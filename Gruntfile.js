@@ -13,11 +13,11 @@ const BANNER_TEXT = '/*! This file is auto-generated */';
 const autoprefixer = require( 'autoprefixer' );
 
 module.exports = function(grunt) {
-    buildTools.setGruntReference( grunt );
+	buildTools.setGruntReference( grunt );
 
-    const puppeteerOptions = {};
+	const puppeteerOptions = {};
 
-    // Load tasks.
+	// Load tasks.
 	for ( const devDep in require( './package.json' ).devDependencies ) {
 		// Match: grunt-abc, @author/grunt-xyz
 		// Skip: grunt-legacy-util
@@ -26,14 +26,14 @@ module.exports = function(grunt) {
 		}
 	}
 
-    // Load legacy utils.
-    grunt.util = require( 'grunt-legacy-util' );
+	// Load legacy utils.
+	grunt.util = require( 'grunt-legacy-util' );
 
 	// Load terser task.
 	require( './tools/build/grunt-terser' )( grunt );
 
-    // Project configuration.
-    grunt.initConfig({
+	// Project configuration.
+	grunt.initConfig({
 		postcss: {
 			options: {
 				processors: [
@@ -212,7 +212,7 @@ module.exports = function(grunt) {
 				options: {
 					processContent(src) {
 						return src.replace( /(\".+?\/)src(\/.+?)(?:.min)?(.js\")/g , (match, $1, $2, $3) => // Don't add `.min` to files that don't have it.
-                        `${$1}build${$2}${/jquery$/.test( $2 ) ? '' : '.min'}${$3}` );
+						`${$1}build${$2}${/jquery$/.test( $2 ) ? '' : '.min'}${$3}` );
 					}
 				}
 			}
@@ -419,32 +419,32 @@ module.exports = function(grunt) {
 				},
 				// Limit JSHint's run to a single specified file:
 				//
-				//    grunt jshint:core --file=filename.js
+				//	grunt jshint:core --file=filename.js
 				//
 				// Optionally, include the file path:
 				//
-				//    grunt jshint:core --file=path/to/filename.js
+				//	grunt jshint:core --file=path/to/filename.js
 				//
 				filter(filepath) {
-                    let index;
-                    const file = grunt.option( 'file' );
+					let index;
+					const file = grunt.option( 'file' );
 
-                    // Don't filter when no target file is specified
-                    if ( ! file ) {
+					// Don't filter when no target file is specified
+					if ( ! file ) {
 						return true;
 					}
 
-                    // Normalize filepath for Windows
-                    filepath = filepath.replace( /\\/g, '/' );
-                    index = filepath.lastIndexOf( `/${file}` );
+					// Normalize filepath for Windows
+					filepath = filepath.replace( /\\/g, '/' );
+					index = filepath.lastIndexOf( `/${file}` );
 
-                    // Match only the filename passed from cli
-                    if ( filepath === file || ( -1 !== index && index === filepath.length - ( file.length + 1 ) ) ) {
+					// Match only the filename passed from cli
+					if ( filepath === file || ( -1 !== index && index === filepath.length - ( file.length + 1 ) ) ) {
 						return true;
 					}
 
-                    return false;
-                }
+					return false;
+				}
 			},
 			plugins: {
 				expand: true,
@@ -455,27 +455,27 @@ module.exports = function(grunt) {
 				],
 				// Limit JSHint's run to a single specified plugin directory:
 				//
-				//    grunt jshint:plugins --dir=foldername
+				//	grunt jshint:plugins --dir=foldername
 				//
 				filter(dirpath) {
-                    let index;
-                    const dir = grunt.option( 'dir' );
+					let index;
+					const dir = grunt.option( 'dir' );
 
-                    // Don't filter when no target folder is specified
-                    if ( ! dir ) {
+					// Don't filter when no target folder is specified
+					if ( ! dir ) {
 						return true;
 					}
 
-                    dirpath = dirpath.replace( /\\/g, '/' );
-                    index = dirpath.lastIndexOf( `/${dir}` );
+					dirpath = dirpath.replace( /\\/g, '/' );
+					index = dirpath.lastIndexOf( `/${dir}` );
 
-                    // Match only the folder name passed from cli
-                    if ( -1 !== index ) {
+					// Match only the folder name passed from cli
+					if ( -1 !== index ) {
 						return true;
 					}
 
-                    return false;
-                }
+					return false;
+				}
 			}
 		},
 		jsdoc : {
@@ -488,11 +488,11 @@ module.exports = function(grunt) {
 		},
 		qunit: {
 			all: {
+				src: [
+					'tests/qunit/*.html'
+				],
 				options: {
-					urls: [
-						'http://localhost:8008/tests/qunit/compiled.html',
-						'http://localhost:8008/tests/qunit/index.html'
-					],
+					httpBase: 'http://localhost:8008/',
 					puppeteer: puppeteerOptions
 				}
 			}
@@ -729,8 +729,8 @@ module.exports = function(grunt) {
 		}
 	});
 
-    // Allow builds to be minimal
-    if( grunt.option( 'minimal-copy' ) ) {
+	// Allow builds to be minimal
+	if( grunt.option( 'minimal-copy' ) ) {
 		const copyFilesOptions = grunt.config.get( 'copy.files.files' );
 		copyFilesOptions[0].src.push( '!wp-content/plugins/**' );
 		copyFilesOptions[0].src.push( '!wp-content/themes/!(twenty*)/**' );
@@ -738,60 +738,96 @@ module.exports = function(grunt) {
 	}
 
 
-    // RTL task.
-    grunt.registerTask('rtl', ['rtlcss:core', 'rtlcss:colors']);
+	// RTL task.
+	grunt.registerTask(
+		'rtl',
+		[
+			'rtlcss:core',
+			'rtlcss:colors'
+		]
+	);
 
-    // Color schemes task.
-    grunt.registerTask('colors', ['sass:colors', 'postcss:colors']);
+	// Color schemes task.
+	grunt.registerTask(
+		'colors',
+		[
+			'sass:colors',
+			'postcss:colors'
+		]
+	);
 
-    // JSHint task.
-    grunt.registerTask( 'jshint:corejs', [
-		'jshint:grunt',
-		'jshint:tests',
-		'jshint:themes',
-		'jshint:core',
-		'jshint:media'
-	] );
-
-    grunt.registerTask( 'restapi-jsclient', [
-		'phpunit:restapi-jsclient',
-		'qunit:compiled'
-	] );
-
-    grunt.registerTask( 'precommit:image', [
-		'imagemin:core'
-	] );
-
-    grunt.registerTask( 'precommit:js', [
-		'rollup',
+	// JSHint task.
+	grunt.registerTask(
 		'jshint:corejs',
-		'terser:masonry',
-		'terser:imgareaselect'
-	] );
+		[
+			'jshint:grunt',
+			'jshint:tests',
+			'jshint:themes',
+			'jshint:core',
+			'jshint:media'
+		]
+	);
 
-    grunt.registerTask( 'precommit:css', [
-		'postcss:core'
-	] );
+	grunt.registerTask(
+		'restapi-jsclient',
+		[
+			'phpunit:restapi-jsclient',
+			'qunit:compiled'
+		]
+	);
 
-    grunt.registerTask( 'precommit:php', [
-		'phpunit:wp-api-client-fixtures'
-	] );
-
-    grunt.registerTask( 'precommit:emoji', [
-		'replace:emojiRegex'
-	] );
-
-    grunt.registerTask( 'precommit', [
-		'precommit:js',
-		'precommit:css',
+	grunt.registerTask(
 		'precommit:image',
-		'precommit:emoji',
-		'precommit:php',
-		'precommit:git-conflicts',
-		'precommit:npm-bug'
-	] );
+		[
+			'imagemin:core'
+		]
+	);
 
-    grunt.registerTask(
+	grunt.registerTask(
+		'precommit:js',
+		[
+			'rollup',
+			'jshint:corejs',
+			'terser:masonry',
+			'terser:imgareaselect'
+		]
+	);
+
+	grunt.registerTask(
+		'precommit:css',
+		[
+			'postcss:core'
+		]
+	);
+
+	grunt.registerTask(
+		'precommit:php',
+		[
+			'phpunit:wp-api-client-fixtures'
+		]
+	);
+
+	grunt.registerTask(
+		'precommit:emoji',
+		[
+			'replace:emojiRegex'
+		]
+	);
+
+	grunt.registerTask(
+		'precommit',
+		[
+			'precommit:js',
+			'precommit:css',
+			'precommit:image',
+			'precommit:emoji',
+			'precommit:php',
+			'precommit:git-conflicts',
+			'precommit:npm-bug'
+		]
+	);
+
+	grunt.registerTask(
 		'precommit:verify',
 		'Run precommit checks and verify no changed files.  Commit everything before running!',
 		[
@@ -800,220 +836,276 @@ module.exports = function(grunt) {
 		]
 	);
 
-    grunt.registerTask( 'dev:git-version', function() {
-		const done = this.async();
+	grunt.registerTask(
+		'dev:git-version',
+		function() {
+			const done = this.async();
 
-		if (
-			process.env.CLASSICPRESS_GIT_VERSION &&
-			/^[a-f0-9]{8}/.test( process.env.CLASSICPRESS_GIT_VERSION )
-		) {
-			grunt.log.ok(
-				`Using git version from env var: ${process.env.CLASSICPRESS_GIT_VERSION.substr( 0, 8 )}`
-			);
-			grunt.config.set( 'dev.git-version', process.env.CLASSICPRESS_GIT_VERSION );
-			done();
-			return;
+			if (
+				process.env.CLASSICPRESS_GIT_VERSION &&
+				/^[a-f0-9]{8}/.test( process.env.CLASSICPRESS_GIT_VERSION )
+			) {
+				grunt.log.ok(
+					`Using git version from env var: ${process.env.CLASSICPRESS_GIT_VERSION.substr( 0, 8 )}`
+				);
+				grunt.config.set( 'dev.git-version', process.env.CLASSICPRESS_GIT_VERSION );
+				done();
+				return;
+			}
+
+			grunt.util.spawn( {
+				cmd: 'git',
+				args: [ 'rev-parse', 'HEAD' ]
+			}, ( error, { stdout, stderr }, code ) => {
+				if ( code !== 0 ) {
+					grunt.fatal( `git rev-parse failed: code ${code}:\n${stdout}\n${stderr}` );
+				}
+				const hash = stdout.trim();
+				if ( ! hash || hash.length !== 40 ) {
+					grunt.fatal( `git rev-parse returned invalid value: ${hash}` );
+				}
+				grunt.config.set( 'dev.git-version', hash );
+				grunt.log.ok(
+					`Using git version from \`git rev-parse\`: ${hash.substr( 0, 8 )}`
+				);
+				done();
+			} );
 		}
+	);
 
-		grunt.util.spawn( {
-			cmd: 'git',
-			args: [ 'rev-parse', 'HEAD' ]
-		}, ( error, { stdout, stderr }, code ) => {
-			if ( code !== 0 ) {
-				grunt.fatal( `git rev-parse failed: code ${code}:\n${stdout}\n${stderr}` );
-			}
-			const hash = stdout.trim();
-			if ( ! hash || hash.length !== 40 ) {
-				grunt.fatal( `git rev-parse returned invalid value: ${hash}` );
-			}
-			grunt.config.set( 'dev.git-version', hash );
-			grunt.log.ok(
-				`Using git version from \`git rev-parse\`: ${hash.substr( 0, 8 )}`
-			);
-			done();
-		} );
-	} );
+	grunt.registerTask(
+		'precommit:check-for-changes',
+		function() {
+			grunt.task.requires( 'precommit' );
 
-    grunt.registerTask( 'precommit:check-for-changes', function() {
-		grunt.task.requires( 'precommit' );
+			const done = this.async();
 
-		const done = this.async();
-
-		grunt.util.spawn( {
-			cmd: 'git',
-			args: [ 'ls-files', '-m' ]
-		}, ( error, { stdout }, code ) => {
-			if ( error ) {
-				throw error;
-			}
-			if ( code !== 0 ) {
-				throw new Error( `git ls-files failed: code ${code}` );
-			}
-			const files = stdout.split( '\n' )
-				.map( f => f.trim() )
-				.filter( f => f !== '' )
-				.filter( f => f !== 'package-lock.json' );
-			if ( files.length ) {
-				grunt.log.writeln(
-					'One or more files were modified when running the precommit checks:'
-					.red
-				);
-				grunt.log.writeln();
-				files.forEach( ( { yellow } ) => grunt.log.writeln( yellow ) );
-				grunt.log.writeln();
-				grunt.log.writeln(
-					'Please run `grunt precommit` and commit the results.'
-					.red.bold
-				);
-				grunt.log.writeln();
-				throw new Error(
-					'Modified files detected during precommit checks!'
-				);
-			} else {
-				grunt.log.ok( 'No modified files detected.' );
-			}
-			done();
-		} );
-	} );
-
-    grunt.registerTask( 'precommit:git-conflicts', function() {
-		const done = this.async();
-
-		grunt.util.spawn( {
-			cmd: 'bash',
-			args: [ '-c', "git ls-files -z | xargs -0 grep -E -C3 -n --binary-files=without-match '(<<" + "<<|^=======(\\s|$)|>>" + ">>)'" ]
-		}, ( error, { stdout, stderr }, code ) => {
-			// Ignore error because it is populated for non-zero exit codes:
-			// https://gruntjs.com/api/grunt.util#grunt.util.spawn
-			// An exit code of 1 from `grep` means "no match" which is fine.
-			// `xargs` reports this as exit code 123 (Linux) or 1 (OS X).
-			if ( ( code !== 0 && code !== 1 && code !== 123 ) || stderr.length ) {
-				grunt.fatal(
-					`checking for changes failed: code ${code}:\n${stderr + stdout}`
-				);
-			}
-			if ( stdout.trim().length ) {
-				stdout.trim().split( '\n' ).forEach( line => {
+			grunt.util.spawn( {
+				cmd: 'git',
+				args: [ 'ls-files', '-m' ]
+			}, ( error, { stdout }, code ) => {
+				if ( error ) {
+					throw error;
+				}
+				if ( code !== 0 ) {
+					throw new Error( `git ls-files failed: code ${code}` );
+				}
+				const files = stdout.split( '\n' )
+					.map( f => f.trim() )
+					.filter( f => f !== '' )
+					.filter( f => f !== 'package-lock.json' );
+				if ( files.length ) {
 					grunt.log.writeln(
-						/^[^:]+:\d+:/.test( line ) ? line.red : line
+						'One or more files were modified when running the precommit checks:'
+						.red
 					);
-				} );
-				grunt.fatal(
-					'git conflict markers detected in the above files!'
-				);
-			}
-
-			done();
-		} );
-	} );
-
-    grunt.registerTask( 'precommit:npm-bug', function() {
-		// Check for and prevent https://github.com/npm/cli/issues/1685
-		// This just adds needless noise to the npm files which already have a
-		// very large commit history.
-		const lockfileLines = fs.readFileSync(
-			path.join( __dirname, 'package-lock.json' ),
-			'utf8'
-		).split( '\n' );
-		const maxLinesToPrint = 9;
-		let badLines = 0;
-		lockfileLines.forEach( ( line, i ) => {
-			const lineNumber = i + 1;
-			if ( /"http:\/\//.test( line ) ) {
-				if ( badLines < maxLinesToPrint ) {
+					grunt.log.writeln();
+					files.forEach( ( { yellow } ) => grunt.log.writeln( yellow ) );
+					grunt.log.writeln();
 					grunt.log.writeln(
-						`package-lock.json line ${lineNumber}: ${line}`.yellow
+						'Please run `grunt precommit` and commit the results.'
+						.red.bold
+					);
+					grunt.log.writeln();
+					throw new Error(
+						'Modified files detected during precommit checks!'
+					);
+				} else {
+					grunt.log.ok( 'No modified files detected.' );
+				}
+				done();
+			} );
+		}
+	);
+
+	grunt.registerTask(
+		'precommit:git-conflicts',
+		function() {
+			const done = this.async();
+
+			grunt.util.spawn( {
+				cmd: 'bash',
+				args: [ '-c', "git ls-files -z | xargs -0 grep -E -C3 -n --binary-files=without-match '(<<" + "<<|^=======(\\s|$)|>>" + ">>)'" ]
+			}, ( error, { stdout, stderr }, code ) => {
+				// Ignore error because it is populated for non-zero exit codes:
+				// https://gruntjs.com/api/grunt.util#grunt.util.spawn
+				// An exit code of 1 from `grep` means "no match" which is fine.
+				// `xargs` reports this as exit code 123 (Linux) or 1 (OS X).
+				if ( ( code !== 0 && code !== 1 && code !== 123 ) || stderr.length ) {
+					grunt.fatal(
+						`checking for changes failed: code ${code}:\n${stderr + stdout}`
 					);
 				}
-				badLines++;
-			}
-		} );
-		if ( badLines > 0 ) {
-			if ( badLines > maxLinesToPrint ) {
-				grunt.log.writeln(
-					`... and ${badLines - maxLinesToPrint} more lines`.yellow
-				);
-			}
-			grunt.log.writeln( 'The above lines may need to be fixed to https:// manually.' );
-			grunt.log.writeln( 'See: https://github.com/ClassicPress/ClassicPress/pull/711' );
-			grunt.fatal( 'package-lock.json contains invalid lines' );
+				if ( stdout.trim().length ) {
+					stdout.trim().split( '\n' ).forEach( line => {
+						grunt.log.writeln(
+							/^[^:]+:\d+:/.test( line ) ? line.red : line
+						);
+					} );
+					grunt.fatal(
+						'git conflict markers detected in the above files!'
+					);
+				}
+
+				done();
+			} );
 		}
-	} );
+	);
 
-	grunt.registerTask( 'rollup', function() {
-		const done = this.async();
-
-		grunt.util.spawn( {
-			cmd: 'node',
-			args: [ './node_modules/.bin/rollup', '--config' ],
-		}, ( error, { stdout, stderr } ) => {
-			if ( error ) {
-				throw error;
+	grunt.registerTask(
+		'precommit:npm-bug',
+		function() {
+			// Check for and prevent https://github.com/npm/cli/issues/1685
+			// This just adds needless noise to the npm files which already have a
+			// very large commit history.
+			const lockfileLines = fs.readFileSync(
+				path.join( __dirname, 'package-lock.json' ),
+				'utf8'
+			).split( '\n' );
+			const maxLinesToPrint = 9;
+			let badLines = 0;
+			lockfileLines.forEach( ( line, i ) => {
+				const lineNumber = i + 1;
+				if ( /"http:\/\//.test( line ) ) {
+					if ( badLines < maxLinesToPrint ) {
+						grunt.log.writeln(
+							`package-lock.json line ${lineNumber}: ${line}`.yellow
+						);
+					}
+					badLines++;
+				}
+			} );
+			if ( badLines > 0 ) {
+				if ( badLines > maxLinesToPrint ) {
+					grunt.log.writeln(
+						`... and ${badLines - maxLinesToPrint} more lines`.yellow
+					);
+				}
+				grunt.log.writeln( 'The above lines may need to be fixed to https:// manually.' );
+				grunt.log.writeln( 'See: https://github.com/ClassicPress/ClassicPress/pull/711' );
+				grunt.fatal( 'package-lock.json contains invalid lines' );
 			}
-			console.log( stdout );
-			console.error( stderr );
-			done();
-		} );
-	} );
+		}
+	);
 
-    grunt.registerTask( 'copy:script-loader', [
-		'dev:git-version',
-		'copy:script-loader-impl'
-	] );
+	grunt.registerTask(
+		'rollup',
+		function() {
+			const done = this.async();
 
-    grunt.registerTask( 'copy:all', [
-		'copy:files',
-		'copy:wp-admin-css-compat-rtl',
-		'copy:wp-admin-css-compat-min',
+			grunt.util.spawn( {
+				cmd: 'node',
+				args: [ './node_modules/.bin/rollup', '--config' ],
+			}, ( error, { stdout, stderr } ) => {
+				if ( error ) {
+					throw error;
+				}
+				console.log( stdout );
+				console.error( stderr );
+				done();
+			} );
+		}
+	);
+
+	grunt.registerTask(
 		'copy:script-loader',
-		'copy:version'
-	] );
+		[
+			'dev:git-version',
+			'copy:script-loader-impl'
+		]
+	);
 
-    grunt.registerTask( 'build', [
-		'clean:all',
+	grunt.registerTask(
 		'copy:all',
-		'cssmin:core',
-		'colors',
-		'rtl',
-		'cssmin:rtl',
-		'cssmin:colors',
-		'terser:core',
-		'terser:embed',
-		'terser:jqueryui',
-		'concat:tinymce',
-		'compress:tinymce',
-		'clean:tinymce',
-		'concat:emoji',
-		'includes:emoji',
-		'includes:embed',
-		'usebanner',
-		'jsvalidate:build'
-	] );
+		[
+			'copy:files',
+			'copy:wp-admin-css-compat-rtl',
+			'copy:wp-admin-css-compat-min',
+			'copy:script-loader',
+			'copy:version'
+		]
+	);
 
-    grunt.registerTask( 'prerelease', [
-		'precommit:php',
-		'precommit:js',
-		'precommit:css',
-		'precommit:image'
-	] );
+	grunt.registerTask(
+		'build',
+		[
+			'clean:all',
+			'copy:all',
+			'cssmin:core',
+			'colors',
+			'rtl',
+			'cssmin:rtl',
+			'cssmin:colors',
+			'terser:core',
+			'terser:embed',
+			'terser:jqueryui',
+			'concat:tinymce',
+			'compress:tinymce',
+			'clean:tinymce',
+			'concat:emoji',
+			'includes:emoji',
+			'includes:embed',
+			'usebanner',
+			'jsvalidate:build'
+		]
+	);
 
-    // Testing tasks.
-    grunt.registerMultiTask('phpunit', 'Runs PHPUnit tests, including the ajax, external-http, and multisite tests.', function() {
-		grunt.util.spawn({
-			cmd: this.data.cmd,
-			args: this.data.args,
-			opts: {stdio: 'inherit'}
-		}, this.async());
-	});
+	grunt.registerTask(
+		'prerelease',
+		[
+			'precommit:php',
+			'precommit:js',
+			'precommit:css',
+			'precommit:image'
+		]
+	);
 
-    grunt.registerTask('qunit:local', 'Runs QUnit tests with a local server.',
-		['connect', 'qunit']);
+	// Testing tasks.
+	grunt.registerMultiTask(
+		'phpunit',
+		'Runs PHPUnit tests, including the ajax, external-http, and multisite tests.',
+		function() {
+			grunt.util.spawn( {
+				cmd: this.data.cmd,
+				args: this.data.args,
+				opts: { stdio: 'inherit' }
+			}, this.async() );
+		}
+	);
 
-    grunt.registerTask('qunit:compiled', 'Runs QUnit tests on compiled as well as uncompiled scripts.',
-		['build', 'copy:qunit', 'qunit:local']);
+	grunt.registerTask(
+		'qunit:local',
+		'Runs QUnit tests with a local server.',
+		[
+			'connect',
+			'qunit'
+		]
+	);
 
-    grunt.registerTask('test', 'Runs all QUnit and PHPUnit tasks.', ['qunit:compiled', 'phpunit']);
+	grunt.registerTask(
+		'qunit:compiled',
+		'Runs QUnit tests on compiled as well as uncompiled scripts.',
+		[
+			'build',
+			'copy:qunit',
+			'qunit:local'
+		]
+	);
 
-    // Default task.
-    grunt.registerTask('default', ['build']);
+	grunt.registerTask(
+		'test',
+		'Runs all QUnit and PHPUnit tasks.',
+		[
+			'qunit:compiled',
+			'phpunit'
+		]
+	);
+
+	// Default task.
+	grunt.registerTask(
+		'default',
+		[
+			'build'
+		]
+	);
 };
