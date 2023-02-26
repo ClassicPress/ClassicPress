@@ -801,7 +801,7 @@ function rest_cookie_check_errors( $result ) {
 	}
 
 	// Send a refreshed nonce in header.
-	rest_get_server()->send_header( 'X-Nonce', wp_create_nonce( 'wp_rest' ) );
+	rest_get_server()->send_header( 'X-WP-Nonce', wp_create_nonce( 'wp_rest' ) );
 
 	return true;
 }
