@@ -47,7 +47,7 @@ class Tests_Formatting_WPSpecialchars extends WP_UnitTestCase {
 	/**
 	 * Check some of the double-encoding features for entity references.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/17780
+	 * @ticket 17780
 	 * @dataProvider data_double_encoding
 	 */
 	function test_double_encoding( $input, $output ) {
@@ -74,7 +74,7 @@ class Tests_Formatting_WPSpecialchars extends WP_UnitTestCase {
 	/**
 	 * Check some of the double-encoding features for entity references.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/17780
+	 * @ticket 17780
 	 * @dataProvider data_no_double_encoding
 	 */
 	function test_no_double_encoding( $input, $output ) {

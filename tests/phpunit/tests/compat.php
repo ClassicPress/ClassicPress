@@ -193,7 +193,7 @@ EOT;
 	/**
 	 * Test that is_countable() is always available (either from PHP or WP).
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/43583
+	 * @ticket 43583
 	 */
 	function test_is_countable_availability() {
 		$this->assertTrue( function_exists( 'is_countable' ) );
@@ -202,7 +202,7 @@ EOT;
 	/**
 	 * Test is_countable() polyfill.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/43583
+	 * @ticket 43583
 	 *
 	 * @dataProvider countable_variable_test_data
 	 *
@@ -216,7 +216,7 @@ EOT;
 	/**
 	 * Data provider for test_is_countable_functionality().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/43583
+	 * @ticket 43583
 	 *
 	 * @return array {
 	 *     @type array {
@@ -242,7 +242,7 @@ EOT;
 	/**
 	 * Test is_countable() polyfill for ResourceBundle.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/43583
+	 * @ticket 43583
 	 */
 	function test_is_countable_ResourceBundle() {
 		if ( ! class_exists( 'ResourceBundle' ) ) {
@@ -255,7 +255,7 @@ EOT;
 	/**
 	 * Test is_countable() polyfill for SimpleXMLElement.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/43583
+	 * @ticket 43583
 	 */
 	function test_is_countable_SimpleXMLElement() {
 		if ( ! class_exists( 'SimpleXMLElement' ) ) {
@@ -268,7 +268,7 @@ EOT;
 	/**
 	 * Test that is_iterable() is always available (either from PHP or WP).
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/43619
+	 * @ticket 43619
 	 */
 	function test_is_iterable_availability() {
 		$this->assertTrue( function_exists( 'is_iterable' ) );
@@ -277,7 +277,7 @@ EOT;
 	/**
 	 * Test is_iterable() polyfill.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/43619
+	 * @ticket 43619
 	 *
 	 * @dataProvider iterable_variable_test_data
 	 *
@@ -291,7 +291,7 @@ EOT;
 	/**
 	 * Data provider for test_is_iterable_functionality().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/43619
+	 * @ticket 43619
 	 *
 	 * @return array {
 	 *     @type array {

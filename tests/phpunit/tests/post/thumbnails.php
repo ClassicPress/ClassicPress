@@ -87,7 +87,7 @@ class Tests_Post_Thumbnail_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/12235
+	 * @ticket 12235
 	 */
 	function test_get_the_post_thumbnail_caption() {
 		$this->assertSame( '', get_the_post_thumbnail_caption() );
@@ -111,7 +111,7 @@ class Tests_Post_Thumbnail_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/12235
+	 * @ticket 12235
 	 */
 	function test_get_the_post_thumbnail_caption_empty() {
 		$post_id       = self::factory()->post->create();
@@ -131,7 +131,7 @@ class Tests_Post_Thumbnail_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/12235
+	 * @ticket 12235
 	 */
 	function test_the_post_thumbnail_caption() {
 		$caption = 'This is a caption.';
@@ -210,7 +210,7 @@ class Tests_Post_Thumbnail_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33070
+	 * @ticket 33070
 	 */
 	function test_get_the_post_thumbnail_url() {
 		$this->assertFalse( has_post_thumbnail( self::$post ) );
@@ -228,7 +228,7 @@ class Tests_Post_Thumbnail_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33070
+	 * @ticket 33070
 	 */
 	function test_get_the_post_thumbnail_url_with_invalid_post() {
 		set_post_thumbnail( self::$post, self::$attachment_id );
@@ -242,7 +242,7 @@ class Tests_Post_Thumbnail_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33070
+	 * @ticket 33070
 	 */
 	function test_the_post_thumbnail_url() {
 		$GLOBALS['post'] = self::$post;
@@ -269,7 +269,7 @@ class Tests_Post_Thumbnail_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/12922
+	 * @ticket 12922
 	 */
 	function test__wp_preview_post_thumbnail_filter() {
 		$old_post = isset( $GLOBALS['post'] ) ? $GLOBALS['post'] : null;
@@ -289,7 +289,7 @@ class Tests_Post_Thumbnail_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37697
+	 * @ticket 37697
 	 */
 	function test__wp_preview_post_thumbnail_filter_secondary_post() {
 		$old_post = isset( $GLOBALS['post'] ) ? $GLOBALS['post'] : null;
@@ -315,7 +315,7 @@ class Tests_Post_Thumbnail_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/12922
+	 * @ticket 12922
 	 */
 	function test_insert_post_with_post_thumbnail() {
 		$post_id = wp_insert_post(
@@ -346,7 +346,7 @@ class Tests_Post_Thumbnail_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37658
+	 * @ticket 37658
 	 */
 	function test_insert_attachment_with_post_thumbnail() {
 		// Audio files support featured images.
@@ -385,7 +385,7 @@ class Tests_Post_Thumbnail_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39030
+	 * @ticket 39030
 	 */
 	function test_post_thumbnail_size_filter_simple() {
 		$this->current_size_filter_data = 'medium';
@@ -405,7 +405,7 @@ class Tests_Post_Thumbnail_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39030
+	 * @ticket 39030
 	 * @dataProvider data_post_thumbnail_size_filter_complex
 	 */
 	function test_post_thumbnail_size_filter_complex( $which_post, $expected ) {

@@ -213,8 +213,8 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 
 	/**
 	 * GUID should never be empty
-	 * @see https://core.trac.wordpress.org/ticket/18310
-	 * @see https://core.trac.wordpress.org/ticket/21963
+	 * @ticket 18310
+	 * @ticket 21963
 	 */
 	function test_insert_image_without_guid() {
 		// this image is smaller than the thumbnail size so it won't have one
@@ -232,7 +232,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21963
+	 * @ticket 21963
 	 */
 	function test_update_attachment_fields() {
 		$filename = ( DIR_TESTDATA . '/images/test-image.jpg' );
@@ -258,7 +258,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/29646
+	 * @ticket 29646
 	 */
 	function test_update_orphan_attachment_parent() {
 		$filename = ( DIR_TESTDATA . '/images/test-image.jpg' );
@@ -287,7 +287,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/15928
+	 * @ticket 15928
 	 */
 	public function test_wp_get_attachment_url_should_not_force_https_when_current_page_is_non_ssl_and_siteurl_is_non_ssl() {
 		$siteurl = get_option( 'siteurl' );
@@ -310,7 +310,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/15928
+	 * @ticket 15928
 	 *
 	 * This situation (current request is non-SSL but siteurl is https) should never arise.
 	 */
@@ -335,7 +335,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/15928
+	 * @ticket 15928
 	 *
 	 * Canonical siteurl is non-SSL, but SSL support is available/optional.
 	 */
@@ -365,7 +365,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/15928
+	 * @ticket 15928
 	 */
 	public function test_wp_get_attachment_url_with_https_on_same_host_when_siteurl_is_https() {
 		$siteurl = get_option( 'siteurl' );
@@ -393,7 +393,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 	}
 
 	/**
-	* @see https://core.trac.wordpress.org/ticket/15928
+	* @ticket 15928
 	*/
 	public function test_wp_get_attachment_url_should_not_force_https_when_administering_over_https_but_siteurl_is_not_https() {
 		$siteurl = get_option( 'siteurl' );
@@ -420,7 +420,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/15928
+	 * @ticket 15928
 	 */
 	public function test_wp_get_attachment_url_should_force_https_when_administering_over_https_and_siteurl_is_https() {
 		// Set https upload URL
@@ -510,7 +510,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33012
+	 * @ticket 33012
 	 */
 	public function test_wp_mime_type_icon() {
 		$icon = wp_mime_type_icon();
@@ -519,7 +519,7 @@ class Tests_Post_Attachments extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33012
+	 * @ticket 33012
 	 */
 	public function test_wp_mime_type_icon_video() {
 		$icon = wp_mime_type_icon( 'video/mp4' );

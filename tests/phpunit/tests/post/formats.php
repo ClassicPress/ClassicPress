@@ -34,7 +34,7 @@ class Tests_Post_Formats extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22473
+	 * @ticket 22473
 	 */
 	function test_set_get_post_format_for_page() {
 		$post_id = self::factory()->post->create( array( 'post_type' => 'page' ) );
@@ -95,7 +95,7 @@ class Tests_Post_Formats extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/23570
+	 * @ticket 23570
 	 */
 	function test_get_url_in_content() {
 		$link                 = 'http://nytimes.com';

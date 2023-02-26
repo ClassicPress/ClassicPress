@@ -21,7 +21,7 @@ class Tests_WP_Blacklist_Check extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37208
+	 * @ticket 37208
 	 */
 	public function test_should_return_true_when_content_with_html_matches_blacklist_keys() {
 		$author       = 'Sting';
@@ -69,7 +69,7 @@ class Tests_WP_Blacklist_Check extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37208
+	 * @ticket 37208
 	 */
 	public function test_should_return_true_when_link_matches_blacklist_keys() {
 		$author       = 'Rainier Wolfcastle';

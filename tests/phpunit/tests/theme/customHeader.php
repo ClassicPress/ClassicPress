@@ -97,7 +97,7 @@ class Tests_Theme_Custom_Header extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38633
+	 * @ticket 38633
 	 */
 	function test_get_header_image_tag_with_registered_default_image_and_remove_header_theme_mod() {
 		$default = 'http://localhost/default-header.jpg';
@@ -252,7 +252,7 @@ class Tests_Theme_Custom_Header extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38738
+	 * @ticket 38738
 	 */
 	function test_video_header_callback_front_page_from_front_page() {
 		$this->_add_theme_support(
@@ -269,7 +269,7 @@ class Tests_Theme_Custom_Header extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38738
+	 * @ticket 38738
 	 */
 	function test_video_header_callback_front_page_from_elsewhere() {
 		$this->_add_theme_support(
@@ -286,7 +286,7 @@ class Tests_Theme_Custom_Header extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38738
+	 * @ticket 38738
 	 */
 	function test_video_header_callback_globally_from_front_page() {
 		$this->_add_theme_support(
@@ -304,7 +304,7 @@ class Tests_Theme_Custom_Header extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38738
+	 * @ticket 38738
 	 */
 	function test_video_header_callback_globally_from_elsewhere() {
 		$this->_add_theme_support(
@@ -322,7 +322,7 @@ class Tests_Theme_Custom_Header extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38738
+	 * @ticket 38738
 	 */
 	function test_video_header_callback_globally_with_negative_filter() {
 		$this->_add_theme_support(

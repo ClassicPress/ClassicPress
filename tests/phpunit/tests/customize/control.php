@@ -105,7 +105,7 @@ class Test_WP_Customize_Control extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38164
+	 * @ticket 38164
 	 */
 	function test_dropdown_pages() {
 		do_action( 'customize_register', $this->wp_customize );

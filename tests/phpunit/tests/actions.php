@@ -118,7 +118,7 @@ class Tests_Actions extends WP_UnitTestCase {
 	 * Test that multiple callbacks receive the correct number of args even when the number
 	 * is less than, or greater than previous hooks.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/17817#comment:72
+	 * @ticket 17817#comment:72
 	 */
 	function test_action_args_3() {
 		$a1   = new MockAction();
@@ -263,7 +263,7 @@ class Tests_Actions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/11241
+	 * @ticket 11241
 	 */
 	function test_action_keyed_array() {
 		$a = new MockAction();
@@ -300,7 +300,7 @@ class Tests_Actions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/17817
+	 * @ticket 17817
 	 */
 	function test_action_recursion() {
 		$tag = __FUNCTION__;
@@ -326,8 +326,8 @@ class Tests_Actions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/9968
-	 * @see https://core.trac.wordpress.org/ticket/17817
+	 * @ticket 9968
+	 * @ticket 17817
 	 */
 	function test_action_callback_manipulation_while_running() {
 		$tag = __FUNCTION__;
@@ -359,7 +359,7 @@ class Tests_Actions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/17817
+	 * @ticket 17817
 	 *
 	 * This specificaly addresses the concern raised at
 	 * https://core.trac.wordpress.org/ticket/17817#comment:52
@@ -395,7 +395,7 @@ class Tests_Actions extends WP_UnitTestCase {
 	/**
 	 * Test the ArrayAccess methods of WP_Hook
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/17817
+	 * @ticket 17817
 	 */
 	function test_array_access_of_wp_filter_global() {
 		global $wp_filter;
@@ -421,7 +421,7 @@ class Tests_Actions extends WP_UnitTestCase {
 	/**
 	 * Make sure current_action() behaves as current_filter()
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/14994
+	 * @ticket 14994
 	 */
 	function test_current_action() {
 		global $wp_current_filter;
@@ -432,7 +432,7 @@ class Tests_Actions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14994
+	 * @ticket 14994
 	 */
 	function test_doing_filter() {
 		global $wp_current_filter;
@@ -451,7 +451,7 @@ class Tests_Actions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14994
+	 * @ticket 14994
 	 */
 	function test_doing_action() {
 		global $wp_current_filter;
@@ -470,7 +470,7 @@ class Tests_Actions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14994
+	 * @ticket 14994
 	 */
 	function test_doing_filter_real() {
 		$this->assertFalse( doing_filter() ); // No filter is passed in, and no filter is being processed
@@ -519,7 +519,7 @@ class Tests_Actions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/10441
+	 * @ticket 10441
 	 * @expectedDeprecated tests_do_action_deprecated
 	 */
 	public function test_do_action_deprecated() {
@@ -537,7 +537,7 @@ class Tests_Actions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/10441
+	 * @ticket 10441
 	 * @expectedDeprecated tests_do_action_deprecated
 	 */
 	public function test_do_action_deprecated_with_multiple_params() {

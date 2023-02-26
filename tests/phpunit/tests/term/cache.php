@@ -11,7 +11,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/25711
+	 * @ticket 25711
 	 */
 	function test_category_children_cache() {
 		// Test with only one Parent => Child
@@ -36,7 +36,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22526
+	 * @ticket 22526
 	 */
 	function test_category_name_change() {
 		$term    = self::factory()->category->create_and_get( array( 'name' => 'Foo' ) );
@@ -53,7 +53,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14485
+	 * @ticket 14485
 	 */
 	function test_hierachy_invalidation() {
 		$tax = 'burrito';
@@ -187,7 +187,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30749
+	 * @ticket 30749
 	 */
 	public function test_get_terms_should_update_cache_for_located_terms() {
 		global $wpdb;
@@ -220,7 +220,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35462
+	 * @ticket 35462
 	 */
 	public function test_term_objects_should_not_be_modified_by_update_term_cache() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -239,7 +239,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21760
+	 * @ticket 21760
 	 */
 	function test_get_term_by_slug_cache() {
 		global $wpdb;
@@ -270,7 +270,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21760
+	 * @ticket 21760
 	 */
 	function test_get_term_by_slug_cache_update() {
 		global $wpdb;
@@ -308,7 +308,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21760
+	 * @ticket 21760
 	 */
 	function test_get_term_by_name_cache() {
 		global $wpdb;
@@ -337,7 +337,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21760
+	 * @ticket 21760
 	 */
 	function test_get_term_by_name_cache_update() {
 		global $wpdb;
@@ -372,7 +372,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21760
+	 * @ticket 21760
 	 */
 	function test_invalidating_term_caches_should_fail_when_invalidation_is_suspended() {
 		global $wpdb;
@@ -415,7 +415,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21760
+	 * @ticket 21760
 	 */
 	public function test_get_term_by_does_not_prime_term_meta_cache() {
 		global $wpdb;
@@ -444,7 +444,7 @@ class Tests_Term_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37291
+	 * @ticket 37291
 	 */
 	public function test_get_object_term_cache_should_return_error_if_any_term_is_an_error() {
 		register_taxonomy( 'wptests_tax', 'post' );

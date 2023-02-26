@@ -68,14 +68,14 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/29684
+		 * @ticket 29684
 		 */
 		public function test_get_main_site_id_on_main_site_returns_self() {
 			$this->assertSame( get_current_blog_id(), get_main_site_id() );
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/29684
+		 * @ticket 29684
 		 */
 		public function test_get_main_site_id_returns_main_site_in_switched_context() {
 			$main_site_id  = get_current_blog_id();
@@ -89,28 +89,28 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/29684
+		 * @ticket 29684
 		 */
 		public function test_get_main_site_id_with_different_network_returns_correct_id() {
 			$this->assertSame( self::$site_ids['wordpress.org/'], get_main_site_id( self::$network_ids['wordpress.org/'] ) );
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/29684
+		 * @ticket 29684
 		 */
 		public function test_get_main_site_id_on_network_without_site_returns_0() {
 			$this->assertSame( 0, get_main_site_id( self::$network_ids['wp.org/'] ) );
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/29684
+		 * @ticket 29684
 		 */
 		public function test_get_main_site_id_on_invalid_network_returns_0() {
 			$this->assertSame( 0, get_main_site_id( 333 ) );
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/29684
+		 * @ticket 29684
 		 */
 		public function test_get_main_site_id_filtered() {
 			add_filter( 'pre_get_main_site_id', array( $this, 'filter_get_main_site_id' ) );
@@ -124,7 +124,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/29684
+		 * @ticket 29684
 		 */
 		public function test_get_main_site_id_filtered_depending_on_network() {
 			add_filter( 'pre_get_main_site_id', array( $this, 'filter_get_main_site_id_depending_on_network' ), 10, 2 );
@@ -143,7 +143,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/41936
+		 * @ticket 41936
 		 */
 		public function test_get_main_site_id_with_property_value() {
 			global $current_site;
@@ -159,7 +159,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/41936
+		 * @ticket 41936
 		 */
 		public function test_get_main_site_id_filtered_with_property_value() {
 			global $current_site;

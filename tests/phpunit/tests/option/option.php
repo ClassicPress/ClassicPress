@@ -60,7 +60,7 @@ class Tests_Option_Option extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31047
+	 * @ticket 31047
 	 */
 	public function test_add_option_should_respect_default_option_filter() {
 		add_filter( 'default_option_doesnotexist', array( $this, '__return_foo' ) );
@@ -88,7 +88,7 @@ class Tests_Option_Option extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/23289
+	 * @ticket 23289
 	 */
 	function test_bad_option_names() {
 		foreach ( array( '', '0', ' ', 0, false, null ) as $empty ) {
@@ -100,7 +100,7 @@ class Tests_Option_Option extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/23289
+	 * @ticket 23289
 	 */
 	function test_special_option_name_alloption() {
 		$this->expectException( 'WPDieException' );
@@ -108,7 +108,7 @@ class Tests_Option_Option extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/23289
+	 * @ticket 23289
 	 */
 	function test_special_option_name_notoptions() {
 		$this->expectException( 'WPDieException' );
@@ -129,7 +129,7 @@ class Tests_Option_Option extends WP_UnitTestCase {
 	/**
 	 * Options should be autoloaded unless they were added with "no" or `false`.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/31119
+	 * @ticket 31119
 	 * @dataProvider data_option_autoloading
 	 */
 	function test_option_autoloading( $name, $autoload_value, $expected ) {

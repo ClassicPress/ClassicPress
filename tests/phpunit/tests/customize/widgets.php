@@ -98,7 +98,7 @@ class Tests_WP_Customize_Widgets extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Widgets::customize_register()
 	 * @see WP_Customize_Widgets::preview_sidebars_widgets()
-	 * @see https://core.trac.wordpress.org/ticket/36660
+	 * @ticket 36660
 	 */
 	function test_customize_register_with_deleted_sidebars() {
 		$sidebar_id = 'sidebar-1';
@@ -170,8 +170,8 @@ class Tests_WP_Customize_Widgets extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Widgets::register_settings() with selective refresh enabled.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30988
-	 * @see https://core.trac.wordpress.org/ticket/36389
+	 * @ticket 30988
+	 * @ticket 36389
 	 */
 	function test_register_settings() {
 		add_theme_support( 'customize-selective-refresh-widgets' );
@@ -223,7 +223,7 @@ class Tests_WP_Customize_Widgets extends WP_UnitTestCase {
 	/**
 	 * Test registering settings without selective refresh enabled.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/36389
+	 * @ticket 36389
 	 */
 	function test_register_settings_without_selective_refresh() {
 		remove_theme_support( 'customize-selective-refresh-widgets' );
@@ -233,7 +233,7 @@ class Tests_WP_Customize_Widgets extends WP_UnitTestCase {
 	/**
 	 * Test registering settings with selective refresh enabled at a late after_setup_theme action.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/36389
+	 * @ticket 36389
 	 */
 	function test_register_settings_with_late_theme_support_added() {
 		remove_theme_support( 'customize-selective-refresh-widgets' );
@@ -456,7 +456,7 @@ class Tests_WP_Customize_Widgets extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34738
+	 * @ticket 34738
 	 * @see WP_Customize_Widgets::call_widget_update()
 	 */
 	function test_call_widget_update() {

@@ -11,7 +11,7 @@ class Tests_Comment_GetCommentAuthorUrl extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/41334
+	 * @ticket 41334
 	 */
 	public function test_comment_author_url_passes_correct_comment_id() {
 		$comment = self::factory()->comment->create_and_get(

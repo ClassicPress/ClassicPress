@@ -112,7 +112,7 @@ class Tests_Link_GetThePrivacyPolicyLink extends WP_UnitTestCase {
 	 * The function should return an empty string when there is an empty page title
 	 * for the privacy policy.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/44192
+	 * @ticket 44192
 	 */
 	public function test_function_should_return_empty_string_when_privacy_page_title_empty() {
 		$nameless_page_id = $this->factory->post->create(

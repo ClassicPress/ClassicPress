@@ -231,7 +231,7 @@ class Tests_Ajax_ReplytoComment extends WP_Ajax_UnitTestCase {
 
 	/**
 	 * Raises WP_Error after Posted a new pre comment
-	 * @see https://core.trac.wordpress.org/ticket/39730
+	 * @ticket 39730
 	 * @return void
 	 */
 	public function test_pre_comments_approved() {

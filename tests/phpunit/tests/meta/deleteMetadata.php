@@ -33,7 +33,7 @@ class Tests_Meta_DeleteMetadata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/32224
+	 * @ticket 32224
 	 */
 	public function test_with_falsey_meta_value_should_not_delete_all_meta() {
 		$vals = array( '0', '1', '2' );
@@ -51,7 +51,7 @@ class Tests_Meta_DeleteMetadata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/32224
+	 * @ticket 32224
 	 *
 	 * This is a backwards compatiblity quirk.
 	 */
@@ -69,7 +69,7 @@ class Tests_Meta_DeleteMetadata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/32224
+	 * @ticket 32224
 	 */
 	public function test_meta_value_should_be_ignored_when_null() {
 		$vals = array( '0', '1', '2', '' );
@@ -85,7 +85,7 @@ class Tests_Meta_DeleteMetadata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/32224
+	 * @ticket 32224
 	 */
 	public function test_meta_value_should_be_ignored_when_false() {
 		$vals = array( '0', '1', '2', '' );
@@ -101,7 +101,7 @@ class Tests_Meta_DeleteMetadata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35797
+	 * @ticket 35797
 	 */
 	public function test_delete_all_should_only_invalidate_cache_for_objects_matching_meta_value() {
 		$p1 = 1234;
@@ -124,7 +124,7 @@ class Tests_Meta_DeleteMetadata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35797
+	 * @ticket 35797
 	 */
 	public function test_delete_all_should_invalidate_cache_for_all_objects_with_meta_key_when_meta_value_is_not_provided() {
 		$p1 = 1234;

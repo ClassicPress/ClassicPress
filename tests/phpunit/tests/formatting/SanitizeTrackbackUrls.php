@@ -5,7 +5,7 @@
  */
 class Tests_Formatting_SanitizeTrackbackUrls extends WP_UnitTestCase {
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21624
+	 * @ticket 21624
 	 * @dataProvider breaks
 	 */
 	function test_sanitize_trackback_urls_with_multiple_urls( $break ) {

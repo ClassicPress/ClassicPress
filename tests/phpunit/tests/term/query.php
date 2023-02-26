@@ -5,7 +5,7 @@
  */
 class Tests_Term_Query extends WP_UnitTestCase {
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37545
+	 * @ticket 37545
 	 */
 	public function test_taxonomy_should_accept_single_taxonomy_as_string() {
 		register_taxonomy( 'wptests_tax_1', 'post' );
@@ -44,7 +44,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37074
+	 * @ticket 37074
 	 */
 	public function test_term_taxonomy_id_single() {
 		global $wpdb;
@@ -72,7 +72,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37074
+	 * @ticket 37074
 	 */
 	public function test_term_taxonomy_id_array() {
 		global $wpdb;
@@ -106,7 +106,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37151
+	 * @ticket 37151
 	 */
 	public function test_order_by_meta_value_num() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -132,7 +132,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37378
+	 * @ticket 37378
 	 */
 	public function test_order_by_keyword_should_not_be_duplicated_when_filtered() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -156,7 +156,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37198
+	 * @ticket 37198
 	 */
 	public function test_order_by_term_order_should_fall_back_on_term_id_when_relationship_table_is_not_being_joined() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -176,7 +176,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37591
+	 * @ticket 37591
 	 */
 	public function test_terms_is_set() {
 		register_taxonomy( 'wptests_tax_1', 'post' );
@@ -203,8 +203,8 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/23261
-	 * @see https://core.trac.wordpress.org/ticket/37904
+	 * @ticket 23261
+	 * @ticket 37904
 	 */
 	public function test_orderby_include_with_comma_separated_list() {
 		register_taxonomy( 'wptests_tax_1', 'post' );
@@ -225,7 +225,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37198
+	 * @ticket 37198
 	 */
 	public function test_object_ids_single() {
 		register_taxonomy( 'wptests_tax_1', 'post' );
@@ -247,7 +247,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37198
+	 * @ticket 37198
 	 */
 	public function test_object_ids_array() {
 		register_taxonomy( 'wptests_tax_1', 'post' );
@@ -269,7 +269,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37198
+	 * @ticket 37198
 	 */
 	public function test_duplicates_should_be_removed_for_fields_all() {
 		register_taxonomy( 'wptests_tax_1', 'post' );
@@ -293,7 +293,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37198
+	 * @ticket 37198
 	 */
 	public function test_duplicates_should_not_be_removed_for_fields_all_with_object_id() {
 		register_taxonomy( 'wptests_tax_1', 'post' );
@@ -319,7 +319,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/44221
+	 * @ticket 44221
 	 */
 	public function test_all_with_object_id_should_return_term_objects() {
 		register_taxonomy( 'wptests_tax_1', 'post' );
@@ -354,7 +354,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37198
+	 * @ticket 37198
 	 * @group cache
 	 */
 	public function test_object_ids_cache_should_be_invalidated_by_term_relationship_change() {
@@ -391,7 +391,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38295
+	 * @ticket 38295
 	 * @group cache
 	 */
 	public function test_count_query_should_be_cached() {
@@ -426,7 +426,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38295
+	 * @ticket 38295
 	 * @group cache
 	 */
 	public function test_count_query_cache_should_be_invalidated_with_incrementor_bump() {
@@ -458,7 +458,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/40496
+	 * @ticket 40496
 	 */
 	public function test_get_the_terms_should_respect_taxonomy_orderby() {
 		register_taxonomy(
@@ -488,7 +488,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/40496
+	 * @ticket 40496
 	 */
 	public function test_wp_get_object_terms_should_respect_taxonomy_orderby() {
 		register_taxonomy(
@@ -518,7 +518,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/41293
+	 * @ticket 41293
 	 */
 	public function test_should_allow_same_args_with_the_get_terms() {
 		register_post_type( 'wptests_pt' );
@@ -590,7 +590,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/42691
+	 * @ticket 42691
 	 */
 	public function test_null_term_object_should_be_discarded() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -627,7 +627,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/42691
+	 * @ticket 42691
 	 */
 	public function test_error_term_object_should_be_discarded() {
 		register_taxonomy( 'wptests_tax', 'post' );

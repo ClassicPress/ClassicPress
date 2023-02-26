@@ -151,7 +151,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/10468
+	 * @ticket 10468
 	 */
 	function test_clear_schedule_new_args() {
 		$hook       = __FUNCTION__;
@@ -189,7 +189,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/18997
+	 * @ticket 18997
 	 */
 	function test_unschedule_hook() {
 		$hook = __FUNCTION__;
@@ -211,7 +211,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/6966
+	 * @ticket 6966
 	 */
 	function test_duplicate_event() {
 		// duplicate events close together should be skipped
@@ -230,7 +230,7 @@ class Tests_Cron extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/6966
+	 * @ticket 6966
 	 */
 	function test_not_duplicate_event() {
 		// duplicate events far apart should work normally

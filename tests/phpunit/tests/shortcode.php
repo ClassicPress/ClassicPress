@@ -113,7 +113,7 @@ class Tests_Shortcode extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/17657
+	 * @ticket 17657
 	 */
 	function test_tag_hyphen_not_tag() {
 		$out = do_shortcode( '[dumptag-notreal]' );
@@ -131,7 +131,7 @@ class Tests_Shortcode extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/17657
+	 * @ticket 17657
 	 */
 	function test_tag_hyphen() {
 		$this->assertSame( '_shortcode_hyphen', do_shortcode( '[hyphen]' ) );
@@ -142,7 +142,7 @@ class Tests_Shortcode extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/9405
+	 * @ticket 9405
 	 */
 	function test_attr_hyphen() {
 		do_shortcode( '[test-shortcode-tag foo="foo" foo-bar="foo-bar" foo-bar-="foo-bar-" -foo-bar="-foo-bar" -foo-bar-="-foo-bar-" foo-bar-baz="foo-bar-baz" -foo-bar-baz="-foo-bar-baz" foo--bar="foo--bar" /]' );
@@ -281,7 +281,7 @@ class Tests_Shortcode extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/6518
+	 * @ticket 6518
 	 */
 	function test_tag_escaped() {
 		$out = do_shortcode( '[[footag]] [[bartag foo="bar"]]' );
@@ -354,7 +354,7 @@ EOF;
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/6562
+	 * @ticket 6562
 	 */
 	function test_utf8_whitespace_1() {
 		// NO-BREAK SPACE: U+00A0.
@@ -370,7 +370,7 @@ EOF;
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/6562
+	 * @ticket 6562
 	 */
 	function test_utf8_whitespace_2() {
 		// ZERO WIDTH SPACE: U+200B.
@@ -386,7 +386,7 @@ EOF;
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14050
+	 * @ticket 14050
 	 */
 	function test_shortcode_unautop() {
 		// a blank line is added at the end, so test with it already there
@@ -410,7 +410,7 @@ EOF;
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/10326
+	 * @ticket 10326
 	 *
 	 * @dataProvider data_test_strip_shortcodes
 	 *
@@ -422,7 +422,7 @@ EOF;
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37767
+	 * @ticket 37767
 	 */
 	function test_strip_shortcodes_filter() {
 		add_filter( 'strip_shortcodes_tagnames', array( $this, '_filter_strip_shortcodes_tagnames' ) );
@@ -497,7 +497,7 @@ EOF;
 	/**
 	 * Check that shortcode_unautop() will always recognize spaces around shortcodes.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22692
+	 * @ticket 22692
 	 */
 	function test_spaces_around_shortcodes() {
 		$nbsp = "\xC2\xA0";
@@ -637,7 +637,7 @@ EOF;
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/26343
+	 * @ticket 26343
 	 */
 	function test_has_shortcode() {
 		$content = 'This is a blob with [gallery] in it';
@@ -758,7 +758,7 @@ EOF;
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34939
+	 * @ticket 34939
 	 *
 	 * Test the (not recommended) [shortcode=XXX] format
 	 */
@@ -769,7 +769,7 @@ EOF;
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36306
+	 * @ticket 36306
 	 */
 	function test_smilies_arent_converted() {
 		$out      = apply_filters( 'the_content', '[img alt="Hello :-) World"]' );
@@ -778,7 +778,7 @@ EOF;
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37906
+	 * @ticket 37906
 	 */
 	public function test_pre_do_shortcode_tag() {
 		// does nothing if no filters are set up
@@ -848,7 +848,7 @@ EOF;
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/32790
+	 * @ticket 32790
 	 */
 	public function test_do_shortcode_tag_filter() {
 		// does nothing if no filters are set up
@@ -918,7 +918,7 @@ EOF;
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37304
+	 * @ticket 37304
 	 *
 	 * Test 'value' syntax for empty attributes
 	 */
@@ -938,7 +938,7 @@ EOF;
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37304
+	 * @ticket 37304
 	 */
 	function test_positional_atts_single_quotes() {
 		$out = do_shortcode( "[test-shortcode-tag 'something in quotes' 'something else']" );
@@ -954,7 +954,7 @@ EOF;
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37304
+	 * @ticket 37304
 	 */
 	function test_positional_atts_mixed_quotes() {
 		$out = do_shortcode( "[test-shortcode-tag 'something in quotes' \"something else\" 123 foo bar='baz' example=\"test\" ]" );

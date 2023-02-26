@@ -182,7 +182,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/17689
+	 * @ticket 17689
 	 */
 	public function test_wp_insert_term_duplicate_name() {
 		$term = self::factory()->tag->create_and_get( array( 'name' => 'Bozo' ) );
@@ -258,7 +258,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31328
+	 * @ticket 31328
 	 */
 	public function test_wp_insert_term_should_not_allow_duplicate_names_when_slug_is_a_duplicate_of_the_same_term_in_non_hierarchical_taxonomy() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -283,7 +283,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31328
+	 * @ticket 31328
 	 */
 	public function test_wp_insert_term_should_not_allow_duplicate_names_when_slug_is_a_duplicate_of_a_different_term_in_non_hierarchical_taxonomy() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -316,7 +316,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31328
+	 * @ticket 31328
 	 */
 	public function test_wp_insert_term_should_allow_duplicate_names_when_a_unique_slug_has_been_provided_in_non_hierarchical_taxonomy() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -344,7 +344,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31328
+	 * @ticket 31328
 	 */
 	public function test_wp_insert_term_should_not_allow_duplicate_names_when_the_slug_is_not_provided_in_non_hierarchical_taxonomy() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -363,7 +363,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31328
+	 * @ticket 31328
 	 */
 	public function test_wp_insert_term_should_not_allow_duplicate_names_when_slug_is_a_duplicate_of_the_same_term_in_hierarchical_taxonomy() {
 		register_taxonomy( 'wptests_tax', 'post', array( 'hierarchical' => true ) );
@@ -388,7 +388,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31328
+	 * @ticket 31328
 	 */
 	public function test_wp_insert_term_should_not_allow_duplicate_names_when_slug_is_a_duplicate_of_a_different_term_at_same_hierarchy_level_in_hierarchical_taxonomy() {
 		register_taxonomy( 'wptests_tax', 'post', array( 'hierarchical' => true ) );
@@ -421,7 +421,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31328
+	 * @ticket 31328
 	 */
 	public function test_wp_insert_term_should_allow_duplicate_names_when_slug_is_a_duplicate_of_a_term_at_different_hierarchy_level_in_hierarchical_taxonomy() {
 		register_taxonomy( 'wptests_tax', 'post', array( 'hierarchical' => true ) );
@@ -461,7 +461,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39984
+	 * @ticket 39984
 	 */
 	public function test_duplicate_name_check_should_fail_when_no_slug_is_provided_even_when_slugs_would_not_clash() {
 		register_taxonomy( 'wptests_tax', 'post', array( 'hierarchical' => true ) );
@@ -481,7 +481,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39984
+	 * @ticket 39984
 	 */
 	public function test_error_should_reference_correct_term_when_rejected_as_duplicate() {
 		register_taxonomy( 'wptests_tax', 'post', array( 'hierarchical' => true ) );
@@ -531,7 +531,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31328
+	 * @ticket 31328
 	 */
 	public function test_wp_insert_term_should_allow_duplicate_names_when_a_unique_slug_has_been_provided_in_hierarchical_taxonomy() {
 		register_taxonomy( 'wptests_tax', 'post', array( 'hierarchical' => true ) );
@@ -559,7 +559,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31328
+	 * @ticket 31328
 	 */
 	public function test_wp_insert_term_should_not_allow_duplicate_names_when_the_slug_is_not_provided_in_hierarchical_taxonomy() {
 		register_taxonomy( 'wptests_tax', 'post', array( 'hierarchical' => true ) );
@@ -577,7 +577,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 		$this->assertSame( 'term_exists', $t2->get_error_code() );
 	}
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5809
+	 * @ticket 5809
 	 */
 	public function test_wp_insert_term_duplicate_slug_same_taxonomy() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -606,7 +606,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5809
+	 * @ticket 5809
 	 */
 	public function test_wp_insert_term_duplicate_slug_different_taxonomy() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -639,7 +639,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5809
+	 * @ticket 5809
 	 */
 	public function test_wp_insert_term_duplicate_slug_different_taxonomy_before_410_schema_change() {
 		$old_db_version = 30055;
@@ -754,7 +754,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5809
+	 * @ticket 5809
 	 */
 	public function test_wp_insert_term_should_not_create_shared_term() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -826,7 +826,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33864
+	 * @ticket 33864
 	 */
 	public function test_wp_insert_term_with_and_without_accents() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -855,7 +855,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37009
+	 * @ticket 37009
 	 */
 	public function test_term_whose_slug_matches_existing_term_but_name_does_not_should_get_suffixed_slug() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -877,7 +877,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35321
+	 * @ticket 35321
 	 */
 	public function test_wp_insert_term_with_null_description() {
 

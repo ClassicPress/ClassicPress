@@ -3,7 +3,7 @@
 /**
  * @group taxonomy
  * @group meta
- * @see https://core.trac.wordpress.org/ticket/10142
+ * @ticket 10142
  */
 class Tests_Term_Meta extends WP_UnitTestCase {
 
@@ -158,7 +158,7 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36593
+	 * @ticket 36593
 	 */
 	public function test_lazy_load_term_meta_should_fall_back_on_update_post_term_cache() {
 		$q = new WP_Query(
@@ -179,7 +179,7 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36593
+	 * @ticket 36593
 	 */
 	public function test_lazy_load_term_meta_false() {
 		global $wpdb;
@@ -344,7 +344,7 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34544
+	 * @ticket 34544
 	 */
 	public function test_add_term_meta_should_return_error_when_term_id_is_shared() {
 		global $wpdb;
@@ -382,7 +382,7 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34544
+	 * @ticket 34544
 	 */
 	public function test_update_term_meta_should_return_error_when_term_id_is_shared() {
 		global $wpdb;
@@ -422,7 +422,7 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34626
+	 * @ticket 34626
 	 */
 	public function test_term_meta_should_be_deleted_when_term_is_deleted() {
 		$t = self::factory()->term->create( array( 'taxonomy' => 'wptests_tax' ) );
@@ -440,7 +440,7 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35991
+	 * @ticket 35991
 	 */
 	public function test_has_term_meta() {
 		$t = self::factory()->term->create( array( 'taxonomy' => 'wptests_tax' ) );
@@ -463,7 +463,7 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35991
+	 * @ticket 35991
 	 */
 	public function test_has_term_meta_empty_results() {
 		$t = self::factory()->term->create( array( 'taxonomy' => 'wptests_tax' ) );
@@ -478,7 +478,7 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38323
+	 * @ticket 38323
 	 * @dataProvider data_register_term_meta
 	 */
 	public function test_register_term_meta( $taxonomy, $meta_key, $args ) {
@@ -513,7 +513,7 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38323
+	 * @ticket 38323
 	 * @dataProvider data_unregister_term_meta
 	 */
 	public function test_unregister_term_meta( $taxonomy, $meta_key ) {

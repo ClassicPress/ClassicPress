@@ -287,7 +287,7 @@ class Test_oEmbed_Controller extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34971
+	 * @ticket 34971
 	 */
 	function test_request_static_front_page() {
 		$post = self::factory()->post->create_and_get(

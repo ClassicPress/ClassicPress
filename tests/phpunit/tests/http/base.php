@@ -84,7 +84,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16855
+	 * @ticket 16855
 	 */
 	function test_redirect_on_301_no_redirect() {
 		// 5 > 0 & 301
@@ -96,7 +96,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16855
+	 * @ticket 16855
 	 */
 	function test_redirect_on_302_no_redirect() {
 		// 5 > 0 & 302
@@ -126,7 +126,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16855
+	 * @ticket 16855
 	 */
 	function test_redirect_on_head() {
 		// Redirections on HEAD request when Requested
@@ -168,7 +168,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16855
+	 * @ticket 16855
 	 */
 	function test_redirections_zero_redirections_specified() {
 		// 0 redirections asked for, Should return the document?
@@ -182,7 +182,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Do not redirect on non 3xx status codes
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/16889
+	 * @ticket 16889
 	 */
 	function test_location_header_on_201() {
 		// Prints PASS on initial load, FAIL if the client follows the specified redirection
@@ -196,7 +196,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Test handling of PUT requests on redirects
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/16889
+	 * @ticket 16889
 	 */
 	function test_no_redirection_on_PUT() {
 		$url = 'http://api.wordpress.org/core/tests/1.0/redirection.php?201-location=1';
@@ -216,7 +216,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/11888
+	 * @ticket 11888
 	 */
 	function test_send_headers() {
 		// Test that the headers sent are recieved by the server
@@ -273,7 +273,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/26726
+	 * @ticket 26726
 	 */
 	function test_file_stream_limited_size() {
 		$url  = $this->file_stream_url;
@@ -302,7 +302,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Tests Limiting the response size when returning strings
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/31172
+	 * @ticket 31172
 	 */
 	function test_request_limited_size() {
 		$url  = $this->file_stream_url;
@@ -326,7 +326,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	 *
 	 * @dataProvider data_post_redirect_to_method_300
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/17588
+	 * @ticket 17588
 	 */
 	function test_post_redirect_to_method_300( $response_code, $method ) {
 		$url = 'http://api.wordpress.org/core/tests/1.0/redirection.php?post-redirect-to-method=1';
@@ -365,7 +365,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Test HTTP Requests using an IP url, with a HOST header specified
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/24182
+	 * @ticket 24182
 	 */
 	function test_ip_url_with_host_header() {
 		$ip   = gethostbyname( 'api.wordpress.org' );
@@ -388,7 +388,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Test HTTP requests where SSL verification is disabled but the CA bundle is still populated
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/33978
+	 * @ticket 33978
 	 */
 	function test_https_url_without_ssl_verification() {
 		$url  = 'https://wordpress.org/';
@@ -413,7 +413,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	 * This test has been disabled due to api.wordpress.org failing to
 	 * send two Location headers. See #57306.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/16890
+	 * @ticket 16890
 	 *
 	 * @covers ::wp_remote_head
 	 * @covers ::wp_remote_retrieve_header
@@ -438,7 +438,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	/**
 	 * Test HTTP Cookie handling
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/21182
+	 * @ticket 21182
 	 */
 	function test_cookie_handling() {
 		$url = 'http://api.wordpress.org/core/tests/1.0/redirection.php?cookie-test=1';
@@ -453,7 +453,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	 * Test if HTTPS support works
 	 *
 	 * @group ssl
-	 * @see https://core.trac.wordpress.org/ticket/25007
+	 * @ticket 25007
 	 */
 	function test_ssl() {
 		$res = wp_remote_get( 'https://wordpress.org/' );
@@ -463,7 +463,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37733
+	 * @ticket 37733
 	 */
 	function test_url_with_double_slashes_path() {
 		$url = $this->redirection_script . '?rt=' . 0;

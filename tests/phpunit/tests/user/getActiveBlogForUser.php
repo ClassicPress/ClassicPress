@@ -24,7 +24,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/38355
+		 * @ticket 38355
 		 */
 		public function test_get_active_blog_for_user_with_no_sites() {
 			$current_site_id = get_current_blog_id();
@@ -37,7 +37,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/38355
+		 * @ticket 38355
 		 */
 		public function test_get_active_blog_for_user_with_primary_site() {
 			$site_id_one = self::factory()->blog->create( array( 'user_id' => self::$user_id ) );
@@ -58,7 +58,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/38355
+		 * @ticket 38355
 		 */
 		public function test_get_active_blog_for_user_without_primary_site() {
 			$sites = get_blogs_of_user( self::$user_id );
@@ -75,7 +75,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/38355
+		 * @ticket 38355
 		 */
 		public function test_get_active_blog_for_user_with_spam_site() {
 			$current_site_id = get_current_blog_id();

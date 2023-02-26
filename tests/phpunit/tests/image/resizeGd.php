@@ -26,7 +26,7 @@ class Test_Image_Resize_GD extends WP_Tests_Image_Resize_UnitTestCase {
 
 	/**
 	 * Try resizing a php file (bad image)
-	 * @see https://core.trac.wordpress.org/ticket/6821
+	 * @ticket 6821
 	 */
 	public function test_resize_bad_image() {
 

@@ -76,7 +76,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38099
+	 * @ticket 38099
 	 */
 	function test_disable_search_exclusion_prefix() {
 		$title = '-HYPHENATION_TEST';
@@ -101,7 +101,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38099
+	 * @ticket 38099
 	 */
 	function test_change_search_exclusion_prefix() {
 		$title = '#OCTOTHORPE_TEST';
@@ -131,7 +131,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33988
+	 * @ticket 33988
 	 */
 	public function test_s_should_exclude_term_prefixed_with_dash() {
 		$p1 = self::factory()->post->create(
@@ -158,7 +158,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33988
+	 * @ticket 33988
 	 */
 	public function test_s_should_exclude_first_term_if_prefixed_with_dash() {
 		$p1 = self::factory()->post->create(
@@ -185,7 +185,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33988
+	 * @ticket 33988
 	 */
 	public function test_s_should_not_exclude_for_dashes_in_the_middle_of_words() {
 		$p1 = self::factory()->post->create(
@@ -218,7 +218,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36195
+	 * @ticket 36195
 	 */
 	public function test_s_should_not_exclude_for_dashes_between_words() {
 		$p1 = self::factory()->post->create(
@@ -251,7 +251,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35361
+	 * @ticket 35361
 	 */
 	public function test_search_orderby_should_be_empty_when_search_string_is_longer_than_6_words_and_exclusion_operator_is_used() {
 		$q = new WP_Query(
@@ -265,7 +265,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31025
+	 * @ticket 31025
 	 */
 	public function test_s_zero() {
 		$p1 = $this->factory->post->create(
@@ -297,7 +297,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35594
+	 * @ticket 35594
 	 */
 	public function test_search_should_respect_suppress_filters() {
 		add_filter( 'posts_search', array( $this, 'filter_posts_search' ) );
@@ -315,7 +315,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35762
+	 * @ticket 35762
 	 */
 	public function test_search_post_excerpt() {
 		$p1 = self::factory()->post->create(
@@ -368,7 +368,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35762
+	 * @ticket 35762
 	 */
 	public function test_search_order_title_before_excerpt_and_content() {
 		$p1 = self::factory()->post->create(
@@ -413,7 +413,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	 * Unfiltered search queries for attachment post types should not inlcude
 	 * filenames to ensure the postmeta JOINs don't happen on the front end.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22744
+	 * @ticket 22744
 	 */
 	public function test_exclude_file_names_in_attachment_search_by_default() {
 		$attachment = self::factory()->post->create(
@@ -442,7 +442,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22744
+	 * @ticket 22744
 	 */
 	public function test_include_file_names_in_attachment_search_as_string() {
 		$attachment = self::factory()->post->create(
@@ -472,7 +472,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22744
+	 * @ticket 22744
 	 */
 	public function test_include_file_names_in_attachment_search_as_array() {
 		$attachment = self::factory()->post->create(
@@ -502,7 +502,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22744
+	 * @ticket 22744
 	 */
 	public function test_exclude_attachment_file_names_in_general_searches() {
 		$attachment = self::factory()->post->create(
@@ -530,7 +530,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22744
+	 * @ticket 22744
 	 */
 	public function test_include_file_names_in_attachment_search_with_meta_query() {
 		$attachment = self::factory()->post->create(
@@ -568,7 +568,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22744
+	 * @ticket 22744
 	 */
 	public function test_include_file_names_in_attachment_search_with_tax_query() {
 		$attachment = self::factory()->post->create(
@@ -608,7 +608,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22744
+	 * @ticket 22744
 	 */
 	public function test_wp_query_removes_filter_wp_allow_query_attachment_by_filename() {
 		$attachment = self::factory()->post->create(

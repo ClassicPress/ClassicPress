@@ -15,7 +15,7 @@ class Tests_Category_GetCategoryLink extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/42771
+	 * @ticket 42771
 	 */
 	public function test_should_return_link_for_term_from_another_taxonomy_on_primed_cache() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -36,7 +36,7 @@ class Tests_Category_GetCategoryLink extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/42771
+	 * @ticket 42771
 	 */
 	public function test_should_return_link_for_term_from_another_taxonomy_on_empty_cache() {
 		register_taxonomy( 'wptests_tax', 'post' );

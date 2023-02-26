@@ -7,7 +7,7 @@
 class Tests_Admin_includesFile extends WP_UnitTestCase {
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/20449
+	 * @ticket 20449
 	 */
 	function test_get_home_path() {
 		$home    = get_option( 'home' );

@@ -79,7 +79,7 @@ class Tests_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/11683
+	 * @ticket 11683
 	 */
 	public function test_update_metadata_hooks_for_multiple_updated_rows() {
 		add_metadata( 'post', 1, 'test_key', 'value_1' );
@@ -112,7 +112,7 @@ class Tests_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22746
+	 * @ticket 22746
 	 */
 	function test_metadata_exists_with_filter() {
 		// Let's see if it returns the correct value when adding a filter.
@@ -123,7 +123,7 @@ class Tests_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/18158
+	 * @ticket 18158
 	 */
 	function test_user_metadata_not_exists() {
 		$u = get_users(
@@ -229,7 +229,7 @@ class Tests_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16814
+	 * @ticket 16814
 	 */
 	function test_meta_type_cast() {
 		$post_id1 = self::factory()->post->create();
@@ -319,7 +319,7 @@ class Tests_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28315
+	 * @ticket 28315
 	 */
 	function test_non_numeric_object_id() {
 		$this->assertFalse( add_metadata( 'user', array( 1 ), 'meta_key', 'meta_value' ) );
@@ -330,7 +330,7 @@ class Tests_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28315
+	 * @ticket 28315
 	 */
 	function test_non_numeric_meta_id() {
 		$this->assertFalse( get_metadata_by_mid( 'user', array( 1 ) ) );
@@ -339,7 +339,7 @@ class Tests_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37746
+	 * @ticket 37746
 	 */
 	function test_negative_meta_id() {
 		$negative_mid = $this->meta_id * -1;
@@ -351,7 +351,7 @@ class Tests_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37746
+	 * @ticket 37746
 	 */
 	function test_floating_meta_id() {
 		$floating_mid = $this->meta_id + 0.1337;
@@ -363,7 +363,7 @@ class Tests_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37746
+	 * @ticket 37746
 	 */
 	function test_string_point_zero_meta_id() {
 		$meta_id = add_metadata( 'user', $this->author->ID, 'meta_key', 'meta_value_2' );
@@ -378,7 +378,7 @@ class Tests_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/15030
+	 * @ticket 15030
 	 */
 	public function test_get_metadata_with_empty_key_array_value() {
 		$data  = array( 1, 2 );
@@ -390,7 +390,7 @@ class Tests_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/15030
+	 * @ticket 15030
 	 */
 	public function test_get_metadata_with_empty_key_object_value() {
 		$data      = new stdClass;
@@ -403,7 +403,7 @@ class Tests_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/15030
+	 * @ticket 15030
 	 */
 	public function test_get_metadata_with_empty_key_nested_array_value() {
 		$data  = array(

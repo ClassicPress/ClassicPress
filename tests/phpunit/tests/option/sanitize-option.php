@@ -103,7 +103,7 @@ class Tests_Sanitize_Option extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36122
+	 * @ticket 36122
 	 */
 	public function test_emoji_in_blogname_and_description() {
 		global $wpdb;
@@ -161,7 +161,7 @@ class Tests_Sanitize_Option extends WP_UnitTestCase {
 	/**
 	 * Test calling get_settings_errors() with variations on where it gets errors from.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/42498
+	 * @ticket 42498
 	 * @covers get_settings_errors()
 	 * @global array $wp_settings_errors
 	 */

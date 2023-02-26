@@ -35,7 +35,7 @@ class Tests_Functions_MaybeDeclineDate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36790
+	 * @ticket 36790
 	 * @dataProvider data_wp_maybe_decline_date
 	 */
 	public function test_wp_maybe_decline_date( $test_locale, $input, $output ) {

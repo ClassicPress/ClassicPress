@@ -12,7 +12,7 @@ class Tests_Formatting_WpHtmlEditPre extends WP_UnitTestCase {
 
 	/*
 	 * Only fails in PHP 5.4 onwards
-	 * @see https://core.trac.wordpress.org/ticket/23688
+	 * @ticket 23688
 	 */
 	function test_wp_htmledit_pre_charset_iso_8859_1() {
 		add_filter( 'pre_option_blog_charset', array( $this, '_charset_iso_8859_1' ) );
@@ -26,7 +26,7 @@ class Tests_Formatting_WpHtmlEditPre extends WP_UnitTestCase {
 	}
 
 	/*
-	 * @see https://core.trac.wordpress.org/ticket/23688
+	 * @ticket 23688
 	 */
 	function test_wp_htmledit_pre_charset_utf_8() {
 		add_filter( 'pre_option_blog_charset', array( $this, '_charset_utf_8' ) );

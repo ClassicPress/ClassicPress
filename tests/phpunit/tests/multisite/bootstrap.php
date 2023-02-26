@@ -115,7 +115,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/27003
+		 * @ticket 27003
 		 * @dataProvider data_get_network_by_path
 		 *
 		 * @param string $expected_key The array key associated with expected data for the test.
@@ -146,7 +146,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/37217
+		 * @ticket 37217
 		 * @dataProvider data_get_network_by_path_with_zero_path_segments
 		 *
 		 * @param string $expected_key The array key associated with expected data for the test.
@@ -194,8 +194,8 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/27003
-		 * @see https://core.trac.wordpress.org/ticket/27927
+		 * @ticket 27003
+		 * @ticket 27927
 		 * @dataProvider data_get_site_by_path
 		 *
 		 * @param string $expected_key The array key associated with expected data for the test.
@@ -247,7 +247,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/27884
+		 * @ticket 27884
 		 * @dataProvider data_multisite_bootstrap
 		 *
 		 * @param string $site_key    The array key associated with the expected site for the test.
@@ -292,7 +292,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/27884
+		 * @ticket 27884
 		 */
 		public function test_multisite_bootstrap_additional_path_segments() {
 			global $current_blog;
@@ -314,7 +314,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/37053
+		 * @ticket 37053
 		 */
 		public function test_get_site_by_path_returns_wp_site() {
 			add_filter( 'pre_get_site_by_path', array( $this, 'filter_pre_get_site_by_path' ), 10, 3 );

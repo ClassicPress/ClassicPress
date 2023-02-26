@@ -9,7 +9,7 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	/**
 	 * Unpatched, this test passes only when Europe/London is not observing DST.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/20328
+	 * @ticket 20328
 	 */
 	function test_get_date_from_gmt_outside_of_dst() {
 		update_option( 'timezone_string', 'Europe/London' );
@@ -21,7 +21,7 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	/**
 	 * Unpatched, this test passes only when Europe/London is observing DST.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/20328
+	 * @ticket 20328
 	 */
 	function test_get_date_from_gmt_during_dst() {
 		update_option( 'timezone_string', 'Europe/London' );
@@ -31,7 +31,7 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/20328
+	 * @ticket 20328
 	 */
 	function test_get_gmt_from_date_outside_of_dst() {
 		update_option( 'timezone_string', 'Europe/London' );
@@ -41,7 +41,7 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/20328
+	 * @ticket 20328
 	 */
 	function test_get_gmt_from_date_during_dst() {
 		update_option( 'timezone_string', 'Europe/London' );
@@ -51,7 +51,7 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34279
+	 * @ticket 34279
 	 */
 	function test_get_date_and_time_from_gmt_no_timezone() {
 		$local = '2012-01-01 12:34:56';
@@ -60,7 +60,7 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34279
+	 * @ticket 34279
 	 */
 	function test_get_gmt_from_date_no_timezone() {
 		$gmt  = '2012-12-01 00:00:00';
@@ -69,7 +69,7 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34279
+	 * @ticket 34279
 	 */
 	function test_get_gmt_from_date_short_date() {
 		update_option( 'timezone_string', 'Europe/London' );
@@ -79,7 +79,7 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34279
+	 * @ticket 34279
 	 */
 	function test_get_gmt_from_date_string_date() {
 		update_option( 'timezone_string', 'Europe/London' );
@@ -89,7 +89,7 @@ class Tests_Formatting_Date extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34279
+	 * @ticket 34279
 	 */
 	function test_get_gmt_from_date_string_date_no_timezone() {
 		$local = 'now';

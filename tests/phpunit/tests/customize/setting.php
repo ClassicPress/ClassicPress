@@ -471,7 +471,7 @@ class Tests_WP_Customize_Setting extends WP_UnitTestCase {
 	/**
 	 * Test specific fix for setting's default value not applying on preview window
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30988
+	 * @ticket 30988
 	 */
 	function test_non_posted_setting_applying_default_value_in_preview() {
 		$type    = 'option';
@@ -548,7 +548,7 @@ class Tests_WP_Customize_Setting extends WP_UnitTestCase {
 	 *
 	 * This is applicable to both single and multisite. This doesn't do switch_to_blog()
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/31428
+	 * @ticket 31428
 	 */
 	function test_is_current_blog_previewed() {
 		wp_set_current_user( $this->factory()->user->create( array( 'role' => 'administrator' ) ) );
@@ -568,7 +568,7 @@ class Tests_WP_Customize_Setting extends WP_UnitTestCase {
 	/**
 	 * Ensure that previewing a setting is disabled when the current blog is switched.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/31428
+	 * @ticket 31428
 	 * @group multisite
 	 * @group ms-required
 	 */
@@ -592,7 +592,7 @@ class Tests_WP_Customize_Setting extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33499
+	 * @ticket 33499
 	 */
 	function test_option_autoloading() {
 		global $wpdb;
@@ -740,7 +740,7 @@ class Tests_WP_Customize_Setting extends WP_UnitTestCase {
 	/**
 	 * Ensure that WP_Customize_Setting::value() can return a previewed value for aggregated multidimensionals.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/37294
+	 * @ticket 37294
 	 */
 	public function test_multidimensional_value_when_previewed() {
 		wp_set_current_user( $this->factory()->user->create( array( 'role' => 'administrator' ) ) );

@@ -73,7 +73,7 @@ EOF;
 
 	/**
 	 * test kses bug. xhtml does not require space before closing empty element
-	 * @see https://core.trac.wordpress.org/ticket/12394
+	 * @ticket 12394
 	 */
 	function test_post_content_xhtml_empty_elem() {
 		$content = <<<EOF

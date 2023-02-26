@@ -12,7 +12,7 @@ class Tests_Rewrite_AddRewriteRule extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16840
+	 * @ticket 16840
 	 */
 	public function test_add_rewrite_rule_redirect() {
 		global $wp_rewrite;
@@ -29,7 +29,7 @@ class Tests_Rewrite_AddRewriteRule extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16840
+	 * @ticket 16840
 	 */
 	public function test_add_rewrite_rule_redirect_array() {
 		global $wp_rewrite;

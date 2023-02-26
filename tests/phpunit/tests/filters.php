@@ -196,7 +196,7 @@ class Tests_Filters extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/20920
+	 * @ticket 20920
 	 */
 	function test_remove_all_filters_should_respect_the_priority_argument() {
 		$a   = new MockAction();
@@ -215,7 +215,7 @@ class Tests_Filters extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/9886
+	 * @ticket 9886
 	 */
 	function test_filter_ref_array() {
 		$obj = new stdClass();
@@ -234,7 +234,7 @@ class Tests_Filters extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/12723
+	 * @ticket 12723
 	 */
 	function test_filter_ref_array_result() {
 		$obj = new stdClass();
@@ -269,7 +269,7 @@ class Tests_Filters extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/29070
+	 * @ticket 29070
 	 */
 	function test_has_filter_after_remove_all_filters() {
 		$a   = new MockAction();
@@ -295,7 +295,7 @@ class Tests_Filters extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/10441
+	 * @ticket 10441
 	 * @expectedDeprecated tests_apply_filters_deprecated
 	 */
 	public function test_apply_filters_deprecated() {
@@ -314,7 +314,7 @@ class Tests_Filters extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/10441
+	 * @ticket 10441
 	 * @expectedDeprecated tests_apply_filters_deprecated
 	 */
 	public function test_apply_filters_deprecated_with_multiple_params() {
@@ -339,7 +339,7 @@ class Tests_Filters extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/10441
+	 * @ticket 10441
 	 */
 	public function test_apply_filters_deprecated_without_filter() {
 		$val = 'Foobar';
@@ -349,7 +349,7 @@ class Tests_Filters extends WP_UnitTestCase {
 
 	private $current_priority;
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39007
+	 * @ticket 39007
 	 */
 	public function test_current_priority() {
 		add_action( 'test_current_priority', array( $this, '_current_priority_action' ), 99 );
@@ -365,7 +365,7 @@ class Tests_Filters extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39007
+	 * @ticket 39007
 	 */
 	public function test_other_priority() {
 		add_action( 'test_current_priority', array( $this, '_other_priority_action' ), 99 );

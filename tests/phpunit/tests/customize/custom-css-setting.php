@@ -209,7 +209,7 @@ class Test_WP_Customize_Custom_CSS_Setting extends WP_UnitTestCase {
 	/**
 	 * Test revision saving on initial save of Custom CSS.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/39032
+	 * @ticket 39032
 	 */
 	function test_custom_css_revision_saved() {
 		$inserted_css = 'body { background: black; }';
@@ -243,7 +243,7 @@ class Test_WP_Customize_Custom_CSS_Setting extends WP_UnitTestCase {
 	/**
 	 * Test that wp_get_custom_css_post() doesn't query for a post after caching a failed lookup.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/39259
+	 * @ticket 39259
 	 */
 	function test_get_custom_css_post_queries_after_failed_lookup() {
 		set_theme_mod( 'custom_css_post_id', -1 );
@@ -255,7 +255,7 @@ class Test_WP_Customize_Custom_CSS_Setting extends WP_UnitTestCase {
 	/**
 	 * Test that wp_update_custom_css_post() updates the 'custom_css_post_id' theme mod.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/39259
+	 * @ticket 39259
 	 */
 	function test_update_custom_css_updates_theme_mod() {
 		set_theme_mod( 'custom_css_post_id', -1 );

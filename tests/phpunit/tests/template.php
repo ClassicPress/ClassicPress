@@ -275,7 +275,7 @@ class Tests_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/18375
+	 * @ticket 18375
 	 */
 	public function test_single_template_hierarchy_for_post() {
 		$this->assertTemplateHierarchy(
@@ -312,7 +312,7 @@ class Tests_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/18375
+	 * @ticket 18375
 	 */
 	public function test_single_template_hierarchy_for_custom_post_type_with_template() {
 		$cpt = self::factory()->post->create_and_get(
@@ -361,7 +361,7 @@ class Tests_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/18375
+	 * @ticket 18375
 	 */
 	public function test_attachment_template_hierarchy_with_template() {
 		$attachment = self::factory()->attachment->create_and_get(

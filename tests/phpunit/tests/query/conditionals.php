@@ -478,7 +478,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/13961
+	 * @ticket 13961
 	 */
 	function test_search_encoded_chars() {
 		$this->go_to( '/search/F%C3%BCnf%2Bbar/' );
@@ -898,7 +898,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16802
+	 * @ticket 16802
 	 */
 	function test_is_single_with_parent() {
 		// Use custom hierarchical post type
@@ -952,7 +952,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24674
+	 * @ticket 24674
 	 */
 	public function test_is_single_with_slug_that_begins_with_a_number_that_clashes_with_another_post_id() {
 		$p1 = self::factory()->post->create();
@@ -975,7 +975,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24612
+	 * @ticket 24612
 	 */
 	public function test_is_single_with_slug_that_clashes_with_attachment() {
 		$this->set_permalink_structure( '/%postname%/' );
@@ -1005,7 +1005,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38225
+	 * @ticket 38225
 	 */
 	function test_is_single_with_attachment() {
 		$post_id = self::factory()->post->create();
@@ -1045,7 +1045,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16802
+	 * @ticket 16802
 	 */
 	function test_is_page_with_parent() {
 		$parent_id = self::factory()->post->create(
@@ -1100,7 +1100,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24674
+	 * @ticket 24674
 	 */
 	public function test_is_attachment_with_slug_that_begins_with_a_number_that_clashes_with_a_page_ID() {
 		$p1 = self::factory()->post->create( array( 'post_type' => 'attachment' ) );
@@ -1124,7 +1124,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24674
+	 * @ticket 24674
 	 */
 	public function test_is_author_with_nicename_that_begins_with_a_number_that_clashes_with_another_author_id() {
 		$u1 = self::factory()->user->create();
@@ -1147,7 +1147,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24674
+	 * @ticket 24674
 	 */
 	public function test_is_category_with_slug_that_begins_with_a_number_that_clashes_with_another_category_id() {
 		$c1 = self::factory()->category->create();
@@ -1170,7 +1170,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24674
+	 * @ticket 24674
 	 */
 	public function test_is_tag_with_slug_that_begins_with_a_number_that_clashes_with_another_tag_id() {
 		$t1 = self::factory()->tag->create();
@@ -1193,7 +1193,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24674
+	 * @ticket 24674
 	 */
 	public function test_is_page_with_page_id_zero_and_random_page_slug() {
 		$post_id = self::factory()->post->create( array( 'post_type' => 'page' ) );
@@ -1215,7 +1215,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24674
+	 * @ticket 24674
 	 */
 	public function test_is_page_with_page_slug_that_begins_with_a_number_that_clashes_with_a_page_ID() {
 		$p1 = self::factory()->post->create( array( 'post_type' => 'page' ) );
@@ -1246,7 +1246,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31271
+	 * @ticket 31271
 	 */
 	function test_is_page_template_default() {
 		$post_id = self::factory()->post->create( array( 'post_type' => 'page' ) );
@@ -1256,7 +1256,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31271
+	 * @ticket 31271
 	 */
 	function test_is_page_template_array() {
 		$post_id = self::factory()->post->create( array( 'post_type' => 'page' ) );
@@ -1267,7 +1267,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/18375
+	 * @ticket 18375
 	 */
 	function test_is_page_template_other_post_type() {
 		$post_id = self::factory()->post->create( array( 'post_type' => 'post' ) );
@@ -1278,7 +1278,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39211
+	 * @ticket 39211
 	 */
 	function test_is_page_template_not_singular() {
 		global $wpdb;
@@ -1304,7 +1304,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35902
+	 * @ticket 35902
 	 */
 	public function test_is_attachment_should_not_match_numeric_id_to_post_title_beginning_with_id() {
 		$p1 = self::factory()->post->create(
@@ -1329,7 +1329,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35902
+	 * @ticket 35902
 	 */
 	public function test_is_attachment_should_not_match_numeric_id_to_post_name_beginning_with_id() {
 		$p1 = self::factory()->post->create(
@@ -1354,7 +1354,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35902
+	 * @ticket 35902
 	 */
 	public function test_is_author_should_not_match_numeric_id_to_nickname_beginning_with_id() {
 		$u1 = self::factory()->user->create(
@@ -1377,7 +1377,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35902
+	 * @ticket 35902
 	 */
 	public function test_is_author_should_not_match_numeric_id_to_user_nicename_beginning_with_id() {
 		$u1 = self::factory()->user->create(
@@ -1400,7 +1400,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35902
+	 * @ticket 35902
 	 */
 	public function test_is_category_should_not_match_numeric_id_to_name_beginning_with_id() {
 		$t1 = self::factory()->term->create(
@@ -1425,7 +1425,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35902
+	 * @ticket 35902
 	 */
 	public function test_is_category_should_not_match_numeric_id_to_slug_beginning_with_id() {
 		$t1 = self::factory()->term->create(
@@ -1450,7 +1450,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35902
+	 * @ticket 35902
 	 */
 	public function test_is_tag_should_not_match_numeric_id_to_name_beginning_with_id() {
 		$t1 = self::factory()->term->create(
@@ -1475,7 +1475,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35902
+	 * @ticket 35902
 	 */
 	public function test_is_tag_should_not_match_numeric_id_to_slug_beginning_with_id() {
 		$t1 = self::factory()->term->create(
@@ -1500,7 +1500,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35902
+	 * @ticket 35902
 	 */
 	public function test_is_page_should_not_match_numeric_id_to_post_title_beginning_with_id() {
 		$p1 = self::factory()->post->create(
@@ -1525,7 +1525,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35902
+	 * @ticket 35902
 	 */
 	public function test_is_page_should_not_match_numeric_id_to_post_name_beginning_with_id() {
 		$p1 = self::factory()->post->create(
@@ -1550,7 +1550,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35902
+	 * @ticket 35902
 	 */
 	public function test_is_single_should_not_match_numeric_id_to_post_title_beginning_with_id() {
 		$p1 = self::factory()->post->create(
@@ -1575,7 +1575,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35902
+	 * @ticket 35902
 	 */
 	public function test_is_single_should_not_match_numeric_id_to_post_name_beginning_with_id() {
 		$p1 = self::factory()->post->create(

@@ -42,7 +42,7 @@ class Tests_General_Errors extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28092
+	 * @ticket 28092
 	 */
 	function test_remove_error() {
 		$error = new WP_Error();

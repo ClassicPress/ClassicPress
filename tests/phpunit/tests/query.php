@@ -10,7 +10,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24785
+	 * @ticket 24785
 	 *
 	 */
 	function test_nested_loop_reset_postdata() {
@@ -31,7 +31,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16471
+	 * @ticket 16471
 	 */
 	function test_default_query_var() {
 		$query = new WP_Query;
@@ -41,7 +41,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/25380
+	 * @ticket 25380
 	 */
 	function test_pre_posts_per_page() {
 		self::factory()->post->create_many( 10 );
@@ -58,7 +58,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/26627
+	 * @ticket 26627
 	 */
 	function test_tag_queried_object() {
 		$slug = 'tag-slug-26627';
@@ -89,7 +89,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31246
+	 * @ticket 31246
 	 */
 	public function test_get_queried_object_should_return_null_when_is_tax_is_true_but_the_taxonomy_args_have_been_removed_in_a_parse_query_callback() {
 		// Don't override the args provided below.
@@ -125,7 +125,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37962
+	 * @ticket 37962
 	 */
 	public function test_get_queried_object_should_return_null_for_not_exists_tax_query() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -239,7 +239,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33532
+	 * @ticket 33532
 	 */
 	public function test_category_querystring_multiple_terms_formatted_as_array() {
 		$c1 = self::factory()->category->create(
@@ -367,7 +367,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33532
+	 * @ticket 33532
 	 */
 	public function test_tag_querystring_multiple_terms_formatted_as_array() {
 		$c1 = self::factory()->tag->create_and_get(
@@ -470,7 +470,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/32454
+	 * @ticket 32454
 	 */
 	public function test_custom_taxonomy_querystring_multiple_terms_formatted_as_array() {
 		register_taxonomy( 'test_tax_cat', 'post' );
@@ -502,7 +502,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31355
+	 * @ticket 31355
 	 */
 	public function test_pages_dont_404_when_queried_post_id_is_modified() {
 		$post_id = self::factory()->post->create(
@@ -524,7 +524,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31355
+	 * @ticket 31355
 	 */
 	public function test_custom_hierarchical_post_types_404_when_queried_post_id_is_modified() {
 		global $wp_rewrite;
@@ -561,7 +561,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34060
+	 * @ticket 34060
 	 */
 	public function test_offset_0_should_override_page() {
 		$q = new WP_Query(
@@ -576,7 +576,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34060
+	 * @ticket 34060
 	 */
 	public function test_offset_should_be_ignored_when_not_set() {
 		$q = new WP_Query(
@@ -590,7 +590,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34060
+	 * @ticket 34060
 	 */
 	public function test_offset_should_be_ignored_when_passed_a_non_numeric_value() {
 		$q = new WP_Query(
@@ -605,7 +605,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35601
+	 * @ticket 35601
 	 */
 	public function test_comment_status() {
 		$p1 = self::factory()->post->create( array( 'comment_status' => 'open' ) );
@@ -622,7 +622,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35601
+	 * @ticket 35601
 	 */
 	public function test_ping_status() {
 		$p1 = self::factory()->post->create( array( 'ping_status' => 'open' ) );
@@ -639,7 +639,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35619
+	 * @ticket 35619
 	 */
 	public function test_get_queried_object_should_return_first_of_multiple_terms() {
 		register_taxonomy( 'tax1', 'post' );
@@ -669,7 +669,7 @@ class Tests_Query extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35619
+	 * @ticket 35619
 	 */
 	public function test_query_vars_should_match_first_of_multiple_terms() {
 		register_taxonomy( 'tax1', 'post' );

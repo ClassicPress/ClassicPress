@@ -7,7 +7,7 @@
 class Tests_Post_GetTheExcerpt extends WP_UnitTestCase {
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/27246
+	 * @ticket 27246
 	 */
 	public function test_the_excerpt_invalid_post() {
 		$this->assertSame( '', get_echo( 'the_excerpt' ) );
@@ -15,7 +15,7 @@ class Tests_Post_GetTheExcerpt extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/27246
+	 * @ticket 27246
 	 * @expectedDeprecated get_the_excerpt
 	 */
 	public function test_the_excerpt_deprecated() {
@@ -24,7 +24,7 @@ class Tests_Post_GetTheExcerpt extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/27246
+	 * @ticket 27246
 	 */
 	public function test_the_excerpt() {
 		$GLOBALS['post'] = self::factory()->post->create_and_get( array( 'post_excerpt' => 'Post excerpt' ) );
@@ -33,8 +33,8 @@ class Tests_Post_GetTheExcerpt extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/27246
-	 * @see https://core.trac.wordpress.org/ticket/35486
+	 * @ticket 27246
+	 * @ticket 35486
 	 */
 	public function test_the_excerpt_password_protected_post() {
 		$post = self::factory()->post->create_and_get(
@@ -50,7 +50,7 @@ class Tests_Post_GetTheExcerpt extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/27246
+	 * @ticket 27246
 	 */
 	public function test_the_excerpt_specific_post() {
 		$GLOBALS['post'] = self::factory()->post->create_and_get( array( 'post_excerpt' => 'Foo' ) );

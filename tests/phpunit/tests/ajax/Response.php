@@ -62,7 +62,7 @@ class Tests_Ajax_Response extends WP_UnitTestCase {
 	 * xdebug_get_headers if it's available
 	 * Needs a separate process to get around the headers/output from the
 	 * bootstrapper
-	 * @see https://core.trac.wordpress.org/ticket/19448
+	 * @ticket 19448
 	 * @runInSeparateProcess
 	 * @preserveGlobalState disabled
 	 */
@@ -86,7 +86,7 @@ class Tests_Ajax_Response extends WP_UnitTestCase {
 
 	/**
 	 * Test that charset in the xml tag matches blog_charset
-	 * @see https://core.trac.wordpress.org/ticket/19448
+	 * @ticket 19448
 	 */
 	public function test_response_charset_in_xml() {
 

@@ -30,7 +30,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21117
+	 * @ticket 21117
 	 */
 	function test_content_post_type() {
 		wp_set_current_user( self::$editor_id );
@@ -49,7 +49,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21117
+	 * @ticket 21117
 	 */
 	function test_merging_existing_meta_values() {
 		wp_set_current_user( self::$editor_id );
@@ -84,7 +84,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/25162
+	 * @ticket 25162
 	 * @group ms-excluded
 	 */
 	public function test_admin_bar_contains_correct_links_for_users_with_no_role() {
@@ -109,7 +109,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/25162
+	 * @ticket 25162
 	 * @group ms-excluded
 	 */
 	public function test_admin_bar_contains_correct_links_for_users_with_role() {
@@ -136,7 +136,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/25162
+	 * @ticket 25162
 	 * @group multisite
 	 * @group ms-required
 	 */
@@ -185,7 +185,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/25162
+	 * @ticket 25162
 	 * @group multisite
 	 * @group ms-required
 	 */
@@ -253,7 +253,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/32495
+	 * @ticket 32495
 	 *
 	 * @dataProvider data_admin_bar_nodes_with_tabindex_meta
 	 *
@@ -346,7 +346,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22247
+	 * @ticket 22247
 	 */
 	public function test_admin_bar_has_edit_link_for_existing_posts() {
 		wp_set_current_user( self::$editor_id );
@@ -373,7 +373,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22247
+	 * @ticket 22247
 	 */
 	public function test_admin_bar_has_no_edit_link_for_non_existing_posts() {
 		wp_set_current_user( self::$editor_id );
@@ -392,7 +392,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34113
+	 * @ticket 34113
 	 */
 	public function test_admin_bar_has_no_archives_link_if_no_static_front_page() {
 		set_current_screen( 'edit-post' );
@@ -406,7 +406,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34113
+	 * @ticket 34113
 	 */
 	public function test_admin_bar_contains_view_archive_link_if_static_front_page() {
 		update_option( 'show_on_front', 'page' );
@@ -421,7 +421,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34113
+	 * @ticket 34113
 	 */
 	public function test_admin_bar_has_no_archives_link_for_pages() {
 		set_current_screen( 'edit-page' );
@@ -435,7 +435,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37949
+	 * @ticket 37949
 	 * @group ms-excluded
 	 */
 	public function test_admin_bar_contains_correct_about_link_for_users_with_role() {
@@ -452,7 +452,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37949
+	 * @ticket 37949
 	 * @group ms-excluded
 	 */
 	public function test_admin_bar_contains_correct_about_link_for_users_with_no_role() {
@@ -470,7 +470,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37949
+	 * @ticket 37949
 	 * @group multisite
 	 * @group ms-required
 	 */
@@ -491,7 +491,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34113
+	 * @ticket 34113
 	 */
 	public function test_admin_bar_has_no_archives_link_for_non_public_cpt() {
 		register_post_type(
@@ -515,7 +515,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34113
+	 * @ticket 34113
 	 */
 	public function test_admin_bar_has_no_archives_link_for_cpt_without_archive() {
 		register_post_type(
@@ -539,7 +539,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34113
+	 * @ticket 34113
 	 */
 	public function test_admin_bar_has_no_archives_link_for_cpt_not_shown_in_admin_bar() {
 		register_post_type(
@@ -595,7 +595,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39252
+	 * @ticket 39252
 	 */
 	public function test_new_user_link_exists_for_user_with_create_users() {
 		wp_set_current_user( self::$admin_id );
@@ -614,7 +614,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39252
+	 * @ticket 39252
 	 */
 	public function test_new_user_link_existence_for_user_with_promote_users() {
 		wp_set_current_user( self::$admin_id );
@@ -637,7 +637,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39252
+	 * @ticket 39252
 	 */
 	public function test_new_user_link_does_not_exist_for_user_without_create_or_promote_users() {
 		wp_set_current_user( self::$admin_id );
@@ -655,7 +655,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30937
+	 * @ticket 30937
 	 * @covers ::wp_admin_bar_customize_menu
 	 */
 	public function test_customize_link() {
@@ -692,7 +692,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39082
+	 * @ticket 39082
 	 * @group ms-required
 	 */
 	public function test_my_sites_network_menu_for_regular_user() {
@@ -707,7 +707,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39082
+	 * @ticket 39082
 	 * @group ms-required
 	 */
 	public function test_my_sites_network_menu_for_super_admin() {
@@ -724,7 +724,7 @@ class Tests_AdminBar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39082
+	 * @ticket 39082
 	 * @group ms-required
 	 */
 	public function test_my_sites_network_menu_for_regular_user_with_network_caps() {

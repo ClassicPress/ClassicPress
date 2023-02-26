@@ -17,7 +17,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21195
+	 * @ticket 21195
 	 */
 	public function test_get_avatar_url_gravatar_url() {
 		$url = get_avatar_url( 1 );
@@ -25,7 +25,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21195
+	 * @ticket 21195
 	 */
 	public function test_get_avatar_url_size() {
 		$url = get_avatar_url( 1 );
@@ -37,7 +37,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21195
+	 * @ticket 21195
 	 */
 	public function test_get_avatar_url_default() {
 		$url = get_avatar_url( 1 );
@@ -54,7 +54,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21195
+	 * @ticket 21195
 	 */
 	public function test_get_avatar_url_rating() {
 		$url = get_avatar_url( 1 );
@@ -66,7 +66,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21195
+	 * @ticket 21195
 	 */
 	public function test_get_avatar_url_scheme() {
 		$url = get_avatar_url( 1 );
@@ -82,7 +82,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21195
+	 * @ticket 21195
 	 */
 	public function test_get_avatar_url_user() {
 		$url = get_avatar_url( 1 );
@@ -115,7 +115,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 
 	protected $fake_url;
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21195
+	 * @ticket 21195
 	 */
 	public function test_pre_get_avatar_url_filter() {
 		$this->fake_url = 'haha wat';
@@ -132,7 +132,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21195
+	 * @ticket 21195
 	 */
 	public function test_get_avatar_url_filter() {
 		$this->fake_url = 'omg lol';
@@ -148,7 +148,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21195
+	 * @ticket 21195
 	 */
 	public function test_get_avatar_comment_types_filter() {
 		$url = get_avatar_url( 1 );
@@ -219,7 +219,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 
 	protected $fake_img;
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21195
+	 * @ticket 21195
 	 */
 	public function test_pre_get_avatar_filter() {
 		$this->fake_img = 'YOU TOO?!';
@@ -235,7 +235,7 @@ class Tests_Avatar extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21195
+	 * @ticket 21195
 	 */
 	public function test_get_avatar_filter() {
 		$this->fake_url = 'YA RLY';

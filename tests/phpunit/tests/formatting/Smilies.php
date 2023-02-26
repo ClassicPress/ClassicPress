@@ -141,7 +141,7 @@ class Tests_Formatting_Smilies extends WP_UnitTestCase {
 	 * Validate Conversion of Smilies is ignored in pre-determined tags
 	 * pre, code, script, style
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/16448
+	 * @ticket 16448
 	 * @dataProvider get_smilies_ignore_tags
 	 */
 	public function test_ignore_smilies_in_tags( $element ) {
@@ -199,7 +199,7 @@ class Tests_Formatting_Smilies extends WP_UnitTestCase {
 	 * Validate Combinations of Smilies separated by single space
 	 * are converted correctly
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/20124
+	 * @ticket 20124
 	 * @dataProvider get_smilies_combinations
 	 */
 	public function test_smilies_combinations( $in_txt, $converted_txt ) {
@@ -242,7 +242,7 @@ class Tests_Formatting_Smilies extends WP_UnitTestCase {
 	 * Validate Smilies are converted for single smilie in
 	 * the $wpsmiliestrans global array
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/25303
+	 * @ticket 25303
 	 * @dataProvider get_single_smilies_input_output
 	 */
 	public function test_single_smilies_in_wpsmiliestrans( $in_txt, $converted_txt ) {
@@ -299,7 +299,7 @@ class Tests_Formatting_Smilies extends WP_UnitTestCase {
 	 * Further check that spaces aren't randomly deleted
 	 * or added when replacing the text with an image.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22692
+	 * @ticket 22692
 	 * @dataProvider get_spaces_around_smilies
 	 */
 	function test_spaces_around_smilies( $in_txt, $converted_txt ) {
@@ -317,7 +317,7 @@ class Tests_Formatting_Smilies extends WP_UnitTestCase {
 	/**
 	 * Test to ensure smilies can be removed with a filter
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/35905
+	 * @ticket 35905
 	 */
 	public function test_smilies_filter_removes_smilies() {
 		add_filter( 'smilies', array( $this, '_filter_remove_smilies' ) );
@@ -332,7 +332,7 @@ class Tests_Formatting_Smilies extends WP_UnitTestCase {
 	/**
 	 * Test to ensure smilies can be added with a filter
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/35905
+	 * @ticket 35905
 	 */
 	public function test_smilies_filter_adds_smilies() {
 		add_filter( 'smilies', array( $this, '_filter_add_smilies' ) );

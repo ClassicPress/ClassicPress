@@ -8,8 +8,8 @@ class Tests_Pluggable extends WP_UnitTestCase {
 	/**
 	 * Tests that the signatures of all functions in pluggable.php match their expected signature.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/33654
-	 * @see https://core.trac.wordpress.org/ticket/33867
+	 * @ticket 33654
+	 * @ticket 33867
 	 *
 	 * @dataProvider get_defined_pluggable_functions
 	 */
@@ -51,8 +51,8 @@ class Tests_Pluggable extends WP_UnitTestCase {
 	/**
 	 * Test the tests. Makes sure all the expected pluggable functions exist and that they live in pluggable.php.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/33654
-	 * @see https://core.trac.wordpress.org/ticket/33867
+	 * @ticket 33654
+	 * @ticket 33867
 	 */
 	public function test_all_pluggable_functions_exist() {
 

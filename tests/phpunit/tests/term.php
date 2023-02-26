@@ -12,7 +12,7 @@ class Tests_Term extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/29911
+	 * @ticket 29911
 	 */
 	public function test_wp_delete_term_should_invalidate_cache_for_child_terms() {
 		register_taxonomy(
@@ -47,7 +47,7 @@ class Tests_Term extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5381
+	 * @ticket 5381
 	 */
 	function test_is_term_type() {
 		// insert a term
@@ -62,7 +62,7 @@ class Tests_Term extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/15919
+	 * @ticket 15919
 	 */
 	function test_wp_count_terms() {
 		$count = wp_count_terms( 'category', array( 'hide_empty' => true ) );
@@ -71,7 +71,7 @@ class Tests_Term extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/15475
+	 * @ticket 15475
 	 */
 	function test_wp_add_remove_object_terms() {
 		$posts = self::$post_ids;
@@ -147,7 +147,7 @@ class Tests_Term extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16550
+	 * @ticket 16550
 	 */
 	function test_wp_set_post_categories() {
 		$post_id = self::$post_ids[0];
@@ -183,7 +183,7 @@ class Tests_Term extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/25852
+	 * @ticket 25852
 	 */
 	function test_sanitize_term_field() {
 		$term = wp_insert_term( 'foo', $this->taxonomy );
@@ -195,7 +195,7 @@ class Tests_Term extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/19205
+	 * @ticket 19205
 	 */
 	function test_orphan_category() {
 		$cat_id1 = self::factory()->category->create();

@@ -129,7 +129,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	/**
 	 * edit_post() should convert an existing auto-draft to a draft.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/25272
+	 * @ticket 25272
 	 */
 	function test_edit_post_auto_draft() {
 		wp_set_current_user( self::$editor_id );
@@ -146,7 +146,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30615
+	 * @ticket 30615
 	 */
 	public function test_edit_post_should_parse_tax_input_by_name_rather_than_slug_for_nonhierarchical_taxonomies() {
 		wp_set_current_user( self::$editor_id );
@@ -186,7 +186,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30615
+	 * @ticket 30615
 	 */
 	public function test_edit_post_should_not_create_terms_for_an_empty_tag_input_field() {
 		wp_set_current_user( self::$editor_id );
@@ -215,7 +215,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/27792
+	 * @ticket 27792
 	 */
 	public function test_bulk_edit_posts_stomping() {
 		wp_set_current_user( self::$admin_id );
@@ -259,7 +259,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/41396
+	 * @ticket 41396
 	 */
 	public function test_bulk_edit_posts_should_set_post_format_before_wp_update_post_runs() {
 		wp_set_current_user( self::$admin_id );
@@ -284,7 +284,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38293
+	 * @ticket 38293
 	 */
 	public function test_user_cant_delete_protected_meta() {
 		$protected_meta_key = '_test_meta_data_that_is_protected';
@@ -318,7 +318,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30910
+	 * @ticket 30910
 	 */
 	public function test_get_sample_permalink_should_return_pretty_permalink_for_posts_with_post_status_future() {
 		$permalink_structure = '%postname%';
@@ -340,8 +340,8 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30910
-	 * @see https://core.trac.wordpress.org/ticket/18306
+	 * @ticket 30910
+	 * @ticket 18306
 	 */
 	public function test_get_sample_permalink_html_should_use_default_permalink_for_view_post_link_when_pretty_permalinks_are_disabled() {
 		wp_set_current_user( self::$admin_id );
@@ -361,8 +361,8 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30910
-	 * @see https://core.trac.wordpress.org/ticket/18306
+	 * @ticket 30910
+	 * @ticket 18306
 	 */
 	public function test_get_sample_permalink_html_should_use_pretty_permalink_for_view_post_link_when_pretty_permalinks_are_enabled() {
 		$this->set_permalink_structure( '/%postname%/' );
@@ -385,7 +385,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35980
+	 * @ticket 35980
 	 */
 	public function test_get_sample_permalink_html_should_use_pretty_permalink_for_view_attachment_link_when_pretty_permalinks_are_enabled() {
 		$this->set_permalink_structure( '/%postname%/' );
@@ -410,8 +410,8 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/32954
-	 * @see https://core.trac.wordpress.org/ticket/18306
+	 * @ticket 32954
+	 * @ticket 18306
 	 */
 	public function test_get_sample_permalink_html_should_use_correct_permalink_for_view_post_link_when_changing_slug() {
 		$this->set_permalink_structure( '/%postname%/' );
@@ -468,8 +468,8 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30910
-	 * @see https://core.trac.wordpress.org/ticket/18306
+	 * @ticket 30910
+	 * @ticket 18306
 	 */
 	public function test_get_sample_permalink_html_should_use_preview_links_for_draft_and_pending_posts_with_no_post_name() {
 		$this->set_permalink_structure( '/%postname%/' );
@@ -491,7 +491,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_get_sample_permalink_should_avoid_slugs_that_would_create_clashes_with_year_archives() {
 		$this->set_permalink_structure( '/%postname%/' );
@@ -507,7 +507,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_get_sample_permalink_should_allow_yearlike_slugs_if_permastruct_does_not_cause_an_archive_conflict() {
 		$this->set_permalink_structure( '/%year%/%postname%/' );
@@ -523,7 +523,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_get_sample_permalink_should_avoid_slugs_that_would_create_clashes_with_month_archives() {
 		$this->set_permalink_structure( '/%year%/%postname%/' );
@@ -539,7 +539,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_get_sample_permalink_should_ignore_potential_month_conflicts_for_invalid_monthnum() {
 		$this->set_permalink_structure( '/%year%/%postname%/' );
@@ -555,7 +555,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_get_sample_permalink_should_avoid_slugs_that_would_create_clashes_with_day_archives() {
 		$this->set_permalink_structure( '/%year%/%monthnum%/%postname%/' );
@@ -571,7 +571,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_get_sample_permalink_should_iterate_slug_suffix_when_a_date_conflict_is_found() {
 		$this->set_permalink_structure( '/%year%/%monthnum%/%postname%/' );
@@ -593,7 +593,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_get_sample_permalink_should_ignore_potential_day_conflicts_for_invalid_day() {
 		$this->set_permalink_structure( '/%year%/%monthnum%/%postname%/' );
@@ -609,7 +609,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_get_sample_permalink_should_allow_daylike_slugs_if_permastruct_does_not_cause_an_archive_conflict() {
 		$this->set_permalink_structure( '/%year%/%monthnum%/%day%/%postname%/' );
@@ -625,7 +625,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35368
+	 * @ticket 35368
 	 */
 	public function test_get_sample_permalink_should_respect_hierarchy_of_draft_pages() {
 		$this->set_permalink_structure( '/%postname%/' );
@@ -685,7 +685,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35246
+	 * @ticket 35246
 	 */
 	public function test_post_exists_should_match_content_with_no_title() {
 		$title   = '';

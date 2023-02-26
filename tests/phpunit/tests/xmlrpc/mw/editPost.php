@@ -111,7 +111,7 @@ class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24916
+	 * @ticket 24916
 	 */
 	function test_capable_reassign_author_to_self() {
 		$contributor_id = $this->make_user_by_role( 'contributor' );
@@ -228,7 +228,7 @@ class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/20662
+	 * @ticket 20662
 	 */
 	function test_make_post_sticky() {
 		$author_id = $this->make_user_by_role( 'editor' );
@@ -263,7 +263,7 @@ class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16980
+	 * @ticket 16980
 	 */
 	function test_empty_not_null() {
 		$editor_id = $this->make_user_by_role( 'editor' );
@@ -295,7 +295,7 @@ class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35874
+	 * @ticket 35874
 	 */
 	function test_draft_not_prematurely_published() {
 		$editor_id = $this->make_user_by_role( 'editor' );

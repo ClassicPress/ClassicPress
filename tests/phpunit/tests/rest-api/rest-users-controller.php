@@ -1219,7 +1219,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/41101
+	 * @ticket 41101
 	 * @group ms-required
 	 */
 	public function test_create_new_network_user_with_add_user_to_blog_failure() {
@@ -1535,7 +1535,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38632
+	 * @ticket 38632
 	 */
 	public function test_update_item_empty_locale() {
 		$user_id = $this->factory->user->create(
@@ -1842,7 +1842,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/40263
+	 * @ticket 40263
 	 */
 	public function test_update_item_only_roles_as_editor() {
 		$user_id = $this->factory->user->create(
@@ -1859,7 +1859,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/40263
+	 * @ticket 40263
 	 */
 	public function test_update_item_only_roles_as_site_administrator() {
 		$user_id = $this->factory->user->create(
@@ -1879,7 +1879,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/40263
+	 * @ticket 40263
 	 */
 	public function test_update_item_including_roles_and_other_params() {
 		$user_id = $this->factory->user->create(
@@ -2605,7 +2605,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39701
+	 * @ticket 39701
 	 * @group ms-required
 	 */
 	public function test_get_item_from_different_site_as_site_administrator() {
@@ -2625,7 +2625,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39701
+	 * @ticket 39701
 	 * @group ms-required
 	 */
 	public function test_get_item_from_different_site_as_network_administrator() {
@@ -2645,7 +2645,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39701
+	 * @ticket 39701
 	 * @group ms-required
 	 */
 	public function test_update_item_from_different_site_as_site_administrator() {
@@ -2667,7 +2667,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39701
+	 * @ticket 39701
 	 * @group ms-required
 	 */
 	public function test_update_item_from_different_site_as_network_administrator() {
@@ -2689,7 +2689,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39701
+	 * @ticket 39701
 	 * @group ms-required
 	 */
 	public function test_delete_item_from_different_site_as_site_administrator() {
@@ -2711,7 +2711,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39701
+	 * @ticket 39701
 	 * @group ms-required
 	 */
 	public function test_delete_item_from_different_site_as_network_administrator() {

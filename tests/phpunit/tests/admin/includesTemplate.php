@@ -71,7 +71,7 @@ class Tests_Admin_includesTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/15000
+	 * @ticket 15000
 	 */
 	public function test_add_meta_box_on_multiple_screens() {
 		global $wp_meta_boxes;
@@ -85,7 +85,7 @@ class Tests_Admin_includesTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/15000
+	 * @ticket 15000
 	 */
 	public function test_remove_meta_box_from_multiple_screens() {
 		global $wp_meta_boxes;
@@ -109,7 +109,7 @@ class Tests_Admin_includesTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/50019
+	 * @ticket 50019
 	 */
 	public function test_add_meta_box_with_previously_removed_box_and_sorted_priority() {
 		global $wp_meta_boxes;

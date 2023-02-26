@@ -6,7 +6,7 @@
 class Tests_Actions_Callbacks extends WP_UnitTestCase {
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/23265
+	 * @ticket 23265
 	 */
 	function test_callback_representations() {
 		$tag = __FUNCTION__;

@@ -266,7 +266,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/9134
+	 * @ticket 9134
 	 */
 	function test_items_comments_closed() {
 		add_filter( 'comments_open', '__return_false' );
@@ -301,7 +301,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 	 * Check to make sure we are rendering feed templates for the home feed.
 	 * e.g. https://example.com/feed/
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30210
+	 * @ticket 30210
 	 */
 	function test_valid_home_feed_endpoint() {
 		// An example of a valid home feed endpoint.
@@ -329,7 +329,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 	 * Check to make sure we are rendering feed templates for the taxonomy feeds.
 	 * e.g. https://example.com/category/foo/feed/
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30210
+	 * @ticket 30210
 	 */
 	function test_valid_taxonomy_feed_endpoint() {
 		// An example of an valid taxonomy feed endpoint.
@@ -357,7 +357,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 	 * Check to make sure we are rendering feed templates for the main comment feed.
 	 * e.g. https://example.com/comments/feed/
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30210
+	 * @ticket 30210
 	 */
 	function test_valid_main_comment_feed_endpoint() {
 		// Generate a bunch of comments
@@ -390,7 +390,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 	 * Check to make sure we are rendering feed templates for the date archive feeds.
 	 * e.g. https://example.com/2003/05/27/feed/
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30210
+	 * @ticket 30210
 	 */
 	function test_valid_archive_feed_endpoint() {
 		// An example of an valid date archive feed endpoint.
@@ -418,7 +418,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 	 * Check to make sure we are rendering feed templates for single post comment feeds.
 	 * e.g. https://example.com/2003/05/27/post-name/feed/
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30210
+	 * @ticket 30210
 	 */
 	function test_valid_single_post_comment_feed_endpoint() {
 		// An example of an valid date archive feed endpoint.
@@ -446,7 +446,7 @@ class Tests_Feeds_RSS2 extends WP_UnitTestCase {
 	 * Check to make sure we are rendering feed templates for the search archive feeds.
 	 * e.g. https://example.com/?s=Lorem&feed=rss
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30210
+	 * @ticket 30210
 	 */
 	function test_valid_search_feed_endpoint() {
 		// An example of an valid search feed endpoint

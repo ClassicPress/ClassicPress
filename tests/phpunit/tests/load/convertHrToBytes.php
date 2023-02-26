@@ -9,7 +9,7 @@ class Tests_Functions_Convert_Hr_To_Bytes extends WP_UnitTestCase {
 	/**
 	 * Tests converting (PHP ini) byte values to integer byte values.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/32075
+	 * @ticket 32075
 	 *
 	 * @dataProvider data_wp_convert_hr_to_bytes
 	 *

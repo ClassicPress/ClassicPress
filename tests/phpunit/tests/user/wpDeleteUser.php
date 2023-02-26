@@ -8,7 +8,7 @@ class Tests_User_WpDeleteUser extends WP_UnitTestCase {
 	/**
 	 * Test that usermeta cache is cleared after user deletion.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/19500
+	 * @ticket 19500
 	 */
 	function test_get_blogs_of_user() {
 		// Logged out users don't have blogs.
@@ -29,7 +29,7 @@ class Tests_User_WpDeleteUser extends WP_UnitTestCase {
 	/**
 	 * Test that usermeta cache is cleared after user deletion.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/19500
+	 * @ticket 19500
 	 */
 	function test_is_user_member_of_blog() {
 		$old_current = get_current_user_id();
@@ -109,7 +109,7 @@ class Tests_User_WpDeleteUser extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/20447
+	 * @ticket 20447
 	 */
 	function test_wp_delete_user_reassignment_clears_post_caches() {
 		$user_id  = self::factory()->user->create();
@@ -136,14 +136,14 @@ class Tests_User_WpDeleteUser extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33800
+	 * @ticket 33800
 	 */
 	public function test_should_return_false_for_non_numeric_string_user_id() {
 		$this->assertFalse( wp_delete_user( 'abcde' ) );
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33800
+	 * @ticket 33800
 	 * @group ms-excluded
 	 */
 	public function test_should_return_false_for_object_user_id() {

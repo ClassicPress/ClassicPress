@@ -51,7 +51,7 @@ class Tests_Option_NetworkOption extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22846
+	 * @ticket 22846
 	 * @group ms-excluded
 	 */
 	public function test_add_network_option_is_not_stored_as_autoload_option() {
@@ -65,7 +65,7 @@ class Tests_Option_NetworkOption extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22846
+	 * @ticket 22846
 	 * @group ms-excluded
 	 */
 	public function test_update_network_option_is_not_stored_as_autoload_option() {

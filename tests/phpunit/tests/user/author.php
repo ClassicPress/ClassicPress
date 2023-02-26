@@ -89,7 +89,7 @@ class Tests_User_Author_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30904
+	 * @ticket 30904
 	 */
 	function test_get_the_author_posts_with_custom_post_type() {
 		register_post_type( 'wptests_pt' );
@@ -109,7 +109,7 @@ class Tests_User_Author_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30355
+	 * @ticket 30355
 	 */
 	public function test_get_the_author_posts_link_no_permalinks() {
 		$author = self::factory()->user->create_and_get(
@@ -133,7 +133,7 @@ class Tests_User_Author_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30355
+	 * @ticket 30355
 	 */
 	public function test_get_the_author_posts_link_with_permalinks() {
 		$this->set_permalink_structure( '/%postname%/' );

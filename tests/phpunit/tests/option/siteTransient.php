@@ -46,7 +46,7 @@ class Tests_Option_SiteTransient extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22846
+	 * @ticket 22846
 	 * @group ms-excluded
 	 */
 	public function test_set_site_transient_is_not_stored_as_autoload_option() {

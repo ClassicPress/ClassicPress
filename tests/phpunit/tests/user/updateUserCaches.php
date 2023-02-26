@@ -52,7 +52,7 @@ class Tests_User_UpdateUserCaches extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24635
+	 * @ticket 24635
 	 */
 	public function test_should_store_raw_data_in_users_bucket_when_passed_a_wp_user_object() {
 		global $wpdb;

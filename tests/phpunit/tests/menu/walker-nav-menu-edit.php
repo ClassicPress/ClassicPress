@@ -29,7 +29,7 @@ class Tests_Walker_Nav_Menu_Edit extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36729
+	 * @ticket 36729
 	 */
 	function test_original_title_prefix_should_not_be_shown_if_empty() {
 		$expected = '';

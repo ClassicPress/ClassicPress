@@ -30,7 +30,7 @@ class Tests_XMLRPC_wp_getOptions extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/20201
+	 * @ticket 20201
 	 */
 	function test_option_values_subscriber() {
 		global $wp_version;

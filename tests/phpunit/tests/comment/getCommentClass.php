@@ -38,7 +38,7 @@ class Tests_Comment_GetCommentClass extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33947
+	 * @ticket 33947
 	 */
 	public function test_should_return_an_empty_array_for_invalid_comment_id() {
 		$this->assertSame( array(), get_comment_class( 'foo', 12345 ) );

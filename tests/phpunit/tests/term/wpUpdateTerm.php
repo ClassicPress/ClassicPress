@@ -84,7 +84,7 @@ class Tests_Term_WpUpdateTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/29614
+	 * @ticket 29614
 	 */
 	function test_wp_update_term_parent_does_not_exist() {
 		register_taxonomy(
@@ -185,7 +185,7 @@ class Tests_Term_WpUpdateTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5809
+	 * @ticket 5809
 	 */
 	public function test_wp_update_term_should_not_create_duplicate_slugs_within_the_same_taxonomy() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -219,7 +219,7 @@ class Tests_Term_WpUpdateTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5809
+	 * @ticket 5809
 	 */
 	public function test_wp_update_term_should_allow_duplicate_slugs_in_different_taxonomy() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -257,7 +257,7 @@ class Tests_Term_WpUpdateTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30780
+	 * @ticket 30780
 	 */
 	public function test_wp_update_term_should_allow_duplicate_names_in_different_taxonomies() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -294,7 +294,7 @@ class Tests_Term_WpUpdateTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30780
+	 * @ticket 30780
 	 */
 	public function test_wp_update_term_should_allow_duplicate_names_at_different_levels_of_the_same_taxonomy() {
 		register_taxonomy(
@@ -346,7 +346,7 @@ class Tests_Term_WpUpdateTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5809
+	 * @ticket 5809
 	 */
 	public function test_wp_update_term_should_split_shared_term() {
 		global $wpdb;
@@ -621,7 +621,7 @@ class Tests_Term_WpUpdateTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/32876
+	 * @ticket 32876
 	 */
 	public function test_wp_update_term_should_return_int_values_for_term_id_and_term_taxonomy_id() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -689,7 +689,7 @@ class Tests_Term_WpUpdateTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30780
+	 * @ticket 30780
 	 */
 	public function test_wp_update_term_should_assign_new_slug_when_reassigning_parent_as_long_as_there_is_no_other_term_with_the_same_slug() {
 		register_taxonomy(
@@ -737,7 +737,7 @@ class Tests_Term_WpUpdateTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30780
+	 * @ticket 30780
 	 */
 	public function test_wp_update_term_should_not_assign_new_slug_when_reassigning_parent_as_long_as_there_is_no_other_slug_conflict_within_the_taxonomy() {
 		register_taxonomy(
@@ -793,7 +793,7 @@ class Tests_Term_WpUpdateTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31954
+	 * @ticket 31954
 	 */
 	public function test_wp_update_term_with_null_get_term() {
 		$t     = self::factory()->term->create( array( 'taxonomy' => 'category' ) );

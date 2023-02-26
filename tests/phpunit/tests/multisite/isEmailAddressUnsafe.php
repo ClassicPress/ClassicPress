@@ -14,8 +14,8 @@ if ( is_multisite() ) :
 
 		/**
 		 * @dataProvider data_unsafe
-		 * @see https://core.trac.wordpress.org/ticket/25046
-		 * @see https://core.trac.wordpress.org/ticket/21570
+		 * @ticket 25046
+		 * @ticket 21570
 		 */
 		public function test_unsafe_emails( $banned, $email ) {
 			update_site_option( 'banned_email_domains', $banned );
@@ -24,8 +24,8 @@ if ( is_multisite() ) :
 
 		/**
 		 * @dataProvider data_safe
-		 * @see https://core.trac.wordpress.org/ticket/25046
-		 * @see https://core.trac.wordpress.org/ticket/21570
+		 * @ticket 25046
+		 * @ticket 21570
 		 */
 		public function test_safe_emails( $banned, $email ) {
 			update_site_option( 'banned_email_domains', $banned );

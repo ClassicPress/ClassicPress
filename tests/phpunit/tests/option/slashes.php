@@ -3,7 +3,7 @@
 /**
  * @group option
  * @group slashes
- * @see https://core.trac.wordpress.org/ticket/21767
+ * @ticket 21767
  */
 class Tests_Option_Slashes extends WP_UnitTestCase {
 	function set_up() {

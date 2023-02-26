@@ -12,7 +12,7 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/26570
+	 * @ticket 26570
 	 */
 	function test_set_object_terms() {
 		$non_hier = rand_str( 10 );

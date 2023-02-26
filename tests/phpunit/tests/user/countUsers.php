@@ -6,7 +6,7 @@
 class Tests_User_CountUsers extends WP_UnitTestCase {
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22993
+	 * @ticket 22993
 	 *
 	 * @dataProvider data_count_users_strategies
 	 * @group ms-excluded
@@ -68,8 +68,8 @@ class Tests_User_CountUsers extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22993
-	 * @see https://core.trac.wordpress.org/ticket/36196
+	 * @ticket 22993
+	 * @ticket 36196
 	 * @group multisite
 	 * @group ms-required
 	 *
@@ -178,7 +178,7 @@ class Tests_User_CountUsers extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/42014
+	 * @ticket 42014
 	 * @group multisite
 	 * @group ms-required
 	 *
@@ -207,7 +207,7 @@ class Tests_User_CountUsers extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34495
+	 * @ticket 34495
 	 *
 	 * @dataProvider data_count_users_strategies
 	 */
@@ -252,7 +252,7 @@ class Tests_User_CountUsers extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/29785
+	 * @ticket 29785
 	 *
 	 * @dataProvider data_count_users_strategies
 	 */

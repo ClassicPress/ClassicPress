@@ -29,7 +29,7 @@ class Tests_XMLRPC_mw_getRecentPosts extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22320
+	 * @ticket 22320
 	 */
 	function test_no_editing_privileges() {
 		$this->make_user_by_role( 'subscriber' );

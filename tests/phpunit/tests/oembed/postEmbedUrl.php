@@ -28,7 +28,7 @@ class Tests_Post_Embed_URL extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34971
+	 * @ticket 34971
 	 */
 	function test_static_front_page() {
 		$this->set_permalink_structure( '/%postname%/' );
@@ -46,7 +46,7 @@ class Tests_Post_Embed_URL extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34971
+	 * @ticket 34971
 	 */
 	function test_static_front_page_with_ugly_permalinks() {
 		$post_id = self::factory()->post->create( array( 'post_type' => 'page' ) );
@@ -62,7 +62,7 @@ class Tests_Post_Embed_URL extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34971
+	 * @ticket 34971
 	 */
 	function test_page_conflicts_with_embed_slug() {
 		$this->set_permalink_structure( '/%postname%/' );
@@ -84,7 +84,7 @@ class Tests_Post_Embed_URL extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34971
+	 * @ticket 34971
 	 */
 	function test_static_front_page_conflicts_with_embed_slug() {
 		$this->set_permalink_structure( '/%postname%/' );

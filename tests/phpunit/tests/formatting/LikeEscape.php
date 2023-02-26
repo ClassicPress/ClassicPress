@@ -5,7 +5,7 @@
  */
 class Tests_Formatting_LikeEscape extends WP_UnitTestCase {
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/10041
+	 * @ticket 10041
 	 * @expectedDeprecated like_escape
 	 */
 	function test_like_escape() {

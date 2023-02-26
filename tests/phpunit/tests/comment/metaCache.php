@@ -5,7 +5,7 @@ class Tests_Comment_Meta_Cache extends WP_UnitTestCase {
 	protected $queries = 0;
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16894
+	 * @ticket 16894
 	 */
 	public function test_update_comment_meta_cache_should_default_to_true() {
 		global $wpdb;
@@ -35,7 +35,7 @@ class Tests_Comment_Meta_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16894
+	 * @ticket 16894
 	 */
 	public function test_update_comment_meta_cache_true() {
 		global $wpdb;
@@ -66,7 +66,7 @@ class Tests_Comment_Meta_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16894
+	 * @ticket 16894
 	 */
 	public function test_update_comment_meta_cache_false() {
 		global $wpdb;
@@ -94,7 +94,7 @@ class Tests_Comment_Meta_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16894
+	 * @ticket 16894
 	 */
 	public function test_comment_meta_should_be_lazy_loaded_for_all_comments_in_comments_template() {
 		global $wpdb;
@@ -129,7 +129,7 @@ class Tests_Comment_Meta_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34047
+	 * @ticket 34047
 	 */
 	public function test_comment_meta_should_be_lazy_loaded_in_comment_feed_queries() {
 		global $wpdb;
@@ -177,7 +177,7 @@ class Tests_Comment_Meta_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34047
+	 * @ticket 34047
 	 */
 	public function test_comment_meta_should_be_lazy_loaded_in_single_post_comment_feed_queries() {
 		global $wpdb;

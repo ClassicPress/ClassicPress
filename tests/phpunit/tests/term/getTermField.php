@@ -14,7 +14,7 @@ class Tests_Term_getTermField extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34245
+	 * @ticket 34245
 	 */
 	public function test_get_term_field_should_not_return_error_for_empty_taxonomy() {
 		$term = self::factory()->term->create_and_get( array( 'taxonomy' => $this->taxonomy ) );
@@ -25,7 +25,7 @@ class Tests_Term_getTermField extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34245
+	 * @ticket 34245
 	 */
 	public function test_get_term_field_supplying_a_taxonomy() {
 		$term = self::factory()->term->create_and_get( array( 'taxonomy' => $this->taxonomy ) );
@@ -35,7 +35,7 @@ class Tests_Term_getTermField extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34245
+	 * @ticket 34245
 	 */
 	public function test_get_term_field_supplying_no_taxonomy() {
 		$term = self::factory()->term->create_and_get( array( 'taxonomy' => $this->taxonomy ) );
@@ -45,7 +45,7 @@ class Tests_Term_getTermField extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34245
+	 * @ticket 34245
 	 */
 	public function test_get_term_field_should_accept_a_WP_Term_object_term_id_or_object() {
 		$term = self::factory()->term->create_and_get( array( 'taxonomy' => $this->taxonomy ) );
@@ -57,7 +57,7 @@ class Tests_Term_getTermField extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34245
+	 * @ticket 34245
 	 */
 	public function test_get_term_field_invalid_taxonomy_should_return_WP_Error() {
 		$term = self::factory()->term->create_and_get( array( 'taxonomy' => $this->taxonomy ) );
@@ -68,7 +68,7 @@ class Tests_Term_getTermField extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34245
+	 * @ticket 34245
 	 */
 	public function test_get_term_field_invalid_term_should_return_WP_Error() {
 		$found = get_term_field( 'taxonomy', 0, $this->taxonomy );

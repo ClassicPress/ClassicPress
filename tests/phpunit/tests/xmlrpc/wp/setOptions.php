@@ -5,7 +5,7 @@
 class Tests_XMLRPC_wp_setOptions extends WP_XMLRPC_UnitTestCase {
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22936
+	 * @ticket 22936
 	 */
 	function test_set_option_no_escape_strings() {
 		$this->make_user_by_role( 'administrator' );

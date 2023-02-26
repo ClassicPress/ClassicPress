@@ -143,7 +143,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 
 	/**
 	 * @group site_icon
-	 * @see https://core.trac.wordpress.org/ticket/38377
+	 * @ticket 38377
 	 */
 	function test_customize_preview_wp_site_icon_empty() {
 		global $wp_customize;
@@ -160,7 +160,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 
 	/**
 	 * @group site_icon
-	 * @see https://core.trac.wordpress.org/ticket/38377
+	 * @ticket 38377
 	 */
 	function test_customize_preview_wp_site_icon_dirty() {
 		global $wp_customize;
@@ -358,7 +358,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 
 	/**
 	 * @group custom_logo
-	 * @see https://core.trac.wordpress.org/ticket/38768
+	 * @ticket 38768
 	 */
 	function test_the_custom_logo_with_alt() {
 		$this->_set_custom_logo();
@@ -422,7 +422,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * Test get_the_modified_time
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/37059
+	 * @ticket 37059
 	 *
 	 * @since WP-4.6.0
 	 */
@@ -445,7 +445,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * Test get_the_modified_time failures are filtered
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/37059
+	 * @ticket 37059
 	 *
 	 * @since WP-4.6.0
 	 */
@@ -474,7 +474,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * Test get_the_modified_time with post_id parameter.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/37059
+	 * @ticket 37059
 	 *
 	 * @since WP-4.6.0
 	 */
@@ -493,7 +493,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * Test get_the_modified_date
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/37059
+	 * @ticket 37059
 	 *
 	 * @since WP-4.6.0
 	 */
@@ -516,7 +516,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * Test get_the_modified_date failures are filtered
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/37059
+	 * @ticket 37059
 	 *
 	 * @since WP-4.6.0
 	 */
@@ -545,7 +545,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	/**
 	 * Test get_the_modified_time with post_id parameter.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/37059
+	 * @ticket 37059
 	 *
 	 * @since WP-4.6.0
 	 */
@@ -562,7 +562,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38253
+	 * @ticket 38253
 	 * @group ms-required
 	 */
 	function test_get_site_icon_url_preserves_switched_state() {
@@ -581,7 +581,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38253
+	 * @ticket 38253
 	 * @group ms-required
 	 */
 	function test_has_custom_logo_preserves_switched_state() {
@@ -600,7 +600,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38253
+	 * @ticket 38253
 	 * @group ms-required
 	 */
 	function test_get_custom_logo_preserves_switched_state() {
@@ -619,7 +619,7 @@ class Tests_General_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/43590
+	 * @ticket 43590
 	 */
 	function test_wp_no_robots() {
 		// Simulate private site (search engines discouraged).

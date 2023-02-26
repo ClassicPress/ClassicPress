@@ -5,7 +5,7 @@
  */
 class Tests_Term_WpRemoveObjectTerms extends WP_UnitTestCase {
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34338
+	 * @ticket 34338
 	 */
 	public function test_removal_should_delete_object_relationship_cache() {
 		register_taxonomy( 'wptests_tax', 'post' );

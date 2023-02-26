@@ -141,7 +141,7 @@ class Tests_Image_Dimensions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/19393
+	 * @ticket 19393
 	 */
 	function test_crop_anchors() {
 		// Landscape: crop 640x480 to fit 400x500: 400x400 taken from a 480x480 crop.

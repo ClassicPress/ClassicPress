@@ -195,7 +195,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/23192
+		 * @ticket 23192
 		 */
 		function test_is_user_spammy() {
 			$user_id = self::factory()->user->create(
@@ -219,7 +219,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/20601
+		 * @ticket 20601
 		 */
 		function test_user_member_of_blog() {
 			global $wp_rewrite;
@@ -313,7 +313,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/27205
+		 * @ticket 27205
 		 */
 		function test_granting_super_admins() {
 			if ( isset( $GLOBALS['super_admins'] ) ) {
@@ -356,14 +356,14 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/33800
+		 * @ticket 33800
 		 */
 		public function test_should_return_false_for_non_numeric_string_user_id() {
 			$this->assertFalse( wpmu_delete_user( 'abcde' ) );
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/33800
+		 * @ticket 33800
 		 */
 		public function test_should_return_false_for_object_user_id() {
 			$u_obj = self::factory()->user->create_and_get();
@@ -372,7 +372,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/38356
+		 * @ticket 38356
 		 */
 		public function test_add_user_to_blog_subscriber() {
 			$site_id = self::factory()->blog->create();
@@ -391,7 +391,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/38356
+		 * @ticket 38356
 		 */
 		public function test_add_user_to_blog_invalid_user() {
 			$site_id = self::factory()->blog->create();
@@ -403,7 +403,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/41101
+		 * @ticket 41101
 		 */
 		public function test_should_fail_can_add_user_to_blog_filter() {
 			$site_id = self::factory()->blog->create();
@@ -416,7 +416,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/41101
+		 * @ticket 41101
 		 */
 		public function test_should_succeed_can_add_user_to_blog_filter() {
 			$site_id = self::factory()->blog->create();
@@ -429,7 +429,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/23016
+		 * @ticket 23016
 		 */
 		public function test_wp_roles_global_is_reset() {
 			global $wp_roles;

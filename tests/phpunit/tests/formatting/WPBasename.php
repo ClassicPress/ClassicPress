@@ -20,7 +20,7 @@ class Tests_Formatting_WP_Basename extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22138
+	 * @ticket 22138
 	 */
 	function test_wp_basename_windows() {
 		$this->assertSame(
@@ -30,7 +30,7 @@ class Tests_Formatting_WP_Basename extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22138
+	 * @ticket 22138
 	 */
 	function test_wp_basename_windows_utf8_support() {
 		$this->assertSame(

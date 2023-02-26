@@ -8,7 +8,7 @@ require_once ABSPATH . WPINC . '/class-wp-http-ixr-client.php';
 class Tests_XMLRPC_Client extends WP_XMLRPC_UnitTestCase {
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/26947
+	 * @ticket 26947
 	 */
 	function test_ixr_client_allows_query_strings() {
 		$client = new IXR_Client( 'http://example.com/server.php?this-is-needed=true#not-this' );
@@ -18,7 +18,7 @@ class Tests_XMLRPC_Client extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/26947
+	 * @ticket 26947
 	 */
 	function test_wp_ixr_client_allows_query_strings() {
 		$client = new WP_HTTP_IXR_Client( 'http://example.com/server.php?this-is-needed=true#not-this' );

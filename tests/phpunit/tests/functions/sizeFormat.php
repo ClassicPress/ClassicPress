@@ -4,7 +4,7 @@
  * Tests for size_format()
  *
  * @group functions.php
- * @see https://core.trac.wordpress.org/ticket/36635
+ * @ticket 36635
  */
 class Tests_Functions_SizeFormat extends WP_UnitTestCase {
 	public function _data_size_format() {

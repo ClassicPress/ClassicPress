@@ -13,7 +13,7 @@ class Tests_Post_GetBodyClass extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30883
+	 * @ticket 30883
 	 */
 	public function test_with_utf8_category_slugs() {
 		$cat_id1 = self::factory()->category->create( array( 'name' => 'Первая рубрика' ) );
@@ -32,7 +32,7 @@ class Tests_Post_GetBodyClass extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30883
+	 * @ticket 30883
 	 */
 	public function test_with_utf8_tag_slugs() {
 		$tag_id1 = self::factory()->tag->create( array( 'name' => 'Первая метка' ) );
@@ -55,7 +55,7 @@ class Tests_Post_GetBodyClass extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30883
+	 * @ticket 30883
 	 */
 	public function test_with_utf8_term_slugs() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -94,8 +94,8 @@ class Tests_Post_GetBodyClass extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35164
-	 * @see https://core.trac.wordpress.org/ticket/36510
+	 * @ticket 35164
+	 * @ticket 36510
 	 */
 	public function test_singular_body_classes() {
 		$post_id = self::factory()->post->create();
@@ -141,7 +141,7 @@ class Tests_Post_GetBodyClass extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/18375
+	 * @ticket 18375
 	 */
 	public function test_page_template_body_classes_attachment() {
 		$post_id = self::factory()->post->create(
@@ -163,7 +163,7 @@ class Tests_Post_GetBodyClass extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/18375
+	 * @ticket 18375
 	 */
 	public function test_page_template_body_classes_post() {
 		$post_id = self::factory()->post->create();
@@ -181,7 +181,7 @@ class Tests_Post_GetBodyClass extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38225
+	 * @ticket 38225
 	 */
 	public function test_attachment_body_classes() {
 		$post_id = self::factory()->post->create();

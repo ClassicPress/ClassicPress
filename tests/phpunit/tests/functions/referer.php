@@ -57,7 +57,7 @@ class Tests_Functions_Referer extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/19856
+	 * @ticket 19856
 	 */
 	public function test_from_request_subfolder_install() {
 		add_filter( 'site_url', array( $this, '_fake_subfolder_install' ) );
@@ -70,7 +70,7 @@ class Tests_Functions_Referer extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/19856
+	 * @ticket 19856
 	 */
 	public function test_from_request_subfolder_install_different_resource() {
 		add_filter( 'site_url', array( $this, '_fake_subfolder_install' ) );
@@ -101,8 +101,8 @@ class Tests_Functions_Referer extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/19856
-	 * @see https://core.trac.wordpress.org/ticket/27152
+	 * @ticket 19856
+	 * @ticket 27152
 	 */
 	public function test_different_server() {
 		$_SERVER['HTTP_REFERER'] = addslashes( 'http://another.' . WP_TESTS_DOMAIN . '/test.php?id=123' );
@@ -111,8 +111,8 @@ class Tests_Functions_Referer extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/19856
-	 * @see https://core.trac.wordpress.org/ticket/27152
+	 * @ticket 19856
+	 * @ticket 27152
 	 */
 	public function test_different_server_allowed_redirect_host() {
 		add_filter( 'allowed_redirect_hosts', array( $this, 'filter_allowed_redirect_hosts' ) );
@@ -123,14 +123,14 @@ class Tests_Functions_Referer extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/27152
+	 * @ticket 27152
 	 */
 	public function test_raw_referer_empty() {
 		$this->assertFalse( wp_get_raw_referer() );
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/27152
+	 * @ticket 27152
 	 */
 	public function test_raw_referer() {
 		$_SERVER['HTTP_REFERER'] = addslashes( 'http://example.com/foo?bar' );
@@ -138,7 +138,7 @@ class Tests_Functions_Referer extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/27152
+	 * @ticket 27152
 	 */
 	public function test_raw_referer_from_request() {
 		$_REQUEST['_wp_http_referer'] = addslashes( 'http://foo.bar/baz' );
@@ -146,7 +146,7 @@ class Tests_Functions_Referer extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/27152
+	 * @ticket 27152
 	 */
 	public function test_raw_referer_both() {
 		$_SERVER['HTTP_REFERER']      = addslashes( 'http://example.com/foo?bar' );

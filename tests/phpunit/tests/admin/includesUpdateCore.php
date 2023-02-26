@@ -22,7 +22,7 @@ class Tests_Admin_IncludesUpdateCore extends WP_UnitTestCase {
 	/**
 	 * Ensure no project files are inside `$_old_files` in the build directory.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/36083
+	 * @ticket 36083
 	 *
 	 * @dataProvider data_old_files
 	 *

@@ -324,7 +324,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38323
+	 * @ticket 38323
 	 * @dataProvider data_get_types_and_subtypes
 	 */
 	public function test_register_meta_with_subtype_populates_wp_meta_keys( $type, $subtype ) {
@@ -356,7 +356,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38323
+	 * @ticket 38323
 	 * @dataProvider data_get_types_and_subtypes
 	 */
 	public function test_unregister_meta_with_subtype_unpopulates_wp_meta_keys( $type, $subtype ) {
@@ -374,7 +374,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38323
+	 * @ticket 38323
 	 * @dataProvider data_get_types_and_subtypes
 	 */
 	public function test_unregister_meta_without_subtype_keeps_subtype_meta_key( $type, $subtype ) {
@@ -409,7 +409,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38323
+	 * @ticket 38323
 	 * @dataProvider data_get_types_and_subtypes
 	 */
 	public function test_get_registered_meta_keys_with_subtype( $type, $subtype ) {
@@ -424,7 +424,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38323
+	 * @ticket 38323
 	 * @dataProvider data_get_types_and_subtypes
 	 */
 	public function test_get_registered_metadata_with_subtype( $type, $subtype ) {
@@ -481,7 +481,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38323
+	 * @ticket 38323
 	 * @dataProvider data_get_types_and_subtypes
 	 */
 	public function test_get_object_subtype( $type, $expected_subtype ) {
@@ -492,7 +492,7 @@ class Tests_Meta_Register_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38323
+	 * @ticket 38323
 	 */
 	public function test_get_object_subtype_custom() {
 		add_filter( 'get_object_subtype_customtype', array( $this, 'filter_get_object_subtype_for_customtype' ), 10, 2 );

@@ -64,8 +64,8 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/4539
-	 * @see https://core.trac.wordpress.org/ticket/15241
+	 * @ticket 4539
+	 * @ticket 15241
 	 */
 	function test_full_sentences_with_unmatched_single_quotes() {
 		$this->assertSame(
@@ -75,7 +75,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/4539
+	 * @ticket 4539
 	 */
 	function test_quotes() {
 		$this->assertSame( '&#8220;Quoted String&#8221;', wptexturize( '"Quoted String"' ) );
@@ -94,7 +94,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/4539
+	 * @ticket 4539
 	 */
 	function test_quotes_before_s() {
 		$this->assertSame( 'test&#8217;s', wptexturize( "test's" ) );
@@ -105,7 +105,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/4539
+	 * @ticket 4539
 	 */
 	function test_quotes_before_numbers() {
 		$this->assertSame( 'Class of &#8217;99', wptexturize( "Class of '99" ) );
@@ -139,8 +139,8 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/4539
-	 * @see https://core.trac.wordpress.org/ticket/15241
+	 * @ticket 4539
+	 * @ticket 15241
 	 */
 	function test_other_html() {
 		$this->assertSame( '&#8216;<strong>', wptexturize( "'<strong>" ) );
@@ -164,7 +164,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/8775
+	 * @ticket 8775
 	 */
 	function test_wptexturize_quotes_around_numbers() {
 		$this->assertSame( '&#8220;12345&#8221;', wptexturize( '"12345"' ) );
@@ -174,7 +174,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/8912
+	 * @ticket 8912
 	 */
 	function test_wptexturize_html_comments() {
 		$this->assertSame( '<!--[if !IE]>--><!--<![endif]-->', wptexturize( '<!--[if !IE]>--><!--<![endif]-->' ) );
@@ -183,8 +183,8 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/4539
-	 * @see https://core.trac.wordpress.org/ticket/15241
+	 * @ticket 4539
+	 * @ticket 15241
 	 */
 	function test_entity_quote_cuddling() {
 		$this->assertSame( '&nbsp;&#8220;Testing&#8221;', wptexturize( '&nbsp;"Testing"' ) );
@@ -192,14 +192,14 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22823
+	 * @ticket 22823
 	 */
 	function test_apostrophes_before_primes() {
 		$this->assertSame( 'WordPress 3.5&#8217;s release date', wptexturize( "WordPress 3.5's release date" ) );
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/23185
+	 * @ticket 23185
 	 */
 	function test_spaces_around_hyphens() {
 		$nbsp = "\xC2\xA0";
@@ -222,7 +222,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31030
+	 * @ticket 31030
 	 */
 	function test_hyphens_at_start_and_end() {
 		$this->assertSame( '&#8211; ', wptexturize( '- ' ) );
@@ -239,7 +239,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	 *
 	 * These should never happen, even if the desired output changes some day.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22692
+	 * @ticket 22692
 	 */
 	function test_spaces_around_quotes_never() {
 		$nbsp = "\xC2\xA0";
@@ -255,7 +255,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	 *
 	 * These are desirable outputs for the current design.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22692
+	 * @ticket 22692
 	 * @dataProvider data_spaces_around_quotes
 	 */
 	function test_spaces_around_quotes( $input, $output ) {
@@ -311,7 +311,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	 *
 	 * Checks all baseline patterns. If anything ever changes in wptexturize(), these tests may fail.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22692
+	 * @ticket 22692
 	 * @dataProvider data_apos_before_digits
 	 */
 	function test_apos_before_digits( $input, $output ) {
@@ -352,7 +352,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	 *
 	 * Checks all baseline patterns. If anything ever changes in wptexturize(), these tests may fail.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22692
+	 * @ticket 22692
 	 * @dataProvider data_opening_single_quote
 	 */
 	function test_opening_single_quote( $input, $output ) {
@@ -481,7 +481,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	 *
 	 * Checks all baseline patterns. If anything ever changes in wptexturize(), these tests may fail.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22692
+	 * @ticket 22692
 	 * @dataProvider data_double_prime
 	 */
 	function test_double_prime( $input, $output ) {
@@ -514,7 +514,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	 *
 	 * Checks all baseline patterns. If anything ever changes in wptexturize(), these tests may fail.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22692
+	 * @ticket 22692
 	 * @dataProvider data_single_prime
 	 */
 	function test_single_prime( $input, $output ) {
@@ -547,7 +547,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	 *
 	 * Checks all baseline patterns. If anything ever changes in wptexturize(), these tests may fail.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22692
+	 * @ticket 22692
 	 * @dataProvider data_contractions
 	 */
 	function test_contractions( $input, $output ) {
@@ -588,7 +588,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	 *
 	 * Checks all baseline patterns. If anything ever changes in wptexturize(), these tests may fail.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22692
+	 * @ticket 22692
 	 * @dataProvider data_opening_quote
 	 */
 	function test_opening_quote( $input, $output ) {
@@ -665,7 +665,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	 *
 	 * Checks all baseline patterns. If anything ever changes in wptexturize(), these tests may fail.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22692
+	 * @ticket 22692
 	 * @dataProvider data_closing_quote
 	 */
 	function test_closing_quote( $input, $output ) {
@@ -754,7 +754,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	 *
 	 * Checks all baseline patterns. If anything ever changes in wptexturize(), these tests may fail.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22692
+	 * @ticket 22692
 	 * @dataProvider data_closing_single_quote
 	 */
 	function test_closing_single_quote( $input, $output ) {
@@ -843,7 +843,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	 *
 	 * Checks all baseline patterns. If anything ever changes in wptexturize(), these tests may fail.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22692
+	 * @ticket 22692
 	 * @dataProvider data_multiplication
 	 */
 	function test_multiplication( $input, $output ) {
@@ -864,7 +864,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 				'-123x1=-123',
 				'-123&#215;1=-123',
 			),
-			// @see https://core.trac.wordpress.org/ticket/30445
+			// @ticket 30445
 			array(
 				'-123x-1',
 				'-123x-1',
@@ -893,7 +893,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	 *
 	 * Checks all baseline patterns. If anything ever changes in wptexturize(), these tests may fail.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22692
+	 * @ticket 22692
 	 * @dataProvider data_ampersand
 	 */
 	function test_ampersand( $input, $output ) {
@@ -958,7 +958,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	 *
 	 * Checks all baseline patterns. If anything ever changes in wptexturize(), these tests may fail.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22692
+	 * @ticket 22692
 	 * @dataProvider data_cockney
 	 */
 	function test_cockney( $input, $output ) {
@@ -1019,7 +1019,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	 *
 	 * Checks all baseline patterns. If anything ever changes in wptexturize(), these tests may fail.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22692
+	 * @ticket 22692
 	 * @dataProvider data_smart_dashes
 	 */
 	function test_smart_dashes( $input, $output ) {
@@ -1072,7 +1072,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	 *
 	 * Checks all baseline patterns. If anything ever changes in wptexturize(), these tests may fail.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/22692
+	 * @ticket 22692
 	 * @dataProvider data_misc_static_replacements
 	 */
 	function test_misc_static_replacements( $input, $output ) {
@@ -1127,7 +1127,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	/**
 	 * Numbers inside of matching quotes get curly quotes instead of apostrophes and primes.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/8775
+	 * @ticket 8775
 	 * @dataProvider data_quoted_numbers
 	 */
 	function test_quoted_numbers( $input, $output ) {
@@ -1178,7 +1178,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	/**
 	 * Quotations should be allowed to have dashes around them.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/20342
+	 * @ticket 20342
 	 * @dataProvider data_quotes_and_dashes
 	 */
 	function test_quotes_and_dashes( $input, $output ) {
@@ -1241,7 +1241,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	/**
 	 * Test HTML and shortcode avoidance.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/12690
+	 * @ticket 12690
 	 * @dataProvider data_tag_avoidance
 	 */
 	function test_tag_avoidance( $input, $output ) {
@@ -1464,7 +1464,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	/**
 	 * Year abbreviations consist of exactly two digits.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/26850
+	 * @ticket 26850
 	 * @dataProvider data_year_abbr
 	 */
 	function test_year_abbr( $input, $output ) {
@@ -1553,7 +1553,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	 *
 	 * Also make sure apostrophes and closing quotes aren't being confused by default.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/27426
+	 * @ticket 27426
 	 * @dataProvider data_translate
 	 */
 	function test_translate( $input, $output ) {
@@ -1780,7 +1780,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	/**
 	 * Extra sanity checks for _wptexturize_pushpop_element()
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/28483
+	 * @ticket 28483
 	 * @dataProvider data_element_stack
 	 */
 	function test_element_stack( $input, $output ) {
@@ -1831,7 +1831,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	/**
 	 * Test disabling shortcode texturization.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/29557
+	 * @ticket 29557
 	 * @dataProvider data_unregistered_shortcodes
 	 */
 	function test_unregistered_shortcodes( $input, $output ) {
@@ -1916,7 +1916,7 @@ class Tests_Formatting_WPTexturize extends WP_UnitTestCase {
 	/**
 	 * Ensure primes logic is not too greedy at the end of a quotation.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/29256
+	 * @ticket 29256
 	 * @dataProvider data_primes_vs_quotes
 	 */
 	function test_primes_vs_quotes( $input, $output ) {
@@ -1978,7 +1978,7 @@ String with a number followed by a single quote &#8216;Expendables 3&#8217; vest
 	 *
 	 * Also make sure opening and closing quotes are allowed to be identical.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/29256
+	 * @ticket 29256
 	 * @dataProvider data_primes_quotes_translation
 	 */
 	function test_primes_quotes_translation( $input, $output ) {
@@ -2092,7 +2092,7 @@ String with a number followed by a single quote !q1!Expendables 3!q1! vestibulum
 	/**
 	 * Ensure that a trailing less-than symbol doesn't cause a PHP warning.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/35864
+	 * @ticket 35864
 	 */
 	function test_trailing_less_than() {
 		$this->assertSame( 'F&#8211;oo<', wptexturize( 'F--oo<', true ) );

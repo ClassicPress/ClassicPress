@@ -2,7 +2,7 @@
 
 /**
  * @group menu
- * @see https://core.trac.wordpress.org/ticket/36590
+ * @ticket 36590
  */
 class Tests_Menu_WpExpandNavMenuPostData extends WP_UnitTestCase {
 	public function test_unnested_data_should_expand() {

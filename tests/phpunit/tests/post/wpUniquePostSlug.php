@@ -7,7 +7,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 	protected $post_ids = array();
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21013
+	 * @ticket 21013
 	 */
 	public function test_non_latin_slugs() {
 		$author_id = self::factory()->user->create( array( 'role' => 'editor' ) );
@@ -41,7 +41,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/18962
+	 * @ticket 18962
 	 */
 	public function test_with_multiple_hierarchies() {
 		register_post_type( 'post-type-1', array( 'hierarchical' => true ) );
@@ -67,7 +67,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30339
+	 * @ticket 30339
 	 */
 	public function test_with_hierarchy() {
 		register_post_type( 'post-type-1', array( 'hierarchical' => true ) );
@@ -90,7 +90,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/18962
+	 * @ticket 18962
 	 */
 	function test_wp_unique_post_slug_with_hierarchy_and_attachments() {
 		register_post_type( 'post-type-1', array( 'hierarchical' => true ) );
@@ -177,7 +177,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_slugs_resulting_in_permalinks_that_resemble_year_archives_should_be_suffixed() {
 		$this->set_permalink_structure( '/%postname%/' );
@@ -194,7 +194,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_slugs_resulting_in_permalinks_that_resemble_year_archives_should_not_be_suffixed_for_already_published_posts() {
 		$this->set_permalink_structure( '/%postname%/' );
@@ -212,7 +212,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_yearlike_slugs_should_not_be_suffixed_if_permalink_structure_does_not_result_in_a_clash_with_year_archives() {
 		$this->set_permalink_structure( '/%year%/%postname%/' );
@@ -229,7 +229,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_slugs_resulting_in_permalinks_that_resemble_month_archives_should_be_suffixed() {
 		$this->set_permalink_structure( '/%year%/%postname%/' );
@@ -246,7 +246,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_monthlike_slugs_should_not_be_suffixed_if_permalink_structure_does_not_result_in_a_clash_with_month_archives() {
 		$this->set_permalink_structure( '/%year%/foo/%postname%/' );
@@ -263,7 +263,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_monthlike_slugs_should_not_be_suffixed_for_invalid_month_numbers() {
 		$this->set_permalink_structure( '/%year%/%postname%/' );
@@ -280,7 +280,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_slugs_resulting_in_permalinks_that_resemble_day_archives_should_be_suffixed() {
 		$this->set_permalink_structure( '/%year%/%monthnum%/%postname%/' );
@@ -297,7 +297,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_daylike_slugs_should_not_be_suffixed_if_permalink_structure_does_not_result_in_a_clash_with_day_archives() {
 		$this->set_permalink_structure( '/%year%/%monthnum%/%day%/%postname%/' );
@@ -314,7 +314,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_daylike_slugs_should_not_be_suffixed_for_invalid_day_numbers() {
 		$this->set_permalink_structure( '/%year%/%monthnum%/%postname%/' );
@@ -331,7 +331,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34971
+	 * @ticket 34971
 	 */
 	public function test_embed_slug_should_be_suffixed_for_posts() {
 		$this->set_permalink_structure( '/%postname%/' );
@@ -348,7 +348,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34971
+	 * @ticket 34971
 	 */
 	public function test_embed_slug_should_be_suffixed_for_pages() {
 		$this->set_permalink_structure( '/%postname%/' );
@@ -365,7 +365,7 @@ class Tests_Post_WpUniquePostSlug extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34971
+	 * @ticket 34971
 	 */
 	public function test_embed_slug_should_be_suffixed_for_attachments() {
 		$this->set_permalink_structure( '/%postname%/' );

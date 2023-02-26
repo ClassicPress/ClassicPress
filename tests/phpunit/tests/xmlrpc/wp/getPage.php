@@ -29,7 +29,7 @@ class Tests_XMLRPC_wp_getPage extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/20336
+	 * @ticket 20336
 	 */
 	function test_invalid_pageid() {
 		$this->make_user_by_role( 'editor' );

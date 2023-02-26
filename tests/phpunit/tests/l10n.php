@@ -7,7 +7,7 @@
 class Tests_L10n extends WP_UnitTestCase {
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35961
+	 * @ticket 35961
 	 */
 	function test_n_noop() {
 		$text_domain   = 'text-domain';
@@ -20,7 +20,7 @@ class Tests_L10n extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35961
+	 * @ticket 35961
 	 */
 	function test_nx_noop() {
 		$text_domain   = 'text-domain';
@@ -34,7 +34,7 @@ class Tests_L10n extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35073
+	 * @ticket 35073
 	 */
 	function test_before_last_bar() {
 		$this->assertSame( 'no-bar-at-all', before_last_bar( 'no-bar-at-all' ) );
@@ -43,7 +43,7 @@ class Tests_L10n extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35950
+	 * @ticket 35950
 	 */
 	function test_get_available_languages() {
 		$array = get_available_languages();
@@ -57,7 +57,7 @@ class Tests_L10n extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35284
+	 * @ticket 35284
 	 */
 	function test_wp_get_installed_translations_for_core() {
 		$installed_translations = wp_get_installed_translations( 'core' );
@@ -79,7 +79,7 @@ class Tests_L10n extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35294
+	 * @ticket 35294
 	 */
 	function test_wp_dropdown_languages() {
 		$args   = array(
@@ -100,7 +100,7 @@ class Tests_L10n extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38632
+	 * @ticket 38632
 	 */
 	function test_wp_dropdown_languages_site_default() {
 		$args   = array(
@@ -123,7 +123,7 @@ class Tests_L10n extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38632
+	 * @ticket 38632
 	 */
 	function test_wp_dropdown_languages_en_US_selected() {
 		$args   = array(
@@ -164,7 +164,7 @@ class Tests_L10n extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35284
+	 * @ticket 35284
 	 */
 	function test_wp_get_pomo_file_data() {
 		$file  = DIR_TESTDATA . '/pomo/empty.po';

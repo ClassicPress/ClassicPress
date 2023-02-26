@@ -24,7 +24,7 @@ class Tests_Ajax_MediaEdit extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22985
+	 * @ticket 22985
 	 */
 	public function testCropImageThumbnail() {
 		include_once ABSPATH . 'wp-admin/includes/image-edit.php';
@@ -53,7 +53,7 @@ class Tests_Ajax_MediaEdit extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/32171
+	 * @ticket 32171
 	 */
 	public function testImageEditOverwriteConstant() {
 		define( 'IMAGE_EDIT_OVERWRITE', true );

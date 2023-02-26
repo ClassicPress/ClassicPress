@@ -855,7 +855,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38446
+	 * @ticket 38446
 	 * @expectedDeprecated rest_enabled
 	 */
 	public function test_rest_enable_filter_is_deprecated() {
@@ -1076,7 +1076,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 	/**
 	 * Refreshed nonce should not be present in header when an invalid nonce is passed for logged in user.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/35662
+	 * @ticket 35662
 	 */
 	public function test_rest_send_refreshed_nonce_invalid_nonce() {
 		$this->helper_setup_user_for_rest_send_refreshed_nonce_tests();
@@ -1093,7 +1093,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 	 * passed for logged in/anonymous user and not present when nonce is not
 	 * passed.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/35662
+	 * @ticket 35662
 	 *
 	 * @dataProvider data_rest_send_refreshed_nonce
 	 *
@@ -1122,7 +1122,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 	 * Make sure that a sanitization that transforms the argument type will not
 	 * cause the validation to fail.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/37192
+	 * @ticket 37192
 	 */
 	public function test_rest_validate_before_sanitization() {
 		register_rest_route(

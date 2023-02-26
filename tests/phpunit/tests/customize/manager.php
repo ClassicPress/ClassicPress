@@ -150,7 +150,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test constructor when deferring UUID.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/39896
+	 * @ticket 39896
 	 * @covers WP_Customize_Manager::establish_loaded_changeset()
 	 * @covers WP_Customize_Manager::__construct()
 	 */
@@ -271,7 +271,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	 * Test that clearing a fresh site is a no-op if the site is already fresh.
 	 *
 	 * @see _delete_option_fresh_site()
-	 * @see https://core.trac.wordpress.org/ticket/41039
+	 * @ticket 41039
 	 */
 	function test_fresh_site_flag_clearing() {
 		global $wp_customize, $wpdb;
@@ -328,7 +328,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::settings_previewed().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/39221
+	 * @ticket 39221
 	 * @covers WP_Customize_Manager::settings_previewed()
 	 */
 	function test_settings_previewed() {
@@ -342,7 +342,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::autosaved().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/39896
+	 * @ticket 39896
 	 * @covers WP_Customize_Manager::autosaved()
 	 */
 	public function test_autosaved() {
@@ -359,7 +359,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::branching().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/39896
+	 * @ticket 39896
 	 * @covers WP_Customize_Manager::branching()
 	 */
 	public function test_branching() {
@@ -381,7 +381,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::changeset_uuid().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30937
+	 * @ticket 30937
 	 * @covers WP_Customize_Manager::changeset_uuid()
 	 */
 	function test_changeset_uuid() {
@@ -395,7 +395,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	 *
 	 * Ensure that post values are previewed even without being in preview.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30937
+	 * @ticket 30937
 	 * @covers WP_Customize_Manager::wp_loaded()
 	 */
 	function test_wp_loaded() {
@@ -413,7 +413,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::find_changeset_post_id().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30937
+	 * @ticket 30937
 	 * @covers WP_Customize_Manager::find_changeset_post_id()
 	 */
 	function test_find_changeset_post_id() {
@@ -438,7 +438,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::changeset_post_id().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30937
+	 * @ticket 30937
 	 * @covers WP_Customize_Manager::changeset_post_id()
 	 */
 	function test_changeset_post_id() {
@@ -462,7 +462,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::changeset_data().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30937
+	 * @ticket 30937
 	 * @covers WP_Customize_Manager::changeset_data()
 	 */
 	function test_changeset_data() {
@@ -805,7 +805,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::customize_preview_init().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30937
+	 * @ticket 30937
 	 * @covers WP_Customize_Manager::customize_preview_init()
 	 */
 	function test_customize_preview_init() {
@@ -849,7 +849,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::filter_iframe_security_headers().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30937
+	 * @ticket 30937
 	 * @covers WP_Customize_Manager::filter_iframe_security_headers()
 	 */
 	function test_filter_iframe_security_headers() {
@@ -864,7 +864,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::add_state_query_params().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30937
+	 * @ticket 30937
 	 * @covers WP_Customize_Manager::add_state_query_params()
 	 */
 	function test_add_state_query_params() {
@@ -923,7 +923,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::save_changeset_post().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30937
+	 * @ticket 30937
 	 * @covers WP_Customize_Manager::save_changeset_post()
 	 */
 	function test_save_changeset_post_without_theme_activation() {
@@ -1378,7 +1378,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::save_changeset_post().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30937
+	 * @ticket 30937
 	 * @covers WP_Customize_Manager::save_changeset_post()
 	 * @covers WP_Customize_Manager::update_stashed_theme_mod_settings()
 	 */
@@ -1417,7 +1417,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test saving changesets with varying users and capabilities.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/38705
+	 * @ticket 38705
 	 * @covers WP_Customize_Manager::save_changeset_post()
 	 */
 	function test_save_changeset_post_with_varying_users() {
@@ -1594,7 +1594,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test that updating an auto-draft changeset bumps its post_date to keep it from getting garbage collected by wp_delete_auto_drafts().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/31089
+	 * @ticket 31089
 	 * @see wp_delete_auto_drafts()
 	 * @covers WP_Customize_Manager::save_changeset_post()
 	 */
@@ -1635,7 +1635,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test writing changesets when user supplies unchanged values.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/38865
+	 * @ticket 38865
 	 * @covers WP_Customize_Manager::save_changeset_post()
 	 */
 	function test_save_changeset_post_with_unchanged_values() {
@@ -1725,7 +1725,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test writing changesets when user supplies unchanged values.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/39896
+	 * @ticket 39896
 	 * @covers WP_Customize_Manager::save_changeset_post()
 	 * @covers WP_Customize_Manager::grant_edit_post_capability_for_changeset()
 	 */
@@ -1835,7 +1835,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test passing `null` for a setting ID to remove it from the changeset.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/41621
+	 * @ticket 41621
 	 * @covers WP_Customize_Manager::save_changeset_post()
 	 */
 	function test_remove_setting_from_changeset_post() {
@@ -1871,7 +1871,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test writing changesets and publishing with users who can unfiltered_html and those who cannot.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/38705
+	 * @ticket 38705
 	 * @covers WP_Customize_Manager::save_changeset_post()
 	 */
 	function test_save_changeset_post_with_varying_unfiltered_html_cap() {
@@ -1941,7 +1941,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	 * so this ensures that the previewing is bypassed when in the context of
 	 * publishing
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/39221
+	 * @ticket 39221
 	 * @covers _wp_customize_publish_changeset()
 	 * @see WP_Customize_Widgets::schedule_customize_register()
 	 * @see WP_Customize_Widgets::customize_register()
@@ -1989,7 +1989,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Ensure that saving a changeset with a publish status but future date will change the status to future, to align with behavior in wp_insert_post().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/41336
+	 * @ticket 41336
 	 * @covers WP_Customize_Manager::save_changeset_post
 	 */
 	function test_publish_changeset_with_future_status_when_future_date() {
@@ -2009,7 +2009,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Ensure that save_changeset_post method bails updating an underlying changeset which is invalid.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/41252
+	 * @ticket 41252
 	 * @covers WP_Customize_Manager::save_changeset_post
 	 * @covers WP_Customize_Manager::get_changeset_post_data
 	 */
@@ -2127,7 +2127,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::is_cross_domain().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30937
+	 * @ticket 30937
 	 * @covers WP_Customize_Manager::is_cross_domain()
 	 */
 	function test_is_cross_domain() {
@@ -2145,7 +2145,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::get_allowed_urls().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30937
+	 * @ticket 30937
 	 * @covers WP_Customize_Manager::get_allowed_urls()
 	 */
 	function test_get_allowed_urls() {
@@ -2200,7 +2200,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::unsanitized_post_values().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30988
+	 * @ticket 30988
 	 */
 	function test_unsanitized_post_values_from_input() {
 		wp_set_current_user( self::$admin_user_id );
@@ -2228,7 +2228,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::unsanitized_post_values().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30937
+	 * @ticket 30937
 	 * @covers WP_Customize_Manager::unsanitized_post_values()
 	 */
 	function test_unsanitized_post_values_with_changeset_and_stashed_theme_mods() {
@@ -2353,7 +2353,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test the WP_Customize_Manager::post_value() method.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30988
+	 * @ticket 30988
 	 */
 	function test_post_value() {
 		wp_set_current_user( self::$admin_user_id );
@@ -2377,7 +2377,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test the WP_Customize_Manager::post_value() method for a setting value that fails validation.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/34893
+	 * @ticket 34893
 	 */
 	function test_invalid_post_value() {
 		wp_set_current_user( self::$admin_user_id );
@@ -2446,7 +2446,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test the WP_Customize_Manager::post_value() method to make sure that the validation and sanitization are done in the right order.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/37247
+	 * @ticket 37247
 	 */
 	function test_post_value_validation_sanitization_order() {
 		wp_set_current_user( self::$admin_user_id );
@@ -2542,7 +2542,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::validate_setting_values().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/37638
+	 * @ticket 37638
 	 * @covers WP_Customize_Manager::validate_setting_values()
 	 */
 	function test_late_validate_setting_values() {
@@ -2568,7 +2568,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::validate_setting_values().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30937
+	 * @ticket 30937
 	 * @covers WP_Customize_Manager::validate_setting_values()
 	 */
 	function test_validate_setting_values_args() {
@@ -2620,7 +2620,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test the WP_Customize_Manager::validate_setting_values() method to make sure that the validation and sanitization are done in the right order.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/37247
+	 * @ticket 37247
 	 */
 	function test_validate_setting_values_validation_sanitization_order() {
 		wp_set_current_user( self::$admin_user_id );
@@ -2729,7 +2729,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test the WP_Customize_Manager::add_dynamic_settings() method.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30936
+	 * @ticket 30936
 	 */
 	function test_add_dynamic_settings() {
 		$manager     = $this->manager;
@@ -2749,7 +2749,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test WP_Customize_Manager::has_published_pages().
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/38013
+	 * @ticket 38013
 	 * @covers WP_Customize_Manager::has_published_pages()
 	 */
 	function test_has_published_pages() {
@@ -2778,7 +2778,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Ensure that page stubs created via nav menus will cause has_published_pages to return true.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/38013
+	 * @ticket 38013
 	 * @covers WP_Customize_Manager::has_published_pages()
 	 */
 	function test_has_published_pages_when_nav_menus_created_posts() {
@@ -2808,7 +2808,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	 *
 	 * This is similar to test_add_dynamic_settings, except the settings are passed via $_POST['customized'].
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30936
+	 * @ticket 30936
 	 */
 	function test_register_dynamic_settings() {
 		wp_set_current_user( self::$admin_user_id );
@@ -3042,7 +3042,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Test remove_frameless_preview_messenger_channel.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/38867
+	 * @ticket 38867
 	 * @covers WP_Customize_Manager::remove_frameless_preview_messenger_channel()
 	 */
 	function test_remove_frameless_preview_messenger_channel() {
@@ -3095,7 +3095,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33552
+	 * @ticket 33552
 	 */
 	function test_customize_loaded_components_filter() {
 		$manager = new WP_Customize_Manager();
@@ -3156,8 +3156,8 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30225
-	 * @see https://core.trac.wordpress.org/ticket/34594
+	 * @ticket 30225
+	 * @ticket 34594
 	 */
 	function test_prepare_controls_stable_sorting() {
 		$manager = new WP_Customize_Manager();
@@ -3197,7 +3197,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34596
+	 * @ticket 34596
 	 */
 	function test_add_section_return_instance() {
 		$manager = new WP_Customize_Manager();
@@ -3231,7 +3231,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34596
+	 * @ticket 34596
 	 */
 	function test_add_setting_return_instance() {
 		$manager = new WP_Customize_Manager();
@@ -3252,7 +3252,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34597
+	 * @ticket 34597
 	 */
 	function test_add_setting_honoring_dynamic() {
 		$manager = new WP_Customize_Manager();
@@ -3302,7 +3302,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34596
+	 * @ticket 34596
 	 */
 	function test_add_panel_return_instance() {
 		$manager = new WP_Customize_Manager();
@@ -3335,7 +3335,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34596
+	 * @ticket 34596
 	 */
 	function test_add_control_return_instance() {
 		$manager    = new WP_Customize_Manager();
@@ -3383,7 +3383,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Testing the return values both with and without filter.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/31195
+	 * @ticket 31195
 	 */
 	function test_get_previewable_devices() {
 
@@ -3443,7 +3443,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37128
+	 * @ticket 37128
 	 */
 	function test_prepare_controls_wp_list_sort_controls() {
 		wp_set_current_user( self::$admin_user_id );
@@ -3476,7 +3476,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37128
+	 * @ticket 37128
 	 */
 	function test_prepare_controls_wp_list_sort_sections() {
 		wp_set_current_user( self::$admin_user_id );
@@ -3505,7 +3505,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37128
+	 * @ticket 37128
 	 */
 	function test_prepare_controls_wp_list_sort_panels() {
 		wp_set_current_user( self::$admin_user_id );
@@ -3536,7 +3536,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	/**
 	 * Verify sanitization of external header video URL will trim the whitespaces in the beginning and end of the URL.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/39125
+	 * @ticket 39125
 	 */
 	function test_sanitize_external_header_video_trim() {
 		$this->manager->register_controls();

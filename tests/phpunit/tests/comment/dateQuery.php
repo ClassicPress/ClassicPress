@@ -7,7 +7,7 @@
  * No need to do a full repeat of all of the post tests again since
  * the query SQL is the same for both just with a different column.
  *
- * @see https://core.trac.wordpress.org/ticket/18694
+ * @ticket 18694
  *
  * @group comment
  * @group date

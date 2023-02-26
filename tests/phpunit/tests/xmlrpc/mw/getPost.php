@@ -36,7 +36,7 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/20336
+	 * @ticket 20336
 	 */
 	function test_invalid_postid() {
 		$result = $this->myxmlrpcserver->mw_getPost( array( 9999, 'author', 'author' ) );

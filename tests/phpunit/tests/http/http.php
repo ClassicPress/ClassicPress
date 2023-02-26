@@ -176,7 +176,7 @@ class Tests_HTTP_HTTP extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36356
+	 * @ticket 36356
 	 */
 	function test_wp_parse_url_with_default_component() {
 		$actual = wp_parse_url( self::FULL_TEST_URL, -1 );
@@ -196,7 +196,7 @@ class Tests_HTTP_HTTP extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36356
+	 * @ticket 36356
 	 *
 	 * @dataProvider parse_url_component_testcases
 	 */
@@ -257,7 +257,7 @@ class Tests_HTTP_HTTP extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35426
+	 * @ticket 35426
 	 */
 	public function test_http_response_code_constants() {
 		global $wp_header_to_desc;
@@ -273,7 +273,7 @@ class Tests_HTTP_HTTP extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37768
+	 * @ticket 37768
 	 */
 	public function test_normalize_cookies_scalar_values() {
 		$http = _wp_http_get_object();
@@ -306,7 +306,7 @@ class Tests_HTTP_HTTP extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36356
+	 * @ticket 36356
 	 *
 	 * @dataProvider get_component_from_parsed_url_array_testcases
 	 */
@@ -345,7 +345,7 @@ class Tests_HTTP_HTTP extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36356
+	 * @ticket 36356
 	 *
 	 * @dataProvider wp_translate_php_url_constant_to_key_testcases
 	 */

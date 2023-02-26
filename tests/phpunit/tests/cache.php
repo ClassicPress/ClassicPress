@@ -196,7 +196,7 @@ class Tests_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21327
+	 * @ticket 21327
 	 */
 	function test_wp_cache_decr() {
 		$key = __FUNCTION__;
@@ -332,7 +332,7 @@ class Tests_Cache extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/20875
+	 * @ticket 20875
 	 */
 	public function test_get_multiple() {
 		wp_cache_set( 'foo1', 'bar', 'group1' );

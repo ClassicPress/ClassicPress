@@ -420,7 +420,7 @@ class WP_Test_REST_Schema_Initialization extends WP_Test_REST_TestCase {
 	/**
 	 * This array contains normalized versions of object IDs and other values
 	 * that can change depending on how PHPUnit is executed.  For details on
-	 * how they were generated, see https://core.trac.wordpress.org/ticket/41123.
+	 * how they were generated, ticket 41123.
 	 */
 	private static $fixture_replacements = array(
 		'Schema.name'                                      => 'Test Blog',

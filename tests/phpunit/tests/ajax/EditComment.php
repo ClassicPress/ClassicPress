@@ -77,7 +77,7 @@ class Tests_Ajax_EditComment extends WP_Ajax_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33154
+	 * @ticket 33154
 	 */
 	function test_editor_can_edit_orphan_comments() {
 		global $wpdb;

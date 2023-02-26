@@ -7,7 +7,7 @@ class Tests_Link_GetAdjacentPost extends WP_UnitTestCase {
 	protected $exclude_term;
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/17807
+	 * @ticket 17807
 	 */
 	public function test_get_adjacent_post() {
 		// Need some sample posts to test adjacency
@@ -87,7 +87,7 @@ class Tests_Link_GetAdjacentPost extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22112
+	 * @ticket 22112
 	 */
 	function test_get_adjacent_post_exclude_self_term() {
 		// Bump term_taxonomy to mimic shared term offsets.
@@ -174,7 +174,7 @@ class Tests_Link_GetAdjacentPost extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/32833
+	 * @ticket 32833
 	 */
 	public function test_get_adjacent_post_excluded_terms() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -208,7 +208,7 @@ class Tests_Link_GetAdjacentPost extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/32833
+	 * @ticket 32833
 	 */
 	public function test_get_adjacent_post_excluded_terms_should_not_require_posts_to_have_terms_in_any_taxonomy() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -245,7 +245,7 @@ class Tests_Link_GetAdjacentPost extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35211
+	 * @ticket 35211
 	 */
 	public function test_excluded_terms_filter() {
 		register_taxonomy( 'wptests_tax', 'post' );

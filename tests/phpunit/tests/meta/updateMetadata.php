@@ -6,7 +6,7 @@
  */
 class Tests_Meta_UpdateMetadata extends WP_UnitTestCase {
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35795
+	 * @ticket 35795
 	 */
 	public function test_slashed_key_for_new_metadata() {
 		update_metadata( 'post', 123, wp_slash( 'foo\foo' ), 'bar' );
@@ -16,7 +16,7 @@ class Tests_Meta_UpdateMetadata extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35795
+	 * @ticket 35795
 	 */
 	public function test_slashed_key_for_existing_metadata() {
 		global $wpdb;

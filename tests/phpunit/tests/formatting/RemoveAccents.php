@@ -9,7 +9,7 @@ class Tests_Formatting_RemoveAccents extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/9591
+	 * @ticket 9591
 	 */
 	public function test_remove_accents_latin1_supplement() {
 		$input  = 'ªºÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ';
@@ -45,7 +45,7 @@ class Tests_Formatting_RemoveAccents extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/17738
+	 * @ticket 17738
 	 */
 	public function test_remove_accents_vowels_diacritic() {
 		// Vowels with diacritic.
@@ -64,7 +64,7 @@ class Tests_Formatting_RemoveAccents extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/20772
+	 * @ticket 20772
 	 */
 	public function test_remove_accents_hanyu_pinyin() {
 		// Vowels with diacritic (Chinese, Hanyu Pinyin).
@@ -85,7 +85,7 @@ class Tests_Formatting_RemoveAccents extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/3782
+	 * @ticket 3782
 	 */
 	public function test_remove_accents_germanic_umlauts() {
 		add_filter( 'locale', array( $this, '_remove_accents_germanic_umlauts_cb' ) );
@@ -100,7 +100,7 @@ class Tests_Formatting_RemoveAccents extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/23907
+	 * @ticket 23907
 	 */
 	public function test_remove_danish_accents() {
 		add_filter( 'locale', array( $this, '_set_locale_to_danish' ) );
@@ -115,7 +115,7 @@ class Tests_Formatting_RemoveAccents extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37086
+	 * @ticket 37086
 	 */
 	public function test_remove_catalan_middot() {
 		add_filter( 'locale', array( $this, '_set_locale_to_catalan' ) );
@@ -132,7 +132,7 @@ class Tests_Formatting_RemoveAccents extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38078
+	 * @ticket 38078
 	 */
 	public function test_transcribe_serbian_crossed_d() {
 		add_filter( 'locale', array( $this, '_set_locale_to_serbian' ) );

@@ -250,7 +250,7 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28662
+	 * @ticket 28662
 	 */
 	function test_theme_dir_slashes() {
 		$size = count( $GLOBALS['wp_theme_directories'] );

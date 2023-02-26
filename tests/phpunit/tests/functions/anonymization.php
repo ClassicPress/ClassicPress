@@ -21,8 +21,8 @@ class Tests_Functions_Anonymization extends WP_UnitTestCase {
 	 *
 	 * @dataProvider data_wp_privacy_anonymize_ip
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/41083
-	 * @see https://core.trac.wordpress.org/ticket/43545
+	 * @ticket 41083
+	 * @ticket 43545
 	 *
 	 * @param string $raw_ip          Raw IP address.
 	 * @param string $expected_result Expected result.
@@ -248,7 +248,7 @@ class Tests_Functions_Anonymization extends WP_UnitTestCase {
 	/**
 	 * Test text anonymization when a filter is added.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/44141
+	 * @ticket 44141
 	 */
 	public function test_anonymize_with_filter() {
 		add_filter( 'wp_privacy_anonymize_data', array( $this, 'filter_wp_privacy_anonymize_data' ), 10, 3 );

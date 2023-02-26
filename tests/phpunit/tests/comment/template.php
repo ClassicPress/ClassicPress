@@ -31,7 +31,7 @@ class Tests_Comment_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/13651
+	 * @ticket 13651
 	 */
 	function test_get_comments_number_text_declension_with_default_args() {
 		$post_id   = $this->factory->post->create();
@@ -53,7 +53,7 @@ class Tests_Comment_Template extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/13651
+	 * @ticket 13651
 	 * @dataProvider data_get_comments_number_text_declension
 	 */
 	function test_get_comments_number_text_declension_with_custom_args( $number, $input, $output ) {

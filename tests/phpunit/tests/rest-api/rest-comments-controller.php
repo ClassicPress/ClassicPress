@@ -196,7 +196,7 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38692
+	 * @ticket 38692
 	 */
 	public function test_get_items_with_password() {
 		wp_set_current_user( 0 );
@@ -219,7 +219,7 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38692
+	 * @ticket 38692
 	 */
 	public function test_get_items_with_password_without_post() {
 		wp_set_current_user( 0 );
@@ -240,7 +240,7 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38692
+	 * @ticket 38692
 	 */
 	public function test_get_items_with_password_with_multiple_post() {
 		wp_set_current_user( 0 );
@@ -1009,7 +1009,7 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38692
+	 * @ticket 38692
 	 */
 	public function test_get_comment_with_password_with_valid_password() {
 		wp_set_current_user( self::$subscriber_id );
@@ -1387,7 +1387,7 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38820
+	 * @ticket 38820
 	 */
 	public function test_create_comment_with_invalid_type() {
 		$post_id = $this->factory->post->create();
@@ -1982,7 +1982,7 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38477
+	 * @ticket 38477
 	 */
 	public function test_create_comment_author_name_too_long() {
 		wp_set_current_user( self::$subscriber_id );
@@ -2005,7 +2005,7 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38477
+	 * @ticket 38477
 	 */
 	public function test_create_comment_author_email_too_long() {
 		wp_set_current_user( self::$subscriber_id );
@@ -2028,7 +2028,7 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38477
+	 * @ticket 38477
 	 */
 	public function test_create_comment_author_url_too_long() {
 		wp_set_current_user( self::$subscriber_id );
@@ -2051,7 +2051,7 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38477
+	 * @ticket 38477
 	 */
 	public function test_create_comment_content_too_long() {
 		wp_set_current_user( self::$subscriber_id );
@@ -2549,7 +2549,7 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38477
+	 * @ticket 38477
 	 */
 	public function test_update_comment_author_name_too_long() {
 		wp_set_current_user( self::$admin_id );
@@ -2568,7 +2568,7 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38477
+	 * @ticket 38477
 	 */
 	public function test_update_comment_author_email_too_long() {
 		wp_set_current_user( self::$admin_id );
@@ -2587,7 +2587,7 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38477
+	 * @ticket 38477
 	 */
 	public function test_update_comment_author_url_too_long() {
 		wp_set_current_user( self::$admin_id );
@@ -2606,7 +2606,7 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38477
+	 * @ticket 38477
 	 */
 	public function test_update_comment_content_too_long() {
 		wp_set_current_user( self::$admin_id );

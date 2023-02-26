@@ -792,7 +792,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/41197
+		 * @ticket 41197
 		 */
 		public function test_wp_site_query_cache_with_different_fields_no_count() {
 			global $wpdb;
@@ -820,7 +820,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/41197
+		 * @ticket 41197
 		 */
 		public function test_wp_site_query_cache_with_different_fields_active_count() {
 			global $wpdb;
@@ -850,7 +850,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/41197
+		 * @ticket 41197
 		 */
 		public function test_wp_site_query_cache_with_same_fields_different_count() {
 			global $wpdb;

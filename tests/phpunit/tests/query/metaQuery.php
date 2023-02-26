@@ -547,7 +547,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30681
+	 * @ticket 30681
 	 */
 	public function test_meta_query_compare_exists() {
 		$posts = self::factory()->post->create_many( 3 );
@@ -570,7 +570,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30681
+	 * @ticket 30681
 	 */
 	public function test_meta_query_compare_exists_with_value_should_convert_to_equals() {
 		$posts = self::factory()->post->create_many( 3 );
@@ -594,7 +594,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30681
+	 * @ticket 30681
 	 */
 	public function test_meta_query_compare_not_exists_should_ignore_value() {
 		$posts = self::factory()->post->create_many( 3 );
@@ -618,7 +618,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/18158
+	 * @ticket 18158
 	 */
 	public function test_meta_query_compare_not_exists() {
 		$post_id = self::factory()->post->create();
@@ -700,7 +700,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/29062
+	 * @ticket 29062
 	 */
 	public function test_meta_query_compare_not_exists_with_another_condition_relation_or() {
 		$posts = self::factory()->post->create_many( 4 );
@@ -738,7 +738,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24093
+	 * @ticket 24093
 	 */
 	public function test_meta_query_relation_or_compare_equals() {
 		$posts = self::factory()->post->create_many( 4 );
@@ -773,7 +773,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24093
+	 * @ticket 24093
 	 */
 	public function test_meta_query_relation_or_compare_equals_different_keys() {
 		$posts = self::factory()->post->create_many( 4 );
@@ -808,7 +808,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24093
+	 * @ticket 24093
 	 */
 	public function test_meta_query_relation_or_compare_equals_and_in() {
 		$posts = self::factory()->post->create_many( 4 );
@@ -843,7 +843,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24093
+	 * @ticket 24093
 	 */
 	public function test_meta_query_relation_or_compare_equals_and_like() {
 		$posts = self::factory()->post->create_many( 4 );
@@ -878,7 +878,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24093
+	 * @ticket 24093
 	 */
 	public function test_meta_query_relation_or_compare_equals_and_between() {
 		$posts = self::factory()->post->create_many( 4 );
@@ -914,7 +914,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24093
+	 * @ticket 24093
 	 */
 	public function test_meta_query_relation_and_compare_in_same_keys() {
 		$posts = self::factory()->post->create_many( 4 );
@@ -951,7 +951,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24093
+	 * @ticket 24093
 	 */
 	public function test_meta_query_relation_and_compare_in_different_keys() {
 		$posts = self::factory()->post->create_many( 4 );
@@ -988,7 +988,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24093
+	 * @ticket 24093
 	 */
 	public function test_meta_query_relation_and_compare_not_equals() {
 		$posts = self::factory()->post->create_many( 4 );
@@ -1024,7 +1024,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24093
+	 * @ticket 24093
 	 */
 	public function test_meta_query_relation_and_compare_not_equals_different_keys() {
 		$posts = self::factory()->post->create_many( 4 );
@@ -1067,7 +1067,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24093
+	 * @ticket 24093
 	 */
 	public function test_meta_query_relation_and_compare_not_equals_not_in() {
 		$posts = self::factory()->post->create_many( 4 );
@@ -1103,7 +1103,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24093
+	 * @ticket 24093
 	 */
 	public function test_meta_query_relation_and_compare_not_equals_and_not_like() {
 		$posts = self::factory()->post->create_many( 4 );
@@ -1139,7 +1139,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/23033
+	 * @ticket 23033
 	 */
 	public function test_meta_query_decimal_results() {
 		$post_1 = self::factory()->post->create();
@@ -1336,7 +1336,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/29604
+	 * @ticket 29604
 	 */
 	public function test_meta_query_with_orderby_meta_value_relation_or() {
 		$posts = self::factory()->post->create_many( 4 );
@@ -1377,7 +1377,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/29604
+	 * @ticket 29604
 	 */
 	public function test_meta_query_with_orderby_meta_value_relation_and() {
 		$posts = self::factory()->post->create_many( 4 );
@@ -1422,7 +1422,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/29642
+	 * @ticket 29642
 	 */
 	public function test_meta_query_nested() {
 		$p1 = self::factory()->post->create();
@@ -1465,7 +1465,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/29642
+	 * @ticket 29642
 	 */
 	public function test_meta_query_nested_two_levels_deep() {
 		$p1 = self::factory()->post->create();
@@ -1560,7 +1560,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16829
+	 * @ticket 16829
 	 */
 	public function test_meta_default_compare() {
 		// compare should default to IN when meta_value is an array
@@ -1604,7 +1604,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/17264
+	 * @ticket 17264
 	 */
 	public function test_duplicate_posts_when_no_key() {
 		$post_id = self::factory()->post->create();
@@ -1635,7 +1635,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/15292
+	 * @ticket 15292
 	 */
 	public function test_empty_meta_value() {
 		$post_id = self::factory()->post->create();
@@ -1714,7 +1714,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31045
+	 * @ticket 31045
 	 */
 	public function test_orderby_clause_key() {
 		$posts = self::factory()->post->create_many( 3 );
@@ -1740,7 +1740,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31045
+	 * @ticket 31045
 	 */
 	public function test_orderby_clause_key_as_secondary_sort() {
 		$p1 = self::factory()->post->create(
@@ -1783,7 +1783,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31045
+	 * @ticket 31045
 	 */
 	public function test_orderby_more_than_one_clause_key() {
 		$posts = self::factory()->post->create_many( 3 );
@@ -1819,7 +1819,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31045
+	 * @ticket 31045
 	 */
 	public function test_duplicate_clause_keys_should_be_made_unique() {
 		$q = new WP_Query(

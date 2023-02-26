@@ -68,7 +68,7 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 
 	/**
 	 * Test versioning
-	 * @see https://core.trac.wordpress.org/ticket/11315
+	 * @ticket 11315
 	 */
 	function test_wp_enqueue_style() {
 		wp_enqueue_style( 'no-deps-no-version', 'example.com' );
@@ -215,7 +215,7 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/42804
+	 * @ticket 42804
 	 */
 	function test_wp_enqueue_style_with_html5_support_does_not_contain_type_attribute() {
 		add_theme_support( 'html5', array( 'style' ) );
@@ -234,7 +234,7 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 	/**
 	 * Test the different protocol references in wp_enqueue_style
 	 * @global WP_Styles $wp_styles
-	 * @see https://core.trac.wordpress.org/ticket/16560
+	 * @ticket 16560
 	 */
 	public function test_protocols() {
 		// Init
@@ -277,7 +277,7 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 
 	/**
 	 * Test if inline styles work
-	 * @see https://core.trac.wordpress.org/ticket/24813
+	 * @ticket 24813
 	 */
 	public function test_inline_styles() {
 
@@ -300,7 +300,7 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 	/**
 	 * Test if inline styles work with concatination
 	 * @global WP_Styles $wp_styles
-	 * @see https://core.trac.wordpress.org/ticket/24813
+	 * @ticket 24813
 	 */
 	public function test_inline_styles_concat() {
 
@@ -328,7 +328,7 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 
 	/**
 	 * Test if multiple inline styles work
-	 * @see https://core.trac.wordpress.org/ticket/24813
+	 * @ticket 24813
 	 */
 	public function test_multiple_inline_styles() {
 
@@ -359,7 +359,7 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 	 * Test if a plugin doing it the wrong way still works
 	 *
 	 * @expectedIncorrectUsage wp_add_inline_style
-	 * @see https://core.trac.wordpress.org/ticket/24813
+	 * @ticket 24813
 	 */
 	public function test_plugin_doing_inline_styles_wrong() {
 
@@ -382,7 +382,7 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 
 	/**
 	 * Test to make sure <style> tags aren't output if there are no inline styles.
-	 * @see https://core.trac.wordpress.org/ticket/24813
+	 * @ticket 24813
 	 */
 	public function test_unnecessary_style_tags() {
 
@@ -418,7 +418,7 @@ CSS;
 	/**
 	 * Testing 'wp_register_style' return boolean success/failure value.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/31126
+	 * @ticket 31126
 	 */
 	function test_wp_register_style() {
 		$this->assertTrue( wp_register_style( 'duplicate-handler', 'http://example.com' ) );
@@ -426,7 +426,7 @@ CSS;
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35229
+	 * @ticket 35229
 	 */
 	function test_wp_add_inline_style_for_handle_without_source() {
 		$style = 'a { color: blue; }';
@@ -448,7 +448,7 @@ CSS;
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35921
+	 * @ticket 35921
 	 * @dataProvider data_styles_with_media
 	 */
 	function test_wp_enqueue_style_with_media( $expected, $media ) {

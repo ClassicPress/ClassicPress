@@ -64,7 +64,7 @@ class Tests_L10n_loadTextdomainJustInTime extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34114
+	 * @ticket 34114
 	 */
 	public function test_plugin_translation_should_be_translated_without_calling_load_plugin_textdomain() {
 		add_filter( 'locale', array( $this, 'filter_set_locale_to_german' ) );
@@ -83,7 +83,7 @@ class Tests_L10n_loadTextdomainJustInTime extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34114
+	 * @ticket 34114
 	 */
 	public function test_theme_translation_should_be_translated_without_calling_load_theme_textdomain() {
 		add_filter( 'locale', array( $this, 'filter_set_locale_to_german' ) );
@@ -104,7 +104,7 @@ class Tests_L10n_loadTextdomainJustInTime extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34114
+	 * @ticket 34114
 	 */
 	public function test_get_translations_for_domain_does_not_return_null_if_override_load_textdomain_is_used() {
 		add_filter( 'locale', array( $this, 'filter_set_locale_to_german' ) );
@@ -117,7 +117,7 @@ class Tests_L10n_loadTextdomainJustInTime extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37113
+	 * @ticket 37113
 	 */
 	public function test_should_allow_unloading_of_text_domain() {
 		add_filter( 'locale', array( $this, 'filter_set_locale_to_german' ) );
@@ -156,7 +156,7 @@ class Tests_L10n_loadTextdomainJustInTime extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/26511
+	 * @ticket 26511
 	 */
 	public function test_plugin_translation_after_switching_locale() {
 		require_once DIR_TESTDATA . '/plugins/internationalized-plugin.php';
@@ -169,7 +169,7 @@ class Tests_L10n_loadTextdomainJustInTime extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37997
+	 * @ticket 37997
 	 */
 	public function test_plugin_translation_after_switching_locale_twice() {
 		require_once DIR_TESTDATA . '/plugins/internationalized-plugin.php';
@@ -187,7 +187,7 @@ class Tests_L10n_loadTextdomainJustInTime extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/26511
+	 * @ticket 26511
 	 */
 	public function test_theme_translation_after_switching_locale() {
 		switch_theme( 'internationalized-theme' );
@@ -204,7 +204,7 @@ class Tests_L10n_loadTextdomainJustInTime extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38485
+	 * @ticket 38485
 	 */
 	public function test_plugin_translation_with_user_locale() {
 		require_once DIR_TESTDATA . '/plugins/internationalized-plugin.php';
@@ -220,7 +220,7 @@ class Tests_L10n_loadTextdomainJustInTime extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38485
+	 * @ticket 38485
 	 */
 	public function test_theme_translation_with_user_locale() {
 		switch_theme( 'internationalized-theme' );
@@ -238,7 +238,7 @@ class Tests_L10n_loadTextdomainJustInTime extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37997
+	 * @ticket 37997
 	 */
 	public function test_get_locale_is_called_only_once_per_textdomain() {
 		$textdomain = 'foo-bar-baz';

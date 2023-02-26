@@ -6,7 +6,7 @@
 class Tests_User_GetUsersWithNoRole extends WP_UnitTestCase {
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22993
+	 * @ticket 22993
 	 * @group ms-excluded
 	 */
 	public function test_get_users_with_no_role_is_accurate() {
@@ -46,8 +46,8 @@ class Tests_User_GetUsersWithNoRole extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22993
-	 * @see https://core.trac.wordpress.org/ticket/36196
+	 * @ticket 22993
+	 * @ticket 36196
 	 * @group multisite
 	 * @group ms-required
 	 */
@@ -108,7 +108,7 @@ class Tests_User_GetUsersWithNoRole extends WP_UnitTestCase {
 	/**
 	 * Role comparison must be done on role name, not role display name.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/38234
+	 * @ticket 38234
 	 */
 	public function test_get_users_with_no_role_matches_on_role_name() {
 		// Create a role with a display name which would not match the role name
@@ -129,7 +129,7 @@ class Tests_User_GetUsersWithNoRole extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/42015
+	 * @ticket 42015
 	 * @group multisite
 	 * @group ms-required
 	 */

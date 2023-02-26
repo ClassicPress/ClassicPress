@@ -45,7 +45,7 @@ class Tests_User_WpSetCurrentUser extends WP_UnitTestCase {
 	/**
 	 * Test that you can set the current user by the name parameter when the current user is 0.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/20845
+	 * @ticket 20845
 	 */
 	public function test_should_set_by_name_if_id_is_null() {
 		wp_set_current_user( 0 );

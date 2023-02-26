@@ -830,7 +830,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/40861
+	 * @ticket 40861
 	 */
 	public function test_create_item_ensure_relative_path() {
 		wp_set_current_user( self::$author_id );
@@ -953,7 +953,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$actual_output = $response->get_data();
 
 		// Remove <p class="attachment"> from rendered description
-		// see https://core.trac.wordpress.org/ticket/38679
+		// ticket 38679
 		$content = $actual_output['description']['rendered'];
 		$content = explode( "\n", trim( $content ) );
 		if ( preg_match( '/^<p class="attachment">/', $content[0] ) ) {
@@ -985,7 +985,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$actual_output = $response->get_data();
 
 		// Remove <p class="attachment"> from rendered description
-		// see https://core.trac.wordpress.org/ticket/38679
+		// ticket 38679
 		$content = $actual_output['description']['rendered'];
 		$content = explode( "\n", trim( $content ) );
 		if ( preg_match( '/^<p class="attachment">/', $content[0] ) ) {
@@ -1539,7 +1539,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/43751
+	 * @ticket 43751
 	 * @group multisite
 	 * @group ms-required
 	 */
@@ -1569,7 +1569,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/43751
+	 * @ticket 43751
 	 * @group multisite
 	 * @group ms-required
 	 */
@@ -1590,7 +1590,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/43751
+	 * @ticket 43751
 	 * @group multisite
 	 * @group ms-required
 	 */
@@ -1620,7 +1620,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/43751
+	 * @ticket 43751
 	 * @group multisite
 	 * @group ms-required
 	 */

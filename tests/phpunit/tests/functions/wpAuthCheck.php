@@ -10,7 +10,7 @@ class Tests_Functions_wpAuthCheck extends WP_UnitTestCase {
 	/**
 	 * Run with user not logged in.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/41860
+	 * @ticket 41860
 	 */
 	function test_wp_auth_check_user_not_logged_in() {
 		$expected = array(
@@ -24,7 +24,7 @@ class Tests_Functions_wpAuthCheck extends WP_UnitTestCase {
 	/**
 	 * Run with user logged in.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/41860
+	 * @ticket 41860
 	 */
 	function test_wp_auth_check_user_logged_in() {
 		// log user in
@@ -41,7 +41,7 @@ class Tests_Functions_wpAuthCheck extends WP_UnitTestCase {
 	/**
 	 * Run with user logged in but with expired state.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/41860
+	 * @ticket 41860
 	 */
 	function test_wp_auth_check_user_logged_in_login_grace_period_set() {
 		// log user in

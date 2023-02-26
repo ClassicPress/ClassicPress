@@ -59,7 +59,7 @@ class Tests_Bookmark_GetBookmarks extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/18356
+	 * @ticket 18356
 	 */
 	public function test_orderby_rand_should_not_be_cached() {
 		global $wpdb;

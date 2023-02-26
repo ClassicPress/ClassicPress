@@ -22,7 +22,7 @@ class Tests_Link_GetNextCommentsLink extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/20319
+	 * @ticket 20319
 	 */
 	public function test_page_should_default_to_1_when_no_cpage_query_var_is_found() {
 		$p = self::factory()->post->create();

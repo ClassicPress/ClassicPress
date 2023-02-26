@@ -102,7 +102,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/11334
+	 * @ticket 11334
 	 */
 	public function test_subsequent_calls_should_hit_cache() {
 		global $wpdb;
@@ -121,7 +121,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/11334
+	 * @ticket 11334
 	 */
 	public function test_cache_hits_should_be_sensitive_to_comment_type() {
 		global $wpdb;
@@ -173,7 +173,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/11334
+	 * @ticket 11334
 	 */
 	public function test_cache_should_be_invalidated_when_comment_is_approved() {
 		$p = self::factory()->post->create();
@@ -194,7 +194,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/11334
+	 * @ticket 11334
 	 */
 	public function test_cache_should_be_invalidated_when_comment_is_deleted() {
 		$p = self::factory()->post->create();
@@ -210,7 +210,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/11334
+	 * @ticket 11334
 	 */
 	public function test_cache_should_be_invalidated_when_comment_is_spammed() {
 		$p = self::factory()->post->create();
@@ -226,7 +226,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/11334
+	 * @ticket 11334
 	 */
 	public function test_cache_should_be_invalidated_when_older_comment_is_published() {
 		$now = time();
@@ -269,7 +269,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34057
+	 * @ticket 34057
 	 */
 	public function test_query_should_be_limited_to_comments_on_the_proper_post() {
 		$posts = self::factory()->post->create_many( 2 );
@@ -306,7 +306,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/13939
+	 * @ticket 13939
 	 */
 	public function test_only_top_level_comments_should_be_included_in_older_count() {
 		$post = self::factory()->post->create();
@@ -356,7 +356,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/13939
+	 * @ticket 13939
 	 */
 	public function test_comments_per_page_option_should_be_fallback_when_query_var_is_not_available() {
 		$now = time();
@@ -397,8 +397,8 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31101
-	 * @see https://core.trac.wordpress.org/ticket/39280
+	 * @ticket 31101
+	 * @ticket 39280
 	 */
 	public function test_should_ignore_comment_order() {
 		$now = time();
@@ -449,8 +449,8 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31101
-	 * @see https://core.trac.wordpress.org/ticket/39280
+	 * @ticket 31101
+	 * @ticket 39280
 	 */
 	public function test_should_ignore_default_comment_page() {
 		$now = time();
@@ -501,7 +501,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/8973
+	 * @ticket 8973
 	 */
 	public function test_page_number_when_unapproved_comments_are_included_for_current_commenter() {
 		$post         = self::factory()->post->create();
@@ -549,7 +549,7 @@ class Tests_Comment_GetPageOfComment extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/8973
+	 * @ticket 8973
 	 */
 	public function test_page_number_when_unapproved_comments_are_included_for_current_user() {
 		$current_user = get_current_user_id();

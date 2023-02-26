@@ -77,7 +77,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/29589
+	 * @ticket 29589
 	 */
 	public function test_term_exists_existing_term_that_sanitizes_to_empty() {
 		wp_insert_term( '//', 'category' );
@@ -121,7 +121,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/29851
+	 * @ticket 29851
 	 */
 	public function test_term_exists_taxonomy_nonempty_parent_0_should_return_false_for_child_term() {
 		register_taxonomy(

@@ -120,7 +120,7 @@ class Tests_XMLRPC_wp_getPost extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21308
+	 * @ticket 21308
 	 */
 	function test_valid_page() {
 		$this->make_user_by_role( 'editor' );

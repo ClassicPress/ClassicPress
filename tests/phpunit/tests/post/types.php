@@ -40,7 +40,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31134
+	 * @ticket 31134
 	 *
 	 * @expectedIncorrectUsage register_post_type
 	 */
@@ -50,7 +50,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31134
+	 * @ticket 31134
 	 *
 	 * @expectedIncorrectUsage register_post_type
 	 */
@@ -60,7 +60,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35985
+	 * @ticket 35985
 	 * @covers ::register_post_type()
 	 */
 	function test_register_post_type_exclude_from_search_should_default_to_opposite_value_of_public() {
@@ -74,7 +74,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35985
+	 * @ticket 35985
 	 * @covers ::register_post_type()
 	 */
 	function test_register_post_type_publicly_queryable_should_default_to_value_of_public() {
@@ -88,7 +88,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35985
+	 * @ticket 35985
 	 * @covers ::register_post_type()
 	 */
 	function test_register_post_type_show_ui_should_default_to_value_of_public() {
@@ -102,7 +102,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35985
+	 * @ticket 35985
 	 * @covers ::register_post_type()
 	 */
 	function test_register_post_type_show_in_menu_should_default_to_value_of_show_ui() {
@@ -121,7 +121,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35985
+	 * @ticket 35985
 	 * @covers ::register_post_type()
 	 */
 	function test_register_post_type_show_in_nav_menus_should_default_to_value_of_public() {
@@ -135,7 +135,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35985
+	 * @ticket 35985
 	 * @covers ::register_post_type()
 	 */
 	function test_register_post_type_show_in_admin_bar_should_default_to_value_of_show_in_menu() {
@@ -192,7 +192,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21586
+	 * @ticket 21586
 	 */
 	function test_post_type_with_no_support() {
 		register_post_type( 'foo', array( 'supports' => array() ) );
@@ -207,7 +207,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/23302
+	 * @ticket 23302
 	 */
 	function test_post_type_with_no_feed() {
 		global $wp_rewrite;
@@ -220,7 +220,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30013
+	 * @ticket 30013
 	 */
 	public function test_get_post_type_object_with_non_scalar_values() {
 		$this->assertFalse( post_type_exists( 'foo' ) );
@@ -240,7 +240,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33023
+	 * @ticket 33023
 	 */
 	public function test_get_post_type_object_casting() {
 		register_post_type( 'foo' );
@@ -257,7 +257,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14761
+	 * @ticket 14761
 	 */
 	public function test_unregister_post_type() {
 		register_post_type( 'foo' );
@@ -265,14 +265,14 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14761
+	 * @ticket 14761
 	 */
 	public function test_unregister_post_type_unknown_post_type() {
 		$this->assertWPError( unregister_post_type( 'foo' ) );
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14761
+	 * @ticket 14761
 	 */
 	public function test_unregister_post_type_twice() {
 		register_post_type( 'foo' );
@@ -281,7 +281,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14761
+	 * @ticket 14761
 	 */
 	public function test_unregister_post_type_disallow_builtin_post_type() {
 		$this->assertWPError( unregister_post_type( 'post' ) );
@@ -292,7 +292,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14761
+	 * @ticket 14761
 	 */
 	public function test_unregister_post_type_removes_query_vars() {
 		global $wp;
@@ -311,7 +311,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14761
+	 * @ticket 14761
 	 */
 	public function test_unregister_post_type_removes_rewrite_tags() {
 		$this->set_permalink_structure( '/%postname%' );
@@ -337,7 +337,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14761
+	 * @ticket 14761
 	 */
 	public function test_unregister_post_type_removes_rewrite_rules() {
 		$this->set_permalink_structure( '/%postname%' );
@@ -358,7 +358,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14761
+	 * @ticket 14761
 	 */
 	public function test_unregister_post_type_removes_custom_meta_capabilities() {
 		global $post_type_meta_caps;
@@ -384,7 +384,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14761
+	 * @ticket 14761
 	 */
 	public function test_unregister_post_type_removes_post_type_supports() {
 		global $_wp_post_type_features;
@@ -410,7 +410,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14761
+	 * @ticket 14761
 	 */
 	public function test_unregister_post_type_removes_post_type_from_taxonomies() {
 		global $wp_taxonomies;
@@ -432,7 +432,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14761
+	 * @ticket 14761
 	 */
 	public function test_unregister_post_type_removes_the_future_post_hooks() {
 		global $wp_filter;
@@ -451,7 +451,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14761
+	 * @ticket 14761
 	 */
 	public function test_unregister_post_type_removes_meta_box_callback() {
 		global $wp_filter;
@@ -471,7 +471,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14761
+	 * @ticket 14761
 	 */
 	public function test_unregister_post_type_removes_post_type_from_global() {
 		global $wp_post_types;
@@ -493,7 +493,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14761
+	 * @ticket 14761
 	 */
 	public function test_post_type_does_not_exist_after_unregister_post_type() {
 		register_post_type(
@@ -509,7 +509,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34010
+	 * @ticket 34010
 	 */
 	public function test_get_post_types_by_support_single_feature() {
 		$this->assertContains( 'post', get_post_types_by_support( 'title' ) );
@@ -519,7 +519,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34010
+	 * @ticket 34010
 	 */
 	public function test_get_post_types_by_support_multiple_features() {
 		$this->assertContains( 'post', get_post_types_by_support( array( 'thumbnail', 'author' ) ) );
@@ -527,7 +527,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34010
+	 * @ticket 34010
 	 */
 	public function test_get_post_types_by_support_or_operator() {
 		$this->assertContains( 'post', get_post_types_by_support( array( 'post-formats', 'page-attributes' ), 'or' ) );
@@ -535,7 +535,7 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34010
+	 * @ticket 34010
 	 */
 	public function test_get_post_types_by_support_not_operator() {
 		$this->assertContains( 'attachment', get_post_types_by_support( array( 'thumbnail' ), 'not' ) );
@@ -544,14 +544,14 @@ class Tests_Post_Types extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34010
+	 * @ticket 34010
 	 */
 	public function test_get_post_types_by_support_excluding_features() {
 		$this->assertSameSets( array(), get_post_types_by_support( array( 'post-formats', 'page-attributes' ) ) );
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34010
+	 * @ticket 34010
 	 */
 	public function test_get_post_types_by_support_non_existant_feature() {
 		$this->assertSameSets( array(), get_post_types_by_support( 'somefeature' ) );

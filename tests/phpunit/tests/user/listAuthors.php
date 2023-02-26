@@ -248,7 +248,7 @@ class Tests_User_ListAuthors extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/26538
+	 * @ticket 26538
 	 */
 	function test_wp_list_authors_feed_type() {
 		$url0 = get_author_feed_link( self::$user_ids[0], 'atom' );

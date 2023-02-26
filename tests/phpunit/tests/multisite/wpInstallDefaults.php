@@ -10,7 +10,7 @@ if ( is_multisite() ) :
 	 */
 	class Tests_Multisite_Install_Defaults extends WP_UnitTestCase {
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/40036
+		 * @ticket 40036
 		 */
 		public function test_option_should_not_be_empty_by_default() {
 			$blog_id = $this->factory->blog->create();
@@ -28,7 +28,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/40036
+		 * @ticket 40036
 		 */
 		public function test_empty_option_should_fall_back_to_default() {
 			/*
@@ -53,7 +53,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/40036
+		 * @ticket 40036
 		 */
 		public function test_non_default_option_values() {
 			/*

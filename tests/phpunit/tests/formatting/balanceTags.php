@@ -47,7 +47,7 @@ class Tests_Formatting_BalanceTags extends WP_UnitTestCase {
 	/**
 	 * If a recognized valid single tag appears unclosed, it should get self-closed
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/1597
+	 * @ticket 1597
 	 * @dataProvider single_tags
 	 */
 	function test_selfcloses_unclosed_known_single_tags( $tag ) {
@@ -58,7 +58,7 @@ class Tests_Formatting_BalanceTags extends WP_UnitTestCase {
 	 * If a recognized valid single tag is given a closing tag, the closing tag
 	 *   should get removed and tag should be self-closed.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/1597
+	 * @ticket 1597
 	 * @dataProvider single_tags
 	 */
 	function test_selfcloses_known_single_tags_having_closing_tag( $tag ) {
@@ -66,7 +66,7 @@ class Tests_Formatting_BalanceTags extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/1597
+	 * @ticket 1597
 	 */
 	function test_closes_unknown_single_tags_with_closing_tag() {
 
@@ -151,7 +151,7 @@ class Tests_Formatting_BalanceTags extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/20401
+	 * @ticket 20401
 	 */
 	function test_allows_immediately_nested_object_tags() {
 		$object = '<object id="obj1"><param name="param1"/><object id="obj2"><param name="param2"/></object></object>';

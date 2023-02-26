@@ -60,7 +60,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 
 	/**
 	 * Test versioning
-	 * @see https://core.trac.wordpress.org/ticket/11315
+	 * @ticket 11315
 	 */
 	function test_wp_enqueue_script() {
 		wp_enqueue_script( 'no-deps-no-version', 'example.com', array() );
@@ -207,7 +207,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/42804
+	 * @ticket 42804
 	 */
 	function test_wp_enqueue_script_with_html5_support_does_not_contain_type_attribute() {
 		add_theme_support( 'html5', array( 'script' ) );
@@ -226,7 +226,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	/**
 	 * Test the different protocol references in wp_enqueue_script
 	 * @global WP_Scripts $wp_scripts
-	 * @see https://core.trac.wordpress.org/ticket/16560
+	 * @ticket 16560
 	 */
 	public function test_protocols() {
 		// Init
@@ -291,7 +291,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 
 	/**
 	 * Testing `wp_script_add_data` with the data key.
-	 * @see https://core.trac.wordpress.org/ticket/16024
+	 * @ticket 16024
 	 */
 	function test_wp_script_add_data_with_data_key() {
 		// Enqueue & add data
@@ -309,7 +309,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 
 	/**
 	 * Testing `wp_script_add_data` with the conditional key.
-	 * @see https://core.trac.wordpress.org/ticket/16024
+	 * @ticket 16024
 	 */
 	function test_wp_script_add_data_with_conditional_key() {
 		// Enqueue & add conditional comments
@@ -326,7 +326,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 
 	/**
 	 * Testing `wp_script_add_data` with both the data & conditional keys.
-	 * @see https://core.trac.wordpress.org/ticket/16024
+	 * @ticket 16024
 	 */
 	function test_wp_script_add_data_with_data_and_conditional_keys() {
 		// Enqueue & add data plus conditional comments for both
@@ -345,7 +345,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 
 	/**
 	 * Testing `wp_script_add_data` with an anvalid key.
-	 * @see https://core.trac.wordpress.org/ticket/16024
+	 * @ticket 16024
 	 */
 	function test_wp_script_add_data_with_invalid_key() {
 		// Enqueue & add an invalid key
@@ -363,7 +363,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	/**
 	 * Testing 'wp_register_script' return boolean success/failure value.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/31126
+	 * @ticket 31126
 	 */
 	function test_wp_register_script() {
 		$this->assertTrue( wp_register_script( 'duplicate-handler', 'http://example.com' ) );
@@ -371,7 +371,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35229
+	 * @ticket 35229
 	 */
 	function test_wp_register_script_with_handle_without_source() {
 		$expected  = "<script type='text/javascript' src='http://example.com?ver=1'></script>\n";
@@ -387,7 +387,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35643
+	 * @ticket 35643
 	 */
 	function test_wp_enqueue_script_footer_alias() {
 		wp_register_script( 'foo', false, array( 'bar', 'baz' ), '1.0', true );
@@ -407,7 +407,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	/**
 	 * Test mismatch of groups in dependencies outputs all scripts in right order.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/35873
+	 * @ticket 35873
 	 */
 	public function test_group_mismatch_in_deps() {
 		$scripts = new WP_Scripts;
@@ -451,7 +451,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35873
+	 * @ticket 35873
 	 */
 	function test_wp_register_script_with_dependencies_in_head_and_footer() {
 		wp_register_script( 'parent', '/parent.js', array( 'child-head' ), null, true ); // in footer
@@ -472,7 +472,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35956
+	 * @ticket 35956
 	 */
 	function test_wp_register_script_with_dependencies_in_head_and_footer_in_reversed_order() {
 		wp_register_script( 'child-head', '/child-head.js', array(), null, false ); // in head
@@ -493,7 +493,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35956
+	 * @ticket 35956
 	 */
 	function test_wp_register_script_with_dependencies_in_head_and_footer_in_reversed_order_and_two_parent_scripts() {
 		wp_register_script( 'grandchild-head', '/grandchild-head.js', array(), null, false ); // in head
@@ -524,7 +524,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14853
+	 * @ticket 14853
 	 */
 	function test_wp_add_inline_script_returns_bool() {
 		$this->assertFalse( wp_add_inline_script( 'test-example', 'console.log("before");', 'before' ) );
@@ -533,7 +533,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14853
+	 * @ticket 14853
 	 */
 	function test_wp_add_inline_script_unknown_handle() {
 		$this->assertFalse( wp_add_inline_script( 'test-invalid', 'console.log("before");', 'before' ) );
@@ -541,7 +541,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14853
+	 * @ticket 14853
 	 */
 	function test_wp_add_inline_script_before() {
 		wp_enqueue_script( 'test-example', 'example.com', array(), null );
@@ -554,7 +554,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14853
+	 * @ticket 14853
 	 */
 	function test_wp_add_inline_script_after() {
 		wp_enqueue_script( 'test-example', 'example.com', array(), null );
@@ -567,7 +567,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14853
+	 * @ticket 14853
 	 */
 	function test_wp_add_inline_script_before_and_after() {
 		wp_enqueue_script( 'test-example', 'example.com', array(), null );
@@ -582,7 +582,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14853
+	 * @ticket 14853
 	 */
 	function test_wp_add_inline_script_multiple() {
 		wp_enqueue_script( 'test-example', 'example.com', array(), null );
@@ -599,7 +599,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14853
+	 * @ticket 14853
 	 */
 	function test_wp_add_inline_script_localized_data_is_added_first() {
 		wp_enqueue_script( 'test-example', 'example.com', array(), null );
@@ -616,7 +616,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14853
+	 * @ticket 14853
 	 */
 	public function test_wp_add_inline_script_before_with_concat() {
 		global $wp_scripts;
@@ -642,7 +642,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14853
+	 * @ticket 14853
 	 */
 	public function test_wp_add_inline_script_before_with_concat2() {
 		global $wp_scripts;
@@ -666,7 +666,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14853
+	 * @ticket 14853
 	 */
 	public function test_wp_add_inline_script_after_with_concat() {
 		global $wp_scripts;
@@ -694,7 +694,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/14853
+	 * @ticket 14853
 	 */
 	public function test_wp_add_inline_script_after_and_before_with_concat_and_conditional() {
 		global $wp_scripts;
@@ -724,7 +724,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36392
+	 * @ticket 36392
 	 */
 	public function test_wp_add_inline_script_after_with_concat_and_core_dependency() {
 		global $wp_scripts;
@@ -749,7 +749,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36392
+	 * @ticket 36392
 	 */
 	public function test_wp_add_inline_script_after_with_concat_and_conditional_and_core_dependency() {
 		global $wp_scripts;
@@ -777,7 +777,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36392
+	 * @ticket 36392
 	 */
 	public function test_wp_add_inline_script_before_with_concat_and_core_dependency() {
 		global $wp_scripts;
@@ -802,7 +802,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36392
+	 * @ticket 36392
 	 */
 	public function test_wp_add_inline_script_before_after_concat_with_core_dependency() {
 		global $wp_scripts;
@@ -831,7 +831,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36392
+	 * @ticket 36392
 	 */
 	public function test_wp_add_inline_script_customize_dependency() {
 		global $wp_scripts;
@@ -859,7 +859,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36392
+	 * @ticket 36392
 	 */
 	public function test_wp_add_inline_script_after_for_core_scripts_with_concat_is_limited_and_falls_back_to_no_concat() {
 		global $wp_scripts;
@@ -884,7 +884,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36392
+	 * @ticket 36392
 	 */
 	public function test_wp_add_inline_script_before_third_core_script_prints_two_concat_scripts() {
 		global $wp_scripts;
@@ -910,7 +910,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	/**
 	 * Testing `wp_enqueue_code_editor` with file path.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/41871
+	 * @ticket 41871
 	 * @covers wp_enqueue_code_editor()
 	 */
 	public function test_wp_enqueue_code_editor_when_php_file_will_be_passed() {
@@ -997,7 +997,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	/**
 	 * Testing `wp_enqueue_code_editor` with `compact`.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/41871
+	 * @ticket 41871
 	 * @covers wp_enqueue_code_editor()
 	 */
 	public function test_wp_enqueue_code_editor_when_generated_array_by_compact_will_be_passed() {
@@ -1080,7 +1080,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	/**
 	 * Testing `wp_enqueue_code_editor` with `array_merge`.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/41871
+	 * @ticket 41871
 	 * @covers wp_enqueue_code_editor()
 	 */
 	public function test_wp_enqueue_code_editor_when_generated_array_by_array_merge_will_be_passed() {
@@ -1177,7 +1177,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 	/**
 	 * Testing `wp_enqueue_code_editor` with `array`.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/41871
+	 * @ticket 41871
 	 * @covers wp_enqueue_code_editor()
 	 */
 	public function test_wp_enqueue_code_editor_when_simple_array_will_be_passed() {

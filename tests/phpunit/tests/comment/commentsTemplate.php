@@ -8,7 +8,7 @@
 class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/8071
+	 * @ticket 8071
 	 */
 	public function test_should_respect_comment_order_asc_when_default_comments_page_is_newest() {
 		$now       = time();
@@ -42,7 +42,7 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/8071
+	 * @ticket 8071
 	 */
 	public function test_should_respect_comment_order_desc_when_default_comments_page_is_newest() {
 		$now       = time();
@@ -76,7 +76,7 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/8071
+	 * @ticket 8071
 	 */
 	public function test_should_respect_comment_order_asc_when_default_comments_page_is_oldest() {
 		$now       = time();
@@ -110,7 +110,7 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/8071
+	 * @ticket 8071
 	 */
 	public function test_should_respect_comment_order_desc_when_default_comments_page_is_oldest() {
 		$now       = time();
@@ -144,7 +144,7 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/8071
+	 * @ticket 8071
 	 */
 	public function test_should_respect_comment_order_asc_when_default_comments_page_is_newest_on_subsequent_pages() {
 		$now       = time();
@@ -215,7 +215,7 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/8071
+	 * @ticket 8071
 	 */
 	public function test_should_respect_comment_order_desc_when_default_comments_page_is_newest_on_subsequent_pages() {
 		$now       = time();
@@ -286,7 +286,7 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/8071
+	 * @ticket 8071
 	 */
 	public function test_should_respect_comment_order_asc_when_default_comments_page_is_oldest_on_subsequent_pages() {
 		$now       = time();
@@ -343,7 +343,7 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/8071
+	 * @ticket 8071
 	 */
 	public function test_should_respect_comment_order_desc_when_default_comments_page_is_oldest_on_subsequent_pages() {
 		$now       = time();
@@ -400,9 +400,9 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/8071
-	 * @see https://core.trac.wordpress.org/ticket/34073
-	 * @see https://core.trac.wordpress.org/ticket/29462
+	 * @ticket 8071
+	 * @ticket 34073
+	 * @ticket 29462
 	 */
 	public function test_last_page_of_comments_should_be_full_when_default_comment_page_is_newest() {
 		$now       = time();
@@ -452,9 +452,9 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/8071
-	 * @see https://core.trac.wordpress.org/ticket/34073
-	 * @see https://core.trac.wordpress.org/ticket/29462
+	 * @ticket 8071
+	 * @ticket 34073
+	 * @ticket 29462
 	 */
 	public function test_first_page_of_comments_should_have_remainder_when_default_comments_page_is_newest() {
 		$now       = time();
@@ -504,7 +504,7 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34073
+	 * @ticket 34073
 	 */
 	public function test_comment_permalinks_should_be_correct_when_using_default_display_callback_with_default_comment_page_oldest() {
 		$now       = time();
@@ -583,7 +583,7 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34073
+	 * @ticket 34073
 	 */
 	public function test_comment_permalinks_should_be_correct_when_using_default_display_callback_with_default_comment_page_newest() {
 		$now       = time();
@@ -696,7 +696,7 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35068
+	 * @ticket 35068
 	 */
 	public function test_query_offset_should_not_include_unapproved_comments() {
 		$now       = time();
@@ -750,7 +750,7 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35068
+	 * @ticket 35068
 	 */
 	public function test_query_offset_should_include_unapproved_comments() {
 		$comment_author_email = 'foo@example.com';
@@ -832,7 +832,7 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35378
+	 * @ticket 35378
 	 */
 	public function test_hierarchy_should_be_ignored_when_threading_is_disabled() {
 		$now       = time();
@@ -877,7 +877,7 @@ class Tests_Comment_CommentsTemplate extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35419
+	 * @ticket 35419
 	 */
 	public function test_pagination_calculation_should_ignore_comment_hierarchy_when_threading_is_disabled() {
 		$now       = time();

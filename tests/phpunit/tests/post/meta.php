@@ -224,7 +224,7 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/12860
+	 * @ticket 12860
 	 */
 	function test_funky_post_meta() {
 		$classy          = new StdClass();
@@ -246,7 +246,7 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38323
+	 * @ticket 38323
 	 * @dataProvider data_register_post_meta
 	 */
 	public function test_register_post_meta( $post_type, $meta_key, $args ) {
@@ -281,7 +281,7 @@ class Tests_Post_Meta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38323
+	 * @ticket 38323
 	 * @dataProvider data_unregister_post_meta
 	 */
 	public function test_unregister_post_meta( $post_type, $meta_key ) {

@@ -15,7 +15,7 @@ class Tests_oEmbed_Discovery extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34971
+	 * @ticket 34971
 	 */
 	function test_add_oembed_discovery_links_static_front_page() {
 		update_option( 'show_on_front', 'page' );

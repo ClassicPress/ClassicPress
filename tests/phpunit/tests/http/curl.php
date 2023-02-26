@@ -10,7 +10,7 @@ class Tests_HTTP_curl extends WP_HTTP_UnitTestCase {
 	var $transport = 'curl';
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39783
+	 * @ticket 39783
 	 */
 	public function test_http_api_curl_stream_parameter_is_a_reference() {
 		add_action( 'http_api_curl', array( $this, '_action_test_http_api_curl_stream_parameter_is_a_reference' ), 10, 3 );

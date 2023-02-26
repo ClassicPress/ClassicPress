@@ -23,7 +23,7 @@ class Tests_Formatting_SanitizeFileName extends WP_UnitTestCase {
 	/**
 	 * Test that spaces are correctly replaced with dashes.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/16330
+	 * @ticket 16330
 	 */
 	function test_replace_spaces() {
 		$urls = array(
@@ -52,7 +52,7 @@ class Tests_Formatting_SanitizeFileName extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16226
+	 * @ticket 16226
 	 */
 	function test_replaces_percent_sign() {
 		$this->assertSame( 'a22b.jpg', sanitize_file_name( 'a%22b.jpg' ) );

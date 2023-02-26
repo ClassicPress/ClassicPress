@@ -3,7 +3,7 @@
 if ( is_multisite() ) :
 
 	/**
-	* @see https://core.trac.wordpress.org/ticket/29845
+	* @ticket 29845
 	* @group ms-site
 	* @group multisite
 	*/
@@ -145,7 +145,7 @@ if ( is_multisite() ) :
 		/**
 		 * @dataProvider data_get_all
 		 *
-		 * @see https://core.trac.wordpress.org/ticket/40228
+		 * @ticket 40228
 		 */
 		public function test_get_blog_details_get_object_vars( $get_all ) {
 			$site = get_blog_details(
@@ -164,7 +164,7 @@ if ( is_multisite() ) :
 		/**
 		 * @dataProvider data_get_all
 		 *
-		 * @see https://core.trac.wordpress.org/ticket/40228
+		 * @ticket 40228
 		 */
 		public function test_get_blog_details_iterate_over_result( $get_all ) {
 			$site = get_blog_details(

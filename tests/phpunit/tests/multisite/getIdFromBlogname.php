@@ -84,7 +84,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/34450
+		 * @ticket 34450
 		 */
 		public function test_get_id_from_blogname_no_www() {
 			global $current_site;
@@ -105,7 +105,7 @@ if ( is_multisite() ) :
 		}
 
 		/**
-		 * @see https://core.trac.wordpress.org/ticket/34450
+		 * @ticket 34450
 		 */
 		public function test_get_id_from_blogname_www() {
 			global $current_site;

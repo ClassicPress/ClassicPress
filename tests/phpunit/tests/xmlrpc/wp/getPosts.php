@@ -12,7 +12,7 @@ class Tests_XMLRPC_wp_getPosts extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/20991
+	 * @ticket 20991
 	 */
 	function test_incapable_user() {
 		$this->make_user_by_role( 'subscriber' );
@@ -148,7 +148,7 @@ class Tests_XMLRPC_wp_getPosts extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21623
+	 * @ticket 21623
 	 */
 	function test_search() {
 		$this->make_user_by_role( 'editor' );

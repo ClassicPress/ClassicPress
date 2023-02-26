@@ -10,7 +10,7 @@ class Tests_Formatting_Emoji extends WP_UnitTestCase {
 	private $svn_cdn = 'https://twemoji.classicpress.net/12/svg/';
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36525
+	 * @ticket 36525
 	 */
 	public function test_unfiltered_emoji_cdns() {
 		$output = get_echo( '_print_emoji_detection_script' );
@@ -24,7 +24,7 @@ class Tests_Formatting_Emoji extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36525
+	 * @ticket 36525
 	 */
 	public function test_filtered_emoji_svn_cdn() {
 		$filtered_svn_cdn = $this->_filtered_emoji_svn_cdn();
@@ -45,7 +45,7 @@ class Tests_Formatting_Emoji extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36525
+	 * @ticket 36525
 	 */
 	public function test_filtered_emoji_png_cdn() {
 		$filtered_png_cdn = $this->_filtered_emoji_png_cdn();
@@ -62,7 +62,7 @@ class Tests_Formatting_Emoji extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/41501
+	 * @ticket 41501
 	 */
 	public function test_wp_emoji_list_returns_data() {
 		$default = _wp_emoji_list();
@@ -105,7 +105,7 @@ class Tests_Formatting_Emoji extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35293
+	 * @ticket 35293
 	 * @dataProvider data_wp_encode_emoji
 	 */
 	public function test_wp_encode_emoji( $emoji, $expected ) {
@@ -140,7 +140,7 @@ class Tests_Formatting_Emoji extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35293
+	 * @ticket 35293
 	 * @dataProvider data_wp_staticize_emoji
 	 */
 	public function test_wp_staticize_emoji( $emoji, $expected ) {

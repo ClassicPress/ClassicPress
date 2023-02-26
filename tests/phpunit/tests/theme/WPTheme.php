@@ -71,7 +71,7 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/20313
+	 * @ticket 20313
 	 */
 	function test_new_WP_Theme_subdir_bad_root() {
 		// This is what get_theme_data() does when you pass it a style.css file for a theme in a subdir.
@@ -94,7 +94,7 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21749
+	 * @ticket 21749
 	 */
 	function test_wp_theme_uris_with_spaces() {
 		$theme = new WP_Theme( 'theme with spaces', $this->theme_root . '/subdir' );
@@ -111,7 +111,7 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21969
+	 * @ticket 21969
 	 */
 	function test_theme_uris_with_spaces() {
 		$callback = array( $this, 'filter_theme_with_spaces' );
@@ -130,7 +130,7 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/26873
+	 * @ticket 26873
 	 */
 	function test_display_method_on_get_method_failure() {
 		$theme = new WP_Theme( 'nonexistent', $this->theme_root );
@@ -141,7 +141,7 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/40820
+	 * @ticket 40820
 	 */
 	function test_child_theme_with_itself_as_parent_should_appear_as_broken() {
 		$theme  = new WP_Theme( 'child-parent-itself', $this->theme_root );
@@ -154,7 +154,7 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 	/**
 	 * Enable a single theme on a network.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30594
+	 * @ticket 30594
 	 * @group ms-required
 	 */
 	function test_wp_theme_network_enable_single_theme() {
@@ -171,7 +171,7 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 	/**
 	 * Enable multiple themes on a network.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30594
+	 * @ticket 30594
 	 * @group ms-required
 	 */
 	function test_wp_theme_network_enable_multiple_themes() {
@@ -194,7 +194,7 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 	/**
 	 * Disable a single theme on a network.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30594
+	 * @ticket 30594
 	 * @group ms-required
 	 */
 	function test_network_disable_single_theme() {
@@ -219,7 +219,7 @@ class Tests_Theme_WPTheme extends WP_UnitTestCase {
 	/**
 	 * Disable multiple themes on a network.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/30594
+	 * @ticket 30594
 	 * @group ms-required
 	 */
 	function test_network_disable_multiple_themes() {

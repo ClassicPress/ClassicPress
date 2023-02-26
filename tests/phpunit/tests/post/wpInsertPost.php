@@ -5,7 +5,7 @@
  */
 class Tests_WPInsertPost extends WP_UnitTestCase {
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/11863
+	 * @ticket 11863
 	 */
 	function test_trashing_a_post_should_add_trashed_suffix_to_post_name() {
 		$trashed_about_page_id = self::factory()->post->create(
@@ -20,7 +20,7 @@ class Tests_WPInsertPost extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/11863
+	 * @ticket 11863
 	 */
 	public function test_trashed_suffix_should_be_added_to_post_with__trashed_in_slug() {
 		$trashed_about_page_id = self::factory()->post->create(
@@ -36,7 +36,7 @@ class Tests_WPInsertPost extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/11863
+	 * @ticket 11863
 	 */
 	function test_trashed_posts_original_post_name_should_be_reassigned_after_untrashing() {
 		$about_page_id = self::factory()->post->create(
@@ -53,7 +53,7 @@ class Tests_WPInsertPost extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/11863
+	 * @ticket 11863
 	 */
 	function test_creating_a_new_post_should_add_trashed_suffix_to_post_name_of_trashed_posts_with_the_desired_slug() {
 		$trashed_about_page_id = self::factory()->post->create(
@@ -77,7 +77,7 @@ class Tests_WPInsertPost extends WP_UnitTestCase {
 	}
 
 	/**
-	* @see https://core.trac.wordpress.org/ticket/11863
+	* @ticket 11863
 	*/
 	function test_untrashing_a_post_with_a_stored_desired_post_name_should_get_its_post_name_suffixed_if_another_post_has_taken_the_desired_post_name() {
 		$about_page_id = self::factory()->post->create(

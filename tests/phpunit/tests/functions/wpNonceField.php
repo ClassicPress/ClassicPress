@@ -11,7 +11,7 @@
 class Tests_Functions_wpNonceField extends WP_UnitTestCase {
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/55578
+	 * @ticket 55578
 	 */
 	public function test_wp_nonce_field() {
 
@@ -20,7 +20,7 @@ class Tests_Functions_wpNonceField extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/55578
+	 * @ticket 55578
 	 *
 	 * @dataProvider data_wp_nonce_field
 	 *

@@ -189,7 +189,7 @@ class Tests_Theme extends WP_UnitTestCase {
 	/**
 	 * Make sure we update the default theme list to include the latest default theme.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/29925
+	 * @ticket 29925
 	 */
 	function test_default_theme_in_default_theme_list() {
 		$latest_default_theme = WP_Theme::get_core_default_theme();
@@ -208,7 +208,7 @@ class Tests_Theme extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/20897
+	 * @ticket 20897
 	 * @expectedDeprecated get_theme_data
 	 */
 	function test_extra_theme_headers() {

@@ -11,7 +11,7 @@
 class Tests_Functions_wpRefererField extends WP_UnitTestCase {
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/55578
+	 * @ticket 55578
 	 */
 	public function test_wp_referer_field() {
 
@@ -21,7 +21,7 @@ class Tests_Functions_wpRefererField extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/55578
+	 * @ticket 55578
 	 */
 	public function test_wp_referer_field_return() {
 
@@ -33,7 +33,7 @@ class Tests_Functions_wpRefererField extends WP_UnitTestCase {
 	/**
 	 * Tests that the echo argument is respected.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/54106
+	 * @ticket 54106
 	 *
 	 * @dataProvider data_wp_referer_field_should_respect_echo_arg
 	 *
@@ -63,7 +63,7 @@ class Tests_Functions_wpRefererField extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/54106
+	 * @ticket 54106
 	 */
 	public function test_wp_referer_field_with_referer() {
 		$old_request_uri        = $_SERVER['REQUEST_URI'];

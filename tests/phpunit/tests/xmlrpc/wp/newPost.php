@@ -342,7 +342,7 @@ class Tests_XMLRPC_wp_newPost extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28601
+	 * @ticket 28601
 	 */
 	function test_invalid_post_date_does_not_fatal() {
 		$this->make_user_by_role( 'author' );
@@ -359,7 +359,7 @@ class Tests_XMLRPC_wp_newPost extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28601
+	 * @ticket 28601
 	 */
 	function test_invalid_post_date_gmt_does_not_fatal() {
 		$this->make_user_by_role( 'author' );
@@ -376,7 +376,7 @@ class Tests_XMLRPC_wp_newPost extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28601
+	 * @ticket 28601
 	 */
 	function test_valid_string_post_date() {
 		$this->make_user_by_role( 'author' );
@@ -393,7 +393,7 @@ class Tests_XMLRPC_wp_newPost extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28601
+	 * @ticket 28601
 	 */
 	function test_valid_string_post_date_gmt() {
 		$this->make_user_by_role( 'author' );
@@ -410,7 +410,7 @@ class Tests_XMLRPC_wp_newPost extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28601
+	 * @ticket 28601
 	 */
 	function test_valid_IXR_post_date() {
 		$this->make_user_by_role( 'author' );
@@ -427,7 +427,7 @@ class Tests_XMLRPC_wp_newPost extends WP_XMLRPC_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28601
+	 * @ticket 28601
 	 */
 	function test_valid_IXR_post_date_gmt() {
 		$this->make_user_by_role( 'author' );

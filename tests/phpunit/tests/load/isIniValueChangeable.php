@@ -10,7 +10,7 @@ class Tests_Functions_Is_Ini_Value_Changeable extends WP_UnitTestCase {
 	/**
 	 * Tests the determining of the changeability of a PHP ini value.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/32075
+	 * @ticket 32075
 	 *
 	 * @dataProvider data_wp_is_ini_value_changeable
 	 *

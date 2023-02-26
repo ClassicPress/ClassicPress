@@ -80,14 +80,14 @@ class Tests_L10n_loadTextdomain extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21319
+	 * @ticket 21319
 	 */
 	public function test_load_textdomain_non_existent_file() {
 		$this->assertFalse( load_textdomain( 'wp-tests-domain', DIR_TESTDATA . '/non-existent-file' ) );
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21319
+	 * @ticket 21319
 	 */
 	public function test_is_textdomain_loaded_non_existent_file() {
 		load_textdomain( 'wp-tests-domain', DIR_TESTDATA . '/non-existent-file' );
@@ -96,7 +96,7 @@ class Tests_L10n_loadTextdomain extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21319
+	 * @ticket 21319
 	 */
 	public function test_get_translations_for_domain_non_existent_file() {
 		load_textdomain( 'wp-tests-domain', DIR_TESTDATA . '/non-existent-file' );
@@ -105,7 +105,7 @@ class Tests_L10n_loadTextdomain extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21319
+	 * @ticket 21319
 	 */
 	public function test_unload_textdomain_non_existent_file() {
 		load_textdomain( 'wp-tests-domain', DIR_TESTDATA . '/non-existent-file' );
@@ -114,7 +114,7 @@ class Tests_L10n_loadTextdomain extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21319
+	 * @ticket 21319
 	 */
 	function test_is_textdomain_is_not_loaded_after_gettext_call_with_no_translations() {
 		$this->assertFalse( is_textdomain_loaded( 'wp-tests-domain' ) );
@@ -194,7 +194,7 @@ class Tests_L10n_loadTextdomain extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38485
+	 * @ticket 38485
 	 */
 	public function test_load_muplugin_textdomain_user_locale() {
 		set_current_screen( 'dashboard' );
@@ -214,7 +214,7 @@ class Tests_L10n_loadTextdomain extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38485
+	 * @ticket 38485
 	 */
 	public function test_load_plugin_textdomain_user_locale() {
 		set_current_screen( 'dashboard' );
@@ -234,7 +234,7 @@ class Tests_L10n_loadTextdomain extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/38485
+	 * @ticket 38485
 	 */
 	public function test_load_theme_textdomain_user_locale() {
 		set_current_screen( 'dashboard' );

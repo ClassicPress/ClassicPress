@@ -9,7 +9,7 @@ class Tests_Link extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/8847
+	 * @ticket 8847
 	 */
 	function test_get_pagenum_link_case_insensitivity() {
 		$old_req_uri = $_SERVER['REQUEST_URI'];
@@ -83,7 +83,7 @@ class Tests_Link extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/26871
+	 * @ticket 26871
 	 */
 	function test_wp_get_shortlink_with_home_page() {
 		$post_id = self::factory()->post->create( array( 'post_type' => 'page' ) );
@@ -98,7 +98,7 @@ class Tests_Link extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30910
+	 * @ticket 30910
 	 */
 	public function test_get_permalink_should_not_reveal_post_name_for_post_with_post_status_future() {
 		update_option( 'permalink_structure', '/%year%/%monthnum%/%day%/%postname%/' );
@@ -118,7 +118,7 @@ class Tests_Link extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30910
+	 * @ticket 30910
 	 */
 	public function test_get_permalink_should_not_reveal_post_name_for_cpt_with_post_status_future() {
 		update_option( 'permalink_structure', '/%year%/%monthnum%/%day%/%postname%/' );
@@ -147,7 +147,7 @@ class Tests_Link extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/1914
+	 * @ticket 1914
 	 */
 	public function test_unattached_attachment_has_a_pretty_permalink() {
 		$this->set_permalink_structure( '/%year%/%monthnum%/%day%/%postname%/' );
@@ -169,7 +169,7 @@ class Tests_Link extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/1914
+	 * @ticket 1914
 	 */
 	public function test_attachment_attached_to_non_existent_post_type_has_a_pretty_permalink() {
 		global $wp_post_types;

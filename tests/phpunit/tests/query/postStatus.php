@@ -391,7 +391,7 @@ class Tests_Query_PostStatus extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/29167
+	 * @ticket 29167
 	 */
 	public function test_specific_post_should_be_returned_if_trash_is_one_of_the_requested_post_statuses() {
 		$p1 = self::factory()->post->create( array( 'post_status' => 'trash' ) );

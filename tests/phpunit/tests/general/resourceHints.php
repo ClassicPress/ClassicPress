@@ -2,7 +2,7 @@
 
 /**
  * @group template
- * @see https://core.trac.wordpress.org/ticket/34292
+ * @ticket 34292
  */
 class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 	private $old_wp_scripts;
@@ -68,7 +68,7 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37652
+	 * @ticket 37652
 	 */
 	function test_preconnect() {
 		$expected = "<link rel='dns-prefetch' href='//twemoji.classicpress.net' />\n" .
@@ -197,7 +197,7 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37502
+	 * @ticket 37502
 	 */
 	function test_deregistered_scripts_are_ignored() {
 		$expected = "<link rel='dns-prefetch' href='//twemoji.classicpress.net' />\n";
@@ -210,7 +210,7 @@ class Tests_WP_Resource_Hints extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37652
+	 * @ticket 37652
 	 */
 	function test_malformed_urls() {
 		$expected = "<link rel='dns-prefetch' href='//twemoji.classicpress.net' />\n";

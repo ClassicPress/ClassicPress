@@ -16,7 +16,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/32464
+	 * @ticket 32464
 	 */
 	public function test_wp_nav_menu_empty_container() {
 		$tag_id = self::factory()->tag->create();
@@ -138,7 +138,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/27113
+	 * @ticket 27113
 	 */
 	function test_orphan_nav_menu_item() {
 
@@ -203,7 +203,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/13910
+	 * @ticket 13910
 	 */
 	function test_wp_get_nav_menu_name() {
 		// Register a nav menu location.
@@ -222,7 +222,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/29460
+	 * @ticket 29460
 	 */
 	function test_orderby_name_by_default() {
 		// We are going to create a random number of menus (min 2, max 10)
@@ -251,7 +251,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35324
+	 * @ticket 35324
 	 */
 	function test_wp_setup_nav_menu_item_for_post_type_archive() {
 
@@ -284,7 +284,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35324
+	 * @ticket 35324
 	 */
 	function test_wp_setup_nav_menu_item_for_post_type_archive_no_description() {
 
@@ -315,7 +315,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35324
+	 * @ticket 35324
 	 */
 	function test_wp_setup_nav_menu_item_for_post_type_archive_custom_description() {
 
@@ -350,7 +350,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35324
+	 * @ticket 35324
 	 */
 	function test_wp_setup_nav_menu_item_for_unknown_post_type_archive_no_description() {
 
@@ -371,7 +371,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/19038
+	 * @ticket 19038
 	 */
 	function test_wp_setup_nav_menu_item_for_trashed_post() {
 		$post_id = self::factory()->post->create(
@@ -397,7 +397,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35206
+	 * @ticket 35206
 	 */
 	function test_wp_nav_menu_whitespace_options() {
 		$post_id1 = self::factory()->post->create();
@@ -484,7 +484,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 	 * This has been the case for some time and should be maintained for reasons of
 	 * backward compatibility.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/24587
+	 * @ticket 24587
 	 */
 	function test_wp_nav_menu_filters_are_passed_args_object() {
 		$tag_id = self::factory()->tag->create();
@@ -572,7 +572,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35272
+	 * @ticket 35272
 	 */
 	function test_no_front_page_class_applied() {
 		$page_id = self::factory()->post->create(
@@ -603,7 +603,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35272
+	 * @ticket 35272
 	 */
 	function test_class_applied_to_front_page_item() {
 		$page_id = self::factory()->post->create(
@@ -636,7 +636,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35272
+	 * @ticket 35272
 	 */
 	function test_class_not_applied_to_taxonomies_with_same_id_as_front_page_item() {
 		global $wpdb;
@@ -733,7 +733,7 @@ class Test_Nav_Menus extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39800
+	 * @ticket 39800
 	 */
 	function test_parent_ancestor_for_post_archive() {
 

@@ -77,7 +77,7 @@ class Tests_Term_SplitSharedTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5809
+	 * @ticket 5809
 	 */
 	public function test_should_create_new_term_ids() {
 		$t1_term = get_term_by( 'term_taxonomy_id', $this->terms['t1']['term_taxonomy_id'], 'wptests_tax' );
@@ -90,7 +90,7 @@ class Tests_Term_SplitSharedTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5809
+	 * @ticket 5809
 	 */
 	public function test_should_retain_child_terms_when_using_get_terms_parent() {
 		$children = get_terms(
@@ -105,7 +105,7 @@ class Tests_Term_SplitSharedTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5809
+	 * @ticket 5809
 	 */
 	public function test_should_retain_child_terms_when_using_get_terms_child_of() {
 		$children = get_terms(
@@ -120,7 +120,7 @@ class Tests_Term_SplitSharedTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30335
+	 * @ticket 30335
 	 */
 	public function test_should_rebuild_split_term_taxonomy_hierarchy() {
 		global $wpdb;
@@ -162,7 +162,7 @@ class Tests_Term_SplitSharedTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30335
+	 * @ticket 30335
 	 */
 	public function test_should_update_default_category_on_term_split() {
 		global $wpdb;
@@ -192,7 +192,7 @@ class Tests_Term_SplitSharedTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/30335
+	 * @ticket 30335
 	 */
 	public function test_should_update_menus_on_term_split() {
 		global $wpdb;
@@ -231,7 +231,7 @@ class Tests_Term_SplitSharedTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33187
+	 * @ticket 33187
 	 * @group navmenus
 	 */
 	public function test_nav_menu_locations_should_be_updated_on_split() {
@@ -261,7 +261,7 @@ class Tests_Term_SplitSharedTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/33187
+	 * @ticket 33187
 	 * @group navmenus
 	 */
 	public function test_nav_menu_term_should_retain_menu_items_on_split() {

@@ -80,7 +80,7 @@ class Tests_Post_GetPosts extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34060
+	 * @ticket 34060
 	 */
 	public function test_paged_should_not_be_overridden_by_default_offset() {
 		$p1 = self::factory()->post->create(

@@ -381,7 +381,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/17180
+	 * @ticket 17180
 	 */
 	function test_vb_insert_invalid_date() {
 		// insert a post with an invalid date, make sure it fails
@@ -443,7 +443,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	public function test_wp_insert_post_should_not_allow_a_bare_numeric_slug_that_might_conflict_with_a_date_archive_when_generating_from_an_empty_post_title() {
 		$this->set_permalink_structure( '/%postname%/' );
@@ -465,8 +465,8 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
-	 * @see https://core.trac.wordpress.org/ticket/33392
+	 * @ticket 5305
+	 * @ticket 33392
 	 */
 	public function test_wp_insert_post_should_invalidate_post_cache_before_generating_guid_when_post_name_is_empty_and_is_generated_from_the_post_ID() {
 		register_post_type( 'wptests_pt' );
@@ -485,7 +485,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/20451
+	 * @ticket 20451
 	 */
 	public function test_wp_insert_post_with_meta_input() {
 		$post_id = wp_insert_post(
@@ -506,7 +506,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5364
+	 * @ticket 5364
 	 */
 	function test_delete_future_post_cron() {
 		// "When I delete a future post using wp_delete_post($post->ID) it does not update the cron correctly."
@@ -534,7 +534,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5305
+	 * @ticket 5305
 	 */
 	function test_permalink_without_title() {
 		// bug: permalink doesn't work if post title is empty
@@ -561,7 +561,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/15665
+	 * @ticket 15665
 	 */
 	function test_get_page_by_path_priority() {
 		global $wpdb;
@@ -613,7 +613,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22944
+	 * @ticket 22944
 	 */
 	function test_wp_insert_post_and_wp_publish_post_with_future_date() {
 		$future_date = gmdate( 'Y-m-d H:i:s', time() + 10000000 );
@@ -636,7 +636,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22944
+	 * @ticket 22944
 	 */
 	function test_publish_post_with_content_filtering() {
 		kses_remove_filters();
@@ -661,7 +661,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/22944
+	 * @ticket 22944
 	 */
 	function test_wp_publish_post_and_avoid_content_filtering() {
 		kses_remove_filters();
@@ -681,7 +681,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/23708
+	 * @ticket 23708
 	 */
 	function test_get_post_ancestors_within_loop() {
 		global $post;
@@ -691,7 +691,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/23474
+	 * @ticket 23474
 	 */
 	function test_update_invalid_post_id() {
 		$post_id = self::factory()->post->create( array( 'post_name' => 'get-page-uri-post-name' ) );
@@ -751,7 +751,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16746
+	 * @ticket 16746
 	 */
 	function test_parse_post_content_starting_with_nextpage() {
 		global $multipage, $pages, $numpages;
@@ -765,7 +765,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/16746
+	 * @ticket 16746
 	 */
 	function test_parse_post_content_starting_with_nextpage_multi() {
 		global $multipage, $pages, $numpages;
@@ -779,7 +779,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/19373
+	 * @ticket 19373
 	 */
 	function test_insert_programmatic_sanitized() {
 		$this->_unset_current_user();
@@ -805,7 +805,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/24803
+	 * @ticket 24803
 	 */
 	function test_wp_count_posts() {
 		$post_type = rand_str( 20 );
@@ -884,7 +884,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/13771
+	 * @ticket 13771
 	 */
 	function test_get_the_date_with_id_returns_correct_time() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2014-03-01 16:35:00' ) );
@@ -892,7 +892,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28310
+	 * @ticket 28310
 	 */
 	function test_get_the_date_returns_false_with_null_or_non_existing_post() {
 		$this->assertFalse( get_the_date() );
@@ -902,7 +902,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28310
+	 * @ticket 28310
 	 */
 	function test_get_the_time_with_id_returns_correct_time() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2014-03-01 16:35:00' ) );
@@ -910,7 +910,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28310
+	 * @ticket 28310
 	 */
 	function test_get_the_time_returns_false_with_null_or_non_existing_post() {
 		$this->assertFalse( get_the_time() );
@@ -920,7 +920,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28310
+	 * @ticket 28310
 	 */
 	function test_get_post_time_with_id_returns_correct_time() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2014-03-01 16:35:00' ) );
@@ -928,7 +928,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28310
+	 * @ticket 28310
 	 */
 	function test_get_post_time_returns_false_with_null_or_non_existing_post() {
 		$this->assertFalse( get_post_time() );
@@ -938,7 +938,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28310
+	 * @ticket 28310
 	 */
 	function test_get_post_modified_time_with_id_returns_correct_time() {
 		$post_id = self::factory()->post->create( array( 'post_date' => '2014-03-01 16:35:00' ) );
@@ -946,7 +946,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28310
+	 * @ticket 28310
 	 */
 	function test_get_post_modified_time_returns_false_with_null_or_non_existing_post() {
 		$this->assertFalse( get_post_modified_time() );
@@ -956,14 +956,14 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28310
+	 * @ticket 28310
 	 */
 	function test_mysql2date_returns_false_with_no_date() {
 		$this->assertFalse( mysql2date( 'F j, Y H:i:s', '' ) );
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/28310
+	 * @ticket 28310
 	 */
 	function test_mysql2date_returns_gmt_or_unix_timestamp() {
 		$this->assertEquals( '441013392', mysql2date( 'G', '1983-12-23 07:43:12' ) );
@@ -971,7 +971,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/25566
+	 * @ticket 25566
 	 */
 	function test_wp_tag_cloud_link_with_post_type() {
 		$post_type = 'new_post_type';
@@ -1004,7 +1004,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/21212
+	 * @ticket 21212
 	 */
 	function test_utf8mb3_post_saves_with_emoji() {
 		global $wpdb;
@@ -1041,7 +1041,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31168
+	 * @ticket 31168
 	 */
 	function test_wp_insert_post_default_comment_ping_status_open() {
 		$post_id = self::factory()->post->create(
@@ -1059,7 +1059,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31168
+	 * @ticket 31168
 	 */
 	function test_wp_insert_post_page_default_comment_ping_status_closed() {
 		$post_id = self::factory()->post->create(
@@ -1078,7 +1078,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31168
+	 * @ticket 31168
 	 */
 	function test_wp_insert_post_cpt_default_comment_ping_status() {
 		$post_type = rand_str( 20 );
@@ -1100,7 +1100,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/31168
+	 * @ticket 31168
 	 */
 	function test_wp_insert_post_cpt_default_comment_ping_status_closed() {
 		$post_type = rand_str( 20 );
@@ -1125,7 +1125,7 @@ class Tests_Post extends WP_UnitTestCase {
 	 * If a post is sticky and is updated by a user that does not have the publish_post capability, it should _stay_
 	 * sticky.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/24153
+	 * @ticket 24153
 	 */
 	function test_user_without_publish_cannot_affect_sticky() {
 		wp_set_current_user( self::$grammarian_id );
@@ -1163,7 +1163,7 @@ class Tests_Post extends WP_UnitTestCase {
 	 * If the `edit_post()` method is invoked by a user without publish_posts permission, the sticky status of the post
 	 * should not be changed.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/24153
+	 * @ticket 24153
 	 */
 	function test_user_without_publish_cannot_affect_sticky_with_edit_post() {
 		// Create a sticky post.
@@ -1203,7 +1203,7 @@ class Tests_Post extends WP_UnitTestCase {
 	/**
 	 * Test that hooks are fired when post gets stuck and unstuck.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/35600
+	 * @ticket 35600
 	 */
 	function test_hooks_fire_when_post_gets_stuck_and_unstuck() {
 		$post_id = self::factory()->post->create();
@@ -1231,7 +1231,7 @@ class Tests_Post extends WP_UnitTestCase {
 	 * If a post is updated without providing a post_name param,
 	 * a new slug should not be generated.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/34865
+	 * @ticket 34865
 	 */
 	function test_post_updates_without_slug_provided() {
 		$post_id = self::factory()->post->create(
@@ -1254,7 +1254,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/32585
+	 * @ticket 32585
 	 */
 	public function test_wp_insert_post_author_zero() {
 		$post_id = self::factory()->post->create( array( 'post_author' => 0 ) );
@@ -1263,7 +1263,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/32585
+	 * @ticket 32585
 	 */
 	public function test_wp_insert_post_author_null() {
 		$post_id = self::factory()->post->create( array( 'post_author' => null ) );
@@ -1272,7 +1272,7 @@ class Tests_Post extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/15946
+	 * @ticket 15946
 	 */
 	function test_wp_insert_post_should_respect_post_date_gmt() {
 		$post = array(
@@ -1320,7 +1320,7 @@ class Tests_Post extends WP_UnitTestCase {
 	 * Test ensuring that the post_name (UUID) is preserved when wp_insert_post()/wp_update_post() is called.
 	 *
 	 * @see _wp_customize_changeset_filter_insert_post_data()
-	 * @see https://core.trac.wordpress.org/ticket/30937
+	 * @ticket 30937
 	 */
 	function test_wp_insert_post_for_customize_changeset_should_not_drop_post_name() {
 

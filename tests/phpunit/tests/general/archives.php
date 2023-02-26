@@ -11,7 +11,7 @@ class Tests_General_Archives extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/23206
+	 * @ticket 23206
 	 */
 	function test_get_archives_cache() {
 		global $wpdb;

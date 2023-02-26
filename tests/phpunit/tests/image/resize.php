@@ -152,7 +152,7 @@ abstract class WP_Tests_Image_Resize_UnitTestCase extends WP_Image_UnitTestCase 
 
 	/**
 	 * Try resizing a non-existent image
-	 * @see https://core.trac.wordpress.org/ticket/6821
+	 * @ticket 6821
 	 */
 	public function test_resize_non_existent_image() {
 		$image = $this->resize_helper( DIR_TESTDATA . '/images/test-non-existent-image.jpg', 25, 25 );

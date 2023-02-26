@@ -556,7 +556,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34299
+	 * @ticket 34299
 	 */
 	public function test_rest_url_scheme() {
 		$_SERVER['SERVER_NAME'] = parse_url( home_url(), PHP_URL_HOST );
@@ -635,7 +635,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 			// Valid dates without timezones
 			array( '2017-01-16T11:30:00', gmmktime( 11, 30, 0, 1, 16, 2017 ) ),
 
-			// Invalid dates (TODO: support parsing partial dates as ranges, see https://core.trac.wordpress.org/ticket/38641)
+			// Invalid dates (TODO: support parsing partial dates as ranges, ticket 38641)
 			array( '2017-01-16T11:30:00-5', false ),
 			array( '2017-01-16T11:30', false ),
 			array( '2017-01-16T11', false ),
@@ -667,7 +667,7 @@ class Tests_REST_API extends WP_UnitTestCase {
 			// Valid dates without timezones
 			array( '2017-01-16T11:30:00', gmmktime( 11, 30, 0, 1, 16, 2017 ) ),
 
-			// Invalid dates (TODO: support parsing partial dates as ranges, see https://core.trac.wordpress.org/ticket/38641)
+			// Invalid dates (TODO: support parsing partial dates as ranges, ticket 38641)
 			array( '2017-01-16T11:30:00-5', false ),
 			array( '2017-01-16T11:30', false ),
 			array( '2017-01-16T11', false ),

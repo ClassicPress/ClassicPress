@@ -8,7 +8,7 @@
 class Tests_Query_Vars extends WP_UnitTestCase {
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/35115
+	 * @ticket 35115
 	 */
 	public function testPublicQueryVarsAreAsExpected() {
 		global $wp;

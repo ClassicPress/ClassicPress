@@ -98,7 +98,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/39650
+	 * @ticket 39650
 	 */
 	public function test_submitting_comment_to_draft_post_returns_error_message_for_user_with_correct_caps() {
 		$error = 'comment_on_draft';
@@ -674,7 +674,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/10377
+	 * @ticket 10377
 	 */
 	public function test_submitting_comment_with_content_too_long_returns_error() {
 		$error = 'comment_content_column_length';
@@ -694,7 +694,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/10377
+	 * @ticket 10377
 	 */
 	public function test_submitting_comment_with_author_too_long_returns_error() {
 		$error = 'comment_author_column_length';
@@ -714,7 +714,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/10377
+	 * @ticket 10377
 	 */
 	public function test_submitting_comment_with_email_too_long_returns_error() {
 		$error = 'comment_author_email_column_length';
@@ -734,7 +734,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/10377
+	 * @ticket 10377
 	 */
 	public function test_submitting_comment_with_url_too_long_returns_error() {
 		$error = 'comment_author_url_column_length';
@@ -754,7 +754,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34997
+	 * @ticket 34997
 	 */
 	public function test_comment_submission_sends_all_expected_parameters_to_preprocess_comment_filter() {
 
@@ -801,7 +801,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36901
+	 * @ticket 36901
 	 */
 	public function test_submitting_duplicate_comments() {
 		$post           = self::factory()->post->create_and_get(
@@ -822,7 +822,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36901
+	 * @ticket 36901
 	 */
 	public function test_comments_flood() {
 		$post          = self::factory()->post->create_and_get(
@@ -846,7 +846,7 @@ class Tests_Comment_Submission extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/36901
+	 * @ticket 36901
 	 */
 	public function test_comments_flood_user_is_admin() {
 		$user = self::factory()->user->create_and_get(

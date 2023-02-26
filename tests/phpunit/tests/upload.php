@@ -44,7 +44,7 @@ class Tests_Upload extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/5953
+	 * @ticket 5953
 	 */
 	function test_upload_dir_absolute() {
 		$path = get_temp_dir() . 'wp-unit-test';

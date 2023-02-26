@@ -113,7 +113,7 @@ class Tests_IsObjectInTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/29467
+	 * @ticket 29467
 	 */
 	public function test_should_not_return_true_if_term_name_begins_with_existing_term_id() {
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -132,7 +132,7 @@ class Tests_IsObjectInTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/32044
+	 * @ticket 32044
 	 */
 	public function test_should_populate_and_hit_relationships_cache() {
 		global $wpdb;
@@ -153,7 +153,7 @@ class Tests_IsObjectInTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/32044
+	 * @ticket 32044
 	 */
 	public function test_should_not_be_fooled_by_a_stale_relationship_cache() {
 		global $wpdb;
@@ -178,7 +178,7 @@ class Tests_IsObjectInTerm extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/37721
+	 * @ticket 37721
 	 */
 	public function test_invalid_taxonomy_should_return_wp_error_object() {
 		$this->assertWPError( is_object_in_term( 12345, 'foo', 'bar' ) );

@@ -7,7 +7,7 @@
 class Tests_Functions_AllowedProtocols extends WP_UnitTestCase {
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/19354
+	 * @ticket 19354
 	 */
 	function test_data_is_not_an_allowed_protocol() {
 		$this->assertNotContains( 'data', wp_allowed_protocols() );

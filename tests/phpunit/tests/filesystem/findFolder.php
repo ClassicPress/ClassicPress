@@ -82,7 +82,7 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 	/**
 	 * Test the ClassicPress ABSPATH containing TWO tokens (www) of which exists in the current FTP home.
 	 *
-	 * @see https://core.trac.wordpress.org/ticket/20934
+	 * @ticket 20934
 	 */
 	function test_multiple_tokens_in_path1() {
 		global $wp_filesystem;

@@ -135,7 +135,7 @@ class Tests_WP_Site_Icon extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/ticket/34368
+	 * @ticket 34368
 	 */
 	function test_get_post_metadata() {
 		$attachment_id = $this->_insert_attachment();
