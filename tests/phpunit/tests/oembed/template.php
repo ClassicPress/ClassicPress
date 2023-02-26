@@ -326,7 +326,7 @@ class Tests_Embed_Template extends WP_UnitTestCase {
 		$gruntfile = file_get_contents( dirname( ABSPATH ) . '/Gruntfile.js' );
 
 		// Confirm this file *should* exist, otherwise this test will always be skipped.
-		$test = '/grunt.registerTask\(\s*\'test\',.*\'qunit:compiled\'.*\'phpunit\'/';
+		$test = '/grunt\.registerTask\(\s*\'test\',.*\'qunit:compiled\'.*\'phpunit\'/s';
 		$this->assertTrue( (bool) preg_match( $test, $gruntfile ) );
 
 		$file = dirname( ABSPATH ) . '/build/' . WPINC . '/js/wp-embed.min.js';
