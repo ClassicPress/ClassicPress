@@ -950,8 +950,50 @@ function wp_user_settings() {
 
 	// The cookie is not set in the current browser or the saved value is newer.
 	$secure = ( 'https' === parse_url( admin_url(), PHP_URL_SCHEME ) );
-	setcookie( 'wp-settings-' . $user_id, $settings, time() + YEAR_IN_SECONDS, SITECOOKIEPATH, null, $secure );
-	setcookie( 'wp-settings-time-' . $user_id, time(), time() + YEAR_IN_SECONDS, SITECOOKIEPATH, null, $secure );
+
+
+	/**
+	 * Allows to manage SameSite Settings Cookie header part.
+	 * Possible values are Lax|Strict|None.
+	 * It's natively supported since PHP 7.3.0.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @param string $same_site SameSite parameter value, default is 'Lax'.
+	 */
+	$same_site = apply_filters( 'wp_settings_cookie_same_site', 'Lax' );
+
+	// lets check PHP version if it's 7.3.0+.
+	if ( version_compare( PHP_VERSION, '7.3.0' ) >= 0 ) {
+		// lets use new setcookie function shipped with php 7.3.0 .
+		setcookie(
+			'wp-settings-' . $user_id,
+			$settings,
+			array(
+				'expires'  => time() + YEAR_IN_SECONDS,
+				'path'     => SITECOOKIEPATH,
+				'domain'   => null,
+				'secure'   => $secure,
+				'httponly' => false,
+				'samesite' => $same_site,
+			)
+		);
+		setcookie(
+			'wp-settings-time-' . $user_id,
+			time(),
+			array(
+				'expires'  => time() + YEAR_IN_SECONDS,
+				'path'     => SITECOOKIEPATH,
+				'domain'   => null,
+				'secure'   => $secure,
+				'httponly' => false,
+				'samesite' => $same_site,
+			)
+		);
+	} else {
+		setcookie( 'wp-settings-' . $user_id, $settings, time() + YEAR_IN_SECONDS, SITECOOKIEPATH . '; Samesite=' . $same_site, null, $secure );
+		setcookie( 'wp-settings-time-' . $user_id, time(), time() + YEAR_IN_SECONDS, SITECOOKIEPATH . '; Samesite=' . $same_site, null, $secure );
+	}
 	$_COOKIE[ 'wp-settings-' . $user_id ] = $settings;
 }
 
