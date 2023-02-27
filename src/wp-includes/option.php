@@ -951,7 +951,6 @@ function wp_user_settings() {
 	// The cookie is not set in the current browser or the saved value is newer.
 	$secure = ( 'https' === parse_url( admin_url(), PHP_URL_SCHEME ) );
 
-
 	/**
 	 * Allows to manage SameSite Settings Cookie header part in User Settings cookies.
 	 * Possible values are Lax|Strict|None.

@@ -983,7 +983,6 @@ if ( ! function_exists( 'wp_set_auth_cookie' ) ) :
 			return;
 		}
 
-
 		/**
 		 * Allows to manage SameSite Auth Cookie header part in auth cookies.
 		 * Possible values are Lax|Strict|None.
