@@ -985,7 +985,7 @@ if ( ! function_exists( 'wp_set_auth_cookie' ) ) :
 
 
 		/**
-		 * Allows to manage SameSite Auth Cookie header part.
+		 * Allows to manage SameSite Auth Cookie header part in auth cookies.
 		 * Possible values are Lax|Strict|None.
 		 * It's natively supported since PHP 7.3.0.
 		 *

@@ -953,7 +953,7 @@ function wp_user_settings() {
 
 
 	/**
-	 * Allows to manage SameSite Settings Cookie header part.
+	 * Allows to manage SameSite Settings Cookie header part in User Settings cookies.
 	 * Possible values are Lax|Strict|None.
 	 * It's natively supported since PHP 7.3.0.
 	 *
