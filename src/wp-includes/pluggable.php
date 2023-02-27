@@ -983,13 +983,80 @@ if ( ! function_exists( 'wp_set_auth_cookie' ) ) :
 			return;
 		}
 
-		setcookie( $auth_cookie_name, $auth_cookie, $expire, PLUGINS_COOKIE_PATH, COOKIE_DOMAIN, $secure, true );
-		setcookie( $auth_cookie_name, $auth_cookie, $expire, ADMIN_COOKIE_PATH, COOKIE_DOMAIN, $secure, true );
-		setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $expire, COOKIEPATH, COOKIE_DOMAIN, $secure_logged_in_cookie, true );
-		if ( COOKIEPATH != SITECOOKIEPATH ) {
-			setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $expire, SITECOOKIEPATH, COOKIE_DOMAIN, $secure_logged_in_cookie, true );
+
+		/**
+		 * Allows to manage SameSite Auth Cookie header part.
+		 * Possible values are Lax|Strict|None.
+		 * It's natively supported since PHP 7.3.0 .
+		 *
+		 * @param string $same_site SameSite parameter value, default is 'Lax'.
+		 */
+		$same_site = apply_filters( 'wp_auth_cookie_same_site', 'Lax' );
+
+		// lets check PHP version if it's 7.3.0+.
+		if ( version_compare( PHP_VERSION, '7.3.0' ) >= 0 ) {
+			// lets use new setcookie function shipped with php 7.3.0 .
+			setcookie(
+				$auth_cookie_name,
+				$auth_cookie,
+				array(
+					'expires'  => $expire,
+					'path'     => PLUGINS_COOKIE_PATH,
+					'domain'   => COOKIE_DOMAIN,
+					'secure'   => $secure,
+					'httponly' => true,
+					'samesite' => $same_site,
+				)
+			);
+			setcookie(
+				$auth_cookie_name,
+				$auth_cookie,
+				array(
+					'expires'  => $expire,
+					'path'     => ADMIN_COOKIE_PATH,
+					'domain'   => COOKIE_DOMAIN,
+					'secure'   => $secure,
+					'httponly' => true,
+					'samesite' => $same_site,
+				)
+			);
+			setcookie(
+				LOGGED_IN_COOKIE,
+				$logged_in_cookie,
+				array(
+					'expires'  => $expire,
+					'path'     => COOKIEPATH,
+					'domain'   => COOKIE_DOMAIN,
+					'secure'   => $secure_logged_in_cookie,
+					'httponly' => true,
+					'samesite' => $same_site,
+				)
+			);
+			if ( COOKIEPATH != SITECOOKIEPATH ) {
+				setcookie(
+					LOGGED_IN_COOKIE,
+					$logged_in_cookie,
+					array(
+						'expires'  => $expire,
+						'path'     => SITECOOKIEPATH,
+						'domain'   => COOKIE_DOMAIN,
+						'secure'   => $secure_logged_in_cookie,
+						'httponly' => true,
+						'samesite' => $same_site,
+					)
+				);
+			}
+		} else {
+			setcookie( $auth_cookie_name, $auth_cookie, $expire, PLUGINS_COOKIE_PATH . '; Samesite=' . $same_site, COOKIE_DOMAIN, $secure, true );
+			setcookie( $auth_cookie_name, $auth_cookie, $expire, ADMIN_COOKIE_PATH . '; Samesite=' . $same_site, COOKIE_DOMAIN, $secure, true );
+			setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $expire, COOKIEPATH . '; Samesite=' . $same_site, COOKIE_DOMAIN, $secure_logged_in_cookie, true );
+			if ( COOKIEPATH != SITECOOKIEPATH ) {
+				setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $expire, SITECOOKIEPATH . '; Samesite=' . $same_site, COOKIE_DOMAIN, $secure_logged_in_cookie, true );
+			}
 		}
-	}
+ 	}
+
+
 endif;
 
 if ( ! function_exists( 'wp_clear_auth_cookie' ) ) :
