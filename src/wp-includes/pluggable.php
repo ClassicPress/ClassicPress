@@ -1055,7 +1055,7 @@ if ( ! function_exists( 'wp_set_auth_cookie' ) ) :
 				setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $expire, SITECOOKIEPATH . '; Samesite=' . $same_site, COOKIE_DOMAIN, $secure_logged_in_cookie, true );
 			}
 		}
- 	}
+	}
 
 
 endif;
