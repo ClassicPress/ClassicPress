@@ -987,7 +987,9 @@ if ( ! function_exists( 'wp_set_auth_cookie' ) ) :
 		/**
 		 * Allows to manage SameSite Auth Cookie header part.
 		 * Possible values are Lax|Strict|None.
-		 * It's natively supported since PHP 7.3.0 .
+		 * It's natively supported since PHP 7.3.0.
+		 *
+		 * @since 1.6.0
 		 *
 		 * @param string $same_site SameSite parameter value, default is 'Lax'.
 		 */
