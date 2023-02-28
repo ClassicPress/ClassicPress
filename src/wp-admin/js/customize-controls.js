@@ -1,31 +1,37 @@
+/**
+ * @output wp-admin/js/customize-controls.js
+ */
+
 /* global _wpCustomizeHeader, _wpCustomizeBackground, _wpMediaViewsL10n, MediaElementPlayer, console, confirm */
 (function( exports, $ ){
 	var Container, focus, normalizedTransitionendEventName, api = wp.customize;
 
-	/**
-	 * A notification that is displayed in a full-screen overlay.
-	 *
-	 * @since WP-4.9.0
-	 * @class
-	 * @augments wp.customize.Notification
-	 */
-	api.OverlayNotification = api.Notification.extend({
+	var reducedMotionMediaQuery = window.matchMedia( '(prefers-reduced-motion: reduce)' );
+	var isReducedMotion = reducedMotionMediaQuery.matches;
+	reducedMotionMediaQuery.addEventListener( 'change' , function handleReducedMotionChange( event ) {
+		isReducedMotion = event.matches;
+	});
+
+	api.OverlayNotification = api.Notification.extend(/** @lends wp.customize.OverlayNotification.prototype */{
 
 		/**
 		 * Whether the notification should show a loading spinner.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @var {boolean}
 		 */
 		loading: false,
 
 		/**
-		 * Initialize.
+		 * A notification that is displayed in a full-screen overlay.
 		 *
-		 * @since WP-4.9.0
+		 * @constructs wp.customize.OverlayNotification
+		 * @augments   wp.customize.Notification
+		 *
+		 * @since 4.9.0
 		 *
 		 * @param {string} code - Code.
-		 * @param {object} params - Params.
+		 * @param {Object} params - Params.
 		 */
 		initialize: function( code, params ) {
 			var notification = this;
@@ -39,7 +45,7 @@
 		/**
 		 * Render notification.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
 		 * @return {jQuery} Notification container.
 		 */
@@ -52,10 +58,10 @@
 		/**
 		 * Stop propagation on escape key presses, but also dismiss notification if it is dismissible.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
 		 * @param {jQuery.Event} event - Event.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		handleEscape: function( event ) {
 			var notification = this;
@@ -68,19 +74,12 @@
 		}
 	});
 
-	/**
-	 * A collection of observable notifications.
-	 *
-	 * @since WP-4.9.0
-	 * @class
-	 * @augments wp.customize.Values
-	 */
-	api.Notifications = api.Values.extend({
+	api.Notifications = api.Values.extend(/** @lends wp.customize.Notifications.prototype */{
 
 		/**
 		 * Whether the alternative style should be used.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @type {boolean}
 		 */
 		alt: false,
@@ -88,21 +87,24 @@
 		/**
 		 * The default constructor for items of the collection.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @type {object}
 		 */
 		defaultConstructor: api.Notification,
 
 		/**
-		 * Initialize notifications area.
+		 * A collection of observable notifications.
 		 *
-		 * @since WP-4.9.0
-		 * @constructor
-		 * @param {object}  options - Options.
+		 * @since 4.9.0
+		 *
+		 * @constructs wp.customize.Notifications
+		 * @augments   wp.customize.Values
+		 *
+		 * @param {Object}  options - Options.
 		 * @param {jQuery}  [options.container] - Container element for notifications. This can be injected later.
 		 * @param {boolean} [options.alt] - Whether alternative style should be used when rendering notifications.
-		 * @returns {void}
-		 * @this {wp.customize.Notifications}
+		 *
+		 * @return {void}
 		 */
 		initialize: function( options ) {
 			var collection = this;
@@ -127,7 +129,7 @@
 		/**
 		 * Get the number of notifications added.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @return {number} Count of notifications.
 		 */
 		count: function() {
@@ -137,11 +139,11 @@
 		/**
 		 * Add notification to the collection.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
 		 * @param {string|wp.customize.Notification} notification - Notification object to add. Alternatively code may be supplied, and in that case the second notificationObject argument must be supplied.
 		 * @param {wp.customize.Notification} [notificationObject] - Notification to add when first argument is the code string.
-		 * @returns {wp.customize.Notification} Added notification (or existing instance if it was already added).
+		 * @return {wp.customize.Notification} Added notification (or existing instance if it was already added).
 		 */
 		add: function( notification, notificationObject ) {
 			var collection = this, code, instance;
@@ -162,7 +164,7 @@
 		/**
 		 * Add notification to the collection.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @param {string} code - Notification code to remove.
 		 * @return {api.Notification} Added instance (or existing instance if it was already added).
 		 */
@@ -177,11 +179,10 @@
 		 *
 		 * Notifications may be sorted by type followed by added time.
 		 *
-		 * @since WP-4.9.0
-		 * @param {object}  args - Args.
+		 * @since 4.9.0
+		 * @param {Object}  args - Args.
 		 * @param {boolean} [args.sort=false] - Whether to return the notifications sorted.
 		 * @return {Array.<wp.customize.Notification>} Notifications.
-		 * @this {wp.customize.Notifications}
 		 */
 		get: function( args ) {
 			var collection = this, notifications, errorTypePriorities, params;
@@ -215,9 +216,8 @@
 		/**
 		 * Render notifications area.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {void}
-		 * @this {wp.customize.Notifications}
+		 * @since 4.9.0
+		 * @return {void}
 		 */
 		render: function() {
 			var collection = this,
@@ -295,7 +295,7 @@
 					collection.focusContainer.focus();
 				}
 			} else if ( collection.previousActiveElement ) {
-				$( collection.previousActiveElement ).focus();
+				$( collection.previousActiveElement ).trigger( 'focus' );
 				collection.previousActiveElement = null;
 			}
 
@@ -307,10 +307,10 @@
 		/**
 		 * Constrain focus on focus container.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
 		 * @param {jQuery.Event} event - Event.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		constrainFocus: function constrainFocus( event ) {
 			var collection = this, focusableElements;
@@ -340,25 +340,12 @@
 		}
 	});
 
-	/**
-	 * A Customizer Setting.
-	 *
-	 * A setting is ClassicPress data (theme mod, option, menu, etc.) that the user can
-	 * draft changes to in the Customizer.
-	 *
-	 * @see PHP class WP_Customize_Setting.
-	 *
-	 * @since WP-3.4.0
-	 * @class
-	 * @augments wp.customize.Value
-	 * @augments wp.customize.Class
-	 */
-	api.Setting = api.Value.extend({
+	api.Setting = api.Value.extend(/** @lends wp.customize.Setting.prototype */{
 
 		/**
 		 * Default params.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @var {object}
 		 */
 		defaults: {
@@ -367,16 +354,24 @@
 		},
 
 		/**
-		 * Initialize.
+		 * A Customizer Setting.
 		 *
-		 * @since WP-3.4.0
+		 * A setting is WordPress data (theme mod, option, menu, etc.) that the user can
+		 * draft changes to in the Customizer.
+		 *
+		 * @see PHP class WP_Customize_Setting.
+		 *
+		 * @constructs wp.customize.Setting
+		 * @augments   wp.customize.Value
+		 *
+		 * @since 3.4.0
 		 *
 		 * @param {string}  id                          - The setting ID.
 		 * @param {*}       value                       - The initial value of the setting.
-		 * @param {object}  [options={}]                - Options.
+		 * @param {Object}  [options={}]                - Options.
 		 * @param {string}  [options.transport=refresh] - The transport to use for previewing. Supports 'refresh' and 'postMessage'.
 		 * @param {boolean} [options.dirty=false]       - Whether the setting should be considered initially dirty.
-		 * @param {object}  [options.previewer]         - The Previewer instance to sync with. Defaults to wp.customize.previewer.
+		 * @param {Object}  [options.previewer]         - The Previewer instance to sync with. Defaults to wp.customize.previewer.
 		 */
 		initialize: function( id, value, options ) {
 			var setting = this, params;
@@ -406,10 +401,10 @@
 		 * fails to match the origin window, so using try/catch around the
 		 * previewer.send() call to then fallback to refresh will not work.
 		 *
-		 * @since WP-3.4.0
+		 * @since 3.4.0
 		 * @access public
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		preview: function() {
 			var setting = this, transport;
@@ -429,8 +424,8 @@
 		/**
 		 * Find controls associated with this setting.
 		 *
-		 * @since WP-4.6.0
-		 * @returns {wp.customize.Control[]} Controls associated with setting.
+		 * @since 4.6.0
+		 * @return {wp.customize.Control[]} Controls associated with setting.
 		 */
 		findControls: function() {
 			var setting = this, controls = [];
@@ -448,7 +443,9 @@
 	/**
 	 * Current change count.
 	 *
-	 * @since WP-4.7.0
+	 * @alias wp.customize._latestRevision
+	 *
+	 * @since 4.7.0
 	 * @type {number}
 	 * @protected
 	 */
@@ -457,7 +454,9 @@
 	/**
 	 * Last revision that was saved.
 	 *
-	 * @since WP-4.7.0
+	 * @alias wp.customize._lastSavedRevision
+	 *
+	 * @since 4.7.0
 	 * @type {number}
 	 * @protected
 	 */
@@ -466,7 +465,9 @@
 	/**
 	 * Latest revisions associated with the updated setting.
 	 *
-	 * @since WP-4.7.0
+	 * @alias wp.customize._latestSettingRevisions
+	 *
+	 * @since 4.7.0
 	 * @type {object}
 	 * @protected
 	 */
@@ -495,12 +496,14 @@
 	/**
 	 * Get the dirty setting values.
 	 *
-	 * @since WP-4.7.0
+	 * @alias wp.customize.dirtyValues
+	 *
+	 * @since 4.7.0
 	 * @access public
 	 *
-	 * @param {object} [options] Options.
+	 * @param {Object} [options] Options.
 	 * @param {boolean} [options.unsaved=false] Whether only values not saved yet into a changeset will be returned (differential changes).
-	 * @returns {object} Dirty setting values.
+	 * @return {Object} Dirty setting values.
 	 */
 	api.dirtyValues = function dirtyValues( options ) {
 		var values = {};
@@ -526,17 +529,19 @@
 	/**
 	 * Request updates to the changeset.
 	 *
-	 * @since WP-4.7.0
+	 * @alias wp.customize.requestChangesetUpdate
+	 *
+	 * @since 4.7.0
 	 * @access public
 	 *
-	 * @param {object}  [changes] - Mapping of setting IDs to setting params each normally including a value property, or mapping to null.
+	 * @param {Object}  [changes] - Mapping of setting IDs to setting params each normally including a value property, or mapping to null.
 	 *                             If not provided, then the changes will still be obtained from unsaved dirty settings.
-	 * @param {object}  [args] - Additional options for the save request.
+	 * @param {Object}  [args] - Additional options for the save request.
 	 * @param {boolean} [args.autosave=false] - Whether changes will be stored in autosave revision if the changeset has been promoted from an auto-draft.
 	 * @param {boolean} [args.force=false] - Send request to update even when there are no changes to submit. This can be used to request the latest status of the changeset on the server.
 	 * @param {string}  [args.title] - Title to update in the changeset. Optional.
 	 * @param {string}  [args.date] - Date to update in the changeset. Optional.
-	 * @returns {jQuery.Promise} Promise resolving with the response data.
+	 * @return {jQuery.Promise} Promise resolving with the response data.
 	 */
 	api.requestChangesetUpdate = function requestChangesetUpdate( changes, args ) {
 		var deferred, request, submittedChanges = {}, data, submittedArgs;
@@ -579,7 +584,8 @@
 			return deferred.promise();
 		}
 
-		// A status would cause a revision to be made, and for this wp.customize.previewer.save() should be used. Status is also disallowed for revisions regardless.
+		// A status would cause a revision to be made, and for this wp.customize.previewer.save() should be used.
+		// Status is also disallowed for revisions regardless.
 		if ( submittedArgs.status ) {
 			return deferred.reject( { code: 'illegal_status_in_changeset_update' } ).promise();
 		}
@@ -661,7 +667,9 @@
 	/**
 	 * Watch all changes to Value properties, and bubble changes to parent Values instance
 	 *
-	 * @since WP-4.1.0
+	 * @alias wp.customize.utils.bubbleChildValueChanges
+	 *
+	 * @since 4.1.0
 	 *
 	 * @param {wp.customize.Class} instance
 	 * @param {Array}              properties  The names of the Value instances to watch.
@@ -679,16 +687,30 @@
 	/**
 	 * Expand a panel, section, or control and focus on the first focusable element.
 	 *
-	 * @since WP-4.1.0
+	 * @alias wp.customize~focus
+	 *
+	 * @since 4.1.0
 	 *
 	 * @param {Object}   [params]
 	 * @param {Function} [params.completeCallback]
 	 */
 	focus = function ( params ) {
-		var construct, completeCallback, focus, focusElement;
+		var construct, completeCallback, focus, focusElement, sections;
 		construct = this;
 		params = params || {};
 		focus = function () {
+			// If a child section is currently expanded, collapse it.
+			if ( construct.extended( api.Panel ) ) {
+				sections = construct.sections();
+				if ( 1 < sections.length ) {
+					sections.forEach( function ( section ) {
+						if ( section.expanded() ) {
+							section.collapse();
+						}
+					} );
+				}
+			}
+
 			var focusContainer;
 			if ( ( construct.extended( api.Panel ) || construct.extended( api.Section ) ) && construct.expanded && construct.expanded() ) {
 				focusContainer = construct.contentContainer;
@@ -726,11 +748,13 @@
 	 *
 	 * If a.priority() === b.priority(), then sort by their respective params.instanceNumber.
 	 *
-	 * @since WP-4.1.0
+	 * @alias wp.customize.utils.prioritySort
+	 *
+	 * @since 4.1.0
 	 *
 	 * @param {(wp.customize.Panel|wp.customize.Section|wp.customize.Control)} a
 	 * @param {(wp.customize.Panel|wp.customize.Section|wp.customize.Control)} b
-	 * @returns {Number}
+	 * @return {number}
 	 */
 	api.utils.prioritySort = function ( a, b ) {
 		if ( a.priority() === b.priority() && typeof a.params.instanceNumber === 'number' && typeof b.params.instanceNumber === 'number' ) {
@@ -743,10 +767,12 @@
 	/**
 	 * Return whether the supplied Event object is for a keydown event but not the Enter key.
 	 *
-	 * @since WP-4.1.0
+	 * @alias wp.customize.utils.isKeydownButNotEnterEvent
+	 *
+	 * @since 4.1.0
 	 *
 	 * @param {jQuery.Event} event
-	 * @returns {boolean}
+	 * @return {boolean}
 	 */
 	api.utils.isKeydownButNotEnterEvent = function ( event ) {
 		return ( 'keydown' === event.type && 13 !== event.which );
@@ -755,21 +781,23 @@
 	/**
 	 * Return whether the two lists of elements are the same and are in the same order.
 	 *
-	 * @since WP-4.1.0
+	 * @alias wp.customize.utils.areElementListsEqual
+	 *
+	 * @since 4.1.0
 	 *
 	 * @param {Array|jQuery} listA
 	 * @param {Array|jQuery} listB
-	 * @returns {boolean}
+	 * @return {boolean}
 	 */
 	api.utils.areElementListsEqual = function ( listA, listB ) {
 		var equal = (
-			listA.length === listB.length && // if lists are different lengths, then naturally they are not equal
-			-1 === _.indexOf( _.map( // are there any false values in the list returned by map?
-				_.zip( listA, listB ), // pair up each element between the two lists
+			listA.length === listB.length && // If lists are different lengths, then naturally they are not equal.
+			-1 === _.indexOf( _.map(         // Are there any false values in the list returned by map?
+				_.zip( listA, listB ),       // Pair up each element between the two lists.
 				function ( pair ) {
-					return $( pair[0] ).is( pair[1] ); // compare to see if each pair are equal
+					return $( pair[0] ).is( pair[1] ); // Compare to see if each pair is equal.
 				}
-			), false ) // check for presence of false in map's return value
+			), false ) // Check for presence of false in map's return value.
 		);
 		return equal;
 	};
@@ -781,17 +809,19 @@
 	 * UI element, after an optional delay. If the user focuses the element
 	 * before the delay passes, the reminder is canceled.
 	 *
-	 * @since WP-4.9.0
+	 * @alias wp.customize.utils.highlightButton
+	 *
+	 * @since 4.9.0
 	 *
 	 * @param {jQuery} button - The element to highlight.
-	 * @param {object} [options] - Options.
+	 * @param {Object} [options] - Options.
 	 * @param {number} [options.delay=0] - Delay in milliseconds.
 	 * @param {jQuery} [options.focusTarget] - A target for user focus that defaults to the highlighted element.
 	 *                                         If the user focuses the target before the delay passes, the reminder
 	 *                                         is canceled. This option exists to accommodate compound buttons
 	 *                                         containing auxiliary UI, such as the Publish button augmented with a
 	 *                                         Settings button.
-	 * @returns {Function} An idempotent function that cancels the reminder.
+	 * @return {Function} An idempotent function that cancels the reminder.
 	 */
 	api.utils.highlightButton = function highlightButton( button, options ) {
 		var animationClass = 'button-see-me',
@@ -834,9 +864,11 @@
 	 *
 	 * Same functionality as the `current_time( 'mysql', false )` function in PHP.
 	 *
-	 * @since WP-4.9.0
+	 * @alias wp.customize.utils.getCurrentTimestamp
 	 *
-	 * @returns {int} Current timestamp.
+	 * @since 4.9.0
+	 *
+	 * @return {number} Current timestamp.
 	 */
 	api.utils.getCurrentTimestamp = function getCurrentTimestamp() {
 		var currentDate, currentClientTimestamp, timestampDifferential;
@@ -851,10 +883,12 @@
 	/**
 	 * Get remaining time of when the date is set.
 	 *
-	 * @since WP-4.9.0
+	 * @alias wp.customize.utils.getRemainingTime
 	 *
-	 * @param {string|int|Date} datetime - Date time or timestamp of the future date.
-	 * @return {int} remainingTime - Remaining time in milliseconds.
+	 * @since 4.9.0
+	 *
+	 * @param {string|number|Date} datetime - Date time or timestamp of the future date.
+	 * @return {number} remainingTime - Remaining time in milliseconds.
 	 */
 	api.utils.getRemainingTime = function getRemainingTime( datetime ) {
 		var millisecondsDivider = 1000, remainingTime, timestamp;
@@ -874,9 +908,11 @@
 	/**
 	 * Return browser supported `transitionend` event name.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
-	 * @returns {string|null} Normalized `transitionend` event name or null if CSS transitions are not supported.
+	 * @ignore
+	 *
+	 * @return {string|null} Normalized `transitionend` event name or null if CSS transitions are not supported.
 	 */
 	normalizedTransitionendEventName = (function () {
 		var el, transitions, prop;
@@ -897,15 +933,7 @@
 		}
 	})();
 
-	/**
-	 * Base class for Panel and Section.
-	 *
-	 * @since WP-4.1.0
-	 *
-	 * @class
-	 * @augments wp.customize.Class
-	 */
-	Container = api.Class.extend({
+	Container = api.Class.extend(/** @lends wp.customize~Container.prototype */{
 		defaultActiveArguments: { duration: 'fast', completeCallback: $.noop },
 		defaultExpandedArguments: { duration: 'fast', completeCallback: $.noop },
 		containerType: 'container',
@@ -920,18 +948,25 @@
 		},
 
 		/**
-		 * @since WP-4.1.0
+		 * Base class for Panel and Section.
 		 *
-		 * @param {string}         id - The ID for the container.
-		 * @param {object}         options - Object containing one property: params.
-		 * @param {string}         options.title - Title shown when panel is collapsed and expanded.
-		 * @param {string=}        [options.description] - Description shown at the top of the panel.
-		 * @param {number=100}     [options.priority] - The sort priority for the panel.
-		 * @param {string}         [options.templateId] - Template selector for container.
-		 * @param {string=default} [options.type] - The type of the panel. See wp.customize.panelConstructor.
-		 * @param {string=}        [options.content] - The markup to be used for the panel container. If empty, a JS template is used.
-		 * @param {boolean=true}   [options.active] - Whether the panel is active or not.
-		 * @param {object}         [options.params] - Deprecated wrapper for the above properties.
+		 * @constructs wp.customize~Container
+		 * @augments   wp.customize.Class
+		 *
+		 * @since 4.1.0
+		 *
+		 * @borrows wp.customize~focus as focus
+		 *
+		 * @param {string}  id - The ID for the container.
+		 * @param {Object}  options - Object containing one property: params.
+		 * @param {string}  options.title - Title shown when panel is collapsed and expanded.
+		 * @param {string}  [options.description] - Description shown at the top of the panel.
+		 * @param {number}  [options.priority=100] - The sort priority for the panel.
+		 * @param {string}  [options.templateId] - Template selector for container.
+		 * @param {string}  [options.type=default] - The type of the panel. See wp.customize.panelConstructor.
+		 * @param {string}  [options.content] - The markup to be used for the panel container. If empty, a JS template is used.
+		 * @param {boolean} [options.active=true] - Whether the panel is active or not.
+		 * @param {Object}  [options.params] - Deprecated wrapper for the above properties.
 		 */
 		initialize: function ( id, options ) {
 			var container = this;
@@ -997,9 +1032,8 @@
 		/**
 		 * Get the element that will contain the notifications.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {jQuery} Notification container element.
-		 * @this {wp.customize.Control}
+		 * @since 4.9.0
+		 * @return {jQuery} Notification container element.
 		 */
 		getNotificationsContainerElement: function() {
 			var container = this;
@@ -1009,8 +1043,8 @@
 		/**
 		 * Set up notifications.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @return {void}
 		 */
 		setupNotifications: function() {
 			var container = this, renderNotifications;
@@ -1028,7 +1062,7 @@
 		},
 
 		/**
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 *
 		 * @abstract
 		 */
@@ -1037,11 +1071,11 @@
 		/**
 		 * Get the child models associated with this parent, sorting them by their priority Value.
 		 *
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 *
-		 * @param {String} parentType
-		 * @param {String} childType
-		 * @returns {Array}
+		 * @param {string} parentType
+		 * @param {string} childType
+		 * @return {Array}
 		 */
 		_children: function ( parentType, childType ) {
 			var parent = this,
@@ -1058,7 +1092,7 @@
 		/**
 		 * To override by subclass, to return whether the container has active children.
 		 *
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 *
 		 * @abstract
 		 */
@@ -1073,7 +1107,7 @@
 		 *
 		 * To override by subclass, update the container's UI to reflect the provided active state.
 		 *
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 *
 		 * @param {boolean}  active - The active state to transiution to.
 		 * @param {Object}   [args] - Args.
@@ -1113,7 +1147,8 @@
 			}
 
 			if ( ! $.contains( document, headContainer.get( 0 ) ) ) {
-				// If the element is not in the DOM, then jQuery.fn.slideUp() does nothing. In this case, a hard toggle is required instead.
+				// If the element is not in the DOM, then jQuery.fn.slideUp() does nothing.
+				// In this case, a hard toggle is required instead.
 				headContainer.toggle( active );
 				if ( args.completeCallback ) {
 					args.completeCallback();
@@ -1135,11 +1170,11 @@
 		},
 
 		/**
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 *
-		 * @params {Boolean} active
-		 * @param {Object}   [params]
-		 * @returns {Boolean} false if state already applied
+		 * @param {boolean} active
+		 * @param {Object}  [params]
+		 * @return {boolean} False if state already applied.
 		 */
 		_toggleActive: function ( active, params ) {
 			var self = this;
@@ -1158,7 +1193,7 @@
 
 		/**
 		 * @param {Object} [params]
-		 * @returns {Boolean} false if already active
+		 * @return {boolean} False if already active.
 		 */
 		activate: function ( params ) {
 			return this._toggleActive( true, params );
@@ -1166,7 +1201,7 @@
 
 		/**
 		 * @param {Object} [params]
-		 * @returns {Boolean} false if already inactive
+		 * @return {boolean} False if already inactive.
 		 */
 		deactivate: function ( params ) {
 			return this._toggleActive( false, params );
@@ -1183,10 +1218,10 @@
 		/**
 		 * Handle the toggle logic for expand/collapse.
 		 *
-		 * @param {Boolean}  expanded - The new state to apply.
+		 * @param {boolean}  expanded - The new state to apply.
 		 * @param {Object}   [params] - Object containing options for expand/collapse.
 		 * @param {Function} [params.completeCallback] - Function to call when expansion/collapse is complete.
-		 * @returns {Boolean} false if state already applied or active state is false
+		 * @return {boolean} False if state already applied or active state is false.
 		 */
 		_toggleExpanded: function( expanded, params ) {
 			var instance = this, previousCompleteCallback;
@@ -1223,7 +1258,7 @@
 
 		/**
 		 * @param {Object} [params]
-		 * @returns {Boolean} false if already expanded or if inactive.
+		 * @return {boolean} False if already expanded or if inactive.
 		 */
 		expand: function ( params ) {
 			return this._toggleExpanded( true, params );
@@ -1231,7 +1266,7 @@
 
 		/**
 		 * @param {Object} [params]
-		 * @returns {Boolean} false if already collapsed.
+		 * @return {boolean} False if already collapsed.
 		 */
 		collapse: function ( params ) {
 			return this._toggleExpanded( false, params );
@@ -1240,18 +1275,21 @@
 		/**
 		 * Animate container state change if transitions are supported by the browser.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 * @private
 		 *
 		 * @param {function} completeCallback Function to be called after transition is completed.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		_animateChangeExpanded: function( completeCallback ) {
-			// Return if CSS transitions are not supported.
-			if ( ! normalizedTransitionendEventName ) {
-				if ( completeCallback ) {
-					completeCallback();
-				}
+			// Return if CSS transitions are not supported or if reduced motion is enabled.
+			if ( ! normalizedTransitionendEventName || isReducedMotion ) {
+				// Schedule the callback until the next tick to prevent focus loss.
+				_.defer( function () {
+					if ( completeCallback ) {
+						completeCallback();
+					}
+				} );
 				return;
 			}
 
@@ -1305,16 +1343,15 @@
 			} );
 		},
 
-		/**
-		 * Bring the container into view and then expand this and bring it into view
-		 * @param {Object} [params]
+		/*
+		 * is documented using @borrows in the constructor.
 		 */
 		focus: focus,
 
 		/**
 		 * Return the container html, generated from its JS template, if it exists.
 		 *
-		 * @since WP-4.3.0
+		 * @since 4.3.0
 		 */
 		getContainer: function () {
 			var template,
@@ -1326,10 +1363,10 @@
 				template = wp.template( 'customize-' + container.containerType + '-default' );
 			}
 			if ( template && container.container ) {
-				return $.trim( template( _.extend(
+				return template( _.extend(
 					{ id: container.id },
 					container.params
-				) ) );
+				) ).toString().trim();
 			}
 
 			return '<li></li>';
@@ -1345,10 +1382,10 @@
 		 * the container. Such non-sliding pane custom sections also need to override the `onChangeExpanded`
 		 * method to handle animating the panel/section into and out of view.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 * @access public
 		 *
-		 * @returns {jQuery} Detached content element.
+		 * @return {jQuery} Detached content element.
 		 */
 		getContent: function() {
 			var construct = this,
@@ -1370,13 +1407,7 @@
 		}
 	});
 
-	/**
-	 * @since WP-4.1.0
-	 *
-	 * @class
-	 * @augments wp.customize.Class
-	 */
-	api.Section = Container.extend({
+	api.Section = Container.extend(/** @lends wp.customize.Section.prototype */{
 		containerType: 'section',
 		containerParent: '#customize-theme-controls',
 		containerPaneParent: '.customize-pane-parent',
@@ -1393,19 +1424,22 @@
 		},
 
 		/**
-		 * @since WP-4.1.0
+		 * @constructs wp.customize.Section
+		 * @augments   wp.customize~Container
 		 *
-		 * @param {string}         id - The ID for the section.
-		 * @param {object}         options - Options.
-		 * @param {string}         options.title - Title shown when section is collapsed and expanded.
-		 * @param {string=}        [options.description] - Description shown at the top of the section.
-		 * @param {number=100}     [options.priority] - The sort priority for the section.
-		 * @param {string=default} [options.type] - The type of the section. See wp.customize.sectionConstructor.
-		 * @param {string=}        [options.content] - The markup to be used for the section container. If empty, a JS template is used.
-		 * @param {boolean=true}   [options.active] - Whether the section is active or not.
-		 * @param {string}         options.panel - The ID for the panel this section is associated with.
-		 * @param {string=}        [options.customizeAction] - Additional context information shown before the section title when expanded.
-		 * @param {object}         [options.params] - Deprecated wrapper for the above properties.
+		 * @since 4.1.0
+		 *
+		 * @param {string}  id - The ID for the section.
+		 * @param {Object}  options - Options.
+		 * @param {string}  options.title - Title shown when section is collapsed and expanded.
+		 * @param {string}  [options.description] - Description shown at the top of the section.
+		 * @param {number}  [options.priority=100] - The sort priority for the section.
+		 * @param {string}  [options.type=default] - The type of the section. See wp.customize.sectionConstructor.
+		 * @param {string}  [options.content] - The markup to be used for the section container. If empty, a JS template is used.
+		 * @param {boolean} [options.active=true] - Whether the section is active or not.
+		 * @param {string}  options.panel - The ID for the panel this section is associated with.
+		 * @param {string}  [options.customizeAction] - Additional context information shown before the section title when expanded.
+		 * @param {Object}  [options.params] - Deprecated wrapper for the above properties.
 		 */
 		initialize: function ( id, options ) {
 			var section = this, params;
@@ -1441,7 +1475,7 @@
 		/**
 		 * Embed the container in the DOM when any parent panel is ready.
 		 *
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 */
 		embed: function () {
 			var inject,
@@ -1468,7 +1502,7 @@
 						});
 					} );
 				} else {
-					// There is no panel, so embed the section in the root of the customizer
+					// There is no panel, so embed the section in the root of the customizer.
 					parentContainer = api.ensure( section.containerPaneParent );
 					if ( ! section.headContainer.parent().is( parentContainer ) ) {
 						parentContainer.append( section.headContainer );
@@ -1486,7 +1520,7 @@
 		/**
 		 * Add behaviors for the accordion section.
 		 *
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 */
 		attachEvents: function () {
 			var meta, content, section = this;
@@ -1500,7 +1534,7 @@
 				if ( api.utils.isKeydownButNotEnterEvent( event ) ) {
 					return;
 				}
-				event.preventDefault(); // Keep this AFTER the key filter above
+				event.preventDefault(); // Keep this AFTER the key filter above.
 
 				if ( section.expanded() ) {
 					section.collapse();
@@ -1530,9 +1564,9 @@
 		/**
 		 * Return whether this section has any active controls.
 		 *
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 *
-		 * @returns {Boolean}
+		 * @return {boolean}
 		 */
 		isContextuallyActive: function () {
 			var section = this,
@@ -1549,9 +1583,9 @@
 		/**
 		 * Get the controls that are associated with this section, sorted by their priority Value.
 		 *
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 *
-		 * @returns {Array}
+		 * @return {Array}
 		 */
 		controls: function () {
 			return this._children( 'section', 'control' );
@@ -1560,9 +1594,9 @@
 		/**
 		 * Update UI to reflect expanded state.
 		 *
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 *
-		 * @param {Boolean} expanded
+		 * @param {boolean} expanded
 		 * @param {Object}  args
 		 */
 		onChangeExpanded: function ( expanded, args ) {
@@ -1579,12 +1613,12 @@
 				if ( args.unchanged ) {
 					expand = args.completeCallback;
 				} else {
-					expand = $.proxy( function() {
+					expand = function() {
 						section._animateChangeExpanded( function() {
 							sectionTitle.attr( 'tabindex', '-1' );
 							backBtn.attr( 'tabindex', '0' );
 
-							backBtn.focus();
+							backBtn.trigger( 'focus' );
 							content.css( 'top', '' );
 							container.scrollTop( 0 );
 
@@ -1596,7 +1630,7 @@
 						content.addClass( 'open' );
 						overlay.addClass( 'section-open' );
 						api.state( 'expandedSection' ).set( section );
-					}, this );
+					}.bind( this );
 				}
 
 				if ( ! args.allowMultiple ) {
@@ -1632,7 +1666,7 @@
 					backBtn.attr( 'tabindex', '-1' );
 					sectionTitle.attr( 'tabindex', '0' );
 
-					sectionTitle.focus();
+					sectionTitle.trigger( 'focus' );
 					content.css( 'top', '' );
 
 					if ( args.completeCallback ) {
@@ -1654,17 +1688,7 @@
 		}
 	});
 
-	/**
-	 * wp.customize.ThemesSection
-	 *
-	 * Custom section for themes that loads themes by category, and also
-	 * handles the theme-details view rendering and navigation.
-	 *
-	 * @constructor
-	 * @augments wp.customize.Section
-	 * @augments wp.customize.Container
-	 */
-	api.ThemesSection = api.Section.extend({
+	api.ThemesSection = api.Section.extend(/** @lends wp.customize.ThemesSection.prototype */{
 		currentTheme: '',
 		overlay: '',
 		template: '',
@@ -1683,13 +1707,19 @@
 		updateCountDebounced: null,
 
 		/**
-		 * Initialize.
+		 * wp.customize.ThemesSection
 		 *
-		 * @since WP-4.9.0
+		 * Custom section for themes that loads themes by category, and also
+		 * handles the theme-details view rendering and navigation.
+		 *
+		 * @constructs wp.customize.ThemesSection
+		 * @augments   wp.customize.Section
+		 *
+		 * @since 4.9.0
 		 *
 		 * @param {string} id - ID.
-		 * @param {object} options - Options.
-		 * @returns {void}
+		 * @param {Object} options - Options.
+		 * @return {void}
 		 */
 		initialize: function( id, options ) {
 			var section = this;
@@ -1705,18 +1735,18 @@
 		 *
 		 * Insert the section before the themes container. Assume that a themes section is within a panel, but not necessarily the themes panel.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 */
 		embed: function() {
 			var inject,
 				section = this;
 
-			// Watch for changes to the panel state
+			// Watch for changes to the panel state.
 			inject = function( panelId ) {
 				var parentContainer;
 				api.panel( panelId, function( panel ) {
 
-					// The panel has been registered, wait for it to become ready/initialized
+					// The panel has been registered, wait for it to become ready/initialized.
 					panel.deferred.embedded.done( function() {
 						parentContainer = panel.contentContainer;
 						if ( ! section.headContainer.parent().is( parentContainer ) ) {
@@ -1730,15 +1760,15 @@
 				} );
 			};
 			section.panel.bind( inject );
-			inject( section.panel.get() ); // Since a section may never get a panel, assume that it won't ever get one
+			inject( section.panel.get() ); // Since a section may never get a panel, assume that it won't ever get one.
 		},
 
 		/**
 		 * Set up.
 		 *
-		 * @since WP-4.2.0
+		 * @since 4.2.0
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		ready: function() {
 			var section = this;
@@ -1751,17 +1781,17 @@
 					return;
 				}
 
-				// Pressing the right arrow key fires a theme:next event
+				// Pressing the right arrow key fires a theme:next event.
 				if ( 39 === event.keyCode ) {
 					section.nextTheme();
 				}
 
-				// Pressing the left arrow key fires a theme:previous event
+				// Pressing the left arrow key fires a theme:previous event.
 				if ( 37 === event.keyCode ) {
 					section.previousTheme();
 				}
 
-				// Pressing the escape key fires a theme:collapse event
+				// Pressing the escape key fires a theme:collapse event.
 				if ( 27 === event.keyCode ) {
 					if ( section.$body.hasClass( 'modal-open' ) ) {
 
@@ -1788,9 +1818,9 @@
 		 * use the section's own active state instead. This prevents empty search
 		 * results for theme sections from causing the section to become inactive.
 		 *
-		 * @since WP-4.2.0
+		 * @since 4.2.0
 		 *
-		 * @returns {Boolean}
+		 * @return {boolean}
 		 */
 		isContextuallyActive: function () {
 			return this.active();
@@ -1799,9 +1829,9 @@
 		/**
 		 * Attach events.
 		 *
-		 * @since WP-4.2.0
+		 * @since 4.2.0
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		attachEvents: function () {
 			var section = this, debounced;
@@ -1811,7 +1841,7 @@
 				if ( api.utils.isKeydownButNotEnterEvent( event ) ) {
 					return;
 				}
-				event.preventDefault(); // Keep this AFTER the key filter above
+				event.preventDefault(); // Keep this AFTER the key filter above.
 				section.collapse();
 			});
 
@@ -1940,21 +1970,21 @@
 		/**
 		 * Update UI to reflect expanded state
 		 *
-		 * @since WP-4.2.0
+		 * @since 4.2.0
 		 *
-		 * @param {Boolean}  expanded
+		 * @param {boolean}  expanded
 		 * @param {Object}   args
-		 * @param {Boolean}  args.unchanged
+		 * @param {boolean}  args.unchanged
 		 * @param {Function} args.completeCallback
-		 * @returns {void}
+		 * @return {void}
 		 */
 		onChangeExpanded: function ( expanded, args ) {
 
-			// Note: there is a second argument 'args' passed
+			// Note: there is a second argument 'args' passed.
 			var section = this,
 				container = section.contentContainer.closest( '.customize-themes-full-container' );
 
-			// Immediately call the complete callback if there were no changes
+			// Immediately call the complete callback if there were no changes.
 			if ( args.unchanged ) {
 				if ( args.completeCallback ) {
 					args.completeCallback();
@@ -1969,7 +1999,7 @@
 					section.loadThemes();
 				}
 
-				// Collapse any sibling sections/panels
+				// Collapse any sibling sections/panels.
 				api.section.each( function ( otherSection ) {
 					var searchTerm;
 
@@ -2034,9 +2064,9 @@
 		/**
 		 * Return the section's content element without detaching from the parent.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
-		 * @returns {jQuery}
+		 * @return {jQuery}
 		 */
 		getContent: function() {
 			return this.container.find( '.control-section-content' );
@@ -2045,9 +2075,9 @@
 		/**
 		 * Load theme data via Ajax and add themes to the section as controls.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		loadThemes: function() {
 			var section = this, params, page, request;
@@ -2116,7 +2146,8 @@
 
 					_.delay( section.renderScreenshots, 100 ); // Wait for the controls to become visible.
 
-					if ( 'local' === section.params.filter_type || 100 > themes.length ) { // If we have less than the requested 100 themes, it's the end of the list.
+					if ( 'local' === section.params.filter_type || 100 > themes.length ) {
+						// If we have less than the requested 100 themes, it's the end of the list.
 						section.fullyLoaded = true;
 					}
 				} else {
@@ -2155,10 +2186,10 @@
 		/**
 		 * Loads controls into the section from data received from loadThemes().
 		 *
-		 * @since WP-4.9.0
-		 * @param {Array} themes - Array of theme data to create controls with.
-		 * @param {integer} page - Page of results being loaded.
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @param {Array}  themes - Array of theme data to create controls with.
+		 * @param {number} page   - Page of results being loaded.
+		 * @return {void}
 		 */
 		loadControls: function( themes, page ) {
 			var newThemeControls = [],
@@ -2186,8 +2217,8 @@
 		/**
 		 * Determines whether more themes should be loaded, and loads them.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @return {void}
 		 */
 		loadMore: function() {
 			var section = this, container, bottom, threshold;
@@ -2195,7 +2226,9 @@
 				container = section.container.closest( '.customize-themes-full-container' );
 
 				bottom = container.scrollTop() + container.height();
-				threshold = container.prop( 'scrollHeight' ) - 3000; // Use a fixed distance to the bottom of loaded results to avoid unnecessarily loading results sooner when using a percentage of scroll distance.
+				// Use a fixed distance to the bottom of loaded results to avoid unnecessarily
+				// loading results sooner when using a percentage of scroll distance.
+				threshold = container.prop( 'scrollHeight' ) - 3000;
 
 				if ( bottom > threshold ) {
 					section.loadThemes();
@@ -2206,10 +2239,10 @@
 		/**
 		 * Event handler for search input that filters visible controls.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
 		 * @param {string} term - The raw search input value.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		filterSearch: function( term ) {
 			var count = 0,
@@ -2250,10 +2283,10 @@
 		/**
 		 * Event handler for search input that determines if the terms have changed and loads new controls as needed.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
 		 * @param {wp.customize.ThemesSection} section - The current theme section, passed through the debouncer.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		checkTerm: function( section ) {
 			var newTerm;
@@ -2268,9 +2301,9 @@
 		/**
 		 * Check for filters checked in the feature filter list and initialize a new query.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		filtersChecked: function() {
 			var section = this,
@@ -2309,11 +2342,11 @@
 		/**
 		 * Reset the current query and load new results.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
 		 * @param {string} newTerm - New term.
 		 * @param {Array} newTags - New tags.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		initializeNewQuery: function( newTerm, newTags ) {
 			var section = this;
@@ -2344,9 +2377,9 @@
 		/**
 		 * Render control's screenshot if the control comes into view.
 		 *
-		 * @since WP-4.2.0
+		 * @since 4.2.0
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		renderScreenshots: function() {
 			var section = this;
@@ -2398,9 +2431,9 @@
 		/**
 		 * Get visible count.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
-		 * @returns {int} Visible count.
+		 * @return {number} Visible count.
 		 */
 		getVisibleCount: function() {
 			return this.contentContainer.find( 'li.customize-control:visible' ).length;
@@ -2409,9 +2442,9 @@
 		/**
 		 * Update the number of themes in the section.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		updateCount: function( count ) {
 			var section = this, countEl, displayed;
@@ -2439,9 +2472,9 @@
 		/**
 		 * Advance the modal to the next theme.
 		 *
-		 * @since WP-4.2.0
+		 * @since 4.2.0
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		nextTheme: function () {
 			var section = this;
@@ -2455,9 +2488,9 @@
 		/**
 		 * Get the next theme model.
 		 *
-		 * @since WP-4.2.0
+		 * @since 4.2.0
 		 *
-		 * @returns {wp.customize.ThemeControl|boolean} Next theme.
+		 * @return {wp.customize.ThemeControl|boolean} Next theme.
 		 */
 		getNextTheme: function () {
 			var section = this, control, nextControl, sectionControls, i;
@@ -2478,8 +2511,8 @@
 		/**
 		 * Advance the modal to the previous theme.
 		 *
-		 * @since WP-4.2.0
-		 * @returns {void}
+		 * @since 4.2.0
+		 * @return {void}
 		 */
 		previousTheme: function () {
 			var section = this;
@@ -2493,8 +2526,8 @@
 		/**
 		 * Get the previous theme model.
 		 *
-		 * @since WP-4.2.0
-		 * @returns {wp.customize.ThemeControl|boolean} Previous theme.
+		 * @since 4.2.0
+		 * @return {wp.customize.ThemeControl|boolean} Previous theme.
 		 */
 		getPreviousTheme: function () {
 			var section = this, control, nextControl, sectionControls, i;
@@ -2515,9 +2548,9 @@
 		/**
 		 * Disable buttons when we're viewing the first or last theme.
 		 *
-		 * @since WP-4.2.0
+		 * @since 4.2.0
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		updateLimits: function () {
 			if ( ! this.getNextTheme() ) {
@@ -2531,12 +2564,12 @@
 		/**
 		 * Load theme preview.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 * @access public
 		 *
 		 * @deprecated
 		 * @param {string} themeId Theme ID.
-		 * @returns {jQuery.promise} Promise.
+		 * @return {jQuery.promise} Promise.
 		 */
 		loadThemePreview: function( themeId ) {
 			return api.ThemesPanel.prototype.loadThemePreview.call( this, themeId );
@@ -2545,11 +2578,11 @@
 		/**
 		 * Render & show the theme details for a given theme model.
 		 *
-		 * @since WP-4.2.0
+		 * @since 4.2.0
 		 *
-		 * @param {object} theme - Theme.
+		 * @param {Object} theme - Theme.
 		 * @param {Function} [callback] - Callback once the details have been shown.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		showDetails: function ( theme, callback ) {
 			var section = this, panel = api.panel( 'themes' );
@@ -2562,7 +2595,7 @@
 				return ! panel.canSwitchTheme( theme.id );
 			}
 
-			// Temporary special function since supplying SFTP credentials does not work yet. See https://core.trac.wordpress.org/ticket/42184.
+			// Temporary special function since supplying SFTP credentials does not work yet. See #42184.
 			function disableInstallButtons() {
 				return disableSwitchButtons() || false === api.settings.theme._canInstall || true === api.settings.theme._filesystemCredentialsNeeded;
 			}
@@ -2582,9 +2615,9 @@
 		/**
 		 * Close the theme details modal.
 		 *
-		 * @since WP-4.2.0
+		 * @since 4.2.0
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		closeDetails: function () {
 			var section = this;
@@ -2596,10 +2629,10 @@
 		/**
 		 * Keep tab focus within the theme details modal.
 		 *
-		 * @since WP-4.2.0
+		 * @since 4.2.0
 		 *
 		 * @param {jQuery} el - Element to contain focus.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		containFocus: function( el ) {
 			var tabbables;
@@ -2607,15 +2640,15 @@
 			el.on( 'keydown', function( event ) {
 
 				// Return if it's not the tab key
-				// When navigating with prev/next focus is already handled
+				// When navigating with prev/next focus is already handled.
 				if ( 9 !== event.keyCode ) {
 					return;
 				}
 
-				// uses jQuery UI to get the tabbable elements
+				// Uses jQuery UI to get the tabbable elements.
 				tabbables = $( ':tabbable', el );
 
-				// Keep focus within the overlay
+				// Keep focus within the overlay.
 				if ( tabbables.last()[0] === event.target && ! event.shiftKey ) {
 					tabbables.first().focus();
 					return false;
@@ -2627,26 +2660,20 @@
 		}
 	});
 
-	/**
-	 * Class wp.customize.OuterSection.
-	 *
-	 * Creates section outside of the sidebar, there is no ui to trigger collapse/expand so
-	 * it would require custom handling.
-	 *
-	 * @since WP-4.9
-	 *
-	 * @constructor
-	 * @augments wp.customize.Section
-	 * @augments wp.customize.Container
-	 */
-	api.OuterSection = api.Section.extend({
+	api.OuterSection = api.Section.extend(/** @lends wp.customize.OuterSection.prototype */{
 
 		/**
-		 * Initialize.
+		 * Class wp.customize.OuterSection.
 		 *
-		 * @since WP-4.9.0
+		 * Creates section outside of the sidebar, there is no ui to trigger collapse/expand so
+		 * it would require custom handling.
 		 *
-		 * @returns {void}
+		 * @constructs wp.customize.OuterSection
+		 * @augments   wp.customize.Section
+		 *
+		 * @since 4.9.0
+		 *
+		 * @return {void}
 		 */
 		initialize: function() {
 			var section = this;
@@ -2659,9 +2686,9 @@
 		 * Overrides api.Section.prototype.onChangeExpanded to prevent collapse/expand effect
 		 * on other sections and panels.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
-		 * @param {Boolean}  expanded - The expanded state to transition to.
+		 * @param {boolean}  expanded - The expanded state to transition to.
 		 * @param {Object}   [args] - Args.
 		 * @param {boolean}  [args.unchanged] - Whether the state is already known to not be changed, and so short-circuit with calling completeCallback early.
 		 * @param {Function} [args.completeCallback] - Function to call when the slideUp/slideDown has completed.
@@ -2690,12 +2717,12 @@
 				if ( args.unchanged ) {
 					expand = args.completeCallback;
 				} else {
-					expand = $.proxy( function() {
+					expand = function() {
 						section._animateChangeExpanded( function() {
 							sectionTitle.attr( 'tabindex', '-1' );
 							backBtn.attr( 'tabindex', '0' );
 
-							backBtn.focus();
+							backBtn.trigger( 'focus' );
 							content.css( 'top', '' );
 							container.scrollTop( 0 );
 
@@ -2705,7 +2732,7 @@
 						} );
 
 						content.addClass( 'open' );
-					}, this );
+					}.bind( this );
 				}
 
 				if ( section.panel() ) {
@@ -2728,7 +2755,7 @@
 					backBtn.attr( 'tabindex', '-1' );
 					sectionTitle.attr( 'tabindex', '0' );
 
-					sectionTitle.focus();
+					sectionTitle.trigger( 'focus' );
 					content.css( 'top', '' );
 
 					if ( args.completeCallback ) {
@@ -2746,27 +2773,24 @@
 		}
 	});
 
-	/**
-	 * @since WP-4.1.0
-	 *
-	 * @class
-	 * @augments wp.customize.Class
-	 */
-	api.Panel = Container.extend({
+	api.Panel = Container.extend(/** @lends wp.customize.Panel.prototype */{
 		containerType: 'panel',
 
 		/**
-		 * @since WP-4.1.0
+		 * @constructs wp.customize.Panel
+		 * @augments   wp.customize~Container
 		 *
-		 * @param {string}         id - The ID for the panel.
-		 * @param {object}         options - Object containing one property: params.
-		 * @param {string}         options.title - Title shown when panel is collapsed and expanded.
-		 * @param {string=}        [options.description] - Description shown at the top of the panel.
-		 * @param {number=100}     [options.priority] - The sort priority for the panel.
-		 * @param {string=default} [options.type] - The type of the panel. See wp.customize.panelConstructor.
-		 * @param {string=}        [options.content] - The markup to be used for the panel container. If empty, a JS template is used.
-		 * @param {boolean=true}   [options.active] - Whether the panel is active or not.
-		 * @param {object}         [options.params] - Deprecated wrapper for the above properties.
+		 * @since 4.1.0
+		 *
+		 * @param {string}  id - The ID for the panel.
+		 * @param {Object}  options - Object containing one property: params.
+		 * @param {string}  options.title - Title shown when panel is collapsed and expanded.
+		 * @param {string}  [options.description] - Description shown at the top of the panel.
+		 * @param {number}  [options.priority=100] - The sort priority for the panel.
+		 * @param {string}  [options.type=default] - The type of the panel. See wp.customize.panelConstructor.
+		 * @param {string}  [options.content] - The markup to be used for the panel container. If empty, a JS template is used.
+		 * @param {boolean} [options.active=true] - Whether the panel is active or not.
+		 * @param {Object}  [options.params] - Deprecated wrapper for the above properties.
 		 */
 		initialize: function ( id, options ) {
 			var panel = this, params;
@@ -2794,12 +2818,12 @@
 		/**
 		 * Embed the container in the DOM when any parent panel is ready.
 		 *
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 */
 		embed: function () {
 			var panel = this,
 				container = $( '#customize-theme-controls' ),
-				parentContainer = $( '.customize-pane-parent' ); // @todo This should be defined elsewhere, and to be configurable
+				parentContainer = $( '.customize-pane-parent' ); // @todo This should be defined elsewhere, and to be configurable.
 
 			if ( ! panel.headContainer.parent().is( parentContainer ) ) {
 				parentContainer.append( panel.headContainer );
@@ -2813,7 +2837,7 @@
 		},
 
 		/**
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 */
 		attachEvents: function () {
 			var meta, panel = this;
@@ -2823,7 +2847,7 @@
 				if ( api.utils.isKeydownButNotEnterEvent( event ) ) {
 					return;
 				}
-				event.preventDefault(); // Keep this AFTER the key filter above
+				event.preventDefault(); // Keep this AFTER the key filter above.
 
 				if ( ! panel.expanded() ) {
 					panel.expand();
@@ -2835,7 +2859,7 @@
 				if ( api.utils.isKeydownButNotEnterEvent( event ) ) {
 					return;
 				}
-				event.preventDefault(); // Keep this AFTER the key filter above
+				event.preventDefault(); // Keep this AFTER the key filter above.
 
 				if ( panel.expanded() ) {
 					panel.collapse();
@@ -2870,9 +2894,9 @@
 		/**
 		 * Get the sections that are associated with this panel, sorted by their priority Value.
 		 *
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 *
-		 * @returns {Array}
+		 * @return {Array}
 		 */
 		sections: function () {
 			return this._children( 'panel', 'section' );
@@ -2881,9 +2905,9 @@
 		/**
 		 * Return whether this panel has any active sections.
 		 *
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 *
-		 * @returns {boolean} Whether contextually active.
+		 * @return {boolean} Whether contextually active.
 		 */
 		isContextuallyActive: function () {
 			var panel = this,
@@ -2900,17 +2924,17 @@
 		/**
 		 * Update UI to reflect expanded state.
 		 *
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 *
-		 * @param {Boolean}  expanded
+		 * @param {boolean}  expanded
 		 * @param {Object}   args
-		 * @param {Boolean}  args.unchanged
+		 * @param {boolean}  args.unchanged
 		 * @param {Function} args.completeCallback
-		 * @returns {void}
+		 * @return {void}
 		 */
 		onChangeExpanded: function ( expanded, args ) {
 
-			// Immediately call the complete callback if there were no changes
+			// Immediately call the complete callback if there were no changes.
 			if ( args.unchanged ) {
 				if ( args.completeCallback ) {
 					args.completeCallback();
@@ -2918,7 +2942,7 @@
 				return;
 			}
 
-			// Note: there is a second argument 'args' passed
+			// Note: there is a second argument 'args' passed.
 			var panel = this,
 				accordionSection = panel.contentContainer,
 				overlay = accordionSection.closest( '.wp-full-overlay' ),
@@ -2929,7 +2953,7 @@
 				skipTransition;
 
 			if ( expanded && ! accordionSection.hasClass( 'current-panel' ) ) {
-				// Collapse any sibling sections/panels
+				// Collapse any sibling sections/panels.
 				api.section.each( function ( section ) {
 					if ( panel.id !== section.panel() ) {
 						section.collapse( { duration: 0 } );
@@ -2953,7 +2977,7 @@
 						topPanel.attr( 'tabindex', '-1' );
 						backBtn.attr( 'tabindex', '0' );
 
-						backBtn.focus();
+						backBtn.trigger( 'focus' );
 						accordionSection.css( 'top', '' );
 						container.scrollTop( 0 );
 
@@ -2999,7 +3023,7 @@
 		 *
 		 * The panel's container must already exist in the DOM.
 		 *
-		 * @since WP-4.3.0
+		 * @since 4.3.0
 		 */
 		renderContent: function () {
 			var template,
@@ -3020,25 +3044,21 @@
 		}
 	});
 
-	/**
-	 * Class wp.customize.ThemesPanel.
-	 *
-	 * Custom section for themes that displays without the customize preview.
-	 *
-	 * @constructor
-	 * @augments wp.customize.Panel
-	 * @augments wp.customize.Container
-	 */
-	api.ThemesPanel = api.Panel.extend({
+	api.ThemesPanel = api.Panel.extend(/** @lends wp.customize.ThemsPanel.prototype */{
 
 		/**
-		 * Initialize.
+		 *  Class wp.customize.ThemesPanel.
 		 *
-		 * @since WP-4.9.0
+		 * Custom section for themes that displays without the customize preview.
+		 *
+		 * @constructs wp.customize.ThemesPanel
+		 * @augments   wp.customize.Panel
+		 *
+		 * @since 4.9.0
 		 *
 		 * @param {string} id - The ID for the panel.
-		 * @param {object} options - Options.
-		 * @returns {void}
+		 * @param {Object} options - Options.
+		 * @return {void}
 		 */
 		initialize: function( id, options ) {
 			var panel = this;
@@ -3049,10 +3069,10 @@
 		/**
 		 * Determine whether a given theme can be switched to, or in general.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
 		 * @param {string} [slug] - Theme slug.
-		 * @returns {boolean} Whether the theme can be switched to.
+		 * @return {boolean} Whether the theme can be switched to.
 		 */
 		canSwitchTheme: function canSwitchTheme( slug ) {
 			if ( slug && slug === api.settings.theme.stylesheet ) {
@@ -3064,8 +3084,8 @@
 		/**
 		 * Attach events.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @return {void}
 		 */
 		attachEvents: function() {
 			var panel = this;
@@ -3073,7 +3093,7 @@
 			// Attach regular panel events.
 			api.Panel.prototype.attachEvents.apply( panel );
 
-			// Temporary since supplying SFTP credentials does not work yet. See https://core.trac.wordpress.org/ticket/42184
+			// Temporary since supplying SFTP credentials does not work yet. See #42184.
 			if ( api.settings.theme._canInstall && api.settings.theme._filesystemCredentialsNeeded ) {
 				panel.notifications.add( new api.Notification( 'theme_install_unavailable', {
 					message: api.l10n.themeInstallUnavailable,
@@ -3132,13 +3152,13 @@
 		/**
 		 * Update UI to reflect expanded state
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
-		 * @param {Boolean}  expanded - Expanded state.
+		 * @param {boolean}  expanded - Expanded state.
 		 * @param {Object}   args - Args.
-		 * @param {Boolean}  args.unchanged - Whether or not the state changed.
+		 * @param {boolean}  args.unchanged - Whether or not the state changed.
 		 * @param {Function} args.completeCallback - Callback to execute when the animation completes.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		onChangeExpanded: function( expanded, args ) {
 			var panel = this, overlay, sections, hasExpandedSection = false;
@@ -3146,7 +3166,7 @@
 			// Expand/collapse the panel normally.
 			api.Panel.prototype.onChangeExpanded.apply( this, [ expanded, args ] );
 
-			// Immediately call the complete callback if there were no changes
+			// Immediately call the complete callback if there were no changes.
 			if ( args.unchanged ) {
 				if ( args.completeCallback ) {
 					args.completeCallback();
@@ -3187,16 +3207,16 @@
 		/**
 		 * Install a theme via wp.updates.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
 		 * @param {jQuery.Event} event - Event.
-		 * @returns {jQuery.promise} Promise.
+		 * @return {jQuery.promise} Promise.
 		 */
 		installTheme: function( event ) {
 			var panel = this, preview, onInstallSuccess, slug = $( event.target ).data( 'slug' ), deferred = $.Deferred(), request;
 			preview = $( event.target ).hasClass( 'preview' );
 
-			// Temporary since supplying SFTP credentials does not work yet. See https://core.trac.wordpress.org/ticket/42184.
+			// Temporary since supplying SFTP credentials does not work yet. See #42184.
 			if ( api.settings.theme._filesystemCredentialsNeeded ) {
 				deferred.reject({
 					errorCode: 'theme_install_unavailable'
@@ -3292,10 +3312,10 @@
 		/**
 		 * Load theme preview.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
 		 * @param {string} themeId Theme ID.
-		 * @returns {jQuery.promise} Promise.
+		 * @return {jQuery.promise} Promise.
 		 */
 		loadThemePreview: function( themeId ) {
 			var panel = this, deferred = $.Deferred(), onceProcessingComplete, urlParser, queryParams;
@@ -3368,10 +3388,10 @@
 		/**
 		 * Update a theme via wp.updates.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
 		 * @param {jQuery.Event} event - Event.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		updateTheme: function( event ) {
 			wp.updates.maybeRequestFilesystemCredentials( event );
@@ -3398,10 +3418,10 @@
 		/**
 		 * Delete a theme via wp.updates.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
 		 * @param {jQuery.Event} event - Event.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		deleteTheme: function( event ) {
 			var theme, section;
@@ -3410,7 +3430,7 @@
 
 			event.preventDefault();
 
-			// Temporary since supplying SFTP credentials does not work yet. See https://core.trac.wordpress.org/ticket/42184.
+			// Temporary since supplying SFTP credentials does not work yet. See #42184.
 			if ( api.settings.theme._filesystemCredentialsNeeded ) {
 				return;
 			}
@@ -3451,23 +3471,13 @@
 		}
 	});
 
-	/**
-	 * A Customizer Control.
-	 *
-	 * A control provides a UI element that allows a user to modify a Customizer Setting.
-	 *
-	 * @see PHP class WP_Customize_Control.
-	 *
-	 * @class
-	 * @augments wp.customize.Class
-	 */
-	api.Control = api.Class.extend({
+	api.Control = api.Class.extend(/** @lends wp.customize.Control.prototype */{
 		defaultActiveArguments: { duration: 'fast', completeCallback: $.noop },
 
 		/**
 		 * Default params.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @var {object}
 		 */
 		defaults: {
@@ -3478,11 +3488,23 @@
 		},
 
 		/**
-		 * Initialize.
+		 * A Customizer Control.
+		 *
+		 * A control provides a UI element that allows a user to modify a Customizer Setting.
+		 *
+		 * @see PHP class WP_Customize_Control.
+		 *
+		 * @constructs wp.customize.Control
+		 * @augments   wp.customize.Class
+		 *
+		 * @borrows wp.customize~focus as this#focus
+		 * @borrows wp.customize~Container#activate as this#activate
+		 * @borrows wp.customize~Container#deactivate as this#deactivate
+		 * @borrows wp.customize~Container#_toggleActive as this#_toggleActive
 		 *
 		 * @param {string} id                       - Unique identifier for the control instance.
-		 * @param {object} options                  - Options hash for the control instance.
-		 * @param {object} options.type             - Type of control (e.g. text, radio, dropdown-pages, etc.)
+		 * @param {Object} options                  - Options hash for the control instance.
+		 * @param {Object} options.type             - Type of control (e.g. text, radio, dropdown-pages, etc.)
 		 * @param {string} [options.content]        - The HTML content for the control or at least its container. This should normally be left blank and instead supplying a templateId.
 		 * @param {string} [options.templateId]     - Template ID for control's content.
 		 * @param {string} [options.priority=10]    - Order of priority to show the control within the section.
@@ -3495,8 +3517,8 @@
 		 * @param {string} options.label            - Label.
 		 * @param {string} options.description      - Description.
 		 * @param {number} [options.instanceNumber] - Order in which this instance was created in relation to other instances.
-		 * @param {object} [options.params]         - Deprecated wrapper for the above properties.
-		 * @returns {void}
+		 * @param {Object} [options.params]         - Deprecated wrapper for the above properties.
+		 * @return {void}
 		 */
 		initialize: function( id, options ) {
 			var control = this, deferredSettingIds = [], settings, gatherSettings;
@@ -3504,7 +3526,7 @@
 			control.params = _.extend(
 				{},
 				control.defaults,
-				control.params || {}, // In case sub-class already defines.
+				control.params || {}, // In case subclass already defines.
 				options.params || options || {} // The options.params property is deprecated, but it is checked first for back-compat.
 			);
 
@@ -3535,11 +3557,11 @@
 			}
 
 			control.id = id;
-			control.selector = '#customize-control-' + id.replace( /\]/g, '' ).replace( /\[/g, '-' ); // Deprecated, likely dead code from time before https://core.trac.wordpress.org/ticket/28709.
+			control.selector = '#customize-control-' + id.replace( /\]/g, '' ).replace( /\[/g, '-' ); // Deprecated, likely dead code from time before #28709.
 			if ( control.params.content ) {
 				control.container = $( control.params.content );
 			} else {
-				control.container = $( control.selector ); // Likely dead, per above. See https://core.trac.wordpress.org/ticket/28709.
+				control.container = $( control.selector ); // Likely dead, per above. See #28709.
 			}
 
 			if ( control.params.templateId ) {
@@ -3634,10 +3656,10 @@
 		/**
 		 * Link elements between settings and inputs.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 * @access public
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		linkElements: function () {
 			var control = this, nodes, radios, element;
@@ -3686,21 +3708,21 @@
 			var control = this,
 				inject;
 
-			// Watch for changes to the section state
+			// Watch for changes to the section state.
 			inject = function ( sectionId ) {
 				var parentContainer;
-				if ( ! sectionId ) { // @todo allow a control to be embedded without a section, for instance a control embedded in the front end.
+				if ( ! sectionId ) { // @todo Allow a control to be embedded without a section, for instance a control embedded in the front end.
 					return;
 				}
-				// Wait for the section to be registered
+				// Wait for the section to be registered.
 				api.section( sectionId, function ( section ) {
-					// Wait for the section to be ready/initialized
+					// Wait for the section to be ready/initialized.
 					section.deferred.embedded.done( function () {
 						parentContainer = ( section.contentContainer.is( 'ul' ) ) ? section.contentContainer : section.contentContainer.find( 'ul:first' );
 						if ( ! control.container.parent().is( parentContainer ) ) {
 							parentContainer.append( control.container );
-							control.renderContent();
 						}
+						control.renderContent();
 						control.deferred.embedded.resolve();
 					});
 				});
@@ -3712,7 +3734,7 @@
 		/**
 		 * Triggered when the control's markup has been injected into the DOM.
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		ready: function() {
 			var control = this, newItem;
@@ -3728,7 +3750,7 @@
 					control.addNewPage();
 				});
 				control.container.on( 'keydown', '.create-item-input', function( e ) {
-					if ( 13 === e.which ) { // Enter
+					if ( 13 === e.which ) { // Enter.
 						control.addNewPage();
 					}
 				});
@@ -3742,9 +3764,8 @@
 		 * Injects the notification container for existing controls that lack the necessary container,
 		 * including special handling for nav menu items and widgets.
 		 *
-		 * @since WP-4.6.0
-		 * @returns {jQuery} Setting validation message element.
-		 * @this {wp.customize.Control}
+		 * @since 4.6.0
+		 * @return {jQuery} Setting validation message element.
 		 */
 		getNotificationsContainerElement: function() {
 			var control = this, controlTitle, notificationsContainer;
@@ -3774,8 +3795,8 @@
 		/**
 		 * Set up notifications.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @return {void}
 		 */
 		setupNotifications: function() {
 			var control = this, renderNotificationsIfVisible, onSectionAssigned;
@@ -3838,7 +3859,7 @@
 		 * of rendering notifications.
 		 *
 		 * @deprecated in favor of `control.notifications.render()`
-		 * @since WP-4.6.0
+		 * @since 4.6.0
 		 * @this {wp.customize.Control}
 		 */
 		renderNotifications: function() {
@@ -3874,9 +3895,9 @@
 
 			control.container.toggleClass( 'has-notifications', 0 !== notifications.length );
 			control.container.toggleClass( 'has-error', hasError );
-			container.empty().append( $.trim(
-				control.notificationsTemplate( { notifications: notifications, altNotice: Boolean( control.altNotice ) } )
-			) );
+			container.empty().append(
+				control.notificationsTemplate( { notifications: notifications, altNotice: Boolean( control.altNotice ) } ).trim()
+			);
 		},
 
 		/**
@@ -3888,9 +3909,8 @@
 			api.section( this.section() ).expand( params );
 		},
 
-		/**
-		 * Bring the containing section and panel into view and then
-		 * this control into view, focusing on the first input.
+		/*
+		 * Documented using @borrows in the constructor.
 		 */
 		focus: focus,
 
@@ -3899,11 +3919,11 @@
 		 * This does not change the active state, it merely handles the behavior
 		 * for when it does change.
 		 *
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 *
-		 * @param {Boolean}  active
+		 * @param {boolean}  active
 		 * @param {Object}   args
-		 * @param {Number}   args.duration
+		 * @param {number}   args.duration
 		 * @param {Function} args.completeCallback
 		 */
 		onChangeActive: function ( active, args ) {
@@ -3915,7 +3935,7 @@
 			}
 
 			if ( ! $.contains( document, this.container[0] ) ) {
-				// jQuery.fn.slideUp is not hiding an element if it is not in the DOM
+				// jQuery.fn.slideUp is not hiding an element if it is not in the DOM.
 				this.container.toggle( active );
 				if ( args.completeCallback ) {
 					args.completeCallback();
@@ -3928,36 +3948,24 @@
 		},
 
 		/**
-		 * @deprecated WP-4.1.0 Use this.onChangeActive() instead.
+		 * @deprecated 4.1.0 Use this.onChangeActive() instead.
 		 */
 		toggle: function ( active ) {
 			return this.onChangeActive( active, this.defaultActiveArguments );
 		},
 
-		/**
-		 * Shorthand way to enable the active state.
-		 *
-		 * @since WP-4.1.0
-		 *
-		 * @param {Object} [params]
-		 * @returns {Boolean} false if already active
+		/*
+		 * Documented using @borrows in the constructor
 		 */
 		activate: Container.prototype.activate,
 
-		/**
-		 * Shorthand way to disable the active state.
-		 *
-		 * @since WP-4.1.0
-		 *
-		 * @param {Object} [params]
-		 * @returns {Boolean} false if already inactive
+		/*
+		 * Documented using @borrows in the constructor
 		 */
 		deactivate: Container.prototype.deactivate,
 
-		/**
-		 * Re-use _toggleActive from Container class.
-		 *
-		 * @access private
+		/*
+		 * Documented using @borrows in the constructor
 		 */
 		_toggleActive: Container.prototype._toggleActive,
 
@@ -3975,7 +3983,7 @@
 					}
 				};
 
-			// Support the .dropdown class to open/close complex elements
+			// Support the .dropdown class to open/close complex elements.
 			this.container.on( 'click keydown', '.dropdown', function( event ) {
 				if ( api.utils.isKeydownButNotEnterEvent( event ) ) {
 					return;
@@ -3991,7 +3999,7 @@
 					control.container.parent().parent().find( 'li.library-selected' ).focus();
 				}
 
-				// Don't want to fire focus and click at same time
+				// Don't want to fire focus and click at same time.
 				toggleFreeze = true;
 				setTimeout(function () {
 					toggleFreeze = false;
@@ -4007,7 +4015,7 @@
 		 *
 		 * The control's container must already exist in the DOM.
 		 *
-		 * @since WP-4.1.0
+		 * @since 4.1.0
 		 */
 		renderContent: function () {
 			var control = this, template, standardTypes, templateId, sectionId;
@@ -4035,7 +4043,8 @@
 
 			templateId = control.templateSelector;
 
-			// Use default content template when a standard HTML type is used, there isn't a more specific template existing, and the control container is empty.
+			// Use default content template when a standard HTML type is used,
+			// there isn't a more specific template existing, and the control container is empty.
 			if ( templateId === 'customize-control-' + control.params.type + '-content' &&
 				_.contains( standardTypes, control.params.type ) &&
 				! document.getElementById( 'tmpl-' + templateId ) &&
@@ -4063,9 +4072,10 @@
 		/**
 		 * Add a new page to a dropdown-pages control reusing menus code for this.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 * @access private
-		 * @returns {void}
+		 *
+		 * @return {void}
 		 */
 		addNewPage: function () {
 			var control = this, promise, toggle, container, input, title, select;
@@ -4088,7 +4098,8 @@
 			input.removeClass( 'invalid' );
 			input.attr( 'disabled', 'disabled' );
 
-			// The menus functions add the page, publish when appropriate, and also add the new page to the dropdown-pages controls.
+			// The menus functions add the page, publish when appropriate,
+			// and also add the new page to the dropdown-pages controls.
 			promise = api.Menus.insertAutoDraftPost( {
 				post_title: title,
 				post_type: 'page'
@@ -4131,11 +4142,10 @@
 	/**
 	 * A colorpicker control.
 	 *
-	 * @class
+	 * @class    wp.customize.ColorControl
 	 * @augments wp.customize.Control
-	 * @augments wp.customize.Class
 	 */
-	api.ColorControl = api.Control.extend({
+	api.ColorControl = api.Control.extend(/** @lends wp.customize.ColorControl.prototype */{
 		ready: function() {
 			var control = this,
 				isHueSlider = this.params.mode === 'hue',
@@ -4195,11 +4205,10 @@
 	/**
 	 * A control that implements the media modal.
 	 *
-	 * @class
+	 * @class    wp.customize.MediaControl
 	 * @augments wp.customize.Control
-	 * @augments wp.customize.Class
 	 */
-	api.MediaControl = api.Control.extend({
+	api.MediaControl = api.Control.extend(/** @lends wp.customize.MediaControl.prototype */{
 
 		/**
 		 * When the control's DOM structure is ready,
@@ -4219,7 +4228,7 @@
 			control.container.on( 'click keydown', '.remove-button', control.removeFile );
 			control.container.on( 'click keydown', '.remove-button', control.cleanupPlayer );
 
-			// Resize the player controls when it becomes visible (ie when section is expanded)
+			// Resize the player controls when it becomes visible (ie when section is expanded).
 			api.section( control.section() ).container
 				.on( 'expanded', function() {
 					if ( control.player ) {
@@ -4367,7 +4376,7 @@
 		/**
 		 * Called when the "Remove" link is clicked. Empties the setting.
 		 *
-		 * @param {object} event jQuery Event object
+		 * @param {Object} event jQuery Event object
 		 */
 		removeFile: function( event ) {
 			if ( api.utils.isKeydownButNotEnterEvent( event ) ) {
@@ -4384,12 +4393,10 @@
 	/**
 	 * An upload control, which utilizes the media modal.
 	 *
-	 * @class
+	 * @class    wp.customize.UploadControl
 	 * @augments wp.customize.MediaControl
-	 * @augments wp.customize.Control
-	 * @augments wp.customize.Class
 	 */
-	api.UploadControl = api.MediaControl.extend({
+	api.UploadControl = api.MediaControl.extend(/** @lends wp.customize.UploadControl.prototype */{
 
 		/**
 		 * Callback handler for when an attachment is selected in the media modal.
@@ -4428,13 +4435,10 @@
 	 * This control no longer needs to do anything more
 	 * than what the upload control does in JS.
 	 *
-	 * @class
+	 * @class    wp.customize.ImageControl
 	 * @augments wp.customize.UploadControl
-	 * @augments wp.customize.MediaControl
-	 * @augments wp.customize.Control
-	 * @augments wp.customize.Class
 	 */
-	api.ImageControl = api.UploadControl.extend({
+	api.ImageControl = api.UploadControl.extend(/** @lends wp.customize.ImageControl.prototype */{
 		// @deprecated
 		thumbnailSrc: function() {}
 	});
@@ -4442,13 +4446,10 @@
 	/**
 	 * A control for uploading background images.
 	 *
-	 * @class
+	 * @class    wp.customize.BackgroundControl
 	 * @augments wp.customize.UploadControl
-	 * @augments wp.customize.MediaControl
-	 * @augments wp.customize.Control
-	 * @augments wp.customize.Class
 	 */
-	api.BackgroundControl = api.UploadControl.extend({
+	api.BackgroundControl = api.UploadControl.extend(/** @lends wp.customize.BackgroundControl.prototype */{
 
 		/**
 		 * When the control's DOM structure is ready,
@@ -4460,7 +4461,7 @@
 
 		/**
 		 * Callback handler for when an attachment is selected in the media modal.
-		 * Does an additional AJAX request for setting the background context.
+		 * Does an additional Ajax request for setting the background context.
 		 */
 		select: function() {
 			api.UploadControl.prototype.select.apply( this, arguments );
@@ -4477,18 +4478,17 @@
 	/**
 	 * A control for positioning a background image.
 	 *
-	 * @since WP-4.7.0
+	 * @since 4.7.0
 	 *
-	 * @class
+	 * @class    wp.customize.BackgroundPositionControl
 	 * @augments wp.customize.Control
-	 * @augments wp.customize.Class
 	 */
-	api.BackgroundPositionControl = api.Control.extend( {
+	api.BackgroundPositionControl = api.Control.extend(/** @lends wp.customize.BackgroundPositionControl.prototype */{
 
 		/**
 		 * Set up control UI once embedded in DOM and settings are created.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 * @access public
 		 */
 		ready: function() {
@@ -4506,7 +4506,7 @@
 				y = control.settings.y.get();
 				inputValue = String( x ) + ' ' + String( y );
 				radioInput = control.container.find( 'input[name="background-position"][value="' + inputValue + '"]' );
-				radioInput.click();
+				radioInput.trigger( 'click' );
 			} );
 			control.settings.x.bind( updateRadios );
 			control.settings.y.bind( updateRadios );
@@ -4518,12 +4518,10 @@
 	/**
 	 * A control for selecting and cropping an image.
 	 *
-	 * @class
+	 * @class    wp.customize.CroppedImageControl
 	 * @augments wp.customize.MediaControl
-	 * @augments wp.customize.Control
-	 * @augments wp.customize.Class
 	 */
-	api.CroppedImageControl = api.MediaControl.extend({
+	api.CroppedImageControl = api.MediaControl.extend(/** @lends wp.customize.CroppedImageControl.prototype */{
 
 		/**
 		 * Open the media modal to the library state.
@@ -4588,7 +4586,7 @@
 		/**
 		 * After the image has been cropped, apply the cropped image data to the setting.
 		 *
-		 * @param {object} croppedImage Cropped attachment data.
+		 * @param {Object} croppedImage Cropped attachment data.
 		 */
 		onCropped: function( croppedImage ) {
 			this.setImageFromAttachment( croppedImage );
@@ -4601,7 +4599,7 @@
 		 *
 		 * @param {wp.media.model.Attachment} attachment
 		 * @param {wp.media.controller.Cropper} controller
-		 * @returns {Object} Options
+		 * @return {Object} Options
 		 */
 		calculateImageSelectOptions: function( attachment, controller ) {
 			var control    = controller.get( 'control' ),
@@ -4664,13 +4662,13 @@
 		/**
 		 * Return whether the image must be cropped, based on required dimensions.
 		 *
-		 * @param {bool} flexW
-		 * @param {bool} flexH
-		 * @param {int}  dstW
-		 * @param {int}  dstH
-		 * @param {int}  imgW
-		 * @param {int}  imgH
-		 * @return {bool}
+		 * @param {boolean} flexW
+		 * @param {boolean} flexH
+		 * @param {number}  dstW
+		 * @param {number}  dstH
+		 * @param {number}  imgW
+		 * @param {number}  imgH
+		 * @return {boolean}
 		 */
 		mustBeCropped: function( flexW, flexH, dstW, dstH, imgW, imgH ) {
 			if ( true === flexW && true === flexH ) {
@@ -4707,7 +4705,7 @@
 		/**
 		 * Updates the setting and re-renders the control UI.
 		 *
-		 * @param {object} attachment
+		 * @param {Object} attachment
 		 */
 		setImageFromAttachment: function( attachment ) {
 			this.params.attachment = attachment;
@@ -4720,13 +4718,10 @@
 	/**
 	 * A control for selecting and cropping Site Icons.
 	 *
-	 * @class
+	 * @class    wp.customize.SiteIconControl
 	 * @augments wp.customize.CroppedImageControl
-	 * @augments wp.customize.MediaControl
-	 * @augments wp.customize.Control
-	 * @augments wp.customize.Class
 	 */
-	api.SiteIconControl = api.CroppedImageControl.extend({
+	api.SiteIconControl = api.CroppedImageControl.extend(/** @lends wp.customize.SiteIconControl.prototype */{
 
 		/**
 		 * Create a media modal select frame, and store it so the instance can be reused when needed.
@@ -4796,7 +4791,7 @@
 		/**
 		 * Updates the setting and re-renders the control UI.
 		 *
-		 * @param {object} attachment
+		 * @param {Object} attachment
 		 */
 		setImageFromAttachment: function( attachment ) {
 			var sizes = [ 'site_icon-32', 'thumbnail', 'full' ], link,
@@ -4825,7 +4820,7 @@
 		/**
 		 * Called when the "Remove" link is clicked. Empties the setting.
 		 *
-		 * @param {object} event jQuery Event object
+		 * @param {Object} event jQuery Event object
 		 */
 		removeFile: function( event ) {
 			if ( api.utils.isKeydownButNotEnterEvent( event ) ) {
@@ -4841,11 +4836,10 @@
 	});
 
 	/**
-	 * @class
+	 * @class    wp.customize.HeaderControl
 	 * @augments wp.customize.Control
-	 * @augments wp.customize.Class
 	 */
-	api.HeaderControl = api.Control.extend({
+	api.HeaderControl = api.Control.extend(/** @lends wp.customize.HeaderControl.prototype */{
 		ready: function() {
 			this.btnRemove = $('#customize-control-header_image .actions .remove');
 			this.btnNew    = $('#customize-control-header_image .actions .new');
@@ -4886,9 +4880,9 @@
 		 * Returns a new instance of api.HeaderTool.ImageModel based on the currently
 		 * saved header image (if any).
 		 *
-		 * @since WP-4.2.0
+		 * @since 4.2.0
 		 *
-		 * @returns {Object} Options
+		 * @return {Object} Options
 		 */
 		getInitialHeaderImage: function() {
 			if ( ! api.get().header_image || ! api.get().header_image_data || _.contains( [ 'remove-header', 'random-default-image', 'random-uploaded-image' ], api.get().header_image ) ) {
@@ -4921,7 +4915,7 @@
 		 *
 		 * @param {wp.media.model.Attachment} attachment
 		 * @param {wp.media.controller.Cropper} controller
-		 * @returns {Object} Options
+		 * @return {Object} Options
 		 */
 		calculateImageSelectOptions: function(attachment, controller) {
 			var xInit = parseInt(_wpCustomizeHeader.data.width, 10),
@@ -5036,7 +5030,7 @@
 		/**
 		 * After the image has been cropped, apply the cropped image data to the setting.
 		 *
-		 * @param {object} croppedImage Cropped attachment data.
+		 * @param {Object} croppedImage Cropped attachment data.
 		 */
 		onCropped: function(croppedImage) {
 			var url = croppedImage.url,
@@ -5049,7 +5043,7 @@
 		/**
 		 * If cropping was skipped, apply the image data directly to the setting.
 		 *
-		 * @param {object} selection
+		 * @param {Object} selection
 		 */
 		onSkippedCrop: function(selection) {
 			var url = selection.get('url'),
@@ -5063,10 +5057,10 @@
 		 * header image data and inserts it into the user-uploaded headers
 		 * collection.
 		 *
-		 * @param {String} url
-		 * @param {Number} attachmentId
-		 * @param {Number} width
-		 * @param {Number} height
+		 * @param {string} url
+		 * @param {number} attachmentId
+		 * @param {number} width
+		 * @param {number} height
 		 */
 		setImageFromURL: function(url, attachmentId, width, height) {
 			var choice, data = {};
@@ -5111,17 +5105,16 @@
 	/**
 	 * wp.customize.ThemeControl
 	 *
-	 * @constructor
+	 * @class    wp.customize.ThemeControl
 	 * @augments wp.customize.Control
-	 * @augments wp.customize.Class
 	 */
-	api.ThemeControl = api.Control.extend({
+	api.ThemeControl = api.Control.extend(/** @lends wp.customize.ThemeControl.prototype */{
 
 		touchDrag: false,
 		screenshotRendered: false,
 
 		/**
-		 * @since WP-4.2.0
+		 * @since 4.2.0
 		 */
 		ready: function() {
 			var control = this, panel = api.panel( 'themes' );
@@ -5130,7 +5123,7 @@
 				return ! panel.canSwitchTheme( control.params.theme.id );
 			}
 
-			// Temporary special function since supplying SFTP credentials does not work yet. See https://core.trac.wordpress.org/ticket/42184.
+			// Temporary special function since supplying SFTP credentials does not work yet. See #42184.
 			function disableInstallButtons() {
 				return disableSwitchButtons() || false === api.settings.theme._canInstall || true === api.settings.theme._filesystemCredentialsNeeded;
 			}
@@ -5164,11 +5157,11 @@
 					return;
 				}
 
-				event.preventDefault(); // Keep this AFTER the key filter above
+				event.preventDefault(); // Keep this AFTER the key filter above.
 				section = api.section( control.section() );
 				section.showDetails( control.params.theme, function() {
 
-					// Temporary special function since supplying SFTP credentials does not work yet. See https://core.trac.wordpress.org/ticket/42184.
+					// Temporary special function since supplying SFTP credentials does not work yet. See #42184.
 					if ( api.settings.theme._filesystemCredentialsNeeded ) {
 						section.overlay.find( '.theme-actions .delete-theme' ).remove();
 					}
@@ -5189,9 +5182,9 @@
 		/**
 		 * Show or hide the theme based on the presence of the term in the title, description, tags, and author.
 		 *
-		 * @since WP-4.2.0
+		 * @since 4.2.0
 		 * @param {Array} terms - An array of terms to search for.
-		 * @returns {boolean} Whether a theme control was activated or not.
+		 * @return {boolean} Whether a theme control was activated or not.
 		 */
 		filter: function( terms ) {
 			var control = this,
@@ -5232,7 +5225,7 @@
 				control.params.priority = 101 - matchCount; // Sort results by match count.
 				return true;
 			} else {
-				control.deactivate(); // Hide control
+				control.deactivate(); // Hide control.
 				control.params.priority = 101;
 				return false;
 			}
@@ -5241,9 +5234,9 @@
 		/**
 		 * Rerender the theme from its JS template with the installed type.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		rerenderAsInstalled: function( installed ) {
 			var control = this, section;
@@ -5261,21 +5254,20 @@
 	/**
 	 * Class wp.customize.CodeEditorControl
 	 *
-	 * @since WP-4.9.0
+	 * @since 4.9.0
 	 *
-	 * @constructor
+	 * @class    wp.customize.CodeEditorControl
 	 * @augments wp.customize.Control
-	 * @augments wp.customize.Class
 	 */
-	api.CodeEditorControl = api.Control.extend({
+	api.CodeEditorControl = api.Control.extend(/** @lends wp.customize.CodeEditorControl.prototype */{
 
 		/**
 		 * Initialize.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @param {string} id      - Unique identifier for the control instance.
-		 * @param {object} options - Options hash for the control instance.
-		 * @returns {void}
+		 * @param {Object} options - Options hash for the control instance.
+		 * @return {void}
 		 */
 		initialize: function( id, options ) {
 			var control = this;
@@ -5309,8 +5301,8 @@
 		/**
 		 * Initialize the editor when the containing section is ready and expanded.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @return {void}
 		 */
 		ready: function() {
 			var control = this;
@@ -5341,8 +5333,8 @@
 		/**
 		 * Initialize editor.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @return {void}
 		 */
 		initEditor: function() {
 			var control = this, element, editorSettings = false;
@@ -5390,10 +5382,10 @@
 		/**
 		 * Make sure editor gets focused when control is focused.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @param {Object}   [params] - Focus params.
 		 * @param {Function} [params.completeCallback] - Function to call when expansion is complete.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		focus: function( params ) {
 			var control = this, extendedParams = _.extend( {}, params ), originalCompleteCallback;
@@ -5412,9 +5404,9 @@
 		/**
 		 * Initialize syntax-highlighting editor.
 		 *
-		 * @since WP-4.9.0
-		 * @param {object} codeEditorSettings - Code editor settings.
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @param {Object} codeEditorSettings - Code editor settings.
+		 * @return {void}
 		 */
 		initSyntaxHighlightingEditor: function( codeEditorSettings ) {
 			var control = this, $textarea = control.container.find( 'textarea' ), settings, suspendEditorUpdate = false;
@@ -5472,8 +5464,8 @@
 		/**
 		 * Handle tabbing to the field after the editor.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @return {void}
 		 */
 		onTabNext: function onTabNext() {
 			var control = this, controls, controlIndex, section;
@@ -5481,7 +5473,7 @@
 			controls = section.controls();
 			controlIndex = controls.indexOf( control );
 			if ( controls.length === controlIndex + 1 ) {
-				$( '#customize-footer-actions .collapse-sidebar' ).focus();
+				$( '#customize-footer-actions .collapse-sidebar' ).trigger( 'focus' );
 			} else {
 				controls[ controlIndex + 1 ].container.find( ':focusable:first' ).focus();
 			}
@@ -5490,8 +5482,8 @@
 		/**
 		 * Handle tabbing to the field before the editor.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @return {void}
 		 */
 		onTabPrevious: function onTabPrevious() {
 			var control = this, controls, controlIndex, section;
@@ -5508,9 +5500,9 @@
 		/**
 		 * Update error notice.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @param {Array} errorAnnotations - Error annotations.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		onUpdateErrorNotice: function onUpdateErrorNotice( errorAnnotations ) {
 			var control = this, message;
@@ -5532,8 +5524,8 @@
 		/**
 		 * Initialize plain-textarea editor when syntax highlighting is disabled.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @return {void}
 		 */
 		initPlainTextareaEditor: function() {
 			var control = this, $textarea = control.container.find( 'textarea' ), textarea = $textarea[0];
@@ -5583,18 +5575,17 @@
 	/**
 	 * Class wp.customize.DateTimeControl.
 	 *
-	 * @since WP-4.9.0
-	 * @constructor
+	 * @since 4.9.0
+	 * @class    wp.customize.DateTimeControl
 	 * @augments wp.customize.Control
-	 * @augments wp.customize.Class
 	 */
-	api.DateTimeControl = api.Control.extend({
+	api.DateTimeControl = api.Control.extend(/** @lends wp.customize.DateTimeControl.prototype */{
 
 		/**
 		 * Initialize behaviors.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @return {void}
 		 */
 		ready: function ready() {
 			var control = this;
@@ -5653,10 +5644,10 @@
 		/**
 		 * Parse datetime string.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 *
 		 * @param {string} datetime - Date/Time string. Accepts Y-m-d[ H:i[:s]] format.
-		 * @returns {object|null} Returns object containing date components or null if parse error.
+		 * @return {Object|null} Returns object containing date components or null if parse error.
 		 */
 		parseDateTime: function parseDateTime( datetime ) {
 			var control = this, matches, date, midDayHour = 12;
@@ -5693,7 +5684,7 @@
 		/**
 		 * Validates if input components have valid date and time.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @return {boolean} If date input fields has error.
 		 */
 		validateInputs: function validateInputs() {
@@ -5747,7 +5738,7 @@
 		/**
 		 * Updates number of days according to the month and year selected.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @return {void}
 		 */
 		updateDaysForMonth: function updateDaysForMonth() {
@@ -5770,8 +5761,8 @@
 		/**
 		 * Populate setting value from the inputs.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {boolean} If setting updated.
+		 * @since 4.9.0
+		 * @return {boolean} If setting updated.
 		 */
 		populateSetting: function populateSetting() {
 			var control = this, date;
@@ -5788,7 +5779,7 @@
 		/**
 		 * Converts input values to string in Y-m-d H:i:s format.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @return {string} Date string.
 		 */
 		convertInputDateToString: function convertInputDateToString() {
@@ -5831,8 +5822,8 @@
 		/**
 		 * Check if the date is in the future.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {boolean} True if future date.
+		 * @since 4.9.0
+		 * @return {boolean} True if future date.
 		 */
 		isFutureDate: function isFutureDate() {
 			var control = this;
@@ -5842,10 +5833,10 @@
 		/**
 		 * Convert hour in twelve hour format to twenty four hour format.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @param {string} hourInTwelveHourFormat - Hour in twelve hour format.
 		 * @param {string} meridian - Either 'am' or 'pm'.
-		 * @returns {string} Hour in twenty four hour format.
+		 * @return {string} Hour in twenty four hour format.
 		 */
 		convertHourToTwentyFourHourFormat: function convertHour( hourInTwelveHourFormat, meridian ) {
 			var hourInTwentyFourHourFormat, hour, midDayHour = 12;
@@ -5869,8 +5860,8 @@
 		/**
 		 * Populates date inputs in date fields.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {boolean} Whether the inputs were populated.
+		 * @since 4.9.0
+		 * @return {boolean} Whether the inputs were populated.
 		 */
 		populateDateInputs: function populateDateInputs() {
 			var control = this, parsed;
@@ -5912,7 +5903,7 @@
 		/**
 		 * Toggle future date notification for date control.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @param {boolean} notify Add or remove the notification.
 		 * @return {wp.customize.DateTimeControl}
 		 */
@@ -5938,12 +5929,11 @@
 	/**
 	 * Class PreviewLinkControl.
 	 *
-	 * @since WP-4.9.0
-	 * @constructor
+	 * @since 4.9.0
+	 * @class    wp.customize.PreviewLinkControl
 	 * @augments wp.customize.Control
-	 * @augments wp.customize.Class
 	 */
-	api.PreviewLinkControl = api.Control.extend({
+	api.PreviewLinkControl = api.Control.extend(/** @lends wp.customize.PreviewLinkControl.prototype */{
 
 		defaults: _.extend( {}, api.Control.prototype.defaults, {
 			templateId: 'customize-preview-link-control'
@@ -5952,8 +5942,8 @@
 		/**
 		 * Initialize behaviors.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @return {void}
 		 */
 		ready: function ready() {
 			var control = this, element, component, node, url, input, button;
@@ -6019,7 +6009,7 @@
 		/**
 		 * Updates Preview Link
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @return {void}
 		 */
 		updatePreviewLink: function updatePreviewLink() {
@@ -6036,7 +6026,7 @@
 		/**
 		 * Toggles save notification.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @param {boolean} notify Add or remove notification.
 		 * @return {void}
 		 */
@@ -6057,25 +6047,32 @@
 		}
 	});
 
-	// Change objects contained within the main customize object to Settings.
+	/**
+	 * Change objects contained within the main customize object to Settings.
+	 *
+	 * @alias wp.customize.defaultConstructor
+	 */
 	api.defaultConstructor = api.Setting;
 
 	/**
 	 * Callback for resolved controls.
 	 *
-	 * @callback deferredControlsCallback
-	 * @param {wp.customize.Control[]} Resolved controls.
+	 * @callback wp.customize.deferredControlsCallback
+	 * @param {wp.customize.Control[]} controls Resolved controls.
 	 */
 
 	/**
 	 * Collection of all registered controls.
 	 *
-	 * @since WP-3.4.0
+	 * @alias wp.customize.control
+	 *
+	 * @since 3.4.0
 	 *
 	 * @type {Function}
 	 * @param {...string} ids - One or more ids for controls to obtain.
 	 * @param {deferredControlsCallback} [callback] - Function called when all supplied controls exist.
-	 * @returns {wp.customize.Control|undefined|jQuery.promise} Control instance or undefined (if function called with one id param), or promise resolving to requested controls.
+	 * @return {wp.customize.Control|undefined|jQuery.promise} Control instance or undefined (if function called with one id param),
+	 *                                                         or promise resolving to requested controls.
 	 *
 	 * @example <caption>Loop over all registered controls.</caption>
 	 * wp.customize.control.each( function( control ) { ... } );
@@ -6122,19 +6119,22 @@
 	/**
 	 * Callback for resolved sections.
 	 *
-	 * @callback deferredSectionsCallback
-	 * @param {wp.customize.Section[]} Resolved sections.
+	 * @callback wp.customize.deferredSectionsCallback
+	 * @param {wp.customize.Section[]} sections Resolved sections.
 	 */
 
 	/**
 	 * Collection of all registered sections.
 	 *
-	 * @since WP-3.4.0
+	 * @alias wp.customize.section
+	 *
+	 * @since 3.4.0
 	 *
 	 * @type {Function}
 	 * @param {...string} ids - One or more ids for sections to obtain.
 	 * @param {deferredSectionsCallback} [callback] - Function called when all supplied sections exist.
-	 * @returns {wp.customize.Section|undefined|jQuery.promise} Section instance or undefined (if function called with one id param), or promise resolving to requested sections.
+	 * @return {wp.customize.Section|undefined|jQuery.promise} Section instance or undefined (if function called with one id param),
+	 *                                                         or promise resolving to requested sections.
 	 *
 	 * @example <caption>Loop over all registered sections.</caption>
 	 * wp.customize.section.each( function( section ) { ... } )
@@ -6154,19 +6154,22 @@
 	/**
 	 * Callback for resolved panels.
 	 *
-	 * @callback deferredPanelsCallback
-	 * @param {wp.customize.Panel[]} Resolved panels.
+	 * @callback wp.customize.deferredPanelsCallback
+	 * @param {wp.customize.Panel[]} panels Resolved panels.
 	 */
 
 	/**
 	 * Collection of all registered panels.
 	 *
-	 * @since WP-4.0.0
+	 * @alias wp.customize.panel
+	 *
+	 * @since 4.0.0
 	 *
 	 * @type {Function}
 	 * @param {...string} ids - One or more ids for panels to obtain.
 	 * @param {deferredPanelsCallback} [callback] - Function called when all supplied panels exist.
-	 * @returns {wp.customize.Panel|undefined|jQuery.promise} Panel instance or undefined (if function called with one id param), or promise resolving to requested panels.
+	 * @return {wp.customize.Panel|undefined|jQuery.promise} Panel instance or undefined (if function called with one id param),
+	 *                                                       or promise resolving to requested panels.
 	 *
 	 * @example <caption>Loop over all registered panels.</caption>
 	 * wp.customize.panel.each( function( panel ) { ... } )
@@ -6186,19 +6189,22 @@
 	/**
 	 * Callback for resolved notifications.
 	 *
-	 * @callback deferredNotificationsCallback
-	 * @param {wp.customize.Notification[]} Resolved notifications.
+	 * @callback wp.customize.deferredNotificationsCallback
+	 * @param {wp.customize.Notification[]} notifications Resolved notifications.
 	 */
 
 	/**
 	 * Collection of all global notifications.
 	 *
-	 * @since WP-4.9.0
+	 * @alias wp.customize.notifications
+	 *
+	 * @since 4.9.0
 	 *
 	 * @type {Function}
 	 * @param {...string} codes - One or more codes for notifications to obtain.
 	 * @param {deferredNotificationsCallback} [callback] - Function called when all supplied notifications exist.
-	 * @returns {wp.customize.Notification|undefined|jQuery.promise} notification instance or undefined (if function called with one code param), or promise resolving to requested notifications.
+	 * @return {wp.customize.Notification|undefined|jQuery.promise} Notification instance or undefined (if function called with one code param),
+	 *                                                              or promise resolving to requested notifications.
 	 *
 	 * @example <caption>Check if existing notification</caption>
 	 * exists = wp.customize.notifications.has( 'a_new_day_arrived' );
@@ -6223,25 +6229,20 @@
 	 */
 	api.notifications = new api.Notifications();
 
-	/**
-	 * An object that fetches a preview in the background of the document, which
-	 * allows for seamless replacement of an existing preview.
-	 *
-	 * @class
-	 * @augments wp.customize.Messenger
-	 * @augments wp.customize.Class
-	 * @mixes wp.customize.Events
-	 */
-	api.PreviewFrame = api.Messenger.extend({
+	api.PreviewFrame = api.Messenger.extend(/** @lends wp.customize.PreviewFrame.prototype */{
 		sensitivity: null, // Will get set to api.settings.timeouts.previewFrameSensitivity.
 
 		/**
-		 * Initialize the PreviewFrame.
+		 * An object that fetches a preview in the background of the document, which
+		 * allows for seamless replacement of an existing preview.
 		 *
-		 * @param {object} params.container
-		 * @param {object} params.previewUrl
-		 * @param {object} params.query
-		 * @param {object} options
+		 * @constructs wp.customize.PreviewFrame
+		 * @augments   wp.customize.Messenger
+		 *
+		 * @param {Object} params.container
+		 * @param {Object} params.previewUrl
+		 * @param {Object} params.query
+		 * @param {Object} options
 		 */
 		initialize: function( params, options ) {
 			var deferred = $.Deferred();
@@ -6268,7 +6269,7 @@
 		/**
 		 * Run the preview request.
 		 *
-		 * @param {object} deferred jQuery Deferred object to be resolved with
+		 * @param {Object} deferred jQuery Deferred object to be resolved with
 		 *                          the request.
 		 */
 		run: function( deferred ) {
@@ -6320,7 +6321,8 @@
 				title: api.l10n.previewIframeTitle,
 				name: 'customize-' + previewFrame.channel()
 			} );
-			previewFrame.iframe.attr( 'onmousewheel', '' ); // Workaround for Safari bug. See https://core.trac.wordpress.org/ticket/38149.
+			previewFrame.iframe.attr( 'onmousewheel', '' ); // Workaround for Safari bug. See WP Trac #38149.
+			previewFrame.iframe.attr( 'sandbox', 'allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-same-origin allow-scripts' );
 
 			if ( ! hasPendingChangesetUpdate ) {
 				previewFrame.iframe.attr( 'src', urlParser.href );
@@ -6355,7 +6357,7 @@
 					} ) );
 				} );
 				previewFrame.container.append( form );
-				form.submit();
+				form.trigger( 'submit' );
 				form.remove(); // No need to keep the form around after submitted.
 			}
 
@@ -6454,7 +6456,9 @@
 	/**
 	 * Set the document title of the customizer.
 	 *
-	 * @since WP-4.1.0
+	 * @alias wp.customize.setDocumentTitle
+	 *
+	 * @since 4.1.0
 	 *
 	 * @param {string} documentTitle
 	 */
@@ -6466,22 +6470,19 @@
 		api.trigger( 'title', title );
 	};
 
-	/**
-	 * @class
-	 * @augments wp.customize.Messenger
-	 * @augments wp.customize.Class
-	 * @mixes wp.customize.Events
-	 */
-	api.Previewer = api.Messenger.extend({
+	api.Previewer = api.Messenger.extend(/** @lends wp.customize.Previewer.prototype */{
 		refreshBuffer: null, // Will get set to api.settings.timeouts.windowRefresh.
 
 		/**
-		 * @param {array}  params.allowedUrls
+		 * @constructs wp.customize.Previewer
+		 * @augments   wp.customize.Messenger
+		 *
+		 * @param {Array}  params.allowedUrls
 		 * @param {string} params.container   A selector or jQuery element for the preview
 		 *                                    frame to be placed.
 		 * @param {string} params.form
 		 * @param {string} params.previewUrl  The URL to preview.
-		 * @param {object} options
+		 * @param {Object} options
 		 */
 		initialize: function( params, options ) {
 			var previewer = this,
@@ -6526,13 +6527,15 @@
 			urlParser.href = previewer.origin();
 			previewer.add( 'scheme', urlParser.protocol.replace( /:$/, '' ) );
 
-			// Limit the URL to internal, front-end links.
-			//
-			// If the front end and the admin are served from the same domain, load the
-			// preview over ssl if the Customizer is being loaded over ssl. This avoids
-			// insecure content warnings. This is not attempted if the admin and front end
-			// are on different domains to avoid the case where the front end doesn't have
-			// ssl certs.
+			/*
+			 * Limit the URL to internal, front-end links.
+			 *
+			 * If the front end and the admin are served from the same domain, load the
+			 * preview over ssl if the Customizer is being loaded over ssl. This avoids
+			 * insecure content warnings. This is not attempted if the admin and front end
+			 * are on different domains to avoid the case where the front end doesn't have
+			 * ssl certs.
+			 */
 
 			previewer.add( 'previewUrl', params.previewUrl ).setter( function( to ) {
 				var result = null, urlParser, queryParams, parsedAllowedUrl, parsedCandidateUrls = [];
@@ -6624,15 +6627,15 @@
 		/**
 		 * Handle the preview receiving the ready message.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 * @access public
 		 *
-		 * @param {object} data - Data from preview.
+		 * @param {Object} data - Data from preview.
 		 * @param {string} data.currentUrl - Current URL.
-		 * @param {object} data.activePanels - Active panels.
-		 * @param {object} data.activeSections Active sections.
-		 * @param {object} data.activeControls Active controls.
-		 * @returns {void}
+		 * @param {Object} data.activePanels - Active panels.
+		 * @param {Object} data.activeSections Active sections.
+		 * @param {Object} data.activeControls Active controls.
+		 * @return {void}
 		 */
 		ready: function( data ) {
 			var previewer = this, synced = {}, constructs;
@@ -6699,10 +6702,10 @@
 		 *
 		 * If a message is not received in the allotted time then the iframe will be set back to the last known valid URL.
 		 *
-		 * @since WP-4.7.0
+		 * @since 4.7.0
 		 * @access public
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		keepPreviewAlive: function keepPreviewAlive() {
 			var previewer = this, keepAliveTick, timeoutId, handleMissingKeepAlive, scheduleKeepAliveCheck;
@@ -6761,14 +6764,15 @@
 		/**
 		 * Refresh the preview seamlessly.
 		 *
-		 * @since WP-3.4.0
+		 * @since 3.4.0
 		 * @access public
-		 * @returns {void}
+		 *
+		 * @return {void}
 		 */
 		refresh: function() {
 			var previewer = this, onSettingChange;
 
-			// Display loading indicator
+			// Display loading indicator.
 			previewer.send( 'loading-initiated' );
 
 			previewer.abort();
@@ -6929,13 +6933,15 @@
 	 *
 	 * Add notifications to the settings and focus on the first control that has an invalid setting.
 	 *
-	 * @since WP-4.6.0
+	 * @alias wp.customize._handleSettingValidities
+	 *
+	 * @since 4.6.0
 	 * @private
 	 *
-	 * @param {object}  args
-	 * @param {object}  args.settingValidities
+	 * @param {Object}  args
+	 * @param {Object}  args.settingValidities
 	 * @param {boolean} [args.focusInvalidControl=false]
-	 * @returns {void}
+	 * @return {void}
 	 */
 	api._handleSettingValidities = function handleSettingValidities( args ) {
 		var invalidSettingControls, invalidSettings = [], wasFocused = false;
@@ -7004,9 +7010,11 @@
 	/**
 	 * Find all controls associated with the given settings.
 	 *
-	 * @since WP-4.6.0
+	 * @alias wp.customize.findControlsForSettings
+	 *
+	 * @since 4.6.0
 	 * @param {string[]} settingIds Setting IDs.
-	 * @returns {object<string, wp.customize.Control>} Mapping setting ids to arrays of controls.
+	 * @return {Object<string, wp.customize.Control>} Mapping setting ids to arrays of controls.
 	 */
 	api.findControlsForSettings = function findControlsForSettings( settingIds ) {
 		var controls = {}, settingControls;
@@ -7025,7 +7033,9 @@
 	/**
 	 * Sort panels, sections, controls by priorities. Hide empty sections and panels.
 	 *
-	 * @since WP-4.1.0
+	 * @alias wp.customize.reflowPaneContents
+	 *
+	 * @since 4.1.0
 	 */
 	api.reflowPaneContents = _.bind( function () {
 
@@ -7035,7 +7045,7 @@
 			activeElement = $( document.activeElement );
 		}
 
-		// Sort the sections within each panel
+		// Sort the sections within each panel.
 		api.panel.each( function ( panel ) {
 			if ( 'themes' === panel.id ) {
 				return; // Don't reflow theme sections, as doing so moves them after the themes container.
@@ -7053,7 +7063,7 @@
 			}
 		} );
 
-		// Sort the controls within each section
+		// Sort the controls within each section.
 		api.section.each( function ( section ) {
 			var controls = section.controls(),
 				controlContainers = _.pluck( controls, 'container' );
@@ -7069,10 +7079,10 @@
 			}
 		} );
 
-		// Sort the root panels and sections
+		// Sort the root panels and sections.
 		rootNodes.sort( api.utils.prioritySort );
 		rootHeadContainers = _.pluck( rootNodes, 'headContainer' );
-		appendContainer = $( '#customize-theme-controls .customize-pane-parent' ); // @todo This should be defined elsewhere, and to be configurable
+		appendContainer = $( '#customize-theme-controls .customize-pane-parent' ); // @todo This should be defined elsewhere, and to be configurable.
 		if ( ! api.utils.areElementListsEqual( rootHeadContainers, appendContainer.children() ) ) {
 			_( rootNodes ).each( function ( rootNode ) {
 				appendContainer.append( rootNode.headContainer );
@@ -7080,7 +7090,7 @@
 			wasReflowed = true;
 		}
 
-		// Now re-trigger the active Value callbacks to that the panels and sections can decide whether they can be rendered
+		// Now re-trigger the active Value callbacks so that the panels and sections can decide whether they can be rendered.
 		api.panel.each( function ( panel ) {
 			var value = panel.active();
 			panel.active.callbacks.fireWith( panel.active, [ value, value ] );
@@ -7090,9 +7100,9 @@
 			section.active.callbacks.fireWith( section.active, [ value, value ] );
 		} );
 
-		// Restore focus if there was a reflow and there was an active (focused) element
+		// Restore focus if there was a reflow and there was an active (focused) element.
 		if ( wasReflowed && activeElement ) {
-			activeElement.focus();
+			activeElement.trigger( 'focus' );
 		}
 		api.trigger( 'pane-contents-reflowed' );
 	}, api );
@@ -7230,9 +7240,11 @@
 					cancelScheduleButtonReminder = api.utils.highlightButton( btnWrapper, {
 						delay: 1000,
 
-						// Only abort the reminder when the save button is focused.
-						// If the user clicks the settings button to toggle the
-						// settings closed, we'll still remind them.
+						/*
+						 * Only abort the reminder when the save button is focused.
+						 * If the user clicks the settings button to toggle the
+						 * settings closed, we'll still remind them.
+						 */
 						focusTarget: saveBtn
 					} );
 				}
@@ -7389,26 +7401,30 @@
 			}
 		});
 
-		// Initialize Previewer
+		/**
+		 * Initialize Previewer
+		 *
+		 * @alias wp.customize.previewer
+		 */
 		api.previewer = new api.Previewer({
 			container:   '#customize-preview',
 			form:        '#customize-controls',
 			previewUrl:  api.settings.url.preview,
 			allowedUrls: api.settings.url.allowed
-		}, {
+		},/** @lends wp.customize.previewer */{
 
 			nonce: api.settings.nonce,
 
 			/**
 			 * Build the query to send along with the Preview request.
 			 *
-			 * @since WP-3.4.0
-			 * @since WP-4.7.0 Added options param.
+			 * @since 3.4.0
+			 * @since 4.7.0 Added options param.
 			 * @access public
 			 *
-			 * @param {object}  [options] Options.
+			 * @param {Object}  [options] Options.
 			 * @param {boolean} [options.excludeCustomizedSaved=false] Exclude saved settings in customized response (values pending writing to changeset).
-			 * @return {object} Query vars.
+			 * @return {Object} Query vars.
 			 */
 			query: function( options ) {
 				var queryVars = {
@@ -7441,14 +7457,14 @@
 			 * A revision will be made for the changeset post if revisions support
 			 * has been added to the post type.
 			 *
-			 * @since WP-3.4.0
-			 * @since WP-4.7.0 Added args param and return value.
+			 * @since 3.4.0
+			 * @since 4.7.0 Added args param and return value.
 			 *
-			 * @param {object} [args] Args.
+			 * @param {Object} [args] Args.
 			 * @param {string} [args.status=publish] Status.
 			 * @param {string} [args.date] Date, in local time in MySQL format.
 			 * @param {string} [args.title] Title
-			 * @returns {jQuery.promise} Promise.
+			 * @return {jQuery.promise} Promise.
 			 */
 			save: function( args ) {
 				var previewer = this,
@@ -7597,7 +7613,7 @@
 						if ( '0' === response ) {
 							response = 'not_logged_in';
 						} else if ( '-1' === response ) {
-							// Back-compat in case any other check_ajax_referer() call is dying
+							// Back-compat in case any other check_ajax_referer() call is dying.
 							response = 'invalid_nonce';
 						}
 
@@ -7717,11 +7733,11 @@
 			/**
 			 * Trash the current changes.
 			 *
-			 * Revert the Customizer to it's previously-published state.
+			 * Revert the Customizer to its previously-published state.
 			 *
-			 * @since WP-4.9.0
+			 * @since 4.9.0
 			 *
-			 * @returns {jQuery.promise} Promise.
+			 * @return {jQuery.promise} Promise.
 			 */
 			trash: function trash() {
 				var request, success, fail;
@@ -7786,7 +7802,7 @@
 			/**
 			 * Builds the front preview url with the current state of customizer.
 			 *
-			 * @since WP-4.9
+			 * @since 4.9
 			 *
 			 * @return {string} Preview url.
 			 */
@@ -7830,7 +7846,7 @@
 			api.previewer.send( 'nonce-refresh', nonce );
 		});
 
-		// Create Settings
+		// Create Settings.
 		$.each( api.settings.settings, function( id, data ) {
 			var Constructor = api.settingConstructor[ data.type ] || api.Setting;
 			api.add( new Constructor( id, data.value, {
@@ -7840,28 +7856,31 @@
 			} ) );
 		});
 
-		// Create Panels
+		// Create Panels.
 		$.each( api.settings.panels, function ( id, data ) {
 			var Constructor = api.panelConstructor[ data.type ] || api.Panel, options;
-			options = _.extend( { params: data }, data ); // Inclusion of params alias is for back-compat for custom panels that expect to augment this property.
+			// Inclusion of params alias is for back-compat for custom panels that expect to augment this property.
+			options = _.extend( { params: data }, data );
 			api.panel.add( new Constructor( id, options ) );
 		});
 
-		// Create Sections
+		// Create Sections.
 		$.each( api.settings.sections, function ( id, data ) {
 			var Constructor = api.sectionConstructor[ data.type ] || api.Section, options;
-			options = _.extend( { params: data }, data ); // Inclusion of params alias is for back-compat for custom sections that expect to augment this property.
+			// Inclusion of params alias is for back-compat for custom sections that expect to augment this property.
+			options = _.extend( { params: data }, data );
 			api.section.add( new Constructor( id, options ) );
 		});
 
-		// Create Controls
+		// Create Controls.
 		$.each( api.settings.controls, function( id, data ) {
 			var Constructor = api.controlConstructor[ data.type ] || api.Control, options;
-			options = _.extend( { params: data }, data ); // Inclusion of params alias is for back-compat for custom controls that expect to augment this property.
+			// Inclusion of params alias is for back-compat for custom controls that expect to augment this property.
+			options = _.extend( { params: data }, data );
 			api.control.add( new Constructor( id, options ) );
 		});
 
-		// Focus the autofocused element
+		// Focus the autofocused element.
 		_.each( [ 'panel', 'section', 'control' ], function( type ) {
 			var id = api.settings.autofocus[ type ];
 			if ( ! id ) {
@@ -7914,7 +7933,7 @@
 			api.notifications.render();
 		});
 
-		// Save and activated states
+		// Save and activated states.
 		(function( state ) {
 			var saved = state.instance( 'saved' ),
 				saving = state.instance( 'saving' ),
@@ -8051,11 +8070,11 @@
 			/**
 			 * Populate URL with UUID via `history.replaceState()`.
 			 *
-			 * @since WP-4.7.0
+			 * @since 4.7.0
 			 * @access private
 			 *
 			 * @param {boolean} isIncluded Is UUID included.
-			 * @returns {void}
+			 * @return {void}
 			 */
 			populateChangesetUuidParam = function( isIncluded ) {
 				var urlParser, queryParams;
@@ -8094,19 +8113,11 @@
 		/**
 		 * Handles lock notice and take over request.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 */
 		( function checkAndDisplayLockNotice() {
 
-			/**
-			 * A notification that is displayed in a full-screen overlay with information about the locked changeset.
-			 *
-			 * @since WP-4.9.0
-			 * @class
-			 * @augments wp.customize.Notification
-			 * @augments wp.customize.OverlayNotification
-			 */
-			var LockedNotification = api.OverlayNotification.extend({
+			var LockedNotification = api.OverlayNotification.extend(/** @lends wp.customize~LockedNotification.prototype */{
 
 				/**
 				 * Template ID.
@@ -8123,18 +8134,22 @@
 				lockUser: null,
 
 				/**
-				 * Initialize.
+				 * A notification that is displayed in a full-screen overlay with information about the locked changeset.
 				 *
-				 * @since WP-4.9.0
+				 * @constructs wp.customize~LockedNotification
+				 * @augments   wp.customize.OverlayNotification
+				 *
+				 * @since 4.9.0
 				 *
 				 * @param {string} [code] - Code.
-				 * @param {object} [params] - Params.
+				 * @param {Object} [params] - Params.
 				 */
 				initialize: function( code, params ) {
 					var notification = this, _code, _params;
 					_code = code || 'changeset_locked';
 					_params = _.extend(
 						{
+							message: '',
 							type: 'warning',
 							containerClasses: '',
 							lockUser: {}
@@ -8148,7 +8163,7 @@
 				/**
 				 * Render notification.
 				 *
-				 * @since WP-4.9.0
+				 * @since 4.9.0
 				 *
 				 * @return {jQuery} Notification container.
 				 */
@@ -8214,12 +8229,12 @@
 			/**
 			 * Start lock.
 			 *
-			 * @since WP-4.9.0
+			 * @since 4.9.0
 			 *
-			 * @param {object} [args] - Args.
-			 * @param {object} [args.lockUser] - Lock user data.
+			 * @param {Object} [args] - Args.
+			 * @param {Object} [args.lockUser] - Lock user data.
 			 * @param {boolean} [args.allowOverride=false] - Whether override is allowed.
-			 * @returns {void}
+			 * @return {void}
 			 */
 			function startLock( args ) {
 				if ( args && args.lockUser ) {
@@ -8278,7 +8293,7 @@
 			/**
 			 * Obtain the URL to restore the autosave.
 			 *
-			 * @returns {string} Customizer URL.
+			 * @return {string} Customizer URL.
 			 */
 			function getAutosaveRestorationUrl() {
 				var urlParser, queryParams;
@@ -8299,7 +8314,7 @@
 			 * Remove parameter from the URL.
 			 *
 			 * @param {Array} params - Parameter names to remove.
-			 * @returns {void}
+			 * @return {void}
 			 */
 			function stripParamsFromLocation( params ) {
 				var urlParser = document.createElement( 'a' ), queryParams, strippedParams = 0;
@@ -8320,9 +8335,36 @@
 			}
 
 			/**
+			 * Displays a Site Editor notification when a block theme is activated.
+			 *
+			 * @since 4.9.0
+			 *
+			 * @param {string} [notification] - A notification to display.
+			 * @return {void}
+			 */
+			function addSiteEditorNotification( notification ) {
+				api.notifications.add( new api.Notification( 'site_editor_block_theme_notice', {
+					message: notification,
+					type: 'info',
+					dismissible: false,
+					render: function() {
+						var notification = api.Notification.prototype.render.call( this ),
+							button = notification.find( 'button.switch-to-editor' );
+
+						button.on( 'click', function( event ) {
+							event.preventDefault();
+							location.assign( button.data( 'action' ) );
+						} );
+
+						return notification;
+					}
+				} ) );
+			}
+
+			/**
 			 * Dismiss autosave.
 			 *
-			 * @returns {void}
+			 * @return {void}
 			 */
 			function dismissAutosave() {
 				if ( autosaveDismissed ) {
@@ -8341,7 +8383,7 @@
 			/**
 			 * Add notification regarding the availability of an autosave to restore.
 			 *
-			 * @returns {void}
+			 * @return {void}
 			 */
 			function addAutosaveRestoreNotification() {
 				var code = 'autosave_available', onStateChange;
@@ -8393,6 +8435,10 @@
 			if ( api.settings.changeset.latestAutoDraftUuid || api.settings.changeset.hasAutosaveRevision ) {
 				addAutosaveRestoreNotification();
 			}
+			var shouldDisplayBlockThemeNotification = !! parseInt( $( '#customize-info' ).data( 'block-theme' ), 10 );
+			if (shouldDisplayBlockThemeNotification) {
+				addSiteEditorNotification( api.l10n.blockThemeNotification );
+			}
 		})();
 
 		// Check if preview url is valid and load the preview frame.
@@ -8403,10 +8449,10 @@
 		}
 
 		// Button bindings.
-		saveBtn.click( function( event ) {
+		saveBtn.on( 'click', function( event ) {
 			api.previewer.save();
 			event.preventDefault();
-		}).keydown( function( event ) {
+		}).on( 'keydown', function( event ) {
 			if ( 9 === event.which ) { // Tab.
 				return;
 			}
@@ -8416,7 +8462,7 @@
 			event.preventDefault();
 		});
 
-		closeBtn.keydown( function( event ) {
+		closeBtn.on( 'keydown', function( event ) {
 			if ( 9 === event.which ) { // Tab.
 				return;
 			}
@@ -8455,6 +8501,13 @@
 			 * This ensures that ESC meant to collapse a modal dialog or a TinyMCE toolbar won't collapse something else.
 			 */
 			if ( ! $( event.target ).is( 'body' ) && ! $.contains( $( '#customize-controls' )[0], event.target ) ) {
+				return;
+			}
+
+			// Abort if we're inside of a block editor instance.
+			if ( event.target.closest( '.block-editor-writing-flow' ) !== null ||
+				event.target.closest( '.block-editor-block-list__block-popover' ) !== null
+			) {
 				return;
 			}
 
@@ -8515,11 +8568,11 @@
 			/**
 			 * Determine which panel or section is currently expanded.
 			 *
-			 * @since WP-4.7.0
+			 * @since 4.7.0
 			 * @access private
 			 *
 			 * @param {wp.customize.Panel|wp.customize.Section} container Construct.
-			 * @returns {void}
+			 * @return {void}
 			 */
 			changeContainer = function( container ) {
 				var newInstance = container,
@@ -8628,10 +8681,10 @@
 			/**
 			 * Update active header height.
 			 *
-			 * @since WP-4.7.0
+			 * @since 4.7.0
 			 * @access private
 			 *
-			 * @returns {void}
+			 * @return {void}
 			 */
 			updateHeaderHeight = function() {
 				activeHeader.height = activeHeader.element.outerHeight();
@@ -8640,13 +8693,13 @@
 			/**
 			 * Reposition header on throttled `scroll` event.
 			 *
-			 * @since WP-4.7.0
+			 * @since 4.7.0
 			 * @access private
 			 *
-			 * @param {object} header - Header.
+			 * @param {Object} header - Header.
 			 * @param {number} scrollTop - Scroll top.
 			 * @param {number} scrollDirection - Scroll direction, negative number being up and positive being down.
-			 * @returns {void}
+			 * @return {void}
 			 */
 			positionStickyHeader = function( header, scrollTop, scrollDirection ) {
 				var headerElement = header.element,
@@ -8713,7 +8766,8 @@
 			};
 		}());
 
-		// Previewed device bindings. (The api.previewedDevice property is how this Value was first introduced, but since it has moved to api.state.)
+		// Previewed device bindings. (The api.previewedDevice property
+		// is how this Value was first introduced, but since it has moved to api.state.)
 		api.previewedDevice = api.state( 'previewedDevice' );
 
 		// Set the default device.
@@ -8757,7 +8811,8 @@
 		if ( title.length ) {
 			api( 'blogname', function( setting ) {
 				var updateTitle = function() {
-					title.text( $.trim( setting() ) || api.l10n.untitledBlogName );
+					var blogTitle = setting() || '';
+					title.text( blogTitle.toString().trim() || api.l10n.untitledBlogName );
 				};
 				setting.bind( updateTitle );
 				updateTitle();
@@ -8820,7 +8875,7 @@
 				api.state( 'selectedChangesetStatus' ).unbind( startPromptingBeforeUnload );
 				api.state( 'selectedChangesetDate' ).unbind( startPromptingBeforeUnload );
 
-				// Prompt user with AYS dialog if leaving the Customizer with unsaved changes
+				// Prompt user with AYS dialog if leaving the Customizer with unsaved changes.
 				$( window ).on( 'beforeunload.customize-confirm', function() {
 					if ( ! isCleanState() && ! api.state( 'changesetLocked' ).get() ) {
 						setTimeout( function() {
@@ -8905,7 +8960,7 @@
 			});
 		} );
 
-		// Pass titles to the parent
+		// Pass titles to the parent.
 		api.bind( 'title', function( newTitle ) {
 			parent.send( 'title', newTitle );
 		});
@@ -8917,7 +8972,7 @@
 		// Initialize the connection with the parent frame.
 		parent.send( 'ready' );
 
-		// Control visibility for default controls
+		// Control visibility for default controls.
 		$.each({
 			'background_image': {
 				controls: [ 'background_preset', 'background_position', 'background_size', 'background_repeat', 'background_attachment' ],
@@ -8949,7 +9004,7 @@
 		api.control( 'background_preset', function( control ) {
 			var visibility, defaultValues, values, toggleVisibility, updateSettings, preset;
 
-			visibility = { // position, size, repeat, attachment
+			visibility = { // position, size, repeat, attachment.
 				'default': [ false, false, false, false ],
 				'fill': [ true, false, false, false ],
 				'fit': [ true, false, true, false ],
@@ -8965,14 +9020,15 @@
 				_wpCustomizeBackground.defaults['default-attachment']
 			];
 
-			values = { // position_x, position_y, size, repeat, attachment
+			values = { // position_x, position_y, size, repeat, attachment.
 				'default': defaultValues,
 				'fill': [ 'left', 'top', 'cover', 'no-repeat', 'fixed' ],
 				'fit': [ 'left', 'top', 'contain', 'no-repeat', 'fixed' ],
 				'repeat': [ 'left', 'top', 'auto', 'repeat', 'scroll' ]
 			};
 
-			// @todo These should actually toggle the active state, but without the preview overriding the state in data.activeControls.
+			// @todo These should actually toggle the active state,
+			// but without the preview overriding the state in data.activeControls.
 			toggleVisibility = function( preset ) {
 				_.each( [ 'background_position', 'background_size', 'background_repeat', 'background_attachment' ], function( controlId, i ) {
 					var control = api.control( controlId );
@@ -9032,7 +9088,7 @@
 			} );
 		} );
 
-		// Juggle the two controls that use header_textcolor
+		// Juggle the two controls that use header_textcolor.
 		api.control( 'display_header_text', function( control ) {
 			var last = '';
 
@@ -9240,7 +9296,7 @@
 			/**
 			 * Request changeset update and then re-schedule the next changeset update time.
 			 *
-			 * @since WP-4.7.0
+			 * @since 4.7.0
 			 * @private
 			 */
 			updateChangesetWithReschedule = function() {
@@ -9256,7 +9312,7 @@
 			/**
 			 * Schedule changeset update.
 			 *
-			 * @since WP-4.7.0
+			 * @since 4.7.0
 			 * @private
 			 */
 			scheduleChangesetUpdate = function() {

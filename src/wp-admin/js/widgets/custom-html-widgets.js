@@ -1,6 +1,15 @@
+/**
+ * @output wp-admin/js/widgets/custom-html-widgets.js
+ */
+
 /* global wp */
 /* eslint consistent-this: [ "error", "control" ] */
 /* eslint no-magic-numbers: ["error", { "ignore": [0,1,-1] }] */
+
+/**
+ * @namespace wp.customHtmlWidget
+ * @memberOf wp
+ */
 wp.customHtmlWidgets = ( function( $ ) {
 	'use strict';
 
@@ -15,14 +24,7 @@ wp.customHtmlWidgets = ( function( $ ) {
 		}
 	};
 
-	/**
-	 * Text widget control.
-	 *
-	 * @class CustomHtmlWidgetControl
-	 * @constructor
-	 * @abstract
-	 */
-	component.CustomHtmlWidgetControl = Backbone.View.extend({
+	component.CustomHtmlWidgetControl = Backbone.View.extend(/** @lends wp.customHtmlWidgets.CustomHtmlWidgetControl.prototype */{
 
 		/**
 		 * View events.
@@ -32,12 +34,17 @@ wp.customHtmlWidgets = ( function( $ ) {
 		events: {},
 
 		/**
-		 * Initialize.
+		 * Text widget control.
+		 *
+		 * @constructs wp.customHtmlWidgets.CustomHtmlWidgetControl
+		 * @augments Backbone.View
+		 * @abstract
 		 *
 		 * @param {Object} options - Options.
 		 * @param {jQuery} options.el - Control field container element.
 		 * @param {jQuery} options.syncContainer - Container element where fields are synced for the server.
-		 * @returns {void}
+		 *
+		 * @return {void}
 		 */
 		initialize: function initialize( options ) {
 			var control = this;
@@ -90,7 +97,7 @@ wp.customHtmlWidgets = ( function( $ ) {
 		 * A field will only be updated if it is not currently focused, to avoid
 		 * overwriting content that the user is entering.
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		updateFields: function updateFields() {
 			var control = this, syncInput;
@@ -105,10 +112,10 @@ wp.customHtmlWidgets = ( function( $ ) {
 			 * to prevent the editor's contents from getting sanitized as soon as a user removes focus from
 			 * the editor. This is particularly important for users who cannot unfiltered_html.
 			 */
-			control.contentUpdateBypassed = control.fields.content.is( document.activeElement ) || control.editor && control.editor.codemirror.state.focused || 0 !== control.currentErrorAnnotations;
+			control.contentUpdateBypassed = control.fields.content.is( document.activeElement ) || control.editor && control.editor.codemirror.state.focused || 0 !== control.currentErrorAnnotations.length;
 			if ( ! control.contentUpdateBypassed ) {
 				syncInput = control.syncContainer.find( '.sync-input.content' );
-				control.fields.content.val( syncInput.val() ).trigger( 'change' );
+				control.fields.content.val( syncInput.val() );
 			}
 		},
 
@@ -116,7 +123,7 @@ wp.customHtmlWidgets = ( function( $ ) {
 		 * Show linting error notice.
 		 *
 		 * @param {Array} errorAnnotations - Error annotations.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		updateErrorNotice: function( errorAnnotations ) {
 			var control = this, errorNotice, message = '', customizeSetting;
@@ -157,7 +164,7 @@ wp.customHtmlWidgets = ( function( $ ) {
 		/**
 		 * Initialize editor.
 		 *
-		 * @returns {void}
+		 * @return {void}
 		 */
 		initializeEditor: function initializeEditor() {
 			var control = this, settings;
@@ -171,7 +178,9 @@ wp.customHtmlWidgets = ( function( $ ) {
 				/**
 				 * Handle tabbing to the field before the editor.
 				 *
-				 * @returns {void}
+				 * @ignore
+				 *
+				 * @return {void}
 				 */
 				onTabPrevious: function onTabPrevious() {
 					control.fields.title.focus();
@@ -180,7 +189,9 @@ wp.customHtmlWidgets = ( function( $ ) {
 				/**
 				 * Handle tabbing to the field after the editor.
 				 *
-				 * @returns {void}
+				 * @ignore
+				 *
+				 * @return {void}
 				 */
 				onTabNext: function onTabNext() {
 					var tabbables = control.syncContainer.add( control.syncContainer.parent().find( '.widget-position, .widget-control-actions' ) ).find( ':tabbable' );
@@ -190,8 +201,10 @@ wp.customHtmlWidgets = ( function( $ ) {
 				/**
 				 * Disable save button and store linting errors for use in updateFields.
 				 *
+				 * @ignore
+				 *
 				 * @param {Array} errorAnnotations - Error notifications.
-				 * @returns {void}
+				 * @return {void}
 				 */
 				onChangeLintingErrors: function onChangeLintingErrors( errorAnnotations ) {
 					control.currentErrorAnnotations = errorAnnotations;
@@ -200,8 +213,10 @@ wp.customHtmlWidgets = ( function( $ ) {
 				/**
 				 * Update error notice.
 				 *
+				 * @ignore
+				 *
 				 * @param {Array} errorAnnotations - Error annotations.
-				 * @returns {void}
+				 * @return {void}
 				 */
 				onUpdateErrorNotice: function onUpdateErrorNotice( errorAnnotations ) {
 					control.saveButton.toggleClass( 'validation-blocked disabled', errorAnnotations.length > 0 );
@@ -259,6 +274,8 @@ wp.customHtmlWidgets = ( function( $ ) {
 	/**
 	 * Mapping of widget ID to instances of CustomHtmlWidgetControl subclasses.
 	 *
+	 * @alias wp.customHtmlWidgets.widgetControls
+	 *
 	 * @type {Object.<string, wp.textWidgets.CustomHtmlWidgetControl>}
 	 */
 	component.widgetControls = {};
@@ -266,9 +283,12 @@ wp.customHtmlWidgets = ( function( $ ) {
 	/**
 	 * Handle widget being added or initialized for the first time at the widget-added event.
 	 *
+	 * @alias wp.customHtmlWidgets.handleWidgetAdded
+	 *
 	 * @param {jQuery.Event} event - Event.
 	 * @param {jQuery}       widgetContainer - Widget container element.
-	 * @returns {void}
+	 *
+	 * @return {void}
 	 */
 	component.handleWidgetAdded = function handleWidgetAdded( event, widgetContainer ) {
 		var widgetForm, idBase, widgetControl, widgetId, animatedCheckDelay = 50, renderWhenAnimationDone, fieldContainer, syncContainer;
@@ -325,7 +345,9 @@ wp.customHtmlWidgets = ( function( $ ) {
 	/**
 	 * Setup widget in accessibility mode.
 	 *
-	 * @returns {void}
+	 * @alias wp.customHtmlWidgets.setupAccessibleMode
+	 *
+	 * @return {void}
 	 */
 	component.setupAccessibleMode = function setupAccessibleMode() {
 		var widgetForm, idBase, widgetControl, fieldContainer, syncContainer;
@@ -334,7 +356,7 @@ wp.customHtmlWidgets = ( function( $ ) {
 			return;
 		}
 
-		idBase = widgetForm.find( '> .widget-control-actions > .id_base' ).val();
+		idBase = widgetForm.find( '.id_base' ).val();
 		if ( -1 === component.idBases.indexOf( idBase ) ) {
 			return;
 		}
@@ -358,9 +380,11 @@ wp.customHtmlWidgets = ( function( $ ) {
 	 * the widgets admin screen and also via the 'widget-synced' event when making
 	 * a change to a widget in the customizer.
 	 *
+	 * @alias wp.customHtmlWidgets.handleWidgetUpdated
+	 *
 	 * @param {jQuery.Event} event - Event.
 	 * @param {jQuery}       widgetContainer - Widget container element.
-	 * @returns {void}
+	 * @return {void}
 	 */
 	component.handleWidgetUpdated = function handleWidgetUpdated( event, widgetContainer ) {
 		var widgetForm, widgetId, widgetControl, idBase;
@@ -384,11 +408,14 @@ wp.customHtmlWidgets = ( function( $ ) {
 	 * Initialize functionality.
 	 *
 	 * This function exists to prevent the JS file from having to boot itself.
-	 * When ClassicPress enqueues this script, it should have an inline script
+	 * When WordPress enqueues this script, it should have an inline script
 	 * attached which calls wp.textWidgets.init().
 	 *
-	 * @param {object} settings - Options for code editor, exported from PHP.
-	 * @returns {void}
+	 * @alias wp.customHtmlWidgets.init
+	 *
+	 * @param {Object} settings - Options for code editor, exported from PHP.
+	 *
+	 * @return {void}
 	 */
 	component.init = function init( settings ) {
 		var $document = $( document );
@@ -419,9 +446,15 @@ wp.customHtmlWidgets = ( function( $ ) {
 			});
 
 			// Accessibility mode.
-			$( window ).on( 'load', function() {
+			if ( document.readyState === 'complete' ) {
+				// Page is fully loaded.
 				component.setupAccessibleMode();
-			});
+			} else {
+				// Page is still loading.
+				$( window ).on( 'load', function() {
+					component.setupAccessibleMode();
+				});
+			}
 		});
 	};
 

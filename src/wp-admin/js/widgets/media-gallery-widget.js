@@ -1,3 +1,7 @@
+/**
+ * @output wp-admin/js/widgets/media-gallery-widget.js
+ */
+
 /* eslint consistent-this: [ "error", "control" ] */
 (function( component ) {
 	'use strict';
@@ -7,17 +11,17 @@
 	/**
 	 * Custom gallery details frame.
 	 *
-	 * @since WP-4.9.0
-	 * @class GalleryDetailsMediaFrame
-	 * @constructor
+	 * @since 4.9.0
+	 * @class    wp.mediaWidgets~GalleryDetailsMediaFrame
+	 * @augments wp.media.view.MediaFrame.Post
 	 */
-	GalleryDetailsMediaFrame = wp.media.view.MediaFrame.Post.extend( {
+	GalleryDetailsMediaFrame = wp.media.view.MediaFrame.Post.extend(/** @lends wp.mediaWidgets~GalleryDetailsMediaFrame.prototype */{
 
 		/**
 		 * Create the default states.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @return {void}
 		 */
 		createStates: function createStates() {
 			this.states.add([
@@ -52,27 +56,19 @@
 	 *
 	 * See WP_Widget_Gallery::enqueue_admin_scripts() for amending prototype from PHP exports.
 	 *
-	 * @since WP-4.9.0
-	 * @class GalleryWidgetModel
-	 * @constructor
+	 * @since 4.9.0
+	 *
+	 * @class    wp.mediaWidgets.modelConstructors.media_gallery
+	 * @augments wp.mediaWidgets.MediaWidgetModel
 	 */
-	GalleryWidgetModel = component.MediaWidgetModel.extend( {} );
+	GalleryWidgetModel = component.MediaWidgetModel.extend(/** @lends wp.mediaWidgets.modelConstructors.media_gallery.prototype */{} );
 
-	/**
-	 * Gallery widget control.
-	 *
-	 * See WP_Widget_Gallery::enqueue_admin_scripts() for amending prototype from PHP exports.
-	 *
-	 * @since WP-4.9.0
-	 * @class GalleryWidgetControl
-	 * @constructor
-	 */
-	GalleryWidgetControl = component.MediaWidgetControl.extend( {
+	GalleryWidgetControl = component.MediaWidgetControl.extend(/** @lends wp.mediaWidgets.controlConstructors.media_gallery.prototype */{
 
 		/**
 		 * View events.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @type {object}
 		 */
 		events: _.extend( {}, component.MediaWidgetControl.prototype.events, {
@@ -80,14 +76,19 @@
 		} ),
 
 		/**
-		 * Initialize.
+		 * Gallery widget control.
 		 *
-		 * @since WP-4.9.0
+		 * See WP_Widget_Gallery::enqueue_admin_scripts() for amending prototype from PHP exports.
+		 *
+		 * @constructs wp.mediaWidgets.controlConstructors.media_gallery
+		 * @augments   wp.mediaWidgets.MediaWidgetControl
+		 *
+		 * @since 4.9.0
 		 * @param {Object}         options - Options.
 		 * @param {Backbone.Model} options.model - Model.
 		 * @param {jQuery}         options.el - Control field container element.
 		 * @param {jQuery}         options.syncContainer - Container element where fields are synced for the server.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		initialize: function initialize( options ) {
 			var control = this;
@@ -108,7 +109,7 @@
 			 * would not be necessary because all of the state should be contained inside the changeset,
 			 * as everything done in the Customizer should not make a change to the site unless the
 			 * changeset itself is published. Attachments are a current exception to this rule.
-			 * For a proposal to include attachments in the customized state, see https://core.trac.wordpress.org/ticket/37887.
+			 * For a proposal to include attachments in the customized state, see #37887.
 			 */
 			if ( wp.customize && wp.customize.previewer ) {
 				control.selectedAttachments.on( 'change', function() {
@@ -120,8 +121,8 @@
 		/**
 		 * Update the selected attachments if necessary.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @return {void}
 		 */
 		updateSelectedAttachments: function updateSelectedAttachments() {
 			var control = this, newIds, oldIds, removedIds, addedIds, addedQuery;
@@ -153,8 +154,8 @@
 		/**
 		 * Render preview.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @return {void}
 		 */
 		renderPreview: function renderPreview() {
 			var control = this, previewContainer, previewTemplate, data;
@@ -174,8 +175,8 @@
 		/**
 		 * Determine whether there are selected attachments.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {boolean} Selected.
+		 * @since 4.9.0
+		 * @return {boolean} Selected.
 		 */
 		isSelected: function isSelected() {
 			var control = this;
@@ -190,8 +191,8 @@
 		/**
 		 * Open the media select frame to edit images.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @return {void}
 		 */
 		editMedia: function editMedia() {
 			var control = this, selection, mediaFrame, mediaFrameProps;
@@ -253,8 +254,8 @@
 		/**
 		 * Open the media select frame to chose an item.
 		 *
-		 * @since WP-4.9.0
-		 * @returns {void}
+		 * @since 4.9.0
+		 * @return {void}
 		 */
 		selectMedia: function selectMedia() {
 			var control = this, selection, mediaFrame, mediaFrameProps;
@@ -318,9 +319,9 @@
 		/**
 		 * Clear the selected attachment when it is deleted in the media select frame.
 		 *
-		 * @since WP-4.9.0
+		 * @since 4.9.0
 		 * @param {wp.media.models.Attachment} attachment - Attachment.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		handleAttachmentDestroy: function handleAttachmentDestroy( attachment ) {
 			var control = this;

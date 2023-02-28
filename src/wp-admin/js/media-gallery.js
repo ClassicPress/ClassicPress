@@ -1,14 +1,16 @@
-/* global ajaxurl */
-
 /**
  * This file is used on media-upload.php which has been replaced by media-new.php and upload.php
- * Deprecated since WP-3.5.0
+ *
+ * @deprecated 3.5.0
+ * @output wp-admin/js/media-gallery.js
  */
+
+ /* global ajaxurl */
 jQuery(function($) {
 	/**
 	 * Adds a click event handler to the element with a 'wp-gallery' class.
 	 */
-	$( 'body' ).bind( 'click.wp-gallery', function(e) {
+	$( 'body' ).on( 'click.wp-gallery', function(e) {
 		var target = $( e.target ), id, img_size, nonceValue;
 
 		if ( target.hasClass( 'wp-set-header' ) ) {
@@ -22,7 +24,7 @@ jQuery(function($) {
 			nonceValue = $( '#_wpnonce' ).val() && '';
 
 			/**
-			 * This AJAX action has been deprecated since WP-3.5.0, see custom-background.php
+			 * This Ajax action has been deprecated since 3.5.0, see custom-background.php
 			 */
 			jQuery.post(ajaxurl, {
 				action: 'set-background-image',

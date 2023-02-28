@@ -1,12 +1,16 @@
+/**
+ * @output wp-admin/js/editor.js
+ */
+
 window.wp = window.wp || {};
 
 ( function( $, wp ) {
 	wp.editor = wp.editor || {};
 
 	/**
-	 * @summary Utility functions for the editor.
+	 * Utility functions for the editor.
 	 *
-	 * @since WP-2.5.0
+	 * @since 2.5.0
 	 */
 	function SwitchEditors() {
 		var tinymce, $$,
@@ -18,11 +22,11 @@ window.wp = window.wp || {};
 				$$ = tinymce.$;
 
 				/**
-				 * @summary Handles onclick events for the Visual/Text tabs.
+				 * Handles onclick events for the Visual/Text tabs.
 				 *
-				 * @since WP-4.3.0
+				 * @since 4.3.0
 				 *
-				 * @returns {void}
+				 * @return {void}
 				 */
 				$$( document ).on( 'click', function( event ) {
 					var id, mode,
@@ -38,12 +42,12 @@ window.wp = window.wp || {};
 		}
 
 		/**
-		 * @summary Returns the height of the editor toolbar(s) in px.
+		 * Returns the height of the editor toolbar(s) in px.
 		 *
-		 * @since WP-3.9.0
+		 * @since 3.9.0
 		 *
 		 * @param {Object} editor The TinyMCE editor.
-		 * @returns {number} If the height is between 10 and 200 return the height,
+		 * @return {number} If the height is between 10 and 200 return the height,
 		 * else return 30.
 		 */
 		function getToolbarHeight( editor ) {
@@ -58,15 +62,15 @@ window.wp = window.wp || {};
 		}
 
 		/**
-		 * @summary Switches the editor between Visual and Text mode.
+		 * Switches the editor between Visual and Text mode.
 		 *
-		 * @since WP-2.5.0
+		 * @since 2.5.0
 		 *
 		 * @memberof switchEditors
 		 *
 		 * @param {string} id The id of the editor you want to change the editor mode for. Default: `content`.
 		 * @param {string} mode The mode you want to switch to. Default: `toggle`.
-		 * @returns {void}
+		 * @return {void}
 		 */
 		function switchEditor( id, mode ) {
 			id = id || 'content';
@@ -108,7 +112,7 @@ window.wp = window.wp || {};
 				}
 
 				if ( keepSelection ) {
-					// Save the selection
+					// Save the selection.
 					addHTMLBookmarkInTextAreaContent( $textarea );
 				}
 
@@ -127,7 +131,7 @@ window.wp = window.wp || {};
 					}
 
 					if ( editor.getParam( 'wp_keep_scroll_position' ) ) {
-						// Restore the selection
+						// Restore the selection.
 						focusHTMLBookmarkInVisualEditor( editor );
 					}
 				} else {
@@ -145,7 +149,8 @@ window.wp = window.wp || {};
 				}
 
 				if ( editor ) {
-					// Don't resize the textarea in iOS. The iframe is forced to 100% height there, we shouldn't match it.
+					// Don't resize the textarea in iOS.
+					// The iframe is forced to 100% height there, we shouldn't match it.
 					if ( ! tinymce.Env.iOS ) {
 						iframe = editor.iframeElement;
 						editorHeight = iframe ? parseInt( iframe.style.height, 10 ) : 0;
@@ -173,7 +178,8 @@ window.wp = window.wp || {};
 						selectTextInTextArea( editor, selectionRange );
 					}
 				} else {
-					// There is probably a JS error on the page. The TinyMCE editor instance doesn't exist. Show the textarea.
+					// There is probably a JS error on the page.
+					// The TinyMCE editor instance doesn't exist. Show the textarea.
 					$textarea.css({ 'display': '', 'visibility': '' });
 				}
 
@@ -184,7 +190,7 @@ window.wp = window.wp || {};
 		}
 
 		/**
-		 * @summary Checks if a cursor is inside an HTML tag or comment.
+		 * Checks if a cursor is inside an HTML tag or comment.
 		 *
 		 * In order to prevent breaking HTML tags when selecting text, the cursor
 		 * must be moved to either the start or end of the tag.
@@ -198,14 +204,14 @@ window.wp = window.wp || {};
 		 * @param {string} content The test content where the cursor is.
 		 * @param {number} cursorPosition The cursor position inside the content.
 		 *
-		 * @returns {(null|Object)} Null if cursor is not in a tag, Object if the cursor is inside a tag.
+		 * @return {(null|Object)} Null if cursor is not in a tag, Object if the cursor is inside a tag.
 		 */
 		function getContainingTagInfo( content, cursorPosition ) {
 			var lastLtPos = content.lastIndexOf( '<', cursorPosition - 1 ),
 				lastGtPos = content.lastIndexOf( '>', cursorPosition );
 
 			if ( lastLtPos > lastGtPos || content.substr( cursorPosition, 1 ) === '>' ) {
-				// find what the tag is
+				// Find what the tag is.
 				var tagContent = content.substr( lastLtPos ),
 					tagMatch = tagContent.match( /<\s*(\/)?(\w+|\!-{2}.*-{2})/ );
 
@@ -218,7 +224,7 @@ window.wp = window.wp || {};
 
 				return {
 					ltPos: lastLtPos,
-					gtPos: lastLtPos + closingGt + 1, // offset by one to get the position _after_ the character,
+					gtPos: lastLtPos + closingGt + 1, // Offset by one to get the position _after_ the character.
 					tagType: tagType,
 					isClosingTag: !! tagMatch[1]
 				};
@@ -227,7 +233,7 @@ window.wp = window.wp || {};
 		}
 
 		/**
-		 * @summary Check if the cursor is inside a shortcode
+		 * Checks if the cursor is inside a shortcode
 		 *
 		 * If the cursor is inside a shortcode wrapping tag, e.g. `[caption]` it's better to
 		 * move the selection marker to before or after the shortcode.
@@ -244,7 +250,7 @@ window.wp = window.wp || {};
 		 * @param {number} cursorPosition    The cursor position to check.
 		 *
 		 * @return {(undefined|Object)} Undefined if the cursor is not wrapped in a shortcode tag.
-		 *                                Information about the wrapping shortcode tag if it's wrapped in one.
+		 *                              Information about the wrapping shortcode tag if it's wrapped in one.
 		 */
 		function getShortcodeWrapperInfo( content, cursorPosition ) {
 			var contentShortcodes = getShortCodePositionsInText( content );
@@ -281,7 +287,7 @@ window.wp = window.wp || {};
 		}
 
 		/**
-		 * @summary Get all shortcodes and their positions in the content
+		 * Gets all shortcodes and their positions in the content
 		 *
 		 * This function returns all the shortcodes that could be found in the textarea content
 		 * along with their character positions and boundaries.
@@ -365,7 +371,7 @@ window.wp = window.wp || {};
 		 * Using DomQuery syntax to create it, since it's used as both text and as a DOM element.
 		 *
 		 * @param {Object} domLib DOM library instance.
-		 * @param {string} content The content to insert into the cusror marker element.
+		 * @param {string} content The content to insert into the cursor marker element.
 		 */
 		function getCursorMarkerSpan( domLib, content ) {
 			return domLib( '<span>' ).css( {
@@ -378,7 +384,7 @@ window.wp = window.wp || {};
 		}
 
 		/**
-		 * @summary Get adjusted selection cursor positions according to HTML tags, comments, and shortcodes.
+		 * Gets adjusted selection cursor positions according to HTML tags, comments, and shortcodes.
 		 *
 		 * Shortcodes and HTML codes are a bit of a special case when selecting, since they may render
 		 * content in Visual mode. If we insert selection markers somewhere inside them, it's really possible
@@ -399,7 +405,7 @@ window.wp = window.wp || {};
 
 			var cursorStart = cursorPositions.cursorStart,
 				cursorEnd = cursorPositions.cursorEnd,
-				// check if the cursor is in a tag and if so, adjust it
+				// Check if the cursor is in a tag and if so, adjust it.
 				isCursorStartInTag = getContainingTagInfo( content, cursorStart );
 
 			if ( isCursorStartInTag ) {
@@ -461,13 +467,13 @@ window.wp = window.wp || {};
 		}
 
 		/**
-		 * @summary Adds text selection markers in the editor textarea.
+		 * Adds text selection markers in the editor textarea.
 		 *
 		 * Adds selection markers in the content of the editor `textarea`.
 		 * The method directly manipulates the `textarea` content, to allow TinyMCE plugins
 		 * to run after the markers are added.
 		 *
-		 * @param {object} $textarea TinyMCE's textarea wrapped as a DomQuery object
+		 * @param {Object} $textarea TinyMCE's textarea wrapped as a DomQuery object
 		 */
 		function addHTMLBookmarkInTextAreaContent( $textarea ) {
 			if ( ! $textarea || ! $textarea.length ) {
@@ -502,16 +508,16 @@ window.wp = window.wp || {};
 			}
 
 			textArea.value = [
-				textArea.value.slice( 0, htmlModeCursorStartPosition ), // text until the cursor/selection position
-				cursorMarkerSkeleton.clone()							// cursor/selection start marker
+				textArea.value.slice( 0, htmlModeCursorStartPosition ), // Text until the cursor/selection position.
+				cursorMarkerSkeleton.clone()							// Cursor/selection start marker.
 					.addClass( 'mce_SELRES_start' )[0].outerHTML,
-				selectedText, 											// selected text with end cursor/position marker
-				textArea.value.slice( htmlModeCursorEndPosition )		// text from last cursor/selection position to end
+				selectedText, 											// Selected text with end cursor/position marker.
+				textArea.value.slice( htmlModeCursorEndPosition )		// Text from last cursor/selection position to end.
 			].join( '' );
 		}
 
 		/**
-		 * @summary Focus the selection markers in Visual mode.
+		 * Focuses the selection markers in Visual mode.
 		 *
 		 * The method checks for existing selection markers inside the editor DOM (Visual mode)
 		 * and create a selection between the two nodes using the DOM `createRange` selection API
@@ -550,12 +556,12 @@ window.wp = window.wp || {};
 		}
 
 		/**
-		 * @summary Remove selection marker and the parent node if it is an empty paragraph.
+		 * Removes selection marker and the parent node if it is an empty paragraph.
 		 *
 		 * By default TinyMCE wraps loose inline tags in a `<p>`.
 		 * When removing selection markers an empty `<p>` may be left behind, remove it.
 		 *
-		 * @param {object} $marker The marker to be removed from the editor DOM, wrapped in an instnce of `editor.$`
+		 * @param {Object} $marker The marker to be removed from the editor DOM, wrapped in an instnce of `editor.$`
 		 */
 		function removeSelectionMarker( $marker ) {
 			var $markerParent = $marker.parent();
@@ -569,7 +575,7 @@ window.wp = window.wp || {};
 		}
 
 		/**
-		 * @summary Scrolls the content to place the selected element in the center of the screen.
+		 * Scrolls the content to place the selected element in the center of the screen.
 		 *
 		 * Takes an element, that is usually the selection start element, selected in
 		 * `focusHTMLBookmarkInVisualEditor()` and scrolls the screen so the element appears roughly
@@ -644,7 +650,7 @@ window.wp = window.wp || {};
 		}
 
 		/**
-		 * @summary Finds the current selection position in the Visual editor.
+		 * Finds the current selection position in the Visual editor.
 		 *
 		 * Find the current selection in the Visual editor by inserting marker elements at the start
 		 * and end of the selection.
@@ -654,8 +660,8 @@ window.wp = window.wp || {};
 		 * Check the notes in the comments in the code below for more information on some gotchas
 		 * and why this solution was chosen.
 		 *
-		 * @param {Object} editor The editor where we must find the selection
-		 * @returns {(null|Object)} The selection range position in the editor
+		 * @param {Object} editor The editor where we must find the selection.
+		 * @return {(null|Object)} The selection range position in the editor.
 		 */
 		function findBookmarkedPosition( editor ) {
 			// Get the TinyMCE `window` reference, since we need to access the raw selection.
@@ -800,7 +806,7 @@ window.wp = window.wp || {};
 					endMatchIndex -= endMatch[1].length;
 				}
 
-				// We need to adjust the end position to discard the length of the range start marker
+				// We need to adjust the end position to discard the length of the range start marker.
 				endIndex = endMatchIndex - startMatchLength;
 			}
 
@@ -811,7 +817,7 @@ window.wp = window.wp || {};
 		}
 
 		/**
-		 * @summary Selects text in the TinyMCE `textarea`.
+		 * Selects text in the TinyMCE `textarea`.
 		 *
 		 * Selects the text in TinyMCE's textarea that's between `selection.start` and `selection.end`.
 		 *
@@ -822,7 +828,7 @@ window.wp = window.wp || {};
 		 * @param {Object} selection Selection data.
 		 */
 		function selectTextInTextArea( editor, selection ) {
-			// only valid in the text area mode and if we have selection
+			// Only valid in the text area mode and if we have selection.
 			if ( ! selection ) {
 				return;
 			}
@@ -832,11 +838,11 @@ window.wp = window.wp || {};
 				end = selection.end || selection.start;
 
 			if ( textArea.focus ) {
-				// Wait for the Visual editor to be hidden, then focus and scroll to the position
+				// Wait for the Visual editor to be hidden, then focus and scroll to the position.
 				setTimeout( function() {
 					textArea.setSelectionRange( start, end );
 					if ( textArea.blur ) {
-						// defocus before focusing
+						// Defocus before focusing.
 						textArea.blur();
 					}
 					textArea.focus();
@@ -852,13 +858,13 @@ window.wp = window.wp || {};
 		} );
 
 		/**
-		 * @summary Replaces <p> tags with two line breaks. "Opposite" of wpautop().
+		 * Replaces <p> tags with two line breaks. "Opposite" of wpautop().
 		 *
 		 * Replaces <p> tags with two line breaks except where the <p> has attributes.
 		 * Unifies whitespace.
 		 * Indents <li>, <dt> and <dd> for better readability.
 		 *
-		 * @since WP-2.5.0
+		 * @since 2.5.0
 		 *
 		 * @memberof switchEditors
 		 *
@@ -991,16 +997,16 @@ window.wp = window.wp || {};
 		}
 
 		/**
-		 * @summary Replaces two line breaks with a paragraph tag and one line break with a <br>.
+		 * Replaces two line breaks with a paragraph tag and one line break with a <br>.
 		 *
 		 * Similar to `wpautop()` in formatting.php.
 		 *
-		 * @since WP-2.5.0
+		 * @since 2.5.0
 		 *
 		 * @memberof switchEditors
 		 *
 		 * @param {string} text The text input.
-		 * @returns {string} The formatted text.
+		 * @return {string} The formatted text.
 		 */
 		function autop( text ) {
 			var preserve_linebreaks = false,
@@ -1120,14 +1126,14 @@ window.wp = window.wp || {};
 		}
 
 		/**
-		 * @summary Fires custom jQuery events `beforePreWpautop` and `afterPreWpautop` when jQuery is available.
+		 * Fires custom jQuery events `beforePreWpautop` and `afterPreWpautop` when jQuery is available.
 		 *
-		 * @since WP-2.9.0
+		 * @since 2.9.0
 		 *
 		 * @memberof switchEditors
 		 *
-		 * @param {String} html The content from the visual editor.
-		 * @returns {String} the filtered content.
+		 * @param {string} html The content from the visual editor.
+		 * @return {string} the filtered content.
 		 */
 		function pre_wpautop( html ) {
 			var obj = { o: exports, data: html, unfiltered: html };
@@ -1146,14 +1152,14 @@ window.wp = window.wp || {};
 		}
 
 		/**
-		 * @summary Fires custom jQuery events `beforeWpautop` and `afterWpautop` when jQuery is available.
+		 * Fires custom jQuery events `beforeWpautop` and `afterWpautop` when jQuery is available.
 		 *
-		 * @since WP-2.9.0
+		 * @since 2.9.0
 		 *
 		 * @memberof switchEditors
 		 *
-		 * @param {String} text The content from the text editor.
-		 * @returns {String} filtered content.
+		 * @param {string} text The content from the text editor.
+		 * @return {string} filtered content.
 		 */
 		function wpautop( text ) {
 			var obj = { o: exports, data: text, unfiltered: text };
@@ -1172,7 +1178,7 @@ window.wp = window.wp || {};
 		}
 
 		if ( $ ) {
-			$( document ).ready( init );
+			$( init );
 		} else if ( document.addEventListener ) {
 			document.addEventListener( 'DOMContentLoaded', init, false );
 			window.addEventListener( 'load', init, false );
@@ -1200,8 +1206,9 @@ window.wp = window.wp || {};
 	}
 
 	/**
-	 * @namespace {SwitchEditors} switchEditors
 	 * Expose the switch editors to be used globally.
+	 *
+	 * @namespace switchEditors
 	 */
 	window.switchEditors = new SwitchEditors();
 
@@ -1214,11 +1221,11 @@ window.wp = window.wp || {};
 	 * Settings for both TinyMCE and Quicktags can be passed on initialization, and are "filtered"
 	 * with custom jQuery events on the document element, wp-before-tinymce-init and wp-before-quicktags-init.
 	 *
-	 * @since WP-4.8.0
+	 * @since 4.8.0
 	 *
 	 * @param {string} id The HTML id of the textarea that is used for the editor.
 	 *                    Has to be jQuery compliant. No brackets, special chars, etc.
-	 * @param {object} settings Example:
+	 * @param {Object} settings Example:
 	 * settings = {
 	 *    // See https://www.tinymce.com/docs/configure/integration-and-setup/.
 	 *    // Alternatively set to `true` to use the defaults.
@@ -1244,7 +1251,7 @@ window.wp = window.wp || {};
 
 		defaults = wp.editor.getDefaultSettings();
 
-		// Initialize TinyMCE by default
+		// Initialize TinyMCE by default.
 		if ( ! settings ) {
 			settings = {
 				tinymce: true
@@ -1344,7 +1351,7 @@ window.wp = window.wp || {};
 	 *
 	 * Intended for use with editors that were initialized with wp.editor.initialize().
 	 *
-	 * @since WP-4.8.0
+	 * @since 4.8.0
 	 *
 	 * @param {string} id The HTML id of the editor textarea.
 	 */
@@ -1383,7 +1390,7 @@ window.wp = window.wp || {};
 	 *
 	 * Intended for use with editors that were initialized with wp.editor.initialize().
 	 *
-	 * @since WP-4.8.0
+	 * @since 4.8.0
 	 *
 	 * @param {string} id The HTML id of the editor textarea.
 	 * @return The editor content.
