@@ -990,8 +990,8 @@ function wp_user_settings() {
 			)
 		);
 	} else {
-		setcookie( 'wp-settings-' . $user_id, $settings, time() + YEAR_IN_SECONDS, SITECOOKIEPATH . '; Samesite=' . $same_site, null, $secure );
-		setcookie( 'wp-settings-time-' . $user_id, time(), time() + YEAR_IN_SECONDS, SITECOOKIEPATH . '; Samesite=' . $same_site, null, $secure );
+		setcookie( 'wp-settings-' . $user_id, $settings, time() + YEAR_IN_SECONDS, SITECOOKIEPATH . '; SameSite=' . $same_site, null, $secure );
+		setcookie( 'wp-settings-time-' . $user_id, time(), time() + YEAR_IN_SECONDS, SITECOOKIEPATH . '; SameSite=' . $same_site, null, $secure );
 	}
 	$_COOKIE[ 'wp-settings-' . $user_id ] = $settings;
 }

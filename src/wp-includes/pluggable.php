@@ -1048,11 +1048,11 @@ if ( ! function_exists( 'wp_set_auth_cookie' ) ) :
 				);
 			}
 		} else {
-			setcookie( $auth_cookie_name, $auth_cookie, $expire, PLUGINS_COOKIE_PATH . '; Samesite=' . $same_site, COOKIE_DOMAIN, $secure, true );
-			setcookie( $auth_cookie_name, $auth_cookie, $expire, ADMIN_COOKIE_PATH . '; Samesite=' . $same_site, COOKIE_DOMAIN, $secure, true );
-			setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $expire, COOKIEPATH . '; Samesite=' . $same_site, COOKIE_DOMAIN, $secure_logged_in_cookie, true );
+			setcookie( $auth_cookie_name, $auth_cookie, $expire, PLUGINS_COOKIE_PATH . '; SameSite=' . $same_site, COOKIE_DOMAIN, $secure, true );
+			setcookie( $auth_cookie_name, $auth_cookie, $expire, ADMIN_COOKIE_PATH . '; SameSite=' . $same_site, COOKIE_DOMAIN, $secure, true );
+			setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $expire, COOKIEPATH . '; SameSite=' . $same_site, COOKIE_DOMAIN, $secure_logged_in_cookie, true );
 			if ( COOKIEPATH != SITECOOKIEPATH ) {
-				setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $expire, SITECOOKIEPATH . '; Samesite=' . $same_site, COOKIE_DOMAIN, $secure_logged_in_cookie, true );
+				setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $expire, SITECOOKIEPATH . '; SameSite=' . $same_site, COOKIE_DOMAIN, $secure_logged_in_cookie, true );
 			}
 		}
 	}
