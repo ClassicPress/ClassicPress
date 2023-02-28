@@ -7,27 +7,25 @@
  */
 define( 'WP_REPAIRING', true );
 
-require_once dirname( dirname( dirname( __FILE__ ) ) ) . '/wp-load.php';
+require_once dirname( dirname( __DIR__ ) ) . '/wp-load.php';
 
 header( 'Content-Type: text/html; charset=utf-8' );
 ?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?>>
+<html <?php language_attributes(); ?>>
 <head>
 	<meta name="viewport" content="width=device-width" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex,nofollow" />
 	<title><?php _e( 'ClassicPress &rsaquo; Database Repair' ); ?></title>
-	<?php
-	wp_admin_css( 'install', true );
-	?>
+	<?php wp_admin_css( 'install', true ); ?>
 </head>
 <body class="wp-core-ui">
 <p id="logo"><a href="<?php echo esc_url( 'https://www.classicpress.net/' ); ?>" tabindex="-1"><?php _e( 'ClassicPress' ); ?></a></p>
 
 <?php
 
-if ( ! defined( 'WP_ALLOW_REPAIR' ) ) {
+if ( ! defined( 'WP_ALLOW_REPAIR' ) || ! WP_ALLOW_REPAIR ) {
 
 	echo '<h1 class="screen-reader-text">' . __( 'Allow automatic database repair' ) . '</h1>';
 
@@ -39,7 +37,17 @@ if ( ! defined( 'WP_ALLOW_REPAIR' ) ) {
 	);
 	echo "</p><p><code>define('WP_ALLOW_REPAIR', true);</code></p>";
 
-	$default_key     = 'put your unique phrase here';
+	$default_keys    = array_unique(
+		array(
+			'put your unique phrase here',
+			/*
+			 * translators: This string should only be translated if wp-config-sample.php is localized.
+			 * You can check the localized release package or
+			 * https://i18n.svn.wordpress.org/<locale code>/branches/<wp version>/dist/wp-config-sample.php
+			 */
+			__( 'put your unique phrase here' ),
+		)
+	);
 	$missing_key     = false;
 	$duplicated_keys = array();
 
@@ -53,9 +61,11 @@ if ( ! defined( 'WP_ALLOW_REPAIR' ) ) {
 		}
 	}
 
-	// If at least one key uses the default value, consider it duplicated.
-	if ( isset( $duplicated_keys[ $default_key ] ) ) {
-		$duplicated_keys[ $default_key ] = true;
+	// If at least one key uses a default value, consider it duplicated.
+	foreach ( $default_keys as $default_key ) {
+		if ( isset( $duplicated_keys[ $default_key ] ) ) {
+			$duplicated_keys[ $default_key ] = true;
+		}
 	}
 
 	// Weed out all unique, non-default values.
@@ -65,8 +75,8 @@ if ( ! defined( 'WP_ALLOW_REPAIR' ) ) {
 
 		echo '<h2 class="screen-reader-text">' . __( 'Check secret keys' ) . '</h2>';
 
-		// Translators: 1: wp-config.php; 2: Secret key service URL.
-		echo '<p>' . sprintf( __( 'While you are editing your %1$s file, take a moment to make sure you have all 8 keys and that they are unique. You can generate these using the <a href="%2$s">ClassicPress.net secret key service</a>.' ), '<code>wp-config.php</code>', 'https://api.classicpress.net/secret-key/1.0/salt/' ) . '</p>';
+		/* translators: 1: wp-config.php, 2: Secret key service URL. */
+		echo '<p>' . sprintf( __( 'While you are editing your %1$s file, take a moment to make sure you have all 8 keys and that they are unique. You can generate these using the <a href="%2$s">WordPress.org secret key service</a>.' ), '<code>wp-config.php</code>', 'https://api.wordpress.org/secret-key/1.1/salt/' ) . '</p>';
 	}
 } elseif ( isset( $_GET['repair'] ) ) {
 
@@ -89,7 +99,7 @@ if ( ! defined( 'WP_ALLOW_REPAIR' ) ) {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param array $tables Array of prefixed table names to be repaired.
+	 * @param string[] $tables Array of prefixed table names to be repaired.
 	 */
 	$tables = array_merge( $tables, (array) apply_filters( 'tables_to_repair', array() ) );
 
@@ -102,40 +112,40 @@ if ( ! defined( 'WP_ALLOW_REPAIR' ) ) {
 			/* translators: %s: Table name. */
 			printf( __( 'The %s table is okay.' ), "<code>$table</code>" );
 		} else {
-			/* translators: 1: table name, 2: error message, */
-			printf( __( 'The %1$s table is not okay. It is reporting the following error: %2$s. ClassicPress will attempt to repair this table&hellip;' ), "<code>$table</code>", "<code>$check->Msg_text</code>" );
+			/* translators: 1: Table name, 2: Error message. */
+			printf( __( 'The %1$s table is not okay. It is reporting the following error: %2$s. WordPress will attempt to repair this table&hellip;' ), "<code>$table</code>", "<code>$check->Msg_text</code>" );
 
 			$repair = $wpdb->get_row( "REPAIR TABLE $table" );
 
 			echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;';
-			if ( 'OK' === $check->Msg_text ) {
+			if ( 'OK' === $repair->Msg_text ) {
 				/* translators: %s: Table name. */
 				printf( __( 'Successfully repaired the %s table.' ), "<code>$table</code>" );
 			} else {
 				/* translators: 1: Table name, 2: Error message. */
-				printf( __( 'Failed to repair the %1$s table. Error: %2$s' ), "<code>$table</code>", "<code>$check->Msg_text</code>" ) . '<br />';
-				$problems[ $table ] = $check->Msg_text;
+				printf( __( 'Failed to repair the %1$s table. Error: %2$s' ), "<code>$table</code>", "<code>$repair->Msg_text</code>" ) . '<br />';
+				$problems[ $table ] = $repair->Msg_text;
 				$okay               = false;
 			}
 		}
 
 		if ( $okay && $optimize ) {
-			$check = $wpdb->get_row( "ANALYZE TABLE $table" );
+			$analyze = $wpdb->get_row( "ANALYZE TABLE $table" );
 
 			echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;';
-			if ( 'Table is already up to date' === $check->Msg_text ) {
+			if ( 'Table is already up to date' === $analyze->Msg_text ) {
 				/* translators: %s: Table name. */
 				printf( __( 'The %s table is already optimized.' ), "<code>$table</code>" );
 			} else {
-				$check = $wpdb->get_row( "OPTIMIZE TABLE $table" );
+				$optimize = $wpdb->get_row( "OPTIMIZE TABLE $table" );
 
 				echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;';
-				if ( 'OK' === $check->Msg_text || 'Table is already up to date' === $check->Msg_text ) {
+				if ( 'OK' === $optimize->Msg_text || 'Table is already up to date' === $optimize->Msg_text ) {
 					/* translators: %s: Table name. */
 					printf( __( 'Successfully optimized the %s table.' ), "<code>$table</code>" );
 				} else {
-					/* translators: 1: table name, 2: error message, */
-					printf( __( 'Failed to optimize the %1$s table. Error: %2$s' ), "<code>$table</code>", "<code>$check->Msg_text</code>" );
+					/* translators: 1: Table name. 2: Error message. */
+					printf( __( 'Failed to optimize the %1$s table. Error: %2$s' ), "<code>$table</code>", "<code>$optimize->Msg_text</code>" );
 				}
 			}
 		}
@@ -143,7 +153,11 @@ if ( ! defined( 'WP_ALLOW_REPAIR' ) ) {
 	}
 
 	if ( $problems ) {
-		printf( '<p>' . __( 'Some database problems could not be repaired. Please copy-and-paste the following list of errors into the <a href="%s">support forum</a> for additional assistance.' ) . '</p>', __( 'https://forums.classicpress.net/c/support/' ) );
+		printf(
+			/* translators: %s: URL to "Fixing WordPress" forum. */
+			'<p>' . __( 'Some database problems could not be repaired. Please copy-and-paste the following list of errors to the <a href="%s">WordPress support forums</a> to get additional assistance.' ) . '</p>',
+			__( 'https://wordpress.org/support/forum/how-to-and-troubleshooting' )
+		);
 		$problem_output = '';
 		foreach ( $problems as $table => $problem ) {
 			$problem_output .= "$table: $problem\n";

@@ -7,11 +7,18 @@
  */
 
 /** ClassicPress Administration Bootstrap */
-require_once dirname( __FILE__ ) . '/admin.php';
+require_once __DIR__ . '/admin.php';
 
+// This file was used to also display the Privacy tab on the About screen from 4.9.6 until 5.3.0.
+if ( isset( $_GET['privacy-notice'] ) ) {
+	wp_redirect( admin_url( 'privacy.php' ), 301 );
+	exit;
+}
+
+// Used in the HTML title tag.
 $title = __( 'Freedoms' );
 
-require ABSPATH . 'wp-admin/admin-header.php';
+require_once ABSPATH . 'wp-admin/admin-header.php';
 
 $is_privacy_notice = isset( $_GET['privacy-notice'] );
 

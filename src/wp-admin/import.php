@@ -9,12 +9,13 @@
 define( 'WP_LOAD_IMPORTERS', true );
 
 /** Load ClassicPress Bootstrap */
-require_once dirname( __FILE__ ) . '/admin.php';
+require_once __DIR__ . '/admin.php';
 
 if ( ! current_user_can( 'import' ) ) {
-	wp_die( __( 'Sorry, you are not allowed to import content.' ) );
+	wp_die( __( 'Sorry, you are not allowed to import content into this site.' ) );
 }
 
+// Used in the HTML title tag.
 $title = __( 'Import' );
 
 get_current_screen()->add_help_tab(
@@ -28,7 +29,7 @@ get_current_screen()->add_help_tab(
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-	'<p>' . __( '<a href="https://codex.wordpress.org/Tools_Import_Screen">Documentation on Import</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://wordpress.org/support/article/tools-import-screen/">Documentation on Import</a>' ) . '</p>' .
 	'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support Forums</a>' ) . '</p>'
 );
 
@@ -39,10 +40,10 @@ if ( current_user_can( 'install_plugins' ) ) {
 	$popular_importers = array();
 }
 
-// Detect and redirect invalid importers like 'movabletype', which is registered as 'mt'
+// Detect and redirect invalid importers like 'movabletype', which is registered as 'mt'.
 if ( ! empty( $_GET['invalid'] ) && isset( $popular_importers[ $_GET['invalid'] ] ) ) {
 	$importer_id = $popular_importers[ $_GET['invalid'] ]['importer-id'];
-	if ( $importer_id != $_GET['invalid'] ) { // Prevent redirect loops.
+	if ( $importer_id !== $_GET['invalid'] ) { // Prevent redirect loops.
 		wp_redirect( admin_url( 'admin.php?import=' . $importer_id ) );
 		exit;
 	}
@@ -61,16 +62,16 @@ $parent_file = 'tools.php';
 <h1><?php echo esc_html( $title ); ?></h1>
 <?php if ( ! empty( $_GET['invalid'] ) ) : ?>
 	<div class="error">
-		<p><strong><?php _e( 'ERROR:' ); ?></strong>
-		<?php
-			/* translators: %s: importer slug */
+		<p><strong><?php _e( 'Error:' ); ?></strong>
+			<?php
+			/* translators: %s: Importer slug. */
 			printf( __( 'The %s importer is invalid or is not installed.' ), '<strong>' . esc_html( $_GET['invalid'] ) . '</strong>' );
-		?>
+			?>
 		</p>
 	</div>
 <?php endif; ?>
-<p><?php _e( 'If you have posts or comments in another system, ClassicPress can import those into this site. To get started, choose a system to import from below:' ); ?></p>
-<p>
+<p><?php _e( 'If you have posts or comments in another system, WordPress can import those into this site. To get started, choose a system to import from below:' ); ?></p>
+
 <?php
 printf(
 	__( 'If you need a WordPress Importer, follow <a href="%s">these instructions</a> to install it manually.' ),
@@ -91,7 +92,7 @@ foreach ( $popular_importers as $pop_importer => $pop_data ) {
 		continue;
 	}
 
-	// Fill the array of registered (already installed) importers with data of the popular importers from the ClassicPress.net API.
+	// Fill the array of registered (already installed) importers with data of the popular importers from the WordPress.org API.
 	$importers[ $pop_data['importer-id'] ] = array(
 		$pop_data['name'],
 		$pop_data['description'],
@@ -100,7 +101,7 @@ foreach ( $popular_importers as $pop_importer => $pop_data ) {
 }
 
 if ( empty( $importers ) ) {
-	echo '<p>' . __( 'No importers are available.' ) . '</p>'; // TODO: make more helpful
+	echo '<p>' . __( 'No importers are available.' ) . '</p>'; // TODO: Make more helpful.
 } else {
 	uasort( $importers, '_usort_by_first_member' );
 	?>
@@ -135,7 +136,7 @@ if ( empty( $importers ) ) {
 					$action      = sprintf(
 						'<a href="%s" aria-label="%s">%s</a>',
 						esc_url( $url ),
-						/* translators: %s: Importer name */
+						/* translators: %s: Importer name. */
 						esc_attr( sprintf( __( 'Run %s' ), $data[0] ) ),
 						__( 'Run Importer' )
 					);
@@ -162,13 +163,13 @@ if ( empty( $importers ) ) {
 						esc_url( $url ),
 						esc_attr( $plugin_slug ),
 						esc_attr( $data[0] ),
-						/* translators: %s: Importer name */
-						esc_attr( sprintf( __( 'Install %s' ), $data[0] ) ),
+						/* translators: %s: Importer name. */
+						esc_attr( sprintf( _x( 'Install %s now', 'plugin' ), $data[0] ) ),
 						__( 'Install Now' )
 					);
 				} else {
 					$action = sprintf(
-						/* translators: URL to wp-admin/import.php */
+						/* translators: %s: URL to Import screen on the main site. */
 						__( 'This importer is not installed. Please install importers from <a href="%s">the main site</a>.' ),
 						get_admin_url( get_current_network_id(), 'import.php' )
 					);
@@ -184,7 +185,7 @@ if ( empty( $importers ) ) {
 			$action = sprintf(
 				'<a href="%1$s" aria-label="%2$s">%3$s</a>',
 				esc_url( $url ),
-				/* translators: %s: Importer name */
+				/* translators: %s: Importer name. */
 				esc_attr( sprintf( __( 'Run %s' ), $data[0] ) ),
 				__( 'Run Importer' )
 			);
@@ -207,7 +208,7 @@ if ( empty( $importers ) ) {
 			$action .= sprintf(
 				' | <a href="%1$s" class="thickbox open-plugin-details-modal" aria-label="%2$s">%3$s</a>',
 				esc_url( $url ),
-				/* translators: %s: Importer name */
+				/* translators: %s: Importer name. */
 				esc_attr( sprintf( __( 'More information about %s' ), $data[0] ) ),
 				__( 'Details' )
 			);
@@ -231,6 +232,7 @@ if ( empty( $importers ) ) {
 
 if ( current_user_can( 'install_plugins' ) ) {
 	echo '<p>' . sprintf(
+		/* translators: %s: URL to Add Plugins screen. */
 		__( 'If the importer you need is not listed, <a href="%s">search the plugin directory</a> to see if an importer is available.' ),
 		esc_url( network_admin_url( 'plugin-install.php?tab=search&type=tag&s=importer' ) )
 	) . '</p>';
@@ -243,4 +245,4 @@ if ( current_user_can( 'install_plugins' ) ) {
 wp_print_request_filesystem_credentials_modal();
 wp_print_admin_notice_templates();
 
-require ABSPATH . 'wp-admin/admin-footer.php';
+require_once ABSPATH . 'wp-admin/admin-footer.php';

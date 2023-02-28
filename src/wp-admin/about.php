@@ -7,7 +7,7 @@
  */
 
 /** ClassicPress Administration Bootstrap */
-require_once dirname( __FILE__ ) . '/admin.php';
+require_once __DIR__ . '/admin.php';
 
 wp_enqueue_script( 'underscore' );
 

@@ -8,14 +8,19 @@
  */
 
 /** ClassicPress Administration Bootstrap */
-require_once dirname( __FILE__ ) . '/admin.php';
+require_once __DIR__ . '/admin.php';
 
 if ( empty( $_REQUEST['tag_ID'] ) ) {
 	$sendback = admin_url( 'edit-tags.php' );
 	if ( ! empty( $taxnow ) ) {
 		$sendback = add_query_arg( array( 'taxonomy' => $taxnow ), $sendback );
 	}
-	wp_redirect( esc_url( $sendback ) );
+
+	if ( 'post' !== get_current_screen()->post_type ) {
+		$sendback = add_query_arg( 'post_type', get_current_screen()->post_type, $sendback );
+	}
+
+	wp_redirect( sanitize_url( $sendback ) );
 	exit;
 }
 
@@ -23,7 +28,7 @@ $tag_ID = absint( $_REQUEST['tag_ID'] );
 $tag    = get_term( $tag_ID, $taxnow, OBJECT, 'edit' );
 
 if ( ! $tag instanceof WP_Term ) {
-	wp_die( __( 'You attempted to edit an item that doesn&#8217;t exist. Perhaps it was deleted?' ) );
+	wp_die( __( 'You attempted to edit an item that does not exist. Perhaps it was deleted?' ) );
 }
 
 $tax      = get_taxonomy( $tag->taxonomy );
@@ -47,10 +52,10 @@ if ( empty( $post_type ) ) {
 	$post_type = reset( $tax->object_type );
 }
 
-if ( 'post' != $post_type ) {
-	$parent_file  = ( 'attachment' == $post_type ) ? 'upload.php' : "edit.php?post_type=$post_type";
+if ( 'post' !== $post_type ) {
+	$parent_file  = ( 'attachment' === $post_type ) ? 'upload.php' : "edit.php?post_type=$post_type";
 	$submenu_file = "edit-tags.php?taxonomy=$taxonomy&amp;post_type=$post_type";
-} elseif ( 'link_category' == $taxonomy ) {
+} elseif ( 'link_category' === $taxonomy ) {
 	$parent_file  = 'link-manager.php';
 	$submenu_file = 'edit-tags.php?taxonomy=link_category';
 } else {
@@ -67,4 +72,4 @@ get_current_screen()->set_screen_reader_content(
 wp_enqueue_script( 'admin-tags' );
 require_once ABSPATH . 'wp-admin/admin-header.php';
 require ABSPATH . 'wp-admin/edit-tag-form.php';
-require ABSPATH . 'wp-admin/admin-footer.php';
+require_once ABSPATH . 'wp-admin/admin-footer.php';

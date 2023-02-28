@@ -9,7 +9,7 @@
 define( 'IFRAME_REQUEST', true );
 
 /** ClassicPress Administration Bootstrap */
-require_once dirname( __FILE__ ) . '/admin.php';
+require_once __DIR__ . '/admin.php';
 
 function wp_load_press_this() {
 	$plugin_slug = 'press-this';
@@ -64,7 +64,7 @@ function wp_load_press_this() {
 				);
 			} else {
 				$action = sprintf(
-					/* translators: URL to wp-admin/press-this.php */
+					/* translators: %s: URL to Press This bookmarklet on the main site. */
 					__( 'Press This is not installed. Please install Press This from <a href="%s">the main site</a>.' ),
 					get_admin_url( get_current_network_id(), 'press-this.php' )
 				);

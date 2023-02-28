@@ -10,7 +10,7 @@
 define( 'IFRAME_REQUEST', true );
 
 /** Load ClassicPress Administration Bootstrap */
-require_once dirname( __FILE__ ) . '/admin.php';
+require_once __DIR__ . '/admin.php';
 
 if ( ! current_user_can( 'customize' ) ) {
 	wp_die(
@@ -49,7 +49,7 @@ if ( $wp_customize->changeset_post_id() ) {
 		 * argument, settings cannot be reliably saved. Some logic short-circuits if the current value is the
 		 * same as the value being saved. This is particularly true for options via `update_option()`.
 		 *
-		 * By opening an Ajax request, this is avoided and the changeset is published. See https://core.trac.wordpress.org/ticket/39221.
+		 * By opening an Ajax request, this is avoided and the changeset is published. See #39221.
 		 */
 		$nonces       = $wp_customize->get_nonces();
 		$request_args = array(
@@ -132,10 +132,7 @@ $body_class = 'wp-core-ui wp-customizer js';
 
 if ( wp_is_mobile() ) :
 	$body_class .= ' mobile';
-
-	?>
-	<meta name="viewport" id="viewport-meta" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=1.2" />
-	<?php
+	add_filter( 'admin_viewport_meta', '_customizer_mobile_viewport_meta' );
 endif;
 
 if ( $wp_customize->is_ios() ) {
@@ -150,7 +147,7 @@ $body_class .= ' locale-' . sanitize_html_class( strtolower( str_replace( '_', '
 $admin_title = sprintf( $wp_customize->get_document_title_template(), __( 'Loading&hellip;' ) );
 
 ?>
-<title><?php echo $admin_title; ?></title>
+<title><?php echo esc_html( $admin_title ); ?></title>
 
 <script type="text/javascript">
 var ajaxurl = <?php echo wp_json_encode( admin_url( 'admin-ajax.php', 'relative' ) ); ?>,
@@ -171,6 +168,13 @@ do_action( 'customize_controls_print_styles' );
  * @since 3.4.0
  */
 do_action( 'customize_controls_print_scripts' );
+
+/**
+ * Fires in head section of Customizer controls.
+ *
+ * @since 5.5.0
+ */
+do_action( 'customize_controls_head' );
 ?>
 </head>
 <body class="<?php echo esc_attr( $body_class ); ?>">
@@ -214,7 +218,7 @@ do_action( 'customize_controls_print_scripts' );
 				<ul></ul>
 			</div>
 			<div class="wp-full-overlay-sidebar-content" tabindex="-1">
-				<div id="customize-info" class="accordion-section customize-info">
+				<div id="customize-info" class="accordion-section customize-info" data-block-theme="<?php echo (int) wp_is_block_theme(); ?>">
 					<div class="accordion-section-title">
 						<span class="preview-notice">
 						<?php
@@ -238,7 +242,7 @@ do_action( 'customize_controls_print_scripts' );
 		</div>
 
 		<div id="customize-footer-actions" class="wp-full-overlay-footer">
-			<button type="button" class="collapse-sidebar button" aria-expanded="true" aria-label="<?php echo esc_attr( _x( 'Hide Controls', 'label for hide controls button without length constraints' ) ); ?>">
+			<button type="button" class="collapse-sidebar button" aria-expanded="true" aria-label="<?php echo esc_attr_x( 'Hide Controls', 'label for hide controls button without length constraints' ); ?>">
 				<span class="collapse-sidebar-arrow"></span>
 				<span class="collapse-sidebar-label"><?php _ex( 'Hide Controls', 'short (~12 characters) label for hide controls button' ); ?></span>
 			</button>

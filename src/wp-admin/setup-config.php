@@ -1,11 +1,9 @@
 <?php
-
 /**
  * Retrieves and creates the wp-config.php file.
  *
  * The permissions for the base directory must allow for writing files in order
- * for the wp-config.php to be created using this page. Once the config file has
- * been created, the user is moved to install.php to complete the installation.
+ * for the wp-config.php to be created using this page.
  *
  * @package ClassicPress
  * @subpackage Administration
@@ -28,12 +26,10 @@ define( 'WP_SETUP_CONFIG', true );
  */
 error_reporting( 0 );
 
-// Everything relies on ABSPATH; make sure it's defined.
 if ( ! defined( 'ABSPATH' ) ) {
-	define( 'ABSPATH', dirname( dirname( __FILE__ ) ) . '/' );
+	define( 'ABSPATH', dirname( __DIR__ ) . '/' );
 }
 
-// WP settings.
 require ABSPATH . 'wp-settings.php';
 
 /** Load ClassicPress Administration Upgrade API */
@@ -42,15 +38,21 @@ require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 /** Load ClassicPress Translation Installation API */
 require_once ABSPATH . 'wp-admin/includes/translation-install.php';
 
-// Prevent browser caching.
 nocache_headers();
 
-// Check for wp-config-sample.php file up to one level up from here.
-$config_file = false;
+// Support wp-config-sample.php one level up, for the develop repo.
 if ( file_exists( ABSPATH . 'wp-config-sample.php' ) ) {
 	$config_file = file( ABSPATH . 'wp-config-sample.php' );
 } elseif ( file_exists( dirname( ABSPATH ) . '/wp-config-sample.php' ) ) {
 	$config_file = file( dirname( ABSPATH ) . '/wp-config-sample.php' );
+} else {
+	wp_die(
+		sprintf(
+			/* translators: %s: wp-config-sample.php */
+			__( 'Sorry, I need a %s file to work from. Please re-upload this file to your WordPress installation.' ),
+			'<code>wp-config-sample.php</code>'
+		)
+	);
 }
 
 // No wp-config-sample.php found? Bail.

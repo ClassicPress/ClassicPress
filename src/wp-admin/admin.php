@@ -31,11 +31,12 @@ if ( isset( $_GET['import'] ) && ! defined( 'WP_LOAD_IMPORTERS' ) ) {
 	define( 'WP_LOAD_IMPORTERS', true );
 }
 
-require_once dirname( dirname( __FILE__ ) ) . '/wp-load.php';
+require_once dirname( __DIR__ ) . '/wp-load.php';
 
 nocache_headers();
 
 if ( get_option( 'db_upgraded' ) ) {
+
 	flush_rewrite_rules();
 	update_option( 'db_upgraded', false );
 
@@ -45,33 +46,38 @@ if ( get_option( 'db_upgraded' ) ) {
 	 * @since 2.8.0
 	 */
 	do_action( 'after_db_upgrade' );
-} elseif ( get_option( 'db_version' ) != $wp_db_version && empty( $_POST ) ) {
+
+} elseif ( ! wp_doing_ajax() && empty( $_POST )
+	&& (int) get_option( 'db_version' ) !== $wp_db_version
+) {
+
 	if ( ! is_multisite() ) {
 		wp_redirect( admin_url( 'upgrade.php?_wp_http_referer=' . urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) );
 		exit;
+	}
 
-		/**
-		 * Filters whether to attempt to perform the multisite DB upgrade routine.
-		 *
-		 * In single site, the user would be redirected to wp-admin/upgrade.php.
-		 * In multisite, the DB upgrade routine is automatically fired, but only
-		 * when this filter returns true.
-		 *
-		 * If the network is 50 sites or less, it will run every time. Otherwise,
-		 * it will throttle itself to reduce load.
-		 *
-		 * @since 3.0.0
-		 *
-		 * @param bool $do_mu_upgrade Whether to perform the Multisite upgrade routine. Default true.
-		 */
-	} elseif ( apply_filters( 'do_mu_upgrade', true ) ) {
+	/**
+	 * Filters whether to attempt to perform the multisite DB upgrade routine.
+	 *
+	 * In single site, the user would be redirected to wp-admin/upgrade.php.
+	 * In multisite, the DB upgrade routine is automatically fired, but only
+	 * when this filter returns true.
+	 *
+	 * If the network is 50 sites or less, it will run every time. Otherwise,
+	 * it will throttle itself to reduce load.
+	 *
+	 * @since MU (3.0.0)
+	 *
+	 * @param bool $do_mu_upgrade Whether to perform the Multisite upgrade routine. Default true.
+	 */
+	if ( apply_filters( 'do_mu_upgrade', true ) ) {
 		$c = get_blog_count();
 
 		/*
 		 * If there are 50 or fewer sites, run every time. Otherwise, throttle to reduce load:
 		 * attempt to do no more than threshold value, with some +/- allowed.
 		 */
-		if ( $c <= 50 || ( $c > 50 && mt_rand( 0, (int) ( $c / 50 ) ) == 1 ) ) {
+		if ( $c <= 50 || ( $c > 50 && mt_rand( 0, (int) ( $c / 50 ) ) === 1 ) ) {
 			require_once ABSPATH . WPINC . '/http.php';
 			$response = wp_remote_get(
 				admin_url( 'upgrade.php?step=1' ),
@@ -92,12 +98,12 @@ require_once ABSPATH . 'wp-admin/includes/admin.php';
 
 auth_redirect();
 
-// Schedule trash collection
+// Schedule Trash collection.
 if ( ! wp_next_scheduled( 'wp_scheduled_delete' ) && ! wp_installing() ) {
 	wp_schedule_event( time(), 'daily', 'wp_scheduled_delete' );
 }
 
-// Schedule Transient cleanup.
+// Schedule transient cleanup.
 if ( ! wp_next_scheduled( 'delete_expired_transients' ) && ! wp_installing() ) {
 	wp_schedule_event( time(), 'daily', 'delete_expired_transients' );
 }
@@ -110,16 +116,16 @@ $time_format = __( 'g:i a' );
 wp_enqueue_script( 'common' );
 
 /**
- * $pagenow is set in vars.php
- * $wp_importers is sometimes set in wp-admin/includes/import.php
- * The remaining variables are imported as globals elsewhere, declared as globals here
+ * $pagenow is set in vars.php.
+ * $wp_importers is sometimes set in wp-admin/includes/import.php.
+ * The remaining variables are imported as globals elsewhere, declared as globals here.
  *
- * @global string $pagenow
+ * @global string $pagenow      The filename of the current screen.
  * @global array  $wp_importers
  * @global string $hook_suffix
  * @global string $plugin_page
- * @global string $typenow
- * @global string $taxnow
+ * @global string $typenow      The post type of the current screen.
+ * @global string $taxnow       The taxonomy of the current screen.
  */
 global $pagenow, $wp_importers, $hook_suffix, $plugin_page, $typenow, $taxnow;
 
@@ -174,7 +180,9 @@ if ( isset( $plugin_page ) ) {
 	} else {
 		$the_parent = $pagenow;
 	}
-	if ( ! $page_hook = get_plugin_page_hook( $plugin_page, $the_parent ) ) {
+
+	$page_hook = get_plugin_page_hook( $plugin_page, $the_parent );
+	if ( ! $page_hook ) {
 		$page_hook = get_plugin_page_hook( $plugin_page, $plugin_page );
 
 		// Back-compat for plugins using add_management_page().
@@ -234,7 +242,18 @@ if ( isset( $plugin_page ) ) {
 		/**
 		 * Used to call the registered callback for a plugin screen.
 		 *
-		 * @ignore
+		 * This hook uses a dynamic hook name, `$page_hook`, which refers to a mixture of plugin
+		 * page information including:
+		 * 1. The page type. If the plugin page is registered as a submenu page, such as for
+		 *    Settings, the page type would be 'settings'. Otherwise the type is 'toplevel'.
+		 * 2. A separator of '_page_'.
+		 * 3. The plugin basename minus the file extension.
+		 *
+		 * Together, the three parts form the `$page_hook`. Citing the example above,
+		 * the hook name used would be 'settings_page_pluginbasename'.
+		 *
+		 * @see get_plugin_page_hook()
+		 *
 		 * @since 1.5.0
 		 */
 		do_action( $page_hook );
@@ -243,7 +262,10 @@ if ( isset( $plugin_page ) ) {
 			wp_die( __( 'Invalid plugin page.' ) );
 		}
 
-		if ( ! ( file_exists( WP_PLUGIN_DIR . "/$plugin_page" ) && is_file( WP_PLUGIN_DIR . "/$plugin_page" ) ) && ! ( file_exists( WPMU_PLUGIN_DIR . "/$plugin_page" ) && is_file( WPMU_PLUGIN_DIR . "/$plugin_page" ) ) ) {
+		if ( ! ( file_exists( WP_PLUGIN_DIR . "/$plugin_page" ) && is_file( WP_PLUGIN_DIR . "/$plugin_page" ) )
+			&& ! ( file_exists( WPMU_PLUGIN_DIR . "/$plugin_page" ) && is_file( WPMU_PLUGIN_DIR . "/$plugin_page" ) )
+		) {
+			/* translators: %s: Admin page generated by a plugin. */
 			wp_die( sprintf( __( 'Cannot load %s.' ), htmlentities( $plugin_page ) ) );
 		}
 
@@ -272,7 +294,7 @@ if ( isset( $plugin_page ) ) {
 		}
 	}
 
-	include ABSPATH . 'wp-admin/admin-footer.php';
+	require_once ABSPATH . 'wp-admin/admin-footer.php';
 
 	exit;
 } elseif ( isset( $_GET['import'] ) ) {
@@ -280,7 +302,7 @@ if ( isset( $plugin_page ) ) {
 	$importer = $_GET['import'];
 
 	if ( ! current_user_can( 'import' ) ) {
-		wp_die( __( 'Sorry, you are not allowed to import content.' ) );
+		wp_die( __( 'Sorry, you are not allowed to import content into this site.' ) );
 	}
 
 	if ( validate_file( $importer ) ) {
@@ -298,13 +320,24 @@ if ( isset( $plugin_page ) ) {
 	 *
 	 * The dynamic portion of the hook name, `$importer`, refers to the importer slug.
 	 *
+	 * Possible hook names include:
+	 *
+	 *  - `load-importer-blogger`
+	 *  - `load-importer-wpcat2tag`
+	 *  - `load-importer-livejournal`
+	 *  - `load-importer-mt`
+	 *  - `load-importer-rss`
+	 *  - `load-importer-tumblr`
+	 *  - `load-importer-wordpress`
+	 *
 	 * @since 3.5.0
 	 */
 	do_action( "load-importer-{$importer}" ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
+	// Used in the HTML title tag.
+	$title        = __( 'Import' );
 	$parent_file  = 'tools.php';
 	$submenu_file = 'import.php';
-	$title        = __( 'Import' );
 
 	if ( ! isset( $_GET['noheader'] ) ) {
 		require_once ABSPATH . 'wp-admin/admin-header.php';
@@ -330,9 +363,9 @@ if ( isset( $plugin_page ) ) {
 
 	call_user_func( $wp_importers[ $importer ][2] );
 
-	include ABSPATH . 'wp-admin/admin-footer.php';
+	require_once ABSPATH . 'wp-admin/admin-footer.php';
 
-	// Make sure rules are flushed
+	// Make sure rules are flushed.
 	flush_rewrite_rules( false );
 
 	exit;
@@ -343,7 +376,7 @@ if ( isset( $plugin_page ) ) {
 	 * The load-* hook fires in a number of contexts. This hook is for core screens.
 	 *
 	 * The dynamic portion of the hook name, `$pagenow`, is a global variable
-	 * referring to the filename of the current page, such as 'admin.php',
+	 * referring to the filename of the current screen, such as 'admin.php',
 	 * 'post-new.php' etc. A complete hook for the latter would be
 	 * 'load-post-new.php'.
 	 *
@@ -355,16 +388,16 @@ if ( isset( $plugin_page ) ) {
 	 * The following hooks are fired to ensure backward compatibility.
 	 * In all other cases, 'load-' . $pagenow should be used instead.
 	 */
-	if ( $typenow == 'page' ) {
-		if ( $pagenow == 'post-new.php' ) {
+	if ( 'page' === $typenow ) {
+		if ( 'post-new.php' === $pagenow ) {
 			do_action( 'load-page-new.php' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
-		} elseif ( $pagenow == 'post.php' ) {
+		} elseif ( 'post.php' === $pagenow ) {
 			do_action( 'load-page.php' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 		}
-	} elseif ( $pagenow == 'edit-tags.php' ) {
-		if ( $taxnow == 'category' ) {
+	} elseif ( 'edit-tags.php' === $pagenow ) {
+		if ( 'category' === $taxnow ) {
 			do_action( 'load-categories.php' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
-		} elseif ( $taxnow == 'link_category' ) {
+		} elseif ( 'link_category' === $taxnow ) {
 			do_action( 'load-edit-link-categories.php' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 		}
 	} elseif ( 'term.php' === $pagenow ) {
@@ -373,13 +406,15 @@ if ( isset( $plugin_page ) ) {
 }
 
 if ( ! empty( $_REQUEST['action'] ) ) {
+	$action = $_REQUEST['action'];
+
 	/**
 	 * Fires when an 'action' request variable is sent.
 	 *
-	 * The dynamic portion of the hook name, `$_REQUEST['action']`,
-	 * refers to the action derived from the `GET` or `POST` request.
+	 * The dynamic portion of the hook name, `$action`, refers to
+	 * the action derived from the `GET` or `POST` request.
 	 *
 	 * @since 2.6.0
 	 */
-	do_action( 'admin_action_' . $_REQUEST['action'] );
+	do_action( "admin_action_{$action}" );
 }

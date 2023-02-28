@@ -7,12 +7,12 @@
  */
 
 /** Load ClassicPress Administration Bootstrap */
-require_once dirname( __FILE__ ) . '/admin.php';
+require_once __DIR__ . '/admin.php';
 
 /**
  * @global string  $post_type
  * @global object  $post_type_object
- * @global WP_Post $post
+ * @global WP_Post $post             Global post object.
  */
 global $post_type, $post_type_object, $post;
 
@@ -39,10 +39,10 @@ if ( 'post' === $post_type ) {
 		// What if there isn't a post-new.php item for this post type?
 		if ( ! isset( $_registered_pages[ get_plugin_page_hookname( "post-new.php?post_type=$post_type", $post_type_object->show_in_menu ) ] ) ) {
 			if ( isset( $_registered_pages[ get_plugin_page_hookname( "edit.php?post_type=$post_type", $post_type_object->show_in_menu ) ] ) ) {
-				// Fall back to edit.php for that post type, if it exists
+				// Fall back to edit.php for that post type, if it exists.
 				$submenu_file = "edit.php?post_type=$post_type";
 			} else {
-				// Otherwise, give up and highlight the parent
+				// Otherwise, give up and highlight the parent.
 				$submenu_file = $parent_file;
 			}
 		}
@@ -63,11 +63,6 @@ if ( ! current_user_can( $post_type_object->cap->edit_posts ) || ! current_user_
 	);
 }
 
-// Schedule auto-draft cleanup
-if ( ! wp_next_scheduled( 'wp_scheduled_auto_draft_delete' ) ) {
-	wp_schedule_event( time(), 'daily', 'wp_scheduled_auto_draft_delete' );
-}
-
 $post    = get_default_post_to_edit( $post_type, true );
 $post_ID = $post->ID;
 
@@ -77,4 +72,4 @@ if ( apply_filters( 'replace_editor', false, $post ) !== true ) {
 	include ABSPATH . 'wp-admin/edit-form-advanced.php';
 }
 
-require ABSPATH . 'wp-admin/admin-footer.php';
+require_once ABSPATH . 'wp-admin/admin-footer.php';

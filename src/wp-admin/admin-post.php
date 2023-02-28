@@ -16,7 +16,7 @@ if ( ! defined( 'WP_ADMIN' ) ) {
 if ( defined( 'ABSPATH' ) ) {
 	require_once ABSPATH . 'wp-load.php';
 } else {
-	require_once dirname( dirname( __FILE__ ) ) . '/wp-load.php';
+	require_once dirname( __DIR__ ) . '/wp-load.php';
 }
 
 /** Allow for cross-domain requests (from the front end). */
@@ -29,17 +29,27 @@ nocache_headers();
 /** This action is documented in wp-admin/admin.php */
 do_action( 'admin_init' );
 
-$action = empty( $_REQUEST['action'] ) ? '' : $_REQUEST['action'];
+$action = ! empty( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
 
-if ( ! wp_validate_auth_cookie() ) {
+// Reject invalid parameters.
+if ( ! is_scalar( $action ) ) {
+	wp_die( '', 400 );
+}
+
+if ( ! is_user_logged_in() ) {
 	if ( empty( $action ) ) {
 		/**
-		 * Fires on a non-authenticated admin post request where no action was supplied.
+		 * Fires on a non-authenticated admin post request where no action is supplied.
 		 *
 		 * @since 2.6.0
 		 */
 		do_action( 'admin_post_nopriv' );
 	} else {
+		// If no action is registered, return a Bad Request response.
+		if ( ! has_action( "admin_post_nopriv_{$action}" ) ) {
+			wp_die( '', 400 );
+		}
+
 		/**
 		 * Fires on a non-authenticated admin post request for the given action.
 		 *
@@ -53,12 +63,17 @@ if ( ! wp_validate_auth_cookie() ) {
 } else {
 	if ( empty( $action ) ) {
 		/**
-		 * Fires on an authenticated admin post request where no action was supplied.
+		 * Fires on an authenticated admin post request where no action is supplied.
 		 *
 		 * @since 2.6.0
 		 */
 		do_action( 'admin_post' );
 	} else {
+		// If no action is registered, return a Bad Request response.
+		if ( ! has_action( "admin_post_{$action}" ) ) {
+			wp_die( '', 400 );
+		}
+
 		/**
 		 * Fires on an authenticated admin post request for the given action.
 		 *
