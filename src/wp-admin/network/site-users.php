@@ -8,7 +8,7 @@
  */
 
 /** Load ClassicPress Administration Bootstrap */
-require_once dirname( __FILE__ ) . '/admin.php';
+require_once __DIR__ . '/admin.php';
 
 if ( ! current_user_can( 'manage_sites' ) ) {
 	wp_die( __( 'Sorry, you are not allowed to edit this site.' ), 403 );
@@ -35,7 +35,7 @@ if ( ! empty( $_REQUEST['paged'] ) ) {
 	$referer = add_query_arg( 'paged', (int) $_REQUEST['paged'], $referer );
 }
 
-$id = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0;
+$id = isset( $_REQUEST['id'] ) ? (int) $_REQUEST['id'] : 0;
 
 if ( ! $id ) {
 	wp_die( __( 'Invalid site ID.' ) );
@@ -79,12 +79,12 @@ if ( $action ) {
 						$update = 'newuser';
 
 						/**
-						  * Fires after a user has been created via the network site-users.php page.
-						  *
-						  * @since 4.4.0
-						  *
-						  * @param int $user_id ID of the newly created user.
-						  */
+						 * Fires after a user has been created via the network site-users.php page.
+						 *
+						 * @since 4.4.0
+						 *
+						 * @param int $user_id ID of the newly created user.
+						 */
 						do_action( 'network_site_users_created_user', $user_id );
 					}
 				}
@@ -178,7 +178,7 @@ if ( $action ) {
 			/** This action is documented in wp-admin/network/site-themes.php */
 			$referer = apply_filters( 'handle_network_bulk_actions-' . get_current_screen()->id, $referer, $action, $userids, $id ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
-			$update  = $action;
+			$update = $action;
 			break;
 	}
 
@@ -195,7 +195,8 @@ if ( isset( $_GET['action'] ) && 'update-site' === $_GET['action'] ) {
 
 add_screen_option( 'per_page' );
 
-/* translators: %s: site name */
+// Used in the HTML title tag.
+/* translators: %s: Site title. */
 $title = sprintf( __( 'Edit Site: %s' ), esc_html( $details->blogname ) );
 
 $parent_file  = 'sites.php';
@@ -212,7 +213,7 @@ if ( ! wp_is_large_network( 'users' ) && apply_filters( 'show_network_site_users
 	wp_enqueue_script( 'user-suggest' );
 }
 
-require ABSPATH . 'wp-admin/admin-header.php'; ?>
+require_once ABSPATH . 'wp-admin/admin-header.php'; ?>
 
 <script type="text/javascript">
 var current_site_id = <?php echo absint( $id ); ?>;
@@ -298,7 +299,7 @@ if ( current_user_can( 'promote_users' ) && apply_filters( 'show_network_site_us
 <h2 id="add-existing-user"><?php _e( 'Add Existing User' ); ?></h2>
 <form action="site-users.php?action=adduser" id="adduser" method="post">
 	<input type="hidden" name="id" value="<?php echo esc_attr( $id ); ?>" />
-	<table class="form-table">
+	<table class="form-table" role="presentation">
 		<tr>
 			<th scope="row"><label for="newuser"><?php _e( 'Username' ); ?></label></th>
 			<td><input type="text" class="regular-text wp-suggest-user" name="newuser" id="newuser" /></td>
@@ -330,9 +331,9 @@ if ( current_user_can( 'promote_users' ) && apply_filters( 'show_network_site_us
 if ( current_user_can( 'create_users' ) && apply_filters( 'show_network_site_users_add_new_form', true ) ) :
 	?>
 <h2 id="add-new-user"><?php _e( 'Add New User' ); ?></h2>
-<form action="<?php echo network_admin_url( 'site-users.php?action=newuser' ); ?>" id="newuser" method="post">
+<form action="<?php echo esc_url( network_admin_url( 'site-users.php?action=newuser' ) ); ?>" id="newuser" method="post">
 	<input type="hidden" name="id" value="<?php echo esc_attr( $id ); ?>" />
-	<table class="form-table">
+	<table class="form-table" role="presentation">
 		<tr>
 			<th scope="row"><label for="user_username"><?php _e( 'Username' ); ?></label></th>
 			<td><input type="text" class="regular-text" name="user[username]" id="user_username" /></td>
@@ -352,7 +353,7 @@ if ( current_user_can( 'create_users' ) && apply_filters( 'show_network_site_use
 			</select></td>
 		</tr>
 		<tr class="form-field">
-			<td colspan="2"><?php _e( 'A password reset link will be sent to the user via email.' ); ?></td>
+			<td colspan="2" class="td-full"><?php _e( 'A password reset link will be sent to the user via email.' ); ?></td>
 		</tr>
 	</table>
 	<?php wp_nonce_field( 'add-user', '_wpnonce_add-new-user' ); ?>
@@ -361,4 +362,4 @@ if ( current_user_can( 'create_users' ) && apply_filters( 'show_network_site_use
 <?php endif; ?>
 </div>
 <?php
-require ABSPATH . 'wp-admin/admin-footer.php';
+require_once ABSPATH . 'wp-admin/admin-footer.php';

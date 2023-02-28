@@ -8,7 +8,7 @@
  */
 
 /** Load ClassicPress Administration Bootstrap */
-require_once dirname( __FILE__ ) . '/admin.php';
+require_once __DIR__ . '/admin.php';
 
 if ( ! current_user_can( 'manage_sites' ) ) {
 	wp_die( __( 'Sorry, you are not allowed to edit this site.' ) );
@@ -17,7 +17,7 @@ if ( ! current_user_can( 'manage_sites' ) ) {
 get_current_screen()->add_help_tab( get_site_screen_help_tab_args() );
 get_current_screen()->set_help_sidebar( get_site_screen_help_sidebar_content() );
 
-$id = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0;
+$id = isset( $_REQUEST['id'] ) ? (int) $_REQUEST['id'] : 0;
 
 if ( ! $id ) {
 	wp_die( __( 'Invalid site ID.' ) );
@@ -79,13 +79,14 @@ if ( isset( $_GET['update'] ) ) {
 	}
 }
 
-/* translators: %s: site name */
+// Used in the HTML title tag.
+/* translators: %s: Site title. */
 $title = sprintf( __( 'Edit Site: %s' ), esc_html( $details->blogname ) );
 
 $parent_file  = 'sites.php';
 $submenu_file = 'sites.php';
 
-require ABSPATH . 'wp-admin/admin-header.php';
+require_once ABSPATH . 'wp-admin/admin-header.php';
 
 ?>
 
@@ -111,7 +112,7 @@ if ( ! empty( $messages ) ) {
 <form method="post" action="site-settings.php?action=update-site">
 	<?php wp_nonce_field( 'edit-site' ); ?>
 	<input type="hidden" name="id" value="<?php echo esc_attr( $id ); ?>" />
-	<table class="form-table">
+	<table class="form-table" role="presentation">
 		<?php
 		$blog_prefix = $wpdb->get_blog_prefix( $id );
 		$sql         = "SELECT * FROM {$blog_prefix}options
@@ -178,4 +179,4 @@ if ( ! empty( $messages ) ) {
 
 </div>
 <?php
-require ABSPATH . 'wp-admin/admin-footer.php';
+require_once ABSPATH . 'wp-admin/admin-footer.php';

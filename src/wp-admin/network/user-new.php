@@ -8,7 +8,7 @@
  */
 
 /** Load ClassicPress Administration Bootstrap */
-require_once dirname( __FILE__ ) . '/admin.php';
+require_once __DIR__ . '/admin.php';
 
 if ( ! current_user_can( 'create_users' ) ) {
 	wp_die( __( 'Sorry, you are not allowed to add users to this network.' ) );
@@ -45,7 +45,7 @@ if ( isset( $_REQUEST['action'] ) && 'add-user' === $_REQUEST['action'] ) {
 
 	$user_details = wpmu_validate_user_signup( $user['username'], $user['email'] );
 
-	if ( is_wp_error( $user_details['errors'] ) && ! empty( $user_details['errors']->errors ) ) {
+	if ( is_wp_error( $user_details['errors'] ) && $user_details['errors']->has_errors() ) {
 		$add_user_errors = $user_details['errors'];
 	} else {
 		$password = wp_generate_password( 12, false );
@@ -55,12 +55,12 @@ if ( isset( $_REQUEST['action'] ) && 'add-user' === $_REQUEST['action'] ) {
 			$add_user_errors = new WP_Error( 'add_user_fail', __( 'Cannot add user.' ) );
 		} else {
 			/**
-			  * Fires after a new user has been created via the network user-new.php page.
-			  *
-			  * @since 4.4.0
-			  *
-			  * @param int $user_id ID of the newly created user.
-			  */
+			 * Fires after a new user has been created via the network user-new.php page.
+			 *
+			 * @since 4.4.0
+			 *
+			 * @param int $user_id ID of the newly created user.
+			 */
 			do_action( 'network_user_new_created_user', $user_id );
 
 			wp_redirect(
@@ -88,19 +88,21 @@ if ( isset( $_GET['update'] ) ) {
 			}
 		}
 
-		if ( empty( $edit_link ) ) {
-			$messages[] = __( 'User added.' );
-		} else {
-			/* translators: %s: edit page url */
-			$messages[] = sprintf( __( 'User added. <a href="%s">Edit user</a>' ), $edit_link );
+		$message = __( 'User added.' );
+
+		if ( $edit_link ) {
+			$message .= sprintf( ' <a href="%s">%s</a>', $edit_link, __( 'Edit user' ) );
 		}
+
+		$messages[] = $message;
 	}
 }
 
+// Used in the HTML title tag.
 $title       = __( 'Add New User' );
 $parent_file = 'users.php';
 
-require ABSPATH . 'wp-admin/admin-header.php'; ?>
+require_once ABSPATH . 'wp-admin/admin-header.php'; ?>
 
 <div class="wrap">
 <h1 id="add-new-user"><?php _e( 'Add New User' ); ?></h1>
@@ -121,18 +123,18 @@ if ( isset( $add_user_errors ) && is_wp_error( $add_user_errors ) ) {
 		?>
 	</div>
 <?php } ?>
-	<form action="<?php echo network_admin_url( 'user-new.php?action=add-user' ); ?>" id="adduser" method="post" novalidate="novalidate">
-	<table class="form-table">
+	<form action="<?php echo esc_url( network_admin_url( 'user-new.php?action=add-user' ) ); ?>" id="adduser" method="post" novalidate="novalidate">
+	<table class="form-table" role="presentation">
 		<tr class="form-field form-required">
 			<th scope="row"><label for="username"><?php _e( 'Username' ); ?></label></th>
 			<td><input type="text" class="regular-text" name="user[username]" id="username" autocapitalize="none" autocorrect="off" maxlength="60" /></td>
 		</tr>
 		<tr class="form-field form-required">
 			<th scope="row"><label for="email"><?php _e( 'Email' ); ?></label></th>
-			<td><input type="email" class="regular-text" name="user[email]" id="email"/></td>
+			<td><input type="email" class="regular-text" name="user[email]" id="email" /></td>
 		</tr>
 		<tr class="form-field">
-			<td colspan="2"><?php _e( 'A password reset link will be sent to the user via email.' ); ?></td>
+			<td colspan="2" class="td-full"><?php _e( 'A password reset link will be sent to the user via email.' ); ?></td>
 		</tr>
 	</table>
 	<?php
@@ -149,4 +151,4 @@ if ( isset( $add_user_errors ) && is_wp_error( $add_user_errors ) ) {
 	</form>
 </div>
 <?php
-require ABSPATH . 'wp-admin/admin-footer.php';
+require_once ABSPATH . 'wp-admin/admin-footer.php';

@@ -8,7 +8,7 @@
  */
 
 /** Load ClassicPress Administration Bootstrap */
-require_once dirname( __FILE__ ) . '/admin.php';
+require_once __DIR__ . '/admin.php';
 
 /** Load ClassicPress dashboard API */
 require_once ABSPATH . 'wp-admin/includes/dashboard.php';
@@ -17,6 +17,7 @@ if ( ! current_user_can( 'manage_network' ) ) {
 	wp_die( __( 'Sorry, you are not allowed to access this page.' ), 403 );
 }
 
+// Used in the HTML title tag.
 $title       = __( 'Dashboard' );
 $parent_file = 'index.php';
 
@@ -52,7 +53,7 @@ get_current_screen()->add_help_tab(
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-	'<p>' . __( '<a href="https://codex.wordpress.org/Network_Admin">Documentation on the Network Admin</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://wordpress.org/support/article/network-admin/">Documentation on the Network Admin</a>' ) . '</p>' .
 	'<p>' . __( '<a href="https://docs.classicpress.net/faq-support/">Support</a>' ) . '</p>'
 );
 
@@ -79,4 +80,4 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 </div><!-- wrap -->
 
 <?php
-require ABSPATH . 'wp-admin/admin-footer.php';
+require_once ABSPATH . 'wp-admin/admin-footer.php';

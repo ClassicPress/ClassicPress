@@ -8,7 +8,7 @@
  */
 
 /** Load ClassicPress Administration Bootstrap */
-require_once dirname( __FILE__ ) . '/admin.php';
+require_once __DIR__ . '/admin.php';
 
 if ( ! current_user_can( 'manage_sites' ) ) {
 	wp_die( __( 'Sorry, you are not allowed to access this page.' ), 403 );
@@ -17,6 +17,7 @@ if ( ! current_user_can( 'manage_sites' ) ) {
 $wp_list_table = _get_list_table( 'WP_MS_Sites_List_Table' );
 $pagenum       = $wp_list_table->get_pagenum();
 
+// Used in the HTML title tag.
 $title       = __( 'Sites' );
 $parent_file = 'sites.php';
 
@@ -42,7 +43,7 @@ get_current_screen()->add_help_tab(
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-	'<p>' . __( '<a href="https://codex.wordpress.org/Network_Admin_Sites_Screen">Documentation on Site Management</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://wordpress.org/support/article/network-admin-sites-screen/">Documentation on Site Management</a>' ) . '</p>' .
 	'<p>' . __( '<a href="https://docs.classicpress.net/faq-support/">Support</a>' ) . '</p>'
 );
 
@@ -53,7 +54,7 @@ get_current_screen()->set_screen_reader_content(
 	)
 );
 
-$id = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0;
+$id = isset( $_REQUEST['id'] ) ? (int) $_REQUEST['id'] : 0;
 
 if ( isset( $_GET['action'] ) ) {
 	/** This action is documented in wp-admin/network/edit.php */
@@ -61,14 +62,23 @@ if ( isset( $_GET['action'] ) ) {
 
 	// A list of valid actions and their associated messaging for confirmation output.
 	$manage_actions = array(
+		/* translators: %s: Site URL. */
 		'activateblog'   => __( 'You are about to activate the site %s.' ),
+		/* translators: %s: Site URL. */
 		'deactivateblog' => __( 'You are about to deactivate the site %s.' ),
+		/* translators: %s: Site URL. */
 		'unarchiveblog'  => __( 'You are about to unarchive the site %s.' ),
+		/* translators: %s: Site URL. */
 		'archiveblog'    => __( 'You are about to archive the site %s.' ),
+		/* translators: %s: Site URL. */
 		'unspamblog'     => __( 'You are about to unspam the site %s.' ),
+		/* translators: %s: Site URL. */
 		'spamblog'       => __( 'You are about to mark the site %s as spam.' ),
+		/* translators: %s: Site URL. */
 		'deleteblog'     => __( 'You are about to delete the site %s.' ),
+		/* translators: %s: Site URL. */
 		'unmatureblog'   => __( 'You are about to mark the site %s as mature.' ),
+		/* translators: %s: Site URL. */
 		'matureblog'     => __( 'You are about to mark the site %s as not mature.' ),
 	);
 
@@ -152,7 +162,14 @@ if ( isset( $_GET['action'] ) ) {
 					$site         = get_site( $site_id );
 					$site_address = untrailingslashit( $site->domain . $site->path );
 
-					wp_die( sprintf( __( 'Sorry, you are not allowed to delete the site %s.' ), $site_address ), 403 );
+					wp_die(
+						sprintf(
+							/* translators: %s: Site URL. */
+							__( 'Sorry, you are not allowed to delete the site %s.' ),
+							$site_address
+						),
+						403
+					);
 				}
 
 				$updated_action = 'all_delete';
@@ -219,14 +236,16 @@ if ( isset( $_GET['action'] ) ) {
 					exit;
 				}
 			} else {
-				$location = network_admin_url( 'sites.php' );
-				if ( ! empty( $_REQUEST['paged'] ) ) {
-					$location = add_query_arg( 'paged', (int) $_REQUEST['paged'], $location );
-				}
+				// Process query defined by WP_MS_Site_List_Table::extra_table_nav().
+				$location = remove_query_arg(
+					array( '_wp_http_referer', '_wpnonce' ),
+					add_query_arg( $_POST, network_admin_url( 'sites.php' ) )
+				);
 
 				wp_redirect( $location );
-				exit();
+				exit;
 			}
+
 			break;
 
 		case 'archiveblog':
@@ -242,7 +261,7 @@ if ( isset( $_GET['action'] ) ) {
 			 *
 			 * @since MU (3.0.0)
 			 *
-			 * @param string $id The ID of the activated site.
+			 * @param int $id The ID of the activated site.
 			 */
 			do_action( 'activate_blog', $id );
 			break;
@@ -253,7 +272,7 @@ if ( isset( $_GET['action'] ) ) {
 			 *
 			 * @since MU (3.0.0)
 			 *
-			 * @param string $id The ID of the site being deactivated.
+			 * @param int $id The ID of the site being deactivated.
 			 */
 			do_action( 'deactivate_blog', $id );
 
@@ -283,7 +302,9 @@ if ( isset( $_GET['action'] ) ) {
 
 $msg = '';
 if ( isset( $_GET['updated'] ) ) {
-	switch ( $_GET['updated'] ) {
+	$action = $_GET['updated'];
+
+	switch ( $action ) {
 		case 'all_notspam':
 			$msg = __( 'Sites removed from spam.' );
 			break;
@@ -319,16 +340,16 @@ if ( isset( $_GET['updated'] ) ) {
 			break;
 		default:
 			/**
-			 * Filters a specific, non-default site-updated message in the Network admin.
+			 * Filters a specific, non-default, site-updated message in the Network admin.
 			 *
-			 * The dynamic portion of the hook name, `$_GET['updated']`, refers to the
-			 * non-default site update action.
+			 * The dynamic portion of the hook name, `$action`, refers to the non-default
+			 * site update action.
 			 *
 			 * @since 3.1.0
 			 *
 			 * @param string $msg The update message. Default 'Settings saved'.
 			 */
-			$msg = apply_filters( 'network_sites_updated_message_' . $_GET['updated'], __( 'Settings saved.' ) );
+			$msg = apply_filters( "network_sites_updated_message_{$action}", __( 'Settings saved.' ) );
 			break;
 	}
 
@@ -346,21 +367,28 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 <h1 class="wp-heading-inline"><?php _e( 'Sites' ); ?></h1>
 
 <?php if ( current_user_can( 'create_sites' ) ) : ?>
-	<a href="<?php echo network_admin_url( 'site-new.php' ); ?>" class="page-title-action"><?php echo esc_html_x( 'Add New', 'site' ); ?></a>
+	<a href="<?php echo esc_url( network_admin_url( 'site-new.php' ) ); ?>" class="page-title-action"><?php echo esc_html_x( 'Add New', 'site' ); ?></a>
 <?php endif; ?>
 
 <?php
 if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) ) {
-	/* translators: %s: search keywords */
-	printf( '<span class="subtitle">' . __( 'Search results for &#8220;%s&#8221;' ) . '</span>', esc_html( $s ) );
+	echo '<span class="subtitle">';
+	printf(
+		/* translators: %s: Search query. */
+		__( 'Search results for: %s' ),
+		'<strong>' . esc_html( $s ) . '</strong>'
+	);
+	echo '</span>';
 }
 ?>
 
 <hr class="wp-header-end">
 
+<?php $wp_list_table->views(); ?>
+
 <?php echo $msg; ?>
 
-<form method="get" id="ms-search">
+<form method="get" id="ms-search" class="wp-clearfix">
 <?php $wp_list_table->search_box( __( 'Search Sites' ), 'site' ); ?>
 <input type="hidden" name="action" value="blogs" />
 </form>

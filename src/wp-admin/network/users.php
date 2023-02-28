@@ -8,7 +8,7 @@
  */
 
 /** Load ClassicPress Administration Bootstrap */
-require_once dirname( __FILE__ ) . '/admin.php';
+require_once __DIR__ . '/admin.php';
 
 if ( ! current_user_can( 'manage_network_users' ) ) {
 	wp_die( __( 'Sorry, you are not allowed to access this page.' ), 403 );
@@ -26,15 +26,20 @@ if ( isset( $_GET['action'] ) ) {
 
 			check_admin_referer( 'deleteuser' );
 
-			$id = intval( $_GET['id'] );
+			$id = (int) $_GET['id'];
 			if ( $id > 1 ) {
 				$_POST['allusers'] = array( $id ); // confirm_delete_users() can only handle arrays.
-				$title             = __( 'Users' );
-				$parent_file       = 'users.php';
+
+				// Used in the HTML title tag.
+				$title       = __( 'Users' );
+				$parent_file = 'users.php';
+
 				require_once ABSPATH . 'wp-admin/admin-header.php';
+
 				echo '<div class="wrap">';
 				confirm_delete_users( $_POST['allusers'] );
 				echo '</div>';
+
 				require_once ABSPATH . 'wp-admin/admin-footer.php';
 			} else {
 				wp_redirect( network_admin_url( 'users.php' ) );
@@ -59,39 +64,61 @@ if ( isset( $_GET['action'] ) ) {
 								if ( ! current_user_can( 'delete_users' ) ) {
 									wp_die( __( 'Sorry, you are not allowed to access this page.' ), 403 );
 								}
+
+								// Used in the HTML title tag.
 								$title       = __( 'Users' );
 								$parent_file = 'users.php';
+
 								require_once ABSPATH . 'wp-admin/admin-header.php';
+
 								echo '<div class="wrap">';
 								confirm_delete_users( $_POST['allusers'] );
 								echo '</div>';
+
 								require_once ABSPATH . 'wp-admin/admin-footer.php';
 								exit;
 
 							case 'spam':
 								$user = get_userdata( $user_id );
 								if ( is_super_admin( $user->ID ) ) {
-									wp_die( sprintf( __( 'Warning! User cannot be modified. The user %s is a network administrator.' ), esc_html( $user->user_login ) ) );
+									wp_die(
+										sprintf(
+											/* translators: %s: User login. */
+											__( 'Warning! User cannot be modified. The user %s is a network administrator.' ),
+											esc_html( $user->user_login )
+										)
+									);
 								}
 
 								$userfunction = 'all_spam';
 								$blogs        = get_blogs_of_user( $user_id, true );
+
 								foreach ( (array) $blogs as $details ) {
 									if ( get_network()->site_id != $details->userblog_id ) { // Main blog is not a spam!
 										update_blog_status( $details->userblog_id, 'spam', '1' );
 									}
 								}
-								update_user_status( $user_id, 'spam', '1' );
+
+								$user_data         = $user->to_array();
+								$user_data['spam'] = '1';
+
+								wp_update_user( $user_data );
 								break;
 
 							case 'notspam':
+								$user = get_userdata( $user_id );
+
 								$userfunction = 'all_notspam';
 								$blogs        = get_blogs_of_user( $user_id, true );
+
 								foreach ( (array) $blogs as $details ) {
 									update_blog_status( $details->userblog_id, 'spam', '0' );
 								}
 
-								update_user_status( $user_id, 'spam', '0' );
+								$user_data         = $user->to_array();
+								$user_data['spam'] = '0';
+
+								wp_update_user( $user_data );
 								break;
 						}
 					}
@@ -189,6 +216,8 @@ if ( $pagenum > $total_pages && $total_pages > 0 ) {
 	wp_redirect( add_query_arg( 'paged', $total_pages ) );
 	exit;
 }
+
+// Used in the HTML title tag.
 $title       = __( 'Users' );
 $parent_file = 'users.php';
 
@@ -256,13 +285,18 @@ if ( isset( $_REQUEST['updated'] ) && 'true' == $_REQUEST['updated'] && ! empty(
 	<?php
 	if ( current_user_can( 'create_users' ) ) :
 		?>
-		<a href="<?php echo network_admin_url( 'user-new.php' ); ?>" class="page-title-action"><?php echo esc_html_x( 'Add New', 'user' ); ?></a>
-							<?php
+		<a href="<?php echo esc_url( network_admin_url( 'user-new.php' ) ); ?>" class="page-title-action"><?php echo esc_html_x( 'Add New', 'user' ); ?></a>
+		<?php
 	endif;
 
 	if ( strlen( $usersearch ) ) {
-		/* translators: %s: search keywords */
-		printf( '<span class="subtitle">' . __( 'Search results for &#8220;%s&#8221;' ) . '</span>', esc_html( $usersearch ) );
+		echo '<span class="subtitle">';
+		printf(
+			/* translators: %s: Search query. */
+			__( 'Search results for: %s' ),
+			'<strong>' . esc_html( $usersearch ) . '</strong>'
+		);
+		echo '</span>';
 	}
 	?>
 

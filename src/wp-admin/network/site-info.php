@@ -8,7 +8,7 @@
  */
 
 /** Load ClassicPress Administration Bootstrap */
-require_once dirname( __FILE__ ) . '/admin.php';
+require_once __DIR__ . '/admin.php';
 
 if ( ! current_user_can( 'manage_sites' ) ) {
 	wp_die( __( 'Sorry, you are not allowed to edit this site.' ) );
@@ -17,7 +17,7 @@ if ( ! current_user_can( 'manage_sites' ) ) {
 get_current_screen()->add_help_tab( get_site_screen_help_tab_args() );
 get_current_screen()->set_help_sidebar( get_site_screen_help_sidebar_content() );
 
-$id = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0;
+$id = isset( $_REQUEST['id'] ) ? (int) $_REQUEST['id'] : 0;
 
 if ( ! $id ) {
 	wp_die( __( 'Invalid site ID.' ) );
@@ -90,7 +90,7 @@ if ( isset( $_REQUEST['action'] ) && 'update-site' === $_REQUEST['action'] ) {
 	$old_home_parsed = parse_url( $old_home_url );
 
 	if ( $old_home_parsed['host'] === $existing_details->domain && $old_home_parsed['path'] === $existing_details->path ) {
-		$new_home_url = untrailingslashit( esc_url_raw( $blog_data['scheme'] . '://' . $new_details->domain . $new_details->path ) );
+		$new_home_url = untrailingslashit( sanitize_url( $blog_data['scheme'] . '://' . $new_details->domain . $new_details->path ) );
 		update_option( 'home', $new_home_url );
 	}
 
@@ -98,7 +98,7 @@ if ( isset( $_REQUEST['action'] ) && 'update-site' === $_REQUEST['action'] ) {
 	$old_site_parsed = parse_url( $old_site_url );
 
 	if ( $old_site_parsed['host'] === $existing_details->domain && $old_site_parsed['path'] === $existing_details->path ) {
-		$new_site_url = untrailingslashit( esc_url_raw( $blog_data['scheme'] . '://' . $new_details->domain . $new_details->path ) );
+		$new_site_url = untrailingslashit( sanitize_url( $blog_data['scheme'] . '://' . $new_details->domain . $new_details->path ) );
 		update_option( 'siteurl', $new_site_url );
 	}
 
@@ -122,13 +122,14 @@ if ( isset( $_GET['update'] ) ) {
 	}
 }
 
-/* translators: %s: site name */
+// Used in the HTML title tag.
+/* translators: %s: Site title. */
 $title = sprintf( __( 'Edit Site: %s' ), esc_html( $details->blogname ) );
 
 $parent_file  = 'sites.php';
 $submenu_file = 'sites.php';
 
-require ABSPATH . 'wp-admin/admin-header.php';
+require_once ABSPATH . 'wp-admin/admin-header.php';
 
 ?>
 
@@ -153,7 +154,7 @@ if ( ! empty( $messages ) ) {
 <form method="post" action="site-info.php?action=update-site">
 	<?php wp_nonce_field( 'edit-site' ); ?>
 	<input type="hidden" name="id" value="<?php echo esc_attr( $id ); ?>" />
-	<table class="form-table">
+	<table class="form-table" role="presentation">
 		<?php
 		// The main site of the network should not be updated on this page.
 		if ( $is_main_site ) :
@@ -167,7 +168,7 @@ if ( ! empty( $messages ) ) {
 		else :
 			?>
 		<tr class="form-field form-required">
-			<th scope="row"><?php _e( 'Site Address (URL)' ); ?></th>
+			<th scope="row"><label for="url"><?php _e( 'Site Address (URL)' ); ?></label></th>
 			<td><input name="blog[url]" type="text" id="url" value="<?php echo $parsed_scheme . '://' . esc_attr( $details->domain ) . esc_attr( $details->path ); ?>" /></td>
 		</tr>
 		<?php endif; ?>
@@ -181,7 +182,7 @@ if ( ! empty( $messages ) ) {
 			<td><input name="blog[last_updated]" type="text" id="blog_last_updated" value="<?php echo esc_attr( $details->last_updated ); ?>" /></td>
 		</tr>
 		<?php
-		$attribute_fields = array( 'public' => __( 'Public' ) );
+		$attribute_fields = array( 'public' => _x( 'Public', 'site' ) );
 		if ( ! $is_main_site ) {
 			$attribute_fields['archived'] = __( 'Archived' );
 			$attribute_fields['spam']     = _x( 'Spam', 'site' );
@@ -196,15 +197,27 @@ if ( ! empty( $messages ) ) {
 			<legend class="screen-reader-text"><?php _e( 'Set site attributes' ); ?></legend>
 			<?php foreach ( $attribute_fields as $field_key => $field_label ) : ?>
 				<label><input type="checkbox" name="blog[<?php echo $field_key; ?>]" value="1" <?php checked( (bool) $details->$field_key, true ); ?> <?php disabled( ! in_array( (int) $details->$field_key, array( 0, 1 ), true ) ); ?> />
-				<?php echo $field_label; ?></label><br/>
+				<?php echo $field_label; ?></label><br />
 			<?php endforeach; ?>
 			<fieldset>
 			</td>
 		</tr>
 	</table>
-	<?php submit_button(); ?>
+
+	<?php
+	/**
+	 * Fires at the end of the site info form in network admin.
+	 *
+	 * @since 5.6.0
+	 *
+	 * @param int $id The site ID.
+	 */
+	do_action( 'network_site_info_form', $id );
+
+	submit_button();
+	?>
 </form>
 
 </div>
 <?php
-require ABSPATH . 'wp-admin/admin-footer.php';
+require_once ABSPATH . 'wp-admin/admin-footer.php';
