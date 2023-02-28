@@ -960,7 +960,7 @@ function wp_user_settings() {
 	 *
 	 * @param string $same_site SameSite parameter value, default is 'Lax'.
 	 */
-	$same_site = apply_filters( 'wp_settings_cookie_same_site', 'Lax' );
+	$same_site = apply_filters( 'wp_settings_cookie_same_site', COOKIE_SAMESITE );
 
 	// lets check PHP version if it's 7.3.0+.
 	if ( version_compare( PHP_VERSION, '7.3.0' ) >= 0 ) {

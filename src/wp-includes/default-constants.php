@@ -306,6 +306,12 @@ function wp_cookie_constants() {
 	if ( ! defined( 'COOKIE_DOMAIN' ) ) {
 		define( 'COOKIE_DOMAIN', false );
 	}
+	/**
+	 * @since 1.6.0
+	 */
+	if ( ! defined( 'COOKIE_SAMESITE' ) ) {
+		define( 'COOKIE_SAMESITE', 'Lax' );
+	}
 }
 
 /**
