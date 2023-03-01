@@ -38,7 +38,35 @@ if ( $key ) {
 	$redirect_url = remove_query_arg( 'key' );
 
 	if ( $redirect_url !== remove_query_arg( false ) ) {
-		setcookie( $activate_cookie, $key, 0, $activate_path, COOKIE_DOMAIN, is_ssl(), true );
+		/**
+		 * Allows to manage SameSite Activate Cookie header partì.
+		 * Possible values are Lax|Strict|None.
+		 * It's natively supported since PHP 7.3.0.
+		 *
+		 * @since 1.6.0
+		 *
+		 * @param string $same_site SameSite parameter value, default is COOKIE_SAMESITE.
+		 */
+		$same_site = apply_filters( 'wp_activate_cookie_same_site', COOKIE_SAMESITE );
+
+		// lets check PHP version if it's 7.3.0+.
+		if ( version_compare( PHP_VERSION, '7.3.0' ) >= 0 ) {
+			// lets use new setcookie function shipped with php 7.3.0 .
+			setcookie(
+				$activate_cookie,
+				$key,
+				array(
+					'expires'  => 0,
+					'path'     => $activate_path,
+					'domain'   => COOKIE_DOMAIN,
+					'secure'   => is_ssl(),
+					'httponly' => true,
+					'samesite' => $same_site,
+				)
+			);
+		} else {
+			setcookie( $activate_cookie, $key, 0, $activate_path . '; SameSite=' . $same_site, COOKIE_DOMAIN, is_ssl(), true );
+		}
 		wp_safe_redirect( $redirect_url );
 		exit;
 	} else {

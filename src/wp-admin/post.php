@@ -214,7 +214,35 @@ switch ( $action ) {
 
 		// Session cookie flag that the post was saved
 		if ( isset( $_COOKIE['wp-saving-post'] ) && $_COOKIE['wp-saving-post'] === $post_id . '-check' ) {
-			setcookie( 'wp-saving-post', $post_id . '-saved', time() + DAY_IN_SECONDS, ADMIN_COOKIE_PATH, COOKIE_DOMAIN, is_ssl() );
+			/**
+			 * Allows to manage SameSite Saving Post Cookie header part.
+			 * Possible values are Lax|Strict|None.
+			 * It's natively supported since PHP 7.3.0.
+			 *
+			 * @since 1.6.0
+			 *
+			 * @param string $same_site SameSite parameter value, default is COOKIE_SAMESITE.
+			 */
+			$same_site = apply_filters( 'wp_saving_post_cookie_same_site', COOKIE_SAMESITE );
+
+			// lets check PHP version if it's 7.3.0+.
+			if ( version_compare( PHP_VERSION, '7.3.0' ) >= 0 ) {
+				// lets use new setcookie function shipped with php 7.3.0 .
+				setcookie(
+					'wp-saving-post',
+					$post_id . '-saved',
+					array(
+						'expires'  => time() + DAY_IN_SECONDS,
+						'path'     => ADMIN_COOKIE_PATH,
+						'domain'   => COOKIE_DOMAIN,
+						'secure'   => is_ssl(),
+						'httponly' => false,
+						'samesite' => $same_site,
+					)
+				);
+			} else {
+				setcookie( 'wp-saving-post', $post_id . '-saved', time() + DAY_IN_SECONDS, ADMIN_COOKIE_PATH . '; SameSite=' . $same_site, COOKIE_DOMAIN, is_ssl() );
+			}
 		}
 
 		redirect_post( $post_id ); // Send user on their way while we keep working

@@ -584,9 +584,62 @@ function wp_set_comment_cookies( $comment, $user, $cookies_consent = true ) {
 	 */
 	$comment_cookie_lifetime = time() + apply_filters( 'comment_cookie_lifetime', 30000000 );
 	$secure                  = ( 'https' === parse_url( home_url(), PHP_URL_SCHEME ) );
-	setcookie( 'comment_author_' . COOKIEHASH, $comment->comment_author, $comment_cookie_lifetime, COOKIEPATH, COOKIE_DOMAIN, $secure );
-	setcookie( 'comment_author_email_' . COOKIEHASH, $comment->comment_author_email, $comment_cookie_lifetime, COOKIEPATH, COOKIE_DOMAIN, $secure );
-	setcookie( 'comment_author_url_' . COOKIEHASH, esc_url( $comment->comment_author_url ), $comment_cookie_lifetime, COOKIEPATH, COOKIE_DOMAIN, $secure );
+
+	/**
+	 * Allows to manage Samesite Comment Author Cookie header part.
+	 * Possible values are Lax|Strict|None.
+	 * It's natively supported since PHP 7.3.0.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @param string $same_site SameSite parameter value, default is COOKIE_SAMESITE.
+	 */
+	$same_site = apply_filters( 'wp_comment_author_cookie_same_site', COOKIE_SAMESITE );
+
+	// lets check PHP version if it's 7.3.0+.
+	if ( version_compare( PHP_VERSION, '7.3.0' ) >= 0 ) {
+		// lets use new setcookie function shipped with php 7.3.0 .
+		setcookie(
+			'comment_author_' . COOKIEHASH,
+			$comment->comment_author,
+			array(
+				'expires'  => $comment_cookie_lifetime,
+				'path'     => COOKIEPATH,
+				'domain'   => COOKIE_DOMAIN,
+				'secure'   => $secure,
+				'httponly' => false,
+				'samesite' => $same_site,
+			)
+		);
+		setcookie(
+			'comment_author_email_' . COOKIEHASH,
+			$comment->comment_author_email,
+			array(
+				'expires'  => $comment_cookie_lifetime,
+				'path'     => COOKIEPATH,
+				'domain'   => COOKIE_DOMAIN,
+				'secure'   => $secure,
+				'httponly' => false,
+				'samesite' => $same_site,
+			)
+		);
+		setcookie(
+			'comment_author_url_' . COOKIEHASH,
+			esc_url( $comment->comment_author_url ),
+			array(
+				'expires'  => $comment_cookie_lifetime,
+				'path'     => COOKIEPATH,
+				'domain'   => COOKIE_DOMAIN,
+				'secure'   => $secure,
+				'httponly' => false,
+				'samesite' => $same_site,
+			)
+		);
+	} else {
+		setcookie( 'comment_author_' . COOKIEHASH, $comment->comment_author, $comment_cookie_lifetime, COOKIEPATH . '; SameSite=' . $same_site, COOKIE_DOMAIN, $secure );
+		setcookie( 'comment_author_email_' . COOKIEHASH, $comment->comment_author_email, $comment_cookie_lifetime, COOKIEPATH . '; SameSite=' . $same_site, COOKIE_DOMAIN, $secure );
+		setcookie( 'comment_author_url_' . COOKIEHASH, esc_url( $comment->comment_author_url ), $comment_cookie_lifetime, COOKIEPATH . '; SameSite=' . $same_site, COOKIE_DOMAIN, $secure );
+	}
 }
 
 /**

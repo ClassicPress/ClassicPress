@@ -310,9 +310,52 @@ if ( defined( 'RELOCATE' ) && RELOCATE ) { // Move flag is set
 
 //Set a cookie now to see if they are supported by the browser.
 $secure = ( 'https' === parse_url( wp_login_url(), PHP_URL_SCHEME ) );
-setcookie( TEST_COOKIE, 'WP Cookie check', 0, COOKIEPATH, COOKIE_DOMAIN, $secure );
-if ( SITECOOKIEPATH != COOKIEPATH ) {
-	setcookie( TEST_COOKIE, 'WP Cookie check', 0, SITECOOKIEPATH, COOKIE_DOMAIN, $secure );
+
+/**
+ * Allows to manage SameSite Test Cookie header part.
+ * Possible values are Lax|Strict|None.
+ * It's natively supported since PHP 7.3.0.
+ *
+ * @since 1.6.0
+ *
+ * @param string $same_site SameSite parameter value, default is COOKIE_SAMESITE.
+ */
+$same_site = apply_filters( 'wp_test_cookie_same_site', COOKIE_SAMESITE );
+
+// lets check PHP version if it's 7.3.0+.
+if ( version_compare( PHP_VERSION, '7.3.0' ) >= 0 ) {
+	// lets use new setcookie function shipped with php 7.3.0 .
+	setcookie(
+		TEST_COOKIE,
+		'WP Cookie check',
+		array(
+			'expires'  => 0,
+			'path'     => COOKIEPATH,
+			'domain'   => COOKIE_DOMAIN,
+			'secure'   => $secure,
+			'httponly' => false,
+			'samesite' => $same_site,
+		)
+	);
+	if ( SITECOOKIEPATH != COOKIEPATH ) {
+		setcookie(
+			TEST_COOKIE,
+			'WP Cookie check',
+			array(
+				'expires'  => 0,
+				'path'     => SITECOOKIEPATH,
+				'domain'   => COOKIE_DOMAIN,
+				'secure'   => $secure,
+				'httponly' => false,
+				'samesite' => $same_site,
+			)
+		);
+	}
+} else {
+	setcookie( TEST_COOKIE, 'WP Cookie check', 0, COOKIEPATH . '; SameSite=' . $same_site, COOKIE_DOMAIN, $secure );
+	if ( SITECOOKIEPATH != COOKIEPATH ) {
+		setcookie( TEST_COOKIE, 'WP Cookie check', 0, SITECOOKIEPATH . '; SameSite=' . $same_site, COOKIE_DOMAIN, $secure );
+	}
 }
 
 $lang            = ! empty( $_GET['wp_lang'] ) ? sanitize_text_field( $_GET['wp_lang'] ) : '';
