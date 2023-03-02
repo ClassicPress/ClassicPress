@@ -16,15 +16,24 @@
  * @see Bulk_Upgrader_Skin
  */
 class Bulk_Plugin_Upgrader_Skin extends Bulk_Upgrader_Skin {
-	public $plugin_info = array(); // Plugin_Upgrader::bulk() will fill this in.
+
+	/**
+	 * Plugin info.
+	 *
+	 * The Plugin_Upgrader::bulk_upgrade() method will fill this in
+	 * with info retrieved from the get_plugin_data() function.
+	 *
+	 * @var array Plugin data. Values will be empty if not supplied by the plugin.
+	 */
+	public $plugin_info = array();
 
 	public function add_strings() {
 		parent::add_strings();
+		/* translators: 1: Plugin name, 2: Number of the plugin, 3: Total number of plugins being updated. */
 		$this->upgrader->strings['skin_before_update_header'] = __( 'Updating Plugin %1$s (%2$d/%3$d)' );
 	}
 
 	/**
-	 *
 	 * @param string $title
 	 */
 	public function before( $title = '' ) {
@@ -32,7 +41,6 @@ class Bulk_Plugin_Upgrader_Skin extends Bulk_Upgrader_Skin {
 	}
 
 	/**
-	 *
 	 * @param string $title
 	 */
 	public function after( $title = '' ) {
@@ -57,6 +65,7 @@ class Bulk_Plugin_Upgrader_Skin extends Bulk_Upgrader_Skin {
 				__( 'Go to ClassicPress Updates page' )
 			),
 		);
+
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			unset( $update_actions['plugins_page'] );
 		}
@@ -66,8 +75,8 @@ class Bulk_Plugin_Upgrader_Skin extends Bulk_Upgrader_Skin {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param array $update_actions Array of plugin action links.
-		 * @param array $plugin_info    Array of information for the last-updated plugin.
+		 * @param string[] $update_actions Array of plugin action links.
+		 * @param array    $plugin_info    Array of information for the last-updated plugin.
 		 */
 		$update_actions = apply_filters( 'update_bulk_plugins_complete_actions', $update_actions, $this->plugin_info );
 

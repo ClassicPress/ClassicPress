@@ -11,14 +11,12 @@
  * Core class used to implement displaying post comments in a list table.
  *
  * @since 3.1.0
- * @access private
  *
  * @see WP_Comments_List_Table
  */
 class WP_Post_Comments_List_Table extends WP_Comments_List_Table {
 
 	/**
-	 *
 	 * @return array
 	 */
 	protected function get_column_info() {
@@ -34,7 +32,6 @@ class WP_Post_Comments_List_Table extends WP_Comments_List_Table {
 	}
 
 	/**
-	 *
 	 * @return array
 	 */
 	protected function get_table_classes() {
@@ -45,7 +42,6 @@ class WP_Post_Comments_List_Table extends WP_Comments_List_Table {
 	}
 
 	/**
-	 *
 	 * @param bool $output_empty
 	 */
 	public function display( $output_empty = false ) {
@@ -72,7 +68,6 @@ class WP_Post_Comments_List_Table extends WP_Comments_List_Table {
 	}
 
 	/**
-	 *
 	 * @param bool $comment_status
 	 * @return int
 	 */

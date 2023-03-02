@@ -187,58 +187,70 @@ foreach ( $menu as $id => $data ) {
 unset( $id, $data, $subs, $first_sub );
 
 /**
+ * Adds a CSS class to a string.
  *
- * @param string $add
- * @param string $class
- * @return string
+ * @since 2.7.0
+ *
+ * @param string $class_to_add The CSS class to add.
+ * @param string $classes      The string to add the CSS class to.
+ * @return string The string with the CSS class added.
  */
-function add_cssclass( $add, $class ) {
-	$class = empty( $class ) ? $add : $class .= ' ' . $add;
-	return $class;
+function add_cssclass( $class_to_add, $classes ) {
+	if ( empty( $classes ) ) {
+		return $class_to_add;
+	}
+
+	return $classes . ' ' . $class_to_add;
 }
 
 /**
+ * Adds CSS classes for top-level administration menu items.
  *
- * @param array $menu
- * @return array
+ * The list of added classes includes `.menu-top-first` and `.menu-top-last`.
+ *
+ * @since 2.7.0
+ *
+ * @param array $menu The array of administration menu items.
+ * @return array The array of administration menu items with the CSS classes added.
  */
 function add_menu_classes( $menu ) {
-	$first     = false;
-	$lastorder = false;
-	$i     = 0;
-	$mc    = count( $menu );
+	$first_item  = false;
+	$last_order  = false;
+	$items_count = count( $menu );
+	$i           = 0;
+
 	foreach ( $menu as $order => $top ) {
 		$i++;
 
-		if ( 0 == $order ) { // dashboard is always shown/single
+		if ( 0 == $order ) { // Dashboard is always shown/single.
 			$menu[0][4] = add_cssclass( 'menu-top-first', $top[4] );
-			$lastorder  = 0;
+			$last_order = 0;
 			continue;
 		}
 
-		if ( 0 === strpos( $top[2], 'separator' ) && false !== $lastorder ) { // if separator
-			$first                 = true;
-			$c                     = $menu[ $lastorder ][4];
-			$menu[ $lastorder ][4] = add_cssclass( 'menu-top-last', $c );
+		if ( 0 === strpos( $top[2], 'separator' ) && false !== $last_order ) { // If separator.
+			$first_item             = true;
+			$classes                = $menu[ $last_order ][4];
+			$menu[ $last_order ][4] = add_cssclass( 'menu-top-last', $classes );
 			continue;
 		}
 
-		if ( $first ) {
-			$c                 = $menu[ $order ][4];
-			$menu[ $order ][4] = add_cssclass( 'menu-top-first', $c );
-			$first             = false;
+		if ( $first_item ) {
+			$classes           = $menu[ $order ][4];
+			$menu[ $order ][4] = add_cssclass( 'menu-top-first', $classes );
+			$first_item        = false;
 		}
 
-		if ( $mc == $i ) { // last item
-			$c                 = $menu[ $order ][4];
-			$menu[ $order ][4] = add_cssclass( 'menu-top-last', $c );
+		if ( $i == $items_count ) { // Last item.
+			$classes           = $menu[ $order ][4];
+			$menu[ $order ][4] = add_cssclass( 'menu-top-last', $classes );
 		}
 
-		$lastorder = $order;
+		$last_order = $order;
 	}
 
 	/**
-	 * Filters administration menus array with classes added for top-level items.
+	 * Filters administration menu array with classes added for top-level items.
 	 *
 	 * @since 2.7.0
 	 *
@@ -247,7 +259,7 @@ function add_menu_classes( $menu ) {
 	return apply_filters( 'add_menu_classes', $menu );
 }
 
-uksort( $menu, 'strnatcasecmp' ); // make it all pretty
+uksort( $menu, 'strnatcasecmp' ); // Make it all pretty.
 
 /**
  * Filters whether to enable custom ordering of the administration menu.
@@ -283,7 +295,6 @@ if ( apply_filters( 'custom_menu_order', false ) ) {
 	$default_menu_order = array_flip( $default_menu_order );
 
 	/**
-	 *
 	 * @global array $menu_order
 	 * @global array $default_menu_order
 	 *
@@ -313,21 +324,21 @@ if ( apply_filters( 'custom_menu_order', false ) ) {
 	unset( $menu_order, $default_menu_order );
 }
 
-// Prevent adjacent separators
+// Prevent adjacent separators.
 $prev_menu_was_separator = false;
 foreach ( $menu as $id => $data ) {
 	if ( false === stristr( $data[4], 'wp-menu-separator' ) ) {
 
-		// This item is not a separator, so falsey the toggler and do nothing
+		// This item is not a separator, so falsey the toggler and do nothing.
 		$prev_menu_was_separator = false;
 	} else {
 
-		// The previous item was a separator, so unset this one
+		// The previous item was a separator, so unset this one.
 		if ( true === $prev_menu_was_separator ) {
 			unset( $menu[ $id ] );
 		}
 
-		// This item is a separator, so truthy the toggler and move on
+		// This item is a separator, so truthy the toggler and move on.
 		$prev_menu_was_separator = true;
 	}
 }

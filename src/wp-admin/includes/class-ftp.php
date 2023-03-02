@@ -1,15 +1,15 @@
 <?php
 /**
- * PemFTP - A Ftp implementation in pure PHP
+ * PemFTP - An Ftp implementation in pure PHP
  *
  * @package PemFTP
- * @since 2.5
+ * @since 2.5.0
  *
  * @version 1.0
  * @copyright Alexey Dotsenko
  * @author Alexey Dotsenko
- * @link http://www.phpclasses.org/browse/package/1743.html Site
- * @license LGPL http://www.opensource.org/licenses/lgpl-license.html
+ * @link https://www.phpclasses.org/package/1743-PHP-FTP-client-in-pure-PHP.html
+ * @license LGPL https://opensource.org/licenses/lgpl-license.html
  */
 
 /**
@@ -17,7 +17,7 @@
  *
  * This can be redefined.
  *
- * @since 2.5
+ * @since 2.5.0
  * @var string
  */
 if(!defined('CRLF')) define('CRLF',"\r\n");
@@ -27,7 +27,7 @@ if(!defined('CRLF')) define('CRLF',"\r\n");
  *
  * This can be redefined.
  *
- * @since 2.5
+ * @since 2.5.0
  * @var int
  */
 if(!defined("FTP_AUTOASCII")) define("FTP_AUTOASCII", -1);
@@ -35,7 +35,7 @@ if(!defined("FTP_AUTOASCII")) define("FTP_AUTOASCII", -1);
 /**
  *
  * This can be redefined.
- * @since 2.5
+ * @since 2.5.0
  * @var int
  */
 if(!defined("FTP_BINARY")) define("FTP_BINARY", 1);
@@ -43,7 +43,7 @@ if(!defined("FTP_BINARY")) define("FTP_BINARY", 1);
 /**
  *
  * This can be redefined.
- * @since 2.5
+ * @since 2.5.0
  * @var int
  */
 if(!defined("FTP_ASCII")) define("FTP_ASCII", 0);
@@ -53,25 +53,25 @@ if(!defined("FTP_ASCII")) define("FTP_ASCII", 0);
  *
  * This can be redefined.
  *
- * @since 2.5
+ * @since 2.5.0
  * @var bool
  */
 if(!defined('FTP_FORCE')) define('FTP_FORCE', true);
 
 /**
- * @since 2.5
+ * @since 2.5.0
  * @var string
  */
 define('FTP_OS_Unix','u');
 
 /**
- * @since 2.5
+ * @since 2.5.0
  * @var string
  */
 define('FTP_OS_Windows','w');
 
 /**
- * @since 2.5
+ * @since 2.5.0
  * @var string
  */
 define('FTP_OS_Mac','m');
@@ -207,7 +207,7 @@ class ftp_base {
 				$b['month'] = $lucifer[5];
 				$b['day'] = $lucifer[6];
 				if (preg_match("/([0-9]{2}):([0-9]{2})/",$lucifer[7],$l2)) {
-					$b['year'] = date("Y");
+					$b['year'] = gmdate("Y");
 					$b['hour'] = $l2[1];
 					$b['minute'] = $l2[2];
 				} else {
@@ -334,7 +334,7 @@ class ftp_base {
 		} while($this->_code<200);
 		$this->_ready=true;
 		$syst=$this->systype();
-		if(!$syst) $this->SendMSG("Can't detect remote OS");
+		if(!$syst) $this->SendMSG("Cannot detect remote OS");
 		else {
 			if(preg_match("/win|dos|novell/i", $syst[0])) $this->OS_remote=FTP_OS_Windows;
 			elseif(preg_match("/os/i", $syst[0])) $this->OS_remote=FTP_OS_Mac;
@@ -342,7 +342,7 @@ class ftp_base {
 			else $this->OS_remote=FTP_OS_Mac;
 			$this->SendMSG("Remote OS: ".$this->OS_FullName[$this->OS_remote]);
 		}
-		if(!$this->features()) $this->SendMSG("Can't get features list. All supported - disabled");
+		if(!$this->features()) $this->SendMSG("Cannot get features list. All supported - disabled");
 		else $this->SendMSG("Supported features: ".implode(", ", array_keys($this->_features)));
 		return TRUE;
 	}
@@ -371,7 +371,7 @@ class ftp_base {
 		}
 		$this->SendMSG("Authentication succeeded");
 		if(empty($this->_features)) {
-			if(!$this->features()) $this->SendMSG("Can't get features list. All supported - disabled");
+			if(!$this->features()) $this->SendMSG("Cannot get features list. All supported - disabled");
 			else $this->SendMSG("Supported features: ".implode(", ", array_keys($this->_features)));
 		}
 		return TRUE;
@@ -480,7 +480,7 @@ class ftp_base {
 			return FALSE;
 		}
 		if($this->_curtype!=FTP_BINARY) {
-			$this->PushError("restore", "can't restore in ASCII mode");
+			$this->PushError("restore", "cannot restore in ASCII mode");
 			return FALSE;
 		}
 		if(!$this->_exec("REST ".$from, "resore")) return FALSE;
@@ -553,7 +553,7 @@ class ftp_base {
 		if (@file_exists($localfile)) $this->SendMSG("Warning : local file will be overwritten");
 		$fp = @fopen($localfile, "w");
 		if (!$fp) {
-			$this->PushError("get","can't open local file", "Cannot create \"".$localfile."\"");
+			$this->PushError("get","cannot open local file", "Cannot create \"".$localfile."\"");
 			return FALSE;
 		}
 		if($this->_can_restore and $rest!=0) fseek($fp, $rest);
@@ -610,13 +610,13 @@ class ftp_base {
 	function put($localfile, $remotefile=NULL, $rest=0) {
 		if(is_null($remotefile)) $remotefile=$localfile;
 		if (!file_exists($localfile)) {
-			$this->PushError("put","can't open local file", "No such file or directory \"".$localfile."\"");
+			$this->PushError("put","cannot open local file", "No such file or directory \"".$localfile."\"");
 			return FALSE;
 		}
 		$fp = @fopen($localfile, "r");
 
 		if (!$fp) {
-			$this->PushError("put","can't open local file", "Cannot read file \"".$localfile."\"");
+			$this->PushError("put","cannot open local file", "Cannot read file \"".$localfile."\"");
 			return FALSE;
 		}
 		if($this->_can_restore and $rest!=0) fseek($fp, $rest);
@@ -649,7 +649,7 @@ class ftp_base {
 	function mput($local=".", $remote=NULL, $continious=false) {
 		$local=realpath($local);
 		if(!@file_exists($local)) {
-			$this->PushError("mput","can't open local folder", "Cannot stat folder \"".$local."\"");
+			$this->PushError("mput","cannot open local folder", "Cannot stat folder \"".$local."\"");
 			return FALSE;
 		}
 		if(!is_dir($local)) return $this->put($local, $remote);
@@ -662,7 +662,7 @@ class ftp_base {
 			}
 			closedir($handle);
 		} else {
-			$this->PushError("mput","can't open local folder", "Cannot read folder \"".$local."\"");
+			$this->PushError("mput","cannot open local folder", "Cannot read folder \"".$local."\"");
 			return FALSE;
 		}
 		if(empty($list)) return TRUE;
@@ -682,13 +682,13 @@ class ftp_base {
 	function mget($remote, $local=".", $continious=false) {
 		$list=$this->rawlist($remote, "-lA");
 		if($list===false) {
-			$this->PushError("mget","can't read remote folder list", "Can't read remote folder \"".$remote."\" contents");
+			$this->PushError("mget","cannot read remote folder list", "Cannot read remote folder \"".$remote."\" contents");
 			return FALSE;
 		}
 		if(empty($list)) return true;
 		if(!@file_exists($local)) {
 			if(!@mkdir($local)) {
-				$this->PushError("mget","can't create local folder", "Cannot create folder \"".$local."\"");
+				$this->PushError("mget","cannot create local folder", "Cannot create folder \"".$local."\"");
 				return FALSE;
 			}
 		}
@@ -700,13 +700,13 @@ class ftp_base {
 		foreach($list as $el) {
 			if($el["type"]=="d") {
 				if(!$this->mget($remote."/".$el["name"], $local."/".$el["name"], $continious)) {
-					$this->PushError("mget", "can't copy folder", "Can't copy remote folder \"".$remote."/".$el["name"]."\" to local \"".$local."/".$el["name"]."\"");
+					$this->PushError("mget", "cannot copy folder", "Cannot copy remote folder \"".$remote."/".$el["name"]."\" to local \"".$local."/".$el["name"]."\"");
 					$ret=false;
 					if(!$continious) break;
 				}
 			} else {
 				if(!$this->get($remote."/".$el["name"], $local."/".$el["name"])) {
-					$this->PushError("mget", "can't copy file", "Can't copy remote file \"".$remote."/".$el["name"]."\" to local \"".$local."/".$el["name"]."\"");
+					$this->PushError("mget", "cannot copy file", "Cannot copy remote file \"".$remote."/".$el["name"]."\" to local \"".$local."/".$el["name"]."\"");
 					$ret=false;
 					if(!$continious) break;
 				}
@@ -721,7 +721,7 @@ class ftp_base {
 	function mdel($remote, $continious=false) {
 		$list=$this->rawlist($remote, "-la");
 		if($list===false) {
-			$this->PushError("mdel","can't read remote folder list", "Can't read remote folder \"".$remote."\" contents");
+			$this->PushError("mdel","cannot read remote folder list", "Cannot read remote folder \"".$remote."\" contents");
 			return false;
 		}
 
@@ -742,7 +742,7 @@ class ftp_base {
 				}
 			} else {
 				if (!$this->delete($remote."/".$el["name"])) {
-					$this->PushError("mdel", "can't delete file", "Can't delete remote file \"".$remote."/".$el["name"]."\"");
+					$this->PushError("mdel", "cannot delete file", "Cannot delete remote file \"".$remote."/".$el["name"]."\"");
 					$ret=false;
 					if(!$continious) break;
 				}
@@ -750,7 +750,7 @@ class ftp_base {
 		}
 
 		if(!$this->rmdir($remote)) {
-			$this->PushError("mdel", "can't delete folder", "Can't delete remote folder \"".$remote."/".$el["name"]."\"");
+			$this->PushError("mdel", "cannot delete folder", "Cannot delete remote folder \"".$remote."/".$el["name"]."\"");
 			$ret=false;
 		}
 		return $ret;
@@ -792,7 +792,7 @@ class ftp_base {
 		return false;
 	}
 
-	function glob_pattern_match($pattern,$string) {
+	function glob_pattern_match($pattern,$subject) {
 		$out=null;
 		$chunks=explode(';',$pattern);
 		foreach($chunks as $pattern) {
@@ -807,26 +807,27 @@ class ftp_base {
 						str_replace('?','.{1,1}',$pattern))));
 			$out[]=$pattern;
 		}
-		if(count($out)==1) return($this->glob_regexp("^$out[0]$",$string));
+		if(count($out)==1) return($this->glob_regexp("^$out[0]$",$subject));
 		else {
 			foreach($out as $tester)
-				if($this->my_regexp("^$tester$",$string)) return true;
+				// TODO: This should probably be glob_regexp(), but needs tests.
+				if($this->my_regexp("^$tester$",$subject)) return true;
 		}
 		return false;
 	}
 
-	function glob_regexp($pattern,$probe) {
+	function glob_regexp($pattern,$subject) {
 		$sensitive=(PHP_OS!='WIN32');
 		return ($sensitive?
-			preg_match( '/' . preg_quote( $pattern, '/' ) . '/', $probe ) :
-			preg_match( '/' . preg_quote( $pattern, '/' ) . '/i', $probe )
+			preg_match( '/' . preg_quote( $pattern, '/' ) . '/', $subject ) :
+			preg_match( '/' . preg_quote( $pattern, '/' ) . '/i', $subject )
 		);
 	}
 
 	function dirlist($remote) {
 		$list=$this->rawlist($remote, "-la");
 		if($list===false) {
-			$this->PushError("dirlist","can't read remote folder list", "Can't read remote folder \"".$remote."\" contents");
+			$this->PushError("dirlist","cannot read remote folder list", "Cannot read remote folder \"".$remote."\" contents");
 			return false;
 		}
 
@@ -903,7 +904,7 @@ if ( ! $mod_sockets && function_exists( 'dl' ) && is_callable( 'dl' ) ) {
 	$mod_sockets = extension_loaded( 'sockets' );
 }
 
-require_once dirname( __FILE__ ) . "/class-ftp-" . ( $mod_sockets ? "sockets" : "pure" ) . ".php";
+require_once __DIR__ . "/class-ftp-" . ( $mod_sockets ? "sockets" : "pure" ) . ".php";
 
 if ( $mod_sockets ) {
 	class ftp extends ftp_sockets {}

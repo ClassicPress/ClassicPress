@@ -31,30 +31,36 @@ add_filter( 'async_upload_audio', 'get_media_item', 10, 2 );
 add_filter( 'async_upload_video', 'get_media_item', 10, 2 );
 add_filter( 'async_upload_file', 'get_media_item', 10, 2 );
 
-add_filter( 'attachment_fields_to_save', 'image_attachment_fields_to_save', 10, 2 );
-
 add_filter( 'media_upload_gallery', 'media_upload_gallery' );
 add_filter( 'media_upload_library', 'media_upload_library' );
 
 add_filter( 'media_upload_tabs', 'update_gallery_tab' );
 
+// Admin color schemes.
+add_action( 'admin_init', 'register_admin_color_schemes', 1 );
+add_action( 'admin_head', 'wp_color_scheme_settings' );
+add_action( 'admin_color_scheme_picker', 'admin_color_scheme_picker' );
+
 // Misc hooks.
 add_action( 'admin_init', 'wp_admin_headers' );
 add_action( 'login_init', 'wp_admin_headers' );
+add_action( 'admin_init', 'send_frame_options_header', 10, 0 );
 add_action( 'admin_head', 'wp_admin_canonical_url' );
-add_action( 'admin_head', 'wp_color_scheme_settings' );
 add_action( 'admin_head', 'wp_site_icon' );
-add_action( 'admin_head', '_ipad_meta' );
-
-// Privacy tools
-add_action( 'admin_menu', '_wp_privacy_hook_requests_page' );
-add_action( 'load-tools_page_export_personal_data', '_wp_privacy_requests_screen_options' );
-add_action( 'load-tools_page_remove_personal_data', '_wp_privacy_requests_screen_options' );
+add_action( 'admin_head', 'wp_admin_viewport_meta' );
+add_action( 'customize_controls_head', 'wp_admin_viewport_meta' );
+add_filter( 'nav_menu_meta_box_object', '_wp_nav_menu_meta_box_object' );
 
 // Prerendering.
 if ( ! is_customize_preview() ) {
 	add_filter( 'admin_print_styles', 'wp_resource_hints', 1 );
 }
+
+add_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+add_action( 'admin_print_scripts', 'print_head_scripts', 20 );
+add_action( 'admin_print_footer_scripts', '_wp_footer_scripts' );
+add_action( 'admin_print_styles', 'print_emoji_styles' );
+add_action( 'admin_print_styles', 'print_admin_styles', 20 );
 
 add_action( 'admin_print_scripts-post.php', 'wp_page_reload_on_back_button_js' );
 add_action( 'admin_print_scripts-post-new.php', 'wp_page_reload_on_back_button_js' );
@@ -69,8 +75,11 @@ add_action( 'update_option_new_admin_email', 'update_option_new_admin_email', 10
 
 add_filter( 'heartbeat_received', 'wp_check_locked_posts', 10, 3 );
 add_filter( 'heartbeat_received', 'wp_refresh_post_lock', 10, 3 );
-add_filter( 'wp_refresh_nonces', 'wp_refresh_post_nonces', 10, 3 );
 add_filter( 'heartbeat_received', 'heartbeat_autosave', 500, 2 );
+
+add_filter( 'wp_refresh_nonces', 'wp_refresh_post_nonces', 10, 3 );
+add_filter( 'wp_refresh_nonces', 'wp_refresh_metabox_loader_nonces', 10, 2 );
+add_filter( 'wp_refresh_nonces', 'wp_refresh_heartbeat_nonces' );
 
 add_filter( 'heartbeat_settings', 'wp_heartbeat_set_suspension' );
 
@@ -78,13 +87,17 @@ add_filter( 'heartbeat_settings', 'wp_heartbeat_set_suspension' );
 add_action( 'admin_head-nav-menus.php', '_wp_delete_orphaned_draft_menu_items' );
 
 // Plugin hooks.
-add_filter( 'whitelist_options', 'option_update_filter' );
+add_filter( 'allowed_options', 'option_update_filter' );
 
 // Plugin Install hooks.
-add_action( 'install_plugins_popular', 'install_dashboard' );
-add_action( 'install_plugins_categories', 'display_plugins_categories_list' );
+add_action( 'install_plugins_featured', 'install_dashboard' );
 add_action( 'install_plugins_upload', 'install_plugins_upload' );
 add_action( 'install_plugins_search', 'display_plugins_table' );
+add_action( 'install_plugins_popular', 'display_plugins_table' );
+add_action( 'install_plugins_recommended', 'display_plugins_table' );
+add_action( 'install_plugins_new', 'display_plugins_table' );
+add_action( 'install_plugins_beta', 'display_plugins_table' );
+add_action( 'install_plugins_favorites', 'display_plugins_table' );
 add_action( 'install_plugins_pre_plugin-information', 'install_plugin_information' );
 
 // Template hooks.
@@ -95,12 +108,6 @@ add_action( 'user_register', array( 'WP_Internal_Pointers', 'dismiss_pointers_fo
 add_action( 'customize_controls_print_footer_scripts', 'customize_themes_print_templates' );
 
 // Theme Install hooks.
-// add_action('install_themes_dashboard', 'install_themes_dashboard');
-// add_action('install_themes_upload', 'install_themes_upload', 10, 0);
-// add_action('install_themes_search', 'display_themes');
-// add_action('install_themes_featured', 'display_themes');
-// add_action('install_themes_new', 'display_themes');
-// add_action('install_themes_updated', 'display_themes');
 add_action( 'install_themes_pre_theme-information', 'install_theme_information' );
 
 // User hooks.
@@ -118,7 +125,11 @@ add_action( 'load-plugins.php', 'wp_plugin_update_rows', 20 ); // After wp_updat
 add_action( 'load-themes.php', 'wp_theme_update_rows', 20 ); // After wp_update_themes() is called.
 
 add_action( 'admin_notices', 'update_nag', 3 );
+add_action( 'admin_notices', 'deactivated_plugins_notice', 5 );
+add_action( 'admin_notices', 'paused_plugins_notice', 5 );
+add_action( 'admin_notices', 'paused_themes_notice', 5 );
 add_action( 'admin_notices', 'maintenance_nag', 10 );
+add_action( 'admin_notices', 'wp_recovery_mode_nag', 1 );
 
 add_filter( 'update_footer', 'core_update_footer' );
 
@@ -131,7 +142,7 @@ add_action( 'upgrader_process_complete', 'wp_version_check', 10, 0 );
 add_action( 'upgrader_process_complete', 'wp_update_plugins', 10, 0 );
 add_action( 'upgrader_process_complete', 'wp_update_themes', 10, 0 );
 
-// Privacy hooks
+// Privacy hooks.
 add_filter( 'wp_privacy_personal_data_erasure_page', 'wp_privacy_process_personal_data_erasure_page', 10, 5 );
 add_filter( 'wp_privacy_personal_data_export_page', 'wp_privacy_process_personal_data_export_page', 10, 7 );
 add_action( 'wp_privacy_personal_data_export_file', 'wp_privacy_generate_personal_data_export_file', 10 );
@@ -141,7 +152,7 @@ add_action( 'wp_privacy_personal_data_erased', '_wp_privacy_send_erasure_fulfill
 add_action( 'admin_init', array( 'WP_Privacy_Policy_Content', 'text_change_check' ), 100 );
 
 // Show a "postbox" with the text suggestions for a privacy policy.
-add_action( 'edit_form_after_title', array( 'WP_Privacy_Policy_Content', 'notice' ) );
+add_action( 'admin_notices', array( 'WP_Privacy_Policy_Content', 'notice' ) );
 
 // Add the suggested policy text from ClassicPress.
 add_action( 'admin_init', array( 'WP_Privacy_Policy_Content', 'add_suggested_content' ), 1 );

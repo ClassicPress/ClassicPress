@@ -109,10 +109,11 @@ function _wp_ajax_menu_quick_search( $request = array() ) {
 			}
 		} elseif ( 'taxonomy' === $matches[1] ) {
 			$terms = get_terms(
-				$matches[2],
 				array(
+					'taxonomy'   => $matches[2],
 					'name__like' => $query,
 					'number'     => 10,
+					'hide_empty' => false,
 				)
 			);
 			if ( empty( $terms ) || is_wp_error( $terms ) ) {
@@ -140,20 +141,20 @@ function _wp_ajax_menu_quick_search( $request = array() ) {
  * Register nav menu meta boxes and advanced menu items.
  *
  * @since 3.0.0
- **/
+ */
 function wp_nav_menu_setup() {
-	// Register meta boxes
+	// Register meta boxes.
 	wp_nav_menu_post_type_meta_boxes();
 	add_meta_box( 'add-custom-links', __( 'Custom Links' ), 'wp_nav_menu_item_link_meta_box', 'nav-menus', 'side', 'default' );
 	wp_nav_menu_taxonomy_meta_boxes();
 
-	// Register advanced menu items (columns)
+	// Register advanced menu items (columns).
 	add_filter( 'manage_nav-menus_columns', 'wp_nav_menu_manage_columns' );
 
 	// If first time editing, disable advanced items by default.
 	if ( false === get_user_option( 'managenav-menuscolumnshidden' ) ) {
 		$user = wp_get_current_user();
-		update_user_option(
+		update_user_meta(
 			$user->ID,
 			'managenav-menuscolumnshidden',
 			array(
@@ -162,8 +163,7 @@ function wp_nav_menu_setup() {
 				2 => 'xfn',
 				3 => 'description',
 				4 => 'title-attribute',
-			),
-			true
+			)
 		);
 	}
 }
@@ -174,7 +174,7 @@ function wp_nav_menu_setup() {
  * @since 3.0.0
  *
  * @global array $wp_meta_boxes
- **/
+ */
 function wp_initial_nav_menu_meta_boxes() {
 	global $wp_meta_boxes;
 
@@ -198,7 +198,7 @@ function wp_initial_nav_menu_meta_boxes() {
 	}
 
 	$user = wp_get_current_user();
-	update_user_option( $user->ID, 'metaboxhidden_nav-menus', $hidden_meta_boxes, true );
+	update_user_meta( $user->ID, 'metaboxhidden_nav-menus', $hidden_meta_boxes );
 }
 
 /**
@@ -223,8 +223,8 @@ function wp_nav_menu_post_type_meta_boxes() {
 		 *
 		 * @since 3.0.0
 		 *
-		 * @param object $meta_box_object The current object to add a menu items
-		 *                                meta box for.
+		 * @param WP_Post_Type|false $post_type The current object to add a menu items
+		 *                                      meta box for.
 		 */
 		$post_type = apply_filters( 'nav_menu_meta_box_object', $post_type );
 		if ( $post_type ) {
@@ -259,23 +259,25 @@ function wp_nav_menu_taxonomy_meta_boxes() {
 }
 
 /**
- * Check whether to disable the Menu Locations meta box submit button
+ * Check whether to disable the Menu Locations meta box submit button and inputs.
  *
  * @since 3.6.0
+ * @since 5.3.1 The `$display` parameter was added.
  *
  * @global bool $one_theme_location_no_menus to determine if no menus exist
  *
- * @param int|string $nav_menu_selected_id (id, name or slug) of the currently-selected menu
- * @return string Disabled attribute if at least one menu exists, false if not
+ * @param int|string $nav_menu_selected_id ID, name, or slug of the currently selected menu.
+ * @param bool       $display              Whether to display or just return the string.
+ * @return string|false Disabled attribute if at least one menu exists, false if not.
  */
-function wp_nav_menu_disabled_check( $nav_menu_selected_id ) {
+function wp_nav_menu_disabled_check( $nav_menu_selected_id, $display = true ) {
 	global $one_theme_location_no_menus;
 
 	if ( $one_theme_location_no_menus ) {
 		return false;
 	}
 
-	return disabled( $nav_menu_selected_id, 0 );
+	return disabled( $nav_menu_selected_id, 0, $display );
 }
 
 /**
@@ -296,12 +298,12 @@ function wp_nav_menu_item_link_meta_box() {
 		<input type="hidden" value="custom" name="menu-item[<?php echo $_nav_menu_placeholder; ?>][menu-item-type]" />
 		<p id="menu-item-url-wrap" class="wp-clearfix">
 			<label class="howto" for="custom-menu-item-url"><?php _e( 'URL' ); ?></label>
-			<input id="custom-menu-item-url" name="menu-item[<?php echo $_nav_menu_placeholder; ?>][menu-item-url]" type="text" class="code menu-item-textbox" value="http://" />
+			<input id="custom-menu-item-url" name="menu-item[<?php echo $_nav_menu_placeholder; ?>][menu-item-url]" type="text"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="code menu-item-textbox form-required" placeholder="https://" />
 		</p>
 
 		<p id="menu-item-name-wrap" class="wp-clearfix">
 			<label class="howto" for="custom-menu-item-name"><?php _e( 'Link Text' ); ?></label>
-			<input id="custom-menu-item-name" name="menu-item[<?php echo $_nav_menu_placeholder; ?>][menu-item-title]" type="text" class="regular-text menu-item-textbox" />
+			<input id="custom-menu-item-name" name="menu-item[<?php echo $_nav_menu_placeholder; ?>][menu-item-title]" type="text"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="regular-text menu-item-textbox" />
 		</p>
 
 		<p class="button-controls wp-clearfix">
@@ -323,22 +325,22 @@ function wp_nav_menu_item_link_meta_box() {
  * @global int        $_nav_menu_placeholder
  * @global int|string $nav_menu_selected_id
  *
- * @param string $object Not used.
+ * @param string $data_object Not used.
  * @param array  $box {
  *     Post type menu item meta box arguments.
  *
  *     @type string       $id       Meta box 'id' attribute.
  *     @type string       $title    Meta box title.
- *     @type string       $callback Meta box display callback.
+ *     @type callable     $callback Meta box display callback.
  *     @type WP_Post_Type $args     Extra meta box arguments (the post type object for this meta box).
  * }
  */
-function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
+function wp_nav_menu_item_post_type_meta_box( $data_object, $box ) {
 	global $_nav_menu_placeholder, $nav_menu_selected_id;
 
 	$post_type_name = $box['args']->name;
-	$tab_name       = $post_type_name . '-tab';
 	$post_type      = get_post_type_object( $post_type_name );
+	$tab_name       = $post_type_name . '-tab';
 
 	// Paginate browsing for large numbers of post objects.
 	$per_page = 50;
@@ -379,7 +381,7 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 			$important_pages[]   = $front_page_obj;
 			$suppress_page_ids[] = $front_page_obj->ID;
 		} else {
-			$_nav_menu_placeholder = ( 0 > $_nav_menu_placeholder ) ? intval( $_nav_menu_placeholder ) - 1 : -1;
+			$_nav_menu_placeholder = ( 0 > $_nav_menu_placeholder ) ? (int) $_nav_menu_placeholder - 1 : -1;
 			$front_page_obj        = (object) array(
 				'front_or_home' => true,
 				'ID'            => 0,
@@ -429,9 +431,19 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 	// @todo Transient caching of these results with proper invalidation on updating of a post of this type.
 	$get_posts = new WP_Query;
 	$posts     = $get_posts->query( $args );
+
+	// Only suppress and insert when more than just suppression pages available.
 	if ( ! $get_posts->post_count ) {
-		echo '<p>' . __( 'No items.' ) . '</p>';
-		return;
+		if ( ! empty( $suppress_page_ids ) ) {
+			unset( $args['post__not_in'] );
+			$get_posts = new WP_Query;
+			$posts     = $get_posts->query( $args );
+		} else {
+			echo '<p>' . __( 'No items.' ) . '</p>';
+			return;
+		}
+	} elseif ( ! empty( $important_pages ) ) {
+		$posts = array_merge( $important_pages, $posts );
 	}
 
 	$num_pages = $get_posts->max_num_pages;
@@ -532,13 +544,18 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 				 *
 				 * The dynamic portion of the hook name, `$post_type_name`, refers to the post type name.
 				 *
+				 * Possible hook names include:
+				 *
+				 *  - `nav_menu_items_post_recent`
+				 *  - `nav_menu_items_page_recent`
+				 *
 				 * @since 4.3.0
 				 * @since 4.9.0 Added the `$recent_args` parameter.
 				 *
-				 * @param array $most_recent An array of post objects being listed.
-				 * @param array $args        An array of WP_Query arguments for the meta box.
-				 * @param array $box         Arguments passed to wp_nav_menu_item_post_type_meta_box().
-				 * @param array $recent_args An array of WP_Query arguments for 'Most Recent' tab.
+				 * @param WP_Post[] $most_recent An array of post objects being listed.
+				 * @param array     $args        An array of `WP_Query` arguments for the meta box.
+				 * @param array     $box         Arguments passed to `wp_nav_menu_item_post_type_meta_box()`.
+				 * @param array     $recent_args An array of `WP_Query` arguments for 'Most Recent' tab.
 				 */
 				$most_recent = apply_filters( "nav_menu_items_{$post_type_name}_recent", $most_recent, $args, $box, $recent_args );
 
@@ -566,7 +583,7 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 			?>
 			<p class="quick-search-wrap">
 				<label for="quick-search-posttype-<?php echo $post_type_name; ?>" class="screen-reader-text"><?php _e( 'Search' ); ?></label>
-				<input type="search" class="quick-search" value="<?php echo $searched; ?>" name="quick-search-posttype-<?php echo $post_type_name; ?>" id="quick-search-posttype-<?php echo $post_type_name; ?>" />
+				<input type="search"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="quick-search" value="<?php echo $searched; ?>" name="quick-search-posttype-<?php echo $post_type_name; ?>" id="quick-search-posttype-<?php echo $post_type_name; ?>" />
 				<span class="spinner"></span>
 				<?php submit_button( __( 'Search' ), 'small quick-search-submit hide-if-js', 'submit', false, array( 'id' => 'submit-quick-search-posttype-' . $post_type_name ) ); ?>
 			</p>
@@ -595,38 +612,8 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 				<?php
 				$args['walker'] = $walker;
 
-				/*
-				 * If we're dealing with pages, let's put a checkbox for the front
-				 * page at the top of the list.
-				 */
-				if ( 'page' == $post_type_name ) {
-					$front_page = 'page' == get_option( 'show_on_front' ) ? (int) get_option( 'page_on_front' ) : 0;
-					if ( ! empty( $front_page ) ) {
-						$front_page_obj                = get_post( $front_page );
-						$front_page_obj->front_or_home = true;
-						array_unshift( $posts, $front_page_obj );
-					} else {
-						$_nav_menu_placeholder = ( 0 > $_nav_menu_placeholder ) ? intval( $_nav_menu_placeholder ) - 1 : -1;
-						array_unshift(
-							$posts,
-							(object) array(
-								'front_or_home' => true,
-								'ID'            => 0,
-								'object_id'     => $_nav_menu_placeholder,
-								'post_content'  => '',
-								'post_excerpt'  => '',
-								'post_parent'   => '',
-								'post_title'    => _x( 'Home', 'nav menu home label' ),
-								'post_type'     => 'nav_menu_item',
-								'type'          => 'custom',
-								'url'           => home_url( '/' ),
-							)
-						);
-					}
-				}
-
 				if ( $post_type->has_archive ) {
-					$_nav_menu_placeholder = ( 0 > $_nav_menu_placeholder ) ? intval( $_nav_menu_placeholder ) - 1 : -1;
+					$_nav_menu_placeholder = ( 0 > $_nav_menu_placeholder ) ? (int) $_nav_menu_placeholder - 1 : -1;
 					array_unshift(
 						$posts,
 						(object) array(
@@ -650,13 +637,19 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 				 * The dynamic portion of the hook name, `$post_type_name`, refers
 				 * to the slug of the current post type.
 				 *
+				 * Possible hook names include:
+				 *
+				 *  - `nav_menu_items_post`
+				 *  - `nav_menu_items_page`
+				 *
 				 * @since 3.2.0
 				 * @since 4.6.0 Converted the `$post_type` parameter to accept a WP_Post_Type object.
 				 *
 				 * @see WP_Query::query()
 				 *
-				 * @param array        $posts     The posts for the current post type.
-				 * @param array        $args      An array of WP_Query arguments.
+				 * @param object[]     $posts     The posts for the current post type. Mostly `WP_Post` objects, but
+				 *                                can also contain "fake" post objects to represent other menu items.
+				 * @param array        $args      An array of `WP_Query` arguments.
 				 * @param WP_Post_Type $post_type The current post type object for this menu item meta box.
 				 */
 				$posts = apply_filters( "nav_menu_items_{$post_type_name}", $posts, $args, $post_type );
@@ -675,8 +668,8 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
 
 		<p class="button-controls wp-clearfix" data-items-type="posttype-<?php echo esc_attr( $post_type_name ); ?>">
 			<span class="list-controls hide-if-no-js">
-				<input type="checkbox" id="<?php echo esc_attr( $post_type_name . '-tab' ); ?>" class="select-all" />
-				<label for="<?php echo esc_attr( $post_type_name . '-tab' ); ?>"><?php _e( 'Select All' ); ?></label>
+				<input type="checkbox"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> id="<?php echo esc_attr( $tab_name ); ?>" class="select-all" />
+				<label for="<?php echo esc_attr( $tab_name ); ?>"><?php _e( 'Select All' ); ?></label>
 			</span>
 
 			<span class="add-to-menu">
@@ -696,17 +689,17 @@ function wp_nav_menu_item_post_type_meta_box( $object, $box ) {
  *
  * @global int|string $nav_menu_selected_id
  *
- * @param string $object Not used.
+ * @param string $data_object Not used.
  * @param array  $box {
  *     Taxonomy menu item meta box arguments.
  *
- *     @type string $id       Meta box 'id' attribute.
- *     @type string $title    Meta box title.
- *     @type string $callback Meta box display callback.
- *     @type object $args     Extra meta box arguments (the taxonomy object for this meta box).
+ *     @type string   $id       Meta box 'id' attribute.
+ *     @type string   $title    Meta box title.
+ *     @type callable $callback Meta box display callback.
+ *     @type object   $args     Extra meta box arguments (the taxonomy object for this meta box).
  * }
  */
-function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
+function wp_nav_menu_item_taxonomy_meta_box( $data_object, $box ) {
 	global $nav_menu_selected_id;
 
 	$taxonomy_name = $box['args']->name;
@@ -719,6 +712,7 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 	$offset   = 0 < $pagenum ? $per_page * ( $pagenum - 1 ) : 0;
 
 	$args = array(
+		'taxonomy'     => $taxonomy_name,
 		'child_of'     => 0,
 		'exclude'      => '',
 		'hide_empty'   => false,
@@ -731,7 +725,7 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 		'pad_counts'   => false,
 	);
 
-	$terms = get_terms( $taxonomy_name, $args );
+	$terms = get_terms( $args );
 
 	if ( ! $terms || is_wp_error( $terms ) ) {
 		echo '<p>' . __( 'No items.' ) . '</p>';
@@ -740,7 +734,6 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 
 	$num_pages = ceil(
 		wp_count_terms(
-			$taxonomy_name,
 			array_merge(
 				$args,
 				array(
@@ -756,9 +749,9 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 			'base'               => add_query_arg(
 				array(
 					$tab_name     => 'all',
-					'paged'                 => '%#%',
-					'item-type'             => 'taxonomy',
-					'item-object'           => $taxonomy_name,
+					'paged'       => '%#%',
+					'item-type'   => 'taxonomy',
+					'item-object' => $taxonomy_name,
 				)
 			),
 			'format'             => '',
@@ -831,8 +824,8 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 			<ul id="<?php echo $taxonomy_name; ?>checklist-pop" class="categorychecklist form-no-clear" >
 				<?php
 				$popular_terms  = get_terms(
-					$taxonomy_name,
 					array(
+						'taxonomy'     => $taxonomy_name,
 						'orderby'      => 'count',
 						'order'        => 'DESC',
 						'number'       => 10,
@@ -869,8 +862,8 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 			if ( isset( $_REQUEST[ 'quick-search-taxonomy-' . $taxonomy_name ] ) ) {
 				$searched       = esc_attr( $_REQUEST[ 'quick-search-taxonomy-' . $taxonomy_name ] );
 				$search_results = get_terms(
-					$taxonomy_name,
 					array(
+						'taxonomy'     => $taxonomy_name,
 						'name__like'   => $searched,
 						'fields'       => 'all',
 						'orderby'      => 'count',
@@ -906,8 +899,8 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
 
 		<p class="button-controls wp-clearfix" data-items-type="taxonomy-<?php echo esc_attr( $taxonomy_name ); ?>">
 			<span class="list-controls hide-if-no-js">
-				<input type="checkbox" id="<?php echo esc_attr( $taxonomy_name . '-tab' ); ?>" class="select-all" />
-				<label for="<?php echo esc_attr( $taxonomy_name . '-tab' ); ?>"><?php _e( 'Select All' ); ?></label>
+				<input type="checkbox"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> id="<?php echo esc_attr( $tab_name ); ?>" class="select-all" />
+				<label for="<?php echo esc_attr( $tab_name ); ?>"><?php _e( 'Select All' ); ?></label>
 			</span>
 
 			<span class="add-to-menu">
@@ -925,9 +918,9 @@ function wp_nav_menu_item_taxonomy_meta_box( $object, $box ) {
  *
  * @since 3.0.0
  *
- * @param int $menu_id The menu ID for which to save this item. $menu_id of 0 makes a draft, orphaned menu item.
- * @param array $menu_data The unsanitized posted menu item data.
- * @return array The database IDs of the items saved
+ * @param int     $menu_id   The menu ID for which to save this item. Value of 0 makes a draft, orphaned menu item. Default 0.
+ * @param array[] $menu_data The unsanitized POSTed menu item data.
+ * @return int[] The database IDs of the items saved
  */
 function wp_save_nav_menu_items( $menu_id = 0, $menu_data = array() ) {
 	$menu_id     = (int) $menu_id;
@@ -996,40 +989,40 @@ function wp_save_nav_menu_items( $menu_id = 0, $menu_data = array() ) {
  *
  * @access private
  *
- * @param object $object The post type or taxonomy meta-object.
- * @return object The post type of taxonomy object.
+ * @param object $data_object The post type or taxonomy meta-object.
+ * @return object The post type or taxonomy object.
  */
-function _wp_nav_menu_meta_box_object( $object = null ) {
-	if ( isset( $object->name ) ) {
+function _wp_nav_menu_meta_box_object( $data_object = null ) {
+	if ( isset( $data_object->name ) ) {
 
-		if ( 'page' === $object->name ) {
-			$object->_default_query = array(
+		if ( 'page' === $data_object->name ) {
+			$data_object->_default_query = array(
 				'orderby'     => 'menu_order title',
 				'post_status' => 'publish',
 			);
 
 			// Posts should show only published items.
-		} elseif ( 'post' === $object->name ) {
-			$object->_default_query = array(
+		} elseif ( 'post' === $data_object->name ) {
+			$data_object->_default_query = array(
 				'post_status' => 'publish',
 			);
 
 			// Categories should be in reverse chronological order.
-		} elseif ( 'category' === $object->name ) {
-			$object->_default_query = array(
+		} elseif ( 'category' === $data_object->name ) {
+			$data_object->_default_query = array(
 				'orderby' => 'id',
 				'order'   => 'DESC',
 			);
 
 			// Custom post types should show only published items.
 		} else {
-			$object->_default_query = array(
+			$data_object->_default_query = array(
 				'post_status' => 'publish',
 			);
 		}
 	}
 
-	return $object;
+	return $data_object;
 }
 
 /**
@@ -1038,7 +1031,7 @@ function _wp_nav_menu_meta_box_object( $object = null ) {
  * @since 3.0.0
  *
  * @param int $menu_id Optional. The ID of the menu to format. Default 0.
- * @return string|WP_Error $output The menu formatted to edit or error object on failure.
+ * @return string|WP_Error The menu formatted to edit or error object on failure.
  */
 function wp_get_nav_menu_to_edit( $menu_id = 0 ) {
 	$menu = wp_get_nav_menu_object( $menu_id );
@@ -1070,8 +1063,8 @@ function wp_get_nav_menu_to_edit( $menu_id = 0 ) {
 		} else {
 			return new WP_Error(
 				'menu_walker_not_exist',
-				/* translators: %s: walker class name */
 				sprintf(
+					/* translators: %s: Walker class name. */
 					__( 'The Walker class named %s does not exist.' ),
 					'<strong>' . $walker_class_name . '</strong>'
 				)
@@ -1112,7 +1105,7 @@ function wp_get_nav_menu_to_edit( $menu_id = 0 ) {
  *
  * @since 3.0.0
  *
- * @return array Columns.
+ * @return string[] Array of column titles keyed by their column name.
  */
 function wp_nav_menu_manage_columns() {
 	return array(
@@ -1132,7 +1125,7 @@ function wp_nav_menu_manage_columns() {
  * @access private
  * @since 3.0.0
  *
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  */
 function _wp_delete_orphaned_draft_menu_items() {
 	global $wpdb;
@@ -1151,9 +1144,9 @@ function _wp_delete_orphaned_draft_menu_items() {
  *
  * @since 3.6.0
  *
- * @param int|string $nav_menu_selected_id (id, slug, or name ) of the currently-selected menu
- * @param string $nav_menu_selected_title Title of the currently-selected menu
- * @return array $messages The menu updated message
+ * @param int|string $nav_menu_selected_id    ID, slug, or name of the currently-selected menu.
+ * @param string     $nav_menu_selected_title Title of the currently-selected menu.
+ * @return array The menu updated message
  */
 function wp_nav_menu_update_menu_items( $nav_menu_selected_id, $nav_menu_selected_title ) {
 	$unsorted_menu_items = wp_get_nav_menu_items(
@@ -1166,8 +1159,8 @@ function wp_nav_menu_update_menu_items( $nav_menu_selected_id, $nav_menu_selecte
 		)
 	);
 
-	$messages            = array();
-	$menu_items          = array();
+	$messages   = array();
+	$menu_items = array();
 
 	// Index menu items by DB ID.
 	foreach ( $unsorted_menu_items as $_item ) {
@@ -1216,7 +1209,7 @@ function wp_nav_menu_update_menu_items( $nav_menu_selected_id, $nav_menu_selecte
 		}
 	}
 
-	// Remove menu items from the menu that weren't in $_POST
+	// Remove menu items from the menu that weren't in $_POST.
 	if ( ! empty( $menu_items ) ) {
 		foreach ( array_keys( $menu_items ) as $menu_item_id ) {
 			if ( is_nav_menu_item( $menu_item_id ) ) {
@@ -1254,8 +1247,8 @@ function wp_nav_menu_update_menu_items( $nav_menu_selected_id, $nav_menu_selecte
 	do_action( 'wp_update_nav_menu', $nav_menu_selected_id );
 
 	$messages[] = '<div id="message" class="updated notice is-dismissible"><p>' .
-		/* translators: %s: nav menu title */
 		sprintf(
+			/* translators: %s: Nav menu title. */
 			__( '%s has been updated.' ),
 			'<strong>' . $nav_menu_selected_title . '</strong>'
 		) . '</p></div>';
@@ -1267,7 +1260,7 @@ function wp_nav_menu_update_menu_items( $nav_menu_selected_id, $nav_menu_selecte
 
 /**
  * If a JSON blob of navigation menu data is in POST data, expand it and inject
- * it into `$_POST` to avoid PHP `max_input_vars` limitations. See https://core.trac.wordpress.org/ticket/14134.
+ * it into `$_POST` to avoid PHP `max_input_vars` limitations. See #14134.
  *
  * @ignore
  * @since 4.5.3
@@ -1283,7 +1276,7 @@ function _wp_expand_nav_menu_post_data() {
 	if ( ! is_null( $data ) && $data ) {
 		foreach ( $data as $post_input_data ) {
 			// For input names that are arrays (e.g. `menu-item-db-id[3][4][5]`),
-			// derive the array path keys via regex and set the value in $_POST.
+			// derive the array path keys via regex and set the value in $_POST.
 			preg_match( '#([^\[]*)(\[(.+)\])?#', $post_input_data->name, $matches );
 
 			$array_bits = array( $matches[1] );

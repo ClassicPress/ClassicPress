@@ -11,7 +11,6 @@
  * Core class used to implement displaying terms in a list table.
  *
  * @since 3.1.0
- * @access private
  *
  * @see WP_List_Table
  */
@@ -68,7 +67,6 @@ class WP_Terms_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 *
 	 * @return bool
 	 */
 	public function ajax_user_can() {
@@ -78,9 +76,11 @@ class WP_Terms_List_Table extends WP_List_Table {
 	/**
 	 */
 	public function prepare_items() {
-		$tags_per_page = $this->get_items_per_page( 'edit_' . $this->screen->taxonomy . '_per_page' );
+		$taxonomy = $this->screen->taxonomy;
 
-		if ( 'post_tag' === $this->screen->taxonomy ) {
+		$tags_per_page = $this->get_items_per_page( "edit_{$taxonomy}_per_page" );
+
+		if ( 'post_tag' === $taxonomy ) {
 			/**
 			 * Filters the number of terms displayed per page for the Tags list table.
 			 *
@@ -94,12 +94,12 @@ class WP_Terms_List_Table extends WP_List_Table {
 			 * Filters the number of terms displayed per page for the Tags list table.
 			 *
 			 * @since 2.7.0
-			 * @deprecated 2.8.0 Use edit_tags_per_page instead.
+			 * @deprecated 2.8.0 Use {@see 'edit_tags_per_page'} instead.
 			 *
 			 * @param int $tags_per_page Number of tags to be displayed. Default 20.
 			 */
-			$tags_per_page = apply_filters( 'tagsperpage', $tags_per_page );
-		} elseif ( 'category' === $this->screen->taxonomy ) {
+			$tags_per_page = apply_filters_deprecated( 'tagsperpage', array( $tags_per_page ), '2.8.0', 'edit_tags_per_page' );
+		} elseif ( 'category' === $taxonomy ) {
 			/**
 			 * Filters the number of terms displayed per page for the Categories list table.
 			 *
@@ -113,9 +113,11 @@ class WP_Terms_List_Table extends WP_List_Table {
 		$search = ! empty( $_REQUEST['s'] ) ? trim( wp_unslash( $_REQUEST['s'] ) ) : '';
 
 		$args = array(
-			'search' => $search,
-			'page'   => $this->get_pagenum(),
-			'number' => $tags_per_page,
+			'taxonomy'   => $taxonomy,
+			'search'     => $search,
+			'page'       => $this->get_pagenum(),
+			'number'     => $tags_per_page,
+			'hide_empty' => 0,
 		);
 
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
@@ -126,23 +128,30 @@ class WP_Terms_List_Table extends WP_List_Table {
 			$args['order'] = trim( wp_unslash( $_REQUEST['order'] ) );
 		}
 
+		$args['offset'] = ( $args['page'] - 1 ) * $args['number'];
+
+		// Save the values because 'number' and 'offset' can be subsequently overridden.
 		$this->callback_args = $args;
+
+		if ( is_taxonomy_hierarchical( $taxonomy ) && ! isset( $args['orderby'] ) ) {
+			// We'll need the full set of terms then.
+			$args['number'] = 0;
+			$args['offset'] = $args['number'];
+		}
+
+		$this->items = get_terms( $args );
 
 		$this->set_pagination_args(
 			array(
-				'total_items' => wp_count_terms( $this->screen->taxonomy, compact( 'search' ) ),
+				'total_items' => wp_count_terms(
+					array(
+						'taxonomy' => $taxonomy,
+						'search'   => $search,
+					)
+				),
 				'per_page'    => $tags_per_page,
 			)
 		);
-	}
-
-	/**
-	 *
-	 * @return bool
-	 */
-	public function has_items() {
-		// todo: populate $this->items in prepare_items()
-		return true;
 	}
 
 	/**
@@ -152,7 +161,6 @@ class WP_Terms_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 *
 	 * @return array
 	 */
 	protected function get_bulk_actions() {
@@ -166,7 +174,6 @@ class WP_Terms_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 *
 	 * @return string
 	 */
 	public function current_action() {
@@ -178,7 +185,6 @@ class WP_Terms_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 *
 	 * @return array
 	 */
 	public function get_columns() {
@@ -199,7 +205,6 @@ class WP_Terms_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 *
 	 * @return array
 	 */
 	protected function get_sortable_columns() {
@@ -217,51 +222,33 @@ class WP_Terms_List_Table extends WP_List_Table {
 	public function display_rows_or_placeholder() {
 		$taxonomy = $this->screen->taxonomy;
 
-		$args = wp_parse_args(
-			$this->callback_args,
-			array(
-				'page'       => 1,
-				'number'     => 20,
-				'search'     => '',
-				'hide_empty' => 0,
-			)
-		);
-
-		$page = $args['page'];
-
-		// Set variable because $args['number'] can be subsequently overridden.
-		$number = $args['number'];
-
-		$offset         = ( $page - 1 ) * $number;
-		$args['offset'] = $offset;
+		$number = $this->callback_args['number'];
+		$offset = $this->callback_args['offset'];
 
 		// Convert it to table rows.
 		$count = 0;
 
-		if ( is_taxonomy_hierarchical( $taxonomy ) && ! isset( $args['orderby'] ) ) {
-			// We'll need the full set of terms then.
-			$args['number'] = 0;
-			$args['offset'] = $args['number'];
-		}
-		$terms = get_terms( $taxonomy, $args );
-
-		if ( empty( $terms ) || ! is_array( $terms ) ) {
+		if ( empty( $this->items ) || ! is_array( $this->items ) ) {
 			echo '<tr class="no-items"><td class="colspanchange" colspan="' . $this->get_column_count() . '">';
 			$this->no_items();
 			echo '</td></tr>';
 			return;
 		}
 
-		if ( is_taxonomy_hierarchical( $taxonomy ) && ! isset( $args['orderby'] ) ) {
-			if ( ! empty( $args['search'] ) ) {// Ignore children on searches.
+		if ( is_taxonomy_hierarchical( $taxonomy ) && ! isset( $this->callback_args['orderby'] ) ) {
+			if ( ! empty( $this->callback_args['search'] ) ) {// Ignore children on searches.
 				$children = array();
 			} else {
 				$children = _get_term_hierarchy( $taxonomy );
 			}
-			// Some funky recursion to get the job done( Paging & parents mainly ) is contained within, Skip it for non-hierarchical taxonomies for performance sake
-			$this->_rows( $taxonomy, $terms, $children, $offset, $number, $count );
+
+			/*
+			 * Some funky recursion to get the job done (paging & parents mainly) is contained within.
+			 * Skip it for non-hierarchical taxonomies for performance sake.
+			 */
+			$this->_rows( $taxonomy, $this->items, $children, $offset, $number, $count );
 		} else {
-			foreach ( $terms as $term ) {
+			foreach ( $this->items as $term ) {
 				$this->single_row( $term );
 			}
 		}
@@ -269,15 +256,15 @@ class WP_Terms_List_Table extends WP_List_Table {
 
 	/**
 	 * @param string $taxonomy
-	 * @param array $terms
-	 * @param array $children
-	 * @param int   $start
-	 * @param int   $per_page
-	 * @param int   $count
-	 * @param int   $parent
-	 * @param int   $level
+	 * @param array  $terms
+	 * @param array  $children
+	 * @param int    $start
+	 * @param int    $per_page
+	 * @param int    $count
+	 * @param int    $parent_term
+	 * @param int    $level
 	 */
-	private function _rows( $taxonomy, $terms, &$children, $start, $per_page, &$count, $parent = 0, $level = 0 ) {
+	private function _rows( $taxonomy, $terms, &$children, $start, $per_page, &$count, $parent_term = 0, $level = 0 ) {
 
 		$end = $start + $per_page;
 
@@ -287,27 +274,32 @@ class WP_Terms_List_Table extends WP_List_Table {
 				break;
 			}
 
-			if ( $term->parent != $parent && empty( $_REQUEST['s'] ) ) {
+			if ( $term->parent !== $parent_term && empty( $_REQUEST['s'] ) ) {
 				continue;
 			}
 
 			// If the page starts in a subtree, print the parents.
-			if ( $count == $start && $term->parent > 0 && empty( $_REQUEST['s'] ) ) {
+			if ( $count === $start && $term->parent > 0 && empty( $_REQUEST['s'] ) ) {
 				$my_parents = array();
 				$parent_ids = array();
 				$p          = $term->parent;
+
 				while ( $p ) {
 					$my_parent    = get_term( $p, $taxonomy );
 					$my_parents[] = $my_parent;
 					$p            = $my_parent->parent;
+
 					if ( in_array( $p, $parent_ids, true ) ) { // Prevent parent loops.
 						break;
 					}
+
 					$parent_ids[] = $p;
 				}
+
 				unset( $parent_ids );
 
 				$num_parents = count( $my_parents );
+
 				while ( $my_parent = array_pop( $my_parents ) ) {
 					echo "\t";
 					$this->single_row( $my_parent, $level - $num_parents );
@@ -332,8 +324,8 @@ class WP_Terms_List_Table extends WP_List_Table {
 
 	/**
 	 * @global string $taxonomy
-	 * @param WP_Term $tag Term object.
-	 * @param int $level
+	 * @param WP_Term $tag   Term object.
+	 * @param int     $level
 	 */
 	public function single_row( $tag, $level = 0 ) {
 		global $taxonomy;
@@ -341,19 +333,36 @@ class WP_Terms_List_Table extends WP_List_Table {
 
 		$this->level = $level;
 
-		echo '<tr id="tag-' . $tag->term_id . '">';
+		if ( $tag->parent ) {
+			$count = count( get_ancestors( $tag->term_id, $taxonomy, 'taxonomy' ) );
+			$level = 'level-' . $count;
+		} else {
+			$level = 'level-0';
+		}
+
+		echo '<tr id="tag-' . $tag->term_id . '" class="' . $level . '">';
 		$this->single_row_columns( $tag );
 		echo '</tr>';
 	}
 
 	/**
-	 * @param WP_Term $tag Term object.
+	 * @since 5.9.0 Renamed `$tag` to `$item` to match parent class for PHP 8 named parameter support.
+	 *
+	 * @param WP_Term $item Term object.
 	 * @return string
 	 */
-	public function column_cb( $tag ) {
+	public function column_cb( $item ) {
+		// Restores the more descriptive, specific name for use within this method.
+		$tag = $item;
+
 		if ( current_user_can( 'delete_term', $tag->term_id ) ) {
-			return '<label class="screen-reader-text" for="cb-select-' . $tag->term_id . '">' . sprintf( __( 'Select %s' ), $tag->name ) . '</label>'
-				. '<input type="checkbox" name="delete_tags[]" value="' . $tag->term_id . '" id="cb-select-' . $tag->term_id . '" />';
+			return sprintf(
+				'<label class="screen-reader-text" for="cb-select-%1$s">%2$s</label>' .
+				'<input type="checkbox" name="delete_tags[]" value="%1$s" id="cb-select-%1$s" />',
+				$tag->term_id,
+				/* translators: %s: Taxonomy term name. */
+				sprintf( __( 'Select %s' ), $tag->name )
+			);
 		}
 
 		return '&nbsp;';
@@ -387,28 +396,36 @@ class WP_Terms_List_Table extends WP_List_Table {
 
 		$uri = wp_doing_ajax() ? wp_get_referer() : $_SERVER['REQUEST_URI'];
 
-		$edit_link = add_query_arg(
-			'wp_http_referer',
-			urlencode( wp_unslash( $uri ) ),
-			get_edit_term_link( $tag->term_id, $taxonomy, $this->screen->post_type )
-		);
+		$edit_link = get_edit_term_link( $tag, $taxonomy, $this->screen->post_type );
 
-		$out = sprintf(
-			'<strong><a class="row-title" href="%s" aria-label="%s">%s</a></strong><br />',
-			esc_url( $edit_link ),
-			/* translators: %s: taxonomy term name */
-			esc_attr( sprintf( __( '&#8220;%s&#8221; (Edit)' ), $tag->name ) ),
+		if ( $edit_link ) {
+			$edit_link = add_query_arg(
+				'wp_http_referer',
+				urlencode( wp_unslash( $uri ) ),
+				$edit_link
+			);
+			$name      = sprintf(
+				'<a class="row-title" href="%s" aria-label="%s">%s</a>',
+				esc_url( $edit_link ),
+				/* translators: %s: Taxonomy term name. */
+				esc_attr( sprintf( __( '&#8220;%s&#8221; (Edit)' ), $tag->name ) ),
+				$name
+			);
+		}
+
+		$output = sprintf(
+			'<strong>%s</strong><br />',
 			$name
 		);
 
-		$out .= '<div class="hidden" id="inline_' . $qe_data->term_id . '">';
-		$out .= '<div class="name">' . $qe_data->name . '</div>';
+		$output .= '<div class="hidden" id="inline_' . $qe_data->term_id . '">';
+		$output .= '<div class="name">' . $qe_data->name . '</div>';
 
 		/** This filter is documented in wp-admin/edit-tag-form.php */
-		$out .= '<div class="slug">' . apply_filters( 'editable_slug', $qe_data->slug, $qe_data ) . '</div>';
-		$out .= '<div class="parent">' . $qe_data->parent . '</div></div>';
+		$output .= '<div class="slug">' . apply_filters( 'editable_slug', $qe_data->slug, $qe_data ) . '</div>';
+		$output .= '<div class="parent">' . $qe_data->parent . '</div></div>';
 
-		return $out;
+		return $output;
 	}
 
 	/**
@@ -426,57 +443,63 @@ class WP_Terms_List_Table extends WP_List_Table {
 	 * Generates and displays row action links.
 	 *
 	 * @since 4.3.0
+	 * @since 5.9.0 Renamed `$tag` to `$item` to match parent class for PHP 8 named parameter support.
 	 *
-	 * @param WP_Term $tag         Tag being acted upon.
+	 * @param WP_Term $item        Tag being acted upon.
 	 * @param string  $column_name Current column name.
 	 * @param string  $primary     Primary column name.
-	 * @return string Row actions output for terms.
+	 * @return string Row actions output for terms, or an empty string
+	 *                if the current column is not the primary column.
 	 */
-	protected function handle_row_actions( $tag, $column_name, $primary ) {
+	protected function handle_row_actions( $item, $column_name, $primary ) {
 		if ( $primary !== $column_name ) {
 			return '';
 		}
 
+		// Restores the more descriptive, specific name for use within this method.
+		$tag      = $item;
 		$taxonomy = $this->screen->taxonomy;
-		$tax      = get_taxonomy( $taxonomy );
 		$uri      = wp_doing_ajax() ? wp_get_referer() : $_SERVER['REQUEST_URI'];
 
 		$edit_link = add_query_arg(
 			'wp_http_referer',
 			urlencode( wp_unslash( $uri ) ),
-			get_edit_term_link( $tag->term_id, $taxonomy, $this->screen->post_type )
+			get_edit_term_link( $tag, $taxonomy, $this->screen->post_type )
 		);
 
 		$actions = array();
+
 		if ( current_user_can( 'edit_term', $tag->term_id ) ) {
 			$actions['edit'] = sprintf(
 				'<a href="%s" aria-label="%s">%s</a>',
 				esc_url( $edit_link ),
-				/* translators: %s: taxonomy term name */
+				/* translators: %s: Taxonomy term name. */
 				esc_attr( sprintf( __( 'Edit &#8220;%s&#8221;' ), $tag->name ) ),
 				__( 'Edit' )
 			);
 			$actions['inline hide-if-no-js'] = sprintf(
 				'<button type="button" class="button-link editinline" aria-label="%s" aria-expanded="false">%s</button>',
-				/* translators: %s: taxonomy term name */
+				/* translators: %s: Taxonomy term name. */
 				esc_attr( sprintf( __( 'Quick edit &#8220;%s&#8221; inline' ), $tag->name ) ),
 				__( 'Quick&nbsp;Edit' )
 			);
 		}
+
 		if ( current_user_can( 'delete_term', $tag->term_id ) ) {
 			$actions['delete'] = sprintf(
 				'<a href="%s" class="delete-tag aria-button-if-js" aria-label="%s">%s</a>',
 				wp_nonce_url( "edit-tags.php?action=delete&amp;taxonomy=$taxonomy&amp;tag_ID=$tag->term_id", 'delete-tag_' . $tag->term_id ),
-				/* translators: %s: taxonomy term name */
+				/* translators: %s: Taxonomy term name. */
 				esc_attr( sprintf( __( 'Delete &#8220;%s&#8221;' ), $tag->name ) ),
 				__( 'Delete' )
 			);
 		}
-		if ( $tax->public ) {
+
+		if ( is_term_publicly_viewable( $tag ) ) {
 			$actions['view'] = sprintf(
 				'<a href="%s" aria-label="%s">%s</a>',
 				get_term_link( $tag ),
-				/* translators: %s: taxonomy term name */
+				/* translators: %s: Taxonomy term name. */
 				esc_attr( sprintf( __( 'View &#8220;%s&#8221; archive' ), $tag->name ) ),
 				__( 'View' )
 			);
@@ -486,11 +509,12 @@ class WP_Terms_List_Table extends WP_List_Table {
 		 * Filters the action links displayed for each term in the Tags list table.
 		 *
 		 * @since 2.8.0
-		 * @deprecated 3.0.0 Use {$taxonomy}_row_actions instead.
+		 * @since 3.0.0 Deprecated in favor of {@see '{$taxonomy}_row_actions'} filter.
+		 * @since 5.4.2 Restored (un-deprecated).
 		 *
-		 * @param array  $actions An array of action links to be displayed. Default
-		 *                        'Edit', 'Quick Edit', 'Delete', and 'View'.
-		 * @param WP_Term $tag    Term object.
+		 * @param string[] $actions An array of action links to be displayed. Default
+		 *                          'Edit', 'Quick Edit', 'Delete', and 'View'.
+		 * @param WP_Term  $tag     Term object.
 		 */
 		$actions = apply_filters( 'tag_row_actions', $actions, $tag );
 
@@ -499,11 +523,16 @@ class WP_Terms_List_Table extends WP_List_Table {
 		 *
 		 * The dynamic portion of the hook name, `$taxonomy`, refers to the taxonomy slug.
 		 *
+		 * Possible hook names include:
+		 *
+		 *  - `category_row_actions`
+		 *  - `post_tag_row_actions`
+		 *
 		 * @since 3.0.0
 		 *
-		 * @param array  $actions An array of action links to be displayed. Default
-		 *                        'Edit', 'Quick Edit', 'Delete', and 'View'.
-		 * @param WP_Term $tag    Term object.
+		 * @param string[] $actions An array of action links to be displayed. Default
+		 *                          'Edit', 'Quick Edit', 'Delete', and 'View'.
+		 * @param WP_Term  $tag     Term object.
 		 */
 		$actions = apply_filters( "{$taxonomy}_row_actions", $actions, $tag );
 
@@ -571,31 +600,40 @@ class WP_Terms_List_Table extends WP_List_Table {
 	 */
 	public function column_links( $tag ) {
 		$count = number_format_i18n( $tag->count );
+
 		if ( $count ) {
 			$count = "<a href='link-manager.php?cat_id=$tag->term_id'>$count</a>";
 		}
+
 		return $count;
 	}
 
 	/**
-	 * @param WP_Term $tag Term object.
-	 * @param string $column_name
+	 * @since 5.9.0 Renamed `$tag` to `$item` to match parent class for PHP 8 named parameter support.
+	 *
+	 * @param WP_Term $item        Term object.
+	 * @param string  $column_name Name of the column.
 	 * @return string
 	 */
-	public function column_default( $tag, $column_name ) {
+	public function column_default( $item, $column_name ) {
 		/**
 		 * Filters the displayed columns in the terms list table.
 		 *
 		 * The dynamic portion of the hook name, `$this->screen->taxonomy`,
 		 * refers to the slug of the current taxonomy.
 		 *
+		 * Possible hook names include:
+		 *
+		 *  - `manage_category_custom_column`
+		 *  - `manage_post_tag_custom_column`
+		 *
 		 * @since 2.8.0
 		 *
-		 * @param string $string      Blank string.
+		 * @param string $string      Custom column output. Default empty.
 		 * @param string $column_name Name of the column.
 		 * @param int    $term_id     Term ID.
 		 */
-		return apply_filters( "manage_{$this->screen->taxonomy}_custom_column", '', $column_name, $tag->term_id );
+		return apply_filters( "manage_{$this->screen->taxonomy}_custom_column", '', $column_name, $item->term_id );
 	}
 
 	/**
@@ -611,8 +649,12 @@ class WP_Terms_List_Table extends WP_List_Table {
 		}
 		?>
 
-	<form method="get"><table style="display: none"><tbody id="inlineedit">
-		<tr id="inline-edit" class="inline-edit-row" style="display: none"><td colspan="<?php echo $this->get_column_count(); ?>" class="colspanchange">
+		<form method="get">
+		<table style="display: none"><tbody id="inlineedit">
+
+			<tr id="inline-edit" class="inline-edit-row" style="display: none">
+			<td colspan="<?php echo $this->get_column_count(); ?>" class="colspanchange">
+			<div class="inline-edit-wrapper">
 
 			<fieldset>
 				<legend class="inline-edit-legend"><?php _e( 'Quick Edit' ); ?></legend>
@@ -621,50 +663,54 @@ class WP_Terms_List_Table extends WP_List_Table {
 					<span class="title"><?php _ex( 'Name', 'term name' ); ?></span>
 					<span class="input-text-wrap"><input type="text" name="name" class="ptitle" value="" /></span>
 				</label>
-		<?php if ( ! global_terms_enabled() ) { ?>
+
 				<label>
 					<span class="title"><?php _e( 'Slug' ); ?></span>
 					<span class="input-text-wrap"><input type="text" name="slug" class="ptitle" value="" /></span>
 				</label>
-	<?php } ?>
-			</div></fieldset>
-		<?php
+				</div>
+			</fieldset>
 
-		$core_columns = array(
-			'cb'          => true,
-			'description' => true,
-			'name'        => true,
-			'slug'        => true,
-			'posts'       => true,
-		);
+			<?php
+			$core_columns = array(
+				'cb'          => true,
+				'description' => true,
+				'name'        => true,
+				'slug'        => true,
+				'posts'       => true,
+			);
 
-		list( $columns ) = $this->get_column_info();
+			list( $columns ) = $this->get_column_info();
 
-		foreach ( $columns as $column_name => $column_display_name ) {
-			if ( isset( $core_columns[ $column_name ] ) ) {
-				continue;
+			foreach ( $columns as $column_name => $column_display_name ) {
+				if ( isset( $core_columns[ $column_name ] ) ) {
+					continue;
+				}
+
+				/** This action is documented in wp-admin/includes/class-wp-posts-list-table.php */
+				do_action( 'quick_edit_custom_box', $column_name, 'edit-tags', $this->screen->taxonomy );
 			}
+			?>
 
-			/** This action is documented in wp-admin/includes/class-wp-posts-list-table.php */
-			do_action( 'quick_edit_custom_box', $column_name, 'edit-tags', $this->screen->taxonomy );
-		}
+			<div class="inline-edit-save submit">
+				<button type="button" class="save button button-primary"><?php echo $tax->labels->update_item; ?></button>
+				<button type="button" class="cancel button"><?php _e( 'Cancel' ); ?></button>
+				<span class="spinner"></span>
 
-		?>
+				<?php wp_nonce_field( 'taxinlineeditnonce', '_inline_edit', false ); ?>
+				<input type="hidden" name="taxonomy" value="<?php echo esc_attr( $this->screen->taxonomy ); ?>" />
+				<input type="hidden" name="post_type" value="<?php echo esc_attr( $this->screen->post_type ); ?>" />
 
-		<div class="inline-edit-save submit">
-			<button type="button" class="cancel button alignleft"><?php _e( 'Cancel' ); ?></button>
-			<button type="button" class="save button button-primary alignright"><?php echo $tax->labels->update_item; ?></button>
-			<span class="spinner"></span>
-			<?php wp_nonce_field( 'taxinlineeditnonce', '_inline_edit', false ); ?>
-			<input type="hidden" name="taxonomy" value="<?php echo esc_attr( $this->screen->taxonomy ); ?>" />
-			<input type="hidden" name="post_type" value="<?php echo esc_attr( $this->screen->post_type ); ?>" />
-			<br class="clear" />
-			<div class="notice notice-error notice-alt inline hidden">
-				<p class="error"></p>
+				<div class="notice notice-error notice-alt inline hidden">
+					<p class="error"></p>
+				</div>
 			</div>
-		</div>
-		</td></tr>
-		</tbody></table></form>
+			</div>
+
+			</td></tr>
+
+		</tbody></table>
+		</form>
 		<?php
 	}
 }

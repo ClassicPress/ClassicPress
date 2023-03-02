@@ -27,19 +27,19 @@ class Core_Upgrader extends WP_Upgrader {
 	 */
 	public function upgrade_strings() {
 		$this->strings['up_to_date'] = __( 'ClassicPress is at the latest version.' );
-		$this->strings['locked']     = __( 'Another update was started but has not completed yet.' );
+		$this->strings['locked']     = __( 'Another update is currently in progress.' );
 		$this->strings['no_package'] = __( 'Update package not available.' );
-		/* translators: %s: package URL */
+		/* translators: %s: Package URL. */
 		$this->strings['downloading_package']   = sprintf( __( 'Downloading update from %s&#8230;' ), '<span class="code">%s</span>' );
 		$this->strings['unpack_package']        = __( 'Unpacking the update&#8230;' );
 		$this->strings['copy_failed']           = __( 'Could not copy files.' );
 		$this->strings['copy_failed_space']     = __( 'Could not copy files. You may have run out of disk space.' );
 		$this->strings['start_rollback']        = __( 'Attempting to roll back to previous version.' );
-		$this->strings['rollback_was_required'] = __( 'Due to an error during updating, ClassicPress has rolled back to your previous version.' );
+		$this->strings['rollback_was_required'] = __( 'Due to an error during updating, WordPress has rolled back to your previous version.' );
 	}
 
 	/**
-	 * Verifies and returns the root directory entry of a ClassicPress update.
+	 * Upgrade WordPress core.
 	 *
 	 * For WordPress, this was always '/wordpress/'.  For ClassicPress, since
 	 * GitHub builds our zip packages for us, the zip file (and therefore the
@@ -96,26 +96,26 @@ class Core_Upgrader extends WP_Upgrader {
 	 *
 	 * @since 2.8.0
 	 *
-	 * @global WP_Filesystem_Base $wp_filesystem Subclass
+	 * @global WP_Filesystem_Base $wp_filesystem                ClassicPress filesystem subclass.
 	 * @global callable           $_wp_filesystem_direct_method
 	 *
 	 * @param object $current Response object for whether ClassicPress is current.
 	 * @param array  $args {
-	 *        Optional. Arguments for upgrading ClassicPress core. Default empty array.
+	 *     Optional. Arguments for upgrading ClassicPress core. Default empty array.
 	 *
-	 *        @type bool $pre_check_md5    Whether to check the file checksums before
-	 *                                     attempting the upgrade. Default true.
-	 *        @type bool $attempt_rollback Whether to attempt to rollback the chances if
-	 *                                     there is a problem. Default false.
-	 *        @type bool $do_rollback      Whether to perform this "upgrade" as a rollback.
-	 *                                     Default false.
+	 *     @type bool $pre_check_md5    Whether to check the file checksums before
+	 *                                  attempting the upgrade. Default true.
+	 *     @type bool $attempt_rollback Whether to attempt to rollback the chances if
+	 *                                  there is a problem. Default false.
+	 *     @type bool $do_rollback      Whether to perform this "upgrade" as a rollback.
+	 *                                  Default false.
 	 * }
-	 * @return null|false|WP_Error False or WP_Error on failure, null on success.
+	 * @return string|false|WP_Error New WordPress version on success, false or WP_Error on failure.
 	 */
 	public function upgrade( $current, $args = array() ) {
 		global $wp_filesystem;
 
-		include ABSPATH . WPINC . '/version.php'; // $wp_version;
+		require ABSPATH . WPINC . '/version.php'; // $wp_version;
 
 		$start_time = time();
 
@@ -141,6 +141,32 @@ class Core_Upgrader extends WP_Upgrader {
 		}
 
 		$wp_dir = trailingslashit( $wp_filesystem->abspath() );
+
+		$partial = true;
+		if ( $parsed_args['do_rollback'] ) {
+			$partial = false;
+		} elseif ( $parsed_args['pre_check_md5'] && ! $this->check_files() ) {
+			$partial = false;
+		}
+
+		/*
+		 * If partial update is returned from the API, use that, unless we're doing
+		 * a reinstallation. If we cross the new_bundled version number, then use
+		 * the new_bundled zip. Don't though if the constant is set to skip bundled items.
+		 * If the API returns a no_content zip, go with it. Finally, default to the full zip.
+		 */
+		if ( $parsed_args['do_rollback'] && $current->packages->rollback ) {
+			$to_download = 'rollback';
+		} elseif ( $current->packages->partial && 'reinstall' !== $current->response && $wp_version === $current->partial_version && $partial ) {
+			$to_download = 'partial';
+		} elseif ( $current->packages->new_bundled && version_compare( $wp_version, $current->new_bundled, '<' )
+			&& ( ! defined( 'CORE_UPGRADE_SKIP_NEW_BUNDLED' ) || ! CORE_UPGRADE_SKIP_NEW_BUNDLED ) ) {
+			$to_download = 'new_bundled';
+		} elseif ( $current->packages->no_content ) {
+			$to_download = 'no_content';
+		} else {
+			$to_download = 'full';
+		}
 
 		// Lock to prevent multiple Core Updates occurring.
 		$lock = WP_Upgrader::create_lock( 'core_updater', 15 * MINUTE_IN_SECONDS );
@@ -170,10 +196,11 @@ class Core_Upgrader extends WP_Upgrader {
 		) ) {
 			$wp_filesystem->delete( $working_dir, true );
 			WP_Upgrader::release_lock( 'core_updater' );
-			return new WP_Error( 'copy_failed_for_update_core_file', __( 'The update cannot be installed because we will be unable to copy some files. This is usually due to inconsistent file permissions.' ), 'wp-admin/includes/update-core.php' );
+			return new WP_Error( 'copy_failed_for_update_core_file', __( 'The update cannot be installed because some files could not be copied. This is usually due to inconsistent file permissions.' ), 'wp-admin/includes/update-core.php' );
 		}
 		$wp_filesystem->chmod( $wp_dir . 'wp-admin/includes/update-core.php', FS_CHMOD_FILE );
 
+		wp_opcache_invalidate( ABSPATH . 'wp-admin/includes/update-core.php' );
 		require_once ABSPATH . 'wp-admin/includes/update-core.php';
 
 		if ( ! function_exists( 'update_core' ) ) {
@@ -233,7 +260,7 @@ class Core_Upgrader extends WP_Upgrader {
 			)
 		);
 
-		// Clear the current updates
+		// Clear the current updates.
 		delete_site_transient( 'update_core' );
 
 		if ( ! $parsed_args['do_rollback'] ) {
@@ -275,8 +302,7 @@ class Core_Upgrader extends WP_Upgrader {
 	}
 
 	/**
-	 * Determines if the current ClassicPress Core version should update to an
-	 * offered version or not.
+	 * Determines if this ClassicPress Core version should update to an offered version or not.
 	 *
 	 * @since 3.7.0
 	 *
@@ -284,7 +310,7 @@ class Core_Upgrader extends WP_Upgrader {
 	 * @return bool True if we should update to the offered version, otherwise false.
 	 */
 	public static function should_update_to_version( $offered_ver ) {
-		include ABSPATH . WPINC . '/version.php'; // $cp_version; // x.y.z
+		require ABSPATH . WPINC . '/version.php'; // $cp_version; // x.y.z
 
 		return self::_auto_update_enabled_for_versions(
 			$cp_version,
