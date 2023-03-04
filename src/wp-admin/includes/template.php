@@ -781,7 +781,7 @@ function meta_form( $post = null ) {
  * @since 0.71
  * @since 4.4.0 Converted to use get_comment() instead of the global `$comment`.
  *
- * @global WP_Locale $wp_locale ClassicPress date and time locale object.
+ * @global WP_Locale $wp_locale WordPress date and time locale object.
  *
  * @param int|bool $edit      Accepts 1|true for editing the date, 0|false for adding the date.
  * @param int|bool $for_post  Accepts 1|true for applying the date to a post, 0|false for a comment.
@@ -1131,6 +1131,55 @@ function add_meta_box( $id, $title, $callback, $screen = null, $context = 'advan
 	);
 }
 
+
+/**
+ * Internal helper function to find the plugin from a meta box callback.
+ *
+ * @since 5.0.0
+ *
+ * @access private
+ *
+ * @param callable $callback The callback function to check.
+ * @return array|null The plugin that the callback belongs to, or null if it doesn't belong to a plugin.
+ */
+function _get_plugin_from_callback( $callback ) {
+	try {
+		if ( is_array( $callback ) ) {
+			$reflection = new ReflectionMethod( $callback[0], $callback[1] );
+		} elseif ( is_string( $callback ) && false !== strpos( $callback, '::' ) ) {
+			$reflection = new ReflectionMethod( $callback );
+		} else {
+			$reflection = new ReflectionFunction( $callback );
+		}
+	} catch ( ReflectionException $exception ) {
+		// We could not properly reflect on the callable, so we abort here.
+		return null;
+	}
+
+	// Don't show an error if it's an internal PHP function.
+	if ( ! $reflection->isInternal() ) {
+
+		// Only show errors if the meta box was registered by a plugin.
+		$filename   = wp_normalize_path( $reflection->getFileName() );
+		$plugin_dir = wp_normalize_path( WP_PLUGIN_DIR );
+
+		if ( strpos( $filename, $plugin_dir ) === 0 ) {
+			$filename = str_replace( $plugin_dir, '', $filename );
+			$filename = preg_replace( '|^/([^/]*/).*$|', '\\1', $filename );
+
+			$plugins = get_plugins();
+
+			foreach ( $plugins as $name => $plugin ) {
+				if ( strpos( $name, $filename ) === 0 ) {
+					return $plugin;
+				}
+			}
+		}
+	}
+
+	return null;
+}
+
 /**
  * Meta-Box template function.
  *
@@ -1189,8 +1238,10 @@ function do_meta_boxes( $screen, $context, $data_object ) {
 					if ( false === $box || ! $box['title'] ) {
 						continue;
 					}
+
 					$i++;
-					$hidden_class = in_array( $box['id'], $hidden, true ) ? ' hide-if-js' : '';
+					// get_hidden_meta_boxes() doesn't apply in the block editor.
+					$hidden_class = ( in_array( $box['id'], $hidden, true ) ) ? ' hide-if-js' : '';
 					echo '<div id="' . $box['id'] . '" class="postbox ' . postbox_classes( $box['id'], $page ) . $hidden_class . '" ' . '>' . "\n";
 
 					echo '<div class="postbox-header">';
@@ -1247,7 +1298,7 @@ function do_meta_boxes( $screen, $context, $data_object ) {
 					echo '</div>';
 
 					echo '<div class="inside">' . "\n";
-					call_user_func( $box['callback'], $object, $box );
+					call_user_func( $box['callback'], $data_object, $box );
 					echo "</div>\n";
 					echo "</div>\n";
 				}

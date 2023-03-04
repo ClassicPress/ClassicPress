@@ -42,6 +42,9 @@ require_once ABSPATH . 'wp-admin/includes/import.php';
 /** ClassicPress Misc Administration API */
 require_once ABSPATH . 'wp-admin/includes/misc.php';
 
+/** ClassicPress Misc Administration API */
+require_once ABSPATH . 'wp-admin/includes/class-wp-privacy-policy-content.php';
+
 /** ClassicPress Options Administration API */
 require_once ABSPATH . 'wp-admin/includes/options.php';
 

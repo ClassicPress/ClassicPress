@@ -202,35 +202,7 @@ if ( ! is_multisite() && current_user_can( 'update_themes' ) ) {
 	/* translators: %s: Number of available theme updates. */
 	$submenu['themes.php'][5] = array( sprintf( __( 'Themes %s' ), $count ), $appearance_cap, 'themes.php' );
 
-if ( wp_is_block_theme() ) {
-	$submenu['themes.php'][6] = array(
-		sprintf(
-			/* translators: %s: "beta" label */
-			__( 'Editor %s' ),
-			'<span class="awaiting-mod">' . __( 'beta' ) . '</span>'
-		),
-		'edit_theme_options',
-		'site-editor.php',
-	);
-}
-
-if ( ! wp_is_block_theme() && current_theme_supports( 'block-template-parts' ) ) {
-	$submenu['themes.php'][6] = array(
-		__( 'Template Parts' ),
-		'edit_theme_options',
-		'site-editor.php?postType=wp_template_part',
-	);
-}
-
 $customize_url = add_query_arg( 'return', urlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ), 'customize.php' );
-
-// Hide Customize link on block themes unless a plugin or theme
-// is using 'customize_register' to add a setting.
-if ( ! wp_is_block_theme() || has_action( 'customize_register' ) ) {
-	$position = ( wp_is_block_theme() || current_theme_supports( 'block-template-parts' ) ) ? 7 : 6;
-
-	$submenu['themes.php'][ $position ] = array( __( 'Customize' ), 'customize', esc_url( $customize_url ), '', 'hide-if-no-customize' );
-}
 
 if ( current_theme_supports( 'menus' ) || current_theme_supports( 'widgets' ) ) {
 	$submenu['themes.php'][10] = array( __( 'Menus' ), 'edit_theme_options', 'nav-menus.php' );
@@ -286,12 +258,7 @@ $submenu['plugins.php'][5] = array( __( 'Installed Plugins' ), 'activate_plugins
 if ( ! is_multisite() ) {
 	/* translators: Add new plugin. */
 	$submenu['plugins.php'][10] = array( _x( 'Add New', 'plugin' ), 'install_plugins', 'plugin-install.php' );
-	if ( wp_is_block_theme() ) {
-		// Place the menu item below the Theme File Editor menu item.
-		add_action( 'admin_menu', '_add_plugin_file_editor_to_tools', 101 );
-	} else {
-		$submenu['plugins.php'][15] = array( __( 'Plugin File Editor' ), 'edit_plugins', 'plugin-editor.php' );
-	}
+	$submenu['plugins.php'][15] = array( __( 'Plugin File Editor' ), 'edit_plugins', 'plugin-editor.php' );
 }
 
 unset( $update_data );
@@ -371,7 +338,7 @@ $menu[80]                     = array( __( 'Settings' ), 'manage_options', 'opti
 	$submenu['options-general.php'][40] = array( __( 'Permalinks' ), 'manage_options', 'options-permalink.php' );
 	$submenu['options-general.php'][45] = array( __( 'Privacy' ), 'manage_privacy_options', 'options-privacy.php' );
 
-menu[85]                     = array( __( 'Security' ), 'manage_options', 'security.php', '', 'menu-top menu-icon-shield', 'menu-security', 'dashicons-shield' );
+$menu[85]                     = array( __( 'Security' ), 'manage_options', 'security.php', '', 'menu-top menu-icon-shield', 'menu-security', 'dashicons-shield' );
 	$submenu['security.php'][10] = array( _x( 'ClassicPress', 'security screen' ), 'manage_options', 'security.php' );
 
 $_wp_last_utility_menu = 85; // The index of the last top-level menu in the utility menu group.
