@@ -14,6 +14,7 @@
  *
  * @see Requests_Hooks
  */
+#[AllowDynamicProperties]
 class WP_HTTP_Requests_Hooks extends Requests_Hooks {
 	/**
 	 * Requested URL.
@@ -23,7 +24,7 @@ class WP_HTTP_Requests_Hooks extends Requests_Hooks {
 	protected $url;
 
 	/**
-	 * ClassicPress WP_HTTP request data.
+	 * WordPress WP_HTTP request data.
 	 *
 	 * @var array Request data in WP_Http format.
 	 */
@@ -32,8 +33,8 @@ class WP_HTTP_Requests_Hooks extends Requests_Hooks {
 	/**
 	 * Constructor.
 	 *
-	 * @param string $url URL to request.
-	 * @param array $request Request data in WP_Http format.
+	 * @param string $url     URL to request.
+	 * @param array  $request Request data in WP_Http format.
 	 */
 	public function __construct( $url, $request ) {
 		$this->url     = $url;
@@ -41,16 +42,16 @@ class WP_HTTP_Requests_Hooks extends Requests_Hooks {
 	}
 
 	/**
-	 * Dispatch a Requests hook to a native ClassicPress action.
+	 * Dispatch a Requests hook to a native WordPress action.
 	 *
-	 * @param string $hook Hook name.
-	 * @param array $parameters Parameters to pass to callbacks.
-	 * @return boolean True if hooks were run, false if nothing was hooked.
+	 * @param string $hook       Hook name.
+	 * @param array  $parameters Parameters to pass to callbacks.
+	 * @return bool True if hooks were run, false if nothing was hooked.
 	 */
 	public function dispatch( $hook, $parameters = array() ) {
 		$result = parent::dispatch( $hook, $parameters );
 
-		// Handle back-compat actions
+		// Handle back-compat actions.
 		switch ( $hook ) {
 			case 'curl.before_send':
 				/** This action is documented in wp-includes/class-wp-http-curl.php */
@@ -59,11 +60,13 @@ class WP_HTTP_Requests_Hooks extends Requests_Hooks {
 		}
 
 		/**
-		 * Transforms a native Request hook to a ClassicPress actions.
+		 * Transforms a native Request hook to a WordPress action.
 		 *
-		 * This action maps Requests internal hook to a native ClassicPress action.
+		 * This action maps Requests internal hook to a native WordPress action.
 		 *
-		 * @see https://github.com/rmccue/Requests/blob/master/docs/hooks.md
+		 * @see https://github.com/WordPress/Requests/blob/master/docs/hooks.md
+		 *
+		 * @since 4.7.0
 		 *
 		 * @param array $parameters Parameters from Requests internal hook.
 		 * @param array $request Request data in WP_Http format.

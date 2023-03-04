@@ -3,7 +3,7 @@
  * Loads the correct template based on the visitor's url
  * @package ClassicPress
  */
-if ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) {
+if ( wp_using_themes() ) {
 	/**
 	 * Fires before determining which template to load.
 	 *
@@ -16,7 +16,7 @@ if ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) {
  * Filters whether to allow 'HEAD' requests to generate content.
  *
  * Provides a significant performance bump by exiting before the page
- * content loads for 'HEAD' requests. See https://core.trac.wordpress.org/ticket/14348.
+ * content loads for 'HEAD' requests. See #14348.
  *
  * @since 3.5.0
  *
@@ -35,15 +35,23 @@ if ( is_robots() ) {
 	 */
 	do_action( 'do_robots' );
 	return;
+} elseif ( is_favicon() ) {
+	/**
+	 * Fired when the template loader determines a favicon.ico request.
+	 *
+	 * @since 5.4.0
+	 */
+	do_action( 'do_favicon' );
+	return;
 } elseif ( is_feed() ) {
 	do_feed();
 	return;
 } elseif ( is_trackback() ) {
-	include( ABSPATH . 'wp-trackback.php' );
+	require ABSPATH . 'wp-trackback.php';
 	return;
 }
 
-if ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) {
+if ( wp_using_themes() ) {
 
 	$tag_templates = array(
 		'is_embed'             => 'get_embed_template',
@@ -51,6 +59,7 @@ if ( defined( 'WP_USE_THEMES' ) && WP_USE_THEMES ) {
 		'is_search'            => 'get_search_template',
 		'is_front_page'        => 'get_front_page_template',
 		'is_home'              => 'get_home_template',
+		'is_privacy_policy'    => 'get_privacy_policy_template',
 		'is_post_type_archive' => 'get_post_type_archive_template',
 		'is_tax'               => 'get_taxonomy_template',
 		'is_attachment'        => 'get_attachment_template',

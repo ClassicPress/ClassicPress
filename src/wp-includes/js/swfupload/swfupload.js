@@ -1,7 +1,7 @@
 /**
  * SWFUpload fallback
  *
- * @since WP-4.9.0
+ * @since 4.9.0
  */
 
 var SWFUpload;

@@ -58,9 +58,15 @@ class IXR_Client
 		self::__construct( $server, $path, $port, $timeout );
 	}
 
-    function query()
+	/**
+	 * @since 1.5.0
+	 * @since 5.5.0 Formalized the existing `...$args` parameter by adding it
+	 *              to the function signature.
+	 *
+	 * @return bool
+	 */
+    function query( ...$args )
     {
-        $args = func_get_args();
         $method = array_shift($args);
         $request = new IXR_Request($method, $args);
         $length = $request->getLength();
@@ -68,7 +74,7 @@ class IXR_Client
         $r = "\r\n";
         $request  = "POST {$this->path} HTTP/1.0$r";
 
-        // Merged from https://core.trac.wordpress.org/ticket/8145 - allow custom headers
+        // Merged from WP #8145 - allow custom headers
         $this->headers['Host']          = $this->server;
         $this->headers['Content-Type']  = 'text/xml';
         $this->headers['User-Agent']    = $this->useragent;
@@ -114,7 +120,7 @@ class IXR_Client
                 $gettingHeaders = false;
             }
             if (!$gettingHeaders) {
-            	// merged from https://core.trac.wordpress.org/ticket/12559 - remove trim
+            	// merged from WP #12559 - remove trim
                 $contents .= $line;
             }
             if ($this->debug) {

@@ -1,3 +1,7 @@
+/**
+ * @output wp-includes/js/wp-util.js
+ */
+
 /* global _wpUtilSettings */
 
 /** @namespace wp */
@@ -12,17 +16,17 @@ window.wp = window.wp || {};
 	 *
 	 * Fetch a JavaScript template for an id, and return a templating function for it.
 	 *
-	 * @param  {string} id   A string that corresponds to a DOM element with an id prefixed with "tmpl-".
-	 *                       For example, "attachment" maps to "tmpl-attachment".
-	 * @return {function}    A function that lazily-compiles the template requested.
+	 * @param {string} id A string that corresponds to a DOM element with an id prefixed with "tmpl-".
+	 *                    For example, "attachment" maps to "tmpl-attachment".
+	 * @return {function} A function that lazily-compiles the template requested.
 	 */
 	wp.template = _.memoize(function ( id ) {
 		var compiled,
 			/*
 			 * Underscore's default ERB-style templates are incompatible with PHP
-			 * when asp_tags is enabled, so ClassicPress uses Mustache-inspired templating syntax.
+			 * when asp_tags is enabled, so WordPress uses Mustache-inspired templating syntax.
 			 *
-			 * @see https://core.trac.wordpress.org/ticket/22344.
+			 * @see trac ticket #22344.
 			 */
 			options = {
 				evaluate:    /<#([\s\S]+?)#>/g,
@@ -32,46 +36,34 @@ window.wp = window.wp || {};
 			};
 
 		return function ( data ) {
-			try {
-				compiled = compiled || _.template( $( '#tmpl-' + id ).html(), options );
-				return compiled( data );
-			} catch ( originalError ) {
-				var err = new Error(
-					'"' + originalError.message + '" ' +
-					'when compiling wp.template( \'' + id + '\' ). ' +
-					'See wp.template.errorData for more information.'
-				);
-				wp.template.errorData.push( {
-					errorMessage: err.message,
-					originalError: originalError,
-					themeId: id,
-					elementId: '#tmpl-' + id,
-					templateHTML: $( '#tmpl-' + id ).html()
-				} );
-				throw err;
+			if ( ! document.getElementById( 'tmpl-' + id ) ) {
+				throw new Error( 'Template not found: ' + '#tmpl-' + id );
 			}
+			compiled = compiled || _.template( $( '#tmpl-' + id ).html(),  options );
+			return compiled( data );
 		};
 	});
-	wp.template.errorData = [];
 
-	// wp.ajax
-	// ------
-	//
-	// Tools for sending ajax requests with JSON responses and built in error handling.
-	// Mirrors and wraps jQuery's ajax APIs.
+	/*
+	 * wp.ajax
+	 * ------
+	 *
+	 * Tools for sending ajax requests with JSON responses and built in error handling.
+	 * Mirrors and wraps jQuery's ajax APIs.
+	 */
 	wp.ajax = {
 		settings: settings.ajax || {},
 
 		/**
 		 * wp.ajax.post( [action], [data] )
 		 *
-		 * Sends a POST request to ClassicPress.
+		 * Sends a POST request to WordPress.
 		 *
-		 * @param  {(string|object)} action  The slug of the action to fire in ClassicPress or options passed
-		 *                                   to jQuery.ajax.
-		 * @param  {object=}         data    Optional. The data to populate $_POST with.
-		 * @return {$.promise}     A jQuery promise that represents the request,
-		 *                         decorated with an abort() method.
+		 * @param {(string|Object)} action The slug of the action to fire in WordPress or options passed
+		 *                                 to jQuery.ajax.
+		 * @param {Object=}         data   Optional. The data to populate $_POST with.
+		 * @return {$.promise} A jQuery promise that represents the request,
+		 *                     decorated with an abort() method.
 		 */
 		post: function( action, data ) {
 			return wp.ajax.send({
@@ -82,13 +74,13 @@ window.wp = window.wp || {};
 		/**
 		 * wp.ajax.send( [action], [options] )
 		 *
-		 * Sends a POST request to ClassicPress.
+		 * Sends a POST request to WordPress.
 		 *
-		 * @param  {(string|object)} action  The slug of the action to fire in ClassicPress or options passed
-		 *                                   to jQuery.ajax.
-		 * @param  {object=}         options Optional. The options passed to jQuery.ajax.
-		 * @return {$.promise}      A jQuery promise that represents the request,
-		 *                          decorated with an abort() method.
+		 * @param {(string|Object)} action  The slug of the action to fire in WordPress or options passed
+		 *                                  to jQuery.ajax.
+		 * @param {Object=}         options Optional. The options passed to jQuery.ajax.
+		 * @return {$.promise} A jQuery promise that represents the request,
+		 *                     decorated with an abort() method.
 		 */
 		send: function( action, options ) {
 			var promise, deferred;
@@ -107,24 +99,45 @@ window.wp = window.wp || {};
 
 			deferred = $.Deferred( function( deferred ) {
 				// Transfer success/error callbacks.
-				if ( options.success )
+				if ( options.success ) {
 					deferred.done( options.success );
-				if ( options.error )
+				}
+
+				if ( options.error ) {
 					deferred.fail( options.error );
+				}
 
 				delete options.success;
 				delete options.error;
 
-				// Use with PHP's wp_send_json_success() and wp_send_json_error()
+				// Use with PHP's wp_send_json_success() and wp_send_json_error().
 				deferred.jqXHR = $.ajax( options ).done( function( response ) {
 					// Treat a response of 1 as successful for backward compatibility with existing handlers.
-					if ( response === '1' || response === 1 )
+					if ( response === '1' || response === 1 ) {
 						response = { success: true };
+					}
 
-					if ( _.isObject( response ) && ! _.isUndefined( response.success ) )
+					if ( _.isObject( response ) && ! _.isUndefined( response.success ) ) {
+
+						// When handling a media attachments request, get the total attachments from response headers.
+						var context = this;
+						deferred.done( function() {
+							if (
+								action &&
+								action.data &&
+								'query-attachments' === action.data.action &&
+								deferred.jqXHR.hasOwnProperty( 'getResponseHeader' ) &&
+								deferred.jqXHR.getResponseHeader( 'X-WP-Total' )
+							) {
+								context.totalAttachments = parseInt( deferred.jqXHR.getResponseHeader( 'X-WP-Total' ), 10 );
+							} else {
+								context.totalAttachments = 0;
+							}
+						} );
 						deferred[ response.success ? 'resolveWith' : 'rejectWith' ]( this, [response.data] );
-					else
+					} else {
 						deferred.rejectWith( this, [response] );
+					}
 				}).fail( function() {
 					deferred.rejectWith( this, arguments );
 				});

@@ -4,7 +4,7 @@
  *
  * @package Requests
  * @subpackage Proxy
- * @since Requests 1.6
+ * @since 1.6
  */
 
 /**
@@ -18,7 +18,7 @@
  * @see Requests_Hooks
  * @package Requests
  * @subpackage Proxy
- * @since Requests 1.6
+ * @since 1.6
  */
 interface Requests_Proxy {
 	/**
@@ -31,5 +31,5 @@ interface Requests_Proxy {
 	 * @see Requests_Hooks::register
 	 * @param Requests_Hooks $hooks Hook system
 	 */
-	public function register(Requests_Hooks &$hooks);
+	public function register(Requests_Hooks $hooks);
 }

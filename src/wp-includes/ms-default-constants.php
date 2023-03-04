@@ -23,7 +23,7 @@ function ms_upload_constants() {
 		return;
 	}
 
-	// Base uploads dir relative to ABSPATH
+	// Base uploads dir relative to ABSPATH.
 	if ( ! defined( 'UPLOADBLOGSDIR' ) ) {
 		define( 'UPLOADBLOGSDIR', 'wp-content/blogs.dir' );
 	}
@@ -68,7 +68,8 @@ function ms_cookie_constants() {
 	 * @since 2.6.0
 	 */
 	if ( ! defined( 'ADMIN_COOKIE_PATH' ) ) {
-		if ( ! is_subdomain_install() || trim( parse_url( get_option( 'siteurl' ), PHP_URL_PATH ), '/' ) ) {
+		$site_path = parse_url( get_option( 'siteurl' ), PHP_URL_PATH );
+		if ( ! is_subdomain_install() || is_string( $site_path ) && trim( $site_path, '/' ) ) {
 			define( 'ADMIN_COOKIE_PATH', SITECOOKIEPATH );
 		} else {
 			define( 'ADMIN_COOKIE_PATH', SITECOOKIEPATH . 'wp-admin' );
@@ -98,6 +99,7 @@ function ms_cookie_constants() {
 function ms_file_constants() {
 	/**
 	 * Optional support for X-Sendfile header
+	 *
 	 * @since 3.0.0
 	 */
 	if ( ! defined( 'WPMU_SENDFILE' ) ) {
@@ -106,6 +108,7 @@ function ms_file_constants() {
 
 	/**
 	 * Optional support for X-Accel-Redirect header
+	 *
 	 * @since 3.0.0
 	 */
 	if ( ! defined( 'WPMU_ACCEL_REDIRECT' ) ) {
@@ -122,9 +125,6 @@ function ms_file_constants() {
  * we will have translations loaded and can trigger warnings easily.
  *
  * @since 3.0.0
- *
- * @staticvar bool $subdomain_error
- * @staticvar bool $subdomain_error_warn
  */
 function ms_subdomain_constants() {
 	static $subdomain_error      = null;
@@ -143,11 +143,21 @@ function ms_subdomain_constants() {
 			'<code>wp-config.php</code>',
 			'<code>is_subdomain_install()</code>'
 		);
+
 		if ( $subdomain_error_warn ) {
-			trigger_error( __( '<strong>Conflicting values for the constants VHOST and SUBDOMAIN_INSTALL.</strong> The value of SUBDOMAIN_INSTALL will be assumed to be your subdomain configuration setting.' ) . ' ' . $vhost_deprecated, E_USER_WARNING );
+			trigger_error(
+				sprintf(
+					/* translators: 1: VHOST, 2: SUBDOMAIN_INSTALL */
+					__( '<strong>Conflicting values for the constants %1$s and %2$s.</strong> The value of %2$s will be assumed to be your subdomain configuration setting.' ),
+					'<code>VHOST</code>',
+					'<code>SUBDOMAIN_INSTALL</code>'
+				) . ' ' . $vhost_deprecated,
+				E_USER_WARNING
+			);
 		} else {
 			_deprecated_argument( 'define()', '3.0.0', $vhost_deprecated );
 		}
+
 		return;
 	}
 

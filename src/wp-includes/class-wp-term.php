@@ -14,6 +14,7 @@
  *
  * @property-read object $data Sanitized term data.
  */
+#[AllowDynamicProperties]
 final class WP_Term {
 
 	/**
@@ -44,7 +45,7 @@ final class WP_Term {
 	 * The term's term_group.
 	 *
 	 * @since 4.4.0
-	 * @var string
+	 * @var int
 	 */
 	public $term_group = '';
 
@@ -102,9 +103,8 @@ final class WP_Term {
 	 * Retrieve WP_Term instance.
 	 *
 	 * @since 4.4.0
-	 * @static
 	 *
-	 * @global wpdb $wpdb ClassicPress database abstraction object.
+	 * @global wpdb $wpdb WordPress database abstraction object.
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param string $taxonomy Optional. Limit matched terms to those matching `$taxonomy`. Only used for
@@ -205,7 +205,7 @@ final class WP_Term {
 	 *
 	 * @since 4.4.0
 	 *
-	 * @param string $filter Filter context. Accepts 'edit', 'db', 'display', 'attribute', 'js', 'raw'.
+	 * @param string $filter Filter context. Accepts 'edit', 'db', 'display', 'attribute', 'js', 'rss', or 'raw'.
 	 */
 	public function filter( $filter ) {
 		sanitize_term( $this, $this->taxonomy, $filter );

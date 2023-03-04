@@ -9,8 +9,8 @@
 	/**
 	 * Replaces emoji with images when browsers don't support emoji.
 	 *
-	 * @since      4.2.0
-	 * @access     private
+	 * @since 4.2.0
+	 * @access private
 	 *
 	 * @class
 	 *
@@ -22,10 +22,10 @@
 	function wpEmoji() {
 		var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver,
 
-		// Compression and maintain local scope
+		// Compression and maintain local scope.
 		document = window.document,
 
-		// Private
+		// Private.
 		twemoji, timer,
 		loaded = false,
 		count = 0,
@@ -34,7 +34,7 @@
 		/**
 		 * Detect if the browser supports SVG.
 		 *
-		 * @since WP-4.6.0
+		 * @since 4.6.0
 		 * @private
 		 *
 		 * @see Modernizr
@@ -59,7 +59,7 @@
 		 * Listens to all the DOM mutations and checks for added nodes that contain
 		 * emoji characters and replaces those with twitter emoji images.
 		 *
-		 * @since WP-4.2.0
+		 * @since 4.2.0
 		 * @private
 		 */
 		function load() {
@@ -69,7 +69,7 @@
 
 			// Ensure twemoji is available on the global window before proceeding.
 			if ( typeof window.twemoji === 'undefined' ) {
-				// Break if waiting for longer than 30 sec.
+				// Break if waiting for longer than 30 seconds.
 				if ( count > 600 ) {
 					return;
 				}
@@ -173,7 +173,7 @@
 		/**
 		 * Tests if a text string contains emoji characters.
 		 *
-		 * @since WP-4.3.0
+		 * @since 4.3.0
 		 *
 		 * @memberOf wp.emoji
 		 *
@@ -201,7 +201,7 @@
 		 * - When passed a string the emoji characters are replaced and the result is
 		 *   returned.
 		 *
-		 * @since WP-4.2.0
+		 * @since 4.2.0
 		 *
 		 * @memberOf wp.emoji
 		 *
@@ -245,13 +245,18 @@
 					}
 
 					if ( settings.supports.everythingExceptFlag &&
-						! /^1f1(?:e[6-9a-f]|f[0-9a-f])-1f1(?:e[6-9a-f]|f[0-9a-f])$/.test( icon ) && // Country flags
-						! /^(1f3f3-fe0f-200d-1f308|1f3f4-200d-2620-fe0f)$/.test( icon )             // Rainbow and pirate flags
+						! /^1f1(?:e[6-9a-f]|f[0-9a-f])-1f1(?:e[6-9a-f]|f[0-9a-f])$/.test( icon ) && // Country flags.
+						! /^(1f3f3-fe0f-200d-1f308|1f3f4-200d-2620-fe0f)$/.test( icon )             // Rainbow and pirate flags.
 					) {
 						return false;
 					}
 
 					return ''.concat( options.base, icon, options.ext );
+				},
+				attributes: function() {
+					return {
+						role: 'img'
+					};
 				},
 				onerror: function() {
 					if ( twemoji.parentNode ) {

@@ -130,7 +130,7 @@ img[data-mce-selected]::selection {
 	background-color: transparent;
 }
 
-/* Styles for the ClassicPress plugins */
+/* Styles for the WordPress plugins */
 .mce-content-body img[data-mce-placeholder] {
 	border-radius: 0;
 	padding: 0;
@@ -241,7 +241,7 @@ audio {
 	visibility: hidden;
 }
 
-/* Fix for proprietary Mozilla display attribute, see https://core.trac.wordpress.org/ticket/38757 */
+/* Fix for proprietary Mozilla display attribute, see #38757 */
 [_moz_abspos] {
 	outline: none;
 }
@@ -263,11 +263,6 @@ a[data-wplink-url-error]:before {
 	left: -2px;
 	outline: 2px dotted #fff;
 	z-index: -1;
-}
-
-/* Special styling for the suggestes policy text tutorial sections after they have been pasted in the editor. */
-p.wp-policy-help {
-    background-color: #ff0;
 }
 
 /**

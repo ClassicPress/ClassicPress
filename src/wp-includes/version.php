@@ -30,41 +30,40 @@
 $cp_version = '1.5.2+dev';
 
 /**
- * The WordPress version string
+ * The WordPress version string.
  *
- * This is still used internally for various core and plugin functions, and to
- * keep compatibility checks working as intended.  The ClassicPress version is
- * stored separately.
+ * Holds the current version number for WordPress core. Used to bust caches
+ * and to enable development mode for scripts when running from the /src directory.
  *
  * @see classicpress_version()
  *
  * @global string $wp_version
  */
-$wp_version = '4.9.22';
+$wp_version = '6.1.1';
 
 /**
- * Holds the ClassicPress DB revision, increments when changes are made to the ClassicPress DB schema.
+ * Holds the WordPress DB revision, increments when changes are made to the WordPress DB schema.
  *
  * @global int $wp_db_version
  */
-$wp_db_version = 38590;
+$wp_db_version = 53496;
 
 /**
- * Holds the TinyMCE version
+ * Holds the TinyMCE version.
  *
  * @global string $tinymce_version
  */
 $tinymce_version = '49110-20201110';
 
 /**
- * Holds the required PHP version
+ * Holds the required PHP version.
  *
  * @global string $required_php_version
  */
-$required_php_version = '5.6.0';
+$required_php_version = '5.6.20';
 
 /**
- * Holds the required MySQL version
+ * Holds the required MySQL version.
  *
  * @global string $required_mysql_version
  */

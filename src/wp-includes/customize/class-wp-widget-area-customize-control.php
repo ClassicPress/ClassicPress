@@ -4,7 +4,7 @@
  *
  * @package ClassicPress
  * @subpackage Customize
- * @since 3.4.0
+ * @since 4.4.0
  */
 
 /**

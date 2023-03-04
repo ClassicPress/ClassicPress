@@ -1,18 +1,25 @@
 /*!
- * jQuery UI Effects Shake 1.11.4
+ * jQuery UI Effects Shake 1.13.2
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
- *
- * http://api.jqueryui.com/shake-effect/
  */
-(function( factory ) {
+
+//>>label: Shake Effect
+//>>group: Effects
+//>>description: Shakes an element horizontally or vertically n times.
+//>>docs: http://api.jqueryui.com/shake-effect/
+//>>demos: http://jqueryui.com/effect/
+
+( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
-		define([
+		define( [
 			"jquery",
 			"./effect"
 		], factory );
@@ -21,32 +28,27 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}(function( $ ) {
+} )( function( $ ) {
+"use strict";
 
-return $.effects.effect.shake = function( o, done ) {
+return $.effects.define( "shake", function( options, done ) {
 
-	var el = $( this ),
-		props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
-		mode = $.effects.setMode( el, o.mode || "effect" ),
-		direction = o.direction || "left",
-		distance = o.distance || 20,
-		times = o.times || 3,
+	var i = 1,
+		element = $( this ),
+		direction = options.direction || "left",
+		distance = options.distance || 20,
+		times = options.times || 3,
 		anims = times * 2 + 1,
-		speed = Math.round( o.duration / anims ),
-		ref = (direction === "up" || direction === "down") ? "top" : "left",
-		positiveMotion = (direction === "up" || direction === "left"),
+		speed = Math.round( options.duration / anims ),
+		ref = ( direction === "up" || direction === "down" ) ? "top" : "left",
+		positiveMotion = ( direction === "up" || direction === "left" ),
 		animation = {},
 		animation1 = {},
 		animation2 = {},
-		i,
 
-		// we will need to re-assemble the queue to stack our animations in place
-		queue = el.queue(),
-		queuelen = queue.length;
+		queuelen = element.queue().length;
 
-	$.effects.save( el, props );
-	el.show();
-	$.effects.createWrapper( el );
+	$.effects.createPlaceholder( element );
 
 	// Animation
 	animation[ ref ] = ( positiveMotion ? "-=" : "+=" ) + distance;
@@ -54,31 +56,21 @@ return $.effects.effect.shake = function( o, done ) {
 	animation2[ ref ] = ( positiveMotion ? "-=" : "+=" ) + distance * 2;
 
 	// Animate
-	el.animate( animation, speed, o.easing );
+	element.animate( animation, speed, options.easing );
 
 	// Shakes
-	for ( i = 1; i < times; i++ ) {
-		el.animate( animation1, speed, o.easing ).animate( animation2, speed, o.easing );
+	for ( ; i < times; i++ ) {
+		element
+			.animate( animation1, speed, options.easing )
+			.animate( animation2, speed, options.easing );
 	}
-	el
-		.animate( animation1, speed, o.easing )
-		.animate( animation, speed / 2, o.easing )
-		.queue(function() {
-			if ( mode === "hide" ) {
-				el.hide();
-			}
-			$.effects.restore( el, props );
-			$.effects.removeWrapper( el );
-			done();
-		});
 
-	// inject all the animations we just queued to be first in line (after "inprogress")
-	if ( queuelen > 1) {
-		queue.splice.apply( queue,
-			[ 1, 0 ].concat( queue.splice( queuelen, anims + 1 ) ) );
-	}
-	el.dequeue();
+	element
+		.animate( animation1, speed, options.easing )
+		.animate( animation, speed / 2, options.easing )
+		.queue( done );
 
-};
+	$.effects.unshift( element, queuelen, anims + 1 );
+} );
 
-}));
+} );

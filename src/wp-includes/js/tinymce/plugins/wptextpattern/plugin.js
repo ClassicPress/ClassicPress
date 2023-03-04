@@ -1,7 +1,7 @@
 /**
  * Text pattern plugin for TinyMCE
  *
- * @since WP-4.3.0
+ * @since 4.3.0
  *
  * This plugin can automatically format text patterns as you type. It includes several groups of patterns.
  *
@@ -52,9 +52,9 @@
 	/**
 	 * Escapes characters for use in a Regular Expression.
 	 *
-	 * @param  {String} string Characters to escape
+	 * @param {String} string Characters to escape
 	 *
-	 * @return {String}        Escaped characters
+	 * @return {String} Escaped characters
 	 */
 	function escapeRegExp( string ) {
 		return string.replace( /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&' );
@@ -120,7 +120,7 @@
 			var format;
 			var zero;
 
-			// We need a non empty text node with an offset greater than zero.
+			// We need a non-empty text node with an offset greater than zero.
 			if ( ! node || node.nodeType !== 3 || ! node.data.length || ! offset ) {
 				return;
 			}
@@ -149,9 +149,9 @@
 				var before = string.charAt( startOffset - 1 );
 				var after = string.charAt( startOffset + p.delimiter.length );
 
-				// test*test* => format applied
-				// test *test* => applied
-				// test* test* => not applied
+				// test*test*  => format applied.
+				// test *test* => applied.
+				// test* test* => not applied.
 				if ( startOffset && /\S/.test( before ) ) {
 					if ( /\s/.test( after ) || before === delimiterFirstChar ) {
 						return;

@@ -12,6 +12,7 @@
  *
  * @since 4.7.0
  */
+#[AllowDynamicProperties]
 class WP_Locale_Switcher {
 	/**
 	 * Locale stack.
@@ -33,7 +34,7 @@ class WP_Locale_Switcher {
 	 * Holds all available languages.
 	 *
 	 * @since 4.7.0
-	 * @var array An array of language codes (file names without the .mo extension).
+	 * @var string[] An array of language codes (file names without the .mo extension).
 	 */
 	private $available_languages = array();
 
@@ -45,7 +46,7 @@ class WP_Locale_Switcher {
 	 * @since 4.7.0
 	 */
 	public function __construct() {
-		$this->original_locale     = is_admin() ? get_user_locale() : get_locale();
+		$this->original_locale     = determine_locale();
 		$this->available_languages = array_merge( array( 'en_US' ), get_available_languages() );
 	}
 
@@ -53,6 +54,8 @@ class WP_Locale_Switcher {
 	 * Initializes the locale switcher.
 	 *
 	 * Hooks into the {@see 'locale'} filter to change the locale on the fly.
+	 *
+	 * @since 4.7.0
 	 */
 	public function init() {
 		add_filter( 'locale', array( $this, 'filter_locale' ) );
@@ -67,7 +70,7 @@ class WP_Locale_Switcher {
 	 * @return bool True on success, false on failure.
 	 */
 	public function switch_to_locale( $locale ) {
-		$current_locale = is_admin() ? get_user_locale() : get_locale();
+		$current_locale = determine_locale();
 		if ( $current_locale === $locale ) {
 			return false;
 		}
@@ -158,11 +161,11 @@ class WP_Locale_Switcher {
 	}
 
 	/**
-	 * Filters the locale of the ClassicPress installation.
+	 * Filters the locale of the WordPress installation.
 	 *
 	 * @since 4.7.0
 	 *
-	 * @param string $locale The locale of the ClassicPress installation.
+	 * @param string $locale The locale of the WordPress installation.
 	 * @return string The locale currently being switched to.
 	 */
 	public function filter_locale( $locale ) {
@@ -194,11 +197,14 @@ class WP_Locale_Switcher {
 		load_default_textdomain( $locale );
 
 		foreach ( $domains as $domain ) {
+			// The default text domain is handled by `load_default_textdomain()`.
 			if ( 'default' === $domain ) {
 				continue;
 			}
 
-			unload_textdomain( $domain );
+			// Unload current text domain but allow them to be reloaded
+			// after switching back or to another locale.
+			unload_textdomain( $domain, true );
 			get_translations_for_domain( $domain );
 		}
 	}
@@ -211,17 +217,16 @@ class WP_Locale_Switcher {
 	 *
 	 * @since 4.7.0
 	 *
-	 * @global WP_Locale $wp_locale The ClassicPress date and time locale object.
+	 * @global WP_Locale $wp_locale WordPress date and time locale object.
 	 *
 	 * @param string $locale The locale to change to.
 	 */
 	private function change_locale( $locale ) {
-		// Reset translation availability information.
-		_get_path_to_translation( null, true );
+		global $wp_locale;
 
 		$this->load_translations( $locale );
 
-		$GLOBALS['wp_locale'] = new WP_Locale();
+		$wp_locale = new WP_Locale();
 
 		/**
 		 * Fires when the locale is switched to or restored.

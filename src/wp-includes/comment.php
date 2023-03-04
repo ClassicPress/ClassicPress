@@ -7,24 +7,24 @@
  */
 
 /**
- * Check whether a comment passes internal checks to be allowed to add.
+ * Checks whether a comment passes internal checks to be allowed to add.
  *
  * If manual comment moderation is set in the administration, then all checks,
- * regardless of their type and whitelist, will fail and the function will
+ * regardless of their type and substance, will fail and the function will
  * return false.
  *
  * If the number of links exceeds the amount in the administration, then the
- * check fails. If any of the parameter contents match the blacklist of words,
+ * check fails. If any of the parameter contents contain any disallowed words,
  * then the check fails.
  *
  * If the comment author was approved before, then the comment is automatically
- * whitelisted.
+ * approved.
  *
  * If all checks pass, the function will return true.
  *
  * @since 1.2.0
  *
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param string $author       Comment author name.
  * @param string $email        Comment author email.
@@ -126,7 +126,7 @@ function check_comment( $author, $email, $url, $comment, $user_ip, $user_agent, 
 	 * as well as whether there are any moderation keywords (if set) present in the author
 	 * email address. If both checks pass, return true. Otherwise, return false.
 	 */
-	if ( 1 == get_option( 'comment_whitelist' ) ) {
+	if ( 1 == get_option( 'comment_previously_approved' ) ) {
 		if ( 'trackback' !== $comment_type && 'pingback' !== $comment_type && '' !== $author && '' !== $email ) {
 			$comment_user = get_user_by( 'email', wp_unslash( $email ) );
 			if ( ! empty( $comment_user->ID ) ) {
@@ -149,22 +149,22 @@ function check_comment( $author, $email, $url, $comment, $user_ip, $user_agent, 
 }
 
 /**
- * Retrieve the approved comments for post $post_id.
+ * Retrieves the approved comments for a post.
  *
  * @since 2.0.0
  * @since 4.1.0 Refactored to leverage WP_Comment_Query over a direct query.
  *
- * @param  int   $post_id The ID of the post.
- * @param  array $args    Optional. See WP_Comment_Query::__construct() for information on accepted arguments.
- * @return int|array $comments The approved comments, or number of comments if `$count`
- *                             argument is true.
+ * @param int   $post_id The ID of the post.
+ * @param array $args    Optional. See WP_Comment_Query::__construct() for information on accepted arguments.
+ * @return WP_Comment[]|int[]|int The approved comments, or number of comments if `$count`
+ *                                argument is true.
  */
 function get_approved_comments( $post_id, $args = array() ) {
 	if ( ! $post_id ) {
 		return array();
 	}
 
-	$defaults = array(
+	$defaults    = array(
 		'status'  => 1,
 		'post_id' => $post_id,
 		'order'   => 'ASC',
@@ -184,11 +184,12 @@ function get_approved_comments( $post_id, $args = array() ) {
  *
  * @since 2.0.0
  *
- * @global WP_Comment $comment
+ * @global WP_Comment $comment Global comment object.
  *
  * @param WP_Comment|string|int $comment Comment to retrieve.
- * @param string                $output  Optional. The required return type. One of OBJECT, ARRAY_A, or ARRAY_N, which correspond to
- *                                       a WP_Comment object, an associative array, or a numeric array, respectively. Default OBJECT.
+ * @param string                $output  Optional. The required return type. One of OBJECT, ARRAY_A, or ARRAY_N, which
+ *                                       correspond to a WP_Comment object, an associative array, or a numeric array,
+ *                                       respectively. Default OBJECT.
  * @return WP_Comment|array|null Depends on $output value.
  */
 function get_comment( $comment = null, $output = OBJECT ) {
@@ -213,22 +214,22 @@ function get_comment( $comment = null, $output = OBJECT ) {
 	 *
 	 * @since 2.3.0
 	 *
-	 * @param mixed $_comment Comment data.
+	 * @param WP_Comment $_comment Comment data.
 	 */
 	$_comment = apply_filters( 'get_comment', $_comment );
 
-	if ( OBJECT == $output ) {
+	if ( OBJECT === $output ) {
 		return $_comment;
-	} elseif ( ARRAY_A == $output ) {
+	} elseif ( ARRAY_A === $output ) {
 		return $_comment->to_array();
-	} elseif ( ARRAY_N == $output ) {
+	} elseif ( ARRAY_N === $output ) {
 		return array_values( $_comment->to_array() );
 	}
 	return $_comment;
 }
 
 /**
- * Retrieve a list of comments.
+ * Retrieves a list of comments.
  *
  * The comment list can be for the blog as a whole or for an individual post.
  *
@@ -236,7 +237,7 @@ function get_comment( $comment = null, $output = OBJECT ) {
  *
  * @param string|array $args Optional. Array or string of arguments. See WP_Comment_Query::__construct()
  *                           for information on accepted arguments. Default empty.
- * @return int|array List of comments or number of found comments if `$count` argument is true.
+ * @return WP_Comment[]|int[]|int List of comments or number of found comments if `$count` argument is true.
  */
 function get_comments( $args = '' ) {
 	$query = new WP_Comment_Query;
@@ -244,14 +245,14 @@ function get_comments( $args = '' ) {
 }
 
 /**
- * Retrieve all of the ClassicPress supported comment statuses.
+ * Retrieves all of the WordPress supported comment statuses.
  *
  * Comments have a limited set of valid status values, this provides the comment
  * status values and descriptions.
  *
  * @since 2.7.0
  *
- * @return array List of comment statuses.
+ * @return string[] List of comment status labels keyed by status.
  */
 function get_comment_statuses() {
 	$status = array(
@@ -283,6 +284,7 @@ function get_default_comment_status( $post_type = 'post', $comment_type = 'comme
 		default:
 			$supports = 'comments';
 			$option   = 'comment';
+			break;
 	}
 
 	// Set the status.
@@ -308,13 +310,13 @@ function get_default_comment_status( $post_type = 'post', $comment_type = 'comme
 }
 
 /**
- * The date the last comment was modified.
+ * Retrieves the date the last comment was modified.
  *
  * @since 1.5.0
  * @since 4.7.0 Replaced caching the modified date in a local static variable
  *              with the Object Cache API.
  *
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param string $timezone Which timezone to use in reference to 'gmt', 'blog', or 'server' locations.
  * @return string|false Last comment modified date on success, false on failure.
@@ -338,7 +340,7 @@ function get_lastcommentmodified( $timezone = 'server' ) {
 			$comment_modified_date = $wpdb->get_var( "SELECT comment_date FROM $wpdb->comments WHERE comment_approved = '1' ORDER BY comment_date_gmt DESC LIMIT 1" );
 			break;
 		case 'server':
-			$add_seconds_server = date( 'Z' );
+			$add_seconds_server = gmdate( 'Z' );
 
 			$comment_modified_date = $wpdb->get_var( $wpdb->prepare( "SELECT DATE_ADD(comment_date_gmt, INTERVAL %s SECOND) FROM $wpdb->comments WHERE comment_approved = '1' ORDER BY comment_date_gmt DESC LIMIT 1", $add_seconds_server ) );
 			break;
@@ -356,15 +358,11 @@ function get_lastcommentmodified( $timezone = 'server' ) {
 /**
  * Retrieves the total comment counts for the whole site or a single post.
  *
- * Unlike wp_count_comments(), this function always returns the live comment counts without caching.
- *
  * @since 2.0.0
- *
- * @global wpdb $wpdb ClassicPress database abstraction object.
  *
  * @param int $post_id Optional. Restrict the comment counts to the given post. Default 0, which indicates that
  *                     comment counts for the whole site will be retrieved.
- * @return array() {
+ * @return int[] {
  *     The number of comments keyed by their status.
  *
  *     @type int $approved            The number of approved comments.
@@ -377,24 +375,7 @@ function get_lastcommentmodified( $timezone = 'server' ) {
  * }
  */
 function get_comment_count( $post_id = 0 ) {
-	global $wpdb;
-
 	$post_id = (int) $post_id;
-
-	$where = '';
-	if ( $post_id > 0 ) {
-		$where = $wpdb->prepare( 'WHERE comment_post_ID = %d', $post_id );
-	}
-
-	$totals = (array) $wpdb->get_results(
-		"
-		SELECT comment_approved, COUNT( * ) AS total
-		FROM {$wpdb->comments}
-		{$where}
-		GROUP BY comment_approved
-	",
-		ARRAY_A
-	);
 
 	$comment_count = array(
 		'approved'            => 0,
@@ -406,101 +387,99 @@ function get_comment_count( $post_id = 0 ) {
 		'all'                 => 0,
 	);
 
-	foreach ( $totals as $row ) {
-		switch ( $row['comment_approved'] ) {
-			case 'trash':
-				$comment_count['trash'] = $row['total'];
-				break;
-			case 'post-trashed':
-				$comment_count['post-trashed'] = $row['total'];
-				break;
-			case 'spam':
-				$comment_count['spam']            = $row['total'];
-				$comment_count['total_comments'] += $row['total'];
-				break;
-			case '1':
-				$comment_count['approved']        = $row['total'];
-				$comment_count['total_comments'] += $row['total'];
-				$comment_count['all']            += $row['total'];
-				break;
-			case '0':
-				$comment_count['awaiting_moderation'] = $row['total'];
-				$comment_count['total_comments']     += $row['total'];
-				$comment_count['all']                += $row['total'];
-				break;
-			default:
-				break;
-		}
+	$args = array(
+		'count'                     => true,
+		'update_comment_meta_cache' => false,
+	);
+	if ( $post_id > 0 ) {
+		$args['post_id'] = $post_id;
 	}
+	$mapping       = array(
+		'approved'            => 'approve',
+		'awaiting_moderation' => 'hold',
+		'spam'                => 'spam',
+		'trash'               => 'trash',
+		'post-trashed'        => 'post-trashed',
+	);
+	$comment_count = array();
+	foreach ( $mapping as $key => $value ) {
+		$comment_count[ $key ] = get_comments( array_merge( $args, array( 'status' => $value ) ) );
+	}
+
+	$comment_count['all']            = $comment_count['approved'] + $comment_count['awaiting_moderation'];
+	$comment_count['total_comments'] = $comment_count['all'] + $comment_count['spam'];
 
 	return array_map( 'intval', $comment_count );
 }
 
 //
-// Comment meta functions
+// Comment meta functions.
 //
 
 /**
- * Add meta data field to a comment.
+ * Adds meta data field to a comment.
  *
  * @since 2.9.0
- * @link https://codex.wordpress.org/Function_Reference/add_comment_meta
  *
- * @param int $comment_id Comment ID.
- * @param string $meta_key Metadata name.
- * @param mixed $meta_value Metadata value.
- * @param bool $unique Optional, default is false. Whether the same key should not be added.
- * @return int|bool Meta ID on success, false on failure.
+ * @link https://developer.wordpress.org/reference/functions/add_comment_meta/
+ *
+ * @param int    $comment_id Comment ID.
+ * @param string $meta_key   Metadata name.
+ * @param mixed  $meta_value Metadata value. Must be serializable if non-scalar.
+ * @param bool   $unique     Optional. Whether the same key should not be added.
+ *                           Default false.
+ * @return int|false Meta ID on success, false on failure.
  */
 function add_comment_meta( $comment_id, $meta_key, $meta_value, $unique = false ) {
-	$added = add_metadata( 'comment', $comment_id, $meta_key, $meta_value, $unique );
-	if ( $added ) {
-		wp_cache_set( 'last_changed', microtime(), 'comment' );
-	}
-	return $added;
+	return add_metadata( 'comment', $comment_id, $meta_key, $meta_value, $unique );
 }
 
 /**
- * Remove metadata matching criteria from a comment.
+ * Removes metadata matching criteria from a comment.
  *
  * You can match based on the key, or key and value. Removing based on key and
  * value, will keep from removing duplicate metadata with the same key. It also
  * allows removing all metadata matching key, if needed.
  *
  * @since 2.9.0
- * @link https://codex.wordpress.org/Function_Reference/delete_comment_meta
  *
- * @param int $comment_id comment ID
- * @param string $meta_key Metadata name.
- * @param mixed $meta_value Optional. Metadata value.
+ * @link https://developer.wordpress.org/reference/functions/delete_comment_meta/
+ *
+ * @param int    $comment_id Comment ID.
+ * @param string $meta_key   Metadata name.
+ * @param mixed  $meta_value Optional. Metadata value. If provided,
+ *                           rows will only be removed that match the value.
+ *                           Must be serializable if non-scalar. Default empty.
  * @return bool True on success, false on failure.
  */
 function delete_comment_meta( $comment_id, $meta_key, $meta_value = '' ) {
-	$deleted = delete_metadata( 'comment', $comment_id, $meta_key, $meta_value );
-	if ( $deleted ) {
-		wp_cache_set( 'last_changed', microtime(), 'comment' );
-	}
-	return $deleted;
+	return delete_metadata( 'comment', $comment_id, $meta_key, $meta_value );
 }
 
 /**
- * Retrieve comment meta field for a comment.
+ * Retrieves comment meta field for a comment.
  *
  * @since 2.9.0
- * @link https://codex.wordpress.org/Function_Reference/get_comment_meta
  *
- * @param int $comment_id Comment ID.
- * @param string $key Optional. The meta key to retrieve. By default, returns data for all keys.
- * @param bool $single Whether to return a single value.
- * @return mixed Will be an array if $single is false. Will be value of meta data field if $single
- *  is true.
+ * @link https://developer.wordpress.org/reference/functions/get_comment_meta/
+ *
+ * @param int    $comment_id Comment ID.
+ * @param string $key        Optional. The meta key to retrieve. By default,
+ *                           returns data for all keys.
+ * @param bool   $single     Optional. Whether to return a single value.
+ *                           This parameter has no effect if `$key` is not specified.
+ *                           Default false.
+ * @return mixed An array of values if `$single` is false.
+ *               The value of meta data field if `$single` is true.
+ *               False for an invalid `$comment_id` (non-numeric, zero, or negative value).
+ *               An empty string if a valid but non-existing comment ID is passed.
  */
 function get_comment_meta( $comment_id, $key = '', $single = false ) {
 	return get_metadata( 'comment', $comment_id, $key, $single );
 }
 
 /**
- * Update comment meta field based on comment ID.
+ * Updates comment meta field based on comment ID.
  *
  * Use the $prev_value parameter to differentiate between meta fields with the
  * same key and comment ID.
@@ -508,20 +487,21 @@ function get_comment_meta( $comment_id, $key = '', $single = false ) {
  * If the meta field for the comment does not exist, it will be added.
  *
  * @since 2.9.0
- * @link https://codex.wordpress.org/Function_Reference/update_comment_meta
  *
- * @param int $comment_id Comment ID.
- * @param string $meta_key Metadata key.
- * @param mixed $meta_value Metadata value.
- * @param mixed $prev_value Optional. Previous value to check before removing.
- * @return int|bool Meta ID if the key didn't exist, true on successful update, false on failure.
+ * @link https://developer.wordpress.org/reference/functions/update_comment_meta/
+ *
+ * @param int    $comment_id Comment ID.
+ * @param string $meta_key   Metadata key.
+ * @param mixed  $meta_value Metadata value. Must be serializable if non-scalar.
+ * @param mixed  $prev_value Optional. Previous value to check before updating.
+ *                           If specified, only update existing metadata entries with
+ *                           this value. Otherwise, update all entries. Default empty.
+ * @return int|bool Meta ID if the key didn't exist, true on successful update,
+ *                  false on failure or if the value passed to the function
+ *                  is the same as the one that is already in the database.
  */
 function update_comment_meta( $comment_id, $meta_key, $meta_value, $prev_value = '' ) {
-	$updated = update_metadata( 'comment', $comment_id, $meta_key, $meta_value, $prev_value );
-	if ( $updated ) {
-		wp_cache_set( 'last_changed', microtime(), 'comment' );
-	}
-	return $updated;
+	return update_metadata( 'comment', $comment_id, $meta_key, $meta_value, $prev_value );
 }
 
 /**
@@ -529,7 +509,7 @@ function update_comment_meta( $comment_id, $meta_key, $meta_value, $prev_value =
  *
  * @since 4.5.0
  *
- * @param array $comments Array of comment objects.
+ * @param WP_Comment[] $comments Array of comment objects.
  */
 function wp_queue_comments_for_comment_meta_lazyload( $comments ) {
 	// Don't use `wp_list_pluck()` to avoid by-reference manipulation.
@@ -557,7 +537,7 @@ function wp_queue_comments_for_comment_meta_lazyload( $comments ) {
  *
  * @param WP_Comment $comment         Comment object.
  * @param WP_User    $user            Comment author's user object. The user may not exist.
- * @param boolean    $cookies_consent Optional. Comment author's consent to store cookies. Default true.
+ * @param bool       $cookies_consent Optional. Comment author's consent to store cookies. Default true.
  */
 function wp_set_comment_cookies( $comment, $user, $cookies_consent = true ) {
 	// If the user already exists, or the user opted out of cookies, don't set cookies.
@@ -583,7 +563,9 @@ function wp_set_comment_cookies( $comment, $user, $cookies_consent = true ) {
 	 * @param int $seconds Comment cookie lifetime. Default 30000000.
 	 */
 	$comment_cookie_lifetime = time() + apply_filters( 'comment_cookie_lifetime', 30000000 );
-	$secure                  = ( 'https' === parse_url( home_url(), PHP_URL_SCHEME ) );
+
+	$secure = ( 'https' === parse_url( home_url(), PHP_URL_SCHEME ) );
+
 	setcookie( 'comment_author_' . COOKIEHASH, $comment->comment_author, $comment_cookie_lifetime, COOKIEPATH, COOKIE_DOMAIN, $secure );
 	setcookie( 'comment_author_email_' . COOKIEHASH, $comment->comment_author_email, $comment_cookie_lifetime, COOKIEPATH, COOKIE_DOMAIN, $secure );
 	setcookie( 'comment_author_url_' . COOKIEHASH, esc_url( $comment->comment_author_url ), $comment_cookie_lifetime, COOKIEPATH, COOKIE_DOMAIN, $secure );
@@ -609,9 +591,10 @@ function sanitize_comment_cookies() {
 		 *
 		 * @param string $author_cookie The comment author name cookie.
 		 */
-		$comment_author                            = apply_filters( 'pre_comment_author_name', $_COOKIE[ 'comment_author_' . COOKIEHASH ] );
-		$comment_author                            = wp_unslash( $comment_author );
-		$comment_author                            = esc_attr( $comment_author );
+		$comment_author = apply_filters( 'pre_comment_author_name', $_COOKIE[ 'comment_author_' . COOKIEHASH ] );
+		$comment_author = wp_unslash( $comment_author );
+		$comment_author = esc_attr( $comment_author );
+
 		$_COOKIE[ 'comment_author_' . COOKIEHASH ] = $comment_author;
 	}
 
@@ -626,9 +609,10 @@ function sanitize_comment_cookies() {
 		 *
 		 * @param string $author_email_cookie The comment author email cookie.
 		 */
-		$comment_author_email                            = apply_filters( 'pre_comment_author_email', $_COOKIE[ 'comment_author_email_' . COOKIEHASH ] );
-		$comment_author_email                            = wp_unslash( $comment_author_email );
-		$comment_author_email                            = esc_attr( $comment_author_email );
+		$comment_author_email = apply_filters( 'pre_comment_author_email', $_COOKIE[ 'comment_author_email_' . COOKIEHASH ] );
+		$comment_author_email = wp_unslash( $comment_author_email );
+		$comment_author_email = esc_attr( $comment_author_email );
+
 		$_COOKIE[ 'comment_author_email_' . COOKIEHASH ] = $comment_author_email;
 	}
 
@@ -643,8 +627,9 @@ function sanitize_comment_cookies() {
 		 *
 		 * @param string $author_url_cookie The comment author URL cookie.
 		 */
-		$comment_author_url                            = apply_filters( 'pre_comment_author_url', $_COOKIE[ 'comment_author_url_' . COOKIEHASH ] );
-		$comment_author_url                            = wp_unslash( $comment_author_url );
+		$comment_author_url = apply_filters( 'pre_comment_author_url', $_COOKIE[ 'comment_author_url_' . COOKIEHASH ] );
+		$comment_author_url = wp_unslash( $comment_author_url );
+
 		$_COOKIE[ 'comment_author_url_' . COOKIEHASH ] = $comment_author_url;
 	}
 }
@@ -653,22 +638,23 @@ function sanitize_comment_cookies() {
  * Validates whether this comment is allowed to be made.
  *
  * @since 2.0.0
- * @since 4.7.0 The `$avoid_die` parameter was added, allowing the function to
- *              return a WP_Error object instead of dying.
+ * @since 4.7.0 The `$avoid_die` parameter was added, allowing the function
+ *              to return a WP_Error object instead of dying.
+ * @since 5.5.0 The `$avoid_die` parameter was renamed to `$wp_error`.
  *
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param array $commentdata Contains information on the comment.
- * @param bool  $avoid_die   When true, a disallowed comment will result in the function
+ * @param bool  $wp_error    When true, a disallowed comment will result in the function
  *                           returning a WP_Error object, rather than executing wp_die().
  *                           Default false.
- * @return int|string|WP_Error Allowed comments return the approval status (0|1|'spam').
- *                             If `$avoid_die` is true, disallowed comments return a WP_Error.
+ * @return int|string|WP_Error Allowed comments return the approval status (0|1|'spam'|'trash').
+ *                             If `$wp_error` is true, disallowed comments return a WP_Error.
  */
-function wp_allow_comment( $commentdata, $avoid_die = false ) {
+function wp_allow_comment( $commentdata, $wp_error = false ) {
 	global $wpdb;
 
-	// Simple duplicate check
+	// Simple duplicate check.
 	// expected_slashed ($comment_post_ID, $comment_author, $comment_author_email, $comment_content)
 	$dupe = $wpdb->prepare(
 		"SELECT comment_ID FROM $wpdb->comments WHERE comment_post_ID = %d AND comment_parent = %s AND comment_approved != 'trash' AND ( comment_author = %s ",
@@ -710,14 +696,24 @@ function wp_allow_comment( $commentdata, $avoid_die = false ) {
 		 * @param array $commentdata Comment data.
 		 */
 		do_action( 'comment_duplicate_trigger', $commentdata );
-		if ( true === $avoid_die ) {
-			return new WP_Error( 'comment_duplicate', __( 'Duplicate comment detected; it looks as though you&#8217;ve already said that!' ), 409 );
+
+		/**
+		 * Filters duplicate comment error message.
+		 *
+		 * @since 5.2.0
+		 *
+		 * @param string $comment_duplicate_message Duplicate comment error message.
+		 */
+		$comment_duplicate_message = apply_filters( 'comment_duplicate_message', __( 'Duplicate comment detected; it looks as though you&#8217;ve already said that!' ) );
+
+		if ( $wp_error ) {
+			return new WP_Error( 'comment_duplicate', $comment_duplicate_message, 409 );
 		} else {
 			if ( wp_doing_ajax() ) {
-				die( __( 'Duplicate comment detected; it looks as though you&#8217;ve already said that!' ) );
+				die( $comment_duplicate_message );
 			}
 
-			wp_die( __( 'Duplicate comment detected; it looks as though you&#8217;ve already said that!' ), 409 );
+			wp_die( $comment_duplicate_message, 409 );
 		}
 	}
 
@@ -728,19 +724,20 @@ function wp_allow_comment( $commentdata, $avoid_die = false ) {
 	 *
 	 * @since 2.3.0
 	 * @since 4.7.0 The `$avoid_die` parameter was added.
+	 * @since 5.5.0 The `$avoid_die` parameter was renamed to `$wp_error`.
 	 *
-	 * @param string $comment_author_IP    Comment author's IP address.
+	 * @param string $comment_author_ip    Comment author's IP address.
 	 * @param string $comment_author_email Comment author's email.
 	 * @param string $comment_date_gmt     GMT date the comment was posted.
-	 * @param bool   $avoid_die            Whether to prevent executing wp_die()
-	 *                                     or die() if a comment flood is occurring.
+	 * @param bool   $wp_error             Whether to return a WP_Error object instead of executing
+	 *                                     wp_die() or die() if a comment flood is occurring.
 	 */
 	do_action(
 		'check_comment_flood',
 		$commentdata['comment_author_IP'],
 		$commentdata['comment_author_email'],
 		$commentdata['comment_date_gmt'],
-		$avoid_die
+		$wp_error
 	);
 
 	/**
@@ -749,13 +746,14 @@ function wp_allow_comment( $commentdata, $avoid_die = false ) {
 	 * The default check is wp_check_comment_flood(). See check_comment_flood_db().
 	 *
 	 * @since 4.7.0
+	 * @since 5.5.0 The `$avoid_die` parameter was renamed to `$wp_error`.
 	 *
 	 * @param bool   $is_flood             Is a comment flooding occurring? Default false.
-	 * @param string $comment_author_IP    Comment author's IP address.
+	 * @param string $comment_author_ip    Comment author's IP address.
 	 * @param string $comment_author_email Comment author's email.
 	 * @param string $comment_date_gmt     GMT date the comment was posted.
-	 * @param bool   $avoid_die            Whether to prevent executing wp_die()
-	 *                                     or die() if a comment flood is occurring.
+	 * @param bool   $wp_error             Whether to return a WP_Error object instead of executing
+	 *                                     wp_die() or die() if a comment flood is occurring.
 	 */
 	$is_flood = apply_filters(
 		'wp_is_comment_flood',
@@ -763,11 +761,14 @@ function wp_allow_comment( $commentdata, $avoid_die = false ) {
 		$commentdata['comment_author_IP'],
 		$commentdata['comment_author_email'],
 		$commentdata['comment_date_gmt'],
-		$avoid_die
+		$wp_error
 	);
 
 	if ( $is_flood ) {
-		return new WP_Error( 'comment_flood', __( 'You are posting comments too quickly. Slow down.' ), 429 );
+		/** This filter is documented in wp-includes/comment-template.php */
+		$comment_flood_message = apply_filters( 'comment_flood_message', __( 'You are posting comments too quickly. Slow down.' ) );
+
+		return new WP_Error( 'comment_flood', $comment_flood_message, 429 );
 	}
 
 	if ( ! empty( $commentdata['user_id'] ) ) {
@@ -799,7 +800,7 @@ function wp_allow_comment( $commentdata, $avoid_die = false ) {
 			$approved = 0;
 		}
 
-		if ( wp_blacklist_check(
+		if ( wp_check_comment_disallowed_list(
 			$commentdata['comment_author'],
 			$commentdata['comment_author_email'],
 			$commentdata['comment_author_url'],
@@ -815,14 +816,14 @@ function wp_allow_comment( $commentdata, $avoid_die = false ) {
 	 * Filters a comment's approval status before it is set.
 	 *
 	 * @since 2.1.0
-	 * @since 4.9.0 Returning a WP_Error value from the filter will shortcircuit comment insertion and
-	 *              allow skipping further processing.
+	 * @since 4.9.0 Returning a WP_Error value from the filter will short-circuit comment insertion
+	 *              and allow skipping further processing.
 	 *
-	 * @param bool|string|WP_Error $approved    The approval status. Accepts 1, 0, 'spam' or WP_Error.
-	 * @param array                $commentdata Comment data.
+	 * @param int|string|WP_Error $approved    The approval status. Accepts 1, 0, 'spam', 'trash',
+	 *                                         or WP_Error.
+	 * @param array               $commentdata Comment data.
 	 */
-	$approved = apply_filters( 'pre_comment_approved', $approved, $commentdata );
-	return $approved;
+	return apply_filters( 'pre_comment_approved', $approved, $commentdata );
 }
 
 /**
@@ -847,19 +848,17 @@ function check_comment_flood_db() {
  *
  * @since 4.7.0
  *
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param bool   $is_flood  Is a comment flooding occurring?
  * @param string $ip        Comment author's IP address.
  * @param string $email     Comment author's email address.
  * @param string $date      MySQL time string.
  * @param bool   $avoid_die When true, a disallowed comment will result in the function
- *                          returning a WP_Error object, rather than executing wp_die().
- *                          Default false.
+ *                          returning without executing wp_die() or die(). Default false.
  * @return bool Whether comment flooding is occurring.
  */
 function wp_check_comment_flood( $is_flood, $ip, $email, $date, $avoid_die = false ) {
-
 	global $wpdb;
 
 	// Another callback has declared a flood. Trust it.
@@ -867,10 +866,11 @@ function wp_check_comment_flood( $is_flood, $ip, $email, $date, $avoid_die = fal
 		return $is_flood;
 	}
 
-	// don't throttle admins or moderators
+	// Don't throttle admins or moderators.
 	if ( current_user_can( 'manage_options' ) || current_user_can( 'moderate_comments' ) ) {
 		return false;
 	}
+
 	$hour_ago = gmdate( 'Y-m-d H:i:s', time() - HOUR_IN_SECONDS );
 
 	if ( is_user_logged_in() ) {
@@ -881,16 +881,19 @@ function wp_check_comment_flood( $is_flood, $ip, $email, $date, $avoid_die = fal
 		$check_column = '`comment_author_IP`';
 	}
 
-	$sql      = $wpdb->prepare(
+	$sql = $wpdb->prepare(
 		"SELECT `comment_date_gmt` FROM `$wpdb->comments` WHERE `comment_date_gmt` >= %s AND ( $check_column = %s OR `comment_author_email` = %s ) ORDER BY `comment_date_gmt` DESC LIMIT 1",
 		$hour_ago,
 		$user,
 		$email
 	);
+
 	$lasttime = $wpdb->get_var( $sql );
+
 	if ( $lasttime ) {
 		$time_lastcomment = mysql2date( 'U', $lasttime, false );
 		$time_newcomment  = mysql2date( 'U', $date, false );
+
 		/**
 		 * Filters the comment flood status.
 		 *
@@ -901,6 +904,7 @@ function wp_check_comment_flood( $is_flood, $ip, $email, $date, $avoid_die = fal
 		 * @param int  $time_newcomment  Timestamp of when the new comment was posted.
 		 */
 		$flood_die = apply_filters( 'comment_flood_filter', false, $time_lastcomment, $time_newcomment );
+
 		if ( $flood_die ) {
 			/**
 			 * Fires before the comment flood message is triggered.
@@ -911,14 +915,24 @@ function wp_check_comment_flood( $is_flood, $ip, $email, $date, $avoid_die = fal
 			 * @param int $time_newcomment  Timestamp of when the new comment was posted.
 			 */
 			do_action( 'comment_flood_trigger', $time_lastcomment, $time_newcomment );
-			if ( true === $avoid_die ) {
+
+			if ( $avoid_die ) {
 				return true;
 			} else {
+				/**
+				 * Filters the comment flood error message.
+				 *
+				 * @since 5.2.0
+				 *
+				 * @param string $comment_flood_message Comment flood error message.
+				 */
+				$comment_flood_message = apply_filters( 'comment_flood_message', __( 'You are posting comments too quickly. Slow down.' ) );
+
 				if ( wp_doing_ajax() ) {
-					die( __( 'You are posting comments too quickly. Slow down.' ) );
+					die( $comment_flood_message );
 				}
 
-				wp_die( __( 'You are posting comments too quickly. Slow down.' ), 429 );
+				wp_die( $comment_flood_message, 429 );
 			}
 		}
 	}
@@ -931,8 +945,8 @@ function wp_check_comment_flood( $is_flood, $ip, $email, $date, $avoid_die = fal
  *
  * @since 2.7.0
  *
- * @param array $comments Array of comments
- * @return array Array of comments keyed by comment_type.
+ * @param WP_Comment[] $comments Array of comments
+ * @return WP_Comment[] Array of comments keyed by comment_type.
  */
 function separate_comments( &$comments ) {
 	$comments_by_type = array(
@@ -942,7 +956,7 @@ function separate_comments( &$comments ) {
 		'pings'     => array(),
 	);
 
-	$count            = count( $comments );
+	$count = count( $comments );
 
 	for ( $i = 0; $i < $count; $i++ ) {
 		$type = $comments[ $i ]->comment_type;
@@ -962,17 +976,17 @@ function separate_comments( &$comments ) {
 }
 
 /**
- * Calculate the total number of comment pages.
+ * Calculates the total number of comment pages.
  *
  * @since 2.7.0
  *
  * @uses Walker_Comment
  *
- * @global WP_Query $wp_query
+ * @global WP_Query $wp_query WordPress Query object.
  *
- * @param array $comments Optional array of WP_Comment objects. Defaults to $wp_query->comments
- * @param int   $per_page Optional comments per page.
- * @param bool  $threaded Optional control over flat or threaded comments.
+ * @param WP_Comment[] $comments Optional. Array of WP_Comment objects. Defaults to `$wp_query->comments`.
+ * @param int          $per_page Optional. Comments per page.
+ * @param bool         $threaded Optional. Control over flat or threaded comments.
  * @return int Number of comment pages.
  */
 function get_comment_pages_count( $comments = null, $per_page = null, $threaded = null ) {
@@ -1019,23 +1033,24 @@ function get_comment_pages_count( $comments = null, $per_page = null, $threaded 
 }
 
 /**
- * Calculate what page number a comment will appear on for comment paging.
+ * Calculates what page number a comment will appear on for comment paging.
  *
  * @since 2.7.0
  *
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param int   $comment_ID Comment ID.
  * @param array $args {
- *      Array of optional arguments.
- *      @type string     $type      Limit paginated comments to those matching a given type.
- *                                  Accepts 'comment', 'trackback', 'pingback', 'pings'
- *                                  (trackbacks and pingbacks), or 'all'. Default 'all'.
- *      @type int        $per_page  Per-page count to use when calculating pagination.
- *                                  Defaults to the value of the 'comments_per_page' option.
- *      @type int|string $max_depth If greater than 1, comment page will be determined
- *                                  for the top-level parent `$comment_ID`.
- *                                  Defaults to the value of the 'thread_comments_depth' option.
+ *     Array of optional arguments.
+ *
+ *     @type string     $type      Limit paginated comments to those matching a given type.
+ *                                 Accepts 'comment', 'trackback', 'pingback', 'pings'
+ *                                 (trackbacks and pingbacks), or 'all'. Default 'all'.
+ *     @type int        $per_page  Per-page count to use when calculating pagination.
+ *                                 Defaults to the value of the 'comments_per_page' option.
+ *     @type int|string $max_depth If greater than 1, comment page will be determined
+ *                                 for the top-level parent `$comment_ID`.
+ *                                 Defaults to the value of the 'thread_comments_depth' option.
  * } *
  * @return int|null Comment page number or null on error.
  */
@@ -1087,7 +1102,7 @@ function get_page_of_comment( $comment_ID, $args = array() ) {
 			}
 		}
 
-		// Find this comment's top level parent if threading is enabled
+		// Find this comment's top-level parent if threading is enabled.
 		if ( $args['max_depth'] > 1 && 0 != $comment->comment_parent ) {
 			return get_page_of_comment( $comment->comment_parent, $args );
 		}
@@ -1110,10 +1125,10 @@ function get_page_of_comment( $comment_ID, $args = array() ) {
 		if ( is_user_logged_in() ) {
 			$comment_args['include_unapproved'] = array( get_current_user_id() );
 		} else {
-			$commenter       = wp_get_current_commenter();
-			$commenter_email = $commenter['comment_author_email'];
-			if ( ! empty( $commenter_email ) ) {
-				$comment_args['include_unapproved'] = array( $commenter_email );
+			$unapproved_email = wp_get_unapproved_comment_author_email();
+
+			if ( $unapproved_email ) {
+				$comment_args['include_unapproved'] = array( $unapproved_email );
 			}
 		}
 
@@ -1150,7 +1165,7 @@ function get_page_of_comment( $comment_ID, $args = array() ) {
 		if ( 0 == $older_comment_count ) {
 			$page = 1;
 
-			// Divide comments older than this one by comments per page to get this comment's page number
+			// Divide comments older than this one by comments per page to get this comment's page number.
 		} else {
 			$page = ceil( ( $older_comment_count + 1 ) / $args['per_page'] );
 		}
@@ -1191,9 +1206,9 @@ function get_page_of_comment( $comment_ID, $args = array() ) {
  *
  * @since 4.5.0
  *
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
- * @return array Maximum character length for the comment form fields.
+ * @return int[] Array of maximum lengths keyed by field name.
  */
 function wp_get_comment_fields_max_lengths() {
 	global $wpdb;
@@ -1210,14 +1225,14 @@ function wp_get_comment_fields_max_lengths() {
 			$col_length = $wpdb->get_col_length( $wpdb->comments, $column );
 			$max_length = 0;
 
-			// No point if we can't get the DB column lengths
+			// No point if we can't get the DB column lengths.
 			if ( is_wp_error( $col_length ) ) {
 				break;
 			}
 
 			if ( ! is_array( $col_length ) && (int) $col_length > 0 ) {
 				$max_length = (int) $col_length;
-			} elseif ( is_array( $col_length ) && isset( $col_length['length'] ) && intval( $col_length['length'] ) > 0 ) {
+			} elseif ( is_array( $col_length ) && isset( $col_length['length'] ) && (int) $col_length['length'] > 0 ) {
 				$max_length = (int) $col_length['length'];
 
 				if ( ! empty( $col_length['type'] ) && 'byte' === $col_length['type'] ) {
@@ -1236,7 +1251,7 @@ function wp_get_comment_fields_max_lengths() {
 	 *
 	 * @since 4.5.0
 	 *
-	 * @param array $lengths Associative array `'field_name' => 'maximum length'`.
+	 * @param int[] $lengths Array of maximum lengths keyed by field name.
 	 */
 	return apply_filters( 'wp_get_comment_fields_max_lengths', $lengths );
 }
@@ -1254,28 +1269,28 @@ function wp_check_comment_data_max_lengths( $comment_data ) {
 	$max_lengths = wp_get_comment_fields_max_lengths();
 
 	if ( isset( $comment_data['comment_author'] ) && mb_strlen( $comment_data['comment_author'], '8bit' ) > $max_lengths['comment_author'] ) {
-		return new WP_Error( 'comment_author_column_length', __( '<strong>ERROR</strong>: your name is too long.' ), 200 );
+		return new WP_Error( 'comment_author_column_length', __( '<strong>Error:</strong> Your name is too long.' ), 200 );
 	}
 
 	if ( isset( $comment_data['comment_author_email'] ) && strlen( $comment_data['comment_author_email'] ) > $max_lengths['comment_author_email'] ) {
-		return new WP_Error( 'comment_author_email_column_length', __( '<strong>ERROR</strong>: your email address is too long.' ), 200 );
+		return new WP_Error( 'comment_author_email_column_length', __( '<strong>Error:</strong> Your email address is too long.' ), 200 );
 	}
 
 	if ( isset( $comment_data['comment_author_url'] ) && strlen( $comment_data['comment_author_url'] ) > $max_lengths['comment_author_url'] ) {
-		return new WP_Error( 'comment_author_url_column_length', __( '<strong>ERROR</strong>: your url is too long.' ), 200 );
+		return new WP_Error( 'comment_author_url_column_length', __( '<strong>Error:</strong> Your URL is too long.' ), 200 );
 	}
 
 	if ( isset( $comment_data['comment_content'] ) && mb_strlen( $comment_data['comment_content'], '8bit' ) > $max_lengths['comment_content'] ) {
-		return new WP_Error( 'comment_content_column_length', __( '<strong>ERROR</strong>: your comment is too long.' ), 200 );
+		return new WP_Error( 'comment_content_column_length', __( '<strong>Error:</strong> Your comment is too long.' ), 200 );
 	}
 
 	return true;
 }
 
 /**
- * Does comment contain blacklisted characters or words.
+ * Checks if a comment contains disallowed characters or words.
  *
- * @since 1.5.0
+ * @since 5.5.0
  *
  * @param string $author The author of the comment
  * @param string $email The email of the comment
@@ -1283,13 +1298,14 @@ function wp_check_comment_data_max_lengths( $comment_data ) {
  * @param string $comment The comment content
  * @param string $user_ip The comment author's IP address
  * @param string $user_agent The author's browser user agent
- * @return bool True if comment contains blacklisted content, false if comment does not
+ * @return bool True if comment contains disallowed content, false if comment does not
  */
-function wp_blacklist_check( $author, $email, $url, $comment, $user_ip, $user_agent ) {
+function wp_check_comment_disallowed_list( $author, $email, $url, $comment, $user_ip, $user_agent ) {
 	/**
-	 * Fires before the comment is tested for blacklisted characters or words.
+	 * Fires before the comment is tested for disallowed characters or words.
 	 *
 	 * @since 1.5.0
+	 * @deprecated 5.5.0 Use {@see 'wp_check_comment_disallowed_list'} instead.
 	 *
 	 * @param string $author     Comment author.
 	 * @param string $email      Comment author's email.
@@ -1298,14 +1314,34 @@ function wp_blacklist_check( $author, $email, $url, $comment, $user_ip, $user_ag
 	 * @param string $user_ip    Comment author's IP address.
 	 * @param string $user_agent Comment author's browser user agent.
 	 */
-	do_action( 'wp_blacklist_check', $author, $email, $url, $comment, $user_ip, $user_agent );
+	do_action_deprecated(
+		'wp_blacklist_check',
+		array( $author, $email, $url, $comment, $user_ip, $user_agent ),
+		'5.5.0',
+		'wp_check_comment_disallowed_list',
+		__( 'Please consider writing more inclusive code.' )
+	);
 
-	$mod_keys = trim( get_option( 'blacklist_keys' ) );
+	/**
+	 * Fires before the comment is tested for disallowed characters or words.
+	 *
+	 * @since 5.5.0
+	 *
+	 * @param string $author     Comment author.
+	 * @param string $email      Comment author's email.
+	 * @param string $url        Comment author's URL.
+	 * @param string $comment    Comment content.
+	 * @param string $user_ip    Comment author's IP address.
+	 * @param string $user_agent Comment author's browser user agent.
+	 */
+	do_action( 'wp_check_comment_disallowed_list', $author, $email, $url, $comment, $user_ip, $user_agent );
+
+	$mod_keys = trim( get_option( 'disallowed_keys' ) );
 	if ( '' === $mod_keys ) {
 		return false; // If moderation keys are empty.
 	}
 
-	// Ensure HTML tags are not being used to bypass the blacklist.
+	// Ensure HTML tags are not being used to bypass the list of disallowed characters and words.
 	$comment_without_html = wp_strip_all_tags( $comment );
 
 	$words = explode( "\n", $mod_keys );
@@ -1313,25 +1349,23 @@ function wp_blacklist_check( $author, $email, $url, $comment, $user_ip, $user_ag
 	foreach ( (array) $words as $word ) {
 		$word = trim( $word );
 
-		// Skip empty lines
+		// Skip empty lines.
 		if ( empty( $word ) ) {
-			continue;
-		}
+			continue; }
 
-		// Do some escaping magic so that '#' chars in the
-		// spam words don't break things:
+		// Do some escaping magic so that '#' chars
+		// in the spam words don't break things:
 		$word = preg_quote( $word, '#' );
 
 		$pattern = "#$word#i";
-		if (
-			   preg_match( $pattern, $author )
+		if ( preg_match( $pattern, $author )
 			|| preg_match( $pattern, $email )
 			|| preg_match( $pattern, $url )
 			|| preg_match( $pattern, $comment )
 			|| preg_match( $pattern, $comment_without_html )
 			|| preg_match( $pattern, $user_ip )
 			|| preg_match( $pattern, $user_agent )
-		 ) {
+		) {
 			return true;
 		}
 	}
@@ -1396,22 +1430,23 @@ function wp_count_comments( $post_id = 0 ) {
 /**
  * Trashes or deletes a comment.
  *
- * The comment is moved to trash instead of permanently deleted unless trash is
- * disabled, item is already in the trash, or $force_delete is true.
+ * The comment is moved to Trash instead of permanently deleted unless Trash is
+ * disabled, item is already in the Trash, or $force_delete is true.
  *
  * The post comment count will be updated if the comment was approved and has a
  * post ID available.
  *
  * @since 2.0.0
  *
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param int|WP_Comment $comment_id   Comment ID or WP_Comment object.
- * @param bool           $force_delete Whether to bypass trash and force deletion. Default is false.
+ * @param bool           $force_delete Whether to bypass Trash and force deletion. Default false.
  * @return bool True on success, false on failure.
  */
 function wp_delete_comment( $comment_id, $force_delete = false ) {
 	global $wpdb;
+
 	$comment = get_comment( $comment_id );
 	if ( ! $comment ) {
 		return false;
@@ -1427,7 +1462,7 @@ function wp_delete_comment( $comment_id, $force_delete = false ) {
 	 * @since 1.2.0
 	 * @since 4.9.0 Added the `$comment` parameter.
 	 *
-	 * @param int        $comment_id The comment ID.
+	 * @param string     $comment_id The comment ID as a numeric string.
 	 * @param WP_Comment $comment    The comment to be deleted.
 	 */
 	do_action( 'delete_comment', $comment->comment_ID, $comment );
@@ -1439,7 +1474,7 @@ function wp_delete_comment( $comment_id, $force_delete = false ) {
 		clean_comment_cache( $children );
 	}
 
-	// Delete metadata
+	// Delete metadata.
 	$meta_ids = $wpdb->get_col( $wpdb->prepare( "SELECT meta_id FROM $wpdb->commentmeta WHERE comment_id = %d", $comment->comment_ID ) );
 	foreach ( $meta_ids as $mid ) {
 		delete_metadata_by_mid( 'comment', $mid );
@@ -1455,7 +1490,7 @@ function wp_delete_comment( $comment_id, $force_delete = false ) {
 	 * @since 2.9.0
 	 * @since 4.9.0 Added the `$comment` parameter.
 	 *
-	 * @param int        $comment_id The comment ID.
+	 * @param string     $comment_id The comment ID as a numeric string.
 	 * @param WP_Comment $comment    The deleted comment.
 	 */
 	do_action( 'deleted_comment', $comment->comment_ID, $comment );
@@ -1471,13 +1506,14 @@ function wp_delete_comment( $comment_id, $force_delete = false ) {
 	do_action( 'wp_set_comment_status', $comment->comment_ID, 'delete' );
 
 	wp_transition_comment_status( 'delete', $comment->comment_approved, $comment );
+
 	return true;
 }
 
 /**
  * Moves a comment to the Trash
  *
- * If trash is disabled, comment is permanently deleted.
+ * If Trash is disabled, comment is permanently deleted.
  *
  * @since 2.9.0
  *
@@ -1500,7 +1536,7 @@ function wp_trash_comment( $comment_id ) {
 	 * @since 2.9.0
 	 * @since 4.9.0 Added the `$comment` parameter.
 	 *
-	 * @param int        $comment_id The comment ID.
+	 * @param string     $comment_id The comment ID as a numeric string.
 	 * @param WP_Comment $comment    The comment to be trashed.
 	 */
 	do_action( 'trash_comment', $comment->comment_ID, $comment );
@@ -1517,10 +1553,11 @@ function wp_trash_comment( $comment_id ) {
 		 * @since 2.9.0
 		 * @since 4.9.0 Added the `$comment` parameter.
 		 *
-		 * @param int        $comment_id The comment ID.
+		 * @param string     $comment_id The comment ID as a numeric string.
 		 * @param WP_Comment $comment    The trashed comment.
 		 */
 		do_action( 'trashed_comment', $comment->comment_ID, $comment );
+
 		return true;
 	}
 
@@ -1547,7 +1584,7 @@ function wp_untrash_comment( $comment_id ) {
 	 * @since 2.9.0
 	 * @since 4.9.0 Added the `$comment` parameter.
 	 *
-	 * @param int        $comment_id The comment ID.
+	 * @param string     $comment_id The comment ID as a numeric string.
 	 * @param WP_Comment $comment    The comment to be untrashed.
 	 */
 	do_action( 'untrash_comment', $comment->comment_ID, $comment );
@@ -1560,16 +1597,18 @@ function wp_untrash_comment( $comment_id ) {
 	if ( wp_set_comment_status( $comment, $status ) ) {
 		delete_comment_meta( $comment->comment_ID, '_wp_trash_meta_time' );
 		delete_comment_meta( $comment->comment_ID, '_wp_trash_meta_status' );
+
 		/**
 		 * Fires immediately after a comment is restored from the Trash.
 		 *
 		 * @since 2.9.0
 		 * @since 4.9.0 Added the `$comment` parameter.
 		 *
-		 * @param int        $comment_id The comment ID.
+		 * @param string     $comment_id The comment ID as a numeric string.
 		 * @param WP_Comment $comment    The untrashed comment.
 		 */
 		do_action( 'untrashed_comment', $comment->comment_ID, $comment );
+
 		return true;
 	}
 
@@ -1577,7 +1616,7 @@ function wp_untrash_comment( $comment_id ) {
 }
 
 /**
- * Marks a comment as Spam
+ * Marks a comment as Spam.
  *
  * @since 2.9.0
  *
@@ -1606,6 +1645,7 @@ function wp_spam_comment( $comment_id ) {
 		delete_comment_meta( $comment->comment_ID, '_wp_trash_meta_time' );
 		add_comment_meta( $comment->comment_ID, '_wp_trash_meta_status', $comment->comment_approved );
 		add_comment_meta( $comment->comment_ID, '_wp_trash_meta_time', time() );
+
 		/**
 		 * Fires immediately after a comment is marked as Spam.
 		 *
@@ -1616,6 +1656,7 @@ function wp_spam_comment( $comment_id ) {
 		 * @param WP_Comment $comment    The comment marked as spam.
 		 */
 		do_action( 'spammed_comment', $comment->comment_ID, $comment );
+
 		return true;
 	}
 
@@ -1623,7 +1664,7 @@ function wp_spam_comment( $comment_id ) {
 }
 
 /**
- * Removes a comment from the Spam
+ * Removes a comment from the Spam.
  *
  * @since 2.9.0
  *
@@ -1642,7 +1683,7 @@ function wp_unspam_comment( $comment_id ) {
 	 * @since 2.9.0
 	 * @since 4.9.0 Added the `$comment` parameter.
 	 *
-	 * @param int        $comment_id The comment ID.
+	 * @param string     $comment_id The comment ID as a numeric string.
 	 * @param WP_Comment $comment    The comment to be unmarked as spam.
 	 */
 	do_action( 'unspam_comment', $comment->comment_ID, $comment );
@@ -1655,16 +1696,18 @@ function wp_unspam_comment( $comment_id ) {
 	if ( wp_set_comment_status( $comment, $status ) ) {
 		delete_comment_meta( $comment->comment_ID, '_wp_trash_meta_status' );
 		delete_comment_meta( $comment->comment_ID, '_wp_trash_meta_time' );
+
 		/**
 		 * Fires immediately after a comment is unmarked as Spam.
 		 *
 		 * @since 2.9.0
 		 * @since 4.9.0 Added the `$comment` parameter.
 		 *
-		 * @param int        $comment_id The comment ID.
+		 * @param string     $comment_id The comment ID as a numeric string.
 		 * @param WP_Comment $comment    The comment unmarked as spam.
 		 */
 		do_action( 'unspammed_comment', $comment->comment_ID, $comment );
+
 		return true;
 	}
 
@@ -1672,12 +1715,12 @@ function wp_unspam_comment( $comment_id ) {
 }
 
 /**
- * The status of a comment by ID.
+ * Retrieves the status of a comment by comment ID.
  *
  * @since 1.0.0
  *
  * @param int|WP_Comment $comment_id Comment ID or WP_Comment object
- * @return false|string Status might be 'trash', 'approved', 'unapproved', 'spam'. False on failure.
+ * @return string|false Status might be 'trash', 'approved', 'unapproved', 'spam'. False on failure.
  */
 function wp_get_comment_status( $comment_id ) {
 	$comment = get_comment( $comment_id );
@@ -1703,34 +1746,34 @@ function wp_get_comment_status( $comment_id ) {
 }
 
 /**
- * Call hooks for when a comment status transition occurs.
+ * Calls hooks for when a comment status transition occurs.
  *
  * Calls hooks for comment status transitions. If the new comment status is not the same
  * as the previous comment status, then two hooks will be ran, the first is
- * {@see 'transition_comment_status'} with new status, old status, and comment data. The
- * next action called is {@see comment_$old_status_to_$new_status'}. It has the
- * comment data.
+ * {@see 'transition_comment_status'} with new status, old status, and comment data.
+ * The next action called is {@see 'comment_$old_status_to_$new_status'}. It has
+ * the comment data.
  *
- * The final action will run whether or not the comment statuses are the same. The
- * action is named {@see 'comment_$new_status_$comment->comment_type'}.
+ * The final action will run whether or not the comment statuses are the same.
+ * The action is named {@see 'comment_$new_status_$comment->comment_type'}.
  *
  * @since 2.7.0
  *
- * @param string $new_status New comment status.
- * @param string $old_status Previous comment status.
- * @param object $comment Comment data.
+ * @param string     $new_status New comment status.
+ * @param string     $old_status Previous comment status.
+ * @param WP_Comment $comment    Comment object.
  */
 function wp_transition_comment_status( $new_status, $old_status, $comment ) {
 	/*
-	 * Translate raw statuses to human readable formats for the hooks.
+	 * Translate raw statuses to human-readable formats for the hooks.
 	 * This is not a complete list of comment status, it's only the ones
-	 * that need to be renamed
+	 * that need to be renamed.
 	 */
 	$comment_statuses = array(
 		0         => 'unapproved',
-		'hold'    => 'unapproved', // wp_set_comment_status() uses "hold"
+		'hold'    => 'unapproved', // wp_set_comment_status() uses "hold".
 		1         => 'approved',
-		'approve' => 'approved', // wp_set_comment_status() uses "approve"
+		'approve' => 'approved',   // wp_set_comment_status() uses "approve".
 	);
 	if ( isset( $comment_statuses[ $new_status ] ) ) {
 		$new_status = $comment_statuses[ $new_status ];
@@ -1739,7 +1782,7 @@ function wp_transition_comment_status( $new_status, $old_status, $comment ) {
 		$old_status = $comment_statuses[ $old_status ];
 	}
 
-	// Call the hooks
+	// Call the hooks.
 	if ( $new_status != $old_status ) {
 		/**
 		 * Fires when the comment status is in transition.
@@ -1748,7 +1791,7 @@ function wp_transition_comment_status( $new_status, $old_status, $comment ) {
 		 *
 		 * @param int|string $new_status The new comment status.
 		 * @param int|string $old_status The old comment status.
-		 * @param object     $comment    The comment data.
+		 * @param WP_Comment $comment    Comment object.
 		 */
 		do_action( 'transition_comment_status', $new_status, $old_status, $comment );
 		/**
@@ -1756,6 +1799,15 @@ function wp_transition_comment_status( $new_status, $old_status, $comment ) {
 		 *
 		 * The dynamic portions of the hook name, `$old_status`, and `$new_status`,
 		 * refer to the old and new comment statuses, respectively.
+		 *
+		 * Possible hook names include:
+		 *
+		 *  - `comment_unapproved_to_approved`
+		 *  - `comment_spam_to_approved`
+		 *  - `comment_approved_to_unapproved`
+		 *  - `comment_spam_to_unapproved`
+		 *  - `comment_unapproved_to_spam`
+		 *  - `comment_approved_to_spam`
 		 *
 		 * @since 2.7.0
 		 *
@@ -1769,19 +1821,30 @@ function wp_transition_comment_status( $new_status, $old_status, $comment ) {
 	 * The dynamic portions of the hook name, `$new_status`, and `$comment->comment_type`,
 	 * refer to the new comment status, and the type of comment, respectively.
 	 *
-	 * Typical comment types include an empty string (standard comment), 'pingback',
-	 * or 'trackback'.
+	 * Typical comment types include 'comment', 'pingback', or 'trackback'.
+	 *
+	 * Possible hook names include:
+	 *
+	 *  - `comment_approved_comment`
+	 *  - `comment_approved_pingback`
+	 *  - `comment_approved_trackback`
+	 *  - `comment_unapproved_comment`
+	 *  - `comment_unapproved_pingback`
+	 *  - `comment_unapproved_trackback`
+	 *  - `comment_spam_comment`
+	 *  - `comment_spam_pingback`
+	 *  - `comment_spam_trackback`
 	 *
 	 * @since 2.7.0
 	 *
-	 * @param int        $comment_ID The comment ID.
+	 * @param string     $comment_ID The comment ID as a numeric string.
 	 * @param WP_Comment $comment    Comment object.
 	 */
 	do_action( "comment_{$new_status}_{$comment->comment_type}", $comment->comment_ID, $comment );
 }
 
 /**
- * Clear the lastcommentmodified cached value when a comment status is changed.
+ * Clears the lastcommentmodified cached value when a comment status is changed.
  *
  * Deletes the lastcommentmodified cache key when a comment enters or leaves
  * 'approved' status.
@@ -1794,14 +1857,16 @@ function wp_transition_comment_status( $new_status, $old_status, $comment ) {
  */
 function _clear_modified_cache_on_transition_comment_status( $new_status, $old_status ) {
 	if ( 'approved' === $new_status || 'approved' === $old_status ) {
+		$data = array();
 		foreach ( array( 'server', 'gmt', 'blog' ) as $timezone ) {
-			wp_cache_delete( "lastcommentmodified:$timezone", 'timeinfo' );
+			$data[] = "lastcommentmodified:$timezone";
 		}
+		wp_cache_delete_multiple( $data, 'timeinfo' );
 	}
 }
 
 /**
- * Get current commenter's name, email, and URL.
+ * Gets current commenter's name, email, and URL.
  *
  * Expects cookies content to already be sanitized. User of this function might
  * wish to recheck the returned array for validity.
@@ -1810,7 +1875,13 @@ function _clear_modified_cache_on_transition_comment_status( $new_status, $old_s
  *
  * @since 2.0.4
  *
- * @return array Comment author, email, url respectively.
+ * @return array {
+ *     An array of current commenter variables.
+ *
+ *     @type string $comment_author       The name of the current commenter, or an empty string.
+ *     @type string $comment_author_email The email address of the current commenter, or an empty string.
+ *     @type string $comment_author_url   The URL address of the current commenter, or an empty string.
+ * }
  */
 function wp_get_current_commenter() {
 	// Cookies should already be sanitized.
@@ -1838,21 +1909,58 @@ function wp_get_current_commenter() {
 	 * @param array $comment_author_data {
 	 *     An array of current commenter variables.
 	 *
-	 *     @type string $comment_author       The name of the author of the comment. Default empty.
-	 *     @type string $comment_author_email The email address of the `$comment_author`. Default empty.
-	 *     @type string $comment_author_url   The URL address of the `$comment_author`. Default empty.
+	 *     @type string $comment_author       The name of the current commenter, or an empty string.
+	 *     @type string $comment_author_email The email address of the current commenter, or an empty string.
+	 *     @type string $comment_author_url   The URL address of the current commenter, or an empty string.
 	 * }
 	 */
 	return apply_filters( 'wp_get_current_commenter', compact( 'comment_author', 'comment_author_email', 'comment_author_url' ) );
 }
 
 /**
+ * Gets unapproved comment author's email.
+ *
+ * Used to allow the commenter to see their pending comment.
+ *
+ * @since 5.1.0
+ * @since 5.7.0 The window within which the author email for an unapproved comment
+ *              can be retrieved was extended to 10 minutes.
+ *
+ * @return string The unapproved comment author's email (when supplied).
+ */
+function wp_get_unapproved_comment_author_email() {
+	$commenter_email = '';
+
+	if ( ! empty( $_GET['unapproved'] ) && ! empty( $_GET['moderation-hash'] ) ) {
+		$comment_id = (int) $_GET['unapproved'];
+		$comment    = get_comment( $comment_id );
+
+		if ( $comment && hash_equals( $_GET['moderation-hash'], wp_hash( $comment->comment_date_gmt ) ) ) {
+			// The comment will only be viewable by the comment author for 10 minutes.
+			$comment_preview_expires = strtotime( $comment->comment_date_gmt . '+10 minutes' );
+
+			if ( time() < $comment_preview_expires ) {
+				$commenter_email = $comment->comment_author_email;
+			}
+		}
+	}
+
+	if ( ! $commenter_email ) {
+		$commenter       = wp_get_current_commenter();
+		$commenter_email = $commenter['comment_author_email'];
+	}
+
+	return $commenter_email;
+}
+
+/**
  * Inserts a comment into the database.
  *
  * @since 2.0.0
- * @since 4.4.0 Introduced `$comment_meta` argument.
+ * @since 4.4.0 Introduced the `$comment_meta` argument.
+ * @since 5.5.0 Default value for `$comment_type` argument changed to `comment`.
  *
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param array $commentdata {
  *     Array of arguments for inserting a new comment.
@@ -1874,7 +1982,7 @@ function wp_get_current_commenter() {
  *     @type int        $comment_parent       ID of this comment's parent, if any. Default 0.
  *     @type int        $comment_post_ID      ID of the post that relates to the comment, if any.
  *                                            Default 0.
- *     @type string     $comment_type         Comment type. Default empty.
+ *     @type string     $comment_type         Comment type. Default 'comment'.
  *     @type array      $comment_meta         Optional. Array of key/value pairs to be stored in commentmeta for the
  *                                            new comment.
  *     @type int        $user_id              ID of the user who submitted the comment. Default 0.
@@ -1883,27 +1991,47 @@ function wp_get_current_commenter() {
  */
 function wp_insert_comment( $commentdata ) {
 	global $wpdb;
+
 	$data = wp_unslash( $commentdata );
 
 	$comment_author       = ! isset( $data['comment_author'] ) ? '' : $data['comment_author'];
 	$comment_author_email = ! isset( $data['comment_author_email'] ) ? '' : $data['comment_author_email'];
 	$comment_author_url   = ! isset( $data['comment_author_url'] ) ? '' : $data['comment_author_url'];
-	$comment_author_IP    = ! isset( $data['comment_author_IP'] ) ? '' : $data['comment_author_IP'];
+	$comment_author_ip    = ! isset( $data['comment_author_IP'] ) ? '' : $data['comment_author_IP'];
 
 	$comment_date     = ! isset( $data['comment_date'] ) ? current_time( 'mysql' ) : $data['comment_date'];
 	$comment_date_gmt = ! isset( $data['comment_date_gmt'] ) ? get_gmt_from_date( $comment_date ) : $data['comment_date_gmt'];
 
-	$comment_post_ID  = ! isset( $data['comment_post_ID'] ) ? 0 : $data['comment_post_ID'];
+	$comment_post_id  = ! isset( $data['comment_post_ID'] ) ? 0 : $data['comment_post_ID'];
 	$comment_content  = ! isset( $data['comment_content'] ) ? '' : $data['comment_content'];
 	$comment_karma    = ! isset( $data['comment_karma'] ) ? 0 : $data['comment_karma'];
 	$comment_approved = ! isset( $data['comment_approved'] ) ? 1 : $data['comment_approved'];
 	$comment_agent    = ! isset( $data['comment_agent'] ) ? '' : $data['comment_agent'];
-	$comment_type     = ! isset( $data['comment_type'] ) ? '' : $data['comment_type'];
+	$comment_type     = empty( $data['comment_type'] ) ? 'comment' : $data['comment_type'];
 	$comment_parent   = ! isset( $data['comment_parent'] ) ? 0 : $data['comment_parent'];
 
 	$user_id = ! isset( $data['user_id'] ) ? 0 : $data['user_id'];
 
-	$compacted = compact( 'comment_post_ID', 'comment_author', 'comment_author_email', 'comment_author_url', 'comment_author_IP', 'comment_date', 'comment_date_gmt', 'comment_content', 'comment_karma', 'comment_approved', 'comment_agent', 'comment_type', 'comment_parent', 'user_id' );
+	$compacted = array(
+		'comment_post_ID'   => $comment_post_id,
+		'comment_author_IP' => $comment_author_ip,
+	);
+
+	$compacted += compact(
+		'comment_author',
+		'comment_author_email',
+		'comment_author_url',
+		'comment_date',
+		'comment_date_gmt',
+		'comment_content',
+		'comment_karma',
+		'comment_approved',
+		'comment_agent',
+		'comment_type',
+		'comment_parent',
+		'user_id'
+	);
+
 	if ( ! $wpdb->insert( $wpdb->comments, $compacted ) ) {
 		return false;
 	}
@@ -1911,11 +2039,13 @@ function wp_insert_comment( $commentdata ) {
 	$id = (int) $wpdb->insert_id;
 
 	if ( 1 == $comment_approved ) {
-		wp_update_comment_count( $comment_post_ID );
+		wp_update_comment_count( $comment_post_id );
 
+		$data = array();
 		foreach ( array( 'server', 'gmt', 'blog' ) as $timezone ) {
-			wp_cache_delete( "lastcommentmodified:$timezone", 'timeinfo' );
+			$data[] = "lastcommentmodified:$timezone";
 		}
+		wp_cache_delete_multiple( $data, 'timeinfo' );
 	}
 
 	clean_comment_cache( $id );
@@ -1957,14 +2087,14 @@ function wp_insert_comment( $commentdata ) {
 function wp_filter_comment( $commentdata ) {
 	if ( isset( $commentdata['user_ID'] ) ) {
 		/**
-		 * Filters the comment author's user id before it is set.
+		 * Filters the comment author's user ID before it is set.
 		 *
-		 * The first time this filter is evaluated, 'user_ID' is checked
-		 * (for back-compat), followed by the standard 'user_id' value.
+		 * The first time this filter is evaluated, `user_ID` is checked
+		 * (for back-compat), followed by the standard `user_id` value.
 		 *
 		 * @since 1.5.0
 		 *
-		 * @param int $user_ID The comment author's user ID.
+		 * @param int $user_id The comment author's user ID.
 		 */
 		$commentdata['user_id'] = apply_filters( 'pre_user_id', $commentdata['user_ID'] );
 	} elseif ( isset( $commentdata['user_id'] ) ) {
@@ -2002,22 +2132,24 @@ function wp_filter_comment( $commentdata ) {
 	$commentdata['comment_author_url'] = apply_filters( 'pre_comment_author_url', $commentdata['comment_author_url'] );
 	/** This filter is documented in wp-includes/comment.php */
 	$commentdata['comment_author_email'] = apply_filters( 'pre_comment_author_email', $commentdata['comment_author_email'] );
-	$commentdata['filtered']             = true;
+
+	$commentdata['filtered'] = true;
+
 	return $commentdata;
 }
 
 /**
- * Whether a comment should be blocked because of comment flood.
+ * Determines whether a comment should be blocked because of comment flood.
  *
  * @since 2.1.0
  *
- * @param bool $block Whether plugin has already blocked comment.
- * @param int $time_lastcomment Timestamp for last comment.
- * @param int $time_newcomment Timestamp for new comment.
+ * @param bool $block            Whether plugin has already blocked comment.
+ * @param int  $time_lastcomment Timestamp for last comment.
+ * @param int  $time_newcomment  Timestamp for new comment.
  * @return bool Whether comment should be blocked.
  */
 function wp_throttle_comment_flood( $block, $time_lastcomment, $time_newcomment ) {
-	if ( $block ) { // a plugin has already blocked... we'll let that decision stand
+	if ( $block ) { // A plugin has already blocked... we'll let that decision stand.
 		return $block;
 	}
 	if ( ( $time_newcomment - $time_lastcomment ) < 15 ) {
@@ -2031,7 +2163,7 @@ function wp_throttle_comment_flood( $block, $time_lastcomment, $time_newcomment 
  *
  * Filters new comment to ensure that the fields are sanitized and valid before
  * inserting comment into database. Calls {@see 'comment_post'} action with comment ID
- * and whether comment is approved by ClassicPress. Also has {@see 'preprocess_comment'}
+ * and whether comment is approved by WordPress. Also has {@see 'preprocess_comment'}
  * filter for processing the comment data before the function handles it.
  *
  * We use `REMOTE_ADDR` here directly. If you are behind a proxy, you should ensure
@@ -2040,12 +2172,14 @@ function wp_throttle_comment_flood( $block, $time_lastcomment, $time_newcomment 
  * See {@link https://core.trac.wordpress.org/ticket/9235}
  *
  * @since 1.5.0
- * @since 4.3.0 'comment_agent' and 'comment_author_IP' can be set via `$commentdata`.
- * @since 4.7.0 The `$avoid_die` parameter was added, allowing the function to
- *              return a WP_Error object instead of dying.
+ * @since 4.3.0 Introduced the `comment_agent` and `comment_author_IP` arguments.
+ * @since 4.7.0 The `$avoid_die` parameter was added, allowing the function
+ *              to return a WP_Error object instead of dying.
+ * @since 5.5.0 The `$avoid_die` parameter was renamed to `$wp_error`.
+ * @since 5.5.0 Introduced the `comment_type` argument.
  *
  * @see wp_insert_comment()
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param array $commentdata {
  *     Comment data.
@@ -2057,6 +2191,7 @@ function wp_throttle_comment_flood( $block, $time_lastcomment, $time_newcomment 
  *     @type string $comment_date         The date the comment was submitted. Default is the current time.
  *     @type string $comment_date_gmt     The date the comment was submitted in the GMT timezone.
  *                                        Default is `$comment_date` in the GMT timezone.
+ *     @type string $comment_type         Comment type. Default 'comment'.
  *     @type int    $comment_parent       The ID of this comment's parent, if any. Default 0.
  *     @type int    $comment_post_ID      The ID of the post that relates to the comment.
  *     @type int    $user_id              The ID of the user who submitted the comment. Default 0.
@@ -2066,35 +2201,54 @@ function wp_throttle_comment_flood( $block, $time_lastcomment, $time_newcomment 
  *     @type string $comment_author_IP    Comment author IP address in IPv4 format. Default is the value of
  *                                        'REMOTE_ADDR' in the `$_SERVER` superglobal sent in the original request.
  * }
- * @param bool $avoid_die Should errors be returned as WP_Error objects instead of
+ * @param bool  $wp_error Should errors be returned as WP_Error objects instead of
  *                        executing wp_die()? Default false.
  * @return int|false|WP_Error The ID of the comment on success, false or WP_Error on failure.
  */
-function wp_new_comment( $commentdata, $avoid_die = false ) {
+function wp_new_comment( $commentdata, $wp_error = false ) {
 	global $wpdb;
 
+	/*
+	 * Normalize `user_ID` to `user_id`, but pass the old key
+	 * to the `preprocess_comment` filter for backward compatibility.
+	 */
 	if ( isset( $commentdata['user_ID'] ) ) {
 		$commentdata['user_ID'] = (int) $commentdata['user_ID'];
 		$commentdata['user_id'] = $commentdata['user_ID'];
+	} elseif ( isset( $commentdata['user_id'] ) ) {
+		$commentdata['user_id'] = (int) $commentdata['user_id'];
+		$commentdata['user_ID'] = $commentdata['user_id'];
 	}
 
 	$prefiltered_user_id = ( isset( $commentdata['user_id'] ) ) ? (int) $commentdata['user_id'] : 0;
+
+	if ( ! isset( $commentdata['comment_author_IP'] ) ) {
+		$commentdata['comment_author_IP'] = $_SERVER['REMOTE_ADDR'];
+	}
+
+	if ( ! isset( $commentdata['comment_agent'] ) ) {
+		$commentdata['comment_agent'] = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : '';
+	}
 
 	/**
 	 * Filters a comment's data before it is sanitized and inserted into the database.
 	 *
 	 * @since 1.5.0
+	 * @since 5.6.0 Comment data includes the `comment_agent` and `comment_author_IP` values.
 	 *
 	 * @param array $commentdata Comment data.
 	 */
 	$commentdata = apply_filters( 'preprocess_comment', $commentdata );
 
 	$commentdata['comment_post_ID'] = (int) $commentdata['comment_post_ID'];
+
+	// Normalize `user_ID` to `user_id` again, after the filter.
 	if ( isset( $commentdata['user_ID'] ) && $prefiltered_user_id !== (int) $commentdata['user_ID'] ) {
 		$commentdata['user_ID'] = (int) $commentdata['user_ID'];
 		$commentdata['user_id'] = $commentdata['user_ID'];
 	} elseif ( isset( $commentdata['user_id'] ) ) {
 		$commentdata['user_id'] = (int) $commentdata['user_id'];
+		$commentdata['user_ID'] = $commentdata['user_id'];
 	}
 
 	$commentdata['comment_parent'] = isset( $commentdata['comment_parent'] ) ? absint( $commentdata['comment_parent'] ) : 0;
@@ -2103,14 +2257,8 @@ function wp_new_comment( $commentdata, $avoid_die = false ) {
 
 	$commentdata['comment_parent'] = ( 'approved' === $parent_status || 'unapproved' === $parent_status ) ? $commentdata['comment_parent'] : 0;
 
-	if ( ! isset( $commentdata['comment_author_IP'] ) ) {
-		$commentdata['comment_author_IP'] = $_SERVER['REMOTE_ADDR'];
-	}
 	$commentdata['comment_author_IP'] = preg_replace( '/[^0-9a-fA-F:., ]/', '', $commentdata['comment_author_IP'] );
 
-	if ( ! isset( $commentdata['comment_agent'] ) ) {
-		$commentdata['comment_agent'] = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : '';
-	}
 	$commentdata['comment_agent'] = substr( $commentdata['comment_agent'], 0, 254 );
 
 	if ( empty( $commentdata['comment_date'] ) ) {
@@ -2121,14 +2269,20 @@ function wp_new_comment( $commentdata, $avoid_die = false ) {
 		$commentdata['comment_date_gmt'] = current_time( 'mysql', 1 );
 	}
 
+	if ( empty( $commentdata['comment_type'] ) ) {
+		$commentdata['comment_type'] = 'comment';
+	}
+
 	$commentdata = wp_filter_comment( $commentdata );
 
-	$commentdata['comment_approved'] = wp_allow_comment( $commentdata, $avoid_die );
+	$commentdata['comment_approved'] = wp_allow_comment( $commentdata, $wp_error );
+
 	if ( is_wp_error( $commentdata['comment_approved'] ) ) {
 		return $commentdata['comment_approved'];
 	}
 
 	$comment_ID = wp_insert_comment( $commentdata );
+
 	if ( ! $comment_ID ) {
 		$fields = array( 'comment_author', 'comment_author_email', 'comment_author_url', 'comment_content' );
 
@@ -2140,7 +2294,7 @@ function wp_new_comment( $commentdata, $avoid_die = false ) {
 
 		$commentdata = wp_filter_comment( $commentdata );
 
-		$commentdata['comment_approved'] = wp_allow_comment( $commentdata, $avoid_die );
+		$commentdata['comment_approved'] = wp_allow_comment( $commentdata, $wp_error );
 		if ( is_wp_error( $commentdata['comment_approved'] ) ) {
 			return $commentdata['comment_approved'];
 		}
@@ -2167,7 +2321,7 @@ function wp_new_comment( $commentdata, $avoid_die = false ) {
 }
 
 /**
- * Send a comment moderation notification to the comment moderator.
+ * Sends a comment moderation notification to the comment moderator.
  *
  * @since 4.4.0
  *
@@ -2191,7 +2345,7 @@ function wp_new_comment_notify_moderator( $comment_ID ) {
 }
 
 /**
- * Send a notification of a new comment to the post author.
+ * Sends a notification of a new comment to the post author.
  *
  * @since 4.4.0
  *
@@ -2241,11 +2395,11 @@ function wp_new_comment_notify_postauthor( $comment_ID ) {
  *
  * @since 1.0.0
  *
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param int|WP_Comment $comment_id     Comment ID or WP_Comment object.
  * @param string         $comment_status New comment status, either 'hold', 'approve', 'spam', or 'trash'.
- * @param bool           $wp_error       Whether to return a WP_Error object if there is a failure. Default is false.
+ * @param bool           $wp_error       Whether to return a WP_Error object if there is a failure. Default false.
  * @return bool|WP_Error True on success, false or WP_Error on failure.
  */
 function wp_set_comment_status( $comment_id, $comment_status, $wp_error = false ) {
@@ -2275,7 +2429,7 @@ function wp_set_comment_status( $comment_id, $comment_status, $wp_error = false 
 
 	if ( ! $wpdb->update( $wpdb->comments, array( 'comment_approved' => $status ), array( 'comment_ID' => $comment_old->comment_ID ) ) ) {
 		if ( $wp_error ) {
-			return new WP_Error( 'db_update_error', __( 'Could not update comment status' ), $wpdb->last_error );
+			return new WP_Error( 'db_update_error', __( 'Could not update comment status.' ), $wpdb->last_error );
 		} else {
 			return false;
 		}
@@ -2286,14 +2440,14 @@ function wp_set_comment_status( $comment_id, $comment_status, $wp_error = false 
 	$comment = get_comment( $comment_old->comment_ID );
 
 	/**
-	 * Fires immediately before transitioning a comment's status from one to another
-	 * in the database.
+	 * Fires immediately after transitioning a comment's status from one to another in the database
+	 * and removing the comment from the object cache, but prior to all status transition hooks.
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param int         $comment_id     Comment ID.
-	 * @param string|bool $comment_status Current comment status. Possible values include
-	 *                                    'hold', 'approve', 'spam', 'trash', or false.
+	 * @param string $comment_id     Comment ID as a numeric string.
+	 * @param string $comment_status Current comment status. Possible values include
+	 *                               'hold', '0', 'approve', '1', 'spam', and 'trash'.
 	 */
 	do_action( 'wp_set_comment_status', $comment->comment_ID, $comment_status );
 
@@ -2311,24 +2465,38 @@ function wp_set_comment_status( $comment_id, $comment_status, $wp_error = false 
  *
  * @since 2.0.0
  * @since 4.9.0 Add updating comment meta during comment update.
+ * @since 5.5.0 The `$wp_error` parameter was added.
+ * @since 5.5.0 The return values for an invalid comment or post ID
+ *              were changed to false instead of 0.
  *
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param array $commentarr Contains information on the comment.
- * @return int Comment was updated if value is 1, or was not updated if value is 0.
+ * @param bool  $wp_error   Optional. Whether to return a WP_Error on failure. Default false.
+ * @return int|false|WP_Error The value 1 if the comment was updated, 0 if not updated.
+ *                            False or a WP_Error object on failure.
  */
-function wp_update_comment( $commentarr ) {
+function wp_update_comment( $commentarr, $wp_error = false ) {
 	global $wpdb;
 
-	// First, get all of the original fields
+	// First, get all of the original fields.
 	$comment = get_comment( $commentarr['comment_ID'], ARRAY_A );
+
 	if ( empty( $comment ) ) {
-		return 0;
+		if ( $wp_error ) {
+			return new WP_Error( 'invalid_comment_id', __( 'Invalid comment ID.' ) );
+		} else {
+			return false;
+		}
 	}
 
 	// Make sure that the comment post ID is valid (if specified).
 	if ( ! empty( $commentarr['comment_post_ID'] ) && ! get_post( $commentarr['comment_post_ID'] ) ) {
-		return 0;
+		if ( $wp_error ) {
+			return new WP_Error( 'invalid_post_id', __( 'Invalid post ID.' ) );
+		} else {
+			return false;
+		}
 	}
 
 	$filter_comment = false;
@@ -2376,8 +2544,8 @@ function wp_update_comment( $commentarr ) {
 		$data['comment_approved'] = 1;
 	}
 
-	$comment_ID      = $data['comment_ID'];
-	$comment_post_ID = $data['comment_post_ID'];
+	$comment_id      = $data['comment_ID'];
+	$comment_post_id = $data['comment_post_ID'];
 
 	/**
 	 * Filters the comment data immediately before it is updated in the database.
@@ -2385,27 +2553,63 @@ function wp_update_comment( $commentarr ) {
 	 * Note: data being passed to the filter is already unslashed.
 	 *
 	 * @since 4.7.0
+	 * @since 5.5.0 Returning a WP_Error value from the filter will short-circuit comment update
+	 *              and allow skipping further processing.
 	 *
-	 * @param array $data       The new, processed comment data.
-	 * @param array $comment    The old, unslashed comment data.
-	 * @param array $commentarr The new, raw comment data.
+	 * @param array|WP_Error $data       The new, processed comment data, or WP_Error.
+	 * @param array          $comment    The old, unslashed comment data.
+	 * @param array          $commentarr The new, raw comment data.
 	 */
 	$data = apply_filters( 'wp_update_comment_data', $data, $comment, $commentarr );
 
-	$keys = array( 'comment_post_ID', 'comment_content', 'comment_author', 'comment_author_email', 'comment_approved', 'comment_karma', 'comment_author_url', 'comment_date', 'comment_date_gmt', 'comment_type', 'comment_parent', 'user_id', 'comment_agent', 'comment_author_IP' );
+	// Do not carry on on failure.
+	if ( is_wp_error( $data ) ) {
+		if ( $wp_error ) {
+			return $data;
+		} else {
+			return false;
+		}
+	}
+
+	$keys = array(
+		'comment_post_ID',
+		'comment_author',
+		'comment_author_email',
+		'comment_author_url',
+		'comment_author_IP',
+		'comment_date',
+		'comment_date_gmt',
+		'comment_content',
+		'comment_karma',
+		'comment_approved',
+		'comment_agent',
+		'comment_type',
+		'comment_parent',
+		'user_id',
+	);
+
 	$data = wp_array_slice_assoc( $data, $keys );
 
-	$rval = $wpdb->update( $wpdb->comments, $data, compact( 'comment_ID' ) );
+	$result = $wpdb->update( $wpdb->comments, $data, array( 'comment_ID' => $comment_id ) );
+
+	if ( false === $result ) {
+		if ( $wp_error ) {
+			return new WP_Error( 'db_update_error', __( 'Could not update comment in the database.' ), $wpdb->last_error );
+		} else {
+			return false;
+		}
+	}
 
 	// If metadata is provided, store it.
 	if ( isset( $commentarr['comment_meta'] ) && is_array( $commentarr['comment_meta'] ) ) {
 		foreach ( $commentarr['comment_meta'] as $meta_key => $meta_value ) {
-			update_comment_meta( $comment_ID, $meta_key, $meta_value );
+			update_comment_meta( $comment_id, $meta_key, $meta_value );
 		}
 	}
 
-	clean_comment_cache( $comment_ID );
-	wp_update_comment_count( $comment_post_ID );
+	clean_comment_cache( $comment_id );
+	wp_update_comment_count( $comment_post_id );
+
 	/**
 	 * Fires immediately after a comment is updated in the database.
 	 *
@@ -2414,17 +2618,20 @@ function wp_update_comment( $commentarr ) {
 	 * @since 1.2.0
 	 * @since 4.6.0 Added the `$data` parameter.
 	 *
-	 * @param int   $comment_ID The comment ID.
+	 * @param int   $comment_id The comment ID.
 	 * @param array $data       Comment data.
 	 */
-	do_action( 'edit_comment', $comment_ID, $data );
-	$comment = get_comment( $comment_ID );
+	do_action( 'edit_comment', $comment_id, $data );
+
+	$comment = get_comment( $comment_id );
+
 	wp_transition_comment_status( $comment->comment_approved, $old_status, $comment );
-	return $rval;
+
+	return $result;
 }
 
 /**
- * Whether to defer comment counting.
+ * Determines whether to defer comment counting.
  *
  * When setting $defer to true, all post comment counts will not be updated
  * until $defer is set to false. When $defer is set to false, then all
@@ -2432,7 +2639,6 @@ function wp_update_comment( $commentarr ) {
  * updated without having to call wp_update_comment_count() after.
  *
  * @since 2.5.0
- * @staticvar bool $_defer
  *
  * @param bool $defer
  * @return bool
@@ -2442,7 +2648,7 @@ function wp_defer_comment_counting( $defer = null ) {
 
 	if ( is_bool( $defer ) ) {
 		$_defer = $defer;
-		// flush any deferred counts
+		// Flush any deferred counts.
 		if ( ! $defer ) {
 			wp_update_comment_count( null, true );
 		}
@@ -2463,9 +2669,8 @@ function wp_defer_comment_counting( $defer = null ) {
  * IDs will be updated along with the current $post_id.
  *
  * @since 2.1.0
- * @see wp_update_comment_count_now() For what could cause a false return value
  *
- * @staticvar array $_deferred
+ * @see wp_update_comment_count_now() For what could cause a false return value
  *
  * @param int|null $post_id     Post ID.
  * @param bool     $do_deferred Optional. Whether to process previously deferred
@@ -2484,7 +2689,8 @@ function wp_update_comment_count( $post_id, $do_deferred = false ) {
 		$_deferred = array_unique( $_deferred );
 		foreach ( $_deferred as $i => $_post_id ) {
 			wp_update_comment_count_now( $_post_id );
-			unset( $_deferred[ $i ] ); /** @todo Move this outside of the foreach and reset $_deferred to an array instead */
+			unset( $_deferred[ $i ] );
+			/** @todo Move this outside of the foreach and reset $_deferred to an array instead */
 		}
 	}
 
@@ -2502,14 +2708,16 @@ function wp_update_comment_count( $post_id, $do_deferred = false ) {
  *
  * @since 2.5.0
  *
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param int $post_id Post ID
- * @return bool True on success, false on '0' $post_id or if post with ID does not exist.
+ * @return bool True on success, false if the post does not exist.
  */
 function wp_update_comment_count_now( $post_id ) {
 	global $wpdb;
+
 	$post_id = (int) $post_id;
+
 	if ( ! $post_id ) {
 		return false;
 	}
@@ -2518,6 +2726,7 @@ function wp_update_comment_count_now( $post_id ) {
 	wp_cache_delete( "comments-{$post_id}", 'counts' );
 
 	$post = get_post( $post_id );
+
 	if ( ! $post ) {
 		return false;
 	}
@@ -2529,9 +2738,9 @@ function wp_update_comment_count_now( $post_id ) {
 	 *
 	 * @since 4.5.0
 	 *
-	 * @param int $new     The new comment count. Default null.
-	 * @param int $old     The old comment count.
-	 * @param int $post_id Post ID.
+	 * @param int|null $new     The new comment count. Default null.
+	 * @param int      $old     The old comment count.
+	 * @param int      $post_id Post ID.
 	 */
 	$new = apply_filters( 'pre_wp_update_comment_count_now', null, $old, $post_id );
 
@@ -2555,6 +2764,10 @@ function wp_update_comment_count_now( $post_id ) {
 	 * @param int $old     The old comment count.
 	 */
 	do_action( 'wp_update_comment_count', $post_id, $new, $old );
+
+	/** This action is documented in wp-includes/post.php */
+	do_action( "edit_post_{$post->post_type}", $post_id, $post );
+
 	/** This action is documented in wp-includes/post.php */
 	do_action( 'edit_post', $post_id, $post );
 
@@ -2574,9 +2787,9 @@ function wp_update_comment_count_now( $post_id ) {
  *
  * @since 1.5.0
  *
- * @param string $url URL to ping.
- * @param int $deprecated Not Used.
- * @return false|string False on failure, string containing URI on success.
+ * @param string $url        URL to ping.
+ * @param string $deprecated Not Used.
+ * @return string|false String containing URI on success, false on failure.
  */
 function discover_pingback_server_uri( $url, $deprecated = '' ) {
 	if ( ! empty( $deprecated ) ) {
@@ -2593,7 +2806,7 @@ function discover_pingback_server_uri( $url, $deprecated = '' ) {
 		return false;
 	}
 
-	//Do not search for a pingback server on our own uploads
+	// Do not search for a pingback server on our own uploads.
 	$uploads_dir = wp_get_upload_dir();
 	if ( 0 === strpos( $url, $uploads_dir['baseurl'] ) ) {
 		return false;
@@ -2620,7 +2833,7 @@ function discover_pingback_server_uri( $url, $deprecated = '' ) {
 		return false;
 	}
 
-	// Now do a GET since we're going to look in the html headers (and we're sure it's not a binary file)
+	// Now do a GET since we're going to look in the HTML headers (and we're sure it's not a binary file).
 	$response = wp_safe_remote_get(
 		$url,
 		array(
@@ -2646,7 +2859,7 @@ function discover_pingback_server_uri( $url, $deprecated = '' ) {
 		$pingback_server_url_len = $pingback_href_end - $pingback_href_start;
 		$pingback_server_url     = substr( $contents, $pingback_href_start, $pingback_server_url_len );
 
-		// We may find rel="pingback" but an incomplete pingback URL
+		// We may find rel="pingback" but an incomplete pingback URL.
 		if ( $pingback_server_url_len > 0 ) { // We got it!
 			return $pingback_server_url;
 		}
@@ -2656,16 +2869,26 @@ function discover_pingback_server_uri( $url, $deprecated = '' ) {
 }
 
 /**
- * Perform all pingbacks, enclosures, trackbacks, and send to pingback services.
+ * Performs all pingbacks, enclosures, trackbacks, and sends to pingback services.
  *
  * @since 2.1.0
- *
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @since 5.6.0 Introduced `do_all_pings` action hook for individual services.
  */
 function do_all_pings() {
-	global $wpdb;
+	/**
+	 * Fires immediately after the `do_pings` event to hook services individually.
+	 *
+	 * @since 5.6.0
+	 */
+	do_action( 'do_all_pings' );
+}
 
-	// Do pingbacks.
+/**
+ * Performs all pingbacks.
+ *
+ * @since 5.6.0
+ */
+function do_all_pingbacks() {
 	$pings = get_posts(
 		array(
 			'post_type'        => get_post_types(),
@@ -2680,8 +2903,14 @@ function do_all_pings() {
 		delete_post_meta( $ping, '_pingme' );
 		pingback( null, $ping );
 	}
+}
 
-	// Do enclosures.
+/**
+ * Performs all enclosures.
+ *
+ * @since 5.6.0
+ */
+function do_all_enclosures() {
 	$enclosures = get_posts(
 		array(
 			'post_type'        => get_post_types(),
@@ -2696,8 +2925,14 @@ function do_all_pings() {
 		delete_post_meta( $enclosure, '_encloseme' );
 		do_enclose( null, $enclosure );
 	}
+}
 
-	// Do trackbacks.
+/**
+ * Performs all trackbacks.
+ *
+ * @since 5.6.0
+ */
+function do_all_trackbacks() {
 	$trackbacks = get_posts(
 		array(
 			'post_type'        => get_post_types(),
@@ -2712,30 +2947,30 @@ function do_all_pings() {
 		delete_post_meta( $trackback, '_trackbackme' );
 		do_trackbacks( $trackback );
 	}
-
-	// Do Update Services/Generic Pings.
-	generic_ping();
 }
 
 /**
- * Perform trackbacks.
+ * Performs trackbacks.
  *
  * @since 1.5.0
- * @since 4.7.0 $post_id can be a WP_Post object.
+ * @since 4.7.0 `$post` can be a WP_Post object.
  *
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
- * @param int|WP_Post $post_id Post object or ID to do trackbacks on.
+ * @param int|WP_Post $post Post ID or object to do trackbacks on.
  */
-function do_trackbacks( $post_id ) {
+function do_trackbacks( $post ) {
 	global $wpdb;
-	$post = get_post( $post_id );
+
+	$post = get_post( $post );
+
 	if ( ! $post ) {
 		return false;
 	}
 
 	$to_ping = get_to_ping( $post );
 	$pinged  = get_pung( $post );
+
 	if ( empty( $to_ping ) ) {
 		$wpdb->update( $wpdb->posts, array( 'to_ping' => '' ), array( 'ID' => $post->ID ) );
 		return;
@@ -2782,7 +3017,7 @@ function do_trackbacks( $post_id ) {
  * @since 1.2.0
  *
  * @param int $post_id Post ID.
- * @return int Same as Post ID from parameter
+ * @return int Same post ID as provided.
  */
 function generic_ping( $post_id = 0 ) {
 	$services = get_option( 'ping_sites' );
@@ -2802,19 +3037,20 @@ function generic_ping( $post_id = 0 ) {
  * Pings back the links found in a post.
  *
  * @since 0.71
- * @since 4.7.0 $post_id can be a WP_Post object.
+ * @since 4.7.0 `$post` can be a WP_Post object.
  *
- * @param string $content Post content to check for links. If empty will retrieve from post.
- * @param int|WP_Post $post_id Post Object or ID.
+ * @param string      $content Post content to check for links. If empty will retrieve from post.
+ * @param int|WP_Post $post    Post ID or object.
  */
-function pingback( $content, $post_id ) {
+function pingback( $content, $post ) {
 	include_once ABSPATH . WPINC . '/class-IXR.php';
 	include_once ABSPATH . WPINC . '/class-wp-http-ixr-client.php';
 
-	// original code by Mort (http://mort.mine.nu:8080)
+	// Original code by Mort (http://mort.mine.nu:8080).
 	$post_links = array();
 
-	$post = get_post( $post_id );
+	$post = get_post( $post );
+
 	if ( ! $post ) {
 		return;
 	}
@@ -2825,8 +3061,10 @@ function pingback( $content, $post_id ) {
 		$content = $post->post_content;
 	}
 
-	// Step 1
-	// Parsing the post, external links (if any) are stored in the $post_links array
+	/*
+	 * Step 1.
+	 * Parsing the post, external links (if any) are stored in the $post_links array.
+	 */
 	$post_links_temp = wp_extract_urls( $content );
 
 	/*
@@ -2845,7 +3083,7 @@ function pingback( $content, $post_id ) {
 			// Also, let's never ping local attachments.
 			&& ! is_local_attachment( $link_test )
 		) {
-			$test = @parse_url( $link_test );
+			$test = parse_url( $link_test );
 			if ( $test ) {
 				if ( isset( $test['query'] ) ) {
 					$post_links[] = $link_test;
@@ -2857,14 +3095,15 @@ function pingback( $content, $post_id ) {
 	}
 
 	$post_links = array_unique( $post_links );
+
 	/**
 	 * Fires just before pinging back links found in a post.
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param array $post_links An array of post links to be checked (passed by reference).
-	 * @param array $pung       Whether a link has already been pinged (passed by reference).
-	 * @param int   $post_ID    The post ID.
+	 * @param string[] $post_links Array of link URLs to be checked (passed by reference).
+	 * @param string[] $pung       Array of link URLs already pinged (passed by reference).
+	 * @param int      $post_id    The post ID.
 	 */
 	do_action_ref_array( 'pre_ping', array( &$post_links, &$pung, $post->ID ) );
 
@@ -2873,10 +3112,10 @@ function pingback( $content, $post_id ) {
 
 		if ( $pingback_server_url ) {
 			set_time_limit( 60 );
-			// Now, the RPC call
+			// Now, the RPC call.
 			$pagelinkedfrom = get_permalink( $post );
 
-			// using a timeout of 3 seconds should be enough to cover slow servers
+			// Using a timeout of 3 seconds should be enough to cover slow servers.
 			$client          = new WP_HTTP_IXR_Client( $pingback_server_url );
 			$client->timeout = 3;
 			/**
@@ -2885,17 +3124,17 @@ function pingback( $content, $post_id ) {
 			 * @since 2.9.0
 			 *
 			 * @param string $concat_useragent    The user agent concatenated with ' -- WordPress/'
-			 *                                    and the equivalent WordPress version.
+			 *                                    and the WordPress version.
 			 * @param string $useragent           The useragent.
 			 * @param string $pingback_server_url The server URL being linked to.
 			 * @param string $pagelinkedto        URL of page linked to.
 			 * @param string $pagelinkedfrom      URL of page linked from.
 			 */
-			$client->useragent = apply_filters( 'pingback_useragent', $client->useragent . ' -- ' . classicpress_user_agent(), $client->useragent, $pingback_server_url, $pagelinkedto, $pagelinkedfrom );
-			// when set to true, this outputs debug messages by itself
+			$client->useragent = apply_filters( 'pingback_useragent', $client->useragent . ' -- WordPress/' . get_bloginfo( 'version' ), $client->useragent, $pingback_server_url, $pagelinkedto, $pagelinkedfrom );
+			// When set to true, this outputs debug messages by itself.
 			$client->debug = false;
 
-			if ( $client->query( 'pingback.ping', $pagelinkedfrom, $pagelinkedto ) || ( isset( $client->error->code ) && 48 == $client->error->code ) ) { // Already registered
+			if ( $client->query( 'pingback.ping', $pagelinkedfrom, $pagelinkedto ) || ( isset( $client->error->code ) && 48 == $client->error->code ) ) { // Already registered.
 				add_ping( $post, $pagelinkedto );
 			}
 		}
@@ -2903,7 +3142,7 @@ function pingback( $content, $post_id ) {
 }
 
 /**
- * Check whether blog is public before returning sites.
+ * Checks whether blog is public before returning sites.
  *
  * @since 2.1.0
  *
@@ -2919,18 +3158,18 @@ function privacy_ping_filter( $sites ) {
 }
 
 /**
- * Send a Trackback.
+ * Sends a Trackback.
  *
  * Updates database when sending trackback to prevent duplicates.
  *
  * @since 0.71
  *
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param string $trackback_url URL to send trackbacks.
- * @param string $title Title of post.
- * @param string $excerpt Excerpt of post.
- * @param int $ID Post ID.
+ * @param string $title         Title of post.
+ * @param string $excerpt       Excerpt of post.
+ * @param int    $ID            Post ID.
  * @return int|false|void Database query from update.
  */
 function trackback( $trackback_url, $title, $excerpt, $ID ) {
@@ -2960,7 +3199,7 @@ function trackback( $trackback_url, $title, $excerpt, $ID ) {
 }
 
 /**
- * Send a pingback.
+ * Sends a pingback.
  *
  * @since 1.2.0
  *
@@ -2974,20 +3213,21 @@ function weblog_ping( $server = '', $path = '' ) {
 	// Using a timeout of 3 seconds should be enough to cover slow servers.
 	$client             = new WP_HTTP_IXR_Client( $server, ( ( ! strlen( trim( $path ) ) || ( '/' === $path ) ) ? false : $path ) );
 	$client->timeout    = 3;
-	$client->useragent .= ' -- ' . classicpress_user_agent();
+	$client->useragent .= ' -- WordPress/' . get_bloginfo( 'version' );
 
-	// when set to true, this outputs debug messages by itself
+	// When set to true, this outputs debug messages by itself.
 	$client->debug = false;
 	$home          = trailingslashit( home_url() );
-	if ( ! $client->query( 'weblogUpdates.extendedPing', get_option( 'blogname' ), $home, get_bloginfo( 'rss2_url' ) ) ) { // then try a normal ping
+	if ( ! $client->query( 'weblogUpdates.extendedPing', get_option( 'blogname' ), $home, get_bloginfo( 'rss2_url' ) ) ) { // Then try a normal ping.
 		$client->query( 'weblogUpdates.ping', get_option( 'blogname' ), $home );
 	}
 }
 
 /**
- * Default filter attached to pingback_ping_source_uri to validate the pingback's Source URI
+ * Default filter attached to pingback_ping_source_uri to validate the pingback's Source URI.
  *
  * @since 3.5.1
+ *
  * @see wp_http_validate_url()
  *
  * @param string $source_uri
@@ -3004,6 +3244,7 @@ function pingback_ping_source_uri( $source_uri ) {
  * which reports that the pingback is already registered.
  *
  * @since 3.5.1
+ *
  * @link https://www.hixie.ch/specs/pingback/pingback#TOC3
  *
  * @param IXR_Error $ixr_error
@@ -3017,7 +3258,7 @@ function xmlrpc_pingback_error( $ixr_error ) {
 }
 
 //
-// Cache
+// Cache.
 //
 
 /**
@@ -3028,9 +3269,9 @@ function xmlrpc_pingback_error( $ixr_error ) {
  * @param int|array $ids Comment ID or an array of comment IDs to remove from cache.
  */
 function clean_comment_cache( $ids ) {
-	foreach ( (array) $ids as $id ) {
-		wp_cache_delete( $id, 'comment' );
-
+	$comment_ids = (array) $ids;
+	wp_cache_delete_multiple( $comment_ids, 'comment' );
+	foreach ( $comment_ids as $id ) {
 		/**
 		 * Fires immediately after a comment has been removed from the object cache.
 		 *
@@ -3054,13 +3295,15 @@ function clean_comment_cache( $ids ) {
  * @since 2.3.0
  * @since 4.4.0 Introduced the `$update_meta_cache` parameter.
  *
- * @param array $comments          Array of comment row objects
- * @param bool  $update_meta_cache Whether to update commentmeta cache. Default true.
+ * @param WP_Comment[] $comments          Array of comment objects
+ * @param bool         $update_meta_cache Whether to update commentmeta cache. Default true.
  */
 function update_comment_cache( $comments, $update_meta_cache = true ) {
+	$data = array();
 	foreach ( (array) $comments as $comment ) {
-		wp_cache_add( $comment->comment_ID, $comment, 'comment' );
+		$data[ $comment->comment_ID ] = $comment;
 	}
+	wp_cache_add_multiple( $data, 'comment' );
 
 	if ( $update_meta_cache ) {
 		// Avoid `wp_list_pluck()` in case `$comments` is passed by reference.
@@ -3076,12 +3319,12 @@ function update_comment_cache( $comments, $update_meta_cache = true ) {
  * Adds any comments from the given IDs to the cache that do not already exist in cache.
  *
  * @since 4.4.0
- * @access private
+ * @since 6.1.0 This function is no longer marked as "private".
  *
  * @see update_comment_cache()
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
- * @param array $comment_ids       Array of comment IDs.
+ * @param int[] $comment_ids       Array of comment IDs.
  * @param bool  $update_meta_cache Optional. Whether to update the meta cache. Default true.
  */
 function _prime_comment_caches( $comment_ids, $update_meta_cache = true ) {
@@ -3089,21 +3332,21 @@ function _prime_comment_caches( $comment_ids, $update_meta_cache = true ) {
 
 	$non_cached_ids = _get_non_cached_ids( $comment_ids, 'comment' );
 	if ( ! empty( $non_cached_ids ) ) {
-		$fresh_comments = $wpdb->get_results( sprintf( "SELECT $wpdb->comments.* FROM $wpdb->comments WHERE comment_ID IN (%s)", join( ',', array_map( 'intval', $non_cached_ids ) ) ) );
+		$fresh_comments = $wpdb->get_results( sprintf( "SELECT $wpdb->comments.* FROM $wpdb->comments WHERE comment_ID IN (%s)", implode( ',', array_map( 'intval', $non_cached_ids ) ) ) );
 
 		update_comment_cache( $fresh_comments, $update_meta_cache );
 	}
 }
 
 //
-// Internal
+// Internal.
 //
 
 /**
- * Close comments on old posts on the fly, without any extra DB queries. Hooked to the_posts.
+ * Closes comments on old posts on the fly, without any extra DB queries. Hooked to the_posts.
  *
- * @access private
  * @since 2.7.0
+ * @access private
  *
  * @param WP_Post  $posts Post data object.
  * @param WP_Query $query Query object.
@@ -3119,7 +3362,7 @@ function _close_comments_for_old_posts( $posts, $query ) {
 	 *
 	 * @since 3.2.0
 	 *
-	 * @param array $post_types An array of registered post types. Default array with 'post'.
+	 * @param string[] $post_types An array of post type names.
 	 */
 	$post_types = apply_filters( 'close_comments_for_post_types', array( 'post' ) );
 	if ( ! in_array( $posts[0]->post_type, $post_types, true ) ) {
@@ -3140,13 +3383,13 @@ function _close_comments_for_old_posts( $posts, $query ) {
 }
 
 /**
- * Close comments on an old post. Hooked to comments_open and pings_open.
+ * Closes comments on an old post. Hooked to comments_open and pings_open.
  *
- * @access private
  * @since 2.7.0
+ * @access private
  *
- * @param bool $open Comments open or closed
- * @param int $post_id Post ID
+ * @param bool $open    Comments open or closed.
+ * @param int  $post_id Post ID.
  * @return bool $open
  */
 function _close_comments_for_old_post( $open, $post_id ) {
@@ -3205,17 +3448,16 @@ function _close_comments_for_old_post( $open, $post_id ) {
  * @return WP_Comment|WP_Error A WP_Comment object on success, a WP_Error object on failure.
  */
 function wp_handle_comment_submission( $comment_data ) {
-
-	$comment_post_ID      = 0;
+	$comment_post_id      = 0;
+	$comment_author       = '';
+	$comment_author_email = '';
+	$comment_author_url   = '';
+	$comment_content      = '';
 	$comment_parent       = 0;
-	$user_ID              = 0;
-	$comment_author       = null;
-	$comment_author_email = null;
-	$comment_author_url   = null;
-	$comment_content      = null;
+	$user_id              = 0;
 
 	if ( isset( $comment_data['comment_post_ID'] ) ) {
-		$comment_post_ID = (int) $comment_data['comment_post_ID'];
+		$comment_post_id = (int) $comment_data['comment_post_ID'];
 	}
 	if ( isset( $comment_data['author'] ) && is_string( $comment_data['author'] ) ) {
 		$comment_author = trim( strip_tags( $comment_data['author'] ) );
@@ -3233,7 +3475,7 @@ function wp_handle_comment_submission( $comment_data ) {
 		$comment_parent = absint( $comment_data['comment_parent'] );
 	}
 
-	$post = get_post( $comment_post_ID );
+	$post = get_post( $comment_post_id );
 
 	if ( empty( $post->comment_status ) ) {
 
@@ -3242,9 +3484,9 @@ function wp_handle_comment_submission( $comment_data ) {
 		 *
 		 * @since 1.5.0
 		 *
-		 * @param int $comment_post_ID Post ID.
+		 * @param int $comment_post_id Post ID.
 		 */
-		do_action( 'comment_id_not_found', $comment_post_ID );
+		do_action( 'comment_id_not_found', $comment_post_id );
 
 		return new WP_Error( 'comment_id_not_found' );
 
@@ -3253,22 +3495,22 @@ function wp_handle_comment_submission( $comment_data ) {
 	// get_post_status() will get the parent status for attachments.
 	$status = get_post_status( $post );
 
-	if ( ( 'private' === $status ) && ! current_user_can( 'read_post', $comment_post_ID ) ) {
+	if ( ( 'private' === $status ) && ! current_user_can( 'read_post', $comment_post_id ) ) {
 		return new WP_Error( 'comment_id_not_found' );
 	}
 
 	$status_obj = get_post_status_object( $status );
 
-	if ( ! comments_open( $comment_post_ID ) ) {
+	if ( ! comments_open( $comment_post_id ) ) {
 
 		/**
 		 * Fires when a comment is attempted on a post that has comments closed.
 		 *
 		 * @since 1.5.0
 		 *
-		 * @param int $comment_post_ID Post ID.
+		 * @param int $comment_post_id Post ID.
 		 */
-		do_action( 'comment_closed', $comment_post_ID );
+		do_action( 'comment_closed', $comment_post_id );
 
 		return new WP_Error( 'comment_closed', __( 'Sorry, comments are closed for this item.' ), 403 );
 
@@ -3279,9 +3521,9 @@ function wp_handle_comment_submission( $comment_data ) {
 		 *
 		 * @since 2.9.0
 		 *
-		 * @param int $comment_post_ID Post ID.
+		 * @param int $comment_post_id Post ID.
 		 */
-		do_action( 'comment_on_trash', $comment_post_ID );
+		do_action( 'comment_on_trash', $comment_post_id );
 
 		return new WP_Error( 'comment_on_trash' );
 
@@ -3292,25 +3534,25 @@ function wp_handle_comment_submission( $comment_data ) {
 		 *
 		 * @since 1.5.1
 		 *
-		 * @param int $comment_post_ID Post ID.
+		 * @param int $comment_post_id Post ID.
 		 */
-		do_action( 'comment_on_draft', $comment_post_ID );
+		do_action( 'comment_on_draft', $comment_post_id );
 
-		if ( current_user_can( 'read_post', $comment_post_ID ) ) {
+		if ( current_user_can( 'read_post', $comment_post_id ) ) {
 			return new WP_Error( 'comment_on_draft', __( 'Sorry, comments are not allowed for this item.' ), 403 );
 		} else {
 			return new WP_Error( 'comment_on_draft' );
 		}
-	} elseif ( post_password_required( $comment_post_ID ) ) {
+	} elseif ( post_password_required( $comment_post_id ) ) {
 
 		/**
 		 * Fires when a comment is attempted on a password-protected post.
 		 *
 		 * @since 2.9.0
 		 *
-		 * @param int $comment_post_ID Post ID.
+		 * @param int $comment_post_id Post ID.
 		 */
-		do_action( 'comment_on_password_protected', $comment_post_ID );
+		do_action( 'comment_on_password_protected', $comment_post_id );
 
 		return new WP_Error( 'comment_on_password_protected' );
 
@@ -3321,28 +3563,30 @@ function wp_handle_comment_submission( $comment_data ) {
 		 *
 		 * @since 2.8.0
 		 *
-		 * @param int $comment_post_ID Post ID.
+		 * @param int $comment_post_id Post ID.
 		 */
-		do_action( 'pre_comment_on_post', $comment_post_ID );
+		do_action( 'pre_comment_on_post', $comment_post_id );
 
 	}
 
-	// If the user is logged in
+	// If the user is logged in.
 	$user = wp_get_current_user();
 	if ( $user->exists() ) {
 		if ( empty( $user->display_name ) ) {
 			$user->display_name = $user->user_login;
 		}
+
 		$comment_author       = $user->display_name;
 		$comment_author_email = $user->user_email;
 		$comment_author_url   = $user->user_url;
-		$user_ID              = $user->ID;
+		$user_id              = $user->ID;
+
 		if ( current_user_can( 'unfiltered_html' ) ) {
 			if ( ! isset( $comment_data['_wp_unfiltered_html_comment'] )
-				|| ! wp_verify_nonce( $comment_data['_wp_unfiltered_html_comment'], 'unfiltered-html-comment_' . $comment_post_ID )
+				|| ! wp_verify_nonce( $comment_data['_wp_unfiltered_html_comment'], 'unfiltered-html-comment_' . $comment_post_id )
 			) {
-				kses_remove_filters(); // start with a clean slate
-				kses_init_filters(); // set up the filters
+				kses_remove_filters(); // Start with a clean slate.
+				kses_init_filters();   // Set up the filters.
 				remove_filter( 'pre_comment_content', 'wp_filter_post_kses' );
 				add_filter( 'pre_comment_content', 'wp_filter_kses' );
 			}
@@ -3353,30 +3597,42 @@ function wp_handle_comment_submission( $comment_data ) {
 		}
 	}
 
-	$comment_type = '';
+	$comment_type = 'comment';
 
 	if ( get_option( 'require_name_email' ) && ! $user->exists() ) {
 		if ( '' == $comment_author_email || '' == $comment_author ) {
-			return new WP_Error( 'require_name_email', __( '<strong>ERROR</strong>: please fill the required fields (name, email).' ), 200 );
+			return new WP_Error( 'require_name_email', __( '<strong>Error:</strong> Please fill the required fields.' ), 200 );
 		} elseif ( ! is_email( $comment_author_email ) ) {
-			return new WP_Error( 'require_valid_email', __( '<strong>ERROR</strong>: please enter a valid email address.' ), 200 );
+			return new WP_Error( 'require_valid_email', __( '<strong>Error:</strong> Please enter a valid email address.' ), 200 );
 		}
 	}
 
-	if ( '' == $comment_content ) {
-		return new WP_Error( 'require_valid_comment', __( '<strong>ERROR</strong>: please type a comment.' ), 200 );
-	}
+	$commentdata = array(
+		'comment_post_ID' => $comment_post_id,
+	);
 
-	$commentdata = compact(
-		'comment_post_ID',
+	$commentdata += compact(
 		'comment_author',
 		'comment_author_email',
 		'comment_author_url',
 		'comment_content',
 		'comment_type',
 		'comment_parent',
-		'user_ID'
+		'user_id'
 	);
+
+	/**
+	 * Filters whether an empty comment should be allowed.
+	 *
+	 * @since 5.1.0
+	 *
+	 * @param bool  $allow_empty_comment Whether to allow empty comments. Default false.
+	 * @param array $commentdata         Array of comment data to be sent to wp_insert_comment().
+	 */
+	$allow_empty_comment = apply_filters( 'allow_empty_comment', false, $commentdata );
+	if ( '' === $comment_content && ! $allow_empty_comment ) {
+		return new WP_Error( 'require_valid_comment', __( '<strong>Error:</strong> Please type your comment text.' ), 200 );
+	}
 
 	$check_max_lengths = wp_check_comment_data_max_lengths( $commentdata );
 	if ( is_wp_error( $check_max_lengths ) ) {
@@ -3389,7 +3645,7 @@ function wp_handle_comment_submission( $comment_data ) {
 	}
 
 	if ( ! $comment_id ) {
-		return new WP_Error( 'comment_save_error', __( '<strong>ERROR</strong>: The comment could not be saved. Please try again later.' ), 500 );
+		return new WP_Error( 'comment_save_error', __( '<strong>Error:</strong> The comment could not be saved. Please try again later.' ), 500 );
 	}
 
 	return get_comment( $comment_id );
@@ -3401,11 +3657,11 @@ function wp_handle_comment_submission( $comment_data ) {
  * @since 4.9.6
  *
  * @param array $exporters An array of personal data exporters.
- * @return array $exporters An array of personal data exporters.
+ * @return array An array of personal data exporters.
  */
 function wp_register_comment_personal_data_exporter( $exporters ) {
 	$exporters['wordpress-comments'] = array(
-		'exporter_friendly_name' => __( 'ClassicPress Comments' ),
+		'exporter_friendly_name' => __( 'WordPress Comments' ),
 		'callback'               => 'wp_comments_personal_data_exporter',
 	);
 
@@ -3419,7 +3675,7 @@ function wp_register_comment_personal_data_exporter( $exporters ) {
  *
  * @param string $email_address The comment author email address.
  * @param int    $page          Comment page.
- * @return array $return An array of personal data.
+ * @return array An array of personal data.
  */
 function wp_comments_personal_data_exporter( $email_address, $page = 1 ) {
 	// Limit us to 500 comments at a time to avoid timing out.
@@ -3473,7 +3729,7 @@ function wp_comments_personal_data_exporter( $email_address, $page = 1 ) {
 				case 'comment_link':
 					$value = get_comment_link( $comment->comment_ID );
 					$value = sprintf(
-						'<a href="%s" target="_blank" rel="noreferrer noopener">%s</a>',
+						'<a href="%s" target="_blank" rel="noopener">%s</a>',
 						esc_url( $value ),
 						esc_html( $value )
 					);
@@ -3489,10 +3745,11 @@ function wp_comments_personal_data_exporter( $email_address, $page = 1 ) {
 		}
 
 		$data_to_export[] = array(
-			'group_id'    => 'comments',
-			'group_label' => __( 'Comments' ),
-			'item_id'     => "comment-{$comment->comment_ID}",
-			'data'        => $comment_data_to_export,
+			'group_id'          => 'comments',
+			'group_label'       => __( 'Comments' ),
+			'group_description' => __( 'User&#8217;s comment data.' ),
+			'item_id'           => "comment-{$comment->comment_ID}",
+			'data'              => $comment_data_to_export,
 		);
 	}
 
@@ -3509,12 +3766,12 @@ function wp_comments_personal_data_exporter( $email_address, $page = 1 ) {
  *
  * @since 4.9.6
  *
- * @param  array $erasers An array of personal data erasers.
- * @return array $erasers An array of personal data erasers.
+ * @param array $erasers An array of personal data erasers.
+ * @return array An array of personal data erasers.
  */
 function wp_register_comment_personal_data_eraser( $erasers ) {
 	$erasers['wordpress-comments'] = array(
-		'eraser_friendly_name' => __( 'ClassicPress Comments' ),
+		'eraser_friendly_name' => __( 'WordPress Comments' ),
 		'callback'             => 'wp_comments_personal_data_eraser',
 	);
 
@@ -3526,8 +3783,8 @@ function wp_register_comment_personal_data_eraser( $erasers ) {
  *
  * @since 4.9.6
  *
- * @param  string $email_address The comment author email address.
- * @param  int    $page          Comment page.
+ * @param string $email_address The comment author email address.
+ * @param int    $page          Comment page.
  * @return array
  */
 function wp_comments_personal_data_eraser( $email_address, $page = 1 ) {
@@ -3579,10 +3836,10 @@ function wp_comments_personal_data_eraser( $email_address, $page = 1 ) {
 		 *
 		 * @since 4.9.6
 		 *
-		 * @param bool|string                    Whether to apply the comment anonymization (bool).
-		 *                                       Custom prevention message (string). Default true.
-		 * @param WP_Comment $comment            WP_Comment object.
-		 * @param array      $anonymized_comment Anonymized comment data.
+		 * @param bool|string $anon_message       Whether to apply the comment anonymization (bool) or a custom
+		 *                                        message (string). Default true.
+		 * @param WP_Comment  $comment            WP_Comment object.
+		 * @param array       $anonymized_comment Anonymized comment data.
 		 */
 		$anon_message = apply_filters( 'wp_anonymize_comment', true, $comment, $anonymized_comment );
 
@@ -3590,7 +3847,7 @@ function wp_comments_personal_data_eraser( $email_address, $page = 1 ) {
 			if ( $anon_message && is_string( $anon_message ) ) {
 				$messages[] = esc_html( $anon_message );
 			} else {
-				/* translators: %d: Comment ID */
+				/* translators: %d: Comment ID. */
 				$messages[] = sprintf( __( 'Comment %d contains personal data but could not be anonymized.' ), $comment_id );
 			}
 
@@ -3621,4 +3878,110 @@ function wp_comments_personal_data_eraser( $email_address, $page = 1 ) {
 		'messages'       => $messages,
 		'done'           => $done,
 	);
+}
+
+/**
+ * Sets the last changed time for the 'comment' cache group.
+ *
+ * @since 5.0.0
+ */
+function wp_cache_set_comments_last_changed() {
+	wp_cache_set( 'last_changed', microtime(), 'comment' );
+}
+
+/**
+ * Updates the comment type for a batch of comments.
+ *
+ * @since 5.5.0
+ *
+ * @global wpdb $wpdb WordPress database abstraction object.
+ */
+function _wp_batch_update_comment_type() {
+	global $wpdb;
+
+	$lock_name = 'update_comment_type.lock';
+
+	// Try to lock.
+	$lock_result = $wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO `$wpdb->options` ( `option_name`, `option_value`, `autoload` ) VALUES (%s, %s, 'no') /* LOCK */", $lock_name, time() ) );
+
+	if ( ! $lock_result ) {
+		$lock_result = get_option( $lock_name );
+
+		// Bail if we were unable to create a lock, or if the existing lock is still valid.
+		if ( ! $lock_result || ( $lock_result > ( time() - HOUR_IN_SECONDS ) ) ) {
+			wp_schedule_single_event( time() + ( 5 * MINUTE_IN_SECONDS ), 'wp_update_comment_type_batch' );
+			return;
+		}
+	}
+
+	// Update the lock, as by this point we've definitely got a lock, just need to fire the actions.
+	update_option( $lock_name, time() );
+
+	// Check if there's still an empty comment type.
+	$empty_comment_type = $wpdb->get_var(
+		"SELECT comment_ID FROM $wpdb->comments
+		WHERE comment_type = ''
+		LIMIT 1"
+	);
+
+	// No empty comment type, we're done here.
+	if ( ! $empty_comment_type ) {
+		update_option( 'finished_updating_comment_type', true );
+		delete_option( $lock_name );
+		return;
+	}
+
+	// Empty comment type found? We'll need to run this script again.
+	wp_schedule_single_event( time() + ( 2 * MINUTE_IN_SECONDS ), 'wp_update_comment_type_batch' );
+
+	/**
+	 * Filters the comment batch size for updating the comment type.
+	 *
+	 * @since 5.5.0
+	 *
+	 * @param int $comment_batch_size The comment batch size. Default 100.
+	 */
+	$comment_batch_size = (int) apply_filters( 'wp_update_comment_type_batch_size', 100 );
+
+	// Get the IDs of the comments to update.
+	$comment_ids = $wpdb->get_col(
+		$wpdb->prepare(
+			"SELECT comment_ID
+			FROM {$wpdb->comments}
+			WHERE comment_type = ''
+			ORDER BY comment_ID DESC
+			LIMIT %d",
+			$comment_batch_size
+		)
+	);
+
+	if ( $comment_ids ) {
+		$comment_id_list = implode( ',', $comment_ids );
+
+		// Update the `comment_type` field value to be `comment` for the next batch of comments.
+		$wpdb->query(
+			"UPDATE {$wpdb->comments}
+			SET comment_type = 'comment'
+			WHERE comment_type = ''
+			AND comment_ID IN ({$comment_id_list})" // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		);
+
+		// Make sure to clean the comment cache.
+		clean_comment_cache( $comment_ids );
+	}
+
+	delete_option( $lock_name );
+}
+
+/**
+ * In order to avoid the _wp_batch_update_comment_type() job being accidentally removed,
+ * check that it's still scheduled while we haven't finished updating comment types.
+ *
+ * @ignore
+ * @since 5.5.0
+ */
+function _wp_check_for_scheduled_update_comment_type() {
+	if ( ! get_option( 'finished_updating_comment_type' ) && ! wp_next_scheduled( 'wp_update_comment_type_batch' ) ) {
+		wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'wp_update_comment_type_batch' );
+	}
 }

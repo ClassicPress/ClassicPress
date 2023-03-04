@@ -1077,8 +1077,8 @@ class PHPMailer
     {
         $pos = false;
         if ($address !== null) {
-        $address = trim($address);
-        $pos = strrpos($address, '@');
+            $address = trim($address);
+            $pos = strrpos($address, '@');
         }
         if (false === $pos) {
             //At-sign is missing.
@@ -1965,13 +1965,6 @@ class PHPMailer
     public function getSMTPInstance()
     {
         if (!is_object($this->smtp)) {
-            // PHPMailer makes use of an autoloader that is not included in ClassicPress
-            // An upstream decision has been made to include PHPMailer unedited
-            // ClassicPress ensures that SMTP class exists when needed
-            // This avoids errors when PHPMailer is directly required or included
-            if ( ! class_exists( 'PHPMailer\PHPMailer\SMTP' ) ) {
-                require_once 'SMTP.php';
-            }
             $this->smtp = new SMTP();
         }
 

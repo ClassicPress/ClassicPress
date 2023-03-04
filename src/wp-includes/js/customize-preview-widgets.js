@@ -1,6 +1,23 @@
+/**
+ * @output wp-includes/js/customize-preview-widgets.js
+ */
+
 /* global _wpWidgetCustomizerPreviewSettings */
 
-/** @namespace wp.customize.widgetsPreview */
+/**
+ * Handles the initialization, refreshing and rendering of widget partials and sidebar widgets.
+ *
+ * @since 4.5.0
+ *
+ * @namespace wp.customize.widgetsPreview
+ *
+ * @param {jQuery} $   The jQuery object.
+ * @param {Object} _   The utilities library.
+ * @param {Object} wp  Current WordPress environment instance.
+ * @param {Object} api Information from the API.
+ *
+ * @return {Object} Widget-related variables.
+ */
 wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( $, _, wp, api ) {
 
 	var self;
@@ -19,9 +36,13 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 	};
 
 	/**
-	 * Init widgets preview.
+	 * Initializes the widgets preview.
 	 *
-	 * @since WP-4.5.0
+	 * @since 4.5.0
+	 *
+	 * @memberOf wp.customize.widgetsPreview
+	 *
+	 * @return {void}
 	 */
 	self.init = function() {
 		var self = this;
@@ -47,7 +68,7 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 		 * would not be necessary because all of the state should be contained inside the changeset,
 		 * as everything done in the Customizer should not make a change to the site unless the
 		 * changeset itself is published. Attachments are a current exception to this rule.
-		 * For a proposal to include attachments in the customized state, see https://core.trac.wordpress.org/ticket/37887.
+		 * For a proposal to include attachments in the customized state, see #37887.
 		 */
 		api.preview.bind( 'refresh-widget-partial', function( widgetId ) {
 			var partialId = 'widget[' + widgetId + ']';
@@ -59,25 +80,23 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 		} );
 	};
 
-	/**
-	 * Partial representing a widget instance.
-	 *
-	 * @memberOf wp.customize.widgetsPreview
-	 * @alias wp.customize.widgetsPreview.WidgetPartial
-	 *
-	 * @class
-	 * @augments wp.customize.selectiveRefresh.Partial
-	 * @since WP-4.5.0
-	 */
 	self.WidgetPartial = api.selectiveRefresh.Partial.extend(/** @lends wp.customize.widgetsPreview.WidgetPartial.prototype */{
 
 		/**
-		 * Constructor.
+		 * Represents a partial widget instance.
 		 *
-		 * @since WP-4.5.0
-		 * @param {string} id - Partial ID.
-		 * @param {Object} options
-		 * @param {Object} options.params
+		 * @since 4.5.0
+		 *
+		 * @constructs
+		 * @augments wp.customize.selectiveRefresh.Partial
+		 *
+		 * @alias wp.customize.widgetsPreview.WidgetPartial
+		 * @memberOf wp.customize.widgetsPreview
+		 *
+		 * @param {string} id             The partial's ID.
+		 * @param {Object} options        Options used to initialize the partial's
+		 *                                instance.
+		 * @param {Object} options.params The options parameters.
 		 */
 		initialize: function( id, options ) {
 			var partial = this, matches;
@@ -101,9 +120,11 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 		},
 
 		/**
-		 * Refresh widget partial.
+		 * Refreshes the widget partial.
 		 *
-		 * @returns {Promise}
+		 * @since 4.5.0
+		 *
+		 * @return {Promise|void} Either a promise postponing the refresh, or void.
 		 */
 		refresh: function() {
 			var partial = this, refreshDeferred;
@@ -118,10 +139,14 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 		},
 
 		/**
-		 * Send widget-updated message to parent so spinner will get removed from widget control.
+		 * Sends the widget-updated message to the parent so the spinner will get
+		 * removed from the widget control.
 		 *
-		 * @inheritdoc
-		 * @param {wp.customize.selectiveRefresh.Placement} placement
+		 * @inheritDoc
+		 * @param {wp.customize.selectiveRefresh.Placement} placement The placement
+		 *                                                            function.
+		 *
+		 * @return {void}
 		 */
 		renderContent: function( placement ) {
 			var partial = this;
@@ -132,25 +157,22 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 		}
 	});
 
-	/**
-	 * Partial representing a widget area.
-	 *
-	 * @memberOf wp.customize.widgetsPreview
-	 * @alias wp.customize.widgetsPreview.SidebarPartial
-	 *
-	 * @class
-	 * @augments wp.customize.selectiveRefresh.Partial
-	 * @since WP-4.5.0
-	 */
 	self.SidebarPartial = api.selectiveRefresh.Partial.extend(/** @lends wp.customize.widgetsPreview.SidebarPartial.prototype */{
 
 		/**
-		 * Constructor.
+		 * Represents a partial widget area.
 		 *
-		 * @since WP-4.5.0
-		 * @param {string} id - Partial ID.
-		 * @param {Object} options
-		 * @param {Object} options.params
+		 * @since 4.5.0
+		 *
+		 * @class
+		 * @augments wp.customize.selectiveRefresh.Partial
+		 *
+		 * @memberOf wp.customize.widgetsPreview
+		 * @alias wp.customize.widgetsPreview.SidebarPartial
+		 *
+		 * @param {string} id             The partial's ID.
+		 * @param {Object} options        Options used to initialize the partial's instance.
+		 * @param {Object} options.params The options parameters.
 		 */
 		initialize: function( id, options ) {
 			var partial = this, matches;
@@ -179,9 +201,11 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 		},
 
 		/**
-		 * Set up the partial.
+		 * Sets up the partial.
 		 *
-		 * @since WP-4.5.0
+		 * @since 4.5.0
+		 *
+		 * @return {void}
 		 */
 		ready: function() {
 			var sidebarPartial = this;
@@ -220,12 +244,16 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 		},
 
 		/**
-		 * Get the before/after boundary nodes for all instances of this sidebar (usually one).
+		 * Gets the before/after boundary nodes for all instances of this sidebar
+		 * (usually one).
 		 *
 		 * Note that TreeWalker is not implemented in IE8.
 		 *
-		 * @since WP-4.5.0
-		 * @returns {Array.<{before: Comment, after: Comment, instanceNumber: number}>}
+		 * @since 4.5.0
+		 *
+		 * @return {Array.<{before: Comment, after: Comment, instanceNumber: number}>}
+		 *         An array with an object for each sidebar instance, containing the
+		 *         node before and after the sidebar instance and its instance number.
 		 */
 		findDynamicSidebarBoundaryNodes: function() {
 			var partial = this, regExp, boundaryNodes = {}, recursiveCommentTraversal;
@@ -261,10 +289,12 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 		},
 
 		/**
-		 * Get the placements for this partial.
+		 * Gets the placements for this partial.
 		 *
-		 * @since WP-4.5.0
-		 * @returns {Array}
+		 * @since 4.5.0
+		 *
+		 * @return {Array} An array containing placement objects for each of the
+		 *                 dynamic sidebar boundary nodes.
 		 */
 		placements: function() {
 			var partial = this;
@@ -284,9 +314,13 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 		/**
 		 * Get the list of widget IDs associated with this widget area.
 		 *
-		 * @since WP-4.5.0
+		 * @since 4.5.0
 		 *
-		 * @returns {Array}
+		 * @throws {Error} If there's no settingId.
+		 * @throws {Error} If the setting doesn't exist in the API.
+		 * @throws {Error} If the API doesn't pass an array of widget IDs.
+		 *
+		 * @return {Array} A shallow copy of the array containing widget IDs.
 		 */
 		getWidgetIds: function() {
 			var sidebarPartial = this, settingId, widgetIds;
@@ -305,11 +339,13 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 		},
 
 		/**
-		 * Reflow widgets in the sidebar, ensuring they have the proper position in the DOM.
+		 * Reflows widgets in the sidebar, ensuring they have the proper position in the
+		 * DOM.
 		 *
-		 * @since WP-4.5.0
+		 * @since 4.5.0
 		 *
-		 * @return {Array.<wp.customize.selectiveRefresh.Placement>} List of placements that were reflowed.
+		 * @return {Array.<wp.customize.selectiveRefresh.Placement>} List of placements
+		 *                                                           that were reflowed.
 		 */
 		reflowWidgets: function() {
 			var sidebarPartial = this, sidebarPlacements, widgetIds, widgetPartials, sortedSidebarContainers = [];
@@ -369,12 +405,14 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 		},
 
 		/**
-		 * Make sure there is a widget instance container in this sidebar for the given widget ID.
+		 * Makes sure there is a widget instance container in this sidebar for the given
+		 * widget ID.
 		 *
-		 * @since WP-4.5.0
+		 * @since 4.5.0
 		 *
-		 * @param {string} widgetId
-		 * @returns {wp.customize.selectiveRefresh.Partial} Widget instance partial.
+		 * @param {string} widgetId The widget ID.
+		 *
+		 * @return {wp.customize.selectiveRefresh.Partial} The widget instance partial.
 		 */
 		ensureWidgetPlacementContainers: function( widgetId ) {
 			var sidebarPartial = this, widgetPartial, wasInserted = false, partialId = 'widget[' + widgetId + ']';
@@ -435,12 +473,14 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 		},
 
 		/**
-		 * Handle change to the sidebars_widgets[] setting.
+		 * Handles changes to the sidebars_widgets[] setting.
 		 *
-		 * @since WP-4.5.0
+		 * @since 4.5.0
 		 *
-		 * @param {Array} newWidgetIds New widget ids.
-		 * @param {Array} oldWidgetIds Old widget ids.
+		 * @param {Array} newWidgetIds New widget IDs.
+		 * @param {Array} oldWidgetIds Old widget IDs.
+		 *
+		 * @return {void}
 		 */
 		handleSettingChange: function( newWidgetIds, oldWidgetIds ) {
 			var sidebarPartial = this, needsRefresh, widgetsRemoved, widgetsAdded, addedWidgetPartials = [];
@@ -488,9 +528,14 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 		},
 
 		/**
-		 * Note that the meat is handled in handleSettingChange because it has the context of which widgets were removed.
+		 * Refreshes the sidebar partial.
 		 *
-		 * @since WP-4.5.0
+		 * Note that the meat is handled in handleSettingChange because it has the
+		 * context of which widgets were removed.
+		 *
+		 * @since 4.5.0
+		 *
+		 * @return {Promise} A promise postponing the refresh.
 		 */
 		refresh: function() {
 			var partial = this, deferred = $.Deferred();
@@ -516,9 +561,11 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 	api.selectiveRefresh.partialConstructor.widget = self.WidgetPartial;
 
 	/**
-	 * Add partials for the registered widget areas (sidebars).
+	 * Adds partials for the registered widget areas (sidebars).
 	 *
-	 * @since WP-4.5.0
+	 * @since 4.5.0
+	 *
+	 * @return {void}
 	 */
 	self.addPartials = function() {
 		_.each( self.registeredSidebars, function( registeredSidebar ) {
@@ -536,11 +583,14 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 	};
 
 	/**
-	 * Calculate the selector for the sidebar's widgets based on the registered sidebar's info.
+	 * Calculates the selector for the sidebar's widgets based on the registered
+	 * sidebar's info.
 	 *
 	 * @memberOf wp.customize.widgetsPreview
 	 *
-	 * @since WP-3.9.0
+	 * @since 3.9.0
+	 *
+	 * @return {void}
 	 */
 	self.buildWidgetSelectors = function() {
 		var self = this;
@@ -576,12 +626,14 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 	};
 
 	/**
-	 * Highlight the widget on widget updates or widget control mouse overs.
+	 * Highlights the widget on widget updates or widget control mouse overs.
 	 *
 	 * @memberOf wp.customize.widgetsPreview
 	 *
-	 * @since WP-3.9.0
-	 * @param  {string} widgetId ID of the widget.
+	 * @since 3.9.0
+	 * @param {string} widgetId ID of the widget.
+	 *
+	 * @return {void}
 	 */
 	self.highlightWidget = function( widgetId ) {
 		var $body = $( document.body ),
@@ -596,12 +648,14 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 	};
 
 	/**
-	 * Show a title and highlight widgets on hover. On shift+clicking
-	 * focus the widget control.
+	 * Shows a title and highlights widgets on hover. On shift+clicking focuses the
+	 * widget control.
 	 *
 	 * @memberOf wp.customize.widgetsPreview
 	 *
-	 * @since WP-3.9.0
+	 * @since 3.9.0
+	 *
+	 * @return {void}
 	 */
 	self.highlightControls = function() {
 		var self = this,
@@ -613,12 +667,12 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 		}
 
 		$( selector ).attr( 'title', this.l10n.widgetTooltip );
-
+		// Highlights widget when entering the widget editor.
 		$( document ).on( 'mouseenter', selector, function() {
 			self.preview.send( 'highlight-widget-control', $( this ).prop( 'id' ) );
 		});
 
-		// Open expand the widget control when shift+clicking the widget element
+		// Open expand the widget control when shift+clicking the widget element.
 		$( document ).on( 'click', selector, function( e ) {
 			if ( ! e.shiftKey ) {
 				return;
@@ -630,14 +684,16 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 	};
 
 	/**
-	 * Parse a widget ID.
+	 * Parses a widget ID.
 	 *
 	 * @memberOf wp.customize.widgetsPreview
 	 *
-	 * @since WP-4.5.0
+	 * @since 4.5.0
 	 *
-	 * @param {string} widgetId Widget ID.
-	 * @returns {{idBase: string, number: number|null}}
+	 * @param {string} widgetId The widget ID.
+	 *
+	 * @return {{idBase: string, number: number|null}} An object containing the idBase
+	 *                                                 and number of the parsed widget ID.
 	 */
 	self.parseWidgetId = function( widgetId ) {
 		var matches, parsed = {
@@ -657,14 +713,17 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 	};
 
 	/**
-	 * Parse a widget setting ID.
+	 * Parses a widget setting ID.
 	 *
 	 * @memberOf wp.customize.widgetsPreview
 	 *
-	 * @since WP-4.5.0
+	 * @since 4.5.0
 	 *
 	 * @param {string} settingId Widget setting ID.
-	 * @returns {{idBase: string, number: number|null}|null}
+	 *
+	 * @return {{idBase: string, number: number|null}|null} Either an object containing the idBase
+	 *                                                      and number of the parsed widget setting ID,
+	 *                                                      or null.
 	 */
 	self.parseWidgetSettingId = function( settingId ) {
 		var matches, parsed = {
@@ -684,14 +743,15 @@ wp.customize.widgetsPreview = wp.customize.WidgetCustomizerPreview = (function( 
 	};
 
 	/**
-	 * Convert a widget ID into a Customizer setting ID.
+	 * Converts a widget ID into a Customizer setting ID.
 	 *
 	 * @memberOf wp.customize.widgetsPreview
 	 *
-	 * @since WP-4.5.0
+	 * @since 4.5.0
 	 *
-	 * @param {string} widgetId Widget ID.
-	 * @returns {string} settingId Setting ID.
+	 * @param {string} widgetId The widget ID.
+	 *
+	 * @return {string} The setting ID.
 	 */
 	self.getWidgetSettingId = function( widgetId ) {
 		var parsed = this.parseWidgetId( widgetId ), settingId;

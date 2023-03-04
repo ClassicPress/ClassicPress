@@ -13,7 +13,7 @@
 
 /** Text_Diff_Renderer */
 
-// https://core.trac.wordpress.org/ticket/7391
+// WP #7391
 require_once dirname(dirname(__FILE__)) . '/Renderer.php';
 
 /**

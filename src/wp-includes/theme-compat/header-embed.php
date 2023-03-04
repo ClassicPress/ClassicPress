@@ -11,7 +11,7 @@
  */
 
 if ( ! headers_sent() ) {
-	header( 'X-embed: true' );
+	header( 'X-WP-embed: true' );
 }
 
 ?>
@@ -22,7 +22,7 @@ if ( ! headers_sent() ) {
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<?php
 	/**
-	 * Prints scripts or data in the embed template <head> tag.
+	 * Prints scripts or data in the embed template head tag.
 	 *
 	 * @since 4.4.0
 	 */

@@ -40,14 +40,14 @@ class IXR_Server
         if (!$data) {
             if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] !== 'POST') {
                 if ( function_exists( 'status_header' ) ) {
-                    status_header( 405 ); // https://core.trac.wordpress.org/ticket/20986
+                    status_header( 405 ); // WP #20986
                     header( 'Allow: POST' );
                 }
-                header('Content-Type: text/plain'); // merged from https://core.trac.wordpress.org/ticket/9093
+                header('Content-Type: text/plain'); // merged from WP #9093
                 die('XML-RPC server accepts POST requests only.');
             }
 
-                $data = file_get_contents('php://input');
+            $data = file_get_contents('php://input');
         }
         $this->message = new IXR_Message($data);
         if (!$this->message->parse()) {
@@ -129,6 +129,7 @@ EOD;
         if ($message && !is_object($error)) {
             $error = new IXR_Error($error, $message);
         }
+
         $this->output($error->getXml());
     }
 
@@ -145,7 +146,7 @@ EOD;
             header('Content-Type: text/xml; charset='.$charset);
         else
             header('Content-Type: text/xml');
-        header('Date: '.date('r'));
+        header('Date: '.gmdate('r'));
         echo $xml;
         exit;
     }

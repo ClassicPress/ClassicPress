@@ -242,7 +242,7 @@ var plupload = {
 	/**
 	 * While working on files runtime may run out of memory and will throw this error.
 	 *
-	 * @since WP-2.1.2
+	 * @since 2.1.2
 	 * @property MEMORY_ERROR
 	 * @static
 	 * @final
@@ -734,7 +734,7 @@ plupload.addFileFilter('prevent_duplicates', function(value, file, cb) {
 		@param {Array} [settings.filters.mime_types=[]] List of file types to accept, each one defined by title and list of extensions. `e.g. {title : "Image files", extensions : "jpg,jpeg,gif,png"}`. Dispatches `plupload.FILE_EXTENSION_ERROR`
 		@param {String|Number} [settings.filters.max_file_size=0] Maximum file size that the user can pick, in bytes. Optionally supports b, kb, mb, gb, tb suffixes. `e.g. "10mb" or "1gb"`. By default - not set. Dispatches `plupload.FILE_SIZE_ERROR`.
 		@param {Boolean} [settings.filters.prevent_duplicates=false] Do not let duplicates into the queue. Dispatches `plupload.FILE_DUPLICATE_ERROR`.
-	@param {String} [settings.flash_swf_url] URL of the Flash swf. (Not used in ClassicPress)
+	@param {String} [settings.flash_swf_url] URL of the Flash swf. (Not used in WordPress)
 	@param {Object} [settings.headers] Custom headers to send with the upload. Hash of name/value pairs.
 	@param {Number} [settings.max_retries=0] How many times to retry the chunk or file, before triggering Error event.
 	@param {Boolean} [settings.multipart=true] Whether to send file and additional parameters as Multipart formated message.
@@ -747,7 +747,7 @@ plupload.addFileFilter('prevent_duplicates', function(value, file, cb) {
 		@param {Number} [settings.resize.quality=90] Compression quality for jpegs (1-100).
 		@param {Boolean} [settings.resize.crop=false] Whether to crop images to exact dimensions. By default they will be resized proportionally.
 	@param {String} [settings.runtimes="html5,html4"] Comma separated list of runtimes, that Plupload will try in turn, moving to the next if previous fails.
-	@param {String} [settings.silverlight_xap_url] URL of the Silverlight xap. (Not used in ClassicPress)
+	@param {String} [settings.silverlight_xap_url] URL of the Silverlight xap. (Not used in WordPress)
 	@param {Boolean} [settings.unique_names=false] If true will generate unique filenames for uploaded files.
 	@param {Boolean} [settings.send_file_name=true] Whether to send file name as additional argument - 'name' (required for chunked uploads and some other cases where file name cannot be sent via normal ways).
 */
@@ -770,7 +770,7 @@ plupload.Uploader = function(options) {
 	Fires when the option is changed in via uploader.setOption().
 	
 	@event OptionChanged
-	@since WP-2.1
+	@since 2.1
 	@param {plupload.Uploader} uploader Uploader instance sending the event.
 	@param {String} name Name of the option that was changed
 	@param {Mixed} value New value for the specified option
@@ -795,7 +795,7 @@ plupload.Uploader = function(options) {
 	Fires when browse_button is clicked and browse dialog shows.
 	
 	@event Browse
-	@since WP-2.1.2
+	@since 2.1.2
 	@param {plupload.Uploader} uploader Uploader instance sending the event.
 	 */	
 
@@ -803,7 +803,7 @@ plupload.Uploader = function(options) {
 	Fires for every filtered file before it is added to the queue.
 	
 	@event FileFiltered
-	@since WP-2.1
+	@since 2.1
 	@param {plupload.Uploader} uploader Uploader instance sending the event.
 	@param {plupload.File} file Another file that has to be added to the queue.
 	 */
@@ -1814,7 +1814,7 @@ plupload.Uploader = function(options) {
 		 * Set the value for the specified option(s).
 		 *
 		 * @method setOption
-		 * @since WP-2.1
+		 * @since 2.1
 		 * @param {String|Object} option Name of the option to change or the set of key/value pairs
 		 * @param {Mixed} [value] Value for the option (is ignored, if first argument is object)
 		 */
@@ -1826,7 +1826,7 @@ plupload.Uploader = function(options) {
 		 * Get the value for the specified option or the whole configuration, if not specified.
 		 * 
 		 * @method getOption
-		 * @since WP-2.1
+		 * @since 2.1
 		 * @param {String} [option] Name of the option to get
 		 * @return {Mixed} Value for the option or the whole set
 		 */
@@ -1920,7 +1920,7 @@ plupload.Uploader = function(options) {
 		 * if any files were added to the queue. Otherwise nothing happens.
 		 *
 		 * @method addFile
-		 * @since WP-2.0
+		 * @since 2.0
 		 * @param {plupload.File|mOxie.File|File|Node|Array} file File or files to add to the queue.
 		 * @param {String} [fileName] If specified, will be used as a name for the file
 		 */

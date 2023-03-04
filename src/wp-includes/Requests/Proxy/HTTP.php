@@ -4,7 +4,7 @@
  *
  * @package Requests
  * @subpackage Proxy
- * @since Requests 1.6
+ * @since 1.6
  */
 
 /**
@@ -14,7 +14,7 @@
  *
  * @package Requests
  * @subpackage Proxy
- * @since Requests 1.6
+ * @since 1.6
  */
 class Requests_Proxy_HTTP implements Requests_Proxy {
 	/**
@@ -50,7 +50,7 @@ class Requests_Proxy_HTTP implements Requests_Proxy {
 	/**
 	 * Constructor
 	 *
-	 * @since Requests 1.6
+	 * @since 1.6
 	 * @throws Requests_Exception On incorrect number of arguments (`authbasicbadargs`)
 	 * @param array|null $args Array of user and password. Must have exactly two elements
 	 */
@@ -59,12 +59,12 @@ class Requests_Proxy_HTTP implements Requests_Proxy {
 			$this->proxy = $args;
 		}
 		elseif (is_array($args)) {
-			if (count($args) == 1) {
+			if (count($args) === 1) {
 				list($this->proxy) = $args;
 			}
-			elseif (count($args) == 3) {
+			elseif (count($args) === 3) {
 				list($this->proxy, $this->user, $this->pass) = $args;
-				$this->use_authentication = true;
+				$this->use_authentication                    = true;
 			}
 			else {
 				throw new Requests_Exception('Invalid number of arguments', 'proxyhttpbadargs');
@@ -75,27 +75,27 @@ class Requests_Proxy_HTTP implements Requests_Proxy {
 	/**
 	 * Register the necessary callbacks
 	 *
-	 * @since Requests 1.6
+	 * @since 1.6
 	 * @see curl_before_send
 	 * @see fsockopen_remote_socket
 	 * @see fsockopen_remote_host_path
 	 * @see fsockopen_header
 	 * @param Requests_Hooks $hooks Hook system
 	 */
-	public function register(Requests_Hooks &$hooks) {
-		$hooks->register('curl.before_send', array(&$this, 'curl_before_send'));
+	public function register(Requests_Hooks $hooks) {
+		$hooks->register('curl.before_send', array($this, 'curl_before_send'));
 
-		$hooks->register('fsockopen.remote_socket', array(&$this, 'fsockopen_remote_socket'));
-		$hooks->register('fsockopen.remote_host_path', array(&$this, 'fsockopen_remote_host_path'));
+		$hooks->register('fsockopen.remote_socket', array($this, 'fsockopen_remote_socket'));
+		$hooks->register('fsockopen.remote_host_path', array($this, 'fsockopen_remote_host_path'));
 		if ($this->use_authentication) {
-			$hooks->register('fsockopen.after_headers', array(&$this, 'fsockopen_header'));
+			$hooks->register('fsockopen.after_headers', array($this, 'fsockopen_header'));
 		}
 	}
 
 	/**
 	 * Set cURL parameters before the data is sent
 	 *
-	 * @since Requests 1.6
+	 * @since 1.6
 	 * @param resource $handle cURL resource
 	 */
 	public function curl_before_send(&$handle) {
@@ -111,7 +111,7 @@ class Requests_Proxy_HTTP implements Requests_Proxy {
 	/**
 	 * Alter remote socket information before opening socket connection
 	 *
-	 * @since Requests 1.6
+	 * @since 1.6
 	 * @param string $remote_socket Socket connection string
 	 */
 	public function fsockopen_remote_socket(&$remote_socket) {
@@ -121,7 +121,7 @@ class Requests_Proxy_HTTP implements Requests_Proxy {
 	/**
 	 * Alter remote path before getting stream data
 	 *
-	 * @since Requests 1.6
+	 * @since 1.6
 	 * @param string $path Path to send in HTTP request string ("GET ...")
 	 * @param string $url Full URL we're requesting
 	 */
@@ -132,7 +132,7 @@ class Requests_Proxy_HTTP implements Requests_Proxy {
 	/**
 	 * Add extra headers to the request before sending
 	 *
-	 * @since Requests 1.6
+	 * @since 1.6
 	 * @param string $out HTTP header string
 	 */
 	public function fsockopen_header(&$out) {
@@ -142,7 +142,7 @@ class Requests_Proxy_HTTP implements Requests_Proxy {
 	/**
 	 * Get the authentication string (user:pass)
 	 *
-	 * @since Requests 1.6
+	 * @since 1.6
 	 * @return string
 	 */
 	public function get_auth_string() {

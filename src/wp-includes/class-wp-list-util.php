@@ -9,10 +9,11 @@
 /**
  * List utility.
  *
- * Utility class to handle operations on an array of objects.
+ * Utility class to handle operations on an array of objects or arrays.
  *
  * @since 4.7.0
  */
+#[AllowDynamicProperties]
 class WP_List_Util {
 	/**
 	 * The input array.
@@ -34,7 +35,7 @@ class WP_List_Util {
 	 * Temporary arguments for sorting.
 	 *
 	 * @since 4.7.0
-	 * @var array
+	 * @var string[]
 	 */
 	private $orderby = array();
 
@@ -77,6 +78,13 @@ class WP_List_Util {
 	/**
 	 * Filters the list, based on a set of key => value arguments.
 	 *
+	 * Retrieves the objects from the list that match the given arguments.
+	 * Key represents property name, and value represents property value.
+	 *
+	 * If an object has more properties than those specified in arguments,
+	 * that will not disqualify it. When using the 'AND' operator,
+	 * any missing properties will disqualify it.
+	 *
 	 * @since 4.7.0
 	 *
 	 * @param array  $args     Optional. An array of key => value arguments to match
@@ -95,16 +103,16 @@ class WP_List_Util {
 		$operator = strtoupper( $operator );
 
 		if ( ! in_array( $operator, array( 'AND', 'OR', 'NOT' ), true ) ) {
-			return array();
+			$this->output = array();
+			return $this->output;
 		}
 
 		$count    = count( $args );
 		$filtered = array();
 
 		foreach ( $this->output as $key => $obj ) {
-			$to_match = (array) $obj;
-
 			$matched = 0;
+
 			foreach ( $args as $m_key => $m_value ) {
 				if ( is_array( $obj ) ) {
 					// Treat object as an array.
@@ -133,21 +141,23 @@ class WP_List_Util {
 	}
 
 	/**
-	 * Plucks a certain field out of each object in the list.
+	 * Plucks a certain field out of each element in the input array.
 	 *
 	 * This has the same functionality and prototype of
 	 * array_column() (PHP 5.5) but also supports objects.
 	 *
 	 * @since 4.7.0
 	 *
-	 * @param int|string $field     Field from the object to place instead of the entire object
-	 * @param int|string $index_key Optional. Field from the object to use as keys for the new array.
+	 * @param int|string $field     Field to fetch from the object or array.
+	 * @param int|string $index_key Optional. Field from the element to use as keys for the new array.
 	 *                              Default null.
 	 * @return array Array of found values. If `$index_key` is set, an array of found values with keys
 	 *               corresponding to `$index_key`. If `$index_key` is null, array keys from the original
 	 *               `$list` will be preserved in the results.
 	 */
 	public function pluck( $field, $index_key = null ) {
+		$newlist = array();
+
 		if ( ! $index_key ) {
 			/*
 			 * This is simple. Could at some point wrap array_column()
@@ -155,11 +165,14 @@ class WP_List_Util {
 			 */
 			foreach ( $this->output as $key => $value ) {
 				if ( is_object( $value ) ) {
-					$this->output[ $key ] = $value->$field;
+					$newlist[ $key ] = $value->$field;
 				} else {
-					$this->output[ $key ] = $value[ $field ];
+					$newlist[ $key ] = $value[ $field ];
 				}
 			}
+
+			$this->output = $newlist;
+
 			return $this->output;
 		}
 
@@ -167,7 +180,6 @@ class WP_List_Util {
 		 * When index_key is not set for a particular item, push the value
 		 * to the end of the stack. This is how array_column() behaves.
 		 */
-		$newlist = array();
 		foreach ( $this->output as $value ) {
 			if ( is_object( $value ) ) {
 				if ( isset( $value->$index_key ) ) {
@@ -190,7 +202,7 @@ class WP_List_Util {
 	}
 
 	/**
-	 * Sorts the list, based on one or more orderby arguments.
+	 * Sorts the input array based on one or more orderby arguments.
 	 *
 	 * @since 4.7.0
 	 *
@@ -228,7 +240,7 @@ class WP_List_Util {
 	}
 
 	/**
-	 * Callback to sort the list by specific fields.
+	 * Callback to sort an array by specific fields.
 	 *
 	 * @since 4.7.0
 	 *

@@ -1,5 +1,5 @@
 <?php
-_deprecated_file( basename( __FILE__ ), '5.3.0', null, 'The PHP native JSON extension is now a requirement.' );
+_deprecated_file( basename( __FILE__ ), '5.3.0', '', 'The PHP native JSON extension is now a requirement.' );
 
 if ( ! class_exists( 'Services_JSON' ) ) :
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
@@ -17,11 +17,11 @@ if ( ! class_exists( 'Services_JSON' ) ) :
  * ideal data-interchange language.
  *
  * This package provides a simple encoder and decoder for JSON notation. It
- * is intended for use with client-side Javascript applications that make
+ * is intended for use with client-side JavaScript applications that make
  * use of HTTPRequest to perform server communication functions - data can
- * be encoded into JSON notation for use in a client-side javascript, or
- * decoded from incoming Javascript requests. JSON format is native to
- * Javascript, and can be directly eval()'ed with no further parsing
+ * be encoded into JSON notation for use in a client-side javaScript, or
+ * decoded from incoming JavaScript requests. JSON format is native to
+ * JavaScript, and can be directly eval()'ed with no further parsing
  * overhead
  *
  * All strings should be in ASCII or UTF-8 format!
@@ -107,7 +107,7 @@ define('SERVICES_JSON_USE_TO_JSON', 64);
  * // create a new instance of Services_JSON
  * $json = new Services_JSON();
  *
- * // convert a complexe value to JSON notation, and send it to the browser
+ * // convert a complex value to JSON notation, and send it to the browser
  * $value = array('foo', 'bar', array(1, 2, 'baz'), array(3, array(4)));
  * $output = $json->encode($value);
  *
@@ -121,6 +121,18 @@ define('SERVICES_JSON_USE_TO_JSON', 64);
  */
 class Services_JSON
 {
+   /**
+    * Object behavior flags.
+    *
+    * @var int
+    */
+    public $use;
+
+    // private - cache the mbstring lookup results..
+    var $_mb_strlen = false;
+    var $_mb_substr = false;
+    var $_mb_convert_encoding = false;
+
    /**
     * constructs a new JSON instance
     *
@@ -154,21 +166,17 @@ class Services_JSON
         $this->_mb_substr            = function_exists('mb_substr');
     }
 
-	/**
-	 * PHP4 constructor.
+    /**
+     * PHP4 constructor.
      *
      * @deprecated 5.3.0 Use __construct() instead.
      *
-     * @see __construct()
-	 */
-	public function Services_JSON( $use = 0 ) {
-		_deprecated_constructor( 'Services_JSON', '5.3.0', get_class( $this ) );
-		self::__construct( $use );
-	}
-    // private - cache the mbstring lookup results..
-    var $_mb_strlen = false;
-    var $_mb_substr = false;
-    var $_mb_convert_encoding = false;
+     * @see Services_JSON::__construct()
+     */
+    public function Services_JSON( $use = 0 ) {
+        _deprecated_constructor( 'Services_JSON', '5.3.0', get_class( $this ) );
+        self::__construct( $use );
+    }
 
    /**
     * convert a string from one UTF-16 char to one UTF-8 char
@@ -223,7 +231,7 @@ class Services_JSON
     *
     * Normally should be handled by mb_convert_encoding, but
     * provides a slower PHP-only method for installations
-    * that lack the multibye string extension.
+    * that lack the multibyte string extension.
     *
     * @deprecated 5.3.0 Use the PHP native JSON extension instead.
     *
@@ -273,7 +281,7 @@ class Services_JSON
     *
     * @param    mixed   $var    any number, boolean, string, array, or object to be encoded.
     *                           see argument 1 to Services_JSON() above for array-parsing behavior.
-    *                           if var is a strng, note that encode() always expects it
+    *                           if var is a string, note that encode() always expects it
     *                           to be in ASCII or UTF-8 format!
     *
     * @return   mixed   JSON string representation of input var or an error if a problem occurs
@@ -293,7 +301,7 @@ class Services_JSON
     *
     * @param    mixed   $var    any number, boolean, string, array, or object to be encoded.
     *                           see argument 1 to Services_JSON() above for array-parsing behavior.
-    *                           if var is a strng, note that encode() always expects it
+    *                           if var is a string, note that encode() always expects it
     *                           to be in ASCII or UTF-8 format!
     *
     * @return   mixed   JSON string representation of input var or an error if a problem occurs
@@ -303,7 +311,7 @@ class Services_JSON
     {
         _deprecated_function( __METHOD__, '5.3.0', 'The PHP native JSON extension' );
 
-        // see bug https://core.trac.wordpress.org/ticket/16908 - regarding numeric locale printing
+        // see bug #16908 - regarding numeric locale printing
         $lc = setlocale(LC_NUMERIC, 0);
         setlocale(LC_NUMERIC, 'C');
         $ret = $this->_encode($var);
@@ -318,7 +326,7 @@ class Services_JSON
     *
     * @param    mixed   $var    any number, boolean, string, array, or object to be encoded.
     *                           see argument 1 to Services_JSON() above for array-parsing behavior.
-    *                           if var is a strng, note that encode() always expects it
+    *                           if var is a string, note that encode() always expects it
     *                           to be in ASCII or UTF-8 format!
     *
     * @return   mixed   JSON string representation of input var or an error if a problem occurs
@@ -579,7 +587,7 @@ class Services_JSON
             return $encoded_value;
         }
 
-        return $this->_encode(strval($name)) . ':' . $encoded_value;
+        return $this->_encode((string) $name) . ':' . $encoded_value;
     }
 
    /**
@@ -816,7 +824,7 @@ class Services_JSON
                                 $parts = array();
 
                                if (preg_match('/^\s*(["\'].*[^\\\]["\'])\s*:/Uis', $slice, $parts)) {
- 	                              // "name":value pair
+                                    // "name":value pair
                                     $key = $this->decode($parts[1]);
                                     $val = $this->decode(trim(substr($slice, strlen($parts[0])), ", \t\n\r\0\x0B"));
                                     if ($this->use & SERVICES_JSON_LOOSE_TYPE) {
@@ -847,7 +855,7 @@ class Services_JSON
                                  ($top['what'] == SERVICES_JSON_IN_STR) &&
                                  (($this->strlen8($this->substr8($chrs, 0, $c)) - $this->strlen8(rtrim($this->substr8($chrs, 0, $c), '\\'))) % 2 != 1)) {
                             // found a quote, we're in a string, and it's not escaped
-                            // we know that it's not escaped becase there is _not_ an
+                            // we know that it's not escaped because there is _not_ an
                             // odd number of backslashes at the end of the string so far
                             array_pop($stk);
                             //print("Found end of string at {$c}: ".$this->substr8($chrs, $top['where'], (1 + 1 + $c - $top['where']))."\n");
@@ -918,7 +926,7 @@ class Services_JSON
 
         if (class_exists('pear')) {
             return PEAR::isError($data, $code);
-        } elseif (is_object($data) && (get_class($data) == 'services_json_error' ||
+        } elseif (is_object($data) && ($data instanceof services_json_error ||
                                  is_subclass_of($data, 'services_json_error'))) {
             return true;
         }
@@ -973,11 +981,11 @@ if (class_exists('PEAR_Error')) {
 
     class Services_JSON_Error extends PEAR_Error
     {
-	    /**
-	     * PHP5 constructor.
-	     *
-	     * @deprecated 5.3.0 Use the PHP native JSON extension instead.
-	     */
+        /**
+         * PHP5 constructor.
+         *
+         * @deprecated 5.3.0 Use the PHP native JSON extension instead.
+         */
         function __construct($message = 'unknown error', $code = null,
                                      $mode = null, $options = null, $userinfo = null)
         {
@@ -986,18 +994,18 @@ if (class_exists('PEAR_Error')) {
             parent::PEAR_Error($message, $code, $mode, $options, $userinfo);
         }
 
-	    /**
-	     * PHP4 constructor.
-	     *
-	     * @deprecated 5.3.0 Use __construct() instead.
-	     *
-	     * @see __construct()
-	     */
-		public function Services_JSON_Error($message = 'unknown error', $code = null,
+        /**
+         * PHP4 constructor.
+         *
+         * @deprecated 5.3.0 Use __construct() instead.
+         *
+         * @see Services_JSON_Error::__construct()
+         */
+        public function Services_JSON_Error($message = 'unknown error', $code = null,
                                      $mode = null, $options = null, $userinfo = null) {
-			_deprecated_constructor( 'Services_JSON_Error', '5.3.0', get_class( $this ) );
-			self::__construct($message, $code, $mode, $options, $userinfo);
-		}
+            _deprecated_constructor( 'Services_JSON_Error', '5.3.0', get_class( $this ) );
+            self::__construct($message, $code, $mode, $options, $userinfo);
+        }
     }
 
 } else {
@@ -1007,29 +1015,29 @@ if (class_exists('PEAR_Error')) {
      */
     class Services_JSON_Error
     {
-	    /**
-	     * PHP5 constructor.
-	     *
-	     * @deprecated 5.3.0 Use the PHP native JSON extension instead.
-	     */
+        /**
+         * PHP5 constructor.
+         *
+         * @deprecated 5.3.0 Use the PHP native JSON extension instead.
+         */
         function __construct( $message = 'unknown error', $code = null,
                                      $mode = null, $options = null, $userinfo = null )
         {
             _deprecated_function( __METHOD__, '5.3.0', 'The PHP native JSON extension' );
         }
 
-	    /**
-	     * PHP4 constructor.
-	     *
-	     * @deprecated 5.3.0 Use __construct() instead.
-	     *
-	     * @see __construct()
-	     */
-		public function Services_JSON_Error( $message = 'unknown error', $code = null,
-	                                     $mode = null, $options = null, $userinfo = null ) {
-			_deprecated_constructor( 'Services_JSON_Error', '5.3.0', get_class( $this ) );
-			self::__construct( $message, $code, $mode, $options, $userinfo );
-		}
+        /**
+         * PHP4 constructor.
+         *
+         * @deprecated 5.3.0 Use __construct() instead.
+         *
+         * @see Services_JSON_Error::__construct()
+         */
+        public function Services_JSON_Error( $message = 'unknown error', $code = null,
+                                         $mode = null, $options = null, $userinfo = null ) {
+            _deprecated_constructor( 'Services_JSON_Error', '5.3.0', get_class( $this ) );
+            self::__construct( $message, $code, $mode, $options, $userinfo );
+        }
     }
 
 }

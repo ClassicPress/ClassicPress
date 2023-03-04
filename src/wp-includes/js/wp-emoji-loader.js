@@ -1,3 +1,7 @@
+/**
+ * @output wp-includes/js/wp-emoji-loader.js
+ */
+
 ( function( window, document, settings ) {
 	var src, ready, ii, tests;
 
@@ -39,7 +43,7 @@
 	 * Flag emoji are a single glyph made of two characters, so some browsers
 	 * (notably, Firefox OS X) don't support them.
 	 *
-	 * @since WP-4.2.0
+	 * @since 4.2.0
 	 *
 	 * @private
 	 *
@@ -64,6 +68,22 @@
 
 		switch ( type ) {
 			case 'flag':
+				/*
+				 * Test for Transgender flag compatibility. This flag is shortlisted for the Emoji 13 spec,
+				 * but has landed in Twemoji early, so we can add support for it, too.
+				 *
+				 * To test for support, we try to render it, and compare the rendering to how it would look if
+				 * the browser doesn't render it correctly (white flag emoji + transgender symbol).
+				 */
+				isIdentical = emojiSetsRenderIdentically(
+					[ 0x1F3F3, 0xFE0F, 0x200D, 0x26A7, 0xFE0F ],
+					[ 0x1F3F3, 0xFE0F, 0x200B, 0x26A7, 0xFE0F ]
+				);
+
+				if ( isIdentical ) {
+					return false;
+				}
+
 				/*
 				 * Test for UN flag compatibility. This is the least supported of the letter locale flags,
 				 * so gives us an easy test for full support.
@@ -95,18 +115,28 @@
 				return ! isIdentical;
 			case 'emoji':
 				/*
-				 * Love is love.
+				 * Why can't we be friends? Everyone can now shake hands in emoji, regardless of skin tone!
 				 *
-				 * To test for Emoji 12 support, try to render a new emoji: men holding hands, with different skin
-				 * tone modifiers.
+				 * To test for Emoji 14.0 support, try to render a new emoji: Handshake: Light Skin Tone, Dark Skin Tone.
+				 *
+				 * The Handshake: Light Skin Tone, Dark Skin Tone emoji is a ZWJ sequence combining 🫱 Rightwards Hand,
+				 * 🏻 Light Skin Tone, a Zero Width Joiner, 🫲 Leftwards Hand, and 🏿 Dark Skin Tone.
+				 *
+				 * 0x1FAF1 == Rightwards Hand
+				 * 0x1F3FB == Light Skin Tone
+				 * 0x200D == Zero-Width Joiner (ZWJ) that links the code points for the new emoji or
+				 * 0x200B == Zero-Width Space (ZWS) that is rendered for clients not supporting the new emoji.
+				 * 0x1FAF2 == Leftwards Hand
+				 * 0x1F3FF == Dark Skin Tone.
 				 *
 				 * When updating this test for future Emoji releases, ensure that individual emoji that make up the
 				 * sequence come from older emoji standards.
 				 */
 				isIdentical = emojiSetsRenderIdentically(
-					[0xD83D, 0xDC68, 0xD83C, 0xDFFE, 0x200D, 0xD83E, 0xDD1D, 0x200D, 0xD83D, 0xDC68, 0xD83C, 0xDFFC],
-					[0xD83D, 0xDC68, 0xD83C, 0xDFFE, 0x200B, 0xD83E, 0xDD1D, 0x200B, 0xD83D, 0xDC68, 0xD83C, 0xDFFC]
+					[0x1FAF1, 0x1F3FB, 0x200D, 0x1FAF2, 0x1F3FF],
+					[0x1FAF1, 0x1F3FB, 0x200B, 0x1FAF2, 0x1F3FF]
 				);
+
 				return ! isIdentical;
 		}
 

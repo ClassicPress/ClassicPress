@@ -24,7 +24,7 @@
 			clipboard_msg: "Copy/Cut/Paste is not available in Mozilla and Firefox.",
 			clipboard_no_support: "Currently not supported by your browser, use keyboard shortcuts instead.",
 			popup_blocked: "Sorry, but we have noticed that your popup-blocker has disabled a window that provides application functionality. You will need to disable popup blocking on this site in order to fully utilize this tool.",
-			invalid_data: "ERROR: Invalid values entered, these are marked in red.",
+			invalid_data: "Error: Invalid values entered, these are marked in red.",
 			invalid_data_number: "{#field} must be a number",
 			invalid_data_min: "{#field} must be a number greater than {#min}",
 			invalid_data_size: "{#field} must be a number or percentage",
@@ -152,9 +152,9 @@
 			plaintext_mode: "Paste is now in plain text mode. Click again to toggle back to regular paste mode."
 		},
 		paste_dlg: {
-			text_title: "Use CTRL + V on your keyboard to paste the text into the window.",
+			text_title: "Use Ctrl + V on your keyboard to paste the text into the window.",
 			text_linebreaks: "Keep linebreaks",
-			word_title: "Use CTRL + V on your keyboard to paste the text into the window."
+			word_title: "Use Ctrl + V on your keyboard to paste the text into the window."
 		},
 		table: {
 			desc: "Inserts a new table",
@@ -501,9 +501,6 @@
 		css: "CSS Class",
 		adv_link_settings: "Advanced Link Settings",
 		link_rel: "Link Rel",
-		height: "Height",
-		orig_size: "Original Size",
-		css: "CSS Class",
 		s60: "60%",
 		s70: "70%",
 		s80: "80%",

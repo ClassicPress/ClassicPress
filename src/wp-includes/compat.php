@@ -6,10 +6,10 @@
  * @access private
  */
 
-// If gettext isn't available
+// If gettext isn't available.
 if ( ! function_exists( '_' ) ) {
-	function _( $string ) {
-		return $string;
+	function _( $message ) {
+		return $message;
 	}
 }
 
@@ -19,8 +19,6 @@ if ( ! function_exists( '_' ) ) {
  * @ignore
  * @since 4.2.2
  * @access private
- *
- * @staticvar string $utf8_pcre
  *
  * @param bool $set - Used for testing only
  *             null   : default - get PCRE/u capability
@@ -51,24 +49,24 @@ if ( ! function_exists( 'mb_substr' ) ) :
 	 *
 	 * @see _mb_substr()
 	 *
-	 * @param string      $str      The string to extract the substring from.
-	 * @param int         $start    Position to being extraction from in `$str`.
-	 * @param int|null    $length   Optional. Maximum number of characters to extract from `$str`.
+	 * @param string      $string   The string to extract the substring from.
+	 * @param int         $start    Position to being extraction from in `$string`.
+	 * @param int|null    $length   Optional. Maximum number of characters to extract from `$string`.
 	 *                              Default null.
 	 * @param string|null $encoding Optional. Character encoding to use. Default null.
 	 * @return string Extracted substring.
 	 */
-	function mb_substr( $str, $start, $length = null, $encoding = null ) {
-		return _mb_substr( $str, $start, $length, $encoding );
+	function mb_substr( $string, $start, $length = null, $encoding = null ) {
+		return _mb_substr( $string, $start, $length, $encoding );
 	}
 endif;
 
 /**
  * Internal compat function to mimic mb_substr().
  *
- * Only understands UTF-8 and 8bit.  All other character sets will be treated as 8bit.
- * For $encoding === UTF-8, the $str input is expected to be a valid UTF-8 byte sequence.
- * The behavior of this function for invalid inputs is undefined.
+ * Only understands UTF-8 and 8bit. All other character sets will be treated as 8bit.
+ * For `$encoding === UTF-8`, the `$str` input is expected to be a valid UTF-8 byte
+ * sequence. The behavior of this function for invalid inputs is undefined.
  *
  * @ignore
  * @since 3.2.0
@@ -81,6 +79,10 @@ endif;
  * @return string Extracted substring.
  */
 function _mb_substr( $str, $start, $length = null, $encoding = null ) {
+	if ( null === $str ) {
+		return '';
+	}
+
 	if ( null === $encoding ) {
 		$encoding = get_option( 'blog_charset' );
 	}
@@ -101,7 +103,7 @@ function _mb_substr( $str, $start, $length = null, $encoding = null ) {
 	}
 
 	$regex = '/(
-		  [\x00-\x7F]                  # single-byte sequences   0xxxxxxx
+		[\x00-\x7F]                  # single-byte sequences   0xxxxxxx
 		| [\xC2-\xDF][\x80-\xBF]       # double-byte sequences   110xxxxx 10xxxxxx
 		| \xE0[\xA0-\xBF][\x80-\xBF]   # triple-byte sequences   1110xxxx 10xxxxxx * 2
 		| [\xE1-\xEC][\x80-\xBF]{2}
@@ -114,6 +116,7 @@ function _mb_substr( $str, $start, $length = null, $encoding = null ) {
 
 	// Start with 1 element instead of 0 since the first thing we do is pop.
 	$chars = array( '' );
+
 	do {
 		// We had some string left over from the last round, but we counted it in that last round.
 		array_pop( $chars );
@@ -129,7 +132,7 @@ function _mb_substr( $str, $start, $length = null, $encoding = null ) {
 		// If there's anything left over, repeat the loop.
 	} while ( count( $pieces ) > 1 && $str = array_pop( $pieces ) );
 
-	return join( '', array_slice( $chars, $start, $length ) );
+	return implode( '', array_slice( $chars, $start, $length ) );
 }
 
 if ( ! function_exists( 'mb_strlen' ) ) :
@@ -141,12 +144,12 @@ if ( ! function_exists( 'mb_strlen' ) ) :
 	 *
 	 * @see _mb_strlen()
 	 *
-	 * @param string      $str      The string to retrieve the character length from.
+	 * @param string      $string   The string to retrieve the character length from.
 	 * @param string|null $encoding Optional. Character encoding to use. Default null.
-	 * @return int String length of `$str`.
+	 * @return int String length of `$string`.
 	 */
-	function mb_strlen( $str, $encoding = null ) {
-		return _mb_strlen( $str, $encoding );
+	function mb_strlen( $string, $encoding = null ) {
+		return _mb_strlen( $string, $encoding );
 	}
 endif;
 
@@ -154,7 +157,7 @@ endif;
  * Internal compat function to mimic mb_strlen().
  *
  * Only understands UTF-8 and 8bit.  All other character sets will be treated as 8bit.
- * For $encoding === UTF-8, the `$str` input is expected to be a valid UTF-8 byte
+ * For `$encoding === UTF-8`, the `$str` input is expected to be a valid UTF-8 byte
  * sequence. The behavior of this function for invalid inputs is undefined.
  *
  * @ignore
@@ -184,7 +187,7 @@ function _mb_strlen( $str, $encoding = null ) {
 	}
 
 	$regex = '/(?:
-		  [\x00-\x7F]                  # single-byte sequences   0xxxxxxx
+		[\x00-\x7F]                  # single-byte sequences   0xxxxxxx
 		| [\xC2-\xDF][\x80-\xBF]       # double-byte sequences   110xxxxx 10xxxxxx
 		| \xE0[\xA0-\xBF][\x80-\xBF]   # triple-byte sequences   1110xxxx 10xxxxxx * 2
 		| [\xE1-\xEC][\x80-\xBF]{2}
@@ -197,6 +200,7 @@ function _mb_strlen( $str, $encoding = null ) {
 
 	// Start at 1 instead of 0 since the first thing we do is decrement.
 	$count = 1;
+
 	do {
 		// We had some string left over from the last round, but we counted it in that last round.
 		$count--;
@@ -233,16 +237,16 @@ if ( ! function_exists( 'hash_hmac' ) ) :
 	 *
 	 * @see _hash_hmac()
 	 *
-	 * @param string $algo       Hash algorithm. Accepts 'md5' or 'sha1'.
-	 * @param string $data       Data to be hashed.
-	 * @param string $key        Secret key to use for generating the hash.
-	 * @param bool   $raw_output Optional. Whether to output raw binary data (true),
-	 *                           or lowercase hexits (false). Default false.
-	 * @return string|false The hash in output determined by `$raw_output`. False if `$algo`
-	 *                      is unknown or invalid.
+	 * @param string $algo   Hash algorithm. Accepts 'md5' or 'sha1'.
+	 * @param string $data   Data to be hashed.
+	 * @param string $key    Secret key to use for generating the hash.
+	 * @param bool   $binary Optional. Whether to output raw binary data (true),
+	 *                       or lowercase hexits (false). Default false.
+	 * @return string|false The hash in output determined by `$binary`.
+	 *                      False if `$algo` is unknown or invalid.
 	 */
-	function hash_hmac( $algo, $data, $key, $raw_output = false ) {
-		return _hash_hmac( $algo, $data, $key, $raw_output );
+	function hash_hmac( $algo, $data, $key, $binary = false ) {
+		return _hash_hmac( $algo, $data, $key, $binary );
 	}
 endif;
 
@@ -252,15 +256,15 @@ endif;
  * @ignore
  * @since 3.2.0
  *
- * @param string $algo       Hash algorithm. Accepts 'md5' or 'sha1'.
- * @param string $data       Data to be hashed.
- * @param string $key        Secret key to use for generating the hash.
- * @param bool   $raw_output Optional. Whether to output raw binary data (true),
- *                           or lowercase hexits (false). Default false.
- * @return string|false The hash in output determined by `$raw_output`. False if `$algo`
- *                      is unknown or invalid.
+ * @param string $algo   Hash algorithm. Accepts 'md5' or 'sha1'.
+ * @param string $data   Data to be hashed.
+ * @param string $key    Secret key to use for generating the hash.
+ * @param bool   $binary Optional. Whether to output raw binary data (true),
+ *                       or lowercase hexits (false). Default false.
+ * @return string|false The hash in output determined by `$binary`.
+ *                      False if `$algo` is unknown or invalid.
  */
-function _hash_hmac( $algo, $data, $key, $raw_output = false ) {
+function _hash_hmac( $algo, $data, $key, $binary = false ) {
 	$packs = array(
 		'md5'  => 'H32',
 		'sha1' => 'H40',
@@ -283,62 +287,16 @@ function _hash_hmac( $algo, $data, $key, $raw_output = false ) {
 
 	$hmac = $algo( $opad . pack( $pack, $algo( $ipad . $data ) ) );
 
-	if ( $raw_output ) {
+	if ( $binary ) {
 		return pack( $pack, $hmac );
 	}
+
 	return $hmac;
-}
-
-if ( ! function_exists( 'json_encode' ) ) {
-	function json_encode( $string ) {
-		global $wp_json;
-
-		if ( ! ( $wp_json instanceof Services_JSON ) ) {
-			require_once ABSPATH . WPINC . '/class-json.php';
-			$wp_json = new Services_JSON();
-		}
-
-		return $wp_json->encodeUnsafe( $string );
-	}
-}
-
-if ( ! function_exists( 'json_decode' ) ) {
-	/**
-	 * @global Services_JSON $wp_json
-	 * @param string $string
-	 * @param bool   $assoc_array
-	 * @return object|array
-	 */
-	function json_decode( $string, $assoc_array = false ) {
-		global $wp_json;
-
-		if ( ! ( $wp_json instanceof Services_JSON ) ) {
-			require_once ABSPATH . WPINC . '/class-json.php';
-			$wp_json = new Services_JSON();
-		}
-
-		$res = $wp_json->decode( $string );
-		if ( $assoc_array ) {
-			$res = _json_decode_object_helper( $res );
-		}
-		return $res;
-	}
-
-	/**
-	 * @param object $data
-	 * @return array
-	 */
-	function _json_decode_object_helper( $data ) {
-		if ( is_object( $data ) ) {
-			$data = get_object_vars( $data );
-		}
-		return is_array( $data ) ? array_map( __FUNCTION__, $data ) : $data;
-	}
 }
 
 if ( ! function_exists( 'hash_equals' ) ) :
 	/**
-	 * Timing attack safe string comparison
+	 * Timing attack safe string comparison.
 	 *
 	 * Compares two strings using the same time whether they're equal or not.
 	 *
@@ -353,113 +311,35 @@ if ( ! function_exists( 'hash_equals' ) ) :
 	 *
 	 * @since 3.9.2
 	 *
-	 * @param string $a Expected string.
-	 * @param string $b Actual, user supplied, string.
+	 * @param string $known_string Expected string.
+	 * @param string $user_string  Actual, user supplied, string.
 	 * @return bool Whether strings are equal.
 	 */
-	function hash_equals( $a, $b ) {
-		$a_length = strlen( $a );
-		if ( strlen( $b ) !== $a_length ) {
+	function hash_equals( $known_string, $user_string ) {
+		$known_string_length = strlen( $known_string );
+
+		if ( strlen( $user_string ) !== $known_string_length ) {
 			return false;
 		}
+
 		$result = 0;
 
 		// Do not attempt to "optimize" this.
-		for ( $i = 0; $i < $a_length; $i++ ) {
-			$result |= ord( $a[ $i ] ) ^ ord( $b[ $i ] );
-		}
-
-		// Do not attempt to "optimize" this.
-		for ( $i = 0; $i < $a_length; $i++ ) {
-			$result |= ord( $a[ $i ] ) ^ ord( $b[ $i ] );
+		for ( $i = 0; $i < $known_string_length; $i++ ) {
+			$result |= ord( $known_string[ $i ] ) ^ ord( $user_string[ $i ] );
 		}
 
 		return 0 === $result;
 	}
 endif;
 
-// JSON_PRETTY_PRINT was introduced in PHP 5.4
-// Defined here to prevent a notice when using it with wp_json_encode()
-if ( ! defined( 'JSON_PRETTY_PRINT' ) ) {
-	define( 'JSON_PRETTY_PRINT', 128 );
-}
-
-if ( ! function_exists( 'json_last_error_msg' ) ) :
-	/**
-	 * Retrieves the error string of the last json_encode() or json_decode() call.
-	 *
-	 * @since 4.4.0
-	 *
-	 * @internal This is a compatibility function for PHP <5.5
-	 *
-	 * @return bool|string Returns the error message on success, "No Error" if no error has occurred,
-	 *                     or false on failure.
-	 */
-	function json_last_error_msg() {
-		// See https://core.trac.wordpress.org/ticket/27799.
-		if ( ! function_exists( 'json_last_error' ) ) {
-			return false;
-		}
-
-		$last_error_code = json_last_error();
-
-		// Just in case JSON_ERROR_NONE is not defined.
-		$error_code_none = defined( 'JSON_ERROR_NONE' ) ? JSON_ERROR_NONE : 0;
-
-		switch ( true ) {
-			case $last_error_code === $error_code_none:
-				return 'No error';
-
-			case defined( 'JSON_ERROR_DEPTH' ) && JSON_ERROR_DEPTH === $last_error_code:
-				return 'Maximum stack depth exceeded';
-
-			case defined( 'JSON_ERROR_STATE_MISMATCH' ) && JSON_ERROR_STATE_MISMATCH === $last_error_code:
-				return 'State mismatch (invalid or malformed JSON)';
-
-			case defined( 'JSON_ERROR_CTRL_CHAR' ) && JSON_ERROR_CTRL_CHAR === $last_error_code:
-				return 'Control character error, possibly incorrectly encoded';
-
-			case defined( 'JSON_ERROR_SYNTAX' ) && JSON_ERROR_SYNTAX === $last_error_code:
-				return 'Syntax error';
-
-			case defined( 'JSON_ERROR_UTF8' ) && JSON_ERROR_UTF8 === $last_error_code:
-				return 'Malformed UTF-8 characters, possibly incorrectly encoded';
-
-			case defined( 'JSON_ERROR_RECURSION' ) && JSON_ERROR_RECURSION === $last_error_code:
-				return 'Recursion detected';
-
-			case defined( 'JSON_ERROR_INF_OR_NAN' ) && JSON_ERROR_INF_OR_NAN === $last_error_code:
-				return 'Inf and NaN cannot be JSON encoded';
-
-			case defined( 'JSON_ERROR_UNSUPPORTED_TYPE' ) && JSON_ERROR_UNSUPPORTED_TYPE === $last_error_code:
-				return 'Type is not supported';
-
-			default:
-				return 'An unknown error occurred';
-		}
-	}
-endif;
-
-if ( ! interface_exists( 'JsonSerializable' ) ) {
-	define( 'WP_JSON_SERIALIZE_COMPATIBLE', true );
-	/**
-	 * JsonSerializable interface.
-	 *
-	 * Compatibility shim for PHP <5.4
-	 *
-	 * @link https://secure.php.net/jsonserializable
-	 *
-	 * @since 4.4.0
-	 */
-	interface JsonSerializable {
-		// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
-		public function jsonSerialize();
-	}
-}
-
-// random_int was introduced in PHP 7.0
+// random_int() was introduced in PHP 7.0.
 if ( ! function_exists( 'random_int' ) ) {
 	require ABSPATH . WPINC . '/random_compat/random.php';
+}
+// sodium_crypto_box() was introduced in PHP 7.2.
+if ( ! function_exists( 'sodium_crypto_box' ) ) {
+	require ABSPATH . WPINC . '/sodium_compat/autoload.php';
 }
 
 if ( ! function_exists( 'is_countable' ) ) {
@@ -471,15 +351,14 @@ if ( ! function_exists( 'is_countable' ) ) {
 	 *
 	 * @since 4.9.6
 	 *
-	 * @param mixed $var The value to check.
-	 *
-	 * @return bool True if `$var` is countable, false otherwise.
+	 * @param mixed $value The value to check.
+	 * @return bool True if `$value` is countable, false otherwise.
 	 */
-	function is_countable( $var ) {
-		return ( is_array( $var )
-			|| $var instanceof Countable
-			|| $var instanceof SimpleXMLElement
-			|| $var instanceof ResourceBundle
+	function is_countable( $value ) {
+		return ( is_array( $value )
+			|| $value instanceof Countable
+			|| $value instanceof SimpleXMLElement
+			|| $value instanceof ResourceBundle
 		);
 	}
 }
@@ -493,12 +372,11 @@ if ( ! function_exists( 'is_iterable' ) ) {
 	 *
 	 * @since 4.9.6
 	 *
-	 * @param mixed $var The value to check.
-	 *
-	 * @return bool True if `$var` is iterable, false otherwise.
+	 * @param mixed $value The value to check.
+	 * @return bool True if `$value` is iterable, false otherwise.
 	 */
-	function is_iterable( $var ) {
-		return ( is_array( $var ) || $var instanceof Traversable );
+	function is_iterable( $value ) {
+		return ( is_array( $value ) || $value instanceof Traversable );
 	}
 }
 
@@ -511,12 +389,12 @@ if ( ! function_exists( 'array_key_first' ) ) {
 	 *
 	 * @since 5.9.0
 	 *
-	 * @param array $arr An array.
+	 * @param array $array An array.
 	 * @return string|int|null The first key of array if the array
 	 *                         is not empty; `null` otherwise.
 	 */
-	function array_key_first( array $arr ) {
-		foreach ( $arr as $key => $value ) {
+	function array_key_first( array $array ) {
+		foreach ( $array as $key => $value ) {
 			return $key;
 		}
 	}
@@ -531,16 +409,18 @@ if ( ! function_exists( 'array_key_last' ) ) {
 	 *
 	 * @since 5.9.0
 	 *
-	 * @param array $arr An array.
+	 * @param array $array An array.
 	 * @return string|int|null The last key of array if the array
 	 *.                        is not empty; `null` otherwise.
 	 */
-	function array_key_last( array $arr ) {
-		if ( empty( $arr ) ) {
+	function array_key_last( array $array ) {
+		if ( empty( $array ) ) {
 			return null;
 		}
-		end( $arr );
-		return key( $arr );
+
+		end( $array );
+
+		return key( $array );
 	}
 }
 
@@ -562,6 +442,52 @@ if ( ! function_exists( 'str_contains' ) ) {
 	}
 }
 
+if ( ! function_exists( 'str_starts_with' ) ) {
+	/**
+	 * Polyfill for `str_starts_with()` function added in PHP 8.0.
+	 *
+	 * Performs a case-sensitive check indicating if
+	 * the haystack begins with needle.
+	 *
+	 * @since 5.9.0
+	 *
+	 * @param string $haystack The string to search in.
+	 * @param string $needle   The substring to search for in the `$haystack`.
+	 * @return bool True if `$haystack` starts with `$needle`, otherwise false.
+	 */
+	function str_starts_with( $haystack, $needle ) {
+		if ( '' === $needle ) {
+			return true;
+		}
+
+		return 0 === strpos( $haystack, $needle );
+	}
+}
+
+if ( ! function_exists( 'str_ends_with' ) ) {
+	/**
+	 * Polyfill for `str_ends_with()` function added in PHP 8.0.
+	 *
+	 * Performs a case-sensitive check indicating if
+	 * the haystack ends with needle.
+	 *
+	 * @since 5.9.0
+	 *
+	 * @param string $haystack The string to search in.
+	 * @param string $needle   The substring to search for in the `$haystack`.
+	 * @return bool True if `$haystack` ends with `$needle`, otherwise false.
+	 */
+	function str_ends_with( $haystack, $needle ) {
+		if ( '' === $haystack && '' !== $needle ) {
+			return false;
+		}
+
+		$len = strlen( $needle );
+
+		return 0 === substr_compare( $haystack, $needle, -$len, $len );
+	}
+}
+
 // IMAGETYPE_WEBP constant is only defined in PHP 7.1 or later.
 if ( ! defined( 'IMAGETYPE_WEBP' ) ) {
 	define( 'IMAGETYPE_WEBP', 18 );
@@ -569,5 +495,5 @@ if ( ! defined( 'IMAGETYPE_WEBP' ) ) {
 
 // IMG_WEBP constant is only defined in PHP 7.0.10 or later.
 if ( ! defined( 'IMG_WEBP' ) ) {
-	define( 'IMG_WEBP', IMAGETYPE_WEBP ); // phpcs:ignore PHPCompatibility.Constants.NewConstants.imagetype_webpFound
+	define( 'IMG_WEBP', IMAGETYPE_WEBP );
 }

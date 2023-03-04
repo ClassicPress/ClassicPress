@@ -18,7 +18,7 @@
  *
  * @author  Örjan Persson <o@42mm.org>
  * @package Text_Diff
- * @since   TextDiff 0.2.0
+ * @since   0.2.0
  */
 class Text_Diff_Engine_string {
 

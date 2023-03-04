@@ -12,12 +12,15 @@
  *
  * @since 3.1.0
  */
+#[AllowDynamicProperties]
 class WP_Admin_Bar {
 	private $nodes = array();
 	private $bound = false;
 	public $user;
 
 	/**
+	 * @since 3.3.0
+	 *
 	 * @param string $name
 	 * @return string|array|void
 	 */
@@ -33,6 +36,9 @@ class WP_Admin_Bar {
 	}
 
 	/**
+	 * Initializes the admin bar.
+	 *
+	 * @since 3.1.0
 	 */
 	public function initialize() {
 		$this->user = new stdClass;
@@ -57,7 +63,7 @@ class WP_Admin_Bar {
 
 		if ( current_theme_supports( 'admin-bar' ) ) {
 			/**
-			 * To remove the default padding styles from ClassicPress for the Toolbar, use the following code:
+			 * To remove the default padding styles from WordPress for the Toolbar, use the following code:
 			 * add_theme_support( 'admin-bar', array( 'callback' => '__return_false' ) );
 			 */
 			$admin_bar_args  = get_theme_support( 'admin-bar' );
@@ -82,14 +88,22 @@ class WP_Admin_Bar {
 	}
 
 	/**
-	 * @param array $node
+	 * Adds a node (menu item) to the admin bar menu.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param array $node The attributes that define the node.
 	 */
 	public function add_menu( $node ) {
 		$this->add_node( $node );
 	}
 
 	/**
-	 * @param string $id
+	 * Removes a node from the admin bar.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string $id The menu slug to remove.
 	 */
 	public function remove_menu( $id ) {
 		$this->remove_node( $id );
@@ -114,9 +128,9 @@ class WP_Admin_Bar {
 	 * }
 	 */
 	public function add_node( $args ) {
-		// Shim for old method signature: add_node( $parent_id, $menu_obj, $args )
-		if ( func_num_args() >= 3 && is_string( func_get_arg( 0 ) ) ) {
-			$args = array_merge( array( 'parent' => func_get_arg( 0 ) ), func_get_arg( 2 ) );
+		// Shim for old method signature: add_node( $parent_id, $menu_obj, $args ).
+		if ( func_num_args() >= 3 && is_string( $args ) ) {
+			$args = array_merge( array( 'parent' => $args ), func_get_arg( 2 ) );
 		}
 
 		if ( is_object( $args ) ) {
@@ -171,6 +185,8 @@ class WP_Admin_Bar {
 	}
 
 	/**
+	 * @since 3.3.0
+	 *
 	 * @param array $args
 	 */
 	final protected function _set_node( $args ) {
@@ -180,8 +196,10 @@ class WP_Admin_Bar {
 	/**
 	 * Gets a node.
 	 *
+	 * @since 3.3.0
+	 *
 	 * @param string $id
-	 * @return object Node.
+	 * @return object|void Node.
 	 */
 	final public function get_node( $id ) {
 		$node = $this->_get_node( $id );
@@ -191,6 +209,8 @@ class WP_Admin_Bar {
 	}
 
 	/**
+	 * @since 3.3.0
+	 *
 	 * @param string $id
 	 * @return object|void
 	 */
@@ -209,6 +229,8 @@ class WP_Admin_Bar {
 	}
 
 	/**
+	 * @since 3.3.0
+	 *
 	 * @return array|void
 	 */
 	final public function get_nodes() {
@@ -224,6 +246,8 @@ class WP_Admin_Bar {
 	}
 
 	/**
+	 * @since 3.3.0
+	 *
 	 * @return array|void
 	 */
 	final protected function _get_nodes() {
@@ -235,7 +259,9 @@ class WP_Admin_Bar {
 	}
 
 	/**
-	 * Add a group to a menu node.
+	 * Adds a group to a toolbar menu node.
+	 *
+	 * Groups can be used to organize toolbar items into distinct sections of a toolbar menu.
 	 *
 	 * @since 3.3.0
 	 *
@@ -257,6 +283,8 @@ class WP_Admin_Bar {
 	/**
 	 * Remove a node.
 	 *
+	 * @since 3.1.0
+	 *
 	 * @param string $id The ID of the item.
 	 */
 	public function remove_node( $id ) {
@@ -264,6 +292,8 @@ class WP_Admin_Bar {
 	}
 
 	/**
+	 * @since 3.3.0
+	 *
 	 * @param string $id
 	 */
 	final protected function _unset_node( $id ) {
@@ -271,6 +301,7 @@ class WP_Admin_Bar {
 	}
 
 	/**
+	 * @since 3.1.0
 	 */
 	public function render() {
 		$root = $this->_bind();
@@ -280,6 +311,8 @@ class WP_Admin_Bar {
 	}
 
 	/**
+	 * @since 3.3.0
+	 *
 	 * @return object|void
 	 */
 	final protected function _bind() {
@@ -416,34 +449,24 @@ class WP_Admin_Bar {
 	}
 
 	/**
+	 * @since 3.3.0
 	 *
-	 * @global bool $is_IE
 	 * @param object $root
 	 */
 	final protected function _render( $root ) {
-		global $is_IE;
-
 		// Add browser classes.
 		// We have to do this here since admin bar shows on the front end.
 		$class = 'nojq nojs';
-		if ( $is_IE ) {
-			if ( strpos( $_SERVER['HTTP_USER_AGENT'], 'MSIE 7' ) ) {
-				$class .= ' ie7';
-			} elseif ( strpos( $_SERVER['HTTP_USER_AGENT'], 'MSIE 8' ) ) {
-				$class .= ' ie8';
-			} elseif ( strpos( $_SERVER['HTTP_USER_AGENT'], 'MSIE 9' ) ) {
-				$class .= ' ie9';
-			}
-		} elseif ( wp_is_mobile() ) {
+		if ( wp_is_mobile() ) {
 			$class .= ' mobile';
 		}
 
 		?>
 		<div id="wpadminbar" class="<?php echo $class; ?>">
-			<?php if ( ! is_admin() ) { ?>
+			<?php if ( ! is_admin() && ! did_action( 'wp_body_open' ) ) { ?>
 				<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1"><?php _e( 'Skip to toolbar' ); ?></a>
 			<?php } ?>
-			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="<?php esc_attr_e( 'Toolbar' ); ?>" tabindex="0">
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="<?php esc_attr_e( 'Toolbar' ); ?>">
 				<?php
 				foreach ( $root->children as $group ) {
 					$this->_render_group( $group );
@@ -459,6 +482,8 @@ class WP_Admin_Bar {
 	}
 
 	/**
+	 * @since 3.3.0
+	 *
 	 * @param object $node
 	 */
 	final protected function _render_container( $node ) {
@@ -474,6 +499,8 @@ class WP_Admin_Bar {
 	}
 
 	/**
+	 * @since 3.3.0
+	 *
 	 * @param object $node
 	 */
 	final protected function _render_group( $node ) {
@@ -499,6 +526,8 @@ class WP_Admin_Bar {
 	}
 
 	/**
+	 * @since 3.3.0
+	 *
 	 * @param object $node
 	 */
 	final protected function _render_item( $node ) {
@@ -506,14 +535,17 @@ class WP_Admin_Bar {
 			return;
 		}
 
-		$is_parent = ! empty( $node->children );
-		$has_link  = ! empty( $node->href );
+		$is_parent             = ! empty( $node->children );
+		$has_link              = ! empty( $node->href );
+		$is_root_top_item      = 'root-default' === $node->parent;
+		$is_top_secondary_item = 'top-secondary' === $node->parent;
 
 		// Allow only numeric values, then casted to integers, and allow a tabindex value of `0` for a11y.
 		$tabindex        = ( isset( $node->meta['tabindex'] ) && is_numeric( $node->meta['tabindex'] ) ) ? (int) $node->meta['tabindex'] : '';
 		$aria_attributes = ( '' !== $tabindex ) ? ' tabindex="' . $tabindex . '"' : '';
 
 		$menuclass = '';
+		$arrow     = '';
 
 		if ( $is_parent ) {
 			$menuclass        = 'menupop ';
@@ -522,6 +554,11 @@ class WP_Admin_Bar {
 
 		if ( ! empty( $node->meta['class'] ) ) {
 			$menuclass .= $node->meta['class'];
+		}
+
+		// Print the arrow icon for the menu children with children.
+		if ( ! $is_root_top_item && ! $is_top_secondary_item && $is_parent ) {
+			$arrow = '<span class="wp-admin-bar-arrow" aria-hidden="true"></span>';
 		}
 
 		if ( $menuclass ) {
@@ -534,7 +571,7 @@ class WP_Admin_Bar {
 			$attributes = array( 'onclick', 'target', 'title', 'rel', 'lang', 'dir' );
 			echo "<a class='ab-item'$aria_attributes href='" . esc_url( $node->href ) . "'";
 		} else {
-			$attributes = array( 'title', 'lang', 'dir' );
+			$attributes = array( 'onclick', 'target', 'title', 'rel', 'lang', 'dir' );
 			echo '<div class="ab-item ab-empty-item"' . $aria_attributes;
 		}
 
@@ -550,7 +587,7 @@ class WP_Admin_Bar {
 			}
 		}
 
-		echo ">{$node->title}";
+		echo ">{$arrow}{$node->title}";
 
 		if ( $has_link ) {
 			echo '</a>';
@@ -590,14 +627,18 @@ class WP_Admin_Bar {
 	}
 
 	/**
+	 * Adds menus to the admin bar.
+	 *
+	 * @since 3.1.0
 	 */
 	public function add_menus() {
-		// User related, aligned right.
+		// User-related, aligned right.
 		add_action( 'admin_bar_menu', 'wp_admin_bar_my_account_menu', 0 );
 		add_action( 'admin_bar_menu', 'wp_admin_bar_search_menu', 4 );
 		add_action( 'admin_bar_menu', 'wp_admin_bar_my_account_item', 7 );
+		add_action( 'admin_bar_menu', 'wp_admin_bar_recovery_mode_menu', 8 );
 
-		// Site related.
+		// Site-related.
 		add_action( 'admin_bar_menu', 'wp_admin_bar_sidebar_toggle', 0 );
 		add_action( 'admin_bar_menu', 'wp_admin_bar_wp_menu', 10 );
 		add_action( 'admin_bar_menu', 'wp_admin_bar_my_sites_menu', 20 );
@@ -605,7 +646,7 @@ class WP_Admin_Bar {
 		add_action( 'admin_bar_menu', 'wp_admin_bar_customize_menu', 40 );
 		add_action( 'admin_bar_menu', 'wp_admin_bar_updates_menu', 50 );
 
-		// Content related.
+		// Content-related.
 		if ( ! is_network_admin() && ! is_user_admin() ) {
 			add_action( 'admin_bar_menu', 'wp_admin_bar_comments_menu', 60 );
 			add_action( 'admin_bar_menu', 'wp_admin_bar_new_content_menu', 70 );

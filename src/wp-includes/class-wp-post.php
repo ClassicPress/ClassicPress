@@ -14,11 +14,11 @@
  *
  * @property string $page_template
  *
- * @property-read array  $ancestors
- * @property-read int    $post_category
- * @property-read string $tag_input
- *
+ * @property-read int[]    $ancestors
+ * @property-read int[]    $post_category
+ * @property-read string[] $tags_input
  */
+#[AllowDynamicProperties]
 final class WP_Post {
 
 	/**
@@ -223,9 +223,8 @@ final class WP_Post {
 	 * Retrieve WP_Post instance.
 	 *
 	 * @since 3.5.0
-	 * @static
 	 *
-	 * @global wpdb $wpdb ClassicPress database abstraction object.
+	 * @global wpdb $wpdb WordPress database abstraction object.
 	 *
 	 * @param int $post_id Post ID.
 	 * @return WP_Post|false Post object, false otherwise.
@@ -249,7 +248,7 @@ final class WP_Post {
 
 			$_post = sanitize_post( $_post, 'raw' );
 			wp_cache_add( $_post->ID, $_post, 'posts' );
-		} elseif ( empty( $_post->filter ) ) {
+		} elseif ( empty( $_post->filter ) || 'raw' !== $_post->filter ) {
 			$_post = sanitize_post( $_post, 'raw' );
 		}
 
@@ -278,19 +277,19 @@ final class WP_Post {
 	 * @return bool
 	 */
 	public function __isset( $key ) {
-		if ( 'ancestors' == $key ) {
+		if ( 'ancestors' === $key ) {
 			return true;
 		}
 
-		if ( 'page_template' == $key ) {
+		if ( 'page_template' === $key ) {
 			return true;
 		}
 
-		if ( 'post_category' == $key ) {
+		if ( 'post_category' === $key ) {
 			return true;
 		}
 
-		if ( 'tags_input' == $key ) {
+		if ( 'tags_input' === $key ) {
 			return true;
 		}
 
@@ -306,11 +305,11 @@ final class WP_Post {
 	 * @return mixed
 	 */
 	public function __get( $key ) {
-		if ( 'page_template' == $key && $this->__isset( $key ) ) {
+		if ( 'page_template' === $key && $this->__isset( $key ) ) {
 			return get_post_meta( $this->ID, '_wp_page_template', true );
 		}
 
-		if ( 'post_category' == $key ) {
+		if ( 'post_category' === $key ) {
 			if ( is_object_in_taxonomy( $this->post_type, 'category' ) ) {
 				$terms = get_the_terms( $this, 'category' );
 			}
@@ -322,7 +321,7 @@ final class WP_Post {
 			return wp_list_pluck( $terms, 'term_id' );
 		}
 
-		if ( 'tags_input' == $key ) {
+		if ( 'tags_input' === $key ) {
 			if ( is_object_in_taxonomy( $this->post_type, 'post_tag' ) ) {
 				$terms = get_the_terms( $this, 'post_tag' );
 			}
@@ -335,7 +334,7 @@ final class WP_Post {
 		}
 
 		// Rest of the values need filtering.
-		if ( 'ancestors' == $key ) {
+		if ( 'ancestors' === $key ) {
 			$value = get_post_ancestors( $this );
 		} else {
 			$value = get_post_meta( $this->ID, $key, true );
@@ -354,14 +353,14 @@ final class WP_Post {
 	 * @since 3.5.0
 	 *
 	 * @param string $filter Filter.
-	 * @return self|array|bool|object|WP_Post
+	 * @return WP_Post
 	 */
 	public function filter( $filter ) {
-		if ( $this->filter == $filter ) {
+		if ( $this->filter === $filter ) {
 			return $this;
 		}
 
-		if ( $filter == 'raw' ) {
+		if ( 'raw' === $filter ) {
 			return self::get_instance( $this->ID );
 		}
 

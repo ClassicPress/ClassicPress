@@ -26,6 +26,7 @@ class WP_Widget_Recent_Comments extends WP_Widget {
 			'classname'                   => 'widget_recent_comments',
 			'description'                 => __( 'Your site&#8217;s most recent comments.' ),
 			'customize_selective_refresh' => true,
+			'show_instance_in_rest'       => true,
 		);
 		parent::__construct( 'recent-comments', __( 'Recent Comments' ), $widget_ops );
 		$this->alt_option_name = 'widget_recent_comments';
@@ -49,7 +50,7 @@ class WP_Widget_Recent_Comments extends WP_Widget {
 		 * @param bool   $active  Whether the widget is active. Default true.
 		 * @param string $id_base The widget ID.
 		 */
-		if ( ! current_theme_supports( 'widgets' ) // Temp hack https://core.trac.wordpress.org/ticket/14876
+		if ( ! current_theme_supports( 'widgets' ) // Temp hack #14876.
 			|| ! apply_filters( 'show_recent_comments_widget_style', true, $this->id_base ) ) {
 			return;
 		}
@@ -66,19 +67,24 @@ class WP_Widget_Recent_Comments extends WP_Widget {
 	 * Outputs the content for the current Recent Comments widget instance.
 	 *
 	 * @since 2.8.0
+	 * @since 5.4.0 Creates a unique HTML ID for the `<ul>` element
+	 *              if more than one instance is displayed on the page.
 	 *
 	 * @param array $args     Display arguments including 'before_title', 'after_title',
 	 *                        'before_widget', and 'after_widget'.
 	 * @param array $instance Settings for the current Recent Comments widget instance.
 	 */
 	public function widget( $args, $instance ) {
+		static $first_instance = true;
+
 		if ( ! isset( $args['widget_id'] ) ) {
 			$args['widget_id'] = $this->id;
 		}
 
 		$output = '';
 
-		$title = ( ! empty( $instance['title'] ) ) ? $instance['title'] : __( 'Recent Comments' );
+		$default_title = __( 'Recent Comments' );
+		$title         = ( ! empty( $instance['title'] ) ) ? $instance['title'] : $default_title;
 
 		/** This filter is documented in wp-includes/widgets/class-wp-widget-pages.php */
 		$title = apply_filters( 'widget_title', $title, $instance, $this->id_base );
@@ -88,18 +94,18 @@ class WP_Widget_Recent_Comments extends WP_Widget {
 			$number = 5;
 		}
 
-		/**
-		 * Filters the arguments for the Recent Comments widget.
-		 *
-		 * @since 3.4.0
-		 * @since 4.9.0 Added the `$instance` parameter.
-		 *
-		 * @see WP_Comment_Query::query() for information on accepted arguments.
-		 *
-		 * @param array $comment_args An array of arguments used to retrieve the recent comments.
-		 * @param array $instance     Array of settings for the current widget.
-		 */
 		$comments = get_comments(
+			/**
+			 * Filters the arguments for the Recent Comments widget.
+			 *
+			 * @since 3.4.0
+			 * @since 4.9.0 Added the `$instance` parameter.
+			 *
+			 * @see WP_Comment_Query::query() for information on accepted arguments.
+			 *
+			 * @param array $comment_args An array of arguments used to retrieve the recent comments.
+			 * @param array $instance     Array of settings for the current widget.
+			 */
 			apply_filters(
 				'widget_comments_args',
 				array(
@@ -116,7 +122,22 @@ class WP_Widget_Recent_Comments extends WP_Widget {
 			$output .= $args['before_title'] . $title . $args['after_title'];
 		}
 
-		$output .= '<ul id="recentcomments">';
+		$recent_comments_id = ( $first_instance ) ? 'recentcomments' : "recentcomments-{$this->number}";
+		$first_instance     = false;
+
+		$format = current_theme_supports( 'html5', 'navigation-widgets' ) ? 'html5' : 'xhtml';
+
+		/** This filter is documented in wp-includes/widgets/class-wp-nav-menu-widget.php */
+		$format = apply_filters( 'navigation_widgets_format', $format );
+
+		if ( 'html5' === $format ) {
+			// The title may be filtered: Strip out HTML and make sure the aria-label is never empty.
+			$title      = trim( strip_tags( $title ) );
+			$aria_label = $title ? $title : $default_title;
+			$output    .= '<nav aria-label="' . esc_attr( $aria_label ) . '">';
+		}
+
+		$output .= '<ul id="' . esc_attr( $recent_comments_id ) . '">';
 		if ( is_array( $comments ) && $comments ) {
 			// Prime cache for associated posts. (Prime post term cache if we need it for permalinks.)
 			$post_ids = array_unique( wp_list_pluck( $comments, 'comment_post_ID' ) );
@@ -124,8 +145,8 @@ class WP_Widget_Recent_Comments extends WP_Widget {
 
 			foreach ( (array) $comments as $comment ) {
 				$output .= '<li class="recentcomments">';
-				/* translators: comments widget: 1: comment author, 2: post link */
 				$output .= sprintf(
+					/* translators: Comments widget. 1: Comment author, 2: Post link. */
 					_x( '%1$s on %2$s', 'widgets' ),
 					'<span class="comment-author-link">' . get_comment_author_link( $comment ) . '</span>',
 					'<a href="' . esc_url( get_comment_link( $comment ) ) . '">' . get_the_title( $comment->comment_post_ID ) . '</a>'
@@ -134,6 +155,11 @@ class WP_Widget_Recent_Comments extends WP_Widget {
 			}
 		}
 		$output .= '</ul>';
+
+		if ( 'html5' === $format ) {
+			$output .= '</nav>';
+		}
+
 		$output .= $args['after_widget'];
 
 		echo $output;

@@ -166,7 +166,7 @@ if ( !function_exists('wp_login') ) :
  * @param string $username   User's username
  * @param string $password   User's password
  * @param string $deprecated Not used
- * @return bool False on login failure, true on successful check
+ * @return bool True on successful check, false on login failure.
  */
 function wp_login($username, $password, $deprecated = '') {
 	_deprecated_function( __FUNCTION__, '2.5.0', 'wp_signon()' );
@@ -185,7 +185,7 @@ else :
 endif;
 
 /**
- * ClassicPress AtomPub API implementation.
+ * WordPress AtomPub API implementation.
  *
  * Originally stored in wp-app.php, and later wp-includes/class-wp-atom-server.php.
  * It is kept here in case a plugin directly referred to the class.
