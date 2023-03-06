@@ -6,7 +6,7 @@
 		eventsFired = 0;
 
 	// Fail if we don't see the expected number of events triggered in 3 seconds.
-	setTimeout( function() {
+	setTimeout( function( assert ) {
 		// QUnit may load this file without running it, in which case `assert`
 		// will never be set to `assertPassed` below.
 		assert && assert.equal(
@@ -22,6 +22,20 @@
 		assert.expect( 3 );
 
 		var testString = '<div>Hello World</div>';
+
+		// Mock global menus.
+		if ( ! window.hasOwnProperty( 'menus' ) ) {
+			window.menus = {
+				'itemAdded': false,
+				'itemDeleted': false
+			};
+		}
+
+		// Mock global wp.a11y.
+		window.wp = window.wp || {};
+		window.wp.a11y = {
+			'speak': function() {}
+		};
 
 		// Mock the internal function calls so the don't fail.
 		$.fn.hideAdvancedMenuItemFields = function() {
