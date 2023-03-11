@@ -548,7 +548,7 @@ class WP_Theme_Install_List_Table extends WP_Themes_List_Table {
 	 *
 	 * @since 3.4.0
 	 *
-	 * @param object $theme - A ClassicPress.net Theme API object.
+	 * @param stdClass $theme A WordPress.org Theme API object.
 	 * @return string Theme status.
 	 */
 	private function _get_theme_status( $theme ) {

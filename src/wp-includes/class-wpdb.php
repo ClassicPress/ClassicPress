@@ -1032,7 +1032,7 @@ class wpdb {
 	 * @since 3.0.0
 	 *
 	 * @param int $blog_id
-	 * @param int $network_id Optional.
+	 * @param int $network_id Optional. Network ID. Default 0.
 	 * @return int Previous blog ID.
 	 */
 	public function set_blog_id( $blog_id, $network_id = 0 ) {
@@ -1061,7 +1061,8 @@ class wpdb {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @param int $blog_id Optional.
+	 * @param int $blog_id Optional. Blog ID to retrieve the table prefix for.
+	 *                     Defaults to the current blog ID.
 	 * @return string Blog prefix.
 	 */
 	public function get_blog_prefix( $blog_id = null ) {
@@ -1180,7 +1181,8 @@ class wpdb {
 	 * @since 0.71
 	 *
 	 * @param string          $db  Database name.
-	 * @param mysqli|resource $dbh Optional database connection.
+	 * @param mysqli|resource $dbh Optional. Database connection.
+	 *                             Defaults to the current database handle.
 	 */
 	public function select( $db, $dbh = null ) {
 		if ( is_null( $dbh ) ) {
@@ -1225,7 +1227,7 @@ class wpdb {
 
 				$message .= '<p>' . sprintf(
 					/* translators: %s: Support forums URL. */
-					__( 'If you do not know how to set up a database you should <strong>contact your host</strong>. If all else fails you may find help at the <a href="%s">WordPress Support Forums</a>.' ),
+					__( 'If you do not know how to set up a database you should <strong>contact your host</strong>. If all else fails you may find help at the <a href="%s">Support forums</a>.' ),
 					__( 'https://wordpress.org/support/forums/' )
 				) . "</p>\n";
 
@@ -1244,14 +1246,14 @@ class wpdb {
 	 * @see wpdb::prepare()
 	 * @see esc_sql()
 	 *
-	 * @param string $string
+	 * @param string $data
 	 * @return string
 	 */
-	public function _weak_escape( $string ) {
+	public function _weak_escape( $data ) {
 		if ( func_num_args() === 1 && function_exists( '_deprecated_function' ) ) {
 			_deprecated_function( __METHOD__, '3.6.0', 'wpdb::prepare() or esc_sql()' );
 		}
-		return addslashes( $string );
+		return addslashes( $data );
 	}
 
 	/**
@@ -1262,19 +1264,19 @@ class wpdb {
 	 * @see mysqli_real_escape_string()
 	 * @see mysql_real_escape_string()
 	 *
-	 * @param string $string String to escape.
+	 * @param string $data String to escape.
 	 * @return string Escaped string.
 	 */
-	public function _real_escape( $string ) {
-		if ( ! is_scalar( $string ) ) {
+	public function _real_escape( $data ) {
+		if ( ! is_scalar( $data ) ) {
 			return '';
 		}
 
 		if ( $this->dbh ) {
 			if ( $this->use_mysqli ) {
-				$escaped = mysqli_real_escape_string( $this->dbh, $string );
+				$escaped = mysqli_real_escape_string( $this->dbh, $data );
 			} else {
-				$escaped = mysql_real_escape_string( $string, $this->dbh );
+				$escaped = mysql_real_escape_string( $data, $this->dbh );
 			}
 		} else {
 			$class = get_class( $this );
@@ -1283,7 +1285,7 @@ class wpdb {
 			/* translators: %s: Database access abstraction class, usually wpdb or a class extending wpdb. */
 			_doing_it_wrong( $class, sprintf( __( '%s must set a database connection for use with escaping.' ), $class ), '3.6.0' );
 
-			$escaped = addslashes( $string );
+			$escaped = addslashes( $data );
 		}
 
 		return $this->add_placeholder_escape( $escaped );
@@ -1354,11 +1356,11 @@ class wpdb {
 	 *
 	 * @since 2.3.0
 	 *
-	 * @param string $string String to escape.
+	 * @param string $data String to escape.
 	 */
-	public function escape_by_ref( &$string ) {
-		if ( ! is_float( $string ) ) {
-			$string = $this->_real_escape( $string );
+	public function escape_by_ref( &$data ) {
+		if ( ! is_float( $data ) ) {
+			$data = $this->_real_escape( $data );
 		}
 	}
 
@@ -1837,7 +1839,7 @@ class wpdb {
 
 			$message .= '<p>' . sprintf(
 				/* translators: %s: Support forums URL. */
-				__( 'If you are unsure what these terms mean you should probably contact your host. If you still need help you can always visit the <a href="%s">WordPress Support Forums</a>.' ),
+				__( 'If you are unsure what these terms mean you should probably contact your host. If you still need help you can always visit the <a href="%s">Support forums</a>.' ),
 				__( 'https://wordpress.org/support/forums/' )
 			) . "</p>\n";
 
@@ -1997,7 +1999,7 @@ class wpdb {
 
 		$message .= '<p>' . sprintf(
 			/* translators: %s: Support forums URL. */
-			__( 'If you are unsure what these terms mean you should probably contact your host. If you still need help you can always visit the <a href="%s">WordPress Support Forums</a>.' ),
+			__( 'If you are unsure what these terms mean you should probably contact your host. If you still need help you can always visit the <a href="%s">Support forums</a>.' ),
 			__( 'https://wordpress.org/support/forums/' )
 		) . "</p>\n";
 
@@ -2319,7 +2321,7 @@ class wpdb {
 	 *                             If string, that format will be used for all of the values in $data.
 	 *                             A format is one of '%d', '%f', '%s' (integer, float, string).
 	 *                             If omitted, all values in $data will be treated as strings unless otherwise
-	 *                             specified in wpdb::$field_types.
+	 *                             specified in wpdb::$field_types. Default null.
 	 * @return int|false The number of rows inserted, or false on error.
 	 */
 	public function insert( $table, $data, $format = null ) {
@@ -2349,7 +2351,7 @@ class wpdb {
 	 *                             If string, that format will be used for all of the values in $data.
 	 *                             A format is one of '%d', '%f', '%s' (integer, float, string).
 	 *                             If omitted, all values in $data will be treated as strings unless otherwise
-	 *                             specified in wpdb::$field_types.
+	 *                             specified in wpdb::$field_types. Default null.
 	 * @return int|false The number of rows affected, or false on error.
 	 */
 	public function replace( $table, $data, $format = null ) {
@@ -2376,7 +2378,7 @@ class wpdb {
 	 *                             If string, that format will be used for all of the values in $data.
 	 *                             A format is one of '%d', '%f', '%s' (integer, float, string).
 	 *                             If omitted, all values in $data will be treated as strings unless otherwise
-	 *                             specified in wpdb::$field_types.
+	 *                             specified in wpdb::$field_types. Default null.
 	 * @param string       $type   Optional. Type of operation. Possible values include 'INSERT' or 'REPLACE'.
 	 *                             Default 'INSERT'.
 	 * @return int|false The number of rows affected, or false on error.
@@ -2442,11 +2444,11 @@ class wpdb {
 	 *                                   If string, that format will be used for all of the values in $data.
 	 *                                   A format is one of '%d', '%f', '%s' (integer, float, string).
 	 *                                   If omitted, all values in $data will be treated as strings unless otherwise
-	 *                                   specified in wpdb::$field_types.
+	 *                                   specified in wpdb::$field_types. Default null.
 	 * @param array|string $where_format Optional. An array of formats to be mapped to each of the values in $where.
 	 *                                   If string, that format will be used for all of the items in $where.
 	 *                                   A format is one of '%d', '%f', '%s' (integer, float, string).
-	 *                                   If omitted, all values in $where will be treated as strings.
+	 *                                   If omitted, all values in $where will be treated as strings. Default null.
 	 * @return int|false The number of rows updated, or false on error.
 	 */
 	public function update( $table, $data, $where, $format = null, $where_format = null ) {
@@ -2518,7 +2520,7 @@ class wpdb {
 	 *                                   If string, that format will be used for all of the items in $where.
 	 *                                   A format is one of '%d', '%f', '%s' (integer, float, string).
 	 *                                   If omitted, all values in $data will be treated as strings unless otherwise
-	 *                                   specified in wpdb::$field_types.
+	 *                                   specified in wpdb::$field_types. Default null.
 	 * @return int|false The number of rows deleted, or false on error.
 	 */
 	public function delete( $table, $where, $where_format = null ) {
@@ -2725,8 +2727,8 @@ class wpdb {
 	 * @since 0.71
 	 *
 	 * @param string|null $query Optional. SQL query. Defaults to null, use the result from the previous query.
-	 * @param int         $x     Optional. Column of value to return. Indexed from 0.
-	 * @param int         $y     Optional. Row of value to return. Indexed from 0.
+	 * @param int         $x     Optional. Column of value to return. Indexed from 0. Default 0.
+	 * @param int         $y     Optional. Row of value to return. Indexed from 0. Default 0.
 	 * @return string|null Database query result (as string), or null on failure.
 	 */
 	public function get_var( $query = null, $x = 0, $y = 0 ) {
@@ -2760,7 +2762,7 @@ class wpdb {
 	 * @param string      $output Optional. The required return type. One of OBJECT, ARRAY_A, or ARRAY_N, which
 	 *                            correspond to an stdClass object, an associative array, or a numeric array,
 	 *                            respectively. Default OBJECT.
-	 * @param int         $y      Optional. Row to return. Indexed from 0.
+	 * @param int         $y      Optional. Row to return. Indexed from 0. Default 0.
 	 * @return array|object|null|void Database query result in format specified by $output or null on failure.
 	 */
 	public function get_row( $query = null, $output = OBJECT, $y = 0 ) {
@@ -2804,7 +2806,7 @@ class wpdb {
 	 * @since 0.71
 	 *
 	 * @param string|null $query Optional. SQL query. Defaults to previous query.
-	 * @param int         $x     Optional. Column to return. Indexed from 0.
+	 * @param int         $x     Optional. Column to return. Indexed from 0. Default 0.
 	 * @return array Database query result. Array indexed from 0 by SQL result row number.
 	 */
 	public function get_col( $query = null, $x = 0 ) {
@@ -2841,6 +2843,7 @@ class wpdb {
 	 *                       or an object ( ->column = value ), respectively. With OBJECT_K,
 	 *                       return an associative array of row objects keyed by the value
 	 *                       of each row's first column's value. Duplicate keys are discarded.
+	 *                       Default OBJECT.
 	 * @return array|object|null Database query results.
 	 */
 	public function get_results( $query = null, $output = OBJECT ) {
@@ -3161,15 +3164,15 @@ class wpdb {
 	 *
 	 * @since 4.2.0
 	 *
-	 * @param string $string String to check.
+	 * @param string $input_string String to check.
 	 * @return bool True if ASCII, false if not.
 	 */
-	protected function check_ascii( $string ) {
+	protected function check_ascii( $input_string ) {
 		if ( function_exists( 'mb_check_encoding' ) ) {
-			if ( mb_check_encoding( $string, 'ASCII' ) ) {
+			if ( mb_check_encoding( $input_string, 'ASCII' ) ) {
 				return true;
 			}
-		} elseif ( ! preg_match( '/[^\x00-\x7F]/', $string ) ) {
+		} elseif ( ! preg_match( '/[^\x00-\x7F]/', $input_string ) ) {
 			return true;
 		}
 

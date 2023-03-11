@@ -65,7 +65,7 @@ class WP_Site_Health {
 	 */
 	public function show_site_health_tab( $tab ) {
 		if ( 'debug' === $tab ) {
-			require_once ABSPATH . '/wp-admin/site-health-info.php';
+			require_once ABSPATH . 'wp-admin/site-health-info.php';
 		}
 	}
 
@@ -242,7 +242,7 @@ class WP_Site_Health {
 	}
 
 	/**
-	 * Tests for ClassicPress version and outputs it.
+	 * Tests for WordPress version and outputs it.
 	 *
 	 * Gives various results depending on what kind of updates are available, if any, to encourage
 	 * the user to install security updates as a priority.
@@ -749,7 +749,7 @@ class WP_Site_Health {
 				'<p><a href="%s" target="_blank" rel="noopener">%s <span class="screen-reader-text">%s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a></p>',
 				esc_url( wp_get_update_php_url() ),
 				__( 'Learn more about updating PHP' ),
-				/* translators: Accessibility text. */
+				/* translators: Hidden accessibility text. */
 				__( '(opens in a new tab)' )
 			),
 			'test'        => 'php_version',
@@ -867,7 +867,7 @@ class WP_Site_Health {
 	/**
 	 * Tests if required PHP modules are installed on the host.
 	 *
-	 * This test builds on the recommendations made by the ClassicPress Hosting Team
+	 * This test builds on the recommendations made by the WordPress Hosting Team
 	 * as seen at https://make.wordpress.org/hosting/handbook/handbook/server-environment/#php-extensions
 	 *
 	 * @since 5.2.0
@@ -893,7 +893,7 @@ class WP_Site_Health {
 					'target="_blank" rel="noopener"',
 					sprintf(
 						' <span class="screen-reader-text">%s</span><span aria-hidden="true" class="dashicons dashicons-external"></span>',
-						/* translators: Accessibility text. */
+						/* translators: Hidden accessibility text. */
 						__( '(opens in a new tab)' )
 					)
 				)
@@ -1051,7 +1051,8 @@ class WP_Site_Health {
 				if ( $module['required'] ) {
 					$result['status'] = 'critical';
 
-					$class         = 'error';
+					$class = 'error';
+					/* translators: Hidden accessibility text. */
 					$screen_reader = __( 'Error' );
 					$message       = sprintf(
 						/* translators: %s: The module name. */
@@ -1059,7 +1060,8 @@ class WP_Site_Health {
 						$library
 					);
 				} else {
-					$class         = 'warning';
+					$class = 'warning';
+					/* translators: Hidden accessibility text. */
 					$screen_reader = __( 'Warning' );
 					$message       = sprintf(
 						/* translators: %s: The module name. */
@@ -1218,7 +1220,7 @@ class WP_Site_Health {
 				/* translators: Localized version of ClassicPress requirements if one exists. */
 				esc_url( __( 'https://wordpress.org/about/requirements/' ) ),
 				__( 'Learn more about what ClassicPress requires to run.' ),
-				/* translators: Accessibility text. */
+				/* translators: Hidden accessibility text. */
 				__( '(opens in a new tab)' )
 			),
 			'test'        => 'sql_server',
@@ -1283,6 +1285,8 @@ class WP_Site_Health {
 	 * Tests if the database server is capable of using utf8mb4.
 	 *
 	 * @since 5.2.0
+	 *
+	 * @global wpdb $wpdb WordPress database abstraction object.
 	 *
 	 * @return array The test results.
 	 */
@@ -1440,6 +1444,7 @@ class WP_Site_Health {
 				'<p>%s</p>',
 				sprintf(
 					'<span class="error"><span class="screen-reader-text">%s</span></span> %s',
+					/* translators: Hidden accessibility text. */
 					__( 'Error' ),
 					sprintf(
 						/* translators: 1: The IP address WordPress.org resolves to. 2: The error returned by the lookup. */
@@ -1455,7 +1460,7 @@ class WP_Site_Health {
 				/* translators: Localized Support reference. */
 				esc_url( __( 'https://wordpress.org/support' ) ),
 				__( 'Get help resolving this issue.' ),
-				/* translators: Accessibility text. */
+				/* translators: Hidden accessibility text. */
 				__( '(opens in a new tab)' )
 			);
 		}
@@ -1491,9 +1496,9 @@ class WP_Site_Health {
 			'actions'     => sprintf(
 				'<p><a href="%s" target="_blank" rel="noopener">%s <span class="screen-reader-text">%s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a></p>',
 				/* translators: Documentation explaining debugging in WordPress. */
-				esc_url( __( 'https://wordpress.org/support/article/debugging-in-wordpress/' ) ),
+				esc_url( __( 'https://wordpress.org/documentation/article/debugging-in-wordpress/' ) ),
 				__( 'Learn more about debugging in WordPress.' ),
-				/* translators: Accessibility text. */
+				/* translators: Hidden accessibility text. */
 				__( '(opens in a new tab)' )
 			),
 			'test'        => 'is_in_debug_mode',
@@ -1573,7 +1578,7 @@ class WP_Site_Health {
 				'<p><a href="%s" target="_blank" rel="noopener">%s<span class="screen-reader-text"> %s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a></p>',
 				esc_url( $default_update_url ),
 				__( 'Learn more about why you should use HTTPS' ),
-				/* translators: Accessibility text. */
+				/* translators: Hidden accessibility text. */
 				__( '(opens in a new tab)' )
 			),
 			'test'        => 'https_status',
@@ -1655,7 +1660,7 @@ class WP_Site_Health {
 							'<p class="button-container"><a class="button button-primary" href="%1$s" target="_blank" rel="noopener">%2$s<span class="screen-reader-text"> %3$s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a></p>',
 							esc_url( $direct_update_url ),
 							__( 'Update your site to use HTTPS' ),
-							/* translators: Accessibility text. */
+							/* translators: Hidden accessibility text. */
 							__( '(opens in a new tab)' )
 						);
 					} else {
@@ -1674,7 +1679,7 @@ class WP_Site_Health {
 						'<p><a href="%s" target="_blank" rel="noopener">%s<span class="screen-reader-text"> %s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a></p>',
 						esc_url( $update_url ),
 						__( 'Talk to your web host about supporting HTTPS for your website.' ),
-						/* translators: Accessibility text. */
+						/* translators: Hidden accessibility text. */
 						__( '(opens in a new tab)' )
 					);
 				} else {
@@ -1805,9 +1810,9 @@ class WP_Site_Health {
 	}
 
 	/**
-	 * Tests if ClassicPress can run automated background updates.
+	 * Tests if WordPress can run automated background updates.
 	 *
-	 * Background updates in ClassicPress are primarily used for minor releases and security updates.
+	 * Background updates in WordPress are primarily used for minor releases and security updates.
 	 * It's important to either have these working, or be aware that they are intentionally disabled
 	 * for whatever reason.
 	 *
@@ -1843,6 +1848,7 @@ class WP_Site_Health {
 		$output = '<ul>';
 
 		foreach ( $tests as $test ) {
+			/* translators: Hidden accessibility text. */
 			$severity_string = __( 'Passed' );
 
 			if ( 'fail' === $test->severity ) {
@@ -1850,6 +1856,7 @@ class WP_Site_Health {
 
 				$result['status'] = 'critical';
 
+				/* translators: Hidden accessibility text. */
 				$severity_string = __( 'Error' );
 			}
 
@@ -1858,6 +1865,7 @@ class WP_Site_Health {
 
 				$result['status'] = 'recommended';
 
+				/* translators: Hidden accessibility text. */
 				$severity_string = __( 'Warning' );
 			}
 
@@ -1920,7 +1928,7 @@ class WP_Site_Health {
 	/**
 	 * Tests if loopbacks work as expected.
 	 *
-	 * A loopback is when ClassicPress queries itself, for example to start a new WP_Cron instance,
+	 * A loopback is when WordPress queries itself, for example to start a new WP_Cron instance,
 	 * or when editing a plugin or theme. This has shown itself to be a recurring issue,
 	 * as code can very easily break this interaction.
 	 *
@@ -2290,7 +2298,7 @@ class WP_Site_Health {
 				'<p><a href="%s" target="_blank" rel="noopener">%s <span class="screen-reader-text">%s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a></p>',
 				__( 'https://developer.wordpress.org/rest-api/frequently-asked-questions/#why-is-authentication-not-working' ),
 				__( 'Learn how to configure the Authorization header.' ),
-				/* translators: Accessibility text. */
+				/* translators: Hidden accessibility text. */
 				__( '(opens in a new tab)' )
 			);
 		}
@@ -2321,9 +2329,9 @@ class WP_Site_Health {
 			'label'       => '',
 			'actions'     => sprintf(
 				'<p><a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s <span class="screen-reader-text">%3$s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a></p>',
-				__( 'https://wordpress.org/support/article/optimization/#Caching' ),
+				__( 'https://wordpress.org/documentation/article/optimization/#Caching' ),
 				__( 'Learn more about page cache' ),
-				/* translators: Accessibility text. */
+				/* translators: Hidden accessibility text. */
 				__( '(opens in a new tab)' )
 			),
 		);
@@ -2430,7 +2438,7 @@ class WP_Site_Health {
 		$action_url = apply_filters(
 			'site_status_persistent_object_cache_url',
 			/* translators: Localized Support reference. */
-			__( 'https://wordpress.org/support/article/optimization/#persistent-object-cache' )
+			__( 'https://wordpress.org/documentation/article/optimization/#persistent-object-cache' )
 		);
 
 		$result = array(
@@ -2449,7 +2457,7 @@ class WP_Site_Health {
 				'<p><a href="%s" target="_blank" rel="noopener">%s <span class="screen-reader-text">%s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a></p>',
 				esc_url( $action_url ),
 				__( 'Learn more about persistent object caching.' ),
-				/* translators: Accessibility text. */
+				/* translators: Hidden accessibility text. */
 				__( '(opens in a new tab)' )
 			),
 		);
@@ -2648,7 +2656,7 @@ class WP_Site_Health {
 		 * Filters which site status tests are run on a site.
 		 *
 		 * The site health is determined by a set of tests based on best practices from
-		 * both the ClassicPress Hosting Team and web standards in general.
+		 * both the WordPress Hosting Team and web standards in general.
 		 *
 		 * Some sites may not have the same requirements, for example the automatic update
 		 * checks may be handled by a host, and are therefore disabled in core.
@@ -2917,7 +2925,7 @@ class WP_Site_Health {
 	/**
 	 * Runs a loopback test on the site.
 	 *
-	 * Loopbacks are what ClassicPress uses to communicate with itself to start up WP_Cron, scheduled posts,
+	 * Loopbacks are what WordPress uses to communicate with itself to start up WP_Cron, scheduled posts,
 	 * make sure plugin or theme edits don't cause site failures and similar.
 	 *
 	 * @since 5.2.0
@@ -2948,7 +2956,7 @@ class WP_Site_Health {
 		 * - the loopback request finishes sooner providing a quicker result.
 		 *
 		 * Using a POST request causes the loopback to differ slightly to the standard
-		 * GET request ClassicPress uses for wp-cron.php loopback requests but is close
+		 * GET request WordPress uses for wp-cron.php loopback requests but is close
 		 * enough. See https://core.trac.wordpress.org/ticket/52547
 		 */
 		$r = wp_remote_post( $url, compact( 'body', 'cookies', 'headers', 'timeout', 'sslverify' ) );

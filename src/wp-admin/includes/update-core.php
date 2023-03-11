@@ -10,6 +10,8 @@
 /**
  * Stores files to be deleted.
  *
+ * Bundled theme files should not be included in this list.
+ *
  * @since 2.7.0
  *
  * @global array $_old_files
@@ -144,22 +146,33 @@ $_new_bundled_files = array(
  *
  * @since 2.7.0
  *
- * @global WP_Filesystem_Base $wp_filesystem          ClassicPress filesystem subclass.
+ * @global WP_Filesystem_Base $wp_filesystem          WordPress filesystem subclass.
  * @global array              $_old_files
+ * @global array              $_old_requests_files
  * @global array              $_new_bundled_files
- * @global wpdb               $wpdb                   ClassicPress database abstraction object.
+ * @global wpdb               $wpdb                   WordPress database abstraction object.
  * @global string             $wp_version
  * @global string             $required_php_version
  * @global string             $required_mysql_version
  *
  * @param string $from New release unzipped path.
- * @param string $to   Path to old ClassicPress installation.
+ * @param string $to   Path to old WordPress installation.
  * @return string|WP_Error New WordPress version on success, WP_Error on failure.
  */
 function update_core( $from, $to ) {
-	global $wp_filesystem, $_old_files, $_new_bundled_files, $wpdb;
+	global $wp_filesystem, $_old_files, $_old_requests_files, $_new_bundled_files, $wpdb;
 
-	set_time_limit( 300 );
+	if ( function_exists( 'set_time_limit' ) ) {
+		set_time_limit( 300 );
+	}
+
+	/*
+	 * Merge the old Requests files and directories into the `$_old_files`.
+	 * Then preload these Requests files first, before the files are deleted
+	 * and replaced to ensure the code is in memory if needed.
+	 */
+	$_old_files = array_merge( $_old_files, array_values( $_old_requests_files ) );
+	_preload_old_requests_classes_and_interfaces( $to );
 
 	/**
 	 * Filters feedback messages displayed during the core update process.
@@ -168,9 +181,9 @@ function update_core( $from, $to ) {
 	 * has been downloaded and unzipped. It is evaluated five more times during
 	 * the process:
 	 *
-	 * 1. Before ClassicPress begins the core upgrade process.
+	 * 1. Before WordPress begins the core upgrade process.
 	 * 2. Before Maintenance Mode is enabled.
-	 * 3. Before ClassicPress begins copying over the necessary files.
+	 * 3. Before WordPress begins copying over the necessary files.
 	 * 4. Before Maintenance Mode is disabled.
 	 * 5. Before the database is upgraded.
 	 *
@@ -581,7 +594,7 @@ function update_core( $from, $to ) {
 					// If a error occurs partway through this final step, keep the error flowing through, but keep process going.
 					if ( is_wp_error( $_result ) ) {
 						if ( ! is_wp_error( $result ) ) {
-							$result = new WP_Error;
+							$result = new WP_Error();
 						}
 
 						$result->add(
@@ -656,7 +669,7 @@ function update_core( $from, $to ) {
 	 */
 	do_action( '_core_updated_successfully', $wp_version );
 
-	// Clear the option that blocks auto updates after failures, now that we've been successful.
+	// Clear the option that blocks auto-updates after failures, now that we've been successful.
 	if ( function_exists( 'delete_site_option' ) ) {
 		delete_site_option( 'auto_core_update_failed' );
 	}

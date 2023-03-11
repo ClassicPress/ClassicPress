@@ -39,7 +39,7 @@ function _usort_by_first_member( $a, $b ) {
 }
 
 /**
- * Register importer for ClassicPress.
+ * Registers importer for ClassicPress.
  *
  * @since 2.0.0
  *

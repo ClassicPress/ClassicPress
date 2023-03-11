@@ -25,7 +25,7 @@ $timezone_format = _x( 'Y-m-d H:i:s', 'timezone date format' );
 add_action( 'admin_head', 'options_general_add_js' );
 
 $options_help = '<p>' . __( 'The fields on this screen determine some of the basics of your site setup.' ) . '</p>' .
-	'<p>' . __( 'Most themes display the site title at the top of every page, in the title bar of the browser, and as the identifying name for syndicated feeds. The tagline is also displayed by many themes.' ) . '</p>';
+	'<p>' . __( 'Most themes show the site title at the top of every page, in the title bar of the browser, and as the identifying name for syndicated feeds. Many themes also show the tagline.' ) . '</p>';
 
 if ( ! is_multisite() ) {
 	$options_help .= '<p>' . __( 'The ClassicPress URL and the site URL can be the same (example.com) or different; for example, having the ClassicPress core files (example.com/classicpress) in a subdirectory instead of the root directory.' ) . '</p>' .
@@ -46,8 +46,8 @@ get_current_screen()->add_help_tab(
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-	'<p>' . __( '<a href="https://wordpress.org/support/article/settings-general-screen/">Documentation on General Settings</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support Forums</a>' ) . '</p>'
+	'<p>' . __( '<a href="https://wordpress.org/documentation/article/settings-general-screen/">Documentation on General Settings</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://wordpress.org/support/forums/">Support forums</a>' ) . '</p>'
 );
 
 require_once ABSPATH . 'wp-admin/admin-header.php';
@@ -105,8 +105,8 @@ if ( ! is_multisite() ) {
 		<?php
 		printf(
 			/* translators: %s: Documentation URL. */
-			__( 'Enter the address here if you <a href="%s">want your site home page to be different from your WordPress installation directory</a>.' ),
-			__( 'https://wordpress.org/support/article/giving-wordpress-its-own-directory/' )
+			__( 'Enter the same address here unless you <a href="%s">want your site home page to be different from your WordPress installation directory</a>.' ),
+			__( 'https://wordpress.org/documentation/article/giving-wordpress-its-own-directory/' )
 		);
 		?>
 </p>
@@ -219,7 +219,12 @@ if ( $login_custom_image_src ) {
 
 <tr>
 <th scope="row"><?php _e( 'Membership' ); ?></th>
-<td> <fieldset><legend class="screen-reader-text"><span><?php _e( 'Membership' ); ?></span></legend><label for="users_can_register">
+<td> <fieldset><legend class="screen-reader-text"><span>
+	<?php
+	/* translators: Hidden accessibility text. */
+	_e( 'Membership' );
+	?>
+</span></legend><label for="users_can_register">
 <input name="users_can_register" type="checkbox" id="users_can_register" value="1" <?php checked( '1', get_option( 'users_can_register' ) ); ?> />
 	<?php _e( 'Anyone can register' ); ?></label>
 </fieldset></td>
@@ -385,7 +390,12 @@ if ( empty( $tzstring ) ) { // Create a UTC+- zone if no timezone string exists.
 <tr>
 <th scope="row"><?php _e( 'Date Format' ); ?></th>
 <td>
-	<fieldset><legend class="screen-reader-text"><span><?php _e( 'Date Format' ); ?></span></legend>
+	<fieldset><legend class="screen-reader-text"><span>
+		<?php
+		/* translators: Hidden accessibility text. */
+		_e( 'Date Format' );
+		?>
+	</span></legend>
 <?php
 	/**
 	 * Filters the default date formats.
@@ -410,8 +420,14 @@ foreach ( $date_formats as $format ) {
 
 	echo '<label><input type="radio" name="date_format" id="date_format_custom_radio" value="\c\u\s\t\o\m"';
 	checked( $custom );
-	echo '/> <span class="date-time-text date-time-custom-text">' . __( 'Custom:' ) . '<span class="screen-reader-text"> ' . __( 'enter a custom date format in the following field' ) . '</span></span></label>' .
-		'<label for="date_format_custom" class="screen-reader-text">' . __( 'Custom date format:' ) . '</label>' .
+	echo '/> <span class="date-time-text date-time-custom-text">' . __( 'Custom:' ) . '<span class="screen-reader-text"> ' .
+			/* translators: Hidden accessibility text. */
+			__( 'enter a custom date format in the following field' ) .
+		'</span></span></label>' .
+		'<label for="date_format_custom" class="screen-reader-text">' .
+			/* translators: Hidden accessibility text. */
+			__( 'Custom date format:' ) .
+		'</label>' .
 		'<input type="text" name="date_format_custom" id="date_format_custom" value="' . esc_attr( get_option( 'date_format' ) ) . '" class="small-text" />' .
 		'<br />' .
 		'<p><strong>' . __( 'Preview:' ) . '</strong> <span class="example">' . date_i18n( get_option( 'date_format' ) ) . '</span>' .
@@ -423,7 +439,12 @@ foreach ( $date_formats as $format ) {
 <tr>
 <th scope="row"><?php _e( 'Time Format' ); ?></th>
 <td>
-	<fieldset><legend class="screen-reader-text"><span><?php _e( 'Time Format' ); ?></span></legend>
+	<fieldset><legend class="screen-reader-text"><span>
+		<?php
+		/* translators: Hidden accessibility text. */
+		_e( 'Time Format' );
+		?>
+	</span></legend>
 <?php
 	/**
 	 * Filters the default time formats.
@@ -447,14 +468,20 @@ foreach ( $time_formats as $format ) {
 
 	echo '<label><input type="radio" name="time_format" id="time_format_custom_radio" value="\c\u\s\t\o\m"';
 	checked( $custom );
-	echo '/> <span class="date-time-text date-time-custom-text">' . __( 'Custom:' ) . '<span class="screen-reader-text"> ' . __( 'enter a custom time format in the following field' ) . '</span></span></label>' .
-		'<label for="time_format_custom" class="screen-reader-text">' . __( 'Custom time format:' ) . '</label>' .
+	echo '/> <span class="date-time-text date-time-custom-text">' . __( 'Custom:' ) . '<span class="screen-reader-text"> ' .
+			/* translators: Hidden accessibility text. */
+			__( 'enter a custom time format in the following field' ) .
+		'</span></span></label>' .
+		'<label for="time_format_custom" class="screen-reader-text">' .
+			/* translators: Hidden accessibility text. */
+			__( 'Custom time format:' ) .
+		'</label>' .
 		'<input type="text" name="time_format_custom" id="time_format_custom" value="' . esc_attr( get_option( 'time_format' ) ) . '" class="small-text" />' .
 		'<br />' .
 		'<p><strong>' . __( 'Preview:' ) . '</strong> <span class="example">' . date_i18n( get_option( 'time_format' ) ) . '</span>' .
 		"<span class='spinner'></span>\n" . '</p>';
 
-	echo "\t<p class='date-time-doc'>" . __( '<a href="https://wordpress.org/support/article/formatting-date-and-time/">Documentation on date and time formatting</a>.' ) . "</p>\n";
+	echo "\t<p class='date-time-doc'>" . __( '<a href="https://wordpress.org/documentation/article/customize-date-and-time-format/">Documentation on date and time formatting</a>.' ) . "</p>\n";
 ?>
 	</fieldset>
 </td>

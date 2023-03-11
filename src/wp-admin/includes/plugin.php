@@ -883,7 +883,7 @@ function activate_plugins( $plugins, $redirect = '', $network_wide = false, $sil
  *
  * @since 2.6.0
  *
- * @global WP_Filesystem_Base $wp_filesystem ClassicPress filesystem subclass.
+ * @global WP_Filesystem_Base $wp_filesystem WordPress filesystem subclass.
  *
  * @param string[] $plugins    List of plugin paths to delete, relative to the plugins directory.
  * @param string   $deprecated Not used.

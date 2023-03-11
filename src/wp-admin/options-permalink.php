@@ -57,14 +57,14 @@ get_current_screen()->add_help_tab(
 );
 
 $help_sidebar_content = '<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-	'<p>' . __( '<a href="https://wordpress.org/support/article/settings-permalinks-screen/">Documentation on Permalinks Settings</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://wordpress.org/support/article/using-permalinks/">Documentation on Using Permalinks</a>' ) . '</p>';
+	'<p>' . __( '<a href="https://wordpress.org/documentation/article/settings-permalinks-screen/">Documentation on Permalinks Settings</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://wordpress.org/documentation/article/customize-permalinks/">Documentation on Using Permalinks</a>' ) . '</p>';
 
 if ( $is_nginx ) {
-	$help_sidebar_content .= '<p>' . __( '<a href="https://wordpress.org/support/article/nginx/">Documentation on Nginx configuration</a>.' ) . '</p>';
+	$help_sidebar_content .= '<p>' . __( '<a href="https://wordpress.org/documentation/article/nginx/">Documentation on Nginx configuration</a>.' ) . '</p>';
 }
 
-$help_sidebar_content .= '<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support Forums</a>' ) . '</p>';
+$help_sidebar_content .= '<p>' . __( '<a href="https://wordpress.org/support/forums/">Support forums</a>' ) . '</p>';
 
 get_current_screen()->set_help_sidebar( $help_sidebar_content );
 unset( $help_sidebar_content );
@@ -84,7 +84,7 @@ if ( ! got_url_rewrite() ) {
  * In a subdirectory configuration of multisite, the `/blog` prefix is used by
  * default on the main site to avoid collisions with other sites created on that
  * network. If the `permalink_structure` option has been changed to remove this
- * base prefix, ClassicPress core can no longer account for the possible collision.
+ * base prefix, WordPress core can no longer account for the possible collision.
  */
 if ( is_multisite() && ! is_subdomain_install() && is_main_site()
 	&& 0 === strpos( $permalink_structure, '/blog/' )
@@ -222,7 +222,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 <p>
 <?php
 printf(
-	/* translators: %s: Codex URL. */
+	/* translators: %s: Documentation URL. */
 	__( 'ClassicPress offers you the ability to create a custom URL structure for your permalinks and archives. Custom URL structures can improve the aesthetics, usability, and forward-compatibility of your links. A <a href="%s">number of tags are available</a>, and here are some examples to get you started.' ),
 	__( 'https://wordpress.org/support/article/using-permalinks/' )
 );
@@ -330,18 +330,27 @@ printf(
 	<th scope="row"><?php _e( 'Permalink structure' ); ?></th>
 	<td>
 		<fieldset class="structure-selection">
-			<legend class="screen-reader-text"><?php _e( 'Permalink structure' ); ?></legend>
+			<legend class="screen-reader-text">
+				<?php
+				/* translators: Hidden accessibility text. */
+				_e( 'Permalink structure' );
+				?>
+			</legend>
 			<?php foreach ( $default_structures as $input ) : ?>
 			<div class="row">
-				<input id="permalink-input-<?php echo $input['id']; ?>"
-					name="selection" aria-describedby="permalink-<?php echo $input['id']; ?>"
+				<input id="permalink-input-<?php echo esc_attr( $input['id'] ); ?>"
+					name="selection" aria-describedby="permalink-<?php echo esc_attr( $input['id'] ); ?>"
 					type="radio" value="<?php echo esc_attr( $input['value'] ); ?>"
 					<?php checked( $input['value'], $permalink_structure ); ?>
 				/>
 				<div>
-					<label for="permalink-input-<?php echo $input['id']; ?>"><?php echo $input['label']; ?></label>
+					<label for="permalink-input-<?php echo esc_attr( $input['id'] ); ?>">
+						<?php echo esc_html( $input['label'] ); ?>
+					</label>
 					<p>
-						<code id="permalink-<?php echo $input['id']; ?>"><?php echo $input['example']; ?></code>
+						<code id="permalink-<?php echo esc_attr( $input['id'] ); ?>">
+							<?php echo esc_html( $input['example'] ); ?>
+						</code>
 					</p>
 				</div>
 			</div><!-- .row -->
@@ -356,10 +365,13 @@ printf(
 					<label for="custom_selection"><?php _e( 'Custom Structure' ); ?></label>
 					<p>
 						<label for="permalink_structure" class="screen-reader-text">
-							<?php _e( 'Customize permalink structure by selecting available tags' ); ?>
+							<?php
+							/* translators: Hidden accessibility text. */
+							_e( 'Customize permalink structure by selecting available tags' );
+							?>
 						</label>
 						<span class="code">
-							<code id="permalink-custom"><?php echo $url_base; ?></code>
+							<code id="permalink-custom"><?php echo esc_url( $url_base ); ?></code>
 							<input name="permalink_structure" id="permalink_structure"
 								type="text" value="<?php echo esc_attr( $permalink_structure ); ?>"
 								aria-describedby="permalink-custom" class="regular-text code"
@@ -381,7 +393,7 @@ printf(
 										data-added="<?php echo esc_attr( sprintf( $tag_added, $tag ) ); ?>"
 										data-removed="<?php echo esc_attr( sprintf( $tag_removed, $tag ) ); ?>"
 										data-used="<?php echo esc_attr( sprintf( $tag_already_used, $tag ) ); ?>">
-										<?php echo '%' . $tag . '%'; ?>
+										<?php echo '%' . esc_html( $tag ) . '%'; ?>
 									</button>
 								</li>
 							<?php endforeach; ?>

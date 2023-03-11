@@ -145,8 +145,8 @@ if ( ! function_exists( 'wp_install_defaults' ) ) :
 	 *
 	 * @since 2.1.0
 	 *
-	 * @global wpdb       $wpdb         ClassicPress database abstraction object.
-	 * @global WP_Rewrite $wp_rewrite   ClassicPress rewrite component.
+	 * @global wpdb       $wpdb         WordPress database abstraction object.
+	 * @global WP_Rewrite $wp_rewrite   WordPress rewrite component.
 	 * @global string     $table_prefix
 	 *
 	 * @param int $user_id User ID.
@@ -490,7 +490,7 @@ endif;
  *
  * @since 4.2.0
  *
- * @global WP_Rewrite $wp_rewrite ClassicPress rewrite component.
+ * @global WP_Rewrite $wp_rewrite WordPress rewrite component.
  *
  * @return bool Whether pretty permalinks are enabled. False otherwise.
  */
@@ -526,7 +526,7 @@ function wp_install_maybe_enable_pretty_permalinks() {
 
 		$test_url = '';
 
-		// Test against a real ClassicPress post.
+		// Test against a real WordPress post.
 		$first_post = get_page_by_path( sanitize_title( _x( 'hello-world', 'Default post slug' ) ), OBJECT, 'post' );
 		if ( $first_post ) {
 			$test_url = get_permalink( $first_post->ID );
@@ -534,13 +534,13 @@ function wp_install_maybe_enable_pretty_permalinks() {
 
 		/*
 		 * Send a request to the site, and check whether
-		 * the 'x-pingback' header is returned as expected.
+		 * the 'X-Pingback' header is returned as expected.
 		 *
 		 * Uses wp_remote_get() instead of wp_remote_head() because web servers
 		 * can block head requests.
 		 */
 		$response          = wp_remote_get( $test_url, array( 'timeout' => 5 ) );
-		$x_pingback_header = wp_remote_retrieve_header( $response, 'x-pingback' );
+		$x_pingback_header = wp_remote_retrieve_header( $response, 'X-Pingback' );
 		$pretty_permalinks = $x_pingback_header && get_bloginfo( 'pingback_url' ) === $x_pingback_header;
 
 		if ( $pretty_permalinks ) {
@@ -560,7 +560,7 @@ function wp_install_maybe_enable_pretty_permalinks() {
 
 if ( ! function_exists( 'wp_new_blog_notification' ) ) :
 	/**
-	 * Notifies the site admin that the installation of ClassicPress is complete.
+	 * Notifies the site admin that the installation of WordPress is complete.
 	 *
 	 * Sends an email to the new administrator that the installation is complete
 	 * and provides them with a record of their login credentials.
@@ -643,7 +643,7 @@ endif;
 
 if ( ! function_exists( 'wp_upgrade' ) ) :
 	/**
-	 * Runs ClassicPress Upgrade functions.
+	 * Runs WordPress Upgrade functions.
 	 *
 	 * Upgrades the database if needed during a site update.
 	 *
@@ -651,7 +651,7 @@ if ( ! function_exists( 'wp_upgrade' ) ) :
 	 *
 	 * @global int  $wp_current_db_version The old (current) database version.
 	 * @global int  $wp_db_version         The new database version.
-	 * @global wpdb $wpdb                  ClassicPress database abstraction object.
+	 * @global wpdb $wpdb                  WordPress database abstraction object.
 	 */
 	function wp_upgrade() {
 		global $wp_current_db_version, $wp_db_version, $wpdb;
@@ -869,7 +869,7 @@ function upgrade_all() {
 }
 
 /**
- * Execute changes made in ClassicPress 1.0.
+ * Execute changes made in WordPress 1.0.
  *
  * @ignore
  * @since 1.0.0
@@ -1113,7 +1113,7 @@ function upgrade_130() {
  * @ignore
  * @since 2.0.0
  *
- * @global wpdb $wpdb ClassicPress                 ClassicPress database abstraction object.
+ * @global wpdb $wpdb                  WordPress database abstraction object.
  * @global int  $wp_current_db_version The old (current) database version.
  */
 function upgrade_160() {
@@ -1233,7 +1233,7 @@ function upgrade_160() {
  * @since 2.1.0
  *
  * @global int  $wp_current_db_version The old (current) database version.
- * @global wpdb $wpdb                  ClassicPress database abstraction object.
+ * @global wpdb $wpdb                  WordPress database abstraction object.
  */
 function upgrade_210() {
 	global $wp_current_db_version, $wpdb;
@@ -1285,7 +1285,7 @@ function upgrade_210() {
  * @since 2.3.0
  *
  * @global int  $wp_current_db_version The old (current) database version.
- * @global wpdb $wpdb                  ClassicPress database abstraction object.
+ * @global wpdb $wpdb                  WordPress database abstraction object.
  */
 function upgrade_230() {
 	global $wp_current_db_version, $wpdb;
@@ -1606,7 +1606,7 @@ function upgrade_260() {
  * @since 2.7.0
  *
  * @global int  $wp_current_db_version The old (current) database version.
- * @global wpdb $wpdb                  ClassicPress database abstraction object.
+ * @global wpdb $wpdb                  WordPress database abstraction object.
  */
 function upgrade_270() {
 	global $wp_current_db_version, $wpdb;
@@ -1628,7 +1628,7 @@ function upgrade_270() {
  * @since 2.8.0
  *
  * @global int  $wp_current_db_version The old (current) database version.
- * @global wpdb $wpdb                  ClassicPress database abstraction object.
+ * @global wpdb $wpdb                  WordPress database abstraction object.
  */
 function upgrade_280() {
 	global $wp_current_db_version, $wpdb;
@@ -1682,7 +1682,7 @@ function upgrade_290() {
  * @since 3.0.0
  *
  * @global int  $wp_current_db_version The old (current) database version.
- * @global wpdb $wpdb                  ClassicPress database abstraction object.
+ * @global wpdb $wpdb                  WordPress database abstraction object.
  */
 function upgrade_300() {
 	global $wp_current_db_version, $wpdb;
@@ -1733,7 +1733,7 @@ function upgrade_300() {
  * @since 3.3.0
  *
  * @global int   $wp_current_db_version The old (current) database version.
- * @global wpdb  $wpdb                  ClassicPress database abstraction object.
+ * @global wpdb  $wpdb                  WordPress database abstraction object.
  * @global array $wp_registered_widgets
  * @global array $sidebars_widgets
  */
@@ -1814,7 +1814,7 @@ function upgrade_330() {
  * @since 3.4.0
  *
  * @global int  $wp_current_db_version The old (current) database version.
- * @global wpdb $wpdb                  ClassicPress database abstraction object.
+ * @global wpdb $wpdb                  WordPress database abstraction object.
  */
 function upgrade_340() {
 	global $wp_current_db_version, $wpdb;
@@ -1851,7 +1851,7 @@ function upgrade_340() {
  * @since 3.5.0
  *
  * @global int  $wp_current_db_version The old (current) database version.
- * @global wpdb $wpdb                  ClassicPress database abstraction object.
+ * @global wpdb $wpdb                  WordPress database abstraction object.
  */
 function upgrade_350() {
 	global $wp_current_db_version, $wpdb;
@@ -1966,7 +1966,7 @@ function upgrade_420() {}
  * @since 4.3.0
  *
  * @global int  $wp_current_db_version The old (current) database version.
- * @global wpdb $wpdb                  ClassicPress database abstraction object.
+ * @global wpdb $wpdb                  WordPress database abstraction object.
  */
 function upgrade_430() {
 	global $wp_current_db_version, $wpdb;
@@ -2069,7 +2069,7 @@ function upgrade_431() {
  * @since 4.4.0
  *
  * @global int  $wp_current_db_version The old (current) database version.
- * @global wpdb $wpdb                  ClassicPress database abstraction object.
+ * @global wpdb $wpdb                  WordPress database abstraction object.
  */
 function upgrade_440() {
 	global $wp_current_db_version, $wpdb;
@@ -2094,7 +2094,7 @@ function upgrade_440() {
  * @since 4.5.0
  *
  * @global int  $wp_current_db_version The old (current) database version.
- * @global wpdb $wpdb                  ClassicPress database abstraction object.
+ * @global wpdb $wpdb                  WordPress database abstraction object.
  */
 function upgrade_450() {
 	global $wp_current_db_version, $wpdb;
@@ -2188,6 +2188,8 @@ function upgrade_530() {
  *
  * @ignore
  * @since 5.5.0
+ *
+ * @global int $wp_current_db_version The old (current) database version.
  */
 function upgrade_550() {
 	global $wp_current_db_version;
@@ -2226,6 +2228,9 @@ function upgrade_550() {
  *
  * @ignore
  * @since 5.6.0
+ *
+ * @global int  $wp_current_db_version The old (current) database version.
+ * @global wpdb $wpdb                  WordPress database abstraction object.
  */
 function upgrade_560() {
 	global $wp_current_db_version, $wpdb;
@@ -2319,7 +2324,7 @@ function upgrade_600() {
  * @since 3.0.0
  *
  * @global int  $wp_current_db_version The old (current) database version.
- * @global wpdb $wpdb                  ClassicPress database abstraction object.
+ * @global wpdb $wpdb                  WordPress database abstraction object.
  */
 function upgrade_network() {
 	global $wp_current_db_version, $wpdb;
@@ -2640,7 +2645,7 @@ function maybe_convert_table_to_utf8mb4( $table ) {
  */
 function get_alloptions_110() {
 	global $wpdb;
-	$all_options = new stdClass;
+	$all_options = new stdClass();
 	$options     = $wpdb->get_results( "SELECT option_name, option_value FROM $wpdb->options" );
 	if ( $options ) {
 		foreach ( $options as $option ) {
@@ -3476,7 +3481,7 @@ function maybe_disable_automattic_widgets() {
  * @since 3.5.0
  *
  * @global int  $wp_current_db_version The old (current) database version.
- * @global wpdb $wpdb                  ClassicPress database abstraction object.
+ * @global wpdb $wpdb                  WordPress database abstraction object.
  */
 function maybe_disable_link_manager() {
 	global $wp_current_db_version, $wpdb;
@@ -3492,7 +3497,7 @@ function maybe_disable_link_manager() {
  * @since 2.9.0
  *
  * @global int  $wp_current_db_version The old (current) database version.
- * @global wpdb $wpdb                  ClassicPress database abstraction object.
+ * @global wpdb $wpdb                  WordPress database abstraction object.
  */
 function pre_schema_upgrade() {
 	global $wp_current_db_version, $wpdb;

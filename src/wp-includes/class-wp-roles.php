@@ -254,7 +254,7 @@ class WP_Roles {
 	}
 
 	/**
-	 * Retrieve list of role names.
+	 * Retrieves a list of role names.
 	 *
 	 * @since 2.0.0
 	 *

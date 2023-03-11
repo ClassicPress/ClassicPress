@@ -131,7 +131,7 @@ if ( !function_exists('wp_get_cookie_login') ):
  * Gets the user cookie login. This function is deprecated.
  *
  * This function is deprecated and should no longer be extended as it won't be
- * used anywhere in ClassicPress. Also, plugins shouldn't use it either.
+ * used anywhere in WordPress. Also, plugins shouldn't use it either.
  *
  * @since 2.0.3
  * @deprecated 2.5.0

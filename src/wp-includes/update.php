@@ -43,7 +43,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	}
 
 	if ( ! is_object( $current ) ) {
-		$current                  = new stdClass;
+		$current                  = new stdClass();
 		$current->updates         = array();
 		$current->version_checked = $cp_version;
 	}
@@ -52,9 +52,10 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 		$force_check = true;
 	}
 
-	// Wait 60 seconds between multiple version check requests
-	$timeout          = 60;
+	// Wait 1 minute between multiple version check requests.
+	$timeout          = MINUTE_IN_SECONDS;
 	$time_not_changed = isset( $current->last_checked ) && $timeout > ( time() - $current->last_checked );
+
 	if ( ! $force_check && $time_not_changed ) {
 		return;
 	}
@@ -68,7 +69,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	 */
 	$locale = apply_filters( 'core_version_check_locale', get_locale() );
 
-	// Update last_checked for current to prevent multiple blocking requests if request hangs
+	// Update last_checked for current to prevent multiple blocking requests if request hangs.
 	$current->last_checked = time();
 	set_site_transient( 'update_core', $current );
 
@@ -100,7 +101,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	);
 
 	/**
-	 * Filter the query arguments sent as part of the core version check.
+	 * Filters the query arguments sent as part of the core version check.
 	 *
 	 * WARNING: Changing this data may result in your site not receiving security updates.
 	 * Please exercise extreme caution.

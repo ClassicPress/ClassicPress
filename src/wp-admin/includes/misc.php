@@ -342,7 +342,7 @@ function save_mod_rewrite_rules() {
  *
  * @since 2.8.0
  *
- * @global WP_Rewrite $wp_rewrite ClassicPress rewrite component.
+ * @global WP_Rewrite $wp_rewrite WordPress rewrite component.
  *
  * @return bool|null True on write success, false on failure. Null in multisite.
  */
@@ -462,7 +462,12 @@ function wp_print_theme_file_tree( $tree, $level = 2, $size = 1, $index = 1 ) {
 				aria-level="<?php echo esc_attr( $level ); ?>"
 				aria-setsize="<?php echo esc_attr( $size ); ?>"
 				aria-posinset="<?php echo esc_attr( $index ); ?>">
-				<span class="folder-label"><?php echo esc_html( $label ); ?> <span class="screen-reader-text"><?php _e( 'folder' ); ?></span><span aria-hidden="true" class="icon"></span></span>
+				<span class="folder-label"><?php echo esc_html( $label ); ?> <span class="screen-reader-text">
+					<?php
+					/* translators: Hidden accessibility text. */
+					_e( 'folder' );
+					?>
+				</span><span aria-hidden="true" class="icon"></span></span>
 				<ul role="group" class="tree-folder"><?php wp_print_theme_file_tree( $theme_file, $level + 1, $index, $size ); ?></ul>
 			</li>
 			<?php
@@ -559,7 +564,12 @@ function wp_print_plugin_file_tree( $tree, $label = '', $level = 2, $size = 1, $
 				aria-level="<?php echo esc_attr( $level ); ?>"
 				aria-setsize="<?php echo esc_attr( $size ); ?>"
 				aria-posinset="<?php echo esc_attr( $index ); ?>">
-				<span class="folder-label"><?php echo esc_html( $label ); ?> <span class="screen-reader-text"><?php _e( 'folder' ); ?></span><span aria-hidden="true" class="icon"></span></span>
+				<span class="folder-label"><?php echo esc_html( $label ); ?> <span class="screen-reader-text">
+					<?php
+					/* translators: Hidden accessibility text. */
+					_e( 'folder' );
+					?>
+				</span><span aria-hidden="true" class="icon"></span></span>
 				<ul role="group" class="tree-folder"><?php wp_print_plugin_file_tree( $plugin_file, '', $level + 1, $index, $size ); ?></ul>
 			</li>
 			<?php
@@ -849,7 +859,7 @@ function set_screen_options() {
 }
 
 /**
- * Check if rewrite rule for ClassicPress already exists in the IIS 7+ configuration file
+ * Checks if rewrite rule for ClassicPress already exists in the IIS 7+ configuration file
  *
  * @since 2.8.0
  *
@@ -1060,7 +1070,12 @@ function admin_color_scheme_picker( $user_id ) {
 	}
 	?>
 	<fieldset id="color-picker" class="scheme-list">
-		<legend class="screen-reader-text"><span><?php _e( 'Admin Color Scheme' ); ?></span></legend>
+		<legend class="screen-reader-text"><span>
+			<?php
+			/* translators: Hidden accessibility text. */
+			_e( 'Admin Color Scheme' );
+			?>
+		</span></legend>
 		<?php
 		wp_nonce_field( 'save-color-scheme', 'color-nonce', false );
 		foreach ( $_wp_admin_css_colors as $color => $color_info ) :
@@ -1112,8 +1127,8 @@ function wp_color_scheme_settings() {
 	} else {
 		// Fall back to the default set of icon colors if the default scheme is missing.
 		$icon_colors = array(
-			'base'    => '#a0a5aa',
-			'focus'   => '#00a0d2',
+			'base'    => '#a7aaad',
+			'focus'   => '#72aee6',
 			'current' => '#fff',
 		);
 	}
@@ -1452,7 +1467,7 @@ function update_option_new_admin_email( $old_value, $value ) {
 	);
 	update_option( 'adminhash', $new_admin_email );
 
-	$switched_locale = switch_to_locale( get_user_locale() );
+	$switched_locale = switch_to_user_locale( get_current_user_id() );
 
 	/* translators: Do not translate USERNAME, ADMIN_URL, EMAIL, SITENAME, SITEURL: those are placeholders. */
 	$email_text = __(

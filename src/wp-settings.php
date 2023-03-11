@@ -19,8 +19,8 @@ define( 'WPINC', 'wp-includes' );
  * Version information for the current WordPress release.
  *
  * These can't be directly globalized in version.php. When updating,
- * we're including version.php from another installation and don't want
- * these values to be overridden if already set.
+ * include version.php from another installation and don't override
+ * these values if already set.
  *
  * @global string $wp_version             The WordPress version string.
  * @global int    $wp_db_version          WordPress database version.
@@ -60,7 +60,7 @@ global $blog_id;
 // Set initial default constants including WP_MEMORY_LIMIT, WP_MAX_MEMORY_LIMIT, WP_DEBUG, SCRIPT_DEBUG, WP_CONTENT_DIR and WP_CACHE.
 wp_initial_constants();
 
-// Make sure we register the shutdown handler for fatal errors as soon as possible.
+// Register the shutdown handler for fatal errors as soon as possible.
 wp_register_fatal_error_handler();
 
 // ClassicPress calculates offsets from UTC.
@@ -70,13 +70,13 @@ date_default_timezone_set( 'UTC' );
 // Standardize $_SERVER variables across setups.
 wp_fix_server_vars();
 
-// Check if we're in maintenance mode.
+// Check if the site is in maintenance mode.
 wp_maintenance();
 
 // Start loading timer.
 timer_start();
 
-// Check if we're in WP_DEBUG mode.
+// Check if WP_DEBUG mode is enabled.
 wp_debug_mode();
 
 /**
@@ -145,7 +145,7 @@ if ( is_multisite() ) {
 
 register_shutdown_function( 'shutdown_action_hook' );
 
-// Stop most of ClassicPress from being loaded if we just want the basics.
+// Stop most of ClassicPress from being loaded if SHORTINIT is enabled.
 if ( SHORTINIT ) {
 	return false;
 }
@@ -383,7 +383,7 @@ wp_start_scraping_edited_file_errors();
 // Register the default theme directory root.
 register_theme_directory( get_theme_root() );
 
-if ( ! is_multisite() ) {
+if ( ! is_multisite() && wp_is_fatal_error_handler_enabled() ) {
 	// Handle users requesting a recovery mode link and initiating recovery mode.
 	wp_recovery_mode()->initialize();
 }
@@ -444,7 +444,7 @@ do_action( 'sanitize_comment_cookies' );
 /**
  * ClassicPress Query object
  *
- * @global WP_Query $wp_the_query ClassicPress Query object.
+ * @global WP_Query $wp_the_query WordPress Query object.
  * @since 2.0.0
  */
 $GLOBALS['wp_the_query'] = new WP_Query();
@@ -453,14 +453,15 @@ $GLOBALS['wp_the_query'] = new WP_Query();
  * Holds the reference to @see $wp_the_query
  * Use this global for ClassicPress queries
  *
- * @global WP_Query $wp_query ClassicPress Query object.
+ * @global WP_Query $wp_query WordPress Query object.
  * @since 1.5.0
  */
 $GLOBALS['wp_query'] = $GLOBALS['wp_the_query'];
 
 /**
  * Holds the ClassicPress Rewrite object for creating pretty URLs
- * @global WP_Rewrite $wp_rewrite
+ *
+ * @global WP_Rewrite $wp_rewrite WordPress rewrite component.
  * @since 1.5.0
  */
 $GLOBALS['wp_rewrite'] = new WP_Rewrite();
@@ -468,7 +469,7 @@ $GLOBALS['wp_rewrite'] = new WP_Rewrite();
 /**
  * ClassicPress Object
  *
- * @global WP $wp Current ClassicPress environment instance.
+ * @global WP $wp Current WordPress environment instance.
  * @since 2.0.0
  */
 $GLOBALS['wp'] = new WP();
@@ -512,7 +513,7 @@ unset( $locale_file );
 /**
  * ClassicPress Locale object for loading locale domain date and various strings.
  *
- * @global WP_Locale $wp_locale ClassicPress date and time locale object.
+ * @global WP_Locale $wp_locale WordPress date and time locale object.
  * @since 2.1.0
  */
 $GLOBALS['wp_locale'] = new WP_Locale();
@@ -522,7 +523,7 @@ $GLOBALS['wp_locale'] = new WP_Locale();
  *
  * @since 4.7.0
  *
- * @global WP_Locale_Switcher $wp_locale_switcher ClassicPress locale switcher object.
+ * @global WP_Locale_Switcher $wp_locale_switcher WordPress locale switcher object.
  */
 $GLOBALS['wp_locale_switcher'] = new WP_Locale_Switcher();
 $GLOBALS['wp_locale_switcher']->init();

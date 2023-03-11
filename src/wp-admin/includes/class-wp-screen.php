@@ -144,7 +144,7 @@ final class WP_Screen {
 	 * The accessible hidden headings and text associated with the screen, if any.
 	 *
 	 * @since 4.4.0
-	 * @var array
+	 * @var string[]
 	 */
 	private $_screen_reader_content = array();
 
@@ -380,7 +380,7 @@ final class WP_Screen {
 	 * @see set_current_screen()
 	 * @since 3.3.0
 	 *
-	 * @global WP_Screen $current_screen ClassicPress current screen object.
+	 * @global WP_Screen $current_screen WordPress current screen object.
 	 * @global string    $typenow        The post type of the current screen.
 	 * @global string    $taxnow         The taxonomy of the current screen.
 	 */
@@ -682,7 +682,7 @@ final class WP_Screen {
 	 *
 	 * @see set_screen_reader_content() For more information on the array format.
 	 *
-	 * @return array An associative array of screen reader text strings.
+	 * @return string[] An associative array of screen reader text strings.
 	 */
 	public function get_screen_reader_content() {
 		return $this->_screen_reader_content;
@@ -1077,7 +1077,7 @@ final class WP_Screen {
 		<legend><?php _e( 'Screen elements' ); ?></legend>
 		<p>
 			<?php _e( 'Some screen elements can be shown or hidden by using the checkboxes.' ); ?>
-			<?php _e( 'They can be expanded and collapsed by clickling on their headings, and arranged by dragging their headings or by clicking on the up and down arrows.' ); ?>
+			<?php _e( 'Expand or collapse the elements by clicking on their headings, and arrange them by dragging their headings or by clicking on the up and down arrows.' ); ?>
 		</p>
 		<?php
 

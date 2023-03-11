@@ -88,7 +88,7 @@ function wp_dashboard_setup() {
 		wp_add_dashboard_widget( 'dashboard_quick_press', $quick_draft_title, 'wp_dashboard_quick_press' );
 	}
 
-	// ClassicPress News
+	// ClassicPress News.
 	wp_add_dashboard_widget( 'dashboard_primary', __( 'ClassicPress News' ), 'wp_dashboard_events_news' );
 
 	// ClassicPress Petitions
@@ -495,7 +495,12 @@ function wp_network_dashboard_right_now() {
 
 	<form action="<?php echo esc_url( network_admin_url( 'users.php' ) ); ?>" method="get">
 		<p>
-			<label class="screen-reader-text" for="search-users"><?php _e( 'Search Users' ); ?></label>
+			<label class="screen-reader-text" for="search-users">
+				<?php
+				/* translators: Hidden accessibility text. */
+				_e( 'Search Users' );
+				?>
+			</label>
 			<input type="search" name="s" value="" size="30" autocomplete="off" id="search-users" />
 			<?php submit_button( __( 'Search Users' ), '', false, false, array( 'id' => 'submit_users' ) ); ?>
 		</p>
@@ -503,7 +508,12 @@ function wp_network_dashboard_right_now() {
 
 	<form action="<?php echo esc_url( network_admin_url( 'sites.php' ) ); ?>" method="get">
 		<p>
-			<label class="screen-reader-text" for="search-sites"><?php _e( 'Search Sites' ); ?></label>
+			<label class="screen-reader-text" for="search-sites">
+				<?php
+				/* translators: Hidden accessibility text. */
+				_e( 'Search Sites' );
+				?>
+			</label>
 			<input type="search" name="s" value="" size="30" autocomplete="off" id="search-sites" />
 			<?php submit_button( __( 'Search Sites' ), '', false, false, array( 'id' => 'submit_sites' ) ); ?>
 		</p>
@@ -1099,7 +1109,10 @@ function wp_dashboard_recent_comments( $total_items = 5 ) {
 		echo '</ul>';
 
 		if ( current_user_can( 'edit_posts' ) ) {
-			echo '<h3 class="screen-reader-text">' . __( 'View more comments' ) . '</h3>';
+			echo '<h3 class="screen-reader-text">' .
+				/* translators: Hidden accessibility text. */
+				__( 'View more comments' ) .
+			'</h3>';
 			_get_list_table( 'WP_Comments_List_Table' )->views();
 		}
 
@@ -1289,6 +1302,7 @@ function wp_dashboard_events_news() {
 	<div class="wordpress-news hide-if-no-js">
 		<?php wp_dashboard_primary(); ?>
 	</div>
+
 	<?php
 }
 
@@ -1339,7 +1353,7 @@ function wp_dashboard_primary() {
 }
 
 /**
- * Display the ClassicPress news feeds.
+ * Displays the ClassicPress news feeds.
  *
  * @since 3.8.0
  * @since 4.8.0 Removed popular plugins feed.
@@ -1400,6 +1414,7 @@ function wp_dashboard_quota() {
 				'<a href="%1$s">%2$s <span class="screen-reader-text">(%3$s)</span></a>',
 				esc_url( admin_url( 'upload.php' ) ),
 				$text,
+				/* translators: Hidden accessibility text. */
 				__( 'Manage Uploads' )
 			);
 			?>
@@ -1415,6 +1430,7 @@ function wp_dashboard_quota() {
 				'<a href="%1$s" class="musublink">%2$s <span class="screen-reader-text">(%3$s)</span></a>',
 				esc_url( admin_url( 'upload.php' ) ),
 				$text,
+				/* translators: Hidden accessibility text. */
 				__( 'Manage Uploads' )
 			);
 			?>
@@ -1641,7 +1657,7 @@ function wp_dashboard_php_nag() {
 			'<a class="button button-primary" href="%1$s" target="_blank" rel="noopener">%2$s <span class="screen-reader-text">%3$s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>',
 			esc_url( wp_get_update_php_url() ),
 			__( 'Learn more about updating PHP' ),
-			/* translators: Accessibility text. */
+			/* translators: Hidden accessibility text. */
 			__( '(opens in a new tab)' )
 		);
 		?>
@@ -1703,7 +1719,7 @@ function wp_dashboard_site_health() {
 	<div class="health-check-widget">
 		<div class="health-check-widget-title-section site-health-progress-wrapper loading hide-if-no-js">
 			<div class="site-health-progress">
-				<svg role="img" aria-hidden="true" focusable="false" width="100%" height="100%" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+				<svg aria-hidden="true" focusable="false" width="100%" height="100%" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
 					<circle r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48" stroke-dashoffset="0"></circle>
 					<circle id="bar" r="90" cx="100" cy="100" fill="transparent" stroke-dasharray="565.48" stroke-dashoffset="0"></circle>
 				</svg>

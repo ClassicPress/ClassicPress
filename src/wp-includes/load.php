@@ -149,23 +149,43 @@ function wp_check_php_mysql_versions() {
 		$protocol = wp_get_server_protocol();
 		header( sprintf( '%s 500 Internal Server Error', $protocol ), true, 500 );
 		header( 'Content-Type: text/html; charset=utf-8' );
-		printf( 'Your server is running PHP version %1$s but WordPress %2$s requires at least %3$s.', $php_version, $wp_version, $required_php_version );
+		printf(
+			'Your server is running PHP version %1$s but ClassicPress %2$s requires at least %3$s.',
+			$php_version,
+			$wp_version,
+			$required_php_version
+		);
 		exit( 1 );
 	}
 
-	if ( ! extension_loaded( 'mysql' ) && ! extension_loaded( 'mysqli' ) && ! extension_loaded( 'mysqlnd' )
+	if ( ! function_exists( 'mysqli_connect' ) && ! function_exists( 'mysql_connect' )
 		// This runs before default constants are defined, so we can't assume WP_CONTENT_DIR is set yet.
 		&& ( defined( 'WP_CONTENT_DIR' ) && ! file_exists( WP_CONTENT_DIR . '/db.php' )
 			|| ! file_exists( ABSPATH . 'wp-content/db.php' ) )
 	) {
 		require_once ABSPATH . WPINC . '/functions.php';
 		wp_load_translations_early();
+
+		$message = '<p>' . __( 'Your PHP installation appears to be missing the MySQL extension which is required by WordPress.' ) . "</p>\n";
+
+		$message .= '<p>' . sprintf(
+			/* translators: %s: mysqli. */
+			__( 'Please check that the %s PHP extension is installed and enabled.' ),
+			'<code>mysqli</code>'
+		) . "</p>\n";
+
+		$message .= '<p>' . sprintf(
+			/* translators: %s: Support forums URL. */
+			__( 'If you are unsure what these terms mean you should probably contact your host. If you still need help you can always visit the <a href="%s">WordPress support forums</a>.' ),
+			__( 'https://wordpress.org/support/forums/' )
+		) . "</p>\n";
+
 		$args = array(
 			'exit' => false,
 			'code' => 'mysql_not_found',
 		);
 		wp_die(
-			__( 'Your PHP installation appears to be missing the MySQL extension which is required by WordPress.' ),
+			$message,
 			__( 'Requirements Not Met' ),
 			$args
 		);
@@ -240,7 +260,7 @@ function wp_get_environment_type() {
 }
 
 /**
- * Don't load all of ClassicPress when handling a favicon.ico request.
+ * Don't load all of WordPress when handling a favicon.ico request.
  *
  * Instead, send the headers for a zero-length favicon and bail.
  *
@@ -256,11 +276,6 @@ function wp_favicon_request() {
 
 /**
  * Die with a maintenance message when conditions are met.
- *
- * Checks for a file in the ClassicPress root directory named ".maintenance".
- * This file will contain the variable $upgrading, set to the time the file
- * was created. If the file was created less than 10 minutes ago, ClassicPress
- * enters maintenance mode and displays a message.
  *
  * The default message can be replaced by using a drop-in (maintenance.php in
  * the wp-content directory).
@@ -352,7 +367,7 @@ function timer_float() {
 }
 
 /**
- * Start the ClassicPress micro-timer.
+ * Start the WordPress micro-timer.
  *
  * @since 0.71
  * @access private
@@ -395,14 +410,14 @@ function timer_stop( $display = 0, $precision = 3 ) {
 }
 
 /**
- * Set PHP error reporting based on ClassicPress debug settings.
+ * Set PHP error reporting based on WordPress debug settings.
  *
  * Uses three constants: `WP_DEBUG`, `WP_DEBUG_DISPLAY`, and `WP_DEBUG_LOG`.
  * All three can be defined in wp-config.php. By default, `WP_DEBUG` and
  * `WP_DEBUG_LOG` are set to false, and `WP_DEBUG_DISPLAY` is set to true.
  *
- * When `WP_DEBUG` is true, all PHP notices are reported. ClassicPress will also
- * display internal notices: when a deprecated ClassicPress function, function
+ * When `WP_DEBUG` is true, all PHP notices are reported. WordPress will also
+ * display internal notices: when a deprecated WordPress function, function
  * argument, or file is used. Deprecated code may be removed from a later
  * version.
  *
@@ -412,8 +427,8 @@ function timer_stop( $display = 0, $precision = 3 ) {
  * `WP_DEBUG_DISPLAY` and `WP_DEBUG_LOG` perform no function unless `WP_DEBUG`
  * is true.
  *
- * When `WP_DEBUG_DISPLAY` is true, ClassicPress will force errors to be displayed.
- * `WP_DEBUG_DISPLAY` defaults to true. Defining it as null prevents ClassicPress
+ * When `WP_DEBUG_DISPLAY` is true, WordPress will force errors to be displayed.
+ * `WP_DEBUG_DISPLAY` defaults to true. Defining it as null prevents WordPress
  * from changing the global configuration setting. Defining `WP_DEBUG_DISPLAY`
  * as false will force errors to be hidden.
  *
@@ -1137,12 +1152,12 @@ function shutdown_action_hook() {
  * @since 2.7.0
  * @deprecated 3.2.0
  *
- * @param object $object The object to clone.
+ * @param object $input_object The object to clone.
  * @return object The cloned object.
  */
-function wp_clone( $object ) {
+function wp_clone( $input_object ) {
 	// Use parens for clone to accommodate PHP 4. See #17880.
-	return clone( $object );
+	return clone( $input_object );
 }
 
 /**
@@ -1327,10 +1342,10 @@ function get_current_network_id() {
  * @access private
  *
  * @global WP_Textdomain_Registry $wp_textdomain_registry WordPress Textdomain Registry.
- * @global WP_Locale $wp_locale WordPress date and time locale object.
+ * @global WP_Locale              $wp_locale              WordPress date and time locale object.
  */
 function wp_load_translations_early() {
-	global $wp_locale, $wp_textdomain_registry;
+	global $wp_textdomain_registry, $wp_locale;
 
 	static $loaded = false;
 	if ( $loaded ) {
@@ -1587,7 +1602,7 @@ function wp_doing_cron() {
 }
 
 /**
- * Check whether variable is a ClassicPress Error.
+ * Checks whether the given variable is a WordPress Error.
  *
  * Returns whether `$thing` is an instance of the `WP_Error` class.
  *

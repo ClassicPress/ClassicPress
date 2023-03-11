@@ -23,7 +23,7 @@ if ( ! headers_sent() ) {
 	header( 'Cache-Control: no-cache, must-revalidate, max-age=0' );
 }
 
-/* Don't make the request block till we finish, if possible. */
+// Don't run cron until the request finishes, if possible.
 if ( PHP_VERSION_ID >= 70016 && function_exists( 'fastcgi_finish_request' ) ) {
 	fastcgi_finish_request();
 } elseif ( function_exists( 'litespeed_finish_request' ) ) {
@@ -35,7 +35,7 @@ if ( ! empty( $_POST ) || defined( 'DOING_AJAX' ) || defined( 'DOING_CRON' ) ) {
 }
 
 /**
- * Tell ClassicPress we are doing the cron task.
+ * Tell ClassicPress the cron task is running.
  *
  * @var bool
  */
@@ -54,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @ignore
  * @since 3.3.0
  *
- * @global wpdb $wpdb ClassicPress database abstraction object.
+ * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @return string|int|false Value of the `doing_cron` transient, 0|false otherwise.
  */

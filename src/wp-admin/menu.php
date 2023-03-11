@@ -329,7 +329,7 @@ if ( ! is_multisite() && defined( 'WP_ALLOW_MULTISITE' ) && WP_ALLOW_MULTISITE )
 	$submenu['tools.php'][50] = array( __( 'Network Setup' ), 'setup_network', 'network.php' );
 }
 
-$menu[80]                     = array( __( 'Settings' ), 'manage_options', 'options-general.php', '', 'menu-top menu-icon-settings', 'menu-settings', 'dashicons-admin-settings' );
+$menu[80]                               = array( __( 'Settings' ), 'manage_options', 'options-general.php', '', 'menu-top menu-icon-settings', 'menu-settings', 'dashicons-admin-settings' );
 	$submenu['options-general.php'][10] = array( _x( 'General', 'settings screen' ), 'manage_options', 'options-general.php' );
 	$submenu['options-general.php'][15] = array( __( 'Writing' ), 'manage_options', 'options-writing.php' );
 	$submenu['options-general.php'][20] = array( __( 'Reading' ), 'manage_options', 'options-reading.php' );
@@ -338,10 +338,7 @@ $menu[80]                     = array( __( 'Settings' ), 'manage_options', 'opti
 	$submenu['options-general.php'][40] = array( __( 'Permalinks' ), 'manage_options', 'options-permalink.php' );
 	$submenu['options-general.php'][45] = array( __( 'Privacy' ), 'manage_privacy_options', 'options-privacy.php' );
 
-$menu[85]                     = array( __( 'Security' ), 'manage_options', 'security.php', '', 'menu-top menu-icon-shield', 'menu-security', 'dashicons-shield' );
-	$submenu['security.php'][10] = array( _x( 'ClassicPress', 'security screen' ), 'manage_options', 'security.php' );
-
-$_wp_last_utility_menu = 85; // The index of the last top-level menu in the utility menu group.
+$_wp_last_utility_menu = 80; // The index of the last top-level menu in the utility menu group.
 
 $menu[99] = array( '', 'read', 'separator-last', '', 'wp-menu-separator' );
 

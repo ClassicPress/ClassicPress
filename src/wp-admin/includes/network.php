@@ -381,7 +381,7 @@ function network_step1( $errors = false ) {
  *
  * @since 3.0.0
  *
- * @global wpdb $wpdb     ClassicPress database abstraction object.
+ * @global wpdb $wpdb     WordPress database abstraction object.
  * @global bool $is_nginx Whether the server software is Nginx or something else.
  *
  * @param false|WP_Error $errors Optional. Error object. Default false.
@@ -645,7 +645,7 @@ define( 'BLOG_ID_CURRENT_SITE', 1 );
 		printf(
 			/* translators: %s: Documentation URL. */
 			__( 'It seems your network is running with Nginx web server. <a href="%s">Learn more about further configuration</a>.' ),
-			__( 'https://wordpress.org/support/article/nginx/' )
+			__( 'https://wordpress.org/documentation/article/nginx/' )
 		);
 		echo '</p></li>';
 

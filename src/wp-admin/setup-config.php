@@ -49,52 +49,73 @@ if ( file_exists( ABSPATH . 'wp-config-sample.php' ) ) {
 	wp_die(
 		sprintf(
 			/* translators: %s: wp-config-sample.php */
-			__( 'Sorry, I need a %s file to work from. Please re-upload this file to your WordPress installation.' ),
+			__( 'Sorry, I need a %s file to work from. Please re-upload this file to your ClassicPress installation.' ),
 			'<code>wp-config-sample.php</code>'
 		)
 	);
 }
 
-// No wp-config-sample.php found? Bail.
-if ( ! $config_file ) {
-	setup_config_display_header( 'cp-installation-error' );
-	echo '<h1>' . __( 'Sample Config File Missing' ) . '</h1>';
-	echo '<p>' . sprintf(
-		/* translators: 1: wp-config-sample.php, 2: link to the contents of this file */
-		__( 'A %1$s file was not found. Please upload it to the root of your ClassicPress installation, or one level higher, and then try again. Need a <a href="%2$s" target="_blank" rel="noopener">fresh copy</a>?' ),
-		'<code>wp-config-sample.php</code>',
-		esc_url( 'https://raw.githubusercontent.com/ClassicPress/ClassicPress-release/master/wp-config-sample.php' )
-	) . '</p>';
-	setup_config_display_footer();
-}
-
-// Does wp-config.php file already exist? Bail.
+// Check if wp-config.php has been created.
 if ( file_exists( ABSPATH . 'wp-config.php' ) ) {
-	setup_config_display_header( 'cp-installation-error' );
-	echo '<h1>' . __( 'Config File Found' ) . '</h1>';
-	echo '<p>' . sprintf(
-		/* translators: 1: wp-config.php, 2: link to install.php */
-		__( 'A %1$s file was found in your ClassicPress installation. If you are trying to reinstall ClassicPress, you must first delete that file.</p><p> If you created and uploaded your own config file, you can <a href="%2$s">continue installing</a>.' ),
-		'<code>wp-config.php</code>',
-		'install.php'
-	) . '</p>';
-	setup_config_display_footer();
+	wp_die(
+		'<p>' . sprintf(
+			/* translators: 1: wp-config.php, 2: install.php */
+			__( 'The file %1$s already exists. If you need to reset any of the configuration items in this file, please delete it first. You may try <a href="%2$s">installing now</a>.' ),
+			'<code>wp-config.php</code>',
+			'install.php'
+		) . '</p>',
+		409
+	);
 }
 
-// Check if wp-config.php exists above the root directory but is not part of another installation
+// Check if wp-config.php exists above the root directory but is not part of another installation.
 if ( @file_exists( ABSPATH . '../wp-config.php' ) && ! @file_exists( ABSPATH . '../wp-settings.php' ) ) {
-	setup_config_display_header( 'cp-installation-error' );
-	echo '<h1>' . __( 'Config File Found' ) . '</h1>';
-	echo '<p>' . sprintf(
-			/* translators: 1: wp-config.php 2: install.php */
-		__( 'A %1$s file was found one level above your ClassicPress installation. If you are trying to reinstall ClassicPress, you must first delete that file.</p><p> If you created and uploaded your own config file, you can <a href="%2$s">continue installing</a>.' ),
-		'<code>wp-config.php</code>',
-		'install.php'
-	) . '</p>';
-	setup_config_display_footer();
+	wp_die(
+		'<p>' . sprintf(
+			/* translators: 1: wp-config.php, 2: install.php */
+			__( 'The file %1$s already exists one level above your ClassicPress installation. If you need to reset any of the configuration items in this file, please delete it first. You may try <a href="%2$s">installing now</a>.' ),
+			'<code>wp-config.php</code>',
+			'install.php'
+		) . '</p>',
+		409
+	);
 }
 
-// Determine which language pack to use.
+$step = isset( $_GET['step'] ) ? (int) $_GET['step'] : -1;
+
+/**
+ * Display setup wp-config.php file header.
+ *
+ * @ignore
+ * @since 2.3.0
+ *
+ * @param string|string[] $body_classes Class attribute values for the body tag.
+ */
+function setup_config_display_header( $body_classes = array() ) {
+	$body_classes   = (array) $body_classes;
+	$body_classes[] = 'wp-core-ui';
+	$dir_attr       = '';
+	if ( is_rtl() ) {
+		$body_classes[] = 'rtl';
+		$dir_attr       = ' dir="rtl"';
+	}
+
+	header( 'Content-Type: text/html; charset=utf-8' );
+	?>
+<!DOCTYPE html>
+<html<?php echo $dir_attr; ?>>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="noindex,nofollow" />
+	<title><?php _e( 'ClassicPress &rsaquo; Setup Configuration File' ); ?></title>
+	<?php wp_admin_css( 'install', true ); ?>
+</head>
+<body class="<?php echo implode( ' ', $body_classes ); ?>">
+<p id="logo"><?php _e( 'ClassicPress' ); ?></p>
+	<?php
+} // End function setup_config_display_header();
+
 $language = '';
 if ( ! empty( $_REQUEST['language'] ) ) {
 	$language = preg_replace( '/[^a-zA-Z0-9_]/', '', $_REQUEST['language'] );
@@ -102,31 +123,23 @@ if ( ! empty( $_REQUEST['language'] ) ) {
 	$language = $GLOBALS['wp_local_package'];
 }
 
-// Get current step.
-$step = isset( $_GET['step'] ) ? (int) $_GET['step'] : -1;
-
-// React to current step.
 switch ( $step ) {
-
-	// Just getting started? Display the language picker.
 	case -1:
 		if ( wp_can_install_language_pack() && empty( $language ) ) {
 			$languages = wp_get_available_translations();
 			if ( $languages ) {
 				setup_config_display_header( 'language-chooser' );
 				echo '<h1 class="screen-reader-text">Select a default language</h1>';
-				echo '<form id="setup" method="post" action="?step=1">';
+				echo '<form id="setup" method="post" action="?step=0">';
 				wp_install_language_form( $languages );
 				echo '</form>';
-				break; // end switch ( $step ), case -1
+				break;
 			}
 		}
 
-		// Notably, there is no longer a step 0 here.
+		// Deliberately fall through if we can't reach the translations API.
 
-		// Display the database setup screen.
-	case 1:
-		// Ensure language is loaded.
+	case 0:
 		if ( ! empty( $language ) ) {
 			$loaded_language = wp_download_language_pack( $language );
 			if ( $loaded_language ) {
@@ -135,126 +148,157 @@ switch ( $step ) {
 			}
 		}
 
-		// Print the page header.
 		setup_config_display_header();
-
-		// Create a string depicting step 2.
-		$step_2  = 'setup-config.php?step=2';
-		$step_2 .= ( isset( $_REQUEST['noapi'] ) ) ? '&amp;noapi' : '';
-		$step_2 .= ( ! empty( $loaded_language ) ) ? '&amp;language=' . $loaded_language : '';
-
-		// Screen reader text; form open.
-		echo '<h1 class="screen-reader-text">' . __( 'Database setup' ) . '</h1>';
-		echo '<form method="post" action="setup-config.php?step=2">';
-
-		// Title.
-		echo '<h2>' . __( 'Database Setup' ) . '</h2>';
-
-		// Description.
-		echo '<p>' . sprintf(
-			/* translators: link to support forums for more help */
-			__( 'To get started, fill in your database information. If you don&#8217;t have this information, it can be requested from your web host. Need more <a href="%s" target="_blank" rel="noopener">help</a>?' ),
-			'https://forums.classicpress.net/c/support'
-		) . '</p>';
-
-		// Database settings inputs.
-		echo '<table class="form-table">';
-		echo '	<tr>';
-		echo '		<th scope="row"><label for="dbname">' . __( 'Database Name' ) . '</label></th>';
-		echo '		<td><input name="dbname" id="dbname" type="text" size="25" value="classicpress" /></td>';
-		echo '	</tr>';
-		echo '	<tr>';
-		echo '		<th scope="row"><label for="uname">' . __( 'Database Username' ) . '</label></th>';
-		echo '		<td><input name="uname" id="uname" type="text" size="25" value="' . htmlspecialchars( _x( 'username', 'example username' ), ENT_QUOTES ) . '" /></td>';
-		echo '	</tr>';
-		echo '	<tr>';
-		echo '		<th scope="row"><label for="pwd">' . __( 'Database Password' ) . '</label></th>';
-		echo '		<td><input name="pwd" id="pwd" type="text" size="25" value="1ejm127$69%" autocomplete="off" /></td>';
-		echo '	</tr>';
-		echo '	<tr>';
-		echo '		<th scope="row"><label for="dbhost">' . __( 'Database Host' ) . '</label></th>';
-		echo '		<td><input name="dbhost" id="dbhost" type="text" size="25" value="localhost" /></td>';
-		echo '	</tr>';
-		echo '	<tr>';
-		echo '		<th scope="row"><label for="prefix">' . __( 'Table Prefix' ) . '</label></th>';
-		echo '		<td><input name="prefix" id="prefix" type="text" value="cp_" size="25" /> ' .
-			sprintf(
-				'<a href="%s" target="_blank" rel="noopener">' . __( 'Learn More' ) . '</a>',
-				esc_url( 'https://docs.classicpress.net/installing-classicpress/#installation-steps' )
-			) .
-			'</td>';
-		echo '	</tr>';
-		echo '</table>';
-
-		// Allow disabling calls to the salts API.
-		if ( isset( $_GET['noapi'] ) ) {
-			echo '<input name="noapi" type="hidden" value="1" />';
+		$step_1 = 'setup-config.php?step=1';
+		if ( isset( $_REQUEST['noapi'] ) ) {
+			$step_1 .= '&amp;noapi';
 		}
+		if ( ! empty( $loaded_language ) ) {
+			$step_1 .= '&amp;language=' . $loaded_language;
+		}
+		?>
+<h1 class="screen-reader-text">
+		<?php
+		/* translators: Hidden accessibility text. */
+		_e( 'Before getting started' );
+		?>
+</h1>
+<p><?php _e( 'Welcome to ClassicPress. Before getting started, you will need to know the following items.' ); ?></p>
+<ol>
+	<li><?php _e( 'Database name' ); ?></li>
+	<li><?php _e( 'Database username' ); ?></li>
+	<li><?php _e( 'Database password' ); ?></li>
+	<li><?php _e( 'Database host' ); ?></li>
+	<li><?php _e( 'Table prefix (if you want to run more than one ClassicPress in a single database)' ); ?></li>
+</ol>
+<p>
+		<?php
+		printf(
+			/* translators: %s: wp-config.php */
+			__( 'This information is being used to create a %s file.' ),
+			'<code>wp-config.php</code>'
+		);
+		?>
+	<strong>
+		<?php
+		printf(
+			/* translators: 1: wp-config-sample.php, 2: wp-config.php */
+			__( 'If for any reason this automatic file creation does not work, do not worry. All this does is fill in the database information to a configuration file. You may also simply open %1$s in a text editor, fill in your information, and save it as %2$s.' ),
+			'<code>wp-config-sample.php</code>',
+			'<code>wp-config.php</code>'
+		);
+		?>
+	</strong>
+		<?php
+		printf(
+			/* translators: 1: Documentation URL, 2: wp-config.php */
+			__( 'Need more help? <a href="%1$s">Read the support article on %2$s</a>.' ),
+			__( 'https://wordpress.org/documentation/article/editing-wp-config-php/' ),
+			'<code>wp-config.php</code>'
+		);
+		?>
+</p>
+<p><?php _e( 'In all likelihood, these items were supplied to you by your web host. If you do not have this information, then you will need to contact them before you can continue. If you are ready&hellip;' ); ?></p>
 
-		// Set a hidden lang arg.
-		echo '<input type="hidden" name="language" value="' . esc_attr( $language ) . '" />';
-		// Add a submit button and close the form.
-		echo '<p class="step"><input name="submit" type="submit" value="' . htmlspecialchars( __( 'Continue' ), ENT_QUOTES ) . '" class="button button-primary button-hero cp-button" /></p>';
-		echo '</form>';
+<p class="step"><a href="<?php echo $step_1; ?>" class="button button-large"><?php _e( 'Let&#8217;s go!' ); ?></a></p>
+		<?php
+		break;
 
-		break; // end case 1
-
-	// Display the site setup (title/admin/SEO) screen.
-	case 2:
-		// Handle language.
+	case 1:
 		load_default_textdomain( $language );
 		$GLOBALS['wp_locale'] = new WP_Locale();
 
-		// Get and pare submitted data.
+		setup_config_display_header();
+
+		$autofocus = wp_is_mobile() ? '' : ' autofocus';
+		?>
+<h1 class="screen-reader-text">
+		<?php
+		/* translators: Hidden accessibility text. */
+		_e( 'Set up your database connection' );
+		?>
+</h1>
+<form method="post" action="setup-config.php?step=2">
+	<p><?php _e( 'Below you should enter your database connection details. If you are not sure about these, contact your host.' ); ?></p>
+	<table class="form-table" role="presentation">
+		<tr>
+			<th scope="row"><label for="dbname"><?php _e( 'Database Name' ); ?></label></th>
+			<td><input name="dbname" id="dbname" type="text" aria-describedby="dbname-desc" size="25" placeholder="wordpress"<?php echo $autofocus; ?>/></td>
+			<td id="dbname-desc"><?php _e( 'The name of the database you want to use with ClassicPress.' ); ?></td>
+		</tr>
+		<tr>
+			<th scope="row"><label for="uname"><?php _e( 'Username' ); ?></label></th>
+			<td><input name="uname" id="uname" type="text" aria-describedby="uname-desc" size="25" placeholder="<?php echo htmlspecialchars( _x( 'username', 'example username' ), ENT_QUOTES ); ?>" /></td>
+			<td id="uname-desc"><?php _e( 'Your database username.' ); ?></td>
+		</tr>
+		<tr>
+			<th scope="row"><label for="pwd"><?php _e( 'Password' ); ?></label></th>
+			<td><input name="pwd" id="pwd" type="text" aria-describedby="pwd-desc" size="25" placeholder="<?php echo htmlspecialchars( _x( 'password', 'example password' ), ENT_QUOTES ); ?>" autocomplete="off" spellcheck="false" /></td>
+			<td id="pwd-desc"><?php _e( 'Your database password.' ); ?></td>
+		</tr>
+		<tr>
+			<th scope="row"><label for="dbhost"><?php _e( 'Database Host' ); ?></label></th>
+			<td><input name="dbhost" id="dbhost" type="text" aria-describedby="dbhost-desc" size="25" value="localhost" /></td>
+			<td id="dbhost-desc">
+			<?php
+				/* translators: %s: localhost */
+				printf( __( 'You should be able to get this info from your web host, if %s does not work.' ), '<code>localhost</code>' );
+			?>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><label for="prefix"><?php _e( 'Table Prefix' ); ?></label></th>
+			<td><input name="prefix" id="prefix" type="text" aria-describedby="prefix-desc" value="wp_" size="25" /></td>
+			<td id="prefix-desc"><?php _e( 'If you want to run multiple ClassicPress installations in a single database, change this.' ); ?></td>
+		</tr>
+	</table>
+		<?php
+		if ( isset( $_GET['noapi'] ) ) {
+			?>
+<input name="noapi" type="hidden" value="1" /><?php } ?>
+	<input type="hidden" name="language" value="<?php echo esc_attr( $language ); ?>" />
+	<p class="step"><input name="submit" type="submit" value="<?php echo htmlspecialchars( __( 'Submit' ), ENT_QUOTES ); ?>" class="button button-large" /></p>
+</form>
+		<?php
+		break;
+
+	case 2:
+		load_default_textdomain( $language );
+		$GLOBALS['wp_locale'] = new WP_Locale();
+
 		$dbname = trim( wp_unslash( $_POST['dbname'] ) );
 		$uname  = trim( wp_unslash( $_POST['uname'] ) );
 		$pwd    = trim( wp_unslash( $_POST['pwd'] ) );
 		$dbhost = trim( wp_unslash( $_POST['dbhost'] ) );
 		$prefix = trim( wp_unslash( $_POST['prefix'] ) );
 
-		// Base of setup URL.
-		$step_1 = 'setup-config.php?step=1';
-
-		// Append to step 1, as needed.
+		$step_1  = 'setup-config.php?step=1';
+		$install = 'install.php';
 		if ( isset( $_REQUEST['noapi'] ) ) {
 			$step_1 .= '&amp;noapi';
 		}
 
-		// Base of installation URL.
-		$install = 'install.php';
-
-		// Language check.
 		if ( ! empty( $language ) ) {
-			// Append language to setup URL and install URL.
 			$step_1  .= '&amp;language=' . $language;
 			$install .= '?language=' . $language;
 		} else {
-			// Only append to the install URL.
 			$install .= '?language=en_US';
 		}
 
-		// A link to "go back" when an error occurs.
-		$tryagain_link = '<a href="' . $step_1 . '" onclick="javascript:history.go(-1);return false;" class="button button-secondary">' . __( 'Try Again' ) . '</a>';
+		$tryagain_link = '</p><p class="step"><a href="' . $step_1 . '" onclick="javascript:history.go(-1);return false;" class="button button-large">' . __( 'Try Again' ) . '</a>';
 
-		// Is database prefix unacceptable? Bail with linkback.
 		if ( empty( $prefix ) ) {
-			setup_config_display_header( 'cp-installation-error' );
-			echo '<h1>' . __( 'Missing Table Prefix' ) . '</h1>';
-			echo '<p>' . __( 'The table prefix field cannot be empty.' ) . '</p>';
-			echo '<p class="step">' . $tryagain_link . '</p>';
-			setup_config_display_footer();
+			wp_die( __( '<strong>Error:</strong> "Table Prefix" must not be empty.' ) . $tryagain_link );
 		}
 
-		// Prefix is more than letters, numbers, underscores? Bail with linkback.
+		// Validate $prefix: it can only contain letters, numbers and underscores.
 		if ( preg_match( '|[^a-z0-9_]|i', $prefix ) ) {
-			setup_config_display_header( 'cp-installation-error' );
-			echo '<h1>' . __( 'Invalid Table Prefix' ) . '</h1>';
-			echo '<p>' . __( 'The table prefix field can only contain numbers, letters, and underscores.' ) . '</p>';
-			echo '<p class="step">' . $tryagain_link . '</p>';
-			setup_config_display_footer();
+			wp_die( __( '<strong>Error:</strong> "Table Prefix" can only contain numbers, letters, and underscores.' ) . $tryagain_link );
 		}
 
+		// Test the DB connection.
 		/**#@+
+		 *
 		 * @ignore
 		 */
 		define( 'DB_NAME', $dbname );
@@ -263,36 +307,27 @@ switch ( $step ) {
 		define( 'DB_HOST', $dbhost );
 		/**#@-*/
 
-		// Kill and resurrect the database object with passed values.
+		// Re-construct $wpdb with these new values.
 		unset( $wpdb );
 		require_wp_db();
 
 		/*
-		 * The wpdb constructor bails when WP_SETUP_CONFIG is set, so we must
-		 * fire this manually. We'll fail here if the values are no good.
-		 */
-
-		// Test the connection.
+		* The wpdb constructor bails when WP_SETUP_CONFIG is set, so we must
+		* fire this manually. We'll fail here if the values are no good.
+		*/
 		$wpdb->db_connect();
 
-		// Were there problems connecting to the database? Bail with linkback.
 		if ( ! empty( $wpdb->error ) ) {
-			setup_config_display_header( 'cp-installation-error' );
-			echo $wpdb->error->get_error_message();
-			echo '<p class="step">' . $tryagain_link . '</p>';
-			setup_config_display_footer();
+			wp_die( $wpdb->error->get_error_message() . $tryagain_link );
 		}
 
-		// Is the prefix a MySQL value (e.g. a number) by itself? Bail.
-		$errors = $wpdb->hide_errors();
+		$errors = $wpdb->suppress_errors();
 		$wpdb->query( "SELECT $prefix" );
-		$wpdb->show_errors( $errors );
+		$wpdb->suppress_errors( $errors );
+
 		if ( ! $wpdb->last_error ) {
-			setup_config_display_header( 'cp-installation-error' );
-			echo '<h1>' . __( 'Invalid Table Prefix' ) . '</h1>';
-			echo '<p>' . __( 'Your table prefix seems to be invalid. Try a different prefix using only letters, numbers, and underscores.' ) . '</p>';
-			echo '<p class="step">' . $tryagain_link . '</p>';
-			setup_config_display_footer();
+			// MySQL was able to parse the prefix as a value, which we don't want. Bail.
+			wp_die( __( '<strong>Error:</strong> "Table Prefix" is invalid.' ) );
 		}
 
 		// Generate keys and salts using secure CSPRNG; fallback to API if enabled; further fallback to original wp_generate_password().
@@ -320,9 +355,8 @@ switch ( $step ) {
 				}
 			} else {
 				$secret_keys = explode( "\n", wp_remote_retrieve_body( $secret_keys ) );
-				array_shift( $secret_keys ); // the first line just contains "<pre>"
 				foreach ( $secret_keys as $k => $v ) {
-					$secret_keys[ $k ] = substr( $v, 29, 64 );
+					$secret_keys[ $k ] = substr( $v, 28, 64 );
 				}
 			}
 		}
@@ -330,7 +364,7 @@ switch ( $step ) {
 		$key = 0;
 		foreach ( $config_file as $line_num => $line ) {
 			if ( '$table_prefix =' === substr( $line, 0, 15 ) ) {
-				$config_file[ $line_num ] = '$table_prefix  = \'' . addcslashes( $prefix, "\\'" ) . "';\r\n";
+				$config_file[ $line_num ] = '$table_prefix = \'' . addcslashes( $prefix, "\\'" ) . "';\r\n";
 				continue;
 			}
 
@@ -346,11 +380,11 @@ switch ( $step ) {
 				case 'DB_USER':
 				case 'DB_PASSWORD':
 				case 'DB_HOST':
-					$config_file[ $line_num ] = "define('" . $constant . "'," . $padding . "'" . addcslashes( constant( $constant ), "\\'" ) . "');\r\n";
+					$config_file[ $line_num ] = "define( '" . $constant . "'," . $padding . "'" . addcslashes( constant( $constant ), "\\'" ) . "' );\r\n";
 					break;
 				case 'DB_CHARSET':
 					if ( 'utf8mb4' === $wpdb->charset || ( ! $wpdb->charset && $wpdb->has_cap( 'utf8mb4' ) ) ) {
-						$config_file[ $line_num ] = "define('" . $constant . "'," . $padding . "'utf8mb4');\r\n";
+						$config_file[ $line_num ] = "define( '" . $constant . "'," . $padding . "'utf8mb4' );\r\n";
 					}
 					break;
 				case 'AUTH_KEY':
@@ -361,123 +395,115 @@ switch ( $step ) {
 				case 'SECURE_AUTH_SALT':
 				case 'LOGGED_IN_SALT':
 				case 'NONCE_SALT':
-					$config_file[ $line_num ] = "define('" . $constant . "'," . $padding . "'" . $secret_keys[ $key++ ] . "');\r\n";
+					$config_file[ $line_num ] = "define( '" . $constant . "'," . $padding . "'" . $secret_keys[ $key++ ] . "' );\r\n";
 					break;
 			}
 		}
 		unset( $line );
 
-		// Is config file writable? No?!?!
-		if ( ! is_writable( ABSPATH ) ) {
-			// Page head.
-			setup_config_display_header( 'cp-installation-error' );
-			// Page heading.
-			echo '<h1>' . __( 'Config File Permissions Insufficient' ) . '</h1>';
-			// Error description.
+		if ( ! is_writable( ABSPATH ) ) :
+			setup_config_display_header();
+			?>
+<p>
+			<?php
 			/* translators: %s: wp-config.php */
-			echo '<p>' . sprintf( __( 'The %s file is not writable.' ), '<code>wp-config.php</code>' ) . '</p>';
-			// Error solution.
+			printf( __( 'Unable to write to %s file.' ), '<code>wp-config.php</code>' );
+			?>
+</p>
+<p id="wp-config-description">
+			<?php
 			/* translators: %s: wp-config.php */
-			echo '<p>' . sprintf( __( 'You can create the %s file manually and paste the following text into it.' ), '<code>wp-config.php</code>' ) . '</p>';
-			// Text version of config file for manual copy paste. Populated.
-			echo '<textarea id="wp-config" cols="98" rows="15" class="code" readonly="readonly">';
+			printf( __( 'You can create the %s file manually and paste the following text into it.' ), '<code>wp-config.php</code>' );
+
+			$config_text = '';
+
 			foreach ( $config_file as $line ) {
-				echo htmlentities( $line, ENT_COMPAT, 'UTF-8' );
+				$config_text .= htmlentities( $line, ENT_COMPAT, 'UTF-8' );
 			}
-			echo '</textarea>';
-			// Closing note.
-			echo '<p>' . __( 'After you&#8217;ve done that, click &#8220;Continue&#8221;.' ) . '</p>';
-			// Link to continue.
-			echo '<p class="step"><a href="' . $install . '" class="button button-primary button-hero cp-button">' . __( 'Continue' ) . '</a></p>';
-			// Add footer scripts only relevant to this situation.
-			echo '<script>(function(){ if ( ! /iPad|iPod|iPhone/.test( navigator.userAgent ) ) { var el = document.getElementById("wp-config"); el.focus(); el.select(); } })();</script>';
-			// Close body/html tags; die.
-			setup_config_display_footer();
+			?>
+</p>
+<p class="configuration-rules-label"><label for="wp-config">
+			<?php
+			/* translators: %s: wp-config.php */
+			printf( __( 'Configuration rules for %s:' ), '<code>wp-config.php</code>' );
+			?>
+	</label></p>
+<textarea id="wp-config" cols="98" rows="15" class="code" readonly="readonly" aria-describedby="wp-config-description"><?php echo $config_text; ?></textarea>
+<p><?php _e( 'After you&#8217;ve done that, click &#8220;Run the installation&#8221;.' ); ?></p>
+<p class="step"><a href="<?php echo $install; ?>" class="button button-large"><?php _e( 'Run the installation' ); ?></a></p>
+<script>
+(function(){
+if ( ! /iPad|iPod|iPhone/.test( navigator.userAgent ) ) {
+	var el = document.getElementById('wp-config');
+	el.focus();
+	el.select();
+}
+})();
+</script>
+			<?php
+		else :
+			/*
+			 * If this file doesn't exist, then we are using the wp-config-sample.php
+			 * file one level up, which is for the develop repo.
+			 */
+			if ( file_exists( ABSPATH . 'wp-config-sample.php' ) ) {
+				$path_to_wp_config = ABSPATH . 'wp-config.php';
+			} else {
+				$path_to_wp_config = dirname( ABSPATH ) . '/wp-config.php';
+			}
 
-		} // end ( ! is_writable( ABSPATH ) )
+			$error_message = '';
+			$handle        = fopen( $path_to_wp_config, 'w' );
+			/*
+			 * Why check for the absence of false instead of checking for resource with is_resource()?
+			 * To future-proof the check for when fopen returns object instead of resource, i.e. a known
+			 * change coming in PHP.
+			 */
+			if ( false !== $handle ) {
+				foreach ( $config_file as $line ) {
+					fwrite( $handle, $line );
+				}
+				fclose( $handle );
+			} else {
+				$wp_config_perms = fileperms( $path_to_wp_config );
+				if ( ! empty( $wp_config_perms ) && ! is_writable( $path_to_wp_config ) ) {
+					$error_message = sprintf(
+						/* translators: 1: wp-config.php, 2: Documentation URL. */
+						__( 'You need to make the file %1$s writable before you can save your changes. See <a href="%2$s">Changing File Permissions</a> for more information.' ),
+						'<code>wp-config.php</code>',
+						__( 'https://wordpress.org/documentation/article/changing-file-permissions/' )
+					);
+				} else {
+					$error_message = sprintf(
+						/* translators: %s: wp-config.php */
+						__( 'Unable to write to %s file.' ),
+						'<code>wp-config.php</code>'
+					);
+				}
+			}
 
-		/*
-		 * If this file doesn't exist, then we are using the wp-config-sample.php
-		 * file one level up, which is for the develop repo.
-		 */
+			chmod( $path_to_wp_config, 0666 );
+			setup_config_display_header();
 
-		// Get path to config file.
-		if ( file_exists( ABSPATH . 'wp-config-sample.php' ) ) {
-			$path_to_wp_config = ABSPATH . 'wp-config.php';
-		} else {
-			$path_to_wp_config = dirname( ABSPATH ) . '/wp-config.php';
-		}
+			if ( false !== $handle ) :
+				?>
+<h1 class="screen-reader-text">
+				<?php
+				/* translators: Hidden accessibility text. */
+				_e( 'Successful database connection' );
+				?>
+</h1>
+<p><?php _e( 'All right, sparky! You&#8217;ve made it through this part of the installation. ClassicPress can now communicate with your database. If you are ready, time now to&hellip;' ); ?></p>
 
-		// Write to the config file.
-		$handle = fopen( $path_to_wp_config, 'w' );
-		foreach ( $config_file as $line ) {
-			fwrite( $handle, $line );
-		}
-		fclose( $handle );
-
-		// Set file permissions.
-		chmod( $path_to_wp_config, 0666 );
-
-		// Redirect to success screen.
-		wp_redirect( $install );
-
-		// Kill the script. With fire.
-		exit;
-
-		// For completeness; end switch ( $step ) case 2
+<p class="step"><a href="<?php echo $install; ?>" class="button button-large"><?php _e( 'Run the installation' ); ?></a></p>
+				<?php
+			else :
+				printf( '<p>%s</p>', $error_message );
+			endif;
+		endif;
 		break;
-
-} // end switch ( $step )
-
-// Print language chooser script.
-wp_print_scripts( 'language-chooser' );
-
-// Close the body/html tags; die.
-setup_config_display_footer();
-
-/**
- * Display setup wp-config.php file header.
- *
- * @ignore
- * @since 2.3.0
- *
- * @global string    $wp_local_package
- * @global WP_Locale $wp_locale
- *
- * @param string|array $body_classes
- */
-function setup_config_display_header( $body_classes = array() ) {
-	// Make sure we're working with an array.
-	$body_classes = (array) $body_classes;
-	// Add core ui class.
-	$body_classes[] = 'cp-installation';
-	$body_classes[] = 'wp-core-ui';
-	// Add rtl class, if needed.
-	if ( is_rtl() ) {
-		$body_classes[] = 'rtl';
-	}
-	// Set the content type.
-	header( 'Content-Type: text/html; charset=utf-8' );
-	// Print out the page header.
-	echo '<!DOCTYPE html>' . "\n";
-	echo '<html xmlns="http://www.w3.org/1999/xhtml" ' . get_language_attributes() . '>' . "\n";
-	echo '<head>' . "\n";
-	echo '<meta name="viewport" content="width=device-width" />' . "\n";
-	echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' . "\n";
-	echo '<meta name="robots" content="noindex,nofollow" />' . "\n";
-	echo '<title>' . __( 'ClassicPress &rsaquo; Setup Configuration File' ) . '</title>' . "\n";
-	wp_admin_css( 'install', true );
-	echo '</head>' . "\n";
-	echo '<body class="' . implode( ' ', $body_classes ) . '">' . "\n";
-	// Add the ClassicPress logo.
-	echo '<p id="logo"><a href="' . esc_url( 'https://www.classicpress.net/' ) . '" tabindex="-1">' . __( 'ClassicPress' ) . '</a></p>' . "\n";
-}
-
-/**
- * Close body/html tags; end script execution.
- */
-function setup_config_display_footer() {
-	echo "\n" . '</body>' . "\n";
-	echo '</html>';
-	die();
-}
+} // End of the steps switch.
+?>
+<?php wp_print_scripts( 'language-chooser' ); ?>
+</body>
+</html>

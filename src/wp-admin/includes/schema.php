@@ -11,7 +11,7 @@
 /**
  * Declare these as global in case schema.php is included from a function.
  *
- * @global wpdb   $wpdb            ClassicPress database abstraction object.
+ * @global wpdb   $wpdb            WordPress database abstraction object.
  * @global array  $wp_queries
  * @global string $charset_collate
  */
@@ -347,13 +347,13 @@ CREATE TABLE $wpdb->signups (
 $wp_queries = wp_get_db_schema( 'all' );
 
 /**
- * Create ClassicPress options and set the default values.
+ * Create WordPress options and set the default values.
  *
  * @since 1.5.0
  * @since 5.1.0 The $options parameter has been added.
  *
- * @global wpdb $wpdb                  ClassicPress database abstraction object.
- * @global int  $wp_db_version         ClassicPress database version.
+ * @global wpdb $wpdb                  WordPress database abstraction object.
+ * @global int  $wp_db_version         WordPress database version.
  * @global int  $wp_current_db_version The old (current) database version.
  *
  * @param array $options Optional. Custom option $key => $value pairs to use. Default empty array.
@@ -363,7 +363,7 @@ function populate_options( array $options = array() ) {
 
 	$guessurl = wp_guess_url();
 	/**
-	 * Fires before creating ClassicPress options and populating their default values.
+	 * Fires before creating WordPress options and populating their default values.
 	 *
 	 * @since 2.6.0
 	 */
@@ -966,9 +966,9 @@ endif;
  *
  * @since 3.0.0
  *
- * @global wpdb       $wpdb         ClassicPress database abstraction object.
+ * @global wpdb       $wpdb         WordPress database abstraction object.
  * @global object     $current_site
- * @global WP_Rewrite $wp_rewrite   ClassicPress rewrite component.
+ * @global WP_Rewrite $wp_rewrite   WordPress rewrite component.
  *
  * @param int    $network_id        ID of network to populate.
  * @param string $domain            The domain name for the network. Example: "example.com".
@@ -1050,7 +1050,7 @@ function populate_network( $network_id = 1, $domain = '', $email = '', $site_nam
 	 * created.
 	 */
 	if ( ! is_multisite() ) {
-		$current_site            = new stdClass;
+		$current_site            = new stdClass();
 		$current_site->domain    = $domain;
 		$current_site->path      = $path;
 		$current_site->site_name = ucfirst( $domain );
@@ -1140,8 +1140,8 @@ function populate_network( $network_id = 1, $domain = '', $email = '', $site_nam
  *
  * @since 5.1.0
  *
- * @global wpdb $wpdb          ClassicPress database abstraction object.
- * @global int  $wp_db_version ClassicPress database version.
+ * @global wpdb $wpdb          WordPress database abstraction object.
+ * @global int  $wp_db_version WordPress database version.
  *
  * @param int   $network_id Network ID to populate meta for.
  * @param array $meta       Optional. Custom meta $key => $value pairs to use. Default empty array.
@@ -1316,7 +1316,7 @@ We hope you enjoy your new site. Thanks!
 }
 
 /**
- * Creates ClassicPress site meta and sets the default values.
+ * Creates WordPress site meta and sets the default values.
  *
  * @since 5.1.0
  *

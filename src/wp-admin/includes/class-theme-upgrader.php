@@ -507,8 +507,8 @@ class Theme_Upgrader extends WP_Upgrader {
 	 *
 	 * @since 3.3.0
 	 *
-	 * @global WP_Filesystem_Base $wp_filesystem ClassicPress filesystem subclass.
-	 * @global string             $wp_version    The ClassicPress version string.
+	 * @global WP_Filesystem_Base $wp_filesystem WordPress filesystem subclass.
+	 * @global string             $wp_version    The WordPress version string.
 	 *
 	 * @param string $source The path to the downloaded package source.
 	 * @return string|WP_Error The source as passed, or a WP_Error object on failure.

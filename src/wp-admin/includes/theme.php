@@ -271,7 +271,7 @@ function get_theme_update_available( $theme ) {
 }
 
 /**
- * Retrieves list of ClassicPress theme features (aka theme tags).
+ * Retrieves list of WordPress theme features (aka theme tags).
  *
  * @since 3.1.0
  * @since 3.2.0 Added 'Gray' color and 'Featured Image Header', 'Featured Images',
@@ -433,7 +433,7 @@ function get_theme_feature_list( $api = true ) {
  * @param string       $action API action to perform: 'query_themes', 'theme_information',
  *                             'hot_tags' or 'feature_list'.
  * @param array|object $args   {
- *     Optional. Array or object of arguments to serialize for the Themes API.
+ *     Optional. Array or object of arguments to serialize for the Themes API. Default empty array.
  *
  *     @type string  $slug     The theme slug. Default empty.
  *     @type int     $per_page Number of themes per page. Default 24.
@@ -548,7 +548,7 @@ function themes_api( $action, $args = array() ) {
 				sprintf(
 					/* translators: %s: Support forums URL. */
 					__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
-					__( 'https://forums.classicpress.net/c/support' )
+					__( 'https://wordpress.org/support/forums/' )
 				),
 				$request->get_error_message()
 			);
@@ -563,7 +563,7 @@ function themes_api( $action, $args = array() ) {
 					sprintf(
 						/* translators: %s: Support forums URL. */
 						__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
-						__( 'https://forums.classicpress.net/c/support' )
+						__( 'https://wordpress.org/support/forums/' )
 					),
 					wp_remote_retrieve_body( $request )
 				);
@@ -784,9 +784,24 @@ function customize_themes_print_templates() {
 		<div class="theme-backdrop"></div>
 		<div class="theme-wrap wp-clearfix" role="document">
 			<div class="theme-header">
-				<button type="button" class="left dashicons dashicons-no"><span class="screen-reader-text"><?php _e( 'Show previous theme' ); ?></span></button>
-				<button type="button" class="right dashicons dashicons-no"><span class="screen-reader-text"><?php _e( 'Show next theme' ); ?></span></button>
-				<button type="button" class="close dashicons dashicons-no"><span class="screen-reader-text"><?php _e( 'Close details dialog' ); ?></span></button>
+				<button type="button" class="left dashicons dashicons-no"><span class="screen-reader-text">
+					<?php
+					/* translators: Hidden accessibility text. */
+					_e( 'Show previous theme' );
+					?>
+				</span></button>
+				<button type="button" class="right dashicons dashicons-no"><span class="screen-reader-text">
+					<?php
+					/* translators: Hidden accessibility text. */
+					_e( 'Show next theme' );
+					?>
+				</span></button>
+				<button type="button" class="close dashicons dashicons-no"><span class="screen-reader-text">
+					<?php
+					/* translators: Hidden accessibility text. */
+					_e( 'Close details dialog' );
+					?>
+				</span></button>
 			</div>
 			<div class="theme-about wp-clearfix">
 				<div class="theme-screenshots">
@@ -823,7 +838,7 @@ function customize_themes_print_templates() {
 									'%1$s <span class="screen-reader-text">%2$s</span>',
 									/* translators: %s: Number of ratings. */
 									sprintf( __( '(%s ratings)' ), '{{ data.num_ratings }}' ),
-									/* translators: Accessibility text. */
+									/* translators: Hidden accessibility text. */
 									__( '(opens in a new tab)' )
 								);
 								?>

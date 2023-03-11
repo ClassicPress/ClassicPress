@@ -253,7 +253,7 @@ class WP_Importer {
 	 *
 	 * @since 3.0.0
 	 *
-	 * @global wpdb  $wpdb       ClassicPress database abstraction object.
+	 * @global wpdb  $wpdb       WordPress database abstraction object.
 	 * @global int[] $wp_actions
 	 */
 	public function stop_the_insanity() {

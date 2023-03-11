@@ -51,7 +51,7 @@ class WP_Textdomain_Registry {
 	 *
 	 * @var array
 	 */
-	protected $cached_mo_files;
+	protected $cached_mo_files = array();
 
 	/**
 	 * Returns the languages directory path for a specific domain and locale.
@@ -108,6 +108,8 @@ class WP_Textdomain_Registry {
 	 * Sets the custom path to the plugin's/theme's languages directory.
 	 *
 	 * Used by {@see load_plugin_textdomain()} and {@see load_theme_textdomain()}.
+	 *
+	 * @since 6.1.0
 	 *
 	 * @param string $domain Text domain.
 	 * @param string $path   Language directory path.

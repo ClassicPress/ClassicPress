@@ -50,10 +50,10 @@ get_current_screen()->add_help_tab(
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
 	'<p>' . __( '<a href="https://developer.wordpress.org/themes/">Documentation on Theme Development</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://wordpress.org/support/article/appearance-editor-screen/">Documentation on Editing Themes</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://wordpress.org/support/article/editing-files/">Documentation on Editing Files</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://wordpress.org/documentation/article/appearance-theme-file-editor-screen/">Documentation on Editing Themes</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://wordpress.org/documentation/article/editing-files/">Documentation on Editing Files</a>' ) . '</p>' .
 	'<p>' . __( '<a href="https://developer.wordpress.org/themes/basics/template-tags/">Documentation on Template Tags</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support Forums</a>' ) . '</p>'
+	'<p>' . __( '<a href="https://wordpress.org/support/forums/">Support forums</a>' ) . '</p>'
 );
 
 wp_reset_vars( array( 'action', 'error', 'file', 'theme' ) );
@@ -199,7 +199,8 @@ if ( $file_description !== $file_show ) {
 		<pre><?php echo esc_html( $edit_error->get_error_message() ? $edit_error->get_error_message() : $edit_error->get_error_code() ); ?></pre>
 	</div>
 <?php endif; ?>
-<?php if ( preg_match( '/\.css$/', $file ) ) : ?>
+
+<?php if ( preg_match( '/\.css$/', $file ) && current_user_can( 'customize' ) ) : ?>
 	<div id="message" class="notice-info notice">
 		<p><strong><?php _e( 'Did you know?' ); ?></strong></p>
 		<p>
@@ -220,7 +221,8 @@ if ( $file_description !== $file_show ) {
 	<?php
 	echo $theme->display( 'Name' );
 	if ( $description ) {
-		echo ': ' . $description;}
+		echo ': ' . $description;
+	}
 	?>
 </h2>
 </div>
@@ -324,7 +326,7 @@ else :
 					printf(
 						/* translators: %s: Documentation URL. */
 						__( 'You need to make this file writable before you can save your changes. See <a href="%s">Changing File Permissions</a> for more information.' ),
-						__( 'https://wordpress.org/support/article/changing-file-permissions/' )
+						__( 'https://wordpress.org/documentation/article/changing-file-permissions/' )
 					);
 					?>
 				</p>

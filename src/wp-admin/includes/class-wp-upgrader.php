@@ -174,7 +174,7 @@ class WP_Upgrader {
 	 *
 	 * @since 2.8.0
 	 *
-	 * @global WP_Filesystem_Base $wp_filesystem ClassicPress filesystem subclass.
+	 * @global WP_Filesystem_Base $wp_filesystem WordPress filesystem subclass.
 	 *
 	 * @param string[] $directories                  Optional. Array of directories. If any of these do
 	 *                                               not exist, a WP_Error object will be returned.
@@ -296,7 +296,7 @@ class WP_Upgrader {
 	 *
 	 * @since 2.8.0
 	 *
-	 * @global WP_Filesystem_Base $wp_filesystem ClassicPress filesystem subclass.
+	 * @global WP_Filesystem_Base $wp_filesystem WordPress filesystem subclass.
 	 *
 	 * @param string $package        Full path to the package file.
 	 * @param bool   $delete_package Optional. Whether to delete the package file after attempting
@@ -378,7 +378,7 @@ class WP_Upgrader {
 	 *
 	 * @since 4.3.0
 	 *
-	 * @global WP_Filesystem_Base $wp_filesystem ClassicPress filesystem subclass.
+	 * @global WP_Filesystem_Base $wp_filesystem WordPress filesystem subclass.
 	 *
 	 * @param string $remote_destination The location on the remote filesystem to be cleared.
 	 * @return true|WP_Error True upon success, WP_Error on failure.
@@ -429,8 +429,9 @@ class WP_Upgrader {
 	 * clear out the destination folder if it already exists.
 	 *
 	 * @since 2.8.0
+	 * @since 6.2.0 Use move_dir() instead of copy_dir() when possible.
 	 *
-	 * @global WP_Filesystem_Base $wp_filesystem        ClassicPress filesystem subclass.
+	 * @global WP_Filesystem_Base $wp_filesystem        WordPress filesystem subclass.
 	 * @global array              $wp_theme_directories
 	 *
 	 * @param array|string $args {
@@ -470,7 +471,9 @@ class WP_Upgrader {
 		$destination       = $args['destination'];
 		$clear_destination = $args['clear_destination'];
 
-		set_time_limit( 300 );
+		if ( function_exists( 'set_time_limit' ) ) {
+			set_time_limit( 300 );
+		}
 
 		if ( empty( $source ) || empty( $destination ) ) {
 			return new WP_Error( 'bad_request', $this->strings['bad_request'] );
@@ -586,25 +589,38 @@ class WP_Upgrader {
 			}
 		}
 
-		// Create destination if needed.
-		if ( ! $wp_filesystem->exists( $remote_destination ) ) {
-			if ( ! $wp_filesystem->mkdir( $remote_destination, FS_CHMOD_DIR ) ) {
-				return new WP_Error( 'mkdir_failed_destination', $this->strings['mkdir_failed'], $remote_destination );
+		/*
+		 * If 'clear_working' is false, the source should not be removed, so use copy_dir() instead.
+		 *
+		 * Partial updates, like language packs, may want to retain the destination.
+		 * If the destination exists or has contents, this may be a partial update,
+		 * and the destination should not be removed, so use copy_dir() instead.
+		 */
+		if ( $args['clear_working']
+			&& (
+				// Destination does not exist or has no contents.
+				! $wp_filesystem->exists( $remote_destination )
+				|| empty( $wp_filesystem->dirlist( $remote_destination ) )
+			)
+		) {
+			$result = move_dir( $source, $remote_destination, true );
+		} else {
+			// Create destination if needed.
+			if ( ! $wp_filesystem->exists( $remote_destination ) ) {
+				if ( ! $wp_filesystem->mkdir( $remote_destination, FS_CHMOD_DIR ) ) {
+					return new WP_Error( 'mkdir_failed_destination', $this->strings['mkdir_failed'], $remote_destination );
+				}
 			}
-		}
-
-		// Copy new version of item into place.
-		$result = copy_dir( $source, $remote_destination );
-		if ( is_wp_error( $result ) ) {
-			if ( $args['clear_working'] ) {
-				$wp_filesystem->delete( $remote_source, true );
-			}
-			return $result;
+			$result = copy_dir( $source, $remote_destination );
 		}
 
 		// Clear the working folder?
 		if ( $args['clear_working'] ) {
 			$wp_filesystem->delete( $remote_source, true );
+		}
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
 		}
 
 		$destination_name = basename( str_replace( $local_destination, '', $destination ) );
@@ -871,7 +887,7 @@ class WP_Upgrader {
 	 *
 	 * @since 2.8.0
 	 *
-	 * @global WP_Filesystem_Base $wp_filesystem ClassicPress filesystem subclass.
+	 * @global WP_Filesystem_Base $wp_filesystem WordPress filesystem subclass.
 	 *
 	 * @param bool $enable True to enable maintenance mode, false to disable.
 	 */
@@ -891,9 +907,11 @@ class WP_Upgrader {
 	}
 
 	/**
-	 * Creates a lock using ClassicPress options.
+	 * Creates a lock using WordPress options.
 	 *
 	 * @since 4.5.0
+	 *
+	 * @global wpdb $wpdb The WordPress database abstraction object.
 	 *
 	 * @param string $lock_name       The name of this unique lock.
 	 * @param int    $release_timeout Optional. The duration in seconds to respect an existing lock.

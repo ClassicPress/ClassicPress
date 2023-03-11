@@ -18,7 +18,7 @@ _deprecated_file(
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
-<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="profile" href="https://gmpg.org/xfn/11" />
 <meta http-equiv="Content-Type" content="<?php bloginfo( 'html_type' ); ?>; charset=<?php bloginfo( 'charset' ); ?>" />
 
 <title><?php echo wp_get_document_title(); ?></title>
@@ -43,7 +43,8 @@ _deprecated_file(
 
 <?php
 if ( is_singular() ) {
-	wp_enqueue_script( 'comment-reply' );}
+	wp_enqueue_script( 'comment-reply' );
+}
 ?>
 
 <?php wp_head(); ?>
