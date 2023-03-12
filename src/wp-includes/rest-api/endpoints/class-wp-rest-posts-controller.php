@@ -249,6 +249,7 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 			'parent'         => 'post_parent__in',
 			'parent_exclude' => 'post_parent__not_in',
 			'search'         => 's',
+			'search_columns' => 'search_columns',
 			'slug'           => 'post_name__in',
 			'status'         => 'post_status',
 		);
@@ -1861,9 +1862,6 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 		if ( rest_is_field_included( 'content.protected', $fields ) ) {
 			$data['content']['protected'] = (bool) $post->post_password;
 		}
-		if ( rest_is_field_included( 'content.block_version', $fields ) ) {
-			$data['content']['block_version'] = block_version( $post->post_content );
-		}
 
 		if ( rest_is_field_included( 'excerpt', $fields ) ) {
 			/** This filter is documented in wp-includes/post-template.php */
@@ -2429,12 +2427,6 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 								'context'     => array( 'view', 'edit' ),
 								'readonly'    => true,
 							),
-							'block_version' => array(
-								'description' => __( 'Version of the content block format used by the post.' ),
-								'type'        => 'integer',
-								'context'     => array( 'edit' ),
-								'readonly'    => true,
-							),
 							'protected'     => array(
 								'description' => __( 'Whether the content is protected with a password.' ),
 								'type'        => 'boolean',
@@ -2890,6 +2882,16 @@ class WP_REST_Posts_Controller extends WP_REST_Controller {
 				'default'     => array(),
 			);
 		}
+
+		$query_params['search_columns'] = array(
+			'default'     => array(),
+			'description' => __( 'Array of column names to be searched.' ),
+			'type'        => 'array',
+			'items'       => array(
+				'enum' => array( 'post_title', 'post_content', 'post_excerpt' ),
+				'type' => 'string',
+			),
+		);
 
 		$query_params['slug'] = array(
 			'description' => __( 'Limit result set to posts with one or more specific slugs.' ),
