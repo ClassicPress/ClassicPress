@@ -1449,28 +1449,6 @@ final class WP_Theme implements ArrayAccess {
 	}
 
 	/**
-	 * Returns whether this theme is a block-based theme or not.
-	 *
-	 * @since 5.9.0
-	 *
-	 * @return bool
-	 */
-	public function is_block_theme() {
-		$paths_to_index_block_template = array(
-			$this->get_file_path( '/block-templates/index.html' ),
-			$this->get_file_path( '/templates/index.html' ),
-		);
-
-		foreach ( $paths_to_index_block_template as $path_to_index_block_template ) {
-			if ( is_file( $path_to_index_block_template ) && is_readable( $path_to_index_block_template ) ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
 	 * Retrieves the path of a file in the theme.
 	 *
 	 * Searches in the stylesheet directory before the template directory so themes

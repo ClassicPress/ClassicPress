@@ -3899,7 +3899,6 @@ function wp_trim_excerpt( $text = '', $post = null ) {
 		$text = get_the_content( '', false, $post );
 
 		$text = strip_shortcodes( $text );
-		$text = excerpt_remove_blocks( $text );
 
 		/** This filter is documented in wp-includes/post-template.php */
 		$text = apply_filters( 'the_content', $text );
