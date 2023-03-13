@@ -441,10 +441,10 @@ function wp_default_packages_scripts( $scripts ) {
 		),
 		'i18n' => array(
 			'dependencies' => array( 'wp-hooks' ),
-			'version'      => '6.1.1'
+			'version'      => '6.1.1',
 		),
 		'url' => array(
-			'version' => '6.1.1'
+			'version' => '6.1.1',
 		),
 	);
 

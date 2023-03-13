@@ -85,7 +85,7 @@ $importers = get_importers();
 
 // If a popular importer is not registered, create a dummy registration that links to the plugin installer.
 foreach ( $popular_importers as $pop_importer => $pop_data ) {
-	if ( isset( $importers[ $pop_importer ] ) ) s
+	if ( isset( $importers[ $pop_importer ] ) ) {
 		continue;
 	}
 	if ( isset( $importers[ $pop_data['importer-id'] ] ) ) {

@@ -37,7 +37,7 @@
 
 	<!--
 		PHPCompatibilityParagonieRandomCompat prevents false positives in `random_compat`.
-		However, because these files are included in a non-standard path, false positives are triggered in ClassicPress Core.
+		However, because these files are included in a non-standard path, false positives are triggered in WordPress Core.
 	-->
 	<rule ref="PHPCompatibility.IniDirectives.RemovedIniDirectives.mbstring_func_overloadDeprecated">
 		<exclude-pattern>/random_compat/byte_safe_strings\.php$</exclude-pattern>
@@ -52,8 +52,8 @@
 		<exclude-pattern>/random_compat/random_bytes_mcrypt\.php$</exclude-pattern>
 	</rule>
 
-	<!-- Whitelist the DB Class for use of `mysql_` extension in PHP < 7.0. -->
+	<!-- Allow the WP DB Class for use of `mysql_` extension in PHP < 7.0. -->
 	<rule ref="PHPCompatibility.Extensions.RemovedExtensions.mysql_DeprecatedRemoved">
-		<exclude-pattern>/src/wp-includes/wp-db\.php</exclude-pattern>
+		<exclude-pattern>/src/wp-includes/class-wpdb\.php</exclude-pattern>
 	</rule>
 </ruleset>

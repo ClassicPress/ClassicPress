@@ -1,24 +1,25 @@
 <phpunit
-	bootstrap="tests/phpunit/includes/bootstrap.php"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/9.2/phpunit.xsd"
+		bootstrap="tests/phpunit/includes/bootstrap.php"
 		backupGlobals="false"
 		colors="true"
 		beStrictAboutTestsThatDoNotTestAnything="true"
+		beStrictAboutOutputDuringTests="true"
+		convertErrorsToExceptions="true"
+		convertWarningsToExceptions="true"
+		convertNoticesToExceptions="true"
+		convertDeprecationsToExceptions="true"
 		>
 	<testsuites>
-		<!-- Default test suite to run all tests -->
+		<!-- Default test suite to run all tests. -->
 		<testsuite name="default">
 			<directory suffix=".php">tests/phpunit/tests</directory>
-			<file phpVersion="5.3.0">tests/phpunit/tests/actions/closures.php</file>
-			<file phpVersion="5.3.0">tests/phpunit/tests/image/editor.php</file>
-			<file phpVersion="5.3.0">tests/phpunit/tests/image/editorGd.php</file>
-			<file phpVersion="5.3.0">tests/phpunit/tests/image/editorImagick.php</file>
-			<file phpVersion="5.3.0">tests/phpunit/tests/oembed/headers.php</file>
-			<exclude>tests/phpunit/tests/actions/closures.php</exclude>
-			<exclude>tests/phpunit/tests/image/editor.php</exclude>
-			<exclude>tests/phpunit/tests/image/editorGd.php</exclude>
-			<exclude>tests/phpunit/tests/image/editorImagick.php</exclude>
-			<exclude>tests/phpunit/tests/oembed/headers.php</exclude>
 			<exclude>tests/phpunit/tests/rest-api/rest-autosaves-controller.php</exclude>
+		</testsuite>
+		<!-- Sets the DOING_AUTOSAVE constant, so needs to be run last. -->
+		<testsuite name="restapi-autosave">
+			<file>tests/phpunit/tests/rest-api/rest-autosaves-controller.php</file>
 		</testsuite>
 	</testsuites>
 	<groups>
@@ -39,13 +40,17 @@
 		<whitelist addUncoveredFilesFromWhitelist="true">
 			<directory suffix=".php">src</directory>
 			<exclude>
-				<!-- Third party library exclusions -->
+				<!-- Third party library exclusions. -->
 				<directory suffix=".php">src/wp-includes/ID3</directory>
 				<directory suffix=".php">src/wp-includes/IXR</directory>
 				<directory suffix=".php">src/wp-includes/random_compat</directory>
+				<directory suffix=".php">src/wp-includes/PHPMailer</directory>
 				<directory suffix=".php">src/wp-includes/Requests</directory>
 				<directory suffix=".php">src/wp-includes/SimplePie</directory>
 				<directory suffix=".php">src/wp-includes/Text</directory>
+
+				<!-- Plugins and themes. -->
+				<directory suffix=".php">src/wp-content/</directory>
 
 				<file>src/wp-admin/includes/class-ftp*</file>
 				<file>src/wp-admin/includes/class-pclzip.php</file>
@@ -56,11 +61,9 @@
 				<file>src/wp-includes/class-IXR.php</file>
 				<file>src/wp-includes/class-json.php</file>
 				<file>src/wp-includes/class-phpass.php</file>
-				<file>src/wp-includes/class-phpmailer.php</file>
 				<file>src/wp-includes/class-pop3.php</file>
 				<file>src/wp-includes/class-requests.php</file>
 				<file>src/wp-includes/class-simplepie.php</file>
-				<file>src/wp-includes/class-smtp.php</file>
 				<file>src/wp-includes/class-snoopy.php</file>
 				<file>src/wp-includes/deprecated.php</file>
 				<file>src/wp-includes/ms-deprecated.php</file>

@@ -4867,7 +4867,7 @@ function get_post_galleries( $post, $html = true ) {
 		return array();
 	}
 
-	if ( ! has_shortcode( $post->post_content, 'gallery' ) && ! has_block( 'gallery', $post->post_content ) ) {
+	if ( ! has_shortcode( $post->post_content, 'gallery' ) ) {
 		return array();
 	}
 
@@ -4906,98 +4906,6 @@ function get_post_galleries( $post, $html = true ) {
 					);
 				}
 			}
-		}
-	}
-
-	if ( has_block( 'gallery', $post->post_content ) ) {
-		$post_blocks = parse_blocks( $post->post_content );
-
-		while ( $block = array_shift( $post_blocks ) ) {
-			$has_inner_blocks = ! empty( $block['innerBlocks'] );
-
-			// Skip blocks with no blockName and no innerHTML.
-			if ( ! $block['blockName'] ) {
-				continue;
-			}
-
-			// Skip non-Gallery blocks.
-			if ( 'core/gallery' !== $block['blockName'] ) {
-				// Move inner blocks into the root array before skipping.
-				if ( $has_inner_blocks ) {
-					array_push( $post_blocks, ...$block['innerBlocks'] );
-				}
-				continue;
-			}
-
-			// New Gallery block format as HTML.
-			if ( $has_inner_blocks && $html ) {
-				$block_html  = wp_list_pluck( $block['innerBlocks'], 'innerHTML' );
-				$galleries[] = '<figure>' . implode( ' ', $block_html ) . '</figure>';
-				continue;
-			}
-
-			$srcs = array();
-
-			// New Gallery block format as an array.
-			if ( $has_inner_blocks ) {
-				$attrs = wp_list_pluck( $block['innerBlocks'], 'attrs' );
-				$ids   = wp_list_pluck( $attrs, 'id' );
-
-				foreach ( $ids as $id ) {
-					$url = wp_get_attachment_url( $id );
-
-					if ( is_string( $url ) && ! in_array( $url, $srcs, true ) ) {
-						$srcs[] = $url;
-					}
-				}
-
-				$galleries[] = array(
-					'ids' => implode( ',', $ids ),
-					'src' => $srcs,
-				);
-
-				continue;
-			}
-
-			// Old Gallery block format as HTML.
-			if ( $html ) {
-				$galleries[] = $block['innerHTML'];
-				continue;
-			}
-
-			// Old Gallery block format as an array.
-			$ids = ! empty( $block['attrs']['ids'] ) ? $block['attrs']['ids'] : array();
-
-			// If present, use the image IDs from the JSON blob as canonical.
-			if ( ! empty( $ids ) ) {
-				foreach ( $ids as $id ) {
-					$url = wp_get_attachment_url( $id );
-
-					if ( is_string( $url ) && ! in_array( $url, $srcs, true ) ) {
-						$srcs[] = $url;
-					}
-				}
-
-				$galleries[] = array(
-					'ids' => implode( ',', $ids ),
-					'src' => $srcs,
-				);
-
-				continue;
-			}
-
-			// Otherwise, extract srcs from the innerHTML.
-			preg_match_all( '#src=([\'"])(.+?)\1#is', $block['innerHTML'], $found_srcs, PREG_SET_ORDER );
-
-			if ( ! empty( $found_srcs[0] ) ) {
-				foreach ( $found_srcs as $src ) {
-					if ( isset( $src[2] ) && ! in_array( $src[2], $srcs, true ) ) {
-						$srcs[] = $src[2];
-					}
-				}
-			}
-
-			$galleries[] = array( 'src' => $srcs );
 		}
 	}
 
