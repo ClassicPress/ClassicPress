@@ -2,6 +2,7 @@
 
 /**
  * @group xmlrpc
+ * @requires function imagejpeg
  */
 class Tests_XMLRPC_wp_uploadFile extends WP_XMLRPC_UnitTestCase {
 
@@ -11,10 +12,10 @@ class Tests_XMLRPC_wp_uploadFile extends WP_XMLRPC_UnitTestCase {
 		parent::tear_down();
 	}
 
-	function test_valid_attachment() {
+	public function test_valid_attachment() {
 		$this->make_user_by_role( 'editor' );
 
-		// create attachment
+		// Create attachment.
 		$filename = ( DIR_TESTDATA . '/images/a2-small.jpg' );
 		$contents = file_get_contents( $filename );
 		$data     = array(

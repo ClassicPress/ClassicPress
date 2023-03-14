@@ -5,13 +5,14 @@
  * @group canonical
  * @covers ::wp_get_canonical_url
  */
-class Tests_WpGetCanonicalURL extends WP_UnitTestCase {
+class Tests_Link_wpGetCanonicalUrl extends WP_UnitTestCase {
 	public static $post_id;
 
-	public static function wpSetUpBeforeClass( $factory ) {
+	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$post_id = $factory->post->create(
 			array(
-				'post_status' => 'publish',
+				'post_content' => 'Page 1 <!--nextpage--> Page 2 <!--nextpage--> Page 3',
+				'post_status'  => 'publish',
 			)
 		);
 	}

@@ -3,9 +3,9 @@ require_once ABSPATH . 'wp-includes/PHPMailer/PHPMailer.php';
 require_once ABSPATH . 'wp-includes/PHPMailer/Exception.php';
 
 class MockPHPMailer extends PHPMailer\PHPMailer\PHPMailer {
-	var $mock_sent = array();
+	public $mock_sent = array();
 
-	function preSend() {
+	public function preSend() {
 		$this->Encoding = '8bit';
 		return parent::preSend();
 	}
@@ -13,7 +13,7 @@ class MockPHPMailer extends PHPMailer\PHPMailer\PHPMailer {
 	/**
 	 * Override postSend() so mail isn't actually sent.
 	 */
-	function postSend() {
+	public function postSend() {
 		$this->mock_sent[] = array(
 			'to'      => $this->to,
 			'cc'      => $this->cc,
@@ -29,7 +29,7 @@ class MockPHPMailer extends PHPMailer\PHPMailer\PHPMailer {
 	/**
 	 * Decorator to return the information for a sent mock.
 	 *
-	 * @since WP-4.5.0
+	 * @since 4.5.0
 	 *
 	 * @param int $index Optional. Array index of mock_sent value.
 	 * @return object
@@ -45,7 +45,7 @@ class MockPHPMailer extends PHPMailer\PHPMailer\PHPMailer {
 	/**
 	 * Get a recipient for a sent mock.
 	 *
-	 * @since WP-4.5.0
+	 * @since 4.5.0
 	 *
 	 * @param string $address_type    The type of address for the email such as to, cc or bcc.
 	 * @param int    $mock_sent_index Optional. The sent_mock index we want to get the recipient for.
@@ -74,9 +74,9 @@ class MockPHPMailer extends PHPMailer\PHPMailer\PHPMailer {
 /**
  * Helper method to return the global phpmailer instance defined in the bootstrap
  *
- * @since WP-4.4.0
+ * @since 4.4.0
  *
- * @return object|bool
+ * @return MockPHPMailer|false
  */
 function tests_retrieve_phpmailer_instance() {
 	$mailer = false;
@@ -89,14 +89,19 @@ function tests_retrieve_phpmailer_instance() {
 /**
  * Helper method to reset the phpmailer instance.
  *
- * @since WP-4.6.0
+ * @since 4.6.0
  *
  * @return bool
  */
 function reset_phpmailer_instance() {
 	$mailer = tests_retrieve_phpmailer_instance();
 	if ( $mailer ) {
-		$GLOBALS['phpmailer'] = new MockPHPMailer( true );
+		$mailer             = new MockPHPMailer( true );
+		$mailer::$validator = static function ( $email ) {
+			return (bool) is_email( $email );
+		};
+
+		$GLOBALS['phpmailer'] = $mailer;
 		return true;
 	}
 

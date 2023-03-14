@@ -2,11 +2,13 @@
 
 /**
  * @group comment
+ *
+ * @covers ::get_comment_author_url_link
  */
 class Tests_Comment_GetCommentAuthorUrlLink extends WP_UnitTestCase {
 	protected static $comments = array();
 
-	public static function wpSetUpBeforeClass( $factory ) {
+	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		unset( $GLOBALS['comment'] );
 
 		$comment_ids    = $factory->comment->create_post_comments( 0, 1 );

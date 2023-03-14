@@ -17,12 +17,12 @@ class Tests_XMLRPC_mw_getRecentPosts extends WP_XMLRPC_UnitTestCase {
 						'role'       => 'author',
 					)
 				),
-				'post_date'   => strftime( '%Y-%m-%d %H:%M:%S', strtotime( '+1 day' ) ),
+				'post_date'   => date_format( date_create( '+1 day' ), 'Y-m-d H:i:s' ),
 			)
 		);
 	}
 
-	function test_invalid_username_password() {
+	public function test_invalid_username_password() {
 		$result = $this->myxmlrpcserver->mw_getRecentPosts( array( 1, 'username', 'password' ) );
 		$this->assertIXRError( $result );
 		$this->assertSame( 403, $result->code );
@@ -31,7 +31,7 @@ class Tests_XMLRPC_mw_getRecentPosts extends WP_XMLRPC_UnitTestCase {
 	/**
 	 * @ticket 22320
 	 */
-	function test_no_editing_privileges() {
+	public function test_no_editing_privileges() {
 		$this->make_user_by_role( 'subscriber' );
 
 		$result = $this->myxmlrpcserver->mw_getRecentPosts( array( 1, 'subscriber', 'subscriber' ) );
@@ -39,15 +39,15 @@ class Tests_XMLRPC_mw_getRecentPosts extends WP_XMLRPC_UnitTestCase {
 		$this->assertSame( 401, $result->code );
 	}
 
-	function test_no_editable_posts() {
+	public function test_no_editable_posts() {
 		wp_delete_post( self::$post_id, true );
 
 		$result = $this->myxmlrpcserver->mw_getRecentPosts( array( 1, 'author', 'author' ) );
 		$this->assertNotIXRError( $result );
-		$this->assertSame( 0, count( $result ) );
+		$this->assertCount( 0, $result );
 	}
 
-	function test_valid_post() {
+	public function test_valid_post() {
 		add_theme_support( 'post-thumbnails' );
 
 		$fields  = array( 'post' );
@@ -79,7 +79,7 @@ class Tests_XMLRPC_mw_getRecentPosts extends WP_XMLRPC_UnitTestCase {
 			$this->assertIsArray( $result['custom_fields'] );
 			$this->assertIsString( $result['wp_post_format'] );
 
-			// Check expected values
+			// Check expected values.
 			$this->assertStringMatchesFormat( '%d', $result['userid'] );
 			$this->assertStringMatchesFormat( '%d', $result['postid'] );
 			$this->assertSame( $post->post_title, $result['title'] );
@@ -94,10 +94,13 @@ class Tests_XMLRPC_mw_getRecentPosts extends WP_XMLRPC_UnitTestCase {
 		remove_theme_support( 'post-thumbnails' );
 	}
 
-	function test_post_thumbnail() {
+	/**
+	 * @requires function imagejpeg
+	 */
+	public function test_post_thumbnail() {
 		add_theme_support( 'post-thumbnails' );
 
-		// create attachment
+		// Create attachment.
 		$filename      = ( DIR_TESTDATA . '/images/a2-small.jpg' );
 		$attachment_id = self::factory()->attachment->create_upload_object( $filename, self::$post_id );
 		set_post_thumbnail( self::$post_id, $attachment_id );
@@ -119,7 +122,7 @@ class Tests_XMLRPC_mw_getRecentPosts extends WP_XMLRPC_UnitTestCase {
 		remove_theme_support( 'post-thumbnails' );
 	}
 
-	function test_date() {
+	public function test_date() {
 		$this->make_user_by_role( 'editor' );
 
 		$results = $this->myxmlrpcserver->mw_getRecentPosts( array( 1, 'editor', 'editor' ) );

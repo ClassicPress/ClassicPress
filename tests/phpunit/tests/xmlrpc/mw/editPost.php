@@ -5,14 +5,14 @@
  */
 class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 
-	function test_invalid_username_password() {
+	public function test_invalid_username_password() {
 		$post   = array();
 		$result = $this->myxmlrpcserver->mw_editPost( array( 1, 'username', 'password', $post ) );
 		$this->assertIXRError( $result );
 		$this->assertSame( 403, $result->code );
 	}
 
-	function test_edit_own_post() {
+	public function test_edit_own_post() {
 		$contributor_id = $this->make_user_by_role( 'contributor' );
 		$post           = array(
 			'post_title'  => 'Post test',
@@ -30,7 +30,7 @@ class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 		$this->assertSame( $new_title, $out->post_title );
 	}
 
-	function test_capable_edit_others_post() {
+	public function test_capable_edit_others_post() {
 		$this->make_user_by_role( 'editor' );
 		$contributor_id = $this->make_user_by_role( 'contributor' );
 
@@ -50,7 +50,7 @@ class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 		$this->assertSame( $new_title, $out->post_title );
 	}
 
-	function test_incapable_edit_others_post() {
+	public function test_incapable_edit_others_post() {
 		$this->make_user_by_role( 'contributor' );
 		$author_id = $this->make_user_by_role( 'author' );
 
@@ -71,7 +71,7 @@ class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 		$this->assertSame( $original_title, $out->post_title );
 	}
 
-	function test_capable_reassign_author() {
+	public function test_capable_reassign_author() {
 		$contributor_id = $this->make_user_by_role( 'contributor' );
 		$author_id      = $this->make_user_by_role( 'author' );
 		$this->make_user_by_role( 'editor' );
@@ -91,7 +91,7 @@ class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 		$this->assertEquals( $author_id, $out->post_author );
 	}
 
-	function test_incapable_reassign_author() {
+	public function test_incapable_reassign_author() {
 		$contributor_id = $this->make_user_by_role( 'contributor' );
 		$author_id      = $this->make_user_by_role( 'author' );
 
@@ -113,7 +113,7 @@ class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 	/**
 	 * @ticket 24916
 	 */
-	function test_capable_reassign_author_to_self() {
+	public function test_capable_reassign_author_to_self() {
 		$contributor_id = $this->make_user_by_role( 'contributor' );
 		$editor_id      = $this->make_user_by_role( 'editor' );
 
@@ -132,7 +132,10 @@ class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 		$this->assertEquals( $editor_id, $out->post_author );
 	}
 
-	function test_post_thumbnail() {
+	/**
+	 * @requires function imagejpeg
+	 */
+	public function test_post_thumbnail() {
 		add_theme_support( 'post-thumbnails' );
 
 		$author_id = $this->make_user_by_role( 'author' );
@@ -145,32 +148,32 @@ class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 
 		$this->assertSame( '', get_post_meta( $post_id, '_thumbnail_id', true ) );
 
-		// create attachment
+		// Create attachment.
 		$filename      = ( DIR_TESTDATA . '/images/a2-small.jpg' );
 		$attachment_id = self::factory()->attachment->create_upload_object( $filename, $post_id );
 
-		// add post thumbnail to post that does not have one
+		// Add post thumbnail to post that does not have one.
 		$post2  = array( 'wp_post_thumbnail' => $attachment_id );
 		$result = $this->myxmlrpcserver->mw_editPost( array( $post_id, 'author', 'author', $post2 ) );
 		$this->assertNotIXRError( $result );
 		$this->assertEquals( $attachment_id, get_post_meta( $post_id, '_thumbnail_id', true ) );
 
-		// edit the post without supplying a post_thumbnail and check that it didn't change
+		// Edit the post without supplying a post_thumbnail and check that it didn't change.
 		$post3  = array( 'post_content' => 'Updated post' );
 		$result = $this->myxmlrpcserver->mw_editPost( array( $post_id, 'author', 'author', $post3 ) );
 		$this->assertNotIXRError( $result );
 		$this->assertEquals( $attachment_id, get_post_meta( $post_id, '_thumbnail_id', true ) );
 
-		// create another attachment
+		// Create another attachment.
 		$attachment2_id = self::factory()->attachment->create_upload_object( $filename, $post_id );
 
-		// change the post's post_thumbnail
+		// Change the post's post_thumbnail.
 		$post4  = array( 'wp_post_thumbnail' => $attachment2_id );
 		$result = $this->myxmlrpcserver->mw_editPost( array( $post_id, 'author', 'author', $post4 ) );
 		$this->assertNotIXRError( $result );
 		$this->assertEquals( $attachment2_id, get_post_meta( $post_id, '_thumbnail_id', true ) );
 
-		// unset the post's post_thumbnail
+		// Unset the post's post_thumbnail.
 		$post5  = array( 'wp_post_thumbnail' => '' );
 		$result = $this->myxmlrpcserver->mw_editPost( array( $post_id, 'author', 'author', $post5 ) );
 		$this->assertNotIXRError( $result );
@@ -179,7 +182,7 @@ class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 		remove_theme_support( 'post-thumbnails' );
 	}
 
-	function test_edit_basic_post_info() {
+	public function test_edit_basic_post_info() {
 		$contributor_id = $this->make_user_by_role( 'contributor' );
 
 		$post    = array(
@@ -230,7 +233,7 @@ class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 	/**
 	 * @ticket 20662
 	 */
-	function test_make_post_sticky() {
+	public function test_make_post_sticky() {
 		$author_id = $this->make_user_by_role( 'editor' );
 
 		$post    = array(
@@ -246,8 +249,8 @@ class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 		$this->assertTrue( $result );
 	}
 
-	// Not allowed since [19914]
-	function test_change_post_type() {
+	// Not allowed since [19914].
+	public function test_change_post_type() {
 		$contributor_id = $this->make_user_by_role( 'contributor' );
 
 		$post    = array(
@@ -265,7 +268,7 @@ class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 	/**
 	 * @ticket 16980
 	 */
-	function test_empty_not_null() {
+	public function test_empty_not_null() {
 		$editor_id = $this->make_user_by_role( 'editor' );
 
 		$post_id = self::factory()->post->create(
@@ -297,7 +300,7 @@ class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 	/**
 	 * @ticket 35874
 	 */
-	function test_draft_not_prematurely_published() {
+	public function test_draft_not_prematurely_published() {
 		$editor_id = $this->make_user_by_role( 'editor' );
 
 		$post = array(
@@ -329,7 +332,7 @@ class Tests_XMLRPC_mw_editPost extends WP_XMLRPC_UnitTestCase {
 		$after = get_post( $post_id );
 		$this->assertSame( 'future', $after->post_status );
 
-		$future_date_string = strftime( '%Y-%m-%d %H:%M:%S', $future_time );
+		$future_date_string = date_format( date_create( "@{$future_time}" ), 'Y-m-d H:i:s' );
 		$this->assertSame( $future_date_string, $after->post_date );
 	}
 }

@@ -9,8 +9,8 @@ abstract class WP_Test_REST_Controller_Testcase extends WP_Test_REST_TestCase {
 		add_filter( 'rest_url', array( $this, 'filter_rest_url_for_leading_slash' ), 10, 2 );
 		/** @var WP_REST_Server $wp_rest_server */
 		global $wp_rest_server;
-		$this->server = $wp_rest_server = new Spy_REST_Server;
-		do_action( 'rest_api_init' );
+		$wp_rest_server = new Spy_REST_Server();
+		do_action( 'rest_api_init', $wp_rest_server );
 	}
 
 	public function tear_down() {
@@ -40,12 +40,19 @@ abstract class WP_Test_REST_Controller_Testcase extends WP_Test_REST_TestCase {
 	abstract public function test_get_item_schema();
 
 	public function filter_rest_url_for_leading_slash( $url, $path ) {
-		if ( is_multisite() ) {
+		if ( is_multisite() || get_option( 'permalink_structure' ) ) {
 			return $url;
 		}
 
 		// Make sure path for rest_url has a leading slash for proper resolution.
-		$this->assertTrue( 0 === strpos( $path, '/' ), 'REST API URL should have a leading slash.' );
+		if ( 0 !== strpos( $path, '/' ) ) {
+			$this->fail(
+				sprintf(
+					'REST API URL "%s" should have a leading slash.',
+					$path
+				)
+			);
+		}
 
 		return $url;
 	}

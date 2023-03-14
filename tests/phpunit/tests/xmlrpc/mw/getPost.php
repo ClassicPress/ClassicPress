@@ -16,18 +16,18 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 						'role'       => 'author',
 					)
 				),
-				'post_date'   => strftime( '%Y-%m-%d %H:%M:%S', strtotime( '+1 day' ) ),
+				'post_date'   => date_format( date_create( '+1 day' ), 'Y-m-d H:i:s' ),
 			)
 		);
 	}
 
-	function test_invalid_username_password() {
+	public function test_invalid_username_password() {
 		$result = $this->myxmlrpcserver->mw_getPost( array( self::$post_id, 'username', 'password' ) );
 		$this->assertIXRError( $result );
 		$this->assertSame( 403, $result->code );
 	}
 
-	function test_incapable_user() {
+	public function test_incapable_user() {
 		$this->make_user_by_role( 'subscriber' );
 
 		$result = $this->myxmlrpcserver->mw_getPost( array( self::$post_id, 'subscriber', 'subscriber' ) );
@@ -38,13 +38,13 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 	/**
 	 * @ticket 20336
 	 */
-	function test_invalid_postid() {
+	public function test_invalid_postid() {
 		$result = $this->myxmlrpcserver->mw_getPost( array( 9999, 'author', 'author' ) );
 		$this->assertIXRError( $result );
 		$this->assertSame( 404, $result->code );
 	}
 
-	function test_valid_post() {
+	public function test_valid_post() {
 		add_theme_support( 'post-thumbnails' );
 
 		$fields = array( 'post' );
@@ -76,7 +76,7 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 
 		$post_data = get_post( self::$post_id );
 
-		// Check expected values
+		// Check expected values.
 		$this->assertStringMatchesFormat( '%d', $result['userid'] );
 		$this->assertSame( $post_data->post_title, $result['title'] );
 		$this->assertSame( 'publish', $result['post_status'] );
@@ -89,10 +89,13 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 		remove_theme_support( 'post-thumbnails' );
 	}
 
-	function test_post_thumbnail() {
+	/**
+	 * @requires function imagejpeg
+	 */
+	public function test_post_thumbnail() {
 		add_theme_support( 'post-thumbnails' );
 
-		// create attachment
+		// Create attachment.
 		$filename      = ( DIR_TESTDATA . '/images/a2-small.jpg' );
 		$attachment_id = self::factory()->attachment->create_upload_object( $filename );
 
@@ -108,7 +111,7 @@ class Tests_XMLRPC_mw_getPost extends WP_XMLRPC_UnitTestCase {
 		remove_theme_support( 'post-thumbnails' );
 	}
 
-	function test_date() {
+	public function test_date() {
 		$fields = array( 'post' );
 		$result = $this->myxmlrpcserver->mw_getPost( array( self::$post_id, 'author', 'author' ) );
 		$this->assertNotIXRError( $result );

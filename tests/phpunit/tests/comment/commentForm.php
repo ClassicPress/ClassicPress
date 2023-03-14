@@ -1,9 +1,13 @@
 <?php
 
 /**
- * @group comment
+ * @group  comment
+ *
+ * @covers ::comment_form
  */
 class Tests_Comment_CommentForm extends WP_UnitTestCase {
+	public static $post_id;
+
 	public function set_up() {
 		parent::set_up();
 		update_option( 'default_comment_status', 'open' );
@@ -23,6 +27,7 @@ class Tests_Comment_CommentForm extends WP_UnitTestCase {
 			'class_submit' => 'foo-class',
 			'label_submit' => 'foo-label',
 		);
+
 		$form = get_echo( 'comment_form', array( $args, $p ) );
 
 		$button = '<input name="foo-name" type="submit" id="foo-id" class="foo-class" value="foo-label" />';
@@ -40,6 +45,7 @@ class Tests_Comment_CommentForm extends WP_UnitTestCase {
 			'label_submit'  => 'foo-label',
 			'submit_button' => '<input name="custom-%1$s" type="submit" id="custom-%2$s" class="custom-%3$s" value="custom-%4$s" />',
 		);
+
 		$form = get_echo( 'comment_form', array( $args, $p ) );
 
 		$button = '<input name="custom-foo-name" type="submit" id="custom-foo-id" class="custom-foo-class" value="custom-foo-label" />';
@@ -56,6 +62,7 @@ class Tests_Comment_CommentForm extends WP_UnitTestCase {
 			'label_submit' => 'foo-label',
 			'submit_field' => '<p class="my-custom-submit-field">%1$s %2$s</p>',
 		);
+
 		$form = get_echo( 'comment_form', array( $args, $p ) );
 
 		$button = '<input name="foo-name" type="submit" id="foo-id" class="foo-class" value="foo-label" />';
@@ -104,10 +111,30 @@ class Tests_Comment_CommentForm extends WP_UnitTestCase {
 				'author' => 'Hello World!',
 			),
 		);
+
 		$form = get_echo( 'comment_form', array( $args, $p ) );
 
 		remove_filter( 'option_show_comments_cookies_opt_in', '__return_true' );
 
 		$this->assertMatchesRegularExpression( '|<p class="comment\-form\-cookies\-consent">.*?</p>|', $form );
+	}
+
+	/**
+	 * @ticket 47975
+	 */
+	public function test_aria_describedby_email_notes_should_not_be_added_if_no_email_notes() {
+		$p = self::factory()->post->create();
+
+		$form_with_aria = get_echo( 'comment_form', array( array(), $p ) );
+
+		$this->assertStringContainsString( 'aria-describedby="email-notes"', $form_with_aria );
+
+		$args = array(
+			'comment_notes_before' => '',
+		);
+
+		$form_without_aria = get_echo( 'comment_form', array( $args, $p ) );
+
+		$this->assertStringNotContainsString( 'aria-describedby="email-notes"', $form_without_aria );
 	}
 }

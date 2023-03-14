@@ -10,8 +10,15 @@ $config_file_path = $argv[1];
 $multisite        = ! empty( $argv[2] );
 
 define( 'WP_INSTALLING', true );
+
+/*
+ * Cron tries to make an HTTP request to the site, which always fails,
+ * because tests are run in CLI mode only.
+ */
+define( 'DISABLE_WP_CRON', true );
+
 require_once $config_file_path;
-require_once dirname( __FILE__ ) . '/functions.php';
+require_once __DIR__ . '/functions.php';
 
 // Set the theme to our special empty theme, to avoid interference from the current Twenty* theme.
 if ( ! defined( 'WP_DEFAULT_THEME' ) ) {
@@ -26,17 +33,17 @@ $_SERVER['PHP_SELF'] = '/index.php';
 
 tests_add_filter( 'wp_die_handler', '_wp_die_handler_filter_exit' );
 
-require_once ABSPATH . '/wp-settings.php';
+require_once ABSPATH . 'wp-settings.php';
 
-require_once ABSPATH . '/wp-admin/includes/upgrade.php';
-require_once ABSPATH . '/wp-includes/wp-db.php';
+require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+require_once ABSPATH . 'wp-includes/class-wpdb.php';
 
-// Override the PHPMailer
+// Override the PHPMailer.
 global $phpmailer;
-require_once dirname( __FILE__ ) . '/mock-mailer.php';
+require_once __DIR__ . '/mock-mailer.php';
 $phpmailer = new MockPHPMailer();
 
-register_theme_directory( dirname( __FILE__ ) . '/../data/themedir1' );
+register_theme_directory( __DIR__ . '/../data/themedir1' );
 
 /*
  * default_storage_engine and storage_engine are the same option, but storage_engine
@@ -88,6 +95,11 @@ if ( $multisite ) {
 	$subdomain_install = false;
 
 	install_network();
-	populate_network( 1, WP_TESTS_DOMAIN, WP_TESTS_EMAIL, $title, '/', $subdomain_install );
+	$error = populate_network( 1, WP_TESTS_DOMAIN, WP_TESTS_EMAIL, $title, '/', $subdomain_install );
+
+	if ( is_wp_error( $error ) ) {
+		wp_die( $error );
+	}
+
 	$wp_rewrite->set_permalink_structure( '' );
 }

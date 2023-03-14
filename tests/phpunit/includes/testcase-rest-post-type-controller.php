@@ -25,14 +25,14 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 		}
 		$this->assertSame( mysql_to_rfc3339( $post->post_modified ), $data['modified'] );
 
-		// author
+		// Author.
 		if ( post_type_supports( $post->post_type, 'author' ) ) {
 			$this->assertEquals( $post->post_author, $data['author'] );
 		} else {
 			$this->assertEmpty( $data['author'] );
 		}
 
-		// post_parent
+		// Post parent.
 		if ( $post_type_obj->hierarchical ) {
 			$this->assertArrayHasKey( 'parent', $data );
 			if ( $post->post_parent ) {
@@ -46,23 +46,23 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 				$this->assertEmpty( $data['parent'] );
 			}
 		} else {
-			$this->assertFalse( isset( $data['parent'] ) );
+			$this->assertArrayNotHasKey( 'parent', $data );
 		}
 
-		// page attributes
+		// Page attributes.
 		if ( $post_type_obj->hierarchical && post_type_supports( $post->post_type, 'page-attributes' ) ) {
 			$this->assertSame( $post->menu_order, $data['menu_order'] );
 		} else {
-			$this->assertFalse( isset( $data['menu_order'] ) );
+			$this->assertArrayNotHasKey( 'menu_order', $data );
 		}
 
-		// Comments
+		// Comments.
 		if ( post_type_supports( $post->post_type, 'comments' ) ) {
 			$this->assertSame( $post->comment_status, $data['comment_status'] );
 			$this->assertSame( $post->ping_status, $data['ping_status'] );
 		} else {
-			$this->assertFalse( isset( $data['comment_status'] ) );
-			$this->assertFalse( isset( $data['ping_status'] ) );
+			$this->assertArrayNotHasKey( 'comment_status', $data );
+			$this->assertArrayNotHasKey( 'ping_status', $data );
 		}
 
 		if ( 'post' === $post->post_type ) {
@@ -80,7 +80,7 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 		if ( post_type_supports( $post->post_type, 'thumbnail' ) ) {
 			$this->assertSame( (int) get_post_thumbnail_id( $post->ID ), $data['featured_media'] );
 		} else {
-			$this->assertFalse( isset( $data['featured_media'] ) );
+			$this->assertArrayNotHasKey( 'featured_media', $data );
 		}
 
 		// Check post format.
@@ -92,7 +92,7 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 				$this->assertSame( get_post_format( $post->ID ), $data['format'] );
 			}
 		} else {
-			$this->assertFalse( isset( $data['format'] ) );
+			$this->assertArrayNotHasKey( 'format', $data );
 		}
 
 		// Check filtered values.
@@ -103,14 +103,14 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 			if ( 'edit' === $context ) {
 				$this->assertSame( $post->post_title, $data['title']['raw'] );
 			} else {
-				$this->assertFalse( isset( $data['title']['raw'] ) );
+				$this->assertArrayNotHasKey( 'raw', $data['title'] );
 			}
 		} else {
-			$this->assertFalse( isset( $data['title'] ) );
+			$this->assertArrayNotHasKey( 'title', $data );
 		}
 
 		if ( post_type_supports( $post->post_type, 'editor' ) ) {
-			// TODO: apply content filter for more accurate testing.
+			// TODO: Apply content filter for more accurate testing.
 			if ( ! $post->post_password ) {
 				$this->assertSame( wpautop( $post->post_content ), $data['content']['rendered'] );
 			}
@@ -118,10 +118,10 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 			if ( 'edit' === $context ) {
 				$this->assertSame( $post->post_content, $data['content']['raw'] );
 			} else {
-				$this->assertFalse( isset( $data['content']['raw'] ) );
+				$this->assertArrayNotHasKey( 'raw', $data['content'] );
 			}
 		} else {
-			$this->assertFalse( isset( $data['content'] ) );
+			$this->assertArrayNotHasKey( 'content', $data );
 		}
 
 		if ( post_type_supports( $post->post_type, 'excerpt' ) ) {
@@ -129,15 +129,15 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 				// TODO: Apply excerpt filter for more accurate testing.
 				$this->assertSame( wpautop( $post->post_excerpt ), $data['excerpt']['rendered'] );
 			} else {
-				// TODO: better testing for excerpts for password protected posts.
+				// TODO: Better testing for excerpts for password protected posts.
 			}
 			if ( 'edit' === $context ) {
 				$this->assertSame( $post->post_excerpt, $data['excerpt']['raw'] );
 			} else {
-				$this->assertFalse( isset( $data['excerpt']['raw'] ) );
+				$this->assertArrayNotHasKey( 'raw', $data['excerpt'] );
 			}
 		} else {
-			$this->assertFalse( isset( $data['excerpt'] ) );
+			$this->assertArrayNotHasKey( 'excerpt', $data );
 		}
 
 		$this->assertSame( $post->post_status, $data['status'] );
@@ -149,14 +149,14 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 
 		$taxonomies = wp_list_filter( get_object_taxonomies( $post->post_type, 'objects' ), array( 'show_in_rest' => true ) );
 		foreach ( $taxonomies as $taxonomy ) {
-			$this->assertTrue( isset( $data[ $taxonomy->rest_base ] ) );
+			$this->assertArrayHasKey( $taxonomy->rest_base, $data );
 			$terms = wp_get_object_terms( $post->ID, $taxonomy->name, array( 'fields' => 'ids' ) );
 			sort( $terms );
 			sort( $data[ $taxonomy->rest_base ] );
 			$this->assertSame( $terms, $data[ $taxonomy->rest_base ] );
 		}
 
-		// test links
+		// Test links.
 		if ( $links ) {
 
 			$links     = test_rest_expand_compact_links( $links );
@@ -200,7 +200,7 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 	}
 
 	protected function check_get_posts_response( $response, $context = 'view' ) {
-		$this->assertNotInstanceOf( 'WP_Error', $response );
+		$this->assertNotWPError( $response );
 		$response = rest_ensure_response( $response );
 		$this->assertSame( 200, $response->get_status() );
 
@@ -211,8 +211,8 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 		$all_data = $response->get_data();
 		foreach ( $all_data as $data ) {
 			$post = get_post( $data['id'] );
-			// as the links for the post are "response_links" format in the data array we have to pull them
-			// out and parse them.
+			// As the links for the post are "response_links" format in the data array,
+			// we have to pull them out and parse them.
 			$links = $data['_links'];
 			foreach ( $links as &$links_array ) {
 				foreach ( $links_array as &$link ) {
@@ -233,7 +233,7 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 	}
 
 	protected function check_get_post_response( $response, $context = 'view' ) {
-		$this->assertNotInstanceOf( 'WP_Error', $response );
+		$this->assertNotWPError( $response );
 		$response = rest_ensure_response( $response );
 		$this->assertSame( 200, $response->get_status() );
 
@@ -244,7 +244,7 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 	}
 
 	protected function check_create_post_response( $response ) {
-		$this->assertNotInstanceOf( 'WP_Error', $response );
+		$this->assertNotWPError( $response );
 		$response = rest_ensure_response( $response );
 
 		$this->assertSame( 201, $response->get_status() );
@@ -257,7 +257,7 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 	}
 
 	protected function check_update_post_response( $response ) {
-		$this->assertNotInstanceOf( 'WP_Error', $response );
+		$this->assertNotWPError( $response );
 		$response = rest_ensure_response( $response );
 
 		$this->assertSame( 200, $response->get_status() );
@@ -305,7 +305,7 @@ abstract class WP_Test_REST_Post_Type_Controller_Testcase extends WP_Test_REST_C
 	/**
 	 * Overwrite the default protected title format.
 	 *
-	 * By default ClassicPress will show password protected posts with a title of
+	 * By default WordPress will show password protected posts with a title of
 	 * "Protected: %s", as the REST API communicates the protected status of a post
 	 * in a machine readable format, we remove the "Protected: " prefix.
 	 *

@@ -19,11 +19,12 @@ $config_file_path .= '/wp-tests-config.php';
 global $wpdb, $current_site, $current_blog, $wp_rewrite, $shortcode_tags, $wp, $phpmailer, $wp_theme_directories;
 
 if ( ! is_readable( $config_file_path ) ) {
-	echo "ERROR: wp-tests-config.php is missing! Please see wp-tests-config-sample.php for setup instructions.\n";
+	echo 'Error: wp-tests-config.php is missing! Please use wp-tests-config-sample.php to create a config file.' . PHP_EOL;
 	exit( 1 );
 }
+
 require_once $config_file_path;
-require_once dirname( __FILE__ ) . '/functions.php';
+require_once __DIR__ . '/functions.php';
 
 if ( defined( 'WP_RUN_CORE_TESTS' ) && WP_RUN_CORE_TESTS && ! is_dir( ABSPATH ) ) {
 	echo "Error: The /build/ directory is missing! Please run `npm run build` prior to running PHPUnit.\n";
@@ -34,10 +35,10 @@ $phpunit_version = tests_get_phpunit_version();
 
 if ( version_compare( $phpunit_version, '5.7.21', '<' ) ) {
 	printf(
-		"Error: Looks like you're using PHPUnit %s. WordPress requires at least PHPUnit 5.7.21.\n",
+		"Error: Looks like you're using PHPUnit %s. WordPress requires at least PHPUnit 5.7.21." . PHP_EOL,
 		$phpunit_version
 	);
-	echo "Please use the latest PHPUnit version supported for the PHP version you are running the tests on.\n";
+	echo 'Please use the latest PHPUnit version supported for the PHP version you are running the tests on.' . PHP_EOL;
 	exit( 1 );
 }
 
@@ -163,10 +164,10 @@ if ( defined( 'WP_RUN_CORE_TESTS' ) && WP_RUN_CORE_TESTS ) {
 
 	if ( $missing_extensions ) {
 		printf(
-			"Error: The following required PHP extensions are missing from the testing environment: %s.\n",
+			'Error: The following required PHP extensions are missing from the testing environment: %s.' . PHP_EOL,
 			implode( ', ', $missing_extensions )
 		);
-		echo "Please make sure they are installed and enabled.\n",
+		echo 'Please make sure they are installed and enabled.' . PHP_EOL,
 		exit( 1 );
 	}
 }
@@ -187,21 +188,25 @@ foreach ( $required_constants as $constant ) {
 
 if ( $missing_constants ) {
 	printf(
-		"Error: The following required constants are not defined: %s.\n",
+		'Error: The following required constants are not defined: %s.' . PHP_EOL,
 		implode( ', ', $missing_constants )
 	);
-	echo "Please check out `wp-tests-config-sample.php` for an example.\n",
+	echo 'Please check out `wp-tests-config-sample.php` for an example.' . PHP_EOL,
 	exit( 1 );
 }
 
 tests_reset__SERVER();
 
 define( 'WP_TESTS_TABLE_PREFIX', $table_prefix );
-define( 'DIR_TESTDATA', dirname( __FILE__ ) . '/../data' );
+define( 'DIR_TESTDATA', __DIR__ . '/../data' );
+define( 'DIR_TESTROOT', realpath( dirname( __DIR__ ) ) );
 
-define( 'WP_LANG_DIR', DIR_TESTDATA . '/languages' );
+define( 'WP_LANG_DIR', realpath( DIR_TESTDATA . '/languages' ) );
 
-// Cron tries to make an HTTP request to the blog, which always fails, because tests are run in CLI mode only
+/*
+ * Cron tries to make an HTTP request to the site, which always fails,
+ * because tests are run in CLI mode only.
+ */
 define( 'DISABLE_WP_CRON', true );
 
 define( 'WP_MEMORY_LIMIT', -1 );
@@ -218,8 +223,8 @@ $multisite = ( '1' === getenv( 'WP_MULTISITE' ) );
 $multisite = $multisite || ( defined( 'WP_TESTS_MULTISITE' ) && WP_TESTS_MULTISITE );
 $multisite = $multisite || ( defined( 'MULTISITE' ) && MULTISITE );
 
-// Override the PHPMailer
-require_once dirname( __FILE__ ) . '/mock-mailer.php';
+// Override the PHPMailer.
+require_once __DIR__ . '/mock-mailer.php';
 $phpmailer = new MockPHPMailer( true );
 
 if ( ! defined( 'WP_DEFAULT_THEME' ) ) {
@@ -247,8 +252,14 @@ if ( $multisite ) {
 unset( $multisite );
 
 $GLOBALS['_wp_die_disabled'] = false;
-// Allow tests to override wp_die
+// Allow tests to override wp_die().
 tests_add_filter( 'wp_die_handler', '_wp_die_handler_filter' );
+// Use the Spy REST Server instead of default.
+tests_add_filter( 'wp_rest_server_class', '_wp_rest_server_class_filter' );
+// Prevent updating translations asynchronously.
+tests_add_filter( 'async_update_translation', '__return_false' );
+// Disable background updates.
+tests_add_filter( 'automatic_updater_disabled', '__return_true' );
 
 // Preset ClassicPress options defined in bootstrap file.
 // Used to activate themes, plugins, as well as  other settings.
@@ -263,10 +274,10 @@ if ( isset( $GLOBALS['wp_tests_options'] ) ) {
 	}
 }
 
-// Load ClassicPress
-require_once ABSPATH . '/wp-settings.php';
+// Load ClassicPress.
+require_once ABSPATH . 'wp-settings.php';
 
-// Delete any default posts & related data
+// Delete any default posts & related data.
 _delete_all_posts();
 
 // Load class aliases for compatibility with PHPUnit 6+.
@@ -283,9 +294,15 @@ require __DIR__ . '/testcase-rest-post-type-controller.php';
 require __DIR__ . '/testcase-xmlrpc.php';
 require __DIR__ . '/testcase-ajax.php';
 require __DIR__ . '/testcase-canonical.php';
+require __DIR__ . '/testcase-xml.php';
 require __DIR__ . '/exceptions.php';
 require __DIR__ . '/utils.php';
 require __DIR__ . '/spy-rest-server.php';
+require __DIR__ . '/class-wp-rest-test-search-handler.php';
+require __DIR__ . '/class-wp-rest-test-configurable-controller.php';
+require __DIR__ . '/class-wp-sitemaps-test-provider.php';
+require __DIR__ . '/class-wp-sitemaps-empty-test-provider.php';
+require __DIR__ . '/class-wp-sitemaps-large-test-provider.php';
 
 /**
  * A class to handle additional command line arguments passed to the script.
@@ -298,7 +315,8 @@ require __DIR__ . '/spy-rest-server.php';
  * how you call phpunit has no effect.
  */
 class WP_PHPUnit_Util_Getopt {
-	function __construct( $argv ) {
+
+	public function __construct( $argv ) {
 		$skipped_groups = array(
 			'ajax'          => true,
 			'ms-files'      => true,
@@ -339,5 +357,6 @@ class WP_PHPUnit_Util_Getopt {
 			echo PHP_EOL;
 		}
 	}
+
 }
 new WP_PHPUnit_Util_Getopt( $_SERVER['argv'] );

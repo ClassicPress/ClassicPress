@@ -1,25 +1,19 @@
 <?php
 /**
- * Define a class to test `wp_privacy_delete_old_export_files()`.
+ * Test cases for the `wp_privacy_delete_old_export_files()` function.
  *
  * @package WordPress
  * @subpackage UnitTests
- * @since WP-4.9.6
- */
-
-/**
- * Test cases for `wp_privacy_delete_old_export_files()`.
+ * @since 4.9.6
  *
  * @group privacy
- * @covers wp_privacy_delete_old_export_files
- *
- * @since WP-4.9.6
+ * @covers ::wp_privacy_delete_old_export_files
  */
-class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
+class Tests_Privacy_wpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	/**
 	 * Path to the index file that blocks directory listing on poorly-configured servers.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @var string $index_path
 	 */
@@ -28,7 +22,7 @@ class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	/**
 	 * Path to an export file that is past the expiration date.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @var string $expired_export_file
 	 */
@@ -37,7 +31,7 @@ class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	/**
 	 * Path to an export file that is active.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @var string $expired_export_file
 	 */
@@ -48,16 +42,16 @@ class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	 *
 	 * @param WP_UnitTest_Factory $factory The base factory object.
 	 */
-	public static function wpSetUpBeforeClass( $factory ) {
+	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		$exports_dir = wp_privacy_exports_dir();
 
 		if ( ! is_dir( $exports_dir ) ) {
 			wp_mkdir_p( $exports_dir );
 		}
 
-		self::$index_path          = $exports_dir . 'index.html';
-		self::$expired_export_file = $exports_dir . 'wp-personal-data-file-user-at-example-com-0123456789abcdef.zip';
-		self::$active_export_file  = $exports_dir . 'wp-personal-data-file-user-at-example-com-fedcba9876543210.zip';
+		self::$index_path          = $exports_dir . 'index.php';
+		self::$expired_export_file = $exports_dir . 'wp-personal-data-file-0123456789abcdef.zip';
+		self::$active_export_file  = $exports_dir . 'wp-personal-data-file-fedcba9876543210.zip';
 	}
 
 	/**
@@ -82,7 +76,7 @@ class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	/**
 	 * The function should not throw notices when the exports directory doesn't exist.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 */
 	public function test_non_existent_folders_should_not_cause_errors() {
 		add_filter( 'wp_privacy_exports_dir', array( $this, 'filter_bad_exports_dir' ) );
@@ -99,7 +93,7 @@ class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	/**
 	 * Return the path to a non-existent folder.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 *
 	 * @param string $exports_dir The default personal data export directory.
 	 *
@@ -114,7 +108,7 @@ class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	/**
 	 * The function should delete files that are past the expiration date.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 */
 	public function test_expired_files_should_be_deleted() {
 		wp_privacy_delete_old_export_files();
@@ -125,7 +119,7 @@ class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	/**
 	 * The function should not delete files that are not past the expiration date.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 */
 	public function test_unexpired_files_should_not_be_deleted() {
 		wp_privacy_delete_old_export_files();
@@ -136,11 +130,37 @@ class Tests_Privacy_WpPrivacyDeleteOldExportFiles extends WP_UnitTestCase {
 	/**
 	 * The function should never delete the index file, even if it's past the expiration date.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 */
 	public function test_index_file_should_never_be_deleted() {
 		wp_privacy_delete_old_export_files();
 
 		$this->assertTrue( file_exists( self::$index_path ) );
+	}
+
+	/**
+	 * Test the correct files are deleted when the expiration time is filtered.
+	 *
+	 * @since 4.9.9
+	 */
+	public function test_filtered_expiration_time() {
+		add_filter( 'wp_privacy_export_expiration', array( $this, 'filter_export_file_expiration_time' ) );
+
+		wp_privacy_delete_old_export_files();
+		$this->assertTrue( file_exists( self::$active_export_file ) );
+		$this->assertTrue( file_exists( self::$expired_export_file ) );
+
+		remove_filter( 'wp_privacy_export_expiration', array( $this, 'filter_export_file_expiration_time' ) );
+	}
+
+	/**
+	 * Filters the expiration time for export files.
+	 *
+	 * @since 4.9.9
+	 *
+	 * @return int New, longer expiration time.
+	 */
+	public function filter_export_file_expiration_time() {
+		return 6 * DAY_IN_SECONDS;
 	}
 }

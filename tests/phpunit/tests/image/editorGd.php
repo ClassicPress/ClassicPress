@@ -2,11 +2,12 @@
 
 /**
  * Test the WP_Image_Editor_GD class
+ *
  * @group image
  * @group media
  * @group wp-image-editor-gd
  */
-require_once dirname( __FILE__ ) . '/base.php';
+require_once __DIR__ . '/base.php';
 
 class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 
@@ -51,7 +52,9 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 	}
 
 	/**
-	 * Test resizing an image, not using crop
+	 * Tests resizing an image, not using crop.
+	 *
+	 * @requires function imagejpeg
 	 */
 	public function test_resize() {
 		$file = DIR_TESTDATA . '/images/waffles.jpg';
@@ -71,7 +74,9 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 	}
 
 	/**
-	 * Test multi_resize with single image resize and no crop
+	 * Tests multi_resize() with single image resize and no crop.
+	 *
+	 * @requires function imagejpeg
 	 */
 	public function test_single_multi_resize() {
 		$file = DIR_TESTDATA . '/images/waffles.jpg';
@@ -88,7 +93,7 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 
 		$resized = $gd_image_editor->multi_resize( $sizes_array );
 
-		# First, check to see if returned array is as expected
+		// First, check to see if returned array is as expected.
 		$expected_array = array(
 			array(
 				'file'      => 'waffles-50x33.jpg',
@@ -101,7 +106,7 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 
 		$this->assertSame( $expected_array, $resized );
 
-		// Now, verify real dimensions are as expected
+		// Now, verify real dimensions are as expected.
 		$image_path = DIR_TESTDATA . '/images/' . $resized[0]['file'];
 		$this->assertImageDimensions(
 			$image_path,
@@ -111,10 +116,10 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 	}
 
 	/**
-	 * Ensure multi_resize doesn't create an image when
+	 * Tests that multi_resize() does not create an image when
 	 * both height and weight are missing, null, or 0.
 	 *
-	 * https://core.trac.wordpress.org/ticket/26823
+	 * @ticket 26823
 	 */
 	public function test_multi_resize_does_not_create() {
 		$file = DIR_TESTDATA . '/images/waffles.jpg';
@@ -180,9 +185,10 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 	}
 
 	/**
-	 * Test multi_resize with multiple sizes
+	 * Tests multi_resize() with multiple sizes.
 	 *
-	 * https://core.trac.wordpress.org/ticket/26823
+	 * @ticket 26823
+	 * @requires function imagejpeg
 	 */
 	public function test_multi_resize() {
 		$file = DIR_TESTDATA . '/images/waffles.jpg';
@@ -192,7 +198,7 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 
 		$sizes_array = array(
 
-			/**
+			/*
 			 * #0 - 10x10 resize, no cropping.
 			 * By aspect, should be 10x6 output.
 			 */
@@ -202,7 +208,7 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 				'crop'   => false,
 			),
 
-			/**
+			/*
 			 * #1 - 75x50 resize, with cropping.
 			 * Output dimensions should be 75x50
 			 */
@@ -212,27 +218,27 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 				'crop'   => true,
 			),
 
-			/**
+			/*
 			 * #2 - 20 pixel max height, no cropping.
 			 * By aspect, should be 30x20 output.
 			 */
 			array(
-				'width'  => 9999, # Arbitrary High Value
+				'width'  => 9999, // Arbitrary high value.
 				'height' => 20,
 				'crop'   => false,
 			),
 
-			/**
+			/*
 			 * #3 - 45 pixel max height, with cropping.
 			 * By aspect, should be 45x400 output.
 			 */
 			array(
 				'width'  => 45,
-				'height' => 9999, # Arbitrary High Value
+				'height' => 9999, // Arbitrary high value.
 				'crop'   => true,
 			),
 
-			/**
+			/*
 			 * #4 - 50 pixel max width, no cropping.
 			 * By aspect, should be 50x33 output.
 			 */
@@ -240,7 +246,7 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 				'width' => 50,
 			),
 
-			/**
+			/*
 			 * #5 - 55 pixel max width, no cropping, null height
 			 * By aspect, should be 55x36 output.
 			 */
@@ -249,7 +255,7 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 				'height' => null,
 			),
 
-			/**
+			/*
 			 * #6 - 55 pixel max height, no cropping, no width specified.
 			 * By aspect, should be 82x55 output.
 			 */
@@ -257,7 +263,7 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 				'height' => 55,
 			),
 
-			/**
+			/*
 			 * #7 - 60 pixel max height, no cropping, null width.
 			 * By aspect, should be 90x60 output.
 			 */
@@ -266,22 +272,22 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 				'height' => 60,
 			),
 
-			/**
+			/*
 			 * #8 - 70 pixel max height, no cropping, negative width.
 			 * By aspect, should be 105x70 output.
 			 */
 			array(
-				'width'  => -9999, # Arbitrary Negative Value
+				'width'  => -9999, // Arbitrary negative value.
 				'height' => 70,
 			),
 
-			/**
+			/*
 			 * #9 - 200 pixel max width, no cropping, negative height.
 			 * By aspect, should be 200x133 output.
 			 */
 			array(
 				'width'  => 200,
-				'height' => -9999, # Arbitrary Negative Value
+				'height' => -9999, // Arbitrary negative value.
 			),
 		);
 
@@ -386,7 +392,7 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 		foreach ( $resized as $key => $image_data ) {
 			$image_path = DIR_TESTDATA . '/images/' . $image_data['file'];
 
-			// Now, verify real dimensions are as expected
+			// Now, verify real dimensions are as expected.
 			$this->assertImageDimensions(
 				$image_path,
 				$expected_array[ $key ]['width'],
@@ -396,7 +402,7 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 	}
 
 	/**
-	 * Test resizing an image with cropping
+	 * Tests resizing an image with cropping.
 	 */
 	public function test_resize_and_crop() {
 		$file = DIR_TESTDATA . '/images/waffles.jpg';
@@ -416,27 +422,130 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 	}
 
 	/**
-	 * Test cropping an image
+	 * Tests cropping an image.
+	 *
+	 * @ticket 51937
+	 *
+	 * @dataProvider data_crop
 	 */
-	public function test_crop() {
+	public function test_crop( $src_x, $src_y, $src_w, $src_h, $dst_w = null, $dst_h = null, $src_abs = false ) {
 		$file = DIR_TESTDATA . '/images/gradient-square.jpg';
 
 		$gd_image_editor = new WP_Image_Editor_GD( $file );
 		$gd_image_editor->load();
 
-		$gd_image_editor->crop( 0, 0, 50, 50 );
+		$gd_image_editor->crop( $src_x, $src_y, $src_w, $src_h, $dst_w, $dst_h, $src_abs );
 
 		$this->assertSame(
 			array(
-				'width'  => 50,
-				'height' => 50,
+				'width'  => (int) $src_w,
+				'height' => (int) $src_h,
 			),
 			$gd_image_editor->get_size()
 		);
 	}
 
+	public function data_crop() {
+		return array(
+			'src height and width must be greater than 0' => array(
+				'src_x' => 0,
+				'src_y' => 0,
+				'src_w' => 50,
+				'src_h' => 50,
+			),
+			'src height and width can be string but must be greater than 0' => array(
+				'src_x' => 10,
+				'src_y' => '10',
+				'src_w' => '50',
+				'src_h' => '50',
+			),
+			'dst height and width must be greater than 0' => array(
+				'src_x' => 10,
+				'src_y' => '10',
+				'src_w' => 150,
+				'src_h' => 150,
+				'dst_w' => 150,
+				'dst_h' => 150,
+			),
+			'dst height and width can be string but must be greater than 0' => array(
+				'src_x' => 10,
+				'src_y' => '10',
+				'src_w' => 150,
+				'src_h' => 150,
+				'dst_w' => '150',
+				'dst_h' => '150',
+			),
+		);
+	}
+
 	/**
-	 * Test rotating an image 180 deg
+	 * Tests that crop() returns WP_Error when dimensions are not integer or are <= 0.
+	 *
+	 * @ticket 51937
+	 *
+	 * @dataProvider data_crop_invalid_dimensions
+	 */
+	public function test_crop_invalid_dimensions( $src_x, $src_y, $src_w, $src_h, $dst_w = null, $dst_h = null, $src_abs = false ) {
+		$file = DIR_TESTDATA . '/images/gradient-square.jpg';
+
+		$gd_image_editor = new WP_Image_Editor_GD( $file );
+		$gd_image_editor->load();
+
+		$actual = $gd_image_editor->crop( $src_x, $src_y, $src_w, $src_h, $dst_w, $dst_h, $src_abs );
+
+		$this->assertInstanceOf( 'WP_Error', $actual );
+		$this->assertSame( 'image_crop_error', $actual->get_error_code() );
+	}
+
+	public function data_crop_invalid_dimensions() {
+		return array(
+			'src height must be greater than 0' => array(
+				'src_x' => 0,
+				'src_y' => 0,
+				'src_w' => 100,
+				'src_h' => 0,
+			),
+			'src width must be greater than 0'  => array(
+				'src_x' => 10,
+				'src_y' => '10',
+				'src_w' => 0,
+				'src_h' => 100,
+			),
+			'src height must be numeric and greater than 0' => array(
+				'src_x' => 10,
+				'src_y' => '10',
+				'src_w' => 100,
+				'src_h' => 'NaN',
+			),
+			'dst height must be numeric and greater than 0' => array(
+				'src_x' => 0,
+				'src_y' => 0,
+				'src_w' => 100,
+				'src_h' => 50,
+				'dst_w' => '100',
+				'dst_h' => 'NaN',
+			),
+			'src and dst height and width must be greater than 0' => array(
+				'src_x' => 0,
+				'src_y' => 0,
+				'src_w' => 0,
+				'src_h' => 0,
+				'dst_w' => 0,
+				'dst_h' => 0,
+			),
+			'src and dst height and width can be string but must be greater than 0' => array(
+				'src_x' => 0,
+				'src_y' => 0,
+				'src_w' => '0',
+				'src_h' => '0',
+				'dst_w' => '0',
+				'dst_h' => '0',
+			),
+		);
+	}
+
+	/**
+	 * Tests rotating an image 180 deg.
 	 */
 	public function test_rotate() {
 		$file = DIR_TESTDATA . '/images/gradient-square.jpg';

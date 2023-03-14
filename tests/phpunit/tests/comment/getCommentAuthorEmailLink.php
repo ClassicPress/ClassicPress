@@ -1,6 +1,8 @@
 <?php
 /**
  * @group comment
+ *
+ * @covers ::get_comment_author_email_link
  */
 class Tests_Comment_GetCommentAuthorEmailLink extends WP_UnitTestCase {
 	public static $comment;
@@ -18,11 +20,9 @@ class Tests_Comment_GetCommentAuthorEmailLink extends WP_UnitTestCase {
 	public function tear_down() {
 		unset( $GLOBALS['comment'] );
 		parent::tear_down();
-
-		add_filter( 'comment_email', 'antispambot' );
 	}
 
-	public static function wpSetUpBeforeClass( $factory ) {
+	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$comment = $factory->comment->create_and_get(
 			array(
 				'comment_author_email' => 'foo@example.org',

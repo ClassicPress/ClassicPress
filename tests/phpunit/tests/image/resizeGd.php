@@ -5,13 +5,16 @@
  * @group media
  * @group upload
  * @group resize
+ *
+ * @requires function imagejpeg
  */
-require_once dirname( __FILE__ ) . '/resize.php';
+require_once __DIR__ . '/resize.php';
 
 class Test_Image_Resize_GD extends WP_Tests_Image_Resize_UnitTestCase {
 
 	/**
 	 * Use the GD image editor engine
+	 *
 	 * @var string
 	 */
 	public $editor_engine = 'WP_Image_Editor_GD';
@@ -26,6 +29,7 @@ class Test_Image_Resize_GD extends WP_Tests_Image_Resize_UnitTestCase {
 
 	/**
 	 * Try resizing a php file (bad image)
+	 *
 	 * @ticket 6821
 	 */
 	public function test_resize_bad_image() {
