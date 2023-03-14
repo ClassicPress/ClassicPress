@@ -15,11 +15,6 @@
 		<!-- Default test suite to run all tests. -->
 		<testsuite name="default">
 			<directory suffix=".php">tests/phpunit/tests</directory>
-			<exclude>tests/phpunit/tests/rest-api/rest-autosaves-controller.php</exclude>
-		</testsuite>
-		<!-- Sets the DOING_AUTOSAVE constant, so needs to be run last. -->
-		<testsuite name="restapi-autosave">
-			<file>tests/phpunit/tests/rest-api/rest-autosaves-controller.php</file>
 		</testsuite>
 	</testsuites>
 	<groups>
