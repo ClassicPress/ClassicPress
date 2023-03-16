@@ -206,6 +206,5 @@ if ( has_action( 'welcome_panel' ) && current_user_can( 'edit_theme_options' ) )
 </div><!-- wrap -->
 
 <?php
-wp_print_community_events_templates();
 
 require_once ABSPATH . 'wp-admin/admin-footer.php';
