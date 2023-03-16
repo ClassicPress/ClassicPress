@@ -358,9 +358,6 @@ function wp_ajax_dashboard_widgets() {
 		case 'dashboard_primary':
 			wp_dashboard_primary();
 			break;
-		case 'dashboard_petitions':
-			cp_dashboard_petitions();
-			break;
 	}
 	wp_die();
 }
