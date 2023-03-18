@@ -1014,7 +1014,7 @@
 /* WordPress Version Badge */
 
 .wp-badge {
-	background: #0073aa url(../images/w-logo-white.png?ver=20160308) no-repeat;
+	background: #0073aa url(../images/cp-logo-white.png?ver=202303) no-repeat;
 	background-position: center 25px;
 	background-size: 80px 80px;
 	color: #fff;
@@ -1031,7 +1031,7 @@
 }
 
 .svg .wp-badge {
-	background-image: url(../images/wordpress-logo-white.svg?ver=20160308);
+	background-image: url(../images/classicpress-logo-white.svg?ver=202303);
 }
 
 .about-wrap .wp-badge {
