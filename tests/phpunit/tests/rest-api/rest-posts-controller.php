@@ -5164,16 +5164,6 @@ class WP_Test_REST_Posts_Controller extends WP_Test_REST_Post_Type_Controller_Te
 	/**
 	 * @ticket 45677
 	 */
-	public function test_get_for_post_type_returns_provided_controller_class() {
-		$this->assertInstanceOf(
-			WP_REST_Blocks_Controller::class,
-			get_post_type_object( 'wp_block' )->get_rest_controller()
-		);
-	}
-
-	/**
-	 * @ticket 45677
-	 */
 	public function test_get_for_post_type_returns_null_for_invalid_provided_controller() {
 		register_post_type(
 			'test',

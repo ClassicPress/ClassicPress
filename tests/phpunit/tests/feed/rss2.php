@@ -21,6 +21,7 @@ class Tests_Feed_RSS2 extends WP_UnitTestCase {
 	 * Setup a new user and attribute some posts.
 	 */
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
+		update_option( 'default_comment_status', 'open' );
 		// Create a user.
 		self::$user_id = $factory->user->create(
 			array(
@@ -86,6 +87,7 @@ class Tests_Feed_RSS2 extends WP_UnitTestCase {
 	 * Tear down.
 	 */
 	public static function wpTearDownAfterClass() {
+		update_option( 'default_comment_status', 'closed' );
 		delete_option( 'blogdescription' );
 	}
 
@@ -221,7 +223,7 @@ class Tests_Feed_RSS2 extends WP_UnitTestCase {
 
 			// Comment link.
 			$comments_link = xml_find( $items[ $key ]['child'], 'comments' );
-			//$this->assertSame( get_permalink( $post ) . '#respond', $comments_link[0]['content'] );
+			$this->assertSame( get_permalink( $post ) . '#respond', $comments_link[0]['content'] );
 
 			// Pub date.
 			$pubdate = xml_find( $items[ $key ]['child'], 'pubDate' );

@@ -104,13 +104,15 @@ function wp_initial_constants() {
 	// Add define( 'SCRIPT_DEBUG', true ); to wp-config.php to enable loading of non-minified,
 	// non-concatenated scripts and stylesheets.
 	if ( ! defined( 'SCRIPT_DEBUG' ) ) {
-		if ( ! empty( $wp_version ) ) {
-			$develop_src = false !== strpos( $wp_version, '-src' );
-		} else {
-			$develop_src = false;
+		// Include an unmodified $wp_version.
+		require ABSPATH . WPINC . '/version.php';
+		if ( ! empty( $cp_version ) ) {
+			$develop_src = classicpress_is_dev_install();
 		}
 
-		define( 'SCRIPT_DEBUG', $develop_src );
+		if ( $develop_src ) {
+			define( 'SCRIPT_DEBUG', $develop_src );
+		}
 	}
 
 	/**
