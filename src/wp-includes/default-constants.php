@@ -16,7 +16,7 @@
  * @global string $wp_version The WordPress version string.
  */
 function wp_initial_constants() {
-	global $blog_id, $wp_version;
+	global $blog_id, $wp_version, $cp_version;
 
 	/**#@+
 	 * Constants for expressing human-readable data sizes in their respective number of bytes.
@@ -108,11 +108,11 @@ function wp_initial_constants() {
 		require ABSPATH . WPINC . '/version.php';
 		if ( ! empty( $cp_version ) ) {
 			$develop_src = classicpress_is_dev_install();
+		} else {
+			$develop_src = false;
 		}
 
-		if ( $develop_src ) {
-			define( 'SCRIPT_DEBUG', $develop_src );
-		}
+		define( 'SCRIPT_DEBUG', $develop_src );
 	}
 
 	/**

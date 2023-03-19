@@ -15,16 +15,9 @@ mockedApiResponse.Schema = {
     "namespaces": [
         "oembed/1.0",
         "wp/v2",
-        "wp-site-health/v1",
-        "wp-block-editor/v1"
+        "wp-site-health/v1"
     ],
-    "authentication": {
-        "application-passwords": {
-            "endpoints": {
-                "authorization": "http://example.org/wp-admin/authorize-application.php"
-            }
-        }
-    },
+    "authentication": [],
     "routes": {
         "/": {
             "namespace": "",
@@ -713,14 +706,6 @@ mockedApiResponse.Schema = {
                                     ],
                                     "readonly": true
                                 },
-                                "block_version": {
-                                    "description": "Version of the content block format used by the post.",
-                                    "type": "integer",
-                                    "context": [
-                                        "edit"
-                                    ],
-                                    "readonly": true
-                                },
                                 "protected": {
                                     "description": "Whether the content is protected with a password.",
                                     "type": "boolean",
@@ -988,14 +973,6 @@ mockedApiResponse.Schema = {
                                     "type": "string",
                                     "context": [
                                         "view",
-                                        "edit"
-                                    ],
-                                    "readonly": true
-                                },
-                                "block_version": {
-                                    "description": "Version of the content block format used by the post.",
-                                    "type": "integer",
-                                    "context": [
                                         "edit"
                                     ],
                                     "readonly": true
@@ -1427,14 +1404,6 @@ mockedApiResponse.Schema = {
                                     "type": "string",
                                     "context": [
                                         "view",
-                                        "edit"
-                                    ],
-                                    "readonly": true
-                                },
-                                "block_version": {
-                                    "description": "Version of the content block format used by the post.",
-                                    "type": "integer",
-                                    "context": [
                                         "edit"
                                     ],
                                     "readonly": true
@@ -1911,14 +1880,6 @@ mockedApiResponse.Schema = {
                                     ],
                                     "readonly": true
                                 },
-                                "block_version": {
-                                    "description": "Version of the content block format used by the post.",
-                                    "type": "integer",
-                                    "context": [
-                                        "edit"
-                                    ],
-                                    "readonly": true
-                                },
                                 "protected": {
                                     "description": "Whether the content is protected with a password.",
                                     "type": "boolean",
@@ -2158,14 +2119,6 @@ mockedApiResponse.Schema = {
                                     "type": "string",
                                     "context": [
                                         "view",
-                                        "edit"
-                                    ],
-                                    "readonly": true
-                                },
-                                "block_version": {
-                                    "description": "Version of the content block format used by the post.",
-                                    "type": "integer",
-                                    "context": [
                                         "edit"
                                     ],
                                     "readonly": true
@@ -2564,14 +2517,6 @@ mockedApiResponse.Schema = {
                                     "type": "string",
                                     "context": [
                                         "view",
-                                        "edit"
-                                    ],
-                                    "readonly": true
-                                },
-                                "block_version": {
-                                    "description": "Version of the content block format used by the post.",
-                                    "type": "integer",
-                                    "context": [
                                         "edit"
                                     ],
                                     "readonly": true
@@ -4274,788 +4219,6 @@ mockedApiResponse.Schema = {
                 }
             ]
         },
-        "/wp/v2/blocks": {
-            "namespace": "wp/v2",
-            "methods": [
-                "GET",
-                "POST"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "allow_batch": {
-                        "v1": true
-                    },
-                    "args": {
-                        "context": {
-                            "description": "Scope under which the request is made; determines fields present in response.",
-                            "type": "string",
-                            "enum": [
-                                "view",
-                                "embed",
-                                "edit"
-                            ],
-                            "default": "view",
-                            "required": false
-                        },
-                        "page": {
-                            "description": "Current page of the collection.",
-                            "type": "integer",
-                            "default": 1,
-                            "minimum": 1,
-                            "required": false
-                        },
-                        "per_page": {
-                            "description": "Maximum number of items to be returned in result set.",
-                            "type": "integer",
-                            "default": 10,
-                            "minimum": 1,
-                            "maximum": 100,
-                            "required": false
-                        },
-                        "search": {
-                            "description": "Limit results to those matching a string.",
-                            "type": "string",
-                            "required": false
-                        },
-                        "after": {
-                            "description": "Limit response to posts published after a given ISO8601 compliant date.",
-                            "type": "string",
-                            "format": "date-time",
-                            "required": false
-                        },
-                        "modified_after": {
-                            "description": "Limit response to posts modified after a given ISO8601 compliant date.",
-                            "type": "string",
-                            "format": "date-time",
-                            "required": false
-                        },
-                        "before": {
-                            "description": "Limit response to posts published before a given ISO8601 compliant date.",
-                            "type": "string",
-                            "format": "date-time",
-                            "required": false
-                        },
-                        "modified_before": {
-                            "description": "Limit response to posts modified before a given ISO8601 compliant date.",
-                            "type": "string",
-                            "format": "date-time",
-                            "required": false
-                        },
-                        "exclude": {
-                            "description": "Ensure result set excludes specific IDs.",
-                            "type": "array",
-                            "items": {
-                                "type": "integer"
-                            },
-                            "default": [],
-                            "required": false
-                        },
-                        "include": {
-                            "description": "Limit result set to specific IDs.",
-                            "type": "array",
-                            "items": {
-                                "type": "integer"
-                            },
-                            "default": [],
-                            "required": false
-                        },
-                        "offset": {
-                            "description": "Offset the result set by a specific number of items.",
-                            "type": "integer",
-                            "required": false
-                        },
-                        "order": {
-                            "description": "Order sort attribute ascending or descending.",
-                            "type": "string",
-                            "default": "desc",
-                            "enum": [
-                                "asc",
-                                "desc"
-                            ],
-                            "required": false
-                        },
-                        "orderby": {
-                            "description": "Sort collection by post attribute.",
-                            "type": "string",
-                            "default": "date",
-                            "enum": [
-                                "author",
-                                "date",
-                                "id",
-                                "include",
-                                "modified",
-                                "parent",
-                                "relevance",
-                                "slug",
-                                "include_slugs",
-                                "title"
-                            ],
-                            "required": false
-                        },
-                        "search_columns": {
-                            "default": [],
-                            "description": "Array of column names to be searched.",
-                            "type": "array",
-                            "items": {
-                                "enum": [
-                                    "post_title",
-                                    "post_content",
-                                    "post_excerpt"
-                                ],
-                                "type": "string"
-                            },
-                            "required": false
-                        },
-                        "slug": {
-                            "description": "Limit result set to posts with one or more specific slugs.",
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            },
-                            "required": false
-                        },
-                        "status": {
-                            "default": "publish",
-                            "description": "Limit result set to posts assigned one or more statuses.",
-                            "type": "array",
-                            "items": {
-                                "enum": [
-                                    "publish",
-                                    "future",
-                                    "draft",
-                                    "pending",
-                                    "private",
-                                    "trash",
-                                    "auto-draft",
-                                    "inherit",
-                                    "request-pending",
-                                    "request-confirmed",
-                                    "request-failed",
-                                    "request-completed",
-                                    "any"
-                                ],
-                                "type": "string"
-                            },
-                            "required": false
-                        }
-                    }
-                },
-                {
-                    "methods": [
-                        "POST"
-                    ],
-                    "allow_batch": {
-                        "v1": true
-                    },
-                    "args": {
-                        "date": {
-                            "description": "The date the post was published, in the site's timezone.",
-                            "type": [
-                                "string",
-                                "null"
-                            ],
-                            "format": "date-time",
-                            "required": false
-                        },
-                        "date_gmt": {
-                            "description": "The date the post was published, as GMT.",
-                            "type": [
-                                "string",
-                                "null"
-                            ],
-                            "format": "date-time",
-                            "required": false
-                        },
-                        "slug": {
-                            "description": "An alphanumeric identifier for the post unique to its type.",
-                            "type": "string",
-                            "required": false
-                        },
-                        "status": {
-                            "description": "A named status for the post.",
-                            "type": "string",
-                            "enum": [
-                                "publish",
-                                "future",
-                                "draft",
-                                "pending",
-                                "private"
-                            ],
-                            "required": false
-                        },
-                        "password": {
-                            "description": "A password to protect access to the content and excerpt.",
-                            "type": "string",
-                            "required": false
-                        },
-                        "title": {
-                            "description": "The title for the post.",
-                            "type": "object",
-                            "properties": {
-                                "raw": {
-                                    "description": "Title for the post, as it exists in the database.",
-                                    "type": "string",
-                                    "context": [
-                                        "view",
-                                        "edit"
-                                    ]
-                                }
-                            },
-                            "required": false
-                        },
-                        "content": {
-                            "description": "The content for the post.",
-                            "type": "object",
-                            "properties": {
-                                "raw": {
-                                    "description": "Content for the post, as it exists in the database.",
-                                    "type": "string",
-                                    "context": [
-                                        "view",
-                                        "edit"
-                                    ]
-                                },
-                                "block_version": {
-                                    "description": "Version of the content block format used by the post.",
-                                    "type": "integer",
-                                    "context": [
-                                        "edit"
-                                    ],
-                                    "readonly": true
-                                },
-                                "protected": {
-                                    "description": "Whether the content is protected with a password.",
-                                    "type": "boolean",
-                                    "context": [
-                                        "view",
-                                        "edit",
-                                        "embed"
-                                    ],
-                                    "readonly": true
-                                }
-                            },
-                            "required": false
-                        },
-                        "template": {
-                            "description": "The theme file to use to display the post.",
-                            "type": "string",
-                            "required": false
-                        }
-                    }
-                }
-            ],
-            "_links": {
-                "self": "http://example.org/index.php?rest_route=/wp/v2/blocks"
-            }
-        },
-        "/wp/v2/blocks/(?P<id>[\\d]+)": {
-            "namespace": "wp/v2",
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "PATCH",
-                "DELETE"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "allow_batch": {
-                        "v1": true
-                    },
-                    "args": {
-                        "id": {
-                            "description": "Unique identifier for the post.",
-                            "type": "integer",
-                            "required": false
-                        },
-                        "context": {
-                            "description": "Scope under which the request is made; determines fields present in response.",
-                            "type": "string",
-                            "enum": [
-                                "view",
-                                "embed",
-                                "edit"
-                            ],
-                            "default": "view",
-                            "required": false
-                        },
-                        "password": {
-                            "description": "The password for the post if it is password protected.",
-                            "type": "string",
-                            "required": false
-                        }
-                    }
-                },
-                {
-                    "methods": [
-                        "POST",
-                        "PUT",
-                        "PATCH"
-                    ],
-                    "allow_batch": {
-                        "v1": true
-                    },
-                    "args": {
-                        "id": {
-                            "description": "Unique identifier for the post.",
-                            "type": "integer",
-                            "required": false
-                        },
-                        "date": {
-                            "description": "The date the post was published, in the site's timezone.",
-                            "type": [
-                                "string",
-                                "null"
-                            ],
-                            "format": "date-time",
-                            "required": false
-                        },
-                        "date_gmt": {
-                            "description": "The date the post was published, as GMT.",
-                            "type": [
-                                "string",
-                                "null"
-                            ],
-                            "format": "date-time",
-                            "required": false
-                        },
-                        "slug": {
-                            "description": "An alphanumeric identifier for the post unique to its type.",
-                            "type": "string",
-                            "required": false
-                        },
-                        "status": {
-                            "description": "A named status for the post.",
-                            "type": "string",
-                            "enum": [
-                                "publish",
-                                "future",
-                                "draft",
-                                "pending",
-                                "private"
-                            ],
-                            "required": false
-                        },
-                        "password": {
-                            "description": "A password to protect access to the content and excerpt.",
-                            "type": "string",
-                            "required": false
-                        },
-                        "title": {
-                            "description": "The title for the post.",
-                            "type": "object",
-                            "properties": {
-                                "raw": {
-                                    "description": "Title for the post, as it exists in the database.",
-                                    "type": "string",
-                                    "context": [
-                                        "view",
-                                        "edit"
-                                    ]
-                                }
-                            },
-                            "required": false
-                        },
-                        "content": {
-                            "description": "The content for the post.",
-                            "type": "object",
-                            "properties": {
-                                "raw": {
-                                    "description": "Content for the post, as it exists in the database.",
-                                    "type": "string",
-                                    "context": [
-                                        "view",
-                                        "edit"
-                                    ]
-                                },
-                                "block_version": {
-                                    "description": "Version of the content block format used by the post.",
-                                    "type": "integer",
-                                    "context": [
-                                        "edit"
-                                    ],
-                                    "readonly": true
-                                },
-                                "protected": {
-                                    "description": "Whether the content is protected with a password.",
-                                    "type": "boolean",
-                                    "context": [
-                                        "view",
-                                        "edit",
-                                        "embed"
-                                    ],
-                                    "readonly": true
-                                }
-                            },
-                            "required": false
-                        },
-                        "template": {
-                            "description": "The theme file to use to display the post.",
-                            "type": "string",
-                            "required": false
-                        }
-                    }
-                },
-                {
-                    "methods": [
-                        "DELETE"
-                    ],
-                    "allow_batch": {
-                        "v1": true
-                    },
-                    "args": {
-                        "id": {
-                            "description": "Unique identifier for the post.",
-                            "type": "integer",
-                            "required": false
-                        },
-                        "force": {
-                            "type": "boolean",
-                            "default": false,
-                            "description": "Whether to bypass Trash and force deletion.",
-                            "required": false
-                        }
-                    }
-                }
-            ]
-        },
-        "/wp/v2/blocks/(?P<parent>[\\d]+)/revisions": {
-            "namespace": "wp/v2",
-            "methods": [
-                "GET"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "args": {
-                        "parent": {
-                            "description": "The ID for the parent of the revision.",
-                            "type": "integer",
-                            "required": false
-                        },
-                        "context": {
-                            "description": "Scope under which the request is made; determines fields present in response.",
-                            "type": "string",
-                            "enum": [
-                                "view",
-                                "embed",
-                                "edit"
-                            ],
-                            "default": "view",
-                            "required": false
-                        },
-                        "page": {
-                            "description": "Current page of the collection.",
-                            "type": "integer",
-                            "default": 1,
-                            "minimum": 1,
-                            "required": false
-                        },
-                        "per_page": {
-                            "description": "Maximum number of items to be returned in result set.",
-                            "type": "integer",
-                            "minimum": 1,
-                            "maximum": 100,
-                            "required": false
-                        },
-                        "search": {
-                            "description": "Limit results to those matching a string.",
-                            "type": "string",
-                            "required": false
-                        },
-                        "exclude": {
-                            "description": "Ensure result set excludes specific IDs.",
-                            "type": "array",
-                            "items": {
-                                "type": "integer"
-                            },
-                            "default": [],
-                            "required": false
-                        },
-                        "include": {
-                            "description": "Limit result set to specific IDs.",
-                            "type": "array",
-                            "items": {
-                                "type": "integer"
-                            },
-                            "default": [],
-                            "required": false
-                        },
-                        "offset": {
-                            "description": "Offset the result set by a specific number of items.",
-                            "type": "integer",
-                            "required": false
-                        },
-                        "order": {
-                            "description": "Order sort attribute ascending or descending.",
-                            "type": "string",
-                            "default": "desc",
-                            "enum": [
-                                "asc",
-                                "desc"
-                            ],
-                            "required": false
-                        },
-                        "orderby": {
-                            "description": "Sort collection by object attribute.",
-                            "type": "string",
-                            "default": "date",
-                            "enum": [
-                                "date",
-                                "id",
-                                "include",
-                                "relevance",
-                                "slug",
-                                "include_slugs",
-                                "title"
-                            ],
-                            "required": false
-                        }
-                    }
-                }
-            ]
-        },
-        "/wp/v2/blocks/(?P<parent>[\\d]+)/revisions/(?P<id>[\\d]+)": {
-            "namespace": "wp/v2",
-            "methods": [
-                "GET",
-                "DELETE"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "args": {
-                        "parent": {
-                            "description": "The ID for the parent of the revision.",
-                            "type": "integer",
-                            "required": false
-                        },
-                        "id": {
-                            "description": "Unique identifier for the revision.",
-                            "type": "integer",
-                            "required": false
-                        },
-                        "context": {
-                            "description": "Scope under which the request is made; determines fields present in response.",
-                            "type": "string",
-                            "enum": [
-                                "view",
-                                "embed",
-                                "edit"
-                            ],
-                            "default": "view",
-                            "required": false
-                        }
-                    }
-                },
-                {
-                    "methods": [
-                        "DELETE"
-                    ],
-                    "args": {
-                        "parent": {
-                            "description": "The ID for the parent of the revision.",
-                            "type": "integer",
-                            "required": false
-                        },
-                        "id": {
-                            "description": "Unique identifier for the revision.",
-                            "type": "integer",
-                            "required": false
-                        },
-                        "force": {
-                            "type": "boolean",
-                            "default": false,
-                            "description": "Required to be true, as revisions do not support trashing.",
-                            "required": false
-                        }
-                    }
-                }
-            ]
-        },
-        "/wp/v2/blocks/(?P<id>[\\d]+)/autosaves": {
-            "namespace": "wp/v2",
-            "methods": [
-                "GET",
-                "POST"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "args": {
-                        "parent": {
-                            "description": "The ID for the parent of the autosave.",
-                            "type": "integer",
-                            "required": false
-                        },
-                        "context": {
-                            "description": "Scope under which the request is made; determines fields present in response.",
-                            "type": "string",
-                            "enum": [
-                                "view",
-                                "embed",
-                                "edit"
-                            ],
-                            "default": "view",
-                            "required": false
-                        }
-                    }
-                },
-                {
-                    "methods": [
-                        "POST"
-                    ],
-                    "args": {
-                        "parent": {
-                            "description": "The ID for the parent of the autosave.",
-                            "type": "integer",
-                            "required": false
-                        },
-                        "date": {
-                            "description": "The date the post was published, in the site's timezone.",
-                            "type": [
-                                "string",
-                                "null"
-                            ],
-                            "format": "date-time",
-                            "required": false
-                        },
-                        "date_gmt": {
-                            "description": "The date the post was published, as GMT.",
-                            "type": [
-                                "string",
-                                "null"
-                            ],
-                            "format": "date-time",
-                            "required": false
-                        },
-                        "slug": {
-                            "description": "An alphanumeric identifier for the post unique to its type.",
-                            "type": "string",
-                            "required": false
-                        },
-                        "status": {
-                            "description": "A named status for the post.",
-                            "type": "string",
-                            "enum": [
-                                "publish",
-                                "future",
-                                "draft",
-                                "pending",
-                                "private"
-                            ],
-                            "required": false
-                        },
-                        "password": {
-                            "description": "A password to protect access to the content and excerpt.",
-                            "type": "string",
-                            "required": false
-                        },
-                        "title": {
-                            "description": "The title for the post.",
-                            "type": "object",
-                            "properties": {
-                                "raw": {
-                                    "description": "Title for the post, as it exists in the database.",
-                                    "type": "string",
-                                    "context": [
-                                        "view",
-                                        "edit"
-                                    ]
-                                }
-                            },
-                            "required": false
-                        },
-                        "content": {
-                            "description": "The content for the post.",
-                            "type": "object",
-                            "properties": {
-                                "raw": {
-                                    "description": "Content for the post, as it exists in the database.",
-                                    "type": "string",
-                                    "context": [
-                                        "view",
-                                        "edit"
-                                    ]
-                                },
-                                "block_version": {
-                                    "description": "Version of the content block format used by the post.",
-                                    "type": "integer",
-                                    "context": [
-                                        "edit"
-                                    ],
-                                    "readonly": true
-                                },
-                                "protected": {
-                                    "description": "Whether the content is protected with a password.",
-                                    "type": "boolean",
-                                    "context": [
-                                        "view",
-                                        "edit",
-                                        "embed"
-                                    ],
-                                    "readonly": true
-                                }
-                            },
-                            "required": false
-                        },
-                        "template": {
-                            "description": "The theme file to use to display the post.",
-                            "type": "string",
-                            "required": false
-                        }
-                    }
-                }
-            ]
-        },
-        "/wp/v2/blocks/(?P<parent>[\\d]+)/autosaves/(?P<id>[\\d]+)": {
-            "namespace": "wp/v2",
-            "methods": [
-                "GET"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "args": {
-                        "parent": {
-                            "description": "The ID for the parent of the autosave.",
-                            "type": "integer",
-                            "required": false
-                        },
-                        "id": {
-                            "description": "The ID for the autosave.",
-                            "type": "integer",
-                            "required": false
-                        },
-                        "context": {
-                            "description": "Scope under which the request is made; determines fields present in response.",
-                            "type": "string",
-                            "enum": [
-                                "view",
-                                "embed",
-                                "edit"
-                            ],
-                            "default": "view",
-                            "required": false
-                        }
-                    }
-                }
-            ]
-        },
         "/wp/v2/templates": {
             "namespace": "wp/v2",
             "methods": [
@@ -6700,14 +5863,6 @@ mockedApiResponse.Schema = {
                                     ],
                                     "readonly": true
                                 },
-                                "block_version": {
-                                    "description": "Version of the content block format used by the post.",
-                                    "type": "integer",
-                                    "context": [
-                                        "edit"
-                                    ],
-                                    "readonly": true
-                                },
                                 "protected": {
                                     "description": "Whether the content is protected with a password.",
                                     "type": "boolean",
@@ -6873,14 +6028,6 @@ mockedApiResponse.Schema = {
                                     "type": "string",
                                     "context": [
                                         "view",
-                                        "edit"
-                                    ],
-                                    "readonly": true
-                                },
-                                "block_version": {
-                                    "description": "Version of the content block format used by the post.",
-                                    "type": "integer",
-                                    "context": [
                                         "edit"
                                     ],
                                     "readonly": true
@@ -7206,14 +6353,6 @@ mockedApiResponse.Schema = {
                                     "type": "string",
                                     "context": [
                                         "view",
-                                        "edit"
-                                    ],
-                                    "readonly": true
-                                },
-                                "block_version": {
-                                    "description": "Version of the content block format used by the post.",
-                                    "type": "integer",
-                                    "context": [
                                         "edit"
                                     ],
                                     "readonly": true
@@ -9453,268 +8592,6 @@ mockedApiResponse.Schema = {
                 "self": "http://example.org/index.php?rest_route=/wp/v2/search"
             }
         },
-        "/wp/v2/block-renderer/(?P<name>[a-z0-9-]+/[a-z0-9-]+)": {
-            "namespace": "wp/v2",
-            "methods": [
-                "GET",
-                "POST"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET",
-                        "POST"
-                    ],
-                    "args": {
-                        "name": {
-                            "description": "Unique registered name for the block.",
-                            "type": "string",
-                            "required": false
-                        },
-                        "context": {
-                            "description": "Scope under which the request is made; determines fields present in response.",
-                            "type": "string",
-                            "enum": [
-                                "edit"
-                            ],
-                            "default": "view",
-                            "required": false
-                        },
-                        "attributes": {
-                            "description": "Attributes for the block.",
-                            "type": "object",
-                            "default": [],
-                            "required": false
-                        },
-                        "post_id": {
-                            "description": "ID of the post context.",
-                            "type": "integer",
-                            "required": false
-                        }
-                    }
-                }
-            ]
-        },
-        "/wp/v2/block-types": {
-            "namespace": "wp/v2",
-            "methods": [
-                "GET"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "args": {
-                        "context": {
-                            "description": "Scope under which the request is made; determines fields present in response.",
-                            "type": "string",
-                            "enum": [
-                                "view",
-                                "embed",
-                                "edit"
-                            ],
-                            "default": "view",
-                            "required": false
-                        },
-                        "namespace": {
-                            "description": "Block namespace.",
-                            "type": "string",
-                            "required": false
-                        }
-                    }
-                }
-            ],
-            "_links": {
-                "self": [
-                    {
-                        "href": "http://example.org/index.php?rest_route=/wp/v2/block-types"
-                    }
-                ]
-            }
-        },
-        "/wp/v2/block-types/(?P<namespace>[a-zA-Z0-9_-]+)": {
-            "namespace": "wp/v2",
-            "methods": [
-                "GET"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "args": {
-                        "context": {
-                            "description": "Scope under which the request is made; determines fields present in response.",
-                            "type": "string",
-                            "enum": [
-                                "view",
-                                "embed",
-                                "edit"
-                            ],
-                            "default": "view",
-                            "required": false
-                        },
-                        "namespace": {
-                            "description": "Block namespace.",
-                            "type": "string",
-                            "required": false
-                        }
-                    }
-                }
-            ]
-        },
-        "/wp/v2/block-types/(?P<namespace>[a-zA-Z0-9_-]+)/(?P<name>[a-zA-Z0-9_-]+)": {
-            "namespace": "wp/v2",
-            "methods": [
-                "GET"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "args": {
-                        "name": {
-                            "description": "Block name.",
-                            "type": "string",
-                            "required": false
-                        },
-                        "namespace": {
-                            "description": "Block namespace.",
-                            "type": "string",
-                            "required": false
-                        },
-                        "context": {
-                            "description": "Scope under which the request is made; determines fields present in response.",
-                            "type": "string",
-                            "enum": [
-                                "view",
-                                "embed",
-                                "edit"
-                            ],
-                            "default": "view",
-                            "required": false
-                        }
-                    }
-                }
-            ]
-        },
-        "/wp/v2/global-styles/themes/(?P<stylesheet>[\\/\\s%\\w\\.\\(\\)\\[\\]\\@_\\-]+)/variations": {
-            "namespace": "wp/v2",
-            "methods": [
-                "GET"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "args": {
-                        "stylesheet": {
-                            "description": "The theme identifier",
-                            "type": "string",
-                            "required": false
-                        }
-                    }
-                }
-            ]
-        },
-        "/wp/v2/global-styles/themes/(?P<stylesheet>[^\\/:<>\\*\\?\"\\|]+(?:\\/[^\\/:<>\\*\\?\"\\|]+)?)": {
-            "namespace": "wp/v2",
-            "methods": [
-                "GET"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "args": {
-                        "stylesheet": {
-                            "description": "The theme identifier",
-                            "type": "string",
-                            "required": false
-                        }
-                    }
-                }
-            ]
-        },
-        "/wp/v2/global-styles/(?P<id>[\\/\\w-]+)": {
-            "namespace": "wp/v2",
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "PATCH"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "args": {
-                        "id": {
-                            "description": "The id of a template",
-                            "type": "string",
-                            "required": false
-                        }
-                    }
-                },
-                {
-                    "methods": [
-                        "POST",
-                        "PUT",
-                        "PATCH"
-                    ],
-                    "args": {
-                        "styles": {
-                            "description": "Global styles.",
-                            "type": [
-                                "object"
-                            ],
-                            "required": false
-                        },
-                        "settings": {
-                            "description": "Global settings.",
-                            "type": [
-                                "object"
-                            ],
-                            "required": false
-                        },
-                        "title": {
-                            "description": "Title of the global styles variation.",
-                            "type": [
-                                "object",
-                                "string"
-                            ],
-                            "properties": {
-                                "raw": {
-                                    "description": "Title for the global styles variation, as it exists in the database.",
-                                    "type": "string",
-                                    "context": [
-                                        "view",
-                                        "edit",
-                                        "embed"
-                                    ]
-                                },
-                                "rendered": {
-                                    "description": "HTML title for the post, transformed for display.",
-                                    "type": "string",
-                                    "context": [
-                                        "view",
-                                        "edit",
-                                        "embed"
-                                    ],
-                                    "readonly": true
-                                }
-                            },
-                            "required": false
-                        }
-                    }
-                }
-            ]
-        },
         "/wp/v2/settings": {
             "namespace": "wp/v2",
             "methods": [
@@ -9835,16 +8712,6 @@ mockedApiResponse.Schema = {
                                 "open",
                                 "closed"
                             ],
-                            "required": false
-                        },
-                        "site_logo": {
-                            "description": "Site logo.",
-                            "type": "integer",
-                            "required": false
-                        },
-                        "site_icon": {
-                            "description": "Site icon.",
-                            "type": "integer",
                             "required": false
                         }
                     }
@@ -10485,205 +9352,6 @@ mockedApiResponse.Schema = {
                 }
             ]
         },
-        "/wp/v2/block-directory/search": {
-            "namespace": "wp/v2",
-            "methods": [
-                "GET"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "args": {
-                        "context": {
-                            "description": "Scope under which the request is made; determines fields present in response.",
-                            "type": "string",
-                            "enum": [
-                                "view"
-                            ],
-                            "default": "view",
-                            "required": false
-                        },
-                        "page": {
-                            "description": "Current page of the collection.",
-                            "type": "integer",
-                            "default": 1,
-                            "minimum": 1,
-                            "required": false
-                        },
-                        "per_page": {
-                            "description": "Maximum number of items to be returned in result set.",
-                            "type": "integer",
-                            "default": 10,
-                            "minimum": 1,
-                            "maximum": 100,
-                            "required": false
-                        },
-                        "term": {
-                            "description": "Limit result set to blocks matching the search term.",
-                            "type": "string",
-                            "minLength": 1,
-                            "required": true
-                        }
-                    }
-                }
-            ],
-            "_links": {
-                "self": [
-                    {
-                        "href": "http://example.org/index.php?rest_route=/wp/v2/block-directory/search"
-                    }
-                ]
-            }
-        },
-        "/wp/v2/pattern-directory/patterns": {
-            "namespace": "wp/v2",
-            "methods": [
-                "GET"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "args": {
-                        "context": {
-                            "description": "Scope under which the request is made; determines fields present in response.",
-                            "type": "string",
-                            "enum": [
-                                "view",
-                                "embed",
-                                "edit"
-                            ],
-                            "default": "view",
-                            "required": false
-                        },
-                        "page": {
-                            "description": "Current page of the collection.",
-                            "type": "integer",
-                            "default": 1,
-                            "minimum": 1,
-                            "required": false
-                        },
-                        "per_page": {
-                            "description": "Maximum number of items to be returned in result set.",
-                            "type": "integer",
-                            "default": 100,
-                            "minimum": 1,
-                            "maximum": 100,
-                            "required": false
-                        },
-                        "search": {
-                            "description": "Limit results to those matching a string.",
-                            "type": "string",
-                            "minLength": 1,
-                            "required": false
-                        },
-                        "category": {
-                            "description": "Limit results to those matching a category ID.",
-                            "type": "integer",
-                            "minimum": 1,
-                            "required": false
-                        },
-                        "keyword": {
-                            "description": "Limit results to those matching a keyword ID.",
-                            "type": "integer",
-                            "minimum": 1,
-                            "required": false
-                        },
-                        "slug": {
-                            "description": "Limit results to those matching a pattern (slug).",
-                            "type": "array",
-                            "required": false
-                        },
-                        "offset": {
-                            "description": "Offset the result set by a specific number of items.",
-                            "type": "integer",
-                            "required": false
-                        },
-                        "order": {
-                            "description": "Order sort attribute ascending or descending.",
-                            "type": "string",
-                            "default": "desc",
-                            "enum": [
-                                "asc",
-                                "desc"
-                            ],
-                            "required": false
-                        },
-                        "orderby": {
-                            "description": "Sort collection by post attribute.",
-                            "type": "string",
-                            "default": "date",
-                            "enum": [
-                                "author",
-                                "date",
-                                "id",
-                                "include",
-                                "modified",
-                                "parent",
-                                "relevance",
-                                "slug",
-                                "include_slugs",
-                                "title",
-                                "favorite_count"
-                            ],
-                            "required": false
-                        }
-                    }
-                }
-            ],
-            "_links": {
-                "self": [
-                    {
-                        "href": "http://example.org/index.php?rest_route=/wp/v2/pattern-directory/patterns"
-                    }
-                ]
-            }
-        },
-        "/wp/v2/block-patterns/patterns": {
-            "namespace": "wp/v2",
-            "methods": [
-                "GET"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "args": []
-                }
-            ],
-            "_links": {
-                "self": [
-                    {
-                        "href": "http://example.org/index.php?rest_route=/wp/v2/block-patterns/patterns"
-                    }
-                ]
-            }
-        },
-        "/wp/v2/block-patterns/categories": {
-            "namespace": "wp/v2",
-            "methods": [
-                "GET"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "args": []
-                }
-            ],
-            "_links": {
-                "self": [
-                    {
-                        "href": "http://example.org/index.php?rest_route=/wp/v2/block-patterns/categories"
-                    }
-                ]
-            }
-        },
         "/wp-site-health/v1": {
             "namespace": "wp-site-health/v1",
             "methods": [
@@ -10861,64 +9529,6 @@ mockedApiResponse.Schema = {
                 ]
             }
         },
-        "/wp-block-editor/v1": {
-            "namespace": "wp-block-editor/v1",
-            "methods": [
-                "GET"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "args": {
-                        "namespace": {
-                            "default": "wp-block-editor/v1",
-                            "required": false
-                        },
-                        "context": {
-                            "default": "view",
-                            "required": false
-                        }
-                    }
-                }
-            ],
-            "_links": {
-                "self": [
-                    {
-                        "href": "http://example.org/index.php?rest_route=/wp-block-editor/v1"
-                    }
-                ]
-            }
-        },
-        "/wp-block-editor/v1/url-details": {
-            "namespace": "wp-block-editor/v1",
-            "methods": [
-                "GET"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "args": {
-                        "url": {
-                            "description": "The URL to process.",
-                            "type": "string",
-                            "format": "uri",
-                            "required": true
-                        }
-                    }
-                }
-            ],
-            "_links": {
-                "self": [
-                    {
-                        "href": "http://example.org/index.php?rest_route=/wp-block-editor/v1/url-details"
-                    }
-                ]
-            }
-        },
         "/wp/v2/menu-locations": {
             "namespace": "wp/v2",
             "methods": [
@@ -10982,27 +9592,6 @@ mockedApiResponse.Schema = {
                     }
                 }
             ]
-        },
-        "/wp-block-editor/v1/export": {
-            "namespace": "wp-block-editor/v1",
-            "methods": [
-                "GET"
-            ],
-            "endpoints": [
-                {
-                    "methods": [
-                        "GET"
-                    ],
-                    "args": []
-                }
-            ],
-            "_links": {
-                "self": [
-                    {
-                        "href": "http://example.org/index.php?rest_route=/wp-block-editor/v1/export"
-                    }
-                ]
-            }
         }
     },
     "site_logo": 0,
@@ -12393,11 +10982,6 @@ mockedApiResponse.UsersCollection = [
         "description": "",
         "link": "http://example.org/?author=1",
         "slug": "admin",
-        "avatar_urls": {
-            "24": "http://0.gravatar.com/avatar/96614ec98aa0c0d2ee75796dced6df54?s=24&d=mm&r=g",
-            "48": "http://0.gravatar.com/avatar/96614ec98aa0c0d2ee75796dced6df54?s=48&d=mm&r=g",
-            "96": "http://0.gravatar.com/avatar/96614ec98aa0c0d2ee75796dced6df54?s=96&d=mm&r=g"
-        },
         "meta": {
             "meta_key": "meta_value"
         },
@@ -12421,11 +11005,6 @@ mockedApiResponse.UsersCollection = [
         "description": "",
         "link": "http://example.org/?author=2",
         "slug": "restapiclientfixtureuser",
-        "avatar_urls": {
-            "24": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=24&d=mm&r=g",
-            "48": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=48&d=mm&r=g",
-            "96": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=96&d=mm&r=g"
-        },
         "meta": {
             "meta_key": ""
         },
@@ -12451,11 +11030,6 @@ mockedApiResponse.UserModel = {
     "description": "",
     "link": "http://example.org/?author=2",
     "slug": "restapiclientfixtureuser",
-    "avatar_urls": {
-        "24": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=24&d=mm&r=g",
-        "48": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=48&d=mm&r=g",
-        "96": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=96&d=mm&r=g"
-    },
     "meta": {
         "meta_key": ""
     }
@@ -12468,11 +11042,6 @@ mockedApiResponse.me = {
     "description": "",
     "link": "http://example.org/?author=2",
     "slug": "restapiclientfixtureuser",
-    "avatar_urls": {
-        "24": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=24&d=mm&r=g",
-        "48": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=48&d=mm&r=g",
-        "96": "http://2.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=96&d=mm&r=g"
-    },
     "meta": {
         "meta_key": ""
     }
@@ -12494,11 +11063,6 @@ mockedApiResponse.CommentsCollection = [
         "link": "http://example.org/?p=4#comment-2",
         "status": "approved",
         "type": "comment",
-        "author_avatar_urls": {
-            "24": "http://2.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=24&d=mm&r=g",
-            "48": "http://2.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=48&d=mm&r=g",
-            "96": "http://2.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=96&d=mm&r=g"
-        },
         "meta": {
             "meta_key": "meta_value"
         },
@@ -12539,11 +11103,6 @@ mockedApiResponse.CommentModel = {
     "link": "http://example.org/?p=4#comment-2",
     "status": "approved",
     "type": "comment",
-    "author_avatar_urls": {
-        "24": "http://2.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=24&d=mm&r=g",
-        "48": "http://2.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=48&d=mm&r=g",
-        "96": "http://2.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=96&d=mm&r=g"
-    },
     "meta": {
         "meta_key": "meta_value"
     }
@@ -12567,7 +11126,5 @@ mockedApiResponse.settings = {
     "page_on_front": 0,
     "page_for_posts": 0,
     "default_ping_status": "open",
-    "default_comment_status": "open",
-    "site_logo": null,
-    "site_icon": 0
+    "default_comment_status": "open"
 };
