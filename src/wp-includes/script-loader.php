@@ -392,7 +392,7 @@ function wp_scripts_get_suffix( $type = '' ) {
 		// Include an unmodified $wp_version.
 		require ABSPATH . WPINC . '/version.php';
 
-		$develop_src = false !== strpos( $wp_version, '-src' );
+		$develop_src = classicpress_is_dev_install();
 
 		if ( ! defined( 'SCRIPT_DEBUG' ) ) {
 			define( 'SCRIPT_DEBUG', $develop_src );
@@ -424,33 +424,34 @@ function wp_scripts_get_suffix( $type = '' ) {
  * @param WP_Scripts $scripts WP_Scripts object.
  */
 function wp_default_packages_scripts( $scripts ) {
+	$suffix = wp_scripts_get_suffix();
 	$assets = array(
 		'a11y' => array(
 			'dependencies' => array( 'wp-dom-ready', 'wp-i18n' ),
-			'version'      => '6.1.1',
+			'version'      => '6.2',
 		),
 		'api-fetch' => array(
 			'dependencies' => array( 'wp-i18n', 'wp-url' ),
-			'version'      => '6.1.1',
+			'version'      => '6.2',
 		),
 		'dom-ready' => array(
-			'version'      => '6.1.1',
+			'version'      => '6.2',
 		),
 		'hooks' => array(
-			'version' => '6.1.1',
+			'version' => '6.2',
 		),
 		'i18n' => array(
 			'dependencies' => array( 'wp-hooks' ),
-			'version'      => '6.1.1',
+			'version'      => '6.2',
 		),
 		'url' => array(
-			'version' => '6.1.1',
+			'version' => '6.2',
 		),
 	);
 
 	foreach ( $assets as $file_name => $package_data ) {
 		$handle   = 'wp-' . $file_name;
-		$path     = "/wp-includes/js/dist/{$file_name}.min.js";
+		$path     = "/wp-includes/js/dist/{$file_name}{$suffix}.js";
 
 		if ( ! empty( $package_data['dependencies'] ) ) {
 			$dependencies = $package_data['dependencies'];
@@ -505,12 +506,6 @@ function wp_default_scripts( $scripts ) {
 	$suffix     = wp_scripts_get_suffix();
 	$dev_suffix = wp_scripts_get_suffix( 'dev' );
 	$guessurl   = site_url();
-
-	$develop_src = classicpress_is_dev_install();
-
-	if ( ! defined( 'SCRIPT_DEBUG' ) ) {
-		define( 'SCRIPT_DEBUG', $develop_src );
-	}
 
 	if ( ! $guessurl ) {
 		$guessed_url = true;

@@ -6,6 +6,8 @@
 const buildTools = require( './tools/build' );
 const fs = require( 'fs' );
 const path = require( 'path' );
+const installChanged = require( 'install-changed' );
+const webpackConfig = require( './webpack.config' );
 
 const SOURCE_DIR = 'src/';
 const BUILD_DIR = 'build/';
@@ -13,6 +15,9 @@ const BANNER_TEXT = '/*! This file is auto-generated */';
 const autoprefixer = require( 'autoprefixer' );
 
 module.exports = function(grunt) {
+	// First do `npm install` if package.json has changed.
+	installChanged.watchPackage();
+
 	buildTools.setGruntReference( grunt );
 
 	const puppeteerOptions = {};
@@ -76,6 +81,21 @@ module.exports = function(grunt) {
 		},
 		clean: {
 			all: [BUILD_DIR],
+			'vendor-js': {
+				expand: true,
+				cwd: SOURCE_DIR,
+				src: [
+					'wp-includes/js/dist/vendor/*.js'
+				]
+			},
+			'package-js': {
+				expand: true,
+				cwd: SOURCE_DIR,
+				src: [
+					'wp-includes/js/dist/*.js',
+					'!wp-includes/js/dist/vendor/**'
+				]
+			},
 			dynamic: {
 				dot: true,
 				expand: true,
@@ -143,6 +163,26 @@ module.exports = function(grunt) {
 					{
 						src:  `${BUILD_DIR}wp-admin/css/wp-admin-rtl.css`,
 						dest: `${BUILD_DIR}wp-admin/css/wp-admin-rtl.min.css`
+					}
+				]
+			},
+			'vendor-js': {
+				files: [
+					{
+						src: `./node_modules/lodash/lodash.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/dist/vendor/lodash.js`
+					},
+					{
+						src: `./node_modules/lodash/lodash.min.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/dist/vendor/lodash.min.js`
+					},
+					{
+						src:  `./node_modules/moment/moment.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/dist/vendor/moment.js`
+					},
+					{
+						src:  `./node_modules/moment/min/moment.min.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/dist/vendor/moment.min.js`
 					}
 				]
 			},
@@ -215,6 +255,22 @@ module.exports = function(grunt) {
 						`${$1}build${$2}${/jquery$/.test( $2 ) ? '' : '.min'}${$3}` );
 					}
 				}
+			}
+		},
+		webpack: {
+			min: webpackConfig( { environment: 'production', buildTarget: SOURCE_DIR } ),
+			dev: webpackConfig( { environment: 'development', buildTarget: SOURCE_DIR } )
+		},
+		usebanner: {
+			options: {
+				position: 'top',
+				banner: '/*! This file is auto-generated */',
+				linebreak: true
+			},
+			files: {
+				src: [
+					SOURCE_DIR + 'wp-includes/js/dist/*.min.js',
+				]
 			}
 		},
 		sass: {
@@ -737,7 +793,6 @@ module.exports = function(grunt) {
 		grunt.config.set( 'copy.files.files', copyFilesOptions );
 	}
 
-
 	// RTL task.
 	grunt.registerTask(
 		'rtl',
@@ -1023,6 +1078,18 @@ module.exports = function(grunt) {
 			'copy:wp-admin-css-compat-min',
 			'copy:script-loader',
 			'copy:version'
+		]
+	);
+
+	grunt.registerTask(
+		'js-dependencies',
+		[
+			'clean:vendor-js',
+			'clean:package-js',
+			'copy:vendor-js',
+			'webpack:dev',
+			'webpack:min',
+			'usebanner'
 		]
 	);
 
