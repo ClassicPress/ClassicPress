@@ -259,6 +259,7 @@ $submenu['plugins.php'][5] = array( __( 'Installed Plugins' ), 'activate_plugins
 
 if ( ! is_multisite() ) {
 	/* translators: Add new plugin. */
+	$submenu['plugins.php'][7]  = array( _x( 'Upload', 'plugin' ), 'install_plugins', 'plugin-install.php?tab=upload' );
 	$submenu['plugins.php'][10] = array( _x( 'Add New', 'plugin' ), 'install_plugins', 'plugin-install.php' );
 	$submenu['plugins.php'][15] = array( __( 'Plugin File Editor' ), 'edit_plugins', 'plugin-editor.php' );
 }
