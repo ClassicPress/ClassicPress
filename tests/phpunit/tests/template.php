@@ -13,6 +13,15 @@ class Tests_Template extends WP_UnitTestCase {
 	protected static $page;
 	protected static $post;
 
+	/**
+	 * Page For Privacy Policy.
+	 *
+	 * @since 5.2.0
+	 *
+	 * @var WP_Post $page_for_privacy_policy
+	 */
+	protected static $page_for_privacy_policy;
+
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$page_on_front = $factory->post->create_and_get(
 			array(
@@ -45,6 +54,13 @@ class Tests_Template extends WP_UnitTestCase {
 		);
 		set_post_format( self::$post, 'quote' );
 		add_post_meta( self::$post->ID, '_wp_page_template', 'templates/post.php' );
+
+		self::$page_for_privacy_policy = $factory->post->create_and_get(
+			array(
+				'post_type'  => 'page',
+				'post_title' => 'Privacy Policy',
+			)
+		);
 	}
 
 	public function set_up() {
@@ -55,7 +71,6 @@ class Tests_Template extends WP_UnitTestCase {
 				'public' => true,
 			)
 		);
-
 		register_taxonomy(
 			'taxo',
 			'post',
@@ -64,7 +79,6 @@ class Tests_Template extends WP_UnitTestCase {
 				'hierarchical' => true,
 			)
 		);
-
 		$this->set_permalink_structure( '/%year%/%monthnum%/%day%/%postname%/' );
 	}
 
@@ -275,6 +289,25 @@ class Tests_Template extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @ticket 44005
+	 * @group privacy
+	 */
+	public function test_privacy_template_hierarchy() {
+		update_option( 'wp_page_for_privacy_policy', self::$page_for_privacy_policy->ID );
+
+		$this->assertTemplateHierarchy(
+			get_permalink( self::$page_for_privacy_policy->ID ),
+			array(
+				'privacy-policy.php',
+				'page-privacy-policy.php',
+				'page-' . self::$page_for_privacy_policy->ID . '.php',
+				'page.php',
+				'singular.php',
+			)
+		);
+	}
+
+	/**
 	 * @ticket 18375
 	 */
 	public function test_single_template_hierarchy_for_post() {
@@ -423,6 +456,178 @@ class Tests_Template extends WP_UnitTestCase {
 		);
 	}
 
+	/**
+	 * @ticket 17851
+	 * @covers ::add_settings_section
+	 */
+	public function test_add_settings_section() {
+		add_settings_section( 'test-section', 'Section title', '__return_false', 'test-page' );
+
+		global $wp_settings_sections;
+		$this->assertIsArray( $wp_settings_sections, 'List of sections is not initialized.' );
+		$this->assertArrayHasKey( 'test-page', $wp_settings_sections, 'List of sections for the test page has not been added to sections list.' );
+		$this->assertIsArray( $wp_settings_sections['test-page'], 'List of sections for the test page is not initialized.' );
+		$this->assertArrayHasKey( 'test-section', $wp_settings_sections['test-page'], 'Test section has not been added to the list of sections for the test page.' );
+
+		$this->assertEqualSetsWithIndex(
+			array(
+				'id'             => 'test-section',
+				'title'          => 'Section title',
+				'callback'       => '__return_false',
+				'before_section' => '',
+				'after_section'  => '',
+				'section_class'  => '',
+			),
+			$wp_settings_sections['test-page']['test-section'],
+			'Test section data does not match the expected dataset.'
+		);
+	}
+
+	/**
+	 * @ticket 17851
+	 *
+	 * @param array  $extra_args                   Extra arguments to pass to function `add_settings_section()`.
+	 * @param array  $expected_section_data        Expected set of section data.
+	 * @param string $expected_before_section_html Expected HTML markup to be rendered before the settings section.
+	 * @param string $expected_after_section_html  Expected HTML markup to be rendered after the settings section.
+	 *
+	 * @covers ::add_settings_section
+	 * @covers ::do_settings_sections
+	 *
+	 * @dataProvider data_extra_args_for_add_settings_section
+	 */
+	public function test_add_settings_section_with_extra_args( $extra_args, $expected_section_data, $expected_before_section_html, $expected_after_section_html ) {
+		add_settings_section( 'test-section', 'Section title', '__return_false', 'test-page', $extra_args );
+		add_settings_field( 'test-field', 'Field title', '__return_false', 'test-page', 'test-section' );
+
+		global $wp_settings_sections;
+		$this->assertIsArray( $wp_settings_sections, 'List of sections is not initialized.' );
+		$this->assertArrayHasKey( 'test-page', $wp_settings_sections, 'List of sections for the test page has not been added to sections list.' );
+		$this->assertIsArray( $wp_settings_sections['test-page'], 'List of sections for the test page is not initialized.' );
+		$this->assertArrayHasKey( 'test-section', $wp_settings_sections['test-page'], 'Test section has not been added to the list of sections for the test page.' );
+
+		$this->assertEqualSetsWithIndex(
+			$expected_section_data,
+			$wp_settings_sections['test-page']['test-section'],
+			'Test section data does not match the expected dataset.'
+		);
+
+		ob_start();
+		do_settings_sections( 'test-page' );
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString( $expected_before_section_html, $output, 'Test page output does not contain the custom markup to be placed before the section.' );
+		$this->assertStringContainsString( $expected_after_section_html, $output, 'Test page output does not contain the custom markup to be placed after the section.' );
+	}
+
+	/**
+	 * Data provider for `test_add_settings_section_with_extra_args()`.
+	 *
+	 * @return array
+	 */
+	public function data_extra_args_for_add_settings_section() {
+		return array(
+			'class placeholder section_class present' => array(
+				array(
+					'before_section' => '<div class="%s">',
+					'after_section'  => '</div><!-- end of the test section -->',
+					'section_class'  => 'test-section-wrap',
+				),
+				array(
+					'id'             => 'test-section',
+					'title'          => 'Section title',
+					'callback'       => '__return_false',
+					'before_section' => '<div class="%s">',
+					'after_section'  => '</div><!-- end of the test section -->',
+					'section_class'  => 'test-section-wrap',
+				),
+				'<div class="test-section-wrap">',
+				'</div><!-- end of the test section -->',
+			),
+			'missing class placeholder section_class' => array(
+				array(
+					'before_section' => '<div class="testing-section-wrapper">',
+					'after_section'  => '</div><!-- end of the test section -->',
+					'section_class'  => 'test-section-wrap',
+				),
+				array(
+					'id'             => 'test-section',
+					'title'          => 'Section title',
+					'callback'       => '__return_false',
+					'before_section' => '<div class="testing-section-wrapper">',
+					'after_section'  => '</div><!-- end of the test section -->',
+					'section_class'  => 'test-section-wrap',
+				),
+				'<div class="testing-section-wrapper">',
+				'</div><!-- end of the test section -->',
+			),
+			'empty section_class'                     => array(
+				array(
+					'before_section' => '<div class="test-section-container">',
+					'after_section'  => '</div><!-- end of the test section -->',
+					'section_class'  => '',
+				),
+				array(
+					'id'             => 'test-section',
+					'title'          => 'Section title',
+					'callback'       => '__return_false',
+					'before_section' => '<div class="test-section-container">',
+					'after_section'  => '</div><!-- end of the test section -->',
+					'section_class'  => '',
+				),
+				'<div class="test-section-container">',
+				'</div><!-- end of the test section -->',
+			),
+			'section_class missing'                   => array(
+				array(
+					'before_section' => '<div class="wp-whitelabel-section">',
+					'after_section'  => '</div><!-- end of the test section -->',
+				),
+				array(
+					'id'             => 'test-section',
+					'title'          => 'Section title',
+					'callback'       => '__return_false',
+					'before_section' => '<div class="wp-whitelabel-section">',
+					'after_section'  => '</div><!-- end of the test section -->',
+					'section_class'  => '',
+				),
+				'<div class="wp-whitelabel-section">',
+				'</div><!-- end of the test section -->',
+			),
+			'disallowed tag in before_section'        => array(
+				array(
+					'before_section' => '<div class="video-settings-section"><iframe src="https://www.wordpress.org/" />',
+					'after_section'  => '</div><!-- end of the test section -->',
+				),
+				array(
+					'id'             => 'test-section',
+					'title'          => 'Section title',
+					'callback'       => '__return_false',
+					'before_section' => '<div class="video-settings-section"><iframe src="https://www.wordpress.org/" />',
+					'after_section'  => '</div><!-- end of the test section -->',
+					'section_class'  => '',
+				),
+				'<div class="video-settings-section">',
+				'</div><!-- end of the test section -->',
+			),
+			'disallowed tag in after_section'         => array(
+				array(
+					'before_section' => '<div class="video-settings-section">',
+					'after_section'  => '</div><iframe src="https://www.wordpress.org/" />',
+				),
+				array(
+					'id'             => 'test-section',
+					'title'          => 'Section title',
+					'callback'       => '__return_false',
+					'before_section' => '<div class="video-settings-section">',
+					'after_section'  => '</div><iframe src="https://www.wordpress.org/" />',
+					'section_class'  => '',
+				),
+				'<div class="video-settings-section">',
+				'</div>',
+			),
+		);
+	}
 
 	public function assertTemplateHierarchy( $url, array $expected, $message = '' ) {
 		$this->go_to( $url );
@@ -438,6 +643,7 @@ class Tests_Template extends WP_UnitTestCase {
 			'search'            => 'is_search',
 			'front_page'        => 'is_front_page',
 			'home'              => 'is_home',
+			'privacy_policy'    => 'is_privacy_policy',
 			'post_type_archive' => 'is_post_type_archive',
 			'taxonomy'          => 'is_tax',
 			'attachment'        => 'is_attachment',

@@ -2,12 +2,15 @@
 
 /**
  * @group formatting
+ * @group slashes
+ *
+ * @covers ::stripslashes_deep
  */
-class Tests_Formatting_StripSlashesDeep extends WP_UnitTestCase {
+class Tests_Formatting_StripslashesDeep extends WP_UnitTestCase {
 	/**
 	 * @ticket 18026
 	 */
-	function test_preserves_original_datatype() {
+	public function test_preserves_original_datatype() {
 
 		$this->assertTrue( stripslashes_deep( true ) );
 		$this->assertFalse( stripslashes_deep( false ) );
@@ -23,14 +26,14 @@ class Tests_Formatting_StripSlashesDeep extends WP_UnitTestCase {
 		$this->assertSame( $arr, stripslashes_deep( $arr ) ); // Keyed array.
 		$this->assertSame( array_values( $arr ), stripslashes_deep( array_values( $arr ) ) ); // Non-keyed.
 
-		$obj = new stdClass;
+		$obj = new stdClass();
 		foreach ( $arr as $k => $v ) {
 			$obj->$k = $v;
 		}
 		$this->assertSame( $obj, stripslashes_deep( $obj ) );
 	}
 
-	function test_strips_slashes() {
+	public function test_strips_slashes() {
 		$old = "I can\'t see, isn\'t that it?";
 		$new = "I can't see, isn't that it?";
 		$this->assertSame( $new, stripslashes_deep( $old ) );
@@ -38,14 +41,14 @@ class Tests_Formatting_StripSlashesDeep extends WP_UnitTestCase {
 		$this->assertSame( array( 'a' => $new ), stripslashes_deep( array( 'a' => $old ) ) ); // Keyed array.
 		$this->assertSame( array( $new ), stripslashes_deep( array( $old ) ) ); // Non-keyed.
 
-		$obj_old    = new stdClass;
+		$obj_old    = new stdClass();
 		$obj_old->a = $old;
-		$obj_new    = new stdClass;
+		$obj_new    = new stdClass();
 		$obj_new->a = $new;
 		$this->assertEquals( $obj_new, stripslashes_deep( $obj_old ) );
 	}
 
-	function test_permits_escaped_slash() {
+	public function test_permits_escaped_slash() {
 		$txt = "I can't see, isn\'t that it?";
 		$this->assertSame( $txt, stripslashes_deep( "I can\'t see, isn\\\'t that it?" ) );
 		$this->assertSame( $txt, stripslashes_deep( "I can\'t see, isn\\\\\'t that it?" ) );

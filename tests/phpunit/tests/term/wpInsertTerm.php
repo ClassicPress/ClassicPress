@@ -8,8 +8,8 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 		parent::set_up();
 
 		_clean_term_filters();
-		// insert one term into every post taxonomy
-		// otherwise term_ids and term_taxonomy_ids might be identical, which could mask bugs
+		// Insert one term into every post taxonomy.
+		// Otherwise term_ids and term_taxonomy_ids might be identical, which could mask bugs.
 		$term = 'seed_term';
 		foreach ( get_object_taxonomies( 'post' ) as $tax ) {
 			wp_insert_term( $term, $tax );
@@ -20,24 +20,24 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 		$taxonomy = 'wptests_tax';
 		register_taxonomy( $taxonomy, 'post' );
 
-		// a new unused term
+		// A new unused term.
 		$term = 'term';
 		$this->assertNull( term_exists( $term ) );
 
-		$initial_count = wp_count_terms( $taxonomy );
+		$initial_count = wp_count_terms( array( 'taxonomy' => $taxonomy ) );
 
 		$t = wp_insert_term( $term, $taxonomy );
 		$this->assertIsArray( $t );
 		$this->assertNotWPError( $t );
-		$this->assertTrue( $t['term_id'] > 0 );
-		$this->assertTrue( $t['term_taxonomy_id'] > 0 );
-		$this->assertEquals( $initial_count + 1, wp_count_terms( $taxonomy ) );
+		$this->assertGreaterThan( 0, $t['term_id'] );
+		$this->assertGreaterThan( 0, $t['term_taxonomy_id'] );
+		$this->assertEquals( $initial_count + 1, wp_count_terms( array( 'taxonomy' => $taxonomy ) ) );
 
-		// make sure the term exists
-		$this->assertTrue( term_exists( $term ) > 0 );
-		$this->assertTrue( term_exists( $t['term_id'] ) > 0 );
+		// Make sure the term exists.
+		$this->assertGreaterThan( 0, term_exists( $term ) );
+		$this->assertGreaterThan( 0, term_exists( $t['term_id'] ) );
 
-		// now delete it
+		// Now delete it.
 		add_filter( 'delete_term', array( $this, 'deleted_term_cb' ), 10, 5 );
 		$this->assertTrue( wp_delete_term( $t['term_id'], $taxonomy ) );
 		remove_filter( 'delete_term', array( $this, 'deleted_term_cb' ), 10, 5 );
@@ -91,12 +91,12 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 
 	public function test_wp_insert_term_unslash_name() {
 		register_taxonomy( 'wptests_tax', 'post' );
-		$found = wp_insert_term( 'Let\\\'s all say \\"Hooray\\" for ClassicPress taxonomy', 'wptests_tax' );
+		$found = wp_insert_term( 'Let\\\'s all say \\"Hooray\\" for WordPress taxonomy', 'wptests_tax' );
 
 		$term = get_term( $found['term_id'], 'wptests_tax' );
 		_unregister_taxonomy( 'wptests_tax' );
 
-		$this->assertSame( 'Let\'s all say "Hooray" for ClassicPress taxonomy', $term->name );
+		$this->assertSame( 'Let\'s all say "Hooray" for WordPress taxonomy', $term->name );
 	}
 
 	public function test_wp_insert_term_unslash_description() {
@@ -105,14 +105,14 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 			'Quality',
 			'wptests_tax',
 			array(
-				'description' => 'Let\\\'s all say \\"Hooray\\" for ClassicPress taxonomy',
+				'description' => 'Let\\\'s all say \\"Hooray\\" for WordPress taxonomy',
 			)
 		);
 
 		$term = get_term( $found['term_id'], 'wptests_tax' );
 		_unregister_taxonomy( 'wptests_tax' );
 
-		$this->assertSame( 'Let\'s all say "Hooray" for ClassicPress taxonomy', $term->description );
+		$this->assertSame( 'Let\'s all say "Hooray" for WordPress taxonomy', $term->description );
 	}
 
 	public function test_wp_insert_term_parent_string() {
@@ -187,9 +187,9 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 	public function test_wp_insert_term_duplicate_name() {
 		$term = self::factory()->tag->create_and_get( array( 'name' => 'Bozo' ) );
 		$this->assertNotWPError( $term );
-		$this->assertTrue( empty( $term->errors ) );
+		$this->assertEmpty( $term->errors );
 
-		// Test existing term name with unique slug
+		// Test existing term name with unique slug.
 		$term1 = self::factory()->tag->create(
 			array(
 				'name' => 'Bozo',
@@ -198,12 +198,12 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 		);
 		$this->assertNotWPError( $term1 );
 
-		// Test an existing term name
+		// Test an existing term name.
 		$term2 = self::factory()->tag->create( array( 'name' => 'Bozo' ) );
 		$this->assertWPError( $term2 );
 		$this->assertNotEmpty( $term2->errors );
 
-		// Test named terms ending in special characters
+		// Test named terms ending in special characters.
 		$term3 = self::factory()->tag->create( array( 'name' => 'T$' ) );
 		$term4 = self::factory()->tag->create( array( 'name' => 'T$$' ) );
 		$term5 = self::factory()->tag->create( array( 'name' => 'T$$$' ) );
@@ -216,7 +216,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 		$terms = array_map( 'get_tag', array( $term3, $term4, $term5, $term6 ) );
 		$this->assertCount( 4, array_unique( wp_list_pluck( $terms, 'slug' ) ) );
 
-		// Test named terms with only special characters
+		// Test named terms with only special characters.
 		$term8  = self::factory()->tag->create( array( 'name' => '$' ) );
 		$term9  = self::factory()->tag->create( array( 'name' => '$$' ) );
 		$term10 = self::factory()->tag->create( array( 'name' => '$$$' ) );
@@ -800,7 +800,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 		);
 
 		/**
-		 * It doesn't appear that ClassicPress itself ever sets these
+		 * It doesn't appear that WordPress itself ever sets these
 		 * caches, but we should ensure that they're being cleared for
 		 * compatibility with third-party addons. Prime the caches
 		 * manually.
@@ -822,7 +822,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 
 		$cached_children = get_option( 'wptests_tax_children' );
 		$this->assertNotEmpty( $cached_children[ $t ] );
-		$this->assertTrue( in_array( $found['term_id'], $cached_children[ $t ], true ) );
+		$this->assertContains( $found['term_id'], $cached_children[ $t ] );
 	}
 
 	/**
@@ -897,7 +897,7 @@ class Tests_Term_WpInsertTerm extends WP_UnitTestCase {
 		$this->assertSame( '', $term_object->description );
 	}
 
-	/** Helpers **********************************************************/
+	/** Helpers */
 
 	public function deleted_term_cb( $term, $tt_id, $taxonomy, $deleted_term, $object_ids ) {
 		$this->assertIsObject( $deleted_term );

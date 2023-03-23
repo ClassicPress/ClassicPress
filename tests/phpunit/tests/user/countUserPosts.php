@@ -5,10 +5,10 @@
  * @group post
  */
 class Tests_User_CountUserPosts extends WP_UnitTestCase {
-	static $user_id;
-	static $post_ids = array();
+	public static $user_id;
+	public static $post_ids = array();
 
-	public static function wpSetUpBeforeClass( $factory ) {
+	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$user_id = $factory->user->create(
 			array(
 				'role'       => 'author',
@@ -58,40 +58,35 @@ class Tests_User_CountUserPosts extends WP_UnitTestCase {
 		register_post_type( 'wptests_pt' );
 	}
 
-	public function tear_down() {
-		_unregister_post_type( 'wptests_pt' );
-		parent::tear_down();
-	}
-
 	public function test_count_user_posts_post_type_should_default_to_post() {
-		$this->assertEquals( 4, count_user_posts( self::$user_id ) );
+		$this->assertSame( '4', count_user_posts( self::$user_id ) );
 	}
 
 	/**
 	 * @ticket 21364
 	 */
 	public function test_count_user_posts_post_type_post() {
-		$this->assertEquals( 4, count_user_posts( self::$user_id, 'post' ) );
+		$this->assertSame( '4', count_user_posts( self::$user_id, 'post' ) );
 	}
 
 	/**
 	 * @ticket 21364
 	 */
 	public function test_count_user_posts_post_type_cpt() {
-		$this->assertEquals( 3, count_user_posts( self::$user_id, 'wptests_pt' ) );
+		$this->assertSame( '3', count_user_posts( self::$user_id, 'wptests_pt' ) );
 	}
 
 	/**
 	 * @ticket 32243
 	 */
 	public function test_count_user_posts_with_multiple_post_types() {
-		$this->assertEquals( 7, count_user_posts( self::$user_id, array( 'wptests_pt', 'post' ) ) );
+		$this->assertSame( '7', count_user_posts( self::$user_id, array( 'wptests_pt', 'post' ) ) );
 	}
 
 	/**
 	 * @ticket 32243
 	 */
 	public function test_count_user_posts_should_ignore_non_existent_post_types() {
-		$this->assertEquals( 4, count_user_posts( self::$user_id, array( 'foo', 'post' ) ) );
+		$this->assertSame( '4', count_user_posts( self::$user_id, array( 'foo', 'post' ) ) );
 	}
 }

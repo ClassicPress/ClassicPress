@@ -7,50 +7,60 @@
  */
 class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 
-	function set_up() {
+	/**
+	 * Theme root directory.
+	 *
+	 * @var string
+	 */
+	const THEME_ROOT = DIR_TESTDATA . '/themedir1';
+
+	/**
+	 * Original theme directory.
+	 *
+	 * @var string
+	 */
+	private $orig_theme_dir;
+
+	public function set_up() {
 		parent::set_up();
-		$this->theme_root = DIR_TESTDATA . '/themedir1';
 
 		$this->orig_theme_dir = $GLOBALS['wp_theme_directories'];
 
 		// /themes is necessary as theme.php functions assume /themes is the root if there is only one root.
-		$GLOBALS['wp_theme_directories'] = array( WP_CONTENT_DIR . '/themes', $this->theme_root );
+		$GLOBALS['wp_theme_directories'] = array( WP_CONTENT_DIR . '/themes', self::THEME_ROOT );
 
-		add_filter( 'theme_root', array( $this, '_theme_root' ) );
-		add_filter( 'stylesheet_root', array( $this, '_theme_root' ) );
-		add_filter( 'template_root', array( $this, '_theme_root' ) );
-		// clear caches
+		add_filter( 'theme_root', array( $this, 'filter_theme_root' ) );
+		add_filter( 'stylesheet_root', array( $this, 'filter_theme_root' ) );
+		add_filter( 'template_root', array( $this, 'filter_theme_root' ) );
+		// Clear caches.
 		wp_clean_themes_cache();
 		unset( $GLOBALS['wp_themes'] );
 	}
 
-	function tear_down() {
+	public function tear_down() {
 		$GLOBALS['wp_theme_directories'] = $this->orig_theme_dir;
-		remove_filter( 'theme_root', array( $this, '_theme_root' ) );
-		remove_filter( 'stylesheet_root', array( $this, '_theme_root' ) );
-		remove_filter( 'template_root', array( $this, '_theme_root' ) );
 		wp_clean_themes_cache();
 		unset( $GLOBALS['wp_themes'] );
 		parent::tear_down();
 	}
 
-	// replace the normal theme root dir with our premade test dir
-	function _theme_root( $dir ) {
-		return $this->theme_root;
+	// Replace the normal theme root directory with our premade test directory.
+	public function filter_theme_root( $dir ) {
+		return self::THEME_ROOT;
 	}
 
 	/**
 	 * @expectedDeprecated get_theme
 	 * @expectedDeprecated get_themes
 	 */
-	function test_theme_default() {
+	public function test_theme_default() {
 		$themes = get_themes();
 		$theme  = get_theme( 'ClassicPress Default' );
 		$this->assertSame( $themes['ClassicPress Default'], $theme );
 
-		$this->assertFalse( empty( $theme ) );
+		$this->assertNotEmpty( $theme );
 
-		#echo gen_tests_array('theme', $theme);
+		// echo gen_tests_array( 'theme', $theme );
 
 		$this->assertSame( 'ClassicPress Default', $theme['Name'] );
 		$this->assertSame( 'ClassicPress Default', $theme['Title'] );
@@ -60,12 +70,12 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 		$this->assertSame( 'default', $theme['Template'] );
 		$this->assertSame( 'default', $theme['Stylesheet'] );
 
-		$this->assertContains( $this->theme_root . '/default/functions.php', $theme['Template Files'] );
-		$this->assertContains( $this->theme_root . '/default/index.php', $theme['Template Files'] );
-		$this->assertContains( $this->theme_root . '/default/style.css', $theme['Stylesheet Files'] );
+		$this->assertContains( self::THEME_ROOT . '/default/functions.php', $theme['Template Files'] );
+		$this->assertContains( self::THEME_ROOT . '/default/index.php', $theme['Template Files'] );
+		$this->assertContains( self::THEME_ROOT . '/default/style.css', $theme['Stylesheet Files'] );
 
-		$this->assertSame( $this->theme_root . '/default', $theme['Template Dir'] );
-		$this->assertSame( $this->theme_root . '/default', $theme['Stylesheet Dir'] );
+		$this->assertSame( self::THEME_ROOT . '/default', $theme['Template Dir'] );
+		$this->assertSame( self::THEME_ROOT . '/default', $theme['Stylesheet Dir'] );
 		$this->assertSame( 'publish', $theme['Status'] );
 		$this->assertSame( '', $theme['Parent Theme'] );
 	}
@@ -74,12 +84,12 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 	 * @expectedDeprecated get_theme
 	 * @expectedDeprecated get_themes
 	 */
-	function test_theme_sandbox() {
+	public function test_theme_sandbox() {
 		$theme = get_theme( 'Sandbox' );
 
-		$this->assertFalse( empty( $theme ) );
+		$this->assertNotEmpty( $theme );
 
-		#echo gen_tests_array('theme', $theme);
+		// echo gen_tests_array( 'theme', $theme );
 
 		$this->assertSame( 'Sandbox', $theme['Name'] );
 		$this->assertSame( 'Sandbox', $theme['Title'] );
@@ -91,15 +101,15 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 
 		$template_files = $theme['Template Files'];
 
-		$this->assertSame( $this->theme_root . '/sandbox/functions.php', reset( $template_files ) );
-		$this->assertSame( $this->theme_root . '/sandbox/index.php', next( $template_files ) );
+		$this->assertSame( self::THEME_ROOT . '/sandbox/functions.php', reset( $template_files ) );
+		$this->assertSame( self::THEME_ROOT . '/sandbox/index.php', next( $template_files ) );
 
 		$stylesheet_files = $theme['Stylesheet Files'];
 
-		$this->assertSame( $this->theme_root . '/sandbox/style.css', reset( $stylesheet_files ) );
+		$this->assertSame( self::THEME_ROOT . '/sandbox/style.css', reset( $stylesheet_files ) );
 
-		$this->assertSame( $this->theme_root . '/sandbox', $theme['Template Dir'] );
-		$this->assertSame( $this->theme_root . '/sandbox', $theme['Stylesheet Dir'] );
+		$this->assertSame( self::THEME_ROOT . '/sandbox', $theme['Template Dir'] );
+		$this->assertSame( self::THEME_ROOT . '/sandbox', $theme['Stylesheet Dir'] );
 		$this->assertSame( 'publish', $theme['Status'] );
 		$this->assertSame( '', $theme['Parent Theme'] );
 
@@ -110,13 +120,13 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 	 *
 	 * @expectedDeprecated get_themes
 	 */
-	function test_theme_stylesheet_only() {
+	public function test_theme_stylesheet_only() {
 		$themes = get_themes();
 
 		$theme = $themes['Stylesheet Only'];
-		$this->assertFalse( empty( $theme ) );
+		$this->assertNotEmpty( $theme );
 
-		#echo gen_tests_array('theme', $theme);
+		// echo gen_tests_array( 'theme', $theme );
 
 		$this->assertSame( 'Stylesheet Only', $theme['Name'] );
 		$this->assertSame( 'Stylesheet Only', $theme['Title'] );
@@ -125,26 +135,27 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 		$this->assertSame( '1.0', $theme['Version'] );
 		$this->assertSame( 'sandbox', $theme['Template'] );
 		$this->assertSame( 'stylesheetonly', $theme['Stylesheet'] );
-		$this->assertContains( $this->theme_root . '/sandbox/functions.php', $theme['Template Files'] );
-		$this->assertContains( $this->theme_root . '/sandbox/index.php', $theme['Template Files'] );
+		$this->assertContains( self::THEME_ROOT . '/sandbox/functions.php', $theme['Template Files'] );
+		$this->assertContains( self::THEME_ROOT . '/sandbox/index.php', $theme['Template Files'] );
 
-		$this->assertContains( $this->theme_root . '/stylesheetonly/style.css', $theme['Stylesheet Files'] );
+		$this->assertContains( self::THEME_ROOT . '/stylesheetonly/style.css', $theme['Stylesheet Files'] );
 
-		$this->assertSame( $this->theme_root . '/sandbox', $theme['Template Dir'] );
-		$this->assertSame( $this->theme_root . '/stylesheetonly', $theme['Stylesheet Dir'] );
+		$this->assertSame( self::THEME_ROOT . '/sandbox', $theme['Template Dir'] );
+		$this->assertSame( self::THEME_ROOT . '/stylesheetonly', $theme['Stylesheet Dir'] );
 		$this->assertSame( 'publish', $theme['Status'] );
 		$this->assertSame( 'Sandbox', $theme['Parent Theme'] );
+
 	}
 
 	/**
 	 * @expectedDeprecated get_themes
 	 */
-	function test_theme_list() {
+	public function test_theme_list() {
 		$themes = get_themes();
 
 		// Ignore themes in the default /themes directory.
 		foreach ( $themes as $theme_name => $theme ) {
-			if ( $theme->get_theme_root() !== $this->theme_root ) {
+			if ( $theme->get_theme_root() !== self::THEME_ROOT ) {
 				unset( $themes[ $theme_name ] );
 			}
 		}
@@ -155,26 +166,24 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 			'Sandbox',
 			'Stylesheet Only',
 			'My Theme',
-			'My Theme/theme1', // duplicate theme should be given a unique name
-			'My Subdir Theme', // theme in a subdirectory should work
-			'Page Template Child Theme', // theme which inherits page templates
-			'Page Template Theme', // theme with page templates for other test code
+			'My Theme/theme1',                    // Duplicate theme should be given a unique name.
+			'My Subdir Theme',                    // Theme in a subdirectory should work.
+			'Page Template Child Theme',          // Theme which inherits page templates.
+			'Page Template Theme',                // Theme with page templates for other test code.
 			'Theme with Spaces in the Directory',
 			'Internationalized Theme',
+			'Custom Internationalized Theme',
 			'camelCase',
 		);
 
-		sort( $theme_names );
-		sort( $expected );
-
-		$this->assertSame( $expected, $theme_names );
+		$this->assertSameSets( $expected, $theme_names );
 	}
 
 	/**
 	 * @expectedDeprecated get_themes
 	 * @expectedDeprecated get_broken_themes
 	 */
-	function test_broken_themes() {
+	public function test_broken_themes() {
 		$themes = get_themes();
 
 		$expected = array(
@@ -193,28 +202,28 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 		$this->assertSame( $expected, get_broken_themes() );
 	}
 
-	function test_wp_get_theme_with_non_default_theme_root() {
-		$this->assertFalse( wp_get_theme( 'sandbox', $this->theme_root )->errors() );
+	public function test_wp_get_theme_with_non_default_theme_root() {
+		$this->assertFalse( wp_get_theme( 'sandbox', self::THEME_ROOT )->errors() );
 		$this->assertFalse( wp_get_theme( 'sandbox' )->errors() );
 	}
 
 	/**
 	 * @expectedDeprecated get_themes
 	 */
-	function test_page_templates() {
+	public function test_page_templates() {
 		$themes = get_themes();
 
 		$theme = $themes['Page Template Theme'];
-		$this->assertFalse( empty( $theme ) );
+		$this->assertNotEmpty( $theme );
 
 		$templates = $theme['Template Files'];
-		$this->assertTrue( in_array( $this->theme_root . '/page-templates/template-top-level.php', $templates, true ) );
+		$this->assertContains( self::THEME_ROOT . '/page-templates/template-top-level.php', $templates );
 	}
 
 	/**
 	 * @expectedDeprecated get_theme_data
 	 */
-	function test_get_theme_data_top_level() {
+	public function test_get_theme_data_top_level() {
 		$theme_data = get_theme_data( DIR_TESTDATA . '/themedir1/theme1/style.css' );
 
 		$this->assertSame( 'My Theme', $theme_data['Name'] );
@@ -233,8 +242,8 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 	/**
 	 * @expectedDeprecated get_theme_data
 	 */
-	function test_get_theme_data_subdir() {
-		$theme_data = get_theme_data( $this->theme_root . '/subdir/theme2/style.css' );
+	public function test_get_theme_data_subdir() {
+		$theme_data = get_theme_data( self::THEME_ROOT . '/subdir/theme2/style.css' );
 
 		$this->assertSame( 'My Subdir Theme', $theme_data['Name'] );
 		$this->assertSame( 'http://example.org/', $theme_data['URI'] );
@@ -252,7 +261,7 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 	/**
 	 * @ticket 28662
 	 */
-	function test_theme_dir_slashes() {
+	public function test_theme_dir_slashes() {
 		$size = count( $GLOBALS['wp_theme_directories'] );
 
 		@mkdir( WP_CONTENT_DIR . '/themes/foo' );

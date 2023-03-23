@@ -17,9 +17,9 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	/**
 	 * Set up a test case.
 	 *
-	 * @see WP_UnitTestCase::setup()
+	 * @see WP_UnitTestCase_Base::set_up()
 	 */
-	function set_up() {
+	public function set_up() {
 		parent::set_up();
 		require_once ABSPATH . WPINC . '/class-wp-customize-manager.php';
 		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
@@ -31,7 +31,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	/**
 	 * Delete the $wp_customize global when cleaning up scope.
 	 */
-	function clean_up_global_scope() {
+	public function clean_up_global_scope() {
 		global $wp_customize;
 		$wp_customize = null;
 		parent::clean_up_global_scope();
@@ -43,7 +43,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 * @param array $items Menu item types.
 	 * @return array Menu item types.
 	 */
-	function filter_item_types( $items ) {
+	public function filter_item_types( $items ) {
 		$items[] = array(
 			'title'      => 'Custom',
 			'type_label' => 'Custom Type',
@@ -57,18 +57,18 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	/**
 	 * Filter to add custom menu items.
 	 *
-	 * @param array  $items  The menu items.
-	 * @param string $type   The object type (e.g. taxonomy).
-	 * @param string $object The object name (e.g. category).
+	 * @param array  $items       The menu items.
+	 * @param string $object_type The object type (e.g. taxonomy).
+	 * @param string $object_name The object name (e.g. category).
 	 * @return array Menu items.
 	 */
-	function filter_items( $items, $type, $object ) {
+	public function filter_items( $items, $object_type, $object_name ) {
 		$items[] = array(
 			'id'         => 'custom-1',
 			'title'      => 'Cool beans',
-			'type'       => $type,
+			'type'       => $object_type,
 			'type_label' => 'Custom Label',
-			'object'     => $object,
+			'object'     => $object_name,
 			'url'        => home_url( '/cool-beans/' ),
 			'classes'    => 'custom-menu-item cool-beans',
 		);
@@ -81,7 +81,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::__construct()
 	 */
-	function test_construct() {
+	public function test_construct() {
 		do_action( 'customize_register', $this->wp_customize );
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 		$this->assertInstanceOf( 'WP_Customize_Manager', $menus->manager );
@@ -107,7 +107,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::load_available_items_query()
 	 */
-	function test_load_available_items_query_returns_wp_error() {
+	public function test_load_available_items_query_returns_wp_error() {
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
 		// Invalid post type $obj_name.
@@ -126,7 +126,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::load_available_items_query()
 	 */
-	function test_load_available_items_query_maybe_returns_home() {
+	public function test_load_available_items_query_maybe_returns_home() {
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
 		// Expected menu item array.
@@ -157,7 +157,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::load_available_items_query()
 	 */
-	function test_load_available_items_query_returns_post_item_with_page_number() {
+	public function test_load_available_items_query_returns_post_item_with_page_number() {
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
 		// Create page.
@@ -173,8 +173,8 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 			'type'       => 'post_type',
 			'type_label' => 'Post',
 			'object'     => 'post',
-			'object_id'  => intval( $post_id ),
-			'url'        => get_permalink( intval( $post_id ) ),
+			'object_id'  => (int) $post_id,
+			'url'        => get_permalink( (int) $post_id ),
 		);
 
 		// Offset the query and get the second page of menu items.
@@ -187,7 +187,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::load_available_items_query()
 	 */
-	function test_load_available_items_query_returns_page_item() {
+	public function test_load_available_items_query_returns_page_item() {
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
 		// Create page.
@@ -205,8 +205,8 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 			'type'       => 'post_type',
 			'type_label' => 'Page',
 			'object'     => 'page',
-			'object_id'  => intval( $page_id ),
-			'url'        => get_permalink( intval( $page_id ) ),
+			'object_id'  => (int) $page_id,
+			'url'        => get_permalink( (int) $page_id ),
 		);
 
 		$items = $menus->load_available_items_query( 'post_type', 'page', 0 );
@@ -218,7 +218,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::load_available_items_query()
 	 */
-	function test_load_available_items_query_returns_post_item() {
+	public function test_load_available_items_query_returns_post_item() {
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
 		// Create post.
@@ -231,8 +231,8 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 			'type'       => 'post_type',
 			'type_label' => 'Post',
 			'object'     => 'post',
-			'object_id'  => intval( $post_id ),
-			'url'        => get_permalink( intval( $post_id ) ),
+			'object_id'  => (int) $post_id,
+			'url'        => get_permalink( (int) $post_id ),
 		);
 
 		$items = $menus->load_available_items_query( 'post_type', 'post', 0 );
@@ -244,7 +244,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::load_available_items_query()
 	 */
-	function test_load_available_items_query_returns_term_item() {
+	public function test_load_available_items_query_returns_term_item() {
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
 		// Create term.
@@ -257,8 +257,8 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 			'type'       => 'taxonomy',
 			'type_label' => 'Category',
 			'object'     => 'category',
-			'object_id'  => intval( $term_id ),
-			'url'        => get_term_link( intval( $term_id ), 'category' ),
+			'object_id'  => (int) $term_id,
+			'url'        => get_term_link( (int) $term_id, 'category' ),
 		);
 
 		$items = $menus->load_available_items_query( 'taxonomy', 'category', 0 );
@@ -270,7 +270,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::load_available_items_query()
 	 */
-	function test_load_available_items_query_returns_custom_item() {
+	public function test_load_available_items_query_returns_custom_item() {
 		add_filter( 'customize_nav_menu_available_item_types', array( $this, 'filter_item_types' ) );
 		add_filter( 'customize_nav_menu_available_items', array( $this, 'filter_items' ), 10, 4 );
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
@@ -295,7 +295,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::search_available_items_query()
 	 */
-	function test_search_available_items_query() {
+	public function test_search_available_items_query() {
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 		do_action( 'customize_register', $this->wp_customize );
 
@@ -327,13 +327,12 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 				'type'       => 'post_type',
 				'type_label' => get_post_type_object( 'post' )->labels->singular_name,
 				'object'     => 'post',
-				'object_id'  => intval( $post_id ),
-				'url'        => get_permalink( intval( $post_id ) ),
+				'object_id'  => (int) $post_id,
+				'url'        => get_permalink( (int) $post_id ),
 			);
 			wp_set_object_terms( $post_id, $term_ids, 'category' );
-			$search = $post_id === $post_ids[0] ? 'test & search' : 'other title';
-			$s      = sanitize_text_field( wp_unslash( $search ) );
-
+			$search  = $post_id === $post_ids[0] ? 'test & search' : 'other title';
+			$s       = sanitize_text_field( wp_unslash( $search ) );
 			$results = $menus->search_available_items_query(
 				array(
 					'pagenum' => 1,
@@ -352,11 +351,10 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 				'type'       => 'taxonomy',
 				'type_label' => get_taxonomy( 'category' )->labels->singular_name,
 				'object'     => 'category',
-				'object_id'  => intval( $term_id ),
-				'url'        => get_term_link( intval( $term_id ), 'category' ),
+				'object_id'  => (int) $term_id,
+				'url'        => get_term_link( (int) $term_id, 'category' ),
 			);
 			$s        = sanitize_text_field( wp_unslash( $term->name ) );
-
 			$results  = $menus->search_available_items_query(
 				array(
 					'pagenum' => 1,
@@ -373,10 +371,9 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 				's'       => 'cat',
 			)
 		);
-		$this->assertEquals( 1, count( $results ) );
+		$this->assertCount( 2, $results ); // Category terms Cats Drool and Uncategorized.
 		$count = $this->filter_count_customize_nav_menu_searched_items;
 		add_filter( 'customize_nav_menu_searched_items', array( $this, 'filter_search' ), 10, 2 );
-
 		$results = $menus->search_available_items_query(
 			array(
 				'pagenum' => 1,
@@ -385,7 +382,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		);
 		$this->assertSame( $count + 1, $this->filter_count_customize_nav_menu_searched_items );
 		$this->assertIsArray( $results );
-		$this->assertCount( 2, $results );
+		$this->assertCount( 3, $results );
 		remove_filter( 'customize_nav_menu_searched_items', array( $this, 'filter_search' ), 10 );
 
 		// Test home.
@@ -399,6 +396,53 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		$this->assertCount( 1, $results );
 		$this->assertSame( 'home', $results[0]['id'] );
 		$this->assertSame( 'custom', $results[0]['type'] );
+	}
+
+	/*
+	 * Tests that the search_available_items_query method should return term items
+	 * not assigned to any posts.
+	 *
+	 * @ticket 45298
+	 */
+	public function test_search_available_items_query_should_return_unassigned_term_items() {
+		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
+
+		register_taxonomy(
+			'wptests_tax',
+			'post',
+			array(
+				'labels' => array(
+					'name' => 'Tests Taxonomy',
+				),
+			)
+		);
+
+		$term_id = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+				'name'     => 'foobar',
+			)
+		);
+
+		// Expected menu item array.
+		$expected = array(
+			'title'      => 'foobar',
+			'id'         => "term-{$term_id}",
+			'type'       => 'taxonomy',
+			'type_label' => 'Tests Taxonomy',
+			'object'     => 'wptests_tax',
+			'object_id'  => (int) $term_id,
+			'url'        => get_term_link( (int) $term_id, '' ),
+		);
+
+		$results = $menus->search_available_items_query(
+			array(
+				'pagenum' => 1,
+				's'       => 'foo',
+			)
+		);
+
+		$this->assertSameSets( $expected, $results[0] );
 	}
 
 	/**
@@ -420,7 +464,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 * }
 	 * @return array Items.
 	 */
-	function filter_search( $items, $args ) {
+	public function filter_search( $items, $args ) {
 		$this->assertIsArray( $items );
 		$this->assertIsArray( $args );
 		$this->assertArrayHasKey( 's', $args );
@@ -448,7 +492,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::enqueue_scripts()
 	 */
-	function test_enqueue_scripts() {
+	public function test_enqueue_scripts() {
 		do_action( 'customize_register', $this->wp_customize );
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 		$menus->enqueue_scripts();
@@ -463,7 +507,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::filter_dynamic_setting_args()
 	 */
-	function test_filter_dynamic_setting_args() {
+	public function test_filter_dynamic_setting_args() {
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
 		$expected = array( 'type' => 'nav_menu_item' );
@@ -480,7 +524,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::filter_dynamic_setting_class()
 	 */
-	function test_filter_dynamic_setting_class() {
+	public function test_filter_dynamic_setting_class() {
 		do_action( 'customize_register', $this->wp_customize );
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
@@ -498,7 +542,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::customize_register()
 	 */
-	function test_customize_register() {
+	public function test_customize_register() {
 		do_action( 'customize_register', $this->wp_customize );
 		$menu_id = wp_create_nav_menu( 'Primary' );
 		$post_id = self::factory()->post->create( array( 'post_title' => 'Hello World' ) );
@@ -530,7 +574,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::intval_base10()
 	 */
-	function test_intval_base10() {
+	public function test_intval_base10() {
 
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
@@ -549,7 +593,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::available_item_types()
 	 */
-	function test_available_item_types() {
+	public function test_available_item_types() {
 
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
@@ -617,7 +661,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	/**
 	 * Test insert_auto_draft_post method.
 	 *
-	 * @covers WP_Customize_Nav_Menus::insert_auto_draft_post()
+	 * @covers WP_Customize_Nav_Menus::insert_auto_draft_post
 	 */
 	public function test_insert_auto_draft_post() {
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
@@ -626,7 +670,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		$this->assertInstanceOf( 'WP_Error', $r );
 		$this->assertSame( 'unknown_post_type', $r->get_error_code() );
 
-		// Non-existent post types allowed as of https://core.trac.wordpress.org/ticket/39610.
+		// Non-existent post types allowed as of #39610.
 		$r = $menus->insert_auto_draft_post(
 			array(
 				'post_title' => 'Non-existent',
@@ -685,7 +729,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::print_templates()
 	 */
-	function test_print_templates() {
+	public function test_print_templates() {
 		do_action( 'customize_register', $this->wp_customize );
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
@@ -709,7 +753,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::available_items_template()
 	 */
-	function test_available_items_template() {
+	public function test_available_items_template() {
 		add_filter( 'customize_nav_menu_available_item_types', array( $this, 'filter_item_types' ) );
 		do_action( 'customize_register', $this->wp_customize );
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
@@ -756,7 +800,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::customize_dynamic_partial_args()
 	 */
-	function test_customize_dynamic_partial_args() {
+	public function test_customize_dynamic_partial_args() {
 		do_action( 'customize_register', $this->wp_customize );
 
 		$args = apply_filters( 'customize_dynamic_partial_args', false, 'nav_menu_instance[68b329da9893e34099c7d8ad5cb9c940]' );
@@ -778,7 +822,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::customize_preview_init()
 	 */
-	function test_customize_preview_init() {
+	public function test_customize_preview_init() {
 		do_action( 'customize_register', $this->wp_customize );
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
@@ -791,9 +835,9 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	/**
 	 * Test make_auto_draft_status_previewable.
 	 *
-	 * @covers WP_Customize_Nav_Menus::make_auto_draft_status_previewable()
+	 * @covers WP_Customize_Nav_Menus::make_auto_draft_status_previewable
 	 */
-	function test_make_auto_draft_status_previewable() {
+	public function test_make_auto_draft_status_previewable() {
 		global $wp_post_statuses;
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 		$menus->make_auto_draft_status_previewable();
@@ -803,15 +847,15 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	/**
 	 * Test sanitize_nav_menus_created_posts.
 	 *
-	 * @covers WP_Customize_Nav_Menus::sanitize_nav_menus_created_posts()
+	 * @covers WP_Customize_Nav_Menus::sanitize_nav_menus_created_posts
 	 */
-	function test_sanitize_nav_menus_created_posts() {
+	public function test_sanitize_nav_menus_created_posts() {
 		$menus                 = new WP_Customize_Nav_Menus( $this->wp_customize );
-		$contributor_user_id   = $this->factory()->user->create( array( 'role' => 'contributor' ) );
-		$author_user_id        = $this->factory()->user->create( array( 'role' => 'author' ) );
-		$administrator_user_id = $this->factory()->user->create( array( 'role' => 'administrator' ) );
+		$contributor_user_id   = self::factory()->user->create( array( 'role' => 'contributor' ) );
+		$author_user_id        = self::factory()->user->create( array( 'role' => 'author' ) );
+		$administrator_user_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
 
-		$contributor_post_id   = $this->factory()->post->create(
+		$contributor_post_id   = self::factory()->post->create(
 			array(
 				'post_status' => 'auto-draft',
 				'post_title'  => 'Contributor Post',
@@ -819,7 +863,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 				'post_author' => $contributor_user_id,
 			)
 		);
-		$author_post_id        = $this->factory()->post->create(
+		$author_post_id        = self::factory()->post->create(
 			array(
 				'post_status' => 'auto-draft',
 				'post_title'  => 'Author Post',
@@ -827,7 +871,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 				'post_author' => $author_user_id,
 			)
 		);
-		$administrator_post_id = $this->factory()->post->create(
+		$administrator_post_id = self::factory()->post->create(
 			array(
 				'post_status' => 'auto-draft',
 				'post_title'  => 'Admin Post',
@@ -836,7 +880,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 			)
 		);
 
-		$draft_post_id = $this->factory()->post->create(
+		$draft_post_id = self::factory()->post->create(
 			array(
 				'post_status' => 'draft',
 				'post_title'  => 'Draft',
@@ -844,7 +888,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 			)
 		);
 
-		$private_post_id = $this->factory()->post->create(
+		$private_post_id = self::factory()->post->create(
 			array(
 				'post_status' => 'private',
 				'post_title'  => 'Private',
@@ -877,9 +921,9 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	/**
 	 * Test save_nav_menus_created_posts.
 	 *
-	 * @covers WP_Customize_Nav_Menus::save_nav_menus_created_posts()
+	 * @covers WP_Customize_Nav_Menus::save_nav_menus_created_posts
 	 */
-	function test_save_nav_menus_created_posts() {
+	public function test_save_nav_menus_created_posts() {
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 		do_action( 'customize_register', $this->wp_customize );
 
@@ -946,7 +990,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		$post_ids[]      = $r->ID;
 		$trashed_post_id = $r->ID;
 
-		$pre_published_post_id = $this->factory()->post->create( array( 'post_status' => 'publish' ) );
+		$pre_published_post_id = self::factory()->post->create( array( 'post_status' => 'publish' ) );
 
 		$setting_id = 'nav_menus_created_posts';
 		$this->wp_customize->set_post_value( $setting_id, array_merge( $post_ids, array( $pre_published_post_id ) ) );
@@ -987,7 +1031,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::filter_wp_nav_menu_args()
 	 */
-	function test_filter_wp_nav_menu_args() {
+	public function test_filter_wp_nav_menu_args() {
 		do_action( 'customize_register', $this->wp_customize );
 		$menus   = $this->wp_customize->nav_menus;
 		$menu_id = wp_create_nav_menu( 'Foo' );
@@ -1070,10 +1114,10 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	/**
 	 * Test the filter_wp_nav_menu method.
 	 *
-	 * @covers WP_Customize_Nav_Menus::filter_wp_nav_menu()
-	 * @covers WP_Customize_Nav_Menus::filter_wp_nav_menu_args()
+	 * @covers WP_Customize_Nav_Menus::filter_wp_nav_menu
+	 * @covers WP_Customize_Nav_Menus::filter_wp_nav_menu_args
 	 */
-	function test_filter_wp_nav_menu() {
+	public function test_filter_wp_nav_menu() {
 		do_action( 'customize_register', $this->wp_customize );
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
@@ -1085,7 +1129,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 			'items_wrap'  => '<ul id="%1$s" class="%2$s">%3$s</ul>',
 		);
 
-		// Add global namespace prefix to check https://core.trac.wordpress.org/ticket/41488.
+		// Add global namespace prefix to check #41488.
 		$original_args['fallback_cb'] = '\\' . $original_args['fallback_cb'];
 
 		$args = $menus->filter_wp_nav_menu_args( $original_args );
@@ -1114,7 +1158,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::customize_preview_enqueue_deps()
 	 */
-	function test_customize_preview_enqueue_deps() {
+	public function test_customize_preview_enqueue_deps() {
 		do_action( 'customize_register', $this->wp_customize );
 		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
 
@@ -1128,7 +1172,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::export_preview_data()
 	 */
-	function test_export_preview_data() {
+	public function test_export_preview_data() {
 		ob_start();
 		$this->wp_customize->nav_menus->export_preview_data();
 		$html = ob_get_clean();
@@ -1142,7 +1186,7 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Nav_Menus::render_nav_menu_partial()
 	 */
-	function test_render_nav_menu_partial() {
+	public function test_render_nav_menu_partial() {
 		$this->wp_customize->nav_menus->customize_preview_init();
 
 		$menu = wp_create_nav_menu( 'Foo' );

@@ -8,12 +8,12 @@ if ( is_multisite() ) :
 	 * @group ms-site
 	 * @group multisite
 	 */
-	class Tests_Multisite_Install_Defaults extends WP_UnitTestCase {
+	class Tests_Multisite_wpInstallDefaults extends WP_UnitTestCase {
 		/**
 		 * @ticket 40036
 		 */
 		public function test_option_should_not_be_empty_by_default() {
-			$blog_id = $this->factory->blog->create();
+			$blog_id = self::factory()->blog->create();
 
 			switch_to_blog( $blog_id );
 
@@ -21,7 +21,8 @@ if ( is_multisite() ) :
 			$first_comment = get_comments();
 
 			restore_current_blog();
-			wpmu_delete_blog( $blog_id, true );
+
+			wp_delete_site( $blog_id );
 
 			$this->assertNotEmpty( $first_page->post_content );
 			$this->assertNotEmpty( $first_comment[0]->comment_content );
@@ -38,7 +39,7 @@ if ( is_multisite() ) :
 			update_site_option( 'first_page', '' );
 			update_site_option( 'first_comment', '' );
 
-			$blog_id = $this->factory->blog->create();
+			$blog_id = self::factory()->blog->create();
 
 			switch_to_blog( $blog_id );
 
@@ -46,7 +47,8 @@ if ( is_multisite() ) :
 			$first_comment = get_comments();
 
 			restore_current_blog();
-			wpmu_delete_blog( $blog_id, true );
+
+			wp_delete_site( $blog_id );
 
 			$this->assertNotEmpty( $first_page->post_content );
 			$this->assertNotEmpty( $first_comment[0]->comment_content );
@@ -63,7 +65,7 @@ if ( is_multisite() ) :
 			update_site_option( 'first_page', 'Some page content' );
 			update_site_option( 'first_comment', 'Some comment content' );
 
-			$blog_id = $this->factory->blog->create();
+			$blog_id = self::factory()->blog->create();
 
 			switch_to_blog( $blog_id );
 
@@ -71,7 +73,8 @@ if ( is_multisite() ) :
 			$first_comment = get_comments();
 
 			restore_current_blog();
-			wpmu_delete_blog( $blog_id, true );
+
+			wp_delete_site( $blog_id );
 
 			$this->assertSame( 'Some page content', $first_page->post_content );
 			$this->assertSame( 'Some comment content', $first_comment[0]->comment_content );

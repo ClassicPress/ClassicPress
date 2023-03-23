@@ -606,81 +606,7 @@ BLOB;
 		$this->assertSame( $srcs, $ids1_srcs );
 	}
 
-	/**
-	 * @ticket 39304
-	 */
-	function test_post_galleries_ignores_global_post() {
-		$global_post_id = $this->factory->post->create(
-			array(
-				'post_content' => 'Global Post',
-			)
-		);
-		$post_id        = $this->factory->post->create(
-			array(
-				'post_content' => '[gallery]',
-			)
-		);
-		$this->factory->attachment->create_object(
-			array(
-				'file'           => 'test.jpg',
-				'post_parent'    => $post_id,
-				'post_mime_type' => 'image/jpeg',
-				'post_type'      => 'attachment',
-			)
-		);
-		$expected_srcs = array(
-			'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/test.jpg',
-		);
-
-		// Set the global $post context to the other post.
-		$GLOBALS['post'] = get_post( $global_post_id );
-
-		$galleries = get_post_galleries( $post_id, false );
-
-		$this->assertNotEmpty( $galleries[0]['src'] );
-		$this->assertSame( $galleries[0]['src'], $expected_srcs );
-	}
-
-	/**
-	 * @ticket 39304
-	 */
-	function test_post_galleries_respects_id_attrs() {
-		$post_id     = $this->factory->post->create(
-			array(
-				'post_content' => 'No gallery defined',
-			)
-		);
-		$post_id_two = $this->factory->post->create(
-			array(
-				'post_content' => "[gallery id='$post_id']",
-			)
-		);
-		$this->factory->attachment->create_object(
-			array(
-				'file'           => 'test.jpg',
-				'post_parent'    => $post_id,
-				'post_mime_type' => 'image/jpeg',
-				'post_type'      => 'attachment',
-			)
-		);
-		$expected_srcs = array(
-			'http://' . WP_TESTS_DOMAIN . '/wp-content/uploads/test.jpg',
-		);
-
-		$galleries = get_post_galleries( $post_id_two, false );
-
-		// Set the global $post context
-		$GLOBALS['post']               = get_post( $post_id_two );
-		$galleries_with_global_context = get_post_galleries( $post_id_two, false );
-
-		// Check that the global post state doesn't affect the results
-		$this->assertSame( $galleries, $galleries_with_global_context );
-
-		$this->assertNotEmpty( $galleries[0]['src'] );
-		$this->assertSame( $galleries[0]['src'], $expected_srcs );
-	}
-
-	function test_get_media_embedded_in_content() {
+	public function test_get_media_embedded_in_content() {
 		$object = <<<OBJ
 <object src="this" data="that">
 	<param name="value"/>
@@ -943,7 +869,7 @@ VIDEO;
 	public function test_wp_video_shortcode_youtube_remove_feature() {
 		$actual = wp_video_shortcode(
 			array(
-				'src' => 'https://www.youtube.com/watch?v=i_cVJgIz_Cs&feature=youtu.be',
+				'src' => 'https://www.youtube.com/watch?v=72xdCU__XCk&feature=youtu.be',
 			)
 		);
 
@@ -957,11 +883,11 @@ VIDEO;
 	public function test_wp_video_shortcode_youtube_force_ssl() {
 		$actual = wp_video_shortcode(
 			array(
-				'src' => 'http://www.youtube.com/watch?v=i_cVJgIz_Cs',
+				'src' => 'http://www.youtube.com/watch?v=72xdCU__XCk',
 			)
 		);
 
-		$this->assertStringContainsString( 'src="https://www.youtube.com/watch?v=i_cVJgIz_Cs', $actual );
+		$this->assertStringContainsString( 'src="https://www.youtube.com/watch?v=72xdCU__XCk', $actual );
 	}
 
 	/**
@@ -971,11 +897,11 @@ VIDEO;
 	public function test_wp_video_shortcode_vimeo_force_ssl_remove_query_args() {
 		$actual = wp_video_shortcode(
 			array(
-				'src' => 'http://vimeo.com/190372437?blah=meh',
+				'src' => 'http://vimeo.com/76979871?blah=meh',
 			)
 		);
 
-		$this->assertStringContainsString( 'src="https://vimeo.com/190372437', $actual );
+		$this->assertStringContainsString( 'src="https://vimeo.com/76979871', $actual );
 		$this->assertStringNotContainsString( 'blah=meh', $actual );
 	}
 
@@ -986,11 +912,11 @@ VIDEO;
 	public function test_wp_video_shortcode_vimeo_adds_loop() {
 		$actual = wp_video_shortcode(
 			array(
-				'src' => 'http://vimeo.com/190372437',
+				'src' => 'http://vimeo.com/76979871',
 			)
 		);
 
-		$this->assertStringContainsString( 'src="https://vimeo.com/190372437?loop=0', $actual );
+		$this->assertStringContainsString( 'src="https://vimeo.com/76979871?loop=0', $actual );
 	}
 
 	/**
@@ -1000,12 +926,12 @@ VIDEO;
 	public function test_wp_video_shortcode_vimeo_force_adds_loop_true() {
 		$actual = wp_video_shortcode(
 			array(
-				'src'  => 'http://vimeo.com/190372437',
+				'src'  => 'http://vimeo.com/76979871',
 				'loop' => true,
 			)
 		);
 
-		$this->assertStringContainsString( 'src="https://vimeo.com/190372437?loop=1', $actual );
+		$this->assertStringContainsString( 'src="https://vimeo.com/76979871?loop=1', $actual );
 	}
 
 	/**

@@ -1,47 +1,32 @@
 <?php
+
 /**
  * Test cases for the `do_enclose()` function.
  *
  * @package WordPress\UnitTests
  *
- * @since WP-5.3.0
- */
-
-/**
- * Tests_Functions_DoEnclose class.
+ * @since 5.3.0
  *
  * @group functions.php
  * @group post
- * @covers do_enclose
- *
- * @since WP-5.3.0
+ * @covers ::do_enclose
  */
 class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 
 	/**
 	 * Setup before each test method.
 	 *
-	 * @since WP-5.3.0
+	 * @since 5.3.0
 	 */
 	public function set_up() {
 		parent::set_up();
-		add_filter( 'pre_http_request', array( $this, 'fake_http_request' ), 10, 3 );
+		add_filter( 'pre_http_request', array( $this, 'mock_http_request' ), 10, 3 );
 	}
 
 	/**
-	 * Cleanup after each test method.
+	 * Tests the function with an explicit content input.
 	 *
-	 * @since WP-5.3.0
-	 */
-	public function tear_down() {
-		remove_filter( 'pre_http_request', array( $this, 'fake_http_request' ) );
-		parent::tear_down();
-	}
-
-	/**
-	 * Test the function with an explicit content input.
-	 *
-	 * @since WP-5.3.0
+	 * @since 5.3.0
 	 *
 	 * @dataProvider data_test_do_enclose
 	 */
@@ -55,9 +40,9 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test the function with an implicit content input.
+	 * Tests the function with an implicit content input.
 	 *
-	 * @since WP-5.3.0
+	 * @since 5.3.0
 	 *
 	 * @dataProvider data_test_do_enclose
 	 */
@@ -75,10 +60,10 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Dataprovider for `test_function_with_explicit_content_input()`
+	 * Data provider for `test_function_with_explicit_content_input()`
 	 * and `test_function_with_implicit_content_input()`.
 	 *
-	 * @since WP-5.3.0
+	 * @since 5.3.0
 	 *
 	 * @return array {
 	 *     @type array {
@@ -135,13 +120,17 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 				'expected' => "https://example.com/wp-content/uploads/2018/06/audio.ogg\n321\naudio/ogg\n" .
 								"https://example.com/wp-content/uploads/2018/06/movie.mp4\n123\nvideo/mp4\n",
 			),
+			'no-path'               => array(
+				'content'  => 'https://example.com?test=1',
+				'expected' => '',
+			),
 		);
 	}
 
 	/**
 	 * The function should return false when the post ID input is invalid.
 	 *
-	 * @since WP-5.3.0
+	 * @since 5.3.0
 	 */
 	public function test_function_should_return_false_when_invalid_post_id() {
 		$post_id = null;
@@ -152,7 +141,7 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	/**
 	 * The function should delete an enclosed link when it's no longer in the post content.
 	 *
-	 * @since WP-5.3.0
+	 * @since 5.3.0
 	 */
 	public function test_function_should_delete_enclosed_link_when_no_longer_in_post_content() {
 		$data = $this->data_test_do_enclose();
@@ -186,7 +175,7 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	/**
 	 * The function should support a post object input.
 	 *
-	 * @since WP-5.3.0
+	 * @since 5.3.0
 	 */
 	public function test_function_should_support_post_object_input() {
 		$data = $this->data_test_do_enclose();
@@ -206,7 +195,7 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	/**
 	 * The enclosure links should be filterable with the `enclosure_links` filter.
 	 *
-	 * @since WP-5.3.0
+	 * @since 5.3.0
 	 */
 	public function test_function_enclosure_links_should_be_filterable() {
 		$data = $this->data_test_do_enclose();
@@ -229,11 +218,11 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	/**
 	 * A callback to filter the list of enclosure links.
 	 *
-	 * @since WP-5.3.0
+	 * @since 5.3.0
 	 *
 	 * @param  array $post_links An array of enclosure links.
 	 * @param  int   $post_id    Post ID.
-	 * @return array $post_links An array of enclosure links.
+	 * @return array An array of enclosure links.
 	 */
 	public function filter_enclosure_links( $enclosure_links, $post_id ) {
 		// Replace the link host to contain the post ID, to test both filter input arguments.
@@ -246,47 +235,46 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 	/**
 	 * Helper function to get all enclosure data for a given post.
 	 *
-	 * @since WP-5.3.0
+	 * @since 5.3.0
 	 *
 	 * @param  int    $post_id Post ID.
-	 * @return string          All enclosure data for the given post.
+	 * @return string  All enclosure data for the given post.
 	 */
 	protected function get_enclosed_by_post_id( $post_id ) {
 		return implode( '', (array) get_post_meta( $post_id, 'enclosure', false ) );
 	}
 
 	/**
-	 * Fake the HTTP request response.
+	 * Mock the HTTP request response.
 	 *
-	 * @since WP-5.3.0
+	 * @since 5.3.0
 	 *
-	 * @param bool   $false     False.
-	 * @param array  $arguments Request arguments.
-	 * @param string $url       Request URL.
-	 *
-	 * @return array            Header.
+	 * @param false|array|WP_Error $response    A preemptive return value of an HTTP request. Default false.
+	 * @param array                $parsed_args HTTP request arguments.
+	 * @param string               $url         The request URL.
+	 * @return array Response data.
 	 */
-	public function fake_http_request( $false, $arguments, $url ) {
+	public function mock_http_request( $response, $parsed_args, $url ) {
 
 		// Video and audio headers.
 		$fake_headers = array(
 			'mp4' => array(
 				'headers' => array(
-					'content-length' => 123,
-					'content-type'   => 'video/mp4',
+					'Content-Length' => 123,
+					'Content-Type'   => 'video/mp4',
 				),
 			),
 			'ogg' => array(
 				'headers' => array(
-					'content-length' => 321,
-					'content-type'   => 'audio/ogg',
+					'Content-Length' => 321,
+					'Content-Type'   => 'audio/ogg',
 				),
 			),
 		);
 
 		$path = parse_url( $url, PHP_URL_PATH );
 
-		if ( false !== $path ) {
+		if ( is_string( $path ) ) {
 			$extension = pathinfo( $path, PATHINFO_EXTENSION );
 			if ( isset( $fake_headers[ $extension ] ) ) {
 				return $fake_headers[ $extension ];
@@ -296,8 +284,8 @@ class Tests_Functions_DoEnclose extends WP_UnitTestCase {
 		// Fallback header.
 		return array(
 			'headers' => array(
-				'content-length' => 0,
-				'content-type'   => '',
+				'Content-Length' => 0,
+				'Content-Type'   => '',
 			),
 		);
 	}

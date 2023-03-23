@@ -9,10 +9,10 @@ if ( is_multisite() ) :
 	 * @group ms-user
 	 * @group multisite
 	 */
-	class Tests_Multisite_getActiveBlogForUser extends WP_UnitTestCase {
-		static $user_id = false;
+	class Tests_User_GetActiveBlogForUser extends WP_UnitTestCase {
+		public static $user_id = false;
 
-		public static function wpSetUpBeforeClass( $factory ) {
+		public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 			self::$user_id = $factory->user->create();
 		}
 
@@ -43,35 +43,35 @@ if ( is_multisite() ) :
 			$site_id_one = self::factory()->blog->create( array( 'user_id' => self::$user_id ) );
 			$site_id_two = self::factory()->blog->create( array( 'user_id' => self::$user_id ) );
 
-			$sites = get_blogs_of_user( self::$user_id );
-			$site_ids = array_keys( $sites );
+			$sites           = get_blogs_of_user( self::$user_id );
+			$site_ids        = array_keys( $sites );
 			$primary_site_id = $site_ids[1];
 
 			update_user_meta( self::$user_id, 'primary_blog', $primary_site_id );
 
 			$result = get_active_blog_for_user( self::$user_id );
 
-			wpmu_delete_blog( $site_id_one, true );
-			wpmu_delete_blog( $site_id_two, true );
+			wp_delete_site( $site_id_one );
+			wp_delete_site( $site_id_two );
 
-				$this->assertSame( $primary_site_id, $result->id );
+			$this->assertSame( $primary_site_id, $result->id );
 		}
 
 		/**
 		 * @ticket 38355
 		 */
 		public function test_get_active_blog_for_user_without_primary_site() {
-			$sites = get_blogs_of_user( self::$user_id );
-			$site_ids = array_keys( $sites );
+			$sites           = get_blogs_of_user( self::$user_id );
+			$site_ids        = array_keys( $sites );
 			$primary_site_id = $site_ids[0];
 
 			delete_user_meta( self::$user_id, 'primary_blog' );
 
 			$result = get_active_blog_for_user( self::$user_id );
 
-			wpmu_delete_blog( $primary_site_id, true );
+			wp_delete_site( $primary_site_id );
 
-				$this->assertSame( $primary_site_id, $result->id );
+			$this->assertSame( $primary_site_id, $result->id );
 		}
 
 		/**
@@ -83,7 +83,7 @@ if ( is_multisite() ) :
 			$site_id = self::factory()->blog->create(
 				array(
 					'user_id' => self::$user_id,
-					'meta'    => array( 'spam' => 1 ),
+					'spam'    => 1,
 				)
 			);
 
@@ -92,9 +92,9 @@ if ( is_multisite() ) :
 
 			$result = get_active_blog_for_user( self::$user_id );
 
-			wpmu_delete_blog( $site_id, true );
+			wp_delete_site( $site_id );
 
-				$this->assertSame( $current_site_id, $result->id );
+			$this->assertSame( $current_site_id, $result->id );
 		}
 	}
 

@@ -11,6 +11,8 @@ class Tests_Formatting_Emoji extends WP_UnitTestCase {
 
 	/**
 	 * @ticket 36525
+	 *
+	 * @covers ::_print_emoji_detection_script
 	 */
 	public function test_unfiltered_emoji_cdns() {
 		$output = get_echo( '_print_emoji_detection_script' );
@@ -25,6 +27,8 @@ class Tests_Formatting_Emoji extends WP_UnitTestCase {
 
 	/**
 	 * @ticket 36525
+	 *
+	 * @covers ::_print_emoji_detection_script
 	 */
 	public function test_filtered_emoji_svn_cdn() {
 		$filtered_svn_cdn = $this->_filtered_emoji_svn_cdn();
@@ -46,6 +50,8 @@ class Tests_Formatting_Emoji extends WP_UnitTestCase {
 
 	/**
 	 * @ticket 36525
+	 *
+	 * @covers ::_print_emoji_detection_script
 	 */
 	public function test_filtered_emoji_png_cdn() {
 		$filtered_png_cdn = $this->_filtered_emoji_png_cdn();
@@ -63,6 +69,8 @@ class Tests_Formatting_Emoji extends WP_UnitTestCase {
 
 	/**
 	 * @ticket 41501
+	 *
+	 * @covers ::_wp_emoji_list
 	 */
 	public function test_wp_emoji_list_returns_data() {
 		$default = _wp_emoji_list();
@@ -82,22 +90,22 @@ class Tests_Formatting_Emoji extends WP_UnitTestCase {
 	public function data_wp_encode_emoji() {
 		return array(
 			array(
-				// Not emoji
+				// Not emoji.
 				'’',
 				'’',
 			),
 			array(
-				// Simple emoji
+				// Simple emoji.
 				'🙂',
 				'&#x1f642;',
 			),
 			array(
-				// Skin tone, gender, ZWJ, emoji selector
+				// Skin tone, gender, ZWJ, emoji selector.
 				'👮🏼‍♀️',
 				'&#x1f46e;&#x1f3fc;&#x200d;&#x2640;&#xfe0f;',
 			),
 			array(
-				// Unicode 10
+				// Unicode 10.
 				'🧚',
 				'&#x1f9da;',
 			),
@@ -107,6 +115,8 @@ class Tests_Formatting_Emoji extends WP_UnitTestCase {
 	/**
 	 * @ticket 35293
 	 * @dataProvider data_wp_encode_emoji
+	 *
+	 * @covers ::wp_encode_emoji
 	 */
 	public function test_wp_encode_emoji( $emoji, $expected ) {
 		$this->assertSame( $expected, wp_encode_emoji( $emoji ) );
@@ -115,22 +125,22 @@ class Tests_Formatting_Emoji extends WP_UnitTestCase {
 	public function data_wp_staticize_emoji() {
 		$data = array(
 			array(
-				// Not emoji
+				// Not emoji.
 				'’',
 				'’',
 			),
 			array(
-				// Simple emoji
+				// Simple emoji.
 				'🙂',
 				'<img src="' . $this->png_cdn . '1f642.png" alt="🙂" class="wp-smiley" style="height: 1em; max-height: 1em;" />',
 			),
 			array(
-				// Skin tone, gender, ZWJ, emoji selector
+				// Skin tone, gender, ZWJ, emoji selector.
 				'👮🏼‍♀️',
 				'<img src="' . $this->png_cdn . '1f46e-1f3fc-200d-2640-fe0f.png" alt="👮🏼‍♀️" class="wp-smiley" style="height: 1em; max-height: 1em;" />',
 			),
 			array(
-				// Unicode 10
+				// Unicode 10.
 				'🧚',
 				'<img src="' . $this->png_cdn . '1f9da.png" alt="🧚" class="wp-smiley" style="height: 1em; max-height: 1em;" />',
 			),
@@ -142,6 +152,8 @@ class Tests_Formatting_Emoji extends WP_UnitTestCase {
 	/**
 	 * @ticket 35293
 	 * @dataProvider data_wp_staticize_emoji
+	 *
+	 * @covers ::wp_staticize_emoji
 	 */
 	public function test_wp_staticize_emoji( $emoji, $expected ) {
 		$this->assertSame( $expected, wp_staticize_emoji( $emoji ) );

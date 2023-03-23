@@ -994,11 +994,11 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 	}
 
 	/**
+	 * An empty tax query should return an empty array, not all posts.
+	 *
 	 * @ticket 20604
 	 */
 	public function test_tax_query_relation_or_both_clauses_empty_terms() {
-		// An empty tax query should return an empty array, not all posts.
-
 		self::factory()->post->create_many( 2 );
 
 		$query = new WP_Query(
@@ -1024,16 +1024,15 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			)
 		);
 
-		$posts = $query->get_posts();
-		$this->assertSame( 0, count( $posts ) );
+		$this->assertCount( 0, $query->posts );
 	}
 
 	/**
+	 * An empty tax query should return an empty array, not all posts.
+	 *
 	 * @ticket 20604
 	 */
 	public function test_tax_query_relation_or_one_clause_empty_terms() {
-		// An empty tax query should return an empty array, not all posts.
-
 		self::factory()->post->create_many( 2 );
 
 		$query = new WP_Query(
@@ -1059,8 +1058,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			)
 		);
 
-		$posts = $query->get_posts();
-		$this->assertSame( 0, count( $posts ) );
+		$this->assertCount( 0, $query->posts );
 	}
 
 	public function test_tax_query_include_children() {
@@ -1112,7 +1110,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertSame( 4, count( $posts ) );
+		$this->assertCount( 4, $posts );
 
 		$posts = get_posts(
 			array(
@@ -1130,7 +1128,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertSame( 1, count( $posts ) );
+		$this->assertCount( 1, $posts );
 
 		$posts = get_posts(
 			array(
@@ -1147,7 +1145,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertSame( 3, count( $posts ) );
+		$this->assertCount( 3, $posts );
 
 		$posts = get_posts(
 			array(
@@ -1165,7 +1163,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertSame( 1, count( $posts ) );
+		$this->assertCount( 1, $posts );
 
 		$posts = get_posts(
 			array(
@@ -1182,7 +1180,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertSame( 1, count( $posts ) );
+		$this->assertCount( 1, $posts );
 
 		$posts = get_posts(
 			array(
@@ -1200,7 +1198,7 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertSame( 1, count( $posts ) );
+		$this->assertCount( 1, $posts );
 	}
 
 	public function test_tax_query_taxonomy_with_attachments() {
@@ -1209,8 +1207,8 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 		register_taxonomy_for_object_type( 'post_tag', 'attachment:image' );
 		$tag_id   = self::factory()->term->create(
 			array(
-				'slug' => rand_str(),
-				'name' => rand_str(),
+				'slug' => 'foo-bar',
+				'name' => 'Foo Bar',
 			)
 		);
 		$image_id = self::factory()->attachment->create_object(
@@ -1301,12 +1299,12 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 		$cats = array();
 		$tags = array();
 
-		// need term_taxonomy_ids in addition to term_ids, so no factory
+		// Need term_taxonomy_ids in addition to term_ids, so no factory.
 		for ( $i = 0; $i < 5; $i++ ) {
 			$cats[ $i ] = wp_insert_term( 'category-' . $i, 'category' );
 			$tags[ $i ] = wp_insert_term( 'tag-' . $i, 'post_tag' );
 
-			// post 0 gets all terms
+			// Post 0 gets all terms.
 			wp_set_object_terms( $posts[0], array( $cats[ $i ]['term_id'] ), 'category', true );
 			wp_set_object_terms( $posts[0], array( $tags[ $i ]['term_id'] ), 'post_tag', true );
 		}
@@ -1394,13 +1392,13 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 		$q = new WP_Query(
 			array(
 				'tax_query' => array(
-					// Empty terms mean that this one should be skipped
+					// Empty terms mean that this one should be skipped.
 					array(
 						'taxonomy' => 'bar',
 						'terms'    => array(),
 					),
 
-					// Category and post tags should be skipped
+					// Category and post tags should be skipped.
 					array(
 						'taxonomy' => 'category',
 						'terms'    => array( $c ),
@@ -1518,19 +1516,19 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 		$q = new WP_Query(
 			array(
 				'tax_query' => array(
-					// Non-category should be skipped
+					// Non-category should be skipped.
 					array(
 						'taxonomy' => 'foo',
 						'terms'    => array( $t ),
 					),
 
-					// Empty terms mean that this one should be skipped
+					// Empty terms mean that this one should be skipped.
 					array(
 						'taxonomy' => 'category',
 						'terms'    => array(),
 					),
 
-					// Category and post tags should be skipped
+					// Category and post tags should be skipped.
 					array(
 						'taxonomy' => 'category',
 						'terms'    => array( $c ),
@@ -1565,19 +1563,19 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 		$q = new WP_Query(
 			array(
 				'tax_query' => array(
-					// Non-tag should be skipped
+					// Non-tag should be skipped.
 					array(
 						'taxonomy' => 'foo',
 						'terms'    => array( $t ),
 					),
 
-					// Empty terms mean that this one should be skipped
+					// Empty terms mean that this one should be skipped.
 					array(
 						'taxonomy' => 'post_tag',
 						'terms'    => array(),
 					),
 
-					// Category and post tags should be skipped
+					// Category and post tags should be skipped.
 					array(
 						'taxonomy' => 'post_tag',
 						'terms'    => array( $tag ),
@@ -1622,5 +1620,128 @@ class Tests_Query_TaxQuery extends WP_UnitTestCase {
 		);
 
 		$this->assertSameSets( array( $p ), $q->posts );
+	}
+
+	/**
+	 * @ticket 55360
+	 *
+	 * @covers WP_Tax_Query::transform_query
+	 */
+	public function test_tax_terms_should_limit_query() {
+		register_taxonomy( 'wptests_tax', 'post' );
+		$name = 'foobar';
+		$t    = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+				'name'     => $name,
+			)
+		);
+
+		$p = self::factory()->post->create();
+		wp_set_object_terms( $p, array( $t ), 'wptests_tax' );
+
+		$filter = new MockAction();
+		add_filter( 'terms_pre_query', array( $filter, 'filter' ), 10, 2 );
+
+		$q = new WP_Query(
+			array(
+				'fields'    => 'ids',
+				'tax_query' => array(
+					array(
+						'taxonomy' => 'wptests_tax',
+						'field'    => 'name',
+						'terms'    => $name,
+					),
+				),
+			)
+		);
+
+		$filter_args = $filter->get_args();
+		$query       = $filter_args[0][1]->request;
+
+		$this->assertSameSets( array( $p ), $q->posts );
+		$this->assertStringContainsString( 'LIMIT 1', $query );
+	}
+
+	/**
+	 * @ticket 55360
+	 *
+	 * @covers WP_Tax_Query::transform_query
+	 */
+	public function test_tax_terms_should_limit_query_to_one() {
+		register_taxonomy( 'wptests_tax', 'post' );
+		$name = 'foobar';
+		$t    = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+				'name'     => $name,
+			)
+		);
+
+		$p = self::factory()->post->create();
+		wp_set_object_terms( $p, array( $t ), 'wptests_tax' );
+
+		$filter = new MockAction();
+		add_filter( 'terms_pre_query', array( $filter, 'filter' ), 10, 2 );
+
+		$q = new WP_Query(
+			array(
+				'fields'    => 'ids',
+				'tax_query' => array(
+					array(
+						'taxonomy' => 'wptests_tax',
+						'field'    => 'term_id',
+						'terms'    => array( $t, $t, $t ),
+					),
+				),
+			)
+		);
+
+		$filter_args = $filter->get_args();
+		$query       = $filter_args[0][1]->request;
+
+		$this->assertSameSets( array( $p ), $q->posts );
+		$this->assertStringContainsString( 'LIMIT 1', $query );
+	}
+
+	/**
+	 * @ticket 55360
+	 *
+	 * @covers WP_Tax_Query::transform_query
+	 */
+	public function test_hierarchical_taxonomies_do_not_limit_query() {
+		register_taxonomy( 'wptests_tax', 'post', array( 'hierarchical' => true ) );
+		$name = 'foobar';
+		$t    = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+				'name'     => $name,
+			)
+		);
+
+		$p = self::factory()->post->create();
+		wp_set_object_terms( $p, array( $t ), 'wptests_tax' );
+
+		$filter = new MockAction();
+		add_filter( 'terms_pre_query', array( $filter, 'filter' ), 10, 2 );
+
+		$q = new WP_Query(
+			array(
+				'fields'    => 'ids',
+				'tax_query' => array(
+					array(
+						'taxonomy' => 'wptests_tax',
+						'field'    => 'name',
+						'terms'    => $name,
+					),
+				),
+			)
+		);
+
+		$filter_args = $filter->get_args();
+		$query       = $filter_args[0][1]->request;
+
+		$this->assertSameSets( array( $p ), $q->posts );
+		$this->assertStringNotContainsString( 'LIMIT 1', $query );
 	}
 }

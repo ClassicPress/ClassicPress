@@ -1,27 +1,29 @@
 <?php
 
-// save and fetch posts to make sure content is properly filtered.
-// these tests don't care what code is responsible for filtering or how it is called, just that it happens when a post is saved.
-
 /**
+ * Save and fetch posts to make sure content is properly filtered.
+ *
+ * These tests don't care what code is responsible for filtering
+ * or how it is called, just that it happens when a post is saved.
+ *
  * @group post
  * @group formatting
  */
 class Tests_Post_Filtering extends WP_UnitTestCase {
-	function set_up() {
+	public function set_up() {
 		parent::set_up();
 		update_option( 'use_balanceTags', 1 );
 		kses_init_filters();
 
 	}
 
-	function tear_down() {
+	public function tear_down() {
 		kses_remove_filters();
 		parent::tear_down();
 	}
 
-	// a simple test to make sure unclosed tags are fixed
-	function test_post_content_unknown_tag() {
+	// A simple test to make sure unclosed tags are fixed.
+	public function test_post_content_unknown_tag() {
 
 		$content = <<<EOF
 <foobar>no such tag</foobar>
@@ -37,8 +39,8 @@ EOF;
 		$this->assertSame( $expected, $post->post_content );
 	}
 
-	// a simple test to make sure unbalanced tags are fixed
-	function test_post_content_unbalanced_tag() {
+	// A simple test to make sure unbalanced tags are fixed.
+	public function test_post_content_unbalanced_tag() {
 
 		$content = <<<EOF
 <i>italics
@@ -54,8 +56,8 @@ EOF;
 		$this->assertSame( $expected, $post->post_content );
 	}
 
-	// test kses filtering of disallowed attribute
-	function test_post_content_disallowed_attr() {
+	// Test KSES filtering of disallowed attribute.
+	public function test_post_content_disallowed_attr() {
 
 		$content = <<<EOF
 <img src='foo' width='500' href='shlorp' />
@@ -73,9 +75,10 @@ EOF;
 
 	/**
 	 * test kses bug. xhtml does not require space before closing empty element
+	 *
 	 * @ticket 12394
 	 */
-	function test_post_content_xhtml_empty_elem() {
+	public function test_post_content_xhtml_empty_elem() {
 		$content = <<<EOF
 <img src='foo' width='500' height='300'/>
 EOF;
@@ -90,8 +93,8 @@ EOF;
 		$this->assertSame( $expected, $post->post_content );
 	}
 
-	// make sure unbalanced tags are untouched when the balance option is off
-	function test_post_content_nobalance_nextpage_more() {
+	// Make sure unbalanced tags are untouched when the balance option is off.
+	public function test_post_content_nobalance_nextpage_more() {
 
 		update_option( 'use_balanceTags', 0 );
 

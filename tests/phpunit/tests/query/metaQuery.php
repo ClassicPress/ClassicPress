@@ -696,7 +696,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertSame( 0, count( $query->posts ) );
+		$this->assertCount( 0, $query->posts );
 	}
 
 	/**
@@ -1154,7 +1154,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 
 		$query = new WP_Query(
 			array(
-				'meta_query' => array(
+				'meta_query'             => array(
 					array(
 						'key'     => 'decimal_value',
 						'value'   => '.300',
@@ -1164,14 +1164,14 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 				),
 				'update_post_meta_cache' => false,
 				'update_post_term_cache' => false,
-				'fields' => 'ids',
+				'fields'                 => 'ids',
 			)
 		);
 		$this->assertSameSets( array( $post_3 ), $query->posts );
 
 		$query = new WP_Query(
 			array(
-				'meta_query' => array(
+				'meta_query'             => array(
 					array(
 						'key'     => 'decimal_value',
 						'value'   => '0.35',
@@ -1181,14 +1181,14 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 				),
 				'update_post_meta_cache' => false,
 				'update_post_term_cache' => false,
-				'fields' => 'ids',
+				'fields'                 => 'ids',
 			)
 		);
 		$this->assertSameSets( array( $post_4 ), $query->posts );
 
 		$query = new WP_Query(
 			array(
-				'meta_query' => array(
+				'meta_query'             => array(
 					array(
 						'key'     => 'decimal_value',
 						'value'   => '0.3',
@@ -1198,14 +1198,14 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 				),
 				'update_post_meta_cache' => false,
 				'update_post_term_cache' => false,
-				'fields' => 'ids',
+				'fields'                 => 'ids',
 			)
 		);
 		$this->assertSameSets( array( $post_3, $post_4 ), $query->posts );
 
 		$query = new WP_Query(
 			array(
-				'meta_query' => array(
+				'meta_query'             => array(
 					array(
 						'key'     => 'decimal_value',
 						'value'   => '0',
@@ -1215,14 +1215,14 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 				),
 				'update_post_meta_cache' => false,
 				'update_post_term_cache' => false,
-				'fields' => 'ids',
+				'fields'                 => 'ids',
 			)
 		);
 		$this->assertSameSets( array( $post_1 ), $query->posts, 'ID' );
 
 		$query = new WP_Query(
 			array(
-				'meta_query' => array(
+				'meta_query'             => array(
 					array(
 						'key'     => 'decimal_value',
 						'value'   => '0.3',
@@ -1232,14 +1232,14 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 				),
 				'update_post_meta_cache' => false,
 				'update_post_term_cache' => false,
-				'fields' => 'ids',
+				'fields'                 => 'ids',
 			)
 		);
 		$this->assertSameSets( array( $post_1, $post_2, $post_3 ), $query->posts );
 
 		$query = new WP_Query(
 			array(
-				'meta_query' => array(
+				'meta_query'             => array(
 					array(
 						'key'     => 'decimal_value',
 						'value'   => array( 0.23409845, .31 ),
@@ -1249,14 +1249,14 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 				),
 				'update_post_meta_cache' => false,
 				'update_post_term_cache' => false,
-				'fields' => 'ids',
+				'fields'                 => 'ids',
 			)
 		);
 		$this->assertSameSets( array( $post_3 ), $query->posts );
 
 		$query = new WP_Query(
 			array(
-				'meta_query' => array(
+				'meta_query'             => array(
 					array(
 						'key'     => 'decimal_value',
 						'value'   => array( 0.23409845, .31 ),
@@ -1266,14 +1266,14 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 				),
 				'update_post_meta_cache' => false,
 				'update_post_term_cache' => false,
-				'fields' => 'ids',
+				'fields'                 => 'ids',
 			)
 		);
 		$this->assertSameSets( array( $post_1, $post_2, $post_4 ), $query->posts );
 
 		$query = new WP_Query(
 			array(
-				'meta_query' => array(
+				'meta_query'             => array(
 					array(
 						'key'     => 'decimal_value',
 						'value'   => '.3',
@@ -1283,14 +1283,14 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 				),
 				'update_post_meta_cache' => false,
 				'update_post_term_cache' => false,
-				'fields' => 'ids',
+				'fields'                 => 'ids',
 			)
 		);
 		$this->assertSameSets( array( $post_1, $post_3 ), $query->posts );
 
 		$query = new WP_Query(
 			array(
-				'meta_query' => array(
+				'meta_query'             => array(
 					array(
 						'key'     => 'decimal_value',
 						'value'   => '.3',
@@ -1300,20 +1300,20 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 				),
 				'update_post_meta_cache' => false,
 				'update_post_term_cache' => false,
-				'fields' => 'ids',
+				'fields'                 => 'ids',
 			)
 		);
 		$this->assertSameSets( array( $post_2, $post_4 ), $query->posts );
 
 		$query = new WP_Query(
 			array(
-				'orderby' => 'meta_value',
-				'order' => 'DESC',
-				'meta_key' => 'decimal_value',
-				'meta_type' => 'DECIMAL(10, 2)',
+				'orderby'                => 'meta_value',
+				'order'                  => 'DESC',
+				'meta_key'               => 'decimal_value',
+				'meta_type'              => 'DECIMAL(10, 2)',
 				'update_post_meta_cache' => false,
 				'update_post_term_cache' => false,
-				'fields' => 'ids',
+				'fields'                 => 'ids',
 			)
 		);
 		$this->assertSameSets( array( $post_4, $post_3, $post_2, $post_1 ), $query->posts );
@@ -1534,7 +1534,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 		);
 
 		$query = new WP_Query( $args );
-		$this->assertSame( 2, count( $query->posts ) );
+		$this->assertCount( 2, $query->posts );
 		foreach ( $query->posts as $post ) {
 			$this->assertInstanceOf( 'WP_Post', $post );
 			$this->assertSame( 'raw', $post->filter );
@@ -1550,7 +1550,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 		);
 
 		$query = new WP_Query( $args );
-		$this->assertSame( 3, count( $query->posts ) );
+		$this->assertCount( 3, $query->posts );
 		foreach ( $query->posts as $post ) {
 			$this->assertInstanceOf( 'WP_Post', $post );
 			$this->assertSame( 'raw', $post->filter );
@@ -1563,7 +1563,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 	 * @ticket 16829
 	 */
 	public function test_meta_default_compare() {
-		// compare should default to IN when meta_value is an array
+		// Compare should default to IN when meta_value is an array.
 		$post_id = self::factory()->post->create();
 		add_post_meta( $post_id, 'foo', 'bar' );
 		$post_id2 = self::factory()->post->create();
@@ -1582,7 +1582,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertSame( 2, count( $posts ) );
+		$this->assertCount( 2, $posts );
 		$posts = wp_list_pluck( $posts, 'ID' );
 		$this->assertSameSets( array( $post_id, $post_id3 ), $posts );
 
@@ -1594,7 +1594,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertSame( 2, count( $posts ) );
+		$this->assertCount( 2, $posts );
 		foreach ( $posts as $post ) {
 			$this->assertInstanceOf( 'WP_Post', $post );
 			$this->assertSame( 'raw', $post->filter );
@@ -1625,7 +1625,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 		);
 
 		$posts = get_posts( $args );
-		$this->assertSame( 2, count( $posts ) );
+		$this->assertCount( 2, $posts );
 		foreach ( $posts as $post ) {
 			$this->assertInstanceOf( 'WP_Post', $post );
 			$this->assertSame( 'raw', $post->filter );
@@ -1659,7 +1659,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 				'meta_value' => '0',
 			)
 		);
-		$this->assertSame( 1, count( $q->posts ) );
+		$this->assertCount( 1, $q->posts );
 		foreach ( $q->posts as $post ) {
 			$this->assertInstanceOf( 'WP_Post', $post );
 			$this->assertSame( 'raw', $post->filter );
@@ -1672,7 +1672,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 				'meta_value' => '0',
 			)
 		);
-		$this->assertSame( 2, count( $posts ) );
+		$this->assertCount( 2, $posts );
 		foreach ( $posts as $post ) {
 			$this->assertInstanceOf( 'WP_Post', $post );
 			$this->assertSame( 'raw', $post->filter );
@@ -1686,7 +1686,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 				'meta_value' => 0,
 			)
 		);
-		$this->assertSame( 2, count( $posts ) );
+		$this->assertCount( 2, $posts );
 		foreach ( $posts as $post ) {
 			$this->assertInstanceOf( 'WP_Post', $post );
 			$this->assertSame( 'raw', $post->filter );
@@ -1695,7 +1695,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 		$this->assertSameSets( array( $post_id, $post_id5 ), $posts );
 
 		$posts = get_posts( array( 'meta_value' => 0 ) );
-		$this->assertSame( 5, count( $posts ) );
+		$this->assertCount( 5, $posts );
 		foreach ( $posts as $post ) {
 			$this->assertInstanceOf( 'WP_Post', $post );
 			$this->assertSame( 'raw', $post->filter );
@@ -1704,7 +1704,7 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 		$this->assertSameSets( array( $post_id, $post_id3, $post_id4, $post_id5, $post_id6 ), $posts );
 
 		$posts = get_posts( array( 'meta_value' => '0' ) );
-		$this->assertSame( 5, count( $posts ) );
+		$this->assertCount( 5, $posts );
 		foreach ( $posts as $post ) {
 			$this->assertInstanceOf( 'WP_Post', $post );
 			$this->assertSame( 'raw', $post->filter );
@@ -1847,5 +1847,322 @@ class Tests_Query_MetaQuery extends WP_UnitTestCase {
 		);
 
 		$this->assertSameSets( array( 'foo_key', 'foo_key-1', 'foo_key-2' ), array_keys( $q->meta_query->get_clauses() ) );
+	}
+
+	/**
+	 * @ticket 42409
+	 */
+	public function test_compare_key_like() {
+		$posts = self::factory()->post->create_many( 3 );
+
+		add_post_meta( $posts[0], 'aaa_foo_aaa', 'abc' );
+		add_post_meta( $posts[1], 'aaa_bar_aaa', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_bbb', 'abc' );
+
+		$q = new WP_Query(
+			array(
+				'meta_query' => array(
+					array(
+						'compare_key' => 'LIKE',
+						'key'         => 'aa_foo',
+					),
+				),
+				'fields'     => 'ids',
+			)
+		);
+
+		$this->assertSameSets( array( $posts[0], $posts[2] ), $q->posts );
+	}
+
+	/**
+	 * @ticket 42409
+	 */
+	public function test_meta_compare_key_like() {
+		$posts = self::factory()->post->create_many( 3 );
+
+		add_post_meta( $posts[0], 'aaa_foo_aaa', 'abc' );
+		add_post_meta( $posts[1], 'aaa_bar_aaa', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_bbb', 'abc' );
+
+		$q = new WP_Query(
+			array(
+				'meta_compare_key' => 'LIKE',
+				'meta_key'         => 'aa_foo',
+				'fields'           => 'ids',
+			)
+		);
+
+		$this->assertSameSets( array( $posts[0], $posts[2] ), $q->posts );
+	}
+
+	/**
+	 * @ticket 42409
+	 */
+	public function test_compare_key_like_with_not_exists_compare() {
+		$posts = self::factory()->post->create_many( 3 );
+
+		add_post_meta( $posts[0], 'aaa_foo_aaa', 'abc' );
+		add_post_meta( $posts[1], 'aaa_bar_aaa', 'abc' );
+		add_post_meta( $posts[2], 'bar', 'abc' );
+
+		$q = new WP_Query(
+			array(
+				'meta_query' => array(
+					'relation' => 'AND',
+					array(
+						'compare_key' => 'LIKE',
+						'key'         => 'bar',
+						'compare'     => 'NOT EXISTS',
+					),
+				),
+				'fields'     => 'ids',
+			)
+		);
+
+		$this->assertSameSets( array( $posts[0] ), $q->posts );
+
+	}
+
+	/**
+	 * @ticket 43446
+	 */
+	public function test_compare_key_not_equals() {
+		$posts = self::factory()->post->create_many( 3 );
+
+		add_post_meta( $posts[0], 'aaa_foo_aaa', 'abc' );
+		add_post_meta( $posts[1], 'aaa_bar_aaa', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_bbb', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_ccc', 'abc' );
+
+		$q = new WP_Query(
+			array(
+				'meta_query' => array(
+					array(
+						'compare_key' => '!=',
+						'key'         => 'aaa_foo_bbb',
+						'value'       => 'abc',
+					),
+				),
+				'fields'     => 'ids',
+			)
+		);
+
+		$this->assertSameSets( array( $posts[0], $posts[1] ), $q->posts );
+	}
+
+	/**
+	 * @ticket 43446
+	 */
+	public function test_compare_key_not_like() {
+		$posts = self::factory()->post->create_many( 3 );
+
+		add_post_meta( $posts[0], 'aaa_foo_aaa', 'abc' );
+		add_post_meta( $posts[1], 'aaa_bar_aaa', 'abc' );
+		add_post_meta( $posts[1], 'aaa_bar_ccc', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_bbb', 'abc' );
+
+		$q = new WP_Query(
+			array(
+				'meta_query' => array(
+					array(
+						'compare_key' => 'NOT LIKE',
+						'key'         => 'aaa_bar',
+						'value'       => 'abc',
+					),
+				),
+				'fields'     => 'ids',
+			)
+		);
+
+		$this->assertSameSets( array( $posts[0], $posts[2] ), $q->posts );
+	}
+
+	/**
+	 * @ticket 43446
+	 */
+	public function test_compare_key_in() {
+		$posts = self::factory()->post->create_many( 3 );
+
+		add_post_meta( $posts[0], 'aaa_foo_aaa', 'abc' );
+		add_post_meta( $posts[1], 'aaa_bar_aaa', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_bbb', 'abc' );
+
+		$q = new WP_Query(
+			array(
+				'meta_query' => array(
+					array(
+						'compare_key' => 'IN',
+						'key'         => array( 'aaa_foo_bbb', 'aaa_bar_aaa' ),
+					),
+				),
+				'fields'     => 'ids',
+			)
+		);
+
+		$this->assertSameSets( array( $posts[1], $posts[2] ), $q->posts );
+	}
+
+	/**
+	 * @ticket 43446
+	 */
+	public function test_compare_key_not_in() {
+		$posts = self::factory()->post->create_many( 3 );
+
+		add_post_meta( $posts[0], 'aaa_foo_aaa', 'abc' );
+		add_post_meta( $posts[0], 'aaa_foo_ddd', 'abc' );
+		add_post_meta( $posts[1], 'aaa_bar_aaa', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_bbb', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_ccc', 'abc' );
+
+		$q = new WP_Query(
+			array(
+				'meta_query' => array(
+					array(
+						'compare_key' => 'NOT IN',
+						'key'         => array( 'aaa_foo_bbb', 'aaa_foo_ddd' ),
+					),
+				),
+				'fields'     => 'ids',
+			)
+		);
+
+		$this->assertSameSets( array( $posts[1] ), $q->posts );
+	}
+
+	/**
+	 * @ticket 43446
+	 */
+	public function test_compare_key_not_exists() {
+		$posts = self::factory()->post->create_many( 3 );
+
+		add_post_meta( $posts[0], 'aaa_foo_aaa', 'abc' );
+		add_post_meta( $posts[1], 'aaa_bar_aaa', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_bbb', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_ccc', 'abc' );
+
+		$q = new WP_Query(
+			array(
+				'meta_query' => array(
+					array(
+						'compare_key' => 'NOT EXISTS',
+						'key'         => 'aaa_foo_bbb',
+						'value'       => 'abc',
+					),
+				),
+				'fields'     => 'ids',
+			)
+		);
+
+		$this->assertSameSets( array( $posts[0], $posts[1] ), $q->posts );
+	}
+
+	/**
+	 * @ticket 43446
+	 */
+	public function test_compare_key_exists() {
+		$posts = self::factory()->post->create_many( 3 );
+
+		add_post_meta( $posts[0], 'aaa_foo_aaa', 'abc' );
+		add_post_meta( $posts[1], 'aaa_bar_aaa', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_bbb', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_ccc', 'abc' );
+
+		$q = new WP_Query(
+			array(
+				'meta_query' => array(
+					array(
+						'compare_key' => 'EXISTS',
+						'key'         => 'aaa_foo_bbb',
+						'value'       => 'abc',
+					),
+				),
+				'fields'     => 'ids',
+			)
+		);
+
+		$this->assertSameSets( array( $posts[2] ), $q->posts );
+	}
+
+	/**
+	 * @ticket 43446
+	 */
+	public function test_compare_key_regexp_rlike() {
+		$posts = self::factory()->post->create_many( 3 );
+
+		add_post_meta( $posts[0], 'AAA_FOO_AAA', 'abc' );
+		add_post_meta( $posts[1], 'aaa_bar_aaa', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_bbb', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_aaa', 'abc' );
+
+		$q = new WP_Query(
+			array(
+				'meta_query' => array(
+					array(
+						'compare_key' => 'REGEXP',
+						'key'         => 'AAA_foo_.*',
+					),
+				),
+				'fields'     => 'ids',
+			)
+		);
+
+		$this->assertSameSets( array( $posts[0], $posts[2] ), $q->posts );
+
+		$q = new WP_Query(
+			array(
+				'meta_query' => array(
+					array(
+						'compare_key' => 'RLIKE',
+						'key'         => 'AAA_FOO_.*',
+						'type_key'    => 'BINARY',
+					),
+				),
+				'fields'     => 'ids',
+			)
+		);
+
+		$this->assertSameSets( array( $posts[0] ), $q->posts );
+	}
+
+	/**
+	 * @ticket 43446
+	 */
+	public function test_compare_key_not_regexp() {
+		$posts = self::factory()->post->create_many( 3 );
+
+		add_post_meta( $posts[0], 'AAA_FOO_AAA', 'abc' );
+		add_post_meta( $posts[0], 'AAA_foo_AAA', 'abc' );
+		add_post_meta( $posts[1], 'aaa_bar_aaa', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_bbb', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_aaa', 'abc' );
+
+		$q = new WP_Query(
+			array(
+				'meta_query' => array(
+					array(
+						'compare_key' => 'NOT REGEXP',
+						'key'         => 'AAA_foo_.*',
+					),
+				),
+				'fields'     => 'ids',
+			)
+		);
+
+		$this->assertSameSets( array( $posts[1] ), $q->posts );
+
+		$q = new WP_Query(
+			array(
+				'meta_query' => array(
+					array(
+						'compare_key' => 'NOT REGEXP',
+						'key'         => 'AAA_FOO_.*',
+						'type_key'    => 'BINARY',
+					),
+				),
+				'fields'     => 'ids',
+			)
+		);
+
+		$this->assertSameSets( array( $posts[1], $posts[2] ), $q->posts );
 	}
 }

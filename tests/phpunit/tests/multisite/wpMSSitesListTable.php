@@ -6,20 +6,20 @@ if ( is_multisite() ) :
 	 * @group admin
 	 * @group network-admin
 	 */
-	class Tests_WP_MS_Sites_List_Table extends WP_UnitTestCase {
+	class Tests_Multisite_wpMsSitesListTable extends WP_UnitTestCase {
 		protected static $site_ids;
 
 		/**
 		 * @var WP_MS_Sites_List_Table
 		 */
-		var $table = false;
+		public $table = false;
 
-		function set_up() {
+		public function set_up() {
 			parent::set_up();
 			$this->table = _get_list_table( 'WP_MS_Sites_List_Table', array( 'screen' => 'ms-sites' ) );
 		}
 
-		public static function wpSetUpBeforeClass( $factory ) {
+		public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 			self::$site_ids = array(
 				'wordpress.org/'          => array(
 					'domain' => 'wordpress.org',
@@ -83,7 +83,7 @@ if ( is_multisite() ) :
 
 		public static function wpTearDownAfterClass() {
 			foreach ( self::$site_ids as $site_id ) {
-				wpmu_delete_blog( $site_id, true );
+				wp_delete_site( $site_id );
 			}
 		}
 
@@ -229,6 +229,18 @@ if ( is_multisite() ) :
 			);
 
 			$this->assertSameSets( $expected, $items );
+		}
+
+		/**
+		 * @ticket 42066
+		 */
+		public function test_get_views_should_return_views_by_default() {
+			$expected = array(
+				'all'    => '<a href="sites.php" class="current" aria-current="page">All <span class="count">(14)</span></a>',
+				'public' => '<a href="sites.php?status=public">Public <span class="count">(14)</span></a>',
+			);
+
+			$this->assertSame( $expected, $this->table->get_views() );
 		}
 	}
 endif;

@@ -7,7 +7,7 @@ class Tests_Term_getTermField extends WP_UnitTestCase {
 
 	public $taxonomy = 'wptests_tax';
 
-	function set_up() {
+	public function set_up() {
 		parent::set_up();
 
 		register_taxonomy( $this->taxonomy, 'post' );
@@ -47,12 +47,12 @@ class Tests_Term_getTermField extends WP_UnitTestCase {
 	/**
 	 * @ticket 34245
 	 */
-	public function test_get_term_field_should_accept_a_WP_Term_object_term_id_or_object() {
+	public function test_get_term_field_should_accept_a_WP_Term_id_or_object() {
 		$term = self::factory()->term->create_and_get( array( 'taxonomy' => $this->taxonomy ) );
 
 		$this->assertInstanceOf( 'WP_Term', $term );
 		$this->assertSame( $term->term_id, get_term_field( 'term_id', $term ) );
-		$this->assertSame( $term->term_id, get_term_Field( 'term_id', $term->data ) );
+		$this->assertSame( $term->term_id, get_term_field( 'term_id', $term->data ) );
 		$this->assertSame( $term->term_id, get_term_field( 'term_id', $term->term_id ) );
 	}
 
@@ -91,7 +91,7 @@ class Tests_Term_getTermField extends WP_UnitTestCase {
 	}
 
 	public function test_get_term_field_name() {
-		$name = rand_str( 15 );
+		$name = 'baz';
 
 		$term = self::factory()->term->create_and_get(
 			array(
@@ -106,7 +106,7 @@ class Tests_Term_getTermField extends WP_UnitTestCase {
 	}
 
 	public function test_get_term_field_slug_when_slug_is_set() {
-		$slug = rand_str( 15 );
+		$slug = 'baz';
 
 		$term = self::factory()->term->create_and_get(
 			array(
@@ -121,7 +121,7 @@ class Tests_Term_getTermField extends WP_UnitTestCase {
 	}
 
 	public function test_get_term_field_slug_when_slug_falls_back_from_name() {
-		$name = rand_str( 15 );
+		$name = 'baz';
 
 		$term = self::factory()->term->create_and_get(
 			array(
@@ -156,7 +156,7 @@ class Tests_Term_getTermField extends WP_UnitTestCase {
 	}
 
 	public function test_get_term_field_description() {
-		$desc = wpautop( rand_str() );
+		$desc = wpautop( 'baz' );
 
 		$term = self::factory()->term->create_and_get(
 			array(

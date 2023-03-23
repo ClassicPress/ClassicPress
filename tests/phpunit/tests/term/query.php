@@ -4,6 +4,27 @@
  * @group taxonomy
  */
 class Tests_Term_Query extends WP_UnitTestCase {
+
+	/**
+	 * Temporary storage for a term ID for tests using filter callbacks.
+	 *
+	 * Used in the following tests:
+	 * - `test_null_term_object_should_be_discarded()`
+	 * - `test_error_term_object_should_be_discarded()`
+	 *
+	 * @var int
+	 */
+	private $term_id;
+
+	/**
+	 * Clean up after each test.
+	 */
+	public function tear_down() {
+		unset( $this->term_id );
+
+		parent::tear_down();
+	}
+
 	/**
 	 * @ticket 37545
 	 */
@@ -288,7 +309,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertSame( 1, count( $query->terms ) );
+		$this->assertCount( 1, $query->terms );
 		$this->assertSame( $t, reset( $query->terms )->term_id );
 	}
 
@@ -312,7 +333,7 @@ class Tests_Term_Query extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertSame( 2, count( $query->terms ) );
+		$this->assertCount( 2, $query->terms );
 		foreach ( $query->terms as $term ) {
 			$this->assertSame( $t, $term->term_id );
 		}
@@ -590,6 +611,81 @@ class Tests_Term_Query extends WP_UnitTestCase {
 	}
 
 	/**
+	 * The query method should return zero for field as count and parent set.
+	 *
+	 * @ticket 42327
+	 */
+	public function test_query_should_return_zero_for_field_count_and_parent_set() {
+		$post_id = self::factory()->post->create();
+		register_taxonomy( 'wptests_tax', 'post' );
+
+		$term_id = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+			)
+		);
+		wp_set_object_terms( $post_id, array( $term_id ), 'wptests_tax' );
+
+		$q    = new WP_Term_Query();
+		$args = array(
+			'taxonomy' => 'wptests_tax',
+			'parent'   => $term_id,
+			'fields'   => 'count',
+		);
+		$this->assertSame( 0, $q->query( $args ) );
+	}
+
+	/**
+	 * The query method should return zero for field as count and child_of set.
+	 *
+	 * @ticket 42327
+	 */
+	public function test_query_should_return_zero_for_field_as_count_and_child_of_set() {
+		$post_id = self::factory()->post->create();
+		register_taxonomy( 'wptests_tax', 'post' );
+
+		$term_id = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+			)
+		);
+		wp_set_object_terms( $post_id, array( $term_id ), 'wptests_tax' );
+
+		$q    = new WP_Term_Query();
+		$args = array(
+			'taxonomy' => 'wptests_tax',
+			'child_of' => $term_id,
+			'fields'   => 'count',
+		);
+		$this->assertSame( 0, $q->query( $args ) );
+	}
+
+	/**
+	 * The terms property should be an empty array for fields not as count and parent set.
+	 *
+	 * @ticket 42327
+	 */
+	public function test_terms_property_should_be_empty_array_for_field_not_as_count_and_parent_set() {
+		$post_id = self::factory()->post->create();
+		register_taxonomy( 'wptests_tax', 'post' );
+
+		$term_id = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+			)
+		);
+		wp_set_object_terms( $post_id, array( $term_id ), 'wptests_tax' );
+
+		$q = new WP_Term_Query(
+			array(
+				'taxonomy' => 'wptests_tax',
+				'parent'   => $term_id,
+			)
+		);
+		$this->assertSame( array(), $q->terms );
+	}
+
+	/**
 	 * @ticket 42691
 	 */
 	public function test_null_term_object_should_be_discarded() {
@@ -661,5 +757,234 @@ class Tests_Term_Query extends WP_UnitTestCase {
 		}
 
 		return $term;
+	}
+
+	/**
+	 * @ticket 41246
+	 */
+	public function test_terms_pre_query_filter_should_bypass_database_query() {
+		global $wpdb;
+
+		add_filter( 'terms_pre_query', array( __CLASS__, 'filter_terms_pre_query' ), 10, 2 );
+
+		$num_queries = $wpdb->num_queries;
+
+		$q       = new WP_Term_Query();
+		$results = $q->query(
+			array(
+				'fields' => 'ids',
+			)
+		);
+
+		remove_filter( 'terms_pre_query', array( __CLASS__, 'filter_terms_pre_query' ), 10, 2 );
+
+		// Make sure no queries were executed.
+		$this->assertSame( $num_queries, $wpdb->num_queries );
+
+		// We manually inserted a non-existing term and overrode the results with it.
+		$this->assertSame( array( 555 ), $q->terms );
+	}
+
+	public static function filter_terms_pre_query( $terms, $query ) {
+		return array( 555 );
+	}
+
+	/**
+	 * @ticket 37728
+	 */
+	public function test_hide_empty_should_include_empty_parents_of_nonempty_children() {
+		register_taxonomy(
+			'wptests_tax',
+			'post',
+			array(
+				'hierarchical' => true,
+			)
+		);
+
+		$t1 = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+			)
+		);
+
+		$t2 = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+				'parent'   => $t1,
+			)
+		);
+
+		$p = self::factory()->post->create();
+
+		wp_set_object_terms( $p, $t2, 'wptests_tax' );
+
+		$q = new WP_Term_Query(
+			array(
+				'taxonomy'   => 'wptests_tax',
+				'hide_empty' => true,
+				'fields'     => 'ids',
+			)
+		);
+
+		$this->assertContains( $t1, $q->terms );
+	}
+
+	/**
+	 * @ticket 37728
+	 */
+	public function test_hide_empty_should_include_empty_parents_of_nonempty_children_when_category_is_unspecified() {
+		register_taxonomy(
+			'wptests_tax',
+			'post',
+			array(
+				'hierarchical' => true,
+			)
+		);
+
+		$t1 = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+			)
+		);
+
+		$t2 = self::factory()->term->create(
+			array(
+				'taxonomy' => 'wptests_tax',
+				'parent'   => $t1,
+			)
+		);
+
+		$p = self::factory()->post->create();
+
+		wp_set_object_terms( $p, $t2, 'wptests_tax' );
+
+		$q = new WP_Term_Query(
+			array(
+				'hide_empty' => true,
+				'fields'     => 'ids',
+			)
+		);
+
+		$this->assertContains( $t1, $q->terms );
+	}
+
+	/**
+	 * Ensure cache keys are generated without WPDB placeholders.
+	 *
+	 * @ticket 57298
+	 *
+	 * @covers       WP_Term_Query::generate_cache_key
+	 * @dataProvider data_query_cache
+	 */
+	public function test_generate_cache_key_placeholder( $args ) {
+		global $wpdb;
+		$query1 = new WP_Term_Query();
+		$query1->query( $args );
+
+		$query_vars = $query1->query_vars;
+		$request    = $query1->request;
+
+		$reflection = new ReflectionMethod( $query1, 'generate_cache_key' );
+		$reflection->setAccessible( true );
+
+		$cache_key_1 = $reflection->invoke( $query1, $query_vars, $request );
+
+		$request_without_placeholder = $wpdb->remove_placeholder_escape( $request );
+
+		$cache_key_2 = $reflection->invoke( $query1, $query_vars, $request_without_placeholder );
+
+		$this->assertSame( $cache_key_1, $cache_key_2, 'Cache key differs when using wpdb placeholder.' );
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @return array[] Test parameters.
+	 */
+	public function data_query_cache() {
+		return array(
+			'empty query'                => array(
+				'args' => array(),
+			),
+			'search query'               => array(
+				'args' => array(
+					'search' => 'title',
+				),
+			),
+			'search name query'          => array(
+				'args' => array(
+					'name__like' => 'title',
+				),
+			),
+			'search description query'   => array(
+				'args' => array(
+					'description__like' => 'title',
+				),
+			),
+			'meta query'                 => array(
+				'args' => array(
+					'meta_query' => array(
+						array(
+							'key' => 'color',
+						),
+					),
+				),
+			),
+			'meta query search'          => array(
+				'args' => array(
+					'meta_query' => array(
+						array(
+							'key'     => 'color',
+							'value'   => '00',
+							'compare' => 'LIKE',
+						),
+					),
+				),
+			),
+			'nested meta query search'   => array(
+				'args' => array(
+					'meta_query' => array(
+						'relation' => 'AND',
+						array(
+							'key'     => 'color',
+							'value'   => '00',
+							'compare' => 'LIKE',
+						),
+						array(
+							'relation' => 'OR',
+							array(
+								'key'     => 'color',
+								'value'   => '00',
+								'compare' => 'LIKE',
+							),
+							array(
+								'relation' => 'AND',
+								array(
+									'key'     => 'wp_test_suite',
+									'value'   => '56802',
+									'compare' => 'LIKE',
+								),
+								array(
+									'key'     => 'wp_test_suite_too',
+									'value'   => '56802',
+									'compare' => 'LIKE',
+								),
+							),
+						),
+					),
+				),
+			),
+			'meta query not like search' => array(
+				'args' => array(
+					'meta_query' => array(
+						array(
+							'key'     => 'color',
+							'value'   => 'ff',
+							'compare' => 'NOT LIKE',
+						),
+					),
+				),
+			),
+		);
 	}
 }

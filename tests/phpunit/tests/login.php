@@ -3,12 +3,17 @@
  * @group login
  */
 class Tests_Login extends WP_UnitTestCase {
-	public function set_up() {
+	public static function set_up_before_class() {
+		parent::set_up_before_class();
+
 		// Something about these tests (@runInSeparateProcess maybe?) requires
 		// the object cache to be (re)initialized.
 		if ( wp_using_ext_object_cache() ) {
 			wp_cache_init();
 		}
+	}
+
+	public function set_up() {
 		parent::set_up();
 		reset_phpmailer_instance();
 	}
@@ -29,7 +34,7 @@ class Tests_Login extends WP_UnitTestCase {
 			. preg_quote( WP_TESTS_DOMAIN, '/' )
 			. '\/wp-login\.php\?action=rp\&key=[a-zA-Z0-9]{20}\&login='
 			. preg_quote( $_POST['user_login'], '/' )
-			. '\r?$/mi'
+			. '\&wp_lang=en_US\r?$/mi'
 		);
 
 		$this->assertMatchesRegularExpression( $regex, $mailer->get_sent()->body );
@@ -52,7 +57,7 @@ class Tests_Login extends WP_UnitTestCase {
 			. preg_quote( WP_TESTS_DOMAIN, '/' )
 			. '\/wp-login\.php\?action=rp\&key=[a-zA-Z0-9]{20}\&login='
 			. preg_quote( $_POST['user_login'], '/' )
-			. '\r?$/mi'
+			. '\&wp_lang=en_US\r?$/mi'
 		);
 
 		$this->assertDoesNotMatchRegularExpression( $regex, $mailer->get_sent()->body );
@@ -64,7 +69,7 @@ class Tests_Login extends WP_UnitTestCase {
 			. preg_quote( WP_TESTS_DOMAIN, '/' )
 			. '\/wp-login\.php\?action=rp\&key=[a-zA-Z0-9]{20}\&login='
 			. preg_quote( $encoded_user_login, '/' )
-			. '\r?$/mi'
+			. '\&wp_lang=en_US\r?$/mi'
 		);
 
 		$this->assertMatchesRegularExpression( $regex, $mailer->get_sent()->body );

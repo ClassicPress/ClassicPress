@@ -7,9 +7,27 @@
 class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 	private $taxonomy = 'wptests_tax';
 
+	/**
+	 * Temporary storage for taxonomies for tests using filter callbacks.
+	 *
+	 * Used in the `test_taxonomies_passed_to_wp_get_object_terms_filter_should_be_quoted()` method.
+	 *
+	 * @var array
+	 */
+	private $taxonomies;
+
 	public function set_up() {
 		parent::set_up();
 		register_taxonomy( 'wptests_tax', 'post' );
+	}
+
+	/**
+	 * Clean up after each test.
+	 */
+	public function tear_down() {
+		unset( $this->taxonomies );
+
+		parent::tear_down();
 	}
 
 	public function test_get_object_terms_by_slug() {
@@ -18,9 +36,9 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 		$terms_1       = array( 'Foo', 'Bar', 'Baz' );
 		$terms_1_slugs = array( 'foo', 'bar', 'baz' );
 
-		// set the initial terms
+		// Set the initial terms.
 		$tt_1 = wp_set_object_terms( $post_id, $terms_1, $this->taxonomy );
-		$this->assertSame( 3, count( $tt_1 ) );
+		$this->assertCount( 3, $tt_1 );
 
 		// Make sure they're correct.
 		$terms = wp_get_object_terms(
@@ -840,7 +858,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 		}
 
 		$term = get_term( $t );
-		$this->assertFalse( isset( $term->object_id ) );
+		$this->assertObjectNotHasAttribute( 'object_id', $term );
 	}
 
 	/**
@@ -899,7 +917,7 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 
 	public function filter_get_object_terms( $terms ) {
 		$term_ids = wp_list_pluck( $terms, 'term_id' );
-		// all terms should still be objects
+		// All terms should still be objects.
 		return $terms;
 	}
 
@@ -943,19 +961,19 @@ class Tests_Term_WpGetObjectTerms extends WP_UnitTestCase {
 		$terms   = array( 'foo', 'bar', 'baz' );
 		$set     = wp_set_object_terms( $post_id, $terms, $taxonomy );
 
-		// Filter for maintaining term order
+		// Filter for maintaining term order.
 		add_filter( 'wp_get_object_terms_args', array( $this, 'filter_wp_get_object_terms_args' ), 10, 3 );
 
-		// Test directly
+		// Test directly.
 		$get_object_terms = wp_get_object_terms( $post_id, $taxonomy, array( 'fields' => 'names' ) );
 		$this->assertSame( $terms, $get_object_terms );
 
-		// Test metabox taxonomy (admin advanced edit)
+		// Test metabox taxonomy (admin advanced edit).
 		$terms_to_edit = get_terms_to_edit( $post_id, $taxonomy );
 		$this->assertSame( implode( ',', $terms ), $terms_to_edit );
 	}
 
-	function filter_wp_get_object_terms_args( $args, $object_ids, $taxonomies ) {
+	public function filter_wp_get_object_terms_args( $args, $object_ids, $taxonomies ) {
 		$args['orderby'] = 'term_order';
 		return $args;
 	}

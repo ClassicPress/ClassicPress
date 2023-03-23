@@ -30,14 +30,14 @@ class Tests_Term_WpUpdateTerm extends WP_UnitTestCase {
 			$t,
 			'wptests_tax',
 			array(
-				'name' => 'Let\\\'s all say \\"Hooray\\" for ClassicPress taxonomy',
+				'name' => 'Let\\\'s all say \\"Hooray\\" for WordPress taxonomy',
 			)
 		);
 
 		$term = get_term( $found['term_id'], 'wptests_tax' );
 		_unregister_taxonomy( 'wptests_tax' );
 
-		$this->assertSame( 'Let\'s all say "Hooray" for ClassicPress taxonomy', $term->name );
+		$this->assertSame( 'Let\'s all say "Hooray" for WordPress taxonomy', $term->name );
 	}
 
 	public function test_wp_update_term_unslash_description() {
@@ -52,14 +52,14 @@ class Tests_Term_WpUpdateTerm extends WP_UnitTestCase {
 			$t,
 			'wptests_tax',
 			array(
-				'description' => 'Let\\\'s all say \\"Hooray\\" for ClassicPress taxonomy',
+				'description' => 'Let\\\'s all say \\"Hooray\\" for WordPress taxonomy',
 			)
 		);
 
 		$term = get_term( $found['term_id'], 'wptests_tax' );
 		_unregister_taxonomy( 'wptests_tax' );
 
-		$this->assertSame( 'Let\'s all say "Hooray" for ClassicPress taxonomy', $term->description );
+		$this->assertSame( 'Let\'s all say "Hooray" for WordPress taxonomy', $term->description );
 	}
 
 	public function test_wp_update_term_name_empty_string() {
@@ -86,7 +86,7 @@ class Tests_Term_WpUpdateTerm extends WP_UnitTestCase {
 	/**
 	 * @ticket 29614
 	 */
-	function test_wp_update_term_parent_does_not_exist() {
+	public function test_wp_update_term_parent_does_not_exist() {
 		register_taxonomy(
 			'wptests_tax',
 			array(
@@ -663,7 +663,7 @@ class Tests_Term_WpUpdateTerm extends WP_UnitTestCase {
 		);
 
 		/*
-		 * It doesn't appear that ClassicPress itself ever sets these
+		 * It doesn't appear that WordPress itself ever sets these
 		 * caches, but we should ensure that they're being cleared for
 		 * compatibility with third-party addons. Prime the caches
 		 * manually.
@@ -685,7 +685,7 @@ class Tests_Term_WpUpdateTerm extends WP_UnitTestCase {
 
 		$cached_children = get_option( 'wptests_tax_children' );
 		$this->assertNotEmpty( $cached_children[ $t2 ] );
-		$this->assertTrue( in_array( $found['term_id'], $cached_children[ $t2 ], true ) );
+		$this->assertContains( $found['term_id'], $cached_children[ $t2 ] );
 	}
 
 	/**

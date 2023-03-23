@@ -8,6 +8,10 @@
 class Tests_Comment_CommentForm extends WP_UnitTestCase {
 	public static $post_id;
 
+	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
+		self::$post_id = $factory->post->create();
+	}
+
 	public function set_up() {
 		parent::set_up();
 		update_option( 'default_comment_status', 'open' );

@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * @group query
  * @group search
  */
@@ -8,23 +7,22 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	protected $q;
 	protected $post_type;
 
-	function set_up() {
+	public function set_up() {
 		parent::set_up();
 
-		$this->post_type = rand_str( 12 );
+		$this->post_type = 'foo1';
 		register_post_type( $this->post_type );
 
 		$this->q = new WP_Query();
 	}
 
-	function tear_down() {
-		_unregister_post_type( $this->post_type );
+	public function tear_down() {
 		unset( $this->q );
 
 		parent::tear_down();
 	}
 
-	function get_search_results( $terms ) {
+	private function get_search_results( $terms ) {
 		$args = http_build_query(
 			array(
 				's'         => $terms,
@@ -34,11 +32,11 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		return $this->q->query( $args );
 	}
 
-	function test_search_order_title_relevance() {
+	public function test_search_order_title_relevance() {
 		foreach ( range( 1, 7 ) as $i ) {
 			self::factory()->post->create(
 				array(
-					'post_content' => $i . rand_str() . ' about',
+					'post_content' => "{$i} about",
 					'post_type'    => $this->post_type,
 				)
 			);
@@ -54,14 +52,14 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		$this->assertSame( $post_id, reset( $posts )->ID );
 	}
 
-	function test_search_terms_query_var() {
+	public function test_search_terms_query_var() {
 		$terms = 'This is a search term';
 		$query = new WP_Query( array( 's' => 'This is a search term' ) );
 		$this->assertNotEquals( explode( ' ', $terms ), $query->get( 'search_terms' ) );
 		$this->assertSame( array( 'search', 'term' ), $query->get( 'search_terms' ) );
 	}
 
-	function test_filter_stopwords() {
+	public function test_filter_stopwords() {
 		$terms = 'This is a search term';
 		add_filter( 'wp_search_stopwords', array( $this, 'filter_wp_search_stopwords' ) );
 		$query = new WP_Query( array( 's' => $terms ) );
@@ -71,17 +69,17 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		$this->assertSame( array( 'This', 'is', 'search', 'term' ), $query->get( 'search_terms' ) );
 	}
 
-	function filter_wp_search_stopwords() {
+	public function filter_wp_search_stopwords() {
 		return array();
 	}
 
 	/**
 	 * @ticket 38099
 	 */
-	function test_disable_search_exclusion_prefix() {
+	public function test_disable_search_exclusion_prefix() {
 		$title = '-HYPHENATION_TEST';
 
-		// Create a post with a title which starts with a hyphen
+		// Create a post with a title which starts with a hyphen.
 		$post_id = self::factory()->post->create(
 			array(
 				'post_content' => $title,
@@ -92,7 +90,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		// By default, we can use the hyphen prefix to exclude results.
 		$this->assertSame( array(), $this->get_search_results( $title ) );
 
-		// After we disable the feature using the filter, we should get the result
+		// After we disable the feature using the filter, we should get the result.
 		add_filter( 'wp_query_search_exclusion_prefix', '__return_false' );
 		$result = $this->get_search_results( $title );
 		$post   = array_pop( $result );
@@ -103,7 +101,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	/**
 	 * @ticket 38099
 	 */
-	function test_change_search_exclusion_prefix() {
+	public function test_change_search_exclusion_prefix() {
 		$title = '#OCTOTHORPE_TEST';
 
 		// Create a post with a title that starts with a non-hyphen prefix.
@@ -126,7 +124,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 		$this->assertSame( array(), $found );
 	}
 
-	function filter_search_exclusion_prefix_octothorpe() {
+	public function filter_search_exclusion_prefix_octothorpe() {
 		return '#';
 	}
 
@@ -268,7 +266,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 	 * @ticket 31025
 	 */
 	public function test_s_zero() {
-		$p1 = $this->factory->post->create(
+		$p1 = self::factory()->post->create(
 			array(
 				'post_status'  => 'publish',
 				'post_title'   => '1',
@@ -277,7 +275,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 			)
 		);
 
-		$p2 = $this->factory->post->create(
+		$p2 = self::factory()->post->create(
 			array(
 				'post_status'  => 'publish',
 				'post_title'   => '0',
@@ -637,7 +635,7 @@ class Tests_Query_Search extends WP_UnitTestCase {
 
 		/*
 		 * WP_Query should have removed the wp_allow_query_attachment_by_filename filter
-		 * and thus not match the attachment created above
+		 * and thus not match the attachment created above.
 		 */
 		$q->get_posts();
 		$this->assertEmpty( $q->posts );

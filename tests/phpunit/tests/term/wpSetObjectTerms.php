@@ -7,18 +7,18 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 	protected $taxonomy        = 'category';
 	protected static $post_ids = array();
 
-	public static function wpSetUpBeforeClass( $factory ) {
+	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$post_ids = $factory->post->create_many( 5 );
 	}
 
 	/**
 	 * @ticket 26570
 	 */
-	function test_set_object_terms() {
+	public function test_set_object_terms() {
 		$non_hier = rand_str( 10 );
 		$hier     = rand_str( 10 );
 
-		// Register taxonomies
+		// Register taxonomies.
 		register_taxonomy( $non_hier, array() );
 		register_taxonomy( $hier, array( 'hierarchical' => true ) );
 
@@ -99,7 +99,7 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 		$this->assertTrue( has_term( array( $cat1->slug, $cat2->slug, $cat3->slug ), $hier, $post_id ) );
 	}
 
-	function test_set_object_terms_by_id() {
+	public function test_set_object_terms_by_id() {
 		$ids = self::$post_ids;
 
 		$terms = array();
@@ -113,7 +113,7 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 		foreach ( $ids as $id ) {
 			$tt = wp_set_object_terms( $id, array_values( $term_id ), $this->taxonomy );
 			// Should return three term taxonomy IDs.
-			$this->assertSame( 3, count( $tt ) );
+			$this->assertCount( 3, $tt );
 		}
 
 		// Each term should be associated with every post.
@@ -129,23 +129,23 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 		}
 	}
 
-	function test_set_object_terms_by_name() {
+	public function test_set_object_terms_by_name() {
 		$ids = self::$post_ids;
 
 		$terms = array(
-			rand_str(),
-			rand_str(),
-			rand_str(),
+			'term0',
+			'term1',
+			'term2',
 		);
 
 		foreach ( $ids as $id ) {
 			$tt = wp_set_object_terms( $id, $terms, $this->taxonomy );
 			// Should return three term taxonomy IDs.
-			$this->assertSame( 3, count( $tt ) );
+			$this->assertCount( 3, $tt );
 			// Remember which term has which term_id.
 			for ( $i = 0; $i < 3; $i++ ) {
 				$term                    = get_term_by( 'name', $terms[ $i ], $this->taxonomy );
-				$term_id[ $terms[ $i ] ] = intval( $term->term_id );
+				$term_id[ $terms[ $i ] ] = (int) $term->term_id;
 			}
 		}
 
@@ -162,9 +162,9 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 		}
 	}
 
-	function test_set_object_terms_invalid() {
-		// bogus taxonomy
-		$result = wp_set_object_terms( self::$post_ids[0], array( rand_str() ), rand_str() );
+	public function test_set_object_terms_invalid() {
+		// Bogus taxonomy.
+		$result = wp_set_object_terms( self::$post_ids[0], array( 'foo' ), 'invalid-taxonomy' );
 		$this->assertWPError( $result );
 	}
 
@@ -243,12 +243,13 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 		_unregister_taxonomy( 'wptests_tax' );
 	}
 
-	function test_change_object_terms_by_id() {
-		// set some terms on an object; then change them while leaving one intact
-
+	/**
+	 * Set some terms on an object; then change them while leaving one intact.
+	 */
+	public function test_change_object_terms_by_id() {
 		$post_id = self::$post_ids[0];
 
-		// first set: 3 terms
+		// First set: 3 terms.
 		$terms_1 = array();
 		for ( $i = 0; $i < 3; $i++ ) {
 			$term   = "term_{$i}";
@@ -257,7 +258,7 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 			$terms_1[ $i ] = $result['term_id'];
 		}
 
-		// second set: one of the original terms, plus one new term
+		// Second set: one of the original terms, plus one new term.
 		$terms_2    = array();
 		$terms_2[0] = $terms_1[1];
 
@@ -265,9 +266,9 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 		$result     = wp_insert_term( $term, $this->taxonomy );
 		$terms_2[1] = $result['term_id'];
 
-		// set the initial terms
+		// Set the initial terms.
 		$tt_1 = wp_set_object_terms( $post_id, $terms_1, $this->taxonomy );
-		$this->assertSame( 3, count( $tt_1 ) );
+		$this->assertCount( 3, $tt_1 );
 
 		// Make sure they're correct.
 		$terms = wp_get_object_terms(
@@ -280,9 +281,9 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 		);
 		$this->assertSame( $terms_1, $terms );
 
-		// change the terms
+		// Change the terms.
 		$tt_2 = wp_set_object_terms( $post_id, $terms_2, $this->taxonomy );
-		$this->assertSame( 2, count( $tt_2 ) );
+		$this->assertCount( 2, $tt_2 );
 
 		// Make sure they're correct.
 		$terms = wp_get_object_terms(
@@ -297,19 +298,21 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 
 		// Make sure the term taxonomy ID for 'bar' matches.
 		$this->assertSame( $tt_1[1], $tt_2[0] );
+
 	}
 
-	function test_change_object_terms_by_name() {
-		// set some terms on an object; then change them while leaving one intact
-
+	/**
+	 * Set some terms on an object; then change them while leaving one intact.
+	 */
+	public function test_change_object_terms_by_name() {
 		$post_id = self::$post_ids[0];
 
 		$terms_1 = array( 'foo', 'bar', 'baz' );
 		$terms_2 = array( 'bar', 'bing' );
 
-		// set the initial terms
+		// Set the initial terms.
 		$tt_1 = wp_set_object_terms( $post_id, $terms_1, $this->taxonomy );
-		$this->assertSame( 3, count( $tt_1 ) );
+		$this->assertCount( 3, $tt_1 );
 
 		// Make sure they're correct.
 		$terms = wp_get_object_terms(
@@ -322,9 +325,9 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 		);
 		$this->assertSame( $terms_1, $terms );
 
-		// change the terms
+		// Change the terms.
 		$tt_2 = wp_set_object_terms( $post_id, $terms_2, $this->taxonomy );
-		$this->assertSame( 2, count( $tt_2 ) );
+		$this->assertCount( 2, $tt_2 );
 
 		// Make sure they're correct.
 		$terms = wp_get_object_terms(
@@ -337,7 +340,7 @@ class Tests_Term_WpSetObjectTerms extends WP_UnitTestCase {
 		);
 		$this->assertSame( $terms_2, $terms );
 
-		// make sure the tt id for 'bar' matches
+		// Make sure the term taxonomy ID for 'bar' matches.
 		$this->assertEquals( $tt_1[1], $tt_2[0] );
 
 	}

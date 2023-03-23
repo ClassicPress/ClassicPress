@@ -9,19 +9,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 
 	protected $global_data = array();
 
-	public function set_up() {
-		parent::set_up();
-		return;
-
-		foreach ( $this->global_keys as $global_key ) {
-			if ( isset( $GLOBALS[ $global_key ] ) ) {
-				$this->global_data[ $global_key ] = $GLOBALS[ $global_key ];
-				unset( $GLOBALS[ $global_key ] );
-			} else {
-				$this->global_data[ $global_key ] = null;
-			}
-		}
-	}
+	protected $pages_global;
 
 	public function test_id() {
 		$p = self::factory()->post->create_and_get();
@@ -45,7 +33,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 	 * @ticket 30970
 	 */
 	public function test_setup_by_fake_post() {
-		$fake     = new stdClass;
+		$fake     = new stdClass();
 		$fake->ID = 98765;
 		setup_postdata( $fake->ID );
 
@@ -329,7 +317,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 		$this->go_to( get_permalink( $post1 ) );
 		setup_postdata( $post2 );
 
-		$this->assertTrue( empty( $GLOBALS['more'] ) );
+		$this->assertEmpty( $GLOBALS['more'] );
 	}
 
 	/**
@@ -347,7 +335,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 		$this->go_to( get_permalink( $page ) );
 		setup_postdata( $post );
 
-		$this->assertTrue( empty( $GLOBALS['more'] ) );
+		$this->assertEmpty( $GLOBALS['more'] );
 	}
 
 	/**
@@ -384,7 +372,7 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 				$q->the_post();
 
 				// $more should refer to the current loop.
-				$this->assertTrue( empty( $GLOBALS['more'] ) );
+				$this->assertEmpty( $GLOBALS['more'] );
 			}
 		}
 		wp_reset_postdata();
@@ -396,24 +384,42 @@ class Tests_Query_SetupPostdata extends WP_UnitTestCase {
 	/**
 	 * @ticket 24330
 	 *
-	 * setup_postdata( $a_post ) followed by the_content() in a loop that does not update
-	 * global $post should use the content of $a_post rather then the global post.
+	 * setup_postdata( $a_post ) followed by the_content() without updating global $post
+	 * should use the content of $a_post rather then the global post.
 	 */
-	function test_setup_postdata_loop() {
+	public function test_setup_postdata_with_the_content() {
 		$post_id                   = self::factory()->post->create( array( 'post_content' => 'global post' ) );
 		$GLOBALS['post']           = get_post( $post_id );
 		$GLOBALS['wp_query']->post = $GLOBALS['post'];
 
-		$ids = self::factory()->post->create_many( 5 );
-		foreach ( $ids as $id ) {
-			$page = get_post( $id );
-			if ( $page ) {
-				setup_postdata( $page );
-				$content = get_echo( 'the_content', array() );
-				$this->assertSame( $post_id, $GLOBALS['post']->ID );
-				$this->assertNotEquals( '<p>global post</p>', strip_ws( $content ) );
-				wp_reset_postdata();
-			}
-		}
+		$a_post_id = self::factory()->post->create();
+		$a_post    = get_post( $a_post_id );
+
+		setup_postdata( $a_post );
+		$content = get_echo( 'the_content' );
+		$this->assertSame( $post_id, $GLOBALS['post']->ID );
+		$this->assertNotEquals( '<p>global post</p>', strip_ws( $content ) );
+		wp_reset_postdata();
+	}
+
+	/**
+	 * @ticket 47114
+	 *
+	 * setup_postdata() should set the globals before `the_post` action is fired.
+	 */
+	public function test_the_post_action() {
+		$post = self::factory()->post->create_and_get();
+		add_action( 'the_post', array( $this, 'the_post_action_callback' ) );
+
+		setup_postdata( $post );
+
+		$this->assertSame( $GLOBALS['pages'], $this->pages_global );
+	}
+
+	/**
+	 * Helpers
+	 */
+	public function the_post_action_callback() {
+		$this->pages_global = $GLOBALS['pages'];
 	}
 }

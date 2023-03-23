@@ -3,6 +3,8 @@
 /**
  * @group formatting
  * @ticket 22300
+ *
+ * @covers ::map_deep
  */
 class Tests_Formatting_MapDeep extends WP_UnitTestCase {
 
@@ -21,10 +23,7 @@ class Tests_Formatting_MapDeep extends WP_UnitTestCase {
 					'a',
 					'x',
 				),
-				array(
-					$this,
-					'append_baba',
-				)
+				array( $this, 'append_baba' )
 			)
 		);
 	}
@@ -44,16 +43,13 @@ class Tests_Formatting_MapDeep extends WP_UnitTestCase {
 						'x',
 					),
 				),
-				array(
-					$this,
-					'append_baba',
-				)
+				array( $this, 'append_baba' )
 			)
 		);
 	}
 
 	public function test_map_deep_should_map_each_object_element_of_an_array() {
-		$this->assertEquals(
+		$this->assertEqualSets(
 			array(
 				'var0' => 'ababa',
 				'var1' => (object) array(
@@ -168,13 +164,7 @@ class Tests_Formatting_MapDeep extends WP_UnitTestCase {
 				'var0' => 'ababa',
 				'var1' => 'xbaba',
 			),
-			map_deep(
-				$array_b,
-				array(
-					$this,
-					'append_baba',
-				)
-			)
+			map_deep( $array_b, array( $this, 'append_baba' ) )
 		);
 	}
 

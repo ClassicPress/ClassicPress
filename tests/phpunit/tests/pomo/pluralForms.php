@@ -106,7 +106,7 @@ class PluralFormsTest extends WP_UnitTestCase {
 				),
 			),
 			array(
-				// Ternary
+				// Ternary.
 				'n ? 1 : 2',
 				array(
 					-1 => 1,
@@ -116,7 +116,7 @@ class PluralFormsTest extends WP_UnitTestCase {
 				),
 			),
 			array(
-				// Comparison
+				// Comparison.
 				'n > 1 ? 1 : 2',
 				array(
 					-2 => 2,
@@ -148,7 +148,7 @@ class PluralFormsTest extends WP_UnitTestCase {
 	 */
 	public function test_simple( $expression, $expected ) {
 		$plural_forms = new Plural_Forms( $expression );
-		$actual      = array();
+		$actual       = array();
 		foreach ( array_keys( $expected ) as $num ) {
 			$actual[ $num ] = $plural_forms->get( $num );
 		}
@@ -159,9 +159,9 @@ class PluralFormsTest extends WP_UnitTestCase {
 	public function data_exceptions() {
 		return array(
 			array(
-				'n # 2',              // Invalid expression to parse
-				'Unknown symbol "#"', // Expected exception message
-				false,                // Whether to call the get() method or not
+				'n # 2',              // Invalid expression to parse.
+				'Unknown symbol "#"', // Expected exception message.
+				false,                // Whether to call the get() method or not.
 			),
 			array(
 				'n & 1',
@@ -199,25 +199,17 @@ class PluralFormsTest extends WP_UnitTestCase {
 	/**
 	 * Ensures that an exception is thrown when an invalid plural form is encountered.
 	 *
-	 * The `@expectedException Exception` notation for PHPUnit cannot be used because expecting an
-	 * exception of type `Exception` is not supported before PHPUnit 3.7. The CI tests for PHP 5.2
-	 * run on PHPUnit 3.6.
-	 *
 	 * @ticket 41562
 	 * @dataProvider data_exceptions
 	 */
-	public function test_exceptions( $expression, $expected_exception, $call_get ) {
-		try {
-			$plural_forms = new Plural_Forms( $expression );
-			if ( $call_get ) {
-				$plural_forms->get( 1 );
-			}
-		} catch ( Exception $e ) {
-			$this->assertSame( $expected_exception, $e->getMessage() );
-			return;
-		}
+	public function test_exceptions( $expression, $expected_message, $call_get ) {
+		$this->expectException( 'Exception' );
+		$this->expectExceptionMessage( $expected_message );
 
-		$this->fail( 'Expected exception was not thrown.' );
+		$plural_forms = new Plural_Forms( $expression );
+		if ( $call_get ) {
+			$plural_forms->get( 1 );
+		}
 	}
 
 	/**

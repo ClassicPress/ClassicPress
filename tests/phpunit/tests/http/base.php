@@ -17,21 +17,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 	protected $http_request_args;
 
-	/**
-	 * Please kill this code ASAP.
-	 */
-	function checkForFailure( $response, $message ) {
-		if (
-			$message === $response->get_error_message() ||
-			false !== strpos( $response->get_error_message(), $message )
-		) {
-			$explanation = "HTTP fail: $message";
-			error_log( $explanation );
-			$this->markTestSkipped( $explanation );
-		}
-	}
-
-	function set_up() {
+	public function set_up() {
 		parent::set_up();
 
 		$class = 'WP_Http_' . ucfirst( $this->transport );

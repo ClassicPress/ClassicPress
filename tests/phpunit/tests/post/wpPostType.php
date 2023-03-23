@@ -3,7 +3,7 @@
 /**
  * @group post
  */
-class Tests_WP_Post_Type extends WP_UnitTestCase {
+class Tests_Post_WP_Post_Type extends WP_UnitTestCase {
 	public function test_instances() {
 		global $wp_post_types;
 
@@ -62,6 +62,47 @@ class Tests_WP_Post_Type extends WP_UnitTestCase {
 		$this->assertSameSets( array(), $post_type_supports_after );
 	}
 
+	/**
+	 * Test that supports can optionally receive nested args.
+	 *
+	 * @ticket 40413
+	 */
+	public function test_add_supports_custom_with_args() {
+		$post_type        = 'cpt';
+		$post_type_object = new WP_Post_Type(
+			$post_type,
+			array(
+				'supports' => array(
+					'support_with_args' => array(
+						'arg1',
+						'arg2',
+					),
+					'support_without_args',
+				),
+			)
+		);
+
+		$post_type_object->add_supports();
+		$post_type_supports = get_all_post_type_supports( $post_type );
+
+		$post_type_object->remove_supports();
+		$post_type_supports_after = get_all_post_type_supports( $post_type );
+
+		$this->assertSameSets(
+			array(
+				'support_with_args'    => array(
+					array(
+						'arg1',
+						'arg2',
+					),
+				),
+				'support_without_args' => true,
+			),
+			$post_type_supports
+		);
+		$this->assertSameSets( array(), $post_type_supports_after );
+	}
+
 	public function test_does_not_add_query_var_if_not_public() {
 		$this->set_permalink_structure( '/%postname%' );
 
@@ -78,7 +119,7 @@ class Tests_WP_Post_Type extends WP_UnitTestCase {
 		);
 		$post_type_object->add_rewrite_rules();
 
-		$this->assertFalse( in_array( 'foobar', $wp->public_query_vars, true ) );
+		$this->assertNotContains( 'foobar', $wp->public_query_vars );
 	}
 
 	public function test_adds_query_var_if_public() {
@@ -174,5 +215,18 @@ class Tests_WP_Post_Type extends WP_UnitTestCase {
 
 		$this->assertSameSets( array( 'post_tag' ), $taxonomies );
 		$this->assertSameSets( array(), $taxonomies_after );
+	}
+
+	public function test_applies_registration_args_filters() {
+		$post_type = 'cpt';
+		$action    = new MockAction();
+
+		add_filter( 'register_post_type_args', array( $action, 'filter' ) );
+		add_filter( "register_{$post_type}_post_type_args", array( $action, 'filter' ) );
+
+		new WP_Post_Type( $post_type );
+		new WP_Post_Type( 'random' );
+
+		$this->assertSame( 3, $action->get_call_count() );
 	}
 }

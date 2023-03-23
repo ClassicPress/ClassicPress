@@ -2,11 +2,12 @@
 
 /**
  * @group link
+ * @covers ::get_dashboard_url
  */
 class Tests_Link_GetDashboardUrl extends WP_UnitTestCase {
-	static $user_id = false;
+	public static $user_id = false;
 
-	public static function wpSetUpBeforeClass( $factory ) {
+	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$user_id = $factory->user->create( array( 'role' => 'administrator' ) );
 	}
 
@@ -68,7 +69,7 @@ class Tests_Link_GetDashboardUrl extends WP_UnitTestCase {
 		remove_user_from_blog( self::$user_id, $site_id );
 		add_user_to_blog( get_current_blog_id(), self::$user_id, 'administrator' );
 
-		wpmu_delete_blog( $site_id, true );
+		wp_delete_site( $site_id );
 
 		$this->assertSame( $expected, $result );
 	}

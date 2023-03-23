@@ -2,8 +2,10 @@
 
 /**
  * @group formatting
+ *
+ * @covers ::wp_rel_nofollow
  */
-class Tests_Rel_No_Follow extends WP_UnitTestCase {
+class Tests_Formatting_wpRelNofollow extends WP_UnitTestCase {
 
 	/**
 	 * @ticket 9959
@@ -27,8 +29,8 @@ class Tests_Rel_No_Follow extends WP_UnitTestCase {
 	 * @ticket 11360
 	 * @dataProvider data_wp_rel_nofollow
 	 */
-	public function test_wp_rel_nofollow( $input, $output ) {
-		return $this->assertSame( wp_slash( $output ), wp_rel_nofollow( $input ) );
+	public function test_wp_rel_nofollow( $input, $output, $expect_deprecation = false ) {
+		$this->assertSame( wp_slash( $output ), wp_rel_nofollow( $input ) );
 	}
 
 	public function data_wp_rel_nofollow() {
@@ -39,6 +41,7 @@ class Tests_Rel_No_Follow extends WP_UnitTestCase {
 			array(
 				'<a href="">Double Quotes</a>',
 				'<a href="" rel="nofollow">Double Quotes</a>',
+				true,
 			),
 			array(
 				'<a href="https://wordpress.org">Double Quotes</a>',

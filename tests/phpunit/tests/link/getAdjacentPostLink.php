@@ -2,6 +2,9 @@
 
 /**
  * @group link
+ * @covers ::get_adjacent_post_link
+ * @covers ::get_next_post_link
+ * @covers ::get_previous_post_link
  */
 class Tests_Link_GetAdjacentPostLink extends WP_UnitTestCase {
 
@@ -48,7 +51,7 @@ class Tests_Link_GetAdjacentPostLink extends WP_UnitTestCase {
 			)
 		);
 
-		//set current post (has 2 on each end)
+		// Set current post (has 2 on each end).
 		global $GLOBALS;
 		$GLOBALS['post'] = get_post( $this->post_ids[2] );
 	}

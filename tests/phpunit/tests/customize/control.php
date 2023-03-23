@@ -1,12 +1,8 @@
 <?php
 /**
- * Test_WP_Customize_Control tests.
- *
- * @package ClassicPress
- */
-
-/**
  * Tests for the Test_WP_Customize_Control class.
+ *
+ * @package WordPress
  *
  * @todo This is missing dedicated tests for all but one of the methods.
  *
@@ -24,14 +20,12 @@ class Test_WP_Customize_Control extends WP_UnitTestCase {
 	/**
 	 * Set up.
 	 */
-	function set_up() {
+	public function set_up() {
 		parent::set_up();
-		wp_set_current_user( $this->factory()->user->create( array( 'role' => 'administrator' ) ) );
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
 		require_once ABSPATH . WPINC . '/class-wp-customize-manager.php';
-		// @codingStandardsIgnoreStart
 		$GLOBALS['wp_customize'] = new WP_Customize_Manager();
-		// @codingStandardsIgnoreEnd
-		$this->wp_customize = $GLOBALS['wp_customize'];
+		$this->wp_customize      = $GLOBALS['wp_customize'];
 	}
 
 	/**
@@ -39,7 +33,7 @@ class Test_WP_Customize_Control extends WP_UnitTestCase {
 	 *
 	 * @see WP_Customize_Control::check_capabilities()
 	 */
-	function test_check_capabilities() {
+	public function test_check_capabilities() {
 		do_action( 'customize_register', $this->wp_customize );
 		$control = new WP_Customize_Control(
 			$this->wp_customize,
@@ -107,7 +101,7 @@ class Test_WP_Customize_Control extends WP_UnitTestCase {
 	/**
 	 * @ticket 38164
 	 */
-	function test_dropdown_pages() {
+	public function test_dropdown_pages() {
 		do_action( 'customize_register', $this->wp_customize );
 
 		$this->assertInstanceOf( 'WP_Customize_Nav_Menus', $this->wp_customize->nav_menus );
@@ -140,21 +134,21 @@ class Test_WP_Customize_Control extends WP_UnitTestCase {
 		$this->assertStringContainsString( '<option value="0">', $content, 'Dropdown-pages renders select even without any pages published.' );
 
 		// Ensure that auto-draft pages are included if they are among the nav_menus_created_posts.
-		$auto_draft_page_id = $this->factory()->post->create(
+		$auto_draft_page_id = self::factory()->post->create(
 			array(
 				'post_type'   => 'page',
 				'post_status' => 'auto-draft',
 				'post_title'  => 'Auto Draft Page',
 			)
 		);
-		$this->factory()->post->create(
+		self::factory()->post->create(
 			array(
 				'post_type'   => 'page',
 				'post_status' => 'auto-draft',
 				'post_title'  => 'Orphan Auto Draft Page',
 			)
 		);
-		$auto_draft_post_id = $this->factory()->post->create(
+		$auto_draft_post_id = self::factory()->post->create(
 			array(
 				'post_type'   => 'post',
 				'post_status' => 'auto-draft',
@@ -174,7 +168,7 @@ class Test_WP_Customize_Control extends WP_UnitTestCase {
 	/**
 	 * Tear down.
 	 */
-	function tear_down() {
+	public function tear_down() {
 		$this->wp_customize = null;
 		unset( $GLOBALS['wp_customize'] );
 		parent::tear_down();

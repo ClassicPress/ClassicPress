@@ -106,7 +106,6 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 			'timezone',
 			'date_format',
 			'time_format',
-			'site_logo',
 			'start_of_week',
 			'language',
 			'use_smilies',
@@ -118,7 +117,6 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 			'page_for_posts',
 			'default_ping_status',
 			'default_comment_status',
-			'site_icon', // Registered in wp-includes/blocks/site-logo.php
 		);
 
 		if ( ! is_multisite() ) {

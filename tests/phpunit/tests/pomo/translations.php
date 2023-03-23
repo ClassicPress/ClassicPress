@@ -5,12 +5,11 @@
  */
 class Tests_POMO_Translations extends WP_UnitTestCase {
 
-	function test_add_entry() {
+	public function test_add_entry() {
 		$entry  = new Translation_Entry( array( 'singular' => 'baba' ) );
 		$entry2 = new Translation_Entry( array( 'singular' => 'dyado' ) );
 		$empty  = new Translation_Entry();
 		$po     = new Translations();
-
 		$po->add_entry( $entry );
 		$this->assertSame( array( $entry->key() => $entry ), $po->entries );
 		// Add the same entry more than once.
@@ -36,14 +35,14 @@ class Tests_POMO_Translations extends WP_UnitTestCase {
 			$po->entries
 		);
 
-		// give add_entry() the arguments and let it create the entry itself
+		// Give add_entry() the arguments and let it create the entry itself.
 		$po = new Translations();
 		$po->add_entry( array( 'singular' => 'baba' ) );
 		$entries = array_values( $po->entries );
 		$this->assertSame( $entry->key(), $entries[0]->key() );
 	}
 
-	function test_translate() {
+	public function test_translate() {
 		$entry1 = new Translation_Entry(
 			array(
 				'singular'     => 'baba',
@@ -58,7 +57,6 @@ class Tests_POMO_Translations extends WP_UnitTestCase {
 			)
 		);
 		$domain = new Translations();
-
 		$domain->add_entry( $entry1 );
 		$domain->add_entry( $entry2 );
 		$this->assertSame( 'babax', $domain->translate( 'baba' ) );
@@ -67,7 +65,7 @@ class Tests_POMO_Translations extends WP_UnitTestCase {
 		$this->assertSame( 'babaz', $domain->translate( 'babaz' ) );
 	}
 
-	function test_translate_plural() {
+	public function test_translate_plural() {
 		$entry_incomplete = new Translation_Entry(
 			array(
 				'singular'     => 'baba',
@@ -79,25 +77,17 @@ class Tests_POMO_Translations extends WP_UnitTestCase {
 			array(
 				'singular'     => 'wink',
 				'plural'       => 'winks',
-				'translations' => array(
-					'winki',
-					'winka',
-					'winko',
-				),
+				'translations' => array( 'winki', 'winka', 'winko' ),
 			)
 		);
 		$entry_2          = new Translation_Entry(
 			array(
 				'singular'     => 'dyado',
 				'plural'       => 'dyados',
-				'translations' => array(
-					'dyadox',
-					'dyadoy',
-				),
+				'translations' => array( 'dyadox', 'dyadoy' ),
 			)
 		);
 		$domain           = new Translations();
-
 		$domain->add_entry( $entry_incomplete );
 		$domain->add_entry( $entry_toomany );
 		$domain->add_entry( $entry_2 );
@@ -115,7 +105,7 @@ class Tests_POMO_Translations extends WP_UnitTestCase {
 		$this->assertSame( 'dyadoy', $domain->translate_plural( 'dyado', 'dyados', -18881 ) );
 	}
 
-	function test_digit_and_merge() {
+	public function test_digit_and_merge() {
 		$entry_digit_1 = new Translation_Entry(
 			array(
 				'singular'     => 1,
@@ -131,10 +121,37 @@ class Tests_POMO_Translations extends WP_UnitTestCase {
 		$domain        = new Translations();
 		$domain->add_entry( $entry_digit_1 );
 		$domain->add_entry( $entry_digit_2 );
-		$dummy_translation = new Translations;
+		$dummy_translation = new Translations();
 		$this->assertSame( '1', $domain->translate( '1' ) );
 		$domain->merge_with( $dummy_translation );
 		$this->assertSame( '1', $domain->translate( '1' ) );
 	}
 
+	/**
+	 * @ticket 55941
+	 */
+	public function test_translate_falsy_key() {
+		$entry_empty = new Translation_Entry(
+			array(
+				'singular'     => '',
+				'translations' => array(
+					'',
+				),
+			)
+		);
+		$entry_zero  = new Translation_Entry(
+			array(
+				'singular'     => '0',
+				'translations' => array(
+					'0',
+				),
+			)
+		);
+		$po          = new Translations();
+		$po->add_entry( $entry_empty );
+		$po->add_entry( $entry_zero );
+
+		$this->assertSame( '', $po->translate( '' ) );
+		$this->assertSame( '0', $po->translate( '0' ) );
+	}
 }

@@ -10,9 +10,9 @@ class Tests_Query_Date extends WP_UnitTestCase {
 
 	public $q;
 
-	static $post_ids = array();
+	public static $post_ids = array();
 
-	public static function wpSetUpBeforeClass( $factory ) {
+	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		// Be careful modifying this. Tests are coded to expect this exact sample data.
 		$post_dates = array(
 			'1972-05-24 14:53:45',
@@ -55,9 +55,9 @@ class Tests_Query_Date extends WP_UnitTestCase {
 		$args = wp_parse_args(
 			$args,
 			array(
-				'post_status'    => 'any', // For the future post
-				'posts_per_page' => '-1',  // To make sure results are accurate
-				'orderby'        => 'ID',  // Same order they were created
+				'post_status'    => 'any', // For the future post.
+				'posts_per_page' => '-1',  // To make sure results are accurate.
+				'orderby'        => 'ID',  // Same order they were created.
 				'order'          => 'ASC',
 			)
 		);
@@ -294,11 +294,11 @@ class Tests_Query_Date extends WP_UnitTestCase {
 		$expected = $this->_get_query_result();
 		$posts    = $this->_get_query_result(
 			array(
-				'm' => array( '1234' ), // ignored
+				'm' => array( '1234' ), // Ignored.
 			)
 		);
 
-		$this->assertEquals( $expected, $posts );
+		$this->assertEqualSets( $expected, $posts );
 	}
 
 	public function test_simple_monthnum_expecting_results() {

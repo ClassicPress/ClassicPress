@@ -4,15 +4,11 @@
  * @group post
  */
 
-class Tests_Post_getPages extends WP_UnitTestCase {
-	function set_up() {
-		parent::set_up();
-	}
-
+class Tests_Post_GetPages extends WP_UnitTestCase {
 	/**
 	 * @ticket 23167
 	 */
-	function test_get_pages_cache() {
+	public function test_get_pages_cache() {
 		global $wpdb;
 
 		self::factory()->post->create_many( 3, array( 'post_type' => 'page' ) );
@@ -20,7 +16,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 		$this->assertFalse( wp_cache_get( 'last_changed', 'posts' ) );
 
 		$pages = get_pages();
-		$this->assertSame( 3, count( $pages ) );
+		$this->assertCount( 3, $pages );
 		$time1 = wp_cache_get( 'last_changed', 'posts' );
 		$this->assertNotEmpty( $time1 );
 		$num_queries = $wpdb->num_queries;
@@ -30,7 +26,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 
 		// Again. num_queries and last_changed should remain the same.
 		$pages = get_pages();
-		$this->assertSame( 3, count( $pages ) );
+		$this->assertCount( 3, $pages );
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries, $wpdb->num_queries );
 		foreach ( $pages as $page ) {
@@ -40,7 +36,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 		// Again with different args. last_changed should not increment because of
 		// different args to get_pages(). num_queries should bump by 1.
 		$pages = get_pages( array( 'number' => 2 ) );
-		$this->assertSame( 2, count( $pages ) );
+		$this->assertCount( 2, $pages );
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries + 1, $wpdb->num_queries );
 		foreach ( $pages as $page ) {
@@ -51,7 +47,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 
 		// Again. num_queries and last_changed should remain the same.
 		$pages = get_pages( array( 'number' => 2 ) );
-		$this->assertSame( 2, count( $pages ) );
+		$this->assertCount( 2, $pages );
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries, $wpdb->num_queries );
 		foreach ( $pages as $page ) {
@@ -60,7 +56,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 
 		// Do the first query again. The interim queries should not affect it.
 		$pages = get_pages();
-		$this->assertSame( 3, count( $pages ) );
+		$this->assertCount( 3, $pages );
 		$this->assertSame( $time1, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries, $wpdb->num_queries );
 		foreach ( $pages as $page ) {
@@ -75,7 +71,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 
 		// last_changed bumped so num_queries should increment.
 		$pages = get_pages( array( 'number' => 2 ) );
-		$this->assertSame( 2, count( $pages ) );
+		$this->assertCount( 2, $pages );
 		$this->assertSame( $time2, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries + 1, $wpdb->num_queries );
 		foreach ( $pages as $page ) {
@@ -95,7 +91,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 
 		// num_queries should bump after wp_delete_post() bumps last_changed.
 		$pages = get_pages();
-		$this->assertSame( 2, count( $pages ) );
+		$this->assertCount( 2, $pages );
 		$this->assertSame( $last_changed, wp_cache_get( 'last_changed', 'posts' ) );
 		$this->assertSame( $num_queries + 1, $wpdb->num_queries );
 		foreach ( $pages as $page ) {
@@ -253,7 +249,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	/**
 	 * @ticket 20376
 	 */
-	function test_get_pages_meta() {
+	public function test_get_pages_meta() {
 		$posts = self::factory()->post->create_many( 3, array( 'post_type' => 'page' ) );
 		add_post_meta( $posts[0], 'some-meta-key', '0' );
 		add_post_meta( $posts[1], 'some-meta-key', '' );
@@ -281,13 +277,13 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 				)
 			)
 		);
-		$this->assertSame( 3, count( get_pages( array( 'meta_key' => 'some-meta-key' ) ) ) );
+		$this->assertCount( 3, get_pages( array( 'meta_key' => 'some-meta-key' ) ) );
 	}
 
 	/**
 	 * @ticket 22074
 	 */
-	function test_get_pages_include_exclude() {
+	public function test_get_pages_include_exclude() {
 		$page_ids = array();
 
 		foreach ( range( 1, 20 ) as $i ) {
@@ -313,7 +309,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	/**
 	 * @ticket 9470
 	 */
-	function test_get_pages_parent() {
+	public function test_get_pages_parent() {
 		$page_id1 = self::factory()->post->create( array( 'post_type' => 'page' ) );
 		$page_id2 = self::factory()->post->create(
 			array(
@@ -371,18 +367,18 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	/**
 	 * @ticket 22389
 	 */
-	function test_wp_dropdown_pages() {
+	public function test_wp_dropdown_pages() {
 		self::factory()->post->create_many( 5, array( 'post_type' => 'page' ) );
 
 		preg_match_all( '#<option#', wp_dropdown_pages( 'echo=0' ), $matches );
 
-		$this->assertSame( 5, count( $matches[0] ) );
+		$this->assertCount( 5, $matches[0] );
 	}
 
 	/**
 	 * @ticket 22208
 	 */
-	function test_get_chidren_fields_ids() {
+	public function test_get_chidren_fields_ids() {
 		$post_id   = self::factory()->post->create();
 		$child_ids = self::factory()->post->create_many( 5, array( 'post_parent' => $post_id ) );
 
@@ -398,7 +394,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 	/**
 	 * @ticket 25750
 	 */
-	function test_get_pages_hierarchical_and_no_parent() {
+	public function test_get_pages_hierarchical_and_no_parent() {
 		global $wpdb;
 		$page_1 = self::factory()->post->create( array( 'post_type' => 'page' ) );
 		$page_2 = self::factory()->post->create(
@@ -420,7 +416,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 			)
 		);
 
-		$pages              = get_pages(); // Defaults: hierarchical = true, parent = -1
+		$pages              = get_pages(); // Defaults: hierarchical = true, parent = -1.
 		$pages_default_args = get_pages(
 			array(
 				'hierarchical' => true,
@@ -428,7 +424,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 			)
 		);
 		// Confirm the defaults.
-		$this->assertEquals( $pages, $pages_default_args );
+		$this->assertEqualSets( $pages, $pages_default_args );
 
 		/*
 		 * Here's the tree we are testing:
@@ -464,7 +460,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 			)
 		);
 
-		$pages        = get_pages(); // Defaults: hierarchical = true, child_of = '', parent = -1
+		$pages        = get_pages(); // Defaults: hierarchical = true, child_of = '', parent = -1.
 		$default_args = get_pages(
 			array(
 				'hierarchical' => true,
@@ -472,7 +468,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertEquals( $pages, $default_args );
+		$this->assertEqualSets( $pages, $default_args );
 
 		/*
 		 * Page tree:
@@ -510,7 +506,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 			)
 		);
 
-		$pages = get_pages( array( 'hierarchical' => false ) ); // child_of = '', parent = -1
+		$pages = get_pages( array( 'hierarchical' => false ) ); // child_of = '', parent = -1.
 
 		/*
 		 * Page tree:
@@ -622,7 +618,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 
 	}
 
-	function test_wp_list_pages_classes() {
+	public function test_wp_list_pages_classes() {
 		$type = 'taco';
 		register_post_type(
 			$type,
@@ -655,7 +651,7 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 		_unregister_post_type( $type );
 	}
 
-	function test_exclude_tree() {
+	public function test_exclude_tree() {
 		$post_id1 = self::factory()->post->create( array( 'post_type' => 'page' ) );
 		$post_id2 = self::factory()->post->create(
 			array(
@@ -700,5 +696,27 @@ class Tests_Post_getPages extends WP_UnitTestCase {
 
 		$exclude6 = get_pages( array( 'exclude_tree' => array( $post_id1, $post_id3 ) ) );
 		$this->assertCount( 2, $exclude6 );
+	}
+
+	/**
+	 * @ticket 43514
+	 */
+	public function test_get_pages_cache_empty() {
+		global $wpdb;
+
+		wp_cache_delete( 'last_changed', 'posts' );
+		$this->assertFalse( wp_cache_get( 'last_changed', 'posts' ) );
+
+		$num_queries = $wpdb->num_queries;
+
+		$pages = get_pages(); // Database gets queried.
+
+		$this->assertSame( $num_queries + 1, $wpdb->num_queries );
+
+		$num_queries = $wpdb->num_queries;
+
+		$pages = get_pages(); // Database should not get queried.
+
+		$this->assertSame( $num_queries, $wpdb->num_queries );
 	}
 }

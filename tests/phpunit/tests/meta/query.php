@@ -45,8 +45,8 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 	public function test_invalid_query_clauses() {
 		$query = new WP_Meta_Query(
 			array(
-				'foo', // empty string
-				5, // int
+				'foo', // Empty string.
+				5,     // int
 				false, // bool
 				array(),
 			)
@@ -76,7 +76,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 
 		$this->assertSame( 1, substr_count( $sql['join'], 'INNER JOIN' ) );
 
-		// also check mixing key and key => value
+		// Also check mixing key and key => value.
 
 		$query = new WP_Meta_Query(
 			array(
@@ -146,7 +146,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 		$query = new WP_Meta_Query();
 		$query->parse_query_vars( $qv );
 
-		$this->assertTrue( ! isset( $query->queries[0]['value'] ) );
+		$this->assertArrayNotHasKey( 'value', $query->queries[0] );
 	}
 
 	/**
@@ -163,7 +163,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 		$query = new WP_Meta_Query();
 		$query->parse_query_vars( $qv );
 
-		$this->assertTrue( ! isset( $query->queries[0]['value'] ) );
+		$this->assertArrayNotHasKey( 'value', $query->queries[0] );
 	}
 
 	/**
@@ -174,7 +174,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 
 		$query = new WP_Meta_Query();
 
-		// just meta_value
+		// Just meta_value.
 		$expected = array(
 			array(
 				'key' => 'abc',
@@ -188,7 +188,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 		);
 		$this->assertSame( $expected, $query->queries );
 
-		// meta_key & meta_value
+		// meta_key & meta_value.
 		$expected = array(
 			array(
 				'key'   => 'abc',
@@ -204,7 +204,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 		);
 		$this->assertSame( $expected, $query->queries );
 
-		// meta_compare
+		// meta_compare.
 		$expected = array(
 			array(
 				'key'     => 'abc',
@@ -565,25 +565,25 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 					'key' => 'foo',
 				),
 
-				// Non-empty 'compare'
+				// Non-empty 'compare'.
 				array(
 					'key'     => 'bar',
 					'compare' => '<',
 				),
 
-				// NOT EXISTS
+				// NOT EXISTS.
 				array(
 					'key'     => 'baz',
 					'compare' => 'NOT EXISTS',
 				),
 
-				// Has a value
+				// Has a value.
 				array(
 					'key'   => 'barry',
 					'value' => 'foo',
 				),
 
-				// Has no key
+				// Has no key.
 				array(
 					'value' => 'bar',
 				),
@@ -594,11 +594,11 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 
 		$sql = $query1->get_sql( 'post', $wpdb->posts, 'ID', $this );
 
-		// 'foo' and 'bar' should be queried against the non-aliased table
+		// 'foo' and 'bar' should be queried against the non-aliased table.
 		$this->assertSame( 1, substr_count( $sql['where'], "$wpdb->postmeta.meta_key = 'foo'" ) );
 		$this->assertSame( 1, substr_count( $sql['where'], "$wpdb->postmeta.meta_key = 'bar'" ) );
 
-		// NOT EXISTS compare queries are not key-only so should not be non-aliased
+		// NOT EXISTS compare queries are not key-only so should not be non-aliased.
 		$this->assertSame( 0, substr_count( $sql['where'], "$wpdb->postmeta.meta_key = 'baz'" ) );
 
 		// 'AND' queries don't have key-only queries.
@@ -608,18 +608,20 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 				array(
 					'key' => 'foo',
 				),
-				// Non-empty 'compare'
+
+				// Non-empty 'compare'.
 				array(
 					'key'     => 'bar',
 					'compare' => '<',
 				),
+
 				'relation' => 'AND',
 			)
 		);
 
 		$sql = $query2->get_sql( 'post', $wpdb->posts, 'ID', $this );
 
-		// Only 'foo' should be queried against the non-aliased table
+		// Only 'foo' should be queried against the non-aliased table.
 		$this->assertSame( 1, substr_count( $sql['where'], "$wpdb->postmeta.meta_key = 'foo'" ) );
 		$this->assertSame( 0, substr_count( $sql['where'], "$wpdb->postmeta.meta_key = 'bar'" ) );
 	}
@@ -733,6 +735,41 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 		$sql = $query->get_sql( 'post', $wpdb->posts, 'ID', $this );
 
 		$this->assertSame( 1, substr_count( $sql['where'], "$wpdb->postmeta.meta_value =" ) );
+	}
+
+	/**
+	 * Verifies only that meta_type_key is passed. See query/metaQuery.php for more complete tests.
+	 *
+	 * @ticket 43446
+	 */
+	public function test_meta_type_key_should_be_passed_to_meta_query() {
+		$posts = self::factory()->post->create_many( 3 );
+
+		add_post_meta( $posts[0], 'AAA_FOO_AAA', 'abc' );
+		add_post_meta( $posts[1], 'aaa_bar_aaa', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_bbb', 'abc' );
+		add_post_meta( $posts[2], 'aaa_foo_aaa', 'abc' );
+
+		$q = new WP_Query(
+			array(
+				'meta_key'         => 'AAA_foo_.*',
+				'meta_compare_key' => 'REGEXP',
+				'fields'           => 'ids',
+			)
+		);
+
+		$this->assertSameSets( array( $posts[0], $posts[2] ), $q->posts );
+
+		$q = new WP_Query(
+			array(
+				'meta_key'         => 'AAA_FOO_.*',
+				'meta_compare_key' => 'REGEXP',
+				'meta_type_key'    => 'BINARY',
+				'fields'           => 'ids',
+			)
+		);
+
+		$this->assertSameSets( array( $posts[0] ), $q->posts );
 	}
 
 	/**
@@ -955,7 +992,7 @@ class Tests_Meta_Query extends WP_UnitTestCase {
 		$q = new WP_Meta_Query(
 			array(
 				array(
-					'key' => 'foo',
+					'key'   => 'foo',
 					'value' => 'bar',
 				),
 				array(

@@ -116,6 +116,9 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 	public function test_term_meta_should_be_lazy_loaded_for_all_terms_in_wp_query_loop() {
 		global $wpdb;
 
+		// Clear any previous term IDs from the queue.
+		wp_metadata_lazyloader()->reset_queue( 'term' );
+
 		$p = self::factory()->post->create( array( 'post_status' => 'publish' ) );
 
 		register_taxonomy( 'wptests_tax', 'post' );
@@ -155,6 +158,10 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 				$this->assertSame( $num_queries, $wpdb->num_queries );
 			}
 		}
+	}
+
+	public static function set_cache_results( $q ) {
+		$q->set( 'cache_results', true );
 	}
 
 	/**
@@ -448,7 +455,7 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 		$term_meta_id = add_term_meta( $t, 'foo', 'bar' );
 		$meta         = has_term_meta( $t );
 
-		$this->assertSame( 1, count( $meta ) );
+		$this->assertCount( 1, $meta );
 
 		$expected = array(
 			'meta_key'   => 'foo',
@@ -471,10 +478,6 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 		$meta = has_term_meta( $t );
 
 		$this->assertSame( array(), $meta );
-	}
-
-	public static function set_cache_results( $q ) {
-		$q->set( 'cache_results', true );
 	}
 
 	/**
@@ -536,5 +539,63 @@ class Tests_Term_Meta extends WP_UnitTestCase {
 			array( 'category', 'registered_key2' ),
 			array( '', 'registered_key3' ),
 		);
+	}
+
+	/**
+	 * @ticket 44467
+	 */
+	public function test_add_metadata_sets_terms_last_changed() {
+		$term_id = self::factory()->term->create();
+
+		wp_cache_delete( 'last_changed', 'terms' );
+
+		$this->assertIsInt( add_metadata( 'term', $term_id, 'foo', 'bar' ) );
+		$this->assertNotFalse( wp_cache_get_last_changed( 'terms' ) );
+	}
+
+	/**
+	 * @ticket 44467
+	 */
+	public function test_update_metadata_sets_terms_last_changed() {
+		$term_id = self::factory()->term->create();
+
+		wp_cache_delete( 'last_changed', 'terms' );
+
+		$this->assertIsInt( update_metadata( 'term', $term_id, 'foo', 'bar' ) );
+		$this->assertNotFalse( wp_cache_get_last_changed( 'terms' ) );
+	}
+
+	/**
+	 * @ticket 44467
+	 */
+	public function test_delete_metadata_sets_terms_last_changed() {
+		$term_id = self::factory()->term->create();
+
+		update_metadata( 'term', $term_id, 'foo', 'bar' );
+		wp_cache_delete( 'last_changed', 'terms' );
+
+		$this->assertTrue( delete_metadata( 'term', $term_id, 'foo' ) );
+		$this->assertNotFalse( wp_cache_get_last_changed( 'terms' ) );
+	}
+
+	/**
+	 * @ticket 44467
+	 */
+	public function test_metadata_functions_respect_term_meta_support() {
+		$term_id = self::factory()->term->create();
+
+		$meta_id = add_metadata( 'term', $term_id, 'foo', 'bar' );
+
+		// Set database version to last version before term meta support.
+		update_option( 'db_version', 34369 );
+
+		$this->assertFalse( get_metadata( 'term', $term_id, 'foo', true ) );
+		$this->assertFalse( add_metadata( 'term', $term_id, 'foo', 'bar' ) );
+		$this->assertFalse( update_metadata( 'term', $term_id, 'foo', 'bar' ) );
+		$this->assertFalse( delete_metadata( 'term', $term_id, 'foo' ) );
+		$this->assertFalse( get_metadata_by_mid( 'term', $meta_id ) );
+		$this->assertFalse( update_metadata_by_mid( 'term', $meta_id, 'baz' ) );
+		$this->assertFalse( delete_metadata_by_mid( 'term', $meta_id ) );
+		$this->assertFalse( update_meta_cache( 'term', array( $term_id ) ) );
 	}
 }

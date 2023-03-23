@@ -6,22 +6,9 @@ if ( is_multisite() ) :
 	 * @group multisite
 	 * @covers ::get_space_used
 	 */
-	class Tests_Multisite_Get_Space_Used extends WP_UnitTestCase {
-		protected $suppress = false;
+	class Tests_Multisite_GetSpaceUsed extends WP_UnitTestCase {
 
-		function set_up() {
-			global $wpdb;
-			parent::set_up();
-			$this->suppress = $wpdb->suppress_errors();
-		}
-
-		function tear_down() {
-			global $wpdb;
-			$wpdb->suppress_errors( $this->suppress );
-			parent::tear_down();
-		}
-
-		function test_get_space_used_switched_site() {
+		public function test_get_space_used_switched_site() {
 			$blog_id = self::factory()->blog->create();
 			switch_to_blog( $blog_id );
 
@@ -37,7 +24,7 @@ if ( is_multisite() ) :
 			// Upload a file to the new site.
 			$filename = __FUNCTION__ . '.jpg';
 			$contents = __FUNCTION__ . '_contents';
-			$file = wp_upload_bits( $filename, null, $contents );
+			$file     = wp_upload_bits( $filename, null, $contents );
 
 			// get_space_used() is measures in MB, get the size of the new file in MB.
 			$size = filesize( $file['file'] ) / 1024 / 1024;
@@ -55,7 +42,7 @@ if ( is_multisite() ) :
 		 * Directories of sub sites on a network should not count against the same spaced used total for
 		 * the main site.
 		 */
-		function test_get_space_used_main_site() {
+		public function test_get_space_used_main_site() {
 			$space_used = get_space_used();
 
 			$blog_id = self::factory()->blog->create();
@@ -79,7 +66,7 @@ if ( is_multisite() ) :
 
 			delete_transient( 'dirsize_cache' );
 
-			$this->assertEquals( $space_used, get_space_used() );
+			$this->assertSame( $space_used, get_space_used() );
 
 			// Switch back to the new site to remove the uploaded file.
 			switch_to_blog( $blog_id );
@@ -89,15 +76,15 @@ if ( is_multisite() ) :
 			restore_current_blog();
 		}
 
-		function test_get_space_used_pre_get_spaced_used_filter() {
-			add_filter( 'pre_get_space_used', array( $this, '_filter_space_used' ) );
+		public function test_get_space_used_pre_get_spaced_used_filter() {
+			add_filter( 'pre_get_space_used', array( $this, 'filter_space_used' ) );
 
 			$this->assertSame( 300, get_space_used() );
 
-			remove_filter( 'pre_get_space_used', array( $this, '_filter_space_used' ) );
+			remove_filter( 'pre_get_space_used', array( $this, 'filter_space_used' ) );
 		}
 
-		function _filter_space_used() {
+		public function filter_space_used() {
 			return 300;
 		}
 	}

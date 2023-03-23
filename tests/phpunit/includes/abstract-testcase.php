@@ -212,6 +212,27 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	/**
 	 * Allows tests to be skipped on some automated runs.
 	 *
+	 * For test runs on GitHub Actions for something other than trunk,
+	 * we want to skip tests that only need to run for trunk.
+	 */
+	public function skipOnAutomatedBranches() {
+		// https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
+		$github_event_name = getenv( 'GITHUB_EVENT_NAME' );
+		$github_ref        = getenv( 'GITHUB_REF' );
+
+		if ( $github_event_name ) {
+			// We're on GitHub Actions.
+			$skipped = array( 'pull_request', 'pull_request_target' );
+
+			if ( in_array( $github_event_name, $skipped, true ) || 'refs/heads/trunk' !== $github_ref ) {
+				$this->markTestSkipped( 'For automated test runs, this test is only run on trunk' );
+			}
+		}
+	}
+
+	/**
+	 * Allows tests to be skipped when Multisite is not in use.
+	 *
 	 * Use in conjunction with the ms-required group.
 	 */
 	public function skipWithoutMultisite() {
@@ -248,7 +269,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 			$this->markTestSkipped( 'HTTP timeout' );
 		}
 
-		if ( 0 === strpos( $response->get_error_message(), 'unable to connect to tcp://twemoji.classicpress.net:443' ) ) {
+		if ( 0 === strpos( $response->get_error_message(), 'stream_socket_client(): unable to connect to tcp://s.w.org:80' ) ) {
 			$this->markTestSkipped( 'HTTP timeout' );
 		}
 

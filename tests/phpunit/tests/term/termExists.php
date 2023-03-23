@@ -15,7 +15,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 			)
 		);
 
-		$found = term_exists( intval( $t ), 'post_tag' );
+		$found = term_exists( (int) $t, 'post_tag' );
 		$this->assertEquals( $t, $found['term_id'] );
 	}
 
@@ -30,7 +30,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertNull( term_exists( intval( $t ), 'foo' ) );
+		$this->assertNull( term_exists( (int) $t, 'foo' ) );
 	}
 
 	public function test_term_exists_term_int_taxonomy_empty_term_exists() {
@@ -40,7 +40,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 			)
 		);
 
-		$found = term_exists( intval( $t ), 'post_tag' );
+		$found = term_exists( (int) $t, 'post_tag' );
 		$this->assertEquals( $t, $found['term_id'] );
 	}
 
@@ -52,11 +52,11 @@ class Tests_TermExists extends WP_UnitTestCase {
 		$t = self::factory()->term->create(
 			array(
 				'taxonomy' => 'post_tag',
-				'name'     => 'I "love" ClassicPress\'s taxonomy system',
+				'name'     => 'I "love" WordPress\'s taxonomy system',
 			)
 		);
 
-		$found = term_exists( 'I \"love\" ClassicPress\\\'s taxonomy system' );
+		$found = term_exists( 'I \"love\" WordPress\\\'s taxonomy system' );
 		$this->assertEquals( $t, $found );
 	}
 
@@ -256,23 +256,23 @@ class Tests_TermExists extends WP_UnitTestCase {
 		$this->assertEquals( $t, $found );
 	}
 
-	function test_term_exists_known() {
+	public function test_term_exists_known() {
 		register_taxonomy( 'wptests_tax', 'post' );
 
-		// insert a term
-		$term = rand_str();
+		// Insert a term.
+		$term = __FUNCTION__;
 		$t    = wp_insert_term( $term, 'wptests_tax' );
 		$this->assertIsArray( $t );
 		$this->assertEquals( $t['term_id'], term_exists( $t['term_id'] ) );
 		$this->assertEquals( $t['term_id'], term_exists( $term ) );
 
-		// clean up
+		// Clean up.
 		$this->assertTrue( wp_delete_term( $t['term_id'], 'wptests_tax' ) );
 		_unregister_taxonomy( 'wptests_tax' );
 	}
 
 	/**
-	 * @ticket https://core.trac.wordpress.org/ticket/36949
+	 * @ticket 36949
 	 * @covers ::term_exists()
 	 */
 	public function test_term_lookup_by_id_and_update() {
@@ -294,7 +294,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket https://core.trac.wordpress.org/ticket/36949
+	 * @ticket 36949
 	 * @covers ::term_exists()
 	 */
 	public function test_term_lookup_by_slug_and_update() {
@@ -316,7 +316,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket https://core.trac.wordpress.org/ticket/36949
+	 * @ticket 36949
 	 * @covers ::term_exists()
 	 */
 	public function test_term_exists_caching() {
@@ -345,7 +345,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket https://core.trac.wordpress.org/ticket/36949
+	 * @ticket 36949
 	 * @covers ::term_exists()
 	 */
 	public function test_term_exists_caching_suspend_cache_invalidation() {
@@ -372,7 +372,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket https://core.trac.wordpress.org/ticket/36949
+	 * @ticket 36949
 	 * @covers ::term_exists()
 	 */
 	public function test_term_exists_caching_by_int_suspend_cache_invalidation() {

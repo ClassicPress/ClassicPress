@@ -3,27 +3,27 @@
 if ( is_multisite() ) :
 
 	/**
-	* @ticket 29845
-	* @group ms-site
-	* @group multisite
-	*/
-	class Tests_Multisite_Get_Blog_Details extends WP_UnitTestCase {
+	 * @ticket 29845
+	 * @group ms-site
+	 * @group multisite
+	 */
+	class Tests_Multisite_GetBlogDetails extends WP_UnitTestCase {
 		protected static $network_ids;
 		protected static $site_ids;
 
-		public static function wpSetUpBeforeClass( $factory ) {
+		public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 			self::$site_ids = array(
 				WP_TESTS_DOMAIN . '/foo/'      => array(
 					'domain' => WP_TESTS_DOMAIN,
-					'path' => '/foo/',
+					'path'   => '/foo/',
 				),
 				'foo.' . WP_TESTS_DOMAIN . '/' => array(
 					'domain' => 'foo.' . WP_TESTS_DOMAIN,
-					'path' => '/',
+					'path'   => '/',
 				),
 				'wordpress.org/'               => array(
 					'domain' => 'wordpress.org',
-					'path' => '/',
+					'path'   => '/',
 				),
 			);
 
@@ -35,7 +35,7 @@ if ( is_multisite() ) :
 
 		public static function wpTearDownAfterClass() {
 			foreach ( self::$site_ids as $id ) {
-				wpmu_delete_blog( $id, true );
+				wp_delete_site( $id );
 			}
 
 			wp_update_network_site_counts();
@@ -93,7 +93,7 @@ if ( is_multisite() ) :
 			$site = get_blog_details(
 				array(
 					'domain' => 'wordpress.org',
-					'path' => '/',
+					'path'   => '/',
 				)
 			);
 			$this->assertEquals( self::$site_ids['wordpress.org/'], $site->blog_id );
@@ -103,7 +103,7 @@ if ( is_multisite() ) :
 			$site = get_blog_details(
 				array(
 					'domain' => 'wordpress.org',
-					'path' => '/zxy/',
+					'path'   => '/zxy/',
 				)
 			);
 			$this->assertFalse( $site );
@@ -113,7 +113,7 @@ if ( is_multisite() ) :
 			$site = get_blog_details(
 				array(
 					'domain' => 'invalid.org',
-					'path' => '/foo/',
+					'path'   => '/foo/',
 				)
 			);
 			$this->assertFalse( $site );
@@ -125,7 +125,7 @@ if ( is_multisite() ) :
 			}
 
 			$site = get_blog_details( array( 'domain' => 'wordpress.org' ) );
-				$this->assertSame( self::$site_ids['wordpress.org/'], $site->blog_id );
+			$this->assertSame( self::$site_ids['wordpress.org/'], $site->blog_id );
 		}
 
 		public function test_get_blog_details_with_only_domain_in_fields_subdirectory() {
@@ -140,6 +140,16 @@ if ( is_multisite() ) :
 		public function test_get_blog_details_with_only_path_in_fields() {
 			$site = get_blog_details( array( 'path' => '/foo/' ) );
 			$this->assertFalse( $site );
+		}
+
+		/**
+		 * @ticket 50391
+		 */
+		public function test_get_blog_details_does_not_switch_to_current_blog() {
+			$count = did_action( 'switch_blog' );
+
+			get_blog_details();
+			$this->assertSame( $count, did_action( 'switch_blog' ) );
 		}
 
 		/**
@@ -158,7 +168,7 @@ if ( is_multisite() ) :
 
 			$result = array_keys( get_object_vars( $site ) );
 
-			$this->assertEqualSets( $this->get_fields( $get_all ), $result );
+			$this->assertSameSets( $this->get_fields( $get_all ), $result );
 		}
 
 		/**
@@ -180,7 +190,7 @@ if ( is_multisite() ) :
 				$result[] = $key;
 			}
 
-			$this->assertEqualSets( $this->get_fields( $get_all ), $result );
+			$this->assertSameSets( $this->get_fields( $get_all ), $result );
 		}
 
 		public function data_get_all() {

@@ -1,26 +1,21 @@
 <?php
 /**
- * Define a class to test `get_privacy_policy_url()`.
+ * Test cases for the `get_privacy_policy_url()` function.
  *
  * @package ClassicPress
  * @subpackage UnitTests
- * @since WP-4.9.6
- */
-
-/**
- * Test cases for `get_privacy_policy_url()`.
+ * @since 4.9.6
  *
  * @group url
  * @group privacy
- * @covers get_privacy_policy_url
  *
- * @since WP-4.9.6
+ * @covers ::get_privacy_policy_url
  */
 class Tests_Url_GetPrivacyPolicyUrl extends WP_UnitTestCase {
 	/**
 	 * The ID of the Privacy Policy page.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 * @var int $privacy_policy_page_id
 	 */
 	protected static $privacy_policy_page_id;
@@ -28,7 +23,7 @@ class Tests_Url_GetPrivacyPolicyUrl extends WP_UnitTestCase {
 	/**
 	 * The URL of the Privacy Policy page.
 	 *
-	 * @since WP-4.9.6
+	 * @since 4.9.6
 	 * @var string $privacy_policy_url
 	 */
 	protected static $privacy_policy_url;
@@ -38,7 +33,7 @@ class Tests_Url_GetPrivacyPolicyUrl extends WP_UnitTestCase {
 	 *
 	 * @param WP_UnitTest_Factory $factory The base factory object.
 	 */
-	public static function wpSetUpBeforeClass( $factory ) {
+	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$privacy_policy_page_id = $factory->post->create(
 			array(
 				'post_type'  => 'page',
@@ -62,13 +57,6 @@ class Tests_Url_GetPrivacyPolicyUrl extends WP_UnitTestCase {
 		update_option( 'wp_page_for_privacy_policy', self::$privacy_policy_page_id );
 
 		$this->assertSame( $privacy_policy_url, get_privacy_policy_url() );
-	}
-
-	/**
-	 * The function should return an empty string when `wp_page_for_privacy_policy` is _not_ set.
-	 */
-	public function test_get_privacy_policy_url_should_return_empty_when_privacy_policy_page_not_set() {
-		$this->assertSame( '', get_privacy_policy_url() );
 	}
 
 	/**

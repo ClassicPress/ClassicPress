@@ -3,7 +3,7 @@
 /**
  * @group admin
  */
-class Tests_Admin_Includes_Post extends WP_UnitTestCase {
+class Tests_Admin_IncludesPost extends WP_UnitTestCase {
 	protected static $contributor_id;
 	protected static $author_ids;
 	protected static $editor_id;
@@ -12,7 +12,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 
 	protected static $user_ids = array();
 
-	public static function wpSetUpBeforeClass( $factory ) {
+	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$user_ids   = $factory->user->create_many( 2, array( 'role' => 'author' ) );
 		self::$author_ids = self::$user_ids;
 
@@ -26,10 +26,10 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		self::$post_id = $factory->post->create();
 	}
 
-	function test__wp_translate_postdata_cap_checks_contributor() {
+	public function test__wp_translate_postdata_cap_checks_contributor() {
 		wp_set_current_user( self::$contributor_id );
 
-		// Create New Draft Post
+		// Create new draft post.
 		$_post_data                = array();
 		$_post_data['post_author'] = self::$contributor_id;
 		$_post_data['post_type']   = 'post';
@@ -40,7 +40,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$this->assertSame( $_post_data['post_author'], $_results['post_author'] );
 		$this->assertSame( 'draft', $_results['post_status'] );
 
-		// Submit Post for Approval
+		// Submit post for approval.
 		$_post_data                = array();
 		$_post_data['post_author'] = self::$contributor_id;
 		$_post_data['post_type']   = 'post';
@@ -51,7 +51,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$this->assertSame( $_post_data['post_author'], $_results['post_author'] );
 		$this->assertSame( 'pending', $_results['post_status'] );
 
-		// Create New Draft Post for another user
+		// Create new draft post for another user.
 		$_post_data                = array();
 		$_post_data['post_author'] = self::$editor_id;
 		$_post_data['post_type']   = 'post';
@@ -62,7 +62,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$this->assertSame( 'edit_others_posts', $_results->get_error_code() );
 		$this->assertSame( 'Sorry, you are not allowed to create posts as this user.', $_results->get_error_message() );
 
-		// Edit Draft Post for another user
+		// Edit draft post for another user.
 		$_post_data                = array();
 		$_post_data['post_ID']     = self::factory()->post->create( array( 'post_author' => self::$editor_id ) );
 		$_post_data['post_author'] = self::$editor_id;
@@ -76,10 +76,10 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$this->assertSame( 'Sorry, you are not allowed to edit posts as this user.', $_results->get_error_message() );
 	}
 
-	function test__wp_translate_postdata_cap_checks_editor() {
+	public function test__wp_translate_postdata_cap_checks_editor() {
 		wp_set_current_user( self::$editor_id );
 
-		// Create New Draft Post
+		// Create new draft post.
 		$_post_data                = array();
 		$_post_data['post_author'] = self::$editor_id;
 		$_post_data['post_type']   = 'post';
@@ -90,7 +90,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$this->assertSame( $_post_data['post_author'], $_results['post_author'] );
 		$this->assertSame( 'draft', $_results['post_status'] );
 
-		// Publish Post
+		// Publish post.
 		$_post_data                = array();
 		$_post_data['post_author'] = self::$editor_id;
 		$_post_data['post_type']   = 'post';
@@ -101,7 +101,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$this->assertSame( $_post_data['post_author'], $_results['post_author'] );
 		$this->assertSame( 'publish', $_results['post_status'] );
 
-		// Create New Draft Post for another user
+		// Create new draft post for another user.
 		$_post_data                = array();
 		$_post_data['post_author'] = self::$contributor_id;
 		$_post_data['post_type']   = 'post';
@@ -112,7 +112,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$this->assertSame( $_post_data['post_author'], $_results['post_author'] );
 		$this->assertSame( 'draft', $_results['post_status'] );
 
-		// Edit Draft Post for another user
+		// Edit draft post for another user.
 		$_post_data                = array();
 		$_post_data['post_ID']     = self::factory()->post->create( array( 'post_author' => self::$contributor_id ) );
 		$_post_data['post_author'] = self::$contributor_id;
@@ -131,7 +131,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	 *
 	 * @ticket 25272
 	 */
-	function test_edit_post_auto_draft() {
+	public function test_edit_post_auto_draft() {
 		wp_set_current_user( self::$editor_id );
 		$post = self::factory()->post->create_and_get( array( 'post_status' => 'auto-draft' ) );
 		$this->assertSame( 'auto-draft', $post->post_status );
@@ -259,6 +259,41 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	}
 
 	/**
+	 * The bulk_edit_posts() function should preserve the post format
+	 * when it's unchanged.
+	 *
+	 * @ticket 44914
+	 */
+	public function test_bulk_edit_posts_should_preserve_post_format_when_unchanged() {
+		wp_set_current_user( self::$admin_id );
+
+		$post_ids = self::factory()->post->create_many( 3 );
+
+		set_post_format( $post_ids[0], 'image' );
+		set_post_format( $post_ids[1], 'aside' );
+
+		$request = array(
+			'post_format' => -1, // Don't change the post format.
+			'_status'     => -1,
+			'post'        => $post_ids,
+		);
+
+		bulk_edit_posts( $request );
+
+		$terms1 = get_the_terms( $post_ids[0], 'post_format' );
+		$terms2 = get_the_terms( $post_ids[1], 'post_format' );
+		$terms3 = get_the_terms( $post_ids[2], 'post_format' );
+
+		$this->assertSame( 'post-format-image', $terms1[0]->slug );
+		$this->assertSame( 'post-format-aside', $terms2[0]->slug );
+		$this->assertFalse( $terms3 );
+
+		$this->assertSame( 'image', get_post_format( $post_ids[0] ) );
+		$this->assertSame( 'aside', get_post_format( $post_ids[1] ) );
+		$this->assertFalse( get_post_format( $post_ids[2] ) );
+	}
+
+	/**
 	 * @ticket 41396
 	 */
 	public function test_bulk_edit_posts_should_set_post_format_before_wp_update_post_runs() {
@@ -324,7 +359,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$permalink_structure = '%postname%';
 		$this->set_permalink_structure( "/$permalink_structure/" );
 
-		$future_date = date( 'Y-m-d H:i:s', time() + 100 );
+		$future_date = gmdate( 'Y-m-d H:i:s', time() + 100 );
 		$p           = self::factory()->post->create(
 			array(
 				'post_status' => 'future',
@@ -346,7 +381,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 	public function test_get_sample_permalink_html_should_use_default_permalink_for_view_post_link_when_pretty_permalinks_are_disabled() {
 		wp_set_current_user( self::$admin_id );
 
-		$future_date = date( 'Y-m-d H:i:s', time() + 100 );
+		$future_date = gmdate( 'Y-m-d H:i:s', time() + 100 );
 		$p           = self::factory()->post->create(
 			array(
 				'post_status' => 'future',
@@ -369,7 +404,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 
 		wp_set_current_user( self::$admin_id );
 
-		$future_date = date( 'Y-m-d H:i:s', time() + 100 );
+		$future_date = gmdate( 'Y-m-d H:i:s', time() + 100 );
 		$p           = self::factory()->post->create(
 			array(
 				'post_status' => 'future',
@@ -418,7 +453,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 
 		wp_set_current_user( self::$admin_id );
 
-		// Published posts should use published permalink
+		// Published posts should use published permalink.
 		$p = self::factory()->post->create(
 			array(
 				'post_status' => 'publish',
@@ -432,8 +467,8 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'href="' . get_option( 'home' ) . '/' . $post->post_name . '/"', $found, $message );
 		$this->assertStringContainsString( '>new_slug-صورة<', $found, $message );
 
-		// Scheduled posts should use published permalink
-		$future_date = date( 'Y-m-d H:i:s', time() + 100 );
+		// Scheduled posts should use published permalink.
+		$future_date = gmdate( 'Y-m-d H:i:s', time() + 100 );
 		$p           = self::factory()->post->create(
 			array(
 				'post_status' => 'future',
@@ -448,7 +483,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'href="' . get_option( 'home' ) . '/' . $post->post_name . '/"', $found, $message );
 		$this->assertStringContainsString( '>new_slug-صورة<', $found, $message );
 
-		// Draft posts should use preview link
+		// Draft posts should use preview link.
 		$p = self::factory()->post->create(
 			array(
 				'post_status' => 'draft',
@@ -476,7 +511,7 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 
 		wp_set_current_user( self::$admin_id );
 
-		$future_date = date( 'Y-m-d H:i:s', time() + 100 );
+		$future_date = gmdate( 'Y-m-d H:i:s', time() + 100 );
 		$p           = self::factory()->post->create(
 			array(
 				'post_status' => 'pending',
@@ -651,6 +686,36 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		$this->assertSame( 'child-page', $actual[1] );
 	}
 
+	/**
+	 * Tests that get_sample_permalink() preserves the original WP_Post properties.
+	 *
+	 * @ticket 54736
+	 *
+	 * @covers ::get_sample_permalink
+	 */
+	public function test_get_sample_permalink_should_preserve_the_original_post_properties() {
+		$post = self::factory()->post->create_and_get(
+			array(
+				'post_status' => 'draft',
+			)
+		);
+
+		$post_original = clone $post;
+
+		add_filter(
+			'get_sample_permalink',
+			function( $permalink, $post_id, $title, $name, $post ) use ( $post_original ) {
+				$this->assertEquals( $post_original, $post, 'Modified post object passed to get_sample_permalink filter.' );
+				return $permalink;
+			},
+			10,
+			5
+		);
+
+		get_sample_permalink( $post );
+		$this->assertEquals( $post_original, $post, 'get_sample_permalink() modifies the post object.' );
+	}
+
 	public function test_post_exists_should_match_title() {
 		$p = self::factory()->post->create(
 			array(
@@ -752,5 +817,197 @@ class Tests_Admin_Includes_Post extends WP_UnitTestCase {
 		);
 
 		$this->assertSame( $p, post_exists( $title, $content, $date ) );
+	}
+
+	/**
+	 * @ticket 43559
+	 *
+	 * @covers ::add_meta
+	 */
+	public function test_add_meta_allows_empty_values() {
+		$p = self::factory()->post->create();
+
+		$_POST = array(
+			'metakeyinput' => 'testkey',
+			'metavalue'    => '',
+		);
+
+		wp_set_current_user( self::$admin_id );
+
+		$this->assertNotFalse( add_meta( $p ) );
+		$this->assertSame( '', get_post_meta( $p, 'testkey', true ) );
+	}
+
+	/**
+	 * Test the post type support in post_exists().
+	 *
+	 * @ticket 37406
+	 */
+	public function test_post_exists_should_support_post_type() {
+		if ( PHP_VERSION_ID >= 80100 ) {
+			/*
+			 * For the time being, ignoring PHP 8.1 "null to non-nullable" deprecations coming in
+			 * via hooked in filter functions until a more structural solution to the
+			 * "missing input validation" conundrum has been architected and implemented.
+			 */
+			$this->expectDeprecation();
+			$this->expectDeprecationMessageMatches( '`Passing null to parameter \#[0-9]+ \(\$[^\)]+\) of type [^ ]+ is deprecated`' );
+		}
+
+		$title     = 'Foo Bar';
+		$post_type = 'page';
+		$post_id   = self::factory()->post->create(
+			array(
+				'post_title' => $title,
+				'post_type'  => $post_type,
+			)
+		);
+		$this->assertSame( $post_id, post_exists( $title, null, null, $post_type ) );
+	}
+
+	/**
+	 * Test that post_exists() doesn't find an existing page as a post.
+	 *
+	 * @ticket 37406
+	 */
+	public function test_post_exists_should_not_match_a_page_for_post() {
+		if ( PHP_VERSION_ID >= 80100 ) {
+			/*
+			 * For the time being, ignoring PHP 8.1 "null to non-nullable" deprecations coming in
+			 * via hooked in filter functions until a more structural solution to the
+			 * "missing input validation" conundrum has been architected and implemented.
+			 */
+			$this->expectDeprecation();
+			$this->expectDeprecationMessageMatches( '`Passing null to parameter \#[0-9]+ \(\$[^\)]+\) of type [^ ]+ is deprecated`' );
+		}
+
+		$title     = 'Foo Bar';
+		$post_type = 'page';
+		$post_id   = self::factory()->post->create(
+			array(
+				'post_title' => $title,
+				'post_type'  => $post_type,
+			)
+		);
+		$this->assertSame( 0, post_exists( $title, null, null, 'post' ) );
+	}
+
+	/**
+	 * Test the status support in post_exists()
+	 *
+	 * @ticket 34012
+	 */
+	public function test_post_exists_should_support_post_status() {
+		if ( PHP_VERSION_ID >= 80100 ) {
+			/*
+			 * For the time being, ignoring PHP 8.1 "null to non-nullable" deprecations coming in
+			 * via hooked in filter functions until a more structural solution to the
+			 * "missing input validation" conundrum has been architected and implemented.
+			 */
+			$this->expectDeprecation();
+			$this->expectDeprecationMessageMatches( '`Passing null to parameter \#[0-9]+ \(\$[^\)]+\) of type [^ ]+ is deprecated`' );
+		}
+
+		$title       = 'Foo Bar';
+		$post_type   = 'post';
+		$post_status = 'publish';
+		$post_id     = self::factory()->post->create(
+			array(
+				'post_title'  => $title,
+				'post_type'   => $post_type,
+				'post_status' => $post_status,
+			)
+		);
+		$this->assertSame( $post_id, post_exists( $title, null, null, null, $post_status ) );
+	}
+
+
+	/**
+	 * Test the type and status query in post_exists()
+	 *
+	 * @ticket 34012
+	 */
+	public function test_post_exists_should_support_post_type_status_combined() {
+		if ( PHP_VERSION_ID >= 80100 ) {
+			/*
+			 * For the time being, ignoring PHP 8.1 "null to non-nullable" deprecations coming in
+			 * via hooked in filter functions until a more structural solution to the
+			 * "missing input validation" conundrum has been architected and implemented.
+			 */
+			$this->expectDeprecation();
+			$this->expectDeprecationMessageMatches( '`Passing null to parameter \#[0-9]+ \(\$[^\)]+\) of type [^ ]+ is deprecated`' );
+		}
+
+		$title       = 'Foo Bar';
+		$post_type   = 'post';
+		$post_status = 'publish';
+		$post_id     = self::factory()->post->create(
+			array(
+				'post_title'  => $title,
+				'post_type'   => $post_type,
+				'post_status' => $post_status,
+			)
+		);
+		$this->assertSame( $post_id, post_exists( $title, null, null, $post_type, $post_status ) );
+	}
+
+	/**
+	 * Test that post_exists() doesn't find an existing draft post when looking for publish
+	 *
+	 * @ticket 34012
+	 */
+	public function test_post_exists_should_only_match_correct_post_status() {
+		if ( PHP_VERSION_ID >= 80100 ) {
+			/*
+			 * For the time being, ignoring PHP 8.1 "null to non-nullable" deprecations coming in
+			 * via hooked in filter functions until a more structural solution to the
+			 * "missing input validation" conundrum has been architected and implemented.
+			 */
+			$this->expectDeprecation();
+			$this->expectDeprecationMessageMatches( '`Passing null to parameter \#[0-9]+ \(\$[^\)]+\) of type [^ ]+ is deprecated`' );
+		}
+
+		$title       = 'Foo Bar';
+		$post_type   = 'post';
+		$post_status = 'draft';
+		$post_id     = self::factory()->post->create(
+			array(
+				'post_title'  => $title,
+				'post_type'   => $post_type,
+				'post_status' => $post_status,
+			)
+		);
+		$this->assertSame( 0, post_exists( $title, null, null, null, 'publish' ) );
+	}
+
+	/**
+	 * Test the status support in post_exists()
+	 *
+	 * @ticket 34012
+	 */
+	public function test_post_exists_should_not_match_invalid_post_type_and_status_combined() {
+		if ( PHP_VERSION_ID >= 80100 ) {
+			/*
+			 * For the time being, ignoring PHP 8.1 "null to non-nullable" deprecations coming in
+			 * via hooked in filter functions until a more structural solution to the
+			 * "missing input validation" conundrum has been architected and implemented.
+			 */
+			$this->expectDeprecation();
+			$this->expectDeprecationMessageMatches( '`Passing null to parameter \#[0-9]+ \(\$[^\)]+\) of type [^ ]+ is deprecated`' );
+		}
+
+		$title       = 'Foo Bar';
+		$post_type   = 'post';
+		$post_status = 'publish';
+		$post_id     = self::factory()->post->create(
+			array(
+				'post_title'  => $title,
+				'post_type'   => $post_type,
+				'post_status' => $post_status,
+			)
+		);
+
+		$this->assertSame( 0, post_exists( $title, null, null, $post_type, 'draft' ) );
+		$this->assertSame( 0, post_exists( $title, null, null, 'wp_tests', $post_status ) );
 	}
 }
