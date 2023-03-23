@@ -3177,7 +3177,6 @@ function retrieve_password( $user_login = null ) {
 	$message .= __( 'To reset your password, visit the following address:' ) . "\r\n\r\n";
 	$message .= network_site_url( "wp-login.php?action=rp&key=$key&login=" . str_replace( '.', '%2e', rawurlencode( $user_login ) ), 'login' ) . '&wp_lang=' . $locale . "\r\n\r\n";
 
-
 	if ( ! is_user_logged_in() ) {
 		$requester_ip = $_SERVER['REMOTE_ADDR'];
 		if ( $requester_ip ) {
