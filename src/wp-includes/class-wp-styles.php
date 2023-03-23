@@ -165,6 +165,9 @@ class WP_Styles extends WP_Dependencies {
 			$ver = $ver ? $ver . '&amp;' . $this->args[ $handle ] : $this->args[ $handle ];
 		}
 
+		/** This filter is documented in wp-includes/script-loader.php */
+		$ver = apply_filters( 'classicpress_asset_version', $ver, 'style', $handle );
+
 		$src         = $obj->src;
 		$cond_before = '';
 		$cond_after  = '';

@@ -589,6 +589,8 @@ function wp_admin_bar_my_sites_menu( $wp_admin_bar ) {
 	foreach ( (array) $wp_admin_bar->user->blogs as $blog ) {
 		switch_to_blog( $blog->userblog_id );
 
+		$cp_logo_src = includes_url( 'images/classicpress-logo-dashicon-grey-on-transparent.svg' );
+
 		$cplogo = '<img class="cp-logo" src="' . $cp_logo_src . '" alt="" />';
 
 		$blogname = $blog->blogname;
