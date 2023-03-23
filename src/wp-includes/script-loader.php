@@ -424,28 +424,30 @@ function wp_scripts_get_suffix( $type = '' ) {
  * @param WP_Scripts $scripts WP_Scripts object.
  */
 function wp_default_packages_scripts( $scripts ) {
-	$suffix = wp_scripts_get_suffix();
+	$suffix  = wp_scripts_get_suffix();
+	$version = classicpress_asset_version( 'script' );
+
 	$assets = array(
 		'a11y' => array(
 			'dependencies' => array( 'wp-dom-ready', 'wp-i18n' ),
-			'version'      => '6.2',
+			'version'      => $version,
 		),
 		'api-fetch' => array(
 			'dependencies' => array( 'wp-i18n', 'wp-url' ),
-			'version'      => '6.2',
+			'version'      => $version,
 		),
 		'dom-ready' => array(
-			'version'      => '6.2',
+			'version'      => $version,
 		),
 		'hooks' => array(
-			'version' => '6.2',
+			'version' => $version,
 		),
 		'i18n' => array(
 			'dependencies' => array( 'wp-hooks' ),
-			'version'      => '6.2',
+			'version'      => $version,
 		),
 		'url' => array(
-			'version' => '6.2',
+			'version' => $version,
 		),
 	);
 
