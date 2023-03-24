@@ -438,11 +438,11 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 	}
 
 	public function data_update_custom_login_image_options() {
-		return [
-			[ 0 ],
-			[ 1 ],
-			[ 2 ],
-		];
+		return array(
+			array( 0 ),
+			array( 1 ),
+			array( 2 ),
+		);
 	}
 
 	public function update_setting_custom_callback( $result, $name, $value, $args ) {
