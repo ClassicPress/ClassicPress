@@ -785,12 +785,18 @@ class Tests_General_Template extends WP_UnitTestCase {
 	 * @group login
 	 */
 	function test_login_html_default_with_filters() {
-		add_filter( 'login_headerurl', function() {
-			return 'https://example.com?"a&b"';
-		} );
-		add_filter( 'login_headertitle', function() {
-			return 'A <script>"special";</script> title';
-		} );
+		add_filter(
+			'login_headerurl',
+			function() {
+				return 'https://example.com?"a&b"';
+			}
+		);
+		add_filter(
+			'login_headertitle',
+			function() {
+				return 'A <script>"special";</script> title';
+			}
+		);
 
 		if ( is_multisite() ) {
 			$expected_login_html = (
@@ -832,12 +838,18 @@ class Tests_General_Template extends WP_UnitTestCase {
 		update_option( 'login_custom_image_state', '1' );
 		update_option( 'login_custom_image_id', (string) $this->insert_attachment() );
 
-		add_filter( 'login_headerurl', function() {
-			return 'https://example.com?"a&b"';
-		} );
-		add_filter( 'login_headertitle', function() {
-			return 'A <script>"special";</script> title';
-		} );
+		add_filter(
+			'login_headerurl',
+			function() {
+				return 'https://example.com?"a&b"';
+			}
+		);
+		add_filter(
+			'login_headertitle',
+			function() {
+				return 'A <script>"special";</script> title';
+			}
+		);
 
 		$image_attrs = array(
 			'class'    => 'custom-login-image',
