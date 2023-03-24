@@ -90,6 +90,8 @@ $allowed_options            = array(
 	'general'    => array(
 		'blogname',
 		'blogdescription',
+		'login_custom_image_state',
+		'login_custom_image_id',
 		'gmt_offset',
 		'date_format',
 		'time_format',

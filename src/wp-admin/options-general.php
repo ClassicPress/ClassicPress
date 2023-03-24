@@ -22,7 +22,15 @@ $parent_file = 'options-general.php';
 /* translators: Date and time format for exact current time, mainly about timezones, see https://www.php.net/manual/datetime.format.php */
 $timezone_format = _x( 'Y-m-d H:i:s', 'timezone date format' );
 
+// Old (pre-1.2.0) options-general JS
 add_action( 'admin_head', 'options_general_add_js' );
+// New (1.2.0, custom login image) options-general JS
+wp_enqueue_media();
+wp_enqueue_script( 'options-general', admin_url( '/js/options-general.js' ), array( 'jquery' ), '1.2.0' );
+wp_localize_script( 'options-general', 'cpOptionsGeneralStrings', array(
+	'selectAnImage' => __( 'Select an image' ),
+	'useThisImage'  => __( 'Use this image' ),
+) );
 
 $options_help = '<p>' . __( 'The fields on this screen determine some of the basics of your site setup.' ) . '</p>' .
 	'<p>' . __( 'Most themes show the site title at the top of every page, in the title bar of the browser, and as the identifying name for syndicated feeds. Many themes also show the tagline.' ) . '</p>';

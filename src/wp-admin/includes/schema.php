@@ -413,6 +413,8 @@ function populate_options( array $options = array() ) {
 		'blogname'                        => __( 'My Site' ),
 		'blogdescription'                 => '',
 		'users_can_register'              => 0,
+		'login_custom_image_state'        => 0,
+		'login_custom_image_id'           => 0,
 		'admin_email'                     => 'you@example.com',
 		/* translators: Default start of the week. 0 = Sunday, 1 = Monday. */
 		'start_of_week'                   => _x( '1', 'start of week' ),
