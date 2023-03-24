@@ -8630,6 +8630,16 @@ mockedApiResponse.Schema = {
                             "format": "uri",
                             "required": false
                         },
+                        "login_custom_image_state": {
+                            "description": "The state of the \"login custom image\" feature (0=disabled, 1=square, or 2=banner).",
+                            "type": "integer",
+                            "required": false
+                        },
+                        "login_custom_image_id": {
+                            "description": "Attachment ID for the \"login custom image\" feature.",
+                            "type": "integer",
+                            "required": false
+                        },
                         "email": {
                             "description": "This address is used for admin purposes, like new user notification.",
                             "type": "string",
@@ -11112,6 +11122,8 @@ mockedApiResponse.settings = {
     "title": "Test Blog",
     "description": "",
     "url": "http://example.org",
+    "login_custom_image_state": 0,
+    "login_custom_image_id": 0,
     "email": "admin@example.org",
     "timezone": "",
     "date_format": "F j, Y",
