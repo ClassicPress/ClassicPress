@@ -1275,6 +1275,7 @@ function wp_default_scripts( $scripts ) {
 		did_action( 'init' ) && $scripts->localize( 'cp-options-general', 'cpOptionsGeneralStrings', array(
 			'selectAnImage' => __( 'Select an image' ),
 			'useThisImage'  => __( 'Use this image' ),
+			'chooseAnImage' => __( 'Please choose an image!' ),
 		) );
 	}
 }
