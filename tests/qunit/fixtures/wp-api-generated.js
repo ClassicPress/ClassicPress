@@ -7618,7 +7618,25 @@ mockedApiResponse.Schema = {
                         "meta": {
                             "description": "Meta fields.",
                             "type": "object",
-                            "properties": [],
+                            "properties": {
+                                "persisted_preferences": {
+                                    "type": "object",
+                                    "description": "",
+                                    "default": [],
+                                    "context": [
+                                        "edit"
+                                    ],
+                                    "properties": {
+                                        "_modified": {
+                                            "description": "The date and time the preferences were updated.",
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "readonly": false
+                                        }
+                                    },
+                                    "additionalProperties": true
+                                }
+                            },
                             "required": false
                         }
                     }
@@ -7749,7 +7767,25 @@ mockedApiResponse.Schema = {
                         "meta": {
                             "description": "Meta fields.",
                             "type": "object",
-                            "properties": [],
+                            "properties": {
+                                "persisted_preferences": {
+                                    "type": "object",
+                                    "description": "",
+                                    "default": [],
+                                    "context": [
+                                        "edit"
+                                    ],
+                                    "properties": {
+                                        "_modified": {
+                                            "description": "The date and time the preferences were updated.",
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "readonly": false
+                                        }
+                                    },
+                                    "additionalProperties": true
+                                }
+                            },
                             "required": false
                         }
                     }
@@ -7890,7 +7926,25 @@ mockedApiResponse.Schema = {
                         "meta": {
                             "description": "Meta fields.",
                             "type": "object",
-                            "properties": [],
+                            "properties": {
+                                "persisted_preferences": {
+                                    "type": "object",
+                                    "description": "",
+                                    "default": [],
+                                    "context": [
+                                        "edit"
+                                    ],
+                                    "properties": {
+                                        "_modified": {
+                                            "description": "The date and time the preferences were updated.",
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "readonly": false
+                                        }
+                                    },
+                                    "additionalProperties": true
+                                }
+                            },
                             "required": false
                         }
                     }
