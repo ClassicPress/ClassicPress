@@ -265,7 +265,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	 */
 	public function test_file_stream() {
 		$url  = $this->file_stream_url;
-		$size = 153204;
+		$size = 5764;
 		$res  = wp_remote_request(
 			$url,
 			array(
@@ -295,7 +295,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	 */
 	public function test_file_stream_limited_size() {
 		$url  = $this->file_stream_url;
-		$size = 10000;
+		$size = 5000;
 		$res  = wp_remote_request(
 			$url,
 			array(
@@ -326,7 +326,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	 */
 	public function test_request_limited_size() {
 		$url  = $this->file_stream_url;
-		$size = 10000;
+		$size = 5000;
 
 		$res = wp_remote_request(
 			$url,
