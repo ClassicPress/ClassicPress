@@ -101,7 +101,9 @@ module.exports = function(grunt) {
 				expand: true,
 				cwd: SOURCE_DIR,
 				src: [
-					'wp-includes/js/dist/vendor/*.js'
+					'wp-includes/js/dist/vendor/*.js',
+					'wp-includes/js/clipboard.js',
+					'wp-includes/js/clipboard.min.js'
 				]
 			},
 			'package-js': {
@@ -199,6 +201,14 @@ module.exports = function(grunt) {
 					{
 						src:  `./node_modules/moment/min/moment.min.js`,
 						dest: `${SOURCE_DIR}wp-includes/js/dist/vendor/moment.min.js`
+					},
+					{
+						src:  `./node_modules/clipboard/dist/clipboard.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/clipboard.js`
+					},
+					{
+						src:  `./node_modules/clipboard/dist/clipboard.min.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/clipboard.min.js`
 					}
 				]
 			},
@@ -461,8 +471,10 @@ module.exports = function(grunt) {
 					'wp-includes/js/tinymce/plugins/wp*/plugin.js',
 					// Third party scripts
 					'!wp-includes/js/codemirror/*.js',
+					'!wp-includes/js/tinymce/plugins/**/*.js',
 					'!wp-admin/js/farbtastic.js',
 					'!wp-includes/js/backbone*.js',
+					'!wp-includes/js/clipboard.js',
 					'!wp-includes/js/swfobject.js',
 					'!wp-includes/js/underscore*.js',
 					'!wp-includes/js/colorpicker.js',
@@ -470,6 +482,7 @@ module.exports = function(grunt) {
 					'!wp-includes/js/json2.js',
 					'!wp-includes/js/tw-sack.js',
 					'!wp-includes/js/twemoji.js',
+					'!wp-includes/js/plupload/*.js',
 					'!**/*.min.js'
 				],
 				// Remove once other JSHint errors are resolved
