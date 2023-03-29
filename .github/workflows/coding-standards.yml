@@ -113,12 +113,6 @@ jobs:
         with:
           composer-options: "--no-progress --no-ansi --no-interaction"
 
-      - name: Install PHPUnit
-        run: |
-          wget -O phpunit https://phar.phpunit.de/phpunit-8.phar
-          chmod +x phpunit
-          sudo mv phpunit /usr/bin/
-
       - name: Enable, start and initialise MySQL
         run: |
           sudo systemctl enable mysql.service
