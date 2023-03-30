@@ -135,7 +135,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 
 	$url = 'https://api-v1.classicpress.net/upgrade/'
 		. $cp_base_version . '.json'
-		. '?' . http_build_query( $query, null, '&' );
+		. '?' . http_build_query( $query, '', '&' );
 
 	$doing_cron = wp_doing_cron();
 
