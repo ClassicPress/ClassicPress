@@ -147,11 +147,7 @@ jobs:
 
       - name: Install PHPUnit and Composer dependencies
         run: |
-          if [ ${{ matrix.php }} == '7.4' ]; then
-            composer require phpunit/phpunit "9.*" -W --no-progress --no-ansi --no-interaction
-          else
-            composer require phpunit/phpunit "10.*" -W --no-progress --no-ansi --no-interaction
-          fi
+          composer require phpunit/phpunit "9.*" -W --no-progress --no-ansi --no-interaction
 
       - name: Make Composer packages available globally
         run: echo "${PWD}/vendor/bin" >> $GITHUB_PATH
