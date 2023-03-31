@@ -16,7 +16,7 @@
 		"dealerdirect/phpcodesniffer-composer-installer": "1.0.0",
 		"wp-coding-standards/wpcs": "2.3.0",
 		"phpcompatibility/phpcompatibility-wp": "2.1.4",
-		"yoast/phpunit-polyfills": "1.0.4"
+		"yoast/phpunit-polyfills": "1.0.5"
 	},
 	"config": {
 		"allow-plugins": {
