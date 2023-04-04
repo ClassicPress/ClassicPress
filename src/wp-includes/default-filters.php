@@ -636,7 +636,4 @@ add_filter( 'user_has_cap', 'wp_maybe_grant_install_languages_cap', 1 );
 add_filter( 'user_has_cap', 'wp_maybe_grant_resume_extensions_caps', 1 );
 add_filter( 'user_has_cap', 'wp_maybe_grant_site_health_caps', 1, 4 );
 
-// User preferences.
-add_action( 'init', 'wp_register_persisted_preferences_meta' );
-
 unset( $filter, $action );
