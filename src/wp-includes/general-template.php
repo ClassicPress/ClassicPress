@@ -5016,25 +5016,25 @@ function get_the_generator( $type = '' ) {
 
 	switch ( $type ) {
 		case 'html':
-			$gen = '<meta name="generator" content="WordPress ' . esc_attr( get_bloginfo( 'version' ) ) . '">';
+			$gen = '<meta name="generator" content="WordPress ' . esc_attr( get_bloginfo( 'version' ) ) . ' (compatible; ClassicPress ' . esc_attr( classicpress_version_short() ) . ')\">';
 			break;
 		case 'xhtml':
-			$gen = '<meta name="generator" content="WordPress ' . esc_attr( get_bloginfo( 'version' ) ) . '" />';
+			$gen = '<meta name="generator" content="WordPress ' . esc_attr( get_bloginfo( 'version' ) ) . ' (compatible; ClassicPress ' . esc_attr( classicpress_version_short() ) . ')\" />';
 			break;
 		case 'atom':
-			$gen = '<generator uri="https://wordpress.org/" version="' . esc_attr( get_bloginfo_rss( 'version' ) ) . '">WordPress</generator>';
+			$gen = '<generator uri="https://www.classicpress.net/" version="' . esc_attr( get_bloginfo( 'version' ) ) . '-cp-' . esc_attr( classicpress_version_short() ) . '">ClassicPress</generator>';
 			break;
 		case 'rss2':
-			$gen = '<generator>' . sanitize_url( 'https://wordpress.org/?v=' . get_bloginfo_rss( 'version' ) ) . '</generator>';
+			$gen = '<generator>' . sanitize_url( 'https://www.classicpress.net/?v=' . get_bloginfo( 'version' ) . '-cp-' . classicpress_version_short() ) . '</generator>';
 			break;
 		case 'rdf':
-			$gen = '<admin:generatorAgent rdf:resource="' . sanitize_url( 'https://wordpress.org/?v=' . get_bloginfo_rss( 'version' ) ) . '" />';
+			$gen = '<admin:generatorAgent rdf:resource="' . sanitize_url( 'https://www.classicpress.net/?v=' . get_bloginfo( 'version' ) . '-cp-' . classicpress_version_short() ) . '" />';
 			break;
 		case 'comment':
-			$gen = '<!-- generator="WordPress/' . esc_attr( get_bloginfo( 'version' ) ) . '" -->';
+			$gen = '<!-- generator="WordPress/' . esc_attr( get_bloginfo( 'version' ) ) . '(compatible; ClassicPress/' . esc_attr( classicpress_version_short() ) . ')\" -->';
 			break;
 		case 'export':
-			$gen = '<!-- generator="WordPress/' . esc_attr( get_bloginfo_rss( 'version' ) ) . '" created="' . gmdate( 'Y-m-d H:i' ) . '" -->';
+			$gen = '<!-- generator="ClassicPress/' . esc_attr( classicpress_version_short() ) . '" created="' . esc_attr( date( 'Y-m-d H:i' ) ) . '" -->';
 			break;
 	}
 
@@ -5238,4 +5238,150 @@ function wp_heartbeat_settings( $settings ) {
 	}
 
 	return $settings;
+}
+
+/**
+ * Return the HTML for the image on the login screen. This is either a link
+ * showing the ClassicPress logo (the default) or the site's custom login image
+ * (if enabled).
+ *
+ * @since 1.2.0
+ */
+function get_login_image_html() {
+	/**
+	 * Determine whether the login page custom image option is enabled.
+	 */
+	$login_custom_image_state = (int) get_option( 'login_custom_image_state' );
+	$login_custom_image_id    = null;
+	$login_custom_image_html  = null;
+
+	if ( $login_custom_image_state === 1 || $login_custom_image_state === 2 ) {
+		$login_custom_image_id = (int) get_option( 'login_custom_image_id' );
+		if ( $login_custom_image_id ) {
+			$attrs     = array(
+				'class'    => 'custom-login-image',
+				'itemprop' => 'logo',
+			);
+			$image_alt = get_post_meta(
+				$login_custom_image_id,
+				'_wp_attachment_image_alt',
+				true
+			);
+			if ( empty( $image_alt ) ) {
+				$attrs['alt'] = get_bloginfo( 'name', 'display' );
+			}
+			$login_custom_image_html = wp_get_attachment_image(
+				$login_custom_image_id,
+				'full',
+				false,
+				$attrs
+			);
+		}
+	}
+
+	if ( ! empty( $login_custom_image_html ) ) {
+		$login_header_url   = home_url( '/' );
+		$login_header_title = get_bloginfo( 'name', 'display' );
+	} elseif ( is_multisite() ) {
+		$login_header_url   = network_home_url();
+		$login_header_title = get_network()->site_name;
+	} else {
+		$login_header_url   = 'https://www.classicpress.net/';
+		$login_header_title = __( 'Powered by ClassicPress' );
+	}
+
+	/**
+	 * Filters link URL of the header logo above login form.
+	 *
+	 * @since WP-2.1.0
+	 *
+	 * @param string $login_header_url Login header logo URL.
+	 */
+	$login_header_url = apply_filters( 'login_headerurl', $login_header_url );
+
+	/**
+	 * Filters the title attribute of the header logo above login form.
+	 *
+	 * @since WP-2.1.0
+	 *
+	 * @param string $login_header_title Login header logo title attribute.
+	 */
+	$login_header_title = apply_filters( 'login_headertitle', $login_header_title );
+
+	if ( ! empty( $login_custom_image_html ) ) {
+		// Generate the custom login image HTML.
+		$login_image_class = 'custom-login-image-container';
+		if ( $login_custom_image_state === 2 ) {
+			$login_image_class .= ' banner';
+		}
+		$login_image_html  = sprintf(
+			'<a href="%s" class="%s" rel="home" itemprop="url" title="%s">%s</a>',
+			esc_url( $login_header_url ),
+			$login_image_class,
+			esc_attr( $login_header_title ),
+			$login_custom_image_html
+		);
+		$login_header_text = null;
+
+	} else {
+		/**
+		 * Otherwise use the ClassicPress logo.
+		 *
+		 * Set the link text (displayed only for screen readers).
+		 *
+		 * To match the URL/title set above, Multisite sites have the blog
+		 * name, while single sites get the header title.
+		 */
+		if ( is_multisite() ) {
+			$login_header_text = get_bloginfo( 'name', 'display' );
+		} else {
+			$login_header_text = $login_header_title;
+		}
+
+		$login_image_html = (
+			'<h1>'
+			. '<a href="' . esc_url( $login_header_url ) . '"'
+			. ' title="' . esc_attr( $login_header_title ) . '"'
+			. ' tabindex="-1">'
+			. $login_header_text
+			. '</a>'
+			. '</h1>'
+		);
+
+	}
+
+	/**
+	 * Filters the HTML for the image displayed on the login page.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param string $html The proposed login image HTML.
+	 * @param array  $args {
+	 *     Other relevant arguments (read-only, you must use earlier filters
+	 *     such as 'login_headerurl' to modify these values).
+	 *     @type int $login_custom_image_state
+	 *                                      0 for disabled, 1 for logo
+	 *                                      style, 2 for banner style.
+	 *     @type int|null $login_custom_image_id
+	 *                                      The image ID to use as the custom
+	 *                                      login image (or null if disabled).
+	 *     @type string $login_header_url   The URL used as a link for the
+	 *                                      login page.
+	 *     @type string $login_header_title The title attribute for the login
+	 *                                      page image.
+	 *     @type string $login_header_text  The screen reader text for the login
+	 *                                      page image.
+	 * }
+	 */
+	return apply_filters(
+		'login_image_html',
+		$login_image_html,
+		array(
+			'login_custom_image_state' => $login_custom_image_state,
+			'login_custom_image_id'    => $login_custom_image_id,
+			'login_header_url'         => $login_header_url,
+			'login_header_title'       => $login_header_title,
+			'login_header_text'        => $login_header_text,
+		)
+	);
 }
