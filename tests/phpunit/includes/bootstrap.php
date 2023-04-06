@@ -202,6 +202,7 @@ define( 'DIR_TESTDATA', __DIR__ . '/../data' );
 define( 'DIR_TESTROOT', realpath( dirname( __DIR__ ) ) );
 
 define( 'WP_LANG_DIR', realpath( DIR_TESTDATA . '/languages' ) );
+define( 'WP_PLUGIN_DIR', realpath( DIR_TESTDATA . '/plugins' ) );
 
 /*
  * Cron tries to make an HTTP request to the site, which always fails,

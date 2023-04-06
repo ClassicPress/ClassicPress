@@ -1,4 +1,5 @@
 /* jshint es3: false, esversion: 9 */
+/* global __dirname*/
 /**
  * External dependencies
  */
@@ -54,7 +55,7 @@ const normalizeJoin = ( ...paths ) => join( ...paths ).replace( /\\/g, '/' );
 
 const camelCaseDash = ( string ) => {
 	return string.replace( /-([a-z])/g, ( _, letter ) => letter.toUpperCase() );
-}
+};
 
 module.exports = {
 	baseDir,

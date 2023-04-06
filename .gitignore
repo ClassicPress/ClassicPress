@@ -17,6 +17,7 @@ wp-tests-config.php
 /wp-cli.local.yml
 /jsdoc
 /packagehash.txt
+/composer.lock
 
 # Files and folders that get created in wp-content
 /src/wp-content/blogs.dir

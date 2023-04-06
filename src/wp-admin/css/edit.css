@@ -861,6 +861,7 @@ form#tags-filter {
 	align-items: center;
 	justify-content: space-between;
 	-webkit-user-select: auto;
+	-moz-user-select: auto;
 	user-select: auto;
 }
 
