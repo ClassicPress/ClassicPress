@@ -1984,7 +1984,7 @@ function get_adjacent_post( $in_same_term = false, $excluded_terms = '', $previo
 	}
 	$cache_key = "adjacent_post:$key:$last_changed";
 
-	$result = wp_cache_get( $cache_key, 'post-queries' );
+	$result = wp_cache_get( $cache_key, 'posts' );
 	if ( false !== $result ) {
 		if ( $result ) {
 			$result = get_post( $result );
@@ -1997,7 +1997,7 @@ function get_adjacent_post( $in_same_term = false, $excluded_terms = '', $previo
 		$result = '';
 	}
 
-	wp_cache_set( $cache_key, $result, 'post-queries' );
+	wp_cache_set( $cache_key, $result, 'posts' );
 
 	if ( $result ) {
 		$result = get_post( $result );

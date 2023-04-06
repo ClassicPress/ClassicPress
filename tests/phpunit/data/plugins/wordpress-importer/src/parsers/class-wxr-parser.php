@@ -17,24 +17,27 @@ class WXR_Parser {
 			$result = $parser->parse( $file );
 
 			// If SimpleXML succeeds or this is an invalid WXR file then return the results
-			if ( ! is_wp_error( $result ) || 'SimpleXML_parse_error' != $result->get_error_code() )
+			if ( ! is_wp_error( $result ) || 'SimpleXML_parse_error' != $result->get_error_code() ) {
 				return $result;
-		} else if ( extension_loaded( 'xml' ) ) {
+			}
+		} elseif ( extension_loaded( 'xml' ) ) {
 			$parser = new WXR_Parser_XML;
 			$result = $parser->parse( $file );
 
 			// If XMLParser succeeds or this is an invalid WXR file then return the results
-			if ( ! is_wp_error( $result ) || 'XML_parse_error' != $result->get_error_code() )
+			if ( ! is_wp_error( $result ) || 'XML_parse_error' != $result->get_error_code() ) {
 				return $result;
+			}
 		}
 
 		// We have a malformed XML file, so display the error and fallthrough to regex
-		if ( isset($result) && defined('IMPORT_DEBUG') && IMPORT_DEBUG ) {
+		if ( isset( $result ) && defined( 'IMPORT_DEBUG' ) && IMPORT_DEBUG ) {
 			echo '<pre>';
 			if ( 'SimpleXML_parse_error' == $result->get_error_code() ) {
-				foreach  ( $result->get_error_data() as $error )
+				foreach ( $result->get_error_data() as $error ) {
 					echo $error->line . ':' . $error->column . ' ' . esc_html( $error->message ) . "\n";
-			} else if ( 'XML_parse_error' == $result->get_error_code() ) {
+				}
+			} elseif ( 'XML_parse_error' == $result->get_error_code() ) {
 				$error = $result->get_error_data();
 				echo $error[0] . ':' . $error[1] . ' ' . esc_html( $error[2] );
 			}

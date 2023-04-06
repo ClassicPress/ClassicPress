@@ -39,7 +39,7 @@ $cp_version = '1.5.2+dev';
  *
  * @global string $wp_version
  */
-$wp_version = '6.1.1';
+$wp_version = '6.2';
 
 /**
  * Holds the WordPress DB revision, increments when changes are made to the WordPress DB schema.
@@ -60,7 +60,7 @@ $tinymce_version = '49110-20201110';
  *
  * @global string $required_php_version
  */
-$required_php_version = '5.6.20';
+$required_php_version = '7.4.0';
 
 /**
  * Holds the required MySQL version.

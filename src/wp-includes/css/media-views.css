@@ -617,6 +617,7 @@
 	border-right-style: solid;
 	border-right-color: #c3c4c7;
 	-webkit-user-select: none;
+	-moz-user-select: none;
 	user-select: none;
 }
 
@@ -955,6 +956,7 @@
 	list-style: none;
 	text-align: center;
 	-webkit-user-select: none;
+	-moz-user-select: none;
 	user-select: none;
 	width: 25%;
 	box-sizing: border-box;
