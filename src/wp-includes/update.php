@@ -25,6 +25,8 @@
  *                           Defaults to false, true if $extra_stats is set.
  */
 function wp_version_check( $extra_stats = array(), $force_check = false ) {
+	global $wpdb, $wp_local_package;
+
 	if ( wp_installing() ) {
 		return;
 	}
@@ -177,12 +179,12 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 
 	foreach ( $offers as &$offer ) {
 		foreach ( $offer as $offer_key => $value ) {
-			if ( 'packages' == $offer_key ) {
+			if ( 'packages' === $offer_key ) {
 				$offer['packages'] = (object) array_intersect_key(
 					array_map( 'esc_url', $offer['packages'] ),
 					array_fill_keys( array( 'full', 'no_content', 'new_bundled', 'partial', 'rollback' ), '' )
 				);
-			} elseif ( 'download' == $offer_key ) {
+			} elseif ( 'download' === $offer_key ) {
 				$offer['download'] = esc_url( $value );
 			} else {
 				$offer[ $offer_key ] = esc_html( $value );
@@ -266,7 +268,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 	// include an unmodified $wp_version
 	include ABSPATH . WPINC . '/version.php';
 
-	// If running blog-side, bail unless we've not checked in the last 12 hours
+	// If running blog-side, bail unless we've not checked in the last 12 hours.
 	if ( ! function_exists( 'get_plugins' ) ) {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 	}
@@ -395,7 +397,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 		$raw_response = wp_remote_post( $url, $options );
 	}
 
-	if ( is_wp_error( $raw_response ) || 200 != wp_remote_retrieve_response_code( $raw_response ) ) {
+	if ( is_wp_error( $raw_response ) || 200 !== wp_remote_retrieve_response_code( $raw_response ) ) {
 		return;
 	}
 
@@ -413,7 +415,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 			continue;
 		}
 
-		$hostname = wp_parse_url( esc_url_raw( $plugin_data['UpdateURI'] ), PHP_URL_HOST );
+		$hostname = wp_parse_url( sanitize_url( $plugin_data['UpdateURI'] ), PHP_URL_HOST );
 
 		/**
 		 * Filters the update response for a given plugin hostname.
@@ -452,7 +454,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 		 * }
 		 * @param array       $plugin_data      Plugin headers.
 		 * @param string      $plugin_file      Plugin filename.
-		 * @param array       $locales          Installed locales to look translations for.
+		 * @param string[]    $locales          Installed locales to look up translations for.
 		 */
 		$update = apply_filters( "update_plugins_{$hostname}", false, $plugin_data, $plugin_file, $locales );
 
@@ -560,6 +562,7 @@ function wp_update_themes( $extra_stats = array() ) {
 			'Version'    => $theme->get( 'Version' ),
 			'Author'     => $theme->get( 'Author' ),
 			'Author URI' => $theme->get( 'AuthorURI' ),
+			'UpdateURI'  => $theme->get( 'UpdateURI' ),
 			'Template'   => $theme->get_template(),
 			'Stylesheet' => $theme->get_stylesheet(),
 		);
@@ -670,7 +673,7 @@ function wp_update_themes( $extra_stats = array() ) {
 		$raw_response = wp_remote_post( $url, $options );
 	}
 
-	if ( is_wp_error( $raw_response ) || 200 != wp_remote_retrieve_response_code( $raw_response ) ) {
+	if ( is_wp_error( $raw_response ) || 200 !== wp_remote_retrieve_response_code( $raw_response ) ) {
 		return;
 	}
 
@@ -929,9 +932,10 @@ function _maybe_update_core() {
 
 	$current = get_site_transient( 'update_core' );
 
-	if ( isset( $current->last_checked, $current->version_checked ) &&
-		12 * HOUR_IN_SECONDS > ( time() - $current->last_checked ) &&
-		$current->version_checked == $cp_version ) {
+	if ( isset( $current->last_checked, $current->version_checked )
+		&& 12 * HOUR_IN_SECONDS > ( time() - $current->last_checked )
+		&& $current->version_checked === $cp_version
+	) {
 		return;
 	}
 
