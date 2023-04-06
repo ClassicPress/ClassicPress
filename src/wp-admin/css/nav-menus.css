@@ -175,6 +175,7 @@ input.bulk-select-switcher:focus + .bulk-select-button-label {
 
 .bulk-actions input.menu-items-delete {
 	-webkit-appearance: none;
+	-moz-appearance: none;
 	appearance: none;
 	font-size: inherit;
 	border: 0;
