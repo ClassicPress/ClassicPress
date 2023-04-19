@@ -1288,6 +1288,7 @@ function wp_dashboard_rss_control( $widget_id, $form_inputs = array() ) {
 function wp_dashboard_events_news() {
 	?>
 	<div class="classicpress-news-inline-notice">
+	<div class="rss-widget">
 		<?php
 		printf(
 			/* translators: link to ClassicPress blog */
@@ -1295,6 +1296,7 @@ function wp_dashboard_events_news() {
 			'https://www.classicpress.net/blog/'
 		);
 		?>
+	</div>
 	</div>
 	<div class="wordpress-news hide-if-no-js">
 		<?php wp_dashboard_primary(); ?>
@@ -1320,7 +1322,7 @@ function wp_dashboard_primary() {
 			 *
 			 * @param string $link The widget's primary link URL.
 			 */
-			'link'         => apply_filters( 'dashboard_primary_link', __( 'https://wordpress.org/news/' ) ),
+			'link'         => apply_filters( 'dashboard_primary_link', __( 'https://www.classicpress.net/blog/' ) ),
 
 			/**
 			 * Filters the primary feed URL for the 'ClassicPress Events and News' dashboard widget.
@@ -1329,7 +1331,7 @@ function wp_dashboard_primary() {
 			 *
 			 * @param string $url The widget's primary feed URL.
 			 */
-			'url'          => apply_filters( 'dashboard_primary_feed', __( 'https://wordpress.org/news/feed/' ) ),
+			'url'          => apply_filters( 'dashboard_primary_feed', __( 'https://www.classicpress.net/feed/' ) ),
 
 			/**
 			 * Filters the primary link title for the 'ClassicPress News' dashboard widget.
