@@ -248,17 +248,12 @@ if ( ! function_exists( 'wp_install_defaults' ) ) :
 			$first_comment        = get_site_option( 'first_comment' );
 		}
 
-		$first_comment_author = ! empty( $first_comment_author ) ? $first_comment_author : __( 'A WordPress Commenter' );
-		$first_comment_email  = ! empty( $first_comment_email ) ? $first_comment_email : 'wapuu@wordpress.example';
-		$first_comment_url    = ! empty( $first_comment_url ) ? $first_comment_url : esc_url( __( 'https://wordpress.org/' ) );
-		$first_comment        = ! empty( $first_comment ) ? $first_comment : sprintf(
-			/* translators: %s: Gravatar URL. */
-			__(
-				'Hi, this is a comment.
-To get started with moderating, editing, and deleting comments, please visit the Comments screen in the dashboard.
-Commenter avatars come from <a href="%s">Gravatar</a>.'
-			),
-			esc_url( __( 'https://en.gravatar.com/' ) )
+		$first_comment_author = ! empty( $first_comment_author ) ? $first_comment_author : __( 'A ClassicPress Commenter' );
+		$first_comment_email  = ! empty( $first_comment_email ) ? $first_comment_email : 'social@classicpress.net';
+		$first_comment_url    = ! empty( $first_comment_url ) ? $first_comment_url : 'https://www.classicpress.net/';
+		$first_comment        = ! empty( $first_comment ) ? $first_comment : __(
+			'Hi, this is a comment.
+To get started with moderating, editing, and deleting comments, please visit the Comments screen in the dashboard.'
 		);
 		$wpdb->insert(
 			$wpdb->comments,
@@ -606,7 +601,7 @@ https://www.classicpress.net/
 
 		$installed_email = array(
 			'to'      => $email,
-			'subject' => __( 'New WordPress Site' ),
+			'subject' => __( 'New ClassicPress Site' ),
 			'message' => $message,
 			'headers' => '',
 		);
