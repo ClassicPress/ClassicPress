@@ -47,7 +47,7 @@ if ( is_network_admin() ) {
 
 if ( $admin_title === $title ) {
 	/* translators: Admin screen title. %s: Admin screen name. */
-	$admin_title = sprintf( __( '%s &#8212; WordPress' ), $title );
+	$admin_title = sprintf( __( '%s &#8212; ClassicPress' ), $title );
 } else {
 	$screen_title = $title;
 
@@ -65,7 +65,7 @@ if ( $admin_title === $title ) {
 	}
 
 	/* translators: Admin screen title. 1: Admin screen name, 2: Network or site name. */
-	$admin_title = sprintf( __( '%1$s &lsaquo; %2$s &#8212; WordPress' ), $screen_title, $admin_title );
+	$admin_title = sprintf( __( '%1$s &lsaquo; %2$s &#8212; ClassicPress' ), $screen_title, $admin_title );
 }
 
 if ( wp_is_recovery_mode() ) {
