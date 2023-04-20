@@ -185,7 +185,7 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 			'parent' => 'wp-logo-external',
 			'id'     => 'support',
 			'title'  => __( 'Support' ),
-			'href'   => __( 'https://docs.classicpress.net/faq-support/' ),
+			'href'   => __( 'https://forums.classicpress.net/' ),
 		)
 	);
 }
