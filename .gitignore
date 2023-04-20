@@ -12,6 +12,7 @@ wp-tests-config.php
 /src/.wp-tests-version
 /node_modules
 /npm-debug.log
+/vendor
 /build
 /tests/phpunit/build
 /wp-cli.local.yml
@@ -59,5 +60,3 @@ wp-tests-config.php
 *.patch
 *.diff
 .svn
-
-vendor

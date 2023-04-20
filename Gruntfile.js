@@ -565,7 +565,7 @@ module.exports = function(grunt) {
 					'tests/qunit/*.html'
 				],
 				options: {
-					httpBase: 'http://localhost:8008/',
+					httpBase: 'http://localhost:8008',
 					puppeteer: puppeteerOptions
 				}
 			}
