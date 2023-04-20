@@ -283,6 +283,8 @@ function core_upgrade_preamble() {
 function list_plugin_updates() {
 	$wp_version     = get_bloginfo( 'version' );
 	$cur_wp_version = preg_replace( '/-.*$/', '', $wp_version );
+	global $cp_version;
+	$cur_cp_version = preg_replace( '/\+.*$/', '', $cp_version );
 
 	require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
 	$plugins = get_plugin_updates();
@@ -325,6 +327,13 @@ function list_plugin_updates() {
 
 	<tbody class="plugins">
 	<?php
+
+	$auto_updates = array();
+	if ( wp_is_auto_update_enabled_for_type( 'plugin' ) ) {
+		$auto_updates       = (array) get_site_option( 'auto_update_plugins', array() );
+		$auto_update_notice = ' | ' . wp_get_auto_update_message();
+	}
+
 	foreach ( (array) $plugins as $plugin_file => $plugin_data ) {
 		$plugin_data = (object) _get_plugin_data_markup_translate( $plugin_file, (array) $plugin_data, false, true );
 
