@@ -222,10 +222,10 @@ class WP_Application_Passwords_List_Table extends WP_List_Table {
 					break;
 				case 'created':
 					// JSON encoding automatically doubles backslashes to ensure they don't get lost when printing the inline JS.
-					echo '<# print( data.created ) #>';
+					echo esc_html__( 'Just now' );
 					break;
 				case 'last_used':
-					echo '<# print( data.last_used !== null ? data.last_used : "—" ) #>';
+					echo '—';
 					break;
 				case 'last_ip':
 					echo "{{ data.last_ip || '—' }}";
