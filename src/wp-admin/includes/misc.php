@@ -1319,6 +1319,24 @@ function wp_refresh_post_nonces( $response, $data, $screen_id ) {
 }
 
 /**
+ * Adds the latest Heartbeat and REST-API nonce to the Heartbeat response.
+ *
+ * @since 5.0.0
+ *
+ * @param array $response The Heartbeat response.
+ * @return array The Heartbeat response.
+ */
+function wp_refresh_heartbeat_nonces( $response ) {
+	// Refresh the Rest API nonce.
+	$response['rest_nonce'] = wp_create_nonce( 'wp_rest' );
+
+	// Refresh the Heartbeat nonce.
+	$response['heartbeat_nonce'] = wp_create_nonce( 'heartbeat-nonce' );
+
+	return $response;
+}
+
+/**
  * Disable suspension of Heartbeat on the Add/Edit Post screens.
  *
  * @since 3.8.0
