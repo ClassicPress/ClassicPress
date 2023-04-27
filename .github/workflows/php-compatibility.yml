@@ -25,7 +25,7 @@ jobs:
   php-comatibility:
     name: Check PHP compatibility
     runs-on: ubuntu-latest
-    if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
+    if: ${{ github.repository == 'ClassicPress/ClassicPress-v2' || github.event_name == 'pull_request' }}
 
     steps:
       - name: Checkout repository

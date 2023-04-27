@@ -35,7 +35,7 @@ jobs:
   test-php:
     name: "PHP ${{ matrix.php }}${{ matrix.memcached && ' with memcached' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
     runs-on: ubuntu-latest
-    if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
+    if: ${{ github.repository == 'ClassicPress/ClassicPress-v2' || github.event_name == 'pull_request' }}
     strategy:
       fail-fast: false
       matrix:
