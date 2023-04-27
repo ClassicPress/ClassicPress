@@ -357,7 +357,7 @@ function update_right_now_message() {
 	 */
 	$content = apply_filters( 'update_right_now_text', $content );
 
-	$msg .= sprintf( '<span id="wp-version">' . $content . '</span>', get_bloginfo( 'version', 'display' ), $theme_name );
+	$msg .= sprintf( '<span id="wp-version">' . $content . '</span>', classicpress_version_short(), $theme_name );
 
 	echo "<p id='wp-version-message'>$msg</p>";
 }

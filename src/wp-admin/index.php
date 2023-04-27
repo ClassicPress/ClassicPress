@@ -108,30 +108,10 @@ $screen->add_help_tab(
 
 unset( $help );
 
-$wp_version = get_bloginfo( 'version', 'display' );
-/* translators: %s: ClassicPress version. */
-$wp_version_text = sprintf( __( 'Version %s' ), $wp_version );
-$is_dev_version  = preg_match( '/alpha|beta|RC/', $wp_version );
-
-if ( ! $is_dev_version ) {
-	$version_url = sprintf(
-		/* translators: %s: WordPress version. */
-		esc_url( __( 'https://wordpress.org/support/wordpress-version/version-%s/' ) ),
-		sanitize_title( $wp_version )
-	);
-
-	$wp_version_text = sprintf(
-		'<a href="%1$s">%2$s</a>',
-		$version_url,
-		$wp_version_text
-	);
-}
-
 $screen->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
 	'<p>' . __( '<a href="https://wordpress.org/support/article/dashboard-screen/">Documentation on Dashboard</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support Forums</a>' ) . '</p>' .
-	'<p>' . $wp_version_text . '</p>'
+	'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support Forums</a>' ) . '</p>'
 );
 
 require_once ABSPATH . 'wp-admin/admin-header.php';
