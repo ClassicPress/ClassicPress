@@ -505,17 +505,17 @@ html:lang(he-il) .rtl #wpadminbar * {
 }
 
 #wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon:before {
-	background-image: url(/wp-admin/images/classicpress-logo-white.svg?ver=202303);
+	background-image: url(../../wp-admin/images/classicpress-logo-white.svg?ver=202303);
 	background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 100%;
-    top: 6px;
-    content: "";
-    position: absolute;
-    left: 0px;
-    height: 20px;
-    width: 20px;
-    opacity: 0.6;
+	background-position: center center;
+	background-size: 100%;
+	top: 6px;
+	content: "";
+	position: absolute;
+	left: 0px;
+	height: 20px;
+	width: 20px;
+	opacity: 0.6;
 }
 
 /*
@@ -801,7 +801,7 @@ html:lang(he-il) .rtl #wpadminbar * {
 	#wpadminbar .quicklinks .menupop.hover ul li .ab-item,
 	#wpadminbar.nojs .quicklinks .menupop:hover ul li .ab-item,
 	#wpadminbar .shortlink-input {
-	    line-height: 1.6;
+		line-height: 1.6;
 	}
 
 	#wpadminbar .ab-label {
