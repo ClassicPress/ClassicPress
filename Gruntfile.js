@@ -1115,6 +1115,7 @@ module.exports = function(grunt) {
 		'build',
 		[
 			'clean:all',
+			'js-dependencies',
 			'copy:all',
 			'cssmin:core',
 			'colors',

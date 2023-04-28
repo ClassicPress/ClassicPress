@@ -534,6 +534,7 @@ __webpack_require__.d(__webpack_exports__, {
   "isValidQueryString": function() { return /* reexport */ isValidQueryString; },
   "normalizePath": function() { return /* reexport */ normalizePath; },
   "prependHTTP": function() { return /* reexport */ prependHTTP; },
+  "prependHTTPS": function() { return /* reexport */ prependHTTPS; },
   "removeQueryArgs": function() { return /* reexport */ removeQueryArgs; },
   "safeDecodeURI": function() { return /* reexport */ safeDecodeURI; },
   "safeDecodeURIComponent": function() { return /* reexport */ safeDecodeURIComponent; }
@@ -1336,7 +1337,42 @@ function normalizePath(path) {
   .join('&');
 }
 
+;// CONCATENATED MODULE: ./node_modules/@wordpress/url/build-module/prepend-https.js
+/**
+ * Internal dependencies
+ */
+
+/**
+ * Prepends "https://" to a url, if it looks like something that is meant to be a TLD.
+ *
+ * Note: this will not replace "http://" with "https://".
+ *
+ * @param {string} url The URL to test.
+ *
+ * @example
+ * ```js
+ * const actualURL = prependHTTPS( 'wordpress.org' ); // https://wordpress.org
+ * ```
+ *
+ * @return {string} The updated URL.
+ */
+
+function prependHTTPS(url) {
+  if (!url) {
+    return url;
+  } // If url starts with http://, return it as is.
+
+
+  if (url.startsWith('http://')) {
+    return url;
+  }
+
+  url = prependHTTP(url);
+  return url.replace(/^http:/, 'https:');
+}
+
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/url/build-module/index.js
+
 
 
 
