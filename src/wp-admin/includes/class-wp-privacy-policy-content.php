@@ -450,7 +450,7 @@ final class WP_Privacy_Policy_Content {
 	 * @param bool $blocks      Whether to format the content for the block editor. Default true.
 	 * @return string The default policy content.
 	 */
-	public static function get_default_content( $description = false, $blocks = true ) {
+	public static function get_default_content( $description = false, $blocks = false ) {
 		$suggested_text = '<strong class="privacy-policy-tutorial">' . __( 'Suggested text:' ) . ' </strong>';
 		$content        = '';
 		$strings        = array();
@@ -652,18 +652,6 @@ final class WP_Privacy_Policy_Content {
 			/* translators: Privacy policy tutorial. */
 			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'If you are a member of a regulated industry, or if you are subject to additional privacy laws, you may be required to disclose that information here.' ) . '</p>';
 			$strings[] = '</div>';
-		}
-
-		if ( $blocks ) {
-			foreach ( $strings as $key => $string ) {
-				if ( 0 === strpos( $string, '<p>' ) ) {
-					$strings[ $key ] = '<!-- wp:paragraph -->' . $string . '<!-- /wp:paragraph -->';
-				}
-
-				if ( 0 === strpos( $string, '<h2>' ) ) {
-					$strings[ $key ] = '<!-- wp:heading -->' . $string . '<!-- /wp:heading -->';
-				}
-			}
 		}
 
 		$content = implode( '', $strings );
