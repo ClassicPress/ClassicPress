@@ -38,14 +38,14 @@
     "moment": "^2.29.4",
     "postcss": "8.4.23",
     "qunit": "^2.19.4",
-    "rollup": "3.21.4",
+    "rollup": "3.21.6",
     "sinon": "^15.0.1",
     "sinon-test": "^3.1.5",
     "source-map-loader": "^4.0.1",
     "sync-request": "6.1.0",
-    "terser": "5.16.1",
+    "terser": "5.17.3",
     "terser-webpack-plugin": "^5.3.7",
-    "webpack": "5.82.0"
+    "webpack": "5.82.1"
   },
   "dependencies": {
     "@wordpress/a11y": "3.32.0",

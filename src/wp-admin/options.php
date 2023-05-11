@@ -92,6 +92,7 @@ $allowed_options            = array(
 		'blogdescription',
 		'login_custom_image_state',
 		'login_custom_image_id',
+		'blocks_compatibility_level',
 		'gmt_offset',
 		'date_format',
 		'time_format',

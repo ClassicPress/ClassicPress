@@ -18,4 +18,12 @@ class Tests_Schema extends WP_UnitTestCase {
 		$this->assertSame( 'closed', $setting );
 		$this->assertNotSame( 'open', $setting );
 	}
+
+	/**
+	* Test default blocks_compatibility_level value
+	*/
+	public function test_default_blocks_compatibility_level() {
+		$setting = get_option( 'blocks_compatibility_level' );
+		$this->assertSame( $setting, '1' );
+	}
 }

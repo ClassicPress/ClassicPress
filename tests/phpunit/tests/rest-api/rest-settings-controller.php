@@ -119,6 +119,7 @@ class WP_Test_REST_Settings_Controller extends WP_Test_REST_Controller_Testcase 
 			'page_for_posts',
 			'default_ping_status',
 			'default_comment_status',
+			'blocks_compatibility_level',
 		);
 
 		if ( ! is_multisite() ) {

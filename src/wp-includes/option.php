@@ -2172,6 +2172,16 @@ function register_initial_settings() {
 		)
 	);
 
+	register_setting(
+		'general',
+		'blocks_compatibility_level',
+		array(
+			'show_in_rest' => true,
+			'type'         => 'integer',
+			'description'  => __( 'Compatibility level for block-related function support.' ),
+		)
+	);
+
 	if ( ! is_multisite() ) {
 		register_setting(
 			'general',

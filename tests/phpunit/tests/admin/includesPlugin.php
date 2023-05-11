@@ -33,6 +33,36 @@ class Tests_Admin_IncludesPlugin extends WP_UnitTestCase {
 			$this->assertArrayHasKey( $name, $data );
 			$this->assertSame( $value, $data[ $name ] );
 		}
+
+		$data = get_plugin_data( DIR_TESTDATA . '/plugins/unit-test-1/unit-test-1.php' );
+
+		$default_headers = array(
+			'Name'        => 'With requires CP and without Update URI',
+			'RequiresCP'  => '1.5',
+			'UpdateURI'   => 'https://directory.classicpress.net/wp-json/wp/v2/plugins?byslug=unit-test-1',
+		);
+
+		$this->assertTrue( is_array( $data ) );
+
+		foreach ( $default_headers as $name => $value ) {
+			$this->assertTrue( isset( $data[ $name ] ) );
+			$this->assertSame( $value, $data[ $name ] );
+		}
+
+		$data = get_plugin_data( DIR_TESTDATA . '/plugins/unit-test-2.php' );
+
+		$default_headers = array(
+			'Name'        => 'With requires CP and with Update URI',
+			'RequiresCP'  => '1.5',
+			'UpdateURI'   => 'https://directory.classicpress.net/wp-json/wp/v2/plugins?byslug=unit-test-2',
+		);
+
+		$this->assertTrue( is_array( $data ) );
+
+		foreach ( $default_headers as $name => $value ) {
+			$this->assertTrue( isset( $data[ $name ] ) );
+			$this->assertSame( $value, $data[ $name ] );
+		}
 	}
 
 	public function test_menu_page_url() {

@@ -426,6 +426,19 @@ final class WP_Screen {
 	}
 
 	/**
+	 * Polyfill for block functions.
+	 *
+	 * @since CP-2.0.0
+	 *
+	 * @return bool False.
+	 */
+	public function is_block_editor( ...$args ) {
+		global $wp_compat;
+		$wp_compat->using_block_function();
+		return false;
+	}
+
+	/**
 	 * Sets the old string-based contextual help for the screen for backward compatibility.
 	 *
 	 * @since 3.3.0
