@@ -43,8 +43,10 @@
  * reading.
  *
  * @since 1.5.0
- * @since 5.3.0 Added support for `Requires at least` and `Requires PHP` headers.
- * @since 5.8.0 Added support for `Update URI` header.
+ * @since 5.3.0    Added support for `Requires at least` and `Requires PHP` headers.
+ * @since 5.8.0    Added support for `Update URI` header.
+ * @since CP-1.5.0 Added support for `Requires CP` header
+ * @since CP-2.0.0 Added fallback for `Requires CP` header.
  *
  * @param string $plugin_file Absolute path to the main plugin file.
  * @param bool   $markup      Optional. If the returned data should have HTML markup applied.
@@ -63,6 +65,7 @@
  *     @type string $DomainPath  Plugin's relative directory path to .mo files.
  *     @type bool   $Network     Whether the plugin can only be activated network-wide.
  *     @type string $RequiresWP  Minimum required version of ClassicPress.
+ *     @type string $RequiresCP  Minimum required version of ClassicPress.
  *     @type string $RequiresPHP Minimum required version of PHP.
  *     @type string $UpdateURI   ID of the plugin for update purposes, should be a URI.
  *     @type string $Title       Title of the plugin and link to the plugin's site (if set).
@@ -105,6 +108,14 @@ function get_plugin_data( $plugin_file, $markup = true, $translate = true ) {
 		$plugin_slug = dirname( plugin_basename( $plugin_file ) );
 		if ( '.' !== $plugin_slug && false === strpos( $plugin_slug, '/' ) ) {
 			$plugin_data['TextDomain'] = $plugin_slug;
+		}
+	}
+
+	// If no Update URI is defined and Requires CP is set fall back to ClassicPress directory URL.
+	if ( ! $plugin_data['UpdateURI'] ) {
+		$plugin_slug = basename( dirname( plugin_basename( $plugin_file ) ) );
+		if ( filter_var( $plugin_data['RequiresCP'], FILTER_VALIDATE_FLOAT ) !== false ) {
+			$plugin_data['UpdateURI'] = 'https://directory.classicpress.net/wp-json/wp/v2/plugins?byslug=' . preg_replace( '/[^a-zA-Z0-9_\-]/', '', $plugin_slug );
 		}
 	}
 
