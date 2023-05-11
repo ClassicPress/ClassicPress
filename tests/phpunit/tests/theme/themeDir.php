@@ -162,6 +162,7 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 
 		$theme_names = array_keys( $themes );
 		$expected    = array(
+			'Test Block Theme',
 			'ClassicPress Default',
 			'Sandbox',
 			'Stylesheet Only',

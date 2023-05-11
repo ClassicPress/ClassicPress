@@ -176,8 +176,8 @@ if ( $login_custom_image_src ) {
 		<legend class="screen-reader-text"><span><?php _e( 'Custom Login Image' ); ?></span></legend>
 		<p class="description" id="login_custom_image-description">
 			<?php _e( 'If you choose an image here and enable this option, then that image will be shown at the top of the login page instead of the ClassicPress logo.' ); ?>
-			<a href="https://link.classicpress.net/docs/custom-login-image" target="_blank" rel="noopener noreferrer">
-				<?php _e( 'Documentation &#187;' ); ?>
+			<a href="https://link.classicpress.net/docs/custom-login-image">
+				<?php _e( 'Learn more.' ); ?>
 			</a>
 		</p>
 		<label>
@@ -506,6 +506,36 @@ endfor;
 ?>
 </select></td>
 </tr>
+
+
+<tr>
+<th scope="row"><label for="blocks_compatibility_level"><?php _e( 'Blocks Compatibility' ); ?></label></th>
+<td><select name="blocks_compatibility_level" id="blocks_compatibility_level">
+<?php
+$blocks_compatibility_level = get_option( 'blocks_compatibility_level', 1 );
+
+$blocks_compatibility_level_desc = array(
+	_x( 'Off', 'Block Compatibility' ),
+	_x( 'On', 'Block Compatibility' ),
+	_x( 'Troubleshooting', 'Block Compatibility' ),
+);
+
+for ( $index = 0; $index <= 2; $index++ ) {
+	echo "\n\t<option value='" . esc_attr( $index ) . "' " . selected( $blocks_compatibility_level, $index, false ) . '>'
+	. esc_html( $blocks_compatibility_level_desc[ $index ] ) . '</option>';
+}
+?>
+</select>
+<p class="description" id="home-description">
+<?php _e( 'ClassicPress is incompatible with the block editor. When blocks compatibility is turned on (default), it allows more plugins and themes to work but block-related features will not work. ' ); ?>
+<a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-general-screen/#blocks-compatibility">
+<?php _e( 'Learn more.' ); ?>
+</a>
+</p>
+</td>
+</tr>
+
+
 <?php do_settings_fields( 'general', 'default' ); ?>
 </table>
 

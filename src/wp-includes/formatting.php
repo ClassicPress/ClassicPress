@@ -4785,6 +4785,7 @@ function sanitize_option( $option, $value ) {
 		case 'users_can_register':
 		case 'login_custom_image_state':
 		case 'login_custom_image_id':
+		case 'blocks_compatibility_level':
 		case 'start_of_week':
 		case 'site_icon':
 		case 'fileupload_maxk':

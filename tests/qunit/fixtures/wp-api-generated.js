@@ -8640,6 +8640,11 @@ mockedApiResponse.Schema = {
                             "type": "integer",
                             "required": false
                         },
+                        "blocks_compatibility_level": {
+                            "description": "Compatibility level for block-related function support.",
+                            "type": "integer",
+                            "required": false
+                        },
                         "email": {
                             "description": "This address is used for admin purposes, like new user notification.",
                             "type": "string",
@@ -11124,6 +11129,7 @@ mockedApiResponse.settings = {
     "url": "http://example.org",
     "login_custom_image_state": 0,
     "login_custom_image_id": 0,
+    "blocks_compatibility_level": 1,
     "email": "admin@example.org",
     "timezone": "",
     "date_format": "F j, Y",

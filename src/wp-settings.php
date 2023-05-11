@@ -288,6 +288,7 @@ require ABSPATH . WPINC . '/sitemaps/class-wp-sitemaps-stylesheet.php';
 require ABSPATH . WPINC . '/sitemaps/providers/class-wp-sitemaps-posts.php';
 require ABSPATH . WPINC . '/sitemaps/providers/class-wp-sitemaps-taxonomies.php';
 require ABSPATH . WPINC . '/sitemaps/providers/class-wp-sitemaps-users.php';
+require ABSPATH . WPINC . '/classicpress/class-wp-compat.php';
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	require ABSPATH . WPINC . '/class-fix-wpcli.php';
 }
