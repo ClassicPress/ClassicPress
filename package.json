@@ -1,13 +1,7 @@
 {
-<<<<<<< HEAD
   "name": "ClassicPress",
   "version": "1.5.2+dev",
   "description": "ClassicPress is web software you can use to create a beautiful website or blog.",
-=======
-	"name": "WordPress",
-	"version": "4.9.23",
-	"description": "WordPress is web software you can use to create a beautiful website or blog.",
->>>>>>> a392d874ae (Grouped backports to the 4.9 branch.)
   "repository": {
     "type": "git",
     "url": "https://github.com/ClassicPress/ClassicPress"

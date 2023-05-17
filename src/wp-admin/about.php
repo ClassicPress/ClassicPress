@@ -156,10 +156,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-<<<<<<< HEAD
-					__( '<strong>WordPress version %s</strong> addressed one security issue.' ),
-=======
-					__( '<strong>Version %s</strong> addressed some security issues.' ),
+					__( '<strong>WordPress Version %s</strong> addressed some security issues.' ),
 					'4.9.23'
 				);
 				?>
@@ -179,8 +176,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-					__( '<strong>Version %s</strong> addressed some security issues.' ),
->>>>>>> a392d874ae (Grouped backports to the 4.9 branch.)
+					__( '<strong>WordPress Version %s</strong> addressed some security issues.' ),
 					'4.9.22'
 				);
 				?>
@@ -200,7 +196,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-					__( '<strong>WordPressVersion %s</strong> addressed some security issues.' ),
+					__( '<strong>WordPress Version %s</strong> addressed some security issues.' ),
 					'4.9.21'
 				);
 				?>
