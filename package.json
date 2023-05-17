@@ -34,7 +34,7 @@
     "postcss": "8.4.21",
     "rollup": "3.14.0",
     "sync-request": "6.1.0",
-    "terser": "5.16.1"
+    "terser": "5.17.4"
   },
   "dependencies": {
     "node-sass": "8.0.0"
