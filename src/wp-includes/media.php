@@ -3962,6 +3962,7 @@ function wp_enqueue_media( $args = array() ) {
 		'captions'         => ! apply_filters( 'disable_captions', '' ),
 		'nonce'            => array(
 			'sendToEditor' => wp_create_nonce( 'media-send-to-editor' ),
+			'setAttachmentThumbnail' => wp_create_nonce( 'set-attachment-thumbnail' ),
 		),
 		'post'             => array(
 			'id' => 0,
