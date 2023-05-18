@@ -8,7 +8,7 @@
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "defaultHooks": function() { return /* binding */ defaultHooks; }
+  defaultHooks: function() { return /* binding */ defaultHooks; }
 });
 
 // UNUSED EXPORTS: actions, addAction, addFilter, applyFilters, createHooks, currentAction, currentFilter, didAction, didFilter, doAction, doingAction, doingFilter, filters, hasAction, hasFilter, removeAction, removeAllActions, removeAllFilters, removeFilter
@@ -1076,19 +1076,19 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "__": function() { return /* reexport */ __; },
-  "_n": function() { return /* reexport */ _n; },
-  "_nx": function() { return /* reexport */ _nx; },
-  "_x": function() { return /* reexport */ _x; },
-  "createI18n": function() { return /* reexport */ createI18n; },
-  "defaultI18n": function() { return /* reexport */ default_i18n; },
-  "getLocaleData": function() { return /* reexport */ getLocaleData; },
-  "hasTranslation": function() { return /* reexport */ hasTranslation; },
-  "isRTL": function() { return /* reexport */ isRTL; },
-  "resetLocaleData": function() { return /* reexport */ resetLocaleData; },
-  "setLocaleData": function() { return /* reexport */ setLocaleData; },
-  "sprintf": function() { return /* reexport */ sprintf_sprintf; },
-  "subscribe": function() { return /* reexport */ subscribe; }
+  __: function() { return /* reexport */ __; },
+  _n: function() { return /* reexport */ _n; },
+  _nx: function() { return /* reexport */ _nx; },
+  _x: function() { return /* reexport */ _x; },
+  createI18n: function() { return /* reexport */ createI18n; },
+  defaultI18n: function() { return /* reexport */ default_i18n; },
+  getLocaleData: function() { return /* reexport */ getLocaleData; },
+  hasTranslation: function() { return /* reexport */ hasTranslation; },
+  isRTL: function() { return /* reexport */ isRTL; },
+  resetLocaleData: function() { return /* reexport */ resetLocaleData; },
+  setLocaleData: function() { return /* reexport */ setLocaleData; },
+  sprintf: function() { return /* reexport */ sprintf_sprintf; },
+  subscribe: function() { return /* reexport */ subscribe; }
 });
 
 // EXTERNAL MODULE: ./node_modules/memize/index.js

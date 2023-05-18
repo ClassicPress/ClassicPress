@@ -39,26 +39,26 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "actions": function() { return /* binding */ actions; },
-  "addAction": function() { return /* binding */ addAction; },
-  "addFilter": function() { return /* binding */ addFilter; },
-  "applyFilters": function() { return /* binding */ applyFilters; },
-  "createHooks": function() { return /* reexport */ build_module_createHooks; },
-  "currentAction": function() { return /* binding */ currentAction; },
-  "currentFilter": function() { return /* binding */ currentFilter; },
-  "defaultHooks": function() { return /* binding */ defaultHooks; },
-  "didAction": function() { return /* binding */ didAction; },
-  "didFilter": function() { return /* binding */ didFilter; },
-  "doAction": function() { return /* binding */ doAction; },
-  "doingAction": function() { return /* binding */ doingAction; },
-  "doingFilter": function() { return /* binding */ doingFilter; },
-  "filters": function() { return /* binding */ filters; },
-  "hasAction": function() { return /* binding */ hasAction; },
-  "hasFilter": function() { return /* binding */ hasFilter; },
-  "removeAction": function() { return /* binding */ removeAction; },
-  "removeAllActions": function() { return /* binding */ removeAllActions; },
-  "removeAllFilters": function() { return /* binding */ removeAllFilters; },
-  "removeFilter": function() { return /* binding */ removeFilter; }
+  actions: function() { return /* binding */ actions; },
+  addAction: function() { return /* binding */ addAction; },
+  addFilter: function() { return /* binding */ addFilter; },
+  applyFilters: function() { return /* binding */ applyFilters; },
+  createHooks: function() { return /* reexport */ build_module_createHooks; },
+  currentAction: function() { return /* binding */ currentAction; },
+  currentFilter: function() { return /* binding */ currentFilter; },
+  defaultHooks: function() { return /* binding */ defaultHooks; },
+  didAction: function() { return /* binding */ didAction; },
+  didFilter: function() { return /* binding */ didFilter; },
+  doAction: function() { return /* binding */ doAction; },
+  doingAction: function() { return /* binding */ doingAction; },
+  doingFilter: function() { return /* binding */ doingFilter; },
+  filters: function() { return /* binding */ filters; },
+  hasAction: function() { return /* binding */ hasAction; },
+  hasFilter: function() { return /* binding */ hasFilter; },
+  removeAction: function() { return /* binding */ removeAction; },
+  removeAllActions: function() { return /* binding */ removeAllActions; },
+  removeAllFilters: function() { return /* binding */ removeAllFilters; },
+  removeFilter: function() { return /* binding */ removeFilter; }
 });
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/validateNamespace.js

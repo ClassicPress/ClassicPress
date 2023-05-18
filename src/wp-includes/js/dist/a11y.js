@@ -63,7 +63,7 @@ function domReady(callback) {
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "defaultHooks": function() { return /* binding */ defaultHooks; }
+  defaultHooks: function() { return /* binding */ defaultHooks; }
 });
 
 // UNUSED EXPORTS: actions, addAction, addFilter, applyFilters, createHooks, currentAction, currentFilter, didAction, didFilter, doAction, doingAction, doingFilter, filters, hasAction, hasFilter, removeAction, removeAllActions, removeAllFilters, removeFilter
@@ -654,7 +654,7 @@ const {
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "__": function() { return /* reexport */ __; }
+  __: function() { return /* reexport */ __; }
 });
 
 // UNUSED EXPORTS: _n, _nx, _x, createI18n, defaultI18n, getLocaleData, hasTranslation, isRTL, resetLocaleData, setLocaleData, sprintf, subscribe
@@ -2351,8 +2351,8 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "setup": function() { return /* binding */ setup; },
-  "speak": function() { return /* binding */ speak; }
+  setup: function() { return /* binding */ setup; },
+  speak: function() { return /* binding */ speak; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/dom-ready/build-module/index.js
