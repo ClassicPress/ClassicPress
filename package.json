@@ -54,7 +54,7 @@
     "@wordpress/hooks": "3.33.0",
     "@wordpress/i18n": "4.33.0",
     "@wordpress/url": "3.34.0",
-    "node-sass": "8.0.0"
+    "node-sass": "9.0.0"
   },
   "collective": {
     "type": "opencollective",
