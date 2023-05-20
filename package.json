@@ -37,7 +37,7 @@
     "terser": "5.16.1"
   },
   "dependencies": {
-    "node-sass": "8.0.0"
+    "node-sass": "9.0.0"
   },
   "collective": {
     "type": "opencollective",
