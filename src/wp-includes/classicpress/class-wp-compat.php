@@ -64,7 +64,7 @@ class WP_Compat {
 		?>
 		<tr class="plugin-update-tr <?php echo $active; ?>">
 			<td colspan="<?php echo $wp_list_table->get_column_count(); ?>" class="plugin-update colspanchange" <?php echo $shadow; ?>>
-				<div class="notice inline notice-alt notice-warning">
+				<div class="notice inline notice-warning">
 					<p>
 						<?php
 						// Translators: %1$s is the plugin name.
@@ -155,7 +155,7 @@ class WP_Compat {
 		}
 
 		?>
-		<div class="notice notice-alt notice-warning">
+		<div class="notice notice-warning">
 			<p>
 			<?php
 				echo $message;
@@ -197,6 +197,15 @@ class WP_Compat {
 		}
 
 		$trace = debug_backtrace();
+
+		/*
+		 * Fires after WP_Compat::using_block_function() is called.
+		 *
+		 * @since: CP-2.0.0
+		 *
+		 * @param array $trace debug_backtrace() output
+		 */
+		do_action( 'using_block_function', $trace );
 
 		if ( 0 === strpos( $trace[1]['file'], realpath( get_stylesheet_directory() ) ) ) {
 			// Current theme is calling the function
