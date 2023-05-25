@@ -13,7 +13,7 @@
  * * Database table prefix
  * * ABSPATH
  *
- * @link https://wordpress.org/support/article/editing-wp-config-php/
+ * @link https://docs.classicpress.net/user-guides/editing-wp-config-php/
  *
  * @package ClassicPress
  */
@@ -68,6 +68,19 @@ define( 'NONCE_SALT',       'put your unique phrase here' );
 $table_prefix = 'cp_';
 
 /**
+ * ClassicPress File Editor
+ * 
+ * The File Editor for plugins and themes is disabled in new installations.
+ * If you want to enable the File Editor, simply remove the line below or
+ * set it to "false".
+ * 
+ * @link https://docs.classicpress.net/user-guides/using-classicpress/editing-files/
+ * 
+ * @since CP-2.0.0
+ */
+define( 'DISALLOW_FILE_EDIT', true );
+
+/**
  * For developers: ClassicPress debugging mode.
  *
  * Change this to true to enable the display of notices during development.
@@ -77,7 +90,7 @@ $table_prefix = 'cp_';
  * For information on other constants that can be used for debugging,
  * visit the documentation.
  *
- * @link https://wordpress.org/support/article/debugging-in-wordpress/
+ * @link https://docs.classicpress.net/user-guides/debugging-in-classicpress/
  */
 define( 'WP_DEBUG', false );
 
