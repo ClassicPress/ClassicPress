@@ -71,14 +71,6 @@ $_old_files = array(
 global $_new_bundled_files;
 
 $_new_bundled_files = array(
-	'plugins/akismet/'        => '2.0',
-	'themes/twentyten/'       => '3.0',
-	'themes/twentyeleven/'    => '3.2',
-	'themes/twentytwelve/'    => '3.5',
-	'themes/twentythirteen/'  => '3.6',
-	'themes/twentyfourteen/'  => '3.8',
-	'themes/twentyfifteen/'   => '4.1',
-	'themes/twentysixteen/'   => '4.4',
 	'themes/twentyseventeen/' => '4.7',
 );
 
@@ -302,12 +294,14 @@ function update_core( $from, $to ) {
 	$skip              = array( 'wp-content', 'wp-includes/version.php' );
 	$check_is_writable = array();
 
-	// Check to see which files don't really need updating - only available for 3.7 and higher.
-	if ( function_exists( 'get_core_checksums' ) ) {
+	// Check to see which files don't really need updating.  The
+	// function_exists check is not necessary, but we'll keep it to preserve
+	// the code structure.
+	if ( function_exists( 'cp_get_core_checksums' ) ) {
 		// Find the local version of the working directory.
 		$working_dir_local = WP_CONTENT_DIR . '/upgrade/' . basename( $from ) . $distro;
 
-		$checksums = get_core_checksums( $wp_version, isset( $wp_local_package ) ? $wp_local_package : 'en_US' );
+		$checksums = cp_get_core_checksums( $cp_version );
 
 		if ( is_array( $checksums ) && isset( $checksums[ $wp_version ] ) ) {
 			$checksums = $checksums[ $wp_version ]; // Compat code for 3.7-beta2.
@@ -613,9 +607,6 @@ function update_core( $from, $to ) {
 	// Deactivate the REST API plugin if its version is 2.0 Beta 4 or lower.
 	_upgrade_440_force_deactivate_incompatible_plugins();
 
-	// Deactivate incompatible plugins.
-	_upgrade_core_deactivate_incompatible_plugins();
-
 	// Upgrade DB with separate request.
 	/** This filter is documented in wp-admin/includes/update-core.php */
 	apply_filters( 'update_feedback', __( 'Upgrading database&#8230;' ) );
@@ -656,108 +647,60 @@ function update_core( $from, $to ) {
 }
 
 /**
- * Gets the checksums for the given version of ClassicPress.
+ * Preloads old Requests classes and interfaces.
  *
- * This function is a duplicate copy of `get_core_checksums()` to ensure the
- * new code is loaded and used when updating from a pre-1.3.0 version.
+ * This function preloads the old Requests code into memory before the
+ * upgrade process deletes the files. Why? Requests code is loaded into
+ * memory via an autoloader, meaning when a class or interface is needed
+ * If a request is in process, Requests could attempt to access code. If
+ * the file is not there, a fatal error could occur. If the file was
+ * replaced, the new code is not compatible with the old, resulting in
+ * a fatal error. Preloading ensures the code is in memory before the
+ * code is updated.
  *
- * @since CP-1.3.0
+ * @since 6.2.0
  *
- * @param string $version Version string to query.
- * @return bool|array False on failure. An array of checksums on success.
+ * @global array              $_old_requests_files Requests files to be preloaded.
+ * @global WP_Filesystem_Base $wp_filesystem       WordPress filesystem subclass.
+ * @global string             $wp_version          The WordPress version string.
+ *
+ * @param string $to Path to old WordPress installation.
  */
-function cp_get_core_checksums( $version ) {
-	$url = 'https://api-v1.classicpress.net/checksums/md5/' . $version . '.json';
+function _preload_old_requests_classes_and_interfaces( $to ) {
+	global $_old_requests_files, $wp_filesystem, $wp_version;
 
-	$options = array(
-		'timeout' => wp_doing_cron() ? 30 : 3,
-	);
-
-	$response = wp_remote_get( $url, $options );
-
-	if ( is_wp_error( $response ) ) {
-		trigger_error(
-			sprintf(
-				/* translators: %s: support forums URL */
-				__( 'An unexpected error occurred. Something may be wrong with ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
-				__( 'https://forums.classicpress.net/c/support' )
-			) . ' ' . __( '(ClassicPress could not establish a secure connection to ClassicPress.net. Please contact your server administrator.)' ),
-			headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
-		);
-
-		// Retry request
-		$response = wp_remote_get( $url, $options );
+	/*
+	 * Requests was introduced in WordPress 4.6.
+	 *
+	 * Skip preloading if the website was previously using
+	 * an earlier version of WordPress.
+	 */
+	if ( version_compare( $wp_version, '4.6', '<' ) ) {
+		return;
 	}
 
-	if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
-		return false;
+	if ( ! defined( 'REQUESTS_SILENCE_PSR0_DEPRECATIONS' ) ) {
+		define( 'REQUESTS_SILENCE_PSR0_DEPRECATIONS', true );
 	}
 
-	$body = trim( wp_remote_retrieve_body( $response ) );
-	$body = json_decode( $body, true );
-
-	if (
-		! is_array( $body ) ||
-		! isset( $body['checksums'] ) ||
-		! is_array( $body['checksums'] )
-	) {
-		return false;
-	}
-
-	return $body['checksums'];
-}
-
-/**
- * Verifies and returns the root directory entry of a ClassicPress update.
- *
- * For WordPress, this was always '/wordpress/'.  For ClassicPress, since
- * GitHub builds our zip packages for us, the zip file (and therefore the
- * directory where it was unpacked) will contain a single directory entry whose
- * name starts with 'ClassicPress-'.
- *
- * We also need to allow the root directory to be called 'wordpress', since
- * this is used when migrating from WordPress to ClassicPress.  If the
- * directory is named otherwise, the WordPress updater will reject the update
- * package for the migration.
- *
- * NOTE: This function is duplicated in class-core-upgrader.php.  This
- * duplication is intentional, as the load order during an upgrade is quite
- * complicated and this is the simplest way to make sure that this code is
- * always available.
- *
- * @since CP-1.0.0
- *
- * @param string $working_dir The directory where a ClassicPress update package
- *                            has been extracted.
- *
- * @return string|null The root directory entry that contains the new files, or
- *                     `null` if this does not look like a valid update.
- */
-function cp_get_update_directory_root( $working_dir ) {
-	global $wp_filesystem;
-
-	$distro  = null;
-	$entries = array_values( $wp_filesystem->dirlist( $working_dir ) );
-
-	if (
-		count( $entries ) === 1 &&
-		(
-			substr( $entries[0]['name'], 0, 13 ) === 'ClassicPress-' ||
-			$entries[0]['name'] === 'wordpress' // migration build
-		) &&
-		$entries[0]['type'] === 'd'
-	) {
-		$distro = '/' . $entries[0]['name'] . '/';
-		$root   = $working_dir . $distro;
-		if (
-			! $wp_filesystem->exists( $root . 'readme.html' ) ||
-			! $wp_filesystem->exists( $root . 'wp-includes/version.php' )
-		) {
-			$distro = null;
+	foreach ( $_old_requests_files as $name => $file ) {
+		// Skip files that aren't interfaces or classes.
+		if ( is_int( $name ) ) {
+			continue;
 		}
-	}
 
-	return $distro;
+		// Skip if it's already loaded.
+		if ( class_exists( $name ) || interface_exists( $name ) ) {
+			continue;
+		}
+
+		// Skip if the file is missing.
+		if ( ! $wp_filesystem->is_file( $to . $file ) ) {
+			continue;
+		}
+
+		require_once $to . $file;
+	}
 }
 
 /**
@@ -913,4 +856,109 @@ function _upgrade_440_force_deactivate_incompatible_plugins() {
 	if ( defined( 'REST_API_VERSION' ) && version_compare( REST_API_VERSION, '2.0-beta4', '<=' ) ) {
 		deactivate_plugins( array( 'rest-api/plugin.php' ), true );
 	}
+}
+
+/**
+ * Gets the checksums for the given version of ClassicPress.
+ *
+ * This function is a duplicate copy of `get_core_checksums()` to ensure the
+ * new code is loaded and used when updating from a pre-1.3.0 version.
+ *
+ * @since CP-1.3.0
+ *
+ * @param string $version Version string to query.
+ * @return bool|array False on failure. An array of checksums on success.
+ */
+function cp_get_core_checksums( $version ) {
+	$url = 'https://api-v1.classicpress.net/checksums/md5/' . $version . '.json';
+
+	$options = array(
+		'timeout' => wp_doing_cron() ? 30 : 3,
+	);
+
+	$response = wp_remote_get( $url, $options );
+
+	if ( is_wp_error( $response ) ) {
+		trigger_error(
+			sprintf(
+				/* translators: %s: support forums URL */
+				__( 'An unexpected error occurred. Something may be wrong with ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+				__( 'https://forums.classicpress.net/c/support' )
+			) . ' ' . __( '(ClassicPress could not establish a secure connection to ClassicPress.net. Please contact your server administrator.)' ),
+			headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
+		);
+
+		// Retry request
+		$response = wp_remote_get( $url, $options );
+	}
+
+	if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
+		return false;
+	}
+
+	$body = trim( wp_remote_retrieve_body( $response ) );
+	$body = json_decode( $body, true );
+
+	if (
+		! is_array( $body ) ||
+		! isset( $body['checksums'] ) ||
+		! is_array( $body['checksums'] )
+	) {
+		return false;
+	}
+
+	return $body['checksums'];
+}
+
+/**
+ * Verifies and returns the root directory entry of a ClassicPress update.
+ *
+ * For WordPress, this was always '/wordpress/'.  For ClassicPress, since
+ * GitHub builds our zip packages for us, the zip file (and therefore the
+ * directory where it was unpacked) will contain a single directory entry whose
+ * name starts with 'ClassicPress-'.
+ *
+ * We also need to allow the root directory to be called 'wordpress', since
+ * this is used when migrating from WordPress to ClassicPress.  If the
+ * directory is named otherwise, the WordPress updater will reject the update
+ * package for the migration.
+ *
+ * NOTE: This function is duplicated in class-core-upgrader.php.  This
+ * duplication is intentional, as the load order during an upgrade is quite
+ * complicated and this is the simplest way to make sure that this code is
+ * always available.
+ *
+ * @since CP-1.0.0
+ *
+ * @param string $working_dir The directory where a ClassicPress update package
+ *                            has been extracted.
+ *
+ * @return string|null The root directory entry that contains the new files, or
+ *                     `null` if this does not look like a valid update.
+ */
+function cp_get_update_directory_root( $working_dir ) {
+	global $wp_filesystem;
+
+	$distro  = null;
+	$entries = array_values( $wp_filesystem->dirlist( $working_dir ) );
+
+	if (
+		count( $entries ) === 1 &&
+		(
+			substr( $entries[0]['name'], 0, 13 ) === 'ClassicPress-' ||
+			$entries[0]['name'] === 'wordpress' // migration build
+		) &&
+		$entries[0]['type'] === 'd'
+	) {
+		$distro = '/' . $entries[0]['name'] . '/';
+		$root   = $working_dir . $distro;
+		if (
+			! $wp_filesystem->exists( $root . 'readme.html' ) ||
+			! $wp_filesystem->exists( $root . 'wp-includes/version.php' )
+		) {
+			$distro = null;
+		}
+	}
+
+	return $distro;
 }

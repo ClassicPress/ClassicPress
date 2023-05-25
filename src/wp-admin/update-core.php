@@ -62,6 +62,18 @@ function list_core_update( $update ) {
 	$php_version   = PHP_VERSION;
 	$mysql_version = $wpdb->db_version();
 	$show_buttons  = true;
+
+	// Nightly build versions have two hyphens and a commit number.
+	if ( strstr( $update->current, '+nightly' ) ) {
+		// Retrieve the major version number.
+		preg_match( '/^\d+.\d+.\d+/', $update->current, $update_major );
+		/* translators: %s: ClassicPress version. */
+		$submit = sprintf( __( 'Update to latest %s nightly' ), $update_major[0] );
+	} else {
+		/* translators: %s: ClassicPress version. */
+		$submit = sprintf( __( 'Update to version %s' ), $version_string );
+	}
+
 	if ( 'development' == $update->response ) {
 		$message = __( 'You are using a development version of ClassicPress. You can update to the latest nightly build automatically:' );
 	} else {
@@ -888,7 +900,7 @@ if ( 'upgrade-core' === $action ) {
 
 	echo '<h2 class="wp-current-version">';
 	/* translators: Current version of WordPress. */
-	printf( __( 'Current version: %s' ), get_bloginfo( 'version' ) );
+	printf( __( 'Current version: %s' ), classicpress_version() );
 	echo '</h2>';
 
 	echo '<p class="update-last-checked">';
