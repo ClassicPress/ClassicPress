@@ -68,8 +68,9 @@ class WP_Compat {
 					<p>
 						<?php
 						// Translators: %1$s is the plugin name.
-						printf( esc_html__( '%1$s uses block-related functions and may not work correctly.' ), $plugin_data['Name'] );
+						printf( esc_html__( '%1$s uses block-related functions and may have issues.' ), $plugin_data['Name'] );
 						?>
+						<a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-general-screen/#blocks-compatibility"><?php _e( 'Learn more' ); ?></a> | 
 						<a href="https://forums.classicpress.net/new-topic?category=plugins/plugin-support&tags=blocks-compatibility&title=<?php echo urlencode( $plugin_data['Name'] ); ?>+blocks+compatibility"><?php _e( 'Report an issue &rsaquo;' ); ?></a>
 					</p>
 				</div>
@@ -146,11 +147,13 @@ class WP_Compat {
 
 		if ( '1' === $theme_using_blocks ) {
 			// Translators: %1$s is the theme name.
-			$message  = sprintf( esc_html__( '%1$s uses block-related functions and may not work correctly.' ), wp_get_theme()->get( 'Name' ) );
+			$message  = sprintf( esc_html__( '%1$s uses block-related functions and may have issues.' ), wp_get_theme()->get( 'Name' ) );
+			$message .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-general-screen/#blocks-compatibility">' . __( 'Learn more' ) . '</a> |';
 			$message .= ' <a href="https://forums.classicpress.net/new-topic?category=themes/theme-support&tags=blocks-compatibility&title=' . urlencode( wp_get_theme()->get( 'Name' ) ) . '+blocks+compatibility">' . __( 'Report an issue &rsaquo;' ) . '</a>';
 		} else {
 			// Translators: %1$s is the theme name, %1$s is the parent theme name.
-			$message = sprintf( esc_html__( '%1$s parent theme (%2$s) uses block-related functions and may not work correctly.' ), wp_get_theme()->get( 'Name' ), wp_get_theme()->parent()->get( 'Name' ) );
+			$message = sprintf( esc_html__( '%1$s parent theme (%2$s) uses block-related functions and may have issues.' ), wp_get_theme()->get( 'Name' ), wp_get_theme()->parent()->get( 'Name' ) );
+			$message .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-general-screen/#blocks-compatibility">' . __( 'Learn more' ) . '</a> |';
 			$message .= ' <a href="https://forums.classicpress.net/new-topic?category=themes/theme-support&tags=blocks-compatibility&title=' . urlencode( wp_get_theme()->parent()->get( 'Name' ) ) . '+blocks+compatibility">' . __( 'Report an issue &rsaquo;' ) . '</a>';
 		}
 
