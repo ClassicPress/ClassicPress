@@ -27,6 +27,7 @@
 		"backport": "bin/backport-wp-commit.sh",
 		"phpcs": "vendor/bin/phpcs -n",
 		"phpcs-tests": "vendor/bin/phpcs -n tests",
-		"phpunit": "vendor/bin/phpunit"
+		"phpunit": "vendor/bin/phpunit",
+		"phpcompat": "vendor/bin/phpcs --standard=phpcompat.xml.dist"
 	}
 }

@@ -4884,7 +4884,7 @@ function sanitize_option( $option, $value ) {
 			break;
 
 		case 'gmt_offset':
-			$value = preg_replace( '/[^0-9:.-]/', '', $value ); // Strips slashes.
+			$value = preg_replace( '/[^0-9:.-]/', '', $value ?? '' ); // Strips slashes.
 			break;
 
 		case 'siteurl':

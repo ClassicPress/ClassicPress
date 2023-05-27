@@ -5,8 +5,8 @@
 	<!-- Use PHPCompatibility/PHPCompatibilityWP -->
 	<rule ref="PHPCompatibilityWP"/>
 
-	<!-- ClassicPress Core currently supports PHP 5.6+. -->
-	<config name="testVersion" value="5.6-"/>
+	<!-- ClassicPress Core currently supports PHP 7.4+. -->
+	<config name="testVersion" value="7.4-"/>
 
 	<!-- Only scan PHP files. -->
 	<arg name="extensions" value="php"/>

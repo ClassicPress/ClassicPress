@@ -37,6 +37,7 @@ class Tests_Option_SanitizeOption extends WP_UnitTestCase {
 			array( 'ping_sites', "http://www.example.com\nhttp://example.org", "www.example.com \n\texample.org\n\n" ),
 			array( 'gmt_offset', '0', 0 ),
 			array( 'gmt_offset', '1.5', '1.5' ),
+			array( 'gmt_offset', '', null ),
 			array( 'siteurl', 'http://example.org', 'http://example.org' ),
 			array( 'siteurl', 'http://example.org/subdir', 'http://example.org/subdir' ),
 			array( 'siteurl', get_option( 'siteurl' ), '' ),
