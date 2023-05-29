@@ -46,7 +46,7 @@ class WP_Debug_Data {
 		$blog_public            = get_option( 'blog_public' );
 		$default_comment_status = get_option( 'default_comment_status' );
 		$environment_type       = wp_get_environment_type();
-		$core_version           = get_bloginfo( 'version' );
+		$core_version           = classicpress_version() . ' (WP-' . get_bloginfo( 'version' ) . ')';
 		$core_updates           = get_core_updates();
 		$core_update_needed     = '';
 
@@ -70,7 +70,7 @@ class WP_Debug_Data {
 				'version'                => array(
 					'label' => __( 'Version' ),
 					'value' => $core_version . $core_update_needed,
-					'debug' => $core_version,
+					'debug' => '**' . __( 'ClassicPress' ) . '** ' . $core_version,
 				),
 				'site_language'          => array(
 					'label' => __( 'Site Language' ),
@@ -346,7 +346,7 @@ class WP_Debug_Data {
 			'label'       => __( 'Filesystem Permissions' ),
 			'description' => __( 'Shows whether ClassicPress is able to write to the directories it needs access to.' ),
 			'fields'      => array(
-				'wordpress'  => array(
+				'root'  => array(
 					'label' => __( 'The main ClassicPress directory' ),
 					'value' => ( $is_writable_abspath ? __( 'Writable' ) : __( 'Not writable' ) ),
 					'debug' => ( $is_writable_abspath ? 'writable' : 'not writable' ),
@@ -411,11 +411,11 @@ class WP_Debug_Data {
 			$loading = __( 'Loading&hellip;' );
 
 			$info['wp-paths-sizes']['fields'] = array(
-				'wordpress_path' => array(
+				'classicpress_path' => array(
 					'label' => __( 'ClassicPress directory location' ),
 					'value' => untrailingslashit( ABSPATH ),
 				),
-				'wordpress_size' => array(
+				'classicpress_size' => array(
 					'label' => __( 'ClassicPress directory size' ),
 					'value' => $loading,
 					'debug' => 'loading...',
@@ -1592,14 +1592,14 @@ class WP_Debug_Data {
 		// Go through the various installation directories and calculate their sizes.
 		// No trailing slashes.
 		$paths = array(
-			'wordpress_size' => untrailingslashit( ABSPATH ),
+			'classicpress_size' => untrailingslashit( ABSPATH ),
 			'themes_size'    => get_theme_root(),
 			'plugins_size'   => WP_PLUGIN_DIR,
 			'uploads_size'   => $upload_dir['basedir'],
 		);
 
 		$exclude = $paths;
-		unset( $exclude['wordpress_size'] );
+		unset( $exclude['classicpress_size'] );
 		$exclude = array_values( $exclude );
 
 		$size_total = 0;
@@ -1614,7 +1614,7 @@ class WP_Debug_Data {
 			);
 
 			if ( microtime( true ) - WP_START_TIMESTAMP < $max_execution_time ) {
-				if ( 'wordpress_size' === $name ) {
+				if ( 'classicpress_size' === $name ) {
 					$dir_size = recurse_dirsize( $path, $exclude, $max_execution_time );
 				} else {
 					$dir_size = recurse_dirsize( $path, null, $max_execution_time );
