@@ -1646,8 +1646,7 @@ function register_and_do_post_meta_boxes( $post ) {
 			'normal',
 			'core',
 			array(
-				'__back_compat_meta_box'             => ! (bool) get_user_meta( get_current_user_id(), 'enable_custom_fields', true ),
-				'__block_editor_compatible_meta_box' => true,
+				'__back_compat_meta_box' => ! (bool) get_user_meta( get_current_user_id(), 'enable_custom_fields', true ),
 			)
 		);
 	}

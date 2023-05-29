@@ -4201,25 +4201,6 @@ function wp_sensitive_page_meta() {
 }
 
 /**
- * Render inner blocks from the `core/columns` block for generating an excerpt.
- *
- * @since 5.2.0
- * @access private
- * @deprecated 5.8.0 Use _excerpt_render_inner_blocks() introduced in 5.8.0.
- *
- * @see _excerpt_render_inner_blocks()
- *
- * @param array $columns        The parsed columns block.
- * @param array $allowed_blocks The list of allowed inner blocks.
- * @return string The rendered inner blocks.
- */
-function _excerpt_render_inner_columns_blocks( $columns, $allowed_blocks ) {
-	_deprecated_function( __FUNCTION__, '5.8.0', '_excerpt_render_inner_blocks()' );
-
-	return _excerpt_render_inner_blocks( $columns, $allowed_blocks );
-}
-
-/**
  * Renders the duotone filter SVG and returns the CSS filter property to
  * reference the rendered SVG.
  *
@@ -4235,83 +4216,6 @@ function wp_render_duotone_filter_preset( $preset ) {
 	_deprecated_function( __FUNCTION__, '5.9.1', 'wp_get_duotone_filter_property()' );
 
 	return wp_get_duotone_filter_property( $preset );
-}
-
-/**
- * Checks whether serialization of the current block's border properties should occur.
- *
- * @since 5.8.0
- * @access private
- * @deprecated 6.0.0 Use wp_should_skip_block_supports_serialization() introduced in 6.0.0.
- *
- * @see wp_should_skip_block_supports_serialization()
- *
- * @param WP_Block_Type $block_type Block type.
- * @return bool Whether serialization of the current block's border properties
- *              should occur.
- */
-function wp_skip_border_serialization( $block_type ) {
-	_deprecated_function( __FUNCTION__, '6.0.0', 'wp_should_skip_block_supports_serialization()' );
-
-	$border_support = _wp_array_get( $block_type->supports, array( '__experimentalBorder' ), false );
-
-	return is_array( $border_support ) &&
-		array_key_exists( '__experimentalSkipSerialization', $border_support ) &&
-		$border_support['__experimentalSkipSerialization'];
-}
-
-/**
- * Checks whether serialization of the current block's dimensions properties should occur.
- *
- * @since 5.9.0
- * @access private
- * @deprecated 6.0.0 Use wp_should_skip_block_supports_serialization() introduced in 6.0.0.
- *
- * @see wp_should_skip_block_supports_serialization()
- *
- * @param WP_Block_type $block_type Block type.
- * @return bool Whether to serialize spacing support styles & classes.
- */
-function wp_skip_dimensions_serialization( $block_type ) {
-	_deprecated_function( __FUNCTION__, '6.0.0', 'wp_should_skip_block_supports_serialization()' );
-
-	$dimensions_support = _wp_array_get( $block_type->supports, array( '__experimentalDimensions' ), false );
-
-	return is_array( $dimensions_support ) &&
-		array_key_exists( '__experimentalSkipSerialization', $dimensions_support ) &&
-		$dimensions_support['__experimentalSkipSerialization'];
-}
-
-/**
- * Checks whether serialization of the current block's spacing properties should occur.
- *
- * @since 5.9.0
- * @access private
- * @deprecated 6.0.0 Use wp_should_skip_block_supports_serialization() introduced in 6.0.0.
- *
- * @see wp_should_skip_block_supports_serialization()
- *
- * @param WP_Block_Type $block_type Block type.
- * @return bool Whether to serialize spacing support styles & classes.
- */
-function wp_skip_spacing_serialization( $block_type ) {
-	_deprecated_function( __FUNCTION__, '6.0.0', 'wp_should_skip_block_supports_serialization()' );
-
-	$spacing_support = _wp_array_get( $block_type->supports, array( 'spacing' ), false );
-
-	return is_array( $spacing_support ) &&
-		array_key_exists( '__experimentalSkipSerialization', $spacing_support ) &&
-		$spacing_support['__experimentalSkipSerialization'];
-}
-
-/**
- * Inject the block editor assets that need to be loaded into the editor's iframe as an inline script.
- *
- * @since 5.8.0
- * @deprecated 6.0.0
- */
-function wp_add_iframed_editor_assets_html() {
-	_deprecated_function( __FUNCTION__, '6.0.0' );
 }
 
 /**
@@ -4443,60 +4347,6 @@ function _get_path_to_translation_from_lang_dir( $domain ) {
 	}
 
 	return false;
-}
-
-/**
-  * Allows multiple block styles.
-  *
-  * @since 5.9.0
-  * @deprecated 6.1.0
-  *
-  * @param array $metadata Metadata for registering a block type.
-  * @return array Metadata for registering a block type.
-  */
-  function _wp_multiple_block_styles( $metadata ) {
-	_deprecated_function( __FUNCTION__, '6.1.0' );
-	return $metadata;
-}
-
-/**
- * Generates an inline style for a typography feature e.g. text decoration,
- * text transform, and font style.
- *
- * @since 5.8.0
- * @access private
- * @deprecated 6.1.0 Use wp_style_engine_get_styles() introduced in 6.1.0.
- *
- * @see wp_style_engine_get_styles()
- *
- * @param array  $attributes   Block's attributes.
- * @param string $feature      Key for the feature within the typography styles.
- * @param string $css_property Slug for the CSS property the inline style sets.
- * @return string CSS inline style.
- */
-function wp_typography_get_css_variable_inline_style( $attributes, $feature, $css_property ) {
-	_deprecated_function( __FUNCTION__, '6.1.0', 'wp_style_engine_get_styles()' );
-
-	// Retrieve current attribute value or skip if not found.
-	$style_value = _wp_array_get( $attributes, array( 'style', 'typography', $feature ), false );
-	if ( ! $style_value ) {
-		return;
-	}
-
-	// If we don't have a preset CSS variable, we'll assume it's a regular CSS value.
-	if ( strpos( $style_value, "var:preset|{$css_property}|" ) === false ) {
-		return sprintf( '%s:%s;', $css_property, $style_value );
-	}
-
-	/*
-	 * We have a preset CSS variable as the style.
-	 * Get the style value from the string and return CSS style.
-	 */
-	$index_to_splice = strrpos( $style_value, '|' ) + 1;
-	$slug            = substr( $style_value, $index_to_splice );
-
-	// Return the actual CSS inline style e.g. `text-decoration:var(--wp--preset--text-decoration--underline);`.
-	return sprintf( '%s:var(--wp--preset--%s--%s);', $css_property, $css_property, $slug );
 }
 
 /**
