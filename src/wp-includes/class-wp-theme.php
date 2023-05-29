@@ -25,6 +25,7 @@ final class WP_Theme implements ArrayAccess {
 	 * @since 3.4.0
 	 * @since 5.4.0 Added `Requires at least` and `Requires PHP` headers.
 	 * @since 6.1.0 Added `Update URI` header.
+	 * @since CP-2.0.0 Added support for `Requires CP` header and fallback for `Update URI`.
 	 * @var string[]
 	 */
 	private static $file_headers = array(
@@ -40,6 +41,7 @@ final class WP_Theme implements ArrayAccess {
 		'TextDomain'  => 'Text Domain',
 		'DomainPath'  => 'Domain Path',
 		'RequiresWP'  => 'Requires at least',
+		'RequiresCP'  => 'Requires CP',
 		'RequiresPHP' => 'Requires PHP',
 		'UpdateURI'   => 'Update URI',
 	);
@@ -293,6 +295,10 @@ final class WP_Theme implements ArrayAccess {
 			return;
 		} else {
 			$this->headers = get_file_data( $this->theme_root . '/' . $theme_file, self::$file_headers, 'theme' );
+			// If no Update URI is defined and Requires CP is set fall back to ClassicPress directory URL.
+			if ( ! $this->headers['UpdateURI'] && filter_var( $this->headers['RequiresCP'], FILTER_VALIDATE_FLOAT ) !== false ) {
+				$this->headers['UpdateURI'] = 'https://directory.classicpress.net/wp-json/wp/v2/themes?byslug=' . preg_replace( '/[^a-zA-Z0-9_\-]/', '', $this->stylesheet );
+			}
 			// Default themes always trump their pretenders.
 			// Properly identify default themes that are inside a directory within wp-content/themes.
 			$default_theme_slug = array_search( $this->headers['Name'], self::$default_themes, true );
@@ -831,10 +837,12 @@ final class WP_Theme implements ArrayAccess {
 	 * @since 3.4.0
 	 * @since 5.4.0 Added support for `Requires at least` and `Requires PHP` headers.
 	 * @since 6.1.0 Added support for `Update URI` header.
+	 * @since CP-2.0.0 Added support for `Requires CP` header.
+	 *
 	 *
 	 * @param string $header Theme header. Accepts 'Name', 'Description', 'Author', 'Version',
-	 *                       'ThemeURI', 'AuthorURI', 'Status', 'Tags', 'RequiresWP', 'RequiresPHP',
-	 *                       'UpdateURI'.
+	 *                       'ThemeURI', 'AuthorURI', 'Status', 'Tags', 'RequiresWP',
+	 *                       'RequiresCP', 'RequiresPHP', 'UpdateURI'.
 	 * @param string $value  Value to sanitize.
 	 * @return string|array An array for Tags header, string otherwise.
 	 */
@@ -884,6 +892,7 @@ final class WP_Theme implements ArrayAccess {
 			case 'Version':
 			case 'RequiresWP':
 			case 'RequiresPHP':
+			case 'RequiresCP':
 			case 'UpdateURI':
 				$value = strip_tags( $value );
 				break;

@@ -116,6 +116,32 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 	}
 
 	/**
+	 * A theme with Requires CP and without Update URI
+	 */
+	public function test_theme_unit_test_update_uri_auto() {
+		$theme = wp_get_theme( 'unit-test-update-uri-auto' );
+		$this->assertSame( 'https://directory.classicpress.net/wp-json/wp/v2/themes?byslug=unit-test-update-uri-auto', $theme->get( 'UpdateURI' ) );
+		$this->assertSame( '2.0', $theme->get( 'RequiresCP' ) );
+	}
+
+	/**
+	 * A theme with Requires CP and Update URI
+	 */
+	public function test_theme_unit_test_update_uri() {
+		$theme = wp_get_theme( 'unit-test-update-uri' );
+		$this->assertSame( 'false', $theme->get( 'UpdateURI' ) );
+		$this->assertSame( '2.0', $theme->get( 'RequiresCP' ) );
+	}
+
+	/**
+	 * Check not to add Update URI where there is not Requires CP header
+	 */
+	public function test_theme_no_update_uri() {
+		$theme = wp_get_theme( 'default' );
+		$this->assertSame( '', $theme->get( 'UpdateURI' ) );
+	}
+
+	/**
 	 * A CSS-only theme
 	 *
 	 * @expectedDeprecated get_themes
@@ -175,6 +201,8 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 			'Internationalized Theme',
 			'Custom Internationalized Theme',
 			'camelCase',
+			'Unit Test Update URI Auto',
+			'Unit Test Update URI',
 		);
 
 		$this->assertSameSets( $expected, $theme_names );
