@@ -70,7 +70,7 @@ class WP_Compat {
 						// Translators: %1$s is the plugin name.
 						printf( esc_html__( '%1$s uses block-related functions and may have issues.' ), $plugin_data['Name'] );
 						?>
-						<a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-general-screen/#blocks-compatibility"><?php _e( 'Learn more' ); ?></a> | 
+						<a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-general-screen/#blocks-compatibility"><?php _e( 'Learn more' ); ?></a> |
 						<a href="https://forums.classicpress.net/new-topic?category=plugins/plugin-support&tags=blocks-compatibility&title=<?php echo urlencode( $plugin_data['Name'] ); ?>+blocks+compatibility"><?php _e( 'Report an issue &rsaquo;' ); ?></a>
 					</p>
 				</div>
@@ -293,6 +293,21 @@ class WP_Compat {
 			 * @return bool False.
 			 */
 			function has_block( ...$args ) {
+				global $wp_compat;
+				$wp_compat->using_block_function();
+				return false;
+			}
+		}
+
+		if ( ! function_exists( 'has_blocks' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.0.0
+			 *
+			 * @return bool False.
+			 */
+			function has_blocks( ...$args ) {
 				global $wp_compat;
 				$wp_compat->using_block_function();
 				return false;
