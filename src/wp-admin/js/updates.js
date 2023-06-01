@@ -2557,10 +2557,11 @@
 
 			if ( wp.updates.searchTerm === data.s && 'typechange' !== eventtype ) {
 				return;
-			} else {
-				$pluginFilter.empty();
-				wp.updates.searchTerm = data.s;
 			}
+
+			$pluginFilter.empty();
+			$( '.plugin-categories-filter-container' ).remove();
+			wp.updates.searchTerm = data.s;
 
 			if ( window.history && window.history.replaceState ) {
 				window.history.replaceState( null, '', searchLocation );

@@ -1373,6 +1373,26 @@ th.action-links {
 	}
 }
 
+/* Plugin Search Categories filter */
+.plugin-categories-filter {
+	display: inline-block;
+}
+.plugin-categories-filter li {
+	float: left;
+	width: 21.5%;
+}
+.plugin-categories-filter li a {
+	font-size: 1.5em;
+	background-color: #FFF;
+	border: 1px solid #c3c4c7;
+	padding: 20px;
+	display: block;
+	text-decoration: none;
+}
+.plugin-categories-filter li a:hover, .plugin-categories-filter li a:focus {
+	background-color: #f6f7f7;
+}
+
 /*------------------------------------------------------------------------------
   4.0 - Notifications
 ------------------------------------------------------------------------------*/
@@ -3105,7 +3125,7 @@ img {
 .postbox .handle-order-higher .order-higher-indicator::before,
 .postbox .handle-order-lower .order-lower-indicator::before {
 	position: relative;
-    top: 0.11rem;
+	top: 0.11rem;
 	width: 20px;
 	height: 20px;
 }

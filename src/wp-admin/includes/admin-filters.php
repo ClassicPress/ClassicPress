@@ -89,14 +89,10 @@ add_action( 'admin_head-nav-menus.php', '_wp_delete_orphaned_draft_menu_items' )
 add_filter( 'allowed_options', 'option_update_filter' );
 
 // Plugin Install hooks.
-add_action( 'install_plugins_featured', 'install_dashboard' );
+add_action( 'install_plugins_popular', 'install_dashboard' );
+add_action( 'install_plugins_categories', 'display_plugins_categories_list' );
 add_action( 'install_plugins_upload', 'install_plugins_upload' );
 add_action( 'install_plugins_search', 'display_plugins_table' );
-add_action( 'install_plugins_popular', 'display_plugins_table' );
-add_action( 'install_plugins_recommended', 'display_plugins_table' );
-add_action( 'install_plugins_new', 'display_plugins_table' );
-add_action( 'install_plugins_beta', 'display_plugins_table' );
-add_action( 'install_plugins_favorites', 'display_plugins_table' );
 add_action( 'install_plugins_pre_plugin-information', 'install_plugin_information' );
 
 // Template hooks.
