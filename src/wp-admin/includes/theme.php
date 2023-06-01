@@ -1028,18 +1028,18 @@ function customize_themes_print_templates() {
 							/* translators: %s: Theme name. */
 							$aria_label = sprintf( _x( 'Activate %s', 'theme' ), '{{ data.name }}' );
 						?>
-						<# if ( data.compatibleWP && data.compatiblePHP && data.actions.activate ) { #>
+						<# if ( data.compatibleWP && data.compatiblePHP && data.actions.activate && data.compatibleCP !== false ) { #>
 							<a href="{{{ data.actions.activate }}}" class="button button-primary activate" aria-label="<?php echo esc_attr( $aria_label ); ?>"><?php _e( 'Activate' ); ?></a>
 						<# } #>
 					<# } else { #>
-						<# if ( data.compatibleWP && data.compatiblePHP ) { #>
+						<# if ( data.compatibleWP && data.compatiblePHP && data.compatibleCP !== false ) { #>
 							<button type="button" class="button button-primary preview-theme" data-slug="{{ data.id }}"><?php _e( 'Live Preview' ); ?></button>
 						<# } else { #>
 							<button class="button button-primary disabled"><?php _e( 'Live Preview' ); ?></button>
 						<# } #>
 					<# } #>
 				<# } else { #>
-					<# if ( data.compatibleWP && data.compatiblePHP ) { #>
+					<# if ( data.compatibleWP && data.compatiblePHP && data.compatibleCP !== false ) { #>
 						<button type="button" class="button theme-install" data-slug="{{ data.id }}"><?php _e( 'Install' ); ?></button>
 						<button type="button" class="button button-primary theme-install preview" data-slug="{{ data.id }}"><?php _e( 'Install &amp; Preview' ); ?></button>
 					<# } else { #>

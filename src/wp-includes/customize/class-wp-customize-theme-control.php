@@ -176,7 +176,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				<# } #>
 			<# } #>
 
-			<# if ( ! data.theme.compatibleWP || ! data.theme.compatiblePHP ) { #>
+			<# if ( ! data.theme.compatibleWP || ! data.theme.compatiblePHP || data.theme.compatibleCP === false ) { #>
 				<div class="notice notice-error notice-alt"><p>
 					<# if ( ! data.theme.compatibleWP && ! data.theme.compatiblePHP ) { #>
 						<?php
@@ -214,6 +214,10 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 								self_admin_url( 'update-core.php' )
 							);
 						}
+						?>
+					<# } else if ( data.theme.compatibleCP === false ) { #>
+						<?php
+						_e( "FSE themes don't work with ClassicPress." );
 						?>
 					<# } else if ( ! data.theme.compatiblePHP ) { #>
 						<?php
@@ -274,7 +278,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 					<div class="theme-id-container">
 						<h3 class="theme-name" id="{{ data.section }}-{{ data.theme.id }}-name">{{ data.theme.name }}</h3>
 						<div class="theme-actions">
-							<# if ( data.theme.compatibleWP && data.theme.compatiblePHP ) { #>
+							<# if ( data.theme.compatibleWP && data.theme.compatiblePHP && data.theme.compatibleCP !== false ) { #>
 								<button type="button" class="button button-primary preview-theme" aria-label="<?php echo esc_attr( $preview_label ); ?>" data-slug="{{ data.theme.id }}"><?php _e( 'Live Preview' ); ?></button>
 							<# } else { #>
 								<button type="button" class="button button-primary disabled" aria-label="<?php echo esc_attr( $preview_label ); ?>"><?php _e( 'Live Preview' ); ?></button>
@@ -287,7 +291,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				<div class="theme-id-container">
 					<h3 class="theme-name" id="{{ data.section }}-{{ data.theme.id }}-name">{{ data.theme.name }}</h3>
 					<div class="theme-actions">
-						<# if ( data.theme.compatibleWP && data.theme.compatiblePHP ) { #>
+						<# if ( data.theme.compatibleWP && data.theme.compatiblePHP && data.theme.compatibleCP !== false ) { #>
 							<button type="button" class="button button-primary theme-install preview" aria-label="<?php echo esc_attr( $install_label ); ?>" data-slug="{{ data.theme.id }}" data-name="{{ data.theme.name }}"><?php _e( 'Install &amp; Preview' ); ?></button>
 						<# } else { #>
 							<button type="button" class="button button-primary disabled" aria-label="<?php echo esc_attr( $install_label ); ?>" disabled><?php _e( 'Install &amp; Preview' ); ?></button>

@@ -3554,6 +3554,7 @@ function wp_ajax_query_themes() {
 
 	/** This filter is documented in wp-admin/includes/class-wp-theme-install-list-table.php */
 	$args = apply_filters( 'install_themes_table_api_args_' . $old_filter, $args );
+	$args['fields']['tags'] = true;
 
 	$api = themes_api( 'query_themes', $args );
 
@@ -3639,6 +3640,7 @@ function wp_ajax_query_themes() {
 		$theme->preview_url    = set_url_scheme( $theme->preview_url );
 		$theme->compatible_wp  = is_wp_version_compatible( $theme->requires );
 		$theme->compatible_php = is_php_version_compatible( $theme->requires_php );
+		$theme->compatible_cp  = ! array_key_exists( 'full-site-editing', $theme->tags );
 	}
 
 	wp_send_json_success( $api );

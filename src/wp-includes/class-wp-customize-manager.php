@@ -5872,6 +5872,8 @@ final class WP_Customize_Manager {
 				$args['browse'] = 'new'; // Sort by latest themes by default.
 			}
 
+			$args['fields']['tags'] = true;
+
 			// Load themes from the .org API.
 			$themes = themes_api( 'query_themes', $args );
 			if ( is_wp_error( $themes ) ) {
@@ -5936,6 +5938,7 @@ final class WP_Customize_Manager {
 				$theme->authorAndUri  = wp_kses( $theme->author['display_name'], $themes_allowedtags );
 				$theme->compatibleWP  = is_wp_version_compatible( $theme->requires ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName
 				$theme->compatiblePHP = is_php_version_compatible( $theme->requires_php ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName
+				$theme->compatibleCP  = ! array_key_exists( 'full-site-editing', $theme->tags );
 
 				if ( isset( $theme->parent ) ) {
 					$theme->parent = $theme->parent['slug'];
