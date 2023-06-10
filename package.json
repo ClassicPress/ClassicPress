@@ -48,12 +48,12 @@
     "webpack": "5.86.0"
   },
   "dependencies": {
-    "@wordpress/a11y": "3.34.0",
-    "@wordpress/api-fetch": "6.31.0",
-    "@wordpress/dom-ready": "3.34.0",
-    "@wordpress/hooks": "3.34.0",
-    "@wordpress/i18n": "4.34.0",
-    "@wordpress/url": "3.35.0",
+    "@wordpress/a11y": "3.35.0",
+    "@wordpress/api-fetch": "6.32.0",
+    "@wordpress/dom-ready": "3.35.0",
+    "@wordpress/hooks": "3.35.0",
+    "@wordpress/i18n": "4.35.0",
+    "@wordpress/url": "3.36.0",
     "node-sass": "9.0.0"
   },
   "collective": {

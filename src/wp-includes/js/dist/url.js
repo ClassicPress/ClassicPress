@@ -1026,10 +1026,7 @@ function getQueryArgs(url) {
  * @return {string} URL with arguments applied.
  */
 
-function addQueryArgs() {
-  let url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-  let args = arguments.length > 1 ? arguments[1] : undefined;
-
+function addQueryArgs(url = '', args) {
   // If no arguments are to be appended, return original URL.
   if (!args || !Object.keys(args).length) {
     return url;
@@ -1123,7 +1120,7 @@ function hasQueryArg(url, arg) {
  * @return {string} Updated URL.
  */
 
-function removeQueryArgs(url) {
+function removeQueryArgs(url, ...args) {
   const queryStringIndex = url.indexOf('?');
 
   if (queryStringIndex === -1) {
@@ -1132,11 +1129,6 @@ function removeQueryArgs(url) {
 
   const query = getQueryArgs(url);
   const baseURL = url.substr(0, queryStringIndex);
-
-  for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    args[_key - 1] = arguments[_key];
-  }
-
   args.forEach(arg => delete query[arg]);
   const queryString = buildQueryString(query);
   return queryString ? baseURL + '?' + queryString : baseURL;
@@ -1212,8 +1204,7 @@ function safeDecodeURI(uri) {
  *
  * @return {string} Displayed URL.
  */
-function filterURLForDisplay(url) {
-  let maxLength = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+function filterURLForDisplay(url, maxLength = null) {
   // Remove protocol and www prefixes.
   let filteredURL = url.replace(/^(?:https?:)\/\/(?:www\.)?/, ''); // Ends with / and only has that single slash, strip it.
 

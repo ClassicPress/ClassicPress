@@ -101,8 +101,7 @@ function validateHookName(hookName) {
  */
 
 function createAddHook(hooks, storeKey) {
-  return function addHook(hookName, namespace, callback) {
-    let priority = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 10;
+  return function addHook(hookName, namespace, callback, priority = 10) {
     const hooksStore = hooks[storeKey];
 
     if (!build_module_validateHookName(hookName)) {
@@ -209,8 +208,7 @@ function createAddHook(hooks, storeKey) {
  * @return {RemoveHook} Function that removes hooks.
  */
 
-function createRemoveHook(hooks, storeKey) {
-  let removeAll = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+function createRemoveHook(hooks, storeKey, removeAll = false) {
   return function removeHook(hookName, namespace) {
     const hooksStore = hooks[storeKey];
 
@@ -317,9 +315,8 @@ function createHasHook(hooks, storeKey) {
  *
  * @return {(hookName:string, ...args: unknown[]) => unknown} Function that runs hook callbacks.
  */
-function createRunHook(hooks, storeKey) {
-  let returnFirstArg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-  return function runHooks(hookName) {
+function createRunHook(hooks, storeKey, returnFirstArg = false) {
+  return function runHooks(hookName, ...args) {
     const hooksStore = hooks[storeKey];
 
     if (!hooksStore[hookName]) {
@@ -333,10 +330,6 @@ function createRunHook(hooks, storeKey) {
     const handlers = hooksStore[hookName].handlers; // The following code is stripped from production builds.
 
     if (false) {}
-
-    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      args[_key - 1] = arguments[_key];
-    }
 
     if (!handlers || !handlers.length) {
       return returnFirstArg ? args[0] : undefined;
@@ -383,10 +376,10 @@ function createRunHook(hooks, storeKey) {
  */
 function createCurrentHook(hooks, storeKey) {
   return function currentHook() {
-    var _hooksStore$__current, _hooksStore$__current2;
+    var _hooksStore$__current;
 
     const hooksStore = hooks[storeKey];
-    return (_hooksStore$__current = (_hooksStore$__current2 = hooksStore.__current[hooksStore.__current.length - 1]) === null || _hooksStore$__current2 === void 0 ? void 0 : _hooksStore$__current2.name) !== null && _hooksStore$__current !== void 0 ? _hooksStore$__current : null;
+    return (_hooksStore$__current = hooksStore.__current[hooksStore.__current.length - 1]?.name) !== null && _hooksStore$__current !== void 0 ? _hooksStore$__current : null;
   };
 }
 
@@ -796,12 +789,8 @@ const logErrorOnce = memize(console.error); // eslint-disable-line no-console
  * @return {string} The formatted string.
  */
 
-function sprintf_sprintf(format) {
+function sprintf_sprintf(format, ...args) {
   try {
-    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      args[_key - 1] = arguments[_key];
-    }
-
     return sprintfjs.sprintf(format, ...args);
   } catch (error) {
     if (error instanceof Error) {
@@ -1514,27 +1503,21 @@ const createI18n = (initialData, initialDomain, hooks) => {
   /** @type {GetLocaleData} */
 
 
-  const getLocaleData = function () {
-    let domain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
-    return tannin.data[domain];
-  };
+  const getLocaleData = (domain = 'default') => tannin.data[domain];
   /**
    * @param {LocaleData} [data]
    * @param {string}     [domain]
    */
 
 
-  const doSetLocaleData = function (data) {
-    var _tannin$data$domain;
-
-    let domain = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'default';
+  const doSetLocaleData = (data, domain = 'default') => {
     tannin.data[domain] = { ...tannin.data[domain],
       ...data
     }; // Populate default domain configuration (supported locale date which omits
     // a plural forms expression).
 
     tannin.data[domain][''] = { ...DEFAULT_LOCALE_DATA[''],
-      ...((_tannin$data$domain = tannin.data[domain]) === null || _tannin$data$domain === void 0 ? void 0 : _tannin$data$domain[''])
+      ...tannin.data[domain]?.['']
     }; // Clean up cached plural forms functions cache as it might be updated.
 
     delete tannin.pluralForms[domain];
@@ -1549,17 +1532,14 @@ const createI18n = (initialData, initialDomain, hooks) => {
   /** @type {AddLocaleData} */
 
 
-  const addLocaleData = function (data) {
-    var _tannin$data$domain2;
-
-    let domain = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'default';
+  const addLocaleData = (data, domain = 'default') => {
     tannin.data[domain] = { ...tannin.data[domain],
       ...data,
       // Populate default domain configuration (supported locale date which omits
       // a plural forms expression).
       '': { ...DEFAULT_LOCALE_DATA[''],
-        ...((_tannin$data$domain2 = tannin.data[domain]) === null || _tannin$data$domain2 === void 0 ? void 0 : _tannin$data$domain2['']),
-        ...(data === null || data === void 0 ? void 0 : data[''])
+        ...tannin.data[domain]?.[''],
+        ...data?.['']
       }
     }; // Clean up cached plural forms functions cache as it might be updated.
 
@@ -1593,13 +1573,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
    */
 
 
-  const dcnpgettext = function () {
-    let domain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
-    let context = arguments.length > 1 ? arguments[1] : undefined;
-    let single = arguments.length > 2 ? arguments[2] : undefined;
-    let plural = arguments.length > 3 ? arguments[3] : undefined;
-    let number = arguments.length > 4 ? arguments[4] : undefined;
-
+  const dcnpgettext = (domain = 'default', context, single, plural, number) => {
     if (!tannin.data[domain]) {
       // Use `doSetLocaleData` to set silently, without notifying listeners.
       doSetLocaleData(undefined, domain);
@@ -1610,10 +1584,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
   /** @type {GetFilterDomain} */
 
 
-  const getFilterDomain = function () {
-    let domain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
-    return domain;
-  };
+  const getFilterDomain = (domain = 'default') => domain;
   /** @type {__} */
 
 
@@ -1750,10 +1721,8 @@ const createI18n = (initialData, initialDomain, hooks) => {
 
 
   const hasTranslation = (single, context, domain) => {
-    var _tannin$data, _tannin$data2;
-
     const key = context ? context + '\u0004' + single : single;
-    let result = !!((_tannin$data = tannin.data) !== null && _tannin$data !== void 0 && (_tannin$data2 = _tannin$data[domain !== null && domain !== void 0 ? domain : 'default']) !== null && _tannin$data2 !== void 0 && _tannin$data2[key]);
+    let result = !!tannin.data?.[domain !== null && domain !== void 0 ? domain : 'default']?.[key];
 
     if (hooks) {
       /**
@@ -2627,10 +2596,7 @@ function buildQueryString(data) {
  * @return {string} URL with arguments applied.
  */
 
-function addQueryArgs() {
-  let url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-  let args = arguments.length > 1 ? arguments[1] : undefined;
-
+function addQueryArgs(url = '', args) {
   // If no arguments are to be appended, return original URL.
   if (!args || !Object.keys(args).length) {
     return url;
@@ -2661,10 +2627,7 @@ function addQueryArgs() {
  */
 
 function createPreloadingMiddleware(preloadedData) {
-  const cache = Object.fromEntries(Object.entries(preloadedData).map(_ref => {
-    let [path, data] = _ref;
-    return [normalizePath(path), data];
-  }));
+  const cache = Object.fromEntries(Object.entries(preloadedData).map(([path, data]) => [normalizePath(path), data]));
   return (options, next) => {
     const {
       parse = true
@@ -2743,17 +2706,14 @@ function prepareResponse(responseData, parse) {
  * @return {import('../types').APIFetchOptions} The request with the modified query args
  */
 
-const modifyQuery = (_ref, queryArgs) => {
-  let {
-    path,
-    url,
-    ...options
-  } = _ref;
-  return { ...options,
-    url: url && addQueryArgs(url, queryArgs),
-    path: path && addQueryArgs(path, queryArgs)
-  };
-};
+const modifyQuery = ({
+  path,
+  url,
+  ...options
+}, queryArgs) => ({ ...options,
+  url: url && addQueryArgs(url, queryArgs),
+  path: path && addQueryArgs(path, queryArgs)
+});
 /**
  * Duplicates parsing functionality from apiFetch.
  *
@@ -3007,9 +2967,7 @@ const userLocaleMiddleware = (options, next) => {
  * @return {Promise<any> | null | Response} Parsed response.
  */
 
-const response_parseResponse = function (response) {
-  let shouldParseResponse = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-
+const response_parseResponse = (response, shouldParseResponse = true) => {
   if (shouldParseResponse) {
     if (response.status === 204) {
       return null;
@@ -3053,8 +3011,7 @@ const parseJsonAndNormalizeError = response => {
  */
 
 
-const parseResponseAndNormalizeError = function (response) {
-  let shouldParseResponse = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+const parseResponseAndNormalizeError = (response, shouldParseResponse = true) => {
   return Promise.resolve(response_parseResponse(response, shouldParseResponse)).catch(res => parseAndThrowError(res, shouldParseResponse));
 };
 /**
@@ -3065,9 +3022,7 @@ const parseResponseAndNormalizeError = function (response) {
  * @return {Promise<any>} Parsed response.
  */
 
-function parseAndThrowError(response) {
-  let shouldParseResponse = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-
+function parseAndThrowError(response, shouldParseResponse = true) {
   if (!shouldParseResponse) {
     throw response;
   }
