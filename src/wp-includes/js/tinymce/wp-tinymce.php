@@ -33,12 +33,8 @@ header( 'Vary: Accept-Encoding' ); // Handle proxies.
 header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', time() + $expires_offset ) . ' GMT' );
 header( "Cache-Control: public, max-age=$expires_offset" );
 
-<<<<<<< HEAD:src/wp-includes/js/tinymce/wp-tinymce.php
 $file = get_file( $basepath . '/wp-tinymce.js' );
 if ( isset( $_GET['c'] ) && $file ) {
-=======
-if ( isset( $_GET['c'] ) && ( $file = get_file( $basepath . '/wp-tinymce.js' ) ) ) {
->>>>>>> 21e479d3a8 (TinyMCE: retire wp-tinymce.php and remove pre-compression of wp-tinymce.js.):src/js/_enqueues/vendor/tinymce/wp-tinymce.php
 	echo $file;
 } else {
 	// Even further back compat.
