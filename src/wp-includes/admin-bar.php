@@ -589,9 +589,20 @@ function wp_admin_bar_my_sites_menu( $wp_admin_bar ) {
 	foreach ( (array) $wp_admin_bar->user->blogs as $blog ) {
 		switch_to_blog( $blog->userblog_id );
 
-		$cp_logo_src = includes_url( 'images/classicpress-logo-dashicon-grey-on-transparent.svg' );
-
-		$cplogo = '<img class="cp-logo" src="' . $cp_logo_src . '" alt="" />';
+		if ( true === $show_site_icons && has_site_icon() ) {
+			$cplogo = sprintf(
+				'<img class="blavatar" src="%s" srcset="%s 2x" alt="" width="16" height="16"%s />',
+				esc_url( get_site_icon_url( 16 ) ),
+				esc_url( get_site_icon_url( 32 ) ),
+				( wp_lazy_loading_enabled( 'img', 'site_icon_in_toolbar' ) ? ' loading="lazy"' : '' )
+			);
+		} else {
+			$cplogo = sprintf(
+				'<img class="blavatar" src="%s" alt=""%s />',
+				esc_url( includes_url( 'images/classicpress-logo-dashicon-grey-on-transparent.svg' ) ),
+				( wp_lazy_loading_enabled( 'img', 'site_icon_in_toolbar' ) ? ' loading="lazy"' : '' )
+			);
+		}
 
 		$blogname = $blog->blogname;
 
