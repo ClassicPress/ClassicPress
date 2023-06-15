@@ -35,7 +35,7 @@ exports.replaceEmojiRegex = () => {
 	// Fetch a list of the files that Twemoji supplies
 
 	const entityNames = callTwemojiFilesAPI(
-		'https://api-v1.classicpress.net/twemoji/6f3545b9_2_svg.json'
+		'https://api-v1.classicpress.net/twemoji/16fb3e0_v_14.0.2_svg.json'
 	);
 
 	// Convert the list of emoji names into PHP code
