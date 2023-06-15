@@ -8,23 +8,23 @@
 
 class WP_Compat {
 
-	public $blocks_compatibility_level = null;
+	public static $blocks_compatibility_level = null;
 
 	public function __construct() {
 
-		if ( null === $this->blocks_compatibility_level ) {
-			$this->blocks_compatibility_level = (int) get_option( 'blocks_compatibility_level', 1 );
+		if ( null === self::$blocks_compatibility_level ) {
+			self::$blocks_compatibility_level = (int) get_option( 'blocks_compatibility_level', 1 );
 		}
 
 		add_action( 'update_option_blocks_compatibility_level', array( $this, 'purge_options' ), 10, 2 );
 
-		if ( 0 === $this->blocks_compatibility_level ) {
+		if ( 0 === self::$blocks_compatibility_level ) {
 			return;
 		}
 
 		$this->define_polyfills();
 
-		if ( 1 === $this->blocks_compatibility_level ) {
+		if ( 1 === self::$blocks_compatibility_level ) {
 			return;
 		}
 
@@ -173,7 +173,7 @@ class WP_Compat {
 	 * @param string $path
 	 * @return string
 	 */
-	private function plugin_folder( $path ) {
+	private static function plugin_folder( $path ) {
 		return preg_replace( '~^' . preg_quote( WP_PLUGIN_DIR ) . preg_quote( DIRECTORY_SEPARATOR ) . '([^' . preg_quote( DIRECTORY_SEPARATOR ) . ']*).*~', '$1', $path );
 	}
 
@@ -194,8 +194,8 @@ class WP_Compat {
 	 *
 	 * @return void
 	 */
-	public function using_block_function() {
-		if ( 2 !== $this->blocks_compatibility_level ) {
+	public static function using_block_function() {
+		if ( 2 !== self::$blocks_compatibility_level ) {
 			return;
 		}
 
@@ -221,14 +221,14 @@ class WP_Compat {
 			$traces = array_column( $trace, 'file' );
 			$traces = array_map(
 				function( $path ) {
-					return $this->plugin_folder( $path );
+					return self::plugin_folder( $path );
 				},
 				$traces
 			);
 			$active = wp_get_active_and_valid_plugins();
 			$active = array_map(
 				function( $path ) {
-					return $this->plugin_folder( $path );
+					return self::plugin_folder( $path );
 				},
 				$active
 			);
@@ -263,8 +263,7 @@ class WP_Compat {
 			 * @return bool False.
 			 */
 			function register_block_type( ...$args ) {
-				global $wp_compat;
-				$wp_compat->using_block_function();
+				WP_Compat::using_block_function();
 				return false;
 			}
 		}
@@ -278,8 +277,7 @@ class WP_Compat {
 			 * @return bool False.
 			 */
 			function register_block_type_from_metadata( ...$args ) {
-				global $wp_compat;
-				$wp_compat->using_block_function();
+				WP_Compat::using_block_function();
 				return false;
 			}
 		}
@@ -293,8 +291,7 @@ class WP_Compat {
 			 * @return bool False.
 			 */
 			function has_block( ...$args ) {
-				global $wp_compat;
-				$wp_compat->using_block_function();
+				WP_Compat::using_block_function();
 				return false;
 			}
 		}
@@ -308,8 +305,7 @@ class WP_Compat {
 			 * @return bool False.
 			 */
 			function has_blocks( ...$args ) {
-				global $wp_compat;
-				$wp_compat->using_block_function();
+				WP_Compat::using_block_function();
 				return false;
 			}
 		}
@@ -323,8 +319,7 @@ class WP_Compat {
 			 * @return bool False.
 			 */
 			function register_block_pattern( ...$args ) {
-				global $wp_compat;
-				$wp_compat->using_block_function();
+				WP_Compat::using_block_function();
 				return false;
 			}
 		}

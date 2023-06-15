@@ -10,16 +10,12 @@ class Tests_Compat_wordpress extends WP_UnitTestCase {
 	public static function wpSetUpBeforeClass() {
 		// Use 'Troubleshooting' mode for deeper testing
 		update_option( 'blocks_compatibility_level', '2' );
-
-		global $wp_compat;
-		$wp_compat->blocks_compatibility_level = 2;
+		WP_Compat::$blocks_compatibility_level = 2;
 	}
 
 	public static function wpTearDownAfterClass() {
 		update_option( 'blocks_compatibility_level', '1' );
-
-		global $wp_compat;
-		$wp_compat->blocks_compatibility_level = 1;
+		WP_Compat::$blocks_compatibility_level = 1;
 	}
 
 	/**
@@ -28,9 +24,7 @@ class Tests_Compat_wordpress extends WP_UnitTestCase {
 	public function test_default_blocks_compatibility_level() {
 		$option = get_option( 'blocks_compatibility_level' );
 		$this->assertSame( $option, '2' );
-
-		global $wp_compat;
-		$this->assertSame( $wp_compat->blocks_compatibility_level, 2 );
+		$this->assertSame( WP_Compat::$blocks_compatibility_level, 2 );
 	}
 
 	/**
