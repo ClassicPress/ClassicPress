@@ -367,6 +367,6 @@ $menu = add_menu_classes( $menu );
   *
   * @since CP-1.6.0
   */
- if ( ! isset( $submenu['security.php'] ) )  {
- 	unset( $menu[85] );
- }
+if ( ! isset( $submenu['security.php'] ) ) {
+	unset( $menu[85] );
+}
