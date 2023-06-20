@@ -1,8 +1,8 @@
-<a href="https://www.classicpress.net"><img src="src/wp-admin/images/classicpress-logo-wordmark-gradient-on-transparent.svg" height="60"></a>
+<a href="https://www.classicpress.net"><img src="src/wp-admin/images/classicpress-logo.png" height="63"></a>
 
 **ClassicPress: The CMS for Creators. Stable. Lightweight. Instantly Familiar.**
 
-ClassicPress is a community-led open source content management system for creators. It is a fork of WordPress 4.9 that preserves the TinyMCE classic editor as the default option. It is half the size of WordPress, contains less bloat improving performance, and has no block editor (Gutenberg/Full Site Editing). 
+ClassicPress is a community-led open source content management system for creators. It is a fork of WordPress 4.9 that preserves the TinyMCE classic editor as the default option. It is half the size of WordPress, contains less bloat improving performance, and has no block editor (Gutenberg/Full Site Editing).
 
 [![Coding Standards](https://github.com/ClassicPress/ClassicPress/workflows/Coding%20Standards/badge.svg?branch=develop)](https://github.com/ClassicPress/ClassicPress/actions?query=workflow%3A%22Coding+Standards%22+branch%3Adevelop)
 [![PHPUnit Tests](https://github.com/ClassicPress/ClassicPress/workflows/PHPUnit%20Tests/badge.svg?branch=develop)](https://github.com/ClassicPress/ClassicPress/actions?query=workflow%3A%22PHPUnit+Tests%22+branch%3Adevelop)
@@ -25,7 +25,7 @@ Would you like to help? [Here is how you can start ›](https://github.com/Class
 
 
 ## Sponsors
-Corporate sponsors that believe in ClassicPress. [Become a sponsor ›](https://opencollective.com/classicpress)   
+Corporate sponsors that believe in ClassicPress. [Become a sponsor ›](https://opencollective.com/classicpress)
 All donations are tax-deductible in the United States.
 
 [![Brinkhost IT](https://www.classicpress.net/wp-content/uploads/2022/07/brinkman-it-sponsor.png)](https://www.brinkhost.nl)
@@ -33,7 +33,7 @@ All donations are tax-deductible in the United States.
 
 ## Financial Contributors
 
-Support the ClassicPress project by making a [donation ›](https://opencollective.com/classicpress)   
+Support the ClassicPress project by making a [donation ›](https://opencollective.com/classicpress)
 All donations are tax-deductible in the United States.
 
 ### Individuals
