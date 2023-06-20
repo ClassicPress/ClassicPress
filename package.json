@@ -42,7 +42,7 @@
     "sinon-test": "^3.1.5",
     "source-map-loader": "^4.0.1",
     "sync-request": "6.1.0",
-    "terser": "5.18.0",
+    "terser": "5.18.1",
     "terser-webpack-plugin": "^5.3.7",
     "webpack": "5.87.0"
   },
