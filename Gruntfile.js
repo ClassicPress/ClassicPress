@@ -20,7 +20,13 @@ module.exports = function(grunt) {
 
 	buildTools.setGruntReference( grunt );
 
-	const puppeteerOptions = {};
+	const puppeteerOptions = {
+		headless: 'new',
+		args: [
+			'--site-per-process',
+			'--disable-web-security'
+		]
+	};
 
 	// Load tasks.
 	for ( const devDep in require( './package.json' ).devDependencies ) {
@@ -562,6 +568,10 @@ module.exports = function(grunt) {
 					'tests/qunit/*.html'
 				],
 				options: {
+					inject: [
+						'tests/qunit/fixtures/fix-iframe-qunit.js',
+						'node_modules/grunt-contrib-qunit/chrome/bridge.js'
+					],
 					httpBase: 'http://localhost:8008',
 					puppeteer: puppeteerOptions
 				}
