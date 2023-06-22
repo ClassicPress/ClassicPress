@@ -251,7 +251,7 @@ class WP_Site_Health {
 	 *
 	 * @return array The test result.
 	 */
-	public function get_test_wordpress_version() {
+	public function get_test_classicpress_version() {
 		$result = array(
 			'label'       => '',
 			'status'      => '',
@@ -261,7 +261,7 @@ class WP_Site_Health {
 			),
 			'description' => '',
 			'actions'     => '',
-			'test'        => 'wordpress_version',
+			'test'        => 'classicpress_version',
 		);
 
 		$core_current_version = get_bloginfo( 'version' );
