@@ -3127,7 +3127,7 @@ const mediaUploadMiddleware = (options, next) => {
  */
 
 /**
- * This appends a `theme_preview` parameter to the REST API request URL if
+ * This appends a `wp_theme_preview` parameter to the REST API request URL if
  * the admin URL contains a `theme` GET parameter.
  *
  * @param {Record<string, any>} themePath
@@ -3135,15 +3135,15 @@ const mediaUploadMiddleware = (options, next) => {
  */
 
 const createThemePreviewMiddleware = themePath => (options, next) => {
-  if (typeof options.url === 'string' && !hasQueryArg(options.url, 'theme_preview')) {
+  if (typeof options.url === 'string' && !hasQueryArg(options.url, 'wp_theme_preview')) {
     options.url = addQueryArgs(options.url, {
-      theme_preview: themePath
+      wp_theme_preview: themePath
     });
   }
 
-  if (typeof options.path === 'string' && !hasQueryArg(options.path, 'theme_preview')) {
+  if (typeof options.path === 'string' && !hasQueryArg(options.path, 'wp_theme_preview')) {
     options.path = addQueryArgs(options.path, {
-      theme_preview: themePath
+      wp_theme_preview: themePath
     });
   }
 
