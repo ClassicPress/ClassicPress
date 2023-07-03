@@ -17,7 +17,7 @@ module.exports = function() { // ClassicPress: defer loading via require()
  *
  * @class
  *
- * @param {object}        options          Options hash for the region.
+ * @param {Object}        options          Options hash for the region.
  * @param {string}        options.id       Unique identifier for the region.
  * @param {Backbone.View} options.view     A parent view the region exists within.
  * @param {string}        options.selector jQuery selector for the region within the parent view.
@@ -33,14 +33,14 @@ _.extend( Region.prototype,/** @lends wp.media.controller.Region.prototype */{
 	/**
 	 * Activate a mode.
 	 *
-	 * @since WP-3.5.0
+	 * @since 3.5.0
 	 *
 	 * @param {string} mode
 	 *
 	 * @fires Region#activate
 	 * @fires Region#deactivate
 	 *
-	 * @returns {wp.media.controller.Region} Returns itself to allow chaining.
+	 * @return {wp.media.controller.Region} Returns itself to allow chaining.
 	 */
 	mode: function( mode ) {
 		if ( ! mode ) {
@@ -72,14 +72,14 @@ _.extend( Region.prototype,/** @lends wp.media.controller.Region.prototype */{
 	/**
 	 * Render a mode.
 	 *
-	 * @since WP-3.5.0
+	 * @since 3.5.0
 	 *
 	 * @param {string} mode
 	 *
 	 * @fires Region#create
 	 * @fires Region#render
 	 *
-	 * @returns {wp.media.controller.Region} Returns itself to allow chaining
+	 * @return {wp.media.controller.Region} Returns itself to allow chaining.
 	 */
 	render: function( mode ) {
 		// If the mode isn't active, activate it.
@@ -120,9 +120,9 @@ _.extend( Region.prototype,/** @lends wp.media.controller.Region.prototype */{
 	/**
 	 * Get the region's view.
 	 *
-	 * @since WP-3.5.0
+	 * @since 3.5.0
 	 *
-	 * @returns {wp.media.View}
+	 * @return {wp.media.View}
 	 */
 	get: function() {
 		return this.view.views.first( this.selector );
@@ -131,11 +131,11 @@ _.extend( Region.prototype,/** @lends wp.media.controller.Region.prototype */{
 	/**
 	 * Set the region's view as a subview of the frame.
 	 *
-	 * @since WP-3.5.0
+	 * @since 3.5.0
 	 *
 	 * @param {Array|Object} views
 	 * @param {Object} [options={}]
-	 * @returns {wp.Backbone.Subviews} Subviews is returned to allow chaining
+	 * @return {wp.Backbone.Subviews} Subviews is returned to allow chaining.
 	 */
 	set: function( views, options ) {
 		if ( options ) {
@@ -147,10 +147,10 @@ _.extend( Region.prototype,/** @lends wp.media.controller.Region.prototype */{
 	/**
 	 * Trigger regional view events on the frame.
 	 *
-	 * @since WP-3.5.0
+	 * @since 3.5.0
 	 *
 	 * @param {string} event
-	 * @returns {undefined|wp.media.controller.Region} Returns itself to allow chaining.
+	 * @return {undefined|wp.media.controller.Region} Returns itself to allow chaining.
 	 */
 	trigger: function( event ) {
 		var base, args;

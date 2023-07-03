@@ -147,3 +147,4 @@ media.view.SiteIconCropper = require( './views/site-icon-cropper.js' )();
 media.view.SiteIconPreview = require( './views/site-icon-preview.js' )();
 media.view.EditImage = require( './views/edit-image.js' )();
 media.view.Spinner = require( './views/spinner.js' )();
+media.view.Heading = require( './views/heading.js' )();

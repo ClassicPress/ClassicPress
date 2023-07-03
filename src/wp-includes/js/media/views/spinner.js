@@ -3,6 +3,10 @@ module.exports = function() { // ClassicPress: defer loading via require()
 /**
  * wp.media.view.Spinner
  *
+ * Represents a spinner in the Media Library.
+ *
+ * @since 3.9.0
+ *
  * @memberOf wp.media.view
  *
  * @class
@@ -16,6 +20,13 @@ var Spinner = wp.media.View.extend(/** @lends wp.media.view.Spinner.prototype */
 	spinnerTimeout: false,
 	delay: 400,
 
+	/**
+	 * Shows the spinner. Delays the visibility by the configured amount.
+	 *
+	 * @since 3.9.0
+	 *
+	 * @return {wp.media.view.Spinner} The spinner.
+	 */
 	show: function() {
 		if ( ! this.spinnerTimeout ) {
 			this.spinnerTimeout = _.delay(function( $el ) {
@@ -26,6 +37,13 @@ var Spinner = wp.media.View.extend(/** @lends wp.media.view.Spinner.prototype */
 		return this;
 	},
 
+	/**
+	 * Hides the spinner.
+	 *
+	 * @since 3.9.0
+	 *
+	 * @return {wp.media.view.Spinner} The spinner.
+	 */
 	hide: function() {
 		this.$el.removeClass( 'is-active' );
 		this.spinnerTimeout = clearTimeout( this.spinnerTimeout );

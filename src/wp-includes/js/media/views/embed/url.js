@@ -2,6 +2,7 @@ module.exports = function() { // ClassicPress: defer loading via require()
 
 var View = wp.media.View,
 	$ = jQuery,
+	l10n = wp.media.view.l10n,
 	EmbedUrl;
 
 /**
@@ -15,17 +16,17 @@ var View = wp.media.View,
  * @augments Backbone.View
  */
 EmbedUrl = View.extend(/** @lends wp.media.view.EmbedUrl.prototype */{
-	tagName:   'label',
+	tagName:   'span',
 	className: 'embed-url',
 
 	events: {
-		'input':  'url',
-		'keyup':  'url',
-		'change': 'url'
+		'input': 'url'
 	},
 
 	initialize: function() {
-		this.$input = $('<input id="embed-url-field" type="url" />').val( this.model.get('url') );
+		this.$input = $( '<input id="embed-url-field" type="url" />' )
+			.attr( 'aria-label', l10n.insertFromUrlTitle )
+			.val( this.model.get('url') );
 		this.input = this.$input[0];
 
 		this.spinner = $('<span class="spinner" />')[0];
@@ -40,7 +41,7 @@ EmbedUrl = View.extend(/** @lends wp.media.view.EmbedUrl.prototype */{
 		}
 	},
 	/**
-	 * @returns {wp.media.view.EmbedUrl} Returns itself to allow chaining
+	 * @return {wp.media.view.EmbedUrl} Returns itself to allow chaining.
 	 */
 	render: function() {
 		var $input = this.$input;
@@ -49,7 +50,12 @@ EmbedUrl = View.extend(/** @lends wp.media.view.EmbedUrl.prototype */{
 			return;
 		}
 
-		this.input.value = this.model.get('url') || 'http://';
+		if ( this.model.get( 'url' ) ) {
+			this.input.value = this.model.get('url');
+		} else {
+			this.input.setAttribute( 'placeholder', 'https://' );
+		}
+
 		/**
 		 * Call `render` directly on parent class with passed arguments
 		 */
@@ -57,24 +63,9 @@ EmbedUrl = View.extend(/** @lends wp.media.view.EmbedUrl.prototype */{
 		return this;
 	},
 
-	ready: function() {
-		if ( ! wp.media.isTouchDevice ) {
-			this.focus();
-		}
-	},
-
 	url: function( event ) {
-		this.model.set( 'url', $.trim( event.target.value ) );
-	},
-
-	/**
-	 * If the input is visible, focus and select its contents.
-	 */
-	focus: function() {
-		var $input = this.$input;
-		if ( $input.is(':visible') ) {
-			$input.focus()[0].select();
-		}
+		var url = event.target.value || '';
+		this.model.set( 'url', url.trim() );
 	}
 });
 

@@ -1,6 +1,5 @@
 module.exports = function() { // ClassicPress: defer loading via require()
 
-
 var Button = wp.media.view.Button,
 	l10n = wp.media.view.l10n,
 	SelectModeToggle;
@@ -51,14 +50,15 @@ SelectModeToggle = Button.extend(/** @lends wp.media.view.SelectModeToggle.proto
 
 		children = toolbar.$( '.media-toolbar-secondary > *, .media-toolbar-primary > *' );
 
-		// TODO: the Frame should be doing all of this.
+		// @todo The Frame should be doing all of this.
 		if ( this.controller.isModeActive( 'select' ) ) {
 			this.model.set( {
 				size: 'large',
-				text: l10n.cancelSelection
+				text: l10n.cancel
 			} );
 			children.not( '.spinner, .media-button' ).hide();
 			this.$el.show();
+			toolbar.$el.addClass( 'media-toolbar-mode-select' );
 			toolbar.$( '.delete-selected-button' ).removeClass( 'hidden' );
 		} else {
 			this.model.set( {
@@ -67,6 +67,7 @@ SelectModeToggle = Button.extend(/** @lends wp.media.view.SelectModeToggle.proto
 			} );
 			this.controller.content.get().$el.removeClass( 'fixed' );
 			toolbar.$el.css( 'width', '' );
+			toolbar.$el.removeClass( 'media-toolbar-mode-select' );
 			toolbar.$( '.delete-selected-button' ).addClass( 'hidden' );
 			children.not( '.media-button' ).show();
 			this.controller.state().get( 'selection' ).reset();

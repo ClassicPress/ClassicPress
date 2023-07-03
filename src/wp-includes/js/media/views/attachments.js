@@ -2,18 +2,9 @@ module.exports = function() { // ClassicPress: defer loading via require()
 
 var View = wp.media.View,
 	$ = jQuery,
-	Attachments;
+	Attachments,
+	infiniteScrolling = wp.media.view.settings.infiniteScrolling;
 
-/**
- * wp.media.view.Attachments
- *
- * @memberOf wp.media.view
- *
- * @class
- * @augments wp.media.View
- * @augments wp.Backbone.View
- * @augments Backbone.View
- */
 Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 	tagName:   'ul',
 	className: 'attachments',
@@ -22,10 +13,50 @@ Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 		tabIndex: -1
 	},
 
+	/**
+	 * Represents the overview of attachments in the Media Library.
+	 *
+	 * The constructor binds events to the collection this view represents when
+	 * adding or removing attachments or resetting the entire collection.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @constructs
+	 * @memberof wp.media.view
+	 *
+	 * @augments wp.media.View
+	 *
+	 * @listens collection:add
+	 * @listens collection:remove
+	 * @listens collection:reset
+	 * @listens controller:library:selection:add
+	 * @listens scrollElement:scroll
+	 * @listens this:ready
+	 * @listens controller:open
+	 */
 	initialize: function() {
 		this.el.id = _.uniqueId('__attachments-view-');
 
+		/**
+		 * @since 5.8.0 Added the `infiniteScrolling` parameter.
+		 *
+		 * @param infiniteScrolling  Whether to enable infinite scrolling or use
+		 *                           the default "load more" button.
+		 * @param refreshSensitivity The time in milliseconds to throttle the scroll
+		 *                           handler.
+		 * @param refreshThreshold   The amount of pixels that should be scrolled before
+		 *                           loading more attachments from the server.
+		 * @param AttachmentView     The view class to be used for models in the
+		 *                           collection.
+		 * @param sortable           A jQuery sortable options object
+		 *                           ( http://api.jqueryui.com/sortable/ ).
+		 * @param resize             A boolean indicating whether or not to listen to
+		 *                           resize events.
+		 * @param idealColumnWidth   The width in pixels which a column should have when
+		 *                           calculating the total number of columns.
+		 */
 		_.defaults( this.options, {
+			infiniteScrolling:  infiniteScrolling || false,
 			refreshSensitivity: wp.media.isTouchDevice ? 300 : 200,
 			refreshThreshold:   3,
 			AttachmentView:     wp.media.view.Attachment,
@@ -44,6 +75,10 @@ Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 			});
 		}, this );
 
+		/*
+		 * Find the view to be removed, delete it and call the remove function to clear
+		 * any set event handlers.
+		 */
 		this.collection.on( 'remove', function( attachment ) {
 			var view = this._viewsByCid[ attachment.cid ];
 			delete this._viewsByCid[ attachment.cid ];
@@ -55,13 +90,15 @@ Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 
 		this.collection.on( 'reset', this.render, this );
 
-		this.listenTo( this.controller, 'library:selection:add',    this.attachmentFocus );
+		this.controller.on( 'library:selection:add', this.attachmentFocus, this );
 
-		// Throttle the scroll handler and bind this.
-		this.scroll = _.chain( this.scroll ).bind( this ).throttle( this.options.refreshSensitivity ).value();
+		if ( this.options.infiniteScrolling ) {
+			// Throttle the scroll handler and bind this.
+			this.scroll = _.chain( this.scroll ).bind( this ).throttle( this.options.refreshSensitivity ).value();
 
-		this.options.scrollElement = this.options.scrollElement || this.el;
-		$( this.options.scrollElement ).on( 'scroll', this.scroll );
+			this.options.scrollElement = this.options.scrollElement || this.el;
+			$( this.options.scrollElement ).on( 'scroll', this.scroll );
+		}
 
 		this.initSortable();
 
@@ -71,24 +108,79 @@ Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 			this.on( 'ready', this.bindEvents );
 			this.controller.on( 'open', this.setColumns );
 
-			// Call this.setColumns() after this view has been rendered in the DOM so
-			// attachments get proper width applied.
+			/*
+			 * Call this.setColumns() after this view has been rendered in the
+			 * DOM so attachments get proper width applied.
+			 */
 			_.defer( this.setColumns, this );
 		}
 	},
 
+	/**
+	 * Listens to the resizeEvent on the window.
+	 *
+	 * Adjusts the amount of columns accordingly. First removes any existing event
+	 * handlers to prevent duplicate listeners.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @listens window:resize
+	 *
+	 * @return {void}
+	 */
 	bindEvents: function() {
 		this.$window.off( this.resizeEvent ).on( this.resizeEvent, _.debounce( this.setColumns, 50 ) );
 	},
 
+	/**
+	 * Focuses the first item in the collection.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @return {void}
+	 */
 	attachmentFocus: function() {
-		this.$( 'li:first' ).focus();
+		/*
+		 * @todo When uploading new attachments, this tries to move focus to
+		 * the attachments grid. Actually, a progress bar gets initially displayed
+		 * and then updated when uploading completes, so focus is lost.
+		 * Additionally: this view is used for both the attachments list and
+		 * the list of selected attachments in the bottom media toolbar. Thus, when
+		 * uploading attachments, it is called twice and returns two different `this`.
+		 * `this.columns` is truthy within the modal.
+		 */
+		if ( this.columns ) {
+			// Move focus to the grid list within the modal.
+			this.$el.focus();
+		}
 	},
 
+	/**
+	 * Restores focus to the selected item in the collection.
+	 *
+	 * Moves focus back to the first selected attachment in the grid. Used when
+	 * tabbing backwards from the attachment details sidebar.
+	 * See media.view.AttachmentsBrowser.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @return {void}
+	 */
 	restoreFocus: function() {
 		this.$( 'li.selected:first' ).focus();
 	},
 
+	/**
+	 * Handles events for arrow key presses.
+	 *
+	 * Focuses the attachment in the direction of the used arrow key if it exists.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @param {KeyboardEvent} event The keyboard event that triggered this function.
+	 *
+	 * @return {void}
+	 */
 	arrowEvent: function( event ) {
 		var attachments = this.$el.children( 'li' ),
 			perRow = this.columns,
@@ -99,7 +191,7 @@ Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 			return;
 		}
 
-		// Left arrow
+		// Left arrow = 37.
 		if ( 37 === event.keyCode ) {
 			if ( 0 === index ) {
 				return;
@@ -107,7 +199,7 @@ Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 			attachments.eq( index - 1 ).focus();
 		}
 
-		// Up arrow
+		// Up arrow = 38.
 		if ( 38 === event.keyCode ) {
 			if ( 1 === row ) {
 				return;
@@ -115,7 +207,7 @@ Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 			attachments.eq( index - perRow ).focus();
 		}
 
-		// Right arrow
+		// Right arrow = 39.
 		if ( 39 === event.keyCode ) {
 			if ( attachments.length === index ) {
 				return;
@@ -123,7 +215,7 @@ Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 			attachments.eq( index + 1 ).focus();
 		}
 
-		// Down arrow
+		// Down arrow = 40.
 		if ( 40 === event.keyCode ) {
 			if ( Math.ceil( attachments.length / perRow ) === row ) {
 				return;
@@ -132,18 +224,33 @@ Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 		}
 	},
 
+	/**
+	 * Clears any set event handlers.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @return {void}
+	 */
 	dispose: function() {
 		this.collection.props.off( null, null, this );
 		if ( this.options.resize ) {
 			this.$window.off( this.resizeEvent );
 		}
 
-		/**
-		 * call 'dispose' directly on the parent class
-		 */
+		// Call 'dispose' directly on the parent class.
 		View.prototype.dispose.apply( this, arguments );
 	},
 
+	/**
+	 * Calculates the amount of columns.
+	 *
+	 * Calculates the amount of columns and sets it on the data-columns attribute
+	 * of .media-frame-content.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @return {void}
+	 */
 	setColumns: function() {
 		var prev = this.columns,
 			width = this.$el.width();
@@ -157,6 +264,18 @@ Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 		}
 	},
 
+	/**
+	 * Initializes jQuery sortable on the attachment list.
+	 *
+	 * Fails gracefully if jQuery sortable doesn't exist or isn't passed
+	 * in the options.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @fires collection:reset
+	 *
+	 * @return {void}
+	 */
 	initSortable: function() {
 		var collection = this.collection;
 
@@ -168,8 +287,10 @@ Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 			// If the `collection` has a `comparator`, disable sorting.
 			disabled: !! collection.comparator,
 
-			// Change the position of the attachment as soon as the
-			// mouse pointer overlaps a thumbnail.
+			/*
+			 * Change the position of the attachment as soon as the mouse pointer
+			 * overlaps a thumbnail.
+			 */
 			tolerance: 'pointer',
 
 			// Record the initial `index` of the dragged model.
@@ -177,8 +298,10 @@ Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 				ui.item.data('sortableIndexStart', ui.item.index());
 			},
 
-			// Update the model's index in the collection.
-			// Do so silently, as the view is already accurate.
+			/*
+			 * Update the model's index in the collection. Do so silently, as the view
+			 * is already accurate.
+			 */
 			update: function( event, ui ) {
 				var model = collection.at( ui.item.data('sortableIndexStart') ),
 					comparator = collection.comparator;
@@ -202,14 +325,15 @@ Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 				// Fire the `reset` event to ensure other collections sync.
 				collection.trigger( 'reset', collection );
 
-				// If the collection is sorted by menu order,
-				// update the menu order.
+				// If the collection is sorted by menu order, update the menu order.
 				collection.saveMenuOrder();
 			}
 		}, this.options.sortable ) );
 
-		// If the `orderby` property is changed on the `collection`,
-		// check to see if we have a `comparator`. If so, disable sorting.
+		/*
+		 * If the `orderby` property is changed on the `collection`,
+		 * check to see if we have a `comparator`. If so, disable sorting.
+		 */
 		collection.props.on( 'change:orderby', function() {
 			this.$el.sortable( 'option', 'disabled', !! collection.comparator );
 		}, this );
@@ -218,12 +342,19 @@ Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 		this.refreshSortable();
 	},
 
+	/**
+	 * Disables jQuery sortable if collection has a comparator or collection.orderby
+	 * equals menuOrder.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @return {void}
+	 */
 	refreshSortable: function() {
 		if ( ! this.options.sortable || ! $.fn.sortable ) {
 			return;
 		}
 
-		// If the `collection` has a `comparator`, disable sorting.
 		var collection = this.collection,
 			orderby = collection.props.get('orderby'),
 			enabled = 'menuOrder' === orderby || ! collection.comparator;
@@ -232,8 +363,13 @@ Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 	},
 
 	/**
+	 * Creates a new view for an attachment and adds it to _viewsByCid.
+	 *
+	 * @since 3.5.0
+	 *
 	 * @param {wp.media.model.Attachment} attachment
-	 * @returns {wp.media.View}
+	 *
+	 * @return {wp.media.View} The created view.
 	 */
 	createAttachmentView: function( attachment ) {
 		var view = new this.options.AttachmentView({
@@ -246,33 +382,61 @@ Attachments = View.extend(/** @lends wp.media.view.Attachments.prototype */{
 		return this._viewsByCid[ attachment.cid ] = view;
 	},
 
+	/**
+	 * Prepares view for display.
+	 *
+	 * Creates views for every attachment in collection if the collection is not
+	 * empty, otherwise clears all views and loads more attachments.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @return {void}
+	 */
 	prepare: function() {
-		// Create all of the Attachment views, and replace
-		// the list in a single DOM operation.
 		if ( this.collection.length ) {
 			this.views.set( this.collection.map( this.createAttachmentView, this ) );
-
-		// If there are no elements, clear the views and load some.
 		} else {
 			this.views.unset();
-			this.collection.more().done( this.scroll );
+			if ( this.options.infiniteScrolling ) {
+				this.collection.more().done( this.scroll );
+			}
 		}
 	},
 
+	/**
+	 * Triggers the scroll function to check if we should query for additional
+	 * attachments right away.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @return {void}
+	 */
 	ready: function() {
-		// Trigger the scroll event to check if we're within the
-		// threshold to query for additional attachments.
-		this.scroll();
+		if ( this.options.infiniteScrolling ) {
+			this.scroll();
+		}
 	},
 
+	/**
+	 * Handles scroll events.
+	 *
+	 * Shows the spinner if we're close to the bottom. Loads more attachments from
+	 * server if we're {refreshThreshold} times away from the bottom.
+	 *
+	 * @since 3.5.0
+	 *
+	 * @return {void}
+	 */
 	scroll: function() {
 		var view = this,
 			el = this.options.scrollElement,
 			scrollTop = el.scrollTop,
 			toolbar;
 
-		// The scroll event occurs on the document, but the element
-		// that should be checked is the document body.
+		/*
+		 * The scroll event occurs on the document, but the element that should be
+		 * checked is the document body.
+		 */
 		if ( el === document ) {
 			el = document.body;
 			scrollTop = $(document).scrollTop();

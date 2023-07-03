@@ -66,7 +66,7 @@ EditorUploader = View.extend(/** @lends wp.media.view.EditorUploader.prototype *
 	/**
 	 * Check browser support for drag'n'drop.
 	 *
-	 * @return Boolean
+	 * @return {boolean}
 	 */
 	browserSupport: function() {
 		var supports = false, div = document.createElement('div');
@@ -131,7 +131,7 @@ EditorUploader = View.extend(/** @lends wp.media.view.EditorUploader.prototype *
 	 * When a file is dropped on the editor uploader, open up an editor media workflow
 	 * and upload the file immediately.
 	 *
-	 * @param  {jQuery.Event} event The 'drop' event.
+	 * @param {jQuery.Event} event The 'drop' event.
 	 */
 	drop: function( event ) {
 		var $wrap, uploadView;

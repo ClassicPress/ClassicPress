@@ -62,7 +62,7 @@ UploaderInline = View.extend(/** @lends wp.media.view.UploaderInline.prototype *
 		return data;
 	},
 	/**
-	 * @returns {wp.media.view.UploaderInline} Returns itself to allow chaining
+	 * @return {wp.media.view.UploaderInline} Returns itself to allow chaining.
 	 */
 	dispose: function() {
 		if ( this.disposing ) {
@@ -72,14 +72,16 @@ UploaderInline = View.extend(/** @lends wp.media.view.UploaderInline.prototype *
 			return View.prototype.dispose.apply( this, arguments );
 		}
 
-		// Run remove on `dispose`, so we can be sure to refresh the
-		// uploader with a view-less DOM. Track whether we're disposing
-		// so we don't trigger an infinite loop.
+		/*
+		 * Run remove on `dispose`, so we can be sure to refresh the
+		 * uploader with a view-less DOM. Track whether we're disposing
+		 * so we don't trigger an infinite loop.
+		 */
 		this.disposing = true;
 		return this.remove();
 	},
 	/**
-	 * @returns {wp.media.view.UploaderInline} Returns itself to allow chaining
+	 * @return {wp.media.view.UploaderInline} Returns itself to allow chaining.
 	 */
 	remove: function() {
 		/**
@@ -99,7 +101,7 @@ UploaderInline = View.extend(/** @lends wp.media.view.UploaderInline.prototype *
 		}
 	},
 	/**
-	 * @returns {wp.media.view.UploaderInline}
+	 * @return {wp.media.view.UploaderInline}
 	 */
 	ready: function() {
 		var $browser = this.options.$browser,
@@ -115,6 +117,7 @@ UploaderInline = View.extend(/** @lends wp.media.view.UploaderInline.prototype *
 
 			$browser.detach().text( $placeholder.text() );
 			$browser[0].className = $placeholder[0].className;
+			$browser[0].setAttribute( 'aria-labelledby', $browser[0].id + ' ' + $placeholder[0].getAttribute('aria-labelledby') );
 			$placeholder.replaceWith( $browser.show() );
 		}
 
@@ -133,7 +136,7 @@ UploaderInline = View.extend(/** @lends wp.media.view.UploaderInline.prototype *
 			this.controller.$uploaderToggler
 				.attr( 'aria-expanded', 'false' )
 				// Move focus back to the toggle button when closing the uploader.
-				.focus();
+				.trigger( 'focus' );
 		}
 	}
 

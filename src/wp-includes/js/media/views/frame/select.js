@@ -60,6 +60,16 @@ Select = MediaFrame.extend(/** @lends wp.media.view.MediaFrame.Select.prototype 
 		};
 	},
 
+	editImageContent: function() {
+		var image = this.state().get('image'),
+			view = new wp.media.view.EditImage( { model: image, controller: this } ).render();
+
+		this.content.set( view );
+
+		// After creating the wrapper view, load the actual editor via an Ajax call.
+		view.loadEditor();
+	},
+
 	/**
 	 * Create the default states on the frame.
 	 */
@@ -78,7 +88,8 @@ Select = MediaFrame.extend(/** @lends wp.media.view.MediaFrame.Select.prototype 
 				multiple:  options.multiple,
 				title:     options.title,
 				priority:  20
-			})
+			}),
+			new wp.media.controller.EditImage( { model: options.editImage } )
 		]);
 	},
 
@@ -93,6 +104,7 @@ Select = MediaFrame.extend(/** @lends wp.media.view.MediaFrame.Select.prototype 
 		this.on( 'content:create:browse', this.browseContent, this );
 		this.on( 'content:render:upload', this.uploadContent, this );
 		this.on( 'toolbar:create:select', this.createSelectToolbar, this );
+		this.on( 'content:render:edit-image', this.editImageContent, this );
 	},
 
 	/**

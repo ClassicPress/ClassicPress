@@ -35,7 +35,7 @@ UploaderStatus = View.extend(/** @lends wp.media.view.UploaderStatus.prototype *
 		this.errors.on( 'add', this.error, this );
 	},
 	/**
-	 * @returns {wp.media.view.UploaderStatus}
+	 * @return {wp.media.view.UploaderStatus}
 	 */
 	dispose: function() {
 		wp.Uploader.queue.off( null, null, this );
@@ -98,13 +98,15 @@ UploaderStatus = View.extend(/** @lends wp.media.view.UploaderStatus.prototype *
 			return attachment.get('uploading');
 		});
 
-		this.$index.text( index + 1 );
-		this.$total.text( queue.length );
-		this.$filename.html( active ? this.filename( active.get('filename') ) : '' );
+		if ( this.$index && this.$total && this.$filename ) {
+			this.$index.text( index + 1 );
+			this.$total.text( queue.length );
+			this.$filename.html( active ? this.filename( active.get('filename') ) : '' );
+		}
 	},
 	/**
 	 * @param {string} filename
-	 * @returns {string}
+	 * @return {string}
 	 */
 	filename: function( filename ) {
 		return _.escape( filename );
@@ -113,24 +115,32 @@ UploaderStatus = View.extend(/** @lends wp.media.view.UploaderStatus.prototype *
 	 * @param {Backbone.Model} error
 	 */
 	error: function( error ) {
-		this.views.add( '.upload-errors', new wp.media.view.UploaderStatusError({
-			filename: this.filename( error.get('file').name ),
-			message:  error.get('message')
-		}), { at: 0 });
+		var statusError = new wp.media.view.UploaderStatusError( {
+			filename: this.filename( error.get( 'file' ).name ),
+			message:  error.get( 'message' )
+		} );
+
+		var buttonClose = this.$el.find( 'button' );
+
+		// Can show additional info here while retrying to create image sub-sizes.
+		this.views.add( '.upload-errors', statusError, { at: 0 } );
+		_.delay( function() {
+			buttonClose.trigger( 'focus' );
+			wp.a11y.speak( error.get( 'message' ), 'assertive' );
+		}, 1000 );
 	},
 
-	/**
-	 * @param {Object} event
-	 */
-	dismiss: function( event ) {
+	dismiss: function() {
 		var errors = this.views.get('.upload-errors');
-
-		event.preventDefault();
 
 		if ( errors ) {
 			_.invoke( errors, 'remove' );
 		}
 		wp.Uploader.errors.reset();
+		// Move focus to the modal after the dismiss button gets removed from the DOM.
+		if ( this.controller.modal ) {
+			this.controller.modal.focusManager.focus();
+		}
 	}
 });
 

@@ -14,7 +14,7 @@ module.exports = function() { // ClassicPress: defer loading via require()
  */
 var selectionSync = {
 	/**
-	 * @since WP-3.5.0
+	 * @since 3.5.0
 	 */
 	syncSelection: function() {
 		var selection = this.get('selection'),
@@ -24,10 +24,12 @@ var selectionSync = {
 			return;
 		}
 
-		// If the selection supports multiple items, validate the stored
-		// attachments based on the new selection's conditions. Record
-		// the attachments that are not included; we'll maintain a
-		// reference to those. Other attachments are considered in flux.
+		/*
+		 * If the selection supports multiple items, validate the stored
+		 * attachments based on the new selection's conditions. Record
+		 * the attachments that are not included; we'll maintain a
+		 * reference to those. Other attachments are considered in flux.
+		 */
 		if ( selection.multiple ) {
 			selection.reset( [], { silent: true });
 			selection.validateAll( manager.attachments );
@@ -44,7 +46,7 @@ var selectionSync = {
 	 * attachments that this specific selection considered invalid.
 	 * Reset the difference and record the single attachment.
 	 *
-	 * @since WP-3.5.0
+	 * @since 3.5.0
 	 */
 	recordSelection: function() {
 		var selection = this.get('selection'),

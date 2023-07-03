@@ -39,7 +39,7 @@ Selection = Attachments.extend(/** @lends wp.media.model.Selection.prototype */{
 	 *
 	 * @param {Array} models
 	 * @param {Object} options
-	 * @returns {wp.media.model.Attachment[]}
+	 * @return {wp.media.model.Attachment[]}
 	 */
 	add: function( models, options ) {
 		if ( ! this.multiple ) {
@@ -59,7 +59,7 @@ Selection = Attachments.extend(/** @lends wp.media.model.Selection.prototype */{
 	 * @fires wp.media.model.Selection#selection:single
 	 * @fires wp.media.model.Selection#selection:unsingle
 	 *
-	 * @returns {Backbone.Model}
+	 * @return {Backbone.Model}
 	 */
 	single: function( model ) {
 		var previous = this._single;

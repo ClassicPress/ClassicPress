@@ -13,7 +13,7 @@ module.exports = function() { // ClassicPress: defer loading via require()
 var Iframe = wp.media.View.extend(/** @lends wp.media.view.Iframe.prototype */{
 	className: 'media-iframe',
 	/**
-	 * @returns {wp.media.view.Iframe} Returns itself to allow chaining
+	 * @return {wp.media.view.Iframe} Returns itself to allow chaining.
 	 */
 	render: function() {
 		this.views.detach();
