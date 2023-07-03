@@ -568,10 +568,6 @@ module.exports = function(grunt) {
 					'tests/qunit/*.html'
 				],
 				options: {
-					inject: [
-						'tests/qunit/fixtures/fix-iframe-qunit.js',
-						'node_modules/grunt-contrib-qunit/chrome/bridge.js'
-					],
 					httpBase: 'http://localhost:8008',
 					puppeteer: puppeteerOptions
 				}
