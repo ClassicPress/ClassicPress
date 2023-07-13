@@ -59,7 +59,9 @@ function wp_dashboard_setup() {
 	wp_add_dashboard_widget( 'dashboard_primary', __( 'ClassicPress News' ), 'wp_dashboard_events_news' );
 
 	// ClassicPress upgrade notice
-	wp_add_dashboard_widget( 'dashboard_upgrade', __( 'ClassicPress Upgrade' ), 'cp_dashboard_upgrade' );
+	if ( current_user_can( 'update_core' ) ) {
+		wp_add_dashboard_widget( 'dashboard_upgrade', __( 'ClassicPress Upgrade' ), 'cp_dashboard_upgrade' );
+	}
 
 	if ( is_network_admin() ) {
 
@@ -1456,23 +1458,20 @@ function cp_dashboard_upgrade() {
 	<?php
 	echo '<p>' . sprintf( __( 'Thank you for using ClassicPress %s!' ), $display_version ) . '</p>';
 	echo '<p>' . __( 'We wanted to let you know some important information about ClassicPress.' ) . '</p>';
-	echo '<p>' . __( 'The major version number you are currently using is not being actively developed. Instead we are working hard to bring you a brand new version 2.0.0.' ) . '</p>';
+	echo '<p>' . __( 'The major version number (1.x) you are currently using is not being actively developed. Instead we are working hard to bring you a brand new version 2.0.0.' ) . '</p>';
 	echo '<p>' . sprintf( __( 'Your current version will continue to receive security updates until %s' ), esc_html( date_i18n( get_option( 'date_format' ), 1700956800 ) ) ) . '</p>';
-	echo '<p>' . sprintf( __( 'This date has been chosen because it is when <a href="%s">support</a> for PHP 8.0 ends. PHP 7.4 already unsupported and no longer receives security updates.' ), esc_url( 'https://www.php.net/supported-versions.php' ) ) . '</p>';
+	echo '<p>' . sprintf( __( 'This date has been chosen because it is when <a href="%s">support</a> for PHP 8.0 ends. PHP 7.4 is already unsupported and no longer receives security updates.' ), esc_url( 'https://www.php.net/supported-versions.php' ) ) . '</p>';
 
 	$core_updates = get_core_updates( array( 'dismissed' => true ) );
 
-	if ( current_user_can( 'update_core' ) ) {
-		if ( ! empty( $core_updates ) && version_compare( $core_updates[0]->current, '2.0.0' ) >= 0 ) {
-			echo '<p>' . sprintf( __( 'Version 2.0.0 has now been released. <a href="%s">Upgrade</a> as soon as you are ready and read more about the release on our <a href="%s">forum</a>.' ), esc_url( admin_url( 'update-core.php' ) ), esc_url( 'https://forums.classicpress.net/c/announcements/release-notes/48' ) ) . '</p>';
-		} else {
-			echo '<p>' . sprintf( __( 'You can continue to use ClassicPress %s at this time. You will be notified when a new version is available that supports future versions of PHP.' ), $display_version ) . '</p>';
-		}
+	if ( ! empty( $core_updates ) && version_compare( $core_updates[0]->current, '2.0.0' ) >= 0 ) {
+		echo '<p>' . sprintf( __( 'Version 2.0.0 has now been released. <a href="%s">Upgrade</a> as soon as you are ready and read more about the release on our <a href="%s">forum</a>.' ), esc_url( admin_url( 'update-core.php' ) ), esc_url( 'https://forums.classicpress.net/c/announcements/release-notes/48' ) ) . '</p>';
 	} else {
-		if ( ! empty( $core_updates ) && version_compare( $core_updates[0]->current, '2.0.0' ) >= 0 ) {
-			echo '<p>' . __( 'An update is avilable! Please notify the site administrator.' ) . '</p>';
-		}
+		echo '<p>' . sprintf( __( 'You can continue to use ClassicPress %s at this time. You will be notified when a new version is available that supports future versions of PHP. <a href="%s">Learn more</a> about testing version 2.0.0.' ), $display_version, esc_url( 'https://www.classicpress.net/help-test-classicpress-v2/' ) ) . '</p>';
 	}
+
+	echo '<p>' . __( 'Deprecation notice: Version 1.6 is the last version to support PHP 5.6 - 7.3. The minimum required version for 2.0.0 will be PHP 7.4.' ) . '</p>';
+
 	?>
 	</p>
 	</div>
