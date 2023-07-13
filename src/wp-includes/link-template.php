@@ -100,8 +100,7 @@ function permalink_anchor( $mode = 'id' ) {
  *
  * @param int|WP_Post $post      Optional. Post ID or post object. Default is the global `$post`.
  * @param bool        $leavename Optional. Whether to keep post name or page name. Default false.
- *
- * @return string|false The permalink URL or false if post does not exist.
+ * @return string|false The permalink URL. False if the post does not exist.
  */
 function get_the_permalink( $post = 0, $leavename = false ) {
 	return get_permalink( $post, $leavename );
@@ -114,7 +113,7 @@ function get_the_permalink( $post = 0, $leavename = false ) {
  *
  * @param int|WP_Post $post      Optional. Post ID or post object. Default is the global `$post`.
  * @param bool        $leavename Optional. Whether to keep post name or page name. Default false.
- * @return string|false The permalink URL or false if post does not exist.
+ * @return string|false The permalink URL. False if the post does not exist.
  */
 function get_permalink( $post = 0, $leavename = false ) {
 	$rewritecode = array(
@@ -251,21 +250,22 @@ function get_permalink( $post = 0, $leavename = false ) {
  * Retrieves the permalink for a post of a custom post type.
  *
  * @since WP-3.0.0
+ * @since WP-6.1.0 Returns false if the post does not exist.
  *
  * @global WP_Rewrite $wp_rewrite
  *
  * @param int|WP_Post $id        Optional. Post ID or post object. Default is the global `$post`.
- * @param bool        $leavename Optional, defaults to false. Whether to keep post name. Default false.
- * @param bool        $sample    Optional, defaults to false. Is it a sample permalink. Default false.
- * @return string|WP_Error The post permalink.
+ * @param bool        $leavename Optional. Whether to keep post name. Default false.
+ * @param bool        $sample    Optional. Is it a sample permalink. Default false.
+ * @return string|false The post permalink URL. False if the post does not exist.
  */
 function get_post_permalink( $id = 0, $leavename = false, $sample = false ) {
 	global $wp_rewrite;
 
 	$post = get_post( $id );
 
-	if ( is_wp_error( $post ) ) {
-		return $post;
+	if ( ! $post ) {
+		return false;
 	}
 
 	$post_link = $wp_rewrite->get_extra_permastruct( $post->post_type );
@@ -3687,8 +3687,8 @@ function get_edit_profile_url( $user_id = 0, $scheme = 'admin' ) {
  * @since WP-4.6.0
  *
  * @param int|WP_Post $post Optional. Post ID or object. Default is global `$post`.
- * @return string|false The canonical URL, or false if the post does not exist or has not
- *                      been published yet.
+ * @return string|false The canonical URL. False if the post does not exist
+ *                      or has not been published yet.
  */
 function wp_get_canonical_url( $post = null ) {
 	$post = get_post( $post );

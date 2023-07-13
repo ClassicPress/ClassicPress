@@ -58,8 +58,10 @@ function wp_dashboard_setup() {
 	// ClassicPress News
 	wp_add_dashboard_widget( 'dashboard_primary', __( 'ClassicPress News' ), 'wp_dashboard_events_news' );
 
-	// ClassicPress Petitions
-	wp_add_dashboard_widget( 'dashboard_petitions', __( 'ClassicPress Petitions' ), 'cp_dashboard_petitions' );
+	// ClassicPress upgrade notice
+	if ( current_user_can( 'update_core' ) ) {
+		wp_add_dashboard_widget( 'dashboard_upgrade', __( 'ClassicPress Upgrade' ), 'cp_dashboard_upgrade' );
+	}
 
 	if ( is_network_admin() ) {
 
@@ -1442,147 +1444,36 @@ function wp_welcome_panel() {
 }
 
 /**
- * Callback function for the petitions dashboard widget
+ * Display the ClassicPress upgrade widget
+ * Warns about PHP support ending and will prompt for upgrade once available
  *
- * @since 1.0.0
+ * @since CP-1.6.0
  */
-function cp_dashboard_petitions() {
-	$feeds = array(
-		'trending'    => array(
-			'title' => __( 'Trending' ),
-		),
-		'most-wanted' => array(
-			'title' => __( 'Most Wanted' ),
-		),
-		'recent'      => array(
-			'title' => __( 'Recent' ),
-		),
-	);
 
-	wp_dashboard_cached_rss_widget( 'dashboard_petitions', 'cp_dashboard_petitions_output', $feeds );
-}
-
-/**
- * Display the ClassicPress petitions feeds.
- *
- * Query the ClassicPress.net API for data about ClassicPress petitions, and
- * echo the results as HTML.
- *
- * @since 1.0.0
- *
- * @param string $widget_id Widget ID.
- * @param array  $feeds     Array of petition feeds (possible sort orders).
- */
-function cp_dashboard_petitions_output( $widget_id, $feeds ) {
-	$api_url = 'https://api-v1.classicpress.net/features/1.0/';
-
-	/**
-	 * Response body should be an object with:
-	 *  'link'        - string - Link to the ClassicPress petitions website.
-	 *  'most-wanted' - object - Petitions sorted by number of votes.
-	 *  'trending'    - object - Petitions sorted by activity and votes.
-	 *  'recent'      - object - Petitions sorted by date created.
-	 * Each of these 'object' keys should have a 'data' property which is an
-	 * array of the top petitions sorted in the order represented by the key.
-	 */
-	$response      = wp_remote_get( $api_url );
-	$response_code = wp_remote_retrieve_response_code( $response );
-
-	if ( ! is_wp_error( $response ) && 200 !== $response_code ) {
-		$response = new WP_Error(
-			'api-error',
-			/* translators: %d: numeric HTTP status code, e.g. 400, 403, 500, 504, etc. */
-			sprintf( __( 'Invalid API response code (%d)' ), $response_code )
-		);
-	}
-
-	if ( ! is_wp_error( $response ) ) {
-		$response = json_decode( wp_remote_retrieve_body( $response ) );
-		if ( empty( $response ) || ! is_object( $response ) || ! isset( $response->link ) ) {
-			$response = new WP_Error(
-				'api-error',
-				__( 'Invalid API response (invalid JSON)' )
-			);
-		}
-	}
-
-	if ( is_wp_error( $response ) ) {
-		if ( is_admin() || current_user_can( 'manage_options' ) ) {
-			echo '<p><strong>' . __( 'Error:' ) . '</strong> ' . $response->get_error_message() . '</p>';
-		}
-		return;
-	}
-
+function cp_dashboard_upgrade() {
+	$display_version = classicpress_version();
 	?>
-	<div class="sub">
-		<a href="<?php echo esc_url( $response->link ); ?>" target="_blank" class="cp_petitions_link"><?php esc_html_e( 'Your voice counts, create and vote on petitions.' ); ?><span class="screen-reader-text"><?php esc_html_e( '(opens in a new window)' ); ?></span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>
-	</div>
-
-	<ul class="petitions-tabs">
-
+	<div class ="upgrade-widget-content">
+	<p>
 	<?php
-	$keys   = array_keys( $feeds );
-	$active = array_shift( $keys );
+	echo '<p>' . sprintf( __( 'Thank you for using ClassicPress %s!' ), $display_version ) . '</p>';
+	echo '<p>' . __( 'We wanted to let you know some important information about ClassicPress.' ) . '</p>';
+	echo '<p>' . __( 'The major version number (1.x) you are currently using is not being actively developed. Instead we are working hard to bring you a brand new version 2.0.0.' ) . '</p>';
+	echo '<p>' . sprintf( __( 'Your current version will continue to receive security updates until %s' ), esc_html( date_i18n( get_option( 'date_format' ), 1700956800 ) ) ) . '</p>';
+	echo '<p>' . sprintf( __( 'This date has been chosen because it is when <a href="%s">support</a> for PHP 8.0 ends. PHP 7.4 is already unsupported and no longer receives security updates.' ), esc_url( 'https://www.php.net/supported-versions.php' ) ) . '</p>';
 
-	foreach ( $feeds as $name => $args ) {
-		$class = $name === $active ? ' class="active"' : '';
-		?>
-		<li<?php echo $class; ?>><a href="#<?php echo esc_attr( $name ); ?>"><?php echo esc_html( $args['title'] ); ?></a></li>
-		<?php
+	$core_updates = get_core_updates( array( 'dismissed' => true ) );
+
+	if ( ! empty( $core_updates ) && version_compare( $core_updates[0]->current, '2.0.0' ) >= 0 ) {
+		echo '<p>' . sprintf( __( 'Version 2.0.0 has now been released. <a href="%s">Upgrade</a> as soon as you are ready and read more about the release on our <a href="%s">forum</a>.' ), esc_url( admin_url( 'update-core.php' ) ), esc_url( 'https://forums.classicpress.net/c/announcements/release-notes/48' ) ) . '</p>';
+	} else {
+		echo '<p>' . sprintf( __( 'You can continue to use ClassicPress %s at this time. You will be notified when a new version is available that supports future versions of PHP. <a href="%s">Learn more</a> about testing version 2.0.0.' ), $display_version, esc_url( 'https://www.classicpress.net/help-test-classicpress-v2/' ) ) . '</p>';
 	}
+
+	echo '<p>' . __( 'Deprecation notice: Version 1.6 is the last version to support PHP 5.6 - 7.3. The minimum required version for 2.0.0 will be PHP 7.4.' ) . '</p>';
+
 	?>
-
-	</ul>
-
-	<div class="petitions-content">
-
-	<?php
-	foreach ( $feeds as $name => $args ) {
-
-		if ( empty( $response->$name ) ) {
-			continue;
-		}
-
-		$data   = $response->$name->data;
-		$class  = $name === $active ? 'petitions-pane active' : 'petitions-pane';
-		$active = $name === array_shift( $keys ) ? ' active' : '';
-		?>
-
-		<div id="<?php echo esc_attr( $name ); ?>" class="<?php echo esc_attr( $class ); ?>">
-			<table class="cp_petitions">
-				<thead>
-					<tr>
-						<td><?php esc_html_e( 'Votes' ); ?></td>
-						<td><?php esc_html_e( 'Petitions' ); ?></td>
-					</tr>
-				</thead>
-
-				<?php
-				foreach ( $data as $petition ) {
-					?>
-					<tr>
-						<td class="votes-count"><?php echo esc_html( $petition->votesCount ); ?></td>
-
-						<td class="petition">
-							<a target="_blank" href="<?php echo esc_url( $petition->link ); ?>"><?php echo esc_html( $petition->title ); ?><span class="screen-reader-text"><?php esc_html_e( '(opens in a new window)' ); ?></span></a>
-							<?php
-							if ( 'open' === $petition->status ) {
-								echo esc_html__( ' - ' ) . ' ' . sprintf( __( '%s ago' ), human_time_diff( strtotime( $petition->createdAt ), current_time( 'timestamp' ) ) );
-							} else {
-								echo ' - ' . '<span class="' . esc_attr( $petition->status ) . '">' . esc_html( $petition->status ) . '</span>';
-							}
-							?>
-						</td>
-					</tr>
-					<?php
-				}
-				?>
-				</table>
-
-			</div>
-			<?php
-	}
-	?>
+	</p>
 	</div>
 	<?php
 }
