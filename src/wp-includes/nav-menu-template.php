@@ -187,7 +187,7 @@ function wp_nav_menu( $args = array() ) {
 			$show_container = true;
 			$class          = $args->container_class ? ' class="' . esc_attr( $args->container_class ) . '"' : ' class="menu-' . $menu->slug . '-container"';
 			$id             = $args->container_id ? ' id="' . esc_attr( $args->container_id ) . '"' : '';
-			$aria_label     = ( 'nav' === $args->container && $args->container_aria_label ) ? ' aria-label="' . esc_attr( $args->container_aria_label ) . '"' : '';
+			$aria_label     = ( 'nav' === $args->container && ! empty( $args->container_aria_label ) ) ? ' aria-label="' . esc_attr( $args->container_aria_label ) . '"' : '';
 			$nav_menu      .= '<' . $args->container . $id . $class . $aria_label . '>';
 		}
 	}

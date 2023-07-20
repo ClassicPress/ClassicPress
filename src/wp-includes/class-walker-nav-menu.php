@@ -177,15 +177,20 @@ class Walker_Nav_Menu extends Walker {
 		$atts           = array();
 		$atts['title']  = ! empty( $menu_item->attr_title ) ? $menu_item->attr_title : '';
 		$atts['target'] = ! empty( $menu_item->target ) ? $menu_item->target : '';
-		if ( '_blank' === $menu_item->target && empty( $menu_item->xfn ) ) {
+
+		if ( ! empty( $menu_item->target ) && '_blank' === $menu_item->target ) {
 			$atts['rel'] = 'noopener';
-		} else {
+		} elseif ( ! empty( $menu_item->xfn ) ) {
 			$atts['rel'] = $menu_item->xfn;
 		}
 
 		if ( ! empty( $menu_item->url ) ) {
 			if ( get_privacy_policy_url() === $menu_item->url ) {
-				$atts['rel'] = empty( $atts['rel'] ) ? 'privacy-policy' : $atts['rel'] . ' privacy-policy';
+				if ( ! empty( $menu_item->target && '_blank' === $menu_item->target && ! empty( $menu_item->xfn ) ) ) {
+					$atts['rel'] = 'nofollow privacy-policy';
+				} else {
+					$atts['rel'] = empty( $atts['rel'] ) ? 'privacy-policy' : $atts['rel'] . ' privacy-policy';
+				}
 			}
 
 			$atts['href'] = $menu_item->url;
@@ -193,7 +198,7 @@ class Walker_Nav_Menu extends Walker {
 			$atts['href'] = '';
 		}
 
-		$atts['aria-current'] = $menu_item->current ? 'page' : '';
+		$atts['aria-current'] = ! empty( $menu_item->current ) ? 'page' : '';
 
 		/**
 		 * Filters the HTML attributes applied to a menu item's anchor element.
