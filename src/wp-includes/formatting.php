@@ -4405,6 +4405,10 @@ function esc_sql( $data ) {
  *                those in `$protocols`, or if `$url` contains an empty string.
  */
 function esc_url( $url, $protocols = null, $_context = 'display' ) {
+	if ( is_null( $url ) ) {
+		return '';
+	}
+
 	$original_url = $url;
 
 	if ( '' === $url ) {

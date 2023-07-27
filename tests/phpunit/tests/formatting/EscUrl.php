@@ -71,6 +71,10 @@ class Tests_Formatting_EscUrl extends WP_UnitTestCase {
 		$this->assertSame( 'http://баба.org/баба', esc_url( 'баба.org/баба' ) );
 	}
 
+	public function test_null() {
+		$this->assertSame( '', esc_url( null ) );
+	}
+
 	/**
 	 * @covers ::sanitize_url
 	 */
