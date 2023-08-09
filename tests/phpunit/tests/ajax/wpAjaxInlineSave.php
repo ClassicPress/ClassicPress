@@ -87,4 +87,19 @@ class Tests_Ajax_wpAjaxInlineSave extends WP_Ajax_UnitTestCase {
 		$post_terms_2 = wp_get_object_terms( $post->ID, 'wptests_tax_2' );
 		$this->assertSameSets( array( $t2 ), wp_list_pluck( $post_terms_2, 'term_id' ) );
 	}
+
+	/**
+	 * @ticket https://github.com/ClassicPress/ClassicPress-v2/issues/166
+	 *
+	 * @covers ::edit_post
+	 */
+	public function test_id_action_on_quick_edit() {
+		global $cp_customization;
+
+		$wp_ajax_inline_save = has_action( 'wp_ajax_inline-save', 'wp_ajax_inline_save' );
+		$add_id_init = has_action( 'wp_ajax_inline-save', array( $cp_customization, 'add_id_init' ) );
+
+		$this->assertNotFalse( $add_id_init );
+		$this->assertGreaterThan( $add_id_init, $wp_ajax_inline_save );
+	}
 }
