@@ -32,9 +32,12 @@ class Tests_Compat_wordpress extends WP_UnitTestCase {
 	 */
 	public function test_defined_polyfills() {
 		$this->assertTrue( function_exists( 'register_block_type' ) );
+		$this->assertTrue( function_exists( 'unregister_block_type' ) );
 		$this->assertTrue( function_exists( 'register_block_type_from_metadata' ) );
 		$this->assertTrue( function_exists( 'has_block' ) );
+		$this->assertTrue( function_exists( 'has_blocks' ) );
 		$this->assertTrue( function_exists( 'register_block_pattern' ) );
+		$this->assertTrue( function_exists( 'wp_is_block_theme' ) );
 	}
 
 	/**

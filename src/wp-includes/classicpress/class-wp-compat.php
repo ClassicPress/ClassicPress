@@ -268,6 +268,20 @@ class WP_Compat {
 			}
 		}
 
+		if ( ! function_exists( 'unregister_block_type' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.0.0
+			 *
+			 * @return bool False.
+			 */
+			function unregister_block_type( ...$args ) {
+				WP_Compat::using_block_function();
+				return false;
+			}
+		}
+
 		if ( ! function_exists( 'register_block_type_from_metadata' ) ) {
 			/**
 			 * Polyfill for block functions.
