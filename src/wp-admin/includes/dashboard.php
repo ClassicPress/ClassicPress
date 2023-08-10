@@ -1281,25 +1281,32 @@ function wp_dashboard_rss_control( $widget_id, $form_inputs = array() ) {
 
 
 /**
- * Renders the Events and News dashboard widget.
+ * Renders ClassicPress News dashboard widget.
  *
  * @since 4.8.0
+ * @since 1.0.0 Events section removed
  */
 function wp_dashboard_events_news() {
 	?>
 	<div class="classicpress-news-inline-notice">
-	<div class="rss-widget">
 		<?php
 		printf(
 			/* translators: link to ClassicPress blog */
-			__( 'You can always find the latest ClassicPress news on our <a href="%s">official&nbsp;blog</a>.' ),
+			__( 'You can always find the latest ClassicPress news on our <a href="%s" target="_blank">official blog <span aria-hidden="true" class="dashicons dashicons-external"></span></a>.' ),
 			'https://www.classicpress.net/blog/'
 		);
 		?>
 	</div>
-	</div>
-	<div class="wordpress-news hide-if-no-js">
+	<div class="classicpress-news hide-if-no-js">
 		<?php wp_dashboard_primary(); ?>
+	</div>
+	<div class="classicpress-news-footer">
+		<ul>
+			<li><a href="https://forums.classicpress.net/" target="_blank"><?php _e( 'Get Help' ); ?> <span aria-hidden="true" class="dashicons dashicons-external"></span></a></li>
+			<li><a href="https://github.com/ClassicPress/ClassicPress/issues/new/choose" target="_blank"><?php _e( 'Feature Requests' ); ?> <span aria-hidden="true" class="dashicons dashicons-external"></span></a></li>
+			<li><a href="https://classicpress.net/volunteer/" target="_blank"><?php _e( 'Volunteer' ); ?> <span aria-hidden="true" class="dashicons dashicons-external"></span></a></li>
+			<li><a href="https://classicpress.net/donate/" target="_blank"><?php _e( 'Donate' ); ?> <span aria-hidden="true" class="dashicons dashicons-external"></span></a></li>
+		</ul>
 	</div>
 
 	<?php
