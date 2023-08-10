@@ -21,7 +21,7 @@ jobs:
   # - todo: Configure Slack notifications for failing tests.
   test-js:
     name: QUnit Tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     if: ${{ github.repository == 'ClassicPress/ClassicPress-v2' || github.event_name == 'pull_request' }}
 
     steps:
