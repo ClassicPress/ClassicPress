@@ -338,6 +338,48 @@ class WP_Compat {
 			}
 		}
 
+		if ( ! function_exists( 'unregister_block_pattern' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.0.0
+			 *
+			 * @return bool False.
+			 */
+			function unregister_block_pattern( ...$args ) {
+				WP_Compat::using_block_function();
+				return false;
+			}
+		}
+
+		if ( ! function_exists( 'register_block_pattern_category' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.0.0
+			 *
+			 * @return bool False.
+			 */
+			function register_block_pattern_category( ...$args ) {
+				WP_Compat::using_block_function();
+				return false;
+			}
+		}
+
+		if ( ! function_exists( 'unregister_block_pattern_category' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.0.0
+			 *
+			 * @return bool False.
+			 */
+			function unregister_block_pattern_category( ...$args ) {
+				WP_Compat::using_block_function();
+				return false;
+			}
+		}
+
 		if ( ! function_exists( 'wp_is_block_theme' ) ) {
 			/**
 			 * Polyfill for block functions.
