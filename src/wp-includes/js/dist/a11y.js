@@ -42,14 +42,14 @@ function domReady(callback) {
   if (typeof document === 'undefined') {
     return;
   }
-
-  if (document.readyState === 'complete' || // DOMContentLoaded + Images/Styles/etc loaded, so we call directly.
+  if (document.readyState === 'complete' ||
+  // DOMContentLoaded + Images/Styles/etc loaded, so we call directly.
   document.readyState === 'interactive' // DOMContentLoaded fires at this point, so we call directly.
   ) {
     return void callback();
-  } // DOMContentLoaded has not fired yet, delay callback until then.
+  }
 
-
+  // DOMContentLoaded has not fired yet, delay callback until then.
   document.addEventListener('DOMContentLoaded', callback);
 }
 
@@ -83,16 +83,13 @@ function validateNamespace(namespace) {
     console.error('The namespace must be a non-empty string.');
     return false;
   }
-
   if (!/^[a-zA-Z][a-zA-Z0-9_.\-\/]*$/.test(namespace)) {
     // eslint-disable-next-line no-console
     console.error('The namespace can only contain numbers, letters, dashes, periods, underscores and slashes.');
     return false;
   }
-
   return true;
 }
-
 /* harmony default export */ const build_module_validateNamespace = (validateNamespace);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/validateHookName.js
@@ -111,28 +108,25 @@ function validateHookName(hookName) {
     console.error('The hook name must be a non-empty string.');
     return false;
   }
-
   if (/^__/.test(hookName)) {
     // eslint-disable-next-line no-console
     console.error('The hook name cannot begin with `__`.');
     return false;
   }
-
   if (!/^[a-zA-Z][a-zA-Z0-9_.-]*$/.test(hookName)) {
     // eslint-disable-next-line no-console
     console.error('The hook name can only contain numbers, letters, dashes, periods and underscores.');
     return false;
   }
-
   return true;
 }
-
 /* harmony default export */ const build_module_validateHookName = (validateHookName);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createAddHook.js
 /**
  * Internal dependencies
  */
+
 
 
 /**
@@ -154,63 +148,55 @@ function validateHookName(hookName) {
  *
  * @return {AddHook} Function that adds a new hook.
  */
-
 function createAddHook(hooks, storeKey) {
   return function addHook(hookName, namespace, callback, priority = 10) {
     const hooksStore = hooks[storeKey];
-
     if (!build_module_validateHookName(hookName)) {
       return;
     }
-
     if (!build_module_validateNamespace(namespace)) {
       return;
     }
-
     if ('function' !== typeof callback) {
       // eslint-disable-next-line no-console
       console.error('The hook callback must be a function.');
       return;
-    } // Validate numeric priority
+    }
 
-
+    // Validate numeric priority
     if ('number' !== typeof priority) {
       // eslint-disable-next-line no-console
       console.error('If specified, the hook priority must be a number.');
       return;
     }
-
     const handler = {
       callback,
       priority,
       namespace
     };
-
     if (hooksStore[hookName]) {
       // Find the correct insert index of the new hook.
       const handlers = hooksStore[hookName].handlers;
+
       /** @type {number} */
-
       let i;
-
       for (i = handlers.length; i > 0; i--) {
         if (priority >= handlers[i - 1].priority) {
           break;
         }
       }
-
       if (i === handlers.length) {
         // If append, operate via direct assignment.
         handlers[i] = handler;
       } else {
         // Otherwise, insert before index via splice.
         handlers.splice(i, 0, handler);
-      } // We may also be currently executing this hook.  If the callback
+      }
+
+      // We may also be currently executing this hook.  If the callback
       // we're adding would come after the current callback, there's no
       // problem; otherwise we need to increase the execution index of
       // any other runs by 1 to account for the added element.
-
-
       hooksStore.__current.forEach(hookInfo => {
         if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
           hookInfo.currentIndex++;
@@ -223,19 +209,18 @@ function createAddHook(hooks, storeKey) {
         runs: 0
       };
     }
-
     if (hookName !== 'hookAdded') {
       hooks.doAction('hookAdded', hookName, namespace, callback, priority);
     }
   };
 }
-
 /* harmony default export */ const build_module_createAddHook = (createAddHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
 /**
  * Internal dependencies
  */
+
 
 
 /**
@@ -262,26 +247,21 @@ function createAddHook(hooks, storeKey) {
  *
  * @return {RemoveHook} Function that removes hooks.
  */
-
 function createRemoveHook(hooks, storeKey, removeAll = false) {
   return function removeHook(hookName, namespace) {
     const hooksStore = hooks[storeKey];
-
     if (!build_module_validateHookName(hookName)) {
       return;
     }
-
     if (!removeAll && !build_module_validateNamespace(namespace)) {
       return;
-    } // Bail if no hooks exist by this name.
+    }
 
-
+    // Bail if no hooks exist by this name.
     if (!hooksStore[hookName]) {
       return 0;
     }
-
     let handlersRemoved = 0;
-
     if (removeAll) {
       handlersRemoved = hooksStore[hookName].handlers.length;
       hooksStore[hookName] = {
@@ -291,16 +271,15 @@ function createRemoveHook(hooks, storeKey, removeAll = false) {
     } else {
       // Try to find the specified callback to remove.
       const handlers = hooksStore[hookName].handlers;
-
       for (let i = handlers.length - 1; i >= 0; i--) {
         if (handlers[i].namespace === namespace) {
           handlers.splice(i, 1);
-          handlersRemoved++; // This callback may also be part of a hook that is
+          handlersRemoved++;
+          // This callback may also be part of a hook that is
           // currently executing.  If the callback we're removing
           // comes after the current callback, there's no problem;
           // otherwise we need to decrease the execution index of any
           // other runs by 1 to account for the removed element.
-
           hooksStore.__current.forEach(hookInfo => {
             if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
               hookInfo.currentIndex--;
@@ -309,15 +288,12 @@ function createRemoveHook(hooks, storeKey, removeAll = false) {
         }
       }
     }
-
     if (hookName !== 'hookRemoved') {
       hooks.doAction('hookRemoved', hookName, namespace);
     }
-
     return handlersRemoved;
   };
 }
-
 /* harmony default export */ const build_module_createRemoveHook = (createRemoveHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createHasHook.js
@@ -332,7 +308,6 @@ function createRemoveHook(hooks, storeKey, removeAll = false) {
  *
  * @return {boolean} Whether there are handlers that are attached to the given hook.
  */
-
 /**
  * Returns a function which, when invoked, will return whether any handlers are
  * attached to a particular hook.
@@ -345,16 +320,15 @@ function createRemoveHook(hooks, storeKey, removeAll = false) {
  */
 function createHasHook(hooks, storeKey) {
   return function hasHook(hookName, namespace) {
-    const hooksStore = hooks[storeKey]; // Use the namespace if provided.
+    const hooksStore = hooks[storeKey];
 
+    // Use the namespace if provided.
     if ('undefined' !== typeof namespace) {
       return hookName in hooksStore && hooksStore[hookName].handlers.some(hook => hook.namespace === namespace);
     }
-
     return hookName in hooksStore;
   };
 }
-
 /* harmony default export */ const build_module_createHasHook = (createHasHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createRunHook.js
@@ -368,54 +342,45 @@ function createHasHook(hooks, storeKey) {
  * @param {boolean}              [returnFirstArg=false] Whether each hook callback is expected to
  *                                                      return its first argument.
  *
- * @return {(hookName:string, ...args: unknown[]) => unknown} Function that runs hook callbacks.
+ * @return {(hookName:string, ...args: unknown[]) => undefined|unknown} Function that runs hook callbacks.
  */
 function createRunHook(hooks, storeKey, returnFirstArg = false) {
   return function runHooks(hookName, ...args) {
     const hooksStore = hooks[storeKey];
-
     if (!hooksStore[hookName]) {
       hooksStore[hookName] = {
         handlers: [],
         runs: 0
       };
     }
-
     hooksStore[hookName].runs++;
-    const handlers = hooksStore[hookName].handlers; // The following code is stripped from production builds.
+    const handlers = hooksStore[hookName].handlers;
 
+    // The following code is stripped from production builds.
     if (false) {}
-
     if (!handlers || !handlers.length) {
       return returnFirstArg ? args[0] : undefined;
     }
-
     const hookInfo = {
       name: hookName,
       currentIndex: 0
     };
-
     hooksStore.__current.push(hookInfo);
-
     while (hookInfo.currentIndex < handlers.length) {
       const handler = handlers[hookInfo.currentIndex];
       const result = handler.callback.apply(null, args);
-
       if (returnFirstArg) {
         args[0] = result;
       }
-
       hookInfo.currentIndex++;
     }
-
     hooksStore.__current.pop();
-
     if (returnFirstArg) {
       return args[0];
     }
+    return undefined;
   };
 }
-
 /* harmony default export */ const build_module_createRunHook = (createRunHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
@@ -432,12 +397,10 @@ function createRunHook(hooks, storeKey, returnFirstArg = false) {
 function createCurrentHook(hooks, storeKey) {
   return function currentHook() {
     var _hooksStore$__current;
-
     const hooksStore = hooks[storeKey];
     return (_hooksStore$__current = hooksStore.__current[hooksStore.__current.length - 1]?.name) !== null && _hooksStore$__current !== void 0 ? _hooksStore$__current : null;
   };
 }
-
 /* harmony default export */ const build_module_createCurrentHook = (createCurrentHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
@@ -463,23 +426,24 @@ function createCurrentHook(hooks, storeKey) {
  */
 function createDoingHook(hooks, storeKey) {
   return function doingHook(hookName) {
-    const hooksStore = hooks[storeKey]; // If the hookName was not passed, check for any current hook.
+    const hooksStore = hooks[storeKey];
 
+    // If the hookName was not passed, check for any current hook.
     if ('undefined' === typeof hookName) {
       return 'undefined' !== typeof hooksStore.__current[0];
-    } // Return the __current hook.
+    }
 
-
+    // Return the __current hook.
     return hooksStore.__current[0] ? hookName === hooksStore.__current[0].name : false;
   };
 }
-
 /* harmony default export */ const build_module_createDoingHook = (createDoingHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createDidHook.js
 /**
  * Internal dependencies
  */
+
 
 /**
  * @callback DidHook
@@ -500,25 +464,22 @@ function createDoingHook(hooks, storeKey) {
  *
  * @return {DidHook} Function that returns a hook's call count.
  */
-
 function createDidHook(hooks, storeKey) {
   return function didHook(hookName) {
     const hooksStore = hooks[storeKey];
-
     if (!build_module_validateHookName(hookName)) {
       return;
     }
-
     return hooksStore[hookName] && hooksStore[hookName].runs ? hooksStore[hookName].runs : 0;
   };
 }
-
 /* harmony default export */ const build_module_createDidHook = (createDidHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createHooks.js
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -533,14 +494,13 @@ function createDidHook(hooks, storeKey) {
  *
  * @private
  */
-
 class _Hooks {
   constructor() {
     /** @type {import('.').Store} actions */
     this.actions = Object.create(null);
     this.actions.__current = [];
-    /** @type {import('.').Store} filters */
 
+    /** @type {import('.').Store} filters */
     this.filters = Object.create(null);
     this.filters.__current = [];
     this.addAction = build_module_createAddHook(this, 'actions');
@@ -560,8 +520,8 @@ class _Hooks {
     this.didAction = build_module_createDidHook(this, 'actions');
     this.didFilter = build_module_createDidHook(this, 'filters');
   }
-
 }
+
 /** @typedef {_Hooks} Hooks */
 
 /**
@@ -569,17 +529,16 @@ class _Hooks {
  *
  * @return {Hooks} A Hooks instance.
  */
-
 function createHooks() {
   return new _Hooks();
 }
-
 /* harmony default export */ const build_module_createHooks = (createHooks);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/index.js
 /**
  * Internal dependencies
  */
+
 
 /** @typedef {(...args: any[])=>any} Callback */
 
@@ -822,6 +781,7 @@ var sprintf = __webpack_require__(124);
  */
 
 
+
 /**
  * Log to console, once per message; or more precisely, per referentially equal
  * argument set. Because Jed throws errors, we log these to the console instead
@@ -829,7 +789,6 @@ var sprintf = __webpack_require__(124);
  *
  * @param {...*} args Arguments to pass to `console.error`
  */
-
 const logErrorOnce = memize(console.error); // eslint-disable-line no-console
 
 /**
@@ -843,7 +802,6 @@ const logErrorOnce = memize(console.error); // eslint-disable-line no-console
  *
  * @return {string} The formatted string.
  */
-
 function sprintf_sprintf(format, ...args) {
   try {
     return sprintfjs.sprintf(format, ...args);
@@ -851,7 +809,6 @@ function sprintf_sprintf(format, ...args) {
     if (error instanceof Error) {
       logErrorOnce('sprintf error: \n\n' + error.toString());
     }
-
     return format;
   }
 }
@@ -1365,6 +1322,7 @@ Tannin.prototype.dcnpgettext = function( domain, context, singular, plural, n ) 
  * External dependencies
  */
 
+
 /**
  * @typedef {Record<string,any>} LocaleData
  */
@@ -1375,22 +1333,21 @@ Tannin.prototype.dcnpgettext = function( domain, context, singular, plural, n ) 
  *
  * @type {LocaleData}
  */
-
 const DEFAULT_LOCALE_DATA = {
   '': {
     /** @param {number} n */
     plural_forms(n) {
       return n === 1 ? 0 : 1;
     }
-
   }
 };
+
 /*
  * Regular expression that matches i18n hooks like `i18n.gettext`, `i18n.ngettext`,
  * `i18n.gettext_domain` or `i18n.ngettext_with_context` or `i18n.has_translation`.
  */
-
 const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
+
 /**
  * @typedef {(domain?: string) => LocaleData} GetLocaleData
  *
@@ -1399,7 +1356,6 @@ const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
  *
  * @see http://messageformat.github.io/Jed/
  */
-
 /**
  * @typedef {(data?: LocaleData, domain?: string) => void} SetLocaleData
  *
@@ -1409,7 +1365,6 @@ const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
  *
  * @see http://messageformat.github.io/Jed/
  */
-
 /**
  * @typedef {(data?: LocaleData, domain?: string) => void} AddLocaleData
  *
@@ -1419,7 +1374,6 @@ const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
  *
  * @see http://messageformat.github.io/Jed/
  */
-
 /**
  * @typedef {(data?: LocaleData, domain?: string) => void} ResetLocaleData
  *
@@ -1428,22 +1382,17 @@ const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
  *
  * @see http://messageformat.github.io/Jed/
  */
-
 /** @typedef {() => void} SubscribeCallback */
-
 /** @typedef {() => void} UnsubscribeCallback */
-
 /**
  * @typedef {(callback: SubscribeCallback) => UnsubscribeCallback} Subscribe
  *
  * Subscribes to changes of locale data
  */
-
 /**
  * @typedef {(domain?: string) => string} GetFilterDomain
  * Retrieve the domain to use when calling domain-specific filters.
  */
-
 /**
  * @typedef {(text: string, domain?: string) => string} __
  *
@@ -1451,7 +1400,6 @@ const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
  *
  * @see https://developer.wordpress.org/reference/functions/__/
  */
-
 /**
  * @typedef {(text: string, context: string, domain?: string) => string} _x
  *
@@ -1459,7 +1407,6 @@ const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
  *
  * @see https://developer.wordpress.org/reference/functions/_x/
  */
-
 /**
  * @typedef {(single: string, plural: string, number: number, domain?: string) => string} _n
  *
@@ -1468,7 +1415,6 @@ const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
  *
  * @see https://developer.wordpress.org/reference/functions/_n/
  */
-
 /**
  * @typedef {(single: string, plural: string, number: number, context: string, domain?: string) => string} _nx
  *
@@ -1477,7 +1423,6 @@ const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
  *
  * @see https://developer.wordpress.org/reference/functions/_nx/
  */
-
 /**
  * @typedef {() => boolean} IsRtl
  *
@@ -1488,13 +1433,11 @@ const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
  * language written RTL. The opposite of RTL, LTR (Left To Right) is used in other languages,
  * including English (`en`, `en-US`, `en-GB`, etc.), Spanish (`es`), and French (`fr`).
  */
-
 /**
  * @typedef {(single: string, context?: string, domain?: string) => boolean} HasTranslation
  *
  * Check if there is a translation for a given string in singular form.
  */
-
 /** @typedef {import('@wordpress/hooks').Hooks} Hooks */
 
 /**
@@ -1530,7 +1473,6 @@ const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
  *
  * @return {I18n} I18n instance.
  */
-
 const createI18n = (initialData, initialDomain, hooks) => {
   /**
    * The underlying instance of Tannin to which exported functions interface.
@@ -1539,78 +1481,80 @@ const createI18n = (initialData, initialDomain, hooks) => {
    */
   const tannin = new Tannin({});
   const listeners = new Set();
-
   const notifyListeners = () => {
     listeners.forEach(listener => listener());
   };
+
   /**
    * Subscribe to changes of locale data.
    *
    * @param {SubscribeCallback} callback Subscription callback.
    * @return {UnsubscribeCallback} Unsubscribe callback.
    */
-
-
   const subscribe = callback => {
     listeners.add(callback);
     return () => listeners.delete(callback);
   };
+
   /** @type {GetLocaleData} */
-
-
   const getLocaleData = (domain = 'default') => tannin.data[domain];
+
   /**
    * @param {LocaleData} [data]
    * @param {string}     [domain]
    */
-
-
   const doSetLocaleData = (data, domain = 'default') => {
-    tannin.data[domain] = { ...tannin.data[domain],
+    tannin.data[domain] = {
+      ...tannin.data[domain],
       ...data
-    }; // Populate default domain configuration (supported locale date which omits
+    };
+
+    // Populate default domain configuration (supported locale date which omits
     // a plural forms expression).
-
-    tannin.data[domain][''] = { ...DEFAULT_LOCALE_DATA[''],
+    tannin.data[domain][''] = {
+      ...DEFAULT_LOCALE_DATA[''],
       ...tannin.data[domain]?.['']
-    }; // Clean up cached plural forms functions cache as it might be updated.
+    };
 
+    // Clean up cached plural forms functions cache as it might be updated.
     delete tannin.pluralForms[domain];
   };
+
   /** @type {SetLocaleData} */
-
-
   const setLocaleData = (data, domain) => {
     doSetLocaleData(data, domain);
     notifyListeners();
   };
+
   /** @type {AddLocaleData} */
-
-
   const addLocaleData = (data, domain = 'default') => {
-    tannin.data[domain] = { ...tannin.data[domain],
+    tannin.data[domain] = {
+      ...tannin.data[domain],
       ...data,
       // Populate default domain configuration (supported locale date which omits
       // a plural forms expression).
-      '': { ...DEFAULT_LOCALE_DATA[''],
+      '': {
+        ...DEFAULT_LOCALE_DATA[''],
         ...tannin.data[domain]?.[''],
         ...data?.['']
       }
-    }; // Clean up cached plural forms functions cache as it might be updated.
+    };
 
+    // Clean up cached plural forms functions cache as it might be updated.
     delete tannin.pluralForms[domain];
     notifyListeners();
   };
+
   /** @type {ResetLocaleData} */
-
-
   const resetLocaleData = (data, domain) => {
     // Reset all current Tannin locale data.
-    tannin.data = {}; // Reset cached plural forms functions cache.
+    tannin.data = {};
 
+    // Reset cached plural forms functions cache.
     tannin.pluralForms = {};
     setLocaleData(data, domain);
   };
+
   /**
    * Wrapper for Tannin's `dcnpgettext`. Populates default locale data if not
    * otherwise previously assigned.
@@ -1626,29 +1570,24 @@ const createI18n = (initialData, initialDomain, hooks) => {
    *
    * @return {string} The translated string.
    */
-
-
   const dcnpgettext = (domain = 'default', context, single, plural, number) => {
     if (!tannin.data[domain]) {
       // Use `doSetLocaleData` to set silently, without notifying listeners.
       doSetLocaleData(undefined, domain);
     }
-
     return tannin.dcnpgettext(domain, context, single, plural, number);
   };
+
   /** @type {GetFilterDomain} */
-
-
   const getFilterDomain = (domain = 'default') => domain;
+
   /** @type {__} */
-
-
   const __ = (text, domain) => {
     let translation = dcnpgettext(domain, undefined, text);
-
     if (!hooks) {
       return translation;
     }
+
     /**
      * Filters text with its translation.
      *
@@ -1656,29 +1595,20 @@ const createI18n = (initialData, initialDomain, hooks) => {
      * @param {string} text        Text to translate.
      * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
      */
-
-
-    translation =
-    /** @type {string} */
-
-    /** @type {*} */
-    hooks.applyFilters('i18n.gettext', translation, text, domain);
-    return (
-      /** @type {string} */
-
-      /** @type {*} */
-      hooks.applyFilters('i18n.gettext_' + getFilterDomain(domain), translation, text, domain)
+    translation = /** @type {string} */
+    /** @type {*} */hooks.applyFilters('i18n.gettext', translation, text, domain);
+    return (/** @type {string} */
+      /** @type {*} */hooks.applyFilters('i18n.gettext_' + getFilterDomain(domain), translation, text, domain)
     );
   };
+
   /** @type {_x} */
-
-
   const _x = (text, context, domain) => {
     let translation = dcnpgettext(domain, context, text);
-
     if (!hooks) {
       return translation;
     }
+
     /**
      * Filters text with its translation based on context information.
      *
@@ -1687,29 +1617,20 @@ const createI18n = (initialData, initialDomain, hooks) => {
      * @param {string} context     Context information for the translators.
      * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
      */
-
-
-    translation =
-    /** @type {string} */
-
-    /** @type {*} */
-    hooks.applyFilters('i18n.gettext_with_context', translation, text, context, domain);
-    return (
-      /** @type {string} */
-
-      /** @type {*} */
-      hooks.applyFilters('i18n.gettext_with_context_' + getFilterDomain(domain), translation, text, context, domain)
+    translation = /** @type {string} */
+    /** @type {*} */hooks.applyFilters('i18n.gettext_with_context', translation, text, context, domain);
+    return (/** @type {string} */
+      /** @type {*} */hooks.applyFilters('i18n.gettext_with_context_' + getFilterDomain(domain), translation, text, context, domain)
     );
   };
+
   /** @type {_n} */
-
-
   const _n = (single, plural, number, domain) => {
     let translation = dcnpgettext(domain, undefined, single, plural, number);
-
     if (!hooks) {
       return translation;
     }
+
     /**
      * Filters the singular or plural form of a string.
      *
@@ -1719,29 +1640,20 @@ const createI18n = (initialData, initialDomain, hooks) => {
      * @param {string} number      The number to compare against to use either the singular or plural form.
      * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
      */
-
-
-    translation =
-    /** @type {string} */
-
-    /** @type {*} */
-    hooks.applyFilters('i18n.ngettext', translation, single, plural, number, domain);
-    return (
-      /** @type {string} */
-
-      /** @type {*} */
-      hooks.applyFilters('i18n.ngettext_' + getFilterDomain(domain), translation, single, plural, number, domain)
+    translation = /** @type {string} */
+    /** @type {*} */hooks.applyFilters('i18n.ngettext', translation, single, plural, number, domain);
+    return (/** @type {string} */
+      /** @type {*} */hooks.applyFilters('i18n.ngettext_' + getFilterDomain(domain), translation, single, plural, number, domain)
     );
   };
+
   /** @type {_nx} */
-
-
   const _nx = (single, plural, number, context, domain) => {
     let translation = dcnpgettext(domain, context, single, plural, number);
-
     if (!hooks) {
       return translation;
     }
+
     /**
      * Filters the singular or plural form of a string with gettext context.
      *
@@ -1752,33 +1664,22 @@ const createI18n = (initialData, initialDomain, hooks) => {
      * @param {string} context     Context information for the translators.
      * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
      */
-
-
-    translation =
-    /** @type {string} */
-
-    /** @type {*} */
-    hooks.applyFilters('i18n.ngettext_with_context', translation, single, plural, number, context, domain);
-    return (
-      /** @type {string} */
-
-      /** @type {*} */
-      hooks.applyFilters('i18n.ngettext_with_context_' + getFilterDomain(domain), translation, single, plural, number, context, domain)
+    translation = /** @type {string} */
+    /** @type {*} */hooks.applyFilters('i18n.ngettext_with_context', translation, single, plural, number, context, domain);
+    return (/** @type {string} */
+      /** @type {*} */hooks.applyFilters('i18n.ngettext_with_context_' + getFilterDomain(domain), translation, single, plural, number, context, domain)
     );
   };
+
   /** @type {IsRtl} */
-
-
   const isRTL = () => {
     return 'rtl' === _x('ltr', 'text direction');
   };
+
   /** @type {HasTranslation} */
-
-
   const hasTranslation = (single, context, domain) => {
     const key = context ? context + '\u0004' + single : single;
     let result = !!tannin.data?.[domain !== null && domain !== void 0 ? domain : 'default']?.[key];
-
     if (hooks) {
       /**
        * Filters the presence of a translation in the locale data.
@@ -1788,25 +1689,16 @@ const createI18n = (initialData, initialDomain, hooks) => {
        * @param {string}  context        Context information for the translators.
        * @param {string}  domain         Text domain. Unique identifier for retrieving translated strings.
        */
-      result =
-      /** @type { boolean } */
-
-      /** @type {*} */
-      hooks.applyFilters('i18n.has_translation', result, single, context, domain);
-      result =
-      /** @type { boolean } */
-
-      /** @type {*} */
-      hooks.applyFilters('i18n.has_translation_' + getFilterDomain(domain), result, single, context, domain);
+      result = /** @type { boolean } */
+      /** @type {*} */hooks.applyFilters('i18n.has_translation', result, single, context, domain);
+      result = /** @type { boolean } */
+      /** @type {*} */hooks.applyFilters('i18n.has_translation_' + getFilterDomain(domain), result, single, context, domain);
     }
-
     return result;
   };
-
   if (initialData) {
     setLocaleData(initialData, initialDomain);
   }
-
   if (hooks) {
     /**
      * @param {string} hookName
@@ -1816,11 +1708,9 @@ const createI18n = (initialData, initialDomain, hooks) => {
         notifyListeners();
       }
     };
-
     hooks.addAction('hookAdded', 'core/i18n', onHookAddedOrRemoved);
     hooks.addAction('hookRemoved', 'core/i18n', onHookAddedOrRemoved);
   }
-
   return {
     getLocaleData,
     setLocaleData,
@@ -1843,17 +1733,18 @@ var build_module = __webpack_require__(200);
  * Internal dependencies
  */
 
+
 /**
  * WordPress dependencies
  */
 
-
 const i18n = createI18n(undefined, undefined, build_module.defaultHooks);
+
 /**
  * Default, singleton instance of `I18n`.
  */
-
 /* harmony default export */ const default_i18n = ((/* unused pure expression or super */ null && (i18n)));
+
 /*
  * Comments in this file are duplicated from ./i18n due to
  * https://github.com/WordPress/gutenberg/pull/20318#issuecomment-590837722
@@ -1873,8 +1764,8 @@ const i18n = createI18n(undefined, undefined, build_module.defaultHooks);
  * @param {string} [domain] Domain for which to get the data.
  * @return {LocaleData} Locale data.
  */
-
 const getLocaleData = i18n.getLocaleData.bind(i18n);
+
 /**
  * Merges locale data into the Tannin instance by domain. Accepts data in a
  * Jed-formatted JSON object shape.
@@ -1884,8 +1775,8 @@ const getLocaleData = i18n.getLocaleData.bind(i18n);
  * @param {LocaleData} [data]   Locale data configuration.
  * @param {string}     [domain] Domain for which configuration applies.
  */
-
 const setLocaleData = i18n.setLocaleData.bind(i18n);
+
 /**
  * Resets all current Tannin instance locale data and sets the specified
  * locale data for the domain. Accepts data in a Jed-formatted JSON object shape.
@@ -1895,16 +1786,16 @@ const setLocaleData = i18n.setLocaleData.bind(i18n);
  * @param {LocaleData} [data]   Locale data configuration.
  * @param {string}     [domain] Domain for which configuration applies.
  */
-
 const resetLocaleData = i18n.resetLocaleData.bind(i18n);
+
 /**
  * Subscribes to changes of locale data
  *
  * @param {SubscribeCallback} callback Subscription callback
  * @return {UnsubscribeCallback} Unsubscribe callback
  */
-
 const subscribe = i18n.subscribe.bind(i18n);
+
 /**
  * Retrieve the translation of text.
  *
@@ -1915,8 +1806,8 @@ const subscribe = i18n.subscribe.bind(i18n);
  *
  * @return {string} Translated text.
  */
-
 const __ = i18n.__.bind(i18n);
+
 /**
  * Retrieve translated string with gettext context.
  *
@@ -1928,8 +1819,8 @@ const __ = i18n.__.bind(i18n);
  *
  * @return {string} Translated context string without pipe.
  */
-
 const _x = i18n._x.bind(i18n);
+
 /**
  * Translates and retrieves the singular or plural form based on the supplied
  * number.
@@ -1944,8 +1835,8 @@ const _x = i18n._x.bind(i18n);
  *
  * @return {string} The translated singular or plural form.
  */
-
 const _n = i18n._n.bind(i18n);
+
 /**
  * Translates and retrieves the singular or plural form based on the supplied
  * number, with gettext context.
@@ -1961,8 +1852,8 @@ const _n = i18n._n.bind(i18n);
  *
  * @return {string} The translated singular or plural form.
  */
-
 const _nx = i18n._nx.bind(i18n);
+
 /**
  * Check if current locale is RTL.
  *
@@ -1973,8 +1864,8 @@ const _nx = i18n._nx.bind(i18n);
  *
  * @return {boolean} Whether locale is RTL.
  */
-
 const isRTL = i18n.isRTL.bind(i18n);
+
 /**
  * Check if there is a translation for a given string (in singular form).
  *
@@ -1983,7 +1874,6 @@ const isRTL = i18n.isRTL.bind(i18n);
  * @param {string} [domain]  Domain to retrieve the translated text.
  * @return {boolean} Whether the translation exists or not.
  */
-
 const hasTranslation = i18n.hasTranslation.bind(i18n);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/index.js
@@ -2312,6 +2202,7 @@ var i18n_build_module = __webpack_require__(959);
  * WordPress dependencies
  */
 
+
 /**
  * Build the explanatory text to be placed before the aria live regions.
  *
@@ -2320,7 +2211,6 @@ var i18n_build_module = __webpack_require__(959);
  *
  * @return {HTMLParagraphElement} The explanatory text HTML element.
  */
-
 function addIntroText() {
   const introText = document.createElement('p');
   introText.id = 'a11y-speak-intro-text';
@@ -2331,11 +2221,9 @@ function addIntroText() {
   const {
     body
   } = document;
-
   if (body) {
     body.appendChild(introText);
   }
-
   return introText;
 }
 
@@ -2358,11 +2246,9 @@ function addContainer(ariaLive = 'polite') {
   const {
     body
   } = document;
-
   if (body) {
     body.appendChild(container);
   }
-
   return container;
 }
 
@@ -2373,12 +2259,11 @@ function addContainer(ariaLive = 'polite') {
 function clear() {
   const regions = document.getElementsByClassName('a11y-speak-region');
   const introText = document.getElementById('a11y-speak-intro-text');
-
   for (let i = 0; i < regions.length; i++) {
     regions[i].textContent = '';
-  } // Make sure the explanatory text is hidden from assistive technologies.
+  }
 
-
+  // Make sure the explanatory text is hidden from assistive technologies.
   if (introText) {
     introText.setAttribute('hidden', 'hidden');
   }
@@ -2386,6 +2271,7 @@ function clear() {
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/a11y/build-module/filter-message.js
 let previousMessage = '';
+
 /**
  * Filter the message to be announced to the screenreader.
  *
@@ -2393,7 +2279,6 @@ let previousMessage = '';
  *
  * @return {string} The filtered message.
  */
-
 function filterMessage(message) {
   /*
    * Strip HTML tags (if any) from the message string. Ideally, messages should
@@ -2403,15 +2288,14 @@ function filterMessage(message) {
    * spaces natively.
    */
   message = message.replace(/<[^<>]+>/g, ' ');
+
   /*
    * Safari + VoiceOver don't announce repeated, identical strings. We use
    * a `no-break space` to force them to think identical strings are different.
    */
-
   if (previousMessage === message) {
     message += '\u00A0';
   }
-
   previousMessage = message;
   return message;
 }
@@ -2420,6 +2304,7 @@ function filterMessage(message) {
 /**
  * WordPress dependencies
  */
+
 
 /**
  * Internal dependencies
@@ -2432,29 +2317,26 @@ function filterMessage(message) {
 /**
  * Create the live regions.
  */
-
 function setup() {
   const introText = document.getElementById('a11y-speak-intro-text');
   const containerAssertive = document.getElementById('a11y-speak-assertive');
   const containerPolite = document.getElementById('a11y-speak-polite');
-
   if (introText === null) {
     addIntroText();
   }
-
   if (containerAssertive === null) {
     addContainer('assertive');
   }
-
   if (containerPolite === null) {
     addContainer('polite');
   }
 }
+
 /**
  * Run setup on domReady.
  */
-
 (0,build_module["default"])(setup);
+
 /**
  * Allows you to easily announce dynamic interface updates to screen readers using ARIA live regions.
  * This module is inspired by the `speak` function in `wp-a11y.js`.
@@ -2473,7 +2355,6 @@ function setup() {
  * speak( 'The message you want to send to the ARIA live region', 'assertive' );
  * ```
  */
-
 function speak(message, ariaLive) {
   /*
    * Clear previous messages to allow repeated strings being read out and hide
@@ -2484,18 +2365,16 @@ function speak(message, ariaLive) {
   const introText = document.getElementById('a11y-speak-intro-text');
   const containerAssertive = document.getElementById('a11y-speak-assertive');
   const containerPolite = document.getElementById('a11y-speak-polite');
-
   if (containerAssertive && ariaLive === 'assertive') {
     containerAssertive.textContent = message;
   } else if (containerPolite) {
     containerPolite.textContent = message;
   }
+
   /*
    * Make the explanatory text available to assistive technologies by removing
    * the 'hidden' HTML attribute.
    */
-
-
   if (introText) {
     introText.removeAttribute('hidden');
   }
