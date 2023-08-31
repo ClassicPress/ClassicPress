@@ -608,7 +608,7 @@ class Theme_Upgrader extends WP_Upgrader {
 		if ( ! is_wp_version_compatible( $requires_wp ) ) {
 			$error = sprintf(
 				/* translators: 1: Current WordPress version, 2: Version required by the uploaded theme. */
-				__( 'Your WordPress version is %1$s, however the uploaded theme requires %2$s.' ),
+				__( 'Your ClassicPress version is %1$s, however the uploaded theme requires %2$s.' ),
 				$wp_version,
 				$requires_wp
 			);

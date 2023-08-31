@@ -86,7 +86,7 @@ class WP_Customize_Themes_Section extends WP_Customize_Section {
 							<?php
 							printf(
 								/* translators: %s: Support forums URL. */
-								__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+								__( 'An unexpected error occurred. Something may be wrong with WordPress.org, ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
 								__( 'https://wordpress.org/support/forums/' )
 							);
 							?>

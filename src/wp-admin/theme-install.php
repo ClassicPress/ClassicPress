@@ -61,7 +61,7 @@ wp_localize_script(
 			'back'                => __( 'Back' ),
 			'error'               => sprintf(
 				/* translators: %s: Support forums URL. */
-				__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+				__( 'An unexpected error occurred. Something may be wrong with WordPress.org, ClassicPress.net, or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
 				__( 'https://wordpress.org/support/forums/' )
 			),
 			'tryAgain'            => __( 'Try Again' ),
@@ -107,7 +107,7 @@ if ( $tab ) {
 $help_overview =
 	'<p>' . sprintf(
 		/* translators: %s: Theme Directory URL. */
-		__( 'You can find additional themes for your site by using the Theme Browser/Installer on this screen, which will display themes from the <a href="%s">WordPress Theme Directory</a>. These themes are designed and developed by third parties, are available free of charge, and are compatible with the license WordPress uses.' ),
+		__( 'You can find additional themes for your site by using the Theme Browser/Installer on this screen, which will display themes from the <a href="%s">ClassicPress Theme Directory</a>. These themes are designed and developed by third parties, are available free of charge, and are compatible with the license WordPress uses.' ),
 		__( 'https://wordpress.org/themes/' )
 	) . '</p>' .
 	'<p>' . __( 'You can Search for themes by keyword, author, or tag, or can get more specific and search by criteria listed in the feature filter.' ) . ' <span id="live-search-desc">' . __( 'The search results will be updated as you type.' ) . '</span></p>' .
@@ -290,11 +290,11 @@ if ( $tab ) {
 		<div class="notice notice-error notice-alt"><p>
 			<# if ( ! data.compatible_wp && ! data.compatible_php ) { #>
 				<?php
-				_e( 'This theme does not work with your versions of WordPress and PHP.' );
+				_e( 'This theme does not work with your versions of ClassicPress and PHP.' );
 				if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
 					printf(
 						/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
-						' ' . __( '<a href="%1$s">Please update WordPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
+						' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
 						self_admin_url( 'update-core.php' ),
 						esc_url( wp_get_update_php_url() )
 					);
@@ -302,7 +302,7 @@ if ( $tab ) {
 				} elseif ( current_user_can( 'update_core' ) ) {
 					printf(
 						/* translators: %s: URL to WordPress Updates screen. */
-						' ' . __( '<a href="%s">Please update WordPress</a>.' ),
+						' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 						self_admin_url( 'update-core.php' )
 					);
 				} elseif ( current_user_can( 'update_php' ) ) {
@@ -316,11 +316,11 @@ if ( $tab ) {
 				?>
 			<# } else if ( ! data.compatible_wp ) { #>
 				<?php
-				_e( 'This theme does not work with your version of WordPress.' );
+				_e( 'This theme does not work with your version of ClassicPress.' );
 				if ( current_user_can( 'update_core' ) ) {
 					printf(
 						/* translators: %s: URL to WordPress Updates screen. */
-						' ' . __( '<a href="%s">Please update WordPress</a>.' ),
+						' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 						self_admin_url( 'update-core.php' )
 					);
 				}
@@ -495,11 +495,11 @@ if ( $tab ) {
 							<div class="notice notice-error notice-alt notice-large"><p>
 								<# if ( ! data.compatible_wp && ! data.compatible_php ) { #>
 									<?php
-									_e( 'This theme does not work with your versions of WordPress and PHP.' );
+									_e( 'This theme does not work with your versions of ClassicPress and PHP.' );
 									if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
 										printf(
 											/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
-											' ' . __( '<a href="%1$s">Please update WordPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
+											' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
 											self_admin_url( 'update-core.php' ),
 											esc_url( wp_get_update_php_url() )
 										);
@@ -507,7 +507,7 @@ if ( $tab ) {
 									} elseif ( current_user_can( 'update_core' ) ) {
 										printf(
 											/* translators: %s: URL to WordPress Updates screen. */
-											' ' . __( '<a href="%s">Please update WordPress</a>.' ),
+											' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 											self_admin_url( 'update-core.php' )
 										);
 									} elseif ( current_user_can( 'update_php' ) ) {
@@ -521,11 +521,11 @@ if ( $tab ) {
 									?>
 								<# } else if ( ! data.compatible_wp ) { #>
 									<?php
-									_e( 'This theme does not work with your version of WordPress.' );
+									_e( 'This theme does not work with your version of ClassicPress.' );
 									if ( current_user_can( 'update_core' ) ) {
 										printf(
 											/* translators: %s: URL to WordPress Updates screen. */
-											' ' . __( '<a href="%s">Please update WordPress</a>.' ),
+											' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 											self_admin_url( 'update-core.php' )
 										);
 									}

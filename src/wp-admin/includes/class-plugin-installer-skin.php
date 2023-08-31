@@ -277,7 +277,7 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 		if ( ! is_wp_version_compatible( $requires_wp ) ) {
 			$error = sprintf(
 				/* translators: 1: Current WordPress version, 2: Version required by the uploaded plugin. */
-				__( 'Your WordPress version is %1$s, however the uploaded plugin requires %2$s.' ),
+				__( 'Your ClassicPress version is %1$s, however the uploaded plugin requires %2$s.' ),
 				get_bloginfo( 'version' ),
 				$requires_wp
 			);

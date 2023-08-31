@@ -312,7 +312,7 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 		if ( ! is_wp_version_compatible( $requires_wp ) ) {
 			$error = sprintf(
 				/* translators: 1: Current WordPress version, 2: Version required by the uploaded theme. */
-				__( 'Your WordPress version is %1$s, however the uploaded theme requires %2$s.' ),
+				__( 'Your ClassicPress version is %1$s, however the uploaded theme requires %2$s.' ),
 				get_bloginfo( 'version' ),
 				$requires_wp
 			);

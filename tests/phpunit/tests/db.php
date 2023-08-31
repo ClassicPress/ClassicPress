@@ -1195,13 +1195,13 @@ class Tests_DB extends WP_UnitTestCase {
 	private function get_db_error_value_too_long( $errored_fields ) {
 		if ( str_contains( $errored_fields, ', ' ) ) {
 			return sprintf(
-				'WordPress database error: Processing the values for the following fields failed: %s. ' .
+				'ClassicPress database error: Processing the values for the following fields failed: %s. ' .
 				'The supplied values may be too long or contain invalid data.',
 				$errored_fields
 			);
 		}
 		return sprintf(
-			'WordPress database error: Processing the value for the following field failed: %s. ' .
+			'ClassicPress database error: Processing the value for the following field failed: %s. ' .
 			'The supplied value may be too long or contains invalid data.',
 			$errored_fields
 		);
@@ -1260,7 +1260,7 @@ class Tests_DB extends WP_UnitTestCase {
 		);
 
 		$this->assertSame(
-			'WordPress database error: Could not perform query because it contains invalid data.',
+			'ClassicPress database error: Could not perform query because it contains invalid data.',
 			$wpdb->last_error
 		);
 	}

@@ -783,7 +783,7 @@ function post_trackback_meta_box( $post ) {
 	<?php
 	printf(
 		/* translators: %s: Documentation URL. */
-		__( 'Trackbacks are a way to notify legacy blog systems that you&#8217;ve linked to them. If you link other WordPress sites, they&#8217;ll be notified automatically using <a href="%s">pingbacks</a>, no other action necessary.' ),
+		__( 'Trackbacks are a way to notify legacy blog systems that you&#8217;ve linked to them. If you link other ClassicPress sites, they&#8217;ll be notified automatically using <a href="%s">pingbacks</a>, no other action necessary.' ),
 		__( 'https://wordpress.org/documentation/article/introduction-to-blogging/#comments' )
 	);
 	?>

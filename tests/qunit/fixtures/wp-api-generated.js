@@ -6472,7 +6472,7 @@ mockedApiResponse.Schema = {
                             "required": false
                         },
                         "language": {
-                            "description": "WordPress locale code.",
+                            "description": "ClassicPress locale code.",
                             "type": "string",
                             "required": false
                         },

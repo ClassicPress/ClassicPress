@@ -5089,7 +5089,7 @@ function wpview_media_sandbox_styles() {
  */
 function wp_register_media_personal_data_exporter( $exporters ) {
 	$exporters['wordpress-media'] = array(
-		'exporter_friendly_name' => __( 'WordPress Media' ),
+		'exporter_friendly_name' => __( 'ClassicPress Media' ),
 		'callback'               => 'wp_media_personal_data_exporter',
 	);
 

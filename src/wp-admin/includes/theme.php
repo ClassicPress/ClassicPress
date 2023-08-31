@@ -69,7 +69,7 @@ function delete_theme( $stylesheet, $redirect = '' ) {
 	// Get the base plugin folder.
 	$themes_dir = $wp_filesystem->wp_themes_dir();
 	if ( empty( $themes_dir ) ) {
-		return new WP_Error( 'fs_no_themes_dir', __( 'Unable to locate WordPress theme directory.' ) );
+		return new WP_Error( 'fs_no_themes_dir', __( 'Unable to locate ClassicPress theme directory.' ) );
 	}
 
 	/**
@@ -547,7 +547,7 @@ function themes_api( $action, $args = array() ) {
 				'themes_api_failed',
 				sprintf(
 					/* translators: %s: Support forums URL. */
-					__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+					__( 'An unexpected error occurred. Something may be wrong with WordPress.org, ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
 					__( 'https://wordpress.org/support/forums/' )
 				),
 				$request->get_error_message()
@@ -562,7 +562,7 @@ function themes_api( $action, $args = array() ) {
 					'themes_api_failed',
 					sprintf(
 						/* translators: %s: Support forums URL. */
-						__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+						__( 'An unexpected error occurred. Something may be wrong with WordPress.org, ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
 						__( 'https://wordpress.org/support/forums/' )
 					),
 					wp_remote_retrieve_body( $request )
@@ -860,13 +860,13 @@ function customize_themes_print_templates() {
 										<?php
 										printf(
 											/* translators: %s: Theme name. */
-											__( 'There is a new version of %s available, but it does not work with your versions of WordPress and PHP.' ),
+											__( 'There is a new version of %s available, but it does not work with your versions of ClassicPress and PHP.' ),
 											'{{{ data.name }}}'
 										);
 										if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
 											printf(
 												/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
-												' ' . __( '<a href="%1$s">Please update WordPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
+												' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
 												self_admin_url( 'update-core.php' ),
 												esc_url( wp_get_update_php_url() )
 											);
@@ -874,7 +874,7 @@ function customize_themes_print_templates() {
 										} elseif ( current_user_can( 'update_core' ) ) {
 											printf(
 												/* translators: %s: URL to WordPress Updates screen. */
-												' ' . __( '<a href="%s">Please update WordPress</a>.' ),
+												' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 												self_admin_url( 'update-core.php' )
 											);
 										} elseif ( current_user_can( 'update_php' ) ) {
@@ -890,13 +890,13 @@ function customize_themes_print_templates() {
 										<?php
 										printf(
 											/* translators: %s: Theme name. */
-											__( 'There is a new version of %s available, but it does not work with your version of WordPress.' ),
+											__( 'There is a new version of %s available, but it does not work with your version of ClassicPress.' ),
 											'{{{ data.name }}}'
 										);
 										if ( current_user_can( 'update_core' ) ) {
 											printf(
 												/* translators: %s: URL to WordPress Updates screen. */
-												' ' . __( '<a href="%s">Please update WordPress</a>.' ),
+												' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 												self_admin_url( 'update-core.php' )
 											);
 										}
@@ -939,11 +939,11 @@ function customize_themes_print_templates() {
 						<div class="notice notice-error notice-alt notice-large"><p>
 							<# if ( ! data.compatibleWP && ! data.compatiblePHP ) { #>
 								<?php
-								_e( 'This theme does not work with your versions of WordPress and PHP.' );
+								_e( 'This theme does not work with your versions of ClassicPress and PHP.' );
 								if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
 									printf(
 										/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
-										' ' . __( '<a href="%1$s">Please update WordPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
+										' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
 										self_admin_url( 'update-core.php' ),
 										esc_url( wp_get_update_php_url() )
 									);
@@ -951,7 +951,7 @@ function customize_themes_print_templates() {
 								} elseif ( current_user_can( 'update_core' ) ) {
 									printf(
 										/* translators: %s: URL to WordPress Updates screen. */
-										' ' . __( '<a href="%s">Please update WordPress</a>.' ),
+										' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 										self_admin_url( 'update-core.php' )
 									);
 								} elseif ( current_user_can( 'update_php' ) ) {
@@ -965,11 +965,11 @@ function customize_themes_print_templates() {
 								?>
 							<# } else if ( ! data.compatibleWP ) { #>
 								<?php
-								_e( 'This theme does not work with your version of WordPress.' );
+								_e( 'This theme does not work with your version of ClassicPress.' );
 								if ( current_user_can( 'update_core' ) ) {
 									printf(
 										/* translators: %s: URL to WordPress Updates screen. */
-										' ' . __( '<a href="%s">Please update WordPress</a>.' ),
+										' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 										self_admin_url( 'update-core.php' )
 									);
 								}

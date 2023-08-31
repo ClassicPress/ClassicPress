@@ -1645,7 +1645,7 @@ function wp_dashboard_php_nag() {
 
 	<p><?php _e( 'What is PHP and how does it affect my site?' ); ?></p>
 	<p>
-		<?php _e( 'PHP is one of the programming languages used to build WordPress. Newer versions of PHP receive regular security updates and may increase your site&#8217;s performance.' ); ?>
+		<?php _e( 'PHP is one of the programming languages used to build ClassicPress. Newer versions of PHP receive regular security updates and may increase your site&#8217;s performance.' ); ?>
 		<?php
 		if ( ! empty( $response['recommended_version'] ) ) {
 			printf(

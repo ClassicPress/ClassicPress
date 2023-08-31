@@ -649,11 +649,11 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 			if ( ! $compatible_php || ! $compatible_wp ) {
 				echo '<div class="notice inline notice-error notice-alt"><p>';
 				if ( ! $compatible_php && ! $compatible_wp ) {
-					_e( 'This plugin does not work with your versions of WordPress and PHP.' );
+					_e( 'This plugin does not work with your versions of ClassicPress and PHP.' );
 					if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
 						printf(
 							/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
-							' ' . __( '<a href="%1$s">Please update WordPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
+							' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
 							self_admin_url( 'update-core.php' ),
 							esc_url( wp_get_update_php_url() )
 						);
@@ -661,7 +661,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 					} elseif ( current_user_can( 'update_core' ) ) {
 						printf(
 							/* translators: %s: URL to WordPress Updates screen. */
-							' ' . __( '<a href="%s">Please update WordPress</a>.' ),
+							' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 							self_admin_url( 'update-core.php' )
 						);
 					} elseif ( current_user_can( 'update_php' ) ) {
@@ -673,11 +673,11 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 						wp_update_php_annotation( '</p><p><em>', '</em>' );
 					}
 				} elseif ( ! $compatible_wp ) {
-					_e( 'This plugin does not work with your version of WordPress.' );
+					_e( 'This plugin does not work with your version of ClassicPress.' );
 					if ( current_user_can( 'update_core' ) ) {
 						printf(
 							/* translators: %s: URL to WordPress Updates screen. */
-							' ' . __( '<a href="%s">Please update WordPress</a>.' ),
+							' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 							self_admin_url( 'update-core.php' )
 						);
 					}
@@ -757,11 +757,11 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 				<div class="column-compatibility">
 					<?php
 					if ( ! $tested_wp ) {
-						echo '<span class="compatibility-untested">' . __( 'Untested with your version of WordPress' ) . '</span>';
+						echo '<span class="compatibility-untested">' . __( 'Untested with your version of ClassicPress' ) . '</span>';
 					} elseif ( ! $compatible_wp ) {
-						echo '<span class="compatibility-incompatible">' . __( '<strong>Incompatible</strong> with your version of WordPress' ) . '</span>';
+						echo '<span class="compatibility-incompatible">' . __( '<strong>Incompatible</strong> with your version of ClassicPress' ) . '</span>';
 					} else {
-						echo '<span class="compatibility-compatible">' . __( '<strong>Compatible</strong> with your version of WordPress' ) . '</span>';
+						echo '<span class="compatibility-compatible">' . __( '<strong>Compatible</strong> with your version of ClassicPress' ) . '</span>';
 					}
 					?>
 				</div>

@@ -166,7 +166,7 @@ function plugins_api( $action, $args = array() ) {
 				trigger_error(
 					sprintf(
 						/* translators: %s: Support forums URL. */
-						__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+						__( 'An unexpected error occurred. Something may be wrong with WordPress.org, ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
 						__( 'https://forums.classicpress.net/c/support' )
 					) . ' ' . __( '(ClassicPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)' ),
 					headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
@@ -182,7 +182,7 @@ function plugins_api( $action, $args = array() ) {
 					'plugins_api_failed',
 					sprintf(
 						/* translators: %s: Support forums URL. */
-						__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+						__( 'An unexpected error occurred. Something may be wrong with WordPress.org, ClassicPress.net or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
 						__( 'https://wordpress.org/support/forums/' )
 					),
 					wp_remote_retrieve_body( $request )
@@ -351,11 +351,11 @@ function install_plugins_favorites_form() {
 	$user   = get_user_option( 'wporg_favorites' );
 	$action = 'save_wporg_username_' . get_current_user_id();
 	?>
-	<p><?php _e( 'If you have marked plugins as favorites on WordPress.org, you can browse them here.' ); ?></p>
+	<p><?php _e( 'If you have marked plugins as favorites on ClassicPress.net, you can browse them here.' ); ?></p>
 	<form method="get">
 		<input type="hidden" name="tab" value="favorites" />
 		<p>
-			<label for="user"><?php _e( 'Your WordPress.org username:' ); ?></label>
+			<label for="user"><?php _e( 'Your ClassicPress.net username:' ); ?></label>
 			<input type="search" id="user" name="user" value="<?php echo esc_attr( $user ); ?>" />
 			<input type="submit" class="button" value="<?php esc_attr_e( 'Get Favorites' ); ?>" />
 			<input type="hidden" id="wporg-username-nonce" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( $action ) ); ?>" />
@@ -421,7 +421,7 @@ function display_plugins_table() {
 		case 'install_plugins_beta':
 			printf(
 				/* translators: %s: URL to "Features as Plugins" page. */
-				'<p>' . __( 'You are using a development version of WordPress. These feature plugins are also under development. <a href="%s">Learn more</a>.' ) . '</p>',
+				'<p>' . __( 'You are using a development version of ClassicPress. These feature plugins are also under development. <a href="%s">Learn more</a>.' ) . '</p>',
 				'https://make.wordpress.org/core/handbook/about/release-cycle/features-as-plugins/'
 			);
 			break;
@@ -701,7 +701,7 @@ function install_plugin_information() {
 					?>
 				</li>
 			<?php } if ( ! empty( $api->tested ) ) { ?>
-				<li><strong><?php _e( 'Compatible up to:' ); ?></strong> <?php echo $api->tested; ?></li>
+				<li><strong><?php _e( 'Compatible Up to WordPress Version:' ); ?></strong> <?php echo $api->tested; ?></li>
 			<?php } if ( ! empty( $api->requires_php ) ) { ?>
 				<li>
 					<strong><?php _e( 'Requires PHP Version:' ); ?></strong>
@@ -851,15 +851,15 @@ function install_plugin_information() {
 
 	if ( ! $tested_wp ) {
 		echo '<div class="notice notice-warning notice-alt"><p>';
-		_e( '<strong>Warning:</strong> This plugin <strong>has not been tested</strong> with your current version of WordPress.' );
+		_e( '<strong>Warning:</strong> This plugin <strong>has not been tested</strong> with your current version of ClassicPress.' );
 		echo '</p></div>';
 	} elseif ( ! $compatible_wp ) {
 		echo '<div class="notice notice-error notice-alt"><p>';
-		_e( '<strong>Error:</strong> This plugin <strong>requires a newer version of WordPress</strong>.' );
+		_e( '<strong>Error:</strong> This plugin <strong>requires a newer version of ClassicPress</strong>.' );
 		if ( current_user_can( 'update_core' ) ) {
 			printf(
 				/* translators: %s: URL to WordPress Updates screen. */
-				' ' . __( '<a href="%s" target="_parent">Click here to update WordPress</a>.' ),
+				' ' . __( '<a href="%s" target="_parent">Click here to update ClassicPress</a>.' ),
 				esc_url( self_admin_url( 'update-core.php' ) )
 			);
 		}

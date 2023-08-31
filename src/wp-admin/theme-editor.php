@@ -364,7 +364,7 @@ if ( ! in_array( 'theme_editor_notice', $dismissed_pointers, true ) ) :
 					<h1><?php _e( 'Heads up!' ); ?></h1>
 					<p>
 						<?php
-						_e( 'You appear to be making direct edits to your theme in the WordPress dashboard. It is not recommended! Editing your theme directly could break your site and your changes may be lost in future updates.' );
+						_e( 'You appear to be making direct edits to your theme in the ClassicPress dashboard. It is not recommended! Editing your theme directly could break your site and your changes may be lost in future updates.' );
 						?>
 					</p>
 						<?php

@@ -58,7 +58,7 @@ get_current_screen()->add_help_tab(
 		'content' =>
 			'<p>' . sprintf(
 				/* translators: %s: URL to Widgets screen. */
-				__( 'You can add links here to be displayed on your site, usually using <a href="%s">Widgets</a>. By default, links to several sites in the WordPress community are included as examples.' ),
+				__( 'You can add links here to be displayed on your site, usually using <a href="%s">Widgets</a>. By default, links to several sites in the ClassicPress community are included as examples.' ),
 				'widgets.php'
 			) . '</p>' .
 			'<p>' . __( 'Links may be separated into Link Categories; these are different than the categories used on your posts.' ) . '</p>' .

@@ -25,7 +25,7 @@ get_current_screen()->add_help_tab(
 					'<p>' . __( 'This screen is where you manage requests for an export of personal data.' ) . '</p>' .
 					'<p>' . __( 'Privacy Laws around the world require businesses and online services to provide an export of some of the data they collect about an individual, and to deliver that export on request. The rights those laws enshrine are sometimes called the "Right of Data Portability". It allows individuals to obtain and reuse their personal data for their own purposes across different services. It allows them to move, copy or transfer personal data easily from one IT environment to another.' ) . '</p>' .
 					'<p>' . __( 'The tool associates data stored in ClassicPress with a supplied email address, including profile data and comments.' ) . '</p>' .
-					'<p><strong>' . __( 'Note: Since this tool only gathers data from WordPress and participating plugins, you may need to do more to comply with export requests. For example, you should also send the requester some of the data collected from or stored with the 3rd party services your organization uses.' ) . '</strong></p>',
+					'<p><strong>' . __( 'Note: Since this tool only gathers data from ClassicPress and participating plugins, you may need to do more to comply with export requests. For example, you should also send the requester some of the data collected from or stored with the 3rd party services your organization uses.' ) . '</strong></p>',
 	)
 );
 

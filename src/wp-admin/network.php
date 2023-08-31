@@ -54,7 +54,7 @@ if ( is_network_admin() ) {
 	$parent_file = 'settings.php';
 } else {
 	// Used in the HTML title tag.
-	$title       = __( 'Create a Network of WordPress Sites' );
+	$title       = __( 'Create a Network of ClassicPress Sites' );
 	$parent_file = 'tools.php';
 }
 

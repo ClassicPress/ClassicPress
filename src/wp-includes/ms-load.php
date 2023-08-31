@@ -477,7 +477,7 @@ function ms_not_installed( $domain, $path ) {
 	if ( ! $wpdb->get_var( $query ) ) {
 		$msg .= '<p>' . sprintf(
 			/* translators: %s: Table name. */
-			__( '<strong>Database tables are missing.</strong> This means that your host&#8217;s database server is not running, WordPress was not installed properly, or someone deleted %s. You really should look at your database now.' ),
+			__( '<strong>Database tables are missing.</strong> This means that your host&#8217;s database server is not running, ClassicPress was not installed properly, or someone deleted %s. You really should look at your database now.' ),
 			'<code>' . $wpdb->site . '</code>'
 		) . '</p>';
 	} else {
@@ -492,7 +492,7 @@ function ms_not_installed( $domain, $path ) {
 	$msg .= '<p><strong>' . __( 'What do I do now?' ) . '</strong> ';
 	$msg .= sprintf(
 		/* translators: %s: Documentation URL. */
-		__( 'Read the <a href="%s" target="_blank">Debugging a WordPress Network</a> article. Some of the suggestions there may help you figure out what went wrong.' ),
+		__( 'Read the <a href="%s" target="_blank">Debugging a ClassicPress Network</a> article. Some of the suggestions there may help you figure out what went wrong.' ),
 		__( 'https://wordpress.org/documentation/article/debugging-a-wordpress-network/' )
 	);
 	$msg .= ' ' . __( 'If you are still stuck with this message, then check that your database contains the following tables:' ) . '</p><ul>';

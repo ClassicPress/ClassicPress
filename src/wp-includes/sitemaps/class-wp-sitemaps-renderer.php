@@ -265,7 +265,7 @@ class WP_Sitemaps_Renderer {
 					esc_xml( __( 'Could not generate XML sitemap due to missing %s extension' ) ),
 					'SimpleXML'
 				),
-				esc_xml( __( 'WordPress &rsaquo; Error' ) ),
+				esc_xml( __( 'ClassicPress &rsaquo; Error' ) ),
 				array(
 					'response' => 501, // "Not implemented".
 				)

@@ -1220,7 +1220,7 @@ switch ( $action ) {
 					'test_cookie',
 					sprintf(
 						/* translators: %s: Browser cookie documentation URL. */
-						__( '<strong>Error:</strong> Cookies are blocked or not supported by your browser. You must <a href="%s">enable cookies</a> to use WordPress.' ),
+						__( '<strong>Error:</strong> Cookies are blocked or not supported by your browser. You must <a href="%s">enable cookies</a> to use ClassicPress.' ),
 						__( 'https://wordpress.org/documentation/article/cookies/#enable-cookies-in-your-browser' )
 					)
 				);
@@ -1326,7 +1326,7 @@ switch ( $action ) {
 			} elseif ( isset( $_GET['registration'] ) && 'disabled' === $_GET['registration'] ) {
 				$errors->add( 'registerdisabled', __( '<strong>Error:</strong> User registration is currently not allowed.' ) );
 			} elseif ( strpos( $redirect_to, 'about.php?updated' ) ) {
-				$errors->add( 'updated', __( '<strong>You have successfully updated WordPress!</strong> Please log back in to see what&#8217;s new.' ), 'message' );
+				$errors->add( 'updated', __( '<strong>You have successfully updated ClassicPress!</strong> Please log back in to see what&#8217;s new.' ), 'message' );
 			} elseif ( WP_Recovery_Mode_Link_Service::LOGIN_ACTION_ENTERED === $action ) {
 				$errors->add( 'enter_recovery_mode', __( 'Recovery Mode Initialized. Please log in to continue.' ), 'message' );
 			} elseif ( isset( $_GET['redirect_to'] ) && false !== strpos( $_GET['redirect_to'], 'wp-admin/authorize-application.php' ) ) {

@@ -2429,7 +2429,7 @@ function request_filesystem_credentials( $form_post, $type = '', $error = false,
 	<?php
 	$label_user = __( 'Username' );
 	$label_pass = __( 'Password' );
-	_e( 'To perform the requested action, WordPress needs to access your web server.' );
+	_e( 'To perform the requested action, ClassicPress needs to access your web server.' );
 	echo ' ';
 	if ( ( isset( $types['ftp'] ) || isset( $types['ftps'] ) ) ) {
 		if ( isset( $types['ssh'] ) ) {

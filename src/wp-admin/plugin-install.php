@@ -97,7 +97,7 @@ get_current_screen()->add_help_tab(
 		'content' =>
 				'<p>' . sprintf(
 					/* translators: %s: https://wordpress.org/plugins/ */
-					__( 'Plugins hook into ClassicPress to extend its functionality with custom features. Plugins are developed independently from the core ClassicPress application by thousands of developers all over the world. All plugins in the <a href="%s">WordPress Plugin Directory</a> are compatible with the license ClassicPress uses, but they are not necessarily designed for ClassicPress. Be sure to confirm their compatibility prior to install!' ),
+					__( 'Plugins hook into ClassicPress to extend its functionality with custom features. Plugins are developed independently from the core ClassicPress application by thousands of developers all over the world. All plugins in the <a href="%s">ClassicPress Plugin Directory</a> are compatible with the license ClassicPress uses, but they are not necessarily designed for ClassicPress. Be sure to confirm their compatibility prior to install!' ),
 					__( 'https://wordpress.org/plugins/' )
 				) . '</p>' .
 				'<p>' . __( 'You can find new plugins to install by searching or browsing the directory right here in your own Plugins section.' ) . ' <span id="live-search-desc" class="hide-if-no-js">' . __( 'The search results will be updated as you type.' ) . '</span></p>',
@@ -109,7 +109,7 @@ get_current_screen()->add_help_tab(
 		'id'      => 'adding-plugins',
 		'title'   => __( 'Adding Plugins' ),
 		'content' =>
-				'<p>' . __( 'If you know what you are looking for, Search is your best bet. The Search screen has options to search the WordPress Plugin Directory for a particular Term, Author, or Tag. You can also search the directory by selecting popular tags. Tags in larger type mean more plugins have been labeled with that tag.' ) . '</p>' .
+				'<p>' . __( 'If you know what you are looking for, Search is your best bet. The Search screen has options to search the ClassicPress Plugin Directory for a particular Term, Author, or Tag. You can also search the directory by selecting popular tags. Tags in larger type mean more plugins have been labeled with that tag.' ) . '</p>' .
 				'<p>' . __( 'If you just want to get an idea of what&#8217;s available, you can browse Featured and Popular plugins by using the links above the plugins list. These sections rotate regularly.' ) . '</p>' .
 				'<p>' . __( 'You can also browse a user&#8217;s favorite plugins, by using the Favorites link above the plugins list and entering their WordPress.org username.' ) . '</p>' .
 				'<p>' . __( 'If you want to install a plugin that you&#8217;ve downloaded elsewhere, click the Upload Plugin button above the plugins list. You will be prompted to upload the .zip package, and once uploaded, you can activate the new plugin.' ) . '</p>',

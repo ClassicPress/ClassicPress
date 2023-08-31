@@ -61,7 +61,7 @@ function get_postdata($postid) {
 function start_wp() {
 	global $wp_query;
 
-	_deprecated_function( __FUNCTION__, '1.5.0', __('new WordPress Loop') );
+	_deprecated_function( __FUNCTION__, '1.5.0', __('new ClassicPress Loop') );
 
 	// Since the old style loop is being used, advance the query iterator here.
 	$wp_query->next_post();

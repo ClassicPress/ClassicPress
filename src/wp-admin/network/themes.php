@@ -312,7 +312,7 @@ if ( current_user_can( 'update_themes' ) && wp_is_auto_update_enabled_for_type( 
 			'title'   => __( 'Auto-updates' ),
 			'content' =>
 				'<p>' . __( 'Auto-updates can be enabled or disabled for each individual theme. Themes with auto-updates enabled will display the estimated date of the next auto-update. Auto-updates depends on the WP-Cron task scheduling system.' ) . '</p>' .
-				'<p>' . __( 'Please note: Third-party themes and plugins, or custom code, may override WordPress scheduling.' ) . '</p>',
+				'<p>' . __( 'Please note: Third-party themes and plugins, or custom code, may override ClassicPress scheduling.' ) . '</p>',
 		)
 	);
 

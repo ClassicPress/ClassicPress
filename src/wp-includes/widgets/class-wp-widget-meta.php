@@ -26,7 +26,7 @@ class WP_Widget_Meta extends WP_Widget {
 	public function __construct() {
 		$widget_ops = array(
 			'classname'                   => 'widget_meta',
-			'description'                 => __( 'Login, RSS, &amp; WordPress.org links.' ),
+			'description'                 => __( 'Login, RSS, &amp; ClassicPress.net links.' ),
 			'customize_selective_refresh' => true,
 			'show_instance_in_rest'       => true,
 		);

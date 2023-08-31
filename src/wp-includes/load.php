@@ -166,7 +166,7 @@ function wp_check_php_mysql_versions() {
 		require_once ABSPATH . WPINC . '/functions.php';
 		wp_load_translations_early();
 
-		$message = '<p>' . __( 'Your PHP installation appears to be missing the MySQL extension which is required by WordPress.' ) . "</p>\n";
+		$message = '<p>' . __( 'Your PHP installation appears to be missing the MySQL extension which is required by ClassicPress.' ) . "</p>\n";
 
 		$message .= '<p>' . sprintf(
 			/* translators: %s: mysqli. */
@@ -176,7 +176,7 @@ function wp_check_php_mysql_versions() {
 
 		$message .= '<p>' . sprintf(
 			/* translators: %s: Support forums URL. */
-			__( 'If you are unsure what these terms mean you should probably contact your host. If you still need help you can always visit the <a href="%s">WordPress support forums</a>.' ),
+			__( 'If you are unsure what these terms mean you should probably contact your host. If you still need help you can always visit the <a href="%s">ClassicPress support forums</a>.' ),
 			__( 'https://wordpress.org/support/forums/' )
 		) . "</p>\n";
 

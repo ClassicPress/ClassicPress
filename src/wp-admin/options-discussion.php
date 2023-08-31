@@ -224,7 +224,7 @@ printf(
 ?>
 </label></p>
 
-<p><label for="moderation_keys"><?php _e( 'When a comment contains any of these words in its content, author name, URL, email, IP address, or browser&#8217;s user agent string, it will be held in the <a href="edit-comments.php?comment_status=moderated">moderation queue</a>. One word or IP address per line. It will match inside words, so &#8220;press&#8221; will match &#8220;WordPress&#8221;.' ); ?></label></p>
+<p><label for="moderation_keys"><?php _e( 'When a comment contains any of these words in its content, author name, URL, email, IP address, or browser&#8217;s user agent string, it will be held in the <a href="edit-comments.php?comment_status=moderated">moderation queue</a>. One word or IP address per line. It will match inside words, so &#8220;press&#8221; will match &#8220;ClassicPress&#8221;.' ); ?></label></p>
 <p>
 <textarea name="moderation_keys" rows="10" cols="50" id="moderation_keys" class="large-text code"><?php echo esc_textarea( get_option( 'moderation_keys' ) ); ?></textarea>
 </p>
@@ -238,7 +238,7 @@ printf(
 	_e( 'Disallowed Comment Keys' );
 	?>
 </span></legend>
-<p><label for="disallowed_keys"><?php _e( 'When a comment contains any of these words in its content, author name, URL, email, IP address, or browser&#8217;s user agent string, it will be put in the Trash. One word or IP address per line. It will match inside words, so &#8220;press&#8221; will match &#8220;WordPress&#8221;.' ); ?></label></p>
+<p><label for="disallowed_keys"><?php _e( 'When a comment contains any of these words in its content, author name, URL, email, IP address, or browser&#8217;s user agent string, it will be put in the Trash. One word or IP address per line. It will match inside words, so &#8220;press&#8221; will match &#8220;ClassicPress&#8221;.' ); ?></label></p>
 <p>
 <textarea name="disallowed_keys" rows="10" cols="50" id="disallowed_keys" class="large-text code"><?php echo esc_textarea( get_option( 'disallowed_keys' ) ); ?></textarea>
 </p>

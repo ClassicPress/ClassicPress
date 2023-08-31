@@ -490,7 +490,7 @@ function wpmu_validate_user_signup( $user_name, $user_email ) {
 	if ( ! is_email( $user_email ) ) {
 		$errors->add( 'user_email', __( 'Please enter a valid email address.' ) );
 	} elseif ( is_email_address_unsafe( $user_email ) ) {
-		$errors->add( 'user_email', __( 'You cannot use that email address to signup. There are problems with them blocking some emails from WordPress. Please use another email provider.' ) );
+		$errors->add( 'user_email', __( 'You cannot use that email address to signup. There are problems with them blocking some emails from ClassicPress. Please use another email provider.' ) );
 	}
 
 	if ( strlen( $user_name ) < 4 ) {
@@ -2197,7 +2197,7 @@ function maybe_add_existing_user_to_blog() {
 			home_url(),
 			admin_url()
 		),
-		__( 'WordPress &rsaquo; Success' ),
+		__( 'ClassicPress &rsaquo; Success' ),
 		array( 'response' => 200 )
 	);
 }

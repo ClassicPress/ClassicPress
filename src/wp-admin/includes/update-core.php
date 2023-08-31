@@ -367,7 +367,7 @@ function update_core( $from, $to ) {
 			'php_mysql_not_compatible',
 			sprintf(
 				/* translators: 1: WordPress version number, 2: Minimum required PHP version number, 3: Minimum required MySQL version number, 4: Current PHP version number, 5: Current MySQL version number. */
-				__( 'The update cannot be installed because WordPress %1$s requires PHP version %2$s or higher and MySQL version %3$s or higher. You are running PHP version %4$s and MySQL version %5$s.' ),
+				__( 'The update cannot be installed because ClassicPress %1$s requires PHP version %2$s or higher and MySQL version %3$s or higher. You are running PHP version %4$s and MySQL version %5$s.' ),
 				$wp_version,
 				$required_php_version,
 				$required_mysql_version,
@@ -380,7 +380,7 @@ function update_core( $from, $to ) {
 			'php_not_compatible',
 			sprintf(
 				/* translators: 1: WordPress version number, 2: Minimum required PHP version number, 3: Current PHP version number. */
-				__( 'The update cannot be installed because WordPress %1$s requires PHP version %2$s or higher. You are running version %3$s.' ),
+				__( 'The update cannot be installed because ClassicPress %1$s requires PHP version %2$s or higher. You are running version %3$s.' ),
 				$wp_version,
 				$required_php_version,
 				$php_version
@@ -391,7 +391,7 @@ function update_core( $from, $to ) {
 			'mysql_not_compatible',
 			sprintf(
 				/* translators: 1: WordPress version number, 2: Minimum required MySQL version number, 3: Current MySQL version number. */
-				__( 'The update cannot be installed because WordPress %1$s requires MySQL version %2$s or higher. You are running version %3$s.' ),
+				__( 'The update cannot be installed because ClassicPress %1$s requires MySQL version %2$s or higher. You are running version %3$s.' ),
 				$wp_version,
 				$required_mysql_version,
 				$mysql_version
@@ -405,7 +405,7 @@ function update_core( $from, $to ) {
 			'php_not_compatible_json',
 			sprintf(
 				/* translators: 1: WordPress version number, 2: The PHP extension name needed. */
-				__( 'The update cannot be installed because WordPress %1$s requires the %2$s PHP extension.' ),
+				__( 'The update cannot be installed because ClassicPress %1$s requires the %2$s PHP extension.' ),
 				$wp_version,
 				'JSON'
 			)

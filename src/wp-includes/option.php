@@ -2249,7 +2249,7 @@ function register_initial_settings() {
 				'name' => 'language',
 			),
 			'type'         => 'string',
-			'description'  => __( 'WordPress locale code.' ),
+			'description'  => __( 'ClassicPress locale code.' ),
 			'default'      => 'en_US',
 		)
 	);

@@ -70,11 +70,11 @@ $parent_file = 'tools.php';
 		</p>
 	</div>
 <?php endif; ?>
-<p><?php _e( 'If you have posts or comments in another system, WordPress can import those into this site. To get started, choose a system to import from below:' ); ?></p>
+<p><?php _e( 'If you have posts or comments in another system, ClassicPress can import those into this site. To get started, choose a system to import from below:' ); ?></p>
 
 <?php
 printf(
-	__( 'If you need a WordPress Importer, follow <a href="%s">these instructions</a> to install it manually.' ),
+	__( 'If you need a ClassicPress Importer, follow <a href="%s">these instructions</a> to install it manually.' ),
 	esc_url( 'https://docs.classicpress.net/user-guides/using-classicpress/tools-import-screen/' )
 );
 ?>

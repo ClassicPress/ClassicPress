@@ -543,11 +543,11 @@ get_current_screen()->add_help_tab(
 		'id'      => 'overview',
 		'title'   => __( 'Overview' ),
 		'content' =>
-				'<p>' . __( 'Plugins extend and expand the functionality of WordPress. Once a plugin is installed, you may activate it or deactivate it here.' ) . '</p>' .
+				'<p>' . __( 'Plugins extend and expand the functionality of ClassicPress. Once a plugin is installed, you may activate it or deactivate it here.' ) . '</p>' .
 				'<p>' . __( 'The search for installed plugins will search for terms in their name, description, or author.' ) . ' <span id="live-search-desc" class="hide-if-no-js">' . __( 'The search results will be updated as you type.' ) . '</span></p>' .
 				'<p>' . sprintf(
 					/* translators: %s: WordPress Plugin Directory URL. */
-					__( 'If you would like to see more plugins to choose from, click on the &#8220;Add New&#8221; button and you will be able to browse or search for additional plugins from the <a href="%s">WordPress Plugin Directory</a>. Plugins in the WordPress Plugin Directory are designed and developed by third parties, and are compatible with the license WordPress uses. Oh, and they&#8217;re free!' ),
+					__( 'If you would like to see more plugins to choose from, click on the &#8220;Add New&#8221; button and you will be able to browse or search for additional plugins from the <a href="%s">ClassicPress Plugin Directory</a>. Plugins in the WordPress Plugin Directory are designed and developed by third parties, and are compatible with the license WordPress uses. Oh, and they&#8217;re free!' ),
 					__( 'https://wordpress.org/plugins/' )
 				) . '</p>',
 	)
@@ -560,7 +560,7 @@ get_current_screen()->add_help_tab(
 				'<p>' . __( 'Most of the time, plugins play nicely with the core of ClassicPress and with other plugins. Sometimes, though, a plugin&#8217;s code will get in the way of another plugin, causing compatibility issues. If your site starts doing strange things, this may be the problem. Try deactivating all your plugins and re-activating them in various combinations until you isolate which one(s) caused the issue.' ) . '</p>' .
 				'<p>' . sprintf(
 					/* translators: %s: WP_PLUGIN_DIR constant value. */
-					__( 'If something goes wrong with a plugin and you cannot use WordPress, delete or rename that file in the %s directory and it will be automatically deactivated.' ),
+					__( 'If something goes wrong with a plugin and you cannot use ClassicPress, delete or rename that file in the %s directory and it will be automatically deactivated.' ),
 					'<code>' . WP_PLUGIN_DIR . '</code>'
 				) . '</p>',
 	)
@@ -575,8 +575,8 @@ if ( current_user_can( 'update_plugins' ) && wp_is_auto_update_enabled_for_type(
 			'title'   => __( 'Auto-updates' ),
 			'content' =>
 					'<p>' . __( 'Auto-updates can be enabled or disabled for each individual plugin. Plugins with auto-updates enabled will display the estimated date of the next auto-update. Auto-updates depends on the WP-Cron task scheduling system.' ) . '</p>' .
-					'<p>' . __( 'Auto-updates are only available for plugins recognized by WordPress.org, or that include a compatible update system.' ) . '</p>' .
-					'<p>' . __( 'Please note: Third-party themes and plugins, or custom code, may override WordPress scheduling.' ) . '</p>',
+					'<p>' . __( 'Auto-updates are only available for plugins recognized by WordPress.org or ClassicPress.net, or that include a compatible update system.' ) . '</p>' .
+					'<p>' . __( 'Please note: Third-party themes and plugins, or custom code, may override ClassicPress scheduling.' ) . '</p>',
 		)
 	);
 

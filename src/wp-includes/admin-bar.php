@@ -133,7 +133,7 @@ function wp_admin_bar_wp_menu( $wp_admin_bar ) {
 		'id'    => 'wp-logo',
 		'title' => '<span class="ab-icon" aria-hidden="true"></span><span class="screen-reader-text">' .
 				/* translators: Hidden accessibility text. */
-				__( 'About WordPress' ) .
+				__( 'About ClassicPress' ) .
 			'</span>',
 		'href'  => $about_url,
 	);

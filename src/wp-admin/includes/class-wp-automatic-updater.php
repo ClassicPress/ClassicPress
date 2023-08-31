@@ -401,9 +401,9 @@ class WP_Automatic_Updater {
 		switch ( $type ) {
 			case 'core':
 				/* translators: %s: WordPress version. */
-				$skin->feedback( __( 'Updating to WordPress %s' ), $item->version );
+				$skin->feedback( __( 'Updating to ClassicPress %s' ), $item->version );
 				/* translators: %s: WordPress version. */
-				$item_name = sprintf( __( 'WordPress %s' ), $item->version );
+				$item_name = sprintf( __( 'ClassicPress %s' ), $item->version );
 				break;
 			case 'theme':
 				$upgrader_item = $item->theme;
@@ -872,7 +872,7 @@ class WP_Automatic_Updater {
 			);
 		} else {
 			// Add a note about the support forums.
-			$body .= "\n\n" . __( 'If you experience any issues or need support, the volunteers in the WordPress.org support forums may be able to help.' );
+			$body .= "\n\n" . __( 'If you experience any issues or need support, the volunteers in the ClassicPress.net support forums may be able to help.' );
 			$body .= "\n" . __( 'https://wordpress.org/support/forums/' );
 		}
 
@@ -1306,7 +1306,7 @@ class WP_Automatic_Updater {
 		}
 
 		// Add a note about the support forums.
-		$body[] = __( 'If you experience any issues or need support, the volunteers in the WordPress.org support forums may be able to help.' );
+		$body[] = __( 'If you experience any issues or need support, the volunteers in the ClassicPress.net support forums may be able to help.' );
 		$body[] = __( 'https://forums.classicpress.net/c/support/' );
 		$body[] = "\n" . __( 'The ClassicPress Team' );
 

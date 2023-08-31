@@ -468,7 +468,7 @@ final class WP_Privacy_Policy_Content {
 			/* translators: Privacy policy tutorial. */
 			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'Personal data is not just created by a user&#8217;s interactions with your site. Personal data is also generated from technical processes such as contact forms, comments, cookies, analytics, and third party embeds.' ) . '</p>';
 			/* translators: Privacy policy tutorial. */
-			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'By default WordPress does not collect any personal data about visitors, and only collects the data shown on the User Profile screen from registered users. However some of your plugins may collect personal data. You should add the relevant information below.' ) . '</p>';
+			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'By default ClassicPress does not collect any personal data about visitors, and only collects the data shown on the User Profile screen from registered users. However some of your plugins may collect personal data. You should add the relevant information below.' ) . '</p>';
 		}
 
 		/* translators: Default privacy policy heading. */
@@ -476,7 +476,7 @@ final class WP_Privacy_Policy_Content {
 
 		if ( $description ) {
 			/* translators: Privacy policy tutorial. */
-			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'In this subsection you should note what information is captured through comments. We have noted the data which WordPress collects by default.' ) . '</p>';
+			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'In this subsection you should note what information is captured through comments. We have noted the data which ClassicPress collects by default.' ) . '</p>';
 		} else {
 			/* translators: Default privacy policy text. */
 			$strings[] = '<p>' . $suggested_text . __( 'When visitors leave comments on the site we collect the data shown in the comments form, and also the visitor&#8217;s IP address and browser user agent string to help spam detection.' ) . '</p>';
@@ -499,7 +499,7 @@ final class WP_Privacy_Policy_Content {
 			/* translators: Default privacy policy heading. */
 			$strings[] = '<h2>' . __( 'Contact forms' ) . '</h2>';
 			/* translators: Privacy policy tutorial. */
-			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'By default, WordPress does not include a contact form. If you use a contact form plugin, use this subsection to note what personal data is captured when someone submits a contact form, and how long you keep it. For example, you may note that you keep contact form submissions for a certain period for customer service purposes, but you do not use the information submitted through them for marketing purposes.' ) . '</p>';
+			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'By default, ClassicPress does not include a contact form. If you use a contact form plugin, use this subsection to note what personal data is captured when someone submits a contact form, and how long you keep it. For example, you may note that you keep contact form submissions for a certain period for customer service purposes, but you do not use the information submitted through them for marketing purposes.' ) . '</p>';
 		}
 
 		/* translators: Default privacy policy heading. */
@@ -507,7 +507,7 @@ final class WP_Privacy_Policy_Content {
 
 		if ( $description ) {
 			/* translators: Privacy policy tutorial. */
-			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'In this subsection you should list the cookies your web site uses, including those set by your plugins, social media, and analytics. We have provided the cookies which WordPress installs by default.' ) . '</p>';
+			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'In this subsection you should list the cookies your web site uses, including those set by your plugins, social media, and analytics. We have provided the cookies which ClassicPress installs by default.' ) . '</p>';
 		} else {
 			/* translators: Default privacy policy text. */
 			$strings[] = '<p>' . $suggested_text . __( 'If you leave a comment on our site you may opt-in to saving your name, email address and website in cookies. These are for your convenience so that you do not have to fill in your details again when you leave another comment. These cookies will last for one year.' ) . '</p>';
@@ -534,7 +534,7 @@ final class WP_Privacy_Policy_Content {
 			/* translators: Privacy policy tutorial. */
 			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'In this subsection you should note what analytics package you use, how users can opt out of analytics tracking, and a link to your analytics provider&#8217;s privacy policy, if any.' ) . '</p>';
 			/* translators: Privacy policy tutorial. */
-			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'By default WordPress does not collect any analytics data. However, many web hosting accounts collect some anonymous analytics data. You may also have installed a WordPress plugin that provides analytics services. In that case, add information from that plugin here.' ) . '</p>';
+			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'By default ClassicPress does not collect any analytics data. However, many web hosting accounts collect some anonymous analytics data. You may also have installed a WordPress plugin that provides analytics services. In that case, add information from that plugin here.' ) . '</p>';
 		}
 
 		/* translators: Default privacy policy heading. */
@@ -544,7 +544,7 @@ final class WP_Privacy_Policy_Content {
 			/* translators: Privacy policy tutorial. */
 			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'In this section you should name and list all third party providers with whom you share site data, including partners, cloud-based services, payment processors, and third party service providers, and note what data you share with them and why. Link to their own privacy policies if possible.' ) . '</p>';
 			/* translators: Privacy policy tutorial. */
-			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'By default WordPress does not share any personal data with anyone.' ) . '</p>';
+			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'By default ClassicPress does not share any personal data with anyone.' ) . '</p>';
 		} else {
 			/* translators: Default privacy policy text. */
 			$strings[] = '<p>' . $suggested_text . __( 'If you request a password reset, your IP address will be included in the reset email.' ) . '</p>';
@@ -667,6 +667,6 @@ final class WP_Privacy_Policy_Content {
 	 */
 	public static function add_suggested_content() {
 		$content = self::get_default_content( false, false );
-		wp_add_privacy_policy_content( __( 'WordPress' ), $content );
+		wp_add_privacy_policy_content( __( 'ClassicPress' ), $content );
 	}
 }

@@ -277,13 +277,13 @@ When seeking help with this issue, you may be asked for some of the following in
 			}
 
 			/* translators: %s: Plugin name. */
-			$cause = sprintf( __( 'In this case, WordPress caught an error with one of your plugins, %s.' ), $name );
+			$cause = sprintf( __( 'In this case, ClassicPress caught an error with one of your plugins, %s.' ), $name );
 		} else {
 			$theme = wp_get_theme( $extension['slug'] );
 			$name  = $theme->exists() ? $theme->display( 'Name' ) : $extension['slug'];
 
 			/* translators: %s: Theme name. */
-			$cause = sprintf( __( 'In this case, WordPress caught an error with your theme, %s.' ), $name );
+			$cause = sprintf( __( 'In this case, ClassicPress caught an error with your theme, %s.' ), $name );
 		}
 
 		return $cause;
@@ -349,7 +349,7 @@ When seeking help with this issue, you may be asked for some of the following in
 		$debug = array(
 			'wp'    => sprintf(
 				/* translators: %s: Current WordPress version number. */
-				__( 'WordPress version %s' ),
+				__( 'ClassicPress version %s' ),
 				$wp_version
 			),
 			'theme' => sprintf(

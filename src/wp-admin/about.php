@@ -63,7 +63,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: link to ClassicPress site */
-					__( '<a href="%s"><strong>ClassicPress</strong></a> is a fork of the WordPress 4.9 branch, including the battle-tested and proven classic editor interface using TinyMCE.' ),
+					__( '<a href="%s"><strong>ClassicPress</strong></a> is a fork of the ClassicPress 4.9 branch, including the battle-tested and proven classic editor interface using TinyMCE.' ),
 					'https://www.classicpress.net'
 				);
 				?>
@@ -139,12 +139,12 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: link to ClassicPress 1.0.0 changelog */
-					__( 'For a list of new features and other changes from WordPress 4.9.x, see the <a href="%s"><strong>ClassicPress 1.0.0 (Aurora) release notes</strong></a>.' ),
+					__( 'For a list of new features and other changes from ClassicPress 4.9.x, see the <a href="%s"><strong>ClassicPress 1.0.0 (Aurora) release notes</strong></a>.' ),
 					'https://forums.classicpress.net/t/classicpress-1-0-0-aurora-release-notes/910'
 				);
 				?>
 			</p>
-			<h3><?php _e( 'WordPress Maintenance and Security Releases' ); ?></h3>
+			<h3><?php _e( 'ClassicPress Maintenance and Security Releases' ); ?></h3>
 			<p>
 				<?php
 				_e(
@@ -156,7 +156,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-					__( '<strong>WordPress version %s</strong> addressed one security issue.' ),
+					__( '<strong>ClassicPress version %s</strong> addressed one security issue.' ),
 					'4.9.22'
 				);
 				?>
@@ -176,7 +176,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-					__( '<strong>WordPressVersion %s</strong> addressed some security issues.' ),
+					__( '<strong>ClassicPressVersion %s</strong> addressed some security issues.' ),
 					'4.9.21'
 				);
 				?>
@@ -196,7 +196,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-					__( '<strong>WordPress Version %s</strong> addressed one security issue.' ),
+					__( '<strong>ClassicPress Version %s</strong> addressed one security issue.' ),
 					'4.9.20'
 				);
 				?>
@@ -216,7 +216,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
+					__( '<strong>ClassicPress version %s</strong> addressed some security issues.' ),
 					'4.9.19'
 				);
 				?>
@@ -236,7 +236,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-					__( '<strong>WordPress version %s</strong> addressed one security issue.' ),
+					__( '<strong>ClassicPress version %s</strong> addressed one security issue.' ),
 					'4.9.18'
 				);
 				?>
@@ -256,7 +256,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
+					__( '<strong>ClassicPress version %s</strong> addressed some security issues.' ),
 					'4.9.17'
 				);
 				?>
@@ -276,7 +276,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
+					__( '<strong>ClassicPress version %s</strong> addressed some security issues.' ),
 					'4.9.16'
 				);
 				?>
@@ -296,7 +296,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
+					__( '<strong>ClassicPress version %s</strong> addressed some security issues.' ),
 					'4.9.15'
 				);
 				?>
@@ -316,7 +316,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
+					__( '<strong>ClassicPress version %s</strong> addressed some security issues.' ),
 					'4.9.14'
 				);
 				?>
@@ -336,7 +336,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
+					__( '<strong>ClassicPress version %s</strong> addressed some security issues.' ),
 					'4.9.13'
 				);
 				?>
@@ -356,7 +356,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
+					__( '<strong>ClassicPress version %s</strong> addressed some security issues.' ),
 					'4.9.12'
 				);
 				?>
@@ -376,7 +376,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
+					__( '<strong>ClassicPress version %s</strong> addressed some security issues.' ),
 					'4.9.11'
 				);
 				?>
@@ -396,7 +396,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: %s: WordPress version number */
-					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
+					__( '<strong>ClassicPress version %s</strong> addressed some security issues.' ),
 					'4.9.10'
 				);
 				?>
@@ -415,7 +415,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 			<p>
 				<?php
 				/* translators: %s: WordPress version number */
-				printf( __( '<strong>WordPress version %s</strong> addressed some security issues.' ), '4.9.9' );
+				printf( __( '<strong>ClassicPress version %s</strong> addressed some security issues.' ), '4.9.9' );
 				?>
 				<?php
 				/* translators: %s: Codex URL */

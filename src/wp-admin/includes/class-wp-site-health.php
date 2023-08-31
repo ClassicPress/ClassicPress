@@ -1443,7 +1443,7 @@ class WP_Site_Health {
 				'<p><a href="%s" target="_blank" rel="noopener">%s <span class="screen-reader-text">%s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a></p>',
 				/* translators: Documentation explaining debugging in WordPress. */
 				esc_url( __( 'https://wordpress.org/documentation/article/debugging-in-wordpress/' ) ),
-				__( 'Learn more about debugging in WordPress.' ),
+				__( 'Learn more about debugging in ClassicPress.' ),
 				/* translators: Hidden accessibility text. */
 				__( '(opens in a new tab)' )
 			),

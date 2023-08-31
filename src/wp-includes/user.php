@@ -3784,7 +3784,7 @@ function _wp_privacy_action_request_types() {
  */
 function wp_register_user_personal_data_exporter( $exporters ) {
 	$exporters['wordpress-user'] = array(
-		'exporter_friendly_name' => __( 'WordPress User' ),
+		'exporter_friendly_name' => __( 'ClassicPress User' ),
 		'callback'               => 'wp_user_personal_data_exporter',
 	);
 
@@ -3941,7 +3941,7 @@ function wp_user_personal_data_exporter( $email_address ) {
 		$data_to_export[] = array(
 			'group_id'          => 'community-events-location',
 			'group_label'       => __( 'Community Events Location' ),
-			'group_description' => __( 'User&#8217;s location data used for the Community Events in the WordPress Events and News dashboard widget.' ),
+			'group_description' => __( 'User&#8217;s location data used for the Community Events in the ClassicPress Events and News dashboard widget.' ),
 			'item_id'           => "community-events-location-{$user->ID}",
 			'data'              => $location_data_to_export,
 		);
