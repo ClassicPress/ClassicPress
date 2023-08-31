@@ -1471,6 +1471,7 @@ function cp_dashboard_upgrade() {
 	}
 
 	echo '<p>' . __( 'Deprecation notice: Version 1.6 is the last version to support PHP 5.6 - 7.3. The minimum required version for 2.0.0 will be PHP 7.4.' ) . '</p>';
+	echo '<p>' . __( 'Deprecation notice: Version 1.7 is the last version to support XHTML. HTML5 will be the default doctype. Make sure your theme does not use XHTML. Themes no longer need to declare HTML5 support using <code>add_theme_support( \'html5\', array() )</code> function.' ) . '</p>';
 
 	?>
 	</p>
