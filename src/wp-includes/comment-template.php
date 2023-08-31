@@ -2653,11 +2653,10 @@ function comment_form( $args = array(), $post = null ) {
 		else :
 
 			printf(
-				'<form action="%s" method="post" id="%s" class="%s"%s>',
+				'<form action="%s" method="post" id="%s" class="%s">',
 				esc_url( $args['action'] ),
 				esc_attr( $args['id_form'] ),
-				esc_attr( $args['class_form'] ),
-				( $html5 ? ' novalidate' : '' )
+				esc_attr( $args['class_form'] )
 			);
 
 			/**
