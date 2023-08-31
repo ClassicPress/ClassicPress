@@ -1175,6 +1175,80 @@ function comment_type( $commenttxt = false, $trackbacktxt = false, $pingbacktxt 
 }
 
 /**
+ * Outputs comment author data
+ *
+ * @since CP-2.0.0
+ *
+ * @param object $comment            Current comment information.
+ * @param array  $args               An array of arguments.
+ * @param bool   $show_pending_links Whether to show author link on pending comment.
+ */
+function display_comment_author_data( $comment, $args, $show_pending_links ) {
+	if ( 0 != $args['avatar_size'] ) {
+		echo get_avatar( $comment, $args['avatar_size'] );
+	}
+
+	$comment_author = get_comment_author_link( $comment );
+
+	if ( '0' == $comment->comment_approved && ! $show_pending_links ) {
+		$comment_author = get_comment_author( $comment );
+	}
+
+	if ( current_theme_supports( 'html5' ) ) {
+		printf(
+			/* translators: %s: Comment author link. */
+			__( '%s <span class="says">says:</span>' ),
+			sprintf( '<b class="fn">%s</b>', $comment_author )
+		);
+	} else {
+		printf(
+			/* translators: %s: Comment author link. */
+			__( '%s <span class="says">says:</span>' ),
+			sprintf( '<cite class="fn">%s</cite>', $comment_author )
+		);
+	}
+}
+add_action( 'comment_author_data', 'display_comment_author_data', 10, 3 );
+
+/**
+ * Outputs comment metadata
+ *
+ * @param object $comment Current comment information.
+ * @param array  $args    An array of arguments.
+ */
+function display_comment_metadata( $comment, $args ) {
+	if ( current_theme_supports( 'html5' ) ) {
+		printf(
+			'<a href="%s"><time datetime="%s">%s</time></a>',
+			esc_url( get_comment_link( $comment, $args ) ),
+			get_comment_time( 'c' ),
+			sprintf(
+				/* translators: 1: Comment date, 2: Comment time. */
+				__( '%1$s at %2$s' ),
+				get_comment_date( '', $comment ),
+				get_comment_time()
+			)
+		);
+
+		edit_comment_link( __( 'Edit' ), ' <span class="edit-link">', '</span>' );
+	} else {
+		printf(
+			'<a href="%s">%s</a>',
+			esc_url( get_comment_link( $comment, $args ) ),
+			sprintf(
+				/* translators: 1: Comment date, 2: Comment time. */
+				__( '%1$s at %2$s' ),
+				get_comment_date( '', $comment ),
+				get_comment_time()
+			)
+		);
+
+		edit_comment_link( __( '(Edit)' ), ' &nbsp;&nbsp;', '' );
+	}
+}
+add_action( 'comment_metadata', 'display_comment_metadata', 10, 2 );
+
+/**
  * Retrieves the current post's trackback URL.
  *
  * There is a check to see if permalink's have been enabled and if so, will
