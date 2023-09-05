@@ -1,14 +1,14 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 200:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  defaultHooks: () => (/* binding */ defaultHooks)
+  defaultHooks: function() { return /* binding */ defaultHooks; }
 });
 
 // UNUSED EXPORTS: actions, addAction, addFilter, applyFilters, createHooks, currentAction, currentFilter, didAction, didFilter, doAction, doingAction, doingFilter, filters, hasAction, hasFilter, removeAction, removeAllActions, removeAllFilters, removeFilter
@@ -35,7 +35,7 @@ function validateNamespace(namespace) {
   }
   return true;
 }
-/* harmony default export */ const build_module_validateNamespace = (validateNamespace);
+/* harmony default export */ var build_module_validateNamespace = (validateNamespace);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/validateHookName.js
 /**
@@ -65,7 +65,7 @@ function validateHookName(hookName) {
   }
   return true;
 }
-/* harmony default export */ const build_module_validateHookName = (validateHookName);
+/* harmony default export */ var build_module_validateHookName = (validateHookName);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createAddHook.js
 /**
@@ -159,7 +159,7 @@ function createAddHook(hooks, storeKey) {
     }
   };
 }
-/* harmony default export */ const build_module_createAddHook = (createAddHook);
+/* harmony default export */ var build_module_createAddHook = (createAddHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
 /**
@@ -239,7 +239,7 @@ function createRemoveHook(hooks, storeKey, removeAll = false) {
     return handlersRemoved;
   };
 }
-/* harmony default export */ const build_module_createRemoveHook = (createRemoveHook);
+/* harmony default export */ var build_module_createRemoveHook = (createRemoveHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createHasHook.js
 /**
@@ -274,7 +274,7 @@ function createHasHook(hooks, storeKey) {
     return hookName in hooksStore;
   };
 }
-/* harmony default export */ const build_module_createHasHook = (createHasHook);
+/* harmony default export */ var build_module_createHasHook = (createHasHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createRunHook.js
 /**
@@ -326,7 +326,7 @@ function createRunHook(hooks, storeKey, returnFirstArg = false) {
     return undefined;
   };
 }
-/* harmony default export */ const build_module_createRunHook = (createRunHook);
+/* harmony default export */ var build_module_createRunHook = (createRunHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
 /**
@@ -346,7 +346,7 @@ function createCurrentHook(hooks, storeKey) {
     return (_hooksStore$__current = hooksStore.__current[hooksStore.__current.length - 1]?.name) !== null && _hooksStore$__current !== void 0 ? _hooksStore$__current : null;
   };
 }
-/* harmony default export */ const build_module_createCurrentHook = (createCurrentHook);
+/* harmony default export */ var build_module_createCurrentHook = (createCurrentHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
 /**
@@ -382,7 +382,7 @@ function createDoingHook(hooks, storeKey) {
     return hooksStore.__current[0] ? hookName === hooksStore.__current[0].name : false;
   };
 }
-/* harmony default export */ const build_module_createDoingHook = (createDoingHook);
+/* harmony default export */ var build_module_createDoingHook = (createDoingHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createDidHook.js
 /**
@@ -418,7 +418,7 @@ function createDidHook(hooks, storeKey) {
     return hooksStore[hookName] && hooksStore[hookName].runs ? hooksStore[hookName].runs : 0;
   };
 }
-/* harmony default export */ const build_module_createDidHook = (createDidHook);
+/* harmony default export */ var build_module_createDidHook = (createDidHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createHooks.js
 /**
@@ -477,7 +477,7 @@ class _Hooks {
 function createHooks() {
   return new _Hooks();
 }
-/* harmony default export */ const build_module_createHooks = (createHooks);
+/* harmony default export */ var build_module_createHooks = (createHooks);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/index.js
 /**
@@ -545,13 +545,13 @@ const {
 /***/ }),
 
 /***/ 959:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  __: () => (/* reexport */ __)
+  __: function() { return /* reexport */ __; }
 });
 
 // UNUSED EXPORTS: _n, _nx, _x, createI18n, defaultI18n, getLocaleData, hasTranslation, isRTL, resetLocaleData, setLocaleData, sprintf, subscribe
@@ -1688,7 +1688,7 @@ const i18n = createI18n(undefined, undefined, build_module.defaultHooks);
 /**
  * Default, singleton instance of `I18n`.
  */
-/* harmony default export */ const default_i18n = ((/* unused pure expression or super */ null && (i18n)));
+/* harmony default export */ var default_i18n = ((/* unused pure expression or super */ null && (i18n)));
 
 /*
  * Comments in this file are duplicated from ./i18n due to
@@ -1830,7 +1830,7 @@ const hasTranslation = i18n.hasTranslation.bind(i18n);
 /***/ }),
 
 /***/ 124:
-/***/ ((module, exports, __webpack_require__) => {
+/***/ (function(module, exports, __webpack_require__) {
 
 var __webpack_unused_export__;
 var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
@@ -2097,44 +2097,44 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 		__webpack_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
+/******/ 		__webpack_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
+!function() {
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "default": () => (/* binding */ api_fetch_build_module)
+  "default": function() { return /* binding */ api_fetch_build_module; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/i18n/build-module/index.js + 9 modules
@@ -2171,7 +2171,7 @@ function createNonceMiddleware(nonce) {
   middleware.nonce = nonce;
   return middleware;
 }
-/* harmony default export */ const nonce = (createNonceMiddleware);
+/* harmony default export */ var nonce = (createNonceMiddleware);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/middlewares/namespace-endpoint.js
 /**
@@ -2196,7 +2196,7 @@ const namespaceAndEndpointMiddleware = (options, next) => {
     path
   });
 };
-/* harmony default export */ const namespace_endpoint = (namespaceAndEndpointMiddleware);
+/* harmony default export */ var namespace_endpoint = (namespaceAndEndpointMiddleware);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/middlewares/root-url.js
 /**
@@ -2233,7 +2233,7 @@ const createRootURLMiddleware = rootURL => (options, next) => {
     });
   });
 };
-/* harmony default export */ const root_url = (createRootURLMiddleware);
+/* harmony default export */ var root_url = (createRootURLMiddleware);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/url/build-module/normalize-path.js
 /**
@@ -2561,7 +2561,7 @@ function prepareResponse(responseData, parse) {
     headers: responseData.headers
   }));
 }
-/* harmony default export */ const preloading = (createPreloadingMiddleware);
+/* harmony default export */ var preloading = (createPreloadingMiddleware);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/middlewares/fetch-all-middleware.js
 /**
@@ -2687,7 +2687,7 @@ const fetchAllMiddleware = async (options, next) => {
   }
   return mergedResults;
 };
-/* harmony default export */ const fetch_all_middleware = (fetchAllMiddleware);
+/* harmony default export */ var fetch_all_middleware = (fetchAllMiddleware);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/middlewares/http-v1.js
 /**
@@ -2732,7 +2732,7 @@ const httpV1Middleware = (options, next) => {
   }
   return next(options);
 };
-/* harmony default export */ const http_v1 = (httpV1Middleware);
+/* harmony default export */ var http_v1 = (httpV1Middleware);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/url/build-module/get-query-arg.js
 /**
@@ -2810,7 +2810,7 @@ const userLocaleMiddleware = (options, next) => {
   }
   return next(options);
 };
-/* harmony default export */ const user_locale = (userLocaleMiddleware);
+/* harmony default export */ var user_locale = (userLocaleMiddleware);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/utils/response.js
 /**
@@ -2964,7 +2964,7 @@ const mediaUploadMiddleware = (options, next) => {
     return parseAndThrowError(response, options.parse);
   }).then(response => parseResponseAndNormalizeError(response, options.parse));
 };
-/* harmony default export */ const media_upload = (mediaUploadMiddleware);
+/* harmony default export */ var media_upload = (mediaUploadMiddleware);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/middlewares/theme-preview.js
 /**
@@ -2992,7 +2992,7 @@ const createThemePreviewMiddleware = themePath => (options, next) => {
   }
   return next(options);
 };
-/* harmony default export */ const theme_preview = (createThemePreviewMiddleware);
+/* harmony default export */ var theme_preview = (createThemePreviewMiddleware);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/index.js
 /**
@@ -3171,10 +3171,9 @@ apiFetch.createRootURLMiddleware = root_url;
 apiFetch.fetchAllMiddleware = fetch_all_middleware;
 apiFetch.mediaUploadMiddleware = media_upload;
 apiFetch.createThemePreviewMiddleware = theme_preview;
-/* harmony default export */ const api_fetch_build_module = (apiFetch);
+/* harmony default export */ var api_fetch_build_module = (apiFetch);
 
-})();
-
+}();
 (window.wp = window.wp || {}).apiFetch = __webpack_exports__;
 /******/ })()
 ;

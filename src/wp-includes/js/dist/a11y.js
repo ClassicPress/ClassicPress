@@ -1,12 +1,12 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 196:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ domReady)
+/* harmony export */   "default": function() { return /* binding */ domReady; }
 /* harmony export */ });
 /**
  * @typedef {() => void} Callback
@@ -57,13 +57,13 @@ function domReady(callback) {
 /***/ }),
 
 /***/ 200:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  defaultHooks: () => (/* binding */ defaultHooks)
+  defaultHooks: function() { return /* binding */ defaultHooks; }
 });
 
 // UNUSED EXPORTS: actions, addAction, addFilter, applyFilters, createHooks, currentAction, currentFilter, didAction, didFilter, doAction, doingAction, doingFilter, filters, hasAction, hasFilter, removeAction, removeAllActions, removeAllFilters, removeFilter
@@ -90,7 +90,7 @@ function validateNamespace(namespace) {
   }
   return true;
 }
-/* harmony default export */ const build_module_validateNamespace = (validateNamespace);
+/* harmony default export */ var build_module_validateNamespace = (validateNamespace);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/validateHookName.js
 /**
@@ -120,7 +120,7 @@ function validateHookName(hookName) {
   }
   return true;
 }
-/* harmony default export */ const build_module_validateHookName = (validateHookName);
+/* harmony default export */ var build_module_validateHookName = (validateHookName);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createAddHook.js
 /**
@@ -214,7 +214,7 @@ function createAddHook(hooks, storeKey) {
     }
   };
 }
-/* harmony default export */ const build_module_createAddHook = (createAddHook);
+/* harmony default export */ var build_module_createAddHook = (createAddHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
 /**
@@ -294,7 +294,7 @@ function createRemoveHook(hooks, storeKey, removeAll = false) {
     return handlersRemoved;
   };
 }
-/* harmony default export */ const build_module_createRemoveHook = (createRemoveHook);
+/* harmony default export */ var build_module_createRemoveHook = (createRemoveHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createHasHook.js
 /**
@@ -329,7 +329,7 @@ function createHasHook(hooks, storeKey) {
     return hookName in hooksStore;
   };
 }
-/* harmony default export */ const build_module_createHasHook = (createHasHook);
+/* harmony default export */ var build_module_createHasHook = (createHasHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createRunHook.js
 /**
@@ -381,7 +381,7 @@ function createRunHook(hooks, storeKey, returnFirstArg = false) {
     return undefined;
   };
 }
-/* harmony default export */ const build_module_createRunHook = (createRunHook);
+/* harmony default export */ var build_module_createRunHook = (createRunHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
 /**
@@ -401,7 +401,7 @@ function createCurrentHook(hooks, storeKey) {
     return (_hooksStore$__current = hooksStore.__current[hooksStore.__current.length - 1]?.name) !== null && _hooksStore$__current !== void 0 ? _hooksStore$__current : null;
   };
 }
-/* harmony default export */ const build_module_createCurrentHook = (createCurrentHook);
+/* harmony default export */ var build_module_createCurrentHook = (createCurrentHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
 /**
@@ -437,7 +437,7 @@ function createDoingHook(hooks, storeKey) {
     return hooksStore.__current[0] ? hookName === hooksStore.__current[0].name : false;
   };
 }
-/* harmony default export */ const build_module_createDoingHook = (createDoingHook);
+/* harmony default export */ var build_module_createDoingHook = (createDoingHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createDidHook.js
 /**
@@ -473,7 +473,7 @@ function createDidHook(hooks, storeKey) {
     return hooksStore[hookName] && hooksStore[hookName].runs ? hooksStore[hookName].runs : 0;
   };
 }
-/* harmony default export */ const build_module_createDidHook = (createDidHook);
+/* harmony default export */ var build_module_createDidHook = (createDidHook);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createHooks.js
 /**
@@ -532,7 +532,7 @@ class _Hooks {
 function createHooks() {
   return new _Hooks();
 }
-/* harmony default export */ const build_module_createHooks = (createHooks);
+/* harmony default export */ var build_module_createHooks = (createHooks);
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/index.js
 /**
@@ -600,13 +600,13 @@ const {
 /***/ }),
 
 /***/ 959:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  __: () => (/* reexport */ __)
+  __: function() { return /* reexport */ __; }
 });
 
 // UNUSED EXPORTS: _n, _nx, _x, createI18n, defaultI18n, getLocaleData, hasTranslation, isRTL, resetLocaleData, setLocaleData, sprintf, subscribe
@@ -1743,7 +1743,7 @@ const i18n = createI18n(undefined, undefined, build_module.defaultHooks);
 /**
  * Default, singleton instance of `I18n`.
  */
-/* harmony default export */ const default_i18n = ((/* unused pure expression or super */ null && (i18n)));
+/* harmony default export */ var default_i18n = ((/* unused pure expression or super */ null && (i18n)));
 
 /*
  * Comments in this file are duplicated from ./i18n due to
@@ -1885,7 +1885,7 @@ const hasTranslation = i18n.hasTranslation.bind(i18n);
 /***/ }),
 
 /***/ 124:
-/***/ ((module, exports, __webpack_require__) => {
+/***/ (function(module, exports, __webpack_require__) {
 
 var __webpack_unused_export__;
 var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
@@ -2152,45 +2152,45 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 		__webpack_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
+/******/ 		__webpack_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
+!function() {
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  setup: () => (/* binding */ setup),
-  speak: () => (/* binding */ speak)
+  setup: function() { return /* binding */ setup; },
+  speak: function() { return /* binding */ speak; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/dom-ready/build-module/index.js
@@ -2380,8 +2380,7 @@ function speak(message, ariaLive) {
   }
 }
 
-})();
-
+}();
 (window.wp = window.wp || {}).a11y = __webpack_exports__;
 /******/ })()
 ;
