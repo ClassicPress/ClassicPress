@@ -945,7 +945,6 @@ function wp_read_image_metadata( $file ) {
 	 * @param array  $exif       EXIF data.
 	 */
 	return apply_filters( 'wp_read_image_metadata', $meta, $file, $image_type, $iptc, $exif );
-
 }
 
 /**

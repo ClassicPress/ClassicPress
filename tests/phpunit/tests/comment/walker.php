@@ -56,6 +56,7 @@ class Tests_Comment_Walker extends WP_UnitTestCase {
 	}
 }
 
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class Comment_Callback_Test_Helper {
 	private $test_walker;
 	private $walker;

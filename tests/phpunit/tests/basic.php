@@ -28,7 +28,7 @@ class Tests_Basic extends WP_UnitTestCase {
 		);
 	}
 
-	function test_license_cp_copyright_years() {
+	public function test_license_cp_copyright_years() {
 		$license   = file_get_contents( ABSPATH . 'license.txt' );
 		$this_year = date( 'Y' );
 
@@ -46,7 +46,7 @@ class Tests_Basic extends WP_UnitTestCase {
 		);
 	}
 
-	function test_package_json() {
+	public function test_package_json() {
 		global $cp_version;
 		$package_json = file_get_contents( dirname( ABSPATH ) . '/package.json' );
 		$package_json = json_decode( $package_json, true );

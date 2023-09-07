@@ -2159,7 +2159,6 @@ function get_posts( $args = null ) {
 
 	$get_posts = new WP_Query();
 	return $get_posts->query( $parsed_args );
-
 }
 
 //
@@ -3709,7 +3708,6 @@ function wp_get_recent_posts( $args = array(), $output = ARRAY_A ) {
 	}
 
 	return $results ? $results : false;
-
 }
 
 /**

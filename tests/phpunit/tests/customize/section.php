@@ -223,6 +223,7 @@ class Tests_WP_Customize_Section extends WP_UnitTestCase {
 }
 
 require_once ABSPATH . WPINC . '/class-wp-customize-section.php';
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class Custom_Section_Test extends WP_Customize_Section {
 	public $type = 'titleless';
 
@@ -239,5 +240,4 @@ class Custom_Section_Test extends WP_Customize_Section {
 		</li>
 		<?php
 	}
-
 }

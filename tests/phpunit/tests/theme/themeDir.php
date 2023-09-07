@@ -112,7 +112,6 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 		$this->assertSame( self::THEME_ROOT . '/sandbox', $theme['Stylesheet Dir'] );
 		$this->assertSame( 'publish', $theme['Status'] );
 		$this->assertSame( '', $theme['Parent Theme'] );
-
 	}
 
 	/**
@@ -170,7 +169,6 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 		$this->assertSame( self::THEME_ROOT . '/stylesheetonly', $theme['Stylesheet Dir'] );
 		$this->assertSame( 'publish', $theme['Status'] );
 		$this->assertSame( 'Sandbox', $theme['Parent Theme'] );
-
 	}
 
 	/**

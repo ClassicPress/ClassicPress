@@ -146,7 +146,6 @@ function list_core_update( $update ) {
 	}
 
 	echo '</form>';
-
 }
 
 /**
@@ -231,7 +230,7 @@ function core_upgrade_preamble() {
 		}
 
 		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-		$upgrader            = new WP_Automatic_Updater;
+		$upgrader            = new WP_Automatic_Updater();
 		$future_minor_update = (object) array(
 			'current'       => $wp_version . '.1.next.minor',
 			'version'       => $wp_version . '.1.next.minor',
@@ -261,7 +260,7 @@ function core_upgrade_preamble() {
 
 	if ( isset( $updates[0] ) && $updates[0]->response == 'development' ) {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-		$upgrader = new WP_Automatic_Updater;
+		$upgrader = new WP_Automatic_Updater();
 		if ( $upgrader->should_update( 'core', $updates[0], ABSPATH ) ) {
 			echo '<div class="updated inline"><p>';
 			echo '<strong>' . __( 'BETA TESTERS:' ) . '</strong> ' . __( 'This site is set up to install updates of future beta versions automatically.' );

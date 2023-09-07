@@ -1035,7 +1035,6 @@ function wp_admin_bar_appearance_menu( $wp_admin_bar ) {
 			)
 		);
 	}
-
 }
 
 /**

@@ -636,7 +636,6 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$response = rest_get_server()->dispatch( $request );
 		$data     = $response->get_data();
 		$this->assertCount( 0, $data );
-
 	}
 
 	public function test_get_items_exclude_query() {
@@ -2705,7 +2704,6 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$this->assertArrayHasKey( 'url', $properties );
 		$this->assertArrayHasKey( 'username', $properties );
 		$this->assertArrayHasKey( 'roles', $properties );
-
 	}
 
 	public function test_get_item_schema_show_avatar() {

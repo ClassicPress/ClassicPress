@@ -10,9 +10,9 @@ class Tests_Actions_Closures extends WP_UnitTestCase {
 	/**
 	 * @ticket 10493
 	 */
-	function test_action_closure() {
+	public function test_action_closure() {
 		$tag     = 'test_action_closure';
-		$closure = function( $a, $b ) {
+		$closure = function ( $a, $b ) {
 			$GLOBALS[ $a ] = $b;
 		};
 		add_action( $tag, $closure, 10, 2 );
@@ -25,7 +25,7 @@ class Tests_Actions_Closures extends WP_UnitTestCase {
 		$this->assertSame( $GLOBALS[ $context[0] ], $context[1] );
 
 		$tag2     = 'test_action_closure_2';
-		$closure2 = function() {
+		$closure2 = function () {
 			$GLOBALS['closure_no_args'] = true;
 		};
 		add_action( $tag2, $closure2 );

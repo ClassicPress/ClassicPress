@@ -1203,5 +1203,4 @@ class Tests_Functions_wpListUtil extends WP_UnitTestCase {
 			),
 		);
 	}
-
 }

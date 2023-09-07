@@ -215,6 +215,7 @@ class Tests_WP_Customize_Panel extends WP_UnitTestCase {
 }
 
 require_once ABSPATH . WPINC . '/class-wp-customize-panel.php';
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class Custom_Panel_Test extends WP_Customize_Panel {
 	public $type = 'titleless';
 
@@ -237,5 +238,4 @@ class Custom_Panel_Test extends WP_Customize_Panel {
 		</li>
 		<?php
 	}
-
 }

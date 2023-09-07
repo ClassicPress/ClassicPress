@@ -7,6 +7,7 @@ class WP_Tests_Exception extends PHPUnit_Framework_Exception {
 /**
  * General exception for wp_die().
  */
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class WPDieException extends Exception {}
 
 /**
@@ -18,6 +19,7 @@ class WPDieException extends Exception {}
  * @subpackage Unit Tests
  * @since      3.4.0
  */
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class WPAjaxDieStopException extends WPDieException {}
 
 /**
@@ -31,4 +33,5 @@ class WPAjaxDieStopException extends WPDieException {}
  * @subpackage Unit Tests
  * @since      3.4.0
  */
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class WPAjaxDieContinueException extends WPDieException {}

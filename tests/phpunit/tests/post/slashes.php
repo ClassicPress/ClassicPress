@@ -6,7 +6,7 @@
  * @ticket 21767
  */
 class Tests_Post_Slashes extends WP_UnitTestCase {
-	function set_up() {
+	public function set_up() {
 		parent::set_up();
 
 		$this->author_id = self::factory()->user->create( array( 'role' => 'editor' ) );
@@ -28,7 +28,7 @@ class Tests_Post_Slashes extends WP_UnitTestCase {
 	 * Tests the controller function that expects slashed data
 	 *
 	 */
-	function test_edit_post() {
+	public function test_edit_post() {
 		$id = self::factory()->post->create();
 
 		$_POST               = array();
@@ -64,7 +64,7 @@ class Tests_Post_Slashes extends WP_UnitTestCase {
 	 * Tests the model function that expects slashed data
 	 *
 	 */
-	function test_wp_insert_post() {
+	public function test_wp_insert_post() {
 		$id   = wp_insert_post(
 			array(
 				'post_status'  => 'publish',
@@ -101,7 +101,7 @@ class Tests_Post_Slashes extends WP_UnitTestCase {
 	 * Tests the model function that expects slashed data
 	 *
 	 */
-	function test_wp_update_post() {
+	public function test_wp_update_post() {
 		$id = self::factory()->post->create();
 
 		wp_update_post(
@@ -136,7 +136,7 @@ class Tests_Post_Slashes extends WP_UnitTestCase {
 	/**
 	 * @ticket 27550
 	 */
-	function test_wp_trash_untrash() {
+	public function test_wp_trash_untrash() {
 		$post = array(
 			'post_title'   => $this->slash_1,
 			'post_content' => $this->slash_3,

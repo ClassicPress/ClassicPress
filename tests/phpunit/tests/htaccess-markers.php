@@ -6,7 +6,7 @@
  * @group rewrite
  */
 class Tests_Htaccess_Markers extends WP_UnitTestCase {
-	var $tmpfile;
+	public $tmpfile;
 
 	public function set_up() {
 		require_once ABSPATH . 'wp-admin/includes/file.php';

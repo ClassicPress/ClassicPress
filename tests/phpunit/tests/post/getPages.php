@@ -615,7 +615,6 @@ class Tests_Post_GetPages extends WP_UnitTestCase {
 		// How it should work.
 		$found_pages = wp_list_filter( $pages, array( 'post_parent' => $page_1 ) );
 		$this->assertSameSets( array( $page_3, $page_5 ), wp_list_pluck( $found_pages, 'ID' ) );
-
 	}
 
 	public function test_wp_list_pages_classes() {

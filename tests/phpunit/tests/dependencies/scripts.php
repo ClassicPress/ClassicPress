@@ -22,7 +22,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		parent::set_up_before_class();
 	}
 
-	function set_up() {
+	public function set_up() {
 		parent::set_up();
 		$this->old_wp_scripts = isset( $GLOBALS['wp_scripts'] ) ? $GLOBALS['wp_scripts'] : null;
 		remove_action( 'wp_default_scripts', 'wp_default_scripts' );
@@ -62,7 +62,7 @@ JS;
 		parent::tear_down();
 	}
 
-	function classicpress_asset_version_handler( $version, $type, $handle ) {
+	public function classicpress_asset_version_handler( $version, $type, $handle ) {
 		if ( is_null( $this->classicpress_asset_version_override ) ) {
 			$return = $version;
 		} else {
@@ -1335,7 +1335,7 @@ JS;
 		wp_set_script_translations( 'common' );
 
 		$print_scripts = get_echo(
-			function() {
+			function () {
 				wp_print_scripts();
 				_print_scripts();
 			}

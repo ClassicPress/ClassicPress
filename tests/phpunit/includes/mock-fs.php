@@ -73,7 +73,6 @@ class WP_Filesystem_MockFS extends WP_Filesystem_Base {
 				$this->put_contents( $path, 'This is a test file' );
 			}
 		}
-
 	}
 
 	/**
@@ -206,9 +205,9 @@ class WP_Filesystem_MockFS extends WP_Filesystem_Base {
 		}
 		return $ret;
 	}
-
 }
 
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class MockFS_Node {
 	public $name; // The "name" of the entry, does not include a slash (exception, root).
 	public $type; // The type of the entry 'f' for file, 'd' for directory.
@@ -228,11 +227,13 @@ class MockFS_Node {
 	}
 }
 
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class MockFS_Directory_Node extends MockFS_Node {
 	public $type     = 'd';
 	public $children = array(); // The child nodes of this directory.
 }
 
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class MockFS_File_Node extends MockFS_Node {
 	public $type     = 'f';
 	public $contents = ''; // The contents of the file.

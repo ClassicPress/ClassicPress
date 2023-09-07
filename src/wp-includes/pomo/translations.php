@@ -181,6 +181,7 @@ if ( ! class_exists( 'Translations', false ) ) :
 		}
 	}
 
+	// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 	class Gettext_Translations extends Translations {
 
 		/**
@@ -316,6 +317,7 @@ if ( ! class_exists( 'NOOP_Translations', false ) ) :
 	 * Provides the same interface as Translations, but doesn't do anything
 	 */
 	#[AllowDynamicProperties]
+	// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 	class NOOP_Translations {
 		public $entries = array();
 		public $headers = array();

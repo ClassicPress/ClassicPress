@@ -234,6 +234,7 @@ EOT;
 }
 
 /* used in data_mb_substr_phpcore_input_type_handling() */
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class ClassWithToStringForMbSubstr {
 	public function __toString() {
 		return 'Class object';

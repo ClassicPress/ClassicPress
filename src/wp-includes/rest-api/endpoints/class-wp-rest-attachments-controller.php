@@ -1443,5 +1443,4 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 			),
 		);
 	}
-
 }

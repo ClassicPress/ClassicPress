@@ -12,8 +12,8 @@
  */
 abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	// You can use your own version of data/WPHTTP-testcase-redirection-script.php here.
-	var $redirection_script = 'http://api.wordpress.org/core/tests/1.0/redirection.php';
-	var $file_stream_url      = 'https://www.classicpress.net/wp-content/uploads/2019/02/celebrating-six-months-150x150.jpg';
+	public $redirection_script = 'http://api.wordpress.org/core/tests/1.0/redirection.php';
+	public $file_stream_url    = 'https://www.classicpress.net/wp-content/uploads/2019/02/celebrating-six-months-150x150.jpg';
 
 	protected $http_request_args;
 
@@ -314,7 +314,6 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 		$this->skipTestOnTimeout( $res );
 		$this->assertNotWPError( $res );
 		$this->assertSame( $size, $filesize ); // Check that the file is written to disk correctly without any extra characters.
-
 	}
 
 	/**
@@ -408,7 +407,6 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 
 		$this->skipTestOnTimeout( $res );
 		$this->assertSame( 'PASS', wp_remote_retrieve_body( $res ) );
-
 	}
 
 	/**
@@ -487,6 +485,4 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 		$this->skipTestOnTimeout( $res );
 		$this->assertNotWPError( $res );
 	}
-
-
 }

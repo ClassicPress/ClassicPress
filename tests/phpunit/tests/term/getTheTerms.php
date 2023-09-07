@@ -217,7 +217,6 @@ class Tests_Term_GetTheTerms extends WP_UnitTestCase {
 
 		$num_queries++;
 		$this->assertSame( $num_queries, $wpdb->num_queries );
-
 	}
 
 	/**

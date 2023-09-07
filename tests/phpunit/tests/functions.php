@@ -1691,7 +1691,7 @@ class Tests_Functions extends WP_UnitTestCase {
 
 		add_filter(
 			'upload_mimes',
-			static function( $mimes ) {
+			static function ( $mimes ) {
 				$mimes['svg'] = 'image/svg+xml';
 				return $mimes;
 			}
@@ -1729,7 +1729,7 @@ class Tests_Functions extends WP_UnitTestCase {
 
 		add_filter(
 			'upload_mimes',
-			static function( $mimes ) use ( $woff_mime_type ) {
+			static function ( $mimes ) use ( $woff_mime_type ) {
 				$mimes['woff'] = $woff_mime_type;
 				return $mimes;
 			}
@@ -2125,5 +2125,4 @@ class Tests_Functions extends WP_UnitTestCase {
 		);
 		$this->assertSameSetsWithIndex( $theme_json, $expected_theme_json );
 	}
-
 }

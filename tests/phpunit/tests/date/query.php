@@ -961,7 +961,6 @@ class Tests_WP_Date_Query extends WP_UnitTestCase {
 		foreach ( $seconds as $second ) {
 			$this->assertFalse( $this->q->validate_date_values( array( 'second' => $second ) ) );
 		}
-
 	}
 
 	/**

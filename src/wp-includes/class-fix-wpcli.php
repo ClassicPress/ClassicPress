@@ -112,7 +112,6 @@ class Fix_WPCLI {
 		// Exit to prevent the core check-update command to continue his work.
 		exit;
 	}
-
 }
 
 new Fix_WPCLI();

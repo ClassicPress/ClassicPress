@@ -3645,6 +3645,7 @@ require_once ABSPATH . WPINC . '/class-wp-customize-setting.php';
  *
  * @see Tests_WP_Customize_Manager::test_add_setting_honoring_dynamic()
  */
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class Test_Dynamic_Customize_Setting extends WP_Customize_Setting {
 	public $type = 'dynamic';
 	public $custom;
@@ -3655,6 +3656,7 @@ class Test_Dynamic_Customize_Setting extends WP_Customize_Setting {
  *
  * @see Tests_WP_Customize_Manager::test_late_validate_setting_values()
  */
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class Test_Setting_Without_Applying_Validate_Filter extends WP_Customize_Setting {
 
 	/**
@@ -3669,5 +3671,4 @@ class Test_Setting_Without_Applying_Validate_Filter extends WP_Customize_Setting
 		}
 		return true;
 	}
-
 }

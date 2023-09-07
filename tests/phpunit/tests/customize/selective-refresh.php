@@ -264,6 +264,7 @@ require_once ABSPATH . WPINC . '/customize/class-wp-customize-partial.php';
 /**
  * Class Tested_Custom_Partial
  */
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class Tested_Custom_Partial extends WP_Customize_Partial {
 
 	/**

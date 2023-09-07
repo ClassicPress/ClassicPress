@@ -3,11 +3,11 @@
  * Installs ClassicPress for running the tests and loads ClassicPress and the test libraries
  */
 
-$config_file_path = dirname( dirname( __FILE__ ) );
+$config_file_path = dirname( __DIR__ );
 if ( ! file_exists( $config_file_path . '/wp-tests-config.php' ) ) {
 	// Support the config file from the root of the source repository.
 	if ( basename( $config_file_path ) === 'phpunit' && basename( dirname( $config_file_path ) ) === 'tests' ) {
-		$config_file_path = dirname( dirname( $config_file_path ) );
+		$config_file_path = dirname( $config_file_path, 2 );
 	}
 }
 $config_file_path .= '/wp-tests-config.php';
@@ -65,7 +65,7 @@ if ( version_compare( $phpunit_version, '5.7.21', '<' ) ) {
  */
 if ( ! class_exists( 'Yoast\PHPUnitPolyfills\Autoload' ) ) {
 	// Default location of the autoloader for WP core test runs.
-	$phpunit_polyfills_autoloader = dirname( dirname( dirname( __DIR__ ) ) ) . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
+	$phpunit_polyfills_autoloader = dirname( __DIR__, 3 ) . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
 	$phpunit_polyfills_error      = false;
 
 	// Allow for a custom installation location to be provided for plugin/theme integration tests.
@@ -237,7 +237,7 @@ if ( file_exists( DIR_TESTDATA . '/themedir1' ) ) {
 	$wp_theme_directories[] = DIR_TESTDATA . '/themedir1';
 }
 
-system( WP_PHP_BINARY . ' ' . escapeshellarg( dirname( __FILE__ ) . '/install.php' ) . ' ' . escapeshellarg( $config_file_path ) . ' ' . $multisite, $retval );
+system( WP_PHP_BINARY . ' ' . escapeshellarg( __DIR__ . '/install.php' ) . ' ' . escapeshellarg( $config_file_path ) . ' ' . $multisite, $retval );
 if ( 0 !== $retval ) {
 	exit( $retval );
 }
@@ -358,6 +358,5 @@ class WP_PHPUnit_Util_Getopt {
 			echo PHP_EOL;
 		}
 	}
-
 }
 new WP_PHPUnit_Util_Getopt( $_SERVER['argv'] );

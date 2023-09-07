@@ -10,11 +10,11 @@ $options = 'v:r:d';
 if ( is_callable( 'getopt' ) ) {
 	$opts = getopt( $options );
 } else {
-	include dirname( __FILE__ ) . '/wp-testlib/getopt.php';
+	include __DIR__ . '/wp-testlib/getopt.php';
 	$opts = getoptParser::getopt( $options );
 }
 
-define( 'DIR_TESTROOT', realpath( dirname( __FILE__ ) ) );
+define( 'DIR_TESTROOT', realpath( __DIR__ ) );
 
 define( 'TEST_WP', true );
 define( 'WP_DEBUG', array_key_exists( 'd', $opts ) );
@@ -82,4 +82,3 @@ $to        = 'To <wp.mail.testing+to@gmail.com>';
 $headers[] = "BCC: {$bcc}";
 wp_mail( '', $subject, $message, $headers );
 echo "Test emails sent!\n";
-

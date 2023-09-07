@@ -140,7 +140,6 @@ class Tests_User extends WP_UnitTestCase {
 		// Correct key: deleted.
 		delete_user_meta( self::$author_id, $key, $val );
 		$this->assertSame( '', get_user_meta( self::$author_id, $key, true ) );
-
 	}
 
 	/**
@@ -1916,7 +1915,6 @@ class Tests_User extends WP_UnitTestCase {
 		// Contains location longitude.
 		$this->assertSame( 'Longitude', $actual['data'][1]['data'][3]['name'] );
 		$this->assertSame( '-84.5143900', $actual['data'][1]['data'][3]['value'] );
-
 	}
 
 	/**

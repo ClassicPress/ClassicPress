@@ -845,7 +845,7 @@ function wp_extract_urls( $content ) {
 
 	$post_links = array_unique(
 		array_map(
-			static function( $link ) {
+			static function ( $link ) {
 				// Decode to replace valid entities, like &amp;.
 				$link = html_entity_decode( $link );
 				// Maintain backward compatibility by removing extraneous semi-colons (`;`).
@@ -4781,7 +4781,6 @@ function smilies_init() {
 	}
 
 	$wp_smiliessearch .= ')(?=' . $spaces . '|$)/m';
-
 }
 
 /**
@@ -5537,7 +5536,6 @@ function _deprecated_constructor( $class_name, $version, $parent_class = '' ) {
 			}
 		}
 	}
-
 }
 
 /**

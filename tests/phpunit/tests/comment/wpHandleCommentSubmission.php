@@ -56,7 +56,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertSame( 1, did_action( $error ) );
 		$this->assertWPError( $comment );
 		$this->assertSame( $error, $comment->get_error_code() );
-
 	}
 
 	public function test_submitting_comment_to_post_with_closed_comments_returns_error() {
@@ -79,7 +78,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertSame( 1, did_action( $error ) );
 		$this->assertWPError( $comment );
 		$this->assertSame( $error, $comment->get_error_code() );
-
 	}
 
 	public function test_submitting_comment_to_trashed_post_returns_error() {
@@ -100,7 +98,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertSame( 1, did_action( $error ) );
 		$this->assertWPError( $comment );
 		$this->assertSame( $error, $comment->get_error_code() );
-
 	}
 
 	public function test_submitting_comment_to_draft_post_returns_error() {
@@ -123,7 +120,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertWPError( $comment );
 		$this->assertSame( $error, $comment->get_error_code() );
 		$this->assertEmpty( $comment->get_error_message() );
-
 	}
 
 	/**
@@ -177,7 +173,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertSame( 1, did_action( $error ) );
 		$this->assertWPError( $comment );
 		$this->assertSame( $error, $comment->get_error_code() );
-
 	}
 
 	public function test_submitting_comment_to_password_required_post_returns_error() {
@@ -200,7 +195,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertSame( 1, did_action( $error ) );
 		$this->assertWPError( $comment );
 		$this->assertSame( $error, $comment->get_error_code() );
-
 	}
 
 	public function test_submitting_comment_to_password_protected_post_succeeds() {
@@ -227,7 +221,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
-
 	}
 
 	public function test_submitting_valid_comment_as_logged_in_user_succeeds() {
@@ -254,7 +247,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertSame( $user->user_email, $comment->comment_author_email );
 		$this->assertSame( $user->user_url, $comment->comment_author_url );
 		$this->assertSame( $user->ID, (int) $comment->user_id );
-
 	}
 
 	public function test_submitting_valid_comment_anonymously_succeeds() {
@@ -276,7 +268,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertSame( 'comment@example.org', $comment->comment_author_email );
 		$this->assertSame( 'http://user.example.org', $comment->comment_author_url );
 		$this->assertSame( '0', $comment->user_id );
-
 	}
 
 	/**
@@ -299,7 +290,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertSame( 'Comment with 1 slash: \\', $comment->comment_content );
 		$this->assertSame( 'Comment Author with 1 slash: \\', $comment->comment_author );
 		$this->assertSame( 'comment@example.org', $comment->comment_author_email );
-
 	}
 
 	public function test_submitting_comment_anonymously_to_private_post_returns_error() {
@@ -320,7 +310,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertFalse( is_user_logged_in() );
 		$this->assertWPError( $comment );
 		$this->assertSame( $error, $comment->get_error_code() );
-
 	}
 
 	public function test_submitting_comment_as_logged_in_user_to_inaccessible_private_post_returns_error() {
@@ -350,7 +339,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertFalse( current_user_can( 'read_post', $post->ID ) );
 		$this->assertWPError( $comment );
 		$this->assertSame( $error, $comment->get_error_code() );
-
 	}
 
 	public function test_submitting_comment_to_private_post_with_closed_comments_returns_correct_error() {
@@ -381,7 +369,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertFalse( current_user_can( 'read_post', $post->ID ) );
 		$this->assertWPError( $comment );
 		$this->assertSame( $error, $comment->get_error_code() );
-
 	}
 
 	public function test_submitting_comment_to_own_private_post_succeeds() {
@@ -404,7 +391,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertTrue( current_user_can( 'read_post', $post->ID ) );
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
-
 	}
 
 	public function test_submitting_comment_to_accessible_private_post_succeeds() {
@@ -427,7 +413,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertTrue( current_user_can( 'read_post', $post->ID ) );
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
-
 	}
 
 	public function test_anonymous_user_cannot_comment_unfiltered_html() {
@@ -442,7 +427,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
 		$this->assertStringNotContainsString( '<script', $comment->comment_content );
-
 	}
 
 	public function test_unprivileged_user_cannot_comment_unfiltered_html() {
@@ -460,7 +444,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
 		$this->assertStringNotContainsString( '<script', $comment->comment_content );
-
 	}
 
 	public function test_unprivileged_user_cannot_comment_unfiltered_html_even_with_valid_nonce() {
@@ -484,7 +467,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
 		$this->assertStringNotContainsString( '<script', $comment->comment_content );
-
 	}
 
 	public function test_privileged_user_can_comment_unfiltered_html_with_valid_nonce() {
@@ -516,7 +498,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
 		$this->assertStringContainsString( '<script', $comment->comment_content );
-
 	}
 
 	public function test_privileged_user_cannot_comment_unfiltered_html_without_valid_nonce() {
@@ -540,7 +521,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 		$this->assertNotWPError( $comment );
 		$this->assertInstanceOf( 'WP_Comment', $comment );
 		$this->assertStringNotContainsString( '<script', $comment->comment_content );
-
 	}
 
 	public function test_submitting_comment_as_anonymous_user_when_registration_required_returns_error() {
@@ -559,7 +539,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 
 		$this->assertWPError( $comment );
 		$this->assertSame( $error, $comment->get_error_code() );
-
 	}
 
 	public function test_submitting_comment_with_no_name_when_name_email_required_returns_error() {
@@ -580,7 +559,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 
 		$this->assertWPError( $comment );
 		$this->assertSame( $error, $comment->get_error_code() );
-
 	}
 
 	public function test_submitting_comment_with_no_email_when_name_email_required_returns_error() {
@@ -601,7 +579,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 
 		$this->assertWPError( $comment );
 		$this->assertSame( $error, $comment->get_error_code() );
-
 	}
 
 	public function test_submitting_comment_with_invalid_email_when_name_email_required_returns_error() {
@@ -623,7 +600,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 
 		$this->assertWPError( $comment );
 		$this->assertSame( $error, $comment->get_error_code() );
-
 	}
 
 	public function test_submitting_comment_with_no_comment_content_returns_error() {
@@ -640,7 +616,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 
 		$this->assertWPError( $comment );
 		$this->assertSame( $error, $comment->get_error_code() );
-
 	}
 
 	/**
@@ -790,7 +765,6 @@ class Tests_Comment_wpHandleCommentSubmission extends WP_UnitTestCase {
 			),
 			$this->preprocess_comment_data
 		);
-
 	}
 
 	/**

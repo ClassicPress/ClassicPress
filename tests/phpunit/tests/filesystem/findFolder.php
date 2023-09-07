@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname( __FILE__ ) . '/base.php';
+require_once __DIR__ . '/base.php';
 
 /**
  * @group filesystem
@@ -8,7 +8,7 @@ require_once dirname( __FILE__ ) . '/base.php';
  */
 class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase {
 
-	function test_ftp_has_root_access() {
+	public function test_ftp_has_root_access() {
 		global $wp_filesystem;
 		$fs = $wp_filesystem;
 		$fs->init(
@@ -24,10 +24,9 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 
 		$path = $fs->find_folder( '/this/directory/doesnt/exist/' );
 		$this->assertFalse( $path );
-
 	}
 
-	function test_sibling_classicpress_in_subdir() {
+	public function test_sibling_classicpress_in_subdir() {
 		global $wp_filesystem;
 		$fs = $wp_filesystem;
 		$fs->init(
@@ -48,7 +47,6 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 
 		$path = $fs->find_folder( '/var/www/cp.example.com/classicpress/wp-content/' );
 		$this->assertSame( '/www/cp.example.com/classicpress/wp-content/', $path );
-
 	}
 
 	/**
@@ -57,7 +55,7 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 	 * example.com at /
 	 * cp.example.com at /cp.example.com/classicpress/
 	 */
-	function test_subdir_of_another() {
+	public function test_subdir_of_another() {
 		global $wp_filesystem;
 		$fs = $wp_filesystem;
 		$fs->init(
@@ -76,7 +74,6 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 
 		$path = $fs->abspath( '/var/www/example.com/' );
 		$this->assertSame( '/', $path );
-
 	}
 
 	/**
@@ -84,7 +81,7 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 	 *
 	 * @ticket 20934
 	 */
-	function test_multiple_tokens_in_path1() {
+	public function test_multiple_tokens_in_path1() {
 		global $wp_filesystem;
 		$fs = $wp_filesystem;
 		$fs->init(
@@ -113,5 +110,4 @@ class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase
 		$path = $fs->find_folder( '/var/www/example.com/sub/wp-content/plugins/' );
 		$this->assertSame( '/example.com/sub/wp-content/plugins/', $path );
 	}
-
 }

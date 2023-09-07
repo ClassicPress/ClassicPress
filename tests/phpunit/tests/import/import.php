@@ -1,12 +1,12 @@
 <?php
 
-require_once dirname( __FILE__ ) . '/base.php';
+require_once __DIR__ . '/base.php';
 
 /**
  * @group import
  */
 class Tests_Import_Import extends WP_Import_UnitTestCase {
-	function set_up() {
+	public function set_up() {
 		parent::set_up();
 
 		if ( ! defined( 'WP_IMPORTING' ) ) {
@@ -29,13 +29,13 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 		}
 	}
 
-	function tear_down() {
+	public function tear_down() {
 		remove_filter( 'import_allow_create_users', '__return_true' );
 
 		parent::tear_down();
 	}
 
-	function test_small_import() {
+	public function test_small_import() {
 		global $wpdb;
 
 		$authors = array(
@@ -203,7 +203,7 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 		$this->assertSame( 1, count( $cats ) );
 	}
 
-	function test_double_import() {
+	public function test_double_import() {
 		$authors = array(
 			'admin'  => false,
 			'editor' => false,
@@ -244,7 +244,7 @@ class Tests_Import_Import extends WP_Import_UnitTestCase {
 		$this->assertSame( 1, $comment_count->total_comments );
 	}
 
-	function test_ordering_of_importers() {
+	public function test_ordering_of_importers() {
 		global $wp_importers;
 		$_wp_importers = $wp_importers; // Preserve global state
 		$wp_importers  = array(

@@ -191,7 +191,6 @@ CAP;
 			)
 		);
 		$this->assertSame( 1, substr_count( $result, 'wp-caption alignnone some-class another-class' ) );
-
 	}
 
 	public function test_new_img_caption_shortcode_with_html_caption() {
@@ -1529,7 +1528,6 @@ EOF;
 			$expected_srcset = $this->src_first( $_expected, $image_url, $size_array[0] );
 			$this->assertSame( $expected_srcset, wp_calculate_image_srcset( $size_array, $image_url, $image_meta ) );
 		}
-
 	}
 
 	/**
@@ -2145,7 +2143,7 @@ EOF;
 
 		add_filter(
 			'wp_content_img_tag',
-			function( $filtered_image ) {
+			function ( $filtered_image ) {
 				return "<span>$filtered_image</span>";
 			}
 		);
@@ -2169,7 +2167,7 @@ EOF;
 
 		add_filter(
 			'wp_content_img_tag',
-			function( $filtered_image ) {
+			function ( $filtered_image ) {
 				return "<span>$filtered_image</span>";
 			}
 		);
@@ -3413,7 +3411,7 @@ EOF;
 		// Use the filter to alter the threshold for not lazy-loading to the first three elements.
 		add_filter(
 			'wp_omit_loading_attr_threshold',
-			function() {
+			function () {
 				return 3;
 			}
 		);
@@ -3449,7 +3447,7 @@ EOF;
 		// Use a threshold of 2.
 		add_filter(
 			'wp_omit_loading_attr_threshold',
-			function() {
+			function () {
 				return 2;
 			}
 		);
@@ -3490,7 +3488,7 @@ EOF;
 		// page load by default, so the value is still 1.
 		add_filter(
 			'wp_omit_loading_attr_threshold',
-			function() {
+			function () {
 				return 3;
 			}
 		);
@@ -3650,12 +3648,12 @@ EOF;
 			return 30;
 		}
 	}
-
 }
 
 /**
  * Helper class for `test_autoembed`.
  */
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class Test_Autoembed extends WP_Embed {
 	public function shortcode( $attr, $url = '' ) {
 		return '[embed]';

@@ -427,7 +427,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 		);
 
 		$this->assertSame( array( $term_id2, $term_id22 ), $terms );
-
 	}
 
 	/**
@@ -803,7 +802,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 			),
 			$terms
 		);
-
 	}
 
 	/**
@@ -2947,7 +2945,6 @@ class Tests_Term_getTerms extends WP_UnitTestCase {
 		$num_queries = $wpdb->num_queries;
 		$term0       = get_term( $terms[0] );
 		$this->assertSame( $num_queries, $wpdb->num_queries );
-
 	}
 
 	/**

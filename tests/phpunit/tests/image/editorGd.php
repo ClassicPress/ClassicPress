@@ -661,7 +661,6 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 
 				$this->assertImageAlphaAtPointGD( $save_to_file, array( 0, 0 ), $expected['alpha'] );
 				unlink( $save_to_file );
-
 	}
 
 	/**

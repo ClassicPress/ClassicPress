@@ -98,7 +98,7 @@ class Tests_Theme_CustomHeader extends WP_UnitTestCase {
 	public function test_filter_header_image( $header_image, $expected ) {
 		add_filter(
 			'get_header_image',
-			static function() use ( $header_image ) {
+			static function () use ( $header_image ) {
 				return $header_image;
 			}
 		);

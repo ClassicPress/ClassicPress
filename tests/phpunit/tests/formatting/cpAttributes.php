@@ -7,7 +7,7 @@
  */
 class Tests_Formatting_CpAttributes extends WP_UnitTestCase {
 
-	function test_attributes_removes_quotes_in_string() {
+	public function test_attributes_removes_quotes_in_string() {
 		$this->assertSame( ' role="main"', cp_attributes( 'body', 'role="main"' ) );
 		$this->assertSame( ' role="main"', cp_attributes( 'div', "role='main'" ) );
 		$this->assertSame( ' role="main" class="test"', cp_attributes( 'div', 'role="main" class="test"' ) );
@@ -18,30 +18,30 @@ class Tests_Formatting_CpAttributes extends WP_UnitTestCase {
 		$this->assertSame( ' id="main" class="site-main" role="main"', cp_attributes( 'main', 'id=main&class=site-main&role="main"' ) );
 	}
 
-	function test_attributes_empty() {
+	public function test_attributes_empty() {
 		$this->assertSame( '', cp_attributes( 'div', array() ) );
 		$this->assertSame( '', cp_attributes( 'span', '' ) );
 	}
 
-	function test_attributes_empty_value() {
+	public function test_attributes_empty_value() {
 		$this->assertSame( ' disabled=""', cp_attributes( 'input', array( 'disabled' => '' ) ) );
 		$this->assertSame( ' disabled=""', cp_attributes( 'input', 'disabled' ) );
 	}
 
 	// This is used as a filter to verify the context.
-	function context_getter( $attrs, $element, $context ) {
+	public function context_getter( $attrs, $element, $context ) {
 		$attrs['context'] = $context;
 		return $attrs;
 	}
 
-	function test_attributes_empty_context_finds_caller_name() {
+	public function test_attributes_empty_context_finds_caller_name() {
 		add_filter( 'cp_attributes', array( $this, 'context_getter' ), 10, 3 );
 		$this->assertSame( ' context="passed context"', cp_attributes( 'p', '', 'passed context' ) );
 		$this->assertSame( ' context="test_attributes_empty_context_finds_caller_name"', cp_attributes( 'p', '' ) );
 		remove_filter( 'cp_attributes', array( $this, 'context_getter' ), 10 );
 	}
 
-	function test_attributes_escape_src_url() {
+	public function test_attributes_escape_src_url() {
 		$this->assertSame(
 			' id="main" src="http://example.org/one?z=5&#038;x=3" data-s="example.org/one?z=5&amp;x=3"',
 			cp_attributes(
@@ -55,7 +55,7 @@ class Tests_Formatting_CpAttributes extends WP_UnitTestCase {
 		);
 	}
 
-	function test_attributes_escape_href_url() {
+	public function test_attributes_escape_href_url() {
 		$this->assertSame(
 			' title="0.25&quot; in height" href="http://example.org/one?z=5&#038;x=3" data-h="example.org/one?x=5&amp;y=3"',
 			cp_attributes(
@@ -69,7 +69,7 @@ class Tests_Formatting_CpAttributes extends WP_UnitTestCase {
 		);
 	}
 
-	function test_attributes_remove_duplicate() {
+	public function test_attributes_remove_duplicate() {
 		$this->assertSame(
 			' font="latin latin2" class="one two"',
 			cp_attributes(
@@ -82,7 +82,7 @@ class Tests_Formatting_CpAttributes extends WP_UnitTestCase {
 		);
 	}
 
-	function test_attributes_escape_special_characters() {
+	public function test_attributes_escape_special_characters() {
 		$this->assertSame(
 			' title="2 &lt; 3" data="John &amp; Sons"',
 			cp_attributes(
@@ -94,5 +94,4 @@ class Tests_Formatting_CpAttributes extends WP_UnitTestCase {
 			)
 		);
 	}
-
 }

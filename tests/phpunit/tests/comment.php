@@ -1007,7 +1007,6 @@ class Tests_Comment extends WP_UnitTestCase {
 			),
 			$this->preprocess_comment_data
 		);
-
 	}
 
 	public function filter_preprocess_comment( $commentdata ) {

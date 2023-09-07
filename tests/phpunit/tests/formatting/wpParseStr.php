@@ -138,6 +138,7 @@ class Tests_Formatting_wpParseStr extends WP_UnitTestCase {
 /**
  * Fixture for use in the tests.
  */
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class Fixture_Formatting_wpParseStr {
 	public function __toString() {
 		return 'foobar';

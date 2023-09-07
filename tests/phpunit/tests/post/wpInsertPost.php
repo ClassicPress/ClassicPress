@@ -307,7 +307,6 @@ class Tests_Post_wpInsertPost extends WP_UnitTestCase {
 
 		// There should be a publish_future_post hook scheduled on the future date.
 		$this->assertFalse( $this->next_schedule_for_post( 'publish_future_post', $post_id ) );
-
 	}
 
 	/**
@@ -653,7 +652,6 @@ class Tests_Post_wpInsertPost extends WP_UnitTestCase {
 
 		$this->assertInstanceOf( 'WP_Error', wp_insert_post( $post, true ) );
 		$this->assertInstanceOf( 'WP_Error', wp_update_post( $post, true ) );
-
 	}
 
 	/**

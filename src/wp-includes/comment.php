@@ -2708,7 +2708,6 @@ function wp_update_comment_count( $post_id, $do_deferred = false ) {
 	} elseif ( $post_id ) {
 		return wp_update_comment_count_now( $post_id );
 	}
-
 }
 
 /**

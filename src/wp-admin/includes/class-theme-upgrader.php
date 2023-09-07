@@ -754,5 +754,4 @@ class Theme_Upgrader extends WP_Upgrader {
 
 		return $theme;
 	}
-
 }

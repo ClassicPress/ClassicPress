@@ -2707,7 +2707,6 @@ function get_posts_nav_link( $args = array() ) {
 		}
 	}
 	return $return;
-
 }
 
 /**

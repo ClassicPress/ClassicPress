@@ -286,6 +286,7 @@ class MockAction {
 
 // Convert valid XML to an array tree structure.
 // Kinda lame, but it works with a default PHP 4 installation.
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class TestXMLParser {
 	public $xml;
 	public $data = array();
@@ -463,6 +464,7 @@ function gen_tests_array( $name, $expected_data ) {
 /**
  * Use to create objects by yourself.
  */
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class MockClass extends stdClass {}
 
 /**
@@ -552,6 +554,7 @@ function _clean_term_filters() {
 /**
  * Special class for exposing protected wpdb methods we need to access
  */
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class WpdbExposedMethodsForTesting extends wpdb {
 	public function __construct() {
 		global $wpdb;

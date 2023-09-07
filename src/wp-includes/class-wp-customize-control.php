@@ -698,7 +698,6 @@ class WP_Customize_Control {
 	 * @since 4.1.0
 	 */
 	protected function content_template() {}
-
 }
 
 /**

@@ -231,6 +231,7 @@ class Tests_Locale extends WP_UnitTestCase {
 	}
 }
 
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class Custom_WP_Locale extends WP_Locale {
 	public function __construct() {
 		// Do not initialize to test property initialization.

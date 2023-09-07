@@ -959,7 +959,7 @@ function _upgrade_422_find_genericons_files_in_folder( $directory ) {
 	$dirs = glob( $directory . '*', GLOB_ONLYDIR );
 	$dirs = array_filter(
 		$dirs,
-		static function( $dir ) {
+		static function ( $dir ) {
 			// Skip any node_modules directories.
 			return false === strpos( $dir, 'node_modules' );
 		}

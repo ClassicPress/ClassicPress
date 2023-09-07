@@ -34,7 +34,6 @@ class WP_Compat {
 		add_action( 'delete_plugin', array( $this, 'delete_plugins_using_blocks' ), 10, 1 );
 		add_action( 'admin_notices', array( $this, 'using_block_function_theme' ), 10, 0 );
 		add_action( 'after_switch_theme', array( $this, 'delete_themes_using_blocks' ), 10, 0 );
-
 	}
 
 	public function purge_options( $old_value, $value ) {
@@ -220,14 +219,14 @@ class WP_Compat {
 			// A plugin is calling the function
 			$traces = array_column( $trace, 'file' );
 			$traces = array_map(
-				function( $path ) {
+				function ( $path ) {
 					return self::plugin_folder( $path );
 				},
 				$traces
 			);
 			$active = wp_get_active_and_valid_plugins();
 			$active = array_map(
-				function( $path ) {
+				function ( $path ) {
 					return self::plugin_folder( $path );
 				},
 				$active
@@ -397,9 +396,7 @@ class WP_Compat {
 		// Load WP_Block_Type class file as polyfill.
 		require_once ABSPATH . WPINC . '/classicpress/class-wp-block-type.php';
 		require_once ABSPATH . WPINC . '/classicpress/class-wp-block-template.php';
-
 	}
-
 }
 
-$wp_compat = new WP_Compat;
+$wp_compat = new WP_Compat();

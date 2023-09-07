@@ -1716,7 +1716,6 @@ function wp_is_json_request() {
 	}
 
 	return false;
-
 }
 
 /**
@@ -1744,7 +1743,6 @@ function wp_is_jsonp_request() {
 	$jsonp_enabled = apply_filters( 'rest_jsonp_enabled', true );
 
 	return $jsonp_enabled;
-
 }
 
 /**

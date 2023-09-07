@@ -521,6 +521,7 @@ class WP_Http_Streams {
  * @since 2.7.0
  * @deprecated 3.7.0 Please use WP_HTTP::request() directly
  */
+//phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class WP_HTTP_Fsockopen extends WP_Http_Streams {
 	// For backward compatibility for users who are using the class directly.
 }

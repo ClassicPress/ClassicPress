@@ -152,6 +152,7 @@ if ( ! class_exists( 'POMO_Reader', false ) ) :
 endif;
 
 if ( ! class_exists( 'POMO_FileReader', false ) ) :
+	// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 	class POMO_FileReader extends POMO_Reader {
 
 		/**
@@ -236,6 +237,7 @@ if ( ! class_exists( 'POMO_StringReader', false ) ) :
 	 * Provides file-like methods for manipulating a string instead
 	 * of a physical file.
 	 */
+	// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 	class POMO_StringReader extends POMO_Reader {
 
 		public $_str = '';
@@ -299,7 +301,6 @@ if ( ! class_exists( 'POMO_StringReader', false ) ) :
 		public function read_all() {
 			return $this->substr( $this->_str, $this->_pos, $this->strlen( $this->_str ) );
 		}
-
 	}
 endif;
 
@@ -307,6 +308,7 @@ if ( ! class_exists( 'POMO_CachedFileReader', false ) ) :
 	/**
 	 * Reads the contents of the file in the beginning.
 	 */
+	// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 	class POMO_CachedFileReader extends POMO_StringReader {
 		/**
 		 * PHP5 constructor.
@@ -338,6 +340,7 @@ if ( ! class_exists( 'POMO_CachedIntFileReader', false ) ) :
 	/**
 	 * Reads the contents of the file in the beginning.
 	 */
+	// phpcs:ignore Generic.Files.OneObjectStructurePerFile
 	class POMO_CachedIntFileReader extends POMO_CachedFileReader {
 		/**
 		 * PHP5 constructor.
@@ -359,4 +362,3 @@ if ( ! class_exists( 'POMO_CachedIntFileReader', false ) ) :
 		}
 	}
 endif;
-
