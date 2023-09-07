@@ -1431,7 +1431,7 @@ function do_accordion_sections( $screen, $context, $data_object ) {
 
 	$hidden = get_hidden_meta_boxes( $screen );
 	?>
-	<div id="side-sortables" class="accordion-container">
+	<div id="side-sortables">
 		<ul class="outer-border">
 	<?php
 	$i          = 0;
@@ -1445,31 +1445,31 @@ function do_accordion_sections( $screen, $context, $data_object ) {
 						continue;
 					}
 
+					/*
+					 * @since CP 2.0.0
+					 *
+					 * Inserts details tag and replaces h3 tag with summary tag for accessibility
+					 */
 					$i++;
-					$hidden_class = in_array( $box['id'], $hidden, true ) ? 'hide-if-js' : '';
-
-					$open_class = '';
-					if ( ! $first_open && empty( $hidden_class ) ) {
-						$first_open = true;
-						$open_class = 'open';
-					}
 					?>
-					<li class="control-section accordion-section <?php echo $hidden_class; ?> <?php echo $open_class; ?> <?php echo esc_attr( $box['id'] ); ?>" id="<?php echo esc_attr( $box['id'] ); ?>">
-						<h3 class="accordion-section-title hndle" tabindex="0">
-							<?php echo esc_html( $box['title'] ); ?>
-							<span class="screen-reader-text">
-								<?php
-								/* translators: Hidden accessibility text. */
-								_e( 'Press return or enter to open this section' );
-								?>
-							</span>
-						</h3>
-						<div class="accordion-section-content <?php postbox_classes( $box['id'], $page ); ?>">
-							<div class="inside">
-								<?php call_user_func( $box['callback'], $data_object, $box ); ?>
-							</div><!-- .inside -->
-						</div><!-- .accordion-section-content -->
-					</li><!-- .accordion-section -->
+					<li class="control-section">
+						<details class="accordion-section open <?php echo esc_attr( $box['id'] ); ?>" id="<?php echo esc_attr( $box['id'] ); ?>">
+							<summary class="accordion-section-title hndle" tabindex="0">
+								<?php echo esc_html( $box['title'] ); ?>
+								<span class="screen-reader-text">
+									<?php
+									/* translators: Hidden accessibility text. */
+									_e( 'Press return or enter to open this section' );
+									?>
+								</span>
+							</summary>
+							<div class="accordion-section-content <?php postbox_classes( $box['id'], $page ); ?>">
+								<div class="inside">
+									<?php call_user_func( $box['callback'], $data_object, $box ); ?>
+								</div><!-- .inside -->
+							</div><!-- .accordion-section-content -->
+						</details><!-- .accordion-section -->
+					</li><!-- .control-section -->
 					<?php
 				}
 			}
