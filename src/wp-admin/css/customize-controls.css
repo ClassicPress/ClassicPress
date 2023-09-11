@@ -564,6 +564,7 @@ body.trashing #publish-settings {
 #customize-theme-controls .accordion-section-title:after,
 #customize-outer-theme-controls .accordion-section-title:after {
 	content: "\f345";
+	font: normal 20px/1 dashicons;
 	color: #a7aaad;
 }
 
