@@ -3449,7 +3449,7 @@ img {
 }
 
 /* @todo: can we use a common class for these? */
-/* @since CP 2.0.0 removes .accordion-section-title:after */
+/* @since CP-2.0.0 removes .accordion-section-title:after */
 .nav-menus-php .item-edit:before,
 .widget-top .widget-action .toggle-indicator:before {
 	content: "\f140";
