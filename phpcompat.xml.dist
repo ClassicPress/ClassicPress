@@ -34,4 +34,28 @@
 
 	<!-- Code which doesn't go into production may have different requirements. -->
 	<exclude-pattern>/node_modules/*</exclude-pattern>
+
+	<!-- Drop-in plugins. -->
+	<exclude-pattern>/src/wp-content/advanced-cache\.php</exclude-pattern>
+	<exclude-pattern>/src/wp-content/blog-deleted\.php</exclude-pattern>
+	<exclude-pattern>/src/wp-content/blog-inactive\.php</exclude-pattern>
+	<exclude-pattern>/src/wp-content/blog-suspended\.php</exclude-pattern>
+	<exclude-pattern>/src/wp-content/db-error\.php</exclude-pattern>
+	<exclude-pattern>/src/wp-content/db\.php</exclude-pattern>
+	<exclude-pattern>/src/wp-content/fatal-error-handler\.php</exclude-pattern>
+	<exclude-pattern>/src/wp-content/install\.php</exclude-pattern>
+	<exclude-pattern>/src/wp-content/maintenance\.php</exclude-pattern>
+	<exclude-pattern>/src/wp-content/object-cache\.php</exclude-pattern>
+	<exclude-pattern>/src/wp-content/php-error\.php</exclude-pattern>
+	<exclude-pattern>/src/wp-content/sunrise\.php</exclude-pattern>
+
+	<!-- Must-Use plugins. -->
+	<exclude-pattern>/src/wp-content/mu-plugins/*</exclude-pattern>
+
+	<!-- Plugins. -->
+	<exclude-pattern>/src/wp-content/plugins/*</exclude-pattern>
+
+	<!-- Themes except the twenty* themes. -->
+	<exclude-pattern>/src/wp-content/themes/(?!twenty)*</exclude-pattern>
+
 </ruleset>
