@@ -35,7 +35,7 @@
     "install-changed": "^1.1.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
-    "postcss": "8.4.29",
+    "postcss": "8.4.30",
     "qunit": "^2.19.4",
     "rollup": "3.29.2",
     "sinon": "^16.0.0",
