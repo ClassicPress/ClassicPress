@@ -431,6 +431,46 @@ echo esc_html( $title );
 <?php
 if ( isset( $post_new_file ) && current_user_can( $post_type_object->cap->create_posts ) ) {
 	echo ' <a href="' . esc_url( admin_url( $post_new_file ) ) . '" class="page-title-action">' . esc_html( $post_type_object->labels->add_new ) . '</a>';
+
+	/**
+	 * Adds Previous and Next links alongside Add New link.
+	 * Setting works per user per post type.
+	 *
+	 * @since CP-2.0.0
+	 */
+	$nav_display = 'inline';
+	$metaboxhidden = (array) get_user_meta( get_current_user_id(), 'metaboxhidden_' . $post_type_object->name, true );
+
+	if ( in_array( 'adminpostnavspan', $metaboxhidden ) ) {
+		$nav_display = 'none';
+	}
+
+	$next_post = get_next_post();
+	$previous_post = get_previous_post();
+
+	echo '<span id="adminpostnavspan" class="postbox" style="background: transparent; border: none; box-shadow: none; display: ' . $nav_display . ';">';
+
+	if ( ! empty( $previous_post ) ) {
+
+		$previous_link = esc_url( admin_url() . 'post.php?post=' . $previous_post->ID . '&amp;action=edit' );
+
+		$prev_title = _x( 'Previous post: ', 'Admin Post Navigation' ) . esc_attr( $previous_post->post_title );
+
+		echo ' <a href="' . $previous_link . '" id="adminpostnav-prev" title="' . $prev_title . ' " class="add-new-h2">' . _x( '&larr; Previous', 'Admin Post Navigation' ) . '</a>';
+
+	}
+
+	if ( ! empty( $next_post ) ) {
+
+		$next_link = esc_url( admin_url() . 'post.php?post=' . $next_post->ID . '&amp;action=edit' );
+
+		$next_title = _x( 'Next post: ', 'Admin Post Navigation' ) . esc_attr( $next_post->post_title );
+
+		echo ' <a href="' . $next_link . '" id="adminpostnav-next" title="' . $next_title . ' " class="add-new-h2">' . _x( 'Next &rarr;', 'Admin Post Navigation' ) . '</a>';
+
+	}
+
+	echo '</span>';
 }
 ?>
 

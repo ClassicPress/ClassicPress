@@ -975,9 +975,30 @@ final class WP_Screen {
 		$this->_screen_settings = '';
 
 		if ( 'post' === $this->base ) {
-			$expand                 = '<fieldset class="editor-expand hidden"><legend>' . __( 'Additional settings' ) . '</legend><label for="editor-expand-toggle">';
-			$expand                .= '<input type="checkbox" id="editor-expand-toggle"' . checked( get_user_setting( 'editor_expand', 'on' ), 'on', false ) . ' />';
-			$expand                .= __( 'Enable full-height editor and distraction-free functionality.' ) . '</label></fieldset>';
+
+			$expand = '<fieldset class="editor-expand hidden"><legend>' . __( 'Additional settings' ) . '</legend><label for="editor-expand-toggle">';
+
+			$expand .= '<input type="checkbox" id="editor-expand-toggle"' . checked( get_user_setting( 'editor_expand', 'on' ), 'on', false ) . '>';
+
+			$expand .= __( 'Enable full-height editor and distraction-free functionality.' ) . '</label>';
+
+			/**
+			 * Adds Previous and Next links alongside Add New link.
+			 *
+			 * @since CP-2.0.0
+			 */
+			$metaboxhidden = (array) get_user_meta( get_current_user_id(), 'metaboxhidden_' . $this->post_type, true );
+
+			$checked = checked( ! in_array( 'adminpostnavspan', $metaboxhidden ), true, false );
+
+			$expand .= '<label for="adminpostnav-hide">';
+
+			$expand .= '<input id="adminpostnav-hide" class="hide-postbox-tog" name="adminpostnav-hide" type="checkbox" value="adminpostnavspan" ' . esc_attr( $checked ) . '>';
+
+			$expand .= _x( 'Enable Previous and Next buttons', 'Admin Post Navigation' );
+
+			$expand .= '</label></fieldset>';
+
 			$this->_screen_settings = $expand;
 		}
 
