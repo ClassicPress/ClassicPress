@@ -2469,4 +2469,14 @@ class Tests_DB extends WP_UnitTestCase {
 			),
 		);
 	}
+
+	/**
+	 * The wpdb->use_mysqli is true (for now), purely for backwards compatibility reasons.
+	 */
+	public function test_mysqli_is_set() {
+		global $wpdb;
+
+		$this->assertObjectHasAttribute( 'use_mysqli', $wpdb );
+		$this->assertTrue( $wpdb->use_mysqli );
+	}
 }

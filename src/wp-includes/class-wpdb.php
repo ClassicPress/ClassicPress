@@ -691,6 +691,16 @@ class wpdb {
 	private $allow_unsafe_unquoted_parameters = true;
 
 	/**
+	 * Whether to use mysqli over mysql. Default false.
+	 *
+	 * @since 3.9.0
+	 * @since CP-2.0.0 Defaults to true for backward compatibility.
+	 *
+	 * @var bool
+	 */
+	private $use_mysqli = true;
+
+	/**
 	 * Whether we've managed to successfully connect at some point.
 	 *
 	 * @since 3.9.0
