@@ -194,7 +194,7 @@ jobs:
         uses: niden/actions-memcached@v7
 
       - name: Clone PHP.net and create local supported versions for PHPUnit tests
-        if: ${{ matrix.php }} == '8.0'
+        if: matrix.php == '8.0'
         run: |
           mkdir php.net
           git clone https://github.com/php/web-php php.net
