@@ -1417,8 +1417,6 @@ function remove_meta_box( $id, $screen, $context ) {
 function do_accordion_sections( $screen, $context, $data_object ) {
 	global $wp_meta_boxes;
 
-	wp_enqueue_script( 'accordion' );
-
 	if ( empty( $screen ) ) {
 		$screen = get_current_screen();
 	} elseif ( is_string( $screen ) ) {
