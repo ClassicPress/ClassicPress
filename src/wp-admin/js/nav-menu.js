@@ -697,7 +697,7 @@
 					updateSharedVars(ui);
 				},
 				stop: function(e, ui) {
-					var children, subMenuTitle,
+					var children, subMenuTitle, origLabel, newLabel, newItemPosition, newLabels, positionSpeech,
 						depthChange = currentDepth - originalDepth;
 
 					// Return child elements to the list.
@@ -732,6 +732,21 @@
 
 					api.refreshKeyboardAccessibility();
 					api.refreshAdvancedAccessibility();
+
+					// Since CP 2.0.0
+					// Add message for accessibility purposes
+					origLabel = ui.item.find( 'a' )[2].getAttribute( 'aria-label' ).split( '.' ).join( '' ).replace( 'Menu', 'menu' ).replace( 'Sub', menus.child );
+					newLabel = '';
+					newItemPosition = menus.menuPosition + ' ' + ui.item.index() + 1;
+					setTimeout( function() {
+						newLabels = ui.item.find( 'a' )[2].getAttribute( 'aria-label' ).split( '. ' );
+						if ( undefined !== newLabels[1] ) {
+							newLabel = ' ' + newLabels[1].replace( 'Menu', 'menu' ).replace( 'Sub', menus.child );
+							newItemPosition = '';
+						}
+						positionSpeech = origLabel + ' ' + menus.movedTo + ' ' + newItemPosition + newLabel;
+						wp.a11y.speak( positionSpeech, 'polite' );
+					}, '0' );
 				},
 				change: function(e, ui) {
 					// Make sure the placeholder is inside the menu.
@@ -876,7 +891,7 @@
 		 * Handle toggling bulk selection checkboxes for menu items.
 		 *
 		 * @since 5.8.0
-		 */ 
+		 */
 		attachBulkSelectButtonListeners : function() {
 			var that = this;
 
@@ -895,7 +910,7 @@
 		 * Enable bulk selection checkboxes for menu items.
 		 *
 		 * @since 5.8.0
-		 */ 
+		 */
 		enableBulkSelection : function() {
 			var checkbox = $( '#menu-to-edit .menu-item-checkbox' );
 
@@ -912,7 +927,7 @@
 		 * Disable bulk selection checkboxes for menu items.
 		 *
 		 * @since 5.8.0
-		 */ 
+		 */
 		disableBulkSelection : function() {
 			var checkbox = $( '#menu-to-edit .menu-item-checkbox' );
 
@@ -936,7 +951,7 @@
 		 * Listen for state changes on bulk action checkboxes.
 		 *
 		 * @since 5.8.0
-		 */ 
+		 */
 		attachMenuCheckBoxListeners : function() {
 			var that = this;
 
@@ -949,7 +964,7 @@
 		 * Create delete button to remove menu items from collection.
 		 *
 		 * @since 5.8.0
-		 */ 
+		 */
 		attachMenuItemDeleteButton : function() {
 			var that = this;
 
@@ -990,7 +1005,7 @@
 		 * List menu items awaiting deletion.
 		 *
 		 * @since 5.8.0
-		 */ 
+		 */
 		attachPendingMenuItemsListForDeletion : function() {
 			$( '#post-body-content' ).on( 'change', '.menu-item-checkbox', function() {
 				var menuItemName, menuItemType, menuItemID, listedMenuItem;
@@ -1027,7 +1042,7 @@
 		 * Set status of bulk delete checkbox.
 		 *
 		 * @since 5.8.0
-		 */ 
+		 */
 		setBulkDeleteCheckboxStatus : function() {
 			var that = this;
 			var checkbox = $( '#menu-to-edit .menu-item-checkbox' );
@@ -1051,7 +1066,7 @@
 		 * Set status of menu items removal button.
 		 *
 		 * @since 5.8.0
-		 */ 
+		 */
 		setRemoveSelectedButtonStatus : function() {
 			var button = $( '.menu-items-delete' );
 

@@ -3449,7 +3449,7 @@ img {
 }
 
 /* @todo: can we use a common class for these? */
-/* @since CP-2.0.0 removes .accordion-section-title:after */
+/* @since CP 2.0.0 removes .accordion-section-title:after */
 .nav-menus-php .item-edit:before,
 .widget-top .widget-action .toggle-indicator:before {
 	content: "\f140";
@@ -3497,13 +3497,6 @@ img {
 	box-shadow:
 		0 0 0 1px #4f94d4,
 		0 0 2px 1px rgba(79, 148, 212, 0.8);
-}
-
-.control-section .accordion-section-title:after,
-.accordion-section-title:after {
-	float: right;
-	right: 20px;
-	top: -2px;
 }
 
 .control-section.open .accordion-section-title:after,
@@ -3590,6 +3583,15 @@ img {
 	display: none;
 }
 
+.control-section {
+	border: 1px solid #c3c4c7;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.control-section:focus-within {
+	outline: 2px solid #3582c4;
+}
+
 .control-section .accordion-section-title,
 .customize-pane-child .accordion-section-title {
 	border-left: none;
@@ -3599,9 +3601,10 @@ img {
 	background: #fff;
 }
 
-.control-section .accordion-section-title:after,
-.customize-pane-child .accordion-section-title:after {
-	top: calc(50% - 10px); /* Arrow height is 20px, so use half of that to vertically center */
+.control-section details[open] summary.accordion-section-title {
+	color: #3c434a;
+	background-color: #f6f7f7;
+	border-bottom: 1px solid #dcdcde;
 }
 
 .js .control-section:hover .accordion-section-title,
