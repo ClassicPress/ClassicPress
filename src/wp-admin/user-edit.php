@@ -265,10 +265,23 @@ switch ( $action ) {
 					<input type="hidden" name="checkuser_id" value="<?php echo get_current_user_id(); ?>" />
 				</p>
 
+				<?php
+				/**
+				 * Filters the user Personal Options section.
+				 *
+				 * @param bool    Whether to show the personal options fields. Default true.
+				 *
+				 * @since CP-2.0.0
+				 */
+				if ( apply_filters( 'user_profile_personal_options', true ) ) :
+					?>
+
 				<h2><?php _e( 'Personal Options' ); ?></h2>
 
 				<table class="form-table" role="presentation">
-					<?php if ( ! ( IS_PROFILE_PAGE && ! $user_can_edit ) ) : ?>
+					<?php
+					if ( ! ( IS_PROFILE_PAGE && ! $user_can_edit ) ) :
+						?>
 						<tr class="user-rich-editing-wrap">
 							<th scope="row"><?php _e( 'Visual Editor' ); ?></th>
 							<td>
@@ -395,7 +408,9 @@ switch ( $action ) {
 					?>
 
 				</table>
-				<?php
+					<?php
+				endif; // end 'user_profile_personal_options' filte
+
 				if ( IS_PROFILE_PAGE ) {
 					/**
 					 * Fires after the 'Personal Options' settings table on the 'Profile' editing screen.
@@ -546,47 +561,84 @@ switch ( $action ) {
 						</td>
 					</tr>
 
-					<tr class="user-url-wrap">
-						<th><label for="url"><?php _e( 'Website' ); ?></label></th>
-						<td><input type="url" name="url" id="url" value="<?php echo esc_attr( $profile_user->user_url ); ?>" class="regular-text code" /></td>
-					</tr>
+					<?php
+					/*
+					 * Filters the user Contact Methods section.
+					 *
+					 * @param bool    Whether to show the contact methods fields. Default true.
+					 *
+					 * @since CP-2.0.0
+					 */
+					if ( apply_filters( 'user_profile_contact_methods', true ) ) :
+						?>
 
-					<?php foreach ( wp_get_user_contact_methods( $profile_user ) as $name => $desc ) : ?>
-					<tr class="user-<?php echo $name; ?>-wrap">
-						<th>
-							<label for="<?php echo $name; ?>">
+						<tr class="user-url-wrap">
+							<th><label for="url"><?php _e( 'Website' ); ?></label></th>
+							<td><input type="url" name="url" id="url" value="<?php echo esc_attr( $profile_user->user_url ); ?>" class="regular-text code" /></td>
+						</tr>
+
+						<?php foreach ( wp_get_user_contact_methods( $profile_user ) as $name => $desc ) : ?>
+							<tr class="user-<?php echo $name; ?>-wrap">
+								<th>
+									<label for="<?php echo $name; ?>">
+									<?php
+									/**
+									 * Filters a user contactmethod label.
+									 *
+									 * The dynamic portion of the hook name, `$name`, refers to
+									 * each of the keys in the contact methods array.
+									 *
+									 * @since 2.9.0
+									 *
+									 * @param string $desc The translatable label for the contact method.
+									 */
+									echo apply_filters( "user_{$name}_label", $desc );
+									?>
+									</label>
+								</th>
+								<td>
+									<input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $profile_user->$name ); ?>" class="regular-text" />
+								</td>
+							</tr>
+
 							<?php
-							/**
-							 * Filters a user contactmethod label.
-							 *
-							 * The dynamic portion of the hook name, `$name`, refers to
-							 * each of the keys in the contact methods array.
-							 *
-							 * @since 2.9.0
-							 *
-							 * @param string $desc The translatable label for the contact method.
-							 */
-							echo apply_filters( "user_{$name}_label", $desc );
-							?>
-							</label>
-						</th>
-						<td>
-							<input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $profile_user->$name ); ?>" class="regular-text" />
-						</td>
-					</tr>
-					<?php endforeach; ?>
+						endforeach;
+					endif; // end 'user_profile_contact_methods' filter
+					?>
+
 				</table>
 
-				<h2><?php IS_PROFILE_PAGE ? _e( 'About Yourself' ) : _e( 'About the user' ); ?></h2>
+				<?php
+				/**
+				* Filters the user About Yourself section.
+				*
+				* @param bool    Whether to show the about yourself fields. Default true.
+				* @since CP 2.0.0
+				*/
+				if ( apply_filters( 'user_profile_about_yourself', true ) || get_option( 'show_avatars' ) ) {
+					echo '<h2>';
+					IS_PROFILE_PAGE ? _e( 'About Yourself' ) : _e( 'About the user' );
+					echo '</h2>';
+				}
+				?>
 
 				<table class="form-table" role="presentation">
-					<tr class="user-description-wrap">
-						<th><label for="description"><?php _e( 'Biographical Info' ); ?></label></th>
-						<td><textarea name="description" id="description" rows="5" cols="30"><?php echo $profile_user->description; // textarea_escaped ?></textarea>
-						<p class="description"><?php _e( 'Share a little biographical information to fill out your profile. This may be shown publicly.' ); ?></p></td>
-					</tr>
 
-					<?php if ( get_option( 'show_avatars' ) ) : ?>
+					<?php
+					if ( apply_filters( 'user_profile_about_yourself', true ) ) :
+						?>
+
+						<tr class="user-description-wrap">
+							<th><label for="description"><?php _e( 'Biographical Info' ); ?></label></th>
+							<td><textarea name="description" id="description" rows="5" cols="30"><?php echo $profile_user->description; // textarea_escaped ?></textarea>
+							<p class="description"><?php _e( 'Share a little biographical information to fill out your profile. This may be shown publicly.' ); ?></p></td>
+						</tr>
+
+						<?php
+					endif; // end 'user_profile_about_yourself' filter
+
+					if ( get_option( 'show_avatars' ) ) :
+						?>
 						<tr class="user-profile-picture">
 							<th><?php _e( 'Profile Picture' ); ?></th>
 							<td>
