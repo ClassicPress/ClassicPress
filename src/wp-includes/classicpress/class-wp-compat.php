@@ -18,22 +18,21 @@ class WP_Compat {
 
 		add_action( 'update_option_blocks_compatibility_level', array( $this, 'purge_options' ), 10, 2 );
 
-		if ( 0 === self::$blocks_compatibility_level ) {
-			return;
-		}
-
 		$this->define_polyfills();
 
 		if ( 1 === self::$blocks_compatibility_level ) {
 			return;
 		}
 
-		// Define hooks to be used to warn users
+		// Define hooks to be used to warn users.
 		add_action( 'after_plugin_row', array( $this, 'using_block_function_row' ), 10, 2 );
 		add_action( 'upgrader_process_complete', array( $this, 'update_extensions_using_blocks' ), 10, 2 );
 		add_action( 'delete_plugin', array( $this, 'delete_plugins_using_blocks' ), 10, 1 );
 		add_action( 'admin_notices', array( $this, 'using_block_function_theme' ), 10, 0 );
 		add_action( 'after_switch_theme', array( $this, 'delete_themes_using_blocks' ), 10, 0 );
+
+		// ClassicPress Site Health block compatibility debug.
+		require_once ABSPATH . WPINC . '/classicpress/class-cp-debug-compat.php';
 	}
 
 	public function purge_options( $old_value, $value ) {
