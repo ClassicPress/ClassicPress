@@ -2035,6 +2035,19 @@ html.wp-toolbar {
 	box-sizing: border-box;
 }
 
+.postbox-container summary {
+	font-size: 14px;
+	font-weight: 600;
+	padding: 8px 12px;
+	margin: 0;
+	line-height: 1.4;
+	border-bottom: 1px solid #c3c4c7;
+}
+
+.postbox-container .handle-actions {
+	float: right;
+}
+
 #wpbody-content .metabox-holder {
 	padding-top: 10px;
 }
@@ -2043,6 +2056,31 @@ html.wp-toolbar {
 	/* The jQuery UI Sortables need some initial height to work properly. */
 	min-height: 1px;
 	position: relative;
+}
+
+/* Replace default marker in details element */
+details summary > * {
+	display: inline;
+}
+
+.metabox-holder details > summary {
+	list-style: none;
+	margin-top: -0.3em !important;
+}
+
+/* Addresses Safari issue, see v2 PR#217 */
+.metabox-holder details > summary::-webkit-details-marker {
+	display: none;
+}
+
+.metabox-holder details > summary::before {
+	content: '\25B8';
+	font-size: 1.5em;
+	cursor: pointer;
+}
+
+.metabox-holder details[open] > summary::before {
+	content: '\25BE';
 }
 
 #post-body-content {
@@ -2363,9 +2401,19 @@ h1.nav-tab-wrapper, /* Back-compat for pre-4.4 */
 }
 
 /* Back-compat for nav-menus screen */
+.nav-menus-php .metabox-holder details > summary {
+	line-height: 1.4;
+	padding-top: 6px;
+	margin-top: -0 !important;
+}
+
+.nav-menus-php .metabox-holder details > summary::before {
+	margin-right: 0.2em
+}
+
 .nav-menus-php .metabox-holder h3 {
-	padding: 10px 10px 11px 14px;
-	line-height: 1.5;
+	font-size: 1.1em;
+	font-weight: 500;
 }
 
 #templateside ul li a {

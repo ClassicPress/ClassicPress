@@ -643,9 +643,7 @@ form#tags-filter {
 	text-indent: 0;
 }
 
-#poststuff h3.hndle, /* Back-compat for pre-4.4 */
-#poststuff .stuffbox > h3, /* Back-compat for pre-4.4 */
-#poststuff h2 {
+#poststuff summary {
 	font-size: 14px;
 	padding: 8px 12px;
 	margin: 0;

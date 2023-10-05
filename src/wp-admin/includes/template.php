@@ -1266,12 +1266,19 @@ function do_meta_boxes( $screen, $context, $data_object ) {
 					}
 
 					$i++;
-					// get_hidden_meta_boxes() doesn't apply in the block editor.
-					$hidden_class = ( in_array( $box['id'], $hidden, true ) ) ? ' hide-if-js' : '';
-					echo '<div id="' . $box['id'] . '" class="postbox ' . postbox_classes( $box['id'], $page ) . $hidden_class . '" ' . '>' . "\n";
+					/*
+					 * Uses details and summary tags instead of JavaScript
+					 * to toggle metaboxes and dashboard widgets open and closed
+					 *
+					 * @since CP-2.0.0
+					 */
+					$hidden_class   = ( in_array( $box['id'], $hidden, true ) ) ? ' hide-if-js' : '';
+					$open_attribute = postbox_classes( $box['id'], $page ) ? '' : ' open';
+					echo '<details id="' . $box['id'] . '" class="postbox' . $hidden_class . '"' . $open_attribute . '>' . "\n";
 
-					echo '<div class="postbox-header">';
+					echo '<summary>';
 					echo '<h2 class="hndle">';
+
 					if ( 'dashboard_php_nag' === $box['id'] ) {
 						echo '<span aria-hidden="true" class="dashicons dashicons-warning"></span>';
 						echo '<span class="screen-reader-text">' .
@@ -1280,7 +1287,6 @@ function do_meta_boxes( $screen, $context, $data_object ) {
 						' </span>';
 					}
 					echo $box['title'];
-					echo "</h2>\n";
 
 					if ( 'dashboard_browser_nag' !== $box['id'] ) {
 						$widget_title = $box['title'];
@@ -1291,7 +1297,7 @@ function do_meta_boxes( $screen, $context, $data_object ) {
 							unset( $box['args']['__widget_basename'] );
 						}
 
-						echo '<div class="handle-actions hide-if-no-js">';
+						echo '<span class="handle-actions hide-if-no-js">';
 
 						echo '<button type="button" class="handle-order-higher" aria-disabled="false" aria-describedby="' . $box['id'] . '-handle-order-higher-description">';
 						echo '<span class="screen-reader-text">' .
@@ -1319,23 +1325,16 @@ function do_meta_boxes( $screen, $context, $data_object ) {
 							$widget_title
 						) . '</span>';
 
-						echo '<button type="button" class="handlediv" aria-expanded="true">';
-						echo '<span class="screen-reader-text">' . sprintf(
-							/* translators: %s: Hidden accessibility text. Meta box title. */
-							__( 'Toggle panel: %s' ),
-							$widget_title
-						) . '</span>';
-						echo '<span class="toggle-indicator" aria-hidden="true"></span>';
-						echo '</button>';
-
-						echo '</div>';
+						echo '</span>';
 					}
-					echo '</div>';
 
-					echo '<div class="inside">' . "\n";
+					echo '</h2>';
+					echo "</summary>\n";
+
+					echo '<div class="inside" style="display:block">' . "\n";
 					call_user_func( $box['callback'], $data_object, $box );
 					echo "</div>\n";
-					echo "</div>\n";
+					echo "</details>\n";
 				}
 			}
 		}
@@ -1450,14 +1449,10 @@ function do_accordion_sections( $screen, $context, $data_object ) {
 					?>
 					<li class="control-section">
 						<details class="accordion-section open <?php echo esc_attr( $box['id'] ); ?>" id="<?php echo esc_attr( $box['id'] ); ?>">
-							<summary class="accordion-section-title hndle" tabindex="0">
-								<?php echo esc_html( $box['title'] ); ?>
-								<span class="screen-reader-text">
-									<?php
-									/* translators: Hidden accessibility text. */
-									_e( 'Press return or enter to open this section' );
-									?>
-								</span>
+							<summary class="accordion-section-title hndle">
+								<h3>
+									<?php echo esc_html( $box['title'] ); ?>
+								</h3>
 							</summary>
 							<div class="accordion-section-content <?php postbox_classes( $box['id'], $page ); ?>">
 								<div class="inside">

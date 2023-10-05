@@ -934,6 +934,8 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 						that._createTrPlaceholder( that.currentItem, element );
 					} else if ( nodeName === "img" ) {
 						element.attr( "src", that.currentItem.attr( "src" ) );
+					} else if ( nodeName === "details" ) {
+						element = $( "<summary>", that.document[ 0 ] );
 					}
 
 					if ( !className ) {

@@ -2090,10 +2090,10 @@ $( function( $ ) {
 	}
 
 	$window.on( 'resize.wp-fire-once', fireOnce );
-}());
+})();
 
 // Make Windows 8 devices play along nicely.
-(function(){
+( function() {
 	if ( '-ms-user-select' in document.documentElement.style && navigator.userAgent.match(/IEMobile\/10\.0/) ) {
 		var msViewportStyle = document.createElement( 'style' );
 		msViewportStyle.appendChild(
@@ -2104,3 +2104,21 @@ $( function( $ ) {
 })();
 
 }( jQuery, window ));
+
+// Address Safari bug with details element
+( function() {
+	document.querySelectorAll( 'details' ).forEach( function(details) {
+		details.addEventListener( 'toggle', function() {
+			if ( details.hasAttribute( 'open' ) ) {
+				details.querySelectorAll( '[inert]' ).forEach( function(inert) {
+					inert.removeAttribute( 'inert' );
+				});
+			} else {
+				var i, n;
+				for ( i = 1, n = details.children.length; i < n; i++ ) { // ignore first child (summary)
+					details.children[i].setAttribute( 'inert', 'inert' );
+				}
+			}
+		});
+	});
+})();
