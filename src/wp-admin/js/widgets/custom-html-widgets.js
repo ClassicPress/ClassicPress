@@ -294,13 +294,13 @@ wp.customHtmlWidgets = ( function( $ ) {
 		var widgetForm, idBase, widgetControl, widgetId, animatedCheckDelay = 50, renderWhenAnimationDone, fieldContainer, syncContainer;
 		widgetForm = widgetContainer.find( '> .widget-inside > .form, > .widget-inside > form' ); // Note: '.form' appears in the customizer, whereas 'form' on the widgets admin screen.
 
-		idBase = widgetForm.find( '> .id_base' ).val();
+		idBase = widgetContainer.find( '.id_base' ).val();
 		if ( -1 === component.idBases.indexOf( idBase ) ) {
 			return;
 		}
 
 		// Prevent initializing already-added widgets.
-		widgetId = widgetForm.find( '.widget-id' ).val();
+		widgetId = widgetContainer.find( '.widget-id' ).val();
 		if ( component.widgetControls[ widgetId ] ) {
 			return;
 		}
@@ -333,7 +333,7 @@ wp.customHtmlWidgets = ( function( $ ) {
 		 * This ensures that the textarea is visible and the editor can be initialized.
 		 */
 		renderWhenAnimationDone = function() {
-			if ( ! ( wp.customize ? widgetContainer.parent().hasClass( 'expanded' ) : widgetContainer.hasClass( 'open' ) ) ) { // Core merge: The wp.customize condition can be eliminated with this change being in core: https://github.com/xwp/wordpress-develop/pull/247/commits/5322387d
+			if ( ! ( widgetContainer.children( 'details' )[0].hasAttribute( 'open' ) ) ) {
 				setTimeout( renderWhenAnimationDone, animatedCheckDelay );
 			} else {
 				widgetControl.initializeEditor();
@@ -350,13 +350,13 @@ wp.customHtmlWidgets = ( function( $ ) {
 	 * @return {void}
 	 */
 	component.setupAccessibleMode = function setupAccessibleMode() {
-		var widgetForm, idBase, widgetControl, fieldContainer, syncContainer;
+		var widgetForm, widgetContainer, idBase, widgetControl, fieldContainer, syncContainer;
 		widgetForm = $( '.editwidget > form' );
 		if ( 0 === widgetForm.length ) {
 			return;
 		}
 
-		idBase = widgetForm.find( '.id_base' ).val();
+		idBase = widgetContainer.find( '.id_base' ).val();
 		if ( -1 === component.idBases.indexOf( idBase ) ) {
 			return;
 		}
@@ -390,12 +390,12 @@ wp.customHtmlWidgets = ( function( $ ) {
 		var widgetForm, widgetId, widgetControl, idBase;
 		widgetForm = widgetContainer.find( '> .widget-inside > .form, > .widget-inside > form' );
 
-		idBase = widgetForm.find( '> .id_base' ).val();
+		idBase = widgetContainer.find( '.id_base' ).val();
 		if ( -1 === component.idBases.indexOf( idBase ) ) {
 			return;
 		}
 
-		widgetId = widgetForm.find( '> .widget-id' ).val();
+		widgetId = widgetContainer.find( '.widget-id' ).val();
 		widgetControl = component.widgetControls[ widgetId ];
 		if ( ! widgetControl ) {
 			return;
@@ -439,7 +439,7 @@ wp.customHtmlWidgets = ( function( $ ) {
 			if ( 'widgets' !== window.pagenow ) {
 				return;
 			}
-			widgetContainers = $( '.widgets-holder-wrap:not(#available-widgets)' ).find( 'div.widget' );
+			widgetContainers = $( '.widgets-holder-wrap:not(#available-widgets)' ).find( 'li.widget' );
 			widgetContainers.one( 'click.toggle-widget-expanded', function toggleWidgetExpanded() {
 				var widgetContainer = $( this );
 				component.handleWidgetAdded( new jQuery.Event( 'widget-added' ), widgetContainer );

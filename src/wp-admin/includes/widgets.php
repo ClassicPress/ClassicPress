@@ -87,36 +87,25 @@ function wp_list_widget_controls( $sidebar, $sidebar_name = '' ) {
 
 	$description = wp_sidebar_description( $sidebar );
 
-	echo '<div id="' . esc_attr( $sidebar ) . '" class="widgets-sortables">';
+	echo '<details>';
 
-	if ( $sidebar_name ) {
-		$add_to = sprintf(
-			/* translators: %s: Widgets sidebar name. */
-			__( 'Add to: %s' ),
-			$sidebar_name
-		);
-		?>
-		<div class="sidebar-name" data-add-to="<?php echo esc_attr( $add_to ); ?>">
-			<button type="button" class="handlediv hide-if-no-js" aria-expanded="true">
-				<span class="screen-reader-text"><?php echo esc_html( $sidebar_name ); ?></span>
-				<span class="toggle-indicator" aria-hidden="true"></span>
-			</button>
-			<h2><?php echo esc_html( $sidebar_name ); ?> <span class="spinner"></span></h2>
-		</div>
-		<?php
-	}
+	echo '<summary class="sidebar-name"><h2>' . esc_html( $sidebar_name ) . '</h2></summary>';
 
 	if ( ! empty( $description ) ) {
-		?>
-		<div class="sidebar-description">
-			<p class="description"><?php echo $description; ?></p>
-		</div>
-		<?php
+
+		echo '<div class="sidebar-description">';
+		echo '<p class="description">' . $description . '</p>';
+		echo '</div>';
+
 	}
+
+	echo '<ul id="' . esc_attr( $sidebar ) . '" class="widgets-sortables">';
 
 	dynamic_sidebar( $sidebar );
 
-	echo '</div>';
+	echo '</ul>';
+
+	echo '</details>';
 }
 
 /**
@@ -130,16 +119,16 @@ function wp_list_widget_controls( $sidebar, $sidebar_name = '' ) {
  * @return array
  */
 function wp_list_widget_controls_dynamic_sidebar( $params ) {
-	global $wp_registered_widgets;
+	global $wp_registered_widgets, $pagenow;
 	static $i = 0;
 	$i++;
 
 	$widget_id = $params[0]['widget_id'];
 	$id        = isset( $params[0]['_temp_id'] ) ? $params[0]['_temp_id'] : $widget_id;
-	$hidden    = isset( $params[0]['_hide'] ) ? ' style="display:none;"' : '';
+	$tag       = $pagenow === 'customize.php' ? 'div' : 'li'; // use correct semantic tag according to whether in customizer or not
 
-	$params[0]['before_widget'] = "<div id='widget-{$i}_{$id}' class='widget'$hidden>";
-	$params[0]['after_widget']  = '</div>';
+	$params[0]['before_widget'] = "<{$tag} id='widget-{$i}_{$id}' class='widget'>";
+	$params[0]['after_widget']  = '</' . $tag . '>';
 	$params[0]['before_title']  = '%BEG_OF_TITLE%'; // Deprecated.
 	$params[0]['after_title']   = '%END_OF_TITLE%'; // Deprecated.
 
@@ -240,31 +229,15 @@ function wp_widget_control( $sidebar_args ) {
 
 	echo $sidebar_args['before_widget'];
 	?>
-	<div class="widget-top">
-	<div class="widget-title-action">
-		<button type="button" class="widget-action hide-if-no-js" aria-expanded="false">
-			<span class="screen-reader-text edit">
-				<?php
-				/* translators: Hidden accessibility text. %s: Widget title. */
-				printf( __( 'Edit widget: %s' ), $widget_title );
-				?>
-			</span>
-			<span class="screen-reader-text add">
-				<?php
-				/* translators: Hidden accessibility text. %s: Widget title. */
-				printf( __( 'Add widget: %s' ), $widget_title );
-				?>
-			</span>
-			<span class="toggle-indicator" aria-hidden="true"></span>
-		</button>
-		<a class="widget-control-edit hide-if-js" href="<?php echo esc_url( add_query_arg( $query_arg ) ); ?>">
-			<span class="edit"><?php _ex( 'Edit', 'widget' ); ?></span>
-			<span class="add"><?php _ex( 'Add', 'widget' ); ?></span>
-			<span class="screen-reader-text"><?php echo $widget_title; ?></span>
-		</a>
-	</div>
-	<div class="widget-title"><h3><?php echo $widget_title; ?><span class="in-widget-title"></span></h3></div>
-	</div>
+	<details class="widget-top">
+		<summary class="widget-title"><h3><?php echo $widget_title; ?></h3></summary>
+		<div class="widget-title-action">
+			<a class="widget-control-edit hide-if-js" href="<?php echo esc_url( add_query_arg( $query_arg ) ); ?>">
+				<span class="edit"><?php _ex( 'Edit', 'widget' ); ?></span>
+				<span class="add"><?php _ex( 'Add', 'widget' ); ?></span>
+				<span class="screen-reader-text"><?php echo $widget_title; ?></span>
+			</a>
+		</div>
 
 	<div class="widget-inside">
 	<?php echo $before_form; ?>
@@ -282,13 +255,13 @@ function wp_widget_control( $sidebar_args ) {
 	}
 	?>
 	<?php echo $after_widget_content; ?>
-	<input type="hidden" name="widget-id" class="widget-id" value="<?php echo esc_attr( $id_format ); ?>" />
-	<input type="hidden" name="id_base" class="id_base" value="<?php echo esc_attr( $id_base ); ?>" />
-	<input type="hidden" name="widget-width" class="widget-width" value="<?php echo esc_attr( $width ); ?>" />
-	<input type="hidden" name="widget-height" class="widget-height" value="<?php echo esc_attr( $height ); ?>" />
-	<input type="hidden" name="widget_number" class="widget_number" value="<?php echo esc_attr( $widget_number ); ?>" />
-	<input type="hidden" name="multi_number" class="multi_number" value="<?php echo esc_attr( $multi_number ); ?>" />
-	<input type="hidden" name="add_new" class="add_new" value="<?php echo esc_attr( $add_new ); ?>" />
+	<input type="hidden" name="widget-id" class="widget-id" value="<?php echo esc_attr( $id_format ); ?>">
+	<input type="hidden" name="id_base" class="id_base" value="<?php echo esc_attr( $id_base ); ?>">
+	<input type="hidden" name="widget-width" class="widget-width" value="<?php echo esc_attr( $width ); ?>">
+	<input type="hidden" name="widget-height" class="widget-height" value="<?php echo esc_attr( $height ); ?>">
+	<input type="hidden" name="widget_number" class="widget_number" value="<?php echo esc_attr( $widget_number ); ?>">
+	<input type="hidden" name="multi_number" class="multi_number" value="<?php echo esc_attr( $multi_number ); ?>">
+	<input type="hidden" name="add_new" class="add_new" value="<?php echo esc_attr( $add_new ); ?>">
 
 	<div class="widget-control-actions">
 		<div class="alignleft">
@@ -301,10 +274,12 @@ function wp_widget_control( $sidebar_args ) {
 			<?php submit_button( __( 'Save' ), 'primary widget-control-save right', 'savewidget', false, array( 'id' => 'widget-' . esc_attr( $id_format ) . '-savewidget' ) ); ?>
 			<span class="spinner"></span>
 		</div>
-		<br class="clear" />
+		<br class="clear">
 	</div>
 	<?php echo $after_form; ?>
 	</div>
+
+	</details>
 
 	<div class="widget-description">
 	<?php

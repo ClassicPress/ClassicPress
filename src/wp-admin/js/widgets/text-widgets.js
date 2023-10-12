@@ -160,8 +160,6 @@ wp.textWidgets = ( function( $ ) {
 				if ( ! control.fields.text.is( document.activeElement ) ) {
 					control.fields.text.val( syncInput.val() );
 				}
-			} else if ( control.editor && ! control.editorFocused && syncInput.val() !== control.fields.text.val() ) {
-				control.editor.setContent( wp.oldEditor.autop( syncInput.val() ) );
 			}
 		},
 
@@ -237,18 +235,12 @@ wp.textWidgets = ( function( $ ) {
 
 				// The user has disabled TinyMCE.
 				if ( typeof window.tinymce === 'undefined' ) {
-					wp.oldEditor.initialize( id, {
-						quicktags: true,
-						mediaButtons: true
-					});
-
 					return;
 				}
 
 				// Destroy any existing editor so that it can be re-initialized after a widget-updated event.
 				if ( tinymce.get( id ) ) {
 					restoreTextMode = tinymce.get( id ).isHidden();
-					wp.oldEditor.remove( id );
 				}
 
 				// Add or enable the `wpview` plugin.
@@ -261,14 +253,6 @@ wp.textWidgets = ( function( $ ) {
 						init.plugins += ',wpview';
 					}
 				} );
-
-				wp.oldEditor.initialize( id, {
-					tinymce: {
-						wpautop: true
-					},
-					quicktags: true,
-					mediaButtons: true
-				});
 
 				/**
 				 * Show a pointer, focus on dismiss, and speak the contents for a11y.
@@ -383,7 +367,7 @@ wp.textWidgets = ( function( $ ) {
 		var widgetForm, idBase, widgetControl, widgetId, animatedCheckDelay = 50, renderWhenAnimationDone, fieldContainer, syncContainer;
 		widgetForm = widgetContainer.find( '> .widget-inside > .form, > .widget-inside > form' ); // Note: '.form' appears in the customizer, whereas 'form' on the widgets admin screen.
 
-		idBase = widgetForm.find( '> .id_base' ).val();
+		idBase = widgetContainer.find( '.id_base' ).val();
 		if ( -1 === component.idBases.indexOf( idBase ) ) {
 			return;
 		}
@@ -391,11 +375,6 @@ wp.textWidgets = ( function( $ ) {
 		// Prevent initializing already-added widgets.
 		widgetId = widgetForm.find( '.widget-id' ).val();
 		if ( component.widgetControls[ widgetId ] ) {
-			return;
-		}
-
-		// Bypass using TinyMCE when widget is in legacy mode.
-		if ( ! widgetForm.find( '.visual' ).val() ) {
 			return;
 		}
 
@@ -445,19 +424,14 @@ wp.textWidgets = ( function( $ ) {
 	 * @return {void}
 	 */
 	component.setupAccessibleMode = function setupAccessibleMode() {
-		var widgetForm, idBase, widgetControl, fieldContainer, syncContainer;
+		var widgetForm, widgetContainer, idBase, widgetControl, fieldContainer, syncContainer;
 		widgetForm = $( '.editwidget > form' );
 		if ( 0 === widgetForm.length ) {
 			return;
 		}
 
-		idBase = widgetForm.find( '.id_base' ).val();
+		idBase = widgetContainer.find( '.id_base' ).val();
 		if ( -1 === component.idBases.indexOf( idBase ) ) {
-			return;
-		}
-
-		// Bypass using TinyMCE when widget is in legacy mode.
-		if ( ! widgetForm.find( '.visual' ).val() ) {
 			return;
 		}
 
@@ -490,12 +464,12 @@ wp.textWidgets = ( function( $ ) {
 		var widgetForm, widgetId, widgetControl, idBase;
 		widgetForm = widgetContainer.find( '> .widget-inside > .form, > .widget-inside > form' );
 
-		idBase = widgetForm.find( '> .id_base' ).val();
+		idBase = widgetContainer.find( '.id_base' ).val();
 		if ( -1 === component.idBases.indexOf( idBase ) ) {
 			return;
 		}
 
-		widgetId = widgetForm.find( '> .widget-id' ).val();
+		widgetId = widgetForm.find( '.widget-id' ).val();
 		widgetControl = component.widgetControls[ widgetId ];
 		if ( ! widgetControl ) {
 			return;
@@ -535,7 +509,7 @@ wp.textWidgets = ( function( $ ) {
 			if ( 'widgets' !== window.pagenow ) {
 				return;
 			}
-			widgetContainers = $( '.widgets-holder-wrap:not(#available-widgets)' ).find( 'div.widget' );
+			widgetContainers = $( '.widgets-holder-wrap:not(#available-widgets)' ).find( 'li.widget' );
 			widgetContainers.one( 'click.toggle-widget-expanded', function toggleWidgetExpanded() {
 				var widgetContainer = $( this );
 				component.handleWidgetAdded( new jQuery.Event( 'widget-added' ), widgetContainer );

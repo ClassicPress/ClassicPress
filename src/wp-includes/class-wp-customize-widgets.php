@@ -867,14 +867,14 @@ final class WP_Customize_Widgets {
 					?>
 				</p>
 			</div>
-			<div id="available-widgets-list">
+			<ul id="available-widgets-list">
 			<?php foreach ( $this->get_available_widgets() as $available_widget ) : ?>
-				<div id="widget-tpl-<?php echo esc_attr( $available_widget['id'] ); ?>" data-widget-id="<?php echo esc_attr( $available_widget['id'] ); ?>" class="widget-tpl <?php echo esc_attr( $available_widget['id'] ); ?>" tabindex="0">
+				<li id="widget-tpl-<?php echo esc_attr( $available_widget['id'] ); ?>" data-widget-id="<?php echo esc_attr( $available_widget['id'] ); ?>" class="widget-tpl <?php echo esc_attr( $available_widget['id'] ); ?>" tabindex="0">
 					<?php echo $available_widget['control_tpl']; ?>
-				</div>
+				</li>
 			<?php endforeach; ?>
 			<p class="no-widgets-found-message"><?php _e( 'No widgets found.' ); ?></p>
-			</div><!-- #available-widgets-list -->
+			</ul><!-- #available-widgets-list -->
 		</div><!-- #available-widgets -->
 		</div><!-- #widgets-left -->
 		<?php

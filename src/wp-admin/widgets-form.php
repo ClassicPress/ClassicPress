@@ -342,12 +342,12 @@ if ( isset( $_GET['editwidget'] ) && $_GET['editwidget'] ) {
 		</div>
 		<div class="alignright">
 			<?php submit_button( __( 'Save Widget' ), 'primary alignright', 'savewidget', false ); ?>
-			<input type="hidden" name="widget-id" class="widget-id" value="<?php echo esc_attr( $widget_id ); ?>" />
-			<input type="hidden" name="id_base" class="id_base" value="<?php echo esc_attr( $id_base ); ?>" />
-			<input type="hidden" name="multi_number" class="multi_number" value="<?php echo esc_attr( $multi_number ); ?>" />
+			<input type="hidden" name="widget-id" class="widget-id" value="<?php echo esc_attr( $widget_id ); ?>">
+			<input type="hidden" name="id_base" class="id_base" value="<?php echo esc_attr( $id_base ); ?>">
+			<input type="hidden" name="multi_number" class="multi_number" value="<?php echo esc_attr( $multi_number ); ?>">
 			<?php wp_nonce_field( "save-delete-widget-$widget_id" ); ?>
 		</div>
-		<br class="clear" />
+		<br class="clear">
 	</div>
 
 	</form>
@@ -421,28 +421,19 @@ do_action( 'widgets_admin_page' );
 <div class="widget-liquid-left">
 <div id="widgets-left">
 	<div id="available-widgets" class="widgets-holder-wrap">
-		<div class="sidebar-name">
-			<button type="button" class="handlediv hide-if-no-js" aria-expanded="true">
-				<span class="screen-reader-text">
-					<?php
-					/* translators: Hidden accessibility text. */
-					_e( 'Available Widgets' );
-					?>
-				</span>
-				<span class="toggle-indicator" aria-hidden="true"></span>
-			</button>
-			<h2><?php _e( 'Available Widgets' ); ?> <span id="removing-widget"><?php _ex( 'Deactivate', 'removing-widget' ); ?> <span></span></span></h2>
-		</div>
-		<div class="widget-holder">
-			<div class="sidebar-description">
-				<p class="description"><?php _e( 'To activate a widget drag it to a sidebar or click on it. To deactivate a widget and delete its settings, drag it back.' ); ?></p>
+		<details open>
+			<summary class="sidebar-name"><h2><?php _e( 'Available Widgets' ); ?></h2></summary>
+			<div class="widget-holder">
+				<div class="sidebar-description">
+					<p class="description"><?php _e( 'To activate a widget drag it to a sidebar or click on it. To deactivate a widget and delete its settings, drag it back.' ); ?></p>
+				</div>
+				<ul id="widget-list">
+					<?php wp_list_widgets(); ?>
+				</ul>
+				<br class="clear">
 			</div>
-			<div id="widget-list">
-				<?php wp_list_widgets(); ?>
-			</div>
-			<br class='clear' />
-		</div>
-		<br class="clear" />
+		</details>
+		<br class="clear">
 	</div>
 
 <?php
@@ -520,10 +511,6 @@ foreach ( $theme_sidebars as $sidebar => $registered_sidebar ) {
 		$wrap_class .= ' sidebar-' . $registered_sidebar['class'];
 	}
 
-	if ( $i > 0 ) {
-		$wrap_class .= ' closed';
-	}
-
 	if ( $split && $i === $split ) {
 		?>
 		</div><div class="sidebars-column-2">
@@ -549,7 +536,7 @@ foreach ( $theme_sidebars as $sidebar => $registered_sidebar ) {
 <form method="post">
 <?php wp_nonce_field( 'save-sidebar-widgets', '_wpnonce_widgets', false ); ?>
 </form>
-<br class="clear" />
+<br class="clear">
 </div>
 
 <div class="widgets-chooser">

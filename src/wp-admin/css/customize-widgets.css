@@ -83,7 +83,8 @@
 
 .widget-inside {
 	padding: 1px 10px 10px;
-	border-top: none;
+	border: 0;
+	border-top: 1px solid #c3c4c7;
 	line-height: 1.23076923;
 }
 
@@ -249,11 +250,11 @@
 	border-left: 4px solid #2271b1;
 }
 
-#customize-controls .widget-title h3 {
+#customize-controls summary.widget-title {
 	font-size: 1em;
 }
 
-#available-widgets .widget-title h3 {
+#available-widgets summary.widget-title {
 	padding: 0 0 5px;
 	font-size: 14px;
 }
@@ -289,16 +290,20 @@ body.adding-widget #customize-preview {
 
 #available-widgets .widget-title {
 	position: relative;
+	list-style: none;
+	padding: 10px 0;
+}
+
+/* Fix for Safari */
+#available-widgets summary::-webkit-details-marker {
+	display: none;
 }
 
 #available-widgets .widget-title:before {
 	content: "\f132";
-	position: absolute;
-	top: -3px;
-	right: 100%;
+	position: inline;
+	vertical-align: sub;
 	margin-right: 20px;
-	width: 20px;
-	height: 20px;
 	color: #2c3338;
 	font: normal 20px/1 dashicons;
 	text-align: center;

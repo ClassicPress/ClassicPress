@@ -1125,8 +1125,8 @@ wp.mediaWidgets = ( function( $ ) {
 	component.handleWidgetAdded = function handleWidgetAdded( event, widgetContainer ) {
 		var fieldContainer, syncContainer, widgetForm, idBase, ControlConstructor, ModelConstructor, modelAttributes, widgetControl, widgetModel, widgetId, animatedCheckDelay = 50, renderWhenAnimationDone;
 		widgetForm = widgetContainer.find( '> .widget-inside > .form, > .widget-inside > form' ); // Note: '.form' appears in the customizer, whereas 'form' on the widgets admin screen.
-		idBase = widgetForm.find( '> .id_base' ).val();
-		widgetId = widgetForm.find( '> .widget-id' ).val();
+		idBase = widgetContainer.find( '.id_base' ).val();
+		widgetId = widgetContainer.find( '.widget-id' ).val();
 
 		// Prevent initializing already-added widgets.
 		if ( component.widgetControls[ widgetId ] ) {
@@ -1182,7 +1182,7 @@ wp.mediaWidgets = ( function( $ ) {
 		 * can initialize with the proper dimensions.
 		 */
 		renderWhenAnimationDone = function() {
-			if ( ! widgetContainer.hasClass( 'open' ) ) {
+			if ( ! widgetContainer.children( 'details' ).attr( 'open' ) ) {
 				setTimeout( renderWhenAnimationDone, animatedCheckDelay );
 			} else {
 				widgetControl.render();
@@ -1206,13 +1206,13 @@ wp.mediaWidgets = ( function( $ ) {
 	 * @return {void}
 	 */
 	component.setupAccessibleMode = function setupAccessibleMode() {
-		var widgetForm, widgetId, idBase, widgetControl, ControlConstructor, ModelConstructor, modelAttributes, fieldContainer, syncContainer;
+		var widgetForm, widgetId, widgetContainer, idBase, widgetControl, ControlConstructor, ModelConstructor, modelAttributes, fieldContainer, syncContainer;
 		widgetForm = $( '.editwidget > form' );
 		if ( 0 === widgetForm.length ) {
 			return;
 		}
 
-		idBase = widgetForm.find( '.id_base' ).val();
+		idBase = widgetContainer.find( '.id_base' ).val();
 
 		ControlConstructor = component.controlConstructors[ idBase ];
 		if ( ! ControlConstructor ) {
@@ -1262,7 +1262,7 @@ wp.mediaWidgets = ( function( $ ) {
 	component.handleWidgetUpdated = function handleWidgetUpdated( event, widgetContainer ) {
 		var widgetForm, widgetContent, widgetId, widgetControl, attributes = {};
 		widgetForm = widgetContainer.find( '> .widget-inside > .form, > .widget-inside > form' );
-		widgetId = widgetForm.find( '> .widget-id' ).val();
+		widgetId = widgetContainer.find( '.widget-id' ).val();
 
 		widgetControl = component.widgetControls[ widgetId ];
 		if ( ! widgetControl ) {
@@ -1313,7 +1313,7 @@ wp.mediaWidgets = ( function( $ ) {
 			if ( 'widgets' !== window.pagenow ) {
 				return;
 			}
-			widgetContainers = $( '.widgets-holder-wrap:not(#available-widgets)' ).find( 'div.widget' );
+			widgetContainers = $( '.widgets-holder-wrap:not(#available-widgets)' ).find( 'li.widget' );
 			widgetContainers.one( 'click.toggle-widget-expanded', function toggleWidgetExpanded() {
 				var widgetContainer = $( this );
 				component.handleWidgetAdded( new jQuery.Event( 'widget-added' ), widgetContainer );

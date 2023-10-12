@@ -28,9 +28,10 @@
 }
 
 .widget-title h3,
-.widget-title h4 {
+.widget-title h4,
+summary.widget-title {
 	margin: 0;
-	padding: 15px;
+	padding: 12px 15px 15px 10px;
 	font-size: 1em;
 	line-height: 1;
 	overflow: hidden;
@@ -41,12 +42,24 @@
 	user-select: none;
 }
 
+.widget-title h3 {
+	padding-left: 5px;
+}
+
+summary.widget-title::marker,
+summary.widget-title::-webkit-details-marker {
+	font-size: 1.4em;
+	cursor: pointer;
+}
+
 .widgets-holder-wrap .widget-inside {
-	border-top: none;
+	border: 0;
+	border-top: 1px solid #c3c4c7;
 	padding: 1px 15px 15px;
 	line-height: 1.23076923;
 }
 
+#available-widgets .widget-inside,
 .widget.widget-dirty .widget-control-close-wrapper {
 	display: none;
 }
@@ -349,6 +362,20 @@
 	overflow: hidden;
 	white-space: normal;
 	line-height: 1.5;
+	font-size: 1em;
+}
+
+summary.sidebar-name {
+	padding: 15px 15px 15px 7px;
+	color: #1d2327;
+	font-size: 1.3em;
+	font-weight: 600;
+}
+
+summary.sidebar-name::marker,
+summary.sidebar-name::-webkit-details-marker {
+	font-size: 1.2em;
+	cursor: pointer;
 }
 
 .widgets-holder-wrap .description {
@@ -559,6 +586,7 @@ div#widgets-right .closed .widgets-sortables {
 	padding: 0 15px;
 	line-height: 3.30769230;
 	border-left: 1px solid #dcdcde;
+	margin-top: -3.3em;
 }
 
 #widgets-left .widget-control-edit:hover,
@@ -589,6 +617,10 @@ div#widgets-right .closed .widgets-sortables {
 	margin-top: 20px;
 }
 
+#available-widgets .widget-control-actions {
+	display: none;
+}
+
 .js .widgets-holder-wrap.closed .widget,
 .js .widgets-holder-wrap.closed .sidebar-description,
 .js .widgets-holder-wrap.closed .remove-inactive-widgets,
@@ -601,14 +633,14 @@ div#widgets-right .closed .widgets-sortables {
 	display: block;
 }
 
-/* Hide Widget Settings by Default */
-.widget-inside,
+/* Hide Widget Description by Default */
 .widget-description {
 	display: none;
 }
 
 .widget-inside {
 	background: #fff;
+	font-weight: 500;
 }
 
 .widget-inside select {
@@ -634,7 +666,6 @@ div#widgets-right .closed .widgets-sortables {
 .widgets_access .widget-action,
 .widgets_access .handlediv,
 .widgets_access #access-on,
-.widgets_access .widget-holder .description,
 .no-js .widget-holder .description {
 	display: none;
 }
@@ -679,7 +710,7 @@ div#widgets-right .closed .widgets-sortables {
 div#widgets-right .widget-top:hover,
 #widgets-left .widget-top:hover {
 	border-color: #8c8f94;
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .widgets-chooser ul.widgets-chooser-sidebars {
@@ -693,8 +724,9 @@ div#widgets-right .widget-top:hover,
 	display: none;
 }
 
-.widgets-chooser ul {
-	border: 1px solid #c3c4c7;
+#available-widgets .widgets-chooser {
+	display: block;
+	font-weight: 500;
 }
 
 .widgets-chooser li {
@@ -846,7 +878,7 @@ ul.CodeMirror-hints {
 }
 
 @media only screen and (min-width: 1250px) {
-	#widgets-left #available-widgets .widget {
+	#widgets-left #widget-list .widget {
 		width: 49%;
 		float: left;
 	}
@@ -855,7 +887,7 @@ ul.CodeMirror-hints {
 		min-width: 49%;
 	}
 
-	#widgets-left #available-widgets .widget:nth-child(even) {
+	#widgets-left #widget-list .widget:nth-child(even) {
 		float: right;
 	}
 

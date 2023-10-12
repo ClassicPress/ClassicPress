@@ -827,9 +827,9 @@ class Tests_Widgets extends WP_UnitTestCase {
 		$control = ob_get_clean();
 		$this->assertNotEmpty( $control );
 
-		$this->assertStringContainsString( '<div class="widget-top">', $control );
+		$this->assertStringContainsString( '<details class="widget-top">', $control );
 		$this->assertStringContainsString( '<div class="widget-title-action">', $control );
-		$this->assertStringContainsString( '<div class="widget-title">', $control );
+		$this->assertStringContainsString( '<summary class="widget-title">', $control );
 		$this->assertStringContainsString( '<form method="post">', $control );
 		$this->assertStringContainsString( '<div class="widget-content">', $control );
 		$this->assertStringContainsString( '<input class="widefat"', $control );

@@ -539,6 +539,7 @@
 					}
 				} );
 			}
+			control.embedWidgetContent();
 		},
 
 		/**
@@ -700,19 +701,16 @@
 		_setupControlToggle: function() {
 			var self = this, $closeBtn;
 
-			this.container.find( '.widget-top' ).on( 'click', function( e ) {
-				e.preventDefault();
+			this.container.find( '.widget-top' ).on( 'click', function() {
 				var sidebarWidgetsControl = self.getSidebarWidgetsControl();
 				if ( sidebarWidgetsControl.isReordering ) {
 					return;
 				}
-				self.expanded( ! self.expanded() );
 			} );
 
 			$closeBtn = this.container.find( '.widget-control-close' );
 			$closeBtn.on( 'click', function() {
-				self.collapse();
-				self.container.find( '.widget-top .widget-action:first' ).focus(); // Keyboard accessibility.
+				$closeBtn.closest('details').removeAttr('open').children('summary').focus(); // Keyboard accessibility.
 			} );
 		},
 
@@ -1402,7 +1400,7 @@
 		 * @param {Object} args  merged on top of this.defaultActiveArguments
 		 */
 		onChangeExpanded: function ( expanded, args ) {
-			var self = this, $widget, $inside, complete, prevComplete, expandControl, $toggleBtn;
+			var self = this, $widget, $inside, complete, prevComplete, expandControl, $details;
 
 			self.embedWidgetControl(); // Make sure the outer form is embedded so that the expanded state can be set in the UI.
 			if ( expanded ) {
@@ -1421,7 +1419,7 @@
 
 			$widget = this.container.find( 'div.widget:first' );
 			$inside = $widget.find( '.widget-inside:first' );
-			$toggleBtn = this.container.find( '.widget-top button.widget-action' );
+			$details = $widget.children( 'details' );
 
 			expandControl = function() {
 
@@ -1433,11 +1431,7 @@
 				} );
 
 				complete = function() {
-					self.container.removeClass( 'expanding' );
-					self.container.addClass( 'expanded' );
-					$widget.addClass( 'open' );
-					$toggleBtn.attr( 'aria-expanded', 'true' );
-					self.container.trigger( 'expanded' );
+					$details.attr( 'open', 'open' );
 				};
 				if ( args.completeCallback ) {
 					prevComplete = complete;
@@ -1457,7 +1451,7 @@
 				self.container.addClass( 'expanding' );
 			};
 
-			if ( $toggleBtn.attr( 'aria-expanded' ) === 'false' ) {
+			if ( ! $details[0].hasAttribute( 'open' ) ) {
 				if ( api.section.has( self.section() ) ) {
 					api.section( self.section() ).expand( {
 						completeCallback: expandControl
@@ -1467,11 +1461,7 @@
 				}
 			} else {
 				complete = function() {
-					self.container.removeClass( 'collapsing' );
-					self.container.removeClass( 'expanded' );
-					$widget.removeClass( 'open' );
-					$toggleBtn.attr( 'aria-expanded', 'false' );
-					self.container.trigger( 'collapsed' );
+					$widget.removeAttr( 'open' );
 				};
 				if ( args.completeCallback ) {
 					prevComplete = complete;
@@ -1482,7 +1472,6 @@
 				}
 
 				self.container.trigger( 'collapse' );
-				self.container.addClass( 'collapsing' );
 
 				if ( self.params.is_wide ) {
 					$inside.fadeOut( args.duration, complete );
@@ -2285,7 +2274,7 @@
 	 */
 	$( document ).on( 'widget-added', function( event, widgetContainer ) {
 		var parsedWidgetId, widgetControl, navMenuSelect, editMenuButton;
-		parsedWidgetId = parseWidgetId( widgetContainer.find( '> .widget-inside > .form > .widget-id' ).val() );
+		parsedWidgetId = parseWidgetId( widgetContainer.find( '.widget-inside > .form > .widget-id' ).val() );
 		if ( 'nav_menu' !== parsedWidgetId.id_base ) {
 			return;
 		}
