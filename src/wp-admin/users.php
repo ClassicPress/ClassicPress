@@ -93,10 +93,10 @@ get_current_screen()->set_screen_reader_content(
 );
 
 if ( empty( $_REQUEST ) ) {
-	$referer = '<input type="hidden" name="wp_http_referer" value="' . esc_attr( wp_unslash( $_SERVER['REQUEST_URI'] ) ) . '" />';
+	$referer = '<input type="hidden" name="wp_http_referer" value="' . esc_attr( wp_unslash( $_SERVER['REQUEST_URI'] ) ) . '">';
 } elseif ( isset( $_REQUEST['wp_http_referer'] ) ) {
 	$redirect = remove_query_arg( array( 'wp_http_referer', 'updated', 'delete_count' ), wp_unslash( $_REQUEST['wp_http_referer'] ) );
-	$referer  = '<input type="hidden" name="wp_http_referer" value="' . esc_attr( $redirect ) . '" />';
+	$referer  = '<input type="hidden" name="wp_http_referer" value="' . esc_attr( $redirect ) . '">';
 } else {
 	$redirect = 'users.php';
 	$referer  = '';
@@ -346,7 +346,7 @@ switch ( $wp_list_table->current_action() ) {
 				echo '<li>' . sprintf( __( 'ID #%1$s: %2$s <strong>The current user will not be deleted.</strong>' ), $id, $user->user_login ) . "</li>\n";
 			} else {
 				/* translators: 1: User ID, 2: User login. */
-				echo '<li><input type="hidden" name="users[]" value="' . esc_attr( $id ) . '" />' . sprintf( __( 'ID #%1$s: %2$s' ), $id, $user->user_login ) . "</li>\n";
+				echo '<li><input type="hidden" name="users[]" value="' . esc_attr( $id ) . '">' . sprintf( __( 'ID #%1$s: %2$s' ), $id, $user->user_login ) . "</li>\n";
 				$go_delete++;
 			}
 		}
@@ -357,7 +357,7 @@ switch ( $wp_list_table->current_action() ) {
 
 			if ( ! $users_have_content ) :
 				?>
-			<input type="hidden" name="delete_option" value="delete" />
+			<input type="hidden" name="delete_option" value="delete">
 			<?php else : ?>
 				<?php if ( 1 == $go_delete ) : ?>
 			<fieldset><p><legend><?php _e( 'What should be done with content owned by this user?' ); ?></legend></p>
@@ -365,9 +365,9 @@ switch ( $wp_list_table->current_action() ) {
 			<fieldset><p><legend><?php _e( 'What should be done with content owned by these users?' ); ?></legend></p>
 		<?php endif; ?>
 		<ul style="list-style:none;">
-			<li><label><input type="radio" id="delete_option0" name="delete_option" value="delete" />
+			<li><label><input type="radio" id="delete_option0" name="delete_option" value="delete">
 				<?php _e( 'Delete all content.' ); ?></label></li>
-			<li><input type="radio" id="delete_option1" name="delete_option" value="reassign" />
+			<li><input type="radio" id="delete_option1" name="delete_option" value="reassign">
 				<?php
 				echo '<label for="delete_option1">' . __( 'Attribute all content to:' ) . '</label> ';
 				wp_dropdown_users(
@@ -393,7 +393,7 @@ switch ( $wp_list_table->current_action() ) {
 			 */
 			do_action( 'delete_user_form', $current_user, $userids );
 			?>
-	<input type="hidden" name="action" value="dodelete" />
+	<input type="hidden" name="action" value="dodelete">
 			<?php submit_button( __( 'Confirm Deletion' ), 'primary' ); ?>
 	<?php else : ?>
 	<p><?php _e( 'There are no valid users selected for deletion.' ); ?></p>
@@ -484,14 +484,14 @@ switch ( $wp_list_table->current_action() ) {
 				echo '<li>' . sprintf( __( 'ID #%1$s: %2$s <strong>Sorry, you are not allowed to remove this user.</strong>' ), $id, $user->user_login ) . "</li>\n";
 			} else {
 				/* translators: 1: User ID, 2: User login. */
-				echo "<li><input type=\"hidden\" name=\"users[]\" value=\"{$id}\" />" . sprintf( __( 'ID #%1$s: %2$s' ), $id, $user->user_login ) . "</li>\n";
+				echo "<li><input type=\"hidden\" name=\"users[]\" value=\"{$id}\">" . sprintf( __( 'ID #%1$s: %2$s' ), $id, $user->user_login ) . "</li>\n";
 				$go_remove = true;
 			}
 		}
 		?>
 	</ul>
 		<?php if ( $go_remove ) : ?>
-		<input type="hidden" name="action" value="doremove" />
+		<input type="hidden" name="action" value="doremove">
 			<?php submit_button( __( 'Confirm Removal' ), 'primary' ); ?>
 	<?php else : ?>
 	<p><?php _e( 'There are no valid users selected for removal.' ); ?></p>
@@ -651,7 +651,7 @@ if ( strlen( $usersearch ) ) {
 		<?php $wp_list_table->search_box( __( 'Search Users' ), 'user' ); ?>
 
 		<?php if ( ! empty( $_REQUEST['role'] ) ) { ?>
-<input type="hidden" name="role" value="<?php echo esc_attr( $_REQUEST['role'] ); ?>" />
+<input type="hidden" name="role" value="<?php echo esc_attr( $_REQUEST['role'] ); ?>">
 <?php } ?>
 
 		<?php $wp_list_table->display(); ?>

@@ -237,12 +237,12 @@ function wp_popular_terms_checklist( $taxonomy, $default_term = 0, $number = 10,
 		}
 
 		$id      = "popular-$taxonomy-$term->term_id";
-		$checked = in_array( $term->term_id, $checked_terms, true ) ? 'checked="checked"' : '';
+		$checked = in_array( $term->term_id, $checked_terms, true ) ? 'checked' : '';
 		?>
 
 		<li id="<?php echo $id; ?>" class="popular-category">
 			<label class="selectit">
-				<input id="in-<?php echo $id; ?>" type="checkbox" <?php echo $checked; ?> value="<?php echo (int) $term->term_id; ?>" <?php disabled( ! current_user_can( $tax->cap->assign_terms ) ); ?> />
+				<input id="in-<?php echo $id; ?>" type="checkbox" <?php echo $checked; ?> value="<?php echo (int) $term->term_id; ?>" <?php disabled( ! current_user_can( $tax->cap->assign_terms ) ); ?>>
 				<?php
 				/** This filter is documented in wp-includes/category-template.php */
 				echo esc_html( apply_filters( 'the_category', $term->name, '', '' ) );
@@ -294,8 +294,8 @@ function wp_link_category_checklist( $link_id = 0 ) {
 
 		/** This filter is documented in wp-includes/category-template.php */
 		$name    = esc_html( apply_filters( 'the_category', $category->name, '', '' ) );
-		$checked = in_array( $cat_id, $checked_categories, true ) ? ' checked="checked"' : '';
-		echo '<li id="link-category-', $cat_id, '"><label for="in-link-category-', $cat_id, '" class="selectit"><input value="', $cat_id, '" type="checkbox" name="link_category[]" id="in-link-category-', $cat_id, '"', $checked, '/> ', $name, '</label></li>';
+		$checked = in_array( $cat_id, $checked_categories, true ) ? ' checked' : '';
+		echo '<li id="link-category-', $cat_id, '"><label for="in-link-category-', $cat_id, '" class="selectit"><input value="', $cat_id, '" type="checkbox" name="link_category[]" id="in-link-category-', $cat_id, '"', $checked, '> ', $name, '</label></li>';
 	}
 }
 
@@ -486,17 +486,17 @@ function wp_comment_reply( $position = 1, $checkbox = false, $mode = 'single', $
 	<div id="edithead" style="display:none;">
 		<div class="inside">
 		<label for="author-name"><?php _e( 'Name' ); ?></label>
-		<input type="text" name="newcomment_author" size="50" value="" id="author-name" />
+		<input type="text" name="newcomment_author" size="50" value="" id="author-name">
 		</div>
 
 		<div class="inside">
 		<label for="author-email"><?php _e( 'Email' ); ?></label>
-		<input type="text" name="newcomment_author_email" size="50" value="" id="author-email" />
+		<input type="text" name="newcomment_author_email" size="50" value="" id="author-email">
 		</div>
 
 		<div class="inside">
 		<label for="author-url"><?php _e( 'URL' ); ?></label>
-		<input type="text" id="author-url" name="newcomment_author_url" class="code" size="103" value="" />
+		<input type="text" id="author-url" name="newcomment_author_url" class="code" size="103" value="">
 		</div>
 	</div>
 
@@ -515,13 +515,13 @@ function wp_comment_reply( $position = 1, $checkbox = false, $mode = 'single', $
 		</div>
 	</div>
 
-	<input type="hidden" name="action" id="action" value="" />
-	<input type="hidden" name="comment_ID" id="comment_ID" value="" />
-	<input type="hidden" name="comment_post_ID" id="comment_post_ID" value="" />
-	<input type="hidden" name="status" id="status" value="" />
-	<input type="hidden" name="position" id="position" value="<?php echo $position; ?>" />
-	<input type="hidden" name="checkbox" id="checkbox" value="<?php echo $checkbox ? 1 : 0; ?>" />
-	<input type="hidden" name="mode" id="mode" value="<?php echo esc_attr( $mode ); ?>" />
+	<input type="hidden" name="action" id="action" value="">
+	<input type="hidden" name="comment_ID" id="comment_ID" value="">
+	<input type="hidden" name="comment_post_ID" id="comment_post_ID" value="">
+	<input type="hidden" name="status" id="status" value="">
+	<input type="hidden" name="position" id="position" value="<?php echo $position; ?>">
+	<input type="hidden" name="checkbox" id="checkbox" value="<?php echo $checkbox ? 1 : 0; ?>">
+	<input type="hidden" name="mode" id="mode" value="<?php echo esc_attr( $mode ); ?>">
 	<?php
 		wp_nonce_field( 'replyto-comment', '_ajax_nonce-replyto-comment', false );
 	if ( current_user_can( 'unfiltered_html' ) ) {
@@ -654,7 +654,7 @@ function _list_meta_row( $entry, &$count ) {
 	$r .= "\n\t\t<td class='left'><label class='screen-reader-text' for='meta-{$entry['meta_id']}-key'>" .
 		/* translators: Hidden accessibility text. */
 		__( 'Key' ) .
-	"</label><input name='meta[{$entry['meta_id']}][key]' id='meta-{$entry['meta_id']}-key' type='text' size='20' value='{$entry['meta_key']}' />";
+	"</label><input name='meta[{$entry['meta_id']}][key]' id='meta-{$entry['meta_id']}-key' type='text' size='20' value='{$entry['meta_key']}'>";
 
 	$r .= "\n\t\t<div class='submit'>";
 	$r .= get_submit_button( __( 'Delete' ), 'deletemeta small', "deletemeta[{$entry['meta_id']}]", false, array( 'data-wp-lists' => "delete:the-list:meta-{$entry['meta_id']}::_ajax_nonce=$delete_nonce" ) );
@@ -753,12 +753,12 @@ function meta_form( $post = null ) {
 		}
 		?>
 </select>
-<input class="hide-if-js" type="text" id="metakeyinput" name="metakeyinput" value="" />
+<input class="hide-if-js" type="text" id="metakeyinput" name="metakeyinput" value="">
 <a href="#postcustomstuff" class="hide-if-no-js" onclick="jQuery('#metakeyinput, #metakeyselect, #enternew, #cancelnew').toggle();return false;">
 <span id="enternew"><?php _e( 'Enter new' ); ?></span>
 <span id="cancelnew" class="hidden"><?php _e( 'Cancel' ); ?></span></a>
 <?php } else { ?>
-<input type="text" id="metakeyinput" name="metakeyinput" value="" />
+<input type="text" id="metakeyinput" name="metakeyinput" value="">
 <?php } ?>
 </td>
 <td><textarea id="metavalue" name="metavalue" rows="2" cols="25"></textarea></td>
@@ -814,7 +814,7 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
 	}
 
 	// @todo Remove this?
-	// echo '<label for="timestamp" style="display: block;"><input type="checkbox" class="checkbox" name="edit_date" value="1" id="timestamp"'.$tab_index_attribute.' /> '.__( 'Edit timestamp' ).'</label><br />';
+	// echo '<label for="timestamp" style="display: block;"><input type="checkbox" class="checkbox" name="edit_date" value="1" id="timestamp"'.$tab_index_attribute.'> '.__( 'Edit timestamp' ).'</label><br>';
 
 	$post_date = ( $for_post ) ? $post->post_date : get_comment()->comment_date;
 	$jj        = ( $edit ) ? mysql2date( 'd', $post_date, false ) : current_time( 'd' );
@@ -846,25 +846,25 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
 	$day = '<label><span class="screen-reader-text">' .
 		/* translators: Hidden accessibility text. */
 		__( 'Day' ) .
-	'</span><input type="text" ' . ( $multi ? '' : 'id="jj" ' ) . 'name="jj" value="' . $jj . '" size="2" maxlength="2"' . $tab_index_attribute . ' autocomplete="off" class="form-required" /></label>';
+	'</span><input type="text" ' . ( $multi ? '' : 'id="jj" ' ) . 'name="jj" value="' . $jj . '" size="2" maxlength="2"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
 	$year = '<label><span class="screen-reader-text">' .
 		/* translators: Hidden accessibility text. */
 		__( 'Year' ) .
-	'</span><input type="text" ' . ( $multi ? '' : 'id="aa" ' ) . 'name="aa" value="' . $aa . '" size="4" maxlength="4"' . $tab_index_attribute . ' autocomplete="off" class="form-required" /></label>';
+	'</span><input type="text" ' . ( $multi ? '' : 'id="aa" ' ) . 'name="aa" value="' . $aa . '" size="4" maxlength="4"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
 	$hour = '<label><span class="screen-reader-text">' .
 		/* translators: Hidden accessibility text. */
 		__( 'Hour' ) .
-	'</span><input type="text" ' . ( $multi ? '' : 'id="hh" ' ) . 'name="hh" value="' . $hh . '" size="2" maxlength="2"' . $tab_index_attribute . ' autocomplete="off" class="form-required" /></label>';
+	'</span><input type="text" ' . ( $multi ? '' : 'id="hh" ' ) . 'name="hh" value="' . $hh . '" size="2" maxlength="2"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
 	$minute = '<label><span class="screen-reader-text">' .
 		/* translators: Hidden accessibility text. */
 		__( 'Minute' ) .
-	'</span><input type="text" ' . ( $multi ? '' : 'id="mn" ' ) . 'name="mn" value="' . $mn . '" size="2" maxlength="2"' . $tab_index_attribute . ' autocomplete="off" class="form-required" /></label>';
+	'</span><input type="text" ' . ( $multi ? '' : 'id="mn" ' ) . 'name="mn" value="' . $mn . '" size="2" maxlength="2"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
 
 	echo '<div class="timestamp-wrap">';
 	/* translators: 1: Month, 2: Day, 3: Year, 4: Hour, 5: Minute. */
 	printf( __( '%1$s %2$s, %3$s at %4$s:%5$s' ), $month, $day, $year, $hour, $minute );
 
-	echo '</div><input type="hidden" id="ss" name="ss" value="' . $ss . '" />';
+	echo '</div><input type="hidden" id="ss" name="ss" value="' . $ss . '">';
 
 	if ( $multi ) {
 		return;
@@ -883,9 +883,9 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
 	foreach ( $map as $timeunit => $value ) {
 		list( $unit, $curr ) = $value;
 
-		echo '<input type="hidden" id="hidden_' . $timeunit . '" name="hidden_' . $timeunit . '" value="' . $unit . '" />' . "\n";
+		echo '<input type="hidden" id="hidden_' . $timeunit . '" name="hidden_' . $timeunit . '" value="' . $unit . '">' . "\n";
 		$cur_timeunit = 'cur_' . $timeunit;
-		echo '<input type="hidden" id="' . $cur_timeunit . '" name="' . $cur_timeunit . '" value="' . $curr . '" />' . "\n";
+		echo '<input type="hidden" id="' . $cur_timeunit . '" name="' . $cur_timeunit . '" value="' . $curr . '">' . "\n";
 	}
 	?>
 
@@ -978,7 +978,7 @@ function wp_dropdown_roles( $selected = '' ) {
 		$name = translate_user_role( $details['name'] );
 		// Preselect specified role.
 		if ( $selected === $role ) {
-			$r .= "\n\t<option selected='selected' value='" . esc_attr( $role ) . "'>$name</option>";
+			$r .= "\n\t<option selected value='" . esc_attr( $role ) . "'>$name</option>";
 		} else {
 			$r .= "\n\t<option value='" . esc_attr( $role ) . "'>$name</option>";
 		}
@@ -1025,9 +1025,9 @@ function wp_import_upload_form( $action ) {
 			sprintf( __( 'Maximum size: %s' ), $size )
 		);
 		?>
-<input type="file" id="upload" name="import" size="25" />
-<input type="hidden" name="action" value="save" />
-<input type="hidden" name="max_file_size" value="<?php echo $bytes; ?>" />
+<input type="file" id="upload" name="import" size="25">
+<input type="hidden" name="action" value="save">
+<input type="hidden" name="max_file_size" value="<?php echo $bytes; ?>">
 </p>
 		<?php submit_button( __( 'Upload file and import' ), 'primary' ); ?>
 </form>
@@ -1914,9 +1914,9 @@ function find_posts_div( $found_action = '' ) {
 		<div class="find-box-inside">
 			<div class="find-box-search">
 				<?php if ( $found_action ) { ?>
-					<input type="hidden" name="found_action" value="<?php echo esc_attr( $found_action ); ?>" />
+					<input type="hidden" name="found_action" value="<?php echo esc_attr( $found_action ); ?>">
 				<?php } ?>
-				<input type="hidden" name="affected" id="affected" value="" />
+				<input type="hidden" name="affected" id="affected" value="">
 				<?php wp_nonce_field( 'find-posts', '_ajax_nonce', false ); ?>
 				<label class="screen-reader-text" for="find-posts-input">
 					<?php
@@ -1924,9 +1924,9 @@ function find_posts_div( $found_action = '' ) {
 					_e( 'Search' );
 					?>
 				</label>
-				<input type="text" id="find-posts-input" name="ps" value="" />
+				<input type="text" id="find-posts-input" name="ps" value="">
 				<span class="spinner"></span>
-				<input type="button" id="find-posts-search" value="<?php esc_attr_e( 'Search' ); ?>" class="button" />
+				<input type="button" id="find-posts-search" value="<?php esc_attr_e( 'Search' ); ?>" class="button">
 				<div class="clear"></div>
 			</div>
 			<div id="find-posts-response"></div>
@@ -2010,7 +2010,7 @@ function iframe_header( $title = '', $deprecated = false ) {
 	<?php
 	wp_enqueue_style( 'colors' );
 	?>
-<script type="text/javascript">
+<script>
 addLoadEvent = function(func){if(typeof jQuery!=='undefined')jQuery(function(){func();});else if(typeof wpOnload!=='function'){wpOnload=func;}else{var oldonload=wpOnload;wpOnload=function(){oldonload();func();}}};
 function tb_close(){var win=window.dialogArguments||opener||parent||top;win.tb_remove();}
 var ajaxurl = '<?php echo esc_js( admin_url( 'admin-ajax.php', 'relative' ) ); ?>',
@@ -2062,7 +2062,7 @@ var ajaxurl = '<?php echo esc_js( admin_url( 'admin-ajax.php', 'relative' ) ); ?
 	$admin_body_classes = ltrim( $admin_body_classes . ' ' . $admin_body_class );
 	?>
 <body <?php echo $admin_body_id; ?>class="wp-admin wp-core-ui no-js iframe <?php echo $admin_body_classes; ?>">
-<script type="text/javascript">
+<script>
 (function(){
 var c = document.body.className;
 c = c.replace(/no-js/, 'js');
@@ -2101,7 +2101,7 @@ function iframe_footer() {
 	do_action( 'admin_print_footer_scripts' );
 	?>
 	</div>
-<script type="text/javascript">if(typeof wpOnload==='function')wpOnload();</script>
+<script>if(typeof wpOnload==='function')wpOnload();</script>
 </body>
 </html>
 	<?php
@@ -2354,7 +2354,7 @@ function get_media_states( $post ) {
  */
 function compression_test() {
 	?>
-	<script type="text/javascript">
+	<script>
 	var compressionNonce = <?php echo wp_json_encode( wp_create_nonce( 'update_can_compress_scripts' ) ); ?>;
 	var testCompression = {
 		get : function(test) {
@@ -2495,7 +2495,7 @@ function get_submit_button( $text = '', $type = 'primary large', $name = 'submit
 	$id_attr   = $id ? ' id="' . esc_attr( $id ) . '"' : '';
 
 	$button  = '<input type="submit"' . $name_attr . $id_attr . ' class="' . esc_attr( $class );
-	$button .= '" value="' . esc_attr( $text ) . '" ' . $attributes . ' />';
+	$button .= '" value="' . esc_attr( $text ) . '" ' . $attributes . '>';
 
 	if ( $wrap ) {
 		$button = '<p class="submit">' . $button . '</p>';
@@ -2533,7 +2533,7 @@ function _wp_admin_html_begin() {
 	?>
 >
 <head>
-<meta http-equiv="Content-Type" content="<?php bloginfo( 'html_type' ); ?>; charset=<?php echo get_option( 'blog_charset' ); ?>" />
+<meta http-equiv="Content-Type" content="<?php bloginfo( 'html_type' ); ?>; charset=<?php echo get_option( 'blog_charset' ); ?>">
 	<?php
 }
 

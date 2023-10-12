@@ -100,7 +100,7 @@ switch ( $action ) {
 		if ( false === strpos( $_POST['content'], '<!-- wp:paragraph -->' ) ) {
 			$_POST['content'] = sprintf(
 				'<!-- wp:paragraph -->%s<!-- /wp:paragraph -->',
-				str_replace( array( "\r\n", "\r", "\n" ), '<br />', $_POST['content'] )
+				str_replace( array( "\r\n", "\r", "\n" ), '<br>', $_POST['content'] )
 			);
 		}
 

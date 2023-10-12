@@ -63,14 +63,14 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 				<# if ( data.attachment.sizes ) { #>
 					<div class="site-icon-preview wp-clearfix">
 						<div class="favicon-preview">
-							<img src="<?php echo esc_url( admin_url( 'images/' . ( is_rtl() ? 'browser-rtl.png' : 'browser.png' ) ) ); ?>" class="browser-preview" width="182" alt="" />
+							<img src="<?php echo esc_url( admin_url( 'images/' . ( is_rtl() ? 'browser-rtl.png' : 'browser.png' ) ) ); ?>" class="browser-preview" width="182" alt="">
 
 							<div class="favicon">
-								<img src="{{ data.attachment.sizes.full ? data.attachment.sizes.full.url : data.attachment.url }}" alt="<?php esc_attr_e( 'Preview as a browser icon' ); ?>" />
+								<img src="{{ data.attachment.sizes.full ? data.attachment.sizes.full.url : data.attachment.url }}" alt="<?php esc_attr_e( 'Preview as a browser icon' ); ?>">
 							</div>
 							<span class="browser-title" aria-hidden="true"><# print( '<?php echo esc_js( get_bloginfo( 'name' ) ); ?>' ) #></span>
 						</div>
-						<img class="app-icon-preview" src="{{ data.attachment.sizes.full ? data.attachment.sizes.full.url : data.attachment.url }}" alt="<?php esc_attr_e( 'Preview as an app icon' ); ?>" />
+						<img class="app-icon-preview" src="{{ data.attachment.sizes.full ? data.attachment.sizes.full.url : data.attachment.url }}" alt="<?php esc_attr_e( 'Preview as an app icon' ); ?>">
 					</div>
 				<# } #>
 				<div class="actions">

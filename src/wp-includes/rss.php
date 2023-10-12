@@ -937,7 +937,7 @@ function get_rss ($url, $num_items = 5) { // Like get posts, but for RSS
 			echo "<li>\n";
 			echo "<a href='$item[link]' title='$item[description]'>";
 			echo esc_html($item['title']);
-			echo "</a><br />\n";
+			echo "</a><br>\n";
 			echo "</li>\n";
 		}
 	} else {

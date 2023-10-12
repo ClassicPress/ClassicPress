@@ -153,7 +153,7 @@ class Tests_Widgets_wpWidgetText extends WP_UnitTestCase {
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
 		$this->assertStringNotContainsString( '<p>', $output );
-		$this->assertStringNotContainsString( '<br />', $output );
+		$this->assertStringNotContainsString( '<br>', $output );
 		$this->assertEmpty( $this->widget_text_content_args );
 		$this->assertNotEmpty( $this->widget_text_args );
 		$this->assertStringContainsString( '[filter:widget_text]', $output );
@@ -170,7 +170,7 @@ class Tests_Widgets_wpWidgetText extends WP_UnitTestCase {
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
 		$this->assertStringContainsString( '<p>', $output );
-		$this->assertStringContainsString( '<br />', $output );
+		$this->assertStringContainsString( '<br>', $output );
 		$this->assertNotEmpty( $this->widget_text_args );
 		$this->assertSame( $instance['text'], $this->widget_text_args[0] );
 		$this->assertSame( $instance, $this->widget_text_args[1] );
@@ -197,7 +197,7 @@ class Tests_Widgets_wpWidgetText extends WP_UnitTestCase {
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
 		$this->assertStringContainsString( '<p>', $output );
-		$this->assertStringContainsString( '<br />', $output );
+		$this->assertStringContainsString( '<br>', $output );
 		$this->assertCount( 3, $this->widget_text_args );
 		$this->assertSame( $expected_instance['text'], $this->widget_text_args[0] );
 		$this->assertSame( $expected_instance, $this->widget_text_args[1] );
@@ -221,7 +221,7 @@ class Tests_Widgets_wpWidgetText extends WP_UnitTestCase {
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
 		$this->assertStringContainsString( '<p>', $output );
-		$this->assertStringContainsString( '<br />', $output );
+		$this->assertStringContainsString( '<br>', $output );
 		$this->assertCount( 3, $this->widget_text_args );
 		$this->assertSame( $expected_instance['text'], $this->widget_text_args[0] );
 		$this->assertSame( $expected_instance, $this->widget_text_args[1] );
@@ -245,7 +245,7 @@ class Tests_Widgets_wpWidgetText extends WP_UnitTestCase {
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
 		$this->assertStringContainsString( '<p>', $output );
-		$this->assertStringContainsString( '<br />', $output );
+		$this->assertStringContainsString( '<br>', $output );
 		$this->assertCount( 3, $this->widget_text_args );
 		$this->assertSame( $expected_instance['text'], $this->widget_text_args[0] );
 		$this->assertSame( $expected_instance, $this->widget_text_args[1] );
@@ -266,7 +266,7 @@ class Tests_Widgets_wpWidgetText extends WP_UnitTestCase {
 		$widget->widget( $args, $instance );
 		$output = ob_get_clean();
 		$this->assertStringNotContainsString( '<p>', $output );
-		$this->assertStringNotContainsString( '<br />', $output );
+		$this->assertStringNotContainsString( '<br>', $output );
 		$this->assertCount( 3, $this->widget_text_args );
 		$this->assertSame( $expected_instance['text'], $this->widget_text_args[0] );
 		$this->assertSame( $expected_instance, $this->widget_text_args[1] );

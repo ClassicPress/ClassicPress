@@ -34,7 +34,7 @@ class Tests_Comment_CommentForm extends WP_UnitTestCase {
 
 		$form = get_echo( 'comment_form', array( $args, $p ) );
 
-		$button = '<input name="foo-name" type="submit" id="foo-id" class="foo-class" value="foo-label" />';
+		$button = '<input name="foo-name" type="submit" id="foo-id" class="foo-class" value="foo-label">';
 		$hidden = get_comment_id_fields( $p );
 		$this->assertMatchesRegularExpression( '|<p class="form\-submit">\s*' . $button . '\s*' . $hidden . '\s*|', $form );
 	}
@@ -47,12 +47,12 @@ class Tests_Comment_CommentForm extends WP_UnitTestCase {
 			'id_submit'     => 'foo-id',
 			'class_submit'  => 'foo-class',
 			'label_submit'  => 'foo-label',
-			'submit_button' => '<input name="custom-%1$s" type="submit" id="custom-%2$s" class="custom-%3$s" value="custom-%4$s" />',
+			'submit_button' => '<input name="custom-%1$s" type="submit" id="custom-%2$s" class="custom-%3$s" value="custom-%4$s">',
 		);
 
 		$form = get_echo( 'comment_form', array( $args, $p ) );
 
-		$button = '<input name="custom-foo-name" type="submit" id="custom-foo-id" class="custom-foo-class" value="custom-foo-label" />';
+		$button = '<input name="custom-foo-name" type="submit" id="custom-foo-id" class="custom-foo-class" value="custom-foo-label">';
 		$this->assertStringContainsString( $button, $form );
 	}
 
@@ -69,7 +69,7 @@ class Tests_Comment_CommentForm extends WP_UnitTestCase {
 
 		$form = get_echo( 'comment_form', array( $args, $p ) );
 
-		$button = '<input name="foo-name" type="submit" id="foo-id" class="foo-class" value="foo-label" />';
+		$button = '<input name="foo-name" type="submit" id="foo-id" class="foo-class" value="foo-label">';
 		$hidden = get_comment_id_fields( $p );
 		$this->assertMatchesRegularExpression( '|<p class="my\-custom\-submit\-field">\s*' . $button . '\s*' . $hidden . '\s*|', $form );
 	}
@@ -91,7 +91,7 @@ class Tests_Comment_CommentForm extends WP_UnitTestCase {
 		$form = get_echo( 'comment_form', array( $args, $p ) );
 		remove_filter( 'comment_form_defaults', array( $this, 'filter_comment_form_defaults' ) );
 
-		$button = '<input name="foo-name" type="submit" id="foo-id" class="foo-class" value="foo-label" />';
+		$button = '<input name="foo-name" type="submit" id="foo-id" class="foo-class" value="foo-label">';
 		$hidden = get_comment_id_fields( $p );
 		$this->assertMatchesRegularExpression( '|<p class="form\-submit">\s*' . $button . '\s*' . $hidden . '\s*|', $form );
 	}

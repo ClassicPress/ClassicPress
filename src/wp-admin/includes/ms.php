@@ -304,7 +304,7 @@ function upload_space_setting( $id ) {
 	<tr>
 		<th><label for="blog-upload-space-number"><?php _e( 'Site Upload Space Quota' ); ?></label></th>
 		<td>
-			<input type="number" step="1" min="0" style="width: 100px" name="option[blog_upload_space]" id="blog-upload-space-number" aria-describedby="blog-upload-space-desc" value="<?php echo $quota; ?>" />
+			<input type="number" step="1" min="0" style="width: 100px" name="option[blog_upload_space]" id="blog-upload-space-number" aria-describedby="blog-upload-space-desc" value="<?php echo $quota; ?>">
 			<span id="blog-upload-space-desc"><span class="screen-reader-text">
 				<?php
 				/* translators: Hidden accessibility text. */
@@ -835,7 +835,7 @@ function can_edit_network( $network_id ) {
  */
 function _thickbox_path_admin_subfolder() {
 	?>
-<script type="text/javascript">
+<script>
 var tb_pathToImage = "<?php echo esc_js( includes_url( 'js/thickbox/loadingAnimation.gif', 'relative' ) ); ?>";
 </script>
 	<?php
@@ -859,7 +859,7 @@ function confirm_delete_users( $users ) {
 	<?php endif; ?>
 
 	<form action="users.php?action=dodelete" method="post">
-	<input type="hidden" name="dodelete" />
+	<input type="hidden" name="dodelete">
 	<?php
 	wp_nonce_field( 'ms-users-delete' );
 	$site_admins = get_super_admins();
@@ -894,7 +894,7 @@ function confirm_delete_users( $users ) {
 			?>
 			<tr>
 				<th scope="row"><?php echo $delete_user->user_login; ?>
-					<?php echo '<input type="hidden" name="user[]" value="' . esc_attr( $user_id ) . '" />' . "\n"; ?>
+					<?php echo '<input type="hidden" name="user[]" value="' . esc_attr( $user_id ) . '">' . "\n"; ?>
 				</th>
 			<?php
 			$blogs = get_blogs_of_user( $user_id, true );
@@ -948,9 +948,9 @@ function confirm_delete_users( $users ) {
 								printf( __( 'Site: %s' ), $user_site );
 								?>
 							</li>
-							<li><label><input type="radio" id="delete_option0" name="delete[<?php echo $details->userblog_id . '][' . $delete_user->ID; ?>]" value="delete" checked="checked" />
+							<li><label><input type="radio" id="delete_option0" name="delete[<?php echo $details->userblog_id . '][' . $delete_user->ID; ?>]" value="delete" checked>
 							<?php _e( 'Delete all content.' ); ?></label></li>
-							<li><label><input type="radio" id="delete_option1" name="delete[<?php echo $details->userblog_id . '][' . $delete_user->ID; ?>]" value="reassign" />
+							<li><label><input type="radio" id="delete_option1" name="delete[<?php echo $details->userblog_id . '][' . $delete_user->ID; ?>]" value="reassign">
 							<?php _e( 'Attribute all content to:' ); ?></label>
 							<?php echo $user_dropdown; ?></li>
 						</ul>
@@ -995,14 +995,14 @@ function confirm_delete_users( $users ) {
  */
 function network_settings_add_js() {
 	?>
-<script type="text/javascript">
+<script>
 jQuery( function($) {
 	var languageSelect = $( '#WPLANG' );
 	$( 'form' ).on( 'submit', function() {
 		// Don't show a spinner for English and installed languages,
 		// as there is nothing to download.
 		if ( ! languageSelect.find( 'option:selected' ).data( 'installed' ) ) {
-			$( '#submit', this ).after( '<span class="spinner language-install-spinner is-active" />' );
+			$( '#submit', this ).after( '<span class="spinner language-install-spinner is-active">' );
 		}
 	});
 } );

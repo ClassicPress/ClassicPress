@@ -126,9 +126,9 @@ function _walk_bookmarks( $bookmarks, $args = '' ) {
 
 		if ( null != $bookmark->link_image && $parsed_args['show_images'] ) {
 			if ( strpos( $bookmark->link_image, 'http' ) === 0 ) {
-				$output .= "<img src=\"$bookmark->link_image\" $alt $title />";
+				$output .= "<img src=\"$bookmark->link_image\" $alt $title>";
 			} else { // If it's a relative path.
-				$output .= '<img src="' . get_option( 'siteurl' ) . "$bookmark->link_image\" $alt $title />";
+				$output .= '<img src="' . get_option( 'siteurl' ) . "$bookmark->link_image\" $alt $title>";
 			}
 			if ( $parsed_args['show_name'] ) {
 				$output .= " $name";

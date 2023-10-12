@@ -100,8 +100,6 @@ class WP_Widget_Archives extends WP_Widget {
 					$label = __( 'Select Post' );
 					break;
 			}
-
-			$type_attr = current_theme_supports( 'html5', 'script' ) ? '' : ' type="text/javascript"';
 			?>
 
 			<option value=""><?php echo esc_html( $label ); ?></option>
@@ -109,8 +107,7 @@ class WP_Widget_Archives extends WP_Widget {
 
 		</select>
 
-<script<?php echo $type_attr; ?>>
-/* <![CDATA[ */
+<script>
 (function() {
 	var dropdown = document.getElementById( "<?php echo esc_js( $dropdown_id ); ?>" );
 	function onSelectChange() {
@@ -120,23 +117,15 @@ class WP_Widget_Archives extends WP_Widget {
 	}
 	dropdown.onchange = onSelectChange;
 })();
-/* ]]> */
 </script>
 			<?php
 		} else {
-			$format = current_theme_supports( 'html5', 'navigation-widgets' ) ? 'html5' : 'xhtml';
+			// The title may be filtered: Strip out HTML and make sure the aria-label is never empty.
+			$title      = trim( strip_tags( $title ) );
+			$aria_label = $title ? $title : $default_title;
+			echo '<nav aria-label="' . esc_attr( $aria_label ) . '">';
 
-			/** This filter is documented in wp-includes/widgets/class-wp-nav-menu-widget.php */
-			$format = apply_filters( 'navigation_widgets_format', $format );
-
-			if ( 'html5' === $format ) {
-				// The title may be filtered: Strip out HTML and make sure the aria-label is never empty.
-				$title      = trim( strip_tags( $title ) );
-				$aria_label = $title ? $title : $default_title;
-				echo '<nav aria-label="' . esc_attr( $aria_label ) . '">';
-			}
 			?>
-
 			<ul>
 				<?php
 				wp_get_archives(
@@ -164,9 +153,7 @@ class WP_Widget_Archives extends WP_Widget {
 			</ul>
 
 			<?php
-			if ( 'html5' === $format ) {
-				echo '</nav>';
-			}
+			echo '</nav>';
 		}
 
 		echo $args['after_widget'];
@@ -218,13 +205,13 @@ class WP_Widget_Archives extends WP_Widget {
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>" />
+			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>">
 		</p>
 		<p>
-			<input class="checkbox" type="checkbox"<?php checked( $instance['dropdown'] ); ?> id="<?php echo $this->get_field_id( 'dropdown' ); ?>" name="<?php echo $this->get_field_name( 'dropdown' ); ?>" />
+			<input class="checkbox" type="checkbox"<?php checked( $instance['dropdown'] ); ?> id="<?php echo $this->get_field_id( 'dropdown' ); ?>" name="<?php echo $this->get_field_name( 'dropdown' ); ?>">
 			<label for="<?php echo $this->get_field_id( 'dropdown' ); ?>"><?php _e( 'Display as dropdown' ); ?></label>
-			<br />
-			<input class="checkbox" type="checkbox"<?php checked( $instance['count'] ); ?> id="<?php echo $this->get_field_id( 'count' ); ?>" name="<?php echo $this->get_field_name( 'count' ); ?>" />
+			<br>
+			<input class="checkbox" type="checkbox"<?php checked( $instance['count'] ); ?> id="<?php echo $this->get_field_id( 'count' ); ?>" name="<?php echo $this->get_field_name( 'count' ); ?>">
 			<label for="<?php echo $this->get_field_id( 'count' ); ?>"><?php _e( 'Show post counts' ); ?></label>
 		</p>
 		<?php

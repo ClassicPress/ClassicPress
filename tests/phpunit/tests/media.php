@@ -161,11 +161,7 @@ CAP;
 		$this->assertSame( 1, substr_count( $result, 'alignnone' ) );
 		$this->assertSame( 1, substr_count( $result, self::CAPTION ) );
 
-		if ( current_theme_supports( 'html5', 'caption' ) ) {
-			$this->assertSame( 1, substr_count( $result, 'width: 20' ) );
-		} else {
-			$this->assertSame( 1, substr_count( $result, 'width: 30' ) );
-		}
+		$this->assertSame( 1, substr_count( $result, 'width: 30' ) );
 	}
 
 	public function test_img_caption_shortcode_with_old_format_id_and_align() {
@@ -780,8 +776,8 @@ VIDEO;
 
 		$expected = '<div style="width: ' . $width . 'px;" class="wp-video">' .
 			"<!--[if lt IE 9]><script>document.createElement('video');</script><![endif]-->\n" .
-			'<video class="wp-video-shortcode" id="video-' . $post_id . '-1" width="' . $width . '" height="' . $h . '" preload="metadata" controls="controls">' .
-			'<source type="video/mp4" src="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4?_=1" />' .
+			'<video class="wp-video-shortcode" id="video-' . $post_id . '-1" width="' . $width . '" height="' . $h . '" preload="metadata" controls>' .
+			'<source type="video/mp4" src="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4?_=1">' .
 			'<!-- WebM/VP8 for Firefox4, Opera, and Chrome --><source type="video/webm" src="myvideo.webm" />' .
 			'<!-- Ogg/Vorbis for older Firefox and Opera versions --><source type="video/ogg" src="myvideo.ogv" />' .
 			'<!-- Optional: Add subtitles for each language --><track kind="subtitles" src="subtitles.srt" srclang="en" />' .
@@ -1201,14 +1197,14 @@ Stop.
 EOF;
 
 		$expected = <<<EOF
-<p>Start.<br />
-https://youtube.com/watch?v=TEST01YRHA0<br />
+<p>Start.<br>
+https://youtube.com/watch?v=TEST01YRHA0<br>
 <script><!--
 my_function();
-// --> </script><br />
-https://youtube.com/watch?v=TEST02YRHA0<br />
-<a href="http://www.example.com/embed/TEST03YRHA0">http://www.example.com/embed/TEST03YRHA0</a><br />
-http://www.example.com/embed/TEST04YRHA0<br />
+// --> </script><br>
+https://youtube.com/watch?v=TEST02YRHA0<br>
+<a href="http://www.example.com/embed/TEST03YRHA0">http://www.example.com/embed/TEST03YRHA0</a><br>
+http://www.example.com/embed/TEST04YRHA0<br>
 Stop.</p>
 
 EOF;
@@ -1272,7 +1268,7 @@ EOF;
 	public function test_wp_get_attachment_image_defaults() {
 		$image    = image_downsize( self::$large_id, 'thumbnail' );
 		$expected = sprintf(
-			'<img width="%1$d" height="%2$d" src="%3$s" class="attachment-thumbnail size-thumbnail" alt="" decoding="async" loading="lazy" />',
+			'<img width="%1$d" height="%2$d" src="%3$s" class="attachment-thumbnail size-thumbnail" alt="" decoding="async" loading="lazy">',
 			$image[1],
 			$image[2],
 			$image[0]
@@ -1310,7 +1306,7 @@ EOF;
 
 		$image    = image_downsize( self::$large_id, 'thumbnail' );
 		$expected = sprintf(
-			'<img width="%1$d" height="%2$d" src="%3$s" class="attachment-thumbnail size-thumbnail" alt="Some very clever alt text" decoding="async" loading="lazy" />',
+			'<img width="%1$d" height="%2$d" src="%3$s" class="attachment-thumbnail size-thumbnail" alt="Some very clever alt text" decoding="async" loading="lazy">',
 			$image[1],
 			$image[2],
 			$image[0]
@@ -1999,12 +1995,12 @@ EOF;
 		$img_html5            = str_replace( ' />', '>', $img );
 
 		// Manually add srcset and sizes to the markup from get_image_tag().
-		$respimg                  = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img );
-		$respimg_no_size_in_class = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_no_size_in_class );
-		$respimg_no_width_height  = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_no_width_height );
-		$respimg_with_sizes_attr  = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' />', $img_with_sizes_attr );
-		$respimg_xhtml            = preg_replace( '|<img ([^>]+)/>|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_xhtml );
-		$respimg_html5            = preg_replace( '|<img ([^>]+)>|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_html5 );
+		$respimg                  = preg_replace( '|<img ([^>]+)>|', '<img $1 ' . $srcset . ' ' . $sizes . '>', $img );
+		$respimg_no_size_in_class = preg_replace( '|<img ([^>]+)>|', '<img $1 ' . $srcset . ' ' . $sizes . '>', $img_no_size_in_class );
+		$respimg_no_width_height  = preg_replace( '|<img ([^>]+)>|', '<img $1 ' . $srcset . ' ' . $sizes . '>', $img_no_width_height );
+		$respimg_with_sizes_attr  = preg_replace( '|<img ([^>]+)>|', '<img $1 ' . $srcset . '>', $img_with_sizes_attr );
+		$respimg_xhtml            = preg_replace( '|<img ([^>]+)>|', '<img $1 ' . $srcset . ' ' . $sizes . '>', $img_xhtml );
+		$respimg_html5            = preg_replace( '|<img ([^>]+)>|', '<img $1 ' . $srcset . ' ' . $sizes . '>', $img_html5 );
 
 		$content = '
 			<p>Image, standard. Should have srcset and sizes.</p>
@@ -2091,7 +2087,7 @@ EOF;
 		$img = get_image_tag( self::$large_id, '', '', '', 'medium' );
 		$img = wp_img_tag_add_loading_attr( $img, 'test' );
 		$img = wp_img_tag_add_decoding_attr( $img, 'the_content' );
-		$img = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . 'srcset="image2x.jpg 2x" />', $img );
+		$img = preg_replace( '|<img ([^>]+)>|', '<img $1 ' . 'srcset="image2x.jpg 2x">', $img );
 
 		// The content filter should return the image unchanged.
 		$this->assertSame( $img, wp_filter_content_tags( $img ) );
@@ -2239,9 +2235,9 @@ EOF;
 		$img_relative = str_replace( 'http://', '//', $img );
 
 		// Manually add srcset and sizes to the markup from get_image_tag().
-		$respimg          = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img );
-		$respimg_https    = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_https );
-		$respimg_relative = preg_replace( '|<img ([^>]+) />|', '<img $1 ' . $srcset . ' ' . $sizes . ' />', $img_relative );
+		$respimg          = preg_replace( '|<img ([^>]+)>|', '<img $1 ' . $srcset . ' ' . $sizes . '>', $img );
+		$respimg_https    = preg_replace( '|<img ([^>]+)>|', '<img $1 ' . $srcset . ' ' . $sizes . '>', $img_https );
+		$respimg_relative = preg_replace( '|<img ([^>]+)>|', '<img $1 ' . $srcset . ' ' . $sizes . '>', $img_relative );
 
 		$content = '
 			<p>Image, http: protocol. Should have srcset and sizes.</p>
@@ -2331,7 +2327,7 @@ EOF;
 		// Calculate attachment data (default is medium).
 		$attachment = wp_get_attachment_image_src( $id, 'medium' );
 
-		$html     = '<img src="%1$s" alt="" width="%2$d" height="%3$d" class="align%4$s size-medium wp-image-%5$d" />';
+		$html     = '<img src="%1$s" alt="" width="%2$d" height="%3$d" class="align%4$s size-medium wp-image-%5$d">';
 		$expected = sprintf(
 			$html,
 			$attachment[0],
@@ -2362,7 +2358,7 @@ EOF;
 		// Calculate attachment data.
 		$attachment = wp_get_attachment_image_src( $id, $size );
 
-		$html = '<a href="%1$s" rel="%2$s"><img src="%3$s" alt="%4$s" width="%5$d" height="%6$d" class="size-%8$s wp-image-%9$d" /></a>';
+		$html = '<a href="%1$s" rel="%2$s"><img src="%3$s" alt="%4$s" width="%5$d" height="%6$d" class="size-%8$s wp-image-%9$d"></a>';
 		$html = '[caption id="attachment_%9$d" align="align%7$s" width="%5$d"]' . $html . ' %10$s[/caption]';
 
 		$expected = sprintf(
@@ -2398,7 +2394,7 @@ EOF;
 		// Calculate attachment data.
 		$attachment = wp_get_attachment_image_src( $id, $size );
 
-		$html = '<a href="%1$s"><img src="%2$s" alt="%3$s" width="%4$d" height="%5$d" class="align%6$s size-%7$s wp-image-%8$d" /></a>';
+		$html = '<a href="%1$s"><img src="%2$s" alt="%3$s" width="%4$d" height="%5$d" class="align%6$s size-%7$s wp-image-%8$d"></a>';
 
 		$expected = sprintf(
 			$html,
@@ -2440,7 +2436,7 @@ EOF;
 			'src="' . $uploads_url . 'test-image-testsize-999x999.jpg" ' .
 			'class="attachment-testsize size-testsize" alt="" decoding="async" loading="lazy" ' .
 			'srcset="' . $uploads_url . 'test-image-testsize-999x999.jpg 999w, ' . $uploads_url . $basename . '-150x150.jpg 150w" ' .
-			'sizes="(max-width: 999px) 100vw, 999px" />';
+			'sizes="(max-width: 999px) 100vw, 999px">';
 
 		$actual = wp_get_attachment_image( self::$large_id, 'testsize' );
 
@@ -2795,7 +2791,7 @@ EOF;
 		$lazy_iframe    = wp_iframe_tag_add_loading_attr( $iframe, 'test' );
 
 		// The following should not be modified because there already is a 'loading' attribute.
-		$img_eager    = str_replace( ' />', ' loading="eager" />', $img );
+		$img_eager    = str_replace( '">', '" loading="eager">', $img );
 		$iframe_eager = str_replace( '">', '" loading="eager">', $iframe );
 
 		$content = '
@@ -2914,7 +2910,7 @@ EOF;
 	 * @ticket 50367
 	 */
 	public function test_wp_img_tag_add_loading_attr() {
-		$img = '<img src="example.png" alt=" width="300" height="225" />';
+		$img = '<img src="example.png" alt=" width="300" height="225">';
 		$img = wp_img_tag_add_loading_attr( $img, 'test' );
 
 		$this->assertStringContainsString( ' loading="lazy"', $img );
@@ -2925,7 +2921,7 @@ EOF;
 	 * @ticket 50367
 	 */
 	public function test_wp_img_tag_add_loading_attr_without_src() {
-		$img = '<img alt=" width="300" height="225" />';
+		$img = '<img alt=" width="300" height="225">';
 		$img = wp_img_tag_add_loading_attr( $img, 'test' );
 
 		$this->assertStringNotContainsString( ' loading=', $img );
@@ -2936,7 +2932,7 @@ EOF;
 	 * @ticket 50367
 	 */
 	public function test_wp_img_tag_add_loading_attr_with_single_quotes() {
-		$img = "<img src='example.png' alt=' width='300' height='225' />";
+		$img = "<img src='example.png' alt=' width='300' height='225'>";
 		$img = wp_img_tag_add_loading_attr( $img, 'test' );
 
 		$this->assertStringNotContainsString( ' loading=', $img );
@@ -2951,7 +2947,7 @@ EOF;
 	 * @ticket 50425
 	 */
 	public function test_wp_img_tag_add_loading_attr_opt_out() {
-		$img = '<img src="example.png" alt=" width="300" height="225" />';
+		$img = '<img src="example.png" alt=" width="300" height="225">';
 		add_filter( 'wp_img_tag_add_loading_attr', '__return_false' );
 
 		$this->assertStringNotContainsString( ' loading=', $img );
@@ -2963,7 +2959,7 @@ EOF;
 	 * @ticket 56969
 	 */
 	public function test_wp_img_tag_add_decoding_attr_with_single_quotes() {
-		$img = "<img src='example.png' alt='' width='300' height='225' />";
+		$img = "<img src='example.png' alt='' width='300' height='225'>";
 		$img = wp_img_tag_add_decoding_attr( $img, 'test' );
 		$this->assertStringNotContainsString( ' decoding="async"', $img );
 	}
@@ -2974,7 +2970,7 @@ EOF;
 	 * @ticket 56969
 	 */
 	public function test_decoding_async_not_applied_to_json() {
-		$content = '{"image": "<img src=\"example.png\" alt=\"\" width=\"300\" height=\"225\" />"}';
+		$content = '{"image": "<img src=\"example.png\" alt=\"\" width=\"300\" height=\"225\">"}';
 		$content = wp_filter_content_tags( $content );
 		$this->assertStringNotContainsString( ' decoding="async"', $content );
 	}

@@ -967,7 +967,7 @@ final class _WP_Editors {
 		}
 
 		?>
-		<script type="text/javascript">
+		<script>
 		window.wp = window.wp || {};
 		window.wp.editor = window.wp.editor || {};
 		window.wp.editor.getDefaultSettings = function() {
@@ -1553,7 +1553,7 @@ final class _WP_Editors {
 
 		wp_print_scripts( array( 'wp-tinymce' ) );
 
-		echo "<script type='text/javascript'>\n" . self::wp_mce_translation() . "</script>\n";
+		echo "<script>\n" . self::wp_mce_translation() . "</script>\n";
 	}
 
 	/**
@@ -1610,7 +1610,7 @@ final class _WP_Editors {
 		do_action( 'before_wp_tiny_mce', self::$mce_settings );
 		?>
 
-		<script type="text/javascript">
+		<script>
 		tinyMCEPreInit = {
 			baseURL: "<?php echo $baseurl; ?>",
 			suffix: "<?php echo $suffix; ?>",
@@ -1634,7 +1634,7 @@ final class _WP_Editors {
 
 			if ( self::$ext_plugins ) {
 				// Load the old-format English strings to prevent unsightly labels in old style popups.
-				echo "<script type='text/javascript' src='{$baseurl}/langs/wp-langs-en.js?$version'></script>\n";
+				echo "<script src='{$baseurl}/langs/wp-langs-en.js?$version'></script>\n";
 			}
 		}
 
@@ -1649,7 +1649,7 @@ final class _WP_Editors {
 		do_action( 'wp_tiny_mce_init', self::$mce_settings );
 
 		?>
-		<script type="text/javascript">
+		<script>
 		<?php
 
 		if ( self::$ext_plugins ) {
@@ -1881,15 +1881,15 @@ final class _WP_Editors {
 				<p class="howto" id="wplink-enter-url"><?php _e( 'Enter the destination URL' ); ?></p>
 				<div>
 					<label><span><?php _e( 'URL' ); ?></span>
-					<input id="wp-link-url" type="text" aria-describedby="wplink-enter-url" /></label>
+					<input id="wp-link-url" type="text" aria-describedby="wplink-enter-url"></label>
 				</div>
 				<div class="wp-link-text-field">
 					<label><span><?php _e( 'Link Text' ); ?></span>
-					<input id="wp-link-text" type="text" /></label>
+					<input id="wp-link-text" type="text"></label>
 				</div>
 				<div class="link-target">
 					<label><span></span>
-					<input type="checkbox" id="wp-link-target" /> <?php _e( 'Open link in a new tab' ); ?></label>
+					<input type="checkbox" id="wp-link-target"> <?php _e( 'Open link in a new tab' ); ?></label>
 				</div>
 			</div>
 			<p class="howto" id="wplink-link-existing-content"><?php _e( 'Or link to existing content' ); ?></p>
@@ -1897,7 +1897,7 @@ final class _WP_Editors {
 				<div class="link-search-wrapper">
 					<label>
 						<span class="search-label"><?php _e( 'Search' ); ?></span>
-						<input type="search" id="wp-link-search" class="link-search-field" autocomplete="off" aria-describedby="wplink-link-existing-content" />
+						<input type="search" id="wp-link-search" class="link-search-field" autocomplete="off" aria-describedby="wplink-link-existing-content">
 						<span class="spinner"></span>
 					</label>
 				</div>

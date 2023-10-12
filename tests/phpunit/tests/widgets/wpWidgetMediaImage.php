@@ -573,7 +573,7 @@ class Tests_Widgets_wpWidgetMediaImage extends WP_UnitTestCase {
 		);
 		$output = ob_get_clean();
 		$this->assertStringContainsString( 'class="wp-caption alignnone"', $output );
-		$this->assertStringContainsString( '<p class="wp-caption-text">Default caption</p>', $output );
+		$this->assertStringContainsString( '<figcaption class="wp-caption-text">Default caption</figcaption>', $output );
 
 		// If caption is provided, then it will be displayed.
 		ob_start();
@@ -585,7 +585,7 @@ class Tests_Widgets_wpWidgetMediaImage extends WP_UnitTestCase {
 		);
 		$output = ob_get_clean();
 		$this->assertStringContainsString( 'class="wp-caption alignnone"', $output );
-		$this->assertStringContainsString( '<p class="wp-caption-text">Custom caption</p>', $output );
+		$this->assertStringContainsString( '<figcaption class="wp-caption-text">Custom caption</figcaption>', $output );
 
 		// Attachments with custom sizes can render captions.
 		ob_start();
@@ -600,7 +600,7 @@ class Tests_Widgets_wpWidgetMediaImage extends WP_UnitTestCase {
 		);
 		$output = ob_get_clean();
 		$this->assertStringContainsString( 'style="width: 310px"', $output );
-		$this->assertStringContainsString( '<p class="wp-caption-text">Caption for an image with custom size</p>', $output );
+		$this->assertStringContainsString( '<figcaption class="wp-caption-text">Caption for an image with custom size</figcaption>', $output );
 	}
 
 	/**

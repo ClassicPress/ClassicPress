@@ -18,16 +18,16 @@ _deprecated_file(
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
-<link rel="profile" href="https://gmpg.org/xfn/11" />
-<meta http-equiv="Content-Type" content="<?php bloginfo( 'html_type' ); ?>; charset=<?php bloginfo( 'charset' ); ?>" />
+<link rel="profile" href="https://gmpg.org/xfn/11">
+<meta http-equiv="Content-Type" content="<?php bloginfo( 'html_type' ); ?>; charset=<?php bloginfo( 'charset' ); ?>">
 
 <title><?php echo wp_get_document_title(); ?></title>
 
-<link rel="stylesheet" href="<?php bloginfo( 'stylesheet_url' ); ?>" type="text/css" media="screen" />
-<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
+<link rel="stylesheet" href="<?php bloginfo( 'stylesheet_url' ); ?>" media="screen">
+<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
 
 <?php if ( file_exists( get_stylesheet_directory() . '/images/kubrickbgwide.jpg' ) ) { ?>
-<style type="text/css" media="screen">
+<style media="screen">
 
 	<?php
 	// Checks to see whether it needs a sidebar.
@@ -58,4 +58,4 @@ if ( is_singular() ) {
 		<div class="description"><?php bloginfo( 'description' ); ?></div>
 	</div>
 </div>
-<hr />
+<hr>

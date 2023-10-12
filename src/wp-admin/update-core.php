@@ -115,8 +115,8 @@ function list_core_update( $update ) {
 	wp_nonce_field( 'upgrade-core' );
 
 	echo '<p>';
-	echo '<input name="version" value="' . esc_attr( $update->current ) . '" type="hidden" />';
-	echo '<input name="locale" value="' . esc_attr( $update->locale ) . '" type="hidden" />';
+	echo '<input name="version" value="' . esc_attr( $update->current ) . '" type="hidden">';
+	echo '<input name="locale" value="' . esc_attr( $update->locale ) . '" type="hidden">';
 	if ( $show_buttons ) {
 		if ( $first_pass ) {
 			submit_button( $submit, $current ? '' : 'primary regular', 'upgrade', false );
@@ -165,7 +165,7 @@ function dismissed_updates() {
 		$show_text = esc_js( __( 'Show hidden updates' ) );
 		$hide_text = esc_js( __( 'Hide hidden updates' ) );
 		?>
-		<script type="text/javascript">
+		<script>
 			jQuery( function( $ ) {
 				$( '#show-dismissed' ).on( 'click', function() {
 					var isExpanded = ( 'true' === $( this ).attr( 'aria-expanded' ) );
@@ -327,11 +327,11 @@ function list_plugin_updates() {
 <p><?php _e( 'The following plugins have new versions available. Check the ones you want to update and then click &#8220;Update Plugins&#8221;.' ); ?></p>
 <form method="post" action="<?php echo esc_url( $form_action ); ?>" name="upgrade-plugins" class="upgrade">
 	<?php wp_nonce_field( 'upgrade-core' ); ?>
-<p><input id="upgrade-plugins" class="button" type="submit" value="<?php esc_attr_e( 'Update Plugins' ); ?>" name="upgrade" /></p>
+<p><input id="upgrade-plugins" class="button" type="submit" value="<?php esc_attr_e( 'Update Plugins' ); ?>" name="upgrade"></p>
 <table class="widefat updates-table" id="update-plugins-table">
 	<thead>
 	<tr>
-		<td class="manage-column check-column"><input type="checkbox" id="plugins-select-all" /></td>
+		<td class="manage-column check-column"><input type="checkbox" id="plugins-select-all"></td>
 		<td class="manage-column"><label for="plugins-select-all"><?php _e( 'Select All' ); ?></label></td>
 	</tr>
 	</thead>
@@ -352,34 +352,34 @@ function list_plugin_updates() {
 		$preferred_icons = array( 'svg', '2x', '1x', 'default' );
 		foreach ( $preferred_icons as $preferred_icon ) {
 			if ( ! empty( $plugin_data->update->icons[ $preferred_icon ] ) ) {
-				$icon = '<img src="' . esc_url( $plugin_data->update->icons[ $preferred_icon ] ) . '" alt="" />';
+				$icon = '<img src="' . esc_url( $plugin_data->update->icons[ $preferred_icon ] ) . '" alt="">';
 				break;
 			}
 		}
 
 		// Get plugin compat for running version of ClassicPress.
 		if ( isset( $plugin_data->update->tested ) && version_compare( $plugin_data->update->tested, $cur_wp_version, '>=' ) ) {
-			$compat  = '<br />' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: 100%%.' ), $cur_cp_version );
+			$compat  = '<br>' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: 100%%.' ), $cur_cp_version );
 			$compat .= ' <a href="https://link.classicpress.net/plugin-compatibility">' . __( 'More info.' ) . '</a>';
 		} elseif ( isset( $plugin_data->update->compatibility->{$cur_wp_version} ) ) {
 			$compat  = $plugin_data->update->compatibility->{$cur_wp_version};
-			$compat  = '<br />' . sprintf( __( 'Expected Compatibility with ClassicPress %1$s: %2$d%% (%3$d "works" votes out of %4$d total).' ), $cur_cp_version, $compat->percent, $compat->votes, $compat->total_votes );
+			$compat  = '<br>' . sprintf( __( 'Expected Compatibility with ClassicPress %1$s: %2$d%% (%3$d "works" votes out of %4$d total).' ), $cur_cp_version, $compat->percent, $compat->votes, $compat->total_votes );
 			$compat .= ' <a href="https://link.classicpress.net/plugin-compatibility">' . __( 'More info.' ) . '</a>';
 		} else {
-			$compat  = '<br />' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: Unknown.' ), $cur_cp_version );
+			$compat  = '<br>' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: Unknown.' ), $cur_cp_version );
 			$compat .= ' <a href="https://link.classicpress.net/plugin-compatibility">' . __( 'More info.' ) . '</a>';
 		}
 		// Get plugin compat for updated version of ClassicPress.
 		if ( $core_update_version ) {
 			if ( isset( $plugin_data->update->tested ) && version_compare( $plugin_data->update->tested, $core_update_version, '>=' ) ) {
-				$compat  = '<br />' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: 100%%.' ), $core_update_version );
+				$compat  = '<br>' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: 100%%.' ), $core_update_version );
 				$compat .= ' <a href="https://link.classicpress.net/plugin-compatibility">' . __( 'More info.' ) . '</a>';
 			} elseif ( isset( $plugin_data->update->compatibility->{$core_update_version} ) ) {
 				$update_compat = $plugin_data->update->compatibility->{$core_update_version};
-				$compat       .= '<br />' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: %2$d%% (%3$d "works" votes out of %4$d total).' ), $core_update_version, $update_compat->percent, $update_compat->votes, $update_compat->total_votes );
+				$compat       .= '<br>' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: %2$d%% (%3$d "works" votes out of %4$d total).' ), $core_update_version, $update_compat->percent, $update_compat->votes, $update_compat->total_votes );
 				$compat       .= ' <a href="https://link.classicpress.net/plugin-compatibility">' . __( 'More info.' ) . '</a>';
 			} else {
-				$compat  = '<br />' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: Unknown.' ), $core_update_version );
+				$compat  = '<br>' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: Unknown.' ), $core_update_version );
 				$compat .= ' <a href="https://link.classicpress.net/plugin-compatibility">' . __( 'More info.' ) . '</a>';
 			}
 		}
@@ -404,7 +404,7 @@ function list_plugin_updates() {
 
 		// Get the upgrade notice for the new plugin version.
 		if ( isset( $plugin_data->update->upgrade_notice ) ) {
-			$upgrade_notice = '<br />' . strip_tags( $plugin_data->update->upgrade_notice );
+			$upgrade_notice = '<br>' . strip_tags( $plugin_data->update->upgrade_notice );
 		} else {
 			$upgrade_notice = '';
 		}
@@ -424,7 +424,7 @@ function list_plugin_updates() {
 	<tr>
 		<td class="check-column">
 			<?php if ( $compatible_php ) : ?>
-				<input type="checkbox" name="checked[]" id="<?php echo $checkbox_id; ?>" value="<?php echo esc_attr( $plugin_file ); ?>" />
+				<input type="checkbox" name="checked[]" id="<?php echo $checkbox_id; ?>" value="<?php echo esc_attr( $plugin_file ); ?>">
 				<label for="<?php echo $checkbox_id; ?>" class="screen-reader-text">
 					<?php
 					/* translators: %s: Plugin name. */
@@ -459,12 +459,12 @@ function list_plugin_updates() {
 
 	<tfoot>
 	<tr>
-		<td class="manage-column check-column"><input type="checkbox" id="plugins-select-all-2" /></td>
+		<td class="manage-column check-column"><input type="checkbox" id="plugins-select-all-2"></td>
 		<td class="manage-column"><label for="plugins-select-all-2"><?php _e( 'Select All' ); ?></label></td>
 	</tr>
 	</tfoot>
 </table>
-<p><input id="upgrade-plugins-2" class="button" type="submit" value="<?php esc_attr_e( 'Update Plugins' ); ?>" name="upgrade" /></p>
+<p><input id="upgrade-plugins-2" class="button" type="submit" value="<?php esc_attr_e( 'Update Plugins' ); ?>" name="upgrade"></p>
 </form>
 	<?php
 }
@@ -507,11 +507,11 @@ function list_theme_updates() {
 </p>
 <form method="post" action="<?php echo esc_url( $form_action ); ?>" name="upgrade-themes" class="upgrade">
 	<?php wp_nonce_field( 'upgrade-core' ); ?>
-<p><input id="upgrade-themes" class="button" type="submit" value="<?php esc_attr_e( 'Update Themes' ); ?>" name="upgrade" /></p>
+<p><input id="upgrade-themes" class="button" type="submit" value="<?php esc_attr_e( 'Update Themes' ); ?>" name="upgrade"></p>
 <table class="widefat updates-table" id="update-themes-table">
 	<thead>
 	<tr>
-		<td class="manage-column check-column"><input type="checkbox" id="themes-select-all" /></td>
+		<td class="manage-column check-column"><input type="checkbox" id="themes-select-all"></td>
 		<td class="manage-column"><label for="themes-select-all"><?php _e( 'Select All' ); ?></label></td>
 	</tr>
 	</thead>
@@ -598,7 +598,7 @@ function list_theme_updates() {
 	<tr>
 		<td class="check-column">
 			<?php if ( $compatible_wp && $compatible_php ) : ?>
-				<input type="checkbox" name="checked[]" id="<?php echo $checkbox_id; ?>" value="<?php echo esc_attr( $stylesheet ); ?>" />
+				<input type="checkbox" name="checked[]" id="<?php echo $checkbox_id; ?>" value="<?php echo esc_attr( $stylesheet ); ?>">
 				<label for="<?php echo $checkbox_id; ?>" class="screen-reader-text">
 					<?php
 					/* translators: %s: Theme name. */
@@ -608,7 +608,7 @@ function list_theme_updates() {
 			<?php endif; ?>
 		</td>
 		<td class="plugin-title"><p>
-			<img src="<?php echo esc_url( $theme->get_screenshot() . '?ver=' . $theme->version ); ?>" width="85" height="64" class="updates-table-screenshot" alt="" />
+			<img src="<?php echo esc_url( $theme->get_screenshot() . '?ver=' . $theme->version ); ?>" width="85" height="64" class="updates-table-screenshot" alt="">
 			<strong><?php echo $theme->display( 'Name' ); ?></strong>
 			<?php
 			printf(
@@ -633,12 +633,12 @@ function list_theme_updates() {
 
 	<tfoot>
 	<tr>
-		<td class="manage-column check-column"><input type="checkbox" id="themes-select-all-2" /></td>
+		<td class="manage-column check-column"><input type="checkbox" id="themes-select-all-2"></td>
 		<td class="manage-column"><label for="themes-select-all-2"><?php _e( 'Select All' ); ?></label></td>
 	</tr>
 	</tfoot>
 </table>
-<p><input id="upgrade-themes-2" class="button" type="submit" value="<?php esc_attr_e( 'Update Themes' ); ?>" name="upgrade" /></p>
+<p><input id="upgrade-themes-2" class="button" type="submit" value="<?php esc_attr_e( 'Update Themes' ); ?>" name="upgrade"></p>
 </form>
 	<?php
 }
@@ -664,7 +664,7 @@ function list_translation_updates() {
 	<form method="post" action="<?php echo esc_url( $form_action ); ?>" name="upgrade-translations" class="upgrade">
 		<p><?php _e( 'New translations are available.' ); ?></p>
 		<?php wp_nonce_field( 'upgrade-translations' ); ?>
-		<p><input class="button" type="submit" value="<?php esc_attr_e( 'Update Translations' ); ?>" name="upgrade" /></p>
+		<p><input class="button" type="submit" value="<?php esc_attr_e( 'Update Translations' ); ?>" name="upgrade"></p>
 	</form>
 	<?php
 }
@@ -788,7 +788,7 @@ function do_core_upgrade( $reinstall = false ) {
 	show_message( '<span class="hide-if-js">' . sprintf( __( 'Welcome to ClassicPress %1$s. <a href="%2$s">Learn more</a>.' ), $result, esc_url( self_admin_url( 'about.php?updated' ) ) ) . '</span>' );
 	?>
 	</div>
-	<script type="text/javascript">
+	<script>
 	window.location = '<?php echo self_admin_url( 'about.php?updated' ); ?>';
 	</script>
 	<?php

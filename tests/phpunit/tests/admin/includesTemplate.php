@@ -17,7 +17,7 @@ class Tests_Admin_IncludesTemplate extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertStringContainsString( "checked='checked'", $output );
+		$this->assertStringContainsString( 'checked', $output );
 	}
 
 	/**

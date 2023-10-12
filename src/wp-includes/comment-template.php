@@ -2061,8 +2061,8 @@ function get_comment_id_fields( $post = null ) {
 
 	$post_id     = $post->ID;
 	$reply_to_id = _get_comment_reply_id( $post_id );
-	$result      = "<input type='hidden' name='comment_post_ID' value='$post_id' id='comment_post_ID' />\n";
-	$result     .= "<input type='hidden' name='comment_parent' id='comment_parent' value='$reply_to_id' />\n";
+	$result      = "<input type='hidden' name='comment_post_ID' value='$post_id' id='comment_post_ID'>\n";
+	$result     .= "<input type='hidden' name='comment_parent' id='comment_parent' value='$reply_to_id'>\n";
 
 	/**
 	 * Filters the returned comment ID fields.
@@ -2227,8 +2227,6 @@ function _get_comment_reply_id( $post = null ) {
  *     @type bool     $reverse_top_level Ordering of the listed comments. If true, will display
  *                                       newest comments first. Default null.
  *     @type bool     $reverse_children  Whether to reverse child comments in the list. Default null.
- *     @type string   $format            How to format the comments list. Accepts 'html5', 'xhtml'.
- *                                       Default 'html5' if the theme supports it.
  *     @type bool     $short_ping        Whether to output short pings. Default false.
  *     @type bool     $echo              Whether to echo the output or return it. Default true.
  * }
@@ -2257,7 +2255,6 @@ function wp_list_comments( $args = array(), $comments = null ) {
 		'avatar_size'       => 32,
 		'reverse_top_level' => null,
 		'reverse_children'  => '',
-		'format'            => current_theme_supports( 'html5', 'comment-list' ) ? 'html5' : 'xhtml',
 		'short_ping'        => false,
 		'echo'              => true,
 	);
@@ -2439,15 +2436,16 @@ function wp_list_comments( $args = array(), $comments = null ) {
  * in the array of fields.
  *
  * @since 3.0.0
- * @since 4.1.0 Introduced the 'class_submit' argument.
- * @since 4.2.0 Introduced the 'submit_button' and 'submit_fields' arguments.
- * @since 4.4.0 Introduced the 'class_form', 'title_reply_before', 'title_reply_after',
- *              'cancel_reply_before', and 'cancel_reply_after' arguments.
- * @since 4.5.0 The 'author', 'email', and 'url' form fields are limited to 245, 100,
- *              and 200 characters, respectively.
- * @since 4.6.0 Introduced the 'action' argument.
- * @since 4.9.6 Introduced the 'cookies' default comment field.
- * @since 5.5.0 Introduced the 'class_container' argument.
+ * @since 4.1.0    Introduced the 'class_submit' argument.
+ * @since 4.2.0    Introduced the 'submit_button' and 'submit_fields' arguments.
+ * @since 4.4.0    Introduced the 'class_form', 'title_reply_before', 'title_reply_after',
+ *                 'cancel_reply_before', and 'cancel_reply_after' arguments.
+ * @since 4.5.0    The 'author', 'email', and 'url' form fields are limited to 245, 100,
+ *                 and 200 characters, respectively.
+ * @since 4.6.0    Introduced the 'action' argument.
+ * @since 4.9.6    Introduced the 'cookies' default comment field.
+ * @since 5.5.0    Introduced the 'class_container' argument.
+ * @since CP-2.0.0 Default to 'html' format.
  *
  * @param array       $args {
  *     Optional. Default arguments and form fields to override.
@@ -2487,11 +2485,10 @@ function wp_list_comments( $args = array(), $comments = null ) {
  *     @type string $cancel_reply_link    The translatable 'cancel reply' button label. Default 'Cancel reply'.
  *     @type string $label_submit         The translatable 'submit' button label. Default 'Post a comment'.
  *     @type string $submit_button        HTML format for the Submit button.
- *                                        Default: '<input name="%1$s" type="submit" id="%2$s" class="%3$s" value="%4$s" />'.
+ *                                        Default: '<input name="%1$s" type="submit" id="%2$s" class="%3$s" value="%4$s">'.
  *     @type string $submit_field         HTML format for the markup surrounding the Submit button and comment hidden
  *                                        fields. Default: '<p class="form-submit">%1$s %2$s</p>', where %1$s is the
  *                                        submit button markup and %2$s is the comment hidden fields.
- *     @type string $format               The comment form format. Default 'xhtml'. Accepts 'xhtml', 'html5'.
  * }
  * @param int|WP_Post $post Optional. Post ID or WP_Post object to generate the form for. Default current post.
  */
@@ -2519,16 +2516,12 @@ function comment_form( $args = array(), $post = null ) {
 	$user_identity = $user->exists() ? $user->display_name : '';
 
 	$args = wp_parse_args( $args );
-	if ( ! isset( $args['format'] ) ) {
-		$args['format'] = current_theme_supports( 'html5', 'comment-form' ) ? 'html5' : 'xhtml';
-	}
 
 	$req   = get_option( 'require_name_email' );
-	$html5 = 'html5' === $args['format'];
 
-	// Define attributes in HTML5 or XHTML syntax.
-	$required_attribute = ( $html5 ? ' required' : ' required="required"' );
-	$checked_attribute  = ( $html5 ? ' checked' : ' checked="checked"' );
+	// Define attributes.
+	$required_attribute = ' required';
+	$checked_attribute  = ' checked';
 
 	// Identify required fields visually and create a message about the indicator.
 	$required_indicator = ' ' . wp_required_field_indicator();
@@ -2543,7 +2536,7 @@ function comment_form( $args = array(), $post = null ) {
 				( $req ? $required_indicator : '' )
 			),
 			sprintf(
-				'<input id="author" name="author" type="text" value="%s" size="30" maxlength="245" autocomplete="name"%s />',
+				'<input id="author" name="author" type="text" value="%s" size="30" maxlength="245" autocomplete="name"%s>',
 				esc_attr( $commenter['comment_author'] ),
 				( $req ? $required_attribute : '' )
 			)
@@ -2556,8 +2549,7 @@ function comment_form( $args = array(), $post = null ) {
 				( $req ? $required_indicator : '' )
 			),
 			sprintf(
-				'<input id="email" name="email" %s value="%s" size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email"%s />',
-				( $html5 ? 'type="email"' : 'type="text"' ),
+				'<input id="email" name="email" type="email" value="%s" size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email"%s>',
 				esc_attr( $commenter['comment_author_email'] ),
 				( $req ? $required_attribute : '' )
 			)
@@ -2569,8 +2561,7 @@ function comment_form( $args = array(), $post = null ) {
 				__( 'Website' )
 			),
 			sprintf(
-				'<input id="url" name="url" %s value="%s" size="30" maxlength="200" autocomplete="url" />',
-				( $html5 ? 'type="url"' : 'type="text"' ),
+				'<input id="url" name="url" type="url" value="%s" size="30" maxlength="200" autocomplete="url">',
 				esc_attr( $commenter['comment_author_url'] )
 			)
 		),
@@ -2582,7 +2573,7 @@ function comment_form( $args = array(), $post = null ) {
 		$fields['cookies'] = sprintf(
 			'<p class="comment-form-cookies-consent">%s %s</p>',
 			sprintf(
-				'<input id="wp-comment-cookies-consent" name="wp-comment-cookies-consent" type="checkbox" value="yes"%s />',
+				'<input id="wp-comment-cookies-consent" name="wp-comment-cookies-consent" type="checkbox" value="yes"%s>',
 				$consent
 			),
 			sprintf(
@@ -2663,9 +2654,8 @@ function comment_form( $args = array(), $post = null ) {
 		'cancel_reply_after'   => '</small>',
 		'cancel_reply_link'    => __( 'Cancel reply' ),
 		'label_submit'         => __( 'Post Comment' ),
-		'submit_button'        => '<input name="%1$s" type="submit" id="%2$s" class="%3$s" value="%4$s" />',
+		'submit_button'        => '<input name="%1$s" type="submit" id="%2$s" class="%3$s" value="%4$s">',
 		'submit_field'         => '<p class="form-submit">%1$s %2$s</p>',
-		'format'               => 'xhtml',
 	);
 
 	/**

@@ -1827,7 +1827,7 @@ class wpdb {
 			$query = htmlspecialchars( $this->last_query, ENT_QUOTES );
 
 			printf(
-				'<div id="error"><p class="wpdberror"><strong>%s</strong> [%s]<br /><code>%s</code></p></div>',
+				'<div id="error"><p class="wpdberror"><strong>%s</strong> [%s]<br><code>%s</code></p></div>',
 				__( 'ClassicPress database error:' ),
 				$str,
 				$query

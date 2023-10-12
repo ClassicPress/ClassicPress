@@ -144,7 +144,7 @@ class WP_Themes_List_Table extends WP_List_Table {
 		<div class="tablenav themes <?php echo $which; ?>">
 			<?php $this->pagination( $which ); ?>
 			<span class="spinner"></span>
-			<br class="clear" />
+			<br class="clear">
 		</div>
 		<?php
 	}
@@ -246,12 +246,12 @@ class WP_Themes_List_Table extends WP_List_Table {
 
 			<span class="screenshot hide-if-customize">
 				<?php if ( $screenshot ) : ?>
-					<img src="<?php echo esc_url( $screenshot . '?ver=' . $theme->version ); ?>" alt="" />
+					<img src="<?php echo esc_url( $screenshot . '?ver=' . $theme->version ); ?>" alt="">
 				<?php endif; ?>
 			</span>
 			<a href="<?php echo wp_customize_url( $stylesheet ); ?>" class="screenshot load-customize hide-if-no-customize">
 				<?php if ( $screenshot ) : ?>
-					<img src="<?php echo esc_url( $screenshot . '?ver=' . $theme->version ); ?>" alt="" />
+					<img src="<?php echo esc_url( $screenshot . '?ver=' . $theme->version ); ?>" alt="">
 				<?php endif; ?>
 			</a>
 
@@ -354,7 +354,7 @@ class WP_Themes_List_Table extends WP_List_Table {
 			$args = array_merge( $args, $extra_args );
 		}
 
-		printf( "<script type='text/javascript'>var theme_list_args = %s;</script>\n", wp_json_encode( $args ) );
+		printf( "<script>var theme_list_args = %s;</script>\n", wp_json_encode( $args ) );
 		parent::_js_vars();
 	}
 }

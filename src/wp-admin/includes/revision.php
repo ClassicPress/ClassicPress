@@ -366,11 +366,11 @@ function wp_print_revision_templates() {
 
 	<script id="tmpl-revisions-buttons" type="text/html">
 		<div class="revisions-previous">
-			<input class="button" type="button" value="<?php echo esc_attr_x( 'Previous', 'Button label for a previous revision' ); ?>" />
+			<input class="button" type="button" value="<?php echo esc_attr_x( 'Previous', 'Button label for a previous revision' ); ?>">
 		</div>
 
 		<div class="revisions-next">
-			<input class="button" type="button" value="<?php echo esc_attr_x( 'Next', 'Button label for a next revision' ); ?>" />
+			<input class="button" type="button" value="<?php echo esc_attr_x( 'Next', 'Button label for a next revision' ); ?>">
 		</div>
 	</script>
 
@@ -380,10 +380,10 @@ function wp_print_revision_templates() {
 				<input type="checkbox" class="compare-two-revisions"
 				<#
 				if ( 'undefined' !== typeof data && data.model.attributes.compareTwoMode ) {
-					#> checked="checked"<#
+					#> checked<#
 				}
 				#>
-				/>
+				>
 				<?php esc_html_e( 'Compare any two revisions' ); ?>
 			</label>
 		</div>
@@ -436,16 +436,16 @@ function wp_print_revision_templates() {
 					</div>
 				<# if ( 'to' === data.type && data.attributes.restoreUrl ) { #>
 					<input  <?php if ( wp_check_post_lock( $post->ID ) ) { ?>
-						disabled="disabled"
+						disabled
 					<?php } else { ?>
 						<# if ( data.attributes.current ) { #>
-							disabled="disabled"
+							disabled
 						<# } #>
 					<?php } ?>
 					<# if ( data.attributes.autosave ) { #>
-						type="button" class="restore-revision button button-primary" value="<?php esc_attr_e( 'Restore This Autosave' ); ?>" />
+						type="button" class="restore-revision button button-primary" value="<?php esc_attr_e( 'Restore This Autosave' ); ?>">
 					<# } else { #>
-						type="button" class="restore-revision button button-primary" value="<?php esc_attr_e( 'Restore This Revision' ); ?>" />
+						type="button" class="restore-revision button button-primary" value="<?php esc_attr_e( 'Restore This Revision' ); ?>">
 					<# } #>
 				<# } #>
 			</div>

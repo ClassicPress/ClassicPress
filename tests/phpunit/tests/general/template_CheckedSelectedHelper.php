@@ -28,7 +28,7 @@ class Tests_General_Template_CheckedSelectedHelper extends WP_UnitTestCase {
 	 * @covers ::selected
 	 */
 	public function test_selected_with_equal_values() {
-		$this->assertSame( " selected='selected'", selected( 'foo', 'foo', false ) );
+		$this->assertSame( ' selected', selected( 'foo', 'foo', false ) );
 	}
 
 	/**
@@ -38,7 +38,7 @@ class Tests_General_Template_CheckedSelectedHelper extends WP_UnitTestCase {
 	 * @covers ::checked
 	 */
 	public function test_checked_with_equal_values() {
-		$this->assertSame( " checked='checked'", checked( 'foo', 'foo', false ) );
+		$this->assertSame( ' checked', checked( 'foo', 'foo', false ) );
 	}
 
 	/**
@@ -48,7 +48,7 @@ class Tests_General_Template_CheckedSelectedHelper extends WP_UnitTestCase {
 	 * @covers ::disabled
 	 */
 	public function test_disabled_with_equal_values() {
-		$this->assertSame( " disabled='disabled'", disabled( 'foo', 'foo', false ) );
+		$this->assertSame( ' disabled', disabled( 'foo', 'foo', false ) );
 	}
 
 	/**
@@ -66,7 +66,7 @@ class Tests_General_Template_CheckedSelectedHelper extends WP_UnitTestCase {
 
 		// Call the function via a variable to prevent a parse error for this file on PHP 8.1.
 		$fn = 'readonly';
-		$this->assertSame( " readonly='readonly'", $fn( 'foo', 'foo', false ) );
+		$this->assertSame( ' readonly', $fn( 'foo', 'foo', false ) );
 	}
 
 	/**
@@ -76,7 +76,7 @@ class Tests_General_Template_CheckedSelectedHelper extends WP_UnitTestCase {
 	 * @covers ::wp_readonly
 	 */
 	public function test_wp_readonly_with_equal_values() {
-		$this->assertSame( " readonly='readonly'", wp_readonly( 'foo', 'foo', false ) );
+		$this->assertSame( ' readonly', wp_readonly( 'foo', 'foo', false ) );
 	}
 
 	/**
@@ -91,7 +91,7 @@ class Tests_General_Template_CheckedSelectedHelper extends WP_UnitTestCase {
 	 * @param mixed $current The other value to compare.
 	 */
 	public function test_checked_selected_helper_with_equal_values( $helper, $current ) {
-		$this->assertSame( " test='test'", __checked_selected_helper( $helper, $current, false, 'test' ) );
+		$this->assertSame( ' test', __checked_selected_helper( $helper, $current, false, 'test' ) );
 	}
 
 	/**
@@ -171,7 +171,7 @@ class Tests_General_Template_CheckedSelectedHelper extends WP_UnitTestCase {
 	 * @covers ::__checked_selected_helper
 	 */
 	public function test_checked_selected_helper_echoes_result_by_default() {
-		$expected = " disabled='disabled'";
+		$expected = ' disabled';
 		$this->expectOutputString( $expected );
 		$this->assertSame( $expected, disabled( 'foo', 'foo' ) );
 	}
@@ -196,10 +196,10 @@ class Tests_General_Template_CheckedSelectedHelper extends WP_UnitTestCase {
 		$expected = '';
 
 		if ( false !== $expect_output ) {
-			$expected = " {$fn}='{$fn}'";
+			$expected = " {$fn}";
 			if ( 'wp_readonly' === $fn ) {
 				// Account for the function name not matching the expected output string.
-				$expected = " readonly='readonly'";
+				$expected = ' readonly';
 			}
 
 			// Only set output expectation when output is expected, so the test will fail on unexpected output.

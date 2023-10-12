@@ -368,12 +368,12 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 					?>
 				</div>
 				<?php $this->pagination( $which ); ?>
-				<br class="clear" />
+				<br class="clear">
 			</div>
 		<?php } else { ?>
 			<div class="tablenav bottom">
 				<?php $this->pagination( $which ); ?>
-				<br class="clear" />
+				<br class="clear">
 			</div>
 			<?php
 		}
@@ -527,7 +527,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 								);
 							} else {
 								$action_links[] = sprintf(
-									'<button type="button" class="button button-disabled" disabled="disabled">%s</button>',
+									'<button type="button" class="button button-disabled" disabled>%s</button>',
 									_x( 'Cannot Install', 'plugin' )
 								);
 							}
@@ -549,7 +549,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 								);
 							} else {
 								$action_links[] = sprintf(
-									'<button type="button" class="button button-disabled" disabled="disabled">%s</button>',
+									'<button type="button" class="button button-disabled" disabled>%s</button>',
 									_x( 'Cannot Update', 'plugin' )
 								);
 							}
@@ -560,7 +560,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 					case 'newer_installed':
 						if ( is_plugin_active( $status['file'] ) ) {
 							$action_links[] = sprintf(
-								'<button type="button" class="button button-disabled" disabled="disabled">%s</button>',
+								'<button type="button" class="button button-disabled" disabled>%s</button>',
 								_x( 'Active', 'plugin' )
 							);
 						} elseif ( current_user_can( 'activate_plugin', $status['file'] ) ) {
@@ -592,13 +592,13 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 								);
 							} else {
 								$action_links[] = sprintf(
-									'<button type="button" class="button button-disabled" disabled="disabled">%s</button>',
+									'<button type="button" class="button button-disabled" disabled>%s</button>',
 									_x( 'Cannot Activate', 'plugin' )
 								);
 							}
 						} else {
 							$action_links[] = sprintf(
-								'<button type="button" class="button button-disabled" disabled="disabled">%s</button>',
+								'<button type="button" class="button button-disabled" disabled>%s</button>',
 								_x( 'Installed', 'plugin' )
 							);
 						}
@@ -700,7 +700,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 					<h3>
 						<a href="<?php echo esc_url( $details_link ); ?>" class="thickbox open-plugin-details-modal">
 						<?php echo $title; ?>
-						<img src="<?php echo esc_url( $plugin_icon_url ); ?>" class="plugin-icon" alt="" />
+						<img src="<?php echo esc_url( $plugin_icon_url ); ?>" class="plugin-icon" alt="">
 						</a>
 					</h3>
 				</div>

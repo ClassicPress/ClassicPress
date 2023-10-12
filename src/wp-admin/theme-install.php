@@ -215,7 +215,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 			echo '<div class="filter-group-feature">';
 			foreach ( $features as $feature => $feature_name ) {
 				$feature = esc_attr( $feature );
-				echo '<input type="checkbox" id="filter-id-' . $feature . '" value="' . $feature . '" /> ';
+				echo '<input type="checkbox" id="filter-id-' . $feature . '" value="' . $feature . '"> ';
 				echo '<label for="filter-id-' . $feature . '">' . esc_html( $feature_name ) . '</label>';
 			}
 			echo '</div>';
@@ -276,7 +276,7 @@ if ( $tab ) {
 <script id="tmpl-theme" type="text/template">
 	<# if ( data.screenshot_url ) { #>
 		<div class="theme-screenshot">
-			<img src="{{ data.screenshot_url }}?ver={{ data.version }}" alt="" />
+			<img src="{{ data.screenshot_url }}?ver={{ data.version }}" alt="">
 		</div>
 	<# } else { #>
 		<div class="theme-screenshot blank"></div>
@@ -466,7 +466,7 @@ if ( $tab ) {
 					</span>
 
 					<div class="theme-screenshot">
-						<img class="theme-screenshot" src="{{ data.screenshot_url }}?ver={{ data.version }}" alt="" />
+						<img class="theme-screenshot" src="{{ data.screenshot_url }}?ver={{ data.version }}" alt="">
 					</div>
 
 					<div class="theme-details">

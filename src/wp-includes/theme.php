@@ -713,12 +713,9 @@ function locale_stylesheet() {
 		return;
 	}
 
-	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
-
 	printf(
-		'<link rel="stylesheet" href="%s"%s media="screen" />',
-		$stylesheet,
-		$type_attr
+		'<link rel="stylesheet" href="%s" media="screen">',
+		$stylesheet
 	);
 }
 
@@ -1270,7 +1267,7 @@ function get_header_image_tag( $attr = array() ) {
 		$html .= ' ' . $name . '="' . $value . '"';
 	}
 
-	$html .= ' />';
+	$html .= '>';
 
 	/**
 	 * Filters the markup of header images.
@@ -1804,11 +1801,9 @@ function _custom_background_cb() {
 		$color = false;
 	}
 
-	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
-
 	if ( ! $background && ! $color ) {
 		if ( is_customize_preview() ) {
-			printf( '<style%s id="custom-background-css"></style>', $type_attr );
+			print( '<style id="custom-background-css"></style>' );
 		}
 		return;
 	}
@@ -1876,9 +1871,8 @@ body.custom-background { <?php echo trim( $style ); ?> }
 function wp_custom_css_cb() {
 	$styles = wp_get_custom_css();
 	if ( $styles || is_customize_preview() ) :
-		$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
 		?>
-		<style<?php echo $type_attr; ?> id="wp-custom-css">
+		<style id="wp-custom-css">
 			<?php
 			// Note that esc_html() cannot be used because `div &gt; span` is not interpreted properly.
 			echo strip_tags( $styles );
@@ -2520,23 +2514,24 @@ function get_theme_starter_content() {
  *     ) );
  *
  * @since 2.9.0
- * @since 3.4.0 The `custom-header-uploads` feature was deprecated.
- * @since 3.6.0 The `html5` feature was added.
- * @since 3.6.1 The `html5` feature requires an array of types to be passed. Defaults to
- *              'comment-list', 'comment-form', 'search-form' for backward compatibility.
- * @since 3.9.0 The `html5` feature now also accepts 'gallery' and 'caption'.
- * @since 4.1.0 The `title-tag` feature was added.
- * @since 4.5.0 The `customize-selective-refresh-widgets` feature was added.
- * @since 4.7.0 The `starter-content` feature was added.
- * @since 5.0.0 The `responsive-embeds`, `align-wide`, `dark-editor-style`, `disable-custom-colors`,
- *              `disable-custom-font-sizes`, `editor-color-palette`, `editor-font-sizes`
- *              and `editor-styles` features were added.
- * @since 5.3.0 The `html5` feature now also accepts 'script' and 'style'.
- * @since 5.3.0 Formalized the existing and already documented `...$args` parameter
- *              by adding it to the function signature.
- * @since 5.5.0 The `custom-logo` feature now also accepts 'unlink-homepage-logo'.
- * @since 5.6.0 The `post-formats` feature warns if no array is passed as the second parameter.
- * @since 6.0.0 The `html5` feature warns if no array is passed as the second parameter.
+ * @since 3.4.0    The `custom-header-uploads` feature was deprecated.
+ * @since 3.6.0    The `html5` feature was added.
+ * @since 3.6.1    The `html5` feature requires an array of types to be passed. Defaults to
+ *                 'comment-list', 'comment-form', 'search-form' for backward compatibility.
+ * @since 3.9.0    The `html5` feature now also accepts 'gallery' and 'caption'.
+ * @since 4.1.0    The `title-tag` feature was added.
+ * @since 4.5.0    The `customize-selective-refresh-widgets` feature was added.
+ * @since 4.7.0    The `starter-content` feature was added.
+ * @since 5.0.0    The `responsive-embeds`, `align-wide`, `dark-editor-style`, `disable-custom-colors`,
+ *                 `disable-custom-font-sizes`, `editor-color-palette`, `editor-font-sizes`
+ *                 and `editor-styles` features were added.
+ * @since 5.3.0    The `html5` feature now also accepts 'script' and 'style'.
+ * @since 5.3.0    Formalized the existing and already documented `...$args` parameter
+ *                 by adding it to the function signature.
+ * @since 5.5.0    The `custom-logo` feature now also accepts 'unlink-homepage-logo'.
+ * @since 5.6.0    The `post-formats` feature warns if no array is passed as the second parameter.
+ * @since 6.0.0    The `html5` feature warns if no array is passed as the second parameter.
+ * @since CP-2.0.0 The `html5` feature warns if used as it is no longer required.
  *
  * @global array $_wp_theme_features
  *
@@ -2611,26 +2606,14 @@ function add_theme_support( $feature, ...$args ) {
 			break;
 
 		case 'html5':
-			// You can't just pass 'html5', you need to pass an array of types.
-			if ( empty( $args[0] ) || ! is_array( $args[0] ) ) {
-				_doing_it_wrong(
-					"add_theme_support( 'html5' )",
-					__( 'You need to pass an array of types.' ),
-					'3.6.1'
-				);
+			// Since CP-2.0.0 HTLM5 has been expected as theme default
+			_doing_it_wrong(
+				"add_theme_support( 'html5' )",
+				__( 'HTML5 is the default ' ),
+				'CP-2.0.0'
+			);
 
-				if ( ! empty( $args[0] ) && ! is_array( $args[0] ) ) {
-					return false;
-				}
-
-				// Build an array of types for back-compat.
-				$args = array( 0 => array( 'comment-list', 'comment-form', 'search-form' ) );
-			}
-
-			// Calling 'html5' again merges, rather than overwrites.
-			if ( isset( $_wp_theme_features['html5'] ) ) {
-				$args[0] = array_merge( $_wp_theme_features['html5'][0], $args[0] );
-			}
+			return true;
 			break;
 
 		case 'custom-logo':
@@ -2817,19 +2800,6 @@ function add_theme_support( $feature, ...$args ) {
 		case 'body-only':
 			add_theme_support( 'automatic-feed-links' );
 			add_theme_support( 'title-tag' );
-			add_theme_support(
-				'html5',
-				array(
-					'comment-list',
-					'comment-form',
-					'gallery',
-					'caption',
-					'search-form',
-					'script',
-					'style',
-					'navigation-widgets',
-				)
-			);
 
 	}
 
@@ -2891,11 +2861,9 @@ function _custom_logo_header_styles() {
 		$classes = (array) get_theme_support( 'custom-logo', 'header-text' );
 		$classes = array_map( 'sanitize_html_class', $classes );
 		$classes = '.' . implode( ', .', $classes );
-
-		$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
 		?>
 		<!-- Custom Logo: hide header text -->
-		<style id="custom-logo-css"<?php echo $type_attr; ?>>
+		<style id="custom-logo-css">
 			<?php echo $classes; ?> {
 				position: absolute;
 				clip: rect(1px, 1px, 1px, 1px);
@@ -3041,11 +3009,11 @@ function _remove_theme_support( $feature ) {
  * Example usage:
  *
  *     current_theme_supports( 'custom-logo' );
- *     current_theme_supports( 'html5', 'comment-form' );
  *
  * @since 2.9.0
- * @since 5.3.0 Formalized the existing and already documented `...$args` parameter
- *              by adding it to the function signature.
+ * @since 5.3.0    Formalized the existing and already documented `...$args` parameter
+ *                 by adding it to the function signature.
+ * @since CP-2.0.0 HTML5 is expected to be supported by default.
  *
  * @global array $_wp_theme_features
  *
@@ -3059,6 +3027,10 @@ function current_theme_supports( $feature, ...$args ) {
 
 	if ( 'custom-header-uploads' === $feature ) {
 		return current_theme_supports( 'custom-header', 'uploads' );
+	}
+
+	if ( 'html5' === strtolower( $feature ) ) {
+		return true;
 	}
 
 	if ( ! isset( $_wp_theme_features[ $feature ] ) ) {
@@ -3084,13 +3056,10 @@ function current_theme_supports( $feature, ...$args ) {
 			$content_type = $args[0];
 			return in_array( $content_type, $_wp_theme_features[ $feature ][0], true );
 
-		case 'html5':
 		case 'post-formats':
 			/*
 			 * Specific post formats can be registered by passing an array of types
 			 * to add_theme_support().
-			 *
-			 * Specific areas of HTML5 support *must* be passed via an array to add_theme_support().
 			 */
 			$type = $args[0];
 			return in_array( $type, $_wp_theme_features[ $feature ][0], true );
@@ -3677,16 +3646,16 @@ function wp_customize_url( $stylesheet = '' ) {
  * to the body tag by default.
  *
  * @since 3.4.0
- * @since 4.7.0 Support for IE8 and below is explicitly removed via conditional comments.
- * @since 5.5.0 IE8 and older are no longer supported.
+ * @since 4.7.0    Support for IE8 and below is explicitly removed via conditional comments.
+ * @since 5.5.0    IE8 and older are no longer supported.
+ * @since CP-2.0.0 XHTML is no longer supported.
  */
 function wp_customize_support_script() {
 	$admin_origin = parse_url( admin_url() );
 	$home_origin  = parse_url( home_url() );
 	$cross_domain = ( strtolower( $admin_origin['host'] ) != strtolower( $home_origin['host'] ) );
-	$type_attr    = current_theme_supports( 'html5', 'script' ) ? '' : ' type="text/javascript"';
 	?>
-	<script<?php echo $type_attr; ?>>
+	<script>
 		(function() {
 			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
 

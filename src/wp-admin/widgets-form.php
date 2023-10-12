@@ -299,7 +299,7 @@ if ( isset( $_GET['editwidget'] ) && $_GET['editwidget'] ) {
 	<table class="widefat"><thead><tr><th><?php _e( 'Sidebar' ); ?></th><th><?php _e( 'Position' ); ?></th></tr></thead><tbody>
 	<?php
 	foreach ( $wp_registered_sidebars as $sbname => $sbvalue ) {
-		echo "\t\t<tr><td><label><input type='radio' name='sidebar' value='" . esc_attr( $sbname ) . "'" . checked( $sbname, $sidebar, false ) . " /> $sbvalue[name]</label></td><td>";
+		echo "\t\t<tr><td><label><input type='radio' name='sidebar' value='" . esc_attr( $sbname ) . "'" . checked( $sbname, $sidebar, false ) . "> $sbvalue[name]</label></td><td>";
 		if ( 'wp_inactive_widgets' === $sbname || 'orphaned_widgets' === substr( $sbname, 0, 16 ) ) {
 			echo '&nbsp;';
 		} else {
@@ -332,7 +332,7 @@ if ( isset( $_GET['editwidget'] ) && $_GET['editwidget'] ) {
 	<div class="widget-control-actions">
 		<div class="alignleft">
 			<?php if ( ! isset( $_GET['addnew'] ) ) : ?>
-				<input type="submit" name="removewidget" id="removewidget" class="button-link button-link-delete widget-control-remove" value="<?php esc_attr_e( 'Delete' ); ?>" />
+				<input type="submit" name="removewidget" id="removewidget" class="button-link button-link-delete widget-control-remove" value="<?php esc_attr_e( 'Delete' ); ?>">
 				<span class="widget-control-close-wrapper">
 					| <a href="widgets.php" class="button-link widget-control-close"><?php _e( 'Cancel' ); ?></a>
 				</span>

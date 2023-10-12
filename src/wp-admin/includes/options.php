@@ -33,7 +33,7 @@ function options_discussion_add_js() {
  */
 function options_general_add_js() {
 	?>
-<script type="text/javascript">
+<script>
 	jQuery( function($) {
 		var $siteName = $( '#wp-admin-bar-site-name' ).children( 'a' ).first(),
 			homeURL = ( <?php echo wp_json_encode( get_home_url() ); ?> || '' ).replace( /^(https?:\/\/)?(www\.)?/, '' );
@@ -93,7 +93,7 @@ function options_general_add_js() {
 			// Don't show a spinner for English and installed languages,
 			// as there is nothing to download.
 			if ( ! languageSelect.find( 'option:selected' ).data( 'installed' ) ) {
-				$( '#submit', this ).after( '<span class="spinner language-install-spinner is-active" />' );
+				$( '#submit', this ).after( '<span class="spinner language-install-spinner is-active">' );
 			}
 		});
 	} );
@@ -108,7 +108,7 @@ function options_general_add_js() {
  */
 function options_reading_add_js() {
 	?>
-<script type="text/javascript">
+<script>
 	jQuery( function($) {
 		var section = $('#front-static-pages'),
 			staticPage = section.find('input:radio[value="page"]'),
@@ -129,6 +129,6 @@ function options_reading_add_js() {
  * @since 3.5.0
  */
 function options_reading_blog_charset() {
-	echo '<input name="blog_charset" type="text" id="blog_charset" value="' . esc_attr( get_option( 'blog_charset' ) ) . '" class="regular-text" />';
+	echo '<input name="blog_charset" type="text" id="blog_charset" value="' . esc_attr( get_option( 'blog_charset' ) ) . '" class="regular-text">';
 	echo '<p class="description">' . __( 'The <a href="https://wordpress.org/documentation/article/wordpress-glossary/#character-set">character encoding</a> of your site (UTF-8 is recommended)' ) . '</p>';
 }

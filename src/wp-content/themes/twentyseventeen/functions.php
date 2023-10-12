@@ -67,22 +67,6 @@ function twentyseventeen_setup() {
 	);
 
 	/*
-	 * Switch default core markup for search form, comment form, and comments
-	 * to output valid HTML5.
-	 */
-	add_theme_support(
-		'html5',
-		array(
-			'comment-form',
-			'comment-list',
-			'gallery',
-			'caption',
-			'script',
-			'style',
-		)
-	);
-
-	/*
 	 * Enable support for Post Formats.
 	 *
 	 * See: https://codex.wordpress.org/Post_Formats
@@ -424,7 +408,7 @@ function twentyseventeen_colors_css_wrap() {
 		$customize_preview_data_hue = 'data-hue="' . $hue . '"';
 	}
 	?>
-	<style type="text/css" id="custom-theme-colors" <?php echo $customize_preview_data_hue; ?>>
+	<style id="custom-theme-colors" <?php echo $customize_preview_data_hue; ?>>
 		<?php echo twentyseventeen_custom_colors_css(); ?>
 	</style>
 	<?php

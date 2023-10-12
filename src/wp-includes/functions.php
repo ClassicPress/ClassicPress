@@ -1877,7 +1877,7 @@ function wp_nonce_url( $actionurl, $action = -1, $name = '_wpnonce' ) {
  */
 function wp_nonce_field( $action = -1, $name = '_wpnonce', $referer = true, $display = true ) {
 	$name        = esc_attr( $name );
-	$nonce_field = '<input type="hidden" id="' . $name . '" name="' . $name . '" value="' . wp_create_nonce( $action ) . '" />';
+	$nonce_field = '<input type="hidden" id="' . $name . '" name="' . $name . '" value="' . wp_create_nonce( $action ) . '">';
 
 	if ( $referer ) {
 		$nonce_field .= wp_referer_field( false );
@@ -1903,7 +1903,7 @@ function wp_nonce_field( $action = -1, $name = '_wpnonce', $referer = true, $dis
  */
 function wp_referer_field( $display = true ) {
 	$request_url   = remove_query_arg( '_wp_http_referer' );
-	$referer_field = '<input type="hidden" name="_wp_http_referer" value="' . esc_url( $request_url ) . '" />';
+	$referer_field = '<input type="hidden" name="_wp_http_referer" value="' . esc_url( $request_url ) . '">';
 
 	if ( $display ) {
 		echo $referer_field;
@@ -1933,7 +1933,7 @@ function wp_original_referer_field( $display = true, $jump_back_to = 'current' )
 		$ref = ( 'previous' === $jump_back_to ) ? wp_get_referer() : wp_unslash( $_SERVER['REQUEST_URI'] );
 	}
 
-	$orig_referer_field = '<input type="hidden" name="_wp_original_http_referer" value="' . esc_attr( $ref ) . '" />';
+	$orig_referer_field = '<input type="hidden" name="_wp_original_http_referer" value="' . esc_attr( $ref ) . '">';
 
 	if ( $display ) {
 		echo $orig_referer_field;
@@ -3790,7 +3790,7 @@ function _default_wp_die_handler( $message, $title = '', $args = array() ) {
 <!DOCTYPE html>
 <html <?php echo $dir_attr; ?>>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $parsed_args['charset']; ?>" />
+	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $parsed_args['charset']; ?>">
 	<meta name="viewport" content="width=device-width">
 		<?php
 		if ( function_exists( 'wp_robots' ) && function_exists( 'wp_robots_no_robots' ) && function_exists( 'add_filter' ) ) {
@@ -3799,7 +3799,7 @@ function _default_wp_die_handler( $message, $title = '', $args = array() ) {
 		}
 		?>
 	<title><?php echo $title; ?></title>
-	<style type="text/css">
+	<style>
 		html {
 			background: #f1f1f1;
 		}
@@ -4652,6 +4652,22 @@ function _mce_set_direction( $mce_init ) {
 	return $mce_init;
 }
 
+/**
+ * Sets element format to html.
+ *
+ * Fills in the 'element_format' setting
+ * This key is then returned in the $mce_init (TinyMCE settings) array.
+ *
+ * @since CP-2.0.0
+ * @access private
+ *
+ * @param array $mce_init MCE settings array.
+ * @return array Element format set to 'html'.
+ */
+function _mce_set_element_format( $mce_init ) {
+	$mce_init['element_format'] = 'html';
+	return $mce_init;
+}
 
 /**
  * Converts smiley code to the icon graphic file equivalent.
@@ -6410,14 +6426,14 @@ function wp_timezone_choice( $selected_zone, $locale = null ) {
 	$structure = array();
 
 	if ( empty( $selected_zone ) ) {
-		$structure[] = '<option selected="selected" value="">' . __( 'Select a city' ) . '</option>';
+		$structure[] = '<option selected value="">' . __( 'Select a city' ) . '</option>';
 	}
 
 	// If this is a deprecated, but valid, timezone string, display it at the top of the list as-is.
 	if ( in_array( $selected_zone, $tz_identifiers, true ) === false
 		&& in_array( $selected_zone, timezone_identifiers_list( DateTimeZone::ALL_WITH_BC ), true )
 	) {
-		$structure[] = '<option selected="selected" value="' . esc_attr( $selected_zone ) . '">' . esc_html( $selected_zone ) . '</option>';
+		$structure[] = '<option selected value="' . esc_attr( $selected_zone ) . '">' . esc_html( $selected_zone ) . '</option>';
 	}
 
 	foreach ( $zonen as $key => $zone ) {
@@ -6451,7 +6467,7 @@ function wp_timezone_choice( $selected_zone, $locale = null ) {
 		$value    = implode( '/', $value );
 		$selected = '';
 		if ( $value === $selected_zone ) {
-			$selected = 'selected="selected" ';
+			$selected = 'selected ';
 		}
 		$structure[] = '<option ' . $selected . 'value="' . esc_attr( $value ) . '">' . esc_html( $display ) . '</option>';
 
@@ -6465,7 +6481,7 @@ function wp_timezone_choice( $selected_zone, $locale = null ) {
 	$structure[] = '<optgroup label="' . esc_attr__( 'UTC' ) . '">';
 	$selected    = '';
 	if ( 'UTC' === $selected_zone ) {
-		$selected = 'selected="selected" ';
+		$selected = 'selected ';
 	}
 	$structure[] = '<option ' . $selected . 'value="' . esc_attr( 'UTC' ) . '">' . __( 'UTC' ) . '</option>';
 	$structure[] = '</optgroup>';
@@ -6542,7 +6558,7 @@ function wp_timezone_choice( $selected_zone, $locale = null ) {
 		$offset_value = 'UTC' . $offset_value;
 		$selected     = '';
 		if ( $offset_value === $selected_zone ) {
-			$selected = 'selected="selected" ';
+			$selected = 'selected ';
 		}
 		$structure[] = '<option ' . $selected . 'value="' . esc_attr( $offset_value ) . '">' . esc_html( $offset_name ) . '</option>';
 

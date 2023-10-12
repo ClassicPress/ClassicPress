@@ -86,7 +86,7 @@ class WP_Embed {
 			return;
 		}
 		?>
-<script type="text/javascript">
+<script>
 	jQuery( function($) {
 		$.get("<?php echo esc_url( admin_url( 'admin-ajax.php', 'relative' ) ) . '?action=oembed-cache&post=' . $post->ID; ?>");
 	} );

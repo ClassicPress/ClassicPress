@@ -354,7 +354,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 	 */
 	public function get_columns() {
 		$sites_columns = array(
-			'cb'          => '<input type="checkbox" />',
+			'cb'          => '<input type="checkbox">',
 			'blogname'    => __( 'URL' ),
 			'lastupdated' => __( 'Last Updated' ),
 			'registered'  => _x( 'Registered', 'site' ),
@@ -408,7 +408,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 				printf( __( 'Select %s' ), $blogname );
 				?>
 			</label>
-			<input type="checkbox" id="blog_<?php echo $blog['blog_id']; ?>" name="allblogs[]" value="<?php echo esc_attr( $blog['blog_id'] ); ?>" />
+			<input type="checkbox" id="blog_<?php echo $blog['blog_id']; ?>" name="allblogs[]" value="<?php echo esc_attr( $blog['blog_id'] ); ?>">
 			<?php
 		endif;
 	}

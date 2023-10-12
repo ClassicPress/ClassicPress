@@ -206,7 +206,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 						);
 						?>
 					</label>
-					<input id="new-application-password-value" type="text" class="code" readonly="readonly" value="<?php esc_attr( WP_Application_Passwords::chunk_password( $new_password ) ); ?>" />
+					<input id="new-application-password-value" type="text" class="code" readonly value="<?php esc_attr( WP_Application_Passwords::chunk_password( $new_password ) ); ?>">
 				</p>
 				<p><?php _e( 'Be sure to save this in a safe location. You will not be able to retrieve it.' ); ?></p>
 			</div>
@@ -230,14 +230,14 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 		<?php else : ?>
 			<form action="<?php echo esc_url( admin_url( 'authorize-application.php' ) ); ?>" method="post" class="form-wrap">
 				<?php wp_nonce_field( 'authorize_application_password' ); ?>
-				<input type="hidden" name="action" value="authorize_application_password" />
-				<input type="hidden" name="app_id" value="<?php echo esc_attr( $app_id ); ?>" />
-				<input type="hidden" name="success_url" value="<?php echo esc_url( $success_url ); ?>" />
-				<input type="hidden" name="reject_url" value="<?php echo esc_url( $reject_url ); ?>" />
+				<input type="hidden" name="action" value="authorize_application_password">
+				<input type="hidden" name="app_id" value="<?php echo esc_attr( $app_id ); ?>">
+				<input type="hidden" name="success_url" value="<?php echo esc_url( $success_url ); ?>">
+				<input type="hidden" name="reject_url" value="<?php echo esc_url( $reject_url ); ?>">
 
 				<div class="form-field">
 					<label for="app_name"><?php _e( 'New Application Password Name' ); ?></label>
-					<input type="text" id="app_name" name="app_name" value="<?php echo esc_attr( $app_name ); ?>" required />
+					<input type="text" id="app_name" name="app_name" value="<?php echo esc_attr( $app_name ); ?>" required>
 				</div>
 
 				<?php

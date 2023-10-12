@@ -26,7 +26,7 @@
 	<a class="skip-link screen-reader-text" href="#content"><?php _e( 'Skip to content', 'twentyfifteen' ); ?></a>
 
 	<div id="sidebar" class="sidebar">
-		<header id="masthead" class="site-header" role="banner">
+		<header id="masthead" class="site-header">
 			<div class="site-branding">
 				<?php
 					twentyfifteen_the_custom_logo();

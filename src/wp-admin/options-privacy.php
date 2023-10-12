@@ -265,7 +265,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 			</th>
 			<td>
 				<form class="wp-create-privacy-page" method="post" action="">
-					<input type="hidden" name="action" value="create-privacy-page" />
+					<input type="hidden" name="action" value="create-privacy-page">
 					<?php
 					wp_nonce_field( 'create-privacy-page' );
 					submit_button( __( 'Create' ), 'secondary', 'submit', false, array( 'id' => 'create-page' ) );
@@ -288,7 +288,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 			</th>
 			<td>
 				<form method="post" action="">
-					<input type="hidden" name="action" value="set-privacy-page" />
+					<input type="hidden" name="action" value="set-privacy-page">
 					<?php
 					wp_dropdown_pages(
 						array(

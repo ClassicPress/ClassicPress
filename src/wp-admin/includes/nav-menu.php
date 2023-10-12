@@ -295,20 +295,20 @@ function wp_nav_menu_item_link_meta_box() {
 
 	?>
 	<div class="customlinkdiv" id="customlinkdiv">
-		<input type="hidden" value="custom" name="menu-item[<?php echo $_nav_menu_placeholder; ?>][menu-item-type]" />
+		<input type="hidden" value="custom" name="menu-item[<?php echo $_nav_menu_placeholder; ?>][menu-item-type]">
 		<p id="menu-item-url-wrap" class="wp-clearfix">
 			<label class="howto" for="custom-menu-item-url"><?php _e( 'URL' ); ?></label>
-			<input id="custom-menu-item-url" name="menu-item[<?php echo $_nav_menu_placeholder; ?>][menu-item-url]" type="text"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="code menu-item-textbox form-required" placeholder="https://" />
+			<input id="custom-menu-item-url" name="menu-item[<?php echo $_nav_menu_placeholder; ?>][menu-item-url]" type="text"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="code menu-item-textbox form-required" placeholder="https://">
 		</p>
 
 		<p id="menu-item-name-wrap" class="wp-clearfix">
 			<label class="howto" for="custom-menu-item-name"><?php _e( 'Link Text' ); ?></label>
-			<input id="custom-menu-item-name" name="menu-item[<?php echo $_nav_menu_placeholder; ?>][menu-item-title]" type="text"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="regular-text menu-item-textbox" />
+			<input id="custom-menu-item-name" name="menu-item[<?php echo $_nav_menu_placeholder; ?>][menu-item-title]" type="text"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="regular-text menu-item-textbox">
 		</p>
 
 		<p class="button-controls wp-clearfix">
 			<span class="add-to-menu">
-				<input type="submit"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="button submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu' ); ?>" name="add-custom-menu-item" id="submit-customlinkdiv" />
+				<input type="submit"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="button submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu' ); ?>" name="add-custom-menu-item" id="submit-customlinkdiv">
 				<span class="spinner"></span>
 			</span>
 		</p>
@@ -589,7 +589,7 @@ function wp_nav_menu_item_post_type_meta_box( $data_object, $box ) {
 					_e( 'Search' );
 					?>
 				</label>
-				<input type="search"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="quick-search" value="<?php echo $searched; ?>" name="quick-search-posttype-<?php echo $post_type_name; ?>" id="quick-search-posttype-<?php echo $post_type_name; ?>" />
+				<input type="search"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="quick-search" value="<?php echo $searched; ?>" name="quick-search-posttype-<?php echo $post_type_name; ?>" id="quick-search-posttype-<?php echo $post_type_name; ?>">
 				<span class="spinner"></span>
 				<?php submit_button( __( 'Search' ), 'small quick-search-submit hide-if-js', 'submit', false, array( 'id' => 'submit-quick-search-posttype-' . $post_type_name ) ); ?>
 			</p>
@@ -674,12 +674,12 @@ function wp_nav_menu_item_post_type_meta_box( $data_object, $box ) {
 
 		<p class="button-controls wp-clearfix" data-items-type="posttype-<?php echo esc_attr( $post_type_name ); ?>">
 			<span class="list-controls hide-if-no-js">
-				<input type="checkbox"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> id="<?php echo esc_attr( $tab_name ); ?>" class="select-all" />
+				<input type="checkbox"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> id="<?php echo esc_attr( $tab_name ); ?>" class="select-all">
 				<label for="<?php echo esc_attr( $tab_name ); ?>"><?php _e( 'Select All' ); ?></label>
 			</span>
 
 			<span class="add-to-menu">
-				<input type="submit"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="button submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu' ); ?>" name="add-post-type-menu-item" id="<?php echo esc_attr( 'submit-posttype-' . $post_type_name ); ?>" />
+				<input type="submit"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="button submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu' ); ?>" name="add-post-type-menu-item" id="<?php echo esc_attr( 'submit-posttype-' . $post_type_name ); ?>">
 				<span class="spinner"></span>
 			</span>
 		</p>
@@ -890,7 +890,7 @@ function wp_nav_menu_item_taxonomy_meta_box( $data_object, $box ) {
 					_e( 'Search' );
 					?>
 				</label>
-				<input type="search" class="quick-search" value="<?php echo $searched; ?>" name="quick-search-taxonomy-<?php echo $taxonomy_name; ?>" id="quick-search-taxonomy-<?php echo $taxonomy_name; ?>" />
+				<input type="search" class="quick-search" value="<?php echo $searched; ?>" name="quick-search-taxonomy-<?php echo $taxonomy_name; ?>" id="quick-search-taxonomy-<?php echo $taxonomy_name; ?>">
 				<span class="spinner"></span>
 				<?php submit_button( __( 'Search' ), 'small quick-search-submit hide-if-js', 'submit', false, array( 'id' => 'submit-quick-search-taxonomy-' . $taxonomy_name ) ); ?>
 			</p>
@@ -911,12 +911,12 @@ function wp_nav_menu_item_taxonomy_meta_box( $data_object, $box ) {
 
 		<p class="button-controls wp-clearfix" data-items-type="taxonomy-<?php echo esc_attr( $taxonomy_name ); ?>">
 			<span class="list-controls hide-if-no-js">
-				<input type="checkbox"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> id="<?php echo esc_attr( $tab_name ); ?>" class="select-all" />
+				<input type="checkbox"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> id="<?php echo esc_attr( $tab_name ); ?>" class="select-all">
 				<label for="<?php echo esc_attr( $tab_name ); ?>"><?php _e( 'Select All' ); ?></label>
 			</span>
 
 			<span class="add-to-menu">
-				<input type="submit"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="button submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu' ); ?>" name="add-taxonomy-menu-item" id="<?php echo esc_attr( 'submit-taxonomy-' . $taxonomy_name ); ?>" />
+				<input type="submit"<?php wp_nav_menu_disabled_check( $nav_menu_selected_id ); ?> class="button submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu' ); ?>" name="add-taxonomy-menu-item" id="<?php echo esc_attr( 'submit-taxonomy-' . $taxonomy_name ); ?>">
 				<span class="spinner"></span>
 			</span>
 		</p>
@@ -1121,7 +1121,7 @@ function wp_get_nav_menu_to_edit( $menu_id = 0 ) {
 function wp_nav_menu_manage_columns() {
 	return array(
 		'_title'          => __( 'Show advanced menu properties' ),
-		'cb'              => '<input type="checkbox" />',
+		'cb'              => '<input type="checkbox">',
 		'link-target'     => __( 'Link Target' ),
 		'title-attribute' => __( 'Title Attribute' ),
 		'css-classes'     => __( 'CSS Classes' ),

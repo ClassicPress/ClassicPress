@@ -304,7 +304,7 @@ if ( isset( $_REQUEST['approved'] ) || isset( $_REQUEST['deleted'] ) || isset( $
 		if ( $spammed > 0 ) {
 			$ids = isset( $_REQUEST['ids'] ) ? $_REQUEST['ids'] : 0;
 			/* translators: %s: Number of comments. */
-			$messages[] = sprintf( _n( '%s comment marked as spam.', '%s comments marked as spam.', $spammed ), $spammed ) . ' <a href="' . esc_url( wp_nonce_url( "edit-comments.php?doaction=undo&action=unspam&ids=$ids", 'bulk-comments' ) ) . '">' . __( 'Undo' ) . '</a><br />';
+			$messages[] = sprintf( _n( '%s comment marked as spam.', '%s comments marked as spam.', $spammed ), $spammed ) . ' <a href="' . esc_url( wp_nonce_url( "edit-comments.php?doaction=undo&action=unspam&ids=$ids", 'bulk-comments' ) ) . '">' . __( 'Undo' ) . '</a><br>';
 		}
 
 		if ( $unspammed > 0 ) {
@@ -315,7 +315,7 @@ if ( isset( $_REQUEST['approved'] ) || isset( $_REQUEST['deleted'] ) || isset( $
 		if ( $trashed > 0 ) {
 			$ids = isset( $_REQUEST['ids'] ) ? $_REQUEST['ids'] : 0;
 			/* translators: %s: Number of comments. */
-			$messages[] = sprintf( _n( '%s comment moved to the Trash.', '%s comments moved to the Trash.', $trashed ), $trashed ) . ' <a href="' . esc_url( wp_nonce_url( "edit-comments.php?doaction=undo&action=untrash&ids=$ids", 'bulk-comments' ) ) . '">' . __( 'Undo' ) . '</a><br />';
+			$messages[] = sprintf( _n( '%s comment moved to the Trash.', '%s comments moved to the Trash.', $trashed ), $trashed ) . ' <a href="' . esc_url( wp_nonce_url( "edit-comments.php?doaction=undo&action=untrash&ids=$ids", 'bulk-comments' ) ) . '">' . __( 'Undo' ) . '</a><br>';
 		}
 
 		if ( $untrashed > 0 ) {
@@ -345,7 +345,7 @@ if ( isset( $_REQUEST['approved'] ) || isset( $_REQUEST['deleted'] ) || isset( $
 			}
 		}
 
-		echo '<div id="moderated" class="updated notice is-dismissible"><p>' . implode( "<br />\n", $messages ) . '</p></div>';
+		echo '<div id="moderated" class="updated notice is-dismissible"><p>' . implode( "<br>\n", $messages ) . '</p></div>';
 	}
 }
 ?>
@@ -357,17 +357,17 @@ if ( isset( $_REQUEST['approved'] ) || isset( $_REQUEST['deleted'] ) || isset( $
 <?php $wp_list_table->search_box( __( 'Search Comments' ), 'comment' ); ?>
 
 <?php if ( $post_id ) : ?>
-<input type="hidden" name="p" value="<?php echo esc_attr( (int) $post_id ); ?>" />
+<input type="hidden" name="p" value="<?php echo esc_attr( (int) $post_id ); ?>">
 <?php endif; ?>
-<input type="hidden" name="comment_status" value="<?php echo esc_attr( $comment_status ); ?>" />
-<input type="hidden" name="pagegen_timestamp" value="<?php echo esc_attr( current_time( 'mysql', 1 ) ); ?>" />
+<input type="hidden" name="comment_status" value="<?php echo esc_attr( $comment_status ); ?>">
+<input type="hidden" name="pagegen_timestamp" value="<?php echo esc_attr( current_time( 'mysql', 1 ) ); ?>">
 
-<input type="hidden" name="_total" value="<?php echo esc_attr( $wp_list_table->get_pagination_arg( 'total_items' ) ); ?>" />
-<input type="hidden" name="_per_page" value="<?php echo esc_attr( $wp_list_table->get_pagination_arg( 'per_page' ) ); ?>" />
-<input type="hidden" name="_page" value="<?php echo esc_attr( $wp_list_table->get_pagination_arg( 'page' ) ); ?>" />
+<input type="hidden" name="_total" value="<?php echo esc_attr( $wp_list_table->get_pagination_arg( 'total_items' ) ); ?>">
+<input type="hidden" name="_per_page" value="<?php echo esc_attr( $wp_list_table->get_pagination_arg( 'per_page' ) ); ?>">
+<input type="hidden" name="_page" value="<?php echo esc_attr( $wp_list_table->get_pagination_arg( 'page' ) ); ?>">
 
 <?php if ( isset( $_REQUEST['paged'] ) ) { ?>
-	<input type="hidden" name="paged" value="<?php echo esc_attr( absint( $_REQUEST['paged'] ) ); ?>" />
+	<input type="hidden" name="paged" value="<?php echo esc_attr( absint( $_REQUEST['paged'] ) ); ?>">
 <?php } ?>
 
 <?php $wp_list_table->display(); ?>

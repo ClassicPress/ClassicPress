@@ -1169,7 +1169,7 @@ final class WP_Customize_Nav_Menus {
 						_e( 'Search Menu Items' );
 						?>
 					</label>
-					<input type="text" id="menu-items-search" placeholder="<?php esc_attr_e( 'Search menu items&hellip;' ); ?>" aria-describedby="menu-items-search-desc" />
+					<input type="text" id="menu-items-search" placeholder="<?php esc_attr_e( 'Search menu items&hellip;' ); ?>" aria-describedby="menu-items-search-desc">
 					<p class="screen-reader-text" id="menu-items-search-desc">
 						<?php
 						/* translators: Hidden accessibility text. */

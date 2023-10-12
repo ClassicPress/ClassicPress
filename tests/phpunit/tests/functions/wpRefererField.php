@@ -17,7 +17,7 @@ class Tests_Functions_wpRefererField extends WP_UnitTestCase {
 		$_SERVER['REQUEST_URI'] = '/test/';
 
 		wp_referer_field();
-		$this->expectOutputString( '<input type="hidden" name="_wp_http_referer" value="/test/" />' );
+		$this->expectOutputString( '<input type="hidden" name="_wp_http_referer" value="/test/">' );
 	}
 
 	/**
@@ -26,7 +26,7 @@ class Tests_Functions_wpRefererField extends WP_UnitTestCase {
 	public function test_wp_referer_field_return() {
 		$_SERVER['REQUEST_URI'] = '/test/';
 
-		$this->assertSame( '<input type="hidden" name="_wp_http_referer" value="/test/" />', wp_referer_field( false ) );
+		$this->assertSame( '<input type="hidden" name="_wp_http_referer" value="/test/">', wp_referer_field( false ) );
 	}
 
 	/**
@@ -41,7 +41,7 @@ class Tests_Functions_wpRefererField extends WP_UnitTestCase {
 	public function test_wp_referer_field_should_respect_display_arg( $display ) {
 		$actual = $display ? get_echo( 'wp_referer_field' ) : wp_referer_field( false );
 
-		$this->assertSame( '<input type="hidden" name="_wp_http_referer" value="" />', $actual );
+		$this->assertSame( '<input type="hidden" name="_wp_http_referer" value="">', $actual );
 	}
 
 	/**
@@ -72,6 +72,6 @@ class Tests_Functions_wpRefererField extends WP_UnitTestCase {
 
 		$_SERVER['REQUEST_URI'] = $old_request_uri;
 
-		$this->assertSame( '<input type="hidden" name="_wp_http_referer" value="edit.php" />', $actual );
+		$this->assertSame( '<input type="hidden" name="_wp_http_referer" value="edit.php">', $actual );
 	}
 }

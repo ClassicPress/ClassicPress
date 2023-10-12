@@ -286,21 +286,6 @@ function get_search_form( $args = array() ) {
 	// Ensure that the filtered arguments contain all required default values.
 	$args = array_merge( $defaults, $args );
 
-	$format = current_theme_supports( 'html5', 'search-form' ) ? 'html5' : 'xhtml';
-
-	/**
-	 * Filters the HTML format of the search form.
-	 *
-	 * @since 3.6.0
-	 * @since 5.5.0 The `$args` parameter was added.
-	 *
-	 * @param string $format The type of markup to use in the search form.
-	 *                       Accepts 'html5', 'xhtml'.
-	 * @param array  $args   The array of arguments for building the search form.
-	 *                       See get_search_form() for information on accepted arguments.
-	 */
-	$format = apply_filters( 'search_form_format', $format, $args );
-
 	$search_form_template = locate_template( 'searchform.php' );
 
 	if ( '' !== $search_form_template ) {
@@ -319,29 +304,16 @@ function get_search_form( $args = array() ) {
 			$aria_label = '';
 		}
 
-		if ( 'html5' === $format ) {
-			$form = '<form role="search" ' . $aria_label . 'method="get" class="search-form" action="' . esc_url( home_url( '/' ) ) . '">
-				<label>
-					<span class="screen-reader-text">' .
-					/* translators: Hidden accessibility text. */
-					_x( 'Search for:', 'label' ) .
-					'</span>
-					<input type="search" class="search-field" placeholder="' . esc_attr_x( 'Search &hellip;', 'placeholder' ) . '" value="' . get_search_query() . '" name="s" />
-				</label>
-				<input type="submit" class="search-submit" value="' . esc_attr_x( 'Search', 'submit button' ) . '" />
-			</form>';
-		} else {
-			$form = '<form role="search" ' . $aria_label . 'method="get" id="searchform" class="searchform" action="' . esc_url( home_url( '/' ) ) . '">
-				<div>
-					<label class="screen-reader-text" for="s">' .
-					/* translators: Hidden accessibility text. */
-					_x( 'Search for:', 'label' ) .
-					'</label>
-					<input type="text" value="' . get_search_query() . '" name="s" id="s" />
-					<input type="submit" id="searchsubmit" value="' . esc_attr_x( 'Search', 'submit button' ) . '" />
-				</div>
-			</form>';
-		}
+		$form = '<form role="search" ' . $aria_label . 'method="get" class="search-form" action="' . esc_url( home_url( '/' ) ) . '">
+			<label>
+				<span class="screen-reader-text">' .
+				/* translators: Hidden accessibility text. */
+				_x( 'Search for:', 'label' ) .
+				'</span>
+				<input type="search" class="search-field" placeholder="' . esc_attr_x( 'Search &hellip;', 'placeholder' ) . '" value="' . get_search_query() . '" name="s">
+			</label>
+			<input type="submit" class="search-submit" value="' . esc_attr_x( 'Search', 'submit button' ) . '">
+		</form>';
 	}
 
 	/**
@@ -592,7 +564,7 @@ function wp_login_form( $args = array() ) {
 		sprintf(
 			'<p class="login-username">
 				<label for="%1$s">%2$s</label>
-				<input type="text" name="log" id="%1$s" autocomplete="username" class="input" value="%3$s" size="20" />
+				<input type="text" name="log" id="%1$s" autocomplete="username" class="input" value="%3$s" size="20">
 			</p>',
 			esc_attr( $args['id_username'] ),
 			esc_html( $args['label_username'] ),
@@ -601,7 +573,7 @@ function wp_login_form( $args = array() ) {
 		sprintf(
 			'<p class="login-password">
 				<label for="%1$s">%2$s</label>
-				<input type="password" name="pwd" id="%1$s" autocomplete="current-password" spellcheck="false" class="input" value="" size="20" />
+				<input type="password" name="pwd" id="%1$s" autocomplete="current-password" spellcheck="false" class="input" value="" size="20">
 			</p>',
 			esc_attr( $args['id_password'] ),
 			esc_html( $args['label_password'] )
@@ -609,16 +581,16 @@ function wp_login_form( $args = array() ) {
 		$login_form_middle .
 		( $args['remember'] ?
 			sprintf(
-				'<p class="login-remember"><label><input name="rememberme" type="checkbox" id="%1$s" value="forever"%2$s /> %3$s</label></p>',
+				'<p class="login-remember"><label><input name="rememberme" type="checkbox" id="%1$s" value="forever"%2$s> %3$s</label></p>',
 				esc_attr( $args['id_remember'] ),
-				( $args['value_remember'] ? ' checked="checked"' : '' ),
+				( $args['value_remember'] ? ' checked' : '' ),
 				esc_html( $args['label_remember'] )
 			) : ''
 		) .
 		sprintf(
 			'<p class="login-submit">
-				<input type="submit" name="wp-submit" id="%1$s" class="button button-primary" value="%2$s" />
-				<input type="hidden" name="redirect_to" value="%3$s" />
+				<input type="submit" name="wp-submit" id="%1$s" class="button button-primary" value="%2$s">
+				<input type="hidden" name="redirect_to" value="%3$s">
 			</p>',
 			esc_attr( $args['id_submit'] ),
 			esc_attr( $args['label_log_in'] ),
@@ -1117,7 +1089,7 @@ function get_custom_logo( $blog_id = 0 ) {
 	} elseif ( is_customize_preview() ) {
 		// If no logo is set but we're in the Customizer, leave a placeholder (needed for the live preview).
 		$html = sprintf(
-			'<a href="%1$s" class="custom-logo-link" style="display:none;"><img class="custom-logo" alt="" /></a>',
+			'<a href="%1$s" class="custom-logo-link" style="display:none;"><img class="custom-logo" alt=""></a>',
 			esc_url( home_url( '/' ) )
 		);
 	}
@@ -1909,9 +1881,9 @@ function get_archives_link( $url, $text, $format = 'html', $before = '', $after 
 	$aria_current = $selected ? ' aria-current="page"' : '';
 
 	if ( 'link' === $format ) {
-		$link_html = "\t<link rel='archives' title='" . esc_attr( $text ) . "' href='$url' />\n";
+		$link_html = "\t<link rel='archives' title='" . esc_attr( $text ) . "' href='$url'>\n";
 	} elseif ( 'option' === $format ) {
-		$selected_attr = $selected ? " selected='selected'" : '';
+		$selected_attr = $selected ? ' selected' : '';
 		$link_html     = "\t<option value='$url'$selected_attr>$before $text $after</option>\n";
 	} elseif ( 'html' === $format ) {
 		$link_html = "\t<li>$before<a href='$url'$aria_current>$text</a>$after</li>\n";
@@ -3112,7 +3084,7 @@ function feed_links( $args = array() ) {
 	 */
 	if ( apply_filters( 'feed_links_show_posts_feed', true ) ) {
 		printf(
-			'<link rel="alternate" type="%s" title="%s" href="%s" />' . "\n",
+			'<link rel="alternate" type="%s" title="%s" href="%s">' . "\n",
 			feed_content_type(),
 			esc_attr( sprintf( $args['feedtitle'], get_bloginfo( 'name' ), $args['separator'] ) ),
 			esc_url( get_feed_link() )
@@ -3128,7 +3100,7 @@ function feed_links( $args = array() ) {
 	 */
 	if ( apply_filters( 'feed_links_show_comments_feed', true ) ) {
 		printf(
-			'<link rel="alternate" type="%s" title="%s" href="%s" />' . "\n",
+			'<link rel="alternate" type="%s" title="%s" href="%s">' . "\n",
 			feed_content_type(),
 			esc_attr( sprintf( $args['comstitle'], get_bloginfo( 'name' ), $args['separator'] ) ),
 			esc_url( get_feed_link( 'comments_' . get_default_feed() ) )
@@ -3350,7 +3322,7 @@ function feed_links_extra( $args = array() ) {
 
 	if ( isset( $title ) && isset( $href ) ) {
 		printf(
-			'<link rel="alternate" type="%s" title="%s" href="%s" />' . "\n",
+			'<link rel="alternate" type="%s" title="%s" href="%s">' . "\n",
 			feed_content_type(),
 			esc_attr( $title ),
 			esc_url( $href )
@@ -3366,7 +3338,7 @@ function feed_links_extra( $args = array() ) {
  */
 function rsd_link() {
 	printf(
-		'<link rel="EditURI" type="application/rsd+xml" title="RSD" href="%s" />' . "\n",
+		'<link rel="EditURI" type="application/rsd+xml" title="RSD" href="%s">' . "\n",
 		esc_url( site_url( 'xmlrpc.php?rsd', 'rpc' ) )
 	);
 }
@@ -3379,7 +3351,7 @@ function rsd_link() {
  */
 function wlwmanifest_link() {
 	printf(
-		'<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="%s" />' . "\n",
+		'<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="%s">' . "\n",
 		includes_url( 'wlwmanifest.xml' )
 	);
 }
@@ -3398,7 +3370,7 @@ function wlwmanifest_link() {
  */
 function wp_strict_cross_origin_referrer() {
 	?>
-	<meta name='referrer' content='strict-origin-when-cross-origin' />
+	<meta name='referrer' content='strict-origin-when-cross-origin'>
 	<?php
 }
 
@@ -3420,19 +3392,19 @@ function wp_site_icon() {
 		$icon_32 = '/favicon.ico'; // Serve default favicon URL in customizer so element can be updated for preview.
 	}
 	if ( $icon_32 ) {
-		$meta_tags[] = sprintf( '<link rel="icon" href="%s" sizes="32x32" />', esc_url( $icon_32 ) );
+		$meta_tags[] = sprintf( '<link rel="icon" href="%s" sizes="32x32">', esc_url( $icon_32 ) );
 	}
 	$icon_192 = get_site_icon_url( 192 );
 	if ( $icon_192 ) {
-		$meta_tags[] = sprintf( '<link rel="icon" href="%s" sizes="192x192" />', esc_url( $icon_192 ) );
+		$meta_tags[] = sprintf( '<link rel="icon" href="%s" sizes="192x192">', esc_url( $icon_192 ) );
 	}
 	$icon_180 = get_site_icon_url( 180 );
 	if ( $icon_180 ) {
-		$meta_tags[] = sprintf( '<link rel="apple-touch-icon" href="%s" />', esc_url( $icon_180 ) );
+		$meta_tags[] = sprintf( '<link rel="apple-touch-icon" href="%s">', esc_url( $icon_180 ) );
 	}
 	$icon_270 = get_site_icon_url( 270 );
 	if ( $icon_270 ) {
-		$meta_tags[] = sprintf( '<meta name="msapplication-TileImage" content="%s" />', esc_url( $icon_270 ) );
+		$meta_tags[] = sprintf( '<meta name="msapplication-TileImage" content="%s">', esc_url( $icon_270 ) );
 	}
 
 	/**
@@ -3564,7 +3536,7 @@ function wp_resource_hints() {
 
 			$html = trim( $html );
 
-			echo "<link $html />\n";
+			echo "<link $html>\n";
 		}
 	}
 }
@@ -3679,7 +3651,7 @@ function wp_preload_resources() {
 		}
 		$html = trim( $html );
 
-		printf( "<link rel='preload' %s />\n", $html );
+		printf( "<link rel='preload' %s>\n", $html );
 	}
 }
 
@@ -4344,11 +4316,11 @@ function the_search_query() {
  * information for the page.
  *
  * @since 4.3.0
+ * @since CP-2.0.0 Remove `xhtml` as a possible doctype.
  *
- * @param string $doctype Optional. The type of HTML document. Accepts 'xhtml' or 'html'. Default 'html'.
  * @return string A space-separated list of language attributes.
  */
-function get_language_attributes( $doctype = 'html' ) {
+function get_language_attributes() {
 	$attributes = array();
 
 	if ( function_exists( 'is_rtl' ) && is_rtl() ) {
@@ -4357,13 +4329,7 @@ function get_language_attributes( $doctype = 'html' ) {
 
 	$lang = get_bloginfo( 'language' );
 	if ( $lang ) {
-		if ( 'text/html' === get_option( 'html_type' ) || 'html' === $doctype ) {
-			$attributes[] = 'lang="' . esc_attr( $lang ) . '"';
-		}
-
-		if ( 'text/html' !== get_option( 'html_type' ) || 'xhtml' === $doctype ) {
-			$attributes[] = 'xml:lang="' . esc_attr( $lang ) . '"';
-		}
+		$attributes[] = 'lang="' . esc_attr( $lang ) . '"';
 	}
 
 	$output = implode( ' ', $attributes );
@@ -4372,12 +4338,12 @@ function get_language_attributes( $doctype = 'html' ) {
 	 * Filters the language attributes for display in the 'html' tag.
 	 *
 	 * @since 2.5.0
-	 * @since 4.3.0 Added the `$doctype` parameter.
+	 * @since 4.3.0    Added the `$doctype` parameter.
+	 * @since CP-2.0.0 Removed the `$doctype` parameter to default to HTML.
 	 *
 	 * @param string $output A space-separated list of language attributes.
-	 * @param string $doctype The type of HTML document (xhtml|html).
 	 */
-	return apply_filters( 'language_attributes', $output, $doctype );
+	return apply_filters( 'language_attributes', $output );
 }
 
 /**
@@ -4387,12 +4353,11 @@ function get_language_attributes( $doctype = 'html' ) {
  * information for the page.
  *
  * @since 2.1.0
- * @since 4.3.0 Converted into a wrapper for get_language_attributes().
- *
- * @param string $doctype Optional. The type of HTML document. Accepts 'xhtml' or 'html'. Default 'html'.
+ * @since 4.3.0    Converted into a wrapper for get_language_attributes().
+ * @since CP-2.0.0 Removed attributes as doctype is always 'html' now.
  */
-function language_attributes( $doctype = 'html' ) {
-	echo get_language_attributes( $doctype );
+function language_attributes() {
+	echo get_language_attributes();
 }
 
 /**
@@ -4885,7 +4850,7 @@ function wp_admin_css( $file = 'wp-admin', $force_echo = false ) {
 	}
 
 	$stylesheet_link = sprintf(
-		"<link rel='stylesheet' href='%s' type='text/css' />\n",
+		"<link rel='stylesheet' href='%s'>\n",
 		esc_url( wp_admin_css_uri( $file ) )
 	);
 
@@ -4904,7 +4869,7 @@ function wp_admin_css( $file = 'wp-admin', $force_echo = false ) {
 
 	if ( function_exists( 'is_rtl' ) && is_rtl() ) {
 		$rtl_stylesheet_link = sprintf(
-			"<link rel='stylesheet' href='%s' type='text/css' />\n",
+			"<link rel='stylesheet' href='%s'>\n",
 			esc_url( wp_admin_css_uri( "$file-rtl" ) )
 		);
 
@@ -4946,7 +4911,7 @@ function wp_generator() {
 	 *
 	 * @param string $generator_type The XHTML generator.
 	 */
-	the_generator( apply_filters( 'wp_generator_type', 'xhtml' ) );
+	the_generator( apply_filters( 'wp_generator_type', 'html' ) );
 }
 
 /**
@@ -4957,7 +4922,7 @@ function wp_generator() {
  *
  * @since 2.5.0
  *
- * @param string $type The type of generator to output - (html|xhtml|atom|rss2|rdf|comment|export).
+ * @param string $type The type of generator to output - (html|atom|rss2|rdf|comment|export).
  */
 function the_generator( $type ) {
 	/**
@@ -4967,7 +4932,7 @@ function the_generator( $type ) {
 	 *
 	 * @param string $generator_type The generator output.
 	 * @param string $type           The type of generator to output. Accepts 'html',
-	 *                               'xhtml', 'atom', 'rss2', 'rdf', 'comment', 'export'.
+	 *                               'atom', 'rss2', 'rdf', 'comment', 'export'.
 	 */
 	echo apply_filters( 'the_generator', get_the_generator( $type ), $type ) . "\n";
 }
@@ -4981,7 +4946,7 @@ function the_generator( $type ) {
  *
  * @since 2.5.0
  *
- * @param string $type The type of generator to return - (html|xhtml|atom|rss2|rdf|comment|export).
+ * @param string $type The type of generator to return - (html|atom|rss2|rdf|comment|export).
  * @return string|void The HTML content for the generator.
  */
 function get_the_generator( $type = '' ) {
@@ -5014,10 +4979,7 @@ function get_the_generator( $type = '' ) {
 
 	switch ( $type ) {
 		case 'html':
-			$gen = '<meta name="generator" content="WordPress ' . esc_attr( get_bloginfo( 'version' ) ) . ' (compatible; ClassicPress ' . esc_attr( classicpress_version_short() ) . ')\">';
-			break;
-		case 'xhtml':
-			$gen = '<meta name="generator" content="WordPress ' . esc_attr( get_bloginfo( 'version' ) ) . ' (compatible; ClassicPress ' . esc_attr( classicpress_version_short() ) . ')\" />';
+			$gen = '<meta name="generator" content="WordPress ' . esc_attr( get_bloginfo( 'version' ) ) . ' (compatible; ClassicPress ' . esc_attr( classicpress_version_short() ) . ')">';
 			break;
 		case 'atom':
 			$gen = '<generator uri="https://www.classicpress.net/" version="' . esc_attr( get_bloginfo( 'version' ) ) . '-cp-' . esc_attr( classicpress_version_short() ) . '">ClassicPress</generator>';
@@ -5029,7 +4991,7 @@ function get_the_generator( $type = '' ) {
 			$gen = '<admin:generatorAgent rdf:resource="' . sanitize_url( 'https://www.classicpress.net/?v=' . get_bloginfo( 'version' ) . '-cp-' . classicpress_version_short() ) . '" />';
 			break;
 		case 'comment':
-			$gen = '<!-- generator="WordPress/' . esc_attr( get_bloginfo( 'version' ) ) . '(compatible; ClassicPress/' . esc_attr( classicpress_version_short() ) . ')\" -->';
+			$gen = '<!-- generator="WordPress/' . esc_attr( get_bloginfo( 'version' ) ) . '(compatible; ClassicPress/' . esc_attr( classicpress_version_short() ) . ')" -->';
 			break;
 		case 'export':
 			$gen = '<!-- generator="ClassicPress/' . esc_attr( classicpress_version_short() ) . '" created="' . esc_attr( date( 'Y-m-d H:i' ) ) . '" -->';
@@ -5049,13 +5011,12 @@ function get_the_generator( $type = '' ) {
 	 *  - `get_the_generator_html`
 	 *  - `get_the_generator_rdf`
 	 *  - `get_the_generator_rss2`
-	 *  - `get_the_generator_xhtml`
 	 *
 	 * @since 2.5.0
 	 *
 	 * @param string $gen  The HTML markup output to wp_head().
-	 * @param string $type The type of generator. Accepts 'html', 'xhtml', 'atom',
-	 *                     'rss2', 'rdf', 'comment', 'export'.
+	 * @param string $type The type of generator. Accepts 'html', atom', 'rss2',
+	 *                     'rdf', 'comment', 'export'.
 	 */
 	return apply_filters( "get_the_generator_{$type}", $gen, $type );
 }
@@ -5148,6 +5109,7 @@ if ( PHP_VERSION_ID < 80100 ) {
  * Compares the first two arguments and if identical marks as `$type`.
  *
  * @since 2.8.0
+ * @since CP-2.0.0 Output only an HTML5 value, not an attribute–value pair.
  * @access private
  *
  * @param mixed  $helper  One of the values to compare.
@@ -5158,7 +5120,7 @@ if ( PHP_VERSION_ID < 80100 ) {
  */
 function __checked_selected_helper( $helper, $current, $display, $type ) { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
 	if ( (string) $helper === (string) $current ) {
-		$result = " $type='$type'";
+		$result = " $type";
 	} else {
 		$result = '';
 	}

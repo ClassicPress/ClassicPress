@@ -1624,7 +1624,7 @@ function _wp_post_thumbnail_html( $thumbnail_id = null, $post = null ) {
 		}
 	}
 
-	$content .= '<input type="hidden" id="_thumbnail_id" name="_thumbnail_id" value="' . esc_attr( $thumbnail_id ? $thumbnail_id : '-1' ) . '" />';
+	$content .= '<input type="hidden" id="_thumbnail_id" name="_thumbnail_id" value="' . esc_attr( $thumbnail_id ? $thumbnail_id : '-1' ) . '">';
 
 	/**
 	 * Filters the admin post thumbnail HTML markup to return.
@@ -1854,8 +1854,8 @@ function _admin_notice_post_locked() {
 		<div class="post-taken-over">
 			<div class="post-locked-avatar"></div>
 			<p class="wp-tab-first" tabindex="0">
-			<span class="currently-editing"></span><br />
-			<span class="locked-saving hidden"><img src="<?php echo esc_url( admin_url( 'images/spinner-2x.gif' ) ); ?>" width="16" height="16" alt="" /> <?php _e( 'Saving revision&hellip;' ); ?></span>
+			<span class="currently-editing"></span><br>
+			<span class="locked-saving hidden"><img src="<?php echo esc_url( admin_url( 'images/spinner-2x.gif' ) ); ?>" width="16" height="16" alt=""> <?php _e( 'Saving revision&hellip;' ); ?></span>
 			<span class="locked-saved hidden"><?php _e( 'Your latest changes were saved as a revision.' ); ?></span>
 			</p>
 			<?php

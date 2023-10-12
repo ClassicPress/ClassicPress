@@ -369,7 +369,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	 */
 	public function get_columns() {
 		$columns = array(
-			'cb'       => '<input type="checkbox" />',
+			'cb'       => '<input type="checkbox">',
 			'username' => __( 'Username' ),
 			'name'     => __( 'Name' ),
 			'email'    => __( 'Email' ),
@@ -468,10 +468,10 @@ class WP_Users_List_Table extends WP_List_Table {
 			);
 
 			if ( current_user_can( 'edit_user', $user_object->ID ) ) {
-				$edit            = "<strong><a href=\"{$edit_link}\">{$user_object->user_login}</a>{$super_admin}</strong><br />";
+				$edit            = "<strong><a href=\"{$edit_link}\">{$user_object->user_login}</a>{$super_admin}</strong><br>";
 				$actions['edit'] = '<a href="' . $edit_link . '">' . __( 'Edit' ) . '</a>';
 			} else {
-				$edit = "<strong>{$user_object->user_login}{$super_admin}</strong><br />";
+				$edit = "<strong>{$user_object->user_login}{$super_admin}</strong><br>";
 			}
 
 			if ( ! is_multisite()
@@ -524,7 +524,7 @@ class WP_Users_List_Table extends WP_List_Table {
 			// Set up the checkbox (because the user is editable, otherwise it's empty).
 			$checkbox = sprintf(
 				'<label class="screen-reader-text" for="user_%1$s">%2$s</label>' .
-				'<input type="checkbox" name="users[]" id="user_%1$s" class="%3$s" value="%1$s" />',
+				'<input type="checkbox" name="users[]" id="user_%1$s" class="%3$s" value="%1$s">',
 				$user_object->ID,
 				/* translators: Hidden accessibility text. %s: User login. */
 				sprintf( __( 'Select %s' ), $user_object->user_login ),

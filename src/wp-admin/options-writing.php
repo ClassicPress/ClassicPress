@@ -74,9 +74,9 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 	?>
 </span></legend>
 <label for="use_smilies">
-<input name="use_smilies" type="checkbox" id="use_smilies" value="1" <?php checked( '1', get_option( 'use_smilies' ) ); ?> />
-	<?php _e( 'Convert emoticons like <code>:-)</code> and <code>:-P</code> to graphics on display' ); ?></label><br />
-<label for="use_balanceTags"><input name="use_balanceTags" type="checkbox" id="use_balanceTags" value="1" <?php checked( '1', get_option( 'use_balanceTags' ) ); ?> /> <?php _e( 'ClassicPress should correct invalidly nested XHTML automatically' ); ?></label>
+<input name="use_smilies" type="checkbox" id="use_smilies" value="1" <?php checked( '1', get_option( 'use_smilies' ) ); ?>>
+	<?php _e( 'Convert emoticons like <code>:-)</code> and <code>:-P</code> to graphics on display' ); ?></label><br>
+<label for="use_balanceTags"><input name="use_balanceTags" type="checkbox" id="use_balanceTags" value="1" <?php checked( '1', get_option( 'use_balanceTags' ) ); ?>> <?php _e( 'ClassicPress should correct invalidly nested XHTML automatically' ); ?></label>
 </fieldset></td>
 </tr>
 <?php endif; ?>
@@ -159,19 +159,19 @@ if ( apply_filters( 'enable_post_by_email_configuration', true ) ) {
 <table class="form-table" role="presentation">
 <tr>
 <th scope="row"><label for="mailserver_url"><?php _e( 'Mail Server' ); ?></label></th>
-<td><input name="mailserver_url" type="text" id="mailserver_url" value="<?php form_option( 'mailserver_url' ); ?>" class="regular-text code" />
+<td><input name="mailserver_url" type="text" id="mailserver_url" value="<?php form_option( 'mailserver_url' ); ?>" class="regular-text code">
 <label for="mailserver_port"><?php _e( 'Port' ); ?></label>
-<input name="mailserver_port" type="text" id="mailserver_port" value="<?php form_option( 'mailserver_port' ); ?>" class="small-text" />
+<input name="mailserver_port" type="text" id="mailserver_port" value="<?php form_option( 'mailserver_port' ); ?>" class="small-text">
 </td>
 </tr>
 <tr>
 <th scope="row"><label for="mailserver_login"><?php _e( 'Login Name' ); ?></label></th>
-<td><input name="mailserver_login" type="text" id="mailserver_login" value="<?php form_option( 'mailserver_login' ); ?>" class="regular-text ltr" /></td>
+<td><input name="mailserver_login" type="text" id="mailserver_login" value="<?php form_option( 'mailserver_login' ); ?>" class="regular-text ltr"></td>
 </tr>
 <tr>
 <th scope="row"><label for="mailserver_pass"><?php _e( 'Password' ); ?></label></th>
 <td>
-<input name="mailserver_pass" type="text" id="mailserver_pass" value="<?php form_option( 'mailserver_pass' ); ?>" class="regular-text ltr" />
+<input name="mailserver_pass" type="text" id="mailserver_pass" value="<?php form_option( 'mailserver_pass' ); ?>" class="regular-text ltr">
 </td>
 </tr>
 <tr>

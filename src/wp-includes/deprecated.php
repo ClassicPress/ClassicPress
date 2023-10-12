@@ -382,7 +382,7 @@ function user_can_edit_user($user_id, $other_user) {
  * @param string $cat_name         Optional. The category name to use. If no match is found, uses all.
  *                                 Default 'noname'.
  * @param string $before           Optional. The HTML to output before the link. Default empty.
- * @param string $after            Optional. The HTML to output after the link. Default '<br />'.
+ * @param string $after            Optional. The HTML to output after the link. Default '<br>'.
  * @param string $between          Optional. The HTML to output between the link/image and its description.
  *                                 Not used if no image or $show_images is true. Default ' '.
  * @param bool   $show_images      Optional. Whether to show images (if defined). Default true.
@@ -397,7 +397,7 @@ function user_can_edit_user($user_id, $other_user) {
  *                                 Default -1.
  * @param int    $show_updated     Optional. Whether to show last updated timestamp. Default 0.
  */
-function get_linksbyname($cat_name = "noname", $before = '', $after = '<br />', $between = " ", $show_images = true, $orderby = 'id',
+function get_linksbyname($cat_name = "noname", $before = '', $after = '<br>', $between = " ", $show_images = true, $orderby = 'id',
 						$show_description = true, $show_rating = false,
 						$limit = -1, $show_updated = 0) {
 	_deprecated_function( __FUNCTION__, '2.1.0', 'get_bookmarks()' );
@@ -425,7 +425,7 @@ function wp_get_linksbyname($category, $args = '') {
 	_deprecated_function(__FUNCTION__, '2.1.0', 'wp_list_bookmarks()');
 
 	$defaults = array(
-		'after' => '<br />',
+		'after' => '<br>',
 		'before' => '',
 		'categorize' => 0,
 		'category_after' => '',
@@ -481,7 +481,7 @@ function get_linkobjectsbyname($cat_name = "noname" , $orderby = 'name', $limit 
  *     $links = get_linkobjects(1);
  *     if ($links) {
  *     	foreach ($links as $link) {
- *     		echo '<li>'.$link->link_name.'<br />'.$link->link_description.'</li>';
+ *     		echo '<li>'.$link->link_name.'<br>'.$link->link_description.'</li>';
  *     	}
  *     }
  *
@@ -537,7 +537,7 @@ function get_linkobjects($category = 0, $orderby = 'name', $limit = 0) {
  * @param string $cat_name         Optional. The category name to use. If no match is found, uses all.
  *                                 Default 'noname'.
  * @param string $before           Optional. The HTML to output before the link. Default empty.
- * @param string $after            Optional. The HTML to output after the link. Default '<br />'.
+ * @param string $after            Optional. The HTML to output after the link. Default '<br>'.
  * @param string $between          Optional. The HTML to output between the link/image and its description.
  *                                 Not used if no image or $show_images is true. Default ' '.
  * @param bool   $show_images      Optional. Whether to show images (if defined). Default true.
@@ -551,7 +551,7 @@ function get_linkobjects($category = 0, $orderby = 'name', $limit = 0) {
  *                                 Default -1.
  * @param int    $show_updated     Optional. Whether to show last updated timestamp. Default 0.
  */
-function get_linksbyname_withrating($cat_name = "noname", $before = '', $after = '<br />', $between = " ",
+function get_linksbyname_withrating($cat_name = "noname", $before = '', $after = '<br>', $between = " ",
 									$show_images = true, $orderby = 'id', $show_description = true, $limit = -1, $show_updated = 0) {
 	_deprecated_function( __FUNCTION__, '2.1.0', 'get_bookmarks()' );
 
@@ -568,7 +568,7 @@ function get_linksbyname_withrating($cat_name = "noname", $before = '', $after =
  * @param int    $category         Optional. The category to use. If no category supplied, uses all.
  *                                 Default 0.
  * @param string $before           Optional. The HTML to output before the link. Default empty.
- * @param string $after            Optional. The HTML to output after the link. Default '<br />'.
+ * @param string $after            Optional. The HTML to output after the link. Default '<br>'.
  * @param string $between          Optional. The HTML to output between the link/image and its description.
  *                                 Not used if no image or $show_images is true. Default ' '.
  * @param bool   $show_images      Optional. Whether to show images (if defined). Default true.
@@ -582,7 +582,7 @@ function get_linksbyname_withrating($cat_name = "noname", $before = '', $after =
  *                                 Default -1.
  * @param int    $show_updated     Optional. Whether to show last updated timestamp. Default 0.
  */
-function get_links_withrating($category = -1, $before = '', $after = '<br />', $between = " ", $show_images = true,
+function get_links_withrating($category = -1, $before = '', $after = '<br>', $between = " ", $show_images = true,
 							$orderby = 'id', $show_description = true, $limit = -1, $show_updated = 0) {
 	_deprecated_function( __FUNCTION__, '2.1.0', 'get_bookmarks()' );
 
@@ -826,7 +826,7 @@ function get_author_link($display, $author_id, $author_nicename = '') {
  * @param string $more_file
  * @return string
  */
-function link_pages($before='<br />', $after='<br />', $next_or_number='number', $nextpagelink='next page', $previouspagelink='previous page',
+function link_pages($before='<br>', $after='<br>', $next_or_number='number', $nextpagelink='next page', $previouspagelink='previous page',
 					$pagelink='%', $more_file='') {
 	_deprecated_function( __FUNCTION__, '2.1.0', 'wp_link_pages()' );
 
@@ -895,7 +895,7 @@ function wp_get_links($args = '') {
 	}
 
 	$defaults = array(
-		'after' => '<br />',
+		'after' => '<br>',
 		'before' => '',
 		'between' => ' ',
 		'categorize' => 0,
@@ -925,7 +925,7 @@ function wp_get_links($args = '') {
  * @param int    $category         Optional. The category to use. If no category supplied uses all.
  *                                 Default 0.
  * @param string $before           Optional. The HTML to output before the link. Default empty.
- * @param string $after            Optional. The HTML to output after the link. Default '<br />'.
+ * @param string $after            Optional. The HTML to output after the link. Default '<br>'.
  * @param string $between          Optional. The HTML to output between the link/image and its description.
  *                                 Not used if no image or $show_images is true. Default ' '.
  * @param bool   $show_images      Optional. Whether to show images (if defined). Default true.
@@ -942,7 +942,7 @@ function wp_get_links($args = '') {
  * @param bool   $display          Whether to display the results, or return them instead.
  * @return null|string
  */
-function get_links($category = -1, $before = '', $after = '<br />', $between = ' ', $show_images = true, $orderby = 'name',
+function get_links($category = -1, $before = '', $after = '<br>', $between = ' ', $show_images = true, $orderby = 'name',
 			$show_description = true, $show_rating = false, $limit = -1, $show_updated = 1, $display = true) {
 	_deprecated_function( __FUNCTION__, '2.1.0', 'get_bookmarks()' );
 
@@ -996,9 +996,9 @@ function get_links($category = -1, $before = '', $after = '<br />', $between = '
 
 		if ( $row->link_image != null && $show_images ) {
 			if ( strpos($row->link_image, 'http') !== false )
-				$output .= "<img src=\"$row->link_image\" $alt $title />";
+				$output .= "<img src=\"$row->link_image\" $alt $title>";
 			else // If it's a relative path.
-				$output .= "<img src=\"" . get_option('siteurl') . "$row->link_image\" $alt $title />";
+				$output .= "<img src=\"" . get_option('siteurl') . "$row->link_image\" $alt $title>";
 		} else {
 			$output .= $name;
 		}
@@ -1973,7 +1973,7 @@ function get_attachment_icon( $id = 0, $fullsize = false, $max_dims = false ) {
 
 	$post_title = esc_attr($post->post_title);
 
-	$icon = "<img src='$src' title='$post_title' alt='$post_title' $constraint/>";
+	$icon = "<img src='$src' title='$post_title' alt='$post_title' $constraint>";
 
 	return apply_filters( 'attachment_icon', $icon, $post->ID );
 }
@@ -2698,7 +2698,7 @@ function get_boundary_post_rel_link($title = '%title', $in_same_cat = false, $ex
 
 	$link = $start ? "<link rel='start' title='" : "<link rel='end' title='";
 	$link .= esc_attr($title);
-	$link .= "' href='" . get_permalink($post) . "' />\n";
+	$link .= "' href='" . get_permalink($post) . "'>\n";
 
 	$boundary = $start ? 'start' : 'end';
 	return apply_filters( "{$boundary}_post_rel_link", $link );
@@ -2731,7 +2731,7 @@ function start_post_rel_link($title = '%title', $in_same_cat = false, $excluded_
 function get_index_rel_link() {
 	_deprecated_function( __FUNCTION__, '3.3.0' );
 
-	$link = "<link rel='index' title='" . esc_attr( get_bloginfo( 'name', 'display' ) ) . "' href='" . esc_url( user_trailingslashit( get_bloginfo( 'url', 'display' ) ) ) . "' />\n";
+	$link = "<link rel='index' title='" . esc_attr( get_bloginfo( 'name', 'display' ) ) . "' href='" . esc_url( user_trailingslashit( get_bloginfo( 'url', 'display' ) ) ) . "'>\n";
 	return apply_filters( "index_rel_link", $link );
 }
 
@@ -2773,7 +2773,7 @@ function get_parent_post_rel_link( $title = '%title' ) {
 
 	$link = "<link rel='up' title='";
 	$link .= esc_attr( $title );
-	$link .= "' href='" . get_permalink($post) . "' />\n";
+	$link .= "' href='" . get_permalink($post) . "'>\n";
 
 	return apply_filters( "parent_post_rel_link", $link );
 }
@@ -4167,11 +4167,11 @@ function wp_no_robots() {
 	_deprecated_function( __FUNCTION__, '5.7.0', 'wp_robots_no_robots()' );
 
 	if ( get_option( 'blog_public' ) ) {
-		echo "<meta name='robots' content='noindex,follow' />\n";
+		echo "<meta name='robots' content='noindex,follow'>\n";
 		return;
 	}
 
-	echo "<meta name='robots' content='noindex,nofollow' />\n";
+	echo "<meta name='robots' content='noindex,nofollow'>\n";
 }
 
 /**
@@ -4195,7 +4195,7 @@ function wp_sensitive_page_meta() {
 	_deprecated_function( __FUNCTION__, '5.7.0', 'wp_robots_sensitive_page()' );
 
 	?>
-	<meta name='robots' content='noindex,noarchive' />
+	<meta name='robots' content='noindex,noarchive'>
 	<?php
 	wp_strict_cross_origin_referrer();
 }

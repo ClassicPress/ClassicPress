@@ -1738,14 +1738,11 @@ function _print_scripts() {
 	}
 
 	$concat    = trim( $wp_scripts->concat, ', ' );
-	$type_attr = current_theme_supports( 'html5', 'script' ) ? '' : " type='text/javascript'";
 
 	if ( $concat ) {
 		if ( ! empty( $wp_scripts->print_code ) ) {
-			echo "\n<script{$type_attr}>\n";
-			echo "/* <![CDATA[ */\n"; // Not needed in HTML 5.
+			echo "\n<script>\n";
 			echo $wp_scripts->print_code;
-			echo "/* ]]> */\n";
 			echo "</script>\n";
 		}
 
@@ -1757,7 +1754,7 @@ function _print_scripts() {
 		}
 
 		$src = $wp_scripts->base_url . "/wp-admin/load-scripts.php?c={$zip}" . $concatenated . '&ver=' . $wp_scripts->default_version;
-		echo "<script{$type_attr} src='" . esc_attr( $src ) . "'></script>\n";
+		echo "<script src='" . esc_attr( $src ) . "'></script>\n";
 	}
 
 	if ( ! empty( $wp_scripts->print_html ) ) {
@@ -1921,7 +1918,6 @@ function _print_styles() {
 	}
 
 	$concat    = trim( $wp_styles->concat, ', ' );
-	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
 
 	if ( $concat ) {
 		$dir = $wp_styles->text_direction;
@@ -1935,10 +1931,10 @@ function _print_styles() {
 		}
 
 		$href = $wp_styles->base_url . "/wp-admin/load-styles.php?c={$zip}&dir={$dir}" . $concatenated . '&ver=' . $ver;
-		echo "<link rel='stylesheet' href='" . esc_attr( $href ) . "'{$type_attr} media='all' />\n";
+		echo "<link rel='stylesheet' href='" . esc_attr( $href ) . "' media='all'>\n";
 
 		if ( ! empty( $wp_styles->print_code ) ) {
-			echo "<style{$type_attr}>\n";
+			echo "<style>\n";
 			echo $wp_styles->print_code;
 			echo "\n</style>\n";
 		}
@@ -1999,15 +1995,14 @@ function script_concat_settings() {
  * @return string String made of sanitized `<script>` tag attributes.
  */
 function wp_sanitize_script_attributes( $attributes ) {
-	$html5_script_support = ! is_admin() && ! current_theme_supports( 'html5', 'script' );
-	$attributes_string    = '';
+	$attributes_string = '';
 
-	// If HTML5 script tag is supported, only the attribute name is added
-	// to $attributes_string for entries with a boolean value, and that are true.
+	// Only the attribute name is added to $attributes_string for entries with a boolean value
+	// and that are true. Otherwise, use both name an value.
 	foreach ( $attributes as $attribute_name => $attribute_value ) {
 		if ( is_bool( $attribute_value ) ) {
 			if ( $attribute_value ) {
-				$attributes_string .= $html5_script_support ? sprintf( ' %1$s="%2$s"', esc_attr( $attribute_name ), esc_attr( $attribute_name ) ) : ' ' . esc_attr( $attribute_name );
+				$attributes_string .= ' ' . esc_attr( $attribute_name );
 			}
 		} else {
 			$attributes_string .= sprintf( ' %1$s="%2$s"', esc_attr( $attribute_name ), esc_attr( $attribute_value ) );
@@ -2024,14 +2019,12 @@ function wp_sanitize_script_attributes( $attributes ) {
  * Automatically injects type attribute if needed.
  *
  * @since 5.7.0
+ * @since CP-2.0.0 Remove JavaScript type declaration.
  *
  * @param array $attributes Key-value pairs representing `<script>` tag attributes.
  * @return string String containing `<script>` opening and closing tags.
  */
 function wp_get_script_tag( $attributes ) {
-	if ( ! isset( $attributes['type'] ) && ! is_admin() && ! current_theme_supports( 'html5', 'script' ) ) {
-		$attributes['type'] = 'text/javascript';
-	}
 	/**
 	 * Filters attributes to be added to a script tag.
 	 *
@@ -2067,15 +2060,13 @@ function wp_print_script_tag( $attributes ) {
  * Automatically injects type attribute if needed.
  *
  * @since 5.7.0
+ * @since CP-2.0.0 Remove JavaScript type declaration.
  *
  * @param string $javascript Inline JavaScript code.
  * @param array  $attributes Optional. Key-value pairs representing `<script>` tag attributes.
  * @return string String containing inline JavaScript code wrapped around `<script>` tag.
  */
 function wp_get_inline_script_tag( $javascript, $attributes = array() ) {
-	if ( ! isset( $attributes['type'] ) && ! is_admin() && ! current_theme_supports( 'html5', 'script' ) ) {
-		$attributes['type'] = 'text/javascript';
-	}
 	/**
 	 * Filters attributes to be added to a script tag.
 	 *

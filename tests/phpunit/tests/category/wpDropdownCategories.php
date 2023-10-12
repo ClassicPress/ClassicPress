@@ -132,7 +132,7 @@ class Tests_Category_WpDropdownCategories extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertStringContainsString( 'value="test_category_2" selected="selected"', $found );
+		$this->assertStringContainsString( 'value="test_category_2" selected', $found );
 	}
 
 	/**
@@ -150,11 +150,11 @@ class Tests_Category_WpDropdownCategories extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertStringContainsString( "value='0' selected='selected'", $found );
+		$this->assertStringContainsString( "value='0' selected", $found );
 
 		foreach ( $cats as $cat ) {
 			$_cat = get_term( $cat, 'category' );
-			$this->assertStringNotContainsString( 'value="' . $_cat->slug . '" selected="selected"', $found );
+			$this->assertStringNotContainsString( 'value="' . $_cat->slug . '" selected', $found );
 		}
 	}
 
@@ -174,11 +174,11 @@ class Tests_Category_WpDropdownCategories extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertStringContainsString( "value='0' selected='selected'", $found );
+		$this->assertStringContainsString( "value='0' selected", $found );
 
 		foreach ( $cats as $cat ) {
 			$_cat = get_term( $cat, 'category' );
-			$this->assertStringNotContainsString( 'value="' . $_cat->slug . '" selected="selected"', $found );
+			$this->assertStringNotContainsString( 'value="' . $_cat->slug . '" selected', $found );
 		}
 	}
 

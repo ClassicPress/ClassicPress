@@ -591,14 +591,14 @@ function wp_admin_bar_my_sites_menu( $wp_admin_bar ) {
 
 		if ( true === $show_site_icons && has_site_icon() ) {
 			$cplogo = sprintf(
-				'<img class="blavatar" src="%s" srcset="%s 2x" alt="" width="16" height="16"%s />',
+				'<img class="blavatar" src="%s" srcset="%s 2x" alt="" width="16" height="16"%s>',
 				esc_url( get_site_icon_url( 16 ) ),
 				esc_url( get_site_icon_url( 32 ) ),
 				( wp_lazy_loading_enabled( 'img', 'site_icon_in_toolbar' ) ? ' loading="lazy"' : '' )
 			);
 		} else {
 			$cplogo = sprintf(
-				'<img class="blavatar" src="%s" alt=""%s />',
+				'<img class="blavatar" src="%s" alt=""%s>',
 				esc_url( includes_url( 'images/classicpress-logo-dashicon-grey-on-transparent.svg' ) ),
 				( wp_lazy_loading_enabled( 'img', 'site_icon_in_toolbar' ) ? ' loading="lazy"' : '' )
 			);
@@ -691,7 +691,7 @@ function wp_admin_bar_shortlink_menu( $wp_admin_bar ) {
 		return;
 	}
 
-	$html = '<input class="shortlink-input" type="text" readonly="readonly" value="' . esc_attr( $short ) . '" aria-label="' . __( 'Shortlink' ) . '" />';
+	$html = '<input class="shortlink-input" type="text" readonly value="' . esc_attr( $short ) . '" aria-label="' . __( 'Shortlink' ) . '">';
 
 	$wp_admin_bar->add_node(
 		array(
@@ -1084,12 +1084,12 @@ function wp_admin_bar_search_menu( $wp_admin_bar ) {
 	}
 
 	$form  = '<form action="' . esc_url( home_url( '/' ) ) . '" method="get" id="adminbarsearch">';
-	$form .= '<input class="adminbar-input" name="s" id="adminbar-search" type="text" value="" maxlength="150" />';
+	$form .= '<input class="adminbar-input" name="s" id="adminbar-search" type="text" value="" maxlength="150">';
 	$form .= '<label for="adminbar-search" class="screen-reader-text">' .
 			/* translators: Hidden accessibility text. */
 			__( 'Search' ) .
 		'</label>';
-	$form .= '<input type="submit" class="adminbar-button" value="' . __( 'Search' ) . '" />';
+	$form .= '<input type="submit" class="adminbar-button" value="' . __( 'Search' ) . '">';
 	$form .= '</form>';
 
 	$wp_admin_bar->add_node(
@@ -1165,9 +1165,8 @@ function wp_admin_bar_add_secondary_groups( $wp_admin_bar ) {
  * @since 3.1.0
  */
 function wp_admin_bar_header() {
-	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
 	?>
-<style<?php echo $type_attr; ?> media="print">#wpadminbar { display:none; }</style>
+<style media="print">#wpadminbar { display:none; }</style>
 	<?php
 }
 
@@ -1177,9 +1176,8 @@ function wp_admin_bar_header() {
  * @since 3.1.0
  */
 function _admin_bar_bump_cb() {
-	$type_attr = current_theme_supports( 'html5', 'style' ) ? '' : ' type="text/css"';
 	?>
-<style<?php echo $type_attr; ?> media="screen">
+<style media="screen">
 	html { margin-top: 32px !important; }
 	@media screen and ( max-width: 782px ) {
 		html { margin-top: 46px !important; }

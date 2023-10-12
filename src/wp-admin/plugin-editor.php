@@ -225,7 +225,7 @@ $content = esc_textarea( $content );
 		foreach ( $plugins as $plugin_key => $a_plugin ) {
 			$plugin_name = $a_plugin['Name'];
 			if ( $plugin_key === $plugin ) {
-				$selected = " selected='selected'";
+				$selected = ' selected';
 			} else {
 				$selected = '';
 			}
@@ -238,7 +238,7 @@ $content = esc_textarea( $content );
 		<?php submit_button( __( 'Select' ), '', 'Submit', false ); ?>
 	</form>
 </div>
-<br class="clear" />
+<br class="clear">
 </div>
 
 <div id="templateside">
@@ -265,16 +265,16 @@ $content = esc_textarea( $content );
 	<div>
 		<label for="newcontent" id="theme-plugin-editor-label"><?php _e( 'Selected file content:' ); ?></label>
 		<textarea cols="70" rows="25" name="newcontent" id="newcontent" aria-describedby="editor-keyboard-trap-help-1 editor-keyboard-trap-help-2 editor-keyboard-trap-help-3 editor-keyboard-trap-help-4"><?php echo $content; ?></textarea>
-		<input type="hidden" name="action" value="update" />
-		<input type="hidden" name="file" value="<?php echo esc_attr( $file ); ?>" />
-		<input type="hidden" name="plugin" value="<?php echo esc_attr( $plugin ); ?>" />
+		<input type="hidden" name="action" value="update">
+		<input type="hidden" name="file" value="<?php echo esc_attr( $file ); ?>">
+		<input type="hidden" name="plugin" value="<?php echo esc_attr( $plugin ); ?>">
 	</div>
 
 	<?php if ( ! empty( $docs_select ) ) : ?>
 		<div id="documentation" class="hide-if-no-js">
 			<label for="docs-list"><?php _e( 'Documentation:' ); ?></label>
 			<?php echo $docs_select; ?>
-			<input disabled id="docs-lookup" type="button" class="button" value="<?php esc_attr_e( 'Look Up' ); ?>" onclick="if ( '' != jQuery('#docs-list').val() ) { window.open( 'https://api.wordpress.org/core/handbook/1.0/?function=' + escape( jQuery( '#docs-list' ).val() ) + '&amp;locale=<?php echo urlencode( get_user_locale() ); ?>&amp;version=<?php echo urlencode( get_bloginfo( 'version' ) ); ?>&amp;redirect=true'); }" />
+			<input disabled id="docs-lookup" type="button" class="button" value="<?php esc_attr_e( 'Look Up' ); ?>" onclick="if ( '' != jQuery('#docs-list').val() ) { window.open( 'https://api.wordpress.org/core/handbook/1.0/?function=' + escape( jQuery( '#docs-list' ).val() ) + '&amp;locale=<?php echo urlencode( get_user_locale() ); ?>&amp;version=<?php echo urlencode( get_bloginfo( 'version' ) ); ?>&amp;redirect=true'); }">
 		</div>
 	<?php endif; ?>
 
@@ -304,7 +304,7 @@ $content = esc_textarea( $content );
 
 	<?php wp_print_file_editor_templates(); ?>
 </form>
-<br class="clear" />
+<br class="clear">
 </div>
 <?php
 $dismissed_pointers = explode( ',', (string) get_user_meta( get_current_user_id(), 'dismissed_wp_pointers', true ) );

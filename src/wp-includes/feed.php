@@ -440,20 +440,14 @@ function the_category_rss( $type = null ) {
 }
 
 /**
- * Displays the HTML type based on the blog setting.
+ * Displays the HTML type.
  *
- * The two possible values are either 'xhtml' or 'html'.
  *
  * @since 2.2.0
+ * @since CP-2.0.0 Site content type will always be 'html'.
  */
 function html_type_rss() {
-	$type = get_bloginfo( 'html_type' );
-	if ( strpos( $type, 'xhtml' ) !== false ) {
-		$type = 'xhtml';
-	} else {
-		$type = 'html';
-	}
-	echo $type;
+	echo 'html';
 }
 
 /**

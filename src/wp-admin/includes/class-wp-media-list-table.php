@@ -154,7 +154,7 @@ class WP_Media_List_Table extends WP_List_Table {
 			);
 		}
 
-		$type_links['detached'] = '<option value="detached"' . ( $this->detached ? ' selected="selected"' : '' ) . '>' . _x( 'Unattached', 'media items' ) . '</option>';
+		$type_links['detached'] = '<option value="detached"' . ( $this->detached ? ' selected' : '' ) . '>' . _x( 'Unattached', 'media items' ) . '</option>';
 
 		$type_links['mine'] = sprintf(
 			'<option value="mine"%s>%s</option>',
@@ -324,7 +324,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	 */
 	public function get_columns() {
 		$posts_columns       = array();
-		$posts_columns['cb'] = '<input type="checkbox" />';
+		$posts_columns['cb'] = '<input type="checkbox">';
 		/* translators: Column name. */
 		$posts_columns['title']  = _x( 'File', 'column name' );
 		$posts_columns['author'] = __( 'Author' );
@@ -417,7 +417,7 @@ class WP_Media_List_Table extends WP_List_Table {
 				printf( __( 'Select %s' ), _draft_or_post_title() );
 				?>
 			</label>
-			<input type="checkbox" name="media[]" id="cb-select-<?php echo $post->ID; ?>" value="<?php echo $post->ID; ?>" />
+			<input type="checkbox" name="media[]" id="cb-select-<?php echo $post->ID; ?>" value="<?php echo $post->ID; ?>">
 			<?php
 		}
 	}
@@ -590,7 +590,7 @@ class WP_Media_List_Table extends WP_List_Table {
 					'upload.php'
 				);
 				printf(
-					'<br /><a href="%s" class="hide-if-no-js detach-from-parent" aria-label="%s">%s</a>',
+					'<br><a href="%s" class="hide-if-no-js detach-from-parent" aria-label="%s">%s</a>',
 					$detach_url,
 					/* translators: %s: Title of the post the attachment is attached to. */
 					esc_attr( sprintf( __( 'Detach from &#8220;%s&#8221;' ), $title ) ),
@@ -604,7 +604,7 @@ class WP_Media_List_Table extends WP_List_Table {
 			if ( $user_can_edit ) {
 				$title = _draft_or_post_title( $post->post_parent );
 				printf(
-					'<br /><a href="#the-list" onclick="findPosts.open( \'media[]\', \'%s\' ); return false;" class="hide-if-no-js aria-button-if-js" aria-label="%s">%s</a>',
+					'<br><a href="#the-list" onclick="findPosts.open( \'media[]\', \'%s\' ); return false;" class="hide-if-no-js aria-button-if-js" aria-label="%s">%s</a>',
 					$post->ID,
 					/* translators: %s: Attachment title. */
 					esc_attr( sprintf( __( 'Attach &#8220;%s&#8221; to existing content' ), $title ) ),

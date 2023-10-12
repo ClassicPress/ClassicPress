@@ -146,7 +146,7 @@ function wp_dropdown_cats( $current_cat = 0, $current_parent = 0, $category_pare
 				$category->name = esc_html( $category->name );
 				echo "\n\t<option value='$category->term_id'";
 				if ( $current_parent == $category->term_id )
-					echo " selected='selected'";
+					echo ' selected';
 				echo ">$pad$category->name</option>";
 				wp_dropdown_cats( $current_cat, $current_parent, $category->term_id, $level +1, $categories );
 			}
@@ -1510,7 +1510,7 @@ function post_form_autocomplete_off() {
  */
 function options_permalink_add_js() {
 	?>
-	<script type="text/javascript">
+	<script>
 		jQuery( function() {
 			jQuery('.permalink-structure input:radio').change(function() {
 				if ( 'custom' == this.value )

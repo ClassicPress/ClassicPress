@@ -60,14 +60,14 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 <div class="wrap">
 <h1><?php echo esc_html( $title ); ?></h1>
 
-<form method="post" action="options.php" novalidate="novalidate">
+<form method="post" action="options.php">
 <?php settings_fields( 'general' ); ?>
 
 <table class="form-table" role="presentation">
 
 <tr>
 <th scope="row"><label for="blogname"><?php _e( 'Site Title' ); ?></label></th>
-<td><input name="blogname" type="text" id="blogname" value="<?php form_option( 'blogname' ); ?>" class="regular-text" /></td>
+<td><input name="blogname" type="text" id="blogname" value="<?php form_option( 'blogname' ); ?>" class="regular-text"></td>
 </tr>
 
 <?php
@@ -80,7 +80,7 @@ if ( is_multisite() ) {
 ?>
 <tr>
 <th scope="row"><label for="blogdescription"><?php _e( 'Tagline' ); ?></label></th>
-<td><input name="blogdescription" type="text" id="blogdescription" aria-describedby="tagline-description" value="<?php form_option( 'blogdescription' ); ?>" class="regular-text" placeholder="<?php echo $sample_tagline; ?>" />
+<td><input name="blogdescription" type="text" id="blogdescription" aria-describedby="tagline-description" value="<?php form_option( 'blogdescription' ); ?>" class="regular-text" placeholder="<?php echo $sample_tagline; ?>">
 <p class="description" id="tagline-description"><?php _e( 'In a few words, explain what this site is about.' ); ?></p></td>
 </tr>
 
@@ -98,12 +98,12 @@ if ( ! is_multisite() ) {
 
 <tr>
 <th scope="row"><label for="siteurl"><?php _e( 'ClassicPress Address (URL)' ); ?></label></th>
-<td><input name="siteurl" type="url" id="siteurl" value="<?php form_option( 'siteurl' ); ?>"<?php disabled( defined( 'WP_SITEURL' ) ); ?> class="regular-text code<?php echo $wp_site_url_class; ?>" /></td>
+<td><input name="siteurl" type="url" id="siteurl" value="<?php form_option( 'siteurl' ); ?>"<?php disabled( defined( 'WP_SITEURL' ) ); ?> class="regular-text code<?php echo $wp_site_url_class; ?>"></td>
 </tr>
 
 <tr>
 <th scope="row"><label for="home"><?php _e( 'Site Address (URL)' ); ?></label></th>
-<td><input name="home" type="url" id="home" aria-describedby="home-description" value="<?php form_option( 'home' ); ?>"<?php disabled( defined( 'WP_HOME' ) ); ?> class="regular-text code<?php echo $wp_home_class; ?>" />
+<td><input name="home" type="url" id="home" aria-describedby="home-description" value="<?php form_option( 'home' ); ?>"<?php disabled( defined( 'WP_HOME' ) ); ?> class="regular-text code<?php echo $wp_home_class; ?>">
 	<?php if ( ! defined( 'WP_HOME' ) ) : ?>
 <p class="description" id="home-description">
 		<?php
@@ -122,7 +122,7 @@ if ( ! is_multisite() ) {
 
 <tr>
 <th scope="row"><label for="new_admin_email"><?php _e( 'Administration Email Address' ); ?></label></th>
-<td><input name="new_admin_email" type="email" id="new_admin_email" aria-describedby="new-admin-email-description" value="<?php form_option( 'admin_email' ); ?>" class="regular-text ltr" />
+<td><input name="new_admin_email" type="email" id="new_admin_email" aria-describedby="new-admin-email-description" value="<?php form_option( 'admin_email' ); ?>" class="regular-text ltr">
 <p class="description" id="new-admin-email-description"><?php _e( 'This address is used for admin purposes. If you change this, an email will be sent to your new address to confirm it. <strong>The new address will not become active until confirmed.</strong>' ); ?></p>
 <?php
 $new_admin_email = get_option( 'new_admin_email' );
@@ -181,32 +181,32 @@ if ( $login_custom_image_src ) {
 			</a>
 		</p>
 		<label>
-			<input name="login_custom_image_state" type="radio" value="0" <?php checked( 0, $login_custom_image_state ); ?> />
+			<input name="login_custom_image_state" type="radio" value="0" <?php checked( 0, $login_custom_image_state ); ?>>
 			<?php _e( 'No custom image: use the <strong>ClassicPress logo</strong>' ); ?>
 		</label>
-		<br />
+		<br>
 		<label>
 			<input name="login_custom_image_state" type="radio" value="1"
 			<?php
 			checked( 1, $login_custom_image_state );
 			disabled( $login_custom_image_state === 0 && ! $login_custom_image_src );
 			?>
-			 />
+			>
 			<?php _e( 'Use my custom image as a <strong>logo</strong>' ); ?>
 		</label>
-		<br />
+		<br>
 		<label>
 			<input name="login_custom_image_state" type="radio" value="2"
 			<?php
 			checked( 2, $login_custom_image_state );
 			disabled( $login_custom_image_state === 0 && ! $login_custom_image_src );
 			?>
-			 />
+			>
 			<?php _e( 'Use my custom image as a <strong>banner</strong>' ); ?>
 		</label>
 		<p><img id="login_custom_image-img" src="<?php echo esc_attr( $login_custom_image_src ); ?>" class="<?php echo esc_attr( $login_custom_image_class ); ?>"></p>
 		<p id="login_custom_image-controls" class="hidden">
-			<input type="hidden" id="login_custom_image-input" name="login_custom_image_id" value="<?php form_option( 'login_custom_image_id' ); ?>" />
+			<input type="hidden" id="login_custom_image-input" name="login_custom_image_id" value="<?php form_option( 'login_custom_image_id' ); ?>">
 			<input type="button" id="login_custom_image-choose" class="button" value="<?php _e( 'Choose Image' ); ?>">
 			<input type="button" id="login_custom_image-clear" class="button" value="<?php _e( 'Clear Image' ); ?>">
 		</p>
@@ -229,7 +229,7 @@ if ( $login_custom_image_src ) {
 	_e( 'Membership' );
 	?>
 </span></legend><label for="users_can_register">
-<input name="users_can_register" type="checkbox" id="users_can_register" value="1" <?php checked( '1', get_option( 'users_can_register' ) ); ?> />
+<input name="users_can_register" type="checkbox" id="users_can_register" value="1" <?php checked( '1', get_option( 'users_can_register' ) ); ?>>
 	<?php _e( 'Anyone can register' ); ?></label>
 </fieldset></td>
 </tr>
@@ -363,7 +363,7 @@ if ( empty( $tzstring ) ) { // Create a UTC+- zone if no timezone string exists.
 		_e( 'This timezone is currently in standard time.' );
 	}
 	?>
-	<br />
+	<br>
 	<?php
 	if ( in_array( $tzstring, timezone_identifiers_list( DateTimeZone::ALL_WITH_BC ), true ) ) {
 		$transitions = timezone_transitions_get( timezone_open( $tzstring ), time() );
@@ -416,15 +416,15 @@ if ( empty( $tzstring ) ) { // Create a UTC+- zone if no timezone string exists.
 foreach ( $date_formats as $format ) {
 	echo "\t<label><input type='radio' name='date_format' value='" . esc_attr( $format ) . "'";
 	if ( get_option( 'date_format' ) === $format ) { // checked() uses "==" rather than "===".
-		echo " checked='checked'";
+		echo ' checked';
 		$custom = false;
 	}
-	echo ' /> <span class="date-time-text format-i18n">' . date_i18n( $format ) . '</span><code>' . esc_html( $format ) . "</code></label><br />\n";
+	echo '> <span class="date-time-text format-i18n">' . date_i18n( $format ) . '</span><code>' . esc_html( $format ) . "</code></label><br>\n";
 }
 
 	echo '<label><input type="radio" name="date_format" id="date_format_custom_radio" value="\c\u\s\t\o\m"';
 	checked( $custom );
-	echo '/> <span class="date-time-text date-time-custom-text">' . __( 'Custom:' ) . '<span class="screen-reader-text"> ' .
+	echo '> <span class="date-time-text date-time-custom-text">' . __( 'Custom:' ) . '<span class="screen-reader-text"> ' .
 			/* translators: Hidden accessibility text. */
 			__( 'enter a custom date format in the following field' ) .
 		'</span></span></label>' .
@@ -432,8 +432,8 @@ foreach ( $date_formats as $format ) {
 			/* translators: Hidden accessibility text. */
 			__( 'Custom date format:' ) .
 		'</label>' .
-		'<input type="text" name="date_format_custom" id="date_format_custom" value="' . esc_attr( get_option( 'date_format' ) ) . '" class="small-text" />' .
-		'<br />' .
+		'<input type="text" name="date_format_custom" id="date_format_custom" value="' . esc_attr( get_option( 'date_format' ) ) . '" class="small-text">' .
+		'<br>' .
 		'<p><strong>' . __( 'Preview:' ) . '</strong> <span class="example">' . date_i18n( get_option( 'date_format' ) ) . '</span>' .
 		"<span class='spinner'></span>\n" . '</p>';
 ?>
@@ -464,15 +464,15 @@ foreach ( $date_formats as $format ) {
 foreach ( $time_formats as $format ) {
 	echo "\t<label><input type='radio' name='time_format' value='" . esc_attr( $format ) . "'";
 	if ( get_option( 'time_format' ) === $format ) { // checked() uses "==" rather than "===".
-		echo " checked='checked'";
+		echo ' checked';
 		$custom = false;
 	}
-	echo ' /> <span class="date-time-text format-i18n">' . date_i18n( $format ) . '</span><code>' . esc_html( $format ) . "</code></label><br />\n";
+	echo '> <span class="date-time-text format-i18n">' . date_i18n( $format ) . '</span><code>' . esc_html( $format ) . "</code></label><br>\n";
 }
 
 	echo '<label><input type="radio" name="time_format" id="time_format_custom_radio" value="\c\u\s\t\o\m"';
 	checked( $custom );
-	echo '/> <span class="date-time-text date-time-custom-text">' . __( 'Custom:' ) . '<span class="screen-reader-text"> ' .
+	echo '> <span class="date-time-text date-time-custom-text">' . __( 'Custom:' ) . '<span class="screen-reader-text"> ' .
 			/* translators: Hidden accessibility text. */
 			__( 'enter a custom time format in the following field' ) .
 		'</span></span></label>' .
@@ -480,8 +480,8 @@ foreach ( $time_formats as $format ) {
 			/* translators: Hidden accessibility text. */
 			__( 'Custom time format:' ) .
 		'</label>' .
-		'<input type="text" name="time_format_custom" id="time_format_custom" value="' . esc_attr( get_option( 'time_format' ) ) . '" class="small-text" />' .
-		'<br />' .
+		'<input type="text" name="time_format_custom" id="time_format_custom" value="' . esc_attr( get_option( 'time_format' ) ) . '" class="small-text">' .
+		'<br>' .
 		'<p><strong>' . __( 'Preview:' ) . '</strong> <span class="example">' . date_i18n( get_option( 'time_format' ) ) . '</span>' .
 		"<span class='spinner'></span>\n" . '</p>';
 
@@ -500,7 +500,7 @@ foreach ( $time_formats as $format ) {
 global $wp_locale;
 
 for ( $day_index = 0; $day_index <= 6; $day_index++ ) :
-	$selected = ( get_option( 'start_of_week' ) == $day_index ) ? 'selected="selected"' : '';
+	$selected = ( get_option( 'start_of_week' ) == $day_index ) ? 'selected' : '';
 	echo "\n\t<option value='" . esc_attr( $day_index ) . "' $selected>" . $wp_locale->get_weekday( $day_index ) . '</option>';
 endfor;
 ?>

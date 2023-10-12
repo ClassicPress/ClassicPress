@@ -231,7 +231,7 @@ function network_step1( $errors = false ) {
 		<?php // @todo Link to an MS readme? ?>
 		<table class="form-table" role="presentation">
 			<tr>
-				<th><label><input type="radio" name="subdomain_install" value="1"<?php checked( $subdomain_install ); ?> /> <?php _e( 'Sub-domains' ); ?></label></th>
+				<th><label><input type="radio" name="subdomain_install" value="1"<?php checked( $subdomain_install ); ?>> <?php _e( 'Sub-domains' ); ?></label></th>
 				<td>
 				<?php
 				printf(
@@ -243,7 +243,7 @@ function network_step1( $errors = false ) {
 				</td>
 			</tr>
 			<tr>
-				<th><label><input type="radio" name="subdomain_install" value="0"<?php checked( ! $subdomain_install ); ?> /> <?php _e( 'Sub-directories' ); ?></label></th>
+				<th><label><input type="radio" name="subdomain_install" value="0"<?php checked( ! $subdomain_install ); ?>> <?php _e( 'Sub-directories' ); ?></label></th>
 				<td>
 				<?php
 				printf(
@@ -355,7 +355,7 @@ function network_step1( $errors = false ) {
 			<tr>
 				<th scope='row'><label for="sitename"><?php esc_html_e( 'Network Title' ); ?></label></th>
 				<td>
-					<input name='sitename' id='sitename' type='text' size='45' value='<?php echo esc_attr( $site_name ); ?>' />
+					<input name='sitename' id='sitename' type='text' size='45' value='<?php echo esc_attr( $site_name ); ?>'>
 					<p class="description">
 						<?php _e( 'What would you like to call your network?' ); ?>
 					</p>
@@ -364,7 +364,7 @@ function network_step1( $errors = false ) {
 			<tr>
 				<th scope='row'><label for="email"><?php esc_html_e( 'Network Admin Email' ); ?></label></th>
 				<td>
-					<input name='email' id='email' type='text' size='45' value='<?php echo esc_attr( $admin_email ); ?>' />
+					<input name='email' id='email' type='text' size='45' value='<?php echo esc_attr( $admin_email ); ?>'>
 					<p class="description">
 						<?php _e( 'Your email address.' ); ?>
 					</p>
@@ -495,7 +495,7 @@ function network_step2( $errors = false ) {
 			);
 			?>
 		</label></p>
-		<textarea id="network-wpconfig-rules" class="code" readonly="readonly" cols="100" rows="7" aria-describedby="network-wpconfig-rules-description">
+		<textarea id="network-wpconfig-rules" class="code" readonly cols="100" rows="7" aria-describedby="network-wpconfig-rules-description">
 define( 'MULTISITE', true );
 define( 'SUBDOMAIN_INSTALL', <?php echo $subdomain_install ? 'true' : 'false'; ?> );
 define( 'DOMAIN_CURRENT_SITE', '<?php echo $hostname; ?>' );
@@ -554,7 +554,7 @@ define( 'BLOG_ID_CURRENT_SITE', 1 );
 			<?php _e( 'To make your installation more secure, you should also add:' ); ?>
 		</p>
 		<p class="configuration-rules-label"><label for="network-wpconfig-authentication"><?php _e( 'Network configuration authentication keys' ); ?></label></p>
-		<textarea id="network-wpconfig-authentication" class="code" readonly="readonly" cols="100" rows="<?php echo $num_keys_salts; ?>" aria-describedby="network-wpconfig-authentication-description"><?php echo esc_textarea( $keys_salts_str ); ?></textarea>
+		<textarea id="network-wpconfig-authentication" class="code" readonly cols="100" rows="<?php echo $num_keys_salts; ?>" aria-describedby="network-wpconfig-authentication-description"><?php echo esc_textarea( $keys_salts_str ); ?></textarea>
 			<?php
 		}
 		?>
@@ -634,7 +634,7 @@ define( 'BLOG_ID_CURRENT_SITE', 1 );
 				);
 				?>
 			</label></p>
-			<textarea id="network-webconfig-rules" class="code" readonly="readonly" cols="100" rows="20" aria-describedby="network-webconfig-rules-description"><?php echo esc_textarea( $web_config_file ); ?></textarea>
+			<textarea id="network-webconfig-rules" class="code" readonly cols="100" rows="20" aria-describedby="network-webconfig-rules-description"><?php echo esc_textarea( $web_config_file ); ?></textarea>
 		</li>
 	</ol>
 
@@ -696,7 +696,7 @@ EOF;
 				);
 				?>
 			</label></p>
-			<textarea id="network-htaccess-rules" class="code" readonly="readonly" cols="100" rows="<?php echo substr_count( $htaccess_file, "\n" ) + 1; ?>" aria-describedby="network-htaccess-rules-description"><?php echo esc_textarea( $htaccess_file ); ?></textarea>
+			<textarea id="network-htaccess-rules" class="code" readonly cols="100" rows="<?php echo substr_count( $htaccess_file, "\n" ) + 1; ?>" aria-describedby="network-htaccess-rules-description"><?php echo esc_textarea( $htaccess_file ); ?></textarea>
 		</li>
 	</ol>
 

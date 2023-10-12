@@ -212,7 +212,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 						<label for="page_for_privacy_policy">
 							<?php _e( 'Select an existing page:' ); ?>
 						</label>
-						<input type="hidden" name="action" value="set-privacy-page" />
+						<input type="hidden" name="action" value="set-privacy-page">
 						<?php
 						wp_dropdown_pages(
 							array(
@@ -232,7 +232,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 				<?php endif; ?>
 
 				<form class="wp-create-privacy-page" method="post" action="">
-					<input type="hidden" name="action" value="create-privacy-page" />
+					<input type="hidden" name="action" value="create-privacy-page">
 					<span>
 						<?php
 						if ( $has_pages ) {

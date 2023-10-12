@@ -16,8 +16,8 @@ class Tests_Formatting_wpAutop extends WP_UnitTestCase {
 <ul>
 <li><a href="%1$s" title="Subscribe to the WordPress mailing list for Release Notifications">Subscribe to the WordPress mailing list for release notifications</a></li>
 </ul>
-<p>As a subscriber, you will receive an email every time an update is available (and only then).  This will make it easier to keep your site up to date, and secure from evildoers.<br />
-When a new version is released, <a href="%2$s" title="If you are already logged in, this will take you directly to the Dashboard">log in to the Dashboard</a> and follow the instructions.<br />
+<p>As a subscriber, you will receive an email every time an update is available (and only then).  This will make it easier to keep your site up to date, and secure from evildoers.<br>
+When a new version is released, <a href="%2$s" title="If you are already logged in, this will take you directly to the Dashboard">log in to the Dashboard</a> and follow the instructions.<br>
 Upgrading is a couple of clicks!</p>
 <p>Then you can start enjoying the WordPress experience:</p>
 <ul>
@@ -89,8 +89,8 @@ PS.  Not yet subscribed for update notifications?  <a href="%1$s" title="Subscri
 		$this->assertSame( $expected, trim( wpautop( $str ) ) );
 
 		// Make sure HTML breaks are maintained if manually inserted.
-		$str      = "Look at this code\n\n<pre>Line1<br />Line2<br>Line3<br/>Line4\nActual Line 2\nActual Line 3</pre>\n\nCool, huh?";
-		$expected = "<p>Look at this code</p>\n<pre>Line1<br />Line2<br>Line3<br/>Line4\nActual Line 2\nActual Line 3</pre>\n<p>Cool, huh?</p>";
+		$str      = "Look at this code\n\n<pre>Line1<br>Line2<br>Line3<br/>Line4\nActual Line 2\nActual Line 3</pre>\n\nCool, huh?";
+		$expected = "<p>Look at this code</p>\n<pre>Line1<br>Line2<br>Line3<br/>Line4\nActual Line 2\nActual Line 3</pre>\n<p>Cool, huh?</p>";
 		$this->assertSame( $expected, trim( wpautop( $str ) ) );
 	}
 
@@ -100,7 +100,7 @@ PS.  Not yet subscribed for update notifications?  <a href="%1$s" title="Subscri
 	 * @ticket 16456
 	 */
 	public function test_skip_input_elements() {
-		$str = 'Username: <input type="text" id="username" name="username" /><br />Password: <input type="password" id="password1" name="password1" />';
+		$str = 'Username: <input type="text" id="username" name="username" /><br>Password: <input type="password" id="password1" name="password1" />';
 		$this->assertSame( "<p>$str</p>", trim( wpautop( $str ) ) );
 	}
 
@@ -544,7 +544,7 @@ Paragraph two.';
 	}
 
 	/**
-	 * wpautop() should not convert line breaks after <br /> tags
+	 * wpautop() should not convert line breaks after <br> tags
 	 *
 	 * @ticket 33377
 	 */
@@ -552,22 +552,22 @@ Paragraph two.';
 		$content = '
 line 1<br>
 line 2<br/>
-line 3<br />
+line 3<br>
 line 4
 line 5
 ';
 
-		$expected = '<p>line 1<br />
-line 2<br />
-line 3<br />
-line 4<br />
+		$expected = '<p>line 1<br>
+line 2<br>
+line 3<br>
+line 4<br>
 line 5</p>';
 
 		$this->assertSameIgnoreEOL( $expected, trim( wpautop( $content ) ) );
 	}
 
 	/**
-	 * wpautop() should convert multiple line breaks into a paragraph regarless of <br /> format
+	 * wpautop() should convert multiple line breaks into a paragraph regarless of <br> format
 	 *
 	 * @ticket 33377
 	 */
@@ -576,7 +576,7 @@ line 5</p>';
 line 1<br>
 <br/>
 line 2<br/>
-<br />
+<br>
 ';
 
 		$expected = '<p>line 1</p>

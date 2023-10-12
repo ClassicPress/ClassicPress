@@ -240,7 +240,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 			}
 
 			$image = sprintf(
-				'<img class="%1$s" src="%2$s" alt="%3$s" width="%4$s" height="%5$s" />',
+				'<img class="%1$s" src="%2$s" alt="%3$s" width="%4$s" height="%5$s">',
 				esc_attr( $classes ),
 				esc_url( $instance['url'] ),
 				esc_attr( $instance['alt'] ),
@@ -368,7 +368,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 						?>
 						"
 					<# } #>
-				/>
+				>
 			<# } #>
 		</script>
 		<?php

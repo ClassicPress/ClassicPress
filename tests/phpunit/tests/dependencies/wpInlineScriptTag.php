@@ -20,8 +20,6 @@ document.addEventListener( 'DOMContentLoaded', function () {
 JS;
 
 	public function get_inline_script_tag_type_set() {
-		add_theme_support( 'html5', array( 'script' ) );
-
 		$this->assertSame(
 			'<script type="application/javascript" nomodule>' . "\n{$this->event_handler}\n</script>\n",
 			wp_get_inline_script_tag(
@@ -33,8 +31,6 @@ JS;
 				)
 			)
 		);
-
-		remove_theme_support( 'html5' );
 
 		$this->assertSame(
 			'<script type="application/javascript" nomodule>' . "\n{$this->event_handler}\n</script>\n",
@@ -50,8 +46,6 @@ JS;
 	}
 
 	public function test_get_inline_script_tag_type_not_set() {
-		add_theme_support( 'html5', array( 'script' ) );
-
 		$this->assertSame(
 			"<script nomodule>\n{$this->event_handler}\n</script>\n",
 			wp_get_inline_script_tag(
@@ -62,19 +56,13 @@ JS;
 				)
 			)
 		);
-
-		remove_theme_support( 'html5' );
 	}
 
 	public function test_get_inline_script_tag_unescaped_src() {
-		add_theme_support( 'html5', array( 'script' ) );
-
 		$this->assertSame(
 			"<script>\n{$this->event_handler}\n</script>\n",
 			wp_get_inline_script_tag( $this->event_handler )
 		);
-
-		remove_theme_support( 'html5' );
 	}
 
 	public function test_print_script_tag_prints_get_inline_script_tag() {
@@ -87,8 +75,6 @@ JS;
 				return $attributes;
 			}
 		);
-
-		add_theme_support( 'html5', array( 'script' ) );
 
 		$attributes = array(
 			'id'       => 'utils-js-before',
@@ -105,8 +91,6 @@ JS;
 				)
 			)
 		);
-
-		remove_theme_support( 'html5' );
 
 		$this->assertSame(
 			wp_get_inline_script_tag( $this->event_handler, $attributes ),

@@ -74,7 +74,7 @@ class Walker_CategoryDropdown extends Walker {
 
 		// Type-juggling causes false matches, so we force everything to a string.
 		if ( (string) $category->{$value_field} === (string) $args['selected'] ) {
-			$output .= ' selected="selected"';
+			$output .= ' selected';
 		}
 		$output .= '>';
 		$output .= $pad . $cat_name;

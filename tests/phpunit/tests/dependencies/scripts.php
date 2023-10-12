@@ -29,7 +29,7 @@ class Tests_Dependencies_Scripts extends WP_UnitTestCase {
 		remove_action( 'wp_default_scripts', 'wp_default_packages' );
 
 		$this->wp_scripts_print_translations_output  = <<<JS
-<script type='text/javascript' id='__HANDLE__-js-translations'>
+<script id='__HANDLE__-js-translations'>
 ( function( domain, translations ) {
 	var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
 	localeData[""].domain = domain;
@@ -92,10 +92,10 @@ JS;
 		wp_enqueue_script( 'empty-deps-null-version', 'example.com', array(), null );
 
 		$ver       = self::$asset_version;
-		$expected  = "<script type='text/javascript' src='http://example.com?ver=$ver' id='no-deps-no-version-js'></script>\n";
-		$expected .= "<script type='text/javascript' src='http://example.com?ver=$ver' id='empty-deps-no-version-js'></script>\n";
-		$expected .= "<script type='text/javascript' src='http://example.com?ver=1.2' id='empty-deps-version-js'></script>\n";
-		$expected .= "<script type='text/javascript' src='http://example.com' id='empty-deps-null-version-js'></script>\n";
+		$expected  = "<script src='http://example.com?ver=$ver' id='no-deps-no-version-js'></script>\n";
+		$expected .= "<script src='http://example.com?ver=$ver' id='empty-deps-no-version-js'></script>\n";
+		$expected .= "<script src='http://example.com?ver=1.2' id='empty-deps-version-js'></script>\n";
+		$expected .= "<script src='http://example.com' id='empty-deps-null-version-js'></script>\n";
 
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 
@@ -138,8 +138,6 @@ JS;
 	 * @ticket 42804
 	 */
 	public function test_wp_enqueue_script_with_html5_support_does_not_contain_type_attribute() {
-		add_theme_support( 'html5', array( 'script' ) );
-
 		$GLOBALS['wp_scripts']                  = new WP_Scripts();
 		$GLOBALS['wp_scripts']->default_version = classicpress_asset_version( 'script' );
 
@@ -167,24 +165,24 @@ JS;
 
 		// Try with an HTTP reference.
 		wp_enqueue_script( 'jquery-http', 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js' );
-		$expected .= "<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=$ver' id='jquery-http-js'></script>\n";
+		$expected .= "<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=$ver' id='jquery-http-js'></script>\n";
 
 		// Try with an HTTPS reference.
 		wp_enqueue_script( 'jquery-https', 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js' );
-		$expected .= "<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=$ver' id='jquery-https-js'></script>\n";
+		$expected .= "<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=$ver' id='jquery-https-js'></script>\n";
 
 		// Try with an automatic protocol reference (//).
 		wp_enqueue_script( 'jquery-doubleslash', '//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js' );
-		$expected .= "<script type='text/javascript' src='//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=$ver' id='jquery-doubleslash-js'></script>\n";
+		$expected .= "<script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=$ver' id='jquery-doubleslash-js'></script>\n";
 
 		// Try with a local resource and an automatic protocol reference (//).
 		$url = '//my_plugin/script.js';
 		wp_enqueue_script( 'plugin-script', $url );
-		$expected .= "<script type='text/javascript' src='$url?ver=$ver' id='plugin-script-js'></script>\n";
+		$expected .= "<script src='$url?ver=$ver' id='plugin-script-js'></script>\n";
 
 		// Try with a bad protocol.
 		wp_enqueue_script( 'jquery-ftp', 'ftp://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js' );
-		$expected .= "<script type='text/javascript' src='{$wp_scripts->base_url}ftp://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=$ver' id='jquery-ftp-js'></script>\n";
+		$expected .= "<script src='{$wp_scripts->base_url}ftp://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=$ver' id='jquery-ftp-js'></script>\n";
 
 		// Go!
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
@@ -213,7 +211,7 @@ JS;
 		$print_scripts = get_echo( '_print_scripts' );
 
 		$ver      = self::$asset_version;
-		$expected = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=one,two,three&amp;ver={$ver}'></script>\n";
+		$expected = "<script src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=one,two,three&amp;ver={$ver}'></script>\n";
 
 		$this->assertSame( $expected, $print_scripts );
 	}
@@ -227,8 +225,8 @@ JS;
 		// Enqueue and add data.
 		wp_enqueue_script( 'test-only-data', 'example.com', array(), null );
 		wp_script_add_data( 'test-only-data', 'data', 'testing' );
-		$expected  = "<script type='text/javascript' id='test-only-data-js-extra'>\n/* <![CDATA[ */\ntesting\n/* ]]> */\n</script>\n";
-		$expected .= "<script type='text/javascript' src='http://example.com' id='test-only-data-js'></script>\n";
+		$expected  = "<script id='test-only-data-js-extra'>\ntesting\n</script>\n";
+		$expected .= "<script src='http://example.com' id='test-only-data-js'></script>\n";
 
 		// Go!
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
@@ -246,7 +244,7 @@ JS;
 		// Enqueue and add conditional comments.
 		wp_enqueue_script( 'test-only-conditional', 'example.com', array(), null );
 		wp_script_add_data( 'test-only-conditional', 'conditional', 'gt IE 7' );
-		$expected = "<!--[if gt IE 7]>\n<script type='text/javascript' src='http://example.com' id='test-only-conditional-js'></script>\n<![endif]-->\n";
+		$expected = "<!--[if gt IE 7]>\n<script src='http://example.com' id='test-only-conditional-js'></script>\n<![endif]-->\n";
 
 		// Go!
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
@@ -265,8 +263,8 @@ JS;
 		wp_enqueue_script( 'test-conditional-with-data', 'example.com', array(), null );
 		wp_script_add_data( 'test-conditional-with-data', 'data', 'testing' );
 		wp_script_add_data( 'test-conditional-with-data', 'conditional', 'lt IE 9' );
-		$expected  = "<!--[if lt IE 9]>\n<script type='text/javascript' id='test-conditional-with-data-js-extra'>\n/* <![CDATA[ */\ntesting\n/* ]]> */\n</script>\n<![endif]-->\n";
-		$expected .= "<!--[if lt IE 9]>\n<script type='text/javascript' src='http://example.com' id='test-conditional-with-data-js'></script>\n<![endif]-->\n";
+		$expected  = "<!--[if lt IE 9]>\n<script id='test-conditional-with-data-js-extra'>\ntesting\n</script>\n<![endif]-->\n";
+		$expected .= "<!--[if lt IE 9]>\n<script src='http://example.com' id='test-conditional-with-data-js'></script>\n<![endif]-->\n";
 
 		// Go!
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
@@ -284,7 +282,7 @@ JS;
 		// Enqueue and add an invalid key.
 		wp_enqueue_script( 'test-invalid', 'example.com', array(), null );
 		wp_script_add_data( 'test-invalid', 'invalid', 'testing' );
-		$expected = "<script type='text/javascript' src='http://example.com' id='test-invalid-js'></script>\n";
+		$expected = "<script src='http://example.com' id='test-invalid-js'></script>\n";
 
 		// Go!
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
@@ -307,8 +305,8 @@ JS;
 	 * @ticket 35229
 	 */
 	public function test_wp_register_script_with_handle_without_source() {
-		$expected  = "<script type='text/javascript' src='http://example.com?ver=1' id='handle-one-js'></script>\n";
-		$expected .= "<script type='text/javascript' src='http://example.com?ver=2' id='handle-two-js'></script>\n";
+		$expected  = "<script src='http://example.com?ver=1' id='handle-one-js'></script>\n";
+		$expected .= "<script src='http://example.com?ver=2' id='handle-two-js'></script>\n";
 
 		wp_register_script( 'handle-one', 'http://example.com', array(), 1 );
 		wp_register_script( 'handle-two', 'http://example.com', array(), 2 );
@@ -400,9 +398,9 @@ JS;
 		$header = get_echo( 'wp_print_head_scripts' );
 		$footer = get_echo( 'wp_print_footer_scripts' );
 
-		$expected_header  = "<script type='text/javascript' src='/child-footer.js' id='child-footer-js'></script>\n";
-		$expected_header .= "<script type='text/javascript' src='/child-head.js' id='child-head-js'></script>\n";
-		$expected_footer  = "<script type='text/javascript' src='/parent.js' id='parent-js'></script>\n";
+		$expected_header  = "<script src='/child-footer.js' id='child-footer-js'></script>\n";
+		$expected_header .= "<script src='/child-head.js' id='child-head-js'></script>\n";
+		$expected_footer  = "<script src='/parent.js' id='parent-js'></script>\n";
 
 		$this->assertSame( $expected_header, $header );
 		$this->assertSame( $expected_footer, $footer );
@@ -421,9 +419,9 @@ JS;
 		$header = get_echo( 'wp_print_head_scripts' );
 		$footer = get_echo( 'wp_print_footer_scripts' );
 
-		$expected_header  = "<script type='text/javascript' src='/child-head.js' id='child-head-js'></script>\n";
-		$expected_footer  = "<script type='text/javascript' src='/child-footer.js' id='child-footer-js'></script>\n";
-		$expected_footer .= "<script type='text/javascript' src='/parent.js' id='parent-js'></script>\n";
+		$expected_header  = "<script src='/child-head.js' id='child-head-js'></script>\n";
+		$expected_footer  = "<script src='/child-footer.js' id='child-footer-js'></script>\n";
+		$expected_footer .= "<script src='/parent.js' id='parent-js'></script>\n";
 
 		$this->assertSame( $expected_header, $header );
 		$this->assertSame( $expected_footer, $footer );
@@ -447,14 +445,14 @@ JS;
 		$header = get_echo( 'wp_print_head_scripts' );
 		$footer = get_echo( 'wp_print_footer_scripts' );
 
-		$expected_header  = "<script type='text/javascript' src='/child-head.js' id='child-head-js'></script>\n";
-		$expected_header .= "<script type='text/javascript' src='/grandchild-head.js' id='grandchild-head-js'></script>\n";
-		$expected_header .= "<script type='text/javascript' src='/child2-head.js' id='child2-head-js'></script>\n";
-		$expected_header .= "<script type='text/javascript' src='/parent-header.js' id='parent-header-js'></script>\n";
+		$expected_header  = "<script src='/child-head.js' id='child-head-js'></script>\n";
+		$expected_header .= "<script src='/grandchild-head.js' id='grandchild-head-js'></script>\n";
+		$expected_header .= "<script src='/child2-head.js' id='child2-head-js'></script>\n";
+		$expected_header .= "<script src='/parent-header.js' id='parent-header-js'></script>\n";
 
-		$expected_footer  = "<script type='text/javascript' src='/child-footer.js' id='child-footer-js'></script>\n";
-		$expected_footer .= "<script type='text/javascript' src='/child2-footer.js' id='child2-footer-js'></script>\n";
-		$expected_footer .= "<script type='text/javascript' src='/parent-footer.js' id='parent-footer-js'></script>\n";
+		$expected_footer  = "<script src='/child-footer.js' id='child-footer-js'></script>\n";
+		$expected_footer .= "<script src='/child2-footer.js' id='child2-footer-js'></script>\n";
+		$expected_footer .= "<script src='/parent-footer.js' id='parent-footer-js'></script>\n";
 
 		$this->assertSame( $expected_header, $header );
 		$this->assertSame( $expected_footer, $footer );
@@ -484,8 +482,8 @@ JS;
 		wp_enqueue_script( 'test-example', 'example.com', array(), null );
 		wp_add_inline_script( 'test-example', 'console.log("before");', 'before' );
 
-		$expected  = "<script type='text/javascript' id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
-		$expected .= "<script type='text/javascript' src='http://example.com' id='test-example-js'></script>\n";
+		$expected  = "<script id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
+		$expected .= "<script src='http://example.com' id='test-example-js'></script>\n";
 
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
@@ -497,8 +495,8 @@ JS;
 		wp_enqueue_script( 'test-example', 'example.com', array(), null );
 		wp_add_inline_script( 'test-example', 'console.log("after");' );
 
-		$expected  = "<script type='text/javascript' src='http://example.com' id='test-example-js'></script>\n";
-		$expected .= "<script type='text/javascript' id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
+		$expected  = "<script src='http://example.com' id='test-example-js'></script>\n";
+		$expected .= "<script id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
 
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
@@ -511,9 +509,9 @@ JS;
 		wp_add_inline_script( 'test-example', 'console.log("before");', 'before' );
 		wp_add_inline_script( 'test-example', 'console.log("after");' );
 
-		$expected  = "<script type='text/javascript' id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
-		$expected .= "<script type='text/javascript' src='http://example.com' id='test-example-js'></script>\n";
-		$expected .= "<script type='text/javascript' id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
+		$expected  = "<script id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
+		$expected .= "<script src='http://example.com' id='test-example-js'></script>\n";
+		$expected .= "<script id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
 
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
@@ -526,7 +524,7 @@ JS;
 		wp_enqueue_script( 'test-example' );
 		wp_add_inline_script( 'test-example', 'console.log("before");', 'before' );
 
-		$expected = "<script type='text/javascript' id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
+		$expected = "<script id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
 
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
@@ -539,7 +537,7 @@ JS;
 		wp_enqueue_script( 'test-example' );
 		wp_add_inline_script( 'test-example', 'console.log("after");' );
 
-		$expected = "<script type='text/javascript' id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
+		$expected = "<script id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
 
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
@@ -553,8 +551,8 @@ JS;
 		wp_add_inline_script( 'test-example', 'console.log("before");', 'before' );
 		wp_add_inline_script( 'test-example', 'console.log("after");' );
 
-		$expected  = "<script type='text/javascript' id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
-		$expected .= "<script type='text/javascript' id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
+		$expected  = "<script id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
+		$expected .= "<script id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
 
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
@@ -569,9 +567,9 @@ JS;
 		wp_add_inline_script( 'test-example', 'console.log("after");' );
 		wp_add_inline_script( 'test-example', 'console.log("after");' );
 
-		$expected  = "<script type='text/javascript' id='test-example-js-before'>\nconsole.log(\"before\");\nconsole.log(\"before\");\n</script>\n";
-		$expected .= "<script type='text/javascript' src='http://example.com' id='test-example-js'></script>\n";
-		$expected .= "<script type='text/javascript' id='test-example-js-after'>\nconsole.log(\"after\");\nconsole.log(\"after\");\n</script>\n";
+		$expected  = "<script id='test-example-js-before'>\nconsole.log(\"before\");\nconsole.log(\"before\");\n</script>\n";
+		$expected .= "<script src='http://example.com' id='test-example-js'></script>\n";
+		$expected .= "<script id='test-example-js-after'>\nconsole.log(\"after\");\nconsole.log(\"after\");\n</script>\n";
 
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
@@ -585,10 +583,10 @@ JS;
 		wp_add_inline_script( 'test-example', 'console.log("before");', 'before' );
 		wp_add_inline_script( 'test-example', 'console.log("after");' );
 
-		$expected  = "<script type='text/javascript' id='test-example-js-extra'>\n/* <![CDATA[ */\nvar testExample = {\"foo\":\"bar\"};\n/* ]]> */\n</script>\n";
-		$expected .= "<script type='text/javascript' id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
-		$expected .= "<script type='text/javascript' src='http://example.com' id='test-example-js'></script>\n";
-		$expected .= "<script type='text/javascript' id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
+		$expected  = "<script id='test-example-js-extra'>\nvar testExample = {\"foo\":\"bar\"};\n</script>\n";
+		$expected .= "<script id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
+		$expected .= "<script src='http://example.com' id='test-example-js'></script>\n";
+		$expected .= "<script id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
 
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
@@ -610,11 +608,11 @@ JS;
 		wp_add_inline_script( 'two', 'console.log("before two");', 'before' );
 
 		$ver       = self::$asset_version;
-		$expected  = "<script type='text/javascript' id='one-js-before'>\nconsole.log(\"before one\");\n</script>\n";
-		$expected .= "<script type='text/javascript' src='/directory/one.js?ver={$ver}' id='one-js'></script>\n";
-		$expected .= "<script type='text/javascript' id='two-js-before'>\nconsole.log(\"before two\");\n</script>\n";
-		$expected .= "<script type='text/javascript' src='/directory/two.js?ver={$ver}' id='two-js'></script>\n";
-		$expected .= "<script type='text/javascript' src='/directory/three.js?ver={$ver}' id='three-js'></script>\n";
+		$expected  = "<script id='one-js-before'>\nconsole.log(\"before one\");\n</script>\n";
+		$expected .= "<script src='/directory/one.js?ver={$ver}' id='one-js'></script>\n";
+		$expected .= "<script id='two-js-before'>\nconsole.log(\"before two\");\n</script>\n";
+		$expected .= "<script src='/directory/two.js?ver={$ver}' id='two-js'></script>\n";
+		$expected .= "<script src='/directory/three.js?ver={$ver}' id='three-js'></script>\n";
 
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
@@ -635,10 +633,10 @@ JS;
 		wp_add_inline_script( 'one', 'console.log("before one");', 'before' );
 
 		$ver       = self::$asset_version;
-		$expected  = "<script type='text/javascript' id='one-js-before'>\nconsole.log(\"before one\");\n</script>\n";
-		$expected .= "<script type='text/javascript' src='/directory/one.js?ver={$ver}' id='one-js'></script>\n";
-		$expected .= "<script type='text/javascript' src='/directory/two.js?ver={$ver}' id='two-js'></script>\n";
-		$expected .= "<script type='text/javascript' src='/directory/three.js?ver={$ver}' id='three-js'></script>\n";
+		$expected  = "<script id='one-js-before'>\nconsole.log(\"before one\");\n</script>\n";
+		$expected .= "<script src='/directory/one.js?ver={$ver}' id='one-js'></script>\n";
+		$expected .= "<script src='/directory/two.js?ver={$ver}' id='two-js'></script>\n";
+		$expected .= "<script src='/directory/three.js?ver={$ver}' id='three-js'></script>\n";
 
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
@@ -661,12 +659,12 @@ JS;
 		wp_add_inline_script( 'three', 'console.log("after three");' );
 
 		$ver       = self::$asset_version;
-		$expected  = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=one&amp;ver={$ver}'></script>\n";
-		$expected .= "<script type='text/javascript' src='/directory/two.js?ver={$ver}' id='two-js'></script>\n";
-		$expected .= "<script type='text/javascript' id='two-js-after'>\nconsole.log(\"after two\");\n</script>\n";
-		$expected .= "<script type='text/javascript' src='/directory/three.js?ver={$ver}' id='three-js'></script>\n";
-		$expected .= "<script type='text/javascript' id='three-js-after'>\nconsole.log(\"after three\");\n</script>\n";
-		$expected .= "<script type='text/javascript' src='/directory/four.js?ver={$ver}' id='four-js'></script>\n";
+		$expected  = "<script src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=one&amp;ver={$ver}'></script>\n";
+		$expected .= "<script src='/directory/two.js?ver={$ver}' id='two-js'></script>\n";
+		$expected .= "<script id='two-js-after'>\nconsole.log(\"after two\");\n</script>\n";
+		$expected .= "<script src='/directory/three.js?ver={$ver}' id='three-js'></script>\n";
+		$expected .= "<script id='three-js-after'>\nconsole.log(\"after three\");\n</script>\n";
+		$expected .= "<script src='/directory/four.js?ver={$ver}' id='four-js'></script>\n";
 
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
@@ -681,13 +679,13 @@ JS;
 		$wp_scripts->default_dirs = array( '/wp-admin/js/', '/wp-includes/js/' ); // Default dirs as in wp-includes/script-loader.php.
 
 		$expected_localized  = "<!--[if gte IE 9]>\n";
-		$expected_localized .= "<script type='text/javascript' id='test-example-js-extra'>\n/* <![CDATA[ */\nvar testExample = {\"foo\":\"bar\"};\n/* ]]> */\n</script>\n";
+		$expected_localized .= "<script id='test-example-js-extra'>\nvar testExample = {\"foo\":\"bar\"};\n</script>\n";
 		$expected_localized .= "<![endif]-->\n";
 
 		$expected  = "<!--[if gte IE 9]>\n";
-		$expected .= "<script type='text/javascript' id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
-		$expected .= "<script type='text/javascript' src='http://example.com' id='test-example-js'></script>\n";
-		$expected .= "<script type='text/javascript' id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
+		$expected .= "<script id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
+		$expected .= "<script src='http://example.com' id='test-example-js'></script>\n";
+		$expected .= "<script id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
 		$expected .= "<![endif]-->\n";
 
 		wp_enqueue_script( 'test-example', 'example.com', array(), null );
@@ -713,9 +711,9 @@ JS;
 		$wp_scripts->do_concat = true;
 
 		$ver      = self::$asset_version;
-		$expected = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=jquery-core,jquery-migrate&amp;ver={$ver}'></script>\n";
-		$expected .= "<script type='text/javascript' src='http://example.com' id='test-example-js'></script>\n";
-		$expected .= "<script type='text/javascript' id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
+		$expected = "<script src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=jquery-core,jquery-migrate&amp;ver={$ver}'></script>\n";
+		$expected .= "<script src='http://example.com' id='test-example-js'></script>\n";
+		$expected .= "<script id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
 
 		wp_enqueue_script( 'test-example', 'http://example.com', array( 'jquery' ), null );
 		wp_add_inline_script( 'test-example', 'console.log("after");' );
@@ -738,10 +736,10 @@ JS;
 		$wp_scripts->do_concat = true;
 
 		$ver      = self::$asset_version;
-		$expected = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=jquery-core,jquery-migrate&amp;ver={$ver}'></script>\n";
+		$expected = "<script src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=jquery-core,jquery-migrate&amp;ver={$ver}'></script>\n";
 		$expected .= "<!--[if gte IE 9]>\n";
-		$expected .= "<script type='text/javascript' src='http://example.com' id='test-example-js'></script>\n";
-		$expected .= "<script type='text/javascript' id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
+		$expected .= "<script src='http://example.com' id='test-example-js'></script>\n";
+		$expected .= "<script id='test-example-js-after'>\nconsole.log(\"after\");\n</script>\n";
 		$expected .= "<![endif]-->\n";
 
 		wp_enqueue_script( 'test-example', 'http://example.com', array( 'jquery' ), null );
@@ -767,9 +765,9 @@ JS;
 		$wp_scripts->do_concat = true;
 
 		$ver      = self::$asset_version;
-		$expected = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=jquery-core,jquery-migrate&amp;ver={$ver}'></script>\n";
-		$expected .= "<script type='text/javascript' id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
-		$expected .= "<script type='text/javascript' src='http://example.com' id='test-example-js'></script>\n";
+		$expected = "<script src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=jquery-core,jquery-migrate&amp;ver={$ver}'></script>\n";
+		$expected .= "<script id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
+		$expected .= "<script src='http://example.com' id='test-example-js'></script>\n";
 
 		wp_enqueue_script( 'test-example', 'http://example.com', array( 'jquery' ), null );
 		wp_add_inline_script( 'test-example', 'console.log("before");', 'before' );
@@ -794,16 +792,16 @@ JS;
 
 		$ver       = self::$asset_version;
 		$suffix    = wp_scripts_get_suffix();
-		$expected  = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=jquery-core,jquery-migrate,wp-dom-ready,wp-hooks&amp;ver={$ver}'></script>\n";
-		$expected .= "<script type='text/javascript' id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
-		$expected .= "<script type='text/javascript' src='http://example.com' id='test-example-js'></script>\n";
-		$expected .= "<script type='text/javascript' src='/wp-includes/js/dist/i18n.js?ver={$ver}' id='wp-i18n-js'></script>\n";
-		$expected .= "<script type='text/javascript' id='wp-i18n-js-after'>\n";
+		$expected  = "<script src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=jquery-core,jquery-migrate,wp-dom-ready,wp-hooks&amp;ver={$ver}'></script>\n";
+		$expected .= "<script id='test-example-js-before'>\nconsole.log(\"before\");\n</script>\n";
+		$expected .= "<script src='http://example.com' id='test-example-js'></script>\n";
+		$expected .= "<script src='/wp-includes/js/dist/i18n.js?ver={$ver}' id='wp-i18n-js'></script>\n";
+		$expected .= "<script id='wp-i18n-js-after'>\n";
 		$expected .= "wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );\n";
 		$expected .= "</script>\n";
-		$expected .= "<script type='text/javascript' src='/wp-includes/js/dist/a11y.js?ver={$ver}' id='wp-a11y-js'></script>\n";
-		$expected .= "<script type='text/javascript' src='http://example2.com' id='test-example2-js'></script>\n";
-		$expected .= "<script type='text/javascript' id='test-example2-js-after'>\nconsole.log(\"after\");\n</script>\n";
+		$expected .= "<script src='/wp-includes/js/dist/a11y.js?ver={$ver}' id='wp-a11y-js'></script>\n";
+		$expected .= "<script src='http://example2.com' id='test-example2-js'></script>\n";
+		$expected .= "<script id='test-example2-js-after'>\nconsole.log(\"after\");\n</script>\n";
 
 		wp_enqueue_script( 'test-example', 'http://example.com', array( 'jquery' ), null );
 		wp_add_inline_script( 'test-example', 'console.log("before");', 'before' );
@@ -832,8 +830,8 @@ JS;
 		$wp_scripts->base_url  = '';
 		$wp_scripts->do_concat = true;
 
-		$expected_tail  = "<script type='text/javascript' src='/customize-dependency.js' id='customize-dependency-js'></script>\n";
-		$expected_tail .= "<script type='text/javascript' id='customize-dependency-js-after'>\n";
+		$expected_tail  = "<script src='/customize-dependency.js' id='customize-dependency-js'></script>\n";
+		$expected_tail .= "<script id='customize-dependency-js-after'>\n";
 		$expected_tail .= "tryCustomizeDependency()\n";
 		$expected_tail .= "</script>\n";
 
@@ -848,7 +846,7 @@ JS;
 		_print_scripts();
 		$print_scripts = $this->getActualOutput();
 
-		$tail = substr( $print_scripts, strrpos( $print_scripts, "<script type='text/javascript' src='/customize-dependency.js' id='customize-dependency-js'>" ) );
+		$tail = substr( $print_scripts, strrpos( $print_scripts, "<script src='/customize-dependency.js' id='customize-dependency-js'>" ) );
 		$this->assertSame( $expected_tail, $tail );
 	}
 
@@ -868,11 +866,11 @@ JS;
 		wp_enqueue_script( 'four', '/wp-includes/js/script4.js' );
 
 		$ver       = self::$asset_version;
-		$expected  = "<script type='text/javascript' src='/wp-includes/js/script.js?ver={$ver}' id='one-js'></script>\n";
-		$expected .= "<script type='text/javascript' id='one-js-after'>\nconsole.log(\"after one\");\n</script>\n";
-		$expected .= "<script type='text/javascript' src='/wp-includes/js/script2.js?ver={$ver}' id='two-js'></script>\n";
-		$expected .= "<script type='text/javascript' src='/wp-includes/js/script3.js?ver={$ver}' id='three-js'></script>\n";
-		$expected .= "<script type='text/javascript' src='/wp-includes/js/script4.js?ver={$ver}' id='four-js'></script>\n";
+		$expected  = "<script src='/wp-includes/js/script.js?ver={$ver}' id='one-js'></script>\n";
+		$expected .= "<script id='one-js-after'>\nconsole.log(\"after one\");\n</script>\n";
+		$expected .= "<script src='/wp-includes/js/script2.js?ver={$ver}' id='two-js'></script>\n";
+		$expected .= "<script src='/wp-includes/js/script3.js?ver={$ver}' id='three-js'></script>\n";
+		$expected .= "<script src='/wp-includes/js/script4.js?ver={$ver}' id='four-js'></script>\n";
 
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
@@ -893,10 +891,10 @@ JS;
 		wp_enqueue_script( 'four', '/wp-includes/js/script4.js' );
 
 		$ver       = self::$asset_version;
-		$expected  = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=one,two&amp;ver={$ver}'></script>\n";
-		$expected .= "<script type='text/javascript' id='three-js-before'>\nconsole.log(\"before three\");\n</script>\n";
-		$expected .= "<script type='text/javascript' src='/wp-includes/js/script3.js?ver={$ver}' id='three-js'></script>\n";
-		$expected .= "<script type='text/javascript' src='/wp-includes/js/script4.js?ver={$ver}' id='four-js'></script>\n";
+		$expected  = "<script src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=one,two&amp;ver={$ver}'></script>\n";
+		$expected .= "<script id='three-js-before'>\nconsole.log(\"before three\");\n</script>\n";
+		$expected .= "<script src='/wp-includes/js/script3.js?ver={$ver}' id='three-js'></script>\n";
+		$expected .= "<script src='/wp-includes/js/script4.js?ver={$ver}' id='four-js'></script>\n";
 
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
@@ -1279,8 +1277,8 @@ JS;
 		wp_enqueue_script( 'test-example', 'example.com', array(), null );
 		wp_localize_script( 'test-example', 'testExample', $l10n_data );
 
-		$expected  = "<script type='text/javascript' id='test-example-js-extra'>\n/* <![CDATA[ */\nvar testExample = {$expected};\n/* ]]> */\n</script>\n";
-		$expected .= "<script type='text/javascript' src='http://example.com' id='test-example-js'></script>\n";
+		$expected  = "<script id='test-example-js-extra'>\nvar testExample = {$expected};\n</script>\n";
+		$expected .= "<script src='http://example.com' id='test-example-js'></script>\n";
 
 		$this->assertSame( $expected, get_echo( 'wp_print_scripts' ) );
 	}
@@ -1343,9 +1341,9 @@ JS;
 
 		// The non-default script should end concatenation and maintain order.
 		$ver       = self::$asset_version;
-		$expected  = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=jquery-core&amp;ver={$ver}'></script>\n";
-		$expected .= "<script type='text/javascript' src='/plugins/wp-i18n.js' id='wp-i18n-js'></script>\n";
-		$expected .= "<script type='text/javascript' src='/default/common.js' id='common-js'></script>\n";
+		$expected  = "<script src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=jquery-core&amp;ver={$ver}'></script>\n";
+		$expected .= "<script src='/plugins/wp-i18n.js' id='wp-i18n-js'></script>\n";
+		$expected .= "<script src='/default/common.js' id='common-js'></script>\n";
 
 		$this->assertSame( $expected, $print_scripts );
 	}

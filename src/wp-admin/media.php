@@ -155,9 +155,9 @@ switch ( $action ) {
 	</div>
 
 		<?php submit_button( __( 'Update' ), 'primary', 'save' ); ?>
-	<input type="hidden" name="post_id" id="post_id" value="<?php echo isset( $post_id ) ? esc_attr( $post_id ) : ''; ?>" />
-	<input type="hidden" name="attachment_id" id="attachment_id" value="<?php echo esc_attr( $att_id ); ?>" />
-	<input type="hidden" name="action" value="editattachment" />
+	<input type="hidden" name="post_id" id="post_id" value="<?php echo isset( $post_id ) ? esc_attr( $post_id ) : ''; ?>">
+	<input type="hidden" name="attachment_id" id="attachment_id" value="<?php echo esc_attr( $att_id ); ?>">
+	<input type="hidden" name="action" value="editattachment">
 		<?php wp_original_referer_field( true, 'previous' ); ?>
 		<?php wp_nonce_field( 'media-form' ); ?>
 

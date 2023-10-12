@@ -114,9 +114,9 @@ if ( isset( $_GET['action'] ) ) {
 			<div class="wrap">
 				<h1><?php _e( 'Confirm your action' ); ?></h1>
 				<form action="sites.php?action=<?php echo esc_attr( $site_action ); ?>" method="post">
-					<input type="hidden" name="action" value="<?php echo esc_attr( $site_action ); ?>" />
-					<input type="hidden" name="id" value="<?php echo esc_attr( $id ); ?>" />
-					<input type="hidden" name="_wp_http_referer" value="<?php echo esc_attr( wp_get_referer() ); ?>" />
+					<input type="hidden" name="action" value="<?php echo esc_attr( $site_action ); ?>">
+					<input type="hidden" name="id" value="<?php echo esc_attr( $id ); ?>">
+					<input type="hidden" name="_wp_http_referer" value="<?php echo esc_attr( wp_get_referer() ); ?>">
 					<?php wp_nonce_field( $site_action . '_' . $id, '_wpnonce', false ); ?>
 					<p><?php printf( $manage_actions[ $site_action ], $site_address ); ?></p>
 					<?php submit_button( __( 'Confirm' ), 'primary' ); ?>
@@ -190,8 +190,8 @@ if ( isset( $_GET['action'] ) ) {
 								<div class="wrap">
 									<h1><?php _e( 'Confirm your action' ); ?></h1>
 									<form action="sites.php?action=delete_sites" method="post">
-										<input type="hidden" name="action" value="delete_sites" />
-										<input type="hidden" name="_wp_http_referer" value="<?php echo esc_attr( wp_get_referer() ); ?>" />
+										<input type="hidden" name="action" value="delete_sites">
+										<input type="hidden" name="_wp_http_referer" value="<?php echo esc_attr( wp_get_referer() ); ?>">
 										<?php wp_nonce_field( 'ms-delete-sites', '_wpnonce', false ); ?>
 										<p><?php _e( 'You are about to delete the following sites:' ); ?></p>
 										<ul class="ul-disc">
@@ -202,7 +202,7 @@ if ( isset( $_GET['action'] ) ) {
 												?>
 												<li>
 													<?php echo $site_address; ?>
-													<input type="hidden" name="site_ids[]" value="<?php echo (int) $site_id; ?>" />
+													<input type="hidden" name="site_ids[]" value="<?php echo (int) $site_id; ?>">
 												</li>
 											<?php endforeach; ?>
 										</ul>
@@ -390,7 +390,7 @@ if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) ) {
 
 <form method="get" id="ms-search" class="wp-clearfix">
 <?php $wp_list_table->search_box( __( 'Search Sites' ), 'site' ); ?>
-<input type="hidden" name="action" value="blogs" />
+<input type="hidden" name="action" value="blogs">
 </form>
 
 <form id="form-site-list" action="sites.php?action=allblogs" method="post">
