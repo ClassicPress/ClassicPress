@@ -2476,7 +2476,7 @@ class Tests_DB extends WP_UnitTestCase {
 	public function test_mysqli_is_set() {
 		global $wpdb;
 
-		$this->assertObjectHasAttribute( 'use_mysqli', $wpdb );
+		$this->assertObjectHasProperty( 'use_mysqli', $wpdb );
 		$this->assertTrue( $wpdb->use_mysqli );
 	}
 }
