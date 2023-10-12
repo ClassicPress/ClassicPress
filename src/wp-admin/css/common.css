@@ -2058,29 +2058,23 @@ html.wp-toolbar {
 	position: relative;
 }
 
-/* Replace default marker in details element */
+/* Enhance default marker in details element */
 details summary > * {
 	display: inline;
 }
 
 .metabox-holder details > summary {
-	list-style: none;
 	margin-top: -0.3em !important;
 }
 
-/* Addresses Safari issue, see v2 PR#217 */
+.metabox-holder details > summary::marker,
 .metabox-holder details > summary::-webkit-details-marker {
-	display: none;
-}
-
-.metabox-holder details > summary::before {
-	content: '\25B8';
 	font-size: 1.5em;
 	cursor: pointer;
 }
 
-.metabox-holder details[open] > summary::before {
-	content: '\25BE';
+.metabox-holder details > summary h2 {
+	padding-left: 5px !important;
 }
 
 #post-body-content {
