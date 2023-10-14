@@ -1857,7 +1857,7 @@ function _custom_background_cb() {
 		$style .= $image . $position . $size . $repeat . $attachment;
 	}
 	?>
-<style<?php echo $type_attr; ?> id="custom-background-css">
+<style id="custom-background-css">
 body.custom-background { <?php echo trim( $style ); ?> }
 </style>
 	<?php
