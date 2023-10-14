@@ -118,6 +118,7 @@ for range in \
 	'dc512708:5.2' \
 	'c67b47c66:5.3' \
 	'66f510bda:5.4' \
+	'd2d0f66:6.2' \
 	'ff6114f8:trunk'
 do
 	start_commit=$(echo "$range" | cut -d: -f1)
