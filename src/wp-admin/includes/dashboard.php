@@ -1109,8 +1109,8 @@ function wp_dashboard_recent_comments( $total_items = 5 ) {
 					current_user_can( 'read_post', $comment->comment_post_ID )
 				)
 			) {
-			_wp_dashboard_recent_comments_row( $comment );
-		}
+				_wp_dashboard_recent_comments_row( $comment );
+			}
 		}
 		echo '</ul>';
 
