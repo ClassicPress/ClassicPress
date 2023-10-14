@@ -956,8 +956,22 @@ function wp_dashboard_recent_comments( $total_items = 5 ) {
 
 		echo '<ul id="the-comment-list" data-wp-lists="list:comment">';
 		foreach ( $comments as $comment ) {
+<<<<<<< HEAD
 			_wp_dashboard_recent_comments_row( $comment );
 		}
+=======
+			$comment_post = get_post( $comment->comment_post_ID );
+			if (
+				current_user_can( 'edit_post', $comment->comment_post_ID ) ||
+				(
+					empty( $comment_post->post_password ) &&
+					current_user_can( 'read_post', $comment->comment_post_ID )
+				)
+			) {
+				_wp_dashboard_recent_comments_row( $comment );
+			}
+		}
+>>>>>>> 392ec5062b (Grouped backports to the 4.9 branch.)
 		echo '</ul>';
 
 		if ( current_user_can( 'edit_posts' ) ) {
