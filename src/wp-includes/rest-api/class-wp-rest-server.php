@@ -239,27 +239,6 @@ class WP_REST_Server {
 		$this->send_header( 'Access-Control-Allow-Headers', 'Authorization, Content-Type' );
 
 		/**
-<<<<<<< HEAD
-		 * Send nocache headers on authenticated requests.
-		 *
-		 * @since WP-4.4.0
-		 *
-		 * @param bool $rest_send_nocache_headers Whether to send no-cache headers.
-		 */
-		$send_no_cache_headers = apply_filters( 'rest_send_nocache_headers', is_user_logged_in() );
-		if ( $send_no_cache_headers ) {
-			foreach ( wp_get_nocache_headers() as $header => $header_value ) {
-				if ( empty( $header_value ) ) {
-					$this->remove_header( $header );
-				} else {
-					$this->send_header( $header, $header_value );
-				}
-			}
-		}
-
-		/**
-=======
->>>>>>> 392ec5062b (Grouped backports to the 4.9 branch.)
 		 * Filters whether the REST API is enabled.
 		 *
 		 * @since WP-4.4.0

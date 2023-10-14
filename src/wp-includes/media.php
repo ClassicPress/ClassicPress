@@ -2097,8 +2097,8 @@ function gallery_shortcode( $attr ) {
 			$attachments[ $val->ID ] = $_attachments[ $key ];
 		}
 	} elseif ( ! empty( $atts['exclude'] ) ) {
-<<<<<<< HEAD
-		$attachments = get_children(
+		$post_parent_id = $id;
+		$attachments    = get_children(
 			array(
 				'post_parent'    => $id,
 				'exclude'        => $atts['exclude'],
@@ -2110,7 +2110,8 @@ function gallery_shortcode( $attr ) {
 			)
 		);
 	} else {
-		$attachments = get_children(
+		$post_parent_id = $id;
+		$attachments    = get_children(
 			array(
 				'post_parent'    => $id,
 				'post_status'    => 'inherit',
@@ -2120,13 +2121,6 @@ function gallery_shortcode( $attr ) {
 				'orderby'        => $atts['orderby'],
 			)
 		);
-=======
-		$post_parent_id = $id;
-		$attachments = get_children( array( 'post_parent' => $id, 'exclude' => $atts['exclude'], 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $atts['order'], 'orderby' => $atts['orderby'] ) );
-	} else {
-		$post_parent_id = $id;
-		$attachments = get_children( array( 'post_parent' => $id, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $atts['order'], 'orderby' => $atts['orderby'] ) );
->>>>>>> 392ec5062b (Grouped backports to the 4.9 branch.)
 	}
 
 	if ( ! empty( $post_parent_id ) ) {
