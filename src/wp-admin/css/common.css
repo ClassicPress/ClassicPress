@@ -2038,14 +2038,19 @@ html.wp-toolbar {
 .postbox-container summary {
 	font-size: 14px;
 	font-weight: 600;
-	padding: 8px 12px;
+	padding: 2px 12px;
 	margin: 0;
 	line-height: 1.4;
 	border-bottom: 1px solid #c3c4c7;
 }
 
+.postbox-container summary > div {
+	display: inline-flex;
+}
+
 .postbox-container .handle-actions {
-	float: right;
+	right: 12px;
+	position: absolute;
 }
 
 #wpbody-content .metabox-holder {
@@ -2061,10 +2066,6 @@ html.wp-toolbar {
 /* Enhance default marker in details element */
 details summary > * {
 	display: inline;
-}
-
-.metabox-holder details > summary {
-	margin-top: -0.3em !important;
 }
 
 .metabox-holder details > summary::marker,

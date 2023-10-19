@@ -1277,6 +1277,7 @@ function do_meta_boxes( $screen, $context, $data_object ) {
 					echo '<details id="' . $box['id'] . '" class="postbox' . $hidden_class . '"' . $open_attribute . '>' . "\n";
 
 					echo '<summary>';
+					echo '<div>';
 					echo '<h2 class="hndle">';
 
 					if ( 'dashboard_php_nag' === $box['id'] ) {
@@ -1287,6 +1288,7 @@ function do_meta_boxes( $screen, $context, $data_object ) {
 						' </span>';
 					}
 					echo $box['title'];
+					echo '</h2>';
 
 					if ( 'dashboard_browser_nag' !== $box['id'] ) {
 						$widget_title = $box['title'];
@@ -1327,8 +1329,7 @@ function do_meta_boxes( $screen, $context, $data_object ) {
 
 						echo '</span>';
 					}
-
-					echo '</h2>';
+					echo '</div>';
 					echo "</summary>\n";
 
 					echo '<div class="inside" style="display:block">' . "\n";
