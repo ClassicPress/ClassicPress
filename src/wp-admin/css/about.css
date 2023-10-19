@@ -1015,7 +1015,7 @@
 
 .wp-badge {
 	background: #0073aa url(../images/cp-logo-white.png?ver=202303) no-repeat;
-	background-position: center 25px;
+	background-position: center;
 	background-size: 80px 80px;
 	color: #fff;
 	font-size: 14px;

@@ -2,7 +2,7 @@
 
 **ClassicPress: The CMS for Creators. Stable. Lightweight. Instantly Familiar.**
 
-ClassicPress is a community-led open source content management system for creators. It is a fork of WordPress 4.9 that preserves the TinyMCE classic editor as the default option. It is half the size of WordPress, contains less bloat improving performance, and has no block editor (Gutenberg/Full Site Editing).
+ClassicPress is a community-led open source content management system for creators. It is a fork of WordPress 6.2 that preserves the TinyMCE classic editor as the default option. It is half the size of WordPress, contains less bloat improving performance, and has no block editor (Gutenberg/Full Site Editing).
 
 [![Coding Standards](https://github.com/ClassicPress/ClassicPress/workflows/Coding%20Standards/badge.svg?branch=develop)](https://github.com/ClassicPress/ClassicPress/actions?query=workflow%3A%22Coding+Standards%22+branch%3Adevelop)
 [![PHPUnit Tests](https://github.com/ClassicPress/ClassicPress/workflows/PHPUnit%20Tests/badge.svg?branch=develop)](https://github.com/ClassicPress/ClassicPress/actions?query=workflow%3A%22PHPUnit+Tests%22+branch%3Adevelop)
