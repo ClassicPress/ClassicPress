@@ -38,7 +38,7 @@
     "postcss": "8.4.31",
     "qunit": "^2.19.4",
     "rollup": "4.1.4",
-    "sinon": "^16.0.0",
+    "sinon": "^17.0.0",
     "sinon-test": "^3.1.5",
     "source-map-loader": "^4.0.1",
     "sync-request": "6.1.0",
