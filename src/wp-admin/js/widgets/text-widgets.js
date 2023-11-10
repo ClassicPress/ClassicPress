@@ -87,7 +87,7 @@ wp.textWidgets = ( function( $ ) {
 			// Sync input fields to hidden sync fields which actually get sent to the server.
 			_.each( control.fields, function( fieldInput, fieldName ) {
 				fieldInput.on( 'input change', function updateSyncField() {
-					var syncInput = control.syncContainer.find( '.sync-input.' + fieldName );
+					var syncInput = $(control.syncContainer).find( '.sync-input.' + fieldName );
 					if ( syncInput.val() !== fieldInput.val() ) {
 						syncInput.val( fieldInput.val() );
 						syncInput.trigger( 'change' );
@@ -95,7 +95,7 @@ wp.textWidgets = ( function( $ ) {
 				});
 
 				// Note that syncInput cannot be re-used because it will be destroyed with each widget-updated event.
-				fieldInput.val( control.syncContainer.find( '.sync-input.' + fieldName ).val() );
+				fieldInput.val( $(control.syncContainer).find( '.sync-input.' + fieldName ).val() );
 			});
 		},
 
@@ -216,7 +216,7 @@ wp.textWidgets = ( function( $ ) {
 			};
 
 			// Just-in-time force-update the hidden input fields.
-			control.syncContainer.closest( '.widget' ).find( '[name=savewidget]:first' ).on( 'click', function onClickSaveButton() {
+			control.syncContainer.closest( '.widget' ).querySelector( '[name=savewidget]' ).addEventListener( 'click', function onClickSaveButton() {
 				triggerChangeIfDirty();
 			});
 
@@ -235,12 +235,18 @@ wp.textWidgets = ( function( $ ) {
 
 				// The user has disabled TinyMCE.
 				if ( typeof window.tinymce === 'undefined' ) {
+					wp.oldEditor.initialize( id, {
+						quicktags: true,
+						mediaButtons: true
+					});
+
 					return;
 				}
 
 				// Destroy any existing editor so that it can be re-initialized after a widget-updated event.
 				if ( tinymce.get( id ) ) {
 					restoreTextMode = tinymce.get( id ).isHidden();
+					wp.oldEditor.remove( id );
 				}
 
 				// Add or enable the `wpview` plugin.
@@ -252,6 +258,14 @@ wp.textWidgets = ( function( $ ) {
 					} else if ( ! /\bwpview\b/.test( init.plugins ) ) {
 						init.plugins += ',wpview';
 					}
+				} );
+
+				wp.oldEditor.initialize( id, {
+					tinymce: {
+						wpautop: true
+					},
+					quicktags: true,
+					mediaButtons: true
 				} );
 
 				/**
@@ -364,17 +378,26 @@ wp.textWidgets = ( function( $ ) {
 	 * @return {void}
 	 */
 	component.handleWidgetAdded = function handleWidgetAdded( event, widgetContainer ) {
-		var widgetForm, idBase, widgetControl, widgetId, animatedCheckDelay = 50, renderWhenAnimationDone, fieldContainer, syncContainer;
+		var widgetForm, idBase, widgetControl, widgetId, animatedCheckDelay = 200, renderWhenAnimationDone, fieldContainer, syncContainer;
 		widgetForm = widgetContainer.find( '> .widget-inside > .form, > .widget-inside > form' ); // Note: '.form' appears in the customizer, whereas 'form' on the widgets admin screen.
 
-		idBase = widgetContainer.find( '.id_base' ).val();
+		if ( widgetContainer instanceof jQuery ) {
+			widgetContainer = widgetContainer[0];
+		}
+
+		idBase = widgetContainer.querySelector( '.id_base' ).value;
 		if ( -1 === component.idBases.indexOf( idBase ) ) {
 			return;
 		}
 
 		// Prevent initializing already-added widgets.
-		widgetId = widgetForm.find( '.widget-id' ).val();
+		widgetId = widgetContainer.querySelector( '.widget-id' ).value;
 		if ( component.widgetControls[ widgetId ] ) {
+			return;
+		}
+
+		// Bypass using TinyMCE when widget is in legacy mode.
+		if ( ! widgetContainer.querySelector( '.visual' ).value ) {
 			return;
 		}
 
@@ -389,8 +412,8 @@ wp.textWidgets = ( function( $ ) {
 		 * components", the JS template is rendered outside of the normal form
 		 * container.
 		 */
-		fieldContainer = $( '<div></div>' );
-		syncContainer = widgetContainer.find( '.widget-content:first' );
+		fieldContainer = document.createElement( 'div' );
+		syncContainer = widgetContainer.querySelector( '.widget-content' );
 		syncContainer.before( fieldContainer );
 
 		widgetControl = new component.TextWidgetControl({
@@ -407,7 +430,7 @@ wp.textWidgets = ( function( $ ) {
 		 * with TinyMCE being able to set contenteditable on it.
 		 */
 		renderWhenAnimationDone = function() {
-			if ( ! widgetContainer.hasClass( 'open' ) ) {
+			if ( ! widgetContainer.querySelector( 'details' ).hasAttribute( 'open' ) ) {
 				setTimeout( renderWhenAnimationDone, animatedCheckDelay );
 			} else {
 				widgetControl.initializeEditor();

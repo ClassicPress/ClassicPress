@@ -1400,7 +1400,7 @@
 		 * @param {Object} args  merged on top of this.defaultActiveArguments
 		 */
 		onChangeExpanded: function ( expanded, args ) {
-			var self = this, $widget, $inside, complete, prevComplete, expandControl, $details;
+			var self = this, $widget, $inside, complete, prevComplete, expandControl, $details, $allWidgets;
 
 			self.embedWidgetControl(); // Make sure the outer form is embedded so that the expanded state can be set in the UI.
 			if ( expanded ) {
@@ -1421,18 +1421,12 @@
 			$inside = $widget.find( '.widget-inside:first' );
 			$details = $widget.children( 'details' );
 
+			// Close all other widget controls before expanding this one.
+			$allWidgets = $details.closest( 'ul' ).find( 'details');
+			$allWidgets.removeAttr( 'open' );
+
 			expandControl = function() {
 
-				// Close all other widget controls before expanding this one.
-				api.control.each( function( otherControl ) {
-					if ( self.params.type === otherControl.params.type && self !== otherControl ) {
-						otherControl.collapse();
-					}
-				} );
-
-				complete = function() {
-					$details.attr( 'open', 'open' );
-				};
 				if ( args.completeCallback ) {
 					prevComplete = complete;
 					complete = function () {
@@ -1440,18 +1434,13 @@
 						args.completeCallback();
 					};
 				}
-
-				if ( self.params.is_wide ) {
-					$inside.fadeIn( args.duration, complete );
-				} else {
-					$inside.slideDown( args.duration, complete );
-				}
+				$details.attr( 'open', 'open' );
 
 				self.container.trigger( 'expand' );
 				self.container.addClass( 'expanding' );
 			};
 
-			if ( ! $details[0].hasAttribute( 'open' ) ) {
+			if ( ! $details.attr( 'open' ) ) {
 				if ( api.section.has( self.section() ) ) {
 					api.section( self.section() ).expand( {
 						completeCallback: expandControl
@@ -1460,9 +1449,6 @@
 					expandControl();
 				}
 			} else {
-				complete = function() {
-					$widget.removeAttr( 'open' );
-				};
 				if ( args.completeCallback ) {
 					prevComplete = complete;
 					complete = function () {
@@ -1472,15 +1458,7 @@
 				}
 
 				self.container.trigger( 'collapse' );
-
-				if ( self.params.is_wide ) {
-					$inside.fadeOut( args.duration, complete );
-				} else {
-					$inside.slideUp( args.duration, function() {
-						$widget.css( { width:'', margin:'' } );
-						complete();
-					} );
-				}
+				$widget.removeAttr( 'open' );
 			}
 		},
 

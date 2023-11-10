@@ -1,7 +1,7 @@
 /* General Widgets Styles */
 
 .widget {
-	margin: 0 auto 10px;
+	margin: 0 auto 10px !important;
 	position: relative;
 	box-sizing: border-box;
 }
