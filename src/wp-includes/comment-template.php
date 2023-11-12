@@ -1494,7 +1494,6 @@ function comments_template( $file = '/comments.php', $separate_comments = false 
 		'status'                    => 'approve',
 		'post_id'                   => $post->ID,
 		'no_found_rows'             => false,
-		'update_comment_meta_cache' => false, // We lazy-load comment meta for performance.
 	);
 
 	if ( get_option( 'thread_comments' ) ) {
@@ -2405,8 +2404,6 @@ function wp_list_comments( $args = array(), $comments = null ) {
 	if ( null === $parsed_args['reverse_top_level'] ) {
 		$parsed_args['reverse_top_level'] = ( 'desc' === get_option( 'comment_order' ) );
 	}
-
-	wp_queue_comments_for_comment_meta_lazyload( $_comments );
 
 	if ( empty( $parsed_args['walker'] ) ) {
 		$walker = new Walker_Comment();

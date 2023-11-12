@@ -194,9 +194,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 		$this->_restore_hooks();
 		wp_set_current_user( 0 );
 
-		$lazyloader = wp_metadata_lazyloader();
-		$lazyloader->reset_queue( 'term' );
-		$lazyloader->reset_queue( 'comment' );
+		$this->reset_lazyload_queue();
 	}
 
 	/**
@@ -272,6 +270,16 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 		if ( 0 === strpos( $response->get_error_message(), 'stream_socket_client(): unable to connect to tcp://s.w.org:80' ) ) {
 			$this->markTestSkipped( 'HTTP timeout' );
 		}
+	}
+
+	/**
+	 * Reset the lazy load meta queue.
+	 */
+	protected function reset_lazyload_queue() {
+		$lazyloader = wp_metadata_lazyloader();
+		$lazyloader->reset_queue( 'term' );
+		$lazyloader->reset_queue( 'comment' );
+		$lazyloader->reset_queue( 'blog' );
 	}
 
 	/**

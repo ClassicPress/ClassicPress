@@ -1006,7 +1006,6 @@ function get_blogs_of_user( $user_id, $all = false ) {
 		$args = array(
 			'number'                 => '',
 			'site__in'               => $site_ids,
-			'update_site_meta_cache' => false,
 		);
 		if ( ! $all ) {
 			$args['archived'] = 0;

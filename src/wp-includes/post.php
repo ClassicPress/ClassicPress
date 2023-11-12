@@ -7561,10 +7561,7 @@ function wp_queue_posts_for_term_meta_lazyload( $posts ) {
 		}
 	}
 
-	if ( $term_ids ) {
-		$lazyloader = wp_metadata_lazyloader();
-		$lazyloader->queue_objects( 'term', $term_ids );
-	}
+	wp_lazyload_term_meta( $term_ids );
 }
 
 /**

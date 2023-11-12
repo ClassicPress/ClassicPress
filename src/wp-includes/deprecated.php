@@ -4453,3 +4453,26 @@ function get_page_by_title( $page_title, $output = OBJECT, $post_type = 'page' )
 function wlwmanifest_link() {
 	_deprecated_function( __FUNCTION__, '6.3.0' );
 }
+
+/**
+ * Queues comments for metadata lazy-loading.
+ *
+ * @since 4.5.0
+ * @deprecated 6.3.0 Use wp_lazyload_comment_meta() instead.
+ *
+ * @param WP_Comment[] $comments Array of comment objects.
+ */
+function wp_queue_comments_for_comment_meta_lazyload( $comments ) {
+	_deprecated_function( __FUNCTION__, '6.3.0', 'wp_lazyload_comment_meta' );
+	// Don't use `wp_list_pluck()` to avoid by-reference manipulation.
+	$comment_ids = array();
+	if ( is_array( $comments ) ) {
+		foreach ( $comments as $comment ) {
+			if ( $comment instanceof WP_Comment ) {
+				$comment_ids[] = $comment->comment_ID;
+			}
+		}
+	}
+
+	wp_lazyload_comment_meta( $comment_ids );
+}
