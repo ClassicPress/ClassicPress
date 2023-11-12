@@ -405,6 +405,7 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 				'site-transient',
 				'rss',
 				'users',
+				'user-queries',
 				'useremail',
 				'userlogins',
 				'usermeta',
