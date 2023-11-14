@@ -37,7 +37,7 @@
     "moment": "^2.29.4",
     "postcss": "8.4.31",
     "qunit": "^2.19.4",
-    "rollup": "4.4.0",
+    "rollup": "4.4.1",
     "sinon": "^17.0.0",
     "sinon-test": "^3.1.5",
     "source-map-loader": "^4.0.1",
