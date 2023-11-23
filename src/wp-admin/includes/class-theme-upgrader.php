@@ -597,7 +597,7 @@ class Theme_Upgrader extends WP_Upgrader {
 		$requires_wp  = isset( $info['RequiresWP'] ) ? $info['RequiresWP'] : null;
 		$tags         = isset( $info['Tags'] ) ? $info['Tags'] : '';
 
-		if ( strpos( $tags, 'full-site-editing' ) !== false) {
+		if ( strpos( $tags, 'full-site-editing' ) !== false ) {
 			$error = __( "FSE themes don't work with ClassicPress." );
 
 			return new WP_Error( 'incompatible_fse_theme', $this->strings['incompatible_archive'], $error );

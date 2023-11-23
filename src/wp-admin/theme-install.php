@@ -313,7 +313,8 @@ if ( $tab ) {
 					);
 					wp_update_php_annotation( '</p><p><em>', '</em>' );
 				}
-				?> <# } else if ( ! data.compatible_cp ) { #>
+				?>
+			<# } else if ( ! data.compatible_cp ) { #>
 				<?php
 				_e( "FSE themes don't work with ClassicPress." );
 				?>
