@@ -551,6 +551,7 @@ class Theme_Upgrader extends WP_Upgrader {
 				'Template'    => 'Template',
 				'RequiresWP'  => 'Requires at least',
 				'RequiresPHP' => 'Requires PHP',
+				'Tags'        => 'Tags',
 			)
 		);
 
@@ -594,7 +595,13 @@ class Theme_Upgrader extends WP_Upgrader {
 
 		$requires_php = isset( $info['RequiresPHP'] ) ? $info['RequiresPHP'] : null;
 		$requires_wp  = isset( $info['RequiresWP'] ) ? $info['RequiresWP'] : null;
+		$tags         = isset( $info['Tags'] ) ? $info['Tags'] : '';
 
+		if ( strpos( $tags, 'full-site-editing' ) !== false ) {
+			$error = __( "FSE themes don't work with ClassicPress." );
+
+			return new WP_Error( 'incompatible_fse_theme', $this->strings['incompatible_archive'], $error );
+		}
 		if ( ! is_php_version_compatible( $requires_php ) ) {
 			$error = sprintf(
 				/* translators: 1: Current PHP version, 2: Version required by the uploaded theme. */
