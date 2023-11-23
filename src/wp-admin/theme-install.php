@@ -313,6 +313,9 @@ if ( $tab ) {
 					);
 					wp_update_php_annotation( '</p><p><em>', '</em>' );
 				}
+				?> <# } else if ( ! data.compatible_cp ) { #>
+				<?php
+				_e( "FSE themes don't work with ClassicPress." );
 				?>
 			<# } else if ( ! data.compatible_wp ) { #>
 				<?php
@@ -324,10 +327,6 @@ if ( $tab ) {
 						self_admin_url( 'update-core.php' )
 					);
 				}
-				?>
-			<# } else if ( ! data.compatible_cp ) { #>
-				<?php
-				_e( "FSE themes don't work with ClassicPress." );
 				?>
 			<# } else if ( ! data.compatible_php ) { #>
 				<?php
@@ -519,6 +518,10 @@ if ( $tab ) {
 										wp_update_php_annotation( '</p><p><em>', '</em>' );
 									}
 									?>
+								<# } else if ( ! data.compatible_cp ) { #>
+									<?php
+									_e( "FSE themes don't work with ClassicPress." );
+									?>
 								<# } else if ( ! data.compatible_wp ) { #>
 									<?php
 									_e( 'This theme does not work with your version of ClassicPress.' );
@@ -529,10 +532,6 @@ if ( $tab ) {
 											self_admin_url( 'update-core.php' )
 										);
 									}
-									?>
-								<# } else if ( ! data.compatible_cp ) { #>
-									<?php
-									_e( "FSE themes don't work with ClassicPress." );
 									?>
 								<# } else if ( ! data.compatible_php ) { #>
 									<?php

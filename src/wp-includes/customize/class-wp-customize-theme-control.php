@@ -204,6 +204,10 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 							wp_update_php_annotation( '</p><p><em>', '</em>' );
 						}
 						?>
+					<# } else if ( data.theme.compatibleCP === false ) { #>
+						<?php
+						_e( "FSE themes don't work with ClassicPress." );
+						?>
 					<# } else if ( ! data.theme.compatibleWP ) { #>
 						<?php
 						_e( 'This theme does not work with your version of ClassicPress.' );
@@ -214,10 +218,6 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 								self_admin_url( 'update-core.php' )
 							);
 						}
-						?>
-					<# } else if ( data.theme.compatibleCP === false ) { #>
-						<?php
-						_e( "FSE themes don't work with ClassicPress." );
 						?>
 					<# } else if ( ! data.theme.compatiblePHP ) { #>
 						<?php
