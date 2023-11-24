@@ -24,7 +24,7 @@ jobs:
   phpcs:
     name: PHP coding standards
     runs-on: ubuntu-latest
-    if: ${{ github.repository == 'ClassicPress/ClassicPress-v2' || github.event_name == 'pull_request' }}
+    if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
 
     steps:
       - name: Checkout repository
@@ -72,7 +72,7 @@ jobs:
   precommit:
     name: Pre-commit checks
     runs-on: ubuntu-latest
-    if: ${{ github.repository == 'ClassicPress/ClassicPress-v2' || github.event_name == 'pull_request' }}
+    if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
     env:
       PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: ${{ true }}
 
