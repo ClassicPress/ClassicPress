@@ -212,7 +212,7 @@ function display_setup_form( $error = null ) {
 			</td>
 		</tr>
 	</table>
-	<p class="step"><?php submit_button( __( 'Install ClassicPress' ), 'large', 'Submit', false, array( 'id' => 'submit' ) ); ?></p>
+	<p class="step"><?php submit_button( __( 'Install ClassicPress' ), 'primary large', 'Submit', false, array( 'id' => 'submit' ) ); ?></p>
 	<input type="hidden" name="language" value="<?php echo isset( $_REQUEST['language'] ) ? esc_attr( $_REQUEST['language'] ) : ''; ?>">
 </form>
 	<?php
@@ -224,7 +224,7 @@ if ( is_blog_installed() ) {
 	die(
 		'<h1>' . __( 'Already Installed' ) . '</h1>' .
 		'<p>' . __( 'You appear to have already installed ClassicPress. To reinstall please clear your old database tables first.' ) . '</p>' .
-		'<p class="step"><a href="' . esc_url( wp_login_url() ) . '" class="button button-large">' . __( 'Log In' ) . '</a></p>' .
+		'<p class="step"><a href="' . esc_url( wp_login_url() ) . '" class="button button-primary button-large">' . __( 'Log In' ) . '</a></p>' .
 		'</body></html>'
 	);
 }
@@ -417,27 +417,35 @@ switch ( $step ) {
 			$result = wp_install( $weblog_title, $user_name, $admin_email, $public, '', wp_slash( $admin_password ), $loaded_language );
 			?>
 
-<h1><?php _e( 'Success!' ); ?></h1>
+			<h1><?php _e( 'Success!' ); ?></h1>
 
-<p><?php _e( 'ClassicPress has been installed. Thank you, and enjoy!' ); ?></p>
+			<p>
+				<?php
+				printf(
+					/* translators: link to Open Collective donation page */
+					__( 'ClassicPress has been installed. Consider making a donation to support <a href="%s">ClassicPress</a>, please. Thank you, and enjoy!' ),
+					'https://www.classicpress.net/donate/'
+				);
+				?>
+			</p>
 
-<table class="form-table install-success">
-	<tr>
-		<th><?php _e( 'Username' ); ?></th>
-		<td><?php echo esc_html( sanitize_user( $user_name, true ) ); ?></td>
-	</tr>
-	<tr>
-		<th><?php _e( 'Password' ); ?></th>
-		<td>
-			<?php if ( ! empty( $result['password'] ) && empty( $admin_password_check ) ) : ?>
-				<code><?php echo esc_html( $result['password'] ); ?></code><br>
-			<?php endif; ?>
-			<p><?php echo $result['password_message']; ?></p>
-		</td>
-	</tr>
-</table>
+			<table class="form-table install-success">
+				<tr>
+					<th><?php _e( 'Username' ); ?></th>
+					<td><?php echo esc_html( sanitize_user( $user_name, true ) ); ?></td>
+				</tr>
+				<tr>
+					<th><?php _e( 'Password' ); ?></th>
+					<td>
+						<?php if ( ! empty( $result['password'] ) && empty( $admin_password_check ) ) : ?>
+							<code><?php echo esc_html( $result['password'] ); ?></code><br>
+						<?php endif; ?>
+						<p><?php echo $result['password_message']; ?></p>
+					</td>
+				</tr>
+			</table>
 
-<p class="step"><a href="<?php echo esc_url( wp_login_url() ); ?>" class="button button-large"><?php _e( 'Log In' ); ?></a></p>
+			<p class="step"><a href="<?php echo esc_url( wp_login_url() ); ?>" class="button button-primary button-large"><?php _e( 'Log In' ); ?></a></p>
 
 			<?php
 		}

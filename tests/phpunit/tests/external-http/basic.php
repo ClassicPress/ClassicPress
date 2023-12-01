@@ -8,7 +8,7 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 		$readme = file_get_contents( ABSPATH . 'readme.html' );
 
 		preg_match(
-			'#Recommendations.*PHP</a> version <strong>([0-9.]*)#s',
+			'#Recommended Setup.*PHP</a> version <strong>([0-9.]*)#s',
 			$readme,
 			$matches
 		);
@@ -29,7 +29,7 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 
 		$this->assertNotEmpty( $phpmatches );
 
-		// TODO: Enable this check once PHP 8.0 compatibility is achieved.
+		// TODO: Enable this check once PHP 8.2 compatibility is achieved.
 		/*$this->assertContains(
 			$matches[1],
 			$phpmatches[1],
@@ -41,7 +41,7 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 		$readme = file_get_contents( ABSPATH . 'readme.html' );
 
 		preg_match(
-			'#Recommendations.*MySQL</a> version <strong>([0-9.]*)#s',
+			'#Recommended Setup.*MySQL</a> version <strong>([0-9.]*)#s',
 			$readme,
 			$matches
 		);
