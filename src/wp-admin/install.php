@@ -419,13 +419,15 @@ switch ( $step ) {
 
 <h1><?php _e( 'Success!' ); ?></h1>
 
-<p><?php
+<p>
+	<?php
 	printf(
 		/* translators: link to Open Collective donation page */
 		__( 'ClassicPress has been installed. Consider making a donation to support <a href="%s">ClassicPress</a>, please. Thank you, and enjoy!' ),
 		'https://www.classicpress.net/donate/'
 	);
-?></p>
+	?>
+</p>
 
 <table class="form-table install-success">
 	<tr>
