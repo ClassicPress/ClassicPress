@@ -28,7 +28,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 <p class="about-text">
 	<?php
 	printf(
-		/* translators: link to "business-focused CMS" article */
+		/* translators: link to ClassicPress website */
 		__( 'Thank you for using ClassicPress, the <a href="%s">CMS for Creators</a>.' ),
 		'https://link.classicpress.net/the-cms-for-creators'
 	);

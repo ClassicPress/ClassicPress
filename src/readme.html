@@ -4,26 +4,29 @@
 <head>
 	<meta name="viewport" content="width=device-width">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="robots" content="noindex, nofollow">
 	<title>ClassicPress &#8250; ReadMe</title>
 	<link rel="stylesheet" href="wp-admin/css/install.css?ver=20190218">
 </head>
 
 <body>
 	<h1 id="logo">
-		<a href="https://www.classicpress.net/">ClassicPress</a>
+		<a href="https://www.classicpress.net/">ClassicPress ReadMe</a>
 	</h1>
 	<p style="text-align: center">The CMS for Creators.<br>Stable. Lightweight. Instantly Familiar.</p>
 
 	<h2 id="welcome">Welcome to ClassicPress!</h2>
-	<p>You&#8217;ve just become part of a growing community of people who value the firm foundation WordPress 4.9.x
+	<p>You&#8217;ve just become part of a growing community of people who value the firm foundation WordPress
 		provides for websites everywhere. <a href="https://www.classicpress.net/governance/">Guided by our
 			community</a>, we can leverage our collective expertise to maintain and develop the ClassicPress platform as
 		<em>the</em> content management system of choice for professionals, hobbyists, developers, sole-traders and
-		<em>all</em> website creators worldwide.</p>
+		<em>all</em> website creators worldwide.
+	</p>
 	<p>Our purpose is to provide a stable, secure, and instantly familiar content management system driven by the needs
 		of the community. We invite you to connect with us and <a href="#resources">add your voice to the
 			conversation.</a>.</p>
-	<p style="text-align: right">&#8212; The ClassicPress Directors</p>
+	<p><a href="https://www.classicpress.net/newsletter">Subscribe to our newsletter</a>, <a href="https://fosstodon.org/@classicpress">Mastodon</a>, or <a href="https://twitter.com/getclassicpress">Twitter</a> to receive the latest
+		announcements, news, and other updates about ClassicPress.</p>
 
 	<h2 id="installation">Installation</h2>
 	<p>For more information about installing ClassicPress, see our <a
@@ -58,8 +61,7 @@
 	</ol>
 
 	<h2 id="updating">Updating</h2>
-	<h3>Using the Automatic Updater</h3>
-	<p>If you are updating from beta version <code>1.0.0-beta1</code> or higher, you can use the automatic updater:</p>
+	<h3>Automatic Updater</h3>
 	<ol>
 		<li>Open <span class="file"><a href="wp-admin/update-core.php">wp-admin/update-core.php</a></span> in your
 			browser and follow the instructions.</li>
@@ -71,14 +73,15 @@
 	<p>For more information, see our <a
 			href="https://docs.classicpress.net/updating-classicpress/#updating-classicpress-manually">manual update
 			documentation</a>.</p>
-	<ol start="0">
+	<ol>
 		<li>Before doing anything, <strong>make sure you have a working backup of the entire site as well as the
 				database</strong>.</li>
 		<li>Download the latest release of ClassicPress from our <a
 				href="https://link.classicpress.net/releases/">releases page</a>.</li>
 		<li>On your <strong>local computer</strong>, unzip the ClassicPress release file into a directory.</li>
 		<li>On your <strong>local computer</strong>, remove the <code>wp-config-sample.php</code> file and the
-			<code>wp-content</code> directory.</li>
+			<code>wp-content</code> directory.
+		</li>
 		<li>Upload what's left over to your server, replacing the existing files (using either SSH or an application
 			that connects over SFTP or FTP).</li>
 		<li>Point the browser to <span class="file"><a href="wp-admin/upgrade.php">/wp-admin/upgrade.php</a></span> and
@@ -93,23 +96,25 @@
 
 	<h2 id="requirements">System Requirements</h2>
 	<ul>
-		<li><a href="https://secure.php.net/">PHP</a> version <strong>5.6</strong> or higher.</li>
-		<li><a href="https://www.mysql.com/">MySQL</a> version <strong>5.0</strong> or higher.</li>
-		<li><a href="https://httpd.apache.org/">Apache</a> version <strong>2.4</strong> server or higher.</li>
+		<li><a href="https://secure.php.net/">PHP</a> version <strong>7.4</strong> or greater.</li>
+		<li><a href="https://www.mysql.com/">MySQL</a> version <strong>5.7</strong> or greater, or MariaDB version
+			<strong>10.4</strong>
+			or greater.</li>
+		<li><a href="https://httpd.apache.org/">Apache</a>, <a href="https://nginx.org/en/">Nginx</a>, <a
+				href="https://www.litespeedtech.com/">LiteSpeed</a> or another web server that supports PHP and
+			MySQL/MariaDB.</li>
 	</ul>
 
-	<h3>Recommendations</h3>
+	<h3>Recommended Setup</h3>
 	<ul>
-		<li><a href="https://secure.php.net/" target="_blank" rel="noopener">PHP</a> version <strong>8.0</strong>
+		<li><a href="https://secure.php.net/">PHP</a> version <strong>8.0</strong> or greater.</li>
+		<li><a href="https://www.mysql.com/">MySQL</a> version <strong>5.7</strong> or greater, or <a
+				href="https://mariadb.org/">MariaDB</a> version <strong>10.4</strong> or greater.</li>
+		<li><a href="https://httpd.apache.org/">Apache</a> with <code>mod_rewrite</code> module, <a
+				href="https://nginx.org/en/">Nginx</a>, or <a href="https://www.litespeedtech.com/">LiteSpeed</a>
+			server.</li>
+		<li>An SSL certificate to support HTTPS (free from <a href="https://letsencrypt.org/">Let&#8217;s Encrypt</a>).
 		</li>
-		<li><a href="https://www.mysql.com/" target="_blank" rel="noopener">MySQL</a> version <strong>5.7</strong> or
-			higher or <a href="https://mariadb.org/" target="_blank" rel="noopener">MariaDB</a> version
-			<strong>10.3</strong> or higher.</li>
-		<li><a href="https://httpd.apache.org/" target="_blank" rel="noopener">Apache</a> <strong>2.4</strong>
-			with&nbsp;mod_rewrite module, <a href="https://nginx.org/en/" target="_blank" rel="noopener">Nginx</a>, or
-			<a href="https://www.litespeedtech.com/" target="_blank" rel="noopener">LiteSpeed</a> server.</li>
-		<li>An SSL certificate to support HTTPS (free from <a href="https://letsencrypt.org/" target="_blank"
-				rel="noopener">Let’s Encrypt</a>).</li>
 	</ul>
 
 	<h2 id="resources">Online Resources</h2>
@@ -128,38 +133,47 @@
 		<dt><a href="https://forums.classicpress.net/c/support">ClassicPress Support Forums</a></dt>
 		<dd>The support forums are a great way to get help from other ClassicPress users. Many community members and
 			ClassicPress leaders are active here.</dd>
-		<dt><a href="https://www.classicpress.net/join-slack/">ClassicPress Slack</a></dt>
+		<dt><a href="https://www.classicpress.net/join-zulip/">ClassicPress Zulip Chat</a></dt>
 		<dd>There is an active online chat channel that is used for discussion among people who use ClassicPress and
 			plan its further development.</dd>
-		<dt><a href="https://github.com/ClassicPress/ClassicPress/issues/new/choose">ClassicPress Feature Requests</a></dt>
-		<dd>Do you have an idea to make ClassicPress better? Consider sharing your idea on GitHub for the core team and the community to share feedback and, possibly, implement the feature.</dd>
+		<dt><a href="https://github.com/ClassicPress/ClassicPress/issues/new/choose">ClassicPress Feature Requests</a>
+		</dt>
+		<dd>Do you have an idea to make ClassicPress better? Consider sharing your idea on GitHub for the core team and
+			the community to share feedback and, possibly, implement the feature.</dd>
 		<dt><a href="https://www.classicpress.net/governance/">ClassicPress Governance</a></dt>
 		<dd>Last but not least, read about the ClassicPress governance structure to understand how we do things and how
-			you can help. ClassicPress is a community-driven and funded fork of WordPress that enables all stakeholders to
+			you can help. ClassicPress is a community-driven and funded fork of WordPress that enables all stakeholders
+			to
 			shape the direction that the project takes. This page aims to explain how we handle this process to ensure
 			that power doesn't become centralised and that every voice can be heard.</dd>
 	</dl>
 
-	<h2 id="share">Share the Love</h2>
+	<h2 id="share">Help Promote ClassicPress</h2>
 	<p>ClassicPress has no multi-million dollar marketing campaign or celebrity sponsors, but we do have something even
 		better: you and the rest of our community. If you enjoy ClassicPress, please consider:</p>
 	<ul>
-		<li>Participating in our <a href="https://forums.classicpress.net/">forums</a></li>
-		<li>Telling a friend about ClassicPress</li>
-		<li>Setting up a ClassicPress website for someone less knowledgeable than yourself</li>
-		<li>Sharing your favorite article about us with your social media followers</li>
-		<li>Writing a technical publication or other news organization to tell them about ClassicPress</li>
+		<li>Participating in our <a href="https://forums.classicpress.net/">forums</a>.</li>
+		<li>Telling a friend about ClassicPress or sharing it on social media.</li>
+		<li>Setting up a ClassicPress website for someone less knowledgeable than yourself.</li>
+		<li>Writing a blog post about why you chose to use ClassicPress for your website.</li>
+		<li>Writing to WordPress plugin and theme developers to ask them to support ClassicPress.</li>
 	</ul>
-	<h2 id="fund">Community Funded</h2>
-	<p>ClassicPress is a community-driven and funded free open source project. You contributions help ClassicPress pay infrastructure and administrative costs. There are several ways you can financially support ClassicPress:</p>
+	<h2 id="fund">Community Funding</h2>
+	<p>ClassicPress is a community-driven and funded free, open-source project managed by 501(c)3 non-profit
+		ClassicPress Initiative.</p>
+	<p>You contributions help ClassicPress pay infrastructure and administrative costs. There are several ways you can
+		financially support ClassicPress:</p>
 	<ul>
-		<li><a href="https://opencollective.com/classicpress" title="Donate to ClassicPress">Making a donation</a> to help us run the project (donations in the US are tax-deductible).</li>
-		<li>If you have a business, <a href="https://www.classicpress.net/sponsors/">become a sponsor</a> to promote your brand to ClassicPress community. Sponsorships start at $250.</li>
-		<li>Support ClassicPress on GitHub by <a href="https://github.com/sponsors/ClassicPress">becoming a sponsor.</a></li>
-		<li>Visit <a href="https://www.cafepress.com/classicpress">ClassicPress Swag store</a> and buy ClassicPress-branded merchandise to show your support.</li>
+		<li><a href="https://opencollective.com/classicpress">Making a donation</a> to help us run the project
+			(donations in the US are tax-deductible).</li>
+		<li><a href="https://www.classicpress.net/sponsors/">Become a sponsor</a> to promote your business to
+			ClassicPress community.</li>
+		<li>Visit <a href="https://link.classicpress.net/merchandise/">ClassicPress brand store</a> to buy
+			ClassicPress-branded merchandise to show your support.</li>
 	</ul>
 	<h2 id="credits">Credits</h2>
-	<p>ClassicPress is a hard fork of the <a href="https://wordpress.org/download/releases/">WordPress 4.9 branch</a>.
+	<p>ClassicPress v2.0 is a hard fork of the <a href="https://wordpress.org/download/releases/">WordPress 6.2
+			branch</a>.
 		WordPress itself is a fork of b2/caf&#233;log from Michel Valdrighi.</p>
 
 	<h2 id="license">License</h2>
