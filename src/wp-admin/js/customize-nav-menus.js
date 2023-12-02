@@ -3316,9 +3316,6 @@
 			api.control.add( menuItemControl );
 			setting.preview();
 			menuControl.debouncedReflowMenuItems();
-			setTimeout( function() {
-				document.getElementById( 'customize-control-nav_menu_item-' + placeholderId ).querySelector( 'details' ).setAttribute( 'open', 'open' );
-			}, 150);
 
 			wp.a11y.speak( api.Menus.data.l10n.itemAdded );
 
