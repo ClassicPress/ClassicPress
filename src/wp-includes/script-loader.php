@@ -1191,7 +1191,7 @@ function wp_default_scripts( $scripts ) {
 
 		$scripts->add( 'xfn', "/wp-admin/js/xfn$suffix.js", array( 'jquery' ), false, 1 );
 
-		$scripts->add( 'sortable-js', "/wp-includes/js/sortable.min.js", array(), false, 1 );
+		$scripts->add( 'sortable-js', '/wp-includes/js/sortable.min.js', array(), false, 1 );
 
 		$scripts->add( 'postbox', "/wp-admin/js/postbox$suffix.js", array( 'jquery-ui-sortable', 'wp-a11y' ), false, 1 );
 		$scripts->set_translations( 'postbox' );
