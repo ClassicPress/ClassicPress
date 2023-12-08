@@ -14,7 +14,7 @@
 
 /* global menus, isRtl, ajaxurl, console */
 document.addEventListener( 'DOMContentLoaded', function() {
-	'use strict;'
+	'use strict';
 
 	/*
 	 * Set variables for the whole file
@@ -107,7 +107,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( response.ok ) {
 					return response.json(); // no errors
 				}
-				throw new Error( error.message );
+				throw new Error( response.status );
 			} )
 			.then( function() {
 				themeLocations.querySelector( '.spinner' ).classList.remove( 'is-active' );
@@ -409,7 +409,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( response.ok ) {
 					return response.json(); // no errors
 				}
-				throw new Error( error.message );
+				throw new Error( response.status );
 			} )
 			.then( function() {
 			} )
@@ -476,7 +476,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						if ( response.ok ) {
 							return response.text(); // no errors
 						}
-						throw new Error( error.message );
+						throw new Error( response.status );
 					} )
 					.then( function( menuMarkup ) {
 						/**
@@ -820,7 +820,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( response.ok ) {
 					return response.json(); // no errors
 				}
-				throw new Error( error.message );
+				throw new Error( response.status );
 			} )
 			.then( function() {
 			} )
@@ -940,7 +940,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						if ( response.ok ) {
 							return response.text(); // no errors
 						}
-						throw new Error( error.message );
+						throw new Error( response.status );
 					} )
 					.then( function( menuMarkup ) {
 
@@ -995,7 +995,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					if ( response.ok ) {
 						return response.text(); // no errors
 					}
-					throw new Error( error.message );
+					throw new Error( response.status );
 				} )
 				.then( function( resp ) {
 					var metaBoxData = JSON.parse( resp ),
@@ -1311,7 +1311,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( response.ok ) {
 				return response.text(); // no errors
 			}
-			throw new Error( error.message );
+			throw new Error( response.status );
 		} )
 		.then( function( menuMarkup ) {
 			var ins = document.getElementById( 'menu-instructions' );
