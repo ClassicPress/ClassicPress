@@ -57,60 +57,6 @@
 		<type>warning</type>
 	</rule>
 
-	<rule ref="WordPress.NamingConventions.ValidVariableName">
-		<properties>
-			<property name="allowed_custom_properties" type="array">
-				<!-- From database structure queries. -->
-				<element value="Collation"/>
-				<element value="Column_name"/>
-				<element value="Default"/>
-				<element value="Extra"/>
-				<element value="Field"/>
-				<element value="Index_type"/>
-				<element value="Key"/>
-				<element value="Key_name"/>
-				<element value="Msg_text"/>
-				<element value="Non_unique"/>
-				<element value="Null"/>
-				<element value="Sub_part"/>
-				<element value="Type"/>
-				<!-- From plugin/theme data. -->
-				<element value="authorAndUri"/>
-				<element value="Name"/>
-				<element value="Version"/>
-				<!-- From the result of wp_xmlrpc_server::wp_getPageList(). -->
-				<element value="dateCreated"/>
-
-				<!-- From DOMDocument. -->
-				<element value="childNodes"/>
-				<element value="formatOutput"/>
-				<element value="nodeName"/>
-				<element value="nodeType"/>
-				<element value="parentNode"/>
-				<element value="preserveWhiteSpace"/>
-				<element value="textContent"/>
-				<!-- From PHPMailer. -->
-				<element value="AltBody"/>
-				<element value="Body"/>
-				<element value="CharSet"/>
-				<element value="ContentType"/>
-				<element value="Encoding"/>
-				<element value="Hostname"/>
-				<element value="mailHeader"/>
-				<element value="MIMEBody"/>
-				<element value="MIMEHeader"/>
-				<element value="Sender"/>
-				<element value="Subject"/>
-				<!-- From PHPUnit_Util_Getopt. -->
-				<element value="longOptions"/>
-				<!-- From POP3. -->
-				<element value="ERROR"/>
-				<!-- From ZipArchive. -->
-				<element value="numFiles"/>
-			</property>
-		</properties>
-	</rule>
-
 	<!-- Exclude the build folder in the current directory. -->
 	<exclude-pattern type="relative">^build/*</exclude-pattern>
 
@@ -241,48 +187,9 @@
 		<exclude-pattern>/src/wp-content/themes/twentyfourteen/taxonomy-post_format\.php</exclude-pattern>
 	</rule>
 
-<<<<<<< HEAD
-	<!-- Allow test classes for select sniffs. -->
-	<rule ref="WordPress.Files.FileName">
-		<properties>
-			<property name="custom_test_class_whitelist" type="array">
-				<!-- Test case parent classes in the "includes" folder, not yet accounted for in WPCS. -->
-				<element value="PHPUnit_Adapter_TestCase"/>
-				<element value="WP_UnitTestCase"/>
-				<element value="WP_Ajax_UnitTestCase"/>
-				<element value="WP_Canonical_UnitTestCase"/>
-				<element value="WP_Test_REST_TestCase"/>
-				<element value="WP_Test_REST_Controller_Testcase"/>
-				<element value="WP_Test_REST_Post_Type_Controller_Testcase"/>
-				<element value="WP_XMLRPC_UnitTestCase"/>
-				<element value="WP_Filesystem_UnitTestCase"/>
-				<element value="WP_Image_UnitTestCase"/>
-				<element value="WP_HTTP_UnitTestCase"/>
-				<element value="WP_Tests_Image_Resize_UnitTestCase"/>
-				<element value="WP_Import_UnitTestCase"/>
-				<element value="Tests_Query_Conditionals"/>
-
-				<!-- Mock classes. -->
-				<element value="Spy_REST_Server"/>
-				<element value="WP_REST_Test_Controller"/>
-				<element value="WP_Image_Editor_Mock"/>
-				<element value="WP_Filesystem_MockFS"/>
-				<element value="Mock_Invokable"/>
-				<element value="MockPHPMailer"/>
-				<element value="MockAction"/>
-				<element value="WP_Object_Cache"/>
-
-				<!-- PHPUnit helpers. -->
-				<element value="TracTickets"/>
-				<element value="WP_PHPUnit_Util_Getopt"/>
-				<element value="PHPUnit_Util_Test"/>
-				<element value="WPProfiler"/>
-				<element value="PHPUnit_Framework_Exception"/>
-				<element value="Polyfill_TestCase"/>
-=======
 	<rule ref="WordPress.NamingConventions.ValidVariableName">
 		<properties>
-			<property name="customPropertiesWhitelist" type="array">
+			<property name="allowed_custom_properties" type="array">
 				<!-- From database structure queries. -->
 				<element value="Collation"/>
 				<element value="Column_name"/>
@@ -306,9 +213,7 @@
 
 				<!-- From DOMDocument. -->
 				<element value="childNodes"/>
-				<element value="firstChild"/>
 				<element value="formatOutput"/>
-				<element value="lastChild"/>
 				<element value="nodeName"/>
 				<element value="nodeType"/>
 				<element value="parentNode"/>
@@ -332,7 +237,6 @@
 				<element value="ERROR"/>
 				<!-- From ZipArchive. -->
 				<element value="numFiles"/>
->>>>>>> 60d2d8ac75 (Coding Standards: Remove the custom property for the `FileName` sniff.)
 			</property>
 		</properties>
 	</rule>
@@ -402,46 +306,6 @@
 		<exclude-pattern>/src/wp-includes/class-wpdb\.php</exclude-pattern>
 	</rule>
 
-<<<<<<< HEAD
-=======
-	<!-- Assignments in while conditions are a valid method of looping over iterables. -->
-	<rule ref="WordPress.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition">
-		<exclude-pattern>*</exclude-pattern>
-	</rule>
-
-	<!-- Allow the WP DB Class and related tests for usage of direct database access functions. -->
-	<rule ref="WordPress.DB.RestrictedFunctions">
-		<exclude-pattern>/src/wp-includes/class-wpdb\.php</exclude-pattern>
-		<exclude-pattern>/tests/phpunit/tests/db/charset\.php</exclude-pattern>
-	</rule>
-
-	<!-- Allow the WP DB related tests for issues with prepared SQL placeholders
-		 (as the handling of those are being tested). -->
-	<rule ref="WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare">
-		<exclude-pattern>/tests/phpunit/tests/db\.php</exclude-pattern>
-	</rule>
-	<rule ref="WordPress.DB.PreparedSQLPlaceholders.UnsupportedPlaceholder">
-		<exclude-pattern>/tests/phpunit/tests/db\.php</exclude-pattern>
-	</rule>
-	<rule ref="WordPress.DB.PreparedSQLPlaceholders.UnescapedLiteral">
-		<exclude-pattern>/tests/phpunit/tests/db\.php</exclude-pattern>
-	</rule>
-	<rule ref="WordPress.DB.PreparedSQL.NotPrepared">
-		<exclude-pattern>/tests/phpunit/tests/admin/includesSchema\.php</exclude-pattern>
-		<exclude-pattern>/tests/phpunit/tests/multisite/site\.php</exclude-pattern>
-	</rule>
-
-	<!-- Exclude the unit tests from the file name rules. -->
-	<rule ref="WordPress.Files.FileName">
-		<exclude-pattern>/tests/phpunit/*</exclude-pattern>
-	</rule>
-
-	<!-- WPCS1620: template.php isn't a template tag file. -->
-	<rule ref="WordPress.Files.FileName.InvalidTemplateTagFileName">
-		<exclude-pattern>/src/wp-includes/template\.php</exclude-pattern>
-	</rule>
-
->>>>>>> 60d2d8ac75 (Coding Standards: Remove the custom property for the `FileName` sniff.)
 	<!-- Exclude some incorrectly named files that won't be renamed. -->
 	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
 		<exclude-pattern>/src/wp-admin/includes/class-wp-list-table-compat\.php</exclude-pattern>
