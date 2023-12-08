@@ -72,7 +72,6 @@
 				// Start dragging
 				onStart: function( e ) {
 					var prevItem, children,
-						prevDepth = 0,
 						details = document.querySelector( '.sortable-ghost details' );
 
 					// Style placeholder when element starts to be dragged	
