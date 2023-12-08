@@ -59,7 +59,7 @@
 
 	<rule ref="WordPress.NamingConventions.ValidVariableName">
 		<properties>
-			<property name="customPropertiesWhitelist" type="array">
+			<property name="allowed_custom_properties" type="array">
 				<!-- From database structure queries. -->
 				<element value="Collation"/>
 				<element value="Column_name"/>
