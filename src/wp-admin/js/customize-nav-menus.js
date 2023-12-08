@@ -1,10 +1,12 @@
 /**
+ * @since CP-2.1.0
+ * @requires SortableJS
  * @output wp-admin/js/customize-nav-menus.js
  */
 
-/* global menus, postboxes, columns, isRtl, ajaxurl, wpNavMenu */
+/* global isRtl, wpNavMenu */
 
-(function($) {
+(function() {
 
 	var api;
 
@@ -34,9 +36,7 @@
 		 * @since CP-2.1.0
 		 */
 		initSortables : function() {
-			var originalClientX, originalDepth, baseClientX, maxDepth, maxChildDepth,
-				currentDepth = 0,
-				menuMaxDepth = 11,
+			var originalClientX, originalDepth, baseClientX, maxDepth, newClientX,
 				childrenInfo = {},
 				indent = 30,
 				editMenu = document.getElementById( 'menu-to-edit' ),
@@ -61,8 +61,6 @@
 
 				// Get position of menu item when chosen
 				onChoose: function( e ) {
-					var itemClasses, itemDepth, xPos, diff
-
 					originalClientX = e.originalEvent.clientX;
 					originalDepth = menuItemDepth( e.item );
 					baseClientX = e.originalEvent.clientX - ( originalDepth * indent );
@@ -88,6 +86,8 @@
 
 					// Continually update horizontal position of current item while dragging
 					editMenu.addEventListener( 'dragover', function( evt ) {
+						var xPos, prevDepth, diff;
+
 						if ( evt.target.closest( 'li' ) === e.item ) {
 							newClientX = evt.clientX;
 
@@ -127,10 +127,10 @@
 
 				// Element dropped
 				onEnd: function( e ) {
-					var i, n, diff, prevItem, parent,
-						nextDepth = null,
+					var i, n, diff, prevItem, parent, parentDepth,
 						details = e.item.querySelector( 'details' ),
-						depth = prevDepth = 0,
+						depth = 0,
+						prevDepth = 0,
 						draggedClasses = e.item.className.split( ' ' );
 
 					// Revert styling and set focus on move icon
@@ -240,7 +240,8 @@
 	
 	// Get depth of menu item
 	function menuItemDepth( item ) {
-		var itemClasses = item.className.split( ' ' );
+		var i, n, itemDepth,
+			itemClasses = item.className.split( ' ' );
 		for ( i = 0, n = itemClasses.length; i < n; i++ ) {
 			if ( itemClasses[i].startsWith( 'menu-item-depth-' ) ) {
 				itemDepth = parseInt( itemClasses[i].split('-').pop(), 10 );
@@ -267,13 +268,13 @@
 	 */
 	function moveChildItems( prevItem, thisItem, depth ) {
 		var i, n, startingDepth, nextDepth, newDepth,
+			newClasses = thisItem.className.split( ' ' ),
 			nextItem = thisItem.nextElementSibling;
 
 		// Move to new position
 		prevItem.after( thisItem );
 
 		// Set new depth of current item
-		newClasses = thisItem.className.split( ' ' );
 		for ( i = 0, n = newClasses.length; i < n; i++ ) {
 			if ( newClasses[i].startsWith( 'menu-item-depth-' ) ) {
 				startingDepth = parseInt( newClasses[i].split('-').pop(), 10 );
@@ -295,7 +296,7 @@
 		}
 	}
 
-})(jQuery);
+})(jQuery );
 
 /* global _wpCustomizeNavMenusSettings, wpNavMenu, console */
 ( function( api, wp, $ ) {
@@ -2352,7 +2353,7 @@
 		 * @param {Function} [params.completeCallback] - Function to call when the form toggle has finished animating.
 		 */
 		onChangeExpanded: function( showOrHide, params ) {
-			var self = this, $menuitem, $inside, complete;
+			var self = this, $menuitem, $inside;
 
 			$menuitem = this.container;
 			$inside = $menuitem.find( '.menu-item-settings:first' );
