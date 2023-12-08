@@ -5,19 +5,21 @@
  * Note that this file does not run in the Customizer
  *
  * @since CP-2.1.0
+ * @requires SortableJS
  *
  * @package ClassicPress
  * @subpackage Administration
  * @output wp-admin/js/nav-menu.js
  */
 
-/* global menus, postboxes, columns, isRtl, ajaxurl, wpNavMenu */
+/* global menus, isRtl, ajaxurl, console */
 document.addEventListener( 'DOMContentLoaded', function() {
+	'use strict;'
 
 	/*
 	 * Set variables for the whole file
 	 */
-	var column, originalDepth, originalClientX, originalLabel, newClientX, baseClientX, params, lastInput, lastSelect,
+	var column, originalDepth, originalClientX, originalLabel, newClientX, baseClientX, lastInput, lastSelect,
 		postboxTogs = document.querySelectorAll( '.hide-postbox-tog' ),
 		advancedMenuProperties = document.querySelectorAll( '#adv-settings .hide-column-tog' ),
 		indent = 30,
@@ -31,7 +33,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		switchers = document.querySelectorAll( '.bulk-select-switcher' ),
 		checkboxes = editMenu ? editMenu.querySelectorAll( '.menu-item-checkbox' ) : {},		
 		isRTL = !! ( 'undefined' != typeof isRtl && isRtl ),
-		negateIfRTL = ( 'undefined' != typeof isRtl && isRtl ) ? -1 : 1,
 		managementArray = [];
 
 	/*
@@ -103,19 +104,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				credentials: 'same-origin'
 			} )
 			.then( function( response ) {
-				if ( ! response.ok ) {
-					return response.json()
-					.then( function ( error ) {
-						throw new Error( error.message );
-					} );
+				if ( response.ok ) {
+					return response.json(); // no errors
 				}
-				return response.json() // no errors
+				throw new Error( error.message );
 			} )
-			.then( function( response ) {
+			.then( function() {
 				themeLocations.querySelector( '.spinner' ).classList.remove( 'is-active' );
 			} )
 			.catch( function( error ) {
-			console.log( error );
+				console.log( error );
 			} );
 		}, false );
 	}
@@ -172,22 +170,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		*/
 		editMenu.addEventListener( 'change', updateHandle );
 		editMenu.addEventListener( 'input', updateHandle );
-		function updateHandle( e ) {
-			var input = e.target, title, titleEl;
-			if ( e.target.className.includes( 'edit-menu-item-title' ) ) {
-				title = input.value;
-				titleEl = input.closest( '.menu-item' ).querySelector( '.menu-item-title' );
-
-				// Don't update to empty title.
-				if ( title ) {
-					titleEl.textContent = title;
-					titleEl.classList.remove( 'no-title' );
-				} else {
-					titleEl.textContent = wp.i18n._x( '(no label)', 'missing menu item navigation label' );
-					titleEl.classList.add( 'no-title' );
-				}
-			}
-		}
 
 		/*
 		* Identify the active menu item
@@ -243,8 +225,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Get position of menu item when chosen
 			onChoose: function( e ) {
-				var itemClasses, itemDepth, xPos, diff;
-
 				originalClientX = e.originalEvent.clientX;
 				originalDepth = menuItemDepth( e.item );
 				baseClientX = e.originalEvent.clientX - ( originalDepth * indent );
@@ -258,7 +238,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Style placeholder when element starts to be dragged
 			onStart: function( e ) {
-				var prevItem, prevClasses, children,
+				var prevItem, children,
 					prevDepth = 0,
 					details = document.querySelector( '.sortable-ghost details' );
 
@@ -277,6 +257,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Continually update horizontal position of current item while dragging
 				editMenu.addEventListener( 'dragover', function( evt ) {
+					var xPos, diff;
+
 					if ( evt.target.closest( 'li' ) === e.item ) {
 						newClientX = evt.clientX;
 
@@ -316,11 +298,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Element dropped
 			onEnd: function( e ) {
-				var i, n, diff, prevItem, prevClasses, nextItem, nextClasses,
-					parent, newLabel, newLabels, positionSpeech,
-					nextDepth = null,
+				var i, n, diff, prevItem, parent, parentDepth, newLabel,
+					newLabels, positionSpeech,
 					details = e.item.querySelector( 'details' ),
-					depth = prevDepth = 0,
+					depth = 0,
+					prevDepth = 0,
 					draggedClasses = e.item.className.split( ' ' );
 
 				// Revert styling and set focus on move icon
@@ -385,7 +367,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				// Set original clientX to current clientX to establish new starting position
 				originalClientX = newClientX;
 
-				// Update aria-label for accessibility
+				// Update for accessibility
 				refreshAdvancedAccessibility();
 				refreshAdvancedAccessibilityOfItem( e.item, depth, e.newDraggableIndex );
 				menusChanged = true;
@@ -408,7 +390,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	postboxTogs.forEach( function( toggle ) {
 		toggle.addEventListener( 'click', function() {
-			var hidden = [ ...document.querySelectorAll( '#side-sortables .control-section.hide-if-js details' ) ].map( function( i ) { return i.id; } ).join( ',' );
+			var postVars,
+				hidden = [ ...document.querySelectorAll( '#side-sortables .control-section.hide-if-js details' ) ].map( function( i ) { return i.id; } ).join( ',' );
 
 			postVars = new URLSearchParams( {
 				action: 'closed-postboxes',
@@ -423,15 +406,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				credentials: 'same-origin'
 			} )
 			.then( function( response ) {
-				if ( ! response.ok ) {
-					return response.json()
-					.then( function ( error ) {
-						throw new Error( error.message );
-					} );
+				if ( response.ok ) {
+					return response.json(); // no errors
 				}
-				return response.json() // no errors
+				throw new Error( error.message );
 			} )
-			.then( function( response ) {
+			.then( function() {
 			} )
 			.catch( function( error ) {
 				console.log( error );
@@ -493,13 +473,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						credentials: 'same-origin'
 					} )
 					.then( function( response ) {
-						if ( ! response.ok ) {
-							return response.json()
-							.then( function ( error ) {
-								throw new Error( error.message );
-							} );
+						if ( response.ok ) {
+							return response.text(); // no errors
 						}
-						return response.text() // no errors
+						throw new Error( error.message );
 					} )
 					.then( function( menuMarkup ) {
 						/**
@@ -820,7 +797,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		property.addEventListener( 'click', function() {
-			var hidden = [ ...document.querySelectorAll( '#adv-settings .hide-column-tog:not(:checked)' ) ].map( function( i ) { return i.value; } ).join( ',' );
+			var postVars,
+				hidden = [ ...document.querySelectorAll( '#adv-settings .hide-column-tog:not(:checked)' ) ].map( function( i ) { return i.value; } ).join( ',' );
 
 			inputs.forEach( function( input ) {
 				input.classList.toggle( 'hidden-field' );
@@ -839,15 +817,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				credentials: 'same-origin'
 			} )
 			.then( function( response ) {
-				if ( ! response.ok ) {
-					return response.json()
-					.then( function ( error ) {
-						throw new Error( error.message );
-					} );
+				if ( response.ok ) {
+					return response.json(); // no errors
 				}
-				return response.json() // no errors
+				throw new Error( error.message );
 			} )
-			.then( function( response ) {
+			.then( function() {
 			} )
 			.catch( function( error ) {
 				console.log( error );
@@ -861,7 +836,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	if ( document.getElementById( 'menu-settings-column' ) ) {
 		document.getElementById( 'menu-settings-column' ).addEventListener( 'click', function(e) {
-			var selectAreaMatch, selectAll, panelId, wrapper, items, params;
+			var selectAreaMatch, selectAll, panelId, wrapper, items, itemsChecked, params;
 
 			if ( e.target.className.includes( 'nav-tab-link' ) ) {
 				e.preventDefault();
@@ -922,7 +897,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					if ( items.length === itemsChecked.length && ! selectAll.checked ) {
 						selectAll.checked = true;
 					} else if ( selectAll.checked ) {
-					selectAll.checked = false;
+						selectAll.checked = false;
 					}
 				}
 
@@ -962,13 +937,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						credentials: 'same-origin'
 					} )
 					.then( function( response ) {
-						if ( ! response.ok ) {
-							return response.json()
-							.then( function ( error ) {
-								throw new Error( error.message );
-							} );
+						if ( response.ok ) {
+							return response.text(); // no errors
 						}
-						return response.text() // no errors
+						throw new Error( error.message );
 					} )
 					.then( function( menuMarkup ) {
 
@@ -1020,13 +992,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					credentials: 'same-origin'
 				} )
 				.then( function( response ) {
-					if ( ! response.ok ) {
-						return response.json()
-						.then( function ( error ) {
-							throw new Error( error.message );
-						} );
+					if ( response.ok ) {
+						return response.text(); // no errors
 					}
-					return response.text() // no errors
+					throw new Error( error.message );
 				} )
 				.then( function( resp ) {
 					var metaBoxData = JSON.parse( resp ),
@@ -1232,13 +1201,32 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		return siblings;
 	}
 
+	/*
+	 * Update the item handle title when the navigation label is changed.
+	 */
+	function updateHandle( e ) {
+		var input = e.target, title, titleEl;
+		if ( e.target.className.includes( 'edit-menu-item-title' ) ) {
+			title = input.value;
+			titleEl = input.closest( '.menu-item' ).querySelector( '.menu-item-title' );
+
+			// Don't update to empty title.
+			if ( title ) {
+				titleEl.textContent = title;
+				titleEl.classList.remove( 'no-title' );
+			} else {
+				titleEl.textContent = wp.i18n._x( '(no label)', 'missing menu item navigation label' );
+				titleEl.classList.add( 'no-title' );
+			}
+		}
+	}
+
 	/**
 	 * Adds selected items to the menu
 	 */
 	function addSelectedToMenu( itemAdd ) {
 
 		var params,
-			menuItems = {},
 			itemData = {},
 			placing = 'beforeend',
 			action = 'add-menu-item',
@@ -1276,10 +1264,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Retrieve menu item data
 		checks.forEach( function( check ) {
-			var id = parseInt( check.getAttribute( 'name' ).replace( 'menu-item[', '' ) ),
+			var id = parseInt( check.getAttribute( 'name' ).replace( 'menu-item[', '' ), 10 ),
 				item = check.closest( 'li' );
 
-			if ( id === NaN ) {
+			if ( isNaN( id ) ) {
 				id === 0;
 			}
 
@@ -1320,13 +1308,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			credentials: 'same-origin'
 		} )
 		.then( function( response ) {
-			if ( ! response.ok ) {
-				return response.json()
-				.then( function ( error ) {
-					throw new Error( error.message );
-				} );
+			if ( response.ok ) {
+				return response.text(); // no errors
 			}
-			return response.text() // no errors
+			throw new Error( error.message );
 		} )
 		.then( function( menuMarkup ) {
 			var ins = document.getElementById( 'menu-instructions' );
@@ -1377,10 +1362,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function moveMenuItem( el, dir ) {
 
 		var newItemPosition, newDepth, primaryItems, itemPosition, newLabel, newLabels, positionSpeech,
-			items = [],
 			menuItems = editMenu.querySelectorAll( 'li' ),
 			menuItemsCount = menuItems.length,
-			thisItem = originalItem = el.closest( 'li.menu-item' ),
+			thisItem = el.closest( 'li.menu-item' ),
+			originalItem = el.closest( 'li.menu-item' ),
 			thisItemChildren = childMenuItems( thisItem ),
 			thisItemDepth = parseInt( menuItemDepth( thisItem ), 10 ),
 			thisItemPosition = parseInt( [ ...menuItems ].indexOf( thisItem ) + 1, 10 ),
@@ -1536,15 +1521,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @param {Object} itemToRefresh The menu item that might need its advanced accessibility buttons refreshed
 	 */
 	function refreshAdvancedAccessibilityOfItem( itemToRefresh, depth, position ) {
-		var thisLink, thisLinkText, primaryItems, itemPosition, title,
-			parentItem, parentItemId, parentItemName, subItems, prevItemNameLeft, prevItemNameRight,
+		var thisLink, thisLinkText, primaryItems, itemPosition, title, prevItemDepth, totalMenuItems,
+			parentItem, parentItemId, parentItemName, prevItemNameLeft, prevItemNameRight,
 			itemName = itemToRefresh.querySelector( '.menu-item-title' ).textContent,
-			depth = depth || menuItemDepth( itemToRefresh );
-			prevItemDepth = ( depth === 0 ) ? depth : parseInt( depth - 1, 10 ),
-			totalMenuItems = editMenu.querySelectorAll( 'li' ).length,
 			position = position || [ ...editMenu.querySelectorAll( 'li' ) ].indexOf( itemToRefresh );
 
+		if ( depth === null ) {
+			depth = menuItemDepth( itemToRefresh );
+		}
+		prevItemDepth = ( depth === 0 ) ? depth : parseInt( depth - 1, 10 );
+
 		// Determine whether to show or hide menu item
+		totalMenuItems = editMenu.querySelectorAll( 'li' ).length;
 		if ( totalMenuItems > 1 ) {
 			itemToRefresh.querySelector( '.field-move' ).style.display = '';
 		} else {
@@ -1636,7 +1624,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Get depth of menu item
 	function menuItemDepth( item ) {
-		var itemClasses = item.className.split( ' ' );
+		var i, n, itemDepth, itemClasses = item.className.split( ' ' );
 		for ( i = 0, n = itemClasses.length; i < n; i++ ) {
 			if ( itemClasses[i].startsWith( 'menu-item-depth-' ) ) {
 				itemDepth = parseInt( itemClasses[i].split('-').pop(), 10 );
@@ -1653,10 +1641,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	function shiftDepthClass( items, change ) {
 		items.forEach( function( item ) {
-			depth = menuItemDepth( item ),
-			newDepth = depth + change;
+			var depth = menuItemDepth( item ),
+				newDepth = depth + change;
 
-			item.classList.remove( 'menu-item-depth-' + depth )
+			item.classList.remove( 'menu-item-depth-' + depth );
 			item.classList.add( 'menu-item-depth-' + newDepth );
 
 			if ( 0 === newDepth ) {
@@ -1732,7 +1720,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Move sub-items if their parent item moves after dragging
 	 */
 	function moveChildItems( prevItem, thisItem, depth ) {
-		var i, n, startingDepth, nextDepth, newDepth,
+		var i, n, startingDepth, nextDepth, newDepth, newClasses,
 			nextItem = thisItem.nextElementSibling;
 
 		// Move to new position
@@ -1778,7 +1766,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		el.classList.add( 'deleting' );
 		el.animate(
 			{ opacity: [1, 0] }, 
-			{ duration: 350, iterations: 1, easing: "ease-out" } )
+			{ duration: 350, iterations: 1, easing: 'ease-out' } )
 			.onfinish = function() {
 
 			var ins = document.getElementById( 'menu-instructions' );
@@ -1797,7 +1785,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			refreshAdvancedAccessibility();
 			wp.a11y.speak( menus.itemRemoved );
-		}
+		};
 	}
 
 	/**
