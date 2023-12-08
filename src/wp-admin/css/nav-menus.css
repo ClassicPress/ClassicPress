@@ -591,6 +591,8 @@ details.menu-item-handle:has(.dashicons-move:focus) {
 
 details.menu-item-handle summary {
 	padding: 0 1em 4px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
 	user-select: none;
 	cursor: pointer;
 }
