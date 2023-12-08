@@ -183,7 +183,7 @@ class Walker_Nav_Menu_Edit extends Walker_Nav_Menu {
 								esc_attr__( 'Move menu item' ),
 								/* translators: Hidden accessibility text. */
 								__( 'Move' )
-								);
+							);
 							?>
 						</span>
 					</summary>
