@@ -243,7 +243,7 @@
 
 	<rule ref="WordPress.PHP.NoSilencedErrors">
 		<properties>
-			<property name="custom_whitelist" type="array">
+			<property name="customAllowedFunctionsList" type="array">
 				<element value="ssh2_connect"/>
 				<element value="ssh2_auth_password"/>
 				<element value="ssh2_auth_pubkey_file"/>
