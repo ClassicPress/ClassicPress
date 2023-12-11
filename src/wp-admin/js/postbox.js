@@ -9,7 +9,7 @@
 
 /* global Sortable, ajaxurl */
 document.addEventListener( 'DOMContentLoaded', function() {
-	'use strict;'
+	'use strict';
 
 	// Set variables for the whole file
 	var moveUpButtons = document.querySelectorAll( '.postbox:not( .hide-if-js ) .handle-order-higher' ),
