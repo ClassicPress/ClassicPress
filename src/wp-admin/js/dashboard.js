@@ -118,9 +118,6 @@ jQuery( function($) {
 	// Initially populate ajax widgets.
 	ajaxPopulateWidgets();
 
-	// Register ajax widgets as postbox toggles.
-	postboxes.add_postbox_toggles(pagenow, { pbshow: ajaxPopulateWidgets } );
-
 	/**
 	 * Control the Quick Press (Quick Draft) widget.
 	 *
@@ -181,9 +178,6 @@ jQuery( function($) {
 		autoResizeTextarea();
 	};
 	window.quickPressLoad();
-
-	// Enable the dragging functionality of the widgets.
-	$( '.meta-box-sortables' ).sortable( 'option', 'containment', '#wpwrap' );
 
 	/**
 	 * Adjust the height of the textarea based on the content.
