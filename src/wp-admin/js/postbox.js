@@ -7,7 +7,7 @@
  * @output wp-admin/js/postbox.js
  */
 
-/* global Sortable, ajaxurl */
+/* global Sortable, ajaxurl, console */
 document.addEventListener( 'DOMContentLoaded', function() {
 	'use strict';
 
@@ -38,7 +38,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			moveDownButtons[moveDownButtons.length - 1].setAttribute( 'aria-disabled', 'true' );
 		}
 	}
-console.log( window.pagenow );
+
 	/**
 	 * Handles clicks on the move up/down buttons.
 	 *
