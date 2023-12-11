@@ -2,7 +2,7 @@
  * @output wp-admin/js/dashboard.js
  */
 
-/* global pagenow, ajaxurl, postboxes, wpActiveEditor:true, ajaxWidgets */
+/* global pagenow, ajaxurl, wpActiveEditor:true, ajaxWidgets */
 /* global ajaxPopulateWidgets, quickPressLoad,  */
 window.wp = window.wp || {};
 window.communityEventsData = window.communityEventsData || {};
