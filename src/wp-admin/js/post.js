@@ -4,7 +4,7 @@
  * @output wp-admin/js/post.js
  */
 
- /* global ajaxurl, wpAjax, postboxes, pagenow, tinymce, alert, deleteUserSetting, ClipboardJS */
+ /* global ajaxurl, wpAjax, tinymce, alert, deleteUserSetting, ClipboardJS */
  /* global theList:true, theExtraList:true, getUserSetting, setUserSetting, commentReply, commentsBox */
  /* global WPSetThumbnailHTML, wptitlehint */
 
