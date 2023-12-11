@@ -272,6 +272,29 @@ class WP_Http {
 
 		$parsed_url = parse_url( $url );
 
+		/**
+		 * Filters the URL value of an HTTP request.
+		 *
+		 * For security reasons it allows only to change classicpress.net URLs.
+		 *
+		 * Must return a classicpress.net URL.
+		 *
+		 * @since CP-2.1
+		 *
+		 * @param string $url         The HTTP request url
+		 * @param array  $parsed_args HTTP request arguments.
+		 */
+		$filtered_url = apply_filters( 'cp_dot_net_urls', $url, $parsed_args );
+
+		$parsed_filtered_url = parse_url( $filtered_url );
+
+		if ( substr( $parsed_url['host'], -16 ) === 'classicpress.net' && substr( $parsed_filtered_url['host'], -16 ) === 'classicpress.net' ) {
+			$url = $filtered_url;
+			$parsed_url = $parsed_filtered_url;
+		} else {
+			_doing_it_wrong( 'cp_dot_net_urls', 'Filter \'cp_dot_net_urls\' only works for classicpress.net urls.', 'CP-2.1' );
+		}
+
 		if ( empty( $url ) || empty( $parsed_url['scheme'] ) ) {
 			$response = new WP_Error( 'http_request_failed', __( 'A valid URL was not provided.' ) );
 			/** This action is documented in wp-includes/class-wp-http.php */
