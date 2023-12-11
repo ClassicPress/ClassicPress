@@ -316,8 +316,6 @@ jQuery( function($) {
 		copyAttachmentURLSuccessTimeout,
 		__ = wp.i18n.__, _x = wp.i18n._x;
 
-	postboxes.add_postbox_toggles(pagenow);
-
 	/*
 	 * Clear the window name. Otherwise if this is a former preview window where the user navigated to edit another post,
 	 * and the first post is still being edited, clicking Preview there will use this window to show the preview.
