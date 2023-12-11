@@ -288,8 +288,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 
 		// Generate newly-ordered array of columns and postboxes
-		columns.forEach( function( column, key ) {				
-			column.querySelectorAll( 'details:not( .hide-if-js )' ).forEach( function( childWidget, index, array ) {
+		columns.forEach( function( column ) {				
+			column.querySelectorAll( 'details:not( .hide-if-js )' ).forEach( function( childWidget ) {
 				widgetsIds.push( childWidget.id ); // for posting to database
 				widgetsIdsList.push( childWidget.id ); // for setting aria-disabled state
 			});
@@ -438,13 +438,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( e.clientY < scrollThreshold ) {
 			window.scrollTo( {
 				top: 0,
-				behavior: 'smooth',
+				behavior: 'smooth'
 			} );
 		}
 		else if ( e.clientY > window.innerHeight - scrollThreshold ) {
 			window.scrollTo( {
 				top: document.body.scrollHeight,
-				behavior: 'smooth',
+				behavior: 'smooth'
 			} );
 		}
 	} );
