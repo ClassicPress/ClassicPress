@@ -433,7 +433,9 @@ final class WP_Screen {
 	 * @return bool False.
 	 */
 	public function is_block_editor( ...$args ) {
-		WP_Compat::using_block_function();
+		if ( class_exists( 'WP_Compat' ) ) {
+			WP_Compat::using_block_function();
+		}
 		return false;
 	}
 
