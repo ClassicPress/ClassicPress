@@ -22,7 +22,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		widgetToggles = document.querySelectorAll( '.hide-postbox-tog' ),
 		columnsPrefs = document.querySelectorAll( '.columns-prefs input[type="radio"]' ),
 		check = document.querySelector( 'label.columns-prefs-1 input[type="radio"]' ),
-		emptySortableText = ( boxes === null ) ?  __( 'Add boxes from the Screen Options menu' ) : __( 'Drag boxes here' );
+		emptySortableText = ( boxes == null ) ?  __( 'Add boxes from the Screen Options menu' ) : __( 'Drag boxes here' );
 
 	/**
 	 * Disables first Up button and last Down button if they appear in
@@ -31,10 +31,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @since CP-2.0.0
 	 */
 	if ( [ 'dashboard', 'post' ].includes( window.pagenow ) ) {
-		if ( columns[0].querySelector( '.handle-order-higher' ) !== null ) {
+		if ( columns[0].querySelector( '.handle-order-higher' ) != null ) {
 			moveUpButtons[0].setAttribute( 'aria-disabled', 'true' );
 		}
-		if ( boxes[boxes.length - 1].closest( '.postbox-container' ).nextElementSibling === null ) {
+		if ( boxes[boxes.length - 1].closest( '.postbox-container' ).nextElementSibling == null ) {
 			moveDownButtons[moveDownButtons.length - 1].setAttribute( 'aria-disabled', 'true' );
 		}
 	}
@@ -69,12 +69,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				else if ( button.className.includes( 'handle-order-higher' ) ) {
 
 					// If the box is first within a sortable area, move it to the previous sortable area.
-					if ( prevSibling === null || prevSibling.className.includes( 'hide-if-js' ) ) {
+					if ( prevSibling == null || prevSibling.className.includes( 'hide-if-js' ) ) {
 						prevCol = widgetCol.parentNode.previousElementSibling.querySelector( '.meta-box-sortables' );
 						prevCol.appendChild( widget );
 
 						// Update where sortable area becomes, or ceases to be, empty.
-						if ( widgetCol.querySelector( '.postbox' ) === null ) {
+						if ( widgetCol.querySelector( '.postbox' ) == null ) {
 							widgetCol.classList.add( 'empty-container' );
 							widgetCol.style.outline = '3px dashed #c3c4c7';
 							widgetCol.setAttribute( 'data-emptystring', emptySortableText );
@@ -97,12 +97,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				else if ( button.className.includes( 'handle-order-lower' ) ) {
 
 					// If the box is last within a sortable area, move it to the next sortable area.
-					if ( nextSibling === null || nextSibling.className.includes( 'hide-if-js' ) ) {
+					if ( nextSibling == null || nextSibling.className.includes( 'hide-if-js' ) ) {
 						nextCol = widgetCol.parentNode.nextElementSibling.querySelector( '.meta-box-sortables' );
 						nextCol.insertBefore( widget, nextCol.querySelector( 'details' ) );
 
 						// Update where sortable area becomes, or ceases to be, empty.
-						if ( widgetCol.querySelector( '.postbox' ) === null ) {
+						if ( widgetCol.querySelector( '.postbox' ) == null ) {
 							widgetCol.classList.add( 'empty-container' );
 							widgetCol.style.outline = '3px dashed #c3c4c7';
 							widgetCol.setAttribute( 'data-emptystring', emptySortableText );
@@ -153,7 +153,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			onChange: updateLocations
 		} );
 
-		if ( column.id !== 'advanced-sortables' && column.querySelector( '.postbox' ) === null ) {
+		if ( column.id !== 'advanced-sortables' && column.querySelector( '.postbox' ) == null ) {
 			column.classList.add( 'empty-container' );
 			column.style.outline = '3px dashed #c3c4c7';
 			column.setAttribute( 'data-emptystring', emptySortableText );
@@ -170,7 +170,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 *
 	 * @since 3.2.0
 	 */
-	if ( nagDismiss !== null ) {
+	if ( nagDismiss != null ) {
 		nagDismiss.addEventListener( 'click', function( e ) {
 			var hideId = e.target.parentElement.id + '-hide';
 			e.preventDefault();
@@ -210,7 +210,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 *
 	 * @since 2.8.0
 	 */
-	if ( columnsPrefs !== null ) {
+	if ( columnsPrefs != null ) {
 		columnsPrefs.forEach( function( pref ) {
 			pref.addEventListener( 'click', function( e ) {
 				var n = parseInt( e.target.value, 10 );
@@ -244,7 +244,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 
 		// Update class and attribute when a sortable area becomes or ceases being empty.
-		if ( e.from.querySelector( '.postbox' ) === null ) {
+		if ( e.from.querySelector( '.postbox' ) == null ) {
 			e.from.classList.add( 'empty-container' );
 			e.from.style.outline = '3px dashed #c3c4c7';
 			e.from.setAttribute( 'data-emptystring', emptySortableText );
@@ -305,7 +305,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Add aria-disabled to last Down button if it's in the last sortable area
 		lastWidget = document.getElementById( widgetsIdsList[widgetsIdsList.length -1] );
-		if ( lastWidget.closest( '.postbox-container' ).nextElementSibling === null ) {
+		if ( lastWidget.closest( '.postbox-container' ).nextElementSibling == null ) {
 			lastWidget.querySelector( '.handle-order-lower' ).setAttribute( 'aria-disabled', 'true' );
 		}
 
@@ -382,7 +382,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 *
 	 * @since 3.3.0
 	 */
-	if ( check !== null ) {
+	if ( check != null ) {
 		switch ( window.orientation ) {
 			case 90:
 			case -90:
