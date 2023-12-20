@@ -230,7 +230,7 @@ function wp_widget_control( $sidebar_args ) {
 	echo $sidebar_args['before_widget'];
 	?>
 	<details class="widget-top">
-		<summary class="widget-title"><h3><?php echo $widget_title; ?></h3></summary>
+		<summary class="widget-title"><h3><?php echo $widget_title; ?><span class="in-widget-title"></span></h3></summary>
 		<div class="widget-title-action">
 			<a class="widget-control-edit hide-if-js" href="<?php echo esc_url( add_query_arg( $query_arg ) ); ?>">
 				<span class="edit"><?php _ex( 'Edit', 'widget' ); ?></span>
