@@ -2151,4 +2151,30 @@ HTML;
 
 		return $this->text_array_to_dataprovider( $required_kses_globals );
 	}
+
+	/**
+	 * Test that passing a null value as content doesn't
+	 * trigger error and retunr an empty string
+	 *
+	 * @since CP-2.0
+	 */
+	public function test_wp_kses_null_content() {
+		$result = wp_kses_stripslashes( null, '' );
+		$this->assertSame( $result, '' );
+
+		$result = wp_kses_no_null( null, array() );
+		$this->assertSame( $result, '' );
+
+		$result = wp_kses_split( null, array(), array() );
+		$this->assertSame( $result, '' );
+
+		$result = wp_kses_bad_protocol_once( null, array() );
+		$this->assertSame( $result, '' );
+
+		$result = wp_kses_normalize_entities( null );
+		$this->assertSame( $result, '' );
+
+		$result = wp_kses_decode_entities( null );
+		$this->assertSame( $result, '' );
+	}
 }
