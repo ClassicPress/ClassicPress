@@ -2154,7 +2154,7 @@ HTML;
 
 	/**
 	 * Test that passing a null value as content doesn't
-	 * trigger error and retunr an empty string
+	 * trigger error and return an empty string
 	 *
 	 * @since CP-2.0
 	 */
