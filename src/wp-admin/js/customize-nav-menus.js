@@ -42,12 +42,17 @@
 				editMenu = document.getElementById( 'menu-to-edit' ),
 				menuEdge = getOffset( editMenu ).left;
 
+			// Use the right edge if RTL
+			menuEdge += api.isRTL ? editMenu.innerWidth : 0;
+
 			if ( editMenu.length > 0 ) {
 				document.querySelector( '.drag-instructions' ).style.display = '';
 			}
 
-			// Use the right edge if RTL
-			menuEdge += api.isRTL ? editMenu.innerWidth : 0;
+			// Make sure some elements aren't draggable
+			editMenu.querySelectorAll( 'li:not(.menu-item)' ).forEach( function( elem ) {
+				elem.classList.add( 'no-drag');
+			} );
 
 			/*
 			* Attach SortableJS to current menu
@@ -55,6 +60,19 @@
 			var sortable = new Sortable( editMenu, {
 				group: 'menu',
 				handle: '.item-title',
+				filter: '.no-drag',
+				setData: function( dataTransfer, dragEl ) {
+					var ghostImage = document.createElement( 'li' );
+					ghostImage.id = 'sortable-ghost';
+					ghostImage.className = 'menu-item';
+					ghostImage.style.listStyle = 'none';
+					ghostImage.innerHTML = '<div class="menu-item-bar"><details class="menu-item-handle"><summary><span class="item-title"><span class="menu-item-title">' + dragEl.querySelector( '.menu-item-title' ).textContent + '</span></span></summary></details></div>';
+					ghostImage.style.position = 'absolute';
+					ghostImage.style.top = '-1000px';
+					ghostImage.style.width = dragEl.getBoundingClientRect().width + 'px';
+					document.body.appendChild( ghostImage );
+					dataTransfer.setDragImage( ghostImage, 30, 20 );
+				},
 				dataIdAttr: 'data-id', // HTML attribute that is used by the `toArray()` method in OnEnd
 				forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for all webkit browsers
 				//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari only
@@ -71,11 +89,12 @@
 
 				// Start dragging
 				onStart: function( e ) {
-					var prevItem, children,
-						details = document.querySelector( '.sortable-ghost details' );
+					var prevItem, children;
 
-					// Style placeholder when element starts to be dragged
-					details.querySelector( 'summary' ).style.visibility = 'hidden';
+					// Close menu item
+					if ( e.item.querySelector( 'details' ).hasAttribute( 'open' ) ) {
+						e.item.querySelector( 'details' ).removeAttribute( 'open' );
+					}
 
 					// Register event and create data ids for every menu item
 					editMenu.dispatchEvent( new CustomEvent( 'sortstart' ) );
@@ -111,16 +130,23 @@
 									diff = prevDepth + 1;
 								}
 								menuEdge = diff * indent;
-							}
+							}			
 							document.querySelector( '.sortable-ghost' ).style.marginLeft = menuEdge + 'px';
 						}
 					} );
-
+				
 					// Does this menu item have children?
 					children = childMenuItems( e.item );
 					if ( children.length > 0 ) {
 						childrenInfo.prevItem = e.item;
 						childrenInfo.menuItem = children[0];
+					}
+				},
+
+				// Keeps undraggable elements in fixed position in list
+				onMove: function( e ) {
+					if ( e.related.className.includes( 'no-drag' ) ) {
+						return false;
 					}
 				},
 
@@ -135,7 +161,7 @@
 					// Revert styling and set focus on move icon
 					e.item.style.marginLeft = '';
 					details.querySelector( 'summary' ).style.visibility = 'visible';
-					details.querySelector( 'summary' ).focus();
+					details.querySelector( 'summary' ).focus();	
 
 					// Send list of menu items, ordered by IDs
 					editMenu.dispatchEvent( new CustomEvent( 'sortstop', {
@@ -191,12 +217,12 @@
 					// Move sub-items if this is a parent
 					if ( Object.keys( childrenInfo ).length > 0 ) {
 						moveChildItems( childrenInfo.prevItem, childrenInfo.menuItem, depth + 1 );
-
+					
 						// Reset for next drag and drop
 						childrenInfo = {};
 					}
 				}
-
+			
 			} );
 		}
 
@@ -217,7 +243,7 @@
 		return ( {
 			top: rect.top + win.pageYOffset,
 			left: rect.left + win.pageXOffset
-		} );
+		} );   
 	}
 
 	/*
@@ -236,7 +262,7 @@
 			sibling = sibling.previousElementSibling;
 		}
 	}
-
+	
 	// Get depth of menu item
 	function menuItemDepth( item ) {
 		var i, n, itemDepth,
@@ -283,7 +309,7 @@
 		thisItem.className = newClasses.join( ' ' );
 		thisItem.style.marginLeft = '';
 
-		// Get depth of next item in list
+		// Get depth of next item in list		
 		if ( nextItem ) {
 			nextDepth = menuItemDepth( nextItem );
 
