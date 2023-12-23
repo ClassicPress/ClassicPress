@@ -455,24 +455,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				saveButton.value = wp.i18n.__( 'Saved' );
 
 				if ( ! widget.className.includes( 'widget-dirty' ) ) {
-					widget.addEventListener( 'input', function() {
-						widget.classList.add( 'widget-dirty' );
-						saveButton.disabled = false;
-						saveButton.value = wp.i18n.__( 'Save' );
-					} );
-					widget.addEventListener( 'change', function() {
-						widget.classList.add( 'widget-dirty' );
-						saveButton.disabled = false;
-						saveButton.value = wp.i18n.__( 'Save' );
-					} );
+					widget.addEventListener( 'input', unsavedWidget );
+					widget.addEventListener( 'change', unsavedWidget );
 				}
 			}
 
-		function unsavedWidget() {
-			widget.classList.add( 'widget-dirty' );
-			saveButton.disabled = false;
-			saveButton.value = wp.i18n.__( 'Save' );
-		}
+			function unsavedWidget() {
+				widget.classList.add( 'widget-dirty' );
+				saveButton.disabled = false;
+				saveButton.value = wp.i18n.__( 'Save' );
+			}
 
 			list = widget.closest( 'details' );
 			sidebar = widget.parentNode;
