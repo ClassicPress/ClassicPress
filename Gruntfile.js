@@ -736,6 +736,7 @@ module.exports = function(grunt) {
 				dest: `${BUILD_DIR}wp-includes/js/wp-emoji-release.min.js`
 			}
 		},
+<<<<<<< HEAD
 		jsvalidate:{
 			options: {
 				globals: {},
@@ -752,6 +753,8 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+=======
+>>>>>>> fb9814474e (Build Tools: Remove outmoded jsvalidate task from Gruntfile.)
 		imagemin: {
 			core: {
 				expand: true,
@@ -788,9 +791,62 @@ module.exports = function(grunt) {
 						expand: true,
 						flatten: true,
 						src: [
+<<<<<<< HEAD
 							`${SOURCE_DIR}wp-includes/formatting.php`
 						],
 						dest: `${SOURCE_DIR}wp-includes/`
+=======
+							BUILD_DIR + 'wp-includes/js/underscore.js'
+						],
+						dest: BUILD_DIR + 'wp-includes/js/'
+					},
+					{
+						expand: true,
+						flatten: true,
+						src: [
+							BUILD_DIR + 'wp-includes/js/dist/block-editor.js',
+						],
+						dest: BUILD_DIR + 'wp-includes/js/dist/'
+					}
+				]
+			}
+		},
+		_watch: {
+			options: {
+				interval: 2000
+			},
+			all: {
+				files: [
+					SOURCE_DIR + '**',
+					'!' + SOURCE_DIR + 'js/**/*.js',
+					// Ignore version control directories.
+					'!' + SOURCE_DIR + '**/.{svn,git}/**'
+				],
+				tasks: ['clean:dynamic', 'copy:dynamic'],
+				options: {
+					dot: true,
+					spawn: false
+				}
+			},
+			'js-enqueues': {
+				files: [SOURCE_DIR + 'js/_enqueues/**/*.js'],
+				tasks: ['clean:dynamic', 'copy:dynamic-js', 'uglify:dynamic'],
+				options: {
+					dot: true,
+					spawn: false
+				}
+			},
+			'js-webpack': {
+				files: [
+					SOURCE_DIR + 'js/**/*.js',
+					'!' + SOURCE_DIR + 'js/_enqueues/**/*.js',
+					'webpack-dev.config.js'
+				],
+				tasks: ['clean:dynamic', 'webpack:dev', 'uglify:dynamic'],
+				options: {
+					dot: true,
+					spawn: false
+>>>>>>> fb9814474e (Build Tools: Remove outmoded jsvalidate task from Gruntfile.)
 					}
 				]
 			}
@@ -1073,6 +1129,7 @@ module.exports = function(grunt) {
 		}
 	);
 
+<<<<<<< HEAD
 	grunt.registerTask(
 		'copy:script-loader',
 		[
@@ -1080,6 +1137,17 @@ module.exports = function(grunt) {
 			'copy:script-loader-impl'
 		]
 	);
+=======
+	grunt.registerTask( 'build:js', [
+		'clean:js',
+		'build:webpack',
+		'copy:js',
+		'file_append',
+		'uglify:all',
+		'concat:tinymce',
+		'concat:emoji'
+	] );
+>>>>>>> fb9814474e (Build Tools: Remove outmoded jsvalidate task from Gruntfile.)
 
 	grunt.registerTask(
 		'copy:all',
@@ -1185,4 +1253,62 @@ module.exports = function(grunt) {
 			'build'
 		]
 	);
+<<<<<<< HEAD
+=======
+
+				for ( dest in configs ) {
+					// If a file in the mapping matches then set the variables for our dynamic tasks.
+					if ( dest && configs.hasOwnProperty( dest ) && configs[ dest ][0] === './' + filepath ) {
+						files[ dest ] = configs[ dest ];
+						src = [ path.relative( WORKING_DIR, dest ) ];
+						break;
+					}
+				}
+			}
+
+			// Configure our dynamic-js copy task which uses a file mapping rather than simply copying from src to build.
+			if ( action !== 'deleted' ) {
+				grunt.config( [ 'copy', 'dynamic-js', 'files' ], files );
+			}
+		// For the webpack builds configure the task to only check those files built by webpack.
+		} else if ( target === 'js-webpack' ) {
+			src = [
+				'wp-includes/js/media-audiovideo.js',
+				'wp-includes/js/media-grid.js',
+				'wp-includes/js/media-models.js',
+				'wp-includes/js/media-views.js'
+			];
+		// Else simply use the path relative to the source directory.
+		} else {
+			src = [ path.relative( SOURCE_DIR, filepath ) ];
+		}
+
+		if ( ! src ) {
+			grunt.warn( 'Failed to determine the destination file.' );
+			return;
+		}
+
+		if ( action === 'deleted' ) {
+			// Clean up only those files that were deleted.
+			grunt.config( [ 'clean', 'dynamic', 'src' ], src );
+		} else {
+			// Otherwise copy over only the changed file.
+			grunt.config( [ 'copy', 'dynamic', 'src' ], src );
+
+			// For javascript also minify and validate the changed file.
+			if ( target === 'js-enqueues' ) {
+				grunt.config( [ 'uglify', 'dynamic', 'src' ], src );
+				grunt.config( [ 'dynamic', 'files', 'src' ], src.map( function( dir ) { return  WORKING_DIR + dir; } ) );
+			}
+			// For webpack only validate the file, minification is handled by webpack itself.
+			if ( target === 'js-webpack' ) {
+				grunt.config( [ 'dynamic', 'files', 'src' ], src.map( function( dir ) { return  WORKING_DIR + dir; } ) );
+			}
+			// For css run the rtl task on just the changed file.
+			if ( target === 'rtl' ) {
+				grunt.config( [ 'rtlcss', 'dynamic', 'src' ], src );
+			}
+		}
+	});
+>>>>>>> fb9814474e (Build Tools: Remove outmoded jsvalidate task from Gruntfile.)
 };
