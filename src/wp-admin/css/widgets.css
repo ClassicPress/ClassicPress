@@ -34,7 +34,6 @@ summary.widget-title {
 	padding: 12px 15px 15px 10px;
 	font-size: 1em;
 	line-height: 1;
-	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	-webkit-user-select: none;
