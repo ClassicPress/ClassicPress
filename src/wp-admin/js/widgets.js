@@ -279,6 +279,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				put: ['widget-list', 'active-widgets', 'inactive']
 			},
 			handle: '.widget',
+			filter: 'input, select, textarea, label, button, fieldset, legend, datalist, output, option, optgroup',
+			preventOnFilter: false, // ensures correct position of cursor in input fields
 			setData: ghostImage,
 			forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for webkit browsers
 			//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari
@@ -297,6 +299,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			put: ['widget-list', 'active-widgets']
 		},
 		handle: '.widget',
+		filter: 'input, select, textarea, label, button, fieldset, legend, datalist, output, option, optgroup',
+		preventOnFilter: false, // ensures correct position of cursor in input fields
 		setData: ghostImage,
 		forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for webkit browsers
 		//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari
