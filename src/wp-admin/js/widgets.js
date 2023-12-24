@@ -5,7 +5,7 @@
  * @output wp-admin/js/widgets.js
  */
 
-/* global Sortable, ajaxurl, isRtl, wpWidgets, console */
+/* global Sortable, ajaxurl, isRtl, console */
 document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Set variables for the whole file
@@ -14,8 +14,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		sortables = document.querySelectorAll( '.widgets-sortables' ),
 		sidebarWrappers = document.querySelectorAll( '.widgets-holder-wrap' ),
 		widgets = document.querySelectorAll( '.widget' ),
-		chooser = document.querySelector( '.widgets-chooser' ),
-		isRTL = !! ( 'undefined' !== typeof isRtl && isRtl ); // Refresh the widgets containers in the right column.;
+		chooser = document.querySelector( '.widgets-chooser' ); // Refresh the widgets containers in the right column.;
 
 	// Set first active Sidebar and Inactive Sidebar to open.
 	document.querySelector( '#widgets-right details' ).setAttribute( 'open', 'open' );
@@ -64,7 +63,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( index === 0 ) {
 					firstUnsaved = unsaved.querySelector( 'input' ) ? unsaved.querySelector( 'input' ) : unsaved.querySelector( 'textarea' );
 					if ( firstUnsaved == null ) { // catches undefined too
-						firstUnsaved = unsaved.querySelector( 'summary' )
+						firstUnsaved = unsaved.querySelector( 'summary' );
 					}
 
 					if ( firstUnsaved.scrollIntoViewIfNeeded ) {
@@ -93,8 +92,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			selectSidebar = chooser.querySelector( '.widgets-chooser-sidebars' ),
 			id = wrapper.querySelector( '.widgets-sortables' ).id;
 
-		button.type = "button";
-		button.className = "widgets-chooser-button";
+		button.type = 'button';
+		button.className = 'widgets-chooser-button';
 		button.setAttribute( 'aria-pressed', false );
 		button.setAttribute( 'aria-label', ariaLabel );
 		button.innerText = name.toString().trim();
@@ -210,7 +209,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		document.addEventListener( 'click', function( e ) {
 			var widget = e.target.closest( 'details' );
 			if ( widgetList.contains( e.target ) && widget.className.includes( 'widget-top' ) ) {
-				widget.addEventListener( 'toggle', function( e ) {
+				widget.addEventListener( 'toggle', function() {
 					widgetToggled( widget );
 				} );
 			}
@@ -257,7 +256,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			sortable.setAttribute( 'data-dragover', true );
 		} );
 
-		sortable.addEventListener( 'dragleave', function( e ) {
+		sortable.addEventListener( 'dragleave', function() {
 			sortable.removeAttribute( 'data-dragover' );
 		} );
 		
@@ -421,7 +420,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 
 	function sortableChange( e ) {
-		var addNew, rem, widgetNumber, sidebar, list, children, child, item, saveButton,
+		var addNew, rem, sidebar, list, children, child, item, saveButton,
 			widget = e.item;
 
 		if ( widget.className.includes( 'deleting' ) ) {
@@ -505,7 +504,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 
 	function saveWidget( widget, del, animate, order ) {
-		var formData, data, a, xhr, id, index,
+		var data, xhr, id,
 			sidebarId = widget.closest( 'ul.widgets-sortables' ).id,
 			form = widget.querySelector( 'form' ),
 			isAdd = widget.querySelector( 'input.add_new' ).value;
@@ -613,7 +612,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		sortables.forEach( function( sortable ) {
-			widgetIds = [];
+			var widgetIds = [];
 			sortable.querySelectorAll( '.widget' ).forEach( function( widget ) {
 				widgetIds.push( widget.id );
 			} );
@@ -688,7 +687,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 
 	function addWidget( chooser ) {
-		var widget, widgetId, add, saveButton,
+		var widget, widgetId, add,
 			sidebarId = chooser.querySelector( '.widgets-chooser-selected' ).dataset.sidebarId,
 			sidebar = document.getElementById( sidebarId ),
 			rect = sidebar.getBoundingClientRect(),
