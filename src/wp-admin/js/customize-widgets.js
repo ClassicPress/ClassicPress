@@ -1887,7 +1887,8 @@
 			Sortable.create( self.$sectionContent[0], {
 				group: 'widgets',
 				handle: '.customize-control-widget_form',
-				filter: '.no-drag',
+				filter: '.no-drag, input, select, textarea, label, button, fieldset, legend, datalist, output, option, optgroup',
+				preventOnFilter: false, // ensures correct position of cursor in input fields
 				setData: function( dataTransfer, dragEl ) {
 					var ghostImage = document.createElement( 'details' );
 					ghostImage.id = 'sortable-ghost';
