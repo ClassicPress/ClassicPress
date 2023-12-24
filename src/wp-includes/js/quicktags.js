@@ -79,11 +79,19 @@ window.edToolbar = function(){};
 
 			if ( ! t.eventAttached ) {
 				if ( document.addEventListener ) {
-					DOMContentLoaded = function(){document.removeEventListener('DOMContentLoaded', DOMContentLoaded, false);t.ready();};
+					DOMContentLoaded = function() {
+						document.removeEventListener('DOMContentLoaded', DOMContentLoaded, false);
+						t.ready();
+					};
 					document.addEventListener('DOMContentLoaded', DOMContentLoaded, false);
 					window.addEventListener('load', t.ready, false);
 				} else if ( document.attachEvent ) {
-					DOMContentLoaded = function(){if (document.readyState === 'complete'){ document.detachEvent('onreadystatechange', DOMContentLoaded);t.ready();}};
+					DOMContentLoaded = function(){
+						if (document.readyState === 'complete'){
+							document.detachEvent('onreadystatechange', DOMContentLoaded);
+							t.ready();
+						}
+					};
 					document.attachEvent('onreadystatechange', DOMContentLoaded);
 					window.attachEvent('onload', t.ready);
 

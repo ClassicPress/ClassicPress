@@ -260,7 +260,7 @@
 		 * Sends a message to the aria-live region to announce how many search results.
 		 */
 		announceSearchMatches: function() {
-			var message = l10n.widgetsFound.replace( '%d', this.searchMatchesCount ) ;
+			var message = l10n.widgetsFound.replace( '%d', this.searchMatchesCount );
 
 			if ( ! this.searchMatchesCount ) {
 				message = l10n.noWidgetsFound;

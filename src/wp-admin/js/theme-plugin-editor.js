@@ -90,6 +90,7 @@ wp.themePluginEditor = (function( $ ) {
 	 * @return {void}
 	 */
 	component.showWarning = function() {
+		var oneSecond = 1000;
 		// Get the text within the modal.
 		var rawMessage = component.warning.find( '.file-editor-warning-message' ).text();
 		// Hide all the #wpwrap content from assistive technologies.
@@ -110,7 +111,7 @@ wp.themePluginEditor = (function( $ ) {
 		// Make screen readers announce the warning message after a short delay (necessary for some screen readers).
 		setTimeout( function() {
 			wp.a11y.speak( wp.sanitize.stripTags( rawMessage.replace( /\s+/g, ' ' ) ), 'assertive' );
-		}, 1000 );
+		}, oneSecond );
 	};
 
 	/**
@@ -121,9 +122,9 @@ wp.themePluginEditor = (function( $ ) {
 	 * @return {void}
 	 */
 	component.constrainTabbing = function( event ) {
-		var firstTabbable, lastTabbable;
+		var firstTabbable, lastTabbable, lastEvent = 9;
 
-		if ( 9 !== event.which ) {
+		if ( lastEvent !== event.which ) {
 			return;
 		}
 
