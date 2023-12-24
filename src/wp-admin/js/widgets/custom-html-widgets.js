@@ -299,7 +299,7 @@ wp.customHtmlWidgets = ( function( $ ) {
 	 * @return {void}
 	 */
 	component.handleWidgetAdded = function handleWidgetAdded( event ) {
-		var widgetForm, widgetContainer, idBase, widgetControl, widgetId,
+		var widgetForm, idBase, widgetControl, widgetId,
 		renderWhenAnimationDone, fieldContainer, syncContainer,
 		animatedCheckDelay = 50,
 		widgetContainer = event.detail.widget;
