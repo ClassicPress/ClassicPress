@@ -95,7 +95,7 @@ module.exports = function(grunt) {
 					},
 					files: {
 						src: [
-							SOURCE_DIR + 'wp-includes/js/dist/*.min.js',
+							SOURCE_DIR + 'wp-includes/js/dist/*.min.js'
 						]
 					}
 				}
@@ -807,7 +807,7 @@ module.exports = function(grunt) {
 					patterns: [
 						{
 							match: /\/\/ START: emoji arrays[\S\s]*\/\/ END: emoji arrays/g,
-							replacement: buildTools.replaceEmojiRegex,
+							replacement: buildTools.replaceEmojiRegex
 						}
 					]
 				},
@@ -1099,7 +1099,7 @@ module.exports = function(grunt) {
 			const done = this.async();
 			grunt.util.spawn( {
 				cmd: 'node',
-				args: [ './node_modules/.bin/rollup', '--config' ],
+				args: [ './node_modules/.bin/rollup', '--config' ]
 			}, ( error, { stdout, stderr } ) => {
 				if ( error ) {
 					throw error;
