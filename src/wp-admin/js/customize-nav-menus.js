@@ -2437,6 +2437,7 @@
 					updateSetting = isNewMenu ? _.noop : function( checked ) {
 						navMenuLocationSetting.set( checked ? control.params.menu_id : 0 );
 					},
+					// eslint-disable-next-line func-style
 					updateSelectedMenuLabel = function( selectedMenuId ) {
 						var menuSetting = api( 'nav_menu[' + String( selectedMenuId ) + ']' );
 						if ( ! selectedMenuId || ! menuSetting || ! menuSetting() ) {

@@ -3,6 +3,7 @@
  */
 
 (function(w) {
+	// eslint-disable-next-line func-style
 	var init = function() {
 		var pr = document.getElementById('post-revisions'),
 		inputs = pr ? pr.getElementsByTagName('input') : [];
