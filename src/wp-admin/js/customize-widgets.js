@@ -262,7 +262,7 @@
 		 * Sends a message to the aria-live region to announce how many search results.
 		 */
 		announceSearchMatches: function() {
-			var message = l10n.widgetsFound.replace( '%d', this.searchMatchesCount );
+			var message = l10n.widgetsFound.replace( '%d', this.searchMatchesCount ) ;
 
 			if ( ! this.searchMatchesCount ) {
 				message = l10n.noWidgetsFound;
@@ -533,7 +533,6 @@
 				control.embedWidgetControl();
 			} else {
 				api.section( control.section(), function( section ) {
-					// eslint-disable-next-line func-style
 					var onExpanded = function( isExpanded ) {
 						if ( isExpanded ) {
 							control.embedWidgetControl();
@@ -928,8 +927,7 @@
 					if ( 'Enter' === e.key ) {
 						e.preventDefault();
 						self.updateWidget( { ignoreActiveElement: true } );
-					}
-					else if ( widgetRoot.parentNode.className.includes( 'widget-dirty' ) ) {
+					} else {
 						updateWidgetDebounced();
 					}
 				} );
@@ -944,7 +942,7 @@
 						return;
 					}
 
-					if ( widgetRoot.parentNode.className.includes( 'widget-dirty' ) && e.type === 'change' ) {
+					if ( e.type === 'change' ) {
 						updateWidgetDebounced();
 					}
 				}
@@ -1886,7 +1884,7 @@
 				elem.classList.add( 'no-drag');
 			} );
 
-			var sortable = new Sortable( self.$sectionContent[0], {
+			Sortable.create( self.$sectionContent[0], {
 				group: 'widgets',
 				handle: '.customize-control-widget_form',
 				filter: '.no-drag',
