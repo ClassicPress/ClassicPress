@@ -631,7 +631,7 @@ wp.mediaWidgets = ( function( $ ) {
 		 *
 		 * @return {void}
 		 */
-		syncModelToInputs: function syncModelToInputs() {console.log('no');
+		syncModelToInputs: function syncModelToInputs() {
 			var control = this;
 			control.syncContainer.querySelectorAll( '.media-widget-instance-property' ).forEach( function( input ) {
 				var propertyName = input.dataset.property,
@@ -648,8 +648,8 @@ wp.mediaWidgets = ( function( $ ) {
 				} else {
 					value = String( value );
 				}
-console.log(propertyName);
-				if ( input.value !== value ) {console.log('yes');
+
+				if ( input.value !== value ) {
 					input.value = value;
 					input.dispatchEvent( new Event( 'change' ) );
 				}
@@ -1122,7 +1122,7 @@ console.log(propertyName);
 	 *
 	 * @return {void}
 	 */
-	component.handleWidgetAdded = function handleWidgetAdded( event ) {console.log('updated');
+	component.handleWidgetAdded = function handleWidgetAdded( event ) {
 		var fieldContainer, syncContainer, idBase, ControlConstructor,
 			ModelConstructor, modelAttributes, widgetControl, widgetModel,
 			widgetId, renderWhenAnimationDone,
