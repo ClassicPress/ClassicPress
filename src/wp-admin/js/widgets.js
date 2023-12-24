@@ -749,7 +749,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function clearWidgetSelection() {
 		document.getElementById( 'widgets-left' ).classList.remove( 'chooser' );
 
-		if ( document.querySelector( '.widget-in-question' ) !== null ) { // catches undefined too
+		if ( document.querySelector( '.widget-in-question' ) != null ) { // catches undefined too
 			document.querySelectorAll( '.widget-in-question' ).forEach( function( inQuestion ) {
 				inQuestion.classList.remove( 'widget-in-question' );
 			} );
