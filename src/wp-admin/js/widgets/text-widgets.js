@@ -39,7 +39,7 @@ wp.textWidgets = ( function( $ ) {
 		 * @return {void}
 		 */
 		initialize: function initialize( options ) {
-			var control = this, templateFunction;
+			var control = this;
 
 			if ( ! options.el ) {
 				throw new Error( 'Missing options.el' );
