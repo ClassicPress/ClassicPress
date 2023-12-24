@@ -129,7 +129,6 @@ wp.mediaWidgets = ( function( $ ) {
 				Constructor = wp.media.view.EmbedImage;
 			} else {
 
-				// This should be eliminated once #40450 lands of when this is merged into core.
 				Constructor = wp.media.view.EmbedLink.extend(/** @lends wp.mediaWidgets~Constructor.prototype */{
 
 					/**
@@ -634,7 +633,8 @@ wp.mediaWidgets = ( function( $ ) {
 		syncModelToInputs: function syncModelToInputs() {
 			var control = this;
 			control.syncContainer.querySelectorAll( '.media-widget-instance-property' ).forEach( function( input ) {
-				var propertyName = input.dataset.property,
+				var widgetId,
+					propertyName = input.dataset.property,
 					value = control.model.get( propertyName );
 
 				if ( _.isUndefined( value ) ) {
@@ -651,7 +651,10 @@ wp.mediaWidgets = ( function( $ ) {
 
 				if ( input.value !== value ) {
 					input.value = value;
-					input.dispatchEvent( new Event( 'change' ) );
+
+					// Get element with class of "widget" whose ID ends with relevant string and dispatch event
+					widgetId = input.id.replace( 'widget-', '' ).replace( '-' + propertyName, '' );
+					document.querySelector( '.widget[id$=' + widgetId + ']' ).dispatchEvent( new Event( 'change' ) );
 				}
 			} );
 		},
