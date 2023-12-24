@@ -935,7 +935,7 @@
 				// Handle widgets that support live previews
 				widgetRoot.addEventListener( 'change', maybeUpdateWidget );
 				widgetRoot.addEventListener( 'input', maybeUpdateWidget );
-				widgetRoot.addEventListener( 'propertychange', maybeUpdateWidget );
+				widgetRoot.addEventListener( 'propertychange', maybeUpdateWidget ); // for backward compatibility
 
 				function maybeUpdateWidget( e ) {
 					if ( ! self.liveUpdateMode ) {
