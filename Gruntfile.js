@@ -554,6 +554,50 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+		eslint: {
+			grunt: {
+				src: [
+					'Gruntfile.js'
+				]
+			},
+			core: {
+				options: {
+					fix: grunt.option( 'fix' )
+				},
+				src: [
+					'src/wp-admin/js/**/*.js',
+					'src/wp-includes/js/*.js',
+					// Built scripts.
+					'!src/wp-includes/js/media-*',
+					// ClassicPress scripts inside directories
+					'src/wp-includes/js/jquery/jquery.table-hotkeys.js',
+					'src/wp-includes/js/mediaelement/mediaelement-migrate.js',
+					'src/wp-includes/js/mediaelement/wp-mediaelement.js',
+					'src/wp-includes/js/mediaelement/wp-playlist.js',
+					'src/wp-includes/js/plupload/handlers.js',
+					'src/wp-includes/js/plupload/wp-plupload.js',
+					'src/wp-includes/js/tinymce/plugins/wordpress/plugin.js',
+					'src/wp-includes/js/tinymce/plugins/wp*/plugin.js',
+					// Third party scripts
+					'!src/wp-includes/js/codemirror/*.js',
+					'!src/wp-includes/js/jquery/*.js',
+					'!src/wp-includes/js/tinymce/plugins/**/*.js',
+					'!src/wp-admin/js/farbtastic.js',
+					'!src/wp-includes/js/backbone*.js',
+					'!src/wp-includes/js/clipboard.js',
+					'!src/wp-includes/js/swfobject.js',
+					'!src/wp-includes/js/underscore*.js',
+					'!src/wp-includes/js/colorpicker.js',
+					'!src/wp-includes/js/hoverIntent.js',
+					'!src/wp-includes/js/json2.js',
+					'!src/wp-includes/js/tw-sack.js',
+					'!src/wp-includes/js/twemoji.js',
+					'!src/wp-includes/js/plupload/*.js',
+					'!src/wp-includes/js/zxcvbn-async.js',
+					'!src/**/*.min.js'
+				]
+			}
+		},
 		jsdoc : {
 			dist : {
 				dest: 'jsdoc',
@@ -819,6 +863,15 @@ module.exports = function(grunt) {
 		]
 	);
 
+	// ESLint task.
+	grunt.registerTask(
+		'eslint:corejs',
+		[
+			'eslint:grunt',
+			'eslint:core'
+		]
+	);
+
 	grunt.registerTask(
 		'restapi-jsclient',
 		[
@@ -839,6 +892,7 @@ module.exports = function(grunt) {
 		[
 			'rollup',
 			'jshint:corejs',
+			'eslint:corejs',
 			'terser:masonry',
 			'terser:imgareaselect'
 		]
