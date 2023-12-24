@@ -53,6 +53,7 @@ window.edToolbar = function(){};
 
 (function(){
 	// Private stuff is prefixed with an underscore.
+	// eslint-disable-next-line func-style
 	var _domReady = function(func) {
 		var t, i, DOMContentLoaded, _tryReady;
 

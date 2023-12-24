@@ -368,6 +368,7 @@
 			 *
 			 * @return {Deferred.promise}        A promise which resolves to the constructed model.
 			 */
+			// eslint-disable-next-line func-style
 			buildModelGetter = function( parentModel, modelId, modelName, embedSourcePoint, embedCheckField ) {
 				var getModel, embeddedObjects, attributes, deferred;
 
@@ -421,6 +422,7 @@
 			 *
 			 * @return {Deferred.promise} A promise which resolves to the constructed collection.
 			 */
+			// eslint-disable-next-line func-style
 			buildCollectionGetter = function( parentModel, collectionName, embedSourcePoint, embedIndex ) {
 				/**
 				 * Returns a promise that resolves to the requested collection
@@ -495,6 +497,7 @@
 			/**
 			 * Set the model post parent.
 			 */
+			// eslint-disable-next-line func-style
 			setHelperParentPost = function( collection, postId ) {
 
 				// Attach post_parent id to the collection.

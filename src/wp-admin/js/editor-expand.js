@@ -35,7 +35,9 @@
 			$postBody = $('#post-body'),
 			fullscreen = window.wp.editor && window.wp.editor.fullscreen,
 			mceEditor,
+			// eslint-disable-next-line func-style
 			mceBind = function(){},
+			// eslint-disable-next-line func-style
 			mceUnbind = function(){},
 			fixedTop = false,
 			fixedBottom = false,

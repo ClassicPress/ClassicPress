@@ -526,6 +526,7 @@
 				control.embedWidgetControl();
 			} else {
 				api.section( control.section(), function( section ) {
+					// eslint-disable-next-line func-style
 					var onExpanded = function( isExpanded ) {
 						if ( isExpanded ) {
 							control.embedWidgetControl();
