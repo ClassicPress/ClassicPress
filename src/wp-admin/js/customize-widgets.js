@@ -2,7 +2,7 @@
  * @output wp-admin/js/customize-widgets.js
  */
 
-/* global _wpCustomizeWidgetsSettings */
+/* global Sortable, _wpCustomizeWidgetsSettings */
 (function( wp, $ ){
 
 	if ( ! wp || ! wp.customize ) { return; }
@@ -721,7 +721,7 @@
 		 * Update the title of the form if a title field is entered
 		 */
 		_setupWidgetTitle: function() {
-			var self = this, updateTitle;
+			var updateTitle;
 
 			updateTitle = function() {
 				var title = self.setting().title,
@@ -903,8 +903,7 @@
 		 * Set up event handlers for widget updating
 		 */
 		_setupUpdateUI: function() {
-			var self = this, widgetRoots, inputs,
-				saveBtn, updateWidgetDebounced, formSyncHandler;
+			var self = this, widgetRoots, saveBtn, updateWidgetDebounced, formSyncHandler;
 
 			// Configure update button.
 			saveBtn = this.container[0].querySelector( '.widget-control-save' );
@@ -1326,7 +1325,7 @@
 					if ( completeCallback ) {
 						completeCallback.call( self, message );
 					} else {
-						$widgetContent.prepend( '<p class="widget-error"><strong>' + message + '</strong></p>' );
+						widgetContent.prepend( '<p class="widget-error"><strong>' + message + '</strong></p>' );
 					}
 				}
 			} );
@@ -1874,8 +1873,7 @@
 		 * Allow widgets in sidebar to be re-ordered, and for the order to be previewed
 		 */
 		_setupSortable: function() {
-			var self = this,
-				sidebars = [];
+			var self = this;
 
 			this.isReordering = false;
 
