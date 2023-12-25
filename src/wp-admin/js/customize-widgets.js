@@ -533,7 +533,7 @@
 				control.embedWidgetControl();
 			} else {
 				api.section( control.section(), function( section ) {
-					var onExpanded = function( isExpanded ) {
+					function onExpanded( isExpanded ) {
 						if ( isExpanded ) {
 							control.embedWidgetControl();
 							section.expanded.unbind( onExpanded );
