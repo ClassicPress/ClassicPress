@@ -708,7 +708,7 @@
 		 * Show/hide the control when clicking on the close button
 		 */
 		_setupControlToggle: function() {
-			var self = this, closeBtn;
+			var closeBtn;
 
 			closeBtn = this.container[0].querySelector( '.widget-control-close' );
 			closeBtn.addEventListener( 'click', function() {
@@ -721,7 +721,7 @@
 		 * Update the title of the form if a title field is entered
 		 */
 		_setupWidgetTitle: function() {
-			var updateTitle;
+			var self = this, updateTitle;
 
 			updateTitle = function() {
 				var title = self.setting().title,
@@ -945,6 +945,15 @@
 						updateWidgetDebounced();
 					}
 				}
+
+				formSyncHandler = api.Widgets.formSyncHandlers[ self.params.widget_id_base ];
+				if ( formSyncHandler ) {
+					document.addEventListener( 'widget-synced', function( e ) {
+						if ( widgetRoot === e.detail.widget ) {
+							formSyncHandler.apply( document, arguments );
+						}
+					} );
+				}
 			} );
 
 			// Remove loading indicators when the setting is saved and the preview updates.
@@ -957,15 +966,6 @@
 					self.container.removeClass( 'previewer-loading' );
 				}
 			} );
-
-			formSyncHandler = api.Widgets.formSyncHandlers[ this.params.widget_id_base ];
-			if ( formSyncHandler ) {
-				document.addEventListener( 'widget-synced', function( e ) {
-					if ( widgetRoot === e.detail.widget ) {
-						formSyncHandler.apply( document, arguments );
-					}
-				} );
-			}
 		},
 
 		/**
