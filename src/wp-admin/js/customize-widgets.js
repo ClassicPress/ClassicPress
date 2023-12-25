@@ -538,7 +538,7 @@
 							control.embedWidgetControl();
 							section.expanded.unbind( onExpanded );
 						}
-					};
+					}
 					if ( section.expanded() ) {
 						onExpanded( true );
 					} else {
