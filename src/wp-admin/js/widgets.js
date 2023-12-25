@@ -5,7 +5,7 @@
  * @output wp-admin/js/widgets.js
  */
 
-/* global Sortable, ajaxurl, isRtl, console */
+/* global Sortable, ajaxurl, console */
 document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Set variables for the whole file
@@ -423,6 +423,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var addNew, rem, sidebar, list, children, child, item, saveButton,
 			widget = e.item;
 
+		function unsavedWidget() {
+			widget.classList.add( 'widget-dirty' );
+			saveButton.disabled = false;
+			saveButton.value = wp.i18n.__( 'Save' );
+		}
+
 		if ( widget.className.includes( 'deleting' ) ) {
 			saveWidget( widget, 1, 0, 1 ); // delete widget
 			widget.remove();
@@ -461,12 +467,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					widget.addEventListener( 'input', unsavedWidget );
 					widget.addEventListener( 'change', unsavedWidget );
 				}
-			}
-
-			function unsavedWidget() {
-				widget.classList.add( 'widget-dirty' );
-				saveButton.disabled = false;
-				saveButton.value = wp.i18n.__( 'Save' );
 			}
 
 			list = widget.closest( 'details' );
