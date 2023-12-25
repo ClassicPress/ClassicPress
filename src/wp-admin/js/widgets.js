@@ -356,7 +356,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		function scrollStep( step ) {
 			var scrollY = document.scrollingElement.scrollTop;
 			window.scrollTo( {
-				top: scrollY + step,
+				top: scrollY + step
 			} );
 		}
 	} );
