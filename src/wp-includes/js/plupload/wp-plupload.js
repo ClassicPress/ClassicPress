@@ -272,6 +272,15 @@ window.wp = window.wp || {};
 
 			dragdrop = self.supports.dragdrop = uploader.features.dragdrop && ! Uploader.browser.mobile;
 
+			// Don't load uploader when re-ordering gallery items
+			observer = new MutationObserver( function() {
+				if ( document.getElementById( 'menu-item-gallery-edit' ) ) {
+					observer.disconnect();
+					return dropzone.unbind( '.wp-uploader' );
+				}
+			} );
+			observer.observe( document, { attributes: false, childList: true, characterData: false, subtree: true } );
+
 			// Generate drag/drop helper classes.
 			if ( ! dropzone ) {
 				return;
