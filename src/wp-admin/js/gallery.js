@@ -2,7 +2,7 @@
  * @output wp-admin/js/gallery.js
  */
 
-/* global Sortable unescape, getUserSetting, setUserSetting, wpgallery, tinymce */
+/* global Sortable, unescape, getUserSetting, setUserSetting, wpgallery, tinymce */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	'use strict';
@@ -20,7 +20,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			fallbackTolerance: 2,
 
 			// Element dropped
-			onEnd: function( e ) {console.log('end');
+			onEnd: function() {
 				// When an update has occurred, adjust the order for each item.
 				var all = gallerySortable.toArray(), len = all.length;
 				all.forEach( function( id, i ) {
@@ -31,7 +31,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	};
 
-	sortIt = function() {console.log('sort');
+	sortIt = function() {
 		var all = document.querySelectorAll( '.menu_order_input' ), len = all.length;
 		all.forEach( function( id, i ) {
 			var order = desc ? ( len - i ) : ( 1 + i );
@@ -39,7 +39,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	};
 
-	clearAll = function( c ) {console.log('clear');
+	clearAll = function( c ) {
 		c = c || 0;
 		document.querySelectorAll( '.menu_order_input' ).forEach( function( input ) {
 			if ( input.value === '0' || c ) {
