@@ -1,3 +1,4 @@
+/* global Sortable */
 (function () {
 
 	var region = function() { // ClassicPress: defer loading via require()
@@ -7135,12 +7136,9 @@
 		},
 
 		/**
-		 * Initializes jQuery sortable on the attachment list.
+		 * Initializes Sortable JS on the attachment list.
 		 *
-		 * Fails gracefully if jQuery sortable doesn't exist or isn't passed
-		 * in the options.
-		 *
-		 * @since 3.5.0
+		 * @since CP-2.1.0
 		 *
 		 * @fires collection:reset
 		 *
@@ -7149,31 +7147,22 @@
 		initSortable: function() {
 			var collection = this.collection;
 
-			if ( ! this.options.sortable || ! $.fn.sortable ) {
+			if ( ! this.options.sortable ) {
 				return;
 			}
 
-			this.$el.sortable( _.extend({
-				// If the `collection` has a `comparator`, disable sorting.
-				disabled: !! collection.comparator,
-
-				/*
-				 * Change the position of the attachment as soon as the mouse pointer
-				 * overlaps a thumbnail.
-				 */
-				tolerance: 'pointer',
-
-				// Record the initial `index` of the dragged model.
-				start: function( event, ui ) {
-					ui.item.data('sortableIndexStart', ui.item.index());
-				},
-
+			Sortable.create( this.el, {
+				group: 'items',
+				sort: true,
+				disabled: !! collection.comparator ? true : false,
+				forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for all webkit browsers
+				//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari only
 				/*
 				 * Update the model's index in the collection. Do so silently, as the view
 				 * is already accurate.
 				 */
-				update: function( event, ui ) {
-					var model = collection.at( ui.item.data('sortableIndexStart') ),
+				onEnd: function( e ) {
+					var model = collection.at( e.oldIndex ),
 						comparator = collection.comparator;
 
 					// Temporarily disable the comparator to prevent `add`
@@ -7186,7 +7175,7 @@
 					});
 					collection.add( model, {
 						silent: true,
-						at:     ui.item.index()
+						at:     e.newIndex
 					});
 
 					// Restore the comparator.
@@ -7198,38 +7187,7 @@
 					// If the collection is sorted by menu order, update the menu order.
 					collection.saveMenuOrder();
 				}
-			}, this.options.sortable ) );
-
-			/*
-			 * If the `orderby` property is changed on the `collection`,
-			 * check to see if we have a `comparator`. If so, disable sorting.
-			 */
-			collection.props.on( 'change:orderby', function() {
-				this.$el.sortable( 'option', 'disabled', !! collection.comparator );
-			}, this );
-
-			this.collection.props.on( 'change:orderby', this.refreshSortable, this );
-			this.refreshSortable();
-		},
-
-		/**
-		 * Disables jQuery sortable if collection has a comparator or collection.orderby
-		 * equals menuOrder.
-		 *
-		 * @since 3.5.0
-		 *
-		 * @return {void}
-		 */
-		refreshSortable: function() {
-			if ( ! this.options.sortable || ! $.fn.sortable ) {
-				return;
-			}
-
-			var collection = this.collection,
-				orderby = collection.props.get('orderby'),
-				enabled = 'menuOrder' === orderby || ! collection.comparator;
-
-			this.$el.sortable( 'option', 'disabled', ! enabled );
+			} );
 		},
 
 		/**
@@ -7241,7 +7199,7 @@
 		 *
 		 * @return {wp.media.View} The created view.
 		 */
-		createAttachmentView: function( attachment ) {
+		createAttachmentView: function ( attachment ) {
 			var view = new this.options.AttachmentView({
 				controller:           this.controller,
 				model:                attachment,
