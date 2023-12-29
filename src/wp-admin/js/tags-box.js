@@ -395,8 +395,6 @@
 					event.preventDefault();
 					event.stopPropagation();
 				}
-			}).each( function( i, element ) {
-				$( element ).wpTagsSuggest();
 			});
 
 			/**
