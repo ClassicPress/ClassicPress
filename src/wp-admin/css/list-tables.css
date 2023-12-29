@@ -1151,6 +1151,28 @@ ul.cat-checklist {
 	outline-offset: 0;
 }
 
+/* Tags autocompletion in Bulk and Quick Edit */
+.container__suggestions {
+	padding: 0;
+	margin: 2px 0 0;
+	list-style: none;
+	position: relative;
+	z-index: 10000;
+	border: 1px solid #4f94d4;
+	box-shadow: 0 1px 2px rgba(79, 148, 212, 0.8);
+	background-color: #fff;
+}
+.container__suggestions:empty { 
+	border: none;
+}
+.container__suggestion {
+	padding: 0 1em;
+}
+.container__suggestion--focused {
+	color: #fff;
+	background-color: #4f94d4;
+}
+
 /*------------------------------------------------------------------------------
   17.0 - Plugins
 ------------------------------------------------------------------------------*/
