@@ -430,12 +430,14 @@ if ( is_multisite() && current_user_can( 'promote_users' ) ) {
 	/*
 	 * Get all user email addresses and compile a datalist
 	 */
-	$users = get_users( array(
-		'blog_id'	=> 0
-	) );
+	$users = get_users(
+		array(
+			'blog_id' => 0,
+		)
+	);
 
 	$email_list = '<datalist id="emails-list">';
-	foreach( $users as $user ) {
+	foreach ( $users as $user ) {
 		$email_list .= '<option>' . esc_html( $user->user_email ) . '</option>';
 		$email_list .= '<option>' . esc_html( $user->user_login ) . '</option>';
 	}

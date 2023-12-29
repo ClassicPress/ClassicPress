@@ -299,13 +299,15 @@ if ( current_user_can( 'promote_users' ) && apply_filters( 'show_network_site_us
 	/*
 	 * Get all usernames and compile a datalist
 	 */
-	$usernames = get_users( array(
-		'blog_id'	=> 0,
-		'fields'	=> 'user_login',
-	) );
+	$usernames = get_users(
+		array(
+			'blog_id' => 0,
+			'fields'  => 'user_login',
+		)
+	);
 
 	$usernames_list = '<datalist id="usernames-list">';
-	foreach( $usernames as $username ) {
+	foreach ( $usernames as $username ) {
 		$usernames_list .= '<option>' . esc_html( $username ) . '</option>';
 	}
 	$usernames_list .= '</datalist>';

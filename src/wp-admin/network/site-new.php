@@ -261,18 +261,21 @@ if ( ! empty( $messages ) ) {
 					?>
 				</td>
 			</tr>
-		<?php endif; // Languages.
+			<?php
+		endif; // Languages.
 
 		/*
 		 * Get all user email addresses and compile a datalist
 		 */
-		$user_emails = get_users( array(
-			'blog_id'	=> 0,
-			'fields'	=> 'user_email',
-		) );
+		$user_emails = get_users(
+			array(
+				'blog_id' => 0,
+				'fields'  => 'user_email',
+			)
+		);
 
 		$email_list = '<datalist id="emails-list">';
-		foreach( $user_emails as $user_email ) {
+		foreach ( $user_emails as $user_email ) {
 			$email_list .= '<option>' . esc_html( $user_email ) . '</option>';
 		}
 		$email_list .= '</datalist>';
