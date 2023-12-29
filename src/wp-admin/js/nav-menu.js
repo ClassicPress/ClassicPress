@@ -1523,8 +1523,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function refreshAdvancedAccessibilityOfItem( itemToRefresh, depth, position ) {
 		var thisLink, thisLinkText, primaryItems, itemPosition, title, prevItemDepth, totalMenuItems,
 			parentItem, parentItemId, parentItemName, prevItemNameLeft, prevItemNameRight,
-			itemName = itemToRefresh.querySelector( '.menu-item-title' ).textContent,
-			position = position || [ ...editMenu.querySelectorAll( 'li' ) ].indexOf( itemToRefresh );
+			itemName = itemToRefresh.querySelector( '.menu-item-title' ).textContent;
+
+		position = position || [ ...editMenu.querySelectorAll( 'li' ) ].indexOf( itemToRefresh );
 
 		if ( depth == null ) { // catches both null and undefined
 			depth = menuItemDepth( itemToRefresh );
