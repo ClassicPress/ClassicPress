@@ -165,7 +165,7 @@ window.wp = window.wp || {};
 		// Replace current word with selected suggestion
 		function replaceCurrentWord( newWord ) {
 			var currentValue = textarea.value,
-				cursorPos = textarea.selectionStart;
+				cursorPos = textarea.selectionStart,
 				startIndex = findIndexOfCurrentWord(),
 				newValue = currentValue.substring( 0, startIndex + 1 ) + newWord + currentValue.substring( cursorPos );
 
