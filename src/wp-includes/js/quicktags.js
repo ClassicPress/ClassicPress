@@ -53,6 +53,7 @@ window.edToolbar = function(){};
 
 (function(){
 	// Private stuff is prefixed with an underscore.
+	// eslint-disable-next-line func-style
 	var _domReady = function(func) {
 		var t, i, DOMContentLoaded, _tryReady;
 
@@ -79,11 +80,19 @@ window.edToolbar = function(){};
 
 			if ( ! t.eventAttached ) {
 				if ( document.addEventListener ) {
-					DOMContentLoaded = function(){document.removeEventListener('DOMContentLoaded', DOMContentLoaded, false);t.ready();};
+					DOMContentLoaded = function() {
+						document.removeEventListener('DOMContentLoaded', DOMContentLoaded, false);
+						t.ready();
+					};
 					document.addEventListener('DOMContentLoaded', DOMContentLoaded, false);
 					window.addEventListener('load', t.ready, false);
 				} else if ( document.attachEvent ) {
-					DOMContentLoaded = function(){if (document.readyState === 'complete'){ document.detachEvent('onreadystatechange', DOMContentLoaded);t.ready();}};
+					DOMContentLoaded = function(){
+						if (document.readyState === 'complete'){
+							document.detachEvent('onreadystatechange', DOMContentLoaded);
+							t.ready();
+						}
+					};
 					document.attachEvent('onreadystatechange', DOMContentLoaded);
 					window.attachEvent('onload', t.ready);
 

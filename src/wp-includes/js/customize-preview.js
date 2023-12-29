@@ -406,6 +406,7 @@
 		 * @param {XMLHttpRequest} xhr XHR.
 		 * @return {void}
 		 */
+		// eslint-disable-next-line func-style
 		var prefilterAjax = function( options, originalOptions, xhr ) {
 			var urlParser, queryParams, requestMethod, dirtyValues = {};
 			urlParser = document.createElement( 'a' );

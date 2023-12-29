@@ -97,6 +97,7 @@ window.addComment = ( function( window ) {
 		cancelElement.addEventListener( 'click',      cancelEvent );
 
 		// Submit the comment form when the user types [Ctrl] or [Cmd] + [Enter].
+		// eslint-disable-next-line func-style
 		var submitFormHandler = function( e ) {
 			if ( ( e.metaKey || e.ctrlKey ) && e.keyCode === 13 ) {
 				commentFormElement.removeEventListener( 'keydown', submitFormHandler );

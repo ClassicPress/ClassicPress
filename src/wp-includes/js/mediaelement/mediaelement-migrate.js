@@ -40,7 +40,7 @@
 
 	var ready = MediaElementPlayer.prototype._meReady;
 	MediaElementPlayer.prototype._meReady = function () {
-		this.container = $( this.container) ;
+		this.container = $( this.container);
 		this.controls = $( this.controls );
 		this.layers = $( this.layers );
 		ready.apply( this, arguments );
