@@ -50,7 +50,6 @@ $core_actions_get = array(
 	'wp-compression-test',
 	'imgedit-preview',
 	'oembed-cache',
-	'autocomplete-user',
 	'dashboard-widgets',
 	'logged-in',
 	'rest-nonce',
