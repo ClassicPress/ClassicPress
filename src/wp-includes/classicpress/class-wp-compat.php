@@ -190,6 +190,9 @@ class WP_Compat {
 	 * This function have to be called from a polyfill
 	 * to map themes and plugins calling those functions.
 	 *
+	 * Make sure that class WP_Compat exists before calling the function
+	 * because it's not defined if Blocks Compatibility option is set to "off".
+	 *
 	 * @return void
 	 */
 	public static function using_block_function() {

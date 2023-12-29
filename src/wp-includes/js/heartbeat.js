@@ -37,6 +37,7 @@
 	 * @return {Object} An instance of the Heartbeat class.
 	 * @constructor
 	 */
+	// eslint-disable-next-line func-style
 	var Heartbeat = function() {
 		var $document = $(document),
 			settings = {

@@ -23,9 +23,9 @@
     "grunt-contrib-imagemin": "4.0.0",
     "grunt-contrib-jshint": "3.2.0",
     "grunt-contrib-qunit": "8.0.1",
+    "grunt-eslint": "^24.3.0",
     "grunt-includes": "1.1.0",
     "grunt-jsdoc": "2.4.1",
-    "grunt-jsvalidate": "0.2.2",
     "grunt-legacy-util": "2.0.1",
     "grunt-replace": "2.0.2",
     "grunt-rtlcss": "2.0.2",
@@ -37,7 +37,7 @@
     "moment": "^2.29.4",
     "postcss": "8.4.32",
     "qunit": "^2.19.4",
-    "rollup": "4.6.1",
+    "rollup": "4.9.1",
     "sinon": "^17.0.0",
     "sinon-test": "^3.1.5",
     "source-map-loader": "^4.0.1",
@@ -47,12 +47,12 @@
     "webpack": "5.89.0"
   },
   "dependencies": {
-    "@wordpress/a11y": "3.47.0",
-    "@wordpress/api-fetch": "6.44.0",
-    "@wordpress/dom-ready": "3.47.0",
-    "@wordpress/hooks": "3.47.0",
-    "@wordpress/i18n": "4.47.0",
-    "@wordpress/url": "3.48.0",
+    "@wordpress/a11y": "3.48.0",
+    "@wordpress/api-fetch": "6.45.0",
+    "@wordpress/dom-ready": "3.48.0",
+    "@wordpress/hooks": "3.48.0",
+    "@wordpress/i18n": "4.48.0",
+    "@wordpress/url": "3.49.0",
     "node-sass": "9.0.0"
   },
   "collective": {

@@ -173,8 +173,7 @@ var getCount, updateCount, updateCountText, updatePending, updateApproved,
 		$( '.comments-in-moderation-text' ).text( response.i18n_moderation_text );
 		// Hide the "comment in moderation" text in the Dashboard "At a Glance" widget.
 		if ( isDashboard && response.in_moderation ) {
-			$( '.comment-mod-count', '#dashboard_right_now' )
-				[ response.in_moderation > 0 ? 'removeClass' : 'addClass' ]( 'hidden' );
+			$( '.comment-mod-count', '#dashboard_right_now' )[ response.in_moderation > 0 ? 'removeClass' : 'addClass' ]( 'hidden' );
 		}
 	};
 

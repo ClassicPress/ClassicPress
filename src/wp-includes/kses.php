@@ -974,6 +974,9 @@ function wp_kses_version() {
  * @return string Content with fixed HTML tags
  */
 function wp_kses_split( $content, $allowed_html, $allowed_protocols ) {
+	if ( is_null( $content ) ) {
+		return '';
+	}
 	global $pass_allowed_html, $pass_allowed_protocols;
 
 	$pass_allowed_html      = $allowed_html;
@@ -1722,6 +1725,9 @@ function wp_kses_bad_protocol( $content, $allowed_protocols ) {
  * @return string Filtered content.
  */
 function wp_kses_no_null( $content, $options = null ) {
+	if ( is_null( $content ) ) {
+		return '';
+	}
 	if ( ! isset( $options['slash_zero'] ) ) {
 		$options = array( 'slash_zero' => 'remove' );
 	}
@@ -1746,6 +1752,9 @@ function wp_kses_no_null( $content, $options = null ) {
  * @return string Fixed string with quoted slashes.
  */
 function wp_kses_stripslashes( $content ) {
+	if ( is_null( $content ) ) {
+		return '';
+	}
 	return preg_replace( '%\\\\"%', '"', $content );
 }
 
@@ -1802,6 +1811,9 @@ function wp_kses_html_error( $attr ) {
  * @return string Sanitized content.
  */
 function wp_kses_bad_protocol_once( $content, $allowed_protocols, $count = 1 ) {
+	if ( is_null( $content ) ) {
+		return '';
+	}
 	$content  = preg_replace( '/(&#0*58(?![;0-9])|&#x0*3a(?![;a-f0-9]))/i', '$1;', $content );
 	$content2 = preg_split( '/:|&#0*58;|&#x0*3a;|&colon;/i', $content, 2 );
 
@@ -1877,6 +1889,9 @@ function wp_kses_bad_protocol_once2( $scheme, $allowed_protocols ) {
  * @return string Content with normalized entities.
  */
 function wp_kses_normalize_entities( $content, $context = 'html' ) {
+	if ( is_null( $content ) ) {
+		return '';
+	}
 	// Disarm all entities by converting & to &amp;
 	$content = str_replace( '&', '&amp;', $content );
 
@@ -2028,6 +2043,9 @@ function valid_unicode( $i ) {
  * @return string Content after decoded entities.
  */
 function wp_kses_decode_entities( $content ) {
+	if ( is_null( $content ) ) {
+		return '';
+	}
 	$content = preg_replace_callback( '/&#([0-9]+);/', '_wp_kses_decode_entities_chr', $content );
 	$content = preg_replace_callback( '/&#[Xx]([0-9A-Fa-f]+);/', '_wp_kses_decode_entities_chr_hexdec', $content );
 
