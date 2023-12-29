@@ -191,17 +191,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var boxId = toggle.value,
 			postbox = ( window.pagenow === 'nav-menus' ) ? document.getElementById( boxId ).closest( 'li' ) : document.getElementById( boxId );
 
-		if ( toggle.checked ) {
-			postbox.classList.remove( 'hide-if-js' );
-		} else {
-			postbox.classList.add( 'hide-if-js' );
-		}
+		if ( postbox != null ) { // also catches undefined
+			if ( toggle.checked ) {
+				postbox.classList.remove( 'hide-if-js' );
+			} else {
+				postbox.classList.add( 'hide-if-js' );
+			}
 
-		toggle.addEventListener( 'click', function() {
-			postbox.classList.toggle( 'hide-if-js' );
-			updateLocations();
-			saveState();
-		} );
+			toggle.addEventListener( 'click', function() {
+				postbox.classList.toggle( 'hide-if-js' );
+				updateLocations();
+				saveState();
+			} );
+		}
 	} );
 
 
