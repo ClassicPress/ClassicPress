@@ -585,19 +585,21 @@ function post_tags_meta_box( $post, $box ) {
 	</div>
 
 	<?php
-	if ( $user_can_assign_terms ) : 
-		$tags = get_tags( array(
-			'fields' => 'names'
-		) );
+	if ( $user_can_assign_terms ) :
+		$tags = get_tags(
+			array(
+				'fields' => 'names',
+			)
+		);
 
 		$tags_list = '<datalist id="tags-list">';
 		if ( ! empty( $tags ) ) {
-			foreach( $tags as $tag ) {
+			foreach ( $tags as $tag ) {
 				$tags_list .= '<option>' . esc_html( $tag ) . '</option>';
 			}
 		}
 		$tags_list .= '</datalist>';
-	?>
+		?>
 
 	<div class="ajaxtag hide-if-no-js">
 		<label class="screen-reader-text" for="new-tag-<?php echo $tax_name; ?>"><?php echo $taxonomy->labels->add_new_item; ?></label>

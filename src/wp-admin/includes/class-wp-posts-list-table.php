@@ -1844,9 +1844,11 @@ class WP_Posts_List_Table extends WP_List_Table {
 							<?php
 							$taxonomy_name = esc_attr( $taxonomy->name );
 
-							$tags = get_tags( array(
-								'fields' => 'names'
-							) );							
+							$tags = get_tags(
+								array(
+									'fields' => 'names',
+								)
+							);
 							$tags_string = ! empty( $tags ) ? implode( ', ', $tags ) : '';
 							?>
 
