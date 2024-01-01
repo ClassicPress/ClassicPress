@@ -38,6 +38,7 @@ module.exports = {
 		"no-prototype-builtins": "off",
 		"no-redeclare": "off",
 		"no-shadow-restricted-names": "off",
+		"no-trailing-spaces": "error",
 		"no-undef": "off",
 		"no-unused-vars": "off",
 		"no-useless-escape": "off",
