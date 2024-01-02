@@ -28,7 +28,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Disables first Up button and last Down button if they appear in
 	 * the first and last sortable areas respectively.
 	 *
-	 * @since CP-2.0.0
+	 * @since CP-2.1.0
 	 */
 	if ( [ 'dashboard', 'post' ].includes( window.pagenow ) ) {
 		if ( columns[0].querySelector( '.handle-order-higher' ) != null ) {
@@ -42,7 +42,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Handles clicks on the move up/down buttons.
 	 *
-	 * @since CP-2.0.0
+	 * @since CP-2.1.0
 	 */
 	allButtons.forEach( function( button ) {
 		button.addEventListener( 'click', function() {
@@ -127,7 +127,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Updates state when boxes toggled open and closed.
 	 *
-	 * @since CP-2.0.0
+	 * @since CP-2.1.0
 	 */
 	boxes.forEach( function( box ) {
 		box.addEventListener( 'toggle', function() {
@@ -138,7 +138,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Makes columns sortable. Handles when a widget is dragged, dropped, or sorted.
 	 *
-	 * @since CP-2.0.0
+	 * @since CP-2.1.0
 	 *
 	 * @requires SortableJS.
 	 */
@@ -227,7 +227,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Identifies droppable areas when starting to drag widget.
 	 *
-	 * @since CP-2.0.0
+	 * @since CP-2.1.0
 	 */
 	function dragStart() {
 		columns.forEach( function( column ) {
@@ -238,7 +238,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Updates styles and attributes when drag ends.
 	 *
-	 * @since CP-2.0.0
+	 * @since CP-2.1.0
 	 */
 	function dragEnd( e ) {
 		columns.forEach( function( column ) {
@@ -262,7 +262,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Updates when box position has changed.
 	 *
-	 * @since CP-2.0.0
+	 * @since CP-2.1.0
 	 */
 	function updateLocations() {
 		if ( window.pagenow === 'nav-menus' ) {
@@ -430,7 +430,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/*
 	 * Enable smooth scrolling up and down page when dragging item
 	 *
-	 * @since CP-2.0.0
+	 * @since CP-2.1.0
 	 */
 	document.addEventListener( 'dragover', function( e ) {
 
