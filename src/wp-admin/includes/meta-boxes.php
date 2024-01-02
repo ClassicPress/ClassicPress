@@ -588,8 +588,8 @@ function post_tags_meta_box( $post, $box ) {
 	if ( $user_can_assign_terms ) :
 		$tags = get_tags(
 			array(
-				'hide_empty'	=> false,
-				'fields'		=> 'names',
+				'hide_empty' => false,
+				'fields'     => 'names',
 			)
 		);
 
