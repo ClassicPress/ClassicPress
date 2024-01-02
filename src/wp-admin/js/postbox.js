@@ -27,7 +27,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Disables first Up button and last Down button if they appear in
 	 * the first and last sortable areas respectively.
-	 * 
+	 *
 	 * @since CP-2.0.0
 	 */
 	if ( [ 'dashboard', 'post' ].includes( window.pagenow ) ) {
@@ -49,9 +49,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			var prevCol,
 				nextCol,
 				firstOrLastPositionMessage,
-				widget = button.closest( 'details' ),				
+				widget = button.closest( 'details' ),
 				prevSibling = widget.previousElementSibling,
-				nextSibling = widget.nextElementSibling,				
+				nextSibling = widget.nextElementSibling,
 				widgetCol = button.closest( '.meta-box-sortables' );
 
 			if ( widget.id !== 'dashboard_browser_nag' ) {
@@ -126,7 +126,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	/**
 	 * Updates state when boxes toggled open and closed.
-	 * 
+	 *
 	 * @since CP-2.0.0
 	 */
 	boxes.forEach( function( box ) {
@@ -137,9 +137,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	/**
 	 * Makes columns sortable. Handles when a widget is dragged, dropped, or sorted.
-	 * 
+	 *
 	 * @since CP-2.0.0
-	 * 
+	 *
 	 * @requires SortableJS.
 	 */
 	columns.forEach( function( column ) {
@@ -217,16 +217,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			pref.addEventListener( 'click', function( e ) {
 				var n = parseInt( e.target.value, 10 );
 				if ( n ) {
-					_pbEdit( n );		
+					_pbEdit( n );
 					updateLocations();
 				}
 			} );
 		} );
 	}
-		
+
 	/**
 	 * Identifies droppable areas when starting to drag widget.
-	 * 
+	 *
 	 * @since CP-2.0.0
 	 */
 	function dragStart() {
@@ -237,7 +237,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	/**
 	 * Updates styles and attributes when drag ends.
-	 * 
+	 *
 	 * @since CP-2.0.0
 	 */
 	function dragEnd( e ) {
@@ -261,7 +261,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	/**
 	 * Updates when box position has changed.
-	 * 
+	 *
 	 * @since CP-2.0.0
 	 */
 	function updateLocations() {
@@ -271,7 +271,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		var firstWidget,
 			lastWidget,
-			postVars,		
+			postVars,
 			cols = document.querySelector( '.columns-prefs input[type="radio"]:checked' ),
 			widgetsIds = [],
 			widgetsIdsList = [];
@@ -290,7 +290,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 
 		// Generate newly-ordered array of columns and postboxes
-		columns.forEach( function( column ) {				
+		columns.forEach( function( column ) {
 			column.querySelectorAll( 'details:not( .hide-if-js )' ).forEach( function( childWidget ) {
 				widgetsIds.push( childWidget.id ); // for posting to database
 				widgetsIdsList.push( childWidget.id ); // for setting aria-disabled state
@@ -298,7 +298,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			postVars.append( 'order[' + column.id.split( '-' )[0] + ']', widgetsIds.join( ',' ) );
 			widgetsIds = []; // reset
 		} );
-		
+
 		// Add aria-disabled to first Up button if it's in the first sortable area
 		firstWidget = document.getElementById( widgetsIdsList[0] );
 		if ( firstWidget.parentNode === columns[0] ) {
@@ -353,7 +353,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			postVars = new URLSearchParams( {
 				action: 'closed-postboxes',
-				closedpostboxesnonce: document.getElementById( 'closedpostboxesnonce' ).value,				
+				closedpostboxesnonce: document.getElementById( 'closedpostboxesnonce' ).value,
 				closed: closed,
 				hidden: hidden,
 				page: window.pagenow
@@ -364,7 +364,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				body: postVars,
 				credentials: 'same-origin'
 			} )
-			.then( function( response ) {				
+			.then( function( response ) {
 				if ( response.ok ) {
 					return response.json(); // no errors
 				}
@@ -377,7 +377,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 		}
 	}
-	
+
 	/**
 	 * Changes the number of columns the postboxes are in based on the current
 	 * orientation of the browser.
@@ -412,7 +412,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @access private
 	 *
 	 * @param {number} n The number of columns to divide the post edit page in.
-	 */	
+	 */
 	function _pbEdit( n ) {
 		var	el = document.querySelector( '.metabox-holder' );
 		if ( el ) {
@@ -429,7 +429,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	/*
 	 * Enable smooth scrolling up and down page when dragging item
-	 * 
+	 *
 	 * @since CP-2.0.0
 	 */
 	document.addEventListener( 'dragover', function( e ) {
