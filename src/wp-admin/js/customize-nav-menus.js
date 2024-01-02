@@ -130,11 +130,11 @@
 									diff = prevDepth + 1;
 								}
 								menuEdge = diff * indent;
-							}			
+							}
 							document.querySelector( '.sortable-ghost' ).style.marginLeft = menuEdge + 'px';
 						}
 					} );
-				
+
 					// Does this menu item have children?
 					children = childMenuItems( e.item );
 					if ( children.length > 0 ) {
@@ -161,7 +161,7 @@
 					// Revert styling and set focus on move icon
 					e.item.style.marginLeft = '';
 					details.querySelector( 'summary' ).style.visibility = 'visible';
-					details.querySelector( 'summary' ).focus();	
+					details.querySelector( 'summary' ).focus();
 
 					// Send list of menu items, ordered by IDs
 					editMenu.dispatchEvent( new CustomEvent( 'sortstop', {
@@ -217,12 +217,12 @@
 					// Move sub-items if this is a parent
 					if ( Object.keys( childrenInfo ).length > 0 ) {
 						moveChildItems( childrenInfo.prevItem, childrenInfo.menuItem, depth + 1 );
-					
+
 						// Reset for next drag and drop
 						childrenInfo = {};
 					}
 				}
-			
+
 			} );
 		}
 
@@ -243,7 +243,7 @@
 		return ( {
 			top: rect.top + win.pageYOffset,
 			left: rect.left + win.pageXOffset
-		} );   
+		} );
 	}
 
 	/*
@@ -262,7 +262,7 @@
 			sibling = sibling.previousElementSibling;
 		}
 	}
-	
+
 	// Get depth of menu item
 	function menuItemDepth( item ) {
 		var i, n, itemDepth,
@@ -309,7 +309,7 @@
 		thisItem.className = newClasses.join( ' ' );
 		thisItem.style.marginLeft = '';
 
-		// Get depth of next item in list		
+		// Get depth of next item in list
 		if ( nextItem ) {
 			nextDepth = menuItemDepth( nextItem );
 

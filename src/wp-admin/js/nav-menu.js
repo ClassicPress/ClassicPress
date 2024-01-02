@@ -1,7 +1,7 @@
 /**
  * ClassicPress Administration Navigation Menu
  * Interface JS functions
- * 
+ *
  * Note that this file does not run in the Customizer
  *
  * @since CP-2.1.0
@@ -31,7 +31,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		menuEdge = getOffset( editMenu ).left,
 		menusChanged = false,
 		switchers = document.querySelectorAll( '.bulk-select-switcher' ),
-		checkboxes = editMenu ? editMenu.querySelectorAll( '.menu-item-checkbox' ) : {},		
+		checkboxes = editMenu ? editMenu.querySelectorAll( '.menu-item-checkbox' ) : {},
 		isRTL = !! ( 'undefined' != typeof isRtl && isRtl ),
 		managementArray = [];
 
@@ -39,7 +39,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Show AYS dialog when there are unsaved changes.
 	 *
 	 * Note that previous code inherited from WordPress was obsolete.
-	 * 
+	 *
 	 * Browsers no longer permit the display of a custom message.
 	 */
 	if ( editMenu || document.querySelector( '.menu-location-menus select' ) ) {
@@ -63,7 +63,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		lastSelect.addEventListener( 'click', function( e ) {
 			e.preventDefault();
 		} );
-	}	
+	}
 
 	if ( document.querySelector( '#menu-locations-wrap form' ) !== null ) {
 		document.querySelector( '#menu-locations-wrap form' ).addEventListener( 'submit', function() {
@@ -97,7 +97,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 
 			themeLocations.querySelector( '.spinner' ).classList.add( 'is-active' );
-		
+
 			fetch( ajaxurl, {
 				method: 'POST',
 				body: new URLSearchParams( params ),
@@ -117,7 +117,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 		}, false );
 	}
-	
+
 	if ( editMenu ) {
 		/*
 		* Links for moving items.
@@ -130,7 +130,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( 'undefined' !== typeof dir ) {
 					moveMenuItem( e.target.closest( 'li.menu-item' ), dir );
 				}
-			}		
+			}
 		} );
 
 		/**
@@ -150,11 +150,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		/**
 		* Listen for state changes on bulk action checkboxes.
-		*/ 
+		*/
 		editMenu.addEventListener( 'change', function( e ) {
 			var button;
 
-			if ( isVisible( e.target ) && e.target.className.includes( 'menu-item-checkbox' ) ) {	
+			if ( isVisible( e.target ) && e.target.className.includes( 'menu-item-checkbox' ) ) {
 				button = document.querySelector( '.menu-items-delete' );
 
 				if ( document.querySelector( '.menu-item-checkbox:checked' ) !== null ) {
@@ -252,7 +252,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Style placeholder
 				details.style.backgroundColor = '#fefefe';
-				details.style.border = '1px dotted #444';			
+				details.style.border = '1px dotted #444';
 				details.querySelector( 'summary' ).style.visibility = 'hidden';
 
 				// Continually update horizontal position of current item while dragging
@@ -283,11 +283,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 								diff = prevDepth + 1;
 							}
 							menuEdge = diff * indent;
-						}			
+						}
 						document.querySelector( '.sortable-ghost' ).style.marginLeft = menuEdge + 'px';
 					}
 				} );
-				
+
 				// Does this menu item have children?
 				children = childMenuItems( e.item );
 				if ( children.length > 0 ) {
@@ -359,7 +359,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				// Move sub-items if this is a parent
 				if ( Object.keys( childrenInfo ).length > 0 ) {
 					moveChildItems( childrenInfo.prevItem, childrenInfo.menuItem, depth + 1 );
-					
+
 					// Reset for next drag and drop
 					childrenInfo = {};
 				}
@@ -381,10 +381,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				positionSpeech = originalLabel + ' ' + menus.movedTo + ' ' + newLabel;
 				wp.a11y.speak( positionSpeech, 'polite' );
 			}
-			
+
 		} );
 	}
-			
+
 	/**
 	 * Updates state when potential menu items are shown or hidden
 	 */
@@ -433,7 +433,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Enable live search
 		document.getElementById( 'nav-menu-meta' ).addEventListener( 'input', function( e ) {
 			var searchTimer, lastSearch, panel;
-			
+
 			if ( e.target.className.includes( 'quick-search' ) ) {
 				e.target.setAttribute( 'autocomplete', 'off' );
 				panel = e.target.closest( '.tabs-panel' );
@@ -567,12 +567,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.preventDefault();
 
 			// Cancel and warn if invalid menu name
-			if ( ! menuNameVal || ! menuNameVal.replace( /\s+/, '' ) ) {			
+			if ( ! menuNameVal || ! menuNameVal.replace( /\s+/, '' ) ) {
 				menuName.parentNode.classList.add( 'form-invalid' );
 				return;
 			}
 
-			// Update position of each menu item 
+			// Update position of each menu item
 			editMenu.querySelectorAll( '.menu-item-data-position' ).forEach( function( pos ) {
 				index = menuList.indexOf( pos.closest( 'li' ) );
 				pos.value = parseInt( index + 1, 10 );
@@ -657,7 +657,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				removeMenuItem( document.getElementById( 'menu-item-' + itemID ) );
 				menusChanged = true;
 			}
-			
+
 			// Bulk delete menu items
 			else if ( e.target.className.includes( 'menu-items-delete' ) ) {
 				var itemsPendingDeletion, itemsPendingDeletionList, deletionSpeech;
@@ -688,7 +688,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					wp.a11y.speak( deletionSpeech, 'polite' );
 					disableBulkSelection();
 				}
-			}	
+			}
 
 			// Prevent AYS when deleting menu
 			else if ( e.target.className.includes( 'menu-delete' ) ) {
@@ -697,9 +697,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 				menusChanged = true;
 			}
-			
+
 		} );
-		
+
 		/**
 		 * Move menu items using arrow keys
 		 */
@@ -905,7 +905,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				e.preventDefault();
 				menusChanged = true;
 
-				if ( e.target.id && 'submit-customlinkdiv' === e.target.id ) {				
+				if ( e.target.id && 'submit-customlinkdiv' === e.target.id ) {
 					var url = document.getElementById( 'custom-menu-item-url' ).value.toString(),
 						label = document.getElementById( 'custom-menu-item-name' ).value;
 
@@ -1066,7 +1066,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Watch for menu changes
 	 */
 	managementArray = [ ...document.querySelectorAll( '#menu-management input' ), ...document.querySelectorAll( '#menu-management select' ), document.getElementById( 'menu-management' ), ...document.querySelectorAll( '#menu-management textarea' ), ...		document.querySelectorAll( '.menu-location-menus select' ) ];
-	
+
 	// Remove empty elements from array
 	managementArray = managementArray.filter( function( el ) {
 		return el;
@@ -1115,7 +1115,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	} );
 
-	/* 
+	/*
 	 * Prevent focused element from being hidden by the sticky footer.
 	 */
 	if ( document.querySelector( '.menu-edit' ) ) {
@@ -1141,8 +1141,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} );
 	}
-	
-	
+
+
 	/*
 	 * HELPER FUNCTIONS
 	 */
@@ -1162,7 +1162,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		return ( {
 			top: rect.top + win.pageYOffset,
 			left: rect.left + win.pageXOffset
-		} );   
+		} );
 	}
 
 	/*
@@ -1355,7 +1355,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		refreshAdvancedAccessibility();
 	}
-	
+
 	/*
 	 * Function to move items without drag and drop
 	 */
@@ -1448,7 +1448,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				updateParentMenuItemDBId( thisItem );
 			}
 			break;
-			
+
 		case 'top':
 			newItemPosition = 1;
 
@@ -1456,7 +1456,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( 1 === thisItemPosition ) {
 				break;
 			}
-			
+
 			thisItem.parentNode.prepend( thisItem );
 			updateParentMenuItemDBId( thisItem );
 
@@ -1480,7 +1480,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			shiftHorizontally( thisItem, -1 );
 			break;
 
-		case 'right':		
+		case 'right':
 			// Can't be sub item at top
 			if ( 1 === thisItemPosition ) {
 				break;
@@ -1500,7 +1500,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Add message for accessibility purposes
 		primaryItems = editMenu.querySelectorAll( '.menu-item-depth-0' );
-		itemPosition = [ ...primaryItems ].indexOf( originalItem ) + 1;		
+		itemPosition = [ ...primaryItems ].indexOf( originalItem ) + 1;
 		newLabel = ' menu item ' + itemPosition + ' of ' + primaryItems.length;
 		newLabels = originalItem.querySelector( '.item-move' ).getAttribute( 'aria-label' ).split( '. ' );
 		if ( undefined !== newLabels[1] ) {
@@ -1509,7 +1509,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		positionSpeech = originalLabel + ' ' + menus.movedTo + ' ' + newLabel;
 		wp.a11y.speak( positionSpeech, 'polite' );
 	}
-	
+
 	/**
 	 * refreshAdvancedAccessibilityOfItem( [itemToRefresh] )
 	 *
@@ -1597,14 +1597,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			parentItemId = parentItem.querySelector( '.menu-item-data-db-id' ).value;
 			parentItemName = parentItem.querySelector( '.menu-item-title' ).textContent;
 			itemPosition = position - [ ...editMenu.querySelectorAll( 'li') ].indexOf( parentItem );
-			
+
 			// String together help text for sub menu items.
 			title = menus.subMenuFocus.replace( '%1$s', itemName ).replace( '%2$d', itemPosition ).replace( '%3$s', parentItemName );
 		}
 
 		itemToRefresh.querySelector( '.item-move' ).setAttribute( 'aria-label', title );
 	}
-	
+
 	/**
 	 * refreshAdvancedAccessibility
 	 *
@@ -1738,7 +1738,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		thisItem.className = newClasses.join( ' ' );
 		thisItem.style.marginLeft = '';
 
-		// Get depth of next item in list		
+		// Get depth of next item in list
 		if ( nextItem ) {
 			nextDepth = menuItemDepth( nextItem );
 
@@ -1766,7 +1766,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		el.classList.add( 'deleting' );
 		el.animate(
-			{ opacity: [1, 0] }, 
+			{ opacity: [1, 0] },
 			{ duration: 350, iterations: 1, easing: 'ease-out' } )
 			.onfinish = function() {
 
