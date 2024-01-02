@@ -1846,7 +1846,8 @@ class WP_Posts_List_Table extends WP_List_Table {
 
 							$tags = get_tags(
 								array(
-									'fields' => 'names',
+									'hide_empty'	=> false,
+									'fields'		=> 'names',
 								)
 							);
 							$tags_string = ! empty( $tags ) ? implode( ', ', $tags ) : '';
