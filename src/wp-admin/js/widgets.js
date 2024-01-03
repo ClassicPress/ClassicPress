@@ -1,7 +1,7 @@
 /**
  * @since CP-2.1.0
  * @requires SortableJS
- * 
+ *
  * @output wp-admin/js/widgets.js
  */
 
@@ -42,7 +42,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Show AYS dialog when there are unsaved widget changes.
 	 *
 	 * Note that previous code inherited from WordPress was obsolete.
-	 * 
+	 *
 	 * Browsers no longer permit the display of a custom message.
 	 */
 	window.addEventListener( 'beforeunload', function( e ) {
@@ -128,7 +128,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		else {
 
 			// Add chooser
-			if ( e.target.closest( 'ul' ).id === 'widget-list' ) {				
+			if ( e.target.closest( 'ul' ).id === 'widget-list' ) {
 				if ( e.target.className.includes( 'widgets-chooser-add' ) ) {
 					addWidget( chooser );
 					e.target.closest( '.widget-top' ).removeAttribute( 'open' );
@@ -160,7 +160,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				saveWidget( e.target.closest( 'li.widget' ), 1, 1, 0 );
 			}
-	
+
 			// Close widget
 			else if ( e.target.className.includes( 'widget-control-close' ) ) {
 				e.target.closest( 'details' ).removeAttribute( 'open' );
@@ -259,7 +259,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		sortable.addEventListener( 'dragleave', function() {
 			sortable.removeAttribute( 'data-dragover' );
 		} );
-		
+
 		sortable.querySelectorAll( '.widget' ).forEach( function( widget ) {
 			var title = widget.querySelector( 'input[id*="-title"]' ).value || '';
 			if ( title ) {
@@ -338,7 +338,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	/*
 	 * Enable smooth scrolling up and down page when dragging item
-	 * 
+	 *
 	 * @since CP-2.0.0
 	 */
 	document.addEventListener( 'dragover', function( e ) {
@@ -369,7 +369,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Open the chooser.
 		if ( widget.hasAttribute( 'open' ) ) {
 
-			// Add CSS class and insert the chooser at the end of the details element.					
+			// Add CSS class and insert the chooser at the end of the details element.
 			clearWidgetSelection();
 			chooser.style.display = 'block';
 			chooser.removeAttribute( 'inert' ); // ensure that chooser is available
@@ -494,7 +494,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				saveOrder( sidebar.id );
 			}
 		}
-				
+
 		// If the last widget was moved out of an orphaned sidebar, close and remove it.
 		if ( e.from.id.indexOf( 'orphaned_widgets' ) > -1 && ! e.from.querySelector( '.widget' ).length ) {
 			e.from.closest( 'details' ).removeAttribute( 'open' );
@@ -525,7 +525,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			/*
 			 * Prepare data for posting to database
-			 * 
+			 *
 			 * Note that using fetch API causes a 400 error
 			 */
 			xhr = new XMLHttpRequest();
@@ -592,7 +592,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 			};
 
-			// Post data to database. 
+			// Post data to database.
 			xhr.send( data );
 		}
 	}
@@ -654,7 +654,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		/*
 		 * Prepare to make call to database.
-		 * 
+		 *
 		 * Note that using fetch API triggers a bug in Firefox.
 		 * https://bugzilla.mozilla.org/show_bug.cgi?id=1280189
 		 */
@@ -669,7 +669,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Call a function when the state changes
 			if ( xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200 ) {
- 
+
 				// Remove widget from screen
 				document.getElementById( 'wp_inactive_widgets' ).querySelectorAll( 'li.widget' ).forEach( function( widget ) {
 					widget.remove();

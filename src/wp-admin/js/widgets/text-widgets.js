@@ -501,7 +501,7 @@ wp.textWidgets = ( function( $ ) {
 	 *
 	 * @param {Custom.Event} event - Event.
 	 * @param widgetContainer - Widget container element.
-	 * 
+	 *
 	 * @return {void}
 	 */
 	component.handleWidgetUpdated = function handleWidgetUpdated( event ) {
@@ -560,7 +560,7 @@ wp.textWidgets = ( function( $ ) {
 					widgetContainers.push( widget );
 				} );
 			} );
-	
+
 			widgetContainers.forEach( function( widgetContainer ) {
 				widgetContainer.querySelector( 'details' ).addEventListener( 'toggle', function toggleWidgetExpanded() {
 					document.dispatchEvent( new CustomEvent( 'widget-added', {

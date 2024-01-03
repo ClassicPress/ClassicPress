@@ -469,7 +469,7 @@ wp.customHtmlWidgets = ( function( $ ) {
 					widgetContainers.push( widget );
 				} );
 			} );
-	
+
 			widgetContainers.forEach( function( widgetContainer ) {
 				widgetContainer.querySelector( 'details' ).addEventListener( 'toggle', function toggleWidgetExpanded() {
 					document.dispatchEvent( new CustomEvent( 'widget-added', {
