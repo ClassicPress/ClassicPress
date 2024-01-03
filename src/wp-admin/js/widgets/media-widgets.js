@@ -632,7 +632,7 @@ wp.mediaWidgets = ( function( $ ) {
 		 */
 		syncModelToInputs: function syncModelToInputs() {
 			var control = this;
-			control.syncContainer.querySelectorAll( '.media-widget-instance-property' ).forEach( function( input ) {
+			document.querySelectorAll( '.media-widget-instance-property' ).forEach( function( input ) {
 				var widgetId,
 					propertyName = input.dataset.property,
 					value = control.model.get( propertyName );
@@ -1323,7 +1323,7 @@ wp.mediaWidgets = ( function( $ ) {
 		 */
 		$( function initializeExistingWidgetContainers() {
 			var widgetContainerWraps, widgetContainers = [];
-	
+
 			if ( 'widgets' !== window.pagenow ) {
 				return;
 			}

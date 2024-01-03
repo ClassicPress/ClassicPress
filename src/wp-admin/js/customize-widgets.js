@@ -170,7 +170,7 @@
 
 			this.search = document.getElementById( 'widgets-search' );
 
-			this.clearResults = this.$el[0].querySelector( '.clear-results' );
+			this.clearResults = document.querySelector( '.clear-results' );
 
 			_.bindAll( this, 'close' );
 
@@ -759,7 +759,7 @@
 			/**
 			 * Add the widget reordering elements to the widget
 			 */
-			this.container[0].querySelector( 'summary' ).insertAdjacentHTML( 'beforeend', api.Widgets.data.tpl.widgetReorderNav );
+			document.querySelector( '.widget-title-action' ).insertAdjacentHTML( 'beforeend', api.Widgets.data.tpl.widgetReorderNav );
 
 			template = _.template( api.Widgets.data.tpl.moveWidgetArea );
 			$moveWidgetArea = $( template( {
@@ -1914,7 +1914,7 @@
 				},
 
 				// Send list of widgets, ordered by IDs
-				onEnd: function() {				
+				onEnd: function() {
 					var widgetIds,
 						widgetContainerIds = [];
 
@@ -1930,7 +1930,7 @@
 				}
 			} );
 
-			/** 
+			/**
 				accept: '.customize-control-widget_form'
 			 * Expand other Customizer sidebar section when dragging a control widget over it,
 			 * allowing the control to be dropped into another section
