@@ -4152,7 +4152,7 @@
 				updating = false,
 				pickers = this.container[0].querySelectorAll( '.color-picker-hex' );
 
-			pickers.forEach( function( picker ) {console.log( picker);
+			pickers.forEach( function( picker ) {
 				picker.addEventListener( 'click', function( e ) {
 					Coloris( {
 						a11y: {
@@ -4170,10 +4170,10 @@
 						rtl: !! ( 'undefined' != typeof isRtl && isRtl ) ? true : false,
 						clearButton: true,
 						closeButton: true,
-						onOpen: function( color ) {console.log( color);
+						onOpen: function( color ) {
 							picker.value = control.setting.get( color );
 						},
-						onChange: function( color ) {console.log( color);
+						onChange: function( color ) {
 							updating = true;
 							control.setting.set( color );
 							updating = false;
@@ -4190,7 +4190,7 @@
 				} );
 
 				// Collapse color picker when hitting Esc instead of collapsing the current section.
-				control.container[0].addEventListener( 'keydown', function( e ) {console.log( control.container[0]);
+				control.container[0].addEventListener( 'keydown', function( e ) {
 					var pickerContainer;
 					e.preventDefault();
 
@@ -4201,7 +4201,7 @@
 							control.container[0].querySelector( '.wp-color-result' ).focus();
 							e.stopPropagation(); // Prevent section from being collapsed.
 						}
-					} else if ( 'Enter' === e.key ) {console.log( picker);
+					} else if ( 'Enter' === e.key ) {
 						picker.click();
 					}
 				} );
