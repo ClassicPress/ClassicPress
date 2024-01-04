@@ -110,13 +110,10 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 		<# } #>
 		<div class="customize-control-content">
 			<label><span class="screen-reader-text">{{{ data.label }}}</span>
-			<# if ( isHueSlider ) { #>
-				<input class="color-picker-hue" type="text" data-type="hue">
-			<# } else { #>
-				<input class="color-picker-hex" type="text" maxlength="7" placeholder="{{ defaultValue }}" {{ defaultValueAttr }}>
-			<# } #>
+				<input class="color-picker-hex" type="text" maxlength="9" placeholder="{{ defaultValue }}" {{ defaultValueAttr }} data-coloris>
 			</label>
 		</div>
 		<?php
 	}
 }
+
