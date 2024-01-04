@@ -2,7 +2,7 @@
  * @output wp-admin/js/customize-controls.js
  */
 
-/* global _wpCustomizeHeader, _wpCustomizeBackground, _wpMediaViewsL10n, MediaElementPlayer, console, confirm */
+/* global _wpCustomizeHeader, _wpCustomizeBackground, _wpMediaViewsL10n, MediaElementPlayer, console, confirm, Coloris, isRtl */
 (function( exports, $ ){
 	var Container, focus, normalizedTransitionendEventName, api = wp.customize;
 
@@ -4149,56 +4149,62 @@
 	api.ColorControl = api.Control.extend(/** @lends wp.customize.ColorControl.prototype */{
 		ready: function() {
 			var control = this,
-				isHueSlider = this.params.mode === 'hue',
 				updating = false,
-				picker;
+				pickers = this.container[0].querySelectorAll( '.color-picker-hex' );
 
-			if ( isHueSlider ) {
-				picker = this.container.find( '.color-picker-hue' );
-				picker.val( control.setting() ).wpColorPicker({
-					change: function( event, ui ) {
-						updating = true;
-						control.setting( ui.color.h() );
-						updating = false;
+			pickers.forEach( function( picker ) {console.log( picker);
+				picker.addEventListener( 'click', function( e ) {
+					Coloris( {
+						a11y: {
+							open: 'Open color picker',
+							close: 'Close color picker',
+							clear: 'Clear the selected color',
+							marker: 'Saturation: {s}. Brightness: {v}.',
+							hueSlider: 'Hue slider',
+							alphaSlider: 'Opacity slider',
+							input: 'Color value field',
+							format: 'Color format',
+							swatch: 'Color swatch',
+							instruction: 'Saturation and brightness selector. Use up, down, left and right arrow keys to select.'
+						},
+						rtl: !! ( 'undefined' != typeof isRtl && isRtl ) ? true : false,
+						clearButton: true,
+						closeButton: true,
+						onOpen: function( color ) {console.log( color);
+							picker.value = control.setting.get( color );
+						},
+						onChange: function( color ) {console.log( color);
+							updating = true;
+							control.setting.set( color );
+							updating = false;
+						}
+					} );
+				} );
+
+				control.setting.bind( function ( value ) {
+					// Bail if the update came from the control itself.
+					if ( updating ) {
+						return;
 					}
-				});
-			} else {
-				picker = this.container.find( '.color-picker-hex' );
-				picker.val( control.setting() ).wpColorPicker({
-					change: function() {
-						updating = true;
-						control.setting.set( picker.wpColorPicker( 'color' ) );
-						updating = false;
-					},
-					clear: function() {
-						updating = true;
-						control.setting.set( '' );
-						updating = false;
+					picker.value = value;
+				} );
+
+				// Collapse color picker when hitting Esc instead of collapsing the current section.
+				control.container[0].addEventListener( 'keydown', function( e ) {console.log( control.container[0]);
+					var pickerContainer;
+					e.preventDefault();
+
+					if ( 'Escape' === e.key ) {
+						pickerContainer = control.container[0].querySelector( '.wp-picker-container' );
+						if ( pickerContainer.className.includes( 'wp-picker-active' ) ) {
+							Coloris.close( true ); // Close the picker and revert the color to its original value
+							control.container[0].querySelector( '.wp-color-result' ).focus();
+							e.stopPropagation(); // Prevent section from being collapsed.
+						}
+					} else if ( 'Enter' === e.key ) {console.log( picker);
+						picker.click();
 					}
-				});
-			}
-
-			control.setting.bind( function ( value ) {
-				// Bail if the update came from the control itself.
-				if ( updating ) {
-					return;
-				}
-				picker.val( value );
-				picker.wpColorPicker( 'color', value );
-			} );
-
-			// Collapse color picker when hitting Esc instead of collapsing the current section.
-			control.container.on( 'keydown', function( event ) {
-				var pickerContainer;
-				if ( 27 !== event.which ) { // Esc.
-					return;
-				}
-				pickerContainer = control.container.find( '.wp-picker-container' );
-				if ( pickerContainer.hasClass( 'wp-picker-active' ) ) {
-					picker.wpColorPicker( 'close' );
-					control.container.find( '.wp-color-result' ).focus();
-					event.stopPropagation(); // Prevent section from being collapsed.
-				}
+				} );
 			} );
 		}
 	});
