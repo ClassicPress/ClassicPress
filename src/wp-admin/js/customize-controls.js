@@ -4153,7 +4153,7 @@
 				pickers = this.container[0].querySelectorAll( '.color-picker-hex' );
 
 			pickers.forEach( function( picker ) {
-				picker.addEventListener( 'click', function( e ) {
+				picker.addEventListener( 'click', function() {
 					Coloris( {
 						a11y: {
 							open: 'Open color picker',
