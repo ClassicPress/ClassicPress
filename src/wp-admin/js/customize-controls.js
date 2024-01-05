@@ -4175,7 +4175,7 @@
 						margin: 2,
 						clearButton: true,
 						closeButton: true,
-						onChange: function( color ) { console.log(color);
+						onChange: function( color ) {
 							updating = true;
 							control.setting.set( color );
 							updating = false;
