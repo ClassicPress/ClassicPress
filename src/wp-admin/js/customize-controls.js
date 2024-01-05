@@ -4141,7 +4141,11 @@
 	});
 
 	/**
-	 * A colorpicker control.
+	 * A colorpicker control
+	 * 
+	 * Uses Coloris JS: https://coloris.js.org/
+	 *
+	 * @since CP-2.1.0
 	 *
 	 * @class    wp.customize.ColorControl
 	 * @augments wp.customize.Control
@@ -4168,17 +4172,16 @@
 							instruction: 'Saturation and brightness selector. Use up, down, left and right arrow keys to select.'
 						},
 						rtl: !! ( 'undefined' != typeof isRtl && isRtl ) ? true : false,
+						margin: 2,
 						clearButton: true,
 						closeButton: true,
-						onOpen: function( color ) {
-							picker.value = control.setting.get( color );
-						},
-						onChange: function( color ) {
+						onChange: function( color ) { console.log(color);
 							updating = true;
 							control.setting.set( color );
 							updating = false;
 						}
 					} );
+					picker.value = picker.dataset.defaultColor;
 				} );
 
 				control.setting.bind( function ( value ) {
@@ -4189,11 +4192,11 @@
 					picker.value = value;
 				} );
 
-				// Collapse color picker when hitting Esc instead of collapsing the current section.
+				// Enable use of the Enter and Escape keys
 				control.container[0].addEventListener( 'keydown', function( e ) {
 					var pickerContainer;
-					e.preventDefault();
 
+					// Collapse color picker when hitting Esc instead of collapsing the current section.
 					if ( 'Escape' === e.key ) {
 						pickerContainer = control.container[0].querySelector( '.wp-picker-container' );
 						if ( pickerContainer.className.includes( 'wp-picker-active' ) ) {
@@ -4202,7 +4205,7 @@
 							e.stopPropagation(); // Prevent section from being collapsed.
 						}
 					} else if ( 'Enter' === e.key ) {
-						picker.click();
+						picker.click(); // Treat as a click
 					}
 				} );
 			} );
