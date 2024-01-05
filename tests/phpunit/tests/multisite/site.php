@@ -1392,7 +1392,8 @@ if ( is_multisite() ) :
 						'domain' => 'with-port.com:8888',
 					),
 					array(
-						'domain' => 'with-port.com:8888',					),
+						'domain' => 'with-port.com:8888',
+					),
 				),
 				array(
 					array(
