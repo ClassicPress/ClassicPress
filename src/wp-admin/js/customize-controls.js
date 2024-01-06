@@ -4153,64 +4153,86 @@
 	api.ColorControl = api.Control.extend(/** @lends wp.customize.ColorControl.prototype */{
 		ready: function() {
 			var control = this,
+				isHueSlider = this.params.mode === 'hue',
 				updating = false,
-				pickers = this.container[0].querySelectorAll( '.color-picker-hex' );
+				picker,
+				__ = wp.i18n.__;			
 
-			pickers.forEach( function( picker ) {
-				picker.addEventListener( 'click', function() {
-					Coloris( {
-						a11y: {
-							open: 'Open color picker',
-							close: 'Close color picker',
-							clear: 'Clear the selected color',
-							marker: 'Saturation: {s}. Brightness: {v}.',
-							hueSlider: 'Hue slider',
-							alphaSlider: 'Opacity slider',
-							input: 'Color value field',
-							format: 'Color format',
-							swatch: 'Color swatch',
-							instruction: 'Saturation and brightness selector. Use up, down, left and right arrow keys to select.'
-						},
-						rtl: !! ( 'undefined' != typeof isRtl && isRtl ) ? true : false,
-						margin: 2,
-						clearButton: true,
-						closeButton: true,
-						onChange: function( color ) {
-							updating = true;
-							control.setting.set( color );
-							updating = false;
-						}
-					} );
-					picker.value = picker.dataset.defaultColor;
-				} );
-
-				control.setting.bind( function ( value ) {
-					// Bail if the update came from the control itself.
-					if ( updating ) {
-						return;
+			if ( isHueSlider ) { // Use Iris
+				picker = this.container.find( '.color-picker-hue' );
+				picker.val( control.setting() ).wpColorPicker({
+					change: function( event, ui ) {
+						updating = true;
+						control.setting( ui.color.h() );
+						updating = false;
 					}
+				} );
+			} else { // Use Coloris
+				picker = this.container[0].querySelector( '.color-picker-hex' );
+				picker.value = picker.dataset.defaultColor;
+
+				Coloris( {
+					a11y: {
+						open: __( 'Open color picker' ),
+						close: __( 'Close color picker' ),
+						clear: __( 'Clear the selected color' ),
+						marker: __( 'Saturation: {s}. Brightness: {v}.' ),
+						hueSlider: __( 'Hue slider' ),
+						alphaSlider: __( 'Opacity slider' ),
+						input: __( 'Color value field' ),
+						format: __( 'Color format' ),
+						swatch: __( 'Color swatch' ),
+						instruction: __( 'Saturation and brightness selector. Use up, down, left and right arrow keys to select.' )
+					},
+					rtl: !! ( 'undefined' != typeof isRtl && isRtl ) ? true : false,
+					margin: 2,
+					clearButton: true,
+					closeButton: true,
+					onChange: function( color ) {
+						updating = true;
+						control.setting.set( color );
+						updating = false;
+					}
+				} );
+			}
+
+			control.setting.bind( function ( value ) {
+				// Bail if the update came from the control itself.
+				if ( updating ) {
+					return;
+				}
+
+				if ( isHueSlider ) {
+					picker.val( value );
+					picker.wpColorPicker( 'color', value );
+				} else {
 					picker.value = value;
-				} );
+				}
+			} );
 
-				// Enable use of the Enter and Escape keys
-				control.container[0].addEventListener( 'keydown', function( e ) {
-					var pickerContainer;
+			// Enable use of the Enter and Escape keys
+			control.container[0].addEventListener( 'keydown', function( e ) {
+				var pickerContainer;
 
-					// Collapse color picker when hitting Esc instead of collapsing the current section.
-					if ( 'Escape' === e.key ) {
-						pickerContainer = control.container[0].querySelector( '.wp-picker-container' );
-						if ( pickerContainer.className.includes( 'wp-picker-active' ) ) {
+				// Collapse color picker when hitting Esc instead of collapsing the current section.
+				if ( 'Escape' === e.key ) {
+					pickerContainer = control.container[0].querySelector( '.wp-picker-container' );
+					if ( pickerContainer.className.includes( 'wp-picker-active' ) ) {
+						if ( isHueSlider ) {
+							picker.wpColorPicker( 'close' );
+						} else {
 							Coloris.close( true ); // Close the picker and revert the color to its original value
-							control.container[0].querySelector( '.wp-color-result' ).focus();
-							e.stopPropagation(); // Prevent section from being collapsed.
 						}
-					} else if ( 'Enter' === e.key ) {
-						picker.click(); // Treat as a click
+
+						control.container[0].querySelector( '.wp-color-result' ).focus();
+						e.stopPropagation(); // Prevent section from being collapsed.
 					}
-				} );
+				} else if ( ! isHueSlider && 'Enter' === e.key ) {
+					picker.click(); // Treat as a click
+				}
 			} );
 		}
-	});
+	} );
 
 	/**
 	 * A control that implements the media modal.
