@@ -1257,6 +1257,8 @@ function wp_default_scripts( $scripts ) {
 		$scripts->add( 'coloris', '/wp-admin/js/coloris.min.js', array() );
 
 		$scripts->add( 'iris', '/wp-admin/js/iris.min.js', array( 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch' ), '1.1.1', 1 );
+		$scripts->add( 'wp-color-picker', "/wp-admin/js/color-picker$suffix.js", array( 'iris', 'coloris' ), false, 1 );
+		$scripts->set_translations( 'wp-color-picker' );
 
 		$scripts->add( 'dashboard', "/wp-admin/js/dashboard$suffix.js", array( 'jquery', 'admin-comments', 'postbox', 'wp-util', 'wp-a11y' ), false, 1 );
 		$scripts->set_translations( 'dashboard' );
@@ -1393,6 +1395,7 @@ function wp_default_styles( $styles ) {
 
 	$styles->add( 'login', "/wp-admin/css/login$suffix.css", array( 'dashicons', 'buttons', 'forms', 'l10n' ) );
 	$styles->add( 'install', "/wp-admin/css/install$suffix.css", array( 'dashicons', 'buttons', 'forms', 'l10n' ) );
+	$styles->add( 'wp-color-picker', "/wp-admin/css/color-picker$suffix.css", array( 'coloris' ) );
 	$styles->add( 'customize-controls', "/wp-admin/css/customize-controls$suffix.css", array( 'wp-admin', 'colors', 'imgareaselect', 'coloris' ) );
 	$styles->add( 'customize-widgets', "/wp-admin/css/customize-widgets$suffix.css", array( 'wp-admin', 'colors' ) );
 	$styles->add( 'customize-nav-menus', "/wp-admin/css/customize-nav-menus$suffix.css", array( 'wp-admin', 'colors' ) );
@@ -1445,6 +1448,7 @@ function wp_default_styles( $styles ) {
 		'site-icon',
 		'l10n',
 		'install',
+		'wp-color-picker',
 		'coloris',
 		'customize-controls',
 		'customize-widgets',
