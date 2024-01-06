@@ -2,7 +2,7 @@
  * @output wp-admin/js/customize-controls.js
  */
 
-/* global _wpCustomizeHeader, _wpCustomizeBackground, _wpMediaViewsL10n, MediaElementPlayer, console, confirm, Coloris, isRtl */
+/* global _wpCustomizeHeader, _wpCustomizeBackground, _wpMediaViewsL10n, MediaElementPlayer, console, confirm */
 (function( exports, $ ){
 	var Container, focus, normalizedTransitionendEventName, api = wp.customize;
 
@@ -4142,7 +4142,7 @@
 
 	/**
 	 * A colorpicker control
-	 * 
+	 *
 	 * Uses Coloris JS: https://coloris.js.org/
 	 *
 	 * @since CP-2.1.0
@@ -4156,7 +4156,7 @@
 				isHueSlider = this.params.mode === 'hue',
 				updating = false,
 				picker,
-				__ = wp.i18n.__;			
+				__ = wp.i18n.__;
 
 			if ( isHueSlider ) { // Use Iris
 				picker = this.container.find( '.color-picker-hue' );
