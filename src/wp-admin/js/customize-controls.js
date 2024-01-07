@@ -4198,19 +4198,18 @@
 
 			} else {
 				pickers.forEach( function( picker ) {
-					picker.value = control.setting() ? control.setting() : picker.dataset.defaultColor;					
+					var originalColor, newColor;
+
+					picker.value = control.setting() ? control.setting() : picker.dataset.defaultColor;
+					picker.previousElementSibling.style.backgroundColor = picker.value;
+
+					// Use color swatch instead of RGB string, or placeholder if undefined
 					if ( picker.value === 'undefined' ) {
-						picker.value = ''; // use placeholder instead
+						picker.value = picker.placeholder;
+						picker.previousElementSibling.style.backgroundColor = picker.placeholder;
 					}
-/*
-					$( picker ).val( control.setting() ).wpColorPicker( {
-						change: function() {
-							updating = true;
-							control.setting.set( picker.wpColorPicker( 'color' ) );
-							updating = false;
-						}
-					} );
-*/
+					originalColor = picker.value;
+
 					picker.addEventListener( 'click', function( e ) {
 						Coloris( {
 							a11y: {
@@ -4232,8 +4231,17 @@
 								updating = true;
 								control.setting.set( color );
 								updating = false;
+								picker.previousElementSibling.style.backgroundColor = color;
+								if ( color === '' ) {
+									picker.previousElementSibling.style.backgroundColor = picker.placeholder;
+								}
 							}
-						} );						
+						} );
+					} );
+
+					// On close, remove 'aria-pressed' attribute from color swatch button
+					picker.addEventListener( 'close', function( e ) {
+						picker.previousElementSibling.removeAttribute( 'aria-pressed' );
 					} );
 
 					// Update picker from external sources
@@ -4244,6 +4252,7 @@
 							return;
 						}
 						picker.value = value;
+						picker.previousElementSibling.style.backgroundColor = value;
 					} );
 
 					// Enable use of the Enter and Escape keys
@@ -4252,13 +4261,33 @@
 
 						// Collapse color picker when hitting Esc instead of collapsing the current section.
 						if ( 'Escape' === e.key ) {
+							document.getElementById( 'clr-clear' ).click();
 							pickerContainer = control.container[0].querySelector( '.wp-picker-container' );
 							if ( pickerContainer.className.includes( 'wp-picker-active' ) ) {
 								e.stopPropagation(); // Prevent section from being collapsed.
 							}
 						} else if ( 'Enter' === e.key ) {
-							picker.click(); // Treat as a click
+							if ( e.target.className === 'color-picker-hex' ) {
+								picker.click(); // Treat as a click on picker input
+							}
 						}
+					} );
+
+					// Close color picker when press Enter or Escape on picked color
+					document.getElementById( 'clr-color-marker' ).addEventListener( 'keydown', function( e ) {
+						if ( 'Enter' === e.key ) {
+							Coloris.close();
+						} else if ( 'Escape' === e.key ) {
+							document.getElementById( 'clr-clear' ).click();
+						}
+					} );
+				} );
+
+				// Open picker by clicking on color swatch button
+				document.querySelectorAll( '.color-picker-hex-button' ).forEach( function( button ) {
+					button.addEventListener( 'click', function() {
+						button.nextElementSibling.click();
+						button.setAttribute( 'aria-pressed', true );
 					} );
 				} );
 			}
