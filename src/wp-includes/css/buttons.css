@@ -58,6 +58,16 @@ TABLE OF CONTENTS:
 	white-space: nowrap;
 	box-sizing: border-box;
 }
+.wp-core-ui button.color-picker-hex-button {
+	width: 20%;
+	min-height: 30px;
+	border-radius: 3px;
+}
+@media screen and (max-width: 782px) {
+	.wp-core-ui button.color-picker-hex-button {
+		min-height: 40px;
+	}
+}
 
 /* Remove the dotted border on :focus and the extra padding in Firefox */
 .wp-core-ui button::-moz-focus-inner,
