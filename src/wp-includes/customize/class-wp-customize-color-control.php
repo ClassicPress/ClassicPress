@@ -113,6 +113,7 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 			<# if ( isHueSlider ) { #>
 				<input class="color-picker-hue" type="text" data-type="hue">
 			<# } else { #>
+				<button type="button" class="color-picker-hex-button" style="background-color:{{ defaultValue }}" aria-label="Open color picker"></button>
 				<input class="color-picker-hex" type="text" maxlength="9" placeholder="{{ defaultValue }}" {{ defaultValueAttr }} data-coloris>
 			<# } #>
 			</label>
@@ -120,4 +121,3 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 		<?php
 	}
 }
-
