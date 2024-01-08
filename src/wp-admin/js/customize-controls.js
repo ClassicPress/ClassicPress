@@ -4198,10 +4198,11 @@
 
 			} else {
 				pickers.forEach( function( picker ) {
-					var originalColor, newColor;
+					var originalColor;
 
 					picker.value = control.setting() ? control.setting() : picker.dataset.defaultColor;
 					picker.previousElementSibling.style.backgroundColor = picker.value;
+					$( picker ).wpColorPicker(); // re-initialize the WP Color Picker
 
 					// Use color swatch instead of RGB string, or placeholder if undefined
 					if ( picker.value === 'undefined' ) {
@@ -4210,7 +4211,7 @@
 					}
 					originalColor = picker.value;
 
-					picker.addEventListener( 'click', function( e ) {
+					picker.addEventListener( 'click', function() {
 						Coloris( {
 							a11y: {
 								open: __( 'Open color picker' ),
@@ -4240,7 +4241,7 @@
 					} );
 
 					// On close, remove 'aria-pressed' attribute from color swatch button
-					picker.addEventListener( 'close', function( e ) {
+					picker.addEventListener( 'close', function() {
 						picker.previousElementSibling.removeAttribute( 'aria-pressed' );
 					} );
 
