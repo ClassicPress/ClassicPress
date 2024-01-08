@@ -139,7 +139,7 @@ function network_step1( $errors = false ) {
 	$hostname = preg_replace( '/(?::80|:443)$/', '', get_clean_basedomain() );
 	$has_ports = strstr( $hostname, ':' );
 	if ( ( false !== $has_ports && ! in_array( $has_ports, array( ':80', ':443' ), true ) ) ) {
-		echo '<div class="notice notice-warning"><p><strong>' . __( 'Warning:' ) . '</strong> ' . __( 'Install a network of sites with your server address is experimental.' ) . '</p></div>';
+		echo '<div class="notice notice-warning"><p><strong>' . __( 'Warning:' ) . '</strong> ' . __( 'Installing a network of sites with your server address is experimental.' ) . '</p></div>';
 		echo '<p>' . sprintf(
 			/* translators: %s: Port number. */
 			__( 'Use port numbers such as %s at your own risk.' ),
