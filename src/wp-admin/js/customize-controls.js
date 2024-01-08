@@ -4202,7 +4202,6 @@
 
 					picker.value = control.setting() ? control.setting() : picker.dataset.defaultColor;
 					picker.previousElementSibling.style.backgroundColor = picker.value;
-					$( picker ).wpColorPicker(); // re-initialize the WP Color Picker
 
 					// Use color swatch instead of RGB string, or placeholder if undefined
 					if ( picker.value === 'undefined' ) {
