@@ -1,6 +1,9 @@
 /*! Iris Color Picker - v1.1.1 - 2021-10-05
 * https://github.com/Automattic/Iris
-* Copyright (c) 2021 Matt Wiebe; Licensed GPLv2 */
+* Copyright (c) 2021 Matt Wiebe; Licensed GPLv2
+* Modified 2024-01-13 by Tim Kaye
+* to use native HTML5 drag-and-drop and sliders */
+/* global Color */
 (function( $, undef ){
 	var _html, nonGradientIE, gradientType, vendorPrefixes, _css, Iris, UA, isIE, IEVersion;
 
@@ -620,7 +623,7 @@
 			controls.squareDrag[0].classList.add( 'ui-draggable' );
 			controls.squareDrag[0].querySelector( 'span' ).classList.add( 'ui-draggable-handle' );
 
-			controls.squareDrag[0].addEventListener( 'dragstart', function( e ) {
+			controls.squareDrag[0].addEventListener( 'dragstart', function() {
 				controls.squareDrag[0].parentNode.classList.add( 'iris-dragging' );
 				controls.squareDrag[0].classList.add( 'ui-state-focus' );
 				controls.squareDrag[0].classList.add( 'ui-draggable-dragging' );
@@ -628,7 +631,7 @@
 				controls.squareDrag[0].focus();
 			} );
 
-			controls.squareDrag[0].addEventListener( 'dragend', function( e ) {
+			controls.squareDrag[0].addEventListener( 'dragend', function() {
 				controls.squareDrag[0].style.zIndex = 'auto';
 				controls.squareDrag[0].classList.remove( 'ui-state-focus' );
 				controls.squareDrag[0].parentNode.classList.remove( 'iris-dragging' );
@@ -865,7 +868,6 @@
 
 		_change: function() {
 			var self = this,
-				controls = self.controls,
 				color = self._getHSpaceColor(),
 				actions = [ 'square', 'strip' ],
 				controlOpts = self.options.controls,
@@ -1250,20 +1252,20 @@
 				case 'rgba':
 					var rgb = this.toRgb();
 					if ( alpha < 1 ) {
-						return "rgba( " + rgb.r + ", " + rgb.g + ", " + rgb.b + ", " + alpha + " )";
+						return 'rgba( ' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ', ' + alpha + ' )';
 					}
 					else {
-						return "rgb( " + rgb.r + ", " + rgb.g + ", " + rgb.b + " )";
+						return 'rgb( ' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ' )';
 					}
 					break;
 				case 'hsl':
 				case 'hsla':
 					var hsl = this.toHsl();
 					if ( alpha < 1 ) {
-						return "hsla( " + hsl.h + ", " + hsl.s + "%, " + hsl.l + "%, " + alpha + " )";
+						return 'hsla( ' + hsl.h + ', ' + hsl.s + '%, ' + hsl.l + '%, ' + alpha + ' )';
 					}
 					else {
-						return "hsl( " + hsl.h + ", " + hsl.s + "%, " + hsl.l + "% )";
+						return 'hsl( ' + hsl.h + ', ' + hsl.s + '%, ' + hsl.l + '% )';
 					}
 					break;
 				default:
