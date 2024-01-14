@@ -136,19 +136,15 @@ function network_step1( $errors = false ) {
 		die();
 	}
 
-	$hostname  = get_clean_basedomain();
+	$hostname = preg_replace( '/(?::80|:443)$/', '', get_clean_basedomain() );
 	$has_ports = strstr( $hostname, ':' );
 	if ( ( false !== $has_ports && ! in_array( $has_ports, array( ':80', ':443' ), true ) ) ) {
-		echo '<div class="error"><p><strong>' . __( 'Error:' ) . '</strong> ' . __( 'You cannot install a network of sites with your server address.' ) . '</p></div>';
+		echo '<div class="notice notice-warning"><p><strong>' . __( 'Warning:' ) . '</strong> ' . __( 'Installing a network of sites with your server address is experimental.' ) . '</p></div>';
 		echo '<p>' . sprintf(
 			/* translators: %s: Port number. */
-			__( 'You cannot use port numbers such as %s.' ),
+			__( 'Use port numbers such as %s at your own risk.' ),
 			'<code>' . $has_ports . '</code>'
 		) . '</p>';
-		echo '<a href="' . esc_url( admin_url() ) . '">' . __( 'Go to Dashboard' ) . '</a>';
-		echo '</div>';
-		require_once ABSPATH . 'wp-admin/admin-footer.php';
-		die();
 	}
 
 	echo '<form method="post">';
