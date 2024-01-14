@@ -1,7 +1,7 @@
 /*! Iris Color Picker - v1.1.1 - 2021-10-05
 * https://github.com/Automattic/Iris
 * Copyright (c) 2021 Matt Wiebe; Licensed GPLv2
-* Modified 2024-01-13 by Tim Kaye
+* Modified 2024-01-14 by Tim Kaye
 * to use native HTML5 drag-and-drop and sliders */
 /* global Color */
 (function( $, undef ){
@@ -606,12 +606,12 @@
 
 			controls.stripSlider.on( 'input', function( e ) {
 				self.active = 'strip';
-				self._color[controlOpts.strip]( e.target.value );
+				self._color[controlOpts.strip]( e.currentTarget.value );
 				self._change.apply( self, arguments );
 			} );
 
 			/*
-			 * Use HTML5 Drag and Drop API for color picker 
+			 * Use HTML5 Drag and Drop API for color picker
 			 *
 			 * @since CP-2.1.0
 			 */
@@ -868,6 +868,7 @@
 
 		_change: function() {
 			var self = this,
+				controls = self.controls,
 				color = self._getHSpaceColor(),
 				actions = [ 'square', 'strip' ],
 				controlOpts = self.options.controls,
@@ -889,7 +890,7 @@
 						case 'strip':
 							// reverse for hue if vertical
 							value = ( controlOpts.strip === 'h' && ! self.horizontalSlider ) ? self._scale[ controlOpts.strip ] - color[ controlOpts.strip ] : color[controlOpts.strip];
-							//controls.stripSlider.slider( 'value', value );
+							controls.stripSlider.val( value );
 							break;
 						case 'square':
 							dimensions = self._squareDimensions();
