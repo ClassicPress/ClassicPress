@@ -1,6 +1,6 @@
 {
   "name": "ClassicPress",
-  "version": "2.0.0+dev",
+  "version": "2.0.0-rc1+dev",
   "description": "ClassicPress is web software you can use to create a beautiful website or blog.",
   "repository": {
     "type": "git",
@@ -37,7 +37,7 @@
     "moment": "^2.29.4",
     "postcss": "8.4.33",
     "qunit": "^2.19.4",
-    "rollup": "4.9.3",
+    "rollup": "4.9.5",
     "sinon": "^17.0.0",
     "sinon-test": "^3.1.5",
     "source-map-loader": "^4.0.1",
