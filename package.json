@@ -40,7 +40,7 @@
     "rollup": "4.9.5",
     "sinon": "^17.0.0",
     "sinon-test": "^3.1.5",
-    "source-map-loader": "^4.0.1",
+    "source-map-loader": "^5.0.0",
     "sync-request": "6.1.0",
     "terser": "5.26.0",
     "terser-webpack-plugin": "^5.3.7",
