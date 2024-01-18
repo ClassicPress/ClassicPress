@@ -1,16 +1,15 @@
 /*! Iris Color Picker - v1.1.1 - 2021-10-05
 * https://github.com/Automattic/Iris
 * Copyright (c) 2021 Matt Wiebe; Licensed GPLv2
-* Modified 2024-01-14 by Tim Kaye
+* Modified 2024-01-18 by Tim Kaye
 * to use native HTML5 drag-and-drop and sliders */
 /* global Color */
 (function( $, undef ){
-	var _html, nonGradientIE, gradientType, vendorPrefixes, _css, Iris, UA, isIE, IEVersion;
+	var _html, nonGradientIE, gradientType, vendorPrefixes, Iris, UA, isIE, IEVersion;
 
-	_html = '<div class="iris-picker"><div class="iris-picker-inner"><div class="iris-square"><a class="iris-square-value" href="#"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz"></div><div class="iris-square-inner iris-square-vert"></div></div><div class="iris-slider iris-strip"><input class="iris-slider-offset" type="range"></input></div></div></div>';
-	_css = '.iris-picker{display:block;position:relative}.iris-picker,.iris-picker *{-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}input+.iris-picker{margin-top:4px}.iris-error{background-color:#ffafaf}.iris-border{border-radius:3px;border:1px solid #aaa;width:200px;background-color:#fff}.iris-picker-inner{position:absolute;top:0;right:0;left:0;bottom:0}.iris-border .iris-picker-inner{top:10px;right:10px;left:10px;bottom:10px}.iris-picker .iris-square-inner{position:absolute;left:0;right:0;top:0;bottom:0}.iris-picker .iris-square,.iris-picker .iris-slider,.iris-picker .iris-square-inner,.iris-picker .iris-palette{border-radius:3px;box-shadow:inset 0 0 5px rgba(0,0,0,.4);height:100%;width:12.5%;float:left;margin-right:5%}.iris-only-strip .iris-slider{width:100%}.iris-picker .iris-square{width:76%;margin-right:10%;position:relative}.iris-only-strip .iris-square{display:none}.iris-picker .iris-square-inner{width:auto;margin:0}.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .iris-square-inner,.iris-ie-9 .iris-palette{box-shadow:none;border-radius:0}.iris-ie-9 .iris-square,.iris-ie-9 .iris-slider,.iris-ie-9 .iris-palette{outline:1px solid rgba(0,0,0,.1)}.iris-ie-lt9 .iris-square,.iris-ie-lt9 .iris-slider,.iris-ie-lt9 .iris-square-inner,.iris-ie-lt9 .iris-palette{outline:1px solid #aaa}.iris-ie-lt9 .iris-square .ui-slider-handle{outline:1px solid #aaa;background-color:#fff;-ms-filter:"alpha(Opacity=30)"}.iris-ie-lt9 .iris-square .iris-square-handle{background:0 0;border:3px solid #fff;-ms-filter:"alpha(Opacity=50)"}.iris-picker .iris-strip{margin-right:0;position:relative}.iris-picker .iris-strip .ui-slider-handle{position:absolute;background:0 0;margin:0;right:-3px;left:-3px;border:4px solid #aaa;border-width:4px 3px;width:auto;height:6px;border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.2);opacity:.9;z-index:5;cursor:ns-resize}.iris-strip-horiz .iris-strip .ui-slider-handle{right:auto;left:auto;bottom:-3px;top:-3px;height:auto;width:6px;cursor:ew-resize}.iris-strip .ui-slider-handle:before{content:" ";position:absolute;left:-2px;right:-2px;top:-3px;bottom:-3px;border:2px solid #fff;border-radius:3px}.iris-picker .iris-slider-offset{position:absolute;top:11px;left:0;right:0;bottom:-3px;width:auto;height:auto;background:transparent;border:0;border-radius:0}.iris-strip-horiz .iris-slider-offset{top:0;bottom:0;right:11px;left:-3px}.iris-picker .iris-square-handle{background:transparent;border:5px solid #aaa;border-radius:50%;border-color:rgba(128,128,128,.5);box-shadow:none;width:12px;height:12px;position:absolute;left:-10px;top:-10px;cursor:move;opacity:1;z-index:10}.iris-picker .ui-state-focus .iris-square-handle{opacity:.8}.iris-picker .iris-square-handle:hover{border-color:#999}.iris-picker .iris-square-value:focus .iris-square-handle{box-shadow:0 0 2px rgba(0,0,0,.75);opacity:.8}.iris-picker .iris-square-handle:hover::after{border-color:#fff}.iris-picker .iris-square-handle::after{position:absolute;bottom:-4px;right:-4px;left:-4px;top:-4px;border:3px solid #f9f9f9;border-color:rgba(255,255,255,.8);border-radius:50%;content:" "}.iris-picker .iris-square-value{width:8px;height:8px;position:absolute}.iris-ie-lt9 .iris-square-value,.iris-mozilla .iris-square-value{width:1px;height:1px}.iris-palette-container{position:absolute;bottom:0;left:0;margin:0;padding:0}.iris-border .iris-palette-container{left:10px;bottom:10px}.iris-picker .iris-palette{margin:0;cursor:pointer}.iris-square-handle,.ui-slider-handle{border:0;outline:0}';
+	_html = '<div class="iris-picker"><div class="iris-picker-inner"><div class="iris-square"><a class="iris-square-value" href="#"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz"></div><div class="iris-square-inner iris-square-vert"></div></div><div class="iris-slider iris-strip"><input class="iris-slider-offset" type="range"></input></div></div><img class="img-ghost" src="' + IRIS.blank + '"></div>';
 
-	// Even IE9 dosen't support gradients. Elaborate sigh.
+	// IE9 doesn't support gradients. Elaborate sigh.
 	UA = navigator.userAgent.toLowerCase();
 	isIE = navigator.appName === 'Microsoft Internet Explorer';
 	IEVersion = isIE ? parseFloat( UA.match( /msie ([0-9]{1,}[\.0-9]{0,})/ )[1] ) : 0;
@@ -598,6 +597,7 @@
 					controls.stripSlider[0].setAttribute( 'orient', 'vertical' );
 				} else {
 					controls.stripSlider[0].style.writingMode = 'vertical-rl'; // scale runs from bottom to top
+					controls.stripSlider[0].style.webkitAppearance = 'slider-vertical'; // for Safari
 				}
 			}
 
@@ -619,11 +619,13 @@
 			controls.squareDrag[0].style.cursor = 'move';
 			controls.squareDrag[0].setAttribute( 'draggable', 'true' );
 
-			// Keep jQuery UI classes to avoid breking changes
+			// Keep jQuery UI classes to avoid possible breaking changes
 			controls.squareDrag[0].classList.add( 'ui-draggable' );
 			controls.squareDrag[0].querySelector( 'span' ).classList.add( 'ui-draggable-handle' );
 
-			controls.squareDrag[0].addEventListener( 'dragstart', function() {
+			// Set focus when dragging and hide ghost image
+			controls.squareDrag[0].addEventListener( 'dragstart', function( e ) {
+				e.dataTransfer.setDragImage( document.querySelector( '.img-ghost' ), 0, 0 );
 				controls.squareDrag[0].parentNode.classList.add( 'iris-dragging' );
 				controls.squareDrag[0].classList.add( 'ui-state-focus' );
 				controls.squareDrag[0].classList.add( 'ui-draggable-dragging' );
@@ -631,6 +633,7 @@
 				controls.squareDrag[0].focus();
 			} );
 
+			// Restore settings when dragging stops
 			controls.squareDrag[0].addEventListener( 'dragend', function() {
 				controls.squareDrag[0].style.zIndex = 'auto';
 				controls.squareDrag[0].classList.remove( 'ui-state-focus' );
@@ -983,8 +986,6 @@
 	};
 	// initialize the widget
 	$.widget( 'a8c.iris', Iris );
-	// add CSS
-	$( '<style id="iris-css">' + _css + '</style>' ).appendTo( 'head' );
 
 }( jQuery ));
 
