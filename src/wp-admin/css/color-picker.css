@@ -246,12 +246,15 @@ input+.iris-picker {
 	right:0;
 	bottom:-3px;
 	width:auto;
-	height:auto
+	height:auto;
 	background:transparent;
 	border:0;border-radius:0;
 }
 .iris-strip-horiz .iris-slider-offset {
-	top:0;bottom:0;right:11px;left:-3px;
+	top:0;
+	bottom:0;
+	right:11px;
+	left:-3px;
 }
 .iris-picker .iris-square-handle {
 	background:transparent;
