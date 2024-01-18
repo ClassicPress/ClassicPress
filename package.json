@@ -11,7 +11,7 @@
   "devDependencies": {
     "@lodder/grunt-postcss": "3.1.1",
     "@rollup/plugin-commonjs": "25.0.7",
-    "autoprefixer": "10.4.16",
+    "autoprefixer": "10.4.17",
     "clipboard": "^2.0.11",
     "grunt": "1.6.1",
     "grunt-banner": "0.6.0",
@@ -40,19 +40,19 @@
     "rollup": "4.9.5",
     "sinon": "^17.0.0",
     "sinon-test": "^3.1.5",
-    "source-map-loader": "^4.0.1",
+    "source-map-loader": "^5.0.0",
     "sync-request": "6.1.0",
-    "terser": "5.26.0",
+    "terser": "5.27.0",
     "terser-webpack-plugin": "^5.3.7",
     "webpack": "5.89.0"
   },
   "dependencies": {
-    "@wordpress/a11y": "3.48.0",
-    "@wordpress/api-fetch": "6.45.0",
-    "@wordpress/dom-ready": "3.48.0",
-    "@wordpress/hooks": "3.48.0",
-    "@wordpress/i18n": "4.48.0",
-    "@wordpress/url": "3.49.0",
+    "@wordpress/a11y": "3.49.0",
+    "@wordpress/api-fetch": "6.46.0",
+    "@wordpress/dom-ready": "3.49.0",
+    "@wordpress/hooks": "3.49.0",
+    "@wordpress/i18n": "4.49.0",
+    "@wordpress/url": "3.50.0",
     "node-sass": "9.0.0"
   },
   "collective": {
