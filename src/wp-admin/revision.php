@@ -173,7 +173,7 @@ $count = count( $prepared['revisionIds'] ) - 1;
 $revisions_list = '<input id="revisions-list" value="' . implode( ', ', $prepared['revisionIds'] ) . '" hidden>';
 
 $ticks = '<datalist id="ticks">';
-foreach( $prepared['revisionData'] as $key => $revision ) {
+foreach ( $prepared['revisionData'] as $key => $revision ) {
 	$avatar = $revision['author']['avatar'];
 	$type = 'Revision by ';
 	if ( $revision['autosave'] === true ) {
