@@ -7,7 +7,7 @@
 (function( $, undef ){
 	var _html, nonGradientIE, gradientType, vendorPrefixes, Iris, UA, isIE, IEVersion;
 
-	_html = '<div class="iris-picker"><div class="iris-picker-inner"><div class="iris-square"><a class="iris-square-value" href="#"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz"></div><div class="iris-square-inner iris-square-vert"></div></div><div class="iris-slider iris-strip"><input class="iris-slider-offset" type="range"></input></div></div><img class="img-ghost" src="' + IRIS.blank + '"></div>';
+	_html = '<div class="iris-picker"><div class="iris-picker-inner"><div class="iris-square"><a class="iris-square-value" href="#"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz"></div><div class="iris-square-inner iris-square-vert"></div></div><div class="iris-slider iris-strip"><input class="iris-slider-offset" type="range"></input></div></div><img class="img-ghost" src="' + IRIS.blank + '" alt="" aria-hidden="true" role="presentation"></div>';
 
 	// IE9 doesn't support gradients. Elaborate sigh.
 	UA = navigator.userAgent.toLowerCase();
