@@ -33,7 +33,7 @@ window.wp = window.wp || {};
 			fromSlider.setAttribute( 'value', fromSlider.value );
 		}
 
-		// Call appropriate revisions: frame is set on initialization at line 181
+		// Call appropriate revisions: frame is set on initialization at line 180
 		frame.set( {
 			from: isVisible( fromSlider ) ? frame.revisions._byId[ list[ fromSlider.value ] ] : frame.revisions._byId[ list[ 0 ] ],
 			to: frame.revisions._byId[ list[ toSlider.value ] ]
@@ -51,7 +51,7 @@ window.wp = window.wp || {};
 			toSlider.setAttribute( 'value', toSlider.value );
 		}
 
-		// Call appropriate revisions: frame is set on initialization at line 181
+		// Call appropriate revisions: frame is set on initialization at line 180
 		frame.set( {
 			from: isVisible( fromSlider ) ? frame.revisions._byId[ list[ fromSlider.value ] ] : frame.revisions._byId[ list[ parseInt( toSlider.value ) - 1 ] ],
 			to: frame.revisions._byId[ list[ toSlider.value ] ]
