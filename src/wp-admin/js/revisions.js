@@ -22,7 +22,6 @@ window.wp = window.wp || {};
 		fromSlider = document.getElementById( 'from-slider' ),
 		toSlider = document.getElementById( 'to-slider' ),
 		fromSliderDiv = document.querySelector( '.from-slider-wrapper' ),
-		toSliderDiv = document.querySelector( '.to-slider-wrapper' ),
 		ticksOptions = document.querySelectorAll( '#ticks option' ),
 		url = location.href;
 
@@ -699,13 +698,6 @@ window.wp = window.wp || {};
 			var slider = new revisions.model.Slider({
 				frame: this.model,
 				revisions: this.model.revisions
-			}),
-
-			// Prep the tooltip model.
-			tooltip = new revisions.model.Tooltip({
-				frame: this.model,
-				revisions: this.model.revisions,
-				slider: slider
 			});
 
 			// Add the slider view.
