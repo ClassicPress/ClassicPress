@@ -223,7 +223,7 @@ switch ( $step ) {
 	<table class="form-table" role="presentation">
 		<tr>
 			<th scope="row"><label for="dbname"><?php _e( 'Database Name' ); ?></label></th>
-			<td><input name="dbname" id="dbname" type="text" aria-describedby="dbname-desc" size="25" placeholder="wordpress"<?php echo $autofocus; ?>></td>
+			<td><input name="dbname" id="dbname" type="text" aria-describedby="dbname-desc" size="25" placeholder="classicpress"<?php echo $autofocus; ?>></td>
 			<td id="dbname-desc"><?php _e( 'The name of the database you want to use with ClassicPress.' ); ?></td>
 		</tr>
 		<tr>
