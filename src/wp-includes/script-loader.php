@@ -1254,7 +1254,7 @@ function wp_default_scripts( $scripts ) {
 
 		$scripts->add( 'farbtastic', '/wp-admin/js/farbtastic.js', array( 'jquery' ), '1.2' );
 
-		$scripts->add( 'iris', "/wp-admin/js/iris$suffix.js", array( 'jquery-touch-punch' ), '1.1.1', 1 );
+		$scripts->add( 'iris', "/wp-admin/js/iris$suffix.js", array( 'jquery-ui-core' ), '1.1.1', 1 );
 		wp_localize_script( 'iris', 'IRIS', array(
 			'blank' => esc_url( get_site_url( '', '/wp-includes/images/blank.gif' ) ),
 		) );
