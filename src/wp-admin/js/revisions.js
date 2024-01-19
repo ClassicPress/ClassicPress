@@ -71,7 +71,7 @@ window.wp = window.wp || {};
 		} else {
 			fromSliderDiv.style.display = 'none';
 		}
-	} );	
+	} );
 
 	// Turn comma-separated list of revision IDs into array
 	list = document.getElementById( 'revisions-list' ).value.split( ', ' );
@@ -906,7 +906,7 @@ window.wp = window.wp || {};
 			if ( this.model.get('compareTwoMode') ) {
 				document.getElementById( 'from-slider' ).value = this.model.toJSON().values[0];
 				document.getElementById( 'to-slider' ).value = this.model.toJSON().values[1];
-			} else {				
+			} else {
 				document.getElementById( 'from-slider' ).value = this.model.toJSON().value;
 			}
 		}
