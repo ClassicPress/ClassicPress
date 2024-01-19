@@ -168,7 +168,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
  *
  * @since CP-2.1.0
  */
-$prepared = wp_prepare_revisions_for_js( $post, $selected_revision_id, $from = null );
+$prepared = wp_prepare_revisions_for_js( $post, $revision_id, $from = null );
 $count = count( $prepared['revisionIds'] ) - 1;
 $revisions_list = '<input id="revisions-list" value="' . implode( ', ', $prepared['revisionIds'] ) . '" hidden>';
 
