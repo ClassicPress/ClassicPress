@@ -904,10 +904,10 @@ window.wp = window.wp || {};
 
 		applySliderSettings: function() {
 			if ( this.model.get('compareTwoMode') ) {
-				document.getElementById( 'from-slider' ).value = this.model.toJSON().values[0];
-				document.getElementById( 'to-slider' ).value = this.model.toJSON().values[1];
+				fromSlider.value = this.model.toJSON().values[0];
+				toSlider.value = this.model.toJSON().values[1];
 			} else {
-				document.getElementById( 'from-slider' ).value = this.model.toJSON().value;
+				fromSlider.value = this.model.toJSON().value;
 			}
 		}
 	});
