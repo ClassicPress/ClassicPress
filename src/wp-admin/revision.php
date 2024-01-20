@@ -175,17 +175,23 @@ $revisions_list = '<input id="revisions-list" value="' . implode( ', ', $prepare
 $ticks = '<datalist id="ticks">';
 foreach ( $prepared['revisionData'] as $key => $revision ) {
 	$avatar = $revision['author']['avatar'];
-	$type = 'Revision by ';
+
+	$type = __( 'Revision by ' );
 	if ( $revision['autosave'] === true ) {
-		$type = '^Autosave by ';
+		$type = '{{' . __( 'Autosave by ' );
 	} elseif ( $key === $count ) {
-		$type = 'Current Revision by ';
+		$type = __( 'Current Revision by ' );
 	}
+
 	$author = $revision['author']['name'];
 	$time_ago = $revision['timeAgo'];
-	$date_short = '* (' . $revision['dateShort'] . ')';
 
-	$ticks .= '<option data-tooltip="' . $type . '~' . $author . '/' . $time_ago . $date_short . '" value="' . $key . '">' . $revision['dateShort'] . '</option>';
+	$date_short = ' (' . $revision['dateShort'] . ')';
+	if ( $revision['autosave'] === true ) {
+		$date_short = '}} (' . $revision['dateShort'] . ')';
+	}
+
+	$ticks .= '<option data-tooltip="' . $type . '[[' . $author . ']]' . $time_ago . $date_short . '" value="' . $key . '">' . $revision['dateShort'] . '</option>';
 }
 $ticks .= '</datalist>';
 ?>
