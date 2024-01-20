@@ -105,7 +105,7 @@ window.wp = window.wp || {};
 
 		option.addEventListener( 'mouseover', function() {
 			tooltip.style.backgroundColor = '#fff';
-			tooltip.innerHTML = option.dataset.tooltip.replace( '^', '<span style="color:#d63638">' ).replace( '*', '</span>' ).replace( '~', '<strong>' ).replace( '/', '</strong><br>' );
+			tooltip.innerHTML = option.dataset.tooltip.replace( '{{', '<span style="color:#d63638">' ).replace( '}}', '</span>' ).replace( '[[', '<strong>' ).replace( ']]', '</strong><br>' );
 		} );
 		option.addEventListener( 'mouseout', function() {
 			tooltip.style.backgroundColor = 'transparent';
