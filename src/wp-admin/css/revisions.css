@@ -46,6 +46,14 @@ input[type="range"]::-moz-range-thumb {
 	box-shadow: 0 0 0 1px #C6C6C6;
 	cursor: pointer;
 }
+input[type="range"]:hover::-webkit-slider-thumb {
+	outline: 3px solid #053a5f;
+	outline-offset: 0.125rem; 
+}
+input[type="range"]:hover::-moz-range-thumb {
+	outline: 3px solid #053a5f;
+	outline-offset: 0.125rem; 
+}
 input[type="range"]:focus::-webkit-slider-thumb {
 	background-color: red;
 	box-shadow: 0 0 0 1px #2271b1; 
