@@ -1256,7 +1256,7 @@ function wp_default_scripts( $scripts ) {
 
 		$scripts->add( 'iris', "/wp-admin/js/iris$suffix.js", array( 'jquery-ui-core' ), '1.1.1', 1 );
 		wp_localize_script( 'iris', 'IRIS', array(
-			'blank' => esc_url( get_site_url( '', '/wp-includes/images/blank.gif' ) ),
+			'blank' => esc_url( site_url( '/wp-includes/images/blank.gif' ) ),
 		) );
 		$scripts->add( 'wp-color-picker', "/wp-admin/js/color-picker$suffix.js", array( 'iris' ), false, 1 );
 		$scripts->set_translations( 'wp-color-picker' );
