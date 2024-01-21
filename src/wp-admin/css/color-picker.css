@@ -139,8 +139,6 @@
 }
 .iris-picker,
 .iris-picker * {
-	-moz-box-sizing:content-box;
-	-webkit-box-sizing:content-box;
 	box-sizing:content-box;
 }
 input+.iris-picker {
