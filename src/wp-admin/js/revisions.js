@@ -498,15 +498,6 @@ window.wp = window.wp || {};
 				from : this.revisions.get( state.from ),
 				compareTwoMode : state.compareTwoMode
 			} );
-/*
-			// Start the router if browser supports History API.
-			if ( window.history && window.history.pushState ) {
-				this.router = new revisions.Router({ model: this });
-				if ( Backbone.History.started ) {
-					Backbone.history.stop();
-				}
-				Backbone.history.start({ pushState: true });
-			}*/
 		},
 
 		updateLoadingStatus: function() {
