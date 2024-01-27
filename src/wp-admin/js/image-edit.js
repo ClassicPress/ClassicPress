@@ -683,13 +683,27 @@
 		 * accessibility tree to better support assistive technologies.
 		 */
 		setTimeout( function() {
-			var elementToSetFocusTo = $( '.notice[role="alert"]' );
+			var elementToSetFocusTo = document.querySelector( '.notice[role="alert"]' ),
+				wrap = document.querySelector( '.imgedit-wrap' ),
+				index = 0;
 
 			if ( ! elementToSetFocusTo.length ) {
-				elementToSetFocusTo = $( '.imgedit-wrap' ).find( ':tabbable:first' );
-			}
+				tabbables = [ ...wrap.querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]:not( [tabindex="-1"] )' ) ];
 
-			elementToSetFocusTo.trigger( 'focus' );
+				elementToSetFocusTo = tabbables[ index ];
+				while ( ! isVisible( tabbables[ index ] ) ) {
+					index = index + 1;
+					elementToSetFocusTo = tabbables[ index ];
+				}
+
+				/*
+				 * Helper function copied from jQuery
+				 */
+				function isVisible( elem ) {
+					return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+				}
+			}
+			elementToSetFocusTo.focus();
 		}, 100 );
 	},
 
