@@ -90,7 +90,6 @@ wp.themePluginEditor = (function( $ ) {
 	 * @return {void}
 	 */
 	component.showWarning = function() {
-		var oneSecond = 1000;
 		// Get the text within the modal.
 		var rawMessage = component.warning.find( '.file-editor-warning-message' ).text();
 		// Hide all the #wpwrap content from assistive technologies.
@@ -111,7 +110,7 @@ wp.themePluginEditor = (function( $ ) {
 		// Make screen readers announce the warning message after a short delay (necessary for some screen readers).
 		setTimeout( function() {
 			wp.a11y.speak( wp.sanitize.stripTags( rawMessage.replace( /\s+/g, ' ' ) ), 'assertive' );
-		}, oneSecond );
+		}, 1000 );
 	};
 
 	/**
@@ -122,9 +121,9 @@ wp.themePluginEditor = (function( $ ) {
 	 * @return {void}
 	 */
 	component.constrainTabbing = function( event ) {
-		var firstTabbable, lastTabbable, lastEvent = 9;
+		var firstTabbable, lastTabbable;
 
-		if ( lastEvent !== event.which ) {
+		if ( 9 !== event.which ) {
 			return;
 		}
 
@@ -329,7 +328,17 @@ wp.themePluginEditor = (function( $ ) {
 		 * @return {void}
 		 */
 		codeEditorSettings.onTabPrevious = function() {
-			$( '#templateside' ).find( ':tabbable' ).last().trigger( 'focus' );
+			var templateside = document.getElementById( 'templateside' ),
+				tabbables = [ ...templateside.querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]:not( [tabindex="-1"] )' ) ];
+
+			tabbables.forEach( function( tabbable ) {
+				var index;
+				if ( ! isVisible( tabbable ) ) {
+					index = tabbables.indexOf( tabbable );
+					tabbables.splice( index, 1 );
+				}
+			} );
+			tabbables[ tabbables.length -1 ].focus();
 		};
 
 		/**
@@ -340,7 +349,21 @@ wp.themePluginEditor = (function( $ ) {
 		 * @return {void}
 		 */
 		codeEditorSettings.onTabNext = function() {
-			$( '#template' ).find( ':tabbable:not(.CodeMirror-code)' ).first().trigger( 'focus' );
+			var template = document.getElementById( 'template' ),
+				tabbables = [ ...template.querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]:not( [tabindex="-1"] )' ) ];
+
+			tabbables.forEach( function( tabbable ) {
+				var index;
+				if ( ! isVisible( tabbable ) ) {
+					index = tabbables.indexOf( tabbable );
+					tabbables.splice( index, 1 );
+				}
+				if ( tabbable.className.includes( 'CodeMirror-code' ) ) {
+					index = tabbables.indexOf( tabbable );
+					tabbables.splice( index, 1 );
+				}
+			} );
+			tabbables[0].focus();
 		};
 
 		/**
@@ -448,6 +471,13 @@ wp.themePluginEditor = (function( $ ) {
 			}
 		} );
 	};
+
+	/*
+	 * Helper function copied from jQuery
+	 */
+	function isVisible( elem ) {
+		return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+	}
 
 	/* jshint ignore:start */
 	/* jscs:disable */
