@@ -350,19 +350,14 @@ wp.themePluginEditor = (function( $ ) {
 		 */
 		codeEditorSettings.onTabNext = function() {
 			var template = document.getElementById( 'template' ),
-				tabbables = [ ...template.querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]:not( [tabindex="-1"] )' ) ];
+				tabbables = [ ...template.querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]:not( [tabindex="-1"] )' ) ],
+				index = 0,
+				elementToSetFocusTo = tabbables[ index ];
 
-			tabbables.forEach( function( tabbable ) {
-				var index;
-				if ( ! isVisible( tabbable ) ) {
-					index = tabbables.indexOf( tabbable );
-					tabbables.splice( index, 1 );
-				}
-				if ( tabbable.className.includes( 'CodeMirror-code' ) ) {
-					index = tabbables.indexOf( tabbable );
-					tabbables.splice( index, 1 );
-				}
-			} );
+			while ( ! isVisible( tabbables[ index ] ) || tabbable.className.includes( 'CodeMirror-code' ) ) {
+				index = index + 1;
+				elementToSetFocusTo = tabbables[ index ];
+			}
 			tabbables[0].focus();
 		};
 
