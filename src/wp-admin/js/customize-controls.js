@@ -2641,22 +2641,36 @@
 
 				// Return if it's not the tab key
 				// When navigating with prev/next focus is already handled.
-				if ( 9 !== event.keyCode ) {
+				if ( 'Tab' !== event.key ) {
 					return;
 				}
 
-				// Uses jQuery UI to get the tabbable elements.
-				tabbables = $( ':tabbable', el );
+				// Get the tabbable elements.
+				tabbables = [ ...el[0].querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]:not( [tabindex="-1"] )' ) ];
+				tabbables.forEach( function( tabbable ) {
+					var index;
+					if ( ! isVisible( tabbable ) ) {
+						index = tabbables.indexOf( tabbable );
+						tabbables.splice( index, 1 );
+					}
+				} );
 
 				// Keep focus within the overlay.
-				if ( tabbables.last()[0] === event.target && ! event.shiftKey ) {
-					tabbables.first().focus();
+				if ( tabbables[ tabbables.length - 1 ] === event.target && ! event.shiftKey ) {
+					tabbables[0].focus();
 					return false;
-				} else if ( tabbables.first()[0] === event.target && event.shiftKey ) {
-					tabbables.last().focus();
+				} else if ( tabbables[0] === event.target && event.shiftKey ) {
+					tabbables[ tabbables.length - 1 ].focus();
 					return false;
 				}
-			});
+
+				/*
+				 * Helper function copied from jQuery
+				 */
+				function isVisible( elem ) {
+					return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+				}
+			} );
 		}
 	});
 
