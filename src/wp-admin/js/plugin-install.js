@@ -113,7 +113,7 @@ jQuery( function( $ ) {
 	 * Get the tabbable elements and detach/attach the keydown event.
 	 * Called after the iframe has fully loaded so we have all the elements we need.
 	 * Called again each time a Tab gets clicked.
-	 * 
+	 *
 	 * @since CP-2.1.0
 	 * Implemented without jQuery UI.
 	 */
