@@ -2966,6 +2966,38 @@ const mediaUploadMiddleware = (options, next) => {
 };
 /* harmony default export */ var media_upload = (mediaUploadMiddleware);
 
+;// CONCATENATED MODULE: ./node_modules/@wordpress/url/build-module/remove-query-args.js
+/**
+ * Internal dependencies
+ */
+
+
+
+/**
+ * Removes arguments from the query string of the url
+ *
+ * @param {string}    url  URL.
+ * @param {...string} args Query Args.
+ *
+ * @example
+ * ```js
+ * const newUrl = removeQueryArgs( 'https://wordpress.org?foo=bar&bar=baz&baz=foobar', 'foo', 'bar' ); // https://wordpress.org?baz=foobar
+ * ```
+ *
+ * @return {string} Updated URL.
+ */
+function removeQueryArgs(url, ...args) {
+  const queryStringIndex = url.indexOf('?');
+  if (queryStringIndex === -1) {
+    return url;
+  }
+  const query = getQueryArgs(url);
+  const baseURL = url.substr(0, queryStringIndex);
+  args.forEach(arg => delete query[arg]);
+  const queryString = buildQueryString(query);
+  return queryString ? baseURL + '?' + queryString : baseURL;
+}
+
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/middlewares/theme-preview.js
 /**
  * WordPress dependencies
@@ -2976,19 +3008,32 @@ const mediaUploadMiddleware = (options, next) => {
  * This appends a `wp_theme_preview` parameter to the REST API request URL if
  * the admin URL contains a `theme` GET parameter.
  *
+ * If the REST API request URL has contained the `wp_theme_preview` parameter as `''`,
+ * then bypass this middleware.
+ *
  * @param {Record<string, any>} themePath
  * @return {import('../types').APIFetchMiddleware} Preloading middleware.
  */
 const createThemePreviewMiddleware = themePath => (options, next) => {
-  if (typeof options.url === 'string' && !hasQueryArg(options.url, 'wp_theme_preview')) {
-    options.url = addQueryArgs(options.url, {
-      wp_theme_preview: themePath
-    });
+  if (typeof options.url === 'string') {
+    const wpThemePreview = getQueryArg(options.url, 'wp_theme_preview');
+    if (wpThemePreview === undefined) {
+      options.url = addQueryArgs(options.url, {
+        wp_theme_preview: themePath
+      });
+    } else if (wpThemePreview === '') {
+      options.url = removeQueryArgs(options.url, 'wp_theme_preview');
+    }
   }
-  if (typeof options.path === 'string' && !hasQueryArg(options.path, 'wp_theme_preview')) {
-    options.path = addQueryArgs(options.path, {
-      wp_theme_preview: themePath
-    });
+  if (typeof options.path === 'string') {
+    const wpThemePreview = getQueryArg(options.path, 'wp_theme_preview');
+    if (wpThemePreview === undefined) {
+      options.path = addQueryArgs(options.path, {
+        wp_theme_preview: themePath
+      });
+    } else if (wpThemePreview === '') {
+      options.path = removeQueryArgs(options.path, 'wp_theme_preview');
+    }
   }
   return next(options);
 };
