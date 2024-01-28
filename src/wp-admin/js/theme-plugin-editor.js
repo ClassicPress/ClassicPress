@@ -354,7 +354,7 @@ wp.themePluginEditor = (function( $ ) {
 				index = 0,
 				elementToSetFocusTo = tabbables[ index ];
 
-			while ( ! isVisible( tabbables[ index ] ) || tabbable.className.includes( 'CodeMirror-code' ) ) {
+			while ( ! isVisible( tabbables[ index ] ) || tabbables[ index ].className.includes( 'CodeMirror-code' ) ) {
 				index = index + 1;
 				elementToSetFocusTo = tabbables[ index ];
 			}
