@@ -12,6 +12,13 @@
 		isReducedMotion = event.matches;
 	});
 
+	/*
+	 * Helper function copied from jQuery
+	 */
+	function isVisible( elem ) {
+		return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+	}
+
 	api.OverlayNotification = api.Notification.extend(/** @lends wp.customize.OverlayNotification.prototype */{
 
 		/**
@@ -254,7 +261,7 @@
 
 			// Add all notifications in the sorted order.
 			_.each( notifications, function( notification ) {
-				var notificationContainer;
+				var notificationContainer, index = 0;
 				if ( wp.a11y && ( ! previousNotificationsByCode[ notification.code ] || ! _.isEqual( notification.message, previousNotificationsByCode[ notification.code ].message ) ) ) {
 					wp.a11y.speak( notification.message, 'assertive' );
 				}
@@ -288,9 +295,13 @@
 			if ( hasOverlayNotification ) {
 				collection.focusContainer = overlayNotifications[ overlayNotifications.length - 1 ].container;
 				collection.focusContainer.prop( 'tabIndex', -1 );
-				focusableElements = collection.focusContainer.find( ':focusable' );
+				focusableElements = [ ...collection.focusContainer[0].querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]' ) ];
 				if ( focusableElements.length ) {
-					focusableElements.first().focus();
+					focusableElements[ index ].focus();
+					while ( ! isVisible( focusableElements[ index ] ) ) {
+						index = index + 1;
+						focusableElements[ index ].focus();
+					}
 				} else {
 					collection.focusContainer.focus();
 				}
@@ -313,29 +324,36 @@
 		 * @return {void}
 		 */
 		constrainFocus: function constrainFocus( event ) {
-			var collection = this, focusableElements;
+			var collection = this, focusableElements, index;
 
 			// Prevent keys from escaping.
 			event.stopPropagation();
 
-			if ( 9 !== event.which ) { // Tab key.
+			if ( 'Tab' !== event.key ) {
 				return;
 			}
 
-			focusableElements = collection.focusContainer.find( ':focusable' );
+			focusableElements = [ ...collection.focusContainer[0].querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]' ) ];
+			focusableElements.forEach( function( elem ) {
+				if ( ! isVisible( elem ) ) {
+					index = focusableElements.indexOf( elem );
+					focusableElements.splice( index, 1 );
+				}
+			} );
+
 			if ( 0 === focusableElements.length ) {
 				focusableElements = collection.focusContainer;
 			}
 
 			if ( ! $.contains( collection.focusContainer[0], event.target ) || ! $.contains( collection.focusContainer[0], document.activeElement ) ) {
 				event.preventDefault();
-				focusableElements.first().focus();
+				focusableElements[0].focus();
 			} else if ( focusableElements.last().is( event.target ) && ! event.shiftKey ) {
 				event.preventDefault();
-				focusableElements.first().focus();
+				focusableElements[0].focus();
 			} else if ( focusableElements.first().is( event.target ) && event.shiftKey ) {
 				event.preventDefault();
-				focusableElements.last().focus();
+				focusableElements[ focusableElements.length - 1 ].focus();
 			}
 		}
 	});
@@ -695,8 +713,9 @@
 	 * @param {Function} [params.completeCallback]
 	 */
 	focus = function ( params ) {
-		var construct, completeCallback, focus, focusElement, sections;
+		var construct, completeCallback, focus, focusElement, focusableElements, sections;
 		construct = this;
+		index = 0,
 		params = params || {};
 		focus = function () {
 			// If a child section is currently expanded, collapse it.
@@ -718,10 +737,14 @@
 				focusContainer = construct.container;
 			}
 
-			focusElement = focusContainer.find( '.control-focus:first' );
+			focusElement = focusContainer[0].querySelector( '.control-focus' );
 			if ( 0 === focusElement.length ) {
-				// Note that we can't use :focusable due to a jQuery UI issue. See: https://github.com/jquery/jquery-ui/pull/1583
-				focusElement = focusContainer.find( 'input, select, textarea, button, object, a[href], [tabindex]' ).filter( ':visible' ).first();
+				focusableElements = focusContainer[0].querySelecttorAll( 'input, select, textarea, button, object, a[href], [tabindex]' );
+				focusElement = focusableElements[ index ];
+				while ( ! isVisible( focusableElements[ index ] ) ) {
+					index = index + 1;
+					focusElement = focusableElements[ index ];
+				}
 			}
 			focusElement.focus();
 		};
@@ -2663,13 +2686,6 @@
 					tabbables[ tabbables.length - 1 ].focus();
 					return false;
 				}
-
-				/*
-				 * Helper function copied from jQuery
-				 */
-				function isVisible( elem ) {
-					return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
-				}
 			} );
 		}
 	});
@@ -3989,7 +4005,6 @@
 				statuses     = this.container.find('.dropdown-status'),
 				params       = this.params,
 				toggleFreeze = false,
-				// eslint-disable-next-line func-style
 				update       = function( to ) {
 					if ( 'string' === typeof to && params.statuses && params.statuses[ to ] ) {
 						statuses.html( params.statuses[ to ] ).show();
@@ -5483,14 +5498,19 @@
 		 * @return {void}
 		 */
 		onTabNext: function onTabNext() {
-			var control = this, controls, controlIndex, section;
+			var control = this, controls, controlIndex, section, index = 0;
 			section = api.section( control.section() );
 			controls = section.controls();
 			controlIndex = controls.indexOf( control );
 			if ( controls.length === controlIndex + 1 ) {
 				$( '#customize-footer-actions .collapse-sidebar' ).trigger( 'focus' );
 			} else {
-				controls[ controlIndex + 1 ].container.find( ':focusable:first' ).focus();
+				focusableElements = [ ...controls[ controlIndex + 1 ].container[0].querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]' ) ];
+				focusableElements[ index ].focus();
+				while ( ! isVisible( focusableElements[ index ] ) ) {
+					index = index + 1;
+					focusableElements[ index ].focus();
+				}
 			}
 		},
 
@@ -5508,7 +5528,12 @@
 			if ( 0 === controlIndex ) {
 				section.contentContainer.find( '.customize-section-title .customize-help-toggle, .customize-section-title .customize-section-description.open .section-description-close' ).last().focus();
 			} else {
-				controls[ controlIndex - 1 ].contentContainer.find( ':focusable:first' ).focus();
+				focusableElements = [ ...controls[ controlIndex + 1 ].contentContainer[0].querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]' ) ];
+				focusableElements[ index ].focus();
+				while ( ! isVisible( focusableElements[ index ] ) ) {
+					index = index + 1;
+					focusableElements[ index ].focus();
+				}
 			}
 		},
 
@@ -8825,7 +8850,6 @@
 		// Bind site title display to the corresponding field.
 		if ( title.length ) {
 			api( 'blogname', function( setting ) {
-				// eslint-disable-next-line func-style
 				var updateTitle = function() {
 					var blogTitle = setting() || '';
 					title.text( blogTitle.toString().trim() || api.l10n.untitledBlogName );
@@ -9006,7 +9030,6 @@
 			api( settingId, function( setting ) {
 				$.each( o.controls, function( i, controlId ) {
 					api.control( controlId, function( control ) {
-						// eslint-disable-next-line func-style
 						var visibility = function( to ) {
 							control.container.toggle( o.callback( to ) );
 						};
@@ -9129,7 +9152,6 @@
 
 		// Add behaviors to the static front page controls.
 		api( 'show_on_front', 'page_on_front', 'page_for_posts', function( showOnFront, pageOnFront, pageForPosts ) {
-			// eslint-disable-next-line func-style
 			var handleChange = function() {
 				var setting = this, pageOnFrontId, pageForPostsId, errorCode = 'show_on_front_page_collision';
 				pageOnFrontId = parseInt( pageOnFront(), 10 );
@@ -9222,7 +9244,6 @@
 		// Toggle visibility of Header Video notice when active state change.
 		api.control( 'header_video', function( headerVideoControl ) {
 			headerVideoControl.deferred.embedded.done( function() {
-				// eslint-disable-next-line func-style
 				var toggleNotice = function() {
 					var section = api.section( headerVideoControl.section() ), noticeCode = 'video_header_not_available';
 					if ( ! section ) {
