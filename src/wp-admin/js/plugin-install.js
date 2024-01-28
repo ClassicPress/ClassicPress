@@ -53,7 +53,7 @@ jQuery( function( $ ) {
 	 * Custom events: when a Thickbox iframe has loaded and when the Thickbox
 	 * modal gets removed from the DOM.
 	 */
-	$(body).on( 'thickbox:iframe:loaded', tbWindow, function( e ) {
+	$(body).on( 'thickbox:iframe:loaded', tbWindow, function() {
 		/*
 		 * Return if it's not the modal with the plugin details iframe. Other
 		 * thickbox instances might want to load an iframe with content from
