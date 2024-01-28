@@ -228,6 +228,7 @@
 		 */
 		render: function() {
 			var collection = this,
+				index = 0,
 				notifications, hadOverlayNotification = false, hasOverlayNotification, overlayNotifications = [],
 				previousNotificationsByCode = {},
 				listElement, focusableElements;
@@ -261,7 +262,7 @@
 
 			// Add all notifications in the sorted order.
 			_.each( notifications, function( notification ) {
-				var notificationContainer, index = 0;
+				var notificationContainer;
 				if ( wp.a11y && ( ! previousNotificationsByCode[ notification.code ] || ! _.isEqual( notification.message, previousNotificationsByCode[ notification.code ].message ) ) ) {
 					wp.a11y.speak( notification.message, 'assertive' );
 				}
@@ -713,9 +714,10 @@
 	 * @param {Function} [params.completeCallback]
 	 */
 	focus = function ( params ) {
-		var construct, completeCallback, focus, focusElement, focusableElements, sections;
+		var construct, completeCallback, focus, focusElement, focusableElements, sections,
+			index = 0;
+
 		construct = this;
-		index = 0,
 		params = params || {};
 		focus = function () {
 			// If a child section is currently expanded, collapse it.
@@ -5498,7 +5500,9 @@
 		 * @return {void}
 		 */
 		onTabNext: function onTabNext() {
-			var control = this, controls, controlIndex, section, index = 0;
+			var control = this, controls, controlIndex, section, focusableElements,
+				index = 0;
+
 			section = api.section( control.section() );
 			controls = section.controls();
 			controlIndex = controls.indexOf( control );
@@ -5521,7 +5525,9 @@
 		 * @return {void}
 		 */
 		onTabPrevious: function onTabPrevious() {
-			var control = this, controls, controlIndex, section;
+			var control = this, controls, controlIndex, section, focusableElements,
+				index = 0;
+
 			section = api.section( control.section() );
 			controls = section.controls();
 			controlIndex = controls.indexOf( control );
