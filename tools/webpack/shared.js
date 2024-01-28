@@ -18,7 +18,20 @@ const baseConfig = ( env ) => {
 			moduleIds: mode === 'production' ? 'deterministic' : 'named',
 			minimizer: [
 				new TerserPlugin( {
-					extractComments: false,
+					parallel: true,
+					terserOptions: {
+						output: {
+							comments: /translators:/i,
+							keep_quoted_props: true,
+						},
+						compress: {
+							passes: 2,
+						},
+						mangle: {
+							reserved: [ '__', '_n', '_nx', '_x' ],
+						},
+					},
+					extractComments: mode === 'production' ? true : false,
 				} ),
 			]
 		},

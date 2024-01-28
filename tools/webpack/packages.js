@@ -4,7 +4,6 @@
  */
 const { normalizeJoin, baseConfig, baseDir, camelCaseDash } = require( './shared' );
 const { dependencies } = require( '../../package' );
-const TerserPlugin = require( 'terser-webpack-plugin' );
 
 module.exports = function( env = { environment: 'production', buildTarget: false } ) {
 	const mode = env.environment;
@@ -20,26 +19,6 @@ module.exports = function( env = { environment: 'production', buildTarget: false
 
 	const config = {
 		...baseConfig( env ),
-		optimization: {
-			minimize: mode === 'production' ? true : false,
-			minimizer: [
-				new TerserPlugin( {
-					parallel: true,
-					terserOptions: {
-						output: {
-							comments: /translators:/i,
-						},
-						compress: {
-							passes: 2,
-						},
-						mangle: {
-							reserved: [ '__', '_n', '_nx', '_x' ],
-						},
-					},
-					extractComments: mode === 'production' ? true : false,
-				} )
-			],
-		},
 		entry: packages.reduce( ( memo, packageName ) => {
 			memo[ packageName] = {
 				import: memo[ packageName ] = normalizeJoin( baseDir, `node_modules/@wordpress/${ packageName }` ),
@@ -56,6 +35,10 @@ module.exports = function( env = { environment: 'production', buildTarget: false
 			devtoolNamespace: 'wp',
 			filename: `[name]${ suffix }.js`,
 			path: normalizeJoin( baseDir, `${ buildTarget }/js/dist` ),
+			environment: {
+				arrowFunction: mode === 'production' ? true : false,
+				const: mode === 'production' ? true : false,
+			}
 		},
 	};
 
