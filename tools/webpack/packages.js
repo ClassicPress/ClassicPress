@@ -35,6 +35,10 @@ module.exports = function( env = { environment: 'production', buildTarget: false
 			devtoolNamespace: 'wp',
 			filename: `[name]${ suffix }.js`,
 			path: normalizeJoin( baseDir, `${ buildTarget }/js/dist` ),
+			environment: {
+				arrowFunction: mode === 'production' ? true : false,
+				const: mode === 'production' ? true : false,
+			}
 		},
 	};
 
