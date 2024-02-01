@@ -229,7 +229,7 @@ jQuery( function( $ ) {
 		 * like a link. Otherwise we're in the normal plugin installer pages and the
 		 * link should behave like a toggle button.
 		 */
-		if ( ! wrap.className.includes( 'plugin-install-tab-upload' ) ) {
+		if ( uploadViewToggle && ! wrap.className.includes( 'plugin-install-tab-upload' ) ) {
 			uploadViewToggle.setAttribute( 'role', 'button' );
 			uploadViewToggle.setAttribute( 'aria-expanded', 'false' );
 			uploadViewToggle.addEventListener( 'click', function( event ) {
