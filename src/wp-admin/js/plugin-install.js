@@ -142,11 +142,15 @@ jQuery( function( $ ) {
 
 		// Get the last tabbable element, ignoring those listed in hidden tab panels.
 		// Cannot do this above because the tab panels are set too late.
-		length = tabbables.length;
-		lastTabbable = tabbables[ length - 1 ];
-		while ( lastTabbable.closest( '.section' ) && ! isVisible( lastTabbable.closest( '.section' ) ) ) {
-			length = length - 1;
-			lastTabbable = tabbables[ length - 1 ];
+		if ( tabbables.at( -1 ).id === 'plugin_install_from_iframe' ) {
+			lastTabbable = tabbables.at( -1 );
+		} else { // we need the last but one element instead
+			length = tabbables.length;
+			lastTabbable = tabbables[ length - 2 ];
+			while ( lastTabbable.closest( '.section' ) && ! isVisible( lastTabbable.closest( '.section' ) ) ) {
+				length = length - 1;
+				lastTabbable = tabbables[ length - 1 ];
+			}
 		}
 		lastTabbable.addEventListener( 'keydown', function( event ) {
 			constrainTabbing( event );
