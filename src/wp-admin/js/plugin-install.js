@@ -3,83 +3,106 @@
  *
  * @output wp-admin/js/plugin-install.js
  */
+document.addEventListener( 'DOMContentLoaded', function() {
 
-/* global tb_click, tb_remove, tb_position */
-
-jQuery( function( $ ) {
-
-	var tbWindow,
-		iframeBody,
-		tabbables,
-		firstTabbable,
-		lastTabbable,
-		focusedBefore = '',
+	var iframe, iframeBody, tabbables, firstTabbable, lastTabbable, closeButton,
 		uploadViewToggle = document.querySelector( '.upload-view-toggle' ),
 		wrap = document.querySelector( '.wrap' ),
-		body = document.body;
+		body = document.body,
+		openers = document.querySelectorAll( '.thickbox' ),
+		width = window.innerWidth,
+		height = window.innerHeight,
+		dialog = document.createElement( 'dialog' );
 
-	window.tb_position = function() {
-		var width = window.innerWidth,
-			H = window.innerHeight - ( ( 792 < width ) ? 60 : 20 ),
-			W = ( 792 < width ) ? 772 : width - 20;
+	dialog.className = 'plugin-details-modal';
+	dialog.style.padding = '0';
+	body.append( dialog ); // append dialog element to page
 
-		tbWindow = document.querySelector( '#TB_window' );
-		tbWindow.style.width = W + 'px';
-		tbWindow.style.height = H + 'px';
-		document.querySelector( '#TB_iframeContent' ).style.width = W + 'px';
-		document.querySelector( '#TB_iframeContent' ).style.height = H + 'px';
-		tbWindow.style.marginLeft = '-' + parseInt( ( W / 2 ), 10 ) + 'px';
-		if ( typeof document.body.style.maxWidth !== 'undefined' ) {
-			tbWindow.style.top = '30px',
-			tbWindow.style.marginTop = '0';
-		}
+	/*
+	 * Open modal dialog (replacing previous thickbox)
+	 *
+	 * @since CP-2.1.0
+	 */
+	openers.forEach( function( opener ) {
+		opener.addEventListener( 'click', function() {
+			var url = opener.href || opener.alt,
+				title = opener.dataset.title ?
+					wp.i18n.sprintf(
+						// translators: %s: Plugin name.
+						wp.i18n.__( 'Plugin: %s' ),
+						opener.dataset.title
+					) :
+					wp.i18n.__( 'Plugin details' );
 
-		return document.querySelectorAll( 'a.thickbox' ).forEach( function( thickbox ) {
-			var href = thickbox.href;
-			if ( ! href ) {
-				return;
+			urlNoQuery = url.split('TB_');
+
+			dialog.classList.add( 'modal-loading' );
+			dialog.showModal();
+			dialog.insertAdjacentHTML( 'beforeend', '<button type="button" id="dialog-close-button" autofocus><span class="screen-reader-text">' + pluginL10n.close + '</span></button><iframe frameborder="0" hspace="0" allowtransparency="true" src="' + urlNoQuery[0] + '" id="TB_iframeContent" name="TB_iframeContent' + Math.round( Math.random() * 1000 ) + '" style="width: ' + ( width * 9 / 10 ) + 'px;max-width:800px;height: ' + ( height * 9 / 10 ) + 'px;" title="' + title + '">' + pluginL10n.noiframes + '</iframe>' );
+
+			iframe = dialog.querySelector( 'iframe' );
+			if ( iframe ) {
+				iframe.addEventListener( 'load', function( event ) {
+					dialog.classList.remove( 'modal-loading' );
+					iframeLoaded( dialog );
+				} );
 			}
-			href = href.replace( /&width=[0-9]+/g, '' );
-			href = href.replace( /&height=[0-9]+/g, '' );
-			thickbox.href = href + '&width=' + W + '&height=' + H;
-		} );
-	};
 
-	window.addEventListener( 'resize', function() {
-		tb_position();
+			closeButton = dialog.querySelector( '#dialog-close-button' );
+			closeButton.addEventListener( 'click', function() {
+				dialog.close();
+				if ( iframe != null ) {
+					iframe.remove();
+				}
+				closeButton.remove();
+			} );
+
+			// Remove iframe contents when hitting the Escape button
+			dialog.addEventListener( 'keydown', function( e ) {
+				if ( e.key === 'Escape' ) {			
+					if ( iframe != null ) {
+						iframe.remove();
+					}
+					closeButton.remove();
+				}
+				else if ( e.key === 'Enter' && e.target.id === 'dialog-close-button' ) {
+					e.preventDefault();
+					dialog.close();
+					if ( iframe != null ) {
+						iframe.remove();
+					}
+					closeButton.remove();
+				}
+			} );
+		} );
 	} );
 
 	/*
-	 * Custom events: when a Thickbox iframe has loaded and when the Thickbox
-	 * modal gets removed from the DOM.
+	 * Remove iframe contents when closing modal dialog with Escape key
+	 *
+	 * @since CP-2.1.0
 	 */
-	$(body).on( 'thickbox:iframe:loaded', tbWindow, function() {
-		/*
-		 * Return if it's not the modal with the plugin details iframe. Other
-		 * thickbox instances might want to load an iframe with content from
-		 * an external domain. Avoid to access the iframe contents when we're
-		 * not sure the iframe loads from the same domain.
-		 */
-		if ( ! tbWindow.className.includes( 'plugin-details-modal' ) ) {
-			return;
+	document.addEventListener( 'keydown', function( e ) {
+		if ( e.key === 'Escape' ) {			
+			if ( iframe != null ) {
+				iframe.remove();
+			}
+			closeButton.remove();
 		}
-
-		iframeLoaded();
 	} );
 
-	$(body).on( 'thickbox:removed', function() {
-		// Set focus back to the element that opened the modal dialog.
-		focusedBefore.focus();
-	} );
-
-	function iframeLoaded() {
-		var iframe = tbWindow.querySelector( '#TB_iframeContent' );
+	/*
+	 * Called when iframe has loaded
+	 *
+	 * @since CP-2.1.0
+	 */
+	function iframeLoaded( dialog ) {
 
 		// Get the iframe body.
 		iframeBody = iframe.contentWindow.document.querySelector( 'body' );
 
 		// Get the tabbable elements and handle the keydown event on first load.
-		handleTabbables();
+		handleTabbables( dialog );
 
 		// Set initial focus on the "Close" button.
 		firstTabbable.focus();
@@ -92,12 +115,12 @@ jQuery( function( $ ) {
 		 */
 		document.querySelectorAll( '#plugin-information-tabs a' ).forEach( function( tab ) {
 			tab.addEventListener( 'click', function() {
-				handleTabbables();
+				handleTabbables( dialog );
 			} );
 		} );
 
 		iframeBody.addEventListener( 'click', function() {
-			handleTabbables();
+			handleTabbables( dialog );
 		} );
 
 		// Close the modal when pressing Escape.
@@ -105,19 +128,18 @@ jQuery( function( $ ) {
 			if ( 'Escape' !== event.key ) {
 				return;
 			}
-			tb_remove();
 		} );
 	}
 
 	/*
-	 * Get the tabbable elements and detach/attach the keydown event.
+	 * Get the tabbable elements.
 	 * Called after the iframe has fully loaded so we have all the elements we need.
 	 * Called again each time a Tab gets clicked.
 	 *
 	 * @since CP-2.1.0
 	 * Implemented without jQuery UI.
 	 */
-	function handleTabbables() {
+	function handleTabbables( dialog ) {
 		var length;
 
 		// Get all the tabbable elements
@@ -134,8 +156,8 @@ jQuery( function( $ ) {
 			}
 		} );
 
-		// The first tabbable element is always the "Close" button.
-		firstTabbable = tbWindow.querySelector( '#TB_closeWindowButton' );
+		// The first tabbable element is always the "Close" button
+		firstTabbable = document.getElementById( 'dialog-close-button' );
 		firstTabbable.addEventListener( 'keydown', function( event ) {
 			constrainTabbing( event );
 		} );
@@ -173,56 +195,26 @@ jQuery( function( $ ) {
 		} );
 	}
 
-	// Constrain tabbing within the plugin modal dialog.
+	// Constrain tabbing within the plugin modal dialog, but allow closing
 	function constrainTabbing( event ) {
-		if ( 'Tab' !== event.key ) {
-			return;
-		}
-
-		if ( lastTabbable === event.target && ! event.shiftKey ) {
-			event.preventDefault();
-			firstTabbable.focus();
-		} else if ( firstTabbable === event.target && event.shiftKey ) {
-			event.preventDefault();
-			lastTabbable.focus();
+		if ( 'Tab' === event.key ) {
+			if ( lastTabbable === event.target && ! event.shiftKey ) {
+				event.preventDefault();
+				firstTabbable.focus();
+			} else if ( firstTabbable === event.target && event.shiftKey ) {
+				event.preventDefault();
+				lastTabbable.focus();
+			}
 		}
 	}
 
 	/*
-	 * Open the Plugin details modal. The event is delegated to get also the links
-	 * in the plugins search tab, after the Ajax search rebuilds the HTML. It's
-	 * delegated on the closest ancestor and not on the body to avoid conflicts
-	 * with other handlers, see Trac ticket #43082.
+	 * Prevent complications such as iframe showing outside modal
 	 */
 	if ( wrap != null ) { // also includes undefined
 		wrap.addEventListener( 'click', function( e ) {
-			if ( e.target.className === 'thickbox open-plugin-details-modal' ) {
-
-				// The `data-title` attribute is used only in the Plugin screens.
-				var title = e.target.dataset.title ?
-					wp.i18n.sprintf(
-						// translators: %s: Plugin name.
-						wp.i18n.__( 'Plugin: %s' ),
-						e.target.dataset.title
-					) :
-					wp.i18n.__( 'Plugin details' );
-
-				e.preventDefault();
-				e.stopPropagation();
-
-				// Store the element that has focus before opening the modal dialog, i.e. the control which opens it.
-				focusedBefore = e.target;
-
-				tb_click.call( e.target );
-
-				// Set ARIA role, ARIA label, and add a CSS class.
-				tbWindow.setAttribute( 'role', 'dialog' );
-				tbWindow.setAttribute( 'aria-label', wp.i18n.__( 'Plugin details' ) );
-				tbWindow.classList.add( 'plugin-details-modal' );
-
-				// Set title attribute on the iframe.
-				tbWindow.querySelector( '#TB_iframeContent' ).setAttribute( 'title', title );
-			}
+			e.preventDefault();
+			e.stopPropagation();
 		} );
 
 		/*
