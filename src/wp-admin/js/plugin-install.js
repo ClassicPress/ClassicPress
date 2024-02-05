@@ -122,13 +122,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		iframeBody.addEventListener( 'click', function() {
 			handleTabbables( dialog );
 		} );
-
-		// Close the modal when pressing Escape.
-		iframeBody.addEventListener( 'keydown', function( event ) {
-			if ( 'Escape' !== event.key ) {
-				return;
-			}
-		} );
 	}
 
 	/*
