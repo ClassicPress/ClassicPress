@@ -64,7 +64,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Remove iframe contents when hitting the Escape button
 			dialog.addEventListener( 'keydown', function( e ) {
-				if ( e.key === 'Escape' ) {			
+				if ( e.key === 'Escape' ) {
 					if ( iframe != null ) {
 						iframe.remove();
 					}
@@ -88,7 +88,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @since CP-2.1.0
 	 */
 	document.addEventListener( 'keydown', function( e ) {
-		if ( e.key === 'Escape' ) {			
+		if ( e.key === 'Escape' ) {
 			if ( iframe != null ) {
 				iframe.remove();
 			}
