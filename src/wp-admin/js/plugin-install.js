@@ -49,7 +49,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( iframe ) {
 				iframe.addEventListener( 'load', function() {
 					dialog.classList.remove( 'modal-loading' );
-					iframeLoaded( dialog );
+					iframeLoaded();
 				} );
 			}
 
@@ -101,7 +101,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 *
 	 * @since CP-2.1.0
 	 */
-	function iframeLoaded( dialog ) {
+	function iframeLoaded() {
 
 		// Get the iframe body.
 		iframeBody = iframe.contentWindow.document.querySelector( 'body' );
