@@ -24,7 +24,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @since CP-2.1.0
 	 */
 	openers.forEach( function( opener ) {
-		opener.addEventListener( 'click', function() {
+		opener.addEventListener( 'click', function( e ) {
 			var url = opener.href || opener.alt,
 				title = opener.dataset.title ?
 					wp.i18n.sprintf(
@@ -33,6 +33,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						opener.dataset.title
 					) :
 					wp.i18n.__( 'Plugin details' );
+
+			e.preventDefault();
+			e.stopPropagation();
 
 			urlNoQuery = url.split('TB_');
 
@@ -202,22 +205,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/*
-	 * Prevent complications such as iframe showing outside modal
+	 * When a user presses the "Upload Plugin" button, show the upload form in place
+	 * rather than sending them to the devoted upload plugin page.
+	 * The `?tab=upload` page still exists for no-js support and for plugins that
+	 * might access it directly. When we're in this page, let the link behave
+	 * like a link. Otherwise we're in the normal plugin installer pages and the
+	 * link should behave like a toggle button.
 	 */
-	if ( wrap != null ) { // also includes undefined
-		wrap.addEventListener( 'click', function( e ) {
-			e.preventDefault();
-			e.stopPropagation();
-		} );
-
-		/*
-		 * When a user presses the "Upload Plugin" button, show the upload form in place
-		 * rather than sending them to the devoted upload plugin page.
-		 * The `?tab=upload` page still exists for no-js support and for plugins that
-		 * might access it directly. When we're in this page, let the link behave
-		 * like a link. Otherwise we're in the normal plugin installer pages and the
-		 * link should behave like a toggle button.
-		 */
+	if ( wrap != null ) {
 		if ( uploadViewToggle && ! wrap.className.includes( 'plugin-install-tab-upload' ) ) {
 			uploadViewToggle.setAttribute( 'role', 'button' );
 			uploadViewToggle.setAttribute( 'aria-expanded', 'false' );
