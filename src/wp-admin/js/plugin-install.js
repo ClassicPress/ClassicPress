@@ -3,6 +3,7 @@
  *
  * @output wp-admin/js/plugin-install.js
  */
+/* global pluginL10n */
 document.addEventListener( 'DOMContentLoaded', function() {
 
 	var iframe, iframeBody, tabbables, firstTabbable, lastTabbable, closeButton,
@@ -25,7 +26,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	openers.forEach( function( opener ) {
 		opener.addEventListener( 'click', function( e ) {
-			var url = opener.href || opener.alt,
+			var urlNoQuery,
+				url = opener.href || opener.alt,
 				title = opener.dataset.title ?
 					wp.i18n.sprintf(
 						// translators: %s: Plugin name.
@@ -45,7 +47,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			iframe = dialog.querySelector( 'iframe' );
 			if ( iframe ) {
-				iframe.addEventListener( 'load', function( event ) {
+				iframe.addEventListener( 'load', function() {
 					dialog.classList.remove( 'modal-loading' );
 					iframeLoaded( dialog );
 				} );
@@ -105,7 +107,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		iframeBody = iframe.contentWindow.document.querySelector( 'body' );
 
 		// Get the tabbable elements and handle the keydown event on first load.
-		handleTabbables( dialog );
+		handleTabbables();
 
 		// Set initial focus on the "Close" button.
 		firstTabbable.focus();
@@ -118,12 +120,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		 */
 		document.querySelectorAll( '#plugin-information-tabs a' ).forEach( function( tab ) {
 			tab.addEventListener( 'click', function() {
-				handleTabbables( dialog );
+				handleTabbables();
 			} );
 		} );
 
 		iframeBody.addEventListener( 'click', function() {
-			handleTabbables( dialog );
+			handleTabbables();
 		} );
 	}
 
@@ -135,7 +137,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @since CP-2.1.0
 	 * Implemented without jQuery UI.
 	 */
-	function handleTabbables( dialog ) {
+	function handleTabbables() {
 		var length;
 
 		// Get all the tabbable elements
