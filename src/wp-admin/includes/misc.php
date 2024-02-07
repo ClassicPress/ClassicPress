@@ -123,15 +123,8 @@ function extract_from_markers( $filename, $marker, $is_regex = false ) {
 		$end_marker   = preg_quote( $end_marker, '/' );
 	}
 
-<<<<<<< HEAD
 	$start_marker = "/{$start_marker}/";
 	$end_marker   = "/{$end_marker}/";
-=======
-		if ( $state ) {
-			if ( str_starts_with( $markerline, '#' ) ) {
-				continue;
-			}
->>>>>>> 66674fbfd9 (Code Modernization: Replace usage of `substr()` with `str_starts_with()` and `str_ends_with()`.)
 
 	$file_data = explode( "\n", implode( '', file( $filename ) ) );
 
