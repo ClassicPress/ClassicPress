@@ -1325,8 +1325,13 @@ switch ( $action ) {
 				$errors->add( 'loggedout', __( 'You are now logged out.' ), 'message' );
 			} elseif ( isset( $_GET['registration'] ) && 'disabled' === $_GET['registration'] ) {
 				$errors->add( 'registerdisabled', __( '<strong>Error:</strong> User registration is currently not allowed.' ) );
+<<<<<<< HEAD
 			} elseif ( strpos( $redirect_to, 'about.php?updated' ) ) {
 				$errors->add( 'updated', __( '<strong>You have successfully updated ClassicPress!</strong> Please log back in to see what&#8217;s new.' ), 'message' );
+=======
+			} elseif ( str_contains( $redirect_to, 'about.php?updated' ) ) {
+				$errors->add( 'updated', __( '<strong>You have successfully updated WordPress!</strong> Please log back in to see what&#8217;s new.' ), 'message' );
+>>>>>>> 8b5cfe0887 (Code Modernization: Use `str_contains()` in a few more places.)
 			} elseif ( WP_Recovery_Mode_Link_Service::LOGIN_ACTION_ENTERED === $action ) {
 				$errors->add( 'enter_recovery_mode', __( 'Recovery Mode Initialized. Please log in to continue.' ), 'message' );
 			} elseif ( isset( $_GET['redirect_to'] ) && false !== strpos( $_GET['redirect_to'], 'wp-admin/authorize-application.php' ) ) {

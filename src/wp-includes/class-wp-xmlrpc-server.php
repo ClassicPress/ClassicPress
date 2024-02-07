@@ -4871,7 +4871,7 @@ class wp_xmlrpc_server extends IXR_Server {
 			return $blogs;
 		} else {
 			foreach ( (array) $blogs as $blog ) {
-				if ( strpos( $blog['url'], $_SERVER['HTTP_HOST'] ) ) {
+				if ( str_contains( $blog['url'], $_SERVER['HTTP_HOST'] ) ) {
 					return array( $blog );
 				}
 			}
