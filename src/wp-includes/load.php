@@ -71,11 +71,7 @@ function wp_fix_server_vars() {
 	}
 
 	// Fix for PHP as CGI hosts that set SCRIPT_FILENAME to something ending in php.cgi for all requests.
-<<<<<<< HEAD
-	if ( isset( $_SERVER['SCRIPT_FILENAME'] ) && ( strpos( $_SERVER['SCRIPT_FILENAME'], 'php.cgi' ) == strlen( $_SERVER['SCRIPT_FILENAME'] ) - 7 ) ) {
-=======
 	if ( isset( $_SERVER['SCRIPT_FILENAME'] ) && str_ends_with( $_SERVER['SCRIPT_FILENAME'], 'php.cgi' ) ) {
->>>>>>> 997abf4009 (Code Modernization: Use `str_contains()` in a few more places.)
 		$_SERVER['SCRIPT_FILENAME'] = $_SERVER['PATH_TRANSLATED'];
 	}
 
