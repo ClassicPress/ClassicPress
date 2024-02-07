@@ -799,11 +799,7 @@ function wp_kses_one_attr( $attr, $element ) {
 			$quote = $value[0];
 		}
 		if ( '"' === $quote || "'" === $quote ) {
-<<<<<<< HEAD
-			if ( substr( $value, -1 ) != $quote ) {
-=======
 			if ( ! str_ends_with( $value, $quote ) ) {
->>>>>>> 89676d88a2 (Code Modernization: Use `str_starts_with()` and `str_ends_with()` in a few more places.)
 				return '';
 			}
 			$value = substr( $value, 1, -1 );
