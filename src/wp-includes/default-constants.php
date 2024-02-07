@@ -104,15 +104,10 @@ function wp_initial_constants() {
 	// Add define( 'SCRIPT_DEBUG', true ); to wp-config.php to enable loading of non-minified,
 	// non-concatenated scripts and stylesheets.
 	if ( ! defined( 'SCRIPT_DEBUG' ) ) {
-<<<<<<< HEAD
 		// Include an unmodified $wp_version.
 		require ABSPATH . WPINC . '/version.php';
 		if ( ! empty( $cp_version ) ) {
 			$develop_src = classicpress_is_dev_install();
-=======
-		if ( ! empty( $wp_version ) ) {
-			$develop_src = str_contains( $wp_version, '-src' );
->>>>>>> 4d6c6eefae (Code Modernization: Use `str_contains()` in a few more places.)
 		} else {
 			$develop_src = false;
 		}
