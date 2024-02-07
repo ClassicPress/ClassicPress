@@ -983,11 +983,6 @@ function _upgrade_422_find_genericons_files_in_folder( $directory ) {
 	$dirs = glob( $directory . '*', GLOB_ONLYDIR );
 	$dirs = array_filter(
 		$dirs,
-<<<<<<< HEAD
-		static function ( $dir ) {
-			// Skip any node_modules directories.
-			return ! str_contains( $dir, 'node_modules' );
-=======
 		static function( $dir ) {
 			/*
 			 * Skip any node_modules directories.
@@ -997,7 +992,6 @@ function _upgrade_422_find_genericons_files_in_folder( $directory ) {
 			 * the polyfills from wp-includes/compat.php may not be available.
 			 */
 			return false === strpos( $dir, 'node_modules' );
->>>>>>> 45363a5976 (Revert use of `str_starts_with()` and `str_contains()` in `update-core.php`.)
 		}
 	);
 
