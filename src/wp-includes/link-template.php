@@ -3887,7 +3887,7 @@ function set_url_scheme( $url, $scheme = null ) {
 	}
 
 	$url = trim( $url );
-	if ( substr( $url, 0, 2 ) === '//' ) {
+	if ( str_starts_with( $url, '//' ) ) {
 		$url = 'http:' . $url;
 	}
 
