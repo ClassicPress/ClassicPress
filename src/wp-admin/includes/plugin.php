@@ -306,7 +306,7 @@ function get_plugins( $plugin_folder = '' ) {
 
 	if ( $plugins_dir ) {
 		while ( ( $file = readdir( $plugins_dir ) ) !== false ) {
-			if ( '.' === substr( $file, 0, 1 ) ) {
+			if ( str_starts_with( $file, '.' ) ) {
 				continue;
 			}
 
@@ -315,11 +315,11 @@ function get_plugins( $plugin_folder = '' ) {
 
 				if ( $plugins_subdir ) {
 					while ( ( $subfile = readdir( $plugins_subdir ) ) !== false ) {
-						if ( '.' === substr( $subfile, 0, 1 ) ) {
+						if ( str_starts_with( $subfile, '.' ) ) {
 							continue;
 						}
 
-						if ( '.php' === substr( $subfile, -4 ) ) {
+						if ( str_ends_with( $subfile, '.php' ) ) {
 							$plugin_files[] = "$file/$subfile";
 						}
 					}
@@ -327,7 +327,7 @@ function get_plugins( $plugin_folder = '' ) {
 					closedir( $plugins_subdir );
 				}
 			} else {
-				if ( '.php' === substr( $file, -4 ) ) {
+				if ( str_ends_with( $file, '.php' ) ) {
 					$plugin_files[] = $file;
 				}
 			}
@@ -383,7 +383,7 @@ function get_mu_plugins() {
 	$plugins_dir = @opendir( WPMU_PLUGIN_DIR );
 	if ( $plugins_dir ) {
 		while ( ( $file = readdir( $plugins_dir ) ) !== false ) {
-			if ( '.php' === substr( $file, -4 ) ) {
+			if ( str_ends_with( $file, '.php' ) ) {
 				$plugin_files[] = $file;
 			}
 		}

@@ -412,7 +412,7 @@ function get_comment_author_url_link( $linktext = '', $before = '', $after = '',
 	$display = str_replace( 'http://www.', '', $display );
 	$display = str_replace( 'http://', '', $display );
 
-	if ( '/' === substr( $display, -1 ) ) {
+	if ( str_ends_with( $display, '/' ) ) {
 		$display = substr( $display, 0, -1 );
 	}
 

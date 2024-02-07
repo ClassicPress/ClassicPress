@@ -299,8 +299,13 @@ if ( isset( $_GET['editwidget'] ) && $_GET['editwidget'] ) {
 	<table class="widefat"><thead><tr><th><?php _e( 'Sidebar' ); ?></th><th><?php _e( 'Position' ); ?></th></tr></thead><tbody>
 	<?php
 	foreach ( $wp_registered_sidebars as $sbname => $sbvalue ) {
+<<<<<<< HEAD
 		echo "\t\t<tr><td><label><input type='radio' name='sidebar' value='" . esc_attr( $sbname ) . "'" . checked( $sbname, $sidebar, false ) . "> $sbvalue[name]</label></td><td>";
 		if ( 'wp_inactive_widgets' === $sbname || 'orphaned_widgets' === substr( $sbname, 0, 16 ) ) {
+=======
+		echo "\t\t<tr><td><label><input type='radio' name='sidebar' value='" . esc_attr( $sbname ) . "'" . checked( $sbname, $sidebar, false ) . " /> $sbvalue[name]</label></td><td>";
+		if ( 'wp_inactive_widgets' === $sbname || str_starts_with( $sbname, 'orphaned_widgets' ) ) {
+>>>>>>> 66674fbfd9 (Code Modernization: Replace usage of `substr()` with `str_starts_with()` and `str_ends_with()`.)
 			echo '&nbsp;';
 		} else {
 			if ( ! isset( $sidebars_widgets[ $sbname ] ) || ! is_array( $sidebars_widgets[ $sbname ] ) ) {
@@ -440,7 +445,7 @@ do_action( 'widgets_admin_page' );
 
 $theme_sidebars = array();
 foreach ( $wp_registered_sidebars as $sidebar => $registered_sidebar ) {
-	if ( str_contains( $registered_sidebar['class'], 'inactive-sidebar' ) || 'orphaned_widgets' === substr( $sidebar, 0, 16 ) ) {
+	if ( str_contains( $registered_sidebar['class'], 'inactive-sidebar' ) || str_starts_with( $sidebar, 'orphaned_widgets' ) ) {
 		$wrap_class = 'widgets-holder-wrap';
 		if ( ! empty( $registered_sidebar['class'] ) ) {
 			$wrap_class .= ' ' . $registered_sidebar['class'];

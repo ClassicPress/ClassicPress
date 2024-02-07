@@ -1042,7 +1042,11 @@ function get_links_list($order = 'name') {
 
 	// Handle link category sorting.
 	$direction = 'ASC';
+<<<<<<< HEAD
 	if ( '_' == substr($order,0,1) ) {
+=======
+	if ( str_starts_with( $order, '_' ) ) {
+>>>>>>> 66674fbfd9 (Code Modernization: Replace usage of `substr()` with `str_starts_with()` and `str_ends_with()`.)
 		$direction = 'DESC';
 		$order = substr($order,1);
 	}

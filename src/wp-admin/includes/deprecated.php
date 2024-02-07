@@ -1365,7 +1365,11 @@ function wp_dashboard_plugins_output( $rss, $args = array() ) {
 			// Is this random plugin's slug already installed? If so, try again.
 			reset( $plugin_slugs );
 			foreach ( $plugin_slugs as $plugin_slug ) {
+<<<<<<< HEAD
 				if ( $slug == substr( $plugin_slug, 0, strlen( $slug ) ) ) {
+=======
+				if ( str_starts_with( $plugin_slug, $slug ) ) {
+>>>>>>> 66674fbfd9 (Code Modernization: Replace usage of `substr()` with `str_starts_with()` and `str_ends_with()`.)
 					unset( $items[$item_key] );
 					continue 2;
 				}
