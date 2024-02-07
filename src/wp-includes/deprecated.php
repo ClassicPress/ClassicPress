@@ -947,11 +947,7 @@ function get_links($category = -1, $before = '', $after = '<br>', $between = ' '
 	_deprecated_function( __FUNCTION__, '2.1.0', 'get_bookmarks()' );
 
 	$order = 'ASC';
-<<<<<<< HEAD
-	if ( substr($orderby, 0, 1) == '_' ) {
-=======
 	if ( str_starts_with($orderby, '_') ) {
->>>>>>> c226fa18f0 (Code Modernization: Use `str_starts_with()` and `str_ends_with()` in a few more places.)
 		$order = 'DESC';
 		$orderby = substr($orderby, 1);
 	}
