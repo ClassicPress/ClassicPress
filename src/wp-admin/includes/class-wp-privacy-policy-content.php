@@ -637,6 +637,21 @@ final class WP_Privacy_Policy_Content {
 			$strings[] = '</div>';
 		}
 
+<<<<<<< HEAD
+=======
+		if ( $blocks ) {
+			foreach ( $strings as $key => $string ) {
+				if ( str_starts_with( $string, '<p>' ) ) {
+					$strings[ $key ] = '<!-- wp:paragraph -->' . $string . '<!-- /wp:paragraph -->';
+				}
+
+				if ( str_starts_with( $string, '<h2>' ) ) {
+					$strings[ $key ] = '<!-- wp:heading -->' . $string . '<!-- /wp:heading -->';
+				}
+			}
+		}
+
+>>>>>>> 4cb3e1582a (Code Modernization: Replace usage of `strpos()` with `str_starts_with()`.)
 		$content = implode( '', $strings );
 		// End of the suggested privacy policy text.
 
