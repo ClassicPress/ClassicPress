@@ -447,17 +447,7 @@ function the_category_rss( $type = null ) {
  * @since CP-2.0.0 Site content type will always be 'html'.
  */
 function html_type_rss() {
-<<<<<<< HEAD
 	echo 'html';
-=======
-	$type = get_bloginfo( 'html_type' );
-	if ( str_contains( $type, 'xhtml' ) ) {
-		$type = 'xhtml';
-	} else {
-		$type = 'html';
-	}
-	echo $type;
->>>>>>> 9e9887d8b8 (Code Modernization: Replace usage of `strpos()` with `str_contains()`.)
 }
 
 /**

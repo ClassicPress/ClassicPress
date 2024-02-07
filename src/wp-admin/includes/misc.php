@@ -118,17 +118,9 @@ function extract_from_markers( $filename, $marker, $is_regex = false ) {
 	$start_marker = "# BEGIN {$marker}";
 	$end_marker   = "# END {$marker}";
 
-<<<<<<< HEAD
 	if ( ! $is_regex ) {
 		$start_marker = preg_quote( $start_marker, '/' );
 		$end_marker   = preg_quote( $end_marker, '/' );
-=======
-	$state = false;
-
-	foreach ( $markerdata as $markerline ) {
-		if ( str_contains( $markerline, '# END ' . $marker ) ) {
-			$state = false;
->>>>>>> 9e9887d8b8 (Code Modernization: Replace usage of `strpos()` with `str_contains()`.)
 	}
 
 	$start_marker = "/{$start_marker}/";
@@ -136,7 +128,6 @@ function extract_from_markers( $filename, $marker, $is_regex = false ) {
 
 	$file_data = explode( "\n", implode( '', file( $filename ) ) );
 
-<<<<<<< HEAD
 	$inside_markers = false;
 	foreach ( $file_data as $line ) {
 		if ( preg_match( $end_marker, $line ) ) {
@@ -147,10 +138,6 @@ function extract_from_markers( $filename, $marker, $is_regex = false ) {
 		}
 		if ( preg_match( $start_marker, $line ) ) {
 			$inside_markers = true;
-=======
-		if ( str_contains( $markerline, '# BEGIN ' . $marker ) ) {
-			$state = true;
->>>>>>> 9e9887d8b8 (Code Modernization: Replace usage of `strpos()` with `str_contains()`.)
 		}
 	}
 
@@ -250,17 +237,10 @@ function insert_with_markers(
 	$found_end_marker = false;
 
 	foreach ( $lines as $line ) {
-<<<<<<< HEAD
 		if ( ! $found_marker && preg_match( $start_marker_in, $line ) ) {
 			$found_marker = true;
 			continue;
 		} elseif ( ! $found_end_marker && preg_match( $end_marker_in, $line ) ) {
-=======
-		if ( ! $found_marker && str_contains( $line, $start_marker ) ) {
-			$found_marker = true;
-			continue;
-		} elseif ( ! $found_end_marker && str_contains( $line, $end_marker ) ) {
->>>>>>> 9e9887d8b8 (Code Modernization: Replace usage of `strpos()` with `str_contains()`.)
 			$found_end_marker = true;
 			continue;
 		}

@@ -409,11 +409,7 @@ function wp_scripts_get_suffix( $type = '' ) {
 		// Include an unmodified $wp_version.
 		require ABSPATH . WPINC . '/version.php';
 
-<<<<<<< HEAD
 		$develop_src = classicpress_is_dev_install();
-=======
-		$develop_src = str_contains( $wp_version, '-src' );
->>>>>>> 9e9887d8b8 (Code Modernization: Replace usage of `strpos()` with `str_contains()`.)
 
 		if ( ! defined( 'SCRIPT_DEBUG' ) ) {
 			define( 'SCRIPT_DEBUG', $develop_src );
@@ -1327,11 +1323,7 @@ function wp_default_styles( $styles ) {
 	require ABSPATH . WPINC . '/version.php';
 
 	if ( ! defined( 'SCRIPT_DEBUG' ) ) {
-<<<<<<< HEAD
 		define( 'SCRIPT_DEBUG', classicpress_is_dev_install() );
-=======
-		define( 'SCRIPT_DEBUG', str_contains( $wp_version, '-src' ) );
->>>>>>> 9e9887d8b8 (Code Modernization: Replace usage of `strpos()` with `str_contains()`.)
 	}
 
 	$guessurl = site_url();

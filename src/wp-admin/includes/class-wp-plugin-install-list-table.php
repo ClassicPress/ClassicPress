@@ -105,14 +105,6 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 			$tabs['search'] = __( 'Search Results' );
 		}
 
-<<<<<<< HEAD
-=======
-		if ( 'beta' === $tab || str_contains( get_bloginfo( 'version' ), '-' ) ) {
-			$tabs['beta'] = _x( 'Beta Testing', 'Plugin Installer' );
-		}
-
-		$tabs['featured']    = _x( 'Featured', 'Plugin Installer' );
->>>>>>> 9e9887d8b8 (Code Modernization: Replace usage of `strpos()` with `str_contains()`.)
 		$tabs['popular']    = _x( 'Popular', 'Plugin Installer' );
 		$tabs['categories'] = _x( 'Categories', 'Plugin Installer' );
 

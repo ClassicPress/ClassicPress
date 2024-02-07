@@ -355,17 +355,12 @@ class Core_Upgrader extends WP_Upgrader {
 				return false;
 			}
 
-<<<<<<< HEAD
 			// Don't claim we can update on update-core.php if we have a
 			// non-critical failure logged.
 			if (
 				$ver_current == $failure_data['current'] &&
-				false !== strpos( $ver_offered, '.1.next.minor' )
+				str_contains( $offered_ver, '.1.next.minor' )
 			) {
-=======
-			// Don't claim we can update on update-core.php if we have a non-critical failure logged.
-			if ( $wp_version === $failure_data['current'] && str_contains( $offered_ver, '.1.next.minor' ) ) {
->>>>>>> 9e9887d8b8 (Code Modernization: Replace usage of `strpos()` with `str_contains()`.)
 				return false;
 			}
 
