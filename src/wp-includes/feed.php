@@ -447,7 +447,17 @@ function the_category_rss( $type = null ) {
  * @since CP-2.0.0 Site content type will always be 'html'.
  */
 function html_type_rss() {
+<<<<<<< HEAD
 	echo 'html';
+=======
+	$type = get_bloginfo( 'html_type' );
+	if ( str_contains( $type, 'xhtml' ) ) {
+		$type = 'xhtml';
+	} else {
+		$type = 'html';
+	}
+	echo $type;
+>>>>>>> 9e9887d8b8 (Code Modernization: Replace usage of `strpos()` with `str_contains()`.)
 }
 
 /**
@@ -574,7 +584,7 @@ function atom_enclosure() {
  * @return array array(type, value)
  */
 function prep_atom_text_construct( $data ) {
-	if ( strpos( $data, '<' ) === false && strpos( $data, '&' ) === false ) {
+	if ( ! str_contains( $data, '<' ) && ! str_contains( $data, '&' ) ) {
 		return array( 'text', $data );
 	}
 
@@ -591,7 +601,7 @@ function prep_atom_text_construct( $data ) {
 	unset( $parser );
 
 	if ( ! $code ) {
-		if ( strpos( $data, '<' ) === false ) {
+		if ( ! str_contains( $data, '<' ) ) {
 			return array( 'text', $data );
 		} else {
 			$data = "<div xmlns='http://www.w3.org/1999/xhtml'>$data</div>";
@@ -599,7 +609,7 @@ function prep_atom_text_construct( $data ) {
 		}
 	}
 
-	if ( strpos( $data, ']]>' ) === false ) {
+	if ( ! str_contains( $data, ']]>' ) ) {
 		return array( 'html', "<![CDATA[$data]]>" );
 	} else {
 		return array( 'html', htmlspecialchars( $data ) );

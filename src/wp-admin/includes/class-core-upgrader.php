@@ -220,9 +220,9 @@ class Core_Upgrader extends WP_Upgrader {
 				 * mkdir_failed__copy_dir, copy_failed__copy_dir_retry, and disk_full.
 				 * do_rollback allows for update_core() to trigger a rollback if needed.
 				 */
-				if ( false !== strpos( $error_code, 'do_rollback' ) ) {
+				if ( str_contains( $error_code, 'do_rollback' ) ) {
 					$try_rollback = true;
-				} elseif ( false !== strpos( $error_code, '__copy_dir' ) ) {
+				} elseif ( str_contains( $error_code, '__copy_dir' ) ) {
 					$try_rollback = true;
 				} elseif ( 'disk_full' === $error_code ) {
 					$try_rollback = true;
@@ -355,12 +355,17 @@ class Core_Upgrader extends WP_Upgrader {
 				return false;
 			}
 
+<<<<<<< HEAD
 			// Don't claim we can update on update-core.php if we have a
 			// non-critical failure logged.
 			if (
 				$ver_current == $failure_data['current'] &&
 				false !== strpos( $ver_offered, '.1.next.minor' )
 			) {
+=======
+			// Don't claim we can update on update-core.php if we have a non-critical failure logged.
+			if ( $wp_version === $failure_data['current'] && str_contains( $offered_ver, '.1.next.minor' ) ) {
+>>>>>>> 9e9887d8b8 (Code Modernization: Replace usage of `strpos()` with `str_contains()`.)
 				return false;
 			}
 
