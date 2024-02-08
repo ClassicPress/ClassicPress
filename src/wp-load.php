@@ -69,10 +69,7 @@ if ( file_exists( ABSPATH . 'wp-config.php' ) ) {
 	// Standardize $_SERVER variables across setups.
 	wp_fix_server_vars();
 
-<<<<<<< HEAD
-=======
 	define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
->>>>>>> 3349f1a527 (Bootstrap/Load: Require `wp-includes/compat.php` in `src/index.php`.)
 	require_once ABSPATH . WPINC . '/functions.php';
 
 	$path = wp_guess_url() . '/wp-admin/setup-config.php';
