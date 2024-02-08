@@ -126,14 +126,24 @@ function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true ) {
 			$img = '<img src="' . esc_url( $item[6] ) . '" alt="">';
 
 			if ( 'none' === $item[6] || 'div' === $item[6] ) {
+<<<<<<< HEAD
 				$img = '<br>';
 			} elseif ( str_starts_with( $item[6], 'data:image/svg+xml;base64,' ) ) {
 				$img = '<br>';
+=======
+				$img = '<br />';
+			} elseif ( str_starts_with( $item[6], 'data:image/svg+xml;base64,' ) ) {
+				$img = '<br />';
+>>>>>>> 4cb3e1582a (Code Modernization: Replace usage of `strpos()` with `str_starts_with()`.)
 				// The value is base64-encoded data, so esc_attr() is used here instead of esc_url().
 				$img_style = ' style="background-image:url(\'' . esc_attr( $item[6] ) . '\')"';
 				$img_class = ' svg';
 			} elseif ( str_starts_with( $item[6], 'dashicons-' ) ) {
+<<<<<<< HEAD
 				$img       = '<br>';
+=======
+				$img       = '<br />';
+>>>>>>> 4cb3e1582a (Code Modernization: Replace usage of `strpos()` with `str_starts_with()`.)
 				$img_class = ' dashicons-before ' . sanitize_html_class( $item[6] );
 			}
 		}
