@@ -487,17 +487,11 @@ class WP_REST_Server {
 		 */
 		$send_no_cache_headers = apply_filters( 'rest_send_nocache_headers', is_user_logged_in() );
 
-<<<<<<< HEAD
-		// send no cache headers if the $send_no_cache_headers is true
-		// OR if the HTTP_X_HTTP_METHOD_OVERRIDE is used but resulted a 4xx response code.
-		if ( $send_no_cache_headers || ( true === $method_overridden && strpos( $code, '4' ) === 0 ) ) {
-=======
 		/*
 		 * Send no-cache headers if $send_no_cache_headers is true,
 		 * OR if the HTTP_X_HTTP_METHOD_OVERRIDE is used but resulted a 4xx response code.
 		 */
 		if ( $send_no_cache_headers || ( true === $method_overridden && str_starts_with( $code, '4' ) ) ) {
->>>>>>> 1427d25716 (Code Modernization: Use `str_starts_with()` in `WP_REST_Server::serve_request()`.)
 			foreach ( wp_get_nocache_headers() as $header => $header_value ) {
 				if ( empty( $header_value ) ) {
 					$this->remove_header( $header );
