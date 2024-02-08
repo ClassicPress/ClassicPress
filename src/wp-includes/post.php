@@ -5862,7 +5862,7 @@ function get_pages( $args = array() ) {
 				$orderby = "$wpdb->posts.comment_count";
 				break;
 			default:
-				if ( 0 === strpos( $orderby, 'post_' ) ) {
+				if ( str_starts_with( $orderby, 'post_' ) ) {
 					$orderby = "$wpdb->posts." . $orderby;
 				} else {
 					$orderby = "$wpdb->posts.post_" . $orderby;
