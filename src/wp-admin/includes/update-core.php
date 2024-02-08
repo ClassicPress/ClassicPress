@@ -623,7 +623,7 @@ function update_core( $from, $to ) {
 		 * the polyfills from wp-includes/compat.php may not be available.
 		 */
 		// Check if the language directory exists first.
-		if ( ! @is_dir( $lang_dir ) &&  0 === strpos( $lang_dir, ABSPATH ) ) {
+		if ( ! @is_dir( $lang_dir ) && 0 === strpos( $lang_dir, ABSPATH ) ) {
 			// If it's within the ABSPATH we can handle it here, otherwise they're out of luck.
 			$wp_filesystem->mkdir( $to . str_replace( ABSPATH, '', $lang_dir ), FS_CHMOD_DIR );
 			clearstatcache(); // For FTP, need to clear the stat cache.
@@ -983,7 +983,7 @@ function _upgrade_422_find_genericons_files_in_folder( $directory ) {
 	$dirs = glob( $directory . '*', GLOB_ONLYDIR );
 	$dirs = array_filter(
 		$dirs,
-		static function( $dir ) {
+		static function ( $dir ) {
 			/*
 			 * Skip any node_modules directories.
 			 *
