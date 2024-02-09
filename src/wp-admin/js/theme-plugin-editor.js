@@ -123,7 +123,7 @@ wp.themePluginEditor = (function( $ ) {
 	component.constrainTabbing = function( event ) {
 		var firstTabbable, lastTabbable;
 
-		if ( 9 !== event.which ) {
+		if ( 'Tab' !== event.key ) {
 			return;
 		}
 
