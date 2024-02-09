@@ -19,7 +19,21 @@ class Fix_WPCLI {
 	 * @since CP-1.5.0
 	 */
 	public function __construct() {
+		WP_CLI::add_hook( 'after_wp_load', array( __CLASS__, 'bring_cp_version_in_scope' ) );
 		WP_CLI::add_hook( 'before_invoke:core check-update', array( __CLASS__, 'correct_core_check_update' ) );
+	}
+
+	/**
+	 * Put $cp_version into scope.
+	 *
+	 * @since CP-2.0.0
+	 */
+	public static function bring_cp_version_in_scope() {
+		// Put $cp_version into scope.
+		if ( ! isset( $GLOBALS['cp_version'] ) ) {
+			global $cp_version;
+			require ABSPATH . WPINC . '/version.php';
+		}
 	}
 
 	/**
@@ -28,6 +42,8 @@ class Fix_WPCLI {
 	 * @since CP-1.5.0
 	 */
 	public static function correct_core_check_update() {
+		// Put $cp_version into scope.
+		global $cp_version;
 
 		// Check for updates. Bail on error.
 		// When playing with versions, an empty array is returned if it's not on api.
@@ -70,12 +86,6 @@ class Fix_WPCLI {
 		$minor = preg_match( '/ --minor */', $current_command );
 
 		$major = preg_match( '/ --major */', $current_command );
-
-		// Put $cp_version into scope.
-		if ( ! isset( $GLOBALS['cp_version'] ) ) {
-			global $cp_version;
-			require ABSPATH . WPINC . '/version.php';
-		}
 
 		// Prepare output array.
 		$table_output = array();
