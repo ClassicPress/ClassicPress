@@ -26,7 +26,7 @@ class Fix_WPCLI {
 	/**
 	 * Put $cp_version into scope.
 	 *
-	 * @since CP-2.0.0
+	 * @since CP-1.7.3
 	 */
 	public static function bring_cp_version_in_scope() {
 		// Put $cp_version into scope.
