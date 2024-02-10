@@ -19,17 +19,17 @@ class Fix_WPCLI {
 	 * @since CP-1.5.0
 	 */
 	public function __construct() {
-		WP_CLI::add_hook( 'after_wp_load', array( __CLASS__, 'bring_cp_version_in_scope' ) );
+		WP_CLI::add_hook( 'after_wp_load', array( __CLASS__, 'add_cp_version_to_scope' ) );
 		WP_CLI::add_hook( 'before_invoke:core check-update', array( __CLASS__, 'correct_core_check_update' ) );
 	}
 
 	/**
-	 * Put $cp_version into scope.
+	 * Add $cp_version to scope.
 	 *
 	 * @since CP-1.7.3
 	 */
-	public static function bring_cp_version_in_scope() {
-		// Put $cp_version into scope.
+	public static function add_cp_version_to_scope() {
+		// Add $cp_version to scope.
 		if ( ! isset( $GLOBALS['cp_version'] ) ) {
 			global $cp_version;
 			require ABSPATH . WPINC . '/version.php';
@@ -42,7 +42,7 @@ class Fix_WPCLI {
 	 * @since CP-1.5.0
 	 */
 	public static function correct_core_check_update() {
-		// Put $cp_version into scope.
+		// Add $cp_version to scope.
 		global $cp_version;
 
 		// Check for updates. Bail on error.
