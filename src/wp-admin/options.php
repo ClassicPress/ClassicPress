@@ -90,13 +90,10 @@ $allowed_options            = array(
 	'general'    => array(
 		'blogname',
 		'blogdescription',
-<<<<<<< HEAD
 		'login_custom_image_state',
 		'login_custom_image_id',
 		'blocks_compatibility_level',
-=======
 		'site_icon',
->>>>>>> 35feae5c75 (General: Add an option to configure the site icon in general settings.)
 		'gmt_offset',
 		'date_format',
 		'time_format',
