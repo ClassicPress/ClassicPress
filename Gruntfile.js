@@ -161,7 +161,6 @@ module.exports = function(grunt) {
 					}
 				]
 			},
-
 			'wp-admin-css-compat-rtl': {
 				options: {
 					processContent(src) {
