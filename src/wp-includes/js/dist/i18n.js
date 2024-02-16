@@ -1,7 +1,7 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 772:
+/***/ 673:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -544,7 +544,7 @@ const {
 
 /***/ }),
 
-/***/ 24:
+/***/ 58:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
@@ -1038,7 +1038,7 @@ function memize(fn, options) {
 
 
 // EXTERNAL MODULE: ./node_modules/sprintf-js/src/sprintf.js
-var sprintf = __webpack_require__(24);
+var sprintf = __webpack_require__(58);
 var sprintf_default = /*#__PURE__*/__webpack_require__.n(sprintf);
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/sprintf.js
 /**
@@ -1992,7 +1992,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
 };
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/hooks/build-module/index.js + 10 modules
-var build_module = __webpack_require__(772);
+var build_module = __webpack_require__(673);
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/default-i18n.js
 /**
  * Internal dependencies
