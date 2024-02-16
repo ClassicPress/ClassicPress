@@ -1287,6 +1287,9 @@ function do_meta_boxes( $screen, $context, $data_object ) {
 							__( 'Warning:' ) .
 						' </span>';
 					}
+					elseif ( 'woocommerce-product-data' === $box['id'] ) {
+						echo '<span aria-hidden="true"></span>';
+					}
 					echo $box['title'];
 					echo '</h2>';
 
