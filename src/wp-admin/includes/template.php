@@ -1286,8 +1286,7 @@ function do_meta_boxes( $screen, $context, $data_object ) {
 							/* translators: Hidden accessibility text. */
 							__( 'Warning:' ) .
 						' </span>';
-					}
-					elseif ( 'woocommerce-product-data' === $box['id'] ) {
+					} elseif ( 'woocommerce-product-data' === $box['id'] ) {
 						echo '<span></span>';
 					}
 					echo $box['title'];
