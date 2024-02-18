@@ -123,6 +123,7 @@
 .ui-helper-hidden-accessible {
 	border: 0;
 	clip: rect(1px, 1px, 1px, 1px);
+	-webkit-clip-path: inset(50%);
 	clip-path: inset(50%);
 	height: 1px;
 	margin: -1px;
@@ -3080,7 +3081,6 @@ div.action-links {
 }
 
 @media print,
-	(-webkit-min-device-pixel-ratio: 1.25),
 	(min-resolution: 120dpi) {
 
 	.plugin-details-modal.modal-loading:before {
@@ -3207,7 +3207,6 @@ img {
 	font-size: 13px;
 	background: #f6f7f7;
 	-moz-tab-size: 4;
-	-o-tab-size: 4;
 	tab-size: 4;
 }
 
@@ -3798,7 +3797,6 @@ img {
  * HiDPI Displays
  */
 @media print,
-  (-webkit-min-device-pixel-ratio: 1.25),
   (min-resolution: 120dpi) {
 	/* Back-compat for pre-3.8 */
 	div.star-holder,
