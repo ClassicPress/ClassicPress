@@ -1243,7 +1243,7 @@ function wp_default_scripts( $scripts ) {
 			'pluginL10n',
 			array(
 				'close'            => __( 'Close' ),
-				'noiframes'        => __( 'This feature requires inline frames. You have iframes disabled or your browser does not support them.' )
+				'noiframes'        => __( 'This feature requires inline frames. You have iframes disabled or your browser does not support them.' ),
 			)
 		);
 
