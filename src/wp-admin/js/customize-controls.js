@@ -4007,6 +4007,7 @@
 				statuses     = this.container.find('.dropdown-status'),
 				params       = this.params,
 				toggleFreeze = false,
+				// eslint-disable-next-line func-style
 				update       = function( to ) {
 					if ( 'string' === typeof to && params.statuses && params.statuses[ to ] ) {
 						statuses.html( params.statuses[ to ] ).show();
@@ -8856,6 +8857,7 @@
 		// Bind site title display to the corresponding field.
 		if ( title.length ) {
 			api( 'blogname', function( setting ) {
+				// eslint-disable-next-line func-style
 				var updateTitle = function() {
 					var blogTitle = setting() || '';
 					title.text( blogTitle.toString().trim() || api.l10n.untitledBlogName );
@@ -9036,6 +9038,7 @@
 			api( settingId, function( setting ) {
 				$.each( o.controls, function( i, controlId ) {
 					api.control( controlId, function( control ) {
+						// eslint-disable-next-line func-style
 						var visibility = function( to ) {
 							control.container.toggle( o.callback( to ) );
 						};
@@ -9158,6 +9161,7 @@
 
 		// Add behaviors to the static front page controls.
 		api( 'show_on_front', 'page_on_front', 'page_for_posts', function( showOnFront, pageOnFront, pageForPosts ) {
+			// eslint-disable-next-line func-style
 			var handleChange = function() {
 				var setting = this, pageOnFrontId, pageForPostsId, errorCode = 'show_on_front_page_collision';
 				pageOnFrontId = parseInt( pageOnFront(), 10 );
@@ -9250,6 +9254,7 @@
 		// Toggle visibility of Header Video notice when active state change.
 		api.control( 'header_video', function( headerVideoControl ) {
 			headerVideoControl.deferred.embedded.done( function() {
+				// eslint-disable-next-line func-style
 				var toggleNotice = function() {
 					var section = api.section( headerVideoControl.section() ), noticeCode = 'video_header_not_available';
 					if ( ! section ) {
