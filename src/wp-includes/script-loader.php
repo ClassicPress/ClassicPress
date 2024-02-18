@@ -1266,9 +1266,13 @@ function wp_default_scripts( $scripts ) {
 		$scripts->add( 'farbtastic', '/wp-admin/js/farbtastic.js', array( 'jquery' ), '1.2' );
 
 		$scripts->add( 'iris', '/wp-admin/js/iris.min.js', array( 'jquery-ui-widget' ), '1.1.1', 1 );
-		wp_localize_script( 'iris', 'IRIS', array(
-			'blank' => esc_url( site_url( '/wp-includes/images/blank.gif' ) ),
-		) );
+		wp_localize_script(
+			'iris',
+			'IRIS',
+			array(
+				'blank' => esc_url( site_url( '/wp-includes/images/blank.gif' ) ),
+			)
+		);
 		$scripts->add( 'wp-color-picker', "/wp-admin/js/color-picker$suffix.js", array( 'iris' ), false, 1 );
 		$scripts->set_translations( 'wp-color-picker' );
 
