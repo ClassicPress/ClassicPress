@@ -18,19 +18,6 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 		self::$author_user_id = $factory->user->create( array( 'role' => 'author' ) );
 	}
 
-<<<<<<< HEAD
-	public function set_up() {
-		parent::set_up();
-		$this->post_type = rand_str( 20 );
-	}
-
-	public function tear_down() {
-		unset( $GLOBALS['wp_post_types'][ $this->post_type ] );
-		parent::tear_down();
-	}
-
-=======
->>>>>>> 278081ed1d (Code Modernization: Remove dynamic properties in `Tests_Post_Revisions`.)
 	/**
 	 * Note: Test needs reviewing when https://core.trac.wordpress.org/ticket/16215 is fixed because I'm not sure the test current tests the "correct" behavior
 	 * @ticket 20982
