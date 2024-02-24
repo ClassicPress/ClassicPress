@@ -5,6 +5,9 @@
  * @group revision
  */
 class Tests_Post_Revisions extends WP_UnitTestCase {
+
+	const POST_TYPE = 'test-revision';
+
 	protected static $admin_user_id;
 	protected static $editor_user_id;
 	protected static $author_user_id;
@@ -15,6 +18,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 		self::$author_user_id = $factory->user->create( array( 'role' => 'author' ) );
 	}
 
+<<<<<<< HEAD
 	public function set_up() {
 		parent::set_up();
 		$this->post_type = rand_str( 20 );
@@ -25,6 +29,8 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 		parent::tear_down();
 	}
 
+=======
+>>>>>>> 278081ed1d (Code Modernization: Remove dynamic properties in `Tests_Post_Revisions`.)
 	/**
 	 * Note: Test needs reviewing when https://core.trac.wordpress.org/ticket/16215 is fixed because I'm not sure the test current tests the "correct" behavior
 	 * @ticket 20982
@@ -317,7 +323,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 	 */
 	public function test_revision_view_caps_cpt() {
 		register_post_type(
-			$this->post_type,
+			self::POST_TYPE,
 			array(
 				'capability_type' => 'event',
 				'map_meta_cap'    => true,
@@ -327,7 +333,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 
 		$post_id = self::factory()->post->create(
 			array(
-				'post_type'   => $this->post_type,
+				'post_type'   => self::POST_TYPE,
 				'post_author' => self::$editor_user_id,
 			)
 		);
@@ -358,7 +364,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 	 */
 	public function test_revision_restore_caps_cpt() {
 		register_post_type(
-			$this->post_type,
+			self::POST_TYPE,
 			array(
 				'capability_type' => 'event',
 				'map_meta_cap'    => true,
@@ -373,7 +379,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 		//create a post as Editor
 		$post_id = self::factory()->post->create(
 			array(
-				'post_type'   => $this->post_type,
+				'post_type'   => self::POST_TYPE,
 				'post_author' => self::$editor_user_id,
 			)
 		);
@@ -403,7 +409,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 	 */
 	public function test_revision_restore_caps_before_publish() {
 		register_post_type(
-			$this->post_type,
+			self::POST_TYPE,
 			array(
 				'capability_type' => 'post',
 				'capabilities'    => array(
@@ -421,7 +427,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 
 		$post_id = self::factory()->post->create(
 			array(
-				'post_type'   => $this->post_type,
+				'post_type'   => self::POST_TYPE,
 				'post_status' => 'draft',
 			)
 		);
@@ -462,7 +468,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 	 */
 	public function test_revision_diff_caps_cpt() {
 		register_post_type(
-			$this->post_type,
+			self::POST_TYPE,
 			array(
 				'capability_type' => 'event',
 				'map_meta_cap'    => true,
@@ -472,7 +478,7 @@ class Tests_Post_Revisions extends WP_UnitTestCase {
 
 		$post_id = self::factory()->post->create(
 			array(
-				'post_type'   => $this->post_type,
+				'post_type'   => self::POST_TYPE,
 				'post_author' => self::$editor_user_id,
 			)
 		);
