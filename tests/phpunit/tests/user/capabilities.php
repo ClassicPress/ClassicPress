@@ -63,6 +63,16 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	 */
 	public function tear_down() {
 		unset( $this->role_test_wp_roles_init );
+<<<<<<< HEAD
+=======
+
+		parent::tear_down();
+	}
+
+	public static function wpTearDownAfterClass() {
+		wp_delete_post( self::$block_id, true );
+	}
+>>>>>>> dfb4737c43 (Code Modernization: Explicitly declare all properties in various tests.)
 
 		parent::tear_down();
 	}
