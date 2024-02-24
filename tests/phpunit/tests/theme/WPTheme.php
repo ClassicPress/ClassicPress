@@ -2,9 +2,6 @@
 /**
  * @group themes
  */
-<<<<<<< HEAD:tests/phpunit/tests/theme/WPTheme.php
-class Tests_Theme_WPTheme extends WP_UnitTestCase {
-=======
 class Tests_Theme_wpTheme extends WP_UnitTestCase {
 
 	/**
@@ -21,7 +18,6 @@ class Tests_Theme_wpTheme extends WP_UnitTestCase {
 	 */
 	private $orig_theme_dir;
 
->>>>>>> e119438d26 (Code Modernization: Remove dynamic properties in theme tests.):tests/phpunit/tests/theme/wpTheme.php
 	public function set_up() {
 		parent::set_up();
 		$this->theme_root = realpath( DIR_TESTDATA . '/themedir1' );
