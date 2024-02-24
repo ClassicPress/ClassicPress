@@ -148,7 +148,11 @@ class Tests_User_Slashes extends WP_UnitTestCase {
 			array(
 				'user_login'   => 'slash_example_user_3',
 				'role'         => 'subscriber',
+<<<<<<< HEAD
 				'user_email'   => 'user3@example.com',
+=======
+				'email'        => 'user3@example.com',
+>>>>>>> bafecbeab5 (Code Modernization: Remove dynamic properties in `Tests_*_Slashes`.)
 				'first_name'   => self::SLASH_1,
 				'last_name'    => self::SLASH_3,
 				'nickname'     => self::SLASH_5,
@@ -169,7 +173,11 @@ class Tests_User_Slashes extends WP_UnitTestCase {
 			array(
 				'user_login'   => 'slash_example_user_4',
 				'role'         => 'subscriber',
+<<<<<<< HEAD
 				'user_email'   => 'user4@example.com',
+=======
+				'email'        => 'user3@example.com',
+>>>>>>> bafecbeab5 (Code Modernization: Remove dynamic properties in `Tests_*_Slashes`.)
 				'first_name'   => self::SLASH_2,
 				'last_name'    => self::SLASH_4,
 				'nickname'     => self::SLASH_6,
