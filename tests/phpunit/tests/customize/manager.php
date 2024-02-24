@@ -34,11 +34,26 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	protected static $subscriber_user_id;
 
 	/**
+<<<<<<< HEAD
 	 * Whether any attachments have been created in the current test run.
 	 *
 	 * @var bool
 	 */
 	private $attachments_created = false;
+=======
+	 * Path to test file 1.
+	 *
+	 * @var string
+	 */
+	private $test_file;
+
+	/**
+	 * Path to test file 2.
+	 *
+	 * @var string
+	 */
+	private $test_file2;
+>>>>>>> 4a71feb890 (Code Modernization: Explicitly declare all properties created in `set_up()` methods of various test classes.)
 
 	/**
 	 * Set up before class.
