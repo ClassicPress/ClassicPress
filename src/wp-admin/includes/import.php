@@ -141,6 +141,7 @@ function wp_get_popular_importers() {
 
 	$locale            = get_user_locale();
 	$cache_key         = 'popular_importers_' . md5( $locale . $wp_version );
+	echo $cache_key;
 	$popular_importers = get_site_transient( $cache_key );
 
 	if ( ! $popular_importers ) {
@@ -149,7 +150,7 @@ function wp_get_popular_importers() {
 				'locale'  => $locale,
 				'version' => $wp_version,
 			),
-			'https://api-v1.classicpress.net/core/importers/1.0/'
+			'https://api-v1.classicpress.net/core/importers/2.0/'
 		);
 		$options = array( 'user-agent' => classicpress_user_agent() );
 
@@ -223,6 +224,12 @@ function wp_get_popular_importers() {
 			'description' => __( 'Import posts &amp; media from Tumblr using their API.' ),
 			'plugin-slug' => 'tumblr-importer',
 			'importer-id' => 'tumblr',
+		),
+		'wordpress'   => array(
+			'name'        => 'ClassicPress',
+			'description' => __( 'Import posts, pages, comments, custom fields, categories, and tags from a ClassicPress export file.' ),
+			'plugin-slug' => 'wordpress-importer',
+			'importer-id' => 'wordpress',
 		),
 	);
 }
