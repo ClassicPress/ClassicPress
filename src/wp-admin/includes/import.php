@@ -141,7 +141,6 @@ function wp_get_popular_importers() {
 
 	$locale            = get_user_locale();
 	$cache_key         = 'popular_importers_' . md5( $locale . $wp_version );
-	echo $cache_key;
 	$popular_importers = get_site_transient( $cache_key );
 
 	if ( ! $popular_importers ) {
