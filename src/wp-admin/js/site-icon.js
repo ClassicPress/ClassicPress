@@ -193,7 +193,7 @@
 			$chooseButton.attr( {
 				class: $chooseButton.attr( 'data-alt-classes' ),
 				'data-alt-classes': $chooseButton.attr( 'class' ),
-				'data-state': '1',
+				'data-state': '1'
 			} );
 		}
 
@@ -212,11 +212,11 @@
 		$iconPreview.toggleClass( 'hidden' );
 		$browserIconPreview.attr( {
 			src: '',
-			alt: '',
+			alt: ''
 		} );
 		$appIconPreview.attr( {
 			src: '',
-			alt: '',
+			alt: ''
 		} );
 
 		/**
@@ -228,7 +228,7 @@
 			.attr( {
 				class: $chooseButton.attr( 'data-alt-classes' ),
 				'data-alt-classes': $chooseButton.attr( 'class' ),
-				'data-state': '',
+				'data-state': ''
 			} )
 			.text( $chooseButton.attr( 'data-choose-text' ) )
 			.trigger( 'focus' );
