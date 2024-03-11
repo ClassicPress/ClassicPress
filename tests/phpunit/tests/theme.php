@@ -238,7 +238,7 @@ class Tests_Theme extends WP_UnitTestCase {
 		$themes = get_themes();
 
 		if ( PHP_VERSION_ID < 80000 ) {
-			unset( $themes["The ClassicPress Theme"] );
+			unset( $themes['The ClassicPress Theme'] );
 		}
 
 		// Switch to each theme in sequence.
