@@ -237,6 +237,10 @@ class Tests_Theme extends WP_UnitTestCase {
 	public function test_switch_theme() {
 		$themes = get_themes();
 
+		if ( PHP_VERSION_ID < 80000 ) {
+			unset( $themes["The ClassicPress Theme"] );
+		}
+
 		// Switch to each theme in sequence.
 		// Do it twice to make sure we switch to the first theme, even if it's our starting theme.
 		// Do it a third time to ensure switch_theme() works with one argument.
