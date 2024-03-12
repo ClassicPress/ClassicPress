@@ -19,10 +19,10 @@ if ( ! function_exists( 'susty_setup' ) ) :
 		/*
 		 * Make theme available for translation.
 		 * Translations can be filed in the /languages/ directory.
-		 * If you're building a theme based on Susty WP, use a find and replace
-		 * to change 'susty' to the name of your theme in all the template files.
+		 * If you're building a theme based on The ClassicPress Theme, use a find and replace
+		 * to change 'the-classicpress-theme' to the name of your theme in all the template files.
 		 */
-		load_theme_textdomain( 'susty', get_template_directory() . '/languages' );
+		load_theme_textdomain( 'the-classicpress-theme', get_template_directory() . '/languages' );
 
 		// Add default posts and comments RSS feed links to head.
 		add_theme_support( 'automatic-feed-links' );
@@ -44,8 +44,8 @@ if ( ! function_exists( 'susty_setup' ) ) :
 
 		// This theme uses wp_nav_menu() in two locations.
 		register_nav_menus( array(
-			'main-menu' => esc_html__( 'MainMenu', 'susty' ),
-			'footer-menu' => esc_html__( 'FooterMenu', 'susty' ),
+			'main-menu' => esc_html__( 'MainMenu', 'the-classicpress-theme' ),
+			'footer-menu' => esc_html__( 'FooterMenu', 'the-classicpress-theme' ),
 		) );
 
 		// Set up the WordPress core custom background feature.
