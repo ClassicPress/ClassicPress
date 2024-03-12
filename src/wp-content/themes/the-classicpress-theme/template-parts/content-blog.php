@@ -18,7 +18,7 @@
 		<p class="entry-meta">
 			<?php susty_wp_posted_on(); ?>
 			<?php susty_wp_posted_by(); ?>
-			<?php esc_html_e( ' | Category: ', 'susty' ); ?>
+			<?php esc_html_e( ' | Category: ', 'the-classicpress-theme' ); ?>
 			<?php the_category(', '); ?>
 		</p>
 
@@ -29,7 +29,7 @@
 					sprintf(
 						wp_kses(
 							/* translators: %s: Name of current post. Only visible to screen readers */
-							__( 'Edit <span class="screen-reader-text">%s</span>', 'susty' ),
+							__( 'Edit <span class="screen-reader-text">%s</span>', 'the-classicpress-theme' ),
 							array(
 								'span' => array(
 									'class' => array(),
@@ -45,10 +45,10 @@
 		</p>
 		</div>
 
-		<!--a href="<?php //the_permalink(); ?>" class="button button-purple"><?php //esc_html_e( 'Continue Reading', 'susty' ); ?></a--> <?php
+		<!--a href="<?php //the_permalink(); ?>" class="button button-purple"><?php //esc_html_e( 'Continue Reading', 'the-classicpress-theme' ); ?></a--> <?php
 
 		wp_link_pages( array(
-			'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'susty' ),
+			'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'the-classicpress-theme' ),
 			'after'  => '</div>',
 		) ); ?>
 
