@@ -27,16 +27,22 @@
 <div id="page">
 	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'susty' ); ?></a>
 
-	<?php if ( is_front_page() ) {
+	<?php
+	if ( is_front_page() ) {
 		echo '<section class="home-hero-container">';
-	} ?>
+	}
+	?>
+
 	<header id="masthead">
 		<div id="inner-header">
 			<span class="logo" role="banner">
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
-					<img src="<?php echo esc_url( get_template_directory_uri() . '/images/logo-white.svg' ); ?>" width="250" alt="ClassicPress logo">
-					<span class="screen-reader-text"><?php esc_html_e( 'Home', 'susty' ); ?></span>
-				</a>
+				
+				<?php // Custom logo
+				if ( function_exists( 'the_custom_logo' ) ) :
+					the_custom_logo();
+				endif;
+				?>
+
 			</span>
 
 			<nav id="site-navigation" class="main-navigation nav--toggle-sub nav--toggle-small" aria-label="<?php esc_attr_e( 'Main menu', 'susty' ); ?>">
