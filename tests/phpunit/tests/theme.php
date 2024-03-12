@@ -6,15 +6,12 @@
  * @group themes
  */
 class Tests_Theme extends WP_UnitTestCase {
-	protected $theme_slug     = 'twentysixteen';
-	protected $theme_name     = 'Twenty Sixteen';
+	protected $theme_slug     = 'twentyseventeen';
+	protected $theme_name     = 'Twenty Seventeen';
 	protected $default_themes = array(
-		'twentyfifteen',
-		'twentysixteen',
 		'twentyseventeen',
-		'classicpress-fifteen',
-		'classicpress-sixteen',
 		'classicpress-seventeen',
+		'the-classicpress-theme'
 	);
 
 	/**

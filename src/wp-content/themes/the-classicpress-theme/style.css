@@ -9,7 +9,7 @@ Requires PHP: 8.0
 Requires CP: 2.0
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
-Text Domain: susty
+Text Domain: the-classicpress-theme
 
 This theme is based on Susty by Jack Lenox https://blog.jacklenox.com
 
@@ -1932,7 +1932,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		z-index: 3;
 		width: 100%;
 		margin-left: -1em;
-		background: rgba(5, 127, 153, 1.0);		
+		background: rgba(5, 127, 153, 1.0);
 	}
 	#primary-menu li {
 		margin: 0.4em 0;
