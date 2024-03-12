@@ -11,7 +11,7 @@
 
 <section>
 	<header>
-		<h1><?php esc_html_e( 'Nothing Found', 'susty' ); ?></h1>
+		<h1><?php esc_html_e( 'Nothing Found', 'the-classicpress-theme' ); ?></h1>
 	</header><!-- .page-header -->
 
 	<div>
@@ -21,7 +21,7 @@
 			printf(
 				'<p>' . wp_kses(
 					/* translators: 1: link to WP admin new post page. */
-					__( 'Ready to publish your first post? <a href="%1$s">Get started here</a>.', 'susty' ),
+					__( 'Ready to publish your first post? <a href="%1$s">Get started here</a>.', 'the-classicpress-theme' ),
 					array(
 						'a' => array(
 							'href' => array(),
@@ -34,14 +34,14 @@
 		elseif ( is_search() ) :
 			?>
 
-			<p><?php esc_html_e( 'Sorry, but nothing matched your search terms. Please try again with some different keywords.', 'susty' ); ?></p>
+			<p><?php esc_html_e( 'Sorry, but nothing matched your search terms. Please try again with some different keywords.', 'the-classicpress-theme' ); ?></p>
 			<?php
 			get_search_form();
 
 		else :
 			?>
 
-			<p><?php esc_html_e( 'It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help.', 'susty' ); ?></p>
+			<p><?php esc_html_e( 'It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help.', 'the-classicpress-theme' ); ?></p>
 			<?php
 			get_search_form();
 
