@@ -18,7 +18,7 @@
 			<?php
 			susty_wp_posted_on();
 			susty_wp_posted_by();
-			esc_html_e( ' | Category: ', 'susty' );
+			esc_html_e( ' | Category: ', 'the-classicpress-theme' );
 			the_category(', ');
 			?>
 		</div><!-- .entry-meta -->
