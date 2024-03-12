@@ -25,7 +25,7 @@
 <body <?php body_class(); ?>>
 
 <div id="page">
-	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'susty' ); ?></a>
+	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'the-classicpress-theme' ); ?></a>
 
 	<?php
 	if ( is_front_page() ) {
@@ -45,7 +45,7 @@
 
 			</span>
 
-			<nav id="site-navigation" class="main-navigation nav--toggle-sub nav--toggle-small" aria-label="<?php esc_attr_e( 'Main menu', 'susty' ); ?>">
+			<nav id="site-navigation" class="main-navigation nav--toggle-sub nav--toggle-small" aria-label="<?php esc_attr_e( 'Main menu', 'the-classicpress-theme' ); ?>">
 
 				<?php
 				$navcheck = '' ;
@@ -71,12 +71,12 @@
 
 		<button id="menu-toggle" class="menu-toggle" type="button" aria-haspopup="true" aria-controls="site-navigation" aria-expanded="false" tabindex="0">
 			<img src="<?php echo esc_url( get_template_directory_uri() . '/images/baseline-menu-24px.svg' ); ?>" alt="Menu" width="32" height="32">
-			<span id="menu-toggle-text" class="screen-reader-text"><?php esc_html_e( 'Menu', 'susty' ); ?></span>
+			<span id="menu-toggle-text" class="screen-reader-text"><?php esc_html_e( 'Menu', 'the-classicpress-theme' ); ?></span>
 		</button>
 			
 		<button id="menu-toggle-close" class="menu-toggle close" type="button" aria-haspopup="true" aria-controls="site-navigation" aria-expanded="true" tabindex="0">
 			<img src="<?php echo esc_url( get_template_directory_uri() . '/images/baseline-close-24px.svg' ); ?>" alt="Close menu" width="32" height="32">
-			<span id="menu-toggle-close-text" class="menu-toggle-text screen-reader-text"><?php esc_html_e( 'Close menu', 'susty' ); ?></span>
+			<span id="menu-toggle-close-text" class="menu-toggle-text screen-reader-text"><?php esc_html_e( 'Close menu', 'the-classicpress-theme' ); ?></span>
 		</button>
 	</header>
 	<?php if ( is_front_page() ) {
@@ -92,19 +92,19 @@
 				echo '</h1>';				
 			} elseif ( is_blog() ) {
 				echo '<h1>';
-				esc_html_e( 'ClassicPress News', 'susty' );
+				esc_html_e( 'ClassicPress News', 'the-classicpress-theme' );
 				if ( ! empty( $category ) ) {
-					esc_html_e( ': ', 'susty' );
+					esc_html_e( ': ', 'the-classicpress-theme' );
 					echo esc_html( ucwords( $category ) );
 				}
 				echo '</h1>';
 			} elseif ( is_search() ) {
 				echo '<h1>';
-				esc_html_e( 'Search Results', 'susty' );
+				esc_html_e( 'Search Results', 'the-classicpress-theme' );
 				echo '</h1>';
 			} elseif ( is_404() ) {
 				echo '<h1>';
-				esc_html_e( 'Sorry! That page cannot be found.', 'susty' );
+				esc_html_e( 'Sorry! That page cannot be found.', 'the-classicpress-theme' );
 				echo '</h1>';
 			}
 			else {
