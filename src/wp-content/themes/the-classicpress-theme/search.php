@@ -19,7 +19,7 @@ get_header();
 				<h3>
 					<?php
 					/* translators: %s: search query. */
-					printf( esc_html__( 'Search term: %s', 'susty' ), '<span>' . get_search_query() . '</span>' );
+					printf( esc_html__( 'Search term: %s', 'the-classicpress-theme' ), '<span>' . get_search_query() . '</span>' );
 					?>
 				</h3>
 			</header><!-- .page-header -->
