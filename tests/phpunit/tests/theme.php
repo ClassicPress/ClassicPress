@@ -11,7 +11,7 @@ class Tests_Theme extends WP_UnitTestCase {
 	protected $default_themes = array(
 		'twentyseventeen',
 		'classicpress-seventeen',
-		'the-classicpress-theme'
+		'the-classicpress-theme',
 	);
 
 	/**
