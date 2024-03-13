@@ -23,7 +23,7 @@ get_header();
 					<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 						<details>
 							<summary>
-								<h3><?php the_title(); ?></h3>
+								<h2><?php the_title(); ?></h2>
 							</summary>
 							<div class="faq-content"><?php the_content(); ?></div>
 						</details>
