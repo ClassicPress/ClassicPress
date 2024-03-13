@@ -26,11 +26,6 @@ class Tests_User_Capabilities extends WP_UnitTestCase {
 	protected static $super_admin = null;
 
 	/**
-	 * @var int $block_id
-	 */
-	protected static $block_id;
-
-	/**
 	 * Temporary storage for roles for tests using filter callbacks.
 	 *
 	 * Used in the `test_wp_roles_init_action()` method.

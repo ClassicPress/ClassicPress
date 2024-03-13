@@ -1,7 +1,7 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 196:
+/***/ 269:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -56,7 +56,7 @@ function domReady(callback) {
 
 /***/ }),
 
-/***/ 200:
+/***/ 673:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -599,7 +599,7 @@ const {
 
 /***/ }),
 
-/***/ 959:
+/***/ 257:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -774,7 +774,7 @@ function memize(fn, options) {
 
 
 // EXTERNAL MODULE: ./node_modules/sprintf-js/src/sprintf.js
-var sprintf = __webpack_require__(124);
+var sprintf = __webpack_require__(58);
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/sprintf.js
 /**
  * External dependencies
@@ -1597,7 +1597,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
      */
     translation = /** @type {string} */
     /** @type {*} */hooks.applyFilters('i18n.gettext', translation, text, domain);
-    return (/** @type {string} */
+    return /** @type {string} */(
       /** @type {*} */hooks.applyFilters('i18n.gettext_' + getFilterDomain(domain), translation, text, domain)
     );
   };
@@ -1619,7 +1619,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
      */
     translation = /** @type {string} */
     /** @type {*} */hooks.applyFilters('i18n.gettext_with_context', translation, text, context, domain);
-    return (/** @type {string} */
+    return /** @type {string} */(
       /** @type {*} */hooks.applyFilters('i18n.gettext_with_context_' + getFilterDomain(domain), translation, text, context, domain)
     );
   };
@@ -1642,7 +1642,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
      */
     translation = /** @type {string} */
     /** @type {*} */hooks.applyFilters('i18n.ngettext', translation, single, plural, number, domain);
-    return (/** @type {string} */
+    return /** @type {string} */(
       /** @type {*} */hooks.applyFilters('i18n.ngettext_' + getFilterDomain(domain), translation, single, plural, number, domain)
     );
   };
@@ -1666,7 +1666,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
      */
     translation = /** @type {string} */
     /** @type {*} */hooks.applyFilters('i18n.ngettext_with_context', translation, single, plural, number, context, domain);
-    return (/** @type {string} */
+    return /** @type {string} */(
       /** @type {*} */hooks.applyFilters('i18n.ngettext_with_context_' + getFilterDomain(domain), translation, single, plural, number, context, domain)
     );
   };
@@ -1727,7 +1727,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
 };
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/hooks/build-module/index.js + 10 modules
-var build_module = __webpack_require__(200);
+var build_module = __webpack_require__(673);
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/default-i18n.js
 /**
  * Internal dependencies
@@ -1884,7 +1884,7 @@ const hasTranslation = i18n.hasTranslation.bind(i18n);
 
 /***/ }),
 
-/***/ 124:
+/***/ 58:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __webpack_unused_export__;
@@ -2194,9 +2194,9 @@ __webpack_require__.d(__webpack_exports__, {
 });
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/dom-ready/build-module/index.js
-var build_module = __webpack_require__(196);
+var build_module = __webpack_require__(269);
 // EXTERNAL MODULE: ./node_modules/@wordpress/i18n/build-module/index.js + 9 modules
-var i18n_build_module = __webpack_require__(959);
+var i18n_build_module = __webpack_require__(257);
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/a11y/build-module/add-intro-text.js
 /**
  * WordPress dependencies

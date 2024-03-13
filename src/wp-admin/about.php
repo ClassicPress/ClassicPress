@@ -116,7 +116,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 					/* translators: link to ClassicPress 1.0.0 changelog */
 					__( 'For a list of new features and other changes from WordPress %1$s, see the <a href="%2$s"><strong>ClassicPress 2.0.0 (Bella) release notes</strong></a>.' ),
 					'6.2.x',
-					'https://forums.classicpress.net/t/classicpress-2-0-0-bella-release-notes/910'
+					'https://forums.classicpress.net/t/classicpress-2-0-0-bella-release-notes/5099'
 				);
 				?>
 			</p>

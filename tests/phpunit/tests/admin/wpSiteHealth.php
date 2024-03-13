@@ -46,7 +46,7 @@ class Tests_Admin_wpSiteHealth extends WP_UnitTestCase {
 
 		$readme = file_get_contents( ABSPATH . 'readme.html' );
 
-		preg_match( '#Recommendations.*MySQL</a> version <strong>([0-9.]*)#s', $readme, $matches );
+		preg_match( '#Recommended.*MySQL</a> version <strong>([0-9.]*)#s', $readme, $matches );
 
 		$this->assertSame( $matches[1], $reflection_property->getValue( $this->instance ) );
 	}
