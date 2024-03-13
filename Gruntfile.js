@@ -882,9 +882,14 @@ module.exports = function(grunt) {
 
 	grunt.registerTask(
 		'precommit:image',
-		[
-			'imagemin:core'
-		]
+		'Detect OS and only run on linux',
+		function() {
+			if ( /linux/.test( process.platform ) ) {
+				grunt.task.run( [ 'imagemin:core' ] );
+			} else {
+				grunt.log.writeln( 'Image minification should only run on Linux, `precommit:image` skipped.' );
+			}
+		}
 	);
 
 	grunt.registerTask(
