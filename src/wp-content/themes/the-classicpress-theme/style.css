@@ -306,7 +306,7 @@ details {
 details summary > * {
 	display: inline;
 }
-#main details > summary > h3 {
+#main details > summary > h2 {
 	font-size: 1.1em;
 }
 
@@ -1176,7 +1176,7 @@ img {
 	color: #fff;
 	max-width: 72rem;
 	margin: 0 auto;
-	padding: 0.6em 15px;
+	padding: 0.6em 0;
 }
 
 /* PAGE CONTENT STRUCTURE */
@@ -2072,6 +2072,9 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		justify-content: space-between;
 		padding: 0 1.2em;
 		margin: 0 auto;
+	}
+	#page-title h1 {
+		padding: 0.6em 15px;
 	}
 	#site-navigation {
 		margin-right: -0.3em;
