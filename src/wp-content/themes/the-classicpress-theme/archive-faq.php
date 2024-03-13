@@ -11,9 +11,6 @@ get_header();
 ?>
 	<div id="primary">
 		<main id="main">
-			<h2>Answers to some commonly asked questions</h2>
-			<p>We hope to be able to answer many of your questions here in this FAQ but we understand you will very likely have other questions too. If you can’t find what you’re looking for here or on the rest of our website, we’d love it if you popped into our <a href="http://forums.classicpress.net/" target="_blank" rel="noopener">forums</a> and ask whatever question(s) you need answering.</p>
-			<br>
 
 		<?php
 		if ( have_posts() ) :
