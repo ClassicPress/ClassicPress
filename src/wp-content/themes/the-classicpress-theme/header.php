@@ -17,7 +17,6 @@
 	<link rel="preload" href="<?php echo esc_url( get_template_directory_uri() . '/fonts/source-sans-pro-v12-latin-600.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
 	<link rel="preload" href="<?php echo esc_url( get_template_directory_uri() . '/fonts/source-sans-pro-v12-latin-regular.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
 	<link rel="preload" href="<?php echo esc_url( get_template_directory_uri() . '/fonts/source-sans-pro-v12-latin-italic.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
-	<link rel="preload" href="<?php echo esc_url( get_template_directory_uri() . '/images/logo-white.svg' ); ?>" as="image" type="image/svg+xml">
 
 	<?php wp_head(); ?>
 </head>
@@ -38,9 +37,11 @@
 			<span class="logo" role="banner">
 				
 				<?php // Custom logo
-				if ( function_exists( 'the_custom_logo' ) ) :
+				if ( function_exists( 'the_custom_logo' ) && has_custom_logo() ) {
 					the_custom_logo();
-				endif;
+				} else {
+					echo '<a href="' . esc_url( home_url( '/' ) ) . '" style="height:50px;visibility:hidden;">Yo</a>';
+				}
 				?>
 
 			</span>
@@ -48,21 +49,11 @@
 			<nav id="site-navigation" class="main-navigation nav--toggle-sub nav--toggle-small" aria-label="<?php esc_attr_e( 'Main menu', 'the-classicpress-theme' ); ?>">
 
 				<?php
-				$navcheck = '' ;
-				$navcheck = wp_nav_menu( array(
+				wp_nav_menu( array(
 					'theme_location' => 'main-menu',
 					'depth' => 2,
 					'menu_id' => 'primary-menu', /*keeping original id so nav css and js still works*/
-					'fallback_cb' => '',
-					'echo' => false
 				) );
-				if ( $navcheck === '' ) {
-					echo '<ul>';
-					wp_list_pages( 'title_li=&sort_column=menu_order' );
-					echo '</ul>';
-				} else {
-					echo $navcheck;
-				}
 				?>
 
 			</nav><!-- #site-navigation -->
@@ -92,7 +83,7 @@
 				echo '</h1>';				
 			} elseif ( is_blog() ) {
 				echo '<h1>';
-				esc_html_e( 'ClassicPress News', 'the-classicpress-theme' );
+				esc_html_e( 'News', 'the-classicpress-theme' );
 				if ( ! empty( $category ) ) {
 					esc_html_e( ': ', 'the-classicpress-theme' );
 					echo esc_html( ucwords( $category ) );
