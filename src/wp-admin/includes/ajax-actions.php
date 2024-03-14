@@ -126,7 +126,7 @@ function wp_ajax_ajax_tag_search() {
 		$search = str_replace( $comma, ',', $search );
 	}
 
-	if ( false !== strpos( $search, ',' ) ) {
+	if ( str_contains( $search, ',' ) ) {
 		$search = explode( ',', $search );
 		$search = $search[ count( $search ) - 1 ];
 	}
@@ -2239,7 +2239,7 @@ function wp_ajax_widgets_order() {
 				$val = explode( ',', $val );
 
 				foreach ( $val as $k => $v ) {
-					if ( strpos( $v, 'widget-' ) === false ) {
+					if ( ! str_contains( $v, 'widget-' ) ) {
 						continue;
 					}
 
@@ -3252,11 +3252,11 @@ function wp_ajax_send_attachment_to_editor() {
 	}
 
 	$url = empty( $attachment['url'] ) ? '' : $attachment['url'];
-	$rel = ( strpos( $url, 'attachment_id' ) || get_attachment_link( $id ) == $url );
+	$rel = ( str_contains( $url, 'attachment_id' ) || get_attachment_link( $id ) === $url );
 
 	remove_filter( 'media_send_to_editor', 'image_media_send_to_editor' );
 
-	if ( 'image' === substr( $post->post_mime_type, 0, 5 ) ) {
+	if ( str_starts_with( $post->post_mime_type, 'image' ) ) {
 		$align = isset( $attachment['align'] ) ? $attachment['align'] : 'none';
 		$size  = isset( $attachment['image-size'] ) ? $attachment['image-size'] : 'medium';
 		$alt   = isset( $attachment['image_alt'] ) ? $attachment['image_alt'] : '';
@@ -3701,7 +3701,7 @@ function wp_ajax_parse_embed() {
 		$wp_embed->usecache = false;
 	}
 
-	if ( is_ssl() && 0 === strpos( $url, 'http://' ) ) {
+	if ( is_ssl() && str_starts_with( $url, 'http://' ) ) {
 		// Admin is ssl and the user pasted non-ssl URL.
 		// Check if the provider supports ssl embeds and use that for the preview.
 		$ssl_shortcode = preg_replace( '%^(\\[embed[^\\]]*\\])http://%i', '$1https://', $shortcode );
@@ -3774,7 +3774,7 @@ function wp_ajax_parse_embed() {
 		'attr' => $wp_embed->last_attr,
 	);
 
-	if ( strpos( $parsed, 'class="wp-embedded-content' ) ) {
+	if ( str_contains( $parsed, 'class="wp-embedded-content' ) ) {
 		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
 			$script_src = includes_url( 'js/wp-embed.js' );
 		} else {

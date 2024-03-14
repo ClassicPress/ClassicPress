@@ -206,6 +206,7 @@
 
 #customize-theme-controls .reordering .widget-reorder-nav {
 	display: block;
+	margin-top: -8px;
 }
 
 /* Text Widget */
@@ -252,6 +253,7 @@
 
 #customize-controls summary.widget-title {
 	font-size: 1em;
+	padding: 9px 15px 13px 10px;
 }
 
 #available-widgets summary.widget-title {

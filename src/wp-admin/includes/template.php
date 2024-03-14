@@ -1172,7 +1172,7 @@ function _get_plugin_from_callback( $callback ) {
 	try {
 		if ( is_array( $callback ) ) {
 			$reflection = new ReflectionMethod( $callback[0], $callback[1] );
-		} elseif ( is_string( $callback ) && false !== strpos( $callback, '::' ) ) {
+		} elseif ( is_string( $callback ) && str_contains( $callback, '::' ) ) {
 			$reflection = new ReflectionMethod( $callback );
 		} else {
 			$reflection = new ReflectionFunction( $callback );
@@ -1189,14 +1189,14 @@ function _get_plugin_from_callback( $callback ) {
 		$filename   = wp_normalize_path( $reflection->getFileName() );
 		$plugin_dir = wp_normalize_path( WP_PLUGIN_DIR );
 
-		if ( strpos( $filename, $plugin_dir ) === 0 ) {
+		if ( str_starts_with( $filename, $plugin_dir ) ) {
 			$filename = str_replace( $plugin_dir, '', $filename );
 			$filename = preg_replace( '|^/([^/]*/).*$|', '\\1', $filename );
 
 			$plugins = get_plugins();
 
 			foreach ( $plugins as $name => $plugin ) {
-				if ( strpos( $name, $filename ) === 0 ) {
+				if ( str_starts_with( $name, $filename ) ) {
 					return $plugin;
 				}
 			}
