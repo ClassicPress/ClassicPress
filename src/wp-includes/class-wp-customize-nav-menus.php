@@ -1069,10 +1069,6 @@ final class WP_Customize_Nav_Menus {
 			<li id="menu-item-tpl-{{ data.id }}" class="menu-item-tpl" data-menu-item-id="{{ data.id }}">
 				<div class="menu-item-bar">
 					<div class="menu-item-handle">
-						<span class="item-type" aria-hidden="true">{{ data.type_label }}</span>
-						<span class="item-title" aria-hidden="true">
-							<span class="menu-item-title<# if ( ! data.title ) { #> no-title<# } #>">{{ data.title || wp.customize.Menus.data.l10n.untitled }}</span>
-						</span>
 						<button type="button" class="button-link item-add">
 							<span class="screen-reader-text">
 							<?php
@@ -1081,6 +1077,12 @@ final class WP_Customize_Nav_Menus {
 							?>
 							</span>
 						</button>
+						<span class="item-split">
+							<span class="item-title" aria-hidden="true">
+								<span class="menu-item-title<# if ( ! data.title ) { #> no-title<# } #>">{{ data.title || wp.customize.Menus.data.l10n.untitled }}</span>
+							</span>
+							<span class="item-type" aria-hidden="true">{{ data.type_label }}</span>
+						</span>
 					</div>
 				</div>
 			</li>
