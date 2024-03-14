@@ -365,7 +365,7 @@ class WP_Customize_Section {
 				</span>
 			</h3>
 			<ul class="accordion-section-content">
-				<li class="customize-section-description-container section-meta <# if ( data.description_hidden ) { #>customize-info<# } #>">
+				<li class="customize-section-description-container section-meta no-drag <# if ( data.description_hidden ) { #>customize-info<# } #>">
 					<div class="customize-section-title">
 						<button class="customize-section-back" tabindex="-1">
 							<span class="screen-reader-text">

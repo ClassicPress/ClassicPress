@@ -799,7 +799,7 @@ function wp_kses_one_attr( $attr, $element ) {
 			$quote = $value[0];
 		}
 		if ( '"' === $quote || "'" === $quote ) {
-			if ( substr( $value, -1 ) != $quote ) {
+			if ( ! str_ends_with( $value, $quote ) ) {
 				return '';
 			}
 			$value = substr( $value, 1, -1 );
@@ -1082,12 +1082,12 @@ function wp_kses_split2( $content, $allowed_html, $allowed_protocols ) {
 	$content = wp_kses_stripslashes( $content );
 
 	// It matched a ">" character.
-	if ( '<' !== substr( $content, 0, 1 ) ) {
+	if ( ! str_starts_with( $content, '<' ) ) {
 		return '&gt;';
 	}
 
 	// Allow HTML comments.
-	if ( '<!--' === substr( $content, 0, 4 ) ) {
+	if ( str_starts_with( $content, '<!--' ) ) {
 		$content = str_replace( array( '<!--', '-->' ), '', $content );
 		while ( ( $newstring = wp_kses( $content, $allowed_html, $allowed_protocols ) ) != $content ) {
 			$content = $newstring;
@@ -1263,7 +1263,7 @@ function wp_kses_attr_check( &$name, &$value, &$whole, $vless, $element, $allowe
 		 * Note: the attribute name should only contain `A-Za-z0-9_-` chars,
 		 * double hyphens `--` are not accepted by WordPress.
 		 */
-		if ( strpos( $name_low, 'data-' ) === 0 && ! empty( $allowed_attr['data-*'] )
+		if ( str_starts_with( $name_low, 'data-' ) && ! empty( $allowed_attr['data-*'] )
 			&& preg_match( '/^data(?:-[a-z0-9_]+)+$/', $name_low, $match )
 		) {
 			/*
@@ -2515,7 +2515,7 @@ function safecss_filter_attr( $css, $deprecated = '' ) {
 		$gradient_attr   = false;
 		$is_custom_var   = false;
 
-		if ( strpos( $css_item, ':' ) === false ) {
+		if ( ! str_contains( $css_item, ':' ) ) {
 			$found = true;
 		} else {
 			$parts        = explode( ':', $css_item, 2 );
