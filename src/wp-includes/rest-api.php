@@ -423,7 +423,7 @@ function get_rest_url( $blog_id = null, $path = '/', $scheme = 'rest' ) {
 		$url = trailingslashit( get_home_url( $blog_id, '', $scheme ) );
 		// nginx only allows HTTP/1.0 methods when redirecting from / to /index.php.
 		// To work around this, we manually add index.php to the URL, avoiding the redirect.
-		if ( 'index.php' !== substr( $url, 9 ) ) {
+		if ( ! str_ends_with( $url, 'index.php' ) ) {
 			$url .= 'index.php';
 		}
 
@@ -895,12 +895,12 @@ function rest_is_field_included( $field, $fields ) {
 	foreach ( $fields as $accepted_field ) {
 		// Check to see if $field is the parent of any item in $fields.
 		// A field "parent" should be accepted if "parent.child" is accepted.
-		if ( strpos( $accepted_field, "$field." ) === 0 ) {
+		if ( str_starts_with( $accepted_field, "$field." ) ) {
 			return true;
 		}
 		// Conversely, if "parent" is accepted, all "parent.child" fields
 		// should also be accepted.
-		if ( strpos( $field, "$accepted_field." ) === 0 ) {
+		if ( str_starts_with( $field, "$accepted_field." ) ) {
 			return true;
 		}
 	}

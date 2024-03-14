@@ -188,12 +188,12 @@ class CP_Debug_Compat {
 		$options = $this->get_options();
 		$func    = $trace[1]['function'];
 
-		if ( 0 === strpos( $trace[1]['file'], realpath( get_stylesheet_directory() ) ) ) {
+		if ( str_starts_with( $trace[1]['file'], realpath( get_stylesheet_directory() ) ) ) {
 			// Theme
 			if ( ! isset( $options['data']['themes'][ wp_get_theme()->get( 'Name' ) ] ) || ! in_array( $func, $options['data']['themes'][ wp_get_theme()->get( 'Name' ) ] ) ) {
 				$options['data']['themes'][ wp_get_theme()->get( 'Name' ) ][] = $func;
 			}
-		} elseif ( 0 === strpos( $trace[1]['file'], realpath( get_template_directory() ) ) ) {
+		} elseif ( str_starts_with( $trace[1]['file'], realpath( get_template_directory() ) ) ) {
 			// Child theme
 			if ( ! isset( $options['data']['parent_themes'][ wp_get_theme()->parent()->get( 'Name' ) ] ) || ! in_array( $func, $options['data']['parent_themes'][ wp_get_theme()->parent()->get( 'Name' ) ] ) ) {
 				$options['data']['parent_themes'][ wp_get_theme()->parent()->get( 'Name' ) ][] = $func;
