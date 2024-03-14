@@ -574,7 +574,7 @@ function atom_enclosure() {
  * @return array array(type, value)
  */
 function prep_atom_text_construct( $data ) {
-	if ( strpos( $data, '<' ) === false && strpos( $data, '&' ) === false ) {
+	if ( ! str_contains( $data, '<' ) && ! str_contains( $data, '&' ) ) {
 		return array( 'text', $data );
 	}
 
@@ -591,7 +591,7 @@ function prep_atom_text_construct( $data ) {
 	unset( $parser );
 
 	if ( ! $code ) {
-		if ( strpos( $data, '<' ) === false ) {
+		if ( ! str_contains( $data, '<' ) ) {
 			return array( 'text', $data );
 		} else {
 			$data = "<div xmlns='http://www.w3.org/1999/xhtml'>$data</div>";
@@ -599,7 +599,7 @@ function prep_atom_text_construct( $data ) {
 		}
 	}
 
-	if ( strpos( $data, ']]>' ) === false ) {
+	if ( ! str_contains( $data, ']]>' ) ) {
 		return array( 'html', "<![CDATA[$data]]>" );
 	} else {
 		return array( 'html', htmlspecialchars( $data ) );
