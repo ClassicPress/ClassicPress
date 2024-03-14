@@ -2,7 +2,22 @@
 /**
  * @group themes
  */
-class Tests_Theme_WPTheme extends WP_UnitTestCase {
+class Tests_Theme_wpTheme extends WP_UnitTestCase {
+
+	/**
+	 * Theme root directory.
+	 *
+	 * @var string
+	 */
+	private $theme_root;
+
+	/**
+	 * Original theme directory.
+	 *
+	 * @var string
+	 */
+	private $orig_theme_dir;
+
 	public function set_up() {
 		parent::set_up();
 		$this->theme_root = realpath( DIR_TESTDATA . '/themedir1' );

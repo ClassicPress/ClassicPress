@@ -30,7 +30,7 @@ class CP_Customization {
 	 */
 
 	public function cp_translations( $translated_text, $untranslated_text, $domain ) {
-		if ( strpos( $untranslated_text, 'https://' ) === false ) {
+		if ( ! str_contains( $untranslated_text, 'https://' ) ) {
 			return $translated_text;
 		}
 
