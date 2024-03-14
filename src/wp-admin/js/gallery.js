@@ -2,93 +2,115 @@
  * @output wp-admin/js/gallery.js
  */
 
-/* global unescape, getUserSetting, setUserSetting, wpgallery, tinymce */
+/* global Sortable, unescape, getUserSetting, setUserSetting, wpgallery, tinymce */
 
-jQuery( function($) {
+document.addEventListener( 'DOMContentLoaded', function() {
+	'use strict';
 	var gallerySortable, gallerySortableInit, sortIt, clearAll, w, desc = false;
 
 	gallerySortableInit = function() {
-		gallerySortable = $('#media-items').sortable( {
-			items: 'div.media-item',
+		gallerySortable = Sortable.create( document.getElementById( '#media-items' ), {
+			group: 'items',
+			sort: true,
 			placeholder: 'sorthelper',
-			axis: 'y',
-			distance: 2,
 			handle: 'div.filename',
-			stop: function() {
+			dataIdAttr: 'data-id', // HTML attribute that is used by the `toArray()` method in OnEnd
+			forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for all webkit browsers
+			//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari only
+			fallbackTolerance: 2,
+
+			// Element dropped
+			onEnd: function() {
 				// When an update has occurred, adjust the order for each item.
-				var all = $('#media-items').sortable('toArray'), len = all.length;
-				$.each(all, function(i, id) {
-					var order = desc ? (len - i) : (1 + i);
-					$('#' + id + ' .menu_order input').val(order);
-				});
+				var all = gallerySortable.toArray(), len = all.length;
+				all.forEach( function( id, i ) {
+					var order = desc ? ( len - i ) : ( 1 + i );
+					document.getElementById( id + ' .menu_order input' ).value = order;
+				} );
 			}
 		} );
 	};
 
 	sortIt = function() {
-		var all = $('.menu_order_input'), len = all.length;
-		all.each(function(i){
-			var order = desc ? (len - i) : (1 + i);
-			$(this).val(order);
-		});
+		var all = document.querySelectorAll( '.menu_order_input' ), len = all.length;
+		all.forEach( function( id, i ) {
+			var order = desc ? ( len - i ) : ( 1 + i );
+			document.getElementById( id + ' .menu_order input' ).value = order;
+		} );
 	};
 
-	clearAll = function(c) {
+	clearAll = function( c ) {
 		c = c || 0;
-		$('.menu_order_input').each( function() {
-			if ( this.value === '0' || c ) {
-				this.value = '';
+		document.querySelectorAll( '.menu_order_input' ).forEach( function( input ) {
+			if ( input.value === '0' || c ) {
+				input.value = '';
 			}
-		});
+		} );
 	};
 
-	$('#asc').on( 'click', function( e ) {
+	document.getElementById( 'asc' ).addEventListener( 'click', function( e ) {
 		e.preventDefault();
 		desc = false;
 		sortIt();
-	});
-	$('#desc').on( 'click', function( e ) {
+	} );
+	document.getElementById( 'desc' ).addEventListener( 'click', function( e ) {
 		e.preventDefault();
 		desc = true;
 		sortIt();
-	});
-	$('#clear').on( 'click', function( e ) {
+	} );
+	document.getElementById( 'clear' ).addEventListener( 'click', function( e ) {
 		e.preventDefault();
 		clearAll(1);
-	});
-	$('#showall').on( 'click', function( e ) {
+	} );
+	document.getElementById( 'showall' ).addEventListener( 'click', function( e ) {
 		e.preventDefault();
-		$('#sort-buttons span a').toggle();
-		$('a.describe-toggle-on').hide();
-		$('a.describe-toggle-off, table.slidetoggle').show();
-		$('img.pinkynail').toggle(false);
-	});
-	$('#hideall').on( 'click', function( e ) {
+		toggle( document.querySelector( '#sort-buttons span a' ) );
+		document.querySelector( 'a.describe-toggle-on').style.display = 'none';
+		document.querySelector( 'a.describe-toggle-off' ).style.display = '';
+		document.querySelector( 'table.slidetoggle' ).style.display = '';
+		document.querySelector( 'img.pinkynail' ).style.display = 'none';
+	} );
+	document.getElementById( 'hideall' ).addEventListener( 'click', function( e ) {
 		e.preventDefault();
-		$('#sort-buttons span a').toggle();
-		$('a.describe-toggle-on').show();
-		$('a.describe-toggle-off, table.slidetoggle').hide();
-		$('img.pinkynail').toggle(true);
-	});
+		toggle( document.querySelector( '#sort-buttons span a' ) );
+		document.querySelector( 'a.describe-toggle-on' ).style.display = '';
+		document.querySelector( 'a.describe-toggle-off' ).style.display = 'none';
+		document.querySelector( 'table.slidetoggle' ).style.display = 'none';
+		document.querySelector( 'img.pinkynail' ).style.display = '';
+	} );
 
 	// Initialize sortable.
 	gallerySortableInit();
 	clearAll();
 
-	if ( $('#media-items>*').length > 1 ) {
+	if ( document.querySelectorAll( '#media-items > *' ).length > 1 ) {
 		w = wpgallery.getWin();
 
-		$('#save-all, #gallery-settings').show();
-		if ( typeof w.tinyMCE !== 'undefined' && w.tinyMCE.activeEditor && ! w.tinyMCE.activeEditor.isHidden() ) {
+		document.getElementById( 'save-all' ).style.display = '';
+		document.getElementById( 'gallery-settings' ).style.display = '';
+		if ( typeof w.tinyMCE !== 'undefined' && w.tinyMCE.activeEditor && isVisible( w.tinyMCE.activeEditor ) ) {
 			wpgallery.mcemode = true;
 			wpgallery.init();
 		} else {
-			$('#insert-gallery').show();
+			document.getElementById( 'insert-gallery' ).style.display = '';
 		}
 	}
-});
 
-jQuery(window).on( 'unload', function () { window.tinymce = window.tinyMCE = window.wpgallery = null; } ); // Cleanup.
+	function toggle(el) {
+		if ( el.style.display === 'none' ) {
+			el.style.display = '';
+		} else {
+			el.style.display = 'none';
+		}
+	}
+
+	function isVisible( elem ) {
+		return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+	}
+
+} );
+
+window.addEventListener( 'beforeunload', function () { window.tinymce = window.tinyMCE = window.wpgallery = null; } ); // Cleanup.
 
 /* gallery settings */
 window.tinymce = null;

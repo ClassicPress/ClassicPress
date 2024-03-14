@@ -222,7 +222,7 @@ function get_permalink( $post = 0, $leavename = false ) {
 	) {
 
 		$category = '';
-		if ( strpos( $permalink, '%category%' ) !== false ) {
+		if ( str_contains( $permalink, '%category%' ) ) {
 			$cats = get_the_category( $post->ID );
 			if ( $cats ) {
 				$cats = wp_list_sort(
@@ -260,7 +260,7 @@ function get_permalink( $post = 0, $leavename = false ) {
 		}
 
 		$author = '';
-		if ( strpos( $permalink, '%author%' ) !== false ) {
+		if ( str_contains( $permalink, '%author%' ) ) {
 			$authordata = get_userdata( $post->post_author );
 			$author     = $authordata->user_nicename;
 		}
@@ -496,13 +496,13 @@ function get_attachment_link( $post = null, $leavename = false ) {
 			$parentlink = get_permalink( $post->post_parent );
 		}
 
-		if ( is_numeric( $post->post_name ) || false !== strpos( get_option( 'permalink_structure' ), '%category%' ) ) {
+		if ( is_numeric( $post->post_name ) || str_contains( get_option( 'permalink_structure' ), '%category%' ) ) {
 			$name = 'attachment/' . $post->post_name; // <permalink>/<int>/ is paged so we use the explicit attachment marker.
 		} else {
 			$name = $post->post_name;
 		}
 
-		if ( strpos( $parentlink, '?' ) === false ) {
+		if ( ! str_contains( $parentlink, '?' ) ) {
 			$link = user_trailingslashit( trailingslashit( $parentlink ) . '%postname%' );
 		}
 
@@ -692,7 +692,7 @@ function get_feed_link( $feed = '' ) {
 	$permalink = $wp_rewrite->get_feed_permastruct();
 
 	if ( $permalink ) {
-		if ( false !== strpos( $feed, 'comments_' ) ) {
+		if ( str_contains( $feed, 'comments_' ) ) {
 			$feed      = str_replace( 'comments_', '', $feed );
 			$permalink = $wp_rewrite->get_comment_feed_permastruct();
 		}
@@ -709,7 +709,7 @@ function get_feed_link( $feed = '' ) {
 			$feed = get_default_feed();
 		}
 
-		if ( false !== strpos( $feed, 'comments_' ) ) {
+		if ( str_contains( $feed, 'comments_' ) ) {
 			$feed = str_replace( 'comments_', 'comments-', $feed );
 		}
 
@@ -1817,7 +1817,7 @@ function get_adjacent_post( $in_same_term = false, $excluded_terms = '', $previo
 
 	if ( ! empty( $excluded_terms ) && ! is_array( $excluded_terms ) ) {
 		// Back-compat, $excluded_terms used to be $excluded_categories with IDs separated by " and ".
-		if ( false !== strpos( $excluded_terms, ' and ' ) ) {
+		if ( str_contains( $excluded_terms, ' and ' ) ) {
 			_deprecated_argument(
 				__FUNCTION__,
 				'3.3.0',
@@ -3635,7 +3635,7 @@ function plugins_url( $path = '', $plugin = '' ) {
 	$plugin        = wp_normalize_path( $plugin );
 	$mu_plugin_dir = wp_normalize_path( WPMU_PLUGIN_DIR );
 
-	if ( ! empty( $plugin ) && 0 === strpos( $plugin, $mu_plugin_dir ) ) {
+	if ( ! empty( $plugin ) && str_starts_with( $plugin, $mu_plugin_dir ) ) {
 		$url = WPMU_PLUGIN_URL;
 	} else {
 		$url = WP_PLUGIN_URL;
@@ -3887,7 +3887,7 @@ function set_url_scheme( $url, $scheme = null ) {
 	}
 
 	$url = trim( $url );
-	if ( substr( $url, 0, 2 ) === '//' ) {
+	if ( str_starts_with( $url, '//' ) ) {
 		$url = 'http:' . $url;
 	}
 
@@ -4426,7 +4426,7 @@ function get_avatar_data( $id_or_email, $args = null ) {
 	if ( is_numeric( $id_or_email ) ) {
 		$user = get_user_by( 'id', absint( $id_or_email ) );
 	} elseif ( is_string( $id_or_email ) ) {
-		if ( strpos( $id_or_email, '@md5.gravatar.com' ) ) {
+		if ( str_contains( $id_or_email, '@md5.gravatar.com' ) ) {
 			// MD5 hash.
 			list( $email_hash ) = explode( '@', $id_or_email );
 		} else {
