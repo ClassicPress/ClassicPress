@@ -512,7 +512,7 @@ function human_readable_duration( $duration = '' ) {
 	$duration = trim( $duration );
 
 	// Remove prepended negative sign.
-	if ( '-' === substr( $duration, 0, 1 ) ) {
+	if ( str_starts_with( $duration, '-' ) ) {
 		$duration = substr( $duration, 1 );
 	}
 
@@ -707,7 +707,7 @@ function is_serialized( $data, $strict = true ) {
 				if ( '"' !== substr( $data, -2, 1 ) ) {
 					return false;
 				}
-			} elseif ( false === strpos( $data, '"' ) ) {
+			} elseif ( ! str_contains( $data, '"' ) ) {
 				return false;
 			}
 			// Or else fall through.
@@ -742,7 +742,7 @@ function is_serialized_string( $data ) {
 		return false;
 	} elseif ( ':' !== $data[1] ) {
 		return false;
-	} elseif ( ';' !== substr( $data, -1 ) ) {
+	} elseif ( ! str_ends_with( $data, ';' ) ) {
 		return false;
 	} elseif ( 's' !== $data[0] ) {
 		return false;
@@ -1157,10 +1157,10 @@ function add_query_arg( ...$args ) {
 		$protocol = '';
 	}
 
-	if ( strpos( $uri, '?' ) !== false ) {
+	if ( str_contains( $uri, '?' ) ) {
 		list( $base, $query ) = explode( '?', $uri, 2 );
 		$base                .= '?';
-	} elseif ( $protocol || strpos( $uri, '=' ) === false ) {
+	} elseif ( $protocol || ! str_contains( $uri, '=' ) ) {
 		$base  = $uri . '?';
 		$query = '';
 	} else {
@@ -2039,7 +2039,7 @@ function wp_mkdir_p( $target ) {
 	}
 
 	// Do not allow path traversals.
-	if ( false !== strpos( $target, '../' ) || false !== strpos( $target, '..' . DIRECTORY_SEPARATOR ) ) {
+	if ( str_contains( $target, '../' ) || str_contains( $target, '..' . DIRECTORY_SEPARATOR ) ) {
 		return false;
 	}
 
@@ -2369,7 +2369,7 @@ function wp_upload_dir( $time = null, $create_dir = true, $refresh_cache = false
 			$uploads['error'] = $tested_paths[ $path ];
 		} else {
 			if ( ! wp_mkdir_p( $path ) ) {
-				if ( 0 === strpos( $uploads['basedir'], ABSPATH ) ) {
+				if ( str_starts_with( $uploads['basedir'], ABSPATH ) ) {
 					$error_path = str_replace( ABSPATH, '', $uploads['basedir'] ) . $uploads['subdir'];
 				} else {
 					$error_path = wp_basename( $uploads['basedir'] ) . $uploads['subdir'];
@@ -2404,7 +2404,7 @@ function _wp_upload_dir( $time = null ) {
 
 	if ( empty( $upload_path ) || 'wp-content/uploads' === $upload_path ) {
 		$dir = WP_CONTENT_DIR . '/uploads';
-	} elseif ( 0 !== strpos( $upload_path, ABSPATH ) ) {
+	} elseif ( ! str_starts_with( $upload_path, ABSPATH ) ) {
 		// $dir is absolute, $upload_path is (maybe) relative to ABSPATH.
 		$dir = path_join( ABSPATH, $upload_path );
 	} else {
@@ -2566,7 +2566,7 @@ function wp_unique_filename( $dir, $filename, $unique_filename_callback = null )
 		$file_type = wp_check_filetype( $filename );
 		$mime_type = $file_type['type'];
 
-		$is_image    = ( ! empty( $mime_type ) && 0 === strpos( $mime_type, 'image/' ) );
+		$is_image    = ( ! empty( $mime_type ) && str_starts_with( $mime_type, 'image/' ) );
 		$upload_dir  = wp_get_upload_dir();
 		$lc_filename = null;
 
@@ -2626,7 +2626,7 @@ function wp_unique_filename( $dir, $filename, $unique_filename_callback = null )
 		$count = 10000;
 
 		// The (resized) image files would have name and extension, and will be in the uploads dir.
-		if ( $name && $ext && @is_dir( $dir ) && false !== strpos( $dir, $upload_dir['basedir'] ) ) {
+		if ( $name && $ext && @is_dir( $dir ) && str_contains( $dir, $upload_dir['basedir'] ) ) {
 			/**
 			 * Filters the file list used for calculating a unique filename for a newly added file.
 			 *
@@ -2904,7 +2904,7 @@ function wp_upload_bits( $name, $deprecated, $bits, $time = null ) {
 
 	$new_file = $upload['path'] . "/$filename";
 	if ( ! wp_mkdir_p( dirname( $new_file ) ) ) {
-		if ( 0 === strpos( $upload['basedir'], ABSPATH ) ) {
+		if ( str_starts_with( $upload['basedir'], ABSPATH ) ) {
 			$error_path = str_replace( ABSPATH, '', $upload['basedir'] ) . $upload['subdir'];
 		} else {
 			$error_path = wp_basename( $upload['basedir'] ) . $upload['subdir'];
@@ -3073,7 +3073,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 	$real_mime = false;
 
 	// Validate image types.
-	if ( $type && 0 === strpos( $type, 'image/' ) ) {
+	if ( $type && str_starts_with( $type, 'image/' ) ) {
 
 		// Attempt to figure out what type of image it actually is.
 		$real_mime = wp_get_image_mime( $file );
@@ -3144,7 +3144,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 				$type = false;
 				$ext  = false;
 			}
-		} elseif ( 0 === strpos( $real_mime, 'video/' ) || 0 === strpos( $real_mime, 'audio/' ) ) {
+		} elseif ( str_starts_with( $real_mime, 'video/' ) || str_starts_with( $real_mime, 'audio/' ) ) {
 			/*
 			 * For these types, only the major type must match the real value.
 			 * This means that common mismatches are forgiven: application/vnd.apple.numbers is often misidentified as application/zip,
@@ -3302,7 +3302,7 @@ function wp_get_image_mime( $file ) {
 		$magic = bin2hex( $magic );
 		if (
 			// RIFF.
-			( 0 === strpos( $magic, '52494646' ) ) &&
+			( str_starts_with( $magic, '52494646' ) ) &&
 			// WEBP.
 			( 16 === strpos( $magic, '57454250' ) )
 		) {
@@ -4640,7 +4640,7 @@ function _mce_set_direction( $mce_init ) {
 		$mce_init['directionality'] = 'rtl';
 		$mce_init['rtl_ui']         = true;
 
-		if ( ! empty( $mce_init['plugins'] ) && strpos( $mce_init['plugins'], 'directionality' ) === false ) {
+		if ( ! empty( $mce_init['plugins'] ) && ! str_contains( $mce_init['plugins'], 'directionality' ) ) {
 			$mce_init['plugins'] .= ',directionality';
 		}
 
@@ -5940,13 +5940,13 @@ function apache_mod_loaded( $mod, $default_value = false ) {
 
 	if ( empty( $loaded_mods )
 		&& function_exists( 'phpinfo' )
-		&& false === strpos( ini_get( 'disable_functions' ), 'phpinfo' )
+		&& ! str_contains( ini_get( 'disable_functions' ), 'phpinfo' )
 	) {
 		ob_start();
 		phpinfo( INFO_MODULES );
 		$phpinfo = ob_get_clean();
 
-		if ( false !== strpos( $phpinfo, $mod ) ) {
+		if ( str_contains( $phpinfo, $mod ) ) {
 			return true;
 		}
 	}
@@ -6021,7 +6021,7 @@ function validate_file( $file, $allowed_files = array() ) {
 	}
 
 	// `../` which does not occur at the end of the path is not allowed:
-	if ( false !== strpos( $file, '../' ) && '../' !== mb_substr( $file, -3, 3 ) ) {
+	if ( str_contains( $file, '../' ) && '../' !== mb_substr( $file, -3, 3 ) ) {
 		return 1;
 	}
 
@@ -6076,7 +6076,7 @@ function wp_guess_url() {
 		$script_filename_dir = dirname( $_SERVER['SCRIPT_FILENAME'] );
 
 		// The request is for the admin.
-		if ( strpos( $_SERVER['REQUEST_URI'], 'wp-admin' ) !== false || strpos( $_SERVER['REQUEST_URI'], 'wp-login.php' ) !== false ) {
+		if ( str_contains( $_SERVER['REQUEST_URI'], 'wp-admin' ) || str_contains( $_SERVER['REQUEST_URI'], 'wp-login.php' ) ) {
 			$path = preg_replace( '#/(wp-admin/?.*|wp-login\.php.*)#i', '', $_SERVER['REQUEST_URI'] );
 
 			// The request is for a file in ABSPATH.
@@ -6085,12 +6085,12 @@ function wp_guess_url() {
 			$path = preg_replace( '#/[^/]*$#i', '', $_SERVER['PHP_SELF'] );
 
 		} else {
-			if ( false !== strpos( $_SERVER['SCRIPT_FILENAME'], $abspath_fix ) ) {
+			if ( str_contains( $_SERVER['SCRIPT_FILENAME'], $abspath_fix ) ) {
 				// Request is hitting a file inside ABSPATH.
 				$directory = str_replace( ABSPATH, '', $script_filename_dir );
 				// Strip off the subdirectory, and any file/query params.
 				$path = preg_replace( '#/' . preg_quote( $directory, '#' ) . '/[^/]*$#i', '', $_SERVER['REQUEST_URI'] );
-			} elseif ( false !== strpos( $abspath_fix, $script_filename_dir ) ) {
+			} elseif ( str_contains( $abspath_fix, $script_filename_dir ) ) {
 				// Request is hitting a file above ABSPATH.
 				$subdirectory = substr( $abspath_fix, strpos( $abspath_fix, $script_filename_dir ) + strlen( $script_filename_dir ) );
 				// Strip off any file/query params from the path, appending the subdirectory to the installation.
@@ -6333,17 +6333,17 @@ function _wp_timezone_choice_usort_callback( $a, $b ) {
 	// Don't use translated versions of Etc.
 	if ( 'Etc' === $a['continent'] && 'Etc' === $b['continent'] ) {
 		// Make the order of these more like the old dropdown.
-		if ( 'GMT+' === substr( $a['city'], 0, 4 ) && 'GMT+' === substr( $b['city'], 0, 4 ) ) {
+		if ( str_starts_with( $a['city'], 'GMT+' ) && str_starts_with( $b['city'], 'GMT+' ) ) {
 			return -1 * ( strnatcasecmp( $a['city'], $b['city'] ) );
 		}
 		if ( 'UTC' === $a['city'] ) {
-			if ( 'GMT+' === substr( $b['city'], 0, 4 ) ) {
+			if ( str_starts_with( $b['city'], 'GMT+' ) ) {
 				return 1;
 			}
 			return -1;
 		}
 		if ( 'UTC' === $b['city'] ) {
-			if ( 'GMT+' === substr( $a['city'], 0, 4 ) ) {
+			if ( str_starts_with( $a['city'], 'GMT+' ) ) {
 				return -1;
 			}
 			return 1;
@@ -7041,9 +7041,9 @@ function _device_can_upload() {
 
 	$ua = $_SERVER['HTTP_USER_AGENT'];
 
-	if ( strpos( $ua, 'iPhone' ) !== false
-		|| strpos( $ua, 'iPad' ) !== false
-		|| strpos( $ua, 'iPod' ) !== false ) {
+	if ( str_contains( $ua, 'iPhone' )
+		|| str_contains( $ua, 'iPad' )
+		|| str_contains( $ua, 'iPod' ) ) {
 			return preg_match( '#OS ([\d_]+) like Mac OS X#', $ua, $version ) && version_compare( $version[1], '6', '>=' );
 	}
 
@@ -7148,7 +7148,7 @@ function wp_auth_check_load() {
 function wp_auth_check_html() {
 	$login_url      = wp_login_url();
 	$current_domain = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'];
-	$same_domain    = ( strpos( $login_url, $current_domain ) === 0 );
+	$same_domain    = str_starts_with( $login_url, $current_domain );
 
 	/**
 	 * Filters whether the authentication check originated at the same domain.
@@ -7396,7 +7396,7 @@ function wp_delete_file_from_directory( $file, $directory ) {
 		$real_directory = wp_normalize_path( $real_directory );
 	}
 
-	if ( false === $real_file || false === $real_directory || strpos( $real_file, trailingslashit( $real_directory ) ) !== 0 ) {
+	if ( false === $real_file || false === $real_directory || ! str_starts_with( $real_file, trailingslashit( $real_directory ) ) ) {
 		return false;
 	}
 
@@ -8402,8 +8402,8 @@ function clean_dirsize_cache( $path ) {
 	}
 
 	if (
-		strpos( $path, '/' ) === false &&
-		strpos( $path, '\\' ) === false
+		! str_contains( $path, '/' ) &&
+		! str_contains( $path, '\\' )
 	) {
 		unset( $directory_cache[ $path ] );
 		set_transient( 'dirsize_cache', $directory_cache );

@@ -136,7 +136,7 @@ function check_comment( $author, $email, $url, $comment, $user_ip, $user_agent, 
 				$ok_to_comment = $wpdb->get_var( $wpdb->prepare( "SELECT comment_approved FROM $wpdb->comments WHERE comment_author = %s AND comment_author_email = %s and comment_approved = '1' LIMIT 1", $author, $email ) );
 			}
 			if ( ( 1 == $ok_to_comment ) &&
-				( empty( $mod_keys ) || false === strpos( $email, $mod_keys ) ) ) {
+				( empty( $mod_keys ) || ! str_contains( $email, $mod_keys ) ) ) {
 					return true;
 			} else {
 				return false;
@@ -2806,7 +2806,7 @@ function discover_pingback_server_uri( $url, $deprecated = '' ) {
 
 	// Do not search for a pingback server on our own uploads.
 	$uploads_dir = wp_get_upload_dir();
-	if ( 0 === strpos( $url, $uploads_dir['baseurl'] ) ) {
+	if ( str_starts_with( $url, $uploads_dir['baseurl'] ) ) {
 		return false;
 	}
 
