@@ -1193,7 +1193,7 @@ function wp_default_scripts( $scripts ) {
 
 		$scripts->add( 'sortable-js', '/wp-includes/js/sortable.min.js', array(), false, 1 );
 
-		$scripts->add( 'postbox', "/wp-admin/js/postbox$suffix.js", array( 'jquery-ui-sortable', 'wp-a11y' ), false, 1 );
+		$scripts->add( 'postbox', "/wp-admin/js/postbox$suffix.js", array( 'sortable-js', 'wp-a11y' ), false, 1 );
 		$scripts->set_translations( 'postbox' );
 
 		$scripts->add( 'tags-box', "/wp-admin/js/tags-box$suffix.js", array( 'jquery', 'tags-suggest' ), false, 1 );

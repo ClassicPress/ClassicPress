@@ -2,657 +2,453 @@
  * Contains the postboxes logic, opening and closing postboxes, reordering and saving
  * the state and ordering to the database.
  *
- * @since 2.5.0
- * @requires jQuery
+ * @since CP-2.1.0
+ * @requires SortableJS
  * @output wp-admin/js/postbox.js
  */
 
-/* global ajaxurl, postboxes */
+/* global Sortable, ajaxurl, console */
+document.addEventListener( 'DOMContentLoaded', function() {
+	'use strict';
 
-(function($) {
-	var $document = $( document ),
-		__ = wp.i18n.__;
+	// Set variables for the whole file
+	var moveUpButtons = document.querySelectorAll( '.postbox:not( .hide-if-js ) .handle-order-higher' ),
+		moveDownButtons = document.querySelectorAll( '.postbox:not( .hide-if-js ) .handle-order-lower' ),
+		allButtons = [ ...moveUpButtons, ...moveDownButtons ],
+		__ = wp.i18n.__,
+		boxes = document.querySelectorAll( '.postbox' ),
+		columns = document.querySelectorAll( '.meta-box-sortables' ),
+		nagDismiss = document.querySelector( '.postbox a.dismiss' ),
+		widgetToggles = document.querySelectorAll( '.hide-postbox-tog' ),
+		columnsPrefs = document.querySelectorAll( '.columns-prefs input[type="radio"]' ),
+		check = document.querySelector( 'label.columns-prefs-1 input[type="radio"]' ),
+		emptySortableText = ( boxes == null ) ?  __( 'Add boxes from the Screen Options menu' ) : __( 'Drag boxes here' );
 
 	/**
-	 * This object contains all function to handle the behavior of the post boxes. The post boxes are the boxes you see
-	 * around the content on the edit page.
+	 * Disables first Up button and last Down button if they appear in
+	 * the first and last sortable areas respectively.
+	 *
+	 * @since CP-2.1.0
+	 */
+	if ( [ 'dashboard', 'post' ].includes( window.pagenow ) ) {
+		if ( columns[0].querySelector( '.handle-order-higher' ) != null ) {
+			moveUpButtons[0].setAttribute( 'aria-disabled', 'true' );
+		}
+		if ( boxes[boxes.length - 1].closest( '.postbox-container' ).nextElementSibling == null ) {
+			moveDownButtons[moveDownButtons.length - 1].setAttribute( 'aria-disabled', 'true' );
+		}
+	}
+
+	/**
+	 * Handles clicks on the move up/down buttons.
+	 *
+	 * @since CP-2.1.0
+	 */
+	allButtons.forEach( function( button ) {
+		button.addEventListener( 'click', function() {
+			var prevCol,
+				nextCol,
+				firstOrLastPositionMessage,
+				widget = button.closest( 'details' ),
+				prevSibling = widget.previousElementSibling,
+				nextSibling = widget.nextElementSibling,
+				widgetCol = button.closest( '.meta-box-sortables' );
+
+			if ( widget.id !== 'dashboard_browser_nag' ) {
+
+				// If on the first or last position, do nothing and send an audible message to screen reader users.
+				if ( button.getAttribute( 'aria-disabled' ) === 'true' ) {
+					firstOrLastPositionMessage = button.className.includes( 'handle-order-higher' ) ?
+						__( 'The box is on the first position' ) :
+						__( 'The box is on the last position' );
+
+					wp.a11y.speak( firstOrLastPositionMessage );
+				}
+
+				// Move a postbox up.
+				else if ( button.className.includes( 'handle-order-higher' ) ) {
+
+					// If the box is first within a sortable area, move it to the previous sortable area.
+					if ( prevSibling == null || prevSibling.className.includes( 'hide-if-js' ) ) {
+						prevCol = widgetCol.parentNode.previousElementSibling.querySelector( '.meta-box-sortables' );
+						prevCol.appendChild( widget );
+
+						// Update where sortable area becomes, or ceases to be, empty.
+						if ( widgetCol.querySelector( '.postbox' ) == null ) {
+							widgetCol.classList.add( 'empty-container' );
+							widgetCol.style.outline = '3px dashed #c3c4c7';
+							widgetCol.setAttribute( 'data-emptystring', emptySortableText );
+						}
+
+						if ( prevCol.className.includes( 'empty-container' ) ) {
+							prevCol.classList.remove( 'empty-container' );
+							prevCol.style.outline = 'none';
+							prevCol.removeAttribute( 'data-emptystring' );
+						}
+					} else { // Otherwise move up within same area
+						widget.parentNode.insertBefore( widget, prevSibling );
+					}
+
+					button.focus();
+					updateLocations();
+				}
+
+				// Move a postbox down.
+				else if ( button.className.includes( 'handle-order-lower' ) ) {
+
+					// If the box is last within a sortable area, move it to the next sortable area.
+					if ( nextSibling == null || nextSibling.className.includes( 'hide-if-js' ) ) {
+						nextCol = widgetCol.parentNode.nextElementSibling.querySelector( '.meta-box-sortables' );
+						nextCol.insertBefore( widget, nextCol.querySelector( 'details' ) );
+
+						// Update where sortable area becomes, or ceases to be, empty.
+						if ( widgetCol.querySelector( '.postbox' ) == null ) {
+							widgetCol.classList.add( 'empty-container' );
+							widgetCol.style.outline = '3px dashed #c3c4c7';
+							widgetCol.setAttribute( 'data-emptystring', emptySortableText );
+						}
+
+						if ( nextCol.className.includes( 'empty-container' ) ) {
+							nextCol.classList.remove( 'empty-container' );
+							nextCol.style.outline = 'none';
+							nextCol.removeAttribute( 'data-emptystring' );
+						}
+					} else { // Otherwise move down within same area
+						widget.parentNode.insertBefore( nextSibling, widget );
+					}
+
+					button.focus();
+					updateLocations();
+				}
+			}
+		} );
+	} );
+
+	/**
+	 * Updates state when boxes toggled open and closed.
+	 *
+	 * @since CP-2.1.0
+	 */
+	boxes.forEach( function( box ) {
+		box.addEventListener( 'toggle', function() {
+			saveState();
+		} );
+	} );
+
+	/**
+	 * Makes columns sortable. Handles when a widget is dragged, dropped, or sorted.
+	 *
+	 * @since CP-2.1.0
+	 *
+	 * @requires SortableJS.
+	 */
+	columns.forEach( function( column ) {
+		Sortable.create( document.getElementById( column.id ), {
+			group: 'widgets',
+			handle: '.hndle',
+			forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for webkit browsers
+			//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari
+			onStart: dragStart,
+			onEnd: dragEnd,
+			onChange: updateLocations
+		} );
+
+		if ( column.id !== 'advanced-sortables' && column.querySelector( '.postbox' ) == null ) {
+			column.classList.add( 'empty-container' );
+			column.style.outline = '3px dashed #c3c4c7';
+			column.setAttribute( 'data-emptystring', emptySortableText );
+		}
+	} );
+
+	/**
+	 * Hides a postbox.
+	 *
+	 * Event handler for the postbox dismiss button. After clicking the button
+	 * the postbox will be hidden.
+	 *
+	 * As of WordPress 5.5, this is only used for the browser update nag.
+	 *
+	 * @since 3.2.0
+	 */
+	if ( nagDismiss != null ) {
+		nagDismiss.addEventListener( 'click', function( e ) {
+			var hideId = e.target.parentElement.id + '-hide';
+			e.preventDefault();
+			document.getElementById( hideId ).checked = 'false';
+			document.getElementById( hideId ).click();
+		} );
+	}
+
+	/**
+	 * Hides the postbox element
+	 *
+	 * Event handler for the screen options checkboxes. When a checkbox is
+	 * clicked this function will hide or show the relevant postboxes.
+	 *
+	 * @since 2.7.0
+	 */
+	widgetToggles.forEach( function( toggle ) {
+		var boxId = toggle.value,
+			postbox = ( window.pagenow === 'nav-menus' ) ? document.getElementById( boxId ).closest( 'li' ) : document.getElementById( boxId );
+
+		if ( postbox != null ) { // also catches undefined
+			if ( toggle.checked ) {
+				postbox.classList.remove( 'hide-if-js' );
+			} else {
+				postbox.classList.add( 'hide-if-js' );
+			}
+
+			toggle.addEventListener( 'click', function() {
+				postbox.classList.toggle( 'hide-if-js' );
+				updateLocations();
+				saveState();
+			} );
+		}
+	} );
+
+
+	/**
+	 * Changes the number of columns based on layout preference.
+	 *
+	 * @since 2.8.0
+	 */
+	if ( columnsPrefs != null ) {
+		columnsPrefs.forEach( function( pref ) {
+			pref.addEventListener( 'click', function( e ) {
+				var n = parseInt( e.target.value, 10 );
+				if ( n ) {
+					_pbEdit( n );
+					updateLocations();
+				}
+			} );
+		} );
+	}
+
+	/**
+	 * Identifies droppable areas when starting to drag widget.
+	 *
+	 * @since CP-2.1.0
+	 */
+	function dragStart() {
+		columns.forEach( function( column ) {
+			column.style.outline = '3px dashed gray';
+		} );
+	}
+
+	/**
+	 * Updates styles and attributes when drag ends.
+	 *
+	 * @since CP-2.1.0
+	 */
+	function dragEnd( e ) {
+		columns.forEach( function( column ) {
+			column.style.outline = 'none';
+		} );
+
+		// Update class and attribute when a sortable area becomes or ceases being empty.
+		if ( e.from.querySelector( '.postbox' ) == null ) {
+			e.from.classList.add( 'empty-container' );
+			e.from.style.outline = '3px dashed #c3c4c7';
+			e.from.setAttribute( 'data-emptystring', emptySortableText );
+		}
+
+		if ( e.to.className.includes( 'empty-container' ) ) {
+			e.to.classList.remove( 'empty-container' );
+			e.to.style.outline = 'none';
+			e.to.removeAttribute( 'data-emptystring' );
+		}
+	}
+
+	/**
+	 * Updates when box position has changed.
+	 *
+	 * @since CP-2.1.0
+	 */
+	function updateLocations() {
+		if ( window.pagenow === 'nav-menus' ) {
+			return;
+		}
+
+		var firstWidget,
+			lastWidget,
+			postVars,
+			cols = document.querySelector( '.columns-prefs input[type="radio"]:checked' ),
+			widgetsIds = [],
+			widgetsIdsList = [];
+
+		// Remove current aria-disabled states
+		document.querySelectorAll( '[aria-disabled="true"]' ).forEach( function( ariaDisabled ) {
+			ariaDisabled.setAttribute( 'aria-disabled', 'false' );
+		});
+
+		// Collect variables for posting to database
+		postVars = new URLSearchParams( {
+			action: 'meta-box-order',
+			_ajax_nonce: document.getElementById( 'meta-box-order-nonce' ).value,
+			page_columns: cols ? cols.value : 0,
+			page: window.pagenow
+		} );
+
+		// Generate newly-ordered array of columns and postboxes
+		columns.forEach( function( column ) {
+			column.querySelectorAll( 'details:not( .hide-if-js )' ).forEach( function( childWidget ) {
+				widgetsIds.push( childWidget.id ); // for posting to database
+				widgetsIdsList.push( childWidget.id ); // for setting aria-disabled state
+			});
+			postVars.append( 'order[' + column.id.split( '-' )[0] + ']', widgetsIds.join( ',' ) );
+			widgetsIds = []; // reset
+		} );
+
+		// Add aria-disabled to first Up button if it's in the first sortable area
+		firstWidget = document.getElementById( widgetsIdsList[0] );
+		if ( firstWidget.parentNode === columns[0] ) {
+			firstWidget.querySelector( '.handle-order-higher' ).setAttribute( 'aria-disabled', 'true' );
+		}
+
+		// Add aria-disabled to last Down button if it's in the last sortable area
+		lastWidget = document.getElementById( widgetsIdsList[widgetsIdsList.length -1] );
+		if ( lastWidget.closest( '.postbox-container' ).nextElementSibling == null ) {
+			lastWidget.querySelector( '.handle-order-lower' ).setAttribute( 'aria-disabled', 'true' );
+		}
+
+		// Post the updated widget locations to the database
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: postVars,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( response ) {
+			if ( response.success ) {
+				wp.a11y.speak( __( 'The boxes order has been saved.' ) );
+			}
+		} )
+		.catch( function( error ) {
+			console.log( error );
+		} );
+	}
+
+	/**
+	 * Saves the state of the postboxes to the server.
+	 *
+	 * It sends two lists, one with all the closed postboxes, one with all the
+	 * hidden postboxes.
 	 *
 	 * @since 2.7.0
 	 *
-	 * @namespace postboxes
-	 *
-	 * @type {Object}
+	 * Closed postboxes are now identified by the lack of an open attribute
+	 * in the details element rather than by a class of "closed"
 	 */
-	window.postboxes = {
+	function saveState() {
+		var closed, hidden, postVars;
 
-		/**
-		 * Handles a click on either the postbox heading or the postbox open/close icon.
-		 *
-		 * Opens or closes the postbox. Expects `this` to equal the clicked element.
-		 * Calls postboxes.pbshow if the postbox has been opened, calls postboxes.pbhide
-		 * if the postbox has been closed.
-		 *
-		 * @since 4.4.0
-		 *
-		 * @memberof postboxes
-		 *
-		 * @fires postboxes#postbox-toggled
-		 *
-		 * @return {void}
-		 */
-		handle_click : function () {
-			var $el = $( this ),
-				p = $el.closest( '.postbox' ),
-				id = p.attr( 'id' ),
-				ariaExpandedValue;
+		if ( window.pagenow !== 'nav-menus' ) {
+			closed = [ ...document.querySelectorAll( '.postbox:not([open])' ) ].map( function( i ) { return i.id; } ).join( ',' );
+			hidden = [ ...document.querySelectorAll( '.postbox.hide-if-js' ) ].map( function( i ) { return i.id; } ).join( ',' );
 
-			if ( 'dashboard_browser_nag' === id ) {
-				return;
-			}
+			postVars = new URLSearchParams( {
+				action: 'closed-postboxes',
+				closedpostboxesnonce: document.getElementById( 'closedpostboxesnonce' ).value,
+				closed: closed,
+				hidden: hidden,
+				page: window.pagenow
+			} );
 
-			p.toggleClass( 'closed' );
-			ariaExpandedValue = ! p.hasClass( 'closed' );
-
-			if ( $el.hasClass( 'handlediv' ) ) {
-				// The handle button was clicked.
-				$el.attr( 'aria-expanded', ariaExpandedValue );
-			} else {
-				// The handle heading was clicked.
-				$el.closest( '.postbox' ).find( 'button.handlediv' )
-					.attr( 'aria-expanded', ariaExpandedValue );
-			}
-
-			if ( postboxes.page !== 'press-this' ) {
-				postboxes.save_state( postboxes.page );
-			}
-
-			if ( id ) {
-				if ( !p.hasClass('closed') && typeof postboxes.pbshow === 'function' ) {
-					postboxes.pbshow( id );
-				} else if ( p.hasClass('closed') && typeof postboxes.pbhide === 'function' ) {
-					postboxes.pbhide( id );
+			fetch( ajaxurl, {
+				method: 'POST',
+				body: postVars,
+				credentials: 'same-origin'
+			} )
+			.then( function( response ) {
+				if ( response.ok ) {
+					return response.json(); // no errors
 				}
-			}
+				throw new Error( response.status );
+			} )
+			.then( function() {
+			} )
+			.catch( function( error ) {
+				console.log( error );
+			} );
+		}
+	}
 
-			/**
-			 * Fires when a postbox has been opened or closed.
-			 *
-			 * Contains a jQuery object with the relevant postbox element.
-			 *
-			 * @since 4.0.0
-			 * @ignore
-			 *
-			 * @event postboxes#postbox-toggled
-			 * @type {Object}
-			 */
-			$document.trigger( 'postbox-toggled', p );
-		},
-
-		/**
-		 * Handles clicks on the move up/down buttons.
-		 *
-		 * @since 5.5.0
-		 *
-		 * @return {void}
-		 */
-		handleOrder: function() {
-			var button = $( this ),
-				postbox = button.closest( '.postbox' ),
-				postboxId = postbox.attr( 'id' ),
-				postboxesWithinSortables = postbox.closest( '.meta-box-sortables' ).find( '.postbox:visible' ),
-				postboxesWithinSortablesCount = postboxesWithinSortables.length,
-				postboxWithinSortablesIndex = postboxesWithinSortables.index( postbox ),
-				firstOrLastPositionMessage;
-
-			if ( 'dashboard_browser_nag' === postboxId ) {
-				return;
-			}
-
-			// If on the first or last position, do nothing and send an audible message to screen reader users.
-			if ( 'true' === button.attr( 'aria-disabled' ) ) {
-				firstOrLastPositionMessage = button.hasClass( 'handle-order-higher' ) ?
-					__( 'The box is on the first position' ) :
-					__( 'The box is on the last position' );
-
-				wp.a11y.speak( firstOrLastPositionMessage );
-				return;
-			}
-
-			// Move a postbox up.
-			if ( button.hasClass( 'handle-order-higher' ) ) {
-				// If the box is first within a sortable area, move it to the previous sortable area.
-				if ( 0 === postboxWithinSortablesIndex ) {
-					postboxes.handleOrderBetweenSortables( 'previous', button, postbox );
-					return;
+	/**
+	 * Changes the number of columns the postboxes are in based on the current
+	 * orientation of the browser.
+	 *
+	 * @since 3.3.0
+	 */
+	if ( check != null ) {
+		switch ( window.orientation ) {
+			case 90:
+			case -90:
+				if ( !check.length || !check.checked ) {
+					_pbEdit( 2 );
 				}
-
-				postbox.prevAll( '.postbox:visible' ).eq( 0 ).before( postbox );
-				button.trigger( 'focus' );
-				postboxes.updateOrderButtonsProperties();
-				postboxes.save_order( postboxes.page );
-			}
-
-			// Move a postbox down.
-			if ( button.hasClass( 'handle-order-lower' ) ) {
-				// If the box is last within a sortable area, move it to the next sortable area.
-				if ( postboxWithinSortablesIndex + 1 === postboxesWithinSortablesCount ) {
-					postboxes.handleOrderBetweenSortables( 'next', button, postbox );
-					return;
-				}
-
-				postbox.nextAll( '.postbox:visible' ).eq( 0 ).after( postbox );
-				button.trigger( 'focus' );
-				postboxes.updateOrderButtonsProperties();
-				postboxes.save_order( postboxes.page );
-			}
-
-		},
-
-		/**
-		 * Moves postboxes between the sortables areas.
-		 *
-		 * @since 5.5.0
-		 *
-		 * @param {string} position The "previous" or "next" sortables area.
-		 * @param {Object} button   The jQuery object representing the button that was clicked.
-		 * @param {Object} postbox  The jQuery object representing the postbox to be moved.
-		 *
-		 * @return {void}
-		 */
-		handleOrderBetweenSortables: function( position, button, postbox ) {
-			var closestSortablesId = button.closest( '.meta-box-sortables' ).attr( 'id' ),
-				sortablesIds = [],
-				sortablesIndex,
-				detachedPostbox;
-
-			// Get the list of sortables within the page.
-			$( '.meta-box-sortables:visible' ).each( function() {
-				sortablesIds.push( $( this ).attr( 'id' ) );
-			});
-
-			// Return if there's only one visible sortables area, e.g. in the block editor page.
-			if ( 1 === sortablesIds.length ) {
-				return;
-			}
-
-			// Find the index of the current sortables area within all the sortable areas.
-			sortablesIndex = $.inArray( closestSortablesId, sortablesIds );
-			// Detach the postbox to be moved.
-			detachedPostbox = postbox.detach();
-
-			// Move the detached postbox to its new position.
-			if ( 'previous' === position ) {
-				$( detachedPostbox ).appendTo( '#' + sortablesIds[ sortablesIndex - 1 ] );
-			}
-
-			if ( 'next' === position ) {
-				$( detachedPostbox ).prependTo( '#' + sortablesIds[ sortablesIndex + 1 ] );
-			}
-
-			postboxes._mark_area();
-			button.focus();
-			postboxes.updateOrderButtonsProperties();
-			postboxes.save_order( postboxes.page );
-		},
-
-		/**
-		 * Update the move buttons properties depending on the postbox position.
-		 *
-		 * @since 5.5.0
-		 *
-		 * @return {void}
-		 */
-		updateOrderButtonsProperties: function() {
-			var firstSortablesId = $( '.meta-box-sortables:visible:first' ).attr( 'id' ),
-				lastSortablesId = $( '.meta-box-sortables:visible:last' ).attr( 'id' ),
-				firstPostbox = $( '.postbox:visible:first' ),
-				lastPostbox = $( '.postbox:visible:last' ),
-				firstPostboxId = firstPostbox.attr( 'id' ),
-				lastPostboxId = lastPostbox.attr( 'id' ),
-				firstPostboxSortablesId = firstPostbox.closest( '.meta-box-sortables' ).attr( 'id' ),
-				lastPostboxSortablesId = lastPostbox.closest( '.meta-box-sortables' ).attr( 'id' ),
-				moveUpButtons = $( '.handle-order-higher' ),
-				moveDownButtons = $( '.handle-order-lower' );
-
-			// Enable all buttons as a reset first.
-			moveUpButtons
-				.attr( 'aria-disabled', 'false' )
-				.removeClass( 'hidden' );
-			moveDownButtons
-				.attr( 'aria-disabled', 'false' )
-				.removeClass( 'hidden' );
-
-			// When there's only one "sortables" area (e.g. in the block editor) and only one visible postbox, hide the buttons.
-			if ( firstSortablesId === lastSortablesId && firstPostboxId === lastPostboxId ) {
-				moveUpButtons.addClass( 'hidden' );
-				moveDownButtons.addClass( 'hidden' );
-			}
-
-			// Set an aria-disabled=true attribute on the first visible "move" buttons.
-			if ( firstSortablesId === firstPostboxSortablesId ) {
-				$( firstPostbox ).find( '.handle-order-higher' ).attr( 'aria-disabled', 'true' );
-			}
-
-			// Set an aria-disabled=true attribute on the last visible "move" buttons.
-			if ( lastSortablesId === lastPostboxSortablesId ) {
-				$( '.postbox:visible .handle-order-lower' ).last().attr( 'aria-disabled', 'true' );
-			}
-		},
-
-		/**
-		 * Adds event handlers to all postboxes and screen option on the current page.
-		 *
-		 * @since 2.7.0
-		 *
-		 * @memberof postboxes
-		 *
-		 * @param {string} page The page we are currently on.
-		 * @param {Object} [args]
-		 * @param {Function} args.pbshow A callback that is called when a postbox opens.
-		 * @param {Function} args.pbhide A callback that is called when a postbox closes.
-		 * @return {void}
-		 */
-		add_postbox_toggles : function (page, args) {
-			var $handles = $( '.postbox .hndle, .postbox .handlediv' ),
-				$orderButtons = $( '.postbox .handle-order-higher, .postbox .handle-order-lower' );
-
-			this.page = page;
-			this.init( page, args );
-
-			$handles.on( 'click.postboxes', this.handle_click );
-
-			// Handle the order of the postboxes.
-			$orderButtons.on( 'click.postboxes', this.handleOrder );
-
-			/**
-			 * @since 2.7.0
-			 */
-			$('.postbox .hndle a').on( 'click', function(e) {
-				e.stopPropagation();
-			});
-
-			/**
-			 * Hides a postbox.
-			 *
-			 * Event handler for the postbox dismiss button. After clicking the button
-			 * the postbox will be hidden.
-			 *
-			 * As of WordPress 5.5, this is only used for the browser update nag.
-			 *
-			 * @since 3.2.0
-			 *
-			 * @return {void}
-			 */
-			$( '.postbox a.dismiss' ).on( 'click.postboxes', function( e ) {
-				var hide_id = $(this).parents('.postbox').attr('id') + '-hide';
-				e.preventDefault();
-				$( '#' + hide_id ).prop('checked', false).triggerHandler('click');
-			});
-
-			/**
-			 * Hides the postbox element
-			 *
-			 * Event handler for the screen options checkboxes. When a checkbox is
-			 * clicked this function will hide or show the relevant postboxes.
-			 *
-			 * @since 2.7.0
-			 * @ignore
-			 *
-			 * @fires postboxes#postbox-toggled
-			 *
-			 * @return {void}
-			 */
-			$('.hide-postbox-tog').on('click.postboxes', function() {
-				var $el = $(this),
-					boxId = $el.val(),
-					$postbox = $( '#' + boxId );
-
-				if ( $el.prop( 'checked' ) ) {
-					$postbox.show();
-					if ( typeof postboxes.pbshow === 'function' ) {
-						postboxes.pbshow( boxId );
-					}
+				break;
+			case 0:
+			case 180:
+				if ( document.getElementById( 'poststuff' ).length ) {
+					_pbEdit( 1 );
 				} else {
-					$postbox.hide();
-					if ( typeof postboxes.pbhide === 'function' ) {
-						postboxes.pbhide( boxId );
+					if ( !check.length || !check.checked ) {
+						_pbEdit( 2 );
 					}
 				}
+				break;
+		}
+	}
 
-				postboxes.save_state( page );
-				postboxes._mark_area();
-
-				/**
-				 * @since 4.0.0
-				 * @see postboxes.handle_click
-				 */
-				$document.trigger( 'postbox-toggled', $postbox );
-			});
-
-			/**
-			 * Changes the amount of columns based on the layout preferences.
-			 *
-			 * @since 2.8.0
-			 *
-			 * @return {void}
-			 */
-			$('.columns-prefs input[type="radio"]').on('click.postboxes', function(){
-				var n = parseInt($(this).val(), 10);
-
-				if ( n ) {
-					postboxes._pb_edit(n);
-					postboxes.save_order( page );
-				}
-			});
-		},
+	/**
+	 * Changes the number of columns on the post edit page.
+	 *
+	 * @since 3.3.0
+	 * @access private
+	 *
+	 * @param {number} n The number of columns to divide the post edit page in.
+	 */
+	function _pbEdit( n ) {
+		var	el = document.querySelector( '.metabox-holder' );
+		if ( el ) {
+			el.className = el.className.replace( /columns-\d+/, 'columns-' + n );
+		}
 
 		/**
-		 * Initializes all the postboxes, mainly their sortable behavior.
-		 *
-		 * @since 2.7.0
-		 *
-		 * @memberof postboxes
-		 *
-		 * @param {string} page The page we are currently on.
-		 * @param {Object} [args={}] The arguments for the postbox initializer.
-		 * @param {Function} args.pbshow A callback that is called when a postbox opens.
-		 * @param {Function} args.pbhide A callback that is called when a postbox
-		 *                               closes.
-		 *
-		 * @return {void}
-		 */
-		init : function(page, args) {
-			var isMobile = $( document.body ).hasClass( 'mobile' ),
-				$handleButtons = $( '.postbox .handlediv' );
+		* Fires when the number of columns on the post edit page has been changed.
+		*
+		* @since 4.0.0
+		*/
+		updateLocations();
+	}
 
-			$.extend( this, args || {} );
-			$('.meta-box-sortables').sortable({
-				placeholder: 'sortable-placeholder',
-				connectWith: '.meta-box-sortables',
-				items: '.postbox',
-				handle: '.hndle',
-				cursor: 'move',
-				delay: ( isMobile ? 200 : 0 ),
-				distance: 2,
-				tolerance: 'pointer',
-				forcePlaceholderSize: true,
-				helper: function( event, element ) {
-					/* `helper: 'clone'` is equivalent to `return element.clone();`
-					 * Cloning a checked radio and then inserting that clone next to the original
-					 * radio unchecks the original radio (since only one of the two can be checked).
-					 * We get around this by renaming the helper's inputs' name attributes so that,
-					 * when the helper is inserted into the DOM for the sortable, no radios are
-					 * duplicated, and no original radio gets unchecked.
-					 */
-					return element.clone()
-						.find( ':input' )
-							.attr( 'name', function( i, currentName ) {
-								return 'sort_' + parseInt( Math.random() * 100000, 10 ).toString() + '_' + currentName;
-							} )
-						.end();
-				},
-				opacity: 0.65,
-				start: function() {
-					$( 'body' ).addClass( 'is-dragging-metaboxes' );
-					// Refresh the cached positions of all the sortable items so that the min-height set while dragging works.
-					$( '.meta-box-sortables' ).sortable( 'refreshPositions' );
-				},
-				stop: function() {
-					var $el = $( this );
+	/*
+	 * Enable smooth scrolling up and down page when dragging item
+	 *
+	 * @since CP-2.1.0
+	 */
+	document.addEventListener( 'dragover', function( e ) {
 
-					$( 'body' ).removeClass( 'is-dragging-metaboxes' );
+		// How close (in pixels) to the edge of the screen before scrolling starts
+		var scrollThreshold = 50;
 
-					if ( $el.find( '#dashboard_browser_nag' ).is( ':visible' ) && 'dashboard_browser_nag' != this.firstChild.id ) {
-						$el.sortable('cancel');
-						return;
-					}
-
-					postboxes.updateOrderButtonsProperties();
-					postboxes.save_order(page);
-				},
-				receive: function(e,ui) {
-					if ( 'dashboard_browser_nag' == ui.item[0].id )
-						$(ui.sender).sortable('cancel');
-
-					postboxes._mark_area();
-					$document.trigger( 'postbox-moved', ui.item );
-				}
-			});
-
-			if ( isMobile ) {
-				$(document.body).on('orientationchange.postboxes', function(){ postboxes._pb_change(); });
-				this._pb_change();
-			}
-
-			this._mark_area();
-
-			// Update the "move" buttons properties.
-			this.updateOrderButtonsProperties();
-			$document.on( 'postbox-toggled', this.updateOrderButtonsProperties );
-
-			// Set the handle buttons `aria-expanded` attribute initial value on page load.
-			$handleButtons.each( function () {
-				var $el = $( this );
-				$el.attr( 'aria-expanded', ! $el.closest( '.postbox' ).hasClass( 'closed' ) );
-			});
-		},
-
-		/**
-		 * Saves the state of the postboxes to the server.
-		 *
-		 * It sends two lists, one with all the closed postboxes, one with all the
-		 * hidden postboxes.
-		 *
-		 * @since 2.7.0
-		 *
-		 * Closed postboxes are now identified by the lack of an open attribute
-		 * in the details element rather than by a class of "closed"
-		 *
-		 * @memberof postboxes
-		 *
-		 * @param {string} page The page we are currently on.
-		 * @return {void}
-		 */
-		save_state : function(page) {
-			var closed, hidden;
-
-			// Return on the nav-menus.php screen, see #35112.
-			if ( 'nav-menus' === page ) {
-				return;
-			}
-			setTimeout( function() {
-				closed = $( '.postbox' ).filter( ':not([open])' ).map( function() { return this.id; } ).get().join( ',' );
-				hidden = $( '.postbox' ).filter( ':hidden' ).map( function() { return this.id; } ).get().join( ',' );
-
-				$.post(ajaxurl, {
-					action: 'closed-postboxes',
-					closed: closed,
-					hidden: hidden,
-					closedpostboxesnonce: jQuery('#closedpostboxesnonce').val(),
-					page: page
-				});
-			}, 0 );
-		},
-
-		/**
-		 * Saves the order of the postboxes to the server.
-		 *
-		 * Sends a list of all postboxes inside a sortable area to the server.
-		 *
-		 * @since 2.8.0
-		 *
-		 * @memberof postboxes
-		 *
-		 * @param {string} page The page we are currently on.
-		 * @return {void}
-		 */
-		save_order : function(page) {
-			var postVars, page_columns = $('.columns-prefs input:checked').val() || 0;
-
-			postVars = {
-				action: 'meta-box-order',
-				_ajax_nonce: $('#meta-box-order-nonce').val(),
-				page_columns: page_columns,
-				page: page
-			};
-
-			$('.meta-box-sortables').each( function() {
-				postVars[ 'order[' + this.id.split( '-' )[0] + ']' ] = $( this ).sortable( 'toArray' ).join( ',' );
+		if ( e.clientY < scrollThreshold ) {
+			window.scrollTo( {
+				top: 0,
+				behavior: 'smooth'
 			} );
-
-			$.post(
-				ajaxurl,
-				postVars,
-				function( response ) {
-					if ( response.success ) {
-						wp.a11y.speak( __( 'The boxes order has been saved.' ) );
-					}
-				}
-			);
-		},
-
-		/**
-		 * Marks empty postbox areas.
-		 *
-		 * Adds a message to empty sortable areas on the dashboard page. Also adds a
-		 * border around the side area on the post edit screen if there are no postboxes
-		 * present.
-		 *
-		 * @since 3.3.0
-		 * @access private
-		 *
-		 * @memberof postboxes
-		 *
-		 * @return {void}
-		 */
-		_mark_area : function() {
-			var visible = $( 'div.postbox:visible' ).length,
-				visibleSortables = $( '#dashboard-widgets .meta-box-sortables:visible, #post-body .meta-box-sortables:visible' ),
-				areAllVisibleSortablesEmpty = true;
-
-			visibleSortables.each( function() {
-				var t = $(this);
-
-				if ( visible == 1 || t.children( '.postbox:visible' ).length ) {
-					t.removeClass('empty-container');
-					areAllVisibleSortablesEmpty = false;
-				}
-				else {
-					t.addClass('empty-container');
-				}
-			});
-
-			postboxes.updateEmptySortablesText( visibleSortables, areAllVisibleSortablesEmpty );
-		},
-
-		/**
-		 * Updates the text for the empty sortable areas on the Dashboard.
-		 *
-		 * @since 5.5.0
-		 *
-		 * @param {Object}  visibleSortables            The jQuery object representing the visible sortable areas.
-		 * @param {boolean} areAllVisibleSortablesEmpty Whether all the visible sortable areas are "empty".
-		 *
-		 * @return {void}
-		 */
-		updateEmptySortablesText: function( visibleSortables, areAllVisibleSortablesEmpty ) {
-			var isDashboard = $( '#dashboard-widgets' ).length,
-				emptySortableText = areAllVisibleSortablesEmpty ?  __( 'Add boxes from the Screen Options menu' ) : __( 'Drag boxes here' );
-
-			if ( ! isDashboard ) {
-				return;
-			}
-
-			visibleSortables.each( function() {
-				if ( $( this ).hasClass( 'empty-container' ) ) {
-					$( this ).attr( 'data-emptyString', emptySortableText );
-				}
+		}
+		else if ( e.clientY > window.innerHeight - scrollThreshold ) {
+			window.scrollTo( {
+				top: document.body.scrollHeight,
+				behavior: 'smooth'
 			} );
-		},
+		}
+	} );
 
-		/**
-		 * Changes the amount of columns on the post edit page.
-		 *
-		 * @since 3.3.0
-		 * @access private
-		 *
-		 * @memberof postboxes
-		 *
-		 * @fires postboxes#postboxes-columnchange
-		 *
-		 * @param {number} n The amount of columns to divide the post edit page in.
-		 * @return {void}
-		 */
-		_pb_edit : function(n) {
-			var el = $('.metabox-holder').get(0);
-
-			if ( el ) {
-				el.className = el.className.replace(/columns-\d+/, 'columns-' + n);
-			}
-
-			/**
-			 * Fires when the amount of columns on the post edit page has been changed.
-			 *
-			 * @since 4.0.0
-			 * @ignore
-			 *
-			 * @event postboxes#postboxes-columnchange
-			 */
-			$( document ).trigger( 'postboxes-columnchange' );
-		},
-
-		/**
-		 * Changes the amount of columns the postboxes are in based on the current
-		 * orientation of the browser.
-		 *
-		 * @since 3.3.0
-		 * @access private
-		 *
-		 * @memberof postboxes
-		 *
-		 * @return {void}
-		 */
-		_pb_change : function() {
-			var check = $( 'label.columns-prefs-1 input[type="radio"]' );
-
-			switch ( window.orientation ) {
-				case 90:
-				case -90:
-					if ( !check.length || !check.is(':checked') )
-						this._pb_edit(2);
-					break;
-				case 0:
-				case 180:
-					if ( $( '#poststuff' ).length ) {
-						this._pb_edit(1);
-					} else {
-						if ( !check.length || !check.is(':checked') )
-							this._pb_edit(2);
-					}
-					break;
-			}
-		},
-
-		/* Callbacks */
-
-		/**
-		 * @since 2.7.0
-		 * @access public
-		 *
-		 * @property {Function|boolean} pbshow A callback that is called when a postbox
-		 *                                     is opened.
-		 * @memberof postboxes
-		 */
-		pbshow : false,
-
-		/**
-		 * @since 2.7.0
-		 * @access public
-		 * @property {Function|boolean} pbhide A callback that is called when a postbox
-		 *                                     is closed.
-		 * @memberof postboxes
-		 */
-		pbhide : false
-	};
-
-}(jQuery));
+} );
