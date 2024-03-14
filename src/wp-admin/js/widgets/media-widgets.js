@@ -129,7 +129,6 @@ wp.mediaWidgets = ( function( $ ) {
 				Constructor = wp.media.view.EmbedImage;
 			} else {
 
-				// This should be eliminated once #40450 lands of when this is merged into core.
 				Constructor = wp.media.view.EmbedLink.extend(/** @lends wp.mediaWidgets~Constructor.prototype */{
 
 					/**
@@ -633,10 +632,11 @@ wp.mediaWidgets = ( function( $ ) {
 		 */
 		syncModelToInputs: function syncModelToInputs() {
 			var control = this;
-			control.syncContainer.find( '.media-widget-instance-property' ).each( function() {
-				var input = $( this ), value, propertyName;
-				propertyName = input.data( 'property' );
-				value = control.model.get( propertyName );
+			document.querySelectorAll( '.media-widget-instance-property' ).forEach( function( input ) {
+				var widgetId,
+					propertyName = input.dataset.property,
+					value = control.model.get( propertyName );
+
 				if ( _.isUndefined( value ) ) {
 					return;
 				}
@@ -649,11 +649,14 @@ wp.mediaWidgets = ( function( $ ) {
 					value = String( value );
 				}
 
-				if ( input.val() !== value ) {
-					input.val( value );
-					input.trigger( 'change' );
+				if ( input.value !== value ) {
+					input.value = value;
+
+					// Get element with class of "widget" whose ID ends with relevant string and dispatch event
+					widgetId = input.id.replace( 'widget-', '' ).replace( '-' + propertyName, '' );
+					document.querySelector( '.widget[id$=' + widgetId + ']' ).dispatchEvent( new Event( 'change' ) );
 				}
-			});
+			} );
 		},
 
 		/**
@@ -1122,11 +1125,15 @@ wp.mediaWidgets = ( function( $ ) {
 	 *
 	 * @return {void}
 	 */
-	component.handleWidgetAdded = function handleWidgetAdded( event, widgetContainer ) {
-		var fieldContainer, syncContainer, widgetForm, idBase, ControlConstructor, ModelConstructor, modelAttributes, widgetControl, widgetModel, widgetId, animatedCheckDelay = 50, renderWhenAnimationDone;
-		widgetForm = widgetContainer.find( '> .widget-inside > .form, > .widget-inside > form' ); // Note: '.form' appears in the customizer, whereas 'form' on the widgets admin screen.
-		idBase = widgetContainer.find( '.id_base' ).val();
-		widgetId = widgetContainer.find( '.widget-id' ).val();
+	component.handleWidgetAdded = function handleWidgetAdded( event ) {
+		var fieldContainer, syncContainer, idBase, ControlConstructor,
+			ModelConstructor, modelAttributes, widgetControl, widgetModel,
+			widgetId, renderWhenAnimationDone,
+			animatedCheckDelay = 50,
+			widgetContainer = event.detail.widget;
+
+		idBase = widgetContainer.querySelector( '.id_base' ).value;
+		widgetId = widgetContainer.querySelector( '.widget-id' ).value;
 
 		// Prevent initializing already-added widgets.
 		if ( component.widgetControls[ widgetId ] ) {
@@ -1151,8 +1158,8 @@ wp.mediaWidgets = ( function( $ ) {
 		 * components", the JS template is rendered outside of the normal form
 		 * container.
 		 */
-		fieldContainer = $( '<div></div>' );
-		syncContainer = widgetContainer.find( '.widget-content:first' );
+		fieldContainer = document.createElement( 'div' );
+		syncContainer = widgetContainer.querySelector( '.widget-content' );
 		syncContainer.before( fieldContainer );
 
 		/*
@@ -1161,19 +1168,18 @@ wp.mediaWidgets = ( function( $ ) {
 		 * from the start, without having to sync with hidden fields. See <https://core.trac.wordpress.org/ticket/33507>.
 		 */
 		modelAttributes = {};
-		syncContainer.find( '.media-widget-instance-property' ).each( function() {
-			var input = $( this );
-			modelAttributes[ input.data( 'property' ) ] = input.val();
-		});
+		syncContainer.querySelectorAll( '.media-widget-instance-property' ).forEach( function( input ) {
+			modelAttributes[ input.dataset.property ] = input.value;
+		} );
 		modelAttributes.widget_id = widgetId;
 
 		widgetModel = new ModelConstructor( modelAttributes );
 
-		widgetControl = new ControlConstructor({
+		widgetControl = new ControlConstructor( {
 			el: fieldContainer,
 			syncContainer: syncContainer,
 			model: widgetModel
-		});
+		} );
 
 		/*
 		 * Render the widget once the widget parent's container finishes animating,
@@ -1182,7 +1188,7 @@ wp.mediaWidgets = ( function( $ ) {
 		 * can initialize with the proper dimensions.
 		 */
 		renderWhenAnimationDone = function() {
-			if ( ! widgetContainer.children( 'details' ).attr( 'open' ) ) {
+			if ( ! widgetContainer.querySelector( 'details' ).hasAttribute( 'open' ) ) {
 				setTimeout( renderWhenAnimationDone, animatedCheckDelay );
 			} else {
 				widgetControl.render();
@@ -1206,31 +1212,32 @@ wp.mediaWidgets = ( function( $ ) {
 	 * @return {void}
 	 */
 	component.setupAccessibleMode = function setupAccessibleMode() {
-		var widgetForm, widgetId, widgetContainer, idBase, widgetControl, ControlConstructor, ModelConstructor, modelAttributes, fieldContainer, syncContainer;
-		widgetForm = $( '.editwidget > form' );
-		if ( 0 === widgetForm.length ) {
+		var widgetForm, widgetId, idBase, widgetControl, ControlConstructor,
+			ModelConstructor, modelAttributes, fieldContainer, syncContainer;
+
+		widgetForm = document.querySelector( '.editwidget > form' );
+		if ( widgetForm == null ) { // also catches undefined
 			return;
 		}
 
-		idBase = widgetContainer.find( '.id_base' ).val();
+		idBase = widgetForm.querySelector( '.id_base' ).value;
 
 		ControlConstructor = component.controlConstructors[ idBase ];
 		if ( ! ControlConstructor ) {
 			return;
 		}
 
-		widgetId = widgetForm.find( '> .widget-control-actions > .widget-id' ).val();
+		widgetId = widgetForm.querySelector( '.widget-control-actions .widget-id' ).value;
 
 		ModelConstructor = component.modelConstructors[ idBase ] || component.MediaWidgetModel;
-		fieldContainer = $( '<div></div>' );
-		syncContainer = widgetForm.find( '> .widget-inside' );
+		fieldContainer = document.createElement( 'div' );
+		syncContainer = widgetForm.querySelector( '.widget-inside' );
 		syncContainer.before( fieldContainer );
 
 		modelAttributes = {};
-		syncContainer.find( '.media-widget-instance-property' ).each( function() {
-			var input = $( this );
-			modelAttributes[ input.data( 'property' ) ] = input.val();
-		});
+		syncContainer.querySelectorAll( '.media-widget-instance-property' ).forEach( function( input ) {
+			modelAttributes[ input.dataset.property ] = input.value;
+		} );
 		modelAttributes.widget_id = widgetId;
 
 		widgetControl = new ControlConstructor({
@@ -1255,26 +1262,32 @@ wp.mediaWidgets = ( function( $ ) {
 	 * @memberOf wp.mediaWidgets
 	 *
 	 * @param {jQuery.Event} event - Event.
-	 * @param {jQuery}       widgetContainer - Widget container element.
+	 * @param widgetContainer - Widget container element.
 	 *
 	 * @return {void}
 	 */
-	component.handleWidgetUpdated = function handleWidgetUpdated( event, widgetContainer ) {
-		var widgetForm, widgetContent, widgetId, widgetControl, attributes = {};
-		widgetForm = widgetContainer.find( '> .widget-inside > .form, > .widget-inside > form' );
-		widgetId = widgetContainer.find( '.widget-id' ).val();
+	component.handleWidgetUpdated = function handleWidgetUpdated( event ) {
+		var widgetForm, widgetContent, widgetId, widgetControl,
+			attributes = {},
+			widgetContainer = event.detail.widget;
 
+		widgetForm = widgetContainer.querySelector( '.widget-inside > .form' );
+		if ( widgetForm == null ) { // also catches undefined
+			widgetForm = widgetContainer.querySelector( '.widget-inside > form' );
+		}
+
+		widgetId = widgetContainer.querySelector( '.widget-id' ).value;
 		widgetControl = component.widgetControls[ widgetId ];
 		if ( ! widgetControl ) {
 			return;
 		}
 
 		// Make sure the server-sanitized values get synced back into the model.
-		widgetContent = widgetForm.find( '> .widget-content' );
-		widgetContent.find( '.media-widget-instance-property' ).each( function() {
-			var property = $( this ).data( 'property' );
-			attributes[ property ] = $( this ).val();
-		});
+		widgetContent = widgetForm.querySelector( '.widget-content' );
+		widgetContent.querySelectorAll( '.media-widget-instance-property' ).forEach( function( instance ) {
+			var property = instance.dataset.property;
+			attributes[ property ] = instance.value;
+		} );
 
 		// Suspend syncing model back to inputs when syncing from inputs to model, preventing infinite loop.
 		widgetControl.stopListening( widgetControl.model, 'change', widgetControl.syncModelToInputs );
@@ -1294,9 +1307,9 @@ wp.mediaWidgets = ( function( $ ) {
 	 * @return {void}
 	 */
 	component.init = function init() {
-		var $document = $( document );
-		$document.on( 'widget-added', component.handleWidgetAdded );
-		$document.on( 'widget-synced widget-updated', component.handleWidgetUpdated );
+		document.addEventListener( 'widget-added', component.handleWidgetAdded );
+		document.addEventListener( 'widget-synced', component.handleWidgetUpdated );
+		document.addEventListener( 'widget-updated', component.handleWidgetUpdated );
 
 		/*
 		 * Manually trigger widget-added events for media widgets on the admin
@@ -1309,15 +1322,26 @@ wp.mediaWidgets = ( function( $ ) {
 		 * handler when a pre-existing media widget is expanded.
 		 */
 		$( function initializeExistingWidgetContainers() {
-			var widgetContainers;
+			var widgetContainerWraps, widgetContainers = [];
+
 			if ( 'widgets' !== window.pagenow ) {
 				return;
 			}
-			widgetContainers = $( '.widgets-holder-wrap:not(#available-widgets)' ).find( 'li.widget' );
-			widgetContainers.one( 'click.toggle-widget-expanded', function toggleWidgetExpanded() {
-				var widgetContainer = $( this );
-				component.handleWidgetAdded( new jQuery.Event( 'widget-added' ), widgetContainer );
-			});
+
+			widgetContainerWraps = document.querySelectorAll( '.widgets-holder-wrap:not(#available-widgets)' );
+			widgetContainerWraps.forEach( function( wrap ) {
+				wrap.querySelectorAll( 'li.widget' ).forEach( function( widget ) {
+					widgetContainers.push( widget );
+				} );
+			} );
+
+			widgetContainers.forEach( function( widgetContainer ) {
+				widgetContainer.querySelector( 'details' ).addEventListener( 'toggle', function toggleWidgetExpanded() {
+					document.dispatchEvent( new CustomEvent( 'widget-added', {
+						detail: { widget: widgetContainer }
+					} ) );
+				}, { once: true } );
+			} );
 
 			// Accessibility mode.
 			if ( document.readyState === 'complete' ) {
@@ -1325,11 +1349,11 @@ wp.mediaWidgets = ( function( $ ) {
 				component.setupAccessibleMode();
 			} else {
 				// Page is still loading.
-				$( window ).on( 'load', function() {
+				window.onload = function() {
 					component.setupAccessibleMode();
-				});
+				};
 			}
-		});
+		} );
 	};
 
 	return component;

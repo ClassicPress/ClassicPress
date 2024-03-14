@@ -1855,7 +1855,7 @@ function upgrade_350() {
 	if ( $wp_current_db_version < 21811 && wp_should_upgrade_global_tables() ) {
 		$meta_keys = array();
 		foreach ( array_merge( get_post_types(), get_taxonomies() ) as $name ) {
-			if ( false !== strpos( $name, '-' ) ) {
+			if ( str_contains( $name, '-' ) ) {
 				$meta_keys[] = 'edit_' . str_replace( '-', '_', $name ) . '_per_page';
 			}
 		}
@@ -3224,7 +3224,7 @@ function make_site_theme_from_oldschool( $theme_name, $template ) {
 		// Check to make sure it's not a new index.
 		if ( 'index.php' === $oldfile ) {
 			$index = implode( '', file( "$oldpath/$oldfile" ) );
-			if ( strpos( $index, 'WP_USE_THEMES' ) !== false ) {
+			if ( str_contains( $index, 'WP_USE_THEMES' ) ) {
 				if ( ! copy( WP_CONTENT_DIR . '/themes/' . WP_DEFAULT_THEME . '/index.php', "$site_dir/$newfile" ) ) {
 					return false;
 				}
@@ -3316,15 +3316,15 @@ function make_site_theme_from_default( $theme_name, $template ) {
 		$f = fopen( "$site_dir/style.css", 'w' );
 
 		foreach ( $stylelines as $line ) {
-			if ( strpos( $line, 'Theme Name:' ) !== false ) {
+			if ( str_contains( $line, 'Theme Name:' ) ) {
 				$line = 'Theme Name: ' . $theme_name;
-			} elseif ( strpos( $line, 'Theme URI:' ) !== false ) {
+			} elseif ( str_contains( $line, 'Theme URI:' ) ) {
 				$line = 'Theme URI: ' . __get_option( 'url' );
-			} elseif ( strpos( $line, 'Description:' ) !== false ) {
+			} elseif ( str_contains( $line, 'Description:' ) ) {
 				$line = 'Description: Your theme.';
-			} elseif ( strpos( $line, 'Version:' ) !== false ) {
+			} elseif ( str_contains( $line, 'Version:' ) ) {
 				$line = 'Version: 1';
-			} elseif ( strpos( $line, 'Author:' ) !== false ) {
+			} elseif ( str_contains( $line, 'Author:' ) ) {
 				$line = 'Author: You';
 			}
 			fwrite( $f, $line . "\n" );

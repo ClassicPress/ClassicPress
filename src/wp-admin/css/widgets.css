@@ -34,7 +34,6 @@ summary.widget-title {
 	padding: 12px 15px 15px 10px;
 	font-size: 1em;
 	line-height: 1;
-	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	-webkit-user-select: none;
@@ -586,7 +585,7 @@ div#widgets-right .closed .widgets-sortables {
 	padding: 0 15px;
 	line-height: 3.30769230;
 	border-left: 1px solid #dcdcde;
-	margin-top: -3.3em;
+	margin-top: -3.4em;
 }
 
 #widgets-left .widget-control-edit:hover,

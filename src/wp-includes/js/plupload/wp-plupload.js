@@ -267,10 +267,19 @@ window.wp = window.wp || {};
 		 * @param {plupload.Uploader} uploader Uploader instance.
 		 */
 		this.uploader.bind( 'init', function( uploader ) {
-			var timer, active, dragdrop,
+			var timer, active, dragdrop, observer,
 				dropzone = self.dropzone;
 
 			dragdrop = self.supports.dragdrop = uploader.features.dragdrop && ! Uploader.browser.mobile;
+
+			// Don't load uploader when re-ordering gallery items or audio or video playlists
+			observer = new MutationObserver( function() {
+				if ( document.getElementById( 'menu-item-gallery-edit' ) || document.getElementById( 'menu-item-playlist-edit' ) || document.getElementById( 'menu-item-video-playlist-edit' ) ) {
+					observer.disconnect();
+					return dropzone.unbind( '.wp-uploader' );
+				}
+			} );
+			observer.observe( document, { attributes: false, childList: true, subtree: true } );
 
 			// Generate drag/drop helper classes.
 			if ( ! dropzone ) {
