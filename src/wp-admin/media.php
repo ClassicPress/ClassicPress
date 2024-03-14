@@ -29,14 +29,14 @@ switch ( $action ) {
 			$location = 'media.php';
 			$referer  = wp_get_original_referer();
 			if ( $referer ) {
-				if ( false !== strpos( $referer, 'upload.php' ) || ( url_to_postid( $referer ) === $attachment_id ) ) {
+				if ( str_contains( $referer, 'upload.php' ) || ( url_to_postid( $referer ) === $attachment_id ) ) {
 					$location = $referer;
 				}
 			}
-			if ( false !== strpos( $location, 'upload.php' ) ) {
+			if ( str_contains( $location, 'upload.php' ) ) {
 				$location = remove_query_arg( 'message', $location );
 				$location = add_query_arg( 'posted', $attachment_id, $location );
-			} elseif ( false !== strpos( $location, 'media.php' ) ) {
+			} elseif ( str_contains( $location, 'media.php' ) ) {
 				$location = add_query_arg( 'message', 'updated', $location );
 			}
 			wp_redirect( $location );

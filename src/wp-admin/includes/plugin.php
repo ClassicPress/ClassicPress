@@ -106,7 +106,7 @@ function get_plugin_data( $plugin_file, $markup = true, $translate = true ) {
 	// If no text domain is defined fall back to the plugin slug.
 	if ( ! $plugin_data['TextDomain'] ) {
 		$plugin_slug = dirname( plugin_basename( $plugin_file ) );
-		if ( '.' !== $plugin_slug && false === strpos( $plugin_slug, '/' ) ) {
+		if ( '.' !== $plugin_slug && ! str_contains( $plugin_slug, '/' ) ) {
 			$plugin_data['TextDomain'] = $plugin_slug;
 		}
 	}
@@ -306,7 +306,7 @@ function get_plugins( $plugin_folder = '' ) {
 
 	if ( $plugins_dir ) {
 		while ( ( $file = readdir( $plugins_dir ) ) !== false ) {
-			if ( '.' === substr( $file, 0, 1 ) ) {
+			if ( str_starts_with( $file, '.' ) ) {
 				continue;
 			}
 
@@ -315,11 +315,11 @@ function get_plugins( $plugin_folder = '' ) {
 
 				if ( $plugins_subdir ) {
 					while ( ( $subfile = readdir( $plugins_subdir ) ) !== false ) {
-						if ( '.' === substr( $subfile, 0, 1 ) ) {
+						if ( str_starts_with( $subfile, '.' ) ) {
 							continue;
 						}
 
-						if ( '.php' === substr( $subfile, -4 ) ) {
+						if ( str_ends_with( $subfile, '.php' ) ) {
 							$plugin_files[] = "$file/$subfile";
 						}
 					}
@@ -327,7 +327,7 @@ function get_plugins( $plugin_folder = '' ) {
 					closedir( $plugins_subdir );
 				}
 			} else {
-				if ( '.php' === substr( $file, -4 ) ) {
+				if ( str_ends_with( $file, '.php' ) ) {
 					$plugin_files[] = $file;
 				}
 			}
@@ -383,7 +383,7 @@ function get_mu_plugins() {
 	$plugins_dir = @opendir( WPMU_PLUGIN_DIR );
 	if ( $plugins_dir ) {
 		while ( ( $file = readdir( $plugins_dir ) ) !== false ) {
-			if ( '.php' === substr( $file, -4 ) ) {
+			if ( str_ends_with( $file, '.php' ) ) {
 				$plugin_files[] = $file;
 			}
 		}
@@ -1947,7 +1947,7 @@ function get_admin_page_parent( $parent_page = '' ) {
 				$parent_file = $parent_page;
 				return $parent_page;
 			} elseif ( empty( $typenow ) && $pagenow === $submenu_array[2]
-				&& ( empty( $parent_file ) || false === strpos( $parent_file, '?' ) )
+				&& ( empty( $parent_file ) || ! str_contains( $parent_file, '?' ) )
 			) {
 				$parent_file = $parent_page;
 				return $parent_page;

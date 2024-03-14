@@ -13,8 +13,9 @@
  *
  * @since 1.0.0
  */
-define( 'WPINC', 'wp-includes' );
-
+if ( ! defined( 'WPINC' ) ) {
+	define( 'WPINC', 'wp-includes' );
+}
 /**
  * Version information for the current WordPress release.
  *
@@ -31,6 +32,7 @@ define( 'WPINC', 'wp-includes' );
  */
 global $wp_version, $wp_db_version, $tinymce_version, $required_php_version, $required_mysql_version, $wp_local_package;
 require ABSPATH . WPINC . '/version.php';
+require ABSPATH . WPINC . '/compat.php';
 require ABSPATH . WPINC . '/load.php';
 
 // Check for the required PHP version and for the MySQL extension or a database drop-in.
@@ -104,7 +106,6 @@ if ( WP_CACHE && apply_filters( 'enable_loading_advanced_cache_dropin', true ) &
 wp_set_lang_dir();
 
 // Load early ClassicPress files.
-require ABSPATH . WPINC . '/compat.php';
 require ABSPATH . WPINC . '/class-wp-list-util.php';
 require ABSPATH . WPINC . '/formatting.php';
 require ABSPATH . WPINC . '/meta.php';
