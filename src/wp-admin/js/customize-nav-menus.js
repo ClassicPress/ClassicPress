@@ -1,6 +1,327 @@
 /**
+ * @since CP-2.1.0
+ * @requires SortableJS
  * @output wp-admin/js/customize-nav-menus.js
  */
+
+/* global Sortable, isRtl, wpNavMenu */
+
+(function() {
+
+	var api;
+
+	/**
+	 * Contains all the functions to handle WordPress navigation menus administration.
+	 *
+	 * @namespace wpNavMenu
+	 */
+	api = window.wpNavMenu = {
+
+		options : {
+			globalMaxDepth:  11,
+			targetTolerance: 10
+		},
+
+		menusChanged : false,
+		isRTL: !! ( 'undefined' != typeof isRtl && isRtl ),
+		negateIfRTL: ( 'undefined' != typeof isRtl && isRtl ) ? -1 : 1,
+		lastSearch: '',
+
+		// Functions that run on init.
+		init : function() {
+			this.initSortables();
+		},
+
+		/*
+		 * @since CP-2.1.0
+		 */
+		initSortables : function() {
+			var originalClientX, originalDepth, baseClientX, maxDepth, newClientX,
+				childrenInfo = {},
+				indent = 30,
+				editMenu = document.getElementById( 'menu-to-edit' ),
+				menuEdge = getOffset( editMenu ).left;
+
+			// Use the right edge if RTL
+			menuEdge += api.isRTL ? editMenu.innerWidth : 0;
+
+			if ( editMenu.length > 0 ) {
+				document.querySelector( '.drag-instructions' ).style.display = '';
+			}
+
+			// Make sure some elements aren't draggable
+			editMenu.querySelectorAll( 'li:not(.menu-item)' ).forEach( function( elem ) {
+				elem.classList.add( 'no-drag');
+			} );
+
+			/*
+			* Attach SortableJS to current menu
+			*/
+			var sortable = new Sortable( editMenu, {
+				group: 'menu',
+				handle: '.item-title',
+				filter: '.no-drag',
+				setData: function( dataTransfer, dragEl ) {
+					var ghostImage = document.createElement( 'li' );
+					ghostImage.id = 'sortable-ghost';
+					ghostImage.className = 'menu-item';
+					ghostImage.style.listStyle = 'none';
+					ghostImage.innerHTML = '<div class="menu-item-bar"><details class="menu-item-handle"><summary><span class="item-title"><span class="menu-item-title">' + dragEl.querySelector( '.menu-item-title' ).textContent + '</span></span></summary></details></div>';
+					ghostImage.style.position = 'absolute';
+					ghostImage.style.top = '-1000px';
+					ghostImage.style.width = dragEl.getBoundingClientRect().width + 'px';
+					document.body.appendChild( ghostImage );
+					dataTransfer.setDragImage( ghostImage, 30, 20 );
+				},
+				dataIdAttr: 'data-id', // HTML attribute that is used by the `toArray()` method in OnEnd
+				forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for all webkit browsers
+				//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari only
+
+				// Get position of menu item when chosen
+				onChoose: function( e ) {
+					originalClientX = e.originalEvent.clientX;
+					originalDepth = menuItemDepth( e.item );
+					baseClientX = e.originalEvent.clientX - ( originalDepth * indent );
+
+					// Ensure menu widget is closed before moving
+					e.item.querySelector( 'details' ).removeAttribute( 'open' );
+				},
+
+				// Start dragging
+				onStart: function( e ) {
+					var prevItem, children;
+
+					// Close menu item
+					if ( e.item.querySelector( 'details' ).hasAttribute( 'open' ) ) {
+						e.item.querySelector( 'details' ).removeAttribute( 'open' );
+					}
+
+					// Register event and create data ids for every menu item
+					editMenu.dispatchEvent( new CustomEvent( 'sortstart' ) );
+					editMenu.querySelectorAll( 'li' ).forEach( function( el ) {
+						el.dataset.id = el.id;
+					} );
+
+					// Continually update horizontal position of current item while dragging
+					editMenu.addEventListener( 'dragover', function( evt ) {
+						var xPos, prevDepth, diff;
+
+						if ( evt.target.closest( 'li' ) === e.item ) {
+							newClientX = evt.clientX;
+
+							// Continually update horizontal position of placeholder
+							xPos = evt.clientX - baseClientX;
+
+							// Get depth of previous item in list
+							prevItem = evt.target.closest( 'li' ).previousElementSibling;
+							if ( prevItem ) {
+								prevDepth = menuItemDepth( prevItem );
+							}
+
+							// Calculate left margin but prevent being indented more than once compared to previous item in list
+							if ( prevItem === null || xPos < 0 ) {
+								menuEdge = 0;
+							} else {
+								diff = Math.floor( xPos / indent );
+								if ( diff > maxDepth ) {
+									diff = maxDepth;
+								}
+								if ( diff > prevDepth + 1 ) {
+									diff = prevDepth + 1;
+								}
+								menuEdge = diff * indent;
+							}
+							document.querySelector( '.sortable-ghost' ).style.marginLeft = menuEdge + 'px';
+						}
+					} );
+
+					// Does this menu item have children?
+					children = childMenuItems( e.item );
+					if ( children.length > 0 ) {
+						childrenInfo.prevItem = e.item;
+						childrenInfo.menuItem = children[0];
+					}
+				},
+
+				// Keeps undraggable elements in fixed position in list
+				onMove: function( e ) {
+					if ( e.related.className.includes( 'no-drag' ) ) {
+						return false;
+					}
+				},
+
+				// Element dropped
+				onEnd: function( e ) {
+					var i, n, diff, prevItem, parent, parentDepth,
+						details = e.item.querySelector( 'details' ),
+						depth = 0,
+						prevDepth = 0,
+						draggedClasses = e.item.className.split( ' ' );
+
+					// Revert styling and set focus on move icon
+					e.item.style.marginLeft = '';
+					details.querySelector( 'summary' ).style.visibility = 'visible';
+					details.querySelector( 'summary' ).focus();
+
+					// Send list of menu items, ordered by IDs
+					editMenu.dispatchEvent( new CustomEvent( 'sortstop', {
+						detail: sortable.toArray()
+					} ) );
+
+					// Handle drop placement for RTL orientation
+					if ( api.isRTL ) {
+						e.item.style.marginLeft = 'auto';
+						e.item.style.marginRight = '';
+					}
+
+					// Get depth of previous item in list, allowing for two extra initial items
+					prevItem = e.item.previousElementSibling;
+					if ( prevItem && prevItem.className.includes( 'menu-item' ) ) {
+						prevDepth = menuItemDepth( prevItem );
+					}
+
+					// Set depth of current item
+					for ( i = 0, n = draggedClasses.length; i < n; i++ ) {
+						if ( draggedClasses[i].startsWith( 'menu-item-depth-' ) ) {
+							if ( e.newDraggableIndex < 3 || prevItem.className.includes( 'section-meta' ) || prevItem.className.includes( 'customize-control-nav_menu_name' ) ) { // first element
+								draggedClasses[i] = 'menu-item-depth-0'; // don't indent
+							} else {
+								diff = Math.floor( ( newClientX - originalClientX ) / indent );
+								depth = originalDepth + diff;
+								if ( depth > maxDepth ) {
+									depth = maxDepth;
+								} else if ( depth < 0 ) {
+									depth = 0;
+								}
+								if ( depth > ( prevDepth + 1 ) ) {
+									depth = prevDepth + 1;
+								}
+								draggedClasses[i] = 'menu-item-depth-' + depth;
+							}
+						}
+						e.item.className = draggedClasses.join( ' ' );
+
+						if ( depth === 0 ) {
+							e.item.querySelector( '.menu-item-data-parent-id' ).value = 0;
+						} else {
+							parentDepth = depth - 1,
+							parent = getPreviousSibling( e.item, '.menu-item-depth-' + parentDepth );
+							e.item.querySelector( '.menu-item-data-parent-id' ).value = parent.querySelector( '.menu-item-data-db-id' ).value;
+						}
+					}
+
+					// Set original clientX to current clientX to establish new starting position
+					originalClientX = newClientX;
+					api.menusChanged = true;
+
+					// Move sub-items if this is a parent
+					if ( Object.keys( childrenInfo ).length > 0 ) {
+						moveChildItems( childrenInfo.prevItem, childrenInfo.menuItem, depth + 1 );
+
+						// Reset for next drag and drop
+						childrenInfo = {};
+					}
+				}
+
+			} );
+		}
+
+	};
+
+	/*
+	 * Get offset of item: copied from jQuery
+	 */
+	function getOffset( element ) {
+		var rect, win;
+
+		if ( ! element.getClientRects().length ) {
+			return { top: 0, left: 0 };
+		}
+
+		rect = element.getBoundingClientRect();
+		win = element.ownerDocument.defaultView;
+		return ( {
+			top: rect.top + win.pageYOffset,
+			left: rect.left + win.pageXOffset
+		} );
+	}
+
+	/*
+	 * Find the first previous sibling with the requisite selector
+	 */
+	function getPreviousSibling( elem, selector ) {
+
+		// Get the previous sibling element
+		var sibling = elem.previousElementSibling;
+
+		// If the sibling matches our selector, use it; otherwise move on to the next sibling
+		while ( sibling ) {
+			if ( sibling.matches( selector ) ) {
+				return sibling;
+			}
+			sibling = sibling.previousElementSibling;
+		}
+	}
+
+	// Get depth of menu item
+	function menuItemDepth( item ) {
+		var i, n, itemDepth,
+			itemClasses = item.className.split( ' ' );
+		for ( i = 0, n = itemClasses.length; i < n; i++ ) {
+			if ( itemClasses[i].startsWith( 'menu-item-depth-' ) ) {
+				itemDepth = parseInt( itemClasses[i].split('-').pop(), 10 );
+			}
+		}
+		return itemDepth || 0;
+	}
+
+	// Get children of menu item
+	function childMenuItems( item ) {
+		var childrenArray = [],
+			depth = menuItemDepth( item ),
+			next = item.nextElementSibling;
+
+		while( next && menuItemDepth( next ) > depth ) {
+			childrenArray.push( next );
+			next = next.nextElementSibling;
+		}
+		return childrenArray;
+	}
+
+	/*
+	 * Move sub-items if their parent item moves after dragging
+	 */
+	function moveChildItems( prevItem, thisItem, depth ) {
+		var i, n, startingDepth, nextDepth, newDepth,
+			newClasses = thisItem.className.split( ' ' ),
+			nextItem = thisItem.nextElementSibling;
+
+		// Move to new position
+		prevItem.after( thisItem );
+
+		// Set new depth of current item
+		for ( i = 0, n = newClasses.length; i < n; i++ ) {
+			if ( newClasses[i].startsWith( 'menu-item-depth-' ) ) {
+				startingDepth = parseInt( newClasses[i].split('-').pop(), 10 );
+				newClasses[i] = 'menu-item-depth-' + depth;
+			}
+		}
+		thisItem.className = newClasses.join( ' ' );
+		thisItem.style.marginLeft = '';
+
+		// Get depth of next item in list
+		if ( nextItem ) {
+			nextDepth = menuItemDepth( nextItem );
+
+			// Trigger to move sub-items if their parent moves
+			if ( startingDepth <= nextDepth ) {
+				newDepth = startingDepth === nextDepth ? depth : depth + 1;
+				moveChildItems( thisItem, nextItem, newDepth );
+			}
+		}
+	}
+
+})(jQuery );
 
 /* global _wpCustomizeNavMenusSettings, wpNavMenu, console */
 ( function( api, wp, $ ) {
@@ -10,9 +331,6 @@
 	 * Set up wpNavMenu for drag and drop.
 	 */
 	wpNavMenu.originalInit = wpNavMenu.init;
-	wpNavMenu.options.menuItemDepthPerLevel = 20;
-	wpNavMenu.options.sortableItems         = '> .customize-control-nav_menu_item';
-	wpNavMenu.options.targetTolerance       = 10;
 	wpNavMenu.init = function() {
 		this.jQueryExtensions();
 	};
@@ -1629,24 +1947,6 @@
 		 * Show/hide the settings when clicking on the menu item handle.
 		 */
 		_setupControlToggle: function() {
-			var control = this;
-
-			this.container.find( '.menu-item-handle' ).on( 'click', function( e ) {
-				e.preventDefault();
-				e.stopPropagation();
-				var menuControl = control.getMenuControl(),
-					isDeleteBtn = $( e.target ).is( '.item-delete, .item-delete *' ),
-					isAddNewBtn = $( e.target ).is( '.add-new-menu-item, .add-new-menu-item *' );
-
-				if ( $( 'body' ).hasClass( 'adding-menu-items' ) && ! isDeleteBtn && ! isAddNewBtn ) {
-					api.Menus.availableMenuItemsPanel.close();
-				}
-
-				if ( menuControl.isReordering || menuControl.isSorting ) {
-					return;
-				}
-				control.toggleForm();
-			} );
 		},
 
 		/**
@@ -2078,7 +2378,7 @@
 		 * @param {Function} [params.completeCallback] - Function to call when the form toggle has finished animating.
 		 */
 		onChangeExpanded: function( showOrHide, params ) {
-			var self = this, $menuitem, $inside, complete;
+			var self = this, $menuitem, $inside;
 
 			$menuitem = this.container;
 			$inside = $menuitem.find( '.menu-item-settings:first' );
@@ -2102,37 +2402,29 @@
 					}
 				} );
 
-				complete = function() {
-					$menuitem
-						.removeClass( 'menu-item-edit-inactive' )
-						.addClass( 'menu-item-edit-active' );
-					self.container.trigger( 'expanded' );
-
-					if ( params && params.completeCallback ) {
-						params.completeCallback();
-					}
-				};
-
 				$menuitem.find( '.item-edit' ).attr( 'aria-expanded', 'true' );
-				$inside.slideDown( 'fast', complete );
+				$menuitem.find( 'details' ).attr( 'open', 'open' );
+				$menuitem
+					.removeClass( 'menu-item-edit-inactive' )
+					.addClass( 'menu-item-edit-active' );
+				self.container.trigger( 'expanded' );
+
+				if ( params && params.completeCallback ) {
+					params.completeCallback();
+				}
 
 				self.container.trigger( 'expand' );
 			} else {
-				complete = function() {
-					$menuitem
-						.addClass( 'menu-item-edit-inactive' )
-						.removeClass( 'menu-item-edit-active' );
-					self.container.trigger( 'collapsed' );
-
-					if ( params && params.completeCallback ) {
-						params.completeCallback();
-					}
-				};
-
-				self.container.trigger( 'collapse' );
-
 				$menuitem.find( '.item-edit' ).attr( 'aria-expanded', 'false' );
-				$inside.slideUp( 'fast', complete );
+				$menuitem.find( 'details' ).removeAttr( 'open' );
+				$menuitem
+					.addClass( 'menu-item-edit-inactive' )
+					.removeClass( 'menu-item-edit-active' );
+				self.container.trigger( 'collapsed' );
+
+				if ( params && params.completeCallback ) {
+					params.completeCallback();
+				}
 			}
 		},
 
@@ -2670,9 +2962,9 @@
 				control.isSorting = true;
 			});
 
-			menuList.on( 'sortstop', function() {
+			menuList.on( 'sortstop', function( e ) {
 				setTimeout( function() { // Next tick.
-					var menuItemContainerIds = control.$sectionContent.sortable( 'toArray' ),
+					var menuItemContainerIds = e.detail, // list of menu items, ordered by IDs
 						menuItemControls = [],
 						position = 0,
 						priority = 10;
@@ -2871,7 +3163,6 @@
 
 			this.isReordering = showOrHide;
 			this.$sectionContent.toggleClass( 'reordering', showOrHide );
-			this.$sectionContent.sortable( this.isReordering ? 'disable' : 'enable' );
 			if ( this.isReordering ) {
 				addNewItemBtn.attr({ 'tabindex': '-1', 'aria-hidden': 'true' });
 				reorderBtn.attr( 'aria-label', api.Menus.data.l10n.reorderLabelOff );
