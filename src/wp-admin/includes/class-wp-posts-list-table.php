@@ -1841,11 +1841,25 @@ class WP_Posts_List_Table extends WP_List_Table {
 					<?php foreach ( $flat_taxonomies as $taxonomy ) : ?>
 
 						<?php if ( current_user_can( $taxonomy->cap->assign_terms ) ) : ?>
-							<?php $taxonomy_name = esc_attr( $taxonomy->name ); ?>
+							<?php
+							$taxonomy_name = esc_attr( $taxonomy->name );
+
+							$tags = get_tags(
+								array(
+									'hide_empty' => false,
+									'fields'     => 'names',
+								)
+							);
+							$tags_string = ! empty( $tags ) ? implode( ', ', $tags ) : '';
+							?>
+
 							<div class="inline-edit-tags-wrap">
 							<label class="inline-edit-tags">
 								<span class="title"><?php echo esc_html( $taxonomy->labels->name ); ?></span>
-								<textarea data-wp-taxonomy="<?php echo $taxonomy_name; ?>" cols="22" rows="1" name="tax_input[<?php echo esc_attr( $taxonomy->name ); ?>]" class="tax_input_<?php echo esc_attr( $taxonomy->name ); ?>" aria-describedby="inline-edit-<?php echo esc_attr( $taxonomy->name ); ?>-desc"></textarea>
+								<div id="inline-container" class="inline-container">
+									<textarea data-wp-taxonomy="<?php echo $taxonomy_name; ?>" cols="22" rows="1" name="tax_input[<?php echo esc_attr( $taxonomy->name ); ?>]" class="tax_input_<?php echo esc_attr( $taxonomy->name ); ?>" aria-describedby="inline-edit-<?php echo esc_attr( $taxonomy->name ); ?>-desc"></textarea>
+								</div>
+								<input id="tags-list" value="<?php echo $tags_string; ?>" hidden>
 							</label>
 							<p class="howto" id="inline-edit-<?php echo esc_attr( $taxonomy->name ); ?>-desc"><?php echo esc_html( $taxonomy->labels->separate_items_with_commas ); ?></p>
 							</div>
