@@ -93,6 +93,7 @@ $allowed_options            = array(
 		'login_custom_image_state',
 		'login_custom_image_id',
 		'blocks_compatibility_level',
+		'site_icon',
 		'gmt_offset',
 		'date_format',
 		'time_format',
