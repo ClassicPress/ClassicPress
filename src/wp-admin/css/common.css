@@ -2047,11 +2047,15 @@ html.wp-toolbar {
 
 .postbox-container summary > div {
 	display: inline-flex;
+	justify-content: space-between;
 }
 
-.postbox-container .handle-actions {
-	right: 12px;
-	position: absolute;
+#dashboard-widgets-wrap .postbox-container summary > div {
+	width: 94%;
+}
+
+#poststuff .postbox-container summary > div {
+	width: 91%;
 }
 
 #wpbody-content .metabox-holder {
@@ -2059,7 +2063,7 @@ html.wp-toolbar {
 }
 
 .metabox-holder .postbox-container .meta-box-sortables {
-	/* The jQuery UI Sortables need some initial height to work properly. */
+	/* Sortables need some initial height to work properly. */
 	min-height: 1px;
 	position: relative;
 }
@@ -2107,6 +2111,7 @@ details summary > * {
 .js .widget .widget-top,
 .js .postbox .hndle {
 	cursor: move;
+	flex: 1;
 }
 
 .js .widget .widget-top.is-non-sortable,
@@ -3549,14 +3554,7 @@ img {
 	content: "\f142";
 }
 
-/*!
- * jQuery UI Draggable/Sortable 1.11.4
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
+/* Draggable/Sortable */
 .ui-draggable-handle,
 .ui-sortable-handle {
 	touch-action: none;
