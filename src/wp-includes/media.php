@@ -3580,7 +3580,7 @@ function get_adjacent_image_link( $prev = true, $size = 'thumbnail', $text = fal
 				'post_type'      => 'attachment',
 				'post_mime_type' => 'image',
 				'order'          => 'ASC',
-				'orderby'        => 'menu_order ID',
+				'orderby'        => 'menu_order date',
 			)
 		)
 	);
