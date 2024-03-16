@@ -295,14 +295,32 @@ do_action( 'network_site_users_after_list_table' );
 
 /** This filter is documented in wp-admin/network/site-users.php */
 if ( current_user_can( 'promote_users' ) && apply_filters( 'show_network_site_users_add_existing_form', true ) ) :
+
+	/*
+	 * Get all usernames and compile a datalist
+	 */
+	$usernames = get_users(
+		array(
+			'blog_id' => 0,
+			'fields'  => 'user_login',
+		)
+	);
+
+	$usernames_list = '<datalist id="usernames-list">';
+	foreach ( $usernames as $username ) {
+		$usernames_list .= '<option>' . esc_html( $username ) . '</option>';
+	}
+	$usernames_list .= '</datalist>';
 	?>
+
 <h2 id="add-existing-user"><?php _e( 'Add Existing User' ); ?></h2>
 <form action="site-users.php?action=adduser" id="adduser" method="post">
 	<input type="hidden" name="id" value="<?php echo esc_attr( $id ); ?>">
 	<table class="form-table" role="presentation">
 		<tr>
 			<th scope="row"><label for="newuser"><?php _e( 'Username' ); ?></label></th>
-			<td><input type="text" class="regular-text wp-suggest-user" name="newuser" id="newuser"></td>
+			<td><input type="text" class="regular-text wp-suggest-user" name="newuser" id="newuser" list="usernames-list" autocomplete="off"></td>
+			<?php echo $usernames_list; ?>
 		</tr>
 		<tr>
 			<th scope="row"><label for="new_role_adduser"><?php _e( 'Role' ); ?></label></th>

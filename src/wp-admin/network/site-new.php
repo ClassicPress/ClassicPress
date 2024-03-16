@@ -261,7 +261,26 @@ if ( ! empty( $messages ) ) {
 					?>
 				</td>
 			</tr>
-		<?php endif; // Languages. ?>
+			<?php
+		endif; // Languages.
+
+		/*
+		 * Get all user email addresses and compile a datalist
+		 */
+		$user_emails = get_users(
+			array(
+				'blog_id' => 0,
+				'fields'  => 'user_email',
+			)
+		);
+
+		$email_list = '<datalist id="emails-list">';
+		foreach ( $user_emails as $user_email ) {
+			$email_list .= '<option>' . esc_html( $user_email ) . '</option>';
+		}
+		$email_list .= '</datalist>';
+		?>
+
 		<tr class="form-field form-required">
 			<th scope="row">
 				<label for="admin-email">
@@ -271,7 +290,8 @@ if ( ! empty( $messages ) ) {
 					?>
 				</label>
 			</th>
-			<td><input name="blog[email]" type="email" class="regular-text wp-suggest-user" id="admin-email" data-autocomplete-type="search" data-autocomplete-field="user_email" aria-describedby="site-admin-email" required></td>
+			<td><input name="blog[email]" type="email" class="regular-text wp-suggest-user" id="admin-email" list="emails-list" aria-describedby="site-admin-email" autocomplete="off" required></td>
+			<?php echo $email_list; ?>
 		</tr>
 		<tr class="form-field">
 			<td colspan="2" class="td-full"><p id="site-admin-email"><?php _e( 'A new user will be created if the above email address is not in the database.' ); ?><br><?php _e( 'The username and a link to set the password will be mailed to this email address.' ); ?></p></td>
