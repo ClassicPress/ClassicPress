@@ -24,6 +24,161 @@ window.wp = window.wp || {};
  */
 ( function( $, wp ) {
 
+	/*
+	 * Autosuggest tags when bulk or quick editing
+	 *
+	 * Based on https://phuoc.ng/collection/mirror-a-text-area/add-autocomplete-to-your-text-area/
+	 */
+	function autoCompleteTextarea( textarea ) {
+		var mirror, suggestionsContainer, suggestions,
+			container = textarea.parentNode,
+			currentSuggestionIndex = -1;
+
+		// Create a hidden, mirrored div to work with
+		mirror = document.createElement( 'div' );
+		mirror.textContent = textarea.value;
+		mirror.hidden = true;
+		container.prepend( mirror );
+
+		suggestionsContainer = document.createElement( 'div' );
+		suggestionsContainer.classList.add( 'container__suggestions' );
+		if ( ! container.contains( suggestionsContainer ) ) { // only append one div
+			container.appendChild( suggestionsContainer );
+		}
+
+		// Get list of tags and convert to an array
+		suggestions = document.getElementById( 'tags-list' ).value.split( ', ' );
+
+		textarea.addEventListener( 'scroll', function() {
+			mirror.scrollTop = textarea.scrollTop;
+		} );
+
+		// Listen for characters input to the textarea
+		textarea.addEventListener( 'input', function() {
+			var currentWord, matches, pre, post, caret, rect, textBeforeCursor, textAfterCursor,
+				currentValue = textarea.value,
+				cursorPos = textarea.selectionStart,
+				startIndex = findIndexOfCurrentWord();
+
+			// Extract just the current word
+			currentWord = currentValue.substring( startIndex + 1, cursorPos );
+			if ( currentWord === '' ) {
+				suggestionsContainer.style.display = 'none';
+				return;
+			}
+
+			// Make matching case insensitive
+			matches = suggestions.filter( function( suggestion ) {
+				return suggestion.toLowerCase().indexOf( currentWord.toLowerCase() ) > -1;
+			} );
+			if ( matches.length === 0 ) {
+				suggestionsContainer.style.display = 'none';
+				return;
+			}
+
+			textBeforeCursor = currentValue.substring( 0, cursorPos ),
+			textAfterCursor = currentValue.substring( cursorPos ),
+			pre = document.createTextNode( textBeforeCursor );
+			post = document.createTextNode( textAfterCursor );
+			caret = document.createElement( 'span' );
+			caret.innerHTML = '&nbsp;';
+
+			mirror.innerHTML = '';
+			mirror.append( pre, caret, post );
+
+			rect = caret.getBoundingClientRect();
+			suggestionsContainer.style.top = `${rect.top + rect.height}px`;
+			suggestionsContainer.style.left = `${rect.left}px`;
+			suggestionsContainer.innerHTML = '';
+
+			matches.forEach( function( match ) {
+				var option = document.createElement( 'div' );
+				option.innerText = match;
+				option.classList.add( 'container__suggestion' );
+				option.addEventListener( 'click', function() {
+					replaceCurrentWord( this.innerText );
+					suggestionsContainer.style.display = 'none';
+				} );
+				suggestionsContainer.appendChild( option );
+			} );
+			suggestionsContainer.style.display = 'block';
+		} );
+
+		// Enable keys to navigate through list of suggestions and select one
+		textarea.addEventListener( 'keydown', function( e ) {
+			var suggestions, numSuggestions;
+
+			if ( ! [ 'ArrowDown', 'ArrowUp', 'Enter', 'Escape' ].includes( e.key ) ) {
+				return;
+			}
+
+			suggestions = suggestionsContainer.querySelectorAll( '.container__suggestion' );
+			numSuggestions = suggestions.length;
+			if ( numSuggestions === 0 || suggestionsContainer.style.display === 'none' ) {
+				return;
+			}
+
+			e.preventDefault();
+
+			switch( e.key ) {
+				case 'ArrowDown':
+					suggestions[
+						clamp( 0, currentSuggestionIndex, numSuggestions - 1 )
+					].classList.remove( 'container__suggestion--focused' );
+					currentSuggestionIndex = clamp( 0, currentSuggestionIndex + 1, numSuggestions - 1 );
+					suggestions[ currentSuggestionIndex ].classList.add( 'container__suggestion--focused' );
+					break;
+				case 'ArrowUp':
+					suggestions[
+						clamp( 0, currentSuggestionIndex, numSuggestions - 1 )
+					].classList.remove( 'container__suggestion--focused' );
+					currentSuggestionIndex = clamp( 0, currentSuggestionIndex - 1, numSuggestions - 1 );
+					suggestions[ currentSuggestionIndex ].classList.add( 'container__suggestion--focused' );
+					break;
+				case 'Enter':
+					e.stopPropagation(); // prevent closing of Bulk or Quick Edit when Enter key pressed
+					replaceCurrentWord( suggestions[ currentSuggestionIndex ].innerText );
+					suggestionsContainer.style.display = 'none';
+					break;
+				case 'Escape':
+					suggestionsContainer.style.display = 'none';
+					break;
+				default:
+					break;
+			}
+		} );
+
+		function findIndexOfCurrentWord() {
+			// Get current value and cursor position
+			var startIndex,
+				currentValue = textarea.value,
+				cursorPos = textarea.selectionStart;
+
+			// Iterate backwards through characters until we find a space or newline character
+			startIndex = cursorPos - 1;
+			while ( startIndex >= 0 && !/\s/.test( currentValue[ startIndex ] ) ) {
+				startIndex--;
+			}
+			return startIndex;
+		}
+
+		// Replace current word with selected suggestion
+		function replaceCurrentWord( newWord ) {
+			var currentValue = textarea.value,
+				cursorPos = textarea.selectionStart,
+				startIndex = findIndexOfCurrentWord(),
+				newValue = currentValue.substring( 0, startIndex + 1 ) + newWord + currentValue.substring( cursorPos );
+
+			textarea.value = newValue;
+			textarea.focus();
+			textarea.selectionStart = textarea.selectionEnd = startIndex + 1 + newWord.length;
+		}
+
+		function clamp( min, value, max ) {
+			return Math.min( Math.max( min, value ), max );
+		}
+	}
+
 	window.inlineEditPost = {
 
 	/**
@@ -246,24 +401,15 @@ window.wp = window.wp || {};
 
 		// Enable auto-complete for tags when editing posts.
 		if ( 'post' === type ) {
-			$( 'tr.inline-editor textarea[data-wp-taxonomy]' ).each( function ( i, element ) {
-				/*
-				 * While Quick Edit clones the form each time, Bulk Edit always re-uses
-				 * the same form. Let's check if an autocomplete instance already exists.
-				 */
-				if ( $( element ).autocomplete( 'instance' ) ) {
-					// jQuery equivalent of `continue` within an `each()` loop.
-					return;
-				}
-
-				$( element ).wpTagsSuggest();
-			} );
+			autoCompleteTextarea( document.querySelector( 'tr.inline-editor textarea[data-wp-taxonomy]' ) );
 		}
 
 		// Set initial focus on the Bulk Edit region.
-		$( '#bulk-edit .inline-edit-wrapper' ).attr( 'tabindex', '-1' ).focus();
+		document.querySelector( '#bulk-edit .inline-edit-wrapper' ).setAttribute( 'tabindex', '-1' );
+		document.querySelector( '#bulk-edit .inline-edit-wrapper' ).focus();
+
 		// Scrolls to the top of the table where the editor is rendered.
-		$('html, body').animate( { scrollTop: 0 }, 'fast' );
+		window.scrollTo( { top: 0, behavior: 'smooth' } );
 	},
 
 	/**
@@ -372,7 +518,7 @@ window.wp = window.wp || {};
 				textarea.val(terms);
 			}
 
-			textarea.wpTagsSuggest();
+			autoCompleteTextarea( textarea[0] );
 		});
 
 		// Handle the post status.

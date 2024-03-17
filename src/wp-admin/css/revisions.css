@@ -1,6 +1,116 @@
 /*------------------------------------------------------------------------------
   11.2 - Post Revisions
 ------------------------------------------------------------------------------*/
+.range-container {
+	display: flex;
+	flex-direction: column;
+	width: 50%;
+	margin: 0 auto -1em;
+}
+.sliders-control {
+	position: relative;
+	min-height: 50px;
+}
+input[type="range"] {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	height: 4px;
+	width: 100%;
+	position: absolute;
+	background-color: #00b3bc;
+	pointer-events: none;
+}
+input[type="range"]:focus {
+	outline: 0;
+}
+input[type="range"]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	pointer-events: all;
+	width: 30px;
+	height: 30px;
+	background-color: #fff;
+	border-radius: 50%;
+	box-shadow: 0 0 0 1px #C6C6C6;
+	cursor: pointer;
+	margin-top: -1.2em;
+}
+input[type="range"]::-moz-range-thumb {
+	border: none;
+	pointer-events: all;
+	width: 30px;
+	height: 30px;
+	background-color: #fff;
+	border-radius: 50%;
+	box-shadow: 0 0 0 1px #C6C6C6;
+	cursor: pointer;
+}
+input[type="range"]:hover::-webkit-slider-thumb {
+	outline: 3px solid #053a5f;
+	outline-offset: 0.125rem; 
+}
+input[type="range"]:hover::-moz-range-thumb {
+	outline: 3px solid #053a5f;
+	outline-offset: 0.125rem; 
+}
+input[type="range"]:focus::-webkit-slider-thumb {
+	background-color: red;
+	box-shadow: 0 0 0 1px #2271b1; 
+	border: 1px solid #053a5f;
+	outline: 3px solid #053a5f;
+	outline-offset: 0.125rem; 
+}
+input[type="range"]:focus::-moz-range-thumb {
+	background-color: red;
+	box-shadow: 0 0 0 1px #2271b1;
+	border: 1px solid #053a5f;
+	outline: 3px solid #053a5f;
+	outline-offset: 0.125rem; 
+}
+
+#ticks {
+	width: 100%;
+	padding-bottom: 1.5em;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+#ticks option {
+	text-align: center;
+	width: 8em;
+}
+#ticks option:first-child {
+	margin-left: -2.5em;
+}
+#ticks option:last-child {
+	margin-right: -2.5em;
+}
+.from-slider-wrapper {
+	display: none;
+}
+#from-slider {
+	height: 0;
+	position: absolute;
+	z-index: 2;
+}
+#to-slider {
+	position: absolute;
+	z-index: 1;
+}
+#current-tooltip {
+	padding: 1em;
+	text-align: center;
+	position: absolute;
+	margin-top: 0.5em;
+	left: 1.8em;
+}
+
+
+#revisions-slider {
+	display: block;
+	margin: 1em auto;
+}
 .revisions-control-frame,
 .revisions-diff-frame {
 	position: relative;
@@ -108,7 +218,7 @@ body.folded .revisions .loading-indicator {
 }
 
 .revisions-meta {
-	margin-top: 20px;
+	margin-top: 3em;
 	background-color: #fff;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 	overflow: hidden;
@@ -120,7 +230,7 @@ body.folded .revisions .loading-indicator {
 
 .revision-toggle-compare-mode {
 	position: absolute;
-	top: 0;
+	top: -5em;
 	right: 0;
 }
 

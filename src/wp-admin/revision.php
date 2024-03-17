@@ -161,11 +161,62 @@ get_current_screen()->set_help_sidebar( $revisions_sidebar );
 
 require_once ABSPATH . 'wp-admin/admin-header.php';
 
+/*
+ * Get all revisions in ascending order
+ *
+ * Data tooltip uses special characters that are replaced by JavaScript when the tooltip is shown
+ *
+ * @since CP-2.1.0
+ */
+$prepared = wp_prepare_revisions_for_js( $post, $revision_id, $from = null );
+$count = count( $prepared['revisionIds'] ) - 1;
+$revisions_list = '<input id="revisions-list" value="' . implode( ', ', $prepared['revisionIds'] ) . '" hidden>';
+
+$ticks = '<datalist id="ticks">';
+foreach ( $prepared['revisionData'] as $key => $revision ) {
+	$avatar = $revision['author']['avatar'];
+
+	$type = __( 'Revision by ' );
+	if ( $revision['autosave'] === true ) {
+		$type = '{{' . __( 'Autosave by ' );
+	} elseif ( $key === $count ) {
+		$type = __( 'Current Revision by ' );
+	}
+
+	$author = $revision['author']['name'];
+	$time_ago = $revision['timeAgo'];
+
+	$date_short = ' (' . $revision['dateShort'] . ')';
+	if ( $revision['autosave'] === true ) {
+		$date_short = '}} (' . $revision['dateShort'] . ')';
+	}
+
+	$ticks .= '<option data-tooltip="' . $type . '[[' . $author . ']]' . $time_ago . $date_short . '" value="' . $key . '">' . $revision['dateShort'] . '</option>';
+}
+$ticks .= '</datalist>';
 ?>
 
 <div class="wrap">
 	<h1 class="long-header"><?php echo $h1; ?></h1>
 	<?php echo $return_to_post; ?>
+
+	<fieldset class="range-container">
+		<span id="current-tooltip"></span>
+		<div class="sliders-control">
+				<?php //echo json_encode( $tooltips ); ?>
+				<?php echo $ticks; ?>
+			<div class="from-slider-wrapper">
+				<label for="from-slider" class="screen-reader-text"><?php esc_html_e( 'Earlier Revision' ); ?></label>
+				<input id="from-slider" class="cp-slider" type="range" step="1" min="0" max="<?php echo $count; ?>" list="ticks">
+			</div>
+
+			<div class="to-slider-wrapper">
+				<label for="to-slider" class="screen-reader-text"><?php esc_html_e( 'Later Revision' ); ?></label>
+				<input id="to-slider" class="cp-slider" type="range" step="1" min="0" max="<?php echo $count; ?>" list="ticks">
+				<?php echo $revisions_list; ?>
+			</div>
+		</div>
+	</fieldset>
 </div>
 <?php
 wp_print_revision_templates();
