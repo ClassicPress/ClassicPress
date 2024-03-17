@@ -78,7 +78,12 @@ function list_core_update( $update ) {
 		$message = __( 'You are using a development version of ClassicPress. You can update to the latest nightly build automatically:' );
 	} else {
 		if ( $current ) {
-			$message     = sprintf( __( 'If you need to re-install version %s, you can do so here:' ), $version_string );
+			// Migration Nag 2
+			if ( strstr( classicpress_version(), 'migration' ) ) {
+				$message     = sprintf( __( '<big>Please press <strong>Re-install Now</strong> to complete the conversion to the ClassicPress v%s Official Release.</big>' ), $version_string );
+			} else {
+				$message     = sprintf( __( 'If you need to re-install version %s, you can do so here:' ), $version_string );
+			}
 			$submit      = __( 'Re-install Now' );
 			$form_action = 'update-core.php?action=do-core-reinstall';
 		} else {
@@ -224,9 +229,16 @@ function core_upgrade_preamble() {
 				echo "</p>\n";
 			}
 		} else { // 'latest'
+			if ( strstr( classicpress_version(), 'migration' ) ) {
+				// Migration Nag 1
+				echo '<h1 style="color:red;">';
+				_e( 'NOTICE: You are still running the Migration Version of ClassicPress!' );
+				echo "</h1>\n";
+			} else {
 			echo '<h2>';
 			_e( 'You have the latest version of ClassicPress.' );
 			echo "</h2>\n";
+			}
 		}
 
 		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
