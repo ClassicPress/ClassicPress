@@ -235,9 +235,9 @@ function core_upgrade_preamble() {
 				_e( 'NOTICE: You are still running the Migration Version of ClassicPress!' );
 				echo "</h1>\n";
 			} else {
-			echo '<h2>';
-			_e( 'You have the latest version of ClassicPress.' );
-			echo "</h2>\n";
+				echo '<h2>';
+				_e( 'You have the latest version of ClassicPress.' );
+				echo "</h2>\n";
 			}
 		}
 
