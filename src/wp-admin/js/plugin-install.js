@@ -3,92 +3,114 @@
  *
  * @output wp-admin/js/plugin-install.js
  */
+/* global pluginL10n */
+document.addEventListener( 'DOMContentLoaded', function() {
 
-/* global tb_click, tb_remove, tb_position */
+	var iframe, iframeBody, tabbables, firstTabbable, lastTabbable, closeButton,
+		uploadViewToggle = document.querySelector( '.upload-view-toggle' ),
+		wrap = document.querySelector( '.wrap' ),
+		body = document.body,
+		openers = document.querySelectorAll( '.thickbox' ),
+		width = window.innerWidth,
+		height = window.innerHeight,
+		dialog = document.createElement( 'dialog' );
 
-jQuery( function( $ ) {
-
-	var tbWindow,
-		$iframeBody,
-		$tabbables,
-		$firstTabbable,
-		$lastTabbable,
-		$focusedBefore = $(),
-		$uploadViewToggle = $( '.upload-view-toggle' ),
-		$wrap = $ ( '.wrap' ),
-		$body = $( document.body );
-
-	window.tb_position = function() {
-		var width = $( window ).width(),
-			H = $( window ).height() - ( ( 792 < width ) ? 60 : 20 ),
-			W = ( 792 < width ) ? 772 : width - 20;
-
-		tbWindow = $( '#TB_window' );
-
-		if ( tbWindow.length ) {
-			tbWindow.width( W ).height( H );
-			$( '#TB_iframeContent' ).width( W ).height( H );
-			tbWindow.css({
-				'margin-left': '-' + parseInt( ( W / 2 ), 10 ) + 'px'
-			});
-			if ( typeof document.body.style.maxWidth !== 'undefined' ) {
-				tbWindow.css({
-					'top': '30px',
-					'margin-top': '0'
-				});
-			}
-		}
-
-		return $( 'a.thickbox' ).each( function() {
-			var href = $( this ).attr( 'href' );
-			if ( ! href ) {
-				return;
-			}
-			href = href.replace( /&width=[0-9]+/g, '' );
-			href = href.replace( /&height=[0-9]+/g, '' );
-			$(this).attr( 'href', href + '&width=' + W + '&height=' + ( H ) );
-		});
-	};
-
-	$( window ).on( 'resize', function() {
-		tb_position();
-	});
+	dialog.className = 'plugin-details-modal';
+	dialog.style.padding = '0';
+	body.append( dialog ); // append dialog element to page
 
 	/*
-	 * Custom events: when a Thickbox iframe has loaded and when the Thickbox
-	 * modal gets removed from the DOM.
+	 * Open modal dialog (replacing previous thickbox)
+	 *
+	 * @since CP-2.1.0
 	 */
-	$body
-		.on( 'thickbox:iframe:loaded', tbWindow, function() {
-			/*
-			 * Return if it's not the modal with the plugin details iframe. Other
-			 * thickbox instances might want to load an iframe with content from
-			 * an external domain. Avoid to access the iframe contents when we're
-			 * not sure the iframe loads from the same domain.
-			 */
-			if ( ! tbWindow.hasClass( 'plugin-details-modal' ) ) {
-				return;
+	openers.forEach( function( opener ) {
+		opener.addEventListener( 'click', function( e ) {
+			var urlNoQuery,
+				url = opener.href || opener.alt,
+				title = opener.dataset.title ?
+					wp.i18n.sprintf(
+						// translators: %s: Plugin name.
+						wp.i18n.__( 'Plugin: %s' ),
+						opener.dataset.title
+					) :
+					wp.i18n.__( 'Plugin details' );
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			urlNoQuery = url.split('TB_');
+
+			dialog.classList.add( 'modal-loading' );
+			dialog.showModal();
+			dialog.insertAdjacentHTML( 'beforeend', '<button type="button" id="dialog-close-button" autofocus><span class="screen-reader-text">' + pluginL10n.close + '</span></button><iframe frameborder="0" hspace="0" allowtransparency="true" src="' + urlNoQuery[0] + '" id="TB_iframeContent" name="TB_iframeContent' + Math.round( Math.random() * 1000 ) + '" style="width: ' + ( width * 9 / 10 ) + 'px;max-width:800px;height: ' + ( height * 9 / 10 ) + 'px;" title="' + title + '">' + pluginL10n.noiframes + '</iframe>' );
+
+			iframe = dialog.querySelector( 'iframe' );
+			if ( iframe ) {
+				iframe.addEventListener( 'load', function() {
+					dialog.classList.remove( 'modal-loading' );
+					iframeLoaded();
+				} );
 			}
 
-			iframeLoaded();
-		})
-		.on( 'thickbox:removed', function() {
-			// Set focus back to the element that opened the modal dialog.
-			// Note: IE 8 would need this wrapped in a fake setTimeout `0`.
-			$focusedBefore.trigger( 'focus' );
-		});
+			closeButton = dialog.querySelector( '#dialog-close-button' );
+			closeButton.addEventListener( 'click', function() {
+				dialog.close();
+				if ( iframe != null ) {
+					iframe.remove();
+				}
+				closeButton.remove();
+			} );
 
+			// Remove iframe contents when hitting the Escape button
+			dialog.addEventListener( 'keydown', function( e ) {
+				if ( e.key === 'Escape' ) {
+					if ( iframe != null ) {
+						iframe.remove();
+					}
+					closeButton.remove();
+				}
+				else if ( e.key === 'Enter' && e.target.id === 'dialog-close-button' ) {
+					e.preventDefault();
+					dialog.close();
+					if ( iframe != null ) {
+						iframe.remove();
+					}
+					closeButton.remove();
+				}
+			} );
+		} );
+	} );
+
+	/*
+	 * Remove iframe contents when closing modal dialog with Escape key
+	 *
+	 * @since CP-2.1.0
+	 */
+	document.addEventListener( 'keydown', function( e ) {
+		if ( e.key === 'Escape' ) {
+			if ( iframe != null ) {
+				iframe.remove();
+			}
+			closeButton.remove();
+		}
+	} );
+
+	/*
+	 * Called when iframe has loaded
+	 *
+	 * @since CP-2.1.0
+	 */
 	function iframeLoaded() {
-		var $iframe = tbWindow.find( '#TB_iframeContent' );
 
 		// Get the iframe body.
-		$iframeBody = $iframe.contents().find( 'body' );
+		iframeBody = iframe.contentWindow.document.querySelector( 'body' );
 
 		// Get the tabbable elements and handle the keydown event on first load.
 		handleTabbables();
 
 		// Set initial focus on the "Close" button.
-		$firstTabbable.trigger( 'focus' );
+		firstTabbable.focus();
 
 		/*
 		 * When the "Install" button is disabled (e.g. the Plugin is already installed)
@@ -96,115 +118,93 @@ jQuery( function( $ ) {
 		 * the tabbable elements and handle the keydown event again and again,
 		 * each time the active tab panel changes.
 		 */
-		$( '#plugin-information-tabs a', $iframeBody ).on( 'click', function() {
-			handleTabbables();
-		});
+		document.querySelectorAll( '#plugin-information-tabs a' ).forEach( function( tab ) {
+			tab.addEventListener( 'click', function() {
+				handleTabbables();
+			} );
+		} );
 
-		// Close the modal when pressing Escape.
-		$iframeBody.on( 'keydown', function( event ) {
-			if ( 27 !== event.which ) {
-				return;
-			}
-			tb_remove();
-		});
+		iframeBody.addEventListener( 'click', function() {
+			handleTabbables();
+		} );
 	}
 
 	/*
-	 * Get the tabbable elements and detach/attach the keydown event.
+	 * Get the tabbable elements.
 	 * Called after the iframe has fully loaded so we have all the elements we need.
 	 * Called again each time a Tab gets clicked.
-	 * @todo Consider to implement a WordPress general utility for this and don't use jQuery UI.
+	 *
+	 * @since CP-2.1.0
+	 * Implemented without jQuery UI.
 	 */
 	function handleTabbables() {
-		var $firstAndLast;
-		// Get all the tabbable elements.
-		$tabbables = $( ':tabbable', $iframeBody );
-		// Our first tabbable element is always the "Close" button.
-		$firstTabbable = tbWindow.find( '#TB_closeWindowButton' );
-		// Get the last tabbable element.
-		$lastTabbable = $tabbables.last();
-		// Make a jQuery collection.
-		$firstAndLast = $firstTabbable.add( $lastTabbable );
-		// Detach any previously attached keydown event.
-		$firstAndLast.off( 'keydown.wp-plugin-details' );
-		// Attach again the keydown event on the first and last focusable elements.
-		$firstAndLast.on( 'keydown.wp-plugin-details', function( event ) {
+		var length;
+
+		// Get all the tabbable elements
+		tabbables = [ ...iframeBody.querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]:not( [tabindex="-1"] )' ) ];
+		tabbables.forEach( function( tabbable ) {
+			var index;
+			if ( ! isVisible( tabbable ) ) {
+				index = tabbables.indexOf( tabbable );
+				tabbables.splice( index, 1 );
+			}
+			if ( hasAncestorWithMatchingSelector( tabbable, '.hidden' ) ) {
+				index = tabbables.indexOf( tabbable );
+				tabbables.splice( index, 1 );
+			}
+		} );
+
+		// The first tabbable element is always the "Close" button
+		firstTabbable = document.getElementById( 'dialog-close-button' );
+		firstTabbable.addEventListener( 'keydown', function( event ) {
 			constrainTabbing( event );
-		});
-	}
+		} );
 
-	// Constrain tabbing within the plugin modal dialog.
-	function constrainTabbing( event ) {
-		if ( 9 !== event.which ) {
-			return;
+		// Get the last tabbable element, ignoring those listed in hidden tab panels.
+		// Cannot do this above because the tab panels are set too late.
+		if ( tabbables.at( -1 ).id === 'plugin_install_from_iframe' ) {
+			lastTabbable = tabbables.at( -1 );
+		} else { // we need the last but one element instead
+			length = tabbables.length;
+			lastTabbable = tabbables[ length - 2 ];
+			while ( lastTabbable.closest( '.section' ) && ! isVisible( lastTabbable.closest( '.section' ) ) ) {
+				length = length - 1;
+				lastTabbable = tabbables[ length - 1 ];
+			}
 		}
-
-		if ( $lastTabbable[0] === event.target && ! event.shiftKey ) {
-			event.preventDefault();
-			$firstTabbable.trigger( 'focus' );
-		} else if ( $firstTabbable[0] === event.target && event.shiftKey ) {
-			event.preventDefault();
-			$lastTabbable.trigger( 'focus' );
-		}
+		lastTabbable.addEventListener( 'keydown', function( event ) {
+			constrainTabbing( event );
+		} );
 	}
 
 	/*
-	 * Open the Plugin details modal. The event is delegated to get also the links
-	 * in the plugins search tab, after the Ajax search rebuilds the HTML. It's
-	 * delegated on the closest ancestor and not on the body to avoid conflicts
-	 * with other handlers, see Trac ticket #43082.
+	 * Helper function copied from jQuery
 	 */
-	$( '.wrap' ).on( 'click', '.thickbox.open-plugin-details-modal', function( e ) {
-		// The `data-title` attribute is used only in the Plugin screens.
-		var title = $( this ).data( 'title' ) ?
-			wp.i18n.sprintf(
-				// translators: %s: Plugin name.
-				wp.i18n.__( 'Plugin: %s' ),
-				$( this ).data( 'title' )
-			) :
-			wp.i18n.__( 'Plugin details' );
+	function isVisible( elem ) {
+		return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+	}
 
-		e.preventDefault();
-		e.stopPropagation();
+	/*
+	 * Helper function to find ancesors with specific selector (e.g. class)
+	 */
+	function hasAncestorWithMatchingSelector( target, selector ) {
+		return [ ...document.querySelectorAll( selector ) ].some( function( el ) {
+			el !== target && el.contains( target );
+		} );
+	}
 
-		// Store the element that has focus before opening the modal dialog, i.e. the control which opens it.
-		$focusedBefore = $( this );
-
-		tb_click.call(this);
-
-		// Set ARIA role, ARIA label, and add a CSS class.
-		tbWindow
-			.attr({
-				'role': 'dialog',
-				'aria-label': wp.i18n.__( 'Plugin details' )
-			})
-			.addClass( 'plugin-details-modal' );
-
-		// Set title attribute on the iframe.
-		tbWindow.find( '#TB_iframeContent' ).attr( 'title', title );
-	});
-
-	/* Plugin install related JS */
-	$( '#plugin-information-tabs a' ).on( 'click', function( event ) {
-		var tab = $( this ).attr( 'name' );
-		event.preventDefault();
-
-		// Flip the tab.
-		$( '#plugin-information-tabs a.current' ).removeClass( 'current' );
-		$( this ).addClass( 'current' );
-
-		// Only show the fyi box in the description section, on smaller screen,
-		// where it's otherwise always displayed at the top.
-		if ( 'description' !== tab && $( window ).width() < 772 ) {
-			$( '#plugin-information-content' ).find( '.fyi' ).hide();
-		} else {
-			$( '#plugin-information-content' ).find( '.fyi' ).show();
+	// Constrain tabbing within the plugin modal dialog, but allow closing
+	function constrainTabbing( event ) {
+		if ( 'Tab' === event.key ) {
+			if ( lastTabbable === event.target && ! event.shiftKey ) {
+				event.preventDefault();
+				firstTabbable.focus();
+			} else if ( firstTabbable === event.target && event.shiftKey ) {
+				event.preventDefault();
+				lastTabbable.focus();
+			}
 		}
-
-		// Flip the content.
-		$( '#section-holder div.section' ).hide(); // Hide 'em all.
-		$( '#section-' + tab ).show();
-	});
+	}
 
 	/*
 	 * When a user presses the "Upload Plugin" button, show the upload form in place
@@ -214,24 +214,52 @@ jQuery( function( $ ) {
 	 * like a link. Otherwise we're in the normal plugin installer pages and the
 	 * link should behave like a toggle button.
 	 */
-	if ( ! $wrap.hasClass( 'plugin-install-tab-upload' ) ) {
-		$uploadViewToggle
-			.attr({
-				role: 'button',
-				'aria-expanded': 'false'
-			})
-			.on( 'click', function( event ) {
+	if ( wrap != null ) {
+		if ( uploadViewToggle && ! wrap.className.includes( 'plugin-install-tab-upload' ) ) {
+			uploadViewToggle.setAttribute( 'role', 'button' );
+			uploadViewToggle.setAttribute( 'aria-expanded', 'false' );
+			uploadViewToggle.addEventListener( 'click', function( event ) {
 				event.preventDefault();
-				$body.toggleClass( 'show-upload-view' );
-				$uploadViewToggle.attr( 'aria-expanded', $body.hasClass( 'show-upload-view' ) );
-			});
+				body.classList.toggle( 'show-upload-view' );
+				uploadViewToggle.setAttribute( 'aria-expanded', body.className.includes( 'show-upload-view' ) );
+			} );
+		}
 	}
 
+	/* Plugin install related JS */
+	document.querySelectorAll( '#plugin-information-tabs a' ).forEach( function( infoLink ) {
+		infoLink.addEventListener( 'click', function( event ) {
+			var tab = infoLink.getAttribute( 'name' );
+			event.preventDefault();
+
+			// Flip the tab.
+			document.querySelector( '#plugin-information-tabs a.current' ).classList.remove( 'current' );
+			infoLink.classList.add( 'current' );
+
+			// Only show the fyi box in the description section, on smaller screens,
+			// where it's otherwise always displayed at the top.
+			if ( 'description' !== tab && window.innerWidth < 772 ) {
+				document.querySelector( '#plugin-information-content .fyi' ).style.display = 'none';
+			} else {
+				document.querySelector( '#plugin-information-content .fyi' ).style.display = 'block';
+			}
+
+			// Flip the content.
+			document.querySelectorAll( '#section-holder div.section' ).forEach( function( section ) {
+				section.style.display = 'none'; // Hide them all.
+			} );
+			document.querySelector( '#section-' + tab ).style.display = 'block';
+		} );
+	} );
+
 	/* Plugin install Category filter JS */
-	$( '.plugin-categories-filter a' ).on( 'click', function( event ) {
-		event.preventDefault();
-		var category = $(this).attr( 'data-plugin-tag' );
-		$( '#typeselector' ).val( 'tag' );
-		$( '.plugin-install-php .wp-filter-search' ).val( category ).trigger( 'input' );
-	});
-});
+	document.querySelectorAll( '.plugin-categories-filter a' ).forEach( function( filter ) {
+		filter.addEventListener( 'click', function( event ) {
+			event.preventDefault();
+			var category = filter.dataset.pluginTag;
+			document.querySelector( '#typeselector' ).value = 'tag';
+			document.querySelector( '.plugin-install-php .wp-filter-search' ).value = category;
+			document.querySelector( '.plugin-install-php .wp-filter-search' ).dispatchEvent( new Event( 'input' ) );
+		} );
+	} );
+} );

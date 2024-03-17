@@ -122,9 +122,9 @@ wp.themePluginEditor = (function( $ ) {
 	 * @return {void}
 	 */
 	component.constrainTabbing = function( event ) {
-		var firstTabbable, lastTabbable, lastEvent = 9;
+		var firstTabbable, lastTabbable;
 
-		if ( lastEvent !== event.which ) {
+		if ( 'Tab' !== event.key ) {
 			return;
 		}
 
@@ -329,7 +329,17 @@ wp.themePluginEditor = (function( $ ) {
 		 * @return {void}
 		 */
 		codeEditorSettings.onTabPrevious = function() {
-			$( '#templateside' ).find( ':tabbable' ).last().trigger( 'focus' );
+			var templateside = document.getElementById( 'templateside' ),
+				tabbables = [ ...templateside.querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]:not( [tabindex="-1"] )' ) ];
+
+			tabbables.forEach( function( tabbable ) {
+				var index;
+				if ( ! isVisible( tabbable ) ) {
+					index = tabbables.indexOf( tabbable );
+					tabbables.splice( index, 1 );
+				}
+			} );
+			tabbables[ tabbables.length -1 ].focus();
 		};
 
 		/**
@@ -340,7 +350,16 @@ wp.themePluginEditor = (function( $ ) {
 		 * @return {void}
 		 */
 		codeEditorSettings.onTabNext = function() {
-			$( '#template' ).find( ':tabbable:not(.CodeMirror-code)' ).first().trigger( 'focus' );
+			var template = document.getElementById( 'template' ),
+				tabbables = [ ...template.querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]:not( [tabindex="-1"] )' ) ],
+				index = 0,
+				elementToSetFocusTo = tabbables[ index ];
+
+			while ( ! isVisible( tabbables[ index ] ) || tabbables[ index ].className.includes( 'CodeMirror-code' ) ) {
+				index = index + 1;
+				elementToSetFocusTo = tabbables[ index ];
+			}
+			tabbables[0].focus();
 		};
 
 		/**
@@ -448,6 +467,13 @@ wp.themePluginEditor = (function( $ ) {
 			}
 		} );
 	};
+
+	/*
+	 * Helper function copied from jQuery
+	 */
+	function isVisible( elem ) {
+		return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+	}
 
 	/* jshint ignore:start */
 	/* jscs:disable */

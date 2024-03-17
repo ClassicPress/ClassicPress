@@ -12,6 +12,13 @@
 		isReducedMotion = event.matches;
 	});
 
+	/*
+	 * Helper function copied from jQuery
+	 */
+	function isVisible( elem ) {
+		return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+	}
+
 	api.OverlayNotification = api.Notification.extend(/** @lends wp.customize.OverlayNotification.prototype */{
 
 		/**
@@ -221,6 +228,7 @@
 		 */
 		render: function() {
 			var collection = this,
+				index = 0,
 				notifications, hadOverlayNotification = false, hasOverlayNotification, overlayNotifications = [],
 				previousNotificationsByCode = {},
 				listElement, focusableElements;
@@ -288,9 +296,13 @@
 			if ( hasOverlayNotification ) {
 				collection.focusContainer = overlayNotifications[ overlayNotifications.length - 1 ].container;
 				collection.focusContainer.prop( 'tabIndex', -1 );
-				focusableElements = collection.focusContainer.find( ':focusable' );
+				focusableElements = [ ...collection.focusContainer[0].querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]' ) ];
 				if ( focusableElements.length ) {
-					focusableElements.first().focus();
+					focusableElements[ index ].focus();
+					while ( ! isVisible( focusableElements[ index ] ) ) {
+						index = index + 1;
+						focusableElements[ index ].focus();
+					}
 				} else {
 					collection.focusContainer.focus();
 				}
@@ -313,29 +325,36 @@
 		 * @return {void}
 		 */
 		constrainFocus: function constrainFocus( event ) {
-			var collection = this, focusableElements;
+			var collection = this, focusableElements, index;
 
 			// Prevent keys from escaping.
 			event.stopPropagation();
 
-			if ( 9 !== event.which ) { // Tab key.
+			if ( 'Tab' !== event.key ) {
 				return;
 			}
 
-			focusableElements = collection.focusContainer.find( ':focusable' );
+			focusableElements = [ ...collection.focusContainer[0].querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]' ) ];
+			focusableElements.forEach( function( elem ) {
+				if ( ! isVisible( elem ) ) {
+					index = focusableElements.indexOf( elem );
+					focusableElements.splice( index, 1 );
+				}
+			} );
+
 			if ( 0 === focusableElements.length ) {
 				focusableElements = collection.focusContainer;
 			}
 
 			if ( ! $.contains( collection.focusContainer[0], event.target ) || ! $.contains( collection.focusContainer[0], document.activeElement ) ) {
 				event.preventDefault();
-				focusableElements.first().focus();
+				focusableElements[0].focus();
 			} else if ( focusableElements.last().is( event.target ) && ! event.shiftKey ) {
 				event.preventDefault();
-				focusableElements.first().focus();
+				focusableElements[0].focus();
 			} else if ( focusableElements.first().is( event.target ) && event.shiftKey ) {
 				event.preventDefault();
-				focusableElements.last().focus();
+				focusableElements[ focusableElements.length - 1 ].focus();
 			}
 		}
 	});
@@ -695,7 +714,9 @@
 	 * @param {Function} [params.completeCallback]
 	 */
 	focus = function ( params ) {
-		var construct, completeCallback, focus, focusElement, sections;
+		var construct, completeCallback, focus, focusElement, focusableElements, sections,
+			index = 0;
+
 		construct = this;
 		params = params || {};
 		focus = function () {
@@ -718,10 +739,14 @@
 				focusContainer = construct.container;
 			}
 
-			focusElement = focusContainer.find( '.control-focus:first' );
+			focusElement = focusContainer[0].querySelector( '.control-focus' );
 			if ( 0 === focusElement.length ) {
-				// Note that we can't use :focusable due to a jQuery UI issue. See: https://github.com/jquery/jquery-ui/pull/1583
-				focusElement = focusContainer.find( 'input, select, textarea, button, object, a[href], [tabindex]' ).filter( ':visible' ).first();
+				focusableElements = focusContainer[0].querySelecttorAll( 'input, select, textarea, button, object, a[href], [tabindex]' );
+				focusElement = focusableElements[ index ];
+				while ( ! isVisible( focusableElements[ index ] ) ) {
+					index = index + 1;
+					focusElement = focusableElements[ index ];
+				}
 			}
 			focusElement.focus();
 		};
@@ -2641,22 +2666,29 @@
 
 				// Return if it's not the tab key
 				// When navigating with prev/next focus is already handled.
-				if ( 9 !== event.keyCode ) {
+				if ( 'Tab' !== event.key ) {
 					return;
 				}
 
-				// Uses jQuery UI to get the tabbable elements.
-				tabbables = $( ':tabbable', el );
+				// Get the tabbable elements.
+				tabbables = [ ...el[0].querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]:not( [tabindex="-1"] )' ) ];
+				tabbables.forEach( function( tabbable ) {
+					var index;
+					if ( ! isVisible( tabbable ) ) {
+						index = tabbables.indexOf( tabbable );
+						tabbables.splice( index, 1 );
+					}
+				} );
 
 				// Keep focus within the overlay.
-				if ( tabbables.last()[0] === event.target && ! event.shiftKey ) {
-					tabbables.first().focus();
+				if ( tabbables[ tabbables.length - 1 ] === event.target && ! event.shiftKey ) {
+					tabbables[0].focus();
 					return false;
-				} else if ( tabbables.first()[0] === event.target && event.shiftKey ) {
-					tabbables.last().focus();
+				} else if ( tabbables[0] === event.target && event.shiftKey ) {
+					tabbables[ tabbables.length - 1 ].focus();
 					return false;
 				}
-			});
+			} );
 		}
 	});
 
@@ -5469,14 +5501,21 @@
 		 * @return {void}
 		 */
 		onTabNext: function onTabNext() {
-			var control = this, controls, controlIndex, section;
+			var control = this, controls, controlIndex, section, focusableElements,
+				index = 0;
+
 			section = api.section( control.section() );
 			controls = section.controls();
 			controlIndex = controls.indexOf( control );
 			if ( controls.length === controlIndex + 1 ) {
 				$( '#customize-footer-actions .collapse-sidebar' ).trigger( 'focus' );
 			} else {
-				controls[ controlIndex + 1 ].container.find( ':focusable:first' ).focus();
+				focusableElements = [ ...controls[ controlIndex + 1 ].container[0].querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]' ) ];
+				focusableElements[ index ].focus();
+				while ( ! isVisible( focusableElements[ index ] ) ) {
+					index = index + 1;
+					focusableElements[ index ].focus();
+				}
 			}
 		},
 
@@ -5487,14 +5526,21 @@
 		 * @return {void}
 		 */
 		onTabPrevious: function onTabPrevious() {
-			var control = this, controls, controlIndex, section;
+			var control = this, controls, controlIndex, section, focusableElements,
+				index = 0;
+
 			section = api.section( control.section() );
 			controls = section.controls();
 			controlIndex = controls.indexOf( control );
 			if ( 0 === controlIndex ) {
 				section.contentContainer.find( '.customize-section-title .customize-help-toggle, .customize-section-title .customize-section-description.open .section-description-close' ).last().focus();
 			} else {
-				controls[ controlIndex - 1 ].contentContainer.find( ':focusable:first' ).focus();
+				focusableElements = [ ...controls[ controlIndex + 1 ].contentContainer[0].querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]' ) ];
+				focusableElements[ index ].focus();
+				while ( ! isVisible( focusableElements[ index ] ) ) {
+					index = index + 1;
+					focusableElements[ index ].focus();
+				}
 			}
 		},
 

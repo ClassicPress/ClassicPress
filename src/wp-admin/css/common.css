@@ -2889,7 +2889,7 @@ div.action-links {
 	right: 0;
 	bottom: 0;
 	left: 0;
-	height: 40px; /* actual height: 40+13+13+1=67 */
+	height: 25px; /* actual height: 25+13+13+1=52 */
 	border-top: 1px solid #dcdcde;
 	background: #f6f7f7;
 }
@@ -3004,6 +3004,15 @@ div.action-links {
 }
 
 @media screen and (max-width: 771px) {
+
+	.plugin-details-modal #dialog-close-button {
+		padding: 0.1em 0.3em !important;
+	}
+
+	.plugin-details-modal #dialog-close-button::before {
+		font: normal 30px/39px dashicons !important;
+	}
+
 	#plugin-information-title.with-banner {
 		height: 100px;
 	}
@@ -3056,12 +3065,12 @@ div.action-links {
 	}
 }
 
-/* Thickbox for the Plugin details modal. */
-#TB_window.plugin-details-modal {
+/* Plugin details modal dialog. */
+.plugin-details-modal {
 	background: #fff;
 }
 
-#TB_window.plugin-details-modal.thickbox-loading:before {
+.plugin-details-modal.modal-loading:before {
 	content: "";
 	display: block;
 	width: 20px;
@@ -3079,57 +3088,28 @@ div.action-links {
 @media print,
 	(min-resolution: 120dpi) {
 
-	#TB_window.plugin-details-modal.thickbox-loading:before {
+	.plugin-details-modal.modal-loading:before {
 		background-image: url(../images/spinner-2x.gif);
 	}
 }
 
-.plugin-details-modal #TB_title {
-	float: left;
-	height: 1px;
+.plugin-details-modal #dialog-close-button {
+	position: absolute;
+	top: 0;
+	right: 0;
+	color: #000;
+	padding: 0.2em 0.3em;
+	background: #fff;
+	border: 1px solid #000;
 }
-
-.plugin-details-modal #TB_ajaxWindowTitle {
-	display: none;
-}
-
-.plugin-details-modal #TB_closeWindowButton {
-	left: auto;
-	right: -30px;
-	color: #f0f0f1;
-}
-
-.plugin-details-modal #TB_closeWindowButton:hover,
-.plugin-details-modal #TB_closeWindowButton:focus {
-	outline: none;
-	box-shadow: none;
-}
-
-.plugin-details-modal #TB_closeWindowButton:hover::after,
-.plugin-details-modal #TB_closeWindowButton:focus::after {
-	outline: 2px solid;
-	outline-offset: -4px;
-	border-radius: 4px;
-}
-
-.plugin-details-modal .tb-close-icon {
-	display: none;
-}
-
-.plugin-details-modal #TB_closeWindowButton:after {
+.plugin-details-modal #dialog-close-button::before {
 	content: "\f335";
-	font: normal 32px/29px 'dashicons';
-	speak: never;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+	font: normal 40px/49px dashicons;
 }
 
-/* move plugin install close icon to top on narrow screens */
-@media screen and (max-width: 830px) {
-	.plugin-details-modal #TB_closeWindowButton {
-		right: 0;
-		top: -30px;
-	}
+.plugin-details-modal #dialog-close-button:hover,
+.plugin-details-modal #dialog-close-button:focus {
+	outline: 2px solid;
 }
 
 /* @todo: move this. */
