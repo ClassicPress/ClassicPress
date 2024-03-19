@@ -155,7 +155,7 @@ function cp_susty_enqueue_assets() {
 		'cp-menu-resize',
 		get_template_directory_uri() . '/js/menu-resize.js',
 		null,
-		cp_susty_get_asset_version()
+		cp_susty_get_asset_version(),
 	);
 }
 add_action( 'wp_enqueue_scripts', 'cp_susty_enqueue_assets' );
@@ -192,7 +192,7 @@ if ( function_exists( 'register_sidebar' ) ) {
  * Modify Featured Image Text
  */
 function filter_featured_image_admin_text( $content, $post_id, $thumbnail_id ){
-	$help_text = '<p>' . __( '<i>Ideal size is 800 x 471 pixels.</i>', 'ClassicPress' ) . '</p>';
+	$help_text = '<p><i>' . __( 'Ideal size is 800 x 471 pixels.', 'the-classicpress-theme' ) . '</i></p>';
 	return $help_text . $content;
 }
 add_filter( 'admin_post_thumbnail_html', 'filter_featured_image_admin_text', 10, 3 );

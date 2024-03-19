@@ -20,8 +20,8 @@ get_header();
 			get_template_part( 'template-parts/content', get_post_type() );
 
 			the_post_navigation( array(
-				'next_text' => __( 'Next post: %title <span class="screen-reader-text">Continue Reading</span>' ),
-				'prev_text' => __( 'Previous post: %title <span class="screen-reader-text">Continue Reading</span>' ),
+				'next_text' => __( 'Next post: %title <span class="screen-reader-text">Continue Reading</span>', 'the-classicpress-theme' ),
+				'prev_text' => __( 'Previous post: %title <span class="screen-reader-text">Continue Reading</span>', 'the-classicpress-theme' ),
 			) );
 
 			// If comments are open or we have at least one comment, load up the comment template.
@@ -37,7 +37,7 @@ get_header();
 		<?php get_sidebar(); ?>
 
 	</div><!-- #primary -->
-	
+
 
 <?php
 get_footer();

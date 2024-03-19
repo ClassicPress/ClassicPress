@@ -19,7 +19,7 @@
 		the_content();
 
 		wp_link_pages( array(
-			'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'susty' ),
+			'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'the-classicpress-theme' ),
 			'after'  => '</div>',
 		) );
 		?>
@@ -32,7 +32,7 @@
 				sprintf(
 					wp_kses(
 						/* translators: %s: Name of current post. Only visible to screen readers */
-						__( 'Edit <span class="screen-reader-text">%s</span>', 'susty' ),
+						__( 'Edit <span class="screen-reader-text">%s</span>', 'the-classicpress-theme' ),
 						array(
 							'span' => array(
 								'class' => array(),
