@@ -29,12 +29,14 @@
 		</div>
 		<div class="footerright">
 			<?php
-			$footmenu = wp_nav_menu( array(
-				'theme_location' => 'footer-menu',
-				'depth' => 1,
-				'menu_id' => 'footmenu',
-				'menu_class' => 'nav'
-			) );
+			$footmenu = wp_nav_menu(
+				array(
+					'theme_location' => 'footer-menu',
+					'depth'          => 1,
+					'menu_id'        => 'footmenu',
+					'menu_class'     => 'nav',
+				)
+			);
 			if ( $footmenu ) {
 				echo $footmenu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}

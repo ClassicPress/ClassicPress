@@ -9,7 +9,7 @@
 	</h2>
 
 	<?php
-	if ( is_page() && is_active_sidebar( 'main-sidebar' ) ) {		
+	if ( is_page() && is_active_sidebar( 'main-sidebar' ) ) {
 		dynamic_sidebar( 'main-sidebar' );
 	} elseif ( is_active_sidebar( 'blog-sidebar' ) ) {
 		dynamic_sidebar( 'blog-sidebar' );

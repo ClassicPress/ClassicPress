@@ -19,7 +19,7 @@
 			<?php susty_wp_posted_on(); ?>
 			<?php susty_wp_posted_by(); ?>
 			<?php esc_html_e( ' | Category: ', 'the-classicpress-theme' ); ?>
-			<?php the_category(', '); ?>
+			<?php the_category( ', ' ); ?>
 		</p>
 
 		<div class="excerpt"><p><?php the_excerpt(); ?>
@@ -38,19 +38,24 @@
 						),
 						get_the_title()
 					),
-					' <span class="edit-link">', '</span>'
+					' <span class="edit-link">',
+					'</span>'
 				);
 				?>
 			<?php endif; ?>
 		</p>
 		</div>
 
-		<!--a href="<?php //the_permalink(); ?>" class="button button-purple"><?php //esc_html_e( 'Continue Reading', 'the-classicpress-theme' ); ?></a--> <?php
+		<!--a href="<?php //the_permalink(); ?>" class="button button-purple"><?php //esc_html_e( 'Continue Reading', 'the-classicpress-theme' ); ?></a--> 
+		<?php
 
-		wp_link_pages( array(
-			'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'the-classicpress-theme' ),
-			'after'  => '</div>',
-		) ); ?>
+		wp_link_pages(
+			array(
+				'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'the-classicpress-theme' ),
+				'after'  => '</div>',
+			)
+		);
+		?>
 
 	</div>	
 	

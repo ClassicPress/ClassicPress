@@ -27,7 +27,7 @@ get_header();
 			/* Start the Loop */
 			while ( have_posts() ) :
 				the_post();
-				
+
 				/*
 				 * Include the Post-Type-specific template for the content.
 				 * If you want to override this in a child theme, then include a file
@@ -39,7 +39,7 @@ get_header();
 
 			the_posts_navigation();
 
-		else:
+		else :
 
 			get_template_part( 'template-parts/content', 'none' );
 

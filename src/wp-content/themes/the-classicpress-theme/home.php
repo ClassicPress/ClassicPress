@@ -13,23 +13,27 @@ get_header();
 		<main id="main">
 
 		<?php
-		if ( have_posts() ) : ?>
+		if ( have_posts() ) :
+			?>
 		
-			<div class="blog-list"> <?php
+			<div class="blog-list"> 
+			<?php
 
 				/* Start the Loop */
-				while ( have_posts() ) :
-					the_post();
-				
-					get_template_part( 'template-parts/content-blog', get_post_type() );
+			while ( have_posts() ) :
+				the_post();
 
-				endwhile; ?>
+				get_template_part( 'template-parts/content-blog', get_post_type() );
 
-			</div> <?php
+				endwhile;
+			?>
+
+			</div> 
+			<?php
 
 			the_posts_navigation();
 
-		else:
+		else :
 
 			get_template_part( 'template-parts/content', 'none' );
 

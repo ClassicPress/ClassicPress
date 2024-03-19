@@ -22,9 +22,9 @@ remove_action( 'wp_head', 'wp_resource_hints', 2 );
 remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
 remove_action( 'wp_print_styles', 'print_emoji_styles' );
-remove_action( 'admin_print_styles', 'print_emoji_styles' );	
+remove_action( 'admin_print_styles', 'print_emoji_styles' );
 remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
-remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );	
+remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
 remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
 function kts_disable_emoji_tinymce( $plugins ) {
 	if ( is_array( $plugins ) ) {
@@ -43,7 +43,7 @@ function kts_disable_emojis_remove_dns_prefetch( $urls, $relation_type ) {
 		$emoji_svg_url_bit = 'https://s.w.org/images/core/emoji/';
 		foreach ( $urls as $key => $url ) {
 			if ( strpos( $url, $emoji_svg_url_bit ) !== false ) {
-				unset( $urls[$key] );
+				unset( $urls[ $key ] );
 			}
 		}
 	}
@@ -82,10 +82,10 @@ function kts_disable_rest_api_endpoints( $endpoints ) {
 		'kts-message',
 	);
 
-	foreach( $endpoints as $key => $object ) {
-		foreach( $endpoints_to_remove as $rem_endpoint ) { // $base_endpoint = '/wp/v2/' . $rem_endpoint;
+	foreach ( $endpoints as $key => $object ) {
+		foreach ( $endpoints_to_remove as $rem_endpoint ) { // $base_endpoint = '/wp/v2/' . $rem_endpoint;
 			if ( stripos( $key, $rem_endpoint ) !== false ) {
-				unset( $endpoints[$key] );
+				unset( $endpoints[ $key ] );
 			}
 		}
 	}
@@ -97,7 +97,7 @@ add_filter( 'rest_endpoints', 'kts_disable_rest_api_endpoints' );
 /* REMOVE <p> FROM AROUND IMAGES */
 # http://css-tricks.com/snippets/wordpress/remove-paragraph-tags-from-around-images/)
 function kts_filter_ptags_on_images( $content ) {
-	return preg_replace('/<p>\s*(<a .*>)?\s*(<img .* \/>)\s*(<\/a>)?\s*<\/p>/iU', '\1\2\3', $content);
+	return preg_replace( '/<p>\s*(<a .*>)?\s*(<img .* \/>)\s*(<\/a>)?\s*<\/p>/iU', '\1\2\3', $content );
 }
 add_filter( 'the_content', 'kts_filter_ptags_on_images' );
 add_filter( 'use_default_gallery_style', '__return_false' );
@@ -124,7 +124,7 @@ function kts_internal_pingbacks( &$links ) {
 	# Unset each internal ping
 	foreach ( $links as $l => $link ) {
 		if ( 0 === strpos( $link, get_option( 'home' ) ) ) {
-			unset( $links[$l] );
+			unset( $links[ $l ] );
 		}
 	}
 }
@@ -177,6 +177,6 @@ add_action( 'customize_register', 'kts_remove_css_section', 15 );
 function kts_disable_bar_stuff() {
 	global $wp_admin_bar;
 	$wp_admin_bar->remove_menu( 'wp-logo' );
-	$wp_admin_bar->remove_menu( 'search' ); 
+	$wp_admin_bar->remove_menu( 'search' );
 }
 add_action( 'wp_before_admin_bar_render', 'kts_disable_bar_stuff' );

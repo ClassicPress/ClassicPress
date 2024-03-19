@@ -36,7 +36,8 @@
 		<div id="inner-header">
 			<span class="logo" role="banner">
 				
-				<?php // Custom logo
+				<?php
+				// Custom logo
 				if ( function_exists( 'the_custom_logo' ) && has_custom_logo() ) {
 					the_custom_logo();
 				} else {
@@ -49,11 +50,13 @@
 			<nav id="site-navigation" class="main-navigation nav--toggle-sub nav--toggle-small" aria-label="<?php esc_attr_e( 'Main menu', 'the-classicpress-theme' ); ?>">
 
 				<?php
-				wp_nav_menu( array(
-					'theme_location' => 'main-menu',
-					'depth' => 2,
-					'menu_id' => 'primary-menu', /*keeping original id so nav css and js still works*/
-				) );
+				wp_nav_menu(
+					array(
+						'theme_location' => 'main-menu',
+						'depth'          => 2,
+						'menu_id'        => 'primary-menu', /*keeping original id so nav css and js still works*/
+					)
+				);
 				?>
 
 			</nav><!-- #site-navigation -->
@@ -70,38 +73,40 @@
 			<span id="menu-toggle-close-text" class="menu-toggle-text screen-reader-text"><?php esc_html_e( 'Close menu', 'the-classicpress-theme' ); ?></span>
 		</button>
 	</header>
-	<?php if ( is_front_page() ) {
+	<?php
+	if ( is_front_page() ) {
 		echo '</section><!-- .home-hero-container -->';
-	} ?>
+	}
+	?>
 
-	<?php if ( ! is_front_page() && ! is_single() ) {
+	<?php
+	if ( ! is_front_page() && ! is_single() ) {
 			$category = single_cat_title( '', false );
 			echo '<header id="page-title">';
-			if ( is_post_type_archive() ) {
-				echo '<h1>';
-				post_type_archive_title();
-				echo '</h1>';				
-			} elseif ( is_blog() ) {
-				echo '<h1>';
-				esc_html_e( 'News', 'the-classicpress-theme' );
-				if ( ! empty( $category ) ) {
-					esc_html_e( ': ', 'the-classicpress-theme' );
-					echo esc_html( ucwords( $category ) );
-				}
-				echo '</h1>';
-			} elseif ( is_search() ) {
-				echo '<h1>';
-				esc_html_e( 'Search Results', 'the-classicpress-theme' );
-				echo '</h1>';
-			} elseif ( is_404() ) {
-				echo '<h1>';
-				esc_html_e( 'Sorry! That page cannot be found.', 'the-classicpress-theme' );
-				echo '</h1>';
+		if ( is_post_type_archive() ) {
+			echo '<h1>';
+			post_type_archive_title();
+			echo '</h1>';
+		} elseif ( is_blog() ) {
+			echo '<h1>';
+			esc_html_e( 'News', 'the-classicpress-theme' );
+			if ( ! empty( $category ) ) {
+				esc_html_e( ': ', 'the-classicpress-theme' );
+				echo esc_html( ucwords( $category ) );
 			}
-			else {
-				the_title( '<h1>', '</h1>' );
-			}
-			echo '</header><!-- .entry-header -->';
+			echo '</h1>';
+		} elseif ( is_search() ) {
+			echo '<h1>';
+			esc_html_e( 'Search Results', 'the-classicpress-theme' );
+			echo '</h1>';
+		} elseif ( is_404() ) {
+			echo '<h1>';
+			esc_html_e( 'Sorry! That page cannot be found.', 'the-classicpress-theme' );
+			echo '</h1>';
+		} else {
+			the_title( '<h1>', '</h1>' );
 		}
+			echo '</header><!-- .entry-header -->';
+	}
 	?>
 	<div id="content" role="main">

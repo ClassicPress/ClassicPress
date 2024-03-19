@@ -43,16 +43,24 @@ if ( ! function_exists( 'susty_setup' ) ) :
 		add_theme_support( 'post-thumbnails' );
 
 		// This theme uses wp_nav_menu() in two locations.
-		register_nav_menus( array(
-			'main-menu' => esc_html__( 'MainMenu', 'the-classicpress-theme' ),
-			'footer-menu' => esc_html__( 'FooterMenu', 'the-classicpress-theme' ),
-		) );
+		register_nav_menus(
+			array(
+				'main-menu'   => esc_html__( 'MainMenu', 'the-classicpress-theme' ),
+				'footer-menu' => esc_html__( 'FooterMenu', 'the-classicpress-theme' ),
+			)
+		);
 
 		// Set up the WordPress core custom background feature.
-		add_theme_support( 'custom-background', apply_filters( 'susty_custom_background_args', array(
-			'default-color' => 'fffefc',
-			'default-image' => '',
-		) ) );
+		add_theme_support(
+			'custom-background',
+			apply_filters(
+				'susty_custom_background_args',
+				array(
+					'default-color' => 'fffefc',
+					'default-image' => '',
+				)
+			)
+		);
 
 		// Add theme support for selective refresh for widgets.
 		add_theme_support( 'customize-selective-refresh-widgets' );
@@ -62,12 +70,15 @@ if ( ! function_exists( 'susty_setup' ) ) :
 		 *
 		 * @link https://codex.wordpress.org/Theme_Logo
 		 */
-		add_theme_support( 'custom-logo', array(
-			'height'  => 50,
-			'width'   => 250,
-			'flex-width'  => true,
-			'flex-height' => true,
-		) );
+		add_theme_support(
+			'custom-logo',
+			array(
+				'height'      => 50,
+				'width'       => 250,
+				'flex-width'  => true,
+				'flex-height' => true,
+			)
+		);
 	}
 endif;
 add_action( 'after_setup_theme', 'susty_setup' );
@@ -124,12 +135,15 @@ function susty_register_query_var( $vars ) {
 }
 add_filter( 'query_vars', 'susty_register_query_var' );
 
-add_filter( 'template_include', function( $path ) {
-	if ( get_query_var( 'menu' ) ) {
-		return get_template_directory() . '/menu.php';
+add_filter(
+	'template_include',
+	function ( $path ) {
+		if ( get_query_var( 'menu' ) ) {
+			return get_template_directory() . '/menu.php';
+		}
+		return $path;
 	}
-	return $path;
-} );
+);
 
 // Remove dashicons in frontend for unauthenticated users
 function susty_dequeue_dashicons() {
@@ -170,28 +184,32 @@ add_filter( 'mce_css', 'cp_tiny_css' );
 
 /* Add widgets to blog sidebar */
 if ( function_exists( 'register_sidebar' ) ) {
-	register_sidebar( array(
-		'id' => 'blog-sidebar',
-		'name' => 'Blog Sidebar',
-		'before_widget' => '<div class="widget-container">',
-		'after_widget' => '</div>',
-		'before_title' => '<h3>',
-		'after_title' => '</h3>',
-	) );
-	register_sidebar( array(
-		'id' => 'main-sidebar',
-		'name' => 'Main Sidebar',
-		'before_widget' => '<div class="widget-container">',
-		'after_widget' => '</div>',
-		'before_title' => '<h3>',
-		'after_title' => '</h3>',
-	) );
+	register_sidebar(
+		array(
+			'id'            => 'blog-sidebar',
+			'name'          => 'Blog Sidebar',
+			'before_widget' => '<div class="widget-container">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h3>',
+			'after_title'   => '</h3>',
+		)
+	);
+	register_sidebar(
+		array(
+			'id'            => 'main-sidebar',
+			'name'          => 'Main Sidebar',
+			'before_widget' => '<div class="widget-container">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h3>',
+			'after_title'   => '</h3>',
+		)
+	);
 }
 
 /**
  * Modify Featured Image Text
  */
-function filter_featured_image_admin_text( $content, $post_id, $thumbnail_id ){
+function filter_featured_image_admin_text( $content, $post_id, $thumbnail_id ) {
 	$help_text = '<p><i>' . __( 'Ideal size is 800 x 471 pixels.', 'the-classicpress-theme' ) . '</i></p>';
 	return $help_text . $content;
 }
@@ -211,8 +229,8 @@ add_post_type_support( 'page', 'excerpt' );
 /**
  * Simplify blog detection
  */
-function is_blog () {
-	return ( is_archive() || is_author() || is_category() || is_home() || is_tag()) && 'post' == get_post_type();
+function is_blog() {
+	return ( is_archive() || is_author() || is_category() || is_home() || is_tag() ) && 'post' == get_post_type();
 }
 
 

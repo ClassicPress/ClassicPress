@@ -19,7 +19,7 @@
 			susty_wp_posted_on();
 			susty_wp_posted_by();
 			esc_html_e( ' | Category: ', 'the-classicpress-theme' );
-			the_category(', ');
+			the_category( ', ' );
 			?>
 		</div><!-- .entry-meta -->
 		<?php endif; ?>
