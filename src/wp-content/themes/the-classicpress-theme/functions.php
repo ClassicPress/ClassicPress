@@ -258,28 +258,3 @@ function cp_add_page_slug_body_class( $classes ) {
 	return $classes;
 }
 add_filter( 'body_class', 'cp_add_page_slug_body_class' );
-
-
-/**
- * Sendfox form
- */
-function custom_sendfox_form_shortcode() {
-	ob_start();
-	?>
-
-	<div class="newsletter">
-		<form method="post" action="https://sendfox.com/form/1wgr00/3qrqnv" class="sendfox-form" id="3qrqnv" data-async="true" data-recaptcha="false">
-			<div><label for="sendfox_form_email">Your Email</label><input type="email" id="sendfox_form_email" placeholder="john@email.com" name="email" required></div>
-			<div>
-				<!-- no botz please -->
-				<div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="a_password" tabindex="-1" value="" autocomplete="off"></div>
-				<button type="submit">Subscribe</button>
-			</div>
-		</form>
-	</div>
-	<script src="https://sendfox.com/js/form.js"></script>
-
-	<?php
-	return ob_get_clean();
-}
-add_shortcode( 'sendfox-form', 'custom_sendfox_form_shortcode' );
