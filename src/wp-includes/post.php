@@ -3199,6 +3199,7 @@ function wp_delete_post( $postid = 0, $force_delete = false ) {
 	 * the post type slug.
 	 *
 	 * @since 6.6.0
+	 * @since CP-2.1.0
 	 *
 	 * @param int     $postid Post ID.
 	 * @param WP_Post $post   Post object.
@@ -3228,6 +3229,7 @@ function wp_delete_post( $postid = 0, $force_delete = false ) {
 	 * the post type slug.
 	 *
 	 * @since 6.6.0
+	 * @since CP-2.1.0
 	 *
 	 * @param int     $postid Post ID.
 	 * @param WP_Post $post   Post object.
