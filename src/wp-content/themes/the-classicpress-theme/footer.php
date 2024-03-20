@@ -47,10 +47,10 @@
 <footer id="legal">
 	<div class="cplegal">
 		<div class="cpcopyright">
-			<p>© 2018-<?php echo gmdate( 'Y' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> ClassicPress. All Rights Reserved.</p>
+			<p>© 2018-<?php echo esc_attr( gmdate( 'Y' ) ); ?> ClassicPress. All Rights Reserved.</p>
 		</div>
 		<div class="cppolicy">
-			<p><a href="<?php echo esc_url( home_url() ); ?>">Privacy Policy</a></p>
+			<p><a href="<?php echo esc_url( get_privacy_policy_url() ); ?>">Privacy Policy</a></p>
 		</div>
 	</div>
 </footer>
