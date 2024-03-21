@@ -1,0 +1,108 @@
+/* CSS Document */
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Source Sans Pro Regular'), 
+	local('SourceSansPro-Regular'),
+    url('fonts/source-sans-pro-v12-latin-regular.woff2') format('woff2'), 
+    url('fonts/source-sans-pro-v12-latin-regular.woff') format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Source Sans Pro SemiBold'), 
+	local('SourceSansPro-SemiBold'),
+    url('fonts/source-sans-pro-v12-latin-600.woff2') format('woff2'),
+    url('fonts/source-sans-pro-v12-latin-600.woff') format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Source Sans Pro Italic'), 
+	local('SourceSansPro-Italic'),
+    url('fonts/source-sans-pro-v12-latin-italic.woff2') format('woff2'),
+    url('fonts/source-sans-pro-v12-latin-italic.woff') format('woff'); 
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: italic;
+  font-weight: 600;
+  src: local('Source Sans Pro SemiBold Italic'),
+	local('SourceSansPro-SemiBoldItalic'),
+    url('fonts/source-sans-pro-v12-latin-600italic.woff2') format('woff2'),
+    url('fonts/source-sans-pro-v12-latin-600italic.woff') format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'),
+    url('fonts/source-sans-pro-v12-latin-700.woff2') format('woff2'),
+    url('fonts/source-sans-pro-v12-latin-700.woff') format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Source Sans Pro Bold Italic'), 
+	local('SourceSansPro-BoldItalic'),
+    url('fonts/source-sans-pro-v12-latin-700italic.woff2') format('woff2'),
+    url('fonts/source-sans-pro-v12-latin-700italic.woff') format('woff');
+}
+
+b, strong { font-weight:600; }
+small,
+.small { font-size:80%!important; }
+.code { padding:.5em .75em .75em 1em; width:100%; background:#f3f3f3; display:inline-block; font-family:Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace; font-size:15px; font-size:0.9375rem; border-radius:6px; margin-bottom:1.4em; } /*block: paragraph or list item*/
+code { width:100%; background:#f3f3f3; font-family:Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace; font-size:15px; font-size:0.9375rem; padding:0 .2em; border-radius:3px; } /*inline*/
+
+h1, h2, h3,h4 {
+	position: relative;
+	line-height: 1.25;
+	font-family:"Source Sans Pro";
+	font-weight: 600;
+}
+h2 { font-size:1.8em; color:#057f99; }
+h2.small,
+h2 .small { font-size:1.5em!important; }
+h3 { font-size:1.5em; color:#4b2063; }
+h3.small,
+h3 .small { font-size:1.3em!important; }
+h4 { font-size:1.3em; color:#057f99; }
+h4.small,
+h4 .small { font-size:1.05em!important; }
+p, li {
+	font-family:"Source Sans Pro";
+	font-weight: 400;
+	color: #040402;
+	line-height: 1.75;
+	font-size:17px;
+}
+li { line-height: 1.5; }
+
+a, 
+a:visited {
+	color: #057f99;
+	text-decoration:underline;
+	font-weight:600;
+	background: transparent;
+	border: 0!important;
+}
+a:hover, 
+a:active { color:#040402; }
+
+h2 a,
+h3 a,
+h4 a { text-decoration:none; font-weight:600; }
+
+a[target='_blank']::after { content:'\2750'; font-size:70%; position:relative; top:-4px; margin-left:1px; color:#07989e; border-bottom: 7px solid #fff!important; text-decoration:none; display: inline-block; }
+
+.column-container { grid-template-columns: repeat(auto-fit, 47.25%); display: grid; justify-content: space-between; align-content: flex-start;}
+.column-container h4 { padding-top:0; }
+
+.code { padding:.5em .75em .75em 1em; width:99%; background:#f3f3f3; display:inline-block; font-family:Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace; font-size:15px; font-size:0.9375rem; border-radius:6px; margin-bottom:1.4em; } /*block: paragraph or list item*/
+code { width:100%; background:#f3f3f3; font-family:Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace; font-size:15px; font-size:0.9375rem; padding:0 .2em; border-radius:3px; } /*inline*/
+pre { border-radius:6px; background:#f3f3f3; }
