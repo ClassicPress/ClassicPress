@@ -2824,9 +2824,9 @@
 
 				case 'install-plugin':
 				case 'update-plugin':
-					/* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-					window.tb_remove();
-					/* jscs:enable */
+					document.querySelector( '.plugin-details-modal' ).close();
+					document.querySelector( 'iframe' ).remove();
+					document.getElementById( 'dialog-close-button' ).remove();
 
 					message.data = wp.updates._addCallbacks( message.data, message.action );
 
