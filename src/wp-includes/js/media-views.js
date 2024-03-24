@@ -4418,7 +4418,7 @@
 
 			// Skip the file input added by Plupload.
 			for ( var i = 0, n = tabbables.length; i < n; i++ ) {
-				if ( tabbables[i].tagName === 'input' && tabbables[i].className.includes( 'moxie-shim' ) && tababbles[i].type === 'file' ) {
+				if ( tabbables[i].tagName === 'input' && tabbables[i].className.includes( 'moxie-shim' ) && tabbables[i].type === 'file' ) {
 					tabbables.splice( i, 1 );
 				}
 			}
