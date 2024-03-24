@@ -258,7 +258,7 @@
 		 * @return {void}
 		 */
 		selectMedia: function selectMedia() {
-			var control = this, selection, mediaFrame, mediaFrameProps;
+			var control = this, selection, mediaFrame, mediaFrameProps, focusableElements, index = 0;
 			selection = new wp.media.model.Selection( control.selectedAttachments.models, {
 				multiple: true
 			});
@@ -313,7 +313,13 @@
 			 * Make sure focus is set inside of modal so that hitting Esc will close
 			 * the modal and not inadvertently cause the widget to collapse in the customizer.
 			 */
-			mediaFrame.$el.find( ':focusable:first' ).focus();
+			focusableElements = [ ...mediaFrame.$el[0].querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]' ) ];	if ( focusableElements.length ) {
+				focusableElements[ index ].focus();
+				while ( ! isVisible( focusableElements[ index ] ) ) {
+					index = index + 1;
+					focusableElements[ index ].focus();
+				}
+			}
 		},
 
 		/**
