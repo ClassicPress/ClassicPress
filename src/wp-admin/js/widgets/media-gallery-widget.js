@@ -345,3 +345,10 @@
 	component.modelConstructors.media_gallery = GalleryWidgetModel;
 
 })( wp.mediaWidgets );
+
+/*
+ * Helper function copied from jQuery
+ */
+function isVisible( elem ) {
+	return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+}
