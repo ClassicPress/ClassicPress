@@ -4415,12 +4415,12 @@
 		 */
 		getTabbables: function() {
 			var newTabbables = [],
-			    tabbables = [ ...this.$el[0].querySelectorAll( 'a[href], button, textarea, select, li[tabindex]' ) ];
+				tabbables = [ ...this.$el[0].querySelectorAll( 'a[href], button, textarea, select, li[tabindex]' ) ];
 
 			tabbables.forEach( function( tabbable ) {
 				if ( tabbable.tagName === 'input' && tabbable.parentNode.className.includes( 'moxie-shim' ) && tabbable.type === 'file' ) {
 					return; // Skip the file input added by Plupload.
-				} else if ( ! isVisible( tabbable ) || tabbable.disabled ) {
+				} else if ( ! this.isVisible( tabbable ) || tabbable.disabled ) {
 					return;
 				}
 				newTabbables.push( tabbable );
@@ -4722,7 +4722,20 @@
 				tab.removeAttribute( 'tabindex' );
 				tab.setAttribute( 'aria-selected', 'true' );
 			} );
-	 	}
+		},
+
+		/**
+		 * Whether an element is visible, copied from jQuery
+		 *
+		 * @since CP-2.1.0
+		 *
+		 * @param {Object} element The DOM element that should be checked for visibility.
+		 *
+		 * @return {boolean}
+		 */
+		isVisible: function( element ) {
+			return !!( element.offsetWidth || element.offsetHeight || element.getClientRects().length );
+		}
 	});
 
 	return FocusManager;
@@ -10311,10 +10324,3 @@
 	media.view.Heading = heading();
 
 })();
-
-/*
- * Helper function copied from jQuery
- */
-function isVisible( elem ) {
-	return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
-}

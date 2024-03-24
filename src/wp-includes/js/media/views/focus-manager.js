@@ -59,15 +59,18 @@ var FocusManager = wp.media.View.extend(/** @lends wp.media.view.FocusManager.pr
 	 * @return {Array} A JavaScript array of tabbable elements.
 	 */
 	getTabbables: function() {
-		var tabbables = [ ...document.querySelector( '.media-modal' ).querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]' ) ];
+		var newTabbables = [],
+			tabbables = [ ...this.$el[0].querySelectorAll( 'a[href], button, textarea, select, li[tabindex]' ) ];
 
-		// Skip the file input added by Plupload.
-		for ( var i = 0, n = tabbables.length; i < n; i++ ) {
-			if ( tabbables[i].tagName === 'input' && tabbables[i].className.includes( 'moxie-shim' ) && tabbables[i].type === 'file' ) {
-				tabbables.splice( i, 1 );
+		tabbables.forEach( function( tabbable ) {
+			if ( tabbable.tagName === 'input' && tabbable.parentNode.className.includes( 'moxie-shim' ) && tabbable.type === 'file' ) {
+				return; // Skip the file input added by Plupload.
+			} else if ( ! this.isVisible( tabbable ) || tabbable.disabled ) {
+				return;
 			}
-		}
-		return tabbables;
+			newTabbables.push( tabbable );
+		} );
+		return newTabbables;
 	},
 
 	/**
@@ -364,7 +367,20 @@ var FocusManager = wp.media.View.extend(/** @lends wp.media.view.FocusManager.pr
 			tab.removeAttribute( 'tabindex' );
 			tab.setAttribute( 'aria-selected', 'true' );
 		} );
- 	}
+	},
+
+	/**
+	 * Whether an element is visible, copied from jQuery
+	 *
+	 * @since CP-2.1.0
+	 *
+	 * @param {Object} element The DOM element that should be checked for visibility.
+	 *
+	 * @return {boolean}
+	 */
+	isVisible: function( element ) {
+		return !!( element.offsetWidth || element.offsetHeight || element.getClientRects().length );
+	}
 });
 
 return FocusManager;
