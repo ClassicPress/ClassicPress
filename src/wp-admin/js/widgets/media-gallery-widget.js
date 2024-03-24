@@ -189,6 +189,19 @@
 		},
 
 		/**
+		 * Whether an element is visible, copied from jQuery
+		 *
+		 * @since CP-2.1.0
+		 *
+		 * @param {Object} element The DOM element that should be checked for visibility.
+		 *
+		 * @return {boolean}
+		 */
+		isVisible: function( element ) {
+			return !!( element.offsetWidth || element.offsetHeight || element.getClientRects().length );
+		},
+
+		/**
 		 * Open the media select frame to edit images.
 		 *
 		 * @since 4.9.0
@@ -315,7 +328,7 @@
 			 */
 			focusableElements = [ ...mediaFrame.$el[0].querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]' ) ];	if ( focusableElements.length ) {
 				focusableElements[ index ].focus();
-				while ( ! isVisible( focusableElements[ index ] ) ) {
+				while ( ! this.isVisible( focusableElements[ index ] ) ) {
 					index = index + 1;
 					focusableElements[ index ].focus();
 				}
@@ -345,10 +358,3 @@
 	component.modelConstructors.media_gallery = GalleryWidgetModel;
 
 })( wp.mediaWidgets );
-
-/*
- * Helper function copied from jQuery
- */
-function isVisible( elem ) {
-	return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
-}
