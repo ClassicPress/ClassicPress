@@ -4414,15 +4414,18 @@
 		 * @return {Array} A JavaScript array of tabbable elements.
 		 */
 		getTabbables: function() {
-			var tabbables = [ ...this.$el[0].querySelector( '.media-modal' ).querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]:not( [tabindex="-1"] )' ) ];
+			var newTabbables = [],
+			    tabbables = [ ...this.$el[0].querySelectorAll( 'a[href], button, textarea, select, li[tabindex]' ) ];
 
-			// Skip the file input added by Plupload.
-			for ( var i = 0, n = tabbables.length; i < n; i++ ) {
-				if ( tabbables[i].tagName === 'input' && tabbables[i].className.includes( 'moxie-shim' ) && tabbables[i].type === 'file' ) {
-					tabbables.splice( i, 1 );
+			tabbables.forEach( function( tabbable ) {
+				if ( tabbable.tagName === 'input' && tabbable.parentNode.className.includes( 'moxie-shim' ) && tabbable.type === 'file' ) {
+					return; // Skip the file input added by Plupload.
+				} else if ( ! isVisible( tabbable ) || tabbable.disabled ) {
+					return;
 				}
-			}
-			return tabbables;
+				newTabbables.push( tabbable );
+			} );
+			return newTabbables;
 		},
 
 		/**
@@ -10308,3 +10311,10 @@
 	media.view.Heading = heading();
 
 })();
+
+/*
+ * Helper function copied from jQuery
+ */
+function isVisible( elem ) {
+	return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+}
