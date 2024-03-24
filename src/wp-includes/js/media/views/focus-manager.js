@@ -54,13 +54,20 @@ var FocusManager = wp.media.View.extend(/** @lends wp.media.view.FocusManager.pr
 	/**
 	 * Gets all the tabbable elements.
 	 *
-	 * @since 5.3.0
+	 * @since CP-2.1.0
 	 *
-	 * @return {Object} A jQuery collection of tabbable elements.
+	 * @return {Array} A JavaScript array of tabbable elements.
 	 */
 	getTabbables: function() {
+		var tabbables = [ ...document.querySelector( '.media-modal' ).querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]' ) ];
+
 		// Skip the file input added by Plupload.
-		return this.$( ':tabbable' ).not( '.moxie-shim input[type="file"]' );
+		for ( var i = 0, n = tabbables.length; i < n; i++ ) {
+			if ( tabbables[i].tagName === 'input' && tabbables[i].className.includes( 'moxie-shim' ) && tabbables[i].type === 'file' ) {
+				tabbables.splice( i, 1 );
+			}
+		}
+		return tabbables;
 	},
 
 	/**
@@ -71,15 +78,15 @@ var FocusManager = wp.media.View.extend(/** @lends wp.media.view.FocusManager.pr
 	 * @return {void}
 	 */
 	focus: function() {
-		this.$( '.media-modal' ).trigger( 'focus' );
+		document.querySelector( '.media-modal' ).focus();
 	},
 
 	/**
 	 * Constrains navigation with the Tab key within the media view element.
 	 *
-	 * @since 4.0.0
+	 * @since CP-2.1.0
 	 *
-	 * @param {Object} event A keydown jQuery event.
+	 * @param {Object} event A keydown JavaScript event.
 	 *
 	 * @return {void}
 	 */
@@ -87,18 +94,18 @@ var FocusManager = wp.media.View.extend(/** @lends wp.media.view.FocusManager.pr
 		var tabbables;
 
 		// Look for the tab key.
-		if ( 9 !== event.keyCode ) {
+		if ( 'Tab' !== event.key ) {
 			return;
 		}
 
 		tabbables = this.getTabbables();
 
 		// Keep tab focus within media modal while it's open.
-		if ( tabbables.last()[0] === event.target && ! event.shiftKey ) {
-			tabbables.first().focus();
+		if ( tabbables.at(-1) === event.target && ! event.shiftKey ) {
+			tabbables[0].focus();
 			return false;
-		} else if ( tabbables.first()[0] === event.target && event.shiftKey ) {
-			tabbables.last().focus();
+		} else if ( tabbables[0] === event.target && event.shiftKey ) {
+			tabbables.at(-1).focus();
 			return false;
 		}
 	},
