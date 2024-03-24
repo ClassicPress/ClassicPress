@@ -4414,7 +4414,7 @@
 		 * @return {Array} A JavaScript array of tabbable elements.
 		 */
 		getTabbables: function() {
-			var tabbables = [ ...document.querySelector( '.media-modal' ).querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]' ) ];
+			var tabbables = [ ...this.$el[0].querySelector( '.media-modal' ).querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]' ) ];
 
 			// Skip the file input added by Plupload.
 			for ( var i = 0, n = tabbables.length; i < n; i++ ) {
