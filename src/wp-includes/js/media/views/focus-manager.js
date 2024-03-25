@@ -106,11 +106,11 @@ var FocusManager = wp.media.View.extend(/** @lends wp.media.view.FocusManager.pr
 
 		// Keep tab focus within media modal while it's open.
 		if ( tabbables.at(-1) === event.target && ! event.shiftKey ) {
+			event.preventDefault();
 			tabbables[0].focus();
-			return false;
 		} else if ( tabbables[0] === event.target && event.shiftKey ) {
+			event.preventDefault();
 			tabbables.at(-1).focus();
-			return false;
 		}
 	},
 
