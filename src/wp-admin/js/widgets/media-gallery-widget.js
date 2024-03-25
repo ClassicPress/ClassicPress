@@ -328,7 +328,7 @@
 			 */
 			focusableElements = [ ...mediaFrame.$el[0].querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]' ) ];	if ( focusableElements.length ) {
 				focusableElements[ index ].focus();
-				while ( ! this.isVisible( focusableElements[ index ] ) ) {
+				while ( ! control.isVisible( focusableElements[ index ] ) ) {
 					index = index + 1;
 					focusableElements[ index ].focus();
 				}
