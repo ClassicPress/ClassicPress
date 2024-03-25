@@ -4414,13 +4414,14 @@
 		 * @return {Array} A JavaScript array of tabbable elements.
 		 */
 		getTabbables: function() {
-			var newTabbables = [],
+			var that = this,
+				newTabbables = [],
 				tabbables = [ ...this.$el[0].querySelectorAll( 'a[href], button, textarea, select, li[tabindex]' ) ];
 
 			tabbables.forEach( function( tabbable ) {
 				if ( tabbable.tagName === 'input' && tabbable.parentNode.className.includes( 'moxie-shim' ) && tabbable.type === 'file' ) {
 					return; // Skip the file input added by Plupload.
-				} else if ( ! this.isVisible( tabbable ) || tabbable.disabled ) {
+				} else if ( ! that.isVisible( tabbable ) || tabbable.disabled ) {
 					return;
 				}
 				newTabbables.push( tabbable );
