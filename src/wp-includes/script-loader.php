@@ -1043,7 +1043,7 @@ function wp_default_scripts( $scripts ) {
 
 	$scripts->add( 'word-count', "/wp-admin/js/word-count$suffix.js", array(), false, 1 );
 
-	$scripts->add( 'media-upload', "/wp-admin/js/media-upload$suffix.js", array( 'thickbox', 'shortcode' ), false, 1 );
+	$scripts->add( 'media-upload', "/wp-admin/js/media-upload$suffix.js", array( 'shortcode' ), false, 1 );
 
 	$scripts->add( 'hoverIntent', "/wp-includes/js/hoverIntent$suffix.js", array( 'jquery' ), '1.10.2', 1 );
 
@@ -1259,7 +1259,7 @@ function wp_default_scripts( $scripts ) {
 
 		$scripts->add( 'farbtastic', '/wp-admin/js/farbtastic.js', array( 'jquery' ), '1.2' );
 
-		$scripts->add( 'iris', '/wp-admin/js/iris.min.js', array( 'jquery-ui-widget' ), '1.1.1', 1 );
+		$scripts->add( 'iris', "/wp-admin/js/iris$suffix.js", array( 'jquery-ui-widget' ), '1.1.1', 1 );
 		did_action( 'init' ) && $scripts->localize(
 			'iris',
 			'IRIS',
