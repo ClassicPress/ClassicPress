@@ -1503,63 +1503,6 @@ function get_attachment_fields_to_edit( $post, $errors = null ) {
 }
 
 /**
- * Retrieves HTML for media items of post gallery.
- *
- * The HTML markup retrieved will be created for the progress of SWF Upload
- * component. Will also create link for showing and hiding the form to modify
- * the image attachment.
- *
- * @since 2.5.0
- *
- * @global WP_Query $wp_the_query WordPress Query object.
- *
- * @param int   $post_id Post ID.
- * @param array $errors  Errors for attachment, if any.
- * @return string HTML content for media items of post gallery.
- */
-function get_media_items( $post_id, $errors ) {
-	$attachments = array();
-
-	if ( $post_id ) {
-		$post = get_post( $post_id );
-
-		if ( $post && 'attachment' === $post->post_type ) {
-			$attachments = array( $post->ID => $post );
-		} else {
-			$attachments = get_children(
-				array(
-					'post_parent' => $post_id,
-					'post_type'   => 'attachment',
-					'orderby'     => 'menu_order ASC, ID',
-					'order'       => 'DESC',
-				)
-			);
-		}
-	} else {
-		if ( is_array( $GLOBALS['wp_the_query']->posts ) ) {
-			foreach ( $GLOBALS['wp_the_query']->posts as $attachment ) {
-				$attachments[ $attachment->ID ] = $attachment;
-			}
-		}
-	}
-
-	$output = '';
-	foreach ( (array) $attachments as $id => $attachment ) {
-		if ( 'trash' === $attachment->post_status ) {
-			continue;
-		}
-
-		$item = get_media_item( $id, array( 'errors' => isset( $errors[ $id ] ) ? $errors[ $id ] : null ) );
-
-		if ( $item ) {
-			$output .= "\n<div id='media-item-$id' class='media-item child-of-$attachment->post_parent preloaded'><div class='progress hidden'><div class='bar'></div></div><div id='media-upload-error-$id' class='hidden'></div><div class='filename hidden'></div>$item\n</div>";
-		}
-	}
-
-	return $output;
-}
-
-/**
  * Retrieves HTML form for modifying the image attachment.
  *
  * @since 2.5.0
@@ -2358,7 +2301,6 @@ function media_upload_type_form( $type = 'file', $errors = null, $id = null ) {
 	if ( $id ) {
 		if ( ! is_wp_error( $id ) ) {
 			add_filter( 'attachment_fields_to_edit', 'media_post_single_attachment_fields_to_edit', 10, 2 );
-			echo get_media_items( $id, $errors );
 		} else {
 			echo '<div id="media-upload-error">' . esc_html( $id->get_error_message() ) . '</div></div>';
 			exit;
@@ -2581,7 +2523,6 @@ function media_upload_gallery_form( $errors ) {
 	</table>
 	<div id="media-items">
 		<?php add_filter( 'attachment_fields_to_edit', 'media_post_single_attachment_fields_to_edit', 10, 2 ); ?>
-		<?php echo get_media_items( $post_id, $errors ); ?>
 	</div>
 
 	<p class="ml-submit">
@@ -2891,7 +2832,6 @@ function media_upload_library_form( $errors ) {
 
 	<div id="media-items">
 		<?php add_filter( 'attachment_fields_to_edit', 'media_post_single_attachment_fields_to_edit', 10, 2 ); ?>
-		<?php echo get_media_items( null, $errors ); ?>
 	</div>
 	<p class="ml-submit">
 		<?php submit_button( __( 'Save all changes' ), 'savebutton', 'save', false ); ?>
