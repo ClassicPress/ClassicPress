@@ -740,8 +740,8 @@
 			}
 
 			focusElement = focusContainer[0].querySelector( '.control-focus' );
-			if ( 0 === focusElement.length ) {
-				focusableElements = focusContainer[0].querySelecttorAll( 'input, select, textarea, button, object, a[href], [tabindex]' );
+			if ( focusElement === null ) {
+				focusableElements = focusContainer[0].querySelectorAll( 'input, select, textarea, button, object, a[href], [tabindex]' );
 				focusElement = focusableElements[ index ];
 				while ( ! isVisible( focusableElements[ index ] ) ) {
 					index = index + 1;
