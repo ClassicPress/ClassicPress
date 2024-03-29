@@ -1152,7 +1152,7 @@ function wp_user_settings() {
 	}
 
 	// The cookie is not set in the current browser or the saved value is newer.
-	$cookie_options = array (
+	$cookie_options = array(
 		'expires' => time() + YEAR_IN_SECONDS,
 		'path' => SITECOOKIEPATH,
 		'domain' => '',
