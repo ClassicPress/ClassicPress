@@ -55,6 +55,15 @@ wp.textWidgets = ( function( $ ) {
 			control.$el.html( wp.template( 'widget-text-control-fields' ) );
 
 			control.customHtmlWidgetPointer = control.$el.find( '.wp-pointer.custom-html-widget-pointer' );
+			if ( control.customHtmlWidgetPointer.length ) {
+				control.customHtmlWidgetPointer[0].querySelector( '.close' ).addEventListener( 'click', function( event ) {
+					event.preventDefault();
+					control.customHtmlWidgetPointer[0].style.display = 'none';
+					document.getElementById( control.fields.text.id + '-html' ).focus();
+					control.dismissPointers( [ 'text_widget_custom_html' ] );
+				});
+			}
+
 			control.pasteHtmlPointer = control.$el.find( '.wp-pointer.paste-html-pointer' );
 			if ( control.pasteHtmlPointer.length ) {
 				control.pasteHtmlPointer[0].querySelector( '.close' ).addEventListener( 'click', function( event ) {
@@ -429,11 +438,14 @@ wp.textWidgets = ( function( $ ) {
 		 * This ensures that the textarea is visible and an iframe can be embedded
 		 * with TinyMCE being able to set contenteditable on it.
 		 */
-		if ( ! widgetContainer.querySelector( 'details' ).hasAttribute( 'open' ) ) {
-			setTimeout( renderWhenAnimationDone, animatedCheckDelay );
-		} else {
-			widgetControl.initializeEditor();
-		}
+		function renderWhenAnimationDone() {
+			if ( ! widgetContainer.querySelector( 'details' ).hasAttribute( 'open' ) ) {
+				setTimeout( renderWhenAnimationDone, animatedCheckDelay );
+			} else {
+				widgetControl.initializeEditor();
+			}
+		};
+		renderWhenAnimationDone();
 	};
 
 	/**
