@@ -429,14 +429,11 @@ wp.textWidgets = ( function( $ ) {
 		 * This ensures that the textarea is visible and an iframe can be embedded
 		 * with TinyMCE being able to set contenteditable on it.
 		 */
-		function renderWhenAnimationDone() {
-			if ( ! widgetContainer.querySelector( 'details' ).hasAttribute( 'open' ) ) {
-				setTimeout( renderWhenAnimationDone, animatedCheckDelay );
-			} else {
-				widgetControl.initializeEditor();
-			}
+		if ( ! widgetContainer.querySelector( 'details' ).hasAttribute( 'open' ) ) {
+			setTimeout( renderWhenAnimationDone, animatedCheckDelay );
+		} else {
+			widgetControl.initializeEditor();
 		}
-		renderWhenAnimationDone();
 	};
 
 	/**
