@@ -444,7 +444,7 @@ wp.textWidgets = ( function( $ ) {
 			} else {
 				widgetControl.initializeEditor();
 			}
-		};
+		}
 		renderWhenAnimationDone();
 	};
 
