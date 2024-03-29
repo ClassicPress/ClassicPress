@@ -381,7 +381,7 @@ wp.textWidgets = ( function( $ ) {
 	 * @return {void}
 	 */
 	component.handleWidgetAdded = function handleWidgetAdded( event ) {
-		var idBase, widgetControl, widgetId, renderWhenAnimationDone, fieldContainer, syncContainer,
+		var idBase, widgetControl, widgetId, fieldContainer, syncContainer,
 			widgetContainer = event.detail.widget,
 			animatedCheckDelay = 200;
 
