@@ -406,7 +406,7 @@ wp.textWidgets = ( function( $ ) {
 		}
 
 		// Bypass using TinyMCE when widget is in legacy mode.
-		if ( ! widgetContainer.querySelector( '.visual' ) ) {// .value
+		if ( ! widgetContainer.querySelector( '.visual' ) ) {
 			return;
 		}
 
