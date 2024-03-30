@@ -852,7 +852,7 @@ function wp_default_scripts( $scripts ) {
 
 	$scripts->add( 'imgareaselect', "/wp-includes/js/imgareaselect/jquery.imgareaselect$suffix.js", array( 'jquery' ), false, 1 );
 
-	$scripts->add( 'mediaelement', "/wp-includes/js/mediaelement/mediaelement-and-player$suffix.js", array( 'mediaelement-aux' ), '7.0.3', 1 );
+	$scripts->add( 'mediaelement', "/wp-includes/js/mediaelement/mediaelement-and-player$suffix.js", array(), '7.0.3', 1 );
 
 	did_action( 'init' ) && $scripts->add_inline_script(
 		'mediaelement-core',
