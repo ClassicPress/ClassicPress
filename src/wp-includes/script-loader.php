@@ -953,9 +953,12 @@ function wp_default_scripts( $scripts ) {
 	);
 
 	/*
-	 * Added for backward compatibility for plugins and custom code
+	 * Added for backward compatibility for plugins and custom code that
+	 * implement mediaelement in a manner that is not recommended
 	 *
 	 * @since CP-2.1.0
+	 *
+	 * This is deprecated and will be removed in CP-3.0.0
 	 */
 	$scripts->add( 'mediaelement-aux', "/wp-includes/js/mediaelement/mediaelement$suffix.js", array(), '7.0.3', 1 );
 	did_action( 'init' ) && $scripts->localize(
