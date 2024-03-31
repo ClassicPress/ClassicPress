@@ -3985,8 +3985,7 @@ function wp_plupload_default_settings() {
 	}
 
 	/*
-	 * Since 4.9 the `runtimes` setting is hardcoded in our version of Plupload to `html5,html4`,
-	 * and the `flash_swf_url` and `silverlight_xap_url` are not used.
+	 * Since 4.9 the `runtimes` setting is hardcoded in our version of Plupload to `html5,html4`
 	 */
 	$defaults = array(
 		'file_data_name' => 'async-upload', // Key passed to $_FILE.
