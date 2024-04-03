@@ -1326,6 +1326,9 @@ function cleanForSlug(string) {
  */
 function getFilename(url) {
   let filename;
+  if (!url) {
+    return;
+  }
   try {
     filename = new URL(url, 'http://example.com').pathname.split('/').pop();
   } catch (error) {}
