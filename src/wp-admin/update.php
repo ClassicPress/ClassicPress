@@ -110,15 +110,38 @@ if ( isset( $_GET['action'] ) ) {
 		include_once ABSPATH . 'wp-admin/includes/plugin-install.php'; // For plugins_api().
 
 		check_admin_referer( 'install-plugin_' . $plugin );
-		$api = plugins_api(
-			'plugin_information',
-			array(
-				'slug'   => $plugin,
-				'fields' => array(
-					'sections' => false,
-				),
-			)
+
+		$cp_plugins = array(
+			'classicpress-directory-integration',
 		);
+
+		if ( in_array( $plugin, $cp_plugins ) ) {
+			$response = wp_remote_get( 'https://staging-directory.classicpress.net/wp-json/wp/v2/plugins?byslug=vars' ); // CHANGE ME
+			if ( ! is_wp_error( $response ) ) {
+				$json = wp_remote_retrieve_body( $response );
+				$cp_api = json_decode( $json, true );
+				if ( is_array( $cp_api ) && ! empty( $cp_api ) ) {
+					$api = new stdClass();
+					$api->download_link = $cp_api[0]['meta']['download_link'];
+					$api->name = $cp_api[0]['title']['rendered'];
+					$api->version = $cp_api[0]['meta']['current_version'];
+				} else {
+					$api = new WP_Error();
+				}
+			} else {
+				$api = $response;
+			}
+		} else {
+			$api = plugins_api(
+				'plugin_information',
+				array(
+					'slug'   => $plugin,
+					'fields' => array(
+						'sections' => false,
+					),
+				)
+			);
+		}
 
 		if ( is_wp_error( $api ) ) {
 			wp_die( $api );
