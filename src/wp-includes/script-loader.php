@@ -778,8 +778,6 @@ function wp_default_scripts( $scripts ) {
 	// Not used in core, replaced by imgAreaSelect.
 	$scripts->add( 'jcrop', '/wp-includes/js/jcrop/jquery.Jcrop.min.js', array( 'jquery' ), '0.9.15' );
 
-	$scripts->add( 'swfobject', '/wp-includes/js/swfobject.js', array(), '2.2-20120417' );
-
 	// Error messages for Plupload.
 	$uploader_l10n = array(
 		'queue_limit_exceeded'      => __( 'You have attempted to queue too many files.' ),

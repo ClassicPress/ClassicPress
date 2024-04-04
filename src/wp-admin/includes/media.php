@@ -2095,7 +2095,6 @@ function media_upload_form( $errors = null ) {
 	/**
 	 * Filters the media upload post parameters.
 	 *
-	 * @since 3.1.0 As 'swfupload_post_params'
 	 * @since 3.3.0
 	 *
 	 * @param array $post_params An array of media upload parameters used by Plupload.
@@ -2103,8 +2102,7 @@ function media_upload_form( $errors = null ) {
 	$post_params = apply_filters( 'upload_post_params', $post_params );
 
 	/*
-	* Since 4.9 the `runtimes` setting is hardcoded in our version of Plupload to `html5,html4`,
-	* and the `flash_swf_url` and `silverlight_xap_url` are not used.
+	* Since 4.9 the `runtimes` setting is hardcoded in our version of Plupload to `html5,html4`
 	*/
 	$plupload_init = array(
 		'browse_button'    => 'plupload-browse-button',
@@ -2169,7 +2167,6 @@ function media_upload_form( $errors = null ) {
 	/**
 	 * Fires before the upload interface loads.
 	 *
-	 * @since 2.6.0 As 'pre-flash-upload-ui'
 	 * @since 3.3.0
 	 */
 	do_action( 'pre-plupload-upload-ui' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
@@ -2186,7 +2183,6 @@ function media_upload_form( $errors = null ) {
 	/**
 	 * Fires after the upload interface loads.
 	 *
-	 * @since 2.6.0 As 'post-flash-upload-ui'
 	 * @since 3.3.0
 	 */
 	do_action( 'post-plupload-upload-ui' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
