@@ -91,6 +91,11 @@ function wp_dashboard_setup() {
 	// ClassicPress News.
 	wp_add_dashboard_widget( 'dashboard_primary', __( 'ClassicPress News' ), 'wp_dashboard_events_news' );
 
+	// ClassicPress directory notice
+	if ( current_user_can( 'install_plugins' ) ) {
+		wp_add_dashboard_widget( 'dashboard_directory', __( 'ClassicPress Directory' ), 'cp_dashboard_directory' );
+	}
+
 	if ( is_network_admin() ) {
 
 		/**
@@ -1803,3 +1808,37 @@ function wp_dashboard_site_health() {
  * @since 2.5.0
  */
 function wp_dashboard_empty() {}
+
+/**
+ * Display the ClassicPress Directory
+ * Inform users about the new ClassicPress directory
+ * and allow to install the ClassicPress Directory Integration plugin.
+ *
+ * @since CP-2.1.0
+ */
+
+function cp_dashboard_directory() {
+	?>
+	<div class ="directory-widget-content">
+	<p>
+	<?php
+	echo '<p>' . __( 'We wanted to let you know some information about ClassicPress Directory.' ) . '</p>';
+	echo '<p>' . sprintf( __( 'You can browse the new directory at <a href="%1$s" target="_blank">%1$s</a>.' ), esc_url( 'https://directory.classicpress.net' ) ) . '</p>';
+	$url = wp_nonce_url(
+		add_query_arg(
+			array(
+				'action' => 'install-plugin',
+				'plugin' => 'classicpress-directory-integration',
+				'from'   => 'index',
+			),
+			self_admin_url( 'update.php' )
+		),
+		'install-plugin_' . 'classicpress-directory-integration'
+	);
+	echo '<p>' . sprintf( __( '<a href="%1$s">Install</a> the ClassicPress Directory Integration plugin to install plugins from the Plugins Menu.' ), $url ) . '</p>';
+
+	?>
+	</p>
+	</div>
+	<?php
+}
