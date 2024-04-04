@@ -92,7 +92,10 @@ function wp_dashboard_setup() {
 	wp_add_dashboard_widget( 'dashboard_primary', __( 'ClassicPress News' ), 'wp_dashboard_events_news' );
 
 	// ClassicPress directory notice
-	if ( current_user_can( 'install_plugins' ) ) {
+	if (
+		current_user_can( 'install_plugins' ) &&
+		! is_file( WP_PLUGIN_DIR . '/classicpress-directory-integration/classicpress-directory-integration.php' )
+	) {
 		wp_add_dashboard_widget( 'dashboard_directory', __( 'ClassicPress Directory' ), 'cp_dashboard_directory' );
 	}
 
