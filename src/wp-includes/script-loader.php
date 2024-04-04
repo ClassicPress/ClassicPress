@@ -852,9 +852,7 @@ function wp_default_scripts( $scripts ) {
 
 	$scripts->add( 'imgareaselect', "/wp-includes/js/imgareaselect/jquery.imgareaselect$suffix.js", array( 'jquery' ), false, 1 );
 
-	$scripts->add( 'mediaelement', false, array( 'jquery', 'mediaelement-core', 'mediaelement-migrate' ), '4.2.17', 1 );
-	$scripts->add( 'mediaelement-core', "/wp-includes/js/mediaelement/mediaelement-and-player$suffix.js", array(), '4.2.17', 1 );
-	$scripts->add( 'mediaelement-migrate', "/wp-includes/js/mediaelement/mediaelement-migrate$suffix.js", array(), false, 1 );
+	$scripts->add( 'mediaelement', "/wp-includes/js/mediaelement/mediaelement-and-player$suffix.js", array(), '7.0.3', 1 );
 
 	did_action( 'init' ) && $scripts->add_inline_script(
 		'mediaelement-core',
@@ -864,23 +862,34 @@ function wp_default_scripts( $scripts ) {
 				array(
 					'language' => strtolower( strtok( determine_locale(), '_-' ) ),
 					'strings'  => array(
-						'mejs.download-file'       => __( 'Download File' ),
-						'mejs.install-flash'       => __( 'You are using a browser that does not have Flash player enabled or installed. Please turn on your Flash player plugin or download the latest version from https://get.adobe.com/flashplayer/' ),
+						'mejs.fullscreen-off'      => __( 'Turn off Fullscreen' ),
+						'mejs.fullscreen-on'       => __( 'Go Fullscreen' ),
+						'mejs.download-video'      => __( 'Download Video' ),
 						'mejs.fullscreen'          => __( 'Fullscreen' ),
+						'mejs.time-jump-forward'   => array( __( 'Jump forward 1 second' ), __( 'Jump forward %1 seconds' ) ),
+						'mejs.loop'                => __( 'Toggle Loop' ),
 						'mejs.play'                => __( 'Play' ),
 						'mejs.pause'               => __( 'Pause' ),
+						'mejs.close'               => __( 'Close' ),
 						'mejs.time-slider'         => __( 'Time Slider' ),
 						'mejs.time-help-text'      => __( 'Use Left/Right Arrow keys to advance one second, Up/Down arrows to advance ten seconds.' ),
-						'mejs.live-broadcast'      => __( 'Live Broadcast' ),
+						'mejs.time-skip-back'      => array( __( 'Skip back 1 second' ), __( 'Skip back %1 seconds' ) ),
+						'mejs.captions-subtitles'  => __( 'Captions/Subtitles' ),
+						'mejs.captions-chapters'   => __( 'Chapters' ),
+						'mejs.none'                => __( 'None' ),
+						'mejs.mute-toggle'         => __( 'Mute Toggle' ),
 						'mejs.volume-help-text'    => __( 'Use Up/Down Arrow keys to increase or decrease volume.' ),
 						'mejs.unmute'              => __( 'Unmute' ),
 						'mejs.mute'                => __( 'Mute' ),
 						'mejs.volume-slider'       => __( 'Volume Slider' ),
 						'mejs.video-player'        => __( 'Video Player' ),
 						'mejs.audio-player'        => __( 'Audio Player' ),
-						'mejs.captions-subtitles'  => __( 'Captions/Subtitles' ),
-						'mejs.captions-chapters'   => __( 'Chapters' ),
-						'mejs.none'                => __( 'None' ),
+						'mejs.ad-skip'             => __( 'Skip ad' ),
+						'mejs.ad-skip-info'        => array( __( 'Skip in 1 second' ), __( 'Skip in %1 seconds' ) ),
+						'mejs.source-chooser'      => __( 'Source Chooser' ),
+						'mejs.stop'                => __( 'Stop' ),
+						'mejs.speed-rate'          => __( 'Speed Rate' ),
+						'mejs.live-broadcast'      => __( 'Live Broadcast' ),
 						'mejs.afrikaans'           => __( 'Afrikaans' ),
 						'mejs.albanian'            => __( 'Albanian' ),
 						'mejs.arabic'              => __( 'Arabic' ),
@@ -941,6 +950,23 @@ function wp_default_scripts( $scripts ) {
 			)
 		),
 		'before'
+	);
+
+	/*
+	 * Added for backward compatibility for plugins and custom code that
+	 * implement mediaelement in a manner that is not recommended
+	 *
+	 * @since CP-2.1.0
+	 *
+	 * This is deprecated and will be removed in CP-3.0.0
+	 */
+	$scripts->add( 'mediaelement-aux', "/wp-includes/js/mediaelement/mediaelement$suffix.js", array(), '7.0.3', 1 );
+	did_action( 'init' ) && $scripts->localize(
+		'mediaelement-aux',
+		'_cp_mediaelement_aux',
+		array(
+			'pluginPath' => includes_url( 'js/mediaelement/', 'relative' ),
+		)
 	);
 
 	$scripts->add( 'mediaelement-vimeo', '/wp-includes/js/mediaelement/renderers/vimeo.min.js', array( 'mediaelement' ), '4.2.17', 1 );
