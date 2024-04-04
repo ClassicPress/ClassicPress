@@ -759,7 +759,7 @@
 			/**
 			 * Add the widget reordering elements to the widget
 			 */
-			this.container[0].querySelector( 'summary' ).insertAdjacentHTML( 'beforeend', api.Widgets.data.tpl.widgetReorderNav );
+			self.container[0].querySelector( 'summary' ).insertAdjacentHTML( 'beforeend', api.Widgets.data.tpl.widgetReorderNav );
 
 			template = _.template( api.Widgets.data.tpl.moveWidgetArea );
 			$moveWidgetArea = $( template( {
