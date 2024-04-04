@@ -111,6 +111,7 @@ if ( isset( $_GET['action'] ) ) {
 
 		check_admin_referer( 'install-plugin_' . $plugin );
 
+		// Allow some plugin slugs to bypass WP plugins_api() and point to ClassicPress Directory API.
 		$cp_plugins = array(
 			'classicpress-directory-integration',
 		);
