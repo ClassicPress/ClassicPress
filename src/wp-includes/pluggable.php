@@ -1086,11 +1086,26 @@ if ( ! function_exists( 'wp_set_auth_cookie' ) ) :
 			return;
 		}
 
-		setcookie( $auth_cookie_name, $auth_cookie, $expire, PLUGINS_COOKIE_PATH, COOKIE_DOMAIN, $secure, true );
-		setcookie( $auth_cookie_name, $auth_cookie, $expire, ADMIN_COOKIE_PATH, COOKIE_DOMAIN, $secure, true );
-		setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $expire, COOKIEPATH, COOKIE_DOMAIN, $secure_logged_in_cookie, true );
+		$cookie_options = array(
+			'expires' => $expire,
+			'path' => '',
+			'domain' => COOKIE_DOMAIN,
+			'secure' => $secure,
+			'httponly' => true,
+			'samesite' => 'Strict',
+		);
+
+		$cookie_options['path'] = PLUGINS_COOKIE_PATH;
+		setcookie( $auth_cookie_name, $auth_cookie, $cookie_options );
+
+		$cookie_options['path'] = ADMIN_COOKIE_PATH;
+		setcookie( $auth_cookie_name, $auth_cookie, $cookie_options );
+
+		$cookie_options['path'] = COOKIEPATH;
+		setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $cookie_options );
 		if ( COOKIEPATH != SITECOOKIEPATH ) {
-			setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $expire, SITECOOKIEPATH, COOKIE_DOMAIN, $secure_logged_in_cookie, true );
+			$cookie_options['path'] = SITECOOKIEPATH;
+			setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $cookie_options );
 		}
 	}
 endif;

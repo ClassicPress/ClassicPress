@@ -223,7 +223,15 @@ switch ( $action ) {
 
 		// Session cookie flag that the post was saved.
 		if ( isset( $_COOKIE['wp-saving-post'] ) && $_COOKIE['wp-saving-post'] === $post_id . '-check' ) {
-			setcookie( 'wp-saving-post', $post_id . '-saved', time() + DAY_IN_SECONDS, ADMIN_COOKIE_PATH, COOKIE_DOMAIN, is_ssl() );
+			$cookie_options = array(
+				'expires' => time() + DAY_IN_SECONDS,
+				'path' => ADMIN_COOKIE_PATH,
+				'domain' => COOKIE_DOMAIN,
+				'secure' => is_ssl(),
+				'httponly' => true,
+				'samesite' => 'Strict',
+			);
+			setcookie( 'wp-saving-post', $post_id . '-saved', $cookie_options );
 		}
 
 		redirect_post( $post_id ); // Send user on their way while we keep working.
