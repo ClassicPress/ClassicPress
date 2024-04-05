@@ -28,12 +28,9 @@ class Tests_Canonical extends WP_Canonical_UnitTestCase {
 	public function set_up() {
 		parent::set_up();
 		wp_set_current_user( self::$author_id );
-<<<<<<< HEAD
-=======
 		self::set_up_custom_post_types();
 
 		update_option( 'wp_attachment_pages_enabled', 1 );
->>>>>>> 96de28cc29 (Canonical: Limit post types searched by `redirect_guess_404_permalink()`.)
 	}
 
 	/**

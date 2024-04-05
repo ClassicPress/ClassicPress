@@ -943,14 +943,10 @@ function redirect_guess_404_permalink() {
 		// If any of post_type, year, monthnum, or day are set, use them to refine the query.
 		if ( get_query_var( 'post_type' ) ) {
 			if ( is_array( get_query_var( 'post_type' ) ) ) {
-<<<<<<< HEAD
-				// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
-=======
 				$post_types = array_intersect( get_query_var( 'post_type' ), $publicly_viewable_post_types );
 				if ( empty( $post_types ) ) {
 					return false;
 				}
->>>>>>> 96de28cc29 (Canonical: Limit post types searched by `redirect_guess_404_permalink()`.)
 				$where .= " AND post_type IN ('" . join( "', '", esc_sql( get_query_var( 'post_type' ) ) ) . "')";
 			} else {
 				if ( ! in_array( get_query_var( 'post_type' ), $publicly_viewable_post_types, true ) ) {
