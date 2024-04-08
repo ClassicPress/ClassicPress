@@ -282,6 +282,23 @@ if ( current_user_can( 'list_users' ) ) {
 	}
 
 	$submenu['users.php'][15] = array( __( 'Profile' ), 'read', 'profile.php' );
+
+	/*
+	 * Enable user taxonomies to be displayed as sub-menu items under Users.
+	 *
+	 * @since CP-2.1.0
+	 */
+	foreach ( get_taxonomies( array(), 'objects' ) as $tax ) {
+		if ( ! $tax->show_ui || ! $tax->show_in_menu  || ! in_array( 'user', (array) $tax->object_type, true ) ) {
+			continue;
+		}
+
+		$i = 20;
+ 
+		$submenu['users.php'][ $i++ ] = array( esc_attr( $tax->labels->menu_name ), $tax->cap->manage_terms, 'edit-tags.php?taxonomy=' . $tax->name );
+	}
+	unset( $tax );
+
 } else {
 	$_wp_real_parent_file['users.php'] = 'profile.php';
 	$submenu['profile.php'][5]         = array( __( 'Profile' ), 'read', 'profile.php' );
