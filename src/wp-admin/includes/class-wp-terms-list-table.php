@@ -475,7 +475,7 @@ class WP_Terms_List_Table extends WP_List_Table {
 		 * @param array  $objects         Objects associated with current taxonomy.
 		 */
 		$taxonomy_object = get_taxonomy( $taxonomy );
-		$objects = $taxonomy_object->object_type;
+		$objects = (array) $taxonomy_object->object_type;
 		if ( $objects[0] !== 'post' ) {
 			$edit_link = str_replace( 'post_type=post', 'object_type=' . $objects[0], $edit_link );
 		}
