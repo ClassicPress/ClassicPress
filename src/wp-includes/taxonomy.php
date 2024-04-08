@@ -684,7 +684,7 @@ function register_taxonomy_for_object_type( $taxonomy, $object_type ) {
 		return false;
 	}
 
-	if ( ! get_post_type_object( $object_type ) ) {
+	if ( 'user' !== $object_type && ! get_post_type_object( $object_type ) ) {
 		return false;
 	}
 
