@@ -770,6 +770,77 @@ class WP_User_Query {
 	}
 
 	/**
+	 * Parses various taxonomy related query vars.
+	 *
+	 * @access protected
+	 * @since CP-2.1.0
+	 *
+	 * @param array $q The query variables. Passed by reference.
+	 */
+	protected function parse_tax_query( &$q ) {
+		if ( ! empty( $q['tax_query'] ) && is_array( $q['tax_query'] ) ) {
+			$tax_query = $q['tax_query'];
+		} else {
+			$tax_query = array();
+		}
+
+		if ( ! empty( $q['taxonomy'] ) && ! empty( $q['term'] ) ) {
+			$tax_query[] = array(
+				'taxonomy' => $q['taxonomy'],
+				'terms'    => array( $q['term'] ),
+				'field'    => 'slug',
+			);
+		}
+
+		foreach ( get_taxonomies( array() , 'objects' ) as $taxonomy => $t ) {
+			if ( 'post_tag' == $taxonomy ) {
+				continue; // Handled further down in the $q['tag'] block.
+			}
+
+			if ( $t->query_var && ! empty( $q[ $t->query_var ] ) ) {
+				$tax_query_defaults = array(
+					'taxonomy' => $taxonomy,
+					'field'    => 'slug',
+				);
+
+				if ( isset( $t->rewrite['hierarchical'] ) && $t->rewrite['hierarchical'] ) {
+					$q[ $t->query_var ] = wp_basename( $q[ $t->query_var ] );
+				}
+
+				$term = $q[ $t->query_var ];
+
+				if ( is_array( $term ) ) {
+					$term = implode( ',', $term );
+				}
+
+				if ( strpos( $term, '+' ) !== false ) {
+					$terms = preg_split( '/[+]+/', $term );
+					foreach ( $terms as $term ) {
+						$tax_query[] = array_merge( $tax_query_defaults, array(
+							'terms' => array( $term )
+						) );
+					}
+				} else {
+					$tax_query[] = array_merge( $tax_query_defaults, array(
+						'terms' => preg_split( '/[,]+/', $term )
+					) );
+				}
+			}
+		}
+
+		$this->tax_query = new WP_Tax_Query( $tax_query );
+
+		/**
+		 * Fires after taxonomy-related query vars have been parsed.
+		 *
+		 * @since CP-2.1.0
+		 *
+		 * @param WP_User_Query $this The WP_User_Query instance.
+		 */
+		do_action( 'parse_user_tax_query', $this );
+	}
+
+	/**
 	 * Executes the query, with the current variables.
 	 *
 	 * @since 3.1.0
