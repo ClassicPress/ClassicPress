@@ -390,14 +390,15 @@ class WP_Users_List_Table extends WP_List_Table {
 		 * @since CP-2.1.0
 		 *
 		 * @param string[] $taxonomies An array of registered taxonomy names to show for users.
-		 * @param string   $object_type  The object type. Default 'attachment'.
+		 * @param string   $object_type  The object type. Default 'user'.
 		 */
 		$taxonomies = apply_filters( 'manage_taxonomies_for_user_columns', $taxonomies, 'user' );
 		$taxonomies = array_filter( $taxonomies, 'taxonomy_exists' );
 
 		foreach ( $taxonomies as $taxonomy ) {
 			$column_key = 'taxonomy-' . $taxonomy;
-			$co
+			$columns[ $column_key ] = get_taxonomy( $taxonomy )->labels->name;
+		}
 
 		return $columns;
 	}
