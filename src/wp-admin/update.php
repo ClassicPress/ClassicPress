@@ -117,7 +117,7 @@ if ( isset( $_GET['action'] ) ) {
 		);
 
 		if ( in_array( $plugin, $cp_plugins ) ) {
-			$response = wp_remote_get( 'https://staging-directory.classicpress.net/wp-json/wp/v2/plugins?byslug=vars' ); // CHANGE ME
+			$response = wp_remote_get( 'https://directory.classicpress.net/wp-json/wp/v2/plugins?byslug=' . $plugin );
 			if ( ! is_wp_error( $response ) ) {
 				$json = wp_remote_retrieve_body( $response );
 				$cp_api = json_decode( $json, true );
