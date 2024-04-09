@@ -524,6 +524,52 @@ switch ( $action ) {
 							</select>
 						</td>
 					</tr>
+
+					<?php
+					/**
+					 * Show user taxonomy terms.
+					 *
+					 * @since CP-2.1.0
+					 */ 
+					$tax_list = '';
+					$taxonomies = get_object_taxonomies( 'user', 'objects' );
+					if ( ! empty( $taxonomies ) ) {
+
+						$tax_list .= '<tr class="user-taxonomy-wrap">';
+
+						foreach( $taxonomies as $taxonomy ) {
+							$tax_list .= '<th><label for="' . esc_attr( $taxonomy->name ) . '">' . esc_html( $taxonomy->labels->name ) . '</label></th>';
+
+							$label = '';
+							$user_terms = wp_get_object_terms( $profile_user->ID, $taxonomy->name );
+							if ( ! empty( $user_terms ) && ! is_wp_error( $user_terms ) ) {
+								foreach ( $user_terms as $user_term ) {
+									$label .= esc_html( sanitize_term_field( 'name', $user_term->name, $user_term->term_id, $taxonomy->name, 'display' ) );
+								}
+							}
+							$tax_list .= '<td><input type="text" name="' . esc_attr( $taxonomy->name ) . '" id="' . esc_attr( $taxonomy->name ) . '" value="' . esc_attr( $label ) . '" class="regular-text"></td>';
+
+							$terms = get_terms( array(
+								'taxonomy'   => $taxonomy->name,
+								'hide_empty' => false,
+							) );
+							if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
+								$tax_list .= '<datalist id="taxlist-' . esc_attr( $taxonomy->name ) . '">';
+
+								foreach( $terms as $term ) {
+									$tax_list .= '<option>' . esc_html( $term->name ) . '</option>';
+								}
+							
+								$tax_list .= '</datalist>';
+							}
+						}
+
+						$tax_list .= '</tr>';
+
+						echo apply_filters( 'user_edit_taxonomies', $tax_list, $taxonomies, $profile_user );
+					}
+					?>
+
 				</table>
 
 				<h2><?php _e( 'Contact Info' ); ?></h2>
