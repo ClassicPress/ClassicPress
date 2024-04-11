@@ -50,6 +50,15 @@ class WP_User_Query {
 	public $meta_query = false;
 
 	/**
+	 * Taxonomy query, as passed to get_tax_sql()
+	 *
+	 * @since CP-2.1.0
+	 * @access public
+	 * @var object WP_Tax_Query
+	 */
+	public $tax_query;
+
+	/**
 	 * The SQL query used to fetch matching users.
 	 *
 	 * @since 4.4.0
@@ -100,6 +109,7 @@ class WP_User_Query {
 			'meta_key'            => '',
 			'meta_value'          => '',
 			'meta_compare'        => '',
+			'tax_query'           => array(),
 			'include'             => array(),
 			'exclude'             => array(),
 			'search'              => '',
@@ -393,6 +403,9 @@ class WP_User_Query {
 		$this->meta_query = new WP_Meta_Query();
 		$this->meta_query->parse_query_vars( $qv );
 
+		// Taxonomy query.
+		$this->parse_tax_query( $qv );
+
 		if ( isset( $qv['who'] ) && 'authors' === $qv['who'] && $blog_id ) {
 			_deprecated_argument(
 				'WP_User_Query',
@@ -627,6 +640,12 @@ class WP_User_Query {
 			}
 		}
 
+		if ( ! empty( $this->tax_query->queries ) ) {
+			$taxonomy_clauses = $this->tax_query->get_sql( $wpdb->users, 'ID' ); // maybe ( 'user', $wpdb->users, 'ID', $this );
+			$this->query_from .= $taxonomy_clauses['join'];
+			$this->query_where .= $taxonomy_clauses['where'];
+		}
+
 		// Sorting.
 		$qv['order'] = isset( $qv['order'] ) ? strtoupper( $qv['order'] ) : '';
 		$order       = $this->parse_order( $qv['order'] );
@@ -753,6 +772,32 @@ class WP_User_Query {
 		if ( ! empty( $qv['date_query'] ) && is_array( $qv['date_query'] ) ) {
 			$date_query         = new WP_Date_Query( $qv['date_query'], 'user_registered' );
 			$this->query_where .= $date_query->get_sql();
+		}
+
+		/**
+		 * Enable grouping of users by taxonomy term on 'users.php' page.
+		 *
+		 * @since CP-2.1.0
+		 *
+		 */
+		if ( $pagenow === 'users.php' ) {
+
+			// Get user taxonomies
+			$taxonomies = get_taxonomies( array(
+				'object_type' => array( 'user' ),
+			), 'objects' );
+
+			foreach ( $taxonomies as $taxonomy ) {
+				if ( ! empty( $_GET[$taxonomy->name] ) ) {
+					$term = get_term_by( 'slug', $_GET[$taxonomy->name], $taxonomy->name );
+					$ids = get_objects_in_term( $term->term_id, $taxonomy->name );
+				}
+			}
+
+			if ( isset( $ids ) ) {
+				$ids = implode( ',', wp_parse_id_list( $ids ) );
+				$this->query_where .= " AND $wpdb->users.ID IN ($ids)";
+			}
 		}
 
 		/**
