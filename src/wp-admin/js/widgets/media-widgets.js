@@ -632,7 +632,7 @@ wp.mediaWidgets = ( function( $ ) {
 		 */
 		syncModelToInputs: function syncModelToInputs() {
 			var control = this;
-			document.querySelectorAll( '.media-widget-instance-property' ).forEach( function( input ) {
+			control.syncContainer.querySelectorAll( '.media-widget-instance-property' ).forEach( function( input ) {
 				var widgetId,
 					propertyName = input.dataset.property,
 					value = control.model.get( propertyName );

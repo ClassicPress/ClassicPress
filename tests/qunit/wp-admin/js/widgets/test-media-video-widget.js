@@ -17,8 +17,8 @@
 
 		videoWidgetModelInstance = new wp.mediaWidgets.modelConstructors.media_video();
 		videoWidgetControlInstance = new VideoWidgetControl({
-			el: jQuery( '<div></div>' ),
-			syncContainer: jQuery( '<div></div>' ),
+			el: document.createElement( 'div' ),
+			syncContainer: document.createElement( 'div' ),
 			model: videoWidgetModelInstance
 		});
 
@@ -42,8 +42,8 @@
 
 		videoWidgetModelInstance = new wp.mediaWidgets.modelConstructors.media_video();
 		videoWidgetControlInstance = new wp.mediaWidgets.controlConstructors.media_video({
-			el: jQuery( '<div></div>' ),
-			syncContainer: jQuery( '<div></div>' ),
+			el: document.createElement( 'div' ),
+			syncContainer: document.createElement( 'div' ),
 			model: videoWidgetModelInstance
 		});
 		assert.equal( videoWidgetControlInstance.$el.find( 'a' ).length, 0, 'No video links should be rendered' );

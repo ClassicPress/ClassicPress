@@ -62,11 +62,6 @@ wp.textWidgets = ( function( $ ) {
 					document.getElementById( control.fields.text.id + '-html' ).focus();
 					control.dismissPointers( [ 'text_widget_custom_html' ] );
 				});
-				control.customHtmlWidgetPointer[0].querySelector( '.add-widget' ).addEventListener( 'click', function( event ) {
-					event.preventDefault();
-					control.customHtmlWidgetPointer[0].style.display = '';
-					control.openAvailableWidgetsPanel();
-				});
 			}
 
 			control.pasteHtmlPointer = control.$el.find( '.wp-pointer.paste-html-pointer' );
@@ -395,7 +390,7 @@ wp.textWidgets = ( function( $ ) {
 	 * @return {void}
 	 */
 	component.handleWidgetAdded = function handleWidgetAdded( event ) {
-		var idBase, widgetControl, widgetId, renderWhenAnimationDone, fieldContainer, syncContainer,
+		var idBase, widgetControl, widgetId, fieldContainer, syncContainer,
 			widgetContainer = event.detail.widget,
 			animatedCheckDelay = 200;
 
@@ -411,7 +406,7 @@ wp.textWidgets = ( function( $ ) {
 		}
 
 		// Bypass using TinyMCE when widget is in legacy mode.
-		if ( ! widgetContainer.querySelector( '.visual' ) ) {// .value
+		if ( ! widgetContainer.querySelector( '.visual' ) ) {
 			return;
 		}
 
@@ -443,13 +438,13 @@ wp.textWidgets = ( function( $ ) {
 		 * This ensures that the textarea is visible and an iframe can be embedded
 		 * with TinyMCE being able to set contenteditable on it.
 		 */
-		renderWhenAnimationDone = function() {
+		function renderWhenAnimationDone() {
 			if ( ! widgetContainer.querySelector( 'details' ).hasAttribute( 'open' ) ) {
 				setTimeout( renderWhenAnimationDone, animatedCheckDelay );
 			} else {
 				widgetControl.initializeEditor();
 			}
-		};
+		}
 		renderWhenAnimationDone();
 	};
 
