@@ -777,6 +777,10 @@ ul#add-to-blog-users {
 	vertical-align: middle;
 }
 
+.form-table td.user-tax-term {
+	padding: 0 2em 0 0;
+}
+
 .form-table th,
 .form-wrap label {
 	color: #1d2327;
