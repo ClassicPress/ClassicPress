@@ -788,7 +788,7 @@ class WP_User_Query {
 			), 'objects' );
 
 			foreach ( $taxonomies as $taxonomy ) {
-				if ( ! empty( $_GET[$taxonomy->name] ) ) {
+				if ( filter_input( INPUT_GET, $taxonomy->name ) ) {
 					$term = get_term_by( 'slug', $_GET[$taxonomy->name], $taxonomy->name );
 					$ids = get_objects_in_term( $term->term_id, $taxonomy->name );
 				}
