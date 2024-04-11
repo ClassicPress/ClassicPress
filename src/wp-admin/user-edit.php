@@ -540,14 +540,13 @@ switch ( $action ) {
 						foreach( $taxonomies as $taxonomy ) {
 							$tax_list .= '<th><label for="' . esc_attr( $taxonomy->name ) . '">' . esc_html( $taxonomy->labels->name ) . '</label></th>';
 
-							$label = '';
+							$tax_names = array();
 							$user_terms = wp_get_object_terms( $profile_user->ID, $taxonomy->name );
 							if ( ! empty( $user_terms ) && ! is_wp_error( $user_terms ) ) {
 								foreach ( $user_terms as $user_term ) {
-									$label .= esc_html( sanitize_term_field( 'name', $user_term->name, $user_term->term_id, $taxonomy->name, 'display' ) );
+									$tax_names[] = $user_term->name;
 								}
 							}
-							$tax_list .= '<td><input type="text" name="' . esc_attr( $taxonomy->name ) . '" id="' . esc_attr( $taxonomy->name ) . '" value="' . esc_attr( $label ) . '" class="regular-text"></td>';
 
 							$terms = get_terms( array(
 								'taxonomy'   => $taxonomy->name,
