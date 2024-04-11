@@ -660,9 +660,9 @@ class WP_Users_List_Table extends WP_List_Table {
 									$users_in_term_qv['term']     = $t->slug;
 								}
 
-								$label = esc_html( sanitize_term_field( 'name', $t->name, $t->term_id, $taxonomy, 'display' ) );
+								$label = sanitize_term_field( 'name', $t->name, $t->term_id, $taxonomy, 'display' );
 
-								$term_links[] = $this->get_edit_link( $users_in_term_qv, $label );
+								$term_links[] = '<a href=' . esc_url( admin_url( 'users.php?' . $taxonomy . '=' . $t->slug ) ) . '>' . esc_html( $label ) . '</a>';
 							}
 
 							/**
