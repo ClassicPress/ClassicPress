@@ -554,13 +554,12 @@ switch ( $action ) {
 								'hide_empty' => false,
 							) );
 							if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
-								$tax_list .= '<datalist id="taxlist-' . esc_attr( $taxonomy->name ) . '">';
-
+								$tax_list .= '<td><table><tr>';
 								foreach( $terms as $term ) {
-									$tax_list .= '<option>' . esc_html( $term->name ) . '</option>';
+									$tax_list .= '<td class="user-tax-term"><input id="taxonomy-' . esc_attr( $term->slug ) . '" name="' . esc_attr( $taxonomy->name ) . '[]" type="checkbox" value="' . esc_attr( $term->slug ) . '"' . checked( in_array( $term->name, $tax_names, true ), true, false ) . '>&nbsp;';
+									$tax_list .= '<label for="taxonomy-' . esc_attr( $term->slug ) . '">' . esc_html( $term->name ) . '</label></td>';
 								}
-							
-								$tax_list .= '</datalist>';
+								$tax_list .= '</tr></table></td>';
 							}
 						}
 
