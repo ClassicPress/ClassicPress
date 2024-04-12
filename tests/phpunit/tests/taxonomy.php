@@ -191,21 +191,21 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
- 	 * @ticket 31383
- 	 */
- 	function test_register_user_taxonomy() {
+	 * @ticket 31383
+	 */
+	public function test_register_user_taxonomy() {
 
 		// make up a new taxonomy name, and ensure it's unused
- 		$tax = rand_str();
- 		$this->assertFalse( taxonomy_exists($tax) );
+		$tax = rand_str();
+		$this->assertFalse( taxonomy_exists( $tax ) );
 
-	 	register_taxonomy( $tax, 'user' );
- 		$this->assertTrue( taxonomy_exists($tax) );
- 		$this->assertFalse( is_taxonomy_hierarchical($tax) );
+		register_taxonomy( $tax, 'user' );
+		$this->assertTrue( taxonomy_exists( $tax ) );
+		$this->assertFalse( is_taxonomy_hierarchical( $tax ) );
 
- 		// clean up
- 		unset($GLOBALS['wp_taxonomies'][$tax]);
- 	}
+		// clean up
+		unset( $GLOBALS['wp_taxonomies'][ $tax ] );
+	}
 
 	public function test_register_hierarchical_taxonomy() {
 
@@ -309,10 +309,10 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 		$this->assertTrue( register_taxonomy_for_object_type( 'category', 'post' ) );
 
 		// Core taxonomy, users
- 		$this->assertTrue( register_taxonomy_for_object_type( 'category', 'user' ) );
- 		$this->assertTrue( unregister_taxonomy_for_object_type( 'category', 'user' ) );
- 		$this->assertFalse( unregister_taxonomy_for_object_type( 'category', 'user' ) );
- 		$this->assertTrue( register_taxonomy_for_object_type( 'category', 'user' ) );
+		$this->assertTrue( register_taxonomy_for_object_type( 'category', 'user' ) );
+		$this->assertTrue( unregister_taxonomy_for_object_type( 'category', 'user' ) );
+		$this->assertFalse( unregister_taxonomy_for_object_type( 'category', 'user' ) );
+		$this->assertTrue( register_taxonomy_for_object_type( 'category', 'user' ) );
 
 		// Core taxonomy, non-core post type.
 		$this->assertTrue( register_taxonomy_for_object_type( 'category', $post_type ) );
@@ -326,10 +326,10 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 		$this->assertTrue( register_taxonomy_for_object_type( $tax, 'post' ) );
 
 		// Non-core taxonomy, users
-	 	$this->assertTrue( register_taxonomy_for_object_type( $tax, 'user' ) );
- 		$this->assertTrue( unregister_taxonomy_for_object_type( $tax, 'user' ) );
- 		$this->assertFalse( unregister_taxonomy_for_object_type( $tax, 'user' ) );
- 		$this->assertTrue( register_taxonomy_for_object_type( $tax, 'user' ) );
+		$this->assertTrue( register_taxonomy_for_object_type( $tax, 'user' ) );
+		$this->assertTrue( unregister_taxonomy_for_object_type( $tax, 'user' ) );
+		$this->assertFalse( unregister_taxonomy_for_object_type( $tax, 'user' ) );
+		$this->assertTrue( register_taxonomy_for_object_type( $tax, 'user' ) );
 
 		// Non-core taxonomy, non-core post type.
 		$this->assertTrue( register_taxonomy_for_object_type( $tax, $post_type ) );
@@ -342,28 +342,28 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 	}
 
 	/**
- 	 * @ticket 31383
- 	 */
- 	function test_registering_taxonomies_to_users() {
- 		// Create a taxonomy to test with
- 		$tax = 'test_tax';
- 		$this->assertFalse( taxonomy_exists( $tax ) );
- 		register_taxonomy( $tax, '', array( 'hierarchical' => true ) );
+	 * @ticket 31383
+	 */
+	public function test_registering_taxonomies_to_users() {
+		// Create a taxonomy to test with
+		$tax = 'test_tax';
+		$this->assertFalse( taxonomy_exists( $tax ) );
+		register_taxonomy( $tax, '', array( 'hierarchical' => true ) );
 
- 		// Core taxonomy, users
- 		$this->assertTrue( register_taxonomy_for_object_type( 'category', 'user' ) );
- 		$this->assertTrue( unregister_taxonomy_for_object_type( 'category', 'user' ) );
- 		$this->assertFalse( unregister_taxonomy_for_object_type( 'category', 'user' ) );
- 		$this->assertTrue( register_taxonomy_for_object_type( 'category', 'user' ) );
+		// Core taxonomy, users
+		$this->assertTrue( register_taxonomy_for_object_type( 'category', 'user' ) );
+		$this->assertTrue( unregister_taxonomy_for_object_type( 'category', 'user' ) );
+		$this->assertFalse( unregister_taxonomy_for_object_type( 'category', 'user' ) );
+		$this->assertTrue( register_taxonomy_for_object_type( 'category', 'user' ) );
 
- 		// Non-core taxonomy, users
- 		$this->assertTrue( register_taxonomy_for_object_type( $tax, 'user' ) );
- 		$this->assertTrue( unregister_taxonomy_for_object_type( $tax, 'user' ) );
- 		$this->assertFalse( unregister_taxonomy_for_object_type( $tax, 'user' ) );
- 		$this->assertTrue( register_taxonomy_for_object_type( $tax, 'user' ) );
+		// Non-core taxonomy, users
+		$this->assertTrue( register_taxonomy_for_object_type( $tax, 'user' ) );
+		$this->assertTrue( unregister_taxonomy_for_object_type( $tax, 'user' ) );
+		$this->assertFalse( unregister_taxonomy_for_object_type( $tax, 'user' ) );
+		$this->assertTrue( register_taxonomy_for_object_type( $tax, 'user' ) );
 
- 		unset( $GLOBALS['wp_taxonomies'][ $tax ] );
- 	}
+		unset( $GLOBALS['wp_taxonomies'][ $tax ] );
+	}
 
 	/**
 	 * @ticket 32590

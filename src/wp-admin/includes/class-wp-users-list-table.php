@@ -680,6 +680,7 @@ class WP_Users_List_Table extends WP_List_Table {
 						} else {
 							$row .= '<span aria-hidden="true">&#8212;</span><span class="screen-reader-text">' . $taxonomy_object->labels->no_terms . '</span>';
 						}
+						break;
 					default:
 						/**
 						 * Filters the display output of custom columns in the Users list table.

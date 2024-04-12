@@ -784,13 +784,16 @@ class WP_User_Query {
 		if ( $pagenow === 'users.php' ) {
 
 			// Get user taxonomies
-			$taxonomies = get_taxonomies( array(
-				'object_type' => array( 'user' ),
-			), 'objects' );
+			$taxonomies = get_taxonomies(
+				array(
+					'object_type' => array( 'user' ),
+				),
+				'objects'
+			);
 
 			foreach ( $taxonomies as $taxonomy ) {
 				if ( filter_input( INPUT_GET, $taxonomy->name ) ) {
-					$term = get_term_by( 'slug', $_GET[$taxonomy->name], $taxonomy->name );
+					$term = get_term_by( 'slug', $_GET[ $taxonomy->name ], $taxonomy->name );
 					$ids = get_objects_in_term( $term->term_id, $taxonomy->name );
 				}
 			}
@@ -838,7 +841,7 @@ class WP_User_Query {
 			);
 		}
 
-		foreach ( get_taxonomies( array() , 'objects' ) as $taxonomy => $t ) {
+		foreach ( get_taxonomies( array(), 'objects' ) as $taxonomy => $t ) {
 			if ( 'post_tag' == $taxonomy ) {
 				continue; // Handled further down in the $q['tag'] block.
 			}
@@ -862,14 +865,20 @@ class WP_User_Query {
 				if ( strpos( $term, '+' ) !== false ) {
 					$terms = preg_split( '/[+]+/', $term );
 					foreach ( $terms as $term ) {
-						$tax_query[] = array_merge( $tax_query_defaults, array(
-							'terms' => array( $term )
-						) );
+						$tax_query[] = array_merge(
+							$tax_query_defaults,
+							array(
+								'terms' => array( $term ),
+							)
+						);
 					}
 				} else {
-					$tax_query[] = array_merge( $tax_query_defaults, array(
-						'terms' => preg_split( '/[,]+/', $term )
-					) );
+					$tax_query[] = array_merge(
+						$tax_query_defaults,
+						array(
+							'terms' => preg_split( '/[,]+/', $term ),
+						)
+					);
 				}
 			}
 		}
