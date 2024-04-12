@@ -64,7 +64,7 @@ function _is_user_taxonomy_page( $submenu_file ) {
 		return false;
 	}
 	$match = preg_match( '~edit-tags\.php\?taxonomy=([A-Za-z0-9\-_]+)~', $submenu_file, $matches );
-	if ( false === $match ||  ! isset( $matches[1] ) ) {
+	if ( false === $match || ! isset( $matches[1] ) ) {
 		return false;
 	}
 	$taxonomy = get_taxonomy( $matches[1] );
