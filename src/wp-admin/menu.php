@@ -288,16 +288,14 @@ if ( current_user_can( 'list_users' ) ) {
 	 *
 	 * @since CP-2.1.0
 	 */
+	$i = 20;
 	foreach ( get_taxonomies( array(), 'objects' ) as $tax ) {
 		if ( ! $tax->show_ui || ! $tax->show_in_menu || ! in_array( 'user', (array) $tax->object_type, true ) ) {
 			continue;
 		}
-
-		$i = 20;
-
 		$submenu['users.php'][ $i++ ] = array( esc_attr( $tax->labels->menu_name ), $tax->cap->manage_terms, 'edit-tags.php?taxonomy=' . $tax->name );
 	}
-	unset( $tax );
+	unset( $tax, $i );
 
 } else {
 	$_wp_real_parent_file['users.php'] = 'profile.php';
