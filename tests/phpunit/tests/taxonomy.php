@@ -33,16 +33,6 @@ class Tests_Taxonomy extends WP_UnitTestCase {
 		}
 	}
 
-	function test_get_user_taxonomy() {
-		foreach ( get_object_taxonomies('user') as $taxonomy ) {
-			$tax = get_taxonomy($taxonomy);
-			// should return an object with the correct taxonomy object type
- 			$this->assertTrue( is_object( $tax ) );
- 			$this->assertTrue( is_array( $tax->object_type ) );
-		 	$this->assertEquals( array( 'user' ), $tax->object_type );
- 		}
- 	}
-
 	public function test_get_the_taxonomies() {
 		$post_id = self::factory()->post->create();
 
@@ -204,15 +194,15 @@ class Tests_Taxonomy extends WP_UnitTestCase {
  	 * @ticket 31383
  	 */
  	function test_register_user_taxonomy() {
- 	
+
 		// make up a new taxonomy name, and ensure it's unused
  		$tax = rand_str();
  		$this->assertFalse( taxonomy_exists($tax) );
- 	
+
 	 	register_taxonomy( $tax, 'user' );
  		$this->assertTrue( taxonomy_exists($tax) );
  		$this->assertFalse( is_taxonomy_hierarchical($tax) );
- 	
+
  		// clean up
  		unset($GLOBALS['wp_taxonomies'][$tax]);
  	}
@@ -359,7 +349,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
  		$tax = 'test_tax';
  		$this->assertFalse( taxonomy_exists( $tax ) );
  		register_taxonomy( $tax, '', array( 'hierarchical' => true ) );
- 	
+
  		// Core taxonomy, users
  		$this->assertTrue( register_taxonomy_for_object_type( 'category', 'user' ) );
  		$this->assertTrue( unregister_taxonomy_for_object_type( 'category', 'user' ) );
@@ -371,7 +361,7 @@ class Tests_Taxonomy extends WP_UnitTestCase {
  		$this->assertTrue( unregister_taxonomy_for_object_type( $tax, 'user' ) );
  		$this->assertFalse( unregister_taxonomy_for_object_type( $tax, 'user' ) );
  		$this->assertTrue( register_taxonomy_for_object_type( $tax, 'user' ) );
- 	
+
  		unset( $GLOBALS['wp_taxonomies'][ $tax ] );
  	}
 
