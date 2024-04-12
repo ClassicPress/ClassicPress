@@ -780,6 +780,7 @@ class WP_User_Query {
 		 * @since CP-2.1.0
 		 *
 		 */
+		global $pagenow;
 		if ( $pagenow === 'users.php' ) {
 
 			// Get user taxonomies
