@@ -112,16 +112,16 @@ function edit_user( $user_id = 0 ) {
 	if ( ! empty( $taxonomies ) ) {
 		foreach ( $taxonomies as $taxonomy ) {
 			$tax_array[] = $taxonomy->name;
-		}
-		foreach ( $tax_array as $tax_field ) {
-			if ( isset( $_POST[ $tax_field ] ) ) {
-				$tax_names = array();
-				foreach ( $_POST[ $tax_field ] as $tax_name ) {
-					$tax_names[] = wp_unslash( $tax_name );
+			foreach ( $tax_array as $tax_field ) {
+				if ( isset( $_POST[ $tax_field ] ) ) {
+					$tax_names = array();
+					foreach ( $_POST[ $tax_field ] as $tax_name ) {
+						$tax_names[] = wp_unslash( $tax_name );
+					}
+					wp_set_object_terms( $user->ID, array_map( 'sanitize_text_field', $tax_names ), $taxonomy->name );
+				} else {
+					wp_delete_object_term_relationships( $user->ID, $taxonomy->name );
 				}
-				wp_set_object_terms( $user->ID, array_map( 'sanitize_text_field', $tax_names ), $taxonomy->name );
-			} else {
-				wp_delete_object_term_relationships( $user->ID, $taxonomy->name );
 			}
 		}
 	}
