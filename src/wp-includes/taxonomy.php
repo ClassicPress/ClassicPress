@@ -20,6 +20,9 @@
  * @since 2.8.0
  * @since 5.9.0 Added `'wp_template_part_area'` taxonomy.
  *
+ * @since CP-2.1.0
+ * Includes media categories and media tags
+ *
  * @global WP_Rewrite $wp_rewrite WordPress rewrite component.
  */
 function create_initial_taxonomies() {
@@ -32,6 +35,8 @@ function create_initial_taxonomies() {
 			'category'    => false,
 			'post_tag'    => false,
 			'post_format' => false,
+			'media_category' => false,
+			'media_post_tag' => false,
 		);
 	} else {
 
@@ -57,6 +62,18 @@ function create_initial_taxonomies() {
 				'ep_mask'      => EP_TAGS,
 			),
 			'post_format' => $post_format_base ? array( 'slug' => $post_format_base ) : false,
+			'media_category'    => array(
+				'hierarchical' => true,
+				'slug'         => get_option( 'media_category_base' ) ? get_option( 'media_category_base' ) : 'media_category',
+				'with_front'   => ! get_option( 'media_category_base' ) || $wp_rewrite->using_index_permalinks(),
+				'ep_mask'      => EP_CATEGORIES,
+			),
+			'media_post_tag'    => array(
+				'hierarchical' => false,
+				'slug'         => get_option( 'media_tag_base' ) ? get_option( 'media_tag_base' ) : 'media_tag',
+				'with_front'   => ! get_option( 'media_tag_base' ) || $wp_rewrite->using_index_permalinks(),
+				'ep_mask'      => EP_TAGS,
+			),
 		);
 	}
 
@@ -182,6 +199,84 @@ function create_initial_taxonomies() {
 			'show_ui'           => false,
 			'_builtin'          => true,
 			'show_in_nav_menus' => current_theme_supports( 'post-formats' ),
+		)
+	);
+
+	register_taxonomy(
+		'media_category',
+		'attachment',
+		array(
+			'hierarchical' => true,
+			'labels'       => array(
+				'name'                       => __( 'Media Categories' ),
+				'singular_name'              => __( 'Media Category' ),
+				'search_items'               => __( 'Search Media Categories' ),
+				'popular_items'              => null,
+				'all_items'                  => __( 'All Media Categories' ),
+				'edit_item'                  => __( 'Edit Media Category' ),
+				'update_item'                => __( 'Update Media Category' ),
+				'add_new_item'               => __( 'Add New Media Category' ),
+				'new_item_name'              => __( 'New Media Category Name' ),
+				'separate_items_with_commas' => null,
+				'add_or_remove_items'        => null,
+				'choose_from_most_used'      => null,
+				'back_to_items'              => __( '&larr; Go to Media Categories' ),
+			),
+			'query_var'             => 'media_category_name',
+			'update_count_callback' => '_update_generic_term_count',
+			'rewrite'               => $rewrite['media_category'],
+			'public'                => true,
+			'show_ui'               => true,
+			'show_admin_column'     => true,
+			'_builtin'              => true,
+			'capabilities'          => array(
+				'manage_terms' => 'manage_categories',
+				'edit_terms'   => 'edit_categories',
+				'delete_terms' => 'delete_categories',
+				'assign_terms' => 'assign_categories',
+			),
+			'show_in_rest'          => true,
+			'rest_base'             => 'media_categories',
+			'rest_controller_class' => 'WP_REST_Terms_Controller',
+		)
+	);
+
+	register_taxonomy(
+		'media_post_tag',
+		'attachment',
+		array(
+			'hierarchical' => false,
+			'labels'       => array(
+				'name'                       => __( 'Media Tags' ),
+				'singular_name'              => __( 'Media Tag' ),
+				'search_items'               => __( 'Search Media Tags' ),
+				'popular_items'              => null,
+				'all_items'                  => __( 'All Media Tags' ),
+				'edit_item'                  => __( 'Edit Media Tag' ),
+				'update_item'                => __( 'Update Media Tag' ),
+				'add_new_item'               => __( 'Add New Media Tag' ),
+				'new_item_name'              => __( 'New Media Tag Name' ),
+				'separate_items_with_commas' => __( 'Separate tags with commas' ),
+				'add_or_remove_items'        => null,
+				'choose_from_most_used'      => __( 'Choose from the most used tags' ),
+				'back_to_items'              => __( '&larr; Go to Media Tags' ),
+			),
+			'query_var'             => 'media_tag',
+			'update_count_callback' => '_update_generic_term_count',
+			'rewrite'               => $rewrite['media_post_tag'],
+			'public'                => true,
+			'show_ui'               => true,
+			'show_admin_column'     => true,
+			'_builtin'              => true,
+			'capabilities'          => array(
+				'manage_terms' => 'manage_post_tags',
+				'edit_terms'   => 'edit_post_tags',
+				'delete_terms' => 'delete_post_tags',
+				'assign_terms' => 'assign_post_tags',
+			),
+			'show_in_rest'          => true,
+			'rest_base'             => 'media_tags',
+			'rest_controller_class' => 'WP_REST_Terms_Controller',
 		)
 	);
 }
