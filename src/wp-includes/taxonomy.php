@@ -52,13 +52,13 @@ function create_initial_taxonomies() {
 		 */
 		$post_format_base = apply_filters( 'post_format_rewrite_base', 'type' );
 		$rewrite          = array(
-			'category'    => array(
+			'category'          => array(
 				'hierarchical' => true,
 				'slug'         => get_option( 'category_base' ) ? get_option( 'category_base' ) : 'category',
 				'with_front'   => ! get_option( 'category_base' ) || $wp_rewrite->using_index_permalinks(),
 				'ep_mask'      => EP_CATEGORIES,
 			),
-			'post_tag'    => array(
+			'post_tag'          => array(
 				'hierarchical' => false,
 				'slug'         => get_option( 'tag_base' ) ? get_option( 'tag_base' ) : 'tag',
 				'with_front'   => ! get_option( 'tag_base' ) || $wp_rewrite->using_index_permalinks(),
