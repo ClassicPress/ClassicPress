@@ -4210,7 +4210,27 @@ function wp_insert_post( $postarr, $wp_error = false, $fire_after_hooks = true )
 
 				return new WP_Error( 'db_update_error', $message, $wpdb->last_error );
 			} else {
-				return 0;
+				/**
+				 * Updates media taxonomies (if any).
+				 *
+				 * @since CP-2.1.0
+				 */
+				if ( 'attachment' === $post_type && ! empty( $postarr['tax_input'] ) ) {
+					foreach ( $postarr['tax_input'] as $taxonomy => $tags ) {
+						$taxonomy_obj = get_taxonomy( $taxonomy );
+
+						// array = hierarchical, string = non-hierarchical.
+						if ( is_array( $tags ) ) {
+							$tags = array_filter( $tags );
+						}
+
+						if ( current_user_can( $taxonomy_obj->cap->assign_terms ) ) {
+							wp_set_post_terms( $post_id, $tags, $taxonomy );
+						}
+					}
+				} else {
+					return 0;
+				}
 			}
 		}
 	} else {
