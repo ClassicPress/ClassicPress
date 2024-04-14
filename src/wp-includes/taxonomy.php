@@ -45,6 +45,9 @@ function create_initial_taxonomies() {
 		 *
 		 * @since 3.1.0
 		 *
+		 * @since CP-2.1.0
+		 * Includes media categories and media tags
+		 *
 		 * @param string $context Context of the rewrite base. Default 'type'.
 		 */
 		$post_format_base = apply_filters( 'post_format_rewrite_base', 'type' );
@@ -224,10 +227,13 @@ function create_initial_taxonomies() {
 			),
 			'query_var'             => 'media_category_name',
 			'update_count_callback' => '_update_generic_term_count',
-			'rewrite'               => $rewrite['media_category'],
-			'public'                => true,
+			'rewrite'               => false,
 			'show_ui'               => true,
+			'show_in_menu'          => true,
+			'show_in_nav_menus'     => false,
+			'show_tagcloud'         => false,
 			'show_admin_column'     => true,
+			'has_default'           => false,
 			'_builtin'              => true,
 			'capabilities'          => array(
 				'manage_terms' => 'manage_categories',
@@ -263,10 +269,13 @@ function create_initial_taxonomies() {
 			),
 			'query_var'             => 'media_tag',
 			'update_count_callback' => '_update_generic_term_count',
-			'rewrite'               => $rewrite['media_post_tag'],
-			'public'                => true,
+			'rewrite'               => false,
 			'show_ui'               => true,
+			'show_in_menu'          => true,
+			'show_in_nav_menus'     => false,
+			'show_tagcloud'         => false,
 			'show_admin_column'     => true,
+			'has_default'           => false,
 			'_builtin'              => true,
 			'capabilities'          => array(
 				'manage_terms' => 'manage_post_tags',
