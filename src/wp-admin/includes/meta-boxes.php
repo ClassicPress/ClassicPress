@@ -593,14 +593,14 @@ function post_tags_meta_box( $post, $box ) {
 		 * @since CP-2.1.0
 		 */
 		$object_types = $taxonomy->object_type;
-		if ( $object_types[0] === 'attachment' ) {			
+		if ( $object_types[0] === 'attachment' ) {
 			$tags = get_terms(
 				array(
 					'taxonomy'   => $taxonomy->name,
 					'hide_empty' => false,
 					'fields'     => 'names',
 				)
-			);			
+			);
 		} else {
 			$tags = get_tags(
 				array(
