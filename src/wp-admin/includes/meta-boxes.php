@@ -586,12 +586,29 @@ function post_tags_meta_box( $post, $box ) {
 
 	<?php
 	if ( $user_can_assign_terms ) :
-		$tags = get_tags(
-			array(
-				'hide_empty' => false,
-				'fields'     => 'names',
-			)
-		);
+
+		/**
+		 * Check if this is a media post tag taxonomy.
+		 *
+		 * @since CP-2.1.0
+		 */
+		$object_types = $taxonomy->object_type;
+		if ( $object_types[0] === 'attachment' ) {			
+			$tags = get_terms(
+				array(
+					'taxonomy'   => $taxonomy->name,
+					'hide_empty' => false,
+					'fields'     => 'names',
+				)
+			);			
+		} else {
+			$tags = get_tags(
+				array(
+					'hide_empty' => false,
+					'fields'     => 'names',
+				)
+			);
+		}
 
 		$tags_list = '<datalist id="tags-list">';
 		if ( ! empty( $tags ) ) {
