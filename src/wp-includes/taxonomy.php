@@ -21,7 +21,7 @@
  * @since 5.9.0 Added `'wp_template_part_area'` taxonomy.
  *
  * @since CP-2.1.0
- * Includes media categories and media tags
+ * Includes media categories and media tags.
  *
  * @global WP_Rewrite $wp_rewrite WordPress rewrite component.
  */
@@ -35,8 +35,6 @@ function create_initial_taxonomies() {
 			'category'    => false,
 			'post_tag'    => false,
 			'post_format' => false,
-			'media_category' => false,
-			'media_post_tag' => false,
 		);
 	} else {
 
@@ -65,18 +63,6 @@ function create_initial_taxonomies() {
 				'ep_mask'      => EP_TAGS,
 			),
 			'post_format' => $post_format_base ? array( 'slug' => $post_format_base ) : false,
-			'media_category'    => array(
-				'hierarchical' => true,
-				'slug'         => get_option( 'media_category_base' ) ? get_option( 'media_category_base' ) : 'media_category',
-				'with_front'   => ! get_option( 'media_category_base' ) || $wp_rewrite->using_index_permalinks(),
-				'ep_mask'      => EP_CATEGORIES,
-			),
-			'media_post_tag'    => array(
-				'hierarchical' => false,
-				'slug'         => get_option( 'media_tag_base' ) ? get_option( 'media_tag_base' ) : 'media_tag',
-				'with_front'   => ! get_option( 'media_tag_base' ) || $wp_rewrite->using_index_permalinks(),
-				'ep_mask'      => EP_TAGS,
-			),
 		);
 	}
 
