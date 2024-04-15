@@ -19,7 +19,7 @@ class Tests_Media_GetAttachmentTaxonomies extends WP_UnitTestCase {
 		$attachment = get_post( $a );
 
 		$found    = get_attachment_taxonomies( $attachment, 'names' );
-		$expected = array( 'wptests_tax' );
+		$expected = array( 'media_category', 'media_post_tag', 'wptests_tax' );
 
 		$this->assertSame( $expected, $found );
 	}
@@ -38,7 +38,7 @@ class Tests_Media_GetAttachmentTaxonomies extends WP_UnitTestCase {
 		$attachment = get_post( $a );
 
 		$found    = get_attachment_taxonomies( $attachment, 'names' );
-		$expected = array( 'wptests_tax' );
+		$expected = array( 'media_category', 'media_post_tag', 'wptests_tax' );
 
 		$this->assertSame( $expected, $found );
 	}
@@ -57,7 +57,7 @@ class Tests_Media_GetAttachmentTaxonomies extends WP_UnitTestCase {
 		$attachment = get_post( $a );
 
 		$found    = get_attachment_taxonomies( $attachment, 'names' );
-		$expected = array( 'wptests_tax' );
+		$expected = array( 'media_category', 'media_post_tag', 'wptests_tax' );
 
 		$this->assertSame( $expected, $found );
 	}
@@ -76,7 +76,7 @@ class Tests_Media_GetAttachmentTaxonomies extends WP_UnitTestCase {
 		$attachment = get_post( $a );
 
 		$found    = get_attachment_taxonomies( $attachment, 'names' );
-		$expected = array( 'wptests_tax' );
+		$expected = array( 'media_category', 'media_post_tag', 'wptests_tax' );
 
 		$this->assertSame( $expected, $found );
 	}
@@ -95,7 +95,7 @@ class Tests_Media_GetAttachmentTaxonomies extends WP_UnitTestCase {
 		$attachment = get_post( $a );
 
 		$found    = get_attachment_taxonomies( $attachment, 'names' );
-		$expected = array( 'wptests_tax' );
+		$expected = array( 'media_category', 'media_post_tag', 'wptests_tax' );
 
 		$this->assertSame( $expected, $found );
 	}
@@ -117,8 +117,9 @@ class Tests_Media_GetAttachmentTaxonomies extends WP_UnitTestCase {
 		$attachment = get_post( $a );
 
 		$found = get_attachment_taxonomies( $attachment, 'objects' );
+		$expected = array( 'media_category', 'media_post_tag', 'wptests_tax2' );
 
-		$this->assertSame( array( 'wptests_tax2' ), array_keys( $found ) );
+		$this->assertSame( $expected, array_keys( $found ) );
 		$this->assertIsObject( $found['wptests_tax2'] );
 		$this->assertSame( 'wptests_tax2', $found['wptests_tax2']->name );
 	}
@@ -141,8 +142,9 @@ class Tests_Media_GetAttachmentTaxonomies extends WP_UnitTestCase {
 		$attachment = get_post( $a );
 
 		$found = get_attachment_taxonomies( $attachment, 'objects' );
+		$expected = array( 'media_category', 'media_post_tag', 'wptests_tax2' );
 
-		$this->assertSame( array( 'wptests_tax2' ), array_keys( $found ) );
+		$this->assertSame( $expected, array_keys( $found ) );
 		$this->assertIsObject( $found['wptests_tax2'] );
 		$this->assertSame( 'wptests_tax2', $found['wptests_tax2']->name );
 	}
