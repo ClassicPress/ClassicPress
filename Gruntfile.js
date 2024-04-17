@@ -556,6 +556,9 @@ module.exports = function(grunt) {
 			}
 		},
 		eslint: {
+			options: {
+				overrideConfigFile: '.eslint.config.js'
+			},
 			grunt: {
 				src: [
 					'Gruntfile.js'
