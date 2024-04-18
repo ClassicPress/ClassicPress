@@ -8558,12 +8558,12 @@ mockedApiResponse.MediaCollection = [
                 {
                     "taxonomy": "media_category",
                     "embeddable": true,
-                    "href": "http://example.org/index.php?rest_route=%2Fwp%2Fv2%2Fmedia_categories&post=1878"
+                    "href": "http://example.org/index.php?rest_route=%2Fwp%2Fv2%2Fmedia_categories&post=10"
                 },
                 {
                     "taxonomy": "media_post_tag",
                     "embeddable": true,
-                    "href": "http://example.org/index.php?rest_route=%2Fwp%2Fv2%2Fmedia_tags&post=1878"
+                    "href": "http://example.org/index.php?rest_route=%2Fwp%2Fv2%2Fmedia_tags&post=10"
                 }
             ],
             "curies": [
