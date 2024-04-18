@@ -216,6 +216,10 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 				'context',
 				'exclude',
 				'include',
+				'media_categories',
+				'media_categories_exclude',
+				'media_tags',
+				'media_tags_exclude',
 				'media_type',
 				'mime_type',
 				'modified_after',
@@ -231,6 +235,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 				'search_columns',
 				'slug',
 				'status',
+				'tax_relation',
 			),
 			$keys
 		);
@@ -1554,7 +1559,7 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$response   = rest_get_server()->dispatch( $request );
 		$data       = $response->get_data();
 		$properties = $data['schema']['properties'];
-		$this->assertCount( 27, $properties );
+		$this->assertCount( 29, $properties );
 		$this->assertArrayHasKey( 'author', $properties );
 		$this->assertArrayHasKey( 'alt_text', $properties );
 		$this->assertArrayHasKey( 'caption', $properties );
@@ -1571,6 +1576,8 @@ class WP_Test_REST_Attachments_Controller extends WP_Test_REST_Post_Type_Control
 		$this->assertArrayHasKey( 'id', $properties );
 		$this->assertArrayHasKey( 'link', $properties );
 		$this->assertArrayHasKey( 'media_type', $properties );
+		$this->assertArrayHasKey( 'media_categories', $properties );
+		$this->assertArrayHasKey( 'media_tags', $properties );
 		$this->assertArrayHasKey( 'meta', $properties );
 		$this->assertArrayHasKey( 'mime_type', $properties );
 		$this->assertArrayHasKey( 'media_details', $properties );
