@@ -381,6 +381,25 @@ class WP_Users_List_Table extends WP_List_Table {
 			unset( $columns['posts'] );
 		}
 
+		$taxonomies = get_object_taxonomies( 'user', 'objects' );
+		$taxonomies = wp_filter_object_list( $taxonomies, array( 'show_admin_column' => true ), 'and', 'name' );
+
+		/**
+		 * Filters the taxonomy columns in the Users list table.
+		 *
+		 * @since CP-2.1.0
+		 *
+		 * @param string[] $taxonomies An array of registered taxonomy names to show for users.
+		 * @param string   $object_type  The object type. Default 'user'.
+		 */
+		$taxonomies = apply_filters( 'manage_taxonomies_for_user_columns', $taxonomies, 'user' );
+		$taxonomies = array_filter( $taxonomies, 'taxonomy_exists' );
+
+		foreach ( $taxonomies as $taxonomy ) {
+			$column_key = 'taxonomy-' . $taxonomy;
+			$columns[ $column_key ] = get_taxonomy( $taxonomy )->labels->name;
+		}
+
 		return $columns;
 	}
 
@@ -557,6 +576,11 @@ class WP_Users_List_Table extends WP_List_Table {
 				$classes .= ' hidden';
 			}
 
+			$taxonomy = '';
+			if ( str_contains( $column_name, 'taxonomy-' ) ) {
+				$taxonomy = substr( $column_name, 9 );
+			}
+
 			$data = 'data-colname="' . esc_attr( wp_strip_all_tags( $column_display_name ) ) . '"';
 
 			$attributes = "class='$classes' $data";
@@ -609,6 +633,52 @@ class WP_Users_List_Table extends WP_List_Table {
 							);
 						} else {
 							$row .= 0;
+						}
+						break;
+
+					/**
+					 * Adds support for taxonomy columns
+					 *
+					 * @since CP-2.1.0
+					 */
+					case 'taxonomy-' . $taxonomy:
+						$taxonomy_object = get_taxonomy( $taxonomy );
+						$terms = wp_get_object_terms( $user_object->ID, $taxonomy );
+
+						if ( is_array( $terms ) ) {
+							$term_links = array();
+
+							foreach ( $terms as $t ) {
+								$users_in_term_qv = array();
+
+								$users_in_term_qv['object_type'] = 'user';
+
+								if ( $taxonomy_object->query_var ) {
+									$users_in_term_qv[ $taxonomy_object->query_var ] = $t->slug;
+								} else {
+									$users_in_term_qv['taxonomy'] = $taxonomy;
+									$users_in_term_qv['term']     = $t->slug;
+								}
+
+								$label = sanitize_term_field( 'name', $t->name, $t->term_id, $taxonomy, 'display' );
+
+								$term_links[] = '<a href=' . esc_url( admin_url( 'users.php?' . $taxonomy . '=' . $t->slug ) ) . '>' . esc_html( $label ) . '</a>';
+							}
+
+							/**
+							 * Filters the links in `$taxonomy` column of edit.php.
+							 *
+							 * @since CP-2.1.0
+							 *
+							 * @param string[]  $term_links Array of term editing links.
+							 * @param string    $taxonomy   Taxonomy name.
+							 * @param WP_Term[] $terms      Array of term objects appearing in the post row.
+							 */
+							$term_links = apply_filters( 'user_column_taxonomy_links', $term_links, $taxonomy, $terms );
+
+							$row .= implode( wp_get_list_item_separator(), $term_links );
+						} else {
+							$row .= '<span aria-hidden="true">&#8212;</span><span class="screen-reader-text">' . $taxonomy_object->labels->no_terms . '</span>';
 						}
 						break;
 					default:
