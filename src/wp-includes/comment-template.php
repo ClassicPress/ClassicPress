@@ -2714,14 +2714,20 @@ function comment_form( $args = array(), $post = null ) {
 		else :
 
 			printf(
-				'<form action="%s" method="post" id="%s" class="%s">',
+				'<form action="%s" method="post" id="%s" class="%s" %s>',
 				esc_url( $args['action'] ),
 				esc_attr( $args['id_form'] ),
-				esc_attr( $args['class_form'] )
+				esc_attr( $args['class_form'] ),
+				/**
+				 * Fires inside the comment form tag.
+				 *
+				 * @since CP-2.1.0
+				 */
+				apply_filters( 'comment_form_tag', null, $args )
 			);
 
 			/**
-			 * Fires at the top of the comment form, inside the form tag.
+			 * Fires at the top of the comment form, just after the form tag.
 			 *
 			 * @since 3.0.0
 			 */
