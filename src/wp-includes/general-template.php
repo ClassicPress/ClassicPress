@@ -310,7 +310,7 @@ function get_search_form( $args = array() ) {
 				/* translators: Hidden accessibility text. */
 				_x( 'Search for:', 'label' ) .
 				'</span>
-				<input type="search" class="search-field" placeholder="' . esc_attr_x( 'Search &hellip;', 'placeholder' ) . '" value="' . get_search_query() . '" name="s">
+				<input type="search" class="search-field" placeholder="' . esc_attr_x( 'Search &hellip;', 'placeholder' ) . '" value="' . get_search_query() . '" name="s" enterkeyhint="search">
 			</label>
 			<input type="submit" class="search-submit" value="' . esc_attr_x( 'Search', 'submit button' ) . '">
 		</form>';
