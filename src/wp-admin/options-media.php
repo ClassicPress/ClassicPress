@@ -51,15 +51,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
  *
  * New options based on year and media category added.
  */
-$storefolders = get_option( 'uploads_use_yearmonth_folders' ) ?: 'uploads';
-
-$media_terms = get_terms( array(
-    'taxonomy'   => 'media_category',
-    'hide_empty' => false,
-) );
-
-$media_attribute = empty( $media_terms ) ? 'disabled' : '';
-$media_requires = empty( $media_terms ) ? ' <em>This option requires that at least one media category has been created.</em>' : '';
+$storefolders = get_option( 'uploads_use_yearmonth_folders' ) ?: '0';
 ?>
 
 <div class="wrap">
