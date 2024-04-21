@@ -2723,7 +2723,7 @@ function comment_form( $args = array(), $post = null ) {
 				 *
 				 * @since CP-2.1.0
 				 */
-				apply_filters( 'comment_form_tag', null, $args )
+				esc_attr( apply_filters( 'comment_form_tag', null ) )
 			);
 
 			/**
