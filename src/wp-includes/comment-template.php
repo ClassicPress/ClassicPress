@@ -2713,17 +2713,40 @@ function comment_form( $args = array(), $post = null ) {
 
 		else :
 
+			/**
+			 * Filters additional comment form attributes.
+			 *
+			 * The following attributes are allowed:
+			 * `accept-charset`, `autocapitalize`, `autocomplete`, `enctype`, `novalidate`
+			 * Pass attribute names as the array key.
+			 * Pass attribute values as the array value, or `true` in the case of attributes that require no value, for example `novalidate`.
+			 *
+			 * @since CP-2.1.0
+			 *
+			 * @param array   An associative array containing the additional attributes for the form.
+			 */
+			$comment_form_attrs = (array) apply_filters( 'comment_form_attrs', array() );
+
+			$comment_form_attributes = '';
+			if ( ! empty( $comment_form_attrs ) ) {
+				$allowed_attributes = array( 'accept-charset', 'autocapitalize', 'autocomplete', 'enctype', 'novalidate' );
+				foreach ( $comment_form_attrs as $comment_form_attr_name => $comment_form_attr_value ) {
+					if ( in_array( $comment_form_attr_name, $allowed_attributes ) ) {
+						if ( 'true' === $comment_form_attr_value ) {
+							$comment_form_attributes .= ' ' . esc_attr( $comment_form_attr_name );
+						} else {
+							$comment_form_attributes .= ' ' . esc_attr( $comment_form_attr_name ) . '="' . esc_attr( $comment_form_attr_value ) . '"';
+						}
+					}
+				}
+			}
+
 			printf(
-				'<form action="%s" method="post" id="%s" class="%s" %s>',
+				'<form action="%s" method="post" id="%s" class="%s"%s>',
 				esc_url( $args['action'] ),
 				esc_attr( $args['id_form'] ),
 				esc_attr( $args['class_form'] ),
-				/**
-				 * Fires inside the comment form tag.
-				 *
-				 * @since CP-2.1.0
-				 */
-				esc_attr( apply_filters( 'comment_form_tag', null ) )
+				$comment_form_attributes
 			);
 
 			/**
