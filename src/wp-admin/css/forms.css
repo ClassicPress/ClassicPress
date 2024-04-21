@@ -805,6 +805,10 @@ ul#add-to-blog-users {
 	font-weight: 400;
 }
 
+.uploads_use_yearmonth_folders br {
+	margin-bottom: 1em;
+}
+
 .form-table td p {
 	margin-top: 4px;
 	margin-bottom: 0;
