@@ -49,9 +49,12 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
  *
  * @since CP-2.1.0
  *
- * New options based on year and media category added.
+ * New option based on year only.
  */
-$storefolders = get_option( 'uploads_use_yearmonth_folders' ) ?: '0';
+$storefolders = '0';
+if ( ! empty( get_option( 'uploads_use_yearmonth_folders' ) ) ) {
+	$storefolders = get_option( 'uploads_use_yearmonth_folders' );
+}
 ?>
 
 <div class="wrap">
