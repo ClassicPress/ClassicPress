@@ -183,10 +183,7 @@ if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) :
 <label for="uploads_use_year_folders"><?php _e( 'Organize uploads into year-based folders.' ); ?></label><br>
 
 <input id="uploads_use_yearmonth_folders" type="radio" name="uploads_use_yearmonth_folders" value="1"<?php checked( '1', $storefolders ); ?>>
-<label for="uploads_use_yearmonth_folders"><?php _e( 'Organize uploads into month- and year-based folders.' ); ?></label><br>
-
-<input id="uploads_use_category_folders" type="radio" name="uploads_use_yearmonth_folders" value="category"<?php checked( 'category', $storefolders ); echo esc_attr( $media_attribute ) ?>>
-<label for="uploads_use_category_folders"><?php _e( 'Organize uploads according to media category.' ); echo $media_requires; ?></label>
+<label for="uploads_use_yearmonth_folders"><?php _e( 'Organize uploads into month- and year-based folders.' ); ?></label>
 </td>
 </tr>
 
