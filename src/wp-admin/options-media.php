@@ -44,6 +44,22 @@ get_current_screen()->set_help_sidebar(
 
 require_once ABSPATH . 'wp-admin/admin-header.php';
 
+/**
+ * Get upload organization preference.
+ *
+ * @since CP-2.1.0
+ *
+ * New options based on year and media category added.
+ */
+$storefolders = get_option( 'uploads_use_yearmonth_folders' ) ?: 'uploads';
+
+$media_terms = get_terms( array(
+    'taxonomy'   => 'media_category',
+    'hide_empty' => false,
+) );
+
+$media_attribute = empty( $media_terms ) ? 'disabled' : '';
+$media_requires = empty( $media_terms ) ? ' <em>This option requires that at least one media category has been created.</em>' : '';
 ?>
 
 <div class="wrap">
@@ -156,12 +172,21 @@ if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) :
 <td colspan="2" class="td-full">
 <?php else : ?>
 <tr>
-<td class="td-full">
+<th scope="row"><?php _e( 'How do you want your uploads organized?' ); ?></th>
+<td class="td-full uploads_use_yearmonth_folders">
 <?php endif; ?>
-<label for="uploads_use_yearmonth_folders">
-<input name="uploads_use_yearmonth_folders" type="checkbox" id="uploads_use_yearmonth_folders" value="1"<?php checked( '1', get_option( 'uploads_use_yearmonth_folders' ) ); ?>>
-	<?php _e( 'Organize my uploads into month- and year-based folders' ); ?>
-</label>
+
+<input id="uploads_use_one_folder" name="uploads_use_yearmonth_folders" type="radio" value="uploads"<?php checked( 'uploads', $storefolders ); ?>>
+<label for="uploads_use_one_folder"><?php _e( 'Store all uploads in the same folder.' ); ?></label><br>
+
+<input id="uploads_use_year_folders" type="radio" name="uploads_use_yearmonth_folders" value="year"<?php checked( 'year', $storefolders ); ?>>
+<label for="uploads_use_year_folders"><?php _e( 'Organize uploads into year-based folders.' ); ?></label><br>
+
+<input id="uploads_use_yearmonth_folders" type="radio" name="uploads_use_yearmonth_folders" value="1"<?php checked( '1', $storefolders ); ?>>
+<label for="uploads_use_yearmonth_folders"><?php _e( 'Organize uploads into month- and year-based folders.' ); ?></label><br>
+
+<input id="uploads_use_category_folders" type="radio" name="uploads_use_yearmonth_folders" value="category"<?php checked( 'category', $storefolders ); echo esc_attr( $media_attribute ) ?>>
+<label for="uploads_use_category_folders"><?php _e( 'Organize uploads according to media category.' ); echo $media_requires; ?></label>
 </td>
 </tr>
 
