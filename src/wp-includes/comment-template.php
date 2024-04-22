@@ -2718,8 +2718,8 @@ function comment_form( $args = array(), $post = null ) {
 			 *
 			 * The following attributes are allowed:
 			 * `accept-charset`, `autocapitalize`, `autocomplete`, `enctype`, `novalidate`
-			 * Pass attribute names as the array key.
-			 * Pass attribute values as the array value, or `true` in the case of attributes that require no value, for example `novalidate`.
+			 * Pass attribute names as a string array key.
+			 * Pass attribute values as a string array value, or boolean `true` in the case of attributes that require no value, for example `novalidate`.
 			 *
 			 * @since CP-2.1.0
 			 *
@@ -2732,10 +2732,16 @@ function comment_form( $args = array(), $post = null ) {
 				$allowed_attributes = array( 'accept-charset', 'autocapitalize', 'autocomplete', 'enctype', 'novalidate' );
 				foreach ( $comment_form_attrs as $comment_form_attr_name => $comment_form_attr_value ) {
 					if ( in_array( $comment_form_attr_name, $allowed_attributes ) ) {
-						if ( 'true' === $comment_form_attr_value ) {
+						if ( true === $comment_form_attr_value ) {
 							$comment_form_attributes .= ' ' . esc_attr( $comment_form_attr_name );
-						} else {
+						} elseif ( is_string( $comment_form_attr_value ) ) {
 							$comment_form_attributes .= ' ' . esc_attr( $comment_form_attr_name ) . '="' . esc_attr( $comment_form_attr_value ) . '"';
+						} else {
+							_doing_it_wrong(
+								"apply_filters( 'comment_form_attrs', array() )",
+								__( 'Array values must only be a string or `true` boolean' ),
+								'CP-2.1.0'
+							);
 						}
 					}
 				}
