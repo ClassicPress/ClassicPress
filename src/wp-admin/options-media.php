@@ -171,7 +171,7 @@ if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) :
 <td class="td-full uploads_use_yearmonth_folders">
 <?php endif; ?>
 
-<input id="uploads_use_one_folder" name="uploads_use_yearmonth_folders" type="radio" value="uploads"<?php checked( '0', $storefolders ); ?>>
+<input id="uploads_use_one_folder" name="uploads_use_yearmonth_folders" type="radio" value="0"<?php checked( empty( $storefolders ), true ); ?>>
 <label for="uploads_use_one_folder"><?php _e( 'Store all uploads in the same folder.' ); ?></label><br>
 
 <input id="uploads_use_year_folders" type="radio" name="uploads_use_yearmonth_folders" value="year"<?php checked( 'year', $storefolders ); ?>>
