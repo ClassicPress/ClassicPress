@@ -77,6 +77,19 @@ class Tests_Upload extends WP_UnitTestCase {
 		$this->assertFalse( $info['error'] );
 	}
 
+	public function test_upload_dir_yearnum() {
+		update_option( 'uploads_use_yearmonth_folders', 'year' );
+
+		// Use `_wp_upload_dir()` directly to bypass caching and work with the changed options.
+		$info = _wp_upload_dir();
+		$year = date_format( date_create( 'now' ), '/Y' );
+
+		$this->assertSame( get_option( 'siteurl' ) . '/wp-content/uploads' . $year, $info['url'] );
+		$this->assertSame( ABSPATH . 'wp-content/uploads' . $year, $info['path'] );
+		$this->assertSame( $year, $info['subdir'] );
+		$this->assertFalse( $info['error'] );
+	}
+
 	public function test_upload_path_absolute() {
 		update_option( 'upload_url_path', 'http://' . WP_TESTS_DOMAIN . '/asdf' );
 
