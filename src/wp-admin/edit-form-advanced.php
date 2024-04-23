@@ -231,7 +231,7 @@ if ( 'auto-draft' === $post->post_status ) {
 		$post->post_title = '';
 		if ( '' === $post->post_content && '' === $post->post_excerpt ) {
 			$message = false;
-			$notice = __( 'You can\'t publish an empty post.' );
+			$notice  = __( 'You can\'t publish an empty post.' );
 		}
 	}
 	$autosave    = false;
