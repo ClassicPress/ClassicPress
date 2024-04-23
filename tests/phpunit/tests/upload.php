@@ -78,7 +78,7 @@ class Tests_Upload extends WP_UnitTestCase {
 	}
 
 	public function test_upload_dir_yearnum() {
-		update_option( 'uploads_use_yearmonth_folders', 'year' );
+		update_option( 'uploads_use_yearmonth_folders', '2' );
 
 		// Use `_wp_upload_dir()` directly to bypass caching and work with the changed options.
 		$info = _wp_upload_dir();
