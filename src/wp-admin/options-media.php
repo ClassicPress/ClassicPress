@@ -51,10 +51,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
  *
  * New option based on year only.
  */
-$storefolders = '0';
-if ( ! empty( get_option( 'uploads_use_yearmonth_folders' ) ) ) {
-	$storefolders = get_option( 'uploads_use_yearmonth_folders' );
-}
+$storefolders = (int) get_option( 'uploads_use_yearmonth_folders' );
 ?>
 
 <div class="wrap">
@@ -171,13 +168,13 @@ if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) :
 <td class="td-full uploads_use_yearmonth_folders">
 <?php endif; ?>
 
-<input id="uploads_use_one_folder" name="uploads_use_yearmonth_folders" type="radio" value="0"<?php checked( empty( $storefolders ), true ); ?>>
+<input id="uploads_use_one_folder" name="uploads_use_yearmonth_folders" type="radio" value="0"<?php checked( 0, $storefolders ); ?>>
 <label for="uploads_use_one_folder"><?php _e( 'Store all uploads in the same folder.' ); ?></label><br>
 
-<input id="uploads_use_year_folders" type="radio" name="uploads_use_yearmonth_folders" value="year"<?php checked( 'year', $storefolders ); ?>>
+<input id="uploads_use_year_folders" type="radio" name="uploads_use_yearmonth_folders" value="2"<?php checked( 2, $storefolders ); ?>>
 <label for="uploads_use_year_folders"><?php _e( 'Organize uploads into year-based folders.' ); ?></label><br>
 
-<input id="uploads_use_yearmonth_folders" type="radio" name="uploads_use_yearmonth_folders" value="1"<?php checked( '1', $storefolders ); ?>>
+<input id="uploads_use_yearmonth_folders" type="radio" name="uploads_use_yearmonth_folders" value="1"<?php checked( 1, $storefolders ); ?>>
 <label for="uploads_use_yearmonth_folders"><?php _e( 'Organize uploads into month- and year-based folders.' ); ?></label>
 </td>
 </tr>
