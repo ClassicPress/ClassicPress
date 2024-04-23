@@ -2488,7 +2488,7 @@ function _wp_upload_dir( $time = null ) {
 		$y      = substr( $time, 0, 4 );
 		$m      = substr( $time, 5, 2 );
 		$subdir = "/$y/$m";
-	} elseif ( $storefolders === 'year' ) {
+	} elseif ( $storefolders === '2' ) {
 		// Generate the yearly directories.
 		if ( ! $time ) {
 			$time = current_time( 'mysql' );
