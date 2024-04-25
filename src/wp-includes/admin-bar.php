@@ -805,11 +805,10 @@ function wp_admin_bar_edit_menu( $wp_admin_bar ) {
 		 * @since CP-2.1.0
 		 */
 		if ( current_user_can( 'manage_options' ) && defined( 'WP_DEBUG' ) && WP_DEBUG === true ) {
-			$label = '<strong style="font-weight:700;">' . __( 'Debugging Enabled' ) . '</strong>';
 			$wp_admin_bar->add_node(
 				array(
 					'id'     => 'cp-debugging',
-					'title'  => $label,
+					'title'  => '<strong style="font-weight:700;">' . __( 'Debugging Enabled' ) . '</strong>',
 				)
 			);
 		}
