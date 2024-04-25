@@ -800,15 +800,12 @@ function wp_admin_bar_edit_menu( $wp_admin_bar ) {
 		}
 
 		/**
-		 * Displays the current status of 'WP_DEBUG'.
+		 * Displays a message to administrators when 'WP_DEBUG' is set to true.
 		 *
 		 * @since CP-2.1.0
 		 */
-		if ( current_user_can( 'manage_options' ) ) {
-			$label = __( 'Debugging Disabled' );
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) {
-				$label = '<strong style="font-weight:700;">' . __( 'Debugging Enabled' ) . '</strong>';
-			}
+		if ( current_user_can( 'manage_options' ) && defined( 'WP_DEBUG' ) && WP_DEBUG === true ) {
+			$label = '<strong style="font-weight:700;">' . __( 'Debugging Enabled' ) . '</strong>';
 			$wp_admin_bar->add_node(
 				array(
 					'id'     => 'cp-debugging',
