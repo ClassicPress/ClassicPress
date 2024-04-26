@@ -428,6 +428,21 @@ function media_handle_upload( $file_id, $post_id, $post_data = array(), $overrid
 		// The image sub-sizes are created during wp_generate_attachment_metadata().
 		// This is generally slow and may cause timeouts or out of memory errors.
 		wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $file ) );
+
+		/**
+		 * If media storage is by media category, set the appropriate category for the attachment.
+		 *
+		 * @since CP-2.1.0
+		 */
+		$storefolders = get_option( 'uploads_use_yearmonth_folders' );
+		if ( $storefolders === '3' ) {
+			$cat_subfolder = get_option( 'media_cat_upload_folder' );
+			$storage_folder = str_replace( '/' . $name . '.' . $ext, '', $url );
+			if ( strpos( strrev( $storage_folder ), strrev( $cat_subfolder ) ) === 0 ) {
+				$exploded = explode( '/', $cat_subfolder );
+				wp_set_object_terms( $attachment_id, [end( $exploded )], 'media_category' ); // using array avoids string splitting
+			}
+		}
 	}
 
 	return $attachment_id;
@@ -508,6 +523,21 @@ function media_handle_sideload( $file_array, $post_id = 0, $desc = null, $post_d
 
 	if ( ! is_wp_error( $attachment_id ) ) {
 		wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $file ) );
+
+		/**
+		 * If media storage is by media category, set the appropriate category for the attachment.
+		 *
+		 * @since CP-2.1.0
+		 */
+		$storefolders = get_option( 'uploads_use_yearmonth_folders' );
+		if ( $storefolders === '3' ) {
+			$cat_subfolder = get_option( 'media_cat_upload_folder' );
+			$storage_folder = str_replace( '/' . $name . '.' . $ext, '', $url );
+			if ( strpos( strrev( $storage_folder ), strrev( $cat_subfolder ) ) === 0 ) {
+				$exploded = explode( '/', $cat_subfolder );
+				wp_set_object_terms( $attachment_id, [end( $exploded )], 'media_category' ); // using array avoids string splitting
+			}
+		}
 	}
 
 	return $attachment_id;
@@ -2076,6 +2106,8 @@ function media_upload_form( $errors = null ) {
 		do_action( 'upload_ui_over_quota' );
 		return;
 	}
+
+	cp_select_upload_media_category();
 
 	/**
 	 * Fires just before the legacy (pre-3.5.0) upload interface is loaded.
@@ -3795,3 +3827,71 @@ function wp_media_attach_action( $parent_id, $action = 'attach' ) {
 		exit;
 	}
 }
+
+/**
+ * Outputs a select box to select upload media category.
+ *
+ * Displays only if media storage option has been set to 'category'.
+ *
+ * @since CP-2.1.0
+ */
+function cp_select_upload_media_category() {	
+	$media_select = '';
+	$storefolders = get_option( 'uploads_use_yearmonth_folders' );
+	if ( $storefolders === '3' ) {
+		$cat_subfolder = get_option( 'media_cat_upload_folder' );
+
+		$media_terms = get_terms( array(
+			'taxonomy'   => 'media_category',
+			'hide_empty' => false,
+		) );
+
+		if ( ! empty( $media_terms ) ) {
+			$media_select .= '<label for="upload-category"><strong>' . __( 'Please choose the upload media category' ) . '</strong></label><br>';
+			$media_select .= '<select id="upload-category" name="upload-category">';
+			$media_select .= '<option value="">&nbsp;' . __( 'Media category' ) . '&nbsp;</option>';
+			foreach ( $media_terms as $media_term ) {
+				$ancestor_ids = get_ancestors( $media_term->term_id, 'media_category' );
+				$level = $count = count( $ancestor_ids );
+				$spaces = '';
+				$slug = $media_term->slug;
+				if ( $count > 0 ) {
+					foreach ( $ancestor_ids as $ancestor_id ) {
+						$spaces .= '&nbsp;';
+						$slug = get_term( $ancestor_id, 'media_category' )->slug . '/' . $slug;
+					}
+				}
+				$media_select .= '<option class="level-' . esc_attr( $level ) . '" value="' . esc_attr( $slug ) . '"' . selected( $slug, $cat_subfolder, false ) . '>' . $spaces . esc_html( $media_term->name ) . '</option>';
+			}
+			$media_select .= '</select><br><br>';
+		}
+	}
+	echo $media_select;
+}
+
+/**
+ * Updates the upload media category.
+ *
+ * Activated only if media storage option has been set to 'category'.
+ *
+ * @since CP-2.1.0
+ */
+function _cp_set_media_upload_category() {
+	$option = wp_unslash( $_POST['option'] );
+	$new_value = wp_unslash( $_POST['new_value'] );
+	update_option( $option, $new_value );
+
+	// Response in array.
+	$array_result = array(
+		'data'    => $new_value,
+		'success' => __( 'The upload media category folder has been updated.' ),
+	);
+
+    // Convert array to JSON.
+	wp_send_json( $array_result );
+ 
+    // Stop execution.
+    wp_die();
+}
+add_action( 'wp_ajax_media_cat_upload', '_cp_set_media_upload_category' );
+add_action( 'wp_ajax_nopriv_media_cat_upload', '_cp_set_media_upload_category' );
