@@ -3841,10 +3841,12 @@ function cp_select_upload_media_category() {
 	if ( $storefolders === '3' ) {
 		$cat_subfolder = get_option( 'media_cat_upload_folder' );
 
-		$media_terms = get_terms( array(
-			'taxonomy'   => 'media_category',
-			'hide_empty' => false,
-		) );
+		$media_terms = get_terms(
+			array(
+				'taxonomy'   => 'media_category',
+				'hide_empty' => false,
+			)
+		);
 
 		if ( ! empty( $media_terms ) ) {
 			$media_select .= '<label for="upload-category"><strong>' . __( 'Please choose the upload media category' ) . '</strong></label><br>';
@@ -3887,11 +3889,11 @@ function _cp_set_media_upload_category() {
 		'success' => __( 'The upload media category folder has been updated.' ),
 	);
 
-    // Convert array to JSON.
+	// Convert array to JSON.
 	wp_send_json( $array_result );
- 
-    // Stop execution.
-    wp_die();
+
+	// Stop execution.
+	wp_die();
 }
 add_action( 'wp_ajax_media_cat_upload', '_cp_set_media_upload_category' );
 add_action( 'wp_ajax_nopriv_media_cat_upload', '_cp_set_media_upload_category' );
