@@ -2713,15 +2713,50 @@ function comment_form( $args = array(), $post = null ) {
 
 		else :
 
+			/**
+			 * Filters additional comment form attributes.
+			 *
+			 * The following attributes are allowed:
+			 * `accept-charset`, `autocapitalize`, `autocomplete`, `enctype`, `novalidate`
+			 * Pass attribute names as a string array key.
+			 * Pass attribute values as a string array value, or boolean `true` in the case of attributes that require no value, for example `novalidate`.
+			 *
+			 * @since CP-2.1.0
+			 *
+			 * @param array   An associative array containing the additional attributes for the form.
+			 */
+			$comment_form_attrs = (array) apply_filters( 'comment_form_attrs', array() );
+
+			$comment_form_attributes = '';
+			if ( ! empty( $comment_form_attrs ) ) {
+				$allowed_attributes = array( 'accept-charset', 'autocapitalize', 'autocomplete', 'enctype', 'novalidate' );
+				foreach ( $comment_form_attrs as $comment_form_attr_name => $comment_form_attr_value ) {
+					if ( in_array( $comment_form_attr_name, $allowed_attributes ) ) {
+						if ( true === $comment_form_attr_value ) {
+							$comment_form_attributes .= ' ' . esc_attr( $comment_form_attr_name );
+						} elseif ( is_string( $comment_form_attr_value ) ) {
+							$comment_form_attributes .= ' ' . esc_attr( $comment_form_attr_name ) . '="' . esc_attr( $comment_form_attr_value ) . '"';
+						} else {
+							_doing_it_wrong(
+								"apply_filters( 'comment_form_attrs', array() )",
+								__( 'Array values must only be a string or `true` boolean' ),
+								'CP-2.1.0'
+							);
+						}
+					}
+				}
+			}
+
 			printf(
-				'<form action="%s" method="post" id="%s" class="%s">',
+				'<form action="%s" method="post" id="%s" class="%s"%s>',
 				esc_url( $args['action'] ),
 				esc_attr( $args['id_form'] ),
-				esc_attr( $args['class_form'] )
+				esc_attr( $args['class_form'] ),
+				$comment_form_attributes
 			);
 
 			/**
-			 * Fires at the top of the comment form, inside the form tag.
+			 * Fires at the top of the comment form, just after the form tag.
 			 *
 			 * @since 3.0.0
 			 */
