@@ -54,10 +54,12 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 $storefolders = (int) get_option( 'uploads_use_yearmonth_folders' );
 $media_attribute = $media_requires = '';
 
-$media_terms = get_terms( array(
-    'taxonomy'   => 'media_category',
-    'hide_empty' => false,
-) );
+$media_terms = get_terms(
+	array(
+		'taxonomy'   => 'media_category',
+		'hide_empty' => false,
+	)
+);
 
 if ( empty( $media_terms ) ) {
 	$media_attribute = 'disabled';
@@ -188,8 +190,13 @@ if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) :
 <input id="uploads_use_yearmonth_folders" type="radio" name="uploads_use_yearmonth_folders" value="1"<?php checked( 1, $storefolders ); ?>>
 <label for="uploads_use_yearmonth_folders"><?php _e( 'Organize uploads into month- and year-based folders.' ); ?></label><br>
 
-<input id="uploads_use_category_folders" type="radio" name="uploads_use_yearmonth_folders" value="3"<?php checked( 3, $storefolders ); echo esc_attr( $media_attribute ) ?>>
-<label for="uploads_use_category_folders"><?php _e( 'Organize uploads according to media category.' ); echo $media_requires; ?></label>
+<input id="uploads_use_category_folders" type="radio" name="uploads_use_yearmonth_folders" value="3"
+	<?php checked( 3, $storefolders ); ?>
+	<?php echo esc_attr( $media_attribute ); ?>>
+<label for="uploads_use_category_folders">
+	<?php _e( 'Organize uploads according to media category.' ); ?>
+	<?php echo $media_requires; ?>
+</label>
 </td>
 </tr>
 
