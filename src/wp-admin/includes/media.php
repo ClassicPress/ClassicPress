@@ -535,7 +535,7 @@ function media_handle_sideload( $file_array, $post_id = 0, $desc = null, $post_d
 			$storage_folder = str_replace( '/' . $name . '.' . $ext, '', $url );
 			if ( strpos( strrev( $storage_folder ), strrev( $cat_subfolder ) ) === 0 ) {
 				$exploded = explode( '/', $cat_subfolder );
-				wp_set_object_terms( $attachment_id, [end( $exploded )], 'media_category' ); // using array avoids string splitting
+				wp_set_object_terms( $attachment_id, array( end( $exploded ) ), 'media_category' ); // using array avoids string splitting
 			}
 		}
 	}
@@ -3835,7 +3835,7 @@ function wp_media_attach_action( $parent_id, $action = 'attach' ) {
  *
  * @since CP-2.1.0
  */
-function cp_select_upload_media_category() {	
+function cp_select_upload_media_category() {
 	$media_select = '';
 	$storefolders = get_option( 'uploads_use_yearmonth_folders' );
 	if ( $storefolders === '3' ) {
