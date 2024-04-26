@@ -440,7 +440,7 @@ function media_handle_upload( $file_id, $post_id, $post_data = array(), $overrid
 			$storage_folder = str_replace( '/' . $name . '.' . $ext, '', $url );
 			if ( strpos( strrev( $storage_folder ), strrev( $cat_subfolder ) ) === 0 ) {
 				$exploded = explode( '/', $cat_subfolder );
-				wp_set_object_terms( $attachment_id, [end( $exploded )], 'media_category' ); // using array avoids string splitting
+				wp_set_object_terms( $attachment_id, array( end( $exploded ) ), 'media_category' ); // using array avoids string splitting
 			}
 		}
 	}
