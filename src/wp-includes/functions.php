@@ -2479,7 +2479,8 @@ function _wp_upload_dir( $time = null ) {
 	$baseurl = $url;
 
 	$subdir = '';
-	if ( get_option( 'uploads_use_yearmonth_folders' ) ) {
+	$storefolders = get_option( 'uploads_use_yearmonth_folders' );
+	if ( $storefolders === '1' ) {
 		// Generate the yearly and monthly directories.
 		if ( ! $time ) {
 			$time = current_time( 'mysql' );
@@ -2487,6 +2488,20 @@ function _wp_upload_dir( $time = null ) {
 		$y      = substr( $time, 0, 4 );
 		$m      = substr( $time, 5, 2 );
 		$subdir = "/$y/$m";
+	} elseif ( $storefolders === '2' ) {
+		// Generate the yearly directories.
+		if ( ! $time ) {
+			$time = current_time( 'mysql' );
+		}
+		$y      = substr( $time, 0, 4 );
+		$subdir = "/$y";
+	} elseif ( $storefolders === '3' ) {
+		// Generate the media category directories.
+		if ( ! $time ) {
+			$time = current_time( 'mysql' );
+		}
+		$category = get_option( 'media_cat_upload_folder' );
+		$subdir   = "/$category";
 	}
 
 	$dir .= $subdir;
