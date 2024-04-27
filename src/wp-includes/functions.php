@@ -2500,8 +2500,7 @@ function _wp_upload_dir( $time = null ) {
 		if ( ! $time ) {
 			$time = current_time( 'mysql' );
 		}
-		$category = get_option( 'media_cat_upload_folder' );
-		$subdir   = "/$category";
+		$subdir = get_option( 'media_cat_upload_folder' );
 	}
 
 	$dir .= $subdir;
