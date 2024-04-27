@@ -387,6 +387,10 @@ input[type="radio"].disabled:checked:before {
 	display: none;
 }
 
+#upload-category {
+	margin-top: 0.5em;
+}
+
 .wp-admin .button-cancel {
 	display: inline-block;
 	min-height: 28px;
