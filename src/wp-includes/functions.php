@@ -2497,9 +2497,6 @@ function _wp_upload_dir( $time = null ) {
 		$subdir = "/$y";
 	} elseif ( $storefolders === '3' ) {
 		// Generate the media category directories.
-		if ( ! $time ) {
-			$time = current_time( 'mysql' );
-		}
 		$subdir = get_option( 'media_cat_upload_folder' );
 	}
 
