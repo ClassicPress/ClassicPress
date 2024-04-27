@@ -3881,7 +3881,7 @@ function cp_select_upload_media_category() {
 function _cp_set_media_upload_category() {
 	$option = wp_unslash( $_POST['option'] );
 	$new_value = wp_unslash( $_POST['new_value'] );
-	update_option( $option, sanitize_url( $new_value ) );
+	update_option( $option, sanitize_url( '/' . $new_value ) );
 
 	// Response in array.
 	$array_result = array(
