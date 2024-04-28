@@ -2610,7 +2610,7 @@ function add_theme_support( $feature, ...$args ) {
 			_deprecated_argument(
 				"add_theme_support( 'html5' )",
 				'CP-2.0.0',
-				__( 'HTML5 is the default ' )
+				__( 'HTML5 is the default.' )
 			);
 
 			return true;
