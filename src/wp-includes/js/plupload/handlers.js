@@ -16,6 +16,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( uploadCatSelect.value == '' ) {
 			plUploader.setAttribute( 'inert', true );
 			asyncUploader.setAttribute( 'inert', true );
+
+			// Prevent uploading file into browser window
+			window.addEventListener( 'dragover', function( e ) {
+				e.preventDefault();
+			}, false );
+			window.addEventListener( 'drop', function( e ) {
+				e.preventDefault();
+			}, false );
 		}
 
 		// Set up variables when a change of upload category is made.
@@ -57,6 +65,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						// Enable uploads.
 						plUploader.removeAttribute( 'inert' );
 						asyncUploader.removeAttribute( 'inert' );
+						window.addEventListener( 'dragover', function() {
+							return true;
+						} );
+						window.addEventListener( 'drop', function() {
+							return true;
+						} );
 
 						// Make success notice dismissible.
 						document.querySelector( '.notice-dismiss' ).addEventListener( 'click', function() {
@@ -80,6 +94,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				// Disable uploads.
 				plUploader.setAttribute( 'inert', true );
 				asyncUploader.setAttribute( 'inert', true );
+
+				// Prevent uploading file into browser window
+				window.addEventListener( 'dragover', function( e ) {
+					e.preventDefault();
+				}, false );
+				window.addEventListener( 'drop', function( e ) {
+					e.preventDefault();
+				}, false );
 			}
 		} );
 	}
