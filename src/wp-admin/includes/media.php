@@ -3863,7 +3863,7 @@ function cp_select_upload_media_category() {
 						$slug = get_term( $ancestor_id, 'media_category' )->slug . '/' . $slug;
 					}
 				}
-				$media_select .= '<option class="level-' . esc_attr( $level ) . '" value="' . esc_attr( $slug ) . '"' . selected( $slug, $cat_subfolder, false ) . '>' . $spaces . esc_html( $media_term->name ) . '</option>';
+				$media_select .= '<option class="level-' . esc_attr( $level ) . '" value="' . esc_attr( $slug ) . '"' . selected( '/' . $slug, $cat_subfolder, false ) . '>' . $spaces . esc_html( $media_term->name ) . '</option>';
 			}
 			$media_select .= '</select><br><br>';
 		}
