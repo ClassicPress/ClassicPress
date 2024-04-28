@@ -65,12 +65,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						// Enable uploads.
 						plUploader.removeAttribute( 'inert' );
 						asyncUploader.removeAttribute( 'inert' );
-						window.addEventListener( 'dragover', function() {
-							return true;
-						} );
-						window.addEventListener( 'drop', function() {
-							return true;
-						} );
 
 						// Make success notice dismissible.
 						document.querySelector( '.notice-dismiss' ).addEventListener( 'click', function() {
