@@ -1588,3 +1588,189 @@ function image_attachment_fields_to_save( $post, $attachment ) {
 
 	return $post;
 }
+
+/**
+ * Scripts no longer used by core since CP-2.1.0
+ *
+ * @since CP_2.2.0
+ *
+ * @return array Array of deprecated script handles.
+ */
+function cp_deprecated_scripts() {
+	 return array(
+		'prototype',
+		'scriptaculous-root',
+		'scriptaculous-builder',
+		'scriptaculous-dragdrop',
+		'scriptaculous-effects',
+		'scriptaculous-slider',
+		'scriptaculous-sound',
+		'scriptaculous-controls',
+		'scriptaculous',
+		'cropper',
+		'jcrop',
+		'jquery-ui-core',
+		'jquery-ui-accordion',
+		'jquery-ui-autocomplete',
+		'jquery-ui-button',
+		'jquery-ui-datepicker',
+		'jquery-ui-dialog',
+		'jquery-ui-draggable',
+		'jquery-ui-droppable',
+		'jquery-ui-menu',
+		'jquery-ui-mouse',
+		'jquery-ui-position',
+		'jquery-ui-progressbar',
+		'jquery-ui-resizable',
+		'jquery-ui-selectable',
+		'jquery-ui-slider',
+		'jquery-ui-sortable',
+		'jquery-ui-spinner',
+		'jquery-ui-tabs',
+		'jquery-ui-tooltip',
+		'jquery-ui-checkboxradio',
+		'jquery-ui-controlgroup',
+		'jquery-effects-core',
+		'jquery-effects-blind',
+		'jquery-effects-bounce',
+		'jquery-effects-clip',
+		'jquery-effects-drop',
+		'jquery-effects-explode',
+		'jquery-effects-fade',
+		'jquery-effects-fold',
+		'jquery-effects-highlight',
+		'jquery-effects-puff',
+		'jquery-effects-pulsate',
+		'jquery-effects-scale',
+		'jquery-effects-shake',
+		'jquery-effects-size',
+		'jquery-effects-slide',
+		'jquery-effects-transfer',
+		'wp-pointer',
+		'farbtastic',
+		'thickbox',
+	);
+}
+
+/**
+ * Stylesheets no longer used by core since CP-2.1.0
+ *
+ * @since CP_2.2.0
+ *
+ * @return array Array of deprecated stylesheet handles.
+ */
+
+function cp_deprecated_styles() {
+	return array(
+		'deprecated-media',
+		'colors-fresh',
+		'open-sans',
+		'jcrop',
+		'wp-jquery-ui-dialog',
+		'farbtastic',
+		'thickbox',
+	);
+}
+
+/**
+ * Deprecated scripts and styles enqueued with the wp_enqueue_scripts hook.
+ *
+ * @since CP-2.2.0.
+ */
+function _cp_deprecate_wp_enqueue_scripts() {
+	$deprecated_scripts = cp_deprecated_scripts();
+	foreach ( $deprecated_scripts as $deprecated_script ) {
+		if ( wp_script_is( $deprecated_script, 'enqueued' ) ) {
+			$message = sprintf(
+				/* translators: 1: Script handle. 2: URL for more information. */
+				__( 'The enqueued script %1$s has been deprecated. It will be removed in version 3.0.0 of ClassicPress. Further details may be found at %2$s.' ),
+				$deprecated_script,
+				'https://www.classicpress.net/deprecated-scripts/'
+			);
+			_deprecated_argument( 'wp_enqueue_script', 'CP-2.2.0', $message );
+		}
+	}
+
+	$deprecated_styles = cp_deprecated_styles();
+	foreach ( $deprecated_styles as $deprecated_style ) {
+		if ( wp_style_is( $deprecated_style, 'enqueued' ) ) {
+			$message = sprintf(
+				/* translators: 1: Stylesheet handle. 2: URL for more information. */
+				__( 'The enqueued stylesheet %1$s has been deprecated. It will be removed in version 3.0.0 of ClassicPress. Further details may be found at %2$s.' ),
+				$deprecated_style,
+				'https://www.classicpress.net/deprecated-scripts/'
+			);
+			_deprecated_argument( 'wp_enqueue_style', 'CP-2.2.0', $message );
+		}
+	}
+}
+add_action( 'wp_enqueue_scripts', '_cp_deprecate_wp_enqueue_scripts', PHP_INT_MAX );
+
+/**
+ * Deprecated scripts and styles enqueued with the admin_enqueue_scripts hook.
+ *
+ * @since CP-2.2.0.
+ */
+function _cp_deprecate_admin_enqueue_scripts() {
+	$deprecated_scripts = cp_deprecated_scripts();
+	foreach ( $deprecated_scripts as $deprecated_script ) {
+		if ( wp_script_is( $deprecated_script, 'enqueued' ) ) {
+			$message = sprintf(
+				/* translators: 1: Script handle. 2: URL for more information. */
+				__( 'The enqueued script %1$s has been deprecated. It will be removed in version 3.0.0 of ClassicPress. Further details may be found at %2$s.' ),
+				$deprecated_script,
+				'https://www.classicpress.net/deprecated-scripts/'
+			);
+			_deprecated_argument( 'wp_enqueue_script', 'CP-2.2.0', $message );
+		}
+	}
+
+	$deprecated_styles = cp_deprecated_styles();
+	foreach ( $deprecated_styles as $deprecated_style ) {
+		if ( wp_style_is( $deprecated_style, 'enqueued' ) ) {
+			$message = sprintf(
+				/* translators: 1: Stylesheet handle. 2: URL for more information. */
+				__( 'The enqueued stylesheet %1$s has been deprecated. It will be removed in version 3.0.0 of ClassicPress. Further details may be found at %2$s.' ),
+				$deprecated_style,
+				'https://www.classicpress.net/deprecated-scripts/'
+			);
+			_deprecated_argument( 'wp_enqueue_style', 'CP-2.2.0', $message );
+		}
+	}
+}
+add_action( 'admin_enqueue_scripts', '_cp_deprecate_admin_enqueue_scripts', PHP_INT_MAX );
+
+/**
+ * Deprecated scripts and styles enqueued with the login_enqueue_scripts hook.
+ *
+ * @since CP-2.2.0.
+ */
+function _cp_deprecate_login_enqueue_scripts() {
+	$deprecated_scripts = cp_deprecated_scripts();
+	foreach ( $deprecated_scripts as $deprecated_script ) {
+		if ( wp_script_is( $deprecated_script, 'enqueued' ) ) {
+			$message = sprintf(
+				/* translators: 1: Script handle. 2: URL for more information. */
+				__( 'The enqueued script %1$s has been deprecated. It will be removed in version 3.0.0 of ClassicPress. Further details may be found at %2$s.' ),
+				$deprecated_script,
+				'https://www.classicpress.net/deprecated-scripts/'
+			);
+			_deprecated_argument( 'wp_enqueue_script', 'CP-2.2.0', $message );
+		}
+	}
+
+	$deprecated_styles = cp_deprecated_styles();
+	foreach ( $deprecated_styles as $deprecated_style ) {
+		if ( wp_style_is( $deprecated_style, 'enqueued' ) ) {
+			$message = sprintf(
+				/* translators: 1: Stylesheet handle. 2: URL for more information. */
+				__( 'The enqueued stylesheet %1$s has been deprecated. It will be removed in version 3.0.0 of ClassicPress. Further details may be found at %2$s.' ),
+				$deprecated_style,
+				'https://www.classicpress.net/deprecated-scripts/'
+			);
+			_deprecated_argument( 'wp_enqueue_style', 'CP-2.2.0', $message );
+		}
+	}
+}
+add_action( 'login_enqueue_scripts', '_cp_deprecate_login_enqueue_scripts', PHP_INT_MAX );
+
