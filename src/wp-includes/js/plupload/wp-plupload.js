@@ -267,7 +267,7 @@ window.wp = window.wp || {};
 		 * @param {plupload.Uploader} uploader Uploader instance.
 		 */
 		this.uploader.bind( 'init', function( uploader ) {
-			var timer, active, dragdrop, observer,
+			var timer, active, dragdrop, observer, uploadCatSelect, thatUploader,
 				dropzone = self.dropzone;
 
 			dragdrop = self.supports.dragdrop = uploader.features.dragdrop && ! Uploader.browser.mobile;
@@ -329,12 +329,77 @@ window.wp = window.wp || {};
 			self.init();
 		});
 
-		this.uploader.init();
+		/**
+		 * Choose media category upload folder if media uploads are organized by media category.
+		 *
+		 * @since CP-2.1.0
+		 */
+		// Ensure that nothing can be uploaded if the media upload category has not been set.
+		thatUploader = this.uploader;
+		uploadCatSelect = document.getElementById( 'upload-category' );
+		if ( uploadCatSelect != null ) {
+			uploadCatValue = uploadCatSelect.value;
+			if ( uploadCatValue == '' ) {
+
+				// Prevent uploading file into browser window
+				window.addEventListener( 'dragover', function( e ) {
+					e.preventDefault();
+				}, false );
+				window.addEventListener( 'drop', function( e ) {
+					e.preventDefault();
+				}, false );
+			}
+
+			// Set up variables when a change of upload category is made.
+			uploadCatSelect.addEventListener( 'change', function( e ) {
+				var div,
+					uploadCatFolder = new URLSearchParams( {
+						action: 'media_cat_upload',
+						_ajax_nonce: document.getElementById( '_wpnonce' ).value,
+						option: 'media_cat_upload_folder',
+						new_value: e.target.value
+					} );
+
+				if ( e.target.value == '' ) {
+					// Prevent removal of upload media category.
+					uploadCatSelect.value = uploadCatValue;
+				} else {
+					// Update default value.
+					uploadCatValue = e.target.value;
+
+					// Update upload category.
+					fetch( ajaxurl, {
+						method: 'POST',
+						body: uploadCatFolder,
+						credentials: 'same-origin'
+					} )
+					.then( function( response ) {
+						if ( response.ok ) {
+							return response.json(); // no errors
+						}
+						throw new Error( response.status );
+					} )
+					.then( function( response ) {
+						if ( response.success ) {
+
+							// Enable uploads.
+							thatUploader.init();
+							console.log( response.success );
+						}
+					} )
+					.catch( function( error ) {
+						console.log( error );
+					} );
+				}
+			} );
+		} else {
+			thatUploader.init();
+		}
 
 		if ( this.browser ) {
 			this.browser.on( 'mouseenter', this.refresh );
 		} else {
-			this.uploader.disableBrowse( true );
+			thatUploader.disableBrowse( true );
 		}
 
 		$( self ).on( 'uploader:ready', function() {
