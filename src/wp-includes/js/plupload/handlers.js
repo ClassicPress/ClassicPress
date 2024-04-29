@@ -42,20 +42,43 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 			// Update upload category.
-			if ( e.target.value != '' ) {
-				fetch( ajaxurl, {
-					method: 'POST',
-					body: uploadCatFolder,
-					credentials: 'same-origin'
-				} )
-				.then( function( response ) {
-					if ( response.ok ) {
-						return response.json(); // no errors
-					}
-					throw new Error( response.status );
-				} )
-				.then( function( response ) {
-					if ( response.success ) {
+			fetch( ajaxurl, {
+				method: 'POST',
+				body: uploadCatFolder,
+				credentials: 'same-origin'
+			} )
+			.then( function( response ) {
+				if ( response.ok ) {
+					return response.json(); // no errors
+				}
+				throw new Error( response.status );
+			} )
+			.then( function( response ) {
+				if ( response.success ) {
+					if ( response.data == '' ) {
+						div = document.createElement( 'div' );
+						div.id = 'message';
+						div.className = 'notice notice-error is-dismissible';
+						div.innerHTML = '<p>' + response.success + '</p><button class="notice-dismiss" type="button"></button>';
+						document.querySelector( '.wrap h1' ).after( div );
+
+						// Disable uploads.
+						plUploader.setAttribute( 'inert', true );
+						asyncUploader.setAttribute( 'inert', true );
+
+						// Prevent uploading file into browser window
+						window.addEventListener( 'dragover', function( e ) {
+							e.preventDefault();
+						}, false );
+						window.addEventListener( 'drop', function( e ) {
+							e.preventDefault();
+						}, false );
+
+						// Make error notice dismissible.
+						document.querySelector( '.notice-dismiss' ).addEventListener( 'click', function() {
+							document.getElementById( 'message' ).remove();
+						} );
+					} else {
 						div = document.createElement( 'div' );
 						div.id = 'message';
 						div.className = 'updated notice notice-success is-dismissible';
@@ -71,32 +94,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							document.getElementById( 'message' ).remove();
 						} );
 					}
-				} )
-				.catch( function( error ) {
-					div = document.createElement( 'div' );
-					div.id = 'message';
-					div.className = 'notice notice-error is-dismissible';
-					div.innerHTML = '<p>' + error + '</p><button class="notice-dismiss" type="button"></button>';
-					document.querySelector( '.wrap h1' ).after( div );
+				}
+			} )
+			.catch( function( error ) {
+				div = document.createElement( 'div' );
+				div.id = 'message';
+				div.className = 'notice notice-error is-dismissible';
+				div.innerHTML = '<p>' + error + '</p><button class="notice-dismiss" type="button"></button>';
+				document.querySelector( '.wrap h1' ).after( div );
 
-					// Make error notice dismissible.
-					document.querySelector( '.notice-dismiss' ).addEventListener( 'click', function() {
-						document.getElementById( 'message' ).remove();
-					} );
+				// Make error notice dismissible.
+				document.querySelector( '.notice-dismiss' ).addEventListener( 'click', function() {
+					document.getElementById( 'message' ).remove();
 				} );
-			} else {
-				// Disable uploads.
-				plUploader.setAttribute( 'inert', true );
-				asyncUploader.setAttribute( 'inert', true );
-
-				// Prevent uploading file into browser window
-				window.addEventListener( 'dragover', function( e ) {
-					e.preventDefault();
-				}, false );
-				window.addEventListener( 'drop', function( e ) {
-					e.preventDefault();
-				}, false );
-			}
+			} );
 		} );
 	}
 } );
