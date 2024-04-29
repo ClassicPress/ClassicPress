@@ -77,6 +77,10 @@
 	vertical-align: middle;
 }
 
+#upload-category {
+	line-height: 2;
+}
+
 .media-frame input[type="text"],
 .media-frame input[type="password"],
 .media-frame input[type="color"],
