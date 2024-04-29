@@ -233,6 +233,13 @@ function wp_print_media_templates() {
 			?>
 		</span></button>
 		<# } #>
+		<br>
+
+		<?php
+		/* Enable choice of upload media category if media storage option has been set to 'category'. */
+		cp_select_upload_media_category();
+		?>
+
 		<div class="uploader-inline-content {{ messageClass }}">
 		<# if ( data.message ) { #>
 			<h2 class="upload-message">{{ data.message }}</h2>
