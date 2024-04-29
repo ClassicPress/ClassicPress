@@ -3851,7 +3851,7 @@ function cp_select_upload_media_category() {
 		if ( ! empty( $media_terms ) ) {
 			$media_select .= '<label for="upload-category"><strong>' . __( 'Please choose the upload media category' ) . '</strong></label><br>';
 			$media_select .= '<select id="upload-category" name="upload-category">';
-			$media_select .= '<option value="">&nbsp;' . __( 'Media category' ) . '&nbsp;</option>';
+			$media_select .= '<option value=""' . selected( in_array( $cat_subfolder, array( '', '/' ) ), true, false ) . '>&nbsp;' . __( 'Media category' ) . '&nbsp;</option>';
 			foreach ( $media_terms as $media_term ) {
 				$ancestor_ids = get_ancestors( $media_term->term_id, 'media_category' );
 				$level = $count = count( $ancestor_ids );
@@ -3863,7 +3863,7 @@ function cp_select_upload_media_category() {
 						$slug = get_term( $ancestor_id, 'media_category' )->slug . '/' . $slug;
 					}
 				}
-				$media_select .= '<option class="level-' . esc_attr( $level ) . '" value="' . esc_attr( $slug ) . '"' . selected( '/' . $slug, $cat_subfolder, false ) . '>' . $spaces . esc_html( $media_term->name ) . '</option>';
+				$media_select .= '<option class="level-' . esc_attr( $level ) . '" value="' . esc_attr( $slug ) . '"' . selected( '/' . $slug, $cat_subfolder, false ) . '>' . esc_html( $spaces . $media_term->name ) . '</option>';
 			}
 			$media_select .= '</select><br><br>';
 		}
@@ -3882,11 +3882,16 @@ function _cp_set_media_upload_category() {
 	$option = wp_unslash( $_POST['option'] );
 	$new_value = wp_unslash( $_POST['new_value'] );
 	update_option( $option, sanitize_url( '/' . $new_value ) );
+	$response = __( 'The upload media category folder has been updated.' );
+
+	if ( $new_value === '' ) {
+		$response = __( 'You need to choose a media category folder before you can upload a file.' );
+	}
 
 	// Response in array.
 	$array_result = array(
 		'data'    => $new_value,
-		'success' => __( 'The upload media category folder has been updated.' ),
+		'success' => $response,
 	);
 
 	// Convert array to JSON.
