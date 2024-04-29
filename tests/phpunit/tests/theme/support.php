@@ -77,7 +77,7 @@ class Tests_Theme_Support extends WP_UnitTestCase {
 	/**
 	 * @PR 200
 	 *
-	 * @expectedIncorrectUsage add_theme_support( 'html5' )
+	 * @expectedDeprecated add_theme_support( 'html5' )
 	 */
 	public function test_supports_html5() {
 		$this->assertTrue( current_theme_supports( 'html5' ) );

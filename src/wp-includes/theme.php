@@ -2607,10 +2607,10 @@ function add_theme_support( $feature, ...$args ) {
 
 		case 'html5':
 			// Since CP-2.0.0 HTLM5 has been expected as theme default
-			_doing_it_wrong(
+			_deprecated_argument(
 				"add_theme_support( 'html5' )",
-				__( 'HTML5 is the default ' ),
-				'CP-2.0.0'
+				'CP-2.0.0',
+				__( 'HTML5 is the default.' )
 			);
 
 			return true;
