@@ -44,7 +44,7 @@ jobs:
         memcached: [ false ]
         experimental: [ false ]
         include:
-          - php: '8.2'
+          - php: '8.0'
             mysql: '5.7'
             memcached: true
             experimental: false
