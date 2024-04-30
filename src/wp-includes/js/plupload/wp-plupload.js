@@ -340,7 +340,6 @@ window.wp = window.wp || {};
 		if ( uploadCatSelect != null ) {
 			uploadCatValue = uploadCatSelect.value;
 			if ( uploadCatValue == '' ) {
-
 				// Prevent uploading file into browser window
 				window.addEventListener( 'dragover', function( e ) {
 					e.preventDefault();
@@ -348,17 +347,27 @@ window.wp = window.wp || {};
 				window.addEventListener( 'drop', function( e ) {
 					e.preventDefault();
 				}, false );
+			} else {
+				// Enable uploads.
+				thatUploader.init();
 			}
 
 			// Set up variables when a change of upload category is made.
 			uploadCatSelect.addEventListener( 'change', function( e ) {
-				var div,
-					uploadCatFolder = new URLSearchParams( {
-						action: 'media_cat_upload',
-						_ajax_nonce: document.getElementById( '_wpnonce' ).value,
-						option: 'media_cat_upload_folder',
-						new_value: e.target.value
-					} );
+				var div, nonce, uploadCatFolder;
+
+				if ( document.body.className.includes( 'widgets-php' ) ) {
+					nonce = document.getElementById( '_wpnonce_widgets' ).value;
+				} else {					
+					nonce = document.getElementById( '_wpnonce' ).value;
+				}
+
+				uploadCatFolder = new URLSearchParams( {
+					action: 'media_cat_upload',
+					_ajax_nonce: nonce,
+					option: 'media_cat_upload_folder',
+					new_value: e.target.value
+				} );
 
 				if ( e.target.value == '' ) {
 					// Prevent removal of upload media category.
@@ -381,7 +390,6 @@ window.wp = window.wp || {};
 					} )
 					.then( function( response ) {
 						if ( response.success ) {
-
 							// Enable uploads.
 							thatUploader.init();
 							console.log( response.success );
