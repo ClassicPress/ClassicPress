@@ -48,6 +48,14 @@ jobs:
             mysql: '5.7'
             memcached: true
             experimental: false
+          - php: '8.2'
+            mysql: '5.7'
+            memcached: true
+            experimental: true
+          - php: '8.3'
+            mysql: '5.7'
+            memcached: true
+            experimental: true
 
     steps:
       - name: Cancel previous runs of this workflow (pull requests only)
