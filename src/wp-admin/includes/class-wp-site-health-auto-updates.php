@@ -331,14 +331,10 @@ class WP_Site_Health_Auto_Updates {
 			require_once ABSPATH . 'wp-admin/includes/update.php';
 		}
 
-		$checksums = get_core_checksums( $wp_version, 'en_US' );
-		$dev       = ( str_contains( $wp_version, '-' ) );
-		// Get the last stable version's files and test against that.
-		if ( ! $checksums && $dev ) {
-			$checksums = get_core_checksums( (float) $wp_version - 0.1, 'en_US' );
-		}
+		$checksums = get_core_checksums( classicpress_version_short(), 'en_US' );
+		$dev       = classicpress_is_dev_install();
 
-		// There aren't always checksums for development releases, so just skip the test if we still can't find any.
+		// There may not be checksums for development releases, so just skip the test if we can't find any.
 		if ( ! $checksums && $dev ) {
 			return false;
 		}
