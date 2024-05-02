@@ -2518,28 +2518,34 @@ endif;
 
 if ( ! function_exists( 'wp_hash_password' ) ) :
 	/**
-	 * Creates a hash (encrypt) of a plain text password.
+	 * Creates a hash (encrypt) of a plain text passwordusing PHP's PASSWORD_DEFAULT hashing algorithm.
 	 *
 	 * For integration with other applications, this function can be overwritten to
 	 * instead use the other package password checking algorithm.
 	 *
-	 * @since 2.5.0
-	 *
-	 * @global PasswordHash $wp_hasher PHPass object
+	 * @since CP-2.2.0
 	 *
 	 * @param string $password Plain text user password to hash.
 	 * @return string The hash string of the password.
 	 */
 	function wp_hash_password( $password ) {
-		global $wp_hasher;
+		/*
+		 * Function cp_hash_password_options() is in wp-includes/user.php
+		 */
+		$options = cp_hash_password_options();
 
-		if ( empty( $wp_hasher ) ) {
-			require_once ABSPATH . WPINC . '/class-phpass.php';
-			// By default, use the portable hash from phpass.
-			$wp_hasher = new PasswordHash( 8, true );
-		}
-
-		return $wp_hasher->HashPassword( trim( $password ) );
+		/**
+		 * Filter enabling the password to be peppered.
+		 * Example use of pepper: hash_hmac( 'sha256', $password, 'long-string-known-as-pepper' );
+		 * For maximum security, pepper should be stored in a file and not in the database.
+		 *
+		 * @since CP-2.2.0
+		 *
+		 * @param  string    $password                   The plaintext password.
+		 * @return string    $maybe_peppered_password    A password that may be peppered.
+		 */
+		$maybe_peppered_password = apply_filters( 'cp_pepper_password', $password );
+		return password_hash( $maybe_peppered_password, PASSWORD_DEFAULT, $options );
 	}
 endif;
 
@@ -2555,7 +2561,7 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 	 * For integration with other applications, this function can be overwritten to
 	 * instead use the other package password checking algorithm.
 	 *
-	 * @since 2.5.0
+	 * @since CP-2.2.0
 	 *
 	 * @global PasswordHash $wp_hasher PHPass object used for checking the password
 	 *                                 against the $hash + $password.
@@ -2567,41 +2573,56 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 	 * @return bool False, if the $password does not match the hashed password.
 	 */
 	function wp_check_password( $password, $hash, $user_id = '' ) {
-		global $wp_hasher;
+		$check = false;
+		$options = cp_hash_password_options();
 
-		// If the hash is still md5...
-		if ( strlen( $hash ) <= 32 ) {
-			$check = hash_equals( $hash, md5( $password ) );
-			if ( $check && $user_id ) {
-				// Rehash using new hash.
-				wp_set_password( $password, $user_id );
-				$hash = wp_hash_password( $password );
+		/**
+		 * Filter enabling the password to be peppered.
+		 * Example use of pepper: hash_hmac( 'sha256', $password, 'long-string-known-as-pepper' );
+		 * For maximum security, pepper should be stored in a file and not in the database.
+		 *
+		 * @since CP-2.2.0
+		 *
+		 * @param  string    $password                   The plaintext password.
+		 * @return string    $maybe_peppered_password    A password that may be peppered.
+		 */
+		$maybe_peppered_password = apply_filters( 'cp_pepper_password', $password );
+
+		// This handles password verification using PHP's PASSWORD_DEFAULT hashing algorithm.
+		if ( password_verify( $maybe_peppered_password, $hash ) ) {
+			$check = true;
+
+			if ( password_needs_rehash( $hash, PASSWORD_DEFAULT, $options ) ) {
+
+				// Update to current password setting and verification method.
+				$hash = wp_set_password( $password, $user_id );
 			}
 
-			/**
-			 * Filters whether the plaintext password matches the encrypted password.
-			 *
-			 * @since 2.5.0
-			 *
-			 * @param bool       $check    Whether the passwords match.
-			 * @param string     $password The plaintext password.
-			 * @param string     $hash     The hashed password.
-			 * @param string|int $user_id  User ID. Can be empty.
-			 */
-			return apply_filters( 'check_password', $check, $password, $hash, $user_id );
+		// This handles password verification when a temporary password has been set via Adminer or phpMyAdmin.
+		} elseif ( md5( $password ) === $hash ) {
+			$check = true;
+
+			// Update to current password setting and verification method.
+			$hash = wp_set_password( $password, $user_id );
+
+		// This handles password verification by the traditional WordPress method.
+		} elseif ( 0 === strpos( $hash, '$P$' ) ) {
+			global $wp_hasher;
+
+			if ( empty( $wp_hasher ) ) {
+				require_once( ABSPATH . WPINC . '/class-phpass.php' );
+
+				$wp_hasher = new PasswordHash( 8, true );
+			}
+
+			$check = $wp_hasher->CheckPassword( $password, $hash );
+
+			if ( $check && $user_id ) {
+
+				// Update to current password setting and verification method.
+				$hash = wp_set_password( $password, $user_id );
+			}
 		}
-
-		// If the stored hash is longer than an MD5,
-		// presume the new style phpass portable hash.
-		if ( empty( $wp_hasher ) ) {
-			require_once ABSPATH . WPINC . '/class-phpass.php';
-			// By default, use the portable hash from phpass.
-			$wp_hasher = new PasswordHash( 8, true );
-		}
-
-		$check = $wp_hasher->CheckPassword( $password, $hash );
-
-		/** This filter is documented in wp-includes/pluggable.php */
 		return apply_filters( 'check_password', $check, $password, $hash, $user_id );
 	}
 endif;
