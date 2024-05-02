@@ -4978,3 +4978,20 @@ function wp_is_application_passwords_available_for_user( $user ) {
 function wp_cache_set_users_last_changed() {
 	wp_cache_set( 'last_changed', microtime(), 'users' );
 }
+
+/**
+ * Set password hashing options.
+ * For use in function wp_check_password in wp-includes/pluggable.php
+ *
+ * @since CP-2.2.0
+ *
+ * @return array
+ */
+function cp_hash_password_options() {
+    return apply_filters( 'cp_hash_password_options',
+		array(
+			'cost' => 12,
+		)
+	);
+}
+
