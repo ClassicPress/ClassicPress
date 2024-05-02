@@ -77,10 +77,6 @@
 	vertical-align: middle;
 }
 
-#upload-category {
-	line-height: 2;
-}
-
 .media-frame input[type="text"],
 .media-frame input[type="password"],
 .media-frame input[type="color"],
@@ -283,6 +279,7 @@
 	margin-right: 2%;
 	width: 42%;
 	width: calc(48% - 12px);
+	line-height: 2;
 }
 
 .media-modal-content .attachments-browser .search {
