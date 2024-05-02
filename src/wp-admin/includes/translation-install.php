@@ -207,6 +207,7 @@ function wp_install_language_form( $languages ) {
  * Download a language pack.
  *
  * @since 4.0.0
+ * @since CP-2.1.0 Added `$force` parameter to allow updates
  *
  * @see wp_get_available_translations()
  *
