@@ -212,6 +212,7 @@ function wp_install_language_form( $languages ) {
  * @see wp_get_available_translations()
  *
  * @param string $download Language code to download.
+ * @param bool   $force    Optional. If set to true, language pack will be overwritten.
  * @return string|false Returns the language code if successfully downloaded
  *                      (or already installed), or false on failure.
  */
