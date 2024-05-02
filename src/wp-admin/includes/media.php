@@ -3879,13 +3879,20 @@ function cp_select_upload_media_category() {
  * @since CP-2.1.0
  */
 function _cp_set_media_upload_category() {
-	$option = wp_unslash( $_POST['option'] );
-	$new_value = wp_unslash( $_POST['new_value'] );
-	update_option( $option, sanitize_url( '/' . $new_value ) );
 	$response = __( 'The upload media category folder has been updated.' );
 
-	if ( $new_value === '' ) {
-		$response = __( 'You need to choose a media category folder before you can upload a file.' );
+	if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
+		$option = wp_unslash( $_POST['option'] );
+		$new_value = wp_unslash( $_POST['new_value'] );
+		update_option( $option, sanitize_url( '/' . $new_value ) );
+		
+		if ( $new_value === '' ) {
+			$response = __( 'You need to choose a media category folder before you can upload a file.' );
+		}
+	} elseif ( $_SERVER['REQUEST_METHOD'] === 'GET' ) {
+		if ( $_GET['action'] === 'media_cat_upload' ) {
+			$new_value = get_option( 'media_cat_upload_folder' );
+		}
 	}
 
 	// Response in array.
