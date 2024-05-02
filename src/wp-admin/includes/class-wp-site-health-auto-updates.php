@@ -343,7 +343,7 @@ class WP_Site_Health_Auto_Updates {
 			$description = sprintf(
 				/* translators: %s: ClassicPress version. */
 				__( "Couldn't retrieve a list of the checksums for ClassicPress %s." ),
-				$wp_version
+				$cp_version
 			);
 			$description .= ' ' . __( 'This could mean that connections are failing to WordPress.org or ClassicPress.net.' );
 			return array(
