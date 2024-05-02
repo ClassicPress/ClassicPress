@@ -3850,7 +3850,7 @@ function cp_select_upload_media_category() {
 
 		if ( ! empty( $media_terms ) ) {
 			$media_select .= '<label for="upload-category"><strong>' . __( 'Please choose the upload media category' ) . '</strong></label><br>';
-			$media_select .= '<select id="upload-category" name="upload-category">';
+			$media_select .= '<select id="upload-category" name="upload-category" class="attachment-filters">';
 			$media_select .= '<option value=""' . selected( in_array( $cat_subfolder, array( '', '/' ) ), true, false ) . '>&nbsp;' . __( 'Media category' ) . '&nbsp;</option>';
 			foreach ( $media_terms as $media_term ) {
 				$ancestor_ids = get_ancestors( $media_term->term_id, 'media_category' );
