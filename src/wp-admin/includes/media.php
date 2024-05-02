@@ -3885,7 +3885,7 @@ function _cp_set_media_upload_category() {
 		$option = wp_unslash( $_POST['option'] );
 		$new_value = wp_unslash( $_POST['new_value'] );
 		update_option( $option, sanitize_url( '/' . $new_value ) );
-		
+
 		if ( $new_value === '' ) {
 			$response = __( 'You need to choose a media category folder before you can upload a file.' );
 		}
