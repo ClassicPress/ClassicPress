@@ -44,7 +44,15 @@ jobs:
         memcached: [ false ]
         experimental: [ false ]
         include:
-          - php: '7.4'
+          - php: '8.0'
+            mysql: '5.7'
+            memcached: true
+            experimental: false
+          - php: '8.2'
+            mysql: '5.7'
+            memcached: true
+            experimental: false
+          - php: '8.3'
             mysql: '5.7'
             memcached: true
             experimental: false
@@ -181,11 +189,17 @@ jobs:
         if: ${{ matrix.memcached }}
         uses: niden/actions-memcached@v7
 
-      - name: Clone PHP.net and create local supported versions for PHPUnit tests
+      - name: Clone PHP.net for PHPUnit tests
+        if: ${{ matrix.memcached }}
+        uses: actions/checkout@v4
+        with:
+          repository: php/web-php
+          fetch-depth: 1
+          path: 'php.net'
+
+      - name: Create HTML of local supported versions
         if: ${{ matrix.memcached }}
         run: |
-          mkdir php.net
-          git clone https://github.com/php/web-php php.net
           php -d error_reporting=E_ERROR -f php.net/supported-versions.php > supported-versions.html
 
       - name: Run PHPUnit default
