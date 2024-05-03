@@ -4988,7 +4988,8 @@ function wp_cache_set_users_last_changed() {
  * @return array
  */
 function cp_hash_password_options() {
-	return apply_filters( 'cp_hash_password_options',
+	return apply_filters(
+		'cp_hash_password_options',
 		array(
 			'cost' => 12,
 		)
