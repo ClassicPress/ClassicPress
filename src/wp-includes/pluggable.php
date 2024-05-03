@@ -2525,12 +2525,14 @@ if ( ! function_exists( 'wp_hash_password' ) ) :
 	 *
 	 * @since CP-2.2.0
 	 *
-	 * @param string $password Plain text user password to hash.
-	 * @return string The hash string of the password.
+	 * @param string    $password                                  Plaintext password
+	 * @param string    PASSWORD_DEFAULT PHP's PASSWORD_DEFAULT    hashing algorithm
+	 * @param array     $options                                   options, including cost
+	 * @return string   The hash string of the password.
 	 */
 	function wp_hash_password( $password ) {
 		/*
-		 * Function cp_hash_password_options() is in wp-includes/user.php
+		 * Function cp_hash_password_options() is documented in wp-includes/user.php
 		 */
 		$options = cp_hash_password_options();
 
@@ -2545,7 +2547,17 @@ if ( ! function_exists( 'wp_hash_password' ) ) :
 		 * @return string    $maybe_peppered_password    A password that may be peppered.
 		 */
 		$maybe_peppered_password = apply_filters( 'cp_pepper_password', $password );
-		return password_hash( $maybe_peppered_password, PASSWORD_DEFAULT, $options );
+
+		/**
+		 * Filter enabling the password algorithm to be changed.
+		 *
+		 * @since CP-2.2.0
+		 *
+		 * @param  string    PASSWORD_DEFAULT            PHP's current default hashing algorithm.
+		 * @return string    $algorithm                  Any algorithm recognized by PHP.
+		 */
+		$algorithm = apply_filters( 'cp_password_algorithm', PASSWORD_DEFAULT );
+		return password_hash( $maybe_peppered_password, $algorithm, $options );
 	}
 endif;
 
@@ -2574,6 +2586,10 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 	 */
 	function wp_check_password( $password, $hash, $user_id = '' ) {
 		$check = false;
+
+		/*
+		 * Function cp_hash_password_options() is documented in wp-includes/user.php
+		 */
 		$options = cp_hash_password_options();
 
 		/**
@@ -2591,6 +2607,16 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 		// This handles password verification using PHP's PASSWORD_DEFAULT hashing algorithm.
 		if ( password_verify( $maybe_peppered_password, $hash ) ) {
 			$check = true;
+
+			/**
+			 * Filter enabling the password algorithm to be changed.
+			 *
+			 * @since CP-2.2.0
+			 *
+			 * @param  string    PASSWORD_DEFAULT    PHP's current default hashing algorithm.
+			 * @return string    $algorithm          Any algorithm recognized by PHP.
+			 */
+			$algorithm = apply_filters( 'cp_password_algorithm', PASSWORD_DEFAULT );
 
 			if ( password_needs_rehash( $hash, PASSWORD_DEFAULT, $options ) ) {
 
