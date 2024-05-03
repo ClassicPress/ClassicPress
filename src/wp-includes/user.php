@@ -4994,4 +4994,3 @@ function cp_hash_password_options() {
 		)
 	);
 }
-
