@@ -774,6 +774,10 @@ function update_core( $from, $to ) {
 		delete_option( 'update_core' );
 	}
 
+	// Update installed language packs from API
+	require_once ABSPATH . 'wp-admin/includes/translation-install.php';
+	maybe_upgrade_translations();
+
 	/**
 	 * Fires after WordPress core has been successfully updated.
 	 *

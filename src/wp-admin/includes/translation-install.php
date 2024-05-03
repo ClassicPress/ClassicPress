@@ -50,7 +50,7 @@ function translations_api( $type, $args = null ) {
 			$options['method']   = 'GET';
 			$url                 = add_query_arg(
 				$stats,
-				'https://api-v1.classicpress.net/translations/core/1.0.0/translations.json'
+				'https://api-v1.classicpress.net/translations/core/2.0.0/translations.json'
 			);
 			$request             = wp_remote_request( $url, $options );
 		} else {
@@ -207,16 +207,18 @@ function wp_install_language_form( $languages ) {
  * Download a language pack.
  *
  * @since 4.0.0
+ * @since CP-2.1.0 Added `$force` parameter to allow updates
  *
  * @see wp_get_available_translations()
  *
  * @param string $download Language code to download.
+ * @param bool   $force    Optional. If set to true, language pack will be overwritten.
  * @return string|false Returns the language code if successfully downloaded
  *                      (or already installed), or false on failure.
  */
-function wp_download_language_pack( $download ) {
+function wp_download_language_pack( $download, $force = false ) {
 	// Check if the translation is already installed.
-	if ( in_array( $download, get_available_languages(), true ) ) {
+	if ( in_array( $download, get_available_languages(), true ) && false === $force ) {
 		return $download;
 	}
 
@@ -279,4 +281,50 @@ function wp_can_install_language_pack() {
 	}
 
 	return true;
+}
+
+/**
+ * Download new language packs after core update.
+ * Called during update_core() from wp-admin/includes/update-core.php
+ *
+ * @since CP-2.1.0
+ *
+ * @return void|bool|WP_Error Returns true on success, WP_Error on failure.
+ */
+function maybe_upgrade_translations() {
+	$languages = get_available_languages();
+
+	// Return if no language packs currently installed
+	if ( empty( $languages ) ) {
+		return;
+	}
+
+	$available_languages = wp_get_available_translations();
+
+	// Return if no language packs are available from the API
+	if ( empty( $available_languages ) ) {
+		return;
+	}
+
+	$result = true;
+	$failed = array();
+
+	foreach ( $languages as $language => $locale ) {
+		if ( array_key_exists( $locale, $available_languages ) ) {
+			$download = wp_download_language_pack( $locale, true );
+			if ( $locale !== $download ) {
+				$failed[] = $locale;
+			}
+		}
+	}
+
+	if ( ! empty( $failed ) ) {
+		$result = new WP_Error(
+			'language_pack_updates_failed',
+			__( 'Unable to upate language pack for locales' ),
+			implode( ', ', $failed )
+		);
+	}
+
+	return $result;
 }
