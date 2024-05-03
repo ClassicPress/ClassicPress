@@ -1711,66 +1711,11 @@ add_action( 'wp_enqueue_scripts', '_cp_deprecate_wp_enqueue_scripts', PHP_INT_MA
  *
  * @since CP-2.2.0.
  */
-function _cp_deprecate_admin_enqueue_scripts() {
-	$deprecated_scripts = cp_deprecated_scripts();
-	foreach ( $deprecated_scripts as $deprecated_script ) {
-		if ( wp_script_is( $deprecated_script, 'enqueued' ) ) {
-			$message = sprintf(
-				/* translators: 1: Script handle. 2: URL for more information. */
-				__( 'The enqueued script %1$s has been deprecated. It will be removed in version 3.0.0 of ClassicPress. Further details may be found at %2$s.' ),
-				$deprecated_script,
-				'https://www.classicpress.net/deprecated-scripts/'
-			);
-			_deprecated_argument( 'wp_enqueue_script', 'CP-2.2.0', $message );
-		}
-	}
-
-	$deprecated_styles = cp_deprecated_styles();
-	foreach ( $deprecated_styles as $deprecated_style ) {
-		if ( wp_style_is( $deprecated_style, 'enqueued' ) ) {
-			$message = sprintf(
-				/* translators: 1: Stylesheet handle. 2: URL for more information. */
-				__( 'The enqueued stylesheet %1$s has been deprecated. It will be removed in version 3.0.0 of ClassicPress. Further details may be found at %2$s.' ),
-				$deprecated_style,
-				'https://www.classicpress.net/deprecated-scripts/'
-			);
-			_deprecated_argument( 'wp_enqueue_style', 'CP-2.2.0', $message );
-		}
-	}
-}
-add_action( 'admin_enqueue_scripts', '_cp_deprecate_admin_enqueue_scripts', PHP_INT_MAX );
+add_action( 'admin_enqueue_scripts', '_cp_deprecate_wp_enqueue_scripts', PHP_INT_MAX );
 
 /**
  * Deprecated scripts and styles enqueued with the login_enqueue_scripts hook.
  *
  * @since CP-2.2.0.
  */
-function _cp_deprecate_login_enqueue_scripts() {
-	$deprecated_scripts = cp_deprecated_scripts();
-	foreach ( $deprecated_scripts as $deprecated_script ) {
-		if ( wp_script_is( $deprecated_script, 'enqueued' ) ) {
-			$message = sprintf(
-				/* translators: 1: Script handle. 2: URL for more information. */
-				__( 'The enqueued script %1$s has been deprecated. It will be removed in version 3.0.0 of ClassicPress. Further details may be found at %2$s.' ),
-				$deprecated_script,
-				'https://www.classicpress.net/deprecated-scripts/'
-			);
-			_deprecated_argument( 'wp_enqueue_script', 'CP-2.2.0', $message );
-		}
-	}
-
-	$deprecated_styles = cp_deprecated_styles();
-	foreach ( $deprecated_styles as $deprecated_style ) {
-		if ( wp_style_is( $deprecated_style, 'enqueued' ) ) {
-			$message = sprintf(
-				/* translators: 1: Stylesheet handle. 2: URL for more information. */
-				__( 'The enqueued stylesheet %1$s has been deprecated. It will be removed in version 3.0.0 of ClassicPress. Further details may be found at %2$s.' ),
-				$deprecated_style,
-				'https://www.classicpress.net/deprecated-scripts/'
-			);
-			_deprecated_argument( 'wp_enqueue_style', 'CP-2.2.0', $message );
-		}
-	}
-}
-add_action( 'login_enqueue_scripts', '_cp_deprecate_login_enqueue_scripts', PHP_INT_MAX );
-
+add_action( 'login_enqueue_scripts', '_cp_deprecate_wp_enqueue_scripts', PHP_INT_MAX );
