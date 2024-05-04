@@ -53,7 +53,22 @@ function wp_get_db_schema( $scope = 'all', $blog_id = null ) {
 	$max_index_length = 191;
 
 	// Blog-specific tables.
-	$blog_tables = "CREATE TABLE $wpdb->termmeta (
+	$blog_tables = "CREATE TABLE $wpdb->object_relationshipmeta (
+	meta_id bigint(20) unsigned NOT NULL auto_increment,
+	relationship_id bigint(20) unsigned NOT NULL default 0,
+	meta_key varchar(200) NOT NULL,
+	meta_value longtext NOT NULL,
+	PRIMARY KEY (meta_id)
+) $charset_collate;
+CREATE TABLE $wpdb->object_relationships (
+	relationship_id bigint(20) unsigned NOT NULL auto_increment,
+	left_object_id bigint(20) NOT NULL default 0,
+	left_object_type varchar(200) NOT NULL,
+	right_object_type varchar(200) NOT NULL,
+	right_object_id bigint(20) NOT NULL default 0,
+	PRIMARY KEY (relationship_id)
+) $charset_collate;
+CREATE TABLE $wpdb->termmeta (
 	meta_id bigint(20) unsigned NOT NULL auto_increment,
 	term_id bigint(20) unsigned NOT NULL default '0',
 	meta_key varchar(255) default NULL,
