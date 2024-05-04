@@ -222,8 +222,8 @@ class Tests_Auth extends WP_UnitTestCase {
 		$limit = str_repeat( 'a', 4096 );
 
 		wp_set_password( $limit, self::$user_id );
-		// phpass hashed password.
-		$this->assertStringStartsWith( '$P$', $this->user->data->user_pass );
+		// PASSWORD_BCRYPT hashed password.
+		$this->assertStringStartsWith( '$2y$', $this->user->data->user_pass );
 
 		$user = wp_authenticate( $this->user->user_login, 'aaaaaaaa' );
 		// Wrong password.
