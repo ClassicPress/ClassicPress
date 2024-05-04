@@ -3854,7 +3854,7 @@ function cp_select_upload_media_category() {
 			$media_select .= '<option value=""' . selected( in_array( $cat_subfolder, array( '', '/' ) ), true, false ) . '>&nbsp;' . esc_html__( 'Media category' ) . '&nbsp;</option>';
 			foreach ( $media_terms as $media_term ) {
 				$ancestor_ids = get_ancestors( $media_term->term_id, 'media_category' );
-				$level = $count = count( $ancestor_ids );
+				$count = count( $ancestor_ids );
 				$spaces = '';
 				$slug = $media_term->slug;
 				if ( $count > 0 ) {
@@ -3863,7 +3863,7 @@ function cp_select_upload_media_category() {
 						$slug = get_term( $ancestor_id, 'media_category' )->slug . '/' . $slug;
 					}
 				}
-				$media_select .= '<option class="level-' . esc_attr( $level ) . '" value="' . esc_attr( $slug ) . '"' . selected( '/' . $slug, $cat_subfolder, false ) . '>' . esc_html( $spaces . $media_term->name ) . '</option>';
+				$media_select .= '<option class="level-' . esc_attr( $count ) . '" value="' . esc_attr( $slug ) . '"' . selected( '/' . $slug, $cat_subfolder, false ) . '>' . esc_html( $spaces . $media_term->name ) . '</option>';
 			}
 			$media_select .= '</select><br><br>';
 		}
