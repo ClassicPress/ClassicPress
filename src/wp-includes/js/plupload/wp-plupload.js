@@ -366,6 +366,11 @@ window.wp = window.wp || {};
 						} );
 					}
 				}
+
+				// Clear file selection if not inserted into post, page, or widget.
+				document.getElementById( 'menu-item-upload' ).addEventListener( 'click', function() {
+					document.querySelector( '.clear-selection' ).click();
+				} );
 			} );
 			mediaCatObserver.observe( document, { attributes: false, childList: true, subtree: true } );
 
