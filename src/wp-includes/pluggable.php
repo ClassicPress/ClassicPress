@@ -2518,7 +2518,7 @@ endif;
 
 if ( ! function_exists( 'wp_hash_password' ) ) :
 	/**
-	 * Creates a hash (encrypt) of a plain text passwordusing PHP's PASSWORD_DEFAULT hashing algorithm.
+	 * Creates a hash (encrypt) of a plain text password using PHP's PASSWORD_DEFAULT hashing algorithm.
 	 *
 	 * For integration with other applications, this function can be overwritten to
 	 * instead use the other package password checking algorithm.
@@ -2526,8 +2526,6 @@ if ( ! function_exists( 'wp_hash_password' ) ) :
 	 * @since CP-2.2.0
 	 *
 	 * @param string    $password                                  Plaintext password
-	 * @param string    PASSWORD_DEFAULT PHP's PASSWORD_DEFAULT    hashing algorithm
-	 * @param array     $options                                   options, including cost
 	 * @return string   The hash string of the password.
 	 */
 	function wp_hash_password( $password ) {
@@ -2536,17 +2534,36 @@ if ( ! function_exists( 'wp_hash_password' ) ) :
 		 */
 		$options = cp_hash_password_options();
 
+		$password = trim( $password );
+
+		if ( strlen( $password ) > 4096 ) {
+			return '*';
+		}
+
 		/**
 		 * Filter enabling the password to be peppered.
 		 * Example use of pepper: hash_hmac( 'sha256', $password, 'long-string-known-as-pepper' );
 		 * For maximum security, pepper should be stored in a file and not in the database.
 		 *
+		 * A function name for peppering should be passed, this can also be a statin function in a class
+		 * For example `function_name` or `Class::static_function_name`
+		 *
 		 * @since CP-2.2.0
 		 *
-		 * @param  string    $password                   The plaintext password.
-		 * @return string    $maybe_peppered_password    A password that may be peppered.
+		 * @param  string $function Optional. Name of function or staic method to use for peppering. Default empty.
 		 */
-		$maybe_peppered_password = apply_filters( 'cp_pepper_password', $password );
+		$pepper_function = apply_filters( 'cp_pepper_password', '' );
+
+		if ( function_exists( $pepper_function ) ) {
+			$maybe_peppered_password = call_user_func( $pepper_function, $password );
+		} elseif ( str_contains( $pepper_function, '::' ) ) {
+			list( $class, $function ) = explode( '::', $pepper_function, 2 );
+			if ( method_exists( $class, $function ) ) {
+				$maybe_peppered_password = call_user_func( array( $class, $function ), $password );
+			}
+		} else {
+			$maybe_peppered_password = $password;
+		}
 
 		/**
 		 * Filter enabling the password algorithm to be changed.
@@ -2557,6 +2574,7 @@ if ( ! function_exists( 'wp_hash_password' ) ) :
 		 * @return string    $algorithm                  Any algorithm recognized by PHP.
 		 */
 		$algorithm = apply_filters( 'cp_password_algorithm', PASSWORD_DEFAULT );
+
 		return password_hash( $maybe_peppered_password, $algorithm, $options );
 	}
 endif;
@@ -2587,6 +2605,10 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 	function wp_check_password( $password, $hash, $user_id = '' ) {
 		$check = false;
 
+		if ( strlen( $password ) > 4096 ) {
+			return $check;
+		}
+
 		/*
 		 * Function cp_hash_password_options() is documented in wp-includes/user.php
 		 */
@@ -2597,15 +2619,28 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 		 * Example use of pepper: hash_hmac( 'sha256', $password, 'long-string-known-as-pepper' );
 		 * For maximum security, pepper should be stored in a file and not in the database.
 		 *
+		 * A function name for peppering should be passed, this can also be a statin function in a class
+		 * For example `function_name` or `Class::static_function_name`
+		 *
 		 * @since CP-2.2.0
 		 *
-		 * @param  string    $password                   The plaintext password.
-		 * @return string    $maybe_peppered_password    A password that may be peppered.
+		 * @param  string $function Optional. Name of function or staic method to use for peppering. Default empty.
 		 */
-		$maybe_peppered_password = apply_filters( 'cp_pepper_password', $password );
+		$pepper_function = apply_filters( 'cp_pepper_password', '' );
 
-		// This handles password verification using PHP's PASSWORD_DEFAULT hashing algorithm.
+		if ( function_exists( $pepper_function ) ) {
+			$maybe_peppered_password = call_user_func( $pepper_function, $password );
+		} elseif ( str_contains( $pepper_function, '::' ) ) {
+			list( $class, $function ) = explode( '::', $pepper_function, 2 );
+			if ( method_exists( $class, $function ) ) {
+				$maybe_peppered_password = call_user_func( array( $class, $function ), $password );
+			}
+		} else {
+			$maybe_peppered_password = $password;
+		}
+
 		if ( password_verify( $maybe_peppered_password, $hash ) ) {
+			// Handle password verification using PHP's PASSWORD_DEFAULT hashing algorithm.
 			$check = true;
 
 			/**
@@ -2623,16 +2658,15 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 				// Update to current password setting and verification method.
 				$hash = wp_set_password( $password, $user_id );
 			}
-
-		// This handles password verification when a temporary password has been set via Adminer or phpMyAdmin.
 		} elseif ( md5( $password ) === $hash ) {
+			// Handle password verification when a temporary password has been set via Adminer or phpMyAdmin.
 			$check = true;
 
 			// Update to current password setting and verification method.
 			$hash = wp_set_password( $password, $user_id );
 
-		// This handles password verification by the traditional WordPress method.
 		} elseif ( 0 === strpos( $hash, '$P$' ) ) {
+			// Handle password verification by the traditional WordPress method.
 			global $wp_hasher;
 
 			if ( empty( $wp_hasher ) ) {
