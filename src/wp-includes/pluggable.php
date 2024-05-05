@@ -2554,13 +2554,8 @@ if ( ! function_exists( 'wp_hash_password' ) ) :
 		 */
 		$pepper_function = apply_filters( 'cp_pepper_password', '' );
 
-		if ( function_exists( $pepper_function ) ) {
+		if ( is_callable( $pepper_function ) ) {
 			$maybe_peppered_password = call_user_func( $pepper_function, $password );
-		} elseif ( str_contains( $pepper_function, '::' ) ) {
-			list( $class, $function ) = explode( '::', $pepper_function, 2 );
-			if ( method_exists( $class, $function ) ) {
-				$maybe_peppered_password = call_user_func( array( $class, $function ), $password );
-			}
 		} else {
 			$maybe_peppered_password = $password;
 		}
@@ -2628,13 +2623,8 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 		 */
 		$pepper_function = apply_filters( 'cp_pepper_password', '' );
 
-		if ( function_exists( $pepper_function ) ) {
+		if ( is_callable( $pepper_function ) ) {
 			$maybe_peppered_password = call_user_func( $pepper_function, $password );
-		} elseif ( str_contains( $pepper_function, '::' ) ) {
-			list( $class, $function ) = explode( '::', $pepper_function, 2 );
-			if ( method_exists( $class, $function ) ) {
-				$maybe_peppered_password = call_user_func( array( $class, $function ), $password );
-			}
 		} else {
 			$maybe_peppered_password = $password;
 		}
