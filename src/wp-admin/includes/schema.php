@@ -78,31 +78,31 @@ CREATE TABLE $wpdb->termmeta (
 	KEY meta_key (meta_key($max_index_length))
 ) $charset_collate;
 CREATE TABLE $wpdb->terms (
- term_id bigint(20) unsigned NOT NULL auto_increment,
- name varchar(200) NOT NULL default '',
- slug varchar(200) NOT NULL default '',
- term_group bigint(10) NOT NULL default 0,
- PRIMARY KEY  (term_id),
- KEY slug (slug($max_index_length)),
- KEY name (name($max_index_length))
+	term_id bigint(20) unsigned NOT NULL auto_increment,
+	name varchar(200) NOT NULL default '',
+	slug varchar(200) NOT NULL default '',
+	term_group bigint(10) NOT NULL default 0,
+	PRIMARY KEY  (term_id),
+	KEY slug (slug($max_index_length)),
+	KEY name (name($max_index_length))
 ) $charset_collate;
 CREATE TABLE $wpdb->term_taxonomy (
- term_taxonomy_id bigint(20) unsigned NOT NULL auto_increment,
- term_id bigint(20) unsigned NOT NULL default 0,
- taxonomy varchar(32) NOT NULL default '',
- description longtext NOT NULL,
- parent bigint(20) unsigned NOT NULL default 0,
- count bigint(20) NOT NULL default 0,
- PRIMARY KEY  (term_taxonomy_id),
- UNIQUE KEY term_id_taxonomy (term_id,taxonomy),
- KEY taxonomy (taxonomy)
+	term_taxonomy_id bigint(20) unsigned NOT NULL auto_increment,
+	term_id bigint(20) unsigned NOT NULL default 0,
+	taxonomy varchar(32) NOT NULL default '',
+	description longtext NOT NULL,
+	parent bigint(20) unsigned NOT NULL default 0,
+	count bigint(20) NOT NULL default 0,
+	PRIMARY KEY  (term_taxonomy_id),
+	UNIQUE KEY term_id_taxonomy (term_id,taxonomy),
+	KEY taxonomy (taxonomy)
 ) $charset_collate;
 CREATE TABLE $wpdb->term_relationships (
- object_id bigint(20) unsigned NOT NULL default 0,
- term_taxonomy_id bigint(20) unsigned NOT NULL default 0,
- term_order int(11) NOT NULL default 0,
- PRIMARY KEY  (object_id,term_taxonomy_id),
- KEY term_taxonomy_id (term_taxonomy_id)
+	object_id bigint(20) unsigned NOT NULL default 0,
+	term_taxonomy_id bigint(20) unsigned NOT NULL default 0,
+	term_order int(11) NOT NULL default 0,
+	PRIMARY KEY  (object_id,term_taxonomy_id),
+	KEY term_taxonomy_id (term_taxonomy_id)
 ) $charset_collate;
 CREATE TABLE $wpdb->commentmeta (
 	meta_id bigint(20) unsigned NOT NULL auto_increment,
