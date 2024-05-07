@@ -61,7 +61,6 @@ wp_dashboard_setup();
 
 wp_enqueue_script( 'dashboard' );
 wp_enqueue_script( 'plugin-install' );
-add_thickbox();
 
 require_once ABSPATH . 'wp-admin/admin-header.php';
 
