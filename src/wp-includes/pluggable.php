@@ -2521,7 +2521,7 @@ if ( ! function_exists( 'wp_hash_password' ) ) :
 	 * Creates a hash (encrypt) of a plain text password using PHP's PASSWORD_DEFAULT hashing algorithm.
 	 *
 	 * For integration with other applications, this function can be overwritten to
-	 * instead use the other package password checking algorithm.
+	 * instead use another package password checking algorithm.
 	 *
 	 * @since CP-2.2.0
 	 *
@@ -2545,12 +2545,12 @@ if ( ! function_exists( 'wp_hash_password' ) ) :
 		 * Example use of pepper: hash_hmac( 'sha256', $password, 'long-string-known-as-pepper' );
 		 * For maximum security, pepper should be stored in a file and not in the database.
 		 *
-		 * A function name for peppering should be passed, this can also be a statin function in a class
+		 * A function name for peppering should be passed, this can also be a static function in a class
 		 * For example `function_name` or `Class::static_function_name`
 		 *
 		 * @since CP-2.2.0
 		 *
-		 * @param  string $function Optional. Name of function or staic method to use for peppering. Default empty.
+		 * @param  string $function Optional. Name of function or static method to use for peppering. Default empty.
 		 */
 		$pepper_function = apply_filters( 'cp_pepper_password', '' );
 
@@ -2584,7 +2584,7 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 	 * against the already encrypted password to see if they match.
 	 *
 	 * For integration with other applications, this function can be overwritten to
-	 * instead use the other package password checking algorithm.
+	 * instead use another package password checking algorithm.
 	 *
 	 * @since CP-2.2.0
 	 *
@@ -2614,12 +2614,12 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 		 * Example use of pepper: hash_hmac( 'sha256', $password, 'long-string-known-as-pepper' );
 		 * For maximum security, pepper should be stored in a file and not in the database.
 		 *
-		 * A function name for peppering should be passed, this can also be a statin function in a class
+		 * A function name for peppering should be passed. This can also be a static function in a class.
 		 * For example `function_name` or `Class::static_function_name`
 		 *
 		 * @since CP-2.2.0
 		 *
-		 * @param  string $function Optional. Name of function or staic method to use for peppering. Default empty.
+		 * @param  string $function Optional. Name of function or static method to use for peppering. Default empty.
 		 */
 		$pepper_function = apply_filters( 'cp_pepper_password', '' );
 
