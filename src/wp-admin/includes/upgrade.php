@@ -855,8 +855,6 @@ function upgrade_all() {
 		upgrade_600();
 	}
 
-<<<<<<< HEAD
-=======
 	if ( $wp_current_db_version < 55853 ) {
 		upgrade_630();
 	}
@@ -865,7 +863,6 @@ function upgrade_all() {
 		upgrade_640();
 	}
 
->>>>>>> 15e37005db (Media: Disable attachment pages for new installations.)
 	maybe_disable_link_manager();
 
 	maybe_disable_automattic_widgets();
@@ -2322,8 +2319,6 @@ function upgrade_600() {
 }
 
 /**
-<<<<<<< HEAD
-=======
  * Executes changes made in WordPress 6.3.0.
  *
  * @ignore
@@ -2364,7 +2359,6 @@ function upgrade_640() {
 }
 
 /**
->>>>>>> 15e37005db (Media: Disable attachment pages for new installations.)
  * Executes network-level upgrade routines.
  *
  * @since 3.0.0

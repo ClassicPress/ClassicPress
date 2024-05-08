@@ -28,7 +28,6 @@ class Tests_Canonical extends WP_Canonical_UnitTestCase {
 	public function set_up() {
 		parent::set_up();
 		wp_set_current_user( self::$author_id );
-<<<<<<< HEAD
 		self::set_up_custom_post_types();
 
 		update_option( 'wp_attachment_pages_enabled', 1 );
@@ -50,10 +49,6 @@ class Tests_Canonical extends WP_Canonical_UnitTestCase {
 				'publicly_queryable' => false,
 			)
 		);
-=======
-
-		add_filter( 'pre_option_wp_attachment_pages_enabled', '__return_true' );
->>>>>>> 15e37005db (Media: Disable attachment pages for new installations.)
 	}
 
 	/**

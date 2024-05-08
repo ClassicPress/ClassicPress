@@ -46,11 +46,7 @@ $wp_version = '6.2.5';
  *
  * @global int $wp_db_version
  */
-<<<<<<< HEAD
-$wp_db_version = 53496;
-=======
 $wp_db_version = 56657;
->>>>>>> 15e37005db (Media: Disable attachment pages for new installations.)
 
 /**
  * Holds the TinyMCE version.
