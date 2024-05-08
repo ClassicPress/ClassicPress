@@ -183,6 +183,24 @@ if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) :
 </table>
 <?php endif; ?>
 
+<?php if ( ! is_multisite() ) : ?>
+<h2 class="title"><?php _e( 'Attachment Pages' ); ?></h2>
+<table class="form-table" role="presentation">
+
+<tr>
+<th scope="row"><?php _e( 'Do you want to enable attachment pages?' ); ?></th>
+<td class="td-full attachment-pages">
+
+<input type="hidden" name="wp_attachment_pages_enabled" value="0">
+<input id="attachment-pages" name="wp_attachment_pages_enabled" type="checkbox" value="1"<?php checked( '1', $attachment_pages_enabled ); ?>>
+<label for="attachment-pages"><?php _e( 'Check this box to enable attachment pages.' ); ?></label>
+</td>
+</tr>
+
+	<?php do_settings_fields( 'media', 'attachments' ); ?>
+</table>
+<?php endif; ?>
+
 <?php do_settings_sections( 'media' ); ?>
 
 <?php submit_button(); ?>
