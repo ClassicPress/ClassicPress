@@ -563,7 +563,7 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 		}
 
 			$is_attachment_redirect = true;
-		}
+	}
 
 	$redirect['query'] = preg_replace( '#^\??&*?#', '', $redirect['query'] );
 
