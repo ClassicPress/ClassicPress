@@ -68,7 +68,7 @@ header( 'Content-Type: ' . get_option( 'html_type' ) . '; charset=' . get_option
 <body class="wp-core-ui">
 <p id="logo"><a href="<?php echo esc_url( __( 'https://www.classicpress.net/' ) ); ?>"><?php _e( 'ClassicPress' ); ?></a></p>
 
-<?php if ( (int) get_option( 'db_version' ) === $wp_db_version || ! is_blog_installed() ) : ?>
+<?php if ( ( (int) get_option( 'db_version' ) === $wp_db_version && (int) get_option( 'cp_db_version', '20100' ) === $cp_db_version ) || ! is_blog_installed() ) : ?>
 
 <h1><?php _e( 'No Update Required' ); ?></h1>
 <p><?php _e( 'Your ClassicPress database is already up to date!' ); ?></p>

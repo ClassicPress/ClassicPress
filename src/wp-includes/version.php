@@ -50,6 +50,7 @@ $wp_db_version = 53496;
 
 /**
  * Holds the ClassicPress DB revision, increments when changes are made to the ClassicPress DB schema.
+ * Format: 1 digit major, 2 digits minor, 2 digits patch in which is changed.
  *
  * @global int $cp_db_version
  */

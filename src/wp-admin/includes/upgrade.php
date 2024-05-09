@@ -662,7 +662,7 @@ if ( ! function_exists( 'wp_upgrade' ) ) :
 		}
 
 		// We are up to date. Nothing to do.
-		if ( $wp_db_version == $wp_current_db_version && $cp_db_version == $cp_current_db_version) {
+		if ( $wp_db_version == $wp_current_db_version && $cp_db_version == $cp_current_db_version ) {
 			return;
 		}
 
@@ -723,7 +723,7 @@ function upgrade_all() {
 	}
 
 	// We are up to date. Nothing to do.
-	if ( $wp_db_version == $wp_current_db_version && $cp_db_version == $cp_current_db_version) {
+	if ( $wp_db_version == $wp_current_db_version && $cp_db_version == $cp_current_db_version ) {
 		return;
 	}
 
