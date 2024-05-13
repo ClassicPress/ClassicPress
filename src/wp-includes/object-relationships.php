@@ -14,8 +14,8 @@ function cp_recognized_relationship_objects() {
 	$taxonomies = get_taxonomies();
 
 	// Merge arrays and add comments and users.
-	$objects = [ ...$posts, ...$taxonomies ];	
-	$objects['comment'] = 'comment';	
+	$objects = array( ...$posts, ...$taxonomies );	
+	$objects['comment'] = 'comment';
 	$objects['user']    = 'user';
 
 	/**
@@ -23,8 +23,8 @@ function cp_recognized_relationship_objects() {
 	 *
 	 * @since CP-2.2.0
 	 *
-	 * @param  array     $objects            Default array of recognized relationship objects.
-	 * @return array     $objects            Filtered array of recognized relationship objects.
+	 * @param  array     $objects      Default array of recognized relationship objects.
+	 * @return array     $objects      Filtered array of recognized relationship objects.
 	 */
 	return apply_filters( 'recognized_relationship_objects', $objects );
 }
