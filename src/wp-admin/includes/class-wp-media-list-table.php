@@ -230,7 +230,7 @@ class WP_Media_List_Table extends WP_List_Table {
 				'orderby'         => 'name',
 				'name'            => 'taxonomy=media_category&term',
 				'taxonomy'        => 'media_category',
-				'selected'        => filter_input( INPUT_GET, 'term' ),
+				'selected'        => get_query_var( 'term' ),
 				'value_field'     => 'slug',
 			);
 
