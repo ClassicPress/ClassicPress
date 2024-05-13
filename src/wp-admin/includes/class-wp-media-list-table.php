@@ -220,9 +220,10 @@ class WP_Media_List_Table extends WP_List_Table {
 			return;
 		}
 
+		$media_category = get_taxonomy( 'media_category' );
 		if ( is_object_in_taxonomy( 'attachment', 'media_category' ) ) {
 			$dropdown_options = array(
-				'show_option_all' => get_taxonomy( 'media_category' )->labels->all_items,
+				'show_option_all' => $media_category->labels->all_items,
 				'hide_empty'      => 0,
 				'hierarchical'    => 1,
 				'show_count'      => 0,
@@ -233,7 +234,7 @@ class WP_Media_List_Table extends WP_List_Table {
 				'value_field'     => 'slug',
 			);
 
-			echo '<label class="screen-reader-text" for="cat">' . get_taxonomy( 'media_category' )->labels->filter_by_item . '</label>';
+			echo '<label class="screen-reader-text" for="cat">' . $media_category->labels->filter_by_item . '</label>';
 
 			wp_dropdown_categories( $dropdown_options );
 		}
