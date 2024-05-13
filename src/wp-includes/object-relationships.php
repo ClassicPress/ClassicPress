@@ -1,25 +1,34 @@
 <?php
 
-/* SPECIFY OBJECTS WHOSE RELATIONSHIPS WILL BE STORED IN THIS TABLE */
+/**
+ * Specifies the names of objects that will be stored in the object-relationships table.
+ *
+ * @since CP-2.2.0
+ */
 function cp_recognized_relationship_objects() {
 
-	# Names of core objects
-	$objects = array(
-		'comment',
-		'post',
-		'taxonomy',
-		'user',
-	);
+	// Names of post types (including custom post types).
+	$posts = get_post_types();
 
-	# Get names of taxonomies and add them to $objects array
+	// Names of taxonomies (including custom taxonomies).
 	$taxonomies = get_taxonomies();
-	foreach ( $taxonomies as $taxonomy ) {
-		$objects[] = $taxonomy;
-	}
 
-	# Add filter to enable modification of list of recognized relationship objects
+	// Merge arrays and add comments and users.
+	$objects = [ ...$posts, ...$taxonomies ];	
+	$objects['comment'] = 'comment';	
+	$objects['user']    = 'user';
+
+	/**
+	 * Filter enabling modification of the list of recognized relationship objects.
+	 *
+	 * @since CP-2.2.0
+	 *
+	 * @param  array     $objects            Default array of recognized relationship objects.
+	 * @return array     $objects            Filtered array of recognized relationship objects.
+	 */
 	return apply_filters( 'recognized_relationship_objects', $objects );
 }
+add_action( 'init', 'cp_recognized_relationship_objects' );
 
 
 /* CHECK IF BI-DIRECTIONAL RELATIONSHIP EXISTS BETWEEN TWO OBJECTS */
