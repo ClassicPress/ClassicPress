@@ -14,7 +14,7 @@ function cp_recognized_relationship_objects() {
 	$taxonomies = get_taxonomies();
 
 	// Merge arrays and add comments and users.
-	$objects = array( ...$posts, ...$taxonomies );	
+	$objects = array( ...$posts, ...$taxonomies );
 	$objects['comment'] = 'comment';
 	$objects['user']    = 'user';
 
