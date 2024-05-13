@@ -198,6 +198,48 @@ class WP_Media_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Displays a media categories drop-down for filtering on the Media list table.
+	 *
+	 * @since CP-2.2.0
+	 *
+	 * @global int $cat Currently selected category.
+	 *
+	 * @param string $post_type Post type slug.
+	 */
+	protected function media_categories_dropdown( $post_type ) {
+
+		/**
+		 * Filters whether to remove the 'Media Categories' drop-down from the post list table.
+		 *
+		 * @since CP-2.2.0
+		 *
+		 * @param bool   $disable   Whether to disable the categories drop-down. Default false.
+		 * @param string $post_type Post type slug.
+		 */
+		if ( false !== apply_filters( 'disable_media_categories_dropdown', false, $post_type ) ) {
+			return;
+		}
+
+		if ( is_object_in_taxonomy( 'attachment', 'media_category' ) ) {
+			$dropdown_options = array(
+				'show_option_all' => get_taxonomy( 'media_category' )->labels->all_items,
+				'hide_empty'      => 0,
+				'hierarchical'    => 1,
+				'show_count'      => 0,
+				'orderby'         => 'name',
+				'name'            => 'taxonomy=media_category&term',
+				'taxonomy'        => 'media_category',
+				'selected'        => filter_input( INPUT_GET, 'term' ),
+				'value_field'     => 'slug',
+			);
+
+			echo '<label class="screen-reader-text" for="cat">' . get_taxonomy( 'media_category' )->labels->filter_by_item . '</label>';
+
+			wp_dropdown_categories( $dropdown_options );
+		}
+	}
+
+	/**
 	 * @param string $which
 	 */
 	protected function extra_tablenav( $which ) {
@@ -209,6 +251,7 @@ class WP_Media_List_Table extends WP_List_Table {
 			<?php
 			if ( ! $this->is_trash ) {
 				$this->months_dropdown( 'attachment' );
+				$this->media_categories_dropdown( 'attachment' );
 			}
 
 			/** This action is documented in wp-admin/includes/class-wp-posts-list-table.php */
