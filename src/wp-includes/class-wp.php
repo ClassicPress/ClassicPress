@@ -394,7 +394,7 @@ class WP {
 		 *
 		 * @since CP-2.2.0
 		 */
-		if ( 'wp-admin/upload.php' === $requested_path ) {
+		if ( isset( $requested_path ) && 'wp-admin/upload.php' === $requested_path ) {
 			if ( isset( $this->query_vars['taxonomy'] ) && isset( $this->query_vars['term'] ) && isset( $this->query_vars['s'] ) ) {
 				unset( $this->query_vars['s'] );
 			}
