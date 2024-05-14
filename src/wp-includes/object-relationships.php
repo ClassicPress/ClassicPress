@@ -417,7 +417,7 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 		$wpdb->delete( $table_name, array( 'relationship_id' => $relationship_id ), array( '%d' ) );
 
 	} else { // nothing deleted so far
-		
+
 		$sql2 = $wpdb->prepare( "SELECT relationship_id FROM $table_name WHERE right_object_id = %d AND right_object_type = %s AND left_object_type = %s AND left_object_id = %d", $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
 		// Get the relationship ID as an integer.
