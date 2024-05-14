@@ -16,7 +16,7 @@ function cp_recognized_relationship_objects() {
 	$taxonomies = get_taxonomies();
 
 	// Merge arrays and add comments and users.
-	$objects = array( ...$posts, ...$taxonomies );
+	$objects = array_merge( $posts, $taxonomies );
 	$objects['comment'] = 'comment';
 	$objects['user']    = 'user';
 
@@ -43,8 +43,8 @@ add_action( 'init', 'cp_recognized_relationship_objects' );
  * @since CP-2.2.0
  *
  * @param  int      $left_object_id        ID of first object.
- * @param  object   $left_object_type      Name of type of first object.
- * @param  object   $right_object_type     Name of type of second object.
+ * @param  string   $left_object_type      Name of type of first object.
+ * @param  string   $right_object_type     Name of type of second object.
  * @param  int      $right_object_id       ID of second object.
  *
  * @return int|WP_Error  $relationship_id  Relationship ID or 0 if none exists.
@@ -177,8 +177,8 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
  * @since CP-2.2.0
  *
  * @param  int      $left_object_id     ID of first object.
- * @param  object   $left_object_type   Name of type of first object.
- * @param  object   $right_object_type  Name of type of second object.
+ * @param  string   $left_object_type   Name of type of first object.
+ * @param  string   $right_object_type  Name of type of second object.
  * @param  int      $right_object_id    ID of second object.
  *
  * @return int      $relationship_id    Relationship ID of a relationship if it already exists.
@@ -223,8 +223,8 @@ function cp_add_object_relationship( $left_object_id, $left_object_type, $right_
  * @since CP-2.2.0
  *
  * @param  int      $left_object_id     ID of first object.
- * @param  object   $left_object_type   Name of type of first object.
- * @param  object   $right_object_type  Name of type of second object.
+ * @param  string   $left_object_type   Name of type of first object.
+ * @param  string   $right_object_type  Name of type of second object.
  *
  * @return array|WP_Error  $target_ids  ID of each object with which the first object has a relationship.
  *                                      WP_Error when a param of an incorrect type is specified.
@@ -321,8 +321,8 @@ function cp_get_object_relationship_ids( $left_object_id, $left_object_type, $ri
  * @since CP-2.2.0
  *
  * @param  int      $left_object_id        ID of first object.
- * @param  object   $left_object_type      Name of type of first object.
- * @param  object   $right_object_type     Name of type of second object.
+ * @param  string   $left_object_type      Name of type of first object.
+ * @param  string   $right_object_type     Name of type of second object.
  * @param  int      $right_object_id       ID of second object.
  *
  * @return int|WP_Error  $relationship_id  ID of deleted relationship.
