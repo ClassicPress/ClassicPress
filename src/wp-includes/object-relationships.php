@@ -4,6 +4,8 @@
  * Specifies the names of objects that will be stored in the object-relationships table.
  *
  * @since CP-2.2.0
+ * 
+ * @return array  $objects  Filtered array of recognized relationship objects.
  */
 function cp_recognized_relationship_objects() {
 
@@ -23,96 +25,121 @@ function cp_recognized_relationship_objects() {
 	 *
 	 * @since CP-2.2.0
 	 *
-	 * @param  array     $objects      Default array of recognized relationship objects.
-	 * @return array     $objects      Filtered array of recognized relationship objects.
+	 * @param  array  $objects  Default array of recognized relationship objects.
+	 *
+	 * @return array  $objects  Filtered array of recognized relationship objects.
 	 */
 	return apply_filters( 'recognized_relationship_objects', $objects );
 }
 add_action( 'init', 'cp_recognized_relationship_objects' );
 
 
-/* CHECK IF BI-DIRECTIONAL RELATIONSHIP EXISTS BETWEEN TWO OBJECTS */
+/**
+ * Check if a relationship exists between two recognized objects.
+ * Relationship is bi-directional so the objects may be given in either order.
+ *
+ * Objects must be among the array produced by cp_recognized_relationship_objects().
+ *
+ * @since CP-2.2.0
+ *
+ * @param  int      $left_object_id        ID of first object.
+ * @param  object   $left_object_type      Name of type of first object.
+ * @param  object   $right_object_type     Name of type of second object.
+ * @param  int      $right_object_id       ID of second object.
+ *
+ * @return int|WP_Error  $relationship_id  Relationship ID or 0 if none exists.
+ *                                         WP_Error when a param of an incorrect type is specified.
+ */
 function cp_object_relationship_exists( $left_object_id, $left_object_type, $right_object_type, $right_object_id ) {
 
-	# Error if $left_object_id is not a positive integer
+	// Error if $left_object_id is not a positive integer.
 	if ( filter_var( $left_object_id, FILTER_VALIDATE_INT ) === false ) {
 
 		$item = 'string';
 		if ( $left_object_id === 0 ) {
 			$item = 0;
-		} elseif ( is_object( $left_object_id ) ) {
+		}
+		elseif ( is_object( $left_object_id ) ) {
 			$item = 'object';
-		} elseif ( is_array( $left_object_id ) ) {
+		}
+		elseif ( is_array( $left_object_id ) ) {
 			$item = 'array';
 		}
 
 		return new WP_Error( 'left_object_id', __( 'cp_add_object_relationship() expects parameter 1 to be a positive integer, ' . $item . ' given.' ) );
 	}
 
-	# Error if $right_object_id is not a positive integer
+	// Error if $right_object_id is not a positive integer.
 	if ( filter_var( $right_object_id, FILTER_VALIDATE_INT ) === false ) {
 
 		$item = 'string';
 		if ( $right_object_id === 0 ) {
 			$item = 0;
-		} elseif ( is_object( $right_object_id ) ) {
+		}
+		elseif ( is_object( $right_object_id ) ) {
 			$item = 'object';
-		} elseif ( is_array( $right_object_id ) ) {
+		}
+		elseif ( is_array( $right_object_id ) ) {
 			$item = 'array';
 		}
 
 		return new WP_Error( 'right_object_id', __( 'cp_add_object_relationship() expects parameter 4 to be a positive integer, ' . $item . ' given.' ) );
 	}
 
+	// Get array, and create list, of recognized relationship objects.
 	$recognized_relationship_objects = cp_recognized_relationship_objects();
 	$object_list = implode( ', ', $recognized_relationship_objects );
 
-	# Error if $left_object_type is not a non-null string of an appropriate value
+	// Error if $left_object_type is not a non-null string of an appropriate value.
 	if ( ! in_array( $left_object_type, $recognized_relationship_objects ) ) {
 
 		$item = $left_object_type;
 		if ( is_int( $left_object_type ) ) {
 			$item = 'integer';
-		} elseif ( is_object( $left_object_type ) ) {
+		}
+		elseif ( is_object( $left_object_type ) ) {
 			$item = 'object';
-		} elseif ( is_array( $left_object_type ) ) {
+		}
+		elseif ( is_array( $left_object_type ) ) {
 			$item = 'array';
 		}
 
-		return new WP_Error( 'left_object_type', __( 'cp_add_object_relationship() expects parameter 2 to be one of ' . $object_list . ', ' . $item . ' given.' ) );
+		return new WP_Error( 'left_object_type', __( 'cp_add_object_relationship() expects parameter 2 to be one of ' . $object_list . '; ' . $item . ' given.' ) );
 	}
 
-	# Error if $right_object_type is not a non-null string of an appropriate value
+	// Error if $right_object_type is not a non-null string of an appropriate value
 	if ( ! in_array( $right_object_type, $recognized_relationship_objects ) ) {
 
 		$item = $right_object_type;
 		if ( is_int( $right_object_type ) ) {
 			$item = 'integer';
-		} elseif ( is_object( $right_object_type ) ) {
+		}
+		elseif ( is_object( $right_object_type ) ) {
 			$item = 'object';
-		} elseif ( is_array( $right_object_type ) ) {
+		}
+		elseif ( is_array( $right_object_type ) ) {
 			$item = 'array';
 		}
 
-		return new WP_Error( 'right_object_type', __( 'cp_add_object_relationship() expects parameter 3 to be one of ' . $object_list . ', ' . $item . ' given.' ) );
+		return new WP_Error( 'right_object_type', __( 'cp_add_object_relationship() expects parameter 3 to be one of ' . $object_list . '; ' . $item . ' given.' ) );
 	}
 
-	# Good to go!
+	// Good to go, so query database table.
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'object_relationships';
 	$relationship_id = 0;
 
 	$relationship_array = array(
-		'left_object_id'    => $left_object_id,
-		'left_object_type'  => $left_object_type,
+		'left_object_id'	=> $left_object_id,
+		'left_object_type'	=> $left_object_type,
 		'right_object_type' => $right_object_type,
-		'right_object_id'   => $right_object_id,
+		'right_object_id'	=> $right_object_id
 	);
 
-	# Check if this relationship already exists
+	// Check if this relationship already exists.
 	$sql1 = $wpdb->prepare( "SELECT relationship_id FROM $table_name WHERE left_object_id = %d AND left_object_type = %s AND right_object_type = %s AND right_object_id = %d", $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
-	# If so, return the relationship ID as an integer
+	// If so, return the relationship ID as an integer.
 	$row = $wpdb->get_row( $sql1 );
 	if ( is_object( $row ) ) {
 		$relationship_id = (int) $row->relationship_id;
@@ -120,17 +147,20 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 
 	if ( ! empty( $relationship_id ) ) {
 
-		# Hook when pre-existing relationship found
+		// Hook when pre-existing relationship found.
 		do_action( 'existing_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
+		// Return early because there is no need to query the objects in the reverse order.
 		return $relationship_id;
 
-	} else {
+	}
 
-		# Also query database table right to left if no match so far
+	else {
+
+		// Also query database table right to left if no match so far.
 		$sql2 = $wpdb->prepare( "SELECT relationship_id FROM $table_name WHERE right_object_id = %d AND right_object_type = %s AND left_object_type = %s AND left_object_id = %d", $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
-		# If this relationship exists, return the relationship ID as an integer
+		// If this relationship exists, return the relationship ID as an integer.
 		$row = $wpdb->get_row( $sql2 );
 		if ( is_object( $row ) ) {
 			$relationship_id = (int) $row->relationship_id;
@@ -138,208 +168,265 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 
 		if ( ! empty( $relationship_id ) ) {
 
-			# Hook when pre-existing relationship found
+			// Hook when pre-existing relationship found.
 			do_action( 'existing_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
 		}
 	}
 
-	# Return relationship ID (which will be 0 if none exists)
+	// Return relationship ID (which will be 0 if none exists).
 	return $relationship_id;
 }
 
 
-/* ADD BI-DIRECTIONAL RELATIONSHIP BETWEEN TWO OBJECTS */
+/**
+ * Create a relationship between two recognized objects.
+ *
+ * Objects must be among the array produced by cp_recognized_relationship_objects().
+ *
+ * @since CP-2.2.0
+ *
+ * @param  int      $left_object_id     ID of first object.
+ * @param  object   $left_object_type   Name of type of first object.
+ * @param  object   $right_object_type  Name of type of second object.
+ * @param  int      $right_object_id    ID of second object.
+ *
+ * @return int      $relationship_id    Relationship ID of a relationship if it already exists.
+ *                                      Otherwise relationship ID of newly-created relationship.
+ */
 function cp_add_object_relationship( $left_object_id, $left_object_type, $right_object_type, $right_object_id ) {
 
-	# Check if relationship already exists: if so return relationship ID
+	// Check if relationship already exists: if so return relationship ID.
 	$relationship_id = cp_object_relationship_exists( $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
 	if ( absint( $relationship_id ) === 0 ) {
 
-		# Relationship does not exist, so insert it now
+		// Relationship does not exist, so insert it now.
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'object_relationships';
 
 		$relationship_array = array(
-			'left_object_id'    => $left_object_id,
-			'left_object_type'  => $left_object_type,
+			'left_object_id'	=> $left_object_id,
+			'left_object_type'	=> $left_object_type,
 			'right_object_type' => $right_object_type,
-			'right_object_id'   => $right_object_id,
+			'right_object_id'	=> $right_object_id
 		);
 
-		# $wpdb->insert sanitizes data
+		// $wpdb->insert sanitizes data.
 		$added = $wpdb->insert( $table_name, $relationship_array );
 		$relationship_id = $wpdb->insert_id;
 
-		# Hook after relationship added
+		// Hook after relationship added.
 		do_action( 'added_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 	}
 
-	# Return relationship ID of newly-inserted relationship
+	// Return relationship ID of newly-inserted relationship.
 	return $relationship_id;
 }
 
 
-/* GET IDs OF RELATED OBJECTS */
+/**
+ * Get IDs of all the recognized objects related to the known object.
+ *
+ * Objects must be among the array produced by cp_recognized_relationship_objects().
+ *
+ * @since CP-2.2.0
+ *
+ * @param  int      $left_object_id     ID of first object.
+ * @param  object   $left_object_type   Name of type of first object.
+ * @param  object   $right_object_type  Name of type of second object.
+ *
+ * @return array|WP_Error  $target_ids  ID of each object with which the first object has a relationship.
+ *                                      WP_Error when a param of an incorrect type is specified.
+ */
 function cp_get_object_relationship_ids( $left_object_id, $left_object_type, $right_object_type ) {
 
-	# Error if $left_object_id is not a positive integer
+	// Error if $left_object_id is not a positive integer
 	if ( filter_var( $left_object_id, FILTER_VALIDATE_INT ) === false ) {
 
 		$item = 'string';
 		if ( $left_object_id === 0 ) {
 			$item = 0;
-		} elseif ( is_object( $left_object_id ) ) {
+		}
+		elseif ( is_object( $left_object_id ) ) {
 			$item = 'object';
-		} elseif ( is_array( $left_object_id ) ) {
+		}
+		elseif ( is_array( $left_object_id ) ) {
 			$item = 'array';
 		}
 
 		return new WP_Error( 'left_object_id', __( 'cp_add_object_relationship() expects parameter 1 to be a positive integer, ' . $item . ' given.' ) );
 	}
 
+	// Get array, and create list, of recognized relationship objects.
 	$recognized_relationship_objects = cp_recognized_relationship_objects();
 	$object_list = implode( ', ', $recognized_relationship_objects );
 
-	# Error if $left_object_type is not a non-null string of an appropriate value
+	// Error if $left_object_type is not a non-null string of an appropriate value
 	if ( ! in_array( $left_object_type, $recognized_relationship_objects ) ) {
 
 		$item = $left_object_type;
 		if ( is_int( $left_object_type ) ) {
 			$item = 'integer';
-		} elseif ( is_object( $left_object_type ) ) {
+		}
+		elseif ( is_object( $left_object_type ) ) {
 			$item = 'object';
-		} elseif ( is_array( $left_object_type ) ) {
+		}
+		elseif ( is_array( $left_object_type ) ) {
 			$item = 'array';
 		}
 
-		return new WP_Error( 'left_object_type', __( 'cp_add_object_relationship() expects parameter 2 to be one of ' . $object_list . ', ' . $item . ' given.' ) );
+		return new WP_Error( 'left_object_type', __( 'cp_add_object_relationship() expects parameter 2 to be one of ' . $object_list . '; ' . $item . ' given.' ) );
 	}
 
-	# Error if $right_object_type is not a non-null string of an appropriate value
+	// Error if $right_object_type is not a non-null string of an appropriate value
 	if ( ! in_array( $right_object_type, $recognized_relationship_objects ) ) {
 
 		$item = $right_object_type;
 		if ( is_int( $right_object_type ) ) {
 			$item = 'integer';
-		} elseif ( is_object( $right_object_type ) ) {
+		}
+		elseif ( is_object( $right_object_type ) ) {
 			$item = 'object';
-		} elseif ( is_array( $right_object_type ) ) {
+		}
+		elseif ( is_array( $right_object_type ) ) {
 			$item = 'array';
 		}
 
-		return new WP_Error( 'left_object_type', __( 'cp_add_object_relationship() expects parameter 3 to be one of ' . $object_list . ', ' . $item . ' given.' ) );
+		return new WP_Error( 'left_object_type', __( 'cp_add_object_relationship() expects parameter 3 to be one of ' . $object_list . '; ' . $item . ' given.' ) );
 	}
 
-	# Good to go!
+	// Good to go, so query database table.
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'object_relationships';
 
-	# Query database table from left to right
+	// Query database table from left to right.
 	$sql1 = $wpdb->prepare( "SELECT right_object_id FROM $table_name WHERE left_object_id = %d AND left_object_type = %s AND right_object_type = %s", $left_object_id, $left_object_type, $right_object_type );
 
-	# Query database table right to left
+	// Query database table from right to left.
 	$sql2 = $wpdb->prepare( "SELECT left_object_id FROM $table_name WHERE right_object_id = %d AND right_object_type = %s AND left_object_type = %s", $left_object_id, $left_object_type, $right_object_type );
 
-	# Results are in the form of two objects
+	// Results are in the form of two objects.
 	$rows1 = $wpdb->get_results( $sql1 );
 	$rows2 = $wpdb->get_results( $sql2 );
 
-	# Create array of target object IDs, starting with empty array
-	$target_ids = array();
+	// Create array of target object IDs, starting with an empty array.
+	$target_ids = [];
 	if ( ! empty( $rows1 ) ) {
-		foreach ( $rows1 as $row ) {
+		foreach( $rows1 as $row ) {
 			$target_ids[] = (int) $row->right_object_id; // cast each one as an integer
 		}
 	}
 
 	if ( ! empty( $rows2 ) ) {
-		foreach ( $rows2 as $row ) {
+		foreach( $rows2 as $row ) {
 			$target_ids[] = (int) $row->left_object_id; // cast each one as an integer
 		}
 	}
 
-	# Return the above array
+	// Return the array of integers or an empty array.
 	return $target_ids;
 }
 
 
-/* DELETE BI-DIRECTIONAL RELATIONSHIP BETWEEN TWO OBJECTS */
+/**
+ * Delete a relationship between two recognized objects.
+ *
+ * Objects must be among the array produced by cp_recognized_relationship_objects().
+ *
+ * @since CP-2.2.0
+ *
+ * @param  int      $left_object_id        ID of first object.
+ * @param  object   $left_object_type      Name of type of first object.
+ * @param  object   $right_object_type     Name of type of second object.
+ * @param  int      $right_object_id       ID of second object.
+ *
+ * @return int|WP_Error  $relationship_id  ID of deleted relationship.
+ *                                         WP_Error when a param of an incorrect type is specified.
+ */
 function cp_delete_object_relationship( $left_object_id, $left_object_type, $right_object_type, $right_object_id ) {
 
-	# Error if $left_object_id is not a positive integer
+	// Error if $left_object_id is not a positive integer
 	if ( filter_var( $left_object_id, FILTER_VALIDATE_INT ) === false ) {
 
 		$item = 'string';
 		if ( $left_object_id === 0 ) {
 			$item = 0;
-		} elseif ( is_object( $left_object_id ) ) {
+		}
+		elseif ( is_object( $left_object_id ) ) {
 			$item = 'object';
-		} elseif ( is_array( $left_object_id ) ) {
+		}
+		elseif ( is_array( $left_object_id ) ) {
 			$item = 'array';
 		}
 
 		return new WP_Error( 'left_object_id', __( 'cp_add_object_relationship() expects parameter 1 to be a positive integer, ' . $item . ' given.' ) );
 	}
 
-	# Error if $right_object_id is not a positive integer
+	// Error if $right_object_id is not a positive integer
 	if ( filter_var( $right_object_id, FILTER_VALIDATE_INT ) === false ) {
 
 		$item = 'string';
 		if ( $right_object_id === 0 ) {
 			$item = 0;
-		} elseif ( is_object( $right_object_id ) ) {
+		}
+		elseif ( is_object( $right_object_id ) ) {
 			$item = 'object';
-		} elseif ( is_array( $right_object_id ) ) {
+		}
+		elseif ( is_array( $right_object_id ) ) {
 			$item = 'array';
 		}
 
 		return new WP_Error( 'right_object_id', __( 'cp_add_object_relationship() expects parameter 4 to be a positive integer, ' . $item . ' given.' ) );
 	}
 
+	// Get array, and create list, of recognized relationship objects.
 	$recognized_relationship_objects = cp_recognized_relationship_objects();
 	$object_list = implode( ', ', $recognized_relationship_objects );
 
-	# Error if $left_object_type is not a non-null string of an appropriate value
+	// Error if $left_object_type is not a non-null string of an appropriate value
 	if ( ! in_array( $left_object_type, $recognized_relationship_objects ) ) {
 
 		$item = $left_object_type;
 		if ( is_int( $left_object_type ) ) {
 			$item = 'integer';
-		} elseif ( is_object( $left_object_type ) ) {
+		}
+		elseif ( is_object( $left_object_type ) ) {
 			$item = 'object';
-		} elseif ( is_array( $left_object_type ) ) {
+		}
+		elseif ( is_array( $left_object_type ) ) {
 			$item = 'array';
 		}
 
 		return new WP_Error( 'left_object_type', __( 'cp_add_object_relationship() expects parameter 2 to be one of ' . $object_list . ', ' . $item . ' given.' ) );
 	}
 
-	# Error if $right_object_type is not a non-null string of an appropriate value
+	// Error if $right_object_type is not a non-null string of an appropriate value
 	if ( ! in_array( $right_object_type, $recognized_relationship_objects ) ) {
 
 		$item = $right_object_type;
 		if ( is_int( $right_object_type ) ) {
 			$item = 'integer';
-		} elseif ( is_object( $right_object_type ) ) {
+		}
+		elseif ( is_object( $right_object_type ) ) {
 			$item = 'object';
-		} elseif ( is_array( $right_object_type ) ) {
+		}
+		elseif ( is_array( $right_object_type ) ) {
 			$item = 'array';
 		}
 
 		return new WP_Error( 'left_object_type', __( 'cp_add_object_relationship() expects parameter 3 to be one of ' . $object_list . ', ' . $item . ' given.' ) );
 	}
 
-	# Good to go!
+	// Good to go, so query database table.
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'object_relationships';
 	$relationship_id = 0;
 
-	# $wpdb->query does not sanitize data, so use $wpdb->prepare
+	// $wpdb->query does not sanitize data, so use $wpdb->prepare.
 	$sql1 = $wpdb->prepare( "SELECT relationship_id FROM $table_name WHERE left_object_id = %d AND left_object_type = %s AND right_object_type = %s AND right_object_id = %d", $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
-	# Get the relationship ID as an integer
+	// Get the relationship ID as an integer.
 	$row = $wpdb->get_row( $sql1 );
 	if ( is_object( $row ) ) {
 		$relationship_id = (int) $row->relationship_id;
@@ -347,17 +434,18 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 
 	if ( ! empty( $relationship_id ) ) {
 
-		# Hook before relationship deleted
+		// Hook before relationship is deleted.
 		do_action( 'pre_delete_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
-		# Delete relationship
-		$wpdb->delete( $table_name, array( 'relationship_id' => $relationship_id ), array( '%d' ) );
+		// Delete relationship.
+		$wpdb->delete( $table_name, ['relationship_id' => $relationship_id], ['%d'] );
+	}
 
-	} else { // nothing deleted so far
-
+	else { // nothing deleted so far
+		
 		$sql2 = $wpdb->prepare( "SELECT relationship_id FROM $table_name WHERE right_object_id = %d AND right_object_type = %s AND left_object_type = %s AND left_object_id = %d", $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
-		# Get the relationship ID as an integer
+		// Get the relationship ID as an integer.
 		$row = $wpdb->get_row( $sql2 );
 		if ( is_object( $row ) ) {
 			$relationship_id = (int) $row->relationship_id;
@@ -365,47 +453,122 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 
 		if ( ! empty( $relationship_id ) ) {
 
-			# Hook before relationship deleted
+			// Hook before relationship is deleted.
 			do_action( 'pre_delete_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
-			# Delete relationship
-			$wpdb->delete( $table_name, array( 'relationship_id' => $relationship_id ), ( '%d' ) );
+			// Delete relationship.
+			$wpdb->delete( $table_name, ['relationship_id' => $relationship_id], ['%d'] );
 		}
 	}
 
-	# If a relationship got deleted
+	// If a relationship got deleted.
 	if ( ! empty( $relationship_id ) ) {
 
-		# Hook after relationship deleted
+		// Hook after relationship is deleted.
 		do_action( 'deleted_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
+
+		// Return ID of deleted relationship.
+		return $relationship_id;
 	}
 }
 
 
-/* DELETE ALL RELATIONSHIP META WHEN RELATIONSHIP DELETED */
+/**
+ * Delete all object relationship metadata when the relationship to which it relates is deleted.
+ *
+ * Objects must be among the array produced by cp_recognized_relationship_objects().
+ *
+ * @since CP-2.2.0
+ *
+ * @param  integer  $relationship_id ID of deleted relationship.
+ */
 function cp_delete_relationship_meta_when_relationship_deleted( $relationship_id ) {
 	$metas = cp_get_relationship_meta( $relationship_id );
 
-	foreach ( $metas as $meta_key => $meta_value ) {
+	foreach( $metas as $meta_key => $meta_value ) {
 		cp_delete_relationship_meta( $relationship_id, $meta_key );
 	}
 }
 add_action( 'deleted_object_relationship', 'cp_delete_relationship_meta_when_relationship_deleted' );
 
 
-/* META FUNCTIONS */
+/**
+ * The metadata functions below are generated automatically by ClassicPress.
+ */
+
+/**
+ * Adds metadata to a relationship.
+ *
+ * @since CP-2.2.0
+ *
+ * @param int    $relationship_id  Relationship ID.
+ * @param string $meta_key         Metadata name.
+ * @param mixed  $meta_value       Metadata value. Must be serializable if non-scalar.
+ * @param bool   $unique           Optional. Whether the same key should not be added.
+ *                                 Default false.
+ * @return int|false|WP_Error      Meta ID on success, false on failure.
+ *                                 WP_Error when term_id is ambiguous between relationships.
+ */
 function cp_add_relationship_meta( $relationship_id, $meta_key, $meta_value, $unique = false ) {
 	return add_metadata( 'object_relationship', $relationship_id, $meta_key, $meta_value, $unique );
 }
 
-function cp_update_relationship_meta( $relationship_id, $meta_key, $meta_value, $prev_value = '' ) {
-	return update_metadata( 'object_relationship', $relationship_id, $meta_key, $meta_value, $prev_value );
-}
-
+/**
+ * Removes metadata matching criteria from a relationship.
+ *
+ * @since CP-2.2.0
+ *
+ * @param int    $relationship_id  Relationship ID.
+ * @param string $meta_key         Metadata name.
+ * @param mixed  $meta_value       Optional. Metadata value. If provided,
+ *                                 rows will only be removed that match the value.
+ *                                 Must be serializable if non-scalar. Default empty.
+ * @return bool True on success, false on failure.
+ */
 function cp_delete_relationship_meta( $relationship_id, $meta_key, $meta_value = '' ) {
 	return delete_metadata( 'object_relationship', $relationship_id, $meta_key, $meta_value );
 }
 
+/**
+ * Retrieves metadata for a relationship.
+ *
+ * @since CP-2.2.0
+ *
+ * @param int    $relationship_id  Relationship ID.
+ * @param string $meta_key         Optional. The meta key to retrieve. By default,
+ *                                 returns data for all keys. Default empty.
+ * @param bool   $single           Optional. Whether to return a single value.
+ *                                 This parameter has no effect if `$key` is not specified.
+ *                                 Default false.
+ * @return mixed An array of values if `$single` is false.
+ *               The value of the meta field if `$single` is true.
+ *               False for an invalid `$term_id` (non-numeric, zero, or negative value).
+ *               An empty string if a valid but non-existing term ID is passed.
+ */
 function cp_get_relationship_meta( $relationship_id, $meta_key = '', $single = '' ) {
 	return get_metadata( 'object_relationship', $relationship_id, $meta_key, $single );
+}
+
+/**
+ * Updates relationship metadata.
+ *
+ * Use the `$prev_value` parameter to differentiate between meta fields with the same key and relationship ID.
+ *
+ * If the meta field for the term does not exist, it will be added.
+ *
+ * @since CP-2.2.0
+ *
+ * @param int    $relationship_id  Relationship ID.
+ * @param string $meta_key         Metadata key.
+ * @param mixed  $meta_value       Metadata value. Must be serializable if non-scalar.
+ * @param mixed  $prev_value       Optional. Previous value to check before updating.
+ *                                 If specified, only update existing metadata entries with
+ *                                 this value. Otherwise, update all entries. Default empty.
+ * @return int|bool|WP_Error       Meta ID if the key didn't exist. true on successful update,
+ *                                 false on failure or if the value passed to the function
+ *                                 is the same as the one that is already in the database.
+ *                                 WP_Error when relationship_id is ambiguous between relationships.
+ */
+function cp_update_relationship_meta( $relationship_id, $meta_key, $meta_value, $prev_value = '' ) {
+	return update_metadata( 'object_relationship', $relationship_id, $meta_key, $meta_value, $prev_value );
 }
