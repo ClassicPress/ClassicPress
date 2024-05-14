@@ -250,7 +250,7 @@ function cp_get_object_relationship_ids( $left_object_id, $left_object_type, $ri
 	$recognized_relationship_objects = cp_recognized_relationship_objects();
 	$object_list = implode( ', ', $recognized_relationship_objects );
 
-	// Error if $left_object_type is not a non-null string of an appropriate value
+	// Error if $left_object_type is not a non-null string of an appropriate value.
 	if ( ! in_array( $left_object_type, $recognized_relationship_objects ) ) {
 
 		$item = $left_object_type;
@@ -330,7 +330,7 @@ function cp_get_object_relationship_ids( $left_object_id, $left_object_type, $ri
  */
 function cp_delete_object_relationship( $left_object_id, $left_object_type, $right_object_type, $right_object_id ) {
 
-	// Error if $left_object_id is not a positive integer
+	// Error if $left_object_id is not a positive integer.
 	if ( filter_var( $left_object_id, FILTER_VALIDATE_INT ) === false ) {
 
 		$item = 'string';
@@ -379,7 +379,7 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 		return new WP_Error( 'left_object_type', __( 'cp_add_object_relationship() expects parameter 2 to be one of ' . $object_list . ', ' . $item . ' given.' ) );
 	}
 
-	// Error if $right_object_type is not a non-null string of an appropriate value
+	// Error if $right_object_type is not a non-null string of an appropriate value.
 	if ( ! in_array( $right_object_type, $recognized_relationship_objects ) ) {
 
 		$item = $right_object_type;
@@ -414,7 +414,7 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 		do_action( 'pre_delete_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
 		// Delete relationship.
-		$wpdb->delete( $table_name, array( 'relationship_id' => $relationship_id ), ['%d'] );
+		$wpdb->delete( $table_name, array( 'relationship_id' => $relationship_id ), array( '%d' ) );
 
 	} else { // nothing deleted so far
 		
@@ -432,7 +432,7 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 			do_action( 'pre_delete_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
 			// Delete relationship.
-			$wpdb->delete( $table_name, array( 'relationship_id' => $relationship_id ), ['%d'] );
+			$wpdb->delete( $table_name, array( 'relationship_id' => $relationship_id ), array( '%d' ) );
 		}
 	}
 
