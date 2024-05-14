@@ -31,7 +31,6 @@ class Tests_Canonical extends WP_Canonical_UnitTestCase {
 		self::set_up_custom_post_types();
 
 		update_option( 'wp_attachment_pages_enabled', 1 );
-<<<<<<< HEAD
 	}
 
 	/**
@@ -50,8 +49,6 @@ class Tests_Canonical extends WP_Canonical_UnitTestCase {
 				'publicly_queryable' => false,
 			)
 		);
-=======
->>>>>>> fe1df4023c (Media: Redirect inactive attachment pages for logged-out users.)
 	}
 
 	/**
