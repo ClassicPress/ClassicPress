@@ -137,15 +137,7 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 		$relationship_id = (int) $row->relationship_id;
 	}
 
-	if ( ! empty( $relationship_id ) ) {
-
-		// Hook when pre-existing relationship found.
-		do_action( 'existing_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
-
-		// Return early because there is no need to query the objects in the reverse order.
-		return $relationship_id;
-
-	} else {
+	if ( empty( $relationship_id ) ) {
 
 		// Also query database table right to left if no match so far.
 		$sql2 = $wpdb->prepare( "SELECT relationship_id FROM $table_name WHERE right_object_id = %d AND right_object_type = %s AND left_object_type = %s AND left_object_id = %d", $left_object_id, $left_object_type, $right_object_type, $right_object_id );
@@ -155,14 +147,10 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 		if ( is_object( $row ) ) {
 			$relationship_id = (int) $row->relationship_id;
 		}
-
-		if ( ! empty( $relationship_id ) ) {
-
-			// Hook when pre-existing relationship found.
-			do_action( 'existing_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
-
-		}
 	}
+
+	// Hook when search for pre-existing relationship completed.
+	do_action( 'existing_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
 	// Return relationship ID (which will be 0 if none exists).
 	return $relationship_id;
