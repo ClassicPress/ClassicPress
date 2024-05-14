@@ -4,7 +4,7 @@
  * Specifies the names of objects that will be stored in the object-relationships table.
  *
  * @since CP-2.2.0
- * 
+ *
  * @return array  $objects  Filtered array of recognized relationship objects.
  */
 function cp_recognized_relationship_objects() {
@@ -58,11 +58,9 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 		$item = 'string';
 		if ( $left_object_id === 0 ) {
 			$item = 0;
-		}
-		elseif ( is_object( $left_object_id ) ) {
+		} elseif ( is_object( $left_object_id ) ) {
 			$item = 'object';
-		}
-		elseif ( is_array( $left_object_id ) ) {
+		} elseif ( is_array( $left_object_id ) ) {
 			$item = 'array';
 		}
 
@@ -75,11 +73,9 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 		$item = 'string';
 		if ( $right_object_id === 0 ) {
 			$item = 0;
-		}
-		elseif ( is_object( $right_object_id ) ) {
+		} elseif ( is_object( $right_object_id ) ) {
 			$item = 'object';
-		}
-		elseif ( is_array( $right_object_id ) ) {
+		} elseif ( is_array( $right_object_id ) ) {
 			$item = 'array';
 		}
 
@@ -96,11 +92,9 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 		$item = $left_object_type;
 		if ( is_int( $left_object_type ) ) {
 			$item = 'integer';
-		}
-		elseif ( is_object( $left_object_type ) ) {
+		} elseif ( is_object( $left_object_type ) ) {
 			$item = 'object';
-		}
-		elseif ( is_array( $left_object_type ) ) {
+		} elseif ( is_array( $left_object_type ) ) {
 			$item = 'array';
 		}
 
@@ -113,11 +107,9 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 		$item = $right_object_type;
 		if ( is_int( $right_object_type ) ) {
 			$item = 'integer';
-		}
-		elseif ( is_object( $right_object_type ) ) {
+		} elseif ( is_object( $right_object_type ) ) {
 			$item = 'object';
-		}
-		elseif ( is_array( $right_object_type ) ) {
+		} elseif ( is_array( $right_object_type ) ) {
 			$item = 'array';
 		}
 
@@ -130,10 +122,10 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 	$relationship_id = 0;
 
 	$relationship_array = array(
-		'left_object_id'	=> $left_object_id,
-		'left_object_type'	=> $left_object_type,
+		'left_object_id'    => $left_object_id,
+		'left_object_type'  => $left_object_type,
 		'right_object_type' => $right_object_type,
-		'right_object_id'	=> $right_object_id
+		'right_object_id'   => $right_object_id,
 	);
 
 	// Check if this relationship already exists.
@@ -153,9 +145,7 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 		// Return early because there is no need to query the objects in the reverse order.
 		return $relationship_id;
 
-	}
-
-	else {
+	} else {
 
 		// Also query database table right to left if no match so far.
 		$sql2 = $wpdb->prepare( "SELECT relationship_id FROM $table_name WHERE right_object_id = %d AND right_object_type = %s AND left_object_type = %s AND left_object_id = %d", $left_object_id, $left_object_type, $right_object_type, $right_object_id );
@@ -206,10 +196,10 @@ function cp_add_object_relationship( $left_object_id, $left_object_type, $right_
 		$table_name = $wpdb->prefix . 'object_relationships';
 
 		$relationship_array = array(
-			'left_object_id'	=> $left_object_id,
-			'left_object_type'	=> $left_object_type,
+			'left_object_id'    => $left_object_id,
+			'left_object_type'  => $left_object_type,
 			'right_object_type' => $right_object_type,
-			'right_object_id'	=> $right_object_id
+			'right_object_id'   => $right_object_id,
 		);
 
 		// $wpdb->insert sanitizes data.
@@ -247,11 +237,9 @@ function cp_get_object_relationship_ids( $left_object_id, $left_object_type, $ri
 		$item = 'string';
 		if ( $left_object_id === 0 ) {
 			$item = 0;
-		}
-		elseif ( is_object( $left_object_id ) ) {
+		} elseif ( is_object( $left_object_id ) ) {
 			$item = 'object';
-		}
-		elseif ( is_array( $left_object_id ) ) {
+		} elseif ( is_array( $left_object_id ) ) {
 			$item = 'array';
 		}
 
@@ -268,11 +256,9 @@ function cp_get_object_relationship_ids( $left_object_id, $left_object_type, $ri
 		$item = $left_object_type;
 		if ( is_int( $left_object_type ) ) {
 			$item = 'integer';
-		}
-		elseif ( is_object( $left_object_type ) ) {
+		} elseif ( is_object( $left_object_type ) ) {
 			$item = 'object';
-		}
-		elseif ( is_array( $left_object_type ) ) {
+		} elseif ( is_array( $left_object_type ) ) {
 			$item = 'array';
 		}
 
@@ -285,11 +271,9 @@ function cp_get_object_relationship_ids( $left_object_id, $left_object_type, $ri
 		$item = $right_object_type;
 		if ( is_int( $right_object_type ) ) {
 			$item = 'integer';
-		}
-		elseif ( is_object( $right_object_type ) ) {
+		} elseif ( is_object( $right_object_type ) ) {
 			$item = 'object';
-		}
-		elseif ( is_array( $right_object_type ) ) {
+		} elseif ( is_array( $right_object_type ) ) {
 			$item = 'array';
 		}
 
@@ -311,15 +295,15 @@ function cp_get_object_relationship_ids( $left_object_id, $left_object_type, $ri
 	$rows2 = $wpdb->get_results( $sql2 );
 
 	// Create array of target object IDs, starting with an empty array.
-	$target_ids = [];
+	$target_ids = array();
 	if ( ! empty( $rows1 ) ) {
-		foreach( $rows1 as $row ) {
+		foreach ( $rows1 as $row ) {
 			$target_ids[] = (int) $row->right_object_id; // cast each one as an integer
 		}
 	}
 
 	if ( ! empty( $rows2 ) ) {
-		foreach( $rows2 as $row ) {
+		foreach ( $rows2 as $row ) {
 			$target_ids[] = (int) $row->left_object_id; // cast each one as an integer
 		}
 	}
@@ -352,11 +336,9 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 		$item = 'string';
 		if ( $left_object_id === 0 ) {
 			$item = 0;
-		}
-		elseif ( is_object( $left_object_id ) ) {
+		} elseif ( is_object( $left_object_id ) ) {
 			$item = 'object';
-		}
-		elseif ( is_array( $left_object_id ) ) {
+		} elseif ( is_array( $left_object_id ) ) {
 			$item = 'array';
 		}
 
@@ -369,11 +351,9 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 		$item = 'string';
 		if ( $right_object_id === 0 ) {
 			$item = 0;
-		}
-		elseif ( is_object( $right_object_id ) ) {
+		} elseif ( is_object( $right_object_id ) ) {
 			$item = 'object';
-		}
-		elseif ( is_array( $right_object_id ) ) {
+		} elseif ( is_array( $right_object_id ) ) {
 			$item = 'array';
 		}
 
@@ -390,11 +370,9 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 		$item = $left_object_type;
 		if ( is_int( $left_object_type ) ) {
 			$item = 'integer';
-		}
-		elseif ( is_object( $left_object_type ) ) {
+		} elseif ( is_object( $left_object_type ) ) {
 			$item = 'object';
-		}
-		elseif ( is_array( $left_object_type ) ) {
+		} elseif ( is_array( $left_object_type ) ) {
 			$item = 'array';
 		}
 
@@ -407,11 +385,9 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 		$item = $right_object_type;
 		if ( is_int( $right_object_type ) ) {
 			$item = 'integer';
-		}
-		elseif ( is_object( $right_object_type ) ) {
+		} elseif ( is_object( $right_object_type ) ) {
 			$item = 'object';
-		}
-		elseif ( is_array( $right_object_type ) ) {
+		} elseif ( is_array( $right_object_type ) ) {
 			$item = 'array';
 		}
 
@@ -438,10 +414,9 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 		do_action( 'pre_delete_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
 		// Delete relationship.
-		$wpdb->delete( $table_name, ['relationship_id' => $relationship_id], ['%d'] );
-	}
+		$wpdb->delete( $table_name, array( 'relationship_id' => $relationship_id ), ['%d'] );
 
-	else { // nothing deleted so far
+	} else { // nothing deleted so far
 		
 		$sql2 = $wpdb->prepare( "SELECT relationship_id FROM $table_name WHERE right_object_id = %d AND right_object_type = %s AND left_object_type = %s AND left_object_id = %d", $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
@@ -457,7 +432,7 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 			do_action( 'pre_delete_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
 			// Delete relationship.
-			$wpdb->delete( $table_name, ['relationship_id' => $relationship_id], ['%d'] );
+			$wpdb->delete( $table_name, array( 'relationship_id' => $relationship_id ), ['%d'] );
 		}
 	}
 
@@ -485,7 +460,7 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 function cp_delete_relationship_meta_when_relationship_deleted( $relationship_id ) {
 	$metas = cp_get_relationship_meta( $relationship_id );
 
-	foreach( $metas as $meta_key => $meta_value ) {
+	foreach ( $metas as $meta_key => $meta_value ) {
 		cp_delete_relationship_meta( $relationship_id, $meta_key );
 	}
 }
