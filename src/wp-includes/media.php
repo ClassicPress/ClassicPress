@@ -5060,6 +5060,163 @@ function attachment_url_to_postid( $url ) {
 }
 
 /**
+ * Gets an attachment ID from its URL.
+ *
+ * Based on https://stackoverflow.com/a/50335619
+ *
+ * @since CP-2.2.0
+ *
+ * @param   string  $url  URL of media file.
+ *
+ * @return  int     $attachment_id on success, 0 on failure.
+ */
+function cp_get_attachment_id_from_url( $url ) {
+
+    $attachment_id = 0;
+    $dir = wp_upload_dir();
+
+    if ( 0 === strpos( $url, $dir['baseurl'] . '/' ) ) { // Is URL in uploads directory?
+
+        $file = basename( $url );
+
+        $args = array(
+			'post_type'   => 'attachment',
+			'post_status' => 'inherit',
+			'fields'      => 'ids',
+			'meta_query'  => array(
+				array(
+					'value'   => $file,
+					'compare' => 'LIKE',
+					'key'     => '_wp_attachment_metadata',
+				),
+			)
+        );
+        $post_ids = get_posts( $args );
+
+        if ( ! empty( $post_ids ) ) {
+            foreach ( $post_ids as $post_id ) {
+                $meta = wp_get_attachment_metadata( $post_id );
+
+                $original_file       = basename( $meta['file'] );
+                $cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
+
+                if ( $original_file === $file || in_array( $file, $cropped_image_files ) ) {
+                    $attachment_id = $post_id;
+                    break;
+                }
+            }
+        }
+    }
+    return $attachment_id;
+}
+
+/**
+ * Creates a relationship between a post, page, or custom post and an attachment.
+ *
+ * @since CP-2.2.0
+ *
+ * @param  int      $post_id  Post ID.
+ * @param  WP_Post  $post     Post object.
+ * @param  bool     $update   Whether this is an existing post being updated.
+ */
+function cp_create_post_attachment_relationship( $post_id, $post, $update ) {
+
+	// Don't run for updates because we have another function for that.
+	if ( $update ) {
+		return;
+	}
+
+	// Create empty array of attachment IDs.
+	$attachment_ids = array();
+
+	// Get all hyperlinks included in a post.
+	$link_strings = wp_extract_urls( $post->post_content );
+
+	// Get the attachment ID (if it exists) for each URL.
+	if ( ! empty( $link_strings ) ) {
+		foreach ( $link_strings as $link_string ) {
+			$attachment_id = cp_get_attachment_id_from_url( $link_string );
+
+			// Filter out all hyperlinks that do not point to the uploads folder.
+			if ( absint( $attachment_id ) !== 0 ) {
+				$attachment_ids[] = $attachment_id;
+			}
+		}
+	}
+
+	// Create a relationship between the post and the attachment.
+	if ( ! empty( $attachment_ids ) ) {
+		foreach ( $attachment_ids as $attachment_id ) {
+			cp_add_object_relationship( $attachment_id, 'attachment', $post->post_type, $post_id );
+		}
+	}
+}
+
+/**
+ * Updates the relationship between a post, page, or custom post and an attachment.
+ *
+ * @since CP-2.2.0
+ *
+ * @param  int      $post_id      Post ID.
+ * @param  WP_Post  $post_after   Post object following the update.
+ * @param  WP_Post  $post_before  Post object before the update.
+ * @param  string   $post_type    Post type.
+ */
+function cp_update_post_attachment_relationship( $post_id, $post_after, $post_before, $post_type ) {
+
+	// Create empty array of attachment IDs after the post was updated.
+	$new_attachment_ids = array();
+
+	// Get all hyperlinks included in a post.
+	$link_strings = wp_extract_urls( $post_after->post_content );
+
+	// Get the attachment ID (if it exists) for each URL.
+	if ( ! empty( $link_strings ) ) {
+		foreach ( $link_strings as $link_string ) {
+			$new_attachment_id = cp_get_attachment_id_from_url( $link_string );
+
+			// Filter out all hyperlinks that do not point to the uploads folder.
+			if ( absint( $new_attachment_id ) !== 0 ) {
+				$new_attachment_ids[] = $new_attachment_id;
+			}
+		}
+	}
+
+	// Update a relationship between the post and the attachment.
+	if ( ! empty( $new_attachment_ids ) ) {
+		foreach ( $new_attachment_ids as $new_attachment_id ) {
+			cp_add_object_relationship( $new_attachment_id, 'attachment', $post_type, $post_id );
+		}
+	}
+
+	// Create empty array of attachment IDs before the post was updated.
+	$old_attachment_ids = array();
+
+	// Get previous hyperlinks included in the post before it was updated.
+	$old_link_strings = wp_extract_urls( $post_before->post_content );
+
+	// Get the attachment ID (if it exists) for each URL.
+	if ( ! empty( $old_link_strings ) ) {
+		foreach ( $old_link_strings as $old_link_string ) {
+			$old_attachment_id = cp_get_attachment_id_from_url( $old_link_string );
+
+			// Filter out all hyperlinks that do not point to the uploads folder.
+			if ( absint( $old_attachment_id ) !== 0 ) {
+				$old_attachment_ids[] = $old_attachment_id;
+			}
+		}
+	}
+
+	// Identify the hyperlinks from the old array that are not present in the updated array.
+	$removed_attachment_ids = array_diff( $old_attachment_ids, $new_attachment_ids );
+
+	// Remove the relationship between the post and the attachments that are no longer used in it.
+	foreach ( $removed_attachment_ids as $removed_attachment_id ) {
+		cp_delete_object_relationship( $removed_attachment_id, 'attachment', $post_type, $post_id );
+	}
+}
+
+/**
  * Returns the URLs for CSS files used in an iframe-sandbox'd TinyMCE media view.
  *
  * @since 4.0.0
