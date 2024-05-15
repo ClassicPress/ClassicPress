@@ -4472,6 +4472,18 @@ function wp_insert_post( $postarr, $wp_error = false, $fire_after_hooks = true )
 		 * @param WP_Post $post_before  Post object before the update.
 		 */
 		do_action( 'post_updated', $post_id, $post_after, $post_before );
+
+		/**
+		 * Updates the relationship between the post and any attachment.
+		 *
+		 * @since CP-2.2.0
+		 *
+		 * @param  int      $post_id          Post ID.
+		 * @param  WP_Post  $post_after       Post object following the update.
+		 * @param  WP_Post  $post_before      Post object before the update.
+		 * @param  string   $post->post_type  Post type.
+		 */
+		cp_update_post_attachment_relationship( $post_id, $post_after, $post_before, $post->post_type );
 	}
 
 	/**
@@ -4503,6 +4515,17 @@ function wp_insert_post( $postarr, $wp_error = false, $fire_after_hooks = true )
 	 * @param bool    $update  Whether this is an existing post being updated.
 	 */
 	do_action( 'save_post', $post_id, $post, $update );
+
+	/**
+	 * Creates a relationship between the post and any attachment.
+	 *
+	 * @since CP-2.2.0
+	 *
+	 * @param  int      $post_id  Post ID.
+	 * @param  WP_Post  $post     Post object.
+	 * @param  bool     $update   Whether this is an existing post being updated.
+	 */
+	cp_create_post_attachment_relationship( $post_id, $post, $update );
 
 	/**
 	 * Fires once a post has been saved.
