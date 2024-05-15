@@ -10,13 +10,13 @@
 function cp_recognized_relationship_objects() {
 
 	// Names of post types (including custom post types).
-	$posts = get_post_types();
+	$post_types = get_post_types();
 
 	// Names of taxonomies (including custom taxonomies).
 	$taxonomies = get_taxonomies();
 
 	// Merge arrays and add comments and users.
-	$objects = array_merge( $posts, $taxonomies );
+	$objects = array_merge( $post_types, $taxonomies );
 	$objects['comment'] = 'comment';
 	$objects['user']    = 'user';
 
