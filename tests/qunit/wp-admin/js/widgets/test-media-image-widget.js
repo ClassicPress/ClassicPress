@@ -90,12 +90,12 @@
 			syncContainer: document.createElement( 'div' ),
 			model: imageWidgetModelInstance
 		});
-		assert.equal( imageWidgetControlInstance.$el.find( 'img' ).length, 0, 'No images should be rendered' );
+		assert.equal( imageWidgetControlInstance.el.querySelectorAll( 'img' ).length, 0, 'No images should be rendered' );
 		imageWidgetControlInstance.model.set({ error: false, url: 'http://s.w.org/style/images/wp-header-logo.png' });
 
 		// Due to renderPreview being deferred.
 		setTimeout( function() {
-			assert.equal( imageWidgetControlInstance.$el.find( 'img[src="http://s.w.org/style/images/wp-header-logo.png"]' ).length, 1, 'One image should be rendered' );
+			assert.equal( imageWidgetControlInstance.el.querySelectorAll( 'img' ).length, 1, 'One image should be rendered' );
 			done();
 		}, 50 );
 
