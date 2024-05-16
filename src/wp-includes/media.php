@@ -5211,8 +5211,10 @@ function cp_update_post_attachment_relationship( $post_id, $post_after, $post_be
 	$removed_attachment_ids = array_diff( $old_attachment_ids, $new_attachment_ids );
 
 	// Remove the relationship between the post and the attachments that are no longer used in it.
-	foreach ( $removed_attachment_ids as $removed_attachment_id ) {
-		cp_delete_object_relationship( $removed_attachment_id, 'attachment', $post_type, $post_id );
+	if ( ! empty( $removed_attachment_ids ) ) {
+		foreach ( $removed_attachment_ids as $removed_attachment_id ) {
+			cp_delete_object_relationship( $removed_attachment_id, 'attachment', $post_type, $post_id );
+		}
 	}
 }
 
