@@ -77,7 +77,7 @@ function create_initial_post_types() {
 				'name_admin_bar' => _x( 'Media', 'add new from admin bar' ),
 				'add_new'        => _x( 'Add New', 'file' ),
 				'edit_item'      => __( 'Edit Media' ),
-				'view_item'      => __( 'View Attachment Page' ),
+				'view_item'      => ( '1' === get_option( 'wp_attachment_pages_enabled' ) ) ? __( 'View Attachment Page' ) : __( 'View Media File' ),
 				'attributes'     => __( 'Attachment Attributes' ),
 			),
 			'public'                => true,
@@ -4463,17 +4463,6 @@ function wp_insert_post( $postarr, $wp_error = false, $fire_after_hooks = true )
 		$post_after = get_post( $post_id );
 
 		/**
-		 * Fires once an existing post has been updated.
-		 *
-		 * @since 3.0.0
-		 *
-		 * @param int     $post_id      Post ID.
-		 * @param WP_Post $post_after   Post object following the update.
-		 * @param WP_Post $post_before  Post object before the update.
-		 */
-		do_action( 'post_updated', $post_id, $post_after, $post_before );
-
-		/**
 		 * Updates the relationship between the post and any attachment.
 		 *
 		 * @since CP-2.2.0
@@ -4484,6 +4473,17 @@ function wp_insert_post( $postarr, $wp_error = false, $fire_after_hooks = true )
 		 * @param  string   $post->post_type  Post type.
 		 */
 		cp_update_post_attachment_relationship( $post_id, $post_after, $post_before, $post->post_type );
+
+		/**
+		 * Fires once an existing post has been updated.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param int     $post_id      Post ID.
+		 * @param WP_Post $post_after   Post object following the update.
+		 * @param WP_Post $post_before  Post object before the update.
+		 */
+		do_action( 'post_updated', $post_id, $post_after, $post_before );
 	}
 
 	/**
@@ -4506,17 +4506,6 @@ function wp_insert_post( $postarr, $wp_error = false, $fire_after_hooks = true )
 	do_action( "save_post_{$post->post_type}", $post_id, $post, $update );
 
 	/**
-	 * Fires once a post has been saved.
-	 *
-	 * @since 1.5.0
-	 *
-	 * @param int     $post_id Post ID.
-	 * @param WP_Post $post    Post object.
-	 * @param bool    $update  Whether this is an existing post being updated.
-	 */
-	do_action( 'save_post', $post_id, $post, $update );
-
-	/**
 	 * Creates a relationship between the post and any attachment.
 	 *
 	 * @since CP-2.2.0
@@ -4526,6 +4515,17 @@ function wp_insert_post( $postarr, $wp_error = false, $fire_after_hooks = true )
 	 * @param  bool     $update   Whether this is an existing post being updated.
 	 */
 	cp_create_post_attachment_relationship( $post_id, $post, $update );
+
+	/**
+	 * Fires once a post has been saved.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param int     $post_id Post ID.
+	 * @param WP_Post $post    Post object.
+	 * @param bool    $update  Whether this is an existing post being updated.
+	 */
+	do_action( 'save_post', $post_id, $post, $update );
 
 	/**
 	 * Fires once a post has been saved.
@@ -7536,7 +7536,7 @@ function set_post_thumbnail( $post, $thumbnail_id ) {
 
 			return update_post_meta( $post->ID, '_thumbnail_id', $thumbnail_id );
 		} else {
-		
+
 			/**
 			 * Deletes a relationship between a post, page, or custom post and its thumbnail.
 			 *
@@ -7565,7 +7565,7 @@ function set_post_thumbnail( $post, $thumbnail_id ) {
 function delete_post_thumbnail( $post ) {
 	$post = get_post( $post );
 	if ( $post ) {
-		
+
 		/**
 		 * Deletes a relationship between a post, page, or custom post and its thumbnail.
 		 *
