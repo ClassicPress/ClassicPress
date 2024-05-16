@@ -5072,14 +5072,14 @@ function attachment_url_to_postid( $url ) {
  */
 function cp_get_attachment_id_from_url( $url ) {
 
-    $attachment_id = 0;
-    $dir = wp_upload_dir();
+	$attachment_id = 0;
+	$dir = wp_upload_dir();
 
-    if ( 0 === strpos( $url, $dir['baseurl'] . '/' ) ) { // Is URL in uploads directory?
+	if ( 0 === strpos( $url, $dir['baseurl'] . '/' ) ) { // Is URL in uploads directory?
 
-        $file = basename( $url );
+		$file = basename( $url );
 
-        $args = array(
+		$args = array(
 			'post_type'   => 'attachment',
 			'post_status' => 'inherit',
 			'fields'      => 'ids',
@@ -5089,25 +5089,25 @@ function cp_get_attachment_id_from_url( $url ) {
 					'compare' => 'LIKE',
 					'key'     => '_wp_attachment_metadata',
 				),
-			)
-        );
-        $post_ids = get_posts( $args );
+			),
+		);
+		$post_ids = get_posts( $args );
 
-        if ( ! empty( $post_ids ) ) {
-            foreach ( $post_ids as $post_id ) {
-                $meta = wp_get_attachment_metadata( $post_id );
+		if ( ! empty( $post_ids ) ) {
+			foreach ( $post_ids as $post_id ) {
+				$meta = wp_get_attachment_metadata( $post_id );
 
-                $original_file       = basename( $meta['file'] );
-                $cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
+				$original_file       = basename( $meta['file'] );
+				$cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
 
-                if ( $original_file === $file || in_array( $file, $cropped_image_files ) ) {
-                    $attachment_id = $post_id;
-                    break;
-                }
-            }
-        }
-    }
-    return $attachment_id;
+				if ( $original_file === $file || in_array( $file, $cropped_image_files ) ) {
+					$attachment_id = $post_id;
+					break;
+				}
+			}
+		}
+	}
+	return $attachment_id;
 }
 
 /**
@@ -5354,7 +5354,7 @@ function wp_show_heic_upload_error( $plupload_settings ) {
  * @param array  $image_info Optional. Extended image information (passed by reference).
  * @return array|false Array of image information or false on failure.
  */
-function wp_getimagesize( $filename, ?array &$image_info = null ) {
+function wp_getimagesize( $filename, array &$image_info = null ) {
 	// Don't silence errors when in debug mode, unless running unit tests.
 	if ( defined( 'WP_DEBUG' ) && WP_DEBUG
 		&& ! defined( 'WP_RUN_CORE_TESTS' )
