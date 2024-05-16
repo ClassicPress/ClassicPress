@@ -356,6 +356,8 @@ class WP_Media_List_Table extends WP_List_Table {
 		}
 
 		/* translators: Column name. */
+		$posts_columns['used_in'] = _x( 'Used In', 'column name' );
+
 		if ( ! $this->detached ) {
 			$posts_columns['parent'] = _x( 'Uploaded to', 'column name' );
 
@@ -550,6 +552,83 @@ class WP_Media_List_Table extends WP_List_Table {
 		 * @param string  $column_name The column name.
 		 */
 		echo apply_filters( 'media_date_column_time', $h_time, $post, 'date' );
+	}
+
+	/**
+	 * Handles the used-in column output.
+	 *
+	 * @since CP-2.2.0
+	 *
+	 * @param WP_Post $post The current WP_Post object.
+	 */
+	public function column_used_in( $post ) {
+		$user_can_edit = current_user_can( 'edit_post', $post->ID );
+
+		// Get all post types except attachments and revisions.
+		$parent_types = get_post_types();
+		unset( $parent_types['attachment'] );
+		unset( $parent_types['revision'] );
+
+		// Set output variable.
+		$output = '';
+
+		foreach ( $parent_types as $parent_type ) {
+
+			// Get all posts where this attachment is the featured image.
+			$relationship_ids = cp_get_object_relationship_ids( $post->ID, 'thumbnail', $parent_type );
+
+			// Get all posts where this attachment is used in the content.
+			$parent_ids = cp_get_object_relationship_ids( $post->ID, 'attachment', $parent_type );
+
+			if ( ! empty( $parent_ids ) ) {
+				foreach( $parent_ids as $parent_id ) {
+					if ( absint( $parent_id ) !== 0 )  {
+						$parent_type_obj = get_post_type_object( $parent_type );
+						$title           = _draft_or_post_title( $parent_id );
+
+						if ( $parent_type_obj->show_ui && current_user_can( 'edit_post', $parent_id ) ) {
+							$link = '<strong><a href="' . esc_url( get_edit_post_link( $parent_id ) ) . '">' . esc_html( $title ) . '</a></strong>';
+						} else {
+							$link = $title;
+						}
+
+						// Check for the thumbnail ID (if any) for this post.
+						if ( in_array( $parent_id, $relationship_ids, true ) ) {
+							$usage_context = __( '(as Featured Image and in content)' );
+
+							// Remove from relationship_ids array to avoid duplicates.
+							$key = array_search( $parent_id, $relationship_ids );
+							unset( $relationship_ids[ $key ] );
+						} else {
+							$usage_context = __( '(in content)' );
+						}
+
+						$output .= $link . ' ' . get_the_time( __( 'Y/m/d' ) ) . ' ' . $usage_context . '<br>';
+					}
+				}
+			}
+
+			if ( ! empty( $relationship_ids ) ) {
+				foreach( $relationship_ids as $relationship_id ) {
+					$ancestor          = get_post( $relationship_id );
+					$ancestor_type_obj = get_post_type_object( $ancestor->post_type );
+					$title             = _draft_or_post_title( $relationship_id );
+
+					if ( $ancestor_type_obj->show_ui && current_user_can( 'edit_post', $relationship_id ) ) {
+						$link = '<strong><a href="' . esc_url( get_edit_post_link( $relationship_id ) ) . '">' . esc_html( $title ) . '</a></strong>';
+					} else {
+						$link = $title;
+					}
+
+					$usage_context = __( '(as Featured Image)' );
+
+					$output .= $link . ' ' . get_the_time( __( 'Y/m/d' ) ) . ' ' . $usage_context . '<br>';
+				}
+			}
+		}
+
+		return $output;
+
 	}
 
 	/**
