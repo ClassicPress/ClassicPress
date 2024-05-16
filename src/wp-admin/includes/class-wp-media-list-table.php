@@ -355,7 +355,7 @@ class WP_Media_List_Table extends WP_List_Table {
 			$posts_columns[ $column_key ] = get_taxonomy( $taxonomy )->labels->name;
 		}
 
-		/* translators: Column name. */	
+		/* translators: Column name. */
 		$posts_columns['used_in'] = _x( 'Used In', 'column name' );
 
 		if ( ! $this->detached ) {
@@ -627,9 +627,7 @@ class WP_Media_List_Table extends WP_List_Table {
 				}
 			}
 		}
-
 		return $output;
-
 	}
 
 	/**
