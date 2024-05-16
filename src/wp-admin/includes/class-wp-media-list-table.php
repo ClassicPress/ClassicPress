@@ -355,7 +355,7 @@ class WP_Media_List_Table extends WP_List_Table {
 			$posts_columns[ $column_key ] = get_taxonomy( $taxonomy )->labels->name;
 		}
 
-		/* translators: Column name. */
+		/* translators: Column name. */	
 		$posts_columns['used_in'] = _x( 'Used In', 'column name' );
 
 		if ( ! $this->detached ) {
@@ -394,6 +394,7 @@ class WP_Media_List_Table extends WP_List_Table {
 			'title'    => 'title',
 			'author'   => 'author',
 			'parent'   => 'parent',
+			'used_in'  => 'used_in',
 			'comments' => 'comment_count',
 			'date'     => array( 'date', true ),
 		);
@@ -581,8 +582,8 @@ class WP_Media_List_Table extends WP_List_Table {
 			$parent_ids = cp_get_object_relationship_ids( $post->ID, 'attachment', $parent_type );
 
 			if ( ! empty( $parent_ids ) ) {
-				foreach( $parent_ids as $parent_id ) {
-					if ( absint( $parent_id ) !== 0 )  {
+				foreach ( $parent_ids as $parent_id ) {
+					if ( absint( $parent_id ) !== 0 ) {
 						$parent_type_obj = get_post_type_object( $parent_type );
 						$title           = _draft_or_post_title( $parent_id );
 
@@ -609,7 +610,7 @@ class WP_Media_List_Table extends WP_List_Table {
 			}
 
 			if ( ! empty( $relationship_ids ) ) {
-				foreach( $relationship_ids as $relationship_id ) {
+				foreach ( $relationship_ids as $relationship_id ) {
 					$ancestor          = get_post( $relationship_id );
 					$ancestor_type_obj = get_post_type_object( $ancestor->post_type );
 					$title             = _draft_or_post_title( $relationship_id );
