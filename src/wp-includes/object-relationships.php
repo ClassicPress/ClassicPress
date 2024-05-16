@@ -15,11 +15,11 @@ function cp_recognized_relationship_objects() {
 	// Names of taxonomies (including custom taxonomies).
 	$taxonomies = get_taxonomies();
 
-	// Merge arrays and add comments and users.
+	// Merge arrays and add comments, users, and thumbnails.
 	$objects = array_merge( $post_types, $taxonomies );
-	$objects['comment'] = 'comment';
-	$objects['user']    = 'user';
-
+	$objects['comment']   = 'comment';
+	$objects['user']      = 'user';
+	$objects['thumbnail'] = 'thumbnail';
 	/**
 	 * Filter enabling modification of the list of recognized relationship objects.
 	 *
@@ -313,7 +313,7 @@ function cp_get_object_relationship_ids( $left_object_id, $left_object_type, $ri
  * @param  string   $right_object_type     Name of type of second object.
  * @param  int      $right_object_id       ID of second object.
  *
- * @return int|WP_Error  $relationship_id  ID of deleted relationship.
+ * @return int|WP_Error  $relationship_id  ID of deleted relationship, or 0 if no relationship found.
  *                                         WP_Error when a param of an incorrect type is specified.
  */
 function cp_delete_object_relationship( $left_object_id, $left_object_type, $right_object_type, $right_object_id ) {
@@ -396,15 +396,7 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 		$relationship_id = (int) $row->relationship_id;
 	}
 
-	if ( ! empty( $relationship_id ) ) {
-
-		// Hook before relationship is deleted.
-		do_action( 'pre_delete_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
-
-		// Delete relationship.
-		$wpdb->delete( $table_name, array( 'relationship_id' => $relationship_id ), array( '%d' ) );
-
-	} else { // nothing deleted so far
+	if ( empty( $relationship_id ) ) {
 
 		$sql2 = $wpdb->prepare( "SELECT relationship_id FROM $table_name WHERE right_object_id = %d AND right_object_type = %s AND left_object_type = %s AND left_object_id = %d", $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
@@ -413,26 +405,26 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 		if ( is_object( $row ) ) {
 			$relationship_id = (int) $row->relationship_id;
 		}
-
-		if ( ! empty( $relationship_id ) ) {
-
-			// Hook before relationship is deleted.
-			do_action( 'pre_delete_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
-
-			// Delete relationship.
-			$wpdb->delete( $table_name, array( 'relationship_id' => $relationship_id ), array( '%d' ) );
-		}
 	}
 
-	// If a relationship got deleted.
+	// If relationship found.
 	if ( ! empty( $relationship_id ) ) {
+
+		// Hook before relationship is deleted.
+		do_action( 'pre_delete_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
+
+		// Delete relationship.
+		$wpdb->delete( $table_name, array( 'relationship_id' => $relationship_id ), array( '%d' ) );
+
+		// Delete relationship meta.
+		cp_delete_relationship_meta_when_relationship_deleted( $relationship_id );
 
 		// Hook after relationship is deleted.
 		do_action( 'deleted_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
-
-		// Return ID of deleted relationship.
-		return $relationship_id;
 	}
+
+	// Return ID of deleted relationship or 0 if no relationship found.
+	return $relationship_id;
 }
 
 
@@ -452,8 +444,6 @@ function cp_delete_relationship_meta_when_relationship_deleted( $relationship_id
 		cp_delete_relationship_meta( $relationship_id, $meta_key );
 	}
 }
-add_action( 'deleted_object_relationship', 'cp_delete_relationship_meta_when_relationship_deleted' );
-
 
 /**
  * The metadata functions below are generated automatically by ClassicPress.
@@ -473,7 +463,7 @@ add_action( 'deleted_object_relationship', 'cp_delete_relationship_meta_when_rel
  *                                 WP_Error when term_id is ambiguous between relationships.
  */
 function cp_add_relationship_meta( $relationship_id, $meta_key, $meta_value, $unique = false ) {
-	return add_metadata( 'object_relationship', $relationship_id, $meta_key, $meta_value, $unique );
+	return add_metadata( 'meta_id', $relationship_id, $meta_key, $meta_value, $unique );
 }
 
 /**
@@ -486,10 +476,10 @@ function cp_add_relationship_meta( $relationship_id, $meta_key, $meta_value, $un
  * @param mixed  $meta_value       Optional. Metadata value. If provided,
  *                                 rows will only be removed that match the value.
  *                                 Must be serializable if non-scalar. Default empty.
- * @return bool True on success, false on failure.
+ * @return bool  True on success, false on failure.
  */
 function cp_delete_relationship_meta( $relationship_id, $meta_key, $meta_value = '' ) {
-	return delete_metadata( 'object_relationship', $relationship_id, $meta_key, $meta_value );
+	return delete_metadata( 'meta_id', $relationship_id, $meta_key, $meta_value );
 }
 
 /**
@@ -509,7 +499,7 @@ function cp_delete_relationship_meta( $relationship_id, $meta_key, $meta_value =
  *               An empty string if a valid but non-existing term ID is passed.
  */
 function cp_get_relationship_meta( $relationship_id, $meta_key = '', $single = '' ) {
-	return get_metadata( 'object_relationship', $relationship_id, $meta_key, $single );
+	return get_metadata( 'meta_id', $relationship_id, $meta_key, $single );
 }
 
 /**
@@ -533,5 +523,5 @@ function cp_get_relationship_meta( $relationship_id, $meta_key = '', $single = '
  *                                 WP_Error when relationship_id is ambiguous between relationships.
  */
 function cp_update_relationship_meta( $relationship_id, $meta_key, $meta_value, $prev_value = '' ) {
-	return update_metadata( 'object_relationship', $relationship_id, $meta_key, $meta_value, $prev_value );
+	return update_metadata( 'meta_id', $relationship_id, $meta_key, $meta_value, $prev_value );
 }
