@@ -52,6 +52,13 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
  * New option based on year only.
  */
 $storefolders = (int) get_option( 'uploads_use_yearmonth_folders' );
+/**
+ * Get attachment page preference.
+ *
+ * @since CP-2.2.0
+ *
+ */
+$attachment_pages_enabled = get_option( 'wp_attachment_pages_enabled' );
 ?>
 
 <div class="wrap">
