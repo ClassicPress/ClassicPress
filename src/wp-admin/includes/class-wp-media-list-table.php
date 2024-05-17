@@ -583,17 +583,17 @@ class WP_Media_List_Table extends WP_List_Table {
 
 			if ( ! empty( $relationship_ids ) ) {
 				foreach ( $relationship_ids as $relationship_id ) {
-					$ancestor          = get_post( $relationship_id );
-					$ancestor_type_obj = get_post_type_object( $ancestor->post_type );
-					$title             = _draft_or_post_title( $relationship_id );
+					if ( absint( $relationship_id ) !== 0 ) {
+						$ancestor          = get_post( $relationship_id );
+						$ancestor_type_obj = get_post_type_object( $ancestor->post_type );
+						$title             = _draft_or_post_title( $relationship_id );
 
-					if ( $ancestor_type_obj->show_ui && current_user_can( 'edit_post', $relationship_id ) ) {
-						$link = '<strong><a href="' . esc_url( get_edit_post_link( $relationship_id ) ) . '">' . esc_html( $title ) . '</a></strong>';
-					} else {
-						$link = $title;
+						if ( $ancestor_type_obj->show_ui && current_user_can( 'edit_post', $relationship_id ) ) {
+							$output .= '<strong><a href="' . esc_url( get_edit_post_link( $relationship_id ) ) . '">' . esc_html( $title ) . '</a></strong><br>';
+						} else {
+							$output .= $title . '<br>';
+						}
 					}
-
-					$output .= $link . ' ' . get_the_time( __( 'Y/m/d' ) ) . '<br>';
 				}
 			}
 		}
@@ -630,12 +630,10 @@ class WP_Media_List_Table extends WP_List_Table {
 						$title           = _draft_or_post_title( $parent_id );
 
 						if ( $parent_type_obj->show_ui && current_user_can( 'edit_post', $parent_id ) ) {
-							$link = '<strong><a href="' . esc_url( get_edit_post_link( $parent_id ) ) . '">' . esc_html( $title ) . '</a></strong>';
+							$output .= '<strong><a href="' . esc_url( get_edit_post_link( $parent_id ) ) . '">' . esc_html( $title ) . '</a></strong><br>';
 						} else {
-							$link = $title;
+							$output .= $title . '<br>';
 						}
-
-						$output .= $link . ' ' . get_the_time( __( 'Y/m/d' ) ) . '<br>';
 					}
 				}
 			}
