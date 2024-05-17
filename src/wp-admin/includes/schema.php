@@ -55,7 +55,7 @@ function wp_get_db_schema( $scope = 'all', $blog_id = null ) {
 	// Blog-specific tables.
 	$blog_tables = "CREATE TABLE $wpdb->object_relationshipmeta (
 	meta_id bigint(20) unsigned NOT NULL auto_increment,
-	relationship_id bigint(20) unsigned NOT NULL default '0',
+	object_relationship_id bigint(20) unsigned NOT NULL default '0',
 	meta_key varchar(255) default NULL,
 	meta_value longtext,
 	PRIMARY KEY (meta_id),	
