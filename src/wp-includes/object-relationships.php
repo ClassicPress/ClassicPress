@@ -463,7 +463,7 @@ function cp_delete_relationship_meta_when_relationship_deleted( $relationship_id
  *                                 WP_Error when term_id is ambiguous between relationships.
  */
 function cp_add_relationship_meta( $relationship_id, $meta_key, $meta_value, $unique = false ) {
-	return add_metadata( 'meta_id', $relationship_id, $meta_key, $meta_value, $unique );
+	return add_metadata( 'object_relationship', $relationship_id, $meta_key, $meta_value, $unique );
 }
 
 /**
@@ -479,7 +479,7 @@ function cp_add_relationship_meta( $relationship_id, $meta_key, $meta_value, $un
  * @return bool  True on success, false on failure.
  */
 function cp_delete_relationship_meta( $relationship_id, $meta_key, $meta_value = '' ) {
-	return delete_metadata( 'meta_id', $relationship_id, $meta_key, $meta_value );
+	return delete_metadata( 'object_relationship', $relationship_id, $meta_key, $meta_value );
 }
 
 /**
@@ -499,7 +499,7 @@ function cp_delete_relationship_meta( $relationship_id, $meta_key, $meta_value =
  *               An empty string if a valid but non-existing term ID is passed.
  */
 function cp_get_relationship_meta( $relationship_id, $meta_key = '', $single = '' ) {
-	return get_metadata( 'meta_id', $relationship_id, $meta_key, $single );
+	return get_metadata( 'object_relationship', $relationship_id, $meta_key, $single );
 }
 
 /**
@@ -523,5 +523,5 @@ function cp_get_relationship_meta( $relationship_id, $meta_key = '', $single = '
  *                                 WP_Error when relationship_id is ambiguous between relationships.
  */
 function cp_update_relationship_meta( $relationship_id, $meta_key, $meta_value, $prev_value = '' ) {
-	return update_metadata( 'meta_id', $relationship_id, $meta_key, $meta_value, $prev_value );
+	return update_metadata( 'object_relationship', $relationship_id, $meta_key, $meta_value, $prev_value );
 }
