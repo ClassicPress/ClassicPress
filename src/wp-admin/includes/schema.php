@@ -59,7 +59,7 @@ function wp_get_db_schema( $scope = 'all', $blog_id = null ) {
 	meta_key varchar(255) default NULL,
 	meta_value longtext,
 	PRIMARY KEY (meta_id),	
-	KEY relationship_id (relationship_id),
+	KEY object_relationship_id (object_relationship_id),
 	KEY meta_key (meta_key($max_index_length))
 ) $charset_collate;
 CREATE TABLE $wpdb->object_relationships (
