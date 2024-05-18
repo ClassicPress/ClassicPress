@@ -33,7 +33,7 @@ jobs:
   # - Clone PHP.net if needed for unit tests.
   # - Run PHPUnit Tests.
   test-php:
-    name: "PHP ${{ matrix.php }}${{ matrix.memcached && ' with memcached' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
+    name: "PHP ${{ matrix.php }} on MySQL ${{matrix.mysql}}${{ matrix.memcached && ' with memcached' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
     strategy:
