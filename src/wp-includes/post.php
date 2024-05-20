@@ -867,7 +867,7 @@ function get_post_mime_type( $post = null ) {
 function get_post_status( $post = null ) {
 	// Normalize the post object if necessary, skip normalization if called from get_sample_permalink().
 	if ( ! $post instanceof WP_Post || ! isset( $post->filter ) || 'sample' !== $post->filter ) {
-	$post = get_post( $post );
+		$post = get_post( $post );
 	}
 
 	if ( ! is_object( $post ) ) {
