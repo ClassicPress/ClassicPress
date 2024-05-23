@@ -2541,13 +2541,13 @@ if ( ! function_exists( 'wp_hash_password' ) ) :
 		}
 
 		/**
-		 * Filter enabling the password to be peppered.
+		 * Filter used to pepper the password.
 		 *
 		 * For maximum security, pepper should be stored in a file and not in the database.
 		 *
 		 * @since CP-2.2.0
 		 *
-		 * @param  string Optional. String to be used as pepper.
+		 * @param  string  String to be used as pepper.
 		 */
 		$pepper = apply_filters( 'cp_pepper_password', 'oTL7E8TdVTJ6rT2pspa0WTM11MqGOY6R' );
 		$peppered_password = hash_hmac( 'sha256', $password, $pepper );
@@ -2602,26 +2602,18 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 		$options = cp_hash_password_options();
 
 		/**
-		 * Filter enabling the password to be peppered.
-		 * Example use of pepper: hash_hmac( 'sha256', $password, 'long-string-known-as-pepper' );
-		 * For maximum security, pepper should be stored in a file and not in the database.
+		 * Filter used to pepper the password.
 		 *
-		 * A function name for peppering should be passed. This can also be a static function in a class.
-		 * For example `function_name` or `Class::static_function_name`
+		 * For maximum security, pepper should be stored in a file and not in the database.
 		 *
 		 * @since CP-2.2.0
 		 *
-		 * @param  string $function Optional. Name of function or static method to use for peppering. Default empty.
+		 * @param  string  String to be used as pepper.
 		 */
-		$pepper_function = apply_filters( 'cp_pepper_password', '' );
+		$pepper = apply_filters( 'cp_pepper_password', 'oTL7E8TdVTJ6rT2pspa0WTM11MqGOY6R' );
+		$peppered_password = hash_hmac( 'sha256', $password, $pepper );
 
-		if ( is_callable( $pepper_function ) ) {
-			$maybe_peppered_password = call_user_func( $pepper_function, $password );
-		} else {
-			$maybe_peppered_password = $password;
-		}
-
-		if ( password_verify( $maybe_peppered_password, $hash ) ) {
+		if ( password_verify( $peppered_password, $hash ) ) {
 			// Handle password verification using PHP's PASSWORD_DEFAULT hashing algorithm.
 			$check = true;
 
