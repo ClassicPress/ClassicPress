@@ -120,25 +120,25 @@
 		// Wait once for conversions to be triggered,
 		// and once for the `canUndo` flag to be set.
 		setTimeout( function() {
-		setTimeout( function() {
-			if ( typeof args[0] === 'string' ) {
-				args[0] = args[0].split( '' );
-			}
+			setTimeout( function() {
+				if ( typeof args[0] === 'string' ) {
+					args[0] = args[0].split( '' );
+				}
 
-			if ( typeof args[0] === 'function' ) {
-				args[0]();
-			} else {
-				mceType( args[0].shift() );
-			}
+				if ( typeof args[0] === 'function' ) {
+					args[0]();
+				} else {
+					mceType( args[0].shift() );
+				}
 
-			if ( ! args[0].length ) {
-				[].shift.call( args );
-			}
+				if ( ! args[0].length ) {
+					[].shift.call( args );
+				}
 
-			if ( args.length ) {
-				type.apply( null, args );
-			}
-		} );
+				if ( args.length ) {
+					type.apply( null, args );
+				}
+			} );
 		} );
 	}
 
