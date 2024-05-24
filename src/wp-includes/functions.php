@@ -5932,7 +5932,7 @@ function wp_trigger_error( $function_name, $message, $error_level = E_USER_NOTIC
 	 *
 	 * Can be used for debug backtracking.
 	 *
-	 * @since 6.4.0
+	 * @since CP-2.2.0
 	 *
 	 * @param string $function_name The function that was called.
 	 * @param string $message       A message explaining what has been done incorrectly.
