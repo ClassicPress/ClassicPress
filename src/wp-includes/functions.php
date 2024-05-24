@@ -5909,7 +5909,7 @@ function _doing_it_wrong( $function_name, $message, $version ) {
  *
  * Generates the message when `WP_DEBUG` is true.
  *
- * @since 6.4.0
+ * @since CP-2.2.0
  *
  * @param string $function_name The function that triggered the error.
  * @param string $message       The message explaining the error.
