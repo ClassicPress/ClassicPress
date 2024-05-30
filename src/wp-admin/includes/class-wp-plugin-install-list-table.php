@@ -419,7 +419,8 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 	}
 
 	public function display_rows() {
-		$cp_needs_update = find_core_update( classicpress_version(), get_locale() ) !== false;
+		$updates_from_api = get_site_transient( 'update_core' );
+		$cp_needs_update = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates );
 
 		$plugins_allowedtags = array(
 			'a'       => array(
