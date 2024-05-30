@@ -988,7 +988,7 @@ function customize_themes_print_templates() {
 								if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
 									printf(
 										/* translators: %s: URL to WordPress Updates screen. */
-										' ' . __( '<a href="%s">Please cd .Press</a>.' ),
+										' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 										self_admin_url( 'update-core.php' )
 									);
 								}
