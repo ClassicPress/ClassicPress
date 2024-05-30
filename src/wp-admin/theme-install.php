@@ -11,7 +11,7 @@ require_once __DIR__ . '/admin.php';
 require ABSPATH . 'wp-admin/includes/theme-install.php';
 
 $updates_from_api = get_site_transient( 'update_core' );
-$cp_needs_update = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates );
+$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates );
 
 wp_reset_vars( array( 'tab' ) );
 
@@ -302,13 +302,13 @@ if ( $tab ) {
 							self_admin_url( 'update-core.php' ),
 							esc_url( wp_get_update_php_url() )
 						);
-				} else {
-					printf(
+					} else {
+						printf(
 						/* translators: %s: URL to Update PHP page. */
-						' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
-						esc_url( wp_get_update_php_url() )
-					);					
-				}
+							' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
+							esc_url( wp_get_update_php_url() )
+						);
+					}
 					wp_update_php_annotation( '</p><p><em>', '</em>' );
 				} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
 					printf(
@@ -516,12 +516,12 @@ if ( $tab ) {
 												esc_url( wp_get_update_php_url() )
 											);
 										} else {
-										printf(
+											printf(
 											/* translators: %s: URL to Update PHP page. */
-											' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
-											esc_url( wp_get_update_php_url() )
-										);								
-									}
+												' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
+												esc_url( wp_get_update_php_url() )
+											);
+										}
 										wp_update_php_annotation( '</p><p><em>', '</em>' );
 									} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
 										printf(

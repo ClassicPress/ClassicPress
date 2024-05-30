@@ -476,8 +476,8 @@ function list_plugin_updates() {
  */
 function list_theme_updates() {
 	$updates_from_api = get_site_transient( 'update_core' );
-	$cp_needs_update = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates );
-	$themes = get_theme_updates();
+	$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates );
+	$themes           = get_theme_updates();
 	if ( empty( $themes ) ) {
 		echo '<h2>' . __( 'Themes' ) . '</h2>';
 		echo '<p>' . __( 'Your themes are all up to date.' ) . '</p>';
@@ -550,7 +550,7 @@ function list_theme_updates() {
 						/* translators: %s: URL to Update PHP page. */
 						__( '<a href="%s">Learn more about updating PHP</a>.' ),
 						esc_url( wp_get_update_php_url() )
-					);				}
+					);              }
 				$annotation = wp_get_update_php_annotation();
 
 				if ( $annotation ) {

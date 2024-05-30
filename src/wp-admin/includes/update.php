@@ -636,8 +636,8 @@ function wp_theme_update_rows() {
 function wp_theme_update_row( $theme_key, $theme ) {
 
 	$updates_from_api = get_site_transient( 'update_core' );
-	$cp_needs_update = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates );
-	$current = get_site_transient( 'update_themes' );
+	$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates );
+	$current          = get_site_transient( 'update_themes' );
 
 	if ( ! isset( $current->response[ $theme_key ] ) ) {
 		return false;
@@ -742,7 +742,7 @@ function wp_theme_update_row( $theme_key, $theme ) {
 						/* translators: %s: URL to Update PHP page. */
 						' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 						esc_url( wp_get_update_php_url() )
-					);				}
+					);              }
 				wp_update_php_annotation( '</p><p><em>', '</em>' );
 			} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
 				printf(

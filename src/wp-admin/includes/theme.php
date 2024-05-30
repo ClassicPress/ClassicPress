@@ -780,7 +780,7 @@ function wp_prepare_themes_for_js( $themes = null ) {
  */
 function customize_themes_print_templates() {
 	$updates_from_api = get_site_transient( 'update_core' );
-	$cp_needs_update = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates );
+	$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates );
 
 	?>
 	<script type="text/html" id="tmpl-customize-themes-details-view">
@@ -879,7 +879,7 @@ function customize_themes_print_templates() {
 													/* translators: %s: URL to Update PHP page. */
 													' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 													esc_url( wp_get_update_php_url() )
-												);											
+												);
 											}
 											wp_update_php_annotation( '</p><p><em>', '</em>' );
 										} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
@@ -964,7 +964,7 @@ function customize_themes_print_templates() {
 											/* translators: %s: URL to Update PHP page. */
 											' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 											esc_url( wp_get_update_php_url() )
-										);										
+										);
 									}
 									wp_update_php_annotation( '</p><p><em>', '</em>' );
 								} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
