@@ -707,7 +707,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 	public function single_row( $item ) {
 
 		$updates_from_api = get_site_transient( 'update_core' );
-		$cp_needs_update = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates );
+		$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates ) && ! empty( $updates_from_api->updates );
 
 		global $status, $page, $s, $totals;
 		static $plugin_id_attrs = array();
