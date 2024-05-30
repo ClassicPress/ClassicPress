@@ -423,12 +423,12 @@ foreach ( $themes as $theme ) :
 								esc_url( wp_get_update_php_url() )
 							);
 						} else {
-						printf(
+							printf(
 							/* translators: %s: URL to Update PHP page. */
-							' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
-							esc_url( wp_get_update_php_url() )
-						);						
-					}
+								' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
+								esc_url( wp_get_update_php_url() )
+							);
+						}
 						wp_update_php_annotation( '</p><p><em>', '</em>' );
 					} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
 						printf(
@@ -486,17 +486,17 @@ foreach ( $themes as $theme ) :
 				if ( $cp_needs_update ) {
 					printf(
 							/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
-							' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
-							self_admin_url( 'update-core.php' ),
-							esc_url( wp_get_update_php_url() )
-						);
+						' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
+						self_admin_url( 'update-core.php' ),
+						esc_url( wp_get_update_php_url() )
+					);
 				} else {
 					printf(
 						/* translators: %s: URL to Update PHP page. */
 						' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 						esc_url( wp_get_update_php_url() )
-					);				
-			}
+					);
+				}
 				wp_update_php_annotation( '</p><p><em>', '</em>' );
 			} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
 				printf(
@@ -794,7 +794,7 @@ function wp_theme_auto_update_setting_template() {
 								/* translators: %s: URL to Update PHP page. */
 								' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 								esc_url( wp_get_update_php_url() )
-							);						
+							);
 						}
 						wp_update_php_annotation( '</p><p><em>', '</em>' );
 					} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
@@ -866,7 +866,7 @@ function wp_theme_auto_update_setting_template() {
 							/* translators: %s: URL to Update PHP page. */
 							' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 							esc_url( wp_get_update_php_url() )
-						);						
+						);
 					}
 					wp_update_php_annotation( '</p><p><em>', '</em>' );
 				} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
@@ -1035,7 +1035,7 @@ function wp_theme_auto_update_setting_template() {
 										/* translators: %s: URL to Update PHP page. */
 										' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 										esc_url( wp_get_update_php_url() )
-									);								
+									);
 								}
 								wp_update_php_annotation( '</p><p><em>', '</em>' );
 							} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
@@ -1110,7 +1110,7 @@ function wp_theme_auto_update_setting_template() {
 												/* translators: %s: URL to Update PHP page. */
 												' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 												esc_url( wp_get_update_php_url() )
-											);											
+											);
 										}
 										wp_update_php_annotation( '</p><p><em>', '</em>' );
 									} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
