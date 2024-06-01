@@ -28,7 +28,7 @@ Also, please be sure to follow our [code of conduct](https://www.classicpress.ne
 
 We encourage you to join and ask any questions you have about contributing.
 
-- [Slack](https://www.classicpress.net/join-slack/) - great for real-time chat, posting screenshots and asking questions about anything you're stuck on. Or just socializing.
+- [Zulip](https://classicpress.zulipchat.com/register/) - great for real-time chat, posting screenshots and asking questions about anything you're stuck on. Or just socializing.
 - [Petitions](https://forums.classicpress.net/c/governance/petitions/77) - for proposing new features or major changes for consideration by the community.
 - [GitHub issues](https://github.com/ClassicPress/ClassicPress/issues) - for proposing or discussing bugfixes, or minor improvements. Generally it is a good idea to create a petition for anything that may take a significant amount of time or that may have backwards compatibility implications.
 - [Forums](https://forums.classicpress.net/) - for posting questions and searching for solutions. The forums are our most active community channel other than Slack.
@@ -175,7 +175,7 @@ When you're ready to backport a code change:
 
 
    **Pay close attention to the output of this script** and let us know if you see anything strange or confusing!
-3. Resolve merge conflicts (if any) by editing the conflicting files, running `git add` and then `git commit`. If you cannot resolve the conflicts, ask for help in the [**#core** Slack channel](https://www.classicpress.net/join-slack/) or just push your branch as-is and we'll take care of it!
+3. Resolve merge conflicts (if any) by editing the conflicting files, running `git add` and then `git commit`. If you cannot resolve the conflicts, ask for help in the [**#core** Zulip channel](https://classicpress.zulipchat.com/register/) or just push your branch as-is and we'll take care of it!
 4. Repeat steps 2 and 3 for any further WordPress changesets that are related to this PR.
 5. Push your branch to your fork on GitHub using `git push origin merge/wp-rCHANGESET_NUMBER` or the name of your current branch.
 6. Use the GitHub website to make a PR against the `develop` branch for review.
