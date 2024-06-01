@@ -34,7 +34,7 @@ if ( isset( $_REQUEST['action'] ) && 'adduser' === $_REQUEST['action'] ) {
 
 	$user_details = null;
 	$user_email   = wp_unslash( $_REQUEST['email'] );
-	if ( false !== strpos( $user_email, '@' ) ) {
+	if ( str_contains( $user_email, '@' ) ) {
 		$user_details = get_user_by( 'email', $user_email );
 	} else {
 		if ( current_user_can( 'manage_network_users' ) ) {
@@ -426,7 +426,24 @@ if ( is_multisite() && current_user_can( 'promote_users' ) ) {
 		$label = __( 'Email or Username' );
 		$type  = 'text';
 	}
+
+	/*
+	 * Get all user email addresses and compile a datalist
+	 */
+	$users = get_users(
+		array(
+			'blog_id' => 0,
+		)
+	);
+
+	$email_list = '<datalist id="emails-list">';
+	foreach ( $users as $user ) {
+		$email_list .= '<option>' . esc_html( $user->user_email ) . '</option>';
+		$email_list .= '<option>' . esc_html( $user->user_login ) . '</option>';
+	}
+	$email_list .= '</datalist>';
 	?>
+
 <form method="post" name="adduser" id="adduser" class="validate"
 	<?php
 	/**
@@ -443,7 +460,8 @@ if ( is_multisite() && current_user_can( 'promote_users' ) ) {
 <table class="form-table" role="presentation">
 	<tr class="form-field form-required">
 		<th scope="row"><label for="adduser-email"><?php echo esc_html( $label ); ?></label></th>
-		<td><input name="email" type="<?php echo esc_attr( $type ); ?>" id="adduser-email" class="wp-suggest-user" value=""></td>
+		<td><input name="email" type="<?php echo esc_attr( $type ); ?>" id="adduser-email" class="wp-suggest-user" list="emails-list" autocomplete="off" value=""></td>
+		<?php echo $email_list; ?>
 	</tr>
 	<tr class="form-field">
 		<th scope="row"><label for="adduser-role"><?php _e( 'Role' ); ?></label></th>

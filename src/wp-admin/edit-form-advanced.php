@@ -229,6 +229,10 @@ $form_extra = '';
 if ( 'auto-draft' === $post->post_status ) {
 	if ( 'edit' === $action ) {
 		$post->post_title = '';
+		if ( '' === $post->post_content && '' === $post->post_excerpt ) {
+			$message = false;
+			$notice  = __( 'You can\'t publish an empty post.' );
+		}
 	}
 	$autosave    = false;
 	$form_extra .= "<input type='hidden' id='auto_draft' name='auto_draft' value='1'>";

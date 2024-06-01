@@ -476,6 +476,7 @@ module.exports = function(grunt) {
 					'!wp-includes/js/codemirror/*.js',
 					'!wp-includes/js/tinymce/plugins/**/*.js',
 					'!wp-admin/js/farbtastic.js',
+					'!wp-admin/js/iris.js',
 					'!wp-includes/js/backbone*.js',
 					'!wp-includes/js/clipboard.js',
 					'!wp-includes/js/swfobject.js',
@@ -555,6 +556,9 @@ module.exports = function(grunt) {
 			}
 		},
 		eslint: {
+			options: {
+				overrideConfigFile: '.eslint.config.js'
+			},
 			grunt: {
 				src: [
 					'Gruntfile.js'
@@ -583,6 +587,7 @@ module.exports = function(grunt) {
 					'!src/wp-includes/js/jquery/*.js',
 					'!src/wp-includes/js/tinymce/plugins/**/*.js',
 					'!src/wp-admin/js/farbtastic.js',
+					'!src/wp-admin/js/iris.js',
 					'!src/wp-includes/js/backbone*.js',
 					'!src/wp-includes/js/clipboard.js',
 					'!src/wp-includes/js/swfobject.js',
@@ -882,9 +887,14 @@ module.exports = function(grunt) {
 
 	grunt.registerTask(
 		'precommit:image',
-		[
-			'imagemin:core'
-		]
+		'Detect OS and only run on linux',
+		function() {
+			if ( /linux/.test( process.platform ) ) {
+				grunt.task.run( [ 'imagemin:core' ] );
+			} else {
+				grunt.log.writeln( 'Image minification should only run on Linux, `precommit:image` skipped.' );
+			}
+		}
 	);
 
 	grunt.registerTask(

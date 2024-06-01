@@ -130,7 +130,7 @@ foreach ( array_merge( $builtin, $types ) as $ptype ) {
 	$menu_icon = 'dashicons-admin-post';
 	if ( is_string( $ptype_obj->menu_icon ) ) {
 		// Special handling for data:image/svg+xml and Dashicons.
-		if ( 0 === strpos( $ptype_obj->menu_icon, 'data:image/svg+xml;base64,' ) || 0 === strpos( $ptype_obj->menu_icon, 'dashicons-' ) ) {
+		if ( str_starts_with( $ptype_obj->menu_icon, 'data:image/svg+xml;base64,' ) || str_starts_with( $ptype_obj->menu_icon, 'dashicons-' ) ) {
 			$menu_icon = $ptype_obj->menu_icon;
 		} else {
 			$menu_icon = esc_url( $ptype_obj->menu_icon );
@@ -282,6 +282,21 @@ if ( current_user_can( 'list_users' ) ) {
 	}
 
 	$submenu['users.php'][15] = array( __( 'Profile' ), 'read', 'profile.php' );
+
+	/*
+	 * Enable user taxonomies to be displayed as sub-menu items under Users.
+	 *
+	 * @since CP-2.1.0
+	 */
+	$i = 20;
+	foreach ( get_taxonomies( array(), 'objects' ) as $tax ) {
+		if ( ! $tax->show_ui || ! $tax->show_in_menu || ! in_array( 'user', (array) $tax->object_type, true ) ) {
+			continue;
+		}
+		$submenu['users.php'][ $i++ ] = array( esc_attr( $tax->labels->menu_name ), $tax->cap->manage_terms, 'edit-tags.php?taxonomy=' . $tax->name );
+	}
+	unset( $tax, $i );
+
 } else {
 	$_wp_real_parent_file['users.php'] = 'profile.php';
 	$submenu['profile.php'][5]         = array( __( 'Profile' ), 'read', 'profile.php' );

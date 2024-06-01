@@ -50,6 +50,15 @@ class WP_User_Query {
 	public $meta_query = false;
 
 	/**
+	 * Taxonomy query, as passed to get_tax_sql()
+	 *
+	 * @since CP-2.1.0
+	 * @access public
+	 * @var object WP_Tax_Query
+	 */
+	public $tax_query;
+
+	/**
 	 * The SQL query used to fetch matching users.
 	 *
 	 * @since 4.4.0
@@ -100,6 +109,7 @@ class WP_User_Query {
 			'meta_key'            => '',
 			'meta_value'          => '',
 			'meta_compare'        => '',
+			'tax_query'           => array(),
 			'include'             => array(),
 			'exclude'             => array(),
 			'search'              => '',
@@ -393,6 +403,9 @@ class WP_User_Query {
 		$this->meta_query = new WP_Meta_Query();
 		$this->meta_query->parse_query_vars( $qv );
 
+		// Taxonomy query.
+		$this->parse_tax_query( $qv );
+
 		if ( isset( $qv['who'] ) && 'authors' === $qv['who'] && $blog_id ) {
 			_deprecated_argument(
 				'WP_User_Query',
@@ -627,6 +640,12 @@ class WP_User_Query {
 			}
 		}
 
+		if ( ! empty( $this->tax_query->queries ) ) {
+			$taxonomy_clauses = $this->tax_query->get_sql( $wpdb->users, 'ID' ); // maybe ( 'user', $wpdb->users, 'ID', $this );
+			$this->query_from .= $taxonomy_clauses['join'];
+			$this->query_where .= $taxonomy_clauses['where'];
+		}
+
 		// Sorting.
 		$qv['order'] = isset( $qv['order'] ) ? strtoupper( $qv['order'] ) : '';
 		$order       = $this->parse_order( $qv['order'] );
@@ -712,7 +731,7 @@ class WP_User_Query {
 				$search_columns = array_intersect( $qv['search_columns'], array( 'ID', 'user_login', 'user_email', 'user_url', 'user_nicename', 'display_name' ) );
 			}
 			if ( ! $search_columns ) {
-				if ( false !== strpos( $search, '@' ) ) {
+				if ( str_contains( $search, '@' ) ) {
 					$search_columns = array( 'user_email' );
 				} elseif ( is_numeric( $search ) ) {
 					$search_columns = array( 'user_login', 'ID' );
@@ -756,6 +775,36 @@ class WP_User_Query {
 		}
 
 		/**
+		 * Enable grouping of users by taxonomy term on 'users.php' page.
+		 *
+		 * @since CP-2.1.0
+		 *
+		 */
+		global $pagenow;
+		if ( $pagenow === 'users.php' ) {
+
+			// Get user taxonomies
+			$taxonomies = get_taxonomies(
+				array(
+					'object_type' => array( 'user' ),
+				),
+				'objects'
+			);
+
+			foreach ( $taxonomies as $taxonomy ) {
+				if ( filter_input( INPUT_GET, $taxonomy->name ) ) {
+					$term = get_term_by( 'slug', $_GET[ $taxonomy->name ], $taxonomy->name );
+					$ids = get_objects_in_term( $term->term_id, $taxonomy->name );
+				}
+			}
+
+			if ( isset( $ids ) ) {
+				$ids = implode( ',', wp_parse_id_list( $ids ) );
+				$this->query_where .= " AND $wpdb->users.ID IN ($ids)";
+			}
+		}
+
+		/**
 		 * Fires after the WP_User_Query has been parsed, and before
 		 * the query is executed.
 		 *
@@ -767,6 +816,83 @@ class WP_User_Query {
 		 * @param WP_User_Query $query Current instance of WP_User_Query (passed by reference).
 		 */
 		do_action_ref_array( 'pre_user_query', array( &$this ) );
+	}
+
+	/**
+	 * Parses various taxonomy related query vars.
+	 *
+	 * @access protected
+	 * @since CP-2.1.0
+	 *
+	 * @param array $q The query variables. Passed by reference.
+	 */
+	protected function parse_tax_query( &$q ) {
+		if ( ! empty( $q['tax_query'] ) && is_array( $q['tax_query'] ) ) {
+			$tax_query = $q['tax_query'];
+		} else {
+			$tax_query = array();
+		}
+
+		if ( ! empty( $q['taxonomy'] ) && ! empty( $q['term'] ) ) {
+			$tax_query[] = array(
+				'taxonomy' => $q['taxonomy'],
+				'terms'    => array( $q['term'] ),
+				'field'    => 'slug',
+			);
+		}
+
+		foreach ( get_taxonomies( array(), 'objects' ) as $taxonomy => $t ) {
+			if ( 'post_tag' == $taxonomy ) {
+				continue; // Handled further down in the $q['tag'] block.
+			}
+
+			if ( $t->query_var && ! empty( $q[ $t->query_var ] ) ) {
+				$tax_query_defaults = array(
+					'taxonomy' => $taxonomy,
+					'field'    => 'slug',
+				);
+
+				if ( isset( $t->rewrite['hierarchical'] ) && $t->rewrite['hierarchical'] ) {
+					$q[ $t->query_var ] = wp_basename( $q[ $t->query_var ] );
+				}
+
+				$term = $q[ $t->query_var ];
+
+				if ( is_array( $term ) ) {
+					$term = implode( ',', $term );
+				}
+
+				if ( strpos( $term, '+' ) !== false ) {
+					$terms = preg_split( '/[+]+/', $term );
+					foreach ( $terms as $term ) {
+						$tax_query[] = array_merge(
+							$tax_query_defaults,
+							array(
+								'terms' => array( $term ),
+							)
+						);
+					}
+				} else {
+					$tax_query[] = array_merge(
+						$tax_query_defaults,
+						array(
+							'terms' => preg_split( '/[,]+/', $term ),
+						)
+					);
+				}
+			}
+		}
+
+		$this->tax_query = new WP_Tax_Query( $tax_query );
+
+		/**
+		 * Fires after taxonomy-related query vars have been parsed.
+		 *
+		 * @since CP-2.1.0
+		 *
+		 * @param WP_User_Query $this The WP_User_Query instance.
+		 */
+		do_action( 'parse_user_tax_query', $this );
 	}
 
 	/**

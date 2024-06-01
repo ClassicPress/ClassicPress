@@ -46,7 +46,7 @@ if ( 'undefined' === typeof window.wp.codeEditor ) {
 	 *
 	 * @return {void}
 	 */
-	function configureLinting( editor, settings ) { // eslint-disable-line complexity
+	function configureLinting( editor, settings ) {
 		var currentErrorAnnotations = [], previouslyShownErrorAnnotations = [];
 
 		/**
@@ -66,7 +66,7 @@ if ( 'undefined' === typeof window.wp.codeEditor ) {
 		 *
 		 * @return {Object} Lint options.
 		 */
-		function getLintOptions() { // eslint-disable-line complexity
+		function getLintOptions() {
 			var options = editor.getOption( 'lint' );
 
 			if ( ! options ) {
@@ -300,7 +300,7 @@ if ( 'undefined' === typeof window.wp.codeEditor ) {
 		};
 
 		if ( codemirror.showHint ) {
-			codemirror.on( 'keyup', function( editor, event ) { // eslint-disable-line complexity
+			codemirror.on( 'keyup', function( editor, event ) {
 				var shouldAutocomplete, isAlphaKey = /^[a-zA-Z]$/.test( event.key ), lineBeforeCursor, innerMode, token;
 				if ( codemirror.state.completionActive && isAlphaKey ) {
 					return;

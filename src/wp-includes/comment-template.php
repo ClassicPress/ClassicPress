@@ -412,7 +412,7 @@ function get_comment_author_url_link( $linktext = '', $before = '', $after = '',
 	$display = str_replace( 'http://www.', '', $display );
 	$display = str_replace( 'http://', '', $display );
 
-	if ( '/' === substr( $display, -1 ) ) {
+	if ( str_ends_with( $display, '/' ) ) {
 		$display = substr( $display, 0, -1 );
 	}
 
@@ -947,13 +947,13 @@ function get_comments_number_text( $zero = false, $one = false, $more = false, $
 				$text = trim( strip_tags( $text ), '% ' );
 
 				// Replace '% Comments' with a proper plural form.
-				if ( $text && ! preg_match( '/[0-9]+/', $text ) && false !== strpos( $more, '%' ) ) {
+				if ( $text && ! preg_match( '/[0-9]+/', $text ) && str_contains( $more, '%' ) ) {
 					/* translators: %s: Number of comments. */
 					$new_text = _n( '%s Comment', '%s Comments', $number );
 					$new_text = trim( sprintf( $new_text, '' ) );
 
 					$more = str_replace( $text, $new_text, $more );
-					if ( false === strpos( $more, '%' ) ) {
+					if ( ! str_contains( $more, '%' ) ) {
 						$more = '% ' . $more;
 					}
 				}
@@ -2670,7 +2670,7 @@ function comment_form( $args = array(), $post = null ) {
 	$args = array_merge( $defaults, $args );
 
 	// Remove `aria-describedby` from the email field if there's no associated description.
-	if ( isset( $args['fields']['email'] ) && false === strpos( $args['comment_notes_before'], 'id="email-notes"' ) ) {
+	if ( isset( $args['fields']['email'] ) && ! str_contains( $args['comment_notes_before'], 'id="email-notes"' ) ) {
 		$args['fields']['email'] = str_replace(
 			' aria-describedby="email-notes"',
 			'',
@@ -2713,15 +2713,50 @@ function comment_form( $args = array(), $post = null ) {
 
 		else :
 
+			/**
+			 * Filters additional comment form attributes.
+			 *
+			 * The following attributes are allowed:
+			 * `accept-charset`, `autocapitalize`, `autocomplete`, `enctype`, `novalidate`
+			 * Pass attribute names as a string array key.
+			 * Pass attribute values as a string array value, or boolean `true` in the case of attributes that require no value, for example `novalidate`.
+			 *
+			 * @since CP-2.1.0
+			 *
+			 * @param array   An associative array containing the additional attributes for the form.
+			 */
+			$comment_form_attrs = (array) apply_filters( 'comment_form_attrs', array() );
+
+			$comment_form_attributes = '';
+			if ( ! empty( $comment_form_attrs ) ) {
+				$allowed_attributes = array( 'accept-charset', 'autocapitalize', 'autocomplete', 'enctype', 'novalidate' );
+				foreach ( $comment_form_attrs as $comment_form_attr_name => $comment_form_attr_value ) {
+					if ( in_array( $comment_form_attr_name, $allowed_attributes ) ) {
+						if ( true === $comment_form_attr_value ) {
+							$comment_form_attributes .= ' ' . esc_attr( $comment_form_attr_name );
+						} elseif ( is_string( $comment_form_attr_value ) ) {
+							$comment_form_attributes .= ' ' . esc_attr( $comment_form_attr_name ) . '="' . esc_attr( $comment_form_attr_value ) . '"';
+						} else {
+							_doing_it_wrong(
+								"apply_filters( 'comment_form_attrs', array() )",
+								__( 'Array values must only be a string or `true` boolean' ),
+								'CP-2.1.0'
+							);
+						}
+					}
+				}
+			}
+
 			printf(
-				'<form action="%s" method="post" id="%s" class="%s">',
+				'<form action="%s" method="post" id="%s" class="%s"%s>',
 				esc_url( $args['action'] ),
 				esc_attr( $args['id_form'] ),
-				esc_attr( $args['class_form'] )
+				esc_attr( $args['class_form'] ),
+				$comment_form_attributes
 			);
 
 			/**
-			 * Fires at the top of the comment form, inside the form tag.
+			 * Fires at the top of the comment form, just after the form tag.
 			 *
 			 * @since 3.0.0
 			 */

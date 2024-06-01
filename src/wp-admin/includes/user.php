@@ -102,6 +102,30 @@ function edit_user( $user_id = 0 ) {
 		$user->display_name = sanitize_text_field( $_POST['display_name'] );
 	}
 
+	/**
+	 * Enable adding of user to user taxonomies.
+	 *
+	 * @since CP-2.1.0
+	 */
+	$tax_array = array();
+	$taxonomies = get_object_taxonomies( 'user', 'objects' );
+	if ( ! empty( $taxonomies ) ) {
+		foreach ( $taxonomies as $taxonomy ) {
+			$tax_array[] = $taxonomy->name;
+			foreach ( $tax_array as $tax_field ) {
+				if ( isset( $_POST[ $tax_field ] ) ) {
+					$tax_names = array();
+					foreach ( $_POST[ $tax_field ] as $tax_name ) {
+						$tax_names[] = wp_unslash( $tax_name );
+					}
+					wp_set_object_terms( $user->ID, array_map( 'sanitize_text_field', $tax_names ), $taxonomy->name );
+				} else {
+					wp_delete_object_term_relationships( $user->ID, $taxonomy->name );
+				}
+			}
+		}
+	}
+
 	if ( isset( $_POST['description'] ) ) {
 		$user->description = trim( $_POST['description'] );
 	}
@@ -174,7 +198,7 @@ function edit_user( $user_id = 0 ) {
 	}
 
 	// Check for "\" in password.
-	if ( false !== strpos( wp_unslash( $pass1 ), '\\' ) ) {
+	if ( str_contains( wp_unslash( $pass1 ), '\\' ) ) {
 		$errors->add( 'pass', __( '<strong>Error:</strong> Passwords may not contain the character "\\".' ), array( 'form-field' => 'pass1' ) );
 	}
 

@@ -6,9 +6,9 @@
 
 	var ColorPicker,
 		_before = '<button type="button" class="button wp-color-result" aria-expanded="false"><span class="wp-color-result-text"></span></button>',
-		_after = '<div class="wp-picker-holder" />',
-		_wrap = '<div class="wp-picker-container" />',
-		_button = '<input type="button" class="button button-small" />',
+		_after = '<div class="wp-picker-holder">',
+		_wrap = '<div class="wp-picker-container">',
+		_button = '<input type="button" class="button button-small">',
 		_wrappingLabel = '<label></label>',
 		_wrappingLabelText = '<span class="screen-reader-text"></span>',
 		__ = wp.i18n.__;
@@ -157,7 +157,7 @@
 
 			// Wrap the wrapping label in its wrapper and append the Clear/Default button.
 			self.wrappingLabel
-				.wrap( '<span class="wp-picker-input-wrap hidden" />' )
+				.wrap( '<span class="wp-picker-input-wrap hidden">' )
 				.after( self.button );
 
 			/*
@@ -188,7 +188,6 @@
 				 */
 				change: function( event, ui ) {
 					self.toggler.css( { backgroundColor: ui.color.toString() } );
-
 					if ( typeof self.options.change === 'function' ) {
 						self.options.change.call( this, event, ui );
 					}
@@ -293,7 +292,10 @@
 		 * @return {void}
 		 */
 		open: function() {
-			this.element.iris( 'toggle' );
+			// if Iris hasn't already been destroyed
+			if ( this.element.iris( 'instance' ) ) {
+				this.element.iris( 'toggle' );
+			}
 			this.inputWrapper.removeClass( 'hidden' );
 			this.wrap.addClass( 'wp-picker-active' );
 			this.toggler
@@ -309,7 +311,10 @@
 		 * @return {void}
 		 */
 		close: function() {
-			this.element.iris( 'toggle' );
+			// if Iris hasn't already been destroyed
+			if ( this.element.iris( 'instance' ) ) {
+				this.element.iris( 'toggle' );
+			}
 			this.inputWrapper.addClass( 'hidden' );
 			this.wrap.removeClass( 'wp-picker-active' );
 			this.toggler

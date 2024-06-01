@@ -385,7 +385,7 @@ function media_handle_upload( $file_id, $post_id, $post_data = array(), $overrid
 		}
 
 		// Use image exif/iptc data for title and caption defaults if possible.
-	} elseif ( 0 === strpos( $type, 'image/' ) ) {
+	} elseif ( str_starts_with( $type, 'image/' ) ) {
 		$image_meta = wp_read_image_metadata( $file );
 
 		if ( $image_meta ) {
@@ -534,8 +534,8 @@ function wp_iframe( $content_func, ...$args ) {
 	wp_enqueue_style( 'colors' );
 	// Check callback name for 'media'.
 	if (
-		( is_array( $content_func ) && ! empty( $content_func[1] ) && 0 === strpos( (string) $content_func[1], 'media' ) ) ||
-		( ! is_array( $content_func ) && 0 === strpos( $content_func, 'media' ) )
+		( is_array( $content_func ) && ! empty( $content_func[1] ) && str_starts_with( (string) $content_func[1], 'media' ) ) ||
+		( ! is_array( $content_func ) && str_starts_with( $content_func, 'media' ) )
 	) {
 		wp_enqueue_style( 'deprecated-media' );
 	}
@@ -828,7 +828,7 @@ function media_upload_form_handler() {
 		if ( ! empty( $attachment['url'] ) ) {
 			$rel = '';
 
-			if ( strpos( $attachment['url'], 'attachment_id' ) || get_attachment_link( $send_id ) == $attachment['url'] ) {
+			if ( str_contains( $attachment['url'], 'attachment_id' ) || get_attachment_link( $send_id ) === $attachment['url'] ) {
 				$rel = " rel='attachment wp-att-" . esc_attr( $send_id ) . "'";
 			}
 
@@ -1351,12 +1351,12 @@ function media_post_single_attachment_fields_to_edit( $form_fields, $post ) {
 function image_media_send_to_editor( $html, $attachment_id, $attachment ) {
 	$post = get_post( $attachment_id );
 
-	if ( 'image' === substr( $post->post_mime_type, 0, 5 ) ) {
+	if ( str_starts_with( $post->post_mime_type, 'image' ) ) {
 		$url   = $attachment['url'];
 		$align = ! empty( $attachment['align'] ) ? $attachment['align'] : 'none';
 		$size  = ! empty( $attachment['image-size'] ) ? $attachment['image-size'] : 'medium';
 		$alt   = ! empty( $attachment['image_alt'] ) ? $attachment['image_alt'] : '';
-		$rel   = ( strpos( $url, 'attachment_id' ) || get_attachment_link( $attachment_id ) === $url );
+		$rel   = ( str_contains( $url, 'attachment_id' ) || get_attachment_link( $attachment_id ) === $url );
 
 		return get_image_send_to_editor( $attachment_id, $attachment['post_excerpt'], $attachment['post_title'], $align, $url, $rel, $size, $alt );
 	}
@@ -1462,7 +1462,7 @@ function get_attachment_fields_to_edit( $post, $errors = null ) {
 	$form_fields = array_merge_recursive( $form_fields, (array) $errors );
 
 	// This was formerly in image_attachment_fields_to_edit().
-	if ( 'image' === substr( $post->post_mime_type, 0, 5 ) ) {
+	if ( str_starts_with( $post->post_mime_type, 'image' ) ) {
 		$alt = get_post_meta( $post->ID, '_wp_attachment_image_alt', true );
 
 		if ( empty( $alt ) ) {
@@ -1500,63 +1500,6 @@ function get_attachment_fields_to_edit( $post, $errors = null ) {
 	$form_fields = apply_filters( 'attachment_fields_to_edit', $form_fields, $post );
 
 	return $form_fields;
-}
-
-/**
- * Retrieves HTML for media items of post gallery.
- *
- * The HTML markup retrieved will be created for the progress of SWF Upload
- * component. Will also create link for showing and hiding the form to modify
- * the image attachment.
- *
- * @since 2.5.0
- *
- * @global WP_Query $wp_the_query WordPress Query object.
- *
- * @param int   $post_id Post ID.
- * @param array $errors  Errors for attachment, if any.
- * @return string HTML content for media items of post gallery.
- */
-function get_media_items( $post_id, $errors ) {
-	$attachments = array();
-
-	if ( $post_id ) {
-		$post = get_post( $post_id );
-
-		if ( $post && 'attachment' === $post->post_type ) {
-			$attachments = array( $post->ID => $post );
-		} else {
-			$attachments = get_children(
-				array(
-					'post_parent' => $post_id,
-					'post_type'   => 'attachment',
-					'orderby'     => 'menu_order ASC, ID',
-					'order'       => 'DESC',
-				)
-			);
-		}
-	} else {
-		if ( is_array( $GLOBALS['wp_the_query']->posts ) ) {
-			foreach ( $GLOBALS['wp_the_query']->posts as $attachment ) {
-				$attachments[ $attachment->ID ] = $attachment;
-			}
-		}
-	}
-
-	$output = '';
-	foreach ( (array) $attachments as $id => $attachment ) {
-		if ( 'trash' === $attachment->post_status ) {
-			continue;
-		}
-
-		$item = get_media_item( $id, array( 'errors' => isset( $errors[ $id ] ) ? $errors[ $id ] : null ) );
-
-		if ( $item ) {
-			$output .= "\n<div id='media-item-$id' class='media-item child-of-$attachment->post_parent preloaded'><div class='progress hidden'><div class='bar'></div></div><div id='media-upload-error-$id' class='hidden'></div><div class='filename hidden'></div>$item\n</div>";
-		}
-	}
-
-	return $output;
 }
 
 /**
@@ -2152,7 +2095,6 @@ function media_upload_form( $errors = null ) {
 	/**
 	 * Filters the media upload post parameters.
 	 *
-	 * @since 3.1.0 As 'swfupload_post_params'
 	 * @since 3.3.0
 	 *
 	 * @param array $post_params An array of media upload parameters used by Plupload.
@@ -2160,8 +2102,7 @@ function media_upload_form( $errors = null ) {
 	$post_params = apply_filters( 'upload_post_params', $post_params );
 
 	/*
-	* Since 4.9 the `runtimes` setting is hardcoded in our version of Plupload to `html5,html4`,
-	* and the `flash_swf_url` and `silverlight_xap_url` are not used.
+	* Since 4.9 the `runtimes` setting is hardcoded in our version of Plupload to `html5,html4`
 	*/
 	$plupload_init = array(
 		'browse_button'    => 'plupload-browse-button',
@@ -2180,8 +2121,8 @@ function media_upload_form( $errors = null ) {
 	 */
 	if (
 		wp_is_mobile() &&
-		strpos( $_SERVER['HTTP_USER_AGENT'], 'OS 7_' ) !== false &&
-		strpos( $_SERVER['HTTP_USER_AGENT'], 'like Mac OS X' ) !== false
+		str_contains( $_SERVER['HTTP_USER_AGENT'], 'OS 7_' ) &&
+		str_contains( $_SERVER['HTTP_USER_AGENT'], 'like Mac OS X' )
 	) {
 		$plupload_init['multi_selection'] = false;
 	}
@@ -2226,7 +2167,6 @@ function media_upload_form( $errors = null ) {
 	/**
 	 * Fires before the upload interface loads.
 	 *
-	 * @since 2.6.0 As 'pre-flash-upload-ui'
 	 * @since 3.3.0
 	 */
 	do_action( 'pre-plupload-upload-ui' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
@@ -2243,7 +2183,6 @@ function media_upload_form( $errors = null ) {
 	/**
 	 * Fires after the upload interface loads.
 	 *
-	 * @since 2.6.0 As 'post-flash-upload-ui'
 	 * @since 3.3.0
 	 */
 	do_action( 'post-plupload-upload-ui' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
@@ -2358,7 +2297,6 @@ function media_upload_type_form( $type = 'file', $errors = null, $id = null ) {
 	if ( $id ) {
 		if ( ! is_wp_error( $id ) ) {
 			add_filter( 'attachment_fields_to_edit', 'media_post_single_attachment_fields_to_edit', 10, 2 );
-			echo get_media_items( $id, $errors );
 		} else {
 			echo '<div id="media-upload-error">' . esc_html( $id->get_error_message() ) . '</div></div>';
 			exit;
@@ -2581,7 +2519,6 @@ function media_upload_gallery_form( $errors ) {
 	</table>
 	<div id="media-items">
 		<?php add_filter( 'attachment_fields_to_edit', 'media_post_single_attachment_fields_to_edit', 10, 2 ); ?>
-		<?php echo get_media_items( $post_id, $errors ); ?>
 	</div>
 
 	<p class="ml-submit">
@@ -2891,7 +2828,6 @@ function media_upload_library_form( $errors ) {
 
 	<div id="media-items">
 		<?php add_filter( 'attachment_fields_to_edit', 'media_post_single_attachment_fields_to_edit', 10, 2 ); ?>
-		<?php echo get_media_items( null, $errors ); ?>
 	</div>
 	<p class="ml-submit">
 		<?php submit_button( __( 'Save all changes' ), 'savebutton', 'save', false ); ?>
@@ -3217,7 +3153,7 @@ function edit_form_image_editor( $post ) {
 	?>
 	</div>
 	<div class="wp_attachment_details edit-form-section">
-	<?php if ( 'image' === substr( $post->post_mime_type, 0, 5 ) ) : ?>
+	<?php if ( str_starts_with( $post->post_mime_type, 'image' ) ) : ?>
 		<p class="attachment-alt-text">
 			<label for="attachment_alt"><strong><?php _e( 'Alternative Text' ); ?></strong></label><br>
 			<textarea class="widefat" name="_wp_attachment_image_alt" id="attachment_alt" aria-describedby="alt-text-description"><?php echo esc_attr( $alt_text ); ?></textarea>
@@ -3507,7 +3443,7 @@ function wp_add_id3_tag_data( &$metadata, $data ) {
 				if ( 'length' !== $key && ! empty( $list ) ) {
 					$metadata[ $key ] = wp_kses_post( reset( $list ) );
 					// Fix bug in byte stream analysis.
-					if ( 'terms_of_use' === $key && 0 === strpos( $metadata[ $key ], 'yright notice.' ) ) {
+					if ( 'terms_of_use' === $key && str_starts_with( $metadata[ $key ], 'yright notice.' ) ) {
 						$metadata[ $key ] = 'Cop' . $metadata[ $key ];
 					}
 				}
@@ -3847,7 +3783,7 @@ function wp_media_attach_action( $parent_id, $action = 'attach' ) {
 		$referer  = wp_get_referer();
 
 		if ( $referer ) {
-			if ( false !== strpos( $referer, 'upload.php' ) ) {
+			if ( str_contains( $referer, 'upload.php' ) ) {
 				$location = remove_query_arg( array( 'attached', 'detach' ), $referer );
 			}
 		}

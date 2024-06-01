@@ -211,10 +211,10 @@ class WP_Compat {
 		 */
 		do_action( 'using_block_function', $trace );
 
-		if ( 0 === strpos( $trace[1]['file'], realpath( get_stylesheet_directory() ) ) ) {
+		if ( str_starts_with( $trace[1]['file'], realpath( get_stylesheet_directory() ) ) ) {
 			// Current theme is calling the function
 			update_option( 'theme_using_blocks', '1' );
-		} elseif ( 0 === strpos( $trace[1]['file'], realpath( get_template_directory() ) ) ) {
+		} elseif ( str_starts_with( $trace[1]['file'], realpath( get_template_directory() ) ) ) {
 			// Parent theme is calling the function
 			update_option( 'theme_using_blocks', '2' );
 		} else {

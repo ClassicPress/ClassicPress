@@ -93,6 +93,7 @@ $allowed_options            = array(
 		'login_custom_image_state',
 		'login_custom_image_id',
 		'blocks_compatibility_level',
+		'site_icon',
 		'gmt_offset',
 		'date_format',
 		'time_format',
@@ -402,7 +403,7 @@ foreach ( (array) $options as $option ) :
 <tr>
 	<th scope="row"><label for="<?php echo $name; ?>"><?php echo esc_html( $option->option_name ); ?></label></th>
 <td>
-	<?php if ( strpos( $value, "\n" ) !== false ) : ?>
+	<?php if ( str_contains( $value, "\n" ) ) : ?>
 		<textarea class="<?php echo $class; ?>" name="<?php echo $name; ?>" id="<?php echo $name; ?>" cols="30" rows="5"><?php echo esc_textarea( $value ); ?></textarea>
 	<?php else : ?>
 		<input class="regular-text <?php echo $class; ?>" type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $value ); ?>"<?php disabled( $disabled, true ); ?>>

@@ -331,14 +331,10 @@ class WP_Site_Health_Auto_Updates {
 			require_once ABSPATH . 'wp-admin/includes/update.php';
 		}
 
-		$checksums = get_core_checksums( $wp_version, 'en_US' );
-		$dev       = ( false !== strpos( $wp_version, '-' ) );
-		// Get the last stable version's files and test against that.
-		if ( ! $checksums && $dev ) {
-			$checksums = get_core_checksums( (float) $wp_version - 0.1, 'en_US' );
-		}
+		$checksums = get_core_checksums( classicpress_version_short(), 'en_US' );
+		$dev       = classicpress_is_dev_install();
 
-		// There aren't always checksums for development releases, so just skip the test if we still can't find any.
+		// There may not be checksums for development releases, so just skip the test if we can't find any.
 		if ( ! $checksums && $dev ) {
 			return false;
 		}
@@ -347,7 +343,7 @@ class WP_Site_Health_Auto_Updates {
 			$description = sprintf(
 				/* translators: %s: ClassicPress version. */
 				__( "Couldn't retrieve a list of the checksums for ClassicPress %s." ),
-				$wp_version
+				$cp_version
 			);
 			$description .= ' ' . __( 'This could mean that connections are failing to WordPress.org or ClassicPress.net.' );
 			return array(
@@ -358,7 +354,7 @@ class WP_Site_Health_Auto_Updates {
 
 		$unwritable_files = array();
 		foreach ( array_keys( $checksums ) as $file ) {
-			if ( 'wp-content' === substr( $file, 0, 10 ) ) {
+			if ( str_starts_with( $file, 'wp-content' ) ) {
 				continue;
 			}
 			if ( ! file_exists( ABSPATH . $file ) ) {
@@ -396,7 +392,7 @@ class WP_Site_Health_Auto_Updates {
 	public function test_accepts_dev_updates() {
 		require ABSPATH . WPINC . '/version.php'; // $wp_version; // x.y.z
 		// Only for dev versions.
-		if ( false === strpos( $wp_version, '-' ) ) {
+		if ( ! str_contains( $wp_version, '-' ) ) {
 			return false;
 		}
 

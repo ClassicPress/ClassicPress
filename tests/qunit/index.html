@@ -56,6 +56,7 @@
 		<script src="../../src/wp-includes/js/media-editor.js"></script>
 		<script src="../../src/wp-includes/js/media-audiovideo.js"></script>
 		<script src="../../src/wp-includes/js/mce-view.js"></script>
+		<script src="../../src/wp-includes/js/sortable.min.js"></script>
 
 		<!-- QUnit -->
 		<link rel="stylesheet" href="../../node_modules/qunit/qunit/qunit.css" type="text/css" media="screen" />
@@ -104,7 +105,6 @@
 		<script type='text/javascript' src='../../src/wp-includes/js/jquery/ui/draggable.js'></script>
 		<script type='text/javascript' src='../../src/wp-includes/js/jquery/ui/droppable.js'></script>
 
-		<script src="../../src/wp-admin/js/nav-menu.js"></script>
 		<script src="../../src/wp-admin/js/customize-nav-menus.js"></script>
 		<script src="../../src/wp-admin/js/customize-widgets.js"></script>
 		<script src="../../src/wp-admin/js/word-count.js"></script>
@@ -155,7 +155,6 @@
 		<script src="wp-admin/js/customize-nav-menus.js"></script>
 		<script src="wp-admin/js/customize-widgets.js"></script>
 		<script src="wp-admin/js/word-count.js"></script>
-		<script src="wp-admin/js/nav-menu.js"></script>
 		<script src="wp-admin/js/widgets/test-media-widgets.js"></script>
 		<script src="wp-admin/js/widgets/test-media-image-widget.js"></script>
 		<script src="wp-admin/js/widgets/test-media-gallery-widget.js"></script>
@@ -644,6 +643,16 @@
 						The current image has no alternative text. The file name is: {{ data.currentFilename }}						"
 					<# } #>
 				/>
+			<# } #>
+		</script>
+
+		<script type="text/html" id="tmpl-wp-media-widget-image-fields">
+			<# var elementIdPrefix = 'el' + String( Math.random() ) + '_'; #>
+			<# if ( data.url ) { #>
+			<p class="media-widget-image-link">
+				<label for="{{ elementIdPrefix }}linkUrl"><?php esc_html_e( 'Link to:' ); ?></label>
+				<input id="{{ elementIdPrefix }}linkUrl" type="text" class="widefat link" value="{{ data.link_url }}" placeholder="https://" pattern="((\w+:)?\/\/\w.*|\w+:(?!\/\/$)|\/|\?|#).*">
+			</p>
 			<# } #>
 		</script>
 

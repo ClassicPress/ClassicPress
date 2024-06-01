@@ -55,8 +55,8 @@ if ( isset( $_POST['deletepost'] ) ) {
 
 $sendback = wp_get_referer();
 if ( ! $sendback ||
-	false !== strpos( $sendback, 'post.php' ) ||
-	false !== strpos( $sendback, 'post-new.php' ) ) {
+	str_contains( $sendback, 'post.php' ) ||
+	str_contains( $sendback, 'post-new.php' ) ) {
 	if ( 'attachment' === $post_type ) {
 		$sendback = admin_url( 'upload.php' );
 	} else {
@@ -97,7 +97,7 @@ switch ( $action ) {
 		$_POST['ping_status']    = get_default_comment_status( $post->post_type, 'pingback' );
 
 		// Wrap Quick Draft content in the Paragraph block.
-		if ( false === strpos( $_POST['content'], '<!-- wp:paragraph -->' ) ) {
+		if ( ! str_contains( $_POST['content'], '<!-- wp:paragraph -->' ) ) {
 			$_POST['content'] = sprintf(
 				'<!-- wp:paragraph -->%s<!-- /wp:paragraph -->',
 				str_replace( array( "\r\n", "\r", "\n" ), '<br>', $_POST['content'] )
@@ -223,7 +223,15 @@ switch ( $action ) {
 
 		// Session cookie flag that the post was saved.
 		if ( isset( $_COOKIE['wp-saving-post'] ) && $_COOKIE['wp-saving-post'] === $post_id . '-check' ) {
-			setcookie( 'wp-saving-post', $post_id . '-saved', time() + DAY_IN_SECONDS, ADMIN_COOKIE_PATH, COOKIE_DOMAIN, is_ssl() );
+			$cookie_options = array(
+				'expires' => time() + DAY_IN_SECONDS,
+				'path' => ADMIN_COOKIE_PATH,
+				'domain' => COOKIE_DOMAIN,
+				'secure' => is_ssl(),
+				'httponly' => true,
+				'samesite' => 'Strict',
+			);
+			setcookie( 'wp-saving-post', $post_id . '-saved', $cookie_options );
 		}
 
 		redirect_post( $post_id ); // Send user on their way while we keep working.

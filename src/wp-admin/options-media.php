@@ -44,6 +44,14 @@ get_current_screen()->set_help_sidebar(
 
 require_once ABSPATH . 'wp-admin/admin-header.php';
 
+/**
+ * Get upload organization preference.
+ *
+ * @since CP-2.1.0
+ *
+ * New option based on year only.
+ */
+$storefolders = (int) get_option( 'uploads_use_yearmonth_folders' );
 ?>
 
 <div class="wrap">
@@ -156,12 +164,18 @@ if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) :
 <td colspan="2" class="td-full">
 <?php else : ?>
 <tr>
-<td class="td-full">
+<th scope="row"><?php _e( 'How do you want your uploads organized?' ); ?></th>
+<td class="td-full uploads_use_yearmonth_folders">
 <?php endif; ?>
-<label for="uploads_use_yearmonth_folders">
-<input name="uploads_use_yearmonth_folders" type="checkbox" id="uploads_use_yearmonth_folders" value="1"<?php checked( '1', get_option( 'uploads_use_yearmonth_folders' ) ); ?>>
-	<?php _e( 'Organize my uploads into month- and year-based folders' ); ?>
-</label>
+
+<input id="uploads_use_one_folder" name="uploads_use_yearmonth_folders" type="radio" value="0"<?php checked( 0, $storefolders ); ?>>
+<label for="uploads_use_one_folder"><?php _e( 'Store all uploads in the same folder.' ); ?></label><br>
+
+<input id="uploads_use_year_folders" type="radio" name="uploads_use_yearmonth_folders" value="2"<?php checked( 2, $storefolders ); ?>>
+<label for="uploads_use_year_folders"><?php _e( 'Organize uploads into year-based folders.' ); ?></label><br>
+
+<input id="uploads_use_yearmonth_folders" type="radio" name="uploads_use_yearmonth_folders" value="1"<?php checked( 1, $storefolders ); ?>>
+<label for="uploads_use_yearmonth_folders"><?php _e( 'Organize uploads into month- and year-based folders.' ); ?></label>
 </td>
 </tr>
 

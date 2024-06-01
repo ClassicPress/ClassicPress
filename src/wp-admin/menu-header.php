@@ -50,6 +50,31 @@ $submenu_file = apply_filters( 'submenu_file', $submenu_file, $parent_file );
 get_admin_page_parent();
 
 /**
+ * Check if editing a "user" taxonomy
+ *
+ * @access private
+ * @since CP-2.1.0
+ *
+ * @param string $submenu_file
+ *
+ * @return bool true if editing a user taxonomy.
+ */
+function _is_user_taxonomy_page( $submenu_file ) {
+	if ( null === $submenu_file ) {
+		return false;
+	}
+	$match = preg_match( '~edit-tags\.php\?taxonomy=([A-Za-z0-9\-_]+)~', $submenu_file, $matches );
+	if ( false === $match || ! isset( $matches[1] ) ) {
+		return false;
+	}
+	$taxonomy = get_taxonomy( $matches[1] );
+	if ( false === $taxonomy ) {
+		return false;
+	}
+	return in_array( 'user', $taxonomy->object_type );
+}
+
+/**
  * Display menu.
  *
  * @access private
@@ -88,7 +113,7 @@ function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true ) {
 			$submenu_items = $submenu[ $item[2] ];
 		}
 
-		if ( ( $parent_file && $item[2] === $parent_file ) || ( empty( $typenow ) && $self === $item[2] ) ) {
+		if ( ( $parent_file && $item[2] === $parent_file && ! _is_user_taxonomy_page( $submenu_file ) ) || ( empty( $typenow ) && $self === $item[2] ) || ( _is_user_taxonomy_page( $submenu_file ) && 'users.php' === $item[2] ) ) {
 			if ( ! empty( $submenu_items ) ) {
 				$class[] = 'wp-has-current-submenu wp-menu-open';
 			} else {
@@ -112,7 +137,7 @@ function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true ) {
 		$img_style = '';
 		$img_class = ' dashicons-before';
 
-		if ( false !== strpos( $class, 'wp-menu-separator' ) ) {
+		if ( str_contains( $class, 'wp-menu-separator' ) ) {
 			$is_separator = true;
 		}
 
@@ -127,12 +152,12 @@ function _wp_menu_output( $menu, $submenu, $submenu_as_parent = true ) {
 
 			if ( 'none' === $item[6] || 'div' === $item[6] ) {
 				$img = '<br>';
-			} elseif ( 0 === strpos( $item[6], 'data:image/svg+xml;base64,' ) ) {
+			} elseif ( str_starts_with( $item[6], 'data:image/svg+xml;base64,' ) ) {
 				$img = '<br>';
 				// The value is base64-encoded data, so esc_attr() is used here instead of esc_url().
 				$img_style = ' style="background-image:url(\'' . esc_attr( $item[6] ) . '\')"';
 				$img_class = ' svg';
-			} elseif ( 0 === strpos( $item[6], 'dashicons-' ) ) {
+			} elseif ( str_starts_with( $item[6], 'dashicons-' ) ) {
 				$img       = '<br>';
 				$img_class = ' dashicons-before ' . sanitize_html_class( $item[6] );
 			}

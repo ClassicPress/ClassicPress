@@ -1152,9 +1152,16 @@ function wp_user_settings() {
 	}
 
 	// The cookie is not set in the current browser or the saved value is newer.
-	$secure = ( 'https' === parse_url( admin_url(), PHP_URL_SCHEME ) );
-	setcookie( 'wp-settings-' . $user_id, $settings, time() + YEAR_IN_SECONDS, SITECOOKIEPATH, '', $secure );
-	setcookie( 'wp-settings-time-' . $user_id, time(), time() + YEAR_IN_SECONDS, SITECOOKIEPATH, '', $secure );
+	$cookie_options = array(
+		'expires' => time() + YEAR_IN_SECONDS,
+		'path' => SITECOOKIEPATH,
+		'domain' => '',
+		'secure' => ( 'https' === parse_url( admin_url(), PHP_URL_SCHEME ) ),
+		'samesite' => 'Strict',
+	);
+
+	setcookie( 'wp-settings-' . $user_id, $settings, $cookie_options );
+	setcookie( 'wp-settings-time-' . $user_id, time(), $cookie_options );
 	$_COOKIE[ 'wp-settings-' . $user_id ] = $settings;
 }
 

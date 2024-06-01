@@ -583,10 +583,46 @@ function post_tags_meta_box( $post, $box ) {
 		<label for="tax-input-<?php echo $tax_name; ?>"><?php echo $taxonomy->labels->add_or_remove_items; ?></label>
 		<p><textarea name="<?php echo "tax_input[$tax_name]"; ?>" rows="3" cols="20" class="the-tags" id="tax-input-<?php echo $tax_name; ?>" <?php disabled( ! $user_can_assign_terms ); ?> aria-describedby="new-tag-<?php echo $tax_name; ?>-desc"><?php echo str_replace( ',', $comma . ' ', $terms_to_edit ); // textarea_escaped by esc_attr() ?></textarea></p>
 	</div>
-	<?php if ( $user_can_assign_terms ) : ?>
+
+	<?php
+	if ( $user_can_assign_terms ) :
+
+		/**
+		 * Check if this is a media post tag taxonomy.
+		 *
+		 * @since CP-2.1.0
+		 */
+		$object_types = $taxonomy->object_type;
+		if ( $object_types[0] === 'attachment' ) {
+			$tags = get_terms(
+				array(
+					'taxonomy'   => $taxonomy->name,
+					'hide_empty' => false,
+					'fields'     => 'names',
+				)
+			);
+		} else {
+			$tags = get_tags(
+				array(
+					'hide_empty' => false,
+					'fields'     => 'names',
+				)
+			);
+		}
+
+		$tags_list = '<datalist id="tags-list">';
+		if ( ! empty( $tags ) ) {
+			foreach ( $tags as $tag ) {
+				$tags_list .= '<option>' . esc_html( $tag ) . '</option>';
+			}
+		}
+		$tags_list .= '</datalist>';
+		?>
+
 	<div class="ajaxtag hide-if-no-js">
 		<label class="screen-reader-text" for="new-tag-<?php echo $tax_name; ?>"><?php echo $taxonomy->labels->add_new_item; ?></label>
-		<input data-wp-taxonomy="<?php echo $tax_name; ?>" type="text" id="new-tag-<?php echo $tax_name; ?>" name="newtag[<?php echo $tax_name; ?>]" class="newtag form-input-tip" size="16" autocomplete="off" aria-describedby="new-tag-<?php echo $tax_name; ?>-desc" value="">
+		<input data-wp-taxonomy="<?php echo $tax_name; ?>" type="text" id="new-tag-<?php echo $tax_name; ?>" name="newtag[<?php echo $tax_name; ?>]" class="newtag form-input-tip" size="16" list="tags-list" autocomplete="off" aria-describedby="new-tag-<?php echo $tax_name; ?>-desc" value="">
+		<?php echo $tags_list; ?>
 		<input type="button" class="button tagadd" value="<?php esc_attr_e( 'Add' ); ?>">
 	</div>
 	<p class="howto" id="new-tag-<?php echo $tax_name; ?>-desc"><?php echo $taxonomy->labels->separate_items_with_commas; ?></p>

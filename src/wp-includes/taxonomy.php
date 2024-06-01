@@ -20,6 +20,9 @@
  * @since 2.8.0
  * @since 5.9.0 Added `'wp_template_part_area'` taxonomy.
  *
+ * @since CP-2.1.0
+ * Includes media categories and media tags.
+ *
  * @global WP_Rewrite $wp_rewrite WordPress rewrite component.
  */
 function create_initial_taxonomies() {
@@ -40,17 +43,20 @@ function create_initial_taxonomies() {
 		 *
 		 * @since 3.1.0
 		 *
+		 * @since CP-2.1.0
+		 * Includes media categories and media tags
+		 *
 		 * @param string $context Context of the rewrite base. Default 'type'.
 		 */
 		$post_format_base = apply_filters( 'post_format_rewrite_base', 'type' );
 		$rewrite          = array(
-			'category'    => array(
+			'category'          => array(
 				'hierarchical' => true,
 				'slug'         => get_option( 'category_base' ) ? get_option( 'category_base' ) : 'category',
 				'with_front'   => ! get_option( 'category_base' ) || $wp_rewrite->using_index_permalinks(),
 				'ep_mask'      => EP_CATEGORIES,
 			),
-			'post_tag'    => array(
+			'post_tag'          => array(
 				'hierarchical' => false,
 				'slug'         => get_option( 'tag_base' ) ? get_option( 'tag_base' ) : 'tag',
 				'with_front'   => ! get_option( 'tag_base' ) || $wp_rewrite->using_index_permalinks(),
@@ -182,6 +188,90 @@ function create_initial_taxonomies() {
 			'show_ui'           => false,
 			'_builtin'          => true,
 			'show_in_nav_menus' => current_theme_supports( 'post-formats' ),
+		)
+	);
+
+	register_taxonomy(
+		'media_category',
+		'attachment',
+		array(
+			'hierarchical' => true,
+			'labels'       => array(
+				'name'                       => __( 'Media Categories' ),
+				'singular_name'              => __( 'Media Category' ),
+				'search_items'               => __( 'Search Media Categories' ),
+				'popular_items'              => null,
+				'all_items'                  => __( 'All Media Categories' ),
+				'edit_item'                  => __( 'Edit Media Category' ),
+				'update_item'                => __( 'Update Media Category' ),
+				'add_new_item'               => __( 'Add New Media Category' ),
+				'new_item_name'              => __( 'New Media Category Name' ),
+				'separate_items_with_commas' => null,
+				'add_or_remove_items'        => null,
+				'choose_from_most_used'      => null,
+				'back_to_items'              => __( '&larr; Go to Media Categories' ),
+			),
+			'query_var'             => 'media_category_name',
+			'update_count_callback' => '_update_generic_term_count',
+			'rewrite'               => false,
+			'show_ui'               => true,
+			'show_in_menu'          => true,
+			'show_in_nav_menus'     => false,
+			'show_tagcloud'         => false,
+			'show_admin_column'     => true,
+			'has_default'           => false,
+			'_builtin'              => true,
+			'capabilities'          => array(
+				'manage_terms' => 'manage_categories',
+				'edit_terms'   => 'edit_categories',
+				'delete_terms' => 'delete_categories',
+				'assign_terms' => 'assign_categories',
+			),
+			'show_in_rest'          => true,
+			'rest_base'             => 'media_categories',
+			'rest_controller_class' => 'WP_REST_Terms_Controller',
+		)
+	);
+
+	register_taxonomy(
+		'media_post_tag',
+		'attachment',
+		array(
+			'hierarchical' => false,
+			'labels'       => array(
+				'name'                       => __( 'Media Tags' ),
+				'singular_name'              => __( 'Media Tag' ),
+				'search_items'               => __( 'Search Media Tags' ),
+				'popular_items'              => null,
+				'all_items'                  => __( 'All Media Tags' ),
+				'edit_item'                  => __( 'Edit Media Tag' ),
+				'update_item'                => __( 'Update Media Tag' ),
+				'add_new_item'               => __( 'Add New Media Tag' ),
+				'new_item_name'              => __( 'New Media Tag Name' ),
+				'separate_items_with_commas' => __( 'Separate tags with commas' ),
+				'add_or_remove_items'        => null,
+				'choose_from_most_used'      => __( 'Choose from the most used tags' ),
+				'back_to_items'              => __( '&larr; Go to Media Tags' ),
+			),
+			'query_var'             => 'media_tag',
+			'update_count_callback' => '_update_generic_term_count',
+			'rewrite'               => false,
+			'show_ui'               => true,
+			'show_in_menu'          => true,
+			'show_in_nav_menus'     => false,
+			'show_tagcloud'         => false,
+			'show_admin_column'     => true,
+			'has_default'           => false,
+			'_builtin'              => true,
+			'capabilities'          => array(
+				'manage_terms' => 'manage_post_tags',
+				'edit_terms'   => 'edit_post_tags',
+				'delete_terms' => 'delete_post_tags',
+				'assign_terms' => 'assign_post_tags',
+			),
+			'show_in_rest'          => true,
+			'rest_base'             => 'media_tags',
+			'rest_controller_class' => 'WP_REST_Terms_Controller',
 		)
 	);
 }
@@ -684,7 +774,7 @@ function register_taxonomy_for_object_type( $taxonomy, $object_type ) {
 		return false;
 	}
 
-	if ( ! get_post_type_object( $object_type ) ) {
+	if ( 'user' !== $object_type && ! get_post_type_object( $object_type ) ) {
 		return false;
 	}
 
@@ -726,7 +816,7 @@ function unregister_taxonomy_for_object_type( $taxonomy, $object_type ) {
 		return false;
 	}
 
-	if ( ! get_post_type_object( $object_type ) ) {
+	if ( 'user' !== $object_type && ! get_post_type_object( $object_type ) ) {
 		return false;
 	}
 
@@ -2216,7 +2306,7 @@ function wp_get_object_terms( $object_ids, $taxonomies, $args = array() ) {
 		$terms_from_remaining_taxonomies = get_terms( $args );
 
 		// Array keys should be preserved for values of $fields that use term_id for keys.
-		if ( ! empty( $args['fields'] ) && 0 === strpos( $args['fields'], 'id=>' ) ) {
+		if ( ! empty( $args['fields'] ) && str_starts_with( $args['fields'], 'id=>' ) ) {
 			$terms = $terms + $terms_from_remaining_taxonomies;
 		} else {
 			$terms = array_merge( $terms, $terms_from_remaining_taxonomies );
@@ -3460,7 +3550,7 @@ function wp_update_term_count_now( $terms, $taxonomy ) {
 	} else {
 		$object_types = (array) $taxonomy->object_type;
 		foreach ( $object_types as &$object_type ) {
-			if ( 0 === strpos( $object_type, 'attachment:' ) ) {
+			if ( str_starts_with( $object_type, 'attachment:' ) ) {
 				list( $object_type ) = explode( ':', $object_type );
 			}
 		}

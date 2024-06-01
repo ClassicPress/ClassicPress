@@ -279,7 +279,7 @@ if ( ! function_exists( 'wp_mail' ) ) :
 			if ( ! empty( $tempheaders ) ) {
 				// Iterate through the raw headers.
 				foreach ( (array) $tempheaders as $header ) {
-					if ( strpos( $header, ':' ) === false ) {
+					if ( ! str_contains( $header, ':' ) ) {
 						if ( false !== stripos( $header, 'boundary=' ) ) {
 							$parts    = preg_split( '/boundary=/i', trim( $header ) );
 							$boundary = trim( str_replace( array( "'", '"' ), '', $parts[1] ) );
@@ -315,7 +315,7 @@ if ( ! function_exists( 'wp_mail' ) ) :
 							}
 							break;
 						case 'content-type':
-							if ( strpos( $content, ';' ) !== false ) {
+							if ( str_contains( $content, ';' ) ) {
 								list( $type, $charset_content ) = explode( ';', $content );
 								$content_type                   = trim( $type );
 								if ( false !== stripos( $charset_content, 'charset=' ) ) {
@@ -376,7 +376,7 @@ if ( ! function_exists( 'wp_mail' ) ) :
 			$from_email = 'classicpress@';
 
 			if ( null !== $sitename ) {
-				if ( 'www.' === substr( $sitename, 0, 4 ) ) {
+				if ( str_starts_with( $sitename, 'www.' ) ) {
 					$sitename = substr( $sitename, 4 );
 				}
 
@@ -1086,11 +1086,26 @@ if ( ! function_exists( 'wp_set_auth_cookie' ) ) :
 			return;
 		}
 
-		setcookie( $auth_cookie_name, $auth_cookie, $expire, PLUGINS_COOKIE_PATH, COOKIE_DOMAIN, $secure, true );
-		setcookie( $auth_cookie_name, $auth_cookie, $expire, ADMIN_COOKIE_PATH, COOKIE_DOMAIN, $secure, true );
-		setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $expire, COOKIEPATH, COOKIE_DOMAIN, $secure_logged_in_cookie, true );
+		$cookie_options = array(
+			'expires' => $expire,
+			'path' => '',
+			'domain' => COOKIE_DOMAIN,
+			'secure' => $secure,
+			'httponly' => true,
+			'samesite' => 'Strict',
+		);
+
+		$cookie_options['path'] = PLUGINS_COOKIE_PATH;
+		setcookie( $auth_cookie_name, $auth_cookie, $cookie_options );
+
+		$cookie_options['path'] = ADMIN_COOKIE_PATH;
+		setcookie( $auth_cookie_name, $auth_cookie, $cookie_options );
+
+		$cookie_options['path'] = COOKIEPATH;
+		setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $cookie_options );
 		if ( COOKIEPATH != SITECOOKIEPATH ) {
-			setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $expire, SITECOOKIEPATH, COOKIE_DOMAIN, $secure_logged_in_cookie, true );
+			$cookie_options['path'] = SITECOOKIEPATH;
+			setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $cookie_options );
 		}
 	}
 endif;
@@ -1186,8 +1201,8 @@ if ( ! function_exists( 'auth_redirect' ) ) :
 		$secure = apply_filters( 'secure_auth_redirect', $secure );
 
 		// If https is required and request is http, redirect.
-		if ( $secure && ! is_ssl() && false !== strpos( $_SERVER['REQUEST_URI'], 'wp-admin' ) ) {
-			if ( 0 === strpos( $_SERVER['REQUEST_URI'], 'http' ) ) {
+		if ( $secure && ! is_ssl() && str_contains( $_SERVER['REQUEST_URI'], 'wp-admin' ) ) {
+			if ( str_starts_with( $_SERVER['REQUEST_URI'], 'http' ) ) {
 				wp_redirect( set_url_scheme( $_SERVER['REQUEST_URI'], 'https' ) );
 				exit;
 			} else {
@@ -1217,8 +1232,8 @@ if ( ! function_exists( 'auth_redirect' ) ) :
 			do_action( 'auth_redirect', $user_id );
 
 			// If the user wants ssl but the session is not ssl, redirect.
-			if ( ! $secure && get_user_option( 'use_ssl', $user_id ) && false !== strpos( $_SERVER['REQUEST_URI'], 'wp-admin' ) ) {
-				if ( 0 === strpos( $_SERVER['REQUEST_URI'], 'http' ) ) {
+			if ( ! $secure && get_user_option( 'use_ssl', $user_id ) && str_contains( $_SERVER['REQUEST_URI'], 'wp-admin' ) ) {
+				if ( str_starts_with( $_SERVER['REQUEST_URI'], 'http' ) ) {
 					wp_redirect( set_url_scheme( $_SERVER['REQUEST_URI'], 'https' ) );
 					exit;
 				} else {
@@ -1233,7 +1248,11 @@ if ( ! function_exists( 'auth_redirect' ) ) :
 		// The cookie is no good, so force login.
 		nocache_headers();
 
-		$redirect = ( strpos( $_SERVER['REQUEST_URI'], '/options.php' ) && wp_get_referer() ) ? wp_get_referer() : set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
+		if ( str_contains( $_SERVER['REQUEST_URI'], '/options.php' ) && wp_get_referer() ) {
+			$redirect = wp_get_referer();
+		} else {
+			$redirect = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
+		}
 
 		$login_url = wp_login_url( $redirect, true );
 
@@ -1281,7 +1300,7 @@ if ( ! function_exists( 'check_admin_referer' ) ) :
 		 */
 		do_action( 'check_admin_referer', $action, $result );
 
-		if ( ! $result && ! ( -1 === $action && strpos( $referer, $adminurl ) === 0 ) ) {
+		if ( ! $result && ! ( -1 === $action && str_starts_with( $referer, $adminurl ) ) ) {
 			wp_nonce_ays( $action );
 			die();
 		}
@@ -1557,7 +1576,7 @@ if ( ! function_exists( 'wp_validate_redirect' ) ) :
 	function wp_validate_redirect( $location, $fallback_url = '' ) {
 		$location = wp_sanitize_redirect( trim( $location, " \t\n\r\0\x08\x0B" ) );
 		// Browsers will assume 'http' is your protocol, and will obey a redirect to a URL starting with '//'.
-		if ( '//' === substr( $location, 0, 2 ) ) {
+		if ( str_starts_with( $location, '//' ) ) {
 			$location = 'http:' . $location;
 		}
 

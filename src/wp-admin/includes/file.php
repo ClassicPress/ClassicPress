@@ -996,7 +996,7 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
 		}
 
 		if ( false === $move_new_file ) {
-			if ( 0 === strpos( $uploads['basedir'], ABSPATH ) ) {
+			if ( str_starts_with( $uploads['basedir'], ABSPATH ) ) {
 				$error_path = str_replace( ABSPATH, '', $uploads['basedir'] ) . $uploads['subdir'];
 			} else {
 				$error_path = basename( $uploads['basedir'] ) . $uploads['subdir'];
@@ -1195,7 +1195,7 @@ function download_url( $url, $timeout = 300, $signature_verification = false ) {
 	if ( $content_disposition ) {
 		$content_disposition = strtolower( $content_disposition );
 
-		if ( 0 === strpos( $content_disposition, 'attachment; filename=' ) ) {
+		if ( str_starts_with( $content_disposition, 'attachment; filename=' ) ) {
 			$tmpfname_disposition = sanitize_file_name( substr( $content_disposition, 21 ) );
 		} else {
 			$tmpfname_disposition = '';
@@ -1252,7 +1252,7 @@ function download_url( $url, $timeout = 300, $signature_verification = false ) {
 
 			$signature_url = false;
 
-			if ( is_string( $url_path ) && ( '.zip' === substr( $url_path, -4 ) || '.tar.gz' === substr( $url_path, -7 ) ) ) {
+			if ( is_string( $url_path ) && ( str_ends_with( $url_path, '.zip' ) || str_ends_with( $url_path, '.tar.gz' ) ) ) {
 				$signature_url = str_replace( $url_path, $url_path . '.sig', $url );
 			}
 
@@ -1645,7 +1645,7 @@ function _unzip_file_ziparchive( $file, $to, $needed_dirs = array() ) {
 			return new WP_Error( 'stat_failed_ziparchive', __( 'Could not retrieve file from archive.' ) );
 		}
 
-		if ( '__MACOSX/' === substr( $info['name'], 0, 9 ) ) { // Skip the OS X-created __MACOSX directory.
+		if ( str_starts_with( $info['name'], '__MACOSX/' ) ) { // Skip the OS X-created __MACOSX directory.
 			continue;
 		}
 
@@ -1658,7 +1658,7 @@ function _unzip_file_ziparchive( $file, $to, $needed_dirs = array() ) {
 
 		$dirname = dirname( $info['name'] );
 
-		if ( '/' === substr( $info['name'], -1 ) ) {
+		if ( str_ends_with( $info['name'], '/' ) ) {
 			// Directory.
 			$needed_dirs[] = $to . untrailingslashit( $info['name'] );
 		} elseif ( '.' !== $dirname ) {
@@ -1692,7 +1692,7 @@ function _unzip_file_ziparchive( $file, $to, $needed_dirs = array() ) {
 			continue;
 		}
 
-		if ( strpos( $dir, $to ) === false ) { // If the directory is not within the working directory, skip it.
+		if ( ! str_contains( $dir, $to ) ) { // If the directory is not within the working directory, skip it.
 			continue;
 		}
 
@@ -1725,11 +1725,11 @@ function _unzip_file_ziparchive( $file, $to, $needed_dirs = array() ) {
 			return new WP_Error( 'stat_failed_ziparchive', __( 'Could not retrieve file from archive.' ) );
 		}
 
-		if ( '/' === substr( $info['name'], -1 ) ) { // Directory.
+		if ( str_ends_with( $info['name'], '/' ) ) { // Directory.
 			continue;
 		}
 
-		if ( '__MACOSX/' === substr( $info['name'], 0, 9 ) ) { // Don't extract the OS X-created __MACOSX directory files.
+		if ( str_starts_with( $info['name'], '__MACOSX/' ) ) { // Don't extract the OS X-created __MACOSX directory files.
 			continue;
 		}
 
@@ -1799,7 +1799,7 @@ function _unzip_file_pclzip( $file, $to, $needed_dirs = array() ) {
 
 	// Determine any children directories needed (From within the archive).
 	foreach ( $archive_files as $file ) {
-		if ( '__MACOSX/' === substr( $file['filename'], 0, 9 ) ) { // Skip the OS X-created __MACOSX directory.
+		if ( str_starts_with( $file['filename'], '__MACOSX/' ) ) { // Skip the OS X-created __MACOSX directory.
 			continue;
 		}
 
@@ -1833,7 +1833,7 @@ function _unzip_file_pclzip( $file, $to, $needed_dirs = array() ) {
 			continue;
 		}
 
-		if ( strpos( $dir, $to ) === false ) { // If the directory is not within the working directory, skip it.
+		if ( ! str_contains( $dir, $to ) ) { // If the directory is not within the working directory, skip it.
 			continue;
 		}
 
@@ -1865,7 +1865,7 @@ function _unzip_file_pclzip( $file, $to, $needed_dirs = array() ) {
 			continue;
 		}
 
-		if ( '__MACOSX/' === substr( $file['filename'], 0, 9 ) ) { // Don't extract the OS X-created __MACOSX directory files.
+		if ( str_starts_with( $file['filename'], '__MACOSX/' ) ) { // Don't extract the OS X-created __MACOSX directory files.
 			continue;
 		}
 
@@ -1936,7 +1936,7 @@ function copy_dir( $from, $to, $skip_list = array() ) {
 			$sub_skip_list = array();
 
 			foreach ( $skip_list as $skip_item ) {
-				if ( 0 === strpos( $skip_item, $filename . '/' ) ) {
+				if ( str_starts_with( $skip_item, $filename . '/' ) ) {
 					$sub_skip_list[] = preg_replace( '!^' . preg_quote( $filename, '!' ) . '/!i', '', $skip_item );
 				}
 			}

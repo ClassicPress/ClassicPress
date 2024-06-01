@@ -466,6 +466,20 @@ class WP_Terms_List_Table extends WP_List_Table {
 			get_edit_term_link( $tag, $taxonomy, $this->screen->post_type )
 		);
 
+		/*
+		 * Ensures that the URL of the term edit link takes account of object type.
+		 *
+		 * @since CP-2.1.0
+		 *
+		 * @param object $taxonomy_object Current taxonomy object.
+		 * @param array  $objects         Objects associated with current taxonomy.
+		 */
+		$taxonomy_object = get_taxonomy( $taxonomy );
+		$objects = (array) $taxonomy_object->object_type;
+		if ( $objects[0] !== 'post' ) {
+			$edit_link = str_replace( 'post_type=post', 'object_type=' . $objects[0], $edit_link );
+		}
+
 		$actions = array();
 
 		if ( current_user_can( 'edit_term', $tag->term_id ) ) {

@@ -238,6 +238,30 @@ class WP_Http {
 		}
 
 		/**
+		 * Filters the URL value of an HTTP request.
+		 *
+		 * For security reasons it allows only to change classicpress.net URLs.
+		 *
+		 * Must return a classicpress.net URL.
+		 *
+		 * @since CP-2.1
+		 *
+		 * @param string $url         The HTTP request url
+		 * @param array  $parsed_args HTTP request arguments.
+		 */
+		$filtered_url = apply_filters( 'cp_dot_net_urls', $url, $parsed_args );
+
+		if ( $url !== $filtered_url ) {
+			$parsed_filtered_url = parse_url( $filtered_url );
+			$pre_parsed_url = parse_url( $url );
+			if ( substr( $pre_parsed_url['host'], -16 ) === 'classicpress.net' && substr( $parsed_filtered_url['host'], -16 ) === 'classicpress.net' ) {
+				$url = $filtered_url;
+			} else {
+				_doing_it_wrong( 'cp_dot_net_urls', 'Filter \'cp_dot_net_urls\' only works for classicpress.net urls.', 'CP-2.1' );
+			}
+		}
+
+		/**
 		 * Filters the preemptive return value of an HTTP request.
 		 *
 		 * Returning a non-false value from the filter will short-circuit the HTTP request and return
@@ -721,7 +745,7 @@ class WP_Http {
 		 * In this case, determine the final HTTP header and parse from there.
 		 */
 		for ( $i = count( $headers ) - 1; $i >= 0; $i-- ) {
-			if ( ! empty( $headers[ $i ] ) && false === strpos( $headers[ $i ], ':' ) ) {
+			if ( ! empty( $headers[ $i ] ) && ! str_contains( $headers[ $i ], ':' ) ) {
 				$headers = array_splice( $headers, $i );
 				break;
 			}
@@ -734,7 +758,7 @@ class WP_Http {
 				continue;
 			}
 
-			if ( false === strpos( $tempheader, ':' ) ) {
+			if ( ! str_contains( $tempheader, ':' ) ) {
 				$stack   = explode( ' ', $tempheader, 3 );
 				$stack[] = '';
 				list( , $response['code'], $response['message']) = $stack;
@@ -905,7 +929,7 @@ class WP_Http {
 		if ( null === $accessible_hosts ) {
 			$accessible_hosts = preg_split( '|,\s*|', WP_ACCESSIBLE_HOSTS );
 
-			if ( false !== strpos( WP_ACCESSIBLE_HOSTS, '*' ) ) {
+			if ( str_contains( WP_ACCESSIBLE_HOSTS, '*' ) ) {
 				$wildcard_regex = array();
 				foreach ( $accessible_hosts as $host ) {
 					$wildcard_regex[] = str_replace( '\*', '.+', preg_quote( $host, '/' ) );
@@ -1095,7 +1119,7 @@ class WP_Http {
 			return 4;
 		}
 
-		if ( false !== strpos( $maybe_ip, ':' ) && preg_match( '/^(((?=.*(::))(?!.*\3.+\3))\3?|([\dA-F]{1,4}(\3|:\b|$)|\2))(?4){5}((?4){2}|(((2[0-4]|1\d|[1-9])?\d|25[0-5])\.?\b){4})$/i', trim( $maybe_ip, ' []' ) ) ) {
+		if ( str_contains( $maybe_ip, ':' ) && preg_match( '/^(((?=.*(::))(?!.*\3.+\3))\3?|([\dA-F]{1,4}(\3|:\b|$)|\2))(?4){5}((?4){2}|(((2[0-4]|1\d|[1-9])?\d|25[0-5])\.?\b){4})$/i', trim( $maybe_ip, ' []' ) ) ) {
 			return 6;
 		}
 

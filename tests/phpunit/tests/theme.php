@@ -6,15 +6,12 @@
  * @group themes
  */
 class Tests_Theme extends WP_UnitTestCase {
-	protected $theme_slug     = 'twentysixteen';
-	protected $theme_name     = 'Twenty Sixteen';
+	protected $theme_slug     = 'twentyseventeen';
+	protected $theme_name     = 'Twenty Seventeen';
 	protected $default_themes = array(
-		'twentyfifteen',
-		'twentysixteen',
 		'twentyseventeen',
-		'classicpress-fifteen',
-		'classicpress-sixteen',
 		'classicpress-seventeen',
+		'the-classicpress-theme',
 	);
 
 	/**
@@ -236,6 +233,10 @@ class Tests_Theme extends WP_UnitTestCase {
 	 */
 	public function test_switch_theme() {
 		$themes = get_themes();
+
+		if ( PHP_VERSION_ID < 80000 ) {
+			unset( $themes['The ClassicPress Theme'] );
+		}
 
 		// Switch to each theme in sequence.
 		// Do it twice to make sure we switch to the first theme, even if it's our starting theme.

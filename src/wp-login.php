@@ -13,7 +13,7 @@ require __DIR__ . '/wp-load.php';
 
 // Redirect to HTTPS login if forced to use SSL.
 if ( force_ssl_admin() && ! is_ssl() ) {
-	if ( 0 === strpos( $_SERVER['REQUEST_URI'], 'http' ) ) {
+	if ( str_starts_with( $_SERVER['REQUEST_URI'], 'http' ) ) {
 		wp_safe_redirect( set_url_scheme( $_SERVER['REQUEST_URI'], 'https' ) );
 		exit;
 	} else {
@@ -446,15 +446,24 @@ if ( defined( 'RELOCATE' ) && RELOCATE ) { // Move flag is set.
 }
 
 // Set a cookie now to see if they are supported by the browser.
-$secure = ( 'https' === parse_url( wp_login_url(), PHP_URL_SCHEME ) );
-setcookie( TEST_COOKIE, 'WP Cookie check', 0, COOKIEPATH, COOKIE_DOMAIN, $secure );
+$cookie_options = array(
+	'expires' => 0,
+	'path' => COOKIEPATH,
+	'domain' => COOKIE_DOMAIN,
+	'secure' => ( 'https' === parse_url( wp_login_url(), PHP_URL_SCHEME ) ),
+	'httponly' => true,
+	'samesite' => 'Strict',
+);
+setcookie( TEST_COOKIE, 'WP Cookie check', $cookie_options );
 
 if ( SITECOOKIEPATH !== COOKIEPATH ) {
-	setcookie( TEST_COOKIE, 'WP Cookie check', 0, SITECOOKIEPATH, COOKIE_DOMAIN, $secure );
+	$site_cookie_options         = $cookie_options;
+	$site_cookie_options['path'] = SITECOOKIEPATH;
+	setcookie( TEST_COOKIE, 'WP Cookie check', $site_cookie_options );
 }
 
 if ( isset( $_GET['wp_lang'] ) ) {
-	setcookie( 'wp_lang', sanitize_text_field( $_GET['wp_lang'] ), 0, COOKIEPATH, COOKIE_DOMAIN, $secure );
+	setcookie( 'wp_lang', sanitize_text_field( $_GET['wp_lang'] ), $cookie_options );
 }
 
 /**
@@ -710,7 +719,16 @@ switch ( $action ) {
 			$secure = false;
 		}
 
-		setcookie( 'wp-postpass_' . COOKIEHASH, $hasher->HashPassword( wp_unslash( $_POST['post_password'] ) ), $expire, COOKIEPATH, COOKIE_DOMAIN, $secure );
+		$cookie_options = array(
+			'expires' => $expire,
+			'path' => COOKIEPATH,
+			'domain' => COOKIE_DOMAIN,
+			'secure' => $secure,
+			'httponly' => true,
+			'samesite' => 'Strict',
+		);
+
+		setcookie( 'wp-postpass_' . COOKIEHASH, $hasher->HashPassword( wp_unslash( $_POST['post_password'] ) ), $cookie_options );
 
 		wp_safe_redirect( wp_get_referer() );
 		exit;
@@ -848,9 +866,18 @@ switch ( $action ) {
 		list( $rp_path ) = explode( '?', wp_unslash( $_SERVER['REQUEST_URI'] ) );
 		$rp_cookie       = 'wp-resetpass-' . COOKIEHASH;
 
+		$cookie_options = array(
+			'expires' => 0,
+			'path' => $rp_path,
+			'domain' => COOKIE_DOMAIN,
+			'secure' => $secure,
+			'httponly' => is_ssl(),
+			'samesite' => 'Strict',
+		);
+
 		if ( isset( $_GET['key'] ) && isset( $_GET['login'] ) ) {
 			$value = sprintf( '%s:%s', wp_unslash( $_GET['login'] ), wp_unslash( $_GET['key'] ) );
-			setcookie( $rp_cookie, $value, 0, $rp_path, COOKIE_DOMAIN, is_ssl(), true );
+			setcookie( $rp_cookie, $value, $cookie_options );
 
 			wp_safe_redirect( remove_query_arg( array( 'key', 'login' ) ) );
 			exit;
@@ -869,7 +896,8 @@ switch ( $action ) {
 		}
 
 		if ( ! $user || is_wp_error( $user ) ) {
-			setcookie( $rp_cookie, ' ', time() - YEAR_IN_SECONDS, $rp_path, COOKIE_DOMAIN, is_ssl(), true );
+			$cookie_options['expires'] = time() - YEAR_IN_SECONDS;
+			setcookie( $rp_cookie, ' ', $cookie_options );
 
 			if ( $user && $user->get_error_code() === 'expired_key' ) {
 				wp_redirect( site_url( 'wp-login.php?action=lostpassword&error=expiredkey' ) );
@@ -908,7 +936,8 @@ switch ( $action ) {
 
 		if ( ( ! $errors->has_errors() ) && isset( $_POST['pass1'] ) && ! empty( $_POST['pass1'] ) ) {
 			reset_password( $user, $_POST['pass1'] );
-			setcookie( $rp_cookie, ' ', time() - YEAR_IN_SECONDS, $rp_path, COOKIE_DOMAIN, is_ssl(), true );
+			$cookie_options['expires'] = time() - YEAR_IN_SECONDS;
+			setcookie( $rp_cookie, ' ', $cookie_options );
 			login_header( __( 'Password Reset' ), '<p class="message reset-pass">' . __( 'Your password has been reset.' ) . ' <a href="' . esc_url( wp_login_url() ) . '">' . __( 'Log in' ) . '</a></p>' );
 			login_footer();
 			exit;
@@ -1192,7 +1221,7 @@ switch ( $action ) {
 		if ( isset( $_REQUEST['redirect_to'] ) ) {
 			$redirect_to = $_REQUEST['redirect_to'];
 			// Redirect to HTTPS if user wants SSL.
-			if ( $secure_cookie && false !== strpos( $redirect_to, 'wp-admin' ) ) {
+			if ( $secure_cookie && str_contains( $redirect_to, 'wp-admin' ) ) {
 				$redirect_to = preg_replace( '|^http://|', 'https://', $redirect_to );
 			}
 		} else {
@@ -1325,11 +1354,11 @@ switch ( $action ) {
 				$errors->add( 'loggedout', __( 'You are now logged out.' ), 'message' );
 			} elseif ( isset( $_GET['registration'] ) && 'disabled' === $_GET['registration'] ) {
 				$errors->add( 'registerdisabled', __( '<strong>Error:</strong> User registration is currently not allowed.' ) );
-			} elseif ( strpos( $redirect_to, 'about.php?updated' ) ) {
+			} elseif ( str_contains( $redirect_to, 'about.php?updated' ) ) {
 				$errors->add( 'updated', __( '<strong>You have successfully updated ClassicPress!</strong> Please log back in to see what&#8217;s new.' ), 'message' );
 			} elseif ( WP_Recovery_Mode_Link_Service::LOGIN_ACTION_ENTERED === $action ) {
 				$errors->add( 'enter_recovery_mode', __( 'Recovery Mode Initialized. Please log in to continue.' ), 'message' );
-			} elseif ( isset( $_GET['redirect_to'] ) && false !== strpos( $_GET['redirect_to'], 'wp-admin/authorize-application.php' ) ) {
+			} elseif ( isset( $_GET['redirect_to'] ) && str_contains( $_GET['redirect_to'], 'wp-admin/authorize-application.php' ) ) {
 				$query_component = wp_parse_url( $_GET['redirect_to'], PHP_URL_QUERY );
 				$query           = array();
 				if ( $query_component ) {

@@ -331,6 +331,11 @@ function update_core( $from, $to ) {
 	$php_version       = PHP_VERSION;
 	$mysql_version     = $wpdb->db_version();
 	$old_wp_version    = $GLOBALS['wp_version']; // The version of WordPress we're updating from.
+	/*
+	 * Note: str_contains() is not used here, as this file is included
+	 * when updating from older WordPress versions, in which case
+	 * the polyfills from wp-includes/compat.php may not be available.
+	 */
 	$development_build = ( false !== strpos( $old_wp_version . $wp_version, '-' ) ); // A dash in the version indicates a development release.
 	$php_compat        = version_compare( $php_version, $required_php_version, '>=' );
 
@@ -435,6 +440,11 @@ function update_core( $from, $to ) {
 
 		if ( is_array( $checksums ) ) {
 			foreach ( $checksums as $file => $checksum ) {
+				/*
+				 * Note: str_starts_with() is not used here, as this file is included
+				 * when updating from older WordPress versions, in which case
+				 * the polyfills from wp-includes/compat.php may not be available.
+				 */
 				if ( 'wp-content' === substr( $file, 0, 10 ) ) {
 					continue;
 				}
@@ -542,6 +552,11 @@ function update_core( $from, $to ) {
 
 	if ( isset( $checksums ) && is_array( $checksums ) ) {
 		foreach ( $checksums as $file => $checksum ) {
+			/*
+			 * Note: str_starts_with() is not used here, as this file is included
+			 * when updating from older WordPress versions, in which case
+			 * the polyfills from wp-includes/compat.php may not be available.
+			 */
 			if ( 'wp-content' === substr( $file, 0, 10 ) ) {
 				continue;
 			}
@@ -602,7 +617,11 @@ function update_core( $from, $to ) {
 		} else {
 			$lang_dir = WP_CONTENT_DIR . '/languages';
 		}
-
+		/*
+		 * Note: str_starts_with() is not used here, as this file is included
+		 * when updating from older WordPress versions, in which case
+		 * the polyfills from wp-includes/compat.php may not be available.
+		 */
 		// Check if the language directory exists first.
 		if ( ! @is_dir( $lang_dir ) && 0 === strpos( $lang_dir, ABSPATH ) ) {
 			// If it's within the ABSPATH we can handle it here, otherwise they're out of luck.
@@ -754,6 +773,17 @@ function update_core( $from, $to ) {
 	} else {
 		delete_option( 'update_core' );
 	}
+
+	/*
+	 * `wp_opcache_invalidate()` only exists in WordPress 5.5 or later,
+	 * so don't run it when upgrading from older versions.
+	 */
+	if ( function_exists( 'wp_opcache_invalidate' ) ) {
+		wp_opcache_invalidate( ABSPATH . 'wp-admin/includes/translation-install.php' );
+	}
+	// Update installed language packs from API
+	require_once ABSPATH . 'wp-admin/includes/translation-install.php';
+	maybe_upgrade_translations();
 
 	/**
 	 * Fires after WordPress core has been successfully updated.
@@ -951,6 +981,11 @@ function _upgrade_422_find_genericons_files_in_folder( $directory ) {
 	$files     = array();
 
 	if ( file_exists( "{$directory}example.html" )
+		/*
+		 * Note: str_contains() is not used here, as this file is included
+		 * when updating from older WordPress versions, in which case
+		 * the polyfills from wp-includes/compat.php may not be available.
+		 */
 		&& false !== strpos( file_get_contents( "{$directory}example.html" ), '<title>Genericons</title>' )
 	) {
 		$files[] = "{$directory}example.html";
@@ -960,7 +995,13 @@ function _upgrade_422_find_genericons_files_in_folder( $directory ) {
 	$dirs = array_filter(
 		$dirs,
 		static function ( $dir ) {
-			// Skip any node_modules directories.
+			/*
+			 * Skip any node_modules directories.
+			 *
+			 * Note: str_contains() is not used here, as this file is included
+			 * when updating from older WordPress versions, in which case
+			 * the polyfills from wp-includes/compat.php may not be available.
+			 */
 			return false === strpos( $dir, 'node_modules' );
 		}
 	);

@@ -467,7 +467,7 @@ function get_attached_file( $attachment_id, $unfiltered = false ) {
 	$file = get_post_meta( $attachment_id, '_wp_attached_file', true );
 
 	// If the file is relative, prepend upload dir.
-	if ( $file && 0 !== strpos( $file, '/' ) && ! preg_match( '|^.:\\\|', $file ) ) {
+	if ( $file && ! str_starts_with( $file, '/' ) && ! preg_match( '|^.:\\\|', $file ) ) {
 		$uploads = wp_get_upload_dir();
 		if ( false === $uploads['error'] ) {
 			$file = $uploads['basedir'] . "/$file";
@@ -539,7 +539,7 @@ function _wp_relative_upload_path( $path ) {
 	$new_path = $path;
 
 	$uploads = wp_get_upload_dir();
-	if ( 0 === strpos( $new_path, $uploads['basedir'] ) ) {
+	if ( str_starts_with( $new_path, $uploads['basedir'] ) ) {
 			$new_path = str_replace( $uploads['basedir'], '', $new_path );
 			$new_path = ltrim( $new_path, '/' );
 	}
@@ -865,7 +865,10 @@ function get_post_mime_type( $post = null ) {
  * @return string|false Post status on success, false on failure.
  */
 function get_post_status( $post = null ) {
-	$post = get_post( $post );
+	// Normalize the post object if necessary, skip normalization if called from get_sample_permalink().
+	if ( ! $post instanceof WP_Post || ! isset( $post->filter ) || 'sample' !== $post->filter ) {
+		$post = get_post( $post );
+	}
 
 	if ( ! is_object( $post ) ) {
 		return false;
@@ -2503,7 +2506,7 @@ function sanitize_post_field( $field, $value, $post_id, $context = 'display' ) {
 	}
 
 	$prefixed = false;
-	if ( false !== strpos( $field, 'post_' ) ) {
+	if ( str_contains( $field, 'post_' ) ) {
 		$prefixed        = true;
 		$field_no_prefix = str_replace( 'post_', '', $field );
 	}
@@ -3002,7 +3005,7 @@ function wp_match_mime_types( $wildcard_mime_types, $real_mime_types ) {
 
 			$patternses[][ $type ] = "^$regex$";
 
-			if ( false === strpos( $mime, '/' ) ) {
+			if ( ! str_contains( $mime, '/' ) ) {
 				$patternses[][ $type ] = "^$regex/";
 				$patternses[][ $type ] = $regex;
 			}
@@ -3059,7 +3062,7 @@ function wp_post_mime_type_where( $post_mime_types, $table_alias = '' ) {
 			$mime_pattern = "$mime_group/$mime_subgroup";
 		} else {
 			$mime_pattern = preg_replace( '/[^-*.a-zA-Z0-9]/', '', $mime_type );
-			if ( false === strpos( $mime_pattern, '*' ) ) {
+			if ( ! str_contains( $mime_pattern, '*' ) ) {
 				$mime_pattern .= '/*';
 			}
 		}
@@ -3070,7 +3073,7 @@ function wp_post_mime_type_where( $post_mime_types, $table_alias = '' ) {
 			return '';
 		}
 
-		if ( false !== strpos( $mime_pattern, '%' ) ) {
+		if ( str_contains( $mime_pattern, '%' ) ) {
 			$wheres[] = empty( $table_alias ) ? "post_mime_type LIKE '$mime_pattern'" : "$table_alias.post_mime_type LIKE '$mime_pattern'";
 		} else {
 			$wheres[] = empty( $table_alias ) ? "post_mime_type = '$mime_pattern'" : "$table_alias.post_mime_type = '$mime_pattern'";
@@ -3195,6 +3198,20 @@ function wp_delete_post( $postid = 0, $force_delete = false ) {
 	/**
 	 * Fires immediately before a post is deleted from the database.
 	 *
+	 * The dynamic portion of the hook name, `$post->post_type`, refers to
+	 * the post type slug.
+	 *
+	 * @since 6.6.0
+	 * @since CP-2.1.0
+	 *
+	 * @param int     $postid Post ID.
+	 * @param WP_Post $post   Post object.
+	 */
+	do_action( "delete_post_{$post->post_type}", $postid, $post );
+
+	/**
+	 * Fires immediately before a post is deleted from the database.
+	 *
 	 * @since 1.2.0
 	 * @since 5.5.0 Added the `$post` parameter.
 	 *
@@ -3207,6 +3224,20 @@ function wp_delete_post( $postid = 0, $force_delete = false ) {
 	if ( ! $result ) {
 		return false;
 	}
+
+	/**
+	 * Fires immediately after a post is deleted from the database.
+	 *
+	 * The dynamic portion of the hook name, `$post->post_type`, refers to
+	 * the post type slug.
+	 *
+	 * @since 6.6.0
+	 * @since CP-2.1.0
+	 *
+	 * @param int     $postid Post ID.
+	 * @param WP_Post $post   Post object.
+	 */
+	do_action( "deleted_post_{$post->post_type}", $postid, $post );
 
 	/**
 	 * Fires immediately after a post is deleted from the database.
@@ -4182,7 +4213,27 @@ function wp_insert_post( $postarr, $wp_error = false, $fire_after_hooks = true )
 
 				return new WP_Error( 'db_update_error', $message, $wpdb->last_error );
 			} else {
-				return 0;
+				/**
+				 * Updates media taxonomies (if any).
+				 *
+				 * @since CP-2.1.0
+				 */
+				if ( 'attachment' === $post_type && ! empty( $postarr['tax_input'] ) ) {
+					foreach ( $postarr['tax_input'] as $taxonomy => $tags ) {
+						$taxonomy_obj = get_taxonomy( $taxonomy );
+
+						// array = hierarchical, string = non-hierarchical.
+						if ( is_array( $tags ) ) {
+							$tags = array_filter( $tags );
+						}
+
+						if ( current_user_can( $taxonomy_obj->cap->assign_terms ) ) {
+							wp_set_post_terms( $post_id, $tags, $taxonomy );
+						}
+					}
+				} else {
+					return 0;
+				}
 			}
 		}
 	} else {
@@ -5862,7 +5913,7 @@ function get_pages( $args = array() ) {
 				$orderby = "$wpdb->posts.comment_count";
 				break;
 			default:
-				if ( 0 === strpos( $orderby, 'post_' ) ) {
+				if ( str_starts_with( $orderby, 'post_' ) ) {
 					$orderby = "$wpdb->posts." . $orderby;
 				} else {
 					$orderby = "$wpdb->posts.post_" . $orderby;
@@ -5966,10 +6017,10 @@ function get_pages( $args = array() ) {
  * @return bool True on success, false on failure.
  */
 function is_local_attachment( $url ) {
-	if ( strpos( $url, home_url() ) === false ) {
+	if ( ! str_contains( $url, home_url() ) ) {
 		return false;
 	}
-	if ( strpos( $url, home_url( '/?attachment_id=' ) ) !== false ) {
+	if ( str_contains( $url, home_url( '/?attachment_id=' ) ) ) {
 		return true;
 	}
 
@@ -6349,10 +6400,10 @@ function wp_get_attachment_url( $attachment_id = 0 ) {
 		$uploads = wp_get_upload_dir();
 		if ( $uploads && false === $uploads['error'] ) {
 			// Check that the upload base exists in the file location.
-			if ( 0 === strpos( $file, $uploads['basedir'] ) ) {
+			if ( str_starts_with( $file, $uploads['basedir'] ) ) {
 				// Replace file location with url location.
 				$url = str_replace( $uploads['basedir'], $uploads['baseurl'], $file );
-			} elseif ( false !== strpos( $file, 'wp-content/uploads' ) ) {
+			} elseif ( str_contains( $file, 'wp-content/uploads' ) ) {
 				// Get the directory name relative to the basedir (back compat for pre-2.7 uploads).
 				$url = trailingslashit( $uploads['baseurl'] . '/' . _wp_get_attachment_relative_path( $file ) ) . wp_basename( $file );
 			} else {
@@ -6478,7 +6529,7 @@ function wp_attachment_is( $type, $post = null ) {
 		return false;
 	}
 
-	if ( 0 === strpos( $post->post_mime_type, $type . '/' ) ) {
+	if ( str_starts_with( $post->post_mime_type, $type . '/' ) ) {
 		return true;
 	}
 
@@ -6604,7 +6655,7 @@ function wp_mime_type_icon( $mime = 0 ) {
 				if ( $dh ) {
 					while ( false !== $file = readdir( $dh ) ) {
 						$file = wp_basename( $file );
-						if ( '.' === substr( $file, 0, 1 ) ) {
+						if ( str_starts_with( $file, '.' ) ) {
 							continue;
 						}
 
@@ -7678,7 +7729,7 @@ function wp_add_trashed_suffix_to_post_name_for_post( $post ) {
 
 	$post = get_post( $post );
 
-	if ( '__trashed' === substr( $post->post_name, -9 ) ) {
+	if ( str_ends_with( $post->post_name, '__trashed' ) ) {
 		return $post->post_name;
 	}
 	add_post_meta( $post->ID, '_wp_desired_post_slug', $post->post_name );

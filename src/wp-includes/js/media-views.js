@@ -4409,13 +4409,24 @@
 		/**
 		 * Gets all the tabbable elements.
 		 *
-		 * @since 5.3.0
+		 * @since CP-2.1.0
 		 *
-		 * @return {Object} A jQuery collection of tabbable elements.
+		 * @return {Array} A JavaScript array of tabbable elements.
 		 */
 		getTabbables: function() {
-			// Skip the file input added by Plupload.
-			return this.$( ':tabbable' ).not( '.moxie-shim input[type="file"]' );
+			var that = this,
+				newTabbables = [],
+				tabbables = [ ...this.$el[0].querySelectorAll( 'a[href], button, textarea, select, li[tabindex]' ) ];
+
+			tabbables.forEach( function( tabbable ) {
+				if ( tabbable.tagName === 'input' && tabbable.parentNode.className.includes( 'moxie-shim' ) && tabbable.type === 'file' ) {
+					return; // Skip the file input added by Plupload.
+				} else if ( ! that.isVisible( tabbable ) || tabbable.disabled ) {
+					return;
+				}
+				newTabbables.push( tabbable );
+			} );
+			return newTabbables;
 		},
 
 		/**
@@ -4426,15 +4437,15 @@
 		 * @return {void}
 		 */
 		focus: function() {
-			this.$( '.media-modal' ).trigger( 'focus' );
+			document.querySelector( '.media-modal' ).focus();
 		},
 
 		/**
 		 * Constrains navigation with the Tab key within the media view element.
 		 *
-		 * @since 4.0.0
+		 * @since CP-2.1.0
 		 *
-		 * @param {Object} event A keydown jQuery event.
+		 * @param {Object} event A keydown JavaScript event.
 		 *
 		 * @return {void}
 		 */
@@ -4442,19 +4453,19 @@
 			var tabbables;
 
 			// Look for the tab key.
-			if ( 9 !== event.keyCode ) {
+			if ( 'Tab' !== event.key ) {
 				return;
 			}
 
 			tabbables = this.getTabbables();
 
 			// Keep tab focus within media modal while it's open.
-			if ( tabbables.last()[0] === event.target && ! event.shiftKey ) {
-				tabbables.first().focus();
-				return false;
-			} else if ( tabbables.first()[0] === event.target && event.shiftKey ) {
-				tabbables.last().focus();
-				return false;
+			if ( tabbables.at(-1) === event.target && ! event.shiftKey ) {
+				event.preventDefault();
+				tabbables[0].focus();
+			} else if ( tabbables[0] === event.target && event.shiftKey ) {
+				event.preventDefault();
+				tabbables.at(-1).focus();
 			}
 		},
 
@@ -4712,7 +4723,20 @@
 				tab.removeAttribute( 'tabindex' );
 				tab.setAttribute( 'aria-selected', 'true' );
 			} );
-	 	}
+		},
+
+		/**
+		 * Whether an element is visible, copied from jQuery
+		 *
+		 * @since CP-2.1.0
+		 *
+		 * @param {Object} element The DOM element that should be checked for visibility.
+		 *
+		 * @return {boolean}
+		 */
+		isVisible: function( element ) {
+			return !!( element.offsetWidth || element.offsetHeight || element.getClientRects().length );
+		}
 	});
 
 	return FocusManager;

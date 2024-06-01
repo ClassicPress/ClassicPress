@@ -70,6 +70,8 @@ class Tests_Query_Vars extends WP_UnitTestCase {
 
 				// Dynamically added public query vars:
 				'post_format',
+				'media_category_name',
+				'media_tag',
 				'rest_route',
 				'sitemap',
 				'sitemap-subtype',

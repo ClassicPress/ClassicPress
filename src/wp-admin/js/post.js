@@ -4,7 +4,7 @@
  * @output wp-admin/js/post.js
  */
 
- /* global ajaxurl, wpAjax, postboxes, pagenow, tinymce, alert, deleteUserSetting, ClipboardJS */
+ /* global ajaxurl, wpAjax, tinymce, alert, deleteUserSetting, ClipboardJS */
  /* global theList:true, theExtraList:true, getUserSetting, setUserSetting, commentReply, commentsBox */
  /* global WPSetThumbnailHTML, wptitlehint */
 
@@ -316,8 +316,6 @@ jQuery( function($) {
 		copyAttachmentURLSuccessTimeout,
 		__ = wp.i18n.__, _x = wp.i18n._x;
 
-	postboxes.add_postbox_toggles(pagenow);
-
 	/*
 	 * Clear the window name. Otherwise if this is a former preview window where the user navigated to edit another post,
 	 * and the first post is still being edited, clicking Preview there will use this window to show the preview.
@@ -563,7 +561,7 @@ jQuery( function($) {
 	if ( $('#tagsdiv-post_tag').length ) {
 		window.tagBox && window.tagBox.init();
 	} else {
-		$('.meta-box-sortables').children('div.postbox').each(function(){
+		$('.meta-box-sortables').children('details.postbox').each(function(){
 			if ( this.id.indexOf('tagsdiv-') === 0 ) {
 				window.tagBox && window.tagBox.init();
 				return false;

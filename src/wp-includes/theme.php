@@ -457,7 +457,7 @@ function search_theme_directories( $force = false ) {
 	 * to use in get_theme_root().
 	 */
 	foreach ( $wp_theme_directories as $theme_root ) {
-		if ( 0 === strpos( $theme_root, WP_CONTENT_DIR ) ) {
+		if ( str_starts_with( $theme_root, WP_CONTENT_DIR ) ) {
 			$relative_theme_roots[ str_replace( WP_CONTENT_DIR, '', $theme_root ) ] = $theme_root;
 		} else {
 			$relative_theme_roots[ $theme_root ] = $theme_root;
@@ -634,11 +634,11 @@ function get_theme_root_uri( $stylesheet_or_template = '', $theme_root = '' ) {
 	if ( $stylesheet_or_template && $theme_root ) {
 		if ( in_array( $theme_root, (array) $wp_theme_directories, true ) ) {
 			// Absolute path. Make an educated guess. YMMV -- but note the filter below.
-			if ( 0 === strpos( $theme_root, WP_CONTENT_DIR ) ) {
+			if ( str_starts_with( $theme_root, WP_CONTENT_DIR ) ) {
 				$theme_root_uri = content_url( str_replace( WP_CONTENT_DIR, '', $theme_root ) );
-			} elseif ( 0 === strpos( $theme_root, ABSPATH ) ) {
+			} elseif ( str_starts_with( $theme_root, ABSPATH ) ) {
 				$theme_root_uri = site_url( str_replace( ABSPATH, '', $theme_root ) );
-			} elseif ( 0 === strpos( $theme_root, WP_PLUGIN_DIR ) || 0 === strpos( $theme_root, WPMU_PLUGIN_DIR ) ) {
+			} elseif ( str_starts_with( $theme_root, WP_PLUGIN_DIR ) || str_starts_with( $theme_root, WPMU_PLUGIN_DIR ) ) {
 				$theme_root_uri = plugins_url( basename( $theme_root ), $theme_root );
 			} else {
 				$theme_root_uri = $theme_root;
@@ -2607,10 +2607,10 @@ function add_theme_support( $feature, ...$args ) {
 
 		case 'html5':
 			// Since CP-2.0.0 HTLM5 has been expected as theme default
-			_doing_it_wrong(
+			_deprecated_argument(
 				"add_theme_support( 'html5' )",
-				__( 'HTML5 is the default ' ),
-				'CP-2.0.0'
+				'CP-2.0.0',
+				__( 'HTML5 is the default.' )
 			);
 
 			return true;

@@ -136,7 +136,7 @@ function check_comment( $author, $email, $url, $comment, $user_ip, $user_agent, 
 				$ok_to_comment = $wpdb->get_var( $wpdb->prepare( "SELECT comment_approved FROM $wpdb->comments WHERE comment_author = %s AND comment_author_email = %s and comment_approved = '1' LIMIT 1", $author, $email ) );
 			}
 			if ( ( 1 == $ok_to_comment ) &&
-				( empty( $mod_keys ) || false === strpos( $email, $mod_keys ) ) ) {
+				( empty( $mod_keys ) || ! str_contains( $email, $mod_keys ) ) ) {
 					return true;
 			} else {
 				return false;
@@ -563,9 +563,18 @@ function wp_set_comment_cookies( $comment, $user, $cookies_consent = true ) {
 
 	$secure = ( 'https' === parse_url( home_url(), PHP_URL_SCHEME ) );
 
-	setcookie( 'comment_author_' . COOKIEHASH, $comment->comment_author, $comment_cookie_lifetime, COOKIEPATH, COOKIE_DOMAIN, $secure );
-	setcookie( 'comment_author_email_' . COOKIEHASH, $comment->comment_author_email, $comment_cookie_lifetime, COOKIEPATH, COOKIE_DOMAIN, $secure );
-	setcookie( 'comment_author_url_' . COOKIEHASH, esc_url( $comment->comment_author_url ), $comment_cookie_lifetime, COOKIEPATH, COOKIE_DOMAIN, $secure );
+	$cookie_options = array(
+		'expires' => $comment_cookie_lifetime,
+		'path' => COOKIEPATH,
+		'domain' => COOKIE_DOMAIN,
+		'secure' => $secure,
+		'httponly' => true,
+		'samesite' => 'Strict',
+	);
+
+	setcookie( 'comment_author_' . COOKIEHASH, $comment->comment_author, $cookie_options );
+	setcookie( 'comment_author_email_' . COOKIEHASH, $comment->comment_author_email, $cookie_options );
+	setcookie( 'comment_author_url_' . COOKIEHASH, esc_url( $comment->comment_author_url ), $cookie_options );
 }
 
 /**
@@ -2806,7 +2815,7 @@ function discover_pingback_server_uri( $url, $deprecated = '' ) {
 
 	// Do not search for a pingback server on our own uploads.
 	$uploads_dir = wp_get_upload_dir();
-	if ( 0 === strpos( $url, $uploads_dir['baseurl'] ) ) {
+	if ( str_starts_with( $url, $uploads_dir['baseurl'] ) ) {
 		return false;
 	}
 

@@ -798,6 +798,20 @@ function wp_admin_bar_edit_menu( $wp_admin_bar ) {
 				);
 			}
 		}
+
+		/**
+		 * Displays a message to administrators when 'WP_DEBUG' is set to true.
+		 *
+		 * @since CP-2.1.0
+		 */
+		if ( current_user_can( 'manage_options' ) && defined( 'WP_DEBUG' ) && WP_DEBUG === true ) {
+			$wp_admin_bar->add_node(
+				array(
+					'id'     => 'cp-debugging',
+					'title'  => '<strong style="font-weight:700;">' . __( 'Debugging Enabled' ) . '</strong>',
+				)
+			);
+		}
 	} else {
 		$current_object = $wp_the_query->get_queried_object();
 
