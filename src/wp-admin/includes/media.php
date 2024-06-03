@@ -3841,9 +3841,9 @@ function bulk_edit_attachments( $attachment_data = null ) {
 		}
 
 		// Update attachment author.
-		if ( isset( $attachment_data[ 'post_author' ] ) ) {
+		if ( isset( $attachment_data['post_author'] ) ) {
 			$attachment = get_post( $attachment_id );
-			$attachment->post_author = $attachment_data[ 'post_author' ];
+			$attachment->post_author = $attachment_data['post_author'];
 			wp_update_post( $attachment );
 			update_post_meta( $attachment_id, '_edit_last', get_current_user_id() );
 			$update = true;
