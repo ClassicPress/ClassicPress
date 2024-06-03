@@ -646,6 +646,16 @@
 			<# } #>
 		</script>
 
+		<script type="text/html" id="tmpl-wp-media-widget-image-fields">
+			<# var elementIdPrefix = 'el' + String( Math.random() ) + '_'; #>
+			<# if ( data.url ) { #>
+			<p class="media-widget-image-link">
+				<label for="{{ elementIdPrefix }}linkUrl"><?php esc_html_e( 'Link to:' ); ?></label>
+				<input id="{{ elementIdPrefix }}linkUrl" type="text" class="widefat link" value="{{ data.link_url }}" placeholder="https://" pattern="((\w+:)?\/\/\w.*|\w+:(?!\/\/$)|\/|\?|#).*">
+			</p>
+			<# } #>
+		</script>
+
 		<script type="text/html" id="tmpl-widget-media-media_video-control">
 			<# var elementIdPrefix = 'el' + String( Math.random() ) + '_' #>
 			<p>
