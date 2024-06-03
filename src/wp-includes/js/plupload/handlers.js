@@ -30,8 +30,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		uploadCatSelect.addEventListener( 'change', function( e ) {
 			var div,
 				uploadCatFolder = new URLSearchParams( {
-					action: 'media_cat_upload',
-					_ajax_nonce: document.getElementById( '_wpnonce' ).value,
+					action: 'media-cat-upload',
 					option: 'media_cat_upload_folder',
 					new_value: e.target.value
 				} );
