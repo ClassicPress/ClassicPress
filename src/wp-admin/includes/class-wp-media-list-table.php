@@ -988,14 +988,14 @@ class WP_Media_List_Table extends WP_List_Table {
 
 							<?php
 							foreach ( $terms as $term ) {
-							?>
+								?>
 
 								<li id="category-<?php echo esc_attr( $term->term_id ); ?>" class="popular-category">
-									<input id="in-category-<?php echo esc_attr( $term->term_id ); ?>" type="checkbox" name="media_category[]" value="<?php echo esc_attr( $term->term_id ); ?>">
+									<input id="in-category-<?php echo esc_attr( $term->term_id ); ?>" type="checkbox" name="media_category[]" value="<?php echo esc_attr( $term->term_id ) ?>">
 									<label for="in-category-<?php echo esc_attr( $term->term_id ); ?>" class="selectit"><?php echo esc_html( $term->name ); ?></label>
 								</li>
 
-							<?php
+								<?php
 							}
 							?>
 
@@ -1024,11 +1024,11 @@ class WP_Media_List_Table extends WP_List_Table {
 
 									<?php
 									foreach ( $users as $user ) {
-									?>
+										?>
 
 									<option value="<?php echo esc_attr( $user->ID ); ?>"><?php echo esc_html( $user->display_name ); ?></option>
 
-									<?php
+										<?php
 									}
 									?>
 
@@ -1110,11 +1110,11 @@ class WP_Media_List_Table extends WP_List_Table {
 
 								<?php
 								foreach ( $users as $user ) {
-								?>
+									?>
 
 								<option value="<?php echo esc_attr( $user->ID ); ?>"><?php echo esc_html( $user->display_name ); ?></option>
 
-								<?php
+									<?php
 								}
 								?>
 
@@ -1129,14 +1129,14 @@ class WP_Media_List_Table extends WP_List_Table {
 
 							<?php
 							foreach ( $terms as $term ) {
-							?>
+								?>
 
 								<li id="category-<?php echo esc_attr( $term->term_id ); ?>" class="popular-category">
 									<input id="in-category-<?php echo esc_attr( $term->term_id ); ?>" type="checkbox" name="media_category[]" value="<?php echo esc_attr( $term->slug ); ?>">&nbsp;
 									<label for="in-category-<?php echo esc_attr( $term->term_id ); ?>" class="selectit"><?php echo esc_html( $term->name ); ?></label>
 								</li>
 
-							<?php
+								<?php
 							}
 							?>
 
