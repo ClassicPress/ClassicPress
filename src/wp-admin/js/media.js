@@ -339,7 +339,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			quickEdit.nextElementSibling.innerHTML = success.data;
 			wp.a11y.speak( wp.i18n.__( 'Changes saved.' ) );
 		} )
-		.catch( function( error ) {
+		.catch( function() {
 			var errorNotice = quickEdit.querySelector( '.inline-edit-save .notice-error' ),
 				error = errorNotice.querySelector( '.error' );
 
@@ -675,7 +675,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		 * @return {void}
 		 */
 		document.querySelectorAll( '.find-box-inside tr' ).forEach( function( row ) {
-			row.addEventListener( 'click', function( e ) {
+			row.addEventListener( 'click', function() {
 				row.querySelector( '.found-radio input' ).checked = true;
 			} );
 		} );
