@@ -19,10 +19,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function autoCompleteTextarea( textarea ) {
 		var currentSuggestionIndex = -1,
-			container = textarea.parentNode,
 			mirror = textarea.previousElementSibling,
 			suggestionsContainer = document.querySelector( '.container__suggestions' ),
-			suggestions = suggestions = document.getElementById( 'tags-list' ).value.split( ', ' );
+			suggestions = document.getElementById( 'tags-list' ).value.split( ', ' );
 
 		textarea.addEventListener( 'scroll', function() {
 			mirror.scrollTop = textarea.scrollTop;
@@ -276,12 +275,79 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				spinner.classList.remove( 'is-active' );
 				document.getElementById( 'find-posts-response' ).innerHTML = x.data;
 			} )
-			.catch( function( error ) {
+			.catch( function() {
 				spinner.classList.remove( 'is-active' );
 				document.getElementById( 'find-posts-response' ).textContent = wp.i18n.__( 'An error has occurred. Please reload the page and try again.' );
 			} );
 		}
 	};
+
+	/**
+	 * Saves the changes made in the quick edit window to the post.
+	 * Ajax saving is only for Quick Edit and not for bulk edit.
+	 *
+	 * @since CP-2.2.0
+	 *
+	 * @param {number} id The ID for the attachment that has been changed.
+	 * @return {boolean} False, so the form does not submit when pressing
+	 *                   Enter on a focused field.
+	 */
+	function saveAttachments( quickEdit, id ) {
+		var params, inputs,			
+			quickMonth     = quickEdit.querySelector( '#quick-month' ),
+			quickAuthor    = quickEdit.querySelector( '#quick-author' ),
+			quickMediaTags = quickEdit.querySelector( '#quick-media-tags' );
+
+		if ( typeof( id ) === 'object' ) {
+			id = this.getId( id );
+		}
+
+		params = new URLSearchParams( {
+			action: 'quick-edit-attachment',
+			post_type: 'attachment',
+			id: id,
+			edit_date: 'true'
+		} );
+
+		inputs = quickEdit.querySelectorAll( 'input' );
+		inputs.forEach( function( input ) {
+			if ( input.name === 'media_category[]' ) {
+				if ( input.checked ) {
+					params.append( input.name, input.value );
+				}
+			} else {
+				params.append( input.name, input.value );
+			}
+		} );
+
+		params.append( quickMonth.name, quickMonth.value );
+		params.append( quickAuthor.name, quickAuthor.value );
+		params.append( quickMediaTags.name, quickMediaTags.value );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: params,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( success ) {
+			quickEdit.nextElementSibling.innerHTML = success.data;
+			wp.a11y.speak( wp.i18n.__( 'Changes saved.' ) );
+		} )
+		.catch( function( error ) {
+			var errorNotice = quickEdit.querySelector( '.inline-edit-save .notice-error' ),
+				error = errorNotice.querySelector( '.error' );
+
+			errorNotice.classList.remove( 'hidden' );
+			error.textContent = wp.i18n.__( 'Error while saving the changes.' );
+			wp.a11y.speak( wp.i18n.__( 'Error while saving the changes.' ) );
+		} );
+	}
 
 	/**
 	 * Initializes the file once the DOM is fully loaded and attaches events to the
@@ -363,7 +429,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					optionValue = select.value,
 					number = 0,
 					count = 0,
-					columns = [ ...document.querySelector( '.widefat thead tr' ).children ];
+					columns = [ ...document.querySelector( '.widefat thead tr' ).children ],
+					selectAll1 = document.getElementById( 'cb-select-all-1' ),
+					selectAll2 = document.getElementById( 'cb-select-all-2' );
 
 				// If Bulk Actions is selected, reload the page without any query args.
 				if ( '-1' === optionValue ) {
@@ -430,7 +498,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						quickEdit.style.display = 'none';
 						document.body.append( quickEdit );
 
-					} else if ( number === 1 ) {
+					} else if ( number === 1 && ! selectAll1.checked && ! selectAll2.checked ) {
 
 						// Quick Edit: replace the row with the Quick Edit row.
 						document.getElementById( 'the-list' ).prepend( hiddenTr );
@@ -501,6 +569,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							}, 100 );
 						} );
 					} else {
+						document.querySelectorAll( 'tr' ).forEach( function( item ) {
+							if ( item.style.display === 'none' ) {
+								item.style.display = '';
+							}
+						} );
 
 						// Bulk Edit: insert the editor at the top of the table.
 						document.getElementById( 'the-list' ).prepend( bulkEdit );
@@ -601,8 +674,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		 *
 		 * @return {void}
 		 */
-		document.querySelectorAll( '.find-box-inside tr' ).forEach( function( row ) {console.log(row);
-			row.addEventListener( 'click', function( e ) { console.log(e.target.tagName);
+		document.querySelectorAll( '.find-box-inside tr' ).forEach( function( row ) {
+			row.addEventListener( 'click', function( e ) {
 				row.querySelector( '.found-radio input' ).checked = true;
 			} );
 		} );
@@ -647,73 +720,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				wp.a11y.speak( wp.i18n.__( 'The file URL has been copied to your clipboard' ) );
 			} );
 		} );
-
-		/**
-		 * Saves the changes made in the quick edit window to the post.
-		 * Ajax saving is only for Quick Edit and not for bulk edit.
-		 *
-		 * @since CP-2.2.0
-		 *
-		 * @param {number} id The ID for the attachment that has been changed.
-		 * @return {boolean} False, so the form does not submit when pressing
-		 *                   Enter on a focused field.
-		 */
-		function saveAttachments( quickEdit, id ) {
-			var params, inputs,			
-				quickMonth     = quickEdit.querySelector( '#quick-month' ),
-				quickAuthor    = quickEdit.querySelector( '#quick-author' ),
-				quickMediaTags = quickEdit.querySelector( '#quick-media-tags' );
-
-			if ( typeof( id ) === 'object' ) {
-				id = this.getId( id );
-			}
-
-			params = new URLSearchParams( {
-				action: 'quick-edit-attachment',
-				post_type: 'attachment',
-				id: id,
-				edit_date: 'true'
-			} );
-
-			inputs = quickEdit.querySelectorAll( 'input' );
-			inputs.forEach( function( input ) {
-				if ( input.name === 'media_category[]' ) {
-					if ( input.checked ) {
-						params.append( input.name, input.value );
-					}
-				} else {
-					params.append( input.name, input.value );
-				}
-			} );
-
-			params.append( quickMonth.name, quickMonth.value );
-			params.append( quickAuthor.name, quickAuthor.value );
-			params.append( quickMediaTags.name, quickMediaTags.value );
-
-			fetch( ajaxurl, {
-				method: 'POST',
-				body: params,
-				credentials: 'same-origin'
-			} )
-			.then( function( response ) {
-				if ( response.ok ) {
-					return response.json(); // no errors
-				}
-				throw new Error( response.status );
-			} )
-			.then( function( success ) {
-				quickEdit.nextElementSibling.innerHTML = success.data;
-				wp.a11y.speak( wp.i18n.__( 'Changes saved.' ) );
-			} )
-			.catch( function( error ) {console.log(error);
-				var errorNotice = quickEdit.querySelector( '.inline-edit-save .notice-error' ),
-					error = errorNotice.querySelector( '.error' );
-
-				errorNotice.classList.remove( 'hidden' );
-				error.textContent = wp.i18n.__( 'Error while saving the changes.' );
-				wp.a11y.speak( wp.i18n.__( 'Error while saving the changes.' ) );
-			} );
-		}
 	}
 
 } );
