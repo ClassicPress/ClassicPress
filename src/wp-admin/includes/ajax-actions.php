@@ -3328,7 +3328,7 @@ function wp_ajax_quick_edit_attachment() {
 		</strong>
 
 		<p class="filename">
-			<span class="screen-reader-text">' . esc_html__( 'File name: ') . '</span>' . esc_html( $attachment->post_title ) . '
+			<span class="screen-reader-text">' . esc_html__( 'File name: ' ) . '</span>' . esc_html( $attachment->post_title ) . '
 		</p>
 
 		<div class="row-actions">
