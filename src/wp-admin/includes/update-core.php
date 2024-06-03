@@ -774,6 +774,17 @@ function update_core( $from, $to ) {
 		delete_option( 'update_core' );
 	}
 
+	/*
+	 * `wp_opcache_invalidate()` only exists in WordPress 5.5 or later,
+	 * so don't run it when upgrading from older versions.
+	 */
+	if ( function_exists( 'wp_opcache_invalidate' ) ) {
+		wp_opcache_invalidate( ABSPATH . 'wp-admin/includes/translation-install.php' );
+	}
+	// Update installed language packs from API
+	require_once ABSPATH . 'wp-admin/includes/translation-install.php';
+	maybe_upgrade_translations();
+
 	/**
 	 * Fires after WordPress core has been successfully updated.
 	 *
