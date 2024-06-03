@@ -991,7 +991,7 @@ class WP_Media_List_Table extends WP_List_Table {
 							?>
 
 								<li id="category-<?php echo esc_attr( $term->term_id ); ?>" class="popular-category">
-									<input id="in-category-<?php echo esc_attr( $term->term_id ); ?>" type="checkbox" name="media_category[]" value="<?php echo $term->term_id; ?>">
+									<input id="in-category-<?php echo esc_attr( $term->term_id ); ?>" type="checkbox" name="media_category[]" value="<?php echo esc_attr( $term->term_id ); ?>">
 									<label for="in-category-<?php echo esc_attr( $term->term_id ); ?>" class="selectit"><?php echo esc_html( $term->name ); ?></label>
 								</li>
 
@@ -1132,7 +1132,7 @@ class WP_Media_List_Table extends WP_List_Table {
 							?>
 
 								<li id="category-<?php echo esc_attr( $term->term_id ); ?>" class="popular-category">
-									<input id="in-category-<?php echo esc_attr( $term->term_id ); ?>" type="checkbox" name="media_category[]" value="<?php echo $term->slug; ?>">&nbsp;
+									<input id="in-category-<?php echo esc_attr( $term->term_id ); ?>" type="checkbox" name="media_category[]" value="<?php echo esc_attr( $term->slug ); ?>">&nbsp;
 									<label for="in-category-<?php echo esc_attr( $term->term_id ); ?>" class="selectit"><?php echo esc_html( $term->name ); ?></label>
 								</li>
 
