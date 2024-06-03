@@ -293,7 +293,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 *                   Enter on a focused field.
 	 */
 	function saveAttachments( quickEdit, id ) {
-		var params, inputs,			
+		var params, inputs,
 			quickMonth     = quickEdit.querySelector( '#quick-month' ),
 			quickAuthor    = quickEdit.querySelector( '#quick-author' ),
 			quickMediaTags = quickEdit.querySelector( '#quick-media-tags' );
@@ -438,7 +438,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					event.preventDefault();
 					location.href = location.pathname;
 
-				// Otherwise apply the appropriate values.	
+				// Otherwise apply the appropriate values.
 				} else if ( 'attach' === optionValue ) {
 					event.preventDefault();
 					findPosts.open();
@@ -588,7 +588,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						autoCompleteTextarea( bulkEdit.querySelector( 'textarea' ) );
 
 						// Populate the list of items to bulk edit.
-						document.getElementById( 'bulk-titles' ).innerHTML = '<ul id="bulk-titles-list" role="list">' + te + '</ul>' ;
+						document.getElementById( 'bulk-titles' ).innerHTML = '<ul id="bulk-titles-list" role="list">' + te + '</ul>';
 
 						// Scroll to Bulk Edit.
 						bulkEdit.scrollIntoView( {
