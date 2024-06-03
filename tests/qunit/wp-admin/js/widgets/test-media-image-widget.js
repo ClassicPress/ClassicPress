@@ -3,7 +3,7 @@
 /* eslint-env qunit */
 /* eslint-disable no-magic-numbers */
 
-( function() {
+( function( setTimeout ) {
 	'use strict';
 
 	QUnit.module( 'Image Media Widget' );
@@ -84,6 +84,8 @@
 		var imageWidgetControlInstance, imageWidgetModelInstance, done;
 		done = assert.async();
 
+		assert.expect( 2 );
+
 		imageWidgetModelInstance = new wp.mediaWidgets.modelConstructors.media_image();
 		imageWidgetControlInstance = new wp.mediaWidgets.controlConstructors.media_image({
 			el: document.createElement( 'div' ),
@@ -99,7 +101,7 @@
 			done();
 		}, 50 );
 
-		done();
+		this.clock.tick( 51 );
 	});
 
 	QUnit.test( 'image media model', function( assert ) {
@@ -114,4 +116,4 @@
 		});
 	});
 
-})();
+})( window.setTimeout );

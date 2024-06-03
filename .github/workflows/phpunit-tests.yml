@@ -33,14 +33,14 @@ jobs:
   # - Clone PHP.net if needed for unit tests.
   # - Run PHPUnit Tests.
   test-php:
-    name: "PHP ${{ matrix.php }}${{ matrix.memcached && ' with memcached' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
+    name: "PHP ${{ matrix.php }} on MySQL ${{matrix.mysql}}${{ matrix.memcached && ' with memcached' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
     strategy:
       fail-fast: false
       matrix:
         php: [ '8.3', '8.2', '8.1', '8.0', '7.4' ]
-        mysql: [ '5.7' ]
+        mysql: [ '5.7', '8.0' ]
         memcached: [ false ]
         experimental: [ false ]
         include:
@@ -54,6 +54,18 @@ jobs:
             experimental: false
           - php: '8.3'
             mysql: '5.7'
+            memcached: true
+            experimental: false
+          - php: '8.0'
+            mysql: '8.0'
+            memcached: true
+            experimental: false
+          - php: '8.2'
+            mysql: '8.0'
+            memcached: true
+            experimental: false
+          - php: '8.3'
+            mysql: '8.0'
             memcached: true
             experimental: false
 
