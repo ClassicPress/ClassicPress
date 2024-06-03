@@ -3827,7 +3827,7 @@ function bulk_edit_attachments( $attachment_data = null ) {
 
 	$attachment_ids = array_map( 'absint', (array) $attachment_data['media'] );
 
-	foreach( $attachment_ids as $attachment_id ) {
+	foreach ( $attachment_ids as $attachment_id ) {
 		$update = false;
 
 		if ( is_wp_error( $attachment_id ) ) {
@@ -3842,7 +3842,7 @@ function bulk_edit_attachments( $attachment_data = null ) {
 
 		// Update attachment author.
 		if ( isset( $attachment_data[ 'post_author' ] ) ) {
-			$attachment = get_post( $attachment_id ); 
+			$attachment = get_post( $attachment_id );
 			$attachment->post_author = $attachment_data[ 'post_author' ];
 			wp_update_post( $attachment );
 			update_post_meta( $attachment_id, '_edit_last', get_current_user_id() );
@@ -3855,7 +3855,7 @@ function bulk_edit_attachments( $attachment_data = null ) {
 			wp_set_object_terms( $attachment_id, $media_cats, 'media_category', true );
 			$update = true;
 		}
-	
+
 		// Append additional media post tags (if any).
 		if ( ! empty( $attachment_data['media_post_tag'] ) ) {
 			$media_post_tags = explode( ',', trim( $attachment_data['media_post_tag'], " \n\t\r\0\x0B," ) );
