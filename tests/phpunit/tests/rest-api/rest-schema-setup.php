@@ -622,6 +622,8 @@ class WP_Test_REST_Schema_Initialization extends WP_Test_REST_TestCase {
 		'MediaCollection.0._links.collection.0.href'       => 'http://example.org/index.php?rest_route=/wp/v2/media',
 		'MediaCollection.0._links.about.0.href'            => 'http://example.org/index.php?rest_route=/wp/v2/types/attachment',
 		'MediaCollection.0._links.replies.0.href'          => 'http://example.org/index.php?rest_route=%2Fwp%2Fv2%2Fcomments&post=10',
+		'MediaCollection.0._links.wp:term.0.href'          => 'http://example.org/index.php?rest_route=%2Fwp%2Fv2%2Fmedia_categories&post=10',
+		'MediaCollection.0._links.wp:term.1.href'          => 'http://example.org/index.php?rest_route=%2Fwp%2Fv2%2Fmedia_tags&post=10',
 		'MediaModel.id'                                    => 10,
 		'MediaModel.guid.rendered'                         => 'http://example.org/?attachment_id=10',
 		'MediaModel.link'                                  => 'http://example.org/?attachment_id=10',
