@@ -3213,6 +3213,179 @@ function wp_ajax_save_attachment_order() {
 }
 
 /**
+ * Ajax handler for updating attachment values and attributes.
+ *
+ * @since CP-2.2.0
+ */
+function wp_ajax_quick_edit_attachment() {
+	if ( ! isset( $_POST['id'] ) || 'attachment' !== $_POST['post_type'] ) {
+		wp_send_json_error();
+	}
+
+	$id = absint( $_POST['id'] );
+	if ( ! $id ) {
+		wp_send_json_error();
+	}
+
+	check_ajax_referer( 'quickeditattachment', '_inline_edit_attachment' );
+
+	if ( ! current_user_can( 'edit_post', $id ) ) {
+		wp_send_json_error();
+	}
+
+	$attachment = get_post( $id );
+
+	if ( 'attachment' !== $attachment->post_type ) {
+		wp_send_json_error();
+	}
+
+	if ( isset( $_POST['post_title'] ) ) {
+		$attachment->post_title = wp_unslash( sanitize_text_field( $_POST['post_title'] ) );
+	}
+
+	if ( isset( $_POST['post_excerpt'] ) ) {
+		$attachment->post_excerpt = wp_unslash( wp_kses_post( $_POST['post_excerpt'] ) );
+	}
+
+	if ( isset( $_POST['post_content'] ) ) {
+		$attachment->post_content = wp_unslash( wp_kses_post( $_POST['post_content'] ) );
+	}
+
+	if ( isset( $_POST['post_author'] ) && is_numeric( wp_unslash( $_POST['post_author'] ) ) ) {
+		$attachment->post_author = wp_unslash( $_POST['post_author'] );
+		$author = get_user_by( 'ID', $attachment->post_author );
+	}
+
+	if ( isset( $_POST['aa'] ) && isset( $_POST['mm'] ) && isset( $_POST['jj'] ) ) {
+		$year  = str_pad( absint( $_POST['aa'] ), 4, '0', STR_PAD_RIGHT );
+		$month = str_pad( absint( $_POST['mm'] ), 2, '0', STR_PAD_LEFT );
+		$day   = str_pad( absint( $_POST['jj'] ), 2, '0', STR_PAD_LEFT );
+		$date  = $year . '/' . $month . '/' . $day;
+
+		$current_date  = get_the_date( 'date_format', $attachment );
+		$exploded_date = explode( ' ', $current_date );
+		$new_date      = $year . '-' . $month . '-' . $day;
+		if ( $new_date !== $exploded_date[3] . '-' . $exploded_date[2] . '-' . $exploded_date[1] ) {
+			$attachment->post_date = $new_date . ' 00:00:00';
+		}
+	}
+
+	// Update attachment object.
+	wp_update_post( $attachment );
+
+	// Update taxonomies and meta.
+	if ( empty( $_POST['media_category'] ) ) {
+		wp_set_object_terms( $id, array(), 'media_category' );
+	} else {
+		$media_cat_ids = wp_set_object_terms( $id, $_POST['media_category'], 'media_category' );
+	}
+
+	if ( empty( $_POST['media_post_tag'] ) ) {
+		wp_set_object_terms( $id, array(), 'media_post_tag' );
+	} else {
+		$media_post_tags = explode( ',', sanitize_text_field( $_POST['media_post_tag'] ) );
+		wp_set_object_terms( $id, $media_post_tags, 'media_post_tag' );
+	}
+
+	if ( isset( $_POST['alt'] ) ) {
+		$alt = wp_unslash( $_POST['alt'] );
+		if ( get_post_meta( $id, '_wp_attachment_image_alt', true ) !== $alt ) {
+			$alt = wp_strip_all_tags( $alt, true );
+			update_post_meta( $id, '_wp_attachment_image_alt', wp_slash( $alt ) );
+		}
+	}
+
+	// Prepare HTML for sending back to JavaScript handler. First include nonce.
+	$nonce = wp_create_nonce( 'attachment-nonce' );
+
+	// Include functions to identify where the media file is used or attached.
+	require_once ABSPATH . 'wp-admin/includes/class-wp-media-list-table.php';
+	$list_table = new WP_Media_List_Table();
+	$thumbnails = $list_table->column_thumbnail( $attachment );
+	$used_in    = $list_table->column_used_in( $attachment );
+	$media_cats = $list_table->column_default( $attachment, 'taxonomy-media_category' );
+	$media_tags = $list_table->column_default( $attachment, 'taxonomy-media_post_tag' );
+
+	/**
+	 * Output buffer is used here because the function prints directly
+	 * to the page, whereas we need to return in order to send as JSON.
+	 */
+	ob_start();
+	$list_table->column_parent( $attachment );
+	$attached_to = ob_get_clean();
+
+	$new_tr = '<th scope="row" class="check-column">
+		<label class="screen-reader-text" for="cb-select-' . $id . '">' . esc_html__( 'Select ' ) . esc_html( $attachment->post_title ) . '</label>
+		<input type="checkbox" name="media[]" id="cb-select-' . $id . '" value="' . $id . '">
+	</th>
+	<td class="title column-title has-row-actions column-primary" data-colname="' . esc_html__( 'File' ) . '">
+		<strong class="has-media-icon">
+			<a href="' . esc_url( home_url( '/wp-admin/post.php?post=' . $id . '&amp;action=edit' ) ) . '" aria-label="' . esc_attr__( '“' ) . esc_attr( $attachment->post_title ) . esc_attr__( '” (Edit)' ) . '">
+				<span class="media-icon image-icon">
+					<img width="60" height="60" src="' . esc_url( wp_get_attachment_image_src( $id )[0] ) . '" class="attachment-60x60 size-60x60" alt="" decoding="async" loading="lazy">
+				</span>' . esc_html( $attachment->post_title ) . '
+			</a>
+		</strong>
+
+		<p class="filename">
+			<span class="screen-reader-text">' . esc_html__( 'File name: ') . '</span>' . esc_html( $attachment->post_title ) . '
+		</p>
+
+		<div class="row-actions">
+			<span class="edit"><a href="' . esc_url( home_url( '/wp-admin/post.php?post=' . $id . '&amp;action=edit' ) ) . '" aria-label="Edit “' . esc_attr( $attachment->post_title ) . '”">' . esc_html__( 'Edit' ) . '</a> | </span>
+
+			<span class="delete"><a href="post.php?action=delete&amp;post=' . $id . '&amp;_wpnonce=' . esc_attr( $nonce ) . '" class="submitdelete aria-button-if-js" onclick="return showNotice.warn();" aria-label="' . esc_attr__( 'Delete “' ) . esc_attr( $attachment->post_title ) . esc_attr__( '” permanently' ) . '" role="button">' . esc_html__( 'Delete Permanently' ) . '</a> | </span>
+
+			<span class="view"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( 'View “' ) . esc_attr( $attachment->post_title ) . esc_attr__( '”' ) . '" rel="bookmark">' . esc_html__( 'View' ) . '</a> | </span>
+
+			<span class="copy">
+				<span class="copy-to-clipboard-container">
+					<button type="button" class="button-link copy-attachment-url media-library" data-clipboard-text="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( 'Copy “' ) . esc_attr( $attachment->post_title ) . esc_attr__( '” URL to clipboard' ) . '">' . esc_html__( 'Copy URL' ) . '</button>
+					<span class="success hidden" aria-hidden="true">' . esc_html__( 'Copied!' ) . '</span>
+				</span> | 
+			</span>
+
+			<span class="download"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( 'Download “' ) . esc_attr( $attachment->post_title ) . esc_attr__( '”' ) . '" download="">' . esc_html__( 'Download file' ) . '</a></span>
+		</div>
+		<button type="button" class="toggle-row">
+			<span class="screen-reader-text">' . esc_html__( 'Show more details' ) . '</span>
+		</button>
+	</td>
+
+	<td class="author column-author" data-colname="' . esc_attr__( 'Author' ) . '">
+		<a href="upload.php?author=' . absint( $attachment->post_author ) . '">' . esc_html( $author->display_name ) . '</a>
+	</td>
+
+	<td class="taxonomy-media_category column-taxonomy-media_category" data-colname="' . esc_attr__( 'Media Categories' ) . '">' . $media_cats . '</td>
+
+	<td class="taxonomy-media_post_tag column-taxonomy-media_post_tag" data-colname="' . esc_attr__( 'Media Tags' ) . '">' . $media_tags . '</td>
+							
+	<td class="thumbnail column-thumbnail" data-colname="' . esc_attr__( 'Featured Image' ) . '">' . $thumbnails . '</td>
+
+	<td class="used_in column-used_in" data-colname="' . esc_attr__( 'Used In' ) . '">' . $used_in . '</td>
+
+	<td class="parent column-parent" data-colname="' . esc_attr__( 'Uploaded to' ) . '">' . $attached_to . '</td>
+
+	<td class="comments column-comments hidden" data-colname="' . esc_attr__( 'Comments' ) . '">
+		<div class="post-com-count-wrapper">
+			<span aria-hidden="true">—</span>
+			<span class="screen-reader-text">' . esc_html__( 'No comments' ) . '</span>
+			<span class="post-com-count post-com-count-pending post-com-count-no-pending">
+				<span class="comment-count comment-count-no-pending" aria-hidden="true">0</span>
+				<span class="screen-reader-text">No comments</span>
+			</span>
+		</div>
+	</td>
+						
+	<td class="alt column-alt" data-colname="' . esc_attr__( 'Alt Text' ) . '">' . esc_html( $alt ) . '</td>
+	<td class="caption column-caption" data-colname="' . esc_attr__( 'Caption' ) . '">' . esc_html( $attachment->post_excerpt ) . '</td>
+	<td class="desc column-desc" data-colname="' . esc_attr__( 'Description' ) . '">' . esc_html( $attachment->post_content ) . '</td>
+	<td class="date column-date" data-colname="' . esc_attr__( 'Date' ) . '">' . esc_html( $date ) . '</td>';
+
+	wp_send_json_success( $new_tr );
+}
+
+/**
  * Ajax handler for sending an attachment to the editor.
  *
  * Generates the HTML to send an attachment to the editor.
