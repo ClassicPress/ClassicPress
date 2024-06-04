@@ -558,7 +558,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						document.getElementById( 'quick-edit-update' ).addEventListener( 'click', function() {
 							var id = tr.id.replace( 'post-', '' );
 							saveAttachments( quickEdit, id );
-							select.value = '-1';
+							document.getElementById( 'bulk-action-selector-top' ).value = '-1';
 							document.getElementById( 'bulk-action-selector-bottom' ).value = '-1';
 
 							// Allow time for element to be updated.
@@ -646,7 +646,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							hiddenTr.remove();
 						}
 						tr.style.display = '';
-						select.value = '-1';
+						document.getElementById( 'bulk-action-selector-top' ).value = '-1';
 						document.getElementById( 'bulk-action-selector-bottom' ).value = '-1';
 						bulkEdit.style.display = 'none';
 						document.body.append( bulkEdit );
