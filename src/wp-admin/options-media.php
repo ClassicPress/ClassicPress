@@ -47,7 +47,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 /**
  * Get upload organization preference.
  *
- * @since CP-2.1.0
+ * @since CP-2.2.0
  *
  * New options based on year and media category added.
  */
