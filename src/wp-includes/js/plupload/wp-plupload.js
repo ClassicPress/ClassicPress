@@ -267,112 +267,31 @@ window.wp = window.wp || {};
 		 * @param {plupload.Uploader} uploader Uploader instance.
 		 */
 		this.uploader.bind( 'init', function( uploader ) {
-			var timer, active, dragdrop, observer, mediaCatObserver, uploadCatSelect, thatUploader, initialized,
-				dropzone = self.dropzone;
+			var timer, active, dragdrop, thatUploader, uploadCatSelect,
+				uploadCatValue, plUploader, modalWidth, menuWidth,
+				containerWidth, centerPoint, labelWidth, selectWidth,
+				dropzone = self.dropzone,
+				dropdown = document.getElementById( 'upload-media-cat-dropdown' );
 
 			dragdrop = self.supports.dragdrop = uploader.features.dragdrop && ! Uploader.browser.mobile;
 
-			// Don't load uploader when re-ordering gallery items or audio or video playlists
-			observer = new MutationObserver( function() {
-				if ( document.getElementById( 'menu-item-gallery-edit' ) || document.getElementById( 'menu-item-playlist-edit' ) || document.getElementById( 'menu-item-video-playlist-edit' ) ) {
-					observer.disconnect();
-					return dropzone.unbind( '.wp-uploader' );
-				}
-			} );
-			observer.observe( document, { attributes: false, childList: true, subtree: true } );
+			// Position the media category dropdown.
+			if ( dropdown != null ) {
+				modalWidth = document.querySelector( '.media-modal-content' ).getBoundingClientRect().width;
+				menuWidth = document.querySelector( '.media-frame-menu' ).getBoundingClientRect().width;
+				containerWidth = modalWidth - menuWidth;
+				centerPoint = containerWidth / 2 + menuWidth;
 
-			// Don't load uploader when re-ordering gallery items or audio or video playlists
-			mediaCatObserver = new MutationObserver( function() {
-				var nonce, uploadCatSelect,
-					thatUploader = this.uploader,
-					initialized = false;
+				labelWidth = dropdown.querySelector( 'label' ).getBoundingClientRect().width;
+				dropdown.querySelector( 'label' ).style.marginLeft = centerPoint - ( labelWidth / 2 ) + 'px';
+				dropdown.querySelector( 'label' ).style.position = 'relative';
+				dropdown.querySelector( 'label' ).style.zIndex = '9999';
 
-				if ( document.querySelector( '.upload-ui' ) ) {
-					initialized = document.querySelector( '.upload-ui' ).dataset.initialized;
-					uploadCatSelect = document.getElementById( 'upload-category' );
-
-					if ( document.body.className.includes( 'widgets-php' ) ) {
-						nonce = document.getElementById( '_wpnonce_widgets' ).value;
-					} else {					
-						nonce = document.getElementById( '_wpnonce' ).value;
-					}
-
-					if ( uploadCatSelect.length ) {
-						fetch( ajaxurl + '?action=media_cat_upload', {
-							method: 'GET',
-							credentials: 'same-origin',
-							headers: {
-								'Content-Type': 'application/json',
-								'X-WP-Nonce': nonce
-							}
-						} )
-						.then( function( response ) {
-							if ( response.ok ) {
-								return response.json(); // no errors
-							}
-							throw new Error( response.status );
-						} )
-						.then( function( response ) {
-							var allOptions = uploadCatSelect.querySelectorAll( 'option' );
-							if ( response.success ) {
-								if ( uploadCatSelect.querySelector( 'option[selected]' ) != null ) {
-									uploadCatSelect.querySelector( 'option[selected]' ).removeAttribute( 'selected' );
-								}
-								uploadCatSelect.value = response.data.replace( '/', '' );
-								for ( i = 0, n = allOptions.length; i < n; i++ ) {
-									if ( allOptions[i].value === uploadCatSelect.value ) {
-										allOptions[i].setAttribute( 'selected', true );
-									}
-								}
-							}
-						} )
-						.catch( function( error ) {
-							console.log( error );
-						} );
-					
-						uploadCatSelect.addEventListener( 'input', function( e ) {
-							uploadCatFolder = new URLSearchParams( {
-								action: 'media_cat_upload',
-								_ajax_nonce: nonce,
-								option: 'media_cat_upload_folder',
-								new_value: e.target.value
-							} );
-
-							// Update upload category.
-							fetch( ajaxurl, {
-								method: 'POST',
-								body: uploadCatFolder,
-								credentials: 'same-origin'
-							} )
-							.then( function( response ) {
-								if ( response.ok ) {
-									return response.json(); // no errors
-								}
-								throw new Error( response.status );
-							} )
-							.then( function( response ) {
-								if ( response.success ) {
-
-									// Enable uploads.
-									if ( initialized === false ) {
-										thatUploader.init();
-										initialized = true;
-									}
-								}
-							} )
-							.catch( function( error ) {
-								console.log( error );
-							} );
-						} );
-					}
-				}
-
-				// Clear file selection if not inserted into post, page, or widget.
-				document.getElementById( 'menu-item-upload' ).addEventListener( 'click', function() {
-					document.querySelector( '.clear-selection' ).click();
-				} );
-			} );
-			mediaCatObserver.observe( document, { attributes: false, childList: true, subtree: true } );
+				selectWidth = dropdown.querySelector( 'select' ).getBoundingClientRect().width;
+				dropdown.querySelector( 'select' ).style.marginLeft = centerPoint - ( selectWidth / 2 ) + 'px';
+				dropdown.querySelector( 'select' ).style.position = 'relative';
+				dropdown.querySelector( 'select' ).style.zIndex = '9999';
+			}
 
 			// Generate drag/drop helper classes.
 			if ( ! dropzone ) {
@@ -423,69 +342,55 @@ window.wp = window.wp || {};
 		});
 
 		/**
-		 * Choose media category upload folder if media uploads are organized by media category.
+		 * Choose media category upload folder if media uploads are
+		 * organized by media category.
 		 *
-		 * @since CP-2.1.0
+		 * If so organized, ensure that nothing can be uploaded if the
+		 * media upload category has not been set.
+		 *
+		 * @since CP-2.2.0
 		 */
-		// Ensure that nothing can be uploaded if the media upload category has not been set.
 		thatUploader = this.uploader;
 		uploadCatSelect = document.getElementById( 'upload-category' );
+		plUploader = document.querySelector( '.uploader-inline' );
 
 		if ( uploadCatSelect == null ) {
-
-			// Initialize uploader when not organizing media by category folder.
 			thatUploader.init();
 		} else {
 			uploadCatValue = uploadCatSelect.value;
-			initialized = document.querySelector( '.upload-ui' ).dataset.initialized;
 
-			if ( uploadCatValue == '' ) {
+			if ( uploadCatSelect.value == '' ) {
+				if ( plUploader ) {
+					plUploader.setAttribute( 'inert', true );
+				}
 
-				// Prevent uploading file into browser window
+				// Prevent uploading file into browser window.
 				window.addEventListener( 'dragover', function( e ) {
 					e.preventDefault();
 				}, false );
 				window.addEventListener( 'drop', function( e ) {
 					e.preventDefault();
 				}, false );
-
-				// Add data attribute to uploader field.
-				initialized = false;
 			} else {
-
 				// Enable uploads.
 				thatUploader.init();
-				initialized = true;
 			}
 
 			// Set up variables when a change of upload category is made.
-			uploadCatSelect.addEventListener( 'input', function( e ) {
-				var nonce, uploadCatFolder, cloned;
+			uploadCatSelect.addEventListener( 'change', function( e ) {
+				var div,
+					uploadCatFolder = new URLSearchParams( {
+						action: 'media-cat-upload',
+						option: 'media_cat_upload_folder',
+						new_value: e.target.value
+					} );
 
 				// Prevent removal of upload media category.
 				if ( e.target.value == '' ) {
 					uploadCatSelect.value = uploadCatValue;
 				} else {
-
-					// Update default value.
+					// Update fallback upload media category in case it's reset to ''.
 					uploadCatValue = e.target.value;
-					if ( uploadCatSelect.querySelector( 'option[selected]' ) != null ) {
-						uploadCatSelect.querySelector( 'option[selected]' ).removeAttribute( 'selected' );
-					}
-					uploadCatSelect[uploadCatSelect.selectedIndex].setAttribute( 'selected', true );
-
-					if ( document.body.className.includes( 'widgets-php' ) ) {
-						nonce = document.getElementById( '_wpnonce_widgets' ).value;
-					} else {					
-						nonce = document.getElementById( '_wpnonce' ).value;
-					}
-
-					uploadCatFolder = new URLSearchParams( {
-						action: 'media_cat_upload',
-						_ajax_nonce: nonce,
-						option: 'media_cat_upload_folder',
-						new_value: e.target.value
-					} );
 
 					// Update upload category.
 					fetch( ajaxurl, {
@@ -501,16 +406,68 @@ window.wp = window.wp || {};
 					} )
 					.then( function( response ) {
 						if ( response.success ) {
+							if ( document.getElementById( 'message' ) != null ) {
+								document.getElementById( 'message' ).remove();
+							}
+							if ( response.data == '' ) {
+								div = document.createElement( 'div' );
+								div.id = 'message';
+								div.className = 'notice notice-error is-dismissible';
+								div.innerHTML = '<p>' + response.success + '</p><button class="notice-dismiss" type="button"></button>';
+								document.querySelector( '.wrap h1' ).after( div );
 
-							// Enable uploads.
-							if ( initialized === false ) {
+								// Disable uploads.
+								if ( plUploader != null ) {
+									plUploader.setAttribute( 'inert', true );
+								}
+								thatUploader.destroy();
+
+								// Prevent uploading file into browser window.
+								window.addEventListener( 'dragover', function( e ) {
+									e.preventDefault();
+								}, false );
+								window.addEventListener( 'drop', function( e ) {
+									e.preventDefault();
+								}, false );
+
+								// Make error notice dismissible.
+								document.querySelector( '.notice-dismiss' ).addEventListener( 'click', function() {
+									document.getElementById( 'message' ).remove();
+								} );
+							} else {
+								div = document.createElement( 'div' );
+								div.id = 'message';
+								div.className = 'updated notice notice-success is-dismissible';
+								div.innerHTML = '<p>' + response.success + '</p><button class="notice-dismiss" type="button"></button>';
+								document.querySelector( '.wrap h1' ).after( div );
+
+								// Enable uploads.
+								if ( plUploader != null ) {
+									plUploader.removeAttribute( 'inert' );
+								}
 								thatUploader.init();
-								initialized = true;
+
+								// Make success notice dismissible.
+								document.querySelector( '.notice-dismiss' ).addEventListener( 'click', function() {
+									document.getElementById( 'message' ).remove();
+								} );
 							}
 						}
 					} )
 					.catch( function( error ) {
-						console.log( error );
+						if ( document.getElementById( 'message' ) != null ) {
+							document.getElementById( 'message' ).remove();
+						}
+						div = document.createElement( 'div' );
+						div.id = 'message';
+						div.className = 'notice notice-error is-dismissible';
+						div.innerHTML = '<p>' + error + '</p><button class="notice-dismiss" type="button"></button>';
+						document.querySelector( '.wrap h1' ).after( div );
+
+						// Make error notice dismissible.
+						document.querySelector( '.notice-dismiss' ).addEventListener( 'click', function() {
+							document.getElementById( 'message' ).remove();
+						} );
 					} );
 				}
 			} );
