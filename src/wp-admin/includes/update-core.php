@@ -198,8 +198,7 @@ global $_new_bundled_files;
 
 $_new_bundled_files = array(
 	'themes/twentyseventeen/'              => '4.7',
-	'themes/classicpress-twentyseventeen/' => '4.9',
-	'themes/the-classicpress-theme/'       => '6.2',
+	'themes/the-classicpress-theme/'       => '6.2.6',
 );
 
 /**
