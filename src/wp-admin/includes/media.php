@@ -432,7 +432,7 @@ function media_handle_upload( $file_id, $post_id, $post_data = array(), $overrid
 		/**
 		 * If media storage is by media category, set the appropriate category for the attachment.
 		 *
-		 * @since CP-2.1.0
+		 * @since CP-2.2.0
 		 */
 		$storefolders = get_option( 'uploads_use_yearmonth_folders' );
 		if ( $storefolders === '3' ) {
@@ -527,7 +527,7 @@ function media_handle_sideload( $file_array, $post_id = 0, $desc = null, $post_d
 		/**
 		 * If media storage is by media category, set the appropriate category for the attachment.
 		 *
-		 * @since CP-2.1.0
+		 * @since CP-2.2.0
 		 */
 		$storefolders = get_option( 'uploads_use_yearmonth_folders' );
 		if ( $storefolders === '3' ) {
@@ -3833,7 +3833,7 @@ function wp_media_attach_action( $parent_id, $action = 'attach' ) {
  *
  * Displays only if media storage option has been set to 'category'.
  *
- * @since CP-2.1.0
+ * @since CP-2.2.0
  */
 function cp_select_upload_media_category() {
 	$media_select = '';
