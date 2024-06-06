@@ -235,6 +235,9 @@
 		 */
 		addNewClickHandler: function( event ) {
 			event.preventDefault();
+			if ( document.getElementById( 'upload-category' ) != null ) {
+				document.getElementById( 'upload-category' ).parentNode.removeAttribute( 'hidden' );
+			}
 			this.trigger( 'toggle:upload:attachment' );
 
 			if ( this.uploader ) {
