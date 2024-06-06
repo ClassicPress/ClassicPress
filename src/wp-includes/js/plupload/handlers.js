@@ -4,7 +4,7 @@ var topWin = window.dialogArguments || opener || parent || top, uploader, upload
 /**
  * Choose media category upload folder if media uploads are organized by media category.
  *
- * @since CP-2.1.0
+ * @since CP-2.2.0
  */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var uploadCatSelect = document.getElementById( 'upload-category' ),
