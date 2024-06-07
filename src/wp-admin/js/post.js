@@ -1297,34 +1297,36 @@ jQuery( function($) {
 	 * @param {MouseEvent} event A click event.
 	 * @return {void}
 	 */
-	copyAttachmentURL.addEventListener( 'click', function() {
-		var copyText = copyAttachmentURL.parentNode.previousElementSibling.value,
-			input = document.createElement( 'input' );
+	if ( copyAttachmentURL != null ) {
+		copyAttachmentURL.addEventListener( 'click', function() {
+			var copyText = copyAttachmentURL.parentNode.previousElementSibling.value,
+				input = document.createElement( 'input' );
 
-		if ( navigator.clipboard ) {
-			navigator.clipboard.writeText( copyText );
-		} else {
-			document.body.append( input );
-			input.value = copyText;
-			input.select();
-			document.execCommand( 'copy' );
-		}
+			if ( navigator.clipboard ) {
+				navigator.clipboard.writeText( copyText );
+			} else {
+				document.body.append( input );
+				input.value = copyText;
+				input.select();
+				document.execCommand( 'copy' );
+			}
 
-		// Show success visual feedback.
-		clearTimeout( copyAttachmentURLSuccessTimeout );
-		copyAttachmentURL.nextElementSibling.classList.remove( 'hidden' );
-		copyAttachmentURL.nextElementSibling.setAttribute( 'aria-hidden', 'false' );
-		input.remove();
+			// Show success visual feedback.
+			clearTimeout( copyAttachmentURLSuccessTimeout );
+			copyAttachmentURL.nextElementSibling.classList.remove( 'hidden' );
+			copyAttachmentURL.nextElementSibling.setAttribute( 'aria-hidden', 'false' );
+			input.remove();
 
-		// Hide success visual feedback after 3 seconds since last success and unfocus the trigger.
-		copyAttachmentURLSuccessTimeout = setTimeout( function() {
-			copyAttachmentURL.nextElementSibling.classList.add( 'hidden' );
-			copyAttachmentURL.nextElementSibling.setAttribute( 'aria-hidden', 'true' );
-		}, 3000 );
+			// Hide success visual feedback after 3 seconds since last success and unfocus the trigger.
+			copyAttachmentURLSuccessTimeout = setTimeout( function() {
+				copyAttachmentURL.nextElementSibling.classList.add( 'hidden' );
+				copyAttachmentURL.nextElementSibling.setAttribute( 'aria-hidden', 'true' );
+			}, 3000 );
 
-		// Handle success audible feedback.
-		wp.a11y.speak( wp.i18n.__( 'The file URL has been copied to your clipboard' ) );
-	} );
+			// Handle success audible feedback.
+			wp.a11y.speak( wp.i18n.__( 'The file URL has been copied to your clipboard' ) );
+		} );
+	}
 } );
 
 /**
