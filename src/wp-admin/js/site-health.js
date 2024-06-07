@@ -27,34 +27,36 @@ jQuery( function( $ ) {
 	 *
 	 * @since CP-2.2.0
 	 */
-	clipboard.addEventListener( 'click', function() {
-		var copyText = clipboard.dataset.clipboardText,
-			input = document.createElement( 'input' );
+	if ( clipboard != null ) {
+		clipboard.addEventListener( 'click', function() {
+			var copyText = clipboard.dataset.clipboardText,
+				input = document.createElement( 'input' );
 
-		if ( navigator.clipboard ) {
-			navigator.clipboard.writeText( copyText );
-		} else {
-			document.body.append( input );
-			input.value = copyText;
-			input.select();
-			document.execCommand( 'copy' );
-		}
+			if ( navigator.clipboard ) {
+				navigator.clipboard.writeText( copyText );
+			} else {
+				document.body.append( input );
+				input.value = copyText;
+				input.select();
+				document.execCommand( 'copy' );
+			}
 
-		// Show success visual feedback.
-		clearTimeout( successTimeout );
-		clipboard.nextElementSibling.classList.remove( 'hidden' );
-		clipboard.nextElementSibling.setAttribute( 'aria-hidden', 'false' );
-		input.remove();
+			// Show success visual feedback.
+			clearTimeout( successTimeout );
+			clipboard.nextElementSibling.classList.remove( 'hidden' );
+			clipboard.nextElementSibling.setAttribute( 'aria-hidden', 'false' );
+			input.remove();
 
-		// Hide success visual feedback after 3 seconds since last success and unfocus the trigger.
-		successTimeout = setTimeout( function() {
-			clipboard.nextElementSibling.classList.add( 'hidden' );
-			clipboard.nextElementSibling.setAttribute( 'aria-hidden', 'true' );
-		}, 3000 );
+			// Hide success visual feedback after 3 seconds since last success and unfocus the trigger.
+			successTimeout = setTimeout( function() {
+				clipboard.nextElementSibling.classList.add( 'hidden' );
+				clipboard.nextElementSibling.setAttribute( 'aria-hidden', 'true' );
+			}, 3000 );
 
-		// Handle success audible feedback.
-		wp.a11y.speak( wp.i18n.__( 'Site information has been copied to your clipboard.' ) );
-	} );
+			// Handle success audible feedback.
+			wp.a11y.speak( wp.i18n.__( 'Site information has been copied to your clipboard.' ) );
+		} );
+	}
 
 	// Accordion handling in various areas.
 	$( '.health-check-accordion' ).on( 'click', '.health-check-accordion-trigger', function() {
