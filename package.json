@@ -10,7 +10,7 @@
   "license": "GPL-2.0+",
   "devDependencies": {
     "@lodder/grunt-postcss": "3.1.1",
-    "@rollup/plugin-commonjs": "25.0.8",
+    "@rollup/plugin-commonjs": "26.0.1",
     "autoprefixer": "10.4.19",
     "clipboard": "^2.0.11",
     "grunt": "1.6.1",
@@ -22,7 +22,7 @@
     "grunt-contrib-cssmin": "5.0.0",
     "grunt-contrib-imagemin": "4.0.0",
     "grunt-contrib-jshint": "3.2.0",
-    "grunt-contrib-qunit": "8.0.1",
+    "grunt-contrib-qunit": "9.1.1",
     "grunt-eslint": "^25.0.0",
     "grunt-includes": "1.1.0",
     "grunt-jsdoc": "2.4.1",
@@ -42,9 +42,9 @@
     "sinon-test": "^3.1.5",
     "source-map-loader": "^5.0.0",
     "sync-request": "6.1.0",
-    "terser": "5.31.0",
+    "terser": "5.31.1",
     "terser-webpack-plugin": "^5.3.7",
-    "webpack": "5.91.0"
+    "webpack": "5.92.0"
   },
   "dependencies": {
     "@wordpress/a11y": "4.0.0",
