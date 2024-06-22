@@ -1,6 +1,6 @@
 {
   "name": "ClassicPress",
-  "version": "2.0.0+dev",
+  "version": "2.1.1+dev",
   "description": "ClassicPress is web software you can use to create a beautiful website or blog.",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
   "license": "GPL-2.0+",
   "devDependencies": {
     "@lodder/grunt-postcss": "3.1.1",
-    "@rollup/plugin-commonjs": "25.0.7",
+    "@rollup/plugin-commonjs": "26.0.1",
     "autoprefixer": "10.4.19",
     "clipboard": "^2.0.11",
     "grunt": "1.6.1",
@@ -22,7 +22,7 @@
     "grunt-contrib-cssmin": "5.0.0",
     "grunt-contrib-imagemin": "4.0.0",
     "grunt-contrib-jshint": "3.2.0",
-    "grunt-contrib-qunit": "8.0.1",
+    "grunt-contrib-qunit": "10.0.0",
     "grunt-eslint": "^25.0.0",
     "grunt-includes": "1.1.0",
     "grunt-jsdoc": "2.4.1",
@@ -37,22 +37,22 @@
     "moment": "^2.29.4",
     "postcss": "8.4.38",
     "qunit": "^2.19.4",
-    "rollup": "4.17.2",
-    "sinon": "^17.0.0",
+    "rollup": "4.18.0",
+    "sinon": "^18.0.0",
     "sinon-test": "^3.1.5",
     "source-map-loader": "^5.0.0",
     "sync-request": "6.1.0",
-    "terser": "5.31.0",
+    "terser": "5.31.1",
     "terser-webpack-plugin": "^5.3.7",
-    "webpack": "5.91.0"
+    "webpack": "5.92.1"
   },
   "dependencies": {
-    "@wordpress/a11y": "3.57.0",
-    "@wordpress/api-fetch": "6.54.0",
-    "@wordpress/dom-ready": "3.57.0",
-    "@wordpress/hooks": "3.57.0",
-    "@wordpress/i18n": "4.57.0",
-    "@wordpress/url": "3.58.0",
+    "@wordpress/a11y": "4.1.0",
+    "@wordpress/api-fetch": "7.1.0",
+    "@wordpress/dom-ready": "4.1.0",
+    "@wordpress/hooks": "4.1.0",
+    "@wordpress/i18n": "5.1.0",
+    "@wordpress/url": "4.1.0",
     "node-sass": "9.0.0"
   },
   "collective": {
