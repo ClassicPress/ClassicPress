@@ -26,6 +26,10 @@ if ( ! is_multisite()
 	$media_options_help .= '<p>' . __( 'Uploading Files allows you to choose the folder and path for storing your uploaded files.' ) . '</p>';
 }
 
+$media_options_help .= '<p>' . __( 'You can choose how you would like uploads to be organized after uploading.' ) . '</p>';
+
+$media_options_help .= '<p>' . __( 'Media attachments, including image, audio, video files, can have Attachment Pages if this is supported by your Theme. You can choose to enable or disable Attachment Pages.' ) . '</p>';
+
 $media_options_help .= '<p>' . __( 'You must click the Save Changes button at the bottom of the screen for new settings to take effect.' ) . '</p>';
 
 get_current_screen()->add_help_tab(
@@ -200,7 +204,7 @@ if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) :
 
 <input type="hidden" name="wp_attachment_pages_enabled" value="0">
 <input id="attachment-pages" name="wp_attachment_pages_enabled" type="checkbox" value="1"<?php checked( '1', $attachment_pages_enabled ); ?>>
-<label for="attachment-pages"><?php _e( 'Check this box to enable attachment pages.' ); ?></label>
+<label for="attachment-pages"><?php _e( 'Enable media attachment pages.' ); ?></label>
 </td>
 </tr>
 
