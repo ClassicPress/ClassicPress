@@ -37,7 +37,6 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	$php_version = phpversion();
 
 	$current      = get_site_transient( 'update_core' );
-	$translations = wp_get_installed_translations( 'core' );
 
 	// Invalidate the transient when $cp_version changes
 	if ( is_object( $current ) && $cp_version != $current->version_checked ) {
@@ -99,7 +98,6 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 		'initial_db_version' => get_site_option( 'initial_db_version' ),
 		'extra_stats'        => $extra_stats,
 		'failure_data'       => get_site_option( 'auto_core_update_failed' ),
-		'translations'       => wp_json_encode( $translations ),
 	);
 
 	/**
@@ -110,6 +108,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	 *
 	 * @since 4.9.0
 	 * @since CP-1.0.0 Added `extra_stats`, `failure_data`, and `translations`
+	 * @since CP-2.2.0 Removed `translations`, unsed at the API server
 	 * parameters to query (in WP these are passed in a POST body).
 	 *
 	 * @param array $query {
@@ -124,7 +123,6 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	 *     @type int    $initial_db_version Database version of ClassicPress at time of installation.
 	 *     @type array  $extra_stats        Failure data from the current update, if any.
 	 *     @type array  $failure_data       Failure data from a previous update, if any.
-	 *     @type array  $translations       Core translations installed on this site.
 	 * }
 	 */
 	$query = apply_filters( 'core_version_check_query_args', $query );
