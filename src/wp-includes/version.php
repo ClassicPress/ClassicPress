@@ -49,6 +49,14 @@ $wp_version = '6.2.5';
 $wp_db_version = 56657;
 
 /**
+ * Holds the ClassicPress DB revision, increments when changes are made to the ClassicPress DB schema.
+ * Suggestion: use the number on the Pull Request where version is bumped.
+ *
+ * @global int $cp_db_version
+ */
+$cp_db_version = 1438;
+
+/**
  * Holds the TinyMCE version.
  *
  * @global string $tinymce_version
