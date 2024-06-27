@@ -53,7 +53,27 @@ function wp_get_db_schema( $scope = 'all', $blog_id = null ) {
 	$max_index_length = 191;
 
 	// Blog-specific tables.
-	$blog_tables = "CREATE TABLE $wpdb->termmeta (
+	$blog_tables = "CREATE TABLE $wpdb->object_relationshipmeta (
+	meta_id bigint(20) unsigned NOT NULL auto_increment,
+	object_relationship_id bigint(20) unsigned NOT NULL default '0',
+	meta_key varchar(255) default NULL,
+	meta_value longtext,
+	PRIMARY KEY (meta_id),	
+	KEY object_relationship_id (object_relationship_id),
+	KEY meta_key (meta_key($max_index_length))
+) $charset_collate;
+CREATE TABLE $wpdb->object_relationships (
+	relationship_id bigint(20) unsigned NOT NULL auto_increment,
+	left_object_id bigint(20) unsigned NOT NULL default 0,
+	left_object_type varchar(255) NOT NULL default '',
+	right_object_type varchar(255) NOT NULL default '',
+	right_object_id bigint(20) unsigned NOT NULL default 0,
+	PRIMARY KEY (relationship_id),	
+	KEY left_object_id (left_object_id),
+	KEY left_object_type (left_object_type($max_index_length)),
+	KEY right_object_type (right_object_type($max_index_length))
+) $charset_collate;
+CREATE TABLE $wpdb->termmeta (
 	meta_id bigint(20) unsigned NOT NULL auto_increment,
 	term_id bigint(20) unsigned NOT NULL default '0',
 	meta_key varchar(255) default NULL,
@@ -63,31 +83,31 @@ function wp_get_db_schema( $scope = 'all', $blog_id = null ) {
 	KEY meta_key (meta_key($max_index_length))
 ) $charset_collate;
 CREATE TABLE $wpdb->terms (
- term_id bigint(20) unsigned NOT NULL auto_increment,
- name varchar(200) NOT NULL default '',
- slug varchar(200) NOT NULL default '',
- term_group bigint(10) NOT NULL default 0,
- PRIMARY KEY  (term_id),
- KEY slug (slug($max_index_length)),
- KEY name (name($max_index_length))
+	term_id bigint(20) unsigned NOT NULL auto_increment,
+	name varchar(200) NOT NULL default '',
+	slug varchar(200) NOT NULL default '',
+	term_group bigint(10) NOT NULL default 0,
+	PRIMARY KEY  (term_id),
+	KEY slug (slug($max_index_length)),
+	KEY name (name($max_index_length))
 ) $charset_collate;
 CREATE TABLE $wpdb->term_taxonomy (
- term_taxonomy_id bigint(20) unsigned NOT NULL auto_increment,
- term_id bigint(20) unsigned NOT NULL default 0,
- taxonomy varchar(32) NOT NULL default '',
- description longtext NOT NULL,
- parent bigint(20) unsigned NOT NULL default 0,
- count bigint(20) NOT NULL default 0,
- PRIMARY KEY  (term_taxonomy_id),
- UNIQUE KEY term_id_taxonomy (term_id,taxonomy),
- KEY taxonomy (taxonomy)
+	term_taxonomy_id bigint(20) unsigned NOT NULL auto_increment,
+	term_id bigint(20) unsigned NOT NULL default 0,
+	taxonomy varchar(32) NOT NULL default '',
+	description longtext NOT NULL,
+	parent bigint(20) unsigned NOT NULL default 0,
+	count bigint(20) NOT NULL default 0,
+	PRIMARY KEY  (term_taxonomy_id),
+	UNIQUE KEY term_id_taxonomy (term_id,taxonomy),
+	KEY taxonomy (taxonomy)
 ) $charset_collate;
 CREATE TABLE $wpdb->term_relationships (
- object_id bigint(20) unsigned NOT NULL default 0,
- term_taxonomy_id bigint(20) unsigned NOT NULL default 0,
- term_order int(11) NOT NULL default 0,
- PRIMARY KEY  (object_id,term_taxonomy_id),
- KEY term_taxonomy_id (term_taxonomy_id)
+	object_id bigint(20) unsigned NOT NULL default 0,
+	term_taxonomy_id bigint(20) unsigned NOT NULL default 0,
+	term_order int(11) NOT NULL default 0,
+	PRIMARY KEY  (object_id,term_taxonomy_id),
+	KEY term_taxonomy_id (term_taxonomy_id)
 ) $charset_collate;
 CREATE TABLE $wpdb->commentmeta (
 	meta_id bigint(20) unsigned NOT NULL auto_increment,
