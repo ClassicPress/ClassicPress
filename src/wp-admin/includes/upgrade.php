@@ -658,7 +658,7 @@ if ( ! function_exists( 'wp_upgrade' ) ) :
 		$cp_current_db_version = __get_option( 'cp_db_version' );
 
 		if ( empty( $cp_current_db_version ) ) {
-			$cp_current_db_version = 20100;
+			$cp_current_db_version = 1438;
 		}
 
 		// We are up to date. Nothing to do.
@@ -719,7 +719,7 @@ function upgrade_all() {
 	$cp_current_db_version = __get_option( 'cp_db_version' );
 
 	if ( empty( $cp_current_db_version ) ) {
-		$cp_current_db_version = 20100;
+		$cp_current_db_version = 1438;
 	}
 
 	// We are up to date. Nothing to do.
