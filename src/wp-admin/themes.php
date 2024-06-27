@@ -239,7 +239,6 @@ wp_localize_script(
 	)
 );
 
-add_thickbox();
 wp_enqueue_script( 'theme' );
 wp_enqueue_script( 'updates' );
 

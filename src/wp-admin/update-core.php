@@ -12,7 +12,6 @@ require_once __DIR__ . '/admin.php';
 wp_enqueue_style( 'plugin-install' );
 wp_enqueue_script( 'plugin-install' );
 wp_enqueue_script( 'updates' );
-add_thickbox();
 
 if ( is_multisite() && ! is_network_admin() ) {
 	wp_redirect( network_admin_url( 'update-core.php' ) );
