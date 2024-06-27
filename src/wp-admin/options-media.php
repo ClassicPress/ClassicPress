@@ -26,6 +26,10 @@ if ( ! is_multisite()
 	$media_options_help .= '<p>' . __( 'Uploading Files allows you to choose the folder and path for storing your uploaded files.' ) . '</p>';
 }
 
+$media_options_help .= '<p>' . __( 'You can choose how you would like uploads to be organized after uploading.' ) . '</p>';
+
+$media_options_help .= '<p>' . __( 'Media attachments, including image, audio, video files, can have Attachment Pages if this is supported by your Theme. You can choose to enable or disable Attachment Pages.' ) . '</p>';
+
 $media_options_help .= '<p>' . __( 'You must click the Save Changes button at the bottom of the screen for new settings to take effect.' ) . '</p>';
 
 get_current_screen()->add_help_tab(
@@ -52,6 +56,13 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
  * New option based on year only.
  */
 $storefolders = (int) get_option( 'uploads_use_yearmonth_folders' );
+/**
+ * Get attachment page preference.
+ *
+ * @since CP-2.2.0
+ *
+ */
+$attachment_pages_enabled = get_option( 'wp_attachment_pages_enabled' );
 ?>
 
 <div class="wrap">
@@ -180,6 +191,24 @@ if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) :
 </tr>
 
 	<?php do_settings_fields( 'media', 'uploads' ); ?>
+</table>
+<?php endif; ?>
+
+<?php if ( ! is_multisite() ) : ?>
+<h2 class="title"><?php _e( 'Attachment Pages' ); ?></h2>
+<table class="form-table" role="presentation">
+
+<tr>
+<th scope="row"><?php _e( 'Do you want to enable attachment pages?' ); ?></th>
+<td class="td-full attachment-pages">
+
+<input type="hidden" name="wp_attachment_pages_enabled" value="0">
+<input id="attachment-pages" name="wp_attachment_pages_enabled" type="checkbox" value="1"<?php checked( '1', $attachment_pages_enabled ); ?>>
+<label for="attachment-pages"><?php _e( 'Enable media attachment pages.' ); ?></label>
+</td>
+</tr>
+
+	<?php do_settings_fields( 'media', 'attachments' ); ?>
 </table>
 <?php endif; ?>
 
