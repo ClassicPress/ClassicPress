@@ -89,7 +89,6 @@ if ( ! $thumbnail_support && 'attachment' === $post_type && $post->post_mime_typ
 }
 
 if ( $thumbnail_support ) {
-	add_thickbox();
 	wp_enqueue_media( array( 'post' => $post->ID ) );
 }
 

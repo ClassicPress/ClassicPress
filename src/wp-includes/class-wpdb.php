@@ -285,6 +285,7 @@ class wpdb {
 	 * List of WordPress per-site tables.
 	 *
 	 * @since 2.5.0
+	* @since CP-2.2.0 - Added `object_relationships` and `object_relationshipmeta`
 	 *
 	 * @see wpdb::tables()
 	 * @var string[]
@@ -300,6 +301,8 @@ class wpdb {
 		'term_relationships',
 		'termmeta',
 		'commentmeta',
+		'object_relationships',
+		'object_relationshipmeta',
 	);
 
 	/**
@@ -440,6 +443,24 @@ class wpdb {
 	 * @var string
 	 */
 	public $termmeta;
+
+	/**
+	 * ClassicPress Object Relationships table.
+	 *
+	 * @since CP-2.2.0
+	 *
+	 * @var string
+	 */
+	public $object_relationships;
+
+	/**
+	 * ClassicPress Object Relationship Meta table.
+	 *
+	 * @since CP-2.2.0
+	 *
+	 * @var string
+	 */
+	 public $object_relationshipmeta;
 
 	//
 	// Global and Multisite tables

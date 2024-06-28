@@ -74,6 +74,17 @@ $_old_files = array(
 	// Added in 5.2.3 or older, not included in ClassicPress
 	'wp-includes/sodium_compat',
 
+	// Removed in ClassiPress 2.1.0
+	'wp-includes/js/swfupload',
+	'wp-includes/js/swfobject.js',
+	'wp-includes/js/mediaelement/mediaelement-migrate.js',
+	'wp-includes/js/mediaelement/mediaelement-migrate.min.js',
+	'wp-includes/js/mediaelement/mejs-controls.png',
+	'wp-admin/js/tags-suggest.js',
+	'wp-admin/js/tags-suggest.min.js',
+	'wp-admin/js/user-suggest.js',
+	'wp-admin/js/user-suggest.min.js',
+
 	// Directories.
 	'wp-includes/css/dist',
 	'wp-includes/block-patterns',
@@ -197,7 +208,8 @@ $_old_requests_files = array(
 global $_new_bundled_files;
 
 $_new_bundled_files = array(
-	'themes/twentyseventeen/' => '4.7',
+	'themes/twentyseventeen/'              => '4.7',
+	'themes/the-classicpress-theme/'       => '6.2.6',
 );
 
 /**

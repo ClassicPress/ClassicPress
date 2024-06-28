@@ -248,7 +248,7 @@ switch ( $step ) {
 		</tr>
 		<tr>
 			<th scope="row"><label for="prefix"><?php _e( 'Table Prefix' ); ?></label></th>
-			<td><input name="prefix" id="prefix" type="text" aria-describedby="prefix-desc" value="wp_" size="25"></td>
+			<td><input name="prefix" id="prefix" type="text" aria-describedby="prefix-desc" value="cp_" size="25"></td>
 			<td id="prefix-desc"><?php _e( 'If you want to run multiple ClassicPress installations in a single database, change this.' ); ?></td>
 		</tr>
 	</table>
