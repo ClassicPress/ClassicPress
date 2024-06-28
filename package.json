@@ -1,6 +1,6 @@
 {
   "name": "ClassicPress",
-  "version": "2.1.0+dev",
+  "version": "2.1.1+dev",
   "description": "ClassicPress is web software you can use to create a beautiful website or blog.",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "grunt-contrib-cssmin": "5.0.0",
     "grunt-contrib-imagemin": "4.0.0",
     "grunt-contrib-jshint": "3.2.0",
-    "grunt-contrib-qunit": "8.0.1",
+    "grunt-contrib-qunit": "10.0.0",
     "grunt-eslint": "^25.0.0",
     "grunt-includes": "1.1.0",
     "grunt-jsdoc": "2.4.1",
@@ -42,17 +42,17 @@
     "sinon-test": "^3.1.5",
     "source-map-loader": "^5.0.0",
     "sync-request": "6.1.0",
-    "terser": "5.31.0",
+    "terser": "5.31.1",
     "terser-webpack-plugin": "^5.3.7",
-    "webpack": "5.91.0"
+    "webpack": "5.92.1"
   },
   "dependencies": {
-    "@wordpress/a11y": "4.0.0",
-    "@wordpress/api-fetch": "7.0.0",
-    "@wordpress/dom-ready": "4.0.0",
-    "@wordpress/hooks": "4.0.0",
-    "@wordpress/i18n": "5.0.0",
-    "@wordpress/url": "4.0.0",
+    "@wordpress/a11y": "4.2.0",
+    "@wordpress/api-fetch": "7.2.0",
+    "@wordpress/dom-ready": "4.2.0",
+    "@wordpress/hooks": "4.2.0",
+    "@wordpress/i18n": "5.2.0",
+    "@wordpress/url": "4.2.0",
     "node-sass": "9.0.0"
   },
   "collective": {

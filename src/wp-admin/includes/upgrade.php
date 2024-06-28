@@ -646,15 +646,23 @@ if ( ! function_exists( 'wp_upgrade' ) ) :
 	 *
 	 * @global int  $wp_current_db_version The old (current) database version.
 	 * @global int  $wp_db_version         The new database version.
+	 * @global int  $cp_current_db_version The old (current) CP database version.
+	 * @global int  $cp_db_version         The new CP database version.
 	 * @global wpdb $wpdb                  WordPress database abstraction object.
 	 */
 	function wp_upgrade() {
 		global $wp_current_db_version, $wp_db_version, $wpdb;
+		global $cp_current_db_version, $cp_db_version;
 
 		$wp_current_db_version = __get_option( 'db_version' );
+		$cp_current_db_version = __get_option( 'cp_db_version' );
+
+		if ( empty( $cp_current_db_version ) ) {
+			$cp_current_db_version = 1438;
+		}
 
 		// We are up to date. Nothing to do.
-		if ( $wp_db_version == $wp_current_db_version ) {
+		if ( $wp_db_version == $wp_current_db_version && $cp_db_version == $cp_current_db_version ) {
 			return;
 		}
 
@@ -700,14 +708,22 @@ endif;
  *
  * @global int $wp_current_db_version The old (current) database version.
  * @global int $wp_db_version         The new database version.
+ * @global int $cp_current_db_version The old (current) CP database version.
+ * @global int $cp_db_version         The new CP database version.
  */
 function upgrade_all() {
 	global $wp_current_db_version, $wp_db_version;
+	global $cp_current_db_version, $cp_db_version;
 
 	$wp_current_db_version = __get_option( 'db_version' );
+	$cp_current_db_version = __get_option( 'cp_db_version' );
+
+	if ( empty( $cp_current_db_version ) ) {
+		$cp_current_db_version = 1438;
+	}
 
 	// We are up to date. Nothing to do.
-	if ( $wp_db_version == $wp_current_db_version ) {
+	if ( $wp_db_version == $wp_current_db_version && $cp_db_version == $cp_current_db_version ) {
 		return;
 	}
 
@@ -855,11 +871,16 @@ function upgrade_all() {
 		upgrade_600();
 	}
 
+	if ( $wp_current_db_version < 56657 ) {
+		upgrade_640();
+	}
+
 	maybe_disable_link_manager();
 
 	maybe_disable_automattic_widgets();
 
 	update_option( 'db_version', $wp_db_version );
+	update_option( 'cp_db_version', $cp_db_version );
 	update_option( 'db_upgraded', true );
 }
 
@@ -2307,6 +2328,23 @@ function upgrade_600() {
 
 	if ( $wp_current_db_version < 53011 ) {
 		wp_update_user_counts();
+	}
+}
+
+/**
+ * Executes changes made in WordPress 6.4.0.
+ *
+ * @ignore
+ * @since 6.4.0
+ *
+ * @global int $wp_current_db_version The old (current) database version.
+ */
+function upgrade_640() {
+	global $wp_current_db_version;
+
+	if ( $wp_current_db_version < 56657 ) {
+		// Enable attachment pages.
+		update_option( 'wp_attachment_pages_enabled', 1 );
 	}
 }
 
