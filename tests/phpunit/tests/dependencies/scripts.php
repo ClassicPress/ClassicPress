@@ -1347,4 +1347,50 @@ JS;
 
 		$this->assertSame( $expected, $print_scripts );
 	}
+
+	/**
+	 * https://github.com/ClassicPress/ClassicPress/pull/1427
+	 *
+	 * @expectedDeprecated wp_enqueue_script
+	 * @expectedDeprecated wp_enqueue_style
+	 */
+	public function test_deprecated_wp_enqueue_scripts() {
+		wp_register_script( 'farbtastic', '' );
+		wp_enqueue_script( 'farbtastic' );
+		wp_enqueue_style( 'jcrop' );
+		do_action( 'wp_enqueue_scripts' );
+		wp_dequeue_script( 'farbtastic' );
+		wp_dequeue_style( 'jcrop' );
+	}
+
+	/**
+	 * https://github.com/ClassicPress/ClassicPress/pull/1427
+	 *
+	 * @expectedDeprecated wp_enqueue_script
+	 * @expectedDeprecated wp_enqueue_style
+	 */
+	public function test_deprecated_login_enqueue_scripts() {
+		wp_register_script( 'farbtastic', '' );
+		wp_enqueue_script( 'farbtastic' );
+		wp_enqueue_style( 'jcrop' );
+		do_action( 'login_enqueue_scripts' );
+		wp_dequeue_script( 'farbtastic' );
+		wp_dequeue_style( 'jcrop' );
+	}
+
+	/**
+	 * https://github.com/ClassicPress/ClassicPress/pull/1427
+	 *
+	 * @expectedDeprecated wp_enqueue_script
+	 * @expectedDeprecated wp_enqueue_style
+	 */
+	public function test_deprecated_admin_enqueue_scripts() {
+		set_current_screen( 'edit-post' );
+		wp_register_script( 'farbtastic', '' );
+		wp_enqueue_script( 'farbtastic' );
+		wp_enqueue_style( 'jcrop' );
+		do_action( 'admin_enqueue_scripts' );
+		wp_dequeue_script( 'farbtastic' );
+		wp_dequeue_style( 'jcrop' );
+	}
 }

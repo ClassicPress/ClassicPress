@@ -288,8 +288,6 @@ if ( $action ) {
 
 $wp_list_table->prepare_items();
 
-add_thickbox();
-
 add_screen_option( 'per_page' );
 
 get_current_screen()->add_help_tab(
