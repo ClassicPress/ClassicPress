@@ -321,7 +321,7 @@ function maybe_upgrade_translations() {
 	if ( ! empty( $failed ) ) {
 		$result = new WP_Error(
 			'language_pack_updates_failed',
-			__( 'Unable to upate language pack for locales' ),
+			__( 'Unable to update language pack for locales' ),
 			implode( ', ', $failed )
 		);
 	}

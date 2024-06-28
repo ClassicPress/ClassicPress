@@ -139,8 +139,9 @@ module.exports = function(grunt) {
 							'**',
 							'!wp-includes/js/media/**',
 							'!**/.{svn,git}/**', // Ignore version control directories.
-							// Exclude Hello Dolly (it's used in the source tree for tests)
-							'!wp-content/plugins/hello.php',
+							// Exclude plugins unless specifically listed
+							'!wp-content/plugins/**',
+							'wp-content/plugins/index.php',
 							// Ignore unminified versions of external libs we don't ship:
 							'!wp-includes/js/backbone.js',
 							'!wp-includes/js/underscore.js',
