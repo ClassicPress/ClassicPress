@@ -210,6 +210,7 @@ function create_initial_taxonomies() {
 				'add_or_remove_items'        => null,
 				'choose_from_most_used'      => null,
 				'back_to_items'              => __( '&larr; Go to Media Categories' ),
+				'filter_by_item'             => __( 'Filter by media category' ),
 			),
 			'query_var'             => 'media_category_name',
 			'update_count_callback' => '_update_generic_term_count',

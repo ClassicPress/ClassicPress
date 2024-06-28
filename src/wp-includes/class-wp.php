@@ -390,6 +390,17 @@ class WP {
 		$this->query_vars = apply_filters( 'request', $this->query_vars );
 
 		/**
+		 * Unsets query parameter [s] on upload.php when selection made in media category dropdown.
+		 *
+		 * @since CP-2.2.0
+		 */
+		if ( isset( $requested_path ) && 'wp-admin/upload.php' === $requested_path ) {
+			if ( isset( $this->query_vars['taxonomy'] ) && isset( $this->query_vars['term'] ) && isset( $this->query_vars['s'] ) ) {
+				unset( $this->query_vars['s'] );
+			}
+		}
+
+		/**
 		 * Fires once all query variables for the current request have been parsed.
 		 *
 		 * @since 2.1.0
