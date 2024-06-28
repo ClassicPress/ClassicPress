@@ -868,7 +868,6 @@ final class _WP_Editors {
 		}
 
 		if ( self::$has_medialib ) {
-			add_thickbox();
 			wp_enqueue_script( 'media-upload' );
 			wp_enqueue_script( 'wp-embed' );
 		} elseif ( $default_scripts ) {

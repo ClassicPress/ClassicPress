@@ -48,7 +48,7 @@ if ( get_option( 'db_upgraded' ) ) {
 	do_action( 'after_db_upgrade' );
 
 } elseif ( ! wp_doing_ajax() && empty( $_POST )
-	&& (int) get_option( 'db_version' ) !== $wp_db_version
+	&& ( (int) get_option( 'db_version' ) !== $wp_db_version || (int) get_option( 'cp_db_version', '1438' ) !== $cp_db_version )
 ) {
 
 	if ( ! is_multisite() ) {
