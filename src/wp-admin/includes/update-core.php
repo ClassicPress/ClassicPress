@@ -210,6 +210,7 @@ global $_new_bundled_files;
 $_new_bundled_files = array(
 	'themes/twentyseventeen/'              => '4.7',
 	'themes/the-classicpress-theme/'       => '6.2.6',
+	'plugins/cp-pepper/'                   => '6.2.7',
 );
 
 /**

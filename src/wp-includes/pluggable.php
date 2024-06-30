@@ -2549,8 +2549,12 @@ if ( ! function_exists( 'wp_hash_password' ) ) :
 		 *
 		 * @param  string  String to be used as pepper.
 		 */
-		$pepper = apply_filters( 'cp_pepper_password', 'oTL7E8TdVTJ6rT2pspa0WTM11MqGOY6R' );
-		$peppered_password = hash_hmac( 'sha256', $password, $pepper );
+		$pepper = apply_filters( 'cp_pepper_password', '' );
+		if ( ! empty( $pepper ) ) {
+			$maybe_peppered_password = hash_hmac( 'sha256', $password, $pepper );
+		} else {
+			$maybe_peppered_password = $password;
+		}
 
 		/**
 		 * Filter enabling the password algorithm to be changed.
@@ -2562,7 +2566,7 @@ if ( ! function_exists( 'wp_hash_password' ) ) :
 		 */
 		$algorithm = apply_filters( 'cp_password_algorithm', PASSWORD_DEFAULT );
 
-		return password_hash( $peppered_password, $algorithm, $options );
+		return password_hash( $maybe_peppered_password, $algorithm, $options );
 	}
 endif;
 
@@ -2610,7 +2614,7 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 		 *
 		 * @param  string  String to be used as pepper.
 		 */
-		$pepper = apply_filters( 'cp_pepper_password', 'oTL7E8TdVTJ6rT2pspa0WTM11MqGOY6R' );
+		$pepper = apply_filters( 'cp_pepper_password', '' );
 		$peppered_password = hash_hmac( 'sha256', $password, $pepper );
 
 		if ( password_verify( $peppered_password, $hash ) ) {
@@ -2628,6 +2632,25 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 			$algorithm = apply_filters( 'cp_password_algorithm', PASSWORD_DEFAULT );
 
 			if ( password_needs_rehash( $hash, PASSWORD_DEFAULT, $options ) ) {
+
+				// Update to current password setting and verification method.
+				$hash = wp_set_password( $password, $user_id );
+			}
+		} elseif ( password_verify( $password, $hash ) ) {
+			// Handle password verification using PHP's PASSWORD_DEFAULT hashing algorithm.
+			$check = true;
+
+			/**
+			 * Filter enabling the password algorithm to be changed.
+			 *
+			 * @since CP-2.2.0
+			 *
+			 * @param  string    PASSWORD_DEFAULT    PHP's current default hashing algorithm.
+			 * @return string    $algorithm          Any algorithm recognized by PHP.
+			 */
+			$algorithm = apply_filters( 'cp_password_algorithm', PASSWORD_DEFAULT );
+
+			if ( ! empty( $pepper ) || password_needs_rehash( $hash, PASSWORD_DEFAULT, $options ) ) {
 
 				// Update to current password setting and verification method.
 				$hash = wp_set_password( $password, $user_id );
