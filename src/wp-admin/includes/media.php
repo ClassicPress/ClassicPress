@@ -3795,3 +3795,84 @@ function wp_media_attach_action( $parent_id, $action = 'attach' ) {
 		exit;
 	}
 }
+
+/**
+ * Processes the post data for the bulk editing of attachments.
+ *
+ * Updates all bulk edited media attachment pages, adding (but not removing)
+ * tags and categories.
+ *
+ * @since CP-2.2.0
+ *
+ * @global wpdb $wpdb WordPress database abstraction object.
+ *
+ * @param array|null $post_data Optional. The array of post data to process.
+ *                              Defaults to the `$_POST` superglobal.
+ * @return array
+ */
+function bulk_edit_attachments( $attachment_data = null ) {
+	global $wpdb;
+
+	if ( empty( $attachment_data ) ) {
+		$attachment_data = &$_POST;
+	}
+
+	if ( ! current_user_can( 'edit_posts' ) ) {
+		wp_die( __( 'Sorry, you are not allowed to edit media attachment pages.' ) );
+	}
+
+	$updated = array();
+	$skipped = array();
+	$locked  = array();
+
+	$attachment_ids = array_map( 'absint', (array) $attachment_data['media'] );
+
+	foreach ( $attachment_ids as $attachment_id ) {
+		$update = false;
+
+		if ( is_wp_error( $attachment_id ) ) {
+			$skipped[] = $attachment_id;
+			continue;
+		}
+
+		if ( wp_check_post_lock( $attachment_id ) ) {
+			$locked[] = $attachment_id;
+			continue;
+		}
+
+		// Update attachment author.
+		if ( isset( $attachment_data['post_author'] ) ) {
+			$attachment = get_post( $attachment_id );
+			$attachment->post_author = $attachment_data['post_author'];
+			wp_update_post( $attachment );
+			update_post_meta( $attachment_id, '_edit_last', get_current_user_id() );
+			$update = true;
+		}
+
+		// Append additional media categories (if any).
+		if ( ! empty( $attachment_data['media_category'] ) && is_array( $attachment_data['media_category'] ) ) {
+			$media_cats = array_map( 'absint', $attachment_data['media_category'] );
+			wp_set_object_terms( $attachment_id, $media_cats, 'media_category', true );
+			$update = true;
+		}
+
+		// Append additional media post tags (if any).
+		if ( ! empty( $attachment_data['media_post_tag'] ) ) {
+			$media_post_tags = explode( ',', trim( $attachment_data['media_post_tag'], " \n\t\r\0\x0B," ) );
+			wp_set_object_terms( $attachment_id, $media_post_tags, 'media_post_tag', true );
+			$update = true;
+		}
+
+		if ( $update === true ) {
+			$updated[] = $attachment_id;
+		} elseif ( ! in_array( $attachment_id, $skipped, true ) ) {
+			$skipped[] = $attachment_id;
+		}
+	}
+
+	return array(
+		'updated' => $updated,
+		'skipped' => $skipped,
+		'locked'  => $locked,
+	);
+}
