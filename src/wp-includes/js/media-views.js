@@ -8991,7 +8991,7 @@
 			}, 3000 );
 
 			// Handle success audible feedback.
-			wp.a11y.speak( wp.i18n.__( 'The file URL has been copied to your clipboard' ) );
+			wp.a11y.speak( __( 'The file URL has been copied to your clipboard' ) );
 		},
 
 		/**
