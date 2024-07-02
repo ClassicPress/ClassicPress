@@ -548,7 +548,7 @@ function wp_default_scripts( $scripts ) {
 		)
 	);
 
-	$scripts->add( 'common', "/wp-admin/js/common$suffix.js", array( 'jquery', 'hoverIntent', 'utils' ), false, 1 );
+	$scripts->add( 'common', "/wp-admin/js/common$suffix.js", array( 'jquery', 'utils' ), false, 1 );
 	$scripts->set_translations( 'common' );
 
 	$scripts->add( 'wp-sanitize', "/wp-includes/js/wp-sanitize$suffix.js", array(), false, 1 );
@@ -846,7 +846,7 @@ function wp_default_scripts( $scripts ) {
 
 	$scripts->add( 'wp-backbone', "/wp-includes/js/wp-backbone$suffix.js", array( 'backbone', 'wp-util' ), false, 1 );
 
-	$scripts->add( 'revisions', "/wp-admin/js/revisions$suffix.js", array( 'wp-backbone', 'hoverIntent' ), false, 1 );
+	$scripts->add( 'revisions', "/wp-admin/js/revisions$suffix.js", array( 'wp-backbone' ), false, 1 );
 
 	$scripts->add( 'imgareaselect', "/wp-includes/js/imgareaselect/jquery.imgareaselect$suffix.js", array( 'jquery' ), false, 1 );
 
