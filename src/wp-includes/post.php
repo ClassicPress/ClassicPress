@@ -4466,6 +4466,18 @@ function wp_insert_post( $postarr, $wp_error = false, $fire_after_hooks = true )
 		$post_after = get_post( $post_id );
 
 		/**
+		 * Updates the relationship between the post and any attachment.
+		 *
+		 * @since CP-2.2.0
+		 *
+		 * @param  int      $post_id          Post ID.
+		 * @param  WP_Post  $post_after       Post object following the update.
+		 * @param  WP_Post  $post_before      Post object before the update.
+		 * @param  string   $post->post_type  Post type.
+		 */
+		cp_update_post_attachment_relationship( $post_id, $post_after, $post_before, $post->post_type );
+
+		/**
 		 * Fires once an existing post has been updated.
 		 *
 		 * @since 3.0.0
@@ -4495,6 +4507,17 @@ function wp_insert_post( $postarr, $wp_error = false, $fire_after_hooks = true )
 	 * @param bool    $update  Whether this is an existing post being updated.
 	 */
 	do_action( "save_post_{$post->post_type}", $post_id, $post, $update );
+
+	/**
+	 * Creates a relationship between the post and any attachment.
+	 *
+	 * @since CP-2.2.0
+	 *
+	 * @param  int      $post_id  Post ID.
+	 * @param  WP_Post  $post     Post object.
+	 * @param  bool     $update   Whether this is an existing post being updated.
+	 */
+	cp_create_post_attachment_relationship( $post_id, $post, $update );
 
 	/**
 	 * Fires once a post has been saved.
@@ -7502,8 +7525,32 @@ function set_post_thumbnail( $post, $thumbnail_id ) {
 	$thumbnail_id = absint( $thumbnail_id );
 	if ( $post && $thumbnail_id && get_post( $thumbnail_id ) ) {
 		if ( wp_get_attachment_image( $thumbnail_id, 'thumbnail' ) ) {
+
+			/**
+			 * Creates a relationship between a post, page, or custom post and its thumbnail.
+			 *
+			 * @since CP-2.2.0
+			 *
+			 * @param  int     $thumbnail_id     Thumbnail ID.
+			 * @param  string  $post->post_type  Name of post type.
+			 * @param  int     $post->ID         Post ID.
+			 */
+			cp_add_object_relationship( $thumbnail_id, 'thumbnail', $post->post_type, $post->ID );
+
 			return update_post_meta( $post->ID, '_thumbnail_id', $thumbnail_id );
 		} else {
+
+			/**
+			 * Deletes a relationship between a post, page, or custom post and its thumbnail.
+			 *
+			 * @since CP-2.2.0
+			 *
+			 * @param  int     $thumbnail_id     Thumbnail ID.
+			 * @param  string  $post->post_type  Name of post type.
+			 * @param  int     $post->ID         Post ID.
+			 */
+			cp_delete_object_relationship( $thumbnail_id, 'thumbnail', $post->post_type, $post->ID );
+
 			return delete_post_meta( $post->ID, '_thumbnail_id' );
 		}
 	}
@@ -7521,6 +7568,19 @@ function set_post_thumbnail( $post, $thumbnail_id ) {
 function delete_post_thumbnail( $post ) {
 	$post = get_post( $post );
 	if ( $post ) {
+
+		/**
+		 * Deletes a relationship between a post, page, or custom post and its thumbnail.
+		 *
+		 * @since CP-2.2.0
+		 *
+		 * @param  int     $thumbnail_id     Thumbnail ID.
+		 * @param  string  $post->post_type  Name of post type.
+		 * @param  int     $post->ID         Post ID.
+		 */
+		$thumbnail_id = get_post_thumbnail_id( $post );
+		cp_delete_object_relationship( $thumbnail_id, 'thumbnail', $post->post_type, $post->ID );
+
 		return delete_post_meta( $post->ID, '_thumbnail_id' );
 	}
 	return false;
