@@ -182,16 +182,17 @@ class WP_Media_List_Table extends WP_List_Table {
 		if ( MEDIA_TRASH ) {
 			if ( $this->is_trash ) {
 				$actions['untrash'] = __( 'Restore' );
-				$actions['delete']  = __( 'Delete permanently' );
+				$actions['delete'] = __( 'Delete permanently' );
 			} else {
 				$actions['trash'] = __( 'Move to Trash' );
 			}
 		} else {
+			$actions['edit'] = __( 'Edit' );
 			$actions['delete'] = __( 'Delete permanently' );
 		}
 
 		if ( $this->detached ) {
-			$actions['attach'] = __( 'Attach' );
+			$actions['attach'] = __( 'Attach to post' );
 		}
 
 		return $actions;
@@ -400,6 +401,9 @@ class WP_Media_List_Table extends WP_List_Table {
 		}
 
 		/* translators: Column name. */
+		$posts_columns['thumbnail'] = _x( 'Featured Image', 'column name' );
+		$posts_columns['used_in']   = _x( 'Used In', 'column name' );
+
 		if ( ! $this->detached ) {
 			$posts_columns['parent'] = _x( 'Uploaded to', 'column name' );
 
@@ -433,11 +437,13 @@ class WP_Media_List_Table extends WP_List_Table {
 	 */
 	protected function get_sortable_columns() {
 		return array(
-			'title'    => 'title',
-			'author'   => 'author',
-			'parent'   => 'parent',
-			'comments' => 'comment_count',
-			'date'     => array( 'date', true ),
+			'title'     => 'title',
+			'author'    => 'author',
+			'parent'    => 'parent',
+			'thumbnail' => 'thumbnail',
+			'used_in'   => 'used_in',
+			'comments'  => 'comment_count',
+			'date'      => array( 'date', true ),
 		);
 	}
 
@@ -594,6 +600,89 @@ class WP_Media_List_Table extends WP_List_Table {
 		 * @param string  $column_name The column name.
 		 */
 		echo apply_filters( 'media_date_column_time', $h_time, $post, 'date' );
+	}
+
+	/**
+	 * Handles the thumbnail column output.
+	 *
+	 * @since CP-2.2.0
+	 *
+	 * @param WP_Post $post The current WP_Post object.
+	 */
+	public function column_thumbnail( $post ) {
+		$user_can_edit = current_user_can( 'edit_post', $post->ID );
+
+		// Get all post types except attachments and revisions.
+		$parent_types = get_post_types();
+		unset( $parent_types['attachment'] );
+		unset( $parent_types['revision'] );
+
+		// Set output variable.
+		$output = '';
+
+		foreach ( $parent_types as $parent_type ) {
+
+			// Get all posts where this attachment is the featured image.
+			$relationship_ids = cp_get_object_relationship_ids( $post->ID, 'thumbnail', $parent_type );
+
+			if ( ! empty( $relationship_ids ) ) {
+				foreach ( $relationship_ids as $relationship_id ) {
+					if ( absint( $relationship_id ) !== 0 ) {
+						$ancestor          = get_post( $relationship_id );
+						$ancestor_type_obj = get_post_type_object( $ancestor->post_type );
+						$title             = _draft_or_post_title( $relationship_id );
+
+						if ( $ancestor_type_obj->show_ui && current_user_can( 'edit_post', $relationship_id ) ) {
+							$output .= '<strong><a href="' . esc_url( get_edit_post_link( $relationship_id ) ) . '">' . esc_html( $title ) . '</a></strong><br>';
+						} else {
+							$output .= $title . '<br>';
+						}
+					}
+				}
+			}
+		}
+		return $output;
+	}
+
+	/**
+	 * Handles the used-in column output.
+	 *
+	 * @since CP-2.2.0
+	 *
+	 * @param WP_Post $post The current WP_Post object.
+	 */
+	public function column_used_in( $post ) {
+		$user_can_edit = current_user_can( 'edit_post', $post->ID );
+
+		// Get all post types except attachments and revisions.
+		$parent_types = get_post_types();
+		unset( $parent_types['attachment'] );
+		unset( $parent_types['revision'] );
+
+		// Set output variable.
+		$output = '';
+
+		foreach ( $parent_types as $parent_type ) {
+
+			// Get all posts where this attachment is used in the content.
+			$parent_ids = cp_get_object_relationship_ids( $post->ID, 'attachment', $parent_type );
+
+			if ( ! empty( $parent_ids ) ) {
+				foreach ( $parent_ids as $parent_id ) {
+					if ( absint( $parent_id ) !== 0 ) {
+						$parent_type_obj = get_post_type_object( $parent_type );
+						$title           = _draft_or_post_title( $parent_id );
+
+						if ( $parent_type_obj->show_ui && current_user_can( 'edit_post', $parent_id ) ) {
+							$output .= '<strong><a href="' . esc_url( get_edit_post_link( $parent_id ) ) . '">' . esc_html( $title ) . '</a></strong><br>';
+						} else {
+							$output .= $title . '<br>';
+						}
+					}
+				}
+			}
+		}
+		return $output;
 	}
 
 	/**
