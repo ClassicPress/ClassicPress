@@ -8922,8 +8922,6 @@
 
 	};
 
-	/* global ClipboardJS */
-
 	var details = function() { // ClassicPress: defer loading via require()
 
 	var Attachment = wp.media.view.Attachment,
@@ -8952,44 +8950,49 @@
 			'click .trash-attachment':        'trashAttachment',
 			'click .untrash-attachment':      'untrashAttachment',
 			'click .edit-attachment':         'editAttachment',
+			'click .copy-attachment-url':     'copyAttachmentURL',
 			'keydown':                        'toggleSelectionHandler'
 		},
 
 		/**
 		 * Copies the attachment URL to the clipboard.
 		 *
-		 * @since 5.5.0
+		 * @since CP-2.2.0
 		 *
 		 * @param {MouseEvent} event A click event.
 		 *
 		 * @return {void}
 		 */
-		 copyAttachmentDetailsURLClipboard: function() {
-			var clipboard = new ClipboardJS( '.copy-attachment-url' ),
-				successTimeout;
+		copyAttachmentURL: function() {
+			var successTimeout,
+				copyURL = document.querySelector( '.copy-attachment-url' ),
+				copyText = copyURL.parentNode.previousElementSibling.value,
+				input = document.createElement( 'input' );
 
-			clipboard.on( 'success', function( event ) {
-				var triggerElement = $( event.trigger ),
-					successElement = $( '.success', triggerElement.closest( '.copy-to-clipboard-container' ) );
+			if ( navigator.clipboard ) {
+				navigator.clipboard.writeText( copyText );
+			} else {
+				document.body.append( input );
+				input.value = copyText;
+				input.select();
+				document.execCommand( 'copy' );
+			}
 
-				// Clear the selection and move focus back to the trigger.
-				event.clearSelection();
-				// Handle ClipboardJS focus bug, see https://github.com/zenorocha/clipboard.js/issues/680
-				triggerElement.trigger( 'focus' );
+			// Show success visual feedback.
+			clearTimeout( successTimeout );
+			copyURL.nextElementSibling.classList.remove( 'hidden' );
+			copyURL.nextElementSibling.setAttribute( 'aria-hidden', 'false' );
+			input.remove();
 
-				// Show success visual feedback.
-				clearTimeout( successTimeout );
-				successElement.removeClass( 'hidden' );
+			// Hide success visual feedback after 3 seconds since last success and unfocus the trigger.
+			successTimeout = setTimeout( function() {
+				copyURL.nextElementSibling.classList.add( 'hidden' );
+				copyURL.nextElementSibling.setAttribute( 'aria-hidden', 'true' );
+			}, 3000 );
 
-				// Hide success visual feedback after 3 seconds since last success.
-				successTimeout = setTimeout( function() {
-					successElement.addClass( 'hidden' );
-				}, 3000 );
-
-				// Handle success audible feedback.
-				wp.a11y.speak( __( 'The file URL has been copied to your clipboard' ) );
-			} );
-		 },
+			// Handle success audible feedback.
+			wp.a11y.speak( __( 'The file URL has been copied to your clipboard' ) );
+		},
 
 		/**
 		 * Shows the details of an attachment.
@@ -9008,8 +9011,6 @@
 
 			// Call 'initialize' directly on the parent class.
 			Attachment.prototype.initialize.apply( this, arguments );
-
-			this.copyAttachmentDetailsURLClipboard();
 		},
 
 		/**

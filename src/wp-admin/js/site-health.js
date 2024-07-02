@@ -4,14 +4,14 @@
  * @output wp-admin/js/site-health.js
  */
 
-/* global ajaxurl, ClipboardJS, SiteHealth, wp */
+/* global ajaxurl, SiteHealth, wp */
 
 jQuery( function( $ ) {
 
 	var __ = wp.i18n.__,
 		_n = wp.i18n._n,
 		sprintf = wp.i18n.sprintf,
-		clipboard = new ClipboardJS( '.site-health-copy-buttons .copy-button' ),
+		clipboard = document.querySelector( '.site-health-copy-buttons .copy-button' ),
 		isStatusTab = $( '.health-check-body.health-check-status-tab' ).length,
 		isDebugTab = $( '.health-check-body.health-check-debug-tab' ).length,
 		pathsSizesSection = $( '#health-check-accordion-block-wp-paths-sizes' ),
@@ -19,28 +19,44 @@ jQuery( function( $ ) {
 		menuCounter = $( '#adminmenu .site-health-counter .count' ),
 		successTimeout;
 
-	// Debug information copy section.
-	clipboard.on( 'success', function( e ) {
-		var triggerElement = $( e.trigger ),
-			successElement = $( '.success', triggerElement.closest( 'div' ) );
+	/*
+	 * Debug information copy section.
+	 *
+	 * Uses Clipboard API (with execCommand fallback for sites
+	 * on neither https nor localhost).
+	 *
+	 * @since CP-2.2.0
+	 */
+	if ( clipboard != null ) {
+		clipboard.addEventListener( 'click', function() {
+			var copyText = clipboard.dataset.clipboardText,
+				input = document.createElement( 'input' );
 
-		// Clear the selection and move focus back to the trigger.
-		e.clearSelection();
-		// Handle ClipboardJS focus bug, see https://github.com/zenorocha/clipboard.js/issues/680
-		triggerElement.trigger( 'focus' );
+			if ( navigator.clipboard ) {
+				navigator.clipboard.writeText( copyText );
+			} else {
+				document.body.append( input );
+				input.value = copyText;
+				input.select();
+				document.execCommand( 'copy' );
+			}
 
-		// Show success visual feedback.
-		clearTimeout( successTimeout );
-		successElement.removeClass( 'hidden' );
+			// Show success visual feedback.
+			clearTimeout( successTimeout );
+			clipboard.nextElementSibling.classList.remove( 'hidden' );
+			clipboard.nextElementSibling.setAttribute( 'aria-hidden', 'false' );
+			input.remove();
 
-		// Hide success visual feedback after 3 seconds since last success.
-		successTimeout = setTimeout( function() {
-			successElement.addClass( 'hidden' );
-		}, 3000 );
+			// Hide success visual feedback after 3 seconds since last success and unfocus the trigger.
+			successTimeout = setTimeout( function() {
+				clipboard.nextElementSibling.classList.add( 'hidden' );
+				clipboard.nextElementSibling.setAttribute( 'aria-hidden', 'true' );
+			}, 3000 );
 
-		// Handle success audible feedback.
-		wp.a11y.speak( __( 'Site information has been copied to your clipboard.' ) );
-	} );
+			// Handle success audible feedback.
+			wp.a11y.speak( wp.i18n.__( 'Site information has been copied to your clipboard.' ) );
+		} );
+	}
 
 	// Accordion handling in various areas.
 	$( '.health-check-accordion' ).on( 'click', '.health-check-accordion-trigger', function() {
