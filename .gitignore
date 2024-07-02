@@ -26,6 +26,7 @@ wp-tests-config.php
 /src/wp-content/mu-plugins
 /src/wp-content/plugins
 !/src/wp-content/plugins/index.php
+!/src/wp-content/plugins/cp-pepper
 /src/wp-content/themes/*
 !/src/wp-content/themes/twentyseventeen
 !/src/wp-content/themes/classicpress-twentyseventeen

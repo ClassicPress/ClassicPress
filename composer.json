@@ -21,7 +21,8 @@
 	"config": {
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true
-		}
+		},
+		"process-timeout": 600
 	},
 	"scripts": {
 		"backport": "bin/backport-wp-commit.sh",

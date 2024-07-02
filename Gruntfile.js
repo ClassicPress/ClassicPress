@@ -142,6 +142,7 @@ module.exports = function(grunt) {
 							// Exclude plugins unless specifically listed
 							'!wp-content/plugins/**',
 							'wp-content/plugins/index.php',
+							'wp-content/plugins/cp-pepper/**',
 							// Ignore unminified versions of external libs we don't ship:
 							'!wp-includes/js/backbone.js',
 							'!wp-includes/js/underscore.js',
