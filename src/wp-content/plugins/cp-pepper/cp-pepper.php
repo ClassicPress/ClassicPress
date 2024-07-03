@@ -17,7 +17,7 @@
 namespace ClassicPress\PepperPassword;
 
 // Prevent direct access.
-if ( ! defined('ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die();
 }
 
@@ -56,4 +56,4 @@ class PepperPassword {
 	}
 }
 
-new PepperPassword;
+new PepperPassword();
