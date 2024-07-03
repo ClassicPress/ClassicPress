@@ -43,6 +43,7 @@ wp-tests-config.php
 /src/wp-content/install.php
 /src/wp-content/maintenance.php
 /src/wp-content/object-cache.php
+/src/wp-content/pepper.php
 /src/wp-content/sunrise.php
 
 # Operating system specific files
