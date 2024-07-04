@@ -33,7 +33,7 @@ class PepperPassword {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		$this->pepper_file_path = WP_CONTENT_DIR . '/pepper.php';
+		$this->pepper_file_path = __DIR__ . '/pepper.php';
 		$this->init();
 	}
 
@@ -115,7 +115,7 @@ class PepperPassword {
 	 */
 	private function set_pepper( $pepper ) {
 		$content = '<?php
-namespace XXSimoXX\PepperTest;
+namespace ClassicPress\PepperPassword;
 $current_pepper = \'' . $pepper . '\';
 ';
 		// $wp_filesystem is not initiated when called in an action
