@@ -267,6 +267,10 @@ function deleteError() {
 
 function uploadComplete() {
 	jQuery( '#insert-gallery' ).prop( 'disabled', false );
+
+	setTimeout( function() {
+		copyAttachmentUploadURLClipboard();
+	}, 200);
 }
 
 function switchUploader( s ) {
@@ -371,31 +375,42 @@ function wpFileExtensionError( up, file, message ) {
  * @return {void}
  */
 function copyAttachmentUploadURLClipboard() {
-	var clipboard = new ClipboardJS( '.copy-attachment-url' ),
+	var clipboard = document.querySelectorAll( '.copy-attachment-url' ),
 		successTimeout;
 
-	clipboard.on( 'success', function( event ) {
-		var triggerElement = jQuery( event.trigger ),
-			successElement = jQuery( '.success', triggerElement.closest( '.copy-to-clipboard-container' ) );
+	clipboard.forEach( function( copyURL ) {
+		copyURL.addEventListener( 'click', function() {
+			var copyText = copyURL.dataset.clipboardText,
+				input = document.createElement( 'input' );
 
-		// Clear the selection and move focus back to the trigger.
-		event.clearSelection();
-		// Handle ClipboardJS focus bug, see https://github.com/zenorocha/clipboard.js/issues/680
-		triggerElement.trigger( 'focus' );
-		// Show success visual feedback.
-		clearTimeout( successTimeout );
-		successElement.removeClass( 'hidden' );
-		// Hide success visual feedback after 3 seconds since last success.
-		successTimeout = setTimeout( function() {
-			successElement.addClass( 'hidden' );
-		}, 3000 );
-		// Handle success audible feedback.
-		wp.a11y.speak( pluploadL10n.file_url_copied );
+			if ( navigator.clipboard ) {
+				navigator.clipboard.writeText( copyText );
+			} else {
+				document.body.append( input );
+				input.value = copyText;
+				input.select();
+				document.execCommand( 'copy' );
+			}
+
+			// Show success visual feedback.
+			clearTimeout( successTimeout );
+			copyURL.nextElementSibling.classList.remove( 'hidden' );
+			copyURL.nextElementSibling.setAttribute( 'aria-hidden', 'false' );
+			input.remove();
+
+			// Hide success visual feedback after 3 seconds since last success and unfocus the trigger.
+			successTimeout = setTimeout( function() {
+				copyURL.nextElementSibling.classList.add( 'hidden' );
+				copyURL.nextElementSibling.setAttribute( 'aria-hidden', 'true' );
+			}, 3000 );
+
+			// Handle success audible feedback.
+			wp.a11y.speak( pluploadL10n.file_url_copied );
+		} );
 	} );
 }
 
 jQuery( document ).ready( function( $ ) {
-	copyAttachmentUploadURLClipboard();
 	var tryAgainCount = {};
 	var tryAgain;
 
