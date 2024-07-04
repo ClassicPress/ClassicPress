@@ -176,9 +176,9 @@ $current_pepper = \'' . $pepper . '\';
 		}
 
 		echo '<h3>' . esc_html__( 'Create or renew a pepper for the password storing algorithm' ) . '</h3>';
-		echo '<p>' . esc_html__( 'Be aware, changing the pepper, or deactivating this plugin will invalidate all stored password hashes.' ) . '</p>';
+		echo '<p>' . esc_html__( 'Note that changing the pepper, or deactivating this plugin, will invalidate all stored password hashes and will mean that every user will need to reset their password.' ) . '</p>';
 
-		$message = $pepper === '' ? esc_html__( 'ClassicPress is not using a Pepper.' ) : esc_html__( 'ClassicPress is using a Pepper.' );
+		$message = $pepper === '' ? esc_html__( 'ClassicPress is not currently using a Pepper.' ) : esc_html__( 'ClassicPress is currently using a Pepper.' );
 		$button  = $pepper === '' ? esc_html__( 'Enable Pepper' ) : esc_html__( 'Renew Pepper' );
 
 		echo '<p>' . esc_html( $message ) . '</p>';
