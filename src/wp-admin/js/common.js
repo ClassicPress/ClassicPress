@@ -810,7 +810,7 @@ $availableStructureTags.on( 'click', function() {
 } );
 
 $( function() {
-	var checks, first, last, checked, sliced, mobileEvent, transitionTimeout, focusedRowActions,
+	var checks, first, last, checked, sliced, mobileEvent, transitionTimeout, focusedRowActions, menuEnterTimer, menuLeaveTimer,
 		lastClicked = false,
 		pageInput = $('input.current-page'),
 		currentPage = pageInput.val(),
@@ -837,7 +837,8 @@ $( function() {
 			adminbar: $adminbar.height(),
 			menu: $adminMenuWrap.height()
 		},
-		$headerEnd = $( '.wp-header-end' );
+		$headerEnd = $( '.wp-header-end' ),
+		topMenuItems = $adminmenu[0].querySelectorAll( 'li.wp-has-submenu' );
 
 	/**
 	 * Makes the fly-out submenu header clickable, when the menu is folded.
@@ -917,15 +918,17 @@ $( function() {
 	 *
 	 * @return {void}
 	 */
-	function adjustSubmenu( $menuItem ) {
-		var bottomOffset, pageHeight, adjustment, theFold, menutop, wintop, maxtop,
-			$submenu = $menuItem.find( '.wp-submenu' );
+	function adjustSubmenu( menuItem ) {
+		var bottomOffset, pageHeight, adjustment, theFold, menutop, wintop, maxtop, rect, win,
+			submenu = menuItem.querySelector( '.wp-submenu' );
 
-		menutop = $menuItem.offset().top;
-		wintop = $window.scrollTop();
+		rect = menuItem.getBoundingClientRect();
+		win = menuItem.ownerDocument.defaultView;
+		menutop = rect.top + win.pageYOffset;
+		wintop = document.scrollingElement.scrollTop;
 		maxtop = menutop - wintop - 30; // max = make the top of the sub almost touch admin bar.
 
-		bottomOffset = menutop + $submenu.height() + 1; // Bottom offset of the menu.
+		bottomOffset = menutop + submenu.getBoundingClientRect().height + 1; // Bottom offset of the menu.
 		pageHeight = $wpwrap.height();                  // Height of the entire page.
 		adjustment = 60 + bottomOffset - pageHeight;
 		theFold = $window.height() + wintop - 50;       // The fold.
@@ -939,9 +942,9 @@ $( function() {
 		}
 
 		if ( adjustment > 1 && $('#wp-admin-bar-menu-toggle').is(':hidden') ) {
-			$submenu.css( 'margin-top', '-' + adjustment + 'px' );
+			submenu.style.marginTop = '-' + adjustment + 'px';
 		} else {
-			$submenu.css( 'margin-top', '' );
+			submenu.style.marginTop = '';
 		}
 	}
 
@@ -974,7 +977,7 @@ $( function() {
 		 * @return {void}
 		 */
 		$adminmenu.find( 'a.wp-has-submenu' ).on( mobileEvent + '.wp-mobile-hover', function( event ) {
-			var $menuItem = $(this).parent();
+			var menuItem = this.parentNode;
 
 			if ( $adminmenu.data( 'wp-responsive' ) ) {
 				return;
@@ -985,27 +988,28 @@ $( function() {
 			 * 	- the submenu is not open.
 			 * 	- the submenu is not shown inline or the menu is not folded.
 			 */
-			if ( ! $menuItem.hasClass( 'opensub' ) && ( ! $menuItem.hasClass( 'wp-menu-open' ) || $menuItem.width() < 40 ) ) {
+			if ( ! menuItem.className.includes( 'opensub' ) && ( ! menuItem.className.includes( 'wp-menu-open' ) || menuItem.getBoundingClientRect().width < 40 ) ) {
 				event.preventDefault();
-				adjustSubmenu( $menuItem );
+				adjustSubmenu( menuItem );
 				$adminmenu.find( 'li.opensub' ).removeClass( 'opensub' );
-				$menuItem.addClass('opensub');
+				menuItem.classList.add( 'opensub' );
 			}
 		});
 	}
 
 	if ( ! isIOS && ! isAndroid ) {
-		$adminmenu.find( 'li.wp-has-submenu' ).hoverIntent({
-
-			/**
-			 * Opens the submenu when hovered over the menu item for desktops.
-			 *
-			 * @return {void}
-			 */
-			over: function() {
-				var $menuItem = $( this ),
-					$submenu = $menuItem.find( '.wp-submenu' ),
-					top = parseInt( $submenu.css( 'top' ), 10 );
+		/**
+		 * Opens the submenu when hovered over the menu item for desktops.
+		 * Uses only vanilla JavaScript with no dependencies.
+		 *
+		 * @since CP-2.2.0
+		 *
+		 * @return {void}
+		 */
+		topMenuItems.forEach( function( topMenuItem ) {
+			topMenuItem.addEventListener( 'mouseenter', function() {
+				var submenu = topMenuItem.querySelector( '.wp-submenu' ),
+					top = submenu.getBoundingClientRect().top;
 
 				if ( isNaN( top ) || top > -5 ) { // The submenu is visible.
 					return;
@@ -1016,28 +1020,31 @@ $( function() {
 					return;
 				}
 
-				adjustSubmenu( $menuItem );
-				$adminmenu.find( 'li.opensub' ).removeClass( 'opensub' );
-				$menuItem.addClass( 'opensub' );
-			},
+				clearTimeout( menuLeaveTimer );
+				adjustSubmenu( topMenuItem );
+
+				topMenuItems.forEach( function( openItem ) {
+					openItem.classList.remove( 'opensub' );
+				} );
+
+				menuEnterTimer = setTimeout( function() {
+					topMenuItem.classList.add( 'opensub' );
+				}, 200 );
+			} );
 
 			/**
 			 * Closes the submenu when no longer hovering the menu item.
 			 *
 			 * @return {void}
 			 */
-			out: function(){
-				if ( $adminmenu.data( 'wp-responsive' ) ) {
-					// The menu is in responsive mode, bail.
-					return;
-				}
+			topMenuItem.addEventListener( 'mouseleave', function() {
+				clearTimeout( menuEnterTimer );
 
-				$( this ).removeClass( 'opensub' ).find( '.wp-submenu' ).css( 'margin-top', '' );
-			},
-			timeout: 200,
-			sensitivity: 7,
-			interval: 90
-		});
+				menuLeaveTimer = setTimeout( function() {
+					topMenuItem.classList.remove( 'opensub' );
+				}, 90 );
+			} );
+		} );
 
 		/**
 		 * Opens the submenu on when focused on the menu item.

@@ -1650,6 +1650,7 @@ function cp_deprecated_scripts() {
 		'farbtastic',
 		'thickbox',
 		'clipboard',
+		'hoverIntent',
 	);
 }
 
