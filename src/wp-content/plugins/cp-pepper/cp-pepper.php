@@ -23,9 +23,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class PepperPassword {
 
-	private $screen           = '';
-	private $pepper_file_path = '';
-	const SLUG                = 'cp-pepper';
+	private $screen      = '';
+	private $pepper_file = '';
+	const SLUG           = 'cp-pepper';
 
 	/**
 	 * Constructor.
@@ -33,7 +33,7 @@ class PepperPassword {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		$this->pepper_file_path = __DIR__ . '/pepper.php';
+		$this->pepper_file = __DIR__ . '/pepper.php';
 		$this->init();
 	}
 
@@ -58,7 +58,7 @@ class PepperPassword {
 	 * @since 1.0.0
 	 */
 	public function activate() {
-		if ( file_exists( $this->pepper_file_path ) ) {
+		if ( file_exists( $this->pepper_file ) ) {
 			return;
 		}
 		$this->set_pepper( '' );
@@ -91,7 +91,7 @@ class PepperPassword {
 	 * @return bool Whether the file that store the pepper is readable
 	 */
 	private function can_read() {
-		return is_readable( $this->pepper_file_path );
+		return is_readable( $this->pepper_file );
 	}
 
 	/**
@@ -102,7 +102,7 @@ class PepperPassword {
 	 * @return bool Whether the file that store the pepper is writable
 	 */
 	private function can_write() {
-		return is_writable( $this->pepper_file_path );
+		return is_writable( $this->pepper_file );
 	}
 
 	/**
@@ -119,7 +119,7 @@ namespace ClassicPress\PepperPassword;
 $current_pepper = \'' . $pepper . '\';
 ';
 		// $wp_filesystem is not initiated when called in an action
-		return (bool) file_put_contents( $this->pepper_file_path, $content ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+		return (bool) file_put_contents( $this->pepper_file, $content ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
 	}
 
 	/**
@@ -130,7 +130,7 @@ $current_pepper = \'' . $pepper . '\';
 	 * @return string|false Pepper string on success, false on failure.
 	 */
 	private function get_pepper() {
-		$lines = file( $this->pepper_file_path );
+		$lines = file( $this->pepper_file );
 		$match = preg_match( '/\$current_pepper = \'([a-zA-Z0-9]*)\';/', $lines[2], $matches );
 		if ( $match !== 1 ) {
 			return false;
@@ -157,7 +157,7 @@ $current_pepper = \'' . $pepper . '\';
 		if ( $this->can_write() === false ) {
 			echo '<div class="notice notice-error is-dismissible">';
 			echo '<p>' . esc_html( 'Error: Cannot write the pepper file.' ) . '</p>';
-			echo '<p><code>' . esc_html( $this->pepper_file_path ) . '</code></p>';
+			echo '<p><code>' . esc_html( $this->pepper_file ) . '</code></p>';
 			if ( $this->can_read() ) {
 				echo '<p>' . esc_html( 'You can edit the file manually to add or chenge the pepper.' ) . '</p>';
 			}
