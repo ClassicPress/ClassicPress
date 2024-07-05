@@ -123,7 +123,7 @@ $current_pepper = \'' . $pepper . '\';
 	}
 
 	/**
-	 * Het the pepper.
+	 * Get the pepper.
 	 *
 	 * @since 1.0.0
 	 *
@@ -156,10 +156,10 @@ $current_pepper = \'' . $pepper . '\';
 
 		if ( $this->can_write() === false ) {
 			echo '<div class="notice notice-error is-dismissible">';
-			echo '<p>' . esc_html( 'Error: can\'t write the pepper file.' ) . '</p>';
+			echo '<p>' . esc_html( 'Error: Cannot write the pepper file.' ) . '</p>';
 			echo '<p><code>' . esc_html( $this->pepper_file_path ) . '</code></p>';
 			if ( $this->can_read() ) {
-				echo '<p>' . esc_html( 'You can anyway edit the file manually to add or chenge the pepper.' ) . '</p>';
+				echo '<p>' . esc_html( 'You can edit the file manually to add or chenge the pepper.' ) . '</p>';
 			}
 			echo '</div></div></div>';
 			return;
