@@ -67,7 +67,7 @@ class PepperPassword {
 	/**
 	 * Menu creation.
 	 *
-	 * Register the menu under options-general and add the regenerate action.
+	 * Register the menu under options-general and add the generate action.
 	 *
 	 * @since 1.0.0
 	 */
@@ -80,7 +80,7 @@ class PepperPassword {
 			self::SLUG,
 			array( $this, 'render_menu' ),
 		);
-		add_action( 'load-' . $this->screen, array( $this, 'regenerate_action' ) );
+		add_action( 'load-' . $this->screen, array( $this, 'generate_action' ) );
 	}
 
 	/**
@@ -96,8 +96,20 @@ class PepperPassword {
 namespace ClassicPress\PepperPassword;
 $current_pepper = \'' . $pepper . '\';
 ';
-		// $wp_filesystem is not initiated when called in an action
-		return (bool) file_put_contents( $this->pepper_file, $content ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+
+		ob_start();
+		if ( false === ( $creds = request_filesystem_credentials( admin_url(), '', false, false, null ) ) ) {
+			return; // Await filesystem access
+		}
+
+		if ( ! WP_Filesystem( $creds ) ) {
+			request_filesystem_credentials( admin_url(), '', true, false, null );
+			return;
+		}
+		ob_end_flush();
+
+		global $wp_filesystem;
+		return (bool) $wp_filesystem->put_contents( $this->pepper_file, $content );
 	}
 
 	/**
@@ -168,7 +180,7 @@ $current_pepper = \'' . $pepper . '\';
 			echo '<p>' . esc_html( 'Error: Cannot write the pepper file.' ) . '</p>';
 			echo '<p><code>' . esc_html( $this->pepper_file ) . '</code></p>';
 			if ( $wp_filesystem->is_readable( $this->pepper_file ) ) {
-				echo '<p>' . esc_html( 'You can edit the file manually to add or chenge the pepper.' ) . '</p>';
+				echo '<p>' . esc_html( 'You can edit the file manually to add or change the pepper.' ) . '</p>';
 			}
 			echo '</div></div></div>';
 			return;
@@ -176,9 +188,9 @@ $current_pepper = \'' . $pepper . '\';
 
 		$pepper = $this->get_pepper();
 
-		$notice = get_transient( 'cp_pepper_regenerate_response' );
+		$notice = get_transient( 'cp_pepper_generate_response' );
 		if ( $notice !== false ) {
-			delete_transient( 'cp_pepper_regenerate_response' );
+			delete_transient( 'cp_pepper_generate_response' );
 			echo '<div class="notice notice-success is-dismissible">';
 			echo '<p>' . esc_html( $notice ) . '</p>';
 			echo '</div>';
@@ -191,8 +203,8 @@ $current_pepper = \'' . $pepper . '\';
 		$button  = $pepper === '' ? esc_html__( 'Enable Pepper' ) : esc_html__( 'Renew Pepper' );
 
 		echo '<p>' . esc_html( $message ) . '</p>';
-		echo '<form action="' . esc_url_raw( add_query_arg( array( 'action' => 'regenerate' ), admin_url( 'options-general.php?page=' . self::SLUG ) ) ) . '" method="POST">';
-		wp_nonce_field( 'regenerate', '_cppepper' );
+		echo '<form action="' . esc_url_raw( add_query_arg( array( 'action' => 'generate' ), admin_url( 'options-general.php?page=' . self::SLUG ) ) ) . '" method="POST">';
+		wp_nonce_field( 'generate', '_cppepper' );
 		echo '<input type="submit" class="button button-primary" id="submit_button" value="' . esc_html( $button ) . '"></input> ';
 		echo '</form></div></div>';
 	}
@@ -218,20 +230,20 @@ $current_pepper = \'' . $pepper . '\';
 	}
 
 	/**
-	 * Regenerate action handler.
+	 * Generate action handler.
 	 *
-	 * Generate and save in the options table the new pepper.
+	 * Generate pepper, store transient results and redirect.
 	 *
 	 * @since 1.0.0
 	 */
-	public function regenerate_action() {
+	public function generate_action() {
 		if ( ! isset( $_GET['action'] ) ) {
 			return false;
 		}
-		if ( $_GET['action'] !== 'regenerate' ) {
+		if ( $_GET['action'] !== 'generate' ) {
 			return false;
 		}
-		if ( ! check_admin_referer( 'regenerate', '_cppepper' ) ) {
+		if ( ! check_admin_referer( 'generate', '_cppepper' ) ) {
 			return false;
 		}
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -239,7 +251,7 @@ $current_pepper = \'' . $pepper . '\';
 		}
 
 		$pepper_result = $this->get_pepper() === '' ? esc_html__( 'Pepper enabled.' ) : esc_html__( 'Pepper renewed.' );
-		set_transient( 'cp_pepper_regenerate_response', $pepper_result, 30 );
+		set_transient( 'cp_pepper_generate_response', $pepper_result, 30 );
 
 		$pepper = $this->random_pepper();
 		$this->set_pepper( $pepper );
