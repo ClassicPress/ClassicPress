@@ -46,6 +46,7 @@ class PepperPassword {
 	 */
 	public function init() {
 		add_action( 'admin_menu', array( $this, 'create_settings_menu' ), 100 );
+		add_filter( 'plugin_action_links', array( $this, 'create_settings_link' ), 10, 2 );
 		add_filter( 'cp_pepper_password', array( $this, 'get_pepper' ) );
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 	}
@@ -81,6 +82,22 @@ class PepperPassword {
 			array( $this, 'render_menu' ),
 		);
 		add_action( 'load-' . $this->screen, array( $this, 'generate_action' ) );
+	}
+
+	/**
+	 * Add Settings Link.
+	 *
+	 * Adds a link to the Settings page to the plugin row for simpler navigation.
+	 *
+	 * @since 1.0.0
+	 */
+	public function create_settings_link( $links, $plugin_file_name ) {
+		if ( str_contains( $plugin_file_name, basename( __FILE__ ) ) ) {
+			$setting_link = '<a href="' . admin_url( 'options-general.php?page=' . self::SLUG ) . '">' . esc_html__( 'Settings' ) . '</a>';
+			array_unshift( $links, $setting_link );
+		}
+
+		return $links;
 	}
 
 	/**
