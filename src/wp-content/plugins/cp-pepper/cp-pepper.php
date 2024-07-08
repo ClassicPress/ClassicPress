@@ -136,7 +136,7 @@ $current_pepper = \'' . $pepper . '\';
 	 *
 	 * @return string Pepper string on success, empty on failure.
 	 */
-	private function get_pepper() {
+	public function get_pepper() {
 		ob_start();
 		if ( false === ( $creds = request_filesystem_credentials( admin_url(), '', false, false, null ) ) ) {
 			return; // Await filesystem access
