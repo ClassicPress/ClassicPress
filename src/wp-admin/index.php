@@ -23,7 +23,6 @@ if ( current_user_can( 'install_plugins' ) ) {
 if ( current_user_can( 'upload_files' ) ) {
 	wp_enqueue_script( 'media-upload' );
 }
-add_thickbox();
 
 if ( wp_is_mobile() ) {
 	wp_enqueue_script( 'jquery-touch-punch' );

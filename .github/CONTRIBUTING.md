@@ -28,7 +28,7 @@ Also, please be sure to follow our [code of conduct](https://www.classicpress.ne
 
 We encourage you to join and ask any questions you have about contributing.
 
-- [Slack](https://www.classicpress.net/join-slack/) - great for real-time chat, posting screenshots and asking questions about anything you're stuck on. Or just socializing.
+- [Zulip](https://classicpress.zulipchat.com/register/) - great for real-time chat, posting screenshots and asking questions about anything you're stuck on. Or just socializing.
 - [Petitions](https://forums.classicpress.net/c/governance/petitions/77) - for proposing new features or major changes for consideration by the community.
 - [GitHub issues](https://github.com/ClassicPress/ClassicPress/issues) - for proposing or discussing bugfixes, or minor improvements. Generally it is a good idea to create a petition for anything that may take a significant amount of time or that may have backwards compatibility implications.
 - [Forums](https://forums.classicpress.net/) - for posting questions and searching for solutions. The forums are our most active community channel other than Slack.
@@ -73,21 +73,23 @@ If you're not sure where to start contributing, here are some ideas:
 
 At this point you have a working local development environment. Here are some further steps for more advanced usage:
 
-- Set up `phpunit` to run and develop automated tests _(see [Automated tests](#automated-tests) below)_.
-- Set up `grunt` to run the pre-commit checks, make your own builds of ClassicPress, and perform other miscellaneous build and development tasks:
+- Set up [`composer`](https://getcomposer.org/) to run and develop automated tests _(see [Automated tests](#automated-tests) below)_.
+- Set up Node and `grunt` to run the pre-commit checks, make your own builds of ClassicPress, and perform other miscellaneous build and development tasks:
   - Set up [`nvm`](https://github.com/nvm-sh/nvm) or a similar program to manage Node versions.
-  - Run `nvm install` or use your version manager to switch to the current version of Node used by ClassicPress. Run this step periodically.
+  - Run `nvm install` or use your version manager to switch to the current version of Node and `npm` (Node package manager) used by ClassicPress. Run this step periodically.
   - Run `npm install` to install/update the ClassicPress `npm` dependencies. Run this step periodically.
-  - When changing Node versions, you may need to run `npm install -g grunt-cli` to make the `grunt` command work.
+  - Run `npm install -g grunt-cli` to make the grunt command line available globally. When changing Node versions, you may need to run this command again.
   - Run `grunt build` to create your own build of ClassicPress (in the `build` directory) or run `grunt precommit:verify` to test whether any other files may need to be updated for your PR. There are many other `grunt` commands available in the `Gruntfile.js` file.
 
 ## Tips for good PRs
 
 - A good pull request (PR) should be for a single, specific change. The change should be explained using the template provided on GitHub.
-- Any new or modified code should have automated tests, especially if the way it works is at all complicated.
+- Before submitting a PR it can be very useful to run some tests locally to save time revising your PR later. _(see [Automated tests](#automated-tests) below)_.
+- Any new or modified code should have automated tests included, especially if the way it works is at all complicated.
 - It is always a good idea to look at the "Files" view on GitHub after submitting your PR to verify that the changes look as expected. Generally, there should be no "extra" changes that are not related to the purpose of your PR like reformatting or re-aligning files. Such changes are best done in a separate PR just for that purpose. If you see something that looks out of place, you can make an edit to fix it and push a new commit to your PR.
 - Generally it is best to only use one pull request for each change, even if the initial code needs revision after review and feedback. Closing the initial pull request and opening a new one makes it more difficult to follow the history of the change, and it is much better to just update the existing PR in response to any feedback received.
 - To be accepted, a PR **must** pass the automated tests which are run using GitHub Actions. Sometimes the tests experience unrelated failures, we will be happy to help resolve these. Usually, when this happens we start a separate PR to resolve the failure, and once that is merged, your PR will need to be updated as per the next bullet point.
+- New functions, filters and actions need to be fully documented consistently with the established DocBlock format. `@since` parameters for new ClassicPress features that diverge from WordPress must be prefixed with `CP-`, for example `@since CP-2.0.0`.
 - You can always refresh your PR branch against the latest ClassicPress code using the following sequence of commands:
 
   ```
@@ -127,6 +129,13 @@ Any change that introduces new code or changes behavior should have automated te
 If you're not familiar with automated tests, the concept is basically **code that runs other code** and verifies its behavior.
 
 Documentation for running and updating our existing tests, as well as the code for the tests themselves, can be found in the [`tests/phpunit`](../tests/phpunit) subdirectory of this repository.
+
+[`Composer`](https://getcomposer.org/) can be used locally to run unit tests,
+- `composer run phpcs` - checks coding standards on source files
+- `composer run phpcs-tests` - checks coding standards on test files
+- `composer run phpunit` - runs unit tests
+
+QUnit is used for testing JavaScript and these tests can be run in a browser at the local path `tests/qunit/index.html` or from the command line with `grunt qunit:local`.
 
 ## Backporting changes from WordPress
 
@@ -175,7 +184,7 @@ When you're ready to backport a code change:
 
 
    **Pay close attention to the output of this script** and let us know if you see anything strange or confusing!
-3. Resolve merge conflicts (if any) by editing the conflicting files, running `git add` and then `git commit`. If you cannot resolve the conflicts, ask for help in the [**#core** Slack channel](https://www.classicpress.net/join-slack/) or just push your branch as-is and we'll take care of it!
+3. Resolve merge conflicts (if any) by editing the conflicting files, running `git add` and then `git commit`. If you cannot resolve the conflicts, ask for help in the [**#core** Zulip channel](https://classicpress.zulipchat.com/register/) or just push your branch as-is and we'll take care of it!
 4. Repeat steps 2 and 3 for any further WordPress changesets that are related to this PR.
 5. Push your branch to your fork on GitHub using `git push origin merge/wp-rCHANGESET_NUMBER` or the name of your current branch.
 6. Use the GitHub website to make a PR against the `develop` branch for review.

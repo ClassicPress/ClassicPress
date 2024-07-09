@@ -246,6 +246,18 @@ if ( $doaction ) {
 			wp_media_attach_action( $_REQUEST['found_post_id'] );
 			break;
 
+		case 'edit':
+			if ( empty( $post_ids ) ) {
+				break;
+			}
+			foreach ( $post_ids as $post_id ) {
+				if ( ! current_user_can( 'edit_post', $post_id ) ) {
+					wp_die( __( 'Sorry, you are not allowed to edit this item.' ) );
+				}
+			}
+			bulk_edit_attachments( $_REQUEST );
+			break;
+
 		case 'trash':
 			if ( empty( $post_ids ) ) {
 				break;
@@ -408,6 +420,12 @@ if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) ) {
 <div id="ajax-response"></div>
 <?php find_posts_div(); ?>
 </form>
+
+<?php
+if ( $wp_list_table->has_items() ) {
+	$wp_list_table->inline_edit();
+}
+?>
 </div>
 
 <?php

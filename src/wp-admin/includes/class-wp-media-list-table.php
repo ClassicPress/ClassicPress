@@ -182,19 +182,63 @@ class WP_Media_List_Table extends WP_List_Table {
 		if ( MEDIA_TRASH ) {
 			if ( $this->is_trash ) {
 				$actions['untrash'] = __( 'Restore' );
-				$actions['delete']  = __( 'Delete permanently' );
+				$actions['delete'] = __( 'Delete permanently' );
 			} else {
 				$actions['trash'] = __( 'Move to Trash' );
 			}
 		} else {
+			$actions['edit']   = __( 'Edit' );
 			$actions['delete'] = __( 'Delete permanently' );
 		}
 
 		if ( $this->detached ) {
-			$actions['attach'] = __( 'Attach' );
+			$actions['attach'] = __( 'Attach to post' );
 		}
 
 		return $actions;
+	}
+
+	/**
+	 * Displays a media categories drop-down for filtering on the Media list table.
+	 *
+	 * @since CP-2.2.0
+	 *
+	 * @global int $cat Currently selected category.
+	 *
+	 * @param string $post_type Post type slug.
+	 */
+	protected function media_categories_dropdown( $post_type ) {
+
+		/**
+		 * Filters whether to remove the 'Media Categories' drop-down from the post list table.
+		 *
+		 * @since CP-2.2.0
+		 *
+		 * @param bool   $disable   Whether to disable the categories drop-down. Default false.
+		 * @param string $post_type Post type slug.
+		 */
+		if ( false !== apply_filters( 'disable_media_categories_dropdown', false, $post_type ) ) {
+			return;
+		}
+
+		$media_category = get_taxonomy( 'media_category' );
+		if ( is_object_in_taxonomy( 'attachment', 'media_category' ) ) {
+			$dropdown_options = array(
+				'show_option_all' => $media_category->labels->all_items,
+				'hide_empty'      => 0,
+				'hierarchical'    => 1,
+				'show_count'      => 0,
+				'orderby'         => 'name',
+				'name'            => 'taxonomy=media_category&term',
+				'taxonomy'        => 'media_category',
+				'selected'        => get_query_var( 'term' ),
+				'value_field'     => 'slug',
+			);
+
+			echo '<label class="screen-reader-text" for="cat">' . $media_category->labels->filter_by_item . '</label>';
+
+			wp_dropdown_categories( $dropdown_options );
+		}
 	}
 
 	/**
@@ -209,6 +253,7 @@ class WP_Media_List_Table extends WP_List_Table {
 			<?php
 			if ( ! $this->is_trash ) {
 				$this->months_dropdown( 'attachment' );
+				$this->media_categories_dropdown( 'attachment' );
 			}
 
 			/** This action is documented in wp-admin/includes/class-wp-posts-list-table.php */
@@ -356,6 +401,9 @@ class WP_Media_List_Table extends WP_List_Table {
 		}
 
 		/* translators: Column name. */
+		$posts_columns['thumbnail'] = _x( 'Featured Image', 'column name' );
+		$posts_columns['used_in']   = _x( 'Used In', 'column name' );
+
 		if ( ! $this->detached ) {
 			$posts_columns['parent'] = _x( 'Uploaded to', 'column name' );
 
@@ -370,6 +418,9 @@ class WP_Media_List_Table extends WP_List_Table {
 		}
 
 		/* translators: Column name. */
+		$posts_columns['alt']         = _x( 'Alt Text', 'column name' );
+		$posts_columns['caption']     = _x( 'Caption', 'column name' );
+		$posts_columns['desc']        = _x( 'Description', 'column name' );
 		$posts_columns['date'] = _x( 'Date', 'column name' );
 
 		/**
@@ -389,11 +440,13 @@ class WP_Media_List_Table extends WP_List_Table {
 	 */
 	protected function get_sortable_columns() {
 		return array(
-			'title'    => 'title',
-			'author'   => 'author',
-			'parent'   => 'parent',
-			'comments' => 'comment_count',
-			'date'     => array( 'date', true ),
+			'title'     => 'title',
+			'author'    => 'author',
+			'parent'    => 'parent',
+			'thumbnail' => 'thumbnail',
+			'used_in'   => 'used_in',
+			'comments'  => 'comment_count',
+			'date'      => array( 'date', true ),
 		);
 	}
 
@@ -505,17 +558,36 @@ class WP_Media_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Handles the alt text column output.
+	 *
+	 * @since CP-2.2.0
+	 *
+	 * @param WP_Post $post The current WP_Post object.
+	 */
+	public function column_alt( $post ) {
+		echo get_post_meta( $post->ID, '_wp_attachment_image_alt', true );
+	}
+
+	/**
+	 * Handles the caption column output.
+	 *
+	 * @since CP-2.2.0
+	 *
+	 * @param WP_Post $post The current WP_Post object.
+	 */
+	public function column_caption( $post ) {
+		echo $post->post_excerpt;
+	}
+
+	/**
 	 * Handles the description column output.
 	 *
-	 * @since 4.3.0
-	 * @deprecated 6.2.0
+	 * @since CP-2.2.0
 	 *
 	 * @param WP_Post $post The current WP_Post object.
 	 */
 	public function column_desc( $post ) {
-		_deprecated_function( __METHOD__, '6.2.0' );
-
-		echo has_excerpt() ? $post->post_excerpt : '';
+		echo $post->post_content;
 	}
 
 	/**
@@ -550,6 +622,89 @@ class WP_Media_List_Table extends WP_List_Table {
 		 * @param string  $column_name The column name.
 		 */
 		echo apply_filters( 'media_date_column_time', $h_time, $post, 'date' );
+	}
+
+	/**
+	 * Handles the thumbnail column output.
+	 *
+	 * @since CP-2.2.0
+	 *
+	 * @param WP_Post $post The current WP_Post object.
+	 */
+	public function column_thumbnail( $post ) {
+		$user_can_edit = current_user_can( 'edit_post', $post->ID );
+
+		// Get all post types except attachments and revisions.
+		$parent_types = get_post_types();
+		unset( $parent_types['attachment'] );
+		unset( $parent_types['revision'] );
+
+		// Set output variable.
+		$output = '';
+
+		foreach ( $parent_types as $parent_type ) {
+
+			// Get all posts where this attachment is the featured image.
+			$relationship_ids = cp_get_object_relationship_ids( $post->ID, 'thumbnail', $parent_type );
+
+			if ( ! empty( $relationship_ids ) ) {
+				foreach ( $relationship_ids as $relationship_id ) {
+					if ( absint( $relationship_id ) !== 0 ) {
+						$ancestor          = get_post( $relationship_id );
+						$ancestor_type_obj = get_post_type_object( $ancestor->post_type );
+						$title             = _draft_or_post_title( $relationship_id );
+
+						if ( $ancestor_type_obj->show_ui && current_user_can( 'edit_post', $relationship_id ) ) {
+							$output .= '<strong><a href="' . esc_url( get_edit_post_link( $relationship_id ) ) . '">' . esc_html( $title ) . '</a></strong><br>';
+						} else {
+							$output .= $title . '<br>';
+						}
+					}
+				}
+			}
+		}
+		return $output;
+	}
+
+	/**
+	 * Handles the used-in column output.
+	 *
+	 * @since CP-2.2.0
+	 *
+	 * @param WP_Post $post The current WP_Post object.
+	 */
+	public function column_used_in( $post ) {
+		$user_can_edit = current_user_can( 'edit_post', $post->ID );
+
+		// Get all post types except attachments and revisions.
+		$parent_types = get_post_types();
+		unset( $parent_types['attachment'] );
+		unset( $parent_types['revision'] );
+
+		// Set output variable.
+		$output = '';
+
+		foreach ( $parent_types as $parent_type ) {
+
+			// Get all posts where this attachment is used in the content.
+			$parent_ids = cp_get_object_relationship_ids( $post->ID, 'attachment', $parent_type );
+
+			if ( ! empty( $parent_ids ) ) {
+				foreach ( $parent_ids as $parent_id ) {
+					if ( absint( $parent_id ) !== 0 ) {
+						$parent_type_obj = get_post_type_object( $parent_type );
+						$title           = _draft_or_post_title( $parent_id );
+
+						if ( $parent_type_obj->show_ui && current_user_can( 'edit_post', $parent_id ) ) {
+							$output .= '<strong><a href="' . esc_url( get_edit_post_link( $parent_id ) ) . '">' . esc_html( $title ) . '</a></strong><br>';
+						} else {
+							$output .= $title . '<br>';
+						}
+					}
+				}
+			}
+		}
+		return $output;
 	}
 
 	/**
@@ -676,9 +831,9 @@ class WP_Media_List_Table extends WP_List_Table {
 					);
 				}
 
-				echo implode( wp_get_list_item_separator(), $output );
+				return implode( wp_get_list_item_separator(), $output );
 			} else {
-				echo '<span aria-hidden="true">&#8212;</span><span class="screen-reader-text">' . get_taxonomy( $taxonomy )->labels->no_terms . '</span>';
+				return '<span aria-hidden="true">&#8212;</span><span class="screen-reader-text">' . get_taxonomy( $taxonomy )->labels->no_terms . '</span>';
 			}
 
 			return;
@@ -911,5 +1066,270 @@ class WP_Media_List_Table extends WP_List_Table {
 		);
 
 		return $this->row_actions( $actions );
+	}
+
+	/**
+	 * Outputs the hidden row displayed when inline editing.
+	 *
+	 * @since CP-2.2.0
+	 *
+	 * @global string $mode List table view mode.
+	 */
+	public function inline_edit() {
+		$users = get_users();
+		$terms = get_terms(
+			array(
+				'taxonomy'   => 'media_category',
+				'hide_empty' => false,
+			)
+		);
+		$tags = get_terms(
+			array(
+				'taxonomy'   => 'media_post_tag',
+				'hide_empty' => false,
+				'fields'     => 'names',
+			)
+		);
+		$tags_string = ! empty( $tags ) ? implode( ', ', $tags ) : '';
+		?>
+
+		<table><tbody>
+
+		<tr id="bulk-edit" class="inline-edit-row inline-edit-row-post bulk-edit-row bulk-edit-row-post bulk-edit-post inline-editor" style="display: none">
+			<td colspan="<?php echo $this->get_column_count(); ?>" class="colspanchange">
+				<div class="inline-edit-wrapper" role="region" aria-labelledby="bulk-edit-legend" tabindex="-1">
+
+					<fieldset class="inline-edit-col-left">
+						<legend id="bulk-edit-legend" class="inline-edit-legend"><?php echo esc_html_e( 'Bulk Edit' ); ?></legend>
+						<div class="inline-edit-col">
+							<div id="bulk-title-div">
+								<div id="bulk-titles">
+									<ul id="bulk-titles-list" role="list">
+										<!-- Fill with JavaScript -->
+									</ul>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+			
+					<fieldset class="inline-edit-col-center inline-edit-categories">
+						<div class="inline-edit-col">
+							<span class="title inline-edit-categories-label"><?php echo esc_html_e( 'Media Categories' ); ?></span>
+							<input type="hidden" name="media_category[]" value="0">
+							<ul class="cat-checklist category-checklist">
+
+							<?php
+							foreach ( $terms as $term ) {
+								?>
+
+								<li id="category-<?php echo esc_attr( $term->term_id ); ?>" class="popular-category">
+									<input id="in-category-<?php echo esc_attr( $term->term_id ); ?>" type="checkbox" name="media_category[]" value="<?php echo esc_attr( $term->term_id ); ?>">
+									<label for="in-category-<?php echo esc_attr( $term->term_id ); ?>" class="selectit"><?php echo esc_html( $term->name ); ?></label>
+								</li>
+
+								<?php
+							}
+							?>
+
+							</ul>
+						</div>
+					</fieldset>
+
+					<fieldset class="inline-edit-col-right">
+						<div class="inline-edit-tags-wrap">
+							<label class="inline-edit-tags">
+								<span class="title"><?php esc_html_e( 'Media Tags' ); ?></span>
+								<div id="inline-container" class="inline-container">
+									<div hidden></div>
+									<textarea data-wp-taxonomy="media_post_tag" cols="22" rows="1" name="media_post_tag" class="media_post_tag" aria-describedby="inline-edit-post_tag-desc"></textarea>
+									<div class="container__suggestions"></div>
+								</div>
+								<input id="tags-list" value="<?php echo $tags_string; ?>" hidden>
+							</label>
+							<p class="howto" id="inline-edit-post_tag-desc"><?php esc_html_e( 'Separate tags with commas' ); ?></p>
+						</div>
+						<div class="inline-edit-col">
+							<label for="bulk-author" class="inline-edit-author">
+								<span class="title"><?php esc_html_e( 'Author' ); ?></span>
+								<select id="bulk-author" name="post_author">
+									<option value="-1"><?php esc_html_e( '— No Change —' ); ?></option>
+
+									<?php
+									foreach ( $users as $user ) {
+										?>
+
+									<option value="<?php echo esc_attr( $user->ID ); ?>"><?php echo esc_html( $user->display_name ); ?></option>
+
+										<?php
+									}
+									?>
+
+								</select>
+							</label>
+						</div>
+
+					</fieldset>
+
+					<div class="submit inline-edit-save">
+						<input id="bulk-edit-update" type="submit" name="bulk_edit" class="button button-primary" value="<?php esc_attr_e( 'Update' ); ?>">				
+						<button type="button" class="button cancel"><?php esc_html_e( 'Cancel' ); ?></button>
+				
+						<input type="hidden" name="upload" value="list">
+						<input type="hidden" name="screen" value="upload">
+				
+						<div class="notice notice-error notice-alt inline hidden">
+							<p class="error"></p>
+						</div>
+					</div>
+					
+				</div>
+			</td>
+		</tr>
+
+		<tr id="quick-edit" class="inline-edit-row inline-edit-row-post quick-edit-row quick-edit-row-post quick-edit-post inline-editor" style="display: none">
+			<td colspan="<?php echo $this->get_column_count(); ?>" class="colspanchange">
+				<div class="inline-edit-wrapper" role="region" aria-labelledby="bulk-edit-legend" tabindex="-1">
+
+					<fieldset class="inline-edit-col-left">
+						<legend id="bulk-edit-legend" class="inline-edit-legend"><?php echo esc_html_e( 'Quick Edit' ); ?></legend>
+						<div class="inline-edit-col">
+							<label for="quick-title">
+								<span class="title"><?php echo esc_html_e( 'Title' ); ?></span>
+							</label>
+							<input id="quick-title" type="text" name="post_title" class="input-text-wrap ptitle" value="">
+
+							<label for="quick-slug">
+								<span class="title"><?php echo esc_html_e( 'URL' ); ?></span>
+							</label>
+							<input id="quick-slug" type="text" name="post_name" value="" class="input-text-wrap" autocomplete="off" spellcheck="false" readonly>
+
+							<fieldset class="inline-edit-date">
+								<legend><span class="title"><?php echo esc_html_e( 'Date' ); ?></span></legend>
+								<div class="timestamp-wrap">
+									<label for="quick-month">
+										<span class="screen-reader-text"><?php echo esc_html_e( 'Month' ); ?></span>				
+									</label>
+									<select id="quick-month" class="form-required" name="mm">
+										<option value="01" data-text="Jan"><?php echo esc_html_e( '01-Jan' ); ?></option>
+										<option value="02" data-text="Feb"><?php echo esc_html_e( '02-Feb' ); ?></option>
+										<option value="03" data-text="Mar"><?php echo esc_html_e( '03-Mar' ); ?></option>
+										<option value="04" data-text="Apr"><?php echo esc_html_e( '04-Apr' ); ?></option>
+										<option value="05" data-text="May"><?php echo esc_html_e( '05-May' ); ?></option>
+										<option value="06" data-text="Jun"><?php echo esc_html_e( '06-Jun' ); ?></option>
+										<option value="07" data-text="Jul"><?php echo esc_html_e( '07-Jul' ); ?></option>
+										<option value="08" data-text="Aug"><?php echo esc_html_e( '08-Aug' ); ?></option>
+										<option value="09" data-text="Sep"><?php echo esc_html_e( '09-Sep' ); ?></option>
+										<option value="10" data-text="Oct"><?php echo esc_html_e( '10-Oct' ); ?></option>
+										<option value="11" data-text="Nov"><?php echo esc_html_e( '11-Nov' ); ?></option>
+										<option value="12" data-text="Dec"><?php echo esc_html_e( '12-Dec' ); ?></option>
+									</select>
+									<label for="quick-day">
+										<span class="screen-reader-text"><?php echo esc_html_e( 'Day' ); ?></span>
+									</label>
+									<input id="quick-day" type="number" name="jj" value="" size="2" maxlength="2" autocomplete="off" class="form-required" style="width:3.7em">&nbsp;,
+									<label for="quick-year">
+										<span class="screen-reader-text"><?php echo esc_html_e( 'Year' ); ?></span>
+									</label>
+									<input id="quick-year" type="number" name="aa" value="" size="4" maxlength="4" autocomplete="off" class="form-required" style="width:5em">
+								</div>
+								<input type="hidden" id="ss" name="ss" value="30">
+							</fieldset>
+							<br class="clear">
+							<label for="quick-author" class="inline-edit-author">
+								<span class="title"><?php esc_html_e( 'Author' ); ?></span>
+							</label>
+							<select id="quick-author" name="post_author">
+
+								<?php
+								foreach ( $users as $user ) {
+									?>
+
+								<option value="<?php echo esc_attr( $user->ID ); ?>"><?php echo esc_html( $user->display_name ); ?></option>
+
+									<?php
+								}
+								?>
+
+							</select>
+						</div>
+					</fieldset>
+			
+					<fieldset class="inline-edit-col-center inline-edit-categories">
+						<div class="inline-edit-col">
+							<span class="title inline-edit-categories-label"><?php echo esc_html_e( 'Media Categories' ); ?></span>
+							<ul class="cat-checklist category-checklist">
+
+							<?php
+							foreach ( $terms as $term ) {
+								?>
+
+								<li id="category-<?php echo esc_attr( $term->term_id ); ?>" class="popular-category">
+									<input id="in-category-<?php echo esc_attr( $term->term_id ); ?>" type="checkbox" name="media_category[]" value="<?php echo esc_attr( $term->slug ); ?>">&nbsp;
+									<label for="in-category-<?php echo esc_attr( $term->term_id ); ?>" class="selectit"><?php echo esc_html( $term->name ); ?></label>
+								</li>
+
+								<?php
+							}
+							?>
+
+							</ul>
+						</div>
+					</fieldset>
+
+					<fieldset class="inline-edit-col-right">
+						<div class="inline-edit-tags-wrap">
+							<label for="quick-media-tags" class="inline-edit-tags">
+								<span class="title"><?php esc_html_e( 'Media Tags' ); ?></span>
+							</label>
+							<div id="inline-container" class="inline-container">
+								<div hidden></div>
+								<textarea id="quick-media-tags" data-wp-taxonomy="media_post_tag" cols="22" rows="1" name="media_post_tag" class="media_post_tag" aria-describedby="inline-edit-post_tag-desc"></textarea>
+								<div class="container__suggestions"></div>
+							</div>
+							<p class="howto" id="inline-edit-post_tag-desc"><?php esc_html_e( 'Separate tags with commas' ); ?></p>
+						</div>
+
+						<div id="attachment-attributes">
+							<div class="inline-edit-col">
+								<label for="attachment-alt" class="alignleft">
+									<span class="title"><?php esc_html_e( 'Alt Text' ); ?></span>
+								</label>
+								<input id="attachment-alt" type="text" name="alt" value="">
+							</div>
+
+							<div class="inline-edit-col">
+								<label for="attachment-caption" class="alignleft">
+									<span class="title"><?php esc_html_e( 'Caption' ); ?></span>
+								</label>
+								<input id="attachment-caption" type="text" name="post_excerpt" value="">
+							</div>
+
+							<div class="inline-edit-col">
+								<label for="attachment-description" class="alignleft">
+									<span class="title"><?php esc_html_e( 'Description' ); ?></span>
+								</label>
+								<input id="attachment-decription" type="text" name="post_content" value="">
+							</div>
+						</div>
+					</fieldset>
+
+					<div class="submit inline-edit-save">
+						<?php wp_nonce_field( 'quickeditattachment', '_inline_edit_attachment', false ); ?>
+						<button id="quick-edit-update" type="button" class="button button-primary save"><?php esc_attr_e( 'Update' ); ?></button>				
+						<button type="button" class="button cancel"><?php esc_html_e( 'Cancel' ); ?></button>
+				
+						<input type="hidden" name="upload" value="list">
+						<input type="hidden" name="screen" value="upload">
+				
+						<div class="notice notice-error notice-alt inline hidden">
+							<p class="error"></p>
+						</div>
+					</div>
+				</div>
+			</td>
+		</tr>
+
+		</tbody></table>
+		<?php
 	}
 }
