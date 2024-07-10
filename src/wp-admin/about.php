@@ -157,6 +157,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				);
 				?>
 			</p>
+			<p>
 				<?php
 				printf(
 				/* translators: %s: WordPress version. */
@@ -176,7 +177,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				);
 				?>
 			</p>
-			</p>
+			<p>
 				<?php
 				printf(
 				/* translators: %s: WordPress version. */
