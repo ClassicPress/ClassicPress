@@ -92,7 +92,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( iframe != null ) {
 				iframe.remove();
 			}
-			closeButton.remove();
+			if ( closeButton != null ) {
+				closeButton.remove();
+			}
 		}
 	} );
 
