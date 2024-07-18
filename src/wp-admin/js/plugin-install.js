@@ -83,20 +83,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	/*
-	 * Remove iframe contents when closing modal dialog with Escape key
-	 *
-	 * @since CP-2.1.0
-	 */
-	document.addEventListener( 'keydown', function( e ) {
-		if ( e.key === 'Escape' ) {
-			if ( iframe != null ) {
-				iframe.remove();
-			}
-			closeButton.remove();
-		}
-	} );
-
-	/*
 	 * Called when iframe has loaded
 	 *
 	 * @since CP-2.1.0
