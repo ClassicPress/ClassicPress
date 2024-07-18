@@ -26,6 +26,7 @@ wp-tests-config.php
 /src/wp-content/mu-plugins
 /src/wp-content/plugins
 !/src/wp-content/plugins/index.php
+!/src/wp-content/plugins/cp-pepper
 /src/wp-content/themes/*
 !/src/wp-content/themes/twentyseventeen
 !/src/wp-content/themes/classicpress-twentyseventeen
@@ -42,6 +43,7 @@ wp-tests-config.php
 /src/wp-content/install.php
 /src/wp-content/maintenance.php
 /src/wp-content/object-cache.php
+/src/wp-content/pepper.php
 /src/wp-content/sunrise.php
 
 # Operating system specific files
