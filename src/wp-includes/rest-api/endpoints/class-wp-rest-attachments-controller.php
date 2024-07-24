@@ -201,9 +201,17 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 
 		wp_after_insert_post( $attachment, false, null );
 
+<<<<<<< HEAD
 		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
 			// Set a custom header with the attachment_id.
 			// Used by the browser/client to resume creating image sub-sizes after a PHP fatal error.
+=======
+		if ( wp_is_serving_rest_request() ) {
+			/*
+			 * Set a custom header with the attachment_id.
+			 * Used by the browser/client to resume creating image sub-sizes after a PHP fatal error.
+			 */
+>>>>>>> d17afcc9dd (Bootstrap/Load: Introduce functions to check whether WordPress is serving a REST API request.)
 			header( 'X-WP-Upload-Attachment-ID: ' . $attachment_id );
 		}
 
@@ -624,9 +632,17 @@ class WP_REST_Attachments_Controller extends WP_REST_Posts_Controller {
 			update_post_meta( $new_attachment_id, '_wp_attachment_image_alt', wp_slash( $image_alt ) );
 		}
 
+<<<<<<< HEAD
 		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
 			// Set a custom header with the attachment_id.
 			// Used by the browser/client to resume creating image sub-sizes after a PHP fatal error.
+=======
+		if ( wp_is_serving_rest_request() ) {
+			/*
+			 * Set a custom header with the attachment_id.
+			 * Used by the browser/client to resume creating image sub-sizes after a PHP fatal error.
+			 */
+>>>>>>> d17afcc9dd (Bootstrap/Load: Introduce functions to check whether WordPress is serving a REST API request.)
 			header( 'X-WP-Upload-Attachment-ID: ' . $new_attachment_id );
 		}
 
