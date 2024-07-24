@@ -4403,13 +4403,8 @@ function _wp_json_prepare_data( $data ) {
  * @param int   $status_code Optional. The HTTP status code to output. Default null.
  * @param int   $options     Optional. Options to be passed to json_encode(). Default 0.
  */
-<<<<<<< HEAD
-function wp_send_json( $response, $status_code = null, $options = 0 ) {
-	if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
-=======
 function wp_send_json( $response, $status_code = null, $flags = 0 ) {
 	if ( wp_is_serving_rest_request() ) {
->>>>>>> d17afcc9dd (Bootstrap/Load: Introduce functions to check whether WordPress is serving a REST API request.)
 		_doing_it_wrong(
 			__FUNCTION__,
 			sprintf(
@@ -4666,7 +4661,6 @@ function _mce_set_direction( $mce_init ) {
 }
 
 /**
-<<<<<<< HEAD
  * Sets element format to html.
  *
  * Fills in the 'element_format' setting
@@ -4681,7 +4675,9 @@ function _mce_set_direction( $mce_init ) {
 function _mce_set_element_format( $mce_init ) {
 	$mce_init['element_format'] = 'html';
 	return $mce_init;
-=======
+}
+
+/**
  * Determines whether WordPress is currently serving a REST API request.
  *
  * The function relies on the 'REST_REQUEST' global. As such, it only returns true when an actual REST _request_ is
@@ -4697,7 +4693,6 @@ function _mce_set_element_format( $mce_init ) {
  */
 function wp_is_serving_rest_request() {
 	return defined( 'REST_REQUEST' ) && REST_REQUEST;
->>>>>>> d17afcc9dd (Bootstrap/Load: Introduce functions to check whether WordPress is serving a REST API request.)
 }
 
 /**
