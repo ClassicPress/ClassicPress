@@ -4424,7 +4424,7 @@ function wp_send_json( $response, $status_code = null, $flags = 0 ) {
 		}
 	}
 
-	echo wp_json_encode( $response, $options );
+	echo wp_json_encode( $response, $flags );
 
 	if ( wp_doing_ajax() ) {
 		wp_die(
