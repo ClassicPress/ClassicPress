@@ -12,7 +12,6 @@
 	min-height: 50px;
 }
 input[type="range"] {
-	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
 	height: 4px;
@@ -25,7 +24,6 @@ input[type="range"]:focus {
 	outline: 0;
 }
 input[type="range"]::-webkit-slider-thumb {
-	-webkit-appearance: none;
 	appearance: none;
 	pointer-events: all;
 	width: 30px;
