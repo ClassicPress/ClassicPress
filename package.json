@@ -38,6 +38,7 @@
     "postcss": "8.4.40",
     "qunit": "^2.19.4",
     "rollup": "4.20.0",
+    "sass": "1.77.6",
     "sinon": "^18.0.0",
     "sinon-test": "^3.1.5",
     "source-map-loader": "^5.0.0",
@@ -52,8 +53,7 @@
     "@wordpress/dom-ready": "4.4.0",
     "@wordpress/hooks": "4.4.0",
     "@wordpress/i18n": "5.4.0",
-    "@wordpress/url": "4.4.0",
-    "node-sass": "9.0.0"
+    "@wordpress/url": "4.4.0"
   },
   "collective": {
     "type": "opencollective",
