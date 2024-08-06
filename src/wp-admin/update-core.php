@@ -196,14 +196,9 @@ function dismissed_updates() {
  *
  * @since 2.7.0
  *
- * @global string $required_php_version   The required PHP version string.
- * @global string $required_mysql_version The required MySQL version string.
  */
 function core_upgrade_preamble() {
-	global $required_php_version, $required_mysql_version;
-
-	$wp_version = get_bloginfo( 'version' );
-	$updates    = get_core_updates();
+	$updates = get_core_updates();
 
 	if ( ! isset( $updates[0]->response ) || 'latest' === $updates[0]->response ) {
 		if ( ! isset( $updates[0]->response ) ) {
@@ -226,21 +221,14 @@ function core_upgrade_preamble() {
 			echo '<h2>';
 			_e( 'You have the latest version of ClassicPress.' );
 			echo "</h2>\n";
-		}
 
-		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-		$upgrader            = new WP_Automatic_Updater();
-		$future_minor_update = (object) array(
-			'current'       => $wp_version . '.1.next.minor',
-			'version'       => $wp_version . '.1.next.minor',
-			'php_version'   => $required_php_version,
-			'mysql_version' => $required_mysql_version,
-		);
-		$should_auto_update  = $upgrader->should_update( 'core', $future_minor_update, ABSPATH );
-		if ( $should_auto_update ) {
-			echo '<p>';
-			_e( 'Future security updates will be applied automatically.' );
-			echo "</p>\n";
+			$should_auto_update = defined( 'WP_AUTO_UPDATE_CORE' ) ? WP_AUTO_UPDATE_CORE : true;
+
+			if ( false !== $should_auto_update ) {
+				echo '<p>';
+				_e( 'Future security updates should be applied automatically.' );
+				echo "</p>\n";
+			}
 		}
 	} else {
 		echo '<div class="notice notice-warning"><p>';
