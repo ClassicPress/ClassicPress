@@ -222,9 +222,11 @@ function core_upgrade_preamble() {
 			_e( 'You have the latest version of ClassicPress.' );
 			echo "</h2>\n";
 
-			$should_auto_update = defined( 'WP_AUTO_UPDATE_CORE' ) ? WP_AUTO_UPDATE_CORE : true;
+			$should_auto_update    = defined( 'WP_AUTO_UPDATE_CORE' ) ? WP_AUTO_UPDATE_CORE : true;
+			$auto_updater_disabled = apply_filters( 'automatic_updater_disabled', false );
+			$auto_update_core      = apply_filters( 'auto_update_core', true );
 
-			if ( false !== $should_auto_update ) {
+			if ( false !== $should_auto_update && true !== $auto_updater_disabled && false !== $auto_update_core ) {
 				echo '<p>';
 				_e( 'Future security updates should be applied automatically.' );
 				echo "</p>\n";
