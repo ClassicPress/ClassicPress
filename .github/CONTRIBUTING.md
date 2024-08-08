@@ -55,7 +55,7 @@ If you're not sure where to start contributing, here are some ideas:
 
 ## Setting up a local development environment
 
-1. Make sure you have [git](https://git-scm.com/), [Apache](http://httpd.apache.org/) and [MySQL](https://www.mysql.com/)/MariaDB installed and working on your computer.
+1. Make sure you have [git](https://git-scm.com/), [Apache](http://httpd.apache.org/) and [MySQL](https://www.mysql.com/)/MariaDB installed and working on your computer. Installing [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/) may be useful for Windows user, for example when running `grunt` tasks (see below).
 2. Fork ClassicPress to your GitHub account using the GitHub website.
 3. Clone your ClassicPress fork to your computer using the following command:
 
