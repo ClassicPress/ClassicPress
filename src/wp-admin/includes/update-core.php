@@ -435,7 +435,7 @@ function update_core( $from, $to ) {
 
 	// Don't copy wp-content, we'll deal with that below.
 	// We also copy version.php last so failed updates report their old version.
-	$skip              = array( 'wp-content', 'wp-includes/version.php' );
+	$skip              = array( 'wp-content', 'wp-includes/version.php', 'composer.json' );
 	$check_is_writable = array();
 
 	// Check to see which files don't really need updating.  The
@@ -445,7 +445,8 @@ function update_core( $from, $to ) {
 		// Find the local version of the working directory.
 		$working_dir_local = WP_CONTENT_DIR . '/upgrade/' . basename( $from ) . $distro;
 
-		$checksums = cp_get_core_checksums( $cp_version );
+		$checksums    = cp_get_core_checksums( $cp_version );
+		$old_checksum = get_option( 'composer_checksum', 'd6dceabc7e9e867b077bd0eb1e45fb94' );
 
 		if ( is_array( $checksums ) && isset( $checksums[ $wp_version ] ) ) {
 			$checksums = $checksums[ $wp_version ]; // Compat code for 3.7-beta2.
@@ -468,6 +469,18 @@ function update_core( $from, $to ) {
 
 				if ( ! file_exists( $working_dir_local . $file ) ) {
 					continue;
+				}
+
+				/*
+				 * `composer.json` is initialized to skip but if the MD5 of the current file
+				 * matches the old checksum the file is not altered, and the new checksum
+				 * is different, the file needs updating and is removed from the skip array.
+				 */
+				if ( 'composer.json' === $file ) {
+					if ( md5_file( ABSPATH . $file ) === $old_checksum && $old_checksum !== $checksum ) {
+						$skip = array_diff( $skip, array( 'composer.json' ) );
+						update_option( 'composer_checksum', $checksum );
+					}
 				}
 
 				if ( '.' === dirname( $file )
@@ -560,7 +573,7 @@ function update_core( $from, $to ) {
 	}
 
 	// Check to make sure everything copied correctly, ignoring the contents of wp-content.
-	$skip   = array( 'wp-content' );
+	$skip   = array( 'wp-content', 'composer.json' );
 	$failed = array();
 
 	if ( isset( $checksums ) && is_array( $checksums ) ) {
@@ -576,6 +589,17 @@ function update_core( $from, $to ) {
 
 			if ( ! file_exists( $working_dir_local . $file ) ) {
 				continue;
+			}
+
+			/*
+			 * `composer.json` is initialized to skip but if the MD5 of the current file
+			 * matches the old checksum the file is not altered, and the new checksum
+			 * is different, the file needs updating and is removed from the skip array.
+			 */
+			if ( 'composer.json' === $file ) {
+				if ( md5_file( ABSPATH . $file ) === $old_checksum && $old_checksum !== $checksum ) {
+					$skip = array_diff( $skip, array( 'composer.json' ) );
+				}
 			}
 
 			if ( '.' === dirname( $file )
