@@ -58,7 +58,7 @@ function wp_get_db_schema( $scope = 'all', $blog_id = null ) {
 	object_relationship_id bigint(20) unsigned NOT NULL default '0',
 	meta_key varchar(255) default NULL,
 	meta_value longtext,
-	PRIMARY KEY (meta_id),	
+	PRIMARY KEY (meta_id),
 	KEY object_relationship_id (object_relationship_id),
 	KEY meta_key (meta_key($max_index_length))
 ) $charset_collate;
@@ -68,7 +68,7 @@ CREATE TABLE $wpdb->object_relationships (
 	left_object_type varchar(255) NOT NULL default '',
 	right_object_type varchar(255) NOT NULL default '',
 	right_object_id bigint(20) unsigned NOT NULL default 0,
-	PRIMARY KEY (relationship_id),	
+	PRIMARY KEY (relationship_id),
 	KEY left_object_id (left_object_id),
 	KEY left_object_type (left_object_type($max_index_length)),
 	KEY right_object_type (right_object_type($max_index_length))
@@ -445,10 +445,6 @@ function populate_options( array $options = array() ) {
 		'comments_notify'                 => 1,
 		'posts_per_rss'                   => 10,
 		'rss_use_excerpt'                 => 0,
-		'mailserver_url'                  => 'mail.example.com',
-		'mailserver_login'                => 'login@example.com',
-		'mailserver_pass'                 => 'password',
-		'mailserver_port'                 => 110,
 		'default_category'                => 1,
 		'default_comment_status'          => 'closed',
 		'default_ping_status'             => 'open',

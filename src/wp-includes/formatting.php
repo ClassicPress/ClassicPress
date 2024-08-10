@@ -4816,7 +4816,6 @@ function sanitize_option( $option, $value ) {
 		case 'medium_large_size_h':
 		case 'large_size_w':
 		case 'large_size_h':
-		case 'mailserver_port':
 		case 'comment_max_links':
 		case 'page_on_front':
 		case 'page_for_posts':
@@ -4885,9 +4884,6 @@ function sanitize_option( $option, $value ) {
 
 		case 'date_format':
 		case 'time_format':
-		case 'mailserver_url':
-		case 'mailserver_login':
-		case 'mailserver_pass':
 		case 'upload_path':
 			$value = $wpdb->strip_invalid_text_for_column( $wpdb->options, 'option_value', $value );
 			if ( is_wp_error( $value ) ) {
