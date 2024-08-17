@@ -2065,28 +2065,28 @@ html.wp-toolbar {
 	}
 }
 
-/* If the width of the `summary` container is greater than 1200px */
+/* If the width of the `summary` container is greater than 500px */
 @container (min-width: 500px) {
 	#poststuff .postbox-container summary > div {
 		width: 96%;
 	}
 }
 
-/* If the width of the `summary` container is greater than 1200px */
+/* If the width of the `summary` container is greater than 800px */
 @container (min-width: 800px) {
 	#poststuff .postbox-container summary > div {
 		width: 97%;
 	}
 }
 
-/* If the width of the `summary` container is greater than 1200px */
+/* If the width of the `summary` container is greater than 1000px */
 @container (min-width: 1000px) {
 	#poststuff .postbox-container summary > div {
 		width: 98%;
 	}
 }
 
-/* If the width of the `summary` container is greater than 1200px */
+/* If the width of the `summary` container is greater than 1400px */
 @container (min-width: 1400px) {
 	#poststuff .postbox-container summary > div {
 		width: 99%;
