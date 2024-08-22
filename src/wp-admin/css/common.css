@@ -2042,6 +2042,7 @@ html.wp-toolbar {
 	margin: 0;
 	line-height: 1.4;
 	border-bottom: 1px solid #c3c4c7;
+	container-type: inline-size;
 }
 
 .postbox-container summary > div {
@@ -2055,6 +2056,45 @@ html.wp-toolbar {
 
 #poststuff .postbox-container summary > div {
 	width: 91%;
+}
+
+/* If the width of the `summary` container is greater than 300px */
+@container (min-width: 300px) {
+	#poststuff .postbox-container summary > div {
+		width: 93%;
+	}
+}
+
+/* If the width of the `summary` container is greater than 500px */
+@container (min-width: 500px) {
+	#poststuff .postbox-container summary > div {
+		width: 96%;
+	}
+}
+
+/* If the width of the `summary` container is greater than 800px */
+@container (min-width: 800px) {
+	#poststuff .postbox-container summary > div {
+		width: 97%;
+	}
+}
+
+/* If the width of the `summary` container is greater than 1000px */
+@container (min-width: 1000px) {
+	#poststuff .postbox-container summary > div {
+		width: 98%;
+	}
+}
+
+/* If the width of the `summary` container is greater than 1400px */
+@container (min-width: 1400px) {
+	#poststuff .postbox-container summary > div {
+		width: 99%;
+	}
+}
+
+.postbox-container summary > div > span {
+	margin-right: -0.75em;
 }
 
 #wpbody-content .metabox-holder {
@@ -2074,7 +2114,7 @@ details summary > * {
 
 .metabox-holder details > summary::marker,
 .metabox-holder details > summary::-webkit-details-marker {
-	font-size: 1.5em;
+	font-size: 1.3em;
 	cursor: pointer;
 }
 
