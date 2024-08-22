@@ -770,7 +770,7 @@ module.exports = function(grunt) {
 					`${BUILD_DIR}wp-includes/js/tinymce/themes/modern/theme.min.js`,
 					`${BUILD_DIR}wp-includes/js/tinymce/plugins/*/plugin.min.js`
 				],
-				dest: `${BUILD_DIR}wp-includes/js/tinymce/wp-tinymce.js`
+				dest: `${BUILD_DIR}wp-includes/js/tinymce/wp-tinymce.min.js`
 			},
 			emoji: {
 				options: {
