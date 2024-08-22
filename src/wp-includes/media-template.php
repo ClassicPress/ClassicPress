@@ -195,12 +195,6 @@ function wp_print_media_templates() {
 	<?php // Template for the media modal. ?>
 	<script type="text/html" id="tmpl-media-modal">
 		<div tabindex="0" class="<?php echo $class; ?>" role="dialog" aria-labelledby="media-frame-title">
-			<div id="upload-media-cat-dropdown" style="margin-top:1.5em;">
-				<?php
-				/* Enable choice of upload media category if media storage option has been set to 'category'. */
-				cp_select_upload_media_category();
-				?>
-			</div>
 			<# if ( data.hasCloseButton ) { #>
 				<button type="button" class="media-modal-close"><span class="media-modal-icon"><span class="screen-reader-text">
 					<?php
