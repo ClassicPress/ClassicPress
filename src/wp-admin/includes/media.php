@@ -2107,8 +2107,6 @@ function media_upload_form( $errors = null ) {
 		return;
 	}
 
-	cp_select_upload_media_category();
-
 	/**
 	 * Fires just before the legacy (pre-3.5.0) upload interface is loaded.
 	 *
@@ -3951,3 +3949,4 @@ function cp_select_upload_media_category() {
 	}
 	echo $media_select;
 }
+add_action( 'pre-upload-ui', 'cp_select_upload_media_category' );
