@@ -2613,9 +2613,6 @@ function wp_ajax_media_cat_upload() {
 
 	// Convert array to JSON.
 	wp_send_json( $array_result );
-
-	// Stop execution.
-	wp_die();
 }
 
 /**
