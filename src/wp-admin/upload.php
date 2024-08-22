@@ -194,14 +194,6 @@ if ( 'grid' === $mode ) {
 			?>
 			</p>
 		</div>
-		</br>
-
-		<div hidden>
-			<?php
-			/* Enable choice of upload media category if media storage option has been set to 'category'. */
-			cp_select_upload_media_category();
-			?>
-		</div>
 	</div>
 	<?php
 	require_once ABSPATH . 'wp-admin/admin-footer.php';
