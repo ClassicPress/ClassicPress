@@ -267,7 +267,8 @@ window.wp = window.wp || {};
 		 * @param {plupload.Uploader} uploader Uploader instance.
 		 */
 		this.uploader.bind( 'init', function( uploader ) {
-			var timer, active, dragdrop, observer,
+			var timer, active, dragdrop, observer, thatUploader,
+				uploadCatSelect, uploadCatValue, plUploader,
 				dropzone = self.dropzone;
 
 			dragdrop = self.supports.dragdrop = uploader.features.dragdrop && ! Uploader.browser.mobile;
@@ -329,7 +330,146 @@ window.wp = window.wp || {};
 			self.init();
 		});
 
-		this.uploader.init();
+		/**
+		 * Choose media category upload folder if media uploads are
+		 * organized by media category.
+		 *
+		 * If so organized, ensure that nothing can be uploaded if the
+		 * media upload category has not been set.
+		 *
+		 * @since CP-2.2.0
+		 */
+		thatUploader = this.uploader;
+		uploadCatSelect = document.getElementById( 'upload-category' );
+		plUploader = document.querySelector( '.uploader-inline' );
+
+		if ( uploadCatSelect == null ) {
+			thatUploader.init();
+		} else {
+			uploadCatValue = uploadCatSelect.value;
+
+			if ( uploadCatSelect.value == '' ) {
+				if ( plUploader ) {
+					plUploader.setAttribute( 'inert', true );
+				}
+
+				// Prevent uploading file into browser window.
+				window.addEventListener( 'dragover', function( e ) {
+					e.preventDefault();
+				}, false );
+				window.addEventListener( 'drop', function( e ) {
+					e.preventDefault();
+				}, false );
+			} else {
+				// Enable uploads.
+				thatUploader.init();
+			}
+
+			// Set up variables when a change of upload category is made.
+			uploadCatSelect.addEventListener( 'change', function( e ) {
+				var div,
+					uploadCatFolder = new URLSearchParams( {
+						action: 'media-cat-upload',
+						option: 'media_cat_upload_folder',
+						new_value: e.target.value
+					} );
+
+				// Prevent removal of upload media category.
+				if ( e.target.value == '' ) {
+					uploadCatSelect.value = uploadCatValue;
+				} else {
+					// Update fallback upload media category in case it's reset to ''.
+					uploadCatValue = e.target.value;
+
+					// Prevent accumulation of notices.
+					if ( document.getElementById( 'message' ) != null ) {
+						document.getElementById( 'message' ).remove();
+					}
+
+					// Update upload category.
+					fetch( ajaxurl, {
+						method: 'POST',
+						body: uploadCatFolder,
+						credentials: 'same-origin'
+					} )
+					.then( function( response ) {
+						if ( response.ok ) {
+							return response.json(); // no errors
+						}
+						throw new Error( response.status );
+					} )
+					.then( function( response ) {
+						if ( response.success ) {
+							if ( document.getElementById( 'message' ) != null ) {
+								document.getElementById( 'message' ).remove();
+							}
+							if ( response.data == '' ) {
+								div = document.createElement( 'div' );
+								div.id = 'message';
+								div.className = 'notice notice-error is-dismissible';
+								div.innerHTML = '<p>' + response.success + '</p><button class="notice-dismiss" type="button"></button>';
+								if ( document.body.className.includes( 'supports-drag-drop' ) ) {
+									document.querySelector( '.page-title-action' ).after( div );
+								} else {
+									document.querySelector( '.media-frame-content' ).prepend( div );
+								}
+
+								// Disable uploads.
+								if ( plUploader != null ) {
+									plUploader.setAttribute( 'inert', true );
+								}
+								thatUploader.destroy();
+
+								// Prevent uploading file into browser window.
+								window.addEventListener( 'dragover', function( e ) {
+									e.preventDefault();
+								}, false );
+								window.addEventListener( 'drop', function( e ) {
+									e.preventDefault();
+								}, false );
+							} else {
+								div = document.createElement( 'div' );
+								div.id = 'message';
+								div.className = 'updated notice notice-success is-dismissible';
+								div.innerHTML = '<p>' + response.success + '</p><button class="notice-dismiss" type="button"></button>';
+								if ( document.body.className.includes( 'supports-drag-drop' ) ) {
+									document.querySelector( '.page-title-action' ).after( div );
+								} else {
+									document.querySelector( '.media-frame-content' ).prepend( div );
+								}
+
+								// Enable uploads.
+								if ( plUploader != null ) {
+									plUploader.removeAttribute( 'inert' );
+								}
+								thatUploader.init();
+							}
+						}
+					} )
+					.catch( function( error ) {
+						if ( document.getElementById( 'message' ) != null ) {
+							document.getElementById( 'message' ).remove();
+						}
+						div = document.createElement( 'div' );
+						div.id = 'message';
+						div.className = 'notice notice-error is-dismissible';
+						div.innerHTML = '<p>' + error + '</p><button class="notice-dismiss" type="button"></button>';
+						if ( document.body.className.includes( 'supports-drag-drop' ) ) {
+							document.querySelector( '.page-title-action' ).after( div );
+						} else {
+							document.querySelector( '.media-frame-content' ).prepend( div );
+						}
+					} );
+				}
+			} );
+		}
+
+		// Make notices dismissible.
+		document.addEventListener( 'click', function( e ) {
+			if ( e.target.className === 'notice-dismiss' ) {
+				document.querySelector( '.is-dismissible' ).remove();
+			}
+		} );
 
 		if ( this.browser ) {
 			this.browser.on( 'mouseenter', this.refresh );
