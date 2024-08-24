@@ -428,6 +428,17 @@ function media_handle_upload( $file_id, $post_id, $post_data = array(), $overrid
 		// The image sub-sizes are created during wp_generate_attachment_metadata().
 		// This is generally slow and may cause timeouts or out of memory errors.
 		wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $file ) );
+
+		/**
+		 * If media storage is by media category, set the appropriate category for the attachment.
+		 *
+		 * @since CP-2.2.0
+		 */
+		$storefolders = get_option( 'uploads_use_yearmonth_folders' );
+		if ( $storefolders === '3' ) {
+			$cat_subfolder = get_option( 'media_cat_upload_folder' );
+			wp_set_object_terms( $attachment_id, array( trim( $cat_subfolder, '/' ) ), 'media_category' ); // using array avoids string splitting
+		}
 	}
 
 	return $attachment_id;
@@ -508,6 +519,17 @@ function media_handle_sideload( $file_array, $post_id = 0, $desc = null, $post_d
 
 	if ( ! is_wp_error( $attachment_id ) ) {
 		wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $file ) );
+
+		/**
+		 * If media storage is by media category, set the appropriate category for the attachment.
+		 *
+		 * @since CP-2.2.0
+		 */
+		$storefolders = get_option( 'uploads_use_yearmonth_folders' );
+		if ( $storefolders === '3' ) {
+			$cat_subfolder = get_option( 'media_cat_upload_folder' );
+			wp_set_object_terms( $attachment_id, array( trim( $cat_subfolder, '/' ) ), 'media_category' ); // using array avoids string splitting
+		}
 	}
 
 	return $attachment_id;
@@ -3876,3 +3898,47 @@ function bulk_edit_attachments( $attachment_data = null ) {
 		'locked'  => $locked,
 	);
 }
+
+/*
+ * Outputs a select box to select upload media category.
+ *
+ * Displays only if media storage option has been set to 'category'.
+ *
+ * @since CP-2.2.0
+ */
+function cp_select_upload_media_category() {
+	$media_select = '';
+	$storefolders = get_option( 'uploads_use_yearmonth_folders' );
+	if ( $storefolders === '3' ) {
+		$cat_subfolder = get_option( 'media_cat_upload_folder' );
+
+		$media_terms = get_terms(
+			array(
+				'taxonomy'   => 'media_category',
+				'hide_empty' => false,
+			)
+		);
+
+		if ( ! empty( $media_terms ) ) {
+			$media_select .= '<div class="upload-category"><label for="upload-category"><strong>' . esc_html__( 'Please choose the upload media category' ) . '</strong></label>';
+			$media_select .= '<select id="upload-category" name="upload-category" class="attachment-filters">';
+			$media_select .= '<option value=""' . selected( in_array( $cat_subfolder, array( '', '/' ) ), true, false ) . '>&nbsp;' . esc_html__( 'Media category' ) . '&nbsp;</option>';
+			foreach ( $media_terms as $media_term ) {
+				$ancestor_ids = get_ancestors( $media_term->term_id, 'media_category' );
+				$count = count( $ancestor_ids );
+				$spaces = '';
+				$slug = $media_term->slug;
+				if ( $count > 0 ) {
+					foreach ( $ancestor_ids as $ancestor_id ) {
+						$spaces .= '&nbsp;';
+						$slug = get_term( $ancestor_id, 'media_category' )->slug . '/' . $slug;
+					}
+				}
+				$media_select .= '<option class="level-' . esc_attr( $count ) . '" value="' . esc_attr( $slug ) . '"' . selected( '/' . $slug, $cat_subfolder, false ) . '>' . esc_html( $spaces . $media_term->name ) . '</option>';
+			}
+			$media_select .= '</select></div>';
+		}
+	}
+	echo $media_select;
+}
+
