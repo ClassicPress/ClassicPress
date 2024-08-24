@@ -2585,6 +2585,37 @@ function wp_ajax_upload_attachment() {
 }
 
 /**
+ * Updates the upload media category.
+ *
+ * Activated only if media storage option has been set to 'category'.
+ *
+ * @since CP-2.2.0
+ */
+function wp_ajax_media_cat_upload() {
+	$response = __( 'The upload media category folder has been updated.' );
+
+	if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
+		$new_value = wp_unslash( $_POST['new_value'] );
+		update_option( 'media_cat_upload_folder', sanitize_url( '/' . $new_value ) );
+
+		if ( $new_value === '' ) {
+			$response = __( 'You need to choose a media category folder before you can upload a file.' );
+		}
+	} elseif ( $_SERVER['REQUEST_METHOD'] === 'GET' ) {
+		$new_value = get_option( 'media_cat_upload_folder' );
+	}
+
+	// Response in array.
+	$array_result = array(
+		'data'    => $new_value,
+		'success' => $response,
+	);
+
+	// Convert array to JSON.
+	wp_send_json( $array_result );
+}
+
+/**
  * Ajax handler for image editing.
  *
  * @since 3.1.0
