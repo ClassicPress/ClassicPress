@@ -283,6 +283,21 @@ function wp_print_media_templates() {
 					do_action( 'post-plupload-upload-ui' ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 				}
 
+				global $pagenow;
+				if ( $pagenow !== 'upload.php' ) {
+					$storefolders = get_option( 'uploads_use_yearmonth_folders' );
+					if ( $storefolders === '3' ) {
+						$cat_subfolder = get_option( 'media_cat_upload_folder' );
+						$cat_object = get_term_by( 'slug', trim( $cat_subfolder, '/' ), 'media_category' );
+						printf(
+							/* translators: 1: Name of media category, 2: Link to Media page in admin. */
+							__( '<p class="media-cat-upload-info">Any files you upload here will be associated with the %1$s media category.</p><p class="media-cat-upload-info">If you want to change this to a different media category, you can do so on the main <a href="%2$s">Media</a> page.</p>' ),
+							'<strong>' . esc_html( $cat_object->name ) . '</strong>',
+							esc_url( home_url( '/wp-admin/upload.php' ) )
+						);
+					}
+				}
+
 				$max_upload_size = wp_max_upload_size();
 				if ( ! $max_upload_size ) {
 					$max_upload_size = 0;
