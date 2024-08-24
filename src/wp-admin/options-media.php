@@ -51,11 +51,26 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 /**
  * Get upload organization preference.
  *
- * @since CP-2.1.0
+ * @since CP-2.2.0
  *
- * New option based on year only.
+ * New options based on year and media category added.
  */
 $storefolders = (int) get_option( 'uploads_use_yearmonth_folders' );
+
+$media_attribute = $media_requires = '';
+
+$media_terms = get_terms(
+	array(
+		'taxonomy'   => 'media_category',
+		'hide_empty' => false,
+	)
+);
+
+if ( empty( $media_terms ) ) {
+	$media_attribute = 'disabled';
+	$media_requires = ' <em>' . __( 'This option requires that at least one media category has been created.' ) . '</em> <a href="' . admin_url( 'edit-tags.php?taxonomy=media_category&post_type=attachment' ) . '">' . __( 'Create one now.' ) . '</a>';
+}
+
 /**
  * Get attachment page preference.
  *
@@ -186,7 +201,15 @@ if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) :
 <label for="uploads_use_year_folders"><?php _e( 'Organize uploads into year-based folders.' ); ?></label><br>
 
 <input id="uploads_use_yearmonth_folders" type="radio" name="uploads_use_yearmonth_folders" value="1"<?php checked( 1, $storefolders ); ?>>
-<label for="uploads_use_yearmonth_folders"><?php _e( 'Organize uploads into month- and year-based folders.' ); ?></label>
+<label for="uploads_use_yearmonth_folders"><?php _e( 'Organize uploads into month- and year-based folders.' ); ?></label><br>
+
+<input id="uploads_use_category_folders" type="radio" name="uploads_use_yearmonth_folders" value="3"
+	<?php checked( 3, $storefolders ); ?>
+	<?php echo esc_attr( $media_attribute ); ?>>
+<label for="uploads_use_category_folders">
+	<?php _e( 'Organize uploads according to media category.' ); ?>
+	<?php echo $media_requires; ?>
+</label>
 </td>
 </tr>
 
