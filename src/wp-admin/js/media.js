@@ -727,7 +727,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	if ( document.body.className.includes( 'upload-php' ) && mediaGridWrap == null && uploadCatSelect != null ) {
 
 		// Set up variables when a change of upload category is made.
-		uploadCatSelect.addEventListener( 'change', function( e ) {console.log('changed');
+		uploadCatSelect.addEventListener( 'change', function( e ) {
 			var div,
 				dismissible = document.querySelector( '.is-dismissible' ),
 				uploadCatFolder = new URLSearchParams( {
