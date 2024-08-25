@@ -3939,6 +3939,6 @@ function cp_select_upload_media_category() {
 			$media_select .= '</select></div>';
 		}
 	}
-	echo $media_select;
+	return $media_select;
 }
 

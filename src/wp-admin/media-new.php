@@ -78,7 +78,7 @@ if ( get_user_setting( 'uploader' ) || isset( $_GET['browser-uploader'] ) ) {
 	 *
 	 * @since CP-2.2.0
 	 */
-	cp_select_upload_media_category();
+	echo cp_select_upload_media_category();
 	?>
 
 	<form enctype="multipart/form-data" method="post" action="<?php echo esc_url( admin_url( 'media-new.php' ) ); ?>" class="<?php echo esc_attr( $form_class ); ?>" id="file-form">

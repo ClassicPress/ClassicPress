@@ -179,7 +179,7 @@ if ( 'grid' === $mode ) {
 			 *
 			 * @since CP-2.2.0
 			 */
-			cp_select_upload_media_category();
+			echo cp_select_upload_media_category();
 		}
 		?>
 
@@ -395,7 +395,7 @@ if ( current_user_can( 'upload_files' ) ) {
 	 *
 	 * @since CP-2.2.0
 	 */
-	cp_select_upload_media_category();
+	echo cp_select_upload_media_category();
 }
 
 if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) ) {
