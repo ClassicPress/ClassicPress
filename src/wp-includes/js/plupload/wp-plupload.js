@@ -408,11 +408,7 @@ window.wp = window.wp || {};
 								div.id = 'message';
 								div.className = 'notice notice-error is-dismissible';
 								div.innerHTML = '<p>' + response.success + '</p><button class="notice-dismiss" type="button"></button>';
-								if ( document.body.className.includes( 'supports-drag-drop' ) ) {
-									document.querySelector( '.page-title-action' ).after( div );
-								} else {
-									document.querySelector( '.media-frame-content' ).prepend( div );
-								}
+								document.querySelector( '.page-title-action' ).after( div );
 
 								// Disable uploads.
 								if ( plUploader != null ) {
@@ -432,11 +428,16 @@ window.wp = window.wp || {};
 								div.id = 'message';
 								div.className = 'updated notice notice-success is-dismissible';
 								div.innerHTML = '<p>' + response.success + '</p><button class="notice-dismiss" type="button"></button>';
-								if ( document.body.className.includes( 'supports-drag-drop' ) ) {
-									document.querySelector( '.page-title-action' ).after( div );
-								} else {
-									document.querySelector( '.media-frame-content' ).prepend( div );
-								}
+								document.querySelector( '.page-title-action' ).after( div );
+
+								// Update selected attribute in DOM.
+								uploadCatSelect.childNodes.forEach( function( option ) {
+									if ( option.value === e.target.value ) {
+										option.setAttribute( 'selected', true );
+									} else {
+										option.removeAttribute( 'selected' );
+									}
+								} );
 
 								// Enable uploads.
 								if ( plUploader != null ) {
@@ -454,11 +455,7 @@ window.wp = window.wp || {};
 						div.id = 'message';
 						div.className = 'notice notice-error is-dismissible';
 						div.innerHTML = '<p>' + error + '</p><button class="notice-dismiss" type="button"></button>';
-						if ( document.body.className.includes( 'supports-drag-drop' ) ) {
-							document.querySelector( '.page-title-action' ).after( div );
-						} else {
-							document.querySelector( '.media-frame-content' ).prepend( div );
-						}
+						document.querySelector( '.page-title-action' ).after( div );
 					} );
 				}
 			} );
@@ -474,7 +471,7 @@ window.wp = window.wp || {};
 		if ( this.browser ) {
 			this.browser.on( 'mouseenter', this.refresh );
 		} else {
-			this.uploader.disableBrowse( true );
+			thatUploader.disableBrowse( true );
 		}
 
 		$( self ).on( 'uploader:ready', function() {
