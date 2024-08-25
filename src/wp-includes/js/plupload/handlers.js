@@ -79,6 +79,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						div.innerHTML = '<p>' + response.success + '</p><button class="notice-dismiss" type="button"></button>';
 						document.querySelector( '.wrap h1' ).after( div );
 
+						// Update selected attribute in DOM.
+						uploadCatSelect.childNodes.forEach( function( option ) {
+							if ( option.value === e.target.value ) {
+								option.setAttribute( 'selected', true );
+							} else {
+								option.removeAttribute( 'selected' );
+							}
+						} );
+
 						// Enable uploads.
 						plUploader.removeAttribute( 'inert' );
 						asyncUploader.removeAttribute( 'inert' );
