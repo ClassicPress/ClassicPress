@@ -767,6 +767,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						div.className = 'updated notice notice-success is-dismissible';
 						div.innerHTML = '<p>' + response.success + '</p><button class="notice-dismiss" type="button"></button>';
 						document.querySelector( '.page-title-action' ).after( div );
+
+						// Update selected attribute in DOM.
+						uploadCatSelect.childNodes.forEach( function( option ) {
+							if ( option.value === e.target.value ) {
+								option.setAttribute( 'selected', true );
+							} else {
+								option.removeAttribute( 'selected' );
+							}
+						} );
 					}
 				}
 			} )
