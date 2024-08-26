@@ -30,6 +30,12 @@ if ( isset( $HTTP_RAW_POST_DATA ) ) {
 /** Include the bootstrap for setting up ClassicPress environment */
 require_once __DIR__ . '/wp-load.php';
 
+if ( get_option( 'disable_xml_rpc', 0 ) === '1' ) {
+	status_header( 410 );
+	header( 'Content-Type: text/plain' );
+	die( 'XML-RPC services are disabled on this site....' );
+}
+
 if ( isset( $_GET['rsd'] ) ) { // http://cyber.law.harvard.edu/blogs/gems/tech/rsd.html
 	header( 'Content-Type: text/xml; charset=' . get_option( 'blog_charset' ), true );
 	echo '<?xml version="1.0" encoding="' . get_option( 'blog_charset' ) . '"?' . '>';
