@@ -1,4 +1,6 @@
 <?php
+require_once ABSPATH . 'xmlrpc.php';
+
 /**
  * XML-RPC protocol support for ClassicPress
  *
@@ -33,7 +35,7 @@ require_once __DIR__ . '/wp-load.php';
 if ( get_option( 'disable_xml_rpc', 0 ) === '1' ) {
 	status_header( 410 );
 	header( 'Content-Type: text/plain' );
-	die( 'XML-RPC services are disabled on this site....' );
+	die( 'XML-RPC services are disabled on this site.' );
 }
 
 if ( isset( $_GET['rsd'] ) ) { // http://cyber.law.harvard.edu/blogs/gems/tech/rsd.html
