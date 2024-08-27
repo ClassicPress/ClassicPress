@@ -292,6 +292,7 @@ if ( 0 !== (int) get_option( 'blocks_compatibility_level', 1 ) ) {
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	require ABSPATH . WPINC . '/class-fix-wpcli.php';
 }
+//require_once ABSPATH . WPINC . '/classicpress/class-cp-customization-frontend.php';
 
 $GLOBALS['wp_embed'] = new WP_Embed();
 
