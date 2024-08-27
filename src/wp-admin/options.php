@@ -101,6 +101,7 @@ $allowed_options            = array(
 		'timezone_string',
 		'WPLANG',
 		'new_admin_email',
+		'disable_emojis',
 	),
 	'discussion' => array(
 		'default_pingback_flag',
