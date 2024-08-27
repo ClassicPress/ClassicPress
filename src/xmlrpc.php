@@ -1,6 +1,4 @@
 <?php
-require_once ABSPATH . 'xmlrpc.php';
-
 /**
  * XML-RPC protocol support for ClassicPress
  *
