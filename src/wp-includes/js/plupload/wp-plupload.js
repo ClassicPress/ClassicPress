@@ -371,7 +371,8 @@ window.wp = window.wp || {};
 					uploadCatFolder = new URLSearchParams( {
 						action: 'media-cat-upload',
 						option: 'media_cat_upload_folder',
-						new_value: e.target.value
+						media_cat_upload_value: e.target.value,
+						media_cat_upload_nonce: document.getElementById( 'media_cat_upload_nonce' ).value
 					} );
 
 				// Prevent removal of upload media category.
