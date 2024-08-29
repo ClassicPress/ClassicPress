@@ -2592,10 +2592,12 @@ function wp_ajax_upload_attachment() {
  * @since CP-2.2.0
  */
 function wp_ajax_media_cat_upload() {
+	check_ajax_referer( 'media-cat-upload', 'media_cat_upload_nonce' );
+
 	$response = __( 'The upload media category folder has been updated.' );
 
 	if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
-		$new_value = wp_unslash( $_POST['new_value'] );
+		$new_value = wp_unslash( $_POST['media_cat_upload_value'] );
 		update_option( 'media_cat_upload_folder', sanitize_url( '/' . $new_value ) );
 
 		if ( $new_value === '' ) {
