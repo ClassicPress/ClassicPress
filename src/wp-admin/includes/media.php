@@ -3937,6 +3937,7 @@ function cp_select_upload_media_category() {
 				$media_select .= '<option class="level-' . esc_attr( $count ) . '" value="' . esc_attr( $slug ) . '"' . selected( '/' . $slug, $cat_subfolder, false ) . '>' . esc_html( $spaces . $media_term->name ) . '</option>';
 			}
 			$media_select .= '</select></div>';
+			$media_select .= wp_nonce_field( 'media-cat-upload', 'media_cat_upload_nonce' );
 		}
 	}
 	return $media_select;
