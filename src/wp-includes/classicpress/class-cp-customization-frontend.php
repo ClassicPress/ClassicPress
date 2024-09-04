@@ -13,7 +13,7 @@ class CP_Customization_Frontend {
 	}
 
 	public function disable_emojis() {
-		if ( get_option( 'disable_emojis', 0 ) !== '1' ) {
+		if ( '1' !== get_option( 'disable_emojis', 0 ) ) {
 			return;
 		}
 
