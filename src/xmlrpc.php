@@ -30,7 +30,7 @@ if ( isset( $HTTP_RAW_POST_DATA ) ) {
 /** Include the bootstrap for setting up ClassicPress environment */
 require_once __DIR__ . '/wp-load.php';
 
-if ( get_option( 'disable_xml_rpc', 0 ) === '1' ) {
+if ( '1' === get_option( 'disable_xml_rpc', 0 ) ) {
 	status_header( 410 );
 	header( 'Content-Type: text/plain' );
 	die( 'XML-RPC services are disabled on this site.' );
