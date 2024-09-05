@@ -756,17 +756,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} )
 			.then( function( response ) {
 				if ( response.success ) {
-					if ( response.data == '' ) {
+					if ( response.data.value == '' ) {
 						div = document.createElement( 'div' );
 						div.id = 'message';
 						div.className = 'notice notice-error is-dismissible';
-						div.innerHTML = '<p>' + response.success + '</p><button class="notice-dismiss" type="button"></button>';
+						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
 						document.querySelector( '.page-title-action' ).after( div );
 					} else {
 						div = document.createElement( 'div' );
 						div.id = 'message';
 						div.className = 'updated notice notice-success is-dismissible';
-						div.innerHTML = '<p>' + response.success + '</p><button class="notice-dismiss" type="button"></button>';
+						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
 						document.querySelector( '.page-title-action' ).after( div );
 
 						// Update selected attribute in DOM.

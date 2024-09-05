@@ -404,11 +404,11 @@ window.wp = window.wp || {};
 							if ( document.getElementById( 'message' ) != null ) {
 								document.getElementById( 'message' ).remove();
 							}
-							if ( response.data == '' ) {
+							if ( response.data.value == '' ) {
 								div = document.createElement( 'div' );
 								div.id = 'message';
 								div.className = 'notice notice-error is-dismissible';
-								div.innerHTML = '<p>' + response.success + '</p><button class="notice-dismiss" type="button"></button>';
+								div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
 								document.querySelector( '.page-title-action' ).after( div );
 
 								// Disable uploads.
@@ -428,7 +428,7 @@ window.wp = window.wp || {};
 								div = document.createElement( 'div' );
 								div.id = 'message';
 								div.className = 'updated notice notice-success is-dismissible';
-								div.innerHTML = '<p>' + response.success + '</p><button class="notice-dismiss" type="button"></button>';
+								div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
 								document.querySelector( '.page-title-action' ).after( div );
 
 								// Update selected attribute in DOM.
