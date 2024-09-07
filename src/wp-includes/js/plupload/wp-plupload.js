@@ -444,7 +444,9 @@ window.wp = window.wp || {};
 								if ( plUploader != null ) {
 									plUploader.removeAttribute( 'inert' );
 								}
-								thatUploader.init();
+								if ( ! thatUploader.init ) {
+									thatUploader.init();
+								}
 							}
 						}
 					} )
