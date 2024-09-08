@@ -3919,10 +3919,14 @@ function cp_select_upload_media_category() {
 			)
 		);
 
+		$mode = get_user_option( 'media_library_mode', get_current_user_id() ) ? get_user_option( 'media_library_mode', get_current_user_id() ) : 'grid';
+
 		if ( ! empty( $media_terms ) ) {
 			$media_select .= '<div class="upload-category"><label for="upload-category"><strong>' . esc_html__( 'Please choose the upload media category' ) . '</strong></label>';
 			$media_select .= '<select id="upload-category" name="upload-category" class="attachment-filters">';
-			$media_select .= '<option value=""' . selected( in_array( $cat_subfolder, array( '', '/' ) ), true, false ) . '>&nbsp;' . esc_html__( 'Media category' ) . '&nbsp;</option>';
+			if ( 'grid' !== $mode ) {
+				$media_select .= '<option value=""' . selected( in_array( $cat_subfolder, array( '', '/' ) ), true, false ) . '>&nbsp;' . esc_html__( 'Media category' ) . '&nbsp;</option>';
+			}
 			foreach ( $media_terms as $media_term ) {
 				$ancestor_ids = get_ancestors( $media_term->term_id, 'media_category' );
 				$count = count( $ancestor_ids );
