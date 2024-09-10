@@ -1608,6 +1608,10 @@
 	margin: 0.5em 0;
 }
 
+.uploader-inline p.media-cat-upload-info {
+	font-size: 1.25em;
+}
+
 .uploader-inline .media-progress-bar {
 	display: none;
 }

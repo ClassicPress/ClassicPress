@@ -174,6 +174,12 @@ if ( 'grid' === $mode ) {
 			?>
 			<a href="<?php echo esc_url( admin_url( 'media-new.php' ) ); ?>" class="page-title-action aria-button-if-js"><?php echo esc_html_x( 'Add New', 'file' ); ?></a>
 			<?php
+			/**
+			 * Enable selection of media category.
+			 *
+			 * @since CP-2.2.0
+			 */
+			echo cp_select_upload_media_category();
 		}
 		?>
 
@@ -383,7 +389,13 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 if ( current_user_can( 'upload_files' ) ) {
 	?>
 	<a href="<?php echo esc_url( admin_url( 'media-new.php' ) ); ?>" class="page-title-action"><?php echo esc_html_x( 'Add New', 'file' ); ?></a>
-						<?php
+	<?php
+	/**
+	 * Enable selection of media category.
+	 *
+	 * @since CP-2.2.0
+	 */
+	echo cp_select_upload_media_category();
 }
 
 if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) ) {
