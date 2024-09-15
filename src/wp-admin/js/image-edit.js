@@ -695,8 +695,8 @@
 				wrap = document.querySelector( '.imgedit-wrap' ),
 				index = 0;
 
-			if ( ! elementToSetFocusTo.length ) {
-				tabbables = [ ...wrap.querySelectorAll( 'a[href], button, input, textarea, select, [tabindex]:not( [tabindex="-1"] )' ) ];
+			if ( elementToSetFocusTo == null ) {
+				tabbables = [ ...wrap.querySelectorAll( 'button' ) ];
 
 				elementToSetFocusTo = tabbables[ index ];
 				while ( ! isVisible( tabbables[ index ] ) ) {
