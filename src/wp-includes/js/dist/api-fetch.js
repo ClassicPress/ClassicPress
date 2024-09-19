@@ -2289,6 +2289,7 @@ function safeDecodeURIComponent(uriComponent) {
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@wordpress/url/build-module/get-query-string.js
+/* wp:polyfill */
 /**
  * Returns the query string part of the URL.
  *

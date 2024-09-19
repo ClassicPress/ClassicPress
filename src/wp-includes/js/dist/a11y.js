@@ -2190,14 +2190,39 @@ __webpack_require__.r(__webpack_exports__);
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
   setup: function() { return /* binding */ setup; },
-  speak: function() { return /* binding */ speak; }
+  speak: function() { return /* reexport */ speak; }
 });
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/dom-ready/build-module/index.js
 var build_module = __webpack_require__(269);
+;// CONCATENATED MODULE: ./node_modules/@wordpress/a11y/build-module/script/add-container.js
+/**
+ * Build the live regions markup.
+ *
+ * @param {string} [ariaLive] Value for the 'aria-live' attribute; default: 'polite'.
+ *
+ * @return {HTMLDivElement} The ARIA live region HTML element.
+ */
+function addContainer(ariaLive = 'polite') {
+  const container = document.createElement('div');
+  container.id = `a11y-speak-${ariaLive}`;
+  container.className = 'a11y-speak-region';
+  container.setAttribute('style', 'position: absolute;' + 'margin: -1px;' + 'padding: 0;' + 'height: 1px;' + 'width: 1px;' + 'overflow: hidden;' + 'clip: rect(1px, 1px, 1px, 1px);' + '-webkit-clip-path: inset(50%);' + 'clip-path: inset(50%);' + 'border: 0;' + 'word-wrap: normal !important;');
+  container.setAttribute('aria-live', ariaLive);
+  container.setAttribute('aria-relevant', 'additions text');
+  container.setAttribute('aria-atomic', 'true');
+  const {
+    body
+  } = document;
+  if (body) {
+    body.appendChild(container);
+  }
+  return container;
+}
+
 // EXTERNAL MODULE: ./node_modules/@wordpress/i18n/build-module/index.js + 9 modules
 var i18n_build_module = __webpack_require__(257);
-;// CONCATENATED MODULE: ./node_modules/@wordpress/a11y/build-module/add-intro-text.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/a11y/build-module/script/add-intro-text.js
 /**
  * WordPress dependencies
  */
@@ -2227,32 +2252,7 @@ function addIntroText() {
   return introText;
 }
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/a11y/build-module/add-container.js
-/**
- * Build the live regions markup.
- *
- * @param {string} [ariaLive] Value for the 'aria-live' attribute; default: 'polite'.
- *
- * @return {HTMLDivElement} The ARIA live region HTML element.
- */
-function addContainer(ariaLive = 'polite') {
-  const container = document.createElement('div');
-  container.id = `a11y-speak-${ariaLive}`;
-  container.className = 'a11y-speak-region';
-  container.setAttribute('style', 'position: absolute;' + 'margin: -1px;' + 'padding: 0;' + 'height: 1px;' + 'width: 1px;' + 'overflow: hidden;' + 'clip: rect(1px, 1px, 1px, 1px);' + '-webkit-clip-path: inset(50%);' + 'clip-path: inset(50%);' + 'border: 0;' + 'word-wrap: normal !important;');
-  container.setAttribute('aria-live', ariaLive);
-  container.setAttribute('aria-relevant', 'additions text');
-  container.setAttribute('aria-atomic', 'true');
-  const {
-    body
-  } = document;
-  if (body) {
-    body.appendChild(container);
-  }
-  return container;
-}
-
-;// CONCATENATED MODULE: ./node_modules/@wordpress/a11y/build-module/clear.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/a11y/build-module/shared/clear.js
 /**
  * Clears the a11y-speak-region elements and hides the explanatory text.
  */
@@ -2269,7 +2269,7 @@ function clear() {
   }
 }
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/a11y/build-module/filter-message.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/a11y/build-module/shared/filter-message.js
 let previousMessage = '';
 
 /**
@@ -2300,49 +2300,19 @@ function filterMessage(message) {
   return message;
 }
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/a11y/build-module/index.js
-/**
- * WordPress dependencies
- */
-
-
+;// CONCATENATED MODULE: ./node_modules/@wordpress/a11y/build-module/shared/index.js
 /**
  * Internal dependencies
  */
 
 
 
-
-
-/**
- * Create the live regions.
- */
-function setup() {
-  const introText = document.getElementById('a11y-speak-intro-text');
-  const containerAssertive = document.getElementById('a11y-speak-assertive');
-  const containerPolite = document.getElementById('a11y-speak-polite');
-  if (introText === null) {
-    addIntroText();
-  }
-  if (containerAssertive === null) {
-    addContainer('assertive');
-  }
-  if (containerPolite === null) {
-    addContainer('polite');
-  }
-}
-
-/**
- * Run setup on domReady.
- */
-(0,build_module["default"])(setup);
-
 /**
  * Allows you to easily announce dynamic interface updates to screen readers using ARIA live regions.
  * This module is inspired by the `speak` function in `wp-a11y.js`.
  *
- * @param {string} message    The message to be announced by assistive technologies.
- * @param {string} [ariaLive] The politeness level for aria-live; default: 'polite'.
+ * @param {string}               message    The message to be announced by assistive technologies.
+ * @param {'polite'|'assertive'} [ariaLive] The politeness level for aria-live; default: 'polite'.
  *
  * @example
  * ```js
@@ -2379,6 +2349,42 @@ function speak(message, ariaLive) {
     introText.removeAttribute('hidden');
   }
 }
+
+;// CONCATENATED MODULE: ./node_modules/@wordpress/a11y/build-module/index.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+/**
+ * Create the live regions.
+ */
+function setup() {
+  const introText = document.getElementById('a11y-speak-intro-text');
+  const containerAssertive = document.getElementById('a11y-speak-assertive');
+  const containerPolite = document.getElementById('a11y-speak-polite');
+  if (introText === null) {
+    addIntroText();
+  }
+  if (containerAssertive === null) {
+    addContainer('assertive');
+  }
+  if (containerPolite === null) {
+    addContainer('polite');
+  }
+}
+
+/**
+ * Run setup on domReady.
+ */
+(0,build_module["default"])(setup);
 
 }();
 (window.wp = window.wp || {}).a11y = __webpack_exports__;
