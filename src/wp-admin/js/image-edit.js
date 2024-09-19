@@ -861,6 +861,7 @@
 	 * @return {void|boolean} Returns false if there is a warning.
 	 */
 	close : function(postid, warn) {
+		var queryParams = new URLSearchParams( window.location.search );
 		warn = warn || false;
 
 		if ( warn && this.notsaved(postid) ) {
@@ -870,25 +871,12 @@
 		this.iasapi = {};
 		this.hold = {};
 
-		// If we've loaded the editor in the context of a Media Modal,
-		// then switch to the previous view, whatever that might have been.
-		if ( this._view ){
-			this._view.back();
-		}
-
-		// In case we are not accessing the image editor in the context of a View,
-		// close the editor the old-school way.
-		else {
-			$('#image-editor-' + postid).fadeOut('fast', function() {
-				$( '#media-head-' + postid ).fadeIn( 'fast', function() {
-					// Move focus back to the Edit Image button. Runs also when saving.
-					$( '#imgedit-open-btn-' + postid ).trigger( 'focus' );
-				});
-				$(this).empty();
-			});
-		}
-
-
+		queryParams.delete( 'mode' );
+		history.replaceState( null, null, '?' + queryParams.toString() ); // reset URL params
+		document.querySelector( '.imgedit-wrap' ).remove();
+		document.querySelector( '.attachment-details' ).removeAttribute( 'hidden' );
+		document.querySelector( '.attachment-details' ).removeAttribute( 'inert' );
+		document.querySelector( '.edit-attachment' ).focus();
 	},
 
 	/**
