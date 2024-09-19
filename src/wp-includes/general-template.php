@@ -3339,6 +3339,9 @@ function feed_links_extra( $args = array() ) {
  * @since 2.0.0
  */
 function rsd_link() {
+	if ( '1' === get_option( 'disable_xml_rpc', 0 ) ) {
+		return;
+	}
 	printf(
 		'<link rel="EditURI" type="application/rsd+xml" title="RSD" href="%s">' . "\n",
 		esc_url( site_url( 'xmlrpc.php?rsd', 'rpc' ) )
