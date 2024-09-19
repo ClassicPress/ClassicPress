@@ -1,6 +1,118 @@
 /* global plupload, pluploadL10n, ajaxurl, post_id, wpUploaderInit, deleteUserSetting, setUserSetting, getUserSetting, shortform */
 var topWin = window.dialogArguments || opener || parent || top, uploader, uploader_init;
 
+/**
+ * Choose media category upload folder if media uploads are organized by media category.
+ *
+ * @since CP-2.2.0
+ */
+document.addEventListener( 'DOMContentLoaded', function() {
+	var uploadCatSelect = document.getElementById( 'upload-category' ),
+		plUploader = document.getElementById( 'plupload-upload-ui' ),
+		asyncUploader = document.getElementById( 'async-upload-wrap' );
+
+	// Ensure that nothing can be uploaded if the media upload category has not been set.
+	if ( uploadCatSelect != null ) {
+		if ( uploadCatSelect.value == '' ) {
+			plUploader.setAttribute( 'inert', true );
+			asyncUploader.setAttribute( 'inert', true );
+
+			// Prevent uploading file into browser window
+			window.addEventListener( 'dragover', function( e ) {
+				e.preventDefault();
+			}, false );
+			window.addEventListener( 'drop', function( e ) {
+				e.preventDefault();
+			}, false );
+		}
+
+		// Set up variables when a change of upload category is made.
+		uploadCatSelect.addEventListener( 'change', function( e ) {
+			var div,
+				uploadCatFolder = new URLSearchParams( {
+					action: 'media-cat-upload',
+					option: 'media_cat_upload_folder',
+					media_cat_upload_value: e.target.value,
+					media_cat_upload_nonce: document.getElementById( 'media_cat_upload_nonce' ).value
+				} );
+
+			// Prevent accumulation of notices.
+			if ( document.getElementById( 'message' ) != null ) {
+				document.getElementById( 'message' ).remove();
+			}
+
+			// Update upload category.
+			fetch( ajaxurl, {
+				method: 'POST',
+				body: uploadCatFolder,
+				credentials: 'same-origin'
+			} )
+			.then( function( response ) {
+				if ( response.ok ) {
+					return response.json(); // no errors
+				}
+				throw new Error( response.status );
+			} )
+			.then( function( response ) {
+				if ( response.success ) {
+					if ( response.data.value == '' ) {
+						div = document.createElement( 'div' );
+						div.id = 'message';
+						div.className = 'notice notice-error is-dismissible';
+						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+						document.querySelector( '.wrap h1' ).after( div );
+
+						// Disable uploads.
+						plUploader.setAttribute( 'inert', true );
+						asyncUploader.setAttribute( 'inert', true );
+
+						// Prevent uploading file into browser window
+						window.addEventListener( 'dragover', function( e ) {
+							e.preventDefault();
+						}, false );
+						window.addEventListener( 'drop', function( e ) {
+							e.preventDefault();
+						}, false );
+					} else {
+						div = document.createElement( 'div' );
+						div.id = 'message';
+						div.className = 'updated notice notice-success is-dismissible';
+						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+						document.querySelector( '.wrap h1' ).after( div );
+
+						// Update selected attribute in DOM.
+						uploadCatSelect.childNodes.forEach( function( option ) {
+							if ( option.value === e.target.value ) {
+								option.setAttribute( 'selected', true );
+							} else {
+								option.removeAttribute( 'selected' );
+							}
+						} );
+
+						// Enable uploads.
+						plUploader.removeAttribute( 'inert' );
+						asyncUploader.removeAttribute( 'inert' );
+					}
+				}
+			} )
+			.catch( function( error ) {
+				div = document.createElement( 'div' );
+				div.id = 'message';
+				div.className = 'notice notice-error is-dismissible';
+				div.innerHTML = '<p>' + error + '</p><button class="notice-dismiss" type="button"></button>';
+				document.querySelector( '.wrap h1' ).after( div );
+			} );
+		} );
+
+		// Make notices dismissible.
+		document.addEventListener( 'click', function( e ) {
+			if ( e.target.className === 'notice-dismiss' ) {
+				document.querySelector( '.is-dismissible' ).remove();
+			}
+		} );
+	}
+} );
+
 // Progress and success handlers for media multi uploads.
 function fileQueued( fileObj ) {
 	// Get rid of unused form.
@@ -267,6 +379,10 @@ function deleteError() {
 
 function uploadComplete() {
 	jQuery( '#insert-gallery' ).prop( 'disabled', false );
+
+	setTimeout( function() {
+		copyAttachmentUploadURLClipboard();
+	}, 200);
 }
 
 function switchUploader( s ) {
@@ -371,31 +487,42 @@ function wpFileExtensionError( up, file, message ) {
  * @return {void}
  */
 function copyAttachmentUploadURLClipboard() {
-	var clipboard = new ClipboardJS( '.copy-attachment-url' ),
+	var clipboard = document.querySelectorAll( '.copy-attachment-url' ),
 		successTimeout;
 
-	clipboard.on( 'success', function( event ) {
-		var triggerElement = jQuery( event.trigger ),
-			successElement = jQuery( '.success', triggerElement.closest( '.copy-to-clipboard-container' ) );
+	clipboard.forEach( function( copyURL ) {
+		copyURL.addEventListener( 'click', function() {
+			var copyText = copyURL.dataset.clipboardText,
+				input = document.createElement( 'input' );
 
-		// Clear the selection and move focus back to the trigger.
-		event.clearSelection();
-		// Handle ClipboardJS focus bug, see https://github.com/zenorocha/clipboard.js/issues/680
-		triggerElement.trigger( 'focus' );
-		// Show success visual feedback.
-		clearTimeout( successTimeout );
-		successElement.removeClass( 'hidden' );
-		// Hide success visual feedback after 3 seconds since last success.
-		successTimeout = setTimeout( function() {
-			successElement.addClass( 'hidden' );
-		}, 3000 );
-		// Handle success audible feedback.
-		wp.a11y.speak( pluploadL10n.file_url_copied );
+			if ( navigator.clipboard ) {
+				navigator.clipboard.writeText( copyText );
+			} else {
+				document.body.append( input );
+				input.value = copyText;
+				input.select();
+				document.execCommand( 'copy' );
+			}
+
+			// Show success visual feedback.
+			clearTimeout( successTimeout );
+			copyURL.nextElementSibling.classList.remove( 'hidden' );
+			copyURL.nextElementSibling.setAttribute( 'aria-hidden', 'false' );
+			input.remove();
+
+			// Hide success visual feedback after 3 seconds since last success and unfocus the trigger.
+			successTimeout = setTimeout( function() {
+				copyURL.nextElementSibling.classList.add( 'hidden' );
+				copyURL.nextElementSibling.setAttribute( 'aria-hidden', 'true' );
+			}, 3000 );
+
+			// Handle success audible feedback.
+			wp.a11y.speak( pluploadL10n.file_url_copied );
+		} );
 	} );
 }
 
 jQuery( document ).ready( function( $ ) {
-	copyAttachmentUploadURLClipboard();
 	var tryAgainCount = {};
 	var tryAgain;
 

@@ -139,8 +139,10 @@ module.exports = function(grunt) {
 							'**',
 							'!wp-includes/js/media/**',
 							'!**/.{svn,git}/**', // Ignore version control directories.
-							// Exclude Hello Dolly (it's used in the source tree for tests)
-							'!wp-content/plugins/hello.php',
+							// Exclude plugins unless specifically listed
+							'!wp-content/plugins/**',
+							'wp-content/plugins/index.php',
+							'wp-content/plugins/cp-pepper/**',
 							// Ignore unminified versions of external libs we don't ship:
 							'!wp-includes/js/backbone.js',
 							'!wp-includes/js/underscore.js',
@@ -298,8 +300,7 @@ module.exports = function(grunt) {
 				ext: '.css',
 				src: ['wp-admin/css/colors/*/colors.scss'],
 				options: {
-					implementation: require( 'node-sass' ),
-					outputStyle: 'expanded'
+					implementation: require( 'sass' )
 				}
 			}
 		},
@@ -769,7 +770,7 @@ module.exports = function(grunt) {
 					`${BUILD_DIR}wp-includes/js/tinymce/themes/modern/theme.min.js`,
 					`${BUILD_DIR}wp-includes/js/tinymce/plugins/*/plugin.min.js`
 				],
-				dest: `${BUILD_DIR}wp-includes/js/tinymce/wp-tinymce.js`
+				dest: `${BUILD_DIR}wp-includes/js/tinymce/wp-tinymce.min.js`
 			},
 			emoji: {
 				options: {

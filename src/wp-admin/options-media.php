@@ -26,6 +26,10 @@ if ( ! is_multisite()
 	$media_options_help .= '<p>' . __( 'Uploading Files allows you to choose the folder and path for storing your uploaded files.' ) . '</p>';
 }
 
+$media_options_help .= '<p>' . __( 'You can choose how you would like uploads to be organized after uploading.' ) . '</p>';
+
+$media_options_help .= '<p>' . __( 'Media attachments, including image, audio, video files, can have Attachment Pages if this is supported by your Theme. You can choose to enable or disable Attachment Pages.' ) . '</p>';
+
 $media_options_help .= '<p>' . __( 'You must click the Save Changes button at the bottom of the screen for new settings to take effect.' ) . '</p>';
 
 get_current_screen()->add_help_tab(
@@ -47,11 +51,33 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 /**
  * Get upload organization preference.
  *
- * @since CP-2.1.0
+ * @since CP-2.2.0
  *
- * New option based on year only.
+ * New options based on year and media category added.
  */
 $storefolders = (int) get_option( 'uploads_use_yearmonth_folders' );
+
+$media_attribute = $media_requires = '';
+
+$media_terms = get_terms(
+	array(
+		'taxonomy'   => 'media_category',
+		'hide_empty' => false,
+	)
+);
+
+if ( empty( $media_terms ) ) {
+	$media_attribute = 'disabled';
+	$media_requires = ' <em>' . __( 'This option requires that at least one media category has been created.' ) . '</em> <a href="' . admin_url( 'edit-tags.php?taxonomy=media_category&post_type=attachment' ) . '">' . __( 'Create one now.' ) . '</a>';
+}
+
+/**
+ * Get attachment page preference.
+ *
+ * @since CP-2.2.0
+ *
+ */
+$attachment_pages_enabled = get_option( 'wp_attachment_pages_enabled' );
 ?>
 
 <div class="wrap">
@@ -175,11 +201,37 @@ if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) :
 <label for="uploads_use_year_folders"><?php _e( 'Organize uploads into year-based folders.' ); ?></label><br>
 
 <input id="uploads_use_yearmonth_folders" type="radio" name="uploads_use_yearmonth_folders" value="1"<?php checked( 1, $storefolders ); ?>>
-<label for="uploads_use_yearmonth_folders"><?php _e( 'Organize uploads into month- and year-based folders.' ); ?></label>
+<label for="uploads_use_yearmonth_folders"><?php _e( 'Organize uploads into month- and year-based folders.' ); ?></label><br>
+
+<input id="uploads_use_category_folders" type="radio" name="uploads_use_yearmonth_folders" value="3"
+	<?php checked( 3, $storefolders ); ?>
+	<?php echo esc_attr( $media_attribute ); ?>>
+<label for="uploads_use_category_folders">
+	<?php _e( 'Organize uploads according to media category.' ); ?>
+	<?php echo $media_requires; ?>
+</label>
 </td>
 </tr>
 
 	<?php do_settings_fields( 'media', 'uploads' ); ?>
+</table>
+<?php endif; ?>
+
+<?php if ( ! is_multisite() ) : ?>
+<h2 class="title"><?php _e( 'Attachment Pages' ); ?></h2>
+<table class="form-table" role="presentation">
+
+<tr>
+<th scope="row"><?php _e( 'Do you want to enable attachment pages?' ); ?></th>
+<td class="td-full attachment-pages">
+
+<input type="hidden" name="wp_attachment_pages_enabled" value="0">
+<input id="attachment-pages" name="wp_attachment_pages_enabled" type="checkbox" value="1"<?php checked( '1', $attachment_pages_enabled ); ?>>
+<label for="attachment-pages"><?php _e( 'Enable media attachment pages.' ); ?></label>
+</td>
+</tr>
+
+	<?php do_settings_fields( 'media', 'attachments' ); ?>
 </table>
 <?php endif; ?>
 

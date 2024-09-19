@@ -395,6 +395,34 @@ class WP_Compat {
 			}
 		}
 
+		if ( ! function_exists( 'parse_blocks' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.2.0
+			 *
+			 * @return array array().
+			 */
+			function parse_blocks( ...$args ) {
+				WP_Compat::using_block_function();
+				return array();
+			}
+		}
+
+		if ( ! function_exists( 'get_dynamic_block_names' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.2.0
+			 *
+			 * @return string ''.
+			 */
+			function get_dynamic_block_names( ...$args ) {
+				WP_Compat::using_block_function();
+				return '';
+			}
+		}
+
 		// Load WP_Block_Type class file as polyfill.
 		require_once ABSPATH . WPINC . '/classicpress/class-wp-block-type.php';
 		require_once ABSPATH . WPINC . '/classicpress/class-wp-block-template.php';

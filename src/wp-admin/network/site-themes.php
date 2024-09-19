@@ -163,7 +163,6 @@ if ( isset( $_GET['action'] ) && 'update-site' === $_GET['action'] ) {
 	exit;
 }
 
-add_thickbox();
 add_screen_option( 'per_page' );
 
 // Used in the HTML title tag.

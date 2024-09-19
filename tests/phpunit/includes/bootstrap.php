@@ -261,6 +261,8 @@ tests_add_filter( 'wp_rest_server_class', '_wp_rest_server_class_filter' );
 tests_add_filter( 'async_update_translation', '__return_false' );
 // Disable background updates.
 tests_add_filter( 'automatic_updater_disabled', '__return_true' );
+// Reduce cost of password hashing to reduce testing time
+tests_add_filter( 'cp_hash_password_options', '_reduce_password_hashing_cost' );
 
 // Preset ClassicPress options defined in bootstrap file.
 // Used to activate themes, plugins, as well as  other settings.

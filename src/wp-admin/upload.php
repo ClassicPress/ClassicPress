@@ -174,6 +174,12 @@ if ( 'grid' === $mode ) {
 			?>
 			<a href="<?php echo esc_url( admin_url( 'media-new.php' ) ); ?>" class="page-title-action aria-button-if-js"><?php echo esc_html_x( 'Add New', 'file' ); ?></a>
 			<?php
+			/**
+			 * Enable selection of media category.
+			 *
+			 * @since CP-2.2.0
+			 */
+			echo cp_select_upload_media_category();
 		}
 		?>
 
@@ -236,6 +242,18 @@ if ( $doaction ) {
 
 		case 'attach':
 			wp_media_attach_action( $_REQUEST['found_post_id'] );
+			break;
+
+		case 'edit':
+			if ( empty( $post_ids ) ) {
+				break;
+			}
+			foreach ( $post_ids as $post_id ) {
+				if ( ! current_user_can( 'edit_post', $post_id ) ) {
+					wp_die( __( 'Sorry, you are not allowed to edit this item.' ) );
+				}
+			}
+			bulk_edit_attachments( $_REQUEST );
 			break;
 
 		case 'trash':
@@ -371,7 +389,13 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 if ( current_user_can( 'upload_files' ) ) {
 	?>
 	<a href="<?php echo esc_url( admin_url( 'media-new.php' ) ); ?>" class="page-title-action"><?php echo esc_html_x( 'Add New', 'file' ); ?></a>
-						<?php
+	<?php
+	/**
+	 * Enable selection of media category.
+	 *
+	 * @since CP-2.2.0
+	 */
+	echo cp_select_upload_media_category();
 }
 
 if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) ) {
@@ -400,6 +424,12 @@ if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) ) {
 <div id="ajax-response"></div>
 <?php find_posts_div(); ?>
 </form>
+
+<?php
+if ( $wp_list_table->has_items() ) {
+	$wp_list_table->inline_edit();
+}
+?>
 </div>
 
 <?php

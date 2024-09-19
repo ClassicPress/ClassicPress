@@ -1023,6 +1023,10 @@ tr.inline-edit-row td {
 	padding-right: 0.5em;
 }
 
+.upload-php .quick-edit-row-post fieldset.inline-edit-col-right label span.title {
+	width: 6em;
+}
+
 .inline-edit-row .inline-edit-or {
 	margin: .2em 6px .2em 0;
 	line-height: 2.5;
@@ -1907,7 +1911,6 @@ div.action-links,
 	/* Show comment bubble as text instead */
 	.post-com-count .screen-reader-text {
 		position: static;
-		-webkit-clip-path: none;
 		clip-path: none;
 		width: auto;
 		height: auto;

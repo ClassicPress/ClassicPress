@@ -2495,6 +2495,9 @@ function _wp_upload_dir( $time = null ) {
 		}
 		$y      = substr( $time, 0, 4 );
 		$subdir = "/$y";
+	} elseif ( $storefolders === '3' ) {
+		// Generate the media category directories.
+		$subdir = get_option( 'media_cat_upload_folder' );
 	}
 
 	$dir .= $subdir;
@@ -3685,7 +3688,7 @@ function wp_die( $message = '', $title = '', $args = array() ) {
 		 * @param callable $callback Callback function name.
 		 */
 		$callback = apply_filters( 'wp_die_json_handler', '_json_wp_die_handler' );
-	} elseif ( defined( 'REST_REQUEST' ) && REST_REQUEST && wp_is_jsonp_request() ) {
+	} elseif ( wp_is_serving_rest_request() && wp_is_jsonp_request() ) {
 		/**
 		 * Filters the callback for killing WordPress execution for JSONP REST requests.
 		 *
@@ -4403,8 +4406,8 @@ function _wp_json_prepare_data( $data ) {
  * @param int   $status_code Optional. The HTTP status code to output. Default null.
  * @param int   $options     Optional. Options to be passed to json_encode(). Default 0.
  */
-function wp_send_json( $response, $status_code = null, $options = 0 ) {
-	if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+function wp_send_json( $response, $status_code = null, $flags = 0 ) {
+	if ( wp_is_serving_rest_request() ) {
 		_doing_it_wrong(
 			__FUNCTION__,
 			sprintf(
@@ -4424,7 +4427,7 @@ function wp_send_json( $response, $status_code = null, $options = 0 ) {
 		}
 	}
 
-	echo wp_json_encode( $response, $options );
+	echo wp_json_encode( $response, $flags );
 
 	if ( wp_doing_ajax() ) {
 		wp_die(
@@ -4675,6 +4678,24 @@ function _mce_set_direction( $mce_init ) {
 function _mce_set_element_format( $mce_init ) {
 	$mce_init['element_format'] = 'html';
 	return $mce_init;
+}
+
+/**
+ * Determines whether WordPress is currently serving a REST API request.
+ *
+ * The function relies on the 'REST_REQUEST' global. As such, it only returns true when an actual REST _request_ is
+ * being made. It does not return true when a REST endpoint is hit as part of another request, e.g. for preloading a
+ * REST response. See {@see wp_is_rest_endpoint()} for that purpose.
+ *
+ * This function should not be called until the {@see 'parse_request'} action, as the constant is only defined then,
+ * even for an actual REST request.
+ *
+ * @since 6.5.0
+ *
+ * @return bool True if it's a WordPress REST API request, false otherwise.
+ */
+function wp_is_serving_rest_request() {
+	return defined( 'REST_REQUEST' ) && REST_REQUEST;
 }
 
 /**
@@ -5905,6 +5926,61 @@ function _doing_it_wrong( $function_name, $message, $version ) {
 }
 
 /**
+ * Generates a user-level error/warning/notice/deprecation message.
+ *
+ * Generates the message when `WP_DEBUG` is true.
+ *
+ * @since CP-2.2.0
+ *
+ * @param string $function_name The function that triggered the error.
+ * @param string $message       The message explaining the error.
+ *                              The message can contain allowed HTML 'a' (with href), 'code',
+ *                              'br', 'em', and 'strong' tags and http or https protocols.
+ *                              If it contains other HTML tags or protocols, the message should be escaped
+ *                              before passing to this function to avoid being stripped {@see wp_kses()}.
+ * @param int    $error_level   Optional. The designated error type for this error.
+ *                              Only works with E_USER family of constants. Default E_USER_NOTICE.
+ */
+function wp_trigger_error( $function_name, $message, $error_level = E_USER_NOTICE ) {
+
+	// Bail out if WP_DEBUG is not turned on.
+	if ( ! WP_DEBUG ) {
+		return;
+	}
+
+	/**
+	 * Fires when the given function triggers a user-level error/warning/notice/deprecation message.
+	 *
+	 * Can be used for debug backtracking.
+	 *
+	 * @since CP-2.2.0
+	 *
+	 * @param string $function_name The function that was called.
+	 * @param string $message       A message explaining what has been done incorrectly.
+	 * @param int    $error_level   The designated error type for this error.
+	 */
+	do_action( 'wp_trigger_error_run', $function_name, $message, $error_level );
+
+	if ( ! empty( $function_name ) ) {
+		$message = sprintf( '%s(): %s', $function_name, $message );
+	}
+
+	$message = wp_kses(
+		$message,
+		array(
+			'a'      => array( 'href' => true ),
+			'br'     => array(),
+			'code'   => array(),
+			'em'     => array(),
+			'strong' => array(),
+		),
+		array( 'http', 'https' )
+	);
+
+	trigger_error( $message, $error_level );
+}
+
+/**
  * Determines whether the server is running an earlier than 1.5.0 version of lighttpd.
  *
  * @since 2.5.0
@@ -6017,6 +6093,9 @@ function validate_file( $file, $allowed_files = array() ) {
 	if ( ! is_scalar( $file ) || '' === $file ) {
 		return 0;
 	}
+
+	// Normalize path for Windows servers
+	$file = wp_normalize_path( $file );
 
 	// `../` on its own is not allowed:
 	if ( '../' === $file ) {
@@ -7361,8 +7440,10 @@ function wp_validate_boolean( $value ) {
  * Deletes a file.
  *
  * @since 4.2.0
+ * @since 6.7.0 A return value was added.
  *
  * @param string $file The path to the file to delete.
+ * @return bool True on success, false on failure.
  */
 function wp_delete_file( $file ) {
 	/**
@@ -7373,9 +7454,12 @@ function wp_delete_file( $file ) {
 	 * @param string $file Path to the file to delete.
 	 */
 	$delete = apply_filters( 'wp_delete_file', $file );
+
 	if ( ! empty( $delete ) ) {
-		@unlink( $delete );
+		return @unlink( $delete );
 	}
+
+	return false;
 }
 
 /**
@@ -7408,9 +7492,7 @@ function wp_delete_file_from_directory( $file, $directory ) {
 		return false;
 	}
 
-	wp_delete_file( $file );
-
-	return true;
+	return wp_delete_file( $file );
 }
 
 /**

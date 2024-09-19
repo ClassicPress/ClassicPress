@@ -16,12 +16,13 @@
 		"dealerdirect/phpcodesniffer-composer-installer": "1.0.0",
 		"wp-coding-standards/wpcs": "3.1.0",
 		"phpcompatibility/phpcompatibility-wp": "2.1.5",
-		"yoast/phpunit-polyfills": "2.0.1"
+		"yoast/phpunit-polyfills": "3.0.0"
 	},
 	"config": {
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true
-		}
+		},
+		"process-timeout": 600
 	},
 	"scripts": {
 		"backport": "bin/backport-wp-commit.sh",

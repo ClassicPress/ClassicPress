@@ -331,3 +331,8 @@ function _wp_rest_server_class_filter() {
 // Skip `setcookie` calls in auth_cookie functions due to warning:
 // Cannot modify header information - headers already sent by...
 tests_add_filter( 'send_auth_cookies', '__return_false' );
+
+// Reduce cost of password hashing to reduce testing time
+function _reduce_password_hashing_cost() {
+	return array( 'cost' => 6 );
+}

@@ -19,6 +19,12 @@ class Tests_Upload extends WP_UnitTestCase {
 		update_option( 'uploads_use_yearmonth_folders', 1 );
 	}
 
+	public function tear_down() {
+		$this->reset_options();
+		delete_option( 'media_cat_upload_folder' );
+		parent::tear_down();
+	}
+
 	public function test_upload_dir_default() {
 		// wp_upload_dir() with default parameters.
 		$info   = wp_upload_dir();
@@ -117,5 +123,25 @@ class Tests_Upload extends WP_UnitTestCase {
 		$this->assertSame( ABSPATH . 'wp-content/uploads' . $subdir, $info['path'] );
 		$this->assertSame( $subdir, $info['subdir'] );
 		$this->assertFalse( $info['error'] );
+	}
+
+	public function test_cp_select_upload_media_category() {
+		$media_select = cp_select_upload_media_category();
+
+		$this->assertSame( $media_select, '' );
+
+		$test_term = 'cp-images';
+		update_option( 'uploads_use_yearmonth_folders', '3' );
+		wp_create_term( $test_term, 'media_category' );
+		update_option( 'media_cat_upload_folder', sanitize_url( '/' . $test_term ) );
+
+		$upload_folder = get_option( 'media_cat_upload_folder' );
+		$this->assertSame( $upload_folder, '/' . $test_term );
+
+		$media_select = cp_select_upload_media_category();
+		$this->assertNotSame( $media_select, '' );
+		$this->assertStringContainsString( $test_term, $media_select, 'Media selecct HTML should contain media category' );
+		$this->assertStringContainsString( 'upload-category', $media_select, 'Media selecct HTML should contain upload-category class name' );
+		$this->assertStringContainsString( '<select', $media_select, 'Media select HTML should contain <select> tag' );
 	}
 }

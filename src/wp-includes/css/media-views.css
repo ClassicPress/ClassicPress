@@ -1608,6 +1608,10 @@
 	margin: 0.5em 0;
 }
 
+.uploader-inline p.media-cat-upload-info {
+	font-size: 1.25em;
+}
+
 .uploader-inline .media-progress-bar {
 	display: none;
 }
@@ -2560,7 +2564,6 @@
 	/* Visually hide the menu heading keeping it available to assistive technologies. */
 	.media-frame-menu-heading {
 		clip: rect(1px, 1px, 1px, 1px);
-		-webkit-clip-path: inset(50%);
 		clip-path: inset(50%);
 		height: 1px;
 		overflow: hidden;
