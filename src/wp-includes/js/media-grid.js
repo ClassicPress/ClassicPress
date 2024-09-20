@@ -1,971 +1,881 @@
-(function () {
+document.addEventListener( 'DOMContentLoaded', function() {
+	var pond, itemID, focusID,
+		{ FilePond } = window, // import FilePond
+		queryParams = new URLSearchParams( window.location.search ),
+		addNew = document.querySelector( '.page-title-action' ),
+		uploader = document.querySelector( '.uploader-inline' ),
+		close = document.querySelector( '.close' ),
+		uploadCatSelect = document.getElementById( 'upload-category' ),
+		inputElement = document.getElementById( 'filepond' ),
+		ajaxurl	= document.getElementById( 'ajax-url' ).value,		
+		body = document.body,
+		dialog = document.getElementById( 'media-modal' ),
+		leftIcon = document.getElementById( 'left-dashicon' ),
+		rightIcon = document.getElementById( 'right-dashicon' ),
+		closeButton = document.getElementById( 'dialog-close-button' ),
+		dateFilter = document.getElementById( 'filter-by-date' ),
+		typeFilter = document.getElementById( 'filter-by-type' ),
+		search = document.getElementById( 'media-search-input' ),
+		mediaCatSelect = document.getElementById( 'taxonomy=media_category&term' ),
+		mediaGrid = document.querySelector( '#media-grid ul' );
 
-	var editAttachmentMetadata = function() { // ClassicPress: defer loading via require()
+	// Update details within modal
+	function setAddedMediaFields( id ) {
+		var form = document.createElement( 'form' );
+		form.className = 'compat-item';
+		form.innerHTML = '<input type="hidden" id="menu-order" name="attachments[' + id + '][menu_order]" value="0">' +
+			'<p class="media-types media-types-required-info"><span class="required-field-message">Required fields are marked <span class="required">*</span></span></p>' +
+			'<span class="setting" data-setting="media_category">' +
+				'<label for="attachments-' + id + '-media_category">' +
+					'<span class="alignleft">Media Categories</span>' +
+				'</label>' +
+				'<input type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" value="">' +
+			'</span>' +
+			'<span class="setting" data-setting="media_post_tag">' +
+				'<label for="attachments-' + id + '-media_post_tag">' +
+					'<span class="alignleft">Media Tags</span>' +
+				'</label>' +
+				'<input type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" value="">' +
+			'</span>';
 
-	var l10n = wp.media.view.l10n,
-		EditAttachmentMetadata;
-
-	/**
-	 * wp.media.controller.EditAttachmentMetadata
-	 *
-	 * A state for editing an attachment's metadata.
-	 *
-	 * @memberOf wp.media.controller
-	 *
-	 * @class
-	 * @augments wp.media.controller.State
-	 * @augments Backbone.Model
-	 */
-	EditAttachmentMetadata = wp.media.controller.State.extend(/** @lends wp.media.controller.EditAttachmentMetadata.prototype */{
-		defaults: {
-			id:      'edit-attachment',
-			// Title string passed to the frame's title region view.
-			title:   l10n.attachmentDetails,
-			// Region mode defaults.
-			content: 'edit-metadata',
-			menu:    false,
-			toolbar: false,
-			router:  false
+		if ( document.querySelector( '.compat-item' ) != null ) {
+			document.querySelector( '.compat-item' ).remove();
 		}
-	});
+		document.querySelector( '.attachment-compat' ).append( form );
+	}
 
-	return EditAttachmentMetadata;
+	// Update attachment details
+	function updateDetails( input, id ) {
+		var successTimeout,
+			data = new FormData();
 
-	};
+		data.append( 'action', 'save-attachment' );
+		data.append( 'id', id );
+		data.append( 'nonce', document.getElementById( 'media-' + id ).dataset.updateNonce );
 
-	var manage$1 = function() { // ClassicPress: defer loading via require()
+		// Append metadata fields
+		if ( input.parentNode.dataset.setting === 'alt' ) {
+			data.append( 'changes[alt]', input.value );
+		} else if ( input.parentNode.dataset.setting === 'title' ) {
+			data.append( 'changes[title]', input.value );
+		} else if ( input.parentNode.dataset.setting === 'caption' ) {
+			data.append( 'changes[caption]', input.value );
+		} else if ( input.parentNode.dataset.setting === 'description' ) {
+			data.append( 'changes[description]', input.value );
+		}
 
-	var MediaFrame = wp.media.view.MediaFrame,
-		Library = wp.media.controller.Library,
-
-		$ = Backbone.$,
-		Manage;
-
-	/**
-	 * wp.media.view.MediaFrame.Manage
-	 *
-	 * A generic management frame workflow.
-	 *
-	 * Used in the media grid view.
-	 *
-	 * @memberOf wp.media.view.MediaFrame
-	 *
-	 * @class
-	 * @augments wp.media.view.MediaFrame
-	 * @augments wp.media.view.Frame
-	 * @augments wp.media.View
-	 * @augments wp.Backbone.View
-	 * @augments Backbone.View
-	 * @mixes wp.media.controller.StateMachine
-	 */
-	Manage = MediaFrame.extend(/** @lends wp.media.view.MediaFrame.Manage.prototype */{
-		/**
-		 * @constructs
-		 */
-		initialize: function() {
-			_.defaults( this.options, {
-				title:     '',
-				modal:     false,
-				selection: [],
-				library:   {}, // Options hash for the query to the media library.
-				multiple:  'add',
-				state:     'library',
-				uploader:  true,
-				mode:      [ 'grid', 'edit' ]
-			});
-
-			this.$body = $( document.body );
-			this.$window = $( window );
-			this.$adminBar = $( '#wpadminbar' );
-			// Store the Add New button for later reuse in wp.media.view.UploaderInline.
-			this.$uploaderToggler = $( '.page-title-action' )
-				.attr( 'aria-expanded', 'false' )
-				.on( 'click', _.bind( this.addNewClickHandler, this ) );
-
-			this.$window.on( 'scroll resize', _.debounce( _.bind( this.fixPosition, this ), 15 ) );
-
-			// Ensure core and media grid view UI is enabled.
-			this.$el.addClass('wp-core-ui');
-
-			// Force the uploader off if the upload limit has been exceeded or
-			// if the browser isn't supported.
-			if ( wp.Uploader.limitExceeded || ! wp.Uploader.browser.supported ) {
-				this.options.uploader = false;
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
 			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result.success ) {
 
-			// Initialize a window-wide uploader.
-			if ( this.options.uploader ) {
-				this.uploader = new wp.media.view.UploaderWindow({
-					controller: this,
-					uploader: {
-						dropzone:  document.body,
-						container: document.body
-					}
-				}).render();
-				this.uploader.ready();
-				$('body').append( this.uploader.el );
-
-				this.options.uploader = false;
-			}
-
-			this.gridRouter = new wp.media.view.MediaFrame.Manage.Router();
-
-			// Call 'initialize' directly on the parent class.
-			MediaFrame.prototype.initialize.apply( this, arguments );
-
-			// Append the frame view directly the supplied container.
-			this.$el.appendTo( this.options.container );
-
-			this.createStates();
-			this.bindRegionModeHandlers();
-			this.render();
-			this.bindSearchHandler();
-
-			wp.media.frames.browse = this;
-		},
-
-		bindSearchHandler: function() {
-			var search = this.$( '#media-search-input' ),
-				searchView = this.browserView.toolbar.get( 'search' ).$el,
-				listMode = this.$( '.view-list' ),
-
-				input  = _.throttle( function (e) {
-					var val = $( e.currentTarget ).val(),
-						url = '';
-
-					if ( val ) {
-						url += '?search=' + val;
-						this.gridRouter.navigate( this.gridRouter.baseUrl( url ), { replace: true } );
-					}
-				}, 1000 );
-
-			// Update the URL when entering search string (at most once per second).
-			search.on( 'input', _.bind( input, this ) );
-
-			this.gridRouter
-				.on( 'route:search', function () {
-					var href = window.location.href;
-					if ( href.indexOf( 'mode=' ) > -1 ) {
-						href = href.replace( /mode=[^&]+/g, 'mode=list' );
-					} else {
-						href += href.indexOf( '?' ) > -1 ? '&mode=list' : '?mode=list';
-					}
-					href = href.replace( 'search=', 's=' );
-					listMode.prop( 'href', href );
-				})
-				.on( 'route:reset', function() {
-					searchView.val( '' ).trigger( 'input' );
-				});
-		},
-
-		/**
-		 * Create the default states for the frame.
-		 */
-		createStates: function() {
-			var options = this.options;
-
-			if ( this.options.states ) {
-				return;
-			}
-
-			// Add the default states.
-			this.states.add([
-				new Library({
-					library:            wp.media.query( options.library ),
-					multiple:           options.multiple,
-					title:              options.title,
-					content:            'browse',
-					toolbar:            'select',
-					contentUserSetting: false,
-					filterable:         'all',
-					autoSelect:         false
-				})
-			]);
-		},
-
-		/**
-		 * Bind region mode activation events to proper handlers.
-		 */
-		bindRegionModeHandlers: function() {
-			this.on( 'content:create:browse', this.browseContent, this );
-
-			// Handle a frame-level event for editing an attachment.
-			this.on( 'edit:attachment', this.openEditAttachmentModal, this );
-
-			this.on( 'select:activate', this.bindKeydown, this );
-			this.on( 'select:deactivate', this.unbindKeydown, this );
-		},
-
-		handleKeydown: function( e ) {
-			if ( 27 === e.which ) {
-				e.preventDefault();
-				this.deactivateMode( 'select' ).activateMode( 'edit' );
-			}
-		},
-
-		bindKeydown: function() {
-			this.$body.on( 'keydown.select', _.bind( this.handleKeydown, this ) );
-		},
-
-		unbindKeydown: function() {
-			this.$body.off( 'keydown.select' );
-		},
-
-		fixPosition: function() {
-			var $browser, $toolbar;
-			if ( ! this.isModeActive( 'select' ) ) {
-				return;
-			}
-
-			$browser = this.$('.attachments-browser');
-			$toolbar = $browser.find('.media-toolbar');
-
-			// Offset doesn't appear to take top margin into account, hence +16.
-			if ( ( $browser.offset().top + 16 ) < this.$window.scrollTop() + this.$adminBar.height() ) {
-				$browser.addClass( 'fixed' );
-				$toolbar.css('width', $browser.width() + 'px');
-			} else {
-				$browser.removeClass( 'fixed' );
-				$toolbar.css('width', '');
-			}
-		},
-
-		/**
-		 * Click handler for the `Add New` button.
-		 */
-		addNewClickHandler: function( event ) {
-			event.preventDefault();
-			this.trigger( 'toggle:upload:attachment' );
-
-			if ( this.uploader ) {
-				this.uploader.refresh();
-			}
-		},
-
-		/**
-		 * Open the Edit Attachment modal.
-		 */
-		openEditAttachmentModal: function( model ) {
-			// Create a new EditAttachment frame, passing along the library and the attachment model.
-			if ( wp.media.frames.edit ) {
-				wp.media.frames.edit.open().trigger( 'refresh', model );
-			} else {
-				wp.media.frames.edit = wp.media( {
-					frame:       'edit-attachments',
-					controller:  this,
-					library:     this.state().get('library'),
-					model:       model
-				} );
-			}
-		},
-
-		/**
-		 * Create an attachments browser view within the content region.
-		 *
-		 * @param {Object} contentRegion Basic object with a `view` property, which
-		 *                               should be set with the proper region view.
-		 * @this wp.media.controller.Region
-		 */
-		browseContent: function( contentRegion ) {
-			var state = this.state();
-
-			// Browse our library of attachments.
-			this.browserView = contentRegion.view = new wp.media.view.AttachmentsBrowser({
-				controller: this,
-				collection: state.get('library'),
-				selection:  state.get('selection'),
-				model:      state,
-				sortable:   state.get('sortable'),
-				search:     state.get('searchable'),
-				filters:    state.get('filterable'),
-				date:       state.get('date'),
-				display:    state.get('displaySettings'),
-				dragInfo:   state.get('dragInfo'),
-				sidebar:    'errors',
-
-				suggestedWidth:  state.get('suggestedWidth'),
-				suggestedHeight: state.get('suggestedHeight'),
-
-				AttachmentView: state.get('AttachmentView'),
-
-				scrollElement: document
-			});
-			this.browserView.on( 'ready', _.bind( this.bindDeferred, this ) );
-
-			this.errors = wp.Uploader.errors;
-			this.errors.on( 'add remove reset', this.sidebarVisibility, this );
-		},
-
-		sidebarVisibility: function() {
-			this.browserView.$( '.media-sidebar' ).toggle( !! this.errors.length );
-		},
-
-		bindDeferred: function() {
-			if ( ! this.browserView.dfd ) {
-				return;
-			}
-			this.browserView.dfd.done( _.bind( this.startHistory, this ) );
-		},
-
-		startHistory: function() {
-			// Verify pushState support and activate.
-			if ( window.history && window.history.pushState ) {
-				if ( Backbone.History.started ) {
-					Backbone.history.stop();
+				// Update data attributes
+				if ( input.parentNode.dataset.setting === 'alt' ) {
+					document.getElementById( 'media-' + id ).querySelector( 'img' ).setAttribute( 'alt', input.value );
+				} else if ( input.parentNode.dataset.setting === 'title' ) {
+					document.getElementById( 'media-' + id ).setAttribute( 'aria-label', input.value );
+				} else if ( input.parentNode.dataset.setting === 'caption' ) {
+					document.getElementById( 'media-' + id ).setAttribute( 'data-caption', input.value );
+				} else if ( input.parentNode.dataset.setting === 'description' ) {
+					document.getElementById( 'media-' + id ).setAttribute( 'data-description', input.value );
 				}
-				Backbone.history.start( {
-					root: window._wpMediaGridSettings.adminUrl,
-					pushState: true
-				} );
-			}
-		}
-	});
 
-	return Manage;
+				// Show success visual feedback.
+				clearTimeout( successTimeout );
+				document.getElementById( 'details-saved' ).classList.remove( 'hidden' );
+				document.getElementById( 'details-saved' ).setAttribute( 'aria-hidden', 'false' );
 
-	};
-
-	var detailsTwoColumn = function() { // ClassicPress: defer loading via require()
-
-	var Details = wp.media.view.Attachment.Details,
-		TwoColumn;
-
-	/**
-	 * wp.media.view.Attachment.Details.TwoColumn
-	 *
-	 * A similar view to media.view.Attachment.Details
-	 * for use in the Edit Attachment modal.
-	 *
-	 * @memberOf wp.media.view.Attachment.Details
-	 *
-	 * @class
-	 * @augments wp.media.view.Attachment.Details
-	 * @augments wp.media.view.Attachment
-	 * @augments wp.media.View
-	 * @augments wp.Backbone.View
-	 * @augments Backbone.View
-	 */
-	TwoColumn = Details.extend(/** @lends wp.media.view.Attachment.Details.TowColumn.prototype */{
-		template: wp.template( 'attachment-details-two-column' ),
-
-		initialize: function() {
-			this.controller.on( 'content:activate:edit-details', _.bind( this.editAttachment, this ) );
-
-			Details.prototype.initialize.apply( this, arguments );
-		},
-
-		editAttachment: function( event ) {
-			if ( event ) {
-				event.preventDefault();
-			}
-			this.controller.content.mode( 'edit-image' );
-		},
-
-		/**
-		 * Noop this from parent class, doesn't apply here.
-		 */
-		toggleSelectionHandler: function() {}
-
-	});
-
-	return TwoColumn;
-
-	};
-
-	var manage = function() { // ClassicPress: defer loading via require()
-
-	/**
-	 * wp.media.view.MediaFrame.Manage.Router
-	 *
-	 * A router for handling the browser history and application state.
-	 *
-	 * @memberOf wp.media.view.MediaFrame.Manage
-	 *
-	 * @class
-	 * @augments Backbone.Router
-	 */
-	var Router = Backbone.Router.extend(/** @lends wp.media.view.MediaFrame.Manage.Router.prototype */{
-		routes: {
-			'upload.php?item=:slug&mode=edit': 'editItem',
-			'upload.php?item=:slug':           'showItem',
-			'upload.php?search=:query':        'search',
-			'upload.php':                      'reset'
-		},
-
-		// Map routes against the page URL.
-		baseUrl: function( url ) {
-			return 'upload.php' + url;
-		},
-
-		reset: function() {
-			var frame = wp.media.frames.edit;
-
-			if ( frame ) {
-				frame.close();
-			}
-		},
-
-		// Respond to the search route by filling the search field and triggering the input event.
-		search: function( query ) {
-			jQuery( '#media-search-input' ).val( query ).trigger( 'input' );
-		},
-
-		// Show the modal with a specific item.
-		showItem: function( query ) {
-			var media = wp.media,
-				frame = media.frames.browse,
-				library = frame.state().get('library'),
-				item;
-
-			// Trigger the media frame to open the correct item.
-			item = library.findWhere( { id: parseInt( query, 10 ) } );
-
-			if ( item ) {
-				item.set( 'skipHistory', true );
-				frame.trigger( 'edit:attachment', item );
+				// Hide success visual feedback after 3 seconds.
+				successTimeout = setTimeout( function() {
+					document.getElementById( 'details-saved' ).classList.add( 'hidden' );
+					document.getElementById( 'details-saved' ).setAttribute( 'aria-hidden', 'true' );
+				}, 3000 );
 			} else {
-				item = media.attachment( query );
-				frame.listenTo( item, 'change', function( model ) {
-					frame.stopListening( item );
-					frame.trigger( 'edit:attachment', model );
-				} );
-				item.fetch();
+				console.error( _wpMediaGridSettings.failed_update, result.data.error );
 			}
-		},
+		} )
+		.catch( function( error ) {
+			console.error( _wpMediaGridSettings.error, error );
+		} );
+	}
 
-		// Show the modal in edit mode with a specific item.
-		editItem: function( query ) {
-			this.showItem( query );
-			wp.media.frames.edit.content.mode( 'edit-details' );
+	// Update media categories and tags
+	function updateMediaTaxOrTag( input, id ) {
+		var successTimeout, newTaxes,
+			data = new FormData(),
+			taxonomy = input.getAttribute( 'name' ).replace( 'attachments[' + id + '][' , '' ).replace( ']', '' );
+
+		data.append( 'action', 'save-attachment-compat' );
+		data.append( 'nonce', document.getElementById( 'media-' + id ).dataset.updateNonce );
+		data.append( 'id', id );
+		data.append( 'taxonomy', taxonomy );
+		data.append( 'attachments[' + id + '][' + taxonomy + ']', input.value );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result.success ) {
+				if ( taxonomy === 'media_category' ) {
+					newTaxes = result.data.media_cats.join( ', ' );
+					input.value = newTaxes;
+					document.getElementById( 'media-' + id ).setAttribute( 'data-taxes', newTaxes );
+				} else if ( taxonomy === 'media_tag' ) {
+					newTaxes = result.data.media_tags.join( ', ' );
+					input.value = newTaxes;
+					document.getElementById( 'media-' + id ).setAttribute( 'data-tags', newTaxes );
+				}
+				
+				// Show success visual feedback.
+				clearTimeout( successTimeout );
+				document.getElementById( 'tax-saved' ).classList.remove( 'hidden' );
+				document.getElementById( 'tax-saved' ).setAttribute( 'aria-hidden', 'false' );
+
+				// Hide success visual feedback after 3 seconds.
+				successTimeout = setTimeout( function() {
+					document.getElementById( 'tax-saved' ).classList.add( 'hidden' );
+					document.getElementById( 'tax-saved' ).setAttribute( 'aria-hidden', 'true' );
+				}, 3000 );
+			} else {
+				console.error( _wpMediaGridSettings.failed_update, result.data.error );
+			}
+		} )
+		.catch( function( error ) {
+			console.error( _wpMediaGridSettings.error, error );
+		} );
+	}
+
+	// Delete attachment from within modal
+	function deleteItem( id ) {
+		var data = new URLSearchParams( {
+			action: 'delete-post',
+			_ajax_nonce: document.getElementById( 'media-' + id ).dataset.deleteNonce,
+			id: id
+		} );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result === 1 ) { // success
+				if ( document.getElementById( 'media-' + id ).previousElementSibling != null ) {
+					focusID = document.getElementById( 'media-' + id ).previousElementSibling.id;
+				} else if ( document.getElementById( 'media-' + id ).nextElementSibling != null ) {
+					focusID = document.getElementById( 'media-' + id ).nextElementSibling.id;
+				} else {
+					focusID = addNew.id;
+				}
+				document.getElementById( 'media-' + id ).remove();
+				closeButton.click();
+			} else {
+				console.log( _wpMediaGridSettings.delete_failed );
+			}
+		} )
+		.catch( function( error ) {
+			console.error( _wpMediaGridSettings.error, error );
+		} );
+	}
+
+	// Open modal
+	function openModalDialog( item ) {
+		var id = item.id.replace( 'media-', '' ),
+			title = item.getAttribute( 'aria-label' ),
+			date = item.dataset.date,
+			filename = item.dataset.filename,
+			filetype = item.dataset.filetype,
+			mime = item.dataset.mime,
+			size = item.dataset.size,
+			width = item.dataset.width,
+			height = item.dataset.height,
+			caption = item.dataset.caption,
+			description = item.dataset.description,
+			taxes = item.dataset.taxes,
+			tags = item.dataset.tags,
+			url = item.dataset.url,
+			alt = item.querySelector( 'img' ).getAttribute( 'alt' ),
+			link = item.dataset.link,
+			orientation = item.dataset.orientation ? ' ' + item.dataset.orientation : '',
+			menuOrder = item.dataset.menuOrder, 
+			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
+			next = item.nextElementSibling ? item.nextElementSibling.id : '';
+
+		// Modify current URL
+		queryParams.set( 'item', id );
+		history.replaceState( null, null, '?' + queryParams.toString() );
+
+		// Set menu_order, media_category, and media_post_tag field IDs correctly
+		setAddedMediaFields( id );
+
+		// Populate modal with attachment details
+		dialog.querySelector( '.attachment-date' ).textContent = date;
+		dialog.querySelector( '.attachment-filename' ).textContent = filename;
+		dialog.querySelector( '.attachment-filetype' ).textContent = mime;
+		dialog.querySelector( '.attachment-filesize' ).textContent = size;
+		dialog.querySelector( '.attachment-dimensions' ).textContent = width + ' ' + _wpMediaGridSettings.by + ' ' + height + ' ' + _wpMediaGridSettings.pixels;
+		dialog.querySelector( '.attachment-media-view' ).className = 'attachment-media-view' + orientation;
+
+		dialog.querySelector( '#attachment-details-two-column-alt-text').textContent = alt;
+		dialog.querySelector( '#attachment-details-two-column-title').value = title;
+		dialog.querySelector( '#attachment-details-two-column-caption').textContent = caption;
+		dialog.querySelector( '#attachment-details-two-column-description').textContent = description;
+		dialog.querySelector( '#attachment-details-two-column-copy-link').value = url;
+
+		dialog.querySelector( '#menu-order').value = menuOrder;
+		dialog.querySelector( '#attachments-' + id + '-media_category').value = taxes;
+		dialog.querySelector( '#attachments-' + id + '-media_post_tag').value = tags;
+
+		if ( filetype === 'audio' ) {
+			dialog.querySelector( '#media-image' ).setAttribute( 'hidden', true );
+			dialog.querySelector( '#media-video' ).setAttribute( 'hidden', true );
+			dialog.querySelector( '#media-audio' ).removeAttribute( 'hidden' );
+			dialog.querySelector( 'audio.wp-audio-shortcode' ).src = url;
+			dialog.querySelector( 'audio' ).setAttribute( 'type', mime );
+		} else if ( filetype === 'video' ) {
+			dialog.querySelector( '.wp-video' ).removeAttribute( 'style' );
+			dialog.querySelector( '#media-image' ).setAttribute( 'hidden', true );
+			dialog.querySelector( '#media-audio' ).setAttribute( 'hidden', true );
+			dialog.querySelector( '#media-video' ).removeAttribute( 'hidden' );
+			dialog.querySelector( 'video.wp-video-shortcode' ).src = url;
+			dialog.querySelector( 'video' ).setAttribute( 'type', mime );
+		} else {
+			dialog.querySelector( '#media-audio' ).setAttribute( 'hidden', true );
+			dialog.querySelector( '#media-video' ).setAttribute( 'hidden', true );
+			dialog.querySelector( '#media-image' ).removeAttribute( 'hidden' );
+				
+			if ( filetype === 'image' ) {
+				dialog.querySelector( '.thumbnail-image img' ).src = url;
+				dialog.querySelector( '.edit-attachment' ).style.display = '';
+			} else {
+				dialog.querySelector( '.thumbnail-image img' ).src = item.querySelector( 'img' ).src;
+				dialog.querySelector( '.edit-attachment' ).style.display = 'none';
+			}
 		}
-	});
+		dialog.querySelector( '.thumbnail-image img' ).setAttribute( 'alt', alt );
 
-	return Router;
+		dialog.querySelector( '#view-attachment').href = link;
+		dialog.querySelector( '#edit-more' ).href = ajaxurl.replace( 'admin-ajax.php', 'post.php?post=' + id + '&action=edit' );
+		dialog.querySelector( '#download-file' ).href = url;
+		leftIcon.setAttribute( 'data-prev', prev );
+		rightIcon.setAttribute( 'data-next', next );
 
-	};
-
-	var editImageDetails = function() { // ClassicPress: defer loading via require()
-
-	var View = wp.media.View,
-		EditImage = wp.media.view.EditImage,
-		Details;
-
-	/**
-	 * wp.media.view.EditImage.Details
-	 *
-	 * @memberOf wp.media.view.EditImage
-	 *
-	 * @class
-	 * @augments wp.media.view.EditImage
-	 * @augments wp.media.View
-	 * @augments wp.Backbone.View
-	 * @augments Backbone.View
-	 */
-	Details = EditImage.extend(/** @lends wp.media.view.EditImage.Details.prototype */{
-		initialize: function( options ) {
-			this.editor = window.imageEdit;
-			this.frame = options.frame;
-			this.controller = options.controller;
-			View.prototype.initialize.apply( this, arguments );
-		},
-
-		back: function() {
-			this.frame.content.mode( 'edit-metadata' );
-		},
-
-		save: function() {
-			this.model.fetch().done( _.bind( function() {
-				this.frame.content.mode( 'edit-metadata' );
-			}, this ) );
+		if ( prev === '' ) {
+			leftIcon.disabled = true;
+		} else {
+			leftIcon.disabled = false;
 		}
-	});
 
-	return Details;
+		if ( next === '' ) {
+			rightIcon.disabled = true;
+		} else {
+			rightIcon.disabled = false;
+		}
 
-	};
+		// Show modal
+		dialog.classList.add( 'modal-loading' );
+		dialog.showModal();
 
-	var editAttachments = function() { // ClassicPress: defer loading via require()
-
-	var Frame = wp.media.view.Frame,
-		MediaFrame = wp.media.view.MediaFrame,
-
-		$ = jQuery,
-		EditAttachments;
-
-	/**
-	 * wp.media.view.MediaFrame.EditAttachments
-	 *
-	 * A frame for editing the details of a specific media item.
-	 *
-	 * Opens in a modal by default.
-	 *
-	 * Requires an attachment model to be passed in the options hash under `model`.
-	 *
-	 * @memberOf wp.media.view.MediaFrame
-	 *
-	 * @class
-	 * @augments wp.media.view.Frame
-	 * @augments wp.media.View
-	 * @augments wp.Backbone.View
-	 * @augments Backbone.View
-	 * @mixes wp.media.controller.StateMachine
-	 */
-	EditAttachments = MediaFrame.extend(/** @lends wp.media.view.MediaFrame.EditAttachments.prototype */{
-
-		className: 'edit-attachment-frame',
-		template:  wp.template( 'edit-attachment-frame' ),
-		regions:   [ 'title', 'content' ],
-
-		events: {
-			'click .left':  'previousMediaItem',
-			'click .right': 'nextMediaItem'
-		},
-
-		initialize: function() {
-			Frame.prototype.initialize.apply( this, arguments );
-
-			_.defaults( this.options, {
-				modal: true,
-				state: 'edit-attachment'
-			});
-
-			this.controller = this.options.controller;
-			this.gridRouter = this.controller.gridRouter;
-			this.library = this.options.library;
-
-			if ( this.options.model ) {
-				this.model = this.options.model;
+		// Delete media item
+		dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
+			if ( confirm( _wpMediaGridSettings.confirm_delete ) ) {
+				deleteItem( id );
 			}
-
-			this.bindHandlers();
-			this.createStates();
-			this.createModal();
-
-			this.title.mode( 'default' );
-			this.toggleNav();
-		},
-
-		bindHandlers: function() {
-			// Bind default title creation.
-			this.on( 'title:create:default', this.createTitle, this );
-
-			this.on( 'content:create:edit-metadata', this.editMetadataMode, this );
-			this.on( 'content:create:edit-image', this.editImageMode, this );
-			this.on( 'content:render:edit-image', this.editImageModeRender, this );
-			this.on( 'refresh', this.rerender, this );
-			this.on( 'close', this.detach );
-
-			this.bindModelHandlers();
-			this.listenTo( this.gridRouter, 'route:search', this.close, this );
-		},
-
-		bindModelHandlers: function() {
-			// Close the modal if the attachment is deleted.
-			this.listenTo( this.model, 'change:status destroy', this.close, this );
-		},
-
-		createModal: function() {
-			// Initialize modal container view.
-			if ( this.options.modal ) {
-				this.modal = new wp.media.view.Modal({
-					controller:     this,
-					title:          this.options.title,
-					hasCloseButton: false
-				});
-
-				this.modal.on( 'open', _.bind( function () {
-					$( 'body' ).on( 'keydown.media-modal', _.bind( this.keyEvent, this ) );
-				}, this ) );
-
-				// Completely destroy the modal DOM element when closing it.
-				this.modal.on( 'close', _.bind( function() {
-					// Remove the keydown event.
-					$( 'body' ).off( 'keydown.media-modal' );
-					// Move focus back to the original item in the grid if possible.
-					$( 'li.attachment[data-id="' + this.model.get( 'id' ) +'"]' ).trigger( 'focus' );
-					this.resetRoute();
-				}, this ) );
-
-				// Set this frame as the modal's content.
-				this.modal.content( this );
-				this.modal.open();
-			}
-		},
-
-		/**
-		 * Add the default states to the frame.
-		 */
-		createStates: function() {
-			this.states.add([
-				new wp.media.controller.EditAttachmentMetadata({
-					model:   this.model,
-					library: this.library
-				})
-			]);
-		},
-
-		/**
-		 * Content region rendering callback for the `edit-metadata` mode.
-		 *
-		 * @param {Object} contentRegion Basic object with a `view` property, which
-		 *                               should be set with the proper region view.
-		 */
-		editMetadataMode: function( contentRegion ) {
-			contentRegion.view = new wp.media.view.Attachment.Details.TwoColumn({
-				controller: this,
-				model:      this.model
-			});
-
-			/**
-			 * Attach a subview to display fields added via the
-			 * `attachment_fields_to_edit` filter.
-			 */
-			contentRegion.view.views.set( '.attachment-compat', new wp.media.view.AttachmentCompat({
-				controller: this,
-				model:      this.model
-			}) );
-
-			// Update browser url when navigating media details, except on load.
-			if ( this.model && ! this.model.get( 'skipHistory' ) ) {
-				this.gridRouter.navigate( this.gridRouter.baseUrl( '?item=' + this.model.id ) );
-			}
-		},
-
-		/**
-		 * Render the EditImage view into the frame's content region.
-		 *
-		 * @param {Object} contentRegion Basic object with a `view` property, which
-		 *                               should be set with the proper region view.
-		 */
-		editImageMode: function( contentRegion ) {
-			var editImageController = new wp.media.controller.EditImage( {
-				model: this.model,
-				frame: this
+		} );
+			
+		/* Update media attachment details */
+		dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
+			input.addEventListener( 'blur', function() {
+				if ( input.parentNode.parentNode.className === 'compat-item' ) {
+					updateMediaTaxOrTag( input, id ); // Update media categories and tags
+				} else {
+					updateDetails( input, id );
+				}
 			} );
-			// Noop some methods.
-			editImageController._toolbar = function() {};
-			editImageController._router = function() {};
-			editImageController._menu = function() {};
+		} );
+	}
 
-			contentRegion.view = new wp.media.view.EditImage.Details( {
-				model: this.model,
-				frame: this,
-				controller: editImageController
+	/* Select and unselect media items for deletion */
+	function selectItemForDeletion( item ) {
+		var deleteButton = document.querySelector( '.delete-selected-button' );
+		if ( item.className.includes( 'selected' ) ) {
+			item.classList.remove( 'selected' );
+			item.setAttribute( 'aria-checked', false );
+
+			// Disable delete button if no media items are selected
+			if ( document.querySelector( '.media-item.selected' ) == null ) {
+				deleteButton.setAttribute( 'disabled', true );
+			}
+		} else {
+			item.classList.add( 'selected' );
+			item.setAttribute( 'aria-checked', true );
+
+			// Enable delete button
+			if ( deleteButton.disabled ) {
+				deleteButton.removeAttribute( 'disabled' );
+			}
+		}
+	}
+
+	/* Populate media items within grid */
+	function populateGridItem( attachment ) {
+		var gridItem = document.createElement( 'li' ),
+			image = '<img src="' + attachment.url + '" alt="' + attachment.alt + '">';
+
+		if ( attachment.type === 'application' ) {
+			if ( attachment.subtype === 'vnd.openxmlformats-officedocument.spreadsheetml.sheet' ) {
+				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/spreadsheet.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+			} else if ( attachment.subtype === 'zip' ) {
+				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/archive.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+			} else {
+				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/document.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+			}
+		} else if ( attachment.type === 'audio' ) {
+			image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/audio.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+		} else if ( attachment.type === 'video' ) {
+			image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/video.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+		}	
+
+		gridItem.className = 'media-item';
+		gridItem.id = 'media-' + attachment.id;
+		gridItem.setAttribute( 'tabindex', 0 );
+		gridItem.setAttribute( 'role', 'checkbox' );
+		gridItem.setAttribute( 'aria-checked', 'false' );
+		gridItem.setAttribute( 'aria-label', attachment.title );
+		gridItem.setAttribute( 'data-date', attachment.dateFormatted );
+		gridItem.setAttribute( 'data-url', attachment.url );
+		gridItem.setAttribute( 'data-filename', attachment.filename );
+		gridItem.setAttribute( 'data-filetype', attachment.type );
+		gridItem.setAttribute( 'data-mime', attachment.mime );
+		gridItem.setAttribute( 'data-width', attachment.width );
+		gridItem.setAttribute( 'data-height', attachment.height );
+		gridItem.setAttribute( 'data-size', attachment.filesizeHumanReadable )
+		gridItem.setAttribute( 'data-caption', attachment.caption );
+		gridItem.setAttribute( 'data-description', attachment.description );
+		gridItem.setAttribute( 'data-link', attachment.link );
+		gridItem.setAttribute( 'data-orientation', attachment.orientation );
+		gridItem.setAttribute( 'data-menu-order', attachment.menuOrder );
+		gridItem.setAttribute( 'data-taxes', attachment.media_cats );
+		gridItem.setAttribute( 'data-tags', attachment.media_tags );
+		gridItem.setAttribute( 'data-update-nonce', attachment.nonces.update );
+		gridItem.setAttribute( 'data-delete-nonce', attachment.nonces.delete );
+		gridItem.setAttribute( 'data-edit-nonce', attachment.nonces.edit );
+
+		gridItem.innerHTML = '<div class="select-attachment-preview type-' + attachment.type + ' subtype-' + attachment.subtype + '">' + 
+			'<div class="media-thumbnail">' + image + '</div>' +
+			'</div>' +
+			'<button type="button" class="check" tabindex="-1">' +
+			'<span class="media-modal-icon"></span>' +
+			'<span class="screen-reader-text">' + _wpMediaGridSettings.deselect + '></span>' +
+			'</button>';
+
+		return gridItem;
+	}
+
+	/* Update items displayed according to dropdown selections */
+	function updateGrid() {
+		var date  = dateFilter.value,
+			type  = typeFilter.value,
+			count = document.querySelector( '.load-more-count' ).textContent;
+
+		// Create URLSearchParams object
+		const params = new URLSearchParams( {
+			'action': 'query-attachments',
+			'query[posts_per_page]': document.getElementById( 'alternative_media_per_page' ).value,
+			'query[monthnum]': date ? parseInt( date.substr( 4, 2 ), 10 ) : 0,
+			'query[year]': date ? parseInt( date.substr( 0, 4 ), 10 ) : 0,
+			'query[post_mime_type]': type || '',
+			'query[s]': search ? search.value : '',
+			'query[media_category_name]': mediaCatSelect ? mediaCatSelect.value : '',
+			'_ajax_nonce': document.getElementById( 'alternative_media_grid_nonce' ).value,
+		} );
+
+		// Make AJAX request
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: params,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result.success ) {
+				if ( result.data.length === 0 ) {
+
+					// Clear existing grid
+					mediaGrid.innerHTML = '';
+
+					// Update the count at the bottom of the page
+					document.querySelector( '.load-more-count' ).setAttribute( 'hidden', true );
+					document.querySelector( '.no-media' ).removeAttribute( 'hidden' );
+				} else {
+
+					// Clear existing grid
+					mediaGrid.innerHTML = '';
+
+					// Populate grid with new items
+					result.data.forEach( function( attachment ) {
+						var gridItem = populateGridItem( attachment );
+						mediaGrid.appendChild( gridItem );
+					} );
+
+					// Open modal to show details about file, or select files for deletion
+					document.querySelectorAll( '.media-item' ).forEach( function( item ) {
+						item.addEventListener( 'click', function() {
+							if ( document.querySelector( '.media-toolbar-mode-select' ) == null ) {
+								openModalDialog( item );
+							} else {
+								selectItemForDeletion( item );
+							}
+						} );
+					} );
+
+					// Update the count at the bottom of the page
+					document.querySelector( '.no-media' ).setAttribute( 'hidden', true );
+					document.querySelector( '.load-more-count' ).removeAttribute( 'hidden' );
+					document.querySelector( '.load-more-count' ).textContent = count.replace( /[0-9]+/g, result.data.length );
+				}
+			} else {
+				console.error( _wpMediaGridSettings.failed_update, result.data.message );
+			}
+		} )
+		.catch( function( error ) {
+			console.error( _wpMediaGridSettings.error, error );
+		} );
+	}
+
+	function removeImageEditWrap() {
+		if ( document.querySelector( '.imgedit-wrap' ) != null ) {
+			document.querySelector( '.imgedit-wrap' ).remove();
+			document.querySelector( '.attachment-details' ).removeAttribute( 'hidden' );
+			document.querySelector( '.attachment-details' ).removeAttribute( 'inert' );
+		}
+	}
+
+	// Open modal automatically if URL contains media item ID as query param
+	if ( queryParams.has( 'item' ) ) {
+		itemID = parseInt( queryParams.get( 'item' ) );
+		if ( itemID != null && document.getElementById( 'media-' + itemID ) != null ) {
+			setTimeout( function() {
+				document.getElementById( 'media-' + itemID ).click();
+				if ( queryParams.has( 'mode' ) && queryParams.get( 'mode' ) === 'edit' ) {
+					document.querySelector( '.edit-attachment' ).click();
+				}
+			} );
+		}
+	}
+
+	// Enable the setting of the media upload category
+	if ( uploadCatSelect != null ) {
+
+		if ( uploadCatSelect.value == '' ) {
+			addNew.setAttribute( 'inert', true );
+			addNew.setAttribute( 'disabled', true );
+
+			// Prevent uploading file into browser window
+			window.addEventListener( 'dragover', function( e ) {
+				e.preventDefault();
+			}, false );
+			window.addEventListener( 'drop', function( e ) {
+				e.preventDefault();
+			}, false );
+		}
+
+		// Set up variables when a change of upload category is made.
+		uploadCatSelect.addEventListener( 'change', function( e ) {
+			var div,
+				dismissible = document.querySelector( '.is-dismissible' ),
+				uploadCatFolder = new URLSearchParams( {
+					action: 'media-cat-upload',
+					option: 'media_cat_upload_folder',
+					media_cat_upload_value: e.target.value,
+					media_cat_upload_nonce: document.getElementById( 'media_cat_upload_nonce' ).value
+				} );
+
+			// Prevent accumulation of notices.
+			if ( dismissible != null ) {
+				dismissible.remove();
+			}
+
+			if ( uploadCatSelect.value == '' ) {
+				addNew.setAttribute( 'inert', true );
+				addNew.setAttribute( 'disabled', true );
+
+				// Prevent uploading file into browser window
+				window.addEventListener( 'dragover', function( e ) {
+					e.preventDefault();
+				}, false );
+				window.addEventListener( 'drop', function( e ) {
+					e.preventDefault();
+				}, false );
+			} else {
+				addNew.removeAttribute( 'inert' );
+				addNew.removeAttribute( 'disabled' );
+			}
+
+			// Update upload category.
+			fetch( ajaxurl, {
+				method: 'POST',
+				body: uploadCatFolder,
+				credentials: 'same-origin'
+			} )
+			.then( function( response ) {
+				if ( response.ok ) {
+					return response.json(); // no errors
+				}
+				throw new Error( response.status );
+			} )
+			.then( function( response ) {
+				if ( response.success ) {
+					if ( response.data.value == '' ) {
+						div = document.createElement( 'div' );
+						div.id = 'message';
+						div.className = 'notice notice-error is-dismissible';
+						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+						document.querySelector( '.page-title-action' ).after( div );
+					} else {
+						div = document.createElement( 'div' );
+						div.id = 'message';
+						div.className = 'updated notice notice-success is-dismissible';
+						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+						document.querySelector( '.page-title-action' ).after( div );
+
+						// Update selected attribute in DOM.
+						uploadCatSelect.childNodes.forEach( function( option ) {
+							if ( option.value === e.target.value ) {
+								option.setAttribute( 'selected', true );
+							} else {
+								option.removeAttribute( 'selected' );
+							}
+						} );
+					}
+				}
+			} )
+			.catch( function( error ) {
+				div = document.createElement( 'div' );
+				div.id = 'message';
+				div.className = 'notice notice-error is-dismissible';
+				div.innerHTML = '<p>' + error + '</p><button class="notice-dismiss" type="button"></button>';
+				document.querySelector( '.page-title-action' ).after( div );
+			} );
+		} );
+
+		// Make notices dismissible.
+		document.addEventListener( 'click', function( e ) {
+			if ( e.target.className === 'notice-dismiss' ) {
+				document.querySelector( '.is-dismissible' ).remove();
+			}
+		} );
+	}
+
+	// Add event listeners for changing the selection of items displayed
+	dateFilter.addEventListener( 'change', updateGrid );
+	typeFilter.addEventListener( 'change', updateGrid );
+	mediaCatSelect.addEventListener( 'change', updateGrid );
+	search.addEventListener( 'input', function() {
+		var searchtimer;
+		clearTimeout( searchtimer );
+		searchtimer = setTimeout( updateGrid, 200 );
+	} );
+
+	// Open and close file upload area by clicking Add New button
+	addNew.addEventListener( 'click', function() {
+		if ( ! uploader.hasAttribute( 'hidden' ) ) {
+			uploader.setAttribute( 'inert', true );
+			uploader.setAttribute( 'hidden', true );
+			addNew.setAttribute( 'aria-expanded', false );
+		} else {
+			uploader.removeAttribute( 'inert' );
+			uploader.removeAttribute( 'hidden' );
+			addNew.setAttribute( 'aria-expanded', true );
+		}
+	} );
+
+	// Close file upload area by clicking X button
+	close.addEventListener( 'click', function() {
+		uploader.setAttribute( 'inert', true );
+		uploader.setAttribute( 'hidden', true );
+		addNew.setAttribute( 'aria-expanded', false );
+	} );
+
+	// Set functions for Escape and Enter keys
+	document.addEventListener( 'keyup', function( e ) {
+		if ( e.key === 'Escape' ) {
+			queryParams.delete( 'item' );			
+			queryParams.delete( 'mode' );
+			history.replaceState( null, null, '?' + queryParams.toString() ); // reset URL params
+			close.click(); // close file upload area
+			if ( focusID != null ) { // set focus correctly
+				document.getElementById( focusID ).focus();
+				focusID = null; // reset focusID
+			}
+			removeImageEditWrap();
+		} else if ( e.key === 'Enter' && e.target.className === 'media-item' ) {
+			e.target.click(); // open modal
+		}
+	} );
+
+	/* Open modal to show details about file, or select files for deletion */
+	document.querySelectorAll( '.media-item' ).forEach( function( item ) {
+		item.addEventListener( 'click', function() {
+			if ( document.querySelector( '.media-toolbar-mode-select' ) == null ) {
+				openModalDialog( item );
+			} else {
+				selectItemForDeletion( item );
+			}
+		} );
+	} );
+
+	/* Close modal by clicking button */
+	closeButton.addEventListener( 'click', function() {
+		queryParams.delete( 'item' );		
+		queryParams.delete( 'mode' );
+		history.replaceState( null, null, '?' + queryParams.toString() ); // reset URL params
+		dialog.classList.remove( 'modal-loading' );
+		dialog.close();
+		if ( focusID != null ) { // set focus correctly
+			document.getElementById( focusID ).focus();
+			focusID = null; // reset focusID
+		}
+		removeImageEditWrap();
+	} );
+
+	leftIcon.addEventListener( 'click', function() {
+		var id = leftIcon.dataset.prev;
+		focusID = id; // set focusID for when modal is closed
+		document.getElementById( id ).click();
+		removeImageEditWrap();
+	} );
+
+	rightIcon.addEventListener( 'click', function() {
+		var id = rightIcon.dataset.next;
+		focusID = id; // set focusID for when modal is closed
+		document.getElementById( id ).click();
+		removeImageEditWrap();
+	} );
+
+	// Edit image
+	document.querySelector( '.edit-attachment' ).addEventListener( 'click', function( e ) {
+		var itemID = parseInt( queryParams.get( 'item' ) ),
+			item = document.getElementById( 'media-' + itemID ),
+			width = item.dataset.width,
+			height = item.dataset.height,
+			nonce = item.dataset.editNonce,
+			action = 'rotate-cw', // or any other valid action e.g. save, scale, restore 
+			target = 'full'; // or 'thumbnail', etc.
+
+		// Construct the FormData object
+		var formData = new FormData();
+		formData.append( 'action', 'image-editor' );
+		formData.append( '_ajax_nonce', nonce );
+		formData.append( 'postid', itemID );
+		formData.append( 'do', action );
+		formData.append( 'target', target );
+		formData.append( 'context', 'edit-attachment' );
+
+		// Make the fetch request
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: formData,
+			credentials: 'same-origin',
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			document.querySelector( '.attachment-details' ).setAttribute( 'hidden', true );
+			document.querySelector( '.attachment-details' ).setAttribute( 'inert', true );
+			document.querySelector( '.media-frame-content' ).insertAdjacentHTML( 'beforeend', result.data.html );
+
+			// Modify current URL
+			queryParams.set( 'mode', 'edit' );
+			history.replaceState( null, null, '?' + queryParams.toString() );
+		} )
+		.catch( function( error ) {
+			console.error( 'Error:', error );
+		} );
+	} );
+
+	// Bulk select media items
+	document.querySelector( '.select-mode-toggle-button' ).addEventListener( 'click', function( e ) {
+		var toolbar = document.querySelector( '.cp-media-toolbar' ),
+			deleteButton = document.querySelector( '.delete-selected-button' );
+
+		if ( toolbar.className.includes( 'media-toolbar-mode-select' ) ) {
+			document.querySelectorAll( '.media-item' ).forEach( function( item ) {
+				if ( item.className.includes( 'selected' ) ) {
+					item.classList.remove( 'selected' );
+					item.setAttribute( 'aria-checked', false );
+				}
 			} );
 
-			this.gridRouter.navigate( this.gridRouter.baseUrl( '?item=' + this.model.id + '&mode=edit' ) );
+			e.target.textContent = 'Bulk select';
+			dateFilter.style.display = '';
+			typeFilter.style.display = '';
+			mediaCatSelect.style.display = '';
+			deleteButton.classList.add( 'hidden' );
+			toolbar.classList.remove( 'media-toolbar-mode-select' );
+		} else {
+			e.target.textContent = 'Cancel';
+			dateFilter.style.display = 'none';
+			typeFilter.style.display = 'none';
+			mediaCatSelect.style.display = 'none';
+			deleteButton.classList.remove( 'hidden' );
+			toolbar.classList.add( 'media-toolbar-mode-select' );
 
-		},
-
-		editImageModeRender: function( view ) {
-			view.on( 'ready', view.loadEditor );
-		},
-
-		toggleNav: function() {
-			this.$( '.left' ).prop( 'disabled', ! this.hasPrevious() );
-			this.$( '.right' ).prop( 'disabled', ! this.hasNext() );
-		},
-
-		/**
-		 * Rerender the view.
-		 */
-		rerender: function( model ) {
-			this.stopListening( this.model );
-
-			this.model = model;
-
-			this.bindModelHandlers();
-
-			// Only rerender the `content` region.
-			if ( this.content.mode() !== 'edit-metadata' ) {
-				this.content.mode( 'edit-metadata' );
-			} else {
-				this.content.render();
-			}
-
-			this.toggleNav();
-		},
-
-		/**
-		 * Click handler to switch to the previous media item.
-		 */
-		previousMediaItem: function() {
-			if ( ! this.hasPrevious() ) {
-				return;
-			}
-
-			this.trigger( 'refresh', this.library.at( this.getCurrentIndex() - 1 ) );
-			// Move focus to the Previous button. When there are no more items, to the Next button.
-			this.focusNavButton( this.hasPrevious() ? '.left' : '.right' );
-		},
-
-		/**
-		 * Click handler to switch to the next media item.
-		 */
-		nextMediaItem: function() {
-			if ( ! this.hasNext() ) {
-				return;
-			}
-
-			this.trigger( 'refresh', this.library.at( this.getCurrentIndex() + 1 ) );
-			// Move focus to the Next button. When there are no more items, to the Previous button.
-			this.focusNavButton( this.hasNext() ? '.right' : '.left' );
-		},
-
-		/**
-		 * Set focus to the navigation buttons depending on the browsing direction.
-		 *
-		 * @since 5.3.0
-		 *
-		 * @param {string} which A CSS selector to target the button to focus.
-		 */
-		focusNavButton: function( which ) {
-			$( which ).trigger( 'focus' );
-		},
-
-		getCurrentIndex: function() {
-			return this.library.indexOf( this.model );
-		},
-
-		hasNext: function() {
-			return ( this.getCurrentIndex() + 1 ) < this.library.length;
-		},
-
-		hasPrevious: function() {
-			return ( this.getCurrentIndex() - 1 ) > -1;
-		},
-		/**
-		 * Respond to the keyboard events: right arrow, left arrow, except when
-		 * focus is in a textarea or input field.
-		 */
-		keyEvent: function( event ) {
-			if ( ( 'INPUT' === event.target.nodeName || 'TEXTAREA' === event.target.nodeName ) && ! event.target.disabled ) {
-				return;
-			}
-
-			// The right arrow key.
-			if ( 39 === event.keyCode ) {
-				this.nextMediaItem();
-			}
-			// The left arrow key.
-			if ( 37 === event.keyCode ) {
-				this.previousMediaItem();
-			}
-		},
-
-		resetRoute: function() {
-			var searchTerm = this.controller.browserView.toolbar.get( 'search' ).$el.val(),
-				url = '' !== searchTerm ? '?search=' + searchTerm : '';
-			this.gridRouter.navigate( this.gridRouter.baseUrl( url ), { replace: true } );
-		}
-	});
-
-	return EditAttachments;
-
-	};
-
-	var selectModeToggle = function() { // ClassicPress: defer loading via require()
-
-	var Button = wp.media.view.Button,
-		l10n = wp.media.view.l10n,
-		SelectModeToggle;
-
-	/**
-	 * wp.media.view.SelectModeToggleButton
-	 *
-	 * @memberOf wp.media.view
-	 *
-	 * @class
-	 * @augments wp.media.view.Button
-	 * @augments wp.media.View
-	 * @augments wp.Backbone.View
-	 * @augments Backbone.View
-	 */
-	SelectModeToggle = Button.extend(/** @lends wp.media.view.SelectModeToggle.prototype */{
-		initialize: function() {
-			_.defaults( this.options, {
-				size : ''
+			deleteButton.addEventListener( 'click', function() {
+				if ( confirm( _wpMediaGridSettings.confirm_multiple ) ) {
+					document.querySelectorAll( '.media-item.selected' ).forEach( function( deleteSelect ) {
+						deleteItem( deleteSelect.id.replace( 'media-', '' ) );
+					} );
+				} 
+				document.querySelector( '.select-mode-toggle-button' ).click();
 			} );
-
-			Button.prototype.initialize.apply( this, arguments );
-			this.controller.on( 'select:activate select:deactivate', this.toggleBulkEditHandler, this );
-			this.controller.on( 'selection:action:done', this.back, this );
-		},
-
-		back: function () {
-			this.controller.deactivateMode( 'select' ).activateMode( 'edit' );
-		},
-
-		click: function() {
-			Button.prototype.click.apply( this, arguments );
-			if ( this.controller.isModeActive( 'select' ) ) {
-				this.back();
-			} else {
-				this.controller.deactivateMode( 'edit' ).activateMode( 'select' );
-			}
-		},
-
-		render: function() {
-			Button.prototype.render.apply( this, arguments );
-			this.$el.addClass( 'select-mode-toggle-button' );
-			return this;
-		},
-
-		toggleBulkEditHandler: function() {
-			var toolbar = this.controller.content.get().toolbar, children;
-
-			children = toolbar.$( '.media-toolbar-secondary > *, .media-toolbar-primary > *' );
-
-			// @todo The Frame should be doing all of this.
-			if ( this.controller.isModeActive( 'select' ) ) {
-				this.model.set( {
-					size: 'large',
-					text: l10n.cancel
-				} );
-				children.not( '.spinner, .media-button' ).hide();
-				this.$el.show();
-				toolbar.$el.addClass( 'media-toolbar-mode-select' );
-				toolbar.$( '.delete-selected-button' ).removeClass( 'hidden' );
-			} else {
-				this.model.set( {
-					size: '',
-					text: l10n.bulkSelect
-				} );
-				this.controller.content.get().$el.removeClass( 'fixed' );
-				toolbar.$el.css( 'width', '' );
-				toolbar.$el.removeClass( 'media-toolbar-mode-select' );
-				toolbar.$( '.delete-selected-button' ).addClass( 'hidden' );
-				children.not( '.media-button' ).show();
-				this.controller.state().get( 'selection' ).reset();
-			}
 		}
-	});
-
-	return SelectModeToggle;
-
-	};
-
-	var deleteSelected = function() { // ClassicPress: defer loading via require()
-
-	var Button = wp.media.view.Button,
-		l10n = wp.media.view.l10n,
-		DeleteSelected;
+	} );
 
 	/**
-	 * wp.media.view.DeleteSelectedButton
+	 * Copies the attachment URL to the clipboard.
 	 *
-	 * A button that handles bulk Delete/Trash logic
+	 * @since CP-2.2.0
 	 *
-	 * @memberOf wp.media.view
+	 * @param {MouseEvent} event A click event.
 	 *
-	 * @class
-	 * @augments wp.media.view.Button
-	 * @augments wp.media.View
-	 * @augments wp.Backbone.View
-	 * @augments Backbone.View
+	 * @return {void}
 	 */
-	DeleteSelected = Button.extend(/** @lends wp.media.view.DeleteSelectedButton.prototype */{
-		initialize: function() {
-			Button.prototype.initialize.apply( this, arguments );
-			if ( this.options.filters ) {
-				this.options.filters.model.on( 'change', this.filterChange, this );
-			}
-			this.controller.on( 'selection:toggle', this.toggleDisabled, this );
-			this.controller.on( 'select:activate', this.toggleDisabled, this );
-		},
+	document.querySelector( '.copy-attachment-url' ).addEventListener( 'click', function( e ) {
+		var successTimeout,
+			copyText = e.target.parentNode.previousElementSibling.value,
+			input = document.createElement( 'input' );
 
-		filterChange: function( model ) {
-			if ( 'trash' === model.get( 'status' ) ) {
-				this.model.set( 'text', l10n.restoreSelected );
-			} else if ( wp.media.view.settings.mediaTrash ) {
-				this.model.set( 'text', l10n.trashSelected );
-			} else {
-				this.model.set( 'text', l10n.deletePermanently );
-			}
-		},
-
-		toggleDisabled: function() {
-			this.model.set( 'disabled', ! this.controller.state().get( 'selection' ).length );
-		},
-
-		render: function() {
-			Button.prototype.render.apply( this, arguments );
-			if ( this.controller.isModeActive( 'select' ) ) {
-				this.$el.addClass( 'delete-selected-button' );
-			} else {
-				this.$el.addClass( 'delete-selected-button hidden' );
-			}
-			this.toggleDisabled();
-			return this;
+		if ( navigator.clipboard ) {
+			navigator.clipboard.writeText( copyText );
+		} else {
+			document.body.append( input );
+			input.value = copyText;
+			input.select();
+			document.execCommand( 'copy' );
 		}
-	});
 
-	return DeleteSelected;
+		// Show success visual feedback.
+		clearTimeout( successTimeout );
+		e.target.nextElementSibling.classList.remove( 'hidden' );
+		e.target.nextElementSibling.setAttribute( 'aria-hidden', 'false' );
+		input.remove();
 
-	};
+		// Hide success visual feedback after 3 seconds since last success and unfocus the trigger.
+		successTimeout = setTimeout( function() {
+			e.target.nextElementSibling.classList.add( 'hidden' );
+			e.target.nextElementSibling.setAttribute( 'aria-hidden', 'true' );
+		}, 3000 );
+		
+	} );
 
-	var deleteSelectedPermanently = function() { // ClassicPress: defer loading via require()
+	/* Upload files using FilePond */
+	// Register FilePond plugins
+	FilePond.registerPlugin(
+		FilePondPluginFileValidateSize,
+		FilePondPluginFileValidateType,
+		FilePondPluginFileRename,
+		FilePondPluginImagePreview
+	);
 
-	var Button = wp.media.view.Button,
-		DeleteSelected = wp.media.view.DeleteSelectedButton,
-		DeleteSelectedPermanently;
+	// Create a FilePond instance
+	pond = FilePond.create( inputElement, {
+		allowMultiple: true,
+		server: {
+			process: function( fieldName, file, metadata, load, error, progress, abort, transfer, options ) {
 
-	/**
-	 * wp.media.view.DeleteSelectedPermanentlyButton
-	 *
-	 * When MEDIA_TRASH is true, a button that handles bulk Delete Permanently logic
-	 *
-	 * @memberOf wp.media.view
-	 *
-	 * @class
-	 * @augments wp.media.view.DeleteSelectedButton
-	 * @augments wp.media.view.Button
-	 * @augments wp.media.View
-	 * @augments wp.Backbone.View
-	 * @augments Backbone.View
-	 */
-	DeleteSelectedPermanently = DeleteSelected.extend(/** @lends wp.media.view.DeleteSelectedPermanentlyButton.prototype */{
-		initialize: function() {
-			DeleteSelected.prototype.initialize.apply( this, arguments );
-			this.controller.on( 'select:activate', this.selectActivate, this );
-			this.controller.on( 'select:deactivate', this.selectDeactivate, this );
+				// Create FormData
+				var formData = new FormData();
+				formData.append( 'async-upload', file, file.name );
+				formData.append( 'action', 'upload-attachment' );
+				formData.append( '_wpnonce', document.getElementById( '_wpnonce' ).value );
+
+				// Use Fetch to upload the file
+				fetch( ajaxurl, {
+					method: 'POST',
+					body: formData,
+					credentials: 'same-origin'
+				} )
+				.then( function( response ) {
+					if ( response.ok ) {
+						return response.json(); // no errors
+					}
+					throw new Error( response.status );
+				} )
+				.then( function( result ) {
+					var gridItem;
+					if ( result.success ) {
+						load( result.data );						
+						gridItem = populateGridItem( result.data );
+						mediaGrid.prepend( gridItem );
+
+						// Open modal to show details about file, or select file for deletion
+						gridItem.addEventListener( 'click', function() {
+							if ( document.querySelector( '.media-toolbar-mode-select' ) == null ) {
+								openModalDialog( gridItem );
+							} else {
+								selectItemForDeletion( gridItem );
+							}
+						} );
+					} else {
+						error( _wpMediaGridSettings.upload_failed );
+					}
+				} )
+				.catch( function( err ) {
+					error( _wpMediaGridSettings.upload_failed );
+					console.error( _wpMediaGridSettings.error, err );
+				} );
+
+				// Return an abort function
+				return {
+					abort: function() {
+						// This function is called when the user aborts the upload
+						abort();
+					}
+				};
+			},
+			maxFileSize: document.getElementById( 'filepond' ).dataset.maxFileSize,
 		},
+		labelTapToUndo: _wpMediaGridSettings.tap_close,
+		fileRenameFunction: ( file ) =>
+			new Promise( function( resolve ) {
+				resolve( window.prompt( _wpMediaGridSettings.new_filename, file.name ) );
+			} ),
+		acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
+		labelFileTypeNotAllowed: _wpMediaGridSettings.invalid_type,
+		fileValidateTypeLabelExpectedTypes: _wpMediaGridSettings.check_types,
+	} );
 
-		filterChange: function( model ) {
-			this.canShow = ( 'trash' === model.get( 'status' ) );
-		},
-
-		selectActivate: function() {
-			this.toggleDisabled();
-			this.$el.toggleClass( 'hidden', ! this.canShow );
-		},
-
-		selectDeactivate: function() {
-			this.toggleDisabled();
-			this.$el.addClass( 'hidden' );
-		},
-
-		render: function() {
-			Button.prototype.render.apply( this, arguments );
-			this.selectActivate();
-			return this;
-		}
-	});
-
-	return DeleteSelectedPermanently;
-
-	};
-
-	var media = wp.media;
-
-	media.controller.EditAttachmentMetadata = editAttachmentMetadata();
-	media.view.MediaFrame.Manage = manage$1();
-	media.view.Attachment.Details.TwoColumn = detailsTwoColumn();
-	media.view.MediaFrame.Manage.Router = manage();
-	media.view.EditImage.Details = editImageDetails();
-	media.view.MediaFrame.EditAttachments = editAttachments();
-	media.view.SelectModeToggleButton = selectModeToggle();
-	media.view.DeleteSelectedButton = deleteSelected();
-	media.view.DeleteSelectedPermanentlyButton = deleteSelectedPermanently();
-
-})();
+} );
