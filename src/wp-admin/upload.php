@@ -106,29 +106,41 @@ if ( isset( $_GET['mode'] ) && in_array( $_GET['mode'], $modes, true ) ) {
 }
 
 if ( 'grid' === $mode ) {
-	wp_enqueue_media();
+	wp_enqueue_style( 'mediaelement-player' );
+	wp_enqueue_style( 'media-grid' );
+	wp_enqueue_style( 'cp-filepond-image-preview' );
+	wp_enqueue_style( 'cp-filepond' );
+	wp_enqueue_script( 'wp-mediaelement' );
 	wp_enqueue_script( 'media-grid' );
-	wp_enqueue_script( 'media' );
 
 	remove_action( 'admin_head', 'wp_admin_canonical_url' );
-
-	$q = $_GET;
-	// Let JS handle this.
-	unset( $q['s'] );
-	$vars   = wp_edit_attachments_query_vars( $q );
-	$ignore = array( 'mode', 'post_type', 'post_status', 'posts_per_page' );
-	foreach ( $vars as $key => $value ) {
-		if ( ! $value || in_array( $key, $ignore, true ) ) {
-			unset( $vars[ $key ] );
-		}
-	}
 
 	wp_localize_script(
 		'media-grid',
 		'_wpMediaGridSettings',
 		array(
-			'adminUrl'  => parse_url( self_admin_url(), PHP_URL_PATH ),
-			'queryVars' => (object) $vars,
+			'by'               => __( 'by' ),
+			'pixels'           => __( 'pixels' ),
+			'deselect'         => __( 'Deselect' ),
+			'failed_update'    => __( 'Failed to update media:' ),
+			'error'            => __( 'Error:' ),
+			'upload_failed'    => __( 'Upload failed' ),
+			'tap_close'        => __( 'Tap to close' ),
+			'new_filename'     => __( 'Enter new filename' ),
+			'invalid_type'     => __( 'Invalid file type' ),
+			'check_types'      => __( 'Check the list of accepted file types.' ),
+			'delete_failed'    => __( 'Failed to delete attachment.' ),
+			'confirm_delete'   => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+			'confirm_multiple' => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+		)
+	);
+
+	add_screen_option(
+		'per_page',
+		array(
+			'label'   => __( 'Number of items per page:' ),
+			'default' => get_option( 'posts_per_page' ) ?: 10,
+			'option'  => 'alternative_media_per_page'
 		)
 	);
 
@@ -164,15 +176,52 @@ if ( 'grid' === $mode ) {
 	$title       = __( 'Media Library' );
 	$parent_file = 'upload.php';
 
+	$max_upload_size = wp_max_upload_size();
+	if ( ! $max_upload_size ) {
+		$max_upload_size = 0;
+	}
+
+	$allowed_mimes = get_allowed_mime_types();
+	$mimes_list = implode( ',', $allowed_mimes );
+
+	// Get the user's preferred items per page
+	$user = get_current_user_id();
+	$screen = get_current_screen();
+	$screen_option = $screen->get_option( 'per_page', 'option' );
+	$per_page = get_user_meta( $user, $screen_option, true );
+	if ( empty( $per_page ) || $per_page < 1 ) {
+		$per_page = $screen->get_option( 'per_page', 'default' );
+	}
+
+	// Fetch media items
+	$paged = isset( $_GET['paged'] ) ? absint( $_GET['paged'] ) : 1;
+	$attachment_args = array(
+		'post_type'		 => 'attachment',
+		'post_status'	 => 'inherit',
+		'posts_per_page' => $per_page,
+		'paged'			 => $paged,
+	);
+
+	$attachments = new WP_Query( $attachment_args );
+
+	$total_pages = (int) $attachments->max_num_pages;
+	$prev_page   = ( $paged === 1 ) ? $paged : $paged - 1;
+	$next_page   = ( $paged === $total_pages ) ? $paged : $paged + 1;
+
 	require_once ABSPATH . 'wp-admin/admin-header.php';
+
+////////////hook
+	do_action( 'cp_media_before_title' );
 	?>
 	<div class="wrap" id="wp-media-grid" data-search="<?php _admin_search_query(); ?>">
 		<h1 class="wp-heading-inline"><?php echo esc_html( $title ); ?></h1>
 
-		<?php
+		<?php ///////hook
+		do_action( 'cp_media_after_title' );
+
 		if ( current_user_can( 'upload_files' ) ) {
 			?>
-			<a href="<?php echo esc_url( admin_url( 'media-new.php' ) ); ?>" class="page-title-action aria-button-if-js"><?php echo esc_html_x( 'Add New', 'file' ); ?></a>
+			<button type="button" id="add-new" class="page-title-action aria-button-if-js" aria-expanded="false"><?php echo esc_html_x( 'Add New', 'file' ); ?></button>
 			<?php
 			/**
 			 * Enable selection of media category.
@@ -180,27 +229,321 @@ if ( 'grid' === $mode ) {
 			 * @since CP-2.2.0
 			 */
 			echo cp_select_upload_media_category();
+////hook
+			do_action( 'cp_media_after_select_upload_media_category' );
 		}
 		?>
+
+		<div class="uploader-inline" data-allowed-mimes="<?php echo esc_attr( $mimes_list ); ?>" hidden inert>
+			<button type="button" class="close dashicons dashicons-no">
+				<span class="screen-reader-text">Close uploader</span>
+			</button>
+
+			<input type="file" id="filepond" class="filepond" name="filepond" multiple data-allow-reorder="true" data-max-file-size="<?php echo esc_attr( size_format( $max_upload_size ) ); ?>" data-max-files="3">
+			<input id="ajax-url" value="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" hidden>
+			<?php wp_nonce_field( 'media-form' ); ?>
+
+			<div class="post-upload-ui" id="post-upload-info">
+				<p class="max-upload-size">
+
+					<?php
+					/* translators: %s: Maximum allowed file size. */
+					printf( __( 'Maximum upload file size: %s.' ), esc_html( size_format( $max_upload_size ) ) );
+					?>
+
+				</p>
+			</div>
+		</div>
 
 		<hr class="wp-header-end">
 
 		<?php if ( ! empty( $message ) ) : ?>
-			<div id="message" class="updated notice is-dismissible"><p><?php echo $message; ?></p></div>
+			<div id="message" class="updated notice is-dismissible">
+				<p><?php echo esc_html( $message ); ?></p>
+			</div>
 		<?php endif; ?>
 
-		<div class="error hide-if-js">
-			<p>
-			<?php
-			printf(
-				/* translators: %s: List view URL. */
-				__( 'The grid view for the Media Library requires JavaScript. <a href="%s">Switch to the list view</a>.' ),
-				'upload.php?mode=list'
-			);
-			?>
-			</p>
+		<div class="cp-media-toolbar wp-filter" style="margin-bottom:0">
+			<div class="media-toolbar-secondary">
+				<h2 class="media-attachments-filter-heading screen-reader-text"><?php esc_html_e( 'Filter media' ); ?></h2>
+				<div class="view-switch media-grid-view-switch">
+					<a href="<?php echo admin_url( 'upload.php?mode=list' ); ?>" class="view-list">
+						<span class="screen-reader-text"><?php esc_html_e( 'List view' ); ?></span>
+					</a>
+					<a href="<?php echo admin_url( 'upload.php?mode=grid' ); ?>" class="view-grid current" aria-current="page">
+						<span class="screen-reader-text"><?php esc_html_e( 'Grid view' ); ?></span>
+					</a>
+				</div>
+
+				<?php echo cp_media_filters(); ?>
+
+				<div class="media-toolbar-primary search-form">
+					<label for="media-search-input"><?php esc_html_e( 'Search' ); ?></label>
+					<input type="search" id="media-search-input" name="s" class="search" value="">
+				</div>
+
+				<?php wp_nonce_field( 'alternative_media_grid', 'alternative_media_grid_nonce' ); ?>
+
+			</div>
+		</div>
+
+		<?php do_action( 'cp_media_before_pagination' ); ?>
+
+		<div class="tablenav top">
+			<div class="alignleft actions"></div>
+			<h2 class="screen-reader-text"><?php esc_html_e( 'Media items navigation' ); ?></h2>
+				<div class="tablenav-pages">
+					<span class="displaying-num">
+						
+						<?php
+						/* translators: %s: Number of media items showing */
+						printf( __( '%s items' ), esc_html( count( $attachments->posts ) ) );
+						?>
+
+					</span>
+					<span class="pagination-links">						
+						<a class="first-page button" href="<?php echo admin_url( '/upload.php?paged=1' ); ?>" <?php if ( $paged === 1 ) { echo 'disabled inert'; } ?>>
+							<span class="screen-reader-text"><?php esc_html_e( 'First page' ); ?></span><span aria-hidden="true">«</span>
+						</a>
+						<a class="prev-page button" href="<?php echo admin_url( '/upload.php?paged=' . $prev_page ); ?>" <?php if ( $paged === 1 ) { echo 'disabled inert'; } ?>>
+							<span class="screen-reader-text"><?php esc_html_e( 'Previous page' ); ?></span><span aria-hidden="true">‹</span>
+						</a>
+						<span class="paging-input">
+							<label for="current-page-selector" class="screen-reader-text"><?php esc_html_e( 'Current Page' ); ?></label>
+							<input class="current-page" id="current-page-selector" type="text" name="paged" value="<?php echo esc_attr( $paged ); ?>" size="4" aria-describedby="table-paging">
+							<span class="tablenav-paging-text"> <?php esc_html_e( 'of' );?> <span class="total-pages"><?php echo esc_html( $total_pages ); ?></span></span>
+						</span>
+						<a class="next-page button" href="<?php echo admin_url( '/upload.php?paged=' . $next_page ); ?>" <?php if ( $paged === $next_page ) { echo 'disabled inert'; } ?>>
+							<span class="screen-reader-text"><?php esc_html_e( 'Next page' ); ?></span><span aria-hidden="true">›</span>
+						</a>
+						<a class="last-page button" href="<?php echo admin_url( '/upload.php?paged=' . $total_pages ); ?>" <?php if ( $paged === $next_page ) { echo 'disabled inert'; } ?>>
+							<span class="screen-reader-text"><?php esc_html_e( 'Last page' ); ?></span><span aria-hidden="true">»</span>
+						</a>
+					</span>
+				</div>
+			<br class="clear">
+		</div>
+
+		<?php do_action( 'cp_media_before_grid' ); ?>
+
+		<div id="media-grid">
+			<ul class="media-grid-view">
+
+				<?php
+				foreach ( $attachments->posts as $attachment ) {
+					$meta = wp_prepare_attachment_for_js( $attachment->ID );
+					$date		  = $meta['dateFormatted'];
+					$author	      = $meta['authorName'];
+					$author_link  = $meta['authorLink'];
+					$url		  = $meta['url'];
+					$width	      = ! empty( $meta['width'] ) ? $meta['width'] : '';
+					$height	      = ! empty( $meta['height'] ) ? $meta['height'] : '';
+					$file_name    = $meta['name'];
+					$file_type    = $meta['type'];
+					$subtype      = $meta['subtype'];
+					$mime_type    = $meta['mime'];
+					$size		  = $meta['filesizeHumanReadable'];
+					$alt		  = $meta['alt'];
+					$caption	  = $meta['caption'];
+					$description  = $meta['description'];
+					$link		  = $meta['link'];
+					$orientation  = ! empty( $meta['orientation'] ) ? $meta['orientation'] : 'landscape';
+					$menu_order   = $meta['menuOrder'];
+					$media_cats   = $meta['media_cats'] ? implode( ', ', $meta['media_cats'] ) : '';
+					$media_tags   = $meta['media_tags'] ? implode( ', ', $meta['media_tags'] ) : '';
+					$update_nonce = $meta['nonces']['update'];
+					$delete_nonce = $meta['nonces']['delete'];
+					$edit_nonce   = $meta['nonces']['edit'];
+					$image        = '<img src="' . esc_url( $url ) . '" alt="' . esc_attr( $alt ) . '">';
+
+					// Use an icon if the file uploaded is not an image
+					if ( $file_type === 'application' ) {
+						if ( $subtype === 'vnd.openxmlformats-officedocument.spreadsheetml.sheet' ) {
+							$image = '<div class="icon"><div class="centered"><img src="' . esc_url( includes_url() . 'images/media/spreadsheet.png' ) . '" draggable="false" alt=""></div><div class="filename"><div>' . esc_html( $attachment->post_title ) . '</div></div></div>';
+						} elseif ( $subtype === 'zip' ) {
+							$image = '<div class="icon"><div class="centered"><img src="' . esc_url( includes_url() . 'images/media/archive.png' ) . '" draggable="false" alt=""></div><div class="filename"><div>' . esc_html( $attachment->post_title ) . '</div></div></div>';
+						} else {
+							$image = '<div class="icon"><div class="centered"><img src="' . esc_url( includes_url() . 'images/media/document.png' ) . '" draggable="false" alt=""></div><div class="filename"><div>' . esc_html( $attachment->post_title ) . '</div></div></div>';
+						}
+					} elseif ( $file_type === 'audio' ) {
+						$image = '<div class="icon"><div class="centered"><img src="' . esc_url( includes_url() . 'images/media/audio.png' ) . '" draggable="false" alt=""></div><div class="filename"><div>' . esc_html( $attachment->post_title ) . '</div></div></div>';
+					} elseif ( $file_type === 'video' ) {
+						$image = '<div class="icon"><div class="centered"><img src="' . esc_url( includes_url() . 'images/media/video.png' ) . '" draggable="false" alt=""></div><div class="filename"><div>' . esc_html( $attachment->post_title ) . '</div></div></div>';
+					}
+					?>
+
+					<li class="media-item" id="media-<?php echo esc_attr( $attachment->ID ); ?>" tabindex="0" role="checkbox" aria-checked="false"
+						aria-label="<?php echo esc_attr( $attachment->post_title ); ?>"
+						data-date="<?php echo esc_attr( $date ); ?>"
+						data-url="<?php echo esc_url( $url ); ?>"
+						data-filename="<?php echo esc_attr( $file_name ); ?>"
+						data-filetype="<?php echo esc_attr( $file_type ); ?>"
+						data-mime="<?php echo esc_attr( $mime_type ); ?>"
+						data-width="<?php echo esc_attr( $width ); ?>"
+						data-height="<?php echo esc_attr( $height ); ?>"
+						data-size="<?php echo esc_attr( $size ); ?>"
+						data-caption="<?php echo esc_attr( $caption ); ?>"
+						data-description="<?php echo esc_attr( $description ); ?>"
+						data-link="<?php echo esc_attr( $link ); ?>"
+						data-orientation="<?php echo esc_attr( $orientation ); ?>"
+						data-menu-order="<?php echo esc_attr( $menu_order ); ?>"
+						data-taxes="<?php echo esc_attr( $media_cats ); ?>"
+						data-tags="<?php echo esc_attr( $media_tags ); ?>"
+						data-update-nonce="<?php echo $update_nonce; ?>"
+						data-delete-nonce="<?php echo $delete_nonce; ?>"
+						data-edit-nonce="<?php echo $edit_nonce; ?>"
+						>
+
+						<div class="select-attachment-preview <?php echo esc_attr( 'type-' . $file_type . ' subtype-' . $subtype . ' ' . $orientation ); ?>">
+							<div class="media-thumbnail">
+								<?php echo $image; ?>
+							</div>
+						</div>
+						<button type="button" class="check" tabindex="-1">
+							<span class="media-modal-icon"></span>
+							<span class="screen-reader-text"><?php esc_html_e( 'Deselect' ); ?></span>
+						</button>
+					</li>
+
+					<?php
+				}
+				?>
+ 
+			</ul>
+			<div class="load-more-wrapper">
+				<p class="load-more-count">
+
+					<?php
+					/* translators: %s: 1. Number of media items showing 2. Total number of media items. */
+					printf( __( 'Showing %s of %s media items' ), esc_html( count( $attachments->posts ) ), esc_html( $attachments->found_posts ) );
+					?>
+
+				</p>
+				<p class="no-media" hidden>
+					<?php esc_html_e( 'No media items found.' ); ?>
+				</p>
+			</div>
 		</div>
 	</div>
+
+	<?php do_action( 'cp_media_after_grid' ); ?>
+
+	<!-- Modal markup -->
+	<dialog id="media-modal" class="media-modal wp-core-ui file-details-modal">
+		<div class="media-modal-content">
+
+			<div class="edit-attachment-frame mode-select hide-menu hide-router">
+				<div class="edit-media-header">
+					<button type="button" id="left-dashicon" class="left dashicons">
+						<span class="screen-reader-text"><?php esc_html_e( 'Edit previous media item' ); ?></span>
+					</button>
+					<button type="button" id="right-dashicon" class="right dashicons">
+						<span class="screen-reader-text"><?php esc_html_e( 'Edit next media item' ); ?></span>
+					</button>
+					<button type="button" id="dialog-close-button" class="dashicons-no dashicons" autofocus>
+						<span class="screen-reader-text"><?php esc_html_e( 'Close dialog' ); ?></span>
+					</button>
+				</div>
+				<div class="media-frame-title">
+					<h2><?php esc_html_e( 'Attachment details' ); ?></h2>
+				</div>
+				<div class="media-frame-content">
+					<div class="attachment-details save-ready">
+						<div class="attachment-media-view">
+							<h3 class="screen-reader-text"><?php esc_html_e( 'Attachment Preview' ); ?></h3>
+							<div id="media-image" class="thumbnail thumbnail-image">
+								<img class="details-image" src="" draggable="false" alt="">
+								<div class="attachment-actions">
+									<button type="button" class="button edit-attachment"><?php esc_html_e( 'Edit Image' ); ?></button>
+								</div>
+							</div>
+							<div id="media-audio" class="thumbnail" hidden>
+								<?php
+								// Uses a blank audio file as a placeholder
+								echo wp_audio_shortcode( array( 'src' => includes_url() . 'js/mediaelement/blank.mp3' ) );
+								?>
+							</div>
+							<div id="media-video" class="thumbnail" hidden>
+								<?php
+								// Uses a blank video file as a placeholder
+								echo wp_video_shortcode( array( 'src' => includes_url() . 'js/mediaelement/blank.mp4' ) );
+								?>
+							</div>
+						</div>
+						<div class="attachment-info">
+							<div class="details">
+								<h3 class="screen-reader-text"><?php esc_html_e( 'Details' ); ?></h3>
+								<div class="uploaded"><strong><?php esc_html_e( 'Uploaded on:' ); ?></strong> <span class="attachment-date"></div>
+								<div class="uploaded-by">
+									<strong><?php esc_html_e( 'Uploaded by:' ); ?></strong> <a href="<?php echo esc_url( $author_link ); ?>"><?php echo esc_html( $author ); ?></a>
+								</div>
+
+								<div class="filename"><strong><?php esc_html_e( 'File name:' ); ?></strong> <span class="attachment-filename"></span></div>
+								<div class="file-type"><strong><?php esc_html_e( 'File type:' ); ?></strong> <span class="attachment-filetype"></span></div>
+								<div class="file-size"><strong><?php esc_html_e( 'File size:' ); ?></strong> <span class="attachment-filesize"></div>
+								<div class="dimensions"><strong><?php esc_html_e( 'Dimensions:' ); ?></strong> <span class="attachment-dimensions"></div>
+
+								<div class="compat-meta"></div>
+							</div>
+
+							<?php do_action( 'cp_media_modal_after_details' ); ?>
+
+							<div class="settings">
+								<span class="setting alt-text has-description" data-setting="alt">
+									<label for="attachment-details-two-column-alt-text" class="name"><?php esc_html_e( 'Alternative Text' ); ?></label>
+									<textarea id="attachment-details-two-column-alt-text" aria-describedby="alt-text-description"></textarea>
+								</span>
+								<p class="description" id="alt-text-description"><a href="https://www.w3.org/WAI/tutorials/images/decision-tree" target="_blank" rel="noopener"><?php esc_html_e( 'Learn how to describe the purpose of the image' ); ?><span class="screen-reader-text"> <?php esc_html_e( '(opens in a new tab)' ); ?></span></a><?php esc_html_e( '. Leave empty if the image is purely decorative.' ); ?></p>
+								<span class="setting" data-setting="title">
+									<label for="attachment-details-two-column-title" class="name"><?php esc_html_e( 'Title' ); ?></label>
+									<input type="text" id="attachment-details-two-column-title" value="">
+								</span>
+								<span class="setting settings-save-status" role="status">
+									<span id="details-saved" class="success hidden" aria-hidden="true"><?php esc_html_e( 'Saved!' ); ?></span>
+								</span>
+								<span class="setting" data-setting="caption">
+									<label for="attachment-details-two-column-caption" class="name"><?php esc_html_e( 'Caption' ); ?></label>
+									<textarea id="attachment-details-two-column-caption"></textarea>
+								</span>
+								<span class="setting" data-setting="description">
+									<label for="attachment-details-two-column-description" class="name"><?php esc_html_e( 'Description' ); ?></label>
+									<textarea id="attachment-details-two-column-description"></textarea>
+								</span>
+								<span class="setting" data-setting="url">
+									<label for="attachment-details-two-column-copy-link" class="name"><?php esc_html_e( 'File URL' ); ?></label>
+									<input type="text" class="attachment-details-copy-link" id="attachment-details-two-column-copy-link" value="" readonly="">
+									<span class="copy-to-clipboard-container">
+										<button type="button" class="button button-small copy-attachment-url media-library" data-clipboard-target="#attachment-details-two-column-copy-link"><?php esc_html_e( 'Copy URL to clipboard' ); ?></button>
+										<span class="success hidden" aria-hidden="true"><?php esc_html_e( 'Copied!' ); ?></span>
+									</span>
+								</span>
+
+								<?php do_action( 'cp_media_modal_before_media_menu_order' ); ?>
+
+								<div class="attachment-compat"></div>
+								<span class="setting settings-save-status" role="status">
+									<span id="tax-saved" class="success hidden" aria-hidden="true"><?php esc_html_e( 'Taxonomy updated successfully!' ); ?></span>
+								</span>
+
+								<?php do_action( 'cp_media_modal_after_media_post_tags' ); ?>
+
+							</div>
+							<div class="actions">
+								<a id="view-attachment" class="view-attachment" href=""><?php esc_html_e( 'View attachment page' ); ?></a>
+								<span class="links-separator">|</span>
+								<a id="edit-more" href=""><?php esc_html_e( 'Edit more details' ); ?></a>
+								<span class="links-separator">|</span>
+								<a id="download-file" href="" download=""><?php esc_html_e( 'Download file' ); ?></a>
+								<span class="links-separator">|</span>
+								<button type="button" class="button-link delete-attachment"><?php esc_html_e( 'Delete permanently' ); ?></button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</dialog>
+
 	<?php
 	require_once ABSPATH . 'wp-admin/admin-footer.php';
 	exit;
