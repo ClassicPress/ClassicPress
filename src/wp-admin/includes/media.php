@@ -3944,3 +3944,37 @@ function cp_select_upload_media_category() {
 	return $media_select;
 }
 
+function cp_media_filters() {
+
+	// File type filter
+	$mime_types = wp_get_mime_types();
+
+	$media_filters = '';
+
+	if ( ! empty( $mime_types ) ) {
+		$media_filters .= '<label for="filter-by-type" class="screen-reader-text">' . __( 'Filter by type' ) . '</label>';
+		$media_filters .= '<select name="post_mime_type" id="filter-by-type">';
+		$media_filters .= '<option value="">' . __( 'All media items' ) . '</option>';
+
+		$post_mime_types = get_post_mime_types();
+		unset( $post_mime_types['trash'] );
+
+		foreach ( $post_mime_types as $mime_type => $label ) {
+			$media_filters .= '<option value="' . esc_attr( $mime_type ) . '"' . selected( 'post_mime_type', $mime_type, false ) . '>' . 
+				 esc_html( $label[0] ) . '</option>';
+		}
+		$media_filters .= '</select>';
+	}
+
+	$media_filters .= '<button type="button" class="button media-button button-primary button-large delete-selected-button hidden" disabled>' . esc_html__( 'Delete permanently' ) . '</button>';
+
+	$list_table = _get_list_table( 'WP_Media_List_Table' );
+	$media_filters .= $list_table->months_dropdown( 'attachment' );
+	$media_filters .= $list_table->media_categories_dropdown( 'attachment' );
+
+	$media_filters .= '<button type="button" class="button media-button button-large select-mode-toggle-button">' . esc_html__( 'Bulk select' ) . '</button>';
+
+	return apply_filters( 'cp_media_filters', $media_filters );
+}
+
+
