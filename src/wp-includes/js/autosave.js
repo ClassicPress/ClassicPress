@@ -449,7 +449,7 @@ window.autosave = function() {
 			 */
 			function compare( str1, str2 ) {
 				function removeSpaces( string ) {
-					return string.toString().replace(/[\x20\t\r\n\f]+/g, '');
+					return string.toString().replace(/[\x20\t\r\n\f]+/g, '').replace(/\s+/g, '').replace(/&nbsp;+/g, '');
 				}
 
 				return ( removeSpaces( str1 || '' ) === removeSpaces( str2 || '' ) );
@@ -466,11 +466,11 @@ window.autosave = function() {
 			 * @return {void}
 			 */
 			function checkPost() {
-				var content, post_title, excerpt, $notice,
+				var content, post_title, excerpt, notice,
 					postData = getSavedPostData(),
 					cookie = wpCookies.get( 'wp-saving-post' ),
-					$newerAutosaveNotice = $( '#has-newer-autosave' ).parent( '.notice' ),
-					$headerEnd = $( '.wp-header-end' );
+					newerAutosaveNotice = document.getElementById( 'has-newer-autosave' ),
+					headerEnd = document.querySelector( '.wp-header-end' );
 
 				if ( cookie === post_id + '-saved' ) {
 					wpCookies.remove( 'wp-saving-post' );
@@ -483,9 +483,9 @@ window.autosave = function() {
 					return;
 				}
 
-				content = $( '#content' ).val() || '';
-				post_title = $( '#title' ).val() || '';
-				excerpt = $( '#excerpt' ).val() || '';
+				content = document.getElementById( 'content' ).value || '';
+				post_title = document.getElementById( 'title' ).value || '';
+				excerpt = document.getElementById( 'excerpt' ).value || '';
 
 				if ( compare( content, postData.content ) && compare( post_title, postData.post_title ) &&
 					compare( excerpt, postData.excerpt ) ) {
@@ -497,31 +497,31 @@ window.autosave = function() {
 				 * If '.wp-header-end' is found, append the notices after it otherwise
 				 * after the first h1 or h2 heading found within the main content.
 				 */
-				if ( ! $headerEnd.length ) {
-					$headerEnd = $( '.wrap h1, .wrap h2' ).first();
+				if ( headerEnd == null ) {
+					headerEnd = document.querySelectorAll( '.wrap h1, .wrap h2' )[0];
 				}
 
-				$notice = $( '#local-storage-notice' )
-					.insertAfter( $headerEnd )
-					.addClass( 'notice-warning' );
+				notice = document.getElementById( 'local-storage-notice' );
+				headerEnd.after( notice );
+				notice.classList.add( 'notice-warning' );
 
-				if ( $newerAutosaveNotice.length ) {
+				if ( newerAutosaveNotice != null ) {
 
 					// If there is a "server" autosave notice, hide it.
 					// The data in the session storage is either the same or newer.
-					$newerAutosaveNotice.slideUp( 150, function() {
-						$notice.slideDown( 150 );
-					});
+					$(newerAutosaveNotice.parentNode).slideUp( 150, function() {
+						$(notice).slideDown( 150 );
+					} );
 				} else {
-					$notice.slideDown( 200 );
+					$(notice).slideDown( 200 );
 				}
 
-				$notice.find( '.restore-backup' ).on( 'click.autosave-local', function() {
+				notice.querySelector( '.restore-backup' ).addEventListener( 'click', function() {
 					restorePost( postData );
-					$notice.fadeTo( 250, 0, function() {
-						$notice.slideUp( 150 );
-					});
-				});
+					$(notice).fadeTo( 250, 0, function() {
+						$(notice).slideUp( 150 );
+					} );
+				} );
 			}
 
 			/**
