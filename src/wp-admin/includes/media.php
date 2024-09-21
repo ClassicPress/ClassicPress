@@ -4005,3 +4005,61 @@ function cp_media_filters() {
 	 */
 	return apply_filters( 'cp_media_filters', $media_filters, $mime_filter, $delete_button, $month_filter, $media_cat_filter, $bulk_button );
 }
+
+/*
+ * Adds media categories and media post tags to the array of attachment details.
+ *
+ * @since CP-2.3.0
+ * 
+ * @return array
+ */
+function kts_add_cats_and_tags_to_attachment_for_js( $response, $attachment, $meta ) {
+	$cat_terms = get_terms( array(
+		'taxonomy' => 'media_category',
+	) );
+
+	$media_cats = array();
+	if ( ! empty( $cat_terms ) ) {
+		$media_cats = get_terms( array(
+			'taxonomy'   => 'media_category',
+			'object_ids' => $attachment->ID,
+			'fields'     => 'slugs',
+		) );
+	}
+
+	/**
+	 * Filters the media categories included in the array of attachment details.
+	 *
+	 * @since CP-2.3.0
+	 *
+	 * @return array  $media_cats  Media categories
+	 */
+	$response['media_cats'] = apply_filters( 'cp_media_cats_for_js', $media_cats );
+
+	$tag_terms = get_terms( array(
+		'taxonomy' => 'media_post_tag',
+	) );
+
+	$media_tags = array();
+	if ( ! empty( $tag_terms ) ) {
+		$media_tags = get_terms( array(
+			'taxonomy'   => 'media_post_tag',
+			'object_ids' => $attachment->ID,
+			'fields'     => 'slugs',
+		) );
+	}
+
+	/**
+	 * Filters the media tags included in the array of attachment details.
+	 *
+	 * @since CP-2.3.0
+	 *
+	 * @return array  $media_tags  Media tags
+	 */
+	$response['media_tags'] = apply_filters( 'cp_media_tags_for_js', $media_tags );
+
+	return $response;
+
+}
+add_filter( 'wp_prepare_attachment_for_js', 'kts_add_cats_and_tags_to_attachment_for_js', 10, 3 );
+
