@@ -4013,7 +4013,7 @@ function cp_media_filters() {
  * 
  * @return array
  */
-function kts_add_cats_and_tags_to_attachment_for_js( $response, $attachment, $meta ) {
+function cp_add_cats_and_tags_to_attachment_for_js( $response, $attachment, $meta ) {
 	$cat_terms = get_terms( array(
 		'taxonomy' => 'media_category',
 	) );
@@ -4061,5 +4061,5 @@ function kts_add_cats_and_tags_to_attachment_for_js( $response, $attachment, $me
 	return $response;
 
 }
-add_filter( 'wp_prepare_attachment_for_js', 'kts_add_cats_and_tags_to_attachment_for_js', 10, 3 );
+add_filter( 'wp_prepare_attachment_for_js', 'cp_add_cats_and_tags_to_attachment_for_js', 10, 3 );
 
