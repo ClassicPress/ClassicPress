@@ -3989,18 +3989,19 @@ function cp_media_filters() {
 	$bulk_button = '<button type="button" class="button media-button button-large select-mode-toggle-button">' . esc_html__( 'Bulk select' ) . '</button>';
 	
 	$media_filters = $mime_filter . $delete_button . $month_filter . $media_cat_filter . $bulk_button;
+
 	/**
 	 * Filters the dropdown select boxes and buttons available on the Media Library grid page.
 	 *
 	 * @since CP-2.3.0
 	 *
-	 * @param string $mime_filter      Mime type filter dropdown select box.
-	 * @param string $delete_button    Button to delete selected items.
-	 * @param string $month_filter     Month-based filter dropdown select box.
-	 * @param string $media_cat_filter Media category filter dropdown select box.
-	 * @param string $bulk_button      Button to select items in bulk.
+	 * @param  string  $mime_filter       Mime type filter dropdown select box.
+	 * @param  string  $delete_button     Button to delete selected items.
+	 * @param  string  $month_filter      Month-based filter dropdown select box.
+	 * @param  string  $media_cat_filter  Media category filter dropdown select box.
+	 * @param  string  $bulk_button       Button to select items in bulk.
 	 *
-	 * @param string $media_filters    A string of dropdown select boxes and buttons
+	 * @return string  $media_filters     A string of dropdown select boxes and buttons
 	 */
 	return apply_filters( 'cp_media_filters', $media_filters, $mime_filter, $delete_button, $month_filter, $media_cat_filter, $bulk_button );
 }
