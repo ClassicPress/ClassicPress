@@ -3905,6 +3905,8 @@ function bulk_edit_attachments( $attachment_data = null ) {
  * Displays only if media storage option has been set to 'category'.
  *
  * @since CP-2.2.0
+ * 
+ * @return string
  */
 function cp_select_upload_media_category() {
 	$media_select = '';
@@ -3944,37 +3946,61 @@ function cp_select_upload_media_category() {
 	return $media_select;
 }
 
+/*
+ * Outputs three dropdown select boxes on the Media Library grid page to filter the items displayed:
+ * a mime type filter, a months-based filter, and a media category filter.
+ *
+ * The media category filter Displays only if the media storage option has been set to 'category'.
+ *
+ * @since CP-2.3.0
+ * 
+ * @return string
+ */
 function cp_media_filters() {
 
 	// File type filter
 	$mime_types = wp_get_mime_types();
 
-	$media_filters = '';
-
+	$mime_filter = '';
 	if ( ! empty( $mime_types ) ) {
-		$media_filters .= '<label for="filter-by-type" class="screen-reader-text">' . __( 'Filter by type' ) . '</label>';
-		$media_filters .= '<select name="post_mime_type" id="filter-by-type">';
-		$media_filters .= '<option value="">' . __( 'All media items' ) . '</option>';
+		$mime_filter .= '<label for="filter-by-type" class="screen-reader-text">' . __( 'Filter by type' ) . '</label>';
+		$mime_filter .= '<select name="post_mime_type" id="filter-by-type">';
+		$mime_filter .= '<option value="">' . __( 'All media items' ) . '</option>';
 
 		$post_mime_types = get_post_mime_types();
 		unset( $post_mime_types['trash'] );
 
 		foreach ( $post_mime_types as $mime_type => $label ) {
-			$media_filters .= '<option value="' . esc_attr( $mime_type ) . '"' . selected( 'post_mime_type', $mime_type, false ) . '>' . 
+			$mime_filter .= '<option value="' . esc_attr( $mime_type ) . '"' . selected( 'post_mime_type', $mime_type, false ) . '>' . 
 				 esc_html( $label[0] ) . '</option>';
 		}
-		$media_filters .= '</select>';
+		$mime_filter .= '</select>';
 	}
 
-	$media_filters .= '<button type="button" class="button media-button button-primary button-large delete-selected-button hidden" disabled>' . esc_html__( 'Delete permanently' ) . '</button>';
+	// Delete button
+	$delete_button = '<button type="button" class="button media-button button-primary button-large delete-selected-button hidden" disabled>' . esc_html__( 'Delete permanently' ) . '</button>';
 
+	// Months and media category dropdown select boxes
 	$list_table = _get_list_table( 'WP_Media_List_Table' );
-	$media_filters .= $list_table->months_dropdown( 'attachment' );
-	$media_filters .= $list_table->media_categories_dropdown( 'attachment' );
+	$month_filter = $list_table->months_dropdown( 'attachment' );
+	$media_cat_filter = $list_table->media_categories_dropdown( 'attachment' );
 
-	$media_filters .= '<button type="button" class="button media-button button-large select-mode-toggle-button">' . esc_html__( 'Bulk select' ) . '</button>';
-
-	return apply_filters( 'cp_media_filters', $media_filters );
+	// Bulk select button
+	$bulk_button = '<button type="button" class="button media-button button-large select-mode-toggle-button">' . esc_html__( 'Bulk select' ) . '</button>';
+	
+	$media_filters = $mime_filter . $delete_button . $month_filter . $media_cat_filter . $bulk_button;
+	/**
+	 * Filters the dropdown select boxes and buttons available on the Media Library grid page.
+	 *
+	 * @since CP-2.3.0
+	 *
+	 * @param string $mime_filter      Mime type filter dropdown select box.
+	 * @param string $delete_button    Button to delete selected items.
+	 * @param string $month_filter     Month-based filter dropdown select box.
+	 * @param string $media_cat_filter Media category filter dropdown select box.
+	 * @param string $bulk_button      Button to select items in bulk.
+	 *
+	 * @param string $media_filters    A string of dropdown select boxes and buttons
+	 */
+	return apply_filters( 'cp_media_filters', $media_filters, $mime_filter, $delete_button, $month_filter, $media_cat_filter, $bulk_button );
 }
-
-
