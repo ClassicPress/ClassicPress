@@ -106,6 +106,7 @@ if ( isset( $_GET['mode'] ) && in_array( $_GET['mode'], $modes, true ) ) {
 }
 
 if ( 'grid' === $mode ) {
+	// Styles and scripts since CP-2.3.0
 	wp_enqueue_style( 'mediaelement-player' );
 	wp_enqueue_style( 'media-grid' );
 	wp_enqueue_style( 'cp-filepond-image-preview' );
@@ -176,15 +177,17 @@ if ( 'grid' === $mode ) {
 	$title       = __( 'Media Library' );
 	$parent_file = 'upload.php';
 
+	// Get the maximum upload size.
 	$max_upload_size = wp_max_upload_size();
 	if ( ! $max_upload_size ) {
 		$max_upload_size = 0;
 	}
 
+	// Get a list of allowed mime types.
 	$allowed_mimes = get_allowed_mime_types();
 	$mimes_list = implode( ',', $allowed_mimes );
 
-	// Get the user's preferred items per page
+	// Get the user's preferred items per page.
 	$user = get_current_user_id();
 	$screen = get_current_screen();
 	$screen_option = $screen->get_option( 'per_page', 'option' );
@@ -193,7 +196,7 @@ if ( 'grid' === $mode ) {
 		$per_page = $screen->get_option( 'per_page', 'default' );
 	}
 
-	// Fetch media items
+	// Fetch media items.
 	$paged = isset( $_GET['paged'] ) ? absint( $_GET['paged'] ) : 1;
 	$attachment_args = array(
 		'post_type'		 => 'attachment',
@@ -201,7 +204,6 @@ if ( 'grid' === $mode ) {
 		'posts_per_page' => $per_page,
 		'paged'			 => $paged,
 	);
-
 	$attachments = new WP_Query( $attachment_args );
 
 	$total_pages = (int) $attachments->max_num_pages;
@@ -210,13 +212,22 @@ if ( 'grid' === $mode ) {
 
 	require_once ABSPATH . 'wp-admin/admin-header.php';
 
-////////////hook
+	/**
+	 * This action is fired before the title is printed to the page.
+	 *
+	 * @since CP-2.3.0
+	 */
 	do_action( 'cp_media_before_title' );
 	?>
 	<div class="wrap" id="wp-media-grid" data-search="<?php _admin_search_query(); ?>">
 		<h1 class="wp-heading-inline"><?php echo esc_html( $title ); ?></h1>
 
-		<?php ///////hook
+		<?php
+		/**
+		 * This action is fired after the title is printed to the page.
+		 *
+		 * @since CP-2.3.0
+		 */
 		do_action( 'cp_media_after_title' );
 
 		if ( current_user_can( 'upload_files' ) ) {
@@ -229,7 +240,13 @@ if ( 'grid' === $mode ) {
 			 * @since CP-2.2.0
 			 */
 			echo cp_select_upload_media_category();
-////hook
+
+			/**
+			 * This action is fired after the media category upload
+			 * select dropdown is printed to the page.
+			 *
+			 * @since CP-2.3.0
+			 */
 			do_action( 'cp_media_after_select_upload_media_category' );
 		}
 		?>
@@ -275,7 +292,10 @@ if ( 'grid' === $mode ) {
 					</a>
 				</div>
 
-				<?php echo cp_media_filters(); ?>
+				<?php
+				/* This function is documented in wp-admin/includes/media.php */
+				echo cp_media_filters();
+				?>
 
 				<div class="media-toolbar-primary search-form">
 					<label for="media-search-input"><?php esc_html_e( 'Search' ); ?></label>
@@ -287,7 +307,13 @@ if ( 'grid' === $mode ) {
 			</div>
 		</div>
 
-		<?php do_action( 'cp_media_before_pagination' ); ?>
+		<?php
+		/**
+		 * This action is fired before pagination is printed to the page.
+		 *
+		 * @since CP-2.3.0
+		 */
+		do_action( 'cp_media_before_pagination' ); ?>
 
 		<div class="tablenav top">
 			<div class="alignleft actions"></div>
@@ -324,7 +350,13 @@ if ( 'grid' === $mode ) {
 			<br class="clear">
 		</div>
 
-		<?php do_action( 'cp_media_before_grid' ); ?>
+		<?php
+		/**
+		 * This action is fired before the media grid is printed to the page.
+		 *
+		 * @since CP-2.3.0
+		 */
+		do_action( 'cp_media_before_grid' ); ?>
 
 		<div id="media-grid">
 			<ul class="media-grid-view">
@@ -426,7 +458,13 @@ if ( 'grid' === $mode ) {
 		</div>
 	</div>
 
-	<?php do_action( 'cp_media_after_grid' ); ?>
+	<?php
+	/**
+	 * This action is fired after the media grid is printed to the page.
+	 *
+	 * @since CP-2.3.0
+	 */
+	do_action( 'cp_media_after_grid' ); ?>
 
 	<!-- Modal markup -->
 	<dialog id="media-modal" class="media-modal wp-core-ui file-details-modal">
@@ -486,7 +524,14 @@ if ( 'grid' === $mode ) {
 								<div class="compat-meta"></div>
 							</div>
 
-							<?php do_action( 'cp_media_modal_after_details' ); ?>
+							<?php
+							/**
+							 * This action is fired after the details list
+							 * within the dialog modal is printed to the page.
+							 *
+							 * @since CP-2.3.0
+							 */
+							do_action( 'cp_media_modal_after_details' ); ?>
 
 							<div class="settings">
 								<span class="setting alt-text has-description" data-setting="alt">
@@ -518,14 +563,30 @@ if ( 'grid' === $mode ) {
 									</span>
 								</span>
 
-								<?php do_action( 'cp_media_modal_before_media_menu_order' ); ?>
+								<?php
+								/**
+								 * This action is fired before the inputs
+								 * and textareas within the dialog modal
+								 * are printed to the page.
+								 *
+								 * @since CP-2.3.0
+								 */
+								do_action( 'cp_media_modal_before_media_menu_order' ); ?>
 
 								<div class="attachment-compat"></div>
 								<span class="setting settings-save-status" role="status">
 									<span id="tax-saved" class="success hidden" aria-hidden="true"><?php esc_html_e( 'Taxonomy updated successfully!' ); ?></span>
 								</span>
 
-								<?php do_action( 'cp_media_modal_after_media_post_tags' ); ?>
+								<?php
+								/**
+								 * This action is fired after the post tags
+								 * list within the dialog modal is printed
+								 * to the page.
+								 *
+								 * @since CP-2.3.0
+								 */
+								do_action( 'cp_media_modal_after_media_post_tags' ); ?>
 
 							</div>
 							<div class="actions">
