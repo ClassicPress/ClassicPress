@@ -241,9 +241,9 @@
 	line-height: 2.27272727;
 	margin: 0;
 }
-.edit-attachment-frame .attachment-media-view .details-image {
-	max-height: 69vh !important;
-	background-image: none !important;
+.edit-attachment-frame .attachment-media-view .thumbnail .details-image {
+	max-height: 69vh;
+	background-image: none;
 }
 .edit-attachment-frame .attachment-info {
 	height: 84.5vh;
