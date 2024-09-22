@@ -53,7 +53,7 @@ function classicpress_asset_version( $type = 'script', $handle = null ) {
 	static $default_version;
 
 	if ( empty( $default_version ) ) {
-		$default_version = 'cp_e3a3128e';
+		$default_version = 'cp_' . substr( md5( classicpress_version() ), 0, 6 );
 	}
 
 	/**
@@ -1305,7 +1305,9 @@ function wp_default_scripts( $scripts ) {
 
 		$scripts->add( 'list-revisions', "/wp-includes/js/wp-list-revisions$suffix.js" );
 
-		$scripts->add( 'media-grid', "/wp-includes/js/media-grid$suffix.js",
+		$scripts->add(
+			'media-grid',
+			"/wp-includes/js/media-grid$suffix.js",
 			array(
 				'image-edit',
 				'cp-filepond-file-validate-size',
@@ -1314,7 +1316,9 @@ function wp_default_scripts( $scripts ) {
 				'cp-filepond-plugin-image-preview',
 				'cp-filepond',
 			),
-		false, 1 );
+			false,
+			1
+		);
 		$scripts->add( 'media', "/wp-admin/js/media$suffix.js", array( 'jquery', 'wp-i18n', 'wp-a11y' ), false, 1 );
 		$scripts->set_translations( 'media' );
 
