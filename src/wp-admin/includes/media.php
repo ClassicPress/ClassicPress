@@ -3905,7 +3905,7 @@ function bulk_edit_attachments( $attachment_data = null ) {
  * Displays only if media storage option has been set to 'category'.
  *
  * @since CP-2.2.0
- * 
+ *
  * @return string
  */
 function cp_select_upload_media_category() {
@@ -3953,7 +3953,7 @@ function cp_select_upload_media_category() {
  * The media category filter Displays only if the media storage option has been set to 'category'.
  *
  * @since CP-2.3.0
- * 
+ *
  * @return string
  */
 function cp_media_filters() {
@@ -3971,7 +3971,7 @@ function cp_media_filters() {
 		unset( $post_mime_types['trash'] );
 
 		foreach ( $post_mime_types as $mime_type => $label ) {
-			$mime_filter .= '<option value="' . esc_attr( $mime_type ) . '"' . selected( 'post_mime_type', $mime_type, false ) . '>' . 
+			$mime_filter .= '<option value="' . esc_attr( $mime_type ) . '"' . selected( 'post_mime_type', $mime_type, false ) . '>' .
 				 esc_html( $label[0] ) . '</option>';
 		}
 		$mime_filter .= '</select>';
@@ -3987,7 +3987,7 @@ function cp_media_filters() {
 
 	// Bulk select button
 	$bulk_button = '<button type="button" class="button media-button button-large select-mode-toggle-button">' . esc_html__( 'Bulk select' ) . '</button>';
-	
+
 	$media_filters = $mime_filter . $delete_button . $month_filter . $media_cat_filter . $bulk_button;
 
 	/**
@@ -4010,13 +4010,15 @@ function cp_media_filters() {
  * Adds media categories and media post tags to the array of attachment details.
  *
  * @since CP-2.3.0
- * 
+ *
  * @return array
  */
 function cp_add_cats_and_tags_to_attachment_for_js( $response, $attachment, $meta ) {
-	$cat_terms = get_terms( array(
-		'taxonomy' => 'media_category',
-	) );
+	$cat_terms = get_terms(
+		array(
+			'taxonomy' => 'media_category',
+		)
+	);
 
 	$media_cats = array();
 	if ( ! empty( $cat_terms ) ) {
@@ -4036,9 +4038,11 @@ function cp_add_cats_and_tags_to_attachment_for_js( $response, $attachment, $met
 	 */
 	$response['media_cats'] = apply_filters( 'cp_media_cats_for_js', $media_cats );
 
-	$tag_terms = get_terms( array(
-		'taxonomy' => 'media_post_tag',
-	) );
+	$tag_terms = get_terms(
+		array(
+			'taxonomy' => 'media_post_tag',
+		)
+	);
 
 	$media_tags = array();
 	if ( ! empty( $tag_terms ) ) {
@@ -4063,3 +4067,22 @@ function cp_add_cats_and_tags_to_attachment_for_js( $response, $attachment, $met
 }
 add_filter( 'wp_prepare_attachment_for_js', 'cp_add_cats_and_tags_to_attachment_for_js', 10, 3 );
 
+/*
+ * Adds adjustable pagination capability to the media library grid page.
+ *
+ * @since CP-2.3.0
+ *
+ * @param  mixed  $screen_option  The value to save instead of the option value.
+ *                                Default false (to skip saving the current option).
+ * @param  string $option         The pagination option name
+ * @param  int    $value          The pagination option value
+ *
+ * @return array
+ */
+function cp_media_grid_set_screen_option( $screen_option, $option, $value ) {
+	if ( 'media_grid_per_page' === $option ) {
+		return $value;
+	}
+	return $screen_option;
+}
+add_filter( 'set-screen-option', 'cp_media_grid_set_screen_option', 10, 3 );
