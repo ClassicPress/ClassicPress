@@ -509,18 +509,15 @@ window.autosave = function() {
 
 					// If there is a "server" autosave notice, hide it.
 					// The data in the session storage is either the same or newer.
-					$(newerAutosaveNotice.parentNode).slideUp( 150, function() {
-						$(notice).slideDown( 150 );
-					} );
+					newerAutosaveNotice.parentNode.style.display = 'none';
+					notice.style.display = 'block';
 				} else {
-					$(notice).slideDown( 200 );
+					notice.style.display = 'block';
 				}
 
 				notice.querySelector( '.restore-backup' ).addEventListener( 'click', function() {
 					restorePost( postData );
-					$(notice).fadeTo( 250, 0, function() {
-						$(notice).slideUp( 150 );
-					} );
+					notice.style.display = 'none';
 				} );
 			}
 
