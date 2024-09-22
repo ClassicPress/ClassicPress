@@ -140,8 +140,8 @@ if ( 'grid' === $mode ) {
 		'per_page',
 		array(
 			'label'   => __( 'Number of items per page:' ),
-			'default' => get_option( 'posts_per_page' ) ?: 10,
-			'option'  => 'alternative_media_per_page'
+			'default' => get_option( 'posts_per_page' ) ? get_option( 'posts_per_page' ) : 10,
+			'option'  => 'alternative_media_per_page',
 		)
 	);
 
@@ -199,10 +199,10 @@ if ( 'grid' === $mode ) {
 	// Fetch media items.
 	$paged = isset( $_GET['paged'] ) ? absint( $_GET['paged'] ) : 1;
 	$attachment_args = array(
-		'post_type'		 => 'attachment',
-		'post_status'	 => 'inherit',
+		'post_type'      => 'attachment',
+		'post_status'    => 'inherit',
 		'posts_per_page' => $per_page,
-		'paged'			 => $paged,
+		'paged'          => $paged,
 	);
 	$attachments = new WP_Query( $attachment_args );
 
@@ -313,7 +313,8 @@ if ( 'grid' === $mode ) {
 		 *
 		 * @since CP-2.3.0
 		 */
-		do_action( 'cp_media_before_pagination' ); ?>
+		do_action( 'cp_media_before_pagination' );
+		?>
 
 		<div class="tablenav top">
 			<div class="alignleft actions"></div>
