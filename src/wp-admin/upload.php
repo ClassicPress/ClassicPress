@@ -395,7 +395,7 @@ if ( 'grid' === $mode ) {
 					$author_link  = $meta['authorLink'];
 					$url          = $meta['url'];
 					$width        = ! empty( $meta['width'] ) ? $meta['width'] : '';
-					$height	      = ! empty( $meta['height'] ) ? $meta['height'] : '';
+					$height       = ! empty( $meta['height'] ) ? $meta['height'] : '';
 					$file_name    = $meta['name'];
 					$file_type    = $meta['type'];
 					$subtype      = $meta['subtype'];
