@@ -329,14 +329,22 @@ if ( 'grid' === $mode ) {
 
 					</span>
 					<span class="pagination-links">						
-						<a class="first-page button" href="<?php echo admin_url( '/upload.php?paged=1' ); ?>" <?php if ( $paged === 1 ) { 
-							echo 'disabled inert';
-						} ?>>
+						<a class="first-page button" href="<?php echo admin_url( '/upload.php?paged=1' ); ?>"
+							<?php
+							if ( $paged === 1 ) {
+								echo 'disabled inert';
+							}
+							?>
+						>
 							<span class="screen-reader-text"><?php esc_html_e( 'First page' ); ?></span><span aria-hidden="true">«</span>
 						</a>
-						<a class="prev-page button" href="<?php echo admin_url( '/upload.php?paged=' . $prev_page ); ?>" <?php if ( $paged === 1 ) {
-							echo 'disabled inert';
-						} ?>>
+						<a class="prev-page button" href="<?php echo admin_url( '/upload.php?paged=' . $prev_page ); ?>"
+							<?php
+							if ( $paged === 1 ) {
+								echo 'disabled inert';
+							}
+							?>
+						>
 							<span class="screen-reader-text"><?php esc_html_e( 'Previous page' ); ?></span><span aria-hidden="true">‹</span>
 						</a>
 						<span class="paging-input">
@@ -344,14 +352,22 @@ if ( 'grid' === $mode ) {
 							<input class="current-page" id="current-page-selector" type="text" name="paged" value="<?php echo esc_attr( $paged ); ?>" size="4" aria-describedby="table-paging">
 							<span class="tablenav-paging-text"> <?php esc_html_e( 'of' ); ?> <span class="total-pages"><?php echo esc_html( $total_pages ); ?></span></span>
 						</span>
-						<a class="next-page button" href="<?php echo admin_url( '/upload.php?paged=' . $next_page ); ?>" <?php if ( $paged === $next_page ) {
-							echo 'disabled inert';
-						} ?>>
+						<a class="next-page button" href="<?php echo admin_url( '/upload.php?paged=' . $next_page ); ?>"
+							<?php
+							if ( $paged === $next_page ) {
+								echo 'disabled inert';
+							}
+							?>
+						>
 							<span class="screen-reader-text"><?php esc_html_e( 'Next page' ); ?></span><span aria-hidden="true">›</span>
 						</a>
-						<a class="last-page button" href="<?php echo admin_url( '/upload.php?paged=' . $total_pages ); ?>" <?php if ( $paged === $next_page ) {
-							echo 'disabled inert';
-						} ?>>
+						<a class="last-page button" href="<?php echo admin_url( '/upload.php?paged=' . $total_pages ); ?>"
+							<?php
+							if ( $paged === $next_page ) {
+								echo 'disabled inert';
+							}
+							?>
+						>
 							<span class="screen-reader-text"><?php esc_html_e( 'Last page' ); ?></span><span aria-hidden="true">»</span>
 						</a>
 					</span>
