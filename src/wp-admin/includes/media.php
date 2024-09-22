@@ -3899,7 +3899,7 @@ function bulk_edit_attachments( $attachment_data = null ) {
 	);
 }
 
-/*
+/**
  * Outputs a select box to select upload media category.
  *
  * Displays only if media storage option has been set to 'category'.
@@ -3946,7 +3946,7 @@ function cp_select_upload_media_category() {
 	return $media_select;
 }
 
-/*
+/**
  * Outputs three dropdown select boxes on the Media Library grid page to filter the items displayed:
  * a mime type filter, a months-based filter, and a media category filter.
  *
@@ -3981,9 +3981,17 @@ function cp_media_filters() {
 	$delete_button = '<button type="button" class="button media-button button-primary button-large delete-selected-button hidden" disabled>' . esc_html__( 'Delete permanently' ) . '</button>';
 
 	// Months and media category dropdown select boxes
+	// Use output buffers to keep the order of the select dropdown boxes
+	// consistent with the Media List View
 	$list_table = _get_list_table( 'WP_Media_List_Table' );
-	$month_filter = $list_table->months_dropdown( 'attachment' );
-	$media_cat_filter = $list_table->media_categories_dropdown( 'attachment' );
+
+	ob_start();
+	$list_table->months_dropdown( 'attachment' );
+	$month_filter = ob_get_clean();
+
+	ob_start();
+	$list_table->media_categories_dropdown( 'attachment' );
+	$media_cat_filter = ob_get_clean();
 
 	// Bulk select button
 	$bulk_button = '<button type="button" class="button media-button button-large select-mode-toggle-button">' . esc_html__( 'Bulk select' ) . '</button>';
@@ -4006,7 +4014,7 @@ function cp_media_filters() {
 	return apply_filters( 'cp_media_filters', $media_filters, $mime_filter, $delete_button, $month_filter, $media_cat_filter, $bulk_button );
 }
 
-/*
+/**
  * Adds media categories and media post tags to the array of attachment details.
  *
  * @since CP-2.3.0
