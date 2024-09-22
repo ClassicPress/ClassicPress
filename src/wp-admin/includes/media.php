@@ -4022,11 +4022,13 @@ function cp_add_cats_and_tags_to_attachment_for_js( $response, $attachment, $met
 
 	$media_cats = array();
 	if ( ! empty( $cat_terms ) ) {
-		$media_cats = get_terms( array(
-			'taxonomy'   => 'media_category',
-			'object_ids' => $attachment->ID,
-			'fields'     => 'slugs',
-		) );
+		$media_cats = get_terms(
+			array(
+				'taxonomy'   => 'media_category',
+				'object_ids' => $attachment->ID,
+				'fields'     => 'slugs',
+			)
+		);
 	}
 
 	/**
@@ -4046,11 +4048,13 @@ function cp_add_cats_and_tags_to_attachment_for_js( $response, $attachment, $met
 
 	$media_tags = array();
 	if ( ! empty( $tag_terms ) ) {
-		$media_tags = get_terms( array(
-			'taxonomy'   => 'media_post_tag',
-			'object_ids' => $attachment->ID,
-			'fields'     => 'slugs',
-		) );
+		$media_tags = get_terms(
+			array(
+				'taxonomy'   => 'media_post_tag',
+				'object_ids' => $attachment->ID,
+				'fields'     => 'slugs',
+			)
+		);
 	}
 
 	/**
@@ -4063,7 +4067,6 @@ function cp_add_cats_and_tags_to_attachment_for_js( $response, $attachment, $met
 	$response['media_tags'] = apply_filters( 'cp_media_tags_for_js', $media_tags );
 
 	return $response;
-
 }
 add_filter( 'wp_prepare_attachment_for_js', 'cp_add_cats_and_tags_to_attachment_for_js', 10, 3 );
 
