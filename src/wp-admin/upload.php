@@ -329,21 +329,29 @@ if ( 'grid' === $mode ) {
 
 					</span>
 					<span class="pagination-links">						
-						<a class="first-page button" href="<?php echo admin_url( '/upload.php?paged=1' ); ?>" <?php if ( $paged === 1 ) { echo 'disabled inert'; } ?>>
+						<a class="first-page button" href="<?php echo admin_url( '/upload.php?paged=1' ); ?>" <?php if ( $paged === 1 ) { 
+							echo 'disabled inert';
+						} ?>>
 							<span class="screen-reader-text"><?php esc_html_e( 'First page' ); ?></span><span aria-hidden="true">«</span>
 						</a>
-						<a class="prev-page button" href="<?php echo admin_url( '/upload.php?paged=' . $prev_page ); ?>" <?php if ( $paged === 1 ) { echo 'disabled inert'; } ?>>
+						<a class="prev-page button" href="<?php echo admin_url( '/upload.php?paged=' . $prev_page ); ?>" <?php if ( $paged === 1 ) {
+							echo 'disabled inert';
+						} ?>>
 							<span class="screen-reader-text"><?php esc_html_e( 'Previous page' ); ?></span><span aria-hidden="true">‹</span>
 						</a>
 						<span class="paging-input">
 							<label for="current-page-selector" class="screen-reader-text"><?php esc_html_e( 'Current Page' ); ?></label>
 							<input class="current-page" id="current-page-selector" type="text" name="paged" value="<?php echo esc_attr( $paged ); ?>" size="4" aria-describedby="table-paging">
-							<span class="tablenav-paging-text"> <?php esc_html_e( 'of' );?> <span class="total-pages"><?php echo esc_html( $total_pages ); ?></span></span>
+							<span class="tablenav-paging-text"> <?php esc_html_e( 'of' ); ?> <span class="total-pages"><?php echo esc_html( $total_pages ); ?></span></span>
 						</span>
-						<a class="next-page button" href="<?php echo admin_url( '/upload.php?paged=' . $next_page ); ?>" <?php if ( $paged === $next_page ) { echo 'disabled inert'; } ?>>
+						<a class="next-page button" href="<?php echo admin_url( '/upload.php?paged=' . $next_page ); ?>" <?php if ( $paged === $next_page ) {
+							echo 'disabled inert';
+						} ?>>
 							<span class="screen-reader-text"><?php esc_html_e( 'Next page' ); ?></span><span aria-hidden="true">›</span>
 						</a>
-						<a class="last-page button" href="<?php echo admin_url( '/upload.php?paged=' . $total_pages ); ?>" <?php if ( $paged === $next_page ) { echo 'disabled inert'; } ?>>
+						<a class="last-page button" href="<?php echo admin_url( '/upload.php?paged=' . $total_pages ); ?>" <?php if ( $paged === $next_page ) {
+							echo 'disabled inert';
+						} ?>>
 							<span class="screen-reader-text"><?php esc_html_e( 'Last page' ); ?></span><span aria-hidden="true">»</span>
 						</a>
 					</span>
@@ -357,7 +365,8 @@ if ( 'grid' === $mode ) {
 		 *
 		 * @since CP-2.3.0
 		 */
-		do_action( 'cp_media_before_grid' ); ?>
+		do_action( 'cp_media_before_grid' );
+		?>
 
 		<div id="media-grid">
 			<ul class="media-grid-view">
@@ -365,21 +374,21 @@ if ( 'grid' === $mode ) {
 				<?php
 				foreach ( $attachments->posts as $attachment ) {
 					$meta = wp_prepare_attachment_for_js( $attachment->ID );
-					$date		  = $meta['dateFormatted'];
-					$author	      = $meta['authorName'];
+					$date         = $meta['dateFormatted'];
+					$author       = $meta['authorName'];
 					$author_link  = $meta['authorLink'];
-					$url		  = $meta['url'];
-					$width	      = ! empty( $meta['width'] ) ? $meta['width'] : '';
+					$url          = $meta['url'];
+					$width        = ! empty( $meta['width'] ) ? $meta['width'] : '';
 					$height	      = ! empty( $meta['height'] ) ? $meta['height'] : '';
 					$file_name    = $meta['name'];
 					$file_type    = $meta['type'];
 					$subtype      = $meta['subtype'];
 					$mime_type    = $meta['mime'];
-					$size		  = $meta['filesizeHumanReadable'];
-					$alt		  = $meta['alt'];
-					$caption	  = $meta['caption'];
+					$size         = $meta['filesizeHumanReadable'];
+					$alt          = $meta['alt'];
+					$caption      = $meta['caption'];
 					$description  = $meta['description'];
-					$link		  = $meta['link'];
+					$link         = $meta['link'];
 					$orientation  = ! empty( $meta['orientation'] ) ? $meta['orientation'] : 'landscape';
 					$menu_order   = $meta['menuOrder'];
 					$media_cats   = $meta['media_cats'] ? implode( ', ', $meta['media_cats'] ) : '';
@@ -465,7 +474,8 @@ if ( 'grid' === $mode ) {
 	 *
 	 * @since CP-2.3.0
 	 */
-	do_action( 'cp_media_after_grid' ); ?>
+	do_action( 'cp_media_after_grid' );
+	?>
 
 	<!-- Modal markup -->
 	<dialog id="media-modal" class="media-modal wp-core-ui file-details-modal">
@@ -532,7 +542,8 @@ if ( 'grid' === $mode ) {
 							 *
 							 * @since CP-2.3.0
 							 */
-							do_action( 'cp_media_modal_after_details' ); ?>
+							do_action( 'cp_media_modal_after_details' );
+							?>
 
 							<div class="settings">
 								<span class="setting alt-text has-description" data-setting="alt">
@@ -572,7 +583,8 @@ if ( 'grid' === $mode ) {
 								 *
 								 * @since CP-2.3.0
 								 */
-								do_action( 'cp_media_modal_before_media_menu_order' ); ?>
+								do_action( 'cp_media_modal_before_media_menu_order' );
+								?>
 
 								<div class="attachment-compat"></div>
 								<span class="setting settings-save-status" role="status">
@@ -587,7 +599,8 @@ if ( 'grid' === $mode ) {
 								 *
 								 * @since CP-2.3.0
 								 */
-								do_action( 'cp_media_modal_after_media_post_tags' ); ?>
+								do_action( 'cp_media_modal_after_media_post_tags' );
+								?>
 
 							</div>
 							<div class="actions">
