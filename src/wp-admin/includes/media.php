@@ -4069,23 +4069,3 @@ function cp_add_cats_and_tags_to_attachment_for_js( $response, $attachment, $met
 	return $response;
 }
 add_filter( 'wp_prepare_attachment_for_js', 'cp_add_cats_and_tags_to_attachment_for_js', 10, 3 );
-
-/*
- * Adds adjustable pagination capability to the media library grid page.
- *
- * @since CP-2.3.0
- *
- * @param  mixed  $screen_option  The value to save instead of the option value.
- *                                Default false (to skip saving the current option).
- * @param  string $option         The pagination option name
- * @param  int    $value          The pagination option value
- *
- * @return array
- */
-function cp_media_grid_set_screen_option( $screen_option, $option, $value ) {
-	if ( 'media_grid_per_page' === $option ) {
-		return $value;
-	}
-	return $screen_option;
-}
-add_filter( 'set-screen-option', 'cp_media_grid_set_screen_option', 10, 3 );
