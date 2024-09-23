@@ -58,7 +58,7 @@ function wp_get_db_schema( $scope = 'all', $blog_id = null ) {
 	object_relationship_id bigint(20) unsigned NOT NULL default '0',
 	meta_key varchar(255) default NULL,
 	meta_value longtext,
-	PRIMARY KEY (meta_id),	
+	PRIMARY KEY (meta_id),
 	KEY object_relationship_id (object_relationship_id),
 	KEY meta_key (meta_key($max_index_length))
 ) $charset_collate;
@@ -68,7 +68,7 @@ CREATE TABLE $wpdb->object_relationships (
 	left_object_type varchar(255) NOT NULL default '',
 	right_object_type varchar(255) NOT NULL default '',
 	right_object_id bigint(20) unsigned NOT NULL default 0,
-	PRIMARY KEY (relationship_id),	
+	PRIMARY KEY (relationship_id),
 	KEY left_object_id (left_object_id),
 	KEY left_object_type (left_object_type($max_index_length)),
 	KEY right_object_type (right_object_type($max_index_length))
@@ -379,7 +379,7 @@ $wp_queries = wp_get_db_schema( 'all' );
  * @param array $options Optional. Custom option $key => $value pairs to use. Default empty array.
  */
 function populate_options( array $options = array() ) {
-	global $wpdb, $wp_db_version, $wp_current_db_version;
+	global $wpdb, $wp_db_version, $cp_db_version, $wp_current_db_version;
 
 	$guessurl = wp_guess_url();
 	/**
@@ -580,6 +580,9 @@ function populate_options( array $options = array() ) {
 
 		// 6.4.0
 		'wp_attachment_pages_enabled'     => 0,
+
+		// CP-2
+		'cp_db_version'                   => $cp_db_version,
 	);
 
 	// 3.3.0
