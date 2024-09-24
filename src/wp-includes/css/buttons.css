@@ -135,7 +135,9 @@ TABLE OF CONTENTS:
 
 .wp-core-ui .button.focus,
 .wp-core-ui .button:focus,
-.wp-core-ui .button-secondary:focus {
+.wp-core-ui .button:focus-visible,
+.wp-core-ui .button-secondary:focus,
+.wp-core-ui .button-secondary:focus-visible {
 	background: #f6f7f7;
 	border-color: #3582c4;
 	color: #0a4b78;
