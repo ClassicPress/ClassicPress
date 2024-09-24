@@ -630,7 +630,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( e.key === 'Escape' ) {
 			queryParams.delete( 'item' );			
 			queryParams.delete( 'mode' );
-			history.replaceState( null, null, '?' + queryParams.toString() ); // reset URL params
+			history.replaceState( null, null, location.href.split('?')[0] ); // reset URL params
 			close.click(); // close file upload area
 			if ( focusID != null ) { // set focus correctly
 				document.getElementById( focusID ).focus();
@@ -657,7 +657,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	closeButton.addEventListener( 'click', function() {
 		queryParams.delete( 'item' );		
 		queryParams.delete( 'mode' );
-		history.replaceState( null, null, '?' + queryParams.toString() ); // reset URL params
+		history.replaceState( null, null, location.href.split('?')[0] ); // reset URL params
 		dialog.classList.remove( 'modal-loading' );
 		dialog.close();
 		if ( focusID != null ) { // set focus correctly
