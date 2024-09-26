@@ -102,6 +102,7 @@ $allowed_options            = array(
 		'WPLANG',
 		'new_admin_email',
 		'disable_emojis',
+		'disable_xml_rpc',
 	),
 	'discussion' => array(
 		'default_pingback_flag',

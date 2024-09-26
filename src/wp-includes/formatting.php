@@ -4835,6 +4835,7 @@ function sanitize_option( $option, $value ) {
 		case 'site_icon':
 		case 'fileupload_maxk':
 		case 'disable_emojis':
+		case 'disable_xml_rpc':
 			$value = absint( $value );
 			break;
 

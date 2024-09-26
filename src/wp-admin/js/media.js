@@ -358,7 +358,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	var settings, copyAttachmentURLs, copyAttachmentURLSuccessTimeout,
-		mediaGridWrap = document.getElementById( 'wp-media-grid' );
+		mediaGridWrap = document.getElementById( 'wp-media-grid' ),
+		uploadCatSelect = document.getElementById( 'upload-category' );
 
 	// Grid View: Opens a manage media frame into the grid.
 	if ( mediaGridWrap != null && window.wp && window.wp.media ) {
@@ -722,4 +723,79 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
+	// Enable the setting of the media upload category on the Media Library List View page.
+	if ( document.body.className.includes( 'upload-php' ) && mediaGridWrap == null && uploadCatSelect != null ) {
+
+		// Set up variables when a change of upload category is made.
+		uploadCatSelect.addEventListener( 'change', function( e ) {
+			var div,
+				dismissible = document.querySelector( '.is-dismissible' ),
+				uploadCatFolder = new URLSearchParams( {
+					action: 'media-cat-upload',
+					option: 'media_cat_upload_folder',
+					media_cat_upload_value: e.target.value,
+					media_cat_upload_nonce: document.getElementById( 'media_cat_upload_nonce' ).value
+				} );
+
+			// Prevent accumulation of notices.
+			if ( dismissible != null ) {
+				dismissible.remove();
+			}
+
+			// Update upload category.
+			fetch( ajaxurl, {
+				method: 'POST',
+				body: uploadCatFolder,
+				credentials: 'same-origin'
+			} )
+			.then( function( response ) {
+				if ( response.ok ) {
+					return response.json(); // no errors
+				}
+				throw new Error( response.status );
+			} )
+			.then( function( response ) {
+				if ( response.success ) {
+					if ( response.data.value == '' ) {
+						div = document.createElement( 'div' );
+						div.id = 'message';
+						div.className = 'notice notice-error is-dismissible';
+						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+						document.querySelector( '.page-title-action' ).after( div );
+					} else {
+						div = document.createElement( 'div' );
+						div.id = 'message';
+						div.className = 'updated notice notice-success is-dismissible';
+						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+						document.querySelector( '.page-title-action' ).after( div );
+
+						// Update selected attribute in DOM.
+						uploadCatSelect.childNodes.forEach( function( option ) {
+							if ( option.value === e.target.value ) {
+								option.setAttribute( 'selected', true );
+							} else {
+								option.removeAttribute( 'selected' );
+							}
+						} );
+					}
+				}
+			} )
+			.catch( function( error ) {
+				div = document.createElement( 'div' );
+				div.id = 'message';
+				div.className = 'notice notice-error is-dismissible';
+				div.innerHTML = '<p>' + error + '</p><button class="notice-dismiss" type="button"></button>';
+				document.querySelector( '.page-title-action' ).after( div );
+			} );
+		} );
+
+		// Make notices dismissible.
+		document.addEventListener( 'click', function( e ) {
+			if ( e.target.className === 'notice-dismiss' ) {
+				document.querySelector( '.is-dismissible' ).remove();
+			}
+		} );
+	}
+
 } );
+

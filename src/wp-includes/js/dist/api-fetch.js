@@ -13,7 +13,7 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: actions, addAction, addFilter, applyFilters, createHooks, currentAction, currentFilter, didAction, didFilter, doAction, doingAction, doingFilter, filters, hasAction, hasFilter, removeAction, removeAllActions, removeAllFilters, removeFilter
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/validateNamespace.js
+;// ./node_modules/@wordpress/hooks/build-module/validateNamespace.js
 /**
  * Validate a namespace string.
  *
@@ -37,7 +37,7 @@ function validateNamespace(namespace) {
 }
 /* harmony default export */ var build_module_validateNamespace = (validateNamespace);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/validateHookName.js
+;// ./node_modules/@wordpress/hooks/build-module/validateHookName.js
 /**
  * Validate a hookName string.
  *
@@ -67,7 +67,7 @@ function validateHookName(hookName) {
 }
 /* harmony default export */ var build_module_validateHookName = (validateHookName);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createAddHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createAddHook.js
 /**
  * Internal dependencies
  */
@@ -161,7 +161,7 @@ function createAddHook(hooks, storeKey) {
 }
 /* harmony default export */ var build_module_createAddHook = (createAddHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
 /**
  * Internal dependencies
  */
@@ -241,7 +241,7 @@ function createRemoveHook(hooks, storeKey, removeAll = false) {
 }
 /* harmony default export */ var build_module_createRemoveHook = (createRemoveHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createHasHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createHasHook.js
 /**
  * @callback HasHook
  *
@@ -276,7 +276,7 @@ function createHasHook(hooks, storeKey) {
 }
 /* harmony default export */ var build_module_createHasHook = (createHasHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createRunHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createRunHook.js
 /**
  * Returns a function which, when invoked, will execute all callbacks
  * registered to a hook of the specified type, optionally returning the final
@@ -328,7 +328,7 @@ function createRunHook(hooks, storeKey, returnFirstArg = false) {
 }
 /* harmony default export */ var build_module_createRunHook = (createRunHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
 /**
  * Returns a function which, when invoked, will return the name of the
  * currently running hook, or `null` if no hook of the given type is currently
@@ -348,7 +348,7 @@ function createCurrentHook(hooks, storeKey) {
 }
 /* harmony default export */ var build_module_createCurrentHook = (createCurrentHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
 /**
  * @callback DoingHook
  * Returns whether a hook is currently being executed.
@@ -384,7 +384,7 @@ function createDoingHook(hooks, storeKey) {
 }
 /* harmony default export */ var build_module_createDoingHook = (createDoingHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createDidHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createDidHook.js
 /**
  * Internal dependencies
  */
@@ -420,7 +420,7 @@ function createDidHook(hooks, storeKey) {
 }
 /* harmony default export */ var build_module_createDidHook = (createDidHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createHooks.js
+;// ./node_modules/@wordpress/hooks/build-module/createHooks.js
 /**
  * Internal dependencies
  */
@@ -479,7 +479,7 @@ function createHooks() {
 }
 /* harmony default export */ var build_module_createHooks = (createHooks);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/index.js
+;// ./node_modules/@wordpress/hooks/build-module/index.js
 /**
  * Internal dependencies
  */
@@ -556,7 +556,7 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: _n, _nx, _x, createI18n, defaultI18n, getLocaleData, hasTranslation, isRTL, resetLocaleData, setLocaleData, sprintf, subscribe
 
-;// CONCATENATED MODULE: ./node_modules/memize/dist/index.js
+;// ./node_modules/memize/dist/index.js
 /**
  * Memize options object.
  *
@@ -720,7 +720,7 @@ function memize(fn, options) {
 
 // EXTERNAL MODULE: ./node_modules/sprintf-js/src/sprintf.js
 var sprintf = __webpack_require__(58);
-;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/sprintf.js
+;// ./node_modules/@wordpress/i18n/build-module/sprintf.js
 /**
  * External dependencies
  */
@@ -758,7 +758,7 @@ function sprintf_sprintf(format, ...args) {
   }
 }
 
-;// CONCATENATED MODULE: ./node_modules/@tannin/postfix/index.js
+;// ./node_modules/@tannin/postfix/index.js
 var PRECEDENCE, OPENERS, TERMINATORS, PATTERN;
 
 /**
@@ -884,7 +884,7 @@ function postfix( expression ) {
 	return terms.concat( stack.reverse() );
 }
 
-;// CONCATENATED MODULE: ./node_modules/@tannin/evaluate/index.js
+;// ./node_modules/@tannin/evaluate/index.js
 /**
  * Operator callback functions.
  *
@@ -996,7 +996,7 @@ function evaluate( postfix, variables ) {
 	return stack[ 0 ];
 }
 
-;// CONCATENATED MODULE: ./node_modules/@tannin/compile/index.js
+;// ./node_modules/@tannin/compile/index.js
 
 
 
@@ -1027,7 +1027,7 @@ function compile( expression ) {
 	};
 }
 
-;// CONCATENATED MODULE: ./node_modules/@tannin/plural-forms/index.js
+;// ./node_modules/@tannin/plural-forms/index.js
 
 
 /**
@@ -1047,7 +1047,7 @@ function pluralForms( expression ) {
 	};
 }
 
-;// CONCATENATED MODULE: ./node_modules/tannin/index.js
+;// ./node_modules/tannin/index.js
 
 
 /**
@@ -1262,7 +1262,7 @@ Tannin.prototype.dcnpgettext = function( domain, context, singular, plural, n ) 
 	return index === 0 ? singular : plural;
 };
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/create-i18n.js
+;// ./node_modules/@wordpress/i18n/build-module/create-i18n.js
 /**
  * External dependencies
  */
@@ -1673,7 +1673,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/hooks/build-module/index.js + 10 modules
 var build_module = __webpack_require__(673);
-;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/default-i18n.js
+;// ./node_modules/@wordpress/i18n/build-module/default-i18n.js
 /**
  * Internal dependencies
  */
@@ -1821,7 +1821,7 @@ const isRTL = i18n.isRTL.bind(i18n);
  */
 const hasTranslation = i18n.hasTranslation.bind(i18n);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/index.js
+;// ./node_modules/@wordpress/i18n/build-module/index.js
 
 
 
@@ -2139,7 +2139,7 @@ __webpack_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/i18n/build-module/index.js + 9 modules
 var build_module = __webpack_require__(257);
-;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/middlewares/nonce.js
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/nonce.js
 /**
  * @param {string} nonce
  * @return {import('../types').APIFetchMiddleware & { nonce: string }} A middleware to enhance a request with a nonce.
@@ -2173,7 +2173,7 @@ function createNonceMiddleware(nonce) {
 }
 /* harmony default export */ var nonce = (createNonceMiddleware);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/middlewares/namespace-endpoint.js
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/namespace-endpoint.js
 /**
  * @type {import('../types').APIFetchMiddleware}
  */
@@ -2198,7 +2198,7 @@ const namespaceAndEndpointMiddleware = (options, next) => {
 };
 /* harmony default export */ var namespace_endpoint = (namespaceAndEndpointMiddleware);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/middlewares/root-url.js
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/root-url.js
 /**
  * Internal dependencies
  */
@@ -2235,7 +2235,7 @@ const createRootURLMiddleware = rootURL => (options, next) => {
 };
 /* harmony default export */ var root_url = (createRootURLMiddleware);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/url/build-module/normalize-path.js
+;// ./node_modules/@wordpress/url/build-module/normalize-path.js
 /**
  * Given a path, returns a normalized path where equal query parameter values
  * will be treated as identical, regardless of order they appear in the original
@@ -2271,7 +2271,7 @@ function normalizePath(path) {
   .join('&');
 }
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/url/build-module/safe-decode-uri-component.js
+;// ./node_modules/@wordpress/url/build-module/safe-decode-uri-component.js
 /**
  * Safely decodes a URI component with `decodeURIComponent`. Returns the URI component unmodified if
  * `decodeURIComponent` throws an error.
@@ -2288,7 +2288,8 @@ function safeDecodeURIComponent(uriComponent) {
   }
 }
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/url/build-module/get-query-string.js
+;// ./node_modules/@wordpress/url/build-module/get-query-string.js
+/* wp:polyfill */
 /**
  * Returns the query string part of the URL.
  *
@@ -2311,7 +2312,7 @@ function getQueryString(url) {
   }
 }
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/url/build-module/get-query-args.js
+;// ./node_modules/@wordpress/url/build-module/get-query-args.js
 /**
  * Internal dependencies
  */
@@ -2399,7 +2400,7 @@ function getQueryArgs(url) {
   }, Object.create(null));
 }
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/url/build-module/build-query-string.js
+;// ./node_modules/@wordpress/url/build-module/build-query-string.js
 /**
  * Generates URL-encoded query string using input query data.
  *
@@ -2456,7 +2457,7 @@ function buildQueryString(data) {
   return string.substr(1);
 }
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/url/build-module/add-query-args.js
+;// ./node_modules/@wordpress/url/build-module/add-query-args.js
 /**
  * Internal dependencies
  */
@@ -2498,7 +2499,7 @@ function addQueryArgs(url = '', args) {
   return baseUrl + '?' + buildQueryString(args);
 }
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/middlewares/preloading.js
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/preloading.js
 /**
  * WordPress dependencies
  */
@@ -2563,7 +2564,7 @@ function prepareResponse(responseData, parse) {
 }
 /* harmony default export */ var preloading = (createPreloadingMiddleware);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/middlewares/fetch-all-middleware.js
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/fetch-all-middleware.js
 /**
  * WordPress dependencies
  */
@@ -2689,7 +2690,7 @@ const fetchAllMiddleware = async (options, next) => {
 };
 /* harmony default export */ var fetch_all_middleware = (fetchAllMiddleware);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/middlewares/http-v1.js
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/http-v1.js
 /**
  * Set of HTTP methods which are eligible to be overridden.
  *
@@ -2734,7 +2735,7 @@ const httpV1Middleware = (options, next) => {
 };
 /* harmony default export */ var http_v1 = (httpV1Middleware);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/url/build-module/get-query-arg.js
+;// ./node_modules/@wordpress/url/build-module/get-query-arg.js
 /**
  * Internal dependencies
  */
@@ -2765,7 +2766,7 @@ function getQueryArg(url, arg) {
   return getQueryArgs(url)[arg];
 }
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/url/build-module/has-query-arg.js
+;// ./node_modules/@wordpress/url/build-module/has-query-arg.js
 /**
  * Internal dependencies
  */
@@ -2788,7 +2789,7 @@ function hasQueryArg(url, arg) {
   return getQueryArg(url, arg) !== undefined;
 }
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/middlewares/user-locale.js
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/user-locale.js
 /**
  * WordPress dependencies
  */
@@ -2812,7 +2813,7 @@ const userLocaleMiddleware = (options, next) => {
 };
 /* harmony default export */ var user_locale = (userLocaleMiddleware);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/utils/response.js
+;// ./node_modules/@wordpress/api-fetch/build-module/utils/response.js
 /**
  * WordPress dependencies
  */
@@ -2888,7 +2889,7 @@ function parseAndThrowError(response, shouldParseResponse = true) {
   });
 }
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/middlewares/media-upload.js
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/media-upload.js
 /**
  * WordPress dependencies
  */
@@ -2949,6 +2950,10 @@ const mediaUploadMiddleware = (options, next) => {
     ...options,
     parse: false
   }).catch(response => {
+    // `response` could actually be an error thrown by `defaultFetchHandler`.
+    if (!response.headers) {
+      return Promise.reject(response);
+    }
     const attachmentId = response.headers.get('x-wp-upload-attachment-id');
     if (response.status >= 500 && response.status < 600 && attachmentId) {
       return postProcess(attachmentId).catch(() => {
@@ -2966,7 +2971,7 @@ const mediaUploadMiddleware = (options, next) => {
 };
 /* harmony default export */ var media_upload = (mediaUploadMiddleware);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/url/build-module/remove-query-args.js
+;// ./node_modules/@wordpress/url/build-module/remove-query-args.js
 /**
  * Internal dependencies
  */
@@ -2998,7 +3003,7 @@ function removeQueryArgs(url, ...args) {
   return queryString ? baseURL + '?' + queryString : baseURL;
 }
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/middlewares/theme-preview.js
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/theme-preview.js
 /**
  * WordPress dependencies
  */
@@ -3039,7 +3044,7 @@ const createThemePreviewMiddleware = themePath => (options, next) => {
 };
 /* harmony default export */ var theme_preview = (createThemePreviewMiddleware);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/api-fetch/build-module/index.js
+;// ./node_modules/@wordpress/api-fetch/build-module/index.js
 /**
  * WordPress dependencies
  */

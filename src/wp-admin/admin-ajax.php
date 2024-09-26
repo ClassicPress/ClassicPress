@@ -139,6 +139,7 @@ $core_actions_post = array(
 	'toggle-auto-updates',
 	'send-password-reset',
 	'quick-edit-attachment',
+	'media-cat-upload',
 );
 
 // Deprecated.
