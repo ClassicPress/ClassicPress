@@ -581,7 +581,7 @@ function populate_options( array $options = array() ) {
 		// 6.4.0
 		'wp_attachment_pages_enabled'     => 0,
 
-		// CP-2
+		// CP-2.3.0
 		'cp_db_version'                   => $cp_db_version,
 	);
 
