@@ -581,6 +581,7 @@ function populate_options( array $options = array() ) {
 		// 6.4.0
 		'wp_attachment_pages_enabled'     => 0,
 
+		'disable_emojis'                  => 0,
 		'disable_xml_rpc'                 => 0,
 	);
 

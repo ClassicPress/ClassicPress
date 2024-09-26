@@ -647,6 +647,16 @@ for ( $index = 0; $index <= 2; $index++ ) {
 </td>
 </tr>
 <tr>
+<th scope="row"><?php _e( 'Disable Emojis' ); ?></th>
+<td> <fieldset><legend class="screen-reader-text"><span>
+	<?php
+	/* translators: Hidden accessibility text. */
+	_e( 'Disable Emojis' );
+	?>
+</span></legend><label for="disable_emojis">
+<input name="disable_emojis" type="checkbox" id="disable_emojis" value="1" <?php checked( '1', get_option( 'disable_emojis' ) ); ?>>
+	<?php _e( 'Emojis disabled' ); ?></label>
+<tr>
 <th scope="row"><?php _e( 'Disable XML-RPC' ); ?></th>
 <td> <fieldset><legend class="screen-reader-text"><span>
 	<?php

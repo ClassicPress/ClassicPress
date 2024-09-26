@@ -101,6 +101,7 @@ $allowed_options            = array(
 		'timezone_string',
 		'WPLANG',
 		'new_admin_email',
+		'disable_emojis',
 		'disable_xml_rpc',
 	),
 	'discussion' => array(
