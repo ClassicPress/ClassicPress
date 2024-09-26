@@ -161,9 +161,10 @@ jobs:
           sudo locale-gen es_ES.UTF-8 fr_FR.UTF-8 ru_RU.UTF-8
           sudo update-locale LC_ALL="es_ES.UTF-8 fr_FR.UTF-8 ru_RU.UTF-8"
 
-      - name: Install PHPUnit and Composer dependencies
-        run: |
-          composer require phpunit/phpunit "9.*" -W --no-progress --no-ansi --no-interaction
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          composer-options: "--no-progress --no-ansi --no-interaction"
 
       - name: Make Composer packages available globally
         run: echo "${PWD}/vendor/bin" >> $GITHUB_PATH
