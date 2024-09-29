@@ -141,7 +141,7 @@ if ( 'grid' === $mode ) {
 		array(
 			'label'   => __( 'Number of items per page:' ),
 			'default' => get_option( 'posts_per_page' ) ? get_option( 'posts_per_page' ) : 10,
-			'option'  => 'alternative_media_per_page',
+			'option'  => 'media_grid_per_page',
 		)
 	);
 
