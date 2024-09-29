@@ -140,7 +140,7 @@ if ( 'grid' === $mode ) {
 		'per_page',
 		array(
 			'label'   => __( 'Number of items per page:' ),
-			'default' => get_option( 'posts_per_page' ) ? get_option( 'posts_per_page' ) : 10,
+			'default' => get_option( 'posts_per_page' ) ? get_option( 'posts_per_page' ) : 80,
 			'option'  => 'media_grid_per_page',
 		)
 	);
