@@ -137,7 +137,8 @@ $current_pepper = \'' . $pepper . '\';
 	 * @return string Pepper string on success, empty on failure.
 	 */
 	public function get_pepper() {
-	require_once ABSPATH . 'wp-admin/includes/file.php';
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		
 		ob_start();
 		if ( false === ( $creds = request_filesystem_credentials( admin_url(), '', false, false, null ) ) ) {
 			return; // Await filesystem access
