@@ -404,13 +404,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Create URLSearchParams object
 		const params = new URLSearchParams( {
 			'action': 'query-attachments',
-			'query[posts_per_page]': document.getElementById( 'alternative_media_per_page' ).value,
+			'query[posts_per_page]': document.getElementById( 'media_grid_per_page' ).value,
 			'query[monthnum]': date ? parseInt( date.substr( 4, 2 ), 10 ) : 0,
 			'query[year]': date ? parseInt( date.substr( 0, 4 ), 10 ) : 0,
 			'query[post_mime_type]': type || '',
 			'query[s]': search ? search.value : '',
 			'query[media_category_name]': mediaCatSelect ? mediaCatSelect.value : '',
-			'_ajax_nonce': document.getElementById( 'alternative_media_grid_nonce' ).value,
+			'_ajax_nonce': document.getElementById( 'media_grid_nonce' ).value,
 		} );
 
 		// Make AJAX request
