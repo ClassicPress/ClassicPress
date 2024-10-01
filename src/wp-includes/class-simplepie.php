@@ -1,33 +1,27 @@
 <?php
-if ( ! class_exists( 'SimplePie', false ) ) :
 
-// Load classes we will need.
-require ABSPATH . WPINC . '/SimplePie/Misc.php';
-require ABSPATH . WPINC . '/SimplePie/Cache.php';
-require ABSPATH . WPINC . '/SimplePie/File.php';
-require ABSPATH . WPINC . '/SimplePie/Sanitize.php';
-require ABSPATH . WPINC . '/SimplePie/Registry.php';
-require ABSPATH . WPINC . '/SimplePie/IRI.php';
-require ABSPATH . WPINC . '/SimplePie/Locator.php';
-require ABSPATH . WPINC . '/SimplePie/Content/Type/Sniffer.php';
-require ABSPATH . WPINC . '/SimplePie/XML/Declaration/Parser.php';
-require ABSPATH . WPINC . '/SimplePie/Parser.php';
-require ABSPATH . WPINC . '/SimplePie/Item.php';
-require ABSPATH . WPINC . '/SimplePie/Parse/Date.php';
-require ABSPATH . WPINC . '/SimplePie/Author.php';
+if ( class_exists( 'SimplePie', false ) ) {
+	return;
+}
+
+// Load and register the SimplePie native autoloaders.
+require ABSPATH . WPINC . '/SimplePie/autoloader.php';
 
 /**
  * ClassicPress autoloader for SimplePie.
  *
  * @since 3.5.0
+<<<<<<< HEAD
+=======
+ * @deprecated 6.7.0 Use `SimplePie_Autoloader` instead.
+ *
+ * @param string $class Class name.
+>>>>>>> ebfb7649ca (External Libraries: Update the SimplePie library to version 1.8.0.)
  */
 function wp_simplepie_autoload( $class ) {
-	if ( ! str_starts_with( $class, 'SimplePie_' ) )
-		return;
-
-	$file = ABSPATH . WPINC . '/' . str_replace( '_', '/', $class ) . '.php';
-	include $file;
+	_deprecated_function( __FUNCTION__, '6.7.0', 'SimplePie_Autoloader' );
 }
+<<<<<<< HEAD
 
 /**
  * We autoload classes we may not need.
@@ -3352,3 +3346,5 @@ class SimplePie
 	}
 }
 endif;
+=======
+>>>>>>> ebfb7649ca (External Libraries: Update the SimplePie library to version 1.8.0.)
