@@ -64,11 +64,7 @@ class WP_SimplePie_File extends SimplePie\File {
 				$args['headers'] = $this->headers;
 			}
 
-<<<<<<< HEAD
-			if ( SIMPLEPIE_USERAGENT != $this->useragent ) { // Use default WP user agent unless custom has been specified.
-=======
 			if ( SimplePie\Misc::get_default_useragent() !== $this->useragent ) { // Use default WP user agent unless custom has been specified.
->>>>>>> ebfb7649ca (External Libraries: Update the SimplePie library to version 1.8.0.)
 				$args['user-agent'] = $this->useragent;
 			}
 
