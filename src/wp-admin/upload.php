@@ -302,7 +302,7 @@ if ( 'grid' === $mode ) {
 					<input type="search" id="media-search-input" name="s" class="search" value="">
 				</div>
 
-				<?php wp_nonce_field( 'alternative_media_grid', 'media_grid_nonce' ); ?>
+				<?php wp_nonce_field( 'media_grid', 'media_grid_nonce' ); ?>
 
 			</div>
 		</div>
