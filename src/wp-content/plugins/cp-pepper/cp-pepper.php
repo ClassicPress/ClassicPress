@@ -3,7 +3,7 @@
  * Plugin Name:       ClassicPress Pepper for Passwords
  * Plugin URI:        https://github.com/ClassicPress/ClassicPress
  * Description:       For enhanced security add a `pepper` to password hashing.
- * Version:           1.0
+ * Version:           1.0.1
  * Requires at least: 4.9.15
  * Requires PHP:      7.4
  * Requires CP:       2.2
@@ -137,6 +137,7 @@ $current_pepper = \'' . $pepper . '\';
 	 * @return string Pepper string on success, empty on failure.
 	 */
 	public function get_pepper() {
+	require_once ABSPATH . 'wp-admin/includes/file.php';
 		ob_start();
 		if ( false === ( $creds = request_filesystem_credentials( admin_url(), '', false, false, null ) ) ) {
 			return; // Await filesystem access
