@@ -73,7 +73,7 @@ class PepperPassword {
 	 *
 	 * If the pepper file does not exists, create it.
 	 *
-	 * @since 1.0disconnecte.0
+	 * @since 1.0.0
 	 */
 	public function activate() {
 		if ( file_exists( $this->pepper_file ) ) {
@@ -137,14 +137,14 @@ $current_pepper = \'' . $pepper . '\';
 
 		ob_start();
 		if ( false === ( $creds = request_filesystem_credentials( admin_url(), '', false, false, null ) ) ) {
-			return false; // Await filesystem access
+			return; // Await filesystem access
 		}
 
 		if ( ! WP_Filesystem( $creds ) ) {
 			request_filesystem_credentials( admin_url(), '', true, false, null );
-			return false;
+			return;
 		}
-		ob_end_clean();
+		ob_end_flush();
 
 		global $wp_filesystem;
 		return (bool) $wp_filesystem->put_contents( $this->pepper_file, $content );
@@ -169,7 +169,7 @@ $current_pepper = \'' . $pepper . '\';
 			request_filesystem_credentials( admin_url(), '', true, false, null );
 			return '';
 		}
-		ob_end_clean();
+		ob_end_flush();
 
 		global $wp_filesystem;
 		if ( $wp_filesystem->exists( $this->pepper_file ) ) {
