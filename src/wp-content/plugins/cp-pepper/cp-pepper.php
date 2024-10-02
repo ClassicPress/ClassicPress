@@ -162,12 +162,12 @@ $current_pepper = \'' . $pepper . '\';
 
 		ob_start();
 		if ( false === ( $creds = request_filesystem_credentials( admin_url(), '', false, false, null ) ) ) {
-			return ''; // Await filesystem access
+			return; // Await filesystem access
 		}
 
 		if ( ! WP_Filesystem( $creds ) ) {
 			request_filesystem_credentials( admin_url(), '', true, false, null );
-			return '';
+			return;
 		}
 		ob_end_flush();
 
@@ -177,13 +177,13 @@ $current_pepper = \'' . $pepper . '\';
 		}
 
 		if ( empty( $pepper ) ) {
-			return '';
+			return;
 		}
 
 		$match = preg_match( '/\$current_pepper = \'([a-zA-Z0-9]*)\';/', $pepper, $matches );
 
 		if ( $match !== 1 ) {
-			return '';
+			return;
 		}
 		return $matches[1];
 	}
