@@ -177,13 +177,13 @@ $current_pepper = \'' . $pepper . '\';
 		}
 
 		if ( empty( $pepper ) ) {
-			return;
+			return '';
 		}
 
 		$match = preg_match( '/\$current_pepper = \'([a-zA-Z0-9]*)\';/', $pepper, $matches );
 
 		if ( $match !== 1 ) {
-			return;
+			return '';
 		}
 		return $matches[1];
 	}
