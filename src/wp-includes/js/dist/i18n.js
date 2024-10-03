@@ -13,7 +13,7 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: actions, addAction, addFilter, applyFilters, createHooks, currentAction, currentFilter, didAction, didFilter, doAction, doingAction, doingFilter, filters, hasAction, hasFilter, removeAction, removeAllActions, removeAllFilters, removeFilter
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/validateNamespace.js
+;// ./node_modules/@wordpress/hooks/build-module/validateNamespace.js
 /**
  * Validate a namespace string.
  *
@@ -37,7 +37,7 @@ function validateNamespace(namespace) {
 }
 /* harmony default export */ var build_module_validateNamespace = (validateNamespace);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/validateHookName.js
+;// ./node_modules/@wordpress/hooks/build-module/validateHookName.js
 /**
  * Validate a hookName string.
  *
@@ -67,7 +67,7 @@ function validateHookName(hookName) {
 }
 /* harmony default export */ var build_module_validateHookName = (validateHookName);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createAddHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createAddHook.js
 /**
  * Internal dependencies
  */
@@ -161,7 +161,7 @@ function createAddHook(hooks, storeKey) {
 }
 /* harmony default export */ var build_module_createAddHook = (createAddHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
 /**
  * Internal dependencies
  */
@@ -241,7 +241,7 @@ function createRemoveHook(hooks, storeKey, removeAll = false) {
 }
 /* harmony default export */ var build_module_createRemoveHook = (createRemoveHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createHasHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createHasHook.js
 /**
  * @callback HasHook
  *
@@ -276,7 +276,7 @@ function createHasHook(hooks, storeKey) {
 }
 /* harmony default export */ var build_module_createHasHook = (createHasHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createRunHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createRunHook.js
 /**
  * Returns a function which, when invoked, will execute all callbacks
  * registered to a hook of the specified type, optionally returning the final
@@ -328,7 +328,7 @@ function createRunHook(hooks, storeKey, returnFirstArg = false) {
 }
 /* harmony default export */ var build_module_createRunHook = (createRunHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
 /**
  * Returns a function which, when invoked, will return the name of the
  * currently running hook, or `null` if no hook of the given type is currently
@@ -348,7 +348,7 @@ function createCurrentHook(hooks, storeKey) {
 }
 /* harmony default export */ var build_module_createCurrentHook = (createCurrentHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
 /**
  * @callback DoingHook
  * Returns whether a hook is currently being executed.
@@ -384,7 +384,7 @@ function createDoingHook(hooks, storeKey) {
 }
 /* harmony default export */ var build_module_createDoingHook = (createDoingHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createDidHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createDidHook.js
 /**
  * Internal dependencies
  */
@@ -420,7 +420,7 @@ function createDidHook(hooks, storeKey) {
 }
 /* harmony default export */ var build_module_createDidHook = (createDidHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createHooks.js
+;// ./node_modules/@wordpress/hooks/build-module/createHooks.js
 /**
  * Internal dependencies
  */
@@ -479,7 +479,7 @@ function createHooks() {
 }
 /* harmony default export */ var build_module_createHooks = (createHooks);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/index.js
+;// ./node_modules/@wordpress/hooks/build-module/index.js
 /**
  * Internal dependencies
  */
@@ -875,7 +875,7 @@ __webpack_require__.d(__webpack_exports__, {
   subscribe: function() { return /* reexport */ subscribe; }
 });
 
-;// CONCATENATED MODULE: ./node_modules/memize/dist/index.js
+;// ./node_modules/memize/dist/index.js
 /**
  * Memize options object.
  *
@@ -1040,7 +1040,7 @@ function memize(fn, options) {
 // EXTERNAL MODULE: ./node_modules/sprintf-js/src/sprintf.js
 var sprintf = __webpack_require__(58);
 var sprintf_default = /*#__PURE__*/__webpack_require__.n(sprintf);
-;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/sprintf.js
+;// ./node_modules/@wordpress/i18n/build-module/sprintf.js
 /**
  * External dependencies
  */
@@ -1078,7 +1078,7 @@ function sprintf_sprintf(format, ...args) {
   }
 }
 
-;// CONCATENATED MODULE: ./node_modules/@tannin/postfix/index.js
+;// ./node_modules/@tannin/postfix/index.js
 var PRECEDENCE, OPENERS, TERMINATORS, PATTERN;
 
 /**
@@ -1204,7 +1204,7 @@ function postfix( expression ) {
 	return terms.concat( stack.reverse() );
 }
 
-;// CONCATENATED MODULE: ./node_modules/@tannin/evaluate/index.js
+;// ./node_modules/@tannin/evaluate/index.js
 /**
  * Operator callback functions.
  *
@@ -1316,7 +1316,7 @@ function evaluate( postfix, variables ) {
 	return stack[ 0 ];
 }
 
-;// CONCATENATED MODULE: ./node_modules/@tannin/compile/index.js
+;// ./node_modules/@tannin/compile/index.js
 
 
 
@@ -1347,7 +1347,7 @@ function compile( expression ) {
 	};
 }
 
-;// CONCATENATED MODULE: ./node_modules/@tannin/plural-forms/index.js
+;// ./node_modules/@tannin/plural-forms/index.js
 
 
 /**
@@ -1367,7 +1367,7 @@ function pluralForms( expression ) {
 	};
 }
 
-;// CONCATENATED MODULE: ./node_modules/tannin/index.js
+;// ./node_modules/tannin/index.js
 
 
 /**
@@ -1582,7 +1582,7 @@ Tannin.prototype.dcnpgettext = function( domain, context, singular, plural, n ) 
 	return index === 0 ? singular : plural;
 };
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/create-i18n.js
+;// ./node_modules/@wordpress/i18n/build-module/create-i18n.js
 /**
  * External dependencies
  */
@@ -1993,7 +1993,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/hooks/build-module/index.js + 10 modules
 var build_module = __webpack_require__(673);
-;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/default-i18n.js
+;// ./node_modules/@wordpress/i18n/build-module/default-i18n.js
 /**
  * Internal dependencies
  */
@@ -2141,7 +2141,7 @@ const isRTL = i18n.isRTL.bind(i18n);
  */
 const hasTranslation = i18n.hasTranslation.bind(i18n);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/index.js
+;// ./node_modules/@wordpress/i18n/build-module/index.js
 
 
 
