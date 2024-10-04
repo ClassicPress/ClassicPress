@@ -192,9 +192,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		widget.addEventListener( 'keyup', function( e ) {
 			if ( e.target.closest( '.widget-top' ).hasAttribute( 'open' ) && e.key === 'Escape' ) {
 				e.target.closest( '.widget-top' ).removeAttribute( 'open' );
-				if ( document.querySelector( '.chooser' ) != null ) {
-					document.querySelector( '.chooser' ).classList.remove( 'chooser' );
-				}
+				document.querySelector( '.chooser' ).classList.remove( 'chooser' );
 			}
 		} );
 
