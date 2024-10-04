@@ -582,7 +582,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						}));
 					}
 					document.querySelectorAll( '.spinner' ).forEach( function( spinner ) {
-						spinner.classList.remove('is-active');
+						spinner.classList.remove( 'is-active' );
 					} );
 				}
 
