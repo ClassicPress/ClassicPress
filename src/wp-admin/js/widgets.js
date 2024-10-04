@@ -504,7 +504,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 
 	function saveWidget( widget, del, animate, order ) {
-		var data, id,
+		var data,
 			sidebarId = widget.closest( 'ul.widgets-sortables' ).id,
 			form = widget.querySelector( 'form' ),
 			isAdd = widget.querySelector( 'input.add_new' ).value;
@@ -541,7 +541,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				throw new Error( response.status );
 			} )
 			.then( function( responseText ) {
-				const id = widget.querySelector( 'input.widget-id' ).value;
+				var id = widget.querySelector( 'input.widget-id' ).value;
 
 				if ( del ) {
 					if ( ! widget.querySelector( 'input.widget_number' ).value ) {
