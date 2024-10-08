@@ -4,7 +4,7 @@ const createPluginCommonJS = require( '@rollup/plugin-commonjs' );
 
 const pluginCommonJS = createPluginCommonJS();
 
-module.exports = [ 'audiovideo', 'grid', 'models', 'views' ].map( artifact => {
+module.exports = [ 'audiovideo', 'models', 'views' ].map( artifact => {
 	return {
 		input: `src/wp-includes/js/media/${artifact}.manifest.ejs`,
 		output: {
