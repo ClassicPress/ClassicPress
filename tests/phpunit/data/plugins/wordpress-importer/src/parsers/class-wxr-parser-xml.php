@@ -90,9 +90,8 @@ class WXR_Parser_XML {
 		$xml = xml_parser_create( 'UTF-8' );
 		xml_parser_set_option( $xml, XML_OPTION_SKIP_WHITE, 1 );
 		xml_parser_set_option( $xml, XML_OPTION_CASE_FOLDING, 0 );
-		xml_set_object( $xml, $this );
-		xml_set_character_data_handler( $xml, 'cdata' );
-		xml_set_element_handler( $xml, 'tag_open', 'tag_close' );
+		xml_set_character_data_handler( $xml, array( $this, 'cdata' ) );
+		xml_set_element_handler( $xml, array( $this, 'tag_open' ), array( $this, 'tag_close' ) );
 
 		if ( ! xml_parse( $xml, file_get_contents( $file ), true ) ) {
 			$current_line   = xml_get_current_line_number( $xml );
