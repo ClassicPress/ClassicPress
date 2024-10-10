@@ -379,7 +379,7 @@ $wp_queries = wp_get_db_schema( 'all' );
  * @param array $options Optional. Custom option $key => $value pairs to use. Default empty array.
  */
 function populate_options( array $options = array() ) {
-	global $wpdb, $wp_db_version, $wp_current_db_version;
+	global $wpdb, $wp_db_version, $cp_db_version, $wp_current_db_version;
 
 	$guessurl = wp_guess_url();
 	/**
@@ -581,6 +581,8 @@ function populate_options( array $options = array() ) {
 		// 6.4.0
 		'wp_attachment_pages_enabled'     => 0,
 
+		// CP-2.3.0
+		'cp_db_version'                   => $cp_db_version,
 		'disable_emojis'                  => 0,
 		'disable_xml_rpc'                 => 0,
 	);
