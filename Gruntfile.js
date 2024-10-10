@@ -300,6 +300,7 @@ module.exports = function(grunt) {
 				ext: '.css',
 				src: ['wp-admin/css/colors/*/colors.scss'],
 				options: {
+					api: 'modern',
 					implementation: require( 'sass' )
 				}
 			}
