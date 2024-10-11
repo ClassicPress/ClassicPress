@@ -227,8 +227,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		},
 		sort: false,
 		setData: ghostImage,
-		forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for webkit browsers
-		//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari
 		onChoose: function( e ) {
 			var multi;
 			if ( e.item.className.includes( 'widget' ) ) {
@@ -281,8 +279,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			filter: 'input, select, textarea, label, button, fieldset, legend, datalist, output, option, optgroup',
 			preventOnFilter: false, // ensures correct position of cursor in input fields
 			setData: ghostImage,
-			forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for webkit browsers
-			//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari
 			onStart: sortableStart,
 			onChange: sortableChange
 		} );
@@ -301,8 +297,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		filter: 'input, select, textarea, label, button, fieldset, legend, datalist, output, option, optgroup',
 		preventOnFilter: false, // ensures correct position of cursor in input fields
 		setData: ghostImage,
-		forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for webkit browsers
-		//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari
 		onStart: sortableStart,
 		onChange: sortableChange,
 		onAdd: function() {
