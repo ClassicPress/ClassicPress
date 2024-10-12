@@ -831,11 +831,6 @@
 			 * @return {void}
 			 */
 			onSelectChange: function(img, c) {
-<<<<<<< HEAD:src/wp-admin/js/image-edit.js
-				var sizer = imageEdit.hold.sizer;
-				selW.val( imageEdit.round(c.width / sizer) );
-				selH.val( imageEdit.round(c.height / sizer) );
-=======
 				var sizer = imageEdit.hold.sizer,
 					oldSel = imageEdit.currentCropSelection;
 
@@ -847,7 +842,6 @@
 				selH.val( Math.min( imageEdit.hold.h, imageEdit.round( c.height / sizer ) ) );
 
 				t.currentCropSelection = c;
->>>>>>> c8b744d12b (Media: Fix admin image cropping calculations.):src/js/_enqueues/lib/image-edit.js
 			}
 		});
 	},
@@ -1070,16 +1064,11 @@
 		}
 
 		// Clear the selection fields after cropping.
-<<<<<<< HEAD:src/wp-admin/js/image-edit.js
-		$('#imgedit-sel-width-' + postid).val('');
-		$('#imgedit-sel-height-' + postid).val('');
-=======
 		$( '#imgedit-sel-width-' + postid ).val( '' );
 		$( '#imgedit-sel-height-' + postid ).val( '' );
 		$( '#imgedit-start-x-' + postid ).val( '0' );
 		$( '#imgedit-start-y-' + postid ).val( '0' );
 		this.currentCropSelection = null;
->>>>>>> c8b744d12b (Media: Fix admin image cropping calculations.):src/js/_enqueues/lib/image-edit.js
 	},
 
 	/**
