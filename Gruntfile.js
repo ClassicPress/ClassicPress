@@ -24,7 +24,9 @@ module.exports = function(grunt) {
 		headless: 'new',
 		args: [
 			'--site-per-process',
-			'--disable-web-security'
+			'--disable-web-security',
+			'--no-sandbox',
+			'--disable-setuid-sandbox'
 		]
 	};
 
