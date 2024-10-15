@@ -449,7 +449,7 @@ window.autosave = function() {
 			 */
 			function compare( str1, str2 ) {
 				function removeSpaces( string ) {
-					return string.toString().replace(/[\x20\t\r\n\f]+/g, '').replace(/\s+/g, '').replace(/&nbsp;+/g, '');
+					return string.toString().replace(/[\x20\t\r\n\f\s]+/g, '').replace(/&nbsp;+/g, '');
 				}
 
 				return ( removeSpaces( str1 || '' ) === removeSpaces( str2 || '' ) );
