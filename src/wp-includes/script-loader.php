@@ -824,6 +824,13 @@ function wp_default_scripts( $scripts ) {
 	$scripts->add( 'wp-plupload', "/wp-includes/js/plupload/wp-plupload$suffix.js", array( 'plupload', 'jquery', 'json2', 'media-models' ), false, 1 );
 	did_action( 'init' ) && $scripts->localize( 'wp-plupload', 'pluploadL10n', $uploader_l10n );
 
+	// FilePond uploader
+	$scripts->add( 'cp-filepond-file-validate-size', '/wp-includes/js/filepond/filepond-plugin-file-validate-size.js', array(), '2.2.8' );
+	$scripts->add( 'cp-filepond-file-validate-type', '/wp-includes/js/filepond/filepond-plugin-file-validate-type.js', array(), '1.2.9' );
+	$scripts->add( 'cp-filepond-file-rename', '/wp-includes/js/filepond/filepond-plugin-file-rename.js', array(), '1.1.8' );
+	$scripts->add( 'cp-filepond-plugin-image-preview', '/wp-includes/js/filepond/filepond-plugin-image-preview.js', array(), '4.6.12' );
+	$scripts->add( 'cp-filepond', '/wp-includes/js/filepond/cp-filepond.js', array(), '4.31.2' );
+
 	$scripts->add( 'comment-reply', "/wp-includes/js/comment-reply$suffix.js", array(), false, 1 );
 
 	$scripts->add( 'json2', "/wp-includes/js/json2$suffix.js", array(), '2015-05-03' );
@@ -1298,7 +1305,20 @@ function wp_default_scripts( $scripts ) {
 
 		$scripts->add( 'list-revisions', "/wp-includes/js/wp-list-revisions$suffix.js" );
 
-		$scripts->add( 'media-grid', "/wp-includes/js/media-grid$suffix.js", array( 'media-editor' ), false, 1 );
+		$scripts->add(
+			'media-grid',
+			"/wp-includes/js/media-grid$suffix.js",
+			array(
+				'image-edit',
+				'cp-filepond-file-validate-size',
+				'cp-filepond-file-validate-type',
+				'cp-filepond-file-rename',
+				'cp-filepond-plugin-image-preview',
+				'cp-filepond',
+			),
+			false,
+			1
+		);
 		$scripts->add( 'media', "/wp-admin/js/media$suffix.js", array( 'jquery', 'wp-i18n', 'wp-a11y' ), false, 1 );
 		$scripts->set_translations( 'media' );
 
@@ -1432,6 +1452,7 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'customize-controls', "/wp-admin/css/customize-controls$suffix.css", array( 'wp-admin', 'colors', 'imgareaselect' ) );
 	$styles->add( 'customize-widgets', "/wp-admin/css/customize-widgets$suffix.css", array( 'wp-admin', 'colors' ) );
 	$styles->add( 'customize-nav-menus', "/wp-admin/css/customize-nav-menus$suffix.css", array( 'wp-admin', 'colors' ) );
+	$styles->add( 'media-grid', "/wp-admin/css/media-grid$suffix.css", array( 'imgareaselect' ), '0.1.0' );
 
 	// Common dependencies.
 	$styles->add( 'buttons', "/wp-includes/css/buttons$suffix.css" );
@@ -1451,9 +1472,12 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'imgareaselect', '/wp-includes/js/imgareaselect/imgareaselect.css', array(), '0.9.8' );
 	$styles->add( 'wp-jquery-ui-dialog', "/wp-includes/css/jquery-ui-dialog$suffix.css", array( 'dashicons' ) );
 	$styles->add( 'mediaelement', '/wp-includes/js/mediaelement/mediaelementplayer-legacy.min.css', array(), '4.2.17' );
+	$styles->add( 'mediaelement-player', "/wp-includes/js/mediaelement/mediaelementplayer$suffix.css", array( 'mediaelement' ), '7.0.5' );
 	$styles->add( 'wp-mediaelement', "/wp-includes/js/mediaelement/wp-mediaelement$suffix.css", array( 'mediaelement' ) );
 	$styles->add( 'thickbox', '/wp-includes/js/thickbox/thickbox.css', array( 'dashicons' ) );
 	$styles->add( 'wp-codemirror', '/wp-includes/js/codemirror/codemirror.min.css', array(), '5.29.1-alpha-ee20357' );
+	$styles->add( 'cp-filepond', "/wp-includes/js/filepond/cp-filepond$suffix.css", array(), '0.1.0' );
+	$styles->add( 'cp-filepond-image-preview', "/wp-includes/js/filepond/filepond-plugin-image-preview$suffix.css", array(), '4.6.12' );
 
 	// Deprecated CSS.
 	$styles->add( 'deprecated-media', "/wp-admin/css/deprecated-media$suffix.css" );

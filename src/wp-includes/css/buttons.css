@@ -135,7 +135,9 @@ TABLE OF CONTENTS:
 
 .wp-core-ui .button.focus,
 .wp-core-ui .button:focus,
-.wp-core-ui .button-secondary:focus {
+.wp-core-ui .button:focus-visible,
+.wp-core-ui .button-secondary:focus,
+.wp-core-ui .button-secondary:focus-visible {
 	background: #f6f7f7;
 	border-color: #3582c4;
 	color: #0a4b78;
@@ -163,7 +165,8 @@ TABLE OF CONTENTS:
 	box-shadow: inset 0 2px 5px -3px #0a4b78;
 }
 
-.wp-core-ui .button.active:focus {
+.wp-core-ui .button.active:focus,
+.wp-core-ui .button.active:focus-visible {
 	border-color: #3582c4;
 	box-shadow:
 		inset 0 2px 5px -3px #0a4b78,
@@ -208,7 +211,8 @@ TABLE OF CONTENTS:
 	color: #135e96;
 }
 
-.wp-core-ui .button-link:focus {
+.wp-core-ui .button-link:focus,
+.wp-core-ui .button-link:focus-visible {
 	color: #043959;
 	box-shadow:
 		0 0 0 1px #4f94d4,
@@ -222,7 +226,8 @@ TABLE OF CONTENTS:
 }
 
 .wp-core-ui .button-link-delete:hover,
-.wp-core-ui .button-link-delete:focus {
+.wp-core-ui .button-link-delete:focus,
+.wp-core-ui .button-link-delete:focus-visible {
 	color: #d63638;
 	background: transparent;
 }
@@ -248,14 +253,16 @@ TABLE OF CONTENTS:
 .wp-core-ui .button-primary.hover,
 .wp-core-ui .button-primary:hover,
 .wp-core-ui .button-primary.focus,
-.wp-core-ui .button-primary:focus {
+.wp-core-ui .button-primary:focus,
+.wp-core-ui .button-primary:focus-visible {
 	background: #135e96;
 	border-color: #135e96;
 	color: #fff;
 }
 
 .wp-core-ui .button-primary.focus,
-.wp-core-ui .button-primary:focus {
+.wp-core-ui .button-primary:focus,
+.wp-core-ui .button-primary:focus-visible {
 	box-shadow:
 		0 0 0 1px #fff,
 		0 0 0 3px #2271b1;
@@ -264,6 +271,7 @@ TABLE OF CONTENTS:
 .wp-core-ui .button-primary.active,
 .wp-core-ui .button-primary.active:hover,
 .wp-core-ui .button-primary.active:focus,
+.wp-core-ui .button-primary.active:focus-visible,
 .wp-core-ui .button-primary:active {
 	background: #135e96;
 	border-color: #135e96;
@@ -313,7 +321,8 @@ TABLE OF CONTENTS:
 	border-left: 0;
 }
 
-.wp-core-ui .button-group > .button:focus {
+.wp-core-ui .button-group > .button:focus,
+.wp-core-ui .button-group > .button:focus-visible {
 	position: relative;
 	z-index: 1;
 }
@@ -326,7 +335,8 @@ TABLE OF CONTENTS:
 	box-shadow: inset 0 2px 5px -3px #0a4b78;
 }
 
-.wp-core-ui .button-group > .button.active:focus {
+.wp-core-ui .button-group > .button.active:focus,
+.wp-core-ui .button-group > .button.active:focus-visible {
 	border-color: #3582c4;
 	box-shadow:
 		inset 0 2px 5px -3px #0a4b78,

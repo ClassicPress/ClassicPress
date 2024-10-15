@@ -64,7 +64,10 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 			$item = 'array';
 		}
 
-		return new WP_Error( 'left_object_id', __( 'cp_add_object_relationship() expects parameter 1 to be a positive integer, ' . $item . ' given.' ) );
+		/* translators: %s: String, 0, object, or array. */
+		$message = sprintf( __( 'cp_add_object_relationship() expects parameter 1 to a positive integer; %s given.' ), $item );
+
+		return new WP_Error( 'left_object_id', $message );
 	}
 
 	// Error if $right_object_id is not a positive integer.
@@ -79,7 +82,10 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 			$item = 'array';
 		}
 
-		return new WP_Error( 'right_object_id', __( 'cp_add_object_relationship() expects parameter 4 to be a positive integer, ' . $item . ' given.' ) );
+		/* translators: %s: String, 0, object, or array. */
+		$message = sprintf( __( 'cp_add_object_relationship() expects parameter 4 to a positive integer; %s given.' ), $item );
+
+		return new WP_Error( 'right_object_id', $message );
 	}
 
 	// Get array, and create list, of recognized relationship objects.
@@ -98,7 +104,10 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 			$item = 'array';
 		}
 
-		return new WP_Error( 'left_object_type', __( 'cp_add_object_relationship() expects parameter 2 to be one of ' . $object_list . '; ' . $item . ' given.' ) );
+		/* translators: 1: List of recognized relationship objects, 2: Integer, object, or array. */
+		$message = sprintf( __( 'cp_add_object_relationship() expects parameter 2 to be one of %s; %s given.' ), $object_list, $item );
+
+		return new WP_Error( 'left_object_type', $message );
 	}
 
 	// Error if $right_object_type is not a non-null string of an appropriate value
@@ -113,7 +122,10 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 			$item = 'array';
 		}
 
-		return new WP_Error( 'right_object_type', __( 'cp_add_object_relationship() expects parameter 3 to be one of ' . $object_list . '; ' . $item . ' given.' ) );
+		/* translators: 1: List of recognized relationship objects, 2: Integer, object, or array. */
+		$message = sprintf( __( 'cp_add_object_relationship() expects parameter 3 to be one of %s; %s given.' ), $object_list, $item );
+
+		return new WP_Error( 'right_object_type', $message );
 	}
 
 	// Good to go, so query database table.
@@ -231,7 +243,10 @@ function cp_get_object_relationship_ids( $left_object_id, $left_object_type, $ri
 			$item = 'array';
 		}
 
-		return new WP_Error( 'left_object_id', __( 'cp_add_object_relationship() expects parameter 1 to be a positive integer, ' . $item . ' given.' ) );
+		/* translators: %s: String, 0, object, or array. */
+		$message = sprintf( __( 'cp_add_object_relationship() expects parameter 1 to a positive integer; %s given.' ), $item );
+
+		return new WP_Error( 'left_object_id', $message );
 	}
 
 	// Get array, and create list, of recognized relationship objects.
@@ -250,7 +265,10 @@ function cp_get_object_relationship_ids( $left_object_id, $left_object_type, $ri
 			$item = 'array';
 		}
 
-		return new WP_Error( 'left_object_type', __( 'cp_add_object_relationship() expects parameter 2 to be one of ' . $object_list . '; ' . $item . ' given.' ) );
+		/* translators: 1: List of recognized relationship objects, 2: Integer, object, or array. */
+		$message = sprintf( __( 'cp_add_object_relationship() expects parameter 2 to be one of %s; %s given.' ), $object_list, $item );
+
+		return new WP_Error( 'left_object_type', $message );
 	}
 
 	// Error if $right_object_type is not a non-null string of an appropriate value
@@ -265,7 +283,10 @@ function cp_get_object_relationship_ids( $left_object_id, $left_object_type, $ri
 			$item = 'array';
 		}
 
-		return new WP_Error( 'left_object_type', __( 'cp_add_object_relationship() expects parameter 3 to be one of ' . $object_list . '; ' . $item . ' given.' ) );
+		/* translators: 1: List of recognized relationship objects, 2: Integer, object, or array. */
+		$message = sprintf( __( 'cp_add_object_relationship() expects parameter 3 to be one of %s; %s given.' ), $object_list, $item );
+
+		return new WP_Error( 'left_object_type', $message );
 	}
 
 	// Good to go, so query database table.
@@ -330,7 +351,10 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 			$item = 'array';
 		}
 
-		return new WP_Error( 'left_object_id', __( 'cp_add_object_relationship() expects parameter 1 to be a positive integer, ' . $item . ' given.' ) );
+		/* translators: %s: String, 0, object, or array. */
+		$message = sprintf( __( 'cp_add_object_relationship() expects parameter 1 to a positive integer; %s given.' ), $item );
+
+		return new WP_Error( 'left_object_id', $message );
 	}
 
 	// Error if $right_object_id is not a positive integer
@@ -345,7 +369,10 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 			$item = 'array';
 		}
 
-		return new WP_Error( 'right_object_id', __( 'cp_add_object_relationship() expects parameter 4 to be a positive integer, ' . $item . ' given.' ) );
+		/* translators: %s: String, 0, object, or array. */
+		$message = sprintf( __( 'cp_add_object_relationship() expects parameter 4 to a positive integer; %s given.' ), $item );
+
+		return new WP_Error( 'right_object_id', $message );
 	}
 
 	// Get array, and create list, of recognized relationship objects.
@@ -364,7 +391,10 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 			$item = 'array';
 		}
 
-		return new WP_Error( 'left_object_type', __( 'cp_add_object_relationship() expects parameter 2 to be one of ' . $object_list . ', ' . $item . ' given.' ) );
+		/* translators: 1: List of recognized relationship objects, 2: Integer, object, or array. */
+		$message = sprintf( __( 'cp_add_object_relationship() expects parameter 2 to be one of %s; %s given.' ), $object_list, $item );
+
+		return new WP_Error( 'left_object_type', $message );
 	}
 
 	// Error if $right_object_type is not a non-null string of an appropriate value.
@@ -379,7 +409,10 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 			$item = 'array';
 		}
 
-		return new WP_Error( 'left_object_type', __( 'cp_add_object_relationship() expects parameter 3 to be one of ' . $object_list . ', ' . $item . ' given.' ) );
+		/* translators: 1: List of recognized relationship objects, 2: Integer, object, or array. */
+		$message = sprintf( __( 'cp_add_object_relationship() expects parameter 3 to be one of %s; %s given.' ), $object_list, $item );
+
+		return new WP_Error( 'left_object_type', $message );
 	}
 
 	// Good to go, so query database table.
