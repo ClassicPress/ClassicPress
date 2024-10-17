@@ -712,26 +712,21 @@ class wpdb {
 	private $allow_unsafe_unquoted_parameters = true;
 
 	/**
-<<<<<<< HEAD
-	 * Whether to use mysqli over mysql. Default false.
-	 *
-	 * @since 3.9.0
-	 * @since CP-2.0.0 Defaults to true for backward compatibility.
-=======
-	 * Whether to use the mysqli extension over mysql. This is no longer used as the mysql
+	 * Whether to use the mysqli extension over mysql. This setting is no longer used as the mysql
 	 * extension is no longer supported.
 	 *
-	 * Default true.
+	 * Default true for backward compatibility with ClassicPress.
 	 *
 	 * @since 3.9.0
 	 * @since 6.4.0 This property was removed.
 	 * @since 6.4.1 This property was reinstated and its default value was changed to true.
 	 *              The property is no longer used in core but may be accessed externally.
->>>>>>> 8c2c762e23 (Database: Reinstate wpdb::$use_mysqli property.)
+	 * @since CP-2.0.0 Defaults to true for backward compatibility.
 	 *
 	 * @var bool
 	 */
 	private $use_mysqli = true;
+
 
 	/**
 	 * Whether we've managed to successfully connect at some point.
