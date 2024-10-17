@@ -151,3 +151,4 @@ class wpdb {
    * @since 0.71
    *
    * @var
+   */
