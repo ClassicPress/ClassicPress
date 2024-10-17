@@ -207,10 +207,10 @@ class WP_Media_List_Table extends WP_List_Table {
 	 *
 	 * @param string $post_type Post type slug.
 	 */
-	protected function media_categories_dropdown( $post_type ) {
+	public function media_categories_dropdown( $post_type ) {
 
 		/**
-		 * Filters whether to remove the 'Media Categories' drop-down from the post list table.
+		 * Filters whether to remove the 'Media Categories' drop-down from the media list table or grid.
 		 *
 		 * @since CP-2.2.0
 		 *

@@ -34,7 +34,7 @@ for ( split /\r?\n/, $diff ) {
 	if ( $op eq '+' ) {
 		# File present in build/ but not in src/
 		next if $fn eq 'wp-config-sample.php';
-		next if $fn eq 'wp-includes/js/tinymce/wp-tinymce.js.gz';
+		next if $fn eq 'wp-includes/js/tinymce/wp-tinymce.min.js';
 		next if $fn eq 'wp-includes/js/wp-emoji-release.min.js';
 		next if $fn =~ /^wp-admin\/css\/colors\/[a-z]+\/colors(-rtl)?(\.min)?\.css$/;
 		# Minified and RTL files
@@ -46,7 +46,6 @@ for ( split /\r?\n/, $diff ) {
 		}
 	} else {
 		# File present in src/ but not in build/
-		next if $fn eq 'wp-content/plugins/hello.php';
 		next if $fn eq 'wp-includes/js/backbone.js';
 		next if $fn eq 'wp-includes/js/underscore.js';
 		next if $fn eq 'wp-includes/js/jquery/jquery.masonry.js';

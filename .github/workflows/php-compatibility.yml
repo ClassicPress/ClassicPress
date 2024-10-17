@@ -38,6 +38,14 @@ jobs:
           coverage: none
           tools: composer, cs2pr
 
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          composer-options: "--no-progress --no-ansi --no-interaction"
+
+      - name: Make Composer packages available globally
+        run: echo "${PWD}/vendor/bin" >> $GITHUB_PATH
+
       - name: Show debug information
         run: |
           set +e
@@ -52,14 +60,6 @@ jobs:
           composer --version
           grunt --version
           mysql --version
-
-      - name: Install Composer dependencies
-        uses: ramsey/composer-install@v3
-        with:
-          composer-options: "--no-progress --no-ansi --no-interaction"
-
-      - name: Make Composer packages available globally
-        run: echo "${PWD}/vendor/bin" >> $GITHUB_PATH
 
       - name: Log PHPCS debug information
         run: phpcs -i

@@ -24,7 +24,9 @@ module.exports = function(grunt) {
 		headless: 'new',
 		args: [
 			'--site-per-process',
-			'--disable-web-security'
+			'--disable-web-security',
+			'--no-sandbox',
+			'--disable-setuid-sandbox'
 		]
 	};
 
@@ -300,6 +302,7 @@ module.exports = function(grunt) {
 				ext: '.css',
 				src: ['wp-admin/css/colors/*/colors.scss'],
 				options: {
+					api: 'modern',
 					implementation: require( 'sass' )
 				}
 			}
@@ -770,7 +773,7 @@ module.exports = function(grunt) {
 					`${BUILD_DIR}wp-includes/js/tinymce/themes/modern/theme.min.js`,
 					`${BUILD_DIR}wp-includes/js/tinymce/plugins/*/plugin.min.js`
 				],
-				dest: `${BUILD_DIR}wp-includes/js/tinymce/wp-tinymce.js`
+				dest: `${BUILD_DIR}wp-includes/js/tinymce/wp-tinymce.min.js`
 			},
 			emoji: {
 				options: {

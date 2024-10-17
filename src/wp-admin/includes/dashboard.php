@@ -1321,7 +1321,7 @@ function wp_dashboard_events_news() {
 		<ul>
 			<li><a href="https://forums.classicpress.net/" target="_blank"><?php _e( 'Get Help' ); ?> <span aria-hidden="true" class="dashicons dashicons-external"></span></a></li>
 			<li><a href="https://github.com/ClassicPress/ClassicPress/issues/new/choose" target="_blank"><?php _e( 'Feature Requests' ); ?> <span aria-hidden="true" class="dashicons dashicons-external"></span></a></li>
-			<li><a href="https://classicpress.net/volunteer/" target="_blank"><?php _e( 'Volunteer' ); ?> <span aria-hidden="true" class="dashicons dashicons-external"></span></a></li>
+			<li><a href="https://classicpress.net/community/" target="_blank"><?php _e( 'Volunteer' ); ?> <span aria-hidden="true" class="dashicons dashicons-external"></span></a></li>
 			<li><a href="https://classicpress.net/donate/" target="_blank"><?php _e( 'Donate' ); ?> <span aria-hidden="true" class="dashicons dashicons-external"></span></a></li>
 		</ul>
 	</div>

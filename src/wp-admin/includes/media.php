@@ -428,6 +428,17 @@ function media_handle_upload( $file_id, $post_id, $post_data = array(), $overrid
 		// The image sub-sizes are created during wp_generate_attachment_metadata().
 		// This is generally slow and may cause timeouts or out of memory errors.
 		wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $file ) );
+
+		/**
+		 * If media storage is by media category, set the appropriate category for the attachment.
+		 *
+		 * @since CP-2.2.0
+		 */
+		$storefolders = get_option( 'uploads_use_yearmonth_folders' );
+		if ( $storefolders === '3' ) {
+			$cat_subfolder = get_option( 'media_cat_upload_folder' );
+			wp_set_object_terms( $attachment_id, array( trim( $cat_subfolder, '/' ) ), 'media_category' ); // using array avoids string splitting
+		}
 	}
 
 	return $attachment_id;
@@ -508,6 +519,17 @@ function media_handle_sideload( $file_array, $post_id = 0, $desc = null, $post_d
 
 	if ( ! is_wp_error( $attachment_id ) ) {
 		wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $file ) );
+
+		/**
+		 * If media storage is by media category, set the appropriate category for the attachment.
+		 *
+		 * @since CP-2.2.0
+		 */
+		$storefolders = get_option( 'uploads_use_yearmonth_folders' );
+		if ( $storefolders === '3' ) {
+			$cat_subfolder = get_option( 'media_cat_upload_folder' );
+			wp_set_object_terms( $attachment_id, array( trim( $cat_subfolder, '/' ) ), 'media_category' ); // using array avoids string splitting
+		}
 	}
 
 	return $attachment_id;
@@ -3876,3 +3898,182 @@ function bulk_edit_attachments( $attachment_data = null ) {
 		'locked'  => $locked,
 	);
 }
+
+/**
+ * Outputs a select box to select upload media category.
+ *
+ * Displays only if media storage option has been set to 'category'.
+ *
+ * @since CP-2.2.0
+ *
+ * @return string
+ */
+function cp_select_upload_media_category() {
+	$media_select = '';
+	$storefolders = get_option( 'uploads_use_yearmonth_folders' );
+	if ( $storefolders === '3' ) {
+		$cat_subfolder = get_option( 'media_cat_upload_folder' );
+
+		$media_terms = get_terms(
+			array(
+				'taxonomy'   => 'media_category',
+				'hide_empty' => false,
+			)
+		);
+
+		if ( ! empty( $media_terms ) ) {
+			$media_select .= '<div class="upload-category"><label for="upload-category"><strong>' . esc_html__( 'Please choose the upload media category' ) . '</strong></label>';
+			$media_select .= '<select id="upload-category" name="upload-category" class="attachment-filters">';
+			$media_select .= '<option value=""' . selected( in_array( $cat_subfolder, array( '', '/' ) ), true, false ) . '>&nbsp;' . esc_html__( 'Select Media Category' ) . '&nbsp;</option>';
+
+			foreach ( $media_terms as $media_term ) {
+				$ancestor_ids = get_ancestors( $media_term->term_id, 'media_category' );
+				$count = count( $ancestor_ids );
+				$spaces = '';
+				$slug = $media_term->slug;
+				if ( $count > 0 ) {
+					foreach ( $ancestor_ids as $ancestor_id ) {
+						$spaces .= '&nbsp;';
+						$slug = get_term( $ancestor_id, 'media_category' )->slug . '/' . $slug;
+					}
+				}
+				$media_select .= '<option class="level-' . esc_attr( $count ) . '" value="' . esc_attr( $slug ) . '"' . selected( '/' . $slug, $cat_subfolder, false ) . '>' . esc_html( $spaces . $media_term->name ) . '</option>';
+			}
+			$media_select .= '</select></div>';
+			$media_select .= wp_nonce_field( 'media-cat-upload', 'media_cat_upload_nonce', true, false );
+		}
+	}
+	return $media_select;
+}
+
+/**
+ * Outputs three dropdown select boxes on the Media Library grid page to filter the items displayed:
+ * a mime type filter, a months-based filter, and a media category filter.
+ *
+ * The media category filter Displays only if the media storage option has been set to 'category'.
+ *
+ * @since CP-2.3.0
+ *
+ * @return string
+ */
+function cp_media_filters() {
+
+	// File type filter
+	$mime_types = wp_get_mime_types();
+
+	$mime_filter = '';
+	if ( ! empty( $mime_types ) ) {
+		$mime_filter .= '<label for="filter-by-type" class="screen-reader-text">' . __( 'Filter by type' ) . '</label>';
+		$mime_filter .= '<select name="post_mime_type" id="filter-by-type">';
+		$mime_filter .= '<option value="">' . __( 'All media items' ) . '</option>';
+
+		$post_mime_types = get_post_mime_types();
+		unset( $post_mime_types['trash'] );
+
+		foreach ( $post_mime_types as $mime_type => $label ) {
+			$mime_filter .= '<option value="' . esc_attr( $mime_type ) . '"' . selected( 'post_mime_type', $mime_type, false ) . '>' .
+				 esc_html( $label[0] ) . '</option>';
+		}
+		$mime_filter .= '</select>';
+	}
+
+	// Delete button
+	$delete_button = '<button type="button" class="button media-button button-primary button-large delete-selected-button hidden" disabled>' . esc_html__( 'Delete permanently' ) . '</button>';
+
+	// Months and media category dropdown select boxes
+	// Use output buffers to keep the order of the select dropdown boxes
+	// consistent with the Media List View
+	$list_table = _get_list_table( 'WP_Media_List_Table' );
+
+	ob_start();
+	$list_table->months_dropdown( 'attachment' );
+	$month_filter = ob_get_clean();
+
+	ob_start();
+	$list_table->media_categories_dropdown( 'attachment' );
+	$media_cat_filter = ob_get_clean();
+
+	// Bulk select button
+	$bulk_button = '<button type="button" class="button media-button button-large select-mode-toggle-button">' . esc_html__( 'Bulk select' ) . '</button>';
+
+	$media_filters = $mime_filter . $delete_button . $month_filter . $media_cat_filter . $bulk_button;
+
+	/**
+	 * Filters the dropdown select boxes and buttons available on the Media Library grid page.
+	 *
+	 * @since CP-2.3.0
+	 *
+	 * @param  string  $mime_filter       Mime type filter dropdown select box.
+	 * @param  string  $delete_button     Button to delete selected items.
+	 * @param  string  $month_filter      Month-based filter dropdown select box.
+	 * @param  string  $media_cat_filter  Media category filter dropdown select box.
+	 * @param  string  $bulk_button       Button to select items in bulk.
+	 *
+	 * @return string  $media_filters     A string of dropdown select boxes and buttons
+	 */
+	return apply_filters( 'cp_media_filters', $media_filters, $mime_filter, $delete_button, $month_filter, $media_cat_filter, $bulk_button );
+}
+
+/**
+ * Adds media categories and media post tags to the array of attachment details.
+ *
+ * @since CP-2.3.0
+ *
+ * @return array
+ */
+function cp_add_cats_and_tags_to_attachment_for_js( $response, $attachment, $meta ) {
+	$cat_terms = get_terms(
+		array(
+			'taxonomy' => 'media_category',
+		)
+	);
+
+	$media_cats = array();
+	if ( ! empty( $cat_terms ) ) {
+		$media_cats = get_terms(
+			array(
+				'taxonomy'   => 'media_category',
+				'object_ids' => $attachment->ID,
+				'fields'     => 'slugs',
+			)
+		);
+	}
+
+	/**
+	 * Filters the media categories included in the array of attachment details.
+	 *
+	 * @since CP-2.3.0
+	 *
+	 * @return array  $media_cats  Media categories
+	 */
+	$response['media_cats'] = apply_filters( 'cp_media_cats_for_js', $media_cats );
+
+	$tag_terms = get_terms(
+		array(
+			'taxonomy' => 'media_post_tag',
+		)
+	);
+
+	$media_tags = array();
+	if ( ! empty( $tag_terms ) ) {
+		$media_tags = get_terms(
+			array(
+				'taxonomy'   => 'media_post_tag',
+				'object_ids' => $attachment->ID,
+				'fields'     => 'slugs',
+			)
+		);
+	}
+
+	/**
+	 * Filters the media tags included in the array of attachment details.
+	 *
+	 * @since CP-2.3.0
+	 *
+	 * @return array  $media_tags  Media tags
+	 */
+	$response['media_tags'] = apply_filters( 'cp_media_tags_for_js', $media_tags );
+
+	return $response;
+}
+add_filter( 'wp_prepare_attachment_for_js', 'cp_add_cats_and_tags_to_attachment_for_js', 10, 3 );

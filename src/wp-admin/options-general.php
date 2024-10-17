@@ -646,7 +646,28 @@ for ( $index = 0; $index <= 2; $index++ ) {
 </p>
 </td>
 </tr>
-
+<tr>
+<th scope="row"><?php _e( 'Disable Emojis' ); ?></th>
+<td> <fieldset><legend class="screen-reader-text"><span>
+	<?php
+	/* translators: Hidden accessibility text. */
+	_e( 'Disable Emojis' );
+	?>
+</span></legend><label for="disable_emojis">
+<input name="disable_emojis" type="checkbox" id="disable_emojis" value="1" <?php checked( '1', get_option( 'disable_emojis' ) ); ?>>
+	<?php _e( 'Emojis disabled' ); ?></label>
+<tr>
+<th scope="row"><?php _e( 'Disable XML-RPC' ); ?></th>
+<td> <fieldset><legend class="screen-reader-text"><span>
+	<?php
+	/* translators: Hidden accessibility text. */
+	_e( 'Disable XML-RPC' );
+	?>
+</span></legend><label for="disable_xml_rpc">
+<input name="disable_xml_rpc" type="checkbox" id="disable_xml_rpc" value="1" <?php checked( '1', get_option( 'disable_xml_rpc' ) ); ?>>
+	<?php _e( 'XML-RPC server disabled' ); ?></label>
+</fieldset></td>
+</tr>
 
 <?php do_settings_fields( 'general', 'default' ); ?>
 </table>

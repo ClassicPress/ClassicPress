@@ -113,6 +113,7 @@ abstract class WP_Ajax_UnitTestCase extends WP_UnitTestCase {
 		'get-post-thumbnail-html',
 		'wp-privacy-export-personal-data',
 		'wp-privacy-erase-personal-data',
+		'media-cat-upload',
 	);
 
 	public static function set_up_before_class() {

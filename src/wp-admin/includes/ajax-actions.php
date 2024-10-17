@@ -2585,6 +2585,37 @@ function wp_ajax_upload_attachment() {
 }
 
 /**
+ * Updates the upload media category.
+ *
+ * Activated only if media storage option has been set to 'category'.
+ *
+ * @since CP-2.2.0
+ */
+function wp_ajax_media_cat_upload() {
+	check_ajax_referer( 'media-cat-upload', 'media_cat_upload_nonce' );
+
+	$response  = __( 'The upload media category folder has been updated.' );
+	$new_value = '';
+
+	if ( isset( $_POST['media_cat_upload_value'] ) ) {
+		$new_value = wp_unslash( $_POST['media_cat_upload_value'] );
+		update_option( 'media_cat_upload_folder', sanitize_url( '/' . $new_value ) );
+
+		if ( $new_value === '' ) {
+			$response = __( 'You need to choose a media category folder before you can upload a file.' );
+		}
+	}
+
+	// Convert array to JSON.
+	wp_send_json_success(
+		array(
+			'value'   => $new_value,
+			'message' => $response,
+		)
+	);
+}
+
+/**
  * Ajax handler for image editing.
  *
  * @since 3.1.0
@@ -3320,7 +3351,7 @@ function wp_ajax_quick_edit_attachment() {
 	</th>
 	<td class="title column-title has-row-actions column-primary" data-colname="' . esc_html__( 'File' ) . '">
 		<strong class="has-media-icon">
-			<a href="' . esc_url( home_url( '/wp-admin/post.php?post=' . $id . '&amp;action=edit' ) ) . '" aria-label="' . esc_attr__( '“' ) . esc_attr( $attachment->post_title ) . esc_attr__( '” (Edit)' ) . '">
+			<a href="' . esc_url( home_url( '/wp-admin/post.php?post=' . $id . '&amp;action=edit' ) ) . '" aria-label="' . esc_attr__( sprintf( '“%s” (Edit)', $attachment->post_title ) ) . '">
 				<span class="media-icon image-icon">
 					<img width="60" height="60" src="' . esc_url( wp_get_attachment_image_src( $id )[0] ) . '" class="attachment-60x60 size-60x60" alt="" decoding="async" loading="lazy">
 				</span>' . esc_html( $attachment->post_title ) . '
@@ -3334,18 +3365,18 @@ function wp_ajax_quick_edit_attachment() {
 		<div class="row-actions">
 			<span class="edit"><a href="' . esc_url( home_url( '/wp-admin/post.php?post=' . $id . '&amp;action=edit' ) ) . '" aria-label="Edit “' . esc_attr( $attachment->post_title ) . '”">' . esc_html__( 'Edit' ) . '</a> | </span>
 
-			<span class="delete"><a href="post.php?action=delete&amp;post=' . $id . '&amp;_wpnonce=' . esc_attr( $nonce ) . '" class="submitdelete aria-button-if-js" onclick="return showNotice.warn();" aria-label="' . esc_attr__( 'Delete “' ) . esc_attr( $attachment->post_title ) . esc_attr__( '” permanently' ) . '" role="button">' . esc_html__( 'Delete Permanently' ) . '</a> | </span>
+			<span class="delete"><a href="post.php?action=delete&amp;post=' . $id . '&amp;_wpnonce=' . esc_attr( $nonce ) . '" class="submitdelete aria-button-if-js" onclick="return showNotice.warn();" aria-label="' . esc_attr__( sprintf( 'Delete “%s” permanently', $attachment->post_title ) ) . '" role="button">' . esc_html__( 'Delete Permanently' ) . '</a> | </span>
 
-			<span class="view"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( 'View “' ) . esc_attr( $attachment->post_title ) . esc_attr__( '”' ) . '" rel="bookmark">' . esc_html__( 'View' ) . '</a> | </span>
+			<span class="view"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'View “%s”', $attachment->post_title ) ) . '" rel="bookmark">' . esc_html__( 'View' ) . '</a> | </span>
 
 			<span class="copy">
 				<span class="copy-to-clipboard-container">
-					<button type="button" class="button-link copy-attachment-url media-library" data-clipboard-text="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( 'Copy “' ) . esc_attr( $attachment->post_title ) . esc_attr__( '” URL to clipboard' ) . '">' . esc_html__( 'Copy URL' ) . '</button>
+					<button type="button" class="button-link copy-attachment-url media-library" data-clipboard-text="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'Copy “%s” URL to clipboard', $attachment->post_title ) ) . '">' . esc_html__( 'Copy URL' ) . '</button>
 					<span class="success hidden" aria-hidden="true">' . esc_html__( 'Copied!' ) . '</span>
-				</span> | 
+				</span> |
 			</span>
 
-			<span class="download"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( 'Download “' ) . esc_attr( $attachment->post_title ) . esc_attr__( '”' ) . '" download="">' . esc_html__( 'Download file' ) . '</a></span>
+			<span class="download"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'Download “%s”', $attachment->post_title ) ) . '" download="">' . esc_html__( 'Download file' ) . '</a></span>
 		</div>
 		<button type="button" class="toggle-row">
 			<span class="screen-reader-text">' . esc_html__( 'Show more details' ) . '</span>
@@ -3359,7 +3390,7 @@ function wp_ajax_quick_edit_attachment() {
 	<td class="taxonomy-media_category column-taxonomy-media_category" data-colname="' . esc_attr__( 'Media Categories' ) . '">' . $media_cats . '</td>
 
 	<td class="taxonomy-media_post_tag column-taxonomy-media_post_tag" data-colname="' . esc_attr__( 'Media Tags' ) . '">' . $media_tags . '</td>
-							
+
 	<td class="thumbnail column-thumbnail" data-colname="' . esc_attr__( 'Featured Image' ) . '">' . $thumbnails . '</td>
 
 	<td class="used_in column-used_in" data-colname="' . esc_attr__( 'Used In' ) . '">' . $used_in . '</td>
@@ -3376,7 +3407,7 @@ function wp_ajax_quick_edit_attachment() {
 			</span>
 		</div>
 	</td>
-						
+
 	<td class="alt column-alt" data-colname="' . esc_attr__( 'Alt Text' ) . '">' . esc_html( $alt ) . '</td>
 	<td class="caption column-caption" data-colname="' . esc_attr__( 'Caption' ) . '">' . esc_html( $attachment->post_excerpt ) . '</td>
 	<td class="desc column-desc" data-colname="' . esc_attr__( 'Description' ) . '">' . esc_html( $attachment->post_content ) . '</td>

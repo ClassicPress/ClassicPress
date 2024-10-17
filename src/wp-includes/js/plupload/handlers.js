@@ -1,6 +1,118 @@
 /* global plupload, pluploadL10n, ajaxurl, post_id, wpUploaderInit, deleteUserSetting, setUserSetting, getUserSetting, shortform */
 var topWin = window.dialogArguments || opener || parent || top, uploader, uploader_init;
 
+/**
+ * Choose media category upload folder if media uploads are organized by media category.
+ *
+ * @since CP-2.2.0
+ */
+document.addEventListener( 'DOMContentLoaded', function() {
+	var uploadCatSelect = document.getElementById( 'upload-category' ),
+		plUploader = document.getElementById( 'plupload-upload-ui' ),
+		asyncUploader = document.getElementById( 'async-upload-wrap' );
+
+	// Ensure that nothing can be uploaded if the media upload category has not been set.
+	if ( uploadCatSelect != null ) {
+		if ( uploadCatSelect.value == '' ) {
+			plUploader.setAttribute( 'inert', true );
+			asyncUploader.setAttribute( 'inert', true );
+
+			// Prevent uploading file into browser window
+			window.addEventListener( 'dragover', function( e ) {
+				e.preventDefault();
+			}, false );
+			window.addEventListener( 'drop', function( e ) {
+				e.preventDefault();
+			}, false );
+		}
+
+		// Set up variables when a change of upload category is made.
+		uploadCatSelect.addEventListener( 'change', function( e ) {
+			var div,
+				uploadCatFolder = new URLSearchParams( {
+					action: 'media-cat-upload',
+					option: 'media_cat_upload_folder',
+					media_cat_upload_value: e.target.value,
+					media_cat_upload_nonce: document.getElementById( 'media_cat_upload_nonce' ).value
+				} );
+
+			// Prevent accumulation of notices.
+			if ( document.getElementById( 'message' ) != null ) {
+				document.getElementById( 'message' ).remove();
+			}
+
+			// Update upload category.
+			fetch( ajaxurl, {
+				method: 'POST',
+				body: uploadCatFolder,
+				credentials: 'same-origin'
+			} )
+			.then( function( response ) {
+				if ( response.ok ) {
+					return response.json(); // no errors
+				}
+				throw new Error( response.status );
+			} )
+			.then( function( response ) {
+				if ( response.success ) {
+					if ( response.data.value == '' ) {
+						div = document.createElement( 'div' );
+						div.id = 'message';
+						div.className = 'notice notice-error is-dismissible';
+						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+						document.querySelector( '.wrap h1' ).after( div );
+
+						// Disable uploads.
+						plUploader.setAttribute( 'inert', true );
+						asyncUploader.setAttribute( 'inert', true );
+
+						// Prevent uploading file into browser window
+						window.addEventListener( 'dragover', function( e ) {
+							e.preventDefault();
+						}, false );
+						window.addEventListener( 'drop', function( e ) {
+							e.preventDefault();
+						}, false );
+					} else {
+						div = document.createElement( 'div' );
+						div.id = 'message';
+						div.className = 'updated notice notice-success is-dismissible';
+						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+						document.querySelector( '.wrap h1' ).after( div );
+
+						// Update selected attribute in DOM.
+						uploadCatSelect.childNodes.forEach( function( option ) {
+							if ( option.value === e.target.value ) {
+								option.setAttribute( 'selected', true );
+							} else {
+								option.removeAttribute( 'selected' );
+							}
+						} );
+
+						// Enable uploads.
+						plUploader.removeAttribute( 'inert' );
+						asyncUploader.removeAttribute( 'inert' );
+					}
+				}
+			} )
+			.catch( function( error ) {
+				div = document.createElement( 'div' );
+				div.id = 'message';
+				div.className = 'notice notice-error is-dismissible';
+				div.innerHTML = '<p>' + error + '</p><button class="notice-dismiss" type="button"></button>';
+				document.querySelector( '.wrap h1' ).after( div );
+			} );
+		} );
+
+		// Make notices dismissible.
+		document.addEventListener( 'click', function( e ) {
+			if ( e.target.className === 'notice-dismiss' ) {
+				document.querySelector( '.is-dismissible' ).remove();
+			}
+		} );
+	}
+} );
+
 // Progress and success handlers for media multi uploads.
 function fileQueued( fileObj ) {
 	// Get rid of unused form.

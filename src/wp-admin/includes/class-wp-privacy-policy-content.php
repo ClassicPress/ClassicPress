@@ -534,7 +534,7 @@ final class WP_Privacy_Policy_Content {
 			/* translators: Privacy policy tutorial. */
 			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'In this subsection you should note what analytics package you use, how users can opt out of analytics tracking, and a link to your analytics provider&#8217;s privacy policy, if any.' ) . '</p>';
 			/* translators: Privacy policy tutorial. */
-			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'By default ClassicPress does not collect any analytics data. However, many web hosting accounts collect some anonymous analytics data. You may also have installed a WordPress plugin that provides analytics services. In that case, add information from that plugin here.' ) . '</p>';
+			$strings[] = '<p class="privacy-policy-tutorial">' . __( 'By default ClassicPress does not collect any analytics data. However, many web hosting accounts collect some anonymous analytics data. You may also have installed a plugin that provides analytics services. In that case, add information from that plugin here.' ) . '</p>';
 		}
 
 		/* translators: Default privacy policy heading. */

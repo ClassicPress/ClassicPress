@@ -780,6 +780,7 @@ function set_screen_options() {
 		case 'plugins_per_page':
 		case 'export_personal_data_requests_per_page':
 		case 'remove_personal_data_requests_per_page':
+		case 'media_grid_per_page':
 			// Network admin.
 		case 'sites_network_per_page':
 		case 'users_network_per_page':
