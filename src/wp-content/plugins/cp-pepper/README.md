@@ -1,10 +1,11 @@
 === ClassicPress Pepper Password Plugin ===
 Contributors: ClassicPress Team
 Tags: security, users
-Requires at least: 2.0
+Requires at least: 4.9.15
 Tested up to: 2.2.0
-Requires PHP: 7.2
-Stable tag: 1.0.1
+Requires PHP: 7.4
+Requires CP: 2.2
+Stable tag: 1.0.2
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
