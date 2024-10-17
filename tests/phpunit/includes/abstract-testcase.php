@@ -210,8 +210,8 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	/**
 	 * Allows tests to be skipped on some automated runs.
 	 *
-	 * For test runs on GitHub Actions for something other than trunk,
-	 * we want to skip tests that only need to run for trunk.
+	 * For test runs on GitHub Actions for something other than develop,
+	 * we want to skip tests that only need to run for develop.
 	 */
 	public function skipOnAutomatedBranches() {
 		// https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
@@ -222,8 +222,8 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 			// We're on GitHub Actions.
 			$skipped = array( 'pull_request', 'pull_request_target' );
 
-			if ( in_array( $github_event_name, $skipped, true ) || 'refs/heads/trunk' !== $github_ref ) {
-				$this->markTestSkipped( 'For automated test runs, this test is only run on trunk' );
+			if ( in_array( $github_event_name, $skipped, true ) || 'refs/heads/develop' !== $github_ref ) {
+				$this->markTestSkipped( 'For automated test runs, this test is only run on develop' );
 			}
 		}
 	}
