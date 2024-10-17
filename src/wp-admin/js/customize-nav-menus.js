@@ -74,8 +74,6 @@
 					dataTransfer.setDragImage( ghostImage, 30, 20 );
 				},
 				dataIdAttr: 'data-id', // HTML attribute that is used by the `toArray()` method in OnEnd
-				forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for all webkit browsers
-				//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari only
 
 				// Get position of menu item when chosen
 				onChoose: function( e ) {
