@@ -2471,6 +2471,7 @@ class Tests_DB extends WP_UnitTestCase {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * The wpdb->use_mysqli is true (for now), purely for backwards compatibility reasons.
 	 */
 	public function test_mysqli_is_set() {
@@ -2489,5 +2490,17 @@ class Tests_DB extends WP_UnitTestCase {
 		global $wpdb;
 
 		$this->assertTrue( $wpdb->check_connection( false ) );
+=======
+	 * This private property is no longer used but needs to be retained as it can be
+	 * accessed externally due to the `__get()` magic method.
+	 *
+	 * @ticket 59118
+	 * @ticket 59846
+	 */
+	public function test_use_mysqli_property_access() {
+		global $wpdb;
+
+		$this->assertTrue( $wpdb->use_mysqli );
+>>>>>>> 8c2c762e23 (Database: Reinstate wpdb::$use_mysqli property.)
 	}
 }
