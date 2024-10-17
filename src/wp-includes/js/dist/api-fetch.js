@@ -443,6 +443,7 @@ function createDidHook(hooks, storeKey) {
 /* harmony default export */ var build_module_createDidHook = (createDidHook);
 
 ;// ./node_modules/@wordpress/hooks/build-module/createHooks.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -1289,6 +1290,7 @@ Tannin.prototype.dcnpgettext = function( domain, context, singular, plural, n ) 
 };
 
 ;// ./node_modules/@wordpress/i18n/build-module/create-i18n.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -1568,9 +1570,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
      */
     translation = /** @type {string} */
     /** @type {*} */hooks.applyFilters('i18n.gettext', translation, text, domain);
-    return /** @type {string} */(
-      /** @type {*} */hooks.applyFilters('i18n.gettext_' + getFilterDomain(domain), translation, text, domain)
-    );
+    return /** @type {string} */ /** @type {*} */hooks.applyFilters('i18n.gettext_' + getFilterDomain(domain), translation, text, domain);
   };
 
   /** @type {_x} */
@@ -1590,9 +1590,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
      */
     translation = /** @type {string} */
     /** @type {*} */hooks.applyFilters('i18n.gettext_with_context', translation, text, context, domain);
-    return /** @type {string} */(
-      /** @type {*} */hooks.applyFilters('i18n.gettext_with_context_' + getFilterDomain(domain), translation, text, context, domain)
-    );
+    return /** @type {string} */ /** @type {*} */hooks.applyFilters('i18n.gettext_with_context_' + getFilterDomain(domain), translation, text, context, domain);
   };
 
   /** @type {_n} */
@@ -1613,9 +1611,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
      */
     translation = /** @type {string} */
     /** @type {*} */hooks.applyFilters('i18n.ngettext', translation, single, plural, number, domain);
-    return /** @type {string} */(
-      /** @type {*} */hooks.applyFilters('i18n.ngettext_' + getFilterDomain(domain), translation, single, plural, number, domain)
-    );
+    return /** @type {string} */ /** @type {*} */hooks.applyFilters('i18n.ngettext_' + getFilterDomain(domain), translation, single, plural, number, domain);
   };
 
   /** @type {_nx} */
@@ -1637,9 +1633,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
      */
     translation = /** @type {string} */
     /** @type {*} */hooks.applyFilters('i18n.ngettext_with_context', translation, single, plural, number, context, domain);
-    return /** @type {string} */(
-      /** @type {*} */hooks.applyFilters('i18n.ngettext_with_context_' + getFilterDomain(domain), translation, single, plural, number, context, domain)
-    );
+    return /** @type {string} */ /** @type {*} */hooks.applyFilters('i18n.ngettext_with_context_' + getFilterDomain(domain), translation, single, plural, number, context, domain);
   };
 
   /** @type {IsRtl} */
@@ -2717,6 +2711,7 @@ const fetchAllMiddleware = async (options, next) => {
 /* harmony default export */ var fetch_all_middleware = (fetchAllMiddleware);
 
 ;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/http-v1.js
+/* wp:polyfill */
 /**
  * Set of HTTP methods which are eligible to be overridden.
  *
@@ -3221,7 +3216,7 @@ function apiFetch(options) {
   // ```
   // opts1 => m1( opts1, opts2 => m2( opts2, opts3 => m3( opts3, fetchHandler ) ) );
   // ```
-  const enhancedHandler = middlewares.reduceRight(( /** @type {FetchHandler} */next, middleware) => {
+  const enhancedHandler = middlewares.reduceRight((/** @type {FetchHandler} */next, middleware) => {
     return workingOptions => middleware(workingOptions, next);
   }, fetchHandler);
   return enhancedHandler(options).catch(error => {
