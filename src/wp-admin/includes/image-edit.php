@@ -715,10 +715,10 @@ function image_edit_apply_changes( $image, $changes ) {
 					$w    = $size['width'];
 					$h    = $size['height'];
 
-					$scale = 1 / _image_get_preview_ratio( $w, $h ); // Discard preview scaling.
-					$image->crop( $sel->x * $scale, $sel->y * $scale, $sel->w * $scale, $sel->h * $scale );
+					$scale = isset( $sel->r ) ? $sel->r : 1 / _image_get_preview_ratio( $w, $h ); // Discard preview scaling.
+					$image->crop( (int) ( $sel->x * $scale ), (int) ( $sel->y * $scale ), (int) ( $sel->w * $scale ), (int) ( $sel->h * $scale ) );
 				} else {
-					$scale = 1 / _image_get_preview_ratio( imagesx( $image ), imagesy( $image ) ); // Discard preview scaling.
+					$scale = isset( $sel->r ) ? $sel->r : 1 / _image_get_preview_ratio( imagesx( $image ), imagesy( $image ) ); // Discard preview scaling.
 					$image = _crop_image_resource( $image, $sel->x * $scale, $sel->y * $scale, $sel->w * $scale, $sel->h * $scale );
 				}
 				break;
@@ -809,6 +809,7 @@ function wp_restore_image( $post_id ) {
 				$backup_sizes[ "full-$suffix" ] = array(
 					'width'  => $meta['width'],
 					'height' => $meta['height'],
+					'filesize' => $meta['filesize'],
 					'file'   => $parts['basename'],
 				);
 			}
@@ -820,6 +821,14 @@ function wp_restore_image( $post_id ) {
 		$meta['file']   = _wp_relative_upload_path( $restored_file );
 		$meta['width']  = $data['width'];
 		$meta['height'] = $data['height'];
+		if ( isset( $data['filesize'] ) ) {
+			/*
+			 * Restore the original filesize if it was backed up.
+			 *
+			 * See https://core.trac.wordpress.org/ticket/59684.
+			 */
+			$meta['filesize'] = $data['filesize'];
+		}
 	}
 
 	foreach ( $default_sizes as $default_size ) {
@@ -964,8 +973,9 @@ function wp_save_image( $post_id ) {
 		}
 	}
 
+	$saved_image = wp_save_image_file( $new_path, $img, $post->post_mime_type, $post_id );
 	// Save the full-size file, also needed to create sub-sizes.
-	if ( ! wp_save_image_file( $new_path, $img, $post->post_mime_type, $post_id ) ) {
+	if ( ! $saved_image ) {
 		$return->error = esc_js( __( 'Unable to save the image.' ) );
 		return $return;
 	}
@@ -984,6 +994,7 @@ function wp_save_image( $post_id ) {
 			$backup_sizes[ $tag ] = array(
 				'width'  => $meta['width'],
 				'height' => $meta['height'],
+				'filesize' => $meta['filesize'],
 				'file'   => $basename,
 			);
 		}
@@ -994,6 +1005,7 @@ function wp_save_image( $post_id ) {
 		$size           = $img->get_size();
 		$meta['width']  = $size['width'];
 		$meta['height'] = $size['height'];
+		$meta['filesize'] = $saved_image['filesize'];
 
 		if ( $success ) {
 			$sizes = get_intermediate_image_sizes();
