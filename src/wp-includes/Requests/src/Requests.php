@@ -148,11 +148,7 @@ class Requests {
 	 *
 	 * @var string
 	 */
-<<<<<<< HEAD
-	const VERSION = '2.0.5';
-=======
 	const VERSION = '2.0.9';
->>>>>>> 2130a90861 (External Libraries: Update Requests to `2.0.9`.)
 
 	/**
 	 * Selected transport name
