@@ -220,8 +220,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		Sortable.create( editMenu, {
 			group: 'menu',
 			handle: '.item-move',
-			forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for webkit browsers
-			//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari
 
 			// Get position of menu item when chosen
 			onChoose: function( e ) {

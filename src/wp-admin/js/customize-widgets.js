@@ -1898,8 +1898,6 @@
 					document.body.appendChild( ghostImage );
 					dataTransfer.setDragImage( ghostImage, 30, 20 );
 				},
-				forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for webkit browsers
-				//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari
 				onStart: function( e ) {
 					if ( e.item.querySelector( 'details' ).hasAttribute( 'open' ) ) {
 						e.item.querySelector( 'details' ).removeAttribute( 'open' );
