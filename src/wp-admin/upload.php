@@ -133,6 +133,7 @@ if ( 'grid' === $mode ) {
 			'delete_failed'    => __( 'Failed to delete attachment.' ),
 			'confirm_delete'   => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
 			'confirm_multiple' => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+			'items'            => __( 'items' ),
 		)
 	);
 
