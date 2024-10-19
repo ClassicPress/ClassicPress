@@ -452,9 +452,24 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							pageLink.setAttribute( 'disabled', true );
 							pageLink.setAttribute( 'inert', true );
 						} else if ( pageLink.className.includes( 'next-page' ) ) {
-							pageLink.href = result.headers.max_pages == 1 ? pageLink.href.replace( pageLink.href.split( '?paged=' )[1], 1 ) : pageLink.href.replace( pageLink.href.split( '?paged=' )[1], 2 );
+							if ( result.headers.max_pages === 1 ) {
+								pageLink.href.replace( pageLink.href.split( '?paged=' )[1], 1 );
+								pageLink.setAttribute( 'disabled', true );
+								pageLink.setAttribute( 'inert', true );
+							} else {
+								pageLink.href.replace( pageLink.href.split( '?paged=' )[1], 2 );
+								pageLink.removeAttribute( 'disabled'  );
+								pageLink.removeAttribute( 'inert'  );
+							}
 						} else if ( pageLink.className.includes( 'last-page' ) ) {
 							pageLink.href = pageLink.href.replace( pageLink.href.split( '?paged=' )[1], result.headers.max_pages );
+							if ( result.headers.max_pages === 1 ) {
+								pageLink.setAttribute( 'disabled', true );
+								pageLink.setAttribute( 'inert', true );
+							} else {
+								pageLink.removeAttribute( 'disabled'  );
+								pageLink.removeAttribute( 'inert'  );
+							}
 						}
 						document.getElementById( 'current-page-selector' ).value = 1;
 						document.querySelector( '.total-pages' ).textContent = result.headers.max_pages;
