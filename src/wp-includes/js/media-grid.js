@@ -453,11 +453,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							pageLink.setAttribute( 'inert', true );
 						} else if ( pageLink.className.includes( 'next-page' ) ) {
 							if ( result.headers.max_pages === 1 ) {
-								pageLink.href.replace( pageLink.href.split( '?paged=' )[1], 1 );
+								pageLink.href.replace( pageLink.href.split( '?paged=' )[1], '1' );
 								pageLink.setAttribute( 'disabled', true );
 								pageLink.setAttribute( 'inert', true );
 							} else {
-								pageLink.href.replace( pageLink.href.split( '?paged=' )[1], 2 );
+								pageLink.href.replace( pageLink.href.split( '?paged=' )[1], '2' );
 								pageLink.removeAttribute( 'disabled'  );
 								pageLink.removeAttribute( 'inert'  );
 							}
