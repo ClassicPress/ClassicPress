@@ -446,6 +446,24 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						mediaGrid.appendChild( gridItem );
 					} );
 
+					// Reset pagination
+					document.querySelectorAll( '.pagination-links a' ).forEach( function( pageLink ) {
+						if ( pageLink.className.includes( 'first-page' ) || pageLink.className.includes( 'prev-page' ) ) {
+							pageLink.setAttribute( 'disabled', true );
+							pageLink.setAttribute( 'inert', true );
+						} else if ( pageLink.className.includes( 'next-page' ) ) {
+							pageLink.href = result.headers.max_pages == 1 ? pageLink.href.replace( pageLink.href.split( '?paged=' )[1], 1 ) : pageLink.href.replace( pageLink.href.split( '?paged=' )[1], 2 );
+						} else if ( pageLink.className.includes( 'last-page' ) ) {
+							pageLink.href = pageLink.href.replace( pageLink.href.split( '?paged=' )[1], result.headers.max_pages );
+						}
+						document.getElementById( 'current-page-selector' ).value = 1;
+						document.querySelector( '.total-pages' ).textContent = result.headers.max_pages;
+						document.querySelector( '.displaying-num' ).textContent = result.headers.total_posts + ' ' + _wpMediaGridSettings.items;
+
+						queryParams.set( 'paged', 1 );
+						history.replaceState( null, null, '?' + queryParams.toString() );
+					} );
+
 					// Open modal to show details about file, or select files for deletion
 					document.querySelectorAll( '.media-item' ).forEach( function( item ) {
 						item.addEventListener( 'click', function() {
@@ -460,7 +478,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					// Update the count at the bottom of the page
 					document.querySelector( '.no-media' ).setAttribute( 'hidden', true );
 					document.querySelector( '.load-more-count' ).removeAttribute( 'hidden' );
-					document.querySelector( '.load-more-count' ).textContent = count.replace( /[0-9]+/g, result.data.length );
+					document.querySelector( '.load-more-count' ).textContent = count.replace( /[0-9]+/g, result.headers.total_posts ).replace( /[0-9]+/, result.data.length );
 				}
 			} else {
 				console.error( _wpMediaGridSettings.failed_update, result.data.message );
