@@ -458,7 +458,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						}
 						document.getElementById( 'current-page-selector' ).value = 1;
 						document.querySelector( '.total-pages' ).textContent = result.headers.max_pages;
-						document.querySelector( '.displaying-num' ).textContent = result.headers.total_posts + ' ' + _wpMediaGridSettings.items;
+						document.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, result.headers.total_posts );
 
 						queryParams.set( 'paged', 1 );
 						history.replaceState( null, null, '?' + queryParams.toString() );
