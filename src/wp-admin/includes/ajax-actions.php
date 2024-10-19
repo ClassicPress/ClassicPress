@@ -3046,8 +3046,8 @@ function wp_ajax_query_attachments() {
 	$response = array(
 		'data'    => $posts,
 		'headers' => array(
-			'total_posts' => $total_posts,
-			'max_pages'   => $max_pages,
+			'total_posts' => (int) $total_posts,
+			'max_pages'   => (int) $max_pages,
 		),
 		'success' => true,
 	);
