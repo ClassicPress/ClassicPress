@@ -3052,7 +3052,7 @@ function wp_ajax_query_attachments() {
 		'success' => true,
 	);
 
-	wp_send_json( $response, 200 );
+	wp_send_json( $response );
 }
 
 /**
