@@ -1651,6 +1651,7 @@ function cp_deprecated_scripts() {
 		'thickbox',
 		'clipboard',
 		'hoverIntent',
+		'wp-api',
 	);
 }
 
