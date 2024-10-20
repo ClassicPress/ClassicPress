@@ -462,7 +462,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 								}
 							}
 						} else if ( pageLink.className.includes( 'next-page' ) ) {
-							if ( result.headers.max_pages == paged ) { // == because integer compared to string
+							if ( result.headers.max_pages === parseInt( paged ) ) {
 								pageLink.href.replace( pageLink.href.split( '?paged=' )[1], paged );
 								pageLink.setAttribute( 'disabled', true );
 								pageLink.setAttribute( 'inert', true );								
@@ -473,7 +473,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							}
 						} else if ( pageLink.className.includes( 'last-page' ) ) {
 							pageLink.href = pageLink.href.replace( pageLink.href.split( '?paged=' )[1], result.headers.max_pages );
-							if ( result.headers.max_pages == paged ) { // == because integer compared to string
+							if ( result.headers.max_pages === parseInt( paged ) ) {
 								pageLink.setAttribute( 'disabled', true );
 								pageLink.setAttribute( 'inert', true );
 							} else {
