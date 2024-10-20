@@ -13,6 +13,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		leftIcon = document.getElementById( 'left-dashicon' ),
 		rightIcon = document.getElementById( 'right-dashicon' ),
 		closeButton = document.getElementById( 'dialog-close-button' ),
+		paged = '1',
 		dateFilter = document.getElementById( 'filter-by-date' ),
 		typeFilter = document.getElementById( 'filter-by-type' ),
 		search = document.getElementById( 'media-search-input' ),
@@ -409,6 +410,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			'query[year]': date ? parseInt( date.substr( 0, 4 ), 10 ) : 0,
 			'query[post_mime_type]': type || '',
 			'query[s]': search ? search.value : '',
+			'query[paged]': paged ? paged : '1',
 			'query[media_category_name]': mediaCatSelect ? mediaCatSelect.value : '',
 			'_ajax_nonce': document.getElementById( 'media_grid_nonce' ).value,
 		} );
@@ -449,21 +451,29 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					// Reset pagination
 					document.querySelectorAll( '.pagination-links a' ).forEach( function( pageLink ) {
 						if ( pageLink.className.includes( 'first-page' ) || pageLink.className.includes( 'prev-page' ) ) {
-							pageLink.setAttribute( 'disabled', true );
-							pageLink.setAttribute( 'inert', true );
-						} else if ( pageLink.className.includes( 'next-page' ) ) {
-							if ( result.headers.max_pages === 1 ) {
-								pageLink.href.replace( pageLink.href.split( '?paged=' )[1], '1' );
+							if ( paged === '1' ) {
 								pageLink.setAttribute( 'disabled', true );
 								pageLink.setAttribute( 'inert', true );
 							} else {
-								pageLink.href.replace( pageLink.href.split( '?paged=' )[1], '2' );
+								pageLink.removeAttribute( 'disabled'  );
+								pageLink.removeAttribute( 'inert'  );
+								if ( pageLink.className.includes( 'prev-page' ) ) {
+									pageLink.href.replace( pageLink.href.split( '?paged=' )[1], parseInt( paged - 1 ) );
+								}
+							}
+						} else if ( pageLink.className.includes( 'next-page' ) ) {
+							if ( result.headers.max_pages == paged ) { // == because integer compared to string
+								pageLink.href.replace( pageLink.href.split( '?paged=' )[1], paged );
+								pageLink.setAttribute( 'disabled', true );
+								pageLink.setAttribute( 'inert', true );								
+							} else {
+								pageLink.href.replace( pageLink.href.split( '?paged=' )[1], parseInt( paged + 1 ) );
 								pageLink.removeAttribute( 'disabled'  );
 								pageLink.removeAttribute( 'inert'  );
 							}
 						} else if ( pageLink.className.includes( 'last-page' ) ) {
 							pageLink.href = pageLink.href.replace( pageLink.href.split( '?paged=' )[1], result.headers.max_pages );
-							if ( result.headers.max_pages === 1 ) {
+							if ( result.headers.max_pages == paged ) { // == because integer compared to string
 								pageLink.setAttribute( 'disabled', true );
 								pageLink.setAttribute( 'inert', true );
 							} else {
@@ -471,11 +481,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 								pageLink.removeAttribute( 'inert'  );
 							}
 						}
-						document.getElementById( 'current-page-selector' ).value = 1;
+						document.getElementById( 'current-page-selector' ).value = paged ? paged : 1;
 						document.querySelector( '.total-pages' ).textContent = result.headers.max_pages;
 						document.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, result.headers.total_posts );
 
-						queryParams.set( 'paged', 1 );
+						queryParams.set( 'paged', paged );
 						history.replaceState( null, null, '?' + queryParams.toString() );
 					} );
 
@@ -494,6 +504,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					document.querySelector( '.no-media' ).setAttribute( 'hidden', true );
 					document.querySelector( '.load-more-count' ).removeAttribute( 'hidden' );
 					document.querySelector( '.load-more-count' ).textContent = count.replace( /[0-9]+/g, result.headers.total_posts ).replace( /[0-9]+/, result.data.length );
+
+					// Reset paged variable
+					paged = '1';
 				}
 			} else {
 				console.error( _wpMediaGridSettings.failed_update, result.data.message );
@@ -629,13 +642,24 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	// Add event listeners for changing the selection of items displayed
-	dateFilter.addEventListener( 'change', updateGrid );
 	typeFilter.addEventListener( 'change', updateGrid );
+	dateFilter.addEventListener( 'change', updateGrid );
 	mediaCatSelect.addEventListener( 'change', updateGrid );
 	search.addEventListener( 'input', function() {
 		var searchtimer;
 		clearTimeout( searchtimer );
 		searchtimer = setTimeout( updateGrid, 200 );
+	} );
+
+	// Make pagination work in conjunction with the select dropdowns
+	document.querySelectorAll( '.pagination-links a' ).forEach( function( pageLink ) {
+		pageLink.addEventListener( 'click', function( e ) {
+			if ( typeFilter.value !== '' || dateFilter.value !== '0' || mediaCatSelect.value !== '0' ) {
+				e.preventDefault();
+				paged = pageLink.href.split( '?paged=' )[1];
+				updateGrid();
+			}
+		} );
 	} );
 
 	// Open and close file upload area by clicking Add New button
