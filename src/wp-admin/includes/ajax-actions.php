@@ -2979,6 +2979,7 @@ function wp_ajax_query_attachments() {
 		'post__not_in',
 		'year',
 		'monthnum',
+		'paged',
 	);
 
 	foreach ( get_taxonomies_for_attachments( 'objects' ) as $t ) {
