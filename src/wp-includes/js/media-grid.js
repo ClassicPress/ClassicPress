@@ -458,21 +458,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 								pageLink.removeAttribute( 'disabled'  );
 								pageLink.removeAttribute( 'inert'  );
 								if ( pageLink.className.includes( 'prev-page' ) ) {
-									pageLink.href.replace( pageLink.href.split( '?paged=' )[1], parseInt( paged - 1 ) );
+									pageLink.setAttribute( 'href', pageLink.href.replace( pageLink.href.split( '?paged=' )[1], parseInt( paged ) - 1 ) );
 								}
 							}
 						} else if ( pageLink.className.includes( 'next-page' ) ) {
 							if ( result.headers.max_pages === parseInt( paged ) ) {
-								pageLink.href.replace( pageLink.href.split( '?paged=' )[1], paged );
+								pageLink.setAttribute( 'href', pageLink.href.replace( pageLink.href.split( '?paged=' )[1], paged ) );
 								pageLink.setAttribute( 'disabled', true );
 								pageLink.setAttribute( 'inert', true );								
 							} else {
-								pageLink.href.replace( pageLink.href.split( '?paged=' )[1], parseInt( paged + 1 ) );
+								pageLink.setAttribute( 'href', pageLink.href.replace( pageLink.href.split( '?paged=' )[1], parseInt( paged ) + 1 ) );
 								pageLink.removeAttribute( 'disabled'  );
 								pageLink.removeAttribute( 'inert'  );
 							}
 						} else if ( pageLink.className.includes( 'last-page' ) ) {
-							pageLink.href = pageLink.href.replace( pageLink.href.split( '?paged=' )[1], result.headers.max_pages );
+							pageLink.setAttribute( 'href', pageLink.href.replace( pageLink.href.split( '?paged=' )[1], result.headers.max_pages ) );
 							if ( result.headers.max_pages === parseInt( paged ) ) {
 								pageLink.setAttribute( 'disabled', true );
 								pageLink.setAttribute( 'inert', true );
@@ -481,7 +481,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 								pageLink.removeAttribute( 'inert'  );
 							}
 						}
-						document.getElementById( 'current-page-selector' ).value = paged ? paged : 1;
+						document.getElementById( 'current-page-selector' ).setAttribute( 'value', paged ? paged : 1 );
 						document.querySelector( '.total-pages' ).textContent = result.headers.max_pages;
 						document.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, result.headers.total_posts );
 
