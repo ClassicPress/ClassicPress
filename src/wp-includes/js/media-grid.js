@@ -434,9 +434,23 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					// Clear existing grid
 					mediaGrid.innerHTML = '';
 
+					// Reset pagination
+					document.querySelectorAll( '.pagination-links a' ).forEach( function( pageLink ) {
+						pageLink.setAttribute( 'href', pageLink.href.replace( pageLink.href.split( '?paged=' )[1], 1 ) );
+						pageLink.setAttribute( 'disabled', true );
+						pageLink.setAttribute( 'inert', true );
+					} );
+
+					document.getElementById( 'current-page-selector' ).setAttribute( 'value', 1 );
+					document.querySelector( '.total-pages' ).textContent = 1;
+					document.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, 0 );
+
 					// Update the count at the bottom of the page
 					document.querySelector( '.load-more-count' ).setAttribute( 'hidden', true );
 					document.querySelector( '.no-media' ).removeAttribute( 'hidden' );
+					
+					queryParams.set( 'paged', paged );
+					history.replaceState( null, null, '?' + queryParams.toString() );
 				} else {
 
 					// Clear existing grid
@@ -504,10 +518,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					document.querySelector( '.no-media' ).setAttribute( 'hidden', true );
 					document.querySelector( '.load-more-count' ).removeAttribute( 'hidden' );
 					document.querySelector( '.load-more-count' ).textContent = count.replace( /[0-9]+/g, result.headers.total_posts ).replace( /[0-9]+/, result.data.length );
-
-					// Reset paged variable
-					paged = '1';
 				}
+
+				// Reset paged variable
+				paged = '1';
 			} else {
 				console.error( _wpMediaGridSettings.failed_update, result.data.message );
 			}
