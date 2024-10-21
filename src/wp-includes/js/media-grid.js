@@ -429,10 +429,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} )
 		.then( function( result ) {
 			if ( result.success ) {
-				if ( result.data.length === 0 ) {
 
-					// Clear existing grid
-					mediaGrid.innerHTML = '';
+				// Clear existing grid
+				mediaGrid.innerHTML = '';
+
+				if ( result.data.length === 0 ) {
 
 					// Reset pagination
 					document.querySelectorAll( '.pagination-links a' ).forEach( function( pageLink ) {
@@ -449,12 +450,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					document.querySelector( '.load-more-count' ).setAttribute( 'hidden', true );
 					document.querySelector( '.no-media' ).removeAttribute( 'hidden' );
 					
-					queryParams.set( 'paged', paged );
+					queryParams.set( 'paged', 1 );
 					history.replaceState( null, null, '?' + queryParams.toString() );
 				} else {
-
-					// Clear existing grid
-					mediaGrid.innerHTML = '';
 
 					// Populate grid with new items
 					result.data.forEach( function( attachment ) {
