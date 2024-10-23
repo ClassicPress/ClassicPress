@@ -493,7 +493,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 								pageLink.removeAttribute( 'inert'  );
 							}
 						}
+
+						// Update both HTML and DOM
 						document.getElementById( 'current-page-selector' ).setAttribute( 'value', paged ? paged : 1 );
+						document.getElementById( 'current-page-selector' ).value = paged ? paged : 1;
 						document.querySelector( '.total-pages' ).textContent = result.headers.max_pages;
 						document.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, result.headers.total_posts );
 
@@ -659,6 +662,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	mediaCatSelect.addEventListener( 'change', updateGrid );
 	search.addEventListener( 'input', function() {
 		var searchtimer;
+		clearTimeout( searchtimer );
+		searchtimer = setTimeout( updateGrid, 200 );
+	} );
+	document.getElementById( 'current-page-selector' ).addEventListener( 'change', function( e ) {
+		var searchtimer;
+		paged = e.target.value;
 		clearTimeout( searchtimer );
 		searchtimer = setTimeout( updateGrid, 200 );
 	} );
