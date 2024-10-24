@@ -15,8 +15,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			placeholder: 'sorthelper',
 			handle: 'div.filename',
 			dataIdAttr: 'data-id', // HTML attribute that is used by the `toArray()` method in OnEnd
-			forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for all webkit browsers
-			//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari only
 			fallbackTolerance: 2,
 
 			// Element dropped

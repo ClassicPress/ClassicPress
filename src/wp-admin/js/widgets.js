@@ -9,7 +9,7 @@
 document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Set variables for the whole file
-	var newMultiValue,
+	var newMultiValue, timeNow,
 		widgetList = document.getElementById( 'widget-list' ),
 		sortables = document.querySelectorAll( '.widgets-sortables' ),
 		sidebarWrappers = document.querySelectorAll( '.widgets-holder-wrap' ),
@@ -125,7 +125,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			removeButton.disabled = true;
 		}
 
-		else {
+		else if ( e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' ) {
 
 			// Add chooser
 			if ( e.target.closest( 'ul' ).id === 'widget-list' ) {
@@ -192,7 +192,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		widget.addEventListener( 'keyup', function( e ) {
 			if ( e.target.closest( '.widget-top' ).hasAttribute( 'open' ) && e.key === 'Escape' ) {
 				e.target.closest( '.widget-top' ).removeAttribute( 'open' );
-				document.querySelector( '.chooser' ).classList.remove( 'chooser' );
+				if ( document.querySelector( '.chooser' ) != null ) {
+					document.querySelector( '.chooser' ).classList.remove( 'chooser' );
+				}
 			}
 		} );
 
@@ -227,8 +229,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		},
 		sort: false,
 		setData: ghostImage,
-		forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for webkit browsers
-		//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari
 		onChoose: function( e ) {
 			var multi;
 			if ( e.item.className.includes( 'widget' ) ) {
@@ -281,8 +281,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			filter: 'input, select, textarea, label, button, fieldset, legend, datalist, output, option, optgroup',
 			preventOnFilter: false, // ensures correct position of cursor in input fields
 			setData: ghostImage,
-			forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for webkit browsers
-			//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari
 			onStart: sortableStart,
 			onChange: sortableChange
 		} );
@@ -301,8 +299,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		filter: 'input, select, textarea, label, button, fieldset, legend, datalist, output, option, optgroup',
 		preventOnFilter: false, // ensures correct position of cursor in input fields
 		setData: ghostImage,
-		forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for webkit browsers
-		//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari
 		onStart: sortableStart,
 		onChange: sortableChange,
 		onAdd: function() {
@@ -508,6 +504,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			sidebarId = widget.closest( 'ul.widgets-sortables' ).id,
 			form = widget.querySelector( 'form' ),
 			isAdd = widget.querySelector( 'input.add_new' ).value;
+
+		// Prevent duplicates
+		if ( Number.isInteger( timeNow ) && timeNow + 50 > Date.now() ) {
+			return false;
+		}
+		timeNow = Date.now();
 
 		if ( ! isAdd || form.checkValidity ) {
 
