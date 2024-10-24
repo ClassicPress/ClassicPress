@@ -3043,7 +3043,16 @@ function wp_ajax_query_attachments() {
 	header( 'X-WP-Total: ' . (int) $total_posts );
 	header( 'X-WP-TotalPages: ' . (int) $max_pages );
 
-	wp_send_json_success( $posts );
+	$response = array(
+		'data'    => $posts,
+		'headers' => array(
+			'total_posts' => (int) $total_posts,
+			'max_pages'   => (int) $max_pages,
+		),
+		'success' => true,
+	);
+
+	wp_send_json( $response );
 }
 
 /**
