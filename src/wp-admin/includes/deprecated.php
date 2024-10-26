@@ -1596,7 +1596,7 @@ function image_attachment_fields_to_save( $post, $attachment ) {
  *
  * @return array Array of deprecated script handles.
  */
-function cp_deprecated_scripts() {
+function cp_deprecated_scripts_2_2() {
 	 return array(
 		'prototype',
 		'scriptaculous-root',
@@ -1651,6 +1651,18 @@ function cp_deprecated_scripts() {
 		'thickbox',
 		'clipboard',
 		'hoverIntent',
+	);
+}
+
+/**
+ * Scripts deprecated since CP-2.3.0
+ *
+ * @since CP_2.3.0
+ *
+ * @return array Array of deprecated script handles.
+ */
+function cp_deprecated_scripts_2_3() {
+	return array(
 		'wp-api',
 	);
 }
@@ -1681,8 +1693,8 @@ function cp_deprecated_styles() {
  * @since CP-2.2.0.
  */
 function _cp_deprecate_wp_enqueue_scripts() {
-	$deprecated_scripts = cp_deprecated_scripts();
-	foreach ( $deprecated_scripts as $deprecated_script ) {
+	$deprecated_scripts_2_2 = cp_deprecated_scripts_2_2();
+	foreach ( $deprecated_scripts_2_2 as $deprecated_script ) {
 		if ( wp_script_is( $deprecated_script, 'enqueued' ) ) {
 			$message = sprintf(
 				/* translators: 1: Script handle. 2: URL for more information. */
@@ -1691,6 +1703,19 @@ function _cp_deprecate_wp_enqueue_scripts() {
 				'https://www.classicpress.net/deprecated-scripts/'
 			);
 			_deprecated_argument( 'wp_enqueue_script', 'CP-2.2.0', $message );
+		}
+	}
+
+	$deprecated_scripts_2_3 = cp_deprecated_scripts_2_3();
+	foreach ( $deprecated_scripts_2_3 as $deprecated_script ) {
+		if ( wp_script_is( $deprecated_script, 'enqueued' ) ) {
+			$message = sprintf(
+				/* translators: 1: Script handle. 2: URL for more information. */
+				__( 'The enqueued script %1$s has been deprecated. It will be removed in version 3.0.0 of ClassicPress. Further details may be found at %2$s.' ),
+				$deprecated_script,
+				'https://www.classicpress.net/deprecated-scripts/'
+			);
+			_deprecated_argument( 'wp_enqueue_script', 'CP-2.3.0', $message );
 		}
 	}
 
@@ -1703,7 +1728,7 @@ function _cp_deprecate_wp_enqueue_scripts() {
 				$deprecated_style,
 				'https://www.classicpress.net/deprecated-scripts/'
 			);
-			_deprecated_argument( 'wp_enqueue_style', 'CP-2.2.0', $message );
+			_deprecated_argument( 'wp_enqueue_style', 'CP-2.2.0/CP-2.3.0', $message );
 		}
 	}
 }
