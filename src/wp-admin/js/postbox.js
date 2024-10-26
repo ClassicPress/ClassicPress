@@ -146,8 +146,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		Sortable.create( document.getElementById( column.id ), {
 			group: 'widgets',
 			handle: '.hndle',
-			forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for webkit browsers
-			//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari
 			onStart: dragStart,
 			onEnd: dragEnd,
 			onChange: updateLocations
