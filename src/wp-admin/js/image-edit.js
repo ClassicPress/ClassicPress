@@ -715,7 +715,7 @@
 				index = 0;
 
 			if ( elementToSetFocusTo == null ) {
-				tabbables = [ ...wrap.querySelectorAll( 'button', 'input[type="button"]' ) ];
+				tabbables = [ ...wrap.querySelectorAll( 'button' ) ];
 
 				elementToSetFocusTo = tabbables[ index ];
 				while ( ! isVisible( tabbables[ index ] ) ) {
@@ -724,7 +724,7 @@
 				}
 			}
 			elementToSetFocusTo.focus();
-		}, 100 );
+		}, 200 );
 	},
 
 	/**
