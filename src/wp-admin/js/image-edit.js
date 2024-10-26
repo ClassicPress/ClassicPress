@@ -715,7 +715,7 @@
 				index = 0;
 
 			if ( elementToSetFocusTo == null ) {
-				tabbables = [ ...wrap.querySelectorAll( 'button' ) ];
+				tabbables = [ ...wrap.querySelectorAll( 'button', 'input[type="button"]' ) ];
 
 				elementToSetFocusTo = tabbables[ index ];
 				while ( ! isVisible( tabbables[ index ] ) ) {
