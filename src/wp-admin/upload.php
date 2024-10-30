@@ -206,6 +206,7 @@ if ( 'grid' === $mode ) {
 		'paged'          => $paged,
 	);
 	$attachments = new WP_Query( $attachment_args );
+	$author = $author_link = '';
 
 	$total_pages = (int) $attachments->max_num_pages;
 	$prev_page   = ( $paged === 1 ) ? $paged : $paged - 1;
