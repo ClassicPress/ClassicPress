@@ -401,7 +401,7 @@ if ( 'grid' === $mode ) {
 					$file_type    = $meta['type'];
 					$subtype      = $meta['subtype'];
 					$mime_type    = $meta['mime'];
-					$size         = $meta['filesizeHumanReadable'];
+					$size         = ! empty( $meta['filesizeHumanReadable'] ) ? $meta['filesizeHumanReadable'] : '';
 					$alt          = $meta['alt'];
 					$caption      = $meta['caption'];
 					$description  = $meta['description'];
