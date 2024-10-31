@@ -37,8 +37,8 @@
     "moment": "^2.29.4",
     "postcss": "8.4.47",
     "qunit": "^2.19.4",
-    "rollup": "4.24.0",
-    "sass": "1.80.1",
+    "rollup": "4.24.3",
+    "sass": "1.80.5",
     "sinon": "^19.0.0",
     "sinon-test": "^3.1.5",
     "source-map-loader": "^5.0.0",
@@ -48,12 +48,12 @@
     "webpack": "5.95.0"
   },
   "dependencies": {
-    "@wordpress/a11y": "4.10.0",
-    "@wordpress/api-fetch": "7.10.0",
-    "@wordpress/dom-ready": "4.10.0",
-    "@wordpress/hooks": "4.10.0",
-    "@wordpress/i18n": "5.10.0",
-    "@wordpress/url": "4.10.0"
+    "@wordpress/a11y": "4.11.0",
+    "@wordpress/api-fetch": "7.11.0",
+    "@wordpress/dom-ready": "4.11.0",
+    "@wordpress/hooks": "4.11.0",
+    "@wordpress/i18n": "5.11.0",
+    "@wordpress/url": "4.11.0"
   },
   "collective": {
     "type": "opencollective",
