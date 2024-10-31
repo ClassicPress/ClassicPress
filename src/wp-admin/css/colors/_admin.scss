@@ -1,7 +1,12 @@
 
 @use 'sass:color';
 @use 'sass:string';
-@forward 'variables' show $scheme-name, $base-color, $body-background, $highlight-color, $notification-color, $form-checked, $icon-color, $text-color, $dashboard-accent-1, $dashboard-accent-2, $dashboard-icon-background, $button-color, $menu-highlight-text, $menu-highlight-icon, $menu-highlight-background, $menu-submenu-background, $menu-submenu-focus-text, $menu-submenu-text, $menu-bubble-text, $menu-collapse-text, $menu-collapse-focus-icon, $link, $link-focus, $low-contrast-theme;
+@forward 'variables' show
+	$scheme-name, $base-color, $body-background, $highlight-color, $notification-color, $form-checked,
+	$icon-color, $text-color, $dashboard-accent-1, $dashboard-accent-2, $dashboard-icon-background,
+	$button-color, $menu-highlight-text, $menu-highlight-icon, $menu-highlight-background,
+	$menu-submenu-background, $menu-submenu-focus-text, $menu-submenu-text, $menu-bubble-text,
+	$menu-collapse-text, $menu-collapse-focus-icon, $link, $link-focus, $low-contrast-theme;
 @use 'variables';
 @use 'mixins';
 
