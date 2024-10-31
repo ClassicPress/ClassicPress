@@ -724,7 +724,7 @@
 				}
 			}
 			elementToSetFocusTo.focus();
-		}, 100 );
+		}, 200 );
 	},
 
 	/**
