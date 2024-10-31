@@ -320,12 +320,13 @@
 	line-height: 1.5;
 	color: #646970;
 }
-.media-modal .delete-attachment,
-.media-modal .trash-attachment,
-.media-modal .untrash-attachment {
+#media-modal .delete-attachment,
+#media-modal .trash-attachment,
+#media-modal .untrash-attachment {
 	display: inline;
 	padding: 0;
 	color: #d63638;
+	text-decoration: none;
 }
 #dialog-close-button {
 	top: 0;
