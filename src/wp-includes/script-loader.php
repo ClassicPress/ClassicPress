@@ -825,11 +825,11 @@ function wp_default_scripts( $scripts ) {
 	did_action( 'init' ) && $scripts->localize( 'wp-plupload', 'pluploadL10n', $uploader_l10n );
 
 	// FilePond uploader
-	$scripts->add( 'cp-filepond-file-validate-size', '/wp-includes/js/filepond/filepond-plugin-file-validate-size.js', array(), '2.2.8' );
-	$scripts->add( 'cp-filepond-file-validate-type', '/wp-includes/js/filepond/filepond-plugin-file-validate-type.js', array(), '1.2.9' );
-	$scripts->add( 'cp-filepond-file-rename', '/wp-includes/js/filepond/filepond-plugin-file-rename.js', array(), '1.1.8' );
-	$scripts->add( 'cp-filepond-plugin-image-preview', '/wp-includes/js/filepond/filepond-plugin-image-preview.js', array(), '4.6.12' );
-	$scripts->add( 'cp-filepond', '/wp-includes/js/filepond/cp-filepond.js', array(), '4.31.2' );
+	$scripts->add( 'cp-filepond-file-validate-size', "/wp-includes/js/filepond/filepond-plugin-file-validate-size$suffix.js", array(), '2.2.8' );
+	$scripts->add( 'cp-filepond-file-validate-type', "/wp-includes/js/filepond/filepond-plugin-file-validate-type$suffix.js", array(), '1.2.9' );
+	$scripts->add( 'cp-filepond-file-rename', "/wp-includes/js/filepond/filepond-plugin-file-rename$suffix.js", array(), '1.1.8' );
+	$scripts->add( 'cp-filepond-plugin-image-preview', "/wp-includes/js/filepond/filepond-plugin-image-preview$suffix.js", array(), '4.6.12' );
+	$scripts->add( 'cp-filepond', "/wp-includes/js/filepond/cp-filepond$suffix.js", array(), '4.31.2' );
 
 	$scripts->add( 'comment-reply', "/wp-includes/js/comment-reply$suffix.js", array(), false, 1 );
 
