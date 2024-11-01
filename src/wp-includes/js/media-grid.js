@@ -14,7 +14,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		rightIcon = document.getElementById( 'right-dashicon' ),
 		closeButton = document.getElementById( 'dialog-close-button' ),
 		paged = '1',
-		dateFilter = document.getElementById( 'filter-by-date' ),
+		dateFilter = document.getElementById( 'filter-by-date' ) ? document.getElementById( 'filter-by-date' ) : '',
 		typeFilter = document.getElementById( 'filter-by-type' ),
 		search = document.getElementById( 'media-search-input' ),
 		mediaCatSelect = document.getElementById( 'taxonomy=media_category&term' ),
@@ -658,7 +658,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Add event listeners for changing the selection of items displayed
 	typeFilter.addEventListener( 'change', updateGrid );
-	dateFilter.addEventListener( 'change', updateGrid );
+	if ( dateFilter ) {
+		dateFilter.addEventListener( 'change', updateGrid );
+	}
 	mediaCatSelect.addEventListener( 'change', updateGrid );
 	search.addEventListener( 'input', function() {
 		var searchtimer;
