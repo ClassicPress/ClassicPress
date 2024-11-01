@@ -317,7 +317,6 @@ table.fixed {
 
 .fixed .column-role,
 .fixed .column-posts {
-	-webkit-hyphens: auto;
 	hyphens: auto;
 }
 
