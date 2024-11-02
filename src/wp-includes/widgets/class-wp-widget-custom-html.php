@@ -220,6 +220,7 @@ class WP_Widget_Custom_HTML extends WP_Widget {
 	public function form( $instance ) {
 		$instance = wp_parse_args( (array) $instance, $this->default_instance );
 		?>
+
 		<fieldset>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title:' ); ?></label>
 			<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" class="widefat" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>">
@@ -235,14 +236,14 @@ class WP_Widget_Custom_HTML extends WP_Widget {
 			$allowed_html         = wp_kses_allowed_html( 'post' );
 			$disallowed_html      = array_diff( $probably_unsafe_html, array_keys( $allowed_html ) );
 			if ( ! empty( $disallowed_html ) ) {
-			?>
+				?>
 
 				<fieldset>
 					<?php _e( 'Some HTML tags are not permitted, including:' ); ?>
 					<code><?php echo implode( '</code>, <code>', $disallowed_html ); ?></code>
 				</fieldset>
 
-			<?php
+				<?php
 			}
 		}
 	}
