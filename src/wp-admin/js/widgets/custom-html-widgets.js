@@ -25,7 +25,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					autoCloseBrackets: true,
 					matchBrackets: true,
 					foldGutter: true,
-					gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+					gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']
 				}
 			} );
 
