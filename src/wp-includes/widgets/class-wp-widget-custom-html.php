@@ -206,19 +206,8 @@ class WP_Widget_Custom_HTML extends WP_Widget {
 		$widget_id = 'widget-' . $this->id_base . '-' . $this->number . '-content';
 
 		wp_enqueue_code_editor( array( 'type' => 'text/html' ) );
-        wp_enqueue_script( 'wp-codemirror' );
+		wp_enqueue_script( 'wp-codemirror' );
 		wp_enqueue_script( 'custom-html-widgets' );
-
-		$l10n = array(
-			'errorNotice' => array(
-				/* translators: %d: Error count. */
-				'singular' => _n( 'There is %d error which must be fixed before you can save.', 'There are %d errors which must be fixed before you can save.', 1 ),
-				/* translators: %d: Error count. */
-				'plural'   => _n( 'There is %d error which must be fixed before you can save.', 'There are %d errors which must be fixed before you can save.', 2 ),
-				// @todo This is lacking, as some languages have a dedicated dual form. For proper handling of plurals in JS, see #20491.
-			),
-		);
-		wp_add_inline_script( 'custom-html-widgets', sprintf( 'jQuery.extend( wp.customHtmlWidgets.l10n, %s );', wp_json_encode( $l10n ) ), 'after' );
 	}
 
 	/**
