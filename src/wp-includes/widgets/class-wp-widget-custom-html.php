@@ -203,8 +203,6 @@ class WP_Widget_Custom_HTML extends WP_Widget {
 			return;
 		}
 
-		$widget_id = 'widget-' . $this->id_base . '-' . $this->number . '-content';
-
 		wp_enqueue_code_editor( array( 'type' => 'text/html' ) );
 		wp_enqueue_script( 'wp-codemirror' );
 		wp_enqueue_script( 'custom-html-widgets' );
