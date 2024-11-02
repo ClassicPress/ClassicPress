@@ -211,7 +211,7 @@ class WP_Widget_Custom_HTML extends WP_Widget {
 	/**
 	 * Outputs the Custom HTML widget settings form.
 	 *
-	 * @since 4.8.1
+	 * @since CP-2.3.0
 	 *
 	 * @see WP_Widget_Custom_HTML::render_control_template_scripts()
 	 *
@@ -245,10 +245,6 @@ class WP_Widget_Custom_HTML extends WP_Widget {
 			<?php
 			}
 		}
-		?>
-
-		<div class="code-editor-error-container"></div>
-	<?php
 	}
 
 	/**
