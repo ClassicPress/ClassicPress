@@ -807,7 +807,7 @@ div#widgets-right .widget-top:hover,
 .text-widget-fields .wp-pointer .wp-pointer-buttons {
 	line-height: 1.4;
 }
-
+.CodeMirror-wrap,
 .custom-html-widget-fields > p > .CodeMirror {
 	border: 1px solid #dcdcde;
 }
