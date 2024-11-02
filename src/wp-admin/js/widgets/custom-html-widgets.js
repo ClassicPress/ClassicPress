@@ -10,9 +10,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function initCodeMirror( textarea ) {
 		if ( textarea && wp.codeEditor ) {
 
-			// Check if CodeMirror is already initialized for this textarea
-			if ( codeMirrorInstances[textarea.id] ) {
-				codeMirrorInstances[textarea.id].codemirror.toTextArea(); // Remove existing instance
+			// Within the Customizer only, check if CodeMirror is already initialized for this textarea
+			if ( document.body.className.includes( 'wp-customizer' ) ) {
+				if ( codeMirrorInstances[textarea.id] !== undefined ) {
+					codeMirrorInstances[textarea.id].codemirror.toTextArea(); // Remove existing instance
+				}
 			}
 
 			var editor = wp.codeEditor.initialize( textarea, {
@@ -36,6 +38,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				textarea.value = cm.getValue();
 				textarea.dispatchEvent( new Event( 'change', { bubbles: true } ) );
 			} );
+
+			// Specify explicit values for when a new widget is added in the Customizer
+			textarea.parentNode.querySelector( '.CodeMirror-sizer' ).style.marginLeft = '39px';
+			textarea.parentNode.querySelector( '.CodeMirror-gutter.CodeMirror-linenumbers' ).style.width = '29px';
 		}
 	}
 
@@ -46,7 +52,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	}
 
-	// Trigger 'widget-added' event on page load
+	// Trigger 'widget-added' event when the widget is first opened
 	widgetContainerWraps.forEach( function( wrap ) {
 		wrap.querySelectorAll( 'input.id_base[value="custom_html"]' ).forEach( function( input ) {
 			input.closest( 'details' ).addEventListener( 'toggle', function() {
