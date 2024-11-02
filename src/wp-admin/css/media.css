@@ -744,7 +744,6 @@ border color while dragging a file over the uploader drop area */
 }
 
 .edit-attachment-frame .attachment-details {
-	position: absolute;
 	overflow: auto;
 	top: 0;
 	bottom: 0;
