@@ -821,6 +821,9 @@ ul.CodeMirror-hints {
 .widget-control-actions .custom-html-widget-save-button.button.validation-blocked {
 	cursor: not-allowed;
 }
+.widget-content fieldset {
+	margin: 1em 0;
+}
 
 /* =Media Queries
 -------------------------------------------------------------- */
