@@ -2,11 +2,10 @@
  * @output wp-admin/js/widgets/text-widgets.js
  */
 
-/* global wp, tinymce, switchEditors */
+/* global wp, tinymce */
 /* eslint consistent-this: [ "error", "control" ] */
 
 document.addEventListener( 'DOMContentLoaded', function() {
-	var widgetContainerWraps = document.querySelectorAll( '.widgets-holder-wrap:not(#available-widgets)' );
 
 	function initTextWidget( textarea ) {
 		
