@@ -1,9 +1,7 @@
 <?php
 /**
  * @group pluggable
- * @group mail
- *
- * @covers ::wp_mail
+ * @group password
  */
 class Tests_Pluggable_wpCheckPassword extends WP_UnitTestCase {
 	public function set_up() {
@@ -11,7 +9,7 @@ class Tests_Pluggable_wpCheckPassword extends WP_UnitTestCase {
 	}
 
 	public function tear_down() {
-		reset_phpmailer_instance();
+		parent::tear_down();
 	}
 
 	public function test_password_check_passes_valid_password_and_hash() {
