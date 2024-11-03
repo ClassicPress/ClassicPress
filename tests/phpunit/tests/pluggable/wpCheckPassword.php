@@ -42,32 +42,31 @@ class Tests_Pluggable_wpCheckPassword extends WP_UnitTestCase {
 
 	public function test_wp_check_password_does_not_reset_application_password() {
 		$valid_password = 'validpassword';
-		$hash           = wp_hash_password( $valid_password );
+		$original_hash  = wp_hash_password( $valid_password );
 
-		// create a user and set their normal password and an application
-		// password
+		// create a user and set their password
 		$user_id = $this->factory()->user->create(
 			array(
 				'user_pass' => $valid_password,
 			)
 		);
 
-		// check the user password
-		$this->assertTrue( wp_check_password( $valid_password, $hash, $user_id ) );
+		// get the stored user password hash
+		$user                = get_user_by( 'id', $user_id );
+		$stored_hash_initial = $user->user_pass;
 
-		// verify user password hash matches the one we set
-		$user = get_user_by( 'id', $user_id );
-		$this->assertSame( $hash, $user->user_pass );
+		// check the password, not passing the user
+		$this->assertTrue( wp_check_password( $valid_password, $original_hash ) );
+		// check the stored password hash passes for the password
+		$this->assertTrue( wp_check_password( $valid_password, $stored_hash_initial ) );
 
-		// create an application password for the user
-		$app_pass      = WP_Application_Passwords::create_new_application_password( $user_id, array( 'name' => 'testapp' ) );
-		$app_pass_hash = wp_hash_password( $app_pass[0] );
+		$other_pass      = 'otherpassword';
+		$other_pass_hash = wp_hash_password( $other_pass );
+		$this->assertTrue( wp_check_password( $other_pass, $other_pass_hash, $user_id ) );
 
-		// check the application password
-		$this->assertTrue( wp_check_password( $app_pass[0], $app_pass_hash, $user_id ) );
-
-		// check if the user password hash has not changed from the one we set
-		$user = get_user_by( 'id', $user_id );
-		$this->assertSame( $hash, $user->user_pass );
+		// get updated user password hash
+		$user               = get_user_by( 'id', $user_id );
+		$stored_hash_latest = $user->user_pass;
+		$this->assertSame( $stored_hash_initial, $stored_hash_latest );
 	}
 }
