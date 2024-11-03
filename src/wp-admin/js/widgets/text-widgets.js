@@ -8,7 +8,7 @@
 document.addEventListener( 'DOMContentLoaded', function() {
 
 	function initTextWidget( textarea ) {
-		
+
 		function initTinyMCE() {
 
 			// Check if TinyMCE is already initialized for this textarea
