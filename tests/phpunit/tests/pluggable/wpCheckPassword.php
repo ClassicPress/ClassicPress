@@ -38,7 +38,6 @@ class Tests_Pluggable_wpCheckPassword extends WP_UnitTestCase {
 		$valid_password = 'validpassword';
 		$hash           = wp_hash_password( $valid_password );
 		$this->assertTrue( wp_check_password( $valid_password, $hash ) );
-		$this->assertTrue( wp_check_password( $valid_password, $hash ) );
 	}
 
 	public function test_wp_check_password_does_not_reset_application_password() {
@@ -49,7 +48,7 @@ class Tests_Pluggable_wpCheckPassword extends WP_UnitTestCase {
 		// password
 		$user_id = $this->factory()->user->create(
 			array(
-				'user_pass' => $hash,
+				'user_pass' => $valid_password,
 			)
 		);
 
