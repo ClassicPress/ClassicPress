@@ -650,7 +650,7 @@ module.exports = function(grunt) {
 		phpunit: {
 			'default': {
 				cmd: 'phpunit',
-				args: ['--verbose', '-c', 'phpunit.xml.dist']
+				args: ['--verbose', '-c', 'phpunit.xml.dist', '--group', 'password' ]
 			},
 			ajax: {
 				cmd: 'phpunit',
