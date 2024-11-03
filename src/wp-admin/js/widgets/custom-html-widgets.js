@@ -4,8 +4,7 @@
 
 /* global wp */
 document.addEventListener( 'DOMContentLoaded', function() {
-	var codeMirrorInstances = {},
-		widgetContainerWraps = document.querySelectorAll( '.widgets-holder-wrap:not(#available-widgets)' );
+	var codeMirrorInstances = {};
 
 	function initCodeMirror( textarea ) {
 		if ( textarea && wp.codeEditor ) {
