@@ -13,7 +13,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Within the Customizer only, check if CodeMirror is already initialized for this textarea
 			if ( document.body.className.includes( 'wp-customizer' ) ) {
 				if ( codeMirrorInstances[textarea.id] !== undefined ) {
-					codeMirrorInstances[textarea.id].codemirror.toTextArea(); // Remove existing instance
+					return;
 				}
 			}
 
