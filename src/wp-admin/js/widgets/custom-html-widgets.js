@@ -52,17 +52,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	}
 
-	// Trigger 'widget-added' event when the widget is first opened
-	widgetContainerWraps.forEach( function( wrap ) {
-		wrap.querySelectorAll( 'input.id_base[value="custom_html"]' ).forEach( function( input ) {
-			input.closest( 'details' ).addEventListener( 'toggle', function() {
-				document.dispatchEvent( new CustomEvent( 'widget-added', {
-					detail: { widget: input.closest( '.widget' ) }
-				} ) );
-			}, { once: true } );
-		} );
-	} );
-
 	// Listen for when widgets are added, synced, or updated
 	document.addEventListener( 'widget-added', handleWidgetUpdate );
 	document.addEventListener( 'widget-synced', handleWidgetUpdate );
