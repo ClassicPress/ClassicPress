@@ -7,7 +7,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		close = document.querySelector( '.close' ),
 		uploadCatSelect = document.getElementById( 'upload-category' ),
 		inputElement = document.getElementById( 'filepond' ),
-		ajaxurl	= document.getElementById( 'ajax-url' ).value,		
+		ajaxurl = document.getElementById( 'ajax-url' ).value,
 		body = document.body,
 		dialog = document.getElementById( 'media-modal' ),
 		leftIcon = document.getElementById( 'left-dashicon' ),
@@ -17,7 +17,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dateFilter = document.getElementById( 'filter-by-date' ) ? document.getElementById( 'filter-by-date' ) : '',
 		typeFilter = document.getElementById( 'filter-by-type' ),
 		search = document.getElementById( 'media-search-input' ),
-		mediaCatSelect = document.getElementById( 'taxonomy=media_category&term' ),
+		mediaCatSelect = document.getElementById( 'taxonomy=media_category&term' ) ? document.getElementById( 'taxonomy=media_category&term' ) : '',
 		mediaGrid = document.querySelector( '#media-grid ul' );
 
 	// Update details within modal
@@ -143,7 +143,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					input.value = newTaxes;
 					document.getElementById( 'media-' + id ).setAttribute( 'data-tags', newTaxes );
 				}
-				
+
 				// Show success visual feedback.
 				clearTimeout( successTimeout );
 				document.getElementById( 'tax-saved' ).classList.remove( 'hidden' );
@@ -221,7 +221,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			alt = item.querySelector( 'img' ).getAttribute( 'alt' ),
 			link = item.dataset.link,
 			orientation = item.dataset.orientation ? ' ' + item.dataset.orientation : '',
-			menuOrder = item.dataset.menuOrder, 
+			menuOrder = item.dataset.menuOrder,
 			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
 			next = item.nextElementSibling ? item.nextElementSibling.id : '';
 
@@ -267,7 +267,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '#media-audio' ).setAttribute( 'hidden', true );
 			dialog.querySelector( '#media-video' ).setAttribute( 'hidden', true );
 			dialog.querySelector( '#media-image' ).removeAttribute( 'hidden' );
-				
+
 			if ( filetype === 'image' ) {
 				dialog.querySelector( '.thumbnail-image img' ).src = url;
 				dialog.querySelector( '.edit-attachment' ).style.display = '';
@@ -306,7 +306,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				deleteItem( id );
 			}
 		} );
-			
+
 		/* Update media attachment details */
 		dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
 			input.addEventListener( 'blur', function() {
@@ -358,7 +358,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/audio.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
 		} else if ( attachment.type === 'video' ) {
 			image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/video.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
-		}	
+		}
 
 		gridItem.className = 'media-item';
 		gridItem.id = 'media-' + attachment.id;
@@ -385,7 +385,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		gridItem.setAttribute( 'data-delete-nonce', attachment.nonces.delete );
 		gridItem.setAttribute( 'data-edit-nonce', attachment.nonces.edit );
 
-		gridItem.innerHTML = '<div class="select-attachment-preview type-' + attachment.type + ' subtype-' + attachment.subtype + '">' + 
+		gridItem.innerHTML = '<div class="select-attachment-preview type-' + attachment.type + ' subtype-' + attachment.subtype + '">' +
 			'<div class="media-thumbnail">' + image + '</div>' +
 			'</div>' +
 			'<button type="button" class="check" tabindex="-1">' +
@@ -449,7 +449,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					// Update the count at the bottom of the page
 					document.querySelector( '.load-more-count' ).setAttribute( 'hidden', true );
 					document.querySelector( '.no-media' ).removeAttribute( 'hidden' );
-					
+
 					queryParams.set( 'paged', 1 );
 					history.replaceState( null, null, '?' + queryParams.toString() );
 				} else {
@@ -477,7 +477,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							if ( result.headers.max_pages === parseInt( paged ) ) {
 								pageLink.setAttribute( 'href', pageLink.href.replace( pageLink.href.split( '?paged=' )[1], paged ) );
 								pageLink.setAttribute( 'disabled', true );
-								pageLink.setAttribute( 'inert', true );								
+								pageLink.setAttribute( 'inert', true );
 							} else {
 								pageLink.setAttribute( 'href', pageLink.href.replace( pageLink.href.split( '?paged=' )[1], parseInt( paged ) + 1 ) );
 								pageLink.removeAttribute( 'disabled'  );
@@ -661,7 +661,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	if ( dateFilter ) {
 		dateFilter.addEventListener( 'change', updateGrid );
 	}
-	mediaCatSelect.addEventListener( 'change', updateGrid );
+	if ( mediaCatSelect ) {
+		mediaCatSelect.addEventListener( 'change', updateGrid );
+	}
 	search.addEventListener( 'input', function() {
 		var searchtimer;
 		clearTimeout( searchtimer );
@@ -708,7 +710,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Set functions for Escape and Enter keys
 	document.addEventListener( 'keyup', function( e ) {
 		if ( e.key === 'Escape' ) {
-			queryParams.delete( 'item' );			
+			queryParams.delete( 'item' );
 			queryParams.delete( 'mode' );
 			history.replaceState( null, null, location.href.split('?')[0] ); // reset URL params
 			close.click(); // close file upload area
@@ -735,7 +737,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	/* Close modal by clicking button */
 	closeButton.addEventListener( 'click', function() {
-		queryParams.delete( 'item' );		
+		queryParams.delete( 'item' );
 		queryParams.delete( 'mode' );
 		history.replaceState( null, null, location.href.split('?')[0] ); // reset URL params
 		dialog.classList.remove( 'modal-loading' );
@@ -768,7 +770,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			width = item.dataset.width,
 			height = item.dataset.height,
 			nonce = item.dataset.editNonce,
-			action = 'rotate-cw', // or any other valid action e.g. save, scale, restore 
+			action = 'rotate-cw', // or any other valid action e.g. save, scale, restore
 			target = 'full'; // or 'thumbnail', etc.
 
 		// Construct the FormData object
@@ -838,7 +840,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					document.querySelectorAll( '.media-item.selected' ).forEach( function( deleteSelect ) {
 						deleteItem( deleteSelect.id.replace( 'media-', '' ) );
 					} );
-				} 
+				}
 				document.querySelector( '.select-mode-toggle-button' ).click();
 			} );
 		}
@@ -878,7 +880,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.target.nextElementSibling.classList.add( 'hidden' );
 			e.target.nextElementSibling.setAttribute( 'aria-hidden', 'true' );
 		}, 3000 );
-		
+
 	} );
 
 	/* Upload files using FilePond */
@@ -917,7 +919,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				.then( function( result ) {
 					var gridItem;
 					if ( result.success ) {
-						load( result.data );						
+						load( result.data );
 						gridItem = populateGridItem( result.data );
 						mediaGrid.prepend( gridItem );
 
