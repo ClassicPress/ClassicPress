@@ -15,7 +15,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		closeButton = document.getElementById( 'dialog-close-button' ),
 		paged = '1',
 		dateFilter = document.getElementById( 'filter-by-date' ) ? document.getElementById( 'filter-by-date' ) : '',
-		typeFilter = document.getElementById( 'filter-by-type' ),
+		typeFilter = document.getElementById( 'filter-by-type' ) ? document.getElementById( 'filter-by-type' ) : '',
 		search = document.getElementById( 'media-search-input' ),
 		mediaCatSelect = document.getElementById( 'taxonomy=media_category&term' ) ? document.getElementById( 'taxonomy=media_category&term' ) : '',
 		mediaGrid = document.querySelector( '#media-grid ul' );
@@ -657,7 +657,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	// Add event listeners for changing the selection of items displayed
-	typeFilter.addEventListener( 'change', updateGrid );
+	if ( typeFilter ) {
+		typeFilter.addEventListener( 'change', updateGrid );
+	}
 	if ( dateFilter ) {
 		dateFilter.addEventListener( 'change', updateGrid );
 	}
