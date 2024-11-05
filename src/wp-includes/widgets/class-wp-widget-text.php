@@ -475,26 +475,26 @@ class WP_Widget_Text extends WP_Widget {
 			?>
 
 			<fieldset>
-				<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
-				<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" class="widefat title sync-input" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title:' ); ?></label>
+				<input id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" class="widefat title sync-input" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>">
 			</fieldset>
 
 			<fieldset>
-				<label for="<?php echo $this->get_field_id( 'text' ); ?>" class="screen-reader-text"><?php _e( 'Content:' ); ?></label>
-				<textarea id="<?php echo $this->get_field_id( 'text' ); ?>" name="<?php echo $this->get_field_name( 'text' ); ?>" class="widefat sync-input" style="height:200px;"><?php echo $escaped_text; ?></textarea>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'text' ) ); ?>" class="screen-reader-text"><?php _e( 'Content:' ); ?></label>
+				<textarea id="<?php echo esc_attr( $this->get_field_id( 'text' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'text' ) ); ?>" class="widefat sync-input" style="height:200px;"><?php echo $escaped_text; ?></textarea>
 			</fieldset>
 
-			<input id="<?php echo $this->get_field_id( 'filter' ); ?>" name="<?php echo $this->get_field_name( 'filter' ); ?>" class="filter sync-input" type="hidden" value="on">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'filter' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'filter' ) ); ?>" class="filter sync-input" type="hidden" value="on">
 
-			<input id="<?php echo $this->get_field_id( 'visual' ); ?>" name="<?php echo $this->get_field_name( 'visual' ); ?>" class="visual sync-input" type="hidden" value="on">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'visual' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'visual' ) ); ?>" class="visual sync-input" type="hidden" value="on">
 
 		<?php else : ?>
 
-			<input id="<?php echo $this->get_field_id( 'visual' ); ?>" name="<?php echo $this->get_field_name( 'visual' ); ?>" class="visual" type="hidden" value="">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'visual' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'visual' ) ); ?>" class="visual" type="hidden" value="">
 
 			<fieldset>
-				<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
-				<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" class="widefat" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title:' ); ?></label>
+				<input id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" class="widefat" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>">
 			</fieldset>
 
 			<div class="notice inline notice-info notice-alt">
@@ -506,12 +506,13 @@ class WP_Widget_Text extends WP_Widget {
 			</div>
 
 			<fieldset>
-				<label for="<?php echo $this->get_field_id( 'text' ); ?>"><?php _e( 'Content:' ); ?></label>
-				<textarea class="widefat" rows="16" cols="20" id="<?php echo $this->get_field_id( 'text' ); ?>" name="<?php echo $this->get_field_name( 'text' ); ?>"><?php echo esc_textarea( $instance['text'] ); ?></textarea>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'text' ) ); ?>"><?php _e( 'Content:' ); ?></label>
+				<textarea class="widefat" rows="16" cols="20" id="<?php echo esc_attr( $this->get_field_id( 'text' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'text' ) ); ?>"><?php echo esc_textarea( $instance['text'] ); ?></textarea>
 			</fieldset>
 
 			<fieldset>
-				<input id="<?php echo $this->get_field_id( 'filter' ); ?>" name="<?php echo $this->get_field_name( 'filter' ); ?>" type="checkbox"<?php checked( ! empty( $instance['filter'] ) ); ?>>&nbsp;<label for="<?php echo $this->get_field_id( 'filter' ); ?>"><?php _e( 'Automatically add paragraphs' ); ?></label>
+				<input id="<?php echo esc_attr( $this->get_field_id( 'filter' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'filter' ) ); ?>" type="checkbox"<?php checked( ! empty( $instance['filter'] ) ); ?>>&nbsp;
+				<label for="<?php echo esc_attr( $this->get_field_id( 'filter' ) ); ?>"><?php _e( 'Automatically add paragraphs' ); ?></label>
 			</fieldset>
 
 			<?php
