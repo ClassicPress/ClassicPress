@@ -204,9 +204,7 @@ class WP_Widget_Custom_HTML extends WP_Widget {
 		}
 
 		wp_enqueue_code_editor( array( 'type' => 'text/html' ) );
-		if ( 'false' !== wp_get_current_user()->syntax_highlighting ) {
-			wp_enqueue_script( 'wp-codemirror' );
-		}
+		wp_enqueue_script( 'wp-codemirror' );
 		wp_enqueue_script( 'custom-html-widgets' );
 	}
 
@@ -214,6 +212,8 @@ class WP_Widget_Custom_HTML extends WP_Widget {
 	 * Outputs the Custom HTML widget settings form.
 	 *
 	 * @since CP-2.3.0
+	 *
+	 * @see WP_Widget_Custom_HTML::render_control_template_scripts()
 	 *
 	 * @param array $instance Current instance.
 	 */
@@ -223,11 +223,11 @@ class WP_Widget_Custom_HTML extends WP_Widget {
 
 		<fieldset>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title:' ); ?></label>
-			<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" class="widefat" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" class="widefat" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>">
 		</fieldset>
 		<fieldset>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'content' ) ); ?>"><?php _e( 'Content:' ); ?></label>
-			<textarea id="<?php echo $this->get_field_id( 'content' ); ?>" name="<?php echo $this->get_field_name( 'content' ); ?>" class="widefat code content" rows="16" cols="20"><?php echo esc_textarea( $instance['content'] ); ?></textarea>
+			<textarea id="<?php echo esc_attr( $this->get_field_id( 'content' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'content' ) ); ?>" class="widefat code content" rows="16" cols="20"><?php echo esc_textarea( $instance['content'] ); ?></textarea>
 		</fieldset>
 
 		<?php
