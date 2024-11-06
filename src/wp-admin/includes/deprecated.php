@@ -1592,85 +1592,92 @@ function image_attachment_fields_to_save( $post, $attachment ) {
 /**
  * Scripts no longer used by core since CP-2.1.0
  *
- * @since CP_2.2.0
+ * @since CP-2.2.0
+ * @since CP-2.3.0 - implement associative array, lists library name and ClassicPress version when deprecated
  *
  * @return array Array of deprecated script handles.
  */
 function cp_deprecated_scripts() {
-	 return array(
-		'prototype',
-		'scriptaculous-root',
-		'scriptaculous-builder',
-		'scriptaculous-dragdrop',
-		'scriptaculous-effects',
-		'scriptaculous-slider',
-		'scriptaculous-sound',
-		'scriptaculous-controls',
-		'scriptaculous',
-		'cropper',
-		'jcrop',
-		'jquery-ui-core',
-		'jquery-ui-accordion',
-		'jquery-ui-autocomplete',
-		'jquery-ui-button',
-		'jquery-ui-datepicker',
-		'jquery-ui-dialog',
-		'jquery-ui-draggable',
-		'jquery-ui-droppable',
-		'jquery-ui-menu',
-		'jquery-ui-mouse',
-		'jquery-ui-position',
-		'jquery-ui-progressbar',
-		'jquery-ui-resizable',
-		'jquery-ui-selectable',
-		'jquery-ui-slider',
-		'jquery-ui-sortable',
-		'jquery-ui-spinner',
-		'jquery-ui-tabs',
-		'jquery-ui-tooltip',
-		'jquery-ui-checkboxradio',
-		'jquery-ui-controlgroup',
-		'jquery-effects-core',
-		'jquery-effects-blind',
-		'jquery-effects-bounce',
-		'jquery-effects-clip',
-		'jquery-effects-drop',
-		'jquery-effects-explode',
-		'jquery-effects-fade',
-		'jquery-effects-fold',
-		'jquery-effects-highlight',
-		'jquery-effects-puff',
-		'jquery-effects-pulsate',
-		'jquery-effects-scale',
-		'jquery-effects-shake',
-		'jquery-effects-size',
-		'jquery-effects-slide',
-		'jquery-effects-transfer',
-		'wp-pointer',
-		'farbtastic',
-		'thickbox',
-		'clipboard',
-		'hoverIntent',
+	return array(
+		// Deprecated since ClassicPress 2.2.0
+		'prototype'                => 'CP-2.2.0',
+		'scriptaculous-root'       => 'CP-2.2.0',
+		'scriptaculous-builder'    => 'CP-2.2.0',
+		'scriptaculous-dragdrop'   => 'CP-2.2.0',
+		'scriptaculous-effects'    => 'CP-2.2.0',
+		'scriptaculous-slider'     => 'CP-2.2.0',
+		'scriptaculous-sound'      => 'CP-2.2.0',
+		'scriptaculous-controls'   => 'CP-2.2.0',
+		'scriptaculous'            => 'CP-2.2.0',
+		'cropper'                  => 'CP-2.2.0',
+		'jcrop'                    => 'CP-2.2.0',
+		'jquery-ui-core'           => 'CP-2.2.0',
+		'jquery-ui-accordion'      => 'CP-2.2.0',
+		'jquery-ui-autocomplete'   => 'CP-2.2.0',
+		'jquery-ui-button'         => 'CP-2.2.0',
+		'jquery-ui-datepicker'     => 'CP-2.2.0',
+		'jquery-ui-dialog'         => 'CP-2.2.0',
+		'jquery-ui-draggable'      => 'CP-2.2.0',
+		'jquery-ui-droppable'      => 'CP-2.2.0',
+		'jquery-ui-menu'           => 'CP-2.2.0',
+		'jquery-ui-mouse'          => 'CP-2.2.0',
+		'jquery-ui-position'       => 'CP-2.2.0',
+		'jquery-ui-progressbar'    => 'CP-2.2.0',
+		'jquery-ui-resizable'      => 'CP-2.2.0',
+		'jquery-ui-selectable'     => 'CP-2.2.0',
+		'jquery-ui-slider'         => 'CP-2.2.0',
+		'jquery-ui-sortable'       => 'CP-2.2.0',
+		'jquery-ui-spinner'        => 'CP-2.2.0',
+		'jquery-ui-tabs'           => 'CP-2.2.0',
+		'jquery-ui-tooltip'        => 'CP-2.2.0',
+		'jquery-ui-checkboxradio'  => 'CP-2.2.0',
+		'jquery-ui-controlgroup'   => 'CP-2.2.0',
+		'jquery-effects-core'      => 'CP-2.2.0',
+		'jquery-effects-blind'     => 'CP-2.2.0',
+		'jquery-effects-bounce'    => 'CP-2.2.0',
+		'jquery-effects-clip'      => 'CP-2.2.0',
+		'jquery-effects-drop'      => 'CP-2.2.0',
+		'jquery-effects-explode'   => 'CP-2.2.0',
+		'jquery-effects-fade'      => 'CP-2.2.0',
+		'jquery-effects-fold'      => 'CP-2.2.0',
+		'jquery-effects-highlight' => 'CP-2.2.0',
+		'jquery-effects-puff'      => 'CP-2.2.0',
+		'jquery-effects-pulsate'   => 'CP-2.2.0',
+		'jquery-effects-scale'     => 'CP-2.2.0',
+		'jquery-effects-shake'     => 'CP-2.2.0',
+		'jquery-effects-size'      => 'CP-2.2.0',
+		'jquery-effects-slide'     => 'CP-2.2.0',
+		'jquery-effects-transfer'  => 'CP-2.2.0',
+		'wp-pointer'               => 'CP-2.2.0',
+		'farbtastic'               => 'CP-2.2.0',
+		'thickbox'                 => 'CP-2.2.0',
+		'clipboard'                => 'CP-2.2.0',
+		'hoverIntent'              => 'CP-2.2.0',
+
+		// Deprecated since ClassicPress 2.3.0
+		'wp-api' => 'CP-2.3.0',
 	);
 }
 
 /**
  * Stylesheets no longer used by core since CP-2.1.0
  *
- * @since CP_2.2.0
+ * @since CP-2.2.0
+ * @since CP-2.3.0 - implement associative array, lists library name and ClassicPress version when deprecated
  *
  * @return array Array of deprecated stylesheet handles.
  */
 
 function cp_deprecated_styles() {
 	return array(
-		'deprecated-media',
-		'colors-fresh',
-		'open-sans',
-		'jcrop',
-		'wp-jquery-ui-dialog',
-		'farbtastic',
-		'thickbox',
+		// Deprecated since ClassicPress 2.2.0
+		'deprecated-media'    => 'CP-2.2.0',
+		'colors-fresh'        => 'CP-2.2.0',
+		'open-sans'           => 'CP-2.2.0',
+		'jcrop'               => 'CP-2.2.0',
+		'wp-jquery-ui-dialog' => 'CP-2.2.0',
+		'farbtastic'          => 'CP-2.2.0',
+		'thickbox'            => 'CP-2.2.0',
 	);
 }
 
@@ -1681,7 +1688,7 @@ function cp_deprecated_styles() {
  */
 function _cp_deprecate_wp_enqueue_scripts() {
 	$deprecated_scripts = cp_deprecated_scripts();
-	foreach ( $deprecated_scripts as $deprecated_script ) {
+	foreach ( $deprecated_scripts as $deprecated_script => $version ) {
 		if ( wp_script_is( $deprecated_script, 'enqueued' ) ) {
 			$message = sprintf(
 				/* translators: 1: Script handle. 2: URL for more information. */
@@ -1689,12 +1696,12 @@ function _cp_deprecate_wp_enqueue_scripts() {
 				$deprecated_script,
 				'https://www.classicpress.net/deprecated-scripts/'
 			);
-			_deprecated_argument( 'wp_enqueue_script', 'CP-2.2.0', $message );
+			_deprecated_argument( 'wp_enqueue_script', $version, $message );
 		}
 	}
 
 	$deprecated_styles = cp_deprecated_styles();
-	foreach ( $deprecated_styles as $deprecated_style ) {
+	foreach ( $deprecated_styles as $deprecated_style => $version ) {
 		if ( wp_style_is( $deprecated_style, 'enqueued' ) ) {
 			$message = sprintf(
 				/* translators: 1: Stylesheet handle. 2: URL for more information. */
@@ -1702,7 +1709,7 @@ function _cp_deprecate_wp_enqueue_scripts() {
 				$deprecated_style,
 				'https://www.classicpress.net/deprecated-scripts/'
 			);
-			_deprecated_argument( 'wp_enqueue_style', 'CP-2.2.0', $message );
+			_deprecated_argument( 'wp_enqueue_style', $version, $message );
 		}
 	}
 }
