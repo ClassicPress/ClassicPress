@@ -229,6 +229,7 @@ class WP_Application_Passwords {
 	 * Updates an application password.
 	 *
 	 * @since 5.6.0
+	 * @since CP-2.3.0 The actual password should now be hashed using bcrypt instead of phpass. See wp_hash_password().
 	 *
 	 * @param int    $user_id User ID.
 	 * @param string $uuid    The password's UUID.
@@ -254,6 +255,11 @@ class WP_Application_Passwords {
 				$save         = true;
 			}
 
+			if ( ! empty( $update['password'] ) && $item['password'] !== $update['password'] ) {
+				$item['password'] = $update['password'];
+				$save             = true;
+			}
+
 			if ( $save ) {
 				$saved = static::set_user_application_passwords( $user_id, $passwords );
 
@@ -266,6 +272,8 @@ class WP_Application_Passwords {
 			 * Fires when an application password is updated.
 			 *
 			 * @since 5.6.0
+			 * @since CP-2.3.0 The password is now hashed using bcrypt instead of phpass.
+			 *                 Existing passwords may still be hashed using phpass.
 			 *
 			 * @param int   $user_id The user ID.
 			 * @param array $item    The updated app password details.
