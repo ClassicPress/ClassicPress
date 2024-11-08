@@ -266,8 +266,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			if ( input ) {
 				title = widget.querySelector( 'input[id*="-title"]' ).value || '';
-			}
-			if ( title ) {
 				title = ': ' + title.replace( /<[^<>]+>/g, '' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
 				widget.querySelector( '.in-widget-title' ).innerHTML = title;
 			}
