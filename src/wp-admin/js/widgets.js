@@ -261,11 +261,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 
 		sortable.querySelectorAll( '.widget' ).forEach( function( widget ) {
-			var title = widget.querySelector( 'input[id*="-title"]' ).value || '';
+			var title,
+				input = widget.querySelector( 'input[id*="-title"]' );
+
+			if ( input ) {
+				title = widget.querySelector( 'input[id*="-title"]' ).value || '';
+			}
 			if ( title ) {
 				title = ': ' + title.replace( /<[^<>]+>/g, '' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
+				widget.querySelector( '.in-widget-title' ).innerHTML = title;
 			}
-			widget.querySelector( '.in-widget-title' ).innerHTML = title;
 
 			if ( widget.querySelector( 'p.widget-error' ) != null ) {
 				widget.querySelector( 'details' ).setAttribute( 'open', 'open' );
