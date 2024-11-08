@@ -1656,6 +1656,7 @@ function cp_deprecated_scripts() {
 
 		// Deprecated since ClassicPress 2.3.0
 		'wp-api' => 'CP-2.3.0',
+		'moment' => 'CP-2.3.0',
 	);
 }
 
