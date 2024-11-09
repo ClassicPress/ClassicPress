@@ -265,7 +265,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				input = widget.querySelector( 'input[id*="-title"]' );
 
 			if ( input ) {
-				title = widget.querySelector( 'input[id*="-title"]' ).value || '';
+				title = input.value || '';
 			}
 			if ( title ) {
 				title = ': ' + title.replace( /<[^<>]+>/g, '' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
