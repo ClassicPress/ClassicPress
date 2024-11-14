@@ -287,7 +287,7 @@ class Walker_Comment extends Walker {
 	 * Outputs a single comment.
 	 *
 	 * @since 3.6.0
-	 * @since CP-2.3.0 - restored function and converted to wrapper of `html5_comment()`
+	 * @since CP-2.4.0 - restored function and converted to wrapper of `html5_comment()`
 	 *
 	 * @see wp_list_comments()
 	 *
