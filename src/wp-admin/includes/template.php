@@ -1346,29 +1346,7 @@ function do_meta_boxes( $screen, $context, $data_object ) {
 					echo '</div>';
 					echo "</summary>\n";
 
-<<<<<<< HEAD
 					echo '<div class="inside" style="display:block">' . "\n";
-=======
-					echo '<div class="inside">' . "\n";
-
-					if ( WP_DEBUG && ! $block_compatible && 'edit' === $screen->parent_base && ! $screen->is_block_editor() && ! isset( $_GET['meta-box-loader'] ) ) {
-						$plugin = _get_plugin_from_callback( $box['callback'] );
-						if ( $plugin ) {
-							$meta_box_not_compatible_message = sprintf(
-								/* translators: %s: The name of the plugin that generated this meta box. */
-								__( 'This meta box, from the %s plugin, is not compatible with the block editor.' ),
-								"<strong>{$plugin['Name']}</strong>"
-							);
-							wp_admin_notice(
-								$meta_box_not_compatible_message,
-								array(
-									'additional_classes' => array( 'error', 'inline' ),
-								)
-							);
-						}
-					}
-
->>>>>>> ce32693b3d (Administration: Use `wp_admin_notice()` more in `/wp-admin/includes/`.)
 					call_user_func( $box['callback'], $data_object, $box );
 					echo "</div>\n";
 					echo "</details>\n";

@@ -533,7 +533,7 @@ class Custom_Image_Header {
 				)
 			);
 		}
-			?>
+		?>
 
 <h2><?php _e( 'Header Image' ); ?></h2>
 

@@ -262,7 +262,7 @@ class Custom_Background {
 				)
 			);
 		}
-			?>
+		?>
 
 <h2><?php _e( 'Background Image' ); ?></h2>
 

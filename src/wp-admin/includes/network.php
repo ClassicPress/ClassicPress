@@ -151,17 +151,13 @@ function network_step1( $errors = false ) {
 	$hostname = preg_replace( '/(?::80|:443)$/', '', get_clean_basedomain() );
 	$has_ports = strstr( $hostname, ':' );
 	if ( ( false !== $has_ports && ! in_array( $has_ports, array( ':80', ':443' ), true ) ) ) {
-<<<<<<< HEAD
-		echo '<div class="notice notice-warning"><p><strong>' . __( 'Warning:' ) . '</strong> ' . __( 'Installing a network of sites with your server address is experimental.' ) . '</p></div>';
-=======
 		wp_admin_notice(
-			'<strong>' . __( 'Error:' ) . '</strong> ' . __( 'You cannot install a network of sites with your server address.' ),
+			'<strong>' . __( 'Warning:' ) . '</strong> ' . __( 'Installing a network of sites with your server address is experimental.' ),
 			array(
-				'additional_classes' => array( 'error' ),
+				'type' => array( 'warning' ),
 			)
 		);
 
->>>>>>> ce32693b3d (Administration: Use `wp_admin_notice()` more in `/wp-admin/includes/`.)
 		echo '<p>' . sprintf(
 			/* translators: %s: Port number. */
 			__( 'Use port numbers such as %s at your own risk.' ),
@@ -467,16 +463,12 @@ function network_step2( $errors = false ) {
 			$subdomain_install = (bool) $wpdb->get_var( "SELECT meta_value FROM $wpdb->sitemeta WHERE site_id = 1 AND meta_key = 'subdomain_install'" );
 
 			wp_admin_notice(
-				'<strong>' . __( 'Warning:' ) . '</strong> ' . __( 'An existing WordPress network was detected.' ),
+				'<strong>' . __( 'Warning:' ) . '</strong> ' . __( 'An existing ClassicPress network was detected.' ),
 				array(
 					'additional_classes' => array( 'error' ),
 				)
 			);
 			?>
-<<<<<<< HEAD
-	<div class="error"><p><strong><?php _e( 'Warning:' ); ?></strong> <?php _e( 'An existing ClassicPress network was detected.' ); ?></p></div>
-=======
->>>>>>> ce32693b3d (Administration: Use `wp_admin_notice()` more in `/wp-admin/includes/`.)
 	<p><?php _e( 'Please complete the configuration steps. To create a new network, you will need to empty or remove the network database tables.' ); ?></p>
 			<?php
 		}
