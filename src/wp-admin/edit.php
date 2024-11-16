@@ -442,9 +442,6 @@ foreach ( $bulk_counts as $message => $count ) {
 }
 
 if ( $messages ) {
-<<<<<<< HEAD
-	echo '<div id="message" class="updated notice is-dismissible"><p>' . implode( ' ', $messages ) . '</p></div>';
-=======
 	wp_admin_notice(
 		implode( ' ', $messages ),
 		array(
@@ -453,7 +450,6 @@ if ( $messages ) {
 			'dismissible'        => true,
 		)
 	);
->>>>>>> f43aaaf741 (Administration: Use `wp_admin_notice()` for `.updated`.)
 }
 unset( $messages );
 

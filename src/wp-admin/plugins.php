@@ -668,10 +668,10 @@ if ( isset( $_GET['error'] ) ) {
 
 	if ( is_wp_error( $delete_result ) ) {
 		$plugin_not_deleted_message = sprintf(
-					/* translators: %s: Error message. */
-					__( 'Plugin could not be deleted due to an error: %s' ),
-					esc_html( $delete_result->get_error_message() )
-				);
+			/* translators: %s: Error message. */
+			__( 'Plugin could not be deleted due to an error: %s' ),
+			esc_html( $delete_result->get_error_message() )
+		);
 		wp_admin_notice(
 			$plugin_not_deleted_message,
 			array(
@@ -686,11 +686,11 @@ if ( isset( $_GET['error'] ) ) {
 			'additional_classes' => array( 'updated' ),
 			'dismissible'        => true,
 		);
-				if ( 1 === (int) $_GET['deleted'] ) {
+		if ( 1 === (int) $_GET['deleted'] ) {
 			$plugins_deleted_message = __( 'The selected plugin has been deleted.' );
-				} else {
+		} else {
 			$plugins_deleted_message = __( 'The selected plugins have been deleted.' );
-				}
+		}
 		wp_admin_notice( $plugins_deleted_message, $updated_args );
 	}
 } elseif ( isset( $_GET['activate'] ) ) {

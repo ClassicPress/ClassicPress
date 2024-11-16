@@ -240,15 +240,15 @@ if ( ! is_multisite() ) {
 $new_admin_email = get_option( 'new_admin_email' );
 if ( $new_admin_email && get_option( 'admin_email' ) !== $new_admin_email ) {
 	$pending_admin_email_message  = sprintf(
-			/* translators: %s: New admin email. */
-			__( 'There is a pending change of the admin email to %s.' ),
-			'<code>' . esc_html( $new_admin_email ) . '</code>'
-		);
+		/* translators: %s: New admin email. */
+		__( 'There is a pending change of the admin email to %s.' ),
+		'<code>' . esc_html( $new_admin_email ) . '</code>'
+	);
 	$pending_admin_email_message .= sprintf(
-			' <a href="%1$s">%2$s</a>',
-			esc_url( wp_nonce_url( admin_url( 'options.php?dismiss=new_admin_email' ), 'dismiss-' . get_current_blog_id() . '-new_admin_email' ) ),
-			__( 'Cancel' )
-		);
+		' <a href="%1$s">%2$s</a>',
+		esc_url( wp_nonce_url( admin_url( 'options.php?dismiss=new_admin_email' ), 'dismiss-' . get_current_blog_id() . '-new_admin_email' ) ),
+		__( 'Cancel' )
+	);
 	wp_admin_notice(
 		$pending_admin_email_message,
 		array(
