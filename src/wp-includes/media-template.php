@@ -390,20 +390,6 @@ function wp_print_media_templates() {
 	<?php // Template for the Attachment Details two columns layout. ?>
 	<script type="text/html" id="tmpl-attachment-details-two-column">
 		<div class="attachment-media-view {{ data.orientation }}">
-<<<<<<< HEAD
-=======
-			<?php
-			if ( isset( $_GET['error'] ) && 'deprecated' === $_GET['error'] ) {
-				wp_admin_notice(
-					__( 'The Edit Media screen is deprecated as of WordPress 6.3. Please use the Media Library instead.' ),
-					array(
-						'id'                 => 'message',
-						'additional_classes' => array( 'error' ),
-					)
-				);
-			}
-			?>
->>>>>>> 5cfb817067 (Administration: Increase `wp_admin_notice()` usage in `/wp-includes/`.)
 			<h2 class="screen-reader-text"><?php /* translators: Hidden accessibility text. */ _e( 'Attachment Preview' ); ?></h2>
 			<div class="thumbnail thumbnail-{{ data.type }}">
 				<# if ( data.uploading ) { #>
