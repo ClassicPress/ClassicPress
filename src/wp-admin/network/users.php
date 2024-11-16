@@ -253,32 +253,25 @@ get_current_screen()->set_screen_reader_content(
 
 require_once ABSPATH . 'wp-admin/admin-header.php';
 
-<<<<<<< HEAD
-if ( isset( $_REQUEST['updated'] ) && 'true' == $_REQUEST['updated'] && ! empty( $_REQUEST['action'] ) ) {
-	?>
-	<div id="message" class="notice notice-success is-dismissible"><p>
-		<?php
-=======
 if ( isset( $_REQUEST['updated'] ) && 'true' === $_REQUEST['updated'] && ! empty( $_REQUEST['action'] ) ) {
 	$message = '';
->>>>>>> 8ef111843b (Administration: Apply admin notice functions in multisite.)
-		switch ( $_REQUEST['action'] ) {
-			case 'delete':
+	switch ( $_REQUEST['action'] ) {
+		case 'delete':
 			$message = __( 'User deleted.' );
-				break;
-			case 'all_spam':
+			break;
+		case 'all_spam':
 			$message = __( 'Users marked as spam.' );
-				break;
-			case 'all_notspam':
+			break;
+		case 'all_notspam':
 			$message = __( 'Users removed from spam.' );
-				break;
-			case 'all_delete':
+			break;
+		case 'all_delete':
 			$message = __( 'Users deleted.' );
-				break;
-			case 'add':
+			break;
+		case 'add':
 			$message = __( 'User added.' );
-				break;
-		}
+			break;
+	}
 
 	wp_admin_notice(
 		$message,

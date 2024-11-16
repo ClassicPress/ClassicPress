@@ -379,10 +379,6 @@ if ( isset( $_GET['enabled'] ) ) {
 			number_format_i18n( $enabled )
 		);
 	}
-<<<<<<< HEAD
-	echo '<div id="message" class="notice notice-updated is-dismissible"><p>' . sprintf( $message, number_format_i18n( $enabled ) ) . '</p></div>';
-=======
->>>>>>> 8ef111843b (Administration: Apply admin notice functions in multisite.)
 } elseif ( isset( $_GET['disabled'] ) ) {
 	$disabled = absint( $_GET['disabled'] );
 	if ( 1 === $disabled ) {
@@ -394,10 +390,6 @@ if ( isset( $_GET['enabled'] ) ) {
 			number_format_i18n( $disabled )
 		);
 	}
-<<<<<<< HEAD
-	echo '<div id="message" class="notice notice-updated is-dismissible"><p>' . sprintf( $message, number_format_i18n( $disabled ) ) . '</p></div>';
-=======
->>>>>>> 8ef111843b (Administration: Apply admin notice functions in multisite.)
 } elseif ( isset( $_GET['deleted'] ) ) {
 	$deleted = absint( $_GET['deleted'] );
 	if ( 1 === $deleted ) {

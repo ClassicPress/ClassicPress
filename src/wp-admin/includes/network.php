@@ -127,9 +127,9 @@ function network_step1( $errors = false ) {
 	if ( ! empty( $active_plugins ) ) {
 		wp_admin_notice(
 			'<strong>' . __( 'Warning:' ) . '</strong> ' . sprintf(
-			/* translators: %s: URL to Plugins screen. */
-			__( 'Please <a href="%s">deactivate your plugins</a> before enabling the Network feature.' ),
-			admin_url( 'plugins.php?plugin_status=active' )
+				/* translators: %s: URL to Plugins screen. */
+				__( 'Please <a href="%s">deactivate your plugins</a> before enabling the Network feature.' ),
+				admin_url( 'plugins.php?plugin_status=active' )
 			),
 			array( 'type' => 'warning' )
 		);

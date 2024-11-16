@@ -138,10 +138,6 @@ if ( $_POST ) {
 require_once ABSPATH . 'wp-admin/admin-header.php';
 
 if ( isset( $_GET['updated'] ) ) {
-<<<<<<< HEAD
-	?><div id="message" class="notice notice-success is-dismissible"><p><?php _e( 'Settings saved.' ); ?></p></div>
-	<?php
-=======
 	wp_admin_notice(
 		__( 'Settings saved.' ),
 		array(
@@ -150,7 +146,6 @@ if ( isset( $_GET['updated'] ) ) {
 			'id'          => 'message',
 		)
 	);
->>>>>>> 8ef111843b (Administration: Apply admin notice functions in multisite.)
 }
 ?>
 
@@ -178,16 +173,16 @@ if ( isset( $_GET['updated'] ) ) {
 					$new_admin_email = get_site_option( 'new_admin_email' );
 					if ( $new_admin_email && get_site_option( 'admin_email' ) !== $new_admin_email ) :
 						$notice_message = sprintf(
-								/* translators: %s: New network admin email. */
-								__( 'There is a pending change of the network admin email to %s.' ),
-								'<code>' . esc_html( $new_admin_email ) . '</code>'
-							);
+							/* translators: %s: New network admin email. */
+							__( 'There is a pending change of the network admin email to %s.' ),
+							'<code>' . esc_html( $new_admin_email ) . '</code>'
+						);
 
 						$notice_message .= sprintf(
-								' <a href="%1$s">%2$s</a>',
-								esc_url( wp_nonce_url( network_admin_url( 'settings.php?dismiss=new_network_admin_email' ), 'dismiss_new_network_admin_email' ) ),
-								__( 'Cancel' )
-							);
+							' <a href="%1$s">%2$s</a>',
+							esc_url( wp_nonce_url( network_admin_url( 'settings.php?dismiss=new_network_admin_email' ), 'dismiss_new_network_admin_email' ) ),
+							__( 'Cancel' )
+						);
 
 						wp_admin_notice(
 							$notice_message,
@@ -198,7 +193,7 @@ if ( isset( $_GET['updated'] ) ) {
 							)
 						);
 					endif;
-						?>
+					?>
 				</td>
 			</tr>
 		</table>

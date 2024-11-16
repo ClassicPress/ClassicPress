@@ -118,15 +118,9 @@ if ( '' !== $message ) {
 
 if ( isset( $add_user_errors ) && is_wp_error( $add_user_errors ) ) {
 	$error_messages = '';
-		foreach ( $add_user_errors->get_error_messages() as $error ) {
+	foreach ( $add_user_errors->get_error_messages() as $error ) {
 		$error_messages .= "<p>$error</p>";
-		}
-<<<<<<< HEAD
-		?>
-	</div>
-<?php } ?>
-	<form action="<?php echo esc_url( network_admin_url( 'user-new.php?action=add-user' ) ); ?>" id="adduser" method="post">
-=======
+	}
 
 	wp_admin_notice(
 		$error_messages,
@@ -140,7 +134,6 @@ if ( isset( $add_user_errors ) && is_wp_error( $add_user_errors ) ) {
 }
 ?>
 	<form action="<?php echo esc_url( network_admin_url( 'user-new.php?action=add-user' ) ); ?>" id="adduser" method="post" novalidate="novalidate">
->>>>>>> 8ef111843b (Administration: Apply admin notice functions in multisite.)
 		<p><?php echo wp_required_field_message(); ?></p>
 		<table class="form-table" role="presentation">
 			<tr class="form-field form-required">
