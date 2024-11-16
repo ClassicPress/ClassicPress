@@ -581,9 +581,16 @@ function wp_dashboard_quick_press( $error_msg = false ) {
 
 	<form name="post" action="<?php echo esc_url( admin_url( 'post.php' ) ); ?>" method="post" id="quick-press" class="initial-form hide-if-no-js">
 
-		<?php if ( $error_msg ) : ?>
-		<div class="error"><?php echo $error_msg; ?></div>
-		<?php endif; ?>
+		<?php
+		if ( $error_msg ) {
+			wp_admin_notice(
+				$error_msg,
+				array(
+					'additional_classes' => array( 'error' ),
+				)
+			);
+		}
+		?>
 
 		<div class="input-text-wrap" id="title-wrap">
 			<label for="title">
@@ -1173,8 +1180,15 @@ function wp_dashboard_rss_output( $widget_id ) {
  * @return bool True on success, false on failure.
  */
 function wp_dashboard_cached_rss_widget( $widget_id, $callback, $check_urls = array(), ...$args ) {
-	$loading    = '<p class="widget-loading hide-if-no-js">' . __( 'Loading&hellip;' ) . '</p><div class="hide-if-js notice notice-error inline"><p>' . __( 'This widget requires JavaScript.' ) . '</p></div>';
 	$doing_ajax = wp_doing_ajax();
+	$loading    = '<p class="widget-loading hide-if-no-js">' . __( 'Loading&hellip;' ) . '</p>';
+	$loading   .= wp_get_admin_notice(
+		__( 'This widget requires JavaScript.' ),
+		array(
+			'type'               => 'error',
+			'additional_classes' => array( 'inline', 'hide-if-js' ),
+		)
+	);
 
 	if ( empty( $check_urls ) ) {
 		$widgets = get_option( 'dashboard_widget_options' );
@@ -1317,6 +1331,7 @@ function wp_dashboard_events_news() {
 	<div class="classicpress-news hide-if-no-js">
 		<?php wp_dashboard_primary(); ?>
 	</div>
+<<<<<<< HEAD
 	<div class="classicpress-news-footer">
 		<ul>
 			<li><a href="https://forums.classicpress.net/" target="_blank"><?php _e( 'Get Help' ); ?> <span aria-hidden="true" class="dashicons dashicons-external"></span></a></li>
@@ -1326,6 +1341,207 @@ function wp_dashboard_events_news() {
 		</ul>
 	</div>
 
+=======
+
+	<p class="community-events-footer">
+		<?php
+			printf(
+				'<a href="%1$s" target="_blank">%2$s <span class="screen-reader-text"> %3$s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>',
+				'https://make.wordpress.org/community/meetups-landing-page',
+				__( 'Meetups' ),
+				/* translators: Hidden accessibility text. */
+				__( '(opens in a new tab)' )
+			);
+		?>
+
+		|
+
+		<?php
+			printf(
+				'<a href="%1$s" target="_blank">%2$s <span class="screen-reader-text"> %3$s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>',
+				'https://central.wordcamp.org/schedule/',
+				__( 'WordCamps' ),
+				/* translators: Hidden accessibility text. */
+				__( '(opens in a new tab)' )
+			);
+		?>
+
+		|
+
+		<?php
+			printf(
+				'<a href="%1$s" target="_blank">%2$s <span class="screen-reader-text"> %3$s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>',
+				/* translators: If a Rosetta site exists (e.g. https://es.wordpress.org/news/), then use that. Otherwise, leave untranslated. */
+				esc_url( _x( 'https://wordpress.org/news/', 'Events and News dashboard widget' ) ),
+				__( 'News' ),
+				/* translators: Hidden accessibility text. */
+				__( '(opens in a new tab)' )
+			);
+		?>
+	</p>
+
+	<?php
+}
+
+/**
+ * Prints the markup for the Community Events section of the Events and News Dashboard widget.
+ *
+ * @since 4.8.0
+ */
+function wp_print_community_events_markup() {
+	$community_events_notice  = '<p class="hide-if-js">' . ( 'This widget requires JavaScript.' ) . '</p>';
+	$community_events_notice .= '<p class="community-events-error-occurred" aria-hidden="true">' . __( 'An error occurred. Please try again.' ) . '</p>';
+	$community_events_notice .= '<p class="community-events-could-not-locate" aria-hidden="true"></p>';
+
+	wp_admin_notice(
+		$community_events_notice,
+		array(
+			'type'               => 'error',
+			'additional_classes' => array( 'community-events-errors', 'inline', 'hide-if-js' ),
+			'paragraph_wrap'     => false,
+		)
+	);
+
+	/*
+	 * Hide the main element when the page first loads, because the content
+	 * won't be ready until wp.communityEvents.renderEventsTemplate() has run.
+	 */
+	?>
+	<div id="community-events" class="community-events" aria-hidden="true">
+		<div class="activity-block">
+			<p>
+				<span id="community-events-location-message"></span>
+
+				<button class="button-link community-events-toggle-location" aria-expanded="false">
+					<span class="dashicons dashicons-location" aria-hidden="true"></span>
+					<span class="community-events-location-edit"><?php _e( 'Select location' ); ?></span>
+				</button>
+			</p>
+
+			<form class="community-events-form" aria-hidden="true" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" method="post">
+				<label for="community-events-location">
+					<?php _e( 'City:' ); ?>
+				</label>
+				<?php
+				/* translators: Replace with a city related to your locale.
+				 * Test that it matches the expected location and has upcoming
+				 * events before including it. If no cities related to your
+				 * locale have events, then use a city related to your locale
+				 * that would be recognizable to most users. Use only the city
+				 * name itself, without any region or country. Use the endonym
+				 * (native locale name) instead of the English name if possible.
+				 */
+				?>
+				<input id="community-events-location" class="regular-text" type="text" name="community-events-location" placeholder="<?php esc_attr_e( 'Cincinnati' ); ?>" />
+
+				<?php submit_button( __( 'Submit' ), 'secondary', 'community-events-submit', false ); ?>
+
+				<button class="community-events-cancel button-link" type="button" aria-expanded="false">
+					<?php _e( 'Cancel' ); ?>
+				</button>
+
+				<span class="spinner"></span>
+			</form>
+		</div>
+
+		<ul class="community-events-results activity-block last"></ul>
+	</div>
+
+	<?php
+}
+
+/**
+ * Renders the events templates for the Event and News widget.
+ *
+ * @since 4.8.0
+ */
+function wp_print_community_events_templates() {
+	?>
+
+	<script id="tmpl-community-events-attend-event-near" type="text/template">
+		<?php
+		printf(
+			/* translators: %s: The name of a city. */
+			__( 'Attend an upcoming event near %s.' ),
+			'<strong>{{ data.location.description }}</strong>'
+		);
+		?>
+	</script>
+
+	<script id="tmpl-community-events-could-not-locate" type="text/template">
+		<?php
+		printf(
+			/* translators: %s is the name of the city we couldn't locate.
+			 * Replace the examples with cities in your locale, but test
+			 * that they match the expected location before including them.
+			 * Use endonyms (native locale names) whenever possible.
+			 */
+			__( '%s could not be located. Please try another nearby city. For example: Kansas City; Springfield; Portland.' ),
+			'<em>{{data.unknownCity}}</em>'
+		);
+		?>
+	</script>
+
+	<script id="tmpl-community-events-event-list" type="text/template">
+		<# _.each( data.events, function( event ) { #>
+			<li class="event event-{{ event.type }} wp-clearfix">
+				<div class="event-info">
+					<div class="dashicons event-icon" aria-hidden="true"></div>
+					<div class="event-info-inner">
+						<a class="event-title" href="{{ event.url }}">{{ event.title }}</a>
+						<span class="event-city">{{ event.location.location }}</span>
+					</div>
+				</div>
+
+				<div class="event-date-time">
+					<span class="event-date">{{ event.user_formatted_date }}</span>
+					<# if ( 'meetup' === event.type ) { #>
+						<span class="event-time">
+							{{ event.user_formatted_time }} {{ event.timeZoneAbbreviation }}
+						</span>
+					<# } #>
+				</div>
+			</li>
+		<# } ) #>
+
+		<# if ( data.events.length <= 2 ) { #>
+			<li class="event-none">
+				<?php
+				printf(
+					/* translators: %s: Localized meetup organization documentation URL. */
+					__( 'Want more events? <a href="%s">Help organize the next one</a>!' ),
+					__( 'https://make.wordpress.org/community/organize-event-landing-page/' )
+				);
+				?>
+			</li>
+		<# } #>
+
+	</script>
+
+	<script id="tmpl-community-events-no-upcoming-events" type="text/template">
+		<li class="event-none">
+			<# if ( data.location.description ) { #>
+				<?php
+				printf(
+					/* translators: 1: The city the user searched for, 2: Meetup organization documentation URL. */
+					__( 'There are no events scheduled near %1$s at the moment. Would you like to <a href="%2$s">organize a WordPress event</a>?' ),
+					'{{ data.location.description }}',
+					__( 'https://make.wordpress.org/community/handbook/meetup-organizer/welcome/' )
+				);
+				?>
+
+			<# } else { #>
+				<?php
+				printf(
+					/* translators: %s: Meetup organization documentation URL. */
+					__( 'There are no events scheduled near you at the moment. Would you like to <a href="%s">organize a WordPress event</a>?' ),
+					__( 'https://make.wordpress.org/community/handbook/meetup-organizer/welcome/' )
+				);
+				?>
+			<# } #>
+		</li>
+	</script>
+>>>>>>> ce32693b3d (Administration: Use `wp_admin_notice()` more in `/wp-admin/includes/`.)
 	<?php
 }
 

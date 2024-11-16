@@ -314,7 +314,14 @@ function update_nag() {
 		);
 	}
 
-	echo "<div class='update-nag notice notice-warning inline'>$msg</div>";
+	wp_admin_notice(
+		$msg,
+		array(
+			'type'              => 'warning',
+			'additonal_classes' => array( 'update-nag', 'inline' ),
+			'paragraph_wrap'    => false,
+		)
+	);
 }
 
 /**
@@ -856,7 +863,14 @@ function maintenance_nag() {
 		$msg = __( 'An automated ClassicPress update has failed to complete! Please notify the site administrator.' );
 	}
 
-	echo "<div class='update-nag notice notice-warning inline'>$msg</div>";
+	wp_admin_notice(
+		$msg,
+		array(
+			'type'               => 'warning',
+			'additional_classes' => array( 'update-nag', 'inline' ),
+			'paragraph_wrap'     => false,
+		)
+	);
 }
 
 /**

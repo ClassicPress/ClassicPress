@@ -249,16 +249,20 @@ class Custom_Background {
 		}
 
 		if ( ! empty( $this->updated ) ) {
-			?>
-<div id="message" class="updated">
-	<p>
-			<?php
+			$updated_message = sprintf(
 			/* translators: %s: Home URL. */
-			printf( __( 'Background updated. <a href="%s">Visit your site</a> to see how it looks.' ), esc_url( home_url( '/' ) ) );
+				__( 'Background updated. <a href="%s">Visit your site</a> to see how it looks.' ),
+				esc_url( home_url( '/' ) )
+			);
+			wp_admin_notice(
+				$updated_message,
+				array(
+					'id'                 => 'message',
+					'additional_classes' => array( 'updated' ),
+				)
+			);
+		}
 			?>
-	</p>
-</div>
-		<?php } ?>
 
 <h2><?php _e( 'Background Image' ); ?></h2>
 
