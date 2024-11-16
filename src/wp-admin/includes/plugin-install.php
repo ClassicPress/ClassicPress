@@ -857,24 +857,15 @@ function install_plugin_information() {
 	}
 
 	if ( ! $tested_wp ) {
-<<<<<<< HEAD
-		echo '<div class="notice notice-warning notice-alt"><p>';
-		_e( '<strong>Warning:</strong> This plugin <strong>has not been tested</strong> with your current version of ClassicPress.' );
-		echo '</p></div>';
-	} elseif ( ! $compatible_wp ) {
-		echo '<div class="notice notice-error notice-alt"><p>';
-		_e( '<strong>Error:</strong> This plugin <strong>requires a newer version of ClassicPress</strong>.' );
-=======
 		wp_admin_notice(
-			__( '<strong>Warning:</strong> This plugin <strong>has not been tested</strong> with your current version of WordPress.' ),
+			__( '<strong>Warning:</strong> This plugin <strong>has not been tested</strong> with your current version of ClassicPress.' ),
 			array(
 				'type'               => 'warning',
 				'additional_classes' => array( 'notice-alt' ),
 			)
 		);
 	} elseif ( ! $compatible_wp ) {
-		$compatible_wp_notice_message = __( '<strong>Error:</strong> This plugin <strong>requires a newer version of WordPress</strong>.' );
->>>>>>> fa21528a9a (Administration: Use `wp_admin_notice()` in `/wp-admin/includes`.)
+		$compatible_wp_notice_message = __( '<strong>Error:</strong> This plugin <strong>requires a newer version of ClassicPress</strong>.' );
 		if ( current_user_can( 'update_core' ) ) {
 			$compatible_wp_notice_message .= sprintf(
 				/* translators: %s: URL to WordPress Updates screen. */

@@ -232,7 +232,7 @@ class Custom_Background {
 <div class="wrap" id="custom-background">
 <h1><?php _e( 'Custom Background' ); ?></h1>
 
-			<?php
+		<?php
 		if ( current_user_can( 'customize' ) ) {
 			$message = sprintf(
 				/* translators: %s: URL to background image configuration in Customizer. */

@@ -503,7 +503,7 @@ class Custom_Image_Header {
 <div class="wrap">
 <h1><?php _e( 'Custom Header' ); ?></h1>
 
-			<?php
+		<?php
 		if ( current_user_can( 'customize' ) ) {
 			$message = sprintf(
 				/* translators: %s: URL to header image configuration in Customizer. */
@@ -518,7 +518,7 @@ class Custom_Image_Header {
 				)
 			);
 		}
-			?>
+		?>
 
 		<?php if ( ! empty( $this->updated ) ) { ?>
 <div id="message" class="updated">

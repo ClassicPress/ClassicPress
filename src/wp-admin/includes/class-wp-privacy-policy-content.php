@@ -336,45 +336,20 @@ final class WP_Privacy_Policy_Content {
 		$url     = esc_url( admin_url( 'options-privacy.php?tab=policyguide' ) );
 		$label   = __( 'View Privacy Policy Guide.' );
 
-<<<<<<< HEAD
-		?>
-		<div class="notice notice-warning inline wp-pp-notice">
-			<p>
-			<?php
-			echo $message;
-			printf(
-=======
-		if ( get_current_screen()->is_block_editor() ) {
-			wp_enqueue_script( 'wp-notices' );
-			$action = array(
-				'url'   => $url,
-				'label' => $label,
-			);
-			wp_add_inline_script(
-				'wp-notices',
-				sprintf(
-					'wp.data.dispatch( "core/notices" ).createWarningNotice( "%s", { actions: [ %s ], isDismissible: false } )',
-					$message,
-					wp_json_encode( $action )
-				),
-				'after'
-			);
-		} else {
-			$message .= sprintf(
->>>>>>> fa21528a9a (Administration: Use `wp_admin_notice()` in `/wp-admin/includes`.)
-				' <a href="%s" target="_blank">%s <span class="screen-reader-text">%s</span></a>',
-				$url,
-				$label,
-				/* translators: Hidden accessibility text. */
-				__( '(opens in a new tab)' )
-			);
-			wp_admin_notice(
-				$message,
-				array(
-					'type'               => 'warning',
-					'additional_classes' => array( 'inline', 'wp-pp-notice' ),
-				)
-			);
+		$message .= sprintf(
+			' <a href="%s" target="_blank">%s <span class="screen-reader-text">%s</span></a>',
+			$url,
+			$label,
+			/* translators: Hidden accessibility text. */
+			__( '(opens in a new tab)' )
+		);
+		wp_admin_notice(
+			$message,
+			array(
+				'type'               => 'warning',
+				'additional_classes' => array( 'inline', 'wp-pp-notice' ),
+			)
+		);
 	}
 
 	/**
