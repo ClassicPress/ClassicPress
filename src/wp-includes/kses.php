@@ -2635,11 +2635,8 @@ function _wp_add_global_attributes( $value ) {
 	$global_attributes = array(
 		'aria-describedby' => true,
 		'aria-details'     => true,
-<<<<<<< HEAD
-=======
 		'aria-expanded'    => true,
 		'aria-hidden'      => true,
->>>>>>> 4bcf32a698 (Administration: Add support for attributes in `wp_admin_notice()`.)
 		'aria-label'       => true,
 		'aria-labelledby'  => true,
 		'aria-live'        => true,
