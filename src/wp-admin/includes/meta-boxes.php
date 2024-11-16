@@ -311,11 +311,7 @@ function post_submit_meta_box( $post, $args = array() ) {
 		endif;
 
 		if ( 'draft' === $post->post_status && get_post_meta( $post_id, '_customize_changeset_uuid', true ) ) :
-			?>
-			<div class="notice notice-info notice-alt inline">
-				<p>
-					<?php
-					printf(
+			$message = sprintf(
 						/* translators: %s: URL to the Customizer. */
 						__( 'This draft comes from your <a href="%s">unpublished customization changes</a>. You can edit, but there is no need to publish now. It will be published automatically with those changes.' ),
 						esc_url(
@@ -326,10 +322,13 @@ function post_submit_meta_box( $post, $args = array() ) {
 							)
 						)
 					);
-					?>
-				</p>
-			</div>
-			<?php
+			wp_admin_notice(
+				$message,
+				array(
+					'type'               => 'info',
+					'additional_classes' => array( 'notice-alt', 'inline' ),
+				)
+			);
 		endif;
 
 		/**

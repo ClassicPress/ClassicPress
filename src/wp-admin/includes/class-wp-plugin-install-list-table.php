@@ -650,17 +650,24 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 		<div class="plugin-card plugin-card-<?php echo sanitize_html_class( $plugin['slug'] ); ?>">
 			<?php
 			if ( ! $compatible_php || ! $compatible_wp ) {
-				echo '<div class="notice inline notice-error notice-alt"><p>';
+				$incompatible_notice_message = '';
 				if ( ! $compatible_php && ! $compatible_wp ) {
+<<<<<<< HEAD
 					_e( 'This plugin does not work with your versions of ClassicPress and PHP.' );
 					if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
 						if ( $cp_needs_update ) {
 							printf(
+=======
+					$incompatible_notice_message .= __( 'This plugin does not work with your versions of WordPress and PHP.' );
+					if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
+						$incompatible_notice_message .= sprintf(
+>>>>>>> fa21528a9a (Administration: Use `wp_admin_notice()` in `/wp-admin/includes`.)
 								/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
 								' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
 								self_admin_url( 'update-core.php' ),
 								esc_url( wp_get_update_php_url() )
 							);
+<<<<<<< HEAD
 						} else {
 							printf(
 								/* translators: %s: URL to Update PHP page. */
@@ -669,41 +676,57 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 							);
 						}
 						wp_update_php_annotation( '</p><p><em>', '</em>' );
+=======
+						$incompatible_notice_message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
+>>>>>>> fa21528a9a (Administration: Use `wp_admin_notice()` in `/wp-admin/includes`.)
 					} elseif ( current_user_can( 'update_core' ) ) {
-						printf(
+						$incompatible_notice_message .= sprintf(
 							/* translators: %s: URL to WordPress Updates screen. */
 							' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 							self_admin_url( 'update-core.php' )
 						);
 					} elseif ( current_user_can( 'update_php' ) ) {
-						printf(
+						$incompatible_notice_message .= sprintf(
 							/* translators: %s: URL to Update PHP page. */
 							' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 							esc_url( wp_get_update_php_url() )
 						);
-						wp_update_php_annotation( '</p><p><em>', '</em>' );
+						$incompatible_notice_message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
 					}
 				} elseif ( ! $compatible_wp ) {
+<<<<<<< HEAD
 					_e( 'This plugin does not work with your version of ClassicPress.' );
 					if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
 						printf(
+=======
+					$incompatible_notice_message .= __( 'This plugin does not work with your version of WordPress.' );
+					if ( current_user_can( 'update_core' ) ) {
+						$incompatible_notice_message .= printf(
+>>>>>>> fa21528a9a (Administration: Use `wp_admin_notice()` in `/wp-admin/includes`.)
 							/* translators: %s: URL to WordPress Updates screen. */
 							' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 							self_admin_url( 'update-core.php' )
 						);
 					}
 				} elseif ( ! $compatible_php ) {
-					_e( 'This plugin does not work with your version of PHP.' );
+					$incompatible_notice_message .= __( 'This plugin does not work with your version of PHP.' );
 					if ( current_user_can( 'update_php' ) ) {
-						printf(
+						$incompatible_notice_message .= sprintf(
 							/* translators: %s: URL to Update PHP page. */
 							' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 							esc_url( wp_get_update_php_url() )
 						);
-						wp_update_php_annotation( '</p><p><em>', '</em>' );
+						$incompatible_notice_message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
 					}
 				}
-				echo '</p></div>';
+
+				wp_admin_notice(
+					$incompatible_notice_message,
+					array(
+						'type'               => 'error',
+						'additional_classes' => array( 'notice-alt', 'inline' ),
+					)
+				);
 			}
 			?>
 			<div class="plugin-card-top">

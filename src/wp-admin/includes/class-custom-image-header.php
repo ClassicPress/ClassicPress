@@ -503,19 +503,22 @@ class Custom_Image_Header {
 <div class="wrap">
 <h1><?php _e( 'Custom Header' ); ?></h1>
 
-		<?php if ( current_user_can( 'customize' ) ) { ?>
-<div class="notice notice-info hide-if-no-customize">
-	<p>
 			<?php
-			printf(
+		if ( current_user_can( 'customize' ) ) {
+			$message = sprintf(
 				/* translators: %s: URL to header image configuration in Customizer. */
 				__( 'You can now manage and live-preview Custom Header in the <a href="%s">Customizer</a>.' ),
 				admin_url( 'customize.php?autofocus[control]=header_image' )
 			);
+			wp_admin_notice(
+				$message,
+				array(
+					'type'               => 'info',
+					'additional_classes' => array( 'hide-if-no-customize' ),
+				)
+			);
+		}
 			?>
-	</p>
-</div>
-		<?php } ?>
 
 		<?php if ( ! empty( $this->updated ) ) { ?>
 <div id="message" class="updated">

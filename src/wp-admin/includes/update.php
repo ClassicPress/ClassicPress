@@ -1021,19 +1021,12 @@ function wp_recovery_mode_nag() {
 	$url = add_query_arg( 'action', WP_Recovery_Mode::EXIT_ACTION, $url );
 	$url = wp_nonce_url( $url, WP_Recovery_Mode::EXIT_ACTION );
 
-	?>
-	<div class="notice notice-info">
-		<p>
-			<?php
-			printf(
+	$message = sprintf(
 				/* translators: %s: Recovery Mode exit link. */
 				__( 'You are in recovery mode. This means there may be an error with a theme or plugin. To exit recovery mode, log out or use the Exit button. <a href="%s">Exit Recovery Mode</a>' ),
 				esc_url( $url )
 			);
-			?>
-		</p>
-	</div>
-	<?php
+	wp_admin_notice( $message, array( 'type' => 'info' ) );
 }
 
 /**
