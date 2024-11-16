@@ -8149,7 +8149,7 @@ function wp_update_php_annotation( $before = '<p class="description">', $after =
 
 	if ( $annotation ) {
 		if ( $echo ) {
-		echo $before . $annotation . $after;
+			echo $before . $annotation . $after;
 		} else {
 			return $before . $annotation . $after;
 		}

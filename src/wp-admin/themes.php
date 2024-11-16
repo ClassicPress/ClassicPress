@@ -480,37 +480,25 @@ foreach ( $themes as $theme ) :
 	if ( ! $theme['compatibleWP'] || ! $theme['compatiblePHP'] ) {
 		$message = '';
 		if ( ! $theme['compatibleWP'] && ! $theme['compatiblePHP'] ) {
-<<<<<<< HEAD
-			_e( 'This theme does not work with your versions of ClassicPress and PHP.' );
+			$message = __( 'This theme does not work with your versions of ClassicPress and PHP.' );
 			if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
 				if ( $cp_needs_update ) {
-					printf(
-=======
-			$message = __( 'This theme does not work with your versions of WordPress and PHP.' );
-			if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
-				$message .= sprintf(
->>>>>>> 3cefc7c7ff (Administration: Use `wp_admin_notice()` in `/wp-admin/`.)
-							/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
+					$message .= sprintf(
+						/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
 						' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
 						self_admin_url( 'update-core.php' ),
 						esc_url( wp_get_update_php_url() )
 					);
-<<<<<<< HEAD
 				} else {
-					printf(
+					$message .= sprintf(
 						/* translators: %s: URL to Update PHP page. */
 						' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 						esc_url( wp_get_update_php_url() )
 					);
 				}
-				wp_update_php_annotation( '</p><p><em>', '</em>' );
-			} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
-				printf(
-=======
 				$message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
-			} elseif ( current_user_can( 'update_core' ) ) {
+			} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
 				$message .= sprintf(
->>>>>>> 3cefc7c7ff (Administration: Use `wp_admin_notice()` in `/wp-admin/`.)
 					/* translators: %s: URL to WordPress Updates screen. */
 					' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 					self_admin_url( 'update-core.php' )
@@ -524,15 +512,9 @@ foreach ( $themes as $theme ) :
 				$message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
 			}
 		} elseif ( ! $theme['compatibleWP'] ) {
-<<<<<<< HEAD
-			_e( 'This theme does not work with your version of ClassicPress.' );
-			if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
-				printf(
-=======
-			$message .= __( 'This theme does not work with your version of WordPress.' );
+			$message .= __( 'This theme does not work with your version of ClassicPress.' );
 			if ( current_user_can( 'update_core' ) ) {
 				$message .= sprintf(
->>>>>>> 3cefc7c7ff (Administration: Use `wp_admin_notice()` in `/wp-admin/`.)
 					/* translators: %s: URL to WordPress Updates screen. */
 					' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 					self_admin_url( 'update-core.php' )

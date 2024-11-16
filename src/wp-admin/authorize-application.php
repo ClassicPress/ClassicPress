@@ -201,21 +201,17 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 		}
 		?>
 
-						<?php
+		<?php
 		if ( $new_password ) :
 			$message = '<p class="application-password-display">
 				<label for="new-application-password-value">' . sprintf(
-							/* translators: %s: Application name. */
-							esc_html__( 'Your new password for %s is:' ),
-							'<strong>' . esc_html( $app_name ) . '</strong>'
+				/* translators: %s: Application name. */
+				esc_html__( 'Your new password for %s is:' ),
+				'<strong>' . esc_html( $app_name ) . '</strong>'
 			) . '
-					</label>
-<<<<<<< HEAD
-					<input id="new-application-password-value" type="text" class="code" readonly value="<?php esc_attr( WP_Application_Passwords::chunk_password( $new_password ) ); ?>">
-=======
+				</label>
 				<input id="new-application-password-value" type="text" class="code" readonly="readonly" value="' . esc_attr( WP_Application_Passwords::chunk_password( $new_password ) ) . '" />
->>>>>>> 3cefc7c7ff (Administration: Use `wp_admin_notice()` in `/wp-admin/`.)
-				</p>
+			</p>
 			<p>' . __( 'Be sure to save this in a safe location. You will not be able to retrieve it.' ) . '</p>';
 			$args = array(
 				'type'               => 'success',
