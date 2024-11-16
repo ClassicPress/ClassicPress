@@ -1095,13 +1095,6 @@ function wp_get_nav_menu_to_edit( $menu_id = 0 ) {
 		}
 
 		if ( $some_pending_menu_items ) {
-<<<<<<< HEAD
-			$result .= '<div class="notice notice-info notice-alt inline"><p>' . __( 'Click Save Menu to make pending menu items public.' ) . '</p></div>';
-		}
-
-		if ( $some_invalid_menu_items ) {
-			$result .= '<div class="notice notice-error notice-alt inline"><p>' . __( 'There are some invalid menu items. Please check or delete them.' ) . '</p></div>';
-=======
 			$message     = __( 'Click Save Menu to make pending menu items public.' );
 			$notice_args = array(
 				'type'               => 'info',
@@ -1117,7 +1110,6 @@ function wp_get_nav_menu_to_edit( $menu_id = 0 ) {
 				'additional_classes' => array( 'notice-alt', 'inline' ),
 			);
 			$result     .= wp_get_admin_notice( $message, $notice_args );
->>>>>>> 3384a80c3a (Administration: Use admin notice functions in nav menu admin.)
 		}
 
 		$result .= '<ul class="menu" id="menu-to-edit"> ';
