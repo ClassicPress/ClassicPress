@@ -276,6 +276,7 @@ if ( 'grid' === $mode ) {
 
 		<hr class="wp-header-end">
 
+<<<<<<< HEAD
 		<?php if ( ! empty( $message ) ) : ?>
 			<div id="message" class="updated notice is-dismissible">
 				<p><?php echo esc_html( $message ); ?></p>
@@ -483,6 +484,43 @@ if ( 'grid' === $mode ) {
 					<?php esc_html_e( 'No media items found.' ); ?>
 				</p>
 			</div>
+=======
+		<?php
+		if ( ! empty( $message ) ) {
+			wp_admin_notice(
+				$message,
+				array(
+					'id'                 => 'message',
+					'additional_classes' => array( 'updated' ),
+					'dismissible'        => true,
+				)
+			);
+		}
+
+		if ( ! empty( $message ) ) {
+			wp_admin_notice(
+				$message,
+				array(
+					'id'                 => 'message',
+					'additional_classes' => array( 'updated' ),
+					'dismissible'        => true,
+				)
+			);
+		}
+
+		$js_required_message = sprintf(
+			/* translators: %s: List view URL. */
+			__( 'The grid view for the Media Library requires JavaScript. <a href="%s">Switch to the list view</a>.' ),
+			'upload.php?mode=list'
+		);
+		wp_admin_notice(
+			$js_required_message,
+			array(
+				additional_classes( 'error', 'hide-if-js' ),
+			)
+		);
+		?>
+>>>>>>> f43aaaf741 (Administration: Use `wp_admin_notice()` for `.updated`.)
 		</div>
 	</div>
 
@@ -847,9 +885,18 @@ if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) ) {
 
 <hr class="wp-header-end">
 
-<?php if ( ! empty( $message ) ) : ?>
-<div id="message" class="updated notice is-dismissible"><p><?php echo $message; ?></p></div>
-<?php endif; ?>
+<?php
+if ( ! empty( $message ) ) {
+	wp_admin_notice(
+		$message,
+		array(
+			'id'                 => 'message',
+			'additional_classes' => array( 'updated' ),
+			'dismissible'        => true,
+		)
+	);
+}
+?>
 
 <form id="posts-filter" method="get">
 

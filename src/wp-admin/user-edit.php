@@ -606,25 +606,28 @@ switch ( $action ) {
 								</p>
 							<?php endif; ?>
 
-							<?php $new_email = get_user_meta( $current_user->ID, '_new_email', true ); ?>
-							<?php if ( $new_email && $new_email['newemail'] !== $current_user->user_email && $profile_user->ID === $current_user->ID ) : ?>
-							<div class="updated inline">
-								<p>
 									<?php
-									printf(
+							$new_email = get_user_meta( $current_user->ID, '_new_email', true );
+							if ( $new_email && $new_email['newemail'] !== $current_user->user_email && $profile_user->ID === $current_user->ID ) :
+
+								$pending_change_message  = sprintf(
 										/* translators: %s: New email. */
 										__( 'There is a pending change of your email to %s.' ),
 										'<code>' . esc_html( $new_email['newemail'] ) . '</code>'
 									);
-									printf(
+								$pending_change_message .= sprintf(
 										' <a href="%1$s">%2$s</a>',
 										esc_url( wp_nonce_url( self_admin_url( 'profile.php?dismiss=' . $current_user->ID . '_new_email' ), 'dismiss-' . $current_user->ID . '_new_email' ) ),
 										__( 'Cancel' )
 									);
+								wp_admin_notice(
+									$pending_change_message,
+									array(
+										'additional_classes' => array( 'updated', 'inline' ),
+									)
+								);
+							endif;
 									?>
-								</p>
-							</div>
-							<?php endif; ?>
 						</td>
 					</tr>
 

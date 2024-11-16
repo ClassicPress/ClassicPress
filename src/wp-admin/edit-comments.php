@@ -345,7 +345,18 @@ if ( isset( $_REQUEST['approved'] ) || isset( $_REQUEST['deleted'] ) || isset( $
 			}
 		}
 
+<<<<<<< HEAD
 		echo '<div id="moderated" class="updated notice is-dismissible"><p>' . implode( "<br>\n", $messages ) . '</p></div>';
+=======
+		wp_admin(
+			implode( "<br />\n", $messages ),
+			array(
+				'id'                 => 'moderated',
+				'additional_classes' => array( 'updated' ),
+				'dismissible'        => true,
+			)
+		);
+>>>>>>> f43aaaf741 (Administration: Use `wp_admin_notice()` for `.updated`.)
 	}
 }
 ?>
