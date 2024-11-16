@@ -478,17 +478,24 @@ foreach ( $themes as $theme ) :
 
 	<?php
 	if ( ! $theme['compatibleWP'] || ! $theme['compatiblePHP'] ) {
-		echo '<div class="notice inline notice-error notice-alt"><p>';
+		$message = '';
 		if ( ! $theme['compatibleWP'] && ! $theme['compatiblePHP'] ) {
+<<<<<<< HEAD
 			_e( 'This theme does not work with your versions of ClassicPress and PHP.' );
 			if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
 				if ( $cp_needs_update ) {
 					printf(
+=======
+			$message = __( 'This theme does not work with your versions of WordPress and PHP.' );
+			if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
+				$message .= sprintf(
+>>>>>>> 3cefc7c7ff (Administration: Use `wp_admin_notice()` in `/wp-admin/`.)
 							/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
 						' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
 						self_admin_url( 'update-core.php' ),
 						esc_url( wp_get_update_php_url() )
 					);
+<<<<<<< HEAD
 				} else {
 					printf(
 						/* translators: %s: URL to Update PHP page. */
@@ -499,39 +506,57 @@ foreach ( $themes as $theme ) :
 				wp_update_php_annotation( '</p><p><em>', '</em>' );
 			} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
 				printf(
+=======
+				$message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
+			} elseif ( current_user_can( 'update_core' ) ) {
+				$message .= sprintf(
+>>>>>>> 3cefc7c7ff (Administration: Use `wp_admin_notice()` in `/wp-admin/`.)
 					/* translators: %s: URL to WordPress Updates screen. */
 					' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 					self_admin_url( 'update-core.php' )
 				);
 			} elseif ( current_user_can( 'update_php' ) ) {
-				printf(
+				$message .= sprintf(
 					/* translators: %s: URL to Update PHP page. */
 					' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 					esc_url( wp_get_update_php_url() )
 				);
-				wp_update_php_annotation( '</p><p><em>', '</em>' );
+				$message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
 			}
 		} elseif ( ! $theme['compatibleWP'] ) {
+<<<<<<< HEAD
 			_e( 'This theme does not work with your version of ClassicPress.' );
 			if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
 				printf(
+=======
+			$message .= __( 'This theme does not work with your version of WordPress.' );
+			if ( current_user_can( 'update_core' ) ) {
+				$message .= sprintf(
+>>>>>>> 3cefc7c7ff (Administration: Use `wp_admin_notice()` in `/wp-admin/`.)
 					/* translators: %s: URL to WordPress Updates screen. */
 					' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 					self_admin_url( 'update-core.php' )
 				);
 			}
 		} elseif ( ! $theme['compatiblePHP'] ) {
-			_e( 'This theme does not work with your version of PHP.' );
+			$message .= __( 'This theme does not work with your version of PHP.' );
 			if ( current_user_can( 'update_php' ) ) {
-				printf(
+				$message .= sprintf(
 					/* translators: %s: URL to Update PHP page. */
 					' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 					esc_url( wp_get_update_php_url() )
 				);
-				wp_update_php_annotation( '</p><p><em>', '</em>' );
+				$message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
 			}
 		}
-		echo '</p></div>';
+
+		wp_admin_notice(
+			$message,
+			array(
+				'type'               => 'error',
+				'additional_classes' => array( 'inline', 'notice-alt' ),
+			)
+		);
 	}
 	?>
 
@@ -708,6 +733,13 @@ if ( ! is_multisite() && $broken_themes ) {
  * @return string The template for displaying the auto-update setting link.
  */
 function wp_theme_auto_update_setting_template() {
+	$notice   = wp_get_admin_notice(
+		'',
+		array(
+			'type'               => 'error',
+			'additional_classes' => array( 'notice-alt', 'inline', 'hidden' ),
+		)
+	);
 	$template = '
 		<div class="theme-autoupdate">
 			<# if ( data.autoupdate.supported ) { #>
@@ -733,7 +765,7 @@ function wp_theme_auto_update_setting_template() {
 				<# } #>
 				<br>' . wp_get_auto_update_message() . '</span>
 			<# } #>
-			<div class="notice notice-error notice-alt inline hidden"><p></p></div>
+			' . $notice . '
 		</div>
 	';
 
