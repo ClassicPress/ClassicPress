@@ -318,7 +318,7 @@ function update_nag() {
 		$msg,
 		array(
 			'type'              => 'warning',
-			'additonal_classes' => array( 'update-nag', 'inline' ),
+			'additional_classes' => array( 'update-nag', 'inline' ),
 			'paragraph_wrap'    => false,
 		)
 	);
