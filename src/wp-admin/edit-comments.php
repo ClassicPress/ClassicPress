@@ -345,7 +345,7 @@ if ( isset( $_REQUEST['approved'] ) || isset( $_REQUEST['deleted'] ) || isset( $
 			}
 		}
 
-		wp_admin(
+		wp_admin_notice(
 			implode( "<br />\n", $messages ),
 			array(
 				'id'                 => 'moderated',
