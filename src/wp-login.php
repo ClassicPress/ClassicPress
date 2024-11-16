@@ -198,15 +198,9 @@ function login_header( $title = 'Log In', $message = '', $wp_error = null ) {
 			$severity = $wp_error->get_error_data( $code );
 			foreach ( $wp_error->get_error_messages( $code ) as $error_message ) {
 				if ( 'message' === $severity ) {
-<<<<<<< HEAD
-					$messages .= '	' . $error_message . "<br>\n";
-				} else {
-					$errors .= '	' . $error_message . "<br>\n";
-=======
 					$messages .= '<p>' . $error_message . '</p>';
 				} else {
 					$error_list[] = $error_message;
->>>>>>> b9adbb33da (Login and Registration: Improve HTML for errors and notices.)
 				}
 			}
 		}
@@ -989,12 +983,8 @@ switch ( $action ) {
 
 		if ( ( ! $errors->has_errors() ) && isset( $_POST['pass1'] ) && ! empty( $_POST['pass1'] ) ) {
 			reset_password( $user, $_POST['pass1'] );
-<<<<<<< HEAD
 			$cookie_options['expires'] = time() - YEAR_IN_SECONDS;
 			setcookie( $rp_cookie, ' ', $cookie_options );
-			login_header( __( 'Password Reset' ), '<p class="message reset-pass">' . __( 'Your password has been reset.' ) . ' <a href="' . esc_url( wp_login_url() ) . '">' . __( 'Log in' ) . '</a></p>' );
-=======
-			setcookie( $rp_cookie, ' ', time() - YEAR_IN_SECONDS, $rp_path, COOKIE_DOMAIN, is_ssl(), true );
 			login_header(
 				__( 'Password Reset' ),
 				wp_get_admin_notice(
@@ -1005,7 +995,6 @@ switch ( $action ) {
 					)
 				)
 			);
->>>>>>> b9adbb33da (Login and Registration: Improve HTML for errors and notices.)
 			login_footer();
 			exit;
 		}
@@ -1054,10 +1043,6 @@ switch ( $action ) {
 			</p>
 
 			<p class="description indicator-hint"><?php echo wp_get_password_hint(); ?></p>
-<<<<<<< HEAD
-			<br class="clear">
-=======
->>>>>>> b9adbb33da (Login and Registration: Improve HTML for errors and notices.)
 
 			<?php
 
@@ -1186,12 +1171,7 @@ switch ( $action ) {
 			<p id="reg_passmail">
 				<?php _e( 'Registration confirmation will be emailed to you.' ); ?>
 			</p>
-<<<<<<< HEAD
-			<br class="clear">
-			<input type="hidden" name="redirect_to" value="<?php echo esc_attr( $redirect_to ); ?>">
-=======
 			<input type="hidden" name="redirect_to" value="<?php echo esc_attr( $redirect_to ); ?>" />
->>>>>>> b9adbb33da (Login and Registration: Improve HTML for errors and notices.)
 			<p class="submit">
 				<input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Register' ); ?>">
 			</p>
