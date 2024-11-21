@@ -879,7 +879,7 @@
 			isImageAttachment: function( attachment ) {
 				// If uploading, we know the filename but not the mime type.
 				if ( attachment.get('uploading') ) {
-					return /\.(jpe?g|png|gif|webp)$/i.test( attachment.get('filename') );
+					return /\.(jpe?g|png|gif|webp|avif)$/i.test( attachment.get('filename') );
 				}
 
 				return attachment.get('type') === 'image';
