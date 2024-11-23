@@ -5807,23 +5807,6 @@ function get_pages( $args = array() ) {
 		'no_found_rows'          => true,
 	);
 
-<<<<<<< HEAD
-	$cache_key = "get_pages:$key:$last_changed";
-	$cache     = wp_cache_get( $cache_key, 'posts' );
-	if ( false !== $cache ) {
-		_prime_post_caches( $cache, false, false );
-
-		// Convert to WP_Post instances.
-		$pages = array_map( 'get_post', $cache );
-		/** This filter is documented in wp-includes/post.php */
-		$pages = apply_filters( 'get_pages', $pages, $parsed_args );
-
-		return $pages;
-	}
-
-	$inclusions = '';
-=======
->>>>>>> eb6bf15bc7 (Posts, Post Types: Use WP_Query internally in get_pages. )
 	if ( ! empty( $parsed_args['include'] ) ) {
 		$child_of     = 0; // Ignore child_of, parent, exclude, meta_key, and meta_value params if using include.
 		$parent       = -1;
@@ -5850,8 +5833,8 @@ function get_pages( $args = array() ) {
 					$post_author = $post_author->ID;
 				}
 				$query_args['author__in'][] = $post_author;
-				}
 			}
+		}
 	}
 
 	if ( is_array( $parent ) ) {
@@ -5869,92 +5852,17 @@ function get_pages( $args = array() ) {
 		$query_args['orderby'] = array_fill_keys( $orderby, $parsed_args['sort_order'] );
 	}
 
-<<<<<<< HEAD
-	$orderby_array = array();
-	$allowed_keys  = array(
-		'author',
-		'post_author',
-		'date',
-		'post_date',
-		'title',
-		'post_title',
-		'name',
-		'post_name',
-		'modified',
-		'post_modified',
-		'modified_gmt',
-		'post_modified_gmt',
-		'menu_order',
-		'parent',
-		'post_parent',
-		'ID',
-		'rand',
-		'comment_count',
-	);
-
-	foreach ( explode( ',', $parsed_args['sort_column'] ) as $orderby ) {
-		$orderby = trim( $orderby );
-		if ( ! in_array( $orderby, $allowed_keys, true ) ) {
-			continue;
-		}
-
-		switch ( $orderby ) {
-			case 'menu_order':
-				break;
-			case 'ID':
-				$orderby = "$wpdb->posts.ID";
-				break;
-			case 'rand':
-				$orderby = 'RAND()';
-				break;
-			case 'comment_count':
-				$orderby = "$wpdb->posts.comment_count";
-				break;
-			default:
-				if ( str_starts_with( $orderby, 'post_' ) ) {
-					$orderby = "$wpdb->posts." . $orderby;
-				} else {
-					$orderby = "$wpdb->posts.post_" . $orderby;
-				}
-		}
-
-		$orderby_array[] = $orderby;
-
-=======
 	$order = $parsed_args['sort_order'];
 	if ( $order ) {
 		$query_args['order'] = $order;
->>>>>>> eb6bf15bc7 (Posts, Post Types: Use WP_Query internally in get_pages. )
 	}
 
 	if ( ! empty( $number ) ) {
 		$query_args['posts_per_page'] = $number;
 	}
 
-<<<<<<< HEAD
-	$pages = $wpdb->get_results( $query );
-
-	if ( empty( $pages ) ) {
-		wp_cache_set( $cache_key, array(), 'posts' );
-
-		/** This filter is documented in wp-includes/post.php */
-		$pages = apply_filters( 'get_pages', array(), $parsed_args );
-
-		return $pages;
-	}
-
-	// Sanitize before caching so it'll only get done once.
-	$num_pages = count( $pages );
-	for ( $i = 0; $i < $num_pages; $i++ ) {
-		$pages[ $i ] = sanitize_post( $pages[ $i ], 'raw' );
-	}
-
-	// Update cache.
-	update_post_cache( $pages );
-=======
 	$query = new WP_Query( $query_args );
 	$pages = $query->get_posts();
->>>>>>> eb6bf15bc7 (Posts, Post Types: Use WP_Query internally in get_pages. )
 
 	if ( $child_of || $hierarchical ) {
 		$pages = get_page_children( $child_of, $pages );
@@ -5977,19 +5885,6 @@ function get_pages( $args = array() ) {
 		}
 	}
 
-<<<<<<< HEAD
-	$page_structure = array();
-	foreach ( $pages as $page ) {
-		$page_structure[] = $page->ID;
-	}
-
-	wp_cache_set( $cache_key, $page_structure, 'posts' );
-
-	// Convert to WP_Post instances.
-	$pages = array_map( 'get_post', $pages );
-
-=======
->>>>>>> eb6bf15bc7 (Posts, Post Types: Use WP_Query internally in get_pages. )
 	/**
 	 * Filters the retrieved list of pages.
 	 *

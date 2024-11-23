@@ -65,11 +65,7 @@ class Tests_Post_GetPages extends WP_UnitTestCase {
 		clean_post_cache( $pages[0]->ID );
 		$this->assertNotEquals( $time1, $time2 = wp_cache_get( 'last_changed', 'posts' ) );
 		get_post( $pages[0]->ID );
-<<<<<<< HEAD
 		$num_queries = get_num_queries();
-=======
-		$num_queries = $wpdb->num_queries;
->>>>>>> eb6bf15bc7 (Posts, Post Types: Use WP_Query internally in get_pages. )
 
 		// last_changed bumped so num_queries should increment.
 		$pages = get_pages( array( 'number' => 2 ) );
