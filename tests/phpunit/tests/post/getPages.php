@@ -359,8 +359,6 @@ class Tests_Post_GetPages extends WP_UnitTestCase {
 	}
 
 	/**
-<<<<<<< HEAD
-=======
 	 * @ticket 12821
 	 * @covers ::get_pages
 	 */
@@ -379,7 +377,7 @@ class Tests_Post_GetPages extends WP_UnitTestCase {
 		// Filter the query to return the wptests_pt post type.
 		add_filter(
 			'get_pages_query_args',
-			static function( $query_args, $parsed_args ) use ( &$query_args_values, &$parsed_args_values ) {
+			static function ( $query_args, $parsed_args ) use ( &$query_args_values, &$parsed_args_values ) {
 				$query_args['post_type'] = 'wptests_pt';
 				$query_args_values       = $query_args;
 				$parsed_args_values      = $parsed_args;
@@ -643,7 +641,6 @@ class Tests_Post_GetPages extends WP_UnitTestCase {
 	}
 
 	/**
->>>>>>> 1825c75f88 (Posts, Post Types: Add a new filter for query arguments in `get_pages`.)
 	 * @ticket 9470
 	 */
 	public function test_get_pages_parent() {
