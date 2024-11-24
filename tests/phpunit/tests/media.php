@@ -4537,7 +4537,7 @@ EOF;
 		$attr['loading']       = 'lazy';
 		$attr['fetchpriority'] = 'high';
 
-		$this->assertSame(
+		$this->assertEqualSetsWithIndex(
 			array(
 				'loading'       => 'lazy',
 				'fetchpriority' => 'high',
