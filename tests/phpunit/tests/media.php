@@ -2803,11 +2803,7 @@ EOF;
 		$lazy_iframe    = wp_iframe_tag_add_loading_attr( $iframe, 'test' );
 
 		// The following should not be modified because there already is a 'loading' attribute.
-<<<<<<< HEAD
-		$img_eager    = str_replace( '">', '" loading="eager">', $img );
-=======
-		$img_eager    = str_replace( ' />', ' loading="eager" fetchpriority="high" />', $img );
->>>>>>> b6fde03ef7 (Media: Automatically add `fetchpriority="high"` to hero image to improve load time performance.)
+		$img_eager    = str_replace( '>', ' loading="eager" fetchpriority="high">', $img );
 		$iframe_eager = str_replace( '">', '" loading="eager">', $iframe );
 
 		$content = '
@@ -3745,181 +3741,6 @@ EOF;
 	}
 
 	/**
-<<<<<<< HEAD
-=======
-	 * Tests that wp_filter_content_tags() does not add loading="lazy" to the first
-	 * image in the loop when using a block theme.
-	 *
-	 * @ticket 56930
-	 * @ticket 58548
-	 * @ticket 58235
-	 *
-	 * @covers ::wp_filter_content_tags
-	 * @covers ::wp_img_tag_add_loading_optimization_attrs
-	 * @covers ::wp_get_loading_optimization_attributes
-	 */
-	public function test_wp_filter_content_tags_does_not_lazy_load_first_image_in_block_theme() {
-		global $_wp_current_template_content, $wp_query, $wp_the_query, $post;
-
-		// Do not add srcset, sizes, or decoding attributes as they are irrelevant for this test.
-		add_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
-		add_filter( 'wp_img_tag_add_decoding_attr', '__return_false' );
-		$this->force_omit_loading_attr_threshold( 1 );
-
-		$img1      = get_image_tag( self::$large_id, '', '', '', 'large' );
-		$img2      = get_image_tag( self::$large_id, '', '', '', 'medium' );
-		$prio_img1 = str_replace( ' src=', ' fetchpriority="high" src=', $img1 );
-		$lazy_img2 = wp_img_tag_add_loading_optimization_attrs( $img2, 'the_content' );
-
-		// Only the second image should be lazy-loaded.
-		$post_content     = $img1 . $img2;
-		$expected_content = wpautop( $prio_img1 . $lazy_img2 );
-
-		// Update the post to test with so that it has the above post content.
-		wp_update_post(
-			array(
-				'ID'                    => self::$post_ids['publish'],
-				'post_content'          => $post_content,
-				'post_content_filtered' => $post_content,
-			)
-		);
-
-		$wp_query     = new WP_Query( array( 'p' => self::$post_ids['publish'] ) );
-		$wp_the_query = $wp_query;
-		$post         = get_post( self::$post_ids['publish'] );
-
-		$_wp_current_template_content = '<!-- wp:post-content /-->';
-
-		$html = get_the_block_template_html();
-		$this->assertSame( '<div class="wp-site-blocks"><div class="entry-content wp-block-post-content is-layout-flow wp-block-post-content-is-layout-flow">' . $expected_content . '</div></div>', $html );
-	}
-
-	/**
-	 * Tests that wp_filter_content_tags() does not add loading="lazy"
-	 * to the featured image when using a block theme.
-	 *
-	 * @ticket 56930
-	 * @ticket 58548
-	 * @ticket 58235
-	 *
-	 * @covers ::wp_filter_content_tags
-	 * @covers ::wp_img_tag_add_loading_optimization_attrs
-	 * @covers ::wp_get_loading_optimization_attributes
-	 */
-	public function test_wp_filter_content_tags_does_not_lazy_load_first_featured_image_in_block_theme() {
-		global $_wp_current_template_content, $wp_query, $wp_the_query, $post;
-
-		// Do not add srcset, sizes, or decoding attributes as they are irrelevant for this test.
-		add_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
-		add_filter( 'wp_img_tag_add_decoding_attr', '__return_false' );
-		add_filter(
-			'wp_get_attachment_image_attributes',
-			static function( $attr ) {
-				unset( $attr['srcset'], $attr['sizes'], $attr['decoding'] );
-				return $attr;
-			}
-		);
-		$this->force_omit_loading_attr_threshold( 1 );
-
-		$content_img      = get_image_tag( self::$large_id, '', '', '', 'large' );
-		$lazy_content_img = wp_img_tag_add_loading_optimization_attrs( $content_img, 'the_content' );
-
-		// The featured image should not be lazy-loaded as it is the first image.
-		$featured_image_id = self::$large_id;
-		update_post_meta( self::$post_ids['publish'], '_thumbnail_id', $featured_image_id );
-		$expected_featured_image = '<figure class="wp-block-post-featured-image">' . get_the_post_thumbnail(
-			self::$post_ids['publish'],
-			'post-thumbnail',
-			array(
-				'loading'       => false,
-				'fetchpriority' => 'high',
-			)
-		) . '</figure>';
-
-		// Reset high priority flag as the forced `fetchpriority="high"` above already modified it.
-		$this->reset_high_priority_element_flag();
-
-		// The post content image should be lazy-loaded since the featured image appears above.
-		$post_content     = $content_img;
-		$expected_content = wpautop( $lazy_content_img );
-
-		// Update the post to test with so that it has the above post content.
-		wp_update_post(
-			array(
-				'ID'                    => self::$post_ids['publish'],
-				'post_content'          => $post_content,
-				'post_content_filtered' => $post_content,
-			)
-		);
-		$wp_query     = new WP_Query( array( 'p' => self::$post_ids['publish'] ) );
-		$wp_the_query = $wp_query;
-		$post         = get_post( self::$post_ids['publish'] );
-
-		$_wp_current_template_content = '<!-- wp:post-featured-image /--> <!-- wp:post-content /-->';
-
-		$html = get_the_block_template_html();
-		$this->assertSame( '<div class="wp-site-blocks">' . $expected_featured_image . ' <div class="entry-content wp-block-post-content is-layout-flow wp-block-post-content-is-layout-flow">' . $expected_content . '</div></div>', $html );
-	}
-
-	/**
-	 * Tests that wp_filter_content_tags() does not add loading="lazy" to images
-	 * in a "Header" template part.
-	 *
-	 * @ticket 56930
-	 * @ticket 58235
-	 *
-	 * @covers ::wp_filter_content_tags
-	 * @covers ::wp_img_tag_add_loading_optimization_attrs
-	 * @covers ::wp_get_loading_optimization_attributes
-	 */
-	public function test_wp_filter_content_tags_does_not_lazy_load_images_in_header() {
-		global $_wp_current_template_content;
-
-		// Do not add srcset, sizes, or decoding attributes as they are irrelevant for this test.
-		add_filter( 'wp_img_tag_add_srcset_and_sizes_attr', '__return_false' );
-		add_filter( 'wp_img_tag_add_decoding_attr', '__return_false' );
-
-		// Use a single image for each header and footer template parts.
-		$header_img = get_image_tag( self::$large_id, '', '', '', 'large' );
-		// Since header_img is qualified candidate for LCP, fetchpriority high is applied to it.
-		$header_img = str_replace( '<img', '<img fetchpriority="high"', $header_img );
-
-		$footer_img = get_image_tag( self::$large_id, '', '', '', 'medium' );
-
-		// Create header and footer template parts.
-		$header_post_id = self::factory()->post->create(
-			array(
-				'post_type'    => 'wp_template_part',
-				'post_status'  => 'publish',
-				'post_name'    => 'header',
-				'post_content' => $header_img,
-			)
-		);
-		wp_set_post_terms( $header_post_id, WP_TEMPLATE_PART_AREA_HEADER, 'wp_template_part_area' );
-		wp_set_post_terms( $header_post_id, get_stylesheet(), 'wp_theme' );
-		$footer_post_id = self::factory()->post->create(
-			array(
-				'post_type'    => 'wp_template_part',
-				'post_status'  => 'publish',
-				'post_name'    => 'footer',
-				'post_content' => $footer_img,
-			)
-		);
-		wp_set_post_terms( $footer_post_id, WP_TEMPLATE_PART_AREA_FOOTER, 'wp_template_part_area' );
-		wp_set_post_terms( $footer_post_id, get_stylesheet(), 'wp_theme' );
-
-		$_wp_current_template_content = '<!-- wp:template-part {"slug":"header","theme":"' . get_stylesheet() . '","tagName":"header"} /--><!-- wp:template-part {"slug":"footer","theme":"' . get_stylesheet() . '","tagName":"footer"} /-->';
-
-		// Header image should not be lazy-loaded, footer image should be lazy-loaded.
-		$expected_template_content  = '<header class="wp-block-template-part">' . $header_img . '</header>';
-		$expected_template_content .= '<footer class="wp-block-template-part">' . wp_img_tag_add_loading_optimization_attrs( $footer_img, 'force-lazy' ) . '</footer>';
-
-		$html = get_the_block_template_html();
-		$this->assertSame( '<div class="wp-site-blocks">' . $expected_template_content . '</div>', $html );
-	}
-
-	/**
->>>>>>> b6fde03ef7 (Media: Automatically add `fetchpriority="high"` to hero image to improve load time performance.)
 	 * @ticket 58089
 	 * @ticket 58235
 	 *
@@ -4299,7 +4120,7 @@ EOF;
 		$result = null;
 		add_filter(
 			'the_content',
-			function( $content ) use ( &$result, $context ) {
+			function ( $content ) use ( &$result, $context ) {
 				$attr   = $this->get_width_height_for_high_priority();
 				$result = wp_get_loading_optimization_attributes( 'img', $attr, $context );
 				return $content;
@@ -4585,7 +4406,7 @@ EOF;
 		// Add a filter that modifies the context.
 		add_filter(
 			'wp_get_attachment_image_context',
-			static function() {
+			static function () {
 				return 'my_custom_context';
 			}
 		);
@@ -4688,38 +4509,6 @@ EOF;
 				array(),
 				'Function should return empty array as video tag is not supported.',
 			),
-		);
-	}
-
-	/**
-	 * @ticket 58235
-	 *
-	 * @covers ::wp_get_loading_optimization_attributes
-	 */
-	public function test_wp_get_loading_optimization_attributes_skip_for_block_template() {
-		$attr = $this->get_width_height_for_high_priority();
-
-		// Skip logic if context is `template`.
-		$this->assertSame(
-			array(),
-			wp_get_loading_optimization_attributes( 'img', $attr, 'template' ),
-			'Skip logic and return blank array for block template.'
-		);
-	}
-
-	/**
-	 * @ticket 58235
-	 *
-	 * @covers ::wp_get_loading_optimization_attributes
-	 */
-	public function test_wp_get_loading_optimization_attributes_header_block_template() {
-		$attr = $this->get_width_height_for_high_priority();
-
-		// Skip logic if context is `template`.
-		$this->assertSame(
-			array( 'fetchpriority' => 'high' ),
-			wp_get_loading_optimization_attributes( 'img', $attr, 'template_part_' . WP_TEMPLATE_PART_AREA_HEADER ),
-			'Images in the header block template part should not be lazy-loaded and first large image is set high fetchpriority.'
 		);
 	}
 
@@ -4872,7 +4661,7 @@ EOF;
 
 		add_filter(
 			'wp_min_priority_img_pixels',
-			static function( $res ) {
+			static function ( $res ) {
 				return 2500; // 50*50=2500
 			}
 		);
@@ -4896,7 +4685,7 @@ EOF;
 	private function track_last_attachment_image_context( &$last_context ) {
 		add_filter(
 			'wp_get_attachment_image_context',
-			static function( $context ) use ( &$last_context ) {
+			static function ( $context ) use ( &$last_context ) {
 				$last_context = $context;
 				return $context;
 			},

@@ -4515,7 +4515,7 @@ function wp_get_loading_attr_default( $context ) {
 	 * Do not lazy-load images in the header block template part, as they are likely above the fold.
 	 * For classic themes, this is handled in the condition below using the 'get_header' action.
 	 */
-	$header_area = WP_TEMPLATE_PART_AREA_HEADER;
+	$header_area = 'header';
 	if ( "template_part_{$header_area}" === $context ) {
 		return false;
 	}

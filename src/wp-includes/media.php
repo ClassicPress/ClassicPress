@@ -1961,20 +1961,20 @@ function wp_img_tag_add_loading_optimization_attrs( $image, $context ) {
 	$loading_attrs_enabled = wp_lazy_loading_enabled( 'img', $context );
 
 	if ( empty( $loading_val ) && $loading_attrs_enabled ) {
-	/**
-	 * Filters the `loading` attribute value to add to an image. Default `lazy`.
+		/**
+		 * Filters the `loading` attribute value to add to an image. Default `lazy`.
 		 * This filter is added in for backward compatibility.
-	 *
-	 * Returning `false` or an empty string will not add the attribute.
-	 * Returning `true` will add the default value.
+		 *
+		 * Returning `false` or an empty string will not add the attribute.
+		 * Returning `true` will add the default value.
 		 * `true` and `false` usage supported for backward compatibility.
-	 *
-	 * @since 5.5.0
-	 *
+		 *
+		 * @since 5.5.0
+		 *
 		 * @param string|bool $loading Current value for `loading` attribute for the image.
-	 * @param string      $image   The HTML `img` tag to be filtered.
-	 * @param string      $context Additional context about how the function was called or where the img tag is.
-	 */
+		 * @param string      $image   The HTML `img` tag to be filtered.
+		 * @param string      $context Additional context about how the function was called or where the img tag is.
+		 */
 		$filtered_loading_attr = apply_filters(
 			'wp_img_tag_add_loading_attr',
 			isset( $optimization_attrs['loading'] ) ? $optimization_attrs['loading'] : false,
@@ -2004,7 +2004,7 @@ function wp_img_tag_add_loading_optimization_attrs( $image, $context ) {
 					__( 'An image should not be lazy-loaded and marked as high priority at the same time.' ),
 					'6.3.0'
 				);
-		}
+			}
 
 			// The filtered value will still be respected.
 			$optimization_attrs['loading'] = $filtered_loading_attr;
@@ -5643,7 +5643,7 @@ function wp_get_loading_optimization_attributes( $tag_name, $attr, $context ) {
 	 * It is here to avoid duplicate logic in many places below, without having
 	 * to introduce a very specific private global function.
 	 */
-	$postprocess = static function( $loading_attributes, $with_fetchpriority = false ) use ( $tag_name, $attr, $context ) {
+	$postprocess = static function ( $loading_attributes, $with_fetchpriority = false ) use ( $tag_name, $attr, $context ) {
 		// Potentially add `fetchpriority="high"`.
 		if ( $with_fetchpriority ) {
 			$loading_attributes = wp_maybe_add_fetchpriority_high_attr( $loading_attributes, $tag_name, $attr );
@@ -5665,10 +5665,6 @@ function wp_get_loading_optimization_attributes( $tag_name, $attr, $context ) {
 		return $loading_attrs;
 	}
 
-<<<<<<< HEAD
-	// Do not lazy-load images in the header block template part, as they are likely above the fold.
-	$header_area = 'header';
-=======
 	// For now this function only supports images and iframes.
 	if ( 'img' !== $tag_name && 'iframe' !== $tag_name ) {
 		return $loading_attrs;
@@ -5708,8 +5704,7 @@ function wp_get_loading_optimization_attributes( $tag_name, $attr, $context ) {
 	 * Do not lazy-load images in the header block template part, as they are likely above the fold.
 	 * For classic themes, this is handled in the condition below using the 'get_header' action.
 	 */
-	$header_area = WP_TEMPLATE_PART_AREA_HEADER;
->>>>>>> b6fde03ef7 (Media: Automatically add `fetchpriority="high"` to hero image to improve load time performance.)
+	$header_area = 'header';
 	if ( "template_part_{$header_area}" === $context ) {
 		return $postprocess( $loading_attrs, true );
 	}
