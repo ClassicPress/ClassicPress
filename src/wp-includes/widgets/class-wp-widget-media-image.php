@@ -239,15 +239,6 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 				$instance['height'] = '';
 			}
 
-<<<<<<< HEAD
-			$image = sprintf(
-				'<img class="%1$s" src="%2$s" alt="%3$s" width="%4$s" height="%5$s">',
-				esc_attr( $classes ),
-				esc_url( $instance['url'] ),
-				esc_attr( $instance['alt'] ),
-				esc_attr( $instance['width'] ),
-				esc_attr( $instance['height'] )
-=======
 			$attr = array(
 				'class'    => $classes,
 				'src'      => $instance['url'],
@@ -255,7 +246,6 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 				'width'    => $instance['width'],
 				'height'   => $instance['height'],
 				'decoding' => 'async',
->>>>>>> 21490c6ba4 (Media: Ensure that the image widget supports loading optimization attributes.)
 			);
 
 			$loading_optimization_attr = wp_get_loading_optimization_attributes(
@@ -273,7 +263,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 				$image .= ' ' . $name . '="' . $value . '"';
 			}
 
-			$image .= ' />';
+			$image .= '>';
 		} // End if().
 
 		$url = '';

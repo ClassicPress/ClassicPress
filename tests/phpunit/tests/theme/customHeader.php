@@ -190,7 +190,7 @@ class Tests_Theme_CustomHeader extends WP_UnitTestCase {
 
 		add_filter(
 			'wp_min_priority_img_pixels',
-			static function() {
+			static function () {
 				return 2500; // 50*50=2500
 			}
 		);
