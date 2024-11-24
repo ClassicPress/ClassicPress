@@ -3752,11 +3752,11 @@ EOF;
 
 		// Force no lazy-loading or fetchpriority on the image tag expected in the content.
 		$expected_image = wp_get_attachment_image(
-				self::$large_id,
-				'large',
-				false,
-				array(
-					'loading'       => false,
+			self::$large_id,
+			'large',
+			false,
+			array(
+				'loading'       => false,
 				'fetchpriority' => false,
 			)
 		);
@@ -3769,11 +3769,7 @@ EOF;
 		// Overwrite post content with an image.
 		add_filter(
 			'the_content',
-<<<<<<< HEAD
-			static function () {
-=======
-			static function() use ( &$image_within_content ) {
->>>>>>> 96c64cd42d (Media: Avoid programmatically created images within post content from incorrectly receiving `fetchpriority="high"`.)
+			static function () use ( &$image_within_content ) {
 				// Replace content with an image tag, i.e. the 'wp_get_attachment_image' context is used while running 'the_content' filter.
 				$image_within_content = wp_get_attachment_image( self::$large_id, 'large', false );
 				return $image_within_content;
