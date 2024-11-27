@@ -213,7 +213,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			size = item.dataset.size,
 			width = item.dataset.width,
 			height = item.dataset.height,
-			caption = item.dataset.caption,
+			caption = item.getAttribute( 'data-caption' ),
 			description = item.dataset.description,
 			taxes = item.dataset.taxes,
 			tags = item.dataset.tags,
@@ -240,15 +240,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '.attachment-dimensions' ).textContent = width + ' ' + _wpMediaGridSettings.by + ' ' + height + ' ' + _wpMediaGridSettings.pixels;
 		dialog.querySelector( '.attachment-media-view' ).className = 'attachment-media-view' + orientation;
 
-		dialog.querySelector( '#attachment-details-two-column-alt-text').textContent = alt;
-		dialog.querySelector( '#attachment-details-two-column-title').value = title;
-		dialog.querySelector( '#attachment-details-two-column-caption').textContent = caption;
-		dialog.querySelector( '#attachment-details-two-column-description').textContent = description;
-		dialog.querySelector( '#attachment-details-two-column-copy-link').value = url;
+		dialog.querySelector( '#attachment-details-two-column-alt-text' ).value = alt;
+		dialog.querySelector( '#attachment-details-two-column-title' ).value = title;
+		dialog.querySelector( '#attachment-details-two-column-caption' ).value = caption;
+		dialog.querySelector( '#attachment-details-two-column-description' ).value = description;
+		dialog.querySelector( '#attachment-details-two-column-copy-link' ).value = url;
 
-		dialog.querySelector( '#menu-order').value = menuOrder;
-		dialog.querySelector( '#attachments-' + id + '-media_category').value = taxes;
-		dialog.querySelector( '#attachments-' + id + '-media_post_tag').value = tags;
+		dialog.querySelector( '#menu-order' ).value = menuOrder;
+		dialog.querySelector( '#attachments-' + id + '-media_category' ).value = taxes;
+		dialog.querySelector( '#attachments-' + id + '-media_post_tag' ).value = tags;
 
 		if ( filetype === 'audio' ) {
 			dialog.querySelector( '#media-image' ).setAttribute( 'hidden', true );
@@ -305,17 +305,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( confirm( _wpMediaGridSettings.confirm_delete ) ) {
 				deleteItem( id );
 			}
-		} );
-
-		/* Update media attachment details */
-		dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
-			input.addEventListener( 'blur', function() {
-				if ( input.parentNode.parentNode.className === 'compat-item' ) {
-					updateMediaTaxOrTag( input, id ); // Update media categories and tags
-				} else {
-					updateDetails( input, id );
-				}
-			} );
 		} );
 	}
 
@@ -749,6 +738,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			focusID = null; // reset focusID
 		}
 		removeImageEditWrap();
+	} );
+	
+	/* Update media attachment details */
+	dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
+		input.addEventListener( 'blur', function() {
+			var id = queryParams.get( 'item' );
+			if ( input.parentNode.parentNode.className === 'compat-item' ) {
+				updateMediaTaxOrTag( input, id ); // Update media categories and tags
+			} else {
+				updateDetails( input, id );
+			}
+		} );
 	} );
 
 	leftIcon.addEventListener( 'click', function() {
