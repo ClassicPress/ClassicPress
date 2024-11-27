@@ -134,6 +134,9 @@ if ( 'grid' === $mode ) {
 			'confirm_delete'   => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
 			'confirm_multiple' => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
 			'includes_url'     => includes_url(),
+			'webp_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) ),
+			'avif_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/avif' ) ),
+			'heic_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/heic' ) ),
 		)
 	);
 
@@ -323,14 +326,14 @@ if ( 'grid' === $mode ) {
 			<h2 class="screen-reader-text"><?php esc_html_e( 'Media items navigation' ); ?></h2>
 				<div class="tablenav-pages">
 					<span class="displaying-num">
-						
+
 						<?php
 						/* translators: %s: Number of media items showing */
 						printf( __( '%s items' ), esc_html( count( $attachments->posts ) ) );
 						?>
 
 					</span>
-					<span class="pagination-links">						
+					<span class="pagination-links">
 						<a class="first-page button" href="<?php echo admin_url( '/upload.php?paged=1' ); ?>"
 							<?php
 							if ( $paged === 1 ) {
@@ -468,7 +471,7 @@ if ( 'grid' === $mode ) {
 					<?php
 				}
 				?>
- 
+
 			</ul>
 			<div class="load-more-wrapper">
 				<p class="load-more-count">

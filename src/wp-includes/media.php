@@ -4708,6 +4708,11 @@ function wp_enqueue_media( $args = array() ) {
 		// Headings.
 		'filterAttachments'           => __( 'Filter media' ),
 		'attachmentsList'             => __( 'Media list' ),
+
+		// Server editable image data
+		'webp_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) ),
+		'avif_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/avif' ) ),
+		'heic_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/heic' ) ),
 	);
 
 	/**
