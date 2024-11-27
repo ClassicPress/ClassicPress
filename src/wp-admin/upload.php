@@ -398,7 +398,7 @@ if ( 'grid' === $mode ) {
 					$url          = $meta['url'];
 					$width        = ! empty( $meta['width'] ) ? $meta['width'] : '';
 					$height       = ! empty( $meta['height'] ) ? $meta['height'] : '';
-					$file_name    = $meta['name'];
+					$file_name    = $meta['filename'];
 					$file_type    = $meta['type'];
 					$subtype      = $meta['subtype'];
 					$mime_type    = $meta['mime'];
