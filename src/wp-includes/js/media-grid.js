@@ -138,7 +138,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					newTaxes = result.data.media_cats.join( ', ' );
 					input.value = newTaxes;
 					document.getElementById( 'media-' + id ).setAttribute( 'data-taxes', newTaxes );
-				} else if ( taxonomy === 'media_tag' ) {
+				} else if ( taxonomy === 'media_post_tag' ) {
 					newTaxes = result.data.media_tags.join( ', ' );
 					input.value = newTaxes;
 					document.getElementById( 'media-' + id ).setAttribute( 'data-tags', newTaxes );
@@ -240,15 +240,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '.attachment-dimensions' ).textContent = width + ' ' + _wpMediaGridSettings.by + ' ' + height + ' ' + _wpMediaGridSettings.pixels;
 		dialog.querySelector( '.attachment-media-view' ).className = 'attachment-media-view' + orientation;
 
-		dialog.querySelector( '#attachment-details-two-column-alt-text').textContent = alt;
-		dialog.querySelector( '#attachment-details-two-column-title').value = title;
-		dialog.querySelector( '#attachment-details-two-column-caption').textContent = caption;
-		dialog.querySelector( '#attachment-details-two-column-description').textContent = description;
-		dialog.querySelector( '#attachment-details-two-column-copy-link').value = url;
+		dialog.querySelector( '#attachment-details-two-column-alt-text' ).value = alt;
+		dialog.querySelector( '#attachment-details-two-column-title' ).value = title;
+		dialog.querySelector( '#attachment-details-two-column-caption' ).value = caption;
+		dialog.querySelector( '#attachment-details-two-column-description' ).value = description;
+		dialog.querySelector( '#attachment-details-two-column-copy-link' ).value = url;
 
-		dialog.querySelector( '#menu-order').value = menuOrder;
-		dialog.querySelector( '#attachments-' + id + '-media_category').value = taxes;
-		dialog.querySelector( '#attachments-' + id + '-media_post_tag').value = tags;
+		dialog.querySelector( '#menu-order' ).value = menuOrder;
+		dialog.querySelector( '#attachments-' + id + '-media_category' ).value = taxes;
+		dialog.querySelector( '#attachments-' + id + '-media_post_tag' ).value = tags;
 
 		if ( filetype === 'audio' ) {
 			dialog.querySelector( '#media-image' ).setAttribute( 'hidden', true );
@@ -307,14 +307,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} );
 
-		/* Update media attachment details */
-		dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
+		// Update media categories and tags
+		dialog.querySelectorAll( '.compat-item input' ).forEach( function( input ) {
 			input.addEventListener( 'blur', function() {
-				if ( input.parentNode.parentNode.className === 'compat-item' ) {
-					updateMediaTaxOrTag( input, id ); // Update media categories and tags
-				} else {
-					updateDetails( input, id );
-				}
+				updateMediaTaxOrTag( input, id );
 			} );
 		} );
 	}
@@ -749,6 +745,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			focusID = null; // reset focusID
 		}
 		removeImageEditWrap();
+	} );
+	
+	/* Update media attachment details */
+	dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
+		input.addEventListener( 'blur', function() {
+			var id = queryParams.get( 'item' );
+			updateDetails( input, id );
+		} );
 	} );
 
 	leftIcon.addEventListener( 'click', function() {
