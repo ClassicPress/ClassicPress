@@ -427,7 +427,7 @@ class WP_Compat {
 			/**
 			 * Polyfill for block functions.
 			 *
-			 * @since CP-2.4.0
+			 * @since CP-2.3.0
 			 *
 			 * @return string ''.
 			 */
