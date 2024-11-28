@@ -138,7 +138,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					newTaxes = result.data.media_cats.join( ', ' );
 					input.value = newTaxes;
 					document.getElementById( 'media-' + id ).setAttribute( 'data-taxes', newTaxes );
-				} else if ( taxonomy === 'media_tag' ) {
+				} else if ( taxonomy === 'media_post_tag' ) {
 					newTaxes = result.data.media_tags.join( ', ' );
 					input.value = newTaxes;
 					document.getElementById( 'media-' + id ).setAttribute( 'data-tags', newTaxes );
