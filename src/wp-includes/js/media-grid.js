@@ -213,7 +213,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			size = item.dataset.size,
 			width = item.dataset.width,
 			height = item.dataset.height,
-			caption = item.getAttribute( 'data-caption' ),
+			caption = item.dataset.caption,
 			description = item.dataset.description,
 			taxes = item.dataset.taxes,
 			tags = item.dataset.tags,
@@ -305,6 +305,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( confirm( _wpMediaGridSettings.confirm_delete ) ) {
 				deleteItem( id );
 			}
+		} );
+
+		// Update media categories and tags
+		dialog.querySelectorAll( '.compat-item input' ).forEach( function( input ) {
+			input.addEventListener( 'blur', function() {
+				updateMediaTaxOrTag( input, id );
+			} );
 		} );
 	}
 
@@ -744,11 +751,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
 		input.addEventListener( 'blur', function() {
 			var id = queryParams.get( 'item' );
-			if ( input.parentNode.parentNode.className === 'compat-item' ) {
-				updateMediaTaxOrTag( input, id ); // Update media categories and tags
-			} else {
-				updateDetails( input, id );
-			}
+			updateDetails( input, id );
 		} );
 	} );
 
