@@ -229,6 +229,11 @@ class Plugin_Upgrader extends WP_Upgrader {
 					'plugin' => $plugin,
 					'type'   => 'plugin',
 					'action' => 'update',
+					'temp_backup' => array(
+						'slug' => dirname( $plugin ),
+						'src'  => WP_PLUGIN_DIR,
+						'dir'  => 'plugins',
+					),
 				),
 			)
 		);
@@ -343,6 +348,11 @@ class Plugin_Upgrader extends WP_Upgrader {
 					'is_multi'          => true,
 					'hook_extra'        => array(
 						'plugin' => $plugin,
+						'temp_backup' => array(
+							'slug' => dirname( $plugin ),
+							'src'  => WP_PLUGIN_DIR,
+							'dir'  => 'plugins',
+						),
 					),
 				)
 			);
