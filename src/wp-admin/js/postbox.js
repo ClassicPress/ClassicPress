@@ -153,7 +153,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		if ( column.id !== 'advanced-sortables' && column.querySelector( '.postbox' ) == null ) {
 			column.classList.add( 'empty-container' );
-			column.style.outline = '3px dashed #c3c4c7';
+			column.style.outline = 'none'; // By default, Sortable targets should not be visible on page load
 			column.setAttribute( 'data-emptystring', emptySortableText );
 		}
 	} );
