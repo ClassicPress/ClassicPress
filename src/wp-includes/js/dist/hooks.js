@@ -43,6 +43,7 @@ __webpack_require__.d(__webpack_exports__, {
   addAction: function() { return /* binding */ addAction; },
   addFilter: function() { return /* binding */ addFilter; },
   applyFilters: function() { return /* binding */ applyFilters; },
+  applyFiltersAsync: function() { return /* binding */ applyFiltersAsync; },
   createHooks: function() { return /* reexport */ build_module_createHooks; },
   currentAction: function() { return /* binding */ currentAction; },
   currentFilter: function() { return /* binding */ currentFilter; },
@@ -50,6 +51,7 @@ __webpack_require__.d(__webpack_exports__, {
   didAction: function() { return /* binding */ didAction; },
   didFilter: function() { return /* binding */ didFilter; },
   doAction: function() { return /* binding */ doAction; },
+  doActionAsync: function() { return /* binding */ doActionAsync; },
   doingAction: function() { return /* binding */ doingAction; },
   doingFilter: function() { return /* binding */ doingFilter; },
   filters: function() { return /* binding */ filters; },
@@ -61,7 +63,7 @@ __webpack_require__.d(__webpack_exports__, {
   removeFilter: function() { return /* binding */ removeFilter; }
 });
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/validateNamespace.js
+;// ./node_modules/@wordpress/hooks/build-module/validateNamespace.js
 /**
  * Validate a namespace string.
  *
@@ -85,7 +87,7 @@ function validateNamespace(namespace) {
 }
 /* harmony default export */ var build_module_validateNamespace = (validateNamespace);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/validateHookName.js
+;// ./node_modules/@wordpress/hooks/build-module/validateHookName.js
 /**
  * Validate a hookName string.
  *
@@ -115,7 +117,7 @@ function validateHookName(hookName) {
 }
 /* harmony default export */ var build_module_validateHookName = (validateHookName);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createAddHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createAddHook.js
 /**
  * Internal dependencies
  */
@@ -209,7 +211,7 @@ function createAddHook(hooks, storeKey) {
 }
 /* harmony default export */ var build_module_createAddHook = (createAddHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
 /**
  * Internal dependencies
  */
@@ -289,7 +291,7 @@ function createRemoveHook(hooks, storeKey, removeAll = false) {
 }
 /* harmony default export */ var build_module_createRemoveHook = (createRemoveHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createHasHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createHasHook.js
 /**
  * @callback HasHook
  *
@@ -324,21 +326,21 @@ function createHasHook(hooks, storeKey) {
 }
 /* harmony default export */ var build_module_createHasHook = (createHasHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createRunHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createRunHook.js
 /**
  * Returns a function which, when invoked, will execute all callbacks
  * registered to a hook of the specified type, optionally returning the final
  * value of the call chain.
  *
- * @param {import('.').Hooks}    hooks                  Hooks instance.
+ * @param {import('.').Hooks}    hooks          Hooks instance.
  * @param {import('.').StoreKey} storeKey
- * @param {boolean}              [returnFirstArg=false] Whether each hook callback is expected to
- *                                                      return its first argument.
+ * @param {boolean}              returnFirstArg Whether each hook callback is expected to return its first argument.
+ * @param {boolean}              async          Whether the hook callback should be run asynchronously
  *
  * @return {(hookName:string, ...args: unknown[]) => undefined|unknown} Function that runs hook callbacks.
  */
-function createRunHook(hooks, storeKey, returnFirstArg = false) {
-  return function runHooks(hookName, ...args) {
+function createRunHook(hooks, storeKey, returnFirstArg, async) {
+  return function runHook(hookName, ...args) {
     const hooksStore = hooks[storeKey];
     if (!hooksStore[hookName]) {
       hooksStore[hookName] = {
@@ -358,25 +360,46 @@ function createRunHook(hooks, storeKey, returnFirstArg = false) {
       name: hookName,
       currentIndex: 0
     };
-    hooksStore.__current.push(hookInfo);
-    while (hookInfo.currentIndex < handlers.length) {
-      const handler = handlers[hookInfo.currentIndex];
-      const result = handler.callback.apply(null, args);
-      if (returnFirstArg) {
-        args[0] = result;
+    async function asyncRunner() {
+      try {
+        hooksStore.__current.add(hookInfo);
+        let result = returnFirstArg ? args[0] : undefined;
+        while (hookInfo.currentIndex < handlers.length) {
+          const handler = handlers[hookInfo.currentIndex];
+          result = await handler.callback.apply(null, args);
+          if (returnFirstArg) {
+            args[0] = result;
+          }
+          hookInfo.currentIndex++;
+        }
+        return returnFirstArg ? result : undefined;
+      } finally {
+        hooksStore.__current.delete(hookInfo);
       }
-      hookInfo.currentIndex++;
     }
-    hooksStore.__current.pop();
-    if (returnFirstArg) {
-      return args[0];
+    function syncRunner() {
+      try {
+        hooksStore.__current.add(hookInfo);
+        let result = returnFirstArg ? args[0] : undefined;
+        while (hookInfo.currentIndex < handlers.length) {
+          const handler = handlers[hookInfo.currentIndex];
+          result = handler.callback.apply(null, args);
+          if (returnFirstArg) {
+            args[0] = result;
+          }
+          hookInfo.currentIndex++;
+        }
+        return returnFirstArg ? result : undefined;
+      } finally {
+        hooksStore.__current.delete(hookInfo);
+      }
     }
-    return undefined;
+    return (async ? asyncRunner : syncRunner)();
   };
 }
 /* harmony default export */ var build_module_createRunHook = (createRunHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
 /**
  * Returns a function which, when invoked, will return the name of the
  * currently running hook, or `null` if no hook of the given type is currently
@@ -389,14 +412,15 @@ function createRunHook(hooks, storeKey, returnFirstArg = false) {
  */
 function createCurrentHook(hooks, storeKey) {
   return function currentHook() {
-    var _hooksStore$__current;
+    var _currentArray$at$name;
     const hooksStore = hooks[storeKey];
-    return (_hooksStore$__current = hooksStore.__current[hooksStore.__current.length - 1]?.name) !== null && _hooksStore$__current !== void 0 ? _hooksStore$__current : null;
+    const currentArray = Array.from(hooksStore.__current);
+    return (_currentArray$at$name = currentArray.at(-1)?.name) !== null && _currentArray$at$name !== void 0 ? _currentArray$at$name : null;
   };
 }
 /* harmony default export */ var build_module_createCurrentHook = (createCurrentHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
 /**
  * @callback DoingHook
  * Returns whether a hook is currently being executed.
@@ -423,16 +447,16 @@ function createDoingHook(hooks, storeKey) {
 
     // If the hookName was not passed, check for any current hook.
     if ('undefined' === typeof hookName) {
-      return 'undefined' !== typeof hooksStore.__current[0];
+      return hooksStore.__current.size > 0;
     }
 
-    // Return the __current hook.
-    return hooksStore.__current[0] ? hookName === hooksStore.__current[0].name : false;
+    // Find if the `hookName` hook is in `__current`.
+    return Array.from(hooksStore.__current).some(hook => hook.name === hookName);
   };
 }
 /* harmony default export */ var build_module_createDoingHook = (createDoingHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createDidHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createDidHook.js
 /**
  * Internal dependencies
  */
@@ -468,7 +492,8 @@ function createDidHook(hooks, storeKey) {
 }
 /* harmony default export */ var build_module_createDidHook = (createDidHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createHooks.js
+;// ./node_modules/@wordpress/hooks/build-module/createHooks.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -491,11 +516,11 @@ class _Hooks {
   constructor() {
     /** @type {import('.').Store} actions */
     this.actions = Object.create(null);
-    this.actions.__current = [];
+    this.actions.__current = new Set();
 
     /** @type {import('.').Store} filters */
     this.filters = Object.create(null);
-    this.filters.__current = [];
+    this.filters.__current = new Set();
     this.addAction = build_module_createAddHook(this, 'actions');
     this.addFilter = build_module_createAddHook(this, 'filters');
     this.removeAction = build_module_createRemoveHook(this, 'actions');
@@ -504,8 +529,10 @@ class _Hooks {
     this.hasFilter = build_module_createHasHook(this, 'filters');
     this.removeAllActions = build_module_createRemoveHook(this, 'actions', true);
     this.removeAllFilters = build_module_createRemoveHook(this, 'filters', true);
-    this.doAction = build_module_createRunHook(this, 'actions');
-    this.applyFilters = build_module_createRunHook(this, 'filters', true);
+    this.doAction = build_module_createRunHook(this, 'actions', false, false);
+    this.doActionAsync = build_module_createRunHook(this, 'actions', false, true);
+    this.applyFilters = build_module_createRunHook(this, 'filters', true, false);
+    this.applyFiltersAsync = build_module_createRunHook(this, 'filters', true, true);
     this.currentAction = build_module_createCurrentHook(this, 'actions');
     this.currentFilter = build_module_createCurrentHook(this, 'filters');
     this.doingAction = build_module_createDoingHook(this, 'actions');
@@ -527,7 +554,7 @@ function createHooks() {
 }
 /* harmony default export */ var build_module_createHooks = (createHooks);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/index.js
+;// ./node_modules/@wordpress/hooks/build-module/index.js
 /**
  * Internal dependencies
  */
@@ -555,7 +582,7 @@ function createHooks() {
  */
 
 /**
- * @typedef {Record<string, Hook> & {__current: Current[]}} Store
+ * @typedef {Record<string, Hook> & {__current: Set<Current>}} Store
  */
 
 /**
@@ -577,7 +604,9 @@ const {
   removeAllActions,
   removeAllFilters,
   doAction,
+  doActionAsync,
   applyFilters,
+  applyFiltersAsync,
   currentAction,
   currentFilter,
   doingAction,

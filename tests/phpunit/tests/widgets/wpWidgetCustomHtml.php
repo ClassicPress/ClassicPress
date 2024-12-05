@@ -65,7 +65,6 @@ class Tests_Widgets_wpWidgetCustomHtml extends WP_UnitTestCase {
 		$widget->_register();
 
 		$this->assertSame( 10, has_action( 'admin_print_scripts-widgets.php', array( $widget, 'enqueue_admin_scripts' ) ) );
-		$this->assertSame( 10, has_action( 'admin_footer-widgets.php', array( 'WP_Widget_Custom_HTML', 'render_control_template_scripts' ) ) );
 		$this->assertSame( 10, has_action( 'admin_head-widgets.php', array( 'WP_Widget_Custom_HTML', 'add_help_text' ) ) );
 	}
 
@@ -274,19 +273,6 @@ class Tests_Widgets_wpWidgetCustomHtml extends WP_UnitTestCase {
 		$this->assertFalse( wp_script_is( 'csslint', 'enqueued' ) );
 		$this->assertFalse( wp_script_is( 'jshint', 'enqueued' ) );
 		$this->assertFalse( wp_script_is( 'htmlhint', 'enqueued' ) );
-	}
-
-	/**
-	 * Test render_control_template_scripts method.
-	 *
-	 * @covers WP_Widget_Custom_HTML::render_control_template_scripts
-	 */
-	public function test_render_control_template_scripts() {
-		ob_start();
-		WP_Widget_Custom_HTML::render_control_template_scripts();
-		$output = ob_get_clean();
-
-		$this->assertStringContainsString( '<script type="text/html" id="tmpl-widget-custom-html-control-fields">', $output );
 	}
 
 	/**

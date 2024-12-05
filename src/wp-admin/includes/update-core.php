@@ -208,9 +208,10 @@ $_old_requests_files = array(
 global $_new_bundled_files;
 
 $_new_bundled_files = array(
-	'themes/twentyseventeen/'              => '4.7',
-	'themes/the-classicpress-theme/'       => '6.2.6',
-	'plugins/cp-pepper/'                   => '6.2.7',
+	'themes/twentyseventeen/'         => '4.7',
+	'themes/the-classicpress-theme/'  => '6.2.6',
+	'plugins/cp-pepper/'              => '6.2.7',
+	'plugins/cp-pepper/cp-pepper.php' => '6.2.7',
 );
 
 /**
@@ -730,6 +731,11 @@ function update_core( $from, $to ) {
 				}
 
 				if ( ! $directory ) {
+					// Force update of ClassicPress Pepper for Passwords plugin from 1.0
+					if ( ! $development_build && 'plugins/cp-pepper/cp-pepper.php' === $file ) {
+						$wp_filesystem->delete( $dest . $filename );
+					}
+
 					if ( ! $development_build && $wp_filesystem->exists( $dest . $filename ) ) {
 						continue;
 					}

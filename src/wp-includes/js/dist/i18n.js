@@ -11,9 +11,9 @@ __webpack_require__.d(__webpack_exports__, {
   defaultHooks: function() { return /* binding */ defaultHooks; }
 });
 
-// UNUSED EXPORTS: actions, addAction, addFilter, applyFilters, createHooks, currentAction, currentFilter, didAction, didFilter, doAction, doingAction, doingFilter, filters, hasAction, hasFilter, removeAction, removeAllActions, removeAllFilters, removeFilter
+// UNUSED EXPORTS: actions, addAction, addFilter, applyFilters, applyFiltersAsync, createHooks, currentAction, currentFilter, didAction, didFilter, doAction, doActionAsync, doingAction, doingFilter, filters, hasAction, hasFilter, removeAction, removeAllActions, removeAllFilters, removeFilter
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/validateNamespace.js
+;// ./node_modules/@wordpress/hooks/build-module/validateNamespace.js
 /**
  * Validate a namespace string.
  *
@@ -37,7 +37,7 @@ function validateNamespace(namespace) {
 }
 /* harmony default export */ var build_module_validateNamespace = (validateNamespace);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/validateHookName.js
+;// ./node_modules/@wordpress/hooks/build-module/validateHookName.js
 /**
  * Validate a hookName string.
  *
@@ -67,7 +67,7 @@ function validateHookName(hookName) {
 }
 /* harmony default export */ var build_module_validateHookName = (validateHookName);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createAddHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createAddHook.js
 /**
  * Internal dependencies
  */
@@ -161,7 +161,7 @@ function createAddHook(hooks, storeKey) {
 }
 /* harmony default export */ var build_module_createAddHook = (createAddHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
 /**
  * Internal dependencies
  */
@@ -241,7 +241,7 @@ function createRemoveHook(hooks, storeKey, removeAll = false) {
 }
 /* harmony default export */ var build_module_createRemoveHook = (createRemoveHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createHasHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createHasHook.js
 /**
  * @callback HasHook
  *
@@ -276,21 +276,21 @@ function createHasHook(hooks, storeKey) {
 }
 /* harmony default export */ var build_module_createHasHook = (createHasHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createRunHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createRunHook.js
 /**
  * Returns a function which, when invoked, will execute all callbacks
  * registered to a hook of the specified type, optionally returning the final
  * value of the call chain.
  *
- * @param {import('.').Hooks}    hooks                  Hooks instance.
+ * @param {import('.').Hooks}    hooks          Hooks instance.
  * @param {import('.').StoreKey} storeKey
- * @param {boolean}              [returnFirstArg=false] Whether each hook callback is expected to
- *                                                      return its first argument.
+ * @param {boolean}              returnFirstArg Whether each hook callback is expected to return its first argument.
+ * @param {boolean}              async          Whether the hook callback should be run asynchronously
  *
  * @return {(hookName:string, ...args: unknown[]) => undefined|unknown} Function that runs hook callbacks.
  */
-function createRunHook(hooks, storeKey, returnFirstArg = false) {
-  return function runHooks(hookName, ...args) {
+function createRunHook(hooks, storeKey, returnFirstArg, async) {
+  return function runHook(hookName, ...args) {
     const hooksStore = hooks[storeKey];
     if (!hooksStore[hookName]) {
       hooksStore[hookName] = {
@@ -310,25 +310,46 @@ function createRunHook(hooks, storeKey, returnFirstArg = false) {
       name: hookName,
       currentIndex: 0
     };
-    hooksStore.__current.push(hookInfo);
-    while (hookInfo.currentIndex < handlers.length) {
-      const handler = handlers[hookInfo.currentIndex];
-      const result = handler.callback.apply(null, args);
-      if (returnFirstArg) {
-        args[0] = result;
+    async function asyncRunner() {
+      try {
+        hooksStore.__current.add(hookInfo);
+        let result = returnFirstArg ? args[0] : undefined;
+        while (hookInfo.currentIndex < handlers.length) {
+          const handler = handlers[hookInfo.currentIndex];
+          result = await handler.callback.apply(null, args);
+          if (returnFirstArg) {
+            args[0] = result;
+          }
+          hookInfo.currentIndex++;
+        }
+        return returnFirstArg ? result : undefined;
+      } finally {
+        hooksStore.__current.delete(hookInfo);
       }
-      hookInfo.currentIndex++;
     }
-    hooksStore.__current.pop();
-    if (returnFirstArg) {
-      return args[0];
+    function syncRunner() {
+      try {
+        hooksStore.__current.add(hookInfo);
+        let result = returnFirstArg ? args[0] : undefined;
+        while (hookInfo.currentIndex < handlers.length) {
+          const handler = handlers[hookInfo.currentIndex];
+          result = handler.callback.apply(null, args);
+          if (returnFirstArg) {
+            args[0] = result;
+          }
+          hookInfo.currentIndex++;
+        }
+        return returnFirstArg ? result : undefined;
+      } finally {
+        hooksStore.__current.delete(hookInfo);
+      }
     }
-    return undefined;
+    return (async ? asyncRunner : syncRunner)();
   };
 }
 /* harmony default export */ var build_module_createRunHook = (createRunHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
 /**
  * Returns a function which, when invoked, will return the name of the
  * currently running hook, or `null` if no hook of the given type is currently
@@ -341,14 +362,15 @@ function createRunHook(hooks, storeKey, returnFirstArg = false) {
  */
 function createCurrentHook(hooks, storeKey) {
   return function currentHook() {
-    var _hooksStore$__current;
+    var _currentArray$at$name;
     const hooksStore = hooks[storeKey];
-    return (_hooksStore$__current = hooksStore.__current[hooksStore.__current.length - 1]?.name) !== null && _hooksStore$__current !== void 0 ? _hooksStore$__current : null;
+    const currentArray = Array.from(hooksStore.__current);
+    return (_currentArray$at$name = currentArray.at(-1)?.name) !== null && _currentArray$at$name !== void 0 ? _currentArray$at$name : null;
   };
 }
 /* harmony default export */ var build_module_createCurrentHook = (createCurrentHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
 /**
  * @callback DoingHook
  * Returns whether a hook is currently being executed.
@@ -375,16 +397,16 @@ function createDoingHook(hooks, storeKey) {
 
     // If the hookName was not passed, check for any current hook.
     if ('undefined' === typeof hookName) {
-      return 'undefined' !== typeof hooksStore.__current[0];
+      return hooksStore.__current.size > 0;
     }
 
-    // Return the __current hook.
-    return hooksStore.__current[0] ? hookName === hooksStore.__current[0].name : false;
+    // Find if the `hookName` hook is in `__current`.
+    return Array.from(hooksStore.__current).some(hook => hook.name === hookName);
   };
 }
 /* harmony default export */ var build_module_createDoingHook = (createDoingHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createDidHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createDidHook.js
 /**
  * Internal dependencies
  */
@@ -420,7 +442,8 @@ function createDidHook(hooks, storeKey) {
 }
 /* harmony default export */ var build_module_createDidHook = (createDidHook);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/createHooks.js
+;// ./node_modules/@wordpress/hooks/build-module/createHooks.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -443,11 +466,11 @@ class _Hooks {
   constructor() {
     /** @type {import('.').Store} actions */
     this.actions = Object.create(null);
-    this.actions.__current = [];
+    this.actions.__current = new Set();
 
     /** @type {import('.').Store} filters */
     this.filters = Object.create(null);
-    this.filters.__current = [];
+    this.filters.__current = new Set();
     this.addAction = build_module_createAddHook(this, 'actions');
     this.addFilter = build_module_createAddHook(this, 'filters');
     this.removeAction = build_module_createRemoveHook(this, 'actions');
@@ -456,8 +479,10 @@ class _Hooks {
     this.hasFilter = build_module_createHasHook(this, 'filters');
     this.removeAllActions = build_module_createRemoveHook(this, 'actions', true);
     this.removeAllFilters = build_module_createRemoveHook(this, 'filters', true);
-    this.doAction = build_module_createRunHook(this, 'actions');
-    this.applyFilters = build_module_createRunHook(this, 'filters', true);
+    this.doAction = build_module_createRunHook(this, 'actions', false, false);
+    this.doActionAsync = build_module_createRunHook(this, 'actions', false, true);
+    this.applyFilters = build_module_createRunHook(this, 'filters', true, false);
+    this.applyFiltersAsync = build_module_createRunHook(this, 'filters', true, true);
     this.currentAction = build_module_createCurrentHook(this, 'actions');
     this.currentFilter = build_module_createCurrentHook(this, 'filters');
     this.doingAction = build_module_createDoingHook(this, 'actions');
@@ -479,7 +504,7 @@ function createHooks() {
 }
 /* harmony default export */ var build_module_createHooks = (createHooks);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/hooks/build-module/index.js
+;// ./node_modules/@wordpress/hooks/build-module/index.js
 /**
  * Internal dependencies
  */
@@ -507,7 +532,7 @@ function createHooks() {
  */
 
 /**
- * @typedef {Record<string, Hook> & {__current: Current[]}} Store
+ * @typedef {Record<string, Hook> & {__current: Set<Current>}} Store
  */
 
 /**
@@ -529,7 +554,9 @@ const {
   removeAllActions,
   removeAllFilters,
   doAction,
+  doActionAsync,
   applyFilters,
+  applyFiltersAsync,
   currentAction,
   currentFilter,
   doingAction,
@@ -852,7 +879,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 !function() {
 "use strict";
 // ESM COMPAT FLAG
@@ -875,7 +902,7 @@ __webpack_require__.d(__webpack_exports__, {
   subscribe: function() { return /* reexport */ subscribe; }
 });
 
-;// CONCATENATED MODULE: ./node_modules/memize/dist/index.js
+;// ./node_modules/memize/dist/index.js
 /**
  * Memize options object.
  *
@@ -1040,7 +1067,7 @@ function memize(fn, options) {
 // EXTERNAL MODULE: ./node_modules/sprintf-js/src/sprintf.js
 var sprintf = __webpack_require__(58);
 var sprintf_default = /*#__PURE__*/__webpack_require__.n(sprintf);
-;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/sprintf.js
+;// ./node_modules/@wordpress/i18n/build-module/sprintf.js
 /**
  * External dependencies
  */
@@ -1078,7 +1105,7 @@ function sprintf_sprintf(format, ...args) {
   }
 }
 
-;// CONCATENATED MODULE: ./node_modules/@tannin/postfix/index.js
+;// ./node_modules/@tannin/postfix/index.js
 var PRECEDENCE, OPENERS, TERMINATORS, PATTERN;
 
 /**
@@ -1204,7 +1231,7 @@ function postfix( expression ) {
 	return terms.concat( stack.reverse() );
 }
 
-;// CONCATENATED MODULE: ./node_modules/@tannin/evaluate/index.js
+;// ./node_modules/@tannin/evaluate/index.js
 /**
  * Operator callback functions.
  *
@@ -1316,7 +1343,7 @@ function evaluate( postfix, variables ) {
 	return stack[ 0 ];
 }
 
-;// CONCATENATED MODULE: ./node_modules/@tannin/compile/index.js
+;// ./node_modules/@tannin/compile/index.js
 
 
 
@@ -1347,7 +1374,7 @@ function compile( expression ) {
 	};
 }
 
-;// CONCATENATED MODULE: ./node_modules/@tannin/plural-forms/index.js
+;// ./node_modules/@tannin/plural-forms/index.js
 
 
 /**
@@ -1367,7 +1394,7 @@ function pluralForms( expression ) {
 	};
 }
 
-;// CONCATENATED MODULE: ./node_modules/tannin/index.js
+;// ./node_modules/tannin/index.js
 
 
 /**
@@ -1582,7 +1609,8 @@ Tannin.prototype.dcnpgettext = function( domain, context, singular, plural, n ) 
 	return index === 0 ? singular : plural;
 };
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/create-i18n.js
+;// ./node_modules/@wordpress/i18n/build-module/create-i18n.js
+/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -1862,9 +1890,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
      */
     translation = /** @type {string} */
     /** @type {*} */hooks.applyFilters('i18n.gettext', translation, text, domain);
-    return /** @type {string} */(
-      /** @type {*} */hooks.applyFilters('i18n.gettext_' + getFilterDomain(domain), translation, text, domain)
-    );
+    return /** @type {string} */ /** @type {*} */hooks.applyFilters('i18n.gettext_' + getFilterDomain(domain), translation, text, domain);
   };
 
   /** @type {_x} */
@@ -1884,9 +1910,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
      */
     translation = /** @type {string} */
     /** @type {*} */hooks.applyFilters('i18n.gettext_with_context', translation, text, context, domain);
-    return /** @type {string} */(
-      /** @type {*} */hooks.applyFilters('i18n.gettext_with_context_' + getFilterDomain(domain), translation, text, context, domain)
-    );
+    return /** @type {string} */ /** @type {*} */hooks.applyFilters('i18n.gettext_with_context_' + getFilterDomain(domain), translation, text, context, domain);
   };
 
   /** @type {_n} */
@@ -1907,9 +1931,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
      */
     translation = /** @type {string} */
     /** @type {*} */hooks.applyFilters('i18n.ngettext', translation, single, plural, number, domain);
-    return /** @type {string} */(
-      /** @type {*} */hooks.applyFilters('i18n.ngettext_' + getFilterDomain(domain), translation, single, plural, number, domain)
-    );
+    return /** @type {string} */ /** @type {*} */hooks.applyFilters('i18n.ngettext_' + getFilterDomain(domain), translation, single, plural, number, domain);
   };
 
   /** @type {_nx} */
@@ -1931,9 +1953,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
      */
     translation = /** @type {string} */
     /** @type {*} */hooks.applyFilters('i18n.ngettext_with_context', translation, single, plural, number, context, domain);
-    return /** @type {string} */(
-      /** @type {*} */hooks.applyFilters('i18n.ngettext_with_context_' + getFilterDomain(domain), translation, single, plural, number, context, domain)
-    );
+    return /** @type {string} */ /** @type {*} */hooks.applyFilters('i18n.ngettext_with_context_' + getFilterDomain(domain), translation, single, plural, number, context, domain);
   };
 
   /** @type {IsRtl} */
@@ -1993,7 +2013,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
 
 // EXTERNAL MODULE: ./node_modules/@wordpress/hooks/build-module/index.js + 10 modules
 var build_module = __webpack_require__(673);
-;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/default-i18n.js
+;// ./node_modules/@wordpress/i18n/build-module/default-i18n.js
 /**
  * Internal dependencies
  */
@@ -2141,7 +2161,7 @@ const isRTL = i18n.isRTL.bind(i18n);
  */
 const hasTranslation = i18n.hasTranslation.bind(i18n);
 
-;// CONCATENATED MODULE: ./node_modules/@wordpress/i18n/build-module/index.js
+;// ./node_modules/@wordpress/i18n/build-module/index.js
 
 
 

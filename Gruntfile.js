@@ -24,7 +24,9 @@ module.exports = function(grunt) {
 		headless: 'new',
 		args: [
 			'--site-per-process',
-			'--disable-web-security'
+			'--disable-web-security',
+			'--no-sandbox',
+			'--disable-setuid-sandbox'
 		]
 	};
 
@@ -300,6 +302,7 @@ module.exports = function(grunt) {
 				ext: '.css',
 				src: ['wp-admin/css/colors/*/colors.scss'],
 				options: {
+					api: 'modern',
 					implementation: require( 'sass' )
 				}
 			}
@@ -317,7 +320,8 @@ module.exports = function(grunt) {
 					'wp-admin/css/*.css',
 					'!wp-admin/css/wp-admin*.css',
 					'wp-includes/css/*.css',
-					'wp-includes/js/mediaelement/wp-mediaelement.css'
+					'wp-includes/js/mediaelement/wp-mediaelement.css',
+					'wp-includes/js/filepond/*.css'
 				]
 			},
 			rtl: {
@@ -696,6 +700,7 @@ module.exports = function(grunt) {
 					'wp-includes/js/mediaelement/mediaelement-migrate.js',
 					'wp-includes/js/tinymce/plugins/wordpress/plugin.js',
 					'wp-includes/js/tinymce/plugins/wp*/plugin.js',
+					'wp-includes/js/filepond/*.js',
 
 					// Exceptions
 					'!wp-admin/js/custom-header.js', // Why? We should minify this.

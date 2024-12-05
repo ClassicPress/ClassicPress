@@ -69,15 +69,9 @@ class WP_Widget_Custom_HTML extends WP_Widget {
 		}
 		$this->registered = true;
 
-		wp_add_inline_script( 'custom-html-widgets', sprintf( 'wp.customHtmlWidgets.idBases.push( %s );', wp_json_encode( $this->id_base ) ) );
-
 		// Note that the widgets component in the customizer will also do
 		// the 'admin_print_scripts-widgets.php' action in WP_Customize_Widgets::print_scripts().
 		add_action( 'admin_print_scripts-widgets.php', array( $this, 'enqueue_admin_scripts' ) );
-
-		// Note that the widgets component in the customizer will also do
-		// the 'admin_footer-widgets.php' action in WP_Customize_Widgets::print_footer_scripts().
-		add_action( 'admin_footer-widgets.php', array( 'WP_Widget_Custom_HTML', 'render_control_template_scripts' ) );
 
 		// Note this action is used to ensure the help text is added to the end.
 		add_action( 'admin_head-widgets.php', array( 'WP_Widget_Custom_HTML', 'add_help_text' ) );
@@ -202,44 +196,24 @@ class WP_Widget_Custom_HTML extends WP_Widget {
 	/**
 	 * Loads the required scripts and styles for the widget control.
 	 *
-	 * @since 4.9.0
+	 * @since CP-2.3.0
 	 */
 	public function enqueue_admin_scripts() {
-		$settings = wp_enqueue_code_editor(
-			array(
-				'type'       => 'text/html',
-				'codemirror' => array(
-					'indentUnit' => 2,
-					'tabSize'    => 2,
-				),
-			)
-		);
-
-		wp_enqueue_script( 'custom-html-widgets' );
-		if ( empty( $settings ) ) {
-			$settings = array(
-				'disabled' => true,
-			);
+		if ( ! isset( $this->number ) ) {
+			return;
 		}
-		wp_add_inline_script( 'custom-html-widgets', sprintf( 'wp.customHtmlWidgets.init( %s );', wp_json_encode( $settings ) ), 'after' );
 
-		$l10n = array(
-			'errorNotice' => array(
-				/* translators: %d: Error count. */
-				'singular' => _n( 'There is %d error which must be fixed before you can save.', 'There are %d errors which must be fixed before you can save.', 1 ),
-				/* translators: %d: Error count. */
-				'plural'   => _n( 'There is %d error which must be fixed before you can save.', 'There are %d errors which must be fixed before you can save.', 2 ),
-				// @todo This is lacking, as some languages have a dedicated dual form. For proper handling of plurals in JS, see #20491.
-			),
-		);
-		wp_add_inline_script( 'custom-html-widgets', sprintf( 'jQuery.extend( wp.customHtmlWidgets.l10n, %s );', wp_json_encode( $l10n ) ), 'after' );
+		wp_enqueue_code_editor( array( 'type' => 'text/html' ) );
+		if ( 'false' !== wp_get_current_user()->syntax_highlighting ) {
+			wp_enqueue_script( 'wp-codemirror' );
+		}
+		wp_enqueue_script( 'custom-html-widgets' );
 	}
 
 	/**
 	 * Outputs the Custom HTML widget settings form.
 	 *
-	 * @since 4.8.1
-	 * @since 4.9.0 The form contains only hidden sync inputs. For the control UI, see `WP_Widget_Custom_HTML::render_control_template_scripts()`.
+	 * @since CP-2.3.0
 	 *
 	 * @see WP_Widget_Custom_HTML::render_control_template_scripts()
 	 *
@@ -248,49 +222,32 @@ class WP_Widget_Custom_HTML extends WP_Widget {
 	public function form( $instance ) {
 		$instance = wp_parse_args( (array) $instance, $this->default_instance );
 		?>
-		<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" class="title sync-input" type="hidden" value="<?php echo esc_attr( $instance['title'] ); ?>">
-		<textarea id="<?php echo $this->get_field_id( 'content' ); ?>" name="<?php echo $this->get_field_name( 'content' ); ?>" class="content sync-input" hidden><?php echo esc_textarea( $instance['content'] ); ?></textarea>
+
+		<fieldset>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title:' ); ?></label>
+			<input id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" class="widefat" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>">
+		</fieldset>
+		<fieldset>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'content' ) ); ?>"><?php _e( 'Content:' ); ?></label>
+			<textarea id="<?php echo esc_attr( $this->get_field_id( 'content' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'content' ) ); ?>" class="widefat code content" rows="16" cols="20"><?php echo esc_textarea( $instance['content'] ); ?></textarea>
+		</fieldset>
+
 		<?php
-	}
-
-	/**
-	 * Render form template scripts.
-	 *
-	 * @since 4.9.0
-	 */
-	public static function render_control_template_scripts() {
-		?>
-		<script type="text/html" id="tmpl-widget-custom-html-control-fields">
-			<# var elementIdPrefix = 'el' + String( Math.random() ).replace( /\D/g, '' ) + '_' #>
-			<p>
-				<label for="{{ elementIdPrefix }}title"><?php esc_html_e( 'Title:' ); ?></label>
-				<input id="{{ elementIdPrefix }}title" type="text" class="widefat title">
-			</p>
-
-			<p>
-				<label for="{{ elementIdPrefix }}content" id="{{ elementIdPrefix }}content-label"><?php esc_html_e( 'Content:' ); ?></label>
-				<textarea id="{{ elementIdPrefix }}content" class="widefat code content" rows="16" cols="20"></textarea>
-			</p>
-
-			<?php if ( ! current_user_can( 'unfiltered_html' ) ) : ?>
-				<?php
-				$probably_unsafe_html = array( 'script', 'iframe', 'form', 'input', 'style' );
-				$allowed_html         = wp_kses_allowed_html( 'post' );
-				$disallowed_html      = array_diff( $probably_unsafe_html, array_keys( $allowed_html ) );
+		if ( ! current_user_can( 'unfiltered_html' ) ) {
+			$probably_unsafe_html = array( 'script', 'iframe', 'form', 'input', 'style' );
+			$allowed_html         = wp_kses_allowed_html( 'post' );
+			$disallowed_html      = array_diff( $probably_unsafe_html, array_keys( $allowed_html ) );
+			if ( ! empty( $disallowed_html ) ) {
 				?>
-				<?php if ( ! empty( $disallowed_html ) ) : ?>
-					<# if ( data.codeEditorDisabled ) { #>
-						<p>
-							<?php _e( 'Some HTML tags are not permitted, including:' ); ?>
-							<code><?php echo implode( '</code>, <code>', $disallowed_html ); ?></code>
-						</p>
-					<# } #>
-				<?php endif; ?>
-			<?php endif; ?>
 
-			<div class="code-editor-error-container"></div>
-		</script>
-		<?php
+				<fieldset>
+					<?php _e( 'Some HTML tags are not permitted, including:' ); ?>
+					<code><?php echo implode( '</code>, <code>', $disallowed_html ); ?></code>
+				</fieldset>
+
+				<?php
+			}
+		}
 	}
 
 	/**

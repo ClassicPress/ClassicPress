@@ -838,8 +838,7 @@ $( function() {
 			menu: $adminMenuWrap.height()
 		},
 		$headerEnd = $( '.wp-header-end' ),
-		topMenuItems = $adminmenu[0].querySelectorAll( 'li.wp-has-submenu' );
-
+		topMenuItems = document.body.className.includes( 'wp-admin' ) && $adminmenu[0] ? $adminmenu[0].querySelectorAll( 'li.wp-has-submenu' ) : [];
 	/**
 	 * Makes the fly-out submenu header clickable, when the menu is folded.
 	 *

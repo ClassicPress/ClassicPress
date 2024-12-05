@@ -34,7 +34,7 @@
 
 .mejs-controls .mejs-time-rail .mejs-time-total,
 .mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-total {
-	background: rgba(255, 255, 255, .33);
+	background: rgba(255, 255, 255, 0.33);
 }
 
 .mejs-controls .mejs-time-rail span,
@@ -119,6 +119,7 @@
 video.wp-video-shortcode,
 .wp-video-shortcode video {
 	max-width: 100%;
+	height: auto;
 	display: inline-block;
 }
 

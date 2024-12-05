@@ -679,11 +679,6 @@ border color while dragging a file over the uploader drop area */
 	right: 51px;
 }
 
-.edit-attachment-frame .media-frame-title {
-	left: 0;
-	right: 150px; /* leave space for prev/next/close */
-}
-
 .edit-attachment-frame .edit-media-header .right:before,
 .edit-attachment-frame .edit-media-header .left:before {
 	font: normal 20px/50px dashicons !important;
@@ -732,19 +727,15 @@ border color while dragging a file over the uploader drop area */
 	cursor: default;
 }
 
-.edit-attachment-frame .media-frame-content,
 .edit-attachment-frame .media-frame-router {
 	left: 0;
 }
 
 .edit-attachment-frame .media-frame-content {
 	border-bottom: none;
-	bottom: 0;
-	top: 50px;
 }
 
 .edit-attachment-frame .attachment-details {
-	position: absolute;
 	overflow: auto;
 	top: 0;
 	bottom: 0;

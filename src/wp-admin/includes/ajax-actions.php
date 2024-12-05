@@ -3043,7 +3043,16 @@ function wp_ajax_query_attachments() {
 	header( 'X-WP-Total: ' . (int) $total_posts );
 	header( 'X-WP-TotalPages: ' . (int) $max_pages );
 
-	wp_send_json_success( $posts );
+	$response = array(
+		'data'    => $posts,
+		'headers' => array(
+			'total_posts' => (int) $total_posts,
+			'max_pages'   => (int) $max_pages,
+		),
+		'success' => true,
+	);
+
+	wp_send_json( $response );
 }
 
 /**
@@ -3351,7 +3360,7 @@ function wp_ajax_quick_edit_attachment() {
 	</th>
 	<td class="title column-title has-row-actions column-primary" data-colname="' . esc_html__( 'File' ) . '">
 		<strong class="has-media-icon">
-			<a href="' . esc_url( home_url( '/wp-admin/post.php?post=' . $id . '&amp;action=edit' ) ) . '" aria-label="' . esc_attr__( '“' ) . esc_attr( $attachment->post_title ) . esc_attr__( '” (Edit)' ) . '">
+			<a href="' . esc_url( home_url( '/wp-admin/post.php?post=' . $id . '&amp;action=edit' ) ) . '" aria-label="' . esc_attr__( sprintf( '“%s” (Edit)', $attachment->post_title ) ) . '">
 				<span class="media-icon image-icon">
 					<img width="60" height="60" src="' . esc_url( wp_get_attachment_image_src( $id )[0] ) . '" class="attachment-60x60 size-60x60" alt="" decoding="async" loading="lazy">
 				</span>' . esc_html( $attachment->post_title ) . '
@@ -3365,18 +3374,18 @@ function wp_ajax_quick_edit_attachment() {
 		<div class="row-actions">
 			<span class="edit"><a href="' . esc_url( home_url( '/wp-admin/post.php?post=' . $id . '&amp;action=edit' ) ) . '" aria-label="Edit “' . esc_attr( $attachment->post_title ) . '”">' . esc_html__( 'Edit' ) . '</a> | </span>
 
-			<span class="delete"><a href="post.php?action=delete&amp;post=' . $id . '&amp;_wpnonce=' . esc_attr( $nonce ) . '" class="submitdelete aria-button-if-js" onclick="return showNotice.warn();" aria-label="' . esc_attr__( 'Delete “' ) . esc_attr( $attachment->post_title ) . esc_attr__( '” permanently' ) . '" role="button">' . esc_html__( 'Delete Permanently' ) . '</a> | </span>
+			<span class="delete"><a href="post.php?action=delete&amp;post=' . $id . '&amp;_wpnonce=' . esc_attr( $nonce ) . '" class="submitdelete aria-button-if-js" onclick="return showNotice.warn();" aria-label="' . esc_attr__( sprintf( 'Delete “%s” permanently', $attachment->post_title ) ) . '" role="button">' . esc_html__( 'Delete Permanently' ) . '</a> | </span>
 
-			<span class="view"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( 'View “' ) . esc_attr( $attachment->post_title ) . esc_attr__( '”' ) . '" rel="bookmark">' . esc_html__( 'View' ) . '</a> | </span>
+			<span class="view"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'View “%s”', $attachment->post_title ) ) . '" rel="bookmark">' . esc_html__( 'View' ) . '</a> | </span>
 
 			<span class="copy">
 				<span class="copy-to-clipboard-container">
-					<button type="button" class="button-link copy-attachment-url media-library" data-clipboard-text="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( 'Copy “' ) . esc_attr( $attachment->post_title ) . esc_attr__( '” URL to clipboard' ) . '">' . esc_html__( 'Copy URL' ) . '</button>
+					<button type="button" class="button-link copy-attachment-url media-library" data-clipboard-text="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'Copy “%s” URL to clipboard', $attachment->post_title ) ) . '">' . esc_html__( 'Copy URL' ) . '</button>
 					<span class="success hidden" aria-hidden="true">' . esc_html__( 'Copied!' ) . '</span>
 				</span> |
 			</span>
 
-			<span class="download"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( 'Download “' ) . esc_attr( $attachment->post_title ) . esc_attr__( '”' ) . '" download="">' . esc_html__( 'Download file' ) . '</a></span>
+			<span class="download"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'Download “%s”', $attachment->post_title ) ) . '" download="">' . esc_html__( 'Download file' ) . '</a></span>
 		</div>
 		<button type="button" class="toggle-row">
 			<span class="screen-reader-text">' . esc_html__( 'Show more details' ) . '</span>

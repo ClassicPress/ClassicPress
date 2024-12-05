@@ -450,7 +450,6 @@ div#widgets-left .widget-holder {
 	word-wrap: break-word;
 	-ms-word-break: break-all;
 	word-break: break-word;
-	-webkit-hyphens: auto;
 	hyphens: auto;
 }
 
@@ -808,7 +807,7 @@ div#widgets-right .widget-top:hover,
 .text-widget-fields .wp-pointer .wp-pointer-buttons {
 	line-height: 1.4;
 }
-
+.CodeMirror-wrap,
 .custom-html-widget-fields > p > .CodeMirror {
 	border: 1px solid #dcdcde;
 }
@@ -821,6 +820,10 @@ ul.CodeMirror-hints {
 }
 .widget-control-actions .custom-html-widget-save-button.button.validation-blocked {
 	cursor: not-allowed;
+}
+.widget-content fieldset {
+	margin: 1em 0;
+	font-size: 1.2em;
 }
 
 /* =Media Queries

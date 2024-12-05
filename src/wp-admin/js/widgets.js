@@ -9,7 +9,7 @@
 document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Set variables for the whole file
-	var newMultiValue,
+	var newMultiValue, timeNow,
 		widgetList = document.getElementById( 'widget-list' ),
 		sortables = document.querySelectorAll( '.widgets-sortables' ),
 		sidebarWrappers = document.querySelectorAll( '.widgets-holder-wrap' ),
@@ -125,7 +125,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			removeButton.disabled = true;
 		}
 
-		else {
+		else if ( e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' ) {
 
 			// Add chooser
 			if ( e.target.closest( 'ul' ).id === 'widget-list' ) {
@@ -192,7 +192,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		widget.addEventListener( 'keyup', function( e ) {
 			if ( e.target.closest( '.widget-top' ).hasAttribute( 'open' ) && e.key === 'Escape' ) {
 				e.target.closest( '.widget-top' ).removeAttribute( 'open' );
-				document.querySelector( '.chooser' ).classList.remove( 'chooser' );
+				if ( document.querySelector( '.chooser' ) != null ) {
+					document.querySelector( '.chooser' ).classList.remove( 'chooser' );
+				}
 			}
 		} );
 
@@ -227,8 +229,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		},
 		sort: false,
 		setData: ghostImage,
-		forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for webkit browsers
-		//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari
 		onChoose: function( e ) {
 			var multi;
 			if ( e.item.className.includes( 'widget' ) ) {
@@ -261,11 +261,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 
 		sortable.querySelectorAll( '.widget' ).forEach( function( widget ) {
-			var title = widget.querySelector( 'input[id*="-title"]' ).value || '';
+			var title,
+				input = widget.querySelector( 'input[id*="-title"]' );
+
+			if ( input ) {
+				title = input.value || '';
+			}
 			if ( title ) {
 				title = ': ' + title.replace( /<[^<>]+>/g, '' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
+				widget.querySelector( '.in-widget-title' ).innerHTML = title;
 			}
-			widget.querySelector( '.in-widget-title' ).innerHTML = title;
 
 			if ( widget.querySelector( 'p.widget-error' ) != null ) {
 				widget.querySelector( 'details' ).setAttribute( 'open', 'open' );
@@ -281,8 +286,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			filter: 'input, select, textarea, label, button, fieldset, legend, datalist, output, option, optgroup',
 			preventOnFilter: false, // ensures correct position of cursor in input fields
 			setData: ghostImage,
-			forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for webkit browsers
-			//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari
 			onStart: sortableStart,
 			onChange: sortableChange
 		} );
@@ -301,8 +304,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		filter: 'input, select, textarea, label, button, fieldset, legend, datalist, output, option, optgroup',
 		preventOnFilter: false, // ensures correct position of cursor in input fields
 		setData: ghostImage,
-		forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for webkit browsers
-		//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari
 		onStart: sortableStart,
 		onChange: sortableChange,
 		onAdd: function() {
@@ -504,10 +505,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 
 	function saveWidget( widget, del, animate, order ) {
-		var data, xhr, id,
+		var data,
 			sidebarId = widget.closest( 'ul.widgets-sortables' ).id,
 			form = widget.querySelector( 'form' ),
 			isAdd = widget.querySelector( 'input.add_new' ).value;
+
+		// Prevent duplicates
+		if ( Number.isInteger( timeNow ) && timeNow + 50 > Date.now() ) {
+			return false;
+		}
+		timeNow = Date.now();
 
 		if ( ! isAdd || form.checkValidity ) {
 
@@ -525,75 +532,72 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			/*
 			 * Prepare data for posting to database
-			 *
-			 * Note that using fetch API causes a 400 error
 			 */
-			xhr = new XMLHttpRequest();
-			xhr.open( 'POST', ajaxurl, true );
+			fetch( ajaxurl, {
+				method: 'POST',
+				headers: {
+					'Accept': 'text/html',
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: data
+			} )
+			.then( function( response ) {
+				if ( response.ok ) {
+					return response.text(); // no errors
+				}
+				throw new Error( response.status );
+			} )
+			.then( function( responseText ) {
+				var id = widget.querySelector( 'input.widget-id' ).value;
 
-			// Send the proper header information along with the request
-			xhr.setRequestHeader( 'Accept', 'text/html' );
-			xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
-
-			xhr.onreadystatechange = function() {
-
-				// Call a function when the state changes.
-				if ( xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200 ) {
-
-					// Request finished. Do processing here.
-					id = widget.querySelector( 'input.widget-id' ).value;
-
-					if ( del ) {
-						if ( ! widget.querySelector( 'input.widget_number' ).value ) {
-							document.getElementById('#available-widgets').querySelectorAll( 'input.widget-id' ).forEach( function( widgetId ) {
-								if ( widgetId.value === id ) {
-									widgetId.closest( 'li.widget' ).style.display = 'block';
-								}
-							} );
-						}
-
-						if ( animate ) {
-							order = 0;
-							widget.removeAttribute( 'open' );
-							widget.remove();
-							saveOrder( sidebarId );
-						} else {
-							widget.remove();
-						}
-					} else {
-						if ( xhr.response && xhr.response.length > 2 ) {
-							widget.querySelector( '.widget-content' ).innerHTML = xhr.response;
-
-							var title = widget.querySelector( 'input[id*="-title"]' ).value || '';
-							if ( title ) {
-								title = ': ' + title.replace( /<[^<>]+>/g, '' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
+				if ( del ) {
+					if ( ! widget.querySelector( 'input.widget_number' ).value ) {
+						document.getElementById( '#available-widgets' ).querySelectorAll( 'input.widget-id' ).forEach( function( widgetId ) {
+							if ( widgetId.value === id ) {
+								widgetId.closest( 'li.widget' ).style.display = 'block';
 							}
-							widget.querySelector( '.in-widget-title' ).innerHTML = title;
-
-							// Re-disable the save button.
-							widget.querySelector( '.widget-control-save' ).disabled = true;
-							widget.querySelector( '.widget-control-save' ).value = wp.i18n.__( 'Saved' );
-
-							widget.classList.remove( 'widget-dirty' );
-
-							// Trigger event so that media, text, and HTML widgets get their fields
-							document.dispatchEvent( new CustomEvent( 'widget-updated', {
-								detail: { widget: widget }
-							} ) );
-						}
-						document.querySelectorAll( '.spinner' ).forEach( function( spinner ) {
-							spinner.classList.remove( 'is-active' );
 						} );
 					}
 
-					if ( order ) {
+					if ( animate ) {
+						order = 0;
+						widget.removeAttribute( 'open' );
+						widget.remove();
 						saveOrder( sidebarId );
+					} else {
+						widget.remove();
 					}
-				}
-			};
+				} else {
+					if ( responseText && responseText.length > 2 ) {
+						widget.querySelector( '.widget-content' ).innerHTML = responseText;
 
-			// Post data to database.
-			xhr.send( data );
+						let title = widget.querySelector( 'input[id*="-title"]' ).value || '';
+						if ( title ) {
+							title = ': ' + title.replace( /<[^<>]+>/g, '' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
+						}
+						widget.querySelector( '.in-widget-title' ).innerHTML = title;
+
+						widget.querySelector( '.widget-control-save' ).disabled = true;
+						widget.querySelector( '.widget-control-save' ).value = wp.i18n.__( 'Saved' );
+
+						widget.classList.remove( 'widget-dirty' );
+
+						document.dispatchEvent( new CustomEvent('widget-updated', {
+							detail: { widget: widget }
+						}));
+					}
+					document.querySelectorAll( '.spinner' ).forEach( function( spinner ) {
+						spinner.classList.remove( 'is-active' );
+					} );
+				}
+
+				if ( order ) {
+					saveOrder( sidebarId );
+				}
+			} )
+			.catch( function( error ) {
+				console.error( 'Error:', error );
+			} );
 		}
 	}
 
@@ -643,46 +647,44 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 
 	function removeInactiveWidgets() {
-		var data, xhr;
-
-		document.querySelector( '.remove-inactive-widgets' ).querySelector( '.spinner' ).classList.add( 'is-active' );
-
-		data = new URLSearchParams( {
+		var data = new URLSearchParams( {
 			action : 'delete-inactive-widgets',
 			removeinactivewidgets : document.getElementById( '_wpnonce_remove_inactive_widgets' ).value
 		} );
 
+		document.querySelector( '.remove-inactive-widgets' ).querySelector( '.spinner' ).classList.add( 'is-active' );
+
 		/*
-		 * Prepare to make call to database.
-		 *
-		 * Note that using fetch API triggers a bug in Firefox.
-		 * https://bugzilla.mozilla.org/show_bug.cgi?id=1280189
+		 * Make call to database.
 		 */
-		xhr = new XMLHttpRequest();
-		xhr.open( 'POST', ajaxurl, true );
-
-		// Send the appropriate header information along with the request
-		xhr.setRequestHeader( 'Accept', 'text/html' );
-		xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
-
-		xhr.onreadystatechange = function() {
-
-			// Call a function when the state changes
-			if ( xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200 ) {
-
-				// Remove widget from screen
-				document.getElementById( 'wp_inactive_widgets' ).querySelectorAll( 'li.widget' ).forEach( function( widget ) {
-					widget.remove();
-				} );
-
-				// Hide spinner
-				document.querySelectorAll( '.spinner' ).forEach( function( spinner ) {
-					spinner.classList.remove( 'is-active' );
-				} );
+		fetch( ajaxurl, {
+			method: 'POST',
+			headers: {
+				'Accept': 'text/html',
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			body: data
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.text(); // no errors
 			}
-		};
+			throw new Error( response.status );
+		} )
+		.then( function() {
+			// Remove widget from screen
+			document.getElementById( 'wp_inactive_widgets' ).querySelectorAll( 'li.widget' ).forEach( function( widget ) {
+				widget.remove();
+			} );
 
-		xhr.send( data );
+			// Hide spinner
+			document.querySelectorAll( '.spinner' ).forEach( function( spinner ) {
+				spinner.classList.remove( 'is-active' );
+			} );
+		} )
+		.catch( function( error ) {
+			console.error( 'Error:', error );
+		} );
 	}
 
 

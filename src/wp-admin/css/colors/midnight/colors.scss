@@ -1,9 +1,12 @@
-$scheme-name: "midnight";
-$base-color: #363b3f;
+
 $highlight-color: #e14d43;
 $notification-color: #69a8bb;
 
-$dashboard-accent-1: $notification-color;
-$dashboard-icon-background: $highlight-color;
-
-@import "../_admin.scss";
+@use "../_admin.scss" with (
+	$scheme-name: "midnight",
+	$base-color: #363b3f,
+	$highlight-color: $highlight-color,
+	$notification-color: $notification-color,
+	$dashboard-accent-1: $notification-color,
+	$dashboard-icon-background: $highlight-color
+);

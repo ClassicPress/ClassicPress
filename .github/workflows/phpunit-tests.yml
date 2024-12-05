@@ -39,7 +39,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ '8.3', '8.2', '8.1', '8.0', '7.4' ]
+        php: [ '8.4', '8.3', '8.2', '8.1', '8.0', '7.4' ]
         mysql: [ '5.7', '8.0' ]
         memcached: [ false ]
         experimental: [ false ]
@@ -161,9 +161,10 @@ jobs:
           sudo locale-gen es_ES.UTF-8 fr_FR.UTF-8 ru_RU.UTF-8
           sudo update-locale LC_ALL="es_ES.UTF-8 fr_FR.UTF-8 ru_RU.UTF-8"
 
-      - name: Install PHPUnit and Composer dependencies
-        run: |
-          composer require phpunit/phpunit "9.*" -W --no-progress --no-ansi --no-interaction
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          composer-options: "--no-progress --no-ansi --no-interaction"
 
       - name: Make Composer packages available globally
         run: echo "${PWD}/vendor/bin" >> $GITHUB_PATH
@@ -200,19 +201,6 @@ jobs:
       - name: Set up a Memcached server
         if: ${{ matrix.memcached }}
         uses: niden/actions-memcached@v7
-
-      - name: Clone PHP.net for PHPUnit tests
-        if: ${{ matrix.memcached }}
-        uses: actions/checkout@v4
-        with:
-          repository: php/web-php
-          fetch-depth: 1
-          path: 'php.net'
-
-      - name: Create HTML of local supported versions
-        if: ${{ matrix.memcached }}
-        run: |
-          php -d error_reporting=E_ERROR -f php.net/supported-versions.php > supported-versions.html
 
       - name: Run PHPUnit default
         env:

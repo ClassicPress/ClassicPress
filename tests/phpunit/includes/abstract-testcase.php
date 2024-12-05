@@ -210,8 +210,8 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	/**
 	 * Allows tests to be skipped on some automated runs.
 	 *
-	 * For test runs on GitHub Actions for something other than trunk,
-	 * we want to skip tests that only need to run for trunk.
+	 * For test runs on GitHub Actions for something other than develop,
+	 * we want to skip tests that only need to run for develop.
 	 */
 	public function skipOnAutomatedBranches() {
 		// https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
@@ -222,8 +222,8 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 			// We're on GitHub Actions.
 			$skipped = array( 'pull_request', 'pull_request_target' );
 
-			if ( in_array( $github_event_name, $skipped, true ) || 'refs/heads/trunk' !== $github_ref ) {
-				$this->markTestSkipped( 'For automated test runs, this test is only run on trunk' );
+			if ( in_array( $github_event_name, $skipped, true ) || 'refs/heads/develop' !== $github_ref ) {
+				$this->markTestSkipped( 'For automated test runs, this test is only run on develop' );
 			}
 		}
 	}
@@ -1041,6 +1041,40 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 			$this->assertIsArray( $sub_array, $message . ' Subitem of the array is not an array.' );
 			$this->assertNotEmpty( $sub_array, $message . ' Subitem of the array is empty.' );
 		}
+	}
+
+	/**
+	 * Assert that two text strings representing file paths are the same, while ignoring
+	 * OS-specific differences in the directory separators.
+	 *
+	 * This allows for tests to be compatible for running on both *nix based as well as Windows OS.
+	 *
+	 * @since 6.7.0
+	 *
+	 * @param string $path_a File or directory path.
+	 * @param string $path_b File or directory path.
+	 */
+	public function assertSamePathIgnoringDirectorySeparators( $path_a, $path_b ) {
+		$path_a = $this->normalizeDirectorySeparatorsInPath( $path_a );
+		$path_b = $this->normalizeDirectorySeparatorsInPath( $path_b );
+
+		$this->assertSame( $path_a, $path_b );
+	}
+
+	/**
+	 * Normalize directory separators in a file path to be a forward slash.
+	 *
+	 * @since 6.7.0
+	 *
+	 * @param string $path File or directory path.
+	 * @return string The normalized file or directory path.
+	 */
+	public function normalizeDirectorySeparatorsInPath( $path ) {
+		if ( ! is_string( $path ) || PHP_OS_FAMILY !== 'Windows' ) {
+			return $path;
+		}
+
+		return strtr( $path, '\\', '/' );
 	}
 
 	/**

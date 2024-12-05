@@ -697,9 +697,6 @@ switch ( $action ) {
 			exit;
 		}
 
-		require_once ABSPATH . WPINC . '/class-phpass.php';
-		$hasher = new PasswordHash( 8, true );
-
 		/**
 		 * Filters the life span of the post password cookie.
 		 *
@@ -719,6 +716,8 @@ switch ( $action ) {
 			$secure = false;
 		}
 
+		$hashed = wp_hash_password( wp_unslash( $_POST['post_password'] ) );
+
 		$cookie_options = array(
 			'expires' => $expire,
 			'path' => COOKIEPATH,
@@ -728,7 +727,7 @@ switch ( $action ) {
 			'samesite' => 'Strict',
 		);
 
-		setcookie( 'wp-postpass_' . COOKIEHASH, $hasher->HashPassword( wp_unslash( $_POST['post_password'] ) ), $cookie_options );
+		setcookie( 'wp-postpass_' . COOKIEHASH, $hashed, $cookie_options );
 
 		wp_safe_redirect( wp_get_referer() );
 		exit;
@@ -865,6 +864,14 @@ switch ( $action ) {
 	case 'rp':
 		list( $rp_path ) = explode( '?', wp_unslash( $_SERVER['REQUEST_URI'] ) );
 		$rp_cookie       = 'wp-resetpass-' . COOKIEHASH;
+
+		$referer = wp_get_referer();
+
+		if ( $referer ) {
+			$secure = ( 'https' === parse_url( $referer, PHP_URL_SCHEME ) );
+		} else {
+			$secure = false;
+		}
 
 		$cookie_options = array(
 			'expires' => 0,
