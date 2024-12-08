@@ -240,7 +240,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function dragEnd( e ) {
 		// Update class and attribute when a sortable area becomes or ceases being empty.
 		columns.forEach( function( column ) {
-			if ( column.querySelector( '.postbox:not(.hide-if-js)' ) == null ) {
+			if ( column.clientHeight > 1 && column.querySelector( '.postbox:not(.hide-if-js)' ) == null ) {
 				column.classList.add( 'empty-container' );
 				column.style.outline = '3px dashed #c3c4c7';
 				column.setAttribute( 'data-emptystring', emptySortableText );
