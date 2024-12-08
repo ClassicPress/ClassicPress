@@ -121,12 +121,10 @@ function wp_default_packages_vendor( $scripts ) {
 	$suffix = wp_scripts_get_suffix();
 
 	$vendor_scripts = array(
-		'moment',
 		'lodash',
 	);
 
 	$vendor_scripts_versions = array(
-		'moment' => '2.29.4',
 		'lodash' => '4.17.19',
 	);
 
@@ -138,34 +136,6 @@ function wp_default_packages_vendor( $scripts ) {
 	}
 
 	did_action( 'init' ) && $scripts->add_inline_script( 'lodash', 'window.lodash = _.noConflict();' );
-
-	did_action( 'init' ) && $scripts->add_inline_script(
-		'moment',
-		sprintf(
-			"moment.updateLocale( '%s', %s );",
-			get_user_locale(),
-			wp_json_encode(
-				array(
-					'months'         => array_values( $wp_locale->month ),
-					'monthsShort'    => array_values( $wp_locale->month_abbrev ),
-					'weekdays'       => array_values( $wp_locale->weekday ),
-					'weekdaysShort'  => array_values( $wp_locale->weekday_abbrev ),
-					'week'           => array(
-						'dow' => (int) get_option( 'start_of_week', 0 ),
-					),
-					'longDateFormat' => array(
-						'LT'   => get_option( 'time_format', __( 'g:i a' ) ),
-						'LTS'  => null,
-						'L'    => null,
-						'LL'   => get_option( 'date_format', __( 'F j, Y' ) ),
-						'LLL'  => __( 'F j, Y g:i a' ),
-						'LLLL' => null,
-					),
-				)
-			)
-		),
-		'after'
-	);
 }
 
 /**
