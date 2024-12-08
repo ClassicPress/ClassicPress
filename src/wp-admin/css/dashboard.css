@@ -1151,10 +1151,6 @@ a.rsswidget {
 		height: 0;
 		min-height: 0;
 		margin-bottom: 0;
-	}
-
-	#dashboard-widgets #postbox-container-3 .empty-container,
-	#dashboard-widgets #postbox-container-4 .empty-container {
 		display: none;
 	}
 
@@ -1212,10 +1208,7 @@ a.rsswidget {
 		margin-bottom: 0;
 	}
 
-	#dashboard-widgets #postbox-container-4 .empty-container {
-		display: none;
-	}
-
+	#dashboard-widgets #postbox-container-4 .empty-container,
 	#dashboard-widgets #postbox-container-4 .empty-container:after {
 		display: none;
 	}
