@@ -418,7 +418,8 @@ foreach ( (array) $options as $option ) :
 	<?php else : ?>
 		<input class="regular-text <?php echo $class; ?>" type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $value ); ?>"<?php disabled( $disabled, true ); ?>>
 	<?php endif; ?>
-	<button type="button" class="button" data-clipboard-text="<?php echo esc_attr( $clipboard_text ); ?>" onClick="navigator.clipboard.writeText( this.getAttribute('data-clipboard-text' ) );"><?php _e( 'Copy' ); ?></button></td>
+	<button type="button" class="button" data-clipboard-text="<?php echo esc_attr( $clipboard_text ); ?>" onClick="navigator.clipboard.writeText( this.getAttribute( 'data-clipboard-text' ) ); document.getElementById( 'success-<?php echo $name; ?>' ).classList.remove( 'hidden' ); setTimeout(function() { document.getElementById( 'success-<?php echo $name; ?>' ).classList.add( 'hidden' ); }, 2000);"><?php _e( 'Copy' ); ?></button>
+	<span id="success-<?php echo $name; ?>" class="success hidden" aria-hidden="true"><?php _e( 'Copied!' ); ?></span></td>
 </tr>
 <?php endforeach; ?>
 </table>
