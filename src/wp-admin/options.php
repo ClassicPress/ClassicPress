@@ -390,15 +390,22 @@ foreach ( (array) $options as $option ) :
 			$value               = maybe_unserialize( $option->option_value );
 			$options_to_update[] = $option->option_name;
 			$class               = 'all-options';
+			$clipboard_text      = $value;
 		} else {
 			$value    = 'SERIALIZED DATA';
 			$disabled = true;
 			$class    = 'all-options disabled';
+			ob_start();
+			$unserialized_value = unserialize( $option->option_value );
+			var_dump( $unserialized_value );
+			$clipboard_text     = ob_get_contents();
+			ob_end_clean();
 		}
 	} else {
 		$value               = $option->option_value;
 		$options_to_update[] = $option->option_name;
 		$class               = 'all-options';
+		$clipboard_text      = $value;
 	}
 
 	$name = esc_attr( $option->option_name );
@@ -410,7 +417,8 @@ foreach ( (array) $options as $option ) :
 		<textarea class="<?php echo $class; ?>" name="<?php echo $name; ?>" id="<?php echo $name; ?>" cols="30" rows="5"><?php echo esc_textarea( $value ); ?></textarea>
 	<?php else : ?>
 		<input class="regular-text <?php echo $class; ?>" type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $value ); ?>"<?php disabled( $disabled, true ); ?>>
-	<?php endif; ?></td>
+	<?php endif; ?>
+	<button type="button" class="button" data-clipboard-text="<?php echo esc_attr( $clipboard_text ); ?>" onClick="navigator.clipboard.writeText( this.getAttribute('data-clipboard-text' ) );"><?php _e( 'Copy' ); ?></button></td>
 </tr>
 <?php endforeach; ?>
 </table>
