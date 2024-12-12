@@ -153,7 +153,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		if ( column.id !== 'advanced-sortables' && column.querySelector( '.postbox' ) == null ) {
 			column.classList.add( 'empty-container' );
-			column.style.outline = '3px dashed #c3c4c7';
 			column.setAttribute( 'data-emptystring', emptySortableText );
 		}
 	} );
@@ -239,17 +238,25 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @since CP-2.1.0
 	 */
 	function dragEnd( e ) {
+		// Update class and attribute when a sortable area becomes or ceases being empty.
 		columns.forEach( function( column ) {
-			column.style.outline = 'none';
+			if ( column.clientHeight > 1 && column.querySelector( '.postbox:not(.hide-if-js)' ) == null ) {
+				column.classList.add( 'empty-container' );
+				column.style.outline = '3px dashed #c3c4c7';
+				column.setAttribute( 'data-emptystring', emptySortableText );
+			} else {
+				column.style.outline = 'none';
+			}
 		} );
 
-		// Update class and attribute when a sortable area becomes or ceases being empty.
-		if ( e.from.querySelector( '.postbox' ) == null ) {
+		// Add empty-container to empty containers after drag from
+		if ( e.from.querySelector( '.postbox:not(.hide-if-js)' ) == null && e.from.querySelector( '.postbox.hide-if-js' ) != null ) {
 			e.from.classList.add( 'empty-container' );
 			e.from.style.outline = '3px dashed #c3c4c7';
 			e.from.setAttribute( 'data-emptystring', emptySortableText );
 		}
 
+		// Remove empty-container from containers after drag to
 		if ( e.to.className.includes( 'empty-container' ) ) {
 			e.to.classList.remove( 'empty-container' );
 			e.to.style.outline = 'none';
