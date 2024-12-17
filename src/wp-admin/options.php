@@ -394,14 +394,11 @@ foreach ( (array) $options as $option ) :
 			$class               = 'all-options';
 			$clipboard_text      = $value;
 		} else {
-			$value    = 'SERIALIZED DATA';
-			$disabled = true;
-			$class    = 'all-options disabled';
-			ob_start();
+			$value              = 'SERIALIZED DATA';
+			$disabled           = true;
+			$class              = 'all-options disabled';
 			$unserialized_value = unserialize( $option->option_value );
-			var_dump( $unserialized_value );
-			$clipboard_text     = ob_get_contents();
-			ob_end_clean();
+			$clipboard_text     = print_r( $unserialized_value, true );
 		}
 	} else {
 		$value               = $option->option_value;
