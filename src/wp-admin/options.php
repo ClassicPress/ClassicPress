@@ -377,6 +377,8 @@ require_once ABSPATH . 'wp-admin/admin-header.php'; ?>
 <?php
 $options = $wpdb->get_results( "SELECT * FROM $wpdb->options ORDER BY option_name" );
 
+$can_copy = wp_is_using_https() || in_array( $_SERVER['REMOTE_ADDR'], array( '127.0.0.1', '::1' ) );
+
 foreach ( (array) $options as $option ) :
 	$disabled = false;
 
@@ -390,15 +392,19 @@ foreach ( (array) $options as $option ) :
 			$value               = maybe_unserialize( $option->option_value );
 			$options_to_update[] = $option->option_name;
 			$class               = 'all-options';
+			$clipboard_text      = $value;
 		} else {
-			$value    = 'SERIALIZED DATA';
-			$disabled = true;
-			$class    = 'all-options disabled';
+			$value              = 'SERIALIZED DATA';
+			$disabled           = true;
+			$class              = 'all-options disabled';
+			$unserialized_value = unserialize( $option->option_value );
+			$clipboard_text     = print_r( $unserialized_value, true );
 		}
 	} else {
 		$value               = $option->option_value;
 		$options_to_update[] = $option->option_name;
 		$class               = 'all-options';
+		$clipboard_text      = $value;
 	}
 
 	$name = esc_attr( $option->option_name );
@@ -410,7 +416,11 @@ foreach ( (array) $options as $option ) :
 		<textarea class="<?php echo $class; ?>" name="<?php echo $name; ?>" id="<?php echo $name; ?>" cols="30" rows="5"><?php echo esc_textarea( $value ); ?></textarea>
 	<?php else : ?>
 		<input class="regular-text <?php echo $class; ?>" type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $value ); ?>"<?php disabled( $disabled, true ); ?>>
-	<?php endif; ?></td>
+	<?php endif; ?>
+	<?php if ( $can_copy ) : ?>
+		<button type="button" class="button" data-clipboard-text="<?php echo esc_attr( $clipboard_text ); ?>" onClick="navigator.clipboard.writeText( this.getAttribute( 'data-clipboard-text' ) ); document.getElementById( 'success-<?php echo $name; ?>' ).classList.remove( 'hidden' ); setTimeout(function() { document.getElementById( 'success-<?php echo $name; ?>' ).classList.add( 'hidden' ); }, 2000);"><?php _e( 'Copy' ); ?></button>
+		<span id="success-<?php echo $name; ?>" class="success hidden" aria-hidden="true"><?php _e( 'Copied!' ); ?></span></td>
+	<?php endif; ?>
 </tr>
 <?php endforeach; ?>
 </table>
