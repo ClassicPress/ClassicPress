@@ -858,7 +858,7 @@
 			/**
 			 * Move widget to another sidebar
 			 */
-			this.container.find( '.move-widget-btn' ).click( function() {
+			this.container.find( '.move-widget-btn' ).on( 'click', function() {
 				self.getSidebarWidgetsControl().toggleReordering( false );
 
 				var oldSidebarId = self.params.sidebar_id,

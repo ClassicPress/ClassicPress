@@ -377,7 +377,7 @@ window.wp = window.wp || {};
 		 *
 		 * @listens click
 		 */
-		$( '#bulk-titles .ntdelbutton' ).click( function() {
+		$( '#bulk-titles .ntdelbutton' ).on( 'click', function() {
 			var $this = $( this ),
 				id = $this.attr( 'id' ).substr( 1 ),
 				$prev = $this.parent().prev().children( '.ntdelbutton' ),
