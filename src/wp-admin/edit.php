@@ -442,7 +442,14 @@ foreach ( $bulk_counts as $message => $count ) {
 }
 
 if ( $messages ) {
-	echo '<div id="message" class="updated notice is-dismissible"><p>' . implode( ' ', $messages ) . '</p></div>';
+	wp_admin_notice(
+		implode( ' ', $messages ),
+		array(
+			'id'                 => 'message',
+			'additional_classes' => array( 'updated' ),
+			'dismissible'        => true,
+		)
+	);
 }
 unset( $messages );
 
