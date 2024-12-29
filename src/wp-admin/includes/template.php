@@ -1272,9 +1272,9 @@ function do_meta_boxes( $screen, $context, $data_object ) {
 					 *
 					 * @since CP-2.0.0
 					 */
-					$classes = postbox_classes( $box['id'], $page );
+					$classes        = ' ' . postbox_classes( $box['id'], $page );
 					$hidden_class   = ( in_array( $box['id'], $hidden, true ) ) ? ' hide-if-js' : '';
-					$open_attribute = $classes ? '' : ' open';
+					$open_attribute = str_contains( $classes, 'closed' ) ? '' : ' open';
 					echo '<details id="' . $box['id'] . '" class="postbox' . $classes . $hidden_class . '"' . $open_attribute . '>' . "\n";
 
 					echo '<summary>';
