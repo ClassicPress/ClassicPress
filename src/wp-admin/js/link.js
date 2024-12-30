@@ -9,8 +9,6 @@ jQuery( function($) {
 	var newCat, noSyncChecks = false, syncChecks, catAddAfter;
 
 	$('#link_name').trigger( 'focus' );
-	// Postboxes.
-	postboxes.add_postbox_toggles('link');
 
 	/**
 	 * Adds event that opens a particular category tab.
@@ -41,7 +39,7 @@ jQuery( function($) {
 	 *
 	 * @return {void}
 	 */
-	$('#link-category-add-submit').on( 'click', function() { newCat.focus(); } );
+	$('#link-category-add-submit').on( 'click', function() { newCat.trigger( 'focus' ); } );
 
 	/**
 	 * Synchronize category checkboxes.
