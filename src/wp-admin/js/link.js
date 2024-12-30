@@ -2,7 +2,7 @@
  * @output wp-admin/js/link.js
  */
 
-/* global postboxes, deleteUserSetting, setUserSetting, getUserSetting */
+/* global deleteUserSetting, setUserSetting, getUserSetting */
 
 jQuery( function($) {
 
