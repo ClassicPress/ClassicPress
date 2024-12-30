@@ -103,6 +103,7 @@ $allowed_options            = array(
 		'new_admin_email',
 		'disable_emojis',
 		'disable_xml_rpc',
+		'link_manager_enabled',
 	),
 	'discussion' => array(
 		'default_pingback_flag',

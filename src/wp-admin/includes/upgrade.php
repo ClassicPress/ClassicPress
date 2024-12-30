@@ -3510,7 +3510,7 @@ function maybe_disable_automattic_widgets() {
 function maybe_disable_link_manager() {
 	global $wp_current_db_version, $wpdb;
 
-	if ( $wp_current_db_version >= 22006 && get_option( 'link_manager_enabled' ) && ! $wpdb->get_var( "SELECT link_id FROM $wpdb->links LIMIT 1" ) ) {
+	if ( $wp_current_db_version >= 22006 && get_option( 'link_manager_enabled' ) !== '1' && ! $wpdb->get_var( "SELECT link_id FROM $wpdb->links LIMIT 1" ) ) {
 		update_option( 'link_manager_enabled', 0 );
 	}
 }
