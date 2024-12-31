@@ -560,7 +560,7 @@ function wp_validate_logged_in_cookie( $user_id ) {
 		return $user_id;
 	}
 
-	if ( is_blog_admin() || is_network_admin() || empty( $_COOKIE[ LOGGED_IN_COOKIE ] ) ) {
+	if ( is_blog_admin() || is_network_admin() || empty( $_COOKIE[ LOGGED_IN_COOKIE ] ) || defined( 'WP_INSTALLING' ) ) {
 		return false;
 	}
 
