@@ -1728,6 +1728,19 @@ final class _WP_Editors {
 			self::wp_link_dialog();
 		}
 
+		/* Enables the saving and updating of posts and pages using Ctrl (or Cmd) + s on keyboard */
+		?>
+		<script>
+		document.addEventListener( 'keydown', function( e ) {
+			var updateButton = document.getElementById( 'save-post' ) ? document.getElementById( 'save-post' ) : document.getElementById( 'publish' );
+			if ( ( e.ctrlKey || e.metaKey ) && e.key === 's' ) {
+				e.preventDefault();
+				updateButton.click();
+			}
+		} );
+		</script>
+		<?php
+
 		/**
 		 * Fires after any core TinyMCE editor instances are created.
 		 *
