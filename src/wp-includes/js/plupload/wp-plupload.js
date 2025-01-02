@@ -501,17 +501,26 @@ window.wp = window.wp || {};
 				}
 
 				if ( file.type === 'image/heic' && up.settings.heic_upload_error ) {
-					// Show error but do not block uploading.
+					// Show error but do not block heic uploading.
 					Uploader.errors.unshift({
 						message: pluploadL10n.unsupported_image,
 						data:    {},
 						file:    file
 					});
 				} else if ( file.type === 'image/webp' && up.settings.webp_upload_error ) {
-					// Disallow uploading of WebP images if the server cannot edit them.
-					error( pluploadL10n.noneditable_image, {}, file, 'no-retry' );
-					up.removeFile( file );
-					return;
+					// Show error but do not block webp uploading.
+					Uploader.errors.unshift({
+						message: pluploadL10n.unsupported_image,
+						data:    {},
+						file:    file
+					});
+				} else if ( file.type === 'image/avif' && up.settings.avif_upload_error ) {
+					// Show error but do not block avif uploading.
+					Uploader.errors.unshift({
+						message: pluploadL10n.unsupported_image,
+						data:    {},
+						file:    file
+					});
 				}
 
 				// Generate attributes for a new `Attachment` model.
