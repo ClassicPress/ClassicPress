@@ -1738,6 +1738,23 @@ final class _WP_Editors {
 				updateButton.click();
 			}
 		} );
+
+		/* Scroll to last position within document before saving */
+		document.addEventListener( 'DOMContentLoaded', function() {
+
+			// Store scroll position when the window is about to unload
+			window.addEventListener( 'beforeunload', function() {
+				var scrollPosition = document.documentElement.scrollTop;
+				sessionStorage.setItem( 'scrollPosition', scrollPosition );
+			} );
+
+			// Restore scroll position if it exists in sessionStorage
+			setTimeout( function () {
+				if ( sessionStorage.getItem( 'scrollPosition' ) ) {
+					window.scrollTo( 0, parseInt( sessionStorage.getItem( 'scrollPosition' ) ) );
+				}
+			}, 500);
+		} );
 		</script>
 		<?php
 
