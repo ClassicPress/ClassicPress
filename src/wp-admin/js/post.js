@@ -1255,24 +1255,6 @@ jQuery( function($) {
 
 	}
 
-	// Save on pressing [Ctrl]/[Command] + [S] in the Text editor.
-	$textarea.on( 'keydown.wp-autosave', function( event ) {
-		// Key [S] has code 83.
-		if ( event.which === 83 ) {
-			if (
-				event.shiftKey ||
-				event.altKey ||
-				( isMac && ( ! event.metaKey || event.ctrlKey ) ) ||
-				( ! isMac && ! event.ctrlKey )
-			) {
-				return;
-			}
-
-			wp.autosave && wp.autosave.server.triggerSave();
-			event.preventDefault();
-		}
-	});
-
 	// If the last status was auto-draft and the save is triggered, edit the current URL.
 	if ( $( '#original_post_status' ).val() === 'auto-draft' && window.history.replaceState ) {
 		var location;
