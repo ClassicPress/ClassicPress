@@ -311,7 +311,6 @@ jQuery( function($) {
 		$postVisibilitySelect = $('#post-visibility-select'),
 		$timestampdiv = $('#timestampdiv'),
 		$postStatusSelect = $('#post-status-select'),
-		isMac = window.navigator.platform ? window.navigator.platform.indexOf( 'Mac' ) !== -1 : false,
 		copyAttachmentURL = document.querySelector( '.copy-attachment-url.edit-media' ),
 		copyAttachmentURLSuccessTimeout,
 		__ = wp.i18n.__, _x = wp.i18n._x;
