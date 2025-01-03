@@ -1050,12 +1050,27 @@ function wp_get_attachment_image( $attachment_id, $size = 'thumbnail', $icon = f
 			'decoding' => 'async',
 		);
 
-		// Add `loading` attribute.
-		if ( wp_lazy_loading_enabled( 'img', 'wp_get_attachment_image' ) ) {
-			$default_attr['loading'] = wp_get_loading_attr_default( 'wp_get_attachment_image' );
-		}
-
+		/**
+		 * Filters the context in which wp_get_attachment_image() is used.
+		 *
+		 * @since 6.3.0
+		 *
+		 * @param string $context The context. Default 'wp_get_attachment_image'.
+		 */
+		$context = apply_filters( 'wp_get_attachment_image_context', 'wp_get_attachment_image' );
 		$attr = wp_parse_args( $attr, $default_attr );
+
+		$loading_attr              = $attr;
+		$loading_attr['width']     = $width;
+		$loading_attr['height']    = $height;
+		$loading_optimization_attr = wp_get_loading_optimization_attributes(
+			'img',
+			$loading_attr,
+			$context
+		);
+
+		// Add loading optimization attributes if not available.
+		$attr = array_merge( $attr, $loading_optimization_attr );
 
 		// Omit the `decoding` attribute if the value is invalid according to the spec.
 		if ( empty( $attr['decoding'] ) || ! in_array( $attr['decoding'], array( 'async', 'sync', 'auto' ), true ) ) {
@@ -1064,8 +1079,13 @@ function wp_get_attachment_image( $attachment_id, $size = 'thumbnail', $icon = f
 
 		// If the default value of `lazy` for the `loading` attribute is overridden
 		// to omit the attribute for this image, ensure it is not included.
-		if ( array_key_exists( 'loading', $attr ) && ! $attr['loading'] ) {
+		if ( isset( $attr['loading'] ) && ! $attr['loading'] ) {
 			unset( $attr['loading'] );
+		}
+
+		// If the `fetchpriority` attribute is overridden and set to false or an empty string.
+		if ( isset( $attr['fetchpriority'] ) && ! $attr['fetchpriority'] ) {
+			unset( $attr['fetchpriority'] );
 		}
 
 		// Generate 'srcset' and 'sizes' if not already present.
@@ -1771,7 +1791,7 @@ function wp_lazy_loading_enabled( $tag_name, $context ) {
  *
  * @see wp_img_tag_add_width_and_height_attr()
  * @see wp_img_tag_add_srcset_and_sizes_attr()
- * @see wp_img_tag_add_loading_attr()
+ * @see wp_img_tag_add_loading_optimization_attrs()
  * @see wp_iframe_tag_add_loading_attr()
  *
  * @param string $content The HTML content to be filtered.
@@ -1784,7 +1804,6 @@ function wp_filter_content_tags( $content, $context = null ) {
 		$context = current_filter();
 	}
 
-	$add_img_loading_attr    = wp_lazy_loading_enabled( 'img', $context );
 	$add_iframe_loading_attr = wp_lazy_loading_enabled( 'iframe', $context );
 
 	if ( ! preg_match_all( '/<(img|iframe)\s[^>]+>/', $content, $matches, PREG_SET_ORDER ) ) {
@@ -1848,10 +1867,8 @@ function wp_filter_content_tags( $content, $context = null ) {
 				$filtered_image = wp_img_tag_add_srcset_and_sizes_attr( $filtered_image, $context, $attachment_id );
 			}
 
-			// Add 'loading' attribute if applicable.
-			if ( $add_img_loading_attr && ! str_contains( $filtered_image, ' loading=' ) ) {
-				$filtered_image = wp_img_tag_add_loading_attr( $filtered_image, $context );
-			}
+			// Add loading optimization attributes if applicable.
+			$filtered_image = wp_img_tag_add_loading_optimization_attrs( $filtered_image, $context );
 
 			// Add 'decoding=async' attribute unless a 'decoding' attribute is already present.
 			if ( ! str_contains( $filtered_image, ' decoding=' ) ) {
@@ -1905,45 +1922,101 @@ function wp_filter_content_tags( $content, $context = null ) {
 }
 
 /**
- * Adds `loading` attribute to an `img` HTML tag.
+ * Adds optimization attributes to an `img` HTML tag.
  *
- * @since 5.5.0
+ * @since 6.3.0
  *
  * @param string $image   The HTML `img` tag where the attribute should be added.
  * @param string $context Additional context to pass to the filters.
- * @return string Converted `img` tag with `loading` attribute added.
+ * @return string Converted `img` tag with optimization attributes added.
  */
-function wp_img_tag_add_loading_attr( $image, $context ) {
-	// Get loading attribute value to use. This must occur before the conditional check below so that even images that
-	// are ineligible for being lazy-loaded are considered.
-	$value = wp_get_loading_attr_default( $context );
+function wp_img_tag_add_loading_optimization_attrs( $image, $context ) {
+	$width             = preg_match( '/ width=["\']([0-9]+)["\']/', $image, $match_width ) ? (int) $match_width[1] : null;
+	$height            = preg_match( '/ height=["\']([0-9]+)["\']/', $image, $match_height ) ? (int) $match_height[1] : null;
+	$loading_val       = preg_match( '/ loading=["\']([A-Za-z]+)["\']/', $image, $match_loading ) ? $match_loading[1] : null;
+	$fetchpriority_val = preg_match( '/ fetchpriority=["\']([A-Za-z]+)["\']/', $image, $match_fetchpriority ) ? $match_fetchpriority[1] : null;
 
-	// Images should have source and dimension attributes for the `loading` attribute to be added.
+	/*
+	 * Get loading optimization attributes to use.
+	 * This must occur before the conditional check below so that even images
+	 * that are ineligible for being lazy-loaded are considered.
+	 */
+	$optimization_attrs = wp_get_loading_optimization_attributes(
+		'img',
+		array(
+			'width'         => $width,
+			'height'        => $height,
+			'loading'       => $loading_val,
+			'fetchpriority' => $fetchpriority_val,
+		),
+		$context
+	);
+
+	// Images should have source and dimension attributes for the loading optimization attributes to be added.
 	if ( ! str_contains( $image, ' src="' ) || ! str_contains( $image, ' width="' ) || ! str_contains( $image, ' height="' ) ) {
 		return $image;
 	}
 
-	/**
-	 * Filters the `loading` attribute value to add to an image. Default `lazy`.
-	 *
-	 * Returning `false` or an empty string will not add the attribute.
-	 * Returning `true` will add the default value.
-	 *
-	 * @since 5.5.0
-	 *
-	 * @param string|bool $value   The `loading` attribute value. Returning a falsey value will result in
-	 *                             the attribute being omitted for the image.
-	 * @param string      $image   The HTML `img` tag to be filtered.
-	 * @param string      $context Additional context about how the function was called or where the img tag is.
-	 */
-	$value = apply_filters( 'wp_img_tag_add_loading_attr', $value, $image, $context );
+	// Retained for backward compatibility.
+	$loading_attrs_enabled = wp_lazy_loading_enabled( 'img', $context );
 
-	if ( $value ) {
-		if ( ! in_array( $value, array( 'lazy', 'eager' ), true ) ) {
-			$value = 'lazy';
+	if ( empty( $loading_val ) && $loading_attrs_enabled ) {
+		/**
+		 * Filters the `loading` attribute value to add to an image. Default `lazy`.
+		 * This filter is added in for backward compatibility.
+		 *
+		 * Returning `false` or an empty string will not add the attribute.
+		 * Returning `true` will add the default value.
+		 * `true` and `false` usage supported for backward compatibility.
+		 *
+		 * @since 5.5.0
+		 *
+		 * @param string|bool $loading Current value for `loading` attribute for the image.
+		 * @param string      $image   The HTML `img` tag to be filtered.
+		 * @param string      $context Additional context about how the function was called or where the img tag is.
+		 */
+		$filtered_loading_attr = apply_filters(
+			'wp_img_tag_add_loading_attr',
+			isset( $optimization_attrs['loading'] ) ? $optimization_attrs['loading'] : false,
+			$image,
+			$context
+		);
+
+		// Validate the values after filtering.
+		if ( isset( $optimization_attrs['loading'] ) && ! $filtered_loading_attr ) {
+			// Unset `loading` attributes if `$filtered_loading_attr` is set to `false`.
+			unset( $optimization_attrs['loading'] );
+		} elseif ( in_array( $filtered_loading_attr, array( 'lazy', 'eager' ), true ) ) {
+			/*
+			 * If the filter changed the loading attribute to "lazy" when a fetchpriority attribute
+			 * with value "high" is already present, trigger a warning since those two attribute
+			 * values should be mutually exclusive.
+			 *
+			 * The same warning is present in `wp_get_loading_optimization_attributes()`, and here it
+			 * is only intended for the specific scenario where the above filtered caused the problem.
+			 */
+			if ( isset( $optimization_attrs['fetchpriority'] ) && 'high' === $optimization_attrs['fetchpriority'] &&
+				( isset( $optimization_attrs['loading'] ) ? $optimization_attrs['loading'] : false ) !== $filtered_loading_attr &&
+				'lazy' === $filtered_loading_attr
+			) {
+				_doing_it_wrong(
+					__FUNCTION__,
+					__( 'An image should not be lazy-loaded and marked as high priority at the same time.' ),
+					'6.3.0'
+				);
+			}
+
+			// The filtered value will still be respected.
+			$optimization_attrs['loading'] = $filtered_loading_attr;
 		}
 
-		return str_replace( '<img', '<img loading="' . esc_attr( $value ) . '"', $image );
+		if ( ! empty( $optimization_attrs['loading'] ) ) {
+			$image = str_replace( '<img', '<img loading="' . esc_attr( $optimization_attrs['loading'] ) . '"', $image );
+		}
+	}
+
+	if ( empty( $fetchpriority_val ) && ! empty( $optimization_attrs['fetchpriority'] ) ) {
+		$image = str_replace( '<img', '<img fetchpriority="' . esc_attr( $optimization_attrs['fetchpriority'] ) . '"', $image );
 	}
 
 	return $image;
@@ -2094,12 +2167,29 @@ function wp_iframe_tag_add_loading_attr( $iframe, $context ) {
 
 	// Get loading attribute value to use. This must occur before the conditional check below so that even iframes that
 	// are ineligible for being lazy-loaded are considered.
-	$value = wp_get_loading_attr_default( $context );
+	$optimization_attrs = wp_get_loading_optimization_attributes(
+		'iframe',
+		array(
+			/*
+			 * The concrete values for width and height are not important here for now
+			 * since fetchpriority is not yet supported for iframes.
+			 * TODO: Use WP_HTML_Tag_Processor to extract actual values once support is
+			 * added.
+			 */
+			'width'   => str_contains( $iframe, ' width="' ) ? 100 : null,
+			'height'  => str_contains( $iframe, ' height="' ) ? 100 : null,
+			// This function is never called when a 'loading' attribute is already present.
+			'loading' => null,
+		),
+		$context
+	);
 
 	// Iframes should have source and dimension attributes for the `loading` attribute to be added.
 	if ( ! str_contains( $iframe, ' src="' ) || ! str_contains( $iframe, ' width="' ) || ! str_contains( $iframe, ' height="' ) ) {
 		return $iframe;
 	}
+
+	$value = isset( $optimization_attrs['loading'] ) ? $optimization_attrs['loading'] : false;
 
 	/**
 	 * Filters the `loading` attribute value to add to an iframe. Default `lazy`.
@@ -2168,6 +2258,47 @@ function _wp_post_thumbnail_class_filter_add( $attr ) {
  */
 function _wp_post_thumbnail_class_filter_remove( $attr ) {
 	remove_filter( 'wp_get_attachment_image_attributes', '_wp_post_thumbnail_class_filter' );
+}
+
+/**
+ * Overrides the context used in {@see wp_get_attachment_image()}. Internal use only.
+ *
+ * Uses the {@see 'begin_fetch_post_thumbnail_html'} and {@see 'end_fetch_post_thumbnail_html'}
+ * action hooks to dynamically add/remove itself so as to only filter post thumbnails.
+ *
+ * @ignore
+ * @since 6.3.0
+ * @access private
+ *
+ * @param string $context The context for rendering an attachment image.
+ * @return string Modified context set to 'the_post_thumbnail'.
+ */
+function _wp_post_thumbnail_context_filter( $context ) {
+	return 'the_post_thumbnail';
+}
+
+/**
+ * Adds the '_wp_post_thumbnail_context_filter' callback to the 'wp_get_attachment_image_context'
+ * filter hook. Internal use only.
+ *
+ * @ignore
+ * @since 6.3.0
+ * @access private
+ */
+function _wp_post_thumbnail_context_filter_add() {
+	add_filter( 'wp_get_attachment_image_context', '_wp_post_thumbnail_context_filter' );
+}
+
+/**
+ * Removes the '_wp_post_thumbnail_context_filter' callback from the 'wp_get_attachment_image_context'
+ * filter hook. Internal use only.
+ *
+ * @ignore
+ * @since 6.3.0
+ * @access private
+ */
+function _wp_post_thumbnail_context_filter_remove() {
+	remove_filter( 'wp_get_attachment_image_context', '_wp_post_thumbnail_context_filter' );
 }
 
 add_shortcode( 'wp_caption', 'img_caption_shortcode' );
@@ -3912,6 +4043,7 @@ function _wp_image_editor_choose( $args = array() ) {
 	require_once ABSPATH . WPINC . '/class-wp-image-editor.php';
 	require_once ABSPATH . WPINC . '/class-wp-image-editor-gd.php';
 	require_once ABSPATH . WPINC . '/class-wp-image-editor-imagick.php';
+	require_once ABSPATH . WPINC . '/class-avif-info.php';
 	/**
 	 * Filters the list of image editing library classes.
 	 *
@@ -4011,6 +4143,11 @@ function wp_plupload_default_settings() {
 	// Check if WebP images can be edited.
 	if ( ! wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) ) ) {
 		$defaults['webp_upload_error'] = true;
+	}
+
+	// Check if AVIF images can be edited.
+	if ( ! wp_image_editor_supports( array( 'mime_type' => 'image/avif' ) ) ) {
+		$defaults['avif_upload_error'] = true;
 	}
 
 	/**
@@ -4702,6 +4839,11 @@ function wp_enqueue_media( $args = array() ) {
 		// Headings.
 		'filterAttachments'           => __( 'Filter media' ),
 		'attachmentsList'             => __( 'Media list' ),
+
+		// Server editable image data
+		'webp_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) ),
+		'avif_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/avif' ) ),
+		'heic_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/heic' ) ),
 	);
 
 	/**
@@ -5351,6 +5493,7 @@ function wp_show_heic_upload_error( $plupload_settings ) {
  *
  * @since 5.7.0
  * @since 5.8.0 Added support for WebP images.
+ * @since 6.5.0 Added support for AVIF images.
  *
  * @param string $filename   The file path.
  * @param array  $image_info Optional. Extended image information (passed by reference).
@@ -5385,7 +5528,11 @@ function wp_getimagesize( $filename, ?array &$image_info = null ) {
 		}
 	}
 
-	if ( false !== $info ) {
+	if (
+		! empty( $info ) &&
+		// Some PHP versions return 0x0 sizes from `getimagesize` for unrecognized image formats, including AVIFs.
+		! ( empty( $info[0] ) && empty( $info[1] ) )
+	) {
 		return $info;
 	}
 
@@ -5412,8 +5559,73 @@ function wp_getimagesize( $filename, ?array &$image_info = null ) {
 		}
 	}
 
+	// For PHP versions that don't support AVIF images, extract the image size info from the file headers.
+	if ( 'image/avif' === wp_get_image_mime( $filename ) ) {
+		$avif_info = wp_get_avif_info( $filename );
+
+		$width  = $avif_info['width'];
+		$height = $avif_info['height'];
+
+		// Mimic the native return format.
+		if ( $width && $height ) {
+			return array(
+				$width,
+				$height,
+				IMAGETYPE_AVIF,
+				sprintf(
+					'width="%d" height="%d"',
+					$width,
+					$height
+				),
+				'mime' => 'image/avif',
+			);
+		}
+	}
+
 	// The image could not be parsed.
 	return false;
+}
+
+/**
+ * Extracts meta information about an AVIF file: width, height, bit depth, and number of channels.
+ *
+ * @since 6.5.0
+ *
+ * @param string $filename Path to an AVIF file.
+ * @return array {
+ *    An array of AVIF image information.
+ *
+ *    @type int|false $width        Image width on success, false on failure.
+ *    @type int|false $height       Image height on success, false on failure.
+ *    @type int|false $bit_depth    Image bit depth on success, false on failure.
+ *    @type int|false $num_channels Image number of channels on success, false on failure.
+ * }
+ */
+function wp_get_avif_info( $filename ) {
+	$results = array(
+		'width'        => false,
+		'height'       => false,
+		'bit_depth'    => false,
+		'num_channels' => false,
+	);
+
+	if ( 'image/avif' !== wp_get_image_mime( $filename ) ) {
+		return $results;
+	}
+
+	// Parse the file using libavifinfo's PHP implementation.
+	require_once ABSPATH . WPINC . '/class-avif-info.php';
+
+	$handle = fopen( $filename, 'rb' );
+	if ( $handle ) {
+		$parser  = new Avifinfo\Parser( $handle );
+		$success = $parser->parse_ftyp() && $parser->parse_file();
+		fclose( $handle );
+		if ( $success ) {
+			$results = $parser->features->primary_item_features;
+		}
+	}
+	return $results;
 }
 
 /**
@@ -5484,103 +5696,205 @@ function wp_get_webp_info( $filename ) {
 }
 
 /**
- * Gets the default value to use for a `loading` attribute on an element.
+ * Gets loading optimization attributes.
  *
- * This function should only be called for a tag and context if lazy-loading is generally enabled.
+ * This function returns an array of attributes that should be merged into the given attributes array to optimize
+ * loading performance. Potential attributes returned by this function are:
+ * - `loading` attribute with a value of "lazy"
+ * - `fetchpriority` attribute with a value of "high"
  *
- * The function usually returns 'lazy', but uses certain heuristics to guess whether the current element is likely to
- * appear above the fold, in which case it returns a boolean `false`, which will lead to the `loading` attribute being
- * omitted on the element. The purpose of this refinement is to avoid lazy-loading elements that are within the initial
- * viewport, which can have a negative performance impact.
+ * If any of these attributes are already present in the given attributes, they will not be modified. Note that no
+ * element should have both `loading="lazy"` and `fetchpriority="high"`, so the function will trigger a warning in case
+ * both attributes are present with those values.
  *
- * Under the hood, the function uses {@see wp_increase_content_media_count()} every time it is called for an element
- * within the main content. If the element is the very first content element, the `loading` attribute will be omitted.
- * This default threshold of 3 content elements to omit the `loading` attribute for can be customized using the
- * {@see 'wp_omit_loading_attr_threshold'} filter.
- *
- * @since 5.9.0
+ * @since 6.3.0
  *
  * @global WP_Query $wp_query WordPress Query object.
  *
- * @param string $context Context for the element for which the `loading` attribute value is requested.
- * @return string|bool The default `loading` attribute value. Either 'lazy', 'eager', or a boolean `false`, to indicate
- *                     that the `loading` attribute should be skipped.
+ * @param string $tag_name The tag name.
+ * @param array  $attr     Array of the attributes for the tag.
+ * @param string $context  Context for the element for which the loading optimization attribute is requested.
+ * @return array Loading optimization attributes.
  */
-function wp_get_loading_attr_default( $context ) {
+function wp_get_loading_optimization_attributes( $tag_name, $attr, $context ) {
 	global $wp_query;
 
-	// Skip lazy-loading for the overall block template, as it is handled more granularly.
+	$loading_attrs = array();
+
+	/*
+	 * Skip lazy-loading for the overall block template, as it is handled more granularly.
+	 * The skip is also applicable for `fetchpriority`.
+	 */
 	if ( 'template' === $context ) {
-		return false;
+		return $loading_attrs;
 	}
 
-	// Do not lazy-load images in the header block template part, as they are likely above the fold.
-	$header_area = 'header';
-	if ( "template_part_{$header_area}" === $context ) {
-		return false;
+	// For now this function only supports images and iframes.
+	if ( 'img' !== $tag_name && 'iframe' !== $tag_name ) {
+		return $loading_attrs;
 	}
 
-	// Special handling for programmatically created image tags.
-	if ( ( 'the_post_thumbnail' === $context || 'wp_get_attachment_image' === $context ) ) {
-		/*
-		 * Skip programmatically created images within post content as they need to be handled together with the other
-		 * images within the post content.
-		 * Without this clause, they would already be counted below which skews the number and can result in the first
-		 * post content image being lazy-loaded only because there are images elsewhere in the post content.
-		 */
-		if ( doing_filter( 'the_content' ) ) {
-			return false;
-		}
-
-		// Conditionally skip lazy-loading on images before the loop.
-		if (
-			// Only apply for main query but before the loop.
-			$wp_query->before_loop && $wp_query->is_main_query()
-			/*
-			 * Any image before the loop, but after the header has started should not be lazy-loaded,
-			 * except when the footer has already started which can happen when the current template
-			 * does not include any loop.
-			 */
-			&& did_action( 'get_header' ) && ! did_action( 'get_footer' )
-		) {
-			return false;
-		}
+	// For any resources, width and height must be provided, to avoid layout shifts.
+	if ( ! isset( $attr['width'], $attr['height'] ) ) {
+		return $loading_attrs;
 	}
 
 	/*
 	 * Skip programmatically created images within post content as they need to be handled together with the other
 	 * images within the post content.
-	 * Without this clause, they would already be counted below which skews the number and can result in the first
-	 * post content image being lazy-loaded only because there are images elsewhere in the post content.
+	 * Without this clause, they would already be considered within their own context which skews the image count and
+	 * can result in the first post content image being lazy-loaded or an image further down the page being marked as a
+	 * high priority.
 	 */
-	if ( ( 'the_post_thumbnail' === $context || 'wp_get_attachment_image' === $context ) && doing_filter( 'the_content' ) ) {
-		return false;
+	switch ( $context ) {
+		case 'the_post_thumbnail':
+		case 'wp_get_attachment_image':
+		case 'widget_media_image':
+			if ( doing_filter( 'the_content' ) ) {
+				return $loading_attrs;
+			}
 	}
 
 	/*
-	 * The first elements in 'the_content' or 'the_post_thumbnail' should not be lazy-loaded,
-	 * as they are likely above the fold.
+	 * The key function logic starts here.
 	 */
-	if ( 'the_content' === $context || 'the_post_thumbnail' === $context ) {
-		// Only elements within the main query loop have special handling.
-		if ( is_admin() || ! in_the_loop() || ! is_main_query() ) {
-			return 'lazy';
+	$maybe_in_viewport    = null;
+	$increase_count       = false;
+	$maybe_increase_count = false;
+
+	// Logic to handle a `loading` attribute that is already provided.
+	if ( isset( $attr['loading'] ) ) {
+		/*
+		 * Interpret "lazy" as not in viewport. Any other value can be
+		 * interpreted as in viewport (realistically only "eager" or `false`
+		 * to force-omit the attribute are other potential values).
+		 */
+		if ( 'lazy' === $attr['loading'] ) {
+			$maybe_in_viewport = false;
+		} else {
+			$maybe_in_viewport = true;
 		}
-
-		// Increase the counter since this is a main query content element.
-		$content_media_count = wp_increase_content_media_count();
-
-		// If the count so far is below the threshold, return `false` so that the `loading` attribute is omitted.
-		if ( $content_media_count <= wp_omit_loading_attr_threshold() ) {
-			return false;
-		}
-
-		// For elements after the threshold, lazy-load them as usual.
-		return 'lazy';
 	}
 
-	// Lazy-load by default for any unknown context.
-	return 'lazy';
+	// Logic to handle a `fetchpriority` attribute that is already provided.
+	if ( isset( $attr['fetchpriority'] ) && 'high' === $attr['fetchpriority'] ) {
+		/*
+		 * If the image was already determined to not be in the viewport (e.g.
+		 * from an already provided `loading` attribute), trigger a warning.
+		 * Otherwise, the value can be interpreted as in viewport, since only
+		 * the most important in-viewport image should have `fetchpriority` set
+		 * to "high".
+		 */
+		if ( false === $maybe_in_viewport ) {
+			_doing_it_wrong(
+				__FUNCTION__,
+				__( 'An image should not be lazy-loaded and marked as high priority at the same time.' ),
+				'6.3.0'
+			);
+			/*
+			 * Set `fetchpriority` here for backward-compatibility as we should
+			 * not override what a developer decided, even though it seems
+			 * incorrect.
+			 */
+			$loading_attrs['fetchpriority'] = 'high';
+		} else {
+			$maybe_in_viewport = true;
+		}
+	}
+
+	if ( null === $maybe_in_viewport ) {
+		switch ( $context ) {
+			// Consider elements with these header-specific contexts to be in viewport.
+			case 'get_header_image_tag':
+				$maybe_in_viewport    = true;
+				$maybe_increase_count = true;
+				break;
+			// Count main content elements and detect whether in viewport.
+			case 'the_content':
+			case 'the_post_thumbnail':
+			case 'do_shortcode':
+				// Only elements within the main query loop have special handling.
+				if ( ! is_admin() && in_the_loop() && is_main_query() ) {
+					/*
+					 * Get the content media count, since this is a main query
+					 * content element. This is accomplished by "increasing"
+					 * the count by zero, as the only way to get the count is
+					 * to call this function.
+					 * The actual count increase happens further below, based
+					 * on the `$increase_count` flag set here.
+					 */
+					$content_media_count = wp_increase_content_media_count( 0 );
+					$increase_count      = true;
+
+					// If the count so far is below the threshold, `loading` attribute is omitted.
+					if ( $content_media_count < wp_omit_loading_attr_threshold() ) {
+						$maybe_in_viewport = true;
+					} else {
+						$maybe_in_viewport = false;
+					}
+				}
+				/*
+				 * For the 'the_post_thumbnail' context, the following case
+				 * clause needs to be considered as well, therefore skip the
+				 * break statement here if the viewport has not been
+				 * determined.
+				 */
+				if ( 'the_post_thumbnail' !== $context || null !== $maybe_in_viewport ) {
+					break;
+				}
+			// phpcs:ignore Generic.WhiteSpace.ScopeIndent.Incorrect
+			// Consider elements before the loop as being in viewport.
+			case 'wp_get_attachment_image':
+			case 'widget_media_image':
+				if (
+					// Only apply for main query but before the loop.
+					$wp_query->before_loop && $wp_query->is_main_query()
+					/*
+					 * Any image before the loop, but after the header has started should not be lazy-loaded,
+					 * except when the footer has already started which can happen when the current template
+					 * does not include any loop.
+					 */
+					&& did_action( 'get_header' ) && ! did_action( 'get_footer' )
+				) {
+					$maybe_in_viewport    = true;
+					$maybe_increase_count = true;
+				}
+				break;
+		}
+	}
+
+	/*
+	 * If the element is in the viewport (`true`), potentially add
+	 * `fetchpriority` with a value of "high". Otherwise, i.e. if the element
+	 * is not not in the viewport (`false`) or it is unknown (`null`), add
+	 * `loading` with a value of "lazy".
+	 */
+	if ( $maybe_in_viewport ) {
+		$loading_attrs = wp_maybe_add_fetchpriority_high_attr( $loading_attrs, $tag_name, $attr );
+	} else {
+		// Only add `loading="lazy"` if the feature is enabled.
+		if ( wp_lazy_loading_enabled( $tag_name, $context ) ) {
+			$loading_attrs['loading'] = 'lazy';
+		}
+	}
+
+	/*
+	 * If flag was set based on contextual logic above, increase the content
+	 * media count, either unconditionally, or based on whether the image size
+	 * is larger than the threshold.
+	 */
+	if ( $increase_count ) {
+		wp_increase_content_media_count();
+	} elseif ( $maybe_increase_count ) {
+		/** This filter is documented in wp-includes/media.php */
+		$wp_min_priority_img_pixels = apply_filters( 'wp_min_priority_img_pixels', 50000 );
+
+		if ( $wp_min_priority_img_pixels <= $attr['width'] * $attr['height'] ) {
+			wp_increase_content_media_count();
+		}
+	}
+
+	return $loading_attrs;
 }
 
 /**
@@ -5632,4 +5946,81 @@ function wp_increase_content_media_count( $amount = 1 ) {
 	$content_media_count += $amount;
 
 	return $content_media_count;
+}
+
+/**
+ * Determines whether to add `fetchpriority='high'` to loading attributes.
+ *
+ * @since 6.3.0
+ * @access private
+ *
+ * @param array  $loading_attrs Array of the loading optimization attributes for the element.
+ * @param string $tag_name      The tag name.
+ * @param array  $attr          Array of the attributes for the element.
+ * @return array Updated loading optimization attributes for the element.
+ */
+function wp_maybe_add_fetchpriority_high_attr( $loading_attrs, $tag_name, $attr ) {
+	// For now, adding `fetchpriority="high"` is only supported for images.
+	if ( 'img' !== $tag_name ) {
+		return $loading_attrs;
+	}
+
+	if ( isset( $attr['fetchpriority'] ) ) {
+		/*
+		 * While any `fetchpriority` value could be set in `$loading_attrs`,
+		 * for consistency we only do it for `fetchpriority="high"` since that
+		 * is the only possible value that WordPress core would apply on its
+		 * own.
+		 */
+		if ( 'high' === $attr['fetchpriority'] ) {
+			$loading_attrs['fetchpriority'] = 'high';
+			wp_high_priority_element_flag( false );
+		}
+
+		return $loading_attrs;
+	}
+
+	// Lazy-loading and `fetchpriority="high"` are mutually exclusive.
+	if ( isset( $loading_attrs['loading'] ) && 'lazy' === $loading_attrs['loading'] ) {
+		return $loading_attrs;
+	}
+
+	if ( ! wp_high_priority_element_flag() ) {
+		return $loading_attrs;
+	}
+
+	/**
+	 * Filters the minimum square-pixels threshold for an image to be eligible as the high-priority image.
+	 *
+	 * @since 6.3.0
+	 *
+	 * @param int $threshold Minimum square-pixels threshold. Default 50000.
+	 */
+	$wp_min_priority_img_pixels = apply_filters( 'wp_min_priority_img_pixels', 50000 );
+
+	if ( $wp_min_priority_img_pixels <= $attr['width'] * $attr['height'] ) {
+		$loading_attrs['fetchpriority'] = 'high';
+		wp_high_priority_element_flag( false );
+	}
+
+	return $loading_attrs;
+}
+
+/**
+ * Accesses a flag that indicates if an element is a possible candidate for `fetchpriority='high'`.
+ *
+ * @since 6.3.0
+ * @access private
+ *
+ * @param bool $value Optional. Used to change the static variable. Default null.
+ * @return bool Returns true if high-priority element was marked already, otherwise false.
+ */
+function wp_high_priority_element_flag( $value = null ) {
+	static $high_priority_element = true;
+
+	if ( is_bool( $value ) ) {
+		$high_priority_element = $value;
+	}
+
+	return $high_priority_element;
 }
