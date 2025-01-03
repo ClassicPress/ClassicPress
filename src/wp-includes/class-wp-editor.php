@@ -1733,7 +1733,7 @@ final class _WP_Editors {
 		<script>
 		document.addEventListener( 'keydown', function( e ) {
 			var updateButton = document.getElementById( 'save-post' ) ? document.getElementById( 'save-post' ) : document.getElementById( 'publish' );
-			if ( ( e.ctrlKey || e.metaKey ) && e.key === 's' ) {
+			if ( ( e.ctrlKey || e.metaKey ) && e.key.toLowerCase() === 's' ) {
 				e.preventDefault();
 				updateButton.click();
 			}
