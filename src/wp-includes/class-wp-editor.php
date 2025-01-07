@@ -1749,7 +1749,7 @@ final class _WP_Editors {
 			} );
 
 			// Restore scroll position if it exists in sessionStorage
-			setTimeout( function () {
+			setTimeout( function() {
 				if ( sessionStorage.getItem( 'scrollPosition' ) ) {
 					window.scrollTo( 0, parseInt( sessionStorage.getItem( 'scrollPosition' ) ) );
 				}
