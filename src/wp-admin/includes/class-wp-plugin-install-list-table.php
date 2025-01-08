@@ -681,6 +681,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 							' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 							self_admin_url( 'update-core.php' )
 						);
+						$incompatible_notice_message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
 					} elseif ( current_user_can( 'update_php' ) ) {
 						$incompatible_notice_message .= sprintf(
 							/* translators: %s: URL to Update PHP page. */
@@ -691,12 +692,13 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 					}
 				} elseif ( ! $compatible_wp ) {
 					$incompatible_notice_message .= __( 'This plugin does not work with your version of ClassicPress.' );
-					if ( current_user_can( 'update_core' ) ) {
-						$incompatible_notice_message .= printf(
+					if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
+						$incompatible_notice_message .= sprintf(
 							/* translators: %s: URL to WordPress Updates screen. */
 							' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 							self_admin_url( 'update-core.php' )
 						);
+						$incompatible_notice_message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
 					}
 				} elseif ( ! $compatible_php ) {
 					$incompatible_notice_message .= __( 'This plugin does not work with your version of PHP.' );
