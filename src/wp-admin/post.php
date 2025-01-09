@@ -228,7 +228,7 @@ switch ( $action ) {
 				'path' => ADMIN_COOKIE_PATH,
 				'domain' => COOKIE_DOMAIN,
 				'secure' => is_ssl(),
-				'httponly' => true,
+				'httponly' => false,
 				'samesite' => 'Strict',
 			);
 			setcookie( 'wp-saving-post', $post_id . '-saved', $cookie_options );
