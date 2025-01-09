@@ -669,6 +669,18 @@ for ( $index = 0; $index <= 2; $index++ ) {
 	<?php _e( 'XML-RPC server disabled' ); ?></label>
 </fieldset></td>
 </tr>
+<tr>
+<th scope="row"><?php _e( 'Enable Link Manager' ); ?></th>
+<td> <fieldset><legend class="screen-reader-text"><span>
+	<?php
+	/* translators: Hidden accessibility text. */
+	_e( 'Enable Link Manager' );
+	?>
+</span></legend><label for="link_manager_enabled">
+<input name="link_manager_enabled" type="checkbox" id="link_manager_enabled" value="1" <?php checked( '1', get_option( 'link_manager_enabled' ) ); ?>>
+	<?php _e( 'Link Manager enabled' ); ?></label>
+</fieldset></td>
+</tr>
 
 <?php do_settings_fields( 'general', 'default' ); ?>
 </table>
