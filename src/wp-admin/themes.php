@@ -154,7 +154,7 @@ if ( current_user_can( 'install_themes' ) ) {
 		$help_install = '<p>' . sprintf(
 			/* translators: %s: https://wordpress.org/themes/ */
 			__( 'If you would like to see more themes to choose from, click on the &#8220;Add New&#8221; button and you will be able to browse or search for additional themes from the <a href="%s">ClassicPress Theme Directory</a>. Themes in the WordPress Theme Directory are designed and developed by third parties, and are compatible with the license WordPress uses. Oh, and they&#8217;re free!' ),
-			__( 'https://wordpress.org/themes/' )
+			__( 'https://directory.classicpress.net/themes/' )
 		) . '</p>';
 	}
 
