@@ -22,6 +22,7 @@ if ( isset( $_GET['widgets-access'] ) ) {
 if ( 'on' === $widgets_access ) {
 	add_filter( 'admin_body_class', 'wp_widgets_access_body_class' );
 } else {
+	wp_enqueue_script( 'jquery-ui-sortable' );
 	wp_enqueue_script( 'admin-widgets' );
 
 	if ( wp_is_mobile() ) {
@@ -402,14 +403,28 @@ $nonce = wp_create_nonce( 'widgets-access' );
 
 <hr class="wp-header-end">
 
-<?php if ( isset( $_GET['message'] ) && isset( $messages[ $_GET['message'] ] ) ) { ?>
-<div id="message" class="updated notice is-dismissible"><p><?php echo $messages[ $_GET['message'] ]; ?></p></div>
-<?php } ?>
-<?php if ( isset( $_GET['error'] ) && isset( $errors[ $_GET['error'] ] ) ) { ?>
-<div id="message" class="error"><p><?php echo $errors[ $_GET['error'] ]; ?></p></div>
-<?php } ?>
-
 <?php
+if ( isset( $_GET['message'] ) && isset( $messages[ $_GET['message'] ] ) ) {
+	wp_admin_notice(
+		$messages[ $_GET['message'] ],
+		array(
+			'id'                 => 'message',
+			'additional_classes' => array( 'updated' ),
+			'dismissible'        => true,
+		)
+	);
+}
+if ( isset( $_GET['error'] ) && isset( $errors[ $_GET['error'] ] ) ) {
+	wp_admin_notice(
+		$errors[ $_GET['error'] ],
+		array(
+			'id'                 => 'message',
+			'additional_classes' => array( 'error' ),
+			'dismissible'        => true,
+		)
+	);
+}
+
 /**
  * Fires before the Widgets administration page content loads.
  *
