@@ -103,6 +103,7 @@ $allowed_options            = array(
 		'new_admin_email',
 		'disable_emojis',
 		'disable_xml_rpc',
+		'link_manager_enabled',
 	),
 	'discussion' => array(
 		'default_pingback_flag',
@@ -365,10 +366,14 @@ require_once ABSPATH . 'wp-admin/admin-header.php'; ?>
 <div class="wrap">
 	<h1><?php esc_html_e( 'All Settings' ); ?></h1>
 
-	<div class="notice notice-warning">
-		<p><strong><?php _e( 'Warning:' ); ?></strong> <?php _e( 'This page allows direct access to your site settings. You can break things here. Please be cautious!' ); ?></p>
-	</div>
-
+	<?php
+	wp_admin_notice(
+		'<strong>' . __( 'Warning:' ) . '</strong> ' . __( 'This page allows direct access to your site settings. You can break things here. Please be cautious!' ),
+		array(
+			'type' => 'warning',
+		)
+	);
+	?>
 	<form name="form" action="options.php" method="post" id="all-options">
 		<?php wp_nonce_field( 'options-options' ); ?>
 		<input type="hidden" name="action" value="update">
