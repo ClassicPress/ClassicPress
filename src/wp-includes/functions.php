@@ -3106,6 +3106,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 					'image/bmp'  => 'bmp',
 					'image/tiff' => 'tif',
 					'image/webp' => 'webp',
+					'image/avif' => 'avif',
 				)
 			);
 
@@ -3264,6 +3265,7 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
  *
  * @since 4.7.1
  * @since 5.8.0 Added support for WebP images.
+ * @since 6.5.0 Added support for AVIF images.
  *
  * @param string $file Full path to the file.
  * @return string|false The actual mime type or false if the type cannot be determined.
@@ -3319,6 +3321,25 @@ function wp_get_image_mime( $file ) {
 		) {
 			$mime = 'image/webp';
 		}
+
+		/**
+		 * Add AVIF fallback detection when image library doesn't support AVIF.
+		 *
+		 * Detection based on section 4.3.1 File-type box definition of the ISO/IEC 14496-12
+		 * specification and the AV1-AVIF spec, see https://aomediacodec.github.io/av1-avif/v1.1.0.html#brands.
+		 */
+
+		 // Divide the header string into 4 byte groups.
+		$magic = str_split( $magic, 8 );
+
+		if (
+			isset( $magic[1] ) &&
+			isset( $magic[2] ) &&
+			'ftyp' === hex2bin( $magic[1] ) &&
+			( 'avif' === hex2bin( $magic[2] ) || 'avis' === hex2bin( $magic[2] ) )
+		) {
+			$mime = 'image/avif';
+		}
 	} catch ( Exception $e ) {
 		$mime = false;
 	}
@@ -3358,6 +3379,7 @@ function wp_get_mime_types() {
 			'bmp'                          => 'image/bmp',
 			'tiff|tif'                     => 'image/tiff',
 			'webp'                         => 'image/webp',
+			'avif'                         => 'image/avif',
 			'ico'                          => 'image/x-icon',
 			'heic'                         => 'image/heic',
 			// Video formats.
@@ -3479,7 +3501,7 @@ function wp_get_ext_types() {
 	return apply_filters(
 		'ext2type',
 		array(
-			'image'       => array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'bmp', 'tif', 'tiff', 'ico', 'heic', 'webp' ),
+			'image'       => array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'bmp', 'tif', 'tiff', 'ico', 'heic', 'webp', 'avif' ),
 			'audio'       => array( 'aac', 'ac3', 'aif', 'aiff', 'flac', 'm3a', 'm4a', 'm4b', 'mka', 'mp1', 'mp2', 'mp3', 'ogg', 'oga', 'ram', 'wav', 'wma' ),
 			'video'       => array( '3g2', '3gp', '3gpp', 'asf', 'avi', 'divx', 'dv', 'flv', 'm4v', 'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'mpv', 'ogm', 'ogv', 'qt', 'rm', 'vob', 'wmv' ),
 			'document'    => array( 'doc', 'docx', 'docm', 'dotm', 'odt', 'pages', 'pdf', 'xps', 'oxps', 'rtf', 'wp', 'wpd', 'psd', 'xcf' ),
@@ -8136,15 +8158,23 @@ function wp_get_default_update_php_url() {
  *
  * @since 5.1.0
  * @since 5.2.0 Added the `$before` and `$after` parameters.
+ * @since 6.4.0 Added the `$echo` parameter.
  *
  * @param string $before Markup to output before the annotation. Default `<p class="description">`.
  * @param string $after  Markup to output after the annotation. Default `</p>`.
+ * @param bool   $echo   Markup should echo if true. Default `true`.
+ *
+ * @return string|void
  */
-function wp_update_php_annotation( $before = '<p class="description">', $after = '</p>' ) {
+function wp_update_php_annotation( $before = '<p class="description">', $after = '</p>', $echo = true ) {
 	$annotation = wp_get_update_php_annotation();
 
 	if ( $annotation ) {
-		echo $before . $annotation . $after;
+		if ( $echo ) {
+			echo $before . $annotation . $after;
+		} else {
+			return $before . $annotation . $after;
+		}
 	}
 }
 
@@ -8567,4 +8597,149 @@ function is_php_version_compatible( $required ) {
  */
 function wp_fuzzy_number_match( $expected, $actual, $precision = 1 ) {
 	return abs( (float) $expected - (float) $actual ) <= $precision;
+}
+
+/**
+ * Creates and returns the markup for an admin notice.
+ *
+ * @since 6.4.0
+ *
+ * @param string $message The message.
+ * @param array  $args {
+ *     Optional. An array of arguments for the admin notice. Default empty array.
+ *
+ *     @type string   $type               Optional. The type of admin notice.
+ *                                        For example, 'error', 'success', 'warning', 'info'.
+ *                                        Default empty string.
+ *     @type bool     $dismissible        Optional. Whether the admin notice is dismissible. Default false.
+ *     @type string   $id                 Optional. The value of the admin notice's ID attribute. Default empty string.
+ *     @type string[] $additional_classes Optional. A string array of class names. Default empty array.
+ *     @type string[] $attributes         Optional. Additional attributes for the notice div. Default empty array.
+ *     @type bool     $paragraph_wrap     Optional. Whether to wrap the message in paragraph tags. Default true.
+ * }
+ * @return string The markup for an admin notice.
+ */
+function wp_get_admin_notice( $message, $args = array() ) {
+	$defaults = array(
+		'type'               => '',
+		'dismissible'        => false,
+		'id'                 => '',
+		'additional_classes' => array(),
+		'attributes'         => array(),
+		'paragraph_wrap'     => true,
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	/**
+	 * Filters the arguments for an admin notice.
+	 *
+	 * @since 6.4.0
+	 *
+	 * @param array  $args    The arguments for the admin notice.
+	 * @param string $message The message for the admin notice.
+	 */
+	$args       = apply_filters( 'wp_admin_notice_args', $args, $message );
+	$id         = '';
+	$classes    = 'notice';
+	$attributes = '';
+
+	if ( is_string( $args['id'] ) ) {
+		$trimmed_id = trim( $args['id'] );
+
+		if ( '' !== $trimmed_id ) {
+			$id = 'id="' . $trimmed_id . '" ';
+		}
+	}
+
+	if ( is_string( $args['type'] ) ) {
+		$type = trim( $args['type'] );
+
+		if ( str_contains( $type, ' ' ) ) {
+			_doing_it_wrong(
+				__FUNCTION__,
+				sprintf(
+					/* translators: %s: The "type" key. */
+					__( 'The %s key must be a string without spaces.' ),
+					'<code>type</code>'
+				),
+				'6.4.0'
+			);
+		}
+
+		if ( '' !== $type ) {
+			$classes .= ' notice-' . $type;
+		}
+	}
+
+	if ( true === $args['dismissible'] ) {
+		$classes .= ' is-dismissible';
+	}
+
+	if ( is_array( $args['additional_classes'] ) && ! empty( $args['additional_classes'] ) ) {
+		$classes .= ' ' . implode( ' ', $args['additional_classes'] );
+	}
+
+	if ( is_array( $args['attributes'] ) && ! empty( $args['attributes'] ) ) {
+		$attributes = '';
+		foreach ( $args['attributes'] as $attr => $val ) {
+			if ( is_bool( $val ) ) {
+				$attributes .= $val ? ' ' . $attr : '';
+			} elseif ( is_int( $attr ) ) {
+				$attributes .= ' ' . esc_attr( trim( $val ) );
+			} elseif ( $val ) {
+				$attributes .= ' ' . $attr . '="' . esc_attr( trim( $val ) ) . '"';
+			}
+		}
+	}
+
+	if ( false !== $args['paragraph_wrap'] ) {
+		$message = "<p>$message</p>";
+	}
+
+	$markup = sprintf( '<div %1$sclass="%2$s"%3$s>%4$s</div>', $id, $classes, $attributes, $message );
+
+	/**
+	 * Filters the markup for an admin notice.
+	 *
+	 * @since 6.4.0
+	 *
+	 * @param string $markup  The HTML markup for the admin notice.
+	 * @param string $message The message for the admin notice.
+	 * @param array  $args    The arguments for the admin notice.
+	 */
+	return apply_filters( 'wp_admin_notice_markup', $markup, $message, $args );
+}
+
+/**
+ * Outputs an admin notice.
+ *
+ * @since 6.4.0
+ *
+ * @param string $message The message to output.
+ * @param array  $args {
+ *     Optional. An array of arguments for the admin notice. Default empty array.
+ *
+ *     @type string   $type               Optional. The type of admin notice.
+ *                                        For example, 'error', 'success', 'warning', 'info'.
+ *                                        Default empty string.
+ *     @type bool     $dismissible        Optional. Whether the admin notice is dismissible. Default false.
+ *     @type string   $id                 Optional. The value of the admin notice's ID attribute. Default empty string.
+ *     @type string[] $additional_classes Optional. A string array of class names. Default empty array.
+ *     @type string[] $attributes         Optional. Additional attributes for the notice div. Default empty array.
+ *     @type bool     $paragraph_wrap     Optional. Whether to wrap the message in paragraph tags. Default true.
+ * }
+ */
+function wp_admin_notice( $message, $args = array() ) {
+	/**
+	 * Fires before an admin notice is output.
+	 *
+	 * @since 6.4.0
+	 *
+	 * @param string $message The message for the admin notice.
+	 * @param array  $args    The arguments for the admin notice.
+	 */
+	do_action( 'wp_admin_notice', $message, $args );
+
+	echo wp_kses_post( wp_get_admin_notice( $message, $args ) );
 }

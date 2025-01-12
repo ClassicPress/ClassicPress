@@ -370,6 +370,7 @@ table.media .column-title .media-icon {
 }
 
 table.media .column-title .media-icon img {
+	width: 100%;
 	max-width: 60px;
 	height: auto;
 	vertical-align: top; /* Remove descender white-space. */

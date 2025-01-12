@@ -271,6 +271,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( filetype === 'image' ) {
 				dialog.querySelector( '.thumbnail-image img' ).src = url;
 				dialog.querySelector( '.edit-attachment' ).style.display = '';
+
+				if (
+					( mime === 'image/webp' && ! _wpMediaGridSettings.webp_editable ) ||
+					( mime === 'image/avif' && ! _wpMediaGridSettings.avif_editable ) ||
+					( mime === 'image/heic' && ! _wpMediaGridSettings.heic_editable )
+				) {
+					dialog.querySelector( '.edit-attachment' ).style.display = 'none';
+				}
 			} else {
 				dialog.querySelector( '.thumbnail-image img' ).src = item.querySelector( 'img' ).src;
 				dialog.querySelector( '.edit-attachment' ).style.display = 'none';
