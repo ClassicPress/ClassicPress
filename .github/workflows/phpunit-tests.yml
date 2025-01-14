@@ -24,6 +24,7 @@ jobs:
   # - Setup, wait for and initialise MySQL.
   # - Installs NPM dependencies using install-changed to hash the `package.json` file.
   # - Configure PHP.
+  # - Install Imagick
   # - Set up locale.
   # - Install PHPUnit and Composer dependencies.
   # - Make Composer packages available globally.
@@ -134,7 +135,7 @@ jobs:
         run: npx install-changed --install-command="npm ci"
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@v2.31.1
+        uses: shivammathur/setup-php@v2
         with:
           php-version: "${{ matrix.php }}"
           ini-values: >-
@@ -148,7 +149,6 @@ jobs:
             exif,
             gd,
             iconv,
-            imagick,
             intl,
             libxml,
             mbstring,
@@ -163,6 +163,13 @@ jobs:
             sqlite,
             zip
           coverage: none
+
+     - name: Install Imagick
+       run: |
+         sudo apt-get update
+         sudo apt-get install -y imagemagick
+         sudo apt-get install -y php-imagick
+         sudo phpenmod imagick
 
       - name: Set up locale
         run: |
