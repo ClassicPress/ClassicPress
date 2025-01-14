@@ -134,7 +134,7 @@ jobs:
         run: npx install-changed --install-command="npm ci"
 
       - name: Set up PHP
-        uses: "shivammathur/setup-php@v2.31.1"
+        uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231
         with:
           php-version: "${{ matrix.php }}"
           ini-values: >-
