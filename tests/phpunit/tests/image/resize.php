@@ -97,8 +97,6 @@ abstract class WP_Tests_Image_Resize_UnitTestCase extends WP_Image_UnitTestCase 
 		$file   = DIR_TESTDATA . '/images/avif-lossy.avif';
 		$editor = wp_get_image_editor( $file );
 
-		$this->markTestSkipped( 'Skip test while investigating failing GitHub Actions.' );
-
 		// Check if the editor supports the avif mime type.
 		if ( is_wp_error( $editor ) || ! $editor->supports_mime_type( 'image/avif' ) ) {
 			$this->markTestSkipped( sprintf( 'No AVIF support in the editor engine %s on this system.', $this->editor_engine ) );
