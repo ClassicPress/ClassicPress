@@ -199,6 +199,7 @@ function twentyseventeen_social_links_icons() {
 		'stumbleupon.com' => 'stumbleupon',
 		't.me'            => 'telegram',
 		'telegram.me'     => 'telegram',
+		'threads.net'     => 'threads',
 		'tumblr.com'      => 'tumblr',
 		'twitch.tv'       => 'twitch',
 		'twitter.com'     => 'twitter',
