@@ -2086,13 +2086,6 @@ html.wp-toolbar {
 	}
 }
 
-/* If the width of the `summary` container is greater than 1400px */
-@container (min-width: 1400px) {
-	#poststuff .postbox-container summary > div {
-		width: 99%;
-	}
-}
-
 .postbox-container summary > div > span {
 	margin-right: -0.75em;
 }
