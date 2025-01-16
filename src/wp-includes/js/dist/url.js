@@ -659,7 +659,7 @@ const PHONE_REGEXP = /^(tel:)?(\+)?\d{6,15}$/;
  * @return {boolean} Whether or not it looks like a phone number.
  */
 function isPhoneNumber(phoneNumber) {
-  // Remove any seperator from phone number.
+  // Remove any separator from phone number.
   phoneNumber = phoneNumber.replace(/[-.() ]/g, '');
   return PHONE_REGEXP.test(phoneNumber);
 }
@@ -1385,9 +1385,9 @@ function getFilename(url) {
  * @return {string} Normalized path.
  */
 function normalizePath(path) {
-  const splitted = path.split('?');
-  const query = splitted[1];
-  const base = splitted[0];
+  const split = path.split('?');
+  const query = split[1];
+  const base = split[0];
   if (!query) {
     return base;
   }

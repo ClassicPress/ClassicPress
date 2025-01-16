@@ -985,6 +985,17 @@ function wp_admin_bar_appearance_menu( $wp_admin_bar ) {
 		)
 	);
 
+	if ( current_user_can( 'activate_plugins' ) ) {
+		$wp_admin_bar->add_node(
+			array(
+				'parent' => 'appearance',
+				'id'     => 'plugins',
+				'title'  => __( 'Plugins' ),
+				'href'   => admin_url( 'plugins.php' ),
+			)
+		);
+	}
+
 	if ( current_user_can( 'switch_themes' ) ) {
 		$wp_admin_bar->add_node(
 			array(
