@@ -545,9 +545,9 @@ get_current_screen()->add_help_tab(
 				'<p>' . __( 'Plugins extend and expand the functionality of ClassicPress. Once a plugin is installed, you may activate it or deactivate it here.' ) . '</p>' .
 				'<p>' . __( 'The search for installed plugins will search for terms in their name, description, or author.' ) . ' <span id="live-search-desc" class="hide-if-no-js">' . __( 'The search results will be updated as you type.' ) . '</span></p>' .
 				'<p>' . sprintf(
-					/* translators: %s: ClassicPress Plugin Directory URL. */
-					__( 'If you would like to see more plugins to choose from, click on the &#8220;Add New&#8221; button and you will be able to browse or search for additional plugins from the <a href="%s">ClassicPress Plugin Directory</a>. Plugins in the ClassicPress Plugin Directory are designed and developed by third parties, and are compatible with the license ClassicPress uses. Oh, and they&#8217;re free!' ),
-					__( 'https://directory.classicpress.net/plugins/' )
+					/* translators: %s: WordPress Plugin Directory URL. */
+					__( 'If you would like to see more plugins to choose from, click on the &#8220;Add New&#8221; button and you will be able to browse or search for additional plugins from the <a href="%s">WordPress Plugin Directory</a>. Plugins in the WordPress Plugin Directory are designed and developed by third parties, and are compatible with the license WordPress uses. Oh, and they&#8217;re free!' ),
+					__( 'https://wordpress.org/plugins/' )
 				) . '</p>',
 	)
 );
