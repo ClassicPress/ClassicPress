@@ -3277,7 +3277,7 @@ function retrieve_password( $user_login = null ) {
 	 *
 	 * @since CP-2.4.0
 	 *
-	 * @param bool   $failed  True if wp_mail failed, false otherwise.
+	 * @param bool   $failed  True if wp_mail() failed, false otherwise.
 	 * @param string $to      The intended recipient - user email address.
 	 * @param string $subject The subject of the email.
 	 * @param string $message The body of the email.
