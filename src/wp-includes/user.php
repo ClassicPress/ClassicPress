@@ -3273,7 +3273,8 @@ function retrieve_password( $user_login = null ) {
 	$subject = wp_specialchars_decode( $subject );
 
 	/**
-	 * Filters the contents of the reset password notification email sent to the user.
+	 * Filters the response after an attempt has been made to send the
+	 * reset password notification email to the user.
 	 *
 	 * @since CP-2.4.0
 	 *
