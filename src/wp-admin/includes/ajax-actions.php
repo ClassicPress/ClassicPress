@@ -3292,7 +3292,7 @@ function wp_ajax_quick_edit_attachment() {
 	}
 
 	if ( isset( $_POST['post_author'] ) && is_numeric( wp_unslash( $_POST['post_author'] ) ) ) {
-		$attachment->post_author = wp_unslash( $_POST['post_author'] );
+		$attachment->post_author = absint( $_POST['post_author'] );
 		$author = get_user_by( 'ID', $attachment->post_author );
 	}
 
@@ -3345,6 +3345,23 @@ function wp_ajax_quick_edit_attachment() {
 	$used_in    = $list_table->column_used_in( $attachment );
 	$media_cats = $list_table->column_default( $attachment, 'taxonomy-media_category' );
 	$media_tags = $list_table->column_default( $attachment, 'taxonomy-media_post_tag' );
+	list( $mime ) = explode( '/', $attachment->post_mime_type );
+	$thumb        = wp_get_attachment_image( $attachment->ID, array( 60, 60 ), true, array( 'alt' => '' ) );	
+	$class        = $thumb ? ' class="has-media-icon"' : '';
+	$media_icon   = $thumb ? '<span class="media-icon ' . sanitize_html_class( $mime . '-icon' ) . '">' . $thumb . '</span>' : '';
+	$file         = get_attached_file( $attachment->ID );
+	$link_start   = '';
+	$link_end     = '';
+
+	if ( current_user_can( 'edit_post', $attachment->ID ) ) {
+		$link_start = sprintf(
+			'<a href="%s" aria-label="%s">',
+			get_edit_post_link( $attachment->ID ),
+			/* translators: %s: Attachment title. */
+			esc_attr( sprintf( __( '&#8220;%s&#8221; (Edit)' ), $attachment->post_title ) )
+		);
+		$link_end = '</a>';
+	}
 
 	/**
 	 * Output buffer is used here because the function prints directly
@@ -3359,13 +3376,7 @@ function wp_ajax_quick_edit_attachment() {
 		<input type="checkbox" name="media[]" id="cb-select-' . $id . '" value="' . $id . '">
 	</th>
 	<td class="title column-title has-row-actions column-primary" data-colname="' . esc_html__( 'File' ) . '">
-		<strong class="has-media-icon">
-			<a href="' . esc_url( home_url( '/wp-admin/post.php?post=' . $id . '&amp;action=edit' ) ) . '" aria-label="' . esc_attr__( sprintf( '“%s” (Edit)', $attachment->post_title ) ) . '">
-				<span class="media-icon image-icon">
-					<img width="60" height="60" src="' . esc_url( wp_get_attachment_image_src( $id )[0] ) . '" class="attachment-60x60 size-60x60" alt="" decoding="async" loading="lazy">
-				</span>' . esc_html( $attachment->post_title ) . '
-			</a>
-		</strong>
+		<strong ' . $class . '>' . $link_start . $media_icon . $attachment->post_title . $link_end . _media_states( $attachment ) . '</strong>
 
 		<p class="filename">
 			<span class="screen-reader-text">' . esc_html__( 'File name: ' ) . '</span>' . esc_html( $attachment->post_title ) . '
