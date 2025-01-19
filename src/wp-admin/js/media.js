@@ -293,10 +293,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 *                   Enter on a focused field.
 	 */
 	function saveAttachments( quickEdit, id ) {
-		var params, inputs,
-			quickMonth     = quickEdit.querySelector( '#quick-month' ),
-			quickAuthor    = quickEdit.querySelector( '#quick-author' ),
-			quickMediaTags = quickEdit.querySelector( '#quick-media-tags' );
+		var params, inputs;
 
 		if ( typeof( id ) === 'object' ) {
 			id = this.getId( id );
@@ -309,7 +306,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			edit_date: 'true'
 		} );
 
-		inputs = quickEdit.querySelectorAll( 'input' );
+		inputs = quickEdit.querySelectorAll( 'input:not([readonly=""]), select, textarea' );
 		inputs.forEach( function( input ) {
 			if ( input.name === 'media_category[]' ) {
 				if ( input.checked ) {
@@ -319,10 +316,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				params.append( input.name, input.value );
 			}
 		} );
-
-		params.append( quickMonth.name, quickMonth.value );
-		params.append( quickAuthor.name, quickAuthor.value );
-		params.append( quickMediaTags.name, quickMediaTags.value );
 
 		fetch( ajaxurl, {
 			method: 'POST',
@@ -501,7 +494,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 					} else if ( number === 1 && ! selectAll1.checked && ! selectAll2.checked ) {
 
-						// Quick Edit: replace the row with the Quick Edit row.
+						// Quick Edit: reset all fields except nonce
+						inputs = quickEdit.querySelectorAll( 'input:not(#_inline_edit_attachment), select, textarea' );
+						inputs.forEach( function( input ) {
+							input.value = '';
+						} );
+
+						// Replace the row with the Quick Edit row.
 						document.getElementById( 'the-list' ).prepend( hiddenTr );
 						quickEdit.dataset.id = tr.id;
 						tr.before( quickEdit );
