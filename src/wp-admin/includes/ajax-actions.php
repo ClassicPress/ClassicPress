@@ -3293,7 +3293,7 @@ function wp_ajax_quick_edit_attachment() {
 
 	if ( isset( $_POST['post_author'] ) && is_numeric( wp_unslash( $_POST['post_author'] ) ) ) {
 		$post_author = absint( wp_unslash( $_POST['post_author'] ) );
-		$author = get_user_by( 'ID', $post_author );
+		$author = get_user_by( 'id', $post_author );
 	}
 
 	if ( isset( $_POST['aa'] ) && isset( $_POST['mm'] ) && isset( $_POST['jj'] ) ) {
