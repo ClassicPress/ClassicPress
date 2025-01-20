@@ -418,10 +418,10 @@ class WP_Media_List_Table extends WP_List_Table {
 		}
 
 		/* translators: Column name. */
-		$posts_columns['alt']         = _x( 'Alt Text', 'column name' );
-		$posts_columns['caption']     = _x( 'Caption', 'column name' );
-		$posts_columns['desc']        = _x( 'Description', 'column name' );
-		$posts_columns['date'] = _x( 'Date', 'column name' );
+		$posts_columns['alt']     = _x( 'Alt Text', 'column name' );
+		$posts_columns['caption'] = _x( 'Caption', 'column name' );
+		$posts_columns['desc']    = _x( 'Description', 'column name' );
+		$posts_columns['date']    = _x( 'Date', 'column name' );
 
 		/**
 		 * Filters the Media list table columns.
@@ -512,7 +512,7 @@ class WP_Media_List_Table extends WP_List_Table {
 
 		$class = $thumb ? ' class="has-media-icon"' : '';
 		?>
-		<strong<?php echo $class; ?>>
+		<strong <?php echo $class; ?>>
 			<?php
 			echo $link_start;
 
@@ -611,6 +611,7 @@ class WP_Media_List_Table extends WP_List_Table {
 				$h_time = get_the_time( __( 'Y/m/d' ), $post );
 			}
 		}
+		$h_time .= '<time datetime="' . date( 'Y/m/d' ) . '"></time>';
 
 		/**
 		 * Filters the published time of an attachment displayed in the Media list table.
