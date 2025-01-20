@@ -3356,7 +3356,7 @@ function wp_ajax_quick_edit_attachment() {
 	$media_cats   = $list_table->column_default( $attachment, 'taxonomy-media_category' );
 	$media_tags   = $list_table->column_default( $attachment, 'taxonomy-media_post_tag' );
 	list( $mime ) = explode( '/', $attachment->post_mime_type );
-	$thumb        = wp_get_attachment_image( $attachment->ID, array( 60, 60 ), true, array( 'alt' => '' ) );	
+	$thumb        = wp_get_attachment_image( $attachment->ID, array( 60, 60 ), true, array( 'alt' => '' ) );
 	$class        = $thumb ? ' class="has-media-icon"' : '';
 	$media_icon   = $thumb ? '<span class="media-icon ' . sanitize_html_class( $mime . '-icon' ) . '">' . $thumb . '</span>' : '';
 	$file         = get_attached_file( $attachment->ID );
