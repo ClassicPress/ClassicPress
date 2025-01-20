@@ -405,8 +405,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Binds the bulk action events to the submit buttons.
 		document.querySelectorAll( '#doaction, #doaction2' ).forEach( function( action ) {
 			action.addEventListener( 'click', function( event ) {
-				var tr, checkboxes, delButtons, dateSplit, author, authorsList,
-					cats, catsArray, categoriesList, mediaTags, hiddenTr, cancel,
+				var tr, checkboxes, delButtons, dateSplit, author, authorsList, cats,
+					catsArray, categoriesList, mediaTags, hiddenTr, cancel, inputs,
 					te = '',
 					quickEdit = document.getElementById( 'quick-edit' ),
 					bulkEdit = document.getElementById( 'bulk-edit' ),
