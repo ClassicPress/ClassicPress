@@ -329,7 +329,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( success ) {
-			quickEdit.nextElementSibling.innerHTML = success.data;
+			document.getElementById( 'post-' + id ).innerHTML = success.data;
 			wp.a11y.speak( wp.i18n.__( 'Changes saved.' ) );
 		} )
 		.catch( function() {
@@ -403,30 +403,29 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		document.getElementById( 'find-posts-close' ).addEventListener( 'click', findPosts.close );
 
 		// Binds the bulk action events to the submit buttons.
-		document.getElementById( 'doaction' ).addEventListener( 'click', function( event ) {
-			var quickEdit = document.getElementById( 'quick-edit' ),
-				bulkEdit = document.getElementById( 'bulk-edit' );
-
-			// Set default state in case a Bulk or Quick Edit has already been opened.
-			bulkEdit.style.display = 'none';
-			document.body.append( bulkEdit );
-			quickEdit.style.display = 'none';
-			document.body.append( quickEdit );
-
-			/*
-			 * Handle the bulk action based on its value.
-			 */
-			document.querySelectorAll( 'select[name="action"]', 'select[name="action2"]' ).forEach( function( select ) {
+		document.querySelectorAll( '#doaction, #doaction2' ).forEach( function( action ) {
+			action.addEventListener( 'click', function( event ) {
 				var tr, checkboxes, delButtons, dateSplit, author, authorsList,
 					cats, catsArray, categoriesList, mediaTags, hiddenTr, cancel,
 					te = '',
-					optionValue = select.value,
+					quickEdit = document.getElementById( 'quick-edit' ),
+					bulkEdit = document.getElementById( 'bulk-edit' ),
+					optionValue = document.querySelector( 'select[name="action"]' ).value,
 					number = 0,
 					count = 0,
 					columns = [ ...document.querySelector( '.widefat thead tr' ).children ],
 					selectAll1 = document.getElementById( 'cb-select-all-1' ),
 					selectAll2 = document.getElementById( 'cb-select-all-2' );
 
+				// Set default state in case a Bulk or Quick Edit has already been opened.
+				bulkEdit.style.display = 'none';
+				document.body.append( bulkEdit );
+				quickEdit.style.display = 'none';
+				document.body.append( quickEdit );
+
+				/**
+				 * Handle the bulk action based on its value.
+				 */
 				// If Bulk Actions is selected, reload the page without any query args.
 				if ( '-1' === optionValue ) {
 					event.preventDefault();
@@ -452,7 +451,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					 * Create a HTML div with the title and a
 					 * link(delete-icon) for each selected media item.
 					 *
-					 * Get the selected posts based on the checked checkboxes in the post table.
+					 * Get the selected posts based on the checked
+					 * checkboxes in the post table.
 					 */
 					checkboxes.forEach( function( checkbox ) {
 
@@ -541,7 +541,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						autoCompleteTextarea( quickEdit.querySelector( 'textarea' ) );
 
 						// Split date into year, month, and day.
-						dateSplit = tr.querySelector( '.column-date' ).textContent.split( '/' );
+						dateSplit = tr.querySelector( '.column-date time' ).getAttribute( 'datetime' ).split( '/' );
 						quickEdit.querySelector( '[name="mm"]' ).value = dateSplit[1];
 						quickEdit.querySelector( '[name="jj"]' ).value = dateSplit[2];
 						quickEdit.querySelector( '[name="aa"]' ).value = dateSplit[0];
@@ -797,4 +797,3 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 } );
-
