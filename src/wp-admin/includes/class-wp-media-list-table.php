@@ -611,7 +611,7 @@ class WP_Media_List_Table extends WP_List_Table {
 				$h_time = get_the_time( __( 'Y/m/d' ), $post );
 			}
 		}
-		$h_time .= '<time datetime="' . date( 'Y/m/d' ) . '"></time>';
+		$h_time .= '<time datetime="' . wp_date( 'Y/m/d' ) . '"></time>';
 
 		/**
 		 * Filters the published time of an attachment displayed in the Media list table.
