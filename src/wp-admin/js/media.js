@@ -12,7 +12,7 @@
 
 document.addEventListener( 'DOMContentLoaded', function() {
 
-	/*
+	/**
 	 * Autosuggest tags when bulk or quick editing
 	 *
 	 * Based on https://phuoc.ng/collection/mirror-a-text-area/add-autocomplete-to-your-text-area/
