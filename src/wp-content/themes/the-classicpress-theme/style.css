@@ -2085,7 +2085,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		margin-left: 2px;
 		font-size: 0.85em;
 	}
-	.menu {
+	#primary-menu.menu {
 		display: flex;
 		flex-grow: 1;
 		justify-content: space-between;
@@ -2094,16 +2094,16 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		margin: 0;
 		line-height: 3.5em;
 	}
-	.menu li a {
+	#primary-menu.menu li a {
 		display: flex;
 		flex-grow: 1;
 		padding: 0.4em 0.5em;
 	}
-	nav .menu .sub-menu li a {
+	#primary-menu.menu .sub-menu li a {
 		line-height: 1.4em;
 		padding: 0.55em .85em;
 	}
-	.menu ul li {
+	#primary-menu.menu ul li {
 		padding: 0;
 		flex-direction: column;
 	}
