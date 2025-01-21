@@ -3312,7 +3312,7 @@ function wp_ajax_quick_edit_attachment() {
 
 	// Update attachment array.
 	$attachment_data = array(
-		'ID'           => $attachment->ID,
+		'ID'           => $id,
 		'post_author'  => $post_author,
 		'post_date'    => $post_date,
 		'post_content' => $post_content,
@@ -3356,17 +3356,17 @@ function wp_ajax_quick_edit_attachment() {
 	$media_cats   = $list_table->column_default( $attachment, 'taxonomy-media_category' );
 	$media_tags   = $list_table->column_default( $attachment, 'taxonomy-media_post_tag' );
 	list( $mime ) = explode( '/', $attachment->post_mime_type );
-	$thumb        = wp_get_attachment_image( $attachment->ID, array( 60, 60 ), true, array( 'alt' => '' ) );
+	$thumb        = wp_get_attachment_image( $id, array( 60, 60 ), true, array( 'alt' => '' ) );
 	$class        = $thumb ? ' class="has-media-icon"' : '';
 	$media_icon   = $thumb ? '<span class="media-icon ' . sanitize_html_class( $mime . '-icon' ) . '">' . $thumb . '</span>' : '';
-	$file         = get_attached_file( $attachment->ID );
+	$file         = get_attached_file( $id );
 	$link_start   = '';
 	$link_end     = '';
 
-	if ( current_user_can( 'edit_post', $attachment->ID ) ) {
+	if ( current_user_can( 'edit_post', $id ) ) {
 		$link_start = sprintf(
 			'<a href="%s" aria-label="%s">',
-			get_edit_post_link( $attachment->ID ),
+			get_edit_post_link( $id ),
 			/* translators: %s: Attachment title. */
 			esc_attr( sprintf( __( '&#8220;%s&#8221; (Edit)' ), $post_title ) )
 		);
@@ -3427,7 +3427,7 @@ function wp_ajax_quick_edit_attachment() {
 
 	<td class="parent column-parent" data-colname="' . esc_attr__( 'Uploaded to' ) . '">' . $attached_to . '</td>
 
-	<td class="comments column-comments hidden" data-colname="' . esc_attr__( 'Comments' ) . '">
+	<td class="comments column-comments" data-colname="' . esc_attr__( 'Comments' ) . '">
 		<div class="post-com-count-wrapper">
 			<span aria-hidden="true">—</span>
 			<span class="screen-reader-text">' . esc_html__( 'No comments' ) . '</span>
