@@ -1363,7 +1363,7 @@ p.text-rightcol,
 }
 .nav-previous,
 .nav-next {
-	width: 47%;
+	flex: 1;
 }
 .nav-next {
 	text-align: right;
