@@ -330,6 +330,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} )
 		.then( function( success ) {
 			document.getElementById( 'post-' + id ).innerHTML = success.data;
+			hideColumns( 'post-' + id );
 			wp.a11y.speak( wp.i18n.__( 'Changes saved.' ) );
 		} )
 		.catch( function() {
@@ -339,6 +340,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			errorNotice.classList.remove( 'hidden' );
 			error.textContent = wp.i18n.__( 'Error while saving the changes.' );
 			wp.a11y.speak( wp.i18n.__( 'Error while saving the changes.' ) );
+		} );
+	}
+
+	/**
+	 * Ensures that columns in a Quick Edit response are hidden
+	 * if the relevant column is checked in Screen Options.
+	 *
+	 * @since CP-2.4.0
+	 */
+	function hideColumns( postID ) {
+		document.querySelectorAll( '.hide-column-tog' ).forEach( function( hide ) {
+			if ( hide.checked === false ) {
+				document.getElementById( postID ).querySelector( '.' + hide.id.replace( '-hide', '' ) ).style.display = 'none';
+			}
 		} );
 	}
 
