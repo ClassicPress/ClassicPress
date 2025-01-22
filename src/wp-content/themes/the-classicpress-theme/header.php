@@ -41,7 +41,7 @@
 				if ( function_exists( 'the_custom_logo' ) && has_custom_logo() ) {
 					the_custom_logo();
 				} else {
-					echo '<a href="' . esc_url( home_url( '/' ) ) . '" style="height:50px;visibility:hidden;">Yo</a>';
+					echo '<a href="' . esc_url( home_url( '/' ) ) . '">' . esc_html( get_bloginfo( 'name' ) ) . '</a>';
 				}
 				?>
 
