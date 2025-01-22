@@ -48,7 +48,11 @@ Normalizing styles have been helped along thanks to the fine work of Nicolas Gal
 /* Document
 	 ========================================================================== */
 
-/**
+:root {
+	--tcpt-border-radius: 4px;
+}
+
+/*
  * 1. Correct the line height in all browsers.
  * 2. Prevent adjustments of font size after orientation changes in iOS.
  */
@@ -374,7 +378,7 @@ pre {
 	max-width: 100%;
 	overflow: auto;
 	padding: 1.6em;
-	border-radius: 6px;
+	border-radius: var(--tcpt-border-radius);
 }
 
 code,
@@ -388,12 +392,12 @@ var {
 	width: 100%;
 	background: #f3f3f3;
 	padding: 0 0.2em;
-	border-radius: 3px;
+	border-radius: var(--tcpt-border-radius);
 }
 .code {
 	padding: 0.5em 0.75em 0.75em 1em;
 	display: inline-block;
-	border-radius: 6px;
+	border-radius: var(--tcpt-border-radius);
 	margin-bottom: 1.4em;
 }
 
@@ -479,7 +483,7 @@ input[type="button"],
 input[type="reset"],
 input[type="submit"] {
 	border: 1px #3a113c solid;
-	border-radius: 3px;
+	border-radius: var(--tcpt-border-radius);
 	background: #89288f;
 	color: rgba(0, 0, 0, 0.8);
 	font-size: 12px;
@@ -522,7 +526,7 @@ input[type="color"],
 textarea {
 	color: #666;
 	border: 1px solid #ccc;
-	border-radius: 3px;
+	border-radius: var(--tcpt-border-radius);
 	padding: 3px;
 }
 input[type="text"]:focus,
@@ -615,7 +619,7 @@ a:active {
 }
 .screen-reader-text:focus {
 	background-color: #f1f1f1;
-	border-radius: 3px;
+	border-radius: var(--tcpt-border-radius);
 	box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
 	clip: auto !important;
 	clip-path: none;
@@ -1015,7 +1019,7 @@ input[type="search"] {
 	width: 300px;
 	max-width: 85%;
 	padding: 0.3em;
-	border-radius: 5px;
+	border-radius: var(--tcpt-border-radius);
 	position: relative;
 	top: 1px;
 }
@@ -1076,7 +1080,7 @@ img {
 	background: #fff;
 	color: #000;
 	font-weight: 600;
-	border-radius: 4px;
+	border-radius: var(--tcpt-border-radius);
 	font-size: 100%;
 	padding: 0.1rem 0.5rem;
 	border: 0;
@@ -1116,7 +1120,7 @@ img {
 #primary-menu.menu li a,
 #primary-menu.menu li a:visited {
 	color: rgba(255, 255, 255, 1);
-	border-radius: 6px;
+	border-radius: var(--tcpt-border-radius);
 	border-width: 0;
 	/* IE11/Edge fix */
 }
@@ -1161,7 +1165,7 @@ img {
 	margin-left: 0;
 	z-index: 1;
 	background: rgba(5, 127, 153, 1);
-	border-radius: 0 0 6px 6px;
+	border-radius: 0 0 var(--tcpt-border-radius) var(--tcpt-border-radius);
 	width: 100%;
 }
 
@@ -1344,7 +1348,7 @@ p.text-rightcol,
 	margin: 1.8em 0 0;
 	padding: 1em;
 	background-color: rgb(235 243 246 / 46%);
-	border-radius: 8px;
+	border-radius: var(--tcpt-border-radius);
 }
 .author_bio_section h5 {
 	font-size: 1.1em;
@@ -1432,7 +1436,7 @@ p.button a,
 input[type="submit"] {
 	display: inline-block;
 	padding: 0.9rem 2.5rem;
-	border-radius: 5px;
+	border-radius: var(--tcpt-border-radius);
 	font-weight: 400;
 	color: #fff;
 	line-height: 1;
@@ -1494,12 +1498,12 @@ body.single-post #content {
 	margin-top: 0.5em;
 	padding: 0.1em 1em;
 	background: rgb(235 243 246 / 46%);
-	border-radius: 6px;
+	border-radius: var(--tcpt-border-radius);
 }
 
 /* CRAYON CODE HILITES */
 .crayon-theme-classic {
-	border-radius: 0 0 6px 6px;
+	border-radius: 0 0 var(--tcpt-border-radius) var(--tcpt-border-radius);
 }
 #content ul li,
 #content ol li {
@@ -1557,7 +1561,7 @@ span.wpcf7-not-valid-tip {
 div.wpcf7-validation-errors,
 div.wpcf7-acceptance-missing {
 	border: 2px solid #89288f;
-	border-radius: 5px;
+	border-radius: var(--tcpt-border-radius);
 }
 div.wpcf7-response-output {
 	margin: 2em 0 1em;
@@ -1637,7 +1641,7 @@ table.cp-logo-list .cp-logo-description {
 .sidebar-note {
 	padding: 10px 9px 12px 15px;
 	background-color: rgb(235 243 246 / 46%);
-	border-radius: 8px;
+	border-radius: var(--tcpt-border-radius);
 	margin: 0.3em 0 1.5em 0;
 }
 #sidebar h3 {
@@ -1655,7 +1659,7 @@ table.cp-logo-list .cp-logo-description {
 #sidebar p.readmore a {
 	display: inline-block;
 	padding: 0.55rem 1.5rem 0.65em;
-	border-radius: 5px;
+	border-radius: var(--tcpt-border-radius);
 	font-weight: 400;
 	color: #fff;
 	line-height: 1;
@@ -1680,7 +1684,7 @@ table.cp-logo-list .cp-logo-description {
 .search-form input[type="submit"] {
 	padding: 0.6em 1em 0.7em;
 	font-size: 0.9em;
-	border-radius: 5px;
+	border-radius: var(--tcpt-border-radius);
 	font-weight: 400;
 	color: #fff;
 	line-height: 1;
@@ -2137,7 +2141,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	}
 	#masthead .menu ul.sub-menu li:last-child a,
 	#masthead .menu li.menu-item-has-children ul.sub-menu li:last-child a {
-		border-radius: 0 0 6px 6px;
+		border-radius: 0 0 var(--tcpt-border-radius) var(--tcpt-border-radius);
 	}
 	.menu-item-has-children > a::after {
 		margin-left: 0.12em;
