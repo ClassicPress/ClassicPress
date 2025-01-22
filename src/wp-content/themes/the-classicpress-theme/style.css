@@ -854,8 +854,6 @@ object {
 }
 .logo {
 	display: block;
-	text-align: left;
-	line-height: 0;
 }
 .logo svg {
 	width: 2.4em;
@@ -1108,16 +1106,12 @@ img {
 }
 #primary-menu.menu li {
 	letter-spacing: 0.1em;
-	margin-left: 2px;
 }
 #primary-menu.menu li ul li {
 	font-size: 1em;
 	text-transform: none;
 	letter-spacing: 0;
 	margin: 0;
-}
-#primary-menu.menu > li > a {
-	outline-offset: -2px;
 }
 #primary-menu.menu li a,
 #primary-menu.menu li a:visited {
@@ -1973,11 +1967,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		margin-left: -1em;
 		background: rgba(5, 127, 153, 1);
 	}
-	#primary-menu li {
-		margin: 0.4em 0;
-	}
 	#primary-menu li a {
-		margin: 0.5em;
 		padding: 0.2em 0.5em;
 	}
 	#masthead .menu ul.sub-menu li a,
@@ -1985,11 +1975,14 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		padding-left: 1.2em;
 	}
 	#masthead .search-form {
-		margin-left: 1em;
+		display: flex;
+		gap: 1em;
 	}
 	#masthead .search-field {
 		margin-right: 0.75em;
 		font-size: 0.9em;
+		width: 100%;
+		max-width: 100%;
 	}
 	#masthead .search-submit {
 		margin-top: 0.2em;
@@ -2049,6 +2042,9 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	}
 	#primary-menu {
 		display: none;
+		flex-direction: column;
+		margin: 1em 0 0 0;
+		gap: 1em;
 	}
 	.petitions-home,
 	.getinvolved,
@@ -2109,7 +2105,6 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	#primary-menu.menu li {
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
-		margin-left: 2px;
 		font-size: 0.85em;
 	}
 	.menu {
@@ -2119,6 +2114,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		flex-wrap: wrap;
 		padding: 0;
 		margin: 0;
+		gap: 1em;
 		line-height: 3.5em;
 	}
 	.menu li a {
