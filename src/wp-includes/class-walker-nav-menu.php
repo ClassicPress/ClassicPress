@@ -202,14 +202,10 @@ class Walker_Nav_Menu extends Walker {
 		}
 
 		if ( ! empty( $menu_item->url ) ) {
-<<<<<<< HEAD
-			if ( get_privacy_policy_url() === $menu_item->url ) {
+			if ( $this->privacy_policy_url === $menu_item->url ) {
 				if ( ! empty( $menu_item->target && '_blank' === $menu_item->target && ! empty( $menu_item->xfn ) ) ) {
 					$atts['rel'] = 'nofollow privacy-policy';
 				} else {
-=======
-			if ( $this->privacy_policy_url === $menu_item->url ) {
->>>>>>> 396f6fbe43 (Menus: Improve performance by calling `get_privacy_policy_url()` once per `Walker_Nav_Menu` instance rather than for every nav menu item.)
 					$atts['rel'] = empty( $atts['rel'] ) ? 'privacy-policy' : $atts['rel'] . ' privacy-policy';
 				}
 			}
