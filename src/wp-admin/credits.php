@@ -51,7 +51,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 
 echo '<p class="about-description">' . __(
 	'ClassicPress is created by a worldwide team of passionate individuals.'
-). '</p>';
+) . '</p>';
 
 echo '<p class="about-description">' . sprintf(
 	/* translators: %s: https://www.classicpress.net/community/ */
