@@ -1018,6 +1018,10 @@ tr.inline-edit-row td {
 	margin-left: 6em;
 }
 
+.quick-edit-row-post div.inline-edit-col {
+	clear: both;
+}
+
 .quick-edit-row-post fieldset.inline-edit-col-right label span.title {
 	width: auto;
 	padding-right: 0.5em;
