@@ -71,8 +71,7 @@
 			// Only initialize new media elements.
 			var mediaElements = document.querySelectorAll( '.wp-audio-shortcode, .wp-video-shortcode' );
 			mediaElements.forEach( function( element ) {
-				if ( !element.classList.contains( 'mejs-container' ) && 
-					( !element.parentNode || !element.parentNode.classList.contains( 'mejs-mediaelement' ) ) ) {
+				if ( !element.classList.contains( 'mejs-container' ) && ( !element.parentNode || !element.parentNode.classList.contains( 'mejs-mediaelement' ) ) ) {
 					new MediaElementPlayer( element, settings );
 				}
 			});
