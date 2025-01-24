@@ -1254,6 +1254,29 @@ jQuery( function($) {
 
 	}
 
+	// Save on pressing [Ctrl]/[Command] + [S] in the Text editor.
+	document.addEventListener( 'keydown', function( e ) {
+		var updateButton = document.getElementById( 'save-post' ) ? document.getElementById( 'save-post' ) : document.getElementById( 'publish' );
+		if ( ( e.ctrlKey || e.metaKey ) && e.key.toLowerCase() === 's' ) {
+			e.preventDefault();
+			updateButton.click();
+		}
+	} );
+
+	/* Scroll to last position within document before saving */
+	// Restore scroll position if it exists in sessionStorage
+	setTimeout( function() {
+		if ( sessionStorage.getItem( 'scrollPosition' ) ) {
+			window.scrollTo( 0, parseInt( sessionStorage.getItem( 'scrollPosition' ) ) );
+		}
+	}, 500);
+
+	// Store scroll position when the window is about to unload
+	window.addEventListener( 'beforeunload', function() {
+		var scrollPosition = document.documentElement.scrollTop;
+		sessionStorage.setItem( 'scrollPosition', scrollPosition );
+	} );
+
 	// If the last status was auto-draft and the save is triggered, edit the current URL.
 	if ( $( '#original_post_status' ).val() === 'auto-draft' && window.history.replaceState ) {
 		var location;
