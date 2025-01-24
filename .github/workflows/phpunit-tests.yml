@@ -108,7 +108,7 @@ jobs:
       - name: Install ImageMagick
         run: |
           sudo apt-get update
-          sudo apt-get install -y imagemagick
+          sudo apt-get install -y imagemagick php-imagick
 
       - name: Login to Docker Hub
         if: ${{ github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false ) }}
@@ -195,7 +195,7 @@ jobs:
           phpunit --version
           composer --version
           grunt --version
-          magick --version
+          convert --version
           lsb_release -a
           localectl list-locales
 
