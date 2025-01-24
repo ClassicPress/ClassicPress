@@ -3272,27 +3272,12 @@ function retrieve_password( $user_login = null ) {
 
 	$subject = wp_specialchars_decode( $subject );
 
-	/**
-	 * Filters the response after an attempt has been made to send the
-	 * reset password notification email to the user.
-	 *
-	 * @since CP-2.4.0
-	 *
-	 * @param bool   $failed  True if wp_mail() failed, false otherwise.
-	 * @param string $to      The intended recipient - user email address.
-	 * @param string $subject The subject of the email.
-	 * @param string $message The body of the email.
-	 * @param string $headers The headers of the email.
-	 */
 	if ( ! wp_mail( $to, $subject, $message, $headers ) ) {
-		$failed = apply_filters( 'cp_failed_password_mail', true, $to, $subject, $message, $headers );
-		if ( $failed ) {
-			$errors->add(
-				'retrieve_password_email_failure',
-				__( '<strong>Error:</strong> The email could not be sent. The site may not be correctly configured to send emails.' )
-			);
-			return $errors;
-		}
+		$errors->add(
+			'retrieve_password_email_failure',
+			__( '<strong>Error:</strong> The email could not be sent. The site may not be correctly configured to send emails.' )
+		);
+		return $errors;
 	}
 	return true;
 }
