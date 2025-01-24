@@ -1,4 +1,4 @@
-/* global _wpmejsSettings, mejsL10n */
+/* global _wpmejsSettings, mejsL10n, MediaElementPlayer */
 (function(window) {
 	window.wp = window.wp || {};
 
