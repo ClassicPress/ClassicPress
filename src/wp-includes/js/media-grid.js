@@ -322,8 +322,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Show modal
 		dialog.classList.add( 'modal-loading' );
+	
 		// Fix wrong image flash
-		setTimeout(function(){
+		setTimeout( function() {
 			dialog.showModal();
 		}, 1);
 
