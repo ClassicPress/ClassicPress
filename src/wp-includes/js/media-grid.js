@@ -220,6 +220,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			url = item.dataset.url,
 			alt = item.querySelector( 'img' ).getAttribute( 'alt' ),
 			link = item.dataset.link,
+			author = item.dataset.author,
+			authorLink = item.dataset.authorLink,
 			orientation = item.dataset.orientation ? ' ' + item.dataset.orientation : '',
 			menuOrder = item.dataset.menuOrder,
 			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
@@ -234,6 +236,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Populate modal with attachment details
 		dialog.querySelector( '.attachment-date' ).textContent = date;
+		dialog.querySelector( '.uploaded-by' ).children[1].textContent = author;
+		dialog.querySelector( '.uploaded-by' ).children[1].href = authorLink;
 		dialog.querySelector( '.attachment-filename' ).textContent = filename;
 		dialog.querySelector( '.attachment-filetype' ).textContent = mime;
 		dialog.querySelector( '.attachment-filesize' ).textContent = size;

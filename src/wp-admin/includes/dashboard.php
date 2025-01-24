@@ -1648,7 +1648,7 @@ function wp_dashboard_php_nag() {
 		if ( $response['is_lower_than_future_minimum'] ) {
 			$message = sprintf(
 				/* translators: %s: The server PHP version. */
-				__( 'Your site is running on an outdated version of PHP (%s), which does not receive security updates and soon will not be supported by WordPress. Ensure that PHP is updated on your server as soon as possible. Otherwise you will not be able to upgrade WordPress.' ),
+				__( 'Your site is running on an outdated version of PHP (%s), which does not receive security updates and soon will not be supported by ClassicPress. Ensure that PHP is updated on your server as soon as possible. Otherwise you will not be able to upgrade WordPress.' ),
 				PHP_VERSION
 			);
 		} else {
@@ -1661,7 +1661,7 @@ function wp_dashboard_php_nag() {
 	} elseif ( $response['is_lower_than_future_minimum'] ) {
 		$message = sprintf(
 			/* translators: %s: The server PHP version. */
-			__( 'Your site is running on an outdated version of PHP (%s), which soon will not be supported by WordPress. Ensure that PHP is updated on your server as soon as possible. Otherwise you will not be able to upgrade WordPress.' ),
+			__( 'Your site is running on an outdated version of PHP (%s), which soon will not be supported by ClassicPress. Ensure that PHP is updated on your server as soon as possible. Otherwise you will not be able to upgrade WordPress.' ),
 			PHP_VERSION
 		);
 	} else {
