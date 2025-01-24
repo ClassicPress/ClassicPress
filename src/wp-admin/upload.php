@@ -209,7 +209,6 @@ if ( 'grid' === $mode ) {
 		'paged'          => $paged,
 	);
 	$attachments = new WP_Query( $attachment_args );
-	$author = $author_link = '';
 
 	$total_pages = (int) $attachments->max_num_pages;
 	$prev_page   = ( $paged === 1 ) ? $paged : $paged - 1;
@@ -467,6 +466,8 @@ if ( 'grid' === $mode ) {
 						data-caption="<?php echo esc_attr( $caption ); ?>"
 						data-description="<?php echo esc_attr( $description ); ?>"
 						data-link="<?php echo esc_attr( $link ); ?>"
+						data-author="<?php echo esc_attr( $author ); ?>"
+						data-author-link="<?php echo esc_attr( $author_link ); ?>"
 						data-orientation="<?php echo esc_attr( $orientation ); ?>"
 						data-menu-order="<?php echo esc_attr( $menu_order ); ?>"
 						data-taxes="<?php echo esc_attr( $media_cats ); ?>"
@@ -564,7 +565,7 @@ if ( 'grid' === $mode ) {
 								<h3 class="screen-reader-text"><?php esc_html_e( 'Details' ); ?></h3>
 								<div class="uploaded"><strong><?php esc_html_e( 'Uploaded on:' ); ?></strong> <span class="attachment-date"></div>
 								<div class="uploaded-by">
-									<strong><?php esc_html_e( 'Uploaded by:' ); ?></strong> <a href="<?php echo esc_url( $author_link ); ?>"><?php echo esc_html( $author ); ?></a>
+									<strong><?php esc_html_e( 'Uploaded by:' ); ?></strong> <a href=""></a>
 								</div>
 
 								<div class="filename"><strong><?php esc_html_e( 'File name:' ); ?></strong> <span class="attachment-filename"></span></div>
