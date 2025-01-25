@@ -363,13 +363,13 @@ dialog::backdrop {
 	outline-style: solid;
 	outline-width: 0.125rem;
 }
-.attachment-media-navigation {
+.media-navigation {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	border-top: 1px solid #dcdcde;
 	border-bottom: 1px solid #dcdcde;
-	font-size: 18px;
+	font-size: 17px;
 	font-variant-numeric: tabular-nums;
 	-webkit-font-smoothing: subpixel-antialiased;
 	cursor: default;
