@@ -363,7 +363,7 @@ dialog::backdrop {
 	outline-style: solid;
 	outline-width: 0.125rem;
 }
-.media-navigation {
+.attachment-media-navigation {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
