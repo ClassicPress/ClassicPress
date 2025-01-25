@@ -373,5 +373,7 @@ dialog::backdrop {
 	font-variant-numeric: tabular-nums;
 	-webkit-font-smoothing: subpixel-antialiased;
 	cursor: default;
+	-webkit-user-select: none;
+	-moz-user-select: none;
 	user-select: none;
 }
