@@ -284,7 +284,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Remove current aria-disabled states
 		document.querySelectorAll( '[aria-disabled="true"]' ).forEach( function( ariaDisabled ) {
 			ariaDisabled.setAttribute( 'aria-disabled', 'false' );
-		});
+		} );
 
 		// Collect variables for posting to database
 		postVars = new URLSearchParams( {
@@ -299,7 +299,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			column.querySelectorAll( 'details:not( .hide-if-js )' ).forEach( function( childWidget ) {
 				widgetsIds.push( childWidget.id ); // for posting to database
 				widgetsIdsList.push( childWidget.id ); // for setting aria-disabled state
-			});
+			} );
 			postVars.append( 'order[' + column.id.split( '-' )[0] + ']', widgetsIds.join( ',' ) );
 			widgetsIds = []; // reset
 		} );
