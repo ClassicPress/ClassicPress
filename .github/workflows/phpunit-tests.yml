@@ -108,7 +108,7 @@ jobs:
       - name: Install ImageMagick
         run: |
           sudo apt-get update
-          sudo apt-get install -y imagemagick php-imagick
+          sudo apt-get install -y libavif-dev libwebp-dev imagemagick php-imagick
 
       - name: Login to Docker Hub
         if: ${{ github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false ) }}
