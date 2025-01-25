@@ -259,7 +259,7 @@
 	float: left;
 	width: 100%;
 	margin: 0 0 10px;
-    margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 .attachment-details .setting .name,
 .attachment-details .setting .value,
@@ -359,7 +359,19 @@ dialog::backdrop {
 	opacity: 0.7;
 }
 .mejs-container:focus {
-    outline-offset: 0.125rem;
-    outline-style: solid;
-    outline-width: 0.125rem;
+	outline-offset: 0.125rem;
+	outline-style: solid;
+	outline-width: 0.125rem;
+}
+.attachment-media-navigation {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-top: 1px solid #dcdcde;
+	border-bottom: 1px solid #dcdcde;
+	font-size: 18px;
+	font-variant-numeric: tabular-nums;
+	-webkit-font-smoothing: subpixel-antialiased;
+	cursor: default;
+	user-select: none;
 }

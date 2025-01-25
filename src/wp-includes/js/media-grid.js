@@ -225,7 +225,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			orientation = item.dataset.orientation ? ' ' + item.dataset.orientation : '',
 			menuOrder = item.dataset.menuOrder,
 			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
-			next = item.nextElementSibling ? item.nextElementSibling.id : '';
+			next = item.nextElementSibling ? item.nextElementSibling.id : '',
+			items = document.querySelectorAll('.media-item');
 
 		// Modify current URL
 		queryParams.set( 'item', id );
@@ -306,6 +307,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			rightIcon.disabled = true;
 		} else {
 			rightIcon.disabled = false;
+		}
+
+		for ( var i = 0; i < items.length; i++ ) {
+			if ( items[i].id === item.id ) {
+				dialog.querySelector( '#current-media-item' ).textContent = i + 1;
+				dialog.querySelector( '#total-media-items' ).textContent = items.length;
+				break;
+			}
 		}
 
 		// Show modal
