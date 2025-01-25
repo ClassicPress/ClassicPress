@@ -322,11 +322,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Show modal
 		dialog.classList.add( 'modal-loading' );
-	
+
 		// Fix wrong image flash
 		setTimeout( function() {
 			dialog.showModal();
-		}, 1);
+		}, 1 );
 
 		// Delete media item
 		dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
@@ -774,7 +774,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 		removeImageEditWrap();
 	} );
-	
+
 	/* Update media attachment details */
 	dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
 		input.addEventListener( 'blur', function() {
@@ -786,7 +786,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	leftIcon.addEventListener( 'click', function() {
 		var id = leftIcon.dataset.prev;
 		if ( id ) {
-			focusID = id; // set focusID for when modal is closed
+			// set focusID for when modal is closed
+			focusID = id;
 			document.getElementById( id ).click();
 		}
 		removeImageEditWrap();
@@ -795,7 +796,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	rightIcon.addEventListener( 'click', function() {
 		var id = rightIcon.dataset.next;
 		if ( id ) {
-			focusID = id; // set focusID for when modal is closed
+			// set focusID for when modal is closed
+			focusID = id;
 			document.getElementById( id ).click();
 		}
 		removeImageEditWrap();
