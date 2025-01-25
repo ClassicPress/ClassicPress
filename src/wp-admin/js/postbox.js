@@ -306,13 +306,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Add aria-disabled to first Up button if it's in the first sortable area
 		firstWidget = document.getElementById( widgetsIdsList[0] );
-		if ( firstWidget.parentNode === columns[0] ) {
+		if ( firstWidget && firstWidget.parentNode === columns[0] ) {
 			firstWidget.querySelector( '.handle-order-higher' ).setAttribute( 'aria-disabled', 'true' );
 		}
 
 		// Add aria-disabled to last Down button if it's in the last sortable area
 		lastWidget = document.getElementById( widgetsIdsList[widgetsIdsList.length -1] );
-		if ( lastWidget.closest( '.postbox-container' ).nextElementSibling == null ) {
+		if ( lastWidget && lastWidget.closest( '.postbox-container' ).nextElementSibling == null ) {
 			lastWidget.querySelector( '.handle-order-lower' ).setAttribute( 'aria-disabled', 'true' );
 		}
 
