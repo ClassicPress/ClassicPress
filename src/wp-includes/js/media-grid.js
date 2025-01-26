@@ -761,8 +761,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	} );
 
+	/* Update media attachment details */
+	dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
+		input.addEventListener( 'blur', function() {
+			var id = queryParams.get( 'item' );
+			updateDetails( input, id );
+		} );
+	} );
+
 	/* Close modal by clicking button */
-	closeButton.addEventListener( 'click', function() {
+	function closeModalDialog() {
 		queryParams.delete( 'item' );
 		queryParams.delete( 'mode' );
 		history.replaceState( null, null, location.href.split('?')[0] ); // reset URL params
@@ -773,34 +781,40 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			focusID = null; // reset focusID
 		}
 		removeImageEditWrap();
-	} );
+	}
+	closeButton.addEventListener( 'click', closeModalDialog );
 
-	/* Update media attachment details */
-	dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
-		input.addEventListener( 'blur', function() {
-			var id = queryParams.get( 'item' );
-			updateDetails( input, id );
-		} );
-	} );
-
-	leftIcon.addEventListener( 'click', function() {
+	function prevModalDialog() {
 		var id = leftIcon.dataset.prev;
 		if ( id ) {
-			// set focusID for when modal is closed
-			focusID = id;
+			focusID = id; // set focusID for when modal is closed
 			document.getElementById( id ).click();
 		}
 		removeImageEditWrap();
-	} );
+	}
+	leftIcon.addEventListener( 'click', prevModalDialog );
 
-	rightIcon.addEventListener( 'click', function() {
+	function nextModalDialog() {
 		var id = rightIcon.dataset.next;
 		if ( id ) {
-			// set focusID for when modal is closed
-			focusID = id;
+			focusID = id; // set focusID for when modal is closed
 			document.getElementById( id ).click();
 		}
 		removeImageEditWrap();
+	}
+	rightIcon.addEventListener( 'click', nextModalDialog );
+
+	// Handle keyboard navigation
+	document.addEventListener( 'keydown', function( e ) {
+		if ( dialog.open ) {
+			if ( e.key === 'ArrowLeft' ) {
+				prevModalDialog();
+			} else if ( e.key === 'ArrowRight' ) {
+				nextModalDialog();
+			} else if ( e.key === 'Escape' ) {
+				closeModalDialog();
+			}
+		}
 	} );
 
 	// Edit image
