@@ -226,7 +226,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			menuOrder = item.dataset.menuOrder,
 			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
 			next = item.nextElementSibling ? item.nextElementSibling.id : '',
-			items = document.querySelectorAll('.media-item');
+			items = document.querySelectorAll('.media-item')
+			order = 1;
 
 		// Modify current URL
 		queryParams.set( 'item', id );
@@ -309,13 +310,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			rightIcon.disabled = false;
 		}
 
-		for ( var i = 0; i < items.length; i++ ) {
-			if ( items[i].id === item.id ) {
-				dialog.querySelector( '#current-media-item' ).textContent = i + 1;
+		items.forEach( function( i ) {
+			if ( i.id === item.id ) {
+				dialog.querySelector( '#current-media-item' ).textContent = order;
 				dialog.querySelector( '#total-media-items' ).textContent = items.length;
-				break;
 			}
-		}
+			order++;
+		} );
 
 		// Show modal
 		dialog.classList.add( 'modal-loading' );
