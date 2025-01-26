@@ -47,12 +47,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Update attachment details
 	function updateDetails( input, id ) {
+		var mediaItem = document.getElementById( 'media-' + id );
+		if ( ! mediaItem ) {
+			return;
+		}
 		var successTimeout,
 			data = new FormData();
 
 		data.append( 'action', 'save-attachment' );
 		data.append( 'id', id );
-		data.append( 'nonce', document.getElementById( 'media-' + id ).dataset.updateNonce );
+		data.append( 'nonce', mediaItem.dataset.updateNonce );
 
 		// Append metadata fields
 		if ( input.parentNode.dataset.setting === 'alt' ) {
@@ -81,13 +85,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Update data attributes
 				if ( input.parentNode.dataset.setting === 'alt' ) {
-					document.getElementById( 'media-' + id ).querySelector( 'img' ).setAttribute( 'alt', input.value );
+					mediaItem.querySelector( 'img' ).setAttribute( 'alt', input.value );
 				} else if ( input.parentNode.dataset.setting === 'title' ) {
-					document.getElementById( 'media-' + id ).setAttribute( 'aria-label', input.value );
+					mediaItem.setAttribute( 'aria-label', input.value );
 				} else if ( input.parentNode.dataset.setting === 'caption' ) {
-					document.getElementById( 'media-' + id ).setAttribute( 'data-caption', input.value );
+					mediaItem.setAttribute( 'data-caption', input.value );
 				} else if ( input.parentNode.dataset.setting === 'description' ) {
-					document.getElementById( 'media-' + id ).setAttribute( 'data-description', input.value );
+					mediaItem.setAttribute( 'data-description', input.value );
 				}
 
 				// Show success visual feedback.
@@ -111,12 +115,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Update media categories and tags
 	function updateMediaTaxOrTag( input, id ) {
+		var mediaItem = document.getElementById( 'media-' + id );
+		if ( ! mediaItem ) {
+			return;
+		}
 		var successTimeout, newTaxes,
 			data = new FormData(),
 			taxonomy = input.getAttribute( 'name' ).replace( 'attachments[' + id + '][' , '' ).replace( ']', '' );
 
 		data.append( 'action', 'save-attachment-compat' );
-		data.append( 'nonce', document.getElementById( 'media-' + id ).dataset.updateNonce );
+		data.append( 'nonce', mediaItem.dataset.updateNonce );
 		data.append( 'id', id );
 		data.append( 'taxonomy', taxonomy );
 		data.append( 'attachments[' + id + '][' + taxonomy + ']', input.value );
@@ -137,11 +145,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( taxonomy === 'media_category' ) {
 					newTaxes = result.data.media_cats.join( ', ' );
 					input.value = newTaxes;
-					document.getElementById( 'media-' + id ).setAttribute( 'data-taxes', newTaxes );
+					mediaItem.setAttribute( 'data-taxes', newTaxes );
 				} else if ( taxonomy === 'media_post_tag' ) {
 					newTaxes = result.data.media_tags.join( ', ' );
 					input.value = newTaxes;
-					document.getElementById( 'media-' + id ).setAttribute( 'data-tags', newTaxes );
+					mediaItem.setAttribute( 'data-tags', newTaxes );
 				}
 
 				// Show success visual feedback.
@@ -165,9 +173,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Delete attachment from within modal
 	function deleteItem( id ) {
+		var mediaItem = document.getElementById( 'media-' + id );
+		if ( ! mediaItem ) {
+			return;
+		}
 		var data = new URLSearchParams( {
 			action: 'delete-post',
-			_ajax_nonce: document.getElementById( 'media-' + id ).dataset.deleteNonce,
+			_ajax_nonce: mediaItem.dataset.deleteNonce,
 			id: id
 		} );
 
@@ -184,14 +196,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} )
 		.then( function( result ) {
 			if ( result === 1 ) { // success
-				if ( document.getElementById( 'media-' + id ).previousElementSibling != null ) {
-					focusID = document.getElementById( 'media-' + id ).previousElementSibling.id;
-				} else if ( document.getElementById( 'media-' + id ).nextElementSibling != null ) {
-					focusID = document.getElementById( 'media-' + id ).nextElementSibling.id;
+				if ( mediaItem.previousElementSibling != null ) {
+					focusID = mediaItem.previousElementSibling.id;
+				} else if ( mediaItem.nextElementSibling != null ) {
+					focusID = mediaItem.nextElementSibling.id;
 				} else {
 					focusID = addNew.id;
 				}
-				document.getElementById( 'media-' + id ).remove();
+				mediaItem.remove();
 				closeButton.click();
 			} else {
 				console.log( _wpMediaGridSettings.delete_failed );
@@ -320,7 +332,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Show modal
 		dialog.classList.add( 'modal-loading' );
-		dialog.showModal();
+
+		// Fix wrong image flash
+		setTimeout( function() {
+			dialog.showModal();
+		}, 1 );
 
 		// Delete media item
 		dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
@@ -768,7 +784,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 		removeImageEditWrap();
 	} );
-	
+
 	/* Update media attachment details */
 	dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
 		input.addEventListener( 'blur', function() {
@@ -779,15 +795,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	leftIcon.addEventListener( 'click', function() {
 		var id = leftIcon.dataset.prev;
-		focusID = id; // set focusID for when modal is closed
-		document.getElementById( id ).click();
+		if ( id ) {
+			// set focusID for when modal is closed
+			focusID = id;
+			document.getElementById( id ).click();
+		}
 		removeImageEditWrap();
 	} );
 
 	rightIcon.addEventListener( 'click', function() {
 		var id = rightIcon.dataset.next;
-		focusID = id; // set focusID for when modal is closed
-		document.getElementById( id ).click();
+		if ( id ) {
+			// set focusID for when modal is closed
+			focusID = id;
+			document.getElementById( id ).click();
+		}
 		removeImageEditWrap();
 	} );
 
