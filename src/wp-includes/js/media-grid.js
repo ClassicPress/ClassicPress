@@ -13,6 +13,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		leftIcon = document.getElementById( 'left-dashicon' ),
 		rightIcon = document.getElementById( 'right-dashicon' ),
 		closeButton = document.getElementById( 'dialog-close-button' ),
+		leftIconMobile = document.getElementById( 'left-dashicon-mobile' ),
+		rightIconMobile = document.getElementById( 'right-dashicon-mobile' ),
+		mediaNavigation = document.querySelector( '.edit-media-header .media-navigation' ),
+		mediaNavigationMobile = document.querySelector( '.attachment-media-view .media-navigation' ),
 		paged = '1',
 		dateFilter = document.getElementById( 'filter-by-date' ) ? document.getElementById( 'filter-by-date' ) : '',
 		typeFilter = document.getElementById( 'filter-by-type' ) ? document.getElementById( 'filter-by-type' ) : '',
@@ -214,6 +218,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
+	// Toggle media button navigation wrappers according to viewport width
+	function toggleMediaNavigation() {
+		if ( window.innerWidth > 480 ) {
+			mediaNavigation.style.display = '';
+			mediaNavigationMobile.style.display = 'none';
+		} else {
+			mediaNavigation.style.display = 'none';
+			mediaNavigationMobile.style.display = '';
+		}
+	}
+
+	window.addEventListener( 'resize', toggleMediaNavigation );
+
 	// Open modal
 	function openModalDialog( item ) {
 		var id = item.id.replace( 'media-', '' ),
@@ -312,23 +329,31 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		if ( prev === '' ) {
 			leftIcon.disabled = true;
+			leftIconMobile.disabled = true;
 		} else {
 			leftIcon.disabled = false;
+			leftIconMobile.disabled = false;
 		}
 
 		if ( next === '' ) {
 			rightIcon.disabled = true;
+			rightIconMobile.disabled = true;
 		} else {
 			rightIcon.disabled = false;
+			rightIconMobile.disabled = false;
 		}
 
 		items.forEach( function( i ) {
 			if ( i.id === item.id ) {
 				dialog.querySelector( '#current-media-item' ).textContent = order;
 				dialog.querySelector( '#total-media-items' ).textContent = items.length;
+				dialog.querySelector( '#current-media-item-mobile' ).textContent = order;
+				dialog.querySelector( '#total-media-items-mobile' ).textContent = items.length;
 			}
 			order++;
 		} );
+
+		toggleMediaNavigation();
 
 		// Show modal
 		dialog.classList.add( 'modal-loading' );
@@ -771,8 +796,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	} );
 
+	/* Update media attachment details */
+	dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
+		input.addEventListener( 'blur', function() {
+			var id = queryParams.get( 'item' );
+			updateDetails( input, id );
+		} );
+	} );
+
 	/* Close modal by clicking button */
-	closeButton.addEventListener( 'click', function() {
+	function closeModalDialog() {
 		queryParams.delete( 'item' );
 		queryParams.delete( 'mode' );
 		history.replaceState( null, null, location.href.split('?')[0] ); // reset URL params
@@ -783,35 +816,30 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			focusID = null; // reset focusID
 		}
 		removeImageEditWrap();
-	} );
+	}
+	closeButton.addEventListener( 'click', closeModalDialog );
 
-	/* Update media attachment details */
-	dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
-		input.addEventListener( 'blur', function() {
-			var id = queryParams.get( 'item' );
-			updateDetails( input, id );
-		} );
-	} );
-
-	leftIcon.addEventListener( 'click', function() {
+	function prevModalDialog() {
 		var id = leftIcon.dataset.prev;
 		if ( id ) {
-			// set focusID for when modal is closed
-			focusID = id;
+			focusID = id; // set focusID for when modal is closed
 			document.getElementById( id ).click();
 		}
 		removeImageEditWrap();
-	} );
+	}
+	leftIcon.addEventListener( 'click', prevModalDialog );
+	leftIconMobile.addEventListener( 'click', prevModalDialog );
 
-	rightIcon.addEventListener( 'click', function() {
+	function nextModalDialog() {
 		var id = rightIcon.dataset.next;
 		if ( id ) {
-			// set focusID for when modal is closed
-			focusID = id;
+			focusID = id; // set focusID for when modal is closed
 			document.getElementById( id ).click();
 		}
 		removeImageEditWrap();
-	} );
+	}
+	rightIcon.addEventListener( 'click', nextModalDialog );
+	rightIconMobile.addEventListener( 'click', nextModalDialog );
 
 	// Edit image
 	document.querySelector( '.edit-attachment' ).addEventListener( 'click', function( e ) {
