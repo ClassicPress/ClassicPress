@@ -3275,15 +3275,10 @@ function retrieve_password( $user_login = null ) {
 	if ( ! wp_mail( $to, $subject, $message, $headers ) ) {
 		$errors->add(
 			'retrieve_password_email_failure',
-			sprintf(
-				/* translators: %s: Documentation URL. */
-				__( '<strong>Error:</strong> The email could not be sent. Your site may not be correctly configured to send emails. <a href="%s">Get support for resetting your password</a>.' ),
-				esc_url( __( 'https://wordpress.org/documentation/article/reset-your-password/' ) )
-			)
+			__( '<strong>Error:</strong> The email could not be sent. The site may not be correctly configured to send emails.' )
 		);
 		return $errors;
 	}
-
 	return true;
 }
 
