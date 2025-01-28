@@ -808,11 +808,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	document.addEventListener( 'keydown', function( e ) {
 		if ( dialog.open ) {
 			if ( e.key === 'ArrowLeft' ) {
+				e.preventDefault();
 				prevModalDialog();
 			} else if ( e.key === 'ArrowRight' ) {
+				e.preventDefault();
 				nextModalDialog();
-			} else if ( e.key === 'Escape' ) {
-				closeModalDialog();
 			}
 		}
 	} );
