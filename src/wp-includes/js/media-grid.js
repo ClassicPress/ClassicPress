@@ -805,7 +805,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	rightIcon.addEventListener( 'click', nextModalDialog );
 
 	// Handle keyboard navigation
-	document.addEventListener( 'keydown', function( e ) {
+	function keyboardNavigation( e ) {
 		if ( dialog.open ) {
 			if ( e.key === 'ArrowLeft' ) {
 				e.preventDefault();
@@ -815,7 +815,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				nextModalDialog();
 			}
 		}
-	} );
+	}
+	document.addEventListener( 'keydown', keyboardNavigation );
 
 	// Edit image
 	document.querySelector( '.edit-attachment' ).addEventListener( 'click', function( e ) {
@@ -835,6 +836,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		formData.append( 'do', action );
 		formData.append( 'target', target );
 		formData.append( 'context', 'edit-attachment' );
+
+		// Disable media keyboard navigation
+		document.removeEventListener( 'keydown', keyboardNavigation );
 
 		// Make the fetch request
 		fetch( ajaxurl, {
@@ -856,6 +860,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Modify current URL
 			queryParams.set( 'mode', 'edit' );
 			history.replaceState( null, null, '?' + queryParams.toString() );
+
+			// Go back to attachment view from edit image screen
+			document.querySelector( '.imgedit-submit' ).addEventListener( 'click', function( e ) {
+				document.addEventListener( 'keydown', keyboardNavigation );
+			} );
 		} )
 		.catch( function( error ) {
 			console.error( 'Error:', error );
