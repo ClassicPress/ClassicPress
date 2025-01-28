@@ -807,27 +807,28 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	rightIcon.addEventListener( 'click', nextModalDialog );
 
 	// Handle keyboard navigation
-	document.addEventListener( 'keydown', function( e ) {
+	function keydownHandler( e ) {
 		if ( dialog.open ) {
 			if ( e.key === 'ArrowLeft' ) {
+				e.preventDefault();
 				prevModalDialog();
 			} else if ( e.key === 'ArrowRight' ) {
+				e.preventDefault();
 				nextModalDialog();
-			} else if ( e.key === 'Escape' ) {
-				closeModalDialog();
 			}
 		}
-	} );
+	}
 
-	// Handle touch navigation
-
-	dialog.addEventListener( 'touchstart', function( e ) {
+	// Handle touch navigation (touchstart event)
+	function touchStartHandler( e ) {
+		e.preventDefault();
 		startX = e.touches[0].clientX;
-	} );
+	}
 
+	// Handle touch navigation (touchend event)
 	// The swipe is considered valid if the horizontal distance moved (difference between startX and endX) is more than 50 pixels. This threshold prevents accidental small touches from triggering a swipe.
-
-	dialog.addEventListener( 'touchend', function( e ) {
+	function touchEndHandler( e ) {
+		e.preventDefault();
 		endX = e.changedTouches[0].clientX;
 
 		// Determine swipe direction
@@ -838,7 +839,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Swipe right (previous media)
 			nextModalDialog();
 		}
-	} );
+	}
+
+	document.addEventListener( 'keydown', keydownHandler );
+	dialog.addEventListener( 'touchstart', touchStartHandler );
+	dialog.addEventListener( 'touchend', touchEndHandler );
 
 	// Edit image
 	document.querySelector( '.edit-attachment' ).addEventListener( 'click', function( e ) {
@@ -858,6 +863,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		formData.append( 'do', action );
 		formData.append( 'target', target );
 		formData.append( 'context', 'edit-attachment' );
+
+		// Disable keyboard and touch navigation
+		document.removeEventListener( 'keydown', keydownHandler );
+		dialog.removeEventListener( 'touchstart', touchStartHandler );
+		dialog.removeEventListener( 'touchend', touchEndHandler );
 
 		// Make the fetch request
 		fetch( ajaxurl, {
@@ -879,6 +889,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Modify current URL
 			queryParams.set( 'mode', 'edit' );
 			history.replaceState( null, null, '?' + queryParams.toString() );
+
+			// Go back to attachment view from edit image screen
+			document.querySelector( '.imgedit-submit' ).addEventListener( 'click', function( e ) {
+				// Re-enable keyboard and touch navigation
+				document.addEventListener( 'keydown', keydownHandler );
+				dialog.addEventListener( 'touchstart', touchStartHandler );
+				dialog.addEventListener( 'touchend', touchEndHandler );
+			} );
 		} )
 		.catch( function( error ) {
 			console.error( 'Error:', error );
