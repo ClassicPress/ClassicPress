@@ -284,7 +284,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Remove current aria-disabled states
 		document.querySelectorAll( '[aria-disabled="true"]' ).forEach( function( ariaDisabled ) {
 			ariaDisabled.setAttribute( 'aria-disabled', 'false' );
-		});
+		} );
 
 		// Collect variables for posting to database
 		postVars = new URLSearchParams( {
@@ -299,20 +299,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			column.querySelectorAll( 'details:not( .hide-if-js )' ).forEach( function( childWidget ) {
 				widgetsIds.push( childWidget.id ); // for posting to database
 				widgetsIdsList.push( childWidget.id ); // for setting aria-disabled state
-			});
+			} );
 			postVars.append( 'order[' + column.id.split( '-' )[0] + ']', widgetsIds.join( ',' ) );
 			widgetsIds = []; // reset
 		} );
 
 		// Add aria-disabled to first Up button if it's in the first sortable area
 		firstWidget = document.getElementById( widgetsIdsList[0] );
-		if ( firstWidget.parentNode === columns[0] ) {
+		if ( firstWidget && firstWidget.parentNode === columns[0] ) {
 			firstWidget.querySelector( '.handle-order-higher' ).setAttribute( 'aria-disabled', 'true' );
 		}
 
 		// Add aria-disabled to last Down button if it's in the last sortable area
 		lastWidget = document.getElementById( widgetsIdsList[widgetsIdsList.length -1] );
-		if ( lastWidget.closest( '.postbox-container' ).nextElementSibling == null ) {
+		if ( lastWidget && lastWidget.closest( '.postbox-container' ).nextElementSibling == null ) {
 			lastWidget.querySelector( '.handle-order-lower' ).setAttribute( 'aria-disabled', 'true' );
 		}
 
