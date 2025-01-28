@@ -821,14 +821,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Handle touch navigation (touchstart event)
 	function touchStartHandler( e ) {
-		e.preventDefault();
 		startX = e.touches[0].clientX;
 	}
 
 	// Handle touch navigation (touchend event)
 	// The swipe is considered valid if the horizontal distance moved (difference between startX and endX) is more than 50 pixels. This threshold prevents accidental small touches from triggering a swipe.
 	function touchEndHandler( e ) {
-		e.preventDefault();
 		endX = e.changedTouches[0].clientX;
 
 		// Determine swipe direction
