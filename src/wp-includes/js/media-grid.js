@@ -824,6 +824,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( id ) {
 			focusID = id; // set focusID for when modal is closed
 			document.getElementById( id ).click();
+			mediaNavigation.style.display === '' ? leftIcon.focus() : leftIconMobile.focus();
 		}
 		removeImageEditWrap();
 	}
@@ -835,6 +836,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( id ) {
 			focusID = id; // set focusID for when modal is closed
 			document.getElementById( id ).click();
+			mediaNavigation.style.display === '' ? rightIcon.focus() : rightIconMobile.focus();
 		}
 		removeImageEditWrap();
 	}
