@@ -18,7 +18,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		typeFilter = document.getElementById( 'filter-by-type' ) ? document.getElementById( 'filter-by-type' ) : '',
 		search = document.getElementById( 'media-search-input' ),
 		mediaCatSelect = document.getElementById( 'taxonomy=media_category&term' ) ? document.getElementById( 'taxonomy=media_category&term' ) : '',
-		mediaGrid = document.querySelector( '#media-grid ul' );
+		mediaGrid = document.querySelector( '#media-grid ul' )
+		startX = 0, // Store starting touch point
+		endX = 0;   // Store ending touch point
 
 	// Update details within modal
 	function setAddedMediaFields( id ) {
@@ -761,8 +763,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	} );
 
+	/* Update media attachment details */
+	dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
+		input.addEventListener( 'blur', function() {
+			var id = queryParams.get( 'item' );
+			updateDetails( input, id );
+		} );
+	} );
+
 	/* Close modal by clicking button */
-	closeButton.addEventListener( 'click', function() {
+	function closeModalDialog() {
 		queryParams.delete( 'item' );
 		queryParams.delete( 'mode' );
 		history.replaceState( null, null, location.href.split('?')[0] ); // reset URL params
@@ -773,35 +783,65 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			focusID = null; // reset focusID
 		}
 		removeImageEditWrap();
-	} );
+	}
+	closeButton.addEventListener( 'click', closeModalDialog );
 
-	/* Update media attachment details */
-	dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
-		input.addEventListener( 'blur', function() {
-			var id = queryParams.get( 'item' );
-			updateDetails( input, id );
-		} );
-	} );
-
-	leftIcon.addEventListener( 'click', function() {
+	function prevModalDialog() {
 		var id = leftIcon.dataset.prev;
 		if ( id ) {
-			// set focusID for when modal is closed
-			focusID = id;
+			focusID = id; // set focusID for when modal is closed
 			document.getElementById( id ).click();
 		}
 		removeImageEditWrap();
-	} );
+	}
+	leftIcon.addEventListener( 'click', prevModalDialog );
 
-	rightIcon.addEventListener( 'click', function() {
+	function nextModalDialog() {
 		var id = rightIcon.dataset.next;
 		if ( id ) {
-			// set focusID for when modal is closed
-			focusID = id;
+			focusID = id; // set focusID for when modal is closed
 			document.getElementById( id ).click();
 		}
 		removeImageEditWrap();
-	} );
+	}
+	rightIcon.addEventListener( 'click', nextModalDialog );
+
+	// Handle keyboard navigation
+	function keydownHandler( e ) {
+		if ( dialog.open ) {
+			if ( e.key === 'ArrowLeft' ) {
+				e.preventDefault();
+				prevModalDialog();
+			} else if ( e.key === 'ArrowRight' ) {
+				e.preventDefault();
+				nextModalDialog();
+			}
+		}
+	}
+
+	// Handle touch navigation (touchstart event)
+	function touchStartHandler( e ) {
+		startX = e.touches[0].clientX;
+	}
+
+	// Handle touch navigation (touchend event)
+	// The swipe is considered valid if the horizontal distance moved (difference between startX and endX) is more than 50 pixels. This threshold prevents accidental small touches from triggering a swipe.
+	function touchEndHandler( e ) {
+		endX = e.changedTouches[0].clientX;
+
+		// Determine swipe direction
+		if ( endX - startX > 50 ) {
+			// Swipe left (next media)
+			prevModalDialog();
+		} else if ( startX - endX > 50 ) {
+			// Swipe right (previous media)
+			nextModalDialog();
+		}
+	}
+
+	document.addEventListener( 'keydown', keydownHandler );
+	dialog.addEventListener( 'touchstart', touchStartHandler );
+	dialog.addEventListener( 'touchend', touchEndHandler );
 
 	// Edit image
 	document.querySelector( '.edit-attachment' ).addEventListener( 'click', function( e ) {
@@ -821,6 +861,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		formData.append( 'do', action );
 		formData.append( 'target', target );
 		formData.append( 'context', 'edit-attachment' );
+
+		// Disable keyboard and touch navigation
+		document.removeEventListener( 'keydown', keydownHandler );
+		dialog.removeEventListener( 'touchstart', touchStartHandler );
+		dialog.removeEventListener( 'touchend', touchEndHandler );
 
 		// Make the fetch request
 		fetch( ajaxurl, {
@@ -842,6 +887,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Modify current URL
 			queryParams.set( 'mode', 'edit' );
 			history.replaceState( null, null, '?' + queryParams.toString() );
+
+			// Go back to attachment view from edit image screen
+			document.querySelector( '.imgedit-submit' ).addEventListener( 'click', function( e ) {
+				// Re-enable keyboard and touch navigation
+				document.addEventListener( 'keydown', keydownHandler );
+				dialog.addEventListener( 'touchstart', touchStartHandler );
+				dialog.addEventListener( 'touchend', touchEndHandler );
+			} );
 		} )
 		.catch( function( error ) {
 			console.error( 'Error:', error );
