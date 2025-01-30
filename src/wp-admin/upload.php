@@ -524,12 +524,15 @@ if ( 'grid' === $mode ) {
 
 			<div class="edit-attachment-frame mode-select hide-menu hide-router">
 				<div class="edit-media-header">
-					<button type="button" id="left-dashicon" class="left dashicons">
-						<span class="screen-reader-text"><?php esc_html_e( 'Edit previous media item' ); ?></span>
-					</button>
-					<button type="button" id="right-dashicon" class="right dashicons">
-						<span class="screen-reader-text"><?php esc_html_e( 'Edit next media item' ); ?></span>
-					</button>
+					<div class="media-navigation">
+						<button type="button" id="left-dashicon" class="left dashicons">
+							<span class="screen-reader-text"><?php esc_html_e( 'Edit previous media item' ); ?></span>
+						</button>
+						<div class="media-contextual-pagination"><span id="current-media-item" aria-hidden="true"></span>&nbsp;/&nbsp;<span id="total-media-items"></span></div>
+						<button type="button" id="right-dashicon" class="right dashicons">
+							<span class="screen-reader-text"><?php esc_html_e( 'Edit next media item' ); ?></span>
+						</button>
+					</div>
 					<button type="button" id="dialog-close-button" class="dashicons-no dashicons" autofocus>
 						<span class="screen-reader-text"><?php esc_html_e( 'Close dialog' ); ?></span>
 					</button>
@@ -541,6 +544,15 @@ if ( 'grid' === $mode ) {
 					<div class="attachment-details save-ready">
 						<div class="attachment-media-view">
 							<h3 class="screen-reader-text"><?php esc_html_e( 'Attachment Preview' ); ?></h3>
+							<div class="media-navigation" role="navigation" aria-label="<?php esc_html_e( 'Media Navigation' ); ?>">
+								<button type="button" id="left-dashicon-mobile" class="left dashicons">
+									<span class="screen-reader-text"><?php esc_html_e( 'Edit previous media item' ); ?></span>
+								</button>
+								<div class="media-contextual-pagination"><span id="current-media-item-mobile" aria-hidden="true"></span>&nbsp;/&nbsp;<span id="total-media-items-mobile"></span></div>
+								<button type="button" id="right-dashicon-mobile" class="right dashicons">
+									<span class="screen-reader-text"><?php esc_html_e( 'Edit next media item' ); ?></span>
+								</button>
+							</div>
 							<div id="media-image" class="thumbnail thumbnail-image">
 								<img class="details-image" src="" draggable="false" alt="">
 								<div class="attachment-actions">
