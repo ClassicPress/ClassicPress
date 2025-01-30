@@ -199,6 +199,10 @@ jobs:
           lsb_release -a
           localectl list-locales
 
+      - name: Verify Imagick formats
+        run: |
+          php -r "print_r( \Imagick::queryFormats() );"
+
       - name: Create ClassicPress config file for tests
         run: |
           cp wp-tests-config-sample.php wp-tests-config.php
