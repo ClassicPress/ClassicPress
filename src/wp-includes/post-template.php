@@ -1757,7 +1757,7 @@ function prepend_attachment( $content ) {
  * @return string HTML content for password form for password protected post.
  */
 function get_the_password_form( $post = 0 ) {
-	$post   = get_post( $post );
+	$post                  = get_post( $post );
 	$field_id              = 'pwbox-' . ( empty( $post->ID ) ? wp_rand() : $post->ID );
 	$invalid_password      = '';
 	$invalid_password_html = '';
@@ -1783,11 +1783,7 @@ function get_the_password_form( $post = 0 ) {
 
 	$output = '<form action="' . esc_url( site_url( 'wp-login.php?action=postpass', 'login_post' ) ) . '" class="post-password-form' . $class . '" method="post">' . $invalid_password_html . '
 	<p>' . __( 'This content is password protected. To view it please enter your password below:' ) . '</p>
-<<<<<<< HEAD
-	<p><label for="' . $label . '">' . __( 'Password:' ) . ' <input name="post_password" id="' . $label . '" type="password" spellcheck="false" size="20"></label> <input type="submit" name="Submit" value="' . esc_attr_x( 'Enter', 'post password form' ) . '"></p></form>
-=======
-	<p><label for="' . $field_id . '">' . __( 'Password:' ) . ' <input name="post_password" id="' . $field_id . '" type="password" spellcheck="false" required size="20"' . $aria . ' /></label> <input type="submit" name="Submit" value="' . esc_attr_x( 'Enter', 'post password form' ) . '" /></p></form>
->>>>>>> 23a215a4d0 (Accessibility: Add invalid password message for post passwords.)
+	<p><label for="' . $field_id . '">' . __( 'Password:' ) . ' <input name="post_password" id="' . $field_id . '" type="password" spellcheck="false" required size="20"' . $aria . '></label> <input type="submit" name="Submit" value="' . esc_attr_x( 'Enter', 'post password form' ) . '"></p></form>
 	';
 
 	/**
