@@ -843,6 +843,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	rightIcon.addEventListener( 'click', nextModalDialog );
 	rightIconMobile.addEventListener( 'click', nextModalDialog );
 
+	// Handle keyboard navigation
+	function keydownHandler( e ) {
+		if ( dialog.open ) {
+			if ( e.key === 'ArrowLeft' ) {
+				e.preventDefault();
+				prevModalDialog();
+			} else if ( e.key === 'ArrowRight' ) {
+				e.preventDefault();
+				nextModalDialog();
+			}
+		}
+	}
+	mediaNavigation.addEventListener( 'keydown', keydownHandler );
+	mediaNavigationMobile.addEventListener( 'keydown', keydownHandler );
+
 	// Edit image
 	document.querySelector( '.edit-attachment' ).addEventListener( 'click', function( e ) {
 		var itemID = parseInt( queryParams.get( 'item' ) ),
