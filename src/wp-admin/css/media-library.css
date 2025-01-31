@@ -131,7 +131,7 @@
 	cursor: pointer;
 	margin-bottom: 0;
 }
-.media-item:focus,
+.media-grid-view .media-item:focus,
 .media-item.selected:focus {
 	box-shadow: 0 0 0 2px #fff, 0 0 0 6px #2271b1;
 }
