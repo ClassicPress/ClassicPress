@@ -515,7 +515,7 @@ if ( 'grid' === $mode ) {
 	 */
 	do_action( 'cp_media_after_grid' );
 
-// List mode
+	// List mode
 } else {
 
 	$wp_list_table = _get_list_table( 'WP_Media_List_Table' );
@@ -829,7 +829,7 @@ if ( 'grid' === $mode ) {
 	?>
 	</div>
 
-<?php
+	<?php
 	/**
 	 * This action is fired after the media list is printed to the page.
 	 *

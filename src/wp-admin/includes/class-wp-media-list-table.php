@@ -555,8 +555,12 @@ class WP_Media_List_Table extends WP_List_Table {
 				<?php
 			endif;
 
-			echo $title . '</a>';
+			echo $title;
+			?>
 
+			</a>
+
+			<?php
 			_media_states( $post );
 			?>
 		</strong>
