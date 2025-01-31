@@ -262,7 +262,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			items = document.querySelectorAll('.media-item'),
 			order = 1;
 
-			if (mediaGrid) {
+			if ( mediaGrid ) {
 				prev = item.previousElementSibling ? item.previousElementSibling.id : '';
 				next = item.nextElementSibling ? item.nextElementSibling.id : '';
 			} else {
