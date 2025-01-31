@@ -497,33 +497,70 @@ class WP_Media_List_Table extends WP_List_Table {
 
 		$title      = _draft_or_post_title();
 		$thumb      = wp_get_attachment_image( $attachment_id, array( 60, 60 ), true, array( 'alt' => '' ) );
-		$link_start = '';
-		$link_end   = '';
-
-		if ( current_user_can( 'edit_post', $post->ID ) && ! $this->is_trash ) {
-			$link_start = sprintf(
-				'<a href="%s" aria-label="%s">',
-				get_edit_post_link( $post->ID ),
-				/* translators: %s: Attachment title. */
-				esc_attr( sprintf( __( '&#8220;%s&#8221; (Edit)' ), $title ) )
-			);
-			$link_end = '</a>';
-		}
-
 		$class = $thumb ? ' class="has-media-icon"' : '';
-		?>
-		<strong <?php echo $class; ?>>
-			<?php
-			echo $link_start;
 
+		$meta = wp_prepare_attachment_for_js( $attachment_id );
+		$date         = $meta['dateFormatted'];
+		$author       = $meta['authorName'];
+		$author_link  = $meta['authorLink'];
+		$url          = $meta['url'];
+		$width        = ! empty( $meta['width'] ) ? $meta['width'] : '';
+		$height       = ! empty( $meta['height'] ) ? $meta['height'] : '';
+		$file_name    = $meta['filename'];
+		$file_type    = $meta['type'];
+		$subtype      = $meta['subtype'];
+		$mime_type    = $meta['mime'];
+		$size         = ! empty( $meta['filesizeHumanReadable'] ) ? $meta['filesizeHumanReadable'] : '';
+		$alt          = $meta['alt'];
+		$caption      = $meta['caption'];
+		$description  = $meta['description'];
+		$link         = $meta['link'];
+		$orientation  = ! empty( $meta['orientation'] ) ? $meta['orientation'] : 'landscape';
+		$menu_order   = $meta['menuOrder'];
+		$media_cats   = $meta['media_cats'] ? implode( ', ', $meta['media_cats'] ) : '';
+		$media_tags   = $meta['media_tags'] ? implode( ', ', $meta['media_tags'] ) : '';
+		$update_nonce = $meta['nonces']['update'];
+		$delete_nonce = $meta['nonces']['delete'];
+		$edit_nonce   = $meta['nonces']['edit'];
+		$image        = '<img src="' . esc_url( $url ) . '" alt="' . esc_attr( $alt ) . '">';
+		?>
+		<strong<?php echo $class; ?>>
+			<a class="media-item" id="media-<?php echo esc_attr( $attachment_id ); ?>" tabindex="0" role="checkbox" aria-checked="false"
+				aria-label="<?php echo esc_attr( $post->post_title ); ?>"
+				data-date="<?php echo esc_attr( $date ); ?>"
+				data-url="<?php echo esc_url( $url ); ?>"
+				data-filename="<?php echo esc_attr( $file_name ); ?>"
+				data-filetype="<?php echo esc_attr( $file_type ); ?>"
+				data-mime="<?php echo esc_attr( $mime_type ); ?>"
+				data-width="<?php echo esc_attr( $width ); ?>"
+				data-height="<?php echo esc_attr( $height ); ?>"
+				data-size="<?php echo esc_attr( $size ); ?>"
+				data-caption="<?php echo esc_attr( $caption ); ?>"
+				data-description="<?php echo esc_attr( $description ); ?>"
+				data-link="<?php echo esc_attr( $link ); ?>"
+				data-author="<?php echo esc_attr( $author ); ?>"
+				data-author-link="<?php echo esc_attr( $author_link ); ?>"
+				data-orientation="<?php echo esc_attr( $orientation ); ?>"
+				data-menu-order="<?php echo esc_attr( $menu_order ); ?>"
+				data-taxes="<?php echo esc_attr( $media_cats ); ?>"
+				data-tags="<?php echo esc_attr( $media_tags ); ?>"
+				data-update-nonce="<?php echo $update_nonce; ?>"
+				data-delete-nonce="<?php echo $delete_nonce; ?>"
+				data-edit-nonce="<?php echo $edit_nonce; ?>"
+				>
+			<?php
 			if ( $thumb ) :
 				?>
 				<span class="media-icon <?php echo sanitize_html_class( $mime . '-icon' ); ?>"><?php echo $thumb; ?></span>
 				<?php
 			endif;
 
-			echo $title . $link_end;
+			echo $title;
+			?>
 
+			</a>
+
+			<?php
 			_media_states( $post );
 			?>
 		</strong>

@@ -1306,8 +1306,8 @@ function wp_default_scripts( $scripts ) {
 		$scripts->add( 'list-revisions', "/wp-includes/js/wp-list-revisions$suffix.js" );
 
 		$scripts->add(
-			'media-grid',
-			"/wp-includes/js/media-grid$suffix.js",
+			'media-library',
+			"/wp-includes/js/media-library$suffix.js",
 			array(
 				'image-edit',
 				'cp-filepond-file-validate-size',
@@ -1452,7 +1452,7 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'customize-controls', "/wp-admin/css/customize-controls$suffix.css", array( 'wp-admin', 'colors', 'imgareaselect' ) );
 	$styles->add( 'customize-widgets', "/wp-admin/css/customize-widgets$suffix.css", array( 'wp-admin', 'colors' ) );
 	$styles->add( 'customize-nav-menus', "/wp-admin/css/customize-nav-menus$suffix.css", array( 'wp-admin', 'colors' ) );
-	$styles->add( 'media-grid', "/wp-admin/css/media-grid$suffix.css", array( 'imgareaselect' ), '0.1.0' );
+	$styles->add( 'media-library', "/wp-admin/css/media-library$suffix.css", array( 'imgareaselect' ), '0.1.0' );
 
 	// Common dependencies.
 	$styles->add( 'buttons', "/wp-includes/css/buttons$suffix.css" );

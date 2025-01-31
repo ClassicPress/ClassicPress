@@ -6,6 +6,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		uploader = document.querySelector( '.uploader-inline' ),
 		close = document.querySelector( '.close' ),
 		uploadCatSelect = document.getElementById( 'upload-category' ),
+		bulkSelect = document.querySelector( '.select-mode-toggle-button' ),
 		inputElement = document.getElementById( 'filepond' ),
 		ajaxurl = document.getElementById( 'ajax-url' ).value,
 		body = document.body,
@@ -109,11 +110,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					document.getElementById( 'details-saved' ).setAttribute( 'aria-hidden', 'true' );
 				}, 3000 );
 			} else {
-				console.error( _wpMediaGridSettings.failed_update, result.data.error );
+				console.error( _wpMediaLibSettings.failed_update, result.data.error );
 			}
 		} )
 		.catch( function( error ) {
-			console.error( _wpMediaGridSettings.error, error );
+			console.error( _wpMediaLibSettings.error, error );
 		} );
 	}
 
@@ -167,11 +168,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					document.getElementById( 'tax-saved' ).setAttribute( 'aria-hidden', 'true' );
 				}, 3000 );
 			} else {
-				console.error( _wpMediaGridSettings.failed_update, result.data.error );
+				console.error( _wpMediaLibSettings.failed_update, result.data.error );
 			}
 		} )
 		.catch( function( error ) {
-			console.error( _wpMediaGridSettings.error, error );
+			console.error( _wpMediaLibSettings.error, error );
 		} );
 	}
 
@@ -209,12 +210,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 				mediaItem.remove();
 				closeButton.click();
+				if ( ! mediaGrid ) {
+					location.href = location.pathname;
+				}
 			} else {
-				console.log( _wpMediaGridSettings.delete_failed );
+				console.log( _wpMediaLibSettings.delete_failed );
 			}
 		} )
 		.catch( function( error ) {
-			console.error( _wpMediaGridSettings.error, error );
+			console.error( _wpMediaLibSettings.error, error );
 		} );
 	}
 
@@ -253,10 +257,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			authorLink = item.dataset.authorLink,
 			orientation = item.dataset.orientation ? ' ' + item.dataset.orientation : '',
 			menuOrder = item.dataset.menuOrder,
-			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
-			next = item.nextElementSibling ? item.nextElementSibling.id : '',
-			items = document.querySelectorAll('.media-item')
+			prev = '',
+			next = '',
+			items = document.querySelectorAll('.media-item'),
 			order = 1;
+
+			if ( mediaGrid ) {
+				prev = item.previousElementSibling ? item.previousElementSibling.id : '';
+				next = item.nextElementSibling ? item.nextElementSibling.id : '';
+			} else {
+				prev = item.parentElement.parentElement.parentElement.previousElementSibling ? item.parentElement.parentElement.parentElement.previousElementSibling.getElementsByTagName('a')[0].id : '';
+				next = item.parentElement.parentElement.parentElement.nextElementSibling ? item.parentElement.parentElement.parentElement.nextElementSibling.getElementsByTagName('a')[0].id : '';
+			}
 
 		// Modify current URL
 		queryParams.set( 'item', id );
@@ -272,7 +284,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '.attachment-filename' ).textContent = filename;
 		dialog.querySelector( '.attachment-filetype' ).textContent = mime;
 		dialog.querySelector( '.attachment-filesize' ).textContent = size;
-		dialog.querySelector( '.attachment-dimensions' ).textContent = width + ' ' + _wpMediaGridSettings.by + ' ' + height + ' ' + _wpMediaGridSettings.pixels;
+		dialog.querySelector( '.attachment-dimensions' ).textContent = width + ' ' + _wpMediaLibSettings.by + ' ' + height + ' ' + _wpMediaLibSettings.pixels;
 		dialog.querySelector( '.attachment-media-view' ).className = 'attachment-media-view' + orientation;
 
 		dialog.querySelector( '#attachment-details-two-column-alt-text' ).value = alt;
@@ -308,9 +320,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				dialog.querySelector( '.edit-attachment' ).style.display = '';
 
 				if (
-					( mime === 'image/webp' && ! _wpMediaGridSettings.webp_editable ) ||
-					( mime === 'image/avif' && ! _wpMediaGridSettings.avif_editable ) ||
-					( mime === 'image/heic' && ! _wpMediaGridSettings.heic_editable )
+					( mime === 'image/webp' && ! _wpMediaLibSettings.webp_editable ) ||
+					( mime === 'image/avif' && ! _wpMediaLibSettings.avif_editable ) ||
+					( mime === 'image/heic' && ! _wpMediaLibSettings.heic_editable )
 				) {
 					dialog.querySelector( '.edit-attachment' ).style.display = 'none';
 				}
@@ -365,7 +377,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Delete media item
 		dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
-			if ( confirm( _wpMediaGridSettings.confirm_delete ) ) {
+			if ( confirm( _wpMediaLibSettings.confirm_delete ) ) {
 				deleteItem( id );
 			}
 		} );
@@ -407,16 +419,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		if ( attachment.type === 'application' ) {
 			if ( attachment.subtype === 'vnd.openxmlformats-officedocument.spreadsheetml.sheet' ) {
-				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/spreadsheet.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaLibSettings.includes_url + 'images/media/spreadsheet.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
 			} else if ( attachment.subtype === 'zip' ) {
-				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/archive.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaLibSettings.includes_url + 'images/media/archive.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
 			} else {
-				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/document.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaLibSettings.includes_url + 'images/media/document.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
 			}
 		} else if ( attachment.type === 'audio' ) {
-			image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/audio.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+			image = '<div class="icon"><div class="centered"><img src="' + _wpMediaLibSettings.includes_url + 'images/media/audio.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
 		} else if ( attachment.type === 'video' ) {
-			image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/video.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+			image = '<div class="icon"><div class="centered"><img src="' + _wpMediaLibSettings.includes_url + 'images/media/video.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
 		}
 
 		gridItem.className = 'media-item';
@@ -449,7 +461,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			'</div>' +
 			'<button type="button" class="check" tabindex="-1">' +
 			'<span class="media-modal-icon"></span>' +
-			'<span class="screen-reader-text">' + _wpMediaGridSettings.deselect + '></span>' +
+			'<span class="screen-reader-text">' + _wpMediaLibSettings.deselect + '></span>' +
 			'</button>';
 
 		return gridItem;
@@ -583,11 +595,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				// Reset paged variable
 				paged = '1';
 			} else {
-				console.error( _wpMediaGridSettings.failed_update, result.data.message );
+				console.error( _wpMediaLibSettings.failed_update, result.data.message );
 			}
 		} )
 		.catch( function( error ) {
-			console.error( _wpMediaGridSettings.error, error );
+			console.error( _wpMediaLibSettings.error, error );
 		} );
 	}
 
@@ -715,38 +727,40 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
-	// Add event listeners for changing the selection of items displayed
-	if ( typeFilter ) {
-		typeFilter.addEventListener( 'change', updateGrid );
-	}
-	if ( dateFilter ) {
-		dateFilter.addEventListener( 'change', updateGrid );
-	}
-	if ( mediaCatSelect ) {
-		mediaCatSelect.addEventListener( 'change', updateGrid );
-	}
-	search.addEventListener( 'input', function() {
-		var searchtimer;
-		clearTimeout( searchtimer );
-		searchtimer = setTimeout( updateGrid, 200 );
-	} );
-	document.getElementById( 'current-page-selector' ).addEventListener( 'change', function( e ) {
-		var searchtimer;
-		paged = e.target.value;
-		clearTimeout( searchtimer );
-		searchtimer = setTimeout( updateGrid, 200 );
-	} );
-
-	// Make pagination work in conjunction with the select dropdowns
-	document.querySelectorAll( '.pagination-links a' ).forEach( function( pageLink ) {
-		pageLink.addEventListener( 'click', function( e ) {
-			if ( typeFilter.value !== '' || dateFilter.value !== '0' || mediaCatSelect.value !== '0' ) {
-				e.preventDefault();
-				paged = pageLink.href.split( '?paged=' )[1];
-				updateGrid();
-			}
+	if ( mediaGrid ) {
+		// Add event listeners for changing the selection of items displayed
+		if ( typeFilter ) {
+			typeFilter.addEventListener( 'change', updateGrid );
+		}
+		if ( dateFilter ) {
+			dateFilter.addEventListener( 'change', updateGrid );
+		}
+		if ( mediaCatSelect ) {
+			mediaCatSelect.addEventListener( 'change', updateGrid );
+		}
+		search.addEventListener( 'input', function() {
+			var searchtimer;
+			clearTimeout( searchtimer );
+			searchtimer = setTimeout( updateGrid, 200 );
 		} );
-	} );
+		document.getElementById( 'current-page-selector' ).addEventListener( 'change', function( e ) {
+			var searchtimer;
+			paged = e.target.value;
+			clearTimeout( searchtimer );
+			searchtimer = setTimeout( updateGrid, 200 );
+		} );
+
+		// Make pagination work in conjunction with the select dropdowns
+		document.querySelectorAll( '.pagination-links a' ).forEach( function( pageLink ) {
+			pageLink.addEventListener( 'click', function( e ) {
+				if ( typeFilter.value !== '' || dateFilter.value !== '0' || mediaCatSelect.value !== '0' ) {
+					e.preventDefault();
+					paged = pageLink.href.split( '?paged=' )[1];
+					updateGrid();
+				}
+			} );
+		} );
+	}
 
 	// Open and close file upload area by clicking Add New button
 	addNew.addEventListener( 'click', function() {
@@ -904,42 +918,44 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	// Bulk select media items
-	document.querySelector( '.select-mode-toggle-button' ).addEventListener( 'click', function( e ) {
-		var toolbar = document.querySelector( '.cp-media-toolbar' ),
-			deleteButton = document.querySelector( '.delete-selected-button' );
+	if ( bulkSelect ) {
+		bulkSelect.addEventListener( 'click', function( e ) {
+			var toolbar = document.querySelector( '.cp-media-toolbar' ),
+				deleteButton = document.querySelector( '.delete-selected-button' );
 
-		if ( toolbar.className.includes( 'media-toolbar-mode-select' ) ) {
-			document.querySelectorAll( '.media-item' ).forEach( function( item ) {
-				if ( item.className.includes( 'selected' ) ) {
-					item.classList.remove( 'selected' );
-					item.setAttribute( 'aria-checked', false );
-				}
-			} );
+			if ( toolbar.className.includes( 'media-toolbar-mode-select' ) ) {
+				document.querySelectorAll( '.media-item' ).forEach( function( item ) {
+					if ( item.className.includes( 'selected' ) ) {
+						item.classList.remove( 'selected' );
+						item.setAttribute( 'aria-checked', false );
+					}
+				} );
 
-			e.target.textContent = 'Bulk select';
-			dateFilter.style.display = '';
-			typeFilter.style.display = '';
-			mediaCatSelect.style.display = '';
-			deleteButton.classList.add( 'hidden' );
-			toolbar.classList.remove( 'media-toolbar-mode-select' );
-		} else {
-			e.target.textContent = 'Cancel';
-			dateFilter.style.display = 'none';
-			typeFilter.style.display = 'none';
-			mediaCatSelect.style.display = 'none';
-			deleteButton.classList.remove( 'hidden' );
-			toolbar.classList.add( 'media-toolbar-mode-select' );
+				e.target.textContent = 'Bulk select';
+				dateFilter.style.display = '';
+				typeFilter.style.display = '';
+				mediaCatSelect.style.display = '';
+				deleteButton.classList.add( 'hidden' );
+				toolbar.classList.remove( 'media-toolbar-mode-select' );
+			} else {
+				e.target.textContent = 'Cancel';
+				dateFilter.style.display = 'none';
+				typeFilter.style.display = 'none';
+				mediaCatSelect.style.display = 'none';
+				deleteButton.classList.remove( 'hidden' );
+				toolbar.classList.add( 'media-toolbar-mode-select' );
 
-			deleteButton.addEventListener( 'click', function() {
-				if ( confirm( _wpMediaGridSettings.confirm_multiple ) ) {
-					document.querySelectorAll( '.media-item.selected' ).forEach( function( deleteSelect ) {
-						deleteItem( deleteSelect.id.replace( 'media-', '' ) );
-					} );
-				}
-				document.querySelector( '.select-mode-toggle-button' ).click();
-			} );
-		}
-	} );
+				deleteButton.addEventListener( 'click', function() {
+					if ( confirm( _wpMediaLibSettings.confirm_multiple ) ) {
+						document.querySelectorAll( '.media-item.selected' ).forEach( function( deleteSelect ) {
+							deleteItem( deleteSelect.id.replace( 'media-', '' ) );
+						} );
+					}
+					document.querySelector( '.select-mode-toggle-button' ).click();
+				} );
+			}
+		} );
+	}
 
 	/**
 	 * Copies the attachment URL to the clipboard.
@@ -978,81 +994,111 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	} );
 
-	/* Upload files using FilePond */
-	// Register FilePond plugins
-	FilePond.registerPlugin(
-		FilePondPluginFileValidateSize,
-		FilePondPluginFileValidateType,
-		FilePondPluginFileRename,
-		FilePondPluginImagePreview
-	);
+	if ( inputElement ) {
+		/* Upload files using FilePond */
+		// Register FilePond plugins
+		FilePond.registerPlugin(
+			FilePondPluginFileValidateSize,
+			FilePondPluginFileValidateType,
+			FilePondPluginFileRename,
+			FilePondPluginImagePreview
+		);
 
-	// Create a FilePond instance
-	pond = FilePond.create( inputElement, {
-		allowMultiple: true,
-		server: {
-			process: function( fieldName, file, metadata, load, error, progress, abort, transfer, options ) {
+		// Create a FilePond instance
+		pond = FilePond.create( inputElement, {
+			allowMultiple: true,
+			server: {
+				process: function( fieldName, file, metadata, load, error, progress, abort, transfer, options ) {
 
-				// Create FormData
-				var formData = new FormData();
-				formData.append( 'async-upload', file, file.name );
-				formData.append( 'action', 'upload-attachment' );
-				formData.append( '_wpnonce', document.getElementById( '_wpnonce' ).value );
+					// Create FormData
+					var formData = new FormData();
+					formData.append( 'async-upload', file, file.name );
+					formData.append( 'action', 'upload-attachment' );
+					formData.append( '_wpnonce', document.getElementById( '_wpnonce' ).value );
 
-				// Use Fetch to upload the file
-				fetch( ajaxurl, {
-					method: 'POST',
-					body: formData,
-					credentials: 'same-origin'
-				} )
-				.then( function( response ) {
-					if ( response.ok ) {
-						return response.json(); // no errors
-					}
-					throw new Error( response.status );
-				} )
-				.then( function( result ) {
-					var gridItem;
-					if ( result.success ) {
-						load( result.data );
-						gridItem = populateGridItem( result.data );
-						mediaGrid.prepend( gridItem );
+					// Use Fetch to upload the file
+					fetch( ajaxurl, {
+						method: 'POST',
+						body: formData,
+						credentials: 'same-origin'
+					} )
+					.then( function( response ) {
+						if ( response.ok ) {
+							return response.json(); // no errors
+						}
+						throw new Error( response.status );
+					} )
+					.then( function( result ) {
+						var gridItem;
+						if ( result.success ) {
+							load( result.data );
+							if ( mediaGrid ) {
+								gridItem = populateGridItem( result.data );
+								mediaGrid.prepend( gridItem );
 
-						// Open modal to show details about file, or select file for deletion
-						gridItem.addEventListener( 'click', function() {
-							if ( document.querySelector( '.media-toolbar-mode-select' ) == null ) {
-								openModalDialog( gridItem );
-							} else {
-								selectItemForDeletion( gridItem );
+								// Open modal to show details about file, or select file for deletion
+								gridItem.addEventListener( 'click', function() {
+									if ( document.querySelector( '.media-toolbar-mode-select' ) == null ) {
+										openModalDialog( gridItem );
+									} else {
+										selectItemForDeletion( gridItem );
+									}
+								} );
 							}
-						} );
-					} else {
-						error( _wpMediaGridSettings.upload_failed );
-					}
-				} )
-				.catch( function( err ) {
-					error( _wpMediaGridSettings.upload_failed );
-					console.error( _wpMediaGridSettings.error, err );
-				} );
+						} else {
+							error( _wpMediaLibSettings.upload_failed );
+						}
+					} )
+					.catch( function( err ) {
+						error( _wpMediaLibSettings.upload_failed );
+						console.error( _wpMediaLibSettings.error, err );
+					} );
 
-				// Return an abort function
-				return {
-					abort: function() {
-						// This function is called when the user aborts the upload
-						abort();
-					}
-				};
+					// Return an abort function
+					return {
+						abort: function() {
+							// This function is called when the user aborts the upload
+							abort();
+						}
+					};
+				},
+				maxFileSize: inputElement.dataset.maxFileSize,
 			},
-			maxFileSize: document.getElementById( 'filepond' ).dataset.maxFileSize,
-		},
-		labelTapToUndo: _wpMediaGridSettings.tap_close,
-		fileRenameFunction: ( file ) =>
-			new Promise( function( resolve ) {
-				resolve( window.prompt( _wpMediaGridSettings.new_filename, file.name ) );
-			} ),
-		acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
-		labelFileTypeNotAllowed: _wpMediaGridSettings.invalid_type,
-		fileValidateTypeLabelExpectedTypes: _wpMediaGridSettings.check_types,
-	} );
+			labelTapToUndo: _wpMediaLibSettings.tap_close,
+			fileRenameFunction: ( file ) =>
+				new Promise( function( resolve ) {
+					resolve( window.prompt( _wpMediaLibSettings.new_filename, file.name ) );
+				} ),
+			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
+			labelFileTypeNotAllowed: _wpMediaLibSettings.invalid_type,
+			fileValidateTypeLabelExpectedTypes: _wpMediaLibSettings.check_types,
+		} );
 
+		pond.on('addfile', function( error, file ) {
+			if ( error ) {
+				if ( ! mediaGrid ) {
+					document.getElementById('refresh').classList.remove('hidden');
+				}
+				return;
+			}
+		});
+
+		pond.on('processfile', function( error, file ) {
+			if ( error ) {
+				if ( ! mediaGrid ) {
+					document.getElementById('refresh').classList.remove('hidden');
+				}
+				return;
+			}
+			setTimeout(function(){
+				pond.removeFile(file.id);
+			}, 100);
+		});
+
+		pond.on('processfiles', function() {
+			if ( ! mediaGrid ) {
+				location.href = location.pathname;
+			}
+		});
+	}
 } );
