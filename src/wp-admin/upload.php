@@ -544,7 +544,7 @@ if ( 'grid' === $mode ) {
 					<div class="attachment-details save-ready">
 						<div class="attachment-media-view">
 							<h3 class="screen-reader-text"><?php esc_html_e( 'Attachment Preview' ); ?></h3>
-							<div class="media-navigation" role="navigation" aria-label="<?php esc_html_e( 'Media Navigation' ); ?>">
+							<div class="media-navigation" aria-label="<?php esc_html_e( 'Media Navigation' ); ?>">
 								<button type="button" id="left-dashicon-mobile" class="left dashicons">
 									<span class="screen-reader-text"><?php esc_html_e( 'Edit previous media item' ); ?></span>
 								</button>
