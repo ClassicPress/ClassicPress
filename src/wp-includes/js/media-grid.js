@@ -328,19 +328,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		rightIcon.setAttribute( 'data-next', next );
 
 		if ( prev === '' ) {
-			leftIcon.disabled = true;
-			leftIconMobile.disabled = true;
+			leftIcon.setAttribute( 'aria-disabled', true );
+			leftIconMobile.setAttribute( 'aria-disabled', true );
 		} else {
-			leftIcon.disabled = false;
-			leftIconMobile.disabled = false;
+			leftIcon.setAttribute( 'aria-disabled',false );
+			leftIconMobile.setAttribute( 'aria-disabled',false );
 		}
 
 		if ( next === '' ) {
-			rightIcon.disabled = true;
-			rightIconMobile.disabled = true;
+			rightIcon.setAttribute( 'aria-disabled', true );
+			rightIconMobile.setAttribute( 'aria-disabled', true );
 		} else {
-			rightIcon.disabled = false;
-			rightIconMobile.disabled = false;
+			rightIcon.setAttribute( 'aria-disabled',false );
+			rightIconMobile.setAttribute( 'aria-disabled',false );
 		}
 
 		items.forEach( function( i ) {
@@ -855,7 +855,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 	}
-	mediaNavigation.addEventListener( 'keydown', keydownHandler );
+	document.querySelector( '.edit-media-header' ).addEventListener( 'keydown', keydownHandler );
 	mediaNavigationMobile.addEventListener( 'keydown', keydownHandler );
 
 	// Edit image
@@ -890,6 +890,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
+			// Avoid duplicate navigation buttons
+			if ( dialog.querySelector( '#edit-image-navigation') != null ) {
+				dialog.querySelector( '#edit-image-navigation').remove();
+			}
+
+			// Add navigation buttons
+			var div = document.createElement( 'div' );
+			div.id = 'edit-image-navigation';
+			div.className = 'attachment-media-view landscape';
+			document.querySelector( '.media-frame-content' ).before( div );
+			div.append( mediaNavigationMobile );
+
 			document.querySelector( '.attachment-details' ).setAttribute( 'hidden', true );
 			document.querySelector( '.attachment-details' ).setAttribute( 'inert', true );
 			document.querySelector( '.media-frame-content' ).insertAdjacentHTML( 'beforeend', result.data.html );
