@@ -331,16 +331,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			leftIcon.setAttribute( 'aria-disabled', true );
 			leftIconMobile.setAttribute( 'aria-disabled', true );
 		} else {
-			leftIcon.setAttribute( 'aria-disabled',false );
-			leftIconMobile.setAttribute( 'aria-disabled',false );
+			leftIcon.setAttribute( 'aria-disabled', false );
+			leftIconMobile.setAttribute( 'aria-disabled', false );
 		}
 
 		if ( next === '' ) {
 			rightIcon.setAttribute( 'aria-disabled', true );
 			rightIconMobile.setAttribute( 'aria-disabled', true );
 		} else {
-			rightIcon.setAttribute( 'aria-disabled',false );
-			rightIconMobile.setAttribute( 'aria-disabled',false );
+			rightIcon.setAttribute( 'aria-disabled', false );
+			rightIconMobile.setAttribute( 'aria-disabled', false );
 		}
 
 		items.forEach( function( i ) {
