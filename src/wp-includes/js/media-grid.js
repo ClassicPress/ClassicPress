@@ -255,7 +255,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			menuOrder = item.dataset.menuOrder,
 			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
 			next = item.nextElementSibling ? item.nextElementSibling.id : '',
-			items = document.querySelectorAll('.media-item'),
+			items = document.querySelectorAll( '.media-item' ),
 			order = 1;
 
 		// Modify current URL
