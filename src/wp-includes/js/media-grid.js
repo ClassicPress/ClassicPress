@@ -13,10 +13,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		leftIcon = document.getElementById( 'left-dashicon' ),
 		rightIcon = document.getElementById( 'right-dashicon' ),
 		closeButton = document.getElementById( 'dialog-close-button' ),
-		leftIconMobile = document.getElementById( 'left-dashicon-mobile' ),
-		rightIconMobile = document.getElementById( 'right-dashicon-mobile' ),
 		mediaNavigation = document.querySelector( '.edit-media-header .media-navigation' ),
-		mediaNavigationMobile = document.querySelector( '.attachment-media-view .media-navigation' ),
 		paged = '1',
 		dateFilter = document.getElementById( 'filter-by-date' ) ? document.getElementById( 'filter-by-date' ) : '',
 		typeFilter = document.getElementById( 'filter-by-type' ) ? document.getElementById( 'filter-by-type' ) : '',
@@ -218,19 +215,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
-	// Toggle media button navigation wrappers according to viewport width
-	function toggleMediaNavigation() {
-		if ( window.innerWidth > 480 ) {
-			mediaNavigation.style.display = '';
-			mediaNavigationMobile.style.display = 'none';
-		} else {
-			mediaNavigation.style.display = 'none';
-			mediaNavigationMobile.style.display = '';
-		}
-	}
-
-	window.addEventListener( 'resize', toggleMediaNavigation );
-
 	// Open modal
 	function openModalDialog( item ) {
 		var id = item.id.replace( 'media-', '' ),
@@ -329,31 +313,23 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		if ( prev === '' ) {
 			leftIcon.disabled = true;
-			leftIconMobile.disabled = true;
 		} else {
 			leftIcon.disabled = false;
-			leftIconMobile.disabled = false;
 		}
 
 		if ( next === '' ) {
 			rightIcon.disabled = true;
-			rightIconMobile.disabled = true;
 		} else {
 			rightIcon.disabled = false;
-			rightIconMobile.disabled = false;
 		}
 
 		items.forEach( function( i ) {
 			if ( i.id === item.id ) {
 				dialog.querySelector( '#current-media-item' ).textContent = order;
 				dialog.querySelector( '#total-media-items' ).textContent = items.length;
-				dialog.querySelector( '#current-media-item-mobile' ).textContent = order;
-				dialog.querySelector( '#total-media-items-mobile' ).textContent = items.length;
 			}
 			order++;
 		} );
-
-		toggleMediaNavigation();
 
 		// Show modal
 		dialog.classList.add( 'modal-loading' );
@@ -824,24 +800,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( id ) {
 			focusID = id; // set focusID for when modal is closed
 			document.getElementById( id ).click();
-			mediaNavigation.style.display === '' ? leftIcon.focus() : leftIconMobile.focus();
+			leftIcon.focus();
 		}
 		removeImageEditWrap();
 	}
 	leftIcon.addEventListener( 'click', prevModalDialog );
-	leftIconMobile.addEventListener( 'click', prevModalDialog );
 
 	function nextModalDialog() {
 		var id = rightIcon.dataset.next;
 		if ( id ) {
 			focusID = id; // set focusID for when modal is closed
 			document.getElementById( id ).click();
-			mediaNavigation.style.display === '' ? rightIcon.focus() : rightIconMobile.focus();
+			rightIcon.focus();
 		}
 		removeImageEditWrap();
 	}
 	rightIcon.addEventListener( 'click', nextModalDialog );
-	rightIconMobile.addEventListener( 'click', nextModalDialog );
 
 	// Handle keyboard navigation
 	function keydownHandler( e ) {
@@ -856,7 +830,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	}
 	mediaNavigation.addEventListener( 'keydown', keydownHandler );
-	mediaNavigationMobile.addEventListener( 'keydown', keydownHandler );
 
 	// Edit image
 	document.querySelector( '.edit-attachment' ).addEventListener( 'click', function( e ) {
