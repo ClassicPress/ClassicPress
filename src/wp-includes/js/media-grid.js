@@ -254,8 +254,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			menuOrder = item.dataset.menuOrder,
 			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
 			next = item.nextElementSibling ? item.nextElementSibling.id : '',
-			items = document.querySelectorAll( '.media-item' ),
-			order = 1;
+			order = item.dataset.order,
+			total = document.querySelectorAll( '.media-item' ).length,
 
 		// Modify current URL
 		queryParams.set( 'item', id );
@@ -342,15 +342,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			rightIconMobile.setAttribute( 'aria-disabled', false );
 		}
 
-		items.forEach( function( i ) {
-			if ( i.id === item.id ) {
-				dialog.querySelector( '#current-media-item' ).textContent = order;
-				dialog.querySelector( '#total-media-items' ).textContent = items.length;
-				dialog.querySelector( '#current-media-item-mobile' ).textContent = order;
-				dialog.querySelector( '#total-media-items-mobile' ).textContent = items.length;
-			}
-			order++;
-		} );
+		// Set order of media item and total
+		dialog.querySelector( '#current-media-item' ).textContent = order;
+		dialog.querySelector( '#total-media-items' ).textContent = total;
+		dialog.querySelector( '#current-media-item-mobile' ).textContent = order;
+		dialog.querySelector( '#total-media-items-mobile' ).textContent = total;
 
 		toggleMediaNavigation();
 
