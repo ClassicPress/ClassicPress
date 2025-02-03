@@ -890,8 +890,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				var div = document.createElement( 'div' );
 				div.id = 'edit-image-navigation';
 				div.className = 'attachment-media-view landscape';
-				document.querySelector( '.media-frame-content' ).before( div );
 				div.append( mediaNavigationMobile );
+				document.querySelector( '.media-frame-content' ).before( div );
 			}
 
 			document.querySelector( '.attachment-details' ).setAttribute( 'hidden', true );
