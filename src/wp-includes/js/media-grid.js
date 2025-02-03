@@ -255,7 +255,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
 			next = item.nextElementSibling ? item.nextElementSibling.id : '',
 			order = item.dataset.order,
-			total = document.querySelectorAll( '.media-item' ).length,
+			total = document.querySelectorAll( '.media-item' ).length;
 
 		// Modify current URL
 		queryParams.set( 'item', id );
