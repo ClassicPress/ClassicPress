@@ -885,17 +885,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
-			// Avoid duplicate navigation buttons
-			if ( dialog.querySelector( '#edit-image-navigation') != null ) {
-				dialog.querySelector( '#edit-image-navigation').remove();
-			}
-
 			// Add navigation buttons
-			var div = document.createElement( 'div' );
-			div.id = 'edit-image-navigation';
-			div.className = 'attachment-media-view landscape';
-			document.querySelector( '.media-frame-content' ).before( div );
-			div.append( mediaNavigationMobile );
+			if ( dialog.querySelector( '#edit-image-navigation') == null ) {
+				var div = document.createElement( 'div' );
+				div.id = 'edit-image-navigation';
+				div.className = 'attachment-media-view landscape';
+				document.querySelector( '.media-frame-content' ).before( div );
+				div.append( mediaNavigationMobile );
+			}
 
 			document.querySelector( '.attachment-details' ).setAttribute( 'hidden', true );
 			document.querySelector( '.attachment-details' ).setAttribute( 'inert', true );
