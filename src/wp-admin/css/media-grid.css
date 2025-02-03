@@ -364,5 +364,7 @@ dialog::backdrop {
 .button-link .imgedit-help-toggle {
 	margin: 0;
 	border: 0;
+	-webkit-text-decoration: none;
+	-moz-text-decoration: none;
 	text-decoration: none;
 }
