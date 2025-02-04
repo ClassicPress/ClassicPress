@@ -832,7 +832,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 	}
-	mediaNavigation.addEventListener( 'keydown', keydownHandler );
+	document.querySelector( '.edit-media-header' ).addEventListener( 'keydown', keydownHandler );
 
 	// Edit image
 	document.querySelector( '.edit-attachment' ).addEventListener( 'click', function( e ) {
