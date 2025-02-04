@@ -334,6 +334,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Show modal
 		dialog.classList.add( 'modal-loading' );
 
+		body.style.overflow = 'hidden';
+
 		// Fix wrong image flash
 		setTimeout( function() {
 			dialog.showModal();
@@ -786,6 +788,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		queryParams.delete( 'mode' );
 		history.replaceState( null, null, location.href.split('?')[0] ); // reset URL params
 		dialog.classList.remove( 'modal-loading' );
+		body.style.overflow = '';
 		dialog.close();
 		if ( focusID != null ) { // set focus correctly
 			document.getElementById( focusID ).focus();
