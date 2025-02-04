@@ -312,15 +312,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		rightIcon.setAttribute( 'data-next', next );
 
 		if ( prev === '' ) {
-			leftIcon.disabled = true;
+			leftIcon.setAttribute( 'aria-disabled', true );
 		} else {
-			leftIcon.disabled = false;
+			leftIcon.setAttribute( 'aria-disabled', false );
 		}
 
 		if ( next === '' ) {
-			rightIcon.disabled = true;
+			rightIcon.setAttribute( 'aria-disabled', true );
 		} else {
-			rightIcon.disabled = false;
+			rightIcon.setAttribute( 'aria-disabled', false );
 		}
 
 		items.forEach( function( i ) {
