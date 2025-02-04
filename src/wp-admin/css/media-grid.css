@@ -130,6 +130,7 @@
 .media-item {
 	cursor: pointer;
 	margin-bottom: 0;
+	position: relative;
 }
 .media-item:focus,
 .media-item.selected:focus {
@@ -149,9 +150,9 @@
 	width: 24px;
 	padding: 0;
 	border: 0;
-	margin-top: -105%;
-	margin-left: 87%;
-	position: relative;
+	top: -5px;
+	right: -5px;
+	position: absolute;
 	z-index: 10;
 	outline: none;
 	background: #f0f0f1;
