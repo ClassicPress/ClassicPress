@@ -361,8 +361,8 @@ dialog::backdrop {
 	outline-width: 0.125rem;
 }
 /* Caret next to "Restore original image" */
-.button-link .imgedit-help-toggle {
+/*.button-link .imgedit-help-toggle {
 	margin: 0;
 	border: 0;
 	text-decoration: none;
-}
+}*/
