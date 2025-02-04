@@ -1378,45 +1378,27 @@ audio, video {
 }
 
 @media only screen and (max-width: 900px) {
-	.media-sidebar .setting .copy-to-clipboard-container,
 	.attachment-details .attachment-info .copy-to-clipboard-container {
-		margin-left: 0;
+		margin: 10px 0 0 0;
 		padding-top: 0;
 	}
 
-	.media-sidebar .setting input,
-	.media-sidebar .setting textarea,
-	.media-sidebar .setting .name,
-	.attachment-details .setting input,
-	.attachment-details .setting textarea,
+	.attachment-details .compat-item label span,
 	.attachment-details .setting .name,
-	.compat-item label span {
-		float: none;
-	}
-
-	.media-sidebar .setting input[type="text"],
-	.media-sidebar .setting input[type="password"],
-	.media-sidebar .setting input[type="email"],
-	.media-sidebar .setting input[type="number"],
-	.media-sidebar .setting input[type="search"],
-	.media-sidebar .setting input[type="tel"],
-	.media-sidebar .setting input[type="url"],
-	.media-sidebar .setting textarea,
-	.media-sidebar .setting select,
 	.attachment-details .setting input[type="text"],
-	.attachment-details .setting input[type="password"],
-	.attachment-details .setting input[type="email"],
-	.attachment-details .setting input[type="number"],
-	.attachment-details .setting input[type="search"],
-	.attachment-details .setting input[type="tel"],
-	.attachment-details .setting input[type="url"],
 	.attachment-details .setting textarea,
-	.attachment-details .setting select,
 	.attachment-details .setting + .description {
 		float: none;
 		width: 98%;
 		max-width: none;
 		height: auto;
+	}
+
+	.attachment-details .setting + .description {
+		clear: both;
+		font-size: 12px;
+		font-style: normal;
+		margin-bottom: 10px;
 	}
 }
 
@@ -1450,10 +1432,6 @@ audio, video {
 		width: 100%;
 	}
 
-	.imgedit-settings .imgedit-scale-button-wrapper {
-		display: block;
-	}
-
 	.edit-attachment-frame .edit-media-header {
 		height: 80px;
 	}
@@ -1469,6 +1447,8 @@ audio, video {
 		top: 40px;
 		left: 0;
 		right: 0;
+		border-top: 1px solid #dcdcde;
+		border-bottom: 1px solid #dcdcde;
 	}
 
 	.upload-php .media-modal-close,
@@ -1488,14 +1468,13 @@ audio, video {
 		top: 80px;
 	}
 
-	.edit-attachment-frame .edit-media-header .media-navigation {
-		border-top: 1px solid #dcdcde;
-		border-bottom: 1px solid #dcdcde;
-	}
-
 	.media-modal .media-frame-title h2 {
 		line-height: 2.22222222;
 		font-size: 18px;
+	}
+
+	.imgedit-settings .imgedit-scale-button-wrapper {
+		display: block;
 	}
 }
 
