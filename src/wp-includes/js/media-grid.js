@@ -222,7 +222,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function resetDataOrdering() {
 		var items = document.querySelectorAll( '.media-item' ),
 			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
-			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' );
+			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
+			count5;
 
 		items.forEach( function( item, index ) {
 			item.setAttribute( 'data-order', parseInt( index + 1 ) );
