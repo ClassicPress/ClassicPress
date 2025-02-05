@@ -380,9 +380,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
 			if ( confirm( _wpMediaGridSettings.confirm_delete ) ) {
 				deleteItem( id );
+				resetDataOrdering();
 			}
 		} );
-		resetDataOrdering();
 
 		// Update media categories and tags
 		dialog.querySelectorAll( '.compat-item input' ).forEach( function( input ) {
