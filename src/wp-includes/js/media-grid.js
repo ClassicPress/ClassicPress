@@ -255,6 +255,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	window.addEventListener( 'resize', toggleMediaNavigation );
 
+	// Delete media item
+	dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
+		var id = location.search.replace( '?item=', '' );
+		if ( confirm( _wpMediaGridSettings.confirm_delete ) ) {
+			deleteItem( id );
+			resetDataOrdering();
+		}
+	} );
+
 	// Open modal
 	function openModalDialog( item ) {
 		var id = item.id.replace( 'media-', '' ),
@@ -382,14 +391,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		setTimeout( function() {
 			dialog.showModal();
 		}, 1 );
-
-		// Delete media item
-		dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
-			if ( confirm( _wpMediaGridSettings.confirm_delete ) ) {
-				deleteItem( id );
-				resetDataOrdering();
-			}
-		} );
 
 		// Update media categories and tags
 		dialog.querySelectorAll( '.compat-item input' ).forEach( function( input ) {
