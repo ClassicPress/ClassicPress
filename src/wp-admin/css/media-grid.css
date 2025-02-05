@@ -43,7 +43,6 @@
 	margin-right: 0;
 }
 .imgedit-panel-content {
-	height: -moz-fit-content;
 	height: fit-content;
 	padding: 16px 16px 0;
 	position: absolute;
@@ -54,7 +53,6 @@
 	overflow: hidden;
 }
 .imgedit-settings {
-	height: -moz-fit-content;
 	height: fit-content;
 	overflow: hidden;
 	background: #f6f7f7;
