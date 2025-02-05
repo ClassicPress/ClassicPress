@@ -208,6 +208,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 				mediaItem.remove();
 				closeButton.click();
+				resetDataOrdering();
 			} else {
 				console.log( _wpMediaGridSettings.delete_failed );
 			}
@@ -215,6 +216,23 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		.catch( function( error ) {
 			console.error( _wpMediaGridSettings.error, error );
 		} );
+	}
+
+	// Reset ordering of remaining media items after deletion
+	function resetDataOrdering() {
+		var items = document.querySelectorAll( '.media-item' ),
+			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
+			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' );
+
+		items.forEach( function( item, index ) {
+			item.setAttribute( 'data-order', parseInt( index + 1 ) );
+		} );
+
+		// Reset totals
+		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
+		document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + ' ' + count[5];
+		dialog.querySelector( '#total-media-items' ).textContent = items.length;
+		dialog.querySelector( '#total-media-items-mobile' ).textContent = items.length;
 	}
 
 	// Toggle media button navigation wrappers according to viewport width
@@ -364,6 +382,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				deleteItem( id );
 			}
 		} );
+		resetDataOrdering();
 
 		// Update media categories and tags
 		dialog.querySelectorAll( '.compat-item input' ).forEach( function( input ) {
