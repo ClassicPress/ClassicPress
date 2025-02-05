@@ -230,11 +230,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Reset totals
 		if ( 5 in count ) { // allow for different languages
-			count5 = count[5];
+			count5 = ' ' + count[5];
 		} else {
 			count5 = '';
 		}
-		document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + ' ' + count5;
+		document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + count5;
 
 		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
 		dialog.querySelector( '#total-media-items' ).textContent = items.length;
