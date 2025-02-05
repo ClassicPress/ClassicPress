@@ -43,7 +43,8 @@
 	margin-right: 0;
 }
 .imgedit-panel-content {
-	height: 100vh;
+	height: -moz-fit-content;
+	height: fit-content;
 	padding: 16px 16px 0;
 	position: absolute;
 	top: 0;
@@ -53,7 +54,8 @@
 	overflow: hidden;
 }
 .imgedit-settings {
-	height: 100vh;
+	height: -moz-fit-content;
+	height: fit-content;
 	overflow: hidden;
 	background: #f6f7f7;
 	border-left: 1px solid #dcdcde;
@@ -360,6 +362,7 @@ dialog::backdrop {
 	outline-style: solid;
 	outline-width: 0.125rem;
 }
+/* Caret next to "Restore original image" */
 .button-link .imgedit-help-toggle {
 	margin: 0;
 	border: 0;
