@@ -961,12 +961,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			toolbar.classList.add( 'media-toolbar-mode-select' );
 
 			deleteButton.addEventListener( 'click', function() {
-				if ( confirm( _wpMediaGridSettings.confirm_multiple ) ) {
-					document.querySelectorAll( '.media-item.selected' ).forEach( function( deleteSelect ) {
-						deleteItem( deleteSelect.id.replace( 'media-', '' ) );
-					} );
+				var selectedItems = document.querySelectorAll( '.media-item.selected' );
+				if ( selectedItems.length !== 0 ) {
+					if ( confirm( _wpMediaGridSettings.confirm_multiple ) ) {
+						selectedItems.forEach( function( deleteSelect ) {
+							deleteItem( deleteSelect.id.replace( 'media-', '' ) );
+						} );
+					}
+					document.querySelector( '.select-mode-toggle-button' ).click();
 				}
-				document.querySelector( '.select-mode-toggle-button' ).click();
 			} );
 		}
 	} );
