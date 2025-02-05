@@ -43,18 +43,18 @@
 	margin-right: 0;
 }
 .imgedit-panel-content {
-	height: 100vh;	
+	height: fit-content;
 	padding: 16px 16px 0;
 	position: absolute;
 	top: 0;
 	right: 282px;
 	bottom: 0;
 	left: 0;
-	overflow: auto;
+	overflow: hidden;
 }
 .imgedit-settings {
-	height: 100vh;
-	overflow: auto;  
+	height: fit-content;
+	overflow: hidden;
 	background: #f6f7f7;
 	border-left: 1px solid #dcdcde;
 	padding: 20px 16px 0;
@@ -66,9 +66,6 @@
 }
 .imgedit-group-top h2 {
 	display: inline-block;
-}
-.imgedit-wrap {
-	box-shadow: inset 0 4px 4px -4px rgba(0, 0, 0, 0.1);
 }
 .imgedit-settings .imgedit-help-toggle {
 	margin: 13px 0 0;
@@ -362,4 +359,10 @@ dialog::backdrop {
 	outline-offset: 0.125rem;
 	outline-style: solid;
 	outline-width: 0.125rem;
+}
+/* Caret next to "Restore original image" */
+.button-link .imgedit-help-toggle {
+	margin: 0;
+	border: 0;
+	text-decoration: none;
 }
