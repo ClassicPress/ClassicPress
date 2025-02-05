@@ -693,8 +693,6 @@ border color while dragging a file over the uploader drop area */
 	font-variant-numeric: tabular-nums;
 	-webkit-font-smoothing: subpixel-antialiased;
 	cursor: default;
-	-webkit-user-select: none;
-	-moz-user-select: none;
 	user-select: none;
 }
 
