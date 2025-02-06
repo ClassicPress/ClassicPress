@@ -210,7 +210,7 @@ if ( 'grid' === $mode ) {
 	);
 	$attachments = new WP_Query( $attachment_args );
 
-	$total_pages = (int) $attachments->max_num_pages;
+	$total_pages = ( $attachments->max_num_pages ) ? (int) $attachments->max_num_pages : 1;
 	$prev_page   = ( $paged === 1 ) ? $paged : $paged - 1;
 	$next_page   = ( $paged === $total_pages ) ? $paged : $paged + 1;
 
