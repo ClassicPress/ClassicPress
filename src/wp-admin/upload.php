@@ -411,7 +411,7 @@ if ( 'grid' === $mode ) {
 			<ul class="media-grid-view">
 
 				<?php
-				foreach ( $attachments->posts as $attachment ) {
+				foreach ( $attachments->posts as $key => $attachment ) {
 					$meta = wp_prepare_attachment_for_js( $attachment->ID );
 					$date         = $meta['dateFormatted'];
 					$author       = $meta['authorName'];
@@ -472,6 +472,7 @@ if ( 'grid' === $mode ) {
 						data-menu-order="<?php echo esc_attr( $menu_order ); ?>"
 						data-taxes="<?php echo esc_attr( $media_cats ); ?>"
 						data-tags="<?php echo esc_attr( $media_tags ); ?>"
+						data-order="<?php echo esc_attr( $key + 1 ); ?>"
 						data-update-nonce="<?php echo $update_nonce; ?>"
 						data-delete-nonce="<?php echo $delete_nonce; ?>"
 						data-edit-nonce="<?php echo $edit_nonce; ?>"
@@ -544,7 +545,7 @@ if ( 'grid' === $mode ) {
 					<div class="attachment-details save-ready">
 						<div class="attachment-media-view">
 							<h3 class="screen-reader-text"><?php esc_html_e( 'Attachment Preview' ); ?></h3>
-							<div class="media-navigation" role="navigation" aria-label="<?php esc_html_e( 'Media Navigation' ); ?>">
+							<div class="media-navigation" aria-label="<?php esc_html_e( 'Media Navigation' ); ?>">
 								<button type="button" id="left-dashicon-mobile" class="left dashicons">
 									<span class="screen-reader-text"><?php esc_html_e( 'Edit previous media item' ); ?></span>
 								</button>

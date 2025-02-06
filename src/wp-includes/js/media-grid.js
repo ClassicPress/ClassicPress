@@ -8,7 +8,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		uploadCatSelect = document.getElementById( 'upload-category' ),
 		inputElement = document.getElementById( 'filepond' ),
 		ajaxurl = document.getElementById( 'ajax-url' ).value,
-		body = document.body,
 		dialog = document.getElementById( 'media-modal' ),
 		leftIcon = document.getElementById( 'left-dashicon' ),
 		rightIcon = document.getElementById( 'right-dashicon' ),
@@ -209,6 +208,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 				mediaItem.remove();
 				closeButton.click();
+				resetDataOrdering();
 			} else {
 				console.log( _wpMediaGridSettings.delete_failed );
 			}
@@ -216,6 +216,30 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		.catch( function( error ) {
 			console.error( _wpMediaGridSettings.error, error );
 		} );
+	}
+
+	// Reset ordering of remaining media items after deletion
+	function resetDataOrdering() {
+		var items = document.querySelectorAll( '.media-item' ),
+			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
+			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
+			count5;
+
+		items.forEach( function( item, index ) {
+			item.setAttribute( 'data-order', parseInt( index + 1 ) );
+		} );
+
+		// Reset totals
+		if ( 5 in count ) { // allow for different languages
+			count5 = ' ' + count[5];
+		} else {
+			count5 = '';
+		}
+		document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + count5;
+
+		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
+		dialog.querySelector( '#total-media-items' ).textContent = items.length;
+		dialog.querySelector( '#total-media-items-mobile' ).textContent = items.length;
 	}
 
 	// Toggle media button navigation wrappers according to viewport width
@@ -230,6 +254,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	window.addEventListener( 'resize', toggleMediaNavigation );
+
+	// Delete media item
+	dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
+		var id = location.search.replace( '?item=', '' );
+		if ( confirm( _wpMediaGridSettings.confirm_delete ) ) {
+			deleteItem( id );
+			resetDataOrdering();
+		}
+	} );
 
 	// Open modal
 	function openModalDialog( item ) {
@@ -255,8 +288,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			menuOrder = item.dataset.menuOrder,
 			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
 			next = item.nextElementSibling ? item.nextElementSibling.id : '',
-			items = document.querySelectorAll('.media-item'),
-			order = 1;
+			order = item.dataset.order,
+			total = parseInt( document.querySelector( '.displaying-num' ).textContent );
 
 		// Modify current URL
 		queryParams.set( 'item', id );
@@ -328,30 +361,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		rightIcon.setAttribute( 'data-next', next );
 
 		if ( prev === '' ) {
-			leftIcon.disabled = true;
-			leftIconMobile.disabled = true;
+			leftIcon.setAttribute( 'aria-disabled', true );
+			leftIconMobile.setAttribute( 'aria-disabled', true );
 		} else {
-			leftIcon.disabled = false;
-			leftIconMobile.disabled = false;
+			leftIcon.setAttribute( 'aria-disabled', false );
+			leftIconMobile.setAttribute( 'aria-disabled', false );
 		}
 
 		if ( next === '' ) {
-			rightIcon.disabled = true;
-			rightIconMobile.disabled = true;
+			rightIcon.setAttribute( 'aria-disabled', true );
+			rightIconMobile.setAttribute( 'aria-disabled', true );
 		} else {
-			rightIcon.disabled = false;
-			rightIconMobile.disabled = false;
+			rightIcon.setAttribute( 'aria-disabled', false );
+			rightIconMobile.setAttribute( 'aria-disabled', false );
 		}
 
-		items.forEach( function( i ) {
-			if ( i.id === item.id ) {
-				dialog.querySelector( '#current-media-item' ).textContent = order;
-				dialog.querySelector( '#total-media-items' ).textContent = items.length;
-				dialog.querySelector( '#current-media-item-mobile' ).textContent = order;
-				dialog.querySelector( '#total-media-items-mobile' ).textContent = items.length;
-			}
-			order++;
-		} );
+		// Set order of media item and total
+		dialog.querySelector( '#current-media-item' ).textContent = order;
+		dialog.querySelector( '#total-media-items' ).textContent = total;
+		dialog.querySelector( '#current-media-item-mobile' ).textContent = order;
+		dialog.querySelector( '#total-media-items-mobile' ).textContent = total;
 
 		toggleMediaNavigation();
 
@@ -362,13 +391,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		setTimeout( function() {
 			dialog.showModal();
 		}, 1 );
-
-		// Delete media item
-		dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
-			if ( confirm( _wpMediaGridSettings.confirm_delete ) ) {
-				deleteItem( id );
-			}
-		} );
 
 		// Update media categories and tags
 		dialog.querySelectorAll( '.compat-item input' ).forEach( function( input ) {
@@ -855,7 +877,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 	}
-	mediaNavigation.addEventListener( 'keydown', keydownHandler );
+	document.querySelector( '.edit-media-header' ).addEventListener( 'keydown', keydownHandler );
 	mediaNavigationMobile.addEventListener( 'keydown', keydownHandler );
 
 	// Edit image
@@ -890,6 +912,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
+			// Add navigation buttons
+			if ( dialog.querySelector( '#edit-image-navigation') == null ) {
+				var div = document.createElement( 'div' );
+				div.id = 'edit-image-navigation';
+				div.className = 'attachment-media-view landscape';
+				div.append( mediaNavigationMobile );
+				document.querySelector( '.media-frame-content' ).before( div );
+			}
+
 			document.querySelector( '.attachment-details' ).setAttribute( 'hidden', true );
 			document.querySelector( '.attachment-details' ).setAttribute( 'inert', true );
 			document.querySelector( '.media-frame-content' ).insertAdjacentHTML( 'beforeend', result.data.html );
@@ -931,12 +962,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			toolbar.classList.add( 'media-toolbar-mode-select' );
 
 			deleteButton.addEventListener( 'click', function() {
-				if ( confirm( _wpMediaGridSettings.confirm_multiple ) ) {
-					document.querySelectorAll( '.media-item.selected' ).forEach( function( deleteSelect ) {
-						deleteItem( deleteSelect.id.replace( 'media-', '' ) );
-					} );
+				var selectedItems = document.querySelectorAll( '.media-item.selected' );
+				if ( selectedItems.length !== 0 ) {
+					if ( confirm( _wpMediaGridSettings.confirm_multiple ) ) {
+						selectedItems.forEach( function( deleteSelect ) {
+							deleteItem( deleteSelect.id.replace( 'media-', '' ) );
+						} );
+					}
+					document.querySelector( '.select-mode-toggle-button' ).click();
 				}
-				document.querySelector( '.select-mode-toggle-button' ).click();
 			} );
 		}
 	} );
