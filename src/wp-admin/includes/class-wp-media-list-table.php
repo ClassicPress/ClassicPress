@@ -502,7 +502,7 @@ class WP_Media_List_Table extends WP_List_Table {
 		$meta = wp_prepare_attachment_for_js( $attachment_id );
 		$date         = $meta['dateFormatted'];
 		$author       = $meta['authorName'];
-		$author_link  = $meta['authorLink'];
+		$author_link  = ! empty( $meta['authorLink'] ) ? $meta['authorLink'] : '';
 		$url          = $meta['url'];
 		$width        = ! empty( $meta['width'] ) ? $meta['width'] : '';
 		$height       = ! empty( $meta['height'] ) ? $meta['height'] : '';
