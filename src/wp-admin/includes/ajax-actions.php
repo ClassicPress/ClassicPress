@@ -3280,20 +3280,20 @@ function wp_ajax_quick_edit_attachment() {
 	}
 
 	if ( isset( $_POST['post_title'] ) ) {
-		$attachment->post_title = wp_unslash( sanitize_text_field( $_POST['post_title'] ) );
+		$post_title = sanitize_text_field( wp_unslash( $_POST['post_title'] ) );
 	}
 
 	if ( isset( $_POST['post_excerpt'] ) ) {
-		$attachment->post_excerpt = wp_unslash( wp_kses_post( $_POST['post_excerpt'] ) );
+		$post_excerpt = wp_kses_post( wp_unslash( $_POST['post_excerpt'] ) );
 	}
 
 	if ( isset( $_POST['post_content'] ) ) {
-		$attachment->post_content = wp_unslash( wp_kses_post( $_POST['post_content'] ) );
+		$post_content = wp_kses_post( wp_unslash( $_POST['post_content'] ) );
 	}
 
 	if ( isset( $_POST['post_author'] ) && is_numeric( wp_unslash( $_POST['post_author'] ) ) ) {
-		$attachment->post_author = wp_unslash( $_POST['post_author'] );
-		$author = get_user_by( 'ID', $attachment->post_author );
+		$post_author = absint( wp_unslash( $_POST['post_author'] ) );
+		$author = get_user_by( 'id', $post_author );
 	}
 
 	if ( isset( $_POST['aa'] ) && isset( $_POST['mm'] ) && isset( $_POST['jj'] ) ) {
@@ -3306,12 +3306,22 @@ function wp_ajax_quick_edit_attachment() {
 		$exploded_date = explode( ' ', $current_date );
 		$new_date      = $year . '-' . $month . '-' . $day;
 		if ( $new_date !== $exploded_date[3] . '-' . $exploded_date[2] . '-' . $exploded_date[1] ) {
-			$attachment->post_date = $new_date . ' 00:00:00';
+			$post_date = $new_date . ' 00:00:00';
 		}
 	}
 
-	// Update attachment object.
-	wp_update_post( $attachment );
+	// Update attachment array.
+	$attachment_data = array(
+		'ID'           => $id,
+		'post_author'  => $post_author,
+		'post_date'    => $post_date,
+		'post_content' => $post_content,
+		'post_title'   => $post_title,
+		'post_excerpt' => $post_excerpt,
+		'post_type'    => 'attachment',
+		'post_name'    => strtolower( $post_title ),
+	);
+	wp_update_post( $attachment_data, true );
 
 	// Update taxonomies and meta.
 	if ( empty( $_POST['media_category'] ) ) {
@@ -3340,11 +3350,28 @@ function wp_ajax_quick_edit_attachment() {
 
 	// Include functions to identify where the media file is used or attached.
 	require_once ABSPATH . 'wp-admin/includes/class-wp-media-list-table.php';
-	$list_table = new WP_Media_List_Table();
-	$thumbnails = $list_table->column_thumbnail( $attachment );
-	$used_in    = $list_table->column_used_in( $attachment );
-	$media_cats = $list_table->column_default( $attachment, 'taxonomy-media_category' );
-	$media_tags = $list_table->column_default( $attachment, 'taxonomy-media_post_tag' );
+	$list_table   = new WP_Media_List_Table();
+	$thumbnails   = $list_table->column_thumbnail( $attachment );
+	$used_in      = $list_table->column_used_in( $attachment );
+	$media_cats   = $list_table->column_default( $attachment, 'taxonomy-media_category' );
+	$media_tags   = $list_table->column_default( $attachment, 'taxonomy-media_post_tag' );
+	list( $mime ) = explode( '/', $attachment->post_mime_type );
+	$thumb        = wp_get_attachment_image( $id, array( 60, 60 ), true, array( 'alt' => '' ) );
+	$class        = $thumb ? ' class="has-media-icon"' : '';
+	$media_icon   = $thumb ? '<span class="media-icon ' . sanitize_html_class( $mime . '-icon' ) . '">' . $thumb . '</span>' : '';
+	$file         = get_attached_file( $id );
+	$link_start   = '';
+	$link_end     = '';
+
+	if ( current_user_can( 'edit_post', $id ) ) {
+		$link_start = sprintf(
+			'<a href="%s" aria-label="%s">',
+			get_edit_post_link( $id ),
+			/* translators: %s: Attachment title. */
+			esc_attr( sprintf( __( '&#8220;%s&#8221; (Edit)' ), $post_title ) )
+		);
+		$link_end = '</a>';
+	}
 
 	/**
 	 * Output buffer is used here because the function prints directly
@@ -3355,37 +3382,31 @@ function wp_ajax_quick_edit_attachment() {
 	$attached_to = ob_get_clean();
 
 	$new_tr = '<th scope="row" class="check-column">
-		<label class="screen-reader-text" for="cb-select-' . $id . '">' . esc_html__( 'Select ' ) . esc_html( $attachment->post_title ) . '</label>
+		<label class="screen-reader-text" for="cb-select-' . $id . '">' . esc_html__( 'Select ' ) . esc_html( $post_title ) . '</label>
 		<input type="checkbox" name="media[]" id="cb-select-' . $id . '" value="' . $id . '">
 	</th>
 	<td class="title column-title has-row-actions column-primary" data-colname="' . esc_html__( 'File' ) . '">
-		<strong class="has-media-icon">
-			<a href="' . esc_url( home_url( '/wp-admin/post.php?post=' . $id . '&amp;action=edit' ) ) . '" aria-label="' . esc_attr__( sprintf( '“%s” (Edit)', $attachment->post_title ) ) . '">
-				<span class="media-icon image-icon">
-					<img width="60" height="60" src="' . esc_url( wp_get_attachment_image_src( $id )[0] ) . '" class="attachment-60x60 size-60x60" alt="" decoding="async" loading="lazy">
-				</span>' . esc_html( $attachment->post_title ) . '
-			</a>
-		</strong>
+		<strong ' . $class . '>' . $link_start . $media_icon . esc_html( $post_title ) . $link_end . _media_states( $attachment ) . '</strong>
 
 		<p class="filename">
-			<span class="screen-reader-text">' . esc_html__( 'File name: ' ) . '</span>' . esc_html( $attachment->post_title ) . '
+			<span class="screen-reader-text">' . esc_html__( 'File name: ' ) . '</span>' . esc_html( wp_basename( $file ) ) . '
 		</p>
 
 		<div class="row-actions">
-			<span class="edit"><a href="' . esc_url( home_url( '/wp-admin/post.php?post=' . $id . '&amp;action=edit' ) ) . '" aria-label="Edit “' . esc_attr( $attachment->post_title ) . '”">' . esc_html__( 'Edit' ) . '</a> | </span>
+			<span class="edit"><a href="' . esc_url( home_url( '/wp-admin/post.php?post=' . $id . '&amp;action=edit' ) ) . '" aria-label="Edit “' . esc_attr( $post_title ) . '”">' . esc_html__( 'Edit' ) . '</a> | </span>
 
-			<span class="delete"><a href="post.php?action=delete&amp;post=' . $id . '&amp;_wpnonce=' . esc_attr( $nonce ) . '" class="submitdelete aria-button-if-js" onclick="return showNotice.warn();" aria-label="' . esc_attr__( sprintf( 'Delete “%s” permanently', $attachment->post_title ) ) . '" role="button">' . esc_html__( 'Delete Permanently' ) . '</a> | </span>
+			<span class="delete"><a href="post.php?action=delete&amp;post=' . $id . '&amp;_wpnonce=' . esc_attr( $nonce ) . '" class="submitdelete aria-button-if-js" onclick="return showNotice.warn();" aria-label="' . esc_attr__( sprintf( 'Delete “%s” permanently', $post_title ) ) . '" role="button">' . esc_html__( 'Delete Permanently' ) . '</a> | </span>
 
-			<span class="view"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'View “%s”', $attachment->post_title ) ) . '" rel="bookmark">' . esc_html__( 'View' ) . '</a> | </span>
+			<span class="view"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'View “%s”', $post_title ) ) . '" rel="bookmark">' . esc_html__( 'View' ) . '</a> | </span>
 
 			<span class="copy">
 				<span class="copy-to-clipboard-container">
-					<button type="button" class="button-link copy-attachment-url media-library" data-clipboard-text="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'Copy “%s” URL to clipboard', $attachment->post_title ) ) . '">' . esc_html__( 'Copy URL' ) . '</button>
+					<button type="button" class="button-link copy-attachment-url media-library" data-clipboard-text="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'Copy “%s” URL to clipboard', $post_title ) ) . '">' . esc_html__( 'Copy URL' ) . '</button>
 					<span class="success hidden" aria-hidden="true">' . esc_html__( 'Copied!' ) . '</span>
 				</span> |
 			</span>
 
-			<span class="download"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'Download “%s”', $attachment->post_title ) ) . '" download="">' . esc_html__( 'Download file' ) . '</a></span>
+			<span class="download"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'Download “%s”', $post_title ) ) . '" download="">' . esc_html__( 'Download file' ) . '</a></span>
 		</div>
 		<button type="button" class="toggle-row">
 			<span class="screen-reader-text">' . esc_html__( 'Show more details' ) . '</span>
@@ -3393,7 +3414,7 @@ function wp_ajax_quick_edit_attachment() {
 	</td>
 
 	<td class="author column-author" data-colname="' . esc_attr__( 'Author' ) . '">
-		<a href="upload.php?author=' . absint( $attachment->post_author ) . '">' . esc_html( $author->display_name ) . '</a>
+		<a href="upload.php?author=' . $post_author . '">' . esc_html( $author->display_name ) . '</a>
 	</td>
 
 	<td class="taxonomy-media_category column-taxonomy-media_category" data-colname="' . esc_attr__( 'Media Categories' ) . '">' . $media_cats . '</td>
@@ -3406,7 +3427,7 @@ function wp_ajax_quick_edit_attachment() {
 
 	<td class="parent column-parent" data-colname="' . esc_attr__( 'Uploaded to' ) . '">' . $attached_to . '</td>
 
-	<td class="comments column-comments hidden" data-colname="' . esc_attr__( 'Comments' ) . '">
+	<td class="comments column-comments" data-colname="' . esc_attr__( 'Comments' ) . '">
 		<div class="post-com-count-wrapper">
 			<span aria-hidden="true">—</span>
 			<span class="screen-reader-text">' . esc_html__( 'No comments' ) . '</span>
@@ -3418,8 +3439,8 @@ function wp_ajax_quick_edit_attachment() {
 	</td>
 
 	<td class="alt column-alt" data-colname="' . esc_attr__( 'Alt Text' ) . '">' . esc_html( $alt ) . '</td>
-	<td class="caption column-caption" data-colname="' . esc_attr__( 'Caption' ) . '">' . esc_html( $attachment->post_excerpt ) . '</td>
-	<td class="desc column-desc" data-colname="' . esc_attr__( 'Description' ) . '">' . esc_html( $attachment->post_content ) . '</td>
+	<td class="caption column-caption" data-colname="' . esc_attr__( 'Caption' ) . '">' . esc_html( $post_excerpt ) . '</td>
+	<td class="desc column-desc" data-colname="' . esc_attr__( 'Description' ) . '">' . esc_html( $post_content ) . '</td>
 	<td class="date column-date" data-colname="' . esc_attr__( 'Date' ) . '">' . esc_html( $date ) . '</td>';
 
 	wp_send_json_success( $new_tr );

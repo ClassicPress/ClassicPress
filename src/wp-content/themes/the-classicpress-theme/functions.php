@@ -206,15 +206,6 @@ if ( function_exists( 'register_sidebar' ) ) {
 	);
 }
 
-/**
- * Modify Featured Image Text
- */
-function filter_featured_image_admin_text( $content, $post_id, $thumbnail_id ) {
-	$help_text = '<p><i>' . __( 'Ideal size is 800 x 471 pixels.', 'the-classicpress-theme' ) . '</i></p>';
-	return $help_text . $content;
-}
-add_filter( 'admin_post_thumbnail_html', 'filter_featured_image_admin_text', 10, 3 );
-
 // Remove empty paragraph tags
 function cp_remove_empty_p( $content ) {
 	$content = force_balance_tags( $content );

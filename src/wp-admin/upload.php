@@ -209,9 +209,8 @@ if ( 'grid' === $mode ) {
 		'paged'          => $paged,
 	);
 	$attachments = new WP_Query( $attachment_args );
-	$author = $author_link = '';
 
-	$total_pages = (int) $attachments->max_num_pages;
+	$total_pages = ( $attachments->max_num_pages ) ? (int) $attachments->max_num_pages : 1;
 	$prev_page   = ( $paged === 1 ) ? $paged : $paged - 1;
 	$next_page   = ( $paged === $total_pages ) ? $paged : $paged + 1;
 
@@ -412,11 +411,11 @@ if ( 'grid' === $mode ) {
 			<ul class="media-grid-view">
 
 				<?php
-				foreach ( $attachments->posts as $attachment ) {
+				foreach ( $attachments->posts as $key => $attachment ) {
 					$meta = wp_prepare_attachment_for_js( $attachment->ID );
 					$date         = $meta['dateFormatted'];
 					$author       = $meta['authorName'];
-					$author_link  = $meta['authorLink'];
+					$author_link  = ! empty( $meta['authorLink'] ) ? $meta['authorLink'] : '';
 					$url          = $meta['url'];
 					$width        = ! empty( $meta['width'] ) ? $meta['width'] : '';
 					$height       = ! empty( $meta['height'] ) ? $meta['height'] : '';
@@ -467,10 +466,13 @@ if ( 'grid' === $mode ) {
 						data-caption="<?php echo esc_attr( $caption ); ?>"
 						data-description="<?php echo esc_attr( $description ); ?>"
 						data-link="<?php echo esc_attr( $link ); ?>"
+						data-author="<?php echo esc_attr( $author ); ?>"
+						data-author-link="<?php echo esc_attr( $author_link ); ?>"
 						data-orientation="<?php echo esc_attr( $orientation ); ?>"
 						data-menu-order="<?php echo esc_attr( $menu_order ); ?>"
 						data-taxes="<?php echo esc_attr( $media_cats ); ?>"
 						data-tags="<?php echo esc_attr( $media_tags ); ?>"
+						data-order="<?php echo esc_attr( $key + 1 ); ?>"
 						data-update-nonce="<?php echo $update_nonce; ?>"
 						data-delete-nonce="<?php echo $delete_nonce; ?>"
 						data-edit-nonce="<?php echo $edit_nonce; ?>"
@@ -523,12 +525,15 @@ if ( 'grid' === $mode ) {
 
 			<div class="edit-attachment-frame mode-select hide-menu hide-router">
 				<div class="edit-media-header">
-					<button type="button" id="left-dashicon" class="left dashicons">
-						<span class="screen-reader-text"><?php esc_html_e( 'Edit previous media item' ); ?></span>
-					</button>
-					<button type="button" id="right-dashicon" class="right dashicons">
-						<span class="screen-reader-text"><?php esc_html_e( 'Edit next media item' ); ?></span>
-					</button>
+					<div class="media-navigation">
+						<button type="button" id="left-dashicon" class="left dashicons">
+							<span class="screen-reader-text"><?php esc_html_e( 'Edit previous media item' ); ?></span>
+						</button>
+						<div class="media-contextual-pagination"><span id="current-media-item" aria-hidden="true"></span>&nbsp;/&nbsp;<span id="total-media-items"></span></div>
+						<button type="button" id="right-dashicon" class="right dashicons">
+							<span class="screen-reader-text"><?php esc_html_e( 'Edit next media item' ); ?></span>
+						</button>
+					</div>
 					<button type="button" id="dialog-close-button" class="dashicons-no dashicons" autofocus>
 						<span class="screen-reader-text"><?php esc_html_e( 'Close dialog' ); ?></span>
 					</button>
@@ -540,6 +545,15 @@ if ( 'grid' === $mode ) {
 					<div class="attachment-details save-ready">
 						<div class="attachment-media-view">
 							<h3 class="screen-reader-text"><?php esc_html_e( 'Attachment Preview' ); ?></h3>
+							<div class="media-navigation" aria-label="<?php esc_html_e( 'Media Navigation' ); ?>">
+								<button type="button" id="left-dashicon-mobile" class="left dashicons">
+									<span class="screen-reader-text"><?php esc_html_e( 'Edit previous media item' ); ?></span>
+								</button>
+								<div class="media-contextual-pagination"><span id="current-media-item-mobile" aria-hidden="true"></span>&nbsp;/&nbsp;<span id="total-media-items-mobile"></span></div>
+								<button type="button" id="right-dashicon-mobile" class="right dashicons">
+									<span class="screen-reader-text"><?php esc_html_e( 'Edit next media item' ); ?></span>
+								</button>
+							</div>
 							<div id="media-image" class="thumbnail thumbnail-image">
 								<img class="details-image" src="" draggable="false" alt="">
 								<div class="attachment-actions">
@@ -564,7 +578,7 @@ if ( 'grid' === $mode ) {
 								<h3 class="screen-reader-text"><?php esc_html_e( 'Details' ); ?></h3>
 								<div class="uploaded"><strong><?php esc_html_e( 'Uploaded on:' ); ?></strong> <span class="attachment-date"></div>
 								<div class="uploaded-by">
-									<strong><?php esc_html_e( 'Uploaded by:' ); ?></strong> <a href="<?php echo esc_url( $author_link ); ?>"><?php echo esc_html( $author ); ?></a>
+									<strong><?php esc_html_e( 'Uploaded by:' ); ?></strong> <a href=""></a>
 								</div>
 
 								<div class="filename"><strong><?php esc_html_e( 'File name:' ); ?></strong> <span class="attachment-filename"></span></div>

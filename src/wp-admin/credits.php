@@ -49,16 +49,14 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 <div class="about-wrap-content">
 <?php
 
-echo '<p class="about-description">' . sprintf(
-	/* translators: %s: https://www.classicpress.net/contributors/ */
-	__( 'ClassicPress is created by a <a href="%1$s">worldwide team</a> of passionate individuals.' ),
-	'https://www.classicpress.net/contributors/'
+echo '<p class="about-description">' . __(
+	'ClassicPress is created by a worldwide team of passionate individuals.'
 ) . '</p>';
 
 echo '<p class="about-description">' . sprintf(
-	/* translators: %s: https://www.classicpress.net/get-involved/ */
+	/* translators: %s: https://www.classicpress.net/community/ */
 	__( 'Interested in helping out with development? <a href="%s">Get involved in ClassicPress</a>.' ),
-	'https://www.classicpress.net/get-involved/'
+	'https://www.classicpress.net/community/'
 ) . '</p>';
 
 ?>
