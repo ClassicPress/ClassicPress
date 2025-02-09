@@ -35,7 +35,7 @@ jobs:
   # - Run PHPUnit Tests.
   test-php:
     name: "PHP ${{ matrix.php }} on MySQL ${{matrix.mysql}}${{ matrix.memcached && ' with memcached' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
     strategy:
       fail-fast: false
@@ -104,6 +104,11 @@ jobs:
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-
+
+      - name: Install ImageMagick
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libavif-dev libwebp-dev libvpx-dev libmagickcore-dev imagemagick php-imagick
 
       - name: Login to Docker Hub
         if: ${{ github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false ) }}
@@ -190,6 +195,7 @@ jobs:
           phpunit --version
           composer --version
           grunt --version
+          convert --version
           lsb_release -a
           localectl list-locales
 
