@@ -285,7 +285,6 @@ if ( ! function_exists( 'str_ends_with' ) ) {
 	}
 }
 
-<<<<<<< HEAD
 // IMAGETYPE_WEBP constant is only defined in PHP 7.1 or later.
 if ( ! defined( 'IMAGETYPE_WEBP' ) ) {
 	define( 'IMAGETYPE_WEBP', 18 );
@@ -294,7 +293,18 @@ if ( ! defined( 'IMAGETYPE_WEBP' ) ) {
 // IMG_WEBP constant is only defined in PHP 7.0.10 or later.
 if ( ! defined( 'IMG_WEBP' ) ) {
 	define( 'IMG_WEBP', IMAGETYPE_WEBP );
-=======
+}
+
+// IMAGETYPE_AVIF constant is only defined in PHP 8.x or later.
+if ( ! defined( 'IMAGETYPE_AVIF' ) ) {
+	define( 'IMAGETYPE_AVIF', 19 );
+}
+
+// IMG_AVIF constant is only defined in PHP 8.x or later.
+if ( ! defined( 'IMG_AVIF' ) ) {
+	define( 'IMG_AVIF', IMAGETYPE_AVIF );
+}
+
 if ( ! function_exists( 'array_find' ) ) {
 	/**
 	 * Polyfill for `array_find()` function added in PHP 8.4.
@@ -385,15 +395,4 @@ if ( ! function_exists( 'array_all' ) ) {
 
 		return true;
 	}
->>>>>>> 6fea443d8f (General: Introduce polyfills for new array related functions in PHP 8.4.)
-}
-
-// IMAGETYPE_AVIF constant is only defined in PHP 8.x or later.
-if ( ! defined( 'IMAGETYPE_AVIF' ) ) {
-	define( 'IMAGETYPE_AVIF', 19 );
-}
-
-// IMG_AVIF constant is only defined in PHP 8.x or later.
-if ( ! defined( 'IMG_AVIF' ) ) {
-	define( 'IMG_AVIF', IMAGETYPE_AVIF );
 }
