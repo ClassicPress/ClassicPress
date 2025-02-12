@@ -67,7 +67,16 @@ class Tests_Locale extends WP_UnitTestCase {
 	public function test_get_weekday_undefined_index() {
 		$expectedErrorMessage = 'Undefined array key 7';
 
-		$this->assertExpectedError( array( $this->locale, 'get_weekday'), array( $expectedErrorMessage, 7 ) );
+		$this->assertExpectedError(
+			array(
+				$this->locale,
+				'get_weekday',
+			),
+			array(
+				$expectedErrorMessage,
+				7,
+			)
+		);
 	}
 
 	/**
