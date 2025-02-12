@@ -27,8 +27,9 @@ class Tests_Admin_wpPostsListTable extends WP_UnitTestCase {
 		foreach ( range( 1, $num_posts ) as $i ) {
 			$p = $factory->post->create_and_get(
 				array(
-					'post_type'  => 'page',
-					'post_title' => sprintf( 'Top Level Page %d', $i ),
+					'post_type'   => 'page',
+					'post_title'  => sprintf( 'Top Level Page %d', $i ),
+					'post_author' => 1,
 				)
 			);
 
@@ -45,6 +46,7 @@ class Tests_Admin_wpPostsListTable extends WP_UnitTestCase {
 						'post_type'   => 'page',
 						'post_parent' => $top_page->ID,
 						'post_title'  => sprintf( 'Child %d', $i ),
+						'post_author' => 1,
 					)
 				);
 
@@ -63,6 +65,7 @@ class Tests_Admin_wpPostsListTable extends WP_UnitTestCase {
 							'post_type'   => 'page',
 							'post_parent' => $child_page->ID,
 							'post_title'  => sprintf( 'Grandchild %d', $i ),
+							'post_author' => 1,
 						)
 					);
 
@@ -203,16 +206,6 @@ class Tests_Admin_wpPostsListTable extends WP_UnitTestCase {
 	 * @param array $expected_ids Expected IDs of pages returned.
 	 */
 	protected function _test_list_hierarchical_page( array $args, array $expected_ids ) {
-		if ( PHP_VERSION_ID >= 80100 ) {
-			/*
-			 * For the time being, ignoring PHP 8.1 "null to non-nullable" deprecations coming in
-			 * via hooked in filter functions until a more structural solution to the
-			 * "missing input validation" conundrum has been architected and implemented.
-			 */
-			$this->expectDeprecation();
-			$this->expectDeprecationMessageMatches( '`Passing null to parameter \#[0-9]+ \(\$[^\)]+\) of type [^ ]+ is deprecated`' );
-		}
-
 		$matches = array();
 
 		$_REQUEST['paged']   = $args['paged'];
@@ -227,7 +220,7 @@ class Tests_Admin_wpPostsListTable extends WP_UnitTestCase {
 
 		// Mimic the behavior of `wp_edit_posts_query()`:
 		if ( ! isset( $args['orderby'] ) ) {
-			$args['orderby']                = 'menu_order title';
+			$args['orderby']                = 'menu_order title ID';
 			$args['order']                  = 'asc';
 			$args['posts_per_page']         = -1;
 			$args['posts_per_archive_page'] = -1;
@@ -334,7 +327,7 @@ class Tests_Admin_wpPostsListTable extends WP_UnitTestCase {
 		$avail_post_stati = $avail_post_stati_backup;
 
 		$expected = array(
-			'all'     => '<a href="edit.php?post_type=page">All <span class="count">(38)</span></a>',
+			'all'     => '<a href="edit.php?post_type=page" class="current" aria-current="page">All <span class="count">(38)</span></a>',
 			'publish' => '<a href="edit.php?post_status=publish&#038;post_type=page">Published <span class="count">(38)</span></a>',
 		);
 
