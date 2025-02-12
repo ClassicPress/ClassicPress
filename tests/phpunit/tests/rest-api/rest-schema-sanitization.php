@@ -455,7 +455,11 @@ class WP_Test_REST_Schema_Sanitization extends WP_UnitTestCase {
 	 */
 	public function test_format_validation_is_applied_if_missing_type() {
 		$this->setExpectedIncorrectUsage( 'rest_sanitize_value_from_schema' );
-		$expectedErrorMessage = 'Undefined array key "type"';
+		if ( PHP_VERSION_ID >= 80000 ) {
+			$expectedErrorMessage = 'Undefined array key "type"';
+		} else {
+			$expectedErrorMessage = 'Undefined index: type';
+		}
 
 		$schema = array( 'format' => 'hex-color' );
 		$this->assertExpectedError( 'rest_sanitize_value_from_schema', array( $expectedErrorMessage, '#abc', $schema ) );
