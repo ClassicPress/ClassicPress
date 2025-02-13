@@ -34,7 +34,7 @@ jobs:
   # - Clone PHP.net if needed for unit tests.
   # - Run PHPUnit Tests.
   test-php:
-    name: "PHP ${{ matrix.php }} on MySQL ${{matrix.mysql}}${{ matrix.memcached && ' with memcached' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
+    name: "PHP ${{ matrix.php }} on MySQL ${{matrix.mysql}}${{ matrix.memcached && ' with memcached' || '' }}${{ 'xdebug' == matrix.coverage && ' with XDebug' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
     runs-on: ubuntu-22.04
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
     strategy:
@@ -43,31 +43,43 @@ jobs:
         php: [ '8.4', '8.3', '8.2', '8.1', '8.0', '7.4' ]
         mysql: [ '5.7', '8.0' ]
         memcached: [ false ]
+        coverage: [ none ]
         experimental: [ false ]
         include:
           - php: '8.0'
             mysql: '5.7'
             memcached: true
+            coverage: none
             experimental: false
           - php: '8.2'
             mysql: '5.7'
             memcached: true
+            coverage: none
             experimental: false
           - php: '8.3'
             mysql: '5.7'
             memcached: true
+            coverage: none
             experimental: false
           - php: '8.0'
             mysql: '8.0'
             memcached: true
+            coverage: none
             experimental: false
           - php: '8.2'
             mysql: '8.0'
             memcached: true
+            coverage: none
             experimental: false
           - php: '8.3'
             mysql: '8.0'
             memcached: true
+            coverage: none
+            experimental: false
+          - php: '8.3'
+            mysql: '8.0'
+            memcached: false
+            coverage: xdebug
             experimental: false
 
     steps:
@@ -162,7 +174,7 @@ jobs:
             soap,
             sqlite,
             zip
-          coverage: none
+          coverage: "${{ matrix.coverage }}"
 
       - name: Set up locale
         run: |
