@@ -2802,7 +2802,7 @@ function trailingslashit( $value ) {
  *
  * @since 2.2.0
  *
- * @param string $text Value from which trailing slashes will be removed.
+ * @param string $value Value from which trailing slashes will be removed.
  * @return string String without the trailing slashes.
  */
 function untrailingslashit( $value ) {
@@ -3423,7 +3423,7 @@ function translate_smiley( $matches ) {
 
 	$matches    = array();
 	$ext        = preg_match( '/\.([^.]+)$/', $img, $matches ) ? strtolower( $matches[1] ) : false;
-	$image_exts = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp' );
+	$image_exts = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp', 'avif' );
 
 	// Don't convert smilies that aren't images - they're probably emoji.
 	if ( ! in_array( $ext, $image_exts, true ) ) {

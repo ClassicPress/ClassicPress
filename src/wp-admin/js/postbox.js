@@ -153,7 +153,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		if ( column.id !== 'advanced-sortables' && column.querySelector( '.postbox' ) == null ) {
 			column.classList.add( 'empty-container' );
-			column.style.outline = '3px dashed #c3c4c7';
 			column.setAttribute( 'data-emptystring', emptySortableText );
 		}
 	} );
@@ -239,17 +238,25 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @since CP-2.1.0
 	 */
 	function dragEnd( e ) {
+		// Update class and attribute when a sortable area becomes or ceases being empty.
 		columns.forEach( function( column ) {
-			column.style.outline = 'none';
+			if ( column.clientHeight > 1 && column.querySelector( '.postbox:not(.hide-if-js)' ) == null ) {
+				column.classList.add( 'empty-container' );
+				column.style.outline = '3px dashed #c3c4c7';
+				column.setAttribute( 'data-emptystring', emptySortableText );
+			} else {
+				column.style.outline = 'none';
+			}
 		} );
 
-		// Update class and attribute when a sortable area becomes or ceases being empty.
-		if ( e.from.querySelector( '.postbox' ) == null ) {
+		// Add empty-container to empty containers after drag from
+		if ( e.from.querySelector( '.postbox:not(.hide-if-js)' ) == null && e.from.querySelector( '.postbox.hide-if-js' ) != null ) {
 			e.from.classList.add( 'empty-container' );
 			e.from.style.outline = '3px dashed #c3c4c7';
 			e.from.setAttribute( 'data-emptystring', emptySortableText );
 		}
 
+		// Remove empty-container from containers after drag to
 		if ( e.to.className.includes( 'empty-container' ) ) {
 			e.to.classList.remove( 'empty-container' );
 			e.to.style.outline = 'none';
@@ -277,7 +284,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Remove current aria-disabled states
 		document.querySelectorAll( '[aria-disabled="true"]' ).forEach( function( ariaDisabled ) {
 			ariaDisabled.setAttribute( 'aria-disabled', 'false' );
-		});
+		} );
 
 		// Collect variables for posting to database
 		postVars = new URLSearchParams( {
@@ -292,20 +299,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			column.querySelectorAll( 'details:not( .hide-if-js )' ).forEach( function( childWidget ) {
 				widgetsIds.push( childWidget.id ); // for posting to database
 				widgetsIdsList.push( childWidget.id ); // for setting aria-disabled state
-			});
+			} );
 			postVars.append( 'order[' + column.id.split( '-' )[0] + ']', widgetsIds.join( ',' ) );
 			widgetsIds = []; // reset
 		} );
 
 		// Add aria-disabled to first Up button if it's in the first sortable area
 		firstWidget = document.getElementById( widgetsIdsList[0] );
-		if ( firstWidget.parentNode === columns[0] ) {
+		if ( firstWidget && firstWidget.parentNode === columns[0] ) {
 			firstWidget.querySelector( '.handle-order-higher' ).setAttribute( 'aria-disabled', 'true' );
 		}
 
 		// Add aria-disabled to last Down button if it's in the last sortable area
 		lastWidget = document.getElementById( widgetsIdsList[widgetsIdsList.length -1] );
-		if ( lastWidget.closest( '.postbox-container' ).nextElementSibling == null ) {
+		if ( lastWidget && lastWidget.closest( '.postbox-container' ).nextElementSibling == null ) {
 			lastWidget.querySelector( '.handle-order-lower' ).setAttribute( 'aria-disabled', 'true' );
 		}
 

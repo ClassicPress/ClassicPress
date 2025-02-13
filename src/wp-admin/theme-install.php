@@ -110,7 +110,7 @@ if ( $tab ) {
 $help_overview =
 	'<p>' . sprintf(
 		/* translators: %s: Theme Directory URL. */
-		__( 'You can find additional themes for your site by using the Theme Browser/Installer on this screen, which will display themes from the <a href="%s">ClassicPress Theme Directory</a>. These themes are designed and developed by third parties, are available free of charge, and are compatible with the license WordPress uses.' ),
+		__( 'You can find additional themes for your site by using the Theme Browser/Installer on this screen, which will display themes from the <a href="%s">WordPress Theme Directory</a>. These themes are designed and developed by third parties, are available free of charge, and are compatible with the license WordPress uses.' ),
 		__( 'https://wordpress.org/themes/' )
 	) . '</p>' .
 	'<p>' . __( 'You can Search for themes by keyword, author, or tag, or can get more specific and search by criteria listed in the feature filter.' ) . ' <span id="live-search-desc">' . __( 'The search results will be updated as you type.' ) . '</span></p>' .
@@ -286,7 +286,15 @@ if ( $tab ) {
 	<# } #>
 
 	<# if ( data.installed ) { #>
-		<div class="notice notice-success notice-alt"><p><?php _ex( 'Installed', 'theme' ); ?></p></div>
+		<?php
+		wp_admin_notice(
+			_x( 'Installed', 'theme' ),
+			array(
+				'type'               => 'success',
+				'additional_classes' => array( 'notice-alt' ),
+			)
+		);
+		?>
 	<# } #>
 
 	<# if ( ! data.compatible_wp || ! data.compatible_php || ! data.compatible_cp ) { #>

@@ -284,6 +284,22 @@ class Walker_Comment extends Walker {
 	}
 
 	/**
+	 * Outputs a single comment.
+	 *
+	 * @since 3.6.0
+	 * @since CP-2.4.0 - restored function and converted to wrapper of `html5_comment()`
+	 *
+	 * @see wp_list_comments()
+	 *
+	 * @param WP_Comment $comment Comment to display.
+	 * @param int        $depth   Depth of the current comment.
+	 * @param array      $args    An array of arguments.
+	 */
+	protected function comment( $comment, $depth, $args ) {
+		$this->html5_comment( $comment, $depth, $args );
+	}
+
+	/**
 	 * Outputs a comment in the HTML5 format.
 	 *
 	 * @since 3.6.0

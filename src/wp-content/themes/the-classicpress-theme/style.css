@@ -4,7 +4,7 @@ Theme URI: https://docs.classicpress.net
 Author: Tim Kaye and ClassicPress contributors
 Author URI: https://www.classicpress.net
 Description: The default theme for ClassicPress.
-Version: 1.0.0
+Version: 1.0.1
 Requires PHP: 8.0
 Requires CP: 2.0
 License: GNU General Public License v2 or later
@@ -48,7 +48,11 @@ Normalizing styles have been helped along thanks to the fine work of Nicolas Gal
 /* Document
 	 ========================================================================== */
 
-/**
+:root {
+	--tcpt-border-radius: 4px;
+}
+
+/*
  * 1. Correct the line height in all browsers.
  * 2. Prevent adjustments of font size after orientation changes in iOS.
  */
@@ -190,7 +194,8 @@ textarea {
  */
 
 button,
-input { /* 1 */
+input {
+	/* 1 */
 	overflow: visible;
 }
 
@@ -200,7 +205,8 @@ input { /* 1 */
  */
 
 button,
-select { /* 1 */
+select {
+	/* 1 */
 	text-transform: none;
 }
 
@@ -332,20 +338,28 @@ textarea {
 	line-height: 1.5;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
 	clear: both;
 }
 
 p {
-	margin: 0 0 .75em;
+	margin: 0 0 0.75em;
 }
 
-dfn, cite, em, i {
+dfn,
+cite,
+em,
+i {
 	font-style: italic;
 }
 
 blockquote {
-	margin: 0 1.5em .75em;
+	margin: 0 1.5em 0.75em;
 	border-left: 4px solid #057f99;
 	padding-left: 1em;
 }
@@ -364,31 +378,37 @@ pre {
 	max-width: 100%;
 	overflow: auto;
 	padding: 1.6em;
-	border-radius: 6px;
+	border-radius: var(--tcpt-border-radius);
 }
 
-code, .code, kbd, tt, var {
+code,
+.code,
+kbd,
+tt,
+var {
 	font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
 	font-size: 15px;
 	font-size: 0.9375rem;
 	width: 100%;
 	background: #f3f3f3;
-	padding: 0 .2em;
-	border-radius: 3px;
+	padding: 0 0.2em;
+	border-radius: var(--tcpt-border-radius);
 }
 .code {
-	padding: .5em .75em .75em 1em;
+	padding: 0.5em 0.75em 0.75em 1em;
 	display: inline-block;
-	border-radius: 6px;
+	border-radius: var(--tcpt-border-radius);
 	margin-bottom: 1.4em;
 }
 
-abbr, acronym {
+abbr,
+acronym {
 	border-bottom: 1px dotted #666;
 	cursor: help;
 }
 
-mark, ins {
+mark,
+ins {
 	background: #fff9c0;
 	text-decoration: none;
 }
@@ -463,13 +483,13 @@ input[type="button"],
 input[type="reset"],
 input[type="submit"] {
 	border: 1px #3a113c solid;
-	border-radius: 3px;
+	border-radius: var(--tcpt-border-radius);
 	background: #89288f;
 	color: rgba(0, 0, 0, 0.8);
 	font-size: 12px;
 	font-size: 0.75rem;
 	line-height: 1;
-	padding: .6em 1em .4em;
+	padding: 0.6em 1em 0.4em;
 }
 button:hover,
 input[type="button"]:hover,
@@ -478,7 +498,8 @@ input[type="submit"]:hover {
 	border-color: #ccc #bbb #aaa;
 	box-shadow: 0 0 3px 2px #89288f;
 }
-button:active, button:focus,
+button:active,
+button:focus,
 input[type="button"]:active,
 input[type="button"]:focus,
 input[type="reset"]:active,
@@ -505,7 +526,7 @@ input[type="color"],
 textarea {
 	color: #666;
 	border: 1px solid #ccc;
-	border-radius: 3px;
+	border-radius: var(--tcpt-border-radius);
 	padding: 3px;
 }
 input[type="text"]:focus,
@@ -545,7 +566,7 @@ a:visited {
 	border-bottom: 0.2em solid transparent;
 }
 #susty-back-link {
-	padding: .3em .6em;
+	padding: 0.3em 0.6em;
 }
 a:hover,
 a:focus,
@@ -598,7 +619,7 @@ a:active {
 }
 .screen-reader-text:focus {
 	background-color: #f1f1f1;
-	border-radius: 3px;
+	border-radius: var(--tcpt-border-radius);
 	box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
 	clip: auto !important;
 	clip-path: none;
@@ -629,13 +650,13 @@ a:active {
 .alignleft {
 	display: inline;
 	float: left;
-	margin: 1em 1.25em .75em 0;
+	margin: 1em 1.25em 0.75em 0;
 }
 
 .alignright {
 	display: inline;
 	float: right;
-	margin: 1em 0 .75em 1.25em;
+	margin: 1em 0 0.75em 1.25em;
 }
 
 .aligncenter {
@@ -804,7 +825,7 @@ object {
 	justify-content: space-between;
 	margin: 0;
 	padding: 0.75em 0;
-	background: rgba(5, 127, 153, 1.0);
+	background: rgba(5, 127, 153, 1);
 	border-bottom: #034a59;
 }
 #masthead h1,
@@ -831,15 +852,12 @@ object {
 #masthead .logo a {
 	display: inline-block;
 }
-#masthead a,
-.home-hero-text h3 {
+#masthead a {
 	color: #fff;
 	font-weight: 400;
 }
 .logo {
 	display: block;
-	text-align: left;
-	line-height: 0;
 }
 .logo svg {
 	width: 2.4em;
@@ -870,63 +888,72 @@ svg * {
 	align-items: center;
 }
 .cat-links a:first-of-type {
-	margin-left: .5em;
+	margin-left: 0.5em;
 }
-.cat-links a, .comments-link a, .edit-link a {
-	padding: 0 .5em;
-	margin: 0 .5em 0 0;
+.cat-links a,
+.comments-link a,
+.edit-link a {
+	padding: 0 0.5em;
+	margin: 0 0.5em 0 0;
 }
 
 /* CLASSICPRESS-SPECIFIC STYLES */
 @font-face {
-	font-family: 'Source Sans Pro';
+	font-family: "Source Sans Pro";
 	font-style: normal;
 	font-weight: 400;
-	src: local('Source Sans Pro Regular'), local('SourceSansPro-Regular'), url('fonts/source-sans-pro-v12-latin-regular.woff2') format('woff2');
+	src: local("Source Sans Pro Regular"), local("SourceSansPro-Regular"),
+		url("fonts/source-sans-pro-v12-latin-regular.woff2") format("woff2");
 }
 @font-face {
-	font-family: 'Source Sans Pro';
+	font-family: "Source Sans Pro";
 	font-style: italic;
 	font-weight: 400;
-	src: local('Source Sans Pro Italic'), local('SourceSansPro-Italic'), url('fonts/source-sans-pro-v12-latin-italic.woff2') format('woff2');
+	src: local("Source Sans Pro Italic"), local("SourceSansPro-Italic"),
+		url("fonts/source-sans-pro-v12-latin-italic.woff2") format("woff2");
 }
 @font-face {
-	font-family: 'Source Sans Pro';
+	font-family: "Source Sans Pro";
 	font-style: normal;
 	font-weight: 600;
-	src: local('Source Sans Pro SemiBold'), local('SourceSansPro-SemiBold'), url('fonts/source-sans-pro-v12-latin-600.woff2') format('woff2');
+	src: local("Source Sans Pro SemiBold"), local("SourceSansPro-SemiBold"),
+		url("fonts/source-sans-pro-v12-latin-600.woff2") format("woff2");
 }
 @font-face {
-	font-family: 'Source Sans Pro';
+	font-family: "Source Sans Pro";
 	font-style: italic;
 	font-weight: 600;
-	src: local('Source Sans Pro SemiBold Italic'), local('SourceSansPro-SemiBoldItalic'), url('fonts/source-sans-pro-v12-latin-600italic.woff2') format('woff2');
+	src: local("Source Sans Pro SemiBold Italic"),
+		local("SourceSansPro-SemiBoldItalic"),
+		url("fonts/source-sans-pro-v12-latin-600italic.woff2") format("woff2");
 }
 @font-face {
-	font-family: 'Source Sans Pro';
+	font-family: "Source Sans Pro";
 	font-style: normal;
 	font-weight: 700;
-	src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url('fonts/source-sans-pro-v12-latin-700.woff2') format('woff2');
+	src: local("Source Sans Pro Bold"), local("SourceSansPro-Bold"),
+		url("fonts/source-sans-pro-v12-latin-700.woff2") format("woff2");
 }
 
 @font-face {
-	font-family: 'Source Sans Pro';
+	font-family: "Source Sans Pro";
 	font-style: italic;
 	font-weight: 700;
-	src: local('Source Sans Pro Bold Italic'), local('SourceSansPro-BoldItalic'), url('fonts/source-sans-pro-v12-latin-700italic.woff2') format('woff2');
+	src: local("Source Sans Pro Bold Italic"), local("SourceSansPro-BoldItalic"),
+		url("fonts/source-sans-pro-v12-latin-700italic.woff2") format("woff2");
 }
 
 /* Icons from Icomoon */
 @font-face {
-	font-family: 'cpicons';
-	src: url('fonts/cpicons.woff2') format('woff2');
+	font-family: "cpicons";
+	src: url("fonts/cpicons.woff2") format("woff2");
 	font-weight: normal;
 	font-style: normal;
 	font-display: block;
 }
 [class^="cpicon-"],
 [class*=" cpicon-"] {
-	font-family: 'cpicons';
+	font-family: "cpicons";
 	speak: none;
 	font-style: normal;
 	font-weight: normal;
@@ -992,7 +1019,7 @@ input[type="search"] {
 	width: 300px;
 	max-width: 85%;
 	padding: 0.3em;
-	border-radius: 5px;
+	border-radius: var(--tcpt-border-radius);
 	position: relative;
 	top: 1px;
 }
@@ -1001,16 +1028,16 @@ button {
 	font-family: "Source Sans Pro";
 	font-weight: 600;
 	border: 0;
-	padding: .7em 2em;
+	padding: 0.7em 2em;
 	text-transform: uppercase;
-	letter-spacing: .05em;
+	letter-spacing: 0.05em;
 }
 #content .widget-container ul li.cat-item.current-cat a {
 	color: #040402;
 }
 
 /* External link icon */
-article a[target='_blank']::after {
+article a[target="_blank"]::after {
 	font-size: 60%;
 	position: relative;
 	top: -3px;
@@ -1018,11 +1045,11 @@ article a[target='_blank']::after {
 	color: #057f99;
 	text-decoration: none;
 	display: inline-block;
-	font-family: 'cpicons';
-	content: '\e901';
+	font-family: "cpicons";
+	content: "\e901";
 }
-article .button a[target='_blank']:after {
-	content: '';
+article .button a[target="_blank"]:after {
+	content: "";
 	display: none;
 }
 img {
@@ -1038,7 +1065,7 @@ img {
 
 /* MENUS AND MASTHEAD */
 .announcement {
-	background: #96D392;
+	background: #96d392;
 	color: #295723;
 	text-align: center;
 	padding: 1rem;
@@ -1053,7 +1080,7 @@ img {
 	background: #fff;
 	color: #000;
 	font-weight: 600;
-	border-radius: 4px;
+	border-radius: var(--tcpt-border-radius);
 	font-size: 100%;
 	padding: 0.1rem 0.5rem;
 	border: 0;
@@ -1082,8 +1109,7 @@ img {
 	background: #fff;
 }
 #primary-menu.menu li {
-	letter-spacing: .1em;
-	margin-left: 2px;
+	letter-spacing: 0.1em;
 }
 #primary-menu.menu li ul li {
 	font-size: 1em;
@@ -1091,18 +1117,15 @@ img {
 	letter-spacing: 0;
 	margin: 0;
 }
-#primary-menu.menu > li > a {
-	outline-offset: -2px;
-}
 #primary-menu.menu li a,
 #primary-menu.menu li a:visited {
-	color: rgba(255, 255, 255, 1.0);
-	border-radius: 6px;
+	color: rgba(255, 255, 255, 1);
+	border-radius: var(--tcpt-border-radius);
 	border-width: 0;
 	/* IE11/Edge fix */
 }
 .menu-item-has-children > a::after {
-	content: '';
+	content: "";
 	border: 4px solid transparent;
 	border-top: 5px solid rgba(255, 255, 255, 0.72);
 	margin-left: 0.2em;
@@ -1111,7 +1134,7 @@ img {
 }
 #primary-menu.menu li.current_page_parent > a,
 #primary-menu.menu li.current_page_item > a {
-	background: rgba(62, 188, 166, .5);
+	background: rgba(62, 188, 166, 0.5);
 }
 #primary-menu.menu li.current_page_parent ul li a,
 #primary-menu.menu li.current_page_item ul li a {
@@ -1125,7 +1148,7 @@ img {
 #primary-menu.menu li.current_page_parent ul li a:active,
 #primary-menu.menu li.current_page_item ul li a:hover,
 #primary-menu.menu li.current_page_item ul li a:active {
-	background: rgba(62, 188, 166, .75)
+	background: rgba(62, 188, 166, 0.75);
 }
 .nav--toggle-sub li.menu-item-has-children,
 .nav--toggle-sub li.menu-item--has-toggle {
@@ -1141,8 +1164,8 @@ img {
 	flex-direction: column;
 	margin-left: 0;
 	z-index: 1;
-	background: rgba(5, 127, 153, 1.0);
-	border-radius: 0 0 6px 6px;
+	background: rgba(5, 127, 153, 1);
+	border-radius: 0 0 var(--tcpt-border-radius) var(--tcpt-border-radius);
 	width: 100%;
 }
 
@@ -1153,7 +1176,7 @@ img {
 }
 #masthead .menu ul.sub-menu li a,
 #masthead .menu li.menu-item-has-children ul.sub-menu li a {
-	padding-left: .85em;
+	padding-left: 0.85em;
 	border-radius: 0;
 }
 
@@ -1161,12 +1184,26 @@ img {
 #page-title {
 	padding: 4.2em 0 1em;
 	background: #006b81;
-	background: -moz-linear-gradient(-135deg, #3ebca6 18%, #057f99 50%, #006b81 100%);
-	background: -webkit-linear-gradient(-135deg, #3ebca6 18%, #057f99 50%, #006b81 100%);
+	background: -moz-linear-gradient(
+		-135deg,
+		#3ebca6 18%,
+		#057f99 50%,
+		#006b81 100%
+	);
+	background: -webkit-linear-gradient(
+		-135deg,
+		#3ebca6 18%,
+		#057f99 50%,
+		#006b81 100%
+	);
 	background: linear-gradient(-135deg, #3ebca6 18%, #057f99 50%, #006b81 100%);
 	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#3ebca6', endColorstr='#006b81', GradientType=1);
 	border-bottom: 10px solid #89288f;
-	border-image-source: linear-gradient(45deg, rgb(137, 40, 143), rgb(75, 32, 99));
+	border-image-source: linear-gradient(
+		45deg,
+		rgb(137, 40, 143),
+		rgb(75, 32, 99)
+	);
 	border-image-slice: 1;
 	margin-bottom: 2.6em;
 }
@@ -1213,8 +1250,8 @@ h1,
 h2,
 h3,
 h4 {
-	margin: 0 0 .5em;
-	padding-top: .5em;
+	margin: 0 0 0.5em;
+	padding-top: 0.5em;
 }
 h2.subhdtop,
 h3.subhdtop,
@@ -1257,8 +1294,8 @@ h4.subhdtop {
 }
 #main ul,
 #main ol {
-	margin-top: .5em;
-	margin-bottom: .9em;
+	margin-top: 0.5em;
+	margin-bottom: 0.9em;
 	padding-left: 28px;
 }
 .twocolumn {
@@ -1276,7 +1313,7 @@ p.text-rightcol,
 	border-bottom: 10px solid #057f99;
 }
 .page-main .post-thumbnail {
-	margin: .6em 0 1.4em;
+	margin: 0.6em 0 1.4em;
 }
 .blog-list .hentry {
 	margin: 0;
@@ -1288,12 +1325,12 @@ p.text-rightcol,
 }
 .blog-post a.post-thumbnail {
 	display: inline-block;
-	margin: 1.2em 0 .6em;
+	margin: 1.2em 0 0.6em;
 	position: relative;
 }
 .sticky .blog-post a.post-thumbnail::after {
 	content: "FEATURED POST";
-	font-size: .8em;
+	font-size: 0.8em;
 	font-weight: 600;
 	color: #fff;
 	position: absolute;
@@ -1301,22 +1338,22 @@ p.text-rightcol,
 	left: 0;
 	width: 100%;
 	text-align: center;
-	letter-spacing: .1em;
+	letter-spacing: 0.1em;
 }
 #main .blog-list .blog-post h2 {
 	line-height: 1.1;
-	margin-bottom: .3em;
+	margin-bottom: 0.3em;
 }
 .author_bio_section {
 	margin: 1.8em 0 0;
 	padding: 1em;
 	background-color: rgb(235 243 246 / 46%);
-	border-radius: 8px;
+	border-radius: var(--tcpt-border-radius);
 }
 .author_bio_section h5 {
 	font-size: 1.1em;
 	font-weight: 600;
-	margin: 0 0 .2em 0;
+	margin: 0 0 0.2em 0;
 }
 .author_details img.avatar-90 {
 	float: left;
@@ -1327,22 +1364,22 @@ p.text-rightcol,
 }
 #main .author_details p {
 	line-height: 1.4em;
-	margin: .3em 0;
+	margin: 0.3em 0;
 }
 #main ul.brand-colors {
 	list-style-type: none;
-	padding-left: .6em;
-	margin: .1em 0 .8em;
+	padding-left: 0.6em;
+	margin: 0.1em 0 0.8em;
 }
 #main ul.brand-colors li {
-	padding: 0 0 .2em 0;
+	padding: 0 0 0.2em 0;
 	line-height: 1.5;
 }
 #main ul.brand-colors li::before {
 	width: 24px;
 	height: 24px;
 	border-radius: 12px;
-	content: '';
+	content: "";
 	margin-right: 6px;
 	vertical-align: bottom;
 	display: inline-block;
@@ -1374,8 +1411,8 @@ p.text-rightcol,
 }
 #main p.entry-meta {
 	color: #767676;
-	margin-bottom: .35em;
-	font-size: .84em;
+	margin-bottom: 0.35em;
+	font-size: 0.84em;
 	line-height: 1.2;
 	font-style: italic;
 }
@@ -1393,13 +1430,13 @@ p.button:focus {
 	outline: none;
 }
 input[type="submit"] {
-	font-size: .9em;
+	font-size: 0.9em;
 }
 p.button a,
 input[type="submit"] {
 	display: inline-block;
-	padding: .9rem 2.5rem;
-	border-radius: 5px;
+	padding: 0.9rem 2.5rem;
+	border-radius: var(--tcpt-border-radius);
 	font-weight: 400;
 	color: #fff;
 	line-height: 1;
@@ -1424,7 +1461,7 @@ input[type="submit"]:focus {
 	font-weight: 400;
 	text-transform: uppercase;
 	padding: 0;
-	letter-spacing: .1em;
+	letter-spacing: 0.1em;
 	text-decoration: none;
 	font-size: 14px;
 }
@@ -1461,17 +1498,17 @@ body.single-post #content {
 	margin-top: 0.5em;
 	padding: 0.1em 1em;
 	background: rgb(235 243 246 / 46%);
-	border-radius: 6px;
+	border-radius: var(--tcpt-border-radius);
 }
 
 /* CRAYON CODE HILITES */
 .crayon-theme-classic {
-	border-radius: 0 0 6px 6px;
+	border-radius: 0 0 var(--tcpt-border-radius) var(--tcpt-border-radius);
 }
 #content ul li,
 #content ol li {
-	padding-top: .2em;
-	padding-bottom: .2em;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
 }
 article a {
 	background: none;
@@ -1485,10 +1522,10 @@ ol.comment-list {
 	list-style-type: none;
 	padding-left: 0;
 }
-ol.comment-list>.comment {
+ol.comment-list > .comment {
 	margin-top: 1.5em;
 }
-ol.comment-list>.comment:first-child {
+ol.comment-list > .comment:first-child {
 	margin-top: 0;
 }
 #respond {
@@ -1524,7 +1561,7 @@ span.wpcf7-not-valid-tip {
 div.wpcf7-validation-errors,
 div.wpcf7-acceptance-missing {
 	border: 2px solid #89288f;
-	border-radius: 5px;
+	border-radius: var(--tcpt-border-radius);
 }
 div.wpcf7-response-output {
 	margin: 2em 0 1em;
@@ -1596,33 +1633,33 @@ table.cp-logo-list .cp-logo-description {
 }
 .page .sidebar .sidebar-note ul {
 	padding-left: 1.3em;
-	margin: .4em 0;
+	margin: 0.4em 0;
 }
 .page .sidebar .sidebar-note li {
-	font-size: .96em;
+	font-size: 0.96em;
 }
 .sidebar-note {
 	padding: 10px 9px 12px 15px;
 	background-color: rgb(235 243 246 / 46%);
-	border-radius: 8px;
-	margin: .3em 0 1.5em 0;
+	border-radius: var(--tcpt-border-radius);
+	margin: 0.3em 0 1.5em 0;
 }
 #sidebar h3 {
-	padding-top: .1em;
-	margin-bottom: .2em;
+	padding-top: 0.1em;
+	margin-bottom: 0.2em;
 	font-size: 1.3em;
 }
 #sidebar p {
-	margin-bottom: .4em;
+	margin-bottom: 0.4em;
 }
 #sidebar p.readmore {
-	margin: .6em 0;
-	font-size: .85em;
+	margin: 0.6em 0;
+	font-size: 0.85em;
 }
 #sidebar p.readmore a {
 	display: inline-block;
-	padding: .55rem 1.5rem .65em;
-	border-radius: 5px;
+	padding: 0.55rem 1.5rem 0.65em;
+	border-radius: var(--tcpt-border-radius);
 	font-weight: 400;
 	color: #fff;
 	line-height: 1;
@@ -1638,16 +1675,16 @@ table.cp-logo-list .cp-logo-description {
 }
 #sidebar input[type="search"] {
 	width: 190px;
-	padding: .3em;
+	padding: 0.3em;
 	position: relative;
 	top: 1px;
 }
 #sidebar input[type="submit"],
 #commentform input[type="submit"],
 .search-form input[type="submit"] {
-	padding: .6em 1em .7em;
-	font-size: .9em;
-	border-radius: 5px;
+	padding: 0.6em 1em 0.7em;
+	font-size: 0.9em;
+	border-radius: var(--tcpt-border-radius);
 	font-weight: 400;
 	color: #fff;
 	line-height: 1;
@@ -1669,13 +1706,13 @@ table.cp-logo-list .cp-logo-description {
 	box-shadow: 0 0 3px 2px #89288f;
 }
 .widget-container {
-	margin: .65em 0 2em;
+	margin: 0.65em 0 2em;
 }
 .page .sidebar .widget-container {
-	margin-top: .5em;
+	margin-top: 0.5em;
 }
 .widget-container ul {
-	margin: .2em 0 1em 0;
+	margin: 0.2em 0 1em 0;
 	padding: 0;
 	list-style-type: none;
 }
@@ -1712,7 +1749,7 @@ table.cp-logo-list .cp-logo-description {
 #colophon p {
 	color: #fff;
 	margin-bottom: 0.6em;
-	font-size: .9em;
+	font-size: 0.9em;
 	line-height: 1.3;
 }
 #colophon li {
@@ -1784,7 +1821,7 @@ table.cp-logo-list .cp-logo-description {
 #legal p {
 	color: #fff;
 	margin-bottom: 0;
-	font-size: .8em;
+	font-size: 0.8em;
 	line-height: 1.3;
 }
 #legal a {
@@ -1899,7 +1936,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	}
 	.footerleft img {
 		float: none;
-		margin: 0 0 .3em 0;
+		margin: 0 0 0.3em 0;
 	}
 	footer .classic {
 		display: flex;
@@ -1932,13 +1969,9 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		z-index: 3;
 		width: 100%;
 		margin-left: -1em;
-		background: rgba(5, 127, 153, 1.0);
-	}
-	#primary-menu li {
-		margin: 0.4em 0;
+		background: rgba(5, 127, 153, 1);
 	}
 	#primary-menu li a {
-		margin: 0.5em;
 		padding: 0.2em 0.5em;
 	}
 	#masthead .menu ul.sub-menu li a,
@@ -1946,11 +1979,14 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		padding-left: 1.2em;
 	}
 	#masthead .search-form {
-		margin-left: 1em;
+		display: flex;
+		gap: 1em;
 	}
 	#masthead .search-field {
 		margin-right: 0.75em;
 		font-size: 0.9em;
+		width: 100%;
+		max-width: 100%;
 	}
 	#masthead .search-submit {
 		margin-top: 0.2em;
@@ -1988,15 +2024,6 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		padding-bottom: 2em;
 		flex-direction: column;
 	}
-	.home-hero-text {
-		width: 100%;
-		text-align: center;
-	}
-	.home-hero-text h1,
-	.home-hero-text h2,
-	.home-hero-text h3 {
-		padding-top: 0;
-	}
 	.home-hero-image {
 		margin: 0 auto 1em;
 		max-width: 600px;
@@ -2014,14 +2041,14 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		justify-content: center;
 		margin-bottom: 2rem;
 	}
-	.home-hero-text h3 {
-		margin: 0 auto 2rem;
-	}
 	#menu-toggle {
 		display: block;
 	}
 	#primary-menu {
 		display: none;
+		flex-direction: column;
+		margin: 1em 0 0 0;
+		gap: 1em;
 	}
 	.petitions-home,
 	.getinvolved,
@@ -2052,7 +2079,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	.getcp,
 	.getinvolved {
 		text-align: center;
-		padding: 0 0 .5em 0;
+		padding: 0 0 0.5em 0;
 	}
 	.getcp p.button a,
 	.getinvolved p.button a,
@@ -2081,8 +2108,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	}
 	#primary-menu.menu li {
 		text-transform: uppercase;
-		letter-spacing: .1em;
-		margin-left: 2px;
+		letter-spacing: 0.1em;
 		font-size: 0.85em;
 	}
 	.menu {
@@ -2092,6 +2118,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		flex-wrap: wrap;
 		padding: 0;
 		margin: 0;
+		gap: 1em;
 		line-height: 3.5em;
 	}
 	.menu li a {
@@ -2101,7 +2128,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	}
 	nav .menu .sub-menu li a {
 		line-height: 1.4em;
-		padding: 0.55em .85em;
+		padding: 0.55em 0.85em;
 	}
 	.menu ul li {
 		padding: 0;
@@ -2114,7 +2141,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	}
 	#masthead .menu ul.sub-menu li:last-child a,
 	#masthead .menu li.menu-item-has-children ul.sub-menu li:last-child a {
-		border-radius: 0 0 6px 6px
+		border-radius: 0 0 var(--tcpt-border-radius) var(--tcpt-border-radius);
 	}
 	.menu-item-has-children > a::after {
 		margin-left: 0.12em;

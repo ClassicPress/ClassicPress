@@ -418,10 +418,10 @@ class WP_Media_List_Table extends WP_List_Table {
 		}
 
 		/* translators: Column name. */
-		$posts_columns['alt']         = _x( 'Alt Text', 'column name' );
-		$posts_columns['caption']     = _x( 'Caption', 'column name' );
-		$posts_columns['desc']        = _x( 'Description', 'column name' );
-		$posts_columns['date'] = _x( 'Date', 'column name' );
+		$posts_columns['alt']     = _x( 'Alt Text', 'column name' );
+		$posts_columns['caption'] = _x( 'Caption', 'column name' );
+		$posts_columns['desc']    = _x( 'Description', 'column name' );
+		$posts_columns['date']    = _x( 'Date', 'column name' );
 
 		/**
 		 * Filters the Media list table columns.
@@ -512,7 +512,7 @@ class WP_Media_List_Table extends WP_List_Table {
 
 		$class = $thumb ? ' class="has-media-icon"' : '';
 		?>
-		<strong<?php echo $class; ?>>
+		<strong <?php echo $class; ?>>
 			<?php
 			echo $link_start;
 
@@ -598,10 +598,10 @@ class WP_Media_List_Table extends WP_List_Table {
 	 * @param WP_Post $post The current WP_Post object.
 	 */
 	public function column_date( $post ) {
+		$time = get_post_timestamp( $post );
 		if ( '0000-00-00 00:00:00' === $post->post_date ) {
 			$h_time = __( 'Unpublished' );
 		} else {
-			$time      = get_post_timestamp( $post );
 			$time_diff = time() - $time;
 
 			if ( $time && $time_diff > 0 && $time_diff < DAY_IN_SECONDS ) {
@@ -611,6 +611,7 @@ class WP_Media_List_Table extends WP_List_Table {
 				$h_time = get_the_time( __( 'Y/m/d' ), $post );
 			}
 		}
+		$h_time .= '<time datetime="' . wp_date( 'Y/m/d', $time ) . '"></time>';
 
 		/**
 		 * Filters the published time of an attachment displayed in the Media list table.

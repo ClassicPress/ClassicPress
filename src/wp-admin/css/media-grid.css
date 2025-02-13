@@ -43,18 +43,20 @@
 	margin-right: 0;
 }
 .imgedit-panel-content {
-	height: 100vh;	
+	height: -moz-fit-content;
+	height: fit-content;	
 	padding: 16px 16px 0;
 	position: absolute;
 	top: 0;
 	right: 282px;
 	bottom: 0;
 	left: 0;
-	overflow: auto;
+	overflow: hidden;
 }
 .imgedit-settings {
-	height: 100vh;
-	overflow: auto;  
+	height: -moz-fit-content;
+	height: fit-content;
+	overflow: hidden;  
 	background: #f6f7f7;
 	border-left: 1px solid #dcdcde;
 	padding: 20px 16px 0;
@@ -130,6 +132,7 @@
 .media-item {
 	cursor: pointer;
 	margin-bottom: 0;
+	position: relative;
 }
 .media-item:focus,
 .media-item.selected:focus {
@@ -149,9 +152,9 @@
 	width: 24px;
 	padding: 0;
 	border: 0;
-	margin-top: -105%;
-	margin-left: 87%;
-	position: relative;
+	top: -5px;
+	right: -5px;
+	position: absolute;
 	z-index: 10;
 	outline: none;
 	background: #f0f0f1;
@@ -259,7 +262,7 @@
 	float: left;
 	width: 100%;
 	margin: 0 0 10px;
-    margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 .attachment-details .setting .name,
 .attachment-details .setting .value,
@@ -359,7 +362,7 @@ dialog::backdrop {
 	opacity: 0.7;
 }
 .mejs-container:focus {
-    outline-offset: 0.125rem;
-    outline-style: solid;
-    outline-width: 0.125rem;
+	outline-offset: 0.125rem;
+	outline-style: solid;
+	outline-width: 0.125rem;
 }

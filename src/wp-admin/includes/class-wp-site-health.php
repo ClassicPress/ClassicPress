@@ -1867,6 +1867,185 @@ class WP_Site_Health {
 	}
 
 	/**
+	 * Tests available disk space for updates.
+	 *
+	 * @since 6.3.0
+	 *
+	 * @return array The test results.
+	 */
+	public function get_test_available_updates_disk_space() {
+		$available_space = function_exists( 'disk_free_space' ) ? @disk_free_space( WP_CONTENT_DIR . '/upgrade/' ) : false;
+
+		$result = array(
+			'label'       => __( 'Disk space available to safely perform updates' ),
+			'status'      => 'good',
+			'badge'       => array(
+				'label' => __( 'Security' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				/* translators: %s: Available disk space in MB or GB. */
+				'<p>' . __( '%s available disk space was detected, update routines can be performed safely.' ) . '</p>',
+				size_format( $available_space )
+			),
+			'actions'     => '',
+			'test'        => 'available_updates_disk_space',
+		);
+
+		if ( false === $available_space ) {
+			$result['description'] = __( 'Could not determine available disk space for updates.' );
+			$result['status']      = 'recommended';
+		} elseif ( $available_space < 20 * MB_IN_BYTES ) {
+			$result['description'] = __( 'Available disk space is critically low, less than 20 MB available. Proceed with caution, updates may fail.' );
+			$result['status']      = 'critical';
+		} elseif ( $available_space < 100 * MB_IN_BYTES ) {
+			$result['description'] = __( 'Available disk space is low, less than 100 MB available.' );
+			$result['status']      = 'recommended';
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Tests if plugin and theme temporary backup directories are writable or can be created.
+	 *
+	 * @since 6.3.0
+	 *
+	 * @global WP_Filesystem_Base $wp_filesystem WordPress filesystem subclass.
+	 *
+	 * @return array The test results.
+	 */
+	public function get_test_update_temp_backup_writable() {
+		global $wp_filesystem;
+
+		$result = array(
+			'label'       => __( 'Plugin and theme temporary backup directory is writable' ),
+			'status'      => 'good',
+			'badge'       => array(
+				'label' => __( 'Security' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				/* translators: %s: wp-content/upgrade-temp-backup */
+				'<p>' . __( 'The %s directory used to improve the stability of plugin and theme updates is writable.' ) . '</p>',
+				'<code>wp-content/upgrade-temp-backup</code>'
+			),
+			'actions'     => '',
+			'test'        => 'update_temp_backup_writable',
+		);
+
+		if ( ! $wp_filesystem ) {
+			require_once ABSPATH . '/wp-admin/includes/file.php';
+			WP_Filesystem();
+		}
+
+		$wp_content = $wp_filesystem->wp_content_dir();
+
+		if ( ! $wp_content ) {
+			$result['status'] = 'critical';
+			$result['label']  = sprintf(
+				/* translators: %s: wp-content */
+				__( 'Unable to locate WordPress content directory (%s)' ),
+				'<code>wp-content</code>'
+			);
+			$result['description'] = sprintf(
+				/* translators: %s: wp-content */
+				'<p>' . __( 'The %s directory cannot be located.' ) . '</p>',
+				'<code>wp-content</code>'
+			);
+			return $result;
+		}
+
+		$upgrade_dir_exists      = $wp_filesystem->is_dir( "$wp_content/upgrade" );
+		$upgrade_dir_is_writable = $wp_filesystem->is_writable( "$wp_content/upgrade" );
+		$backup_dir_exists       = $wp_filesystem->is_dir( "$wp_content/upgrade-temp-backup" );
+		$backup_dir_is_writable  = $wp_filesystem->is_writable( "$wp_content/upgrade-temp-backup" );
+
+		$plugins_dir_exists      = $wp_filesystem->is_dir( "$wp_content/upgrade-temp-backup/plugins" );
+		$plugins_dir_is_writable = $wp_filesystem->is_writable( "$wp_content/upgrade-temp-backup/plugins" );
+		$themes_dir_exists       = $wp_filesystem->is_dir( "$wp_content/upgrade-temp-backup/themes" );
+		$themes_dir_is_writable  = $wp_filesystem->is_writable( "$wp_content/upgrade-temp-backup/themes" );
+
+		if ( $plugins_dir_exists && ! $plugins_dir_is_writable && $themes_dir_exists && ! $themes_dir_is_writable ) {
+			$result['status']      = 'critical';
+			$result['label']       = __( 'Plugin and theme temporary backup directories exist but are not writable' );
+			$result['description'] = sprintf(
+				/* translators: 1: wp-content/upgrade-temp-backup/plugins, 2: wp-content/upgrade-temp-backup/themes. */
+				'<p>' . __( 'The %1$s and %2$s directories exist but are not writable. These directories are used to improve the stability of plugin updates. Please make sure the server has write permissions to these directories.' ) . '</p>',
+				'<code>wp-content/upgrade-temp-backup/plugins</code>',
+				'<code>wp-content/upgrade-temp-backup/themes</code>'
+			);
+			return $result;
+		}
+
+		if ( $plugins_dir_exists && ! $plugins_dir_is_writable ) {
+			$result['status']      = 'critical';
+			$result['label']       = __( 'Plugin temporary backup directory exists but is not writable' );
+			$result['description'] = sprintf(
+				/* translators: %s: wp-content/upgrade-temp-backup/plugins */
+				'<p>' . __( 'The %s directory exists but is not writable. This directory is used to improve the stability of plugin updates. Please make sure the server has write permissions to this directory.' ) . '</p>',
+				'<code>wp-content/upgrade-temp-backup/plugins</code>'
+			);
+			return $result;
+		}
+
+		if ( $themes_dir_exists && ! $themes_dir_is_writable ) {
+			$result['status']      = 'critical';
+			$result['label']       = __( 'Theme temporary backup directory exists but is not writable' );
+			$result['description'] = sprintf(
+				/* translators: %s: wp-content/upgrade-temp-backup/themes */
+				'<p>' . __( 'The %s directory exists but is not writable. This directory is used to improve the stability of theme updates. Please make sure the server has write permissions to this directory.' ) . '</p>',
+				'<code>wp-content/upgrade-temp-backup/themes</code>'
+			);
+			return $result;
+		}
+
+		if ( ( ! $plugins_dir_exists || ! $themes_dir_exists ) && $backup_dir_exists && ! $backup_dir_is_writable ) {
+			$result['status']      = 'critical';
+			$result['label']       = __( 'The temporary backup directory exists but is not writable' );
+			$result['description'] = sprintf(
+				/* translators: %s: wp-content/upgrade-temp-backup */
+				'<p>' . __( 'The %s directory exists but is not writable. This directory is used to improve the stability of plugin and theme updates. Please make sure the server has write permissions to this directory.' ) . '</p>',
+				'<code>wp-content/upgrade-temp-backup</code>'
+			);
+			return $result;
+		}
+
+		if ( ! $backup_dir_exists && $upgrade_dir_exists && ! $upgrade_dir_is_writable ) {
+			$result['status'] = 'critical';
+			$result['label']  = sprintf(
+				/* translators: %s: upgrade */
+				__( 'The %s directory exists but is not writable' ),
+				'upgrade'
+			);
+			$result['description'] = sprintf(
+				/* translators: %s: wp-content/upgrade */
+				'<p>' . __( 'The %s directory exists but is not writable. This directory is used for plugin and theme updates. Please make sure the server has write permissions to this directory.' ) . '</p>',
+				'<code>wp-content/upgrade</code>'
+			);
+			return $result;
+		}
+
+		if ( ! $upgrade_dir_exists && ! $wp_filesystem->is_writable( $wp_content ) ) {
+			$result['status'] = 'critical';
+			$result['label']  = sprintf(
+				/* translators: %s: upgrade */
+				__( 'The %s directory cannot be created' ),
+				'upgrade'
+			);
+			$result['description'] = sprintf(
+				/* translators: 1: wp-content/upgrade, 2: wp-content. */
+				'<p>' . __( 'The %1$s directory does not exist, and the server does not have write permissions in %2$s to create it. This directory is used for plugin and theme updates. Please make sure the server has write permissions in %2$s.' ) . '</p>',
+				'<code>wp-content/upgrade</code>',
+				'<code>wp-content</code>'
+			);
+			return $result;
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Tests if loopbacks work as expected.
 	 *
 	 * A loopback is when WordPress queries itself, for example to start a new WP_Cron instance,
@@ -2537,6 +2716,14 @@ class WP_Site_Health {
 				'plugin_theme_auto_updates' => array(
 					'label' => __( 'Plugin and theme auto-updates' ),
 					'test'  => 'plugin_theme_auto_updates',
+				),
+				'update_temp_backup_writable'  => array(
+					'label' => __( 'Plugin and theme temporary backup directory access' ),
+					'test'  => 'update_temp_backup_writable',
+				),
+				'available_updates_disk_space' => array(
+					'label' => __( 'Available disk space' ),
+					'test'  => 'available_updates_disk_space',
 				),
 			),
 			'async'  => array(

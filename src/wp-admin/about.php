@@ -133,7 +133,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: link to ClassicPress release announcements subforum */
-					__( 'The changes and new features included in recent versions of ClassicPress can be found in our <a href="%s"><strong>Release Announcements subforum</strong></a>.' ),
+					__( 'The changes and new features included in recent versions of ClassicPress can be found in our <a href="%s"><strong>Release Notes subforum</strong></a>.' ),
 					'https://forums.classicpress.net/c/announcements/release-notes'
 				);
 				?>

@@ -144,7 +144,10 @@ module.exports = function(grunt) {
 							// Exclude plugins unless specifically listed
 							'!wp-content/plugins/**',
 							'wp-content/plugins/index.php',
+							// ClassicPress Pepper plugin
 							'wp-content/plugins/cp-pepper/**',
+							// but not the ClassicPress pepper key file
+							'!wp-content/plugins/cp-pepper/pepper.php',
 							// Ignore unminified versions of external libs we don't ship:
 							'!wp-includes/js/backbone.js',
 							'!wp-includes/js/underscore.js',

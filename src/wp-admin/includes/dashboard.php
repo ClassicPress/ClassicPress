@@ -581,9 +581,16 @@ function wp_dashboard_quick_press( $error_msg = false ) {
 
 	<form name="post" action="<?php echo esc_url( admin_url( 'post.php' ) ); ?>" method="post" id="quick-press" class="initial-form hide-if-no-js">
 
-		<?php if ( $error_msg ) : ?>
-		<div class="error"><?php echo $error_msg; ?></div>
-		<?php endif; ?>
+		<?php
+		if ( $error_msg ) {
+			wp_admin_notice(
+				$error_msg,
+				array(
+					'additional_classes' => array( 'error' ),
+				)
+			);
+		}
+		?>
 
 		<div class="input-text-wrap" id="title-wrap">
 			<label for="title">
@@ -1173,8 +1180,15 @@ function wp_dashboard_rss_output( $widget_id ) {
  * @return bool True on success, false on failure.
  */
 function wp_dashboard_cached_rss_widget( $widget_id, $callback, $check_urls = array(), ...$args ) {
-	$loading    = '<p class="widget-loading hide-if-no-js">' . __( 'Loading&hellip;' ) . '</p><div class="hide-if-js notice notice-error inline"><p>' . __( 'This widget requires JavaScript.' ) . '</p></div>';
 	$doing_ajax = wp_doing_ajax();
+	$loading    = '<p class="widget-loading hide-if-no-js">' . __( 'Loading&hellip;' ) . '</p>';
+	$loading   .= wp_get_admin_notice(
+		__( 'This widget requires JavaScript.' ),
+		array(
+			'type'               => 'error',
+			'additional_classes' => array( 'inline', 'hide-if-js' ),
+		)
+	);
 
 	if ( empty( $check_urls ) ) {
 		$widgets = get_option( 'dashboard_widget_options' );
@@ -1634,7 +1648,7 @@ function wp_dashboard_php_nag() {
 		if ( $response['is_lower_than_future_minimum'] ) {
 			$message = sprintf(
 				/* translators: %s: The server PHP version. */
-				__( 'Your site is running on an outdated version of PHP (%s), which does not receive security updates and soon will not be supported by WordPress. Ensure that PHP is updated on your server as soon as possible. Otherwise you will not be able to upgrade WordPress.' ),
+				__( 'Your site is running on an outdated version of PHP (%s), which does not receive security updates and soon will not be supported by ClassicPress. Ensure that PHP is updated on your server as soon as possible. Otherwise you will not be able to upgrade WordPress.' ),
 				PHP_VERSION
 			);
 		} else {
@@ -1647,7 +1661,7 @@ function wp_dashboard_php_nag() {
 	} elseif ( $response['is_lower_than_future_minimum'] ) {
 		$message = sprintf(
 			/* translators: %s: The server PHP version. */
-			__( 'Your site is running on an outdated version of PHP (%s), which soon will not be supported by WordPress. Ensure that PHP is updated on your server as soon as possible. Otherwise you will not be able to upgrade WordPress.' ),
+			__( 'Your site is running on an outdated version of PHP (%s), which soon will not be supported by ClassicPress. Ensure that PHP is updated on your server as soon as possible. Otherwise you will not be able to upgrade WordPress.' ),
 			PHP_VERSION
 		);
 	} else {

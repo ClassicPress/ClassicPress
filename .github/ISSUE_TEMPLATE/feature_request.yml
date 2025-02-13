@@ -24,7 +24,7 @@ body:
   - type: textarea
     id: possible-implementation
     attributes:
-      label: Possible implemantion
+      label: Possible implementation
       description: |
         This is optional, but suggest a way to implement your request.
         Tip: You can attach images or files by clicking this area to highlight it and then dragging files in.

@@ -560,7 +560,7 @@ function wp_validate_logged_in_cookie( $user_id ) {
 		return $user_id;
 	}
 
-	if ( is_blog_admin() || is_network_admin() || empty( $_COOKIE[ LOGGED_IN_COOKIE ] ) ) {
+	if ( is_blog_admin() || is_network_admin() || empty( $_COOKIE[ LOGGED_IN_COOKIE ] ) || defined( 'WP_INSTALLING' ) ) {
 		return false;
 	}
 
@@ -3275,15 +3275,10 @@ function retrieve_password( $user_login = null ) {
 	if ( ! wp_mail( $to, $subject, $message, $headers ) ) {
 		$errors->add(
 			'retrieve_password_email_failure',
-			sprintf(
-				/* translators: %s: Documentation URL. */
-				__( '<strong>Error:</strong> The email could not be sent. Your site may not be correctly configured to send emails. <a href="%s">Get support for resetting your password</a>.' ),
-				esc_url( __( 'https://wordpress.org/documentation/article/reset-your-password/' ) )
-			)
+			__( '<strong>Error:</strong> The email could not be sent. The site may not be correctly configured to send emails.' )
 		);
 		return $errors;
 	}
-
 	return true;
 }
 
@@ -3763,8 +3758,12 @@ function new_user_email_admin_notice() {
 	if ( 'profile.php' === $pagenow && isset( $_GET['updated'] ) ) {
 		$email = get_user_meta( get_current_user_id(), '_new_email', true );
 		if ( $email ) {
+			$message = sprintf(
 			/* translators: %s: New email address. */
-			echo '<div class="notice notice-info"><p>' . sprintf( __( 'Your email address has not been updated yet. Please check your inbox at %s for a confirmation email.' ), '<code>' . esc_html( $email['newemail'] ) . '</code>' ) . '</p></div>';
+				__( 'Your email address has not been updated yet. Please check your inbox at %s for a confirmation email.' ),
+				'<code>' . esc_html( $email['newemail'] ) . '</code>'
+			);
+			wp_admin_notice( $message, array( 'type' => 'info' ) );
 		}
 	}
 }
