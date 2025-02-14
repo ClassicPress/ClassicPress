@@ -29,7 +29,7 @@
     "grunt-legacy-util": "2.0.1",
     "grunt-replace": "2.0.2",
     "grunt-rtlcss": "2.0.2",
-    "grunt-sass": "github:mattyrob/grunt-sass#add/modern-api",
+    "grunt-sass": "4.0.0",
     "grunt-webpack": "7.0.0",
     "ink-docstrap": "1.3.2",
     "install-changed": "^1.1.0",
