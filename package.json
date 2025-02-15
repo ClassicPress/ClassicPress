@@ -45,7 +45,7 @@
     "sync-request": "6.1.0",
     "terser": "5.39.0",
     "terser-webpack-plugin": "^5.3.7",
-    "webpack": "5.97.1"
+    "webpack": "5.98.0"
   },
   "dependencies": {
     "@wordpress/a11y": "4.17.0",
