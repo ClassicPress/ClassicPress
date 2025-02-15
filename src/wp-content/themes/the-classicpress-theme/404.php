@@ -20,7 +20,7 @@ get_header();
 					<?php
 					$widget_title_args = array(
 						'before_title' => '<h2 class="widget-title">',
-						'after_title' => '</h2>'
+						'after_title' => '</h2>',
 					);
 
 					the_widget( 'WP_Widget_Search', array(), $widget_title_args );
