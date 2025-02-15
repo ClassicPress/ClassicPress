@@ -27,4 +27,3 @@ if ( is_active_sidebar( 'main-sidebar' ) || is_active_sidebar( 'blog-sidebar' ) 
 </aside>
 <?php
 }
-?>
