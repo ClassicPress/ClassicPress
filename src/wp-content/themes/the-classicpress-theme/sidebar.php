@@ -10,6 +10,7 @@
 <?php
 if ( is_active_sidebar( 'main-sidebar' ) || is_active_sidebar( 'blog-sidebar' ) ) {
 ?>
+
 <aside id="sidebar" class="sidebar" role="complementary">
 
 	<h2 id="sidebar-header" class="screen-reader-text">
@@ -25,5 +26,6 @@ if ( is_active_sidebar( 'main-sidebar' ) || is_active_sidebar( 'blog-sidebar' ) 
 	?>
 
 </aside>
+
 <?php
 }
