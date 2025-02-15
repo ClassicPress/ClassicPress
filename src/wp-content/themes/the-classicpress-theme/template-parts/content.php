@@ -1,6 +1,6 @@
 <?php
 /**
- * Template part for displaying posts
+ * Template part for displaying single post content
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
@@ -10,64 +10,33 @@
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
-<?php if ( is_singular() ) : ?>
 	<header>
 		<?php
-		the_title(
-			'<h1>',
-			'</h1>'
-		);
+		the_title( '<h1 class="post-title">', '</h1>' );
+		?>
 
-		if ( 'post' === get_post_type() ) :
-			?>
-			<p class="entry-meta">
-				<!--span class="author-avatar">
-					<?php //echo get_avatar( get_the_author_meta( 'ID' ), '50' ); ?>
-				</span-->
-				<span class="post-meta">
-					<?php susty_wp_posted_on(); ?>
-					<?php susty_wp_posted_by(); ?>
-					<?php esc_html_e( ' | Category: ', 'the-classicpress-theme' ); ?>
-					<?php the_category( ', ' ); ?>
-				</span>
-			</p><!-- .entry-meta -->
-		<?php endif; ?>
-	</header>
-
-<?php else : ?>
-	<header class="blog">
 		<?php
-		the_title(
-			'<h2><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">',
-			'</a></h2>'
-		);
+		if ( 'post' === get_post_type() ) :
+		?>
+		<div class="entry-meta">
+			<?php
+			susty_wp_posted_on();
+			susty_wp_posted_by();
+			wp_categories_tags();
+			?>
+		</div>
+		<?php
+		endif;
 		?>
 	</header>
-<?php endif; ?>
-	
+
 	<?php
-	if ( is_singular() ) {
-		susty_wp_post_thumbnail();
-	}
+	susty_wp_post_thumbnail();
 	?>
 
-	<div>
-
+	<div class="post-content">
 		<?php
-		the_content(
-			sprintf(
-				wp_kses(
-				/* translators: %s: Name of current post. Only visible to screen readers */
-					__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'the-classicpress-theme' ),
-					array(
-						'span' => array(
-							'class' => array(),
-						),
-					)
-				),
-				get_the_title()
-			)
-		);
+		the_content();
 
 		wp_link_pages(
 			array(
@@ -78,6 +47,4 @@
 		?>
 	</div>
 
-	<footer>
-	</footer>
 </article><!-- #post-<?php the_ID(); ?> -->
