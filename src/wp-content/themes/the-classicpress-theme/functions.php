@@ -16,15 +16,20 @@ if ( ! function_exists( 'susty_setup' ) ) :
 	 * as indicating support for post thumbnails.
 	 */
 	function susty_setup() {
-		/*
-		 * Make theme available for translation.
-		 * Translations can be filed in the /languages/ directory.
-		 * If you're building a theme based on The ClassicPress Theme, use a find and replace
-		 * to change 'the-classicpress-theme' to the name of your theme in all the template files.
+		/**
+		 * Set the content width in pixels, based on the theme's design and stylesheet.
+		 *
+		 * Priority 0 to make it available to lower priority callbacks.
+		 *
+		 * @global int $content_width
 		 */
-		load_theme_textdomain( 'the-classicpress-theme', get_template_directory() . '/languages' );
+		global $content_width;
+		if ( ! isset( $content_width ) )
+		$content_width = 850;
 
-		// Add default posts and comments RSS feed links to head.
+		/**
+		 * Add default posts and comments RSS feed links to head.
+		 */	
 		add_theme_support( 'automatic-feed-links' );
 
 		/*
@@ -42,15 +47,20 @@ if ( ! function_exists( 'susty_setup' ) ) :
 		 */
 		add_theme_support( 'post-thumbnails' );
 
-		// This theme uses wp_nav_menu() in two locations.
+		/**
+		 * This theme uses wp_nav_menu() in one location.
+		 */
 		register_nav_menus(
 			array(
-				'main-menu'   => esc_html__( 'MainMenu', 'the-classicpress-theme' ),
-				'footer-menu' => esc_html__( 'FooterMenu', 'the-classicpress-theme' ),
+				'main-menu'   => esc_html__( 'Main Menu', 'the-classicpress-theme' ),
 			)
 		);
 
-		// Set up the WordPress core custom background feature.
+		/**
+		 * Add support for core custom background.
+		 *
+		 * @link https://developer.wordpress.org/themes/functionality/custom-backgrounds/
+		 */
 		add_theme_support(
 			'custom-background',
 			apply_filters(
@@ -62,23 +72,58 @@ if ( ! function_exists( 'susty_setup' ) ) :
 			)
 		);
 
-		// Add theme support for selective refresh for widgets.
+		/**
+		 * Add support for selective refresh for widgets.
+		 */
 		add_theme_support( 'customize-selective-refresh-widgets' );
 
 		/**
 		 * Add support for core custom logo.
 		 *
-		 * @link https://codex.wordpress.org/Theme_Logo
+		 * @link https://developer.wordpress.org/themes/functionality/custom-logo/
 		 */
 		add_theme_support(
 			'custom-logo',
 			array(
-				'height'      => 50,
-				'width'       => 250,
-				'flex-width'  => true,
+				'height' => 50,
+				'width' => 250,
+				'flex-width' => true,
 				'flex-height' => true,
 			)
 		);
+
+		/**
+		 * Add support for core custom header.
+		 *
+		 * @link https://developer.wordpress.org/themes/functionality/custom-headers/
+		 */
+		add_theme_support(
+			'custom-header',
+			array(
+				'height' => 360,
+				'width' => 640,
+				'flex-width' => true,
+				'flex-height' => true,
+				'default-image' => get_template_directory_uri() . '/images/classicpress-admin.png',
+				'header-text' => false,
+				'uploads' => true,
+			)
+		);
+		register_default_headers( array(
+			'classicpress-admin' => array(
+				'url' => get_template_directory_uri() . '/images/classicpress-admin.png',
+				'thumbnail_url' => get_template_directory_uri() . '/images/classicpress-admin.png',
+				'description' => __( 'Classicpress Admin', 'the-classicpress-theme' )
+			)
+		) );
+
+		/**
+		 * Add support for core editor style.
+		 *
+		 * @link https://codex.wordpress.org/Editor_Style
+		 */
+		add_theme_support( 'editor-styles' );
+		add_editor_style( 'css/editor-style.css' );
 	}
 endif;
 add_action( 'after_setup_theme', 'susty_setup' );
@@ -89,6 +134,8 @@ add_action( 'after_setup_theme', 'susty_setup' );
 function susty_scripts() {
 	wp_enqueue_style( 'susty-style', get_stylesheet_uri() );
 
+	wp_enqueue_script( 'cp-menu-resize', get_template_directory_uri() . '/js/menu-resize.js', null,	null );	
+
 	wp_deregister_script( 'wp-embed' );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
@@ -98,142 +145,71 @@ function susty_scripts() {
 add_action( 'wp_enqueue_scripts', 'susty_scripts' );
 
 /**
+ * Remove emoji styles.
+ */
+remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+remove_action( 'wp_print_styles', 'print_emoji_styles' );
+
+/**
+ * Add widgets to hero, sidebar and footer.
+ *
+ * @link https://developer.wordpress.org/themes/functionality/sidebars/
+ */
+function cp_susty_register_sidebar() {
+	register_sidebar(
+		array(
+			'id'            => 'main-sidebar',
+			'name'          => __( 'Main Sidebar', 'the-classicpress-theme' ),
+			'before_widget' => '<div class="widget-container widget %2$s">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h3 class="widget-title">',
+			'after_title'   => '</h3>',
+		)
+	);
+	register_sidebar(
+		array(
+			'id'            => 'blog-sidebar',
+			'name'          => __( 'Blog Sidebar', 'the-classicpress-theme' ),
+			'before_widget' => '<div class="widget-container widget %2$s">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h3 class="widget-title">',
+			'after_title'   => '</h3>',
+		)
+	);
+	register_sidebar(
+		array(
+			'id'            => 'hero',
+			'name'          => __( 'Hero', 'the-classicpress-theme' ),
+			'before_widget' => '<div class="widget-container widget %2$s">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h3 class="widget-title">',
+			'after_title'   => '</h3>',
+		)
+	);
+	register_sidebar(
+		array(
+			'id'            => 'footer',
+			'name'          => __( 'Footer', 'the-classicpress-theme' ),
+			'before_widget' => '<div class="widget-container widget %2$s">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h3 class="widget-title">',
+			'after_title'   => '</h3>',
+		)
+	);
+}
+add_action( 'widgets_init', 'cp_susty_register_sidebar' );
+
+/**
+ * Customizer additions.
+ */
+require get_template_directory() . '/inc/customizer.php';
+
+/**
  * Custom template tags for this theme.
  */
 require get_template_directory() . '/inc/template-tags.php';
 
 /**
- * Functions which enhance the theme by hooking into WordPress.
+ * Functions which enhance the theme by hooking into ClassicPress.
  */
 require get_template_directory() . '/inc/template-functions.php';
-
-remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
-remove_action( 'wp_print_styles', 'print_emoji_styles' );
-
-function susty_nav_rewrite_rule() {
-	add_rewrite_rule( 'menu', 'index.php?menu=true', 'top' );
-}
-
-add_action( 'init', 'susty_nav_rewrite_rule' );
-
-function susty_register_query_var( $vars ) {
-	$vars[] = 'menu';
-
-	return $vars;
-}
-add_filter( 'query_vars', 'susty_register_query_var' );
-
-add_filter(
-	'template_include',
-	function ( $path ) {
-		if ( get_query_var( 'menu' ) ) {
-			return get_template_directory() . '/menu.php';
-		}
-		return $path;
-	}
-);
-
-// Remove dashicons in frontend for unauthenticated users
-function susty_dequeue_dashicons() {
-	if ( ! is_user_logged_in() ) {
-		wp_deregister_style( 'dashicons' );
-	}
-}
-add_action( 'wp_enqueue_scripts', 'susty_dequeue_dashicons' );
-
-/**
- * Stylesheet version (cache buster)
- */
-function cp_susty_get_asset_version() {
-	return '20250130';
-}
-
-/**
- * Enqueue scripts and styles
- */
-function cp_susty_enqueue_assets() {
-	/* Make menu more accessible */
-	wp_enqueue_script(
-		'cp-menu-resize',
-		get_template_directory_uri() . '/js/menu-resize.js',
-		null,
-		cp_susty_get_asset_version(),
-	);
-}
-add_action( 'wp_enqueue_scripts', 'cp_susty_enqueue_assets' );
-
-// Add custom stylesheet to TinyMCE editor
-function cp_tiny_css( $wp ) {
-	$wp .= ',' . get_template_directory_uri() . '/css/editor-style.css';
-	return $wp;
-}
-add_filter( 'mce_css', 'cp_tiny_css' );
-
-
-/* Add widgets to blog sidebar */
-if ( function_exists( 'register_sidebar' ) ) {
-	register_sidebar(
-		array(
-			'id'            => 'blog-sidebar',
-			'name'          => 'Blog Sidebar',
-			'before_widget' => '<div class="widget-container">',
-			'after_widget'  => '</div>',
-			'before_title'  => '<h3>',
-			'after_title'   => '</h3>',
-		)
-	);
-	register_sidebar(
-		array(
-			'id'            => 'main-sidebar',
-			'name'          => 'Main Sidebar',
-			'before_widget' => '<div class="widget-container">',
-			'after_widget'  => '</div>',
-			'before_title'  => '<h3>',
-			'after_title'   => '</h3>',
-		)
-	);
-}
-
-// Remove empty paragraph tags
-function cp_remove_empty_p( $content ) {
-	$content = force_balance_tags( $content );
-	return preg_replace( '#<p>\s*+(<br\s*/*>)?\s*</p>#i', '', $content );
-}
-add_filter( 'the_content', 'cp_remove_empty_p', 20, 1 );
-
-// Add excerpts to pages
-add_post_type_support( 'page', 'excerpt' );
-
-
-/**
- * Simplify blog detection
- */
-function is_blog() {
-	return ( is_archive() || is_author() || is_category() || is_home() || is_tag() ) && 'post' == get_post_type();
-}
-
-
-/**
- * Set our own version string for the theme's stylesheet
- */
-function cp_susty_override_style_css_version( $version, $type, $handle ) {
-	if ( $type !== 'style' || $handle !== 'susty-style' ) {
-		return $version;
-	}
-	return cp_susty_get_asset_version();
-}
-add_filter( 'classicpress_asset_version', 'cp_susty_override_style_css_version', 10, 3 );
-
-
-/**
- * Add the page slug as a class to the <body>
- * Gives greater flexibility for styling
- */
-function cp_add_page_slug_body_class( $classes ) {
-	global $post;
-	if ( isset( $post ) ) {
-		$classes[] = 'page-' . $post->post_name;
-	}
-	return $classes;
-}
-add_filter( 'body_class', 'cp_add_page_slug_body_class' );
