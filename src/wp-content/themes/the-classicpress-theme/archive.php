@@ -9,41 +9,37 @@
 
 get_header();
 ?>
+
 	<div id="primary">
-		<main id="main">
+		<main id="main" class="page-main" role="main">
+			<div class="post-list">
 
-		<?php
-		if ( have_posts() ) :
-			?>
+				<?php
+				if ( have_posts() ) :
 
-			<div class="blog-list"> 
-			<?php
+					the_archive_description( '<div class="archive-desc">', '</div>' );
 
-				/* Start the Loop */
-			while ( have_posts() ) :
-				the_post();
+					/* Start the Loop */
+					while ( have_posts() ) :
+						the_post();
 
-				get_template_part( 'template-parts/content-blog', get_post_type() );
+						get_template_part( 'template-parts/content', 'blog' );
 
-				endwhile;
-			?>
+					endwhile;
 
-			</div><!-- .blog-list --> 
-			<?php
+					the_posts_navigation();
 
-			the_posts_navigation();
+				else :
 
-		else :
+					get_template_part( 'template-parts/content', 'none' );
 
-			get_template_part( 'template-parts/content', 'none' );
+				endif;
+				?>
 
-		endif;
-		?>
-
+			</div>
 		</main><!-- #main -->
 
-		<?php get_sidebar(); ?>
-
+		<?php get_sidebar(); ?>		
 	</div><!-- #primary -->
 
 <?php

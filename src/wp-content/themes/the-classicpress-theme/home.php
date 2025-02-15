@@ -1,50 +1,43 @@
 <?php
 /**
- * The main template file
+ * The template for displaying latest posts
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
- *
- * @package Susty
  */
 
 get_header();
 ?>
+
 	<div id="primary">
-		<main id="main">
+		<main id="main" class="page-main" role="main">
+			<div class="post-list">
 
-		<?php
-		if ( have_posts() ) :
-			?>
-		
-			<div class="blog-list"> 
-			<?php
+				<?php
+				if ( have_posts() ) :
 
-				/* Start the Loop */
-			while ( have_posts() ) :
-				the_post();
+					/* Start the Loop */
+					while ( have_posts() ) :
+						the_post();
 
-				get_template_part( 'template-parts/content-blog', get_post_type() );
+						get_template_part( 'template-parts/content', 'blog' );
 
-				endwhile;
-			?>
+					endwhile;
 
-			</div> 
-			<?php
+					the_posts_navigation();
 
-			the_posts_navigation();
+				else:
 
-		else :
+					get_template_part( 'template-parts/content', 'none' );
 
-			get_template_part( 'template-parts/content', 'none' );
+				endif;
+				?>
 
-		endif;
-		?>
-
-		</main>
+			</div>
+		</main><!-- #main -->
 
 		<?php get_sidebar(); ?>
 
-	</div>
+	</div><!-- #primary -->
 
 <?php
 get_footer();

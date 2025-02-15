@@ -2,7 +2,7 @@
 /**
  * The template for displaying 404 pages (not found)
  *
- * @link https://codex.wordpress.org/Creating_an_Error_404_Page
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#404-not-found
  *
  * @package Susty
  */
@@ -11,16 +11,21 @@ get_header();
 ?>
 
 	<div id="primary">
-		<main id="main">
+		<main id="main" class="page-main" role="main">
 
 			<section>
-				<div>
+				<div class="page-content">
 					<p><?php esc_html_e( 'It looks like nothing was found at this location. Maybe try one of the links below or a search?', 'the-classicpress-theme' ); ?></p>
 
 					<?php
-					get_search_form();
+					$widget_title_args = array(
+						'before_title' => '<h2 class="widget-title">',
+						'after_title' => '</h2>'
+					);
 
-					the_widget( 'WP_Widget_Recent_Posts' );
+					the_widget( 'WP_Widget_Search', array(), $widget_title_args );
+
+					the_widget( 'WP_Widget_Recent_Posts', array(), $widget_title_args );
 					?>
 
 					<div class="widget widget_categories">
@@ -41,17 +46,17 @@ get_header();
 					</div><!-- .widget -->
 
 					<?php
-					/* translators: %1$s: smiley */
-					$susty_wp_archive_content = '<p>' . sprintf( esc_html__( 'Try looking in the monthly archives. %1$s', 'the-classicpress-theme' ), convert_smilies( ':)' ) ) . '</p>';
-					the_widget( 'WP_Widget_Archives', 'dropdown=1', "after_title=</h2>$susty_wp_archive_content" );
+					the_widget( 'WP_Widget_Archives', array(), $widget_title_args );
 
-					the_widget( 'WP_Widget_Tag_Cloud' );
+					the_widget( 'WP_Widget_Tag_Cloud', array(), $widget_title_args );
 					?>
-
 				</div>
 			</section>
 
 		</main><!-- #main -->
+
+		<?php get_sidebar(); ?>		
+
 	</div><!-- #primary -->
 
 <?php
