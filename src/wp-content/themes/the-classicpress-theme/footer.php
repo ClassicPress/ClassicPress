@@ -28,7 +28,7 @@ if ( is_active_sidebar( 'footer' ) ) {
 <footer id="legal" role="contentinfo">
 	<div class="inner-legal cplegal">
 		<div class="copyright cpcopyright">
-			<p><?php _e('Copyright', 'the-classicpress-theme'); ?> <?php echo date('Y'); ?>  <a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a></p>
+			<p><?php _e('Copyright', 'the-classicpress-theme'); ?> <?php echo date('Y'); ?> <a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a></p>
 		</div>
 		<div class="policy cppolicy">
 			<?php
