@@ -50,63 +50,19 @@ if ( ! function_exists( 'susty_wp_posted_by' ) ) :
 	}
 endif;
 
-if ( ! function_exists( 'susty_wp_entry_footer' ) ) :
+if ( ! function_exists( 'wp_categories_tags' ) ) :
 	/**
-	 * Prints HTML with meta information for the categories, tags and comments.
+	 * Prints the categories and tags for the current post.
 	 */
-	function susty_wp_entry_footer() {
-		// Hide category and tag text for pages.
-		if ( 'post' === get_post_type() ) {
-			/* translators: used between list items, there is a space after the comma */
-			$categories_list = get_the_category_list( esc_html__( ', ', 'the-classicpress-theme' ) );
-			if ( $categories_list ) {
-				/* translators: 1: list of categories. */
-				printf( '<span class="cat-links">' . esc_html__( 'Posted in %1$s', 'the-classicpress-theme' ) . '</span>', $categories_list ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			}
-
-			/* translators: used between list items, there is a space after the comma */
-			$tags_list = get_the_tag_list( '', esc_html_x( ', ', 'list item separator', 'the-classicpress-theme' ) );
-			if ( $tags_list ) {
-				/* translators: 1: list of tags. */
-				printf( '<span class="tags-links">' . esc_html__( 'Tagged %1$s', 'the-classicpress-theme' ) . '</span>', $tags_list ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			}
-		}
-
-		if ( ! is_single() && ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
-			echo '<span class="comments-link">';
-			comments_popup_link(
-				sprintf(
-					wp_kses(
-						/* translators: %s: post title */
-						__( 'Leave a Comment<span class="screen-reader-text"> on %s</span>', 'the-classicpress-theme' ),
-						array(
-							'span' => array(
-								'class' => array(),
-							),
-						)
-					),
-					get_the_title()
-				)
-			);
-			echo '</span>';
-		}
-
-		edit_post_link(
-			sprintf(
-				wp_kses(
-					/* translators: %s: Name of current post. Only visible to screen readers */
-					__( 'Edit <span class="screen-reader-text">%s</span>', 'the-classicpress-theme' ),
-					array(
-						'span' => array(
-							'class' => array(),
-						),
-					)
-				),
-				get_the_title()
-			),
-			'<span class="edit-link">',
-			'</span>'
-		);
+	function wp_categories_tags() {
+		if( has_category() ) :
+			/* translators: 1: list of categories. */
+			printf( __( ' | Category: %1$s', 'the-classicpress-theme' ), get_the_category_list( ', ' ) );
+		endif;
+		if( has_tag() ) :
+			/* translators: 1: list of tags. */
+			printf( __( ' | Tag: %1$s', 'the-classicpress-theme' ), get_the_tag_list( '', ', ', '' ) );
+		endif;
 	}
 endif;
 
@@ -116,6 +72,7 @@ if ( ! function_exists( 'susty_wp_post_thumbnail' ) ) :
 	 *
 	 * Wraps the post thumbnail in an anchor element on index views, or a div
 	 * element when on single views.
+	 * Note: post thumbnail is removed from template files for index views.
 	 */
 	function susty_wp_post_thumbnail() {
 		if ( post_password_required() || is_attachment() || ! has_post_thumbnail() ) {
