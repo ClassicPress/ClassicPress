@@ -17,25 +17,17 @@ document.addEventListener( 'DOMContentLoaded', function () {
 	}, false);
 
 	/* SHOW AND HIDE MENU AND TOGGLE BUTTONS ON MOBILE */
-	if ( window.matchMedia( "screen and (max-width: 899px)" ).matches ) {
+	if ( window.matchMedia( "screen and (max-width: 900px)" ).matches ) {
 		const menuToggle = document.getElementById( 'menu-toggle' );
 		const menuToggleClose = document.getElementById( 'menu-toggle-close' );
-		const primaryMenu = document.getElementById( 'primary-menu' );
-		const mobileSearch = document.getElementById( 'mobile-search' );
+		const primaryMenu = document.getElementById( 'site-navigation' );
 		const mobileLinks = primaryMenu.querySelectorAll( 'a' );
 		const parents = primaryMenu.querySelectorAll( '.menu-item-has-children > a' );
-
-		const form = document.createElement( 'form' );
-		form.role = 'search';
-		form.className = 'search-form';
-		form.action = document.querySelector( '#inner-header .logo a' ).href;
-		form.innerHTML = '<label><span class="screen-reader-text">Search for:</span><input type="search" class="search-field" placeholder="Search …" value="" name="s"></label><input type="submit" class="search-submit" value="Search">';
-		primaryMenu.append(form);
 
 		// Toggle menu open and closed
 		menuToggle.addEventListener( 'click', function (e) {
 			menuToggle.style.display = 'none';
-			primaryMenu.style.display = 'flex';
+			primaryMenu.style.display = 'block';
 			menuToggleClose.style.display = 'block';
 
 			menuToggle.setAttribute( 'aria-expanded', true);
