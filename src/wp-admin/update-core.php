@@ -357,7 +357,7 @@ function list_plugin_updates() {
 		// Get plugin compat for updated version of ClassicPress.
 		if ( $core_update_version ) {
 			if ( isset( $plugin_data->update->tested ) && version_compare( $plugin_data->update->tested, $core_update_version, '>=' ) ) {
-				$compat  = '<br>' . sprintf( __( 'Potentially compatible with ClassicPress %1$s.' ), $core_update_version );
+				$compat  = '<br>' . sprintf( __( 'Potentially compatible with ClassicPress %1$s' ), $core_update_version );
 				$compat .= ' <a href="https://www.classicpress.net/faq/#post-27980">' . __( 'More info.' ) . '</a>';
 			} else {
 				$compat  = '<br>' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: Unknown.' ), $core_update_version );
