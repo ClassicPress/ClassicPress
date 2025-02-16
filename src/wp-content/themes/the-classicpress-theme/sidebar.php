@@ -1,8 +1,17 @@
 <?php
-/* Sidebar template */
+/**
+ * Sidebar template
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
+ *
+ */
 ?>
 
-<aside id="sidebar" class="sidebar" role="complementary" aria-labelledby="sidebar-header">
+<?php
+if ( is_active_sidebar( 'main-sidebar' ) || is_active_sidebar( 'blog-sidebar' ) ) {
+?>
+
+<aside id="sidebar" class="sidebar" role="complementary">
 
 	<h2 id="sidebar-header" class="screen-reader-text">
 		<?php echo esc_attr_x( 'Sidebar', 'Sidebar aria label', 'the-classicpress-theme' ); ?>
@@ -17,3 +26,6 @@
 	?>
 
 </aside>
+
+<?php
+}

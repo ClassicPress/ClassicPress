@@ -3,19 +3,18 @@
  * The template for displaying archive pages
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
- *
- * @package Susty
  */
 
 get_header();
 ?>
+
 	<div id="primary">
-		<main id="main">
+		<main id="main" class="page-main" role="main">
 
 		<?php
 		if ( have_posts() ) :
 
-				/* Start the Loop */
+			/* Start the Loop */
 			while ( have_posts() ) :
 				the_post();
 				?>
@@ -23,7 +22,7 @@ get_header();
 					<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 						<details>
 							<summary>
-								<h2><?php the_title(); ?></h2>
+								<h3><?php the_title(); ?></h3>
 							</summary>
 							<div class="faq-content"><?php the_content(); ?></div>
 						</details>
