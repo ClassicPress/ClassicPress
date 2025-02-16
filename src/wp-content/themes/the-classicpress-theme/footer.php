@@ -11,9 +11,7 @@
 
 </div>
 
-<?php
-if ( is_active_sidebar( 'footer' ) ) {
-?>
+<?php if ( is_active_sidebar( 'footer' ) ) { ?>
 <footer id="colophon" role="complementary">
 	<div class="inner-colophon classic">
 		<?php
@@ -21,15 +19,13 @@ if ( is_active_sidebar( 'footer' ) ) {
 		?>
 	</div>
 </footer>
-<?php
-}
-?>
+<?php } ?>
 
 <footer id="legal" role="contentinfo">
 	<div class="inner-legal cplegal">
 		<div class="copyright cpcopyright">
 			<p>
-			<?php _e('Copyright', 'the-classicpress-theme'); ?> <?php echo date('Y'); ?> <a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a>
+			<?php _e( 'Copyright', 'the-classicpress-theme' ); ?> <?php echo date( 'Y' ); ?> <a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php bloginfo( 'name' ); ?>"><?php bloginfo( 'name' ); ?></a>
 			</p>
 		</div>
 		<div class="policy cppolicy">
