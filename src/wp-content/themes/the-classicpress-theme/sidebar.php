@@ -7,9 +7,7 @@
  */
 ?>
 
-<?php
-if ( is_active_sidebar( 'main-sidebar' ) || is_active_sidebar( 'blog-sidebar' ) ) {
-?>
+<?php if ( is_active_sidebar( 'main-sidebar' ) || is_active_sidebar( 'blog-sidebar' ) ) { ?>
 
 <aside id="sidebar" class="sidebar" role="complementary">
 
@@ -27,5 +25,4 @@ if ( is_active_sidebar( 'main-sidebar' ) || is_active_sidebar( 'blog-sidebar' ) 
 
 </aside>
 
-<?php
-}
+<?php }
