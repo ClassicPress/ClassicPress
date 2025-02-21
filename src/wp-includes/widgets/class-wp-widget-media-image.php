@@ -31,24 +31,6 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 				'mime_type'   => 'image',
 			)
 		);
-
-		$this->l10n = array_merge(
-			$this->l10n,
-			array(
-				'no_media_selected'          => __( 'No image selected' ),
-				'add_media'                  => _x( 'Add Image', 'label for button in the image widget' ),
-				'replace_media'              => _x( 'Replace Image', 'label for button in the image widget; should preferably not be longer than ~13 characters long' ),
-				'edit_media'                 => _x( 'Edit Image', 'label for button in the image widget; should preferably not be longer than ~13 characters long' ),
-				'missing_attachment'         => sprintf(
-					/* translators: %s: URL to media library. */
-					__( 'That image cannot be found. Check your <a href="%s">media library</a> and make sure it was not deleted.' ),
-					esc_url( admin_url( 'upload.php' ) )
-				),
-				/* translators: %d: Widget count. */
-				'media_library_state_multi'  => _n_noop( 'Image Widget (%d)', 'Image Widget (%d)' ),
-				'media_library_state_single' => __( 'Image Widget' ),
-			)
-		);
 	}
 
 	/**
@@ -83,7 +65,6 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 					'default'     => 0,
 					'description' => __( 'Height' ),
 				),
-
 				'caption'           => array(
 					'type'                  => 'string',
 					'default'               => '',
@@ -306,100 +287,344 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 	}
 
 	/**
+	 * Back-end widget form.
+	 *
+	 * @since CP-2.5.0
+	 *
+	 * @see WP_Widget::form()
+	 *
+	 * @param array $instance Previously saved values from database.
+	 */
+	public function form( $instance ) {
+		$title             = ! empty( $instance['title'] ) ? $instance['title'] : '';
+		$attachment_id     = ! empty( $instance['attachment_id'] ) ? $instance['attachment_id'] : 0;
+		$size              = ! empty( $instance['size'] ) ? $instance['size'] : 'full';
+		$alt               = ! empty( $instance['alt'] ) ? $instance['alt'] : '';
+		$link_type         = ! empty( $instance['link_type'] ) ? $instance['link_type'] : '';
+		$link_url          = ! empty( $instance['link_url'] ) ? $instance['link_url'] : '';
+		$caption           = ! empty( $instance['caption'] ) ? $instance['caption'] : '';
+		$url               = ! empty( $instance['url'] ) ? $instance['url'] : '';
+		$width             = ! empty( $instance['width'] ) ? $instance['width'] : '';
+		$height            = ! empty( $instance['height'] ) ? $instance['height'] : '';
+		$image_classes     = ! empty( $instance['image_classes'] ) ? $instance['image_classes'] : '';
+		$link_classes      = ! empty( $instance['link_classes'] ) ? $instance['link_classes'] : '';
+		$link_rel          = ! empty( $instance['link_rel'] ) ? $instance['link_rel'] : '';
+		$link_target_blank = ! empty( $instance['link_target_blank'] ) ? '_blank' : '';
+		$link_image_title  = ! empty( $instance['link_image_title'] ) ? $instance['link_image_title'] : '';
+		$size_options      = ! empty( $instance['size_options'] ) ? $instance['size_options'] : '';
+		$nonce             = wp_create_nonce( 'image_editor-' . $attachment_id );
+		$attributes        = 'alt="' . $alt . '"';
+		$aria_label        = '';
+
+		if ( $attachment_id && $url === '' ) {
+			$url = wp_get_attachment_url( $attachment_id );
+		}
+
+		// Create an aria-label attribute if the image has no alt attribute.
+		if ( $url && $alt === '' ) {
+			$aria_label = esc_attr(
+				sprintf(
+					/* translators: %s: The image file name. */
+					__( 'The current image has no alternative text. The file name is: %s' ),
+					basename( $url )
+				)
+			);
+			$attributes .= ' aria-label="' . $aria_label . '"';
+		}
+
+		/**
+		 * Filter media image attributes within media image widget
+		 *
+		 * @since CP-2.5.0
+		 *
+		 * @param string $attributes    The default attributes.
+		 * @param string $alt           The default alt attribute.
+		 * @param string $aria-label    The default aria-label attribute.
+		 * @param int    $attachment_id The attachment ID.
+		 * @param string $url           The image file URL.
+		 */
+		apply_filters( 'cp_media_image_widget_image_attributes', $attributes, $alt, $aria_label, $attachment_id, $url );
+		
+		$image_html = '';
+		if ( $url ) {
+			if ( $attachment_id === 0 ) {
+				$attachment_id = attachment_url_to_postid( $url );
+			}
+			$image_html = '<img class="attachment-thumb" src="' . esc_url( $url ) . '" draggable="false" ' . $attributes . '>';
+			if ( $caption !== '' ) {
+				$image_html = '<figure style="margin:auto;">' . $image_html . '<figcaption>' . esc_html( $caption ) . '</figcaption></figure>';
+			}
+		} else {
+			$image_html = '<div class="notice-error notice-alt" style="border-left: 3px solid #d63638;"><p style="padding: 0.5em 0">' . __( 'Unable to preview media due to an unknown error.' ) . '</p></div>';
+		}
+
+		$size_options = '';
+		if ( $attachment_id !== 0 ) {
+			$sizes_array = wp_get_attachment_metadata( $attachment_id );
+			foreach( $sizes_array['sizes'] as $key => $option ) {
+				$size_options .= '<option value="' . esc_attr( $key ) . '"' . selected( $key, $size, false ) . '>' . esc_html( ucfirst( $key ) . ' &ndash; ' . $option['width'] . ' x ' . $option['height'] ) . '</option>';
+			}
+			$size_options .= '<option value="full"' . selected( 'full', $size, false ) . '>' . esc_html( 'Full &ndash; ' . $sizes_array['width'] . ' x ' . $sizes_array['height'] ) . '</option>';
+		}
+		?>
+
+		<div class="media-widget-control selected">	
+			<fieldset>
+				<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
+				<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" class="widefat" type="text" value="<?php echo esc_attr( $title ); ?>">
+			</fieldset>
+
+			<?php
+			if ( $url ) {
+			?>
+				<div class="media-widget-preview media_image populated"><?php echo $image_html; ?></div>
+
+				<fieldset class="media-widget-buttons">
+					<button type="button" class="button edit-media selected" data-edit-nonce="<?php echo esc_attr( $nonce ); ?>"><?php esc_html_e( 'Edit Image' ); ?></button>
+					<button type="button" class="button change-media select-media selected"><?php esc_html_e( 'Replace Image' ); ?></button>
+				</fieldset>
+
+				<fieldset class="media-widget-image-link">
+					<label for="<?php echo $this->get_field_id( 'link_url' ); ?>"><?php esc_html_e( 'Link to:' ); ?></label>
+					<input id="<?php echo $this->get_field_id( 'link_url' ); ?>" name="<?php echo $this->get_field_name( 'link_url' ); ?>" class="widefat" type="url" value="<?php echo esc_url( $link_url ); ?>" placeholder="https://" data-property="link_url">
+				</fieldset>
+
+			<?php
+			} else {
+			?>
+
+				<div class="media-widget-preview media_image">
+					<div class="attachment-media-view">
+						<button type="button" class="select-media button-add-media"><?php esc_html_e( 'Add Image' ); ?></button>
+					</div>
+				</div>
+
+			<?php
+			}
+			?>
+
+			<input id="<?php echo esc_attr( $this->get_field_id( 'size' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'size' ) ); ?>" type="hidden" data-property="size" class="media-widget-instance-property" value="<?php echo esc_attr( esc_attr( $size ) ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'width' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'width' ) ); ?>" type="hidden" data-property="width" class="media-widget-instance-property" value="<?php echo esc_attr( $width ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'height' ) ); ?>" type="hidden" data-property="height" class="media-widget-instance-property" value="<?php echo esc_attr( $height ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'caption' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'caption' ) ); ?>" type="hidden" data-property="caption" class="media-widget-instance-property" value="<?php echo esc_attr( $caption ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'alt' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'alt' ) ); ?>" type="hidden" data-property="alt" class="media-widget-instance-property" value="<?php echo esc_attr( $alt ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'link_type' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'link_type' ) ); ?>" type="hidden" data-property="link_type" class="media-widget-instance-property" value="<?php echo esc_attr( $link_type ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'image_classes' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'image_classes' ) ); ?>" type="hidden" data-property="image_classes" class="media-widget-instance-property" value="<?php echo esc_attr( $image_classes ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'link_classes' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'link_classes' ) ); ?>" type="hidden" data-property="link_classes" class="media-widget-instance-property" value="<?php echo esc_attr( $link_classes ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'link_rel' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'link_rel' ) ); ?>" type="hidden" data-property="link_rel" class="media-widget-instance-property" value="<?php echo esc_url( $link_rel ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'link_target_blank' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'link_target_blank' ) ); ?>" type="hidden" data-property="link_target_blank" class="media-widget-instance-property" value="<?php echo esc_attr( $link_target_blank ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'link_image_title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'link_image_title' ) ); ?>" type="hidden" data-property="link_image_title" class="media-widget-instance-property" value="<?php echo esc_attr( $link_image_title ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'attachment_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'attachment_id' ) ); ?>" type="hidden" data-property="attachment_id" class="media-widget-instance-property" value="<?php echo esc_attr( $attachment_id ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="hidden" data-property="url" class="media-widget-instance-property" value="<?php echo esc_url( $url ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'size_options' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'size_options' ) ); ?>" type="hidden" data-property="size_options" class="media-widget-instance-property" value="<?php echo esc_attr( $size_options ); ?>">
+
+		</div>
+
+		<?php
+	}
+
+	/**
+	 * Sanitize widget form values as they are saved.
+	 *
+	 * @since CP-2.5.0
+	 *
+	 * @see WP_Widget::update()
+	 *
+	 * @param array $new_instance Values just sent to be saved.
+	 * @param array $old_instance Previously saved values from database.
+	 *
+	 * @return array Updated safe values to be saved.
+	 */
+	public function update( $new_instance, $old_instance ) {
+		$instance = array();
+		$instance['title']             = ! empty( $new_instance['title'] ) ? sanitize_text_field( $new_instance['title'] ) : '';
+		$instance['attachment_id']     = ! empty( $new_instance['attachment_id'] ) ? absint( $new_instance['attachment_id'] ) : 0;
+		$instance['url']               = ! empty( $new_instance['url'] ) ? sanitize_url( $new_instance['url'] ) : '';
+		$instance['size']              = ! empty( $new_instance['size'] ) ? sanitize_text_field( $new_instance['size'] ) : '';
+		$instance['width']             = ! empty( $new_instance['width'] ) ? sanitize_text_field( $new_instance['width'] ) : '';
+		$instance['height']            = ! empty( $new_instance['height'] ) ? sanitize_text_field( $new_instance['height'] ) : '';
+		$instance['caption']           = ! empty( $new_instance['caption'] ) ? wp_kses_post( $new_instance['caption'] ) : '';
+		$instance['alt']               = ! empty( $new_instance['alt'] ) ? sanitize_text_field( $new_instance['alt'] ) : '';
+		$instance['link_type']         = ! empty( $new_instance['link_type'] ) ? sanitize_text_field( $new_instance['link_type'] ) : '';
+		$instance['link_url']          = ! empty( $new_instance['link_url'] ) ? sanitize_url( $new_instance['link_url'] ) : '';
+		$instance['image_classes']     = ! empty( $new_instance['image_classes'] ) ? $this->sanitize_token_list( $new_instance['image_classes'] ) : '';
+		$instance['link_classes']      = ! empty( $new_instance['link_classes'] ) ? $this->sanitize_token_list( $new_instance['link_classes'] ) : '';
+		$instance['link_rel']          = ! empty( $new_instance['link_rel'] ) ? sanitize_url( $new_instance['link_rel'] ) : '';
+		$instance['link_target_blank'] = ! empty( $new_instance['link_target_blank'] ) ? '_blank' : '';
+		$instance['link_image_title']  = ! empty( $new_instance['link_image_title'] ) ? sanitize_text_field( $new_instance['link_image_title'] ) : '';
+		$instance['size_options']      = ! empty( $new_instance['size_options'] ) ? sanitize_text_field( $new_instance['size_options'] ) : '';
+
+		return $instance;
+	}
+
+	/**
 	 * Loads the required media files for the media manager and scripts for media widgets.
 	 *
 	 * @since 4.8.0
 	 */
 	public function enqueue_admin_scripts() {
-		parent::enqueue_admin_scripts();
 
-		$handle = 'media-image-widget';
-		wp_enqueue_script( $handle );
-
-		$exported_schema = array();
-		foreach ( $this->get_instance_schema() as $field => $field_schema ) {
-			$exported_schema[ $field ] = wp_array_slice_assoc( $field_schema, array( 'type', 'default', 'enum', 'minimum', 'format', 'media_prop', 'should_preview_update' ) );
+		// Identify permitted image file types
+		$image_file_types = [];
+		$allowed_mime_types = get_allowed_mime_types();
+		foreach( $allowed_mime_types as $key => $mime ) {
+			if ( str_contains( $mime, 'image/' ) ) {
+				$extensions = explode( '|', $key );
+				foreach( $extensions as $extension ) {
+					$image_file_types[] = $extension;
+				}
+			}
 		}
-		wp_add_inline_script(
-			$handle,
-			sprintf(
-				'wp.mediaWidgets.modelConstructors[ %s ].prototype.schema = %s;',
-				wp_json_encode( $this->id_base ),
-				wp_json_encode( $exported_schema )
-			)
-		);
 
-		wp_add_inline_script(
-			$handle,
-			sprintf(
-				'
-					wp.mediaWidgets.controlConstructors[ %1$s ].prototype.mime_type = %2$s;
-					wp.mediaWidgets.controlConstructors[ %1$s ].prototype.l10n = _.extend( {}, wp.mediaWidgets.controlConstructors[ %1$s ].prototype.l10n, %3$s );
-				',
-				wp_json_encode( $this->id_base ),
-				wp_json_encode( $this->widget_options['mime_type'] ),
-				wp_json_encode( $this->l10n )
+		wp_enqueue_script( 'media-image-widget' );
+		wp_localize_script(
+			'media-image-widget',
+			'IMAGE_WIDGET',
+			array(
+				'replace_image'              => _x( 'Replace Image', 'label for button in the image widget; should preferably not be longer than ~13 characters long' ),
+				'edit_image'                 => _x( 'Edit Image', 'label for button in the image widget; should preferably not be longer than ~13 characters long' ),
+				'add_to_widget'              => __( 'Add to Widget' ),
+				'unsupported_file_type'      => __( 'Looks like this is not the correct kind of file. Please link to an appropriate file instead.' ),
+				'aria_label'                 => __( 'The current image has no alternative text. The file name is: ' ),
+				'image_file_types'           => $image_file_types,
+				'wrong_url'                  => __( 'No file exists at the URL provided.' ),
 			)
 		);
 	}
+}
 
-	/**
-	 * Render form template scripts.
-	 *
-	 * @since 4.8.0
-	 */
-	public function render_control_template_scripts() {
-		parent::render_control_template_scripts();
+/**
+ * Renders the template for the modal content for the media image widget
+ *
+ * @since CP-2.5.0
+ *
+ * @return string
+ */
+function cp_render_media_image_template() {
+	ob_start();
+	?>
 
-		?>
-		<script type="text/html" id="tmpl-wp-media-widget-image-fields">
-			<# var elementIdPrefix = 'el' + String( Math.random() ) + '_'; #>
-			<# if ( data.url ) { #>
-			<p class="media-widget-image-link">
-				<label for="{{ elementIdPrefix }}linkUrl"><?php esc_html_e( 'Link to:' ); ?></label>
-				<input id="{{ elementIdPrefix }}linkUrl" type="text" class="widefat link" value="{{ data.link_url }}" placeholder="https://" pattern="((\w+:)?\/\/\w.*|\w+:(?!\/\/$)|\/|\?|#).*">
-			</p>
-			<# } #>
-		</script>
-		<script type="text/html" id="tmpl-wp-media-widget-image-preview">
-			<# if ( data.error && 'missing_attachment' === data.error ) { #>
-				<?php
-				wp_admin_notice(
-					$this->l10n['missing_attachment'],
-					array(
-						'type'               => 'error',
-						'additional_classes' => array( 'notice-alt', 'notice-missing-attachment' ),
-					)
-				);
-				?>
-			<# } else if ( data.error ) { #>
-				<?php
-				wp_admin_notice(
-					__( 'Unable to preview media due to an unknown error.' ),
-					array(
-						'type'               => 'error',
-						'additional_classes' => array( 'notice-alt' ),
-					)
-				);
-				?>
-			<# } else if ( data.url ) { #>
-				<img class="attachment-thumb" src="{{ data.url }}" draggable="false" alt="{{ data.alt }}"
-					<# if ( ! data.alt && data.currentFilename ) { #>
-						aria-label="
-						<?php
-						echo esc_attr(
-							sprintf(
-								/* translators: %s: The image file name. */
-								__( 'The current image has no alternative text. The file name is: %s' ),
-								'{{ data.currentFilename }}'
-							)
-						);
-						?>
-						"
-					<# } #>
-				>
-			<# } #>
-		</script>
-		<?php
-	}
+	<template id="tmpl-edit-image-modal">
+		<div id="image-modal-content" class="media-modal-content">
+			<div class="media-frame mode-select wp-core-ui media-widget hide-menu hide-router">
+
+				<div class="media-frame-title" id="media-frame-title">
+					<h2><?php esc_html_e( 'Image details' ); ?></h2>
+				</div>
+
+				<div class="media-frame-tab-panel">
+					<div class="media-frame-content">
+						<div class="image-details">
+							<div class="media-embed">
+								<div class="embed-media-settings">
+									<div class="column-settings">
+										<span class="setting alt-text has-description">
+											<label for="image-details-alt-text" class="name"><?php esc_html_e( 'Alternative Text' ); ?></label>
+											<textarea id="image-details-alt-text" data-setting="alt" aria-describedby="alt-text-description"></textarea>
+										</span>
+										<p class="description" id="alt-text-description"><a href="https://www.w3.org/WAI/tutorials/images/decision-tree" target="_blank" rel="noopener"><?php esc_html_e( 'Learn how to describe the purpose of the image' ); ?><span class="screen-reader-text"> <?php esc_html_e( '(opens in a new tab)' ); ?></span></a><?php esc_html_e( '. Leave empty if the image is purely decorative.' ); ?></p>
+
+										<span class="setting caption">
+											<label for="image-details-caption" class="name"><?php esc_html_e( 'Caption' ); ?></label>
+											<textarea id="image-details-caption" data-setting="caption"></textarea>
+										</span>
+
+										<h3><?php esc_html_e( 'Display Settings' ); ?></h3>
+										<fieldset>
+											<span class="setting size">
+												<label for="image-details-size" class="name"><?php _e( 'Size' ); ?></label>
+												<select id="image-details-size" class="size" name="size" data-setting="size">
+													<option value="custom">Custom Size</option>
+												</select>
+											</span>
+
+											<div class="custom-size wp-clearfix hidden">
+												<span class="custom-size-setting">
+													<label for="image-details-size-width"><?php esc_html_e( 'Width' ); ?></label>
+													<input type="number" id="image-details-size-width" aria-describedby="image-size-desc" data-setting="customWidth" step="1" value="">
+												</span>
+												<span class="sep" aria-hidden="true">×</span>
+												<span class="custom-size-setting">
+													<label for="image-details-size-height"><?php esc_html_e( 'Height' ); ?></label>
+													<input type="number" id="image-details-size-height" aria-describedby="image-size-desc" data-setting="customHeight" step="1" value="">
+												</span>
+												<p id="image-size-desc" class="description"><?php esc_html_e( 'Image size in pixels' ); ?></p>
+											</div>
+
+											<div class="setting">
+												<label for="image-details-link-to" class="name" style="margin-top:17px;"><?php esc_html_e( 'Link To' ); ?></label>
+												<div class="setting link-to" style="display:inline-block;">
+													<select id="image-details-link-to" name="link-type" data-setting="link">
+														<option value="none" selected><?php esc_html_e( 'None' ); ?></option>
+														<option value="file"><?php esc_html_e( 'Image URL' ); ?></option>
+														<option value="custom"><?php esc_html_e( 'Custom URL' ); ?></option>
+													</select>
+												</div>
+												<div id="link-to-url" hidden inert>
+													<label for="image-details-link-to-custom" class="name"><?php esc_html_e( 'URL' ); ?></label>
+													<input type="url" id="image-details-link-to-custom" class="link-to-custom" style="margin-left: 0;" data-setting="linkUrl">
+												</div>
+											</div>
+										</fieldset>
+
+										<details class="advanced-section">
+											<summary><h3><?php esc_html_e( 'Advanced Options' ); ?></h3></summary>
+											<div class="advanced-settings">
+												<div class="advanced-image">
+													<span class="setting title-text">
+														<label for="image-details-title-attribute" class="name"><?php esc_html_e( 'Image Title Attribute' ); ?></label>
+														<input type="text" id="image-details-title-attribute" data-setting="title" value="">
+													</span>
+													<span class="setting extra-classes">
+														<label for="image-details-css-class" class="name"><?php esc_html_e( 'Image CSS Class' )?> </label>
+														<input type="text" id="image-details-css-class" data-setting="extraClasses" value="">
+													</span>
+												</div>
+												<div class="advanced-link">
+													<span class="setting link-target">
+														<input type="checkbox" id="image-details-link-target" data-setting="linkTargetBlank" value="_blank">
+														<label for="image-details-link-target" class="checkbox-label"><?php esc_html_e( 'Open link in a new tab' ); ?></label>
+													</span>
+													<span class="setting link-rel">
+														<label for="image-details-link-rel" class="name"><?php esc_html_e( 'Link Rel' ); ?></label>
+														<input type="text" id="image-details-link-rel" data-setting="linkRel" value="">
+													</span>
+													<span class="setting link-class-name">
+														<label for="image-details-link-css-class" class="name"><?php esc_html_e( 'Link CSS Class' ); ?></label>
+														<input type="text" id="image-details-link-css-class" data-setting="linkClassName" value="">
+													</span>
+												</div>
+											</div>
+										</details>
+									</div>
+									<div class="column-image">
+										<div class="image">
+											<img src="<?php echo esc_url( includes_url() . 'images/blank.gif' ); ?>" draggable="false" alt="">
+
+											<div class="actions">
+												<button id="edit-original" type="button" class="edit-attachment button" data-href="<?php echo esc_url( home_url( '/wp-admin/post.php?item=xxx&mode=edit' ) ); ?>"><?php esc_html_e( 'Edit Original' ); ?></button>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<h2 class="media-frame-actions-heading screen-reader-text"><?php esc_html_e( 'Selected media actions' ); ?></h2>
+				<div class="media-frame-toolbar">
+					<div class="media-toolbar">
+						<div class="media-toolbar-primary search-form">
+							<button type="button" class="button media-button button-primary button-large media-button-select"><?php esc_html_e( 'Update' ); ?></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</template>
+
+	<?php
+	return ob_get_clean();
 }
