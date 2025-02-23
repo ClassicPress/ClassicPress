@@ -31,16 +31,6 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 				'mime_type'   => 'image',
 			)
 		);
-
-		$this->l10n = array_merge(
-			$this->l10n,
-			array(
-				'no_media_selected' => __( 'No images selected' ),
-				'add_media'         => _x( 'Add Images', 'label for button in the gallery widget; should not be longer than ~13 characters long' ),
-				'replace_media'     => '',
-				'edit_media'        => _x( 'Edit Gallery', 'label for button in the gallery widget; should not be longer than ~13 characters long' ),
-			)
-		);
 	}
 
 	/**
@@ -130,131 +120,133 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 	}
 
 	/**
+	 * Back-end widget form.
+	 *
+	 * @since CP-2.5.0
+	 *
+	 * @see WP_Widget::form()
+	 *
+	 * @param array $instance Previously saved values from database.
+	 */
+    public function form( $instance ) {        
+		$title             = ! empty( $instance['title'] ) ? $instance['title'] : '';
+		$ids               = ! empty( $instance['ids'] ) ? $instance['ids'] : '';
+		$columns           = ! empty( $instance['columns'] ) ? $instance['columns'] : 3;
+		$size              = ! empty( $instance['size'] ) ? $instance['size'] : 'thumbnail';
+		$link_type         = ! empty( $instance['link_type'] ) ? $instance['link_type'] : 'post';
+		$orderby_random    = ! empty( $instance['orderby_random'] ) ? $instance['orderby_random'] : '';
+		$nonce             = wp_create_nonce( '_wpnonce' );
+		?>
+
+		<div class="media-widget-control selected">
+			<fieldset>
+				<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
+				<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" data-property="title" class="widefat title" value="<?php echo esc_attr( $title ); ?>">
+			</fieldset>
+
+			<?php
+			if ( $ids ) {
+				$exploded = explode( ',', $ids );
+				$gallery_html = '<ul class="gallery media-widget-gallery-preview">';
+				foreach( $exploded as $id ) {
+					$attributes = '';
+					$thumbnail = wp_get_attachment_image_src( $id, 'thumbnail', false );
+					$alt = get_post_meta( $id, '_wp_attachment_image_alt', true );
+
+					// Create an aria-label attribute if the image has no alt attribute.
+					if ( $thumbnail[0] && $alt === '' ) {
+						$aria_label = esc_attr(
+							sprintf(
+								/* translators: %s: The image file name. */
+								__( 'The current image has no alternative text. The file name is: %s' ),
+								basename( $thumbnail[0] )
+							)
+						);
+						$attributes .= ' aria-label="' . $aria_label . '"';
+					}
+
+					$gallery_html .= '<li class="gallery-item">';
+					$gallery_html .= '<div class="gallery-icon">';
+					$gallery_html .= '<img alt="' . $alt . '" src="' . $thumbnail[0] . '" width="150" height="150"' . $attributes . '>';
+					$gallery_html .= '</div>';
+					$gallery_html .= '</li>';					
+				}
+				$gallery_html .= '</ul>';
+				?>
+
+				<div class="media-widget-preview media_gallery"><?php echo $gallery_html; ?></div>
+
+				<fieldset class="media-widget-buttons">
+					<button type="button" class="button edit-media selected" data-edit-nonce="<?php echo esc_attr( $nonce ); ?>" style="margin-top:0;"><?php esc_html_e( 'Edit Gallery' ); ?></button>
+				</fieldset>
+
+			<?php
+			} else {
+			?>
+
+				<div class="media-widget-preview media_gallery">
+					<div class="attachment-media-view">
+						<button type="button" class="select-media button-add-media"><?php esc_html_e( 'Add Images' ); ?></button>
+					</div>
+				</div>
+
+			<?php
+			}
+			?>
+
+			<input id="<?php echo esc_attr( $this->get_field_id( 'ids' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'ids' ) ); ?>" type="hidden" data-property="ids" class="media-widget-instance-property" value="<?php echo esc_attr( $ids ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'columns' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'columns' ) ); ?>" type="hidden" data-property="columns" class="media-widget-instance-property" value="<?php echo esc_attr( esc_attr( $columns ) ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'size' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'size' ) ); ?>" type="hidden" data-property="size" class="media-widget-instance-property" value="<?php echo esc_attr( esc_attr( $size ) ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'link_type' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'link_type' ) ); ?>" type="hidden" data-property="link_type" class="media-widget-instance-property" value="<?php echo esc_attr( $link_type ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'orderby_random' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'orderby_random' ) ); ?>" type="hidden" data-property="orderby_random" class="media-widget-instance-property" value="<?php echo esc_attr( $orderby_random ); ?>">
+		
+		</div>
+        <?php
+    }
+
+	/**
+	 * Sanitize widget form values as they are saved.
+	 *
+	 * @since CP-2.5.0
+	 *
+	 * @see WP_Widget::update()
+	 *
+	 * @param array $new_instance Values just sent to be saved.
+	 * @param array $old_instance Previously saved values from database.
+	 *
+	 * @return array Updated safe values to be saved.
+	 */
+	public function update( $new_instance, $old_instance ) {
+		$instance = array();
+		$instance['title']          = ! empty( $new_instance['title'] ) ? sanitize_text_field( $new_instance['title'] ) : '';
+		$instance['ids']            = ! empty( $new_instance['ids'] ) ? implode( ',', array_map( 'absint', explode( ',', $new_instance['ids'] ) ) ) : '';
+		$instance['columns']        = ! empty( $new_instance['columns'] ) ? absint( $new_instance['columns'] ) : 3;
+		$instance['size']           = ! empty( $new_instance['size'] ) ? sanitize_text_field( $new_instance['size'] ) : '';
+		$instance['link_type']      = ! empty( $new_instance['link_type'] ) ? sanitize_text_field( $new_instance['link_type'] ) : 'post';
+		$instance['orderby_random'] = ! empty( $new_instance['orderby_random'] ) ? sanitize_text_field( $new_instance['orderby_random'] ) : '';
+
+		return $instance;
+	}
+
+	/**
 	 * Loads the required media files for the media manager and scripts for media widgets.
 	 *
 	 * @since 4.9.0
 	 */
 	public function enqueue_admin_scripts() {
-		parent::enqueue_admin_scripts();
 
-		$handle = 'media-gallery-widget';
-		wp_enqueue_script( $handle );
-
-		$exported_schema = array();
-		foreach ( $this->get_instance_schema() as $field => $field_schema ) {
-			$exported_schema[ $field ] = wp_array_slice_assoc( $field_schema, array( 'type', 'default', 'enum', 'minimum', 'format', 'media_prop', 'should_preview_update', 'items' ) );
-		}
-		wp_add_inline_script(
-			$handle,
-			sprintf(
-				'wp.mediaWidgets.modelConstructors[ %s ].prototype.schema = %s;',
-				wp_json_encode( $this->id_base ),
-				wp_json_encode( $exported_schema )
-			)
-		);
-
-		wp_add_inline_script(
-			$handle,
-			sprintf(
-				'
-					wp.mediaWidgets.controlConstructors[ %1$s ].prototype.mime_type = %2$s;
-					_.extend( wp.mediaWidgets.controlConstructors[ %1$s ].prototype.l10n, %3$s );
-				',
-				wp_json_encode( $this->id_base ),
-				wp_json_encode( $this->widget_options['mime_type'] ),
-				wp_json_encode( $this->l10n )
-			)
-		);
-	}
-
-	/**
-	 * Render form template scripts.
-	 *
-	 * @since 4.9.0
-	 */
-	public function render_control_template_scripts() {
-		parent::render_control_template_scripts();
-		?>
-		<script type="text/html" id="tmpl-wp-media-widget-gallery-preview">
-			<#
-			var ids = _.filter( data.ids, function( id ) {
-				return ( id in data.attachments );
-			} );
-			#>
-			<# if ( ids.length ) { #>
-				<ul class="gallery media-widget-gallery-preview" role="list">
-					<# _.each( ids, function( id, index ) { #>
-						<# var attachment = data.attachments[ id ]; #>
-						<# if ( index < 6 ) { #>
-							<li class="gallery-item">
-								<div class="gallery-icon">
-									<img alt="{{ attachment.alt }}"
-										<# if ( index === 5 && data.ids.length > 6 ) { #> aria-hidden="true" <# } #>
-										<# if ( attachment.sizes.thumbnail ) { #>
-											src="{{ attachment.sizes.thumbnail.url }}" width="{{ attachment.sizes.thumbnail.width }}" height="{{ attachment.sizes.thumbnail.height }}"
-										<# } else { #>
-											src="{{ attachment.url }}"
-										<# } #>
-										<# if ( ! attachment.alt && attachment.filename ) { #>
-											aria-label="
-											<?php
-											echo esc_attr(
-												sprintf(
-													/* translators: %s: The image file name. */
-													__( 'The current image has no alternative text. The file name is: %s' ),
-													'{{ attachment.filename }}'
-												)
-											);
-											?>
-											"
-										<# } #>
-									>
-									<# if ( index === 5 && data.ids.length > 6 ) { #>
-									<div class="gallery-icon-placeholder">
-										<p class="gallery-icon-placeholder-text" aria-label="
-										<?php
-											printf(
-												/* translators: %s: The amount of additional, not visible images in the gallery widget preview. */
-												__( 'Additional images added to this gallery: %s' ),
-												'{{ data.ids.length - 5 }}'
-											);
-										?>
-										">+{{ data.ids.length - 5 }}</p>
-									</div>
-									<# } #>
-								</div>
-							</li>
-						<# } #>
-					<# } ); #>
-				</ul>
-			<# } else { #>
-				<div class="attachment-media-view">
-					<button type="button" class="placeholder button-add-media"><?php echo esc_html( $this->l10n['add_media'] ); ?></button>
-				</div>
-			<# } #>
-		</script>
-		<?php
-	}
-
-	/**
-	 * Whether the widget has content to show.
-	 *
-	 * @since 4.9.0
-	 * @access protected
-	 *
-	 * @param array $instance Widget instance props.
-	 * @return bool Whether widget has content.
-	 */
-	protected function has_content( $instance ) {
-		if ( ! empty( $instance['ids'] ) ) {
-			$attachments = wp_parse_id_list( $instance['ids'] );
-			foreach ( $attachments as $attachment ) {
-				if ( 'attachment' !== get_post_type( $attachment ) ) {
-					return false;
+		// Identify permitted image file types
+		$image_file_types = [];
+		$allowed_mime_types = get_allowed_mime_types();
+		foreach( $allowed_mime_types as $key => $mime ) {
+			if ( str_contains( $mime, 'image/' ) ) {
+				$extensions = explode( '|', $key );
+				foreach( $extensions as $extension ) {
+					$image_file_types[] = $extension;
 				}
 			}
-			return true;
 		}
-		return false;
+
+		wp_enqueue_script( 'media-gallery-widget' );
 	}
 }
