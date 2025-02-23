@@ -130,7 +130,7 @@ class PepperPassword {
 	 * @since 1.0.3
 	 */
 	public function load_plugin_textdomain() {
-		load_plugin_textdomain( 'cp-pepper', false, basename( dirname(__FILE__) ) . '/languages' );
+		load_plugin_textdomain( 'cp-pepper', false, basename( __DIR__ ) . '/languages' );
 	}
 
 	/**
