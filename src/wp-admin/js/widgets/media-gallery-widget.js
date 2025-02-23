@@ -64,7 +64,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			fieldset = document.createElement( 'fieldset' );
 			fieldset.className = 'media-widget-buttons';
-			fieldset.innerHTML = '<button type="button" class="button edit-media selected" data-edit-nonce="" style="margin-top:0;">Edit Gallery</button>';
+			fieldset.innerHTML = '<button type="button" class="button edit-media selected" data-edit-nonce="" style="margin-top:0;">' + GALLERY_WIDGET.edit_gallery + '</button>';
 
 			widget.querySelector( 'input[data-property="ids"]').value = imageIds.join( ',' );
 			widget.querySelector( '.attachment-media-view' ).replaceWith( ul );
