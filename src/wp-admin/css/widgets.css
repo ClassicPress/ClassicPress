@@ -247,7 +247,7 @@ summary.widget-title::-webkit-details-marker {
 }
 
 .media-widget-gallery-preview .gallery-item img {
-	height: auto;
+	object-fit: cover;
 	vertical-align: bottom;
 }
 
