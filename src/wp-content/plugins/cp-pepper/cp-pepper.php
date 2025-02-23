@@ -1,9 +1,9 @@
 <?php
 /*
  * Plugin Name:       ClassicPress Pepper for Passwords
- * Plugin URI:        https://github.com/ClassicPress/ClassicPress
+ * Plugin URI:        https://directory.classicpress.net/plugins/classicpress-pepper-for-passwords/
  * Description:       For enhanced security add a `pepper` to password hashing.
- * Version:           1.0.2
+ * Version:           1.0.3
  * Requires at least: 4.9.15
  * Requires PHP:      7.4
  * Requires CP:       2.2
@@ -11,6 +11,8 @@
  * Author URI:        https://www.classicpress.net/
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       cp-pepper
+ * Domain Path:       /languages
 */
 
 namespace ClassicPress\PepperPassword;
@@ -64,6 +66,7 @@ class PepperPassword {
 	public function init() {
 		add_action( 'admin_menu', array( $this, 'create_settings_menu' ), 100 );
 		add_filter( 'plugin_action_links', array( $this, 'create_settings_link' ), 10, 2 );
+		add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
 		add_filter( 'cp_pepper_password', array( $this, 'get_pepper' ) );
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 	}
@@ -92,8 +95,8 @@ class PepperPassword {
 	public function create_settings_menu() {
 		$this->screen = add_submenu_page(
 			'options-general.php',
-			esc_html__( 'Pepper' ),
-			esc_html__( 'Pepper' ),
+			esc_html__( 'Pepper', 'cp-pepper' ),
+			esc_html__( 'Pepper', 'cp-pepper' ),
 			'manage_options',
 			self::SLUG,
 			array( $this, 'render_menu' ),
@@ -114,11 +117,20 @@ class PepperPassword {
 	 */
 	public function create_settings_link( $links, $plugin_file_name ) {
 		if ( strpos( $plugin_file_name, basename( __FILE__ ) ) !== false ) {
-			$setting_link = '<a href="' . admin_url( 'options-general.php?page=' . self::SLUG ) . '">' . esc_html__( 'Settings' ) . '</a>';
+			$setting_link = '<a href="' . admin_url( 'options-general.php?page=' . self::SLUG ) . '">' . esc_html__( 'Settings', 'cp-pepper' ) . '</a>';
 			array_unshift( $links, $setting_link );
 		}
 
 		return $links;
+	}
+
+	/**
+	 * Enable localization.
+	 *
+	 * @since 1.0.3
+	 */
+	public function load_plugin_textdomain() {
+		load_plugin_textdomain( 'cp-pepper', false, basename( dirname(__FILE__) ) . '/languages' );
 	}
 
 	/**
@@ -197,7 +209,7 @@ $current_pepper = \'' . $pepper . '\';
 	 */
 	public function render_menu() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Unauthorized.' ) );
+			wp_die( esc_html__( 'Unauthorized.', 'cp-pepper' ) );
 		}
 
 		if ( false === ( $creds = request_filesystem_credentials( admin_url( 'options-general.php?page=' . self::SLUG ), '', false, false, null ) ) ) {
@@ -213,14 +225,14 @@ $current_pepper = \'' . $pepper . '\';
 
 		echo '<div class="wrap">';
 		echo '<div class="cp-pepper-general">';
-		echo '<h1>' . esc_html__( 'ClassicPress Pepper' ) . '</h1>';
+		echo '<h1>' . esc_html__( 'ClassicPress Pepper', 'cp-pepper' ) . '</h1>';
 
 		if ( false === $wp_filesystem->is_writable( dirname( $this->pepper_file ) ) ) {
 			echo '<div class="notice notice-error is-dismissible">';
-			echo '<p>' . esc_html( 'Error: Cannot write the pepper file.' ) . '</p>';
+			echo '<p>' . esc_html__( 'Error: Cannot write the pepper file.', 'cp-pepper' ) . '</p>';
 			echo '<p><code>' . esc_html( $this->pepper_file ) . '</code></p>';
 			if ( $wp_filesystem->is_readable( $this->pepper_file ) ) {
-				echo '<p>' . esc_html( 'You can edit the file manually to add or change the pepper.' ) . '</p>';
+				echo '<p>' . esc_html__( 'You can edit the file manually to add or change the pepper.', 'cp-pepper' ) . '</p>';
 			}
 			echo '</div></div></div>';
 			return;
@@ -236,11 +248,11 @@ $current_pepper = \'' . $pepper . '\';
 			echo '</div>';
 		}
 
-		echo '<h3>' . esc_html__( 'Create or renew a pepper for the password storing algorithm' ) . '</h3>';
-		echo '<p>' . esc_html__( 'Note that changing the pepper, or deactivating this plugin, will invalidate all stored password hashes and will mean that every user will need to reset their password.' ) . '</p>';
+		echo '<h3>' . esc_html__( 'Create or renew a pepper for the password storing algorithm', 'cp-pepper' ) . '</h3>';
+		echo '<p>' . esc_html__( 'Note that changing the pepper, or deactivating this plugin, will invalidate all stored password hashes and will mean that every user will need to reset their password.', 'cp-pepper' ) . '</p>';
 
-		$message = $pepper === '' ? esc_html__( 'ClassicPress is not currently using a Pepper.' ) : esc_html__( 'ClassicPress is currently using a Pepper.' );
-		$button  = $pepper === '' ? esc_html__( 'Enable Pepper' ) : esc_html__( 'Renew Pepper' );
+		$message = $pepper === '' ? esc_html__( 'ClassicPress is not currently using a Pepper.', 'cp-pepper' ) : esc_html__( 'ClassicPress is currently using a Pepper.', 'cp-pepper' );
+		$button  = $pepper === '' ? esc_html__( 'Enable Pepper', 'cp-pepper' ) : esc_html__( 'Renew Pepper', 'cp-pepper' );
 
 		echo '<p>' . esc_html( $message ) . '</p>';
 		echo '<form action="' . esc_url_raw( add_query_arg( array( 'action' => 'generate' ), admin_url( 'options-general.php?page=' . self::SLUG ) ) ) . '" method="POST">';
@@ -290,7 +302,7 @@ $current_pepper = \'' . $pepper . '\';
 			return false;
 		}
 
-		$pepper_result = $this->get_pepper() === '' ? esc_html__( 'Pepper enabled.' ) : esc_html__( 'Pepper renewed.' );
+		$pepper_result = $this->get_pepper() === '' ? esc_html__( 'Pepper enabled.', 'cp-pepper' ) : esc_html__( 'Pepper renewed.', 'cp-pepper' );
 		set_transient( 'cp_pepper_generate_response', $pepper_result, 30 );
 
 		$pepper = $this->random_pepper();
