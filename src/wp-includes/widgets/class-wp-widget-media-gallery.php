@@ -248,5 +248,12 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 		}
 
 		wp_enqueue_script( 'media-gallery-widget' );
+		wp_localize_script(
+			'media-gallery-widget',
+			'GALLERY_WIDGET',
+			array(
+				'edit_gallery' => __( 'Edit Gallery' ),
+			)
+		);
 	}
 }
