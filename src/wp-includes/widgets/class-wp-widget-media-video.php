@@ -178,7 +178,6 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 				$url = $flv;
 			}
 		}
-		$video_html = wp_video_shortcode( array( 'src' => $url ) );
 		?>
  
 		<div class="media-widget-control">
@@ -190,7 +189,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 			<?php
 			if ( $url ) {
 			?>
-				<div class="media-widget-preview media_video populated"><?php echo $video_html; ?></div>
+				<div class="media-widget-preview media_video populated"><?php echo wp_video_shortcode( array( 'src' => $url ) ); ?></div>
 
 				<fieldset class="media-widget-buttons">
 					<button type="button" class="button edit-media"><?php esc_html_e( 'Edit Video' ); ?></button>
