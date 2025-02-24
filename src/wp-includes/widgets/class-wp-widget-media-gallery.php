@@ -247,6 +247,7 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 			}
 		}
 
+		wp_enqueue_script( 'jquery-ui-sortable' );
 		wp_enqueue_script( 'media-gallery-widget' );
 		wp_localize_script(
 			'media-gallery-widget',
