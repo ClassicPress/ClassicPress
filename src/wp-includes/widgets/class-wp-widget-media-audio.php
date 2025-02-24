@@ -125,15 +125,20 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 
 		if ( $attachment_id && $url === '' ) {
 			$url = wp_get_attachment_url( $attachment_id );
-		} elseif ( $url === '' ) {
+		}
+		if ( $url === '' ) {
 			$url = $mp3;
-		} elseif ( $url === '' ) {
+		}
+		if ( $url === '' ) {
 			$url = $ogg;
-		} elseif ( $url === '' ) {
+		}
+		if ( $url === '' ) {
 			$url = $flac;
-		} elseif ( $url === '' ) {
+		}
+		if ( $url === '' ) {
 			$url = $m4a;
-		} elseif ( $url === '' ) {
+		}
+		if ( $url === '' ) {
 			$url = $wav;
 		}
 		$audio_html = wp_audio_shortcode( array( 'src' => $url ) );
