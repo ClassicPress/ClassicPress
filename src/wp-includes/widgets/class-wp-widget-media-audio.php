@@ -132,7 +132,7 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 				$url = $ogg;
 			} elseif ( $flac ) {
 				$url = $flac;
-			} elseif ( $mfa ) {
+			} elseif ( $m4a ) {
 				$url = $m4a;
 			} elseif ( $wav ) {
 				$url = $wav;
