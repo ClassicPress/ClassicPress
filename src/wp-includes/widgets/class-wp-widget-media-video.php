@@ -163,23 +163,20 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 		$ogv           = ! empty( $instance['ogv'] ) ? $instance['ogv'] : '';
 		$flv           = ! empty( $instance['flv'] ) ? $instance['flv'] : '';
 
-		if ( $attachment_id && $url === '' ) {
-			$url = wp_get_attachment_url( $attachment_id );
-		}
 		if ( $url === '' ) {
-			$url = $mp4;
-		}
-		if ( $url === '' ) {
-			$url = $m4v;
-		}
-		if ( $url === '' ) {
-			$url = $webm;
-		}
-		if ( $url === '' ) {
-			$url = $ogv;
-		}
-		if ( $url === '' ) {
-			$url = $flv;
+			if ( $attachment_id ) {
+				$url = wp_get_attachment_url( $attachment_id );
+			} elseif ( $mp4 ) {
+				$url = $mp4;
+			} elseif ( $m4v ) {
+				$url = $m4v;
+			} elseif ( $webm ) {
+				$url = $webm;
+			} elseif ( $ogv ) {
+				$url = $ogv;
+			} elseif ( $flv ) {
+				$url = $flv;
+			}
 		}
 		$video_html = wp_video_shortcode( array( 'src' => $url ) );
 		?>
