@@ -123,23 +123,20 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 		$url           = ! empty( $instance['url'] ) ? $instance['url'] : '';
 		$nonce         = wp_create_nonce( 'audio_editor-' . $attachment_id );
 
-		if ( $attachment_id && $url === '' ) {
-			$url = wp_get_attachment_url( $attachment_id );
-		}
 		if ( $url === '' ) {
-			$url = $mp3;
-		}
-		if ( $url === '' ) {
-			$url = $ogg;
-		}
-		if ( $url === '' ) {
-			$url = $flac;
-		}
-		if ( $url === '' ) {
-			$url = $m4a;
-		}
-		if ( $url === '' ) {
-			$url = $wav;
+			if ( $attachment_id ) {
+				$url = wp_get_attachment_url( $attachment_id );
+			} elseif ( $mp3 ) {
+				$url = $mp3;
+			} elseif ( $ogg ) {
+				$url = $ogg;
+			} elseif ( $flac ) {
+				$url = $flac;
+			} elseif ( $mfa ) {
+				$url = $m4a;
+			} elseif ( $wav ) {
+				$url = $wav;
+			}
 		}
 		$audio_html = wp_audio_shortcode( array( 'src' => $url ) );
 		?>
