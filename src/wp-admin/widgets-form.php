@@ -22,7 +22,6 @@ if ( isset( $_GET['widgets-access'] ) ) {
 if ( 'on' === $widgets_access ) {
 	add_filter( 'admin_body_class', 'wp_widgets_access_body_class' );
 } else {
-	wp_enqueue_script( 'jquery-ui-sortable' );
 	wp_enqueue_script( 'admin-widgets' );
 
 	if ( wp_is_mobile() ) {
