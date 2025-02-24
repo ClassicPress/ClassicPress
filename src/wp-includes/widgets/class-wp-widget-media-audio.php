@@ -138,7 +138,6 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 				$url = $wav;
 			}
 		}
-		$audio_html = wp_audio_shortcode( array( 'src' => $url ) );
 		?>
 
 		<div class="media-widget-control selected">	
@@ -150,7 +149,7 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 			<?php
 			if ( $url ) {
 			?>
-				<div class="media-widget-preview media_audio populated"><?php echo $audio_html; ?></div>
+				<div class="media-widget-preview media_audio populated"><?php echo wp_audio_shortcode( array( 'src' => $url ) ); ?></div>
 
 				<fieldset class="media-widget-buttons">
 					<button type="button" class="button edit-media selected" data-edit-nonce="<?php echo esc_attr( $nonce ); ?>"><?php esc_html_e( 'Edit Audio' ); ?></button>
