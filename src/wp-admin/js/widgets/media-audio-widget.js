@@ -165,7 +165,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				fileType   = attachment.url.split( '.' ).pop(),
 				audio      = document.createElement( 'audio' ),
 				source     = document.createElement( 'source' ),
-				buttons    = document.createElement( 'div' );
+				fieldset   = document.createElement( 'fieldset' );
 
 			audio.className = 'wp_audio_shortcode';
 			audio.style.width = '100%';
@@ -179,14 +179,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			audio.append( source );
 
 			// Add Edit and Replace buttons
-			buttons.className = 'media-widget-buttons';
-			buttons.innerHTML = '<button type="button" class="button edit-media">' + AUDIO_WIDGET.edit_audio + '</button>' +
+			fieldset.className = 'media-widget-buttons';
+			fieldset.innerHTML = '<button type="button" class="button edit-media">' + AUDIO_WIDGET.edit_audio + '</button>' +
 				'<button type="button" class="button change-media select-media">' + AUDIO_WIDGET.replace_audio + '</button>';
 
 			// Insert audio according to whether this is a new insertion or replacement
 			if ( widget.querySelector( '.attachment-media-view' ) !== null ) {
-				widget.querySelector( '.media_audio' ).append( audio );
-				widget.querySelector( '.attachment-media-view' ).replaceWith( buttons );
+				widget.querySelector( '.media_audio' ).prepend( audio );
+				widget.querySelector( '.attachment-media-view' ).replaceWith( fieldset );
 			} else { // replacement
 				widget.querySelector( '.media_audio' ).replaceWith( audio );
 			}
