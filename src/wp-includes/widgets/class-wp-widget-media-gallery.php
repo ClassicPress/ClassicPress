@@ -120,6 +120,28 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 	}
 
 	/**
+	 * Whether the widget has content to show.
+	 *
+	 * @since 4.9.0
+	 * @access protected
+	 *
+	 * @param array $instance Widget instance props.
+	 * @return bool Whether widget has content.
+	 */
+	protected function has_content( $instance ) {
+		if ( ! empty( $instance['ids'] ) ) {
+			$attachments = wp_parse_id_list( $instance['ids'] );
+			foreach ( $attachments as $attachment ) {
+				if ( 'attachment' !== get_post_type( $attachment ) ) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Back-end widget form.
 	 *
 	 * @since CP-2.5.0
@@ -128,7 +150,7 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
-    public function form( $instance ) {        
+	public function form( $instance ) {        
 		$title             = ! empty( $instance['title'] ) ? $instance['title'] : '';
 		$ids               = ! empty( $instance['ids'] ) ? $instance['ids'] : '';
 		$columns           = ! empty( $instance['columns'] ) ? $instance['columns'] : 3;
