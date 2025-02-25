@@ -154,7 +154,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 		$title         = ! empty( $instance['title'] ) ? $instance['title'] : '';
 		$attachment_id = ! empty( $instance['attachment_id'] ) ? $instance['attachment_id'] : 0;
 		$url           = ! empty( $instance['url'] ) ? $instance['url'] : '';
-		$preload       = ! empty( $instance['preload'] ) ? $instance['preload'] : '';
+		$preload       = ! empty( $instance['preload'] ) ? $instance['preload'] : 'metadata';
 		$loop          = ! empty( $instance['loop'] ) ? true : false;
 		$content       = ! empty( $instance['content'] ) ? $instance['content'] : '';
 		$mp4           = ! empty( $instance['mp4'] ) ? $instance['mp4'] : '';
@@ -242,7 +242,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 		$instance['title']         = ! empty( $new_instance['title'] ) ? sanitize_text_field( $new_instance['title'] ) : '';
 		$instance['attachment_id'] = ! empty( $new_instance['attachment_id'] ) ? absint( $new_instance['attachment_id'] ) : 0;
 		$instance['url']           = ! empty( $new_instance['url'] ) ? sanitize_url( $new_instance['url'] ) : '';
-		$instance['preload']       = ! empty( $new_instance['preload'] ) ? sanitize_text_field( $new_instance['preload'] ) : '';
+		$instance['preload']       = ! empty( $new_instance['preload'] ) ? sanitize_text_field( $new_instance['preload'] ) : 'metadata';
 		$instance['loop']          = ! empty( $new_instance['loop'] ) ? sanitize_text_field( $new_instance['loop'] ) : '';
 		$instance['content']       = ! empty( $new_instance['content'] ) ? wp_kses_post( $new_instance['content'] ) : '';
 		$instance['mp4']           = ! empty( $new_instance['mp4'] ) ? sanitize_url( $new_instance['mp4'] ) : '';
