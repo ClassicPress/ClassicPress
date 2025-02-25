@@ -50,7 +50,8 @@
 	<footer id="legal">
 		<div class="cplegal">
 			<div class="cpcopyright">
-				<p><?php esc_html_e( 'Copyright', 'the-classicpress-theme' ); ?> <?php echo esc_attr( gmdate( 'Y' ) ); ?> <a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php bloginfo( 'name' ); ?>"><?php bloginfo( 'name' ); ?></a></p>
+				<?php /* translators: 1: year, 2: site title. */ ?>
+				<p><?php printf( esc_html( '&copy; %1$s %2$s.', 'the-classicpress-theme' ), esc_html( gmdate( 'Y' ) ), esc_html( get_bloginfo( 'name' ) ) ); ?> <?php esc_html_e( 'All Rights Reserved.', 'the-classicpress-theme' ); ?></p>
 			</div>
 			<div class="cppolicy">
 				<?php if ( ! empty( get_privacy_policy_url() ) ) { ?>
