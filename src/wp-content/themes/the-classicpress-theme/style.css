@@ -1124,7 +1124,7 @@ img {
 	border-width: 0;
 	/* IE11/Edge fix */
 }
-.menu-item-has-children > a::after {
+#primary-menu .menu-item-has-children > a::after {
 	content: "";
 	border: 4px solid transparent;
 	border-top: 5px solid rgba(255, 255, 255, 0.72);
@@ -1174,8 +1174,8 @@ img {
 .nav--toggle-sub li > ul.sub-menu.open {
 	display: block;
 }
-#masthead .menu ul.sub-menu li a,
-#masthead .menu li.menu-item-has-children ul.sub-menu li a {
+#primary-menu.menu ul.sub-menu li a,
+#primary-menu.menu li.menu-item-has-children ul.sub-menu li a {
 	padding-left: 0.85em;
 	border-radius: 0;
 }
@@ -1957,25 +1957,18 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	}
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 899px) {
 	header#page-title h1 {
 		max-width: 600px;
 	}
 	#primary {
 		display: block;
 	}
-	.menu-mainmenu-container {
-		position: absolute;
-		z-index: 3;
-		width: 100%;
-		margin-left: -1em;
-		background: rgba(5, 127, 153, 1);
-	}
 	#primary-menu li a {
 		padding: 0.2em 0.5em;
 	}
-	#masthead .menu ul.sub-menu li a,
-	#masthead .menu li.menu-item-has-children ul.sub-menu li a {
+	#primary-menu.menu ul.sub-menu li a,
+	#primary-menu.menu li.menu-item-has-children ul.sub-menu li a {
 		padding-left: 1.2em;
 	}
 	#masthead .search-form {
@@ -2103,15 +2096,12 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	#page-title h1 {
 		padding: 0.6em 15px;
 	}
-	#site-navigation {
-		margin-right: -0.3em;
-	}
 	#primary-menu.menu li {
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
 		font-size: 0.85em;
 	}
-	.menu {
+	#primary-menu.menu {
 		display: flex;
 		flex-grow: 1;
 		justify-content: space-between;
@@ -2121,16 +2111,16 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		gap: 1em;
 		line-height: 3.5em;
 	}
-	.menu li a {
+	#primary-menu.menu li a {
 		display: flex;
 		flex-grow: 1;
 		padding: 0.4em 0.5em;
 	}
-	nav .menu .sub-menu li a {
+	#primary-menu.menu .sub-menu li a {
 		line-height: 1.4em;
 		padding: 0.55em 0.85em;
 	}
-	.menu ul li {
+	#primary-menu.menu ul li {
 		padding: 0;
 		flex-direction: column;
 	}
@@ -2139,11 +2129,11 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		display: inline-block;
 		background: #fff;
 	}
-	#masthead .menu ul.sub-menu li:last-child a,
-	#masthead .menu li.menu-item-has-children ul.sub-menu li:last-child a {
+	#primary-menu.menu ul.sub-menu li:last-child a,
+	#primary-menu.menu li.menu-item-has-children ul.sub-menu li:last-child a {
 		border-radius: 0 0 var(--tcpt-border-radius) var(--tcpt-border-radius);
 	}
-	.menu-item-has-children > a::after {
+	#primary-menu .menu-item-has-children > a::after {
 		margin-left: 0.12em;
 		margin-top: 0.69em;
 	}
