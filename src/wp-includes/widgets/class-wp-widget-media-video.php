@@ -220,7 +220,6 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 		<input id="<?php echo esc_attr( $this->get_field_id( 'flv' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'flv' ) ); ?>" type="hidden" data-property="flv" class="media-widget-instance-property" value="<?php echo esc_attr( $flv ); ?>">
 		<input id="<?php echo esc_attr( $this->get_field_id( 'attachment_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'attachment_id' ) ); ?>" type="hidden" data-property="attachment_id" class="media-widget-instance-property" value="<?php echo esc_attr( $attachment_id ); ?>">
 		<input id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="hidden" data-property="url" class="media-widget-instance-property" value="<?php echo esc_url( $url ); ?>">
-		<input id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="hidden" data-property="title" class="media-widget-instance-property" value="<?php echo esc_attr( $title ); ?>">
 
         <?php
     }
