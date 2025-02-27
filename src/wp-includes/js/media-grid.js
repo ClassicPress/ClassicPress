@@ -8,17 +8,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		uploadCatSelect = document.getElementById( 'upload-category' ),
 		inputElement = document.getElementById( 'filepond' ),
 		ajaxurl = document.getElementById( 'ajax-url' ).value,
-		body = document.body,
 		dialog = document.getElementById( 'media-modal' ),
 		leftIcon = document.getElementById( 'left-dashicon' ),
 		rightIcon = document.getElementById( 'right-dashicon' ),
 		closeButton = document.getElementById( 'dialog-close-button' ),
+		leftIconMobile = document.getElementById( 'left-dashicon-mobile' ),
+		rightIconMobile = document.getElementById( 'right-dashicon-mobile' ),
+		mediaNavigation = document.querySelector( '.edit-media-header .media-navigation' ),
+		mediaNavigationMobile = document.querySelector( '.attachment-media-view .media-navigation' ),
 		paged = '1',
 		dateFilter = document.getElementById( 'filter-by-date' ) ? document.getElementById( 'filter-by-date' ) : '',
 		typeFilter = document.getElementById( 'filter-by-type' ) ? document.getElementById( 'filter-by-type' ) : '',
 		search = document.getElementById( 'media-search-input' ),
 		mediaCatSelect = document.getElementById( 'taxonomy=media_category&term' ) ? document.getElementById( 'taxonomy=media_category&term' ) : '',
-		mediaGrid = document.querySelector( '#media-grid ul' )
+		mediaGrid = document.querySelector( '#media-grid ul' ),
 		startX = 0, // Store starting touch point
 		endX = 0;   // Store ending touch point
 
@@ -207,6 +210,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 				mediaItem.remove();
 				closeButton.click();
+				resetDataOrdering();
 			} else {
 				console.log( _wpMediaGridSettings.delete_failed );
 			}
@@ -215,6 +219,52 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			console.error( _wpMediaGridSettings.error, error );
 		} );
 	}
+
+	// Reset ordering of remaining media items after deletion
+	function resetDataOrdering() {
+		var items = document.querySelectorAll( '.media-item' ),
+			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
+			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
+			count5;
+
+		items.forEach( function( item, index ) {
+			item.setAttribute( 'data-order', parseInt( index + 1 ) );
+		} );
+
+		// Reset totals
+		if ( 5 in count ) { // allow for different languages
+			count5 = ' ' + count[5];
+		} else {
+			count5 = '';
+		}
+		document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + count5;
+
+		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
+		dialog.querySelector( '#total-media-items' ).textContent = items.length;
+		dialog.querySelector( '#total-media-items-mobile' ).textContent = items.length;
+	}
+
+	// Toggle media button navigation wrappers according to viewport width
+	function toggleMediaNavigation() {
+		if ( window.innerWidth > 480 ) {
+			mediaNavigation.style.display = '';
+			mediaNavigationMobile.style.display = 'none';
+		} else {
+			mediaNavigation.style.display = 'none';
+			mediaNavigationMobile.style.display = '';
+		}
+	}
+
+	window.addEventListener( 'resize', toggleMediaNavigation );
+
+	// Delete media item
+	dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
+		var id = location.search.replace( '?item=', '' );
+		if ( confirm( _wpMediaGridSettings.confirm_delete ) ) {
+			deleteItem( id );
+			resetDataOrdering();
+		}
+	} );
 
 	// Open modal
 	function openModalDialog( item ) {
@@ -239,7 +289,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			orientation = item.dataset.orientation ? ' ' + item.dataset.orientation : '',
 			menuOrder = item.dataset.menuOrder,
 			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
-			next = item.nextElementSibling ? item.nextElementSibling.id : '';
+			next = item.nextElementSibling ? item.nextElementSibling.id : '',
+			order = item.dataset.order,
+			total = parseInt( document.querySelector( '.displaying-num' ).textContent );
 
 		// Modify current URL
 		queryParams.set( 'item', id );
@@ -311,16 +363,28 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		rightIcon.setAttribute( 'data-next', next );
 
 		if ( prev === '' ) {
-			leftIcon.disabled = true;
+			leftIcon.setAttribute( 'aria-disabled', true );
+			leftIconMobile.setAttribute( 'aria-disabled', true );
 		} else {
-			leftIcon.disabled = false;
+			leftIcon.setAttribute( 'aria-disabled', false );
+			leftIconMobile.setAttribute( 'aria-disabled', false );
 		}
 
 		if ( next === '' ) {
-			rightIcon.disabled = true;
+			rightIcon.setAttribute( 'aria-disabled', true );
+			rightIconMobile.setAttribute( 'aria-disabled', true );
 		} else {
-			rightIcon.disabled = false;
+			rightIcon.setAttribute( 'aria-disabled', false );
+			rightIconMobile.setAttribute( 'aria-disabled', false );
 		}
+
+		// Set order of media item and total
+		dialog.querySelector( '#current-media-item' ).textContent = order;
+		dialog.querySelector( '#total-media-items' ).textContent = total;
+		dialog.querySelector( '#current-media-item-mobile' ).textContent = order;
+		dialog.querySelector( '#total-media-items-mobile' ).textContent = total;
+
+		toggleMediaNavigation();
 
 		// Show modal
 		dialog.classList.add( 'modal-loading' );
@@ -329,13 +393,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		setTimeout( function() {
 			dialog.showModal();
 		}, 1 );
-
-		// Delete media item
-		dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
-			if ( confirm( _wpMediaGridSettings.confirm_delete ) ) {
-				deleteItem( id );
-			}
-		} );
 
 		// Update media categories and tags
 		dialog.querySelectorAll( '.compat-item input' ).forEach( function( input ) {
@@ -791,20 +848,24 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( id ) {
 			focusID = id; // set focusID for when modal is closed
 			document.getElementById( id ).click();
+			mediaNavigation.style.display === '' ? leftIcon.focus() : leftIconMobile.focus();
 		}
 		removeImageEditWrap();
 	}
 	leftIcon.addEventListener( 'click', prevModalDialog );
+	leftIconMobile.addEventListener( 'click', prevModalDialog );
 
 	function nextModalDialog() {
 		var id = rightIcon.dataset.next;
 		if ( id ) {
 			focusID = id; // set focusID for when modal is closed
 			document.getElementById( id ).click();
+			mediaNavigation.style.display === '' ? rightIcon.focus() : rightIconMobile.focus();
 		}
 		removeImageEditWrap();
 	}
 	rightIcon.addEventListener( 'click', nextModalDialog );
+	rightIconMobile.addEventListener( 'click', nextModalDialog );
 
 	// Handle keyboard navigation
 	function keydownHandler( e ) {
@@ -818,12 +879,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 	}
+	document.querySelector( '.edit-media-header' ).addEventListener( 'keydown', keydownHandler );
+	mediaNavigationMobile.addEventListener( 'keydown', keydownHandler );
 
 	// Handle touch navigation (touchstart event)
 	function touchStartHandler( e ) {
 		startX = e.touches[0].clientX;
 	}
-
 	// Handle touch navigation (touchend event)
 	// The swipe is considered valid if the horizontal distance moved (difference between startX and endX) is more than 50 pixels. This threshold prevents accidental small touches from triggering a swipe.
 	function touchEndHandler( e ) {
@@ -838,8 +900,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			nextModalDialog();
 		}
 	}
-
-	document.addEventListener( 'keydown', keydownHandler );
 	dialog.addEventListener( 'touchstart', touchStartHandler );
 	dialog.addEventListener( 'touchend', touchEndHandler );
 
@@ -862,11 +922,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		formData.append( 'target', target );
 		formData.append( 'context', 'edit-attachment' );
 
-		// Disable keyboard and touch navigation
-		document.removeEventListener( 'keydown', keydownHandler );
-		dialog.removeEventListener( 'touchstart', touchStartHandler );
-		dialog.removeEventListener( 'touchend', touchEndHandler );
-
 		// Make the fetch request
 		fetch( ajaxurl, {
 			method: 'POST',
@@ -880,6 +935,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
+			// Add navigation buttons
+			if ( dialog.querySelector( '#edit-image-navigation') == null ) {
+				var div = document.createElement( 'div' );
+				div.id = 'edit-image-navigation';
+				div.className = 'attachment-media-view landscape';
+				div.append( mediaNavigationMobile );
+				document.querySelector( '.media-frame-content' ).before( div );
+			}
+
 			document.querySelector( '.attachment-details' ).setAttribute( 'hidden', true );
 			document.querySelector( '.attachment-details' ).setAttribute( 'inert', true );
 			document.querySelector( '.media-frame-content' ).insertAdjacentHTML( 'beforeend', result.data.html );
@@ -887,14 +951,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Modify current URL
 			queryParams.set( 'mode', 'edit' );
 			history.replaceState( null, null, '?' + queryParams.toString() );
-
-			// Go back to attachment view from edit image screen
-			document.querySelector( '.imgedit-submit' ).addEventListener( 'click', function( e ) {
-				// Re-enable keyboard and touch navigation
-				document.addEventListener( 'keydown', keydownHandler );
-				dialog.addEventListener( 'touchstart', touchStartHandler );
-				dialog.addEventListener( 'touchend', touchEndHandler );
-			} );
 		} )
 		.catch( function( error ) {
 			console.error( 'Error:', error );
@@ -929,12 +985,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			toolbar.classList.add( 'media-toolbar-mode-select' );
 
 			deleteButton.addEventListener( 'click', function() {
-				if ( confirm( _wpMediaGridSettings.confirm_multiple ) ) {
-					document.querySelectorAll( '.media-item.selected' ).forEach( function( deleteSelect ) {
-						deleteItem( deleteSelect.id.replace( 'media-', '' ) );
-					} );
+				var selectedItems = document.querySelectorAll( '.media-item.selected' );
+				if ( selectedItems.length !== 0 ) {
+					if ( confirm( _wpMediaGridSettings.confirm_multiple ) ) {
+						selectedItems.forEach( function( deleteSelect ) {
+							deleteItem( deleteSelect.id.replace( 'media-', '' ) );
+						} );
+					}
+					document.querySelector( '.select-mode-toggle-button' ).click();
 				}
-				document.querySelector( '.select-mode-toggle-button' ).click();
 			} );
 		}
 	} );
