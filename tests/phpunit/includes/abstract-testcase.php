@@ -1154,6 +1154,27 @@ abstract class WP_UnitTestCase_Base extends PHPUnit_Adapter_TestCase {
 	}
 
 	/**
+	 * Checks for expected PHP Errors, Warnings and Notices
+	 *
+	 * @since CP-2.5.0
+	 *
+	 * @param string $function   The function name to test that generates the expected error.
+	 * @param array  $parameters Array with first element the expected error message and subsequent values parameters to pass into the function.
+	 *
+	 */
+	public function assertExpectedError( $function, $parameters = array() ) {
+		$expectedErrorMessage = array_shift( $parameters );
+		try {
+			call_user_func_array( $function, $parameters );
+			$this->fail( "Expected an error, didn't get one." );
+		} catch ( AssertionFailedError $e ) {
+			throw $e;
+		} catch ( \Throwable $e ) {
+			$this->assertSame( $expectedErrorMessage, $e->getMessage() );
+		}
+	}
+
+	/**
 	 * Helper function to convert a single-level array containing text strings to a named data provider.
 	 *
 	 * The value of the data set will also be used as the name of the data set.

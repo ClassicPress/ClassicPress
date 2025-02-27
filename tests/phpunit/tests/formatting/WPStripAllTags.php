@@ -53,9 +53,9 @@ class Tests_Formatting_wpStripAllTags extends WP_UnitTestCase {
 	 */
 	public function test_wp_strip_all_tags_should_return_empty_string_and_trigger_an_error_for_non_string_arg( $non_string ) {
 		$type = gettype( $non_string );
-		$this->expectError();
-		$this->expectErrorMessage( "Warning: wp_strip_all_tags expects parameter #1 (\$text) to be a string, $type given." );
-		$this->assertSame( '', wp_strip_all_tags( $non_string ) );
+		$expectedErrorMessage = "Warning: wp_strip_all_tags expects parameter #1 (\$text) to be a string, $type given.";
+		$args = array( $expectedErrorMessage, $non_string );
+		$this->assertExpectedError( 'wp_strip_all_tags', $args );
 	}
 
 	/**
