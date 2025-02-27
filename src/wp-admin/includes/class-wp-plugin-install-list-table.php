@@ -250,12 +250,18 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 	/**
 	 */
 	public function no_items() {
-		global $tab;
-		if ( isset( $this->error ) ) { ?>
-			<div class="inline error"><p><?php echo $this->error->get_error_message(); ?></p>
-				<p class="hide-if-no-js"><button class="button try-again"><?php _e( 'Try Again' ); ?></button></p>
-			</div>
-		<?php } elseif ( $tab !== 'categories' ) { ?>
+		if ( isset( $this->error ) ) {
+			$error_message  = '<p>' . $this->error->get_error_message() . '</p>';
+			$error_message .= '<p class="hide-if-no-js"><button class="button try-again">' . __( 'Try Again' ) . '</button></p>';
+			wp_admin_notice(
+				$error_message,
+				array(
+					'additional_classes' => array( 'inline', 'error' ),
+					'paragraph_wrap'     => false,
+				)
+			);
+			?>
+		<?php } else { ?>
 			<div class="no-plugin-results"><?php _e( 'No plugins found. Try a different search.' ); ?></div>
 			<?php
 		}
@@ -650,60 +656,69 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 		<div class="plugin-card plugin-card-<?php echo sanitize_html_class( $plugin['slug'] ); ?>">
 			<?php
 			if ( ! $compatible_php || ! $compatible_wp ) {
-				echo '<div class="notice inline notice-error notice-alt"><p>';
+				$incompatible_notice_message = '';
 				if ( ! $compatible_php && ! $compatible_wp ) {
-					_e( 'This plugin does not work with your versions of ClassicPress and PHP.' );
+					$incompatible_notice_message .= __( 'This plugin does not work with your versions of ClassicPress and PHP.' );
 					if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
 						if ( $cp_needs_update ) {
-							printf(
+							$incompatible_notice_message .= sprintf(
 								/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
 								' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
 								self_admin_url( 'update-core.php' ),
 								esc_url( wp_get_update_php_url() )
 							);
 						} else {
-							printf(
+							$incompatible_notice_message .= sprintf(
 								/* translators: %s: URL to Update PHP page. */
 								' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 								esc_url( wp_get_update_php_url() )
 							);
 						}
-						wp_update_php_annotation( '</p><p><em>', '</em>' );
+						$incompatible_notice_message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
 					} elseif ( current_user_can( 'update_core' ) ) {
-						printf(
+						$incompatible_notice_message .= sprintf(
 							/* translators: %s: URL to WordPress Updates screen. */
 							' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 							self_admin_url( 'update-core.php' )
 						);
+						$incompatible_notice_message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
 					} elseif ( current_user_can( 'update_php' ) ) {
-						printf(
+						$incompatible_notice_message .= sprintf(
 							/* translators: %s: URL to Update PHP page. */
 							' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 							esc_url( wp_get_update_php_url() )
 						);
-						wp_update_php_annotation( '</p><p><em>', '</em>' );
+						$incompatible_notice_message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
 					}
 				} elseif ( ! $compatible_wp ) {
-					_e( 'This plugin does not work with your version of ClassicPress.' );
+					$incompatible_notice_message .= __( 'This plugin does not work with your version of ClassicPress.' );
 					if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
-						printf(
+						$incompatible_notice_message .= sprintf(
 							/* translators: %s: URL to WordPress Updates screen. */
 							' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 							self_admin_url( 'update-core.php' )
 						);
+						$incompatible_notice_message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
 					}
 				} elseif ( ! $compatible_php ) {
-					_e( 'This plugin does not work with your version of PHP.' );
+					$incompatible_notice_message .= __( 'This plugin does not work with your version of PHP.' );
 					if ( current_user_can( 'update_php' ) ) {
-						printf(
+						$incompatible_notice_message .= sprintf(
 							/* translators: %s: URL to Update PHP page. */
 							' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 							esc_url( wp_get_update_php_url() )
 						);
-						wp_update_php_annotation( '</p><p><em>', '</em>' );
+						$incompatible_notice_message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
 					}
 				}
-				echo '</p></div>';
+
+				wp_admin_notice(
+					$incompatible_notice_message,
+					array(
+						'type'               => 'error',
+						'additional_classes' => array( 'notice-alt', 'inline' ),
+					)
+				);
 			}
 			?>
 			<div class="plugin-card-top">

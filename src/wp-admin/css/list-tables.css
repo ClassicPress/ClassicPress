@@ -370,6 +370,7 @@ table.media .column-title .media-icon {
 }
 
 table.media .column-title .media-icon img {
+	width: 100%;
 	max-width: 60px;
 	height: auto;
 	vertical-align: top; /* Remove descender white-space. */
@@ -1015,6 +1016,10 @@ tr.inline-edit-row td {
 .inline-edit-row fieldset .timestamp-wrap {
 	display: block;
 	margin-left: 6em;
+}
+
+.quick-edit-row-post div.inline-edit-col {
+	clear: both;
 }
 
 .quick-edit-row-post fieldset.inline-edit-col-right label span.title {

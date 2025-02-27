@@ -1080,7 +1080,7 @@ $( function() {
 			 * @return {void}
 			 */
 		}).find( 'li.wp-has-submenu.wp-not-current-submenu' ).on( 'focusin.adminmenu', function() {
-			adjustSubmenu( $( this ) );
+			adjustSubmenu( $( this )[0] );
 		});
 	}
 

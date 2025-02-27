@@ -123,6 +123,7 @@ function validateHookName(hookName) {
 /* harmony default export */ var build_module_validateHookName = (validateHookName);
 
 ;// ./node_modules/@wordpress/hooks/build-module/createAddHook.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -217,6 +218,7 @@ function createAddHook(hooks, storeKey) {
 /* harmony default export */ var build_module_createAddHook = (createAddHook);
 
 ;// ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -297,6 +299,7 @@ function createRemoveHook(hooks, storeKey, removeAll = false) {
 /* harmony default export */ var build_module_createRemoveHook = (createRemoveHook);
 
 ;// ./node_modules/@wordpress/hooks/build-module/createHasHook.js
+/* wp:polyfill */
 /**
  * @callback HasHook
  *
@@ -426,6 +429,7 @@ function createCurrentHook(hooks, storeKey) {
 /* harmony default export */ var build_module_createCurrentHook = (createCurrentHook);
 
 ;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
+/* wp:polyfill */
 /**
  * @callback DoingHook
  * Returns whether a hook is currently being executed.
@@ -498,7 +502,6 @@ function createDidHook(hooks, storeKey) {
 /* harmony default export */ var build_module_createDidHook = (createDidHook);
 
 ;// ./node_modules/@wordpress/hooks/build-module/createHooks.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */

@@ -103,6 +103,7 @@ $allowed_options            = array(
 		'new_admin_email',
 		'disable_emojis',
 		'disable_xml_rpc',
+		'link_manager_enabled',
 	),
 	'discussion' => array(
 		'default_pingback_flag',
@@ -310,9 +311,10 @@ if ( 'update' === $action ) { // We are saving settings sent from a settings pag
 					'options.php',
 					'2.7.0',
 					sprintf(
-						/* translators: %s: The option/setting. */
-						__( 'The %s setting is unregistered. Unregistered settings are deprecated. See https://developer.wordpress.org/plugins/settings/settings-api/' ),
-						'<code>' . esc_html( $option ) . '</code>'
+						/* translators: 1: The option/setting, 2: Documentation URL. */
+						__( 'The %1$s setting is unregistered. Unregistered settings are deprecated. See <a href="%2$s">documentation on the Settings API</a>.' ),
+						'<code>' . esc_html( $option ) . '</code>',
+						__( 'https://developer.wordpress.org/plugins/settings/settings-api/' )
 					)
 				);
 			}
@@ -365,10 +367,14 @@ require_once ABSPATH . 'wp-admin/admin-header.php'; ?>
 <div class="wrap">
 	<h1><?php esc_html_e( 'All Settings' ); ?></h1>
 
-	<div class="notice notice-warning">
-		<p><strong><?php _e( 'Warning:' ); ?></strong> <?php _e( 'This page allows direct access to your site settings. You can break things here. Please be cautious!' ); ?></p>
-	</div>
-
+	<?php
+	wp_admin_notice(
+		'<strong>' . __( 'Warning:' ) . '</strong> ' . __( 'This page allows direct access to your site settings. You can break things here. Please be cautious!' ),
+		array(
+			'type' => 'warning',
+		)
+	);
+	?>
 	<form name="form" action="options.php" method="post" id="all-options">
 		<?php wp_nonce_field( 'options-options' ); ?>
 		<input type="hidden" name="action" value="update">
@@ -376,6 +382,8 @@ require_once ABSPATH . 'wp-admin/admin-header.php'; ?>
 		<table class="form-table" role="presentation">
 <?php
 $options = $wpdb->get_results( "SELECT * FROM $wpdb->options ORDER BY option_name" );
+
+$can_copy = wp_is_using_https() || in_array( $_SERVER['REMOTE_ADDR'], array( '127.0.0.1', '::1' ) );
 
 foreach ( (array) $options as $option ) :
 	$disabled = false;
@@ -390,15 +398,19 @@ foreach ( (array) $options as $option ) :
 			$value               = maybe_unserialize( $option->option_value );
 			$options_to_update[] = $option->option_name;
 			$class               = 'all-options';
+			$clipboard_text      = $value;
 		} else {
-			$value    = 'SERIALIZED DATA';
-			$disabled = true;
-			$class    = 'all-options disabled';
+			$value              = 'SERIALIZED DATA';
+			$disabled           = true;
+			$class              = 'all-options disabled';
+			$unserialized_value = unserialize( $option->option_value );
+			$clipboard_text     = print_r( $unserialized_value, true );
 		}
 	} else {
 		$value               = $option->option_value;
 		$options_to_update[] = $option->option_name;
 		$class               = 'all-options';
+		$clipboard_text      = $value;
 	}
 
 	$name = esc_attr( $option->option_name );
@@ -410,7 +422,11 @@ foreach ( (array) $options as $option ) :
 		<textarea class="<?php echo $class; ?>" name="<?php echo $name; ?>" id="<?php echo $name; ?>" cols="30" rows="5"><?php echo esc_textarea( $value ); ?></textarea>
 	<?php else : ?>
 		<input class="regular-text <?php echo $class; ?>" type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $value ); ?>"<?php disabled( $disabled, true ); ?>>
-	<?php endif; ?></td>
+	<?php endif; ?>
+	<?php if ( $can_copy ) : ?>
+		<button type="button" class="button" data-clipboard-text="<?php echo esc_attr( $clipboard_text ); ?>" onClick="navigator.clipboard.writeText( this.getAttribute( 'data-clipboard-text' ) ); document.getElementById( 'success-<?php echo $name; ?>' ).classList.remove( 'hidden' ); setTimeout(function() { document.getElementById( 'success-<?php echo $name; ?>' ).classList.add( 'hidden' ); }, 2000);"><?php _e( 'Copy' ); ?></button>
+		<span id="success-<?php echo $name; ?>" class="success hidden" aria-hidden="true"><?php _e( 'Copied!' ); ?></span></td>
+	<?php endif; ?>
 </tr>
 <?php endforeach; ?>
 </table>

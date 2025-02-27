@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-  14.0 - Media Screen
+	14.0 - Media Screen
 ------------------------------------------------------------------------------*/
 
 .media-item .describe {
@@ -258,7 +258,7 @@
 }
 
 /*------------------------------------------------------------------------------
-  14.1 - Media Library
+	14.1 - Media Library
 ------------------------------------------------------------------------------*/
 
 .find-box {
@@ -652,35 +652,68 @@ border color while dragging a file over the uploader drop area */
 
 .upload-php .media-modal-close,
 .edit-attachment-frame .edit-media-header .left,
-.edit-attachment-frame .edit-media-header .right {
+.edit-attachment-frame .edit-media-header .right,
+.edit-attachment-frame .media-navigation .left,
+.edit-attachment-frame .media-navigation .right {
 	cursor: pointer;
 	color: #787c82;
 	background-color: transparent;
 	height: 50px;
 	width: 50px;
 	padding: 0;
-	position: absolute;
 	text-align: center;
 	border: 0;
 	border-left: 1px solid #dcdcde;
 	transition: color .1s ease-in-out, background .1s ease-in-out;
 }
 
-.upload-php .media-modal-close {
+.upload-php .media-modal-close,
+.edit-attachment-frame .edit-media-header .media-navigation {
+	position: absolute;
 	top: 0;
+}
+
+.upload-php .media-modal-close {
 	right: 0;
 }
 
-.edit-attachment-frame .edit-media-header .left {
-	right: 102px;
-}
-
-.edit-attachment-frame .edit-media-header .right {
+.edit-attachment-frame .edit-media-header .media-navigation {
+	display: flex;
 	right: 51px;
 }
 
+.edit-attachment-frame .edit-media-header .media-navigation,
+.attachment-media-view .media-navigation {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-top: 1px solid #dcdcde;
+	border-bottom: 1px solid #dcdcde;
+	font-size: 17px;
+	font-variant-numeric: tabular-nums;
+	-webkit-font-smoothing: subpixel-antialiased;
+	cursor: default;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+.edit-attachment-frame .edit-media-header .media-navigation .media-contextual-pagination {
+	padding: 0 20px;
+}
+
+.edit-attachment-frame .media-navigation .left {
+	border-right: 1px solid #dcdcde;
+}
+
+.edit-attachment-frame .media-navigation .right {
+	border-left: 1px solid #dcdcde;
+}
+
 .edit-attachment-frame .edit-media-header .right:before,
-.edit-attachment-frame .edit-media-header .left:before {
+.edit-attachment-frame .edit-media-header .left:before,
+.edit-attachment-frame .media-navigation .right:before,
+.edit-attachment-frame .media-navigation .left:before {
 	font: normal 20px/50px dashicons !important;
 	display: inline;
 	font-weight: 300;
@@ -691,7 +724,11 @@ border color while dragging a file over the uploader drop area */
 .edit-attachment-frame .edit-media-header .left:hover,
 .edit-attachment-frame .edit-media-header .right:hover,
 .edit-attachment-frame .edit-media-header .left:focus,
-.edit-attachment-frame .edit-media-header .right:focus {
+.edit-attachment-frame .edit-media-header .right:focus,
+.edit-attachment-frame .media-navigation .left:hover,
+.edit-attachment-frame .media-navigation .right:hover,
+.edit-attachment-frame .media-navigation .left:focus,
+.edit-attachment-frame .media-navigation .right:focus {
 	background: #dcdcde;
 	border-color: #c3c4c7;
 	color: #000;
@@ -701,7 +738,9 @@ border color while dragging a file over the uploader drop area */
 
 .upload-php .media-modal-close:focus,
 .edit-attachment-frame .edit-media-header .left:focus,
-.edit-attachment-frame .edit-media-header .right:focus {
+.edit-attachment-frame .edit-media-header .right:focus,
+.edit-attachment-frame .media-navigation .left:focus,
+.edit-attachment-frame .media-navigation .right:focus {
 	/* Only visible in Windows High Contrast mode */
 	outline: 2px solid transparent;
 	outline-offset: -2px;
@@ -712,16 +751,20 @@ border color while dragging a file over the uploader drop area */
 	color: #000;
 }
 
-.edit-attachment-frame .edit-media-header .left:before {
+.edit-attachment-frame .edit-media-header .left:before,
+.edit-attachment-frame .media-navigation .left:before {
 	content: "\f341";
 }
 
-.edit-attachment-frame .edit-media-header .right:before {
+.edit-attachment-frame .edit-media-header .right:before,
+.edit-attachment-frame .media-navigation .right:before {
 	content: "\f345";
 }
 
 .edit-attachment-frame .edit-media-header [disabled],
-.edit-attachment-frame .edit-media-header [disabled]:hover {
+.edit-attachment-frame .edit-media-header [disabled]:hover,
+.edit-attachment-frame .media-navigation [disabled],
+.edit-attachment-frame .media-navigation [disabled]:hover {
 	color: #c3c4c7;
 	background: inherit;
 	cursor: default;
@@ -843,7 +886,7 @@ border color while dragging a file over the uploader drop area */
 }
 
 /*------------------------------------------------------------------------------
-  14.2 - Image Editor
+	14.2 - Image Editor
 ------------------------------------------------------------------------------*/
 .wp_attachment_details .attachment-alt-text {
 	margin-bottom: 5px;
@@ -947,7 +990,7 @@ border color while dragging a file over the uploader drop area */
 .media-disabled,
 .imgedit-settings .disabled {
 	/* WCAG 1.4.3 Text or images of text that are part of an inactive user
-	   interface component ... have no contrast requirement. */
+		 interface component ... have no contrast requirement. */
 	color: #a7aaad;
 }
 
@@ -1228,7 +1271,7 @@ audio, video {
  * HiDPI Displays
  */
 @media print,
-  (min-resolution: 120dpi) {
+	(min-resolution: 120dpi) {
 	.imgedit-wait:before {
 		background-image: url(../images/spinner-2x.gif);
 	}
@@ -1341,24 +1384,9 @@ audio, video {
 		right: 110px;
 	}
 
-	.upload-php .media-modal-close,
-	.edit-attachment-frame .edit-media-header .left,
-	.edit-attachment-frame .edit-media-header .right {
+	.upload-php .media-modal-close {
 		width: 40px;
 		height: 40px;
-	}
-
-	.edit-attachment-frame .edit-media-header .right:before,
-	.edit-attachment-frame .edit-media-header .left:before {
-		line-height: 40px !important;
-	}
-
-	.edit-attachment-frame .edit-media-header .left {
-		right: 82px;
-	}
-
-	.edit-attachment-frame .edit-media-header .right {
-		right: 41px;
 	}
 
 	.edit-attachment-frame .media-frame-content {
@@ -1374,6 +1402,10 @@ audio, video {
 	.edit-attachment-frame .attachment-info {
 		height: auto;
 		width: 100%;
+	}
+
+	.edit-attachment-frame .attachment-media-view .thumbnail {
+		padding: 0 16px 16px;
 	}
 }
 

@@ -68,6 +68,7 @@ function validateHookName(hookName) {
 /* harmony default export */ var build_module_validateHookName = (validateHookName);
 
 ;// ./node_modules/@wordpress/hooks/build-module/createAddHook.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -162,6 +163,7 @@ function createAddHook(hooks, storeKey) {
 /* harmony default export */ var build_module_createAddHook = (createAddHook);
 
 ;// ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -242,6 +244,7 @@ function createRemoveHook(hooks, storeKey, removeAll = false) {
 /* harmony default export */ var build_module_createRemoveHook = (createRemoveHook);
 
 ;// ./node_modules/@wordpress/hooks/build-module/createHasHook.js
+/* wp:polyfill */
 /**
  * @callback HasHook
  *
@@ -371,6 +374,7 @@ function createCurrentHook(hooks, storeKey) {
 /* harmony default export */ var build_module_createCurrentHook = (createCurrentHook);
 
 ;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
+/* wp:polyfill */
 /**
  * @callback DoingHook
  * Returns whether a hook is currently being executed.
@@ -443,7 +447,6 @@ function createDidHook(hooks, storeKey) {
 /* harmony default export */ var build_module_createDidHook = (createDidHook);
 
 ;// ./node_modules/@wordpress/hooks/build-module/createHooks.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -2256,6 +2259,7 @@ const createRootURLMiddleware = rootURL => (options, next) => {
 /* harmony default export */ var root_url = (createRootURLMiddleware);
 
 ;// ./node_modules/@wordpress/url/build-module/normalize-path.js
+/* wp:polyfill */
 /**
  * Given a path, returns a normalized path where equal query parameter values
  * will be treated as identical, regardless of order they appear in the original
@@ -2266,9 +2270,9 @@ const createRootURLMiddleware = rootURL => (options, next) => {
  * @return {string} Normalized path.
  */
 function normalizePath(path) {
-  const splitted = path.split('?');
-  const query = splitted[1];
-  const base = splitted[0];
+  const split = path.split('?');
+  const query = split[1];
+  const base = split[0];
   if (!query) {
     return base;
   }
@@ -2333,6 +2337,7 @@ function getQueryString(url) {
 }
 
 ;// ./node_modules/@wordpress/url/build-module/get-query-args.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -2421,6 +2426,7 @@ function getQueryArgs(url) {
 }
 
 ;// ./node_modules/@wordpress/url/build-module/build-query-string.js
+/* wp:polyfill */
 /**
  * Generates URL-encoded query string using input query data.
  *
@@ -2520,6 +2526,7 @@ function addQueryArgs(url = '', args) {
 }
 
 ;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/preloading.js
+/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -2711,7 +2718,6 @@ const fetchAllMiddleware = async (options, next) => {
 /* harmony default export */ var fetch_all_middleware = (fetchAllMiddleware);
 
 ;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/http-v1.js
-/* wp:polyfill */
 /**
  * Set of HTTP methods which are eligible to be overridden.
  *
@@ -2993,6 +2999,7 @@ const mediaUploadMiddleware = (options, next) => {
 /* harmony default export */ var media_upload = (mediaUploadMiddleware);
 
 ;// ./node_modules/@wordpress/url/build-module/remove-query-args.js
+/* wp:polyfill */
 /**
  * Internal dependencies
  */

@@ -2154,6 +2154,11 @@ function media_upload_form( $errors = null ) {
 		$plupload_init['webp_upload_error'] = true;
 	}
 
+	// Check if AVIF images can be edited.
+	if ( ! wp_image_editor_supports( array( 'mime_type' => 'image/avif' ) ) ) {
+		$plupload_init['avif_upload_error'] = true;
+	}
+
 	/**
 	 * Filters the default Plupload settings.
 	 *
@@ -3863,10 +3868,12 @@ function bulk_edit_attachments( $attachment_data = null ) {
 		}
 
 		// Update attachment author.
-		if ( isset( $attachment_data['post_author'] ) ) {
-			$attachment = get_post( $attachment_id );
-			$attachment->post_author = $attachment_data['post_author'];
-			wp_update_post( $attachment );
+		if ( isset( $attachment_data['post_author'] ) && $attachment_data['post_author'] !== '-1' ) {
+			$args = array(
+				'ID' => $attachment_id,
+				'post_author' => absint( $attachment_data['post_author'] ),
+			);
+			wp_update_post( $args, true );
 			update_post_meta( $attachment_id, '_edit_last', get_current_user_id() );
 			$update = true;
 		}

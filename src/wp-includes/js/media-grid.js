@@ -8,11 +8,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		uploadCatSelect = document.getElementById( 'upload-category' ),
 		inputElement = document.getElementById( 'filepond' ),
 		ajaxurl = document.getElementById( 'ajax-url' ).value,
-		body = document.body,
 		dialog = document.getElementById( 'media-modal' ),
 		leftIcon = document.getElementById( 'left-dashicon' ),
 		rightIcon = document.getElementById( 'right-dashicon' ),
 		closeButton = document.getElementById( 'dialog-close-button' ),
+		leftIconMobile = document.getElementById( 'left-dashicon-mobile' ),
+		rightIconMobile = document.getElementById( 'right-dashicon-mobile' ),
+		mediaNavigation = document.querySelector( '.edit-media-header .media-navigation' ),
+		mediaNavigationMobile = document.querySelector( '.attachment-media-view .media-navigation' ),
 		paged = '1',
 		dateFilter = document.getElementById( 'filter-by-date' ) ? document.getElementById( 'filter-by-date' ) : '',
 		typeFilter = document.getElementById( 'filter-by-type' ) ? document.getElementById( 'filter-by-type' ) : '',
@@ -47,12 +50,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Update attachment details
 	function updateDetails( input, id ) {
+		var mediaItem = document.getElementById( 'media-' + id );
+		if ( ! mediaItem ) {
+			return;
+		}
 		var successTimeout,
 			data = new FormData();
 
 		data.append( 'action', 'save-attachment' );
 		data.append( 'id', id );
-		data.append( 'nonce', document.getElementById( 'media-' + id ).dataset.updateNonce );
+		data.append( 'nonce', mediaItem.dataset.updateNonce );
 
 		// Append metadata fields
 		if ( input.parentNode.dataset.setting === 'alt' ) {
@@ -81,13 +88,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Update data attributes
 				if ( input.parentNode.dataset.setting === 'alt' ) {
-					document.getElementById( 'media-' + id ).querySelector( 'img' ).setAttribute( 'alt', input.value );
+					mediaItem.querySelector( 'img' ).setAttribute( 'alt', input.value );
 				} else if ( input.parentNode.dataset.setting === 'title' ) {
-					document.getElementById( 'media-' + id ).setAttribute( 'aria-label', input.value );
+					mediaItem.setAttribute( 'aria-label', input.value );
 				} else if ( input.parentNode.dataset.setting === 'caption' ) {
-					document.getElementById( 'media-' + id ).setAttribute( 'data-caption', input.value );
+					mediaItem.setAttribute( 'data-caption', input.value );
 				} else if ( input.parentNode.dataset.setting === 'description' ) {
-					document.getElementById( 'media-' + id ).setAttribute( 'data-description', input.value );
+					mediaItem.setAttribute( 'data-description', input.value );
 				}
 
 				// Show success visual feedback.
@@ -111,12 +118,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Update media categories and tags
 	function updateMediaTaxOrTag( input, id ) {
+		var mediaItem = document.getElementById( 'media-' + id );
+		if ( ! mediaItem ) {
+			return;
+		}
 		var successTimeout, newTaxes,
 			data = new FormData(),
 			taxonomy = input.getAttribute( 'name' ).replace( 'attachments[' + id + '][' , '' ).replace( ']', '' );
 
 		data.append( 'action', 'save-attachment-compat' );
-		data.append( 'nonce', document.getElementById( 'media-' + id ).dataset.updateNonce );
+		data.append( 'nonce', mediaItem.dataset.updateNonce );
 		data.append( 'id', id );
 		data.append( 'taxonomy', taxonomy );
 		data.append( 'attachments[' + id + '][' + taxonomy + ']', input.value );
@@ -137,11 +148,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( taxonomy === 'media_category' ) {
 					newTaxes = result.data.media_cats.join( ', ' );
 					input.value = newTaxes;
-					document.getElementById( 'media-' + id ).setAttribute( 'data-taxes', newTaxes );
-				} else if ( taxonomy === 'media_tag' ) {
+					mediaItem.setAttribute( 'data-taxes', newTaxes );
+				} else if ( taxonomy === 'media_post_tag' ) {
 					newTaxes = result.data.media_tags.join( ', ' );
 					input.value = newTaxes;
-					document.getElementById( 'media-' + id ).setAttribute( 'data-tags', newTaxes );
+					mediaItem.setAttribute( 'data-tags', newTaxes );
 				}
 
 				// Show success visual feedback.
@@ -165,9 +176,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Delete attachment from within modal
 	function deleteItem( id ) {
+		var mediaItem = document.getElementById( 'media-' + id );
+		if ( ! mediaItem ) {
+			return;
+		}
 		var data = new URLSearchParams( {
 			action: 'delete-post',
-			_ajax_nonce: document.getElementById( 'media-' + id ).dataset.deleteNonce,
+			_ajax_nonce: mediaItem.dataset.deleteNonce,
 			id: id
 		} );
 
@@ -184,15 +199,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} )
 		.then( function( result ) {
 			if ( result === 1 ) { // success
-				if ( document.getElementById( 'media-' + id ).previousElementSibling != null ) {
-					focusID = document.getElementById( 'media-' + id ).previousElementSibling.id;
-				} else if ( document.getElementById( 'media-' + id ).nextElementSibling != null ) {
-					focusID = document.getElementById( 'media-' + id ).nextElementSibling.id;
+				if ( mediaItem.previousElementSibling != null ) {
+					focusID = mediaItem.previousElementSibling.id;
+				} else if ( mediaItem.nextElementSibling != null ) {
+					focusID = mediaItem.nextElementSibling.id;
 				} else {
 					focusID = addNew.id;
 				}
-				document.getElementById( 'media-' + id ).remove();
+				mediaItem.remove();
 				closeButton.click();
+				resetDataOrdering();
 			} else {
 				console.log( _wpMediaGridSettings.delete_failed );
 			}
@@ -201,6 +217,52 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			console.error( _wpMediaGridSettings.error, error );
 		} );
 	}
+
+	// Reset ordering of remaining media items after deletion
+	function resetDataOrdering() {
+		var items = document.querySelectorAll( '.media-item' ),
+			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
+			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
+			count5;
+
+		items.forEach( function( item, index ) {
+			item.setAttribute( 'data-order', parseInt( index + 1 ) );
+		} );
+
+		// Reset totals
+		if ( 5 in count ) { // allow for different languages
+			count5 = ' ' + count[5];
+		} else {
+			count5 = '';
+		}
+		document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + count5;
+
+		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
+		dialog.querySelector( '#total-media-items' ).textContent = items.length;
+		dialog.querySelector( '#total-media-items-mobile' ).textContent = items.length;
+	}
+
+	// Toggle media button navigation wrappers according to viewport width
+	function toggleMediaNavigation() {
+		if ( window.innerWidth > 480 ) {
+			mediaNavigation.style.display = '';
+			mediaNavigationMobile.style.display = 'none';
+		} else {
+			mediaNavigation.style.display = 'none';
+			mediaNavigationMobile.style.display = '';
+		}
+	}
+
+	window.addEventListener( 'resize', toggleMediaNavigation );
+
+	// Delete media item
+	dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
+		var id = location.search.replace( '?item=', '' );
+		if ( confirm( _wpMediaGridSettings.confirm_delete ) ) {
+			deleteItem( id );
+			resetDataOrdering();
+		}
+	} );
 
 	// Open modal
 	function openModalDialog( item ) {
@@ -220,10 +282,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			url = item.dataset.url,
 			alt = item.querySelector( 'img' ).getAttribute( 'alt' ),
 			link = item.dataset.link,
+			author = item.dataset.author,
+			authorLink = item.dataset.authorLink,
 			orientation = item.dataset.orientation ? ' ' + item.dataset.orientation : '',
 			menuOrder = item.dataset.menuOrder,
 			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
-			next = item.nextElementSibling ? item.nextElementSibling.id : '';
+			next = item.nextElementSibling ? item.nextElementSibling.id : '',
+			order = item.dataset.order,
+			total = parseInt( document.querySelector( '.displaying-num' ).textContent );
 
 		// Modify current URL
 		queryParams.set( 'item', id );
@@ -234,21 +300,23 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Populate modal with attachment details
 		dialog.querySelector( '.attachment-date' ).textContent = date;
+		dialog.querySelector( '.uploaded-by' ).children[1].textContent = author;
+		dialog.querySelector( '.uploaded-by' ).children[1].href = authorLink;
 		dialog.querySelector( '.attachment-filename' ).textContent = filename;
 		dialog.querySelector( '.attachment-filetype' ).textContent = mime;
 		dialog.querySelector( '.attachment-filesize' ).textContent = size;
 		dialog.querySelector( '.attachment-dimensions' ).textContent = width + ' ' + _wpMediaGridSettings.by + ' ' + height + ' ' + _wpMediaGridSettings.pixels;
 		dialog.querySelector( '.attachment-media-view' ).className = 'attachment-media-view' + orientation;
 
-		dialog.querySelector( '#attachment-details-two-column-alt-text').textContent = alt;
-		dialog.querySelector( '#attachment-details-two-column-title').value = title;
-		dialog.querySelector( '#attachment-details-two-column-caption').textContent = caption;
-		dialog.querySelector( '#attachment-details-two-column-description').textContent = description;
-		dialog.querySelector( '#attachment-details-two-column-copy-link').value = url;
+		dialog.querySelector( '#attachment-details-two-column-alt-text' ).value = alt;
+		dialog.querySelector( '#attachment-details-two-column-title' ).value = title;
+		dialog.querySelector( '#attachment-details-two-column-caption' ).value = caption;
+		dialog.querySelector( '#attachment-details-two-column-description' ).value = description;
+		dialog.querySelector( '#attachment-details-two-column-copy-link' ).value = url;
 
-		dialog.querySelector( '#menu-order').value = menuOrder;
-		dialog.querySelector( '#attachments-' + id + '-media_category').value = taxes;
-		dialog.querySelector( '#attachments-' + id + '-media_post_tag').value = tags;
+		dialog.querySelector( '#menu-order' ).value = menuOrder;
+		dialog.querySelector( '#attachments-' + id + '-media_category' ).value = taxes;
+		dialog.querySelector( '#attachments-' + id + '-media_post_tag' ).value = tags;
 
 		if ( filetype === 'audio' ) {
 			dialog.querySelector( '#media-image' ).setAttribute( 'hidden', true );
@@ -271,6 +339,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( filetype === 'image' ) {
 				dialog.querySelector( '.thumbnail-image img' ).src = url;
 				dialog.querySelector( '.edit-attachment' ).style.display = '';
+
+				if (
+					( mime === 'image/webp' && ! _wpMediaGridSettings.webp_editable ) ||
+					( mime === 'image/avif' && ! _wpMediaGridSettings.avif_editable ) ||
+					( mime === 'image/heic' && ! _wpMediaGridSettings.heic_editable )
+				) {
+					dialog.querySelector( '.edit-attachment' ).style.display = 'none';
+				}
 			} else {
 				dialog.querySelector( '.thumbnail-image img' ).src = item.querySelector( 'img' ).src;
 				dialog.querySelector( '.edit-attachment' ).style.display = 'none';
@@ -285,36 +361,41 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		rightIcon.setAttribute( 'data-next', next );
 
 		if ( prev === '' ) {
-			leftIcon.disabled = true;
+			leftIcon.setAttribute( 'aria-disabled', true );
+			leftIconMobile.setAttribute( 'aria-disabled', true );
 		} else {
-			leftIcon.disabled = false;
+			leftIcon.setAttribute( 'aria-disabled', false );
+			leftIconMobile.setAttribute( 'aria-disabled', false );
 		}
 
 		if ( next === '' ) {
-			rightIcon.disabled = true;
+			rightIcon.setAttribute( 'aria-disabled', true );
+			rightIconMobile.setAttribute( 'aria-disabled', true );
 		} else {
-			rightIcon.disabled = false;
+			rightIcon.setAttribute( 'aria-disabled', false );
+			rightIconMobile.setAttribute( 'aria-disabled', false );
 		}
+
+		// Set order of media item and total
+		dialog.querySelector( '#current-media-item' ).textContent = order;
+		dialog.querySelector( '#total-media-items' ).textContent = total;
+		dialog.querySelector( '#current-media-item-mobile' ).textContent = order;
+		dialog.querySelector( '#total-media-items-mobile' ).textContent = total;
+
+		toggleMediaNavigation();
 
 		// Show modal
 		dialog.classList.add( 'modal-loading' );
-		dialog.showModal();
 
-		// Delete media item
-		dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
-			if ( confirm( _wpMediaGridSettings.confirm_delete ) ) {
-				deleteItem( id );
-			}
-		} );
+		// Fix wrong image flash
+		setTimeout( function() {
+			dialog.showModal();
+		}, 1 );
 
-		/* Update media attachment details */
-		dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
+		// Update media categories and tags
+		dialog.querySelectorAll( '.compat-item input' ).forEach( function( input ) {
 			input.addEventListener( 'blur', function() {
-				if ( input.parentNode.parentNode.className === 'compat-item' ) {
-					updateMediaTaxOrTag( input, id ); // Update media categories and tags
-				} else {
-					updateDetails( input, id );
-				}
+				updateMediaTaxOrTag( input, id );
 			} );
 		} );
 	}
@@ -737,8 +818,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	} );
 
+	/* Update media attachment details */
+	dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
+		input.addEventListener( 'blur', function() {
+			var id = queryParams.get( 'item' );
+			updateDetails( input, id );
+		} );
+	} );
+
 	/* Close modal by clicking button */
-	closeButton.addEventListener( 'click', function() {
+	function closeModalDialog() {
 		queryParams.delete( 'item' );
 		queryParams.delete( 'mode' );
 		history.replaceState( null, null, location.href.split('?')[0] ); // reset URL params
@@ -749,21 +838,47 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			focusID = null; // reset focusID
 		}
 		removeImageEditWrap();
-	} );
+	}
+	closeButton.addEventListener( 'click', closeModalDialog );
 
-	leftIcon.addEventListener( 'click', function() {
+	function prevModalDialog() {
 		var id = leftIcon.dataset.prev;
-		focusID = id; // set focusID for when modal is closed
-		document.getElementById( id ).click();
+		if ( id ) {
+			focusID = id; // set focusID for when modal is closed
+			document.getElementById( id ).click();
+			mediaNavigation.style.display === '' ? leftIcon.focus() : leftIconMobile.focus();
+		}
 		removeImageEditWrap();
-	} );
+	}
+	leftIcon.addEventListener( 'click', prevModalDialog );
+	leftIconMobile.addEventListener( 'click', prevModalDialog );
 
-	rightIcon.addEventListener( 'click', function() {
+	function nextModalDialog() {
 		var id = rightIcon.dataset.next;
-		focusID = id; // set focusID for when modal is closed
-		document.getElementById( id ).click();
+		if ( id ) {
+			focusID = id; // set focusID for when modal is closed
+			document.getElementById( id ).click();
+			mediaNavigation.style.display === '' ? rightIcon.focus() : rightIconMobile.focus();
+		}
 		removeImageEditWrap();
-	} );
+	}
+	rightIcon.addEventListener( 'click', nextModalDialog );
+	rightIconMobile.addEventListener( 'click', nextModalDialog );
+
+	// Handle keyboard navigation
+	function keydownHandler( e ) {
+		if ( dialog.open ) {
+			if ( e.key === 'ArrowLeft' ) {
+				e.preventDefault();
+				prevModalDialog();
+			} else if ( e.key === 'ArrowRight' ) {
+				e.preventDefault();
+				nextModalDialog();
+			}
+		}
+	}
+	document.querySelector( '.edit-media-header' ).addEventListener( 'keydown', keydownHandler );
+	mediaNavigationMobile.addEventListener( 'keydown', keydownHandler );
 
 	// Edit image
 	document.querySelector( '.edit-attachment' ).addEventListener( 'click', function( e ) {
@@ -797,6 +912,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
+			// Add navigation buttons
+			if ( dialog.querySelector( '#edit-image-navigation') == null ) {
+				var div = document.createElement( 'div' );
+				div.id = 'edit-image-navigation';
+				div.className = 'attachment-media-view landscape';
+				div.append( mediaNavigationMobile );
+				document.querySelector( '.media-frame-content' ).before( div );
+			}
+
 			document.querySelector( '.attachment-details' ).setAttribute( 'hidden', true );
 			document.querySelector( '.attachment-details' ).setAttribute( 'inert', true );
 			document.querySelector( '.media-frame-content' ).insertAdjacentHTML( 'beforeend', result.data.html );
@@ -838,12 +962,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			toolbar.classList.add( 'media-toolbar-mode-select' );
 
 			deleteButton.addEventListener( 'click', function() {
-				if ( confirm( _wpMediaGridSettings.confirm_multiple ) ) {
-					document.querySelectorAll( '.media-item.selected' ).forEach( function( deleteSelect ) {
-						deleteItem( deleteSelect.id.replace( 'media-', '' ) );
-					} );
+				var selectedItems = document.querySelectorAll( '.media-item.selected' );
+				if ( selectedItems.length !== 0 ) {
+					if ( confirm( _wpMediaGridSettings.confirm_multiple ) ) {
+						selectedItems.forEach( function( deleteSelect ) {
+							deleteItem( deleteSelect.id.replace( 'media-', '' ) );
+						} );
+					}
+					document.querySelector( '.select-mode-toggle-button' ).click();
 				}
-				document.querySelector( '.select-mode-toggle-button' ).click();
 			} );
 		}
 	} );
