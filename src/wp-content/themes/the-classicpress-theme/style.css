@@ -1764,18 +1764,19 @@ table.cp-logo-list .cp-logo-description {
 	padding: 0;
 }
 .footerleft {
-	min-height: 50px;
-	width: 100%;
-	padding: 0 1em;
 	display: flex;
 	flex-direction: row;
+	flex-basis: 56rem;
+	flex-grow: 1;
+	flex-shrink: 1;
+	padding: 0 1rem;
 	gap: 2rem;
 }
 .footerright {
-	min-height: 50px;
-	width: 100%;
-	max-width: 12.15rem;
-	padding: 0 1em;
+	flex-basis: 12rem;
+	flex-grow: 1;
+	flex-shrink: 1;
+	padding: 0 1rem;
 }
 #footer-logo {
 	max-width: 90px;
@@ -1932,7 +1933,6 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 /* MEDIA QUERIES */
 @media screen and (max-width: 600px) {
 	.classic,
-	.footerleft,
 	.cplegal {
 		display: block;
 	}
@@ -1945,9 +1945,16 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		max-width: 100%;
 		text-align: center;
 	}
+	.footerleft {
+		flex-direction: column;
+		gap: 0;
+	}
 	.footerleft img {
 		float: none;
 		margin: 0 0 0.3em 0;
+	}
+	.registration {
+		max-width: 100%;
 	}
 	.sponsors-inner {
 		flex-direction: column;
