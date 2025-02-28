@@ -222,8 +222,8 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 		<input id="<?php echo esc_attr( $this->get_field_id( 'attachment_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'attachment_id' ) ); ?>" type="hidden" data-property="attachment_id" class="media-widget-instance-property" value="<?php echo esc_attr( $attachment_id ); ?>">
 		<input id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="hidden" data-property="url" class="media-widget-instance-property" value="<?php echo esc_url( $url ); ?>">
 
-        <?php
-    }
+		<?php
+	}
 
 	/**
 	 * Sanitize widget form values as they are saved.
@@ -237,8 +237,8 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 	 *
 	 * @return array Updated safe values to be saved.
 	 */
-    public function update( $new_instance, $old_instance ) {
-        $instance = array();       
+	public function update( $new_instance, $old_instance ) {
+		$instance = array();
 		$instance['title']         = ! empty( $new_instance['title'] ) ? sanitize_text_field( $new_instance['title'] ) : '';
 		$instance['attachment_id'] = ! empty( $new_instance['attachment_id'] ) ? absint( $new_instance['attachment_id'] ) : 0;
 		$instance['url']           = ! empty( $new_instance['url'] ) ? sanitize_url( $new_instance['url'] ) : '';
@@ -253,9 +253,9 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 		$instance['dw_include']    = ! empty( $new_instance['dw_include'] ) ? absint( $new_instance['dw_include'] ) : 0;
 		$instance['dw_logged']     = ! empty( $new_instance['dw_logged'] ) ? sanitize_text_field( $new_instance['dw_logged'] ) : '';
 		$instance['other_ids']     = ! empty( $new_instance['other_ids'] ) ? sanitize_text_field( $new_instance['other_ids'] ) : '';
- 
-        return $instance;
-    }
+
+		return $instance;
+	}
 
 	/**
 	 * Enqueue preview scripts.
