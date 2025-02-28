@@ -188,7 +188,8 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 
 			<?php
 			if ( $url ) {
-			?>
+				?>
+
 				<div class="media-widget-preview media_video populated"><?php echo wp_video_shortcode( array( 'src' => $url ) ); ?></div>
 
 				<fieldset class="media-widget-buttons">
@@ -196,15 +197,15 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 					<button type="button" class="button change-media select-media"><?php esc_html_e( 'Replace Video' ); ?></button>
 				</fieldset>
 
-			<?php
+				<?php
 			} else {
-			?>
+				?>
 
 				<fieldset class="attachment-media-view">
 					<button type="button" class="select-media button-add-media"><?php esc_html_e( 'Add Video' ); ?></button>
 				</fieldset>
 
-			<?php
+				<?php
 			}
 			?>
 
