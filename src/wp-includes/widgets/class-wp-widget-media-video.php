@@ -268,6 +268,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 	 * @since 4.8.0
 	 */
 	public function enqueue_preview_scripts() {
+
 		/** This filter is documented in wp-includes/media.php */
 		if ( 'mediaelement' === apply_filters( 'wp_video_shortcode_library', 'mediaelement' ) ) {
 			wp_enqueue_style( 'wp-mediaelement' );
