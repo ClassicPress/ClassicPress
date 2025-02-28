@@ -3,7 +3,6 @@
  */
 
 /* eslint consistent-this: [ "error", "control" ] */
-
 /* global VIDEO_WIDGET, console */
 
 /**
