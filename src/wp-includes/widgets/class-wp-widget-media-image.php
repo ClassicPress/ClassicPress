@@ -344,7 +344,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 		 * @param string $url           The image file URL.
 		 */
 		apply_filters( 'cp_media_image_widget_image_attributes', $attributes, $alt, $aria_label, $attachment_id, $url );
-		
+
 		$image_html = '';
 		if ( $url ) {
 			if ( $attachment_id === 0 ) {
@@ -361,7 +361,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 		$size_options = '';
 		if ( $attachment_id !== 0 ) {
 			$sizes_array = wp_get_attachment_metadata( $attachment_id );
-			foreach( $sizes_array['sizes'] as $key => $option ) {
+			foreach ( $sizes_array['sizes'] as $key => $option ) {
 				$size_options .= '<option value="' . esc_attr( $key ) . '"' . selected( $key, $size, false ) . '>' . esc_html( ucfirst( $key ) . ' &ndash; ' . $option['width'] . ' x ' . $option['height'] ) . '</option>';
 			}
 			$size_options .= '<option value="full"' . selected( 'full', $size, false ) . '>' . esc_html( 'Full &ndash; ' . $sizes_array['width'] . ' x ' . $sizes_array['height'] ) . '</option>';
@@ -376,7 +376,8 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 
 			<?php
 			if ( $url ) {
-			?>
+				?>
+
 				<div class="media-widget-preview media_image populated"><?php echo $image_html; ?></div>
 
 				<fieldset class="media-widget-buttons">
@@ -389,9 +390,9 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 					<input id="<?php echo $this->get_field_id( 'link_url' ); ?>" name="<?php echo $this->get_field_name( 'link_url' ); ?>" class="widefat" type="url" value="<?php echo esc_url( $link_url ); ?>" placeholder="https://" data-property="link_url">
 				</fieldset>
 
-			<?php
+				<?php
 			} else {
-			?>
+				?>
 
 				<div class="media-widget-preview media_image">
 					<div class="attachment-media-view">
@@ -399,7 +400,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 					</div>
 				</div>
 
-			<?php
+				<?php
 			}
 			?>
 
@@ -465,12 +466,12 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 	public function enqueue_admin_scripts() {
 
 		// Identify permitted image file types
-		$image_file_types = [];
+		$image_file_types = array();
 		$allowed_mime_types = get_allowed_mime_types();
-		foreach( $allowed_mime_types as $key => $mime ) {
+		foreach ( $allowed_mime_types as $key => $mime ) {
 			if ( str_contains( $mime, 'image/' ) ) {
 				$extensions = explode( '|', $key );
-				foreach( $extensions as $extension ) {
+				foreach ( $extensions as $extension ) {
 					$image_file_types[] = $extension;
 				}
 			}
