@@ -577,7 +577,7 @@ function cp_render_media_image_template() {
 														<input type="text" id="image-details-title-attribute" data-setting="title" value="">
 													</span>
 													<span class="setting extra-classes">
-														<label for="image-details-css-class" class="name"><?php esc_html_e( 'Image CSS Class' )?> </label>
+														<label for="image-details-css-class" class="name"><?php esc_html_e( 'Image CSS Class' ); ?> </label>
 														<input type="text" id="image-details-css-class" data-setting="extraClasses" value="">
 													</span>
 												</div>
