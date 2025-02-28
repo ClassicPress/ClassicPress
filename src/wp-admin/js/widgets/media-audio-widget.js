@@ -4,6 +4,8 @@
 
 /* eslint consistent-this: [ "error", "control" ] */
 
+/* global AUDIO_WIDGET */
+
 /**
  * @namespace wp.mediaWidgets
  * @memberOf  wp
