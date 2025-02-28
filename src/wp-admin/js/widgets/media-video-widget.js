@@ -4,6 +4,8 @@
 
 /* eslint consistent-this: [ "error", "control" ] */
 
+/* global VIDEO_WIDGET */
+
 /**
  * @namespace wp.mediaWidgets
  * @memberOf  wp
