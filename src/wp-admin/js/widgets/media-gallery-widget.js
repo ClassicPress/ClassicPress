@@ -4,6 +4,8 @@
 
 /* eslint consistent-this: [ "error", "control" ] */
 
+/* global GALLERY_WIDGET */
+
 /**
  * @since CP 2.5.0
  */
