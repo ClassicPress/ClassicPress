@@ -170,7 +170,7 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 			if ( $ids ) {
 				$exploded = explode( ',', $ids );
 				$gallery_html = '<ul class="gallery media-widget-gallery-preview">';
-				foreach( $exploded as $id ) {
+				foreach ( $exploded as $id ) {
 					$attributes = '';
 					$thumbnail = wp_get_attachment_image_src( $id, 'thumbnail', false );
 					$alt = get_post_meta( $id, '_wp_attachment_image_alt', true );
@@ -260,10 +260,10 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 		// Identify permitted image file types
 		$image_file_types = [];
 		$allowed_mime_types = get_allowed_mime_types();
-		foreach( $allowed_mime_types as $key => $mime ) {
+		foreach ( $allowed_mime_types as $key => $mime ) {
 			if ( str_contains( $mime, 'image/' ) ) {
 				$extensions = explode( '|', $key );
-				foreach( $extensions as $extension ) {
+				foreach ( $extensions as $extension ) {
 					$image_file_types[] = $extension;
 				}
 			}
