@@ -13,8 +13,6 @@
  */
 jQuery( function($) {
 
-	postboxes.add_postbox_toggles('comment');
-
 	var $timestampdiv = $('#timestampdiv'),
 		$timestamp = $( '#timestamp' ),
 		stamp = $timestamp.html(),
