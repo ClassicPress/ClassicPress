@@ -4372,6 +4372,14 @@ function wp_insert_post( $postarr, $wp_error = false, $fire_after_hooks = true )
 			} else {
 				set_post_thumbnail( $post_id, $thumbnail_id );
 			}
+
+			// Unlink previous featured images from the object_relationships table when selecting a new featured image
+			$linked_thumbnails = cp_get_object_relationship_ids( $post_id, $postarr['post_type'], 'thumbnail' );
+			foreach ( $linked_thumbnails as $thumbnail ) {
+				if ( $thumbnail_id !== $thumbnail ) {
+					cp_delete_object_relationship( $thumbnail, 'thumbnail', $postarr['post_type'], $post_id );
+				}
+			}
 		}
 	}
 

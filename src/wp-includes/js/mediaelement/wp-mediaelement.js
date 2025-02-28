@@ -1,6 +1,5 @@
-/* global _wpmejsSettings, mejsL10n */
-(function( window, $ ) {
-
+/* global _wpmejsSettings, mejsL10n, MediaElementPlayer */
+(function(window) {
 	window.wp = window.wp || {};
 
 	function wpMediaElement() {
@@ -16,19 +15,22 @@
 		 *
 		 * @since 4.4.0
 		 *
+		 * Rewritten in vanilla JavaScript
+		 * @since CP-2.4.0
+		 *
 		 * @return {void}
 		 */
 		function initialize() {
 			if ( typeof _wpmejsSettings !== 'undefined' ) {
-				settings = $.extend( true, {}, _wpmejsSettings );
+				settings = Object.assign( {}, _wpmejsSettings );
 			}
 			settings.classPrefix = 'mejs-';
-			settings.success = settings.success || function ( mejs ) {
+			settings.success = settings.success || function( mejs ) {
 				var autoplay, loop;
 
-				if ( mejs.rendererName && -1 !== mejs.rendererName.indexOf( 'flash' ) ) {
-					autoplay = mejs.attributes.autoplay && 'false' !== mejs.attributes.autoplay;
-					loop = mejs.attributes.loop && 'false' !== mejs.attributes.loop;
+				if ( mejs.rendererName && mejs.rendererName.indexOf( 'flash' ) !== -1 ) {
+					autoplay = mejs.attributes.autoplay && mejs.attributes.autoplay !== 'false';
+					loop = mejs.attributes.loop && mejs.attributes.loop !== 'false';
 
 					if ( autoplay ) {
 						mejs.addEventListener( 'canplay', function() {
@@ -52,24 +54,27 @@
 			 *
 			 * @since 4.9.3
 			 *
+			 * Rewritten in vanilla JavaScript
+			 * @since CP-2.4.0
+			 *
 			 * @param {object} media The wrapper that mimics all the native events/properties/methods for all renderers.
 			 * @param {object} node  The original HTML video, audio, or iframe tag where the media was loaded.
 			 * @return {string}
 			 */
-			settings.customError = function ( media, node ) {
+			settings.customError = function( media, node ) {
 				// Make sure we only fall back to a download link for flash files.
-				if ( -1 !== media.rendererName.indexOf( 'flash' ) || -1 !== media.rendererName.indexOf( 'flv' ) ) {
+				if ( media.rendererName.indexOf( 'flash' ) !== -1 || media.rendererName.indexOf( 'flv' ) !== -1 ) {
 					return '<a href="' + node.src + '">' + mejsL10n.strings['mejs.download-file'] + '</a>';
 				}
 			};
 
 			// Only initialize new media elements.
-			$( '.wp-audio-shortcode, .wp-video-shortcode' )
-				.not( '.mejs-container' )
-				.filter(function () {
-					return ! $( this ).parent().hasClass( 'mejs-mediaelement' );
-				})
-				.mediaelementplayer( settings );
+			var mediaElements = document.querySelectorAll( '.wp-audio-shortcode, .wp-video-shortcode' );
+			mediaElements.forEach( function( element ) {
+				if ( !element.classList.contains( 'mejs-container' ) && ( !element.parentNode || !element.parentNode.classList.contains( 'mejs-mediaelement' ) ) ) {
+					new MediaElementPlayer( element, settings );
+				}
+			});
 		}
 
 		return {
@@ -83,6 +88,6 @@
 	 */
 	window.wp.mediaelement = new wpMediaElement();
 
-	$( window.wp.mediaelement.initialize );
+	window.addEventListener( 'load', window.wp.mediaelement.initialize );
 
-})( window, jQuery );
+} )( window );
