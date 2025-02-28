@@ -148,7 +148,8 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 
 			<?php
 			if ( $url ) {
-			?>
+				?>
+
 				<div class="media-widget-preview media_audio populated"><?php echo wp_audio_shortcode( array( 'src' => $url ) ); ?></div>
 
 				<fieldset class="media-widget-buttons">
@@ -156,9 +157,9 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 					<button type="button" class="button change-media select-media selected"><?php esc_html_e( 'Replace Audio' ); ?></button>
 				</fieldset>
 
-			<?php
+				<?php
 			} else {
-			?>
+				?>
 
 				<div class="media-widget-preview media_audio">
 					<div class="attachment-media-view">
@@ -166,7 +167,7 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 					</div>
 				</div>
 
-			<?php
+				<?php
 			}
 			?>
 
