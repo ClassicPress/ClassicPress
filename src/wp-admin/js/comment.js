@@ -2,8 +2,6 @@
  * @output wp-admin/js/comment.js
  */
 
-/* global postboxes */
-
 /**
  * Binds to the document ready event.
  *
