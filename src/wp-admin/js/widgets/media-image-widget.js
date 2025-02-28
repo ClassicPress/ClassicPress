@@ -3,7 +3,7 @@
  */
 
 /* eslint consistent-this: [ "error", "control" ] */
-/* global ajaxurl */
+/* global ajaxurl, IMAGE_WIDGET, console */
 
 /**
  * @namespace wp.mediaWidgets
@@ -77,7 +77,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Insert image from URL
 			mediaUploader.el.querySelector( '#menu-item-embed' ).addEventListener( 'click', function() {
-				var embedAlt, embedCaption, embedLinkTo, embedButtons, url,
+				var embedAlt, embedCaption, embedLinkTo, embedButtons,
 					embed = document.createElement( 'div' ),
 					linkType = widget.querySelector( '[data-property="link_type"]' ).value;
 
@@ -157,11 +157,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						fields.forEach( function( input ) {
 							input.setAttribute( 'disabled', true );
 						} );
-					}
+					};
 					img.onload = function() {
 						widget.querySelector( '[data-property="width"]' ).value = img.width;
 						widget.querySelector( '[data-property="height"]' ).value = img.height;
-					}
+					};
 
 					// Load image
 					embed.querySelector( '.media-embed img').src = url;
@@ -268,7 +268,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Insert image from media library
 		mediaUploader.on( 'select', function() {
-			var attachment = mediaUploader.state().get( 'selection' ) ? mediaUploader.state().get( 'selection' ).first().toJSON() : '',
+			var formData,
+				attachment = mediaUploader.state().get( 'selection' ) ? mediaUploader.state().get( 'selection' ).first().toJSON() : '',
 				image      = document.createElement( 'img' ),
 				alt        = widget.querySelector( 'input[data-property="alt"]' ).value,
 				buttons	   = document.createElement( 'div' ),
@@ -555,14 +556,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Cancel
 			dialog.querySelector( '.imgedit-cancel-btn' ).addEventListener( 'click', function() {
 				dialog.querySelector( '.media-embed' ).style.display = '';
-			} )
+			} );
 
 			// Submit changes
 			dialog.querySelector( '.imgedit-submit-btn' ).addEventListener( 'click', function() {
 				document.getElementById( widgetID ).dispatchEvent( new Event( 'change' ) );
 				closeButton.click();
 				editButton.focus();
-			} )
+			} );
 		} )
 		.catch( function( error ) {
 			console.error( 'Error:', error );
@@ -616,10 +617,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	closeButton.addEventListener( 'click', function( e ) {
+	closeButton.addEventListener( 'click', function() {
 		dialog.close();
 		if ( dialog.querySelector( '#image-modal-content' ) ) {
 			dialog.querySelector( '#image-modal-content' ).remove();
+		}
+		if ( dialog.querySelector( '#new-image-modal' ) ) {
+			dialog.querySelector( '#new-image-modal' ).remove();
 		}
 	} );
 } );
