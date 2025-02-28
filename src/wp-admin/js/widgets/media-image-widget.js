@@ -527,7 +527,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function imageEdit( widgetID ) {
-		var attachmentID = document.querySelector( '#' + widgetID + ' input[data-property="attachment_id"]' ).value,
+		var formData,
+			attachmentID = document.querySelector( '#' + widgetID + ' input[data-property="attachment_id"]' ).value,
 			editButton = document.querySelector( '#' + widgetID + ' .edit-media' ),
 			nonce = editButton.dataset.editNonce;
 
