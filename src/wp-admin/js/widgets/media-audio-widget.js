@@ -4,7 +4,7 @@
 
 /* eslint consistent-this: [ "error", "control" ] */
 
-/* global AUDIO_WIDGET */
+/* global AUDIO_WIDGET, console */
 
 /**
  * @namespace wp.mediaWidgets
@@ -267,7 +267,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
     
     function updateFrame( frame, widget, audioURL ) {
 		var audio = document.createElement( 'audio' ),
-			source = document.createElement( 'source' )
+			source = document.createElement( 'source' ),
 			span = document.createElement( 'span' ),
 			fileType = audioURL.split( '.' ).pop(),
 			autoplay = frame.el.querySelector( '#audio-details-autoplay' ),
