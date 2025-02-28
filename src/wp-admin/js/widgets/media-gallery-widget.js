@@ -18,8 +18,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function selectMedia( widget ) {
-		var mediaUploader,
-			embedded = false;
+		var mediaUploader;
 
 		if ( mediaUploader ) {
 			mediaUploader.open();
