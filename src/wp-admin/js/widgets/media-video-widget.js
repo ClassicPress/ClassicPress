@@ -4,7 +4,7 @@
 
 /* eslint consistent-this: [ "error", "control" ] */
 
-/* global VIDEO_WIDGET */
+/* global VIDEO_WIDGET, console */
 
 /**
  * @namespace wp.mediaWidgets
@@ -223,8 +223,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function editMedia( widget ) {
 		var	frame,
 			videoURL = widget.querySelector( '[data-property="url"]' ).value,
-			videoID = widget.querySelector( '[data-property="attachment_id"]' ).value,
-			widgetContainer = widget.querySelector( '.widget-content' );
+			videoID = widget.querySelector( '[data-property="attachment_id"]' ).value;
 
         if ( videoURL === null ) {
 			videoURL = widget.querySelector( '[data-property="mp4"]' ).value;
@@ -269,7 +268,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
     
     function updateFrame( frame, widget, videoURL ) {
 		var video = document.createElement( 'video' ),
-			source = document.createElement( 'source' )
+			source = document.createElement( 'source' ),
 			span = document.createElement( 'span' ),
 			fileType = videoURL.split( '.' ).pop(),
 			fileMime = frame.el.querySelector( '.add-media-source[data-mime="video/' + fileType + '"]' ),
