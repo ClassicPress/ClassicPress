@@ -198,7 +198,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Update values in hidden fields
 			widget.querySelector( '[data-property="attachment_id"]' ).value = attachment.id;
 			widget.querySelector( '[data-property="url"]' ).value = attachment.url;
-			if ( widget.querySelector( '[data-property="' + fileType + '"]' ) ) {		
+			if ( widget.querySelector( '[data-property="' + fileType + '"]' ) ) {
 				widget.querySelector( '[data-property="' + fileType + '"]' ).value = attachment.url;
 			} else {
 				console.error( VIDEO_WIDGET.unsupported_file_type );
@@ -265,7 +265,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
         frame.open();
     }
-    
+
     function updateFrame( frame, widget, videoURL ) {
 		var video = document.createElement( 'video' ),
 			source = document.createElement( 'source' ),
@@ -295,7 +295,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Append source to video
 		video.append( source );
 		frame.el.querySelector( 'video' ).replaceWith( video );
-			
+
 		span.className = 'setting';
 		span.innerHTML = '<label for="video-details-' + fileType + '-source" class="name">' + fileType.toUpperCase() + '</label>' +
 			'<input type="text" id="video-details-' + fileType + '-source" readonly="" data-setting="' + fileType + '" value="' + videoURL + '">' +
@@ -320,7 +320,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( loop.checked ) {
 				widget.querySelector( '[data-property="loop"]' ).value = '1';
 			} else {
-				widget.querySelector( '[data-property="loop"]' ).value = '';				
+				widget.querySelector( '[data-property="loop"]' ).value = '';
 			}
 		} );
 
