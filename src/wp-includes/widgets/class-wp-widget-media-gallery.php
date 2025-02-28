@@ -150,7 +150,7 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 	 *
 	 * @param array $instance Previously saved values from database.
 	 */
-	public function form( $instance ) {        
+	public function form( $instance ) {
 		$title             = ! empty( $instance['title'] ) ? $instance['title'] : '';
 		$ids               = ! empty( $instance['ids'] ) ? $instance['ids'] : '';
 		$columns           = ! empty( $instance['columns'] ) ? $instance['columns'] : 3;
@@ -191,7 +191,7 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 					$gallery_html .= '<div class="gallery-icon">';
 					$gallery_html .= '<img alt="' . $alt . '" src="' . $thumbnail[0] . '" width="150" height="150"' . $attributes . '>';
 					$gallery_html .= '</div>';
-					$gallery_html .= '</li>';					
+					$gallery_html .= '</li>';
 				}
 				$gallery_html .= '</ul>';
 				?>
@@ -202,9 +202,9 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 					<button type="button" class="button edit-media selected" data-edit-nonce="<?php echo esc_attr( $nonce ); ?>" style="margin-top:0;"><?php esc_html_e( 'Edit Gallery' ); ?></button>
 				</fieldset>
 
-			<?php
+				<?php
 			} else {
-			?>
+				?>
 
 				<div class="media-widget-preview media_gallery">
 					<div class="attachment-media-view">
@@ -212,7 +212,7 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 					</div>
 				</div>
 
-			<?php
+				<?php
 			}
 			?>
 
@@ -223,8 +223,8 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 			<input id="<?php echo esc_attr( $this->get_field_id( 'orderby_random' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'orderby_random' ) ); ?>" type="hidden" data-property="orderby_random" class="media-widget-instance-property" value="<?php echo esc_attr( $orderby_random ); ?>">
 		
 		</div>
-        <?php
-    }
+		<?php
+	}
 
 	/**
 	 * Sanitize widget form values as they are saved.
@@ -258,7 +258,7 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 	public function enqueue_admin_scripts() {
 
 		// Identify permitted image file types
-		$image_file_types = [];
+		$image_file_types = array();
 		$allowed_mime_types = get_allowed_mime_types();
 		foreach ( $allowed_mime_types as $key => $mime ) {
 			if ( str_contains( $mime, 'image/' ) ) {
