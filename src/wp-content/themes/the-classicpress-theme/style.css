@@ -1644,7 +1644,7 @@ table.cp-logo-list .cp-logo-description {
 	border-radius: var(--tcpt-border-radius);
 	margin: 0.3em 0 1.5em 0;
 }
-#sidebar h3 {
+#sidebar h3.widget-title {
 	padding-top: 0.1em;
 	margin-bottom: 0.2em;
 	font-size: 1.3em;
@@ -1766,17 +1766,20 @@ table.cp-logo-list .cp-logo-description {
 .footerleft {
 	min-height: 50px;
 	width: 100%;
-	max-width: 550px;
 	padding: 0 1em;
 	display: flex;
-	flex-direction: row;
-	gap: 1rem;
+	gap: 1em;
 }
 .footerright {
 	min-height: 50px;
 	width: 100%;
-	max-width: 12.15rem;
+	max-width: 12rem;
 	padding: 0 1em;
+}
+.footer-widgets {
+	width: 100%;
+	display: flex;
+	gap: 1em;
 }
 #footer-logo {
 	max-width: 90px;
@@ -1788,12 +1791,25 @@ table.cp-logo-list .cp-logo-description {
 	margin: 0;
 	max-width: 90px;
 }
+.footerleft a {
+	color: #ddd;
+}
 .footerleft a:hover {
 	text-decoration: none;
 	border: 0;
 }
+.footer-widgets h3.widget-title {
+	padding-top: 0;
+	color: #fff;
+}
+.footer-widgets .widget-container {
+	flex-basis: 50%;
+	flex-grow: 1;
+	margin-top: 0;
+}
 .registration {
-	margin: 00 0 1em;
+	max-width: 400px;
+	margin: 0 0 1em;
 }
 .social-menu {
 	width: 100%;
@@ -1842,7 +1858,6 @@ table.cp-logo-list .cp-logo-description {
 }
 .cpcopyright,
 .cppolicy {
-	width: 40%;
 	padding: 0 1em;
 }
 .cppolicy {
@@ -1920,28 +1935,15 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 
 /* MEDIA QUERIES */
 @media screen and (max-width: 600px) {
-	.classic,
 	.cplegal {
 		display: block;
-		justify-content: normal;
 	}
-	.footerleft,
-	.footerright,
 	.cpcopyright,
 	.cppolicy,
 	.footersponsor {
 		width: 100%;
 		max-width: 100%;
 		text-align: center;
-	}
-	.footerleft img {
-		float: none;
-		margin: 0 0 0.3em 0;
-	}
-	footer .classic {
-		display: flex;
-		flex-direction: column;
-		gap: 2em;
 	}
 	.sponsors-inner {
 		flex-direction: column;
@@ -1993,7 +1995,8 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		font-size: 0.85em;
 	}
 	#main,
-	#sidebar {
+	#sidebar,
+	.classic {
 		max-width: 600px;
 		margin: 0 auto;
 	}
@@ -2004,8 +2007,21 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	#sidebar .sidebar-internal .sidebar-note p {
 		text-align: left;
 	}
-	.page .sidebar .widget-container {
-		display: none;
+	.classic,
+	.footer-widgets {
+		display: block;
+	}
+	.footerleft,
+	.footerright {
+		width: 100%;
+		max-width: 100%;
+		text-align: center;
+	}
+	.registration {
+		max-width: 100%;
+	}
+	.social-menu {
+		justify-content: center;
 	}
 	img.alignright,
 	img.alignleft {
