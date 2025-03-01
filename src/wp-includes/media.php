@@ -2406,7 +2406,7 @@ function img_caption_shortcode( $attr, $content = '' ) {
 	$class = trim( 'wp-caption ' . $atts['align'] . ' ' . $atts['class'] );
 
 	// HTML5 captions never added the extra 10px to the image width.
-	$width = ( 10 + $atts['width'] );
+	$width = $atts['width'];
 
 	/**
 	 * Filters the width of an image's caption.
