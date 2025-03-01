@@ -15,7 +15,9 @@
 		<div class="classic">
 			<div class="footerleft">
 				<?php if ( is_active_sidebar( 'footer' ) ) { ?>
-					<?php dynamic_sidebar( 'footer' ); ?>
+					<div class="footer-widgets">
+						<?php dynamic_sidebar( 'footer' ); ?>
+					</div>
 				<?php } else { ?>
 					<a id="footer-logo" href="<?php echo esc_url( home_url() ); ?>"><img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/images/classicpress-logo-feather-white.svg' ); ?>" alt="<?php esc_attr_e( 'ClassicPress feather logo', 'the-classicpress-theme' ); ?>" width="90"></a>
 					<div class="registration">
