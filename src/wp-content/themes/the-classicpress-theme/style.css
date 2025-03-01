@@ -1764,19 +1764,24 @@ table.cp-logo-list .cp-logo-description {
 	padding: 0;
 }
 .footerleft {
+	min-height: 50px;
+	width: 100%;
+	max-width: 60rem;
+	padding: 0 1em;
 	display: flex;
 	flex-direction: row;
-	flex-basis: 56rem;
-	flex-grow: 1;
-	flex-shrink: 1;
-	padding: 0 1rem;
-	gap: 2rem;
+	gap: 1em;
 }
 .footerright {
-	flex-basis: 12rem;
-	flex-grow: 1;
-	flex-shrink: 1;
-	padding: 0 1rem;
+	min-height: 50px;
+	width: 100%;
+	max-width: 12rem;
+	padding: 0 1em;
+}
+.footer-widgets {
+	display: flex;
+	flex-direction: row;
+	gap: 1em;
 }
 #footer-logo {
 	max-width: 90px;
@@ -1795,11 +1800,11 @@ table.cp-logo-list .cp-logo-description {
 	text-decoration: none;
 	border: 0;
 }
-.footerleft h3.widget-title {
+.footer-widgets h3.widget-title {
 	padding-top: 0;
 	color: #fff;
 }
-.footerleft .widget-container {
+.footer-widgets .widget-container {
 	flex-basis: 50%;
 	margin-top: 0;
 }
@@ -1933,11 +1938,13 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 /* MEDIA QUERIES */
 @media screen and (max-width: 600px) {
 	.classic,
+	.footer-widgets,
 	.cplegal {
 		display: block;
 	}
 	.footerleft,
 	.footerright,
+	.footer-widgets,
 	.cpcopyright,
 	.cppolicy,
 	.footersponsor {
@@ -1951,6 +1958,9 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	}
 	.registration {
 		max-width: 100%;
+	}
+	.social-menu {
+		justify-content: center;
 	}
 	.sponsors-inner {
 		flex-direction: column;
