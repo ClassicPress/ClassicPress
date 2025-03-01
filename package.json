@@ -48,12 +48,12 @@
     "webpack": "5.97.1"
   },
   "dependencies": {
-    "@wordpress/a11y": "4.17.0",
-    "@wordpress/api-fetch": "7.17.0",
-    "@wordpress/dom-ready": "4.17.0",
-    "@wordpress/hooks": "4.17.0",
-    "@wordpress/i18n": "5.17.0",
-    "@wordpress/url": "4.17.0"
+    "@wordpress/a11y": "4.19.0",
+    "@wordpress/api-fetch": "7.19.0",
+    "@wordpress/dom-ready": "4.19.0",
+    "@wordpress/hooks": "4.19.0",
+    "@wordpress/i18n": "5.19.0",
+    "@wordpress/url": "4.19.0"
   },
   "collective": {
     "type": "opencollective",

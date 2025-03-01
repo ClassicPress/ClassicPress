@@ -68,7 +68,6 @@ function validateHookName(hookName) {
 /* harmony default export */ var build_module_validateHookName = (validateHookName);
 
 ;// ./node_modules/@wordpress/hooks/build-module/createAddHook.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -163,7 +162,6 @@ function createAddHook(hooks, storeKey) {
 /* harmony default export */ var build_module_createAddHook = (createAddHook);
 
 ;// ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -244,7 +242,6 @@ function createRemoveHook(hooks, storeKey, removeAll = false) {
 /* harmony default export */ var build_module_createRemoveHook = (createRemoveHook);
 
 ;// ./node_modules/@wordpress/hooks/build-module/createHasHook.js
-/* wp:polyfill */
 /**
  * @callback HasHook
  *
@@ -374,7 +371,6 @@ function createCurrentHook(hooks, storeKey) {
 /* harmony default export */ var build_module_createCurrentHook = (createCurrentHook);
 
 ;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
-/* wp:polyfill */
 /**
  * @callback DoingHook
  * Returns whether a hook is currently being executed.
@@ -1293,7 +1289,6 @@ Tannin.prototype.dcnpgettext = function( domain, context, singular, plural, n ) 
 };
 
 ;// ./node_modules/@wordpress/i18n/build-module/create-i18n.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -2259,7 +2254,6 @@ const createRootURLMiddleware = rootURL => (options, next) => {
 /* harmony default export */ var root_url = (createRootURLMiddleware);
 
 ;// ./node_modules/@wordpress/url/build-module/normalize-path.js
-/* wp:polyfill */
 /**
  * Given a path, returns a normalized path where equal query parameter values
  * will be treated as identical, regardless of order they appear in the original
@@ -2337,7 +2331,6 @@ function getQueryString(url) {
 }
 
 ;// ./node_modules/@wordpress/url/build-module/get-query-args.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -2426,7 +2419,6 @@ function getQueryArgs(url) {
 }
 
 ;// ./node_modules/@wordpress/url/build-module/build-query-string.js
-/* wp:polyfill */
 /**
  * Generates URL-encoded query string using input query data.
  *
@@ -2483,10 +2475,32 @@ function buildQueryString(data) {
   return string.substr(1);
 }
 
+;// ./node_modules/@wordpress/url/build-module/get-fragment.js
+/**
+ * Returns the fragment part of the URL.
+ *
+ * @param {string} url The full URL
+ *
+ * @example
+ * ```js
+ * const fragment1 = getFragment( 'http://localhost:8080/this/is/a/test?query=true#fragment' ); // '#fragment'
+ * const fragment2 = getFragment( 'https://wordpress.org#another-fragment?query=true' ); // '#another-fragment'
+ * ```
+ *
+ * @return {string|void} The fragment part of the URL.
+ */
+function getFragment(url) {
+  const matches = /^\S+?(#[^\s\?]*)/.exec(url);
+  if (matches) {
+    return matches[1];
+  }
+}
+
 ;// ./node_modules/@wordpress/url/build-module/add-query-args.js
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -2511,7 +2525,8 @@ function addQueryArgs(url = '', args) {
   if (!args || !Object.keys(args).length) {
     return url;
   }
-  let baseUrl = url;
+  const fragment = getFragment(url) || '';
+  let baseUrl = url.replace(fragment, '');
 
   // Determine whether URL already had query arguments.
   const queryStringIndex = url.indexOf('?');
@@ -2522,11 +2537,10 @@ function addQueryArgs(url = '', args) {
     // Change working base URL to omit previous query arguments.
     baseUrl = baseUrl.substr(0, queryStringIndex);
   }
-  return baseUrl + '?' + buildQueryString(args);
+  return baseUrl + '?' + buildQueryString(args) + fragment;
 }
 
 ;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/preloading.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -2583,11 +2597,28 @@ function createPreloadingMiddleware(preloadedData) {
  * @return {Promise<any>} Promise with the response.
  */
 function prepareResponse(responseData, parse) {
-  return Promise.resolve(parse ? responseData.body : new window.Response(JSON.stringify(responseData.body), {
-    status: 200,
-    statusText: 'OK',
-    headers: responseData.headers
-  }));
+  if (parse) {
+    return Promise.resolve(responseData.body);
+  }
+  try {
+    return Promise.resolve(new window.Response(JSON.stringify(responseData.body), {
+      status: 200,
+      statusText: 'OK',
+      headers: responseData.headers
+    }));
+  } catch {
+    // See: https://github.com/WordPress/gutenberg/issues/67358#issuecomment-2621163926.
+    Object.entries(responseData.headers).forEach(([key, value]) => {
+      if (key.toLowerCase() === 'link') {
+        responseData.headers[key] = value.replace(/<([^>]+)>/, (/** @type {any} */_, /** @type {string} */url) => `<${encodeURI(url)}>`);
+      }
+    });
+    return Promise.resolve(parse ? responseData.body : new window.Response(JSON.stringify(responseData.body), {
+      status: 200,
+      statusText: 'OK',
+      headers: responseData.headers
+    }));
+  }
 }
 /* harmony default export */ var preloading = (createPreloadingMiddleware);
 
@@ -2999,7 +3030,6 @@ const mediaUploadMiddleware = (options, next) => {
 /* harmony default export */ var media_upload = (mediaUploadMiddleware);
 
 ;// ./node_modules/@wordpress/url/build-module/remove-query-args.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -3020,15 +3050,18 @@ const mediaUploadMiddleware = (options, next) => {
  * @return {string} Updated URL.
  */
 function removeQueryArgs(url, ...args) {
+  const fragment = url.replace(/^[^#]*/, '');
+  url = url.replace(/#.*/, '');
   const queryStringIndex = url.indexOf('?');
   if (queryStringIndex === -1) {
-    return url;
+    return url + fragment;
   }
   const query = getQueryArgs(url);
   const baseURL = url.substr(0, queryStringIndex);
   args.forEach(arg => delete query[arg]);
   const queryString = buildQueryString(query);
-  return queryString ? baseURL + '?' + queryString : baseURL;
+  const updatedUrl = queryString ? baseURL + '?' + queryString : baseURL;
+  return updatedUrl + fragment;
 }
 
 ;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/theme-preview.js
