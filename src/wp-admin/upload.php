@@ -409,7 +409,7 @@ if ( 'grid' === $mode ) {
 			<ul class="media-grid-view">
 
 				<?php
-				foreach ( $attachments->posts as $attachment ) {
+				foreach ( $attachments->posts as $key => $attachment ) {
 					$meta = wp_prepare_attachment_for_js( $attachment->ID );
 					$date         = $meta['dateFormatted'];
 					$author       = $meta['authorName'];
@@ -451,29 +451,30 @@ if ( 'grid' === $mode ) {
 					}
 					?>
 
-					<li class="media-item" id="media-<?php echo esc_attr( $attachment->ID ); ?>" tabindex="0" role="checkbox" aria-checked="false"
-						aria-label="<?php echo esc_attr( $attachment->post_title ); ?>"
-						data-date="<?php echo esc_attr( $date ); ?>"
-						data-url="<?php echo esc_url( $url ); ?>"
-						data-filename="<?php echo esc_attr( $file_name ); ?>"
-						data-filetype="<?php echo esc_attr( $file_type ); ?>"
-						data-mime="<?php echo esc_attr( $mime_type ); ?>"
-						data-width="<?php echo esc_attr( $width ); ?>"
-						data-height="<?php echo esc_attr( $height ); ?>"
-						data-size="<?php echo esc_attr( $size ); ?>"
-						data-caption="<?php echo esc_attr( $caption ); ?>"
-						data-description="<?php echo esc_attr( $description ); ?>"
-						data-link="<?php echo esc_attr( $link ); ?>"
-						data-author="<?php echo esc_attr( $author ); ?>"
-						data-author-link="<?php echo esc_attr( $author_link ); ?>"
-						data-orientation="<?php echo esc_attr( $orientation ); ?>"
-						data-menu-order="<?php echo esc_attr( $menu_order ); ?>"
-						data-taxes="<?php echo esc_attr( $media_cats ); ?>"
-						data-tags="<?php echo esc_attr( $media_tags ); ?>"
-						data-update-nonce="<?php echo $update_nonce; ?>"
-						data-delete-nonce="<?php echo $delete_nonce; ?>"
-						data-edit-nonce="<?php echo $edit_nonce; ?>"
-						>
+          <li class="media-item" id="media-<?php echo esc_attr( $attachment->ID ); ?>" tabindex="0" role="checkbox" aria-checked="false"
+            aria-label="<?php echo esc_attr( $attachment->post_title ); ?>"
+            data-date="<?php echo esc_attr( $date ); ?>"
+            data-url="<?php echo esc_url( $url ); ?>"
+            data-filename="<?php echo esc_attr( $file_name ); ?>"
+            data-filetype="<?php echo esc_attr( $file_type ); ?>"
+            data-mime="<?php echo esc_attr( $mime_type ); ?>"
+            data-width="<?php echo esc_attr( $width ); ?>"
+            data-height="<?php echo esc_attr( $height ); ?>"
+            data-size="<?php echo esc_attr( $size ); ?>"
+            data-caption="<?php echo esc_attr( $caption ); ?>"
+            data-description="<?php echo esc_attr( $description ); ?>"
+            data-link="<?php echo esc_attr( $link ); ?>"
+            data-author="<?php echo esc_attr( $author ); ?>"
+            data-author-link="<?php echo esc_attr( $author_link ); ?>"
+            data-orientation="<?php echo esc_attr( $orientation ); ?>"
+            data-menu-order="<?php echo esc_attr( $menu_order ); ?>"
+            data-taxes="<?php echo esc_attr( $media_cats ); ?>"
+            data-tags="<?php echo esc_attr( $media_tags ); ?>"
+            data-order="<?php echo esc_attr( $key + 1 ); ?>"
+            data-update-nonce="<?php echo $update_nonce; ?>"
+            data-delete-nonce="<?php echo $delete_nonce; ?>"
+            data-edit-nonce="<?php echo $edit_nonce; ?>"
+            >
 
 						<div class="select-attachment-preview <?php echo esc_attr( 'type-' . $file_type . ' subtype-' . $subtype . ' ' . $orientation ); ?>">
 							<div class="media-thumbnail">
@@ -864,7 +865,7 @@ if ( 'grid' === $mode ) {
 				<div class="attachment-details save-ready">
 					<div class="attachment-media-view">
 						<h3 class="screen-reader-text"><?php esc_html_e( 'Attachment Preview' ); ?></h3>
-						<div class="media-navigation" role="navigation" aria-label="<?php esc_html_e( 'Media Navigation' ); ?>">
+						<div class="media-navigation" aria-label="<?php esc_html_e( 'Media Navigation' ); ?>">
 							<button type="button" id="left-dashicon-mobile" class="left dashicons">
 								<span class="screen-reader-text"><?php esc_html_e( 'Edit previous media item' ); ?></span>
 							</button>

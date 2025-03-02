@@ -9,7 +9,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		bulkSelect = document.querySelector( '.select-mode-toggle-button' ),
 		inputElement = document.getElementById( 'filepond' ),
 		ajaxurl = document.getElementById( 'ajax-url' ).value,
-		body = document.body,
 		dialog = document.getElementById( 'media-modal' ),
 		leftIcon = document.getElementById( 'left-dashicon' ),
 		rightIcon = document.getElementById( 'right-dashicon' ),
@@ -210,7 +209,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 				mediaItem.remove();
 				closeButton.click();
-				if ( ! mediaGrid ) {
+				if ( mediaGrid ) {
+					resetDataOrdering();
+				} else {
 					location.href = location.pathname;
 				}
 			} else {
@@ -220,6 +221,30 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		.catch( function( error ) {
 			console.error( _wpMediaLibSettings.error, error );
 		} );
+	}
+
+	// Reset ordering of remaining media items after deletion
+	function resetDataOrdering() {
+		var items = document.querySelectorAll( '.media-item' ),
+			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
+			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
+			count5;
+
+		items.forEach( function( item, index ) {
+			item.setAttribute( 'data-order', parseInt( index + 1 ) );
+		} );
+
+		// Reset totals
+		if ( 5 in count ) { // allow for different languages
+			count5 = ' ' + count[5];
+		} else {
+			count5 = '';
+		}
+		document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + count5;
+
+		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
+		dialog.querySelector( '#total-media-items' ).textContent = items.length;
+		dialog.querySelector( '#total-media-items-mobile' ).textContent = items.length;
 	}
 
 	// Toggle media button navigation wrappers according to viewport width
@@ -234,6 +259,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	window.addEventListener( 'resize', toggleMediaNavigation );
+
+	// Delete media item
+	dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
+		// var id = location.search.match(/\d+/g)[0];
+		var id = location.search.replace( '?item=', '' );
+		if ( confirm( _wpMediaLibSettings.confirm_delete ) ) {
+			deleteItem( id );
+			if ( mediaGrid ) {
+				resetDataOrdering();
+			}
+		}
+	} );
 
 	// Open modal
 	function openModalDialog( item ) {
@@ -257,17 +294,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			authorLink = item.dataset.authorLink,
 			orientation = item.dataset.orientation ? ' ' + item.dataset.orientation : '',
 			menuOrder = item.dataset.menuOrder,
-			prev = '',
-			next = '',
-			items = document.querySelectorAll('.media-item'),
-			order = 1;
+			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
+			next = item.nextElementSibling ? item.nextElementSibling.id : '',
+			order = item.dataset.order,
+			total = parseInt( document.querySelector( '.displaying-num' ).textContent ),
+			items = 0; // Used in list mode
 
-			if ( mediaGrid ) {
-				prev = item.previousElementSibling ? item.previousElementSibling.id : '';
-				next = item.nextElementSibling ? item.nextElementSibling.id : '';
-			} else {
+			if ( ! mediaGrid ) {
 				prev = item.parentElement.parentElement.parentElement.previousElementSibling ? item.parentElement.parentElement.parentElement.previousElementSibling.getElementsByTagName('a')[0].id : '';
 				next = item.parentElement.parentElement.parentElement.nextElementSibling ? item.parentElement.parentElement.parentElement.nextElementSibling.getElementsByTagName('a')[0].id : '';
+				order = 1;
+				items = document.querySelectorAll('.media-item');
 			}
 
 		// Modify current URL
@@ -340,30 +377,38 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		rightIcon.setAttribute( 'data-next', next );
 
 		if ( prev === '' ) {
-			leftIcon.disabled = true;
-			leftIconMobile.disabled = true;
+			leftIcon.setAttribute( 'aria-disabled', true );
+			leftIconMobile.setAttribute( 'aria-disabled', true );
 		} else {
-			leftIcon.disabled = false;
-			leftIconMobile.disabled = false;
+			leftIcon.setAttribute( 'aria-disabled', false );
+			leftIconMobile.setAttribute( 'aria-disabled', false );
 		}
 
 		if ( next === '' ) {
-			rightIcon.disabled = true;
-			rightIconMobile.disabled = true;
+			rightIcon.setAttribute( 'aria-disabled', true );
+			rightIconMobile.setAttribute( 'aria-disabled', true );
 		} else {
-			rightIcon.disabled = false;
-			rightIconMobile.disabled = false;
+			rightIcon.setAttribute( 'aria-disabled', false );
+			rightIconMobile.setAttribute( 'aria-disabled', false );
 		}
 
-		items.forEach( function( i ) {
-			if ( i.id === item.id ) {
-				dialog.querySelector( '#current-media-item' ).textContent = order;
-				dialog.querySelector( '#total-media-items' ).textContent = items.length;
-				dialog.querySelector( '#current-media-item-mobile' ).textContent = order;
-				dialog.querySelector( '#total-media-items-mobile' ).textContent = items.length;
-			}
-			order++;
-		} );
+		// Set order of media item and total
+		if ( mediaGrid ) {
+			dialog.querySelector( '#current-media-item' ).textContent = order;
+			dialog.querySelector( '#total-media-items' ).textContent = total;
+			dialog.querySelector( '#current-media-item-mobile' ).textContent = order;
+			dialog.querySelector( '#total-media-items-mobile' ).textContent = total;
+		} else {
+			items.forEach( function( i ) {
+				if ( i.id === item.id ) {
+					dialog.querySelector( '#current-media-item' ).textContent = order;
+					dialog.querySelector( '#total-media-items' ).textContent = items.length;
+					dialog.querySelector( '#current-media-item-mobile' ).textContent = order;
+					dialog.querySelector( '#total-media-items-mobile' ).textContent = items.length;
+				}
+				order++;
+			} );
+		}
 
 		toggleMediaNavigation();
 
@@ -374,13 +419,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		setTimeout( function() {
 			dialog.showModal();
 		}, 1 );
-
-		// Delete media item
-		dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
-			if ( confirm( _wpMediaLibSettings.confirm_delete ) ) {
-				deleteItem( id );
-			}
-		} );
 
 		// Update media categories and tags
 		dialog.querySelectorAll( '.compat-item input' ).forEach( function( input ) {
@@ -869,7 +907,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 	}
-	mediaNavigation.addEventListener( 'keydown', keydownHandler );
+	document.querySelector( '.edit-media-header' ).addEventListener( 'keydown', keydownHandler );
 	mediaNavigationMobile.addEventListener( 'keydown', keydownHandler );
 
 	// Edit image
@@ -904,6 +942,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
+			// Add navigation buttons
+			if ( dialog.querySelector( '#edit-image-navigation') == null ) {
+				var div = document.createElement( 'div' );
+				div.id = 'edit-image-navigation';
+				div.className = 'attachment-media-view landscape';
+				div.append( mediaNavigationMobile );
+				document.querySelector( '.media-frame-content' ).before( div );
+			}
+
 			document.querySelector( '.attachment-details' ).setAttribute( 'hidden', true );
 			document.querySelector( '.attachment-details' ).setAttribute( 'inert', true );
 			document.querySelector( '.media-frame-content' ).insertAdjacentHTML( 'beforeend', result.data.html );
@@ -946,12 +993,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				toolbar.classList.add( 'media-toolbar-mode-select' );
 
 				deleteButton.addEventListener( 'click', function() {
-					if ( confirm( _wpMediaLibSettings.confirm_multiple ) ) {
-						document.querySelectorAll( '.media-item.selected' ).forEach( function( deleteSelect ) {
-							deleteItem( deleteSelect.id.replace( 'media-', '' ) );
-						} );
+					var selectedItems = document.querySelectorAll( '.media-item.selected' );
+					if ( selectedItems.length !== 0 ) {
+						if ( confirm( _wpMediaLibSettings.confirm_multiple ) ) {
+							selectedItems.forEach( function( deleteSelect ) {
+								deleteItem( deleteSelect.id.replace( 'media-', '' ) );
+							} );
+						}
+						document.querySelector( '.select-mode-toggle-button' ).click();
 					}
-					document.querySelector( '.select-mode-toggle-button' ).click();
 				} );
 			}
 		} );
@@ -994,111 +1044,113 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	} );
 
-	if ( inputElement ) {
-		/* Upload files using FilePond */
-		// Register FilePond plugins
-		FilePond.registerPlugin(
-			FilePondPluginFileValidateSize,
-			FilePondPluginFileValidateType,
-			FilePondPluginFileRename,
-			FilePondPluginImagePreview
-		);
+	/* Upload files using FilePond */
+	// Register FilePond plugins
+	FilePond.registerPlugin(
+		FilePondPluginFileValidateSize,
+		FilePondPluginFileValidateType,
+		FilePondPluginFileRename,
+		FilePondPluginImagePreview
+	);
 
-		// Create a FilePond instance
-		pond = FilePond.create( inputElement, {
-			allowMultiple: true,
-			server: {
-				process: function( fieldName, file, metadata, load, error, progress, abort, transfer, options ) {
+	// Create a FilePond instance
+	pond = FilePond.create( inputElement, {
+		allowMultiple: true,
+		server: {
+			process: function( fieldName, file, metadata, load, error, progress, abort, transfer, options ) {
 
-					// Create FormData
-					var formData = new FormData();
-					formData.append( 'async-upload', file, file.name );
-					formData.append( 'action', 'upload-attachment' );
-					formData.append( '_wpnonce', document.getElementById( '_wpnonce' ).value );
+				// Create FormData
+				var formData = new FormData();
+				formData.append( 'async-upload', file, file.name );
+				formData.append( 'action', 'upload-attachment' );
+				formData.append( '_wpnonce', document.getElementById( '_wpnonce' ).value );
 
-					// Use Fetch to upload the file
-					fetch( ajaxurl, {
-						method: 'POST',
-						body: formData,
-						credentials: 'same-origin'
-					} )
-					.then( function( response ) {
-						if ( response.ok ) {
-							return response.json(); // no errors
+				// Use Fetch to upload the file
+				fetch( ajaxurl, {
+					method: 'POST',
+					body: formData,
+					credentials: 'same-origin'
+				} )
+				.then( function( response ) {
+					if ( response.ok ) {
+						return response.json(); // no errors
+					}
+					throw new Error( response.status );
+				} )
+				.then( function( result ) {
+					var gridItem;
+					if ( result.success ) {
+						load( result.data );
+						if ( mediaGrid ) {
+							gridItem = populateGridItem( result.data );
+							mediaGrid.prepend( gridItem );
+
+							// Open modal to show details about file, or select file for deletion
+							gridItem.addEventListener( 'click', function() {
+								if ( document.querySelector( '.media-toolbar-mode-select' ) == null ) {
+									openModalDialog( gridItem );
+								} else {
+									selectItemForDeletion( gridItem );
+								}
+							} );
 						}
-						throw new Error( response.status );
-					} )
-					.then( function( result ) {
-						var gridItem;
-						if ( result.success ) {
-							load( result.data );
-							if ( mediaGrid ) {
-								gridItem = populateGridItem( result.data );
-								mediaGrid.prepend( gridItem );
-
-								// Open modal to show details about file, or select file for deletion
-								gridItem.addEventListener( 'click', function() {
-									if ( document.querySelector( '.media-toolbar-mode-select' ) == null ) {
-										openModalDialog( gridItem );
-									} else {
-										selectItemForDeletion( gridItem );
-									}
-								} );
-							}
-						} else {
-							error( _wpMediaLibSettings.upload_failed );
-						}
-					} )
-					.catch( function( err ) {
+					} else {
 						error( _wpMediaLibSettings.upload_failed );
-						console.error( _wpMediaLibSettings.error, err );
-					} );
+					}
+				} )
+				.catch( function( err ) {
+					error( _wpMediaLibSettings.upload_failed );
+					console.error( _wpMediaLibSettings.error, err );
+				} );
 
-					// Return an abort function
-					return {
-						abort: function() {
-							// This function is called when the user aborts the upload
-							abort();
-						}
-					};
-				},
-				maxFileSize: inputElement.dataset.maxFileSize,
+				// Return an abort function
+				return {
+					abort: function() {
+						// This function is called when the user aborts the upload
+						abort();
+					}
+				};
 			},
-			labelTapToUndo: _wpMediaLibSettings.tap_close,
-			fileRenameFunction: ( file ) =>
-				new Promise( function( resolve ) {
-					resolve( window.prompt( _wpMediaLibSettings.new_filename, file.name ) );
-				} ),
-			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
-			labelFileTypeNotAllowed: _wpMediaLibSettings.invalid_type,
-			fileValidateTypeLabelExpectedTypes: _wpMediaLibSettings.check_types,
-		} );
+			maxFileSize: inputElement.dataset.maxFileSize,
+		},
+		labelTapToUndo: _wpMediaLibSettings.tap_close,
+		fileRenameFunction: ( file ) =>
+			new Promise( function( resolve ) {
+				resolve( window.prompt( _wpMediaLibSettings.new_filename, file.name ) );
+			} ),
+		acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
+		labelFileTypeNotAllowed: _wpMediaLibSettings.invalid_type,
+		fileValidateTypeLabelExpectedTypes: _wpMediaLibSettings.check_types,
+	} );
 
-		pond.on('addfile', function( error, file ) {
-			if ( error ) {
-				if ( ! mediaGrid ) {
-					document.getElementById('refresh').classList.remove('hidden');
-				}
-				return;
-			}
-		});
-
-		pond.on('processfile', function( error, file ) {
-			if ( error ) {
-				if ( ! mediaGrid ) {
-					document.getElementById('refresh').classList.remove('hidden');
-				}
-				return;
-			}
-			setTimeout(function(){
-				pond.removeFile(file.id);
-			}, 100);
-		});
-
-		pond.on('processfiles', function() {
+	pond.on( 'addfile', function( error, file ) {
+		if ( error ) {
 			if ( ! mediaGrid ) {
-				location.href = location.pathname;
+				document.getElementById('refresh').classList.remove('hidden');
 			}
-		});
-	}
+			return;
+		}
+	} );
+
+	pond.on( 'processfile', function( error, file ) {
+		if ( error ) {
+			if ( ! mediaGrid ) {
+				document.getElementById('refresh').classList.remove('hidden');
+			}
+			return;
+		}
+		setTimeout( function() {
+			pond.removeFile( file.id );
+		}, 100 );
+		if ( mediaGrid ) {
+			resetDataOrdering();
+		}
+	} );
+
+	pond.on( 'processfiles', function() {
+		if ( ! mediaGrid ) {
+			location.href = location.pathname;
+		}
+	} );
+
 } );
