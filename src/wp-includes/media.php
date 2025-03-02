@@ -4868,6 +4868,8 @@ function wp_enqueue_media( $args = array() ) {
 
 	$strings['settings'] = $settings;
 
+	wp_enqueue_script( 'jquery-ui-sortable' );
+
 	// Ensure we enqueue media-editor first, that way media-views
 	// is registered internally before we try to localize it. See #24724.
 	wp_enqueue_script( 'media-editor' );
