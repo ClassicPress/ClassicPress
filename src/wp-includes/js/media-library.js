@@ -262,7 +262,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Delete media item
 	dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
-		var id = location.search.match(/\d+/g)[0];
+		var id = location.search.replace( '?item=', '' );
 		if ( confirm( _wpMediaLibSettings.confirm_delete ) ) {
 			deleteItem( id );
 			if ( mediaGrid ) {
@@ -1137,12 +1137,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.getElementById('refresh').classList.remove('hidden');
 			}
 			return;
-		}
-		setTimeout( function() {
-			pond.removeFile( file.id );
-		}, 100 );
-		if ( mediaGrid ) {
-			resetDataOrdering();
 		}
 	} );
 
