@@ -1074,12 +1074,74 @@ function _wp_delete_all_temp_backups() {
 	}
 }
 
+/**
+ * Checks for translation file updates and adds to update transient
+ *
+ * Hooks to `wp_version_check` and looks for any installed translation file locales,
+ * compares the file PO-Revision-Date to the API date. Any translation file updates
+ * are injected into the `update_core` transient` for later processing.
+ *
+ * @since CP-2.5.0
+ */
+function cp_translation_file_updates() {
+	require_once ABSPATH . 'wp-admin/includes/translation-install.php';
+	$installed_translations = wp_get_installed_translations( 'core' );
+
+	// return if no translation files installed
+	if ( empty( $installed_translation ) ) {
+		return;
+	}
+
+	$domains = array( 'admin', 'admin-network', 'continents-cities', 'default' );
+	$po_data = array();
+
+	foreach ( $domains as $domain ) {
+		foreach ( $installed_translations[ $domain ] as $locale => $data ) {
+			if ( ! isset( $po_data[ $locale ] ) ) {
+				$po_data[ $locale ] = strtotime( $data['PO-Revision-Date'] );
+			} else {
+				if ( strtotime( $data['PO-Revision-Date'] ) > $po_data[ $locale ] ) {
+					$po_data[ $locale ] = strtotime( $data['PO-Revision-Date'] );
+				}
+			}
+		}
+	}
+
+	$translations = wp_get_available_translations();
+
+	$translation_updates = array();
+
+	foreach ( $translations as $translation ) {
+		if ( array_key_exists( $translation['language'], $po_data ) ) {
+			if ( strtotime( $translation['updated'] ) > $po_data[ $translation['language'] ] ) {
+				$translation_updates[] = array(
+					'type'       => 'core',
+					'slug'       => 'default',
+					'language'   => $translation['language'],
+					'package'    => $translation['package'],
+					'autoupdate' => true,
+				);
+			}
+		}
+	}
+
+	// return if no translation updates available
+	if ( empty( $translation_updates ) ) {
+		return;
+	}
+
+	$updates = get_site_transient( 'update_core' );
+	$updates->translations[] = $translation_updates;
+	set_site_transient( 'update_core', $updates );
+}
+
 if ( ( ! is_main_site() && ! is_network_admin() ) || wp_doing_ajax() ) {
 	return;
 }
 
 add_action( 'admin_init', '_maybe_update_core' );
 add_action( 'wp_version_check', 'wp_version_check' );
+add_action( 'wp_version_check', 'cp_translation_file_updates' );
 
 add_action( 'load-plugins.php', 'wp_update_plugins' );
 add_action( 'load-update.php', 'wp_update_plugins' );
