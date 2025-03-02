@@ -262,8 +262,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Delete media item
 	dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
-		// var id = location.search.match(/\d+/g)[0];
-		var id = location.search.replace( '?item=', '' );
+		var id = location.search.match(/\d+/g)[0];
 		if ( confirm( _wpMediaLibSettings.confirm_delete ) ) {
 			deleteItem( id );
 			if ( mediaGrid ) {
