@@ -1058,7 +1058,7 @@ function _wp_delete_all_temp_backups() {
 	}
 
 	if ( ! $wp_filesystem->wp_content_dir() ) {
-		return new WP_Error( 'fs_no_content_dir', __( 'Unable to locate WordPress content directory (wp-content).' ) );
+		return new WP_Error( 'fs_no_content_dir', __( 'Unable to locate ClassicPress content directory (wp-content).' ) );
 	}
 
 	$temp_backup_dir = $wp_filesystem->wp_content_dir() . 'upgrade-temp-backup/';
