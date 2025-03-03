@@ -366,12 +366,12 @@ dialog::backdrop {
 	outline-width: 0.125rem;
 }
 .filepond--root {
-	margin-bottom: 1.2em !important;
+	margin-bottom: 1.2em;
 }
 .filepond--drip {
-	opacity: 1 !important;
-	background: #ecf7e9 !important;
+	opacity: 1;
+	background: #ecf7e9;
 }
 .filepond--file-info .filepond--file-info-main {
-	line-height: 1.3 !important;
+	line-height: 1.3;
 }
