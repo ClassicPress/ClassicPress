@@ -373,7 +373,7 @@ if ( 'grid' === $mode ) {
 						<span class="paging-input">
 							<label for="current-page-selector" class="screen-reader-text"><?php esc_html_e( 'Current Page' ); ?></label>
 							<input class="current-page" id="current-page-selector" type="text" name="paged" value="<?php echo esc_attr( $paged ); ?>" size="4" aria-describedby="table-paging">
-							<span class="tablenav-paging-text"> <?php esc_html_e( 'of' ); ?> <span class="total-pages"><?php echo esc_html( $total_pages ); ?></span></span>
+							<span id="table-paging" class="tablenav-paging-text"> <?php esc_html_e( 'of' ); ?> <span class="total-pages"><?php echo esc_html( $total_pages ); ?></span></span>
 						</span>
 						<a class="next-page button" href="<?php echo admin_url( '/upload.php?paged=' . $next_page ); ?>"
 							<?php
