@@ -3373,6 +3373,21 @@ function wp_ajax_quick_edit_attachment() {
 		$link_end = '</a>';
 	}
 
+	$time = get_post_timestamp( $attachment );
+	if ( '0000-00-00 00:00:00' === $attachment->post_date ) {
+		$h_time = __( 'Unpublished' );
+	} else {
+		$time_diff = time() - $time;
+		if ( $time && $time_diff > 0 && $time_diff < DAY_IN_SECONDS ) {
+			/* translators: %s: Human-readable time difference. */
+			$h_time = sprintf( __( '%s ago' ), human_time_diff( $time ) );
+		} else {
+			$h_time = get_the_time( __( 'Y/m/d' ), $attachment );
+		}
+	}
+	$h_time .= '<time datetime="' . wp_date( 'Y/m/d', $time ) . '"></time>';
+	$h_time = apply_filters( 'media_date_column_time', $h_time, $attachment, 'date' );
+
 	/**
 	 * Output buffer is used here because the function prints directly
 	 * to the page, whereas we need to return in order to send as JSON.
@@ -3441,7 +3456,7 @@ function wp_ajax_quick_edit_attachment() {
 	<td class="alt column-alt" data-colname="' . esc_attr__( 'Alt Text' ) . '">' . esc_html( $alt ) . '</td>
 	<td class="caption column-caption" data-colname="' . esc_attr__( 'Caption' ) . '">' . esc_html( $post_excerpt ) . '</td>
 	<td class="desc column-desc" data-colname="' . esc_attr__( 'Description' ) . '">' . esc_html( $post_content ) . '</td>
-	<td class="date column-date" data-colname="' . esc_attr__( 'Date' ) . '">' . esc_html( $date ) . '</td>';
+	<td class="date column-date" data-colname="' . esc_attr__( 'Date' ) . '">' . $h_time . '</td>';
 
 	wp_send_json_success( $new_tr );
 }
