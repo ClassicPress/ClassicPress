@@ -548,6 +548,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						categoriesList.forEach( function( item ) {
 							if ( catsArray.includes( item.querySelector( 'label' ).textContent ) ) {
 								item.querySelector( 'input' ).checked = true;
+							} else {
+								item.querySelector( 'input' ).checked = false;
 							}
 						} );
 
