@@ -3370,7 +3370,7 @@ function wp_ajax_quick_edit_attachment() {
 	$title           = esc_html( $post_title );
 	$meta            = wp_prepare_attachment_for_js( $id );
 	$date            = esc_attr( $meta['dateFormatted'] );
-	$author          = esc_attr( $meta['authorName'] );
+	$author_attr     = esc_attr( $meta['authorName'] );
 	$author_link     = esc_url( ! empty( $meta['authorLink'] ) ? $meta['authorLink'] : '' );
 	$url             = esc_url( $meta['url'] );
 	$width           = esc_attr( ! empty( $meta['width'] ) ? $meta['width'] : '' );
@@ -3420,7 +3420,7 @@ function wp_ajax_quick_edit_attachment() {
 			data-caption="{$caption}"
 			data-description="{$description}"
 			data-link="{$link}"
-			data-author="{$author}"
+			data-author="{$author_attr}"
 			data-author-link="{$author_link}"
 			data-orientation="{$orientation}"
 			data-menu-order="{$menu_order}"
