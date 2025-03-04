@@ -522,7 +522,6 @@ class WP_Media_List_Table extends WP_List_Table {
 		$update_nonce = $meta['nonces']['update'];
 		$delete_nonce = $meta['nonces']['delete'];
 		$edit_nonce   = $meta['nonces']['edit'];
-		$image        = '<img src="' . esc_url( $url ) . '" alt="' . esc_attr( $alt ) . '">';
 		?>
 		<strong<?php echo $class; ?>>
 			<a class="media-item" id="media-<?php echo esc_attr( $attachment_id ); ?>" tabindex="0" role="checkbox" aria-checked="false"
@@ -537,9 +536,9 @@ class WP_Media_List_Table extends WP_List_Table {
 				data-size="<?php echo esc_attr( $size ); ?>"
 				data-caption="<?php echo esc_attr( $caption ); ?>"
 				data-description="<?php echo esc_attr( $description ); ?>"
-				data-link="<?php echo esc_attr( $link ); ?>"
+				data-link="<?php echo esc_url( $link ); ?>"
 				data-author="<?php echo esc_attr( $author ); ?>"
-				data-author-link="<?php echo esc_attr( $author_link ); ?>"
+				data-author-link="<?php echo esc_url( $author_link ); ?>"
 				data-orientation="<?php echo esc_attr( $orientation ); ?>"
 				data-menu-order="<?php echo esc_attr( $menu_order ); ?>"
 				data-taxes="<?php echo esc_attr( $media_cats ); ?>"

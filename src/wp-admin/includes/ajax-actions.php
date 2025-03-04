@@ -3348,30 +3348,49 @@ function wp_ajax_quick_edit_attachment() {
 	// Prepare HTML for sending back to JavaScript handler. First include nonce.
 	$nonce = wp_create_nonce( 'attachment-nonce' );
 
+	if ( has_post_thumbnail( $attachment ) ) {
+		$thumbnail_id = get_post_thumbnail_id( $attachment );
+		if ( ! empty( $thumbnail_id ) ) {
+			$id = $thumbnail_id;
+		}
+	}
+
 	// Include functions to identify where the media file is used or attached.
 	require_once ABSPATH . 'wp-admin/includes/class-wp-media-list-table.php';
-	$list_table   = new WP_Media_List_Table();
-	$thumbnails   = $list_table->column_thumbnail( $attachment );
-	$used_in      = $list_table->column_used_in( $attachment );
-	$media_cats   = $list_table->column_default( $attachment, 'taxonomy-media_category' );
-	$media_tags   = $list_table->column_default( $attachment, 'taxonomy-media_post_tag' );
-	list( $mime ) = explode( '/', $attachment->post_mime_type );
-	$thumb        = wp_get_attachment_image( $id, array( 60, 60 ), true, array( 'alt' => '' ) );
-	$class        = $thumb ? ' class="has-media-icon"' : '';
-	$media_icon   = $thumb ? '<span class="media-icon ' . sanitize_html_class( $mime . '-icon' ) . '">' . $thumb . '</span>' : '';
-	$file         = get_attached_file( $id );
-	$link_start   = '';
-	$link_end     = '';
-
-	if ( current_user_can( 'edit_post', $id ) ) {
-		$link_start = sprintf(
-			'<a href="%s" aria-label="%s">',
-			get_edit_post_link( $id ),
-			/* translators: %s: Attachment title. */
-			esc_attr( sprintf( __( '&#8220;%s&#8221; (Edit)' ), $post_title ) )
-		);
-		$link_end = '</a>';
-	}
+	$list_table      = new WP_Media_List_Table();
+	$thumbnails      = $list_table->column_thumbnail( $attachment );
+	$used_in         = $list_table->column_used_in( $attachment );
+	$media_cats      = $list_table->column_default( $attachment, 'taxonomy-media_category' );
+	$media_tags      = $list_table->column_default( $attachment, 'taxonomy-media_post_tag' );
+	list( $mime )    = explode( '/', $attachment->post_mime_type );
+	$thumb           = wp_get_attachment_image( $id, array( 60, 60 ), true, array( 'alt' => '' ) );
+	$class           = $thumb ? ' class="has-media-icon"' : '';
+	$media_icon      = $thumb ? '<span class="media-icon ' . sanitize_html_class( $mime . '-icon' ) . '">' . $thumb . '</span>' : '';
+	$file            = get_attached_file( $id );
+	$title           = esc_html( $post_title );
+	$meta            = wp_prepare_attachment_for_js( $id );
+	$date            = esc_attr( $meta['dateFormatted'] );
+	$author          = esc_attr( $meta['authorName'] );
+	$author_link     = esc_url( ! empty( $meta['authorLink'] ) ? $meta['authorLink'] : '' );
+	$url             = esc_url( $meta['url'] );
+	$width           = esc_attr( ! empty( $meta['width'] ) ? $meta['width'] : '' );
+	$height          = esc_attr( ! empty( $meta['height'] ) ? $meta['height'] : '' );
+	$file_name       = esc_attr( $meta['filename'] );
+	$file_type       = esc_attr( $meta['type'] );
+	$subtype         = esc_attr( $meta['subtype'] );
+	$mime_type       = esc_attr( $meta['mime'] );
+	$size            = esc_attr( ! empty( $meta['filesizeHumanReadable'] ) ? $meta['filesizeHumanReadable'] : '' );
+	$alt             = esc_attr( $meta['alt'] );
+	$caption         = esc_attr( $meta['caption'] );
+	$description     = esc_attr( $meta['description'] );
+	$link            = esc_url( $meta['link'] );
+	$orientation     = esc_attr( ! empty( $meta['orientation'] ) ? $meta['orientation'] : 'landscape' );
+	$menu_order      = esc_attr( $meta['menuOrder'] );
+	$media_cats_attr = esc_attr( $meta['media_cats'] ? implode( ', ', $meta['media_cats'] ) : '' );
+	$media_tags_attr = esc_attr( $meta['media_tags'] ? implode( ', ', $meta['media_tags'] ) : '' );
+	$update_nonce    = $meta['nonces']['update'];
+	$delete_nonce    = $meta['nonces']['delete'];
+	$edit_nonce      = $meta['nonces']['edit'];
 
 	/**
 	 * Output buffer is used here because the function prints directly
@@ -3385,9 +3404,38 @@ function wp_ajax_quick_edit_attachment() {
 		<label class="screen-reader-text" for="cb-select-' . $id . '">' . esc_html__( 'Select ' ) . esc_html( $post_title ) . '</label>
 		<input type="checkbox" name="media[]" id="cb-select-' . $id . '" value="' . $id . '">
 	</th>
-	<td class="title column-title has-row-actions column-primary" data-colname="' . esc_html__( 'File' ) . '">
-		<strong ' . $class . '>' . $link_start . $media_icon . esc_html( $post_title ) . $link_end . _media_states( $attachment ) . '</strong>
+	<td class="title column-title has-row-actions column-primary" data-colname="' . esc_html__( 'File' ) . '"> <strong ' . $class . '>';
 
+	$new_tr .= <<<HTML
+		<a class="media-item" id="media-{$id}" tabindex="0" role="checkbox" aria-checked="false"
+			aria-label="{$title}"
+			data-date="{$date}"
+			data-url="{$url}"
+			data-filename="{$file_name}"
+			data-filetype="{$file_type}"
+			data-mime="{$mime_type}"
+			data-width="{$width}"
+			data-height="{$height}"
+			data-size="{$size}"
+			data-caption="{$caption}"
+			data-description="{$description}"
+			data-link="{$link}"
+			data-author="{$author}"
+			data-author-link="{$author_link}"
+			data-orientation="{$orientation}"
+			data-menu-order="{$menu_order}"
+			data-taxes="{$media_cats_attr}"
+			data-tags="{$media_tags_attr}"
+			data-update-nonce="{$update_nonce}"
+			data-delete-nonce="{$delete_nonce}"
+			data-edit-nonce="{$edit_nonce}"
+			>
+			{$media_icon}
+			{$title}
+		</a>
+		HTML;
+
+	$new_tr .= _media_states( $attachment ) . '</strong>
 		<p class="filename">
 			<span class="screen-reader-text">' . esc_html__( 'File name: ' ) . '</span>' . esc_html( wp_basename( $file ) ) . '
 		</p>
@@ -3397,7 +3445,7 @@ function wp_ajax_quick_edit_attachment() {
 
 			<span class="delete"><a href="post.php?action=delete&amp;post=' . $id . '&amp;_wpnonce=' . esc_attr( $nonce ) . '" class="submitdelete aria-button-if-js" onclick="return showNotice.warn();" aria-label="' . esc_attr__( sprintf( 'Delete “%s” permanently', $post_title ) ) . '" role="button">' . esc_html__( 'Delete Permanently' ) . '</a> | </span>
 
-			<span class="view"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'View “%s”', $post_title ) ) . '" rel="bookmark">' . esc_html__( 'View' ) . '</a> | </span>
+			<span class="view"><a href="' . esc_url( get_permalink( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'View “%s”', $post_title ) ) . '" rel="bookmark">' . esc_html__( 'View' ) . '</a> | </span>
 
 			<span class="copy">
 				<span class="copy-to-clipboard-container">

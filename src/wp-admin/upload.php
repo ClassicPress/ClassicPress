@@ -117,15 +117,13 @@ if ( ! $max_upload_size ) {
 $allowed_mimes = get_allowed_mime_types();
 $mimes_list = implode( ',', $allowed_mimes );
 
-wp_enqueue_style( 'media-library' );
-wp_enqueue_style( 'cp-filepond-image-preview' );
-wp_enqueue_style( 'cp-filepond' );
-wp_enqueue_script( 'media-library' );
+wp_enqueue_style( 'media' );
+wp_enqueue_script( 'media' );
 
 remove_action( 'admin_head', 'wp_admin_canonical_url' );
 
 wp_localize_script(
-	'media-library',
+	'media',
 	'_wpMediaLibSettings',
 	array(
 		'by'               => __( 'by' ),
@@ -451,30 +449,30 @@ if ( 'grid' === $mode ) {
 					}
 					?>
 
-          <li class="media-item" id="media-<?php echo esc_attr( $attachment->ID ); ?>" tabindex="0" role="checkbox" aria-checked="false"
-            aria-label="<?php echo esc_attr( $attachment->post_title ); ?>"
-            data-date="<?php echo esc_attr( $date ); ?>"
-            data-url="<?php echo esc_url( $url ); ?>"
-            data-filename="<?php echo esc_attr( $file_name ); ?>"
-            data-filetype="<?php echo esc_attr( $file_type ); ?>"
-            data-mime="<?php echo esc_attr( $mime_type ); ?>"
-            data-width="<?php echo esc_attr( $width ); ?>"
-            data-height="<?php echo esc_attr( $height ); ?>"
-            data-size="<?php echo esc_attr( $size ); ?>"
-            data-caption="<?php echo esc_attr( $caption ); ?>"
-            data-description="<?php echo esc_attr( $description ); ?>"
-            data-link="<?php echo esc_attr( $link ); ?>"
-            data-author="<?php echo esc_attr( $author ); ?>"
-            data-author-link="<?php echo esc_attr( $author_link ); ?>"
-            data-orientation="<?php echo esc_attr( $orientation ); ?>"
-            data-menu-order="<?php echo esc_attr( $menu_order ); ?>"
-            data-taxes="<?php echo esc_attr( $media_cats ); ?>"
-            data-tags="<?php echo esc_attr( $media_tags ); ?>"
-            data-order="<?php echo esc_attr( $key + 1 ); ?>"
-            data-update-nonce="<?php echo $update_nonce; ?>"
-            data-delete-nonce="<?php echo $delete_nonce; ?>"
-            data-edit-nonce="<?php echo $edit_nonce; ?>"
-            >
+					<li class="media-item" id="media-<?php echo esc_attr( $attachment->ID ); ?>" tabindex="0" role="checkbox" aria-checked="false"
+						aria-label="<?php echo esc_attr( $attachment->post_title ); ?>"
+						data-date="<?php echo esc_attr( $date ); ?>"
+						data-url="<?php echo esc_url( $url ); ?>"
+						data-filename="<?php echo esc_attr( $file_name ); ?>"
+						data-filetype="<?php echo esc_attr( $file_type ); ?>"
+						data-mime="<?php echo esc_attr( $mime_type ); ?>"
+						data-width="<?php echo esc_attr( $width ); ?>"
+						data-height="<?php echo esc_attr( $height ); ?>"
+						data-size="<?php echo esc_attr( $size ); ?>"
+						data-caption="<?php echo esc_attr( $caption ); ?>"
+						data-description="<?php echo esc_attr( $description ); ?>"
+						data-link="<?php echo esc_url( $link ); ?>"
+						data-author="<?php echo esc_attr( $author ); ?>"
+						data-author-link="<?php echo esc_url( $author_link ); ?>"
+						data-orientation="<?php echo esc_attr( $orientation ); ?>"
+						data-menu-order="<?php echo esc_attr( $menu_order ); ?>"
+						data-taxes="<?php echo esc_attr( $media_cats ); ?>"
+						data-tags="<?php echo esc_attr( $media_tags ); ?>"
+						data-order="<?php echo esc_attr( $key + 1 ); ?>"
+						data-update-nonce="<?php echo $update_nonce; ?>"
+						data-delete-nonce="<?php echo $delete_nonce; ?>"
+						data-edit-nonce="<?php echo $edit_nonce; ?>"
+						>
 
 						<div class="select-attachment-preview <?php echo esc_attr( 'type-' . $file_type . ' subtype-' . $subtype . ' ' . $orientation ); ?>">
 							<div class="media-thumbnail">
@@ -639,8 +637,6 @@ if ( 'grid' === $mode ) {
 	// Used in the HTML title tag.
 	$title       = __( 'Media Library' );
 	$parent_file = 'upload.php';
-
-	wp_enqueue_script( 'media' );
 
 	add_screen_option( 'per_page' );
 
