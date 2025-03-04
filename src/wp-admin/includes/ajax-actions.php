@@ -3322,6 +3322,7 @@ function wp_ajax_quick_edit_attachment() {
 		'post_name'    => strtolower( $post_title ),
 	);
 	wp_update_post( $attachment_data, true );
+	$attachment = get_post( $id );
 
 	// Update taxonomies and meta.
 	if ( empty( $_POST['media_category'] ) ) {
