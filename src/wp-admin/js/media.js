@@ -509,8 +509,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 					} else if ( number === 1 && ! selectAll1.checked && ! selectAll2.checked ) {
 
-						// Quick Edit: reset all fields except nonce
-						inputs = quickEdit.querySelectorAll( 'input:not(#_inline_edit_attachment), select, textarea' );
+						// Quick Edit: reset all fields except nonce and media_category[]
+						inputs = quickEdit.querySelectorAll( 'input:not(#_inline_edit_attachment):not([name="media_category[]"]), select, textarea' );
 						inputs.forEach( function( input ) {
 							input.value = '';
 						} );
