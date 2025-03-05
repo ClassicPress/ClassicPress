@@ -362,7 +362,7 @@
 			document.body.classList.add( 'adding-widget' );
 
 			if ( this.el.querySelector( '.selected' ) ) {
-				this.el.querySelector( '.selected' ).removeClass( 'selected' );
+				this.el.querySelector( '.selected' ).classList.remove( 'selected' );
 			}
 
 			// Reset search.
