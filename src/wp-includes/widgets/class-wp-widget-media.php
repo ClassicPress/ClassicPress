@@ -401,7 +401,6 @@ abstract class WP_Widget_Media extends WP_Widget {
 	 */
 	public function enqueue_admin_scripts() {
 		wp_enqueue_media();
-		wp_enqueue_script( 'media-widgets' );
 	}
 
 	/**
