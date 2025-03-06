@@ -148,9 +148,12 @@ jobs:
             mysql.default_socket=/var/run/mysqld/mysqld.sock
           extensions: >-
             bcmath,
+            Core,
             curl,
+            date,
             dom,
             exif,
+            filenfo,
             gd,
             iconv,
             imagick,
