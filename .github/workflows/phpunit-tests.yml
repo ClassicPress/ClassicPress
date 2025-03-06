@@ -35,7 +35,7 @@ jobs:
   # - Run PHPUnit Tests.
   test-php:
     name: "PHP ${{ matrix.php }} on MySQL ${{matrix.mysql}}${{ matrix.memcached && ' with memcached' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
     strategy:
       fail-fast: false
@@ -105,6 +105,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
+      - name: Install ImageMagick
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libavif-dev libwebp-dev libvpx-dev libmagickcore-dev imagemagick php-imagick
+
       - name: Login to Docker Hub
         if: ${{ github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false ) }}
         uses: docker/login-action@v3
@@ -141,27 +146,6 @@ jobs:
             mysql.default_host=127.0.0.1,
             mysql.default_port=3306,
             mysql.default_socket=/var/run/mysqld/mysqld.sock
-          extensions: >-
-            bcmath,
-            curl,
-            dom,
-            exif,
-            gd,
-            iconv,
-            imagick,
-            intl,
-            libxml,
-            mbstring,
-            memcached,
-            mysql,
-            mysqli,
-            pcntl,
-            pdo,
-            pdo_mysql,
-            pdo_sqlite,
-            soap,
-            sqlite,
-            zip
           coverage: none
 
       - name: Set up locale
@@ -190,8 +174,13 @@ jobs:
           phpunit --version
           composer --version
           grunt --version
+          convert --version
           lsb_release -a
           localectl list-locales
+
+      - name: Verify Imagick formats
+        run: |
+          php -r "print_r( \Imagick::queryFormats() );"
 
       - name: Create ClassicPress config file for tests
         run: |
