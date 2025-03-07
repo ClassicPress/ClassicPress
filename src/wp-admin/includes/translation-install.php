@@ -50,7 +50,7 @@ function translations_api( $type, $args = null ) {
 			$options['method']   = 'GET';
 			$url                 = add_query_arg(
 				$stats,
-				'https://api-v1.classicpress.net/translations/core/2.0.0/translations.json'
+				'https://api-v1.classicpress.net/translations/core/' . classicpress_version_short() . '/translations.json'
 			);
 			$request             = wp_remote_request( $url, $options );
 		} else {
