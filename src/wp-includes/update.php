@@ -1088,7 +1088,7 @@ function cp_translation_file_updates() {
 	$installed_translations = wp_get_installed_translations( 'core' );
 
 	// return if no translation files installed
-	if ( empty( $installed_translation ) ) {
+	if ( empty( $installed_translations ) ) {
 		return;
 	}
 
