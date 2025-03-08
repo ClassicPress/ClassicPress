@@ -9,7 +9,7 @@
 	padding: 2em 0;
 	margin: 2em 0;
 	border: 4px dashed #c3c4c7;
-	background-color: #ECF7E9;
+	background-color: #ecf7e9;
 }
 .uploader-inline .close {
 	position: absolute;
@@ -122,7 +122,6 @@
 .filepond--credits {
 	display: none;
 }
-
 .media-grid-view {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -183,7 +182,7 @@
 	left: 0;
 	right: 0;
 	top: 0;
-	margin: auto;	
+	margin: auto;
 	object-fit: cover;
 }
 .media-thumbnail .icon {
@@ -365,4 +364,14 @@ dialog::backdrop {
 	outline-offset: 0.125rem;
 	outline-style: solid;
 	outline-width: 0.125rem;
+}
+.filepond--root {
+	margin-bottom: 1.2em;
+}
+.filepond--drip {
+	opacity: 1;
+	background: #ecf7e9;
+}
+.filepond--file-info .filepond--file-info-main {
+	line-height: 1.3;
 }
