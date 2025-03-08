@@ -758,7 +758,7 @@ class WP_Media_List_Table extends WP_List_Table {
 			?>
 			<?php
 			if ( $user_can_edit ) {
-				$title = _draft_or_post_title( $post->post_parent );
+				$title = _draft_or_post_title( $post );
 				printf(
 					'<br><a href="#the-list" onclick="findPosts.open( \'media[]\', \'%s\' ); return false;" class="hide-if-no-js aria-button-if-js" aria-label="%s">%s</a>',
 					$post->ID,
@@ -1112,7 +1112,7 @@ class WP_Media_List_Table extends WP_List_Table {
 							</div>
 						</div>
 					</fieldset>
-			
+
 					<fieldset class="inline-edit-col-center inline-edit-categories">
 						<div class="inline-edit-col">
 							<span class="title inline-edit-categories-label"><?php echo esc_html_e( 'Media Categories' ); ?></span>
@@ -1172,17 +1172,17 @@ class WP_Media_List_Table extends WP_List_Table {
 					</fieldset>
 
 					<div class="submit inline-edit-save">
-						<input id="bulk-edit-update" type="submit" name="bulk_edit" class="button button-primary" value="<?php esc_attr_e( 'Update' ); ?>">				
+						<input id="bulk-edit-update" type="submit" name="bulk_edit" class="button button-primary" value="<?php esc_attr_e( 'Update' ); ?>">
 						<button type="button" class="button cancel"><?php esc_html_e( 'Cancel' ); ?></button>
-				
+
 						<input type="hidden" name="upload" value="list">
 						<input type="hidden" name="screen" value="upload">
-				
+
 						<div class="notice notice-error notice-alt inline hidden">
 							<p class="error"></p>
 						</div>
 					</div>
-					
+
 				</div>
 			</td>
 		</tr>
@@ -1254,7 +1254,7 @@ class WP_Media_List_Table extends WP_List_Table {
 							</select>
 						</div>
 					</fieldset>
-			
+
 					<fieldset class="inline-edit-col-center inline-edit-categories">
 						<div class="inline-edit-col">
 							<span class="title inline-edit-categories-label"><?php echo esc_html_e( 'Media Categories' ); ?></span>
@@ -1316,12 +1316,12 @@ class WP_Media_List_Table extends WP_List_Table {
 
 					<div class="submit inline-edit-save">
 						<?php wp_nonce_field( 'quickeditattachment', '_inline_edit_attachment', false ); ?>
-						<button id="quick-edit-update" type="button" class="button button-primary save"><?php esc_attr_e( 'Update' ); ?></button>				
+						<button id="quick-edit-update" type="button" class="button button-primary save"><?php esc_attr_e( 'Update' ); ?></button>
 						<button type="button" class="button cancel"><?php esc_html_e( 'Cancel' ); ?></button>
-				
+
 						<input type="hidden" name="upload" value="list">
 						<input type="hidden" name="screen" value="upload">
-				
+
 						<div class="notice notice-error notice-alt inline hidden">
 							<p class="error"></p>
 						</div>
