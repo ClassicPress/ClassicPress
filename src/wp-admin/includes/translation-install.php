@@ -48,9 +48,13 @@ function translations_api( $type, $args = null ) {
 			// Get ClassicPress core translations from the ClassicPress.net API.
 			$stats['cp_version'] = $cp_version;
 			$options['method']   = 'GET';
+
+			// Use {major}.{minor} version number format for API endpoint
+			preg_match( '#\d+\.\d+#', $cp_version, $api );
+
 			$url                 = add_query_arg(
 				$stats,
-				'https://api-v1.classicpress.net/translations/core/' . classicpress_version_short() . '/translations.json'
+				'https://api-v1.classicpress.net/translations/core/' . $api[0] . '/translations.json'
 			);
 			$request             = wp_remote_request( $url, $options );
 		} else {
