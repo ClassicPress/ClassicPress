@@ -1131,7 +1131,11 @@ function cp_translation_file_updates() {
 	}
 
 	$updates = get_site_transient( 'update_core' );
-	$updates->translations[] = $translation_updates;
+	if ( isset( $updates->translations ) ) {
+		$updates->translations = array_merge( $updates->translations, $translation_updates );
+	} else {
+		$updates->translations = $translation_updates;
+	}
 	set_site_transient( 'update_core', $updates );
 }
 
