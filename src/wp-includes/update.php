@@ -1119,6 +1119,7 @@ function cp_translation_file_updates() {
 					'slug'       => 'default',
 					'language'   => $translation['language'],
 					'package'    => $translation['package'],
+					'version'    => $translation['version'],
 					'autoupdate' => true,
 				);
 			}
