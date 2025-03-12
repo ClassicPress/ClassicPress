@@ -1083,7 +1083,7 @@ function _wp_delete_all_temp_backups() {
  *
  * @since CP-2.5.0
  */
-function cp_translation_file_updates() {
+function cp_get_translation_updates() {
 	require_once ABSPATH . 'wp-admin/includes/translation-install.php';
 	$installed_translations = wp_get_installed_translations( 'core' );
 
@@ -1146,7 +1146,7 @@ if ( ( ! is_main_site() && ! is_network_admin() ) || wp_doing_ajax() ) {
 
 add_action( 'admin_init', '_maybe_update_core' );
 add_action( 'wp_version_check', 'wp_version_check' );
-add_action( 'wp_version_check', 'cp_translation_file_updates' );
+add_action( 'wp_version_check', 'cp_get_translation_updates' );
 
 add_action( 'load-plugins.php', 'wp_update_plugins' );
 add_action( 'load-update.php', 'wp_update_plugins' );
