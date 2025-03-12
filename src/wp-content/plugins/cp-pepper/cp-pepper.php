@@ -3,7 +3,7 @@
  * Plugin Name:       ClassicPress Pepper for Passwords
  * Plugin URI:        https://github.com/ClassicPress/ClassicPress
  * Description:       For enhanced security add a `pepper` to password hashing.
- * Version:           1.0.2
+ * Version:           2.0.0
  * Requires at least: 4.9.15
  * Requires PHP:      7.4
  * Requires CP:       2.2
