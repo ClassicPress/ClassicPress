@@ -411,7 +411,6 @@ $current_pepper = \'' . $pepper . '\';
 		wp_safe_redirect( $sendback );
 		exit;
 	}
-
 }
 
 new PepperPassword();

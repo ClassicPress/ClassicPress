@@ -2651,7 +2651,7 @@ function wp_insert_user( $userdata ) {
 			}
 		}
 	} else {
-		$pepper_loaded  = apply_filters( 'cp_pepper_status_pepper', false );
+		$pepper_loaded = apply_filters( 'cp_pepper_status_pepper', false );
 		if ( $pepper_loaded ) {
 			add_user_meta( $user_id, 'peppered_hash', true );
 		}
@@ -2723,7 +2723,7 @@ function wp_update_user( $userdata ) {
 		if ( metadata_exists( 'user', $user_id, 'peppered_hash' ) ) {
 			delete_user_meta( $user_id, 'peppered_hash' );
 		} else {
-			$pepper_loaded  = apply_filters( 'cp_pepper_status_pepper', false );
+			$pepper_loaded = apply_filters( 'cp_pepper_status_pepper', false );
 			if ( $pepper_loaded ) {
 				add_user_meta( $user_id, 'peppered_hash', true );
 			}
