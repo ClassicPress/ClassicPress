@@ -66,20 +66,55 @@ class PepperPassword {
 		add_filter( 'plugin_action_links', array( $this, 'create_settings_link' ), 10, 2 );
 		add_filter( 'cp_pepper_password', array( $this, 'get_pepper' ) );
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
+		add_action( 'admin_init', array( $this, 'migrate' ) );
 	}
 
 	/**
 	 * Activation hook.
 	 *
-	 * If the pepper file does not exists, create it.
+	 * Attempt to migrate pepper file.
+	 * If the pepper file does not exist, create it.
 	 *
 	 * @since 1.0.0
 	 */
 	public function activate() {
+		$this->migrate();
 		if ( file_exists( $this->pepper_file ) ) {
 			return;
 		}
 		$this->set_pepper( '' );
+	}
+
+	/**
+	 *
+	 * Migrate existing pepper file in plugin directory if applicable.
+	 *
+	 * @since 2.0.0
+	 */
+	public function migrate() {
+		$flag = get_option( 'cp_pepper_ok' );
+		// Only attempt to migrate once
+		if ( false === $flag ) {
+			update_option( 'cp_pepper_ok', true );
+
+			ob_start();
+			if ( false === ( $creds = request_filesystem_credentials( admin_url(), '', false, false, null ) ) ) {
+				return; // Await filesystem access
+			}
+
+			if ( ! WP_Filesystem( $creds ) ) {
+				request_filesystem_credentials( admin_url(), '', true, false, null );
+				return;
+			}
+			ob_end_flush();
+
+			global $wp_filesystem;
+			if ( true === $wp_filesystem->exists( __DIR__ . '/pepper.php' ) && false === $wp_filesystem->exists( $this->pepper_file ) ) {
+				if ( $wp_filesystem->move( __DIR__ . '/pepper.php', $this->pepper_file ) ) {
+					do_action( 'cp_pepper_file_migrated' );
+				}
+			}
+		}
 	}
 
 	/**
