@@ -3,7 +3,7 @@
  * Plugin Name:       ClassicPress Pepper for Passwords
  * Plugin URI:        https://github.com/ClassicPress/ClassicPress
  * Description:       For enhanced security add a `pepper` to password hashing.
- * Version:           1.0.2
+ * Version:           2.0.0
  * Requires at least: 4.9.15
  * Requires PHP:      7.4
  * Requires CP:       2.2
@@ -11,6 +11,7 @@
  * Author URI:        https://www.classicpress.net/
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Network:           true
 */
 
 namespace ClassicPress\PepperPassword;
@@ -50,7 +51,7 @@ class PepperPassword {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		$this->pepper_file = __DIR__ . '/pepper.php';
+		$this->pepper_file = WP_CONTENT_DIR . '/pepper.php';
 		$this->init();
 	}
 
@@ -63,19 +64,26 @@ class PepperPassword {
 	 */
 	public function init() {
 		add_action( 'admin_menu', array( $this, 'create_settings_menu' ), 100 );
+		add_action( 'network_admin_menu', array( $this, 'create_settings_menu' ), 100 );
 		add_filter( 'plugin_action_links', array( $this, 'create_settings_link' ), 10, 2 );
+		add_filter( 'network_admin_plugin_action_links', array( $this, 'create_settings_link' ), 10, 2 );
 		add_filter( 'cp_pepper_password', array( $this, 'get_pepper' ) );
+		add_filter( 'cp_pepper_status_pepper', array( $this, 'get_pepper_status' ) );
+		add_filter( 'cp_pepper_status_plugin', array( $this, 'get_plugin_status' ) );
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
+		add_action( 'admin_init', array( $this, 'migrate' ) );
 	}
 
 	/**
 	 * Activation hook.
 	 *
-	 * If the pepper file does not exists, create it.
+	 * Attempt to migrate pepper file.
+	 * If the pepper file does not exist, create it.
 	 *
 	 * @since 1.0.0
 	 */
 	public function activate() {
+		$this->migrate();
 		if ( file_exists( $this->pepper_file ) ) {
 			return;
 		}
@@ -83,21 +91,87 @@ class PepperPassword {
 	}
 
 	/**
+	 *
+	 * Migrate existing pepper file in plugin directory if applicable.
+	 *
+	 * @since 2.0.0
+	 */
+	public function migrate() {
+		// Only attempt to migrate once
+		if ( false === get_option( 'cp_pepper_ok' ) ) {
+			update_option( 'cp_pepper_ok', true );
+
+			ob_start();
+			if ( false === ( $creds = request_filesystem_credentials( admin_url(), '', false, false, null ) ) ) {
+				return; // Await filesystem access
+			}
+
+			if ( ! WP_Filesystem( $creds ) ) {
+				request_filesystem_credentials( admin_url(), '', true, false, null );
+				return;
+			}
+			ob_end_flush();
+
+			global $wp_filesystem;
+			if ( true === $wp_filesystem->exists( __DIR__ . '/pepper.php' ) && false === $wp_filesystem->exists( $this->pepper_file ) ) {
+				if ( $wp_filesystem->move( __DIR__ . '/pepper.php', $this->pepper_file ) ) {
+					do_action( 'cp_pepper_file_migrated' );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Determines if the pepper is loaded.
+	 *
+	 * @since 2.0.0
+	 */
+	public function get_pepper_status() {
+		if ( empty( $this->get_pepper() ) ) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Determines if the plugin is activated.
+	 *
+	 * @since 2.0.0
+	 */
+	public function get_plugin_status() {
+		return true;
+	}
+
+	/**
 	 * Menu creation.
 	 *
-	 * Register the menu under options-general and add the generate action.
+	 * Register the menu under Settings in Network Admin screen in multisite mode, or under Options->General in single-site mode.
+	 * Add the generate action.
 	 *
 	 * @since 1.0.0
 	 */
 	public function create_settings_menu() {
-		$this->screen = add_submenu_page(
-			'options-general.php',
-			esc_html__( 'Pepper' ),
-			esc_html__( 'Pepper' ),
-			'manage_options',
-			self::SLUG,
-			array( $this, 'render_menu' ),
-		);
+		if ( is_network_admin() ) {
+			$this->screen = add_submenu_page(
+				'settings.php',
+				esc_html__( 'Pepper' ),
+				esc_html__( 'Pepper' ),
+				'manage_options',
+				self::SLUG,
+				array( $this, 'render_menu' ),
+			);
+		} else {
+			if ( ! is_multisite() ) {
+				$this->screen = add_submenu_page(
+					'options-general.php',
+					esc_html__( 'Pepper' ),
+					esc_html__( 'Pepper' ),
+					'manage_options',
+					self::SLUG,
+					array( $this, 'render_menu' ),
+				);
+			}
+		}
 		add_action( 'load-' . $this->screen, array( $this, 'generate_action' ) );
 	}
 
@@ -114,8 +188,15 @@ class PepperPassword {
 	 */
 	public function create_settings_link( $links, $plugin_file_name ) {
 		if ( strpos( $plugin_file_name, basename( __FILE__ ) ) !== false ) {
-			$setting_link = '<a href="' . admin_url( 'options-general.php?page=' . self::SLUG ) . '">' . esc_html__( 'Settings' ) . '</a>';
-			array_unshift( $links, $setting_link );
+			if ( is_multisite() ) {
+				if ( is_network_admin() ) {
+					$setting_link = '<a href="' . network_admin_url( 'settings.php?page=' . self::SLUG ) . '">' . esc_html__( 'Settings', 'cp-pepper' ) . '</a>';
+					array_unshift( $links, $setting_link );
+				}
+			} else {
+				$setting_link = '<a href="' . admin_url( 'options-general.php?page=' . self::SLUG ) . '">' . esc_html__( 'Settings', 'cp-pepper' ) . '</a>';
+				array_unshift( $links, $setting_link );
+			}
 		}
 
 		return $links;
@@ -200,12 +281,14 @@ $current_pepper = \'' . $pepper . '\';
 			wp_die( esc_html__( 'Unauthorized.' ) );
 		}
 
-		if ( false === ( $creds = request_filesystem_credentials( admin_url( 'options-general.php?page=' . self::SLUG ), '', false, false, null ) ) ) {
+		$url = is_multisite() ? network_admin_url( 'settings.php?page=' . self::SLUG ) : admin_url( 'options-general.php?page=' . self::SLUG );
+
+		if ( false === ( $creds = request_filesystem_credentials( $url, '', false, false, null ) ) ) {
 			return; // Await filesystem access
 		}
 
 		if ( ! WP_Filesystem( $creds ) ) {
-			request_filesystem_credentials( admin_url( 'options-general.php?page=' . self::SLUG ), '', true, false, null );
+			request_filesystem_credentials( $url, '', true, false, null );
 			return;
 		}
 
@@ -243,7 +326,7 @@ $current_pepper = \'' . $pepper . '\';
 		$button  = $pepper === '' ? esc_html__( 'Enable Pepper' ) : esc_html__( 'Renew Pepper' );
 
 		echo '<p>' . esc_html( $message ) . '</p>';
-		echo '<form action="' . esc_url_raw( add_query_arg( array( 'action' => 'generate' ), admin_url( 'options-general.php?page=' . self::SLUG ) ) ) . '" method="POST">';
+		echo '<form action="' . esc_url_raw( add_query_arg( array( 'action' => 'generate' ), $url ) ) . '" method="POST">';
 		wp_nonce_field( 'generate', '_cppepper' );
 		echo '<input type="submit" class="button button-primary" id="submit_button" value="' . esc_html( $button ) . '"></input> ';
 		echo '</form></div></div>';
@@ -290,11 +373,40 @@ $current_pepper = \'' . $pepper . '\';
 			return false;
 		}
 
-		$pepper_result = $this->get_pepper() === '' ? esc_html__( 'Pepper enabled.' ) : esc_html__( 'Pepper renewed.' );
+		$pepper_renewed = ! empty( $this->get_pepper() );
+		$pepper_result  = $pepper_renewed ? esc_html__( 'Pepper renewed.' ) : esc_html__( 'Pepper enabled.' );
 		set_transient( 'cp_pepper_generate_response', $pepper_result, 30 );
 
 		$pepper = $this->random_pepper();
 		$this->set_pepper( $pepper );
+
+		// Show the password reset nag also after re-enabling the pepper.
+		global $wpdb;
+		$data  = array( 'meta_key' => 'pepper_renewed' );
+		$where = array( 'meta_key' => 'peppered_hash' );
+		$wpdb->update(
+			$wpdb->prefix . 'usermeta',
+			$data,
+			$where,
+			array( '%s' ),
+			array( '%s' )
+		);
+
+		if ( $pepper_renewed ) {
+			/**
+			* This action is fired after the pepper is renewed.
+			*
+			* @since 2.0.0
+			*/
+			do_action( 'cp_pepper_renewed' );
+		} else {
+			/**
+			* This action is fired after the pepper is enabled.
+			*
+			* @since 2.0.0
+			*/
+			do_action( 'cp_pepper_enabled' );
+		}
 
 		$sendback = remove_query_arg( array( 'action', '_cppepper' ), wp_get_referer() );
 		wp_safe_redirect( $sendback );
