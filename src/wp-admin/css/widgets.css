@@ -45,8 +45,18 @@ summary.widget-title {
 	padding-left: 5px;
 }
 
+.image-details .column-settings h3 {
+	margin: 1em 0 0 1em;
+}
+
+.image-details .column-settings details h3 {
+	margin-left: 0;
+}
+
 summary.widget-title::marker,
-summary.widget-title::-webkit-details-marker {
+summary.widget-title::-webkit-details-marker,
+.advanced-section summary::marker,
+.advanced-section summary::-webkit-details-marker {
 	font-size: 1.4em;
 	cursor: pointer;
 }
@@ -117,6 +127,7 @@ summary.widget-title::-webkit-details-marker {
 	cursor: pointer;
 	background-color: #f0f0f1;
 	color: #2c3338;
+	margin-bottom: 1em;
 }
 
 .media-widget-control .attachment-media-view .button-add-media:hover {
@@ -375,6 +386,10 @@ summary.sidebar-name::marker,
 summary.sidebar-name::-webkit-details-marker {
 	font-size: 1.2em;
 	cursor: pointer;
+}
+
+.advanced-section summary {
+	padding-left: 1.2em
 }
 
 .widgets-holder-wrap .description {
@@ -824,6 +839,9 @@ ul.CodeMirror-hints {
 .widget-content fieldset {
 	margin: 1em 0;
 	font-size: 1.2em;
+}
+.widget-content .media-widget-control fieldset {
+	font-size: 1.1em;
 }
 
 /* =Media Queries
