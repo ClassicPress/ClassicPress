@@ -380,17 +380,19 @@ $current_pepper = \'' . $pepper . '\';
 		$pepper = $this->random_pepper();
 		$this->set_pepper( $pepper );
 
+		// Show the password reset nag also after re-enabling the pepper.
+		global $wpdb;
+		$data  = array( 'meta_key' => 'pepper_renewed' );
+		$where = array( 'meta_key' => 'peppered_hash' );
+		$wpdb->update(
+			$wpdb->prefix . 'usermeta',
+			$data,
+			$where,
+			array( '%s' ),
+			array( '%s' )
+		);
+
 		if ( $pepper_renewed ) {
-			global $wpdb;
-			$data  = array( 'meta_key' => 'pepper_renewed' );
-			$where = array( 'meta_key' => 'peppered_hash' );
-			$wpdb->update(
-				$wpdb->prefix . 'usermeta',
-				$data,
-				$where,
-				array( '%s' ),
-				array( '%s' )
-			);
 			/**
 			* This action is fired after the pepper is renewed.
 			*
