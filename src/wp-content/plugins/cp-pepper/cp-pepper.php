@@ -97,9 +97,8 @@ class PepperPassword {
 	 * @since 2.0.0
 	 */
 	public function migrate() {
-		$flag = get_option( 'cp_pepper_ok' );
 		// Only attempt to migrate once
-		if ( false === $flag ) {
+		if ( false === get_option( 'cp_pepper_ok' ) ) {
 			update_option( 'cp_pepper_ok', true );
 
 			ob_start();
