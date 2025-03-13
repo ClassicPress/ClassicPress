@@ -20,10 +20,7 @@ class Tests_Functions_CleanDirsizeCache extends WP_UnitTestCase {
 	 * @param string $expected_message Expected notice message.
 	 */
 	public function test_clean_dirsize_cache_with_invalid_inputs( $path, $expected_message ) {
-		$this->expectNotice();
-		$this->expectNoticeMessage( $expected_message );
-
-		clean_dirsize_cache( $path );
+		$this->assertExpectedError( 'clean_dirsize_cache', array( $expected_message, $path ) );
 	}
 
 	/**
