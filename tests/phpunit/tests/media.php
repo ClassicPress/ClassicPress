@@ -172,7 +172,7 @@ CAP;
 		$this->assertSame( 1, substr_count( $result, 'alignnone' ) );
 		$this->assertSame( 1, substr_count( $result, self::CAPTION ) );
 
-		$this->assertSame( 1, substr_count( $result, 'width: 30' ) );
+		$this->assertSame( 1, substr_count( $result, 'width: 20' ) );
 	}
 
 	public function test_img_caption_shortcode_with_old_format_id_and_align() {
