@@ -1112,7 +1112,7 @@ class WP_Media_List_Table extends WP_List_Table {
 							</div>
 						</div>
 					</fieldset>
-			
+
 					<fieldset class="inline-edit-col-center inline-edit-categories">
 						<div class="inline-edit-col">
 							<span class="title inline-edit-categories-label"><?php echo esc_html_e( 'Media Categories' ); ?></span>
@@ -1172,17 +1172,17 @@ class WP_Media_List_Table extends WP_List_Table {
 					</fieldset>
 
 					<div class="submit inline-edit-save">
-						<input id="bulk-edit-update" type="submit" name="bulk_edit" class="button button-primary" value="<?php esc_attr_e( 'Update' ); ?>">				
+						<input id="bulk-edit-update" type="submit" name="bulk_edit" class="button button-primary" value="<?php esc_attr_e( 'Update' ); ?>">
 						<button type="button" class="button cancel"><?php esc_html_e( 'Cancel' ); ?></button>
-				
+
 						<input type="hidden" name="upload" value="list">
 						<input type="hidden" name="screen" value="upload">
-				
+
 						<div class="notice notice-error notice-alt inline hidden">
 							<p class="error"></p>
 						</div>
 					</div>
-					
+
 				</div>
 			</td>
 		</tr>
@@ -1207,8 +1207,8 @@ class WP_Media_List_Table extends WP_List_Table {
 							<fieldset class="inline-edit-date">
 								<legend><span class="title"><?php echo esc_html_e( 'Date' ); ?></span></legend>
 								<div class="timestamp-wrap">
-									<label for="quick-month">
-										<span class="screen-reader-text"><?php echo esc_html_e( 'Month' ); ?></span>				
+									<label for="quick-month" style="display:none;">
+										<span class="screen-reader-text"><?php echo esc_html_e( 'Month' ); ?></span>
 									</label>
 									<select id="quick-month" class="form-required" name="mm">
 										<option value="01" data-text="Jan"><?php echo esc_html_e( '01-Jan' ); ?></option>
@@ -1227,11 +1227,11 @@ class WP_Media_List_Table extends WP_List_Table {
 									<label for="quick-day">
 										<span class="screen-reader-text"><?php echo esc_html_e( 'Day' ); ?></span>
 									</label>
-									<input id="quick-day" type="number" name="jj" value="" size="2" maxlength="2" autocomplete="off" class="form-required" style="width:3.7em">&nbsp;,
+									<input id="quick-day" type="text" name="jj" value="" size="2" maxlength="2" autocomplete="off" class="form-required">&nbsp;,
 									<label for="quick-year">
 										<span class="screen-reader-text"><?php echo esc_html_e( 'Year' ); ?></span>
 									</label>
-									<input id="quick-year" type="number" name="aa" value="" size="4" maxlength="4" autocomplete="off" class="form-required" style="width:5em">
+									<input id="quick-year" type="text" name="aa" value="" size="4" maxlength="4" autocomplete="off" class="form-required">
 								</div>
 								<input type="hidden" id="ss" name="ss" value="30">
 							</fieldset>
@@ -1254,7 +1254,7 @@ class WP_Media_List_Table extends WP_List_Table {
 							</select>
 						</div>
 					</fieldset>
-			
+
 					<fieldset class="inline-edit-col-center inline-edit-categories">
 						<div class="inline-edit-col">
 							<span class="title inline-edit-categories-label"><?php echo esc_html_e( 'Media Categories' ); ?></span>
@@ -1279,15 +1279,17 @@ class WP_Media_List_Table extends WP_List_Table {
 
 					<fieldset class="inline-edit-col-right">
 						<div class="inline-edit-tags-wrap">
-							<label for="quick-media-tags" class="inline-edit-tags">
+							<label for="quick-media-tags">
 								<span class="title"><?php esc_html_e( 'Media Tags' ); ?></span>
 							</label>
+							<label class="inline-edit-tags">
 							<div id="inline-container" class="inline-container">
 								<div hidden></div>
 								<textarea id="quick-media-tags" data-wp-taxonomy="media_post_tag" cols="22" rows="1" name="media_post_tag" class="media_post_tag" aria-describedby="inline-edit-post_tag-desc"></textarea>
 								<div class="container__suggestions"></div>
 							</div>
 							<p class="howto" id="inline-edit-post_tag-desc"><?php esc_html_e( 'Separate tags with commas' ); ?></p>
+							<label>
 						</div>
 
 						<div id="attachment-attributes">
@@ -1316,12 +1318,12 @@ class WP_Media_List_Table extends WP_List_Table {
 
 					<div class="submit inline-edit-save">
 						<?php wp_nonce_field( 'quickeditattachment', '_inline_edit_attachment', false ); ?>
-						<button id="quick-edit-update" type="button" class="button button-primary save"><?php esc_attr_e( 'Update' ); ?></button>				
+						<button id="quick-edit-update" type="button" class="button button-primary save"><?php esc_attr_e( 'Update' ); ?></button>
 						<button type="button" class="button cancel"><?php esc_html_e( 'Cancel' ); ?></button>
-				
+
 						<input type="hidden" name="upload" value="list">
 						<input type="hidden" name="screen" value="upload">
-				
+
 						<div class="notice notice-error notice-alt inline hidden">
 							<p class="error"></p>
 						</div>
