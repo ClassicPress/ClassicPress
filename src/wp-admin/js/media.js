@@ -283,6 +283,276 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	};
 
 	/**
+	 * Click event handler for Quick/Bulk Edit.
+	 *
+	 */
+	function doactionHandler( event ) {
+		var tr, checkboxes, delButtons, dateSplit, author, authorsList, cats,
+			catsArray, categoriesList, mediaTags, hiddenTr, cancel, inputs,
+			te = '',
+			quickEdit = document.getElementById( 'quick-edit' ),
+			bulkEdit = document.getElementById( 'bulk-edit' ),
+			optionValue = document.querySelector( 'select[name="action"]' ).value,
+			number = 0,
+			count = 0,
+			columns = [ ...document.querySelector( '.widefat thead tr' ).children ],
+			selectAll1 = document.getElementById( 'cb-select-all-1' ),
+			selectAll2 = document.getElementById( 'cb-select-all-2' );
+
+		// Set default state in case a Bulk or Quick Edit has already been opened.
+		bulkEdit.style.display = 'none';
+		document.body.append( bulkEdit );
+		quickEdit.style.display = 'none';
+		document.body.append( quickEdit );
+
+		/**
+			* Handle the bulk action based on its value.
+			*/
+		// If Bulk Actions is selected, reload the page without any query args.
+		if ( '-1' === optionValue ) {
+			event.preventDefault();
+			location.href = location.pathname;
+
+		// Otherwise apply the appropriate values.
+		} else if ( 'attach' === optionValue ) {
+			event.preventDefault();
+			findPosts.open();
+		} else if ( 'delete' === optionValue ) {
+			if ( ! showNotice.warn() ) {
+				event.preventDefault();
+			}
+		} else if ( 'edit' === optionValue ) {
+			event.preventDefault();
+			checkboxes = document.querySelectorAll( 'tbody th.check-column input[type="checkbox"]' );
+
+			// Create hidden element for inserting above Bulk or Quick Edit to maintain striping.
+			hiddenTr = document.createElement( 'tr' );
+			hiddenTr.className = 'hidden';
+
+			/**
+				* Create a HTML div with the title and a
+				* link(delete-icon) for each selected media item.
+				*
+				* Get the selected posts based on the checked
+				* checkboxes in the post table.
+				*/
+			checkboxes.forEach( function( checkbox ) {
+
+				// If the checkbox for a post is selected, add the post to the edit list.
+				if ( checkbox.checked ) {
+					var id = checkbox.value,
+						theTitle = document.getElementById( 'post-' + id ).querySelector( ' .filename' ).innerHTML || wp.i18n.__( '(no title)' ),
+						buttonVisuallyHiddenText = wp.i18n.sprintf(
+							/* translators: %s: Post title. */
+							wp.i18n.__( 'Remove &#8220;%s&#8221; from Bulk Edit' ),
+							theTitle
+						);
+
+					number++;
+					if ( number === 1 ) {
+						tr = document.getElementById( 'post-' + id );
+					}
+
+					te += '<li class="ntdelitem" name="attachment[]" value="' + id + '"><button type="button" id="_' + id + '" class="button-link ntdelbutton"><span class="screen-reader-text">' + buttonVisuallyHiddenText + '</span></button><span class="ntdeltitle" aria-hidden="true">' + theTitle + '</span></li>';
+				}
+			} );
+
+			// Set the number of columns.
+			columns.forEach( function( column ) {
+				if ( ! column.className.includes( 'hidden' ) ) {
+					count++;
+				}
+			} );
+			bulkEdit.querySelector( 'td' ).setAttribute( 'colspan', count );
+			quickEdit.querySelector( 'td' ).setAttribute( 'colspan', count );
+
+			if ( number < 1 ) {
+
+				// No checkboxes were checked, so hide the bulk and quick edit rows.
+				bulkEdit.style.display = 'none';
+				document.body.append( bulkEdit );
+				quickEdit.style.display = 'none';
+				document.body.append( quickEdit );
+
+			} else if ( number === 1 && ! selectAll1.checked && ! selectAll2.checked ) {
+
+				// Quick Edit: reset all fields except nonce and media_category[]
+				inputs = quickEdit.querySelectorAll( 'input:not(#_inline_edit_attachment):not([name="media_category[]"]), select, textarea' );
+				inputs.forEach( function( input ) {
+					input.value = '';
+				} );
+
+				// Replace the row with the Quick Edit row.
+				document.getElementById( 'the-list' ).prepend( hiddenTr );
+				quickEdit.dataset.id = tr.id;
+				tr.before( quickEdit );
+				quickEdit.classList.add( 'inline-editor' );
+				quickEdit.style.display = '';
+				tr.style.display = 'none';
+
+				// Scroll to Quick Edit.
+				quickEdit.scrollIntoView( {
+					behavior: 'smooth'
+				} );
+
+				// Check the box for the current author.
+				author = tr.querySelector( '.column-author a' ).textContent;
+				authorsList = quickEdit.querySelectorAll( '#quick-author option' );
+				authorsList.forEach( function( item ) {
+					if ( item.textContent === author ) {
+						document.getElementById( 'quick-author' ).value = item.value;
+						item.setAttribute( 'selected', 'selected' );
+					}
+				} );
+
+				// Check the boxes for the appropriate media categories.
+				cats = tr.querySelectorAll( '.column-taxonomy-media_category a' );
+				catsArray = [];
+				cats.forEach( function( cat ) {
+					catsArray.push( cat.textContent );
+				} );
+				categoriesList = quickEdit.querySelectorAll( '.category-checklist li' );
+				categoriesList.forEach( function( item ) {
+					if ( catsArray.includes( item.querySelector( 'label' ).textContent ) ) {
+						item.querySelector( 'input' ).checked = true;
+					} else {
+						item.querySelector( 'input' ).checked = false;
+					}
+				} );
+
+				// Enable autocomplete for tags.
+				mediaTags = tr.querySelector( '.column-taxonomy-media_post_tag a' ) ? tr.querySelector( '.column-taxonomy-media_post_tag a' ).textContent : '';
+				autoCompleteTextarea( quickEdit.querySelector( 'textarea' ) );
+
+				// Split date into year, month, and day.
+				dateSplit = tr.querySelector( '.column-date time' ).getAttribute( 'datetime' ).split( '/' );
+				quickEdit.querySelector( '[name="mm"]' ).value = dateSplit[1];
+				quickEdit.querySelector( '[name="jj"]' ).value = dateSplit[2];
+				quickEdit.querySelector( '[name="aa"]' ).value = dateSplit[0];
+
+				// Fill the other relevant boxes.
+				quickEdit.querySelector( '[name="post_title"]' ).value = tr.querySelector( '.column-title strong a' ).textContent.trim();
+				quickEdit.querySelector( '[name="post_name"]' ).value = tr.querySelector( '.column-title .row-actions .copy-attachment-url' ).dataset.clipboardText;
+				quickEdit.querySelector( '#quick-media-tags' ).textContent = mediaTags;
+				quickEdit.querySelector( '[name="alt"]' ).value = tr.querySelector( '.column-alt' ).textContent;
+				quickEdit.querySelector( '[name="post_excerpt"]' ).value = tr.querySelector( '.column-caption' ).textContent;
+				quickEdit.querySelector( '[name="post_content"]' ).value = tr.querySelector( '.column-desc' ).textContent;
+
+				// Update
+				document.getElementById( 'quick-edit-update' ).addEventListener( 'click', function() {
+					var id = tr.id.replace( 'post-', '' );
+					saveAttachments( quickEdit, id );
+					document.getElementById( 'bulk-action-selector-top' ).value = '-1';
+					document.getElementById( 'bulk-action-selector-bottom' ).value = '-1';
+
+					// Allow time for element to be updated.
+					setTimeout( function() {
+						tr.style.display = '';
+						quickEdit.style.display = 'none';
+						document.body.append( quickEdit );
+					}, 100 );
+				}, { once: true } );
+			} else {
+				document.querySelectorAll( 'tr' ).forEach( function( item ) {
+					if ( item.style.display === 'none' ) {
+						item.style.display = '';
+					}
+				} );
+
+				// Bulk Edit: insert the editor at the top of the table.
+				document.getElementById( 'the-list' ).prepend( bulkEdit );
+				document.getElementById( 'the-list' ).prepend( hiddenTr );
+				bulkEdit.classList.add( 'inline-editor' );
+				bulkEdit.style.display = '';
+
+				// Make sure any element hidden for Quick Edit is visible.
+				tr.style.display = '';
+
+				// Enable autocomplete for tags.
+				autoCompleteTextarea( bulkEdit.querySelector( 'textarea' ) );
+
+				// Populate the list of items to bulk edit.
+				document.getElementById( 'bulk-titles' ).innerHTML = '<ul id="bulk-titles-list" role="list">' + te + '</ul>';
+
+				// Scroll to Bulk Edit.
+				bulkEdit.scrollIntoView( {
+					behavior: 'smooth'
+				} );
+
+				/**
+					* Binds on click events to handle the list of items to bulk edit.
+					*
+					* @listens click
+					*/
+				delButtons = document.querySelectorAll( '#bulk-titles .ntdelbutton' );
+				delButtons.forEach( function( delButton ) {
+					delButton.addEventListener( 'click', function() {
+						var id     = delButton.id,
+							parent = delButton.parentNode,
+							prev   = parent.previousElementSibling ? parent.previousElementSibling.querySelector( '.ntdelbutton' ) : null,
+							next   = parent.nextElementSibling ? parent.nextElementSibling.querySelector( '.ntdelbutton' ) : null;
+
+						document.querySelector( 'table.widefat input[value="' + id.replace( '_', '' ) + '"]' ).checked = false;
+						document.getElementById( id ).parentNode.remove();
+						wp.a11y.speak( wp.i18n.__( 'Item removed.' ), 'assertive' );
+
+						// Move focus to a proper place when items are removed.
+						if ( next !== null ) {
+							next.focus();
+						} else if ( prev !== null ) {
+							prev.focus();
+						} else {
+							hiddenTr.remove();
+							document.getElementById( 'bulk-titles-list' ).remove();
+							bulkEdit.style.display = 'none';
+							document.body.append( bulkEdit );
+							wp.a11y.speak( wp.i18n.__( 'All selected items have been removed. Select new items to use Bulk Actions.' ) );
+						}
+					} );
+				} );
+
+				// Update
+				document.getElementById( 'bulk-edit-update' ).addEventListener( 'click', function() {
+					hiddenTr.remove();
+					//bulkEdit.style.display = 'none';
+					//document.body.append( bulkEdit );
+				} );
+			}
+
+			// Set initial focus on the Quick/Bulk Edit region.
+			document.querySelector( '.inline-edit-wrapper' ).setAttribute( 'tabindex', '-1' );
+			document.querySelector( '.inline-edit-wrapper' ).focus();
+
+			// Cancel button and Escape key.
+			cancel = document.querySelector( '.inline-edit-save .cancel' );
+			cancel.addEventListener( 'click', function() {
+				if ( hiddenTr != null ) {
+					hiddenTr.remove();
+				}
+				tr.style.display = '';
+				document.getElementById( 'bulk-action-selector-top' ).value = '-1';
+				document.getElementById( 'bulk-action-selector-bottom' ).value = '-1';
+				bulkEdit.style.display = 'none';
+				document.body.append( bulkEdit );
+				quickEdit.style.display = 'none';
+				document.body.append( quickEdit );
+			} );
+
+			quickEdit.addEventListener( 'keydown', function( e ) {
+				if ( e.key === 'Escape' ) {
+					cancel.click();
+				}
+			} );
+
+			bulkEdit.addEventListener( 'keydown', function( e ) {
+				if ( e.key === 'Escape' ) {
+					cancel.click();
+				}
+			} );
+		}
+	}
+
+	/**
 	 * Saves the changes made in the quick edit window to the post.
 	 * Ajax saving is only for Quick Edit and not for bulk edit.
 	 *
@@ -417,272 +687,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Binds the attach form close dialog click event.
 		document.getElementById( 'find-posts-close' ).addEventListener( 'click', findPosts.close );
 
-		// Binds the bulk action events to the submit buttons.
-		document.querySelectorAll( '#doaction, #doaction2' ).forEach( function( action ) {
-			action.addEventListener( 'click', function( event ) {
-				var tr, checkboxes, delButtons, dateSplit, author, authorsList, cats,
-					catsArray, categoriesList, mediaTags, hiddenTr, cancel, inputs,
-					te = '',
-					quickEdit = document.getElementById( 'quick-edit' ),
-					bulkEdit = document.getElementById( 'bulk-edit' ),
-					optionValue = document.querySelector( 'select[name="action"]' ).value,
-					number = 0,
-					count = 0,
-					columns = [ ...document.querySelector( '.widefat thead tr' ).children ],
-					selectAll1 = document.getElementById( 'cb-select-all-1' ),
-					selectAll2 = document.getElementById( 'cb-select-all-2' );
-
-				// Set default state in case a Bulk or Quick Edit has already been opened.
-				bulkEdit.style.display = 'none';
-				document.body.append( bulkEdit );
-				quickEdit.style.display = 'none';
-				document.body.append( quickEdit );
-
-				/**
-				 * Handle the bulk action based on its value.
-				 */
-				// If Bulk Actions is selected, reload the page without any query args.
-				if ( '-1' === optionValue ) {
-					event.preventDefault();
-					location.href = location.pathname;
-
-				// Otherwise apply the appropriate values.
-				} else if ( 'attach' === optionValue ) {
-					event.preventDefault();
-					findPosts.open();
-				} else if ( 'delete' === optionValue ) {
-					if ( ! showNotice.warn() ) {
-						event.preventDefault();
-					}
-				} else if ( 'edit' === optionValue ) {
-					event.preventDefault();
-					checkboxes = document.querySelectorAll( 'tbody th.check-column input[type="checkbox"]' );
-
-					// Create hidden element for inserting above Bulk or Quick Edit to maintain striping.
-					hiddenTr = document.createElement( 'tr' );
-					hiddenTr.className = 'hidden';
-
-					/**
-					 * Create a HTML div with the title and a
-					 * link(delete-icon) for each selected media item.
-					 *
-					 * Get the selected posts based on the checked
-					 * checkboxes in the post table.
-					 */
-					checkboxes.forEach( function( checkbox ) {
-
-						// If the checkbox for a post is selected, add the post to the edit list.
-						if ( checkbox.checked ) {
-							var id = checkbox.value,
-								theTitle = document.getElementById( 'post-' + id ).querySelector( ' .filename' ).innerHTML || wp.i18n.__( '(no title)' ),
-								buttonVisuallyHiddenText = wp.i18n.sprintf(
-									/* translators: %s: Post title. */
-									wp.i18n.__( 'Remove &#8220;%s&#8221; from Bulk Edit' ),
-									theTitle
-								);
-
-							number++;
-							if ( number === 1 ) {
-								tr = document.getElementById( 'post-' + id );
-							}
-
-							te += '<li class="ntdelitem" name="attachment[]" value="' + id + '"><button type="button" id="_' + id + '" class="button-link ntdelbutton"><span class="screen-reader-text">' + buttonVisuallyHiddenText + '</span></button><span class="ntdeltitle" aria-hidden="true">' + theTitle + '</span></li>';
-						}
-					} );
-
-					// Set the number of columns.
-					columns.forEach( function( column ) {
-						if ( ! column.className.includes( 'hidden' ) ) {
-							count++;
-						}
-					} );
-					bulkEdit.querySelector( 'td' ).setAttribute( 'colspan', count );
-					quickEdit.querySelector( 'td' ).setAttribute( 'colspan', count );
-
-					if ( number < 1 ) {
-
-						// No checkboxes were checked, so hide the bulk and quick edit rows.
-						bulkEdit.style.display = 'none';
-						document.body.append( bulkEdit );
-						quickEdit.style.display = 'none';
-						document.body.append( quickEdit );
-
-					} else if ( number === 1 && ! selectAll1.checked && ! selectAll2.checked ) {
-
-						// Quick Edit: reset all fields except nonce
-						inputs = quickEdit.querySelectorAll( 'input:not(#_inline_edit_attachment), select, textarea' );
-						inputs.forEach( function( input ) {
-							input.value = '';
-						} );
-
-						// Replace the row with the Quick Edit row.
-						document.getElementById( 'the-list' ).prepend( hiddenTr );
-						quickEdit.dataset.id = tr.id;
-						tr.before( quickEdit );
-						quickEdit.classList.add( 'inline-editor' );
-						quickEdit.style.display = '';
-						tr.style.display = 'none';
-
-						// Scroll to Quick Edit.
-						quickEdit.scrollIntoView( {
-							behavior: 'smooth'
-						} );
-
-						// Check the box for the current author.
-						author = tr.querySelector( '.column-author a' ).textContent;
-						authorsList = quickEdit.querySelectorAll( '#quick-author option' );
-						authorsList.forEach( function( item ) {
-							if ( item.textContent === author ) {
-								document.getElementById( 'quick-author' ).value = item.value;
-								item.setAttribute( 'selected', 'selected' );
-							}
-						} );
-
-						// Check the boxes for the appropriate media categories.
-						cats = tr.querySelectorAll( '.column-taxonomy-media_category a' );
-						catsArray = [];
-						cats.forEach( function( cat ) {
-							catsArray.push( cat.textContent );
-						} );
-						categoriesList = quickEdit.querySelectorAll( '.category-checklist li' );
-						categoriesList.forEach( function( item ) {
-							if ( catsArray.includes( item.querySelector( 'label' ).textContent ) ) {
-								item.querySelector( 'input' ).checked = true;
-							}
-						} );
-
-						// Enable autocomplete for tags.
-						mediaTags = tr.querySelector( '.column-taxonomy-media_post_tag a' ) ? tr.querySelector( '.column-taxonomy-media_post_tag a' ).textContent : '';
-						autoCompleteTextarea( quickEdit.querySelector( 'textarea' ) );
-
-						// Split date into year, month, and day.
-						dateSplit = tr.querySelector( '.column-date time' ).getAttribute( 'datetime' ).split( '/' );
-						quickEdit.querySelector( '[name="mm"]' ).value = dateSplit[1];
-						quickEdit.querySelector( '[name="jj"]' ).value = dateSplit[2];
-						quickEdit.querySelector( '[name="aa"]' ).value = dateSplit[0];
-
-						// Fill the other relevant boxes.
-						quickEdit.querySelector( '[name="post_title"]' ).value = tr.querySelector( '.column-title strong a' ).textContent.trim();
-						quickEdit.querySelector( '[name="post_name"]' ).value = tr.querySelector( '.column-title .row-actions .copy-attachment-url' ).dataset.clipboardText;
-						quickEdit.querySelector( '#quick-media-tags' ).textContent = mediaTags;
-						quickEdit.querySelector( '[name="alt"]' ).value = tr.querySelector( '.column-alt' ).textContent;
-						quickEdit.querySelector( '[name="post_excerpt"]' ).value = tr.querySelector( '.column-caption' ).textContent;
-						quickEdit.querySelector( '[name="post_content"]' ).value = tr.querySelector( '.column-desc' ).textContent;
-
-						// Update.
-						document.getElementById( 'quick-edit-update' ).addEventListener( 'click', function() {
-							var id = tr.id.replace( 'post-', '' );
-							saveAttachments( quickEdit, id );
-							document.getElementById( 'bulk-action-selector-top' ).value = '-1';
-							document.getElementById( 'bulk-action-selector-bottom' ).value = '-1';
-
-							// Allow time for element to be updated.
-							setTimeout( function() {
-								tr.style.display = '';
-								quickEdit.style.display = 'none';
-								document.body.append( quickEdit );
-							}, 100 );
-						} );
-					} else {
-						document.querySelectorAll( 'tr' ).forEach( function( item ) {
-							if ( item.style.display === 'none' ) {
-								item.style.display = '';
-							}
-						} );
-
-						// Bulk Edit: insert the editor at the top of the table.
-						document.getElementById( 'the-list' ).prepend( bulkEdit );
-						document.getElementById( 'the-list' ).prepend( hiddenTr );
-						bulkEdit.classList.add( 'inline-editor' );
-						bulkEdit.style.display = '';
-
-						// Make sure any element hidden for Quick Edit is visible.
-						tr.style.display = '';
-
-						// Enable autocomplete for tags.
-						autoCompleteTextarea( bulkEdit.querySelector( 'textarea' ) );
-
-						// Populate the list of items to bulk edit.
-						document.getElementById( 'bulk-titles' ).innerHTML = '<ul id="bulk-titles-list" role="list">' + te + '</ul>';
-
-						// Scroll to Bulk Edit.
-						bulkEdit.scrollIntoView( {
-							behavior: 'smooth'
-						} );
-
-						/**
-						 * Binds on click events to handle the list of items to bulk edit.
-						 *
-						 * @listens click
-						 */
-						delButtons = document.querySelectorAll( '#bulk-titles .ntdelbutton' );
-						delButtons.forEach( function( delButton ) {
-							delButton.addEventListener( 'click', function() {
-								var id     = delButton.id,
-									parent = delButton.parentNode,
-									prev   = parent.previousElementSibling ? parent.previousElementSibling.querySelector( '.ntdelbutton' ) : null,
-									next   = parent.nextElementSibling ? parent.nextElementSibling.querySelector( '.ntdelbutton' ) : null;
-
-								document.querySelector( 'table.widefat input[value="' + id.replace( '_', '' ) + '"]' ).checked = false;
-								document.getElementById( id ).parentNode.remove();
-								wp.a11y.speak( wp.i18n.__( 'Item removed.' ), 'assertive' );
-
-								// Move focus to a proper place when items are removed.
-								if ( next !== null ) {
-									next.focus();
-								} else if ( prev !== null ) {
-									prev.focus();
-								} else {
-									hiddenTr.remove();
-									document.getElementById( 'bulk-titles-list' ).remove();
-									bulkEdit.style.display = 'none';
-									document.body.append( bulkEdit );
-									wp.a11y.speak( wp.i18n.__( 'All selected items have been removed. Select new items to use Bulk Actions.' ) );
-								}
-							} );
-						} );
-
-						// Update
-						document.getElementById( 'bulk-edit-update' ).addEventListener( 'click', function() {
-							hiddenTr.remove();
-							//bulkEdit.style.display = 'none';
-							//document.body.append( bulkEdit );
-						} );
-					}
-
-					// Set initial focus on the Quick/Bulk Edit region.
-					document.querySelector( '.inline-edit-wrapper' ).setAttribute( 'tabindex', '-1' );
-					document.querySelector( '.inline-edit-wrapper' ).focus();
-
-					// Cancel button and Escape key.
-					cancel = document.querySelector( '.inline-edit-save .cancel' );
-					cancel.addEventListener( 'click', function() {
-						if ( hiddenTr != null ) {
-							hiddenTr.remove();
-						}
-						tr.style.display = '';
-						document.getElementById( 'bulk-action-selector-top' ).value = '-1';
-						document.getElementById( 'bulk-action-selector-bottom' ).value = '-1';
-						bulkEdit.style.display = 'none';
-						document.body.append( bulkEdit );
-						quickEdit.style.display = 'none';
-						document.body.append( quickEdit );
-					} );
-
-					quickEdit.addEventListener( 'keydown', function( e ) {
-						if ( e.key === 'Escape' ) {
-							cancel.click();
-						}
-					} );
-
-					bulkEdit.addEventListener( 'keydown', function( e ) {
-						if ( e.key === 'Escape' ) {
-							cancel.click();
-						}
-					} );
-				}
-			} );
-		} );
+		// Binds the Quick/Bulk Edit actions to the click event of the "doaction" buttons.
+		var doaction = document.getElementById( 'doaction' );
+		if ( doaction ) {
+			doaction.addEventListener( 'click', doactionHandler );
+		}
 
 		/**
 		 * Enables clicking on the entire table row.
