@@ -103,24 +103,22 @@ function edit_user( $user_id = 0 ) {
 	}
 
 	/**
-	 * Enable adding of user to user taxonomies.
+	 * Enable adding of user taxonomies unless a filter is set to false.
 	 *
 	 * @since CP-2.1.0
 	 */
-	$tax_array = array();
-	$taxonomies = get_object_taxonomies( 'user', 'objects' );
-	if ( ! empty( $taxonomies ) ) {
-		foreach ( $taxonomies as $taxonomy ) {
-			$tax_array[] = $taxonomy->name;
-			foreach ( $tax_array as $tax_field ) {
-				if ( isset( $_POST[ $tax_field ] ) ) {
-					$tax_names = array();
-					foreach ( $_POST[ $tax_field ] as $tax_name ) {
-						$tax_names[] = wp_unslash( $tax_name );
+	if ( ! has_filter( 'cp_user_taxonomies', '__return_false' ) && ! has_filter( 'user_edit_taxonomies', '__return_false' ) ) {
+		$taxonomies = get_object_taxonomies( 'user' );
+		if ( ! empty( $taxonomies ) ) {
+			foreach ( $taxonomies as $taxonomy ) {
+				if ( isset( $_POST[ $taxonomy ] ) ) {
+					$term_slugs = array();
+					foreach ( $_POST[ $taxonomy ] as $term_slug ) {
+						$term_slugs[] = wp_unslash( $term_slug );
 					}
-					wp_set_object_terms( $user->ID, array_map( 'sanitize_text_field', $tax_names ), $taxonomy->name );
+					wp_set_object_terms( $user->ID, array_map( 'sanitize_title', array_unique( $term_slugs ) ), $taxonomy );
 				} else {
-					wp_delete_object_term_relationships( $user->ID, $taxonomy->name );
+					wp_delete_object_term_relationships( $user->ID, $taxonomy );
 				}
 			}
 		}
