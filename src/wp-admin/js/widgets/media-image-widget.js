@@ -328,7 +328,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				fetch( ajaxurl, {
 					method: 'POST',
 					credentials: 'same-origin',
-					body: formData,
+					body: formData
 				} )
 				.then( function( response ) {
 					if ( response.ok ) {
@@ -542,7 +542,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		fetch( ajaxurl, {
 			method: 'POST',
 			body: formData,
-			credentials: 'same-origin',
+			credentials: 'same-origin'
 		} )
 		.then( function( response ) {
 			if ( response.ok ) {
