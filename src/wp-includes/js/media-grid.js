@@ -22,8 +22,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		search = document.getElementById( 'media-search-input' ),
 		mediaCatSelect = document.getElementById( 'taxonomy=media_category&term' ) ? document.getElementById( 'taxonomy=media_category&term' ) : '',
 		mediaGrid = document.querySelector( '#media-grid ul' ),
-		startX = 0, // Store starting touch point
-		endX = 0;   // Store ending touch point
+		startTouchPosition = 0,
+		endTouchPosition = 0;
 
 	// Update details within modal
 	function setAddedMediaFields( id ) {
@@ -884,18 +884,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Handle touch navigation (touchstart event)
 	function touchStartHandler( e ) {
-		startX = e.touches[0].clientX;
+		startTouchPosition = e.touches[0].clientX;
 	}
 	// Handle touch navigation (touchend event)
-	// The swipe is considered valid if the horizontal distance moved (difference between startX and endX) is more than 50 pixels. This threshold prevents accidental small touches from triggering a swipe.
+	// The swipe is considered valid if the horizontal distance moved (difference between startTouchPosition and endTouchPosition) is more than 50 pixels. This threshold prevents accidental small touches from triggering a swipe.
 	function touchEndHandler( e ) {
-		endX = e.changedTouches[0].clientX;
+		endTouchPosition = e.changedTouches[0].clientX;
 
 		// Determine swipe direction
-		if ( endX - startX > 50 ) {
+		if ( endTouchPosition - startTouchPosition > 50 ) {
 			// Swipe left (next media)
 			prevModalDialog();
-		} else if ( startX - endX > 50 ) {
+		} else if ( startTouchPosition - endTouchPosition > 50 ) {
 			// Swipe right (previous media)
 			nextModalDialog();
 		}
