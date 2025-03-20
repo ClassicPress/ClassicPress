@@ -1107,6 +1107,7 @@ img {
 	padding: 0.2em;
 	margin-right: 1em;
 	background: #fff;
+	align-self: start;
 }
 #primary-menu.menu li {
 	letter-spacing: 0.1em;
@@ -1243,6 +1244,9 @@ header#page-title {
 }
 
 /* CONTENT */
+body.home #content {
+	margin-top: 2.6em;
+}
 .center {
 	text-align: center;
 }
@@ -1397,10 +1401,11 @@ p.text-rightcol,
 	padding-bottom: 1.5em;
 	display: flex;
 	justify-content: space-between;
+	gap: 1em;
 }
 .nav-previous,
 .nav-next {
-	width: 47%;
+	flex: 1;
 }
 .nav-next {
 	text-align: right;
@@ -1469,11 +1474,8 @@ nav a {
 	line-height: 1.6em;
 	background: transparent;
 }
-body.home #content {
-	border-bottom: none;
-}
 body.single-post #content {
-	margin-top: 4rem;
+	margin-top: 2.6em;
 }
 .single-post article header {
 	display: flex;
@@ -1850,9 +1852,6 @@ table.cp-logo-list .cp-logo-description {
 }
 
 /* BLOG PAGE */
-.blog #content {
-	margin: 0 auto;
-}
 .attachment-post-thumbnail {
 	max-width: 100%;
 }
