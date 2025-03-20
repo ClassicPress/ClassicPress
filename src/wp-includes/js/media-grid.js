@@ -1090,10 +1090,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	pond.on( 'processfile', function( error, file ) {
-		setTimeout( function() {
-			pond.removeFile( file.id );
-		}, 100 );
-		resetDataOrdering();
+		if ( ! error ) {
+			setTimeout( function() {
+				pond.removeFile( file.id );
+			}, 100 );
+			resetDataOrdering();
+		}
 	} );
 
 } );
