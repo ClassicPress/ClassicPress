@@ -89,6 +89,9 @@
 	<!-- Themes except the twenty* themes. -->
 	<exclude-pattern>/src/wp-content/themes/(?!twenty|the-classicpress-theme)*</exclude-pattern>
 
+	<!-- Languages. -->
+	<exclude-pattern>/src/wp-content/languages/*</exclude-pattern>
+
 	<rule ref="WordPress-Core"/>
 	<rule ref="Generic.CodeAnalysis.EmptyPHPStatement"/>
 
