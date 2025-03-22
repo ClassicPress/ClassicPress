@@ -1,14 +1,5 @@
-/**
- * @output wp-admin/js/widgets/media-image-widgets.js
- */
-
 /* eslint consistent-this: [ "error", "control" ] */
 /* global ajaxurl, IMAGE_WIDGET, console */
-
-/**
- * @namespace wp.mediaWidgets
- * @memberOf  wp
- */
 
 /**
  * @since CP 2.5.0
