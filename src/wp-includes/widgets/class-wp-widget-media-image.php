@@ -182,11 +182,12 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 				'class' => sprintf( 'image wp-image-%d %s', $attachment->ID, $instance['image_classes'] ),
 				'style' => 'max-width: 100%; height: auto;',
 			);
+
 			if ( ! empty( $instance['image_title'] ) ) {
 				$image_attributes['title'] = $instance['image_title'];
 			}
 
-			if ( $instance['alt'] ) {
+			if ( ! empty( $instance['alt'] ) ) {
 				$image_attributes['alt'] = $instance['alt'];
 			}
 
@@ -213,6 +214,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 			$caption          = $instance['caption'];
 			$width            = $instance['width'];
 			$classes          = 'image ' . $instance['image_classes'];
+
 			if ( 0 === $instance['width'] ) {
 				$instance['width'] = '';
 			}
@@ -296,6 +298,8 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 	 * @param array $instance Previously saved values from database.
 	 */
 	public function form( $instance ) {
+		$instance = array_merge( wp_list_pluck( $this->get_instance_schema(), 'default' ), $instance );
+
 		$title             = ! empty( $instance['title'] ) ? $instance['title'] : '';
 		$attachment_id     = ! empty( $instance['attachment_id'] ) ? $instance['attachment_id'] : 0;
 		$size              = ! empty( $instance['size'] ) ? $instance['size'] : 'full';
@@ -304,15 +308,15 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 		$link_url          = ! empty( $instance['link_url'] ) ? $instance['link_url'] : '';
 		$caption           = ! empty( $instance['caption'] ) ? $instance['caption'] : '';
 		$url               = ! empty( $instance['url'] ) ? $instance['url'] : '';
-		$width             = ! empty( $instance['width'] ) ? $instance['width'] : '';
-		$height            = ! empty( $instance['height'] ) ? $instance['height'] : '';
+		$width             = ! empty( $instance['width'] ) ? absint( $instance['width'] ) : 0;
+		$height            = ! empty( $instance['height'] ) ? absint( $instance['height'] ) : 0;
 		$image_classes     = ! empty( $instance['image_classes'] ) ? $instance['image_classes'] : '';
 		$link_classes      = ! empty( $instance['link_classes'] ) ? $instance['link_classes'] : '';
 		$link_rel          = ! empty( $instance['link_rel'] ) ? $instance['link_rel'] : '';
 		$link_target_blank = ! empty( $instance['link_target_blank'] ) ? '_blank' : '';
 		$link_image_title  = ! empty( $instance['link_image_title'] ) ? $instance['link_image_title'] : '';
 		$size_options      = ! empty( $instance['size_options'] ) ? $instance['size_options'] : '';
-		$nonce             = wp_create_nonce( 'image_editor-' . $attachment_id );
+
 		$attributes        = 'alt="' . $alt . '"';
 		$aria_label        = '';
 
@@ -343,7 +347,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 		 * @param int    $attachment_id The attachment ID.
 		 * @param string $url           The image file URL.
 		 */
-		apply_filters( 'cp_media_image_widget_image_attributes', $attributes, $alt, $aria_label, $attachment_id, $url );
+		$attributes = apply_filters( 'cp_media_image_widget_image_attributes', $attributes, $alt, $aria_label, $attachment_id, $url );
 
 		$image_html = '';
 		if ( $url ) {
@@ -368,7 +372,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 		}
 		?>
 
-		<div class="media-widget-control selected">	
+		<div class="media-widget-control selected">
 			<fieldset>
 				<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
 				<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" class="widefat" type="text" value="<?php echo esc_attr( $title ); ?>">
@@ -376,6 +380,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 
 			<?php
 			if ( $url ) {
+				$nonce = wp_create_nonce( 'image_editor-' . $attachment_id );
 				?>
 
 				<div class="media-widget-preview media_image populated"><?php echo $image_html; ?></div>
@@ -442,15 +447,15 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 		$instance['attachment_id']     = ! empty( $new_instance['attachment_id'] ) ? absint( $new_instance['attachment_id'] ) : 0;
 		$instance['url']               = ! empty( $new_instance['url'] ) ? sanitize_url( $new_instance['url'] ) : '';
 		$instance['size']              = ! empty( $new_instance['size'] ) ? sanitize_text_field( $new_instance['size'] ) : '';
-		$instance['width']             = ! empty( $new_instance['width'] ) ? sanitize_text_field( $new_instance['width'] ) : '';
-		$instance['height']            = ! empty( $new_instance['height'] ) ? sanitize_text_field( $new_instance['height'] ) : '';
+		$instance['width']             = ! empty( $new_instance['width'] ) ? absint( $new_instance['width'] ) : 0;
+		$instance['height']            = ! empty( $new_instance['height'] ) ? absint( $new_instance['height'] ) : 0;
 		$instance['caption']           = ! empty( $new_instance['caption'] ) ? wp_kses_post( $new_instance['caption'] ) : '';
 		$instance['alt']               = ! empty( $new_instance['alt'] ) ? sanitize_text_field( $new_instance['alt'] ) : '';
 		$instance['link_type']         = ! empty( $new_instance['link_type'] ) ? sanitize_text_field( $new_instance['link_type'] ) : '';
 		$instance['link_url']          = ! empty( $new_instance['link_url'] ) ? sanitize_url( $new_instance['link_url'] ) : '';
 		$instance['image_classes']     = ! empty( $new_instance['image_classes'] ) ? $this->sanitize_token_list( $new_instance['image_classes'] ) : '';
 		$instance['link_classes']      = ! empty( $new_instance['link_classes'] ) ? $this->sanitize_token_list( $new_instance['link_classes'] ) : '';
-		$instance['link_rel']          = ! empty( $new_instance['link_rel'] ) ? sanitize_url( $new_instance['link_rel'] ) : '';
+		$instance['link_rel']          = ! empty( $new_instance['link_rel'] ) ? $this->sanitize_token_list( $new_instance['link_rel'] ) : '';
 		$instance['link_target_blank'] = ! empty( $new_instance['link_target_blank'] ) ? '_blank' : '';
 		$instance['link_image_title']  = ! empty( $new_instance['link_image_title'] ) ? sanitize_text_field( $new_instance['link_image_title'] ) : '';
 		$instance['size_options']      = ! empty( $new_instance['size_options'] ) ? sanitize_text_field( $new_instance['size_options'] ) : '';

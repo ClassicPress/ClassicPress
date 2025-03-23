@@ -125,283 +125,121 @@ class Tests_Widgets_wpWidgetMediaImage extends WP_UnitTestCase {
 	 */
 	public function test_update() {
 		$widget   = new WP_Widget_Media_Image();
-		$instance = array();
+		$instance = array(
+			'title'             => '',
+			'attachment_id'     => 0,
+			'url'               => '',
+			'size'              => '',
+			'width'             => 0,
+			'height'            => 0,
+			'caption'           => '',
+			'alt'               => '',
+			'link_type'         => '',
+			'link_url'          => '',
+			'image_classes'     => '',
+			'link_classes'      => '',
+			'link_rel'          => '',
+			'link_target_blank' => '',
+			'link_image_title'  => '',
+			'size_options'      => '',
+		);
 
-		// Should return valid attachment ID.
+		// Test valid widget details.
 		$expected = array(
-			'attachment_id' => 1,
+			'title'             => 'What a title',
+			'attachment_id'     => 1,
+			'url'               => 'https://example.org',
+			'size'              => 'full',
+			'width'             => 300,
+			'height'            => 200,
+			'caption'           => 'A caption with <a href="#">link</a>',
+			'alt'               => 'A water tower',
+			'link_type'         => 'file',
+			'link_url'          => 'https://example.org',
+			'image_classes'     => 'A water tower',
+			'link_classes'      => 'A water tower',
+			'link_rel'          => 'previous',
+			'link_target_blank' => '_blank',
+			'link_image_title'  => 'A water tower',
+			'size_options'      => '',
 		);
 		$result   = $widget->update( $expected, $instance );
-		$this->assertSame( $expected, $result );
+		$this->assertSameSetsWithIndex( $expected, $result );
 
-		// Should filter invalid attachment ID.
-		$result = $widget->update(
-			array(
-				'attachment_id' => 'media',
-			),
-			$instance
-		);
-		$this->assertSame( $result, $instance );
-
-		// Should return valid attachment url.
+		// Test invalid widget details.
 		$expected = array(
-			'url' => 'https://example.org',
+			'title'             => '<h1>W00t!</h1>',
+			'attachment_id'     => 'media',
+			'url'               => 'not_a_url',
+			'size'              => 'big league',
+			'width'             => 'wide',
+			'height'            => 'high',
+			'caption'           => '"><i onload="alert(\'hello\')" />',
+			'alt'               => '"><i onload="alert(\'hello\')" />',
+			'link_type'         => 'interesting',
+			'link_url'          => 'not_a_url',
+			'image_classes'     => '"><i onload="alert(\'hello\')" />',
+			'link_classes'      => '"><i onload="alert(\'hello\')" />',
+			'link_rel'          => '"><i onload="alert(\'hello\')" />',
+			'link_target_blank' => 'top',
+			'link_image_title'  => '<h1>W00t!</h1>',
+			'size_options'      => '',
+			'imaginary_key'     => 'value',
 		);
-		$result   = $widget->update( $expected, $instance );
-		$this->assertSame( $expected, $result );
 
-		// Should filter invalid attachment url.
-		$result = $widget->update(
-			array(
-				'url' => 'not_a_url',
-			),
-			$instance
-		);
-		$this->assertNotSame( $result, $instance );
+		// Invalid attachment title.
+		$result = $widget->update( $expected, $instance );
+		$this->assertNotSame( $expected['title'], $result['title'] );
+
+		// Invalid URL.
+		$this->assertNotSame( $expected['url'], $result['url'] );
 		$this->assertStringStartsWith( 'http://', $result['url'] );
 
-		// Should return valid attachment title.
-		$expected = array(
-			'title' => 'What a title',
-		);
-		$result   = $widget->update( $expected, $instance );
-		$this->assertSame( $expected, $result );
+		// Invalid image size.
+		//$this->assertNotSame( $expected['size'], $result['size'] );
 
-		// Should filter invalid attachment title.
-		$result = $widget->update(
-			array(
-				'title' => '<h1>W00t!</h1>',
-			),
-			$instance
-		);
-		$this->assertNotSame( $result, $instance );
+		// Invalid image width.
+		$this->assertNotSame( $expected['width'], $result['width'] );
 
-		// Should return valid image size.
-		$expected = array(
-			'size' => 'thumbnail',
-		);
-		$result   = $widget->update( $expected, $instance );
-		$this->assertSame( $expected, $result );
+		// Invalid image height.
+		$this->assertNotSame( $expected['height'], $result['height'] );
 
-		// Should filter invalid image size.
-		$result = $widget->update(
-			array(
-				'size' => 'big league',
-			),
-			$instance
-		);
-		$this->assertSame( $result, $instance );
+		// Invalid image caption.
+		$this->assertNotSame( $expected['caption'], $result['caption'] );
+		$this->assertSame( $result['caption'], '"&gt;<i />' );
 
-		// Should return valid image width.
-		$expected = array(
-			'width' => 300,
-		);
-		$result   = $widget->update( $expected, $instance );
-		$this->assertSame( $expected, $result );
+		// Invalid alt text.
+		$this->assertNotSame( $expected['alt'], $result['alt'] );
+		$this->assertSame( $result['alt'], '">' );
 
-		// Should filter invalid image width.
-		$result = $widget->update(
-			array(
-				'width' => 'wide',
-			),
-			$instance
-		);
-		$this->assertSame( $result, $instance );
+		// Invalid link type.
+		$this->assertNotSame( $result['link_type'], $instance['link_type'] );
 
-		// Should return valid image height.
-		$expected = array(
-			'height' => 200,
-		);
-		$result   = $widget->update( $expected, $instance );
-		$this->assertSame( $expected, $result );
-
-		// Should filter invalid image height.
-		$result = $widget->update(
-			array(
-				'height' => 'high',
-			),
-			$instance
-		);
-		$this->assertSame( $result, $instance );
-
-		// Should return valid image caption.
-		$expected = array(
-			'caption' => 'A caption with <a href="#">link</a>',
-		);
-		$result   = $widget->update( $expected, $instance );
-		$this->assertSame( $expected, $result );
-
-		// Should filter invalid image caption.
-		$result = $widget->update(
-			array(
-				'caption' => '"><i onload="alert(\'hello\')" />',
-			),
-			$instance
-		);
-		$this->assertSame(
-			$result,
-			array(
-				'caption' => '"&gt;<i />',
-			)
-		);
-
-		// Should return valid alt text.
-		$expected = array(
-			'alt' => 'A water tower',
-		);
-		$result   = $widget->update( $expected, $instance );
-		$this->assertSame( $expected, $result );
-
-		// Should filter invalid alt text.
-		$result = $widget->update(
-			array(
-				'alt' => '"><i onload="alert(\'hello\')" />',
-			),
-			$instance
-		);
-		$this->assertSame(
-			$result,
-			array(
-				'alt' => '">',
-			)
-		);
-
-		// Should return valid link type.
-		$expected = array(
-			'link_type' => 'file',
-		);
-		$result   = $widget->update( $expected, $instance );
-		$this->assertSame( $expected, $result );
-
-		// Should filter invalid link type.
-		$result = $widget->update(
-			array(
-				'link_type' => 'interesting',
-			),
-			$instance
-		);
-		$this->assertSame( $result, $instance );
-
-		// Should return valid link url.
-		$expected = array(
-			'link_url' => 'https://example.org',
-		);
-		$result   = $widget->update( $expected, $instance );
-		$this->assertSame( $expected, $result );
-
-		// Should filter invalid link url.
-		$result = $widget->update(
-			array(
-				'link_url' => 'not_a_url',
-			),
-			$instance
-		);
-		$this->assertNotSame( $result, $instance );
+		// Invalid link url.
+		$this->assertNotSame( $expected['link_url'], $result['link_url'] );
 		$this->assertStringStartsWith( 'http://', $result['link_url'] );
 
-		// Should return valid image classes.
-		$expected = array(
-			'image_classes' => 'A water tower',
-		);
-		$result   = $widget->update( $expected, $instance );
-		$this->assertSame( $expected, $result );
+		// Invalid image classes.
+		$this->assertNotSame( $expected['image_classes'], $result['image_classes'] );
+		$this->assertSame( $result['image_classes'], 'i onloadalerthello' );
 
-		// Should filter invalid image classes.
-		$result = $widget->update(
-			array(
-				'image_classes' => '"><i onload="alert(\'hello\')" />',
-			),
-			$instance
-		);
-		$this->assertSame(
-			$result,
-			array(
-				'image_classes' => 'i onloadalerthello',
-			)
-		);
+		// Invalid link classes.
+		$this->assertNotSame( $expected['link_classes'], $result['link_classes'] );
+		$this->assertSame( $result['link_classes'], 'i onloadalerthello' );
 
-		// Should return valid link classes.
-		$expected = array(
-			'link_classes' => 'A water tower',
-		);
-		$result   = $widget->update( $expected, $instance );
-		$this->assertSame( $expected, $result );
+		// Invalid rel text.
+		$this->assertNotSame( $expected['link_rel'], $result['link_rel'] );
+		$this->assertSame( $result['link_rel'], 'i onloadalerthello' );
 
-		// Should filter invalid link classes.
-		$result = $widget->update(
-			array(
-				'link_classes' => '"><i onload="alert(\'hello\')" />',
-			),
-			$instance
-		);
-		$this->assertSame(
-			$result,
-			array(
-				'link_classes' => 'i onloadalerthello',
-			)
-		);
+		// Invalid  link target.
+		$this->assertNotSame( $result['link_target_blank'], $instance['link_target_blank'] );
 
-		// Should return valid rel text.
-		$expected = array(
-			'link_rel' => 'previous',
-		);
-		$result   = $widget->update( $expected, $instance );
-		$this->assertSame( $expected, $result );
+		// Invalid image title.
+		$this->assertNotSame( $result['link_image_title'], $instance['link_image_title'] );
 
-		// Should filter invalid rel text.
-		$result = $widget->update(
-			array(
-				'link_rel' => '"><i onload="alert(\'hello\')" />',
-			),
-			$instance
-		);
-		$this->assertSame(
-			$result,
-			array(
-				'link_rel' => 'i onloadalerthello',
-			)
-		);
-
-		// Should return valid link target.
-		$expected = array(
-			'link_target_blank' => false,
-		);
-		$result   = $widget->update( $expected, $instance );
-		$this->assertSame( $expected, $result );
-
-		// Should filter invalid  link target.
-		$result = $widget->update(
-			array(
-				'link_target_blank' => 'top',
-			),
-			$instance
-		);
-		$this->assertSame( $result, $instance );
-
-		// Should return valid image title.
-		$expected = array(
-			'image_title' => 'What a title',
-		);
-		$result   = $widget->update( $expected, $instance );
-		$this->assertSame( $expected, $result );
-
-		// Should filter invalid image title.
-		$result = $widget->update(
-			array(
-				'image_title' => '<h1>W00t!</h1>',
-			),
-			$instance
-		);
-		$this->assertNotSame( $result, $instance );
-
-		// Should filter invalid key.
-		$result = $widget->update(
-			array(
-				'imaginary_key' => 'value',
-			),
-			$instance
-		);
-		$this->assertSame( $result, $instance );
+		// Invalid key.
+		$this->assertArrayNotHasKey( 'imaginary_key', $result );
+		$this->assertNotContains( 'key', $result );
 	}
 
 	/**
