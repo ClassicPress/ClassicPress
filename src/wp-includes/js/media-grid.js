@@ -286,6 +286,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			authorLink = item.dataset.authorLink,
 			orientation = item.dataset.orientation ? ' ' + item.dataset.orientation : '',
 			menuOrder = item.dataset.menuOrder,
+			erasable = item.dataset.erasable,
 			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
 			next = item.nextElementSibling ? item.nextElementSibling.id : '',
 			order = item.dataset.order,
@@ -357,6 +358,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#view-attachment').href = link;
 		dialog.querySelector( '#edit-more' ).href = ajaxurl.replace( 'admin-ajax.php', 'post.php?post=' + id + '&action=edit' );
 		dialog.querySelector( '#download-file' ).href = url;
+
+		if ( erasable === '1' ) {
+			dialog.querySelector( '.delete-attachment' ).style.display = '';
+			dialog.querySelectorAll( '.links-separator' )[2].style.display = '';
+		} else {
+			dialog.querySelector( '.delete-attachment' ).style.display = 'none';
+			dialog.querySelectorAll( '.links-separator' )[2].style.display = 'none';
+		}
+
 		leftIcon.setAttribute( 'data-prev', prev );
 		rightIcon.setAttribute( 'data-next', next );
 
