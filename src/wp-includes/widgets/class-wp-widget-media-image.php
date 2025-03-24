@@ -315,7 +315,6 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 		$link_rel          = ! empty( $instance['link_rel'] ) ? $instance['link_rel'] : '';
 		$link_target_blank = ! empty( $instance['link_target_blank'] ) ? '_blank' : '';
 		$link_image_title  = ! empty( $instance['link_image_title'] ) ? $instance['link_image_title'] : '';
-		$size_options      = ! empty( $instance['size_options'] ) ? $instance['size_options'] : '';
 
 		$attributes        = 'alt="' . $alt . '"';
 		$aria_label        = '';
@@ -458,7 +457,6 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 		$instance['link_rel']          = ! empty( $new_instance['link_rel'] ) ? $this->sanitize_token_list( $new_instance['link_rel'] ) : '';
 		$instance['link_target_blank'] = ! empty( $new_instance['link_target_blank'] ) ? '_blank' : '';
 		$instance['link_image_title']  = ! empty( $new_instance['link_image_title'] ) ? sanitize_text_field( $new_instance['link_image_title'] ) : '';
-		$instance['size_options']      = ! empty( $new_instance['size_options'] ) ? sanitize_text_field( $new_instance['size_options'] ) : '';
 
 		return $instance;
 	}
