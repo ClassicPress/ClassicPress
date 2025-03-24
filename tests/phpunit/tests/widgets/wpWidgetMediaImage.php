@@ -141,7 +141,6 @@ class Tests_Widgets_wpWidgetMediaImage extends WP_UnitTestCase {
 			'link_rel'          => '',
 			'link_target_blank' => '',
 			'link_image_title'  => '',
-			'size_options'      => '',
 		);
 
 		// Test valid widget details.
@@ -161,7 +160,6 @@ class Tests_Widgets_wpWidgetMediaImage extends WP_UnitTestCase {
 			'link_rel'          => 'previous',
 			'link_target_blank' => '_blank',
 			'link_image_title'  => 'A water tower',
-			'size_options'      => '',
 		);
 		$result   = $widget->update( $expected, $instance );
 		$this->assertSameSetsWithIndex( $expected, $result );
@@ -183,7 +181,6 @@ class Tests_Widgets_wpWidgetMediaImage extends WP_UnitTestCase {
 			'link_rel'          => '"><i onload="alert(\'hello\')" />',
 			'link_target_blank' => 'top',
 			'link_image_title'  => '<h1>W00t!</h1>',
-			'size_options'      => '',
 			'imaginary_key'     => 'value',
 		);
 
