@@ -1138,15 +1138,17 @@ class WP_Media_List_Table extends WP_List_Table {
 
 					<fieldset class="inline-edit-col-right">
 						<div class="inline-edit-tags-wrap">
-							<label class="inline-edit-tags">
-								<span class="title"><?php esc_html_e( 'Media Tags' ); ?></span>
+							<div class="inline-edit-tags">
+								<label for="quick-media-tags">
+									<span class="title"><?php esc_html_e( 'Media Tags' ); ?></span>
+								</label>
 								<div id="inline-container" class="inline-container">
 									<div hidden></div>
 									<textarea data-wp-taxonomy="media_post_tag" cols="22" rows="1" name="media_post_tag" class="media_post_tag" aria-describedby="inline-edit-post_tag-desc"></textarea>
 									<div class="container__suggestions"></div>
 								</div>
 								<input id="tags-list" value="<?php echo $tags_string; ?>" hidden>
-							</label>
+							</div>
 							<p class="howto" id="inline-edit-post_tag-desc"><?php esc_html_e( 'Separate tags with commas' ); ?></p>
 						</div>
 						<div class="inline-edit-col">
@@ -1197,12 +1199,16 @@ class WP_Media_List_Table extends WP_List_Table {
 							<label for="quick-title">
 								<span class="title"><?php echo esc_html_e( 'Title' ); ?></span>
 							</label>
-							<input id="quick-title" type="text" name="post_title" class="input-text-wrap ptitle" value="">
+							<span class="input-text-wrap">
+								<input id="quick-title" type="text" name="post_title" class="input-text-wrap ptitle" value="">
+							</span>
 
 							<label for="quick-slug">
 								<span class="title"><?php echo esc_html_e( 'URL' ); ?></span>
 							</label>
-							<input id="quick-slug" type="text" name="post_name" value="" class="input-text-wrap" autocomplete="off" spellcheck="false" readonly>
+							<span class="input-text-wrap">
+								<input id="quick-slug" type="text" name="post_name" value="" class="input-text-wrap" autocomplete="off" spellcheck="false" readonly>
+							</span>
 
 							<fieldset class="inline-edit-date">
 								<legend><span class="title"><?php echo esc_html_e( 'Date' ); ?></span></legend>
@@ -1282,14 +1288,14 @@ class WP_Media_List_Table extends WP_List_Table {
 							<label for="quick-media-tags">
 								<span class="title"><?php esc_html_e( 'Media Tags' ); ?></span>
 							</label>
-							<label class="inline-edit-tags">
+							<div class="inline-edit-tags">
 							<div id="inline-container" class="inline-container">
 								<div hidden></div>
 								<textarea id="quick-media-tags" data-wp-taxonomy="media_post_tag" cols="22" rows="1" name="media_post_tag" class="media_post_tag" aria-describedby="inline-edit-post_tag-desc"></textarea>
 								<div class="container__suggestions"></div>
 							</div>
 							<p class="howto" id="inline-edit-post_tag-desc"><?php esc_html_e( 'Separate tags with commas' ); ?></p>
-							<label>
+							</div>
 						</div>
 
 						<div id="attachment-attributes">
@@ -1297,21 +1303,27 @@ class WP_Media_List_Table extends WP_List_Table {
 								<label for="attachment-alt" class="alignleft">
 									<span class="title"><?php esc_html_e( 'Alt Text' ); ?></span>
 								</label>
-								<input id="attachment-alt" type="text" name="alt" value="">
+								<span class="input-text-wrap">
+									<input id="attachment-alt" type="text" name="alt" value="">
+								</span>
 							</div>
 
 							<div class="inline-edit-col">
 								<label for="attachment-caption" class="alignleft">
 									<span class="title"><?php esc_html_e( 'Caption' ); ?></span>
 								</label>
-								<input id="attachment-caption" type="text" name="post_excerpt" value="">
+								<span class="input-text-wrap">
+									<input id="attachment-caption" type="text" name="post_excerpt" value="">
+								</span>
 							</div>
 
 							<div class="inline-edit-col">
 								<label for="attachment-description" class="alignleft">
 									<span class="title"><?php esc_html_e( 'Description' ); ?></span>
 								</label>
-								<input id="attachment-decription" type="text" name="post_content" value="">
+								<span class="input-text-wrap">
+									<input id="attachment-decription" type="text" name="post_content" value="">
+								</span>
 							</div>
 						</div>
 					</fieldset>
