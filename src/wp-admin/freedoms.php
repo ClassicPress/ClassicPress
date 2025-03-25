@@ -44,15 +44,6 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 	<a href="privacy.php" class="nav-tab"><?php _e( 'Privacy' ); ?></a>
 </h2>
 
-<?php if ( $is_privacy_notice ) : ?>
-
-<div class="about-wrap-content">
-	<p class="about-description"><?php _e( 'From time to time, your ClassicPress site may send anonymous data to ClassicPress.net. Some examples of the kinds of data that may be sent are the version of ClassicPress your site is running and a list of installed plugins and themes.' ); ?></p>
-
-	<p><?php printf( __( 'We take privacy and transparency very seriously. To learn more about what data we collect, how we use it, and what precautions we take to ensure site owners&#8217; privacy, please see the <a href="%s">ClassicPress Privacy Policy</a>.' ), 'https://link.classicpress.net/core-privacy-policy/' ); ?></p>
-</div>
-
-<?php else : ?>
 <div class="about-wrap-content">
 	<p class="about-description"><?php printf( __( 'ClassicPress is Free and open source software, built by a distributed community of volunteer developers from around the world. ClassicPress comes with some awesome, worldview-changing rights courtesy of its <a href="%s">license</a>, the GPL.' ), 'https://opensource.org/licenses/gpl-license' ); ?></p>
 
