@@ -30,7 +30,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 	printf(
 		/* translators: link to ClassicPress website */
 		__( 'Thank you for using ClassicPress, the <a href="%s">CMS for Creators</a>.' ),
-		'https://link.classicpress.net/the-cms-for-creators'
+		'https://www.classicpress.net/'
 	);
 	?>
 	<br>
@@ -43,7 +43,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 	<a href="about.php" class="nav-tab"><?php _e( 'About' ); ?></a>
 	<a href="credits.php" class="nav-tab nav-tab-active"><?php _e( 'Credits' ); ?></a>
 	<a href="freedoms.php" class="nav-tab"><?php _e( 'Freedoms' ); ?></a>
-	<a href="freedoms.php?privacy-notice" class="nav-tab"><?php _e( 'Privacy' ); ?></a>
+	<a href="privacy.php" class="nav-tab"><?php _e( 'Privacy' ); ?></a>
 </h2>
 
 <div class="about-wrap-content">
