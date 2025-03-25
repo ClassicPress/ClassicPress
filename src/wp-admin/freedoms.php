@@ -69,6 +69,5 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 	<p><?php _e( 'Don&#8217;t you wish all software came with these freedoms? So do we! For more information, check out the <a href="https://www.fsf.org/">Free Software Foundation</a>.' ); ?></p>
 </div>
 
-<?php endif; ?>
 </div>
 <?php require ABSPATH . 'wp-admin/admin-footer.php'; ?>
