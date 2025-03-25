@@ -64,6 +64,6 @@ echo '<p class="about-description">' . sprintf(
 </div>
 <?php
 
-require ABSPATH . 'wp-admin/admin-footer.php';
+require_once ABSPATH . 'wp-admin/admin-footer.php';
 
 return;
