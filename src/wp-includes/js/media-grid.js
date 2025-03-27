@@ -1115,4 +1115,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		fileValidateTypeLabelExpectedTypes: _wpMediaGridSettings.check_types,
 	} );
 
+	pond.on( 'processfile', function( error, file ) {
+		if ( ! error ) {
+			setTimeout( function() {
+				pond.removeFile( file.id );
+			}, 100 );
+			resetDataOrdering();
+		}
+	} );
+
 } );
