@@ -28,7 +28,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 		printf(
 			/* translators: link to "business-focused CMS" article */
 			__( 'Thank you for using ClassicPress, the <a href="%s">CMS for Creators</a>.' ),
-			'https://www.classicpress.net/'
+			'https://link.classicpress.net/the-cms-for-creators'
 		);
 		?>
 		<br>
@@ -47,7 +47,6 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 		<p class="about-description"><?php _e( 'From time to time, your ClassicPress site may send anonymous data to ClassicPress.net. Some examples of the kinds of data that may be sent are the version of ClassicPress your site is running and a list of installed plugins and themes.' ); ?></p>
 
 		<p><?php printf( __( 'We take privacy and transparency very seriously. To learn more about what data we collect, how we use it, and what precautions we take to ensure site owners&#8217; privacy, please see the <a href="%s">ClassicPress Privacy Policy</a>.' ), 'https://www.classicpress.net/privacy-policy/' ); ?></p>
-	</div>
 	</div>
 
 </div>
