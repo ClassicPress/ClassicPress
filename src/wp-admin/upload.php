@@ -433,6 +433,8 @@ if ( 'grid' === $mode ) {
 					$update_nonce = $meta['nonces']['update'];
 					$delete_nonce = $meta['nonces']['delete'];
 					$edit_nonce   = $meta['nonces']['edit'];
+					$editable     = current_user_can( 'delete_post', $attachment->ID ) ? 1 : 0;
+					$erasable     = current_user_can( 'delete_post', $attachment->ID ) ? 1 : 0;
 					$image        = '<img src="' . esc_url( $url ) . '" alt="' . esc_attr( $alt ) . '">';
 
 					// Use an icon if the file uploaded is not an image
@@ -474,6 +476,8 @@ if ( 'grid' === $mode ) {
 						data-update-nonce="<?php echo $update_nonce; ?>"
 						data-delete-nonce="<?php echo $delete_nonce; ?>"
 						data-edit-nonce="<?php echo $edit_nonce; ?>"
+						data-editable="<?php echo $editable; ?>"
+						data-erasable="<?php echo $erasable; ?>"
 						>
 
 						<div class="select-attachment-preview <?php echo esc_attr( 'type-' . $file_type . ' subtype-' . $subtype . ' ' . $orientation ); ?>">

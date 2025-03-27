@@ -288,6 +288,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			authorLink = item.dataset.authorLink,
 			orientation = item.dataset.orientation ? ' ' + item.dataset.orientation : '',
 			menuOrder = item.dataset.menuOrder,
+			editable = item.dataset.editable,
+			erasable = item.dataset.erasable,
 			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
 			next = item.nextElementSibling ? item.nextElementSibling.id : '',
 			order = item.dataset.order,
@@ -359,6 +361,33 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#view-attachment').href = link;
 		dialog.querySelector( '#edit-more' ).href = ajaxurl.replace( 'admin-ajax.php', 'post.php?post=' + id + '&action=edit' );
 		dialog.querySelector( '#download-file' ).href = url;
+
+		if ( editable === '1' ) {
+			dialog.querySelector( '#attachment-details-two-column-alt-text' ).removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachment-details-two-column-title' ).removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachment-details-two-column-caption' ).removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachment-details-two-column-description' ).removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachments-' + id + '-media_category' ).removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachments-' + id + '-media_post_tag' ).removeAttribute( 'readonly' );
+			dialog.querySelector( '.edit-attachment' ).style.display = '';
+		} else {
+			dialog.querySelector( '#attachment-details-two-column-alt-text' ).setAttribute( 'readonly', true );
+			dialog.querySelector( '#attachment-details-two-column-title' ).setAttribute( 'readonly', true );
+			dialog.querySelector( '#attachment-details-two-column-caption' ).setAttribute( 'readonly', true );
+			dialog.querySelector( '#attachment-details-two-column-description' ).setAttribute( 'readonly', true );
+			dialog.querySelector( '#attachments-' + id + '-media_category' ).setAttribute( 'readonly', true );
+			dialog.querySelector( '#attachments-' + id + '-media_post_tag' ).setAttribute( 'readonly', true );
+			dialog.querySelector( '.edit-attachment' ).style.display = 'none';
+		}
+
+		if ( erasable === '1' ) {
+			dialog.querySelector( '.delete-attachment' ).style.display = '';
+			dialog.querySelectorAll( '.links-separator' )[2].style.display = '';
+		} else {
+			dialog.querySelector( '.delete-attachment' ).style.display = 'none';
+			dialog.querySelectorAll( '.links-separator' )[2].style.display = 'none';
+		}
+
 		leftIcon.setAttribute( 'data-prev', prev );
 		rightIcon.setAttribute( 'data-next', next );
 
@@ -399,7 +428,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Update media categories and tags
 		dialog.querySelectorAll( '.compat-item input' ).forEach( function( input ) {
 			input.addEventListener( 'blur', function() {
-				updateMediaTaxOrTag( input, id );
+				if ( editable === '1' ) {
+					updateMediaTaxOrTag( input, id );
+				}
 			} );
 		} );
 	}
@@ -826,7 +857,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
 		input.addEventListener( 'blur', function() {
 			var id = queryParams.get( 'item' );
-			updateDetails( input, id );
+			var item = document.getElementById( 'media-' + id );
+			if ( item.dataset.editable === '1' ) {
+				updateDetails( input, id );
+			}
 		} );
 	} );
 
