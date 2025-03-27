@@ -14,7 +14,7 @@ wp_enqueue_script( 'underscore' );
 /* translators: Page title of the About ClassicPress page in the admin. */
 $title = _x( 'About', 'page title' );
 
-require ABSPATH . 'wp-admin/admin-header.php';
+require_once ABSPATH . 'wp-admin/admin-header.php';
 ?>
 	<div class="wrap about-wrap full-width-layout">
 		<h1><?php _e( 'Welcome to ClassicPress!' ); ?></h1>
@@ -40,7 +40,7 @@ require ABSPATH . 'wp-admin/admin-header.php';
 			<a href="about.php" class="nav-tab nav-tab-active"><?php _e( 'About' ); ?></a>
 			<a href="credits.php" class="nav-tab"><?php _e( 'Credits' ); ?></a>
 			<a href="freedoms.php" class="nav-tab"><?php _e( 'Freedoms' ); ?></a>
-			<a href="freedoms.php?privacy-notice" class="nav-tab"><?php _e( 'Privacy' ); ?></a>
+			<a href="privacy.php" class="nav-tab"><?php _e( 'Privacy' ); ?></a>
 		</h2>
 
 		<div class="changelog point-releases about-wrap-content">
@@ -269,9 +269,10 @@ require ABSPATH . 'wp-admin/admin-header.php';
 			</p>
 		</div>
 	</div>
-<?php
 
-require ABSPATH . 'wp-admin/admin-footer.php';
+<?php require_once ABSPATH . 'wp-admin/admin-footer.php'; ?>
+
+<?php
 
 // These are strings we may use to describe maintenance/security releases, where we aim for no new strings.
 return;
