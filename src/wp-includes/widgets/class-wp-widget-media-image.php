@@ -363,11 +363,12 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 
 		$size_options = '';
 		if ( $attachment_id !== 0 ) {
-			$sizes_array = wp_get_attachment_metadata( $attachment_id );
-			foreach ( $sizes_array['sizes'] as $key => $option ) {
-				$size_options .= '<option value="' . esc_attr( $key ) . '"' . selected( $key, $size, false ) . '>' . esc_html( ucfirst( $key ) . ' &ndash; ' . $option['width'] . ' x ' . $option['height'] ) . '</option>';
+			$attachment_metadata = wp_prepare_attachment_for_js( $attachment_id );
+			$sizes_array = $attachment_metadata['sizes'];
+			foreach ( $sizes_array as $key => $option ) {
+				$option_text = ucwords( str_replace( '_', ' ', $key ) ) . ' &ndash; ' . $option['width'] . ' x ' . $option['height'];
+				$size_options .= '<option value="' . esc_attr( $key ) . '"' . selected( $key, $size, false ) . '>' . esc_html( $option_text ) . '</option>';
 			}
-			$size_options .= '<option value="full"' . selected( 'full', $size, false ) . '>' . esc_html( 'Full &ndash; ' . $sizes_array['width'] . ' x ' . $sizes_array['height'] ) . '</option>';
 		}
 		?>
 
