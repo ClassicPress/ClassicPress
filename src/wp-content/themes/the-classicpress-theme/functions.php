@@ -181,26 +181,37 @@ function cp_tiny_css( $wp ) {
 }
 add_filter( 'mce_css', 'cp_tiny_css' );
 
-
-/* Add widgets to blog sidebar */
+/**
+ * Add widgets to sidebar and footer
+ */
 if ( function_exists( 'register_sidebar' ) ) {
 	register_sidebar(
 		array(
 			'id'            => 'blog-sidebar',
-			'name'          => 'Blog Sidebar',
+			'name'          => esc_html__( 'Blog Sidebar', 'the-classicpress-theme' ),
 			'before_widget' => '<div class="widget-container">',
 			'after_widget'  => '</div>',
-			'before_title'  => '<h3>',
+			'before_title'  => '<h3 class="widget-title">',
 			'after_title'   => '</h3>',
 		)
 	);
 	register_sidebar(
 		array(
 			'id'            => 'main-sidebar',
-			'name'          => 'Main Sidebar',
+			'name'          => esc_html__( 'Main Sidebar', 'the-classicpress-theme' ),
 			'before_widget' => '<div class="widget-container">',
 			'after_widget'  => '</div>',
-			'before_title'  => '<h3>',
+			'before_title'  => '<h3 class="widget-title">',
+			'after_title'   => '</h3>',
+		)
+	);
+	register_sidebar(
+		array(
+			'id'            => 'footer',
+			'name'          => esc_html__( 'Footer', 'the-classicpress-theme' ),
+			'before_widget' => '<div class="widget-container">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h3 class="widget-title">',
 			'after_title'   => '</h3>',
 		)
 	);
@@ -216,14 +227,12 @@ add_filter( 'the_content', 'cp_remove_empty_p', 20, 1 );
 // Add excerpts to pages
 add_post_type_support( 'page', 'excerpt' );
 
-
 /**
  * Simplify blog detection
  */
 function is_blog() {
 	return ( is_archive() || is_author() || is_category() || is_home() || is_tag() ) && 'post' == get_post_type();
 }
-
 
 /**
  * Set our own version string for the theme's stylesheet
@@ -235,7 +244,6 @@ function cp_susty_override_style_css_version( $version, $type, $handle ) {
 	return cp_susty_get_asset_version();
 }
 add_filter( 'classicpress_asset_version', 'cp_susty_override_style_css_version', 10, 3 );
-
 
 /**
  * Add the page slug as a class to the <body>

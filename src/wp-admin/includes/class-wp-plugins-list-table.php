@@ -1275,7 +1275,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 		if ( ! $compatible_php || ! $compatible_wp ) {
 			printf(
 				'<tr class="plugin-update-tr">' .
-				'<td colspan="%s" class="plugin-update colspanchange">' .
+				'<td colspan="%s" class="plugin-update colspanchange">',
 				esc_attr( $this->get_column_count() )
 			);
 
