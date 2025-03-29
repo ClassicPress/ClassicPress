@@ -5,8 +5,7 @@
   font-weight: 400;
   src: local('Source Sans Pro Regular'), 
 	local('SourceSansPro-Regular'),
-    url('fonts/source-sans-pro-v12-latin-regular.woff2') format('woff2'), 
-    url('fonts/source-sans-pro-v12-latin-regular.woff') format('woff');
+    url('../fonts/source-sans-pro-v12-latin-regular.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Source Sans Pro';
@@ -14,8 +13,7 @@
   font-weight: 600;
   src: local('Source Sans Pro SemiBold'), 
 	local('SourceSansPro-SemiBold'),
-    url('fonts/source-sans-pro-v12-latin-600.woff2') format('woff2'),
-    url('fonts/source-sans-pro-v12-latin-600.woff') format('woff');
+    url('../fonts/source-sans-pro-v12-latin-600.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Source Sans Pro';
@@ -23,8 +21,7 @@
   font-weight: 400;
   src: local('Source Sans Pro Italic'), 
 	local('SourceSansPro-Italic'),
-    url('fonts/source-sans-pro-v12-latin-italic.woff2') format('woff2'),
-    url('fonts/source-sans-pro-v12-latin-italic.woff') format('woff'); 
+    url('../fonts/source-sans-pro-v12-latin-italic.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Source Sans Pro';
@@ -32,16 +29,14 @@
   font-weight: 600;
   src: local('Source Sans Pro SemiBold Italic'),
 	local('SourceSansPro-SemiBoldItalic'),
-    url('fonts/source-sans-pro-v12-latin-600italic.woff2') format('woff2'),
-    url('fonts/source-sans-pro-v12-latin-600italic.woff') format('woff');
+    url('../fonts/source-sans-pro-v12-latin-600italic.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Source Sans Pro';
   font-style: normal;
   font-weight: 700;
   src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'),
-    url('fonts/source-sans-pro-v12-latin-700.woff2') format('woff2'),
-    url('fonts/source-sans-pro-v12-latin-700.woff') format('woff');
+    url('../fonts/source-sans-pro-v12-latin-700.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Source Sans Pro';
@@ -49,8 +44,7 @@
   font-weight: 700;
   src: local('Source Sans Pro Bold Italic'), 
 	local('SourceSansPro-BoldItalic'),
-    url('fonts/source-sans-pro-v12-latin-700italic.woff2') format('woff2'),
-    url('fonts/source-sans-pro-v12-latin-700italic.woff') format('woff');
+    url('../fonts/source-sans-pro-v12-latin-700italic.woff2') format('woff2');
 }
 
 b, strong { font-weight:600; }

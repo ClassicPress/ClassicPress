@@ -2406,7 +2406,7 @@ function img_caption_shortcode( $attr, $content = '' ) {
 	$class = trim( 'wp-caption ' . $atts['align'] . ' ' . $atts['class'] );
 
 	// HTML5 captions never added the extra 10px to the image width.
-	$width = ( 10 + $atts['width'] );
+	$width = $atts['width'];
 
 	/**
 	 * Filters the width of an image's caption.
@@ -4867,6 +4867,8 @@ function wp_enqueue_media( $args = array() ) {
 	$strings = apply_filters( 'media_view_strings', $strings, $post );
 
 	$strings['settings'] = $settings;
+
+	wp_enqueue_script( 'jquery-ui-sortable' );
 
 	// Ensure we enqueue media-editor first, that way media-views
 	// is registered internally before we try to localize it. See #24724.

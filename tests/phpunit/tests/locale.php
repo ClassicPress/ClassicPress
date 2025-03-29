@@ -66,12 +66,21 @@ class Tests_Locale extends WP_UnitTestCase {
 	 */
 	public function test_get_weekday_undefined_index() {
 		if ( PHP_VERSION_ID >= 80000 ) {
-			$this->expectWarning();
+			$expectedErrorMessage = 'Undefined array key 7';
 		} else {
-			$this->expectNotice();
+			$expectedErrorMessage = 'Undefined offset: 7';
 		}
 
-		$this->locale->get_weekday( 7 );
+		$this->assertExpectedError(
+			array(
+				$this->locale,
+				'get_weekday',
+			),
+			array(
+				$expectedErrorMessage,
+				7,
+			)
+		);
 	}
 
 	/**
