@@ -151,12 +151,14 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 	 * @param array $instance Previously saved values from database.
 	 */
 	public function form( $instance ) {
+		$instance = array_merge( wp_list_pluck( $this->get_instance_schema(), 'default' ), $instance );
+
 		$title             = ! empty( $instance['title'] ) ? $instance['title'] : '';
 		$ids               = ! empty( $instance['ids'] ) ? $instance['ids'] : '';
 		$columns           = ! empty( $instance['columns'] ) ? $instance['columns'] : 3;
 		$size              = ! empty( $instance['size'] ) ? $instance['size'] : 'thumbnail';
 		$link_type         = ! empty( $instance['link_type'] ) ? $instance['link_type'] : 'post';
-		$orderby_random    = ! empty( $instance['orderby_random'] ) ? $instance['orderby_random'] : '';
+		$orderby_random    = ! empty( $instance['orderby_random'] ) ? $instance['orderby_random'] : false;
 		$nonce             = wp_create_nonce( '_wpnonce' );
 		?>
 
@@ -221,33 +223,9 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 			<input id="<?php echo esc_attr( $this->get_field_id( 'size' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'size' ) ); ?>" type="hidden" data-property="size" class="media-widget-instance-property" value="<?php echo esc_attr( esc_attr( $size ) ); ?>">
 			<input id="<?php echo esc_attr( $this->get_field_id( 'link_type' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'link_type' ) ); ?>" type="hidden" data-property="link_type" class="media-widget-instance-property" value="<?php echo esc_attr( $link_type ); ?>">
 			<input id="<?php echo esc_attr( $this->get_field_id( 'orderby_random' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'orderby_random' ) ); ?>" type="hidden" data-property="orderby_random" class="media-widget-instance-property" value="<?php echo esc_attr( $orderby_random ); ?>">
-		
+
 		</div>
 		<?php
-	}
-
-	/**
-	 * Sanitize widget form values as they are saved.
-	 *
-	 * @since CP-2.5.0
-	 *
-	 * @see WP_Widget::update()
-	 *
-	 * @param array $new_instance Values just sent to be saved.
-	 * @param array $old_instance Previously saved values from database.
-	 *
-	 * @return array Updated safe values to be saved.
-	 */
-	public function update( $new_instance, $old_instance ) {
-		$instance = array();
-		$instance['title']          = ! empty( $new_instance['title'] ) ? sanitize_text_field( $new_instance['title'] ) : '';
-		$instance['ids']            = ! empty( $new_instance['ids'] ) ? implode( ',', array_map( 'absint', explode( ',', $new_instance['ids'] ) ) ) : '';
-		$instance['columns']        = ! empty( $new_instance['columns'] ) ? absint( $new_instance['columns'] ) : 3;
-		$instance['size']           = ! empty( $new_instance['size'] ) ? sanitize_text_field( $new_instance['size'] ) : '';
-		$instance['link_type']      = ! empty( $new_instance['link_type'] ) ? sanitize_text_field( $new_instance['link_type'] ) : 'post';
-		$instance['orderby_random'] = ! empty( $new_instance['orderby_random'] ) ? sanitize_text_field( $new_instance['orderby_random'] ) : '';
-
-		return $instance;
 	}
 
 	/**
