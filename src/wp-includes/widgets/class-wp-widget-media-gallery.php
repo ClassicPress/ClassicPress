@@ -154,7 +154,7 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 		$instance = array_merge( wp_list_pluck( $this->get_instance_schema(), 'default' ), $instance );
 
 		$title             = ! empty( $instance['title'] ) ? $instance['title'] : '';
-		$ids               = ! empty( $instance['ids'] ) ? $instance['ids'] : '';
+		$ids               = ! empty( $instance['ids'] ) ? implode( ',', $instance['ids'] ) : '';
 		$columns           = ! empty( $instance['columns'] ) ? $instance['columns'] : 3;
 		$size              = ! empty( $instance['size'] ) ? $instance['size'] : 'thumbnail';
 		$link_type         = ! empty( $instance['link_type'] ) ? $instance['link_type'] : 'post';
