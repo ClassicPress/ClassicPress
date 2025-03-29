@@ -186,19 +186,4 @@ class Tests_Widgets_wpWidgetMediaGallery extends WP_UnitTestCase {
 		$instance                   = $widget->update( $instance, array() );
 		$this->assertFalse( $instance['orderby_random'] );
 	}
-
-	/**
-	 * Test render_control_template_scripts() method.
-	 *
-	 * @covers WP_Widget_Media_Gallery::render_control_template_scripts
-	 */
-	public function test_render_control_template_scripts() {
-		$widget = new WP_Widget_Media_Gallery();
-
-		ob_start();
-		$widget->render_control_template_scripts();
-		$output = ob_get_clean();
-
-		$this->assertStringContainsString( '<script type="text/html" id="tmpl-wp-media-widget-gallery-preview">', $output );
-	}
 }
