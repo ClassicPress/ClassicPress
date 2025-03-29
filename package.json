@@ -1,6 +1,6 @@
 {
   "name": "ClassicPress",
-  "version": "2.4.0+dev",
+  "version": "2.4.1+dev",
   "description": "ClassicPress is web software you can use to create a beautiful website or blog.",
   "repository": {
     "type": "git",
@@ -11,7 +11,7 @@
   "devDependencies": {
     "@lodder/grunt-postcss": "3.1.1",
     "@rollup/plugin-commonjs": "28.0.3",
-    "autoprefixer": "10.4.20",
+    "autoprefixer": "10.4.21",
     "clipboard": "^2.0.11",
     "grunt": "1.6.1",
     "grunt-banner": "0.6.0",
@@ -37,23 +37,23 @@
     "moment": "^2.29.4",
     "postcss": "8.5.3",
     "qunit": "^2.19.4",
-    "rollup": "4.34.9",
-    "sass": "1.85.1",
-    "sinon": "^19.0.0",
+    "rollup": "4.37.0",
+    "sass": "1.86.0",
+    "sinon": "^20.0.0",
     "sinon-test": "^3.1.5",
     "source-map-loader": "^5.0.0",
     "sync-request": "6.1.0",
     "terser": "5.39.0",
     "terser-webpack-plugin": "^5.3.7",
-    "webpack": "5.97.1"
+    "webpack": "5.98.0"
   },
   "dependencies": {
-    "@wordpress/a11y": "4.17.0",
-    "@wordpress/api-fetch": "7.17.0",
-    "@wordpress/dom-ready": "4.17.0",
-    "@wordpress/hooks": "4.17.0",
-    "@wordpress/i18n": "5.17.0",
-    "@wordpress/url": "4.17.0"
+    "@wordpress/a11y": "4.21.0",
+    "@wordpress/api-fetch": "7.21.0",
+    "@wordpress/dom-ready": "4.21.0",
+    "@wordpress/hooks": "4.21.0",
+    "@wordpress/i18n": "5.21.0",
+    "@wordpress/url": "4.21.0"
   },
   "collective": {
     "type": "opencollective",
