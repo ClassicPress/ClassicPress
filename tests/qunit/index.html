@@ -127,13 +127,6 @@
 			wp.mediaWidgets.controlConstructors[ "media_audio" ].prototype.mime_type = "audio";
 			_.extend( wp.mediaWidgets.controlConstructors[ "media_audio" ].prototype.l10n, {"no_media_selected":"No audio selected","select_media":"Select File","change_media":"Change Audio","edit_media":"Edit Audio","add_to_widget":"Add to Widget","missing_attachment":"That audio file cannot be found. Check your <a href=\"http:\/\/src.wordpress-develop.dev\/wp-admin\/upload.php\">media library<\/a> and make sure it was not deleted.","media_library_state_multi":{"0":"Audio Widget (%d)","1":"Audio Widget (%d)","singular":"Audio Widget (%d)","plural":"Audio Widget (%d)","context":null,"domain":null},"media_library_state_single":"Audio Widget"} );
 		</script>
-		<script type='text/javascript' src='../../src/wp-admin/js/widgets/media-gallery-widget.js'></script>
-		<script type='text/javascript'>
-			wp.mediaWidgets.modelConstructors[ "media_gallery" ].prototype.schema = {"title":{"type":"string","default":"","should_preview_update":false},"ids":{"type":"string","default":""},"columns":{"type":"integer","default":3},"size":{"type":"string","default":"thumbnail","enum":["thumbnail","medium","medium_large","large","post-thumbnail","full","custom"]},"link_type":{"type":"string","default":"none","enum":["none","file","post"],"media_prop":"link","should_preview_update":false},"orderby_random":{"type":"boolean","default":false,"media_prop":"_orderbyRandom","should_preview_update":false},"attachments":{"type":"string","default":""}};
-			wp.mediaWidgets.controlConstructors[ "media_gallery" ].prototype.mime_type = "image";
-
-			_.extend( wp.mediaWidgets.controlConstructors[ "media_gallery" ].prototype.l10n, {"no_media_selected":"No images selected","add_media":"Add Media","replace_media":"Replace Media","edit_media":"Edit Gallery","add_to_widget":"Add to Widget","missing_attachment":"We cannot find that gallery. Check your <a href=\"http:\/\/src.wordpress-develop.dev\/wp-admin\/upload.php\">media library<\/a> and make sure it was not deleted.","media_library_state_multi":"","media_library_state_single":"","unsupported_file_type":"Looks like this is not the correct kind of file. Please link to an appropriate file instead.","select_media":"Select Images","change_media":"Add Image"} );
-		</script>
 
 		<!-- Unit tests -->
 		<script src="wp-admin/js/password-strength-meter.js"></script>
@@ -149,7 +142,6 @@
 		<script src="wp-admin/js/customize-widgets.js"></script>
 		<script src="wp-admin/js/word-count.js"></script>
 		<script src="wp-admin/js/widgets/test-media-widgets.js"></script>
-		<script src="wp-admin/js/widgets/test-media-gallery-widget.js"></script>
 		<script src="wp-admin/js/widgets/test-media-video-widget.js"></script>
 
 		<!-- Customizer templates for sections -->
@@ -854,69 +846,6 @@
 		<div class="media-frame-uploader"></div>
 	</script>
 
-	<script type="text/html" id="tmpl-widget-media-media_gallery-control">
-		<# var elementIdPrefix = 'el' + String( Math.random() ) + '_' #>
-		<p>
-			<label for="{{ elementIdPrefix }}title">Title:</label>
-			<input id="{{ elementIdPrefix }}title" type="text" class="widefat title">
-		</p>
-		<div class="media-widget-preview media_gallery">
-			<div class="attachment-media-view">
-				<button type="button" class="select-media button-add-media not-selected">
-					Add Images					</button>
-			</div>
-		</div>
-		<p class="media-widget-buttons">
-			<button type="button" class="button edit-media selected">
-				Edit Gallery				</button>
-					</p>
-		<div class="media-widget-fields">
-		</div>
-	</script>
-
-	<script type="text/html" id="tmpl-wp-media-widget-gallery-preview">
-		<#
-		var ids = _.filter( data.ids, function( id ) {
-			return ( id in data.attachments );
-		} );
-		#>
-		<# if ( ids.length ) { #>
-			<ul class="gallery media-widget-gallery-preview" role="list">
-				<# _.each( ids, function( id, index ) { #>
-					<# var attachment = data.attachments[ id ]; #>
-					<# if ( index < 6 ) { #>
-						<li class="gallery-item">
-							<div class="gallery-icon">
-								<img alt="{{ attachment.alt }}"
-									<# if ( index === 5 && data.ids.length > 6 ) { #> aria-hidden="true" <# } #>
-									<# if ( attachment.sizes.thumbnail ) { #>
-										src="{{ attachment.sizes.thumbnail.url }}" width="{{ attachment.sizes.thumbnail.width }}" height="{{ attachment.sizes.thumbnail.height }}"
-									<# } else { #>
-										src="{{ attachment.url }}"
-									<# } #>
-									<# if ( ! attachment.alt && attachment.filename ) { #>
-										aria-label="
-										The current image has no alternative text. The file name is: {{ attachment.filename }}											"
-									<# } #>
-								/>
-								<# if ( index === 5 && data.ids.length > 6 ) { #>
-								<div class="gallery-icon-placeholder">
-									<p class="gallery-icon-placeholder-text" aria-label="
-									Additional images added to this gallery: {{ data.ids.length - 5 }}										">+{{ data.ids.length - 5 }}</p>
-								</div>
-								<# } #>
-							</div>
-						</li>
-					<# } #>
-				<# } ); #>
-			</ul>
-		<# } else { #>
-			<div class="attachment-media-view">
-				<button type="button" class="placeholder button-add-media">Add Images</button>
-			</div>
-		<# } #>
-	</script>
-
 		<script type="text/html" id="tmpl-customize-control-date_time-content">
 
 		<# _.defaults( data, {"settings":[],"type":"date_time","priority":10,"active":true,"section":"","content":"<li id=\"customize-control-temp\" class=\"customize-control customize-control-date_time\">\n\t\t\t\t\t<\/li>","label":"","description":"","instanceNumber":73,"maxYear":9999,"minYear":1000,"allowPastDate":true,"twelveHourFormat":true,"includeTime":true,"defaultValue":null,"month_choices":{"1":{"text":"1-Jan","value":1},"2":{"text":"2-Feb","value":2},"3":{"text":"3-Mar","value":3},"4":{"text":"4-Apr","value":4},"5":{"text":"5-May","value":5},"6":{"text":"6-Jun","value":6},"7":{"text":"7-Jul","value":7},"8":{"text":"8-Aug","value":8},"9":{"text":"9-Sep","value":9},"10":{"text":"10-Oct","value":10},"11":{"text":"11-Nov","value":11},"12":{"text":"12-Dec","value":12}}} ); #>
@@ -1484,96 +1413,6 @@
 									</select>
 			</label>
 		<# } #>
-	</script>
-
-	<script type="text/html" id="tmpl-gallery-settings">
-		<h2>Gallery Settings</h2>
-
-		<label class="setting">
-			<span>Link To</span>
-			<select class="link-to"
-				data-setting="link"
-				<# if ( data.userSettings ) { #>
-					data-user-setting="urlbutton"
-				<# } #>>
-
-				<option value="post" <# if ( ! wp.media.galleryDefaults.link || 'post' == wp.media.galleryDefaults.link ) {
-					#>selected="selected"<# }
-				#>>
-					Attachment Page				</option>
-				<option value="file" <# if ( 'file' == wp.media.galleryDefaults.link ) { #>selected="selected"<# } #>>
-					Media File				</option>
-				<option value="none" <# if ( 'none' == wp.media.galleryDefaults.link ) { #>selected="selected"<# } #>>
-					None				</option>
-			</select>
-		</label>
-
-		<label class="setting">
-			<span>Columns</span>
-			<select class="columns" name="columns"
-				data-setting="columns">
-									<option value="1" <#
-						if ( 1 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
-					#>>
-						1					</option>
-									<option value="2" <#
-						if ( 2 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
-					#>>
-						2					</option>
-									<option value="3" <#
-						if ( 3 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
-					#>>
-						3					</option>
-									<option value="4" <#
-						if ( 4 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
-					#>>
-						4					</option>
-									<option value="5" <#
-						if ( 5 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
-					#>>
-						5					</option>
-									<option value="6" <#
-						if ( 6 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
-					#>>
-						6					</option>
-									<option value="7" <#
-						if ( 7 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
-					#>>
-						7					</option>
-									<option value="8" <#
-						if ( 8 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
-					#>>
-						8					</option>
-									<option value="9" <#
-						if ( 9 == wp.media.galleryDefaults.columns ) { #>selected="selected"<# }
-					#>>
-						9					</option>
-							</select>
-		</label>
-
-		<label class="setting">
-			<span>Random Order</span>
-			<input type="checkbox" data-setting="_orderbyRandom" />
-		</label>
-
-		<label class="setting size">
-			<span>Size</span>
-			<select class="size" name="size"
-				data-setting="size"
-				<# if ( data.userSettings ) { #>
-					data-user-setting="imgsize"
-				<# } #>
-				>
-									<option value="thumbnail">
-						Thumbnail					</option>
-									<option value="medium">
-						Medium					</option>
-									<option value="large">
-						Large					</option>
-									<option value="full">
-						Full Size					</option>
-							</select>
-		</label>
 	</script>
 
 	<script type="text/html" id="tmpl-playlist-settings">
