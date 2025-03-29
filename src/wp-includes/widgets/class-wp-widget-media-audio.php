@@ -140,7 +140,7 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 		}
 		?>
 
-		<div class="media-widget-control selected">	
+		<div class="media-widget-control selected">
 			<fieldset>
 				<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
 				<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" class="widefat" type="text" value="<?php echo esc_attr( $title ); ?>">
@@ -178,40 +178,12 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 			<input id="<?php echo esc_attr( $this->get_field_id( 'flac' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'flac' ) ); ?>" type="hidden" data-property="flac" class="media-widget-instance-property" value="<?php echo esc_attr( esc_attr( $flac ) ); ?>">
 			<input id="<?php echo esc_attr( $this->get_field_id( 'm4a' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'm4a' ) ); ?>" type="hidden" data-property="m4a" class="media-widget-instance-property" value="<?php echo esc_attr( esc_attr( $m4a ) ); ?>">
 			<input id="<?php echo esc_attr( $this->get_field_id( 'wav' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'wav' ) ); ?>" type="hidden" data-property="wav" class="media-widget-instance-property" value="<?php echo esc_attr( esc_attr( $wav ) ); ?>">
-			<input id="<?php echo esc_attr( $this->get_field_id( 'attachment_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'attachment_id' ) ); ?>" type="hidden" data-property="attachment_id" class="media-widget-instance-property" value="<?php echo esc_attr( $attachment_id ); ?>">			
+			<input id="<?php echo esc_attr( $this->get_field_id( 'attachment_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'attachment_id' ) ); ?>" type="hidden" data-property="attachment_id" class="media-widget-instance-property" value="<?php echo esc_attr( $attachment_id ); ?>">
 			<input id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="hidden" data-property="url" class="media-widget-instance-property" value="<?php echo esc_url( $url ); ?>">
 
 		</div>
 
 		<?php
-	}
-
-	/**
-	 * Sanitize widget form values as they are saved.
-	 *
-	 * @since CP-2.5.0
-	 *
-	 * @see WP_Widget::update()
-	 *
-	 * @param array $new_instance Values just sent to be saved.
-	 * @param array $old_instance Previously saved values from database.
-	 *
-	 * @return array Updated safe values to be saved.
-	 */
-	public function update( $new_instance, $old_instance ) {
-		$instance = array();
-		$instance['title']         = ! empty( $new_instance['title'] ) ? sanitize_text_field( $new_instance['title'] ) : '';
-		$instance['attachment_id'] = ! empty( $new_instance['attachment_id'] ) ? absint( $new_instance['attachment_id'] ) : 0;
-		$instance['preload']       = ! empty( $new_instance['preload'] ) ? sanitize_text_field( $new_instance['preload'] ) : '';
-		$instance['loop']          = ! empty( $new_instance['loop'] ) ? sanitize_text_field( $new_instance['loop'] ) : '';
-		$instance['mp3']           = ! empty( $new_instance['mp3'] ) ? sanitize_text_field( $new_instance['mp3'] ) : '';
-		$instance['ogg']           = ! empty( $new_instance['ogg'] ) ? sanitize_text_field( $new_instance['ogg'] ) : '';
-		$instance['flac']          = ! empty( $new_instance['flac'] ) ? sanitize_text_field( $new_instance['flac'] ) : '';
-		$instance['m4a']           = ! empty( $new_instance['m4a'] ) ? sanitize_text_field( $new_instance['m4a'] ) : '';
-		$instance['wav']           = ! empty( $new_instance['wav'] ) ? sanitize_text_field( $new_instance['wav'] ) : '';
-		$instance['url']           = ! empty( $new_instance['url'] ) ? sanitize_url( $new_instance['url'] ) : '';
-
-		return $instance;
 	}
 
 	/**
