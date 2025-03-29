@@ -430,39 +430,6 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 	}
 
 	/**
-	 * Sanitize widget form values as they are saved.
-	 *
-	 * @since CP-2.5.0
-	 *
-	 * @see WP_Widget::update()
-	 *
-	 * @param array $new_instance Values just sent to be saved.
-	 * @param array $old_instance Previously saved values from database.
-	 *
-	 * @return array Updated safe values to be saved.
-	 */
-	public function update( $new_instance, $old_instance ) {
-		$instance = array();
-		$instance['title']             = ! empty( $new_instance['title'] ) ? sanitize_text_field( $new_instance['title'] ) : '';
-		$instance['attachment_id']     = ! empty( $new_instance['attachment_id'] ) ? absint( $new_instance['attachment_id'] ) : 0;
-		$instance['url']               = ! empty( $new_instance['url'] ) ? sanitize_url( $new_instance['url'] ) : '';
-		$instance['size']              = ! empty( $new_instance['size'] ) ? sanitize_text_field( $new_instance['size'] ) : '';
-		$instance['width']             = ! empty( $new_instance['width'] ) ? absint( $new_instance['width'] ) : 0;
-		$instance['height']            = ! empty( $new_instance['height'] ) ? absint( $new_instance['height'] ) : 0;
-		$instance['caption']           = ! empty( $new_instance['caption'] ) ? wp_kses_post( $new_instance['caption'] ) : '';
-		$instance['alt']               = ! empty( $new_instance['alt'] ) ? sanitize_text_field( $new_instance['alt'] ) : '';
-		$instance['link_type']         = ! empty( $new_instance['link_type'] ) ? sanitize_text_field( $new_instance['link_type'] ) : '';
-		$instance['link_url']          = ! empty( $new_instance['link_url'] ) ? sanitize_url( $new_instance['link_url'] ) : '';
-		$instance['image_classes']     = ! empty( $new_instance['image_classes'] ) ? $this->sanitize_token_list( $new_instance['image_classes'] ) : '';
-		$instance['link_classes']      = ! empty( $new_instance['link_classes'] ) ? $this->sanitize_token_list( $new_instance['link_classes'] ) : '';
-		$instance['link_rel']          = ! empty( $new_instance['link_rel'] ) ? $this->sanitize_token_list( $new_instance['link_rel'] ) : '';
-		$instance['link_target_blank'] = ! empty( $new_instance['link_target_blank'] ) ? '_blank' : '';
-		$instance['link_image_title']  = ! empty( $new_instance['link_image_title'] ) ? sanitize_text_field( $new_instance['link_image_title'] ) : '';
-
-		return $instance;
-	}
-
-	/**
 	 * Loads the required media files for the media manager and scripts for media widgets.
 	 *
 	 * @since 4.8.0
