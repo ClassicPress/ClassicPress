@@ -1,15 +1,6 @@
-/**
- * @output wp-admin/js/widgets/media-audio-widgets.js
- */
-
 /* eslint consistent-this: [ "error", "control" ] */
 
 /* global AUDIO_WIDGET, console */
-
-/**
- * @namespace wp.mediaWidgets
- * @memberOf  wp
- */
 
 /*
  * @since CP-2.5.0
