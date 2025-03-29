@@ -326,12 +326,13 @@ abstract class WP_Widget_Media extends WP_Widget {
 	 * Note that the widget UI itself is rendered with JavaScript via `MediaWidgetControl#render()`.
 	 *
 	 * @since 4.8.0
+	 * @since CP-2.5.0 `form` function can be overridden by extending classes
 	 *
 	 * @see \WP_Widget_Media::render_control_template_scripts() Where the JS template is located.
 	 *
 	 * @param array $instance Current settings.
 	 */
-	final public function form( $instance ) {
+	public function form( $instance ) {
 		$instance_schema = $this->get_instance_schema();
 		$instance        = wp_array_slice_assoc(
 			wp_parse_args( (array) $instance, wp_list_pluck( $instance_schema, 'default' ) ),

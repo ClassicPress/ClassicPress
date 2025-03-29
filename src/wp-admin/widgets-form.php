@@ -22,7 +22,6 @@ if ( isset( $_GET['widgets-access'] ) ) {
 if ( 'on' === $widgets_access ) {
 	add_filter( 'admin_body_class', 'wp_widgets_access_body_class' );
 } else {
-	wp_enqueue_script( 'jquery-ui-sortable' );
 	wp_enqueue_script( 'admin-widgets' );
 
 	if ( wp_is_mobile() ) {
@@ -562,7 +561,26 @@ foreach ( $theme_sidebars as $sidebar => $registered_sidebar ) {
 	</div>
 </div>
 
+<?php // Renders the modal for media widgets ?>
+<dialog id="widget-modal">
+	<div class="media-modal wp-core-ui" aria-labelledby="media-frame-title">
+		<button type="button" id="media-modal-close" class="media-modal-close" autofocus>
+			<span class="media-modal-icon">
+				<span class="screen-reader-text"><?php esc_html_e( 'Close dialog' ); ?></span>
+			</span>
+		</button>
+	</div>
+</dialog>
+
 <?php
+/**
+ * Renders the template for the media image widget
+ *
+ * @since CP-2.5.0
+ */
+if ( class_exists( 'WP_Widget_Media_Image' ) ) {
+	echo cp_render_media_image_template();
+}
 
 /**
  * Fires after the available widgets and sidebars have loaded, before the admin footer.

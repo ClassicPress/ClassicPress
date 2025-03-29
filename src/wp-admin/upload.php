@@ -108,9 +108,9 @@ if ( isset( $_GET['mode'] ) && in_array( $_GET['mode'], $modes, true ) ) {
 if ( 'grid' === $mode ) {
 	// Styles and scripts since CP-2.3.0
 	wp_enqueue_style( 'mediaelement-player' );
-	wp_enqueue_style( 'media-grid' );
 	wp_enqueue_style( 'cp-filepond-image-preview' );
 	wp_enqueue_style( 'cp-filepond' );
+	wp_enqueue_style( 'media-grid' );
 	wp_enqueue_script( 'wp-mediaelement' );
 	wp_enqueue_script( 'media-grid' );
 
@@ -166,7 +166,7 @@ if ( 'grid' === $mode ) {
 			'title'   => __( 'Attachment Details' ),
 			'content' =>
 				'<p>' . __( 'Clicking an item will display an Attachment Details dialog, which allows you to preview media and make quick edits. Any changes you make to the attachment details will be automatically saved.' ) . '</p>' .
-				'<p>' . __( 'Use the arrow buttons at the top of the dialog, or the left and right arrow keys on your keyboard, to navigate between media items quickly.' ) . '</p>' .
+				'<p>' . __( 'Use the arrow buttons at the top of the dialog, the left and right arrow keys on your keyboard, or swipe left and right on a touch device to navigate between media items.' ) . '</p>' .
 				'<p>' . __( 'You can also delete individual items and access the extended edit screen from the details dialog.' ) . '</p>',
 		)
 	);
@@ -192,12 +192,10 @@ if ( 'grid' === $mode ) {
 	$mimes_list = implode( ',', $allowed_mimes );
 
 	// Get the user's preferred items per page.
-	$user = get_current_user_id();
-	$screen = get_current_screen();
-	$screen_option = $screen->get_option( 'per_page', 'option' );
-	$per_page = get_user_meta( $user, $screen_option, true );
+	$user_id = get_current_user_id();
+	$per_page = get_user_meta( $user_id, 'media_grid_per_page', true );
 	if ( empty( $per_page ) || $per_page < 1 ) {
-		$per_page = $screen->get_option( 'per_page', 'default' );
+		$per_page = 80;
 	}
 
 	// Fetch media items.
@@ -373,7 +371,7 @@ if ( 'grid' === $mode ) {
 						<span class="paging-input">
 							<label for="current-page-selector" class="screen-reader-text"><?php esc_html_e( 'Current Page' ); ?></label>
 							<input class="current-page" id="current-page-selector" type="text" name="paged" value="<?php echo esc_attr( $paged ); ?>" size="4" aria-describedby="table-paging">
-							<span class="tablenav-paging-text"> <?php esc_html_e( 'of' ); ?> <span class="total-pages"><?php echo esc_html( $total_pages ); ?></span></span>
+							<span id="table-paging" class="tablenav-paging-text"> <?php esc_html_e( 'of' ); ?> <span class="total-pages"><?php echo esc_html( $total_pages ); ?></span></span>
 						</span>
 						<a class="next-page button" href="<?php echo admin_url( '/upload.php?paged=' . $next_page ); ?>"
 							<?php
@@ -435,6 +433,8 @@ if ( 'grid' === $mode ) {
 					$update_nonce = $meta['nonces']['update'];
 					$delete_nonce = $meta['nonces']['delete'];
 					$edit_nonce   = $meta['nonces']['edit'];
+					$editable     = current_user_can( 'delete_post', $attachment->ID ) ? 1 : 0;
+					$erasable     = current_user_can( 'delete_post', $attachment->ID ) ? 1 : 0;
 					$image        = '<img src="' . esc_url( $url ) . '" alt="' . esc_attr( $alt ) . '">';
 
 					// Use an icon if the file uploaded is not an image
@@ -476,6 +476,8 @@ if ( 'grid' === $mode ) {
 						data-update-nonce="<?php echo $update_nonce; ?>"
 						data-delete-nonce="<?php echo $delete_nonce; ?>"
 						data-edit-nonce="<?php echo $edit_nonce; ?>"
+						data-editable="<?php echo $editable; ?>"
+						data-erasable="<?php echo $erasable; ?>"
 						>
 
 						<div class="select-attachment-preview <?php echo esc_attr( 'type-' . $file_type . ' subtype-' . $subtype . ' ' . $orientation ); ?>">

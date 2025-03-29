@@ -813,7 +813,8 @@
 	display: none;
 }
 
-.media-frame-title h1 {
+.media-frame-title h1,
+.media-frame-title h2 {
 	padding: 0 16px;
 	font-size: 22px;
 	line-height: 2.27272727;
@@ -2365,6 +2366,10 @@
 	display: block;
 	width: 100%;
 	max-width: 400px;
+}
+
+.image-details .media-embed fieldset {
+	max-width: unset;
 }
 
 .image-details .embed-media-settings .setting input[type="text"],
