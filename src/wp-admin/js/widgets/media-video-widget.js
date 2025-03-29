@@ -1,15 +1,6 @@
-/**
- * @output wp-admin/js/widgets/media-video-widgets.js
- */
-
 /* eslint consistent-this: [ "error", "control" ] */
 
 /* global VIDEO_WIDGET, console */
-
-/**
- * @namespace wp.mediaWidgets
- * @memberOf  wp
- */
 
 /*
  * @since CP 2.3.0
