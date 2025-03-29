@@ -179,7 +179,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 			}
 		}
 		?>
- 
+
 		<div class="media-widget-control">
 			<fieldset>
 				<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
@@ -223,38 +223,6 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 		<input id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="hidden" data-property="url" class="media-widget-instance-property" value="<?php echo esc_url( $url ); ?>">
 
 		<?php
-	}
-
-	/**
-	 * Sanitize widget form values as they are saved.
-	 *
-	 * @since CP-2.5.0
-	 *
-	 * @see WP_Widget::update()
-	 *
-	 * @param array $new_instance Values just sent to be saved.
-	 * @param array $old_instance Previously saved values from database.
-	 *
-	 * @return array Updated safe values to be saved.
-	 */
-	public function update( $new_instance, $old_instance ) {
-		$instance = array();
-		$instance['title']         = ! empty( $new_instance['title'] ) ? sanitize_text_field( $new_instance['title'] ) : '';
-		$instance['attachment_id'] = ! empty( $new_instance['attachment_id'] ) ? absint( $new_instance['attachment_id'] ) : 0;
-		$instance['url']           = ! empty( $new_instance['url'] ) ? sanitize_url( $new_instance['url'] ) : '';
-		$instance['preload']       = ! empty( $new_instance['preload'] ) ? sanitize_text_field( $new_instance['preload'] ) : 'metadata';
-		$instance['loop']          = ! empty( $new_instance['loop'] ) ? sanitize_text_field( $new_instance['loop'] ) : '';
-		$instance['content']       = ! empty( $new_instance['content'] ) ? wp_kses_post( $new_instance['content'] ) : '';
-		$instance['mp4']           = ! empty( $new_instance['mp4'] ) ? sanitize_url( $new_instance['mp4'] ) : '';
-		$instance['m4v']           = ! empty( $new_instance['m4v'] ) ? sanitize_url( $new_instance['m4v'] ) : '';
-		$instance['webm']          = ! empty( $new_instance['webm'] ) ? sanitize_url( $new_instance['webm'] ) : '';
-		$instance['ogv']           = ! empty( $new_instance['ogv'] ) ? sanitize_url( $new_instance['ogv'] ) : '';
-		$instance['flv']           = ! empty( $new_instance['flv'] ) ? sanitize_url( $new_instance['flv'] ) : '';
-		$instance['dw_include']    = ! empty( $new_instance['dw_include'] ) ? absint( $new_instance['dw_include'] ) : 0;
-		$instance['dw_logged']     = ! empty( $new_instance['dw_logged'] ) ? sanitize_text_field( $new_instance['dw_logged'] ) : '';
-		$instance['other_ids']     = ! empty( $new_instance['other_ids'] ) ? sanitize_text_field( $new_instance['other_ids'] ) : '';
-
-		return $instance;
 	}
 
 	/**
