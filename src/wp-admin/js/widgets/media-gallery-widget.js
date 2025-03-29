@@ -57,8 +57,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		mediaUploader.on( 'update', function( selection ) {
 			var ul, fieldset,
 				imageIds = selection.map( function( attachment ) {
-				return attachment.id;
-			} );
+					return attachment.id;
+				} );
 
 			ul = document.createElement( 'ul' );
 			ul.className = 'media-widget-gallery-preview';
