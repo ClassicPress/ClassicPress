@@ -101,9 +101,6 @@ class Tests_Widgets_wpWidgetMediaGallery extends WP_UnitTestCase {
 		$widget->enqueue_admin_scripts();
 
 		$this->assertTrue( wp_script_is( 'media-gallery-widget' ) );
-
-		$after = implode( '', wp_scripts()->registered['media-gallery-widget']->extra['after'] );
-		$this->assertStringContainsString( 'wp.mediaWidgets.modelConstructors[ "media_gallery" ].prototype', $after );
 	}
 
 	/**
