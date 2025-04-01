@@ -70,4 +70,6 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 </div>
 
 </div>
-<?php require_once ABSPATH . 'wp-admin/admin-footer.php'; ?>
+<?php
+
+require_once ABSPATH . 'wp-admin/admin-footer.php';
