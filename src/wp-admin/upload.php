@@ -433,7 +433,7 @@ if ( 'grid' === $mode ) {
 					$update_nonce = $meta['nonces']['update'];
 					$delete_nonce = $meta['nonces']['delete'];
 					$edit_nonce   = $meta['nonces']['edit'];
-					$editable     = current_user_can( 'delete_post', $attachment->ID ) ? 1 : 0;
+					$editable     = current_user_can( 'edit_post', $attachment->ID ) ? 1 : 0;
 					$erasable     = current_user_can( 'delete_post', $attachment->ID ) ? 1 : 0;
 					$image        = '<img src="' . esc_url( $url ) . '" alt="' . esc_attr( $alt ) . '">';
 
