@@ -110,7 +110,7 @@ function edit_user( $user_id = 0 ) {
 	$taxonomies = apply_filters( 'cp_user_taxonomies', get_object_taxonomies( 'user', 'objects' ), $user );
 
 	if ( ! empty( $taxonomies ) ) {
-			foreach ( $taxonomies as $taxonomy ) {
+		foreach ( $taxonomies as $taxonomy ) {
 			if ( isset( $_POST[ $taxonomy->name ] ) ) {
 				$term_slugs = array();
 				foreach ( $_POST[ $taxonomy->name ] as $term_slug ) {
