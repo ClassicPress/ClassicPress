@@ -564,7 +564,7 @@ foreach ( $theme_sidebars as $sidebar => $registered_sidebar ) {
 <?php // Renders the modal for media widgets ?>
 <dialog id="widget-modal">
 	<div class="media-modal wp-core-ui" aria-labelledby="media-frame-title">
-		<button type="button" id="media-modal-close" class="media-modal-close" autofocus>
+		<button id="media-modal-close" type="button" class="media-modal-close" autofocus>
 			<span class="media-modal-icon">
 				<span class="screen-reader-text"><?php esc_html_e( 'Close dialog' ); ?></span>
 			</span>
@@ -573,6 +573,13 @@ foreach ( $theme_sidebars as $sidebar => $registered_sidebar ) {
 </dialog>
 
 <?php
+/**
+ * Renders the template for uploading files to widgets
+ *
+ * @since CP-2.5.0
+ */
+echo cp_render_widget_upload_template();
+
 /**
  * Renders the template for the media image widget
  *
