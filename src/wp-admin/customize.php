@@ -312,6 +312,13 @@ do_action( 'customize_controls_head' );
 
 <?php
 /**
+ * Renders the template for uploading files to widgets
+ *
+ * @since CP-2.5.0
+ */
+echo cp_render_widget_upload_template();
+
+/**
  * Renders the template for the media image widget
  *
  * @since CP-2.5.0
