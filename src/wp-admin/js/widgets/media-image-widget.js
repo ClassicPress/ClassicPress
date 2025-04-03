@@ -221,7 +221,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			title = item.getAttribute( 'aria-label' ),
 			date = item.dataset.date,
 			filename = item.dataset.filename,
-			filetype = item.dataset.filetype,
 			size = item.dataset.size,
 			width = item.dataset.width,
 			height = item.dataset.height,
@@ -234,7 +233,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			sizeOptions = '',
 			sizesObject = JSON.parse( sizes ),
 			alt = item.querySelector( 'img' ).getAttribute( 'alt' ),
-			link = item.dataset.link,
 			updateNonce = item.dataset.updateNonce,
 			deleteNonce = item.dataset.deleteNonce,
 			linkType = widget.querySelector( 'input[data-property="link_type"]' ).value,
@@ -242,9 +240,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			inputs = dialog.querySelectorAll( '.media-sidebar input, .media-sidebar textarea, .media-embed input, .media-embed textarea' ),
 			selects = dialog.querySelectorAll( '.media-sidebar select, .media-embed select' ),
 			linkTo = dialog.querySelector( '#attachment-display-settings-link-to' ),
-			linkToCustom = dialog.querySelector( '#attachment-display-settings-link-to-custom' ),
-			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
-			next = item.nextElementSibling ? item.nextElementSibling.id : '';
+			linkToCustom = dialog.querySelector( '#attachment-display-settings-link-to-custom' );
 
 		// Update available size options in hidden field
 		for ( var dimension in sizesObject ) {
@@ -771,8 +767,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function insertEmbed() {
-		var embedAlt, embedCaption, embedLinkTo,
-			embed = dialog.querySelector( '#embed-url-field' ),
+		var embed = dialog.querySelector( '#embed-url-field' ),
 			widgetId = dialog.querySelector( '#new-image-modal' ).dataset.widgetId,
 			widget = document.getElementById( widgetId ),
 			linkType = widget.querySelector( '[data-property="link_type"]' ).value,
@@ -945,7 +940,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function editMedia( widget ) {
-		var	imageSize, linkTo, linkToUrl, editOriginal, widthField, heightField, customSizeField, updateButton,
+		var	imageSize, linkTo, linkToCustom, editOriginal, widthField, heightField, customSizeField, updateButton,
 			size            = widget.querySelector( 'input[data-property="size"]' ).value,
 			width           = widget.querySelector( 'input[data-property="width"]' ).value,
 			height          = widget.querySelector( 'input[data-property="height"]' ).value,
@@ -1084,8 +1079,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function updateImageDetails( widgetId ) {
-		var sizeOptions = '',
-			size = dialog.querySelector( '#image-details-size' ),
+		var size = dialog.querySelector( '#image-details-size' ),
 			selectedOption = size.options[size.selectedIndex].text,
 			widget = document.getElementById( widgetId );
 
@@ -1158,7 +1152,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Submit changes
 			dialog.querySelector( '.imgedit-submit-btn' ).addEventListener( 'click', function() {
-				document.getElementById( widgetID ).dispatchEvent( new Event( 'change' ) );
+				document.getElementById( widgetId ).dispatchEvent( new Event( 'change' ) );
 				closeButton.click();
 				editButton.focus();
 			} );
@@ -1175,7 +1169,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	document.addEventListener( 'click', function( e ) {
-		var base, page, widgetId, itemAdd, itemEmbed, tabPanel, urlPanel, frameTitle,
+		var base, page, widgetId, itemAdd, itemEmbed, itemBrowse, itemUpload,
+			tabPanel, gridSubPanel, uploadSubPanel, urlPanel, frameTitle,
 			widget = e.target.closest( '.widget' );
 
 		if ( widget ) {
@@ -1352,7 +1347,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		pond = FilePond.create( dialog.querySelector( '#filepond' ), {
 			allowMultiple: true,
 			server: {
-				process: function( fieldName, file, metadata, load, error, progress, abort, transfer, options ) {
+				process: function( fieldName, file, metadata, load, error, progress, abort ) {
 
 					// Create FormData
 					var formData = new FormData();
@@ -1447,15 +1442,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	/* Enable choosing of panel on narrow screen */
 	function checkWindowWidth() {
-		var insert, embed, details;
+		var itemAdd, embed, details;
 		if ( window.innerWidth < 901 ) {
-			add = dialog.querySelector( '#menu-item-add' );
-			add.removeAttribute( 'hidden' );
-			add.setAttribute( 'aria-selected', true );
+			itemAdd = dialog.querySelector( '#menu-item-add' );
+			itemAdd.removeAttribute( 'hidden' );
+			itemAdd.setAttribute( 'aria-selected', true );
 			embed = dialog.querySelector( '#menu-item-embed' );
 			embed.removeAttribute( 'hidden' );
 			details = dialog.querySelector( 'details' );
-			details.append( add );
+			details.append( itemAdd );
 			details.append( embed );
 			details.removeAttribute( 'hidden' );
 		}
