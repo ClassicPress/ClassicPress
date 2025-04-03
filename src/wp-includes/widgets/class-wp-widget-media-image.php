@@ -391,18 +391,18 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 
 					<?php
 					if ( ! empty( $edit_nonce ) ) {
-					?>
+						?>
 
 						<button type="button" class="button edit-media selected" data-edit-nonce="<?php echo esc_attr( $edit_nonce ); ?>"><?php esc_html_e( 'Edit Image' ); ?></button>
 
-					<?php
+						<?php
 					}
 					if ( ! empty( $update_nonce ) ) {
-					?>
+						?>
 
 						<button type="button" class="button change-media select-media selected"><?php esc_html_e( 'Replace Image' ); ?></button>
 
-					<?php
+						<?php
 					}
 					?>
 
@@ -498,7 +498,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 				}
 			}
 		}
-		
+
 		$user_id = get_current_user_id();
 		$per_page = get_user_meta( $user_id, 'media_grid_per_page', true );
 		if ( empty( $per_page ) || $per_page < 1 ) {
@@ -616,11 +616,11 @@ function cp_render_media_image_template() {
 														<?php
 														// Enable Attachment page option only if available.
 														if ( '1' === get_option( 'wp_attachment_pages_enabled' ) ) {
-														?>
+															?>
 
 															<option value="post"><?php esc_html_e( 'Attachment Page' ); ?></option>
 
-														<?php
+															<?php
 														}
 														?>
 
