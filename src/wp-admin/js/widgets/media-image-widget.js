@@ -1,3 +1,7 @@
+/**
+ * @output wp-admin/js/widgets/media-image-widgets.js
+ */
+
 /* eslint consistent-this: [ "error", "control" ] */
 /* global ajaxurl, IMAGE_WIDGET, console */
 
@@ -5,352 +9,933 @@
  * @since CP 2.5.0
  */
 document.addEventListener( 'DOMContentLoaded', function() {
-	var dialog = document.getElementById( 'widget-modal' ),
+	var addButton, pond,
+		{ FilePond } = window, // import FilePond
+		dialog = document.getElementById( 'widget-modal' ),
 		closeButton = document.getElementById( 'media-modal-close' );
 
 	/**
-	 * Open the media select frame to chose an item.
+	 * Update details within modal.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function setAddedMediaFields( id ) {
+		var form = document.createElement( 'form' );
+		form.className = 'compat-item';
+		form.innerHTML = '<input type="hidden" id="menu-order" name="attachments[' + id + '][menu_order]" value="0">' +
+			'<p class="media-types media-types-required-info"><span class="required-field-message">Required fields are marked <span class="required">*</span></span></p>' +
+			'<span class="setting" data-setting="media_category">' +
+				'<label for="attachments-' + id + '-media_category">' +
+					'<span class="alignleft">Media Categories</span>' +
+				'</label>' +
+				'<input type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" value="">' +
+			'</span>' +
+			'<span class="setting" data-setting="media_post_tag">' +
+				'<label for="attachments-' + id + '-media_post_tag">' +
+					'<span class="alignleft">Media Tags</span>' +
+				'</label>' +
+				'<input type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" value="">' +
+			'</span>';
+
+		if ( document.querySelector( '.compat-item' ) != null ) {
+			document.querySelector( '.compat-item' ).remove();
+		}
+		document.querySelector( '.attachment-compat' ).append( form );
+	}
+
+	/**
+	 * Update attachment details.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function updateDetails( input, id ) {
+		var successTimeout,
+			data = new FormData();
+
+		data.append( 'action', 'save-attachment' );
+		data.append( 'id', id );
+		data.append( 'nonce', document.getElementById( 'media-' + id ).dataset.updateNonce );
+
+		// Append metadata fields
+		if ( input.parentNode.dataset.setting === 'alt' ) {
+			data.append( 'changes[alt]', input.value );
+		} else if ( input.parentNode.dataset.setting === 'title' ) {
+			data.append( 'changes[title]', input.value );
+		} else if ( input.parentNode.dataset.setting === 'caption' ) {
+			data.append( 'changes[caption]', input.value );
+		} else if ( input.parentNode.dataset.setting === 'description' ) {
+			data.append( 'changes[description]', input.value );
+		}
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result.success ) {
+
+				// Update data attributes
+				if ( input.parentNode.dataset.setting === 'alt' ) {
+					document.getElementById( 'media-' + id ).querySelector( 'img' ).setAttribute( 'alt', input.value );
+				} else if ( input.parentNode.dataset.setting === 'title' ) {
+					document.getElementById( 'media-' + id ).setAttribute( 'aria-label', input.value );
+				} else if ( input.parentNode.dataset.setting === 'caption' ) {
+					document.getElementById( 'media-' + id ).setAttribute( 'data-caption', input.value );
+				} else if ( input.parentNode.dataset.setting === 'description' ) {
+					document.getElementById( 'media-' + id ).setAttribute( 'data-description', input.value );
+				}
+
+				// Show success visual feedback.
+				clearTimeout( successTimeout );
+				document.getElementById( 'details-saved' ).classList.remove( 'hidden' );
+				document.getElementById( 'details-saved' ).setAttribute( 'aria-hidden', 'false' );
+
+				// Hide success visual feedback after 3 seconds.
+				successTimeout = setTimeout( function() {
+					document.getElementById( 'details-saved' ).classList.add( 'hidden' );
+					document.getElementById( 'details-saved' ).setAttribute( 'aria-hidden', 'true' );
+				}, 3000 );
+			} else {
+				console.error( IMAGE_WIDGET.failed_update, result.data.error );
+			}
+		} )
+		.catch( function( error ) {
+			console.error( IMAGE_WIDGET.error, error );
+		} );
+	}
+
+	/**
+	 * Update media categories and tags.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function updateMediaTaxOrTag( input, id ) {
+		var successTimeout, newTaxes,
+			data = new FormData(),
+			taxonomy = input.getAttribute( 'name' ).replace( 'attachments[' + id + '][' , '' ).replace( ']', '' );
+
+		data.append( 'action', 'save-attachment-compat' );
+		data.append( 'nonce', document.getElementById( 'media-' + id ).dataset.updateNonce );
+		data.append( 'id', id );
+		data.append( 'taxonomy', taxonomy );
+		data.append( 'attachments[' + id + '][' + taxonomy + ']', input.value );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result.success ) {
+				if ( taxonomy === 'media_category' ) {
+					newTaxes = result.data.media_cats.join( ', ' );
+					input.value = newTaxes;
+					document.getElementById( 'media-' + id ).setAttribute( 'data-taxes', newTaxes );
+				} else if ( taxonomy === 'media_tag' ) {
+					newTaxes = result.data.media_tags.join( ', ' );
+					input.value = newTaxes;
+					document.getElementById( 'media-' + id ).setAttribute( 'data-tags', newTaxes );
+				}
+
+				// Show success visual feedback.
+				clearTimeout( successTimeout );
+				document.getElementById( 'tax-saved' ).classList.remove( 'hidden' );
+				document.getElementById( 'tax-saved' ).setAttribute( 'aria-hidden', 'false' );
+
+				// Hide success visual feedback after 3 seconds.
+				successTimeout = setTimeout( function() {
+					document.getElementById( 'tax-saved' ).classList.add( 'hidden' );
+					document.getElementById( 'tax-saved' ).setAttribute( 'aria-hidden', 'true' );
+				}, 3000 );
+			} else {
+				console.error( IMAGE_WIDGET.failed_update, result.data.error );
+			}
+		} )
+		.catch( function( error ) {
+			console.error( IMAGE_WIDGET.error, error );
+		} );
+	}
+
+	/**
+	 * Delete attachment from within modal.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function deleteItem( id ) {
+		var data = new URLSearchParams( {
+			action: 'delete-post',
+			_ajax_nonce: document.getElementById( 'media-' + id ).dataset.deleteNonce,
+			id: id
+		} );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result === 1 ) {
+				document.getElementById( 'media-' + id ).remove();
+				closeButton.click();
+			} else {
+				console.log( IMAGE_WIDGET.delete_failed );
+			}
+		} )
+		.catch( function( error ) {
+			console.error( IMAGE_WIDGET.error, error );
+		} );
+	}
+
+	/**
+	 * Select and deselect media items for adding to widget.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function selectItemToAdd( item, widget, clicked ) {
+		var selectedItems = document.querySelectorAll( '.selected' ),
+			id = item.id.replace( 'media-', '' ),
+			title = item.getAttribute( 'aria-label' ),
+			date = item.dataset.date,
+			filename = item.dataset.filename,
+			filetype = item.dataset.filetype,
+			size = item.dataset.size,
+			width = item.dataset.width,
+			height = item.dataset.height,
+			caption = item.dataset.caption,
+			description = item.dataset.description,
+			taxes = item.dataset.taxes,
+			tags = item.dataset.tags,
+			url = item.dataset.url,
+			sizes = item.dataset.sizes,
+			sizeOptions = '',
+			sizesObject = JSON.parse( sizes ),
+			alt = item.querySelector( 'img' ).getAttribute( 'alt' ),
+			link = item.dataset.link,
+			updateNonce = item.dataset.updateNonce,
+			deleteNonce = item.dataset.deleteNonce,
+			linkType = widget.querySelector( 'input[data-property="link_type"]' ).value,
+			linkUrl = widget.querySelector( 'input[data-property="link_url"]' ),
+			inputs = dialog.querySelectorAll( '.media-sidebar input, .media-sidebar textarea, .media-embed input, .media-embed textarea' ),
+			selects = dialog.querySelectorAll( '.media-sidebar select, .media-embed select' ),
+			linkTo = dialog.querySelector( '#attachment-display-settings-link-to' ),
+			linkToCustom = dialog.querySelector( '#attachment-display-settings-link-to-custom' ),
+			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
+			next = item.nextElementSibling ? item.nextElementSibling.id : '';
+
+		// Update available size options in hidden field
+		for ( var dimension in sizesObject ) {
+			sizeOptions += '<option value="' + dimension + '">' + dimension[0].toUpperCase() + dimension.slice(1) + ' – ' + sizesObject[dimension].width + ' x ' + sizesObject[dimension].height + '</option>';
+		}
+
+		// Set menu_order, media_category, and media_post_tag field IDs correctly
+		setAddedMediaFields( id );
+
+		// Populate modal with attachment details
+		dialog.querySelector( '.attachment-date' ).textContent = date;
+		dialog.querySelector( '.attachment-filename' ).textContent = filename;
+		dialog.querySelector( '.attachment-filesize' ).textContent = size;
+		dialog.querySelector( '.attachment-dimensions' ).textContent = width + ' ' + IMAGE_WIDGET.by + ' ' + height + ' ' + IMAGE_WIDGET.pixels;
+		dialog.querySelector( '#edit-more' ).href = ajaxurl.replace( 'admin-ajax.php', 'post.php?post=' + id + '&action=edit' );
+		dialog.querySelector( '#attachment-details-description').textContent = description;
+		dialog.querySelector( '#attachment-details-copy-link').value = url;
+
+		if ( clicked === true ) {
+			dialog.querySelector( '#attachment-details-alt-text').textContent = alt;
+			dialog.querySelector( '#attachment-details-title').value = title;
+			dialog.querySelector( '#attachment-details-caption').textContent = caption;
+		} else {
+			dialog.querySelector( '#attachment-details-alt-text').textContent = widget.querySelector( 'input[data-property="alt"]' ).value;
+			dialog.querySelector( '#attachment-details-title').value = title;
+			dialog.querySelector( '#attachment-details-caption').textContent = widget.querySelector( 'input[data-property="caption"]' ).value;
+		}
+
+		// Set status of items according to user's capabilities
+		if ( updateNonce == null ) {
+			inputs.forEach( function( input ) {
+				input.setAttribute( 'readonly', true );
+			} );
+			dialog.querySelector( '#edit-more' ).parentNode.setAttribute( 'hidden', true );
+		} else {
+			inputs.forEach( function( input ) {
+				input.removeAttribute( 'readonly' );
+			} );
+			dialog.querySelector( '#edit-more' ).parentNode.removeAttribute( 'hidden' );
+		}
+
+		if ( deleteNonce == null ) {
+			selects.forEach( function( select ) {
+				select.setAttribute( 'disabled', true );
+			} );
+			dialog.querySelector( '.delete-attachment' ).parentNode.setAttribute( 'hidden', true );
+		} else {
+			selects.forEach( function( select ) {
+				select.removeAttribute( 'disabled' );
+			} );
+			dialog.querySelector( '.delete-attachment' ).parentNode.removeAttribute( 'hidden' );
+		}
+
+		// Show or hide Custom URL depending on link type
+		linkTo.querySelectorAll( 'option' ).forEach( function( option ) {
+			option.removeAttribute( 'selected' );
+			if ( option.value === linkType ) {
+				option.setAttribute( 'selected', true );
+			}
+		} );
+		if ( linkTo.value === 'none' ) {
+			linkToCustom.parentNode.classList.add( 'hidden' );		
+			linkToCustom.value = '';
+		} else {
+			if ( linkUrl != null ) {
+				linkToCustom.value = linkUrl.value;
+			} else {
+				linkToCustom.value = '';
+			}
+			linkToCustom.parentNode.classList.remove( 'hidden' );
+		}
+
+		// Show and hide URL field as appropriate
+		linkTo.addEventListener( 'change', function() {
+			var selectedOption = this[this.selectedIndex];
+			linkTo.querySelectorAll( 'option' ).forEach( function( option ) {
+				option.removeAttribute( 'selected' );
+			} );
+			selectedOption.setAttribute( 'selected', true );
+			if ( selectedOption.value === 'none' ) {
+				linkToCustom.parentNode.classList.add( 'hidden' );
+				linkToCustom.value = '';
+			} else {
+				if ( selectedOption.value === 'file' ) {
+					linkToCustom.value = url;
+				} else if ( selectedOption.value === 'post' ) {
+					linkToCustom.value = url;
+				} else if ( selectedOption.value === 'custom' ) {
+					linkToCustom.value = '';
+				}
+				linkToCustom.parentNode.classList.remove( 'hidden' );
+			}
+			addButton.removeAttribute( 'disabled' );
+		} );
+
+		dialog.querySelector( '#attachments-' + id + '-media_category').value = taxes;
+		dialog.querySelector( '#attachments-' + id + '-media_post_tag').value = tags;
+		dialog.querySelector( '#attachment-display-settings-size' ).innerHTML = sizeOptions;
+
+		dialog.querySelector( '.attachment-details' ).removeAttribute( 'hidden' );
+
+		// Delete media item
+		dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
+			if ( confirm( IMAGE_WIDGET.confirm_delete ) ) {
+				deleteItem( id );
+			}
+		} );
+
+		// Update media attachment details
+		dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
+			input.addEventListener( 'blur', function() {
+				if ( input.parentNode.parentNode.className === 'compat-item' ) {
+					updateMediaTaxOrTag( input, id ); // Update media categories and tags
+				} else {
+					updateDetails( input, id );
+				}
+			} );
+		} );
+
+		// Uncheck item if clicked on
+		if ( item.className.includes( 'selected' ) ) {
+			if ( clicked === false ) {
+				addButton.setAttribute( 'disabled', true );
+			} else {
+				item.classList.remove( 'selected' );
+				item.setAttribute( 'aria-checked', false );
+
+				// Disable add to widget button if no media items are selected
+				if ( document.querySelector( '.media-item.selected' ) == null ) {
+					addButton.setAttribute( 'disabled', true );
+					dialog.querySelector( '.attachment-details' ).setAttribute( 'hidden', true );
+				}
+			}
+		} else {
+			// Prevent selection of multiple items
+			if ( selectedItems.length ) {
+				selectedItems.forEach( function( selectedItem ) {
+					selectedItem.classList.remove( 'selected' );
+					selectedItem.setAttribute( 'aria-checked', false );
+				} );
+			}
+
+			item.classList.add( 'selected' );
+			item.setAttribute( 'aria-checked', true );
+
+			// Enable add to widget button
+			addButton.removeAttribute( 'disabled' );
+		}
+	}
+
+	/**
+	 * Populate media items within grid.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function populateGridItem( attachment, widget ) {
+		var gridItem = document.createElement( 'li' ),
+			image = '<img src="' + attachment.url + '" alt="' + attachment.alt + '">',
+			selected = attachment.id == widget.querySelector( '[data-property="attachment_id"]' ).value ? ' selected' : '';
+
+		gridItem.className = 'media-item' + selected;
+		gridItem.id = 'media-' + attachment.id;
+		gridItem.setAttribute( 'tabindex', 0 );
+		gridItem.setAttribute( 'role', 'checkbox' );
+		gridItem.setAttribute( 'aria-checked', selected ? true : false );
+		gridItem.setAttribute( 'aria-label', attachment.title );
+		gridItem.setAttribute( 'data-date', attachment.dateFormatted );
+		gridItem.setAttribute( 'data-url', attachment.url );
+		gridItem.setAttribute( 'data-filename', attachment.filename );
+		gridItem.setAttribute( 'data-filetype', attachment.type );
+		gridItem.setAttribute( 'data-mime', attachment.mime );
+		gridItem.setAttribute( 'data-width', attachment.width );
+		gridItem.setAttribute( 'data-height', attachment.height );
+		gridItem.setAttribute( 'data-size', attachment.filesizeHumanReadable );
+		gridItem.setAttribute( 'data-caption', attachment.caption );
+		gridItem.setAttribute( 'data-description', attachment.description );
+		gridItem.setAttribute( 'data-link', attachment.link );
+		gridItem.setAttribute( 'data-orientation', attachment.orientation );
+		gridItem.setAttribute( 'data-menu-order', attachment.menuOrder );
+		gridItem.setAttribute( 'data-taxes', attachment.media_cats );
+		gridItem.setAttribute( 'data-tags', attachment.media_tags );
+		gridItem.setAttribute( 'data-sizes', JSON.stringify( attachment.sizes ) );
+		gridItem.setAttribute( 'data-update-nonce', attachment.nonces.update );
+		gridItem.setAttribute( 'data-delete-nonce', attachment.nonces.delete );
+		gridItem.setAttribute( 'data-edit-nonce', attachment.nonces.edit );
+
+		gridItem.innerHTML = '<div class="select-attachment-preview type-' + attachment.type + ' subtype-' + attachment.subtype + '">' + 
+			'<div class="media-thumbnail">' + image + '</div>' +
+			'</div>' +
+			'<button type="button" class="check" tabindex="-1">' +
+			'<span class="media-modal-icon"></span>' +
+			'<span class="screen-reader-text">' + IMAGE_WIDGET.deselect + '></span>' +
+			'</button>';
+
+		return gridItem;
+	}
+
+	/**
+	 * Populate the grid with images.
 	 *
 	 * @abstract
 	 * @return {void}
 	 */
 	function selectMedia( widget ) {
-		var mediaUploader,
-			embedded = false,
-			currentImageId = widget.querySelector( '[data-property="attachment_id"]' ).value;
+		var template = document.getElementById( 'tmpl-media-grid-modal' ),
+			clone    = template.content.cloneNode( true ),
+			nonce    = document.body.className.includes( ' wp-customizer' ) ? document.getElementById( '_ajax_linking_nonce' ).value : document.getElementById( '_wpnonce_widgets' ).value,
+			params   = new URLSearchParams( {
+				'action': 'query-attachments',
+				'query[posts_per_page]': IMAGE_WIDGET.per_page,
+				'query[post_mime_type]': 'image',
+				'query[paged]': 1,
+				'_ajax_nonce': nonce,
+			} );
 
-		if ( mediaUploader ) {
-			mediaUploader.open();
-			return;
-		}
-
-		mediaUploader = wp.media( {
-			multiple: false,
-			library: {
-				type: 'image'
-			},
-			states: [
-				new wp.media.controller.Library( {
-					library: wp.media.query({ type: 'image' }),
-					multiple: false,
-					priority: 20
-				} ),
-				new wp.media.controller.Embed( {
-					id: 'embed',
-					priority: 30
-				} )
-			]
-		} );
-
-		// This runs once the modal is open
-		mediaUploader.on( 'ready', function() {
-			var separator = document.createElement( 'div' ),
-				addButton = mediaUploader.el.querySelector( '.media-button-select' ),
-				libraryButton = mediaUploader.el.querySelector( '#menu-item-library' ),
-				selection = mediaUploader.state().get( 'selection' ),
-				attachment = wp.media.attachment( currentImageId );
-
-			separator.className = 'separator';
-			separator.setAttribute( 'role', 'presentation' );
-			libraryButton.after( separator );
-
-			// Prevent duplicate separator lines
-			if ( mediaUploader.el.querySelectorAll( '.separator' ).length > 1 ) {
-				mediaUploader.el.querySelectorAll( '.separator' )[1].remove();
+		// Make AJAX request
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: params,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
 			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result.success ) {
 
-			// Set the current image as selected when opening the media library
-			attachment.fetch();
-			selection.add( attachment ? [attachment] : [] );
-			if ( attachment.id === '0' ) {
-				addButton.setAttribute( 'disabled', true );
-			}
+				// Append cloned template and show relevant elements
+				dialog.querySelector( '.media-modal' ).append( clone );
+				dialog.querySelector( '#menu-item-add' ).textContent = IMAGE_WIDGET.add_image;
+				dialog.querySelector( '#menu-item-add' ).removeAttribute( 'hidden' );
+				dialog.querySelector( '#menu-item-embed' ).removeAttribute( 'hidden' );
+				checkWindowWidth();
 
-			// Insert image from URL
-			mediaUploader.el.querySelector( '#menu-item-embed' ).addEventListener( 'click', function() {
-				var embedAlt, embedCaption, embedLinkTo, embedButtons,
-					embed = document.createElement( 'div' ),
-					linkType = widget.querySelector( '[data-property="link_type"]' ).value;
+				// Set widget ID and values of variables
+				dialog.querySelector( '#new-image-modal' ).dataset.widgetId = widget.id;
+				addButton = dialog.querySelector( '#media-button-insert' );
 
-				embed.className = 'media-embed';
-				embed.innerHTML = '<span class="embed-url">' +
-					'<input id="embed-url-field" type="url" aria-label="' + mediaUploader.el.querySelector( 'h1' ).textContent + '" placeholder="https://" value="' + widget.querySelector( '[data-property="url"]' ).value + '">' +
-					'<span class="spinner"></span>' +
-					'</span>' +
-					'<div class="embed-media-settings">' +
-					'<div class="wp-clearfix">' +
-					'<div class="thumbnail">' +
-					'<img src="" draggable="false" alt="">' +
-					'</div>' +
-					'</div>' +
-					'<span class="setting alt-text has-description">' +
-					'<label for="embed-image-settings-alt-text" class="name">Alternative Text</label>' +
-					'<textarea id="embed-image-settings-alt-text" data-setting="alt" aria-describedby="alt-text-description">' + widget.querySelector( '[data-property="alt"]' ).value + '</textarea>' +
-					'</span>' +
-					'<p class="description" id="alt-text-description"><a href="https://www.w3.org/WAI/tutorials/images/decision-tree/" target="_blank">Learn how to describe the purpose of the image<span class="screen-reader-text"> (opens in a new tab)</span></a>. Leave empty if the image is purely decorative.</p>' +
-					'<span class="setting caption">' +
-					'<label for="embed-image-settings-caption" class="name">Caption</label>' +
-					'<textarea id="embed-image-settings-caption" data-setting="caption">' + widget.querySelector( '[data-property="caption"]' ).value + '</textarea>' +
-					'</span>' +
-					'<fieldset class="setting-group">' +
-					'<legend class="name">Link To</legend>' +
-					'<span class="setting link-to">' +
-					'<span class="button-group button-large" data-setting="link">' +
-					'<button class="button" value="file" aria-pressed="false">Image URL</button>' +
-					'<button class="button" value="custom" aria-pressed="false">Custom URL</button>' +
-					'<button class="button" value="none" aria-pressed="false">None</button>' +
-					'</span>' +
-					'</span>' +
-					'<span class="setting hidden">' +
-					'<label for="embed-image-settings-link-to-custom" class="name">URL</label>' +
-					'<input type="text" id="embed-image-settings-link-to-custom" class="link-to-custom" data-setting="linkUrl" value="' + widget.querySelector( '[data-property="link_url"]' ).value + '">' +
-					'</span>' +
-					'</fieldset>' +
-					'</div>';
+				if ( result.data.length === 0 ) {
 
-				if ( embedded === false ) {
-					mediaUploader.el.querySelector( '.media-frame-content' ).append( embed );
-					embedded = true;
-				}
-				if ( mediaUploader.el.querySelector( '.uploader-inline' ) ) {
-					mediaUploader.el.querySelector( '.uploader-inline' ).remove();
-				}
-				if ( mediaUploader.el.querySelector( '.attachments-browser' ) ) {
-					mediaUploader.el.querySelector( '.attachments-browser' ).remove();
-				}
+					// Reset pagination
+					dialog.querySelectorAll( '.pagination-links button' ).forEach( function( pageLink ) {
+						pageLink.setAttribute( 'data-page', 1 );
+						pageLink.setAttribute( 'disabled', true );
+						pageLink.setAttribute( 'inert', true );
+					} );
 
-				mediaUploader.el.querySelector( '#embed-url-field' ).addEventListener( 'change', function( e ) {
-					var fields   = mediaUploader.el.querySelectorAll( '.embed-media-settings input, .embed-media-settings textarea' ),
-						url      = e.target.value,
-						fileType = url.split( '.' ).pop(),
-						error    = document.createElement( 'div' ),
-						message  = mediaUploader.el.querySelector( '#message' ),
-						img      = new Image();
+					dialog.querySelector( '#current-page-selector' ).setAttribute( 'value', 1 );
+					dialog.querySelector( '.total-pages' ).textContent = 1;
+					dialog.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, 0 );
 
-					// Check if URL is valid
-					img.src = url;
-					img.onerror = function() {
-						if ( message ) {
-							message.remove();
-						}
-						error.id = 'message';
-						error.className = 'notice-error is-dismissible';
-						error.innerHTML = '<p style="color:#fff;background:red;font-size:1em;padding:0.5em 1em;">' + IMAGE_WIDGET.wrong_url + '</p>';
-						e.target.before( error );
+					// Update the count at the bottom of the page
+					dialog.querySelector( '.load-more-count' ).setAttribute( 'hidden', true );
+					dialog.querySelector( '.no-media' ).removeAttribute( 'hidden' );
 
-						// Onerror event fires twice, so remove duplicate message
-						if ( mediaUploader.el.querySelectorAll( '.notice-error' )[1] ) {
-							mediaUploader.el.querySelectorAll( '.notice-error' )[1].remove();
-						}
+				} else {
 
-						// Disable other fields until the issue is corrected
-						addButton.setAttribute( 'disabled', true );
-						fields.forEach( function( input ) {
-							input.setAttribute( 'disabled', true );
-						} );
-					};
-					img.onload = function() {
-						widget.querySelector( '[data-property="width"]' ).value = img.width;
-						widget.querySelector( '[data-property="height"]' ).value = img.height;
-					};
+					// Populate grid with new items
+					result.data.forEach( function( attachment ) {
+						var gridItem = populateGridItem( attachment, widget );
+						dialog.querySelector( '#widgets-media-grid ul' ).append( gridItem );
+					} );
 
-					// Load image
-					embed.querySelector( '.media-embed img').src = url;
-					widget.querySelector( '[data-property="url"]' ).value = url;
-					if ( IMAGE_WIDGET.image_file_types.includes( fileType.toLowerCase() ) ) {
-						if ( message ) {
-							message.remove();
-							fields.forEach( function( input ) {
-								input.removeAttribute( 'disabled' );
-							} );
-						}
-
-						// Set attachment ID to zero
-						widget.querySelector( '[data-property="attachment_id"]' ).value = 0;
-
-						// Activate Add to widget button
-						if ( url != '' && addButton.disabled ) {
-							addButton.removeAttribute( 'disabled' );
-							addButton.textContent = IMAGE_WIDGET.add_to_widget;
-						}
-					} else {
-						if ( message ) {
-							message.remove();
-						}
-						error.id = 'message';
-						error.className = 'notice-error is-dismissible';
-						error.innerHTML = '<p style="color:#fff;background:red;font-size:1em;padding:0.5em 1em;">' + IMAGE_WIDGET.unsupported_file_type + '</p>';
-						e.target.before( error );
-
-						// Disable other fields until the issue is corrected
-						addButton.setAttribute( 'disabled', true );
-						fields.forEach( function( input ) {
-							input.setAttribute( 'disabled', true );
-						} );
-					}
-				} );
-
-				// Update values in hidden fields
-				embedAlt     = mediaUploader.el.querySelector( '#embed-image-settings-alt-text' );
-				embedCaption = mediaUploader.el.querySelector( '#embed-image-settings-caption' );
-				embedLinkTo  = mediaUploader.el.querySelector( '#embed-image-settings-link-to-custom' );
-				embedButtons = mediaUploader.el.querySelectorAll ( '.link-to button' );
-
-				embedAlt.addEventListener( 'change', function() {
-					widget.querySelector( '[data-property="alt"]' ).value = embedAlt.value;
-				} );
-
-				embedCaption.addEventListener( 'change', function() {
-					widget.querySelector( '[data-property="caption"]' ).value = embedCaption.value;
-				} );
-
-				// Set type and URL of image hyperlink
-				embedButtons.forEach( function( embedButton ) {
-					if ( embedButton.value === linkType ) {
-						embedButton.classList.add( 'active' );
-						embedButton.setAttribute( 'aria-pressed', true );
-						if ( linkType === 'custom' ) {
-							embedLinkTo.parentNode.classList.remove( 'hidden' );
-						} else {
-							embedLinkTo.parentNode.classList.add( 'hidden' );
-						}
-					} else {
-						embedButton.classList.remove( 'active' );
-						embedButton.setAttribute( 'aria-pressed', false );
-					}
-
-					embedButton.addEventListener( 'click', function() {
-						embedButtons.forEach( function( link ) {
-							link.classList.remove( 'active' );
-							link.setAttribute( 'aria-pressed', false );
-						} );
-						embedButton.classList.add( 'active' );
-						embedButton.setAttribute( 'aria-pressed', true );
-						widget.querySelector( '[data-property="link_type"]' ).value = embedButton.value;
-						if ( embedButton.value === 'custom' ) {
-							embedLinkTo.parentNode.classList.remove( 'hidden' );
-							embedLinkTo.addEventListener( 'change', function() {
-								widget.querySelector( '[data-property="link_url"]' ).value = embedLinkTo.value;
-							} );
-						} else {
-							embedLinkTo.parentNode.classList.add( 'hidden' );
-							embedLinkTo.value = '';
-							if ( embedButton.value === 'file' ) {
-								widget.querySelector( '[data-property="link_url"]' ).value = mediaUploader.el.querySelector( '#embed-url-field' ).value;
-							} else {
-								widget.querySelector( '[data-property="link_url"]' ).value = '';
+					// Reset pagination
+					dialog.querySelectorAll( '.pagination-links button' ).forEach( function( pageLink ) {
+						if ( pageLink.className.includes( 'next-page' ) ) {
+							if ( result.headers.max_pages !== 1 ) {
+								pageLink.setAttribute( 'data-page', 2 );
+								pageLink.removeAttribute( 'disabled'  );
+								pageLink.removeAttribute( 'inert'  );
+							}
+						} else if ( pageLink.className.includes( 'last-page' ) ) {
+							pageLink.setAttribute( 'data-page', result.headers.max_pages );
+							if ( result.headers.max_pages !== 1 ) {
+								pageLink.removeAttribute( 'disabled'  );
+								pageLink.removeAttribute( 'inert'  );
 							}
 						}
+					} );
 
-						// Activate Add to widget button
-						if ( mediaUploader.el.querySelector( '#embed-url-field' ).value != '' && addButton.disabled ) {
-							addButton.removeAttribute( 'disabled' );
-							addButton.textContent = IMAGE_WIDGET.add_to_widget;
+					// Update both HTML and DOM
+					dialog.querySelector( '.total-pages' ).textContent = result.headers.max_pages;
+					dialog.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, result.headers.total_posts );
+
+					// Open modal to show details about file, or select files for deletion
+					dialog.querySelectorAll( '.media-item' ).forEach( function( item ) {
+						if ( item.className.includes( 'selected' ) ) {
+							selectItemToAdd( item, widget, false );
+							item.focus();
+						}
+						item.addEventListener( 'click', function() {
+							selectItemToAdd( item, widget, true );
+						} );
+					} );
+
+					// Update the count at the bottom of the page
+					dialog.querySelector( '.no-media' ).setAttribute( 'hidden', true );
+					dialog.querySelector( '.load-more-count' ).removeAttribute( 'hidden' );
+					dialog.querySelector( '.load-more-count' ).textContent = result.data.length + ' ' + IMAGE_WIDGET.of + ' ' + result.headers.total_posts + ' media items';
+				}
+			}
+		} )
+		.catch( function( error ) {
+			console.error( IMAGE_WIDGET.error, error );
+		} );
+
+		dialog.showModal();
+	}
+
+	/**
+	 * Update the grid with new images.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function updateGrid( widget, paged ) {
+		var dateFilter = dialog.querySelector( '#filter-by-date' ),
+			search = dialog.querySelector( '#media-search-input' ),
+			mediaCatSelect = dialog.querySelector( '.media-toolbar-secondary .postform' ),
+			params = new URLSearchParams( {
+				'action': 'query-attachments',
+				'query[posts_per_page]': IMAGE_WIDGET.per_page,
+				'query[monthnum]': dateFilter.value ? parseInt( dateFilter.value.substr( 4, 2 ), 10 ) : 0,
+				'query[year]': dateFilter.value ? parseInt( dateFilter.value.substr( 0, 4 ), 10 ) : 0,
+				'query[post_mime_type]': 'image',
+				'query[s]': search.value ? search.value : '',
+				'query[paged]': paged ? paged : 1,
+				'query[media_category_name]': mediaCatSelect.value ? mediaCatSelect.value : '',
+				'_ajax_nonce': document.getElementById( '_wpnonce_widgets' ).value,
+			} );
+
+		// Make AJAX request
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: params,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result.success ) {
+
+				// Show relevant buttons and clear grid
+				addButton = dialog.querySelector( '#media-button-insert' );
+				dialog.querySelector( '#widgets-media-grid ul' ).innerHTML = '';
+
+				if ( result.data.length === 0 ) {
+
+					// Reset pagination
+					dialog.querySelectorAll( '.pagination-links button' ).forEach( function( pageLink ) {
+						pageLink.setAttribute( 'data-page', 1 );
+						pageLink.setAttribute( 'disabled', true );
+						pageLink.setAttribute( 'inert', true );
+					} );
+
+					dialog.querySelector( '#current-page-selector' ).setAttribute( 'value', 1 );
+					dialog.querySelector( '.total-pages' ).textContent = 1;
+					dialog.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, 0 );
+
+					// Update the count at the bottom of the page
+					dialog.querySelector( '.load-more-count' ).setAttribute( 'hidden', true );
+					dialog.querySelector( '.no-media' ).removeAttribute( 'hidden' );
+				} else {
+
+					// Populate grid with new items
+					result.data.forEach( function( attachment ) {
+						var gridItem = populateGridItem( attachment, widget );
+						dialog.querySelector( '#widgets-media-grid ul' ).append( gridItem );
+					} );
+
+					// Reset pagination
+					dialog.querySelectorAll( '.pagination-links button' ).forEach( function( pageLink ) {
+						if ( pageLink.className.includes( 'first-page' ) || pageLink.className.includes( 'prev-page' ) ) {
+							if ( paged === '1' ) {
+								pageLink.setAttribute( 'disabled', true );
+								pageLink.setAttribute( 'inert', true );
+							} else {
+								pageLink.removeAttribute( 'disabled'  );
+								pageLink.removeAttribute( 'inert'  );
+								if ( pageLink.className.includes( 'prev-page' ) ) {
+									if ( ( parseInt( paged ) - 1 ) < 1 ) {
+										pageLink.setAttribute( 'data-page', 1 );
+									} else {
+										pageLink.setAttribute( 'data-page', parseInt( paged ) - 1 );
+									}
+								}
+							}
+						} else if ( pageLink.className.includes( 'next-page' ) ) {
+							if ( result.headers.max_pages === parseInt( paged ) ) {
+								pageLink.setAttribute( 'data-page', paged );
+								pageLink.setAttribute( 'disabled', true );
+								pageLink.setAttribute( 'inert', true );								
+							} else {
+								pageLink.setAttribute( 'data-page', parseInt( paged ) + 1 );
+								pageLink.removeAttribute( 'disabled'  );
+								pageLink.removeAttribute( 'inert'  );
+							}
+						} else if ( pageLink.className.includes( 'last-page' ) ) {
+							pageLink.setAttribute( 'data-page', result.headers.max_pages );
+							if ( result.headers.max_pages === parseInt( paged ) ) {
+								pageLink.setAttribute( 'disabled', true );
+								pageLink.setAttribute( 'inert', true );
+							} else {
+								pageLink.removeAttribute( 'disabled'  );
+								pageLink.removeAttribute( 'inert'  );
+							}
 						}
 					} );
-				} );
-			} );
 
-			libraryButton.addEventListener( 'click', function() {
-				embedded = false;
-				addButton.textContent = IMAGE_WIDGET.add_to_widget;
-			} );
+					// Update both HTML and DOM
+					dialog.querySelector( '#current-page-selector' ).setAttribute( 'value', paged ? paged : 1 );
+					dialog.querySelector( '#current-page-selector' ).value = paged ? paged : 1;
+					dialog.querySelector( '.total-pages' ).textContent = result.headers.max_pages;
+					dialog.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, result.headers.total_posts );
+
+					// Open modal to show details about file, or select files for deletion
+					if ( dialog.querySelector( '.media-item.selected' ) == null ) {
+						addButton.setAttribute( 'disabled', true );
+						dialog.querySelector( '.attachment-details' ).setAttribute( 'hidden', true );
+					}
+					dialog.querySelectorAll( '.media-item' ).forEach( function( item ) {
+						if ( item.className.includes( 'selected' ) ) {
+							selectItemToAdd( item, widget, false );
+							item.focus();
+						}
+						item.addEventListener( 'click', function() {
+							selectItemToAdd( item, widget, true );
+						} );
+					} );
+
+					// Update the count at the bottom of the page
+					dialog.querySelector( '.no-media' ).setAttribute( 'hidden', true );
+					dialog.querySelector( '.load-more-count' ).removeAttribute( 'hidden' );
+					dialog.querySelector( '.load-more-count' ).textContent = result.data.length + ' ' + IMAGE_WIDGET.of + ' ' + result.headers.total_posts + ' media items';
+				}
+			}
+		} )
+		.catch( function( error ) {
+			console.error( IMAGE_WIDGET.error, error );
 		} );
 
-		// Insert image from media library
-		mediaUploader.on( 'select', function() {
-			var formData,
-				attachment = mediaUploader.state().get( 'selection' ) ? mediaUploader.state().get( 'selection' ).first().toJSON() : '',
-				image      = document.createElement( 'img' ),
-				alt        = widget.querySelector( 'input[data-property="alt"]' ).value,
-				buttons	   = document.createElement( 'div' ),
-				fieldset   = document.createElement( 'fieldset' ),
-				number     = widget.querySelector( '.widget_number' ).value,
-				nonce      = widget.querySelector( '.edit-media' ) ? widget.querySelector( '.edit-media' ).dataset.editNonce : '';
+		dialog.showModal();
+	}
 
-				// Obtain correct nonce when adding image for the first time according to whether using Customizer or not
-				if ( nonce === '' ) {
-					if ( document.body.className.includes( ' wp-customizer' ) ) {
-						nonce = document.getElementById( '_ajax_linking_nonce' ).value;
-					} else {
-						nonce = document.getElementById( '_wpnonce_widgets' ).value;
-					}
+	/**
+	 * Check if image URL is valid and display if possible.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function validateImageUrl( url ) {
+		var fileType = url.split( '.' ).pop(),
+			error    = document.createElement( 'div' ),
+			message  = dialog.querySelector( '#message' ),
+			img      = new Image(),
+			widgetId = dialog.querySelector( '#new-image-modal' ).dataset.widgetId,
+			widget   = document.getElementById( widgetId ),
+			fields   = dialog.querySelectorAll( '.embed-media-settings input, .embed-media-settings textarea' );
+
+		img.src = url;
+		img.onerror = function() {
+			if ( message ) {
+				message.remove();
+			}
+			error.id = 'message';
+			error.className = 'notice-error is-dismissible';
+			error.innerHTML = '<p style="color:#fff;background:red;font-size:1em;padding:0.5em 1em;margin-top:-1px;">' + IMAGE_WIDGET.wrong_url + '</p>';
+			dialog.querySelector( '#embed-url-field' ).before( error );
+
+			// Disable other fields until the issue is corrected
+			addButton.setAttribute( 'disabled', true );
+			fields.forEach( function( input ) {
+				input.setAttribute( 'disabled', true );
+			} );
+		};
+		img.onload = function() {
+			widget.querySelector( '[data-property="width"]' ).value = img.width;
+			widget.querySelector( '[data-property="height"]' ).value = img.height;
+		};
+
+		// Load image
+		if ( dialog.querySelector( '.media-embed .thumbnail img') ) {
+			dialog.querySelector( '.media-embed .thumbnail img').remove(); // avoid duplicates
+		}
+		dialog.querySelector( '.media-embed .thumbnail').append( img );
+		dialog.querySelector( '.media-embed img').src = url;
+		widget.querySelector( '[data-property="url"]' ).value = url;
+		if ( IMAGE_WIDGET.image_file_types.includes( fileType.toLowerCase() ) ) {
+			if ( message ) {
+				message.remove();
+				fields.forEach( function( input ) {
+					input.removeAttribute( 'disabled' );
+				} );
+			}
+		} else {
+			if ( message ) {
+				message.remove();
+			}
+			error.id = 'message';
+			error.className = 'notice-error is-dismissible';
+			error.innerHTML = '<p style="color:#fff;background:red;font-size:1em;padding:0.5em 1em;margin-top:-1px;">' + IMAGE_WIDGET.unsupported_file_type + '</p>';
+			dialog.querySelector( '#embed-url-field' ).before( error );
+
+			// Disable other fields until the issue is corrected
+			addButton.setAttribute( 'disabled', true );
+			fields.forEach( function( input ) {
+				input.setAttribute( 'disabled', true );
+			} );
+		}
+	}
+
+	/**
+	 * Insert image from URL.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function insertEmbed() {
+		var embedAlt, embedCaption, embedLinkTo,
+			embed = dialog.querySelector( '#embed-url-field' ),
+			widgetId = dialog.querySelector( '#new-image-modal' ).dataset.widgetId,
+			widget = document.getElementById( widgetId ),
+			linkType = widget.querySelector( '[data-property="link_type"]' ).value,
+			originalUrl = widget.querySelector( '[data-property="url"]' ).value,
+			embedAlt = dialog.querySelector( '#embed-image-settings-alt-text' ),
+			embedCaption = dialog.querySelector( '#embed-image-settings-caption' ),
+			embedLinkTo = dialog.querySelector( '#link-to' ),
+			embedLinkUrl = dialog.querySelector( '#embed-image-settings-link-to-custom' );
+
+		embed.value = originalUrl;
+		if ( originalUrl !== '' ) {
+			validateImageUrl( originalUrl );
+		}
+
+		embed.addEventListener( 'change', function( e ) {
+			var url = e.target.value,
+				message  = dialog.querySelector( '#message' );
+			
+			// Activate Add to Widget button if appropriate			
+			if ( url !== originalUrl ) {
+				addButton.removeAttribute( 'disabled' );
+				validateImageUrl( url );
+			} else {
+				if ( message ) {
+					message.remove();
+				}
+				addButton.setAttribute( 'disabled', true );
+				if ( url === originalUrl ) {
+					validateImageUrl( originalUrl );
+				}
+			}
+		} );
+
+		// Update values and trigger Add to Widget button
+		embedAlt.addEventListener( 'change', function() {
+			widget.querySelector( '[data-property="alt"]' ).value = embedAlt.value;
+			addButton.removeAttribute( 'disabled' );
+		} );
+
+		embedCaption.addEventListener( 'change', function() {
+			widget.querySelector( '[data-property="caption"]' ).value = embedCaption.value;
+			addButton.removeAttribute( 'disabled' );
+		} );
+
+		// Show or hide Custom URL depending on link type
+		if ( linkType ) {
+			embedLinkTo.querySelectorAll( 'option' ).forEach( function( option ) {
+				if ( option.value === linkType ) {
+					option.setAttribute( 'selected', 'selected' );
+				}
+			} );
+			if ( linkType === 'none' ) {
+				embedLinkUrl.parentNode.setAttribute( 'hidden', true );
+				embedLinkUrl.value = '';
+			} else {
+				embedLinkUrl.value = widget.querySelector( '[data-property="link_url"]' ).value;
+				embedLinkUrl.parentNode.removeAttribute( 'hidden' );
+			}
+		} else {
+			embedLinkTo.value = 'none';
+			embedLinkUrl.value = '';
+		}
+
+		// Show and hide URL field if Custom URL chosen or deselected
+		embedLinkTo.addEventListener( 'change', function() {
+			var selectedOption = this[this.selectedIndex];
+			embedLinkTo.querySelectorAll( 'option' ).forEach( function( option ) {
+				option.removeAttribute( 'selected' );
+			} );
+			selectedOption.setAttribute( 'selected', true );
+			if ( selectedOption.value === 'none' ) {
+				embedLinkUrl.parentNode.setAttribute( 'hidden', true );
+				embedLinkUrl.value = '';
+			} else {
+				embedLinkUrl.parentNode.removeAttribute( 'hidden' );
+			}
+			addButton.removeAttribute( 'disabled' );
+		} );
+
+		// Trigger Add to Widget button if Custom URL value changed
+		embedLinkUrl.addEventListener( 'change', function() {
+			addButton.removeAttribute( 'disabled' );
+		} );
+	}
+
+	/**
+	 * Add image to widget.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function addItemToWidget( widget ) {
+		var addedElement, source, sizesObject, sizeOptions = '',
+			preview = widget.querySelector( '.media-widget-preview' ),
+			buttons	= document.createElement( 'div' ),
+			fieldset = document.createElement( 'fieldset' ),
+			number = widget.querySelector( '.widget_number' ).value;
+
+		// Add from URL
+		if ( dialog.querySelector( '#insert-from-url-panel' ) == null || ! dialog.querySelector( '#insert-from-url-panel' ).hasAttribute( 'hidden' ) ) {
+			source = dialog.querySelector( '#embed-url-field' ).value;
+			addedElement = document.createElement( 'img' );
+			addedElement.src = source;
+
+			widget.querySelector( 'input[data-property="url"]' ).value = source;
+			widget.querySelector( 'input[data-property="attachment_id"]' ).value = 0;
+			widget.querySelector( 'input[data-property="alt"]' ).value = dialog.querySelector( '#embed-image-settings-alt-text' ).value;
+			widget.querySelector( 'input[data-property="caption"]' ).value = dialog.querySelector( '#embed-image-settings-caption' ).value;
+			widget.querySelector( 'input[data-property="link_type"]' ).value = dialog.querySelector( '#link-to' ).value ? dialog.querySelector( '#link-to' ).value : 'none';
+			widget.querySelector( 'input[data-property="link_url"]' ).value = dialog.querySelector( '#link-to-url input' ).value;
+
+		// Add from Media Library
+		} else {
+			document.querySelectorAll( '.media-item.selected' ).forEach( function( selectedItem ) {
+				addedElement = selectedItem.querySelector( 'img' );
+				sizesObject = JSON.parse( selectedItem.dataset.sizes );
+				for ( var dimension in sizesObject ) {
+					sizeOptions += '<option value="' + dimension + '">' + dimension[0].toUpperCase() + dimension.slice(1) + ' – ' + sizesObject[dimension].width + ' x ' + sizesObject[dimension].height + '</option>';
 				}
 
-			image.className = 'attachment-thumb';
-			image.src = attachment ? attachment.url : widget.querySelector( '[data-property="url"]' ).value;
-			image.setAttribute( 'draggable', false );
-			image.alt = alt;
-			if ( alt === '' ) {
-				image.setAttribute( 'aria-label', IMAGE_WIDGET.aria_label + image.src.split( '/' ).pop() );
-			}
+				// Add values to div.widget-content fields
+				widget.querySelector( 'input[data-property="attachment_id"]' ).value = selectedItem.id.replace( 'media-', '' );
+				widget.querySelector( 'input[data-property="alt"]' ).value = dialog.querySelector( '#attachment-details-alt-text' ).textContent;
+				widget.querySelector( 'input[data-property="caption"]' ).value = dialog.querySelector( '#attachment-details-caption' ).textContent;
+				widget.querySelector( 'input[data-property="url"]' ).value = selectedItem.dataset.url;
+				widget.querySelector( 'input[data-property="size"]' ).value = dialog.querySelector( '.size' ).value;
+				widget.querySelector( 'input[data-property="link_type"]' ).value = dialog.querySelector( '.link-to' ).value;
+				if ( widget.querySelector( 'input[data-property="link_url"]' ) ) {
+					widget.querySelector( 'input[data-property="link_url"]' ).value = dialog.querySelector( '.link-to-custom' ).value;
+				}
+				widget.querySelector( 'input[data-property="size_options"]' ).value = sizeOptions;
+			} );
+		}
 
-			// Add Edit and Replace buttons
-			buttons.className = 'media-widget-buttons';
-			buttons.innerHTML = '<button type="button" class="button edit-media">' + IMAGE_WIDGET.edit_image + '</button>' +
-				'<button type="button" class="button change-media select-media">' + IMAGE_WIDGET.replace_image + '</button>';
+		// Add Edit and Replace buttons
+		buttons.className = 'media-widget-buttons';
+		buttons.innerHTML = '<button type="button" class="button edit-media">' + IMAGE_WIDGET.edit_image + '</button>' +
+			'<button type="button" class="button change-media select-media">' + IMAGE_WIDGET.replace_image + '</button>';
 
-			// Add Link field
-			fieldset.className = 'media-widget-image-link';
-			fieldset.innerHTML = '<label for="widget-media_image-' + number + '-link_url">Link to:</label>' +
-				'<input id="widget-media_image-' + number + '-link_url" name="widget-media_image[' + number + '][link_url]" class="widefat" type="url" value="" placeholder="https://" data-property="link_url">';
+		// Add Link field
+		fieldset.className = 'media-widget-image-link';
+		fieldset.innerHTML = '<label for="widget-media_image-' + number + '-link_url">Link to:</label>' +
+			'<input id="widget-media_image-' + number + '-link_url" name="widget-media_image[' + number + '][link_url]" class="widefat" type="url" value="' + dialog.querySelector( '.link-to-custom' ).value + '" placeholder="https://" data-property="link_url">';
+		
+		// Insert image according to whether this is a new insertion or replacement
+		addedElement.className = 'attachment-thumb';
+		if ( widget.querySelector( '.attachment-media-view' ) !== null ) {
+			preview.prepend( addedElement );
+			preview.classList.add( 'populated' );
+			widget.querySelector( '.attachment-media-view' ).remove();
+			preview.after( buttons );
+			buttons.after( fieldset );
+		} else { // replacement
+			widget.querySelector( '.attachment-thumb' ).replaceWith( addedElement );
+		}
+		
+		// Activate Save/Publish button
+		if ( document.body.className.includes( 'widgets-php' ) ) {
+			widget.classList.add( 'widget-dirty' );
+		}
+		widget.dispatchEvent( new Event( 'change' ) );
 
-			// Insert image according to whether this is a new insertion or replacement
-			if ( widget.querySelector( '.attachment-media-view' ) !== null ) {
-				widget.querySelector( '.media_image' ).prepend( image );
-				widget.querySelector( '.attachment-media-view' ).remove();
-				widget.querySelector( '.media-widget-preview' ).after( buttons );
-				buttons.after( fieldset );
-			} else { // replacement
-				widget.querySelector( '.attachment-thumb' ).replaceWith( image );
-			}
-
-			// Update values in other hidden fields for uploads from media library
-			if ( attachment !== '' ) {
-				widget.querySelector( '[data-property="attachment_id"]' ).value = attachment.id;
-				widget.querySelector( '[data-property="url"]' ).value = attachment.url;
-
-				// Use the Fetch API to get details of the image
-				formData = new FormData();
-				formData.append( 'action', 'get-attachment' );
-				formData.append( '_ajax_nonce', nonce );
-				formData.append( 'id', attachment.id );
-
-				fetch( ajaxurl, {
-					method: 'POST',
-					credentials: 'same-origin',
-					body: formData
-				} )
-				.then( function( response ) {
-					if ( response.ok ) {
-						return response.json();
-					}
-					throw new Error( 'Network response was not ok' );
-				} )
-				.then( function( result ) {
-					var sizeOptions = '',
-						sizes = result.data.sizes,
-						sizesInput = widget.querySelector( '[data-property="size_options"]' );
-
-					// Update available size options in hidden field
-					for ( var dimension in sizes ) {
-						sizeOptions += '<option value="' + dimension + '">' + dimension[0].toUpperCase() + dimension.slice(1) + ' – ' + sizes[dimension].width + ' x ' + sizes[dimension].height + '</option>';
-					}
-					sizesInput.value = sizeOptions;
-				} )
-				.catch( function( error ) {
-					console.error( 'Error:', error );
-				} );
-			}
-
-			// Activate Save/Publish button
-			if ( document.body.className.includes( 'widgets-php' ) ) {
-				widget.classList.add( 'widget-dirty' );
-			}
-			widget.dispatchEvent( new Event( 'change' ) );
-		} );
-
-		mediaUploader.open();
+		closeButton.click();
 	}
 
 	/**
@@ -360,7 +945,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function editMedia( widget ) {
-		var	imageSize, linkTo, linkToUrl, editOriginal, widthField, heightField, customSizeField,
+		var	imageSize, linkTo, linkToUrl, editOriginal, widthField, heightField, customSizeField, updateButton,
 			size            = widget.querySelector( 'input[data-property="size"]' ).value,
 			width           = widget.querySelector( 'input[data-property="width"]' ).value,
 			height          = widget.querySelector( 'input[data-property="height"]' ).value,
@@ -381,20 +966,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Append cloned template and establish new variables
 		dialog.querySelector( '.media-modal' ).append( clone );
+		checkWindowWidth();
 		imageSize       = dialog.querySelector( '#image-details-size' );
 		linkTo          = dialog.querySelector( '#image-details-link-to' );
-		linkToUrl       = dialog.querySelector( '#link-to-url' );
+		linkToCustom    = dialog.querySelector( '#image-details-link-to-custom' );
 		editOriginal    = dialog.querySelector( '#edit-original' );
 		widthField      = dialog.querySelector( '#image-details-size-width' );
 		heightField     = dialog.querySelector( '#image-details-size-height' );
+		updateButton    = dialog.querySelector( '#media-button-update' );
 		customSizeField = imageSize.closest( 'fieldset' ).querySelector( '.custom-size' );
 
 		// Set available sizes select dropdown
 		imageSize.insertAdjacentHTML( 'afterbegin', sizeOptions );
 		if ( size === 'custom' ) {
-			customSizeField.classList.remove( 'hidden' );
 			widthField.value = width;
 			heightField.value = height;
+			customSizeField.classList.remove( 'hidden' );
 		} else {
 			customSizeField.classList.add( 'hidden' );
 			widthField.value = '';
@@ -417,27 +1004,35 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				widthField.value = '';
 				heightField.value = '';
 			}
+			updateButton.removeAttribute( 'disabled' ); // trigger Update button
 		} );
 
 		// Show or hide Custom URL depending on link type
-		if ( linkType ) {
-			linkTo.querySelector( 'option[selected]' ).removeAttribute( 'selected' );
-			linkTo.querySelectorAll( 'option' ).forEach( function( option ) {
-				if ( option.value === linkType ) {
-					option.setAttribute( 'selected', 'selected' );
-				}
-			} );
-			if ( linkType === 'custom' ) {
-				linkToUrl.removeAttribute( 'hidden' );
-				linkToUrl.removeAttribute( 'inert' );
+		linkTo.querySelectorAll( 'option' ).forEach( function( option ) {
+			option.removeAttribute( 'selected' );
+			if ( option.value === linkType ) {
+				option.setAttribute( 'selected', true );
 			}
+		} );
+		if ( linkType !== 'none' ) {
+			linkToCustom.parentNode.removeAttribute( 'hidden' );
+			if ( linkType === 'file' ) {
+				linkToCustom.value = url;
+			} else if ( linkType === 'post' ) {
+				linkToCustom.value = url;
+			} else if ( linkType === 'custom' ) {
+				linkToCustom.value = linkUrl;
+			}
+		} else {
+			linkTo.value = 'none';
+			linkToCustom.parentNode.setAttribute( 'hidden', true );
+			linkToCustom.value = '';
 		}
 
 		// Widget-specific details
 		dialog.querySelector( '#image-details-alt-text' ).value = alt;
 		dialog.querySelector( '#image-details-caption' ).value = caption;
 		dialog.querySelector( '#image-details-title-attribute' ).value = linkImageTitle;
-		dialog.querySelector( '#image-details-link-to-custom' ).value = linkUrl;
 		dialog.querySelector( '#image-details-css-class' ).value = imageClasses;
 		dialog.querySelector( '#image-details-link-target' ).value = linkTargetBlank;
 		dialog.querySelector( '#image-details-link-rel' ).value = linkRel;
@@ -451,37 +1046,48 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 		dialog.showModal();
 
-		// Show and hide URL field if Custom URL chosen or deselected
+		// Show and hide URL field as appropriate
 		linkTo.addEventListener( 'change', function() {
 			var selectedOption = this[this.selectedIndex];
 			linkTo.querySelectorAll( 'option' ).forEach( function( option ) {
 				option.removeAttribute( 'selected' );
 			} );
 			selectedOption.setAttribute( 'selected', true );
-			if ( selectedOption.value === 'custom' ) {
-				linkToUrl.removeAttribute( 'hidden' );
-				linkToUrl.removeAttribute( 'inert' );
+			if ( selectedOption.value === 'none' ) {
+				linkToCustom.parentNode.setAttribute( 'hidden', true );
+				linkToCustom.value = '';
 			} else {
-				linkToUrl.setAttribute( 'hidden', true );
-				linkToUrl.setAttribute( 'inert', true );
+				if ( selectedOption.value === 'file' ) {
+					linkToCustom.value = url;
+				} else if ( selectedOption.value === 'post' ) {
+					linkToCustom.value = url;
+				} else if ( selectedOption.value === 'custom' ) {
+					linkToCustom.value = linkUrl;
+				}
+				linkToCustom.parentNode.removeAttribute( 'hidden' );
 			}
+			updateButton.removeAttribute( 'disabled' ); // trigger Update button
 		} );
 
-		// Update image details
-		dialog.querySelector( '.media-button-select' ).addEventListener( 'click', function() {
-			updateImageDetails( widget );
+		// Trigger Update button when other changes made to inputs or textareas
+		dialog.querySelectorAll( '.media-frame-content textarea, .media-frame-content input' ).forEach( function( input ) {
+			input.addEventListener( 'change', function() {
+				updateButton.removeAttribute( 'disabled' );
+			} );
 		} );
 	}
 
 	/**
-	 * Trigger change event in widget to enable update of image details.
+	 * Enable update of image details.
 	 *
 	 * @abstract
 	 * @return {void}
 	 */
-	function updateImageDetails( widget ) {
-		var size = dialog.querySelector( '#image-details-size' ),
-			selectedOption = size.options[size.selectedIndex].text;
+	function updateImageDetails( widgetId ) {
+		var sizeOptions = '',
+			size = dialog.querySelector( '#image-details-size' ),
+			selectedOption = size.options[size.selectedIndex].text,
+			widget = document.getElementById( widgetId );
 
 		widget.querySelector( '[data-property="alt"]' ).value = dialog.querySelector( '#image-details-alt-text' ).value,
 		widget.querySelector( '[data-property="caption"]' ).value = dialog.querySelector( '#image-details-caption' ).value,
@@ -494,7 +1100,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		widget.querySelector( '[data-property="link_rel"]' ).value = dialog.querySelector( '#image-details-link-rel' ).value,
 		widget.querySelector( '[data-property="link_classes"]' ).value = dialog.querySelector( '#image-details-link-css-class' ).value;
 
-		if ( dialog.querySelector( '#image-details-size' ).value === 'custom' ) {
+		if ( size.value === 'custom' ) {
 			widget.querySelector( '[data-property="width"]' ).value = dialog.querySelector( '#image-details-size-width' ).value;
 			widget.querySelector( '[data-property="height"]' ).value = dialog.querySelector( '#image-details-size-height' ).value;
 		} else {
@@ -517,23 +1123,23 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	function imageEdit( widgetID ) {
+	function imageEdit( widgetId ) {
 		var formData,
-			attachmentID = document.querySelector( '#' + widgetID + ' input[data-property="attachment_id"]' ).value,
-			editButton = document.querySelector( '#' + widgetID + ' .edit-media' ),
+			attachmentId = document.querySelector( '#' + widgetId + ' input[data-property="attachment_id"]' ).value,
+			editButton = document.querySelector( '#' + widgetId + ' .edit-media' ),
 			nonce = editButton.dataset.editNonce;
 
 		formData = new FormData();
 		formData.append( 'action', 'image-editor' );
 		formData.append( '_ajax_nonce', nonce );
-		formData.append( 'postid', attachmentID );
+		formData.append( 'postid', attachmentId );
 		formData.append( 'do', 'rotate-cw' );
 
 		// Make the fetch request
 		fetch( ajaxurl, {
 			method: 'POST',
 			body: formData,
-			credentials: 'same-origin'
+			credentials: 'same-origin',
 		} )
 		.then( function( response ) {
 			if ( response.ok ) {
@@ -563,13 +1169,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
-	 * Handle clicks on Add, Edit, and Replace Image buttons.
+	 * Handle clicks on buttons.
 	 *
 	 * @abstract
 	 * @return {void}
 	 */
 	document.addEventListener( 'click', function( e ) {
-		var base,
+		var base, page, widgetId, itemAdd, itemEmbed, tabPanel, urlPanel, frameTitle,
 			widget = e.target.closest( '.widget' );
 
 		if ( widget ) {
@@ -600,6 +1206,116 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 		} else if ( e.target.id === 'edit-original' ) {
 			imageEdit( e.target.dataset.widgetId );
+		} else if ( e.target.id === 'media-button-update' ) {
+			updateImageDetails( document.getElementById( 'edit-original' ).dataset.widgetId );
+		} else if ( dialog.querySelector( '#new-image-modal' ) ) {
+			widgetId       = dialog.querySelector( '#new-image-modal' ).dataset.widgetId;
+			itemAdd        = dialog.querySelector( '#menu-item-add' );
+			itemEmbed      = dialog.querySelector( '#menu-item-embed' );
+			itemBrowse     = dialog.querySelector( '#menu-item-browse' );
+			itemUpload     = dialog.querySelector( '#menu-item-upload' );
+			tabPanel       = dialog.querySelector( '#media-frame-tab-panel' );
+			gridSubPanel   = dialog.querySelectorAll( '#attachments-browser, .media-views-heading, .attachments-wrapper, .media-sidebar, .widgets-modal-pages, .media-frame-toolbar' );
+			uploadSubPanel = dialog.querySelector( '#uploader-inline' );
+			urlPanel       = dialog.querySelector( '#insert-from-url-panel' );
+			frameTitle     = dialog.querySelector( '#media-frame-title' );
+
+			if ( e.target.parentNode.className === 'pagination-links' && e.target.tagName === 'BUTTON' ) {
+				page = e.target.dataset.page;
+				updateGrid( document.getElementById( widgetId ), page );
+			} else if ( e.target.parentNode.parentNode.className === 'pagination-links' && e.target.parentNode.tagName === 'BUTTON' ) {
+				page = e.target.parentNode.dataset.page;
+				updateGrid( document.getElementById( widgetId ), page );
+			} else if ( e.target.id === 'menu-item-embed' ) {
+				itemAdd.classList.remove( 'active' );
+				itemAdd.setAttribute( 'aria-selected', false );
+				itemBrowse.classList.remove( 'active' );
+				itemBrowse.setAttribute( 'aria-selected', false );
+				itemUpload.classList.remove( 'active' );
+				itemUpload.setAttribute( 'aria-selected', false );
+				e.target.classList.add ( 'active' );
+				e.target.setAttribute( 'aria-selected', true );
+				frameTitle.setAttribute( 'hidden', true );
+				tabPanel.setAttribute( 'hidden', true );
+				tabPanel.setAttribute( 'inert', true );
+				urlPanel.removeAttribute( 'hidden' );
+				urlPanel.removeAttribute( 'inert' );
+				insertEmbed();
+			} else if ( e.target.id === 'menu-item-add' ) {
+				itemEmbed.classList.remove( 'active' );
+				itemEmbed.setAttribute( 'aria-selected', false );
+				itemUpload.classList.remove( 'active' );
+				itemUpload.setAttribute( 'aria-selected', false );
+				itemBrowse.classList.remove( 'active' );
+				itemBrowse.setAttribute( 'aria-selected', false );
+				e.target.classList.add ( 'active' );
+				e.target.setAttribute( 'aria-selected', true );
+				urlPanel.setAttribute( 'hidden', true );
+				urlPanel.setAttribute( 'inert', true );
+				if ( dialog.querySelector( '.media-embed .thumbnail img') ) {
+					dialog.querySelector( '.media-embed .thumbnail img').remove();
+				}
+				frameTitle.removeAttribute( 'hidden' );
+				tabPanel.removeAttribute( 'hidden' );
+				tabPanel.removeAttribute( 'inert' );
+				dialog.querySelector( '#menu-item-browse' ).click();
+			} else if ( e.target.id === 'menu-item-browse' ) {
+				itemUpload.classList.remove( 'active' );
+				itemUpload.setAttribute( 'aria-selected', false );
+				itemAdd.classList.remove( 'active' );
+				itemAdd.setAttribute( 'aria-selected', false );
+				itemEmbed.classList.remove( 'active' );
+				itemEmbed.setAttribute( 'aria-selected', false );
+				e.target.classList.add ( 'active' );
+				e.target.setAttribute( 'aria-selected', true );
+				uploadSubPanel.setAttribute( 'hidden', true );
+				uploadSubPanel.setAttribute( 'inert', true );
+				gridSubPanel.forEach( function ( element ) {
+					element.removeAttribute( 'hidden' );
+					element.removeAttribute( 'inert' );
+				} );
+			} else if ( e.target.id === 'menu-item-upload' ) {
+				itemBrowse.classList.remove( 'active' );
+				itemBrowse.setAttribute( 'aria-selected', false );
+				itemAdd.classList.remove( 'active' );
+				itemAdd.setAttribute( 'aria-selected', false );
+				itemEmbed.classList.remove( 'active' );
+				itemEmbed.setAttribute( 'aria-selected', false );
+				e.target.classList.add ( 'active' );
+				e.target.setAttribute( 'aria-selected', true );
+				uploadSubPanel.removeAttribute( 'hidden' );
+				uploadSubPanel.removeAttribute( 'inert' );
+				gridSubPanel.forEach( function ( element ) {
+					element.setAttribute( 'hidden', true );
+					element.setAttribute( 'inert', true );
+				} );
+				goFilepond( widgetId );
+			} else if ( e.target.id === 'media-button-insert' ) {
+				addItemToWidget( document.getElementById( widgetId ) );
+			}
+		}
+	} );
+
+	
+	/**
+	 * Enable searching for items within grid.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	dialog.addEventListener( 'change', function( e ) {
+		var widgetId;
+		if ( dialog.querySelector( '#new-image-modal' ) ) {
+			widgetId = dialog.querySelector( '#new-image-modal' ).dataset.widgetId;
+			if ( e.target.id === 'filter-by-date' ) {
+				updateGrid( document.getElementById( widgetId ), 1 );
+			} else if ( e.target.className === 'postform' ) {
+				updateGrid( document.getElementById( widgetId ), 1 );
+			} else if ( e.target.id === 'current-page-selector' ) {
+				updateGrid( document.getElementById( widgetId ), e.target.value );
+			} else if ( e.target.id === 'media-search-input' ) {
+				updateGrid( document.getElementById( widgetId ), 1 );
+			}
 		}
 	} );
 
@@ -618,4 +1334,131 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '#new-image-modal' ).remove();
 		}
 	} );
+
+	/**
+	 * Upload files using FilePond
+	 */
+	function goFilepond( widgetId ) {
+
+		// Register FilePond plugins
+		FilePond.registerPlugin(
+			FilePondPluginFileValidateSize,
+			FilePondPluginFileValidateType,
+			FilePondPluginFileRename,
+			FilePondPluginImagePreview
+		);
+
+		// Create a FilePond instance
+		pond = FilePond.create( dialog.querySelector( '#filepond' ), {
+			allowMultiple: true,
+			server: {
+				process: function( fieldName, file, metadata, load, error, progress, abort, transfer, options ) {
+
+					// Create FormData
+					var formData = new FormData();
+					formData.append( 'async-upload', file, file.name );
+					formData.append( 'action', 'upload-attachment' );
+					formData.append( '_wpnonce', document.getElementById( '_wpnonce' ).value );
+
+					// Use Fetch to upload the file
+					fetch( ajaxurl, {
+						method: 'POST',
+						body: formData,
+						credentials: 'same-origin'
+					} )
+					.then( function( response ) {
+						if ( response.ok ) {
+							return response.json(); // no errors
+						}
+						throw new Error( response.status );
+					} )
+					.then( function( result ) {
+						var gridItem;
+						if ( result.success ) {
+							updateGrid( document.getElementById( widgetId ), 1 );
+							dialog.querySelector( '#menu-item-browse' ).click();
+							setTimeout( function() {
+								gridItem = dialog.querySelector( '#media-' + result.data.id );
+								gridItem.click();
+								gridItem.focus();
+							}, 100 );
+						} else {
+							error( IMAGE_WIDGET.upload_failed );
+						}
+					} )
+					.catch( function( err ) {
+						error( IMAGE_WIDGET.upload_failed );
+						console.error( IMAGE_WIDGET.error, err );
+					} );
+
+					// Return an abort function
+					return {
+						abort: function() {
+							// This function is called when the user aborts the upload
+							abort();
+						}
+					};
+				},
+				maxFileSize: dialog.querySelector( '#ajax-url' ).dataset.maxFileSize,
+			},
+			labelTapToUndo: IMAGE_WIDGET.tap_close,
+			fileRenameFunction: ( file ) =>
+				new Promise( function( resolve ) {
+					resolve( window.prompt( IMAGE_WIDGET.new_filename, file.name ) );
+				} ),
+			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
+			labelFileTypeNotAllowed: IMAGE_WIDGET.invalid_type,
+			fileValidateTypeLabelExpectedTypes: IMAGE_WIDGET.check_types,
+		} );
+
+		pond.on( 'processfile', function( error, file ) {
+			if ( ! error ) {
+				setTimeout( function() {
+					pond.removeFile( file.id );
+				}, 100 );
+				resetDataOrdering();
+			}
+		} );
+	}
+
+	// Reset ordering of remaining media items after deletion
+	function resetDataOrdering() {
+		var items = document.querySelectorAll( '.media-item' ),
+			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
+			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
+			count5;
+
+		items.forEach( function( item, index ) {
+			item.setAttribute( 'data-order', parseInt( index + 1 ) );
+		} );
+
+		// Reset totals
+		if ( 5 in count ) { // allow for different languages
+			count5 = ' ' + count[5];
+		} else {
+			count5 = '';
+		}
+		document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + count5;
+
+		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
+		//dialog.querySelector( '#total-media-items' ).textContent = items.length;
+		//dialog.querySelector( '#total-media-items-mobile' ).textContent = items.length;
+	}
+
+	/* Enable choosing of panel on narrow screen */
+	function checkWindowWidth() {
+		var insert, embed, details;
+		if ( window.innerWidth < 901 ) {
+			add = dialog.querySelector( '#menu-item-add' );
+			add.removeAttribute( 'hidden' );
+			add.setAttribute( 'aria-selected', true );
+			embed = dialog.querySelector( '#menu-item-embed' );
+			embed.removeAttribute( 'hidden' );
+			details = dialog.querySelector( 'details' );
+			details.append( add );
+			details.append( embed );
+			details.removeAttribute( 'hidden' );
+		}
+	}
+
 } );
