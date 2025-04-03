@@ -107,19 +107,18 @@ function edit_user( $user_id = 0 ) {
 	 *
 	 * @since CP-2.1.0
 	 */
-	if ( ! has_filter( 'cp_user_taxonomies', '__return_false' ) && ! has_filter( 'user_edit_taxonomies', '__return_false' ) ) {
-		$taxonomies = get_object_taxonomies( 'user' );
-		if ( ! empty( $taxonomies ) ) {
+	$taxonomies = apply_filters( 'cp_user_taxonomies', get_object_taxonomies( 'user', 'objects' ), $user );
+
+	if ( ! empty( $taxonomies ) ) {
 			foreach ( $taxonomies as $taxonomy ) {
-				if ( isset( $_POST[ $taxonomy ] ) ) {
-					$term_slugs = array();
-					foreach ( $_POST[ $taxonomy ] as $term_slug ) {
-						$term_slugs[] = wp_unslash( $term_slug );
-					}
-					wp_set_object_terms( $user->ID, array_map( 'sanitize_title', array_unique( $term_slugs ) ), $taxonomy );
-				} else {
-					wp_delete_object_term_relationships( $user->ID, $taxonomy );
+			if ( isset( $_POST[ $taxonomy->name ] ) ) {
+				$term_slugs = array();
+				foreach ( $_POST[ $taxonomy->name ] as $term_slug ) {
+					$term_slugs[] = wp_unslash( $term_slug );
 				}
+				wp_set_object_terms( $user->ID, array_map( 'sanitize_title', array_unique( $term_slugs ) ), $taxonomy->name );
+			} else {
+				wp_delete_object_term_relationships( $user->ID, $taxonomy->name );
 			}
 		}
 	}
