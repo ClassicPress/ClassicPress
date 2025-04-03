@@ -120,13 +120,6 @@
 			wp.mediaWidgets.controlConstructors[ "media_video" ].prototype.mime_type = "video";
 			_.extend( wp.mediaWidgets.controlConstructors[ "media_video" ].prototype.l10n, {"no_media_selected":"No video selected","select_media":"Select Video","change_media":"Change Video","edit_media":"Edit Video","add_to_widget":"Add to Widget","missing_attachment":"That video cannot be found. Check your <a href=\"http:\/\/src.wordpress-develop.dev\/wp-admin\/upload.php\">media library<\/a> and make sure it was not deleted.","media_library_state_multi":{"0":"Video Widget (%d)","1":"Video Widget (%d)","singular":"Video Widget (%d)","plural":"Video Widget (%d)","context":null,"domain":null},"media_library_state_single":"Video Widget"} );
 		</script>
-		<script src="../../src/wp-admin/js/widgets/media-audio-widget.js"></script>
-		<script>
-			wp.mediaWidgets.modelConstructors[ "media_audio" ].prototype.schema = {"attachment_id":{"type":"integer","default":0,"minimum":0,"media_prop":"id"},"url":{"type":"string","default":"","format":"uri"},"title":{"type":"string","default":""},"preload":{"type":"string","default":"none","enum":["none","auto","metadata"]},"loop":{"type":"boolean","default":false},"mp3":{"type":"string","default":"","format":"uri"},"ogg":{"type":"string","default":"","format":"uri"},"wma":{"type":"string","default":"","format":"uri"},"m4a":{"type":"string","default":"","format":"uri"},"wav":{"type":"string","default":"","format":"uri"}};
-
-			wp.mediaWidgets.controlConstructors[ "media_audio" ].prototype.mime_type = "audio";
-			_.extend( wp.mediaWidgets.controlConstructors[ "media_audio" ].prototype.l10n, {"no_media_selected":"No audio selected","select_media":"Select File","change_media":"Change Audio","edit_media":"Edit Audio","add_to_widget":"Add to Widget","missing_attachment":"That audio file cannot be found. Check your <a href=\"http:\/\/src.wordpress-develop.dev\/wp-admin\/upload.php\">media library<\/a> and make sure it was not deleted.","media_library_state_multi":{"0":"Audio Widget (%d)","1":"Audio Widget (%d)","singular":"Audio Widget (%d)","plural":"Audio Widget (%d)","context":null,"domain":null},"media_library_state_single":"Audio Widget"} );
-		</script>
 
 		<!-- Unit tests -->
 		<script src="wp-admin/js/password-strength-meter.js"></script>
@@ -765,75 +758,6 @@
 		{{{ data.model.content }}}
 </video>
 </div>
-				<# } #>
-		</script>
-
-		<script type="text/html" id="tmpl-widget-media-media_audio-control">
-			<# var elementIdPrefix = 'el' + String( Math.random() ) + '_' #>
-			<p>
-				<label for="{{ elementIdPrefix }}title">Title:</label>
-				<input id="{{ elementIdPrefix }}title" type="text" class="widefat title">
-			</p>
-			<div class="media-widget-preview media_audio">
-				<div class="attachment-media-view">
-					<button type="button" class="select-media button-add-media not-selected">
-						Add Audio					</button>
-				</div>
-			</div>
-			<p class="media-widget-buttons">
-				<button type="button" class="button edit-media selected">
-					Edit Audio				</button>
-							<button type="button" class="button change-media select-media selected">
-					Replace Audio				</button>
-						</p>
-			<div class="media-widget-fields">
-			</div>
-		</script>
-
-		<script type="text/html" id="tmpl-wp-media-widget-audio-preview">
-			<# if ( data.error && 'missing_attachment' === data.error ) { #>
-				<div class="notice notice-error notice-alt notice-missing-attachment">
-					<p>That audio file cannot be found. Check your <a href="http://src.wordpress-develop.test/wp-admin/upload.php">media library</a> and make sure it was not deleted.</p>
-				</div>
-			<# } else if ( data.error ) { #>
-				<div class="notice notice-error notice-alt">
-					<p>Unable to preview media due to an unknown error.</p>
-				</div>
-			<# } else if ( data.model && data.model.src ) { #>
-				<audio style="visibility: hidden"
-	controls
-	class="wp-audio-shortcode"
-	width="{{ _.isUndefined( data.model.width ) ? 400 : data.model.width }}"
-	preload="{{ _.isUndefined( data.model.preload ) ? 'none' : data.model.preload }}"
-	<#
-		if ( ! _.isUndefined( data.model.autoplay ) && data.model.autoplay ) {
-		#> autoplay<#
-	}
-		if ( ! _.isUndefined( data.model.loop ) && data.model.loop ) {
-		#> loop<#
-	}
-	#>
->
-	<# if ( ! _.isEmpty( data.model.src ) ) { #>
-	<source src="{{ data.model.src }}" type="{{ wp.media.view.settings.embedMimes[ data.model.src.split('.').pop() ] }}" />
-	<# } #>
-
-		<# if ( ! _.isEmpty( data.model.mp3 ) ) { #>
-	<source src="{{ data.model.mp3 }}" type="{{ wp.media.view.settings.embedMimes[ 'mp3' ] }}" />
-	<# } #>
-			<# if ( ! _.isEmpty( data.model.ogg ) ) { #>
-	<source src="{{ data.model.ogg }}" type="{{ wp.media.view.settings.embedMimes[ 'ogg' ] }}" />
-	<# } #>
-			<# if ( ! _.isEmpty( data.model.flac ) ) { #>
-	<source src="{{ data.model.flac }}" type="{{ wp.media.view.settings.embedMimes[ 'flac' ] }}" />
-	<# } #>
-			<# if ( ! _.isEmpty( data.model.m4a ) ) { #>
-	<source src="{{ data.model.m4a }}" type="{{ wp.media.view.settings.embedMimes[ 'm4a' ] }}" />
-	<# } #>
-			<# if ( ! _.isEmpty( data.model.wav ) ) { #>
-	<source src="{{ data.model.wav }}" type="{{ wp.media.view.settings.embedMimes[ 'wav' ] }}" />
-	<# } #>
-		</audio>
 				<# } #>
 		</script>
 
