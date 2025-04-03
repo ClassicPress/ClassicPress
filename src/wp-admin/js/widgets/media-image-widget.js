@@ -1,9 +1,5 @@
-/**
- * @output wp-admin/js/widgets/media-image-widgets.js
- */
-
 /* eslint consistent-this: [ "error", "control" ] */
-/* global ajaxurl, IMAGE_WIDGET, console */
+/* global ajaxurl, IMAGE_WIDGET, console, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
 
 /**
  * @since CP 2.5.0
@@ -302,7 +298,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} );
 		if ( linkTo.value === 'none' ) {
-			linkToCustom.parentNode.classList.add( 'hidden' );		
+			linkToCustom.parentNode.classList.add( 'hidden' );
 			linkToCustom.value = '';
 		} else {
 			if ( linkUrl != null ) {
@@ -344,7 +340,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Delete media item
 		dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
-			if ( confirm( IMAGE_WIDGET.confirm_delete ) ) {
+			if ( window.confirm( IMAGE_WIDGET.confirm_delete ) ) {
 				deleteItem( id );
 			}
 		} );
@@ -428,7 +424,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		gridItem.setAttribute( 'data-delete-nonce', attachment.nonces.delete );
 		gridItem.setAttribute( 'data-edit-nonce', attachment.nonces.edit );
 
-		gridItem.innerHTML = '<div class="select-attachment-preview type-' + attachment.type + ' subtype-' + attachment.subtype + '">' + 
+		gridItem.innerHTML = '<div class="select-attachment-preview type-' + attachment.type + ' subtype-' + attachment.subtype + '">' +
 			'<div class="media-thumbnail">' + image + '</div>' +
 			'</div>' +
 			'<button type="button" class="check" tabindex="-1">' +
@@ -454,7 +450,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				'query[posts_per_page]': IMAGE_WIDGET.per_page,
 				'query[post_mime_type]': 'image',
 				'query[paged]': 1,
-				'_ajax_nonce': nonce,
+				'_ajax_nonce': nonce
 			} );
 
 		// Make AJAX request
@@ -573,7 +569,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				'query[s]': search.value ? search.value : '',
 				'query[paged]': paged ? paged : 1,
 				'query[media_category_name]': mediaCatSelect.value ? mediaCatSelect.value : '',
-				'_ajax_nonce': document.getElementById( '_wpnonce_widgets' ).value,
+				'_ajax_nonce': document.getElementById( '_wpnonce_widgets' ).value
 			} );
 
 		// Make AJAX request
@@ -640,7 +636,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							if ( result.headers.max_pages === parseInt( paged ) ) {
 								pageLink.setAttribute( 'data-page', paged );
 								pageLink.setAttribute( 'disabled', true );
-								pageLink.setAttribute( 'inert', true );								
+								pageLink.setAttribute( 'inert', true );
 							} else {
 								pageLink.setAttribute( 'data-page', parseInt( paged ) + 1 );
 								pageLink.removeAttribute( 'disabled'  );
@@ -785,8 +781,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		embed.addEventListener( 'change', function( e ) {
 			var url = e.target.value,
 				message  = dialog.querySelector( '#message' );
-			
-			// Activate Add to Widget button if appropriate			
+
+			// Activate Add to Widget button if appropriate
 			if ( url !== originalUrl ) {
 				addButton.removeAttribute( 'disabled' );
 				validateImageUrl( url );
@@ -911,7 +907,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		fieldset.className = 'media-widget-image-link';
 		fieldset.innerHTML = '<label for="widget-media_image-' + number + '-link_url">Link to:</label>' +
 			'<input id="widget-media_image-' + number + '-link_url" name="widget-media_image[' + number + '][link_url]" class="widefat" type="url" value="' + dialog.querySelector( '.link-to-custom' ).value + '" placeholder="https://" data-property="link_url">';
-		
+
 		// Insert image according to whether this is a new insertion or replacement
 		addedElement.className = 'attachment-thumb';
 		if ( widget.querySelector( '.attachment-media-view' ) !== null ) {
@@ -923,7 +919,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else { // replacement
 			widget.querySelector( '.attachment-thumb' ).replaceWith( addedElement );
 		}
-		
+
 		// Activate Save/Publish button
 		if ( document.body.className.includes( 'widgets-php' ) ) {
 			widget.classList.add( 'widget-dirty' );
@@ -1133,7 +1129,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		fetch( ajaxurl, {
 			method: 'POST',
 			body: formData,
-			credentials: 'same-origin',
+			credentials: 'same-origin'
 		} )
 		.then( function( response ) {
 			if ( response.ok ) {
@@ -1291,7 +1287,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	} );
 
-	
+
 	/**
 	 * Enable searching for items within grid.
 	 *
@@ -1394,7 +1390,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						}
 					};
 				},
-				maxFileSize: dialog.querySelector( '#ajax-url' ).dataset.maxFileSize,
+				maxFileSize: dialog.querySelector( '#ajax-url' ).dataset.maxFileSize
 			},
 			labelTapToUndo: IMAGE_WIDGET.tap_close,
 			fileRenameFunction: ( file ) =>
@@ -1403,7 +1399,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} ),
 			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 			labelFileTypeNotAllowed: IMAGE_WIDGET.invalid_type,
-			fileValidateTypeLabelExpectedTypes: IMAGE_WIDGET.check_types,
+			fileValidateTypeLabelExpectedTypes: IMAGE_WIDGET.check_types
 		} );
 
 		pond.on( 'processfile', function( error, file ) {
