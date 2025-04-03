@@ -304,7 +304,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 		$attachment_id     = ! empty( $instance['attachment_id'] ) ? $instance['attachment_id'] : 0;
 		$size              = ! empty( $instance['size'] ) ? $instance['size'] : 'full';
 		$alt               = ! empty( $instance['alt'] ) ? $instance['alt'] : '';
-		$link_type         = ! empty( $instance['link_type'] ) ? $instance['link_type'] : '';
+		$link_type         = ! empty( $instance['link_type'] ) ? $instance['link_type'] : 'none';
 		$link_url          = ! empty( $instance['link_url'] ) ? $instance['link_url'] : '';
 		$caption           = ! empty( $instance['caption'] ) ? $instance['caption'] : '';
 		$url               = ! empty( $instance['url'] ) ? $instance['url'] : '';
@@ -358,10 +358,11 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 				$image_html = '<figure style="margin:auto;">' . $image_html . '<figcaption>' . esc_html( $caption ) . '</figcaption></figure>';
 			}
 		} else {
-			$image_html = '<div class="notice-error notice-alt" style="border-left: 3px solid #d63638;"><p style="padding: 0.5em 0">' . __( 'Unable to preview media due to an unknown error.' ) . '</p></div>';
+			$image_html = '<div class="notice-error notice-alt" style="border-left: 3px solid #d63638;"><p style="padding: 0.5em 0">' . esc_html__( 'Unable to preview media due to an unknown error.' ) . '</p></div>';
 		}
 
 		$size_options = '';
+		$attachment_metadata = array();
 		if ( $attachment_id !== 0 ) {
 			$attachment_metadata = wp_prepare_attachment_for_js( $attachment_id );
 			$sizes_array = $attachment_metadata['sizes'];
@@ -380,14 +381,31 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 
 			<?php
 			if ( $url ) {
-				$nonce = wp_create_nonce( 'image_editor-' . $attachment_id );
+				$edit_nonce   = $attachment_metadata['nonces']['edit'];
+				$update_nonce = $attachment_metadata['nonces']['update'];
 				?>
 
 				<div class="media-widget-preview media_image populated"><?php echo $image_html; ?></div>
 
 				<fieldset class="media-widget-buttons">
-					<button type="button" class="button edit-media selected" data-edit-nonce="<?php echo esc_attr( $nonce ); ?>"><?php esc_html_e( 'Edit Image' ); ?></button>
-					<button type="button" class="button change-media select-media selected"><?php esc_html_e( 'Replace Image' ); ?></button>
+
+					<?php
+					if ( ! empty( $edit_nonce ) ) {
+					?>
+
+						<button type="button" class="button edit-media selected" data-edit-nonce="<?php echo esc_attr( $edit_nonce ); ?>"><?php esc_html_e( 'Edit Image' ); ?></button>
+
+					<?php
+					}
+					if ( ! empty( $update_nonce ) ) {
+					?>
+
+						<button type="button" class="button change-media select-media selected"><?php esc_html_e( 'Replace Image' ); ?></button>
+
+					<?php
+					}
+					?>
+
 				</fieldset>
 
 				<fieldset class="media-widget-image-link">
@@ -451,7 +469,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 		$instance['height']            = ! empty( $new_instance['height'] ) ? absint( $new_instance['height'] ) : 0;
 		$instance['caption']           = ! empty( $new_instance['caption'] ) ? wp_kses_post( $new_instance['caption'] ) : '';
 		$instance['alt']               = ! empty( $new_instance['alt'] ) ? sanitize_text_field( $new_instance['alt'] ) : '';
-		$instance['link_type']         = ! empty( $new_instance['link_type'] ) ? sanitize_text_field( $new_instance['link_type'] ) : '';
+		$instance['link_type']         = ! empty( $new_instance['link_type'] ) ? sanitize_text_field( $new_instance['link_type'] ) : 'none';
 		$instance['link_url']          = ! empty( $new_instance['link_url'] ) ? sanitize_url( $new_instance['link_url'] ) : '';
 		$instance['image_classes']     = ! empty( $new_instance['image_classes'] ) ? $this->sanitize_token_list( $new_instance['image_classes'] ) : '';
 		$instance['link_classes']      = ! empty( $new_instance['link_classes'] ) ? $this->sanitize_token_list( $new_instance['link_classes'] ) : '';
@@ -480,6 +498,20 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 				}
 			}
 		}
+		
+		$user_id = get_current_user_id();
+		$per_page = get_user_meta( $user_id, 'media_grid_per_page', true );
+		if ( empty( $per_page ) || $per_page < 1 ) {
+			$per_page = 80;
+		}
+
+		wp_enqueue_style( 'cp-filepond-image-preview' );
+		wp_enqueue_style( 'cp-filepond' );
+		wp_enqueue_script( 'cp-filepond-file-validate-size' );
+		wp_enqueue_script( 'cp-filepond-file-validate-type' );
+		wp_enqueue_script( 'cp-filepond-file-rename' );
+		wp_enqueue_script( 'cp-filepond-plugin-image-preview' );
+		wp_enqueue_script( 'cp-filepond' );
 
 		wp_enqueue_script( 'media-image-widget' );
 		wp_localize_script(
@@ -488,11 +520,29 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 			array(
 				'replace_image'              => _x( 'Replace Image', 'label for button in the image widget; should preferably not be longer than ~13 characters long' ),
 				'edit_image'                 => _x( 'Edit Image', 'label for button in the image widget; should preferably not be longer than ~13 characters long' ),
+				'add_image'                  => __( 'Add Image' ),
 				'add_to_widget'              => __( 'Add to Widget' ),
 				'unsupported_file_type'      => __( 'Looks like this is not the correct kind of file. Please link to an appropriate file instead.' ),
 				'aria_label'                 => __( 'The current image has no alternative text. The file name is: ' ),
 				'image_file_types'           => $image_file_types,
 				'wrong_url'                  => __( 'No file exists at the URL provided.' ),
+				'deselect'                   => __( 'Deselect' ),
+				'includes_url'               => includes_url(),
+				'per_page'                   => $per_page,
+				'of'                         => __( 'of' ),
+				'by'                         => __( 'by' ),
+				'pixels'                     => __( 'pixels' ),
+				'deselect'                   => __( 'Deselect' ),
+				'failed_update'              => __( 'Failed to update media:' ),
+				'error'                      => __( 'Error:' ),
+				'upload_failed'              => __( 'Upload failed' ),
+				'tap_close'                  => __( 'Tap to close' ),
+				'new_filename'               => __( 'Enter new filename' ),
+				'invalid_type'               => __( 'Invalid file type' ),
+				'check_types'                => __( 'Check the list of accepted file types.' ),
+				'delete_failed'              => __( 'Failed to delete attachment.' ),
+				'confirm_delete'             => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+				'confirm_multiple'           => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
 			)
 		);
 	}
@@ -562,12 +612,24 @@ function cp_render_media_image_template() {
 													<select id="image-details-link-to" name="link-type" data-setting="link">
 														<option value="none" selected><?php esc_html_e( 'None' ); ?></option>
 														<option value="file"><?php esc_html_e( 'Image URL' ); ?></option>
+														
+														<?php
+														// Enable Attachment page option only if available.
+														if ( '1' === get_option( 'wp_attachment_pages_enabled' ) ) {
+														?>
+
+															<option value="post"><?php esc_html_e( 'Attachment Page' ); ?></option>
+
+														<?php
+														}
+														?>
+
 														<option value="custom"><?php esc_html_e( 'Custom URL' ); ?></option>
 													</select>
 												</div>
-												<div id="link-to-url" hidden inert>
+												<div id="link-to-url" hidden>
 													<label for="image-details-link-to-custom" class="name"><?php esc_html_e( 'URL' ); ?></label>
-													<input type="url" id="image-details-link-to-custom" class="link-to-custom" style="margin-left: 0;" data-setting="linkUrl">
+													<input type="url" id="image-details-link-to-custom" class="link-to-custom" placeholder="https://" style="margin-left:0;" data-setting="linkUrl">
 												</div>
 											</div>
 										</fieldset>
@@ -622,7 +684,7 @@ function cp_render_media_image_template() {
 				<div class="media-frame-toolbar">
 					<div class="media-toolbar">
 						<div class="media-toolbar-primary search-form">
-							<button type="button" class="button media-button button-primary button-large media-button-select"><?php esc_html_e( 'Update' ); ?></button>
+							<button id="media-button-update" type="button" class="button media-button button-primary button-large media-button-select" disabled><?php esc_html_e( 'Update' ); ?></button>
 						</div>
 					</div>
 				</div>
