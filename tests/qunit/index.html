@@ -113,13 +113,6 @@
 		<script>
 			wp.mediaWidgets.init();
 		</script>
-		<script src="../../src/wp-admin/js/widgets/media-video-widget.js"></script>
-		<script>
-			wp.mediaWidgets.modelConstructors[ "media_video" ].prototype.schema = {"attachment_id":{"type":"integer","default":0,"minimum":0,"media_prop":"id"},"url":{"type":"string","default":"","format":"uri"},"title":{"type":"string","default":""},"preload":{"type":"string","default":"metadata","enum":["none","auto","metadata"]},"loop":{"type":"boolean","default":false},"content":{"type":"string","default":""},"mp4":{"type":"string","default":"","format":"uri"},"m4v":{"type":"string","default":"","format":"uri"},"webm":{"type":"string","default":"","format":"uri"},"ogv":{"type":"string","default":"","format":"uri"},"wmv":{"type":"string","default":"","format":"uri"},"flv":{"type":"string","default":"","format":"uri"}};
-
-			wp.mediaWidgets.controlConstructors[ "media_video" ].prototype.mime_type = "video";
-			_.extend( wp.mediaWidgets.controlConstructors[ "media_video" ].prototype.l10n, {"no_media_selected":"No video selected","select_media":"Select Video","change_media":"Change Video","edit_media":"Edit Video","add_to_widget":"Add to Widget","missing_attachment":"That video cannot be found. Check your <a href=\"http:\/\/src.wordpress-develop.dev\/wp-admin\/upload.php\">media library<\/a> and make sure it was not deleted.","media_library_state_multi":{"0":"Video Widget (%d)","1":"Video Widget (%d)","singular":"Video Widget (%d)","plural":"Video Widget (%d)","context":null,"domain":null},"media_library_state_single":"Video Widget"} );
-		</script>
 
 		<!-- Unit tests -->
 		<script src="wp-admin/js/password-strength-meter.js"></script>
@@ -135,7 +128,6 @@
 		<script src="wp-admin/js/customize-widgets.js"></script>
 		<script src="wp-admin/js/word-count.js"></script>
 		<script src="wp-admin/js/widgets/test-media-widgets.js"></script>
-		<script src="wp-admin/js/widgets/test-media-video-widget.js"></script>
 
 		<!-- Customizer templates for sections -->
 		<script type="text/html" id="tmpl-customize-section-default">
@@ -581,185 +573,6 @@
 					</div><!-- #available-widgets-list -->
 				</div><!-- #available-widgets -->
 			</div><!-- #widgets-left -->
-
-		<script type="text/html" id="tmpl-widget-media-media_image-control">
-			<# var elementIdPrefix = 'el' + String( Math.random() ) + '_' #>
-			<p>
-				<label for="{{ elementIdPrefix }}title">Title:</label>
-				<input id="{{ elementIdPrefix }}title" type="text" class="widefat title">
-			</p>
-			<div class="media-widget-preview media_image">
-				<div class="attachment-media-view">
-					<button type="button" class="select-media button-add-media not-selected">
-						Add Image					</button>
-				</div>
-			</div>
-			<p class="media-widget-buttons">
-				<button type="button" class="button edit-media selected">
-					Edit Image				</button>
-							<button type="button" class="button change-media select-media selected">
-					Replace Image				</button>
-						</p>
-			<div class="media-widget-fields">
-			</div>
-		</script>
-
-		<script type="text/html" id="tmpl-wp-media-widget-image-preview">
-			<# if ( data.error && 'missing_attachment' === data.error ) { #>
-				<div class="notice notice-error notice-alt notice-missing-attachment">
-					<p>That image cannot be found. Check your <a href="http://src.wordpress-develop.test/wp-admin/upload.php">media library</a> and make sure it was not deleted.</p>
-				</div>
-			<# } else if ( data.error ) { #>
-				<div class="notice notice-error notice-alt">
-					<p>Unable to preview media due to an unknown error.</p>
-				</div>
-			<# } else if ( data.url ) { #>
-				<img class="attachment-thumb" src="{{ data.url }}" draggable="false" alt="{{ data.alt }}"
-					<# if ( ! data.alt && data.currentFilename ) { #>
-						aria-label="
-						The current image has no alternative text. The file name is: {{ data.currentFilename }}						"
-					<# } #>
-				/>
-			<# } #>
-		</script>
-
-		<script type="text/html" id="tmpl-wp-media-widget-image-fields">
-			<# var elementIdPrefix = 'el' + String( Math.random() ) + '_'; #>
-			<# if ( data.url ) { #>
-			<p class="media-widget-image-link">
-				<label for="{{ elementIdPrefix }}linkUrl"><?php esc_html_e( 'Link to:' ); ?></label>
-				<input id="{{ elementIdPrefix }}linkUrl" type="text" class="widefat link" value="{{ data.link_url }}" placeholder="https://" pattern="((\w+:)?\/\/\w.*|\w+:(?!\/\/$)|\/|\?|#).*">
-			</p>
-			<# } #>
-		</script>
-
-		<script type="text/html" id="tmpl-widget-media-media_video-control">
-			<# var elementIdPrefix = 'el' + String( Math.random() ) + '_' #>
-			<p>
-				<label for="{{ elementIdPrefix }}title">Title:</label>
-				<input id="{{ elementIdPrefix }}title" type="text" class="widefat title">
-			</p>
-			<div class="media-widget-preview media_video">
-				<div class="attachment-media-view">
-					<button type="button" class="select-media button-add-media not-selected">
-						Add Video					</button>
-				</div>
-			</div>
-			<p class="media-widget-buttons">
-				<button type="button" class="button edit-media selected">
-					Edit Video				</button>
-							<button type="button" class="button change-media select-media selected">
-					Replace Video				</button>
-						</p>
-			<div class="media-widget-fields">
-			</div>
-		</script>
-
-		<script type="text/html" id="tmpl-wp-media-widget-video-preview">
-			<# if ( data.error && 'missing_attachment' === data.error ) { #>
-				<div class="notice notice-error notice-alt notice-missing-attachment">
-					<p>That video cannot be found. Check your <a href="http://src.wordpress-develop.test/wp-admin/upload.php">media library</a> and make sure it was not deleted.</p>
-				</div>
-			<# } else if ( data.error && 'unsupported_file_type' === data.error ) { #>
-				<div class="notice notice-error notice-alt notice-missing-attachment">
-					<p>Sorry, the video at the supplied URL cannot be loaded. Please check that the URL is for a supported video file (<code>.mp4</code>, <code>.m4v</code>, <code>.webm</code>, <code>.ogv</code>, <code>.flv</code>) or stream (e.g. YouTube and Vimeo).</p>
-				</div>
-			<# } else if ( data.error ) { #>
-				<div class="notice notice-error notice-alt">
-					<p>Unable to preview media due to an unknown error.</p>
-				</div>
-			<# } else if ( data.is_oembed && data.model.poster ) { #>
-				<a href="{{ data.model.src }}" target="_blank" class="media-widget-video-link">
-					<img src="{{ data.model.poster }}" />
-				</a>
-			<# } else if ( data.is_oembed ) { #>
-				<a href="{{ data.model.src }}" target="_blank" class="media-widget-video-link no-poster">
-					<span class="dashicons dashicons-format-video"></span>
-				</a>
-			<# } else if ( data.model.src ) { #>
-				<#  var w_rule = '', classes = [],
-		w, h, settings = wp.media.view.settings,
-		isYouTube = isVimeo = false;
-
-	if ( ! _.isEmpty( data.model.src ) ) {
-		isYouTube = data.model.src.match(/youtube|youtu\.be/);
-		isVimeo = -1 !== data.model.src.indexOf('vimeo');
-	}
-
-	if ( settings.contentWidth && data.model.width >= settings.contentWidth ) {
-		w = settings.contentWidth;
-	} else {
-		w = data.model.width;
-	}
-
-	if ( w !== data.model.width ) {
-		h = Math.ceil( ( data.model.height * w ) / data.model.width );
-	} else {
-		h = data.model.height;
-	}
-
-	if ( w ) {
-		w_rule = 'width: ' + w + 'px; ';
-	}
-
-	if ( isYouTube ) {
-		classes.push( 'youtube-video' );
-	}
-
-	if ( isVimeo ) {
-		classes.push( 'vimeo-video' );
-	}
-
-#>
-<div style="{{ w_rule }}" class="wp-video">
-<video controls
-	class="wp-video-shortcode {{ classes.join( ' ' ) }}"
-	<# if ( w ) { #>width="{{ w }}"<# } #>
-	<# if ( h ) { #>height="{{ h }}"<# } #>
-			<#
-		if ( ! _.isUndefined( data.model.poster ) && data.model.poster ) {
-			#> poster="{{ data.model.poster }}"<#
-		} #>
-			preload			="{{ _.isUndefined( data.model.preload ) ? 'metadata' : data.model.preload }}"
-				<#
-		if ( ! _.isUndefined( data.model.autoplay ) && data.model.autoplay ) {
-		#> autoplay<#
-	}
-		if ( ! _.isUndefined( data.model.loop ) && data.model.loop ) {
-		#> loop<#
-	}
-	#>
->
-	<# if ( ! _.isEmpty( data.model.src ) ) {
-		if ( isYouTube ) { #>
-		<source src="{{ data.model.src }}" type="video/youtube" />
-		<# } else if ( isVimeo ) { #>
-		<source src="{{ data.model.src }}" type="video/vimeo" />
-		<# } else { #>
-		<source src="{{ data.model.src }}" type="{{ settings.embedMimes[ data.model.src.split('.').pop() ] }}" />
-		<# }
-	} #>
-
-		<# if ( data.model.mp4 ) { #>
-	<source src="{{ data.model.mp4 }}" type="{{ settings.embedMimes[ 'mp4' ] }}" />
-	<# } #>
-		<# if ( data.model.m4v ) { #>
-	<source src="{{ data.model.m4v }}" type="{{ settings.embedMimes[ 'm4v' ] }}" />
-	<# } #>
-		<# if ( data.model.webm ) { #>
-	<source src="{{ data.model.webm }}" type="{{ settings.embedMimes[ 'webm' ] }}" />
-	<# } #>
-		<# if ( data.model.ogv ) { #>
-	<source src="{{ data.model.ogv }}" type="{{ settings.embedMimes[ 'ogv' ] }}" />
-	<# } #>
-		<# if ( data.model.flv ) { #>
-	<source src="{{ data.model.flv }}" type="{{ settings.embedMimes[ 'flv' ] }}" />
-	<# } #>
-		{{{ data.model.content }}}
-</video>
-</div>
-				<# } #>
-		</script>
 
 	<script type="text/html" id="tmpl-media-frame">
 		<div class="media-frame-menu"></div>
