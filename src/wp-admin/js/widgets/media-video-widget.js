@@ -160,7 +160,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				fileType   = attachment.mime.split( '/' )[1],
 				video      = document.createElement( 'video' ),
 				source     = document.createElement( 'source' ),
-				buttons    = document.createElement( 'div' );
+				buttons    = document.createElement( 'div' ),
+				mediaView  = widget.querySelector( '.attachment-media-view' );
 
 			video.className = 'wp_video_shortcode';
 			video.style.width = '100%';
@@ -179,9 +180,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				'<button type="button" class="button change-media select-media">' + VIDEO_WIDGET.replace_video + '</button>';
 
 			// Insert video according to whether this is a new insertion or replacement
-			if ( widget.querySelector( '.attachment-media-view' ) !== null ) {
-				widget.querySelector( '.media_video' ).append( video );
-				widget.querySelector( '.attachment-media-view' ).replaceWith( buttons );
+			if ( mediaView !== null ) {
+				mediaView.before( video );
+				mediaView.replaceWith( buttons );
 			} else { // replacement
 				widget.querySelector( '.wp-video' ).replaceWith( video );
 			}
