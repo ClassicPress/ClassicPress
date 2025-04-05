@@ -1015,17 +1015,20 @@ ul.CodeMirror-hints {
 	right: 10px;
 }
 #widget-modal .media-toolbar {
-	position: static;
-	height: 70px;
+	position: relative;
 	border-top: none;
+	bottom: 0;
 }
 .media-button-primary {
-	float: right;
 	height: 100%;
 	position: absolute;
 	right: 10px;
+	top: 10px;
+}
+#image-modal-content .media-toolbar-primary {
+	position: absolute;
+	right: 20px;
 	bottom: 0;
-	margin-bottom: -6.75em;
 }
 .details-panel {
 	margin-top: -2em;
