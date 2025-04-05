@@ -1002,15 +1002,6 @@ ul.CodeMirror-hints {
 #insert-from-url-panel .media-frame-content {
 	top: 50px;
 }
-#uploader details {
-	font-size: 1.3em;
-	text-align: center;
-}
-#uploader summary {
-	color: #2271b1;
-	font-weight: 600;
-	line-height: 2.71428571;
-}
 #widget-modal .media-modal-close {
 	right: 10px;
 }
@@ -1018,12 +1009,12 @@ ul.CodeMirror-hints {
 	position: relative;
 	border-top: none;
 	bottom: 0;
+	height: 110px;
 }
-.media-button-primary {
-	height: 100%;
+#widget-modal .media-button-primary {
 	position: absolute;
 	right: 10px;
-	top: 10px;
+	top: 120px;
 }
 #image-modal-content .media-toolbar-primary {
 	position: absolute;
@@ -1031,11 +1022,36 @@ ul.CodeMirror-hints {
 	bottom: 0;
 }
 .details-panel {
-	margin-top: -2em;
+	margin-top: -35px;
+	font-size: 1.3em;
+	text-align: center;
+	float: right;
+}
+.details-panel summary {
+	color: #2271b1;
+	font-weight: 600;
+	line-height: 2.71428571;
+	margin-right: 10em;
 }
 .details-panel summary {
 	text-align: left;
 	margin-left: 1em;
+}
+.details-panel .media-menu-item {
+	margin-top: -1em;
+	display: inline-block;
+	box-sizing: border-box;
+	position: relative;
+	border: 1px solid #dcdcde;
+	margin-left: 0.5em;
+	padding: 6px 8px;
+	font-size: 14px;
+	line-height: 1.28571428;
+	color: #2271b1;
+	text-align: left;
+	text-decoration: none;
+	cursor: pointer;
+	z-index: 999;
 }
 
 /* =Media Queries
@@ -1124,26 +1140,9 @@ ul.CodeMirror-hints {
 }
 
 /**
- * Media queries.
+ * Modal media queries.
  */
-@media only screen and (max-width: 900px) {
-	#widget-modal .media-frame-title,
-	#widget-modal .media-frame-content {
-		left: 0;
-	}
-	#widget-modal #widgets-media-grid {
-		margin-top: 5em;
-	}
-	#widget-modal #attachments-browser {
-		width: 100%;
-	}
-	#widget-modal .pagination-links .button,
-	#widget-modal .pagination-links input[type="text"],	
-	#widget-modal #attachments-browser select,
-	#widget-modal #attachments-browser input[type="search"] {
-		line-height: 1.3;
-		min-height: 30px;
-	}
+@media only screen and (max-width: 1014px) {
 	#widget-modal .media-toolbar-primary {
 		float: right;
 		height: 100%;
@@ -1159,6 +1158,37 @@ ul.CodeMirror-hints {
 	#widget-modal .media-modal-close {
 		width: 46px;
 		height: 46px;
+	}
+}
+@media only screen and (max-width: 900px) {
+	#widget-modal .media-frame-title {
+		position: static;
+		text-align: left;
+		padding-left: 0;
+	}
+	#widget-modal .media-frame-content {
+		left: 0;
+	}
+	#widget-modal #widgets-media-grid {
+		margin-top: 2em;
+	}
+	#widget-modal #attachments-browser {
+		width: 100%;
+	}
+	#widget-modal .pagination-links .button,
+	#widget-modal .pagination-links input[type="text"],	
+	#widget-modal #attachments-browser select,
+	#widget-modal #attachments-browser input[type="search"] {
+		line-height: 1.3;
+		min-height: 30px;
+	}
+	#insert-from-url-panel .media-embed {
+		margin-top: 1em;
+	}
+	#insert-from-url-panel .embed-url input {
+		font-size: 16px;
+		line-height: 1;
+		padding: 6px 40px 6px 14px;
 	}
 }
 @media only screen and (max-width: 640px) {
