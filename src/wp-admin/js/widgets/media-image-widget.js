@@ -1432,8 +1432,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + count5;
 
 		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
-		//dialog.querySelector( '#total-media-items' ).textContent = items.length;
-		//dialog.querySelector( '#total-media-items-mobile' ).textContent = items.length;
 	}
 
 	/* Enable choosing of panel on narrow screen */
@@ -1449,6 +1447,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			details.append( itemAdd );
 			details.append( embed );
 			details.removeAttribute( 'hidden' );
+			dialog.querySelector( '#menu-item-embed' ).addEventListener( 'click', function() {
+				dialog.querySelector( '.details-panel' ).style.marginTop = '4px';
+			} );
+			dialog.querySelector( '#menu-item-add' ).addEventListener( 'click', function() {
+				dialog.querySelector( '.details-panel' ).style.marginTop = '-35px';
+			} );
 		}
 	}
 
