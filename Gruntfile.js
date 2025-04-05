@@ -469,8 +469,6 @@ module.exports = function(grunt) {
 				src: [
 					'wp-admin/js/**/*.js',
 					'wp-includes/js/*.js',
-					// Built scripts.
-					'!wp-includes/js/media-*',
 					// ClassicPress scripts inside directories
 					'wp-includes/js/jquery/jquery.table-hotkeys.js',
 					'wp-includes/js/mediaelement/mediaelement-migrate.js',
@@ -579,8 +577,6 @@ module.exports = function(grunt) {
 				src: [
 					'src/wp-admin/js/**/*.js',
 					'src/wp-includes/js/*.js',
-					// Built scripts.
-					'!src/wp-includes/js/media-*',
 					// ClassicPress scripts inside directories
 					'src/wp-includes/js/jquery/jquery.table-hotkeys.js',
 					'src/wp-includes/js/mediaelement/mediaelement-migrate.js',
