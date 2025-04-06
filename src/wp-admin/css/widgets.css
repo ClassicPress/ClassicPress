@@ -1018,8 +1018,8 @@ ul.CodeMirror-hints {
 }
 #image-modal-content .media-toolbar-primary {
 	position: absolute;
-	right: 20px;
-	bottom: 0;
+	right: 10px;
+	top: 110px;
 }
 .details-panel {
 	margin-top: -35px;
@@ -1148,6 +1148,9 @@ ul.CodeMirror-hints {
 		height: 100%;
 		position: absolute;
 		margin-top: 4em;
+	}
+	#widget-modal .media-toolbar-primary button {
+		margin-top: -2.5em;
 	}
 	#widget-modal .media-frame .media-search-input-label {
 		top: 0;
