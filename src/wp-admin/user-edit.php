@@ -557,7 +557,7 @@ switch ( $action ) {
 				$tax_list = '<h2>' . __( 'User Taxonomies' ) . '</h2>';
 
 				/**
-				 * Filters which taxonomies should be printed.
+				 * Filters which user taxonomies are displayed.
 				 *
 				 * @since CP-2.5.0
 				 *

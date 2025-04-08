@@ -102,13 +102,14 @@ function edit_user( $user_id = 0 ) {
 		$user->display_name = sanitize_text_field( $_POST['display_name'] );
 	}
 
+	 /** This filter is documented in wp-admin/user-edit.php */
+	$taxonomies = apply_filters( 'cp_user_taxonomies', get_object_taxonomies( 'user', 'objects' ), $user );
+
 	/**
-	 * Enable adding of user taxonomies unless a filter is set to false.
+	 * Enable adding of user taxonomies using the filter above.
 	 *
 	 * @since CP-2.1.0
 	 */
-	$taxonomies = apply_filters( 'cp_user_taxonomies', get_object_taxonomies( 'user', 'objects' ), $user );
-
 	if ( ! empty( $taxonomies ) ) {
 		foreach ( $taxonomies as $taxonomy ) {
 			if ( isset( $_POST[ $taxonomy->name ] ) ) {
