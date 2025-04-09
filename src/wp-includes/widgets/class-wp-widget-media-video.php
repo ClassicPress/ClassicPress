@@ -226,35 +226,6 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 	}
 
 	/**
-	 * Sanitize widget form values as they are saved.
-	 *
-	 * @since CP-2.5.0
-	 *
-	 * @see WP_Widget::update()
-	 *
-	 * @param array $new_instance Values just sent to be saved.
-	 * @param array $old_instance Previously saved values from database.
-	 *
-	 * @return array Updated safe values to be saved.
-	 */
-	public function update( $new_instance, $old_instance ) {
-		$instance = array();
-		$instance['title']         = ! empty( $new_instance['title'] ) ? sanitize_text_field( $new_instance['title'] ) : '';
-		$instance['attachment_id'] = ! empty( $new_instance['attachment_id'] ) ? absint( $new_instance['attachment_id'] ) : 0;
-		$instance['url']           = ! empty( $new_instance['url'] ) ? sanitize_url( $new_instance['url'] ) : '';
-		$instance['preload']       = ! empty( $new_instance['preload'] ) ? sanitize_text_field( $new_instance['preload'] ) : 'metadata';
-		$instance['loop']          = ! empty( $new_instance['loop'] ) ? true : false;
-		$instance['content']       = ! empty( $new_instance['content'] ) ? sanitize_text_field( $new_instance['content'] ) : '';
-		$instance['mp4']           = ! empty( $new_instance['mp4'] ) ? sanitize_url( $new_instance['mp4'] ) : '';
-		$instance['m4v']           = ! empty( $new_instance['m4v'] ) ? sanitize_url( $new_instance['m4v'] ) : '';
-		$instance['webm']          = ! empty( $new_instance['webm'] ) ? sanitize_url( $new_instance['webm'] ) : '';
-		$instance['ogv']           = ! empty( $new_instance['ogv'] ) ? sanitize_url( $new_instance['ogv'] ) : '';
-		$instance['flv']           = ! empty( $new_instance['flv'] ) ? sanitize_url( $new_instance['flv'] ) : '';
-
-		return $instance;
-	}
-
-	/**
 	 * Enqueue preview scripts.
 	 *
 	 * These scripts normally are enqueued just-in-time when a video shortcode is used.
