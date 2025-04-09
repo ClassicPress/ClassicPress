@@ -2090,7 +2090,6 @@ function cp_render_widget_upload_template() {
 
 			<div class="media-frame-menu">
 				<div role="tablist" aria-orientation="vertical" class="media-menu">
-					<button id="menu-item-insert" type="button" role="tab" class="media-menu-item active" aria-selected="false" aria-controls="media-frame-tab-panel" hidden><?php esc_html_e( 'Media Library' ); ?></button>
 					<button id="menu-item-add" type="button" role="tab" class="media-menu-item active" aria-selected="true" hidden><?php esc_html_e( 'Add media' ); ?></button>
 					<button id="menu-item-gallery" type="button" role="tab" class="media-menu-item" aria-selected="false" hidden><?php esc_html_e( 'Create gallery' ); ?></button>
 					<button id="menu-item-playlist" type="button" role="tab" class="media-menu-item" aria-selected="false" hidden><?php esc_html_e( 'Create audio playlist' ); ?></button>
