@@ -247,7 +247,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 		$instance['content']       = ! empty( $new_instance['content'] ) ? sanitize_text_field( $new_instance['content'] ) : '';
 		$instance['mp4']           = ! empty( $new_instance['mp4'] ) ? sanitize_url( $new_instance['mp4'] ) : '';
 		$instance['m4v']           = ! empty( $new_instance['m4v'] ) ? sanitize_url( $new_instance['m4v'] ) : '';
-		$instance['webm']          = ! empty( $new_instance['webm'] ) ? sanitize_url( $new_instance['webm'] ) : 'none';
+		$instance['webm']          = ! empty( $new_instance['webm'] ) ? sanitize_url( $new_instance['webm'] ) : '';
 		$instance['ogv']           = ! empty( $new_instance['ogv'] ) ? sanitize_url( $new_instance['ogv'] ) : '';
 		$instance['flv']           = ! empty( $new_instance['flv'] ) ? sanitize_url( $new_instance['flv'] ) : '';
 
