@@ -557,7 +557,11 @@ switch ( $action ) {
 				$tax_list = '<h2>' . __( 'User Taxonomies' ) . '</h2>';
 
 				/**
-				 * Filters which user taxonomies are displayed.
+				 * Filters user level taxonomy data used to create a table list.
+				 *
+				 * Taxonomy data can be amended in this filter, specific taxonomies can be removed.
+				 * The taxonomy data can be returned as empty to suppress table creation.
+				 * Using the user level data allows table creation to be tailored at user or user permission level.
 				 *
 				 * @since CP-2.5.0
 				 *
@@ -598,11 +602,11 @@ switch ( $action ) {
 					$tax_list .= '</tbody></table>';
 
 					/**
-					 * Filters whether to show the user taxonomy terms.
+					 * Filters a pre-formatted HTML table list of user taxonomy terms.
 					 *
-					 * @since CP-2.5.0
+					 * @since CP-2.1.0
 					 *
-					 * @param string  $tax_list     An HTML-formatted list of printed taxonomy terms.
+					 * @param string  $tax_list     An HTML-formatted table list of taxonomy terms with input checkboxes.
 					 * @param array   $taxonomies   An array of user taxonomy objects.
 					 * @param WP_User $profile_user The current WP_User object.
 					 */
