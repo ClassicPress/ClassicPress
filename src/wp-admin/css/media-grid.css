@@ -69,7 +69,13 @@
 .imgedit-group-top h2 {
 	display: inline-block;
 }
-.imgedit-wrap {
+.media-modal-content .imgedit-wrap {
+	position: absolute;
+	overflow: auto;
+	top: 50px;
+	bottom: 0;
+	right: 0;
+	left: 0;
 	box-shadow: inset 0 4px 4px -4px rgba(0, 0, 0, 0.1);
 }
 .imgedit-settings .imgedit-help-toggle {
@@ -238,6 +244,18 @@
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 	font-size: 12px;
 }
+.media-frame-title,
+.media-modal-content .edit-attachment-frame .edit-media-header {
+	position: sticky;
+	top: 0;
+	background-color: #fff;
+	z-index: 10;
+	border-bottom: 1px solid #dcdcde;
+}
+.media-modal-content .edit-attachment-frame .edit-media-header {
+	overflow: revert;
+	z-index: 11;
+}
 .media-frame-title h2 {
 	padding: 0 16px;
 	font-size: 22px;
@@ -375,4 +393,24 @@ dialog::backdrop {
 }
 .filepond--file-info .filepond--file-info-main {
 	line-height: 1.3;
+}
+
+@media screen and (min-width: 481px) {
+	.media-modal-content .edit-attachment-frame .edit-media-header .media-navigation {
+		border-bottom: none;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.media-modal-content .edit-attachment-frame .media-frame-content {
+		margin-top: 64px;
+	}
+	.attachment-media-view .media-navigation {
+		margin-bottom: 1em;
+		position: fixed;
+		top: calc(5% + 50px);
+		background-color: #fff;
+		z-index: 10;
+		width: calc(100% - 30px);
+	}
 }
