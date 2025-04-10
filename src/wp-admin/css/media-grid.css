@@ -115,6 +115,7 @@
 }
 #post-upload-info {
 	margin-top: -6em;
+	position: relative;
 }
 .filepond--drop-label {
 	background-color: #ecf7e9;
