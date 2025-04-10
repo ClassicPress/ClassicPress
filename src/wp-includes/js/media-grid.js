@@ -1,3 +1,5 @@
+/* global console, _wpMediaGridSettings, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
+
 document.addEventListener( 'DOMContentLoaded', function() {
 	var pond, itemID, focusID,
 		{ FilePond } = window, // import FilePond
@@ -260,7 +262,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Delete media item
 	dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
 		var id = location.search.match( /\d+/g )[0];
-		if ( confirm( _wpMediaGridSettings.confirm_delete ) ) {
+		if ( window.confirm( _wpMediaGridSettings.confirm_delete ) ) {
 			deleteItem( id );
 			resetDataOrdering();
 		}
@@ -489,7 +491,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		gridItem.setAttribute( 'data-mime', attachment.mime );
 		gridItem.setAttribute( 'data-width', attachment.width );
 		gridItem.setAttribute( 'data-height', attachment.height );
-		gridItem.setAttribute( 'data-size', attachment.filesizeHumanReadable )
+		gridItem.setAttribute( 'data-size', attachment.filesizeHumanReadable );
 		gridItem.setAttribute( 'data-caption', attachment.caption );
 		gridItem.setAttribute( 'data-description', attachment.description );
 		gridItem.setAttribute( 'data-link', attachment.link );
@@ -528,7 +530,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			'query[s]': search ? search.value : '',
 			'query[paged]': paged ? paged : '1',
 			'query[media_category_name]': mediaCatSelect ? mediaCatSelect.value : '',
-			'_ajax_nonce': document.getElementById( 'media_grid_nonce' ).value,
+			'_ajax_nonce': document.getElementById( 'media_grid_nonce' ).value
 		} );
 
 		// Make AJAX request
@@ -941,11 +943,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	dialog.addEventListener( 'touchend', touchEndHandler );
 
 	// Edit image
-	document.querySelector( '.edit-attachment' ).addEventListener( 'click', function( e ) {
+	document.querySelector( '.edit-attachment' ).addEventListener( 'click', function() {
 		var itemID = parseInt( queryParams.get( 'item' ) ),
 			item = document.getElementById( 'media-' + itemID ),
-			width = item.dataset.width,
-			height = item.dataset.height,
 			nonce = item.dataset.editNonce,
 			action = 'rotate-cw', // or any other valid action e.g. save, scale, restore
 			target = 'full'; // or 'thumbnail', etc.
@@ -963,7 +963,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		fetch( ajaxurl, {
 			method: 'POST',
 			body: formData,
-			credentials: 'same-origin',
+			credentials: 'same-origin'
 		} )
 		.then( function( response ) {
 			if ( response.ok ) {
@@ -1024,7 +1024,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			deleteButton.addEventListener( 'click', function() {
 				var selectedItems = document.querySelectorAll( '.media-item.selected' );
 				if ( selectedItems.length !== 0 ) {
-					if ( confirm( _wpMediaGridSettings.confirm_multiple ) ) {
+					if ( window.confirm( _wpMediaGridSettings.confirm_multiple ) ) {
 						selectedItems.forEach( function( deleteSelect ) {
 							deleteItem( deleteSelect.id.replace( 'media-', '' ) );
 						} );
@@ -1085,7 +1085,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	pond = FilePond.create( inputElement, {
 		allowMultiple: true,
 		server: {
-			process: function( fieldName, file, metadata, load, error, progress, abort, transfer, options ) {
+			process: function( fieldName, file, metadata, load, error, progress, abort ) {
 
 				// Create FormData
 				var formData = new FormData();
@@ -1137,7 +1137,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 				};
 			},
-			maxFileSize: document.getElementById( 'filepond' ).dataset.maxFileSize,
+			maxFileSize: document.getElementById( 'filepond' ).dataset.maxFileSize
 		},
 		labelTapToUndo: _wpMediaGridSettings.tap_close,
 		fileRenameFunction: ( file ) =>
@@ -1146,7 +1146,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} ),
 		acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 		labelFileTypeNotAllowed: _wpMediaGridSettings.invalid_type,
-		fileValidateTypeLabelExpectedTypes: _wpMediaGridSettings.check_types,
+		fileValidateTypeLabelExpectedTypes: _wpMediaGridSettings.check_types
 	} );
 
 	pond.on( 'processfile', function( error, file ) {
