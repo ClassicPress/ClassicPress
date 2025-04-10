@@ -1144,7 +1144,7 @@ class WP_Media_List_Table extends WP_List_Table {
 								</label>
 								<div id="inline-container" class="inline-container">
 									<div hidden></div>
-									<textarea data-wp-taxonomy="media_post_tag" cols="22" rows="1" name="media_post_tag" class="media_post_tag" aria-describedby="inline-edit-post_tag-desc"></textarea>
+									<textarea data-wp-taxonomy="media_post_tag" cols="22" rows="1" name="media_post_tag" class="media_post_tag" id="quick-media-tags" aria-describedby="inline-edit-post_tag-desc"></textarea>
 									<div class="container__suggestions"></div>
 								</div>
 								<input id="tags-list" value="<?php echo $tags_string; ?>" hidden>
