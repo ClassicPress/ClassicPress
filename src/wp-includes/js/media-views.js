@@ -10,6 +10,8 @@
 		hasRequiredRegion = 1;
 		region = function() { // ClassicPress: defer loading via require()
 
+		var Region;
+
 		/**
 		 * wp.media.controller.Region
 		 *
@@ -32,7 +34,7 @@
 		 * @param {Backbone.View} options.view     A parent view the region exists within.
 		 * @param {string}        options.selector jQuery selector for the region within the parent view.
 		 */
-		var Region = function( options ) {
+		Region = function( options ) {
 			_.extend( this, _.pick( options || {}, 'id', 'view', 'selector' ) );
 		};
 
@@ -197,6 +199,8 @@
 		hasRequiredStateMachine = 1;
 		stateMachine = function() { // ClassicPress: defer loading via require()
 
+		var StateMachine;
+
 		/**
 		 * wp.media.controller.StateMachine
 		 *
@@ -214,7 +218,7 @@
 		 * @mixin
 		 * @mixes Backbone.Events
 		 */
-		var StateMachine = function() {
+		StateMachine = function() {
 			return {
 				// Use Backbone's self-propagating `extend` inheritance method.
 				extend: Backbone.Model.extend
