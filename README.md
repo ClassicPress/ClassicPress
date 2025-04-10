@@ -4,10 +4,10 @@
 
 ClassicPress is a community-led open source content management system for creators. It is a fork of WordPress 6.2 that preserves the TinyMCE classic editor as the default option. It is half the size of WordPress, contains less bloat improving performance, and has no block editor (Gutenberg/Full Site Editing).
 
-[![Coding Standards](https://github.com/ClassicPress/ClassicPress/workflows/Coding%20Standards/badge.svg?branch=develop)](https://github.com/ClassicPress/ClassicPress/actions?query=workflow%3A%22Coding+Standards%22+branch%3Adevelop)
-[![PHPUnit Tests](https://github.com/ClassicPress/ClassicPress/workflows/PHPUnit%20Tests/badge.svg?branch=develop)](https://github.com/ClassicPress/ClassicPress/actions?query=workflow%3A%22PHPUnit+Tests%22+branch%3Adevelop)
-[![JavaScript Tests](https://github.com/ClassicPress/ClassicPress/workflows/JavaScript%20Tests/badge.svg?branch=develop)](https://github.com/ClassicPress/ClassicPress/actions?query=workflow%3A%22JavaScript+Tests%22+branch%3Adevelop)
-[![PHP Compatibility](https://github.com/ClassicPress/ClassicPress/workflows/PHP%20Compatibility/badge.svg?branch=develop)](https://github.com/ClassicPress/ClassicPress/actions?query=workflow%3A%22PHP+Compatibility%22+branch%3Adevelop)
+[![Coding Standards](https://github.com/ClassicPress/ClassicPress/actions/workflows/coding-standards.yml/badge.svg)](https://github.com/ClassicPress/ClassicPress/actions/workflows/coding-standards.yml)
+[![PHPUnit Tests](https://github.com/ClassicPress/ClassicPress/actions/workflows/phpunit-tests.yml/badge.svg)](https://github.com/ClassicPress/ClassicPress/actions/workflows/phpunit-tests.yml)
+[![JavaScript Tests](https://github.com/ClassicPress/ClassicPress/actions/workflows/javascript-tests.yml/badge.svg)](https://github.com/ClassicPress/ClassicPress/actions/workflows/javascript-tests.yml)
+[![PHP Compatibility](https://github.com/ClassicPress/ClassicPress/actions/workflows/php-compatibility.yml/badge.svg)](https://github.com/ClassicPress/ClassicPress/actions/workflows/php-compatibility.yml)
 [![Financial Contributors](https://opencollective.com/classicpress/tiers/badge.svg?label=Financial+Contributors)](https://opencollective.com/classicpress)
 
 For more information, see:
