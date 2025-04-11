@@ -3312,15 +3312,15 @@ function wp_ajax_quick_edit_attachment() {
 
 	// Update attachment array.
 	$attachment_data = array(
-		'ID'           => $id,
-		'post_author'  => $post_author,
-		'post_date'    => $post_date,
-		'post_date_gmt'=> get_gmt_from_date( $post_date ),
-		'post_content' => $post_content,
-		'post_title'   => $post_title,
-		'post_excerpt' => $post_excerpt,
-		'post_type'    => 'attachment',
-		'post_name'    => strtolower( $post_title ),
+		'ID'            => $id,
+		'post_author'   => $post_author,
+		'post_date'     => $post_date,
+		'post_date_gmt' => get_gmt_from_date( $post_date ),
+		'post_content'  => $post_content,
+		'post_title'    => $post_title,
+		'post_excerpt'  => $post_excerpt,
+		'post_type'     => 'attachment',
+		'post_name'     => strtolower( $post_title ),
 	);
 	wp_update_post( $attachment_data, true );
 	$attachment = get_post( $id );
