@@ -162,6 +162,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 		$webm          = ! empty( $instance['webm'] ) ? $instance['webm'] : '';
 		$ogv           = ! empty( $instance['ogv'] ) ? $instance['ogv'] : '';
 		$flv           = ! empty( $instance['flv'] ) ? $instance['flv'] : '';
+		$mov           = ! empty( $instance['mov'] ) ? $instance['mov'] : '';
 
 		if ( $url === '' ) {
 			if ( $attachment_id ) {
@@ -176,6 +177,8 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 				$url = $ogv;
 			} elseif ( $flv ) {
 				$url = $flv;
+			} elseif ( $mov ) {
+				$url = $mov;
 			}
 		}
 		?>
@@ -219,6 +222,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 		<input id="<?php echo esc_attr( $this->get_field_id( 'webm' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'webm' ) ); ?>" type="hidden" data-property="webm" class="media-widget-instance-property" value="<?php echo esc_attr( $webm ); ?>">
 		<input id="<?php echo esc_attr( $this->get_field_id( 'ogv' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'ogv' ) ); ?>" type="hidden" data-property="ogv" class="media-widget-instance-property" value="<?php echo esc_attr( $ogv ); ?>">
 		<input id="<?php echo esc_attr( $this->get_field_id( 'flv' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'flv' ) ); ?>" type="hidden" data-property="flv" class="media-widget-instance-property" value="<?php echo esc_attr( $flv ); ?>">
+		<input id="<?php echo esc_attr( $this->get_field_id( 'mov' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'mov' ) ); ?>" type="hidden" data-property="mov" class="media-widget-instance-property" value="<?php echo esc_attr( $mov ); ?>">
 		<input id="<?php echo esc_attr( $this->get_field_id( 'attachment_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'attachment_id' ) ); ?>" type="hidden" data-property="attachment_id" class="media-widget-instance-property" value="<?php echo esc_attr( $attachment_id ); ?>">
 		<input id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="hidden" data-property="url" class="media-widget-instance-property" value="<?php echo esc_url( $url ); ?>">
 
