@@ -3397,7 +3397,7 @@ function wp_ajax_quick_edit_attachment() {
 
 			<span class="delete"><a href="post.php?action=delete&amp;post=' . $id . '&amp;_wpnonce=' . esc_attr( $nonce ) . '" class="submitdelete aria-button-if-js" onclick="return showNotice.warn();" aria-label="' . esc_attr__( sprintf( 'Delete “%s” permanently', $post_title ) ) . '" role="button">' . esc_html__( 'Delete Permanently' ) . '</a> | </span>
 
-			<span class="view"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'View “%s”', $post_title ) ) . '" rel="bookmark">' . esc_html__( 'View' ) . '</a> | </span>
+			<span class="view"><a href="' . esc_url( get_permalink( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'View “%s”', $post_title ) ) . '" rel="bookmark">' . esc_html__( 'View' ) . '</a> | </span>
 
 			<span class="copy">
 				<span class="copy-to-clipboard-container">
