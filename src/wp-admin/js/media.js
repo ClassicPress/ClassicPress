@@ -436,6 +436,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.body.append( bulkEdit );
 				quickEdit.style.display = 'none';
 				document.body.append( quickEdit );
+				quickEdit.querySelector( '.inline-edit-save .notice-error' ).classList.add( 'hidden' );
 
 				/**
 				 * Handle the bulk action based on its value.
