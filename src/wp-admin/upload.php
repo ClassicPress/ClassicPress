@@ -854,12 +854,26 @@ get_current_screen()->set_screen_reader_content(
 );
 
 require_once ABSPATH . 'wp-admin/admin-header.php';
+
+/**
+	* This action is fired before the title is printed to the page.
+	*
+	* @since CP-2.5.0
+	*/
+do_action( 'cp_media_before_title' );
 ?>
 
 <div class="wrap">
 <h1 class="wp-heading-inline"><?php echo esc_html( $title ); ?></h1>
 
 <?php
+/**
+	* This action is fired after the title is printed to the page.
+	*
+	* @since CP-2.5.0
+	*/
+do_action( 'cp_media_after_title' );
+
 if ( current_user_can( 'upload_files' ) ) {
 	?>
 	<a href="<?php echo esc_url( admin_url( 'media-new.php' ) ); ?>" class="page-title-action"><?php echo esc_html_x( 'Add New', 'file' ); ?></a>
@@ -870,6 +884,14 @@ if ( current_user_can( 'upload_files' ) ) {
 	 * @since CP-2.2.0
 	 */
 	echo cp_select_upload_media_category();
+
+	/**
+		* This action is fired after the media category upload
+		* select dropdown is printed to the page.
+		*
+		* @since CP-2.5.0
+		*/
+	do_action( 'cp_media_after_select_upload_media_category' );
 }
 
 if ( isset( $_REQUEST['s'] ) && strlen( $_REQUEST['s'] ) ) {
@@ -909,6 +931,13 @@ if ( ! empty( $message ) ) {
 </form>
 
 <?php
+/**
+	* This action is fired before the media list is printed to the page.
+	*
+	* @since CP-2.5.0
+	*/
+do_action( 'cp_media_before_list' );
+
 if ( $wp_list_table->has_items() ) {
 	$wp_list_table->inline_edit();
 }
@@ -916,4 +945,11 @@ if ( $wp_list_table->has_items() ) {
 </div>
 
 <?php
+/**
+	* This action is fired after the media list is printed to the page.
+	*
+	* @since CP-2.5.0
+	*/
+do_action( 'cp_media_after_list' );
+
 require_once ABSPATH . 'wp-admin/admin-footer.php';
