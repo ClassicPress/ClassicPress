@@ -758,7 +758,7 @@ class WP_Media_List_Table extends WP_List_Table {
 			?>
 			<?php
 			if ( $user_can_edit ) {
-				$title = _draft_or_post_title( $post->post_parent );
+				$title = _draft_or_post_title( $post );
 				printf(
 					'<br><a href="#the-list" onclick="findPosts.open( \'media[]\', \'%s\' ); return false;" class="hide-if-no-js aria-button-if-js" aria-label="%s">%s</a>',
 					$post->ID,
