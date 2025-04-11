@@ -66,7 +66,7 @@ class CP_Debug_Compat {
 	public function test_plugin() {
 		$options = $this->get_options();
 		$result = array(
-			'label'       => esc_html__( 'Plugins using block functions' ),
+			'label'       => __( 'Plugins using block functions' ),
 			'status'      => 'good',
 			'badge'       => array(
 				'label' => 'Compatibility',
@@ -85,7 +85,7 @@ class CP_Debug_Compat {
 		$action  = esc_html__( 'Plugins on this list may have issues.' );
 		$action .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/site-health-screen/#block-compatibility">' . esc_html__( 'Learn more.' ) . '</a>';
 		$result = array(
-			'label'       => esc_html__( 'Plugins using block functions' ),
+			'label'       => __( 'Plugins using block functions' ),
 			'status'      => 'recommended',
 			'badge'       => array(
 				'label' => 'Compatibility',
@@ -101,7 +101,7 @@ class CP_Debug_Compat {
 	public function test_theme() {
 		$options = $this->get_options();
 		$result = array(
-			'label'       => esc_html__( 'Themes using block functions' ),
+			'label'       => __( 'Themes using block functions' ),
 			'status'      => 'good',
 			'badge'       => array(
 				'label' => 'Compatibility',
@@ -121,7 +121,7 @@ class CP_Debug_Compat {
 		$action  = esc_html__( 'Themes on this list may have issues.' );
 		$action .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/site-health-screen/#block-compatibility">' . esc_html__( 'Learn more.' ) . '</a>';
 		$result = array(
-			'label'       => esc_html__( 'Themes using block functions' ),
+			'label'       => __( 'Themes using block functions' ),
 			'status'      => 'recommended',
 			'badge'       => array(
 				'label' => 'Compatibility',

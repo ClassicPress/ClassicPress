@@ -1012,7 +1012,7 @@ tr.inline-edit-row td {
 	padding: 0;
 }
 
-.inline-edit-row fieldset label span.input-text-wrap,
+.inline-edit-row fieldset span.input-text-wrap,
 .inline-edit-row fieldset .timestamp-wrap {
 	display: block;
 	margin-left: 6em;
@@ -1022,8 +1022,12 @@ tr.inline-edit-row td {
 	clear: both;
 }
 
-.quick-edit-row-post fieldset.inline-edit-col-right label span.title {
+.edit-php .quick-edit-row-post fieldset.inline-edit-col-right label span.title,
+.upload-php .quick-edit-row-post fieldset.inline-edit-col-right label span.title {
 	width: auto;
+}
+
+.edit-php .quick-edit-row-post fieldset.inline-edit-col-right label span.title {
 	padding-right: 0.5em;
 }
 
@@ -1044,7 +1048,7 @@ tr.inline-edit-row td {
 	vertical-align: middle;
 }
 
-.inline-edit-row fieldset label textarea {
+.inline-edit-row fieldset textarea {
 	width: 100%;
 	height: 4em;
 	vertical-align: top;
@@ -2088,7 +2092,7 @@ div.action-links,
 		padding: 0;
 	}
 
-	.inline-edit-row fieldset label span.input-text-wrap,
+	.inline-edit-row fieldset span.input-text-wrap,
 	.inline-edit-row fieldset .timestamp-wrap {
 		margin-left: 0;
 	}
