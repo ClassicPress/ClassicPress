@@ -418,7 +418,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		document.getElementById( 'find-posts-close' ).addEventListener( 'click', findPosts.close );
 
 		// Binds the bulk action events to the submit buttons.
-		document.querySelectorAll( '#doaction, #doaction2' ).forEach( function( action ) {
+		var action = document.getElementById( 'doaction' );
+		if ( action ) {
 			action.addEventListener( 'click', function( event ) {
 				var tr, checkboxes, delButtons, dateSplit, author, authorsList, cats,
 					catsArray, categoriesList, mediaTags, hiddenTr, cancel, inputs,
@@ -584,7 +585,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 								quickEdit.style.display = 'none';
 								document.body.append( quickEdit );
 							}, 100 );
-						} );
+						}, { once: true } );
 					} else {
 						document.querySelectorAll( 'tr' ).forEach( function( item ) {
 							if ( item.style.display === 'none' ) {
@@ -684,7 +685,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					} );
 				}
 			} );
-		} );
+		}
 
 		/**
 		 * Enables clicking on the entire table row.
