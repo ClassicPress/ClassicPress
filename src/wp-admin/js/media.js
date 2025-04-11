@@ -554,7 +554,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						} );
 
 						// Enable autocomplete for tags.
-						mediaTags = tr.querySelector( '.column-taxonomy-media_post_tag a' ) ? tr.querySelector( '.column-taxonomy-media_post_tag a' ).textContent : '';
+						mediaTags = tr.querySelector( '.column-taxonomy-media_post_tag a' ) ? tr.querySelector( '.column-taxonomy-media_post_tag' ).textContent : '';
 						autoCompleteTextarea( quickEdit.querySelector( 'textarea' ) );
 
 						// Split date into year, month, and day.
@@ -566,7 +566,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						// Fill the other relevant boxes.
 						quickEdit.querySelector( '[name="post_title"]' ).value = tr.querySelector( '.column-title strong a' ).textContent.trim();
 						quickEdit.querySelector( '[name="post_name"]' ).value = tr.querySelector( '.column-title .row-actions .copy-attachment-url' ).dataset.clipboardText;
-						quickEdit.querySelector( '#quick-media-tags' ).textContent = mediaTags;
+						quickEdit.querySelector( '#quick-media-tags' ).value = mediaTags;
 						quickEdit.querySelector( '[name="alt"]' ).value = tr.querySelector( '.column-alt' ).textContent;
 						quickEdit.querySelector( '[name="post_excerpt"]' ).value = tr.querySelector( '.column-caption' ).textContent;
 						quickEdit.querySelector( '[name="post_content"]' ).value = tr.querySelector( '.column-desc' ).textContent;
