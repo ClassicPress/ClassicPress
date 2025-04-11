@@ -3315,6 +3315,7 @@ function wp_ajax_quick_edit_attachment() {
 		'ID'           => $id,
 		'post_author'  => $post_author,
 		'post_date'    => $post_date,
+		'post_date_gmt'=> get_gmt_from_date( $post_date ),
 		'post_content' => $post_content,
 		'post_title'   => $post_title,
 		'post_excerpt' => $post_excerpt,
