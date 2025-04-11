@@ -429,9 +429,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					optionValue = document.querySelector( 'select[name="action"]' ).value,
 					number = 0,
 					count = 0,
-					columns = [ ...document.querySelector( '.widefat thead tr' ).children ],
-					selectAll1 = document.getElementById( 'cb-select-all-1' ),
-					selectAll2 = document.getElementById( 'cb-select-all-2' );
+					columns = [ ...document.querySelector( '.widefat thead tr' ).children ];
 
 				// Set default state in case a Bulk or Quick Edit has already been opened.
 				bulkEdit.style.display = 'none';
@@ -508,7 +506,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						quickEdit.style.display = 'none';
 						document.body.append( quickEdit );
 
-					} else if ( number === 1 && ! selectAll1.checked && ! selectAll2.checked ) {
+					} else if ( number === 1 ) {
 
 						// Quick Edit: reset all fields except nonce and media_category[]
 						inputs = quickEdit.querySelectorAll( 'input:not(#_inline_edit_attachment):not([name="media_category[]"]), select, textarea' );
