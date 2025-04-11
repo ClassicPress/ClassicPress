@@ -161,7 +161,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				video      = document.createElement( 'video' ),
 				source     = document.createElement( 'source' ),
 				buttons    = document.createElement( 'div' ),
-				mediaView  = widget.querySelector( '.attachment-media-view' );
+				mediaView  = widget.querySelector( '.attachment-media-view' ),
+				vidInputs  = widget.querySelectorAll( '[data-property="mp4"], [data-property="m4v"], [data-property="webm"], [data-property="ogv"], [data-property="flv"], [data-property="mov"]' );
 
 			video.className = 'wp_video_shortcode';
 			video.style.width = '100%';
@@ -179,12 +180,23 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			buttons.innerHTML = '<button type="button" class="button edit-media">' + VIDEO_WIDGET.edit_video + '</button>' +
 				'<button type="button" class="button change-media select-media">' + VIDEO_WIDGET.replace_video + '</button>';
 
-			// Insert video according to whether this is a new insertion or replacement
+			// Insert video according to whether this is a new insertion ...
 			if ( mediaView !== null ) {
 				mediaView.before( video );
 				mediaView.replaceWith( buttons );
-			} else { // replacement
-				widget.querySelector( '.wp-video' ).replaceWith( video );
+
+			// ... or replacement
+			} else {
+				vidInputs.forEach( function( vidInput ) {
+					vidInput.value = '';
+				} );
+				if ( widget.querySelector( '.wp-embedded-video' ) ) {
+					widget.querySelector( '.wp-embedded-video' ).replaceWith( video );
+				} else if ( widget.querySelector( '.wp-video' ) ) {
+					widget.querySelector( '.wp-video' ).replaceWith( video );
+				} else if ( widget.querySelector( '.wp_video_shortcode' ) ) {
+					widget.querySelector( '.wp_video_shortcode' ).replaceWith( video );
+				}
 			}
 
 			// Update values in hidden fields
