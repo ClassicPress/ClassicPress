@@ -3302,10 +3302,10 @@ function wp_ajax_quick_edit_attachment() {
 		$day   = str_pad( absint( $_POST['jj'] ), 2, '0', STR_PAD_LEFT );
 		$date  = $year . '/' . $month . '/' . $day;
 
-		$current_date  = get_the_date( 'date_format', $attachment );
-		$exploded_date = explode( ' ', $current_date );
+		$current_date  = get_the_date( 'Y-m-d', $attachment );
 		$new_date      = $year . '-' . $month . '-' . $day;
-		if ( $new_date !== $exploded_date[3] . '-' . $exploded_date[2] . '-' . $exploded_date[1] ) {
+		$post_date     = $attachment->post_date;
+		if ( $new_date !== $current_date ) {
 			$post_date = $new_date . ' 00:00:00';
 		}
 	}
@@ -3322,6 +3322,7 @@ function wp_ajax_quick_edit_attachment() {
 		'post_name'    => strtolower( $post_title ),
 	);
 	wp_update_post( $attachment_data, true );
+	$attachment = get_post( $id );
 
 	// Update taxonomies and meta.
 	if ( empty( $_POST['media_category'] ) ) {
