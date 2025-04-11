@@ -229,7 +229,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			videoURL = widget.querySelector( '[data-property="url"]' ).value,
 			videoID = widget.querySelector( '[data-property="attachment_id"]' ).value;
 
-        if ( videoURL === null ) {
+		if ( videoURL === null ) {
 			videoURL = widget.querySelector( '[data-property="mp4"]' ).value;
 		}
 		if ( videoURL === null ) {
@@ -244,17 +244,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( videoURL === null ) {
 			videoURL = widget.querySelector( '[data-property="flv"]' ).value;
 		}
-        if ( videoURL == null ) {
-            console.error( VIDEO_WIDGET.no_video_selected );
-            return;
-        }
+		if ( videoURL === null ) {
+			videoURL = widget.querySelector( '[data-property="mov"]' ).value;
+		}
+		if ( videoURL === null ) {
+			console.error( VIDEO_WIDGET.no_video_selected );
+			return;
+		}
 
-        // Open the media modal in edit mode
-        frame = wp.media( {
-            frame: 'video',
-            state: 'video-details',
-            metadata: wp.media.attachment( videoID )
-        } );
+		// Open the media modal in edit mode
+		frame = wp.media( {
+			frame: 'video',
+			state: 'video-details',
+			metadata: wp.media.attachment( videoID )
+		} );
 
 		// This runs once the modal is open
 		frame.on( 'ready', function() {
@@ -267,10 +270,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 		} );
 
-        frame.open();
-    }
+		frame.open();
+	}
 
-    function updateFrame( frame, widget, videoURL ) {
+	function updateFrame( frame, widget, videoURL ) {
 		var video = document.createElement( 'video' ),
 			source = document.createElement( 'source' ),
 			span = document.createElement( 'span' ),
