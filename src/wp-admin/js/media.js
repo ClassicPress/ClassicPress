@@ -352,7 +352,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function hideColumns( postID ) {
 		document.querySelectorAll( '.hide-column-tog' ).forEach( function( hide ) {
 			if ( hide.checked === false ) {
-				document.getElementById( postID ).querySelector( '.' + hide.id.replace( '-hide', '' ) ).classList.add( 'hidden' );
+				document.getElementById( postID ).querySelector( '.' + hide.value ).classList.add( 'hidden' );
 			}
 		} );
 	}
