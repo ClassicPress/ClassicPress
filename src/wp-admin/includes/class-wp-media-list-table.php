@@ -1233,7 +1233,7 @@ class WP_Media_List_Table extends WP_List_Table {
 									<label for="quick-day">
 										<span class="screen-reader-text"><?php echo esc_html_e( 'Day' ); ?></span>
 									</label>
-									<input id="quick-day" type="text" name="jj" value="" size="2" maxlength="2" inputmode="numeric" pattern="(0?[1-9]|[12][0-9]|3[01])$"autocomplete="off" class="form-required">&nbsp;,
+									<input id="quick-day" type="text" name="jj" value="" size="2" maxlength="2" inputmode="numeric" pattern="(0?[1-9]|[12][0-9]|3[01])$" autocomplete="off" class="form-required">&nbsp;,
 									<label for="quick-year">
 										<span class="screen-reader-text"><?php echo esc_html_e( 'Year' ); ?></span>
 									</label>
