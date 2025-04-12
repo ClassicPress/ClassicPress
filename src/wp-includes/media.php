@@ -3358,7 +3358,7 @@ function wp_get_video_extensions() {
 	 * @param string[] $extensions An array of supported video formats. Defaults are
 	 *                             'mp4', 'm4v', 'webm', 'ogv', 'flv', 'mov'.
 	 */
-	return apply_filters( 'wp_video_extensions', array( 'mp4', 'm4v', 'webm', 'ogv', 'flv', 'mov' ) );
+	return apply_filters( 'wp_video_extensions', array( 'mp4', 'm4v', 'webm', 'ogv', 'flv', 'mov', 'quicktime' ) );
 }
 
 /**
