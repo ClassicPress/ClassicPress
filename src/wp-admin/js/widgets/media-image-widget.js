@@ -547,6 +547,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			console.error( IMAGE_WIDGET.error, error );
 		} );
 
+		dialog.removeAttribute( 'hidden' );
 		dialog.showModal();
 	}
 
@@ -686,6 +687,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			console.error( IMAGE_WIDGET.error, error );
 		} );
 
+		dialog.removeAttribute( 'hidden' );
 		dialog.showModal();
 	}
 
@@ -1035,6 +1037,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			editOriginal.setAttribute( 'data-href', editOriginal.dataset.href.replace( 'item=xxx', 'item=' + attachmentId ) );
 			editOriginal.setAttribute( 'data-widget-id', widget.id );
 		}
+		dialog.removeAttribute( 'hidden' );
 		dialog.showModal();
 
 		// Show and hide URL field as appropriate
@@ -1201,6 +1204,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			updateImageDetails( document.getElementById( 'edit-original' ).dataset.widgetId );
 		} else if ( dialog.querySelector( '#new-image-modal' ) ) {
 			widgetId       = dialog.querySelector( '#new-image-modal' ).dataset.widgetId;
+			widgetEl       = document.getElementById( widgetId );
 			itemAdd        = dialog.querySelector( '#menu-item-add' );
 			itemEmbed      = dialog.querySelector( '#menu-item-embed' );
 			itemBrowse     = dialog.querySelector( '#menu-item-browse' );
@@ -1213,10 +1217,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			if ( e.target.parentNode.className === 'pagination-links' && e.target.tagName === 'BUTTON' ) {
 				page = e.target.dataset.page;
-				updateGrid( document.getElementById( widgetId ), page );
-			} else if ( e.target.parentNode.parentNode.className === 'pagination-links' && e.target.parentNode.tagName === 'BUTTON' ) {
+				updateGrid( widgetEl, page );
+			} else if ( e.target.parentNode.parentNode && e.target.parentNode.parentNode.className === 'pagination-links' && e.target.parentNode.tagName === 'BUTTON' ) {
 				page = e.target.parentNode.dataset.page;
-				updateGrid( document.getElementById( widgetId ), page );
+				updateGrid( widgetEl, page );
 			} else if ( e.target.id === 'menu-item-embed' ) {
 				itemAdd.classList.remove( 'active' );
 				itemAdd.setAttribute( 'aria-selected', false );
@@ -1282,7 +1286,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 				goFilepond( widgetId );
 			} else if ( e.target.id === 'media-button-insert' ) {
-				addItemToWidget( document.getElementById( widgetId ) );
+				addItemToWidget( widgetEl );
 			}
 		}
 	} );
