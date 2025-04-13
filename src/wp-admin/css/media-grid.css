@@ -236,8 +236,11 @@
 	height: 90%;
 	padding: 0;
 }
-.media-modal *:not(input[type="radio"]) {
+.media-modal * {
 	box-sizing: content-box;
+}
+.media-modal input[type="radio"] {
+	box-sizing: border-box;
 }
 .media-modal,
 .media-frame {
