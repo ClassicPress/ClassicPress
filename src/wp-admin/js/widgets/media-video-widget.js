@@ -162,7 +162,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				source     = document.createElement( 'source' ),
 				buttons    = document.createElement( 'div' ),
 				mediaView  = widget.querySelector( '.attachment-media-view' ),
-				vidInputs  = widget.querySelectorAll( '[data-property="mp4"], [data-property="m4v"], [data-property="webm"], [data-property="ogv"], [data-property="flv"], [data-property="mov"]' );
+				vidInputs  = widget.querySelectorAll( '[data-property="mp4"], [data-property="m4v"], [data-property="webm"], [data-property="ogv"], [data-property="flv"], [data-property="mov"], [data-property="quicktime"]' );
 
 			video.className = 'wp_video_shortcode';
 			video.style.width = '100%';
