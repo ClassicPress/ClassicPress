@@ -362,7 +362,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#edit-more' ).href = ajaxurl.replace( 'admin-ajax.php', 'post.php?post=' + id + '&action=edit' );
 		dialog.querySelector( '#download-file' ).href = url;
 
-		if ( updateNonce != null ) {
+		if ( updateNonce ) {
 			dialog.querySelector( '#attachment-details-two-column-alt-text' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-title' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-caption' ).removeAttribute( 'readonly' );
@@ -380,7 +380,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '.edit-attachment' ).style.display = 'none';
 		}
 
-		if ( deleteNonce != null ) {
+		if ( deleteNonce ) {
 			dialog.querySelector( '.delete-attachment' ).style.display = '';
 			dialog.querySelectorAll( '.links-separator' )[2].style.display = '';
 		} else {
@@ -428,7 +428,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Update media categories and tags
 		dialog.querySelectorAll( '.compat-item input' ).forEach( function( input ) {
 			input.addEventListener( 'blur', function() {
-				if ( editable === '1' ) {
+				if ( updateNonce ) {
 					updateMediaTaxOrTag( input, id );
 				}
 			} );
@@ -858,7 +858,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		input.addEventListener( 'blur', function() {
 			var id = queryParams.get( 'item' );
 			var item = document.getElementById( 'media-' + id );
-			if ( item.dataset.editable === '1' ) {
+			if ( item.dataset.updateNonce ) {
 				updateDetails( input, id );
 			}
 		} );
