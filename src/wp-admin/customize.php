@@ -300,7 +300,7 @@ do_action( 'customize_controls_head' );
 </div>
 
 <?php // Renders the modal for media widgets ?>
-<dialog id="widget-modal">
+<dialog id="widget-modal" hidden>
 	<div class="media-modal wp-core-ui" aria-labelledby="media-frame-title">
 		<button type="button" id="media-modal-close" class="media-modal-close" autofocus>
 			<span class="media-modal-icon">
