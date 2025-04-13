@@ -1119,6 +1119,22 @@ tr.inline-edit-row td {
 	float: left;
 }
 
+/* Consistent whitespace in Quick Edit across screens */
+.upload-php .inline-edit-row fieldset.inline-edit-date label {
+	display: none;
+}
+.edit-php .inline-edit-row fieldset.inline-edit-date input[name=jj] {
+	margin-right: 5px;
+}
+.edit-php .inline-edit-row fieldset.inline-edit-date input[name=hh] {
+	margin-right: 3px;
+}
+.upload-php .inline-edit-row fieldset.inline-edit-date input[name=aa],
+.edit-php .inline-edit-row fieldset.inline-edit-date input[name=aa],
+.edit-php .inline-edit-row fieldset.inline-edit-date input[name=mn] {
+	margin-left: 3px;
+}
+
 #bulk-titles,
 ul.cat-checklist {
 	height: 14em;
