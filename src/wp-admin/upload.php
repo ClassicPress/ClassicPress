@@ -258,8 +258,8 @@ if ( 'grid' === $mode ) {
 				<span class="screen-reader-text">Close uploader</span>
 			</button>
 
-			<input type="file" id="filepond" class="filepond" name="filepond" multiple data-allow-reorder="true" data-max-file-size="<?php echo esc_attr( size_format( $max_upload_size ) ); ?>">
-			<input id="ajax-url" value="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" hidden>
+			<input type="file" id="filepond" class="filepond" name="filepond" multiple data-allow-reorder="true">
+			<input id="ajax-url" value="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" data-max-file-size="<?php echo esc_attr( size_format( $max_upload_size ) ); ?>" hidden>
 			<?php wp_nonce_field( 'media-form' ); ?>
 
 			<div class="post-upload-ui" id="post-upload-info">

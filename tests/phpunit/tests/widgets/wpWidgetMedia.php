@@ -460,7 +460,7 @@ class Tests_Widgets_wpWidgetMedia extends WP_UnitTestCase {
 		$widget = $this->get_mocked_class_instance();
 		$widget->enqueue_admin_scripts();
 
-		$this->assertTrue( wp_script_is( 'media-widgets' ) );
+		$this->assertTrue( wp_script_is( 'wp-mediaelement' ) );
 	}
 
 	/**
