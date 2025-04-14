@@ -120,7 +120,7 @@ jobs:
       - name: Install ImageMagick
         run: |
           sudo apt-get update
-          sudo apt-get install -y php7-imagick
+          sudo apt-get install -y php8-imagick
 
       - name: Login to Docker Hub
         if: ${{ github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false ) }}
