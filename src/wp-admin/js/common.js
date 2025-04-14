@@ -2139,13 +2139,15 @@ $( function( $ ) {
 					var firstColumn = row.querySelector( 'td' );
 					var idColumn    = row.querySelector( 'td.column-id' );
 					var titleColumn = row.querySelector( 'td.column-title' );
-					if ( window.innerWidth < 782 ) {
-						if ( firstColumn !== titleColumn ) {
-							row.insertBefore( titleColumn, idColumn );
-						}
-					} else {
-						if ( firstColumn !== idColumn ) {
-							row.insertBefore( idColumn, titleColumn );
+					if ( firstColumn && idColumn && titleColumn ) {
+						if ( window.innerWidth < 782 ) {
+							if ( firstColumn.classList.contains( 'id' ) ) {
+								row.insertBefore( titleColumn, idColumn );
+							}
+						} else {
+							if ( firstColumn.classList.contains( 'title' ) ) {
+								row.insertBefore( idColumn, titleColumn );
+							}
 						}
 					}
 				}
