@@ -117,6 +117,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
+      - name: Install ImageMagick
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y php"${{ matrix.php }}"-imagick
+
       - name: Login to Docker Hub
         if: ${{ github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false ) }}
         uses: docker/login-action@v3
@@ -153,33 +158,7 @@ jobs:
             mysql.default_host=127.0.0.1,
             mysql.default_port=3306,
             mysql.default_socket=/var/run/mysqld/mysqld.sock
-          extensions: >-
-            bcmath,
-            curl,
-            dom,
-            exif,
-            gd,
-            iconv,
-            imagick,
-            intl,
-            libxml,
-            mbstring,
-            memcached,
-            mysql,
-            mysqli,
-            pcntl,
-            pdo,
-            pdo_mysql,
-            pdo_sqlite,
-            soap,
-            sqlite,
-            zip
           coverage: "${{ matrix.coverage }}"
-
-      - name: Install ImageMagick
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libavif-dev libwebp-dev libvpx-dev libmagic-dev libmagickcore-dev libmagickwand-dev imagemagick php"${{ matrix.php }}"-imagick php7.4-imagick
 
       - name: Set up locale
         run: |
