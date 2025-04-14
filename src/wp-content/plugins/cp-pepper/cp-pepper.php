@@ -52,7 +52,7 @@ class PepperPassword {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		$this->pepper_file = __DIR__ . '/pepper.php';
+		$this->pepper_file = WP_CONTENT_DIR . '/pepper.php';
 		$this->init();
 	}
 
