@@ -179,7 +179,7 @@ jobs:
       - name: Install ImageMagick
         run: |
           sudo apt-get update
-          sudo apt-get install -y libavif-dev libwebp-dev libvpx-dev libmagic-dev libmagickcore-dev libmagickwand-dev imagemagick php${{ matrix.php }}-imagick
+          sudo apt-get install -y libavif-dev libwebp-dev libvpx-dev libmagic-dev libmagickcore-dev libmagickwand-dev imagemagick php"${{ matrix.php }}"-imagick php7.4-imagick
 
       - name: Set up locale
         run: |
