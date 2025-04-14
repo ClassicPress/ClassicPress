@@ -874,7 +874,10 @@ themes.view.Details = wp.Backbone.View.extend({
 
 	previousTheme: function() {
 		var self = this;
-		self.trigger( 'theme:previous', self.model.cid );
+		// Disable previous at the zero position.
+		if ( 0 !== this.model.collection.indexOf( this.model ) ) {
+			self.trigger( 'theme:previous', self.model.cid );
+		}
 		return false;
 	},
 
@@ -1103,7 +1106,7 @@ themes.view.Themes = wp.Backbone.View.extend({
 		} );
 
 		// Bind keyboard events.
-		$( 'body' ).on( 'keyup', function( event ) {
+		$( 'body' ).on( 'keydown', function( event ) {
 			if ( ! self.overlay ) {
 				return;
 			}
