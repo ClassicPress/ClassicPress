@@ -562,7 +562,7 @@ foreach ( $theme_sidebars as $sidebar => $registered_sidebar ) {
 </div>
 
 <?php // Renders the modal for media widgets ?>
-<dialog id="widget-modal" hidden>
+<dialog id="widget-modal">
 	<div class="media-modal wp-core-ui" aria-labelledby="media-frame-title">
 		<button id="media-modal-close" type="button" class="media-modal-close" autofocus>
 			<span class="media-modal-icon">
