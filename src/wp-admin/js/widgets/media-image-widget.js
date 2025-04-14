@@ -547,7 +547,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			console.error( IMAGE_WIDGET.error, error );
 		} );
 
-		dialog.removeAttribute( 'hidden' );
 		dialog.showModal();
 	}
 
@@ -687,7 +686,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			console.error( IMAGE_WIDGET.error, error );
 		} );
 
-		dialog.removeAttribute( 'hidden' );
 		dialog.showModal();
 	}
 
@@ -1037,7 +1035,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			editOriginal.setAttribute( 'data-href', editOriginal.dataset.href.replace( 'item=xxx', 'item=' + attachmentId ) );
 			editOriginal.setAttribute( 'data-widget-id', widget.id );
 		}
-		dialog.removeAttribute( 'hidden' );
 		dialog.showModal();
 
 		// Show and hide URL field as appropriate
