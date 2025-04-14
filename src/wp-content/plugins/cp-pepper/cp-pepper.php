@@ -385,11 +385,40 @@ $current_pepper = \'' . $pepper . '\';
 			return false;
 		}
 
-		$pepper_result = $this->get_pepper() === '' ? esc_html__( 'Pepper enabled.', 'cp-pepper' ) : esc_html__( 'Pepper renewed.', 'cp-pepper' );
+		$pepper_renewed = ! empty( $this->get_pepper() );
+		$pepper_result  = $pepper_renewed ? esc_html__( 'Pepper renewed.', 'cp-pepper' ) : esc_html__( 'Pepper enabled.', 'cp-pepper' );
 		set_transient( 'cp_pepper_generate_response', $pepper_result, 30 );
 
 		$pepper = $this->random_pepper();
 		$this->set_pepper( $pepper );
+
+		// Show the password reset nag after both renewing and re-enabling the pepper.
+		global $wpdb;
+		$data  = array( 'meta_key' => 'pepper_renewed' );
+		$where = array( 'meta_key' => 'peppered_hash' );
+		$wpdb->update(
+			$wpdb->prefix . 'usermeta',
+			$data,
+			$where,
+			array( '%s' ),
+			array( '%s' )
+		);
+
+		if ( $pepper_renewed ) {
+			/**
+			* This action is fired after the pepper is renewed.
+			*
+			* @since 2.0.0
+			*/
+			do_action( 'cp_pepper_renewed' );
+		} else {
+			/**
+			* This action is fired after the pepper is enabled.
+			*
+			* @since 2.0.0
+			*/
+			do_action( 'cp_pepper_enabled' );
+		}
 
 		$sendback = remove_query_arg( array( 'action', '_cppepper' ), wp_get_referer() );
 		wp_safe_redirect( $sendback );
