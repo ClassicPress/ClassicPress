@@ -71,6 +71,8 @@ class PepperPassword {
 		add_filter( 'network_admin_plugin_action_links', array( $this, 'create_settings_link' ), 10, 2 );
 		add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
 		add_filter( 'cp_pepper_password', array( $this, 'get_pepper' ) );
+		add_filter( 'cp_pepper_loaded', array( $this, 'get_pepper_status' ) );
+		add_filter( 'cp_pepper_plugin', array( $this, 'get_plugin_status' ) );
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		add_action( 'admin_init', array( $this, 'migrate' ) );
 	}
@@ -120,6 +122,27 @@ class PepperPassword {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Determines if the pepper is loaded.
+	 *
+	 * @since 2.0.0
+	 */
+	public function get_pepper_status() {
+		if ( empty( $this->get_pepper() ) ) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Determines if the plugin is activated.
+	 *
+	 * @since 2.0.0
+	 */
+	public function get_plugin_status() {
+		return true;
 	}
 
 	/**

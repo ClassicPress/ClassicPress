@@ -188,6 +188,14 @@ function wp_authenticate_username_password( $user, $username, $password ) {
 		wp_set_password( $password, $user->ID );
 	}
 
+	$pepper_loaded = apply_filters( 'cp_pepper_loaded', false );
+	$peppered_hash = get_user_meta( $user->ID, 'peppered_hash', true );
+
+	if ( $valid && $pepper_loaded && ! $peppered_hash ) {
+		wp_set_password( $password, $user->ID );
+		add_user_meta( $user->ID, 'peppered_hash', true );
+	}
+
 	if ( ! $valid ) {
 		return new WP_Error(
 			'incorrect_password',
@@ -264,6 +272,14 @@ function wp_authenticate_email_password( $user, $email, $password ) {
 
 	if ( $valid && wp_password_needs_rehash( $user->user_pass ) ) {
 		wp_set_password( $password, $user->ID );
+	}
+
+	$pepper_loaded = apply_filters( 'cp_pepper_loaded', false );
+	$peppered_hash = get_user_meta( $user->ID, 'peppered_hash', true );
+
+	if ( $valid && $pepper_loaded && ! $peppered_hash ) {
+		wp_set_password( $password, $user->ID );
+		add_user_meta( $user->ID, 'peppered_hash', true );
 	}
 
 	if ( ! $valid ) {
@@ -2503,6 +2519,11 @@ function wp_insert_user( $userdata ) {
 			}
 		}
 	} else {
+		$pepper_loaded = apply_filters( 'cp_pepper_loaded', false );
+		if ( $pepper_loaded ) {
+			add_user_meta( $user_id, 'peppered_hash', true );
+		}
+
 		/**
 		 * Fires immediately after a new user is registered.
 		 *
@@ -2566,6 +2587,15 @@ function wp_update_user( $userdata ) {
 		// If password is changing, hash it now.
 		$plaintext_pass        = $userdata['user_pass'];
 		$userdata['user_pass'] = wp_hash_password( $userdata['user_pass'] );
+
+		if ( metadata_exists( 'user', $user_id, 'peppered_hash' ) ) {
+			delete_user_meta( $user_id, 'peppered_hash' );
+		} else {
+			$pepper_loaded = apply_filters( 'cp_pepper_loaded', false );
+			if ( $pepper_loaded ) {
+				add_user_meta( $user_id, 'peppered_hash', true );
+			}
+		}
 
 		/**
 		 * Filters whether to send the password change email.
