@@ -13,6 +13,7 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       cp-pepper
  * Domain Path:       /languages
+ * Network:           true
 */
 
 namespace ClassicPress\PepperPassword;
@@ -65,7 +66,9 @@ class PepperPassword {
 	 */
 	public function init() {
 		add_action( 'admin_menu', array( $this, 'create_settings_menu' ), 100 );
+		add_action( 'network_admin_menu', array( $this, 'create_settings_menu' ), 100 );
 		add_filter( 'plugin_action_links', array( $this, 'create_settings_link' ), 10, 2 );
+		add_filter( 'network_admin_plugin_action_links', array( $this, 'create_settings_link' ), 10, 2 );
 		add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
 		add_filter( 'cp_pepper_password', array( $this, 'get_pepper' ) );
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
@@ -122,19 +125,33 @@ class PepperPassword {
 	/**
 	 * Menu creation.
 	 *
-	 * Register the menu under options-general and add the generate action.
+	 * Register the menu under Settings in Network Admin screen in multisite mode, or under Options->General in single-site mode.
+	 * Add the generate action.
 	 *
 	 * @since 1.0.0
 	 */
 	public function create_settings_menu() {
-		$this->screen = add_submenu_page(
-			'options-general.php',
-			esc_html__( 'Pepper', 'cp-pepper' ),
-			esc_html__( 'Pepper', 'cp-pepper' ),
-			'manage_options',
-			self::SLUG,
-			array( $this, 'render_menu' ),
-		);
+		if ( is_network_admin() ) {
+			$this->screen = add_submenu_page(
+				'settings.php',
+				esc_html__( 'Pepper', 'cp-pepper' ),
+				esc_html__( 'Pepper', 'cp-pepper' ),
+				'manage_options',
+				self::SLUG,
+				array( $this, 'render_menu' ),
+			);
+		} else {
+			if ( ! is_multisite() ) {
+				$this->screen = add_submenu_page(
+					'options-general.php',
+					esc_html__( 'Pepper', 'cp-pepper' ),
+					esc_html__( 'Pepper', 'cp-pepper' ),
+					'manage_options',
+					self::SLUG,
+					array( $this, 'render_menu' ),
+				);
+			}
+		}
 		add_action( 'load-' . $this->screen, array( $this, 'generate_action' ) );
 	}
 
@@ -151,8 +168,15 @@ class PepperPassword {
 	 */
 	public function create_settings_link( $links, $plugin_file_name ) {
 		if ( strpos( $plugin_file_name, basename( __FILE__ ) ) !== false ) {
-			$setting_link = '<a href="' . admin_url( 'options-general.php?page=' . self::SLUG ) . '">' . esc_html__( 'Settings', 'cp-pepper' ) . '</a>';
-			array_unshift( $links, $setting_link );
+			if ( is_multisite() ) {
+				if ( is_network_admin() ) {
+					$setting_link = '<a href="' . network_admin_url( 'settings.php?page=' . self::SLUG ) . '">' . esc_html__( 'Settings', 'cp-pepper' ) . '</a>';
+					array_unshift( $links, $setting_link );
+				}
+			} else {
+				$setting_link = '<a href="' . admin_url( 'options-general.php?page=' . self::SLUG ) . '">' . esc_html__( 'Settings', 'cp-pepper' ) . '</a>';
+				array_unshift( $links, $setting_link );
+			}
 		}
 
 		return $links;
@@ -246,12 +270,14 @@ $current_pepper = \'' . $pepper . '\';
 			wp_die( esc_html__( 'Unauthorized.', 'cp-pepper' ) );
 		}
 
-		if ( false === ( $creds = request_filesystem_credentials( admin_url( 'options-general.php?page=' . self::SLUG ), '', false, false, null ) ) ) {
+		$url = is_multisite() ? network_admin_url( 'settings.php?page=' . self::SLUG ) : admin_url( 'options-general.php?page=' . self::SLUG );
+
+		if ( false === ( $creds = request_filesystem_credentials( $url, '', false, false, null ) ) ) {
 			return; // Await filesystem access
 		}
 
 		if ( ! WP_Filesystem( $creds ) ) {
-			request_filesystem_credentials( admin_url( 'options-general.php?page=' . self::SLUG ), '', true, false, null );
+			request_filesystem_credentials( $url, '', true, false, null );
 			return;
 		}
 
@@ -289,7 +315,7 @@ $current_pepper = \'' . $pepper . '\';
 		$button  = $pepper === '' ? esc_html__( 'Enable Pepper', 'cp-pepper' ) : esc_html__( 'Renew Pepper', 'cp-pepper' );
 
 		echo '<p>' . esc_html( $message ) . '</p>';
-		echo '<form action="' . esc_url_raw( add_query_arg( array( 'action' => 'generate' ), admin_url( 'options-general.php?page=' . self::SLUG ) ) ) . '" method="POST">';
+		echo '<form action="' . esc_url_raw( add_query_arg( array( 'action' => 'generate' ), $url ) ) . '" method="POST">';
 		wp_nonce_field( 'generate', '_cppepper' );
 		echo '<input type="submit" class="button button-primary" id="submit_button" value="' . esc_html( $button ) . '"></input> ';
 		echo '</form></div></div>';
