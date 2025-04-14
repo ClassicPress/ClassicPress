@@ -1165,7 +1165,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	document.addEventListener( 'click', function( e ) {
-		var base, page, widgetId, itemAdd, itemEmbed, itemBrowse, itemUpload,
+		var base, page, widgetId, widgetEl, itemAdd, itemEmbed, itemBrowse, itemUpload,
 			tabPanel, gridSubPanel, uploadSubPanel, urlPanel, frameTitle,
 			widget = e.target.closest( '.widget' );
 
