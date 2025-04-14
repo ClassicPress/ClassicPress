@@ -2,8 +2,7 @@ name: PHPUnit Tests
 
 on:
   push:
-    branches:
-      - [develop, ubuntu]
+    branches: [ develop, ubuntu ]
   workflow_dispatch:
   pull_request:
   # Once weekly On Sundays at 00:00 UTC.
