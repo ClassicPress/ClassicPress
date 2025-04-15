@@ -1691,7 +1691,7 @@ table.cp-logo-list .cp-logo-description {
 .widget-container ul.sub-menu {
 	margin: 0;
 }
-.widget-container ul li.cat-item.current-cat a {
+#sidebar .widget-container ul li.cat-item.current-cat a {
 	color: #040402;
 }
 .widget-container .search-form {
@@ -1950,7 +1950,6 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		max-width: 100%;
 	}
 	#masthead .search-submit {
-		margin-top: 0.2em;
 		font-size: 0.85em;
 	}
 	#main,
