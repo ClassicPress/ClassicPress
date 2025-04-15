@@ -159,9 +159,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libavif-dev libwebp-dev libvpx-dev libmagic-dev libmagickcore-dev libmagickwand-dev imagemagick php-imagick
-          php -i
-          sudo pecl install imagick
-          php -i
 
       - name: Set up locale
         run: |
