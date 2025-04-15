@@ -47,56 +47,199 @@
     url('../fonts/source-sans-pro-v12-latin-700italic.woff2') format('woff2');
 }
 
-b, strong { font-weight:600; }
-small,
-.small { font-size:80%!important; }
-.code { padding:.5em .75em .75em 1em; width:100%; background:#f3f3f3; display:inline-block; font-family:Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace; font-size:15px; font-size:0.9375rem; border-radius:6px; margin-bottom:1.4em; } /*block: paragraph or list item*/
-code { width:100%; background:#f3f3f3; font-family:Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace; font-size:15px; font-size:0.9375rem; padding:0 .2em; border-radius:3px; } /*inline*/
-
-h1, h2, h3,h4 {
-	position: relative;
-	line-height: 1.25;
-	font-family:"Source Sans Pro";
-	font-weight: 600;
+:root {
+	--tcpt-border-radius: 4px;
 }
-h2 { font-size:1.8em; color:#057f99; }
-h2.small,
-h2 .small { font-size:1.5em!important; }
-h3 { font-size:1.5em; color:#4b2063; }
-h3.small,
-h3 .small { font-size:1.3em!important; }
-h4 { font-size:1.3em; color:#057f99; }
-h4.small,
-h4 .small { font-size:1.05em!important; }
-p, li {
-	font-family:"Source Sans Pro";
-	font-weight: 400;
+
+/* Typography */
+body,
+button,
+input,
+select,
+optgroup,
+textarea {
 	color: #040402;
-	line-height: 1.75;
-	font-size:17px;
+	font-family: "Source Sans Pro", "Helvetica Neue", Verdana, sans-serif;
+	font-size: calc(18px + 2 * (100vw / 1500));
+	line-height: 1.5;
 }
-li { line-height: 1.5; }
 
-a, 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	clear: both;
+}
+
+p {
+	margin: 0 0 0.75em;
+}
+
+dfn,
+cite,
+em,
+i {
+	font-style: italic;
+}
+
+blockquote {
+	margin: 0 1.5em 0.75em;
+	border-left: 4px solid #057f99;
+	padding-left: 1em;
+}
+
+address {
+	margin: 0 0 1.5em;
+}
+
+pre {
+	background: #eee;
+	font-family: "Courier 10 Pitch", Courier, monospace;
+	font-size: 15px;
+	font-size: 0.9375rem;
+	line-height: 1.6;
+	margin-bottom: 1.6em;
+	max-width: 100%;
+	overflow: auto;
+	padding: 1.6em;
+	border-radius: var(--tcpt-border-radius);
+}
+
+code,
+.code,
+kbd,
+tt,
+var {
+	font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+	font-size: 15px;
+	font-size: 0.9375rem;
+	width: 100%;
+	background: #f3f3f3;
+	padding: 0 0.2em;
+	border-radius: var(--tcpt-border-radius);
+}
+
+.code {
+	padding: 0.5em 0.75em 0.75em 1em;
+	display: inline-block;
+	margin-bottom: 1.4em;
+}
+
+abbr,
+acronym {
+	border-bottom: 1px dotted #666;
+	cursor: help;
+}
+
+mark,
+ins {
+	background: #fff9c0;
+	text-decoration: none;
+}
+
+big {
+	font-size: 125%;
+}
+
+/* Elements */
+hr {
+	background-color: #ccc;
+	border: 0;
+	height: 1px;
+}
+
+ul {
+	list-style: disc;
+}
+
+ol {
+	list-style: decimal;
+}
+
+li > ul,
+li > ol {
+	margin-bottom: 0;
+}
+
+dt {
+	font-weight: bold;
+}
+
+dd {
+	margin: 0 1.5em 1.5em;
+}
+
+img {
+	height: auto;
+	max-width: 100%;
+}
+figure {
+	margin: 1em 0;
+}
+table {
+	margin: 0 0 1.5em;
+	width: 100%;
+}
+
+/* Links */
+a,
 a:visited {
 	color: #057f99;
-	text-decoration:underline;
-	font-weight:600;
+	font-weight: 500;
 	background: transparent;
-	border: 0!important;
+	border: 0;
+	border-bottom: 0.2em solid transparent;
 }
-a:hover, 
-a:active { color:#040402; }
+a:hover,
+a:focus,
+a:active {
+	color: #040402;
+	text-decoration: none;
+	border-bottom-style: solid;
+	border-bottom-color: inherit;
+}
 
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	position: relative;
+	color: #057f99;
+	line-height: 1.25;
+	font-family: "Source Sans Pro";
+	font-weight: 600;
+	clear: none;
+}
+
+/* Misc */
 h2 a,
 h3 a,
-h4 a { text-decoration:none; font-weight:600; }
-
-a[target='_blank']::after { content:'\2750'; font-size:70%; position:relative; top:-4px; margin-left:1px; color:#07989e; border-bottom: 7px solid #fff!important; text-decoration:none; display: inline-block; }
-
-.column-container { grid-template-columns: repeat(auto-fit, 47.25%); display: grid; justify-content: space-between; align-content: flex-start;}
-.column-container h4 { padding-top:0; }
-
-.code { padding:.5em .75em .75em 1em; width:99%; background:#f3f3f3; display:inline-block; font-family:Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace; font-size:15px; font-size:0.9375rem; border-radius:6px; margin-bottom:1.4em; } /*block: paragraph or list item*/
-code { width:100%; background:#f3f3f3; font-family:Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace; font-size:15px; font-size:0.9375rem; padding:0 .2em; border-radius:3px; } /*inline*/
-pre { border-radius:6px; background:#f3f3f3; }
+h4 a {
+	text-decoration: none;
+	font-weight: 600;
+}
+a[target='_blank']::after {
+	content: '\2750';
+	font-size: 70%;
+	position: relative;
+	top: -4px;
+	margin-left: 1px;
+	color: #07989e;
+	border-bottom: 7px solid #fff!important;
+	text-decoration: none;
+	display: inline-block;
+}
+.column-container {
+	grid-template-columns: repeat(auto-fit, 47.25%);
+	display: grid;
+	justify-content: space-between;
+	align-content: flex-start;
+}
+.column-container h4 {
+	padding-top: 0;
+}
