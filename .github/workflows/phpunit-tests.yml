@@ -159,6 +159,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libavif-dev libwebp-dev libvpx-dev libmagic-dev libmagickcore-dev libmagickwand-dev imagemagick php-imagick
+          sudo apt-get install -y php-xmlwriter ext-simplexml php-curl
 
       - name: Set up locale
         run: |
