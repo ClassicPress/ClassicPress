@@ -1094,7 +1094,7 @@ img {
 }
 #inner-header {
 	max-width: 72rem;
-	margin: 0;
+	margin: 0 auto;
 	padding: 0 1em;
 }
 .menu,
@@ -1691,6 +1691,7 @@ table.cp-logo-list .cp-logo-description {
 }
 .widget-container input[type="search"] {
 	width: 190px;
+	top: 2px;
 }
 
 /* FOOTER */
@@ -1916,6 +1917,9 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	.commun .comm-txt {
 		max-width: 100%;
 	}
+	input[type="search"] {
+		width: 190px;
+	}
 }
 
 @media screen and (max-width: 899px) {
@@ -2063,7 +2067,6 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		flex-grow: 1;
 		align-items: center;
 		justify-content: space-between;
-		padding: 0 1.2em;
 		margin: 0 auto;
 	}
 	#page-title h1 {
@@ -2080,7 +2083,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		flex-wrap: wrap;
 		padding: 0;
 		margin: 0;
-		gap: 0.5em;
+		gap: 0.2em;
 		line-height: 3.5em;
 	}
 	#primary-menu.menu li a {
