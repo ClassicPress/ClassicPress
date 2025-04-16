@@ -486,7 +486,6 @@ input[type="submit"] {
 	border-radius: var(--tcpt-border-radius);
 	background: #89288f;
 	color: #fff;
-	color: rgba(0, 0, 0, 0.8);
 	font-size: 12px;
 	font-size: 0.75rem;
 	line-height: 1;
