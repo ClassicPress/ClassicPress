@@ -149,17 +149,12 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "${{ matrix.php }}"
+          extensions: imagick
           ini-values: >-
             mysql.default_host=127.0.0.1,
             mysql.default_port=3306,
             mysql.default_socket=/var/run/mysqld/mysqld.sock
           coverage: "${{ matrix.coverage }}"
-
-      - name: Install ImageMagick
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libavif-dev libwebp-dev libvpx-dev libmagic-dev libmagickcore-dev libmagickwand-dev imagemagick php-imagick
-          sudo apt-get install -y php-xml php-curl
 
       - name: Set up locale
         run: |
