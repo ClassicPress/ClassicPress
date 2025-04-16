@@ -1471,7 +1471,7 @@ function wp_default_styles( $styles ) {
 	// External libraries and friends.
 	$styles->add( 'imgareaselect', '/wp-includes/js/imgareaselect/imgareaselect.css', array(), '0.9.8' );
 	$styles->add( 'wp-jquery-ui-dialog', "/wp-includes/css/jquery-ui-dialog$suffix.css", array( 'dashicons' ) );
-	$styles->add( 'mediaelement', '/wp-includes/js/mediaelement/mediaelementplayer-legacy.min.css', array(), '4.2.17' );
+	$styles->add( 'mediaelement', "/wp-includes/js/mediaelement/mediaelementplayer-legacy$suffix.css", array(), '4.2.17' );
 	$styles->add( 'mediaelement-player', "/wp-includes/js/mediaelement/mediaelementplayer$suffix.css", array( 'mediaelement' ), '7.0.5' );
 	$styles->add( 'wp-mediaelement', "/wp-includes/js/mediaelement/wp-mediaelement$suffix.css", array( 'mediaelement' ) );
 	$styles->add( 'thickbox', '/wp-includes/js/thickbox/thickbox.css', array( 'dashicons' ) );

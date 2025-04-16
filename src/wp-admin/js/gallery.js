@@ -9,7 +9,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	var gallerySortable, gallerySortableInit, sortIt, clearAll, w, desc = false;
 
 	gallerySortableInit = function() {
-		gallerySortable = Sortable.create( document.getElementById( '#media-items' ), {
+		gallerySortable = Sortable.create( document.getElementById( 'media-items' ), {
 			group: 'items',
 			sort: true,
 			placeholder: 'sorthelper',
