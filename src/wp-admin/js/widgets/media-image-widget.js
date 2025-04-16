@@ -213,7 +213,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function selectItemToAdd( item, widget, clicked ) {
 		var selectedItems = document.querySelectorAll( '.selected' ),
-			id = item.id.replace( 'media-', '' ),
+			id = item.dataset.id,
 			title = item.getAttribute( 'aria-label' ),
 			date = item.dataset.date,
 			filename = item.dataset.filename,
@@ -394,9 +394,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function populateGridItem( attachment, widget ) {
-		var gridItem = document.createElement( 'li' ),
-			image = '<img src="' + attachment.url + '" alt="' + attachment.alt + '">',
-			selected = attachment.id == widget.querySelector( '[data-property="attachment_id"]' ).value ? ' selected' : '';
+		var selected = '',
+			idsArray = [],
+			gridItem = document.createElement( 'li' ),
+			image = '<img src="' + attachment.url + '" alt="' + attachment.alt + '">';
+
+		if ( widget.querySelector( '[data-property="attachment_id"]' ) ) {
+			if ( attachment.id == widget.querySelector( '[data-property="attachment_id"]' ).value ) {
+				selected = ' selected';
+			}
+		} else if ( widget.querySelector( '[data-property="ids"]' ) ) {
+			idsArray = widget.querySelector( '[data-property="ids"]' ).value.split( ',' );
+			if ( idsArray.indexOf( attachment.id ).value ) {
+				selected = ' selected';
+			}
+		}
 
 		gridItem.className = 'media-item' + selected;
 		gridItem.id = 'media-' + attachment.id;
@@ -546,7 +558,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		.catch( function( error ) {
 			console.error( IMAGE_WIDGET.error, error );
 		} );
-
 		dialog.showModal();
 	}
 
@@ -1202,6 +1213,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( dialog.querySelector( '#new-image-modal' ) ) {
 			widgetId       = dialog.querySelector( '#new-image-modal' ).dataset.widgetId;
 			widgetEl       = document.getElementById( widgetId );
+			base           = widgetEl.querySelector( '.id_base' );
 			itemAdd        = dialog.querySelector( '#menu-item-add' );
 			itemEmbed      = dialog.querySelector( '#menu-item-embed' );
 			itemBrowse     = dialog.querySelector( '#menu-item-browse' );
@@ -1461,4 +1473,5 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 		}
 	}
+
 } );
