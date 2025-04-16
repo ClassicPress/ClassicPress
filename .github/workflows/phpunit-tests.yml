@@ -145,21 +145,22 @@ jobs:
       - name: Install dependencies
         run: npx install-changed --install-command="npm ci"
 
-      - name: Install ImageMagick
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libavif-dev libwebp-dev imagemagick
-
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: "${{ matrix.php }}"
-          extensions: imagick
           ini-values: >-
             mysql.default_host=127.0.0.1,
             mysql.default_port=3306,
             mysql.default_socket=/var/run/mysqld/mysqld.sock
           coverage: "${{ matrix.coverage }}"
+
+      - name: Install Imagick
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
+          sudo apt-get install -y php-imagick
+          sudo phpenmod imagick
 
       - name: Set up locale
         run: |
