@@ -1667,16 +1667,6 @@ table.cp-logo-list .cp-logo-description {
 #sidebar p.readmore a:active {
 	box-shadow: 0 0 3px 2px #89288f;
 }
-.widget-container input[type="search"] {
-	width: 190px;
-	padding: 0.3em;
-	position: relative;
-}
-.widget-container input[type="submit"] {
-	font-size: 0.9em;
-	position: relative;
-	top: -1px;
-}
 .widget-container {
 	margin: 0.65em 0 2em;
 }
@@ -1699,6 +1689,9 @@ table.cp-logo-list .cp-logo-description {
 }
 .widget-container .search-field {
 	font-size: 1em;
+}
+.widget-container input[type="search"] {
+	width: 190px;
 }
 
 /* FOOTER */
