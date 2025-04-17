@@ -35,7 +35,7 @@ jobs:
   # - Run PHPUnit Tests.
   test-php:
     name: "PHP ${{ matrix.php }} on MySQL ${{matrix.mysql}}${{ matrix.memcached && ' with memcached' || '' }}${{ 'xdebug' == matrix.coverage && ' with XDebug' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
     strategy:
       fail-fast: false
@@ -117,6 +117,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
+      - name: Install Imagick
+        run: |
+          sudo apt-get update
+          sudo apt-get --with-new-pkgs upgrade libgd3
+
       - name: Login to Docker Hub
         if: ${{ github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false ) }}
         uses: docker/login-action@v3
@@ -153,14 +158,28 @@ jobs:
             mysql.default_host=127.0.0.1,
             mysql.default_port=3306,
             mysql.default_socket=/var/run/mysqld/mysqld.sock
+          extensions: >-
+            bcmath,
+            curl,
+            dom,
+            exif,
+            gd,
+            iconv,
+            imagick,
+            intl,
+            libxml,
+            mbstring,
+            memcached,
+            mysql,
+            mysqli,
+            pcntl,
+            pdo,
+            pdo_mysql,
+            pdo_sqlite,
+            soap,
+            sqlite,
+            zip
           coverage: "${{ matrix.coverage }}"
-
-      - name: Install Imagick
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y imagemagick
-          sudo apt-get install -y php-imagick
-          sudo phpenmod imagick
 
       - name: Set up locale
         run: |
