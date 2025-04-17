@@ -1656,7 +1656,7 @@ table.cp-logo-list .cp-logo-description {
 }
 #sidebar p.readmore a:hover,
 #sidebar p.readmore a:active,
-#sidebar p.button a:focus {
+#sidebar p.readmore a:focus {
 	box-shadow: 0 0 3px 2px #89288f;
 }
 .widget-container {
