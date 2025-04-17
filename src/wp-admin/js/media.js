@@ -571,17 +571,35 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 						// Update.
 						document.getElementById( 'quick-edit-update' ).addEventListener( 'click', function() {
-							var id = tr.id.replace( 'post-', '' );
-							saveAttachments( quickEdit, id );
-							document.getElementById( 'bulk-action-selector-top' ).value = '-1';
-							document.getElementById( 'bulk-action-selector-bottom' ).value = '-1';
+							var inputs = document.querySelector( '.inline-edit-wrapper' ).querySelectorAll( 'input[pattern]' ),
+								allValid = true;
 
-							// Allow time for element to be updated.
-							setTimeout( function() {
-								tr.style.display = '';
-								quickEdit.style.display = 'none';
-								document.body.append( quickEdit );
-							}, 100 );
+							for ( var i = 0, n = inputs.length; i < n; i++ ) {
+								if ( ! inputs[i].checkValidity() ) {
+									// Show the first invalid field message
+									inputs[i].reportValidity();
+
+									// Mark as invalid
+									allValid = false;
+
+									// Stop after first invalid field
+									break;
+								}
+							}
+
+							if ( allValid ) {
+								var id = tr.id.replace( 'post-', '' );
+								saveAttachments( quickEdit, id );
+								document.getElementById( 'bulk-action-selector-top' ).value = '-1';
+								document.getElementById( 'bulk-action-selector-bottom' ).value = '-1';
+
+								// Allow time for element to be updated.
+								setTimeout( function() {
+									tr.style.display = '';
+									quickEdit.style.display = 'none';
+									document.body.append( quickEdit );
+								}, 100 );
+							}
 						} );
 					} else {
 						document.querySelectorAll( 'tr' ).forEach( function( item ) {
