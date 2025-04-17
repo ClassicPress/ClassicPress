@@ -3356,9 +3356,9 @@ function wp_get_video_extensions() {
 	 * @since 3.6.0
 	 *
 	 * @param string[] $extensions An array of supported video formats. Defaults are
-	 *                             'mp4', 'm4v', 'webm', 'ogv', 'flv'.
+	 *                             'mp4', 'm4v', 'webm', 'ogv', 'flv', 'mov', 'quicktime'.
 	 */
-	return apply_filters( 'wp_video_extensions', array( 'mp4', 'm4v', 'webm', 'ogv', 'flv' ) );
+	return apply_filters( 'wp_video_extensions', array( 'mp4', 'm4v', 'webm', 'ogv', 'flv', 'mov', 'quicktime' ) );
 }
 
 /**
