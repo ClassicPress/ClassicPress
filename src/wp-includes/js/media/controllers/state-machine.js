@@ -1,7 +1,5 @@
 module.exports = function() { // ClassicPress: defer loading via require()
 
-var StateMachine;
-
 /**
  * wp.media.controller.StateMachine
  *
@@ -19,7 +17,7 @@ var StateMachine;
  * @mixin
  * @mixes Backbone.Events
  */
-StateMachine = function() {
+var StateMachine = function() {
 	return {
 		// Use Backbone's self-propagating `extend` inheritance method.
 		extend: Backbone.Model.extend

@@ -1,7 +1,5 @@
 module.exports = function() { // ClassicPress: defer loading via require()
 
-var Region;
-
 /**
  * wp.media.controller.Region
  *
@@ -24,7 +22,7 @@ var Region;
  * @param {Backbone.View} options.view     A parent view the region exists within.
  * @param {string}        options.selector jQuery selector for the region within the parent view.
  */
-Region = function( options ) {
+var Region = function( options ) {
 	_.extend( this, _.pick( options || {}, 'id', 'view', 'selector' ) );
 };
 
