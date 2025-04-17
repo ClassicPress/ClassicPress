@@ -160,7 +160,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				fileType   = attachment.mime.split( '/' )[1],
 				video      = document.createElement( 'video' ),
 				source     = document.createElement( 'source' ),
-				buttons    = document.createElement( 'div' );
+				buttons    = document.createElement( 'div' ),
+				mediaView  = widget.querySelector( '.attachment-media-view' ),
+				vidInputs  = widget.querySelectorAll( '[data-property="mp4"], [data-property="m4v"], [data-property="webm"], [data-property="ogv"], [data-property="flv"], [data-property="mov"], [data-property="quicktime"]' );
 
 			video.className = 'wp_video_shortcode';
 			video.style.width = '100%';
@@ -178,12 +180,23 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			buttons.innerHTML = '<button type="button" class="button edit-media">' + VIDEO_WIDGET.edit_video + '</button>' +
 				'<button type="button" class="button change-media select-media">' + VIDEO_WIDGET.replace_video + '</button>';
 
-			// Insert video according to whether this is a new insertion or replacement
-			if ( widget.querySelector( '.attachment-media-view' ) !== null ) {
-				widget.querySelector( '.media_video' ).append( video );
-				widget.querySelector( '.attachment-media-view' ).replaceWith( buttons );
-			} else { // replacement
-				widget.querySelector( '.wp-video' ).replaceWith( video );
+			// Insert video according to whether this is a new insertion ...
+			if ( mediaView !== null ) {
+				mediaView.before( video );
+				mediaView.replaceWith( buttons );
+
+			// ... or replacement
+			} else {
+				vidInputs.forEach( function( vidInput ) {
+					vidInput.value = '';
+				} );
+				if ( widget.querySelector( '.wp-embedded-video' ) ) {
+					widget.querySelector( '.wp-embedded-video' ).replaceWith( video );
+				} else if ( widget.querySelector( '.wp-video' ) ) {
+					widget.querySelector( '.wp-video' ).replaceWith( video );
+				} else if ( widget.querySelector( '.wp_video_shortcode' ) ) {
+					widget.querySelector( '.wp_video_shortcode' ).replaceWith( video );
+				}
 			}
 
 			// Update values in hidden fields
@@ -216,7 +229,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			videoURL = widget.querySelector( '[data-property="url"]' ).value,
 			videoID = widget.querySelector( '[data-property="attachment_id"]' ).value;
 
-        if ( videoURL === null ) {
+		if ( videoURL === null ) {
 			videoURL = widget.querySelector( '[data-property="mp4"]' ).value;
 		}
 		if ( videoURL === null ) {
@@ -231,17 +244,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( videoURL === null ) {
 			videoURL = widget.querySelector( '[data-property="flv"]' ).value;
 		}
-        if ( videoURL == null ) {
-            console.error( VIDEO_WIDGET.no_video_selected );
-            return;
-        }
+		if ( videoURL === null ) {
+			videoURL = widget.querySelector( '[data-property="mov"]' ).value;
+		}
+		if ( videoURL === null ) {
+			console.error( VIDEO_WIDGET.no_video_selected );
+			return;
+		}
 
-        // Open the media modal in edit mode
-        frame = wp.media( {
-            frame: 'video',
-            state: 'video-details',
-            metadata: wp.media.attachment( videoID )
-        } );
+		// Open the media modal in edit mode
+		frame = wp.media( {
+			frame: 'video',
+			state: 'video-details',
+			metadata: wp.media.attachment( videoID )
+		} );
 
 		// This runs once the modal is open
 		frame.on( 'ready', function() {
@@ -254,10 +270,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 		} );
 
-        frame.open();
-    }
+		frame.open();
+	}
 
-    function updateFrame( frame, widget, videoURL ) {
+	function updateFrame( frame, widget, videoURL ) {
 		var video = document.createElement( 'video' ),
 			source = document.createElement( 'source' ),
 			span = document.createElement( 'span' ),
