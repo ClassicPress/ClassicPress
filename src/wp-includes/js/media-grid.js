@@ -362,7 +362,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#edit-more' ).href = ajaxurl.replace( 'admin-ajax.php', 'post.php?post=' + id + '&action=edit' );
 		dialog.querySelector( '#download-file' ).href = url;
 
-		if ( updateNonce ) { // Existence of nonce means that user capability has been checked and verified
+		/*
+		 * Existence of nonce means that user capability has already been checked and verified.
+		 *
+		 * @see wp_prepare_attachment_for_js()
+		 */
+		if ( updateNonce ) {
 			dialog.querySelector( '#attachment-details-two-column-alt-text' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-title' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-caption' ).removeAttribute( 'readonly' );
@@ -380,7 +385,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '.edit-attachment' ).style.display = 'none';
 		}
 
-		if ( deleteNonce ) { // Existence of nonce means that user capability has been checked and verified
+		/*
+		 * Existence of nonce means that user capability has already been checked and verified.
+		 *
+		 * @see wp_prepare_attachment_for_js()
+		 */
+		if ( deleteNonce ) {
 			dialog.querySelector( '.delete-attachment' ).style.display = '';
 			dialog.querySelectorAll( '.links-separator' )[2].style.display = '';
 		} else {
