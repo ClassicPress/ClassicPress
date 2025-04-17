@@ -3016,6 +3016,13 @@ function wp_ajax_query_attachments() {
 		}
 	}
 
+	// Ensure that the list of posts to be excluded is an array.
+	if ( isset( $query['post__not_in'] ) ) {
+		if ( ! is_array( $query['post__not_in'] ) ) {
+			$query['post__not_in'] = explode( ',', $query['post__not_in'] );
+		}
+	}
+
 	/**
 	 * Filters the arguments passed to WP_Query during an Ajax
 	 * call for querying attachments.
