@@ -268,7 +268,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Open modal
 	function openModalDialog( item ) {
-		var id = item.id.replace( 'media-', '' ),
+		var id = item.dataset.id,
 			title = item.getAttribute( 'aria-label' ),
 			date = item.dataset.date,
 			filename = item.dataset.filename,
@@ -362,7 +362,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#edit-more' ).href = ajaxurl.replace( 'admin-ajax.php', 'post.php?post=' + id + '&action=edit' );
 		dialog.querySelector( '#download-file' ).href = url;
 
-		if ( updateNonce ) {
+		if ( updateNonce ) { // Existence of nonce means that user capability has been checked and verified
 			dialog.querySelector( '#attachment-details-two-column-alt-text' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-title' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-caption' ).removeAttribute( 'readonly' );
@@ -380,7 +380,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '.edit-attachment' ).style.display = 'none';
 		}
 
-		if ( deleteNonce ) {
+		if ( deleteNonce ) { // Existence of nonce means that user capability has been checked and verified
 			dialog.querySelector( '.delete-attachment' ).style.display = '';
 			dialog.querySelectorAll( '.links-separator' )[2].style.display = '';
 		} else {
