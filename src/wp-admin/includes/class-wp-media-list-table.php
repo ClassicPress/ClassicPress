@@ -1213,7 +1213,7 @@ class WP_Media_List_Table extends WP_List_Table {
 							<fieldset class="inline-edit-date">
 								<legend><span class="title"><?php echo esc_html_e( 'Date' ); ?></span></legend>
 								<div class="timestamp-wrap">
-									<label for="quick-month" style="display:none;">
+									<label for="quick-month">
 										<span class="screen-reader-text"><?php echo esc_html_e( 'Month' ); ?></span>
 									</label>
 									<select id="quick-month" class="form-required" name="mm">
