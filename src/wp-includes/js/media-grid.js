@@ -268,7 +268,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Open modal
 	function openModalDialog( item ) {
-		var id = item.dataset.id,
+		var id = item.id.replace( 'media-', '' ),
 			title = item.getAttribute( 'aria-label' ),
 			date = item.dataset.date,
 			filename = item.dataset.filename,
