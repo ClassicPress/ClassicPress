@@ -1899,6 +1899,11 @@ div.action-links,
 		text-overflow: ellipsis;
 	}
 
+	/* Hide ID column header cell in post table to fix layout on mobile. */
+	.wp-list-table th.column-id {
+		display: none;
+	}
+
 	.wp-list-table .is-expanded td:not(.hidden) {
 		display: block !important;
 		overflow: hidden; /* clearfix */
