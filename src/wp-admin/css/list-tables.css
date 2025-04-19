@@ -1119,6 +1119,22 @@ tr.inline-edit-row td {
 	float: left;
 }
 
+/* Consistent whitespace in Quick Edit across screens */
+.upload-php .inline-edit-row fieldset.inline-edit-date label {
+	display: none;
+}
+.edit-php .inline-edit-row fieldset.inline-edit-date input[name=jj] {
+	margin-right: 5px;
+}
+.edit-php .inline-edit-row fieldset.inline-edit-date input[name=hh] {
+	margin-right: 3px;
+}
+.upload-php .inline-edit-row fieldset.inline-edit-date input[name=aa],
+.edit-php .inline-edit-row fieldset.inline-edit-date input[name=aa],
+.edit-php .inline-edit-row fieldset.inline-edit-date input[name=mn] {
+	margin-left: 3px;
+}
+
 #bulk-titles,
 ul.cat-checklist {
 	height: 14em;
@@ -1881,6 +1897,11 @@ div.action-links,
 		content: attr(data-colname);
 		white-space: nowrap;
 		text-overflow: ellipsis;
+	}
+
+	/* Hide ID column header cell in post table to fix layout on mobile. */
+	.wp-list-table th.column-id {
+		display: none;
 	}
 
 	.wp-list-table .is-expanded td:not(.hidden) {
