@@ -1189,23 +1189,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					editMedia( widget );
 				}
 			}
-
-			// Set focus after closing modal using Escape key
-			document.addEventListener( 'keydown', function( e ) {
-				var details = widget.querySelector( 'details' );
-				if ( dialog.hasAttribute( 'open' ) && e.key === 'Escape' ) {
-					dialog.close();
-					dialog.querySelector( '#image-modal-content' ).remove();
-					setTimeout( function() {
-						details.open = true;
-					}, 100 );
-					details.addEventListener( 'toggle', function( e ) {
-						if ( e.target.open === true ) {
-							widget.querySelector( '.edit-media' ).focus();
-						}
-					} );
-				}
-			} );
 		} else if ( e.target.id === 'edit-original' ) {
 			imageEdit( e.target.dataset.widgetId );
 		} else if ( e.target.id === 'media-button-update' ) {
@@ -1336,6 +1319,36 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 		if ( dialog.querySelector( '#new-image-modal' ) ) {
 			dialog.querySelector( '#new-image-modal' ).remove();
+		}
+	} );
+
+	// Set focus after closing modal using Escape key
+	dialog.addEventListener( 'keydown', function( e ) {
+		var widgetId, widget, details, base,
+			modal = dialog.querySelector( '#new-image-modal' );
+
+		if ( modal ) {
+			widgetId = dialog.querySelector( '#new-image-modal' ).dataset.widgetId;
+
+			if ( widgetId ) {
+				widget  = document.getElementById( widgetId );
+				details = widget.querySelector( 'details' );
+				base    = widget.querySelector( '.id_base' );
+
+				if ( base && base.value === 'media_image' ) {
+					if ( dialog.open && e.key === 'Escape' ) {
+						closeButton.click();
+						setTimeout( function() {
+							details.open = true;
+						}, 100 );
+						details.addEventListener( 'toggle', function( e ) {
+							if ( e.target.open ) {
+								widget.querySelector( '.edit-media' ) ? widget.querySelector( '.edit-media' ).focus() : widget.querySelector( '.select-media' ).focus();
+							}
+						} );
+					}
+				}
+			}
 		}
 	} );
 
