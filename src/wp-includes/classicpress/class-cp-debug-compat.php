@@ -91,7 +91,7 @@ class CP_Debug_Compat {
 				__( 'You can reset this list by switching the <a href="%s">Blocks Compatibility</a> to "On" and back to "Troubleshooting" again.' ),
 				esc_url( admin_url( 'options-general.php#blocks_compatibility_level' ) )
 			)
-		);	
+		);
 		$result = array(
 			'label'       => __( 'Plugins using block functions' ),
 			'status'      => 'recommended',
