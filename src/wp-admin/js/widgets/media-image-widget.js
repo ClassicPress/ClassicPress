@@ -260,9 +260,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '#attachment-details-title').value = title;
 			dialog.querySelector( '#attachment-details-caption').textContent = caption;
 		} else {
-			dialog.querySelector( '#attachment-details-alt-text').textContent = widget.querySelector( 'input[data-property="alt"]' ).value;
+			dialog.querySelector( '#attachment-details-alt-text').textContent = widget.querySelector( 'input[data-property="alt"]' ) ? widget.querySelector( 'input[data-property="alt"]' ).value : '';
 			dialog.querySelector( '#attachment-details-title').value = title;
-			dialog.querySelector( '#attachment-details-caption').textContent = widget.querySelector( 'input[data-property="caption"]' ).value;
+			dialog.querySelector( '#attachment-details-caption').textContent = widget.querySelector( 'input[data-property="caption"]' ) ? widget.querySelector( 'input[data-property="caption"]' ).value : '';
 		}
 
 		// Set status of items according to user's capabilities
@@ -600,6 +600,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Show relevant buttons and clear grid
 				addButton = dialog.querySelector( '#media-button-insert' );
+				if ( addButton === null ) {
+					 addButton = dialog.querySelector( '#gallery-button-update' );
+				} else if ( addButton === null ) {
+					 addButton = dialog.querySelector( '#create-new-gallery' );
+				}
+
 				dialog.querySelector( '#widgets-media-grid ul' ).innerHTML = '';
 
 				if ( result.data.length === 0 ) {
@@ -1395,10 +1401,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							updateGrid( document.getElementById( widgetId ), 1 );
 							dialog.querySelector( '#menu-item-browse' ).click();
 							setTimeout( function() {
-								gridItem = dialog.querySelector( '#media-' + result.data.id );
-								gridItem.click();
-								gridItem.focus();
-							}, 100 );
+								dialog.querySelector( '.attachment-details' ).setAttribute( 'hidden', true );
+							}, 500 );
 						} else {
 							error( IMAGE_WIDGET.upload_failed );
 						}
