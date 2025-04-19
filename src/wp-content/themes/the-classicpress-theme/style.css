@@ -2100,6 +2100,18 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 }
 
 @media screen and (min-width: 900px) {
+	#primary{
+		display: grid;
+		grid-template-columns: 3fr 1fr;
+	}
+	#main{
+		display: flex;
+		padding: 1.78em 1em;
+	}
+	#sidebar{
+	  display: initial;
+		padding: 1.14em .444em
+	}	
 	#inner-header {
 		display: flex;
 		flex-grow: 1;
