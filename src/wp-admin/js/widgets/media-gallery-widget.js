@@ -933,6 +933,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			galleryItems = [],
 			widget = e.target.closest( '.widget' );
 
+		// Either add an image to an empty gallery widget or edit a gallery in a non-empty widget
 		if ( widget ) {
 			base = widget.querySelector( '.id_base' );
 			if ( base && base.value === 'media_gallery' && e.target.tagName === 'BUTTON' ) {
@@ -979,6 +980,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} else {
 					setupGridView();
 				}
+
+			// Open the library of images
 			} else if ( e.target.id === 'menu-item-browse' ) {
 				itemUpload.classList.remove( 'active' );
 				itemUpload.setAttribute( 'aria-selected', false );
@@ -1006,6 +1009,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					element.removeAttribute( 'hidden' );
 					element.removeAttribute( 'inert' );
 				} );
+
+			// Create a new gallery of images
 			} else if ( e.target.id === 'create-new-gallery' ) {
 				dialog.querySelector( '#media-frame-title h2' ).textContent = GALLERY_WIDGET.edit_gallery;
 
@@ -1044,6 +1049,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 
 				enableGallerySorting( galleryItems, widgetEl );
+
+			// Open the library of images
 			} else if ( e.target.id === 'menu-item-gallery-library' ) {
 				itemEdit.classList.remove( 'active' );
 				itemEdit.setAttribute( 'aria-selected', false );
@@ -1107,6 +1114,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 				widgetEl.dispatchEvent( new Event( 'change' ) );
 				closeButton.click();
+
+			// Update a gallery
 			} else if ( e.target.id === 'gallery-button-update' ) {
 				dialog.querySelector( '#create-new-gallery' ).click();
 				mediaToolbar.classList.add( 'hidden' );
@@ -1118,7 +1127,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				itemLibrary.setAttribute( 'aria-selected', false );
 				galleryInsert.classList.remove( 'hidden' );
 				galleryInsert.removeAttribute( 'disabled' );
+
+			// Edit a gallery
 			} else if ( e.target.id === 'menu-item-gallery-edit' ) {
+
+				// No need to do anything if the edit gallery screenis already visible
+				if ( e.target.className.includes( 'active' ) ) {
+					return;
+				}
 				itemLibrary.classList.remove( 'active' );
 				itemLibrary.setAttribute( 'aria-selected', false );
 				galleryUpdate.classList.add( 'hidden' );
@@ -1130,18 +1146,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				mediaToolbar.classList.add( 'hidden' );
 				loadMore.classList.add( 'hidden' );
 				content.style.top = '50px';
-				gallerySortable.option( 'disabled', false ); // turn sorting back on
+
+				// Turn sorting back on if it's been turned off
+				if ( gallerySortable ) {
+					gallerySortable.option( 'disabled', false );
+				}
 
 				dialog.querySelector( '.media-toolbar-gallery' ).removeAttribute( 'hidden' );
 				e.target.classList.add ( 'active' );
 				e.target.setAttribute( 'aria-selected', true );
 				galleryInsert.classList.remove( 'hidden' );
 				galleryInsert.removeAttribute( 'disabled' );
+
+			// Reverse the order of items in the gallery
 			} else if ( e.target.className.includes( 'gallery-button-reverse' ) ) {
 				dialog.querySelectorAll( '.widgets-media-grid-view li:not( [hidden] )' ).forEach( function( item ) {
 					item.parentNode.prepend( item );
 				} );
 				selectedIds.reverse();
+
+			// Delete an item from the media library
 			} else if ( e.target.className.includes( 'delete-attachment' ) ) {
 				if ( widgetEl.querySelector( '[data-property="ids"]' ) ) {
 					gridViewItems.forEach( function( item ) {
