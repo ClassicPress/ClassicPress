@@ -554,7 +554,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					dialog.querySelector( '.no-media' ).setAttribute( 'hidden', true );
 					dialog.querySelector( '.load-more-count' ).removeAttribute( 'hidden' );
 					dialog.querySelector( '.load-more-count' ).textContent = result.data.length + ' ' + GALLERY_WIDGET.of + ' ' + result.headers.total_posts + ' media items';
-					
+
 					dialog.querySelector( '.media-frame-toolbar .media-toolbar-secondary' ).prepend( galleryClone.querySelector( '.media-selection' ) );
 
 					dialog.querySelector( '.media-frame-actions-heading' ).nextElementSibling.innerHTML = galleryClone.querySelector( '.media-toolbar-primary.search-form' ).outerHTML;
@@ -610,7 +610,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		itemEdit = dialog.querySelector( '#menu-item-gallery-edit' );
 		itemEdit.removeAttribute( 'hidden' );
 		itemEdit.classList.add ( 'active' );
-		itemEdit.setAttribute( 'aria-selected', true );		
+		itemEdit.setAttribute( 'aria-selected', true );
 
 		dialog.querySelector( '.attachment-details' ).setAttribute( 'hidden', true );
 		dialog.querySelector( '#create-new-gallery' ).classList.add( 'hidden' );
@@ -678,7 +678,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 *
 	 * @abstract
 	 * @return {void}
-	 */	
+	 */
 	function enableGallerySorting( galleryItems, widget ) {
 		var gallerySortable,
 			grid = dialog.querySelector( '#gallery-grid' );
@@ -689,7 +689,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			item.classList.add( 'selected' );
 			item.setAttribute( 'aria-checked', true );
 
-			if ( item.querySelector( '.describe' ) == null ) {				
+			if ( item.querySelector( '.describe' ) == null ) {
 				input = document.createElement( 'input' );
 				input.className = 'describe';
 				input.type = 'text';
@@ -740,7 +740,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				dialog.querySelectorAll( '.selected' ).forEach( function( selected ) {
 					selectedIds.push( selected.dataset.id );
 				} );
-				
+
 				if ( grid.querySelector( '.selected' ) == null ) {
 					dialog.querySelector( '#gallery-button-insert' ).disabled = true;
 				}
@@ -811,7 +811,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					result.data.forEach( function( attachment ) {
 						var gridItem = populateGridItem( attachment, widget );
 						dialog.querySelector( '#widgets-media-grid ul' ).append( gridItem );
-						
+
 						updatedItems.push( gridItem );
 					} );
 
@@ -996,7 +996,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( gallerySortable ) {
 					gallerySortable.option( 'disabled', true );
 				}
-				
+
 				gridViewItems.forEach( function( item ) {
 					item.removeAttribute( 'hidden' );
 					item.removeAttribute( 'inert' );
@@ -1006,7 +1006,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					element.removeAttribute( 'hidden' );
 					element.removeAttribute( 'inert' );
 				} );
-			} else if ( e.target.id === 'create-new-gallery' ) {				
+			} else if ( e.target.id === 'create-new-gallery' ) {
 				dialog.querySelector( '#media-frame-title h2' ).textContent = GALLERY_WIDGET.edit_gallery;
 
 				e.target.classList.add( 'hidden' );
@@ -1022,12 +1022,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				itemEdit.setAttribute( 'aria-selected', true );
 				itemLibrary.removeAttribute( 'hidden' );
 
-				toolbarGallery.classList.remove( 'hidden' );				
+				toolbarGallery.classList.remove( 'hidden' );
 				dialog.querySelectorAll( '.media-toolbar-primary' )[1].style.right = '1em';
 				galleryInsert.classList.remove( 'hidden' );
 				attachDetails.setAttribute( 'hidden', true );
 				collections.classList.remove( 'hidden' );
-				
+
 				router.classList.add( 'hidden' );
 				mediaToolbar.classList.add( 'hidden' );
 				loadMore.classList.add( 'hidden' );
@@ -1072,7 +1072,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} else {
 					ul = document.createElement( 'ul' );
 					ul.className = 'media-widget-gallery-preview';
-					
+
 					fieldset = document.createElement( 'fieldset' );
 					fieldset.className = 'media-widget-buttons';
 					fieldset.innerHTML = '<button type="button" class="button edit-media selected" data-edit-nonce="' + widgetEl.querySelector( '.select-media' ).dataset.editNonce + '" style="margin-top:0;">' + GALLERY_WIDGET.edit_gallery + '</button>';
