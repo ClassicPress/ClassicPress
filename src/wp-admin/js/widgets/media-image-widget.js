@@ -1281,7 +1281,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} else if ( e.target.className.includes( 'delete-attachment' ) ) {
 				if ( widgetEl.querySelector( '[data-property="attachment_id"]' ) ) {
 					if ( dialog.querySelector( '#widgets-media-grid .selected' ).dataset.id != widgetEl.querySelector( '[data-property="attachment_id"]' ).value ) {
-						if ( window.confirm( GALLERY_WIDGET.confirm_delete ) ) {
+						if ( window.confirm( IMAGE_WIDGET.confirm_delete ) ) {
 							deleteItem( dialog.querySelector( '#widgets-media-grid .selected' ).dataset.id );
 						}
 					}
