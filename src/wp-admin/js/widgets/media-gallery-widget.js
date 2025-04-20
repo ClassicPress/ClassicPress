@@ -1,5 +1,5 @@
 /* eslint consistent-this: [ "error", "control" ] */
-/* global ajaxurl, GALLERY_WIDGET, console */
+/* global ajaxurl, GALLERY_WIDGET, Sortable, console */
 
 /**
  * @since CP 2.5.0
