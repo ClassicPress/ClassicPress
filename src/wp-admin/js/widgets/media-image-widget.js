@@ -194,7 +194,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} )
 		.then( function( result ) {
 			if ( result === 1 ) {
-				document.getElementById( 'media-' + id ).remove();
 				closeButton.click();
 			} else {
 				console.log( IMAGE_WIDGET.delete_failed );
@@ -338,13 +337,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		dialog.querySelector( '.attachment-details' ).removeAttribute( 'hidden' );
 
-		// Delete media item
-		dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
-			if ( window.confirm( IMAGE_WIDGET.confirm_delete ) ) {
-				deleteItem( id );
-			}
-		} );
-
 		// Update media attachment details
 		dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
 			input.addEventListener( 'blur', function() {
@@ -416,6 +408,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		gridItem.setAttribute( 'role', 'checkbox' );
 		gridItem.setAttribute( 'aria-checked', selected ? true : false );
 		gridItem.setAttribute( 'aria-label', attachment.title );
+		gridItem.setAttribute( 'data-id', attachment.id );
 		gridItem.setAttribute( 'data-date', attachment.dateFormatted );
 		gridItem.setAttribute( 'data-url', attachment.url );
 		gridItem.setAttribute( 'data-filename', attachment.filename );
@@ -902,7 +895,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 
 				// Add values to div.widget-content fields
-				widget.querySelector( 'input[data-property="attachment_id"]' ).value = selectedItem.id.replace( 'media-', '' );
+				widget.querySelector( 'input[data-property="attachment_id"]' ).value = selectedItem.dataset.id;
 				widget.querySelector( 'input[data-property="alt"]' ).value = dialog.querySelector( '#attachment-details-alt-text' ).textContent;
 				widget.querySelector( 'input[data-property="caption"]' ).value = dialog.querySelector( '#attachment-details-caption' ).textContent;
 				widget.querySelector( 'input[data-property="url"]' ).value = selectedItem.dataset.url;
@@ -1285,6 +1278,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				goFilepond( widgetId );
 			} else if ( e.target.id === 'media-button-insert' ) {
 				addItemToWidget( widgetEl );
+			} else if ( e.target.className.includes( 'delete-attachment' ) ) {
+				if ( widgetEl.querySelector( '[data-property="attachment_id"]' ) ) {
+					if ( dialog.querySelector( '#widgets-media-grid .selected' ).dataset.id != widgetEl.querySelector( '[data-property="attachment_id"]' ).value ) {
+						if ( window.confirm( GALLERY_WIDGET.confirm_delete ) ) {
+							deleteItem( dialog.querySelector( '#widgets-media-grid .selected' ).dataset.id );
+						}
+					}
+				}
 			}
 		}
 	} );
@@ -1396,7 +1397,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						throw new Error( response.status );
 					} )
 					.then( function( result ) {
-						var gridItem;
 						if ( result.success ) {
 							updateGrid( document.getElementById( widgetId ), 1 );
 							dialog.querySelector( '#menu-item-browse' ).click();
