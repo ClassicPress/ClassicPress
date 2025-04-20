@@ -574,12 +574,28 @@ foreach ( $theme_sidebars as $sidebar => $registered_sidebar ) {
 
 <?php
 /**
+ * Renders the template for uploading files to widgets
+ *
+ * @since CP-2.5.0
+ */
+echo cp_render_widget_upload_template();
+
+/**
  * Renders the template for the media image widget
  *
  * @since CP-2.5.0
  */
 if ( class_exists( 'WP_Widget_Media_Image' ) ) {
 	echo cp_render_media_image_template();
+}
+
+/**
+ * Renders the template for the media gallery widget
+ *
+ * @since CP-2.5.0
+ */
+if ( class_exists( 'WP_Widget_Media_Gallery' ) ) {
+	echo cp_render_media_gallery_template();
 }
 
 /**
