@@ -41,12 +41,140 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Update attachment details.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function updateDetails( input, id ) {
+		var successTimeout,
+			data = new FormData();
+
+		data.append( 'action', 'save-attachment' );
+		data.append( 'id', id );
+		data.append( 'nonce', document.getElementById( 'media-' + id ).dataset.updateNonce );
+
+		// Append metadata fields
+		if ( input.parentNode.dataset.setting === 'alt' ) {
+			data.append( 'changes[alt]', input.value );
+		} else if ( input.parentNode.dataset.setting === 'title' ) {
+			data.append( 'changes[title]', input.value );
+		} else if ( input.parentNode.dataset.setting === 'caption' ) {
+			data.append( 'changes[caption]', input.value );
+		} else if ( input.parentNode.dataset.setting === 'description' ) {
+			data.append( 'changes[description]', input.value );
+		}
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result.success ) {
+
+				// Update data attributes
+				if ( input.parentNode.dataset.setting === 'alt' ) {
+					document.getElementById( 'media-' + id ).querySelector( 'img' ).setAttribute( 'alt', input.value );
+				} else if ( input.parentNode.dataset.setting === 'title' ) {
+					document.getElementById( 'media-' + id ).setAttribute( 'aria-label', input.value );
+				} else if ( input.parentNode.dataset.setting === 'caption' ) {
+					document.getElementById( 'media-' + id ).setAttribute( 'data-caption', input.value );
+				} else if ( input.parentNode.dataset.setting === 'description' ) {
+					document.getElementById( 'media-' + id ).setAttribute( 'data-description', input.value );
+				}
+
+				// Show success visual feedback.
+				clearTimeout( successTimeout );
+				document.getElementById( 'details-saved' ).classList.remove( 'hidden' );
+				document.getElementById( 'details-saved' ).setAttribute( 'aria-hidden', 'false' );
+
+				// Hide success visual feedback after 3 seconds.
+				successTimeout = setTimeout( function() {
+					document.getElementById( 'details-saved' ).classList.add( 'hidden' );
+					document.getElementById( 'details-saved' ).setAttribute( 'aria-hidden', 'true' );
+				}, 3000 );
+			} else {
+				console.error( GALLERY_WIDGET.failed_update, result.data.error );
+			}
+		} )
+		.catch( function( error ) {
+			console.error( GALLERY_WIDGET.error, error );
+		} );
+	}
+
+	/**
+	 * Update media categories and tags.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function updateMediaTaxOrTag( input, id ) {
+		var successTimeout, newTaxes,
+			data = new FormData(),
+			taxonomy = input.getAttribute( 'name' ).replace( 'attachments[' + id + '][' , '' ).replace( ']', '' );
+
+		data.append( 'action', 'save-attachment-compat' );
+		data.append( 'nonce', document.getElementById( 'media-' + id ).dataset.updateNonce );
+		data.append( 'id', id );
+		data.append( 'taxonomy', taxonomy );
+		data.append( 'attachments[' + id + '][' + taxonomy + ']', input.value );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result.success ) {
+				if ( taxonomy === 'media_category' ) {
+					newTaxes = result.data.media_cats.join( ', ' );
+					input.value = newTaxes;
+					document.getElementById( 'media-' + id ).setAttribute( 'data-taxes', newTaxes );
+				} else if ( taxonomy === 'media_tag' ) {
+					newTaxes = result.data.media_tags.join( ', ' );
+					input.value = newTaxes;
+					document.getElementById( 'media-' + id ).setAttribute( 'data-tags', newTaxes );
+				}
+
+				// Show success visual feedback.
+				clearTimeout( successTimeout );
+				document.getElementById( 'tax-saved' ).classList.remove( 'hidden' );
+				document.getElementById( 'tax-saved' ).setAttribute( 'aria-hidden', 'false' );
+
+				// Hide success visual feedback after 3 seconds.
+				successTimeout = setTimeout( function() {
+					document.getElementById( 'tax-saved' ).classList.add( 'hidden' );
+					document.getElementById( 'tax-saved' ).setAttribute( 'aria-hidden', 'true' );
+				}, 3000 );
+			} else {
+				console.error( GALLERY_WIDGET.failed_update, result.data.error );
+			}
+		} )
+		.catch( function( error ) {
+			console.error( GALLERY_WIDGET.error, error );
+		} );
+	}
+
+	/**
 	 * Delete attachment from within modal.
 	 *
 	 * @abstract
 	 * @return {void}
 	 */
-	function deleteItem( id ) {console.log(id);
+	function deleteItem( id ) {
 		var data = new URLSearchParams( {
 			action: 'delete-post',
 			_ajax_nonce: document.getElementById( 'media-' + id ).dataset.deleteNonce,
@@ -83,8 +211,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function selectItemToAdd( item, widget, clicked ) {
-		var selectedItems = document.querySelectorAll( '.selected' ),
-			id = item.dataset.id,
+		var id = item.dataset.id,
 			title = item.getAttribute( 'aria-label' ),
 			date = item.dataset.date,
 			filename = item.dataset.filename,
@@ -279,14 +406,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function setupGridView() {
-		var itemGallery    = dialog.querySelector( '#menu-item-gallery' );
-			itemUpload     = dialog.querySelector( '#menu-item-upload' );
-			itemBrowse     = dialog.querySelector( '#menu-item-browse' );
-			router         = dialog.querySelector( '.media-frame-router' );
-			mediaToolbar   = dialog.querySelector( '.media-toolbar' );
-			gridView       = dialog.querySelector( '.widgets-media-grid-view' );
-			loadMore       = dialog.querySelector( '.load-more-wrapper' );
-			content        = dialog.querySelector( '.media-frame-content' );
+		var itemGallery  = dialog.querySelector( '#menu-item-gallery' ),
+			itemUpload   = dialog.querySelector( '#menu-item-upload' ),
+			itemBrowse   = dialog.querySelector( '#menu-item-browse' );
 
 		itemUpload.classList.remove( 'active' );
 		itemUpload.setAttribute( 'aria-selected', false );
@@ -294,11 +416,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		itemBrowse.setAttribute( 'aria-selected', false );
 		itemGallery.classList.add ( 'active' );
 		itemGallery.setAttribute( 'aria-selected', true );
-		router.classList.remove( 'hidden' );
-		mediaToolbar.classList.remove( 'hidden' );
-		gridView.classList.remove( 'hidden' );
-		loadMore.classList.remove( 'hidden' );
-		content.style.top = '84px';
+
+		dialog.querySelector( '.media-frame-router' ).classList.remove( 'hidden' );
+		dialog.querySelector( '.media-toolbar' ).classList.remove( 'hidden' );
+		dialog.querySelector( '.widgets-media-grid-view' ).classList.remove( 'hidden' );
+		dialog.querySelector( '.load-more-wrapper' ).classList.remove( 'hidden' );
+		dialog.querySelector( '.media-frame-content' ).style.top = '84px';
 	}
 
 	/**
@@ -557,10 +680,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */	
 	function enableGallerySorting( galleryItems, widget ) {
-		var grid = dialog.querySelector( '#gallery-grid' );
+		var gallerySortable,
+			grid = dialog.querySelector( '#gallery-grid' );
 
 		galleryItems.forEach( function( item ) {
-			var input, gallerySortable;
+			var input;
 
 			item.classList.add( 'selected' );
 			item.setAttribute( 'aria-checked', true );
@@ -639,9 +763,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function updateLibrary( widget ) {
-		var updatedItems = [];
+		var updatedItems = [],
+			formData = new FormData();
 
-		formData = new FormData();
 		formData.append( 'action', 'query-attachments' );
 		formData.append( 'query[post__not_in]', selectedIds );
 		formData.append( 'query[post_mime_type]', 'image' );
@@ -802,9 +926,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	document.addEventListener( 'click', function( e ) {
-		var base, page, widgetId, itemAdd, itemBrowse, itemUpload, editButton,
-			libraryButton, router, mediaToolbar, gridView, loadMore, content,
-			gridSubPanel, uploadSubPanel, urlPanel, frameTitle, preview, ul,
+		var widgetId, widgetEl, base, preview, itemAdd, itemEdit, itemLibrary,
+			itemBrowse, itemUpload, galleryInsert, galleryUpdate, router, mediaToolbar,
+			toolbarGallery, widgetsGrid, gridViewItems, loadMore, content, collections,
+			attachDetails, gridSubPanel, uploadSubPanel, frameTitle, ul, fieldset,
 			galleryItems = [],
 			widget = e.target.closest( '.widget' );
 
@@ -1039,7 +1164,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	closeButton.addEventListener( 'click', function( e ) {
+	closeButton.addEventListener( 'click', function() {
 		dialog.close();
 		if ( dialog.querySelector( '#image-modal-content' ) ) {
 			dialog.querySelector( '#image-modal-content' ).remove();
