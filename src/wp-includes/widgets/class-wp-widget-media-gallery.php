@@ -210,7 +210,7 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 
 				<div class="media-widget-preview media_gallery">
 					<div class="attachment-media-view">
-						<button type="button" class="select-media button-add-media"><?php esc_html_e( 'Add Images' ); ?></button>
+						<button type="button" class="select-media button-add-media" data-edit-nonce="<?php echo esc_attr( $nonce ); ?>"><?php esc_html_e( 'Add Images' ); ?></button>
 					</div>
 				</div>
 
@@ -247,13 +247,109 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 			}
 		}
 
+		$user_id = get_current_user_id();
+		$per_page = get_user_meta( $user_id, 'media_grid_per_page', true );
+		if ( empty( $per_page ) || $per_page < 1 ) {
+			$per_page = 80;
+		}
+
 		wp_enqueue_script( 'media-gallery-widget' );
 		wp_localize_script(
 			'media-gallery-widget',
 			'GALLERY_WIDGET',
 			array(
-				'edit_gallery' => __( 'Edit Gallery' ),
+				'edit_gallery'               => _x( 'Edit Gallery', 'label for button in the image widget; should preferably not be longer than ~13 characters long' ),
+				'create_gallery'             => __( 'Create Gallery' ),
+				'cancel_gallery'             => __( 'Cancel Gallery' ),
+				'deselect'                   => __( 'Deselect' ),
+				'per_page'                   => $per_page,
+				'of'                         => __( 'of' ),
+				'by'                         => __( 'by' ),
+				'pixels'                     => __( 'pixels' ),
+				'deselect'                   => __( 'Deselect' ),
+				'failed_update'              => __( 'Failed to update media:' ),
+				'error'                      => __( 'Error:' ),
+				'delete_failed'              => __( 'Failed to delete attachment.' ),
+				'confirm_delete'             => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+				'confirm_multiple'           => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
 			)
 		);
 	}
+}
+
+/**
+ * Renders the template for the modal content for the media gallery widget
+ *
+ * @since CP-2.5.0
+ *
+ * @return string
+ */
+function cp_render_media_gallery_template() {
+	ob_start();
+	?>
+
+	<template id="tmpl-edit-gallery-modal">
+		<div class="media-toolbar-gallery hidden">
+			<div style="display:flex;justify-content:space-between;margin:1em;">
+				<div class="instructions"><?php esc_html_e( 'Drag and drop to reorder media files.' ); ?></div>
+				<button type="button" class="button media-button button-large gallery-button-reverse"><?php esc_html_e( 'Reverse order' ); ?></button>
+			</div>
+			<ul id="gallery-grid" class="widgets-media-grid-view"></ul>
+		</div>
+
+		<button id="menu-item-gallery-edit" type="button" class="media-menu-item" role="tab" aria-selected="false" hidden><?php esc_html_e( 'Edit Gallery' ); ?></button>
+		<button id="menu-item-gallery-library" type="button" class="media-menu-item" role="tab" aria-selected="false" hidden><?php esc_html_e( 'Add to Gallery' ); ?></button>
+		
+		<div class="collection-settings gallery-settings" hidden>
+			<h3><?php esc_html_e( 'Gallery Settings' ); ?></h3>
+
+			<span class="setting">
+				<label for="gallery-settings-link-to" class="name"><?php esc_html_e( 'Link To' ); ?></label>
+				<select id="gallery-settings-link-to" class="link-to" data-setting="link">
+					<option value="post" selected><?php esc_html_e( 'Attachment Page' ); ?></option>
+					<option value="file"><?php esc_html_e( 'Media File' ); ?></option>
+					<option value="none"><?php esc_html_e( 'None' ); ?></option>
+				</select>
+			</span>
+
+			<span class="setting">
+				<label for="gallery-settings-columns" class="name select-label-inline"><?php esc_html_e( 'Columns' ); ?></label>
+				<select id="gallery-settings-columns" class="columns" name="columns" data-setting="columns">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3" selected>3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+				</select>
+			</span>
+
+			<span class="setting">
+				<input type="checkbox" id="gallery-settings-random-order" data-setting="_orderbyRandom">
+				<label for="gallery-settings-random-order" class="checkbox-label-inline"><?php esc_html_e( 'Random Order' ); ?></label>
+			</span>
+
+			<span class="setting size">
+				<label for="gallery-settings-size" class="name"><?php esc_html_e( 'Size' ); ?></label>
+				<select id="gallery-settings-size" class="size" name="size" data-setting="size">
+					<option value="thumbnail"><?php esc_html_e( 'Thumbnail' ); ?></option>
+					<option value="medium"><?php esc_html_e( 'Medium' ); ?></option>
+					<option value="large"><?php esc_html_e( 'Large' ); ?></option>
+					<option value="full"><?php esc_html_e( 'Full Size' ); ?></option>
+				</select>
+			</span>
+		</div>
+
+		<div class="media-toolbar-primary search-form">
+			<button id="create-new-gallery" type="button" class="button media-button button-primary button-large media-button-gallery" disabled><?php esc_html_e( 'Create a new gallery' ); ?></button>
+			<button id="gallery-button-insert" type="button" class="button media-button button-primary button-large media-button-insert hidden"><?php esc_html_e( 'Insert gallery' ); ?></button>
+			<button id="gallery-button-update" type="button" class="button media-button button-primary button-large media-button-select hidden" disabled><?php esc_html_e( 'Update gallery' ); ?></button>
+		</div>
+	</template>
+
+	<?php
+	return ob_get_clean();
 }
