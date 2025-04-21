@@ -575,7 +575,12 @@ do_action( 'edit_form_top', $post );
 	$title_placeholder = apply_filters( 'enter_title_here', __( 'Add title' ), $post );
 	?>
 	<label class="screen-reader-text" id="title-prompt-text" for="title"><?php echo $title_placeholder; ?></label>
+<<<<<<< HEAD
 	<input type="text" name="post_title" size="30" value="<?php echo esc_attr( $post->post_title ); ?>" id="title" spellcheck="true" autocomplete="off">
+=======
+	<input type="text" name="post_title" size="30" value="<?php echo esc_attr( $post->post_title ); ?>" id="title" spellcheck="true" autocomplete="off" />
+	<a href="#content" class="button-secondary screen-reader-text skiplink" onclick="if (tinymce) { tinymce.execCommand( 'mceFocus', false, 'content' ); }"><?php esc_html_e( 'Skip to Editor' ); ?></a>
+>>>>>>> 4c1898dad2 (Editor: A11y: Fix tab order, state, and focus in classic editor.)
 </div>
 	<?php
 	/**
@@ -651,18 +656,16 @@ if ( post_type_supports( $post_type, 'editor' ) ) {
 		array(
 			'_content_editor_dfw' => $_content_editor_dfw,
 			'drag_drop_upload'    => true,
-			'tabfocus_elements'   => 'content-html,save-post',
 			'editor_height'       => 300,
 			'tinymce'             => array(
 				'resize'                  => false,
 				'wp_autoresize_on'        => $_wp_editor_expand,
 				'add_unload_trigger'      => false,
-				'wp_keep_scroll_position' => ! $is_IE,
 			),
 		)
 	);
 	?>
-<table id="post-status-info"><tbody><tr>
+<table id="post-status-info" role="presentation"><tbody><tr>
 	<td id="wp-word-count" class="hide-if-no-js">
 	<?php
 	printf(
