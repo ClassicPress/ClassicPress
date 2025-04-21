@@ -82,10 +82,18 @@ final class _WP_Editors {
 		 */
 		$settings = apply_filters( 'wp_editor_settings', $settings, $editor_id );
 
+		$wp_post = get_post();
+		if ( ! $wp_post instanceof WP_Post ) {
+			$has_blocks = false;
+		} else {
+			$post = $wp_post->post_content;
+			$has_blocks = str_contains( (string) $post, '<!-- wp:' );
+		}
+
 		$set = wp_parse_args(
 			$settings,
 			array(
-				'wpautop'             => true,
+				'wpautop'             => $has_blocks,
 				'media_buttons'       => true,
 				'default_editor'      => '',
 				'drag_drop_upload'    => false,
