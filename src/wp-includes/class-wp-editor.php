@@ -93,7 +93,7 @@ final class _WP_Editors {
 		$set = wp_parse_args(
 			$settings,
 			array(
-				'wpautop'             => $has_blocks,
+				'wpautop'             => ! $has_blocks,
 				'media_buttons'       => true,
 				'default_editor'      => '',
 				'drag_drop_upload'    => false,
