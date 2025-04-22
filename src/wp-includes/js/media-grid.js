@@ -1137,7 +1137,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 				};
 			},
-			maxFileSize: document.getElementById( 'filepond' ).dataset.maxFileSize
+			maxFileSize: document.getElementById( 'ajax-url' ).dataset.maxFileSize,
 		},
 		labelTapToUndo: _wpMediaGridSettings.tap_close,
 		fileRenameFunction: ( file ) =>
