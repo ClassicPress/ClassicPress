@@ -83,7 +83,7 @@ class CP_Debug_Compat {
 			return $result;
 		}
 		$action  = esc_html__( 'Plugins on this list may have issues.' );
-		$action .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/site-health-screen/#block-compatibility">' . esc_html__( 'Learn more.' ) . '</a>';
+		$action .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-general-screen/#blocks-compatibility">' . esc_html__( 'Learn more.' ) . '</a>';
 		$action .= sprintf(
 			'<p>%s</p>',
 			sprintf(
@@ -127,7 +127,7 @@ class CP_Debug_Compat {
 			return $result;
 		}
 		$action  = esc_html__( 'Themes on this list may have issues.' );
-		$action .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/site-health-screen/#block-compatibility">' . esc_html__( 'Learn more.' ) . '</a>';
+		$action .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-general-screen/#blocks-compatibility">' . esc_html__( 'Learn more.' ) . '</a>';
 		$action .= sprintf(
 			'<p>%s</p>',
 			sprintf(
