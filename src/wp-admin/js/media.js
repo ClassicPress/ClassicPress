@@ -602,7 +602,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 									document.body.append( quickEdit );
 								}, 100 );
 							}
-						} );
+						}, { once: true } );
 					} else {
 						document.querySelectorAll( 'tr' ).forEach( function( item ) {
 							if ( item.style.display === 'none' ) {
