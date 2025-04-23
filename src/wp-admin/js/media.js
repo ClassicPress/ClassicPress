@@ -358,6 +358,47 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * @since CP-2.5.0
+	 */
+	function quickEditUpdate( quickEdit, tr ) {
+		var inputs = document.querySelector( '.inline-edit-wrapper' ).querySelectorAll( 'input[pattern]' ),
+			allValid = true;
+
+		for ( var i = 0, n = inputs.length; i < n; i++ ) {
+			if ( ! inputs[i].checkValidity() ) {
+				// Show the first invalid field message
+				inputs[i].reportValidity();
+
+				// Mark as invalid
+				allValid = false;
+
+				// Stop after first invalid field
+				break;
+			}
+		}
+
+		if ( allValid ) {
+			var id = tr.id.replace( 'post-', '' );
+			saveAttachments( quickEdit, id );
+			document.getElementById( 'bulk-action-selector-top' ).value = '-1';
+			document.getElementById( 'bulk-action-selector-bottom' ).value = '-1';
+
+			// Allow time for element to be updated.
+			setTimeout( function() {
+				tr.style.display = '';
+				quickEdit.style.display = 'none';
+				document.body.append( quickEdit );
+			}, 100 );
+
+			// Remove click event listener to prevent multiple AJAX submissions
+			if ( quickEditEventHandler !== null ) {
+				quickEditUpdateButton.removeEventListener( 'click', quickEditEventHandler );
+				quickEditEventHandler = null;
+			}
+		}
+	}
+
+	/**
 	 * Initializes the file once the DOM is fully loaded and attaches events to the
 	 * various form elements.
 	 *
@@ -367,7 +408,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	var settings, copyAttachmentURLs, copyAttachmentURLSuccessTimeout,
 		mediaGridWrap = document.getElementById( 'wp-media-grid' ),
-		uploadCatSelect = document.getElementById( 'upload-category' );
+		uploadCatSelect = document.getElementById( 'upload-category' ),
+		quickEditUpdateButton = document.getElementById( 'quick-edit-update' ),
+		quickEditEventHandler = null;
 
 	// Grid View: Opens a manage media frame into the grid.
 	if ( mediaGridWrap != null && window.wp && window.wp.media ) {
@@ -572,37 +615,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						quickEdit.querySelector( '[name="post_content"]' ).value = tr.querySelector( '.column-desc' ).textContent;
 
 						// Update.
-						document.getElementById( 'quick-edit-update' ).addEventListener( 'click', function() {
-							var inputs = document.querySelector( '.inline-edit-wrapper' ).querySelectorAll( 'input[pattern]' ),
-								allValid = true;
-
-							for ( var i = 0, n = inputs.length; i < n; i++ ) {
-								if ( ! inputs[i].checkValidity() ) {
-									// Show the first invalid field message
-									inputs[i].reportValidity();
-
-									// Mark as invalid
-									allValid = false;
-
-									// Stop after first invalid field
-									break;
-								}
-							}
-
-							if ( allValid ) {
-								var id = tr.id.replace( 'post-', '' );
-								saveAttachments( quickEdit, id );
-								document.getElementById( 'bulk-action-selector-top' ).value = '-1';
-								document.getElementById( 'bulk-action-selector-bottom' ).value = '-1';
-
-								// Allow time for element to be updated.
-								setTimeout( function() {
-									tr.style.display = '';
-									quickEdit.style.display = 'none';
-									document.body.append( quickEdit );
-								}, 100 );
-							}
-						}, { once: true } );
+						if ( quickEditEventHandler === null ) {
+							quickEditEventHandler = function() {
+								quickEditUpdate( quickEdit, tr );
+							};
+							quickEditUpdateButton.addEventListener( 'click', quickEditEventHandler );
+						}
 					} else {
 						document.querySelectorAll( 'tr' ).forEach( function( item ) {
 							if ( item.style.display === 'none' ) {
@@ -687,6 +705,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						document.body.append( bulkEdit );
 						quickEdit.style.display = 'none';
 						document.body.append( quickEdit );
+
+						// Remove click event listener to prevent multiple AJAX submissions
+						if ( quickEditEventHandler !== null ) {
+							quickEditUpdateButton.removeEventListener( 'click', quickEditEventHandler );
+							quickEditEventHandler = null;
+						}
 					} );
 
 					quickEdit.addEventListener( 'keydown', function( e ) {
