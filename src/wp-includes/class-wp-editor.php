@@ -87,7 +87,7 @@ final class _WP_Editors {
 			$has_blocks = false;
 		} else {
 			$post = $wp_post->post_content;
-			$has_blocks = str_contains( (string) $post, '<!-- wp:' );
+			$has_blocks = str_contains( (string) $post, '<!--' );
 		}
 
 		$set = wp_parse_args(
