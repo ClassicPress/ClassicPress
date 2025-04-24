@@ -352,7 +352,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function hideColumns( postID ) {
 		document.querySelectorAll( '.hide-column-tog' ).forEach( function( hide ) {
 			if ( hide.checked === false ) {
-				document.getElementById( postID ).querySelector( '.' + hide.id.replace( '-hide', '' ) ).style.display = 'none';
+				document.getElementById( postID ).querySelector( '.' + hide.value ).classList.add( 'hidden' );
 			}
 		} );
 	}
@@ -418,7 +418,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		document.getElementById( 'find-posts-close' ).addEventListener( 'click', findPosts.close );
 
 		// Binds the bulk action events to the submit buttons.
-		document.querySelectorAll( '#doaction, #doaction2' ).forEach( function( action ) {
+		var action = document.getElementById( 'doaction' );
+		if ( action ) {
 			action.addEventListener( 'click', function( event ) {
 				var tr, checkboxes, delButtons, dateSplit, author, authorsList, cats,
 					catsArray, categoriesList, mediaTags, hiddenTr, cancel, inputs,
@@ -428,15 +429,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					optionValue = document.querySelector( 'select[name="action"]' ).value,
 					number = 0,
 					count = 0,
-					columns = [ ...document.querySelector( '.widefat thead tr' ).children ],
-					selectAll1 = document.getElementById( 'cb-select-all-1' ),
-					selectAll2 = document.getElementById( 'cb-select-all-2' );
+					columns = [ ...document.querySelector( '.widefat thead tr' ).children ];
 
 				// Set default state in case a Bulk or Quick Edit has already been opened.
 				bulkEdit.style.display = 'none';
 				document.body.append( bulkEdit );
 				quickEdit.style.display = 'none';
 				document.body.append( quickEdit );
+				quickEdit.querySelector( '.inline-edit-save .notice-error' ).classList.add( 'hidden' );
 
 				/**
 				 * Handle the bulk action based on its value.
@@ -507,10 +507,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						quickEdit.style.display = 'none';
 						document.body.append( quickEdit );
 
-					} else if ( number === 1 && ! selectAll1.checked && ! selectAll2.checked ) {
+					} else if ( number === 1 ) {
 
-						// Quick Edit: reset all fields except nonce
-						inputs = quickEdit.querySelectorAll( 'input:not(#_inline_edit_attachment), select, textarea' );
+						// Quick Edit: reset all fields except nonce and media_category[]
+						inputs = quickEdit.querySelectorAll( 'input:not(#_inline_edit_attachment):not([name="media_category[]"]), select, textarea' );
 						inputs.forEach( function( input ) {
 							input.value = '';
 						} );
@@ -548,11 +548,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						categoriesList.forEach( function( item ) {
 							if ( catsArray.includes( item.querySelector( 'label' ).textContent ) ) {
 								item.querySelector( 'input' ).checked = true;
+							} else {
+								item.querySelector( 'input' ).checked = false;
 							}
 						} );
 
 						// Enable autocomplete for tags.
-						mediaTags = tr.querySelector( '.column-taxonomy-media_post_tag a' ) ? tr.querySelector( '.column-taxonomy-media_post_tag a' ).textContent : '';
+						mediaTags = tr.querySelector( '.column-taxonomy-media_post_tag a' ) ? tr.querySelector( '.column-taxonomy-media_post_tag' ).textContent : '';
 						autoCompleteTextarea( quickEdit.querySelector( 'textarea' ) );
 
 						// Split date into year, month, and day.
@@ -564,24 +566,42 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						// Fill the other relevant boxes.
 						quickEdit.querySelector( '[name="post_title"]' ).value = tr.querySelector( '.column-title strong a' ).textContent.trim();
 						quickEdit.querySelector( '[name="post_name"]' ).value = tr.querySelector( '.column-title .row-actions .copy-attachment-url' ).dataset.clipboardText;
-						quickEdit.querySelector( '#quick-media-tags' ).textContent = mediaTags;
+						quickEdit.querySelector( '#quick-media-tags' ).value = mediaTags;
 						quickEdit.querySelector( '[name="alt"]' ).value = tr.querySelector( '.column-alt' ).textContent;
 						quickEdit.querySelector( '[name="post_excerpt"]' ).value = tr.querySelector( '.column-caption' ).textContent;
 						quickEdit.querySelector( '[name="post_content"]' ).value = tr.querySelector( '.column-desc' ).textContent;
 
 						// Update.
 						document.getElementById( 'quick-edit-update' ).addEventListener( 'click', function() {
-							var id = tr.id.replace( 'post-', '' );
-							saveAttachments( quickEdit, id );
-							document.getElementById( 'bulk-action-selector-top' ).value = '-1';
-							document.getElementById( 'bulk-action-selector-bottom' ).value = '-1';
+							var inputs = document.querySelector( '.inline-edit-wrapper' ).querySelectorAll( 'input[pattern]' ),
+								allValid = true;
 
-							// Allow time for element to be updated.
-							setTimeout( function() {
-								tr.style.display = '';
-								quickEdit.style.display = 'none';
-								document.body.append( quickEdit );
-							}, 100 );
+							for ( var i = 0, n = inputs.length; i < n; i++ ) {
+								if ( ! inputs[i].checkValidity() ) {
+									// Show the first invalid field message
+									inputs[i].reportValidity();
+
+									// Mark as invalid
+									allValid = false;
+
+									// Stop after first invalid field
+									break;
+								}
+							}
+
+							if ( allValid ) {
+								var id = tr.id.replace( 'post-', '' );
+								saveAttachments( quickEdit, id );
+								document.getElementById( 'bulk-action-selector-top' ).value = '-1';
+								document.getElementById( 'bulk-action-selector-bottom' ).value = '-1';
+
+								// Allow time for element to be updated.
+								setTimeout( function() {
+									tr.style.display = '';
+									quickEdit.style.display = 'none';
+									document.body.append( quickEdit );
+								}, 100 );
+							}
 						} );
 					} else {
 						document.querySelectorAll( 'tr' ).forEach( function( item ) {
@@ -682,7 +702,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					} );
 				}
 			} );
-		} );
+		}
 
 		/**
 		 * Enables clicking on the entire table row.

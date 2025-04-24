@@ -1012,7 +1012,7 @@ tr.inline-edit-row td {
 	padding: 0;
 }
 
-.inline-edit-row fieldset label span.input-text-wrap,
+.inline-edit-row fieldset span.input-text-wrap,
 .inline-edit-row fieldset .timestamp-wrap {
 	display: block;
 	margin-left: 6em;
@@ -1022,8 +1022,12 @@ tr.inline-edit-row td {
 	clear: both;
 }
 
-.quick-edit-row-post fieldset.inline-edit-col-right label span.title {
+.edit-php .quick-edit-row-post fieldset.inline-edit-col-right label span.title,
+.upload-php .quick-edit-row-post fieldset.inline-edit-col-right label span.title {
 	width: auto;
+}
+
+.edit-php .quick-edit-row-post fieldset.inline-edit-col-right label span.title {
 	padding-right: 0.5em;
 }
 
@@ -1044,7 +1048,7 @@ tr.inline-edit-row td {
 	vertical-align: middle;
 }
 
-.inline-edit-row fieldset label textarea {
+.inline-edit-row fieldset textarea {
 	width: 100%;
 	height: 4em;
 	vertical-align: top;
@@ -1113,6 +1117,22 @@ tr.inline-edit-row td {
 
 .quick-edit-row-post fieldset label.inline-edit-status {
 	float: left;
+}
+
+/* Consistent whitespace in Quick Edit across screens */
+.upload-php .inline-edit-row fieldset.inline-edit-date label {
+	display: none;
+}
+.edit-php .inline-edit-row fieldset.inline-edit-date input[name=jj] {
+	margin-right: 5px;
+}
+.edit-php .inline-edit-row fieldset.inline-edit-date input[name=hh] {
+	margin-right: 3px;
+}
+.upload-php .inline-edit-row fieldset.inline-edit-date input[name=aa],
+.edit-php .inline-edit-row fieldset.inline-edit-date input[name=aa],
+.edit-php .inline-edit-row fieldset.inline-edit-date input[name=mn] {
+	margin-left: 3px;
 }
 
 #bulk-titles,
@@ -1879,6 +1899,11 @@ div.action-links,
 		text-overflow: ellipsis;
 	}
 
+	/* Hide ID column header cell in post table to fix layout on mobile. */
+	.wp-list-table th.column-id {
+		display: none;
+	}
+
 	.wp-list-table .is-expanded td:not(.hidden) {
 		display: block !important;
 		overflow: hidden; /* clearfix */
@@ -2088,7 +2113,7 @@ div.action-links,
 		padding: 0;
 	}
 
-	.inline-edit-row fieldset label span.input-text-wrap,
+	.inline-edit-row fieldset span.input-text-wrap,
 	.inline-edit-row fieldset .timestamp-wrap {
 		margin-left: 0;
 	}

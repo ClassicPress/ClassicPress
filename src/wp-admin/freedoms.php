@@ -9,26 +9,10 @@
 /** ClassicPress Administration Bootstrap */
 require_once __DIR__ . '/admin.php';
 
-// This file was used to also display the Privacy tab on the About screen from 4.9.6 until 5.3.0.
-if ( isset( $_GET['privacy-notice'] ) ) {
-	wp_redirect( admin_url( 'privacy.php' ), 301 );
-	exit;
-}
-
 // Used in the HTML title tag.
 $title = __( 'Freedoms' );
 
 require_once ABSPATH . 'wp-admin/admin-header.php';
-
-$is_privacy_notice = isset( $_GET['privacy-notice'] );
-
-if ( $is_privacy_notice ) {
-	$freedoms_class = '';
-	$privacy_class  = ' nav-tab-active';
-} else {
-	$freedoms_class = ' nav-tab-active';
-	$privacy_class  = '';
-}
 
 ?>
 <div class="wrap about-wrap full-width-layout">
@@ -56,19 +40,10 @@ if ( $is_privacy_notice ) {
 <h2 class="nav-tab-wrapper wp-clearfix">
 	<a href="about.php" class="nav-tab"><?php _e( 'About' ); ?></a>
 	<a href="credits.php" class="nav-tab"><?php _e( 'Credits' ); ?></a>
-	<a href="freedoms.php" class="nav-tab<?php echo $freedoms_class; ?>"><?php _e( 'Freedoms' ); ?></a>
-	<a href="freedoms.php?privacy-notice" class="nav-tab<?php echo $privacy_class; ?>"><?php _e( 'Privacy' ); ?></a>
+	<a href="freedoms.php" class="nav-tab nav-tab-active"><?php _e( 'Freedoms' ); ?></a>
+	<a href="privacy.php" class="nav-tab"><?php _e( 'Privacy' ); ?></a>
 </h2>
 
-<?php if ( $is_privacy_notice ) : ?>
-
-<div class="about-wrap-content">
-	<p class="about-description"><?php _e( 'From time to time, your ClassicPress site may send anonymous data to ClassicPress.net. Some examples of the kinds of data that may be sent are the version of ClassicPress your site is running and a list of installed plugins and themes.' ); ?></p>
-
-	<p><?php printf( __( 'We take privacy and transparency very seriously. To learn more about what data we collect, how we use it, and what precautions we take to ensure site owners&#8217; privacy, please see the <a href="%s">ClassicPress Privacy Policy</a>.' ), 'https://link.classicpress.net/core-privacy-policy/' ); ?></p>
-</div>
-
-<?php else : ?>
 <div class="about-wrap-content">
 	<p class="about-description"><?php printf( __( 'ClassicPress is Free and open source software, built by a distributed community of volunteer developers from around the world. ClassicPress comes with some awesome, worldview-changing rights courtesy of its <a href="%s">license</a>, the GPL.' ), 'https://opensource.org/licenses/gpl-license' ); ?></p>
 
@@ -94,6 +69,7 @@ if ( $is_privacy_notice ) {
 	<p><?php _e( 'Don&#8217;t you wish all software came with these freedoms? So do we! For more information, check out the <a href="https://www.fsf.org/">Free Software Foundation</a>.' ); ?></p>
 </div>
 
-<?php endif; ?>
 </div>
-<?php require ABSPATH . 'wp-admin/admin-footer.php'; ?>
+<?php
+
+require_once ABSPATH . 'wp-admin/admin-footer.php';
