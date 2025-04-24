@@ -82,10 +82,10 @@ final class _WP_Editors {
 		 */
 		$settings = apply_filters( 'wp_editor_settings', $settings, $editor_id );
 
-		$wp_post = get_post();
-		if ( ! $wp_post instanceof WP_Post ) {
-			$has_blocks = false;
-		} else {
+		$wp_post    = get_post();
+		$has_blocks = false;
+
+		if ( $wp_post instanceof WP_Post ) {
 			$post = $wp_post->post_content;
 			$has_blocks = str_contains( (string) $post, '<!--' );
 		}
