@@ -453,6 +453,7 @@ if ( 'grid' === $mode ) {
 
 					<li class="media-item" id="media-<?php echo esc_attr( $attachment->ID ); ?>" tabindex="0" role="checkbox" aria-checked="false"
 						aria-label="<?php echo esc_attr( $attachment->post_title ); ?>"
+						data-id ="<?php echo esc_attr( $attachment->ID ); ?>"
 						data-date="<?php echo esc_attr( $date ); ?>"
 						data-url="<?php echo esc_url( $url ); ?>"
 						data-filename="<?php echo esc_attr( $file_name ); ?>"
