@@ -288,8 +288,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			authorLink = item.dataset.authorLink,
 			orientation = item.dataset.orientation ? ' ' + item.dataset.orientation : '',
 			menuOrder = item.dataset.menuOrder,
-			editable = item.dataset.editable,
-			erasable = item.dataset.erasable,
+			updateNonce = item.dataset.updateNonce,
+			deleteNonce = item.dataset.deleteNonce,
 			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
 			next = item.nextElementSibling ? item.nextElementSibling.id : '',
 			order = item.dataset.order,
@@ -362,7 +362,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#edit-more' ).href = ajaxurl.replace( 'admin-ajax.php', 'post.php?post=' + id + '&action=edit' );
 		dialog.querySelector( '#download-file' ).href = url;
 
-		if ( editable === '1' ) {
+		/*
+		 * Existence of nonce means that user capability has already been checked and verified.
+		 *
+		 * @see wp_prepare_attachment_for_js()
+		 */
+		if ( updateNonce ) {
 			dialog.querySelector( '#attachment-details-two-column-alt-text' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-title' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-caption' ).removeAttribute( 'readonly' );
@@ -380,7 +385,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '.edit-attachment' ).style.display = 'none';
 		}
 
-		if ( erasable === '1' ) {
+		/*
+		 * Existence of nonce means that user capability has already been checked and verified.
+		 *
+		 * @see wp_prepare_attachment_for_js()
+		 */
+		if ( deleteNonce ) {
 			dialog.querySelector( '.delete-attachment' ).style.display = '';
 			dialog.querySelectorAll( '.links-separator' )[2].style.display = '';
 		} else {
@@ -428,7 +438,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Update media categories and tags
 		dialog.querySelectorAll( '.compat-item input' ).forEach( function( input ) {
 			input.addEventListener( 'blur', function() {
-				if ( editable === '1' ) {
+				if ( updateNonce ) {
 					updateMediaTaxOrTag( input, id );
 				}
 			} );
@@ -858,7 +868,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		input.addEventListener( 'blur', function() {
 			var id = queryParams.get( 'item' );
 			var item = document.getElementById( 'media-' + id );
-			if ( item.dataset.editable === '1' ) {
+			if ( item.dataset.updateNonce ) {
 				updateDetails( input, id );
 			}
 		} );
