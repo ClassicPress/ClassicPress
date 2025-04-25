@@ -7,8 +7,7 @@
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addButton, pond,
 		{ FilePond } = window, // import FilePond
-		dialog = document.getElementById( 'widget-modal' ),
-		dialogClone = dialog.cloneNode( true );
+		dialog = document.getElementById( 'widget-modal' );
 
 	/**
 	 * Update details within modal.
@@ -791,8 +790,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function insertEmbed() {
-		var successTimeout,
-			embed = dialog.querySelector( '#widget-modal-embed-url-field' ),
+		var embed = dialog.querySelector( '#widget-modal-embed-url-field' ),
 			widgetId = dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId,
 			widget = document.getElementById( widgetId ),
 			linkType = widget.querySelector( '[data-property="link_type"]' ).value,
