@@ -1,3 +1,5 @@
+/* global console, _wpMediaGridSettings, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
+
 document.addEventListener( 'DOMContentLoaded', function() {
 	var pond, itemID, focusID,
 		{ FilePond } = window, // import FilePond
@@ -260,7 +262,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Delete media item
 	dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
 		var id = location.search.match( /\d+/g )[0];
-		if ( confirm( _wpMediaGridSettings.confirm_delete ) ) {
+		if ( window.confirm( _wpMediaGridSettings.confirm_delete ) ) {
 			deleteItem( id );
 			resetDataOrdering();
 		}
@@ -268,7 +270,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Open modal
 	function openModalDialog( item ) {
-		var id = item.id.replace( 'media-', '' ),
+		var id = item.dataset.id,
 			title = item.getAttribute( 'aria-label' ),
 			date = item.dataset.date,
 			filename = item.dataset.filename,
@@ -288,8 +290,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			authorLink = item.dataset.authorLink,
 			orientation = item.dataset.orientation ? ' ' + item.dataset.orientation : '',
 			menuOrder = item.dataset.menuOrder,
-			editable = item.dataset.editable,
-			erasable = item.dataset.erasable,
+			updateNonce = item.dataset.updateNonce,
+			deleteNonce = item.dataset.deleteNonce,
 			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
 			next = item.nextElementSibling ? item.nextElementSibling.id : '',
 			order = item.dataset.order,
@@ -362,7 +364,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#edit-more' ).href = ajaxurl.replace( 'admin-ajax.php', 'post.php?post=' + id + '&action=edit' );
 		dialog.querySelector( '#download-file' ).href = url;
 
-		if ( editable === '1' ) {
+		/*
+		 * Existence of nonce means that user capability has already been checked and verified.
+		 *
+		 * @see wp_prepare_attachment_for_js()
+		 */
+		if ( updateNonce ) {
 			dialog.querySelector( '#attachment-details-two-column-alt-text' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-title' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-caption' ).removeAttribute( 'readonly' );
@@ -380,7 +387,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '.edit-attachment' ).style.display = 'none';
 		}
 
-		if ( erasable === '1' ) {
+		/*
+		 * Existence of nonce means that user capability has already been checked and verified.
+		 *
+		 * @see wp_prepare_attachment_for_js()
+		 */
+		if ( deleteNonce ) {
 			dialog.querySelector( '.delete-attachment' ).style.display = '';
 			dialog.querySelectorAll( '.links-separator' )[2].style.display = '';
 		} else {
@@ -428,7 +440,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Update media categories and tags
 		dialog.querySelectorAll( '.compat-item input' ).forEach( function( input ) {
 			input.addEventListener( 'blur', function() {
-				if ( editable === '1' ) {
+				if ( updateNonce ) {
 					updateMediaTaxOrTag( input, id );
 				}
 			} );
@@ -489,7 +501,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		gridItem.setAttribute( 'data-mime', attachment.mime );
 		gridItem.setAttribute( 'data-width', attachment.width );
 		gridItem.setAttribute( 'data-height', attachment.height );
-		gridItem.setAttribute( 'data-size', attachment.filesizeHumanReadable )
+		gridItem.setAttribute( 'data-size', attachment.filesizeHumanReadable );
 		gridItem.setAttribute( 'data-caption', attachment.caption );
 		gridItem.setAttribute( 'data-description', attachment.description );
 		gridItem.setAttribute( 'data-link', attachment.link );
@@ -528,7 +540,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			'query[s]': search ? search.value : '',
 			'query[paged]': paged ? paged : '1',
 			'query[media_category_name]': mediaCatSelect ? mediaCatSelect.value : '',
-			'_ajax_nonce': document.getElementById( 'media_grid_nonce' ).value,
+			'_ajax_nonce': document.getElementById( 'media_grid_nonce' ).value
 		} );
 
 		// Make AJAX request
@@ -858,7 +870,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		input.addEventListener( 'blur', function() {
 			var id = queryParams.get( 'item' );
 			var item = document.getElementById( 'media-' + id );
-			if ( item.dataset.editable === '1' ) {
+			if ( item.dataset.updateNonce ) {
 				updateDetails( input, id );
 			}
 		} );
@@ -941,11 +953,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	dialog.addEventListener( 'touchend', touchEndHandler );
 
 	// Edit image
-	document.querySelector( '.edit-attachment' ).addEventListener( 'click', function( e ) {
+	document.querySelector( '.edit-attachment' ).addEventListener( 'click', function() {
 		var itemID = parseInt( queryParams.get( 'item' ) ),
 			item = document.getElementById( 'media-' + itemID ),
-			width = item.dataset.width,
-			height = item.dataset.height,
 			nonce = item.dataset.editNonce,
 			action = 'rotate-cw', // or any other valid action e.g. save, scale, restore
 			target = 'full'; // or 'thumbnail', etc.
@@ -963,7 +973,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		fetch( ajaxurl, {
 			method: 'POST',
 			body: formData,
-			credentials: 'same-origin',
+			credentials: 'same-origin'
 		} )
 		.then( function( response ) {
 			if ( response.ok ) {
@@ -1024,7 +1034,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			deleteButton.addEventListener( 'click', function() {
 				var selectedItems = document.querySelectorAll( '.media-item.selected' );
 				if ( selectedItems.length !== 0 ) {
-					if ( confirm( _wpMediaGridSettings.confirm_multiple ) ) {
+					if ( window.confirm( _wpMediaGridSettings.confirm_multiple ) ) {
 						selectedItems.forEach( function( deleteSelect ) {
 							deleteItem( deleteSelect.id.replace( 'media-', '' ) );
 						} );
@@ -1085,7 +1095,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	pond = FilePond.create( inputElement, {
 		allowMultiple: true,
 		server: {
-			process: function( fieldName, file, metadata, load, error, progress, abort, transfer, options ) {
+			process: function( fieldName, file, metadata, load, error, progress, abort ) {
 
 				// Create FormData
 				var formData = new FormData();
@@ -1137,7 +1147,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 				};
 			},
-			maxFileSize: document.getElementById( 'ajax-url' ).dataset.maxFileSize,
+			maxFileSize: document.getElementById( 'ajax-url' ).dataset.maxFileSize
 		},
 		labelTapToUndo: _wpMediaGridSettings.tap_close,
 		fileRenameFunction: ( file ) =>
@@ -1146,7 +1156,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} ),
 		acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 		labelFileTypeNotAllowed: _wpMediaGridSettings.invalid_type,
-		fileValidateTypeLabelExpectedTypes: _wpMediaGridSettings.check_types,
+		fileValidateTypeLabelExpectedTypes: _wpMediaGridSettings.check_types
 	} );
 
 	pond.on( 'processfile', function( error, file ) {
