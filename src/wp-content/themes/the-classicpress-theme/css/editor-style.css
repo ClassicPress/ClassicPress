@@ -63,37 +63,36 @@ textarea {
 	font-size: calc(18px + 2 * (100vw / 1500));
 	line-height: 1.5;
 }
-
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-	clear: both;
+	position: relative;
+	color: #057f99;
+	line-height: 1.25;
+	font-family: "Source Sans Pro";
+	font-weight: 600;
+	clear: none;
 }
-
 p {
 	margin: 0 0 0.75em;
 }
-
 dfn,
 cite,
 em,
 i {
 	font-style: italic;
 }
-
 blockquote {
 	margin: 0 1.5em 0.75em;
 	border-left: 4px solid #057f99;
 	padding-left: 1em;
 }
-
 address {
 	margin: 0 0 1.5em;
 }
-
 pre {
 	background: #eee;
 	font-family: "Courier 10 Pitch", Courier, monospace;
@@ -106,7 +105,6 @@ pre {
 	padding: 1.6em;
 	border-radius: var(--tcpt-border-radius);
 }
-
 code,
 .code,
 kbd,
@@ -120,25 +118,21 @@ var {
 	padding: 0 0.2em;
 	border-radius: var(--tcpt-border-radius);
 }
-
 .code {
 	padding: 0.5em 0.75em 0.75em 1em;
 	display: inline-block;
 	margin-bottom: 1.4em;
 }
-
 abbr,
 acronym {
 	border-bottom: 1px dotted #666;
 	cursor: help;
 }
-
 mark,
 ins {
 	background: #fff9c0;
 	text-decoration: none;
 }
-
 big {
 	font-size: 125%;
 }
@@ -149,28 +143,22 @@ hr {
 	border: 0;
 	height: 1px;
 }
-
 ul {
 	list-style: disc;
 }
-
 ol {
 	list-style: decimal;
 }
-
 li > ul,
 li > ol {
 	margin-bottom: 0;
 }
-
 dt {
 	font-weight: bold;
 }
-
 dd {
 	margin: 0 1.5em 1.5em;
 }
-
 img {
 	height: auto;
 	max-width: 100%;
@@ -199,21 +187,6 @@ a:active {
 	text-decoration: none;
 	border-bottom-style: solid;
 	border-bottom-color: inherit;
-}
-
-/* Headings */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	position: relative;
-	color: #057f99;
-	line-height: 1.25;
-	font-family: "Source Sans Pro";
-	font-weight: 600;
-	clear: none;
 }
 
 /* Misc */
