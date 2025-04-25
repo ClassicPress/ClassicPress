@@ -641,6 +641,11 @@ border color while dragging a file over the uploader drop area */
 	width: 100%;
 }
 
+.edit-attachment-frame .media-frame-title {
+	left: 0;
+	right: 280px; /* leave space for prev/next/close */
+}
+
 .edit-attachment-frame .edit-media-header {
 	overflow: hidden;
 }
