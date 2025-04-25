@@ -381,8 +381,12 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 
 			<?php
 			if ( $url ) {
-				$edit_nonce   = $attachment_metadata['nonces']['edit'];
-				$update_nonce = $attachment_metadata['nonces']['update'];
+				if ( $attachment_id === 0 ) {
+					$edit_nonce = '';
+				} else {
+					$edit_nonce = 'data-edit-nonce="' . esc_attr( $attachment_metadata['nonces']['edit'] ) . '"';
+					$update_nonce = $attachment_metadata['nonces']['update'];
+				}
 				?>
 
 				<div class="media-widget-preview media_image populated"><?php echo $image_html; ?></div>
@@ -390,14 +394,14 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 				<fieldset class="media-widget-buttons">
 
 					<?php
-					if ( ! empty( $edit_nonce ) ) {
+					if ( ! empty( $edit_nonce ) || $attachment_id === 0 ) {
 						?>
 
-						<button type="button" class="button edit-media selected" data-edit-nonce="<?php echo esc_attr( $edit_nonce ); ?>"><?php esc_html_e( 'Edit Image' ); ?></button>
+						<button type="button" class="button edit-media selected" <?php echo $edit_nonce; ?>><?php esc_html_e( 'Edit Image' ); ?></button>
 
 						<?php
 					}
-					if ( ! empty( $update_nonce ) ) {
+					if ( ! empty( $update_nonce ) || $attachment_id === 0 ) {
 						?>
 
 						<button type="button" class="button change-media select-media selected"><?php esc_html_e( 'Replace Image' ); ?></button>
@@ -489,6 +493,9 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 				'edit_image'                 => _x( 'Edit Image', 'label for button in the image widget; should preferably not be longer than ~13 characters long' ),
 				'add_image'                  => __( 'Add Image' ),
 				'add_to_widget'              => __( 'Add to Widget' ),
+				'media_library'              => __( 'Media Library' ),
+				'image_details'              => __( 'Image Details' ),
+				'insert_from_url'            => __( 'Insert from URL' ),
 				'unsupported_file_type'      => __( 'Looks like this is not the correct kind of file. Please link to an appropriate file instead.' ),
 				'aria_label'                 => __( 'The current image has no alternative text. The file name is: ' ),
 				'image_file_types'           => $image_file_types,
@@ -527,136 +534,119 @@ function cp_render_media_image_template() {
 	?>
 
 	<template id="tmpl-edit-image-modal">
-		<div id="image-modal-content" class="media-modal-content">
-			<div class="media-frame mode-select wp-core-ui media-widget hide-menu hide-router">
+		<div id="image-modal-content">
+			<div class="modal-image-details">
+				<div class="media-embed">
+								
+					<div class="column-settings">
+						<div class="setting alt-text has-description">
+							<label for="image-details-alt-text" class="name"><?php esc_html_e( 'Alternative Text' ); ?></label>
+							<textarea id="image-details-alt-text" data-setting="alt" aria-describedby="alt-text-description"></textarea>
+						</div>
+						<p class="description" id="alt-text-description"><a href="https://www.w3.org/WAI/tutorials/images/decision-tree" target="_blank" rel="noopener"><?php esc_html_e( 'Learn how to describe the purpose of the image' ); ?><span class="screen-reader-text"> <?php esc_html_e( '(opens in a new tab)' ); ?></span></a><?php esc_html_e( '. Leave empty if the image is purely decorative.' ); ?></p>
 
-				<div class="media-frame-title" id="media-frame-title">
-					<h2><?php esc_html_e( 'Image details' ); ?></h2>
-				</div>
+						<div class="setting caption">
+							<label for="image-details-caption" class="name"><?php esc_html_e( 'Caption' ); ?></label>
+							<textarea id="image-details-caption" data-setting="caption"></textarea>
+						</div>
 
-				<div class="media-frame-tab-panel">
-					<div class="media-frame-content">
-						<div class="image-details">
-							<div class="media-embed">
-								<div class="embed-media-settings">
-									<div class="column-settings">
-										<span class="setting alt-text has-description">
-											<label for="image-details-alt-text" class="name"><?php esc_html_e( 'Alternative Text' ); ?></label>
-											<textarea id="image-details-alt-text" data-setting="alt" aria-describedby="alt-text-description"></textarea>
-										</span>
-										<p class="description" id="alt-text-description"><a href="https://www.w3.org/WAI/tutorials/images/decision-tree" target="_blank" rel="noopener"><?php esc_html_e( 'Learn how to describe the purpose of the image' ); ?><span class="screen-reader-text"> <?php esc_html_e( '(opens in a new tab)' ); ?></span></a><?php esc_html_e( '. Leave empty if the image is purely decorative.' ); ?></p>
+						<h3><?php esc_html_e( 'Display Settings' ); ?></h3>
+						<fieldset>
+							<div class="setting size">
+								<label for="image-details-size" class="name"><?php _e( 'Size' ); ?></label>
+								<select id="image-details-size" class="size" name="size" data-setting="size">
+									<option value="custom">Custom Size</option>
+								</select>
+							</div>
 
-										<span class="setting caption">
-											<label for="image-details-caption" class="name"><?php esc_html_e( 'Caption' ); ?></label>
-											<textarea id="image-details-caption" data-setting="caption"></textarea>
-										</span>
+							<div class="custom-size wp-clearfix hidden">
+								<div class="custom-size-setting">
+									<label for="image-details-size-width"><?php esc_html_e( 'Width' ); ?></label>
+									<input type="number" id="image-details-size-width" aria-describedby="image-size-desc" data-setting="customWidth" step="1" value="">
+								</div>
+								<span class="sep" aria-hidden="true">×</span>
+								<div class="custom-size-setting">
+									<label for="image-details-size-height"><?php esc_html_e( 'Height' ); ?></label>
+									<input type="number" id="image-details-size-height" aria-describedby="image-size-desc" data-setting="customHeight" step="1" value="">
+								</div>
+								<p id="image-size-desc" class="description"><?php esc_html_e( 'Image size in pixels' ); ?></p>
+							</div>
 
-										<h3><?php esc_html_e( 'Display Settings' ); ?></h3>
-										<fieldset>
-											<span class="setting size">
-												<label for="image-details-size" class="name"><?php _e( 'Size' ); ?></label>
-												<select id="image-details-size" class="size" name="size" data-setting="size">
-													<option value="custom">Custom Size</option>
-												</select>
-											</span>
-
-											<div class="custom-size wp-clearfix hidden">
-												<span class="custom-size-setting">
-													<label for="image-details-size-width"><?php esc_html_e( 'Width' ); ?></label>
-													<input type="number" id="image-details-size-width" aria-describedby="image-size-desc" data-setting="customWidth" step="1" value="">
-												</span>
-												<span class="sep" aria-hidden="true">×</span>
-												<span class="custom-size-setting">
-													<label for="image-details-size-height"><?php esc_html_e( 'Height' ); ?></label>
-													<input type="number" id="image-details-size-height" aria-describedby="image-size-desc" data-setting="customHeight" step="1" value="">
-												</span>
-												<p id="image-size-desc" class="description"><?php esc_html_e( 'Image size in pixels' ); ?></p>
-											</div>
-
-											<div class="setting">
-												<label for="image-details-link-to" class="name" style="margin-top:17px;"><?php esc_html_e( 'Link To' ); ?></label>
-												<div class="setting link-to" style="display:inline-block;">
-													<select id="image-details-link-to" name="link-type" data-setting="link">
-														<option value="none" selected><?php esc_html_e( 'None' ); ?></option>
-														<option value="file"><?php esc_html_e( 'Image URL' ); ?></option>
+							<div class="setting link-to">
+								<label for="image-details-link-to" class="name"><?php esc_html_e( 'Link To' ); ?></label>
+								<select id="image-details-link-to" name="link-type" data-setting="link">
+									<option value="none" selected><?php esc_html_e( 'None' ); ?></option>
+									<option value="file"><?php esc_html_e( 'Image URL' ); ?></option>
 														
-														<?php
-														// Enable Attachment page option only if available.
-														if ( '1' === get_option( 'wp_attachment_pages_enabled' ) ) {
-															?>
+									<?php
+									// Enable Attachment page option only if available.
+									if ( '1' === get_option( 'wp_attachment_pages_enabled' ) ) {
+										?>
 
-															<option value="post"><?php esc_html_e( 'Attachment Page' ); ?></option>
+										<option value="post"><?php esc_html_e( 'Attachment Page' ); ?></option>
 
-															<?php
-														}
-														?>
+										<?php
+									}
+									?>
 
-														<option value="custom"><?php esc_html_e( 'Custom URL' ); ?></option>
-													</select>
-												</div>
-												<div id="link-to-url" hidden>
-													<label for="image-details-link-to-custom" class="name"><?php esc_html_e( 'URL' ); ?></label>
-													<input type="url" id="image-details-link-to-custom" class="link-to-custom" placeholder="https://" style="margin-left:0;" data-setting="linkUrl">
-												</div>
-											</div>
-										</fieldset>
+									<option value="custom"><?php esc_html_e( 'Custom URL' ); ?></option>
+								</select>
+								<div id="link-to-url" hidden>
+									<label for="image-details-link-to-custom" class="name"><?php esc_html_e( 'URL' ); ?></label>
+									<input type="url" id="image-details-link-to-custom" class="link-to-custom" placeholder="https://" data-setting="linkUrl">
+								</div>
+							</div>
+						</fieldset>
 
-										<details class="advanced-section">
-											<summary><h3><?php esc_html_e( 'Advanced Options' ); ?></h3></summary>
-											<div class="advanced-settings">
-												<div class="advanced-image">
-													<span class="setting title-text">
-														<label for="image-details-title-attribute" class="name"><?php esc_html_e( 'Image Title Attribute' ); ?></label>
-														<input type="text" id="image-details-title-attribute" data-setting="title" value="">
-													</span>
-													<span class="setting extra-classes">
-														<label for="image-details-css-class" class="name"><?php esc_html_e( 'Image CSS Class' ); ?> </label>
-														<input type="text" id="image-details-css-class" data-setting="extraClasses" value="">
-													</span>
-												</div>
-												<div class="advanced-link">
-													<span class="setting link-target">
-														<input type="checkbox" id="image-details-link-target" data-setting="linkTargetBlank" value="_blank">
-														<label for="image-details-link-target" class="checkbox-label"><?php esc_html_e( 'Open link in a new tab' ); ?></label>
-													</span>
-													<span class="setting link-rel">
-														<label for="image-details-link-rel" class="name"><?php esc_html_e( 'Link Rel' ); ?></label>
-														<input type="text" id="image-details-link-rel" data-setting="linkRel" value="">
-													</span>
-													<span class="setting link-class-name">
-														<label for="image-details-link-css-class" class="name"><?php esc_html_e( 'Link CSS Class' ); ?></label>
-														<input type="text" id="image-details-link-css-class" data-setting="linkClassName" value="">
-													</span>
-												</div>
-											</div>
-										</details>
+						<details class="advanced-section">
+							<summary><h3><?php esc_html_e( 'Advanced Options' ); ?></h3></summary>
+							<div class="advanced-settings">
+								<div class="advanced-image">
+									<div class="setting title-text">
+										<label for="image-details-title-attribute" class="name"><?php esc_html_e( 'Image Title Attribute' ); ?></label>
+										<input type="text" id="image-details-title-attribute" data-setting="title" value="">
 									</div>
-									<div class="column-image">
-										<div class="image">
-											<img src="<?php echo esc_url( includes_url() . 'images/blank.gif' ); ?>" draggable="false" alt="">
-
-											<div class="actions">
-												<button id="edit-original" type="button" class="edit-attachment button" data-href="<?php echo esc_url( home_url( '/wp-admin/post.php?item=xxx&mode=edit' ) ); ?>"><?php esc_html_e( 'Edit Original' ); ?></button>
-											</div>
-
-										</div>
+									<div class="setting extra-classes">
+										<label for="image-details-css-class" class="name"><?php esc_html_e( 'Image CSS Class' ); ?> </label>
+										<input type="text" id="image-details-css-class" data-setting="extraClasses" value="">
+									</div>
+								</div>
+								<div class="advanced-link">
+									<div class="setting link-target">
+										<input type="checkbox" id="image-details-link-target" data-setting="linkTargetBlank" value="_blank">
+										<label for="image-details-link-target" class="checkbox-label"><?php esc_html_e( 'Open link in a new tab' ); ?></label>
+									</div>
+									<div class="setting link-rel">
+										<label for="image-details-link-rel" class="name"><?php esc_html_e( 'Link Rel' ); ?></label>
+										<input type="text" id="image-details-link-rel" data-setting="linkRel" value="">
+									</div>
+									<div class="setting link-class-name">
+										<label for="image-details-link-css-class" class="name"><?php esc_html_e( 'Link CSS Class' ); ?></label>
+										<input type="text" id="image-details-link-css-class" data-setting="linkClassName" value="">
 									</div>
 								</div>
 							</div>
-						</div>
+						</details>
 					</div>
-				</div>
+					<div class="column-image">
+						<div class="image">
+							<img src="<?php echo esc_url( includes_url() . 'images/blank.gif' ); ?>" draggable="false" alt="">
 
-				<h2 class="media-frame-actions-heading screen-reader-text"><?php esc_html_e( 'Selected media actions' ); ?></h2>
-				<div class="media-frame-toolbar">
-					<div class="media-toolbar">
-						<div class="media-toolbar-primary search-form">
-							<button id="media-button-update" type="button" class="button media-button button-primary button-large media-button-select" disabled><?php esc_html_e( 'Update' ); ?></button>
+							<div class="actions">
+								<button id="edit-original" type="button" class="edit-attachment button" data-href="<?php echo esc_url( home_url( '/wp-admin/post.php?item=xxx&mode=edit' ) ); ?>"><?php esc_html_e( 'Edit Original' ); ?></button>
+							</div>
+
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+
+		<footer class="widget-modal-footer">
+			<div class="widget-modal-footer-buttons">
+				<button id="media-button-update" type="button" class="button media-button button-primary button-large media-button-select" disabled><?php esc_html_e( 'Update' ); ?></button>
+			</div>
+		</footer>
 	</template>
 
 	<?php
