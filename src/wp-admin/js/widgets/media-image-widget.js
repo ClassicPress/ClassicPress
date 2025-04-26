@@ -931,7 +931,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Add Edit and Replace buttons
 		buttons.className = 'media-widget-buttons';
-		buttons.innerHTML = '<button type="button" class="button edit-media">' + IMAGE_WIDGET.edit_image + '</button>' +
+		buttons.innerHTML = '<button type="button" class="button edit-media" data-edit-nonce="' + selectedItem.datasetEditNonce + '">' + IMAGE_WIDGET.edit_image + '</button>' +
 			'<button type="button" class="button change-media select-media">' + IMAGE_WIDGET.replace_image + '</button>';
 
 		// Add Link field
