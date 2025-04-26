@@ -487,7 +487,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( result.success ) {
 
 				// Append cloned template and show relevant elements
-				dialog.querySelector( '.widget-modal-left-sidebar' ).classList.remove( 'hidden' );
 				header.querySelector( 'h2' ).textContent = IMAGE_WIDGET.media_library;
 				header.append( dialogButtons );
 				header.after( dialogContent );
@@ -1249,6 +1248,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 		dialog.removeAttribute( 'style' );
 		dialog.querySelector( '.widget-modal-headings' ).removeAttribute( 'style' );
+		dialog.querySelector( '.widget-modal-left-sidebar' ).classList.remove( 'hidden' );
 	}
 
 	/**
