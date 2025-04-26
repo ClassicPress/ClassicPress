@@ -469,8 +469,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				'action': 'query-attachments',
 				'query[posts_per_page]': IMAGE_WIDGET.per_page,
 				'query[post_mime_type]': 'image',
-				'query[paged]': 1,
-				'_ajax_nonce': nonce
+				'query[paged]': 1
 			} );
 
 		// Make AJAX request
@@ -589,8 +588,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				'query[post_mime_type]': 'image',
 				'query[s]': search.value ? search.value : '',
 				'query[paged]': paged ? paged : 1,
-				'query[media_category_name]': mediaCatSelect.value ? mediaCatSelect.value : '',
-				'_ajax_nonce': document.getElementById( '_wpnonce_widgets' ).value
+				'query[media_category_name]': mediaCatSelect.value ? mediaCatSelect.value : ''
 			} );
 
 		// Make AJAX request
@@ -1285,6 +1283,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( e.target.id === 'widget-modal-close' ) {
 			closeModal();
 
+		// Update an edited image
+		} if ( e.target.id === 'media-button-update' ) {
+			updateImageDetails( dialog.querySelector( '#edit-original' ).dataset.widgetId );
+
 		// Set variables for the rest of the options below
 		} else if ( dialog.querySelector( '#widget-modal-media-content' ) ) {
 			widgetId     = dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId;
@@ -1304,12 +1306,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				urlPanel     = dialog.querySelector( '#insert-from-url-panel' );
 				modalButtons = dialog.querySelector( '.widget-modal-header-buttons' );
 
-				// Update an edited image
-				if ( e.target.id === 'media-button-update' ) {
-					updateImageDetails( dialog.querySelector( '#edit-original' ).dataset.widgetId );
-
 				// Search or go to a specific page in the media library grid
-				} else if ( e.target.parentNode.className === 'pagination-links' && e.target.tagName === 'BUTTON' ) {
+				if ( e.target.parentNode.className === 'pagination-links' && e.target.tagName === 'BUTTON' ) {
 					page = e.target.dataset.page;
 					updateGrid( widgetEl, page );
 				} else if ( e.target.parentNode.parentNode && e.target.parentNode.parentNode.className === 'pagination-links' && e.target.parentNode.tagName === 'BUTTON' ) {
