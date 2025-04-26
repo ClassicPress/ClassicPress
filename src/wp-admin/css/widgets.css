@@ -882,6 +882,8 @@ ul.CodeMirror-hints {
 	padding: 0.5em 1em;
 	background: #f6f7f7;
 	border-right: 1px solid #c3c4c7;
+	-webkit-user-select: none;
+	-moz-user-select: none;
 	user-select: none;
 }
 .widget-modal-left-sticky {
@@ -1076,6 +1078,8 @@ ul.CodeMirror-hints {
 	border-left: 1px solid #c3c4c7;
 	width: 267px;
 	min-width: 267px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
 	user-select: none;
 	height: 110vh;
 	overflow: auto;
