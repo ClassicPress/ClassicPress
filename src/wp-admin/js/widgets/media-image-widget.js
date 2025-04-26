@@ -464,7 +464,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialogButtons = clone.querySelector( '.widget-modal-header-buttons' ),
 			dialogContent = clone.querySelector( '#widget-modal-media-content' ),
 			header = dialog.querySelector( 'header' ),
-			nonce = document.body.className.includes( ' wp-customizer' ) ? document.getElementById( '_ajax_linking_nonce' ).value : document.getElementById( '_wpnonce_widgets' ).value,
 			params = new URLSearchParams( {
 				'action': 'query-attachments',
 				'query[posts_per_page]': IMAGE_WIDGET.per_page,
