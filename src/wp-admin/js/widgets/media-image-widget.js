@@ -487,7 +487,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( result.success ) {
 
 				// Append cloned template and show relevant elements
-				header.querySelector( 'h2' ).textContent = IMAGE_WIDGET.media_library;
 				header.append( dialogButtons );
 				header.after( dialogContent );
 				dialog.querySelector( '#menu-item-embed' ).removeAttribute( 'hidden' );
