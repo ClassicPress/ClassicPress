@@ -788,49 +788,49 @@ function password_reset_nag() {
 
 	$pepper_renewed_message = sprintf(
 		'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
-		__( 'Warning:' ),
-		__( 'Your password must be reset.' ),
+		__( 'Warning:', 'cp-pepper' ),
+		__( 'Your password must be reset.', 'cp-pepper' ),
 		$is_super_admin ? sprintf(
 			'<p><strong>%1$s</strong> %2$s</p>',
-			__( 'Notice:' ),
-			__( 'The pepper was renewed.' )
+			__( 'Notice:', 'cp-pepper' ),
+			__( 'The pepper was renewed.', 'cp-pepper' )
 		) : '',
 		sprintf(
 			'<a href="%1$s">%2$s</a>',
 			esc_url( get_edit_profile_url() . '#password' ),
-			__( 'Take me to my profile page' )
+			__( 'Take me to my profile page', 'cp-pepper' )
 		)
 	);
 
 	$pepper_disabled_message = sprintf(
 		'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
-		__( 'Warning:' ),
-		__( 'Your password must be reset.' ),
+		__( 'Warning:', 'cp-pepper' ),
+		__( 'Your password must be reset.', 'cp-pepper' ),
 		$is_super_admin ? sprintf(
 			'<p><strong>%1$s</strong> %2$s</p>',
-			__( 'Notice:' ),
-			__( 'The pepper is disabled. The pepper file may have been moved or modified.' )
+			__( 'Notice:', 'cp-pepper' ),
+			__( 'The pepper is disabled. The pepper file may have been moved or modified.', 'cp-pepper' )
 		) : '',
 		sprintf(
 			'<a href="%1$s">%2$s</a>',
 			esc_url( get_edit_profile_url() . '#password' ),
-			__( 'Take me to my profile page' )
+			__( 'Take me to my profile page', 'cp-pepper' )
 		)
 	);
 
 	$pepper_plugin_missing_message = sprintf(
 		'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
-		__( 'Warning:' ),
-		__( 'Your password must be reset.' ),
+		__( 'Warning:', 'cp-pepper' ),
+		__( 'Your password must be reset.', 'cp-pepper' ),
 		$is_super_admin ? sprintf(
 			'<p><strong>%1$s</strong> %2$s</p>',
-			__( 'Notice:' ),
-			__( 'ClassicPress Pepper for Passwords was deactivated or uninstalled.' )
+			__( 'Notice:', 'cp-pepper' ),
+			__( 'ClassicPress Pepper for Passwords was deactivated or uninstalled.', 'cp-pepper' )
 		) : '',
 		sprintf(
 			'<a href="%1$s">%2$s</a>',
 			esc_url( get_edit_profile_url() . '#password' ),
-			__( 'Take me to my profile page' )
+			__( 'Take me to my profile page', 'cp-pepper' )
 		)
 	);
 

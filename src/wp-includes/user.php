@@ -202,44 +202,44 @@ function wp_authenticate_username_password( $user, $username, $password ) {
 	if ( ! $valid ) {
 		$reset_password_message = sprintf(
 			/* translators: %s: User name. */
-			__( 'The password for the username %s must be reset.' ),
+			__( 'The password for the username %s must be reset.', 'cp-pepper' ),
 			'<strong>' . $username . '</strong>'
 		);
 
 		$pepper_renewed_message = sprintf(
 			'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
-			__( 'Warning:' ),
+			__( 'Warning:', 'cp-pepper' ),
 			$reset_password_message,
 			$is_super_admin ? sprintf(
 				'<p><strong>%1$s</strong> %2$s</p>',
-				__( 'Notice:' ),
-				__( 'The pepper was renewed.' )
+				__( 'Notice:', 'cp-pepper' ),
+				__( 'The pepper was renewed.', 'cp-pepper' )
 			) : '',
-			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.' ) . '</a>'
+			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.', 'cp-pepper' ) . '</a>'
 		);
 
 		$pepper_disabled_message = sprintf(
 			'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
-			__( 'Warning:' ),
+			__( 'Warning:', 'cp-pepper' ),
 			$reset_password_message,
 			$is_super_admin ? sprintf(
 				'<p><strong>%1$s</strong> %2$s</p>',
-				__( 'Notice:' ),
-				__( 'The pepper is disabled. The pepper file may have been moved or modified.' )
+				__( 'Notice:', 'cp-pepper' ),
+				__( 'The pepper is disabled. The pepper file may have been moved or modified.', 'cp-pepper' )
 			) : '',
-			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.' ) . '</a>'
+			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.', 'cp-pepper' ) . '</a>'
 		);
 
 		$pepper_plugin_missing_message = sprintf(
 			'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
-			__( 'Warning:' ),
+			__( 'Warning:', 'cp-pepper' ),
 			$reset_password_message,
 			$is_super_admin ? sprintf(
 				'<p><strong>%1$s</strong> %2$s</p>',
-				__( 'Notice:' ),
-				__( 'ClassicPress Pepper for Passwords was deactivated or uninstalled.' )
+				__( 'Notice:', 'cp-pepper' ),
+				__( 'ClassicPress Pepper for Passwords was deactivated or uninstalled.', 'cp-pepper' )
 			) : '',
-			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.' ) . '</a>'
+			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.', 'cp-pepper' ) . '</a>'
 		);
 
 		if ( $pepper_renewed && $pepper_loaded ) {
@@ -354,44 +354,44 @@ function wp_authenticate_email_password( $user, $email, $password ) {
 	if ( ! $valid ) {
 		$reset_password_message = sprintf(
 			/* translators: %s: User name. */
-			__( 'The password for the email %s must be reset.' ),
+			__( 'The password for the email %s must be reset.', 'cp-pepper' ),
 			'<strong>' . $email . '</strong>'
 		);
 
 		$pepper_renewed_message = sprintf(
 			'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
-			__( 'Warning:' ),
+			__( 'Warning:', 'cp-pepper' ),
 			$reset_password_message,
 			$is_super_admin ? sprintf(
 				'<p><strong>%1$s</strong> %2$s</p>',
-				__( 'Notice:' ),
-				__( 'The pepper was renewed.' )
+				__( 'Notice:', 'cp-pepper' ),
+				__( 'The pepper was renewed.', 'cp-pepper' )
 			) : '',
-			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.' ) . '</a>'
+			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.', 'cp-pepper' ) . '</a>'
 		);
 
 		$pepper_disabled_message = sprintf(
 			'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
-			__( 'Warning:' ),
+			__( 'Warning:', 'cp-pepper' ),
 			$reset_password_message,
 			$is_super_admin ? sprintf(
 				'<p><strong>%1$s</strong> %2$s</p>',
-				__( 'Notice:' ),
-				__( 'The pepper is disabled. The pepper file may have been moved or modified.' )
+				__( 'Notice:', 'cp-pepper' ),
+				__( 'The pepper is disabled. The pepper file may have been moved or modified.', 'cp-pepper' )
 			) : '',
-			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.' ) . '</a>'
+			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.', 'cp-pepper' ) . '</a>'
 		);
 
 		$pepper_plugin_missing_message = sprintf(
 			'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
-			__( 'Warning:' ),
+			__( 'Warning:', 'cp-pepper' ),
 			$reset_password_message,
 			$is_super_admin ? sprintf(
 				'<p><strong>%1$s</strong> %2$s</p>',
-				__( 'Notice:' ),
-				__( 'ClassicPress Pepper for Passwords was deactivated or uninstalled.' )
+				__( 'Notice:', 'cp-pepper' ),
+				__( 'ClassicPress Pepper for Passwords was deactivated or uninstalled.', 'cp-pepper' )
 			) : '',
-			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.' ) . '</a>'
+			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.', 'cp-pepper' ) . '</a>'
 		);
 
 		if ( $pepper_renewed && $pepper_loaded ) {
