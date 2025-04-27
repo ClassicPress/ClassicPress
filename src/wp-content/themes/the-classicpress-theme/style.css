@@ -1096,6 +1096,7 @@ img {
 	max-width: 72rem;
 	margin: 0;
 	padding: 0 1em;
+	align-self: start;
 }
 .menu,
 .menu ul {
@@ -1673,6 +1674,9 @@ table.cp-logo-list .cp-logo-description {
 .widget-container ul.sub-menu {
 	margin: 0;
 }
+.widget-container ul.sub-menu li {
+	margin-left: 0.5em;
+}
 #sidebar .widget-container ul li.cat-item.current-cat a {
 	color: #040402;
 }
@@ -2059,6 +2063,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		flex-grow: 1;
 		align-items: center;
 		justify-content: space-between;
+		gap: 0.5em;
 		margin: 0 auto;
 	}
 	#page-title h1 {
