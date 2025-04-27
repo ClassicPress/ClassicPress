@@ -69,10 +69,10 @@ class PepperPassword {
 		add_action( 'network_admin_menu', array( $this, 'create_settings_menu' ), 100 );
 		add_filter( 'plugin_action_links', array( $this, 'create_settings_link' ), 10, 2 );
 		add_filter( 'network_admin_plugin_action_links', array( $this, 'create_settings_link' ), 10, 2 );
-		add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
 		add_filter( 'cp_pepper_password', array( $this, 'get_pepper' ) );
 		add_filter( 'cp_pepper_loaded', array( $this, 'get_pepper_status' ) );
 		add_filter( 'cp_pepper_plugin', array( $this, 'get_plugin_status' ) );
+		add_filter( 'cp_pepper_languages_path', array( $this, 'get_languages_path' ) );
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		add_action( 'admin_init', array( $this, 'migrate' ) );
 	}
@@ -137,12 +137,21 @@ class PepperPassword {
 	}
 
 	/**
-	 * Determines if the plugin is activated.
+	 * Determines if the plugin is active.
 	 *
 	 * @since 2.0.0
 	 */
 	public function get_plugin_status() {
 		return true;
+	}
+
+	/**
+	 * Returns the languages directory path.
+	 *
+	 * @since 2.0.0
+	 */
+	public function get_languages_path() {
+		return basename( __DIR__ ) . '/languages';
 	}
 
 	/**
@@ -203,15 +212,6 @@ class PepperPassword {
 		}
 
 		return $links;
-	}
-
-	/**
-	 * Enable localization.
-	 *
-	 * @since 1.0.3
-	 */
-	public function load_plugin_textdomain() {
-		load_plugin_textdomain( 'cp-pepper', false, basename( __DIR__ ) . '/languages' );
 	}
 
 	/**
