@@ -932,7 +932,7 @@ ul.CodeMirror-hints {
 .widget-modal-headings {
 	display: flex;
 	justify-content: space-between;
-	margin: 0 1em 0.5em;
+	margin: 0 1em;
 }
 .widget-modal-title {
 	margin-top: 1em;
@@ -972,6 +972,7 @@ ul.CodeMirror-hints {
 .widget-modal-header-buttons {
 	display: flex;
 	justify-content: space-between;
+	margin-top: 0.5em;
 }
 .widget-modal-router {
 	padding:0 6px;
@@ -1001,7 +1002,6 @@ ul.CodeMirror-hints {
 }
 .media-library-select-section {
 	position: sticky;
-	top: 74px;
 	z-index: 900;
 	background: #fff;
 	padding: 0.75em 1em 0 0;
