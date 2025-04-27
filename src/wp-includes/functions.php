@@ -8750,8 +8750,6 @@ function wp_admin_notice( $message, $args = array() ) {
  * @since CP-3.0.0
  */
 function cp_pepper_load_plugin_textdomain() {
-	$cp_pepper_languages_path = apply_filters( 'cp_pepper_languages_path', '' );
-	if ( ! empty( $cp_pepper_languages_path ) ) {
-		load_plugin_textdomain( 'cp-pepper', false, $cp_pepper_languages_path );
-	}
+	$cp_pepper_languages_path = apply_filters( 'cp_pepper_languages_path', 'cp-pepper/languages' );
+	load_plugin_textdomain( 'cp-pepper', false, $cp_pepper_languages_path );
 }
