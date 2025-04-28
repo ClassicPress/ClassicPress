@@ -299,14 +299,40 @@ do_action( 'customize_controls_head' );
 	?>
 </div>
 
-<?php // Renders the modal for media widgets ?>
+<?php /* Enables the modal for gallery widgets */ ?>
 <dialog id="widget-modal">
-	<div class="media-modal wp-core-ui" aria-labelledby="media-frame-title">
-		<button type="button" id="media-modal-close" class="media-modal-close" autofocus>
-			<span class="media-modal-icon">
-				<span class="screen-reader-text"><?php esc_html_e( 'Close dialog' ); ?></span>
-			</span>
-		</button>
+	<div id="media-widget-modal" class="widget-modal-container">
+		<aside class="widget-modal-left-sidebar">
+			<div class="widget-modal-left-sticky">
+				<h3 class="widget-modal-left-heading"><?php esc_html_e( 'Actions' ); ?></h3>
+				<div class="widget-modal-left-tablist" role="tablist" aria-orientation="vertical">
+					<button id="menu-item-add" type="button" role="tab" class="media-menu-item active" aria-selected="true"><?php esc_html_e( 'Add media' ); ?></button>
+					<button id="menu-item-gallery" type="button" role="tab" class="media-menu-item" aria-selected="false" hidden><?php esc_html_e( 'Create gallery' ); ?></button>
+					<button id="menu-item-playlist" type="button" role="tab" class="media-menu-item" aria-selected="false" hidden><?php esc_html_e( 'Create audio playlist' ); ?></button>
+					<button id="menu-item-video-playlist" type="button" role="tab" class="media-menu-item" aria-selected="false" hidden><?php esc_html_e( 'Create video playlist' ); ?></button>
+					<button id="menu-item-featured-image" type="button" role="tab" class="media-menu-item" aria-selected="false" hidden><?php esc_html_e( 'Featured image' ); ?></button>
+					<div role="presentation" class="separator"></div>
+					<button id="menu-item-embed" type="button" role="tab" class="media-menu-item" aria-selected="false" aria-controls="insert-from-url-panel" hidden><?php esc_html_e( 'Insert from URL' ); ?></button>
+				</div>
+			</div>
+		</aside>
+		<div class="widget-modal-main">
+			<header class="widget-modal-header">
+				<div class="widget-modal-headings">
+					<div id="widget-modal-title" class="widget-modal-title">
+						<h2><?php esc_html_e( 'Media Library' ); ?></h2>
+					</div>
+					<details class="widget-modal-details" hidden>
+						<summary><?php esc_html_e( 'Menu' ); ?></summary>
+					</details>
+					<button id="widget-modal-close" type="button" class="widget-modal-close" autofocus>
+						<span id="widget-modal-icon" class="widget-modal-icon">
+							<span class="screen-reader-text"><?php esc_html_e( 'Close dialog' ); ?></span>
+						</span>
+					</button>
+				</div>
+			</header>
+		</div>
 	</div>
 </dialog>
 
