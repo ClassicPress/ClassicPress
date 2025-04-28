@@ -251,8 +251,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function selectItemToAdd( item, widget, clicked ) {
-		var selectedItems = dialog.querySelectorAll( '.widget-modal-grid .selected' ),
-			id = item.dataset.id,
+		var id = item.dataset.id,
 			title = item.getAttribute( 'aria-label' ),
 			date = item.dataset.date,
 			filename = item.dataset.filename,
@@ -503,13 +502,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			galleryClone = galleryTemplate.content.cloneNode( true ),
 			itemAdd = dialog.querySelector( '#menu-item-add' ),
 			itemGallery = dialog.querySelector( '#menu-item-gallery' ),
-			selectedIds = [],
 			params = new URLSearchParams( {
 				'action': 'query-attachments',
 				'query[posts_per_page]': GALLERY_WIDGET.per_page,
 				'query[post_mime_type]': 'image',
 				'query[paged]': 1
 			} );
+
+		// Reset selectedIds
+		selectedIds = [];
 
 		// Make AJAX request
 		fetch( ajaxurl, {
@@ -627,7 +628,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function editGallery( widget, mode ) {
-		var toolbar, itemAdd, itemEdit, galleryAdd, formData,
+		var itemAdd, itemEdit, galleryAdd, formData,
 			template        = document.getElementById( 'tmpl-media-grid-modal' ),
 			clone           = template.content.cloneNode( true ),			
 			dialogButtons   = clone.querySelector( '.widget-modal-header-buttons' ),
@@ -994,8 +995,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	document.addEventListener( 'click', function( e ) {
 		var widgetId, widgetEl, base, preview, itemAdd, itemEdit, itemLibrary,
 			itemCancel, itemUpload, galleryInsert, galleryUpdate, librarySelect,
-			galleryGrid, libraryGrid, libraryItems, content, settings,
-			gridSubPanel, uploadSubPanel, ul, fieldset,
+			headerButtons, galleryGrid, libraryGrid, libraryItems, content,
+			sidebarSettings, sidebarInfo, gridSubPanel, uploadSubPanel, ul, fieldset,
 			galleryItems = [],
 			widget = e.target.closest( '.widget' );
 
