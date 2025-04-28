@@ -630,7 +630,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function editGallery( widget, mode ) {
 		var itemAdd, itemEdit, galleryAdd, formData,
 			template        = document.getElementById( 'tmpl-media-grid-modal' ),
-			clone           = template.content.cloneNode( true ),			
+			clone           = template.content.cloneNode( true ),
 			dialogButtons   = clone.querySelector( '.widget-modal-header-buttons' ),
 			dialogContent   = clone.querySelector( '#widget-modal-media-content' ),
 			header          = dialog.querySelector( 'header' ),
@@ -982,7 +982,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( dialog.querySelector( '.widget-modal-gallery-settings' ) ) {
 			dialog.querySelector( '.widget-modal-gallery-settings' ).remove();
 		}
-		dialog.removeAttribute( 'style' );		
+		dialog.removeAttribute( 'style' );
 		dialog.querySelector( '.widget-modal-headings' ).removeAttribute( 'style' );
 	}
 
@@ -1096,7 +1096,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Create a new gallery of images
 			} else if ( e.target.id === 'gallery-button-new' ) {
-				dialog.querySelector( '#widget-modal-title h2' ).textContent = GALLERY_WIDGET.edit_gallery;				
+				dialog.querySelector( '#widget-modal-title h2' ).textContent = GALLERY_WIDGET.edit_gallery;
 				headerButtons.style.display = 'none';
 				sidebarInfo.setAttribute( 'hidden', true );
 
