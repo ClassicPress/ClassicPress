@@ -6,6 +6,7 @@
  */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addButton, pond,
+		{ FilePond } = window, // import FilePond
 		selectedIds = [],
 		dialog = document.getElementById( 'widget-modal' );
 
