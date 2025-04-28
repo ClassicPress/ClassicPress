@@ -1364,7 +1364,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					e.target.setAttribute( 'aria-selected', true );
 					modalButtons.style.display = 'none';
 					uploadPanel.setAttribute( 'hidden', true );
-					uploadPanel.setAttribute( 'hidden', true );
+					uploadPanel.setAttribute( 'inert', true );
 					gridPanel.setAttribute( 'hidden', true );
 					gridPanel.setAttribute( 'inert', true );
 					rightSidebar.setAttribute( 'hidden', true );
