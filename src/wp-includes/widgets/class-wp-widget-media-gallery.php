@@ -260,8 +260,11 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 			array(
 				'edit_gallery'               => _x( 'Edit Gallery', 'label for button in the image widget; should preferably not be longer than ~13 characters long' ),
 				'create_gallery'             => __( 'Create Gallery' ),
-				'cancel_gallery'             => __( 'Cancel Gallery' ),
+				'cancel_gallery'             => '&larr; ' . __( 'Cancel Gallery' ),
+				'add_image'                  => __( 'Add Image' ),
+				'add_to_gallery'             => __( 'Add to Gallery' ),
 				'deselect'                   => __( 'Deselect' ),
+				'caption'                    => __( 'Caption' ),
 				'per_page'                   => $per_page,
 				'of'                         => __( 'of' ),
 				'by'                         => __( 'by' ),
@@ -289,65 +292,71 @@ function cp_render_media_gallery_template() {
 	?>
 
 	<template id="tmpl-edit-gallery-modal">
-		<div class="media-toolbar-gallery hidden">
-			<div style="display:flex;justify-content:space-between;margin:1em;">
+
+		<section class="media-gallery-grid-section hidden">
+			<div class="media-gallery-grid-header">
 				<div class="instructions"><?php esc_html_e( 'Drag and drop to reorder media files.' ); ?></div>
 				<button type="button" class="button media-button button-large gallery-button-reverse"><?php esc_html_e( 'Reverse order' ); ?></button>
 			</div>
-			<ul id="gallery-grid" class="widgets-media-grid-view"></ul>
+			<ul id="gallery-grid" class="widget-modal-grid"></ul>
+		</section>
+
+		<div id="gallery-buttons">
+			<button id="menu-item-gallery-edit" type="button" class="media-menu-item" role="tab" aria-selected="false" hidden><?php esc_html_e( 'Edit Gallery' ); ?></button>
+			<button id="menu-item-gallery-library" type="button" class="media-menu-item" role="tab" aria-selected="false" hidden><?php esc_html_e( 'Add to Gallery' ); ?></button>
 		</div>
 
-		<button id="menu-item-gallery-edit" type="button" class="media-menu-item" role="tab" aria-selected="false" hidden><?php esc_html_e( 'Edit Gallery' ); ?></button>
-		<button id="menu-item-gallery-library" type="button" class="media-menu-item" role="tab" aria-selected="false" hidden><?php esc_html_e( 'Add to Gallery' ); ?></button>
-		
-		<div class="collection-settings gallery-settings" hidden>
+		<div class="widget-modal-gallery-settings" hidden>
 			<h3><?php esc_html_e( 'Gallery Settings' ); ?></h3>
+			<fieldset>
+				<div class="setting">
+					<label for="gallery-settings-link-to" class="name"><?php esc_html_e( 'Link To' ); ?></label>
+					<select id="gallery-settings-link-to" class="link-to" data-setting="link">
+						<option value="post" selected><?php esc_html_e( 'Attachment Page' ); ?></option>
+						<option value="file"><?php esc_html_e( 'Media File' ); ?></option>
+						<option value="none"><?php esc_html_e( 'None' ); ?></option>
+					</select>
+				</div>
 
-			<span class="setting">
-				<label for="gallery-settings-link-to" class="name"><?php esc_html_e( 'Link To' ); ?></label>
-				<select id="gallery-settings-link-to" class="link-to" data-setting="link">
-					<option value="post" selected><?php esc_html_e( 'Attachment Page' ); ?></option>
-					<option value="file"><?php esc_html_e( 'Media File' ); ?></option>
-					<option value="none"><?php esc_html_e( 'None' ); ?></option>
-				</select>
-			</span>
+				<div class="setting">
+					<label for="gallery-settings-columns" class="name select-label-inline"><?php esc_html_e( 'Columns' ); ?></label>
+					<select id="gallery-settings-columns" class="columns" name="columns" data-setting="columns">
+						<option value="1"><?php esc_html_e( '1' ); ?></option>
+						<option value="2"><?php esc_html_e( '2' ); ?></option>
+						<option value="3" selected><?php esc_html_e( '3' ); ?></option>
+						<option value="4"><?php esc_html_e( '4' ); ?></option>
+						<option value="5"><?php esc_html_e( '5' ); ?></option>
+						<option value="6"><?php esc_html_e( '6' ); ?></option>
+						<option value="7"><?php esc_html_e( '7' ); ?></option>
+						<option value="8"><?php esc_html_e( '8' ); ?></option>
+						<option value="9"><?php esc_html_e( '9' ); ?></option>
+					</select>
+				</div>
 
-			<span class="setting">
-				<label for="gallery-settings-columns" class="name select-label-inline"><?php esc_html_e( 'Columns' ); ?></label>
-				<select id="gallery-settings-columns" class="columns" name="columns" data-setting="columns">
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3" selected>3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
-					<option value="6">6</option>
-					<option value="7">7</option>
-					<option value="8">8</option>
-					<option value="9">9</option>
-				</select>
-			</span>
+				<div class="setting">
+					<input type="checkbox" id="gallery-settings-random-order" data-setting="_orderbyRandom">
+					<label for="gallery-settings-random-order" class="checkbox-label-inline"><?php esc_html_e( 'Random Order' ); ?></label>
+				</div>
 
-			<span class="setting">
-				<input type="checkbox" id="gallery-settings-random-order" data-setting="_orderbyRandom">
-				<label for="gallery-settings-random-order" class="checkbox-label-inline"><?php esc_html_e( 'Random Order' ); ?></label>
-			</span>
-
-			<span class="setting size">
-				<label for="gallery-settings-size" class="name"><?php esc_html_e( 'Size' ); ?></label>
-				<select id="gallery-settings-size" class="size" name="size" data-setting="size">
-					<option value="thumbnail"><?php esc_html_e( 'Thumbnail' ); ?></option>
-					<option value="medium"><?php esc_html_e( 'Medium' ); ?></option>
-					<option value="large"><?php esc_html_e( 'Large' ); ?></option>
-					<option value="full"><?php esc_html_e( 'Full Size' ); ?></option>
-				</select>
-			</span>
+				<div class="setting size">
+					<label for="gallery-settings-size" class="name"><?php esc_html_e( 'Size' ); ?></label>
+					<select id="gallery-settings-size" class="size" name="size" data-setting="size">
+						<option value="thumbnail"><?php esc_html_e( 'Thumbnail' ); ?></option>
+						<option value="medium"><?php esc_html_e( 'Medium' ); ?></option>
+						<option value="large"><?php esc_html_e( 'Large' ); ?></option>
+						<option value="full"><?php esc_html_e( 'Full Size' ); ?></option>
+					</select>
+				</div>
+			</fieldset>
 		</div>
 
-		<div class="media-toolbar-primary search-form">
-			<button id="create-new-gallery" type="button" class="button media-button button-primary button-large media-button-gallery" disabled><?php esc_html_e( 'Create a new gallery' ); ?></button>
-			<button id="gallery-button-insert" type="button" class="button media-button button-primary button-large media-button-insert hidden"><?php esc_html_e( 'Insert gallery' ); ?></button>
-			<button id="gallery-button-update" type="button" class="button media-button button-primary button-large media-button-select hidden" disabled><?php esc_html_e( 'Update gallery' ); ?></button>
-		</div>
+		<footer class="widget-modal-footer">
+			<div class="widget-modal-footer-buttons">				
+				<button id="gallery-button-new" type="button" class="button media-button button-primary button-large media-button-gallery hidden" disabled><?php esc_html_e( 'Create a new gallery' ); ?></button>
+				<button id="gallery-button-insert" type="button" class="button media-button button-primary button-large media-button-insert hidden"><?php esc_html_e( 'Insert gallery' ); ?></button>
+				<button id="gallery-button-update" type="button" class="button media-button button-primary button-large media-button-select hidden" disabled><?php esc_html_e( 'Update gallery' ); ?></button>
+			</div>
+		</footer>
 	</template>
 
 	<?php
