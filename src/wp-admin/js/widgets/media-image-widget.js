@@ -170,6 +170,45 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Handles media list copy media URL button.
+	 *
+	 * Uses Clipboard API (with execCommand fallback for sites
+	 * on neither https nor localhost).
+	 *
+	 * @since CP-2.5.0
+	 *
+	 * @param {MouseEvent} event A click event.
+	 * @return {void}
+	 */
+	function copyToClipboard( button ) {
+		var copyAttachmentURLSuccessTimeout,
+			copyText = dialog.querySelector( '#attachment-details-copy-link' ).value,
+			input = document.createElement( 'input' );
+
+		if ( navigator.clipboard ) {
+			navigator.clipboard.writeText( copyText );
+		} else {
+			document.body.append( input );
+			input.value = copyText;
+			input.select();
+			document.execCommand( 'copy' );
+		}
+
+		// Show success visual feedback.
+		clearTimeout( copyAttachmentURLSuccessTimeout );
+		button.nextElementSibling.classList.remove( 'hidden' );
+		input.remove();
+
+		// Hide success visual feedback after 3 seconds since last success and unfocus the trigger.
+		copyAttachmentURLSuccessTimeout = setTimeout( function() {
+			button.nextElementSibling.classList.add( 'hidden' );
+		}, 3000 );
+
+		// Handle success audible feedback.
+		wp.a11y.speak( wp.i18n.__( 'The file URL has been copied to your clipboard' ) );
+	}
+
+	/**
 	 * Delete attachment from within modal.
 	 *
 	 * @abstract
@@ -1405,6 +1444,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							}
 						}
 					}
+
+				// Copy URL
+				} else if ( e.target.className.includes( 'copy-attachment-url' ) ) {
+					copyToClipboard( e.target );
 				}
 			}
 		}
