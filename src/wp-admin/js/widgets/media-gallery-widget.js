@@ -1,11 +1,11 @@
 /* eslint consistent-this: [ "error", "control" ] */
-/* global ajaxurl, GALLERY_WIDGET, Sortable, console */
+/* global ajaxurl, GALLERY_WIDGET, Sortable, console, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
 
 /**
  * @since CP 2.5.0
  */
 document.addEventListener( 'DOMContentLoaded', function() {
-	var addButton,
+	var addButton, pond,
 		selectedIds = [],
 		dialog = document.getElementById( 'widget-modal' );
 
@@ -1101,7 +1101,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function closeModal() {
 		var imageButton = dialog.querySelector( '#menu-item-add' ),
-			galleryButton = dialog.querySelector( '#menu-item-gallery' )
+			galleryButton = dialog.querySelector( '#menu-item-gallery' );
 
 		dialog.close();
 
@@ -1148,7 +1148,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var widgetId, widgetEl, base, preview, itemAdd, itemEdit, itemLibrary, modalPages,
 			itemCancel, itemUpload, itemBrowse, galleryInsert, galleryUpdate, uploadPanel,
 			librarySelect, headerButtons, galleryGrid, libraryGrid,libraryItems, content,
-			sidebarSettings, sidebarInfo, gridSubPanel, uploadSubPanel, ul, fieldset,
+			sidebarSettings, sidebarInfo, gridSubPanel, uploadSubPanel, ul, fieldset, page,
 			galleryItems = [],
 			widget = e.target.closest( '.widget' );
 
@@ -1429,7 +1429,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	dialog.addEventListener( 'change', function( e ) {
-		var widgetId;
+		var widgetId, widgetEl, base;
 		if ( dialog.querySelector( '#widget-modal-media-content' ) ) {
 			widgetId = dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId;
 			widgetEl = document.getElementById( widgetId );
