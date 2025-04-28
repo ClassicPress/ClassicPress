@@ -642,14 +642,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		.then( function( result ) {
 			if ( result.success ) {
 
-				// Show relevant buttons and clear grid
+				// Show relevant button and clear grid
 				addButton = dialog.querySelector( '#media-button-insert' );
-				if ( addButton === null ) {
-					 addButton = dialog.querySelector( '#gallery-button-update' );
-				} else if ( addButton === null ) {
-					 addButton = dialog.querySelector( '#gallery-button-new' );
-				}
-
 				dialog.querySelector( '.widget-modal-grid' ).innerHTML = '';
 
 				if ( result.data.length === 0 ) {
