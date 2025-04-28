@@ -5,10 +5,9 @@
  * @since CP 2.5.0
  */
 document.addEventListener( 'DOMContentLoaded', function() {
-	var addButton, gallerySortable,
+	var addButton,
 		selectedIds = [],
-		dialog = document.getElementById( 'widget-modal' ),
-		closeButton = document.getElementById( 'media-modal-close' );
+		dialog = document.getElementById( 'widget-modal' );
 
 	/**
 	 * Update details within modal.
@@ -21,18 +20,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		form.className = 'compat-item';
 		form.innerHTML = '<input type="hidden" id="menu-order" name="attachments[' + id + '][menu_order]" value="0">' +
 			'<p class="media-types media-types-required-info"><span class="required-field-message">Required fields are marked <span class="required">*</span></span></p>' +
-			'<span class="setting" data-setting="media_category">' +
-				'<label for="attachments-' + id + '-media_category">' +
+			'<div class="setting" data-setting="media_category">' +
+				'<label for="attachments-' + id + '-media_category" style="width:30%;">' +
 					'<span class="alignleft">Media Categories</span>' +
 				'</label>' +
 				'<input type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" value="">' +
-			'</span>' +
-			'<span class="setting" data-setting="media_post_tag">' +
+			'</div>' +
+			'<div class="setting" data-setting="media_post_tag">' +
 				'<label for="attachments-' + id + '-media_post_tag">' +
 					'<span class="alignleft">Media Tags</span>' +
 				'</label>' +
 				'<input type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" value="">' +
-			'</span>';
+			'</div>';
 
 		if ( document.querySelector( '.compat-item' ) != null ) {
 			document.querySelector( '.compat-item' ).remove();
@@ -55,11 +54,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		data.append( 'nonce', document.getElementById( 'media-' + id ).dataset.updateNonce );
 
 		// Append metadata fields
-		if ( input.parentNode.dataset.setting === 'alt' ) {
+		if ( input.parentNode.dataset.setting === 'alt' || input.id === 'embed-image-settings-alt-text' ) {
 			data.append( 'changes[alt]', input.value );
 		} else if ( input.parentNode.dataset.setting === 'title' ) {
 			data.append( 'changes[title]', input.value );
-		} else if ( input.parentNode.dataset.setting === 'caption' ) {
+		} else if ( input.parentNode.dataset.setting === 'caption' || input.id === 'embed-image-settings-caption' ) {
 			data.append( 'changes[caption]', input.value );
 		} else if ( input.parentNode.dataset.setting === 'description' ) {
 			data.append( 'changes[description]', input.value );
@@ -77,6 +76,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
+			var saved = dialog.querySelector( '#details-saved' );
+
 			if ( result.success ) {
 
 				// Update data attributes
@@ -92,13 +93,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Show success visual feedback.
 				clearTimeout( successTimeout );
-				document.getElementById( 'details-saved' ).classList.remove( 'hidden' );
-				document.getElementById( 'details-saved' ).setAttribute( 'aria-hidden', 'false' );
+				saved.classList.remove( 'hidden' );
+				saved.setAttribute( 'aria-hidden', 'false' );
 
 				// Hide success visual feedback after 3 seconds.
 				successTimeout = setTimeout( function() {
-					document.getElementById( 'details-saved' ).classList.add( 'hidden' );
-					document.getElementById( 'details-saved' ).setAttribute( 'aria-hidden', 'true' );
+					saved.classList.add( 'hidden' );
+					saved.setAttribute( 'aria-hidden', 'true' );
 				}, 3000 );
 			} else {
 				console.error( GALLERY_WIDGET.failed_update, result.data.error );
@@ -169,6 +170,45 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Handles media list copy media URL button.
+	 *
+	 * Uses Clipboard API (with execCommand fallback for sites
+	 * on neither https nor localhost).
+	 *
+	 * @since CP-2.5.0
+	 *
+	 * @param {MouseEvent} event A click event.
+	 * @return {void}
+	 */
+	function copyToClipboard( button ) {
+		var copyAttachmentURLSuccessTimeout,
+			copyText = dialog.querySelector( '#attachment-details-copy-link' ).value,
+			input = document.createElement( 'input' );
+
+		if ( navigator.clipboard ) {
+			navigator.clipboard.writeText( copyText );
+		} else {
+			document.body.append( input );
+			input.value = copyText;
+			input.select();
+			document.execCommand( 'copy' );
+		}
+
+		// Show success visual feedback.
+		clearTimeout( copyAttachmentURLSuccessTimeout );
+		button.nextElementSibling.classList.remove( 'hidden' );
+		input.remove();
+
+		// Hide success visual feedback after 3 seconds since last success and unfocus the trigger.
+		copyAttachmentURLSuccessTimeout = setTimeout( function() {
+			button.nextElementSibling.classList.add( 'hidden' );
+		}, 3000 );
+
+		// Handle success audible feedback.
+		wp.a11y.speak( wp.i18n.__( 'The file URL has been copied to your clipboard' ) );
+	}
+
+	/**
 	 * Delete attachment from within modal.
 	 *
 	 * @abstract
@@ -194,7 +234,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} )
 		.then( function( result ) {
 			if ( result === 1 ) {
-				closeButton.click();
+				closeModal();
 			} else {
 				console.log( GALLERY_WIDGET.delete_failed );
 			}
@@ -211,7 +251,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function selectItemToAdd( item, widget, clicked ) {
-		var id = item.dataset.id,
+		var selectedItems = dialog.querySelectorAll( '.widget-modal-grid .selected' ),
+			id = item.dataset.id,
 			title = item.getAttribute( 'aria-label' ),
 			date = item.dataset.date,
 			filename = item.dataset.filename,
@@ -226,13 +267,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			sizes = item.dataset.sizes,
 			sizeOptions = '',
 			sizesObject = JSON.parse( sizes ),
-			alt = item.querySelector( 'img' ).alt,
+			alt = item.querySelector( 'img' ).getAttribute( 'alt' ),
 			updateNonce = item.dataset.updateNonce,
 			deleteNonce = item.dataset.deleteNonce,
 			linkType = widget.querySelector( '[data-property="link_type"]' ).value,
 			linkUrl = widget.querySelector( '[data-property="link_url"]' ),
-			inputs = dialog.querySelectorAll( '.media-sidebar input, .media-sidebar textarea' ),
-			selects = dialog.querySelectorAll( '.media-sidebar select' ),
+			inputs = dialog.querySelectorAll( '.widget-modal-right-sidebar input, .widget-modal-right-sidebar textarea, .widget-modal-media-embed input, .widget-modal-media-embed textarea' ),
+			selects = dialog.querySelectorAll( '.widget-modal-right-sidebar select, .widget-modal-media-embed select' ),
 			linkTo = dialog.querySelector( '#attachment-display-settings-link-to' ),
 			linkToCustom = dialog.querySelector( '#attachment-display-settings-link-to-custom' );
 
@@ -252,41 +293,47 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#edit-more' ).href = ajaxurl.replace( 'admin-ajax.php', 'post.php?post=' + id + '&action=edit' );
 		dialog.querySelector( '#attachment-details-description').textContent = description;
 		dialog.querySelector( '#attachment-details-copy-link').value = url;
-		dialog.querySelector( '.attachment-details' ).removeAttribute( 'hidden' );
 
 		if ( clicked === true ) {
 			dialog.querySelector( '#attachment-details-alt-text').textContent = alt;
 			dialog.querySelector( '#attachment-details-title').value = title;
 			dialog.querySelector( '#attachment-details-caption').textContent = caption;
+			dialog.querySelector( '.widget-modal-attachment-info img' ).src = url;
+			dialog.querySelector( '.widget-modal-attachment-info img' ).alt = alt;
 		} else {
-			dialog.querySelector( '#attachment-details-alt-text').textContent = widget.querySelector( '[data-property="alt"]' ).value;
 			dialog.querySelector( '#attachment-details-title').value = title;
-			dialog.querySelector( '#attachment-details-caption').textContent = widget.querySelector( '[data-property="caption"]' ).value;
+			dialog.querySelector( '#attachment-details-caption').textContent = widget.querySelector( '[data-property="caption"]' ) ? widget.querySelector( '[data-property="caption"]' ).value : '';
+			dialog.querySelector( '.widget-modal-attachment-info img' ).src = widget.querySelector( '[data-property="url"]' ) ? widget.querySelector( '[data-property="url"]' ).value : '';
+
+			if ( widget.querySelector( '[data-property="alt"]' ) ) {
+				dialog.querySelector( '#attachment-details-alt-text').textContent = widget.querySelector( '[data-property="alt"]' ).value;
+				dialog.querySelector( '.widget-modal-attachment-info img' ).alt = widget.querySelector( '[data-property="alt"]' ).value;
+			}
 		}
 
 		// Set status of items according to user's capabilities
-		if ( updateNonce == null ) {
-			inputs.forEach( function( input ) {
-				input.setAttribute( 'readonly', true );
-			} );
-			dialog.querySelector( '#edit-more' ).parentNode.setAttribute( 'hidden', true );
-		} else {
+		if ( updateNonce ) {
 			inputs.forEach( function( input ) {
 				input.removeAttribute( 'readonly' );
 			} );
 			dialog.querySelector( '#edit-more' ).parentNode.removeAttribute( 'hidden' );
+		} else {
+			inputs.forEach( function( input ) {
+				input.setAttribute( 'readonly', true );
+			} );
+			dialog.querySelector( '#edit-more' ).parentNode.setAttribute( 'hidden', true );
 		}
 
-		if ( deleteNonce == null ) {
-			selects.forEach( function( select ) {
-				select.setAttribute( 'disabled', true );
-			} );
-			dialog.querySelector( '.delete-attachment' ).parentNode.setAttribute( 'hidden', true );
-		} else {
+		if ( deleteNonce ) {
 			selects.forEach( function( select ) {
 				select.removeAttribute( 'disabled' );
 			} );
 			dialog.querySelector( '.delete-attachment' ).parentNode.removeAttribute( 'hidden' );
+		} else {
+			selects.forEach( function( select ) {
+				select.setAttribute( 'disabled', true );
+			} );
+			dialog.querySelector( '.delete-attachment' ).parentNode.setAttribute( 'hidden', true );
 		}
 
 		// Show or hide Custom URL depending on link type
@@ -297,7 +344,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} );
 		if ( linkTo.value === 'none' ) {
-			linkToCustom.parentNode.classList.add( 'hidden' );
+			linkToCustom.parentNode.classList.add( 'setting-hidden' );
 			linkToCustom.value = '';
 		} else {
 			if ( linkUrl != null ) {
@@ -305,7 +352,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} else {
 				linkToCustom.value = '';
 			}
-			linkToCustom.parentNode.classList.remove( 'hidden' );
+			linkToCustom.parentNode.classList.remove( 'setting-hidden' );
 		}
 
 		// Show and hide URL field as appropriate
@@ -316,7 +363,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 			selectedOption.setAttribute( 'selected', true );
 			if ( selectedOption.value === 'none' ) {
-				linkToCustom.parentNode.classList.add( 'hidden' );
+				linkToCustom.parentNode.classList.add( 'setting-hidden' );
 				linkToCustom.value = '';
 			} else {
 				if ( selectedOption.value === 'file' ) {
@@ -326,7 +373,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} else if ( selectedOption.value === 'custom' ) {
 					linkToCustom.value = '';
 				}
-				linkToCustom.parentNode.classList.remove( 'hidden' );
+				linkToCustom.parentNode.classList.remove( 'setting-hidden' );
 			}
 			addButton.removeAttribute( 'disabled' );
 		} );
@@ -335,11 +382,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#attachments-' + id + '-media_post_tag').value = tags;
 		dialog.querySelector( '#attachment-display-settings-size' ).innerHTML = sizeOptions;
 
-		dialog.querySelector( '.attachment-details' ).removeAttribute( 'hidden' );
+		dialog.querySelector( '.widget-modal-right-sidebar-info' ).removeAttribute( 'hidden' );
 
 		// Update media attachment details
-		dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
-			input.addEventListener( 'blur', function() {
+		dialog.querySelectorAll( '.widget-modal-right-sidebar-info input, .widget-modal-right-sidebar-info textarea' ).forEach( function( input ) {
+			input.addEventListener( 'change', function() {
 				if ( input.parentNode.parentNode.className === 'compat-item' ) {
 					updateMediaTaxOrTag( input, id ); // Update media categories and tags
 				} else {
@@ -347,6 +394,36 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 			} );
 		} );
+
+		// Uncheck item if clicked on
+		if ( item.className.includes( 'selected' ) ) {
+			if ( clicked === false ) {
+				item.querySelector( '.check' ).style.display = 'block';
+				addButton.setAttribute( 'disabled', true );
+			} else {
+				item.classList.remove( 'selected' );
+				item.setAttribute( 'aria-checked', false );
+				item.querySelector( '.check' ).style.display = 'none';
+				dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+
+				// Disable add to widget button if no media items are selected
+				if ( document.querySelector( '.media-item.selected' ) == null ) {
+					if ( addButton ) {
+						addButton.setAttribute( 'disabled', true );
+					}
+					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+				}
+			}
+		} else {
+			item.classList.add( 'selected' );
+			item.setAttribute( 'aria-checked', true );
+			item.querySelector( '.check' ).style.display = 'block';
+
+			// Enable add to widget button
+			if ( addButton ) {
+				addButton.removeAttribute( 'disabled' );
+			}
+		}
 	}
 
 	/**
@@ -356,10 +433,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function populateGridItem( attachment, widget ) {
-		var gridItem = document.createElement( 'li' ),
-			image = '<img src="' + attachment.url + '" alt="' + attachment.alt + '">',
-			idsArray = widget.querySelector( '[data-property="ids"]' ).value.split( ',' ),
-			selected = idsArray.indexOf( attachment.id ).value ? ' selected' : '';
+		var selected = '',
+			idsArray = [],
+			gridItem = document.createElement( 'li' ),
+			image = '<img src="' + attachment.url + '" alt="' + attachment.alt + '">';
+
+		if ( widget.querySelector( '[data-property="attachment_id"]' ) ) {
+			if ( attachment.id == widget.querySelector( '[data-property="attachment_id"]' ).value ) {
+				selected = ' selected';
+			}
+		} else if ( widget.querySelector( '[data-property="ids"]' ) ) {
+			idsArray = widget.querySelector( '[data-property="ids"]' ).value.split( ',' );
+			if ( idsArray.indexOf( attachment.id ).value ) {
+				selected = ' selected';
+			}
+		}
 
 		gridItem.className = 'media-item' + selected;
 		gridItem.id = 'media-' + attachment.id;
@@ -400,42 +488,23 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
-	 * Show the grid of media items when that view is selected.
-	 *
-	 * @abstract
-	 * @return {void}
-	 */
-	function setupGridView() {
-		var itemGallery  = dialog.querySelector( '#menu-item-gallery' ),
-			itemUpload   = dialog.querySelector( '#menu-item-upload' ),
-			itemBrowse   = dialog.querySelector( '#menu-item-browse' );
-
-		itemUpload.classList.remove( 'active' );
-		itemUpload.setAttribute( 'aria-selected', false );
-		itemBrowse.classList.remove( 'active' );
-		itemBrowse.setAttribute( 'aria-selected', false );
-		itemGallery.classList.add ( 'active' );
-		itemGallery.setAttribute( 'aria-selected', true );
-
-		dialog.querySelector( '.media-frame-router' ).classList.remove( 'hidden' );
-		dialog.querySelector( '.media-toolbar' ).classList.remove( 'hidden' );
-		dialog.querySelector( '.widgets-media-grid-view' ).classList.remove( 'hidden' );
-		dialog.querySelector( '.load-more-wrapper' ).classList.remove( 'hidden' );
-		dialog.querySelector( '.media-frame-content' ).style.top = '84px';
-	}
-
-	/**
 	 * Populate the grid with images.
 	 *
 	 * @abstract
 	 * @return {void}
 	 */
 	function selectMedia( widget ) {
-		var template     = document.getElementById( 'tmpl-media-grid-modal' ),
-			clone        = template.content.cloneNode( true ),
-			gallery      = document.getElementById( 'tmpl-edit-gallery-modal' ),
-			galleryClone = gallery.content.cloneNode( true ),
-			params       = new URLSearchParams( {
+		var template = document.getElementById( 'tmpl-media-grid-modal' ),
+			clone = template.content.cloneNode( true ),
+			dialogButtons = clone.querySelector( '.widget-modal-header-buttons' ),
+			dialogContent = clone.querySelector( '#widget-modal-media-content' ),
+			header = dialog.querySelector( 'header' ),
+			galleryTemplate = document.getElementById( 'tmpl-edit-gallery-modal' ),
+			galleryClone = galleryTemplate.content.cloneNode( true ),
+			itemAdd = dialog.querySelector( '#menu-item-add' ),
+			itemGallery = dialog.querySelector( '#menu-item-gallery' ),
+			selectedIds = [],
+			params = new URLSearchParams( {
 				'action': 'query-attachments',
 				'query[posts_per_page]': GALLERY_WIDGET.per_page,
 				'query[post_mime_type]': 'image',
@@ -458,15 +527,29 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( result.success ) {
 
 				// Append cloned template and show relevant elements
-				dialog.querySelector( '.media-modal' ).append( clone );
-				dialog.querySelector( '.media-toolbar').after( galleryClone.querySelector( '.media-toolbar-gallery' ) );
-				dialog.querySelector( '.attachment-details' ).before( galleryClone.querySelector( '.collection-settings' ) );
-				dialog.querySelector( '.separator' ).after( galleryClone.querySelector( '#menu-item-gallery-library' ) );
-				dialog.querySelector( '.separator' ).after( galleryClone.querySelector( '#menu-item-gallery-edit' ) );
+				header.append( dialogButtons );
+				if ( dialog.querySelector( '#widget-modal-media-content' ) == null ) {
+					header.after( dialogContent );
+				}
+				dialog.querySelector( '.widget-modal-title h2' ).textContent = GALLERY_WIDGET.create_gallery;
+				dialog.querySelector( '.separator' ).insertAdjacentHTML( 'afterend', galleryClone.querySelector( '#gallery-buttons' ).innerHTML ),
+				dialog.querySelector( '.media-library-grid-section' ).after( galleryClone.querySelector( '.media-gallery-grid-section' ) ),
+				dialog.querySelector( '.widget-modal-right-sidebar' ).prepend( galleryClone.querySelector( '.widget-modal-gallery-settings' ) );
+				dialog.querySelector( 'footer' ).replaceWith( galleryClone.querySelector( 'footer' ) ),
 
-				dialog.querySelector( '#menu-item-gallery' ).textContent = GALLERY_WIDGET.create_gallery;
-				dialog.querySelector( '#menu-item-gallery' ).removeAttribute( 'hidden' );
-				checkWindowWidth();
+				itemAdd.setAttribute( 'hidden', true );
+				itemAdd.setAttribute( 'aria-selected', false );
+
+				itemGallery.textContent = GALLERY_WIDGET.create_gallery;
+				itemGallery.removeAttribute( 'hidden' );
+				itemGallery.classList.add( 'active' );
+				itemGallery.setAttribute( 'aria-selected', true );
+
+				// Set widget ID and values of variables
+				dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId = widget.id;
+				dialog.querySelector( '#menu-item-embed' ).setAttribute( 'hidden', true );
+				addButton = dialog.querySelector( '#gallery-button-new' );
+				addButton.classList.remove( 'hidden' );
 
 				if ( result.data.length === 0 ) {
 
@@ -490,7 +573,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					// Populate grid with new items
 					result.data.forEach( function( attachment ) {
 						var gridItem = populateGridItem( attachment, widget );
-						dialog.querySelector( '#widgets-media-grid ul' ).append( gridItem );
+						dialog.querySelector( '.widget-modal-grid' ).append( gridItem );
 					} );
 
 					// Reset pagination
@@ -518,35 +601,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					dialog.querySelectorAll( '.media-item' ).forEach( function( item ) {
 						if ( item.className.includes( 'selected' ) ) {
 							selectItemToAdd( item, widget, false );
-							item.focus();
-							addButton.setAttribute( 'disabled', true );
 						}
-
-						// Update items only on the media library grid, not the gallery grid
 						item.addEventListener( 'click', function() {
-							if ( item.parentNode.id === 'gallery-grid' ) {
-								return;
-							}
-
 							selectItemToAdd( item, widget, true );
-
-							if ( item.className.includes( 'selected' ) ) {
-								item.classList.remove( 'selected' );
-								item.setAttribute( 'aria-checked', false );
-								dialog.querySelector( '.attachment-details' ).setAttribute( 'hidden', true );
-
-								// Disable add to widget button if no media items are selected
-								if ( document.querySelector( '.selected' ) == null ) {
-									addButton.setAttribute( 'disabled', true );
-								}
-							} else {
-								item.classList.add( 'selected' );
-								item.setAttribute( 'aria-checked', true );
-								dialog.querySelector( '.attachment-details' ).removeAttribute( 'hidden' );
-
-								// Enable add to widget button
-								addButton.removeAttribute( 'disabled' );
-							}
 						} );
 					} );
 
@@ -554,21 +611,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					dialog.querySelector( '.no-media' ).setAttribute( 'hidden', true );
 					dialog.querySelector( '.load-more-count' ).removeAttribute( 'hidden' );
 					dialog.querySelector( '.load-more-count' ).textContent = result.data.length + ' ' + GALLERY_WIDGET.of + ' ' + result.headers.total_posts + ' media items';
-
-					dialog.querySelector( '.media-frame-toolbar .media-toolbar-secondary' ).prepend( galleryClone.querySelector( '.media-selection' ) );
-
-					dialog.querySelector( '.media-frame-actions-heading' ).nextElementSibling.innerHTML = galleryClone.querySelector( '.media-toolbar-primary.search-form' ).outerHTML;
 				}
-
-				// Set widget ID and values of variables
-				dialog.querySelector( '#new-image-modal' ).dataset.widgetId = widget.id;
-				addButton = dialog.querySelector( '#create-new-gallery' );
 			}
 		} )
 		.catch( function( error ) {
 			console.error( GALLERY_WIDGET.error, error );
 		} );
-
 		dialog.showModal();
 	}
 
@@ -578,33 +626,37 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	function editGallery( widget ) {
+	function editGallery( widget, mode ) {
 		var toolbar, itemAdd, itemEdit, galleryAdd, formData,
-			template     = document.getElementById( 'tmpl-media-grid-modal' ),
-			clone        = template.content.cloneNode( true ),
-			gallery      = document.getElementById( 'tmpl-edit-gallery-modal' ),
-			galleryClone = gallery.content.cloneNode( true ),
-			galleryItems = [],
-			selectedIds  = widget.querySelector( '[data-property="ids"]').value.split( ',' );
+			template        = document.getElementById( 'tmpl-media-grid-modal' ),
+			clone           = template.content.cloneNode( true ),			
+			dialogButtons   = clone.querySelector( '.widget-modal-header-buttons' ),
+			dialogContent   = clone.querySelector( '#widget-modal-media-content' ),
+			header          = dialog.querySelector( 'header' ),
+			galleryTemplate = document.getElementById( 'tmpl-edit-gallery-modal' ),
+			galleryClone    = galleryTemplate.content.cloneNode( true ),
+			galleryItems    = [],
+			galleryIds      = mode === 'update' ? selectedIds : widget.querySelector( '[data-property="ids"]').value.split( ',' );
 
 		// Append cloned template and show relevant elements
-		dialog.querySelector( '.media-modal' ).append( clone );
-		dialog.querySelector( '.media-frame-router').classList.add( 'hidden' );
-		dialog.querySelector( '.media-frame-content').style.top = '50px';
-		dialog.querySelector( '#media-frame-title h2' ).textContent = GALLERY_WIDGET.edit_gallery;
+		header.append( dialogButtons );
+		header.after( dialogContent );
+		dialog.querySelector( '.separator' ).insertAdjacentHTML( 'afterend', galleryClone.querySelector( '#gallery-buttons' ).innerHTML ),
+		dialog.querySelector( '.media-library-grid-section' ).after( galleryClone.querySelector( '.media-gallery-grid-section' ) ),
+		dialog.querySelector( '.widget-modal-right-sidebar' ).prepend( galleryClone.querySelector( '.widget-modal-gallery-settings' ) );
+		dialog.querySelector( 'footer' ).replaceWith( galleryClone.querySelector( 'footer' ) ),
+		dialog.querySelector( '#menu-item-embed' ).removeAttribute( 'hidden' );
+		dialog.querySelector( '.media-library-select-section').classList.add( 'hidden' );
+		dialog.querySelector( '#widget-modal-title h2' ).textContent = GALLERY_WIDGET.edit_gallery;
 
-		toolbar = dialog.querySelector( '.media-toolbar');
-		toolbar.classList.add( 'hidden' );
-		toolbar.after( galleryClone.querySelector( '.media-toolbar-gallery' ) );
-
-		dialog.querySelector( '.attachment-details' ).before( galleryClone.querySelector( '.collection-settings' ) );
-		dialog.querySelector( '.separator' ).after( galleryClone.querySelector( '#menu-item-gallery-library' ) );
-		dialog.querySelector( '.separator' ).after( galleryClone.querySelector( '#menu-item-gallery-edit' ) );
-		dialog.querySelector( '.media-toolbar .media-button-primary' ).replaceWith( galleryClone.querySelector( '.media-toolbar-primary' ) );
-		dialog.querySelector( '.media-toolbar-gallery' ).classList.remove( 'hidden' );
+		dialogButtons.style.display = 'none';
+		dialog.querySelector( '#menu-item-embed' ).setAttribute( 'hidden', true );
+		dialog.querySelector( '.media-library-grid-section' ).classList.add( 'hidden' );
+		dialog.querySelector( '.media-gallery-grid-section' ).classList.remove( 'hidden' );
 
 		itemAdd = dialog.querySelector( '#menu-item-add' );
 		itemAdd.classList.remove( 'active' );
+		itemAdd.setAttribute( 'hidden', true );
 		itemAdd.setAttribute( 'aria-selected', false );
 
 		itemEdit = dialog.querySelector( '#menu-item-gallery-edit' );
@@ -612,28 +664,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		itemEdit.classList.add ( 'active' );
 		itemEdit.setAttribute( 'aria-selected', true );
 
-		dialog.querySelector( '.attachment-details' ).setAttribute( 'hidden', true );
-		dialog.querySelector( '#create-new-gallery' ).classList.add( 'hidden' );
-		dialog.querySelectorAll( '.media-toolbar-primary' )[1].style.top = '110px';
+		dialog.querySelector( '#gallery-button-new' ).classList.add( 'hidden' );
 		dialog.querySelector( '#menu-item-gallery-library' ).removeAttribute( 'hidden' );
 		dialog.querySelector( '#gallery-button-insert' ).classList.remove( 'hidden' );
+		dialog.querySelector( '.widget-modal-gallery-settings' ).removeAttribute( 'hidden' );
 
 		// Load gallery settings
 		dialog.querySelector( '#gallery-settings-size' ).value = widget.querySelector( '[data-property="size"]').value;
 		dialog.querySelector( '#gallery-settings-columns' ).value = widget.querySelector( '[data-property="columns"]').value;
 		dialog.querySelector( '#gallery-settings-link-to' ).value = widget.querySelector( '[data-property="link_type"]').value;
 		dialog.querySelector( '#gallery-settings-random-order' ).checked = widget.querySelector( '[data-property="orderby_random"]').value === 'on' ? true : false;
-		dialog.querySelector( '.collection-settings' ).removeAttribute( 'hidden' );
+		dialog.querySelector( '.widget-modal-gallery-settings' ).removeAttribute( 'hidden' );
 
 		galleryAdd = dialog.querySelector( '#menu-item-gallery' );
 		galleryAdd.classList.add( 'cancel' );
-		galleryAdd.innerHTML = '&larr; ' + GALLERY_WIDGET.cancel_gallery;
+		galleryAdd.textContent = GALLERY_WIDGET.cancel_gallery;
 		galleryAdd.removeAttribute( 'hidden' );
-		checkWindowWidth();
 
 		formData = new FormData();
 		formData.append( 'action', 'query-attachments' );
-		formData.append( 'query[post__in]', selectedIds );
+		formData.append( 'query[post__in]', galleryIds );
 		formData.append( 'query[orderby]', 'post__in' );
 		formData.append( 'query[post_mime_type]', 'image' );
 		formData.append( 'query[paged]', 1 );
@@ -653,10 +703,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		.then( function( result ) {
 			if ( result.success ) {
 
-				// Set widget ID as data attribute of dialog
-				dialog.querySelector( '#new-image-modal' ).dataset.widgetId = widget.id;
+				// Set data attributes
+				dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId = widget.id;
 
 				// Populate grid with new items
+				selectedIds = [];
 				result.data.forEach( function( attachment ) {
 					var gridItem = populateGridItem( attachment, widget );
 
@@ -664,7 +715,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					galleryItems.push( gridItem );
 				} );
 
-				enableGallerySorting( galleryItems, widget );
+				enableGallerySorting( galleryItems, widget, 'edit' );
 				dialog.showModal();
 			}
 		} )
@@ -679,16 +730,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	function enableGallerySorting( galleryItems, widget ) {
+	function enableGallerySorting( galleryItems, widget, mode ) {
 		var gallerySortable,
 			grid = dialog.querySelector( '#gallery-grid' );
 
+		// Give each item the correct class and attributes
 		galleryItems.forEach( function( item ) {
 			var input;
 
 			item.classList.add( 'selected' );
 			item.setAttribute( 'aria-checked', true );
+			item.querySelector( '.check' ).style.display = 'block';
 
+			// Add a caption input box
 			if ( item.querySelector( '.describe' ) == null ) {
 				input = document.createElement( 'input' );
 				input.className = 'describe';
@@ -696,7 +750,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				input.value = item.dataset.caption;
 				input.dataset.setting = 'caption';
 				input.setAttribute( 'aria-label', 'Caption' );
-				input.placeholder = 'Caption...';
+				input.placeholder = GALLERY_WIDGET.caption + '...';
 				item.append( input );
 			}
 
@@ -711,47 +765,42 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 		} );
 
+		// Make gallery grid sortable
 		gallerySortable = Sortable.create( grid, {
 			group: 'items',
 			sort: true,
 			handle: 'li',
 			fallbackTolerance: 2,
 
-			// Select, deselect, or remove an item when clicked on
+			// Remove an item when clicking on the cross
 			onChoose: function( e ) {
-				var item = e.item;
 				if ( e.explicitOriginalTarget.className === 'check' ) {
-					item.remove();
+					e.item.remove();
 				}
-
-				selectItemToAdd( item, widget, true );
-
-				if ( item.className.includes( 'selected' ) ) {
-					item.className = 'media-item';
-					item.setAttribute( 'aria-checked', false );
-					dialog.querySelector( '.attachment-details' ).setAttribute( 'hidden', true );
-				} else {
-					item.className = 'media-item selected';
-					item.setAttribute( 'aria-checked', true );
-					dialog.querySelector( '.attachment-details' ).removeAttribute( 'hidden' );
-					dialog.querySelector( '#gallery-button-insert' ).disabled = false;
-				}
-
-				dialog.querySelectorAll( '.selected' ).forEach( function( selected ) {
-					selectedIds.push( selected.dataset.id );
-				} );
-
-				if ( grid.querySelector( '.selected' ) == null ) {
-					dialog.querySelector( '#gallery-button-insert' ).disabled = true;
+				if ( mode === 'edit' ) {
+					selectItemToAdd( e.item, widget, true );
 				}
 			},
 
-			// Re-order selectedIds when element dropped
-			onEnd: function() {
-				selectedIds = [];
-				dialog.querySelectorAll( '.selected' ).forEach( function( selected ) {
-					selectedIds.push( selected.dataset.id );
-				} );
+			// Re-identify selectedIds after deselection, reselection, or sorting
+			onUnchoose: function() {
+				setTimeout( function() {
+					grid.dispatchEvent( new Event( 'change' ) );
+				}, 0 );
+			}
+		} );
+
+		// Collect selectedIds and enable or disable button to insert items into widget
+		grid.addEventListener( 'change', function() {
+			var items = grid.querySelectorAll( '.selected' );
+			selectedIds = [];
+			items.forEach( function( item ) {
+				selectedIds.push( item.dataset.id );
+			} );
+			if ( selectedIds.length === 0 ) {
+				dialog.querySelector( '#gallery-button-insert' ).disabled = true;
+			} else {
+				dialog.querySelector( '#gallery-button-insert' ).disabled = false;
 			}
 		} );
 	}
@@ -763,7 +812,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function updateLibrary( widget ) {
-		var updatedItems = [],
+		var gridSection,
+			updatedItems = [],
 			formData = new FormData();
 
 		formData.append( 'action', 'query-attachments' );
@@ -785,8 +835,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} )
 		.then( function( result ) {
 			if ( result.success ) {
-				var grid = dialog.querySelector( '#widgets-media-grid ul' );
-				grid.innerHTML = '';
+				gridSection = dialog.querySelector( '.media-library-grid-section' );
+				gridSection.querySelector( 'ul' ).innerHTML = '';
+				dialog.querySelector( '.widget-modal-title h2' ).textContent = GALLERY_WIDGET.add_to_gallery;
 
 				if ( result.data.length === 0 ) {
 
@@ -810,7 +861,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					// Populate grid with new items
 					result.data.forEach( function( attachment ) {
 						var gridItem = populateGridItem( attachment, widget );
-						dialog.querySelector( '#widgets-media-grid ul' ).append( gridItem );
+						gridSection.querySelector( 'ul' ).append( gridItem );
 
 						updatedItems.push( gridItem );
 					} );
@@ -839,31 +890,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					// Show details about file, or select files for deletion
 					dialog.querySelectorAll( '.media-item' ).forEach( function( item ) {
 						item.addEventListener( 'click', function() {
-
-							// Applicable only to the media library grid, not the gallery grid
-							if ( item.parentNode.id === 'gallery-grid' ) {
-								return;
-							}
-
 							selectItemToAdd( item, widget, true );
-
-							if ( item.className.includes( 'selected' ) ) {
-								item.classList.remove( 'selected' );
-								item.setAttribute( 'aria-checked', false );
-								dialog.querySelector( '.attachment-details' ).setAttribute( 'hidden', true );
-
-								// Disable add to widget button if no media items are selected
-								if ( document.querySelector( '.selected' ) == null ) {
-									addButton.setAttribute( 'disabled', true );
-								}
-							} else {
-								item.classList.add( 'selected' );
-								item.setAttribute( 'aria-checked', true );
-								dialog.querySelector( '.attachment-details' ).removeAttribute( 'hidden' );
-
-								// Enable add to widget button
-								addButton.removeAttribute( 'disabled' );
-							}
 						} );
 					} );
 
@@ -874,8 +901,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 
 				// Set widget ID and values of variables
-				dialog.querySelector( '#new-image-modal' ).dataset.widgetId = widget.id;
-				addButton = dialog.querySelector( '#create-new-gallery' );
+				dialog.querySelector( '.widget-modal-header-buttons' ).style.display = 'flex';
+				dialog.querySelector( '.media-library-select-section' ).classList.remove( 'hidden' );
+				gridSection.classList.remove( 'hidden' );
+				addButton = dialog.querySelector( '#gallery-button-new' );
 			}
 		} )
 		.catch( function( error ) {
@@ -920,6 +949,43 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Close modal by clicking button.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function closeModal() {
+		dialog.close();
+
+		if ( dialog.querySelector( '.widget-modal-header-buttons' ) ) {
+			dialog.querySelector( '.widget-modal-header-buttons' ).remove();
+		}
+		if ( dialog.querySelector( '#widget-modal-media-content' ) ) {
+			dialog.querySelector( '#widget-modal-media-content' ).remove();
+		}
+		if ( dialog.querySelector( '#image-modal-content' ) ) {
+			dialog.querySelector( '#image-modal-content' ).remove();
+		}
+		if ( dialog.querySelector( '.widget-modal-footer' ) ) {
+			dialog.querySelector( '.widget-modal-footer' ).remove();
+		}
+		if ( dialog.querySelector( '#menu-item-gallery-edit' ) ) {
+			dialog.querySelector( '#menu-item-gallery-edit' ).remove();
+		}
+		if ( dialog.querySelector( '#menu-item-gallery-library' ) ) {
+			dialog.querySelector( '#menu-item-gallery-library' ).remove();
+		}
+		if ( dialog.querySelector( '.media-gallery-grid-section' ) ) {
+			dialog.querySelector( '.media-gallery-grid-section' ).remove();
+		}
+		if ( dialog.querySelector( '.widget-modal-gallery-settings' ) ) {
+			dialog.querySelector( '.widget-modal-gallery-settings' ).remove();
+		}
+		dialog.removeAttribute( 'style' );		
+		dialog.querySelector( '.widget-modal-headings' ).removeAttribute( 'style' );
+	}
+
+	/**
 	 * Handle clicks on buttons.
 	 *
 	 * @abstract
@@ -927,9 +993,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	document.addEventListener( 'click', function( e ) {
 		var widgetId, widgetEl, base, preview, itemAdd, itemEdit, itemLibrary,
-			itemBrowse, itemUpload, galleryInsert, galleryUpdate, router, mediaToolbar,
-			toolbarGallery, widgetsGrid, gridViewItems, loadMore, content, collections,
-			attachDetails, gridSubPanel, uploadSubPanel, frameTitle, ul, fieldset,
+			itemCancel, itemUpload, galleryInsert, galleryUpdate, librarySelect,
+			galleryGrid, libraryGrid, libraryItems, content, settings,
+			gridSubPanel, uploadSubPanel, ul, fieldset,
 			galleryItems = [],
 			widget = e.target.closest( '.widget' );
 
@@ -940,105 +1006,122 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( e.target.className.includes( 'select-media' ) ) {
 					selectMedia( widget );
 				} else if ( e.target.className.includes( 'edit-media' ) ) {
-					editGallery( widget );
+					editGallery( widget, 'renew' );
 				}
 			}
 
+		// Close the modal
+		} else if ( e.target.id === 'widget-modal-close' ) {
+			closeModal();
+
 		// Open dialog modal to see images in media library
-		} else if ( dialog.querySelector( '#new-image-modal' ) ) {
-			widgetId       = dialog.querySelector( '#new-image-modal' ).dataset.widgetId;
-			widgetEl       = document.getElementById( widgetId );
-			base           = widgetEl.querySelector( '.id_base' );
-			preview        = widgetEl.querySelector( '.media-widget-gallery-preview' );
+		} else if ( dialog.querySelector( '#widget-modal-media-content' ) ) {
+			widgetId        = dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId;
+			widgetEl        = document.getElementById( widgetId );
+			base            = widgetEl.querySelector( '.id_base' );
+			preview         = widgetEl.querySelector( '.media-widget-gallery-preview' );
 
-			itemAdd        = dialog.querySelector( '#menu-item-gallery' );
-			itemEdit       = dialog.querySelector( '#menu-item-gallery-edit' );
-			itemLibrary    = dialog.querySelector( '#menu-item-gallery-library' );
-			itemBrowse     = dialog.querySelector( '#menu-item-browse' );
-			itemUpload     = dialog.querySelector( '#menu-item-upload' );
+			itemAdd         = dialog.querySelector( '#menu-item-add' );
+			itemCancel      = dialog.querySelector( '#menu-item-gallery' );
+			itemEdit        = dialog.querySelector( '#menu-item-gallery-edit' );
+			itemLibrary     = dialog.querySelector( '#menu-item-gallery-library' );
+			itemUpload      = dialog.querySelector( '#menu-item-upload' );
 
-			galleryInsert  = dialog.querySelector( '#gallery-button-insert' );
-			galleryUpdate  = dialog.querySelector( '#gallery-button-update' );
+			galleryInsert   = dialog.querySelector( '#gallery-button-insert' );
+			galleryUpdate   = dialog.querySelector( '#gallery-button-update' );
+			sidebarInfo     = dialog.querySelector( '.widget-modal-right-sidebar-info' );
+			sidebarSettings = dialog.querySelector( '.widget-modal-gallery-settings' );
 
-			router         = dialog.querySelector( '.media-frame-router' );
-			mediaToolbar   = dialog.querySelector( '.media-toolbar' );
-			toolbarGallery = dialog.querySelector( '.media-toolbar-gallery' );
-			widgetsGrid    = dialog.querySelector( '#widgets-media-grid' );
-			gridViewItems  = dialog.querySelectorAll( '.widgets-media-grid-view li' );
-			loadMore       = dialog.querySelector( '.load-more-wrapper' );
-			content        = dialog.querySelector( '.media-frame-content' );
-			collections    = dialog.querySelector( '.collection-settings' );
-			attachDetails  = dialog.querySelector( '.attachment-details' );
+			headerButtons   = dialog.querySelector( '.widget-modal-header-buttons');
+			librarySelect   = dialog.querySelector( '.media-library-select-section' );
+			libraryGrid     = dialog.querySelector( '.media-library-grid-section' );
+			libraryItems    = dialog.querySelectorAll( '.media-library-grid-section li' );
+			galleryGrid     = dialog.querySelector( '.media-gallery-grid-section' );
+			content         = dialog.querySelector( '.media-frame-content' );
 
-			gridSubPanel   = dialog.querySelectorAll( '#attachments-browser, .media-views-heading, .attachments-wrapper, .media-sidebar, .widgets-modal-pages, .media-frame-toolbar' );
-			uploadSubPanel = dialog.querySelector( '#uploader-inline' );
-			frameTitle     = dialog.querySelector( '#media-frame-title' );
+			gridSubPanel    = dialog.querySelectorAll( '#attachments-browser, .media-views-heading, .attachments-wrapper, .media-sidebar, .widgets-modal-pages, .media-frame-toolbar' );
+			uploadSubPanel  = dialog.querySelector( '#uploader-inline' );
 
 			if ( e.target.id === 'menu-item-gallery' ) {
-				if ( e.target.className.includes( 'cancel' ) ) {
-					closeButton.click();
-				} else {
-					setupGridView();
+				closeModal();
+				if ( ! e.target.className.includes( 'cancel' ) ) {
+					selectMedia( widgetEl );
+					e.target.textContent = GALLERY_WIDGET.create_gallery;
 				}
 
-			// Open the library of images
-			} else if ( e.target.id === 'menu-item-browse' ) {
+			// Edit a gallery
+			} else if ( e.target.id === 'menu-item-gallery-edit' ) {
+
+				// No need to do anything if the edit gallery screen is already visible
+				if ( e.target.className.includes( 'active' ) ) {
+					return;
+				}
+				itemLibrary.classList.remove( 'active' );
+				itemLibrary.setAttribute( 'aria-selected', false );
+				galleryUpdate.classList.add( 'hidden' );
+				galleryUpdate.setAttribute( 'disabled', true );
+				headerButtons.style.display = 'none';
+				librarySelect.classList.add( 'hidden' );
+				libraryGrid.classList.add( 'hidden' );
+
+				e.target.classList.add ( 'active' );
+				e.target.setAttribute( 'aria-selected', true );
+				galleryGrid.classList.remove( 'hidden' );
+				sidebarSettings.removeAttribute( 'hidden' );
+				galleryInsert.classList.remove( 'hidden' );
+				galleryInsert.removeAttribute( 'disabled' );
+
+			// Open the library to add images to current gallery
+			} else if ( e.target.id === 'menu-item-gallery-library' ) {
+				sidebarInfo.setAttribute( 'hidden', true );
+				sidebarSettings.setAttribute( 'hidden', true );
+				itemEdit.classList.remove( 'active' );
+				itemEdit.setAttribute( 'aria-selected', false );
 				itemUpload.classList.remove( 'active' );
 				itemUpload.setAttribute( 'aria-selected', false );
 				itemAdd.classList.remove( 'active' );
 				itemAdd.setAttribute( 'aria-selected', false );
 				e.target.classList.add ( 'active' );
 				e.target.setAttribute( 'aria-selected', true );
-				uploadSubPanel.setAttribute( 'hidden', true );
-				uploadSubPanel.setAttribute( 'inert', true );
-				widgetsGrid.removeAttribute( 'hidden' );
-				collections.classList.add( 'hidden' );
-				attachDetails.removeAttribute( 'hidden' );
+				galleryInsert.classList.add( 'hidden' );
+				galleryInsert.setAttribute( 'disabled', true );
+				galleryGrid.classList.add( 'hidden' );
+				sidebarInfo.setAttribute( 'hidden', true );
+				libraryGrid.classList.remove( 'hidden' );
 
-				// Turn off sorting
-				if ( gallerySortable ) {
-					gallerySortable.option( 'disabled', true );
-				}
-
-				gridViewItems.forEach( function( item ) {
-					item.removeAttribute( 'hidden' );
-					item.removeAttribute( 'inert' );
-				} );
-
-				gridSubPanel.forEach( function ( element ) {
-					element.removeAttribute( 'hidden' );
-					element.removeAttribute( 'inert' );
-				} );
+				updateLibrary( widgetEl );
+				galleryUpdate.classList.remove( 'hidden' );
+				galleryUpdate.removeAttribute( 'disabled' );
 
 			// Create a new gallery of images
-			} else if ( e.target.id === 'create-new-gallery' ) {
-				dialog.querySelector( '#media-frame-title h2' ).textContent = GALLERY_WIDGET.edit_gallery;
+			} else if ( e.target.id === 'gallery-button-new' ) {
+				dialog.querySelector( '#widget-modal-title h2' ).textContent = GALLERY_WIDGET.edit_gallery;				
+				headerButtons.style.display = 'none';
+				sidebarInfo.setAttribute( 'hidden', true );
 
 				e.target.classList.add( 'hidden' );
+				itemAdd.classList.remove( 'active' );
+				itemAdd.setAttribute( 'aria-selected', false );
+				itemAdd.setAttribute( 'hidden', true );
 				itemUpload.classList.remove( 'active' );
 				itemUpload.setAttribute( 'aria-selected', false );
-				itemBrowse.classList.remove( 'active' );
-				itemBrowse.setAttribute( 'aria-selected', false );
-				widgetsGrid.setAttribute( 'hidden', true );
-				itemAdd.textContent = '&larr; ' + GALLERY_WIDGET.cancel_gallery;
-				itemAdd.classList.add( 'cancel' );
+				libraryGrid.classList.add( 'hidden' );
+				librarySelect.classList.add( 'hidden' );
+
+				itemCancel.textContent = GALLERY_WIDGET.cancel_gallery;
+				itemCancel.removeAttribute( 'hidden' );
+				itemCancel.classList.remove( 'active' );
+				itemCancel.setAttribute( 'aria-selected', false );
 				itemEdit.removeAttribute( 'hidden' );
 				itemEdit.classList.add ( 'active' );
 				itemEdit.setAttribute( 'aria-selected', true );
 				itemLibrary.removeAttribute( 'hidden' );
 
-				toolbarGallery.classList.remove( 'hidden' );
-				dialog.querySelectorAll( '.media-toolbar-primary' )[1].style.right = '1em';
+				galleryGrid.classList.remove( 'hidden' );
 				galleryInsert.classList.remove( 'hidden' );
-				attachDetails.setAttribute( 'hidden', true );
-				collections.classList.remove( 'hidden' );
+				dialog.querySelector( '.widget-modal-gallery-settings' ).removeAttribute( 'hidden' );
 
-				router.classList.add( 'hidden' );
-				mediaToolbar.classList.add( 'hidden' );
-				loadMore.classList.add( 'hidden' );
-				content.style.top = '50px';
-
-				gridViewItems.forEach( function( item ) {
+				libraryItems.forEach( function( item ) {
 					if ( item.className.includes( 'selected' ) ) {
 						selectedIds.push( item.dataset.id );
 						galleryItems.push( item );
@@ -1048,29 +1131,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 				} );
 
-				enableGallerySorting( galleryItems, widgetEl );
-
-			// Open the library of images
-			} else if ( e.target.id === 'menu-item-gallery-library' ) {
-				itemEdit.classList.remove( 'active' );
-				itemEdit.setAttribute( 'aria-selected', false );
-				itemUpload.classList.remove( 'active' );
-				itemUpload.setAttribute( 'aria-selected', false );
-				itemAdd.classList.remove( 'active' );
-				itemAdd.setAttribute( 'aria-selected', false );
-				e.target.classList.add ( 'active' );
-				e.target.setAttribute( 'aria-selected', true );
-				dialog.querySelector( '.media-toolbar-gallery' ).setAttribute( 'hidden', true );
-				dialog.querySelector( '#widgets-media-grid' ).removeAttribute( 'hidden' );
-
-				updateLibrary( widgetEl );
-				setupGridView();
-
-				dialog.querySelector( '#menu-item-browse' ).click();
-				galleryInsert.classList.add( 'hidden' );
-				galleryInsert.setAttribute( 'disabled', true );
-				galleryUpdate.classList.remove( 'hidden' );
-				galleryUpdate.removeAttribute( 'disabled' );
+				enableGallerySorting( galleryItems, widgetEl, 'select' );
 
 			// Insert the gallery into the widget
 			} else if ( e.target.id === 'gallery-button-insert' ) {
@@ -1113,54 +1174,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					widgetEl.classList.add( 'widget-dirty' );
 				}
 				widgetEl.dispatchEvent( new Event( 'change' ) );
-				closeButton.click();
+				closeModal();
 
 			// Update a gallery
 			} else if ( e.target.id === 'gallery-button-update' ) {
-				dialog.querySelector( '#create-new-gallery' ).click();
-				mediaToolbar.classList.add( 'hidden' );
-				toolbarGallery.removeAttribute( 'hidden' );
-				widgetsGrid.querySelector( 'ul' ).innerHTML = '';
-				galleryUpdate.classList.add( 'hidden' );
-				galleryUpdate.setAttribute( 'disabled', true );
-				itemLibrary.classList.remove( 'active' );
-				itemLibrary.setAttribute( 'aria-selected', false );
-				galleryInsert.classList.remove( 'hidden' );
-				galleryInsert.removeAttribute( 'disabled' );
+				libraryItems.forEach( function( item ) {
+					if ( item.className.includes( 'selected' ) ) {
+						selectedIds.push( item.dataset.id );
+					}
+				} );
 
-			// Edit a gallery
-			} else if ( e.target.id === 'menu-item-gallery-edit' ) {
-
-				// No need to do anything if the edit gallery screenis already visible
-				if ( e.target.className.includes( 'active' ) ) {
-					return;
-				}
-				itemLibrary.classList.remove( 'active' );
-				itemLibrary.setAttribute( 'aria-selected', false );
-				galleryUpdate.classList.add( 'hidden' );
-				galleryUpdate.setAttribute( 'disabled', true );
-				dialog.querySelector( '#widgets-media-grid' ).setAttribute( 'hidden', true );
-				attachDetails.setAttribute( 'hidden', true );
-
-				router.classList.add( 'hidden' );
-				mediaToolbar.classList.add( 'hidden' );
-				loadMore.classList.add( 'hidden' );
-				content.style.top = '50px';
-
-				// Turn sorting back on if it's been turned off
-				if ( gallerySortable ) {
-					gallerySortable.option( 'disabled', false );
-				}
-
-				dialog.querySelector( '.media-toolbar-gallery' ).removeAttribute( 'hidden' );
-				e.target.classList.add ( 'active' );
-				e.target.setAttribute( 'aria-selected', true );
-				galleryInsert.classList.remove( 'hidden' );
-				galleryInsert.removeAttribute( 'disabled' );
+				closeModal();
+				editGallery( widgetEl, 'update' );
 
 			// Reverse the order of items in the gallery
 			} else if ( e.target.className.includes( 'gallery-button-reverse' ) ) {
-				dialog.querySelectorAll( '.widgets-media-grid-view li:not( [hidden] )' ).forEach( function( item ) {
+				dialog.querySelectorAll( '#gallery-grid li:not( [hidden] )' ).forEach( function( item ) {
 					item.parentNode.prepend( item );
 				} );
 				selectedIds.reverse();
@@ -1168,7 +1197,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Delete an item from the media library
 			} else if ( e.target.className.includes( 'delete-attachment' ) ) {
 				if ( widgetEl.querySelector( '[data-property="ids"]' ) ) {
-					gridViewItems.forEach( function( item ) {
+					libraryItems.forEach( function( item ) {
 						if ( item.className.includes( 'selected' ) ) {
 							if ( ! widgetEl.querySelector( '[data-property="ids"]' ).value.split( ',' ).includes( item.dataset.id ) ) {
 								if ( window.confirm( GALLERY_WIDGET.confirm_delete ) ) {
@@ -1178,33 +1207,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						}
 					} );
 				}
+
+			// Copy URL
+			} else if ( e.target.className.includes( 'copy-attachment-url' ) ) {
+				copyToClipboard( e.target );
 			}
 		}
 	} );
 
-	/**
-	 * Close modal by clicking button.
-	 *
-	 * @abstract
-	 * @return {void}
-	 */
-	closeButton.addEventListener( 'click', function() {
-		dialog.close();
-		if ( dialog.querySelector( '#image-modal-content' ) ) {
-			dialog.querySelector( '#image-modal-content' ).remove();
-		}
-		if ( dialog.querySelector( '#new-image-modal' ) ) {
-			dialog.querySelector( '#new-image-modal' ).remove();
-		}
-	} );
-
 	// Set focus after closing modal using Escape key
-	dialog.addEventListener( 'keydown', function( e ) {
+	document.addEventListener( 'keydown', function( e ) {
 		var widgetId, widget, details, base,
-			modal = dialog.querySelector( '#new-image-modal' );
+			modal = dialog.querySelector( '#widget-modal-media-content' );
 
 		if ( modal ) {
-			widgetId = dialog.querySelector( '#new-image-modal' ).dataset.widgetId;
+			widgetId = dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId;
 
 			if ( widgetId ) {
 				widget  = document.getElementById( widgetId );
@@ -1213,7 +1230,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				if ( base && base.value === 'media_gallery' ) {
 					if ( dialog.open && e.key === 'Escape' ) {
-						closeButton.click();
+						closeModal();
 						setTimeout( function() {
 							details.open = true;
 						}, 100 );
@@ -1227,32 +1244,4 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 	} );
-
-	/* Enable choosing of panel on narrow screen */
-	function checkWindowWidth() {
-		var itemAdd, itemEdit, itemLibrary, details;
-		if ( window.innerWidth < 901 ) {
-			itemAdd = dialog.querySelector( '#menu-item-gallery' );
-			itemAdd.removeAttribute( 'hidden' );
-
-			details = dialog.querySelector( 'details' );
-			details.append( itemAdd );
-
-			if ( dialog.querySelector( '#media-frame-title h2' ).textContent === GALLERY_WIDGET.edit_gallery ) {
-				itemEdit = dialog.querySelector( '#menu-item-gallery-edit' );
-				itemEdit.removeAttribute( 'hidden' );
-				details.append( itemEdit );
-
-				itemLibrary = dialog.querySelector( '#menu-item-gallery-library' );
-				itemLibrary.removeAttribute( 'hidden' );
-				details.append( itemLibrary );
-				dialog.querySelector( 'summary' ).style.marginLeft = '8em';
-			}
-
-			details.removeAttribute( 'hidden' );
-			itemAdd.addEventListener( 'click', function() {
-				dialog.querySelector( '.details-panel' ).style.marginTop = '-35px';
-			} );
-		}
-	}
 } );
