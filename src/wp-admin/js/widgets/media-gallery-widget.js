@@ -622,6 +622,150 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Update the grid with new images.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function updateGrid( widget, paged ) {
+		var dateFilter = dialog.querySelector( '#filter-by-date' ),
+			mediaCatSelect = dateFilter.nextElementSibling,
+			search = dialog.querySelector( '#widget-modal-search-input' ),
+			params = new URLSearchParams( {
+				'action': 'query-attachments',
+				'query[posts_per_page]': GALLERY_WIDGET.per_page,
+				'query[monthnum]': dateFilter.value ? parseInt( dateFilter.value.substr( 4, 2 ), 10 ) : 0,
+				'query[year]': dateFilter.value ? parseInt( dateFilter.value.substr( 0, 4 ), 10 ) : 0,
+				'query[post_mime_type]': 'image',
+				'query[s]': search.value ? search.value : '',
+				'query[paged]': paged ? paged : 1,
+				'query[media_category_name]': mediaCatSelect.value ? mediaCatSelect.value : ''
+			} );
+
+		// Make AJAX request
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: params,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result.success ) {
+
+				// Show relevant buttons and clear grid
+				addButton = dialog.querySelector( '#media-button-insert' );
+				if ( addButton === null ) {
+					 addButton = dialog.querySelector( '#gallery-button-update' );
+				} else if ( addButton === null ) {
+					 addButton = dialog.querySelector( '#gallery-button-new' );
+				}
+
+				dialog.querySelector( '.widget-modal-grid' ).innerHTML = '';
+
+				if ( result.data.length === 0 ) {
+
+					// Reset pagination
+					dialog.querySelectorAll( '.pagination-links button' ).forEach( function( pageLink ) {
+						pageLink.setAttribute( 'data-page', 1 );
+						pageLink.setAttribute( 'disabled', true );
+						pageLink.setAttribute( 'inert', true );
+					} );
+
+					dialog.querySelector( '#current-page-selector' ).setAttribute( 'value', 1 );
+					dialog.querySelector( '.total-pages' ).textContent = 1;
+					dialog.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, 0 );
+
+					// Update the count at the bottom of the page
+					dialog.querySelector( '.load-more-count' ).setAttribute( 'hidden', true );
+					dialog.querySelector( '.no-media' ).removeAttribute( 'hidden' );
+				} else {
+
+					// Populate grid with new items
+					result.data.forEach( function( attachment ) {
+						var gridItem = populateGridItem( attachment, widget );
+						dialog.querySelector( '.widget-modal-grid' ).append( gridItem );
+					} );
+
+					// Reset pagination
+					dialog.querySelectorAll( '.pagination-links button' ).forEach( function( pageLink ) {
+						if ( pageLink.className.includes( 'first-page' ) || pageLink.className.includes( 'prev-page' ) ) {
+							if ( paged === '1' ) {
+								pageLink.setAttribute( 'disabled', true );
+								pageLink.setAttribute( 'inert', true );
+							} else {
+								pageLink.removeAttribute( 'disabled'  );
+								pageLink.removeAttribute( 'inert'  );
+								if ( pageLink.className.includes( 'prev-page' ) ) {
+									if ( ( parseInt( paged ) - 1 ) < 1 ) {
+										pageLink.setAttribute( 'data-page', 1 );
+									} else {
+										pageLink.setAttribute( 'data-page', parseInt( paged ) - 1 );
+									}
+								}
+							}
+						} else if ( pageLink.className.includes( 'next-page' ) ) {
+							if ( result.headers.max_pages === parseInt( paged ) ) {
+								pageLink.setAttribute( 'data-page', paged );
+								pageLink.setAttribute( 'disabled', true );
+								pageLink.setAttribute( 'inert', true );
+							} else {
+								pageLink.setAttribute( 'data-page', parseInt( paged ) + 1 );
+								pageLink.removeAttribute( 'disabled'  );
+								pageLink.removeAttribute( 'inert'  );
+							}
+						} else if ( pageLink.className.includes( 'last-page' ) ) {
+							pageLink.setAttribute( 'data-page', result.headers.max_pages );
+							if ( result.headers.max_pages === parseInt( paged ) ) {
+								pageLink.setAttribute( 'disabled', true );
+								pageLink.setAttribute( 'inert', true );
+							} else {
+								pageLink.removeAttribute( 'disabled'  );
+								pageLink.removeAttribute( 'inert'  );
+							}
+						}
+					} );
+
+					// Update both HTML and DOM
+					dialog.querySelector( '#current-page-selector' ).setAttribute( 'value', paged ? paged : 1 );
+					dialog.querySelector( '#current-page-selector' ).value = paged ? paged : 1;
+					dialog.querySelector( '.total-pages' ).textContent = result.headers.max_pages;
+					dialog.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, result.headers.total_posts );
+
+					// Open modal to show details about file, or select files for deletion
+					if ( dialog.querySelector( '.media-item.selected' ) == null ) {
+						addButton.setAttribute( 'disabled', true );
+						dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+					}
+					dialog.querySelectorAll( '.media-item' ).forEach( function( item ) {
+						if ( item.className.includes( 'selected' ) ) {
+							selectItemToAdd( item, widget, false );
+							item.focus();
+						}
+						item.addEventListener( 'click', function() {
+							selectItemToAdd( item, widget, true );
+						} );
+					} );
+
+					// Update the count at the bottom of the page
+					dialog.querySelector( '.no-media' ).setAttribute( 'hidden', true );
+					dialog.querySelector( '.load-more-count' ).removeAttribute( 'hidden' );
+					dialog.querySelector( '.load-more-count' ).textContent = result.data.length + ' ' + GALLERY_WIDGET.of + ' ' + result.headers.total_posts + ' media items';
+				}
+			}
+		} )
+		.catch( function( error ) {
+			console.error( GALLERY_WIDGET.error, error );
+		} );
+
+		dialog.showModal();
+	}
+
+	/**
 	 * Open the modal to edit a gallery.
 	 *
 	 * @abstract
@@ -956,6 +1100,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function closeModal() {
+		var imageButton = dialog.querySelector( '#menu-item-add' ),
+			galleryButton = dialog.querySelector( '#menu-item-gallery' )
+
 		dialog.close();
 
 		if ( dialog.querySelector( '.widget-modal-header-buttons' ) ) {
@@ -983,7 +1130,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '.widget-modal-gallery-settings' ).remove();
 		}
 		dialog.removeAttribute( 'style' );
+		imageButton.removeAttribute( 'hidden' );
+		imageButton.setAttribute( 'aria-selected', true );
+		galleryButton.setAttribute( 'hidden', true );
+		galleryButton.setAttribute( 'aria-selected', false );
 		dialog.querySelector( '.widget-modal-headings' ).removeAttribute( 'style' );
+		dialog.querySelector( '.widget-modal-title h2' ).textContent = GALLERY_WIDGET.media_library;
 	}
 
 	/**
@@ -993,9 +1145,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	document.addEventListener( 'click', function( e ) {
-		var widgetId, widgetEl, base, preview, itemAdd, itemEdit, itemLibrary,
-			itemCancel, itemUpload, galleryInsert, galleryUpdate, librarySelect,
-			headerButtons, galleryGrid, libraryGrid, libraryItems, content,
+		var widgetId, widgetEl, base, preview, itemAdd, itemEdit, itemLibrary, modalPages,
+			itemCancel, itemUpload, itemBrowse, galleryInsert, galleryUpdate, uploadPanel,
+			librarySelect, headerButtons, galleryGrid, libraryGrid,libraryItems, content,
 			sidebarSettings, sidebarInfo, gridSubPanel, uploadSubPanel, ul, fieldset,
 			galleryItems = [],
 			widget = e.target.closest( '.widget' );
@@ -1020,198 +1172,281 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			widgetId        = dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId;
 			widgetEl        = document.getElementById( widgetId );
 			base            = widgetEl.querySelector( '.id_base' );
-			preview         = widgetEl.querySelector( '.media-widget-gallery-preview' );
 
-			itemAdd         = dialog.querySelector( '#menu-item-add' );
-			itemCancel      = dialog.querySelector( '#menu-item-gallery' );
-			itemEdit        = dialog.querySelector( '#menu-item-gallery-edit' );
-			itemLibrary     = dialog.querySelector( '#menu-item-gallery-library' );
-			itemUpload      = dialog.querySelector( '#menu-item-upload' );
+			// Only run on a media gallery widget
+			if ( base && base.value === 'media_gallery' ) {
+				preview         = widgetEl.querySelector( '.media-widget-gallery-preview' );
 
-			galleryInsert   = dialog.querySelector( '#gallery-button-insert' );
-			galleryUpdate   = dialog.querySelector( '#gallery-button-update' );
-			sidebarInfo     = dialog.querySelector( '.widget-modal-right-sidebar-info' );
-			sidebarSettings = dialog.querySelector( '.widget-modal-gallery-settings' );
+				itemAdd         = dialog.querySelector( '#menu-item-add' );
+				itemCancel      = dialog.querySelector( '#menu-item-gallery' );
+				itemEdit        = dialog.querySelector( '#menu-item-gallery-edit' );
+				itemLibrary     = dialog.querySelector( '#menu-item-gallery-library' );
+				itemUpload      = dialog.querySelector( '#menu-item-upload' );
+				itemBrowse      = dialog.querySelector( '#menu-item-browse' );
 
-			headerButtons   = dialog.querySelector( '.widget-modal-header-buttons');
-			librarySelect   = dialog.querySelector( '.media-library-select-section' );
-			libraryGrid     = dialog.querySelector( '.media-library-grid-section' );
-			libraryItems    = dialog.querySelectorAll( '.media-library-grid-section li' );
-			galleryGrid     = dialog.querySelector( '.media-gallery-grid-section' );
-			content         = dialog.querySelector( '.media-frame-content' );
+				galleryInsert   = dialog.querySelector( '#gallery-button-insert' );
+				galleryUpdate   = dialog.querySelector( '#gallery-button-update' );
+				sidebarInfo     = dialog.querySelector( '.widget-modal-right-sidebar-info' );
+				sidebarSettings = dialog.querySelector( '.widget-modal-gallery-settings' );
 
-			gridSubPanel    = dialog.querySelectorAll( '#attachments-browser, .media-views-heading, .attachments-wrapper, .media-sidebar, .widgets-modal-pages, .media-frame-toolbar' );
-			uploadSubPanel  = dialog.querySelector( '#uploader-inline' );
+				uploadPanel     = dialog.querySelector( '#uploader-inline' );
+				headerButtons   = dialog.querySelector( '.widget-modal-header-buttons');
+				modalPages      = dialog.querySelector( '.widget-modal-pages' );
+				librarySelect   = dialog.querySelector( '.media-library-select-section' );
+				libraryGrid     = dialog.querySelector( '.media-library-grid-section' );
+				libraryItems    = dialog.querySelectorAll( '.media-library-grid-section li' );
+				galleryGrid     = dialog.querySelector( '.media-gallery-grid-section' );
+				content         = dialog.querySelector( '.media-frame-content' );
 
-			if ( e.target.id === 'menu-item-gallery' ) {
-				closeModal();
-				if ( ! e.target.className.includes( 'cancel' ) ) {
-					selectMedia( widgetEl );
-					e.target.textContent = GALLERY_WIDGET.create_gallery;
-				}
+				gridSubPanel    = dialog.querySelectorAll( '#attachments-browser, .media-views-heading, .attachments-wrapper, .media-sidebar, .widgets-modal-pages, .media-frame-toolbar' );
+				uploadSubPanel  = dialog.querySelector( '#uploader-inline' );
 
-			// Edit a gallery
-			} else if ( e.target.id === 'menu-item-gallery-edit' ) {
+				// Search or go to a specific page in the media library grid
+				if ( e.target.parentNode.className === 'pagination-links' && e.target.tagName === 'BUTTON' ) {
+					page = e.target.dataset.page;
+					updateGrid( widgetEl, page );
+				} else if ( e.target.parentNode.parentNode && e.target.parentNode.parentNode.className === 'pagination-links' && e.target.parentNode.tagName === 'BUTTON' ) {
+					page = e.target.parentNode.dataset.page;
+					updateGrid( widgetEl, page );
 
-				// No need to do anything if the edit gallery screen is already visible
-				if ( e.target.className.includes( 'active' ) ) {
-					return;
-				}
-				itemLibrary.classList.remove( 'active' );
-				itemLibrary.setAttribute( 'aria-selected', false );
-				galleryUpdate.classList.add( 'hidden' );
-				galleryUpdate.setAttribute( 'disabled', true );
-				headerButtons.style.display = 'none';
-				librarySelect.classList.add( 'hidden' );
-				libraryGrid.classList.add( 'hidden' );
-
-				e.target.classList.add ( 'active' );
-				e.target.setAttribute( 'aria-selected', true );
-				galleryGrid.classList.remove( 'hidden' );
-				sidebarSettings.removeAttribute( 'hidden' );
-				galleryInsert.classList.remove( 'hidden' );
-				galleryInsert.removeAttribute( 'disabled' );
-
-			// Open the library to add images to current gallery
-			} else if ( e.target.id === 'menu-item-gallery-library' ) {
-				sidebarInfo.setAttribute( 'hidden', true );
-				sidebarSettings.setAttribute( 'hidden', true );
-				itemEdit.classList.remove( 'active' );
-				itemEdit.setAttribute( 'aria-selected', false );
-				itemUpload.classList.remove( 'active' );
-				itemUpload.setAttribute( 'aria-selected', false );
-				itemAdd.classList.remove( 'active' );
-				itemAdd.setAttribute( 'aria-selected', false );
-				e.target.classList.add ( 'active' );
-				e.target.setAttribute( 'aria-selected', true );
-				galleryInsert.classList.add( 'hidden' );
-				galleryInsert.setAttribute( 'disabled', true );
-				galleryGrid.classList.add( 'hidden' );
-				sidebarInfo.setAttribute( 'hidden', true );
-				libraryGrid.classList.remove( 'hidden' );
-
-				updateLibrary( widgetEl );
-				galleryUpdate.classList.remove( 'hidden' );
-				galleryUpdate.removeAttribute( 'disabled' );
-
-			// Create a new gallery of images
-			} else if ( e.target.id === 'gallery-button-new' ) {
-				dialog.querySelector( '#widget-modal-title h2' ).textContent = GALLERY_WIDGET.edit_gallery;
-				headerButtons.style.display = 'none';
-				sidebarInfo.setAttribute( 'hidden', true );
-
-				e.target.classList.add( 'hidden' );
-				itemAdd.classList.remove( 'active' );
-				itemAdd.setAttribute( 'aria-selected', false );
-				itemAdd.setAttribute( 'hidden', true );
-				itemUpload.classList.remove( 'active' );
-				itemUpload.setAttribute( 'aria-selected', false );
-				libraryGrid.classList.add( 'hidden' );
-				librarySelect.classList.add( 'hidden' );
-
-				itemCancel.textContent = GALLERY_WIDGET.cancel_gallery;
-				itemCancel.removeAttribute( 'hidden' );
-				itemCancel.classList.remove( 'active' );
-				itemCancel.setAttribute( 'aria-selected', false );
-				itemEdit.removeAttribute( 'hidden' );
-				itemEdit.classList.add ( 'active' );
-				itemEdit.setAttribute( 'aria-selected', true );
-				itemLibrary.removeAttribute( 'hidden' );
-
-				galleryGrid.classList.remove( 'hidden' );
-				galleryInsert.classList.remove( 'hidden' );
-				dialog.querySelector( '.widget-modal-gallery-settings' ).removeAttribute( 'hidden' );
-
-				libraryItems.forEach( function( item ) {
-					if ( item.className.includes( 'selected' ) ) {
-						selectedIds.push( item.dataset.id );
-						galleryItems.push( item );
-					} else {
-						item.setAttribute( 'hidden', true );
-						item.setAttribute( 'inert', true );
+				// Cancel gallery creation or update
+				} else if ( e.target.id === 'menu-item-gallery' ) {
+					closeModal();
+					if ( ! e.target.className.includes( 'cancel' ) ) {
+						selectMedia( widgetEl );
+						e.target.textContent = GALLERY_WIDGET.create_gallery;
 					}
-				} );
 
-				enableGallerySorting( galleryItems, widgetEl, 'select' );
+				// Edit a gallery
+				} else if ( e.target.id === 'menu-item-gallery-edit' ) {
 
-			// Insert the gallery into the widget
-			} else if ( e.target.id === 'gallery-button-insert' ) {
-				if ( preview ) {
-					preview.innerHTML = '';
-				} else {
-					ul = document.createElement( 'ul' );
-					ul.className = 'media-widget-gallery-preview';
-
-					fieldset = document.createElement( 'fieldset' );
-					fieldset.className = 'media-widget-buttons';
-					fieldset.innerHTML = '<button type="button" class="button edit-media selected" data-edit-nonce="' + widgetEl.querySelector( '.select-media' ).dataset.editNonce + '" style="margin-top:0;">' + GALLERY_WIDGET.edit_gallery + '</button>';
-
-					widgetEl.querySelector( '.attachment-media-view' ).replaceWith( ul );
-					widgetEl.querySelector( '.media-widget-preview' ).after( fieldset );
-				}
-
-				// Update the preview within the media gallery widget
-				selectedIds = [];
-				dialog.querySelectorAll( '#gallery-grid .selected' ).forEach( function( item ) {
-					var li = document.createElement( 'li' );
-
-					selectedIds.push( item.dataset.id );
-
-					li.className = 'gallery-item';
-					li.innerHTML = '<div class="gallery-icon"><img alt="' + item.querySelector( 'img' ).alt + '" src="' + item.dataset.url + '" width="150" height="150"></div>';
-
-					widgetEl.querySelector( '.media-widget-gallery-preview' ).append( li );
-				} );
-
-				// Update the widget fields
-				widgetEl.querySelector( '[data-property="ids"]' ).value = selectedIds.toString();
-				widgetEl.querySelector( '[data-property="link_type"]' ).value = dialog.querySelector( '#gallery-settings-link-to' ).value;
-				widgetEl.querySelector( '[data-property="columns"]' ).value = dialog.querySelector( '#gallery-settings-columns' ).value;
-				widgetEl.querySelector( '[data-property="orderby_random"]' ).value = dialog.querySelector( '#gallery-settings-random-order' ).checked ? 1 : '';
-				widgetEl.querySelector( '[data-property="size"]' ).value = dialog.querySelector( '#gallery-settings-size' ).value;
-
-				// Activate Save/Publish button
-				if ( document.body.className.includes( 'widgets-php' ) ) {
-					widgetEl.classList.add( 'widget-dirty' );
-				}
-				widgetEl.dispatchEvent( new Event( 'change' ) );
-				closeModal();
-
-			// Update a gallery
-			} else if ( e.target.id === 'gallery-button-update' ) {
-				libraryItems.forEach( function( item ) {
-					if ( item.className.includes( 'selected' ) ) {
-						selectedIds.push( item.dataset.id );
+					// No need to do anything if the edit gallery screen is already visible
+					if ( e.target.className.includes( 'active' ) ) {
+						return;
 					}
-				} );
+					itemLibrary.classList.remove( 'active' );
+					itemLibrary.setAttribute( 'aria-selected', false );
+					galleryUpdate.classList.add( 'hidden' );
+					galleryUpdate.setAttribute( 'disabled', true );
+					headerButtons.style.display = 'none';
+					librarySelect.classList.add( 'hidden' );
+					libraryGrid.classList.add( 'hidden' );
 
-				closeModal();
-				editGallery( widgetEl, 'update' );
+					e.target.classList.add ( 'active' );
+					e.target.setAttribute( 'aria-selected', true );
+					galleryGrid.classList.remove( 'hidden' );
+					sidebarSettings.removeAttribute( 'hidden' );
+					galleryInsert.classList.remove( 'hidden' );
+					galleryInsert.removeAttribute( 'disabled' );
 
-			// Reverse the order of items in the gallery
-			} else if ( e.target.className.includes( 'gallery-button-reverse' ) ) {
-				dialog.querySelectorAll( '#gallery-grid li:not( [hidden] )' ).forEach( function( item ) {
-					item.parentNode.prepend( item );
-				} );
-				selectedIds.reverse();
+				// Open the library to add images to current gallery
+				} else if ( e.target.id === 'menu-item-gallery-library' ) {
+					sidebarInfo.setAttribute( 'hidden', true );
+					sidebarSettings.setAttribute( 'hidden', true );
+					itemEdit.classList.remove( 'active' );
+					itemEdit.setAttribute( 'aria-selected', false );
+					itemUpload.classList.remove( 'active' );
+					itemUpload.setAttribute( 'aria-selected', false );
+					itemAdd.classList.remove( 'active' );
+					itemAdd.setAttribute( 'aria-selected', false );
+					e.target.classList.add ( 'active' );
+					e.target.setAttribute( 'aria-selected', true );
+					galleryInsert.classList.add( 'hidden' );
+					galleryInsert.setAttribute( 'disabled', true );
+					galleryGrid.classList.add( 'hidden' );
+					sidebarInfo.setAttribute( 'hidden', true );
+					libraryGrid.classList.remove( 'hidden' );
 
-			// Delete an item from the media library
-			} else if ( e.target.className.includes( 'delete-attachment' ) ) {
-				if ( widgetEl.querySelector( '[data-property="ids"]' ) ) {
+					updateLibrary( widgetEl );
+					galleryUpdate.classList.remove( 'hidden' );
+					galleryUpdate.removeAttribute( 'disabled' );
+
+				// Create a new gallery of images
+				} else if ( e.target.id === 'gallery-button-new' ) {
+					dialog.querySelector( '#widget-modal-title h2' ).textContent = GALLERY_WIDGET.edit_gallery;
+					headerButtons.style.display = 'none';
+					sidebarInfo.setAttribute( 'hidden', true );
+
+					e.target.classList.add( 'hidden' );
+					itemAdd.classList.remove( 'active' );
+					itemAdd.setAttribute( 'aria-selected', false );
+					itemAdd.setAttribute( 'hidden', true );
+					itemUpload.classList.remove( 'active' );
+					itemUpload.setAttribute( 'aria-selected', false );
+					libraryGrid.classList.add( 'hidden' );
+					librarySelect.classList.add( 'hidden' );
+
+					itemCancel.textContent = GALLERY_WIDGET.cancel_gallery;
+					itemCancel.removeAttribute( 'hidden' );
+					itemCancel.classList.remove( 'active' );
+					itemCancel.setAttribute( 'aria-selected', false );
+					itemEdit.removeAttribute( 'hidden' );
+					itemEdit.classList.add ( 'active' );
+					itemEdit.setAttribute( 'aria-selected', true );
+					itemLibrary.removeAttribute( 'hidden' );
+
+					galleryGrid.classList.remove( 'hidden' );
+					galleryInsert.classList.remove( 'hidden' );
+					dialog.querySelector( '.widget-modal-gallery-settings' ).removeAttribute( 'hidden' );
+
 					libraryItems.forEach( function( item ) {
 						if ( item.className.includes( 'selected' ) ) {
-							if ( ! widgetEl.querySelector( '[data-property="ids"]' ).value.split( ',' ).includes( item.dataset.id ) ) {
-								if ( window.confirm( GALLERY_WIDGET.confirm_delete ) ) {
-									deleteItem( item.dataset.id );
-								}
-							}
+							selectedIds.push( item.dataset.id );
+							galleryItems.push( item );
+						} else {
+							item.setAttribute( 'hidden', true );
+							item.setAttribute( 'inert', true );
 						}
 					} );
-				}
 
-			// Copy URL
-			} else if ( e.target.className.includes( 'copy-attachment-url' ) ) {
-				copyToClipboard( e.target );
+					enableGallerySorting( galleryItems, widgetEl, 'select' );
+
+				// Upload a new attachment
+				} else if ( e.target.id === 'menu-item-upload' ) {
+					itemBrowse.classList.remove( 'active' );
+					itemBrowse.setAttribute( 'aria-selected', false );
+					itemAdd.classList.remove( 'active' );
+					itemAdd.setAttribute( 'aria-selected', false );
+					e.target.classList.add ( 'active' );
+					e.target.setAttribute( 'aria-selected', true );
+					modalPages.classList.add( 'hidden' );
+					librarySelect.classList.add( 'hidden' );
+					libraryGrid.classList.add( 'hidden' );
+					libraryGrid.setAttribute( 'inert', true );
+					galleryGrid.classList.add( 'hidden' );
+					sidebarInfo.parentNode.setAttribute( 'hidden', true );
+					sidebarInfo.parentNode.setAttribute( 'inert', true );
+					uploadPanel.removeAttribute( 'hidden' );
+					uploadPanel.removeAttribute( 'inert' );
+					goFilepond( widgetId );
+
+				// Browse the library of uploaded images
+				} else if ( e.target.id === 'menu-item-browse' ) {
+					itemUpload.classList.remove( 'active' );
+					itemUpload.setAttribute( 'aria-selected', false );
+					itemAdd.classList.add( 'active' );
+					itemAdd.setAttribute( 'aria-selected', true );
+					e.target.classList.add ( 'active' );
+					e.target.setAttribute( 'aria-selected', true );
+					uploadPanel.setAttribute( 'hidden', true );
+					uploadPanel.setAttribute( 'inert', true );
+					modalPages.classList.remove( 'hidden' );
+					librarySelect.classList.remove( 'hidden' );
+					libraryGrid.classList.remove( 'hidden' );
+					libraryGrid.removeAttribute( 'inert' );
+					sidebarInfo.parentNode.removeAttribute( 'hidden' );
+					sidebarInfo.parentNode.removeAttribute( 'inert' );
+					modalPages.removeAttribute( 'hidden' );
+					modalPages.removeAttribute( 'inert' );
+
+				// Insert the gallery into the widget
+				} else if ( e.target.id === 'gallery-button-insert' ) {
+					if ( preview ) {
+						preview.innerHTML = '';
+					} else {
+						ul = document.createElement( 'ul' );
+						ul.className = 'media-widget-gallery-preview';
+
+						fieldset = document.createElement( 'fieldset' );
+						fieldset.className = 'media-widget-buttons';
+						fieldset.innerHTML = '<button type="button" class="button edit-media selected" data-edit-nonce="' + widgetEl.querySelector( '.select-media' ).dataset.editNonce + '" style="margin-top:0;">' + GALLERY_WIDGET.edit_gallery + '</button>';
+
+						widgetEl.querySelector( '.attachment-media-view' ).replaceWith( ul );
+						widgetEl.querySelector( '.media-widget-preview' ).after( fieldset );
+					}
+
+					// Update the preview within the media gallery widget
+					selectedIds = [];
+					dialog.querySelectorAll( '#gallery-grid .selected' ).forEach( function( item ) {
+						var li = document.createElement( 'li' );
+
+						selectedIds.push( item.dataset.id );
+
+						li.className = 'gallery-item';
+						li.innerHTML = '<div class="gallery-icon"><img alt="' + item.querySelector( 'img' ).alt + '" src="' + item.dataset.url + '" width="150" height="150"></div>';
+
+						widgetEl.querySelector( '.media-widget-gallery-preview' ).append( li );
+					} );
+
+					// Update the widget fields
+					widgetEl.querySelector( '[data-property="ids"]' ).value = selectedIds.toString();
+					widgetEl.querySelector( '[data-property="link_type"]' ).value = dialog.querySelector( '#gallery-settings-link-to' ).value;
+					widgetEl.querySelector( '[data-property="columns"]' ).value = dialog.querySelector( '#gallery-settings-columns' ).value;
+					widgetEl.querySelector( '[data-property="orderby_random"]' ).value = dialog.querySelector( '#gallery-settings-random-order' ).checked ? 1 : '';
+					widgetEl.querySelector( '[data-property="size"]' ).value = dialog.querySelector( '#gallery-settings-size' ).value;
+
+					// Activate Save/Publish button
+					if ( document.body.className.includes( 'widgets-php' ) ) {
+						widgetEl.classList.add( 'widget-dirty' );
+					}
+					widgetEl.dispatchEvent( new Event( 'change' ) );
+					closeModal();
+
+				// Update a gallery
+				} else if ( e.target.id === 'gallery-button-update' ) {
+					libraryItems.forEach( function( item ) {
+						if ( item.className.includes( 'selected' ) ) {
+							selectedIds.push( item.dataset.id );
+						}
+					} );
+
+					closeModal();
+					editGallery( widgetEl, 'update' );
+
+				// Reverse the order of items in the gallery
+				} else if ( e.target.className.includes( 'gallery-button-reverse' ) ) {
+					dialog.querySelectorAll( '#gallery-grid li:not( [hidden] )' ).forEach( function( item ) {
+						item.parentNode.prepend( item );
+					} );
+					selectedIds.reverse();
+
+				// Delete an item from the media library
+				} else if ( e.target.className.includes( 'delete-attachment' ) ) {
+					if ( widgetEl.querySelector( '[data-property="ids"]' ) ) {
+						libraryItems.forEach( function( item ) {
+							if ( item.className.includes( 'selected' ) ) {
+								if ( ! widgetEl.querySelector( '[data-property="ids"]' ).value.split( ',' ).includes( item.dataset.id ) ) {
+									if ( window.confirm( GALLERY_WIDGET.confirm_delete ) ) {
+										deleteItem( item.dataset.id );
+									}
+								}
+							}
+						} );
+					}
+
+				// Copy URL
+				} else if ( e.target.className.includes( 'copy-attachment-url' ) ) {
+					copyToClipboard( e.target );
+				}
+			}
+		}
+	} );
+
+	/**
+	 * Enable searching for items within grid.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	dialog.addEventListener( 'change', function( e ) {
+		var widgetId;
+		if ( dialog.querySelector( '#widget-modal-media-content' ) ) {
+			widgetId = dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId;
+			widgetEl = document.getElementById( widgetId );
+			base     = widgetEl.querySelector( '.id_base' );
+
+			// Only run on a media gallery widget
+			if ( base && base.value === 'media_gallery' ) {
+				if ( e.target.id === 'filter-by-date' ) {
+					updateGrid( document.getElementById( widgetId ), 1 );
+				} else if ( e.target.className === 'postform' ) {
+					updateGrid( document.getElementById( widgetId ), 1 );
+				} else if ( e.target.id === 'current-page-selector' ) {
+					updateGrid( document.getElementById( widgetId ), e.target.value );
+				} else if ( e.target.id === 'widget-modal-search-input' ) {
+					updateGrid( document.getElementById( widgetId ), 1 );
+					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+				}
 			}
 		}
 	} );
@@ -1245,4 +1480,110 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 	} );
+
+	/**
+	 * Upload files using FilePond
+	 */
+	function goFilepond( widgetId ) {
+
+		// Register FilePond plugins
+		FilePond.registerPlugin(
+			FilePondPluginFileValidateSize,
+			FilePondPluginFileValidateType,
+			FilePondPluginFileRename,
+			FilePondPluginImagePreview
+		);
+
+		// Create a FilePond instance
+		pond = FilePond.create( dialog.querySelector( '#filepond' ), {
+			allowMultiple: true,
+			server: {
+				process: function( fieldName, file, metadata, load, error, progress, abort ) {
+
+					// Create FormData
+					var formData = new FormData();
+					formData.append( 'async-upload', file, file.name );
+					formData.append( 'action', 'upload-attachment' );
+					formData.append( '_wpnonce', document.getElementById( '_wpnonce' ).value );
+
+					// Use Fetch to upload the file
+					fetch( ajaxurl, {
+						method: 'POST',
+						body: formData,
+						credentials: 'same-origin'
+					} )
+					.then( function( response ) {
+						if ( response.ok ) {
+							return response.json(); // no errors
+						}
+						throw new Error( response.status );
+					} )
+					.then( function( result ) {
+						if ( result.success ) {
+							updateGrid( document.getElementById( widgetId ), 1 );
+							dialog.querySelector( '#menu-item-browse' ).click();
+							setTimeout( function() {
+								dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+							}, 500 );
+						} else {
+							error( GALLERY_WIDGET.upload_failed );
+						}
+					} )
+					.catch( function( err ) {
+						error( GALLERY_WIDGET.upload_failed );
+						console.error( GALLERY_WIDGET.error, err );
+					} );
+
+					// Return an abort function
+					return {
+						abort: function() {
+							// This function is called when the user aborts the upload
+							abort();
+						}
+					};
+				},
+				maxFileSize: dialog.querySelector( '#ajax-url' ).dataset.maxFileSize
+			},
+			labelTapToUndo: GALLERY_WIDGET.tap_close,
+			fileRenameFunction: ( file ) =>
+				new Promise( function( resolve ) {
+					resolve( window.prompt( GALLERY_WIDGET.new_filename, file.name ) );
+				} ),
+			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
+			labelFileTypeNotAllowed: GALLERY_WIDGET.invalid_type,
+			fileValidateTypeLabelExpectedTypes: GALLERY_WIDGET.check_types
+		} );
+
+		pond.on( 'processfile', function( error, file ) {
+			if ( ! error ) {
+				setTimeout( function() {
+					pond.removeFile( file.id );
+				}, 100 );
+				resetDataOrdering();
+			}
+		} );
+	}
+
+	// Reset ordering of remaining media items after deletion
+	function resetDataOrdering() {
+		var items = document.querySelectorAll( '.media-item' ),
+			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
+			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
+			count5;
+
+		items.forEach( function( item, index ) {
+			item.setAttribute( 'data-order', parseInt( index + 1 ) );
+		} );
+
+		// Reset totals
+		if ( 5 in count ) { // allow for different languages
+			count5 = ' ' + count[5];
+		} else {
+			count5 = '';
+		}
+		document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + count5;
+
+		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
+	}
+
 } );
