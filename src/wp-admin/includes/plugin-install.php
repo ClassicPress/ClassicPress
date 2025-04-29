@@ -865,14 +865,7 @@ function install_plugin_information() {
 			)
 		);
 	} elseif ( ! $compatible_wp ) {
-		$compatible_wp_notice_message = __( '<strong>Error:</strong> This plugin <strong>requires a newer version of ClassicPress</strong>.' );
-		if ( current_user_can( 'update_core' ) ) {
-			$compatible_wp_notice_message .= sprintf(
-				/* translators: %s: URL to WordPress Updates screen. */
-				' ' . __( '<a href="%s" target="_parent">Click here to update ClassicPress</a>.' ),
-				esc_url( self_admin_url( 'update-core.php' ) )
-			);
-		}
+		$compatible_wp_notice_message = __( '<strong>Error:</strong> This plugin <strong>does not work with your version of ClassicPress</strong>.' );
 
 		wp_admin_notice(
 			$compatible_wp_notice_message,
