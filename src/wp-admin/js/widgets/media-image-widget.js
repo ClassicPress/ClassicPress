@@ -1455,21 +1455,27 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	dialog.addEventListener( 'change', function( e ) {
-		var widgetId;
+		var widgetId, widgetEl, base;
 		if ( dialog.querySelector( '#widget-modal-media-content' ) ) {
 			widgetId = dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId;
-			if ( e.target.id === 'filter-by-date' ) {
-				updateGrid( document.getElementById( widgetId ), 1 );
-			} else if ( e.target.className === 'postform' ) {
-				updateGrid( document.getElementById( widgetId ), 1 );
-			} else if ( e.target.id === 'current-page-selector' ) {
-				updateGrid( document.getElementById( widgetId ), e.target.value );
-			} else if ( e.target.id === 'widget-modal-search-input' ) {
-				updateGrid( document.getElementById( widgetId ), 1 );
-				dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+			widgetEl = document.getElementById( widgetId );
+			base     = widgetEl.querySelector( '.id_base' );
+
+			// Only run on a media image widget
+			if ( base && base.value === 'media_image' ) {
+				if ( e.target.id === 'filter-by-date' ) {
+					updateGrid( document.getElementById( widgetId ), 1 );
+				} else if ( e.target.className === 'postform' ) {
+					updateGrid( document.getElementById( widgetId ), 1 );
+				} else if ( e.target.id === 'current-page-selector' ) {
+					updateGrid( document.getElementById( widgetId ), e.target.value );
+				} else if ( e.target.id === 'widget-modal-search-input' ) {
+					updateGrid( document.getElementById( widgetId ), 1 );
+					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+				}
+			} else if ( dialog.querySelector( '#image-modal-content' ) ) {
+				widgetId = dialog.querySelector( '#image-modal-content' ).dataset.widgetId;
 			}
-		} else if ( dialog.querySelector( '#image-modal-content' ) ) {
-			widgetId = dialog.querySelector( '#image-modal-content' ).dataset.widgetId;
 		}
 	} );
 
