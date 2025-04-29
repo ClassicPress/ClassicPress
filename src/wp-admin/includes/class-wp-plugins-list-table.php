@@ -1314,13 +1314,6 @@ class WP_Plugins_List_Table extends WP_List_Table {
 				}
 			} elseif ( ! $compatible_wp ) {
 				$incompatible_message .= __( 'This plugin does not work with your version of ClassicPress.' );
-				if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
-					$incompatible_message .= sprintf(
-						/* translators: %s: URL to WordPress Updates screen. */
-						' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
-						self_admin_url( 'update-core.php' )
-					);
-				}
 			} elseif ( ! $compatible_php ) {
 				$incompatible_message .= __( 'This plugin does not work with your version of PHP.' );
 				if ( current_user_can( 'update_php' ) ) {
