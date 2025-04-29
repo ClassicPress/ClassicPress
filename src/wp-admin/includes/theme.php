@@ -985,13 +985,6 @@ function customize_themes_print_templates() {
 							<# } else if ( ! data.compatibleWP ) { #>
 								<?php
 								_e( 'This theme does not work with your version of ClassicPress.' );
-								if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
-									printf(
-										/* translators: %s: URL to WordPress Updates screen. */
-										' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
-										self_admin_url( 'update-core.php' )
-									);
-								}
 								?>
 							<# } else if ( ! data.compatiblePHP ) { #>
 								<?php
