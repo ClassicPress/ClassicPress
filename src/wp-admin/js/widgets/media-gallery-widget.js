@@ -1101,10 +1101,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function closeModal() {
+		dialog.close();
+		cleanup();
+	}
+
+	/**
+	 * Restore modal to its original state when it was opened.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function cleanup() {
 		var imageButton = dialog.querySelector( '#menu-item-add' ),
 			galleryButton = dialog.querySelector( '#menu-item-gallery' );
-
-		dialog.close();
 
 		if ( dialog.querySelector( '.widget-modal-header-buttons' ) ) {
 			dialog.querySelector( '.widget-modal-header-buttons' ).remove();
@@ -1391,7 +1400,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						}
 					} );
 
-					closeModal();
+					cleanup();
 					editGallery( widgetEl, 'update' );
 
 				// Reverse the order of items in the gallery
