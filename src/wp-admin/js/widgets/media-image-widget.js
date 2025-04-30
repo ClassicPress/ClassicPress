@@ -596,7 +596,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					// Update the count at the bottom of the page
 					dialog.querySelector( '.no-media' ).setAttribute( 'hidden', true );
 					dialog.querySelector( '.load-more-count' ).removeAttribute( 'hidden' );
-					dialog.querySelector( '.load-more-count' ).textContent = result.data.length + ' ' + IMAGE_WIDGET.of + ' ' + result.headers.total_posts + ' media items';
+					dialog.querySelector( '.load-more-count' ).textContent = result.data.length + ' ' + IMAGE_WIDGET.of + ' ' + result.headers.total_posts + ' ' + IMAGE_WIDGET.media_items;
 				}
 			}
 		} )
@@ -733,7 +733,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					// Update the count at the bottom of the page
 					dialog.querySelector( '.no-media' ).setAttribute( 'hidden', true );
 					dialog.querySelector( '.load-more-count' ).removeAttribute( 'hidden' );
-					dialog.querySelector( '.load-more-count' ).textContent = result.data.length + ' ' + IMAGE_WIDGET.of + ' ' + result.headers.total_posts + ' media items';
+					dialog.querySelector( '.load-more-count' ).textContent = result.data.length + ' ' + IMAGE_WIDGET.of + ' ' + result.headers.total_posts + ' ' + IMAGE_WIDGET.media_items;
 				}
 			}
 		} )
