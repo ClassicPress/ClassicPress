@@ -501,6 +501,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 				'image_file_types'           => $image_file_types,
 				'wrong_url'                  => __( 'No file exists at the URL provided.' ),
 				'deselect'                   => __( 'Deselect' ),
+				'media_items'                => __( 'media items' ),
 				'includes_url'               => includes_url(),
 				'per_page'                   => $per_page,
 				'of'                         => __( 'of' ),
