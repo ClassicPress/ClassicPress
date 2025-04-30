@@ -431,7 +431,7 @@ if ( 'grid' === $mode ) {
 					$media_cats   = $data['media_cats'] ? implode( ', ', $data['media_cats'] ) : '';
 					$media_tags   = $data['media_tags'] ? implode( ', ', $data['media_tags'] ) : '';
 					$artist       = $data['meta'] && ! empty( $data['meta']['artist'] ) ? $data['meta']['artist'] : '';
-					$album        = $data['meta'] && ! empty( $data['meta']['artist'] ) ? $data['meta']['album'] : '';
+					$album        = $data['meta'] && ! empty( $data['meta']['album'] ) ? $data['meta']['album'] : '';
 					$update_nonce = $data['nonces']['update'];
 					$delete_nonce = $data['nonces']['delete'];
 					$edit_nonce   = $data['nonces']['edit'];
