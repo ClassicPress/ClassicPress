@@ -83,7 +83,15 @@ class CP_Debug_Compat {
 			return $result;
 		}
 		$action  = esc_html__( 'Plugins on this list may have issues.' );
-		$action .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/site-health-screen/#block-compatibility">' . esc_html__( 'Learn more.' ) . '</a>';
+		$action .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-general-screen/#blocks-compatibility">' . esc_html__( 'Learn more.' ) . '</a>';
+		$action .= sprintf(
+			'<p>%s</p>',
+			sprintf(
+				/* translators: %s: URL to Settings > General > Blocks Compatibility. */
+				__( 'You can reset this list by switching the <a href="%s">Blocks Compatibility</a> to "On" and back to "Troubleshooting" again.' ),
+				esc_url( admin_url( 'options-general.php#blocks_compatibility_level' ) )
+			)
+		);
 		$result = array(
 			'label'       => __( 'Plugins using block functions' ),
 			'status'      => 'recommended',
@@ -119,7 +127,15 @@ class CP_Debug_Compat {
 			return $result;
 		}
 		$action  = esc_html__( 'Themes on this list may have issues.' );
-		$action .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/site-health-screen/#block-compatibility">' . esc_html__( 'Learn more.' ) . '</a>';
+		$action .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-general-screen/#blocks-compatibility">' . esc_html__( 'Learn more.' ) . '</a>';
+		$action .= sprintf(
+			'<p>%s</p>',
+			sprintf(
+				/* translators: %s: URL to Settings > General > Blocks Compatibility. */
+				__( 'You can reset this list by switching the <a href="%s">Blocks Compatibility</a> to "On" and back to "Troubleshooting" again.' ),
+				esc_url( admin_url( 'options-general.php#blocks_compatibility_level' ) )
+			)
+		);
 		$result = array(
 			'label'       => __( 'Themes using block functions' ),
 			'status'      => 'recommended',
