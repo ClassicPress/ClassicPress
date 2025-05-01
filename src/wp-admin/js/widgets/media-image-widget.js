@@ -917,7 +917,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			preview = widget.querySelector( '.media-widget-preview' ),
 			buttons	= document.createElement( 'fieldset' ),
 			fieldset = document.createElement( 'fieldset' ),
-			number = widget.querySelector( '.widget_number' ).value;
+			number = widget.querySelector( '.multi_number' ).value;
 
 		// Add from URL
 		if ( ! dialog.querySelector( '#insert-from-url-panel' ).hasAttribute( 'hidden' ) ) {
