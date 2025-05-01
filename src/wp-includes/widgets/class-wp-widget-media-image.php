@@ -375,8 +375,8 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 
 		<div class="media-widget-control selected">
 			<fieldset>
-				<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
-				<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" class="widefat" type="text" value="<?php echo esc_attr( $title ); ?>">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
+				<input id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" class="widefat" type="text" value="<?php echo esc_attr( $title ); ?>">
 			</fieldset>
 
 			<?php
@@ -413,8 +413,8 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 				</fieldset>
 
 				<fieldset class="media-widget-image-link">
-					<label for="<?php echo $this->get_field_id( 'link_url' ); ?>"><?php esc_html_e( 'Link to:' ); ?></label>
-					<input id="<?php echo $this->get_field_id( 'link_url' ); ?>" name="<?php echo $this->get_field_name( 'link_url' ); ?>" class="widefat" type="url" value="<?php echo esc_url( $link_url ); ?>" placeholder="https://" data-property="link_url">
+					<label for="<?php echo esc_attr( $this->get_field_id( 'link_url' ) ); ?>"><?php esc_html_e( 'Link to:' ); ?></label>
+					<input id="<?php echo esc_attr( $this->get_field_id( 'link_url' ) ); ?>" name="<?php echo $this->get_field_name( 'link_url' ); ?>" class="widefat" type="url" value="<?php echo esc_url( $link_url ); ?>" placeholder="https://" data-property="link_url">
 				</fieldset>
 
 				<?php
