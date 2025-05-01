@@ -164,8 +164,8 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 
 		<div class="media-widget-control selected">
 			<fieldset>
-				<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
-				<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" data-property="title" class="widefat title" value="<?php echo esc_attr( $title ); ?>">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
+				<input id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" data-property="title" class="widefat title" value="<?php echo esc_attr( $title ); ?>">
 			</fieldset>
 
 			<?php
