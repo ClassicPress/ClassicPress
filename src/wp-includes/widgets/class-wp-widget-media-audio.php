@@ -298,7 +298,7 @@ function cp_render_media_audio_template() {
 					<div class="setting-group" style="margin: 1em 0;display: flex;">
 						<div class="setting checkbox-setting">
 							<input type="checkbox" id="audio-details-loop" data-setting="loop">
-							<label for="audio-details-loop" class="checkbox-label">Loop</label>
+							<label for="audio-details-loop" class="checkbox-label"><?php esc_html_e( 'Loop' ); ?></label>
 						</div>
 					</div>
 				</div>
