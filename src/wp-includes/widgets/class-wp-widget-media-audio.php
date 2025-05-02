@@ -142,8 +142,8 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 
 		<div class="media-widget-control selected">
 			<fieldset>
-				<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
-				<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" class="widefat" type="text" value="<?php echo esc_attr( $title ); ?>">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
+				<input id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" class="widefat" type="text" value="<?php echo esc_attr( $title ); ?>">
 			</fieldset>
 
 			<?php
@@ -210,6 +210,16 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 	 * @since 4.8.0
 	 */
 	public function enqueue_admin_scripts() {
+
+		// Identify permitted audio file types
+		$audio_file_types = array( 'mp3', 'ogg', 'flac', 'm4a', 'wav' );
+
+		$user_id = get_current_user_id();
+		$per_page = get_user_meta( $user_id, 'media_grid_per_page', true );
+		if ( empty( $per_page ) || $per_page < 1 ) {
+			$per_page = 80;
+		}
+
 		wp_enqueue_style( 'wp-mediaelement' );
 		wp_enqueue_script( 'wp-mediaelement' );
 
@@ -220,6 +230,7 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 			array(
 				'no_audio_selected'          => __( 'No audio selected' ),
 				'add_audio'                  => _x( 'Add Audio', 'label for button in the audio widget' ),
+				'add_media'                  => _x( 'Add Media', 'label for button in the audio widget' ),
 				'add_to_widget'              => __( 'Add to widget' ),
 				'replace_audio'              => _x( 'Replace Audio', 'label for button in the audio widget; should preferably not be longer than ~13 characters long' ),
 				'edit_audio'                 => _x( 'Edit Audio', 'label for button in the audio widget; should preferably not be longer than ~13 characters long' ),
@@ -229,12 +240,78 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 					esc_url( admin_url( 'upload.php' ) )
 				),
 				/* translators: %d: Widget count. */
+				'media_library'              => __( 'Media Library' ),
+				'audio_details'              => __( 'Audio Details' ),
+				'details_button'             => __( 'Audio details' ),
 				'media_library_state_multi'  => _n_noop( 'Audio Widget (%d)', 'Audio Widget (%d)' ),
 				'media_library_state_single' => __( 'Audio Widget' ),
 				'unsupported_file_type'      => __( 'Looks like this is not the correct kind of file. Please link to an audio file instead.' ),
+				'wrong_url'                  => __( 'No file exists at that URL' ),
 				'insert_from_url'            => __( 'Insert from URL' ),
 				'remove_audio_source'        => __( 'Remove audio source' ),
+				'artist'                     => __( 'Artist' ),
+				'album'                      => __( 'Album' ),
+				'cancel_edit'                => __( 'Cancel edit' ),
+				'media_items'                => __( 'media items' ),
+				'includes_url'               => includes_url(),
+				'per_page'                   => $per_page,
+				'audio_file_types'           => $audio_file_types,
+				'of'                         => __( 'of' ),
 			)
 		);
 	}
+}
+
+/**
+ * Renders the template for the modal content for the media audio widget
+ *
+ * @since CP-2.5.0
+ *
+ * @return string
+ */
+function cp_render_media_audio_template() {
+	ob_start();
+	?>
+
+	<template id="tmpl-edit-audio-modal">
+		<div id="audio-modal-content" style="padding: 2em;">
+			<div class="modal-audio-details">
+				<div class="audio-embed" style="width:100%;">
+					<audio class="wp_audio_shortcode" controls="" style="width:100%;">
+						<source src="<?php echo esc_url( includes_url() . 'js/mediaelement/blank.mp3' ); ?>" type="audio/mp3">
+					</audio>
+					<div class="setting" style="margin-top: 1em;">
+						<label for="audio-details-source" class="name">MP3</label>
+						<input type="text" id="audio-details-source" readonly="" data-setting="mp3" value="" style="width:100%;">
+					</div>
+					<button type="button" class="button-link remove-setting" style="display:block;color: #a00; padding: 5px 0;"><?php esc_html_e( 'Remove audio source' ); ?></button>
+
+					<fieldset class="setting-group setting preload" style="margin: 1em 0;display: flex;">						
+						<label for="preload" class="name" style="margin: 6px 1em 0 0;"><?php esc_html_e( 'Preload' ); ?></label>
+						<select id="preload" name="link-type" data-setting="preload">
+							<option value="auto"><?php esc_html_e( 'Auto' ); ?></option>
+							<option value="metadata"><?php esc_html_e( 'Metadata' ); ?></option>
+							<option value="" selected><?php esc_html_e( 'None' ); ?></option>
+						</select>
+					</fieldset>
+
+					<div class="setting-group" style="margin: 1em 0;display: flex;">
+						<div class="setting checkbox-setting">
+							<input type="checkbox" id="audio-details-loop" data-setting="loop">
+							<label for="audio-details-loop" class="checkbox-label">Loop</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<footer class="widget-modal-footer">
+			<div class="widget-modal-footer-buttons" style="padding-right: 2em;">
+				<button id="audio-button-update" type="button" class="button media-button button-primary button-large media-button-select" disabled><?php esc_html_e( 'Update' ); ?></button>
+			</div>
+		</footer>
+	</template>
+
+	<?php
+	return ob_get_clean();
 }
