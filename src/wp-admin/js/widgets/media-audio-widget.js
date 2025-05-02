@@ -510,7 +510,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				header.append( dialogButtons );
 				header.after( dialogContent );
 				dialog.querySelector( '#menu-item-embed' ).removeAttribute( 'hidden' );
-				dialog.querySelector( '#menu-item-add' ).textContent = AUDIO_WIDGET.add_audio;				
+				dialog.querySelector( '#menu-item-add' ).textContent = AUDIO_WIDGET.add_audio;
 				dialog.querySelector( '.widget-modal-attachment-info .thumbnail-image' ).remove();
 				checkWindowWidth();
 
@@ -868,7 +868,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		audioElement.append( source );
 		widget.querySelector( '.media_audio' ).innerHTML = '';
 		widget.querySelector( '.media_audio' ).prepend( audioElement );
-		
+
 		if ( widget.querySelector( '.media-widget-buttons' ) == null ) {
 			widget.querySelector( '.media_audio' ).after( fieldset );
 		}
@@ -956,7 +956,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		header.after( clone.querySelector( '#audio-modal-content' ) );
 		header.querySelector( '.widget-modal-headings' ).style.padding = '0 0.5em 0 0.75em';
 		header.querySelector( '#widget-modal-title h2' ).textContent = AUDIO_WIDGET.audio_details;
-		
+
 		audioSource = dialog.querySelector( '#audio-details-source' );
 		audioSource.value = url;
 		audioSource.previousElementSibling.value = url.split( '.' ).pop().toUpperCase();
@@ -1105,12 +1105,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			} else if ( e.target.className === 'media-menu-item cancel' ) {
 				closeModal();
-		
+
 			} else if ( e.target.className === 'button-link remove-setting'	) {
 				e.target.previousElementSibling.remove();
 				e.target.parentNode.querySelector( 'audio' ).remove();
 				e.target.remove();
-				dialog.querySelector( '#audio-button-update' ).disabled = false;				
+				dialog.querySelector( '#audio-button-update' ).disabled = false;
 			}
 
 		// Set variables for the rest of the options below
