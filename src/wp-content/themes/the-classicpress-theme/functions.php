@@ -79,6 +79,11 @@ if ( ! function_exists( 'susty_setup' ) ) :
 				'flex-height' => true,
 			)
 		);
+
+		/**
+		 * Add custom stylesheet to TinyMCE editor
+		 */
+		add_editor_style( 'editor-style.css' );
 	}
 endif;
 add_action( 'after_setup_theme', 'susty_setup' );
@@ -173,13 +178,6 @@ function cp_susty_enqueue_assets() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'cp_susty_enqueue_assets' );
-
-// Add custom stylesheet to TinyMCE editor
-function cp_tiny_css( $wp ) {
-	$wp .= ',' . get_template_directory_uri() . '/css/editor-style.css';
-	return $wp;
-}
-add_filter( 'mce_css', 'cp_tiny_css' );
 
 /**
  * Add widgets to sidebar and footer
