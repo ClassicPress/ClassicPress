@@ -932,7 +932,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			url = mp3;
 		}
 		if ( url === null ) {
-			ogg;
+			url = ogg;
 		}
 		if ( url === null ) {
 			url = flac;
