@@ -957,6 +957,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		header.querySelector( '.widget-modal-headings' ).style.padding = '0 0.5em 0 0.75em';
 		header.querySelector( '#widget-modal-title h2' ).textContent = AUDIO_WIDGET.audio_details;
 
+		dialog.querySelector( '.wp_audio_shortcode source' ).src = url;
 		audioSource = dialog.querySelector( '#audio-details-source' );
 		audioSource.value = url;
 		audioSource.previousElementSibling.value = url.split( '.' ).pop().toUpperCase();
