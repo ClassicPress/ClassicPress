@@ -914,6 +914,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var imageElement, source, sizesObject, selectedItem,
 			sizeOptions = '',
 			linkUrl = '',
+			editNonce = '',
 			preview = widget.querySelector( '.media-widget-preview' ),
 			buttons	= document.createElement( 'fieldset' ),
 			fieldset = document.createElement( 'fieldset' ),
@@ -945,6 +946,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Add from Media Library
 		} else if ( ! dialog.querySelector( '#media-library-grid' ).hasAttribute( 'hidden' ) ) {
 			selectedItem = dialog.querySelector( '.widget-modal-grid .selected' );
+			editNonce = selectedItem.dataset.editNonce;
 			imageElement = selectedItem.querySelector( 'img' );
 			sizesObject = JSON.parse( selectedItem.dataset.sizes );
 			for ( var dimension in sizesObject ) {
@@ -964,7 +966,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Add Edit and Replace buttons
 		buttons.className = 'media-widget-buttons';
-		buttons.innerHTML = '<button type="button" class="button edit-media" data-edit-nonce="' + selectedItem.dataset.editNonce + '">' + IMAGE_WIDGET.edit_image + '</button>' +
+		buttons.innerHTML = '<button type="button" class="button edit-media" data-edit-nonce="' + editNonce + '">' + IMAGE_WIDGET.edit_image + '</button>' +
 			'<button type="button" class="button change-media select-media">' + IMAGE_WIDGET.replace_image + '</button>';
 
 		// Add Link field
@@ -1446,7 +1448,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 	} );
-
 
 	/**
 	 * Enable searching for items within grid.
