@@ -283,7 +283,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			artist = item.dataset.artist,
 			album = item.dataset.album,
 			url = item.dataset.url,
-			alt = item.querySelector( 'img' ).getAttribute( 'alt' ),
 			updateNonce = item.dataset.updateNonce,
 			deleteNonce = item.dataset.deleteNonce,
 			inputs = dialog.querySelectorAll( '.widget-modal-right-sidebar input, .widget-modal-right-sidebar textarea, .widget-modal-media-embed input, .widget-modal-media-embed textarea' ),
@@ -414,8 +413,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function populateGridItem( attachment, widget ) {
 		var selected = '',
 			idsArray = [],
-			gridItem = document.createElement( 'li' ),
-			image = '<img src="' + attachment.url + '" alt="' + attachment.alt + '">';
+			gridItem = document.createElement( 'li' );
 
 		if ( widget.querySelector( '[data-property="attachment_id"]' ) ) {
 			if ( attachment.id == widget.querySelector( '[data-property="attachment_id"]' ).value ) {
@@ -791,9 +789,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var embed = dialog.querySelector( '#widget-modal-embed-url-field' ),
 			widgetId = dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId,
 			widget = document.getElementById( widgetId ),
-			originalUrl = widget.querySelector( '[data-property="url"]' ).value,
-			embedAlt = dialog.querySelector( '#embed-image-settings-alt-text' ),
-			embedCaption = dialog.querySelector( '#embed-image-settings-caption' );
+			originalUrl = widget.querySelector( '[data-property="url"]' ).value;
 
 		dialog.querySelector( '#widget-modal-url-settings' ).style.display = 'none';
 
@@ -921,13 +917,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function editAudio( widget ) {
 		var	header, preloaded, audioSource,
 			preload = widget.querySelector( '[data-property="preload"]' ).value,
-			loop = widget.querySelector( '[data-property="loop"]' ).value,
 			mp3 = widget.querySelector( '[data-property="mp3"]' ).value,
 			ogg = widget.querySelector( '[data-property="ogg"]' ).value,
 			flac = widget.querySelector( '[data-property="flac"]' ).value,
 			m4a = widget.querySelector( '[data-property="m4a"]' ).value,
 			wav	= widget.querySelector( '[data-property="wav"]' ).value,
-			attachmentId = widget.querySelector( '[data-property="attachment_id"]' ).value,
 			url	= widget.querySelector( '[data-property="url"]' ).value,
 			template = document.getElementById( 'tmpl-edit-audio-modal' ),
 			clone = template.content.cloneNode( true ),
