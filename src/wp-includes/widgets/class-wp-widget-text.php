@@ -429,6 +429,7 @@ class WP_Widget_Text extends WP_Widget {
 	 * @since 4.8.0
 	 */
 	public function enqueue_admin_scripts() {
+		wp_enqueue_media();
 		wp_enqueue_editor();
 		wp_enqueue_script( 'text-widgets' );
 	}
