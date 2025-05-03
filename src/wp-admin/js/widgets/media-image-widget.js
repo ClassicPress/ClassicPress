@@ -1480,8 +1480,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} else if ( e.target.id === 'widget-modal-search-input' ) {
 					updateGrid( document.getElementById( widgetId ), 1 );
 					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
-				} else if ( e.target.className === 'widefat' ) {
-					widgetEl.querySelector( '.widget-control-save' ).disabled = false;
 				}
 			} else if ( dialog.querySelector( '#image-modal-content' ) ) {
 				widgetId = dialog.querySelector( '#image-modal-content' ).dataset.widgetId;
