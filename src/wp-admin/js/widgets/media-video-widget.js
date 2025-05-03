@@ -895,9 +895,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			m4v = widget.querySelector( '[data-property="m4v"]' ).value,
 			webm = widget.querySelector( '[data-property="webm"]' ).value,
 			ogv = widget.querySelector( '[data-property="ogv"]' ).value,
-			flv	= widget.querySelector( '[data-property="flv"]' ).value,
-			mov	= widget.querySelector( '[data-property="mov"]' ).value,
-			url	= widget.querySelector( '[data-property="url"]' ).value,
+			flv = widget.querySelector( '[data-property="flv"]' ).value,
+			mov = widget.querySelector( '[data-property="mov"]' ).value,
+			url = widget.querySelector( '[data-property="url"]' ).value,
 			template = document.getElementById( 'tmpl-edit-video-modal' ),
 			clone = template.content.cloneNode( true ),
 			cancelButton = dialog.querySelector( '#menu-item-add' ),
@@ -1100,15 +1100,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Only run on a media image widget
 			if ( base && base.value === 'media_video' ) {
-				itemAdd	  = dialog.querySelector( '#menu-item-add' );
-				itemEmbed	= dialog.querySelector( '#menu-item-embed' );
+				itemAdd      = dialog.querySelector( '#menu-item-add' );
+				itemEmbed    = dialog.querySelector( '#menu-item-embed' );
 				itemBrowse   = dialog.querySelector( '#menu-item-browse' );
 				itemUpload   = dialog.querySelector( '#menu-item-upload' );
-				gridPanel	= dialog.querySelector( '#media-library-grid' );
+				gridPanel    = dialog.querySelector( '#media-library-grid' );
 				rightSidebar = dialog.querySelector( '.widget-modal-right-sidebar' );
 				modalPages   = dialog.querySelector( '.widget-modal-pages' );
 				uploadPanel  = dialog.querySelector( '#uploader-inline' );
-				urlPanel	 = dialog.querySelector( '#insert-from-url-panel' );
+				urlPanel     = dialog.querySelector( '#insert-from-url-panel' );
 				modalButtons = dialog.querySelector( '.widget-modal-header-buttons' );
 
 				// Search or go to a specific page in the media library grid
