@@ -992,6 +992,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 		widget.dispatchEvent( new Event( 'change' ) );
 
+		// Explicitly enable Save button (required by some browsers)
+		widget.querySelector( '.widget-control-save' ).disabled = false;
+
 		closeModal();
 	}
 
