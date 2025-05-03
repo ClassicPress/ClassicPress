@@ -1390,6 +1390,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						widgetEl.classList.add( 'widget-dirty' );
 					}
 					widgetEl.dispatchEvent( new Event( 'change' ) );
+
+					// Explicitly enable Save button (required by some browsers)
+					widget.querySelector( '.widget-control-save' ).disabled = false;
+
 					closeModal();
 
 				// Update a gallery
