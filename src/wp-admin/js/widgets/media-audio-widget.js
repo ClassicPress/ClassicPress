@@ -1125,15 +1125,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Only run on a media image widget
 			if ( base && base.value === 'media_audio' ) {
-				itemAdd	  = dialog.querySelector( '#menu-item-add' );
-				itemEmbed	= dialog.querySelector( '#menu-item-embed' );
+				itemAdd      = dialog.querySelector( '#menu-item-add' );
+				itemEmbed    = dialog.querySelector( '#menu-item-embed' );
 				itemBrowse   = dialog.querySelector( '#menu-item-browse' );
 				itemUpload   = dialog.querySelector( '#menu-item-upload' );
-				gridPanel	= dialog.querySelector( '#media-library-grid' );
+				gridPanel    = dialog.querySelector( '#media-library-grid' );
 				rightSidebar = dialog.querySelector( '.widget-modal-right-sidebar' );
 				modalPages   = dialog.querySelector( '.widget-modal-pages' );
 				uploadPanel  = dialog.querySelector( '#uploader-inline' );
-				urlPanel	 = dialog.querySelector( '#insert-from-url-panel' );
+				urlPanel     = dialog.querySelector( '#insert-from-url-panel' );
 				modalButtons = dialog.querySelector( '.widget-modal-header-buttons' );
 
 				// Search or go to a specific page in the media library grid
@@ -1257,7 +1257,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( dialog.querySelector( '#widget-modal-media-content' ) ) {
 			widgetId = dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId;
 			widgetEl = document.getElementById( widgetId );
-			base	 = widgetEl.querySelector( '.id_base' );
+			base     = widgetEl.querySelector( '.id_base' );
 
 			// Only run on a media image widget
 			if ( base && base.value === 'media_audio' ) {
