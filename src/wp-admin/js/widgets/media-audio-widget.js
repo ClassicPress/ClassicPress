@@ -908,6 +908,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 		widget.dispatchEvent( new Event( 'change' ) );
 
+		// Explicitly enable Save button (required by some browsers)
+		widget.querySelector( '.widget-control-save' ).disabled = false;
+
 		closeModal();
 	}
 
@@ -1285,7 +1288,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( dialog.querySelector( '#audio-modal-content' ) ) {
 				method = 'edit';
 				widgetId = dialog.querySelector( '#audio-modal-content' ).dataset.widgetId;
-			} else {
+			} else if ( dialog.querySelector( '#widget-modal-media-content' ) ) {
 				widgetId = dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId;
 			}
 
