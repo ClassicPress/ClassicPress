@@ -1096,7 +1096,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( dialog.querySelector( '#widget-modal-media-content' ) ) {
 			widgetId = dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId;
 			widgetEl = document.getElementById( widgetId );
-			base     = widgetEl.querySelector( '.id_base' );
+			base     = widgetEl ? widgetEl.querySelector( '.id_base' ) : '';
 
 			// Only run on a media image widget
 			if ( base && base.value === 'media_video' ) {
