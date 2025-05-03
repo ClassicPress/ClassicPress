@@ -1186,11 +1186,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		dialog.close();
 		dialog.querySelector( '#image-modal-content' ).remove();
+		dialog.querySelector( '.widget-modal-footer' ).remove();
 
 		if ( document.body.className.includes( 'widgets-php' ) ) {
 			widget.classList.add( 'widget-dirty' );
 		}
 		widget.dispatchEvent( new Event( 'change' ) );
+
+		// Explicitly enable Save button (required by some browsers)
+		widget.querySelector( '.widget-control-save' ).disabled = false;
 	}
 
 	/**
@@ -1476,6 +1480,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} else if ( e.target.id === 'widget-modal-search-input' ) {
 					updateGrid( document.getElementById( widgetId ), 1 );
 					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+				} else if ( e.target.className === 'widefat' ) {
+					widgetEl.querySelector( '.widget-control-save' ).disabled = false;
 				}
 			} else if ( dialog.querySelector( '#image-modal-content' ) ) {
 				widgetId = dialog.querySelector( '#image-modal-content' ).dataset.widgetId;
