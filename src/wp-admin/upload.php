@@ -656,6 +656,17 @@ if ( 'grid' === $mode ) {
 
 	get_current_screen()->add_help_tab(
 		array(
+			'id'      => 'attachment-details',
+			'title'   => __( 'Attachment Details' ),
+			'content' =>
+				'<p>' . __( 'Clicking an item will display an Attachment Details dialog, which allows you to preview media and make quick edits. Any changes you make to the attachment details will be automatically saved.' ) . '</p>' .
+				'<p>' . __( 'Use the arrow buttons at the top of the dialog, the left and right arrow keys on your keyboard, or swipe left and right on a touch device to navigate between media items.' ) . '</p>' .
+				'<p>' . __( 'You can also delete individual items and access the extended edit screen from the details dialog.' ) . '</p>',
+		)
+	);
+
+	get_current_screen()->add_help_tab(
+		array(
 			'id'      => 'actions-links',
 			'title'   => __( 'Available Actions' ),
 			'content' =>
