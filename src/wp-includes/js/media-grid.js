@@ -228,6 +228,46 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
+	// Update media row
+	function updateMediaRow( item ) {
+		var id = item.id.replace( 'media-', '' ),
+			row = item.closest('tr');
+
+		if ( ! row ) {
+			return;
+		}
+
+		var successTimeout,
+			data = new FormData();
+
+		data.append( 'action', 'get-attachment-html' );
+		data.append( 'id', id );
+		data.append( 'nonce', item.dataset.updateNonce );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result.success ) {
+				row.innerHTML = result.data;
+				// hideColumns( 'post-' + id );
+			} else {
+				console.error( _wpMediaLibSettings.failed_update, result.data.error );
+			}
+		} )
+		.catch( function( error ) {
+			console.error( _wpMediaLibSettings.error, error );
+		} );
+	}
+
 	// Set or reset ordering of media items
 	function resetDataOrdering() {
 		var items = document.querySelectorAll( '.media-item' );
@@ -455,6 +495,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			input.addEventListener( 'blur', function() {
 				if ( updateNonce ) {
 					updateMediaTaxOrTag( input, id );
+					updateMediaRow( item );
 				}
 			} );
 		} );
@@ -888,6 +929,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			var item = document.getElementById( 'media-' + id );
 			if ( item.dataset.updateNonce ) {
 				updateDetails( input, id );
+				updateMediaRow( item );
 			}
 		} );
 	} );
