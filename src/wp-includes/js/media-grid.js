@@ -213,6 +213,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				mediaItem.remove();
 				closeButton.click();
 				resetDataOrdering();
+				if ( mediaGrid == null ) {
+					location.href = location.href;
+				}
 			} else {
 				console.log( _wpMediaLibSettings.delete_failed );
 			}
@@ -222,28 +225,30 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
-	// Reset ordering of remaining media items after deletion
+	// Set or reset ordering of media items
 	function resetDataOrdering() {
-		var items = document.querySelectorAll( '.media-item' ),
-			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
-			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
-			count5;
-
+		var items = document.querySelectorAll( '.media-item' );
 		items.forEach( function( item, index ) {
 			item.setAttribute( 'data-order', parseInt( index + 1 ) );
 		} );
 
-		// Reset totals
-		if ( 5 in count ) { // allow for different languages
-			count5 = ' ' + count[5];
-		} else {
-			count5 = '';
-		}
-		document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + count5;
+		if ( mediaGrid != null ) {
+			var num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
+				count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
+				count5;
 
-		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
-		dialog.querySelector( '#total-media-items' ).textContent = items.length;
-		dialog.querySelector( '#total-media-items-mobile' ).textContent = items.length;
+			// Reset totals
+			if ( 5 in count ) { // allow for different languages
+				count5 = ' ' + count[5];
+			} else {
+				count5 = '';
+			}
+			document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + count5;
+
+			document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
+			dialog.querySelector( '#total-media-items' ).textContent = items.length;
+			dialog.querySelector( '#total-media-items-mobile' ).textContent = items.length;
+		}
 	}
 
 	// Toggle media button navigation wrappers according to viewport width
@@ -295,6 +300,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			next = item.nextElementSibling ? item.nextElementSibling.id : '',
 			order = item.dataset.order,
 			total = parseInt( document.querySelector( '.displaying-num' ).textContent );
+
+			if ( mediaGrid == null ) {
+				prev = item.closest( 'tr' ).previousElementSibling ? item.closest( 'tr' ).previousElementSibling.querySelector( '.media-item' ).id : '';
+				next = item.closest( 'tr' ).nextElementSibling ? item.closest( 'tr' ).nextElementSibling.querySelector( '.media-item' ).id : '';
+			}
 
 		// Modify current URL
 		queryParams.set( 'item', id );
@@ -783,38 +793,40 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
-	// Add event listeners for changing the selection of items displayed
-	if ( typeFilter ) {
-		typeFilter.addEventListener( 'change', updateGrid );
-	}
-	if ( dateFilter ) {
-		dateFilter.addEventListener( 'change', updateGrid );
-	}
-	if ( mediaCatSelect ) {
-		mediaCatSelect.addEventListener( 'change', updateGrid );
-	}
-	search.addEventListener( 'input', function() {
-		var searchtimer;
-		clearTimeout( searchtimer );
-		searchtimer = setTimeout( updateGrid, 200 );
-	} );
-	document.getElementById( 'current-page-selector' ).addEventListener( 'change', function( e ) {
-		var searchtimer;
-		paged = e.target.value;
-		clearTimeout( searchtimer );
-		searchtimer = setTimeout( updateGrid, 200 );
-	} );
-
-	// Make pagination work in conjunction with the select dropdowns
-	document.querySelectorAll( '.pagination-links a' ).forEach( function( pageLink ) {
-		pageLink.addEventListener( 'click', function( e ) {
-			if ( typeFilter.value !== '' || dateFilter.value !== '0' || mediaCatSelect.value !== '0' ) {
-				e.preventDefault();
-				paged = pageLink.href.split( '?paged=' )[1];
-				updateGrid();
-			}
+	if ( mediaGrid != null ) {
+		// Add event listeners for changing the selection of items displayed
+		if ( typeFilter ) {
+			typeFilter.addEventListener( 'change', updateGrid );
+		}
+		if ( dateFilter ) {
+			dateFilter.addEventListener( 'change', updateGrid );
+		}
+		if ( mediaCatSelect ) {
+			mediaCatSelect.addEventListener( 'change', updateGrid );
+		}
+		search.addEventListener( 'input', function() {
+			var searchtimer;
+			clearTimeout( searchtimer );
+			searchtimer = setTimeout( updateGrid, 200 );
 		} );
-	} );
+		document.getElementById( 'current-page-selector' ).addEventListener( 'change', function( e ) {
+			var searchtimer;
+			paged = e.target.value;
+			clearTimeout( searchtimer );
+			searchtimer = setTimeout( updateGrid, 200 );
+		} );
+
+		// Make pagination work in conjunction with the select dropdowns
+		document.querySelectorAll( '.pagination-links a' ).forEach( function( pageLink ) {
+			pageLink.addEventListener( 'click', function( e ) {
+				if ( typeFilter.value !== '' || dateFilter.value !== '0' || mediaCatSelect.value !== '0' ) {
+					e.preventDefault();
+					paged = pageLink.href.split( '?paged=' )[1];
+					updateGrid();
+				}
+			} );
+		} );
+	}
 
 	// Open and close file upload area by clicking Add New button
 	addNew.addEventListener( 'click', function() {
@@ -853,7 +865,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	} );
 
-	/* Open modal to show details about file, or select files for deletion */
+	// Open modal to show details about file, or select files for deletion
 	document.querySelectorAll( '.media-item' ).forEach( function( item ) {
 		item.addEventListener( 'click', function() {
 			if ( document.querySelector( '.media-toolbar-mode-select' ) == null ) {
@@ -864,7 +876,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	} );
 
-	/* Update media attachment details */
+	// Update media attachment details
 	dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
 		input.addEventListener( 'blur', function() {
 			var id = queryParams.get( 'item' );
@@ -875,7 +887,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	} );
 
-	/* Close modal by clicking button */
+	// Close modal by clicking button
 	function closeModalDialog() {
 		queryParams.delete( 'item' );
 		queryParams.delete( 'mode' );
@@ -1004,45 +1016,47 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	// Bulk select media items
-	document.querySelector( '.select-mode-toggle-button' ).addEventListener( 'click', function( e ) {
-		var toolbar = document.querySelector( '.cp-media-toolbar' ),
-			deleteButton = document.querySelector( '.delete-selected-button' );
+	if ( mediaGrid != null ) {
+		document.querySelector( '.select-mode-toggle-button' ).addEventListener( 'click', function( e ) {
+			var toolbar = document.querySelector( '.cp-media-toolbar' ),
+				deleteButton = document.querySelector( '.delete-selected-button' );
 
-		if ( toolbar.className.includes( 'media-toolbar-mode-select' ) ) {
-			document.querySelectorAll( '.media-item' ).forEach( function( item ) {
-				if ( item.className.includes( 'selected' ) ) {
-					item.classList.remove( 'selected' );
-					item.setAttribute( 'aria-checked', false );
-				}
-			} );
-
-			e.target.textContent = 'Bulk select';
-			dateFilter.style.display = '';
-			typeFilter.style.display = '';
-			mediaCatSelect.style.display = '';
-			deleteButton.classList.add( 'hidden' );
-			toolbar.classList.remove( 'media-toolbar-mode-select' );
-		} else {
-			e.target.textContent = 'Cancel';
-			dateFilter.style.display = 'none';
-			typeFilter.style.display = 'none';
-			mediaCatSelect.style.display = 'none';
-			deleteButton.classList.remove( 'hidden' );
-			toolbar.classList.add( 'media-toolbar-mode-select' );
-
-			deleteButton.addEventListener( 'click', function() {
-				var selectedItems = document.querySelectorAll( '.media-item.selected' );
-				if ( selectedItems.length !== 0 ) {
-					if ( window.confirm( _wpMediaLibSettings.confirm_multiple ) ) {
-						selectedItems.forEach( function( deleteSelect ) {
-							deleteItem( deleteSelect.id.replace( 'media-', '' ) );
-						} );
+			if ( toolbar.className.includes( 'media-toolbar-mode-select' ) ) {
+				document.querySelectorAll( '.media-item' ).forEach( function( item ) {
+					if ( item.className.includes( 'selected' ) ) {
+						item.classList.remove( 'selected' );
+						item.setAttribute( 'aria-checked', false );
 					}
-					document.querySelector( '.select-mode-toggle-button' ).click();
-				}
-			} );
-		}
-	} );
+				} );
+
+				e.target.textContent = 'Bulk select';
+				dateFilter.style.display = '';
+				typeFilter.style.display = '';
+				mediaCatSelect.style.display = '';
+				deleteButton.classList.add( 'hidden' );
+				toolbar.classList.remove( 'media-toolbar-mode-select' );
+			} else {
+				e.target.textContent = 'Cancel';
+				dateFilter.style.display = 'none';
+				typeFilter.style.display = 'none';
+				mediaCatSelect.style.display = 'none';
+				deleteButton.classList.remove( 'hidden' );
+				toolbar.classList.add( 'media-toolbar-mode-select' );
+
+				deleteButton.addEventListener( 'click', function() {
+					var selectedItems = document.querySelectorAll( '.media-item.selected' );
+					if ( selectedItems.length !== 0 ) {
+						if ( window.confirm( _wpMediaLibSettings.confirm_multiple ) ) {
+							selectedItems.forEach( function( deleteSelect ) {
+								deleteItem( deleteSelect.id.replace( 'media-', '' ) );
+							} );
+						}
+						document.querySelector( '.select-mode-toggle-button' ).click();
+					}
+				} );
+			}
+		} );
+	}
 
 	/**
 	 * Copies the attachment URL to the clipboard.
@@ -1118,17 +1132,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					var gridItem;
 					if ( result.success ) {
 						load( result.data );
-						gridItem = populateGridItem( result.data );
-						mediaGrid.prepend( gridItem );
+						if ( mediaGrid != null ) {
+							gridItem = populateGridItem( result.data );
+							mediaGrid.prepend( gridItem );
 
-						// Open modal to show details about file, or select file for deletion
-						gridItem.addEventListener( 'click', function() {
-							if ( document.querySelector( '.media-toolbar-mode-select' ) == null ) {
-								openModalDialog( gridItem );
-							} else {
-								selectItemForDeletion( gridItem );
-							}
-						} );
+							// Open modal to show details about file, or select file for deletion
+							gridItem.addEventListener( 'click', function() {
+								if ( document.querySelector( '.media-toolbar-mode-select' ) == null ) {
+									openModalDialog( gridItem );
+								} else {
+									selectItemForDeletion( gridItem );
+								}
+							} );
+						}
 					} else {
 						error( _wpMediaLibSettings.upload_failed );
 					}
