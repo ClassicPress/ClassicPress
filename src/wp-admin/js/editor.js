@@ -1082,17 +1082,17 @@ window.wp = window.wp || {};
 			text = text.replace( /(<br[^>]*>)\s*\n/gi, '$1' );
 
 			// Add <br> tags.
-			text = text.replace( /\s*\n/g, '<br />\n');
+			text = text.replace( /\s*\n/g, '<br>\n');
 
 			// Normalize <br> tags.
-			text = text.replace( /<br>|<br\/>/g, '<br />' );
+			text = text.replace( /<br \/>|<br\/>/g, '<br>' );
 
 			// Remove <br> tags that are around block tags.
-			text = text.replace( new RegExp( '(</?(?:' + blocklist + ')[^>]*>)\\s*<br />', 'gi' ), '$1' );
-			text = text.replace( /<br \/>(\s*<\/?(?:p|li|div|dl|dd|dt|th|pre|td|ul|ol)>)/gi, '$1' );
+			text = text.replace( new RegExp( '(</?(?:' + blocklist + ')[^>]*>)\\s*<br>', 'gi' ), '$1' );
+			text = text.replace( /<br>(\s*<\/?(?:p|li|div|dl|dd|dt|th|pre|td|ul|ol)>)/gi, '$1' );
 
 			// Remove <p> and <br> around captions.
-			text = text.replace( /(?:<p>|<br ?\/?>)*\s*\[caption([^\[]+)\[\/caption\]\s*(?:<\/p>|<br ?\/?>)*/gi, '[caption$1[/caption]' );
+			text = text.replace( /(?:<p>|<br>)*\s*\[caption([^\[]+)\[\/caption\]\s*(?:<\/p>|<br>)*/gi, '[caption$1[/caption]' );
 
 			// Make sure there is <p> when there is </p> inside block tags that can contain other blocks.
 			text = text.replace( /(<(?:div|th|td|form|fieldset|dd)[^>]*>)(.*?)<\/p>/g, function( a, b, c ) {
