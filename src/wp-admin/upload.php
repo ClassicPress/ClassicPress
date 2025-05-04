@@ -105,6 +105,16 @@ if ( isset( $_GET['mode'] ) && in_array( $_GET['mode'], $modes, true ) ) {
 	update_user_option( get_current_user_id(), 'media_library_mode', $mode );
 }
 
+// Get the maximum upload size.
+$max_upload_size = wp_max_upload_size();
+if ( ! $max_upload_size ) {
+	$max_upload_size = 0;
+}
+
+// Get a list of allowed mime types.
+$allowed_mimes = get_allowed_mime_types();
+$mimes_list    = implode( ',', $allowed_mimes );
+
 wp_enqueue_style( 'cp-filepond-image-preview' );
 wp_enqueue_style( 'cp-filepond' );
 wp_enqueue_style( 'media-grid' );
@@ -181,16 +191,6 @@ if ( 'grid' === $mode ) {
 	// Used in the HTML title tag.
 	$title       = __( 'Media Library' );
 	$parent_file = 'upload.php';
-
-	// Get the maximum upload size.
-	$max_upload_size = wp_max_upload_size();
-	if ( ! $max_upload_size ) {
-		$max_upload_size = 0;
-	}
-
-	// Get a list of allowed mime types.
-	$allowed_mimes = get_allowed_mime_types();
-	$mimes_list    = implode( ',', $allowed_mimes );
 
 	// Get the user's preferred items per page.
 	$user_id  = get_current_user_id();
