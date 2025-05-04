@@ -1,3 +1,6 @@
+.no-top-margin {
+	margin-top: 0 !important;
+}
 .wp-core-ui .button.media-button {
 	margin: 11px 8px 0 8px;
 }
@@ -43,7 +46,7 @@
 }
 .imgedit-panel-content {
 	height: -moz-fit-content;
-	height: fit-content;	
+	height: fit-content;
 	padding: 16px 16px 0;
 	position: absolute;
 	top: 0;
@@ -55,7 +58,7 @@
 .imgedit-settings {
 	height: -moz-fit-content;
 	height: fit-content;
-	overflow: hidden;  
+	overflow: hidden;
 	background: #f6f7f7;
 	border-left: 1px solid #dcdcde;
 	padding: 20px 16px 0;
@@ -109,6 +112,10 @@
 }
 .filepond--root {
 	padding-bottom: 12em;
+	margin-bottom: 1.2em;
+}
+.filepond--file-info .filepond--file-info-main {
+	line-height: 1.3;
 }
 .filepond--file-info .filepond--file-info-main,
 .filepond--file-status .filepond--file-status-main {
@@ -125,6 +132,10 @@
 .filepond--drop-label {
 	background-color: #ecf7e9;
 }
+.filepond--drip {
+	opacity: 1;
+	background: #ecf7e9;
+}
 .filepond--credits {
 	display: none;
 }
@@ -138,6 +149,18 @@
 	cursor: pointer;
 	margin-bottom: 0;
 	position: relative;
+}
+.media-item strong {
+	color: #2271b1;
+}
+.media-item:focus-within strong {
+	color: #043959;
+	box-shadow: 0 2px rgba(79, 148, 212, 0.8);
+}
+.media-item:focus-within img {
+	box-shadow: 0 0 0 2px rgba(79, 148, 212, 0.8);
+	/* Only visible in Windows High Contrast mode */
+	outline: 1px solid transparent;
 }
 .media-grid-view .media-item:focus,
 .media-item.selected:focus {
@@ -385,16 +408,6 @@ dialog::backdrop {
 	outline-offset: 0.125rem;
 	outline-style: solid;
 	outline-width: 0.125rem;
-}
-.filepond--root {
-	margin-bottom: 1.2em;
-}
-.filepond--drip {
-	opacity: 1;
-	background: #ecf7e9;
-}
-.filepond--file-info .filepond--file-info-main {
-	line-height: 1.3;
 }
 
 @media screen and (min-width: 481px) {
