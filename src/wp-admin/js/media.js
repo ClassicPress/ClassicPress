@@ -592,12 +592,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						quickEdit.querySelector( '[name="aa"]' ).value = dateSplit[0];
 
 						// Fill the other relevant boxes.
-						quickEdit.querySelector( '[name="post_title"]' ).value = tr.querySelector( '.column-title strong a' ).textContent.trim();
+						quickEdit.querySelector( '[name="post_title"]' ).value = tr.querySelector( '.column-title strong' ).textContent.trim();
 						quickEdit.querySelector( '[name="post_name"]' ).value = tr.querySelector( '.column-title .row-actions .copy-attachment-url' ).dataset.clipboardText;
 						quickEdit.querySelector( '#quick-media-tags' ).value = mediaTags;
 						quickEdit.querySelector( '[name="alt"]' ).value = tr.querySelector( '.column-alt' ).textContent;
 						quickEdit.querySelector( '[name="post_excerpt"]' ).value = tr.querySelector( '.column-caption' ).textContent;
 						quickEdit.querySelector( '[name="post_content"]' ).value = tr.querySelector( '.column-desc' ).textContent;
+
+						hiddenTr.remove();
 
 						// Update.
 						if ( quickEditEventHandler === null ) {

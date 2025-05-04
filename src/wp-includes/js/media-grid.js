@@ -895,7 +895,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.classList.remove( 'modal-loading' );
 		document.body.style.overflow = '';
 		dialog.close();
-		if ( focusID != null ) { // set focus correctly
+		if ( focusID != null && document.getElementById( focusID ) ) { // set focus correctly
 			document.getElementById( focusID ).focus();
 			focusID = null; // reset focusID
 		}
