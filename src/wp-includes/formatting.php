@@ -429,7 +429,7 @@ function _wptexturize_pushpop_element( $text, &$stack, $disabled_elements ) {
  *
  * A group of regex replaces used to identify text formatted with newlines and
  * replace double line breaks with HTML paragraph tags. The remaining line breaks
- * after conversion become `<br />` tags, unless `$br` is set to '0' or 'false'.
+ * after conversion become `<br>` tags, unless `$br` is set to '0' or 'false'.
  *
  * @since 0.71
  *
@@ -472,7 +472,7 @@ function wpautop( $text, $br = true ) {
 			$pre_tags[ $name ] = substr( $text_part, $start ) . '</pre>';
 
 			$text .= substr( $text_part, 0, $start ) . $name;
-			++$i;
+			$i++;
 		}
 
 		$text .= $last_part;
@@ -571,20 +571,20 @@ function wpautop( $text, $br = true ) {
 		$text = preg_replace_callback( '/<(script|style|svg|math).*?<\/\\1>/s', '_autop_newline_preservation_helper', $text );
 
 		// Normalize <br>
-		$text = str_replace( array( '<br>', '<br/>' ), '<br />', $text );
+		$text = str_replace( array( '<br />', '<br/>' ), '<br>', $text );
 
-		// Replace any new line characters that aren't preceded by a <br /> with a <br />.
-		$text = preg_replace( '|(?<!<br />)\s*\n|', "<br />\n", $text );
+		// Replace any new line characters that aren't preceded by a <br> with a <br>.
+		$text = preg_replace( '|(?<!<br>)\s*\n|', "<br>\n", $text );
 
 		// Replace newline placeholders with newlines.
 		$text = str_replace( '<WPPreserveNewline />', "\n", $text );
 	}
 
-	// If a <br /> tag is after an opening or closing block tag, remove it.
-	$text = preg_replace( '!(</?' . $allblocks . '[^>]*>)\s*<br />!', '$1', $text );
+	// If a <br> tag is after an opening or closing block tag, remove it.
+	$text = preg_replace( '!(</?' . $allblocks . '[^>]*>)\s*<br>!', '$1', $text );
 
-	// If a <br /> tag is before a subset of opening or closing block tags, remove it.
-	$text = preg_replace( '!<br />(\s*</?(?:p|li|div|dl|dd|dt|th|pre|td|ul|ol)[^>]*>)!', '$1', $text );
+	// If a <br> tag is before a subset of opening or closing block tags, remove it.
+	$text = preg_replace( '!<br>(\s*</?(?:p|li|div|dl|dd|dt|th|pre|td|ul|ol)[^>]*>)!', '$1', $text );
 	$text = preg_replace( "|\n</p>$|", '</p>', $text );
 
 	// Replace placeholder <pre> tags with their original content.
