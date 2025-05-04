@@ -98,6 +98,7 @@ $core_actions_post = array(
 	'dismiss-wp-pointer',
 	'upload-attachment',
 	'get-attachment',
+	'get-attachment-html',
 	'query-attachments',
 	'save-attachment',
 	'save-attachment-compat',
