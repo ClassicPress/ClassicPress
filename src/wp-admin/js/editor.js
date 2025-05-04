@@ -1084,6 +1084,9 @@ window.wp = window.wp || {};
 			// Add <br> tags.
 			text = text.replace( /\s*\n/g, '<br />\n');
 
+			// Normalize <br> tags.
+			text = text.replace( /<br>|<br\/>/g, '<br />' );
+
 			// Remove <br> tags that are around block tags.
 			text = text.replace( new RegExp( '(</?(?:' + blocklist + ')[^>]*>)\\s*<br />', 'gi' ), '$1' );
 			text = text.replace( /<br \/>(\s*<\/?(?:p|li|div|dl|dd|dt|th|pre|td|ul|ol)>)/gi, '$1' );
