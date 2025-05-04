@@ -1265,13 +1265,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Only run on a media image widget
 			if ( base && base.value === 'media_audio' ) {
 				if ( e.target.id === 'filter-by-date' ) {
-					updateGrid( document.getElementById( widgetId ), 1 );
+					updateGrid( widgetEl, 1 );
 				} else if ( e.target.className === 'postform' ) {
-					updateGrid( document.getElementById( widgetId ), 1 );
+					updateGrid( widgetEl, 1 );
 				} else if ( e.target.id === 'current-page-selector' ) {
-					updateGrid( document.getElementById( widgetId ), e.target.value );
+					updateGrid( widgetEl, e.target.value );
 				} else if ( e.target.id === 'widget-modal-search-input' ) {
-					updateGrid( document.getElementById( widgetId ), 1 );
+					updateGrid( widgetEl, 1 );
 					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
 				}
 			}
