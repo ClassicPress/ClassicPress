@@ -118,7 +118,7 @@ if ( 'grid' === $mode ) {
 
 	wp_localize_script(
 		'media-grid',
-		'_wpMediaGridSettings',
+		'_wpMediaLibSettings',
 		array(
 			'by'               => __( 'by' ),
 			'pixels'           => __( 'pixels' ),

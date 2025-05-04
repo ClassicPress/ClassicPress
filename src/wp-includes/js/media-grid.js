@@ -1,4 +1,4 @@
-/* global console, _wpMediaGridSettings, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
+/* global console, _wpMediaLibSettings, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	var pond, itemID, focusID,
@@ -112,11 +112,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					document.getElementById( 'details-saved' ).setAttribute( 'aria-hidden', 'true' );
 				}, 3000 );
 			} else {
-				console.error( _wpMediaGridSettings.failed_update, result.data.error );
+				console.error( _wpMediaLibSettings.failed_update, result.data.error );
 			}
 		} )
 		.catch( function( error ) {
-			console.error( _wpMediaGridSettings.error, error );
+			console.error( _wpMediaLibSettings.error, error );
 		} );
 	}
 
@@ -170,11 +170,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					document.getElementById( 'tax-saved' ).setAttribute( 'aria-hidden', 'true' );
 				}, 3000 );
 			} else {
-				console.error( _wpMediaGridSettings.failed_update, result.data.error );
+				console.error( _wpMediaLibSettings.failed_update, result.data.error );
 			}
 		} )
 		.catch( function( error ) {
-			console.error( _wpMediaGridSettings.error, error );
+			console.error( _wpMediaLibSettings.error, error );
 		} );
 	}
 
@@ -214,11 +214,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				closeButton.click();
 				resetDataOrdering();
 			} else {
-				console.log( _wpMediaGridSettings.delete_failed );
+				console.log( _wpMediaLibSettings.delete_failed );
 			}
 		} )
 		.catch( function( error ) {
-			console.error( _wpMediaGridSettings.error, error );
+			console.error( _wpMediaLibSettings.error, error );
 		} );
 	}
 
@@ -262,7 +262,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Delete media item
 	dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
 		var id = location.search.match( /\d+/g )[0];
-		if ( window.confirm( _wpMediaGridSettings.confirm_delete ) ) {
+		if ( window.confirm( _wpMediaLibSettings.confirm_delete ) ) {
 			deleteItem( id );
 		}
 	} );
@@ -310,7 +310,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '.attachment-filename' ).textContent = filename;
 		dialog.querySelector( '.attachment-filetype' ).textContent = mime;
 		dialog.querySelector( '.attachment-filesize' ).textContent = size;
-		dialog.querySelector( '.attachment-dimensions' ).textContent = width + ' ' + _wpMediaGridSettings.by + ' ' + height + ' ' + _wpMediaGridSettings.pixels;
+		dialog.querySelector( '.attachment-dimensions' ).textContent = width + ' ' + _wpMediaLibSettings.by + ' ' + height + ' ' + _wpMediaLibSettings.pixels;
 		dialog.querySelector( '.attachment-media-view' ).className = 'attachment-media-view' + orientation;
 
 		dialog.querySelector( '#attachment-details-two-column-alt-text' ).value = alt;
@@ -346,9 +346,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				dialog.querySelector( '.edit-attachment' ).style.display = '';
 
 				if (
-					( mime === 'image/webp' && ! _wpMediaGridSettings.webp_editable ) ||
-					( mime === 'image/avif' && ! _wpMediaGridSettings.avif_editable ) ||
-					( mime === 'image/heic' && ! _wpMediaGridSettings.heic_editable )
+					( mime === 'image/webp' && ! _wpMediaLibSettings.webp_editable ) ||
+					( mime === 'image/avif' && ! _wpMediaLibSettings.avif_editable ) ||
+					( mime === 'image/heic' && ! _wpMediaLibSettings.heic_editable )
 				) {
 					dialog.querySelector( '.edit-attachment' ).style.display = 'none';
 				}
@@ -475,16 +475,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		if ( attachment.type === 'application' ) {
 			if ( attachment.subtype === 'vnd.openxmlformats-officedocument.spreadsheetml.sheet' ) {
-				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/spreadsheet.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaLibSettings.includes_url + 'images/media/spreadsheet.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
 			} else if ( attachment.subtype === 'zip' ) {
-				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/archive.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaLibSettings.includes_url + 'images/media/archive.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
 			} else {
-				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/document.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaLibSettings.includes_url + 'images/media/document.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
 			}
 		} else if ( attachment.type === 'audio' ) {
-			image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/audio.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+			image = '<div class="icon"><div class="centered"><img src="' + _wpMediaLibSettings.includes_url + 'images/media/audio.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
 		} else if ( attachment.type === 'video' ) {
-			image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/video.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+			image = '<div class="icon"><div class="centered"><img src="' + _wpMediaLibSettings.includes_url + 'images/media/video.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
 		}
 
 		gridItem.className = 'media-item';
@@ -517,7 +517,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			'</div>' +
 			'<button type="button" class="check" tabindex="-1">' +
 			'<span class="media-modal-icon"></span>' +
-			'<span class="screen-reader-text">' + _wpMediaGridSettings.deselect + '></span>' +
+			'<span class="screen-reader-text">' + _wpMediaLibSettings.deselect + '></span>' +
 			'</button>';
 
 		return gridItem;
@@ -651,11 +651,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				// Reset paged variable
 				paged = '1';
 			} else {
-				console.error( _wpMediaGridSettings.failed_update, result.data.message );
+				console.error( _wpMediaLibSettings.failed_update, result.data.message );
 			}
 		} )
 		.catch( function( error ) {
-			console.error( _wpMediaGridSettings.error, error );
+			console.error( _wpMediaLibSettings.error, error );
 		} );
 	}
 
@@ -1033,7 +1033,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			deleteButton.addEventListener( 'click', function() {
 				var selectedItems = document.querySelectorAll( '.media-item.selected' );
 				if ( selectedItems.length !== 0 ) {
-					if ( window.confirm( _wpMediaGridSettings.confirm_multiple ) ) {
+					if ( window.confirm( _wpMediaLibSettings.confirm_multiple ) ) {
 						selectedItems.forEach( function( deleteSelect ) {
 							deleteItem( deleteSelect.id.replace( 'media-', '' ) );
 						} );
@@ -1130,12 +1130,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							}
 						} );
 					} else {
-						error( _wpMediaGridSettings.upload_failed );
+						error( _wpMediaLibSettings.upload_failed );
 					}
 				} )
 				.catch( function( err ) {
-					error( _wpMediaGridSettings.upload_failed );
-					console.error( _wpMediaGridSettings.error, err );
+					error( _wpMediaLibSettings.upload_failed );
+					console.error( _wpMediaLibSettings.error, err );
 				} );
 
 				// Return an abort function
@@ -1148,14 +1148,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			},
 			maxFileSize: document.getElementById( 'ajax-url' ).dataset.maxFileSize
 		},
-		labelTapToUndo: _wpMediaGridSettings.tap_close,
+		labelTapToUndo: _wpMediaLibSettings.tap_close,
 		fileRenameFunction: ( file ) =>
 			new Promise( function( resolve ) {
-				resolve( window.prompt( _wpMediaGridSettings.new_filename, file.name ) );
+				resolve( window.prompt( _wpMediaLibSettings.new_filename, file.name ) );
 			} ),
 		acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
-		labelFileTypeNotAllowed: _wpMediaGridSettings.invalid_type,
-		fileValidateTypeLabelExpectedTypes: _wpMediaGridSettings.check_types
+		labelFileTypeNotAllowed: _wpMediaLibSettings.invalid_type,
+		fileValidateTypeLabelExpectedTypes: _wpMediaLibSettings.check_types
 	} );
 
 	pond.on( 'processfile', function( error, file ) {
