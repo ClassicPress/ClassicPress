@@ -1202,4 +1202,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	} );
 
+	pond.on( 'processfiles', function() {
+		if ( mediaGrid == null ) {
+			location.href = location.pathname;
+		}
+	} );
+
 } );
