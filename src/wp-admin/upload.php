@@ -105,40 +105,41 @@ if ( isset( $_GET['mode'] ) && in_array( $_GET['mode'], $modes, true ) ) {
 	update_user_option( get_current_user_id(), 'media_library_mode', $mode );
 }
 
+wp_enqueue_style( 'cp-filepond-image-preview' );
+wp_enqueue_style( 'cp-filepond' );
+wp_enqueue_style( 'media-grid' );
+wp_enqueue_script( 'media-grid' );
+
+wp_localize_script(
+	'media-grid',
+	'_wpMediaLibSettings',
+	array(
+		'by'               => __( 'by' ),
+		'pixels'           => __( 'pixels' ),
+		'deselect'         => __( 'Deselect' ),
+		'failed_update'    => __( 'Failed to update media:' ),
+		'error'            => __( 'Error:' ),
+		'upload_failed'    => __( 'Upload failed' ),
+		'tap_close'        => __( 'Tap to close' ),
+		'new_filename'     => __( 'Enter new filename' ),
+		'invalid_type'     => __( 'Invalid file type' ),
+		'check_types'      => __( 'Check the list of accepted file types.' ),
+		'delete_failed'    => __( 'Failed to delete attachment.' ),
+		'confirm_delete'   => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+		'confirm_multiple' => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+		'includes_url'     => includes_url(),
+		'webp_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) ),
+		'avif_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/avif' ) ),
+		'heic_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/heic' ) ),
+	)
+);
+
 if ( 'grid' === $mode ) {
 	// Styles and scripts since CP-2.3.0
 	wp_enqueue_style( 'mediaelement-player' );
-	wp_enqueue_style( 'cp-filepond-image-preview' );
-	wp_enqueue_style( 'cp-filepond' );
-	wp_enqueue_style( 'media-grid' );
 	wp_enqueue_script( 'wp-mediaelement' );
-	wp_enqueue_script( 'media-grid' );
 
 	remove_action( 'admin_head', 'wp_admin_canonical_url' );
-
-	wp_localize_script(
-		'media-grid',
-		'_wpMediaLibSettings',
-		array(
-			'by'               => __( 'by' ),
-			'pixels'           => __( 'pixels' ),
-			'deselect'         => __( 'Deselect' ),
-			'failed_update'    => __( 'Failed to update media:' ),
-			'error'            => __( 'Error:' ),
-			'upload_failed'    => __( 'Upload failed' ),
-			'tap_close'        => __( 'Tap to close' ),
-			'new_filename'     => __( 'Enter new filename' ),
-			'invalid_type'     => __( 'Invalid file type' ),
-			'check_types'      => __( 'Check the list of accepted file types.' ),
-			'delete_failed'    => __( 'Failed to delete attachment.' ),
-			'confirm_delete'   => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
-			'confirm_multiple' => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
-			'includes_url'     => includes_url(),
-			'webp_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) ),
-			'avif_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/avif' ) ),
-			'heic_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/heic' ) ),
-		)
-	);
 
 	add_screen_option(
 		'per_page',
