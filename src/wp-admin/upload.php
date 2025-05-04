@@ -912,6 +912,20 @@ if ( ! empty( $message ) ) {
 		)
 	);
 }
+wp_admin_notice(
+	$js_required_message,
+	array(
+		'additional_classes' => array( 'error', 'hide-if-js' ),
+	)
+);
+wp_admin_notice(
+	__( 'Not all files were uploaded. Refresh the page to see the current list.' ),
+	array(
+		'id'                 => 'refresh',
+		'additional_classes' => array( 'error', 'hidden' ),
+		'dismissible'        => true,
+	)
+);
 ?>
 
 <form id="posts-filter" method="get">
