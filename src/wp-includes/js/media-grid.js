@@ -1182,6 +1182,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	pond.on( 'addfile', function( error ) {
+		document.getElementById( 'post-upload-info' ).classList.add( 'no-top-margin' );
 		if ( error ) {
 			if ( mediaGrid == null ) {
 				document.getElementById( 'refresh' ).classList.remove( 'hidden' );
@@ -1190,6 +1191,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	pond.on( 'processfile', function( error, file ) {
+		document.getElementById( 'post-upload-info' ).classList.add( 'no-top-margin' );
 		if ( error ) {
 			if ( mediaGrid == null ) {
 				document.getElementById( 'refresh' ).classList.remove( 'hidden' );
@@ -1199,13 +1201,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				pond.removeFile( file.id );
 			}, 100 );
 			resetDataOrdering();
+			document.getElementById( 'post-upload-info' ).classList.remove( 'no-top-margin' );
 		}
 	} );
 
 	pond.on( 'processfiles', function() {
+		document.getElementById( 'post-upload-info' ).classList.remove( 'no-top-margin' );
 		if ( mediaGrid == null ) {
 			location.href = location.pathname;
 		}
+	} );
+
+	pond.on( 'removefile', function() {
+		document.getElementById( 'post-upload-info' ).classList.remove( 'no-top-margin' );
 	} );
 
 } );
