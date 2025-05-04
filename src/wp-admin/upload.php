@@ -105,6 +105,8 @@ if ( isset( $_GET['mode'] ) && in_array( $_GET['mode'], $modes, true ) ) {
 	update_user_option( get_current_user_id(), 'media_library_mode', $mode );
 }
 
+$js_required_message = __( 'To view media details in a dialog, please enable JavaScript.' );
+
 // Get the maximum upload size.
 $max_upload_size = wp_max_upload_size();
 if ( ! $max_upload_size ) {
@@ -288,12 +290,6 @@ if ( 'grid' === $mode ) {
 				)
 			);
 		}
-
-		$js_required_message = sprintf(
-			/* translators: %s: List view URL. */
-			__( 'The grid view for the Media Library requires JavaScript. <a href="%s">Switch to the list view</a>.' ),
-			'upload.php?mode=list'
-		);
 		wp_admin_notice(
 			$js_required_message,
 			array(
