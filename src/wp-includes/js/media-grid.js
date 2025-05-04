@@ -264,7 +264,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var id = location.search.match( /\d+/g )[0];
 		if ( window.confirm( _wpMediaGridSettings.confirm_delete ) ) {
 			deleteItem( id );
-			resetDataOrdering();
 		}
 	} );
 
