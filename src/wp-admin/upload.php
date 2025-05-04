@@ -110,6 +110,8 @@ wp_enqueue_style( 'cp-filepond' );
 wp_enqueue_style( 'media-grid' );
 wp_enqueue_script( 'media-grid' );
 
+remove_action( 'admin_head', 'wp_admin_canonical_url' );
+
 wp_localize_script(
 	'media-grid',
 	'_wpMediaLibSettings',
@@ -138,8 +140,6 @@ if ( 'grid' === $mode ) {
 	// Styles and scripts since CP-2.3.0
 	wp_enqueue_style( 'mediaelement-player' );
 	wp_enqueue_script( 'wp-mediaelement' );
-
-	remove_action( 'admin_head', 'wp_admin_canonical_url' );
 
 	add_screen_option(
 		'per_page',
