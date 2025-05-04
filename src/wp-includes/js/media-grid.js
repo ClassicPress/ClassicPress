@@ -214,6 +214,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				closeButton.click();
 				resetDataOrdering();
 				if ( mediaGrid == null ) {
+					// Modify current URL
+					queryParams.set( 'deleted', '1' );
+					history.replaceState( null, null, '?' + queryParams.toString() );
 					location.href = location.href;
 				}
 			} else {
@@ -307,6 +310,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 		// Modify current URL
+		queryParams.delete( 'deleted' );
 		queryParams.set( 'item', id );
 		history.replaceState( null, null, '?' + queryParams.toString() );
 
@@ -853,6 +857,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( e.key === 'Escape' ) {
 			queryParams.delete( 'item' );
 			queryParams.delete( 'mode' );
+			queryParams.delete( 'deleted' );
 			history.replaceState( null, null, location.href.split('?')[0] ); // reset URL params
 			close.click(); // close file upload area
 			if ( focusID != null ) { // set focus correctly
@@ -891,6 +896,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function closeModalDialog() {
 		queryParams.delete( 'item' );
 		queryParams.delete( 'mode' );
+		queryParams.delete( 'deleted' );
 		history.replaceState( null, null, location.href.split('?')[0] ); // reset URL params
 		dialog.classList.remove( 'modal-loading' );
 		document.body.style.overflow = '';
@@ -1007,6 +1013,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.querySelector( '.media-frame-content' ).insertAdjacentHTML( 'beforeend', result.data.html );
 
 			// Modify current URL
+			queryParams.delete( 'deleted' );
 			queryParams.set( 'mode', 'edit' );
 			history.replaceState( null, null, '?' + queryParams.toString() );
 		} )
@@ -1174,8 +1181,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		fileValidateTypeLabelExpectedTypes: _wpMediaLibSettings.check_types
 	} );
 
+	pond.on( 'addfile', function( error ) {
+		if ( error ) {
+			if ( mediaGrid == null ) {
+				document.getElementById( 'refresh' ).classList.remove( 'hidden' );
+			}
+		}
+	} );
+
 	pond.on( 'processfile', function( error, file ) {
-		if ( ! error ) {
+		if ( error ) {
+			if ( mediaGrid == null ) {
+				document.getElementById( 'refresh' ).classList.remove( 'hidden' );
+			}
+		} else {
 			setTimeout( function() {
 				pond.removeFile( file.id );
 			}, 100 );
