@@ -3307,7 +3307,7 @@ function wp_ajax_quick_edit_attachment() {
 
 	if ( isset( $_POST['post_author'] ) && is_numeric( wp_unslash( $_POST['post_author'] ) ) ) {
 		$post_author = absint( wp_unslash( $_POST['post_author'] ) );
-		$author = get_user_by( 'id', $post_author );
+		$author      = get_user_by( 'id', $post_author );
 	}
 
 	if ( isset( $_POST['aa'] ) && isset( $_POST['mm'] ) && isset( $_POST['jj'] ) ) {
@@ -3316,9 +3316,9 @@ function wp_ajax_quick_edit_attachment() {
 		$day   = str_pad( absint( $_POST['jj'] ), 2, '0', STR_PAD_LEFT );
 		$date  = $year . '/' . $month . '/' . $day;
 
-		$current_date  = get_the_date( 'Y-m-d', $attachment );
-		$new_date      = $year . '-' . $month . '-' . $day;
-		$post_date     = $attachment->post_date;
+		$current_date = get_the_date( 'Y-m-d', $attachment );
+		$new_date     = $year . '-' . $month . '-' . $day;
+		$post_date    = $attachment->post_date;
 		if ( $new_date !== $current_date ) {
 			$post_date = $new_date . ' 00:00:00';
 		}
@@ -3402,7 +3402,7 @@ function wp_ajax_quick_edit_attachment() {
 		}
 	}
 	$h_time .= '<time datetime="' . wp_date( 'Y/m/d', $time ) . '"></time>';
-	$h_time = apply_filters( 'media_date_column_time', $h_time, $attachment, 'date' );
+	$h_time  = apply_filters( 'media_date_column_time', $h_time, $attachment, 'date' );
 
 	/**
 	 * Output buffer is used here because the function prints directly
@@ -3818,7 +3818,7 @@ function wp_ajax_query_themes() {
 	$old_filter = isset( $args['browse'] ) ? $args['browse'] : 'search';
 
 	/** This filter is documented in wp-admin/includes/class-wp-theme-install-list-table.php */
-	$args = apply_filters( 'install_themes_table_api_args_' . $old_filter, $args );
+	$args = apply_filters( 'install_themes_table_api_args_' . $old_filter, $args ); // phpcs:ignore Generic.Formatting.MultipleStatementAlignment.NotSameWarning
 	$args['fields']['tags'] = true;
 
 	$api = themes_api( 'query_themes', $args );

@@ -182,7 +182,7 @@ class WP_Media_List_Table extends WP_List_Table {
 		if ( MEDIA_TRASH ) {
 			if ( $this->is_trash ) {
 				$actions['untrash'] = __( 'Restore' );
-				$actions['delete'] = __( 'Delete permanently' );
+				$actions['delete']  = __( 'Delete permanently' );
 			} else {
 				$actions['trash'] = __( 'Move to Trash' );
 			}
@@ -1077,6 +1077,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	 * @global string $mode List table view mode.
 	 */
 	public function inline_edit() {
+		// phpcs:disable Generic.Formatting.MultipleStatementAlignment.NotSameWarning
 		$users = get_users();
 		$terms = get_terms(
 			array(
@@ -1091,6 +1092,7 @@ class WP_Media_List_Table extends WP_List_Table {
 				'fields'     => 'names',
 			)
 		);
+		// phpcs:enable
 		$tags_string = ! empty( $tags ) ? implode( ', ', $tags ) : '';
 		?>
 

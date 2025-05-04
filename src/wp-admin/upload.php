@@ -189,15 +189,15 @@ if ( 'grid' === $mode ) {
 
 	// Get a list of allowed mime types.
 	$allowed_mimes = get_allowed_mime_types();
-	$mimes_list = implode( ',', $allowed_mimes );
+	$mimes_list    = implode( ',', $allowed_mimes );
 
 	// Get the user's preferred items per page.
-	$user_id = get_current_user_id();
+	$user_id  = get_current_user_id();
 	$per_page = get_user_meta( $user_id, 'media_grid_per_page', true );
 	if ( empty( $per_page ) || $per_page < 1 ) {
 		$per_page = 80;
 	}
-
+	// phpcs:disable Generic.Formatting.MultipleStatementAlignment.NotSameWarning
 	// Fetch media items.
 	$paged = isset( $_GET['paged'] ) ? absint( $_GET['paged'] ) : 1;
 	$attachment_args = array(
@@ -207,7 +207,7 @@ if ( 'grid' === $mode ) {
 		'paged'          => $paged,
 	);
 	$attachments = new WP_Query( $attachment_args );
-
+	// phpcs:enable
 	$total_pages = ( $attachments->max_num_pages ) ? (int) $attachments->max_num_pages : 1;
 	$prev_page   = ( $paged === 1 ) ? $paged : $paged - 1;
 	$next_page   = ( $paged === $total_pages ) ? $paged : $paged + 1;
@@ -410,7 +410,7 @@ if ( 'grid' === $mode ) {
 
 				<?php
 				foreach ( $attachments->posts as $key => $attachment ) {
-					$meta = wp_prepare_attachment_for_js( $attachment->ID );
+					$meta         = wp_prepare_attachment_for_js( $attachment->ID );
 					$date         = $meta['dateFormatted'];
 					$author       = $meta['authorName'];
 					$author_link  = ! empty( $meta['authorLink'] ) ? $meta['authorLink'] : '';
