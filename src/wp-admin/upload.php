@@ -744,6 +744,27 @@ if ( 'grid' === $mode ) {
 	}
 	?>
 
+	<div class="uploader-inline" data-allowed-mimes="<?php echo esc_attr( $mimes_list ); ?>" hidden inert>
+		<button type="button" class="close dashicons dashicons-no">
+			<span class="screen-reader-text">Close uploader</span>
+		</button>
+
+		<input type="file" id="filepond" class="filepond" name="filepond" multiple data-allow-reorder="true">
+		<input id="ajax-url" value="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" data-max-file-size="<?php echo esc_attr( size_format( $max_upload_size ) ); ?>" hidden>
+		<?php wp_nonce_field( 'media-form' ); ?>
+
+		<div class="post-upload-ui" id="post-upload-info">
+			<p class="max-upload-size">
+
+				<?php
+				/* translators: %s: Maximum allowed file size. */
+				printf( __( 'Maximum upload file size: %s.' ), esc_html( size_format( $max_upload_size ) ) );
+				?>
+
+			</p>
+		</div>
+	</div>
+
 	<hr class="wp-header-end">
 
 	<?php
