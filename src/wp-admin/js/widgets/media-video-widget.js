@@ -867,6 +867,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			widget.querySelector( '[data-property="url"]' ).value = '';
 			widget.querySelector( '[data-property="preload"]' ).value = 'none';
 			widget.querySelector( '[data-property="loop"]' ).value = '';
+			widget.querySelector( '.wp-video' ).remove();
+			widget.querySelector( '.media_video' ).classList.remove( 'populated' );
+			widget.querySelector( '.reset_widget' ).value = '1';
 		} else {
 			widget.querySelector( '[data-property="url"]' ).value = dialog.querySelector( '#video-details-source' ).value;
 			widget.querySelector( '[data-property="preload"]' ).value = dialog.querySelector( '#preload' ).value;
