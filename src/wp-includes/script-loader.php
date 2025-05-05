@@ -1434,7 +1434,7 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'list-tables', "/wp-admin/css/list-tables$suffix.css" );
 	$styles->add( 'edit', "/wp-admin/css/edit$suffix.css" );
 	$styles->add( 'revisions', "/wp-admin/css/revisions$suffix.css" );
-	$styles->add( 'media', "/wp-admin/css/media$suffix.css" );
+	$styles->add( 'media', "/wp-admin/css/media$suffix.css", array( 'cp-filepond-image-preview', 'cp-filepond', 'imgareaselect' ) );
 	$styles->add( 'themes', "/wp-admin/css/themes$suffix.css" );
 	$styles->add( 'about', "/wp-admin/css/about$suffix.css" );
 	$styles->add( 'nav-menus', "/wp-admin/css/nav-menus$suffix.css" );
@@ -1452,7 +1452,6 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'customize-controls', "/wp-admin/css/customize-controls$suffix.css", array( 'wp-admin', 'colors', 'imgareaselect' ) );
 	$styles->add( 'customize-widgets', "/wp-admin/css/customize-widgets$suffix.css", array( 'wp-admin', 'colors' ) );
 	$styles->add( 'customize-nav-menus', "/wp-admin/css/customize-nav-menus$suffix.css", array( 'wp-admin', 'colors' ) );
-	$styles->add( 'media-grid', "/wp-admin/css/media-grid$suffix.css", array( 'imgareaselect' ), '0.1.0' );
 
 	// Common dependencies.
 	$styles->add( 'buttons', "/wp-includes/css/buttons$suffix.css" );

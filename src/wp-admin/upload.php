@@ -117,9 +117,7 @@ if ( ! $max_upload_size ) {
 $allowed_mimes = get_allowed_mime_types();
 $mimes_list    = implode( ',', $allowed_mimes );
 
-wp_enqueue_style( 'cp-filepond-image-preview' );
-wp_enqueue_style( 'cp-filepond' );
-wp_enqueue_style( 'media-grid' );
+wp_enqueue_style( 'media' );
 wp_enqueue_script( 'media-grid' );
 
 remove_action( 'admin_head', 'wp_admin_canonical_url' );
