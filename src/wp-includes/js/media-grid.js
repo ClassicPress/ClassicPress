@@ -688,13 +688,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 					// Open modal to show details about file, or select files for deletion
 					document.querySelectorAll( '.media-item' ).forEach( function( item ) {
-						item.addEventListener( 'click', function() {
+						item.onclick = function() {
 							if ( document.querySelector( '.media-toolbar-mode-select' ) == null ) {
 								openModalDialog( item );
 							} else {
 								selectItemForDeletion( item );
 							}
-						} );
+						};
 					} );
 
 					// Update the count at the bottom of the page
@@ -1259,6 +1259,50 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	if ( mediaGrid == null ) {
+		// Observe media list for changes
+		var mediaList = document.querySelector( '.upload-php tbody#the-list' );
+		var mediaListObserver = new MutationObserver( function( mutationsList ) {
+			for ( let i = 0, n = mutationsList.length; i < n; i++ ) {
+				const mutation = mutationsList[i];
+				if ( mutation.removedNodes ) {
+					for ( let i = 0, n = mutation.removedNodes.length; i < n; i++ ) {
+						const node = mutation.removedNodes[i];
+						if ( node.nodeName !== '#text' && node.id.startsWith( 'post' ) ) {
+							// Reset media items ordering
+							resetDataOrdering();
+						}
+					}
+				}
+				if ( mutation.addedNodes ) {
+					for ( let i = 0, n = mutation.addedNodes.length; i < n; i++ ) {
+						const node = mutation.addedNodes[i];
+						if ( node.nodeName !== '#text' ) {
+							// Reset media items ordering
+							const postRow = node.id.startsWith( 'post' );
+							const lastColumn = node.classList.contains( 'date' );
+							if ( postRow || lastColumn ) {
+								resetDataOrdering();
+							}
+							// Reset media item click event handler
+							const mediaItem = node.querySelector( '.media-item' );
+							if ( mediaItem != null && mediaItem.onclick === null ) {
+								// Ignore "Functions declared within loops referencing an outer scoped variable may lead to confusing semantics" error
+								/* jshint -W083 */
+								( function ( mediaItem ) {
+									mediaItem.onclick = function() {
+										openModalDialog( mediaItem );
+									};
+								} ( mediaItem ) );
+							}
+						}
+					}
+				}
+			}
+		} );
+		if ( mediaList ) {
+			mediaListObserver.observe( mediaList, { childList: true, subtree: true } );
+		}
+
 		// Set ordering of media items in list view on page load
 		resetDataOrdering();
 	}
