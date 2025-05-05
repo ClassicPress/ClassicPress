@@ -230,6 +230,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 			<input id="<?php echo esc_attr( $this->get_field_id( 'quicktime' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'quicktime' ) ); ?>" type="hidden" data-property="quicktime" class="media-widget-instance-property" value="<?php echo esc_attr( $quicktime ); ?>">
 			<input id="<?php echo esc_attr( $this->get_field_id( 'attachment_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'attachment_id' ) ); ?>" type="hidden" data-property="attachment_id" class="media-widget-instance-property" value="<?php echo esc_attr( $attachment_id ); ?>">
 			<input id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="hidden" data-property="url" class="media-widget-instance-property" value="<?php echo esc_url( $url ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'reset_widget' ) ); ?>" name="reset_widget" type="hidden" class="reset_widget" value="0">
 
 		</div>
 
