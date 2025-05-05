@@ -1718,6 +1718,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Set functions for Escape and Enter keys
 	document.addEventListener( 'keyup', function( e ) {
 		if ( e.key === 'Escape' ) {
+			document.body.style.overflow = '';
 			queryParams.delete( 'item' );
 			queryParams.delete( 'mode' );
 			history.replaceState( null, null, location.href.split('?')[0] ); // reset URL params
