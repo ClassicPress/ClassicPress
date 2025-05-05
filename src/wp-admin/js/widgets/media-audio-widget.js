@@ -896,6 +896,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			widget.querySelector( '[data-property="url"]' ).value = '';
 			widget.querySelector( '[data-property="preload"]' ).value = 'none';
 			widget.querySelector( '[data-property="loop"]' ).value = '';
+			if ( widget.querySelector( '.wp_audio_shortcode' ) ) {
+				widget.querySelector( '.wp_audio_shortcode' ).remove();
+			} else {
+				widget.querySelector( '.wp-audio-shortcode' ).remove();
+			}
+			widget.querySelector( '.media_audio' ).classList.remove( 'populated' );
+			widget.querySelector( '.reset_widget' ).value = '1';
 		} else {
 			widget.querySelector( '[data-property="url"]' ).value = dialog.querySelector( '#audio-details-source' ).value;
 			widget.querySelector( '[data-property="preload"]' ).value = dialog.querySelector( '#preload' ).value;
