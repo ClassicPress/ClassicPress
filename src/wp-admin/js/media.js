@@ -458,15 +458,24 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
 			next = item.nextElementSibling ? item.nextElementSibling.id : '',
 			order = item.dataset.order,
-			total = parseInt( document.querySelector( '.displaying-num' ).textContent );
+			total = parseInt( document.querySelector( '.displaying-num' ).textContent ),
+			dismissible = document.querySelector( '.is-dismissible' );
 
 			if ( mediaGrid == null ) {
 				prev = item.closest( 'tr' ).previousElementSibling ? item.closest( 'tr' ).previousElementSibling.querySelector( '.media-item' ).id : '';
 				next = item.closest( 'tr' ).nextElementSibling ? item.closest( 'tr' ).nextElementSibling.querySelector( '.media-item' ).id : '';
 			}
 
+		// Remove AJAX deletion query parameter and associated notice
+		if ( queryParams.has( 'deleted' ) ) {
+			console.log(queryParams);
+			queryParams.delete( 'deleted' );
+		}
+		if ( dismissible != null ) {
+			dismissible.remove();
+		}
+
 		// Modify current URL
-		queryParams.delete( 'deleted' );
 		queryParams.set( 'item', id );
 		history.replaceState( null, null, '?' + queryParams.toString() );
 
@@ -1705,6 +1714,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			uploader.removeAttribute( 'inert' );
 			uploader.removeAttribute( 'hidden' );
 			addNew.setAttribute( 'aria-expanded', true );
+		}
+
+		// Remove AJAX deletion query parameter and associated notice
+		if ( queryParams.has( 'deleted' ) ) {
+			console.log(queryParams);
+			queryParams.delete( 'deleted' );
+		}
+		var dismissible = document.querySelector( '.is-dismissible' );
+		if ( dismissible != null ) {
+			dismissible.remove();
 		}
 	} );
 
