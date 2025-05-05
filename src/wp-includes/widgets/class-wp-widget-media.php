@@ -521,13 +521,13 @@ abstract class WP_Widget_Media extends WP_Widget {
  * @return  array  $instance  Current widget schema
  */
 function cp_restore_default_media_widget_schema( $instance, $new_instance, $old_instance, $widget ) {
-	if ( isset( $_POST['reset_widget'] ) && $_POST['reset_widget'] === '1' ) {
+	if ( isset( $_POST[ 'reset_widget' ] ) && $_POST[ 'reset_widget' ] === '1' ) {
 
 		# Get the default schema for the widget
 		$schema = $widget->get_instance_schema();
 		$defaults = array();
 		foreach ( $schema as $key => $data ) {
-			$defaults[$key] = isset( $data['default'] ) ? $data['default'] : '';
+			$defaults[ $key ] = isset( $data[ 'default' ] ) ? $data[ 'default' ] : '';
 		}
 		return $defaults;
 	}
