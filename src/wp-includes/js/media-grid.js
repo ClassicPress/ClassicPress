@@ -1258,4 +1258,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		document.getElementById( 'post-upload-info' ).classList.remove( 'no-top-margin' );
 	} );
 
+	if ( mediaGrid == null ) {
+		// Set ordering of media items in list view on page load
+		resetDataOrdering();
+	}
+
 } );
