@@ -118,12 +118,12 @@ $allowed_mimes = get_allowed_mime_types();
 $mimes_list    = implode( ',', $allowed_mimes );
 
 wp_enqueue_style( 'media' );
-wp_enqueue_script( 'media-grid' );
+wp_enqueue_script( 'media' );
 
 remove_action( 'admin_head', 'wp_admin_canonical_url' );
 
 wp_localize_script(
-	'media-grid',
+	'media',
 	'_wpMediaLibSettings',
 	array(
 		'by'               => __( 'by' ),
@@ -636,8 +636,6 @@ if ( 'grid' === $mode ) {
 	// Used in the HTML title tag.
 	$title       = __( 'Media Library' );
 	$parent_file = 'upload.php';
-
-	wp_enqueue_script( 'media' );
 
 	add_screen_option( 'per_page' );
 

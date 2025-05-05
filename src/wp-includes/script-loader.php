@@ -1306,9 +1306,12 @@ function wp_default_scripts( $scripts ) {
 		$scripts->add( 'list-revisions', "/wp-includes/js/wp-list-revisions$suffix.js" );
 
 		$scripts->add(
-			'media-grid',
-			"/wp-includes/js/media-grid$suffix.js",
+			'media',
+			"/wp-admin/js/media$suffix.js",
 			array(
+				'jquery',
+				'wp-i18n',
+				'wp-a11y',
 				'image-edit',
 				'cp-filepond-file-validate-size',
 				'cp-filepond-file-validate-type',
@@ -1319,7 +1322,6 @@ function wp_default_scripts( $scripts ) {
 			false,
 			1
 		);
-		$scripts->add( 'media', "/wp-admin/js/media$suffix.js", array( 'jquery', 'wp-i18n', 'wp-a11y' ), false, 1 );
 		$scripts->set_translations( 'media' );
 
 		$scripts->add( 'image-edit', "/wp-admin/js/image-edit$suffix.js", array( 'jquery', 'json2', 'imgareaselect', 'wp-a11y' ), false, 1 );
