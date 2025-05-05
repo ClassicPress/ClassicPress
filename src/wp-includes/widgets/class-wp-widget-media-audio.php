@@ -180,6 +180,7 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 			<input id="<?php echo esc_attr( $this->get_field_id( 'wav' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'wav' ) ); ?>" type="hidden" data-property="wav" class="media-widget-instance-property" value="<?php echo esc_attr( esc_attr( $wav ) ); ?>">
 			<input id="<?php echo esc_attr( $this->get_field_id( 'attachment_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'attachment_id' ) ); ?>" type="hidden" data-property="attachment_id" class="media-widget-instance-property" value="<?php echo esc_attr( $attachment_id ); ?>">
 			<input id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="hidden" data-property="url" class="media-widget-instance-property" value="<?php echo esc_url( $url ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'reset_widget' ) ); ?>" name="reset_widget" type="hidden" class="reset_widget" value="0">
 
 		</div>
 
