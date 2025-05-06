@@ -468,7 +468,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Remove AJAX deletion query parameter and associated notice
 		if ( queryParams.has( 'deleted' ) ) {
-			console.log(queryParams);
 			queryParams.delete( 'deleted' );
 		}
 		if ( dismissible != null ) {
@@ -1718,7 +1717,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Remove AJAX deletion query parameter and associated notice
 		if ( queryParams.has( 'deleted' ) ) {
-			console.log(queryParams);
 			queryParams.delete( 'deleted' );
 		}
 		var dismissible = document.querySelector( '.is-dismissible' );
