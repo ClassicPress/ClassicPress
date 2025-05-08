@@ -265,6 +265,7 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 				'add_to_gallery'             => __( 'Add to Gallery' ),
 				'deselect'                   => __( 'Deselect' ),
 				'caption'                    => __( 'Caption' ),
+				'save'                       => __( 'Save' ),
 				'media_items'                => __( 'media items' ),
 				'per_page'                   => $per_page,
 				'of'                         => __( 'of' ),
