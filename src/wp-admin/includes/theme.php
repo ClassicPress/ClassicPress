@@ -1025,10 +1025,6 @@ function customize_themes_print_templates() {
 					<# } #>
 
 					<p class="theme-description">{{{ data.description }}}</p>
-
-					<# if ( data.tags ) { #>
-						<p class="theme-tags"><span><?php _e( 'Tags:' ); ?></span> {{{ data.tags }}}</p>
-					<# } #>
 				</div>
 			</div>
 
