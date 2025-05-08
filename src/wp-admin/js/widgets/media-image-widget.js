@@ -990,7 +990,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( document.body.className.includes( 'widgets-php' ) ) {
 			widget.classList.add( 'widget-dirty' );
 		}
-		widgetEl.querySelector( '.widget-control-save' ).textContent = IMAGE_WIDGET.save;
+		widget.querySelector( '.widget-control-save' ).textContent = IMAGE_WIDGET.save;
 		widget.dispatchEvent( new Event( 'change' ) );
 
 		// Explicitly enable Save button (required by some browsers)
@@ -1192,7 +1192,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( document.body.className.includes( 'widgets-php' ) ) {
 			widget.classList.add( 'widget-dirty' );
 		}
-		widgetEl.querySelector( '.widget-control-save' ).textContent = IMAGE_WIDGET.save;
+		widget.querySelector( '.widget-control-save' ).textContent = IMAGE_WIDGET.save;
 		widget.dispatchEvent( new Event( 'change' ) );
 
 		// Explicitly enable Save button (required by some browsers)
