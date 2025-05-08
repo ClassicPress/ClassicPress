@@ -304,6 +304,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 				'insert_from_url'            => __( 'Insert from URL' ),
 				'remove_video_source'        => __( 'Remove video source' ),
 				'cancel_edit'                => __( 'Cancel edit' ),
+				'save'                       => __( 'Save' ),
 				'media_items'                => __( 'media items' ),
 				'includes_url'               => includes_url(),
 				'per_page'                   => $per_page,
