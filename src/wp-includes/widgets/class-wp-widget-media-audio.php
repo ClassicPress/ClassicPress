@@ -253,6 +253,7 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 				'artist'                     => __( 'Artist' ),
 				'album'                      => __( 'Album' ),
 				'cancel_edit'                => __( 'Cancel edit' ),
+				'save'                       => __( 'Save' ),
 				'media_items'                => __( 'media items' ),
 				'includes_url'               => includes_url(),
 				'per_page'                   => $per_page,
