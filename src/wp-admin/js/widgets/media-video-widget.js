@@ -848,6 +848,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( document.body.className.includes( 'widgets-php' ) ) {
 			widget.classList.add( 'widget-dirty' );
 		}
+		widget.querySelector( '.widget-control-save' ).textContent = VIDEO_WIDGET.save;
 		widget.dispatchEvent( new Event( 'change' ) );
 
 		// Explicitly enable Save button (required by some browsers)
@@ -880,6 +881,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( document.body.className.includes( 'widgets-php' ) ) {
 			widget.classList.add( 'widget-dirty' );
 		}
+		widget.querySelector( '.widget-control-save' ).textContent = VIDEO_WIDGET.save;
 		widget.dispatchEvent( new Event( 'change' ) );
 
 		// Explicitly enable Save button (required by some browsers)
