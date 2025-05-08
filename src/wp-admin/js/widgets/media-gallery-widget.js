@@ -1389,6 +1389,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					if ( document.body.className.includes( 'widgets-php' ) ) {
 						widgetEl.classList.add( 'widget-dirty' );
 					}
+					widgetEl.querySelector( '.widget-control-save' ).textContent = GALLERY_WIDGET.save;
 					widgetEl.dispatchEvent( new Event( 'change' ) );
 
 					// Explicitly enable Save button (required by some browsers)
