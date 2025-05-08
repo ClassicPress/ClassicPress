@@ -561,7 +561,7 @@ foreach ( $theme_sidebars as $sidebar => $registered_sidebar ) {
 	</div>
 </div>
 
-<?php /* Enables the modal for gallery widgets */ ?>
+<?php /* Enables the modal for media widgets */ ?>
 <dialog id="widget-modal">
 	<div id="media-widget-modal" class="widget-modal-container">
 		<aside class="widget-modal-left-sidebar">
