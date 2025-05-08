@@ -3307,7 +3307,7 @@ function wp_ajax_quick_edit_attachment() {
 
 	if ( isset( $_POST['post_author'] ) && is_numeric( wp_unslash( $_POST['post_author'] ) ) ) {
 		$post_author = absint( wp_unslash( $_POST['post_author'] ) );
-		$author = get_user_by( 'id', $post_author );
+		$author      = get_user_by( 'id', $post_author );
 	}
 
 	if ( isset( $_POST['aa'] ) && isset( $_POST['mm'] ) && isset( $_POST['jj'] ) ) {
@@ -3316,9 +3316,9 @@ function wp_ajax_quick_edit_attachment() {
 		$day   = str_pad( absint( $_POST['jj'] ), 2, '0', STR_PAD_LEFT );
 		$date  = $year . '/' . $month . '/' . $day;
 
-		$current_date  = get_the_date( 'Y-m-d', $attachment );
-		$new_date      = $year . '-' . $month . '-' . $day;
-		$post_date     = $attachment->post_date;
+		$current_date = get_the_date( 'Y-m-d', $attachment );
+		$new_date     = $year . '-' . $month . '-' . $day;
+		$post_date    = $attachment->post_date;
 		if ( $new_date !== $current_date ) {
 			$post_date = $new_date . ' 00:00:00';
 		}
@@ -3366,28 +3366,41 @@ function wp_ajax_quick_edit_attachment() {
 
 	// Include functions to identify where the media file is used or attached.
 	require_once ABSPATH . 'wp-admin/includes/class-wp-media-list-table.php';
-	$list_table   = new WP_Media_List_Table();
-	$thumbnails   = $list_table->column_thumbnail( $attachment );
-	$used_in      = $list_table->column_used_in( $attachment );
-	$media_cats   = $list_table->column_default( $attachment, 'taxonomy-media_category' );
-	$media_tags   = $list_table->column_default( $attachment, 'taxonomy-media_post_tag' );
-	list( $mime ) = explode( '/', $attachment->post_mime_type );
-	$thumb        = wp_get_attachment_image( $id, array( 60, 60 ), true, array( 'alt' => '' ) );
-	$class        = $thumb ? ' class="has-media-icon"' : '';
-	$media_icon   = $thumb ? '<span class="media-icon ' . sanitize_html_class( $mime . '-icon' ) . '">' . $thumb . '</span>' : '';
-	$file         = get_attached_file( $id );
-	$link_start   = '';
-	$link_end     = '';
-
-	if ( current_user_can( 'edit_post', $id ) ) {
-		$link_start = sprintf(
-			'<a href="%s" aria-label="%s">',
-			get_edit_post_link( $id ),
-			/* translators: %s: Attachment title. */
-			esc_attr( sprintf( __( '&#8220;%s&#8221; (Edit)' ), $post_title ) )
-		);
-		$link_end = '</a>';
-	}
+	$list_table      = new WP_Media_List_Table();
+	$thumbnails      = $list_table->column_thumbnail( $attachment );
+	$used_in         = $list_table->column_used_in( $attachment );
+	$media_cats      = $list_table->column_default( $attachment, 'taxonomy-media_category' );
+	$media_tags      = $list_table->column_default( $attachment, 'taxonomy-media_post_tag' );
+	list( $mime )    = explode( '/', $attachment->post_mime_type );
+	$file            = get_attached_file( $id );
+	$post_title      = _draft_or_post_title( $attachment );
+	$title           = esc_html( $post_title );
+	$meta            = wp_prepare_attachment_for_js( $id );
+	$date            = esc_attr( $meta['dateFormatted'] );
+	$author_attr     = esc_attr( $meta['authorName'] );
+	$author_link     = esc_attr( ! empty( $meta['authorLink'] ) ? $meta['authorLink'] : '' );
+	$url             = esc_attr( $meta['url'] );
+	$width           = esc_attr( ! empty( $meta['width'] ) ? $meta['width'] : '' );
+	$height          = esc_attr( ! empty( $meta['height'] ) ? $meta['height'] : '' );
+	$file_name       = esc_attr( $meta['filename'] );
+	$file_type       = esc_attr( $meta['type'] );
+	$subtype         = esc_attr( $meta['subtype'] );
+	$mime_type       = esc_attr( $meta['mime'] );
+	$size            = esc_attr( ! empty( $meta['filesizeHumanReadable'] ) ? $meta['filesizeHumanReadable'] : '' );
+	$alt             = esc_attr( $meta['alt'] );
+	$caption         = esc_attr( $meta['caption'] );
+	$description     = esc_attr( $meta['description'] );
+	$link            = esc_url( $meta['link'] );
+	$orientation     = esc_attr( ! empty( $meta['orientation'] ) ? $meta['orientation'] : 'landscape' );
+	$menu_order      = esc_attr( $meta['menuOrder'] );
+	$media_cats_attr = esc_attr( $meta['media_cats'] ? implode( ', ', $meta['media_cats'] ) : '' );
+	$media_tags_attr = esc_attr( $meta['media_tags'] ? implode( ', ', $meta['media_tags'] ) : '' );
+	$update_nonce    = $meta['nonces']['update'];
+	$delete_nonce    = $meta['nonces']['delete'];
+	$edit_nonce      = $meta['nonces']['edit'];
+	$thumb           = wp_get_attachment_image( $id, array( 60, 60 ), true, array( 'alt' => $alt ) );
+	$class           = $thumb ? ' has-media-icon' : '';
+	$media_icon      = $thumb ? '<span class="media-icon ' . sanitize_html_class( $mime . '-icon' ) . '">' . $thumb . '</span>' : '';
 
 	$time = get_post_timestamp( $attachment );
 	if ( '0000-00-00 00:00:00' === $attachment->post_date ) {
@@ -3402,12 +3415,16 @@ function wp_ajax_quick_edit_attachment() {
 		}
 	}
 	$h_time .= '<time datetime="' . wp_date( 'Y/m/d', $time ) . '"></time>';
-	$h_time = apply_filters( 'media_date_column_time', $h_time, $attachment, 'date' );
+	$h_time  = apply_filters( 'media_date_column_time', $h_time, $attachment, 'date' );
 
 	/**
 	 * Output buffer is used here because the function prints directly
 	 * to the page, whereas we need to return in order to send as JSON.
 	 */
+	ob_start();
+	_media_states( $attachment );
+	$media_states = ob_get_clean();
+	$media_states = $media_states ? '<em>' . $media_states . '</em>' : '';
 	ob_start();
 	$list_table->column_parent( $attachment );
 	$attached_to = ob_get_clean();
@@ -3416,8 +3433,43 @@ function wp_ajax_quick_edit_attachment() {
 		<label class="screen-reader-text" for="cb-select-' . $id . '">' . esc_html__( 'Select ' ) . esc_html( $post_title ) . '</label>
 		<input type="checkbox" name="media[]" id="cb-select-' . $id . '" value="' . $id . '">
 	</th>
-	<td class="title column-title has-row-actions column-primary" data-colname="' . esc_html__( 'File' ) . '">
-		<strong ' . $class . '>' . $link_start . $media_icon . esc_html( $post_title ) . $link_end . _media_states( $attachment ) . '</strong>
+	<td class="title column-title has-row-actions column-primary" data-colname="' . esc_html__( 'File' ) . '">';
+
+	$new_tr .= <<<HTML
+		<div
+			id="media-{$id}"
+			class="media-item{$class}"
+			tabindex="0"
+			role="button"
+			aria-label="{$title}"
+			data-id="{$id}"
+			data-date="{$date}"
+			data-url="{$url}"
+			data-filename="{$file_name}"
+			data-filetype="{$file_type}"
+			data-mime="{$mime_type}"
+			data-width="{$width}"
+			data-height="{$height}"
+			data-size="{$size}"
+			data-caption="{$caption}"
+			data-description="{$description}"
+			data-link="{$link}"
+			data-author="{$author_attr}"
+			data-author-link="{$author_link}"
+			data-orientation="{$orientation}"
+			data-menu-order="{$menu_order}"
+			data-taxes="{$media_cats_attr}"
+			data-tags="{$media_tags_attr}"
+			data-order=""
+			data-update-nonce="{$update_nonce}"
+			data-delete-nonce="{$delete_nonce}"
+			data-edit-nonce="{$edit_nonce}"
+			>
+		HTML;
+
+	$new_tr .= $media_icon . '
+			<strong>' . $title . '</strong>' . $media_states . '
+		</div>
 
 		<p class="filename">
 			<span class="screen-reader-text">' . esc_html__( 'File name: ' ) . '</span>' . esc_html( wp_basename( $file ) ) . '
@@ -3445,7 +3497,196 @@ function wp_ajax_quick_edit_attachment() {
 	</td>
 
 	<td class="author column-author" data-colname="' . esc_attr__( 'Author' ) . '">
-		<a href="upload.php?author=' . $post_author . '">' . esc_html( $author->display_name ) . '</a>
+		<a href="upload.php?author=' . $attachment->post_author . '">' . esc_html( $meta['authorName'] ) . '</a>
+	</td>
+
+	<td class="taxonomy-media_category column-taxonomy-media_category" data-colname="' . esc_attr__( 'Media Categories' ) . '">' . $media_cats . '</td>
+
+	<td class="taxonomy-media_post_tag column-taxonomy-media_post_tag" data-colname="' . esc_attr__( 'Media Tags' ) . '">' . $media_tags . '</td>
+
+	<td class="thumbnail column-thumbnail" data-colname="' . esc_attr__( 'Featured Image' ) . '">' . $thumbnails . '</td>
+
+	<td class="used_in column-used_in" data-colname="' . esc_attr__( 'Used In' ) . '">' . $used_in . '</td>
+
+	<td class="parent column-parent" data-colname="' . esc_attr__( 'Uploaded to' ) . '">' . $attached_to . '</td>
+
+	<td class="comments column-comments" data-colname="' . esc_attr__( 'Comments' ) . '">
+		<div class="post-com-count-wrapper">
+			<span aria-hidden="true">—</span>
+			<span class="screen-reader-text">' . esc_html__( 'No comments' ) . '</span>
+			<span class="post-com-count post-com-count-pending post-com-count-no-pending">
+				<span class="comment-count comment-count-no-pending" aria-hidden="true">0</span>
+				<span class="screen-reader-text">No comments</span>
+			</span>
+		</div>
+	</td>
+
+	<td class="alt column-alt" data-colname="' . esc_attr__( 'Alt Text' ) . '">' . esc_html( $alt ) . '</td>
+	<td class="caption column-caption" data-colname="' . esc_attr__( 'Caption' ) . '">' . esc_html( $post_excerpt ) . '</td>
+	<td class="desc column-desc" data-colname="' . esc_attr__( 'Description' ) . '">' . esc_html( $post_content ) . '</td>
+	<td class="date column-date" data-colname="' . esc_attr__( 'Date' ) . '">' . $h_time . '</td>';
+
+	wp_send_json_success( $new_tr );
+}
+
+/**
+ * Ajax handler for getting attachment table row.
+ *
+ * @since CP-2.5.0
+ */
+function wp_ajax_get_attachment_html() {
+	if ( ! isset( $_POST['id'] ) ) {
+		wp_send_json_error();
+	}
+
+	$id = absint( $_POST['id'] );
+	if ( ! $id ) {
+		wp_send_json_error();
+	}
+
+	$attachment = get_post( $id );
+
+	if ( 'attachment' !== $attachment->post_type ) {
+		wp_send_json_error();
+	}
+
+	// Prepare HTML for sending back to JavaScript handler. First include nonce.
+	$nonce = wp_create_nonce( 'attachment-nonce' );
+
+	// Include functions to identify where the media file is used or attached.
+	require_once ABSPATH . 'wp-admin/includes/class-wp-media-list-table.php';
+	$list_table      = new WP_Media_List_Table();
+	$thumbnails      = $list_table->column_thumbnail( $attachment );
+	$used_in         = $list_table->column_used_in( $attachment );
+	$media_cats      = $list_table->column_default( $attachment, 'taxonomy-media_category' );
+	$media_tags      = $list_table->column_default( $attachment, 'taxonomy-media_post_tag' );
+	list( $mime )    = explode( '/', $attachment->post_mime_type );
+	$file            = get_attached_file( $id );
+	$post_title      = _draft_or_post_title( $attachment );
+	$title           = esc_html( $post_title );
+	$meta            = wp_prepare_attachment_for_js( $id );
+	$date            = esc_attr( $meta['dateFormatted'] );
+	$author_attr     = esc_attr( $meta['authorName'] );
+	$author_link     = esc_attr( ! empty( $meta['authorLink'] ) ? $meta['authorLink'] : '' );
+	$url             = esc_attr( $meta['url'] );
+	$width           = esc_attr( ! empty( $meta['width'] ) ? $meta['width'] : '' );
+	$height          = esc_attr( ! empty( $meta['height'] ) ? $meta['height'] : '' );
+	$file_name       = esc_attr( $meta['filename'] );
+	$file_type       = esc_attr( $meta['type'] );
+	$subtype         = esc_attr( $meta['subtype'] );
+	$mime_type       = esc_attr( $meta['mime'] );
+	$size            = esc_attr( ! empty( $meta['filesizeHumanReadable'] ) ? $meta['filesizeHumanReadable'] : '' );
+	$alt             = esc_attr( $meta['alt'] );
+	$caption         = esc_attr( $meta['caption'] );
+	$description     = esc_attr( $meta['description'] );
+	$link            = esc_url( $meta['link'] );
+	$orientation     = esc_attr( ! empty( $meta['orientation'] ) ? $meta['orientation'] : 'landscape' );
+	$menu_order      = esc_attr( $meta['menuOrder'] );
+	$media_cats_attr = esc_attr( $meta['media_cats'] ? implode( ', ', $meta['media_cats'] ) : '' );
+	$media_tags_attr = esc_attr( $meta['media_tags'] ? implode( ', ', $meta['media_tags'] ) : '' );
+	$update_nonce    = $meta['nonces']['update'];
+	$delete_nonce    = $meta['nonces']['delete'];
+	$edit_nonce      = $meta['nonces']['edit'];
+	$thumb           = wp_get_attachment_image( $id, array( 60, 60 ), true, array( 'alt' => $alt ) );
+	$class           = $thumb ? ' has-media-icon' : '';
+	$media_icon      = $thumb ? '<span class="media-icon ' . sanitize_html_class( $mime . '-icon' ) . '">' . $thumb . '</span>' : '';
+
+	$time = get_post_timestamp( $attachment );
+	if ( '0000-00-00 00:00:00' === $attachment->post_date ) {
+		$h_time = __( 'Unpublished' );
+	} else {
+		$time_diff = time() - $time;
+		if ( $time && $time_diff > 0 && $time_diff < DAY_IN_SECONDS ) {
+			/* translators: %s: Human-readable time difference. */
+			$h_time = sprintf( __( '%s ago' ), human_time_diff( $time ) );
+		} else {
+			$h_time = get_the_time( __( 'Y/m/d' ), $attachment );
+		}
+	}
+	$h_time .= '<time datetime="' . wp_date( 'Y/m/d', $time ) . '"></time>';
+	$h_time  = apply_filters( 'media_date_column_time', $h_time, $attachment, 'date' );
+
+	/**
+	 * Output buffer is used here because the function prints directly
+	 * to the page, whereas we need to return in order to send as JSON.
+	 */
+	ob_start();
+	_media_states( $attachment );
+	$media_states = ob_get_clean();
+	$media_states = $media_states ? '<em>' . $media_states . '</em>' : '';
+	ob_start();
+	$list_table->column_parent( $attachment );
+	$attached_to = ob_get_clean();
+
+	$new_tr = '<th scope="row" class="check-column">
+		<label class="screen-reader-text" for="cb-select-' . $id . '">' . esc_html__( 'Select ' ) . esc_html( $post_title ) . '</label>
+		<input type="checkbox" name="media[]" id="cb-select-' . $id . '" value="' . $id . '">
+	</th>
+	<td class="title column-title has-row-actions column-primary" data-colname="' . esc_html__( 'File' ) . '">';
+
+	$new_tr .= <<<HTML
+		<div
+			id="media-{$id}"
+			class="media-item{$class}"
+			tabindex="0"
+			role="button"
+			aria-label="{$title}"
+			data-id="{$id}"
+			data-date="{$date}"
+			data-url="{$url}"
+			data-filename="{$file_name}"
+			data-filetype="{$file_type}"
+			data-mime="{$mime_type}"
+			data-width="{$width}"
+			data-height="{$height}"
+			data-size="{$size}"
+			data-caption="{$caption}"
+			data-description="{$description}"
+			data-link="{$link}"
+			data-author="{$author_attr}"
+			data-author-link="{$author_link}"
+			data-orientation="{$orientation}"
+			data-menu-order="{$menu_order}"
+			data-taxes="{$media_cats_attr}"
+			data-tags="{$media_tags_attr}"
+			data-order=""
+			data-update-nonce="{$update_nonce}"
+			data-delete-nonce="{$delete_nonce}"
+			data-edit-nonce="{$edit_nonce}"
+			>
+		HTML;
+
+	$new_tr .= $media_icon . '
+			<strong>' . $title . '</strong>' . $media_states . '
+		</div>
+
+		<p class="filename">
+			<span class="screen-reader-text">' . esc_html__( 'File name: ' ) . '</span>' . esc_html( wp_basename( $file ) ) . '
+		</p>
+
+		<div class="row-actions">
+			<span class="edit"><a href="' . esc_url( home_url( '/wp-admin/post.php?post=' . $id . '&amp;action=edit' ) ) . '" aria-label="Edit “' . esc_attr( $post_title ) . '”">' . esc_html__( 'Edit' ) . '</a> | </span>
+
+			<span class="delete"><a href="post.php?action=delete&amp;post=' . $id . '&amp;_wpnonce=' . esc_attr( $nonce ) . '" class="submitdelete aria-button-if-js" onclick="return showNotice.warn();" aria-label="' . esc_attr__( sprintf( 'Delete “%s” permanently', $post_title ) ) . '" role="button">' . esc_html__( 'Delete Permanently' ) . '</a> | </span>
+
+			<span class="view"><a href="' . esc_url( get_permalink( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'View “%s”', $post_title ) ) . '" rel="bookmark">' . esc_html__( 'View' ) . '</a> | </span>
+
+			<span class="copy">
+				<span class="copy-to-clipboard-container">
+					<button type="button" class="button-link copy-attachment-url media-library" data-clipboard-text="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'Copy “%s” URL to clipboard', $post_title ) ) . '">' . esc_html__( 'Copy URL' ) . '</button>
+					<span class="success hidden" aria-hidden="true">' . esc_html__( 'Copied!' ) . '</span>
+				</span> |
+			</span>
+
+			<span class="download"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'Download “%s”', $post_title ) ) . '" download="">' . esc_html__( 'Download file' ) . '</a></span>
+		</div>
+		<button type="button" class="toggle-row">
+			<span class="screen-reader-text">' . esc_html__( 'Show more details' ) . '</span>
+		</button>
+	</td>
+
+	<td class="author column-author" data-colname="' . esc_attr__( 'Author' ) . '">
+		<a href="upload.php?author=' . $attachment->post_author . '">' . esc_html( $meta['authorName'] ) . '</a>
 	</td>
 
 	<td class="taxonomy-media_category column-taxonomy-media_category" data-colname="' . esc_attr__( 'Media Categories' ) . '">' . $media_cats . '</td>
@@ -3818,7 +4059,7 @@ function wp_ajax_query_themes() {
 	$old_filter = isset( $args['browse'] ) ? $args['browse'] : 'search';
 
 	/** This filter is documented in wp-admin/includes/class-wp-theme-install-list-table.php */
-	$args = apply_filters( 'install_themes_table_api_args_' . $old_filter, $args );
+	$args = apply_filters( 'install_themes_table_api_args_' . $old_filter, $args ); // phpcs:ignore Generic.Formatting.MultipleStatementAlignment.NotSameWarning
 	$args['fields']['tags'] = true;
 
 	$api = themes_api( 'query_themes', $args );

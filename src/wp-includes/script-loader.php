@@ -1305,9 +1305,12 @@ function wp_default_scripts( $scripts ) {
 		$scripts->add( 'list-revisions', "/wp-includes/js/wp-list-revisions$suffix.js" );
 
 		$scripts->add(
-			'media-grid',
-			"/wp-includes/js/media-grid$suffix.js",
+			'media',
+			"/wp-admin/js/media$suffix.js",
 			array(
+				'jquery',
+				'wp-i18n',
+				'wp-a11y',
 				'image-edit',
 				'cp-filepond-file-validate-size',
 				'cp-filepond-file-validate-type',
@@ -1318,7 +1321,6 @@ function wp_default_scripts( $scripts ) {
 			false,
 			1
 		);
-		$scripts->add( 'media', "/wp-admin/js/media$suffix.js", array( 'jquery', 'wp-i18n', 'wp-a11y' ), false, 1 );
 		$scripts->set_translations( 'media' );
 
 		$scripts->add( 'image-edit', "/wp-admin/js/image-edit$suffix.js", array( 'jquery', 'json2', 'imgareaselect', 'wp-a11y' ), false, 1 );
@@ -1433,7 +1435,7 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'list-tables', "/wp-admin/css/list-tables$suffix.css" );
 	$styles->add( 'edit', "/wp-admin/css/edit$suffix.css" );
 	$styles->add( 'revisions', "/wp-admin/css/revisions$suffix.css" );
-	$styles->add( 'media', "/wp-admin/css/media$suffix.css" );
+	$styles->add( 'media', "/wp-admin/css/media$suffix.css", array( 'cp-filepond-image-preview', 'cp-filepond', 'imgareaselect' ) );
 	$styles->add( 'themes', "/wp-admin/css/themes$suffix.css" );
 	$styles->add( 'about', "/wp-admin/css/about$suffix.css" );
 	$styles->add( 'nav-menus', "/wp-admin/css/nav-menus$suffix.css" );
@@ -1451,7 +1453,6 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'customize-controls', "/wp-admin/css/customize-controls$suffix.css", array( 'wp-admin', 'colors', 'imgareaselect' ) );
 	$styles->add( 'customize-widgets', "/wp-admin/css/customize-widgets$suffix.css", array( 'wp-admin', 'colors' ) );
 	$styles->add( 'customize-nav-menus', "/wp-admin/css/customize-nav-menus$suffix.css", array( 'wp-admin', 'colors' ) );
-	$styles->add( 'media-grid', "/wp-admin/css/media-grid$suffix.css", array( 'imgareaselect' ), '0.1.0' );
 
 	// Common dependencies.
 	$styles->add( 'buttons', "/wp-includes/css/buttons$suffix.css" );

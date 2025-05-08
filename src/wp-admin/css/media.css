@@ -1,4 +1,440 @@
 /*------------------------------------------------------------------------------
+	Merged from wp-admin/css/media-grid.css
+------------------------------------------------------------------------------*/
+
+.no-top-margin {
+	margin-top: 0 !important;
+}
+.wp-core-ui .button.media-button {
+	margin: 11px 8px 0 8px;
+}
+.upload-php .media-toolbar-secondary {
+	float: none;
+}
+.uploader-inline {
+	padding: 2em 0;
+	margin: 2em 0;
+	border: 4px dashed #c3c4c7;
+	background-color: #ecf7e9;
+}
+.uploader-inline .close {
+	position: absolute;
+	right: 0;
+	margin: -1.3em 1.2em 0 0;
+	background-color: transparent;
+	border: 0;
+	cursor: pointer;
+	height: 48px;
+	outline: none;
+	padding: 0;
+	text-align: center;
+	width: 48px;
+	z-index: 9999999999;
+	tabindex: 1;
+}
+.uploader-inline .close:focus {
+	outline: 2px solid #2271b1;
+}
+.dashicons-no::before {
+	content: "\f158";
+	font-size: 30px;
+}
+.media_page_alternative-media-grid select {
+	margin-right: 0.75em;
+}
+.media_page_alternative-media-grid select:first-of-type {
+	margin-left: -0.25em;
+}
+.media_page_alternative-media-grid select:last-of-type {
+	margin-right: 0;
+}
+.imgedit-panel-content {
+	height: -moz-fit-content;
+	height: fit-content;
+	padding: 16px 16px 0;
+	position: absolute;
+	top: 0;
+	right: 282px;
+	bottom: 0;
+	left: 0;
+	overflow: hidden;
+}
+.imgedit-settings {
+	height: -moz-fit-content;
+	height: fit-content;
+	overflow: hidden;
+	background: #f6f7f7;
+	border-left: 1px solid #dcdcde;
+	padding: 20px 16px 0;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: 250px;
+}
+.imgedit-group-top h2 {
+	display: inline-block;
+}
+.media-modal-content .imgedit-wrap {
+	position: absolute;
+	overflow: auto;
+	top: 50px;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	box-shadow: inset 0 4px 4px -4px rgba(0, 0, 0, 0.1);
+}
+.imgedit-settings .imgedit-help-toggle {
+	margin: 13px 0 0;
+	border: 1px solid transparent;
+	padding: 0;
+	background: transparent;
+	color: #2271b1;
+	font-size: 20px;
+	line-height: 1;
+	cursor: pointer;
+	box-sizing: content-box;
+	box-shadow: none;
+}
+.imgedit-settings .imgedit-help-toggle:focus {
+	color: #2271b1;
+	border-color: #4f94d4;
+	box-shadow: 0 0 3px rgba(34, 113, 177, 0.8);
+	outline: 2px solid transparent;
+}
+.imgedit-menu .button {
+	display: inline-block;
+	width: auto;
+	min-height: 28px;
+	font-size: 13px;
+	line-height: 2;
+	margin: 0 8px 8px 0;
+	padding: 0 10px;
+}
+.max-upload-size {
+	 text-align: center;
+}
+.filepond--root {
+	padding-bottom: 12em;
+	margin-bottom: 1.2em;
+}
+.filepond--file-info .filepond--file-info-main {
+	line-height: 1.3;
+}
+.filepond--file-info .filepond--file-info-main,
+.filepond--file-status .filepond--file-status-main {
+	font-size: 1em;
+}
+.filepond--file-info .filepond--file-info-sub,
+.filepond--file-status .filepond--file-status-sub {
+	font-size: 0.9em;
+}
+#post-upload-info {
+	margin-top: -6em;
+	position: relative;
+}
+.filepond--drop-label {
+	background-color: #ecf7e9;
+}
+.filepond--drip {
+	opacity: 1;
+	background: #ecf7e9;
+}
+.filepond--credits {
+	display: none;
+}
+.media-grid-view {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+	gap: 16px;
+	margin-bottom: 20px;
+}
+.media-item {
+	cursor: pointer;
+	margin-bottom: 0;
+	position: relative;
+}
+.media-item strong {
+	color: #2271b1;
+}
+.media-item:focus-within strong {
+	color: #043959;
+	box-shadow: 0 2px rgba(79, 148, 212, 0.8);
+}
+.wp-list-table .media-item:focus-within img {
+	box-shadow: 0 0 0 2px rgba(79, 148, 212, 0.8);
+	/* Only visible in Windows High Contrast mode */
+	outline: 1px solid transparent;
+}
+.media-grid-view .media-item:focus,
+.media-item.selected:focus {
+	box-shadow: 0 0 0 2px #fff, 0 0 0 6px #2271b1;
+}
+.media-item.selected {
+	box-shadow: 0 0 0 2px #f0f0f1, 0 0 0 4px #c3c4c7;
+}
+.media-item.selected .check {
+	display: block;
+	background-color: #2271b1;
+	box-shadow: 0 0 0 1px #fff, 0 0 0 2px #2271b1;
+}
+.media-item .check {
+	display: none;
+	height: 24px;
+	width: 24px;
+	padding: 0;
+	border: 0;
+	top: -5px;
+	right: -5px;
+	position: absolute;
+	z-index: 10;
+	outline: none;
+	background: #f0f0f1;
+	cursor: pointer;
+	box-shadow: 0 0 0 1px #fff, 0 0 0 2px rgba(0, 0, 0, 0.15);
+}
+.media-item .check::before {
+	content: "\2713";
+	color: #fff;
+	font-size: 20px;
+	font-weight: 600;
+}
+.media-item .check:hover::before {
+	content: "\2014";
+}
+.media-thumbnail {
+	position: relative;
+	aspect-ratio: 1;
+	overflow: hidden;
+	text-align: center;
+}
+.media-thumbnail img {
+	width: 100%;
+	height: 100%;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	top: 0;
+	margin: auto;
+	object-fit: cover;
+}
+.media-thumbnail .icon {
+	height: 100%;
+	box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+.media-thumbnail .icon img {
+	width: 30%;
+	height: 30%;
+	padding-top: 1.8em;
+}
+.media-item .filename {
+	margin: 0.65em auto 0 !important;
+	padding: 0.4em 1em !important;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: hidden;
+	max-height: 100%;
+	word-wrap: break-word;
+	text-align: center;
+	font-weight: 600;
+	background: rgba(255, 255, 255, 0.8);
+	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+.load-more-count {
+	min-width: 100%;
+	margin: 0 0 1em;
+	text-align: center;
+}
+.no-media {
+	font-size: 18px;
+	text-align:center;
+}
+.media-modal {
+	background: #fff;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: 97%;
+	height: 90%;
+	padding: 0;
+}
+.media-modal * {
+	box-sizing: content-box;
+}
+.media-modal input[type="radio"] {
+	box-sizing: border-box;
+}
+.media-modal,
+.media-frame {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-size: 12px;
+}
+.media-frame-title,
+.media-modal-content .edit-attachment-frame .edit-media-header {
+	position: sticky;
+	top: 0;
+	background-color: #fff;
+	z-index: 10;
+	border-bottom: 1px solid #dcdcde;
+}
+.media-modal-content .edit-attachment-frame .edit-media-header {
+	overflow: revert;
+	z-index: 11;
+}
+.media-frame-title h2 {
+	padding: 0 16px;
+	font-size: 22px;
+	line-height: 2.27272727;
+	margin: 0;
+}
+.edit-attachment-frame .attachment-media-view .thumbnail .details-image {
+	max-height: 69vh;
+	background-image: none;
+}
+.edit-attachment-frame .attachment-info {
+	height: 84.5vh;
+}
+.edit-attachment-frame .attachment-details {
+	position: relative;
+}
+.attachment-details .setting.has-description {
+	margin-bottom: 5px;
+}
+.attachment-details .setting {
+	display: block;
+	float: left;
+	width: 100%;
+	margin: 0 0 10px;
+	margin-bottom: 10px;
+}
+.attachment-details .setting .name,
+.attachment-details .setting .value,
+.compat-item label span {
+	float: left;
+	min-height: 22px;
+	padding-top: 8px;
+	line-height: 1.33333333;
+	font-weight: 400;
+	color: #646970;
+}
+.attachment-details .setting span,
+.attachment-details .setting .name {
+	min-width: 30%;
+	margin-right: 4%;
+	font-size: 12px;
+	text-align: right;
+	word-wrap: break-word;
+}
+.media-modal label {
+	font-size: 13px;
+}
+.compat-item {
+	float: left;
+	width: 100%;
+	overflow: hidden;
+}
+.compat-item label span {
+	text-align: right;
+}
+.attachment-details .settings-save-status {
+	margin-bottom: 0;
+}
+.settings-save-status .success {
+	color: #008a20;
+	margin-left: 8px;
+}
+.attachment-details .setting input[type="text"],
+.attachment-details .setting input[type="password"],
+.attachment-details .setting input[type="email"],
+.attachment-details .setting input[type="number"],
+.attachment-details .setting input[type="search"],
+.attachment-details .setting input[type="tel"],
+.attachment-details .setting input[type="url"],
+.attachment-details .setting textarea,
+.attachment-details .setting .value,
+.attachment-details .setting + .description {
+	box-sizing: border-box;
+	margin: 1px;
+	width: 65%;
+	float: right;
+}
+.attachment-details .attachment-info .copy-to-clipboard-container {
+	float: none;
+	margin: 3em 0 0 35%;
+}
+.attachment-info {
+	line-height: 1.5;
+	color: #646970;
+}
+#media-modal .delete-attachment,
+#media-modal .trash-attachment,
+#media-modal .untrash-attachment {
+	display: inline;
+	padding: 0;
+	color: #d63638;
+	text-decoration: none;
+}
+#dialog-close-button {
+	top: 0;
+	right: 0;
+	cursor: pointer;
+	color: #787c82;
+	background-color: transparent;
+	height: 50px;
+	width: 50px;
+	padding: 0;
+	position: absolute;
+	text-align: center;
+	border: 0;
+	border-left: 1px solid #dcdcde;
+}
+#dialog-close-button::before {
+	content: "\f335";
+	font-size: 24px;
+}
+#dialog-close-button:hover,
+#dialog-close-button:focus {
+	color: #000;
+	outline: none;
+	background-color: #dcdcde;
+	border-color: #c3c4c7;
+	box-shadow: none;
+}
+dialog::backdrop {
+	background: #000;
+	opacity: 0.7;
+}
+.mejs-container:focus {
+	outline-offset: 0.125rem;
+	outline-style: solid;
+	outline-width: 0.125rem;
+}
+
+@media screen and (min-width: 481px) {
+	.media-modal-content .edit-attachment-frame .edit-media-header .media-navigation {
+		border-bottom: none;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.media-modal-content .edit-attachment-frame .media-frame-content {
+		margin-top: 64px;
+	}
+	.attachment-media-view .media-navigation {
+		margin-bottom: 1em;
+		position: fixed;
+		top: calc(5% + 50px);
+		background-color: #fff;
+		z-index: 10;
+		width: calc(100% - 30px);
+	}
+}
+
+/*------------------------------------------------------------------------------
 	14.0 - Media Screen
 ------------------------------------------------------------------------------*/
 

@@ -182,7 +182,7 @@ class WP_Media_List_Table extends WP_List_Table {
 		if ( MEDIA_TRASH ) {
 			if ( $this->is_trash ) {
 				$actions['untrash'] = __( 'Restore' );
-				$actions['delete'] = __( 'Delete permanently' );
+				$actions['delete']  = __( 'Delete permanently' );
 			} else {
 				$actions['trash'] = __( 'Move to Trash' );
 			}
@@ -495,38 +495,85 @@ class WP_Media_List_Table extends WP_List_Table {
 			}
 		}
 
-		$title      = _draft_or_post_title();
-		$thumb      = wp_get_attachment_image( $attachment_id, array( 60, 60 ), true, array( 'alt' => '' ) );
-		$link_start = '';
-		$link_end   = '';
-
-		if ( current_user_can( 'edit_post', $post->ID ) && ! $this->is_trash ) {
-			$link_start = sprintf(
-				'<a href="%s" aria-label="%s">',
-				get_edit_post_link( $post->ID ),
-				/* translators: %s: Attachment title. */
-				esc_attr( sprintf( __( '&#8220;%s&#8221; (Edit)' ), $title ) )
-			);
-			$link_end = '</a>';
-		}
-
-		$class = $thumb ? ' class="has-media-icon"' : '';
+		$title        = _draft_or_post_title();
+		$meta         = wp_prepare_attachment_for_js( $attachment_id );
+		$date         = $meta['dateFormatted'];
+		$author       = $meta['authorName'];
+		$author_link  = ! empty( $meta['authorLink'] ) ? $meta['authorLink'] : '';
+		$url          = $meta['url'];
+		$width        = ! empty( $meta['width'] ) ? $meta['width'] : '';
+		$height       = ! empty( $meta['height'] ) ? $meta['height'] : '';
+		$file_name    = $meta['filename'];
+		$file_type    = $meta['type'];
+		$subtype      = $meta['subtype'];
+		$mime_type    = $meta['mime'];
+		$size         = ! empty( $meta['filesizeHumanReadable'] ) ? $meta['filesizeHumanReadable'] : '';
+		$alt          = $meta['alt'];
+		$caption      = $meta['caption'];
+		$description  = $meta['description'];
+		$link         = $meta['link'];
+		$orientation  = ! empty( $meta['orientation'] ) ? $meta['orientation'] : 'landscape';
+		$menu_order   = $meta['menuOrder'];
+		$media_cats   = $meta['media_cats'] ? implode( ', ', $meta['media_cats'] ) : '';
+		$media_tags   = $meta['media_tags'] ? implode( ', ', $meta['media_tags'] ) : '';
+		$update_nonce = $meta['nonces']['update'];
+		$delete_nonce = $meta['nonces']['delete'];
+		$edit_nonce   = $meta['nonces']['edit'];
+		$thumb        = wp_get_attachment_image( $attachment_id, array( 60, 60 ), true, array( 'alt' => $alt ) );
+		$class        = $thumb ? ' has-media-icon' : '';
 		?>
-		<strong <?php echo $class; ?>>
+		<div
+			id="media-<?php echo esc_attr( $attachment_id ); ?>"
+			class="media-item<?php echo esc_attr( $class ); ?>"
+			tabindex="0"
+			role="button"
+			aria-label="<?php echo esc_attr( $post->post_title ); ?>"
+			data-id ="<?php echo esc_attr( $attachment_id ); ?>"
+			data-date="<?php echo esc_attr( $date ); ?>"
+			data-url="<?php echo esc_url( $url ); ?>"
+			data-filename="<?php echo esc_attr( $file_name ); ?>"
+			data-filetype="<?php echo esc_attr( $file_type ); ?>"
+			data-mime="<?php echo esc_attr( $mime_type ); ?>"
+			data-width="<?php echo esc_attr( $width ); ?>"
+			data-height="<?php echo esc_attr( $height ); ?>"
+			data-size="<?php echo esc_attr( $size ); ?>"
+			data-caption="<?php echo esc_attr( $caption ); ?>"
+			data-description="<?php echo esc_attr( $description ); ?>"
+			data-link="<?php echo esc_attr( $link ); ?>"
+			data-author="<?php echo esc_attr( $author ); ?>"
+			data-author-link="<?php echo esc_attr( $author_link ); ?>"
+			data-orientation="<?php echo esc_attr( $orientation ); ?>"
+			data-menu-order="<?php echo esc_attr( $menu_order ); ?>"
+			data-taxes="<?php echo esc_attr( $media_cats ); ?>"
+			data-tags="<?php echo esc_attr( $media_tags ); ?>"
+			data-order=""
+			data-update-nonce="<?php echo $update_nonce; ?>"
+			data-delete-nonce="<?php echo $delete_nonce; ?>"
+			data-edit-nonce="<?php echo $edit_nonce; ?>"
+		>
 			<?php
-			echo $link_start;
-
 			if ( $thumb ) :
 				?>
 				<span class="media-icon <?php echo sanitize_html_class( $mime . '-icon' ); ?>"><?php echo $thumb; ?></span>
 				<?php
 			endif;
-
-			echo $title . $link_end;
-
-			_media_states( $post );
 			?>
-		</strong>
+			<strong><?php	echo $title; ?></strong>
+			<?php
+			/**
+			* Output buffer is used here because the function prints directly
+			* to the page, whereas we need to return in order to send as JSON.
+			*/
+			ob_start();
+			_media_states( $post );
+			$media_states = ob_get_clean();
+			if ( $media_states ) :
+				?>
+				<em><?php echo $media_states; ?></em>
+				<?php
+			endif;
+			?>
+		</div>
 		<p class="filename">
 			<span class="screen-reader-text">
 				<?php
@@ -1077,6 +1124,7 @@ class WP_Media_List_Table extends WP_List_Table {
 	 * @global string $mode List table view mode.
 	 */
 	public function inline_edit() {
+		// phpcs:disable Generic.Formatting.MultipleStatementAlignment.NotSameWarning
 		$users = get_users();
 		$terms = get_terms(
 			array(
@@ -1091,6 +1139,7 @@ class WP_Media_List_Table extends WP_List_Table {
 				'fields'     => 'names',
 			)
 		);
+		// phpcs:enable
 		$tags_string = ! empty( $tags ) ? implode( ', ', $tags ) : '';
 		?>
 
