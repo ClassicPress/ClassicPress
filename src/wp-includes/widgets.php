@@ -2014,3 +2014,325 @@ function wp_render_widget_control( $id ) {
 
 	return ob_get_clean();
 }
+
+/**
+ * Renders the modal for adding media to widgets
+ *
+ * @since CP-2.5.0
+ *
+ * @return string
+ */
+function cp_render_widget_upload_template() {
+
+	// Get the maximum upload size.
+	$max_upload_size = wp_max_upload_size();
+	if ( ! $max_upload_size ) {
+		$max_upload_size = 0;
+	}
+
+	// Get a list of allowed mime types.
+	$allowed_mimes = get_allowed_mime_types();
+	$mimes_list = implode( ',', $allowed_mimes );
+
+	// Get the user's preferred items per page.
+	$user_id = get_current_user_id();
+	$per_page = get_user_meta( $user_id, 'media_grid_per_page', true );
+	if ( empty( $per_page ) || $per_page < 1 ) {
+		$per_page = 80;
+	}
+
+	// Get the user's capabilities.
+	$readonly = current_user_can( 'edit_posts' ) ? '' : 'readonly';
+	$no_edit  = $readonly === 'readonly' ? 'hidden' : '';
+	$disabled = $readonly === 'readonly' ? 'disabled' : '';
+	$hidden   = current_user_can( 'delete_posts' ) ? '' : 'hidden';
+
+	// Fetch media items.
+	$paged = isset( $_GET['paged'] ) ? absint( $_GET['paged'] ) : 1;
+	$attachment_args = array(
+		'post_type'      => 'attachment',
+		'post_status'    => 'inherit',
+		'posts_per_page' => $per_page,
+		'paged'          => $paged,
+	);
+	$attachments = new WP_Query( $attachment_args );
+
+	$total_pages = ( $attachments->max_num_pages ) ? (int) $attachments->max_num_pages : 1;
+	$prev_page   = ( $paged === 1 ) ? $paged : $paged - 1;
+	$next_page   = ( $paged === $total_pages ) ? $paged : $paged + 1;
+
+	$uri = 'widgets.php';
+	if ( is_customize_preview() ) {
+		$uri = 'customize.php';
+	}
+
+	$attachment_url_options = '<option value="none" selected>' . esc_html__( 'None' ) . '</option>';
+	$attachment_url_options .= '<option value="file">' . esc_html__( 'Image URL' ) . '</option>';
+	if ( '1' === get_option( 'wp_attachment_pages_enabled' ) ) {
+		$attachment_url_options .= '<option value="post">' . esc_html__( 'Attachment Page' ) . '</option>';
+	}
+	$attachment_url_options .= '<option value="custom">' . esc_html__( 'Custom URL' ) . '</option>';
+
+	ob_start();
+	?>
+
+<template id="tmpl-media-grid-modal">
+	<div class="widget-modal-header-buttons">
+		<div role="tablist" aria-orientation="horizontal" class="widget-modal-router">
+			<button type="button" role="tab" class="media-menu-item" id="menu-item-upload" aria-selected="false" aria-controls="uploader-inline"><?php esc_html_e( 'Upload files' ); ?></button>
+			<button type="button" role="tab" class="media-menu-item active" id="menu-item-browse" aria-selected="true" aria-controls="media-library-grid"><?php esc_html_e( 'Media Library' ); ?></button>
+		</div>
+
+		<div class="widget-modal-pages">
+			<span class="displaying-num"><?php esc_html_e( '2 items' ); ?></span>
+			<span class="pagination-links">
+				<button type="button" class="first-page button" data-page="1" disabled inert>
+					<span class="screen-reader-text"><?php esc_html_e( 'First page' ); ?></span><span aria-hidden="true">«</span>
+				</button>
+				<button type="button"class="prev-page button" data-page="1" disabled inert>
+					<span class="screen-reader-text"><?php esc_html_e( 'Previous page' ); ?></span><span aria-hidden="true">‹</span>
+				</button>
+				<span class="paging-input">
+					<label for="current-page-selector" class="screen-reader-text"><?php esc_html_e( 'Current Page' ); ?></label>
+					<input class="current-page" id="current-page-selector" type="text" name="paged" value="1" size="4" aria-describedby="table-paging">
+					<span id="table-paging" class="tablenav-paging-text"> <?php esc_html_e( 'of' ); ?> <span class="total-pages"><?php esc_html_e( $total_pages ); ?></span></span>
+				</span>
+				<button type="button" class="next-page button" data-page="<?php echo $next_page; ?>"
+					<?php
+					if ( $paged === $next_page ) {
+						echo 'disabled inert';
+					}
+					?>
+				>
+					<span class="screen-reader-text"><?php esc_html_e( 'Next page' ); ?></span><span aria-hidden="true">›</span>
+				</button>
+				<button type="button" class="last-page button" data-page="<?php echo $total_pages; ?>"
+					<?php
+					if ( $paged === $next_page ) {
+						echo 'disabled inert';
+					}
+					?>
+				>
+					<span class="screen-reader-text"><?php esc_html_e( 'Last page' ); ?></span><span aria-hidden="true">»</span>
+				</button>
+			</span>
+		</div><!-- end .modal-pages -->
+	</div>
+
+	<div id="widget-modal-media-content">
+		<article class="widget-modal-content">
+				
+			<div id="uploader-inline" class="uploader-inline" role="tabpanel" data-allowed-mimes="<?php echo esc_attr( $mimes_list ); ?>" hidden inert>
+				<input type="file" id="filepond" class="filepond" name="filepond" multiple data-allow-reorder="true">
+				<input id="ajax-url" value="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" data-max-file-size="<?php echo esc_attr( size_format( $max_upload_size ) ); ?>" hidden>
+				<?php wp_nonce_field( 'media-form' ); ?>
+
+				<div class="post-upload-ui" id="post-upload-info">
+					<p class="max-upload-size">
+
+						<?php
+						/* translators: %s: Maximum allowed file size. */
+						printf( __( 'Maximum upload file size: %s.' ), esc_html( size_format( $max_upload_size ) ) );
+						?>
+
+					</p>
+				</div>
+			</div><!-- end #uploader-inline -->
+
+			<div id="media-library-grid" class="media-library-grid" role="tabpanel">
+				<section class="media-library-select-section">
+					<div class="media-library-select-div">
+						<div>
+							<h3 class="widget-modal-filter-heading"><?php esc_html_e( 'Filter media' ); ?></h3>
+							<fieldset>
+
+								<?php
+								// Select dropdown boxes
+								$list_table = _get_list_table( 'WP_Media_List_Table' );
+								$list_table->months_dropdown( 'attachment' );
+								$list_table->media_categories_dropdown( 'attachment' );
+								?>
+
+							</fieldset>
+						</div>
+
+						<div class="widget-modal-search-form">
+							<label for="widget-modal-search-input" class="widget-modal-search-label"><?php esc_html_e( 'Search' ); ?></label>
+							<input type="search" id="widget-modal-search-input" class="search">
+						</div>
+					</div>
+				</section>
+
+				<section class="media-library-grid-section">
+					<ul class="widget-modal-grid">
+						<?php // populated by JS after call to fetch API ?>
+					</ul>
+					<p class="load-more-count">
+						<?php // populated, if applicable, by JS after call to fetch API ?>
+					</p>
+					<p class="no-media" hidden="true">
+						<?php // populated, if applicable, by JS after call to fetch API ?>
+					</p>
+				</section>
+			</div>
+
+			<aside class="widget-modal-right-sidebar">
+				<div class="widget-modal-right-sidebar-info" hidden>
+					<h3><?php esc_html_e( 'Attachment Details' ); ?></h3>
+					<fieldset class="widget-modal-attachment-info">
+						<div class="thumbnail thumbnail-image">
+							<img src="<?php echo esc_url( includes_url() . 'images/blank.gif' ); ?>" draggable="false" alt="">
+						</div>
+						<div class="details">
+							<div class="filename"><strong><span class="screen-reader-text"><?php esc_html_e( 'File name:' ); ?></span> <span class="attachment-filename"></span></strong></div>
+							<div class="uploaded">
+								<span class="screen-reader-text"><?php esc_html_e( 'Uploaded on:' ); ?></span> <span class="attachment-date"></span>
+							</div>
+							<div class="file-size">
+								<span class="screen-reader-text"><?php esc_html_e( 'File size:' ); ?></span> <span class="attachment-filesize"></span>
+							</div>
+							<div class="dimensions">
+								<span class="screen-reader-text"><?php esc_html_e( 'Dimensions:' ); ?></span> <span class="attachment-dimensions"></span>
+							</div>
+							<div <?php echo $no_edit; ?>>
+								<a id="edit-more" href=""><?php esc_html_e( 'Edit details' ); ?></a>
+							</div>
+							<div <?php echo $hidden; ?>>
+								<button type="button" class="button-link delete-attachment"><?php esc_html_e( 'Delete permanently' ); ?></button>
+							</div>
+							<div class="compat-meta"></div>
+						</div>							
+					</fieldset>
+
+					<fieldset class="widget-modal-descriptions">
+						<div class="setting alt-text has-description" data-setting="alt">
+							<label for="attachment-details-alt-text" class="name"><?php esc_html_e( 'Alt Text' ); ?></label>
+							<textarea id="attachment-details-alt-text" aria-describedby="alt-text-description" <?php echo $readonly; ?>></textarea>
+						</div>
+						<p class="description" id="alt-text-description"><a href="https://www.w3.org/WAI/tutorials/images/decision-tree" target="_blank" rel="noopener"><?php esc_html_e( 'Learn how to describe the purpose of the image' ); ?><span class="screen-reader-text"> <?php esc_html_e( '(opens in a new tab)' ); ?></span></a><?php esc_html_e( '. Leave empty if the image is purely decorative.' ); ?></p>
+
+						<div class="setting" data-setting="title">
+							<label for="attachment-details-title" class="name"><?php esc_html_e( 'Title' ); ?></label>
+							<input type="text" id="attachment-details-title" value="" <?php echo $readonly; ?>>
+						</div>
+
+						<span class="settings-save-status" role="status">
+							<span id="details-saved" class="success hidden" aria-hidden="true"><?php esc_html_e( 'Saved!' ); ?></span>
+						</span>
+
+						<div class="setting" data-setting="caption">
+							<label for="attachment-details-caption" class="name"><?php esc_html_e( 'Caption' ); ?></label>
+							<textarea id="attachment-details-caption" <?php echo $readonly; ?>></textarea>
+						</div>
+
+						<div class="setting" data-setting="description">
+							<label for="attachment-details-description" class="name"><?php esc_html_e( 'Description' ); ?></label>
+							<textarea id="attachment-details-description" <?php echo $readonly; ?>></textarea>
+						</div>
+
+						<div class="setting" data-setting="url">
+							<label for="attachment-details-copy-link" class="name" style="padding:8px 1em 0 0;"><?php esc_html_e( 'File URL' ); ?></label>
+							<input type="text" class="attachment-details-copy-link" id="attachment-details-copy-link" value="" readonly>
+						</div>
+						<div class="copy-to-clipboard-container">
+							<button type="button" class="button button-small copy-attachment-url media-library" data-clipboard-target="#attachment-details-copy-link"><?php esc_html_e( 'Copy URL to clipboard' ); ?></button>
+							<span class="success hidden" aria-hidden="true"><?php esc_html_e( 'Copied!' ); ?></span>
+						</div>
+
+						<div class="attachment-compat"></div>
+						<span class="setting settings-save-status" role="status">
+							<span id="tax-saved" class="success hidden" aria-hidden="true"><?php esc_html_e( 'Taxonomy updated successfully!' ); ?></span>
+						</span>
+					</fieldset>
+
+					<h3><?php esc_html_e( 'Attachment Display Settings' ); ?></h3>
+					<fieldset class="widget-modal-display-settings">
+						<div class="setting">
+							<label for="attachment-display-settings-link-to" class="name"><?php esc_html_e( 'Link To' ); ?></label>
+							<select id="attachment-display-settings-link-to" class="link-to" data-setting="link" <?php echo $disabled; ?>>
+								<?php echo $attachment_url_options; ?>
+							</select>
+						</div>
+
+						<div class="setting setting-hidden">
+							<label for="attachment-display-settings-link-to-custom" class="name"><?php esc_html_e( 'URL' ); ?></label>
+							<input id="attachment-display-settings-link-to-custom" type="url" class="link-to-custom" placeholder="https://" data-setting="linkUrl" <?php echo $readonly; ?>>
+						</div>
+
+						<div class="setting">
+							<label for="attachment-display-settings-size" class="name"><?php _e( 'Size' ); ?></label>
+							<select id="attachment-display-settings-size" class="size" name="size" data-setting="size" <?php echo $disabled; ?>></select>
+						</div>
+					</fieldset>
+				</div>
+
+				<div class="media-uploader-status" hidden>
+					<h3><?php esc_html_e( 'Uploading' ); ?></h3>
+					<fieldset class="media-progress-bar">
+					<div></div>
+					</fieldset>
+					<fieldset class="upload-details">
+						<span class="upload-count">
+							<span class="upload-index"></span> / <span class="upload-total"></span>
+						</span>
+						<span class="upload-detail-separator">–</span>
+						<span class="upload-filename"></span>
+					</fieldset>
+					<div class="upload-errors"></div>
+					<button type="button" class="button upload-dismiss-errors"><?php esc_html_e( 'Dismiss errors' ); ?></button>
+				</div>
+			</aside>
+		</article>
+
+		<article id="insert-from-url-panel" class="insert-from-url-panel" hidden inert>
+			<div class="widget-modal-url-container">
+				<div class="widget-modal-media-embed">
+					<div class="widget-modal-embed-url">
+						<input id="widget-modal-embed-url-field" type="url" aria-labelledby="media-frame-title-2">
+					</div>
+
+					<div id="widget-modal-url-settings" class="widget-modal-url-media-settings">
+						<div class="wp-clearfix">
+							<div class="thumbnail"></div>
+						</div>
+
+						<div class="setting alt-text has-description">
+							<label for="embed-image-settings-alt-text" class="name"><?php esc_html_e( 'Alternative Text' ); ?></label>
+							<textarea id="embed-image-settings-alt-text" data-setting="alt" aria-describedby="alt-text-description" <?php echo $readonly; ?>></textarea>
+						</div>
+						<p class="description" id="alt-text-description"><a href="https://www.w3.org/WAI/tutorials/images/decision-tree" target="_blank" rel="noopener"><?php esc_html_e( 'Learn how to describe the purpose of the image' ); ?> <span class="screen-reader-text"><?php esc_html_e( '(opens in a new tab)' ); ?></span></a>. <?php esc_html_e( 'Leave empty if the image is purely decorative.' ); ?></p>
+
+						<div class="setting caption">
+							<label for="embed-image-settings-caption" class="name"><?php esc_html_e( 'Caption' ); ?></label>
+							<textarea id="embed-image-settings-caption" data-setting="caption" <?php echo $readonly; ?>></textarea>
+						</div>
+
+						<fieldset class="setting-group">
+							<legend class="name"><?php esc_html_e( 'Link To' ); ?></legend>
+							<div class="setting link-to">
+								<select id="link-to" name="link-to" data-setting="link" <?php echo $disabled; ?>>
+									<?php echo $attachment_url_options; ?>
+								</select>
+							</div>
+							<div id="link-to-url" hidden>
+								<label for="embed-image-settings-link-to-custom" class="name"><?php esc_html_e( 'URL' ); ?></label>
+								<input type="url" id="embed-image-settings-link-to-custom" class="link-to-custom" data-setting="linkUrl" <?php echo $readonly; ?>>
+							</div>
+						</fieldset>
+					</div>
+
+				</div>
+			</div>
+		</article><!-- end #insert-from-url-panel -->
+
+		<footer class="widget-modal-footer">
+			<div class="widget-modal-footer-buttons">
+				<button id="media-button-insert" type="button" class="button media-button button-primary button-large media-button-insert" disabled><?php esc_html_e( 'Add to Widget' ); ?></button>
+			</div>
+		</footer>
+	</div>
+</template>
+
+	<?php
+	return ob_get_clean();
+}
