@@ -920,7 +920,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Remove an item when clicking on the cross
 			onChoose: function( e ) {
-				if ( e.explicitOriginalTarget.className === 'check' ) {
+				if ( e.originalEvent.target.className === 'check' ) {
 					e.item.remove();
 				}
 				if ( mode === 'edit' ) {
