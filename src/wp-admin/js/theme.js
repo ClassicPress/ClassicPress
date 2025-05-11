@@ -1,13 +1,13 @@
 /**
  * @output wp-admin/js/theme.js
  */
-/* global _wpThemeSettings, ajaxurl, confirm */
+/* global _wpThemeSettings, ajaxurl, console */
 
 /**
  * @since CP 2.5.0
  */
 document.addEventListener( 'DOMContentLoaded', function() {
-	var prevElement, nextElement, observer,
+	var prevElement, nextElement, observer, themeID,
 		i = 1,
 		updateType = 'browse',
 		updateValue = 'popular',
@@ -196,7 +196,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Open the modal
 	document.addEventListener( 'click', function( e ) {
-		var theme, filterDrawer, span, img, template, clone, response;
+		var theme, filterDrawer, img, template, clone, response;
 
 		if ( dialog && e.target.className === 'more-details' ) {
 			e.preventDefault();
