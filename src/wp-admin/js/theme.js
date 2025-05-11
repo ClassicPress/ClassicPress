@@ -500,6 +500,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					previewDialog.classList.remove( 'collapsed' );
 					previewDialog.querySelector( '.wp-full-overlay-main' ).style.width = 'calc(100% - 300px)';
 				}
+
+			// Toggle display of Upload Theme area
+			} else if ( e.target.className.includes( 'upload-view-toggle' ) ) {
+				if ( document.querySelector( '.upload-theme' ).style.display === 'block' ) {
+					document.querySelector( '.upload-theme' ).style.display = 'none';
+					e.target.setAttribute( 'aria-expanded', false );
+				} else {
+					document.querySelector( '.upload-theme' ).style.display = 'block';
+					e.target.setAttribute( 'aria-expanded', true );
+				}
 			}
 		}
 	} );
