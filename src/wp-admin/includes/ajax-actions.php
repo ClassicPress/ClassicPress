@@ -3316,28 +3316,26 @@ function wp_ajax_quick_edit_attachment() {
 		$day   = str_pad( absint( $_POST['jj'] ), 2, '0', STR_PAD_LEFT );
 		$date  = $year . '/' . $month . '/' . $day;
 
-		$current_date  = get_the_date( 'Y-m-d', $attachment );
+		$current_date  = get_the_date( 'date_format', $attachment );
+		$exploded_date = explode( ' ', $current_date );
 		$new_date      = $year . '-' . $month . '-' . $day;
-		$post_date     = $attachment->post_date;
-		if ( $new_date !== $current_date ) {
+		if ( $new_date !== $exploded_date[3] . '-' . $exploded_date[2] . '-' . $exploded_date[1] ) {
 			$post_date = $new_date . ' 00:00:00';
 		}
 	}
 
 	// Update attachment array.
 	$attachment_data = array(
-		'ID'            => $id,
-		'post_author'   => $post_author,
-		'post_date'     => $post_date,
-		'post_date_gmt' => get_gmt_from_date( $post_date ),
-		'post_content'  => $post_content,
-		'post_title'    => $post_title,
-		'post_excerpt'  => $post_excerpt,
-		'post_type'     => 'attachment',
-		'post_name'     => strtolower( $post_title ),
+		'ID'           => $id,
+		'post_author'  => $post_author,
+		'post_date'    => $post_date,
+		'post_content' => $post_content,
+		'post_title'   => $post_title,
+		'post_excerpt' => $post_excerpt,
+		'post_type'    => 'attachment',
+		'post_name'    => strtolower( $post_title ),
 	);
 	wp_update_post( $attachment_data, true );
-	$attachment = get_post( $id );
 
 	// Update taxonomies and meta.
 	if ( empty( $_POST['media_category'] ) ) {
@@ -3389,21 +3387,6 @@ function wp_ajax_quick_edit_attachment() {
 		$link_end = '</a>';
 	}
 
-	$time = get_post_timestamp( $attachment );
-	if ( '0000-00-00 00:00:00' === $attachment->post_date ) {
-		$h_time = __( 'Unpublished' );
-	} else {
-		$time_diff = time() - $time;
-		if ( $time && $time_diff > 0 && $time_diff < DAY_IN_SECONDS ) {
-			/* translators: %s: Human-readable time difference. */
-			$h_time = sprintf( __( '%s ago' ), human_time_diff( $time ) );
-		} else {
-			$h_time = get_the_time( __( 'Y/m/d' ), $attachment );
-		}
-	}
-	$h_time .= '<time datetime="' . wp_date( 'Y/m/d', $time ) . '"></time>';
-	$h_time = apply_filters( 'media_date_column_time', $h_time, $attachment, 'date' );
-
 	/**
 	 * Output buffer is used here because the function prints directly
 	 * to the page, whereas we need to return in order to send as JSON.
@@ -3428,7 +3411,7 @@ function wp_ajax_quick_edit_attachment() {
 
 			<span class="delete"><a href="post.php?action=delete&amp;post=' . $id . '&amp;_wpnonce=' . esc_attr( $nonce ) . '" class="submitdelete aria-button-if-js" onclick="return showNotice.warn();" aria-label="' . esc_attr__( sprintf( 'Delete “%s” permanently', $post_title ) ) . '" role="button">' . esc_html__( 'Delete Permanently' ) . '</a> | </span>
 
-			<span class="view"><a href="' . esc_url( get_permalink( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'View “%s”', $post_title ) ) . '" rel="bookmark">' . esc_html__( 'View' ) . '</a> | </span>
+			<span class="view"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'View “%s”', $post_title ) ) . '" rel="bookmark">' . esc_html__( 'View' ) . '</a> | </span>
 
 			<span class="copy">
 				<span class="copy-to-clipboard-container">
@@ -3472,7 +3455,7 @@ function wp_ajax_quick_edit_attachment() {
 	<td class="alt column-alt" data-colname="' . esc_attr__( 'Alt Text' ) . '">' . esc_html( $alt ) . '</td>
 	<td class="caption column-caption" data-colname="' . esc_attr__( 'Caption' ) . '">' . esc_html( $post_excerpt ) . '</td>
 	<td class="desc column-desc" data-colname="' . esc_attr__( 'Description' ) . '">' . esc_html( $post_content ) . '</td>
-	<td class="date column-date" data-colname="' . esc_attr__( 'Date' ) . '">' . $h_time . '</td>';
+	<td class="date column-date" data-colname="' . esc_attr__( 'Date' ) . '">' . esc_html( $date ) . '</td>';
 
 	wp_send_json_success( $new_tr );
 }
@@ -3828,6 +3811,8 @@ function wp_ajax_query_themes() {
 	}
 
 	$update_php = network_admin_url( 'update.php?action=install-theme' );
+	$updates_from_api = get_site_transient( 'update_core' );
+	$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates ) && ! empty( $updates_from_api->updates );
 
 	$installed_themes = search_theme_directories();
 
@@ -3842,6 +3827,7 @@ function wp_ajax_query_themes() {
 		}
 	}
 
+	$themes_string = '';
 	foreach ( $api->themes as &$theme ) {
 		$theme->install_url = add_query_arg(
 			array(
@@ -3906,9 +3892,153 @@ function wp_ajax_query_themes() {
 		$theme->compatible_wp  = is_wp_version_compatible( $theme->requires );
 		$theme->compatible_php = is_php_version_compatible( $theme->requires_php );
 		$theme->compatible_cp  = ! array_key_exists( 'full-site-editing', $theme->tags );
+
+		// Build HTML response
+		$theme_item = '<li id="' . esc_attr__( $theme->slug ) . '" class="theme" tabindex="0" data-install-nonce="' .  esc_url( $theme->install_url ) . '" data-activate-nonce="' . esc_url( $theme->activate_url ) . '" data-customize="' .  esc_url( $theme->customize_url ) . '" data-home="' . esc_url( $theme->homepage ) . '" data-description="' .  esc_attr__( $theme->description ) . '" data-tags="' . esc_attr__( implode( ',', $theme->tags) ) . '" data-ratings="' . esc_attr( $theme->stars ) . '" data-num-ratings="' . esc_attr( $theme->num_ratings ) . '" data-version="' . esc_attr( $theme->version ) . '">';
+
+		if ( ! empty( $theme->screenshot_url ) ) {
+			$theme_item .= '<div class="theme-screenshot"><img src="' . esc_url( $theme->screenshot_url ) . '" alt=""></div>';
+		} else {
+			$theme_item .= '<div class="theme-screenshot blank"></div>';
+		}
+
+		if ( $is_theme_installed ) {
+			$theme_item .= '<div class="notice inline notice-success notice-alt"><p>' . esc_html__( 'Installed' ) . '</p></div>';
+		}
+
+		if ( ! $theme->compatible_wp || ! $theme->compatible_php || ! $theme->compatible_cp ) {
+			$theme_item .= '<div class="notice inline notice-error notice-alt"><p>';
+
+			if ( ! $theme->compatible_wp && ! $theme->compatible_php ) {
+				$theme_item .= __( 'This theme does not work with your versions of ClassicPress and PHP.' );
+
+				if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
+					if ( $cp_needs_update ) {
+						$theme_item .= sprintf(
+							/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
+							' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
+							self_admin_url( 'update-core.php' ),
+							esc_url( wp_get_update_php_url() )
+						);
+					} else {
+						$theme_item .= sprintf(
+							/* translators: %s: URL to Update PHP page. */
+							' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
+							esc_url( wp_get_update_php_url() )
+						);
+					}
+					wp_update_php_annotation( '</p><p><em>', '</em>' );
+				} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
+					$theme_item .= sprintf(
+						/* translators: %s: URL to WordPress Updates screen. */
+						' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
+						self_admin_url( 'update-core.php' )
+					);
+				} elseif ( current_user_can( 'update_php' ) ) {
+					$theme_item .= sprintf(
+						/* translators: %s: URL to Update PHP page. */
+						' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
+						esc_url( wp_get_update_php_url() )
+					);
+					wp_update_php_annotation( '</p><p><em>', '</em>' );
+				}
+			} else if ( ! $theme->compatible_cp ) {
+				$theme_item .= __( "FSE themes don't work with ClassicPress." );
+
+			} else if ( ! $theme->compatible_wp ) {
+				$theme_item .= __( 'This theme does not work with your version of ClassicPress.' );
+
+				if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
+					$theme_item .= sprintf(
+						/* translators: %s: URL to WordPress Updates screen. */
+						' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
+						self_admin_url( 'update-core.php' )
+					);
+				}
+			} else if ( ! $theme->compatible_php ) {
+				$theme_item .= __( 'This theme does not work with your version of PHP.' );
+
+				if ( current_user_can( 'update_php' ) ) {
+					$theme_item .= sprintf(
+						/* translators: %s: URL to Update PHP page. */
+						' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
+						esc_url( wp_get_update_php_url() )
+					);
+					wp_update_php_annotation( '</p><p><em>', '</em>' );
+				}
+			}
+			$theme_item .= '</p></div>';
+		}
+
+		$theme_item .= '<button class="more-details">' . esc_html__( 'Details &amp; Preview' ) . '</button>';
+		$theme_item .= '<div class="theme-author">';
+			/* translators: %s: Theme author name. */
+			$theme_item .= sprintf( __( 'By %s' ), $theme->author );
+		$theme_item .= '</div>';
+
+		$theme_item .= '<div class="theme-id-container">';
+		$theme_item .= '<h3 class="theme-name">' . esc_html__( $theme->name ) . '</h3>';
+		$theme_item .= '<div class="theme-actions">';
+
+		if ( $is_theme_installed ) {
+			if ( $theme->compatible_wp && $theme->compatible_php && $theme->compatible_cp ) {
+
+				/* translators: %s: Theme name. */
+				$aria_label = sprintf( _x( 'Activate %s', 'theme' ), $theme->name );
+				if ( $theme->activate_url ) {
+					if ( $theme->slug !== get_option( 'template' ) ) {
+						$theme_item .= '<a class="button button-primary activate" href="' . esc_url( $theme->activate_url ) . ' aria-label="' . esc_attr( $aria_label ) . '">' . __( 'Activate' ) . '</a>';
+					} else {
+						$theme_item .= '<button class="button button-primary disabled">' . _x( 'Activated', 'theme' ) . '</button>';
+					}
+				}
+				if ( $theme->customize_url ) {
+					if ( $theme->slug !== get_option( 'template' ) ) {
+						$theme_item .= '<a class="button load-customize" href="' . esc_url( $theme->customize_url ) . '">' . __( 'Customize' ) . '</a>';
+					} else {
+						$theme_item .= '<button class="button preview install-theme-preview">' . __( 'Preview' ) . '</button>';
+					}
+				} else {
+					/* translators: %s: Theme name. */
+					$aria_label = sprintf( _x( 'Cannot Activate %s', 'theme' ), $theme->name );
+
+					if ( $theme->activate_url ) {
+						$theme_item .= '<a class="button button-primary disabled" aria-label="' . esc_attr( $aria_label ) . '">' . _x( 'Cannot Activate', 'theme' ) . '</a>';
+					}
+					if ( $theme->customize_url ) {
+						$theme_item .= '<a class="button disabled">' . __( 'Live Preview' ) . '</a>';
+					} else {
+						$theme_item .= '<button class="button disabled">' . __( 'Preview' ) . '</button>';
+					}
+				}
+			}
+		} else {
+			if ( $theme->compatible_wp && $theme->compatible_php && $theme->compatible_cp ) {
+
+				/* translators: %s: Theme name. */
+				$aria_label = sprintf( _x( 'Install %s', 'theme' ), $theme->name );
+
+				$theme_item .= '<a class="button button-primary theme-install" data-name="' . esc_attr__( $theme->name ) . '" data-slug="' .  esc_attr__( $theme->slug ) . '" href="' .  esc_url( $theme->install_url ) . '" aria-label="' .  esc_attr( $aria_label ) . '">' . __( 'Install' ) . '</a>';
+				$theme_item .= '<button class="button preview install-theme-preview">' . __( 'Preview' ) . '</button>';
+
+			} else {
+				/* translators: %s: Theme name. */
+				$aria_label = sprintf( _x( 'Cannot Install %s', 'theme' ), $theme->name );
+
+				$theme_item .= '<a class="button button-primary disabled" data-name="' .  esc_attr__( $theme->name ) . '" aria-label="' . esc_attr( $aria_label ) . '">' . _x( 'Cannot Install', 'theme' ) . '</a>';
+				$theme_item .= '<button class="button disabled">' . __( 'Preview' ) . '</button>';
+			}
+		}
+		$theme_item .= '</div></div></li>';
+		$themes_string .= $theme_item;
 	}
 
-	wp_send_json_success( $api );
+	wp_send_json_success(
+		array(
+			'count' => $api->info['results'],
+			'html'  => $themes_string,
+		)
+	);
 }
 
 /**
