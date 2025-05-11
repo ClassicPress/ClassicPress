@@ -152,8 +152,9 @@ get_current_screen()->set_help_sidebar(
 
 require_once ABSPATH . 'wp-admin/admin-header.php';
 
-// Make call to AJAX endpoint to get first 20 themes.
-$response = wp_remote_post( admin_url( 'admin-ajax.php' ),
+// Make call to AJAX endpoint to get first 100 themes.
+$response = wp_remote_post(
+	admin_url( 'admin-ajax.php' ),
 	array(
 		'body' => array(
 			'action'  => 'query-themes',
