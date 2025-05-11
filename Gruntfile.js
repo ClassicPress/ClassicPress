@@ -224,7 +224,7 @@ module.exports = function(grunt) {
 					{
 						src:  `./node_modules/sortablejs/Sortable.min.js`,
 						dest: `${SOURCE_DIR}wp-includes/js/sortable.min.js`
-					},
+					}
 				]
 			},
 			'script-loader-impl': {
