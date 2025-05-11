@@ -917,8 +917,8 @@ if ( ! is_multisite() && $broken_themes ) {
 							);
 							wp_update_php_annotation( '</p><p><em>', '</em>' );
 						}
-						?>									
-					</p>	
+						?>
+					</p>
 
 					<p class="no-wp" hidden>
 						<?php
