@@ -3894,7 +3894,7 @@ function wp_ajax_query_themes() {
 		$theme->compatible_cp  = ! array_key_exists( 'full-site-editing', $theme->tags );
 
 		// Build HTML response
-		$theme_item = '<li id="' . esc_attr__( $theme->slug ) . '" class="theme" tabindex="0" data-install-nonce="' .  esc_url( $theme->install_url ) . '" data-activate-nonce="' . esc_url( $theme->activate_url ) . '" data-customize="' .  esc_url( $theme->customize_url ) . '" data-home="' . esc_url( $theme->homepage ) . '" data-description="' .  esc_attr__( $theme->description ) . '" data-tags="' . esc_attr__( implode( ',', $theme->tags) ) . '" data-ratings="' . esc_attr( $theme->stars ) . '" data-num-ratings="' . esc_attr( $theme->num_ratings ) . '" data-version="' . esc_attr( $theme->version ) . '">';
+		$theme_item = '<li id="' . esc_attr__( $theme->slug ) . '" class="theme" tabindex="0" data-install-nonce="' . esc_url( $theme->install_url ) . '" data-activate-nonce="' . esc_url( $theme->activate_url ) . '" data-customize="' . esc_url( $theme->customize_url ) . '" data-home="' . esc_url( $theme->homepage ) . '" data-description="' . esc_attr__( $theme->description ) . '" data-tags="' . esc_attr__( implode( ',', $theme->tags ) ) . '" data-ratings="' . esc_attr( $theme->stars ) . '" data-num-ratings="' . esc_attr( $theme->num_ratings ) . '" data-version="' . esc_attr( $theme->version ) . '">';
 
 		if ( ! empty( $theme->screenshot_url ) ) {
 			$theme_item .= '<div class="theme-screenshot"><img src="' . esc_url( $theme->screenshot_url ) . '" alt=""></div>';
@@ -4018,14 +4018,14 @@ function wp_ajax_query_themes() {
 				/* translators: %s: Theme name. */
 				$aria_label = sprintf( _x( 'Install %s', 'theme' ), $theme->name );
 
-				$theme_item .= '<a class="button button-primary theme-install" data-name="' . esc_attr__( $theme->name ) . '" data-slug="' .  esc_attr__( $theme->slug ) . '" href="' .  esc_url( $theme->install_url ) . '" aria-label="' .  esc_attr( $aria_label ) . '">' . __( 'Install' ) . '</a>';
+				$theme_item .= '<a class="button button-primary theme-install" data-name="' . esc_attr__( $theme->name ) . '" data-slug="' . esc_attr__( $theme->slug ) . '" href="' . esc_url( $theme->install_url ) . '" aria-label="' . esc_attr( $aria_label ) . '">' . __( 'Install' ) . '</a>';
 				$theme_item .= '<button class="button preview install-theme-preview">' . __( 'Preview' ) . '</button>';
 
 			} else {
 				/* translators: %s: Theme name. */
 				$aria_label = sprintf( _x( 'Cannot Install %s', 'theme' ), $theme->name );
 
-				$theme_item .= '<a class="button button-primary disabled" data-name="' .  esc_attr__( $theme->name ) . '" aria-label="' . esc_attr( $aria_label ) . '">' . _x( 'Cannot Install', 'theme' ) . '</a>';
+				$theme_item .= '<a class="button button-primary disabled" data-name="' . esc_attr__( $theme->name ) . '" aria-label="' . esc_attr( $aria_label ) . '">' . _x( 'Cannot Install', 'theme' ) . '</a>';
 				$theme_item .= '<button class="button disabled">' . __( 'Preview' ) . '</button>';
 			}
 		}
