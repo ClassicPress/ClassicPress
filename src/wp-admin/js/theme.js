@@ -231,7 +231,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					img.alt = theme.querySelector( 'img' ).alt;
 					dialog.querySelector( '.screenshot' ).append( img );
 				} else {
-					dialog.querySelector( '.screenshot' ).classList.add( 'blank' ); 
+					dialog.querySelector( '.screenshot' ).classList.add( 'blank' );
 				}
 
 				if ( theme.className.includes( 'active' ) ) {
@@ -265,7 +265,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						} else if ( response[1] !== '1' ) {
 							dialog.querySelector( '.incompat-update .no-php' ).removeAttribute( 'hidden' );
 						}
-					}					
+					}
 				}
 
 				if ( theme.dataset.autoupdate ) {
@@ -332,7 +332,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						dialog.querySelector( '.inactive-theme .load-customize' ).classList.add( 'disabled' );
 						dialog.querySelector( '.inactive-theme .load-customize' ).classList.remove( 'load-customize' );
 					}
-					
+
 					if ( theme.dataset.deleteNonce ) {
 						dialog.querySelector( '.delete-theme' ).href = theme.dataset.deleteNonce;
 						dialog.querySelector( '.delete-theme' ).setAttribute( 'aria-label', _wpThemeSettings.l10n.delete + ' ' + theme.querySelector( '.theme-name' ).textContent );
@@ -449,7 +449,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( prevElement == null ) { // first theme
 					previewDialog.querySelector( '.previous-theme' ).disabled = true;
 				}
-				
+
 				nextElement = document.getElementById( previewDialog.querySelector( '.theme-install-container' ).dataset.id ).nextElementSibling;
 				if ( nextElement == null ) { // last theme
 					previewDialog.querySelector( '.next-theme' ).disabled = true;
