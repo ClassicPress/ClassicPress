@@ -432,8 +432,24 @@ foreach ( $themes as $theme ) :
 	if ( $theme['active'] ) {
 		$active_class = ' active';
 	}
+	$activate_nonce = '';
+	if ( isset( $theme['actions']['activate'] ) ) {
+		$activate_nonce = esc_url( $theme['actions']['activate'] );
+	}	
+	$delete_nonce = '';
+	if ( isset( $theme['actions']['delete'] ) ) {
+		$delete_nonce = esc_url( $theme['actions']['delete'] );
+	}
+	$customize_action = '';
+	if ( isset( $theme['actions']['customize'] ) ) {
+		$customize_action = esc_url( $theme['actions']['customize'] );
+	}
+	$autoupdate_action = '';
+	if ( isset( $theme['actions']['autoupdate'] ) ) {
+		$autoupdate_action = esc_url( $theme['actions']['autoupdate'] );
+	}
 	?>
-<li id="<?php esc_html_e( $theme['id'] ); ?>" class="theme<?php echo $active_class; ?>" tabindex="0" data-active="<?php esc_attr_e( $theme['active'] ); ?>" data-activate-nonce="<?php echo esc_url( $theme['actions']['activate'] ); ?>" data-customize="<?php echo esc_url( $theme['actions']['customize'] ); ?>" data-autoupdate="<?php echo esc_url( $theme['actions']['autoupdate'] ); ?>" data-autoupdate-enabled="<?php echo esc_url( $theme['autoupdate']['enabled'] ); ?>" data-autoupdate-supported="<?php echo esc_url( $theme['autoupdate']['supported'] ); ?>" data-autoupdate-forced="<?php echo esc_url( $theme['autoupdate']['forced'] ); ?>" data-description="<?php esc_attr_e( $theme['description'] ); ?>" data-tags="<?php esc_attr_e( $theme['tags'] ); ?>" data-parent="<?php esc_attr_e( $theme['parent'] ); ?>" data-version="<?php esc_attr_e( $theme['version'] ); ?>" data-delete-nonce="<?php echo esc_url( $theme['actions']['delete'] ); ?>" data-compatible-wp="<?php esc_attr_e( $theme['compatibleWP'] ); ?>" data-compatible-php="<?php esc_attr_e( $theme['compatiblePHP'] ); ?>" data-has-update="<?php esc_attr_e( $theme['hasUpdate'] ); ?>" data-update="<?php esc_attr_e( $theme['update'] ); ?>" data-update-response="<?php esc_attr_e( $theme['updateResponse']['compatibleWP'] . '-' . $theme['updateResponse']['compatiblePHP'] ); ?>">
+<li id="<?php esc_html_e( $theme['id'] ); ?>" class="theme<?php echo $active_class; ?>" tabindex="0" data-active="<?php esc_attr_e( $theme['active'] ); ?>" data-activate-nonce="<?php echo $activate_nonce; ?>" data-customize="<?php echo $customize_action; ?>" data-autoupdate="<?php echo $autoupdate_action; ?>" data-autoupdate-enabled="<?php esc_attr_e( $theme['autoupdate']['enabled'] ); ?>" data-autoupdate-supported="<?php esc_attr_e( $theme['autoupdate']['supported'] ); ?>" data-autoupdate-forced="<?php esc_attr_e( $theme['autoupdate']['forced'] ); ?>" data-description="<?php esc_attr_e( $theme['description'] ); ?>" data-tags="<?php esc_attr_e( $theme['tags'] ); ?>" data-parent="<?php esc_attr_e( $theme['parent'] ); ?>" data-version="<?php esc_attr_e( $theme['version'] ); ?>" data-delete-nonce="<?php echo $delete_nonce; ?>" data-compatible-wp="<?php esc_attr_e( $theme['compatibleWP'] ); ?>" data-compatible-php="<?php esc_attr_e( $theme['compatiblePHP'] ); ?>" data-has-update="<?php esc_attr_e( $theme['hasUpdate'] ); ?>" data-update="<?php esc_attr_e( $theme['update'] ); ?>" data-update-response="<?php esc_attr_e( $theme['updateResponse']['compatibleWP'] . '-' . $theme['updateResponse']['compatiblePHP'] ); ?>">
 	<?php if ( ! empty( $theme['screenshot'][0] ) ) { ?>
 		<div class="theme-screenshot">
 			<img src="<?php echo esc_url( $theme['screenshot'][0] . '?ver=' . $theme['version'] ); ?>" alt="">
@@ -994,7 +1010,17 @@ if ( ! is_multisite() && $broken_themes ) {
 				<a href="" class="button" aria-label=""><?php esc_html_e( 'Activate' ); ?></a>
 				<a href="" class="button button-primary load-customize hide-if-no-customize"><?php esc_html_e( 'Live Preview' ); ?></a>
 			</div>
-			<a href="" class="button delete-theme" aria-label="" hidden><?php esc_html_e( 'Delete' ); ?></a>
+
+			<?php
+			if ( current_user_can( 'delete_themes' ) ) {
+				?>
+
+				<a href="" class="button delete-theme" aria-label="" hidden><?php esc_html_e( 'Delete' ); ?></a>
+
+				<?php
+			}
+			?>
+
 		</div>
 	</div>
 </template>
