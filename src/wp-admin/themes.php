@@ -435,7 +435,7 @@ foreach ( $themes as $theme ) :
 	$activate_nonce = '';
 	if ( isset( $theme['actions']['activate'] ) ) {
 		$activate_nonce = esc_url( $theme['actions']['activate'] );
-	}	
+	}
 	$delete_nonce = '';
 	if ( isset( $theme['actions']['delete'] ) ) {
 		$delete_nonce = esc_url( $theme['actions']['delete'] );
