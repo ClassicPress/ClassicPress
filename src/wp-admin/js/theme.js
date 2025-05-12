@@ -44,6 +44,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Close the theme preview dialog and set focus on theme
 	function closePreviewDialog() {
+		document.body.style.overflow = '';
 		previewDialog.close();
 		document.getElementById( previewDialog.querySelector( '.theme-install-container' ).dataset.id ).focus();
 		previewDialog.querySelector( '.previous-theme' ).disabled = false;
@@ -225,7 +226,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 
 				// Fill fields in modal
-				if ( theme.querySelector( 'img' ).src ) {
+				if ( theme.querySelector( 'img' ) ) {
 					img = document.createElement( 'img' );
 					img.src = theme.querySelector( 'img' ).src;
 					img.alt = theme.querySelector( 'img' ).alt;
@@ -442,7 +443,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				previewDialog.querySelector( '.num-ratings' ).href = 'https://wordpress.org/support/theme/' + e.target.closest( '.theme' ).id + '/reviews/';
 				previewDialog.querySelector( '.theme-version' ).textContent = _wpThemeSettings.l10n.version + ' ' + e.target.closest( '.theme' ).dataset.version;
 				previewDialog.querySelector( '.theme-description' ).textContent = e.target.closest( '.theme' ).dataset.description;
-				previewDialog.querySelector( 'iframe' ).src = 'http://wp-themes.com/' + e.target.closest( '.theme' ).id + '/';
+				previewDialog.querySelector( 'iframe' ).src = '//wp-themes.com/' + e.target.closest( '.theme' ).id + '/';
+				document.body.style.overflow = 'hidden';
 				previewDialog.showModal();
 
 				prevElement = document.getElementById( previewDialog.querySelector( '.theme-install-container' ).dataset.id ).previousElementSibling;
