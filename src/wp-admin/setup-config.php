@@ -90,7 +90,7 @@ $step = isset( $_GET['step'] ) ? (int) $_GET['step'] : -1;
  */
 function set_config_file_permissions( $path_to_wp_config ) {
 	// Short-circuit in Windows.
-	if ( strtoupper( substr( PHP_OS, 0, 3) ) === 'WIN' ) {
+	if ( strtoupper( substr( PHP_OS, 0, 3 ) ) === 'WIN' ) {
 		return;
 	}
 
@@ -120,7 +120,7 @@ function set_config_file_permissions( $path_to_wp_config ) {
 
 	if ( $php_user_is_owner ) {
 		chmod( $path_to_wp_config, 0600 );
-	} else if ( $php_user_in_group ) {
+	} elseif ( $php_user_in_group ) {
 		chmod( $path_to_wp_config, 0660 );
 	} else {
 		// As fallback, use lax permissions to ensure compatibility.
