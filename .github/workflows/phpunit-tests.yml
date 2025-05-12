@@ -120,6 +120,7 @@ jobs:
       - name: Install Imagick
         run: |
           sudo apt-get update
+          sudo apt-get install imagemagick
           sudo apt-get --with-new-pkgs upgrade libgd3
 
       - name: Login to Docker Hub
