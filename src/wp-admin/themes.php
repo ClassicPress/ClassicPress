@@ -1016,11 +1016,11 @@ if ( ! is_multisite() && $broken_themes ) {
 				<?php
 				if ( current_user_can( 'edit_theme_options' ) ) {
 					if ( current_user_can( 'customize' ) ) {
-					?>
+						?>
 				
 						<a href="" class="button button-primary customize load-customize hide-if-no-customize"><?php esc_html_e( 'Customize' ); ?></a>
 
-					<?php
+						<?php
 					}
 					if ( current_user_can( 'install_themes' ) ) {
 						echo implode( ' ', $current_theme_actions );
