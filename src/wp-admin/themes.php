@@ -967,12 +967,21 @@ if ( ! is_multisite() && $broken_themes ) {
 				<div class="theme-autoupdate" style="margin-top:1em;" hidden>
 					<span class="forced" hidden><?php esc_html_e( 'Auto-updates enabled' ); ?></span>
 					<span class="not-forced" hidden><?php esc_html_e( 'Auto-updates disabled' ); ?></span>
-					<button type="button" class="toggle-auto-update button-link enabled" data-slug="" data-wp-action="disable" hidden>
-						<span class="dashicons dashicons-update spin hidden" aria-hidden="true"></span><span class="label"><?php esc_html_e( 'Disable auto-updates' ); ?></span>
-					</button>
-					<button type="button" class="toggle-auto-update button-link no-auto" data-slug="" data-wp-action="enable" hidden>
-						<span class="dashicons dashicons-update spin hidden" aria-hidden="true"></span><span class="label"><?php esc_html_e( 'Enable auto-updates' ); ?></span>
-					</button>
+
+					<?php
+					if ( current_user_can( 'edit_theme_options' ) ) {
+						?>
+
+						<button type="button" class="toggle-auto-update button-link enabled" data-slug="" data-wp-action="disable" hidden>
+							<span class="dashicons dashicons-update spin hidden" aria-hidden="true"></span><span class="label"><?php esc_html_e( 'Disable auto-updates' ); ?></span>
+						</button>
+						<button type="button" class="toggle-auto-update button-link no-auto" data-slug="" data-wp-action="enable" hidden>
+							<span class="dashicons dashicons-update spin hidden" aria-hidden="true"></span><span class="label"><?php esc_html_e( 'Enable auto-updates' ); ?></span>
+						</button>
+
+						<?php
+					}
+					?>
 
 					<span class="auto-update-time" hidden>					
 						<br><?php wp_get_auto_update_message(); ?>
@@ -1003,12 +1012,36 @@ if ( ! is_multisite() && $broken_themes ) {
 
 		<div class="theme-actions">
 			<div class="active-theme" hidden>
-				<a href="" class="button button-primary customize load-customize hide-if-no-customize"><?php esc_html_e( 'Customize' ); ?></a>
-				<?php echo implode( ' ', $current_theme_actions ); ?>
+
+				<?php
+				if ( current_user_can( 'edit_theme_options' ) ) {
+					if ( current_user_can( 'customize' ) ) {
+					?>
+				
+						<a href="" class="button button-primary customize load-customize hide-if-no-customize"><?php esc_html_e( 'Customize' ); ?></a>
+
+					<?php
+					}
+					if ( current_user_can( 'install_themes' ) ) {
+						echo implode( ' ', $current_theme_actions );
+					}
+				}
+				?>
+
 			</div>
 			<div class="inactive-theme" hidden>
 				<a href="" class="button" aria-label=""><?php esc_html_e( 'Activate' ); ?></a>
-				<a href="" class="button button-primary load-customize hide-if-no-customize"><?php esc_html_e( 'Live Preview' ); ?></a>
+
+				<?php
+				if ( current_user_can( 'edit_theme_options' ) && current_user_can( 'customize' ) ) {
+					?>
+
+					<a href="" class="button button-primary load-customize hide-if-no-customize"><?php esc_html_e( 'Live Preview' ); ?></a>
+
+					<?php
+				}
+				?>
+
 			</div>
 
 			<?php
