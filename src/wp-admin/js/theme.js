@@ -272,15 +272,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( theme.dataset.autoupdate ) {
 					dialog.querySelector( '.theme-autoupdate' ).removeAttribute( 'hidden' );
 					if ( theme.dataset.autoupdateSupported === '1' ) {
-						if ( theme.dataset.autoupdateForced === '1' ) {
+						if ( theme.dataset.autoupdateForced === '1' && dialog.querySelector( '.theme-autoupdate .forced' ) ) {
 							dialog.querySelector( '.theme-autoupdate .forced' ).removeAttribute( 'hidden' );
-						} else if ( theme.dataset.autoupdateEnabled === '1' ) {
+						} else if ( theme.dataset.autoupdateEnabled === '1' && dialog.querySelector( '.theme-autoupdate .enabled' ) ) {
 							dialog.querySelector( '.theme-autoupdate .enabled' ).dataset.slug = theme.id;
 							dialog.querySelector( '.theme-autoupdate .enabled' ).removeAttribute( 'hidden' );
-						} else {
+						} else if ( dialog.querySelector( '.theme-autoupdate .not-forced' ) ) {
 							dialog.querySelector( '.theme-autoupdate .not-forced' ).removeAttribute( 'hidden' );
 						}
-					} else {
+					} else if ( dialog.querySelector( '.theme-autoupdate .no-auto' ) ) {
 						dialog.querySelector( '.theme-autoupdate .no-auto' ).dataset.slug = theme.id;
 						dialog.querySelector( '.theme-autoupdate .no-auto' ).removeAttribute( 'hidden' );
 					}
@@ -304,37 +304,43 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					dialog.querySelector( '.theme-tags' ).removeAttribute( 'hidden' );
 				}
 
-				if ( theme.dataset.customize ) {
+				if ( theme.dataset.customize && dialog.querySelector( '.active-theme .customize' ) ) {
 					dialog.querySelector( '.active-theme .customize' ).href = theme.dataset.customize;
 				}
 
 				// Identify current active theme
 				if ( theme.className.includes( 'active' ) ) {
-					dialog.querySelector( '.active-theme a' ).href = theme.dataset.customize;
+					if ( dialog.querySelector( '.active-theme a' ) ) {
+						dialog.querySelector( '.active-theme a' ).href = theme.dataset.customize;
+					}
 					dialog.querySelector( '.active-theme' ).removeAttribute( 'hidden' );
 				} else {
 					dialog.querySelector( '.inactive-theme' ).removeAttribute( 'hidden' );
 
 					if ( theme.dataset.compatibleWp === '1' && theme.dataset.compatiblePhp === '1' ) {
-						if ( theme.dataset.activateNonce ) {
+						if ( theme.dataset.activateNonce && dialog.querySelector( '.inactive-theme a' ) ) {
 							dialog.querySelector( '.inactive-theme a' ).href = theme.dataset.activateNonce;
 							dialog.querySelector( '.inactive-theme a' ).classList.add( 'activate' );
 							dialog.querySelector( '.inactive-theme a' ).setAttribute( 'aria-label', _wpThemeSettings.l10n.activate + ' ' + theme.querySelector( '.theme-name' ).textContent );
 							dialog.querySelector( '.inactive-theme a' ).disabled = false;
 						}
-						dialog.querySelector( '.inactive-theme .load-customize' ).href = theme.dataset.customize;
+						if ( dialog.querySelector( '.inactive-theme .load-customize' ) ) {
+							dialog.querySelector( '.inactive-theme .load-customize' ).href = theme.dataset.customize;
+						}
 					} else {
-						if ( theme.dataset.activateNonce ) {
+						if ( theme.dataset.activateNonce && dialog.querySelector( '.inactive-theme a' ) ) {
 							dialog.querySelector( '.inactive-theme a' ).removeAttribute( 'href' );
 							dialog.querySelector( '.inactive-theme a' ).classList.add( 'disabled' );
 							dialog.querySelector( '.inactive-theme a' ).setAttribute( 'aria-label', _wpThemeSettings.l10n.cannot_activate + ' ' + theme.querySelector( '.theme-name' ).textContent );
 						}
-						dialog.querySelector( '.inactive-theme .load-customize' ).removeAttribute( 'href' );
-						dialog.querySelector( '.inactive-theme .load-customize' ).classList.add( 'disabled' );
-						dialog.querySelector( '.inactive-theme .load-customize' ).classList.remove( 'load-customize' );
+						if ( dialog.querySelector( '.inactive-theme .load-customize' ) ) {
+							dialog.querySelector( '.inactive-theme .load-customize' ).removeAttribute( 'href' );
+							dialog.querySelector( '.inactive-theme .load-customize' ).classList.add( 'disabled' );
+							dialog.querySelector( '.inactive-theme .load-customize' ).classList.remove( 'load-customize' );
+						}
 					}
 
-					if ( theme.dataset.deleteNonce ) {
+					if ( theme.dataset.deleteNonce && dialog.querySelector( '.delete-theme' ) ) {
 						dialog.querySelector( '.delete-theme' ).href = theme.dataset.deleteNonce;
 						dialog.querySelector( '.delete-theme' ).setAttribute( 'aria-label', _wpThemeSettings.l10n.delete + ' ' + theme.querySelector( '.theme-name' ).textContent );
 						dialog.querySelector( '.delete-theme' ).removeAttribute( 'hidden' );
@@ -342,9 +348,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 
 				// Show or hide fields
-				if ( ! theme.className.includes( 'active' ) && theme.dataset.deleteNonce ) {
+				if ( ! theme.className.includes( 'active' ) && theme.dataset.deleteNonce && dialog.querySelector( '.delete-theme' ) ) {
 					dialog.querySelector( '.delete-theme' ).style.display = 'inline-block';
-				} else {
+				} else if ( dialog.querySelector( '.delete-theme' ) ) {
 					dialog.querySelector( '.delete-theme' ).style.display = 'none';
 				}
 
