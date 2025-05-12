@@ -84,6 +84,56 @@ if ( @file_exists( ABSPATH . '../wp-config.php' ) && ! @file_exists( ABSPATH . '
 $step = isset( $_GET['step'] ) ? (int) $_GET['step'] : -1;
 
 /**
+ * Set permissions on the wp-config.php file in Linux/Unix.
+ *
+ * @since CP-2.5.0
+ */
+function set_config_file_permissions( $path_to_wp_config ) {
+	// Short-circuit in Windows.
+	if ( strtoupper( substr( PHP_OS, 0, 3) ) === 'WIN' ) {
+		return;
+	}
+
+	// If POSIX support is disabled, use lax permissions to ensure compatibility.
+	if ( ! function_exists( 'posix_geteuid' ) ) {
+		chmod( $path_to_wp_config, 0666 );
+		return;
+	}
+
+	// Create test file.
+	$test_file = ABSPATH . 'cp-permissions-test-' . uniqid() . '.tmp';
+	file_put_contents( $test_file, '' );
+
+	// Get file and directory ownership info.
+	$file_owner = file_exists( $test_file ) ? fileowner( $test_file ) : null;
+	$file_group = file_exists( $test_file ) ? filegroup( $test_file ) : null;
+	$dir_owner  = fileowner( ABSPATH );
+	$dir_group  = filegroup( ABSPATH );
+
+	// Get PHP process effective user and group IDs if possible.
+	$php_euid = posix_geteuid();
+	$php_egid = posix_getegid();
+
+	// Determine if PHP process user is owner or in group of the file.
+	$php_user_is_owner = ( $php_euid === $file_owner ) && ( $file_owner === $dir_owner );
+	$php_user_in_group = ( $php_egid === $file_group ) && ( $file_group === $dir_group );
+
+	if ( $php_user_is_owner ) {
+		chmod( $path_to_wp_config, 0600 );
+	} else if ( $php_user_in_group ) {
+		chmod( $path_to_wp_config, 0660 );
+	} else {
+		// As fallback, use lax permissions to ensure compatibility.
+		chmod( $path_to_wp_config, 0666 );
+	}
+
+	// Delete test file.
+	if ( file_exists( $test_file ) ) {
+		unlink( $test_file );
+	}
+}
+
+/**
  * Display setup wp-config.php file header.
  *
  * @ignore
@@ -482,7 +532,7 @@ if ( ! /iPad|iPod|iPhone/.test( navigator.userAgent ) ) {
 				}
 			}
 
-			chmod( $path_to_wp_config, 0666 );
+			set_config_file_permissions( $path_to_wp_config );
 			setup_config_display_header();
 
 			if ( false !== $handle ) :
