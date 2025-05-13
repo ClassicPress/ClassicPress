@@ -1377,15 +1377,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			labelFileTypeNotAllowed: VIDEO_WIDGET.invalid_type,
 			fileValidateTypeLabelExpectedTypes: VIDEO_WIDGET.check_types
 		} );
-
-		pond.on( 'processfile', function( error, file ) {
-			if ( ! error ) {
-				setTimeout( function() {
-					pond.removeFile( file.id );
-				}, 100 );
-				resetDataOrdering();
-			}
-		} );
 	}
 
 	// Reset ordering of remaining media items after deletion
