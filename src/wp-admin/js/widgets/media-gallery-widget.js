@@ -1560,7 +1560,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					setTimeout( function() {
 						pond.removeFile( file.id );
 					}, 100 );
-					uploadedNumber++;console.log(uploadedNumber);
+					uploadedNumber++;
 					resetDataOrdering();
 				}
 			},
