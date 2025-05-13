@@ -1567,7 +1567,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			onprocessfiles: () => { // Called when all files in the queue have finished uploading
 				if ( dialog.querySelectorAll( '#gallery-grid li' ).length ) {
 					updateGrid( document.getElementById( widgetId ), 1 );
-					dialog.querySelector( '#menu-item-browse' ).click();					
+					dialog.querySelector( '#menu-item-browse' ).click();
 					setTimeout( function() { // click on uploaded items
 						for ( var i = 1, n = uploadedNumber; i <= n; i++ ) {
 							dialog.querySelectorAll( '.widget-modal-grid li' )[i - 1].click();
