@@ -1333,11 +1333,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					} )
 					.then( function( result ) {
 						if ( result.success ) {
-							updateGrid( document.getElementById( widgetId ), 1 );
-							dialog.querySelector( '#menu-item-browse' ).click();
-							setTimeout( function() {
-								dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
-							}, 500 );
+							load( 'finished' );
 						} else {
 							error( VIDEO_WIDGET.upload_failed );
 						}
@@ -1356,6 +1352,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					};
 				},
 				maxFileSize: dialog.querySelector( '#ajax-url' ).dataset.maxFileSize
+			},
+			onprocessfile: ( error, file ) => { // Called when an individual file upload completes
+				if ( ! error ) {
+					setTimeout( function() {
+						pond.removeFile( file.id );
+					}, 100 );
+					resetDataOrdering();
+				}
+			},
+			onprocessfiles: () => { // Called when all files in the queue have finished uploading
+				updateGrid( document.getElementById( widgetId ), 1 );
+				dialog.querySelector( '#menu-item-browse' ).click();
+				setTimeout( function() {
+					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+				}, 500 );
 			},
 			labelTapToUndo: VIDEO_WIDGET.tap_close,
 			fileRenameFunction: ( file ) =>
