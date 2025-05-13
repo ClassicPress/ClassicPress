@@ -410,29 +410,31 @@ if ( 'grid' === $mode ) {
 
 				<?php
 				foreach ( $attachments->posts as $key => $attachment ) {
-					$meta = wp_prepare_attachment_for_js( $attachment->ID );
-					$date         = $meta['dateFormatted'];
-					$author       = $meta['authorName'];
-					$author_link  = ! empty( $meta['authorLink'] ) ? $meta['authorLink'] : '';
-					$url          = $meta['url'];
-					$width        = ! empty( $meta['width'] ) ? $meta['width'] : '';
-					$height       = ! empty( $meta['height'] ) ? $meta['height'] : '';
-					$file_name    = $meta['filename'];
-					$file_type    = $meta['type'];
-					$subtype      = $meta['subtype'];
-					$mime_type    = $meta['mime'];
-					$size         = ! empty( $meta['filesizeHumanReadable'] ) ? $meta['filesizeHumanReadable'] : '';
-					$alt          = $meta['alt'];
-					$caption      = $meta['caption'];
-					$description  = $meta['description'];
-					$link         = $meta['link'];
-					$orientation  = ! empty( $meta['orientation'] ) ? $meta['orientation'] : 'landscape';
-					$menu_order   = $meta['menuOrder'];
-					$media_cats   = $meta['media_cats'] ? implode( ', ', $meta['media_cats'] ) : '';
-					$media_tags   = $meta['media_tags'] ? implode( ', ', $meta['media_tags'] ) : '';
-					$update_nonce = $meta['nonces']['update'];
-					$delete_nonce = $meta['nonces']['delete'];
-					$edit_nonce   = $meta['nonces']['edit'];
+					$data = wp_prepare_attachment_for_js( $attachment->ID );
+					$date         = $data['dateFormatted'];
+					$author       = $data['authorName'];
+					$author_link  = ! empty( $data['authorLink'] ) ? $data['authorLink'] : '';
+					$url          = $data['url'];
+					$width        = ! empty( $data['width'] ) ? $data['width'] : '';
+					$height       = ! empty( $data['height'] ) ? $data['height'] : '';
+					$file_name    = $data['filename'];
+					$file_type    = $data['type'];
+					$subtype      = $data['subtype'];
+					$mime_type    = $data['mime'];
+					$size         = ! empty( $data['filesizeHumanReadable'] ) ? $data['filesizeHumanReadable'] : '';
+					$alt          = $data['alt'];
+					$caption      = $data['caption'];
+					$description  = $data['description'];
+					$link         = $data['link'];
+					$orientation  = ! empty( $data['orientation'] ) ? $data['orientation'] : 'landscape';
+					$menu_order   = $data['menuOrder'];
+					$media_cats   = $data['media_cats'] ? implode( ', ', $data['media_cats'] ) : '';
+					$media_tags   = $data['media_tags'] ? implode( ', ', $data['media_tags'] ) : '';
+					$artist       = $data['meta'] && ! empty( $data['meta']['artist'] ) ? $data['meta']['artist'] : '';
+					$album        = $data['meta'] && ! empty( $data['meta']['album'] ) ? $data['meta']['album'] : '';
+					$update_nonce = $data['nonces']['update'];
+					$delete_nonce = $data['nonces']['delete'];
+					$edit_nonce   = $data['nonces']['edit'];
 					$image        = '<img src="' . esc_url( $url ) . '" alt="' . esc_attr( $alt ) . '">';
 
 					// Use an icon if the file uploaded is not an image
@@ -471,6 +473,8 @@ if ( 'grid' === $mode ) {
 						data-menu-order="<?php echo esc_attr( $menu_order ); ?>"
 						data-taxes="<?php echo esc_attr( $media_cats ); ?>"
 						data-tags="<?php echo esc_attr( $media_tags ); ?>"
+						data-artist="<?php echo esc_attr( $artist ); ?>"
+						data-album="<?php echo esc_attr( $album ); ?>"
 						data-order="<?php echo esc_attr( $key + 1 ); ?>"
 						data-update-nonce="<?php echo $update_nonce; ?>"
 						data-delete-nonce="<?php echo $delete_nonce; ?>"
