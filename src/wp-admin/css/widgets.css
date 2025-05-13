@@ -1068,7 +1068,11 @@ ul.CodeMirror-hints {
 	font-size: 20px;
 	font-weight: 600;
 }
-.widget-modal-grid  .media-item .check:hover::before {
+#gallery-grid .media-item .check::before {
+	content: "\2715";
+}
+.widget-modal-grid  .media-item .check:hover::before,
+#gallery-grid .media-item .check:hover::before {
 	content: "\2014";
 }
 .widget-modal-right-sidebar {
@@ -1284,8 +1288,14 @@ ul.CodeMirror-hints {
 #edit-original {
 	margin-top: 1em;
 }
-
-
+.media-gallery-grid-header {
+	display: flex;
+	justify-content: space-between;
+	margin: 1em 1em 1em 0;
+}
+.describe {
+	margin-left: -0.5px;
+}
 
 /* =Media Queries
 -------------------------------------------------------------- */
