@@ -1915,10 +1915,6 @@ body.full-overlay-active {
 	background-size: 20px 20px;
 }
 
-#customize-preview.wp-full-overlay-main.iframe-ready::before,
-.theme-install-overlay.iframe-ready .wp-full-overlay-main::before {
-	background-image: none;
-}
 #theme-preview-main {
 	 position: fixed;
 	 left: unset;
