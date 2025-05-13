@@ -1499,6 +1499,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Upload files using FilePond
 	 */
 	function goFilepond( widgetId ) {
+		var uploadedNumber = 0;
 
 		// Register FilePond plugins
 		FilePond.registerPlugin(
@@ -1559,15 +1560,28 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					setTimeout( function() {
 						pond.removeFile( file.id );
 					}, 100 );
+					uploadedNumber++;console.log(uploadedNumber);
 					resetDataOrdering();
 				}
 			},
 			onprocessfiles: () => { // Called when all files in the queue have finished uploading
-				updateGrid( document.getElementById( widgetId ), 1 );
-				dialog.querySelector( '#menu-item-browse' ).click();
-				setTimeout( function() {
-					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
-				}, 500 );
+				if ( dialog.querySelectorAll( '#gallery-grid li' ).length ) {
+					updateGrid( document.getElementById( widgetId ), 1 );
+					dialog.querySelector( '#menu-item-browse' ).click();					
+					setTimeout( function() { // click on uploaded items
+						for ( var i = 1, n = uploadedNumber; i <= n; i++ ) {
+							dialog.querySelectorAll( '.widget-modal-grid li' )[i - 1].click();
+						}
+					}, 500 );
+				} else {
+					cleanup();
+					selectMedia( document.getElementById( widgetId ) );
+					setTimeout( function() { // click on uploaded items
+						for ( var i = 1, n = uploadedNumber; i <= n; i++ ) {
+							dialog.querySelectorAll( '.widget-modal-grid li' )[i - 1].click();
+						}
+					}, 500 );
+				}
 			},
 			labelTapToUndo: GALLERY_WIDGET.tap_close,
 			fileRenameFunction: ( file ) =>
