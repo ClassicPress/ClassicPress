@@ -1158,7 +1158,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var widgetId, widgetEl, base, preview, itemAdd, itemEdit, itemLibrary, modalPages,
 			itemCancel, itemUpload, itemBrowse, galleryInsert, galleryUpdate, uploadPanel,
 			librarySelect, headerButtons, galleryGrid, libraryGrid,libraryItems, content,
-			sidebarSettings, sidebarInfo, gridSubPanel, uploadSubPanel, ul, fieldset, page,
+			sidebarSettings, sidebarInfo, gridSubPanel, ul, fieldset, page,
 			galleryItems = [],
 			widget = e.target.closest( '.widget' );
 
@@ -1209,7 +1209,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				content         = dialog.querySelector( '.media-frame-content' );
 
 				gridSubPanel    = dialog.querySelectorAll( '#attachments-browser, .media-views-heading, .attachments-wrapper, .media-sidebar, .widgets-modal-pages, .media-frame-toolbar' );
-				uploadSubPanel  = dialog.querySelector( '#uploader-inline' );
 
 				// Search or go to a specific page in the media library grid
 				if ( e.target.parentNode.className === 'pagination-links' && e.target.tagName === 'BUTTON' ) {
@@ -1535,11 +1534,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					} )
 					.then( function( result ) {
 						if ( result.success ) {
-							updateGrid( document.getElementById( widgetId ), 1 );
-							dialog.querySelector( '#menu-item-browse' ).click();
-							setTimeout( function() {
-								dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
-							}, 500 );
+							load( 'finished' );
 						} else {
 							error( GALLERY_WIDGET.upload_failed );
 						}
@@ -1559,6 +1554,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				},
 				maxFileSize: dialog.querySelector( '#ajax-url' ).dataset.maxFileSize
 			},
+			onprocessfile: ( error, file ) => { // Called when an individual file upload completes
+				if ( ! error ) {
+					setTimeout( function() {
+						pond.removeFile( file.id );
+					}, 100 );
+					resetDataOrdering();
+				}
+			},
+			onprocessfiles: () => { // Called when all files in the queue have finished uploading
+				updateGrid( document.getElementById( widgetId ), 1 );
+				dialog.querySelector( '#menu-item-browse' ).click();
+				setTimeout( function() {
+					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+				}, 500 );
+			},
 			labelTapToUndo: GALLERY_WIDGET.tap_close,
 			fileRenameFunction: ( file ) =>
 				new Promise( function( resolve ) {
@@ -1567,15 +1577,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 			labelFileTypeNotAllowed: GALLERY_WIDGET.invalid_type,
 			fileValidateTypeLabelExpectedTypes: GALLERY_WIDGET.check_types
-		} );
-
-		pond.on( 'processfile', function( error, file ) {
-			if ( ! error ) {
-				setTimeout( function() {
-					pond.removeFile( file.id );
-				}, 100 );
-				resetDataOrdering();
-			}
 		} );
 	}
 
