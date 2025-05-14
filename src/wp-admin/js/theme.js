@@ -1,7 +1,7 @@
 /**
  * @output wp-admin/js/theme.js
  */
-/* global _wpThemeSettings, ajaxurl, console */
+/* global _wpThemeSettings, _wpUpdatesSettings, ajaxurl, console */
 
 /**
  * @since CP 2.5.0
