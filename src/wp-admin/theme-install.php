@@ -76,6 +76,10 @@ wp_localize_script(
 			/* translators: Hidden accessibility text. */
 			'selectFeatureFilter' => __( 'Select one or more Theme features to filter by' ),
 			'version'             => __( 'Version' ),
+			'installing'          => __( 'Installing...' ),
+			'installing_wait'     => __( 'Installing... please wait.' ),
+			'installed'           => __( 'Installed' ),
+			'activate'            => __( 'Activate' ),
 			'ratings'             => __( 'ratings' ),
 		),
 		'installedThemes' => array_keys( $installed_themes ),
