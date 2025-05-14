@@ -663,6 +663,14 @@ foreach ( $themes as $theme ) :
 	</div>
 </li>
 <?php endforeach; ?>
+<li class="theme add-new-theme">
+	<a href="<?php echo esc_url( admin_url( 'theme-install.php' ) ); ?>">
+		<div class="theme-screenshot">
+			<span></span>
+		</div>
+		<h2 class="theme-name"><?php esc_html_e( 'Add New Theme' ); ?></h2>
+	</a>
+</li>
 	</ul>
 </div>
 
