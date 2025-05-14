@@ -71,6 +71,44 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		history.replaceState( null, null, location.href.split( '?' )[0] );
 	}
 
+	function installTheme( link ) {
+		var formData = new FormData(),
+			queryParams = new URLSearchParams( link ),
+			slug = queryParams.get( 'theme' );
+
+		// Create URLSearchParams object
+		formData.append( 'action', 'install-theme' );
+		formData.append( 'slug', slug );
+		formData.append( '_ajax_nonce', _wpUpdatesSettings.ajax_nonce );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: formData,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			var themeID = result.data.slug,
+				theme = document.getElementById( themeID ),
+				div = document.createElement( 'div' );
+
+			div.className = 'notice inline notice-success notice-alt';
+			div.innerHTML = '<p>' + _wpThemeSettings.l10n.installed + '</p>';
+			theme.querySelector( '.theme-screenshot' ).after( div );
+			theme.querySelector( '.theme-install' ).textContent = _wpThemeSettings.l10n.activate;
+			theme.querySelector( '.theme-install' ).href = theme.dataset.activateNonce;
+			theme.querySelector( '.theme-install' ).className = 'button button-primary activate';
+		} )
+		.catch( function( error ) {
+			console.error( _wpThemeSettings.error, error );
+		} );
+	}
+
 	function updateThemes() {
 		var themesGrid = document.querySelector( '.themes' ),
 
@@ -518,6 +556,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					document.querySelector( '.upload-theme' ).style.display = 'block';
 					e.target.setAttribute( 'aria-expanded', true );
 				}
+
+			// Install new theme
+ 			} else if ( e.target.className.includes( 'theme-install' ) ) {
+				e.preventDefault();
+				e.target.textContent = _wpThemeSettings.l10n.installing;
+				e.target.classList.add( 'updating-message' );
+				e.target.setAttribute( 'aria-label', 'Installing ' + e.target.closest( '.theme-id-container' ).querySelector( '.theme-name' ).textContent );
+				e.target.focus();
+				wp.a11y.speak( _wpThemeSettings.l10n.installing_wait );
+				installTheme( e.target.href );
 			}
 		}
 	} );
