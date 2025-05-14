@@ -3810,6 +3810,7 @@ function wp_ajax_query_themes() {
 		wp_send_json_error();
 	}
 
+	$count = $api->info['results'];
 	$update_php = network_admin_url( 'update.php?action=install-theme' );
 	$updates_from_api = get_site_transient( 'update_core' );
 	$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates ) && ! empty( $updates_from_api->updates );
@@ -3828,7 +3829,17 @@ function wp_ajax_query_themes() {
 	}
 
 	$themes_string = '';
-	foreach ( $api->themes as &$theme ) {
+	foreach ( $api->themes as $theme ) {
+
+		// Don't show FSE themes
+		$theme->compatible_wp  = is_wp_version_compatible( $theme->requires );
+		$theme->compatible_php = is_php_version_compatible( $theme->requires_php );
+		$theme->compatible_cp  = ! array_key_exists( 'full-site-editing', $theme->tags );
+		if ( ! $theme->compatible_cp ) {
+			$count--; // Remove from total count shown
+			continue;
+		}
+
 		$theme->install_url = add_query_arg(
 			array(
 				'theme'    => $theme->slug,
@@ -3889,9 +3900,6 @@ function wp_ajax_query_themes() {
 
 		$theme->num_ratings    = number_format_i18n( $theme->num_ratings );
 		$theme->preview_url    = set_url_scheme( $theme->preview_url );
-		$theme->compatible_wp  = is_wp_version_compatible( $theme->requires );
-		$theme->compatible_php = is_php_version_compatible( $theme->requires_php );
-		$theme->compatible_cp  = ! array_key_exists( 'full-site-editing', $theme->tags );
 
 		// Build HTML response
 		$theme_item = '<li id="' . esc_attr__( $theme->slug ) . '" class="theme" tabindex="0" data-install-nonce="' . esc_url( $theme->install_url ) . '" data-activate-nonce="' . esc_url( $theme->activate_url ) . '" data-customize="' . esc_url( $theme->customize_url ) . '" data-home="' . esc_url( $theme->homepage ) . '" data-description="' . esc_attr__( $theme->description ) . '" data-tags="' . esc_attr__( implode( ',', $theme->tags ) ) . '" data-ratings="' . esc_attr( $theme->stars ) . '" data-num-ratings="' . esc_attr( $theme->num_ratings ) . '" data-version="' . esc_attr( $theme->version ) . '">';
@@ -4035,7 +4043,7 @@ function wp_ajax_query_themes() {
 
 	wp_send_json_success(
 		array(
-			'count' => $api->info['results'],
+			'count' => $count,
 			'html'  => $themes_string,
 		)
 	);
