@@ -21,7 +21,28 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			threshold: 0
 		};
 
-	showAndHide( document.querySelectorAll( '.themes li:not( .add-new-theme )' ) );
+	// Open modal automatically if URL contains appropriate query param
+	if ( queryParams.has( 'theme' ) ) {
+		themeID = queryParams.get( 'theme' );
+		if ( themeID != null && document.getElementById( themeID ) != null ) {
+			setTimeout( function() {
+				document.getElementById( themeID ).querySelector( '.more-details' ).click();
+			} );
+		}
+	}
+
+	// Reload the list of themes from wordpress.org using Intersection Observer
+	if ( footer ) {
+		observer = new IntersectionObserver( function( entries ) {
+			entries.forEach( entry => {
+				if ( entry.isIntersecting ) {
+					i++;
+					updateThemes();
+				}
+			} );
+		}, config );
+		observer.observe( footer );
+	}
 
 	// Close modal and set focus on theme
 	function closeModal() {
@@ -187,29 +208,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 		} );
 	}
-
-	// Open modal automatically if URL contains appropriate query param
-	if ( queryParams.has( 'theme' ) ) {
-		themeID = queryParams.get( 'theme' );
-		if ( themeID != null && document.getElementById( themeID ) != null ) {
-			setTimeout( function() {
-				document.getElementById( themeID ).querySelector( '.more-details' ).click();
-			} );
-		}
-	}
-
-	// Reload the list of themes from wordpress.org using Intersection Observer
-	if ( footer ) {
-		observer = new IntersectionObserver( function( entries ) {
-			entries.forEach( entry => {
-				if ( entry.isIntersecting ) {
-					i++;
-					updateThemes();
-				}
-			} );
-		}, config );
-		observer.observe( footer );
-	}
+	showAndHide( document.querySelectorAll( '.themes li:not( .add-new-theme )' ) );
 
 	// Navigate the modals by using the keyboard
 	document.addEventListener( 'keydown', function( e ) {
