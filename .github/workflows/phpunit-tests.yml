@@ -10,11 +10,14 @@ on:
   schedule:
     - cron: '0 0 * * 0'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   # Runs the PHPUnit tests for ClassicPress.
   #
   # Performs the following steps:
-  # - Cancel workflow if PR updated.
   # - Checkout ClassicPress.
   # - Set environment variables.
   # - Read .nvmrc.
@@ -83,12 +86,6 @@ jobs:
             experimental: false
 
     steps:
-      - name: Cancel previous runs of this workflow (pull requests only)
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: styfle/cancel-workflow-action@0.12.1
-        with:
-          access_token: ${{ github.token }}
-
       - name: Configure environment variables
         run: |
           echo "PHP_FPM_UID=$(id -u)" >> $GITHUB_ENV
