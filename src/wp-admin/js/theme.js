@@ -12,9 +12,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		updateType = 'browse',
 		updateValue = 'popular',
 		queryParams = new URLSearchParams( window.location.search ),
-		themes = document.querySelectorAll( '.themes li:not( .add-new-theme )' ),
-		firstElement = themes[0],
-		lastElement = themes[ parseInt( themes.length - 1 ) ],
 		dialog = document.getElementById( 'theme-modal' ),
 		previewDialog = document.querySelector( '.theme-install-overlay' ),
 		footer = document.querySelector( '.theme-install-php #wpfooter' ),
@@ -23,6 +20,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			rootMargin: '50%',
 			threshold: 0
 		};
+
+	showAndHide( document.querySelectorAll( '.themes li:not( .add-new-theme )' ) );
 
 	// Close modal and set focus on theme
 	function closeModal() {
@@ -147,9 +146,45 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Populate grid with new items
 			themesGrid.insertAdjacentHTML( 'beforeend', result.data.html );
+
+			showAndHide( document.querySelectorAll( '.themes li:not( .add-new-theme )' ) );
 		} )
 		.catch( function( error ) {
 			console.error( _wpThemeSettings.error, error );
+		} );
+	}
+
+	// Show and hide each theme's details button when hovering over and out of a theme
+	function showAndHide( themes ) {
+		themes.forEach( function( theme ) {
+			theme.addEventListener( 'mouseover', function() {
+				themes.forEach( function( other ) {
+					other.querySelector( '.more-details' ).style.opacity = '0';
+					other.querySelector( '.theme-actions' ).style.opacity = '0';
+				} );
+				theme.querySelector( '.more-details' ).style.opacity = '1';
+				theme.querySelector( '.theme-actions' ).style.opacity = '1';
+				theme.querySelector( '.theme-actions' ).style.display = 'block';
+			} );
+			theme.addEventListener( 'touchenter', function() {
+				themes.forEach( function( other ) {
+					other.querySelector( '.more-details' ).style.opacity = '0';
+					other.querySelector( '.theme-actions' ).style.opacity = '0';
+				} );
+				theme.querySelector( '.more-details' ).style.opacity = '1';
+				theme.querySelector( '.theme-actions' ).style.opacity = '1';
+				theme.querySelector( '.theme-actions' ).style.display = 'block';
+			} );
+			theme.addEventListener( 'mouseout', function() {
+				theme.querySelector( '.more-details' ).style.opacity = '0';
+				theme.querySelector( '.theme-actions' ).style.opacity = '0';
+				theme.querySelector( '.theme-actions' ).style.display = 'none';
+			} );
+			theme.addEventListener( 'touchleave', function() {
+				theme.querySelector( '.more-details' ).style.opacity = '0';
+				theme.querySelector( '.theme-actions' ).style.opacity = '0';
+				theme.querySelector( '.theme-actions' ).style.display = 'none';
+			} );
 		} );
 	}
 
@@ -201,41 +236,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	} );
 
-	// Show and hide each theme's details button when hovering over and out of a theme
-	themes.forEach( function( theme ) {
-		theme.addEventListener( 'mouseover', function() {
-			themes.forEach( function( other ) {
-				other.querySelector( '.more-details' ).style.opacity = '0';
-				other.querySelector( '.theme-actions' ).style.opacity = '0';
-			} );
-			theme.querySelector( '.more-details' ).style.opacity = '1';
-			theme.querySelector( '.theme-actions' ).style.opacity = '1';
-			theme.querySelector( '.theme-actions' ).style.display = 'block';
-		} );
-		theme.addEventListener( 'touchenter', function() {
-			themes.forEach( function( other ) {
-				other.querySelector( '.more-details' ).style.opacity = '0';
-				other.querySelector( '.theme-actions' ).style.opacity = '0';
-			} );
-			theme.querySelector( '.more-details' ).style.opacity = '1';
-			theme.querySelector( '.theme-actions' ).style.opacity = '1';
-			theme.querySelector( '.theme-actions' ).style.display = 'block';
-		} );
-		theme.addEventListener( 'mouseout', function() {
-			theme.querySelector( '.more-details' ).style.opacity = '0';
-			theme.querySelector( '.theme-actions' ).style.opacity = '0';
-			theme.querySelector( '.theme-actions' ).style.display = 'none';
-		} );
-		theme.addEventListener( 'touchleave', function() {
-			theme.querySelector( '.more-details' ).style.opacity = '0';
-			theme.querySelector( '.theme-actions' ).style.opacity = '0';
-			theme.querySelector( '.theme-actions' ).style.display = 'none';
-		} );
-	} );
-
 	// Open the modal
 	document.addEventListener( 'click', function( e ) {
-		var theme, filterDrawer, img, template, clone, response;
+		var theme, filterDrawer, img, template, clone, response,
+			allThemes = document.querySelectorAll( '.themes li:not( .add-new-theme )' ),
+			firstElement = document.querySelector( '.themes li' ),
+			lastElement = allThemes[ parseInt( allThemes.length - 1 ) ];
 
 		if ( dialog && e.target.className === 'more-details' ) {
 			e.preventDefault();
