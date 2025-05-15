@@ -361,6 +361,15 @@ if ( class_exists( 'WP_Widget_Media_Image' ) ) {
 if ( class_exists( 'WP_Widget_Media_Gallery' ) ) {
 	echo cp_render_media_gallery_template();
 }
+
+/**
+ * Renders the template for the media audio widget
+ *
+ * @since CP-2.5.0
+ */
+if ( class_exists( 'WP_Widget_Media_Audio' ) ) {
+	echo cp_render_media_audio_template();
+}
 ?>
 	
 </body>

@@ -510,3 +510,28 @@ abstract class WP_Widget_Media extends WP_Widget {
 		return self::$l10n_defaults;
 	}
 }
+
+/**
+ * Restores the default widget status and schema after removing am audio or video file.
+ *
+ * @since CP-2.5.0
+ *
+ * @return  array  $defaults  Default widget schema
+ *
+ * @return  array  $instance  Current widget schema
+ */
+function cp_restore_default_media_widget_schema( $instance, $new_instance, $old_instance, $widget ) {
+	if ( isset( $_POST['reset_widget'] ) && $_POST['reset_widget'] === '1' ) {
+
+		# Get the default schema for the widget
+		$schema = $widget->get_instance_schema();
+		$defaults = array();
+		foreach ( $schema as $key => $data ) {
+			$defaults[ $key ] = isset( $data['default'] ) ? $data['default'] : '';
+		}
+		return $defaults;
+	}
+	return $instance;
+}
+add_filter( 'widget_update_callback', 'cp_restore_default_media_widget_schema', 10, 4 );
+
