@@ -1149,6 +1149,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			},
 			maxFileSize: document.getElementById( 'ajax-url' ).dataset.maxFileSize
 		},
+		onprocessfile: ( error, file ) => { // Called when an individual file upload completes
+			if ( ! error ) {
+				setTimeout( function() {
+					pond.removeFile( file.id );
+				}, 100 );
+				resetDataOrdering();
+			}
+		},
 		labelTapToUndo: _wpMediaGridSettings.tap_close,
 		fileRenameFunction: ( file ) =>
 			new Promise( function( resolve ) {
@@ -1158,14 +1166,4 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		labelFileTypeNotAllowed: _wpMediaGridSettings.invalid_type,
 		fileValidateTypeLabelExpectedTypes: _wpMediaGridSettings.check_types
 	} );
-
-	pond.on( 'processfile', function( error, file ) {
-		if ( ! error ) {
-			setTimeout( function() {
-				pond.removeFile( file.id );
-			}, 100 );
-			resetDataOrdering();
-		}
-	} );
-
 } );

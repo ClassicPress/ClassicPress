@@ -1568,11 +1568,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					} )
 					.then( function( result ) {
 						if ( result.success ) {
-							updateGrid( document.getElementById( widgetId ), 1 );
-							dialog.querySelector( '#menu-item-browse' ).click();
-							setTimeout( function() {
-								dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
-							}, 500 );
+							load( 'finished' );
 						} else {
 							error( IMAGE_WIDGET.upload_failed );
 						}
@@ -1592,6 +1588,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				},
 				maxFileSize: dialog.querySelector( '#ajax-url' ).dataset.maxFileSize
 			},
+			onprocessfile: ( error, file ) => { // Called when an individual file upload completes
+				if ( ! error ) {
+					setTimeout( function() {
+						pond.removeFile( file.id );
+					}, 100 );
+					resetDataOrdering();
+				}
+			},
+			onprocessfiles: () => { // Called when all files in the queue have finished uploading
+				updateGrid( document.getElementById( widgetId ), 1 );
+				dialog.querySelector( '#menu-item-browse' ).click();
+				setTimeout( function() {
+					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+				}, 500 );
+			},
 			labelTapToUndo: IMAGE_WIDGET.tap_close,
 			fileRenameFunction: ( file ) =>
 				new Promise( function( resolve ) {
@@ -1600,15 +1611,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 			labelFileTypeNotAllowed: IMAGE_WIDGET.invalid_type,
 			fileValidateTypeLabelExpectedTypes: IMAGE_WIDGET.check_types
-		} );
-
-		pond.on( 'processfile', function( error, file ) {
-			if ( ! error ) {
-				setTimeout( function() {
-					pond.removeFile( file.id );
-				}, 100 );
-				resetDataOrdering();
-			}
 		} );
 	}
 
