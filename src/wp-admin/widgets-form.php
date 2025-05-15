@@ -634,6 +634,15 @@ if ( class_exists( 'WP_Widget_Media_Audio' ) ) {
 }
 
 /**
+ * Renders the template for the media video widget
+ *
+ * @since CP-2.5.0
+ */
+if ( class_exists( 'WP_Widget_Media_Video' ) ) {
+	echo cp_render_media_video_template();
+}
+
+/**
  * Fires after the available widgets and sidebars have loaded, before the admin footer.
  *
  * @since 2.2.0
