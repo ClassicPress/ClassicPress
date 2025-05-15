@@ -123,6 +123,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			theme.querySelector( '.theme-install' ).textContent = _wpThemeSettings.l10n.activate;
 			theme.querySelector( '.theme-install' ).href = theme.dataset.activateNonce;
 			theme.querySelector( '.theme-install' ).className = 'button button-primary activate';
+
+			if ( previewDialog ) {
+				closePreviewDialog();
+				theme.focus();
+			}
 		} )
 		.catch( function( error ) {
 			console.error( _wpThemeSettings.error, error );
@@ -567,7 +572,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				e.preventDefault();
 				e.target.textContent = _wpThemeSettings.l10n.installing;
 				e.target.classList.add( 'updating-message' );
-				e.target.setAttribute( 'aria-label', 'Installing ' + e.target.closest( '.theme-id-container' ).querySelector( '.theme-name' ).textContent );
+				if ( e.target.closest( '.theme-id-container' ) ) {
+					e.target.setAttribute( 'aria-label', 'Installing ' + e.target.closest( '.theme-id-container' ).querySelector( '.theme-name' ).textContent );
+				} else {
+					e.target.setAttribute( 'aria-label', 'Installing ' + previewDialog.querySelector( '.theme-name' ).textContent );
+				}
 				e.target.focus();
 				wp.a11y.speak( _wpThemeSettings.l10n.installing_wait );
 				installTheme( e.target.href );
