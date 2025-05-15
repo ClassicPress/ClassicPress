@@ -630,7 +630,7 @@ if ( class_exists( 'WP_Widget_Media_Gallery' ) ) {
  * @since CP-2.5.0
  */
 if ( class_exists( 'WP_Widget_Media_Audio' ) ) {
-	echo cp_render_media_audio_template();
+	//echo cp_render_media_audio_template();
 }
 
 /**
