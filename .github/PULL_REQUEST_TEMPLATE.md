@@ -52,5 +52,6 @@ What types of changes does your code introduce?  Most PRs are one of the followi
 
 - Bug fix
 - New feature
+- Enhancement
 - Breaking change
 -->
