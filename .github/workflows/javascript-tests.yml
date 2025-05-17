@@ -22,6 +22,7 @@ jobs:
     runs-on: ubuntu-24.04
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
 
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
