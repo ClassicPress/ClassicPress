@@ -248,7 +248,6 @@ input+.iris-picker {
 	background:transparent;
 	border:0;
 	border-radius:0;
-	transform:rotate(270deg);
 }
 .iris-strip-horiz .iris-slider-offset {
 	top:0;
