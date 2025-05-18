@@ -592,10 +592,10 @@
 				stripOrientation = self.horizontalSlider ? 'horizontal' : 'vertical';
 
 			if ( stripOrientation === 'vertical' ) {
-				controls.stripSlider[0].setAttribute( 'writing-mode', 'vertical-lr' );
-				controls.stripSlider[0].setAttribute( 'appearance', 'slider-vertical' );
-				controls.stripSlider[0].setAttribute( 'direction', 'rtl' );
-				controls.stripSlider[0].setAttribute( 'vertical-align', 'bottom' );
+				controls.stripSlider[0].style.writingMode = 'vertical-lr';
+				controls.stripSlider[0].style.appearance = 'slider-vertical';
+				controls.stripSlider[0].style.direction = 'rtl';
+				controls.stripSlider[0].style.verticalAlign = 'bottom';
 			}
 
 			controls.stripSlider[0].setAttribute( 'min', '0' );
