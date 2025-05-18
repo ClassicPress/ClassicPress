@@ -592,13 +592,10 @@
 				stripOrientation = self.horizontalSlider ? 'horizontal' : 'vertical';
 
 			if ( stripOrientation === 'vertical' ) {
-				// Use non-standard attribute to ensure Firefox doesn't reverse the scale
-				if ( userAgent.match( /firefox|fxios/i ) ) {
-					controls.stripSlider[0].setAttribute( 'orient', 'vertical' );
-				} else {
-					controls.stripSlider[0].style.writingMode = 'vertical-rl'; // scale runs from bottom to top
-					controls.stripSlider[0].style.webkitAppearance = 'slider-vertical'; // for Safari
-				}
+				controls.stripSlider[0].setAttribute( 'writing-mode', 'vertical-lr' );
+				controls.stripSlider[0].setAttribute( 'appearance', 'slider-vertical' );
+				controls.stripSlider[0].setAttribute( 'direction', 'rtl' );
+				controls.stripSlider[0].setAttribute( 'vertical-align', 'bottom' );
 			}
 
 			controls.stripSlider[0].setAttribute( 'min', '0' );
@@ -606,7 +603,7 @@
 
 			controls.stripSlider.on( 'input', function( e ) {
 				self.active = 'strip';
-				self._color[controlOpts.strip]( e.currentTarget.value );
+				self._color[controlOpts.strip]( e.target.value );
 				self._change.apply( self, arguments );
 			} );
 
