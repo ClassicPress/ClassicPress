@@ -252,7 +252,7 @@ input+.iris-picker {
 	bottom:0;
 	right:0;
 	left:0;
-	width:auto !important;
+	width:auto;
 }
 .iris-picker .iris-square-handle {
 	background:transparent;
