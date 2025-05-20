@@ -462,7 +462,7 @@ foreach ( $themes as $theme ) :
 		<?php if ( $theme['updateResponse']['compatibleWP'] && $theme['updateResponse']['compatiblePHP'] ) : ?>
 			<div class="update-message notice inline notice-warning notice-alt"><p>
 				<?php if ( $theme['hasPackage'] ) : ?>
-					<?php esc_html_e( 'New version available.' ); ?> <button class="button-link" type="button">Update now</button>
+					<?php esc_html_e( 'New version available.' ); ?> <button class="button-link" type="button"><?php esc_html_e( 'Update now' ); ?></button>
 				<?php else : ?>
 					<?php esc_html_e( 'New version available.' ); ?>
 				<?php endif; ?>
