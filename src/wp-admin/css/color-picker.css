@@ -240,10 +240,8 @@ input+.iris-picker {
 .iris-picker .iris-slider-offset {
 	position:absolute;
 	top:0;
-	left:-86px;
 	right:0;
 	bottom:0;
-	width:200px !important;
 	height:auto;
 	background:transparent;
 	border:0;
