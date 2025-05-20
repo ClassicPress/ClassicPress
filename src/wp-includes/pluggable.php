@@ -2641,9 +2641,6 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 		} elseif ( password_verify( $password, $hash ) ) {
 			// Handle password verification using PHP's PASSWORD_DEFAULT hashing algorithm.
 			$check = true;
-		} elseif ( md5( $password ) === $hash ) {
-			// Handle password verification when a temporary password has been set via Adminer or phpMyAdmin.
-			$check = true;
 		} elseif ( 0 === strpos( $hash, '$P$' ) ) {
 			// Handle password verification by the traditional WordPress method.
 			global $wp_hasher;
