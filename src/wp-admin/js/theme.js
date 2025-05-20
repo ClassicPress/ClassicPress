@@ -134,7 +134,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
-	function updateIndividualTheme( slug ) {console.log('go');
+	function updateIndividualTheme( slug ) {
 		var formData = new FormData();
 
 		// Create URLSearchParams object
