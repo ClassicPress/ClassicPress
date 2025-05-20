@@ -134,6 +134,37 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
+	function updateIndividualTheme( slug ) {console.log('go');
+		var formData = new FormData();
+
+		// Create URLSearchParams object
+		formData.append( 'action', 'update-theme' );
+		formData.append( 'slug', slug );
+		formData.append( '_ajax_nonce', _wpUpdatesSettings.ajax_nonce );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: formData,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			var theme = document.getElementById( slug ),
+				notice = theme.querySelector( '.update-message' );
+
+			notice.innerHTML = '<p>' + _wpThemeSettings.l10n.updated + '</p>';
+			notice.className = 'notice inline notice-success notice-alt';
+		} )
+		.catch( function( error ) {
+			console.error( _wpThemeSettings.error, error );
+		} );
+	}
+
 	function updateThemes() {
 		var themesGrid = document.querySelector( '.themes' ),
 
@@ -434,6 +465,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Close modal
 		} else if ( e.target.className === 'close dashicons dashicons-no' ) {
 			closeModal();
+
+		// Update a theme
+		} else if ( e.target.className.includes( 'update-button-link' ) ) {
+			updateIndividualTheme( e.target.closest( 'li' ).id );
 
 		// Search for popular or latest themes at wordpress.org
 		} else if ( document.body.className.includes( 'theme-install-php' ) ) {
