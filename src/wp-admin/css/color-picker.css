@@ -252,9 +252,9 @@ input+.iris-picker {
 .iris-strip-horiz .iris-slider-offset {
 	top:0;
 	bottom:0;
-	right:11px;
+	right:0;
 	left:0;
-	width:255px !important;
+	width:auto !important;
 }
 .iris-picker .iris-square-handle {
 	background:transparent;
