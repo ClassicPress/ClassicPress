@@ -37,13 +37,13 @@
     "moment": "^2.29.4",
     "postcss": "8.5.3",
     "qunit": "^2.19.4",
-    "rollup": "4.40.2",
-    "sass": "1.88.0",
+    "rollup": "4.41.0",
+    "sass": "1.89.0",
     "sinon": "^20.0.0",
     "sinon-test": "^3.1.5",
     "source-map-loader": "^5.0.0",
     "sync-request": "6.1.0",
-    "terser": "5.39.1",
+    "terser": "5.39.2",
     "terser-webpack-plugin": "^5.3.7",
     "webpack": "5.99.8"
   },
@@ -53,7 +53,8 @@
     "@wordpress/dom-ready": "4.23.0",
     "@wordpress/hooks": "4.23.0",
     "@wordpress/i18n": "5.23.0",
-    "@wordpress/url": "4.23.0"
+    "@wordpress/url": "4.23.0",
+    "sortablejs": "^1.15.6"
   },
   "collective": {
     "type": "opencollective",

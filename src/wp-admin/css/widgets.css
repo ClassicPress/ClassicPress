@@ -1040,12 +1040,37 @@ ul.CodeMirror-hints {
 	aspect-ratio: 1;
 	overflow: hidden;
 	text-align: center;
+	background: #f6f7f7;
 }
 .widget-modal-grid img {
 	width: 100%;
 	height: 100%;
 	margin: auto;
 	object-fit: cover;
+}
+.widget-modal-grid .icon .centered img {
+	width: 30%;
+	height: 30%;
+	padding-top: 1.8em;
+}
+.media-thumbnail .icon {
+	height: 100%;
+	box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+.media-item .filename {
+	margin: 0.65em auto 0 !important;
+	padding: 0.4em 1em !important;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: hidden;
+	max-height: 100%;
+	word-wrap: break-word;
+	text-align: center;
+	font-weight: 600;
+	background: rgba(255, 255, 255, 0.8);
+	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
 }
 .widget-modal-grid .media-item .check {
 	display: none;

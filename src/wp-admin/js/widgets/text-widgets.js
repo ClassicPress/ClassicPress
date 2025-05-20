@@ -72,4 +72,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	document.addEventListener( 'widget-added', handleWidgetUpdate );
 	document.addEventListener( 'widget-synced', handleWidgetUpdate );
 	document.addEventListener( 'widget-updated', handleWidgetUpdate );
+
+	// Ensure TinyMCE loads on page load
+	document.querySelectorAll( '#widgets-right .id_base' ).forEach( function( base ) {
+		if ( base.value === 'text' ) {
+			initTextWidget( base.closest ( '.widget' ).querySelector( 'textarea' ) );
+		}
+	} );
 } );
