@@ -468,6 +468,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Update a theme
 		} else if ( e.target.className.includes( 'update-button-link' ) ) {
+			e.target.closest( '.update-message' ).classList.add( 'updating-message' );
 			updateIndividualTheme( e.target.closest( 'li' ).id );
 
 		// Search for popular or latest themes at wordpress.org
