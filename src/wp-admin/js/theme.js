@@ -153,7 +153,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 			throw new Error( response.status );
 		} )
-		.then( function( result ) {
+		.then( function() {
 			var theme = document.getElementById( slug ),
 				notice = theme.querySelector( '.update-message' );
 
