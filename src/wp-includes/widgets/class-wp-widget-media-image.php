@@ -365,10 +365,12 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 		$attachment_metadata = array();
 		if ( $attachment_id !== 0 ) {
 			$attachment_metadata = wp_prepare_attachment_for_js( $attachment_id );
-			$sizes_array = $attachment_metadata['sizes'];
-			foreach ( $sizes_array as $key => $option ) {
-				$option_text = ucwords( str_replace( '_', ' ', $key ) ) . ' &ndash; ' . $option['width'] . ' x ' . $option['height'];
-				$size_options .= '<option value="' . esc_attr( $key ) . '"' . selected( $key, $size, false ) . '>' . esc_html( $option_text ) . '</option>';
+			if ( ! empty( $attachment_metadata ) ) {
+				$sizes_array = $attachment_metadata['sizes'];
+				foreach ( $sizes_array as $key => $option ) {
+					$option_text = ucwords( str_replace( '_', ' ', $key ) ) . ' &ndash; ' . $option['width'] . ' x ' . $option['height'];
+					$size_options .= '<option value="' . esc_attr( $key ) . '"' . selected( $key, $size, false ) . '>' . esc_html( $option_text ) . '</option>';
+				}
 			}
 		}
 		?>
@@ -380,7 +382,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 			</fieldset>
 
 			<?php
-			if ( $url ) {
+			if ( $url && $attachment_metadata ) {
 				if ( $attachment_id === 0 ) {
 					$edit_nonce = '';
 				} else {
