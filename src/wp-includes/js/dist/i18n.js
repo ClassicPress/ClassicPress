@@ -541,7 +541,8 @@ function createRunHook(hooks, storeKey, returnFirstArg, async) {
     const handlers = hooksStore[hookName].handlers;
 
     // The following code is stripped from production builds.
-    if (false) {}
+    if (false) // removed by dead control flow
+{}
     if (!handlers || !handlers.length) {
       return returnFirstArg ? args[0] : undefined;
     }
