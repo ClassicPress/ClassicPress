@@ -194,7 +194,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 			</fieldset>
 
 			<?php
-			if ( $url ) {
+			if ( file_exists( $url ) ) {
 				?>
 
 				<div class="media-widget-preview media_video populated"><?php echo wp_video_shortcode( array( 'src' => $url ) ); ?></div>
