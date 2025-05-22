@@ -29,11 +29,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.getElementById( themeID ).querySelector( '.more-details' ).click();
 			} );
 		}
-	} else if ( queryParams.has( 'search' ) ) {
+	} else if ( document.body.className.includes( 'themes-php' ) && queryParams.has( 'search' ) ) {
 		document.querySelector( '.themes-php #wp-filter-search-input' ).value = queryParams.get( 'search' );
 		setTimeout( function() {
 			document.querySelector( '.themes-php #wp-filter-search-input' ).dispatchEvent( new KeyboardEvent( 'keyup', { 'key':'Enter' } ) );
 		} );
+	} else {
+		history.replaceState( null, null, location.href.split( '?' )[0] );
 	}
 
 	// Reload the list of themes from wordpress.org using Intersection Observer
