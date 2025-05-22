@@ -676,9 +676,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} else {
 				themes.forEach( function( theme ) {
 					theme.style.display = '';
-					count = themes.length - 1;
 					history.replaceState( null, null, location.href.split( '?' )[0] );
 				} );
+				count = themes.length - 1;
 			}
 			document.querySelector( '.wp-heading-inline .title-count' ).textContent = count;
 		}, 500 ) );
