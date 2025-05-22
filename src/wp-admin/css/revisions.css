@@ -11,8 +11,7 @@
 	position: relative;
 	min-height: 50px;
 }
-.sliders-control input[type="range"],
-.wp-picker-holder input[type="range"] {
+.sliders-control input[type="range"] {
 	-moz-appearance: none;
 	appearance: none;
 	height: 4px;
@@ -21,12 +20,10 @@
 	background-color: #00b3bc;
 	pointer-events: none;
 }
-.sliders-control input[type="range"]:focus,
-.wp-picker-holder input[type="range"]:focus {
+.sliders-control input[type="range"]:focus {
 	outline: 0;
 }
-.sliders-control input[type="range"]::-webkit-slider-thumb,
-.wp-picker-holder input[type="range"]::-webkit-slider-thumb {
+.sliders-control input[type="range"]::-webkit-slider-thumb {
 	appearance: none;
 	pointer-events: all;
 	width: 30px;
@@ -37,8 +34,7 @@
 	cursor: pointer;
 	margin-top: -1.2em;
 }
-.sliders-control input[type="range"]::-moz-range-thumb,
-.wp-picker-holder input[type="range"]::-moz-range-thumb {
+.sliders-control input[type="range"]::-moz-range-thumb {
 	border: none;
 	pointer-events: all;
 	width: 30px;
@@ -48,26 +44,22 @@
 	box-shadow: 0 0 0 1px #C6C6C6;
 	cursor: pointer;
 }
-.sliders-control input[type="range"]:hover::-webkit-slider-thumb,
-.wp-picker-holder input[type="range"]:hover::-webkit-slider-thumb {
+.sliders-control input[type="range"]:hover::-webkit-slider-thumb {
 	outline: 3px solid #053a5f;
 	outline-offset: 0.125rem; 
 }
-.sliders-control input[type="range"]:hover::-moz-range-thumb,
-.wp-picker-holder input[type="range"]:hover::-moz-range-thumb {
+.sliders-control input[type="range"]:hover::-moz-range-thumb {
 	outline: 3px solid #053a5f;
 	outline-offset: 0.125rem; 
 }
-.sliders-control input[type="range"]:focus::-webkit-slider-thumb,
-.wp-picker-holder input[type="range"]:focus::-webkit-slider-thumb {
+.sliders-control input[type="range"]:focus::-webkit-slider-thumb {
 	background-color: red;
 	box-shadow: 0 0 0 1px #2271b1; 
 	border: 1px solid #053a5f;
 	outline: 3px solid #053a5f;
 	outline-offset: 0.125rem; 
 }
-.sliders-control input[type="range"]:focus::-moz-range-thumb,
-.wp-picker-holder input[type="range"]:focus::-moz-range-thumb {
+.sliders-control input[type="range"]:focus::-moz-range-thumb {
 	background-color: red;
 	box-shadow: 0 0 0 1px #2271b1;
 	border: 1px solid #053a5f;

@@ -65,8 +65,13 @@ jobs:
   # - Checks out the repository.
   # - Installs NodeJS.
   # - Sets up caching for NPM.
+  # - Sets up PHP.
+  # - Installs Composer dependencies (use cache if possible).
+  # - Instal PHPUnit.
+  # - Enable, start and initialise MySQL.
   # - Logs debug information.
   # - Installs NPM dependencies using install-changed to hash the `package.json` file.
+  # - Create config file.
   # - Run the ClassicPress pre-commit checks (JSHint, no uncommitted
   #   modifications to generated files).
   precommit:

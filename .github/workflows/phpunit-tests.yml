@@ -18,8 +18,8 @@ jobs:
   # Runs the PHPUnit tests for ClassicPress.
   #
   # Performs the following steps:
-  # - Checkout ClassicPress.
   # - Set environment variables.
+  # - Checkout ClassicPress.
   # - Read .nvmrc.
   # - Installs NodeJS.
   # - Sets up caching for NPM.
