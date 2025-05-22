@@ -219,6 +219,7 @@ if ( ! is_wp_error( $response ) ) {
 	</h2>
 
 	<div class="wp-filter hide-if-no-js">
+
 		<div class="filter-count">
 			<span class="count theme-count"><?php esc_html_e( $count ); ?></span>
 		</div>
@@ -232,8 +233,8 @@ if ( ! is_wp_error( $response ) ) {
 
 		<form class="search-form">
 			<fieldset class="search-box">
-				<label for="wp-filter-search-input"><?php esc_html_e( 'Search Themes' ); ?></label>
-				<input type="search" aria-describedby="live-search-desc" id="wp-filter-search-input" class="wp-filter-search">
+				<label for="wp-filter-search-input" class="screen-reader-text"><?php esc_html_e( 'Search Themes' ); ?></label>
+				<input type="search" placeholder="<?php esc_html_e( 'Search Themes...' ); ?>" aria-describedby="live-search-desc" id="wp-filter-search-input" class="wp-filter-search">
 			</fieldset>
 		</form>
 
