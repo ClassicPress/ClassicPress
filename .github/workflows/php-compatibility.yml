@@ -16,12 +16,11 @@ jobs:
   # Performs the following steps:
   # - Checks out the repository.
   # - Sets up PHP.
-  # - Logs debug information.
   # - Installs Composer dependencies (use cache if possible).
   # - Make Composer packages available globally.
+  # - Logs debug information.
   # - Logs PHP_CodeSniffer debug information.
   # - Runs the PHP compatibility tests.
-  # - todo: Configure Slack notifications for failing scans.
   php-comatibility:
     name: Check PHP compatibility
     runs-on: ubuntu-latest
