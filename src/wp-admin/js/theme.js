@@ -30,9 +30,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 		}
 	} else if ( document.body.className.includes( 'themes-php' ) && queryParams.has( 'search' ) ) {
-		document.querySelector( '.themes-php #wp-filter-search-input' ).value = queryParams.get( 'search' );
+		document.getElementById( 'wp-filter-search-input' ).value = queryParams.get( 'search' );
 		setTimeout( function() {
-			document.querySelector( '.themes-php #wp-filter-search-input' ).dispatchEvent( new KeyboardEvent( 'keyup', { 'key':'Enter' } ) );
+			document.getElementById( 'wp-filter-search-input' ).dispatchEvent( new KeyboardEvent( 'keyup', { 'key':'Enter' } ) );
 		} );
 	} else {
 		history.replaceState( null, null, location.href.split( '?' )[0] );
