@@ -29,6 +29,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.getElementById( themeID ).querySelector( '.more-details' ).click();
 			} );
 		}
+	} else if ( queryParams.has( 'search' ) ) {
+		document.querySelector( '.themes-php #wp-filter-search-input' ).value = queryParams.get( 'search' );
+		setTimeout( function() {
+			document.querySelector( '.themes-php #wp-filter-search-input' ).dispatchEvent( new KeyboardEvent( 'keyup', { 'key':'Enter' } ) );
+		} );
 	}
 
 	// Reload the list of themes from wordpress.org using Intersection Observer
@@ -532,6 +537,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					previewDialog.querySelector( '.theme-install' ).href = theme.dataset.activateNonce;
 					previewDialog.querySelector( '.theme-install' ).textContent = _wpThemeSettings.l10n.activate;
 					previewDialog.querySelector( '.theme-install' ).className = 'button button-primary activate';
+					if ( theme.className.includes( 'active' ) ) {
+						previewDialog.querySelector( '.activate' ).classList.add( 'disabled' );
+					}
 				}
 
 				previewDialog.querySelector( '.theme-name' ).textContent = theme.querySelector( '.theme-name' ).textContent;
@@ -645,6 +653,34 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				history.replaceState( null, null, '?' + queryParams.toString() );
 			}
 		}, 500 ) );
-	}
+	} else {
+		document.querySelector( '.themes-php #wp-filter-search-input' ).addEventListener( 'keyup', _.debounce( function( e ) {
+			var themes = document.querySelectorAll( '.themes li' ),
+				count = themes.length;
 
+			if ( document.querySelector( '.theme-browser.search-loading' ) ) {
+				document.querySelector( '.theme-browser.search-loading' ).classList.remove( 'search-loading' );
+			}
+
+			if ( e.key === 'Enter' || e.target.value.length > 2 ) { // requires at least 3 characters
+				themes.forEach( function( theme ) {
+					if ( theme.id.indexOf( e.target.value ) == -1 ) {
+						theme.style.display = 'none';
+						count--;
+					}
+				} );
+
+				// Modify current URL
+				queryParams.set( 'search', e.target.value );
+				history.replaceState( null, null, '?' + queryParams.toString() );
+			} else {
+				themes.forEach( function( theme ) {
+					theme.style.display = '';
+					count = themes.length - 1;
+					history.replaceState( null, null, location.href.split( '?' )[0] );
+				} );
+			}
+			document.querySelector( '.wp-heading-inline .title-count' ).textContent = count;
+		}, 500 ) );
+	}
 } );
