@@ -664,7 +664,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			if ( e.key === 'Enter' || e.target.value.length > 2 ) { // requires at least 3 characters
 				themes.forEach( function( theme ) {
-					if ( theme.id.indexOf( e.target.value ) == -1 ) {
+					if ( ! theme.id.includes( e.target.value ) ) {
 						theme.style.display = 'none';
 						count--;
 					}
