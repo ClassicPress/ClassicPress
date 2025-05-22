@@ -279,7 +279,7 @@ if ( ! is_wp_error( $response ) ) {
 		?>
 	</h2>
 	<div class="theme-browser content-filterable">
-		<ul class="themes"><?php echo $themes; ?></ul>
+		<ul class="themes wp-clearfix"><?php echo $themes; ?></ul>
 	</div>
 
 	<p class="no-themes"><?php _e( 'No themes found. Try a different search.' ); ?></p>
