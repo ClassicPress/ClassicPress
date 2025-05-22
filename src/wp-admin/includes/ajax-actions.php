@@ -3828,6 +3828,9 @@ function wp_ajax_query_themes() {
 		}
 	}
 
+	// Get the current theme
+	$current_theme = wp_get_theme()->get( 'TextDomain' );
+
 	$themes_string = '';
 	foreach ( $api->themes as $theme ) {
 
@@ -3838,6 +3841,11 @@ function wp_ajax_query_themes() {
 		if ( ! $theme->compatible_cp ) {
 			$count--; // Remove from total count shown
 			continue;
+		}
+
+		$active = '';
+		if ( $theme->slug === $current_theme ) {
+			$active = ' active';
 		}
 
 		$theme->install_url = add_query_arg(
@@ -3902,7 +3910,7 @@ function wp_ajax_query_themes() {
 		$theme->preview_url    = set_url_scheme( $theme->preview_url );
 
 		// Build HTML response
-		$theme_item = '<li id="' . esc_attr__( $theme->slug ) . '" class="theme" tabindex="0" data-install-nonce="' . esc_url( $theme->install_url ) . '" data-activate-nonce="' . esc_url( $theme->activate_url ) . '" data-customize="' . esc_url( $theme->customize_url ) . '" data-home="' . esc_url( $theme->homepage ) . '" data-description="' . esc_attr__( $theme->description ) . '" data-tags="' . esc_attr__( implode( ',', $theme->tags ) ) . '" data-ratings="' . esc_attr( $theme->stars ) . '" data-num-ratings="' . esc_attr( $theme->num_ratings ) . '" data-version="' . esc_attr( $theme->version ) . '">';
+		$theme_item = '<li id="' . esc_attr__( $theme->slug ) . '" class="theme' . esc_attr( $active ) . '" tabindex="0" data-install-nonce="' . esc_url( $theme->install_url ) . '" data-activate-nonce="' . esc_url( $theme->activate_url ) . '" data-customize="' . esc_url( $theme->customize_url ) . '" data-home="' . esc_url( $theme->homepage ) . '" data-description="' . esc_attr__( $theme->description ) . '" data-tags="' . esc_attr__( implode( ',', $theme->tags ) ) . '" data-ratings="' . esc_attr( $theme->stars ) . '" data-num-ratings="' . esc_attr( $theme->num_ratings ) . '" data-version="' . esc_attr( $theme->version ) . '">';
 
 		if ( ! empty( $theme->screenshot_url ) ) {
 			$theme_item .= '<div class="theme-screenshot"><img src="' . esc_url( $theme->screenshot_url ) . '" alt=""></div>';
