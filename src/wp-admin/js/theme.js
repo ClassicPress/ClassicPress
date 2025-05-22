@@ -78,11 +78,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		previewDialog.classList.remove( 'collapsed' );
 		previewDialog.querySelector( '.wp-full-overlay-main' ).style.width = 'calc(100% - 300px)';
 		previewDialog.querySelector( '.theme-install-container' ).dataset.id = '';
+		if ( previewDialog.querySelector( '.activate' ) ) {
+			previewDialog.querySelector( '.activate' ).className = 'button button-primary theme-install';
+		}
 		previewDialog.querySelector( '.theme-install' ).href = '';
 		previewDialog.querySelector( '.theme-name' ).textContent = '';
 		previewDialog.querySelector( '.theme-by' ).textContent = '';
 		previewDialog.querySelector( '.theme-screenshot img' ).src = '';
-		previewDialog.querySelector( '.theme-rating' ).innerHTML = '<a class="num-ratings" href=""></a>';
+		previewDialog.querySelector( '.theme-rating' ).innerHTML = ' <a class="num-ratings" href=""></a>';
 		previewDialog.querySelector( '.theme-version' ).textContent = '';
 		previewDialog.querySelector( '.theme-description' ).textContent = '';
 		previewDialog.querySelector( 'iframe' ).src = '';
@@ -273,14 +276,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Open the modal
 	document.addEventListener( 'click', function( e ) {
-		var theme, filterDrawer, img, template, clone, response,
+		var filterDrawer, img, template, clone, response,
+			theme = e.target.closest( '.theme' ),
 			allThemes = document.querySelectorAll( '.themes li:not( .add-new-theme )' ),
 			firstElement = document.querySelector( '.themes li' ),
 			lastElement = allThemes[ parseInt( allThemes.length - 1 ) ];
 
 		if ( dialog && e.target.className === 'more-details' ) {
 			e.preventDefault();
-			theme = e.target.closest( '.theme' );
 
 			if ( theme ) {
 
@@ -519,21 +522,27 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Show theme preview
 			} else if ( e.target.className === 'more-details' || e.target.className === 'button preview install-theme-preview' ) {
-				previewDialog.querySelector( '.theme-install-container' ).dataset.id = e.target.closest( '.theme' ).id;
+				previewDialog.querySelector( '.theme-install-container' ).dataset.id = theme.id;
 				queryParams.delete( 'browse' );
 				queryParams.delete( 'search' );
-				queryParams.set( 'theme', e.target.closest( '.theme' ).id );
+				queryParams.set( 'theme', theme.id );
 				history.replaceState( null, null, '?' + queryParams.toString() );
-				previewDialog.querySelector( '.theme-install' ).href = e.target.closest( '.theme' ).dataset.installNonce;
-				previewDialog.querySelector( '.theme-name' ).textContent = e.target.closest( '.theme' ).querySelector( '.theme-name' ).textContent;
-				previewDialog.querySelector( '.theme-by' ).textContent = e.target.closest( '.theme' ).querySelector( '.theme-author' ).textContent;
-				previewDialog.querySelector( '.theme-screenshot img' ).src = e.target.closest( '.theme' ).querySelector( '.theme-screenshot img' ).src;
-				previewDialog.querySelector( '.theme-rating' ).insertAdjacentHTML( 'afterbegin', e.target.closest( '.theme' ).dataset.ratings );
-				previewDialog.querySelector( '.num-ratings' ).textContent = '(' + e.target.closest( '.theme' ).dataset.numRatings + ' ' + _wpThemeSettings.l10n.ratings + ')';
-				previewDialog.querySelector( '.num-ratings' ).href = 'https://wordpress.org/support/theme/' + e.target.closest( '.theme' ).id + '/reviews/';
-				previewDialog.querySelector( '.theme-version' ).textContent = _wpThemeSettings.l10n.version + ' ' + e.target.closest( '.theme' ).dataset.version;
-				previewDialog.querySelector( '.theme-description' ).textContent = e.target.closest( '.theme' ).dataset.description;
-				previewDialog.querySelector( 'iframe' ).src = '//wp-themes.com/' + e.target.closest( '.theme' ).id + '/';
+				previewDialog.querySelector( '.theme-install' ).href = theme.dataset.installNonce;
+				if ( theme.querySelector( '.notice-success' ) ) {
+					previewDialog.querySelector( '.theme-install' ).href = theme.dataset.activateNonce;
+					previewDialog.querySelector( '.theme-install' ).textContent = _wpThemeSettings.l10n.activate;
+					previewDialog.querySelector( '.theme-install' ).className = 'button button-primary activate';
+				}
+
+				previewDialog.querySelector( '.theme-name' ).textContent = theme.querySelector( '.theme-name' ).textContent;
+				previewDialog.querySelector( '.theme-by' ).textContent = theme.querySelector( '.theme-author' ).textContent;
+				previewDialog.querySelector( '.theme-screenshot img' ).src = theme.querySelector( '.theme-screenshot img' ).src;
+				previewDialog.querySelector( '.theme-rating' ).insertAdjacentHTML( 'afterbegin', theme.dataset.ratings );
+				previewDialog.querySelector( '.num-ratings' ).textContent = '(' + theme.dataset.numRatings + ' ' + _wpThemeSettings.l10n.ratings + ')';
+				previewDialog.querySelector( '.num-ratings' ).href = 'https://wordpress.org/support/theme/' + theme.id + '/reviews/';
+				previewDialog.querySelector( '.theme-version' ).textContent = _wpThemeSettings.l10n.version + ' ' + theme.dataset.version;
+				previewDialog.querySelector( '.theme-description' ).textContent = theme.dataset.description;
+				previewDialog.querySelector( 'iframe' ).src = '//wp-themes.com/' + theme.id + '/';
 				document.body.style.overflow = 'hidden';
 				previewDialog.showModal();
 
