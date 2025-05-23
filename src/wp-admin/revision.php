@@ -186,12 +186,12 @@ foreach ( $prepared['revisionData'] as $key => $revision ) {
 	$author = $revision['author']['name'];
 	$time_ago = $revision['timeAgo'];
 
-	$date_short = ' (' . $revision['dateShort'] . ')';
+	$date = ' (' . $revision['date'] . ')';
 	if ( $revision['autosave'] === true ) {
-		$date_short = '}} (' . $revision['dateShort'] . ')';
+		$date = '}} (' . $revision['date'] . ')';
 	}
 
-	$ticks .= '<option data-tooltip="' . $type . '[[' . $author . ']]' . $time_ago . $date_short . '" value="' . $key . '">' . $revision['dateShort'] . '</option>';
+	$ticks .= '<option data-tooltip="' . $type . '[[' . $author . ']]' . $time_ago . $date . '" data-id="' . $revision['id'] . '" value="' . $key . '">' . $revision['dateShort'] . '</option>';
 }
 $ticks .= '</datalist>';
 ?>
@@ -203,8 +203,7 @@ $ticks .= '</datalist>';
 	<fieldset class="range-container">
 		<span id="current-tooltip"></span>
 		<div class="sliders-control">
-				<?php //echo json_encode( $tooltips ); ?>
-				<?php echo $ticks; ?>
+			<?php echo $ticks; ?>
 			<div class="from-slider-wrapper">
 				<label for="from-slider" class="screen-reader-text"><?php esc_html_e( 'Earlier Revision' ); ?></label>
 				<input id="from-slider" class="cp-slider" type="range" step="1" min="0" max="<?php echo $count; ?>" list="ticks">
@@ -217,8 +216,58 @@ $ticks .= '</datalist>';
 			</div>
 		</div>
 	</fieldset>
-</div>
-<?php
-wp_print_revision_templates();
 
+	<div class="revisions">
+		<div class="revisions-control-frame">
+			<div class="revisions-controls">
+				<div class="revisions-buttons">
+					<div class="revisions-previous">
+						<input class="button" type="button" value="<?php echo esc_attr_x( 'Previous', 'Button label for a previous revision' ); ?>">
+					</div>
+					<div class="revisions-next">
+						<input class="button" type="button" value="<?php echo esc_attr_x( 'Next', 'Button label for a next revision' ); ?>">
+					</div>
+				</div>
+				<div class="revisions-checkbox">
+					<div class="revision-toggle-compare-mode">
+						<input id="compare-two-revisions" type="checkbox" class="compare-two-revisions">
+						<label for="compare-two-revisions"><?php esc_html_e( 'Compare any two revisions' ); ?></label>
+					</div>
+				</div>
+				<div></div>
+				<div class="revisions-meta">
+					<div class="diff-meta diff-meta-from">
+						<div class="diff-title">
+							<strong><?php esc_html_e( 'From:' ); ?></strong>
+							<div class="author-card">
+								<?php // Author info from the AJAX call ?>
+							</div>
+						</div>
+					</div>
+					<div class="diff-meta diff-meta-to">
+						<div class="diff-title">
+							<strong><?php esc_html_e( 'To:' ); ?></strong>
+							<div class="author-card">
+								<?php // Author info from the AJAX call ?>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="revisions-diff-frame">
+			<div class="revisions-diff">
+				<div class="loading-indicator">
+					<span class="spinner"></span>
+				</div>
+				<div class="diff-error"><?php esc_html_e( 'Sorry, something went wrong. The requested comparison could not be loaded.' ); ?></div>
+				<div class="diff">
+					<?php // Diff from the AJAX call ?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<?php
 require_once ABSPATH . 'wp-admin/admin-footer.php';
