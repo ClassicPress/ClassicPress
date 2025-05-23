@@ -3791,7 +3791,7 @@ function wp_ajax_get_revision_diffs() {
 		$author_left .= '<span class="time-ago">' . sprintf( __( '%s ago' ), human_time_diff( get_post_timestamp( $post_ids[0] ), time() ) ) . '</span> ';
 		$author_left .= '<span class="date">(' . get_the_date( '', $post_ids[0] ) . ')</span>';
 		$author_left .= '</div>';
-		$diffs_array[ $diff[ 'id' ] ][ 'author_left' ] = $author_left;
+		$diffs_array[ $diff['id'] ]['author_left'] = $author_left;
 
 		$author_right  = $show_avatars ? get_avatar( $author_right_id, 32 ) : '';
 		$author_right .= '<div class="author-info';
@@ -3806,11 +3806,11 @@ function wp_ajax_get_revision_diffs() {
 		$author_right .= '</div>';
 		$author_right .= '<input type="button" class="restore-revision button button-primary" data-restore="' . $restore_link . '" value="';
 		$author_right .= wp_is_post_autosave( $post_ids[1] ) ? esc_attr__( 'Restore This Autosave' ) : esc_attr__( 'Restore This Revision' ) . '"' . $locked . '>';
-		$diffs_array[ $diff[ 'id' ] ][ 'author_right' ] = $author_right;
+		$diffs_array[ $diff['id'] ]['author_right'] = $author_right;
 
-		$diffs_string  = '<h3>' . esc_html__( 'Title' ) . '</h3>' . $diff[ 'fields' ][0][ 'diff' ];
-		$diffs_string .= '<h3>' . esc_html__( 'Content' ) . '</h3>' . $diff[ 'fields' ][1][ 'diff' ];
-		$diffs_array[ $diff[ 'id' ]] [ 'diffs' ] = $diffs_string;
+		$diffs_string  = '<h3>' . esc_html__( 'Title' ) . '</h3>' . $diff['fields'][0]['diff'];
+		$diffs_string .= '<h3>' . esc_html__( 'Content' ) . '</h3>' . $diff['fields'][1]['diff'];
+		$diffs_array[ $diff['id'] ]['diffs'] = $diffs_string;
 	}
 
 	wp_send_json_success( $diffs_array );
