@@ -89,7 +89,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			queryParams.delete( 'from' );
 			queryParams.delete( 'to' );
 			queryParams.set( 'revision', toRevision );
-		}		
+		}
 		compareRevisions( fromRevision + ':' + toRevision );
 
 		// Update URL
@@ -138,7 +138,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				fromSlider.value = parseInt( toSlider.value, 10 ) - 1;
 				fromSlider.dispatchEvent( new Event( 'input' ) );
 			}
-			
+
 			// If we were on the first revision before switching to two-handled mode,
 			// bump the To slider position over one.
 			if ( toSlider.value == 0 ) {
@@ -154,7 +154,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			history.replaceState( null, null, '?' + queryParams.toString() );
 
 		} else {
-			fromSliderWrapper.style.display = 'none';		
+			fromSliderWrapper.style.display = 'none';
 			revisionsArea.classList.remove( 'comparing-two-revisions' );
 
 			// When switching back to single-handled mode, reset From slider to
