@@ -202,7 +202,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( split[0] === '0' ) {
 
 			// Return an array of proximal diffs
-			for( let i = list.length - 2, n = list.length - 1; i >= 0; i-- ) {
+			for( let i = list.length - 2; i >= 0; i-- ) {
 				formData.append( 'compare[]', list[i] + ':' + list[i + 1] );
 			}
 			formData.append( 'compare[]', '0:' + list[0] );
