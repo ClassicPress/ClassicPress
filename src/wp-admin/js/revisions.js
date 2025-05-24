@@ -23,6 +23,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		fromSliderWrapper = document.querySelector( '.from-slider-wrapper' ),
 		fromSlider = document.getElementById( 'from-slider' ),
 		toSlider = document.getElementById( 'to-slider' ),
+		previousButton = document.querySelector( '.revisions-previous .button' ),
+		nextButton = document.querySelector( '.revisions-next .button' ),
 		ticksOptions = document.querySelectorAll( '#ticks option' ),
 		list = document.getElementById( 'revisions-list' ).value.split( ', ' ),
 		fromAuthorCard = document.querySelector( '.diff-meta-from .author-card' ),
@@ -45,6 +47,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		fromSliderWrapper.style.display = 'none';
 		revisionsArea.classList.remove( 'comparing-two-revisions' );
 		toSlider.value = list.indexOf( queryParams.get( 'revision' ) );
+
+		if ( parseInt( toSlider.value, 10 ) === 0 ) {
+			previousButton.disabled = true;
+		} else if ( parseInt( toSlider.value, 10 ) === list.length - 1 ) {
+			nextButton.disabled = true;
+		}
 		getDiff( '0:' + queryParams.get( 'revision' ) ); // Will return an array of proximal diffs
 	}
 
@@ -90,6 +98,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			queryParams.delete( 'to' );
 			queryParams.set( 'revision', toRevision );
 		}
+
+		// Disable and enable Next button
+		if ( parseInt( toSlider.value, 10 ) === 0 ) {
+			previousButton.disabled = true;
+		} else {
+			previousButton.disabled = false;
+		}
+		if ( parseInt( toSlider.value, 10 ) === list.length - 1 ) {
+			nextButton.disabled = true;
+		} else {
+			nextButton.disabled = false;
+		}
 		compareRevisions( fromRevision + ':' + toRevision );
 
 		// Update URL
@@ -98,14 +118,24 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Update To slider after Previous or Next button pressed
 	document.addEventListener( 'click', function( e ) {
-		if ( e.target.className === 'button' ) {
-			if ( e.target.parentNode.className === 'revisions-previous' ) {
-				toSlider.value = parseInt( toSlider.value, 10 ) - 1;
-				toSlider.dispatchEvent( new Event( 'input' ) );
-			} else if ( e.target.parentNode.className === 'revisions-next' ) {
-				toSlider.value = parseInt( toSlider.value, 10 ) + 1;
-				toSlider.dispatchEvent( new Event( 'input' ) );
+		if ( e.target === previousButton ) {
+			toSlider.value = parseInt( toSlider.value, 10 ) - 1;
+			toSlider.dispatchEvent( new Event( 'input' ) );
+			if ( parseInt( toSlider.value, 10 ) === 0 ) {
+				previousButton.disabled = true;
+			} else {
+				previousButton.disabled = false;
 			}
+			nextButton.disabled = false;
+		} else if ( e.target === nextButton ) {
+			toSlider.value = parseInt( toSlider.value, 10 ) + 1;
+			toSlider.dispatchEvent( new Event( 'input' ) );
+			if ( parseInt( toSlider.value, 10 ) === list.length - 1 ) {
+				nextButton.disabled = true;
+			} else {
+				nextButton.disabled = false;
+			}
+			previousButton.disabled = false;
 		} else if ( e.target.className.includes( 'restore-revision' ) ) {
 			document.location = e.target.dataset.restore;
 		}
