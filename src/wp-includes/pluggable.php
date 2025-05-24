@@ -2647,6 +2647,19 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 			$check = password_verify( $maybe_peppered_password, $hash );
 		}
 
+		/**
+		 * Filters whether the plaintext password matches the hashed password.
+		 *
+		 * @since 2.5.0
+		 * @since 6.8.0 Passwords are now hashed with bcrypt by default.
+		 *              Old passwords may still be hashed with phpass or md5.
+		 *
+		 * @param bool       $check    Whether the passwords match.
+		 * @param string     $password The plaintext password.
+		 * @param string     $hash     The hashed password.
+		 * @param string|int $user_id  Optional ID of a user associated with the password.
+		 *                             Can be empty.
+		 */
 		return apply_filters( 'check_password', $check, $password, $hash, $user_id );
 	}
 endif;
