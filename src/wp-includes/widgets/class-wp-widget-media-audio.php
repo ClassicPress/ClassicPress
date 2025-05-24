@@ -147,7 +147,7 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 			</fieldset>
 
 			<?php
-			if ( $url ) {
+			if ( $url && file_exists( get_attached_file( $attachment_id ) ) ) {
 				?>
 
 				<div class="media-widget-preview media_audio populated"><?php echo wp_audio_shortcode( array( 'src' => $url ) ); ?></div>
