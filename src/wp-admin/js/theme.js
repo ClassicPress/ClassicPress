@@ -9,12 +9,15 @@
 document.addEventListener( 'DOMContentLoaded', function() {
 	var prevElement, nextElement, observer, themeID,
 		i = 1,
+		numberTags = 0,
 		updateType = 'browse',
 		updateValue = 'popular',
+		updateValueArray = [],
 		queryParams = new URLSearchParams( window.location.search ),
 		dialog = document.getElementById( 'theme-modal' ),
 		previewDialog = document.querySelector( '.theme-install-overlay' ),
 		footer = document.querySelector( '.theme-install-php #wpfooter' ),
+		features = document.querySelectorAll( '.filter-group-feature input' ),
 		tagSearch = document.querySelector( '.theme-install-php #wp-filter-search-input' ),
 		config = {
 			rootMargin: '50%',
@@ -34,8 +37,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		setTimeout( function() {
 			document.getElementById( 'wp-filter-search-input' ).dispatchEvent( new KeyboardEvent( 'keyup', { 'key':'Enter' } ) );
 		} );
-	} else {
-		history.replaceState( null, null, location.href.split( '?' )[0] );
 	}
 
 	// Reload the list of themes from wordpress.org using Intersection Observer
@@ -190,7 +191,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( updateType === 'search' ) {
 			params.append( 'request[search]', updateValue );
 		} else if ( updateType === 'tag' ) { // array
-			params.append( 'request[tag]', updateValue );
+			params.append( 'request[tag]', updateValueArray );
 		}
 
 		fetch( ajaxurl, {
@@ -281,9 +282,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	} );
 
-	// Open the modal
+	// Open the modal or perform other operations
 	document.addEventListener( 'click', function( e ) {
-		var filterDrawer, img, template, clone, response,
+		var img, template, clone, response, span,
 			theme = e.target.closest( '.theme' ),
 			allThemes = document.querySelectorAll( '.themes li:not( .add-new-theme )' ),
 			firstElement = document.querySelector( '.themes li' ),
@@ -486,10 +487,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			if ( e.target.parentNode.parentNode.className === 'filter-links' && e.target.tagName === 'A' ) {
 				i = 1;
+				document.body.classList.remove( 'show-filters' );
+				document.body.classList.remove( 'filters-applied' );
 				updateType = 'browse';
-				if ( e.target.href.split( '?' ).pop() === 'browse=popular' ) {
+				document.querySelectorAll( '.filter-links a' ).forEach( function( link ) {
+					link.classList.remove( 'current' );
+				} );
+
+				if ( e.target.href.split( '?' )[1] === 'browse=popular' ) {
+					e.preventDefault();
+					e.target.classList.add( 'current' );
 					updateValue = 'popular';
-				} else if ( e.target.href.split( '?' ).pop() === 'browse=new' ) {
+				} else if ( e.target.href.split( '?' )[1] === 'browse=new' ) {
+					e.preventDefault();
+					e.target.classList.add( 'current' );
 					updateValue = 'new';
 				}
 				updateThemes();
@@ -503,29 +514,34 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Search for themes at wordpress.org by tags
 			} else if ( e.target.className === 'apply-filters button' ) {
 				i = 1;
-				updateType = 'tag';
-				updateValue = [];
-				document.querySelectorAll( '.filter-group-feature input' ).forEach( function( input ) {
-					if ( input.checked ) {
-						updateValue.push( input.value );
-					}
+				document.body.classList.add( 'filters-applied' );
+				span = document.createElement( 'span' );
+				span.className = 'tag';
+				updateValueArray.forEach( function( tag ) {
+					span.textContent = tag;
+					document.querySelector( '.filtered-by .tags' ).append( span.cloneNode( true ) );
 				} );
-				document.querySelector( '.filter-drawer' ).style.display = 'none';
 				updateThemes();
 
-				// Reset URL params
-				history.replaceState( null, null, location.href.split( '?' )[0] );
-
 			// Show and hide feature filter tags
-			} else if ( e.target.className === 'button drawer-toggle' ) {
-				filterDrawer = document.querySelector( '.filter-drawer' );
-				if ( ! filterDrawer.checkVisibility() ) {
-					e.target.setAttribute( 'aria-expanded', true );
-					filterDrawer.style.display = 'block';
+			} else if ( e.target.className === 'button drawer-toggle' || e.target.className === 'button-link edit-filters' ) {
+				document.body.classList.add( 'show-filters' );
+				document.body.classList.remove( 'filters-applied' );
+				document.querySelector( '.filtered-by .tags' ).innerHTML = '';
+				if ( document.querySelector( '.filter-drawer' ).checkVisibility() ) {
+					document.querySelector( '.drawer-toggle' ).setAttribute( 'aria-expanded', false );
 				} else {
-					e.target.setAttribute( 'aria-expanded', false );
-					filterDrawer.style.display = 'none';
+					document.querySelector( '.drawer-toggle' ).setAttribute( 'aria-expanded', true );
 				}
+
+			// Clear selected filter tags
+			} else if ( e.target.className === 'clear-filters button' ) {
+				features.forEach( function( feature ) {
+					feature.checked = false;
+				} );
+				numberTags = 0;
+				document.querySelector( '.apply-filters span' ).textContent = '';
+				e.target.style.display = 'none';
 
 			// Show theme preview
 			} else if ( e.target.className === 'more-details' || e.target.className === 'button preview install-theme-preview' ) {
@@ -637,6 +653,33 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				installTheme( e.target.href );
 			}
 		}
+	} );
+
+	// Set filter features for searching
+	features.forEach( function( input ) {
+		input.addEventListener( 'change', function() {
+			var index;
+			updateType = 'tag';
+
+			if ( input.checked ) {
+				updateValueArray.push( input.value );
+				numberTags++;
+			} else {
+				index = updateValueArray.indexOf( input.value );
+				if ( index > -1 ) { // only splice array when item is found
+					updateValueArray.splice( index, 1 ); // 2nd parameter means remove one item only
+					numberTags--;
+				}
+			}
+
+			if ( numberTags > 0 ) {
+				document.querySelector( '.apply-filters span' ).textContent = numberTags;
+				document.querySelector( '.clear-filters' ).style.display = 'inline';
+			} else {
+				document.querySelector( '.apply-filters span' ).textContent = '';
+				document.querySelector( '.clear-filters' ).style.display = 'none';
+			}
+		} );
 	} );
 
 	// Search for themes at wordpress.org by search term
