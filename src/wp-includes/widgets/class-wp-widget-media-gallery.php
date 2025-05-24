@@ -169,31 +169,43 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 			</fieldset>
 
 			<?php
+			$files_exist = false;
 			if ( $ids ) {
-				$exploded = explode( ',', $ids );
+				foreach ( $instance['ids'] as $id ) {
+					if ( file_exists( get_attached_file( $id ) ) ) {
+						$files_exist = true;
+						break;
+					}
+				}
+			}
+
+			if ( $ids && $files_exist ) {
 				$gallery_html = '<ul class="gallery media-widget-gallery-preview">';
-				foreach ( $exploded as $id ) {
+				foreach ( $instance['ids'] as $id ) {
 					$attributes = '';
 					$thumbnail = wp_get_attachment_image_src( $id, 'thumbnail', false );
 					$alt = get_post_meta( $id, '_wp_attachment_image_alt', true );
 
-					// Create an aria-label attribute if the image has no alt attribute.
-					if ( $thumbnail[0] && $alt === '' ) {
-						$aria_label = esc_attr(
-							sprintf(
-								/* translators: %s: The image file name. */
-								__( 'The current image has no alternative text. The file name is: %s' ),
-								basename( $thumbnail[0] )
-							)
-						);
-						$attributes .= ' aria-label="' . $aria_label . '"';
-					}
+					if ( $thumbnail && $thumbnail[0] ) {
 
-					$gallery_html .= '<li class="gallery-item">';
-					$gallery_html .= '<div class="gallery-icon">';
-					$gallery_html .= '<img alt="' . $alt . '" src="' . $thumbnail[0] . '" width="150" height="150"' . $attributes . '>';
-					$gallery_html .= '</div>';
-					$gallery_html .= '</li>';
+						// Create an aria-label attribute if the image has no alt attribute.
+						if ( $alt === '' ) {
+							$aria_label = esc_attr(
+								sprintf(
+									/* translators: %s: The image file name. */
+									__( 'The current image has no alternative text. The file name is: %s' ),
+									basename( $thumbnail[0] )
+								)
+							);
+							$attributes .= ' aria-label="' . $aria_label . '"';
+						}
+
+						$gallery_html .= '<li class="gallery-item">';
+						$gallery_html .= '<div class="gallery-icon">';
+						$gallery_html .= '<img alt="' . $alt . '" src="' . $thumbnail[0] . '" width="150" height="150"' . $attributes . '>';
+						$gallery_html .= '</div>';
+						$gallery_html .= '</li>';
+					}
 				}
 				$gallery_html .= '</ul>';
 				?>
@@ -263,6 +275,7 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 				'cancel_gallery'             => '&larr; ' . __( 'Cancel Gallery' ),
 				'add_image'                  => __( 'Add Image' ),
 				'add_to_gallery'             => __( 'Add to Gallery' ),
+				'media_library'              => __( 'Media Library' ),
 				'deselect'                   => __( 'Deselect' ),
 				'caption'                    => __( 'Caption' ),
 				'save'                       => __( 'Save' ),
