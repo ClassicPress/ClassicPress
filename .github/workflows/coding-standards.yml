@@ -118,11 +118,8 @@ jobs:
         with:
           composer-options: "--no-progress --no-ansi --no-interaction"
 
-      - name: Install PHPUnit
-        run: |
-          wget -O phpunit https://phar.phpunit.de/phpunit-8.phar
-          chmod +x phpunit
-          sudo mv phpunit /usr/bin/
+      - name: Make Composer packages available globally
+        run: echo "${PWD}/vendor/bin" >> $GITHUB_PATH
 
       - name: Enable, start and initialise MySQL
         run: |
