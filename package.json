@@ -37,7 +37,7 @@
     "moment": "^2.29.4",
     "postcss": "8.5.3",
     "qunit": "^2.19.4",
-    "rollup": "4.41.0",
+    "rollup": "4.41.1",
     "sass": "1.89.0",
     "sinon": "^20.0.0",
     "sinon-test": "^3.1.5",
@@ -48,12 +48,12 @@
     "webpack": "5.99.9"
   },
   "dependencies": {
-    "@wordpress/a11y": "4.23.0",
-    "@wordpress/api-fetch": "7.23.0",
-    "@wordpress/dom-ready": "4.23.0",
-    "@wordpress/hooks": "4.23.0",
-    "@wordpress/i18n": "5.23.0",
-    "@wordpress/url": "4.23.0",
+    "@wordpress/a11y": "4.24.0",
+    "@wordpress/api-fetch": "7.24.0",
+    "@wordpress/dom-ready": "4.24.0",
+    "@wordpress/hooks": "4.24.0",
+    "@wordpress/i18n": "5.24.0",
+    "@wordpress/url": "4.24.0",
     "sortablejs": "^1.15.6"
   },
   "collective": {
