@@ -425,8 +425,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 	}
 
 	public function display_rows() {
-		$updates_from_api = get_site_transient( 'update_core' );
-		$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates ) && ! empty( $updates_from_api->updates );
+		$cp_needs_update = classicpress_needs_update();
 
 		$plugins_allowedtags = array(
 			'a'       => array(
