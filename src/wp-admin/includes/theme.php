@@ -779,8 +779,7 @@ function wp_prepare_themes_for_js( $themes = null ) {
  * @since 4.2.0
  */
 function customize_themes_print_templates() {
-	$updates_from_api = get_site_transient( 'update_core' );
-	$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates ) && ! empty( $updates_from_api->updates );
+	$cp_needs_update = classicpress_needs_update();
 
 	?>
 	<script type="text/html" id="tmpl-customize-themes-details-view">
