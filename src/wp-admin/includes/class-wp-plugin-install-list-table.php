@@ -341,9 +341,9 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 		<?php
 		$this->screen->render_screen_reader_content( 'heading_list' );
 		?>
-	<div id="the-list"<?php echo $data_attr; ?>>
+	<ul id="the-list"<?php echo $data_attr; ?>>
 		<?php $this->display_rows_or_placeholder(); ?>
-	</div>
+	</ul>
 </div>
 		<?php
 		$this->display_tablenav( 'bottom' );
@@ -653,7 +653,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 
 			$last_updated_timestamp = strtotime( $plugin['last_updated'] );
 			?>
-		<div class="plugin-card plugin-card-<?php echo sanitize_html_class( $plugin['slug'] ); ?>">
+		<li class="plugin-card plugin-card-<?php echo sanitize_html_class( $plugin['slug'] ); ?>">
 			<?php
 			if ( ! $compatible_php || ! $compatible_wp ) {
 				$incompatible_notice_message = '';
@@ -792,7 +792,7 @@ class WP_Plugin_Install_List_Table extends WP_List_Table {
 					?>
 				</div>
 			</div>
-		</div>
+		</li>
 			<?php
 		}
 
