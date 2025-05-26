@@ -783,7 +783,7 @@ class WP_User_Query {
 		 *
 		 */
 		global $pagenow;
-		if ( $pagenow === 'users.php' && ! str_contains( filter_input( INPUT_SERVER, 'QUERY_STRING', FILTER_SANITIZE_STRING ), 'action=delete' ) ) {
+		if ( $pagenow === 'users.php' && ( isset( $_GET['action'] ) && 'delete' !== $_GET['action'] ) ) {
 
 			// Get user taxonomies
 			$taxonomies = get_taxonomies(
