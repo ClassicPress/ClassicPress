@@ -1451,6 +1451,7 @@ ul.cat-checklist {
 .plugin-install-php #the-list {
 	display: flex;
 	flex-wrap: wrap;
+	margin-top: -1px;
 }
 
 .plugin-install-php .plugin-card {
