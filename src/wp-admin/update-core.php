@@ -456,9 +456,8 @@ function list_plugin_updates() {
  * @since 2.9.0
  */
 function list_theme_updates() {
-	$updates_from_api = get_site_transient( 'update_core' );
-	$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates ) && ! empty( $updates_from_api->updates );
-	$themes           = get_theme_updates();
+	$cp_needs_update = classicpress_needs_update();
+	$themes          = get_theme_updates();
 	if ( empty( $themes ) ) {
 		echo '<h2>' . __( 'Themes' ) . '</h2>';
 		echo '<p>' . __( 'Your themes are all up to date.' ) . '</p>';
