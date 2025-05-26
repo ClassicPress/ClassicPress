@@ -125,3 +125,17 @@ if ( ! function_exists( 'classicpress_is_dev_install' ) ) {
 		return substr( $cp_version, -4 ) === '+dev';
 	}
 }
+
+/**
+ * Determine whether ClassicPress needs updating
+ *
+ * @since CP-2.5.0
+ *
+ * @return bool Whether the current install needs updating to the latest version of ClassicPress
+ */
+if ( ! function_exists( 'classicpress_needs_update' ) ) {
+	function classicpress_needs_update() {
+		$updates_from_api = get_site_transient( 'update_core' );
+		return empty( $updates_from_api ) || empty( $updates_from_api->version_checked !== $updates_from_api->updates );
+	}
+}
