@@ -777,11 +777,13 @@ class WP_User_Query {
 		/**
 		 * Enable grouping of users by taxonomy term on 'users.php' page.
 		 *
+		 * Do not run when deleting one or more users.
+		 *
 		 * @since CP-2.1.0
 		 *
 		 */
 		global $pagenow;
-		if ( $pagenow === 'users.php' ) {
+		if ( $pagenow === 'users.php' && ! str_contains( filter_input( INPUT_SERVER, 'QUERY_STRING', FILTER_SANITIZE_STRING ), 'action=delete' ) ) {
 
 			// Get user taxonomies
 			$taxonomies = get_taxonomies(
