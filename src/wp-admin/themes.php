@@ -417,8 +417,7 @@ if ( ! empty( $_GET['search'] ) ) {
 /*
  * This PHP is synchronized with the tmpl-theme template below!
  */
-$updates_from_api = get_site_transient( 'update_core' );
-$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates ) && ! empty( $updates_from_api->updates );
+$cp_needs_update = classicpress_needs_update();
 
 foreach ( $themes as $theme ) :
 	$aria_action = $theme['id'] . '-action';
