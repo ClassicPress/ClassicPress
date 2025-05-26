@@ -10,8 +10,7 @@
 require_once __DIR__ . '/admin.php';
 require ABSPATH . 'wp-admin/includes/theme-install.php';
 
-$updates_from_api = get_site_transient( 'update_core' );
-$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates ) && ! empty( $updates_from_api->updates );
+$cp_needs_update = classicpress_needs_update();
 
 wp_reset_vars( array( 'tab' ) );
 
