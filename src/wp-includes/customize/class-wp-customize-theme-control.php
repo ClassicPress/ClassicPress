@@ -57,8 +57,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 	 * @since 4.2.0
 	 */
 	public function content_template() {
-		$updates_from_api = get_site_transient( 'update_core' );
-		$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates ) && ! empty( $updates_from_api->updates );
+		$cp_needs_update = classicpress_needs_update();
 		/* translators: %s: Theme name. */
 		$details_label = sprintf( __( 'Details for theme: %s' ), '{{ data.theme.name }}' );
 		/* translators: %s: Theme name. */
