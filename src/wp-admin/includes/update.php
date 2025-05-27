@@ -641,8 +641,8 @@ function wp_theme_update_rows() {
  * @return void|false
  */
 function wp_theme_update_row( $theme_key, $theme ) {
-	$cp_needs_update = classicpress_needs_update();
-	$current         = get_site_transient( 'update_themes' );
+	$cp_has_update = classicpress_has_update();
+	$current       = get_site_transient( 'update_themes' );
 
 	if ( ! isset( $current->response[ $theme_key ] ) ) {
 		return false;
@@ -735,7 +735,7 @@ function wp_theme_update_row( $theme_key, $theme ) {
 				$theme['Name']
 			);
 			if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
-				if ( $cp_needs_update ) {
+				if ( $cp_has_update ) {
 					printf(
 						/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
 						' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
@@ -749,7 +749,7 @@ function wp_theme_update_row( $theme_key, $theme ) {
 						esc_url( wp_get_update_php_url() )
 					);              }
 				wp_update_php_annotation( '</p><p><em>', '</em>' );
-			} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
+			} elseif ( current_user_can( 'update_core' ) && $cp_has_update ) {
 				printf(
 					/* translators: %s: URL to WordPress Updates screen. */
 					' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
@@ -769,7 +769,7 @@ function wp_theme_update_row( $theme_key, $theme ) {
 				__( 'There is a new version of %s available, but it does not work with your version of ClassicPress.' ),
 				$theme['Name']
 			);
-			if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
+			if ( current_user_can( 'update_core' ) && $cp_has_update ) {
 				printf(
 					/* translators: %s: URL to WordPress Updates screen. */
 					' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
