@@ -127,24 +127,24 @@ if ( ! function_exists( 'classicpress_is_dev_install' ) ) {
 }
 
 /**
- * Determine whether ClassicPress needs updating
+ * Determine whether there is a ClassicPress update available
  *
  * @since CP-2.5.0
  *
- * @return bool Whether the current install needs updating to the latest version of ClassicPress
+ * @return bool Whether there is a ClassicPress core update available
  */
-if ( ! function_exists( 'classicpress_needs_update' ) ) {
-	function classicpress_needs_update() {
+if ( ! function_exists( 'classicpress_has_update' ) ) {
+	function classicpress_has_update() {
 		$updates_from_api = get_site_transient( 'update_core' );
 
 		if ( empty( $updates_from_api ) ) {
 			return true;
 		} elseif ( empty( $updates_from_api->updates ) ) {
-			delete_site_transient( 'update_core' );
+			wp_version_check( array(), true );
 			$updates_from_api = get_site_transient( 'update_core' );
 		}
 
-		if ( empty( $updates_from_api->updates ) || $updates_from_api->version_checked !== $updates_from_api->updates[0]->current ) {
+		if ( empty( $updates_from_api->updates ) || empty( $updates_from_api->updates[0]->current ) || $updates_from_api->version_checked !== $updates_from_api->updates[0]->current ) {
 			return true;
 		}
 
