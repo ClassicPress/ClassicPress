@@ -133,7 +133,7 @@ add_action( '_core_updated_successfully', '_redirect_to_about_wordpress' );
 
 // Upgrade hooks.
 add_action( 'upgrader_process_complete', array( 'Language_Pack_Upgrader', 'async_upgrade' ), 20 );
-add_action( 
+add_action(
 	'upgrader_process_complete',
 	function () {
 		wp_version_check( array(), true );
