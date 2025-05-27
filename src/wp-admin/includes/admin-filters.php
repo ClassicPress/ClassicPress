@@ -139,7 +139,7 @@ add_action(
 		wp_version_check( array(), true );
 	},
 	10,
-	0 
+	0
 );
 add_action( 'upgrader_process_complete', 'wp_update_plugins', 10, 0 );
 add_action( 'upgrader_process_complete', 'wp_update_themes', 10, 0 );
