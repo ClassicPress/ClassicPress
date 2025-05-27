@@ -825,13 +825,13 @@ function install_plugin_information() {
 	</div>
 	<div id="section-holder">
 	<?php
-	$cp_needs_update = classicpress_needs_update();
-	$requires_php    = isset( $api->requires_php ) ? $api->requires_php : null;
-	$requires_wp     = isset( $api->requires ) ? $api->requires : null;
+	$cp_has_update  = classicpress_has_update();
+	$requires_php   = isset( $api->requires_php ) ? $api->requires_php : null;
+	$requires_wp    = isset( $api->requires ) ? $api->requires : null;
 
-	$compatible_php  = is_php_version_compatible( $requires_php );
-	$compatible_wp   = is_wp_version_compatible( $requires_wp );
-	$tested_wp       = ( empty( $api->tested ) || version_compare( get_bloginfo( 'version' ), $api->tested, '<=' ) );
+	$compatible_php = is_php_version_compatible( $requires_php );
+	$compatible_wp  = is_wp_version_compatible( $requires_wp );
+	$tested_wp      = ( empty( $api->tested ) || version_compare( get_bloginfo( 'version' ), $api->tested, '<=' ) );
 
 	if ( ! $compatible_php ) {
 		$compatible_php_notice_message  = '<p>';
@@ -867,7 +867,7 @@ function install_plugin_information() {
 		);
 	} elseif ( ! $compatible_wp ) {
 		$compatible_wp_notice_message = __( '<strong>Error:</strong> This plugin <strong>does not work</strong> with your version of ClassicPress.' );
-		if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
+		if ( current_user_can( 'update_core' ) && $cp_has_update ) {
 			$compatible_wp_notice_message .= sprintf(
 				/* translators: %s: URL to WordPress Updates screen. */
 				' ' . __( '<a href="%s" target="_parent">Please update ClassicPress</a>.' ),
