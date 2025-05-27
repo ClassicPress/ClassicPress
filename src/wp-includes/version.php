@@ -144,7 +144,7 @@ if ( ! function_exists( 'classicpress_needs_update' ) ) {
 			$updates_from_api = get_site_transient( 'update_core' );
 		}
 
-		if ( $updates_from_api->version_checked !== $updates_from_api->updates[0]->current ) {
+		if ( empty( $updates_from_api->updates ) || $updates_from_api->version_checked !== $updates_from_api->updates[0]->current ) {
 			return true;
 		}
 
