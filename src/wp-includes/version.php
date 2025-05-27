@@ -136,6 +136,18 @@ if ( ! function_exists( 'classicpress_is_dev_install' ) ) {
 if ( ! function_exists( 'classicpress_needs_update' ) ) {
 	function classicpress_needs_update() {
 		$updates_from_api = get_site_transient( 'update_core' );
-		return empty( $updates_from_api ) || empty( $updates_from_api->version_checked !== $updates_from_api->updates );
+
+		if ( empty( $updates_from_api ) ) {
+			return true;
+		} elseif ( empty( $updates_from_api->updates ) ) {
+			delete_site_transient( 'update_core' );
+			$updates_from_api = get_site_transient( 'update_core' );
+		}
+
+		if ( $updates_from_api->version_checked !== $updates_from_api->updates[0]->current ) {
+			return true;
+		}
+
+		return false;
 	}
 }
