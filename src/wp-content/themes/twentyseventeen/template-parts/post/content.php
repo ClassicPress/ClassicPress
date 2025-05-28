@@ -2,11 +2,11 @@
 /**
  * Template part for displaying posts
  *
- * @link https://codex.wordpress.org/Template_Hierarchy
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
  * @package WordPress
  * @subpackage Twenty_Seventeen
- * @since WP-1.0
+ * @since Twenty Seventeen 1.0
  * @version 1.2
  */
 
@@ -27,9 +27,9 @@
 			} else {
 				echo twentyseventeen_time_link();
 				twentyseventeen_edit_link();
-			};
+			}
 			echo '</div><!-- .entry-meta -->';
-		};
+		}
 
 		if ( is_single() ) {
 			the_title( '<h1 class="entry-title">', '</h1>' );
@@ -53,7 +53,7 @@
 		<?php
 		the_content(
 			sprintf(
-				/* translators: %s: Name of current post */
+				/* translators: %s: Post title. Only visible to screen readers. */
 				__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'twentyseventeen' ),
 				get_the_title()
 			)
@@ -76,4 +76,4 @@
 	}
 	?>
 
-</article><!-- #post-## -->
+</article><!-- #post-<?php the_ID(); ?> -->
