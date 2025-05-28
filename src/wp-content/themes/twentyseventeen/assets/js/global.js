@@ -26,7 +26,7 @@
 		resizeTimer;
 
 	// Ensure the sticky navigation doesn't cover current focused links.
-	$( 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex], [contenteditable]', '.site-content-contain' ).filter( ':visible' ).on('focus', function() {
+	$( 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex], [contenteditable]', '.site-content-contain' ).filter( ':visible' ).on( 'focus', function() {
 		if ( $navigation.hasClass( 'site-navigation-fixed' ) ) {
 			var windowScrollTop = $( window ).scrollTop(),
 				fixedNavHeight = $navigation.height(),
@@ -111,7 +111,9 @@
 	function belowEntryMetaClass( param ) {
 		var sidebarPos, sidebarPosBottom;
 
-		if ( ! $body.hasClass( 'has-sidebar' ) || (
+		if ( ! $body.hasClass( 'has-sidebar' ) ||
+			typeof $sidebar === 'undefined' ||
+			$sidebar.length < 1 || (
 			$body.hasClass( 'search' ) ||
 			$body.hasClass( 'single-attachment' ) ||
 			$body.hasClass( 'error404' ) ||
@@ -176,7 +178,7 @@
 	}
 
 	// Fire on document ready.
-	$( document ).ready( function() {
+	$( function() {
 
 		// If navigation menu is present on page, setNavProps and adjustScrollClass.
 		if ( $navigation.length ) {
@@ -197,7 +199,7 @@
 				navigationOuterHeight = 0;
 			}
 
-			$menuScrollDown.on('click', function( e ) {
+			$menuScrollDown.on( 'click', function( e ) {
 				e.preventDefault();
 				$( window ).scrollTo( '#primary', {
 					duration: 600,
@@ -208,6 +210,7 @@
 
 		adjustHeaderHeight();
 		setQuotesIcon();
+		belowEntryMetaClass( 'blockquote.alignleft, blockquote.alignright' );
 		if ( true === supportsInlineSVG() ) {
 			document.documentElement.className = document.documentElement.className.replace( /(\s*)no-svg(\s*)/, '$1svg$2' );
 		}
@@ -215,7 +218,7 @@
 		if ( true === supportsFixedBackground() ) {
 			document.documentElement.className += ' background-fixed';
 		}
-	});
+	} );
 
 	// If navigation menu is present on page, adjust it on scroll and screen resize.
 	if ( $navigation.length ) {
@@ -227,13 +230,13 @@
 		});
 
 		// Also want to make sure the navigation is where it should be on resize.
-		$( window ).on('resize', function() {
+		$( window ).on( 'resize', function() {
 			setNavProps();
 			setTimeout( adjustScrollClass, 500 );
 		});
 	}
 
-	$( window ).on('resize', function() {
+	$( window ).on( 'resize', function() {
 		clearTimeout( resizeTimer );
 		resizeTimer = setTimeout( function() {
 			belowEntryMetaClass( 'blockquote.alignleft, blockquote.alignright' );
