@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage Twenty_Seventeen
- * @since WP-1.0
+ * @since Twenty Seventeen 1.0
  */
 
 /**
@@ -74,7 +74,7 @@ function twentyseventeen_get_svg( $args = array() ) {
 	 */
 	if ( $args['title'] ) {
 		$aria_hidden     = '';
-		$unique_id       = uniqid();
+		$unique_id       = twentyseventeen_unique_id();
 		$aria_labelledby = ' aria-labelledby="title-' . $unique_id . '"';
 
 		if ( $args['desc'] ) {
@@ -117,11 +117,11 @@ function twentyseventeen_get_svg( $args = array() ) {
 /**
  * Display SVG icons in social links menu.
  *
- * @param  string  $item_output The menu item output.
- * @param  WP_Post $item        Menu item object.
- * @param  int     $depth       Depth of the menu.
- * @param  array   $args        wp_nav_menu() arguments.
- * @return string  $item_output The menu item output with social icon.
+ * @param string   $item_output The menu item's starting HTML output.
+ * @param WP_Post  $item        Menu item data object.
+ * @param int      $depth       Depth of the menu. Used for padding.
+ * @param stdClass $args        An object of wp_nav_menu() arguments.
+ * @return string The menu item output with social icon.
  */
 function twentyseventeen_nav_menu_social_icons( $item_output, $item, $depth, $args ) {
 	// Get supported social icons.
@@ -130,7 +130,7 @@ function twentyseventeen_nav_menu_social_icons( $item_output, $item, $depth, $ar
 	// Change SVG icon inside social links menu if there is supported URL.
 	if ( 'social' === $args->theme_location ) {
 		foreach ( $social_icons as $attr => $value ) {
-			if ( str_contains( $item_output, $attr ) ) {
+			if ( false !== strpos( $item_output, $attr ) ) {
 				$item_output = str_replace( $args->link_after, '</span>' . twentyseventeen_get_svg( array( 'icon' => esc_attr( $value ) ) ), $item_output );
 			}
 		}
@@ -143,11 +143,11 @@ add_filter( 'walker_nav_menu_start_el', 'twentyseventeen_nav_menu_social_icons',
 /**
  * Add dropdown icon if menu item has children.
  *
- * @param  string  $title The menu item's title.
- * @param  WP_Post $item  The current menu item.
- * @param  array   $args  An array of wp_nav_menu() arguments.
- * @param  int     $depth Depth of menu item. Used for padding.
- * @return string  $title The menu item's title with dropdown icon.
+ * @param string   $title The menu item's title.
+ * @param WP_Post  $item  The current menu item.
+ * @param stdClass $args  An object of wp_nav_menu() arguments.
+ * @param int      $depth Depth of menu item. Used for padding.
+ * @return string The menu item's title with dropdown icon.
  */
 function twentyseventeen_dropdown_icon_to_menu_link( $title, $item, $args, $depth ) {
 	if ( 'top' === $args->theme_location ) {
@@ -165,7 +165,7 @@ add_filter( 'nav_menu_item_title', 'twentyseventeen_dropdown_icon_to_menu_link',
 /**
  * Returns an array of supported social links (URL and icon name).
  *
- * @return array $social_links_icons
+ * @return array Array of social links icons.
  */
 function twentyseventeen_social_links_icons() {
 	// Supported social links icons.
@@ -210,13 +210,13 @@ function twentyseventeen_social_links_icons() {
 		'whatsapp.com'    => 'whatsapp',
 		'wordpress.org'   => 'wordpress',
 		'wordpress.com'   => 'wordpress',
-		'x.com'           => 'twitter',
+		'x.com'           => 'x',
 		'yelp.com'        => 'yelp',
 		'youtube.com'     => 'youtube',
 	);
 
 	/**
-	 * Filter Twenty Seventeen social links icons.
+	 * Filters Twenty Seventeen social links icons.
 	 *
 	 * @since Twenty Seventeen 1.0
 	 *

@@ -1,10 +1,10 @@
 <?php
 /**
- * Additional features to allow styling of the templates
+ * Additional features to allow styling of the templates.
  *
  * @package WordPress
  * @subpackage Twenty_Seventeen
- * @since WP-1.0
+ * @since Twenty Seventeen 1.0
  */
 
 /**
@@ -67,16 +67,18 @@ function twentyseventeen_body_classes( $classes ) {
 add_filter( 'body_class', 'twentyseventeen_body_classes' );
 
 /**
- * Count our number of active panels.
+ * Counts the number of our active panels.
  *
- * Primarily used to see if we have any panels active, duh.
+ * Primarily used to see if we have any panels active.
+ *
+ * @return int The number of active panels.
  */
 function twentyseventeen_panel_count() {
 
 	$panel_count = 0;
 
 	/**
-	 * Filter number of front page sections in Twenty Seventeen.
+	 * Filters the number of front page sections in Twenty Seventeen.
 	 *
 	 * @since Twenty Seventeen 1.0
 	 *
@@ -87,7 +89,7 @@ function twentyseventeen_panel_count() {
 	// Create a setting and control for each of the sections available in the theme.
 	for ( $i = 1; $i < ( 1 + $num_sections ); $i++ ) {
 		if ( get_theme_mod( 'panel_' . $i ) ) {
-			$panel_count++;
+			++$panel_count;
 		}
 	}
 
@@ -95,7 +97,9 @@ function twentyseventeen_panel_count() {
 }
 
 /**
- * Checks to see if we're on the homepage or not.
+ * Checks to see if we are on the front page or not.
+ *
+ * @return bool Whether we are on the front page or not.
  */
 function twentyseventeen_is_frontpage() {
 	return ( is_front_page() && ! is_home() );

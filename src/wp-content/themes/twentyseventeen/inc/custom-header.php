@@ -6,7 +6,7 @@
  *
  * @package WordPress
  * @subpackage Twenty_Seventeen
- * @since WP-1.0
+ * @since Twenty Seventeen 1.0
  */
 
 /**
@@ -16,25 +16,25 @@
  */
 function twentyseventeen_custom_header_setup() {
 
-	/**
-	 * Filter Twenty Seventeen custom-header support arguments.
-	 *
-	 * @since Twenty Seventeen 1.0
-	 *
-	 * @param array $args {
-	 *     An array of custom-header support arguments.
-	 *
-	 *     @type string $default-image          Default image of the header.
-	 *     @type string $default_text_color     Default color of the header text.
-	 *     @type int    $width                  Width in pixels of the custom header image. Default 954.
-	 *     @type int    $height                 Height in pixels of the custom header image. Default 1300.
-	 *     @type string $wp-head-callback       Callback function used to styles the header image and text
-	 *                                          displayed on the blog.
-	 *     @type string $flex-height            Flex support for height of header.
-	 * }
-	 */
 	add_theme_support(
 		'custom-header',
+		/**
+		 * Filters Twenty Seventeen custom-header support arguments.
+		 *
+		 * @since Twenty Seventeen 1.0
+		 *
+		 * @param array $args {
+		 *     An array of custom-header support arguments.
+		 *
+		 *     @type string $default-image    Default image of the header.
+		 *     @type int    $width            Width in pixels of the custom header image. Default 954.
+		 *     @type int    $height           Height in pixels of the custom header image. Default 1300.
+		 *     @type string $flex-height      Flex support for height of header.
+		 *     @type string $video            Video support for header.
+		 *     @type string $wp-head-callback Callback function used to styles the header image and text
+		 *                                    displayed on the blog.
+		 * }
+		 */
 		apply_filters(
 			'twentyseventeen_custom_header_args',
 			array(
@@ -77,7 +77,7 @@ if ( ! function_exists( 'twentyseventeen_header_style' ) ) :
 
 		// If we get this far, we have custom styles. Let's do this.
 		?>
-	<style id="twentyseventeen-custom-header-styles">
+		<style id="twentyseventeen-custom-header-styles" type="text/css">
 		<?php
 		// Has the text been hidden?
 		if ( 'blank' === $header_text_color ) :
@@ -85,12 +85,12 @@ if ( ! function_exists( 'twentyseventeen_header_style' ) ) :
 		.site-title,
 		.site-description {
 			position: absolute;
-			clip: rect(1px, 1px, 1px, 1px);
+			clip-path: inset(50%);
 		}
 			<?php
 			// If the user has set a custom color for the text use that.
-			else :
-				?>
+		else :
+			?>
 		.site-title a,
 		.colors-dark .site-title a,
 		.colors-custom .site-title a,
@@ -115,7 +115,7 @@ if ( ! function_exists( 'twentyseventeen_header_style' ) ) :
 	</style>
 		<?php
 	}
-endif; // End of twentyseventeen_header_style.
+endif; // End of twentyseventeen_header_style().
 
 /**
  * Customize video play/pause button in the custom header.
@@ -124,7 +124,9 @@ endif; // End of twentyseventeen_header_style.
  * @return array The filtered video settings.
  */
 function twentyseventeen_video_controls( $settings ) {
-	$settings['l10n']['play']  = '<span class="screen-reader-text">' . __( 'Play background video', 'twentyseventeen' ) . '</span>' . twentyseventeen_get_svg( array( 'icon' => 'play' ) );
+	/* translators: Hidden accessibility text. */
+	$settings['l10n']['play'] = '<span class="screen-reader-text">' . __( 'Play background video', 'twentyseventeen' ) . '</span>' . twentyseventeen_get_svg( array( 'icon' => 'play' ) );
+	/* translators: Hidden accessibility text. */
 	$settings['l10n']['pause'] = '<span class="screen-reader-text">' . __( 'Pause background video', 'twentyseventeen' ) . '</span>' . twentyseventeen_get_svg( array( 'icon' => 'pause' ) );
 	return $settings;
 }
