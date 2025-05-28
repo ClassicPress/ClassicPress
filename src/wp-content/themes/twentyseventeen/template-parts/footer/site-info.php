@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage Twenty_Seventeen
- * @since WP-1.0
+ * @since Twenty Seventeen 1.0
  * @version 1.0
  */
 
@@ -17,7 +17,7 @@
 	?>
 	<a href="<?php echo esc_url( __( 'https://www.classicpress.net/', 'twentyseventeen' ) ); ?>" class="imprint">
 		<?php
-		/* translators: %s: ClassicPress */
+			/* translators: %s: ClassicPress */
 		printf( __( 'Proudly powered by %s', 'twentyseventeen' ), 'ClassicPress' );
 		?>
 	</a>
