@@ -4,7 +4,7 @@
  *
  * @package WordPress
  * @subpackage Twenty_Seventeen
- * @since WP-1.0
+ * @since Twenty Seventeen 1.0
  * @version 1.0
  */
 
@@ -41,7 +41,7 @@ global $twentyseventeencounter;
 				<?php
 					the_content(
 						sprintf(
-							/* translators: %s: Name of current post */
+							/* translators: %s: Post title. Only visible to screen readers. */
 							__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'twentyseventeen' ),
 							get_the_title()
 						)
@@ -55,7 +55,7 @@ global $twentyseventeencounter;
 				?>
 
 				<?php
-				// Show four most recent posts.
+				// Show three most recent posts.
 				$recent_posts = new WP_Query(
 					array(
 						'posts_per_page'      => 3,
@@ -84,4 +84,4 @@ global $twentyseventeencounter;
 		</div><!-- .wrap -->
 	</div><!-- .panel-content -->
 
-</article><!-- #post-## -->
+</article><!-- #post-<?php the_ID(); ?> -->
