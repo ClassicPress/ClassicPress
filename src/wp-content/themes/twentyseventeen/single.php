@@ -6,7 +6,7 @@
  *
  * @package WordPress
  * @subpackage Twenty_Seventeen
- * @since WP-1.0
+ * @since Twenty Seventeen 1.0
  * @version 1.0
  */
 
@@ -17,7 +17,7 @@ get_header(); ?>
 		<main id="main" class="site-main">
 
 			<?php
-			/* Start the Loop */
+			// Start the Loop.
 			while ( have_posts() ) :
 				the_post();
 
@@ -30,12 +30,14 @@ get_header(); ?>
 
 				the_post_navigation(
 					array(
+						/* translators: Hidden accessibility text. */
 						'prev_text' => '<span class="screen-reader-text">' . __( 'Previous Post', 'twentyseventeen' ) . '</span><span aria-hidden="true" class="nav-subtitle">' . __( 'Previous', 'twentyseventeen' ) . '</span> <span class="nav-title"><span class="nav-title-icon-wrapper">' . twentyseventeen_get_svg( array( 'icon' => 'arrow-left' ) ) . '</span>%title</span>',
+						/* translators: Hidden accessibility text. */
 						'next_text' => '<span class="screen-reader-text">' . __( 'Next Post', 'twentyseventeen' ) . '</span><span aria-hidden="true" class="nav-subtitle">' . __( 'Next', 'twentyseventeen' ) . '</span> <span class="nav-title">%title<span class="nav-title-icon-wrapper">' . twentyseventeen_get_svg( array( 'icon' => 'arrow-right' ) ) . '</span></span>',
 					)
 				);
 
-			endwhile; // End of the loop.
+			endwhile; // End the loop.
 			?>
 
 		</main><!-- #main -->
