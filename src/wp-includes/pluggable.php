@@ -2594,28 +2594,17 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 	 * @return bool False, if the $password does not match the hashed password.
 	 */
 	function wp_check_password( $password, $hash, $user_id = '' ) {
+		global $wp_hasher;
+
+		if ( ! empty( $wp_hasher ) ) {
+			// Check the password using the overridden hasher.
+			return $wp_hasher->CheckPassword( $password, $hash );
+		}
+
 		$check = false;
 
 		if ( strlen( $password ) > 4096 ) {
 			return $check;
-		}
-
-		// If the hash is still md5 or otherwise truncated then invalidate it.
-		if ( strlen( $hash ) <= 32 ) {
-			/**
-			 * Filters whether the plaintext password matches the hashed password.
-			 *
-			 * @since 2.5.0
-			 * @since CP-2.3.0 Passwords are now hashed with bcrypt by default.
-			 *                 Old passwords may still be hashed with phpass.
-			 *
-			 * @param bool       $check    Whether the passwords match.
-			 * @param string     $password The plaintext password.
-			 * @param string     $hash     The hashed password.
-			 * @param string|int $user_id  Optional ID of a user associated with the password.
-			 *                             Can be empty.
-			 */
-			return apply_filters( 'check_password', $check, $password, $hash, $user_id );
 		}
 
 		/*
@@ -2633,29 +2622,44 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 		 * @param  string  String to be used as pepper.
 		 */
 		$pepper = apply_filters( 'cp_pepper_password', '' );
-		$peppered_password = hash_hmac( 'sha256', $password, $pepper );
+		if ( ! empty( $pepper ) ) {
+			$maybe_peppered_password = hash_hmac( 'sha256', $password, $pepper );
+		} else {
+			$maybe_peppered_password = $password;
+		}
 
-		if ( password_verify( $peppered_password, $hash ) ) {
+		if ( password_verify( $maybe_peppered_password, $hash ) ) {
 			// Handle password verification using PHP's PASSWORD_DEFAULT hashing algorithm.
 			$check = true;
-		} elseif ( password_verify( $password, $hash ) ) {
-			// Handle password verification using PHP's PASSWORD_DEFAULT hashing algorithm.
-			$check = true;
-		} elseif ( md5( $password ) === $hash ) {
+		} elseif ( md5( $maybe_peppered_password ) === $hash ) {
 			// Handle password verification when a temporary password has been set via Adminer or phpMyAdmin.
 			$check = true;
-		} elseif ( 0 === strpos( $hash, '$P$' ) ) {
+		} elseif ( str_starts_with( $hash, '$wp' ) ) {
+			// Handle password from WordPress 6.8 and above
+			$password_to_verify = base64_encode( hash_hmac( 'sha384', $maybe_peppered_password, 'wp-sha384', true ) );
+			$check              = password_verify( $password_to_verify, substr( $hash, 3 ) );
+		} elseif ( str_starts_with( $hash, '$P$' ) ) {
 			// Handle password verification by the traditional WordPress method.
-			global $wp_hasher;
-
-			if ( empty( $wp_hasher ) ) {
-				require_once( ABSPATH . WPINC . '/class-phpass.php' );
-
-				$wp_hasher = new PasswordHash( 8, true );
-			}
-
-			$check = $wp_hasher->CheckPassword( $password, $hash );
+			require_once ABSPATH . WPINC . '/class-phpass.php';
+			$check = ( new PasswordHash( 8, true ) )->CheckPassword( $maybe_peppered_password, $hash );
+		} else {
+			// Check the password using compat support for any non-prefixed hash.
+			$check = password_verify( $maybe_peppered_password, $hash );
 		}
+
+		/**
+		 * Filters whether the plaintext password matches the hashed password.
+		 *
+		 * @since 2.5.0
+		 * @since 6.8.0 Passwords are now hashed with bcrypt by default.
+		 *              Old passwords may still be hashed with phpass or md5.
+		 *
+		 * @param bool       $check    Whether the passwords match.
+		 * @param string     $password The plaintext password.
+		 * @param string     $hash     The hashed password.
+		 * @param string|int $user_id  Optional ID of a user associated with the password.
+		 *                             Can be empty.
+		 */
 		return apply_filters( 'check_password', $check, $password, $hash, $user_id );
 	}
 endif;
@@ -2683,12 +2687,25 @@ if ( ! function_exists( 'wp_password_needs_rehash' ) ) :
 			return false;
 		}
 
+		/** This filter is documented in wp-includes/pluggable.php */
+		$algorithm = apply_filters( 'cp_password_algorithm', PASSWORD_DEFAULT );
+
 		/*
 		 * Function cp_hash_password_options() is documented in wp-includes/user.php
 		 */
 		$options = cp_hash_password_options();
 
-		return password_needs_rehash( $hash, PASSWORD_DEFAULT, $options );
+		$needs_rehash  = password_needs_rehash( $hash, $algorithm, $options );
+
+		/**
+		 * Filters whether the password hash needs to be rehashed.
+		 *
+		 * @since 6.8.0
+		 *
+		 * @param bool       $needs_rehash Whether the password hash needs to be rehashed.
+		 * @param string     $hash         The password hash.
+		 */
+		return apply_filters( 'password_needs_rehash', $needs_rehash, $hash );
 	}
 endif;
 
