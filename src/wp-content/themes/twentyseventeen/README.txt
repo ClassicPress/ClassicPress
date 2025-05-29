@@ -1,5 +1,5 @@
 === Twenty Seventeen ===
-Contributors: wordpressdotorg
+Contributors: the WordPress team and ClassicPress contributors
 Version: 99.3-upstream3.9
 Requires PHP: 7.4
 Requires CP: 2.0
