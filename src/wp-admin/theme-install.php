@@ -10,8 +10,7 @@
 require_once __DIR__ . '/admin.php';
 require ABSPATH . 'wp-admin/includes/theme-install.php';
 
-$updates_from_api = get_site_transient( 'update_core' );
-$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates ) && ! empty( $updates_from_api->updates );
+$cp_has_update = classicpress_has_update();
 
 wp_reset_vars( array( 'tab' ) );
 
@@ -303,7 +302,7 @@ if ( $tab ) {
 				<?php
 				_e( 'This theme does not work with your versions of ClassicPress and PHP.' );
 				if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
-					if ( $cp_needs_update ) {
+					if ( $cp_has_update ) {
 						printf(
 							/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
 							' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
@@ -318,7 +317,7 @@ if ( $tab ) {
 						);
 					}
 					wp_update_php_annotation( '</p><p><em>', '</em>' );
-				} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
+				} elseif ( current_user_can( 'update_core' ) && $cp_has_update ) {
 					printf(
 						/* translators: %s: URL to WordPress Updates screen. */
 						' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
@@ -340,7 +339,7 @@ if ( $tab ) {
 			<# } else if ( ! data.compatible_wp ) { #>
 				<?php
 				_e( 'This theme does not work with your version of ClassicPress.' );
-				if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
+				if ( current_user_can( 'update_core' ) && $cp_has_update ) {
 					printf(
 						/* translators: %s: URL to WordPress Updates screen. */
 						' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
@@ -516,7 +515,7 @@ if ( $tab ) {
 									<?php
 									_e( 'This theme does not work with your versions of ClassicPress and PHP.' );
 									if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
-										if ( $cp_needs_update ) {
+										if ( $cp_has_update ) {
 											printf(
 												/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
 												' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
@@ -531,7 +530,7 @@ if ( $tab ) {
 											);
 										}
 										wp_update_php_annotation( '</p><p><em>', '</em>' );
-									} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
+									} elseif ( current_user_can( 'update_core' ) && $cp_has_update ) {
 										printf(
 											/* translators: %s: URL to WordPress Updates screen. */
 											' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
@@ -553,7 +552,7 @@ if ( $tab ) {
 								<# } else if ( ! data.compatible_wp ) { #>
 									<?php
 									_e( 'This theme does not work with your version of ClassicPress.' );
-									if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
+									if ( current_user_can( 'update_core' ) && $cp_has_update ) {
 										printf(
 											/* translators: %s: URL to WordPress Updates screen. */
 											' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),

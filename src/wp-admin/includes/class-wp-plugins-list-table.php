@@ -705,9 +705,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 	 * @param array $item
 	 */
 	public function single_row( $item ) {
-
-		$updates_from_api = get_site_transient( 'update_core' );
-		$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates ) && ! empty( $updates_from_api->updates );
+		$cp_has_update = classicpress_has_update();
 
 		global $status, $page, $s, $totals;
 		static $plugin_id_attrs = array();
@@ -1283,7 +1281,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 			if ( ! $compatible_php && ! $compatible_wp ) {
 				$incompatible_message .= __( 'This plugin does not work with your versions of ClassicPress and PHP.' );
 				if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
-					if ( $cp_needs_update ) {
+					if ( $cp_has_update ) {
 						$incompatible_message .= sprintf(
 							/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
 							' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
@@ -1314,7 +1312,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 				}
 			} elseif ( ! $compatible_wp ) {
 				$incompatible_message .= __( 'This plugin does not work with your version of ClassicPress.' );
-				if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
+				if ( current_user_can( 'update_core' ) && $cp_has_update ) {
 					$incompatible_message .= sprintf(
 						/* translators: %s: URL to WordPress Updates screen. */
 						' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
