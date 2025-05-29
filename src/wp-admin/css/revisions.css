@@ -101,7 +101,7 @@
 	text-align: center;
 	position: absolute;
 	margin-top: 0.5em;
-	left: 1.8em;
+	left: 0.2em;
 }
 
 
@@ -395,6 +395,10 @@ table.diff .diff-addedline ins {
 .revisions-controls .author-card .author-info {
 	font-size: 12px;
 	line-height: 1.33333333;
+}
+
+.revisions-controls .author-card .author-info.autosave {
+	color: #d63638;
 }
 
 .revisions-controls .author-card .avatar,

@@ -3714,6 +3714,10 @@ function wp_ajax_heartbeat() {
  * Ajax handler for getting revision diffs.
  *
  * @since 3.6.0
+ *
+ * Modified for use without backbone.js
+ *
+ * @since CP-2.5.0
  */
 function wp_ajax_get_revision_diffs() {
 	require ABSPATH . 'wp-admin/includes/revision.php';
@@ -3732,8 +3736,9 @@ function wp_ajax_get_revision_diffs() {
 	if ( ! $revisions ) {
 		wp_send_json_error();
 	}
+	$latest_revision_id = array_key_first( $revisions );
 
-	$return = array();
+	$diffs = array();
 
 	if ( function_exists( 'set_time_limit' ) ) {
 		set_time_limit( 0 );
@@ -3742,12 +3747,73 @@ function wp_ajax_get_revision_diffs() {
 	foreach ( $_REQUEST['compare'] as $compare_key ) {
 		list( $compare_from, $compare_to ) = explode( ':', $compare_key ); // from:to
 
-		$return[] = array(
+		$diffs[] = array(
 			'id'     => $compare_key,
 			'fields' => wp_get_revision_ui_diff( $post, $compare_from, $compare_to ),
 		);
 	}
-	wp_send_json_success( $return );
+
+	$show_avatars = get_option( 'show_avatars' );
+
+	$diffs_array = array();
+	foreach ( $diffs as $diff ) {
+		$post_ids = explode( ':', $diff['id'] );
+		$author_left_id = get_post_field( 'post_author', $post_ids[0] );
+		$author_left_name = get_the_author_meta( 'display_name', $author_left_id );
+
+		$author_right_id = get_post_field( 'post_author', $post_ids[1] );
+		$author_right_name = get_the_author_meta( 'display_name', $author_right_id );
+		$current = (int) $post_ids[1] === $latest_revision_id ? esc_html__( 'Current ' ) : '';
+		$locked = wp_check_post_lock( $post->ID ) ? ' disabled' : '';
+		$restore_link = str_replace(
+			'&amp;',
+			'&',
+			wp_nonce_url(
+				add_query_arg(
+					array(
+						'revision' => $post_ids[1],
+						'action'   => 'restore',
+					),
+					admin_url( 'revision.php' )
+				),
+				'restore-post_' . $post_ids[1]
+			)
+		);
+
+		$author_left  = $show_avatars ? get_avatar( $author_left_id, 32 ) : '';
+		$author_left .= '<div class="author-info';
+		$author_left .= wp_is_post_autosave( $post_ids[0] ) ? ' autosave' : '';
+		$author_left .= '">';
+		$author_left .= '<span class="byline">';
+		$author_left .= wp_is_post_autosave( $post_ids[0] ) ? esc_html__( 'Autosave by ' ) : esc_html__( 'Revision by ' );
+		$author_left .= '<span class="author-name">' . esc_html__( $author_left_name ) . '</span>';
+		$author_left .= '</span>';
+		$author_left .= '<span class="time-ago">' . sprintf( __( '%s ago' ), human_time_diff( get_post_timestamp( $post_ids[0] ), time() ) ) . '</span> ';
+		$author_left .= '<span class="date">(' . get_the_date( '', $post_ids[0] ) . ')</span>';
+		$author_left .= '</div>';
+		$diffs_array[ $diff['id'] ]['author_left'] = $author_left;
+
+		$author_right  = $show_avatars ? get_avatar( $author_right_id, 32 ) : '';
+		$author_right .= '<div class="author-info';
+		$author_right .= wp_is_post_autosave( $post_ids[1] ) ? ' autosave' : '';
+		$author_right .= '">';
+		$author_right .= '<span class="byline">';
+		$author_right .= wp_is_post_autosave( $post_ids[1] ) ? esc_html__( 'Autosave by ' ) : $current . esc_html__( 'Revision by ' );
+		$author_right .= '<span class="author-name">' . esc_html__( $author_right_name ) . '</span>';
+		$author_right .= '</span>';
+		$author_right .= '<span class="time-ago">' . sprintf( __( '%s ago' ), human_time_diff( get_post_timestamp( $post_ids[1] ), time() ) ) . '</span> ';
+		$author_right .= '<span class="date">(' . get_the_date( '', $post_ids[1] ) . ')</span>';
+		$author_right .= '</div>';
+		$author_right .= '<input type="button" class="restore-revision button button-primary" data-restore="' . $restore_link . '" value="';
+		$author_right .= wp_is_post_autosave( $post_ids[1] ) ? esc_attr__( 'Restore This Autosave' ) : esc_attr__( 'Restore This Revision' ) . '"' . $locked . '>';
+		$diffs_array[ $diff['id'] ]['author_right'] = $author_right;
+
+		$diffs_string  = '<h3>' . esc_html__( 'Title' ) . '</h3>' . $diff['fields'][0]['diff'];
+		$diffs_string .= '<h3>' . esc_html__( 'Content' ) . '</h3>' . $diff['fields'][1]['diff'];
+		$diffs_array[ $diff['id'] ]['diffs'] = $diffs_string;
+	}
+
+	wp_send_json_success( $diffs_array );
 }
 
 /**
