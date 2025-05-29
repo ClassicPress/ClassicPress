@@ -125,3 +125,29 @@ if ( ! function_exists( 'classicpress_is_dev_install' ) ) {
 		return substr( $cp_version, -4 ) === '+dev';
 	}
 }
+
+/**
+ * Determine whether there is a ClassicPress update available
+ *
+ * @since CP-2.5.0
+ *
+ * @return bool Whether there is a ClassicPress core update available
+ */
+if ( ! function_exists( 'classicpress_has_update' ) ) {
+	function classicpress_has_update() {
+		$updates_from_api = get_site_transient( 'update_core' );
+
+		if ( empty( $updates_from_api ) ) {
+			return true;
+		} elseif ( empty( $updates_from_api->updates ) ) {
+			wp_version_check( array(), true );
+			$updates_from_api = get_site_transient( 'update_core' );
+		}
+
+		if ( empty( $updates_from_api->updates ) || empty( $updates_from_api->updates[0]->current ) || $updates_from_api->version_checked !== $updates_from_api->updates[0]->current ) {
+			return true;
+		}
+
+		return false;
+	}
+}
