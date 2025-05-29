@@ -474,8 +474,8 @@ if ( ! /iPad|iPod|iPhone/.test( navigator.userAgent ) ) {
 					$dir_group = filegroup( dirname( $path_to_wp_config ) );
 
 					// Get PHP process effective user and group IDs if possible
-					$php_euid = function_exists( 'posix_geteuid' ) ? posix_geteuid() : fstat( $handle )["uid"];
-					$php_egid = function_exists( 'posix_getegid' ) ? posix_getegid() : fstat( $handle )["gid"];
+					$php_euid = function_exists( 'posix_geteuid' ) ? posix_geteuid() : fstat( $handle )['uid'];
+					$php_egid = function_exists( 'posix_getegid' ) ? posix_getegid() : fstat( $handle )['gid'];
 
 					// Determine if PHP process user is owner or in group of the file
 					$php_user_is_owner = ( $php_euid === $file_owner ) && ( $file_owner === $dir_owner );
@@ -526,14 +526,18 @@ if ( ! /iPad|iPod|iPhone/.test( navigator.userAgent ) ) {
 
 				<?php
 				if ( true === $show_warning ) :
-				?>
-					<p><?php printf(
+					?>
+					<p>
+					<?php
+					printf(
 						/* translators: 1: wp-config.php, 2: Documentation URL. */
 						__( 'The %1$s file has been created with open permissions. See <a href="%2$s">Working with wp-config.php file</a> for more information.' ),
 						'<code>wp-config.php</code>',
 						__( 'https://docs.classicpress.net/user-guides/editing-wp-config-php/' )
-					); ?></p>
-				<?php
+					);
+					?>
+					</p>
+					<?php
 				endif;
 				?>
 
