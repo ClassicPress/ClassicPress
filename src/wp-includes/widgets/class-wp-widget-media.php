@@ -115,10 +115,6 @@ abstract class WP_Widget_Media extends WP_Widget {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_preview_scripts' ) );
 		}
 
-		// Note that the widgets component in the customizer will also do
-		// the 'admin_footer-widgets.php' action in WP_Customize_Widgets::print_footer_scripts().
-		add_action( 'admin_footer-widgets.php', array( $this, 'render_control_template_scripts' ) );
-
 		add_filter( 'display_media_states', array( $this, 'display_media_state' ), 10, 2 );
 	}
 
@@ -328,8 +324,6 @@ abstract class WP_Widget_Media extends WP_Widget {
 	 * @since 4.8.0
 	 * @since CP-2.5.0 `form` function can be overridden by extending classes
 	 *
-	 * @see \WP_Widget_Media::render_control_template_scripts() Where the JS template is located.
-	 *
 	 * @param array $instance Current settings.
 	 */
 	public function form( $instance ) {
@@ -402,42 +396,6 @@ abstract class WP_Widget_Media extends WP_Widget {
 	 */
 	public function enqueue_admin_scripts() {
 		wp_enqueue_media();
-	}
-
-	/**
-	 * Render form template scripts.
-	 *
-	 * @since 4.8.0
-	 */
-	public function render_control_template_scripts() {
-		?>
-		<script type="text/html" id="tmpl-widget-media-<?php echo esc_attr( $this->id_base ); ?>-control">
-			<# var elementIdPrefix = 'el' + String( Math.random() ) + '_' #>
-			<p>
-				<label for="{{ elementIdPrefix }}title"><?php esc_html_e( 'Title:' ); ?></label>
-				<input id="{{ elementIdPrefix }}title" type="text" class="widefat title">
-			</p>
-			<div class="media-widget-preview <?php echo esc_attr( $this->id_base ); ?>">
-				<div class="attachment-media-view">
-					<button type="button" class="select-media button-add-media not-selected">
-						<?php echo esc_html( $this->l10n['add_media'] ); ?>
-					</button>
-				</div>
-			</div>
-			<p class="media-widget-buttons">
-				<button type="button" class="button edit-media selected">
-					<?php echo esc_html( $this->l10n['edit_media'] ); ?>
-				</button>
-			<?php if ( ! empty( $this->l10n['replace_media'] ) ) : ?>
-				<button type="button" class="button change-media select-media selected">
-					<?php echo esc_html( $this->l10n['replace_media'] ); ?>
-				</button>
-			<?php endif; ?>
-			</p>
-			<div class="media-widget-fields">
-			</div>
-		</script>
-		<?php
 	}
 
 	/**
