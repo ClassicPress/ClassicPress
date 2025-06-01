@@ -90,7 +90,7 @@
 			echo '<h1>';
 			if ( is_home() ) {
 				$blog_page_id = get_option( 'page_for_posts' );
-				if ( $blog_page_id && ( ! empty ( get_the_title( $blog_page_id ) ) ) ) {
+				if ( $blog_page_id && ( ! empty( get_the_title( $blog_page_id ) ) ) ) {
 					echo esc_html( get_the_title( $blog_page_id ) );
 				} else {
 					esc_html_e( 'News', 'the-classicpress-theme' );
