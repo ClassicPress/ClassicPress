@@ -12,6 +12,6 @@ The ClassicPress Theme comes with two accessible menus. The top one is for the m
 
 The footer also contains a series of static links to various locations on social media. Feel free to edit them or to override them in a child theme, according to the customization method you have chosen above.
 
-The theme enables widgets to be added to a right sidebar, while specifying one sidebar for posts (the Blog Sidebar) and another for pages (the Main Sidebar).
+The theme enables widgets to be added to a right sidebar, while specifying one sidebar for posts (the Blog Sidebar) and another for pages (the Main Sidebar). Widgets can also be added to the footer.
 
 The ClassicPress Theme also comes with a ready-made template for Frequently Asked Questions. To make use of this, create a custom post type for FAQs, register the post type as 'faq', and specify a URL for its archive (e.g. 'has_archive' => 'faqs' ). The theme will then display your FAQs using accessible disclosure widgets. Just remember to create a Custom Link to the FAQs in your menu!
