@@ -1,10 +1,10 @@
 /*
 Theme Name: Twenty Seventeen
 Theme URI: https://wordpress.org/themes/twentyseventeen/
-Author: the WordPress team
+Author: the WordPress team and ClassicPress contributors
 Author URI: https://wordpress.org/
 Description: Twenty Seventeen brings your site to life with header video and immersive featured images. With a focus on business sites, it features multiple sections on the front page as well as widgets, navigation and social menus, a logo, and more. Personalize its asymmetrical grid with a custom color scheme and showcase your multimedia content with post formats. Our default theme for 2017 works great in many languages, for any abilities, and on any device.
-Version: 99.2-upstream1.7
+Version: 99.3-upstream1.7
 Requires PHP: 5.6
 Requires CP: 1.0
 License: GNU General Public License v2 or later
@@ -305,7 +305,7 @@ template {
 /* Text meant only for screen readers. */
 
 .screen-reader-text {
-	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
 	height: 1px;
 	overflow: hidden;
 	position: absolute !important;
@@ -319,7 +319,7 @@ template {
 	border-radius: 3px;
 	-webkit-box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
 	box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
-	clip: auto !important;
+	clip-path: none;
 	color: #21759b;
 	display: block;
 	font-size: 14px;
@@ -1643,6 +1643,7 @@ body.home.title-tagline-hidden.has-header-video .custom-logo-link img {
 
 body:not(.title-tagline-hidden) .site-branding-text {
 	display: inline-block;
+	max-width: 100%;
 	vertical-align: middle;
 }
 
@@ -1745,7 +1746,6 @@ body:not(.title-tagline-hidden) .site-branding-text {
 @supports ( object-fit: cover ) {
 	.has-header-image .custom-header-media img,
 	.has-header-video .custom-header-media video,
-	.has-header-video .custom-header-media iframe,
 	.has-header-image:not(.twentyseventeen-front-page):not(.home) .custom-header-media img {
 		height: 100%;
 		left: 0;
@@ -1980,7 +1980,7 @@ body.page:not(.twentyseventeen-front-page) .entry-title {
 }
 
 .page-numbers.current .screen-reader-text {
-	clip: auto;
+	clip-path: none;
 	height: auto;
 	overflow: auto;
 	position: relative !important;
@@ -2478,6 +2478,10 @@ body:not(.twentyseventeen-front-page) .entry-header {
 	position: absolute;
 	top: 0;
 	width: 1em;
+}
+
+.comment-reply-title small {
+	margin-left: 0.5em;
 }
 
 .children .comment-author .avatar {
@@ -3198,7 +3202,7 @@ p > object:only-child {
 .no-svg .prev.page-numbers .screen-reader-text,
 .no-svg .social-navigation li a .screen-reader-text,
 .no-svg .search-submit .screen-reader-text {
-	clip: auto;
+	clip-path: none;
 	font-size: 16px;
 	font-size: 1rem;
 	font-weight: 400;
@@ -3496,7 +3500,7 @@ p > object:only-child {
 		right: 0;
 		top: 0;
 		width: 100%;
-		z-index: 7;
+		z-index: 1000;
 	}
 
 	.admin-bar .site-navigation-fixed.navigation-top {
@@ -4125,7 +4129,7 @@ p > object:only-child {
 	}
 
 	.page-numbers.current .screen-reader-text {
-		clip: rect(1px, 1px, 1px, 1px);
+		clip-path: inset(50%);
 		height: 1px;
 		overflow: hidden;
 		position: absolute !important;
