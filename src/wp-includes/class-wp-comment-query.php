@@ -301,7 +301,7 @@ class WP_Comment_Query {
 			'post_name'                 => '',
 			'post_parent'               => '',
 			'post_status'               => '',
-			'post_type'                 => get_post_types(),
+			'post_type'                 => '',
 			'status'                    => 'all',
 			'type'                      => '',
 			'type__in'                  => '',
