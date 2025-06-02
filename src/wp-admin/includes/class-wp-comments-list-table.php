@@ -103,7 +103,7 @@ class WP_Comments_List_Table extends WP_List_Table {
 
 		$search = ( isset( $_REQUEST['s'] ) ) ? $_REQUEST['s'] : '';
 
-		$post_type = get_post_types();
+		$post_type = ( isset( $_REQUEST['post_type'] ) ) ? sanitize_key( $_REQUEST['post_type'] ) : '';
 
 		$user_id = ( isset( $_REQUEST['user_id'] ) ) ? $_REQUEST['user_id'] : '';
 
