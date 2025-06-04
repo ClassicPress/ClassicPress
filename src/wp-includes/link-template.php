@@ -4257,17 +4257,6 @@ function the_shortlink( $text = '', $title = '', $before = '', $after = '' ) {
  *     Optional. Arguments to use instead of the default arguments.
  *
  *     @type int    $size           Height and width of the avatar in pixels. Default 96.
-<<<<<<< HEAD
- *     @type string $default        URL for the default image or a default type. Accepts '404' (return
- *                                  a 404 instead of a default image), 'retro' (8bit), 'RoboHash' (robohash),
- *                                  'monsterid' (monster), 'wavatar' (cartoon face), 'indenticon' (the "quilt"),
- *                                  'mystery', 'mm', or 'mysteryman' (The Oyster Man), 'blank' (transparent GIF),
- *                                  or 'gravatar_default' (the Gravatar logo). Default is the value of the
- *                                  'avatar_default' option, with a fallback of 'mystery'.
- *     @type bool   $force_default  Whether to always show the default image, never the Gravatar. Default false.
- *     @type string $rating         What rating to display avatars up to. Accepts 'G', 'PG', 'R', 'X', and are
- *                                  judged in that order. Default is the value of the 'avatar_rating' option.
-=======
  *     @type string $default        URL for the default image or a default type. Accepts:
  *                                  - '404' (return a 404 instead of a default image)
  *                                  - 'retro' (a 8-bit arcade-style pixelated face)
@@ -4290,7 +4279,6 @@ function the_shortlink( $text = '', $title = '', $before = '', $after = '' ) {
  *                                  - 'R' (intended for adult audiences above 17)
  *                                  - 'X' (even more mature than above)
  *                                  Default is the value of the 'avatar_rating' option.
->>>>>>> 43b7ac1008 (Users: Add support for Initials and Color Gravatar images in default user profile pics.)
  *     @type string $scheme         URL scheme to use. See set_url_scheme() for accepted values.
  *                                  Default null.
  *     @type array  $processed_args When the function returns, the value will be the processed/sanitized $args
@@ -4340,17 +4328,6 @@ function is_avatar_comment_type( $comment_type ) {
  *     @type int    $size           Height and width of the avatar image file in pixels. Default 96.
  *     @type int    $height         Display height of the avatar in pixels. Defaults to $size.
  *     @type int    $width          Display width of the avatar in pixels. Defaults to $size.
-<<<<<<< HEAD
- *     @type string $default        URL for the default image or a default type. Accepts '404' (return
- *                                  a 404 instead of a default image), 'retro' (8bit), 'monsterid' (monster),
- *                                  'wavatar' (cartoon face), 'indenticon' (the "quilt"), 'mystery', 'mm',
- *                                  or 'mysteryman' (The Oyster Man), 'blank' (transparent GIF), or
- *                                  'gravatar_default' (the Gravatar logo). Default is the value of the
- *                                  'avatar_default' option, with a fallback of 'mystery'.
- *     @type bool   $force_default  Whether to always show the default image, never the Gravatar. Default false.
- *     @type string $rating         What rating to display avatars up to. Accepts 'G', 'PG', 'R', 'X', and are
- *                                  judged in that order. Default is the value of the 'avatar_rating' option.
-=======
  *     @type string $default        URL for the default image or a default type. Accepts:
  *                                  - '404' (return a 404 instead of a default image)
  *                                  - 'retro' (a 8-bit arcade-style pixelated face)
@@ -4373,7 +4350,6 @@ function is_avatar_comment_type( $comment_type ) {
  *                                  - 'R' (intended for adult audiences above 17)
  *                                  - 'X' (even more mature than above)
  *                                  Default is the value of the 'avatar_rating' option.
->>>>>>> 43b7ac1008 (Users: Add support for Initials and Color Gravatar images in default user profile pics.)
  *     @type string $scheme         URL scheme to use. See set_url_scheme() for accepted values.
  *                                  For Gravatars this setting is ignored and HTTPS is used to avoid
  *                                  unnecessary redirects. The setting is retained for systems using
@@ -4569,7 +4545,7 @@ function get_avatar_data( $id_or_email, $args = null ) {
 	 * The Gravatar website redirects HTTP requests to HTTPS URLs so always
 	 * use the HTTPS scheme to avoid unnecessary redirects.
 	 */
-		$url = 'https://secure.gravatar.com/avatar/' . $email_hash;
+	$url = 'https://secure.gravatar.com/avatar/' . $email_hash;
 
 	$url = add_query_arg(
 		rawurlencode_deep( array_filter( $url_args ) ),

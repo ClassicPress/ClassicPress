@@ -2899,16 +2899,6 @@ if ( ! function_exists( 'get_avatar' ) ) :
 	 *
 	 * @param mixed  $id_or_email   The Gravatar to retrieve. Accepts a user_id, gravatar md5 hash,
 	 *                              user email, WP_User object, WP_Post object, or WP_Comment object.
-<<<<<<< HEAD
-	 * @param int    $size          Optional. Height and width of the avatar image file in pixels. Default 96.
-	 * @param string $default_value URL for the default image or a default type. Accepts '404' (return
-	 *                              a 404 instead of a default image), 'retro' (8bit), 'RoboHash' (robohash),
-	 *                              'monsterid' (monster), 'wavatar' (cartoon face), 'indenticon' (the "quilt"),
-	 *                              'mystery', 'mm', or 'mysteryman' (The Oyster Man), 'blank' (transparent GIF),
-	 *                              or 'gravatar_default' (the Gravatar logo). Default is the value of the
-	 *                              'avatar_default' option, with a fallback of 'mystery'.
-	 * @param string $alt           Optional. Alternative text to use in img tag. Default empty.
-=======
 	 * @param int    $size          Optional. Height and width of the avatar in pixels. Default 96.
 	 * @param string $default_value URL for the default image or a default type. Accepts:
 	 *                              - '404' (return a 404 instead of a default image)
@@ -2926,7 +2916,6 @@ if ( ! function_exists( 'get_avatar' ) ) :
 	 *                              with a fallback of 'mystery'.
 	 * @param string $alt           Optional. Alternative text to use in the avatar image tag.
 	 *                              Default empty.
->>>>>>> 43b7ac1008 (Users: Add support for Initials and Color Gravatar images in default user profile pics.)
 	 * @param array  $args {
 	 *     Optional. Extra arguments to retrieve the avatar.
 	 *
