@@ -9160,6 +9160,14 @@ mockedApiResponse.UsersCollection = [
         "description": "",
         "link": "http://example.org/?author=1",
         "slug": "admin",
+<<<<<<< HEAD
+=======
+        "avatar_urls": {
+            "24": "https://secure.gravatar.com/avatar/96614ec98aa0c0d2ee75796dced6df54?s=24&d=mm&r=g",
+            "48": "https://secure.gravatar.com/avatar/96614ec98aa0c0d2ee75796dced6df54?s=48&d=mm&r=g",
+            "96": "https://secure.gravatar.com/avatar/96614ec98aa0c0d2ee75796dced6df54?s=96&d=mm&r=g"
+        },
+>>>>>>> c1ffe3309a (Users: Always use HTTPS URLs for Gravatar links.)
         "meta": {
             "meta_key": "meta_value"
         },
@@ -9183,6 +9191,14 @@ mockedApiResponse.UsersCollection = [
         "description": "",
         "link": "http://example.org/?author=2",
         "slug": "restapiclientfixtureuser",
+<<<<<<< HEAD
+=======
+        "avatar_urls": {
+            "24": "https://secure.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=24&d=mm&r=g",
+            "48": "https://secure.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=48&d=mm&r=g",
+            "96": "https://secure.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=96&d=mm&r=g"
+        },
+>>>>>>> c1ffe3309a (Users: Always use HTTPS URLs for Gravatar links.)
         "meta": {
             "meta_key": ""
         },
@@ -9208,6 +9224,14 @@ mockedApiResponse.UserModel = {
     "description": "",
     "link": "http://example.org/?author=2",
     "slug": "restapiclientfixtureuser",
+<<<<<<< HEAD
+=======
+    "avatar_urls": {
+        "24": "https://secure.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=24&d=mm&r=g",
+        "48": "https://secure.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=48&d=mm&r=g",
+        "96": "https://secure.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=96&d=mm&r=g"
+    },
+>>>>>>> c1ffe3309a (Users: Always use HTTPS URLs for Gravatar links.)
     "meta": {
         "meta_key": ""
     }
@@ -9220,6 +9244,14 @@ mockedApiResponse.me = {
     "description": "",
     "link": "http://example.org/?author=2",
     "slug": "restapiclientfixtureuser",
+<<<<<<< HEAD
+=======
+    "avatar_urls": {
+        "24": "https://secure.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=24&d=mm&r=g",
+        "48": "https://secure.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=48&d=mm&r=g",
+        "96": "https://secure.gravatar.com/avatar/57cbd982c963c7eb2294e2eee1b4448e?s=96&d=mm&r=g"
+    },
+>>>>>>> c1ffe3309a (Users: Always use HTTPS URLs for Gravatar links.)
     "meta": {
         "meta_key": ""
     }
@@ -9241,6 +9273,14 @@ mockedApiResponse.CommentsCollection = [
         "link": "http://example.org/?p=4#comment-2",
         "status": "approved",
         "type": "comment",
+<<<<<<< HEAD
+=======
+        "author_avatar_urls": {
+            "24": "https://secure.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=24&d=mm&r=g",
+            "48": "https://secure.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=48&d=mm&r=g",
+            "96": "https://secure.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=96&d=mm&r=g"
+        },
+>>>>>>> c1ffe3309a (Users: Always use HTTPS URLs for Gravatar links.)
         "meta": {
             "meta_key": "meta_value"
         },
@@ -9281,6 +9321,14 @@ mockedApiResponse.CommentModel = {
     "link": "http://example.org/?p=4#comment-2",
     "status": "approved",
     "type": "comment",
+<<<<<<< HEAD
+=======
+    "author_avatar_urls": {
+        "24": "https://secure.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=24&d=mm&r=g",
+        "48": "https://secure.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=48&d=mm&r=g",
+        "96": "https://secure.gravatar.com/avatar/bd7c2b505bcf39cc71cfee564c614956?s=96&d=mm&r=g"
+    },
+>>>>>>> c1ffe3309a (Users: Always use HTTPS URLs for Gravatar links.)
     "meta": {
         "meta_key": "meta_value"
     }
