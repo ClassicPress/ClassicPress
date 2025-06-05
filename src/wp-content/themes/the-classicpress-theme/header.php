@@ -64,15 +64,17 @@
 			<?php } ?>
 		</div>
 
-		<button id="menu-toggle" class="menu-toggle" type="button" aria-haspopup="true" aria-controls="site-navigation" aria-expanded="false" tabindex="0">
-			<img src="<?php echo esc_url( get_template_directory_uri() . '/images/baseline-menu-24px.svg' ); ?>" alt="Menu" width="32" height="32">
-			<span id="menu-toggle-text" class="screen-reader-text"><?php esc_html_e( 'Menu', 'the-classicpress-theme' ); ?></span>
-		</button>
-			
-		<button id="menu-toggle-close" class="menu-toggle close" type="button" aria-haspopup="true" aria-controls="site-navigation" aria-expanded="true" tabindex="0">
-			<img src="<?php echo esc_url( get_template_directory_uri() . '/images/baseline-close-24px.svg' ); ?>" alt="Close menu" width="32" height="32">
-			<span id="menu-toggle-close-text" class="menu-toggle-text screen-reader-text"><?php esc_html_e( 'Close menu', 'the-classicpress-theme' ); ?></span>
-		</button>
+		<?php if ( has_nav_menu( 'main-menu' ) ) { ?>
+			<button id="menu-toggle" class="menu-toggle" type="button" aria-haspopup="true" aria-controls="site-navigation" aria-expanded="false" tabindex="0">
+				<img src="<?php echo esc_url( get_template_directory_uri() . '/images/baseline-menu-24px.svg' ); ?>" alt="Menu" width="32" height="32">
+				<span id="menu-toggle-text" class="screen-reader-text"><?php esc_html_e( 'Menu', 'the-classicpress-theme' ); ?></span>
+			</button>
+
+			<button id="menu-toggle-close" class="menu-toggle close" type="button" aria-haspopup="true" aria-controls="site-navigation" aria-expanded="true" tabindex="0">
+				<img src="<?php echo esc_url( get_template_directory_uri() . '/images/baseline-close-24px.svg' ); ?>" alt="Close menu" width="32" height="32">
+				<span id="menu-toggle-close-text" class="menu-toggle-text screen-reader-text"><?php esc_html_e( 'Close menu', 'the-classicpress-theme' ); ?></span>
+			</button>
+		<?php } ?>
 	</header>
 	<?php
 	if ( is_front_page() ) {
