@@ -58,7 +58,7 @@ jQuery( function( $ ) {
 		playlistEl.querySelector( '.wp-playlist-prev' ).after( ol );
 
 		// Play next item in playlist
-		playlistEl.querySelector( type ).addEventListener( 'ended', function( e ) {
+		playlistEl.querySelector( type ).addEventListener( 'ended', function() {
 			var item = playlistEl.querySelector( '.wp-playlist-playing' ),
 				index = [...item.parentNode.children].indexOf( item );
 
