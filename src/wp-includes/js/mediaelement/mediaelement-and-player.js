@@ -4378,7 +4378,7 @@ var MediaElementPlayer = function () {
 					if (t.hasFluidMode() === true) {
 						t.setResponsiveMode();
 					} else {
-						t.setDimensions(t.width, t.height);
+						t.setResponsiveMode();
 					}
 					break;
 			}
