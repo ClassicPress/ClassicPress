@@ -47,20 +47,21 @@
 
 			</span>
 
-			<nav id="site-navigation" class="main-navigation nav--toggle-sub nav--toggle-small" aria-label="<?php esc_attr_e( 'Main menu', 'the-classicpress-theme' ); ?>">
-
-				<?php
-				wp_nav_menu(
-					array(
-						'theme_location' => 'main-menu',
-						'depth'          => 2,
-						'menu_id'        => 'primary-menu', /*keeping original id so nav css and js still works*/
-					)
-				);
-				?>
-
-			</nav><!-- #site-navigation -->
-
+			<?php if ( has_nav_menu( 'main-menu' ) ) { ?>
+				<nav id="site-navigation" class="main-navigation nav--toggle-sub nav--toggle-small" aria-label="<?php esc_attr_e( 'Main menu', 'the-classicpress-theme' ); ?>">
+	
+					<?php
+					wp_nav_menu(
+						array(
+							'theme_location' => 'main-menu',
+							'depth'          => 2,
+							'menu_id'        => 'primary-menu', /*keeping original id so nav css and js still works*/
+						)
+					);
+					?>
+	
+				</nav><!-- #site-navigation -->
+			<?php } ?>
 		</div>
 
 		<button id="menu-toggle" class="menu-toggle" type="button" aria-haspopup="true" aria-controls="site-navigation" aria-expanded="false" tabindex="0">
