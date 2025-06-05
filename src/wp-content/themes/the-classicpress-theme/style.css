@@ -4,7 +4,7 @@ Theme URI: https://directory.classicpress.net/themes/the-classicpress-theme/
 Author: Tim Kaye and ClassicPress contributors
 Author URI: https://www.classicpress.net
 Description: The default theme for ClassicPress.
-Version: 1.0.1
+Version: 1.1.0
 Requires PHP: 8.0
 Requires CP: 2.0
 License: GNU General Public License v2 or later
@@ -561,7 +561,6 @@ a,
 a:visited {
 	color: #057f99;
 	font-weight: 500;
-	background: transparent;
 	border: 0;
 	border-bottom: 0.2em solid transparent;
 }
@@ -1096,6 +1095,7 @@ img {
 	max-width: 72rem;
 	margin: 0;
 	padding: 0 1em;
+	align-self: start;
 }
 .menu,
 .menu ul {
@@ -1673,6 +1673,9 @@ table.cp-logo-list .cp-logo-description {
 .widget-container ul.sub-menu {
 	margin: 0;
 }
+.widget-container ul.sub-menu li {
+	margin-left: 0.5em;
+}
 #sidebar .widget-container ul li.cat-item.current-cat a {
 	color: #040402;
 }
@@ -2059,6 +2062,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		flex-grow: 1;
 		align-items: center;
 		justify-content: space-between;
+		gap: 0.5em;
 		margin: 0 auto;
 	}
 	#page-title h1 {
