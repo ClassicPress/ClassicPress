@@ -79,7 +79,7 @@ jQuery( function( $ ) {
 				playlistEl.querySelector( '.wp-playlist-item-artist' ).textContent = item.dataset.artist;
 			}
 
-			// Timeout require for promise
+			// Timeout required for promise
 			setTimeout( function() {
 				playlistEl.querySelector( type ).play();
 			}, 200 );
@@ -109,7 +109,7 @@ jQuery( function( $ ) {
 				playlist.querySelector( '.wp-playlist-item-artist' ).textContent = item.dataset.artist;
 			}
 
-			// Timeout require for promise
+			// Timeout required for promise
 			setTimeout( function() {
 				playlist.querySelector( type ).play();
 			}, 200 );
