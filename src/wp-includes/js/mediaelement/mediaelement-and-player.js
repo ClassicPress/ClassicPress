@@ -3602,7 +3602,7 @@ var config = exports.config = {
 
 	stretching: 'auto',
 
-	classPrefix: 'mejs__',
+	classPrefix: 'mejs-',
 
 	enableKeyboard: true,
 
