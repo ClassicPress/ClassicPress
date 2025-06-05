@@ -81,7 +81,6 @@
 
 	<?php
 	if ( ! is_front_page() && ! is_single() ) {
-			$category = single_cat_title( '', false );
 			echo '<header id="page-title">';
 		if ( is_post_type_archive() ) {
 			echo '<h1>';
@@ -89,10 +88,15 @@
 			echo '</h1>';
 		} elseif ( is_blog() ) {
 			echo '<h1>';
-			esc_html_e( 'News', 'the-classicpress-theme' );
-			if ( ! empty( $category ) ) {
-				esc_html_e( ': ', 'the-classicpress-theme' );
-				echo esc_html( ucwords( $category ) );
+			if ( is_home() ) {
+				$blog_page_id = get_option( 'page_for_posts' );
+				if ( $blog_page_id && ( ! empty( get_the_title( $blog_page_id ) ) ) ) {
+					echo esc_html( get_the_title( $blog_page_id ) );
+				} else {
+					esc_html_e( 'News', 'the-classicpress-theme' );
+				}
+			} else {
+				the_archive_title();
 			}
 			echo '</h1>';
 		} elseif ( is_search() ) {
@@ -106,7 +110,7 @@
 		} else {
 			the_title( '<h1>', '</h1>' );
 		}
-			echo '</header><!-- .entry-header -->';
+			echo '</header><!-- #page-title -->';
 	}
 	?>
 	<div id="content" role="main">

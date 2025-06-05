@@ -187,7 +187,7 @@ if ( function_exists( 'register_sidebar' ) ) {
 		array(
 			'id'            => 'blog-sidebar',
 			'name'          => esc_html__( 'Blog Sidebar', 'the-classicpress-theme' ),
-			'before_widget' => '<div class="widget-container">',
+			'before_widget' => '<div id="%1$s" class="widget-container %2$s">',
 			'after_widget'  => '</div>',
 			'before_title'  => '<h3 class="widget-title">',
 			'after_title'   => '</h3>',
@@ -197,7 +197,7 @@ if ( function_exists( 'register_sidebar' ) ) {
 		array(
 			'id'            => 'main-sidebar',
 			'name'          => esc_html__( 'Main Sidebar', 'the-classicpress-theme' ),
-			'before_widget' => '<div class="widget-container">',
+			'before_widget' => '<div id="%1$s" class="widget-container %2$s">',
 			'after_widget'  => '</div>',
 			'before_title'  => '<h3 class="widget-title">',
 			'after_title'   => '</h3>',
@@ -207,7 +207,7 @@ if ( function_exists( 'register_sidebar' ) ) {
 		array(
 			'id'            => 'footer',
 			'name'          => esc_html__( 'Footer', 'the-classicpress-theme' ),
-			'before_widget' => '<div class="widget-container">',
+			'before_widget' => '<div id="%1$s" class="widget-container %2$s">',
 			'after_widget'  => '</div>',
 			'before_title'  => '<h3 class="widget-title">',
 			'after_title'   => '</h3>',

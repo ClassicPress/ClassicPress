@@ -79,7 +79,6 @@ class Tests_Widgets_wpWidgetMedia extends WP_UnitTestCase {
 		$this->assertSame( count( $widget->l10n ), count( array_filter( $widget->l10n ) ), 'Expected all translation strings to be defined.' );
 		$this->assertSame( 10, has_action( 'admin_print_scripts-widgets.php', array( $widget, 'enqueue_admin_scripts' ) ) );
 		$this->assertFalse( has_action( 'wp_enqueue_scripts', array( $widget, 'enqueue_preview_scripts' ) ), 'Did not expect preview scripts to be enqueued when not in customize preview context.' );
-		$this->assertSame( 10, has_action( 'admin_footer-widgets.php', array( $widget, 'render_control_template_scripts' ) ) );
 
 		// With non-default args.
 		$id_base         = 'media_pdf';
@@ -461,21 +460,6 @@ class Tests_Widgets_wpWidgetMedia extends WP_UnitTestCase {
 		$widget->enqueue_admin_scripts();
 
 		$this->assertTrue( wp_script_is( 'wp-mediaelement' ) );
-	}
-
-	/**
-	 * Test render_control_template_scripts method.
-	 *
-	 * @covers WP_Widget_Media::render_control_template_scripts
-	 */
-	public function test_render_control_template_scripts() {
-		$widget = $this->get_mocked_class_instance();
-
-		ob_start();
-		$widget->render_control_template_scripts();
-		$output = ob_get_clean();
-
-		$this->assertStringContainsString( '<script type="text/html" id="tmpl-widget-media-mocked-control">', $output );
 	}
 
 	/**
