@@ -1,7 +1,9 @@
 jQuery( function( $ ) {
 
+	// Script set by wp_playlist_shortcode function in wp-includes/media.php
 	var playlists = document.querySelectorAll( '.wp-playlist-script' );
 
+	// Set up playlists when page loads
 	playlists.forEach( function( playlist ) {
 		var playlistData = JSON.parse( playlist.innerHTML ),
 			type = playlistData.type,
@@ -77,12 +79,14 @@ jQuery( function( $ ) {
 				playlistEl.querySelector( '.wp-playlist-item-artist' ).textContent = item.dataset.artist;
 			}
 
+			// Timeout require for promise
 			setTimeout( function() {
 				playlistEl.querySelector( type ).play();
 			}, 200 );
 		} );
 	} );
 
+	// Pay track when clicking on it
 	document.addEventListener( 'click', function( e ) {
 		var item, playlist, type;
 		if ( e.target.closest( '.wp-playlist-caption' ) ) {
@@ -105,9 +109,12 @@ jQuery( function( $ ) {
 				playlist.querySelector( '.wp-playlist-item-artist' ).textContent = item.dataset.artist;
 			}
 
+			// Timeout require for promise
 			setTimeout( function() {
 				playlist.querySelector( type ).play();
 			}, 200 );
+
+		// Ensure that current track shows in boldface
 		} else if ( e.target.closest( '.mejs-play' ) || e.target.closest( '.mejs-overlay-play' ) ) {
 			playlist = e.target.closest( '.wp-playlist' );
 			if ( ! playlist.querySelector( '.wp-playlist-playing' ) ) {
