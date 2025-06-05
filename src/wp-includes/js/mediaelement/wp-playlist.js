@@ -122,6 +122,6 @@ jQuery( function( $ ) {
 			}
 		}
 	} );
-	
-    $( 'audio, video' ).mediaelementplayer();
+
+	$( 'audio, video' ).mediaelementplayer();
 } );
