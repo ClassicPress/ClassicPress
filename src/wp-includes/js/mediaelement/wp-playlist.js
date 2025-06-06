@@ -15,7 +15,8 @@ jQuery( function( $ ) {
 			img = document.createElement( 'img' ),
 			div = document.createElement( 'div' ),
 			ol = document.createElement( 'ol' ),
-			playlistEl = playlist.closest( '.wp-playlist' );
+			playlistEl = playlist.closest( '.wp-playlist' ),
+			source = document.createElement( 'source' );
 
 		img.src = firstTrack.image.src;
 		img.alt = '';
@@ -43,6 +44,9 @@ jQuery( function( $ ) {
 			li.dataset.artist = artist;
 			li.dataset.img = track.image.src;
 			li.dataset.src = track.src;
+			li.dataset.type = track.type;
+			li.dataset.caption = track.caption;
+			li.dataset.description = track.description;
 			li.innerHTML = '<div class="wp-playlist-caption">' +
 				'<span class="wp-playlist-item-title">' + title + '</span> ' +
 				'<span class="wp-playlist-item-artist">' + artist + '</span></div>' +
@@ -53,7 +57,13 @@ jQuery( function( $ ) {
 		if ( type === 'audio' ) {
 			playlistEl.querySelector( '.wp-playlist-current-item' ).append( img );
 			playlistEl.querySelector( '.wp-playlist-current-item' ).append( div );
+		} else {
+			playlistEl.querySelector( type ).preload = 'metadata';
 		}
+
+		source.type = firstTrack.type;
+		source.src = firstTrack.src;
+		playlistEl.querySelector( type ).append( source );
 		playlistEl.querySelector( type ).src = firstTrack.src;
 		playlistEl.querySelector( '.wp-playlist-prev' ).after( ol );
 
@@ -108,6 +118,8 @@ jQuery( function( $ ) {
 				playlist.querySelector( '.wp-playlist-item-album' ).textContent = item.dataset.album;
 				playlist.querySelector( '.wp-playlist-item-artist' ).textContent = item.dataset.artist;
 			}
+			playlist.querySelector( 'source' ).type = item.dataset.type;
+			playlist.querySelector( 'source' ).src = item.dataset.src;
 
 			// Timeout required for promise
 			setTimeout( function() {
