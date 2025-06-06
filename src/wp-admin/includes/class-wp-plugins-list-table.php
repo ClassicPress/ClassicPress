@@ -27,7 +27,7 @@ class WP_Plugins_List_Table extends WP_List_Table {
 	/**
 	 * Whether ClassicPress has updates available.
 	 *
-	 * @since 5.5.0
+	 * @since CP-2.5.0
 	 *
 	 * @var bool True if ClassicPress has updates available, false otherwise.
 	 */
