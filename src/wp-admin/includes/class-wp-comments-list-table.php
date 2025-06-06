@@ -522,7 +522,7 @@ class WP_Comments_List_Table extends WP_List_Table {
 					array(
 						'number'    => 1,
 						'type'      => $type,
-						'post_type' => $this->post_type
+						'post_type' => $this->post_type,
 					)
 				) ) {
 					printf(
@@ -1078,7 +1078,6 @@ class WP_Comments_List_Table extends WP_List_Table {
 		$post_type_object = get_post_type_object( $post->post_type );
 		if ( null !== $post_type_object ) {
 			echo "<a href='" . get_permalink( $post->ID ) . "' class='comments-view-item-link'>" . $post_type_object->labels->view_item . '</a>';
-
 
 			echo '<span class="post-com-count-wrapper post-com-count-', $post->ID, '">';
 			$this->comments_bubble( $post->ID, $pending_comments );
