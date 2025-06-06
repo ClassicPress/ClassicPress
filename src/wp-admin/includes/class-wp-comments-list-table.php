@@ -641,7 +641,7 @@ class WP_Comments_List_Table extends WP_List_Table {
 			$post = get_post( $comment->comment_post_ID );
 		}
 
-		if ( in_array( $post->post_type, get_post_types(), true ) ) {
+		if ( isset( $post->post_type ) && in_array( $post->post_type, get_post_types(), true ) ) {
 			$this->user_can = current_user_can( 'edit_comment', $comment->comment_ID );
 
 			$edit_post_cap = $post ? 'edit_post' : 'edit_posts';
