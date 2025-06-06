@@ -82,6 +82,8 @@ jQuery( function( $ ) {
 			item = playlistEl.querySelector( '.wp-playlist-playing' );
 
 			playlistEl.querySelector( type ).src = item.dataset.src;
+			playlistEl.querySelector( 'source' ).type = item.dataset.type;
+			playlistEl.querySelector( 'source' ).src = item.dataset.src;
 			if ( type === 'audio' ) {
 				playlistEl.querySelector( 'img' ).src = item.dataset.img;
 				playlistEl.querySelector( '.wp-playlist-item-title' ).textContent = item.dataset.title;
