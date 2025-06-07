@@ -3602,7 +3602,7 @@ var config = exports.config = {
 
 	stretching: 'auto',
 
-	classPrefix: 'mejs-',
+	classPrefix: 'mejs__',
 
 	enableKeyboard: true,
 
@@ -4378,7 +4378,7 @@ var MediaElementPlayer = function () {
 					if (t.hasFluidMode() === true) {
 						t.setResponsiveMode();
 					} else {
-						t.setResponsiveMode();
+						t.setDimensions(t.width, t.height);
 					}
 					break;
 			}
