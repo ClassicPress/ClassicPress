@@ -1,3 +1,5 @@
+/* global MediaElementPlayer */
+
 document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Script set by wp_playlist_shortcode function in wp-includes/media.php
