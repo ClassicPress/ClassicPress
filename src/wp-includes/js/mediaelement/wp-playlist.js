@@ -141,5 +141,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	// Initialize medialement player
-	mediaElements.forEach( ( el ) => new MediaElementPlayer( el ) );
+	mediaElements.forEach( function( el ) {
+		new MediaElementPlayer( el, {
+			stretching: 'responsive',
+			classPrefix: 'mejs-'
+		} );
+	} );
 } );
