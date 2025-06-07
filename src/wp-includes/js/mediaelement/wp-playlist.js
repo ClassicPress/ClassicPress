@@ -1,7 +1,8 @@
-jQuery( function( $ ) {
+document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Script set by wp_playlist_shortcode function in wp-includes/media.php
-	var playlists = document.querySelectorAll( '.wp-playlist-script' );
+	var playlists = document.querySelectorAll( '.wp-playlist-script' ),
+		mediaElements = document.querySelectorAll( 'audio, video' );
 
 	// Set up playlists when page loads
 	playlists.forEach( function( playlist ) {
@@ -137,5 +138,6 @@ jQuery( function( $ ) {
 		}
 	} );
 
-	$( 'audio, video' ).mediaelementplayer();
+	// Initialize medialement player
+	mediaElements.forEach( ( el ) => new MediaElementPlayer( el ) );
 } );
