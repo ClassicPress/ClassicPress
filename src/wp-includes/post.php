@@ -6094,7 +6094,7 @@ function wp_delete_attachment( $post_id, $force_delete = false ) {
 
 				// Remove the deleted image ID from the widget's stored IDs.
 				$instance['ids'] = array_diff( $instance['ids'], array( $post_id ) );
-				$widget_options[$key] = $instance;
+				$widget_options[ $key ] = $instance;
 			}
 		}
 		update_option( 'widget_media_gallery', $widget_options ); // Update widget settings
