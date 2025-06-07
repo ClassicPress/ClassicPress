@@ -147,6 +147,7 @@ jobs:
         with:
           php-version: "${{ matrix.php }}"
           ini-values: >-
+            imagick.avif.enabled=1,
             mysql.default_host=127.0.0.1,
             mysql.default_port=3306,
             mysql.default_socket=/var/run/mysqld/mysqld.sock
