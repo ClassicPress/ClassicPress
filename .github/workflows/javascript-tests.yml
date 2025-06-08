@@ -7,6 +7,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Disable permissions for all available scopes by default.
+# Required permissions are configured at the job level.
+permissions: {}
+
 jobs:
   # Runs the QUnit tests for ClassicPress.
   #
@@ -19,6 +23,8 @@ jobs:
   # - Run the ClassicPress QUnit tests.
   test-js:
     name: QUnit Tests
+    permissions:
+      contents: read
     runs-on: ubuntu-24.04
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
 

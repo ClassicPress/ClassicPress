@@ -7,6 +7,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Disable permissions for all available scopes by default.
+# Required permissions are configured at the job level.
+permissions: {}
+
 jobs:
 
   # Runs PHP compatibility testing.
@@ -23,6 +27,8 @@ jobs:
   # - Runs the PHP compatibility tests.
   php-comatibility:
     name: Check PHP compatibility
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
 
