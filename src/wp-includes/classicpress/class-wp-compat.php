@@ -436,10 +436,6 @@ class WP_Compat {
 			}
 		}
 
-		function wp_print_community_events_markup() {
-			echo 'unuseful';
-		}
-
 		// Load WP_Block_Type class file as polyfill.
 		require_once ABSPATH . WPINC . '/classicpress/class-wp-block-type.php';
 		require_once ABSPATH . WPINC . '/classicpress/class-wp-block-template.php';
