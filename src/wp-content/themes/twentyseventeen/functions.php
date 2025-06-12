@@ -387,7 +387,7 @@ add_action( 'wp_head', 'twentyseventeen_javascript_detection', 0 );
  */
 function twentyseventeen_pingback_header() {
 	if ( is_singular() && pings_open() ) {
-		printf( '<link rel="pingback" href="%s">' . "\n", get_bloginfo( 'pingback_url' ) );
+		printf( '<link rel="pingback" href="%s">' . "\n", esc_url( get_bloginfo( 'pingback_url' ) ) );
 	}
 }
 add_action( 'wp_head', 'twentyseventeen_pingback_header' );
@@ -514,7 +514,7 @@ add_filter( 'wp_calculate_image_sizes', 'twentyseventeen_content_image_sizes_att
  */
 function twentyseventeen_header_image_tag( $html, $header, $attr ) {
 	if ( isset( $attr['sizes'] ) ) {
-		$html = str_replace( $attr['sizes'], '100vw', $html );
+		$html = str_replace( $attr['sizes'], '(max-width: 767px) 200vw, 100vw', $html );
 	}
 	return $html;
 }
