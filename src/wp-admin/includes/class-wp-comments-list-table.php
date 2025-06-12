@@ -24,6 +24,8 @@ class WP_Comments_List_Table extends WP_List_Table {
 
 	private $user_can;
 
+	private $post_type;
+
 	/**
 	 * Constructor.
 	 *
@@ -43,6 +45,8 @@ class WP_Comments_List_Table extends WP_List_Table {
 		if ( get_option( 'show_avatars' ) ) {
 			add_filter( 'comment_author', array( $this, 'floated_admin_avatar' ), 10, 2 );
 		}
+
+		$this->post_type = ( isset( $_REQUEST['post_type'] ) ) ? sanitize_key( $_REQUEST['post_type'] ) : get_post_types();
 
 		parent::__construct(
 			array(
@@ -103,8 +107,6 @@ class WP_Comments_List_Table extends WP_List_Table {
 
 		$search = ( isset( $_REQUEST['s'] ) ) ? $_REQUEST['s'] : '';
 
-		$post_type = ( isset( $_REQUEST['post_type'] ) ) ? sanitize_key( $_REQUEST['post_type'] ) : '';
-
 		$user_id = ( isset( $_REQUEST['user_id'] ) ) ? $_REQUEST['user_id'] : '';
 
 		$orderby = ( isset( $_REQUEST['orderby'] ) ) ? $_REQUEST['orderby'] : '';
@@ -149,7 +151,7 @@ class WP_Comments_List_Table extends WP_List_Table {
 			'type'      => $comment_type,
 			'orderby'   => $orderby,
 			'order'     => $order,
-			'post_type' => $post_type,
+			'post_type' => $this->post_type,
 		);
 
 		/**
@@ -294,9 +296,10 @@ class WP_Comments_List_Table extends WP_List_Table {
 				$current_user_id    = get_current_user_id();
 				$num_comments->mine = get_comments(
 					array(
-						'post_id' => $post_id ? $post_id : 0,
-						'user_id' => $current_user_id,
-						'count'   => true,
+						'post_id'   => $post_id ? $post_id : 0,
+						'user_id'   => $current_user_id,
+						'count'     => true,
+						'post_type' => $this->post_type,
 					)
 				);
 				$link               = add_query_arg( 'user_id', $current_user_id, $link );
@@ -517,8 +520,9 @@ class WP_Comments_List_Table extends WP_List_Table {
 			foreach ( $comment_types as $type => $label ) {
 				if ( get_comments(
 					array(
-						'number' => 1,
-						'type'   => $type,
+						'number'    => 1,
+						'type'      => $type,
+						'post_type' => $this->post_type,
 					)
 				) ) {
 					printf(
@@ -637,19 +641,21 @@ class WP_Comments_List_Table extends WP_List_Table {
 			$post = get_post( $comment->comment_post_ID );
 		}
 
-		$this->user_can = current_user_can( 'edit_comment', $comment->comment_ID );
+		if ( isset( $post->post_type ) && in_array( $post->post_type, get_post_types(), true ) ) {
+			$this->user_can = current_user_can( 'edit_comment', $comment->comment_ID );
 
-		$edit_post_cap = $post ? 'edit_post' : 'edit_posts';
-		if (
-			current_user_can( $edit_post_cap, $comment->comment_post_ID ) ||
-			(
-				empty( $post->post_password ) &&
-				current_user_can( 'read_post', $comment->comment_post_ID )
-			)
-		) {
-			// The user has access to the post
-		} else {
-			return false;
+			$edit_post_cap = $post ? 'edit_post' : 'edit_posts';
+			if (
+				current_user_can( $edit_post_cap, $comment->comment_post_ID ) ||
+				(
+					empty( $post->post_password ) &&
+					current_user_can( 'read_post', $comment->comment_post_ID )
+				)
+			) {
+				// The user has access to the post
+			} else {
+				return false;
+			}
 		}
 
 		echo "<tr id='comment-$comment->comment_ID' class='$the_comment_class'>";
@@ -1051,7 +1057,7 @@ class WP_Comments_List_Table extends WP_List_Table {
 			$this->pending_count[ $post->ID ] = $pending_comments;
 		}
 
-		if ( current_user_can( 'edit_post', $post->ID ) ) {
+		if ( in_array( $post->post_type, get_post_types(), true ) && current_user_can( 'edit_post', $post->ID ) ) {
 			$post_link  = "<a href='" . get_edit_post_link( $post->ID ) . "' class='comments-edit-item-link'>";
 			$post_link .= esc_html( get_the_title( $post->ID ) ) . '</a>';
 		} else {
@@ -1070,11 +1076,13 @@ class WP_Comments_List_Table extends WP_List_Table {
 		echo $post_link;
 
 		$post_type_object = get_post_type_object( $post->post_type );
-		echo "<a href='" . get_permalink( $post->ID ) . "' class='comments-view-item-link'>" . $post_type_object->labels->view_item . '</a>';
+		if ( null !== $post_type_object ) {
+			echo "<a href='" . get_permalink( $post->ID ) . "' class='comments-view-item-link'>" . $post_type_object->labels->view_item . '</a>';
 
-		echo '<span class="post-com-count-wrapper post-com-count-', $post->ID, '">';
-		$this->comments_bubble( $post->ID, $pending_comments );
-		echo '</span> ';
+			echo '<span class="post-com-count-wrapper post-com-count-', $post->ID, '">';
+			$this->comments_bubble( $post->ID, $pending_comments );
+			echo '</span> ';
+		}
 
 		echo '</div>';
 	}
