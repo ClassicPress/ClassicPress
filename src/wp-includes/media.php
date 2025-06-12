@@ -2741,60 +2741,6 @@ function gallery_shortcode( $attr ) {
 }
 
 /**
- * Outputs the templates used by playlists.
- *
- * @since 3.9.0
- */
-function wp_underscore_playlist_templates() {
-	?>
-<script type="text/html" id="tmpl-wp-playlist-current-item">
-	<# if ( data.thumb && data.thumb.src ) { #>
-		<img src="{{ data.thumb.src }}" alt="">
-	<# } #>
-	<div class="wp-playlist-caption">
-		<span class="wp-playlist-item-meta wp-playlist-item-title">
-			<# if ( data.meta.album || data.meta.artist ) { #>
-				<?php
-				/* translators: %s: Playlist item title. */
-				printf( _x( '&#8220;%s&#8221;', 'playlist item title' ), '{{ data.title }}' );
-				?>
-			<# } else { #>
-				{{ data.title }}
-			<# } #>
-		</span>
-		<# if ( data.meta.album ) { #><span class="wp-playlist-item-meta wp-playlist-item-album">{{ data.meta.album }}</span><# } #>
-		<# if ( data.meta.artist ) { #><span class="wp-playlist-item-meta wp-playlist-item-artist">{{ data.meta.artist }}</span><# } #>
-	</div>
-</script>
-<script type="text/html" id="tmpl-wp-playlist-item">
-	<div class="wp-playlist-item">
-		<a class="wp-playlist-caption" href="{{ data.src }}">
-			{{ data.index ? ( data.index + '. ' ) : '' }}
-			<# if ( data.caption ) { #>
-				{{ data.caption }}
-			<# } else { #>
-				<# if ( data.artists && data.meta.artist ) { #>
-					<span class="wp-playlist-item-title">
-						<?php
-						/* translators: %s: Playlist item title. */
-						printf( _x( '&#8220;%s&#8221;', 'playlist item title' ), '{{{ data.title }}}' );
-						?>
-					</span>
-					<span class="wp-playlist-item-artist"> &mdash; {{ data.meta.artist }}</span>
-				<# } else { #>
-					<span class="wp-playlist-item-title">{{{ data.title }}}</span>
-				<# } #>
-			<# } #>
-		</a>
-		<# if ( data.meta.length_formatted ) { #>
-		<div class="wp-playlist-item-length">{{ data.meta.length_formatted }}</div>
-		<# } #>
-	</div>
-</script>
-	<?php
-}
-
-/**
  * Outputs and enqueues default scripts and styles for playlists.
  *
  * @since 3.9.0
@@ -2807,8 +2753,6 @@ function wp_playlist_scripts( $type ) {
 	?>
 <!--[if lt IE 9]><script>document.createElement('<?php echo esc_js( $type ); ?>');</script><![endif]-->
 	<?php
-	add_action( 'wp_footer', 'wp_underscore_playlist_templates', 0 );
-	add_action( 'admin_footer', 'wp_underscore_playlist_templates', 0 );
 }
 
 /**

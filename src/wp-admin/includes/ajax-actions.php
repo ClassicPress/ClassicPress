@@ -4335,8 +4335,6 @@ function wp_ajax_parse_media_shortcode() {
 	echo $parsed;
 
 	if ( 'playlist' === $_REQUEST['type'] ) {
-		wp_underscore_playlist_templates();
-
 		wp_print_scripts( 'wp-playlist' );
 	} else {
 		wp_print_scripts( array( 'mediaelement-vimeo', 'wp-mediaelement' ) );
