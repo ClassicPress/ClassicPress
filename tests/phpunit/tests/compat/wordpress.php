@@ -47,6 +47,13 @@ class Tests_Compat_wordpress extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test that functions that may cause errors are not polyfilled
+	 */
+	public function test_undefined_polyfills() {
+		$this->assertFalse( function_exists( 'wp_print_community_events_markup' ), 'Do not break FAIR plugin. See https://github.com/fairpm/fair-plugin/pull/65' );
+	}
+
+	/**
 	 * Test the WP_Block_Type class exists
 	 */
 	public function test_class_polyfills() {
