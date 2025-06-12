@@ -9,6 +9,11 @@
 document.addEventListener( 'DOMContentLoaded', function () {
 	'use strict'; // satisfy code inspectors
 
+	// Exit if no Primary Menu is set
+	if ( ! document.getElementById( 'primary-menu' ) ) {
+		return;
+	}
+
 	// Provide accessible labels for sub-menus
 	const subMenus = document.querySelectorAll( '.sub-menu' );
 	subMenus.forEach(sub => {
