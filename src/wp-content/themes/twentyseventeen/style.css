@@ -3027,6 +3027,29 @@ p > object:only-child {
 	top: 5px;
 }
 
+/* Playlist Style Overrides for CP */
+
+.site-content li.wp-playlist-item {
+	margin-left: 1em;
+}
+
+.site-content .wp-playlist-light li.wp-playlist-item::marker {
+	color: #222;
+}
+
+.site-content .wp-playlist-dark li.wp-playlist-item::marker {
+	color: #fff;
+}
+
+.site-content li.wp-playlist-item .wp-playlist-caption {
+	padding: 0.3125em 0;
+}
+
+.site-content li.wp-playlist-item .wp-playlist-caption,
+.site-content li.wp-playlist-item .wp-playlist-item-length {
+	color: inherit;
+}
+
 /* SVG Icons base styles */
 
 .icon {
