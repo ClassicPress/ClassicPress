@@ -3043,6 +3043,7 @@ p > object:only-child {
 
 .site-content li.wp-playlist-item .wp-playlist-caption {
 	padding: 0.3125em 0;
+	overflow: visible;
 }
 
 .site-content li.wp-playlist-item .wp-playlist-caption,
