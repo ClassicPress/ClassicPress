@@ -3029,10 +3029,6 @@ p > object:only-child {
 
 /* Playlist Style Overrides for CP */
 
-.site-content li.wp-playlist-item {
-	margin-left: 1em;
-}
-
 .site-content .wp-playlist-light li.wp-playlist-item::marker {
 	color: #222;
 }
