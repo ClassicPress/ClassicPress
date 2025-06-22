@@ -171,7 +171,7 @@ video.wp-video-shortcode,
 }
 
 .wp-playlist-caption {
-	display: inline;
+	display: block;
 	max-width: 88%;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -224,7 +224,6 @@ video.wp-video-shortcode,
 }
 
 .wp-playlist-tracks {
-	list-style-position: inside;
 	margin-top: 10px;
 }
 
