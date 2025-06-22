@@ -224,6 +224,7 @@ video.wp-video-shortcode,
 }
 
 .wp-playlist-tracks {
+	list-style-position: inside;
 	margin-top: 10px;
 }
 
