@@ -2927,6 +2927,11 @@ p > object:only-child {
 	color: #fff;
 }
 
+.site-content .wp-playlist-light .wp-playlist-caption:hover,
+.site-content .wp-playlist-light .wp-playlist-caption:focus {
+	color: #fff;
+}
+
 .site-content .wp-playlist-light a.wp-playlist-caption:hover,
 .site-content .wp-playlist-light .wp-playlist-item:hover a,
 .site-content .wp-playlist-light .wp-playlist-item:focus a {
@@ -3023,8 +3028,8 @@ p > object:only-child {
 	background: transparent;
 }
 
-.site-content .wp-playlist-item-length {
-	top: 5px;
+.site-content .wp-playlist-caption {
+	display: inline !important;
 }
 
 /* SVG Icons base styles */
