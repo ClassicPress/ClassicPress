@@ -3029,25 +3029,34 @@ p > object:only-child {
 
 /* Playlist Style Overrides for CP */
 
-.site-content li.wp-playlist-item {
+ol.wp-playlist-tracks {
 	margin-left: 1em;
+	margin-bottom: 0;
 }
 
-.site-content .wp-playlist-light li.wp-playlist-item::marker {
+ol.wp-playlist-tracks li {
+	list-style-position: outside;
+	padding: 0 0.3125em;
+}
+
+.wp-playlist-light li.wp-playlist-item::marker {
 	color: #222;
 }
 
-.site-content .wp-playlist-dark li.wp-playlist-item::marker {
+.wp-playlist-dark li.wp-playlist-item::marker {
 	color: #fff;
 }
 
-.site-content li.wp-playlist-item .wp-playlist-caption {
+li.wp-playlist-item .wp-playlist-caption {
 	padding: 0.3125em 0;
-	overflow: visible;
 }
 
-.site-content li.wp-playlist-item .wp-playlist-caption,
-.site-content li.wp-playlist-item .wp-playlist-item-length {
+li.wp-playlist-item .wp-playlist-item-length {
+	top: 5px;
+}
+
+li.wp-playlist-item .wp-playlist-caption,
+li.wp-playlist-item .wp-playlist-item-length {
 	color: inherit;
 }
 
