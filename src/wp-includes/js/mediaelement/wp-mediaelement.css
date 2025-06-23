@@ -181,8 +181,8 @@ video.wp-video-shortcode,
 }
 
 .wp-playlist-item .wp-playlist-caption {
-	text-decoration: none;
-	color: #000;
+	overflow: visible;
+	white-space: normal;
 	max-width: -webkit-calc(100% - 40px);
 	max-width: calc(100% - 40px);
 }
@@ -200,9 +200,6 @@ video.wp-video-shortcode,
 
 .wp-playlist-item-album {
 	font-style: italic;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
 }
 
 .wp-playlist-item-artist {
@@ -236,14 +233,6 @@ video.wp-video-shortcode,
 
 .wp-playlist-item:last-child {
 	border-bottom: 0;
-}
-
-.wp-playlist-light .wp-playlist-caption {
-	color: #333;
-}
-
-.wp-playlist-dark .wp-playlist-caption {
-	color: #ddd;
 }
 
 .wp-playlist-playing {
@@ -283,6 +272,7 @@ video.wp-video-shortcode,
 }
 
 .wp-playlist-current-item .wp-playlist-item-title,
+.wp-playlist-current-item .wp-playlist-item-album,
 .wp-playlist-current-item .wp-playlist-item-artist {
 	overflow: hidden;
 	text-overflow: ellipsis;
