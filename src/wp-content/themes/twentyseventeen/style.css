@@ -3055,8 +3055,33 @@ li.wp-playlist-item .wp-playlist-item-length {
 	top: 5px;
 }
 
-li.wp-playlist-item .wp-playlist-caption,
-li.wp-playlist-item .wp-playlist-item-length {
+.site-content .wp-playlist-light li.wp-playlist-item,
+.site-content .wp-playlist-light li.wp-playlist-item .wp-playlist-caption,
+.site-content .wp-playlist-light li.wp-playlist-item .wp-playlist-item-length {
+	color: #222;
+}
+
+.site-content .wp-playlist-light li.wp-playlist-item:hover {
+	color: #fff;
+}
+
+.site-content .wp-playlist-light li.wp-playlist-item .wp-playlist-caption,
+.site-content .wp-playlist-light li.wp-playlist-item .wp-playlist-item-length {
+	color: inherit;
+}
+
+.site-content .wp-playlist-dark li.wp-playlist-item,
+.site-content .wp-playlist-dark li.wp-playlist-item .wp-playlist-caption,
+.site-content .wp-playlist-dark li.wp-playlist-item .wp-playlist-item-length {
+	color: #fff;
+}
+
+.site-content .wp-playlist-dark li.wp-playlist-item:hover {
+	color: #222;
+}
+
+.site-content .wp-playlist-dark li.wp-playlist-item .wp-playlist-caption,
+.site-content .wp-playlist-dark li.wp-playlist-item .wp-playlist-item-length {
 	color: inherit;
 }
 
