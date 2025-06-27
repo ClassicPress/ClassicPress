@@ -240,6 +240,14 @@ video.wp-video-shortcode,
 	border-bottom: 0;
 }
 
+.wp-playlist-light .wp-playlist-caption {
+	color: #333;
+}
+
+.wp-playlist-dark .wp-playlist-caption {
+	color: #ddd;
+}
+
 .wp-playlist-playing {
 	font-weight: bold;
 	background: #f7f7f7;
