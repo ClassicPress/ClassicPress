@@ -61,7 +61,9 @@ module.exports = function(grunt) {
 				dest: SOURCE_DIR,
 				src: [
 					'wp-admin/css/*.css',
-					'wp-includes/css/*.css'
+					'wp-includes/css/*.css',
+					'wp-includes/js/mediaelement/wp-*.css',
+					'!wp-includes/js/mediaelement/wp-*.min.css',
 				]
 			},
 			colors: {
