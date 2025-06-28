@@ -125,6 +125,21 @@ module.exports = function(grunt) {
 					'!wp-includes/js/dist/vendor/**'
 				]
 			},
+			'mediaelement-js': {
+				expand: true,
+				cwd: SOURCE_DIR,
+				src: [
+					'wp-includes/js/mediaelement/mediaelement-and-player.js',
+					'wp-includes/js/mediaelement/mediaelement-and-player.min.js',
+					'wp-includes/js/mediaelement/mediaelement.js',
+					'wp-includes/js/mediaelement/mediaelement.min.js',
+					'wp-includes/js/mediaelement/mediaelementplayer-legacy.css',
+					'wp-includes/js/mediaelement/mediaelementplayer-legacy.min.css',
+					'wp-includes/js/mediaelement/mediaelementplayer.css',
+					'wp-includes/js/mediaelement/mediaelementplayer.min.css',
+					'wp-includes/js/mediaelement/mejs-controls.svg'
+				]
+			},
 			dynamic: {
 				dot: true,
 				expand: true,
@@ -226,6 +241,46 @@ module.exports = function(grunt) {
 					{
 						src:  `./node_modules/sortablejs/Sortable.min.js`,
 						dest: `${SOURCE_DIR}wp-includes/js/sortable.min.js`
+					}
+				]
+			},
+			'mediaelement-js': {
+				files: [
+					{
+						src:  `./node_modules/mediaelement/build/mediaelement-and-player.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelement-and-player.js`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelement-and-player.min.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelement-and-player.min.js`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelement.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelement.js`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelement.min.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelement.min.js`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelementplayer-legacy.css`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelementplayer-legacy.css`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelementplayer-legacy.min.css`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelementplayer-legacy.min.css`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelementplayer.css`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelementplayer.css`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelementplayer.min.css`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelementplayer.min.css`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mejs-controls.svg`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mejs-controls.svg`
 					}
 				]
 			},
@@ -1161,10 +1216,12 @@ module.exports = function(grunt) {
 		[
 			'clean:vendor-js',
 			'clean:package-js',
+			'clean:mediaelement-js',
 			'copy:vendor-js',
 			'webpack:dev',
 			'webpack:min',
-			'usebanner:js'
+			'usebanner:js',
+			'copy:mediaelement-js'
 		]
 	);
 
