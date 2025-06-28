@@ -62,8 +62,7 @@ module.exports = function(grunt) {
 				src: [
 					'wp-admin/css/*.css',
 					'wp-includes/css/*.css',
-					'wp-includes/js/mediaelement/wp-*.css',
-					'!wp-includes/js/mediaelement/wp-*.min.css',
+					'wp-includes/js/mediaelement/wp-*.css'
 				]
 			},
 			colors: {
