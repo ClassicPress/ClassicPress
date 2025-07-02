@@ -174,9 +174,17 @@ function wp_add_inline_script( $handle, $data, $position = 'after' ) {
  *      @type string    $strategy     Optional. If provided, may be either 'defer' or 'async'.
  *      @type bool      $in_footer    Optional. Whether to print the script in the footer. Default 'false'.
  * }
+ * @param bool          $in_footer    Optional. Deprecated method for printing script in footer. Default 'false'.
  * @return bool Whether the script has been registered. True on success, false on failure.
  */
-function wp_register_script( $handle, $src, $deps = array(), $ver = false, $args = array() ) {
+function wp_register_script( $handle, $src, $deps = array(), $ver = false, $args = array(), $in_footer = false ) {
+	if ( false !== $in_footer ) {
+		if ( ! isset( $args['in_footer'] ) ) {
+			$args['in_footer'] = $in_footer;
+		}
+		_deprecated_argument( __FUNCTION__, 'CP3.0.0', __( 'Use the `$args` paramater instead.' ) );
+	}
+
 	if ( ! is_array( $args ) ) {
 		$args = array(
 			'in_footer' => (bool) $args,
