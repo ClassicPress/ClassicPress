@@ -265,7 +265,7 @@ JS;
 		$expected .= wp_get_inline_script_tag(
 			"console.log(\"before last\");\n",
 			array(
-				'id'   => 'ms-i1-1-js-before'
+				'id' => 'ms-i1-1-js-before',
 			)
 		);
 		$expected .= "<script src='http://example.org/ms-i1-1.js' id='ms-i1-1-js' {$strategy} data-wp-strategy='{$strategy}'></script>\n";
