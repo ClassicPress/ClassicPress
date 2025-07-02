@@ -23,84 +23,7 @@
 	<!-- Show sniff codes in all reports. -->
 	<arg value="ps"/>
 
-<<<<<<< HEAD
 	<file>./src/</file>
-=======
-	<file>.</file>
-
-	<rule ref="WordPress-Core"/>
-	<rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
-
-	<!-- These rules are being set as warnings instead of errors, so we can error check the entire codebase. -->
-	<rule ref="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase">
-		<type>warning</type>
-	</rule>
-	<rule ref="WordPress.DB.PreparedSQL.InterpolatedNotPrepared">
-		<type>warning</type>
-	</rule>
-	<rule ref="WordPress.DB.PreparedSQL.NotPrepared">
-		<type>warning</type>
-	</rule>
-	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
-		<type>warning</type>
-	</rule>
-
-	<rule ref="WordPress.NamingConventions.ValidVariableName">
-		<properties>
-			<property name="customPropertiesWhitelist" type="array">
-				<!-- From database structure queries. -->
-				<element value="Collation"/>
-				<element value="Column_name"/>
-				<element value="Default"/>
-				<element value="Extra"/>
-				<element value="Field"/>
-				<element value="Index_type"/>
-				<element value="Key"/>
-				<element value="Key_name"/>
-				<element value="Msg_text"/>
-				<element value="Non_unique"/>
-				<element value="Null"/>
-				<element value="Sub_part"/>
-				<element value="Type"/>
-				<!-- From plugin/theme data. -->
-				<element value="authorAndUri"/>
-				<element value="Name"/>
-				<element value="Version"/>
-				<!-- From the result of wp_xmlrpc_server::wp_getPageList(). -->
-				<element value="dateCreated"/>
-
-				<!-- From DOMDocument. -->
-				<element value="childNodes"/>
-				<element value="firstChild"/>
-				<element value="formatOutput"/>
-				<element value="lastChild"/>
-				<element value="nodeName"/>
-				<element value="nodeType"/>
-				<element value="parentNode"/>
-				<element value="preserveWhiteSpace"/>
-				<element value="textContent"/>
-				<!-- From PHPMailer. -->
-				<element value="AltBody"/>
-				<element value="Body"/>
-				<element value="CharSet"/>
-				<element value="ContentType"/>
-				<element value="Encoding"/>
-				<element value="Hostname"/>
-				<element value="mailHeader"/>
-				<element value="MIMEBody"/>
-				<element value="MIMEHeader"/>
-				<element value="Sender"/>
-				<element value="Subject"/>
-				<!-- From PHPUnit_Util_Getopt. -->
-				<element value="longOptions"/>
-				<!-- From POP3. -->
-				<element value="ERROR"/>
-				<!-- From ZipArchive. -->
-				<element value="numFiles"/>
-			</property>
-		</properties>
-	</rule>
->>>>>>> 613b0e7dc9 (Script Loader: Add support for HTML 5 "async" and "defer" attributes.)
 
 	<!-- Exclude the build folder in the current directory. -->
 	<exclude-pattern type="relative">^build/*</exclude-pattern>
@@ -227,7 +150,9 @@
 
 				<!-- From DOMDocument. -->
 				<element value="childNodes"/>
+				<element value="firstChild"/>
 				<element value="formatOutput"/>
+				<element value="lastChild"/>
 				<element value="nodeName"/>
 				<element value="nodeType"/>
 				<element value="parentNode"/>

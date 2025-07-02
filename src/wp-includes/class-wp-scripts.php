@@ -123,19 +123,6 @@ class WP_Scripts extends WP_Dependencies {
 	public $default_dirs;
 
 	/**
-<<<<<<< HEAD
-=======
-	 * Holds a string which contains the type attribute for script tag.
-	 *
-	 * If the active theme does not declare HTML5 support for 'script',
-	 * then it initializes as `type='text/javascript'`.
-	 *
-	 * @since 5.3.0
-	 * @var string
-	 */
-	private $type_attr = '';
-
-	/**
 	 * Holds a mapping of dependents (as handles) for a given script handle.
 	 * Used to optimize recursive dependency tree checks.
 	 *
@@ -154,7 +141,6 @@ class WP_Scripts extends WP_Dependencies {
 	private $delayed_strategies = array( 'defer', 'async' );
 
 	/**
->>>>>>> 613b0e7dc9 (Script Loader: Add support for HTML 5 "async" and "defer" attributes.)
 	 * Constructor.
 	 *
 	 * @since 2.6.0
@@ -309,21 +295,8 @@ class WP_Scripts extends WP_Dependencies {
 		$before_script = $this->get_inline_script_tag( $handle, 'before' );
 		$after_script  = $this->get_inline_script_tag( $handle, 'after' );
 
-<<<<<<< HEAD
-		if ( $before_handle ) {
-			$before_handle = sprintf( "<script id='%s-js-before'>\n%s\n</script>\n", esc_attr( $handle ), $before_handle );
-		}
-
-		if ( $after_handle ) {
-			$after_handle = sprintf( "<script id='%s-js-after'>\n%s\n</script>\n", esc_attr( $handle ), $after_handle );
-		}
-
-		if ( $before_handle || $after_handle ) {
-			$inline_script_tag = $cond_before . $before_handle . $after_handle . $cond_after;
-=======
 		if ( $before_script || $after_script ) {
 			$inline_script_tag = $cond_before . $before_script . $after_script . $cond_after;
->>>>>>> 613b0e7dc9 (Script Loader: Add support for HTML 5 "async" and "defer" attributes.)
 		} else {
 			$inline_script_tag = '';
 		}
@@ -410,22 +383,15 @@ class WP_Scripts extends WP_Dependencies {
 			return true;
 		}
 
-<<<<<<< HEAD
-		$tag  = $translations . $cond_before . $before_handle;
-		$tag .= sprintf( "<script src='%s' id='%s-js'></script>\n", $src, esc_attr( $handle ) );
-		$tag .= $after_handle . $cond_after;
-=======
 		$tag  = $translations . $cond_before . $before_script;
 		$tag .= sprintf(
-			"<script%s src='%s' id='%s-js'%s%s></script>\n",
-			$this->type_attr,
+			"<script src='%s' id='%s-js'%s%s></script>\n",
 			$src, // Value is escaped above.
 			esc_attr( $handle ),
 			$strategy ? " {$strategy}" : '',
 			$intended_strategy ? " data-wp-strategy='{$intended_strategy}'" : ''
 		);
 		$tag .= $after_script . $cond_after;
->>>>>>> 613b0e7dc9 (Script Loader: Add support for HTML 5 "async" and "defer" attributes.)
 
 		/**
 		 * Filters the HTML script tag of an enqueued script.
@@ -497,11 +463,7 @@ class WP_Scripts extends WP_Dependencies {
 		}
 
 		if ( $display ) {
-<<<<<<< HEAD
-			printf( "<script id='%s-js-%s'>\n%s\n</script>\n", esc_attr( $handle ), esc_attr( $position ), $output );
-=======
 			echo $this->get_inline_script_tag( $handle, $position );
->>>>>>> 613b0e7dc9 (Script Loader: Add support for HTML 5 "async" and "defer" attributes.)
 		}
 		return $output;
 	}
