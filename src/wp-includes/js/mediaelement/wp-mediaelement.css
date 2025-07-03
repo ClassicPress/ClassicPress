@@ -47,10 +47,13 @@
 	background: transparent;
 }
 
+.mejs-overlay-play {
+	max-width: 100%;
+}
+
 /* Override theme styles that may conflict with controls. */
 .mejs-controls button:hover {
 	border: none;
-	-webkit-box-shadow: none;
 	box-shadow: none;
 }
 
@@ -183,7 +186,6 @@ video.wp-video-shortcode,
 .wp-playlist-item .wp-playlist-caption {
 	text-decoration: none;
 	color: #000;
-	max-width: -webkit-calc(100% - 40px);
 	max-width: calc(100% - 40px);
 }
 
