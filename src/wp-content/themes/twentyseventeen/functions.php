@@ -278,20 +278,7 @@ if ( ! function_exists( 'twentyseventeen_fonts_url' ) ) :
 	$libre_franklin = _x( 'on', 'Libre Franklin font: on or off', 'twentyseventeen' );
 
 	if ( 'off' !== $libre_franklin ) {
-<<<<<<< HEAD
-		$font_families = array();
-
-		$font_families[] = 'Libre Franklin:300,300i,400,400i,600,600i,800,800i';
-
-		$query_args = array(
-			'family' => urlencode( implode( '|', $font_families ) ),
-			'subset' => urlencode( 'latin,latin-ext' ),
-		);
-
-		$fonts_url = add_query_arg( $query_args, 'https://fonts.googleapis.com/css' );
-=======
-			$fonts_url = get_template_directory_uri() . '/assets/fonts/font-libre-franklin.css';
->>>>>>> 6fa564122d (Twenty Seventeen: Bundle Google Fonts locally.)
+		$fonts_url = get_template_directory_uri() . '/assets/fonts/font-libre-franklin.css';
 	}
 
 	return esc_url_raw( $fonts_url );
@@ -494,23 +481,6 @@ function twentyseventeen_scripts() {
 add_action( 'wp_enqueue_scripts', 'twentyseventeen_scripts' );
 
 /**
-<<<<<<< HEAD
-=======
- * Enqueues styles for the block-based editor.
- *
- * @since Twenty Seventeen 1.8
- */
-function twentyseventeen_block_editor_styles() {
-	// Block styles.
-	wp_enqueue_style( 'twentyseventeen-block-editor-style', get_theme_file_uri( '/assets/css/editor-blocks.css' ), array(), '20220912' );
-	// Add custom fonts.
-	$font_version = ( 0 === strpos( (string) twentyseventeen_fonts_url(), get_template_directory_uri() . '/' ) ) ? '20230328' : null;
-	wp_enqueue_style( 'twentyseventeen-fonts', twentyseventeen_fonts_url(), array(), $font_version );
-}
-add_action( 'enqueue_block_editor_assets', 'twentyseventeen_block_editor_styles' );
-
-/**
->>>>>>> 6fa564122d (Twenty Seventeen: Bundle Google Fonts locally.)
  * Add custom image sizes attribute to enhance responsive image functionality
  * for content images.
  *
