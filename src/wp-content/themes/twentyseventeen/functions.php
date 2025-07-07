@@ -99,9 +99,15 @@ function twentyseventeen_setup() {
 
 	/*
 	 * This theme styles the visual editor to resemble the theme style,
-	 * specifically font, colors, and column width.
+	 * specifically font, colors, and column width. When fonts are
+	 * self-hosted, the theme directory needs to be removed first.
 	  */
-	add_editor_style( array( 'assets/css/editor-style.css', twentyseventeen_fonts_url() ) );
+	$font_stylesheet = str_replace(
+		array( get_template_directory_uri() . '/', get_stylesheet_directory_uri() . '/' ),
+		'',
+		twentyseventeen_fonts_url()
+	);
+	add_editor_style( array( 'assets/css/editor-style.css', $font_stylesheet ) );
 
 	// Define and register starter content to showcase the theme on new sites.
 	$starter_content = array(
@@ -252,10 +258,16 @@ function twentyseventeen_content_width() {
 }
 add_action( 'template_redirect', 'twentyseventeen_content_width', 0 );
 
-/**
+if ( ! function_exists( 'twentyseventeen_fonts_url' ) ) :
+	/**
  * Register custom fonts.
+	 *
+	 * @since Twenty Seventeen 1.0
+	 * @since Twenty Seventeen 3.2 Replaced Google URL with self-hosted fonts.
+	 *
+	 * @return string Fonts URL for the theme.
  */
-function twentyseventeen_fonts_url() {
+	function twentyseventeen_fonts_url() {
 	$fonts_url = '';
 
 	/*
@@ -266,6 +278,7 @@ function twentyseventeen_fonts_url() {
 	$libre_franklin = _x( 'on', 'Libre Franklin font: on or off', 'twentyseventeen' );
 
 	if ( 'off' !== $libre_franklin ) {
+<<<<<<< HEAD
 		$font_families = array();
 
 		$font_families[] = 'Libre Franklin:300,300i,400,400i,600,600i,800,800i';
@@ -276,15 +289,20 @@ function twentyseventeen_fonts_url() {
 		);
 
 		$fonts_url = add_query_arg( $query_args, 'https://fonts.googleapis.com/css' );
+=======
+			$fonts_url = get_template_directory_uri() . '/assets/fonts/font-libre-franklin.css';
+>>>>>>> 6fa564122d (Twenty Seventeen: Bundle Google Fonts locally.)
 	}
 
 	return esc_url_raw( $fonts_url );
-}
+	}
+endif;
 
 /**
  * Add preconnect for Google Fonts.
  *
  * @since Twenty Seventeen 1.0
+ * @deprecated Twenty Seventeen 3.2 Disabled filter because, by default, fonts are self-hosted.
  *
  * @param array  $urls           URLs to print for resource hints.
  * @param string $relation_type  The relation type the URLs are printed.
@@ -300,7 +318,7 @@ function twentyseventeen_resource_hints( $urls, $relation_type ) {
 
 	return $urls;
 }
-add_filter( 'wp_resource_hints', 'twentyseventeen_resource_hints', 10, 2 );
+// add_filter( 'wp_resource_hints', 'twentyseventeen_resource_hints', 10, 2 );
 
 /**
  * Register widget area.
@@ -420,7 +438,8 @@ add_action( 'wp_head', 'twentyseventeen_colors_css_wrap' );
  */
 function twentyseventeen_scripts() {
 	// Add custom fonts, used in the main stylesheet.
-	wp_enqueue_style( 'twentyseventeen-fonts', twentyseventeen_fonts_url(), array(), null );
+	$font_version = ( 0 === strpos( (string) twentyseventeen_fonts_url(), get_template_directory_uri() . '/' ) ) ? '20230328' : null;
+	wp_enqueue_style( 'twentyseventeen-fonts', twentyseventeen_fonts_url(), array(), $font_version );
 
 	// Theme stylesheet.
 	wp_enqueue_style( 'twentyseventeen-style', get_stylesheet_uri() );
@@ -475,6 +494,23 @@ function twentyseventeen_scripts() {
 add_action( 'wp_enqueue_scripts', 'twentyseventeen_scripts' );
 
 /**
+<<<<<<< HEAD
+=======
+ * Enqueues styles for the block-based editor.
+ *
+ * @since Twenty Seventeen 1.8
+ */
+function twentyseventeen_block_editor_styles() {
+	// Block styles.
+	wp_enqueue_style( 'twentyseventeen-block-editor-style', get_theme_file_uri( '/assets/css/editor-blocks.css' ), array(), '20220912' );
+	// Add custom fonts.
+	$font_version = ( 0 === strpos( (string) twentyseventeen_fonts_url(), get_template_directory_uri() . '/' ) ) ? '20230328' : null;
+	wp_enqueue_style( 'twentyseventeen-fonts', twentyseventeen_fonts_url(), array(), $font_version );
+}
+add_action( 'enqueue_block_editor_assets', 'twentyseventeen_block_editor_styles' );
+
+/**
+>>>>>>> 6fa564122d (Twenty Seventeen: Bundle Google Fonts locally.)
  * Add custom image sizes attribute to enhance responsive image functionality
  * for content images.
  *
