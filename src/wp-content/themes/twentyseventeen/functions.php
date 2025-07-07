@@ -268,20 +268,20 @@ if ( ! function_exists( 'twentyseventeen_fonts_url' ) ) :
 	 * @return string Fonts URL for the theme.
  */
 	function twentyseventeen_fonts_url() {
-	$fonts_url = '';
+		$fonts_url = '';
 
-	/*
-	 * Translators: If there are characters in your language that are not
-	 * supported by Libre Franklin, translate this to 'off'. Do not translate
-	 * into your own language.
-	 */
-	$libre_franklin = _x( 'on', 'Libre Franklin font: on or off', 'twentyseventeen' );
+		/*
+		 * Translators: If there are characters in your language that are not
+		 * supported by Libre Franklin, translate this to 'off'. Do not translate
+		 * into your own language.
+		 */
+		$libre_franklin = _x( 'on', 'Libre Franklin font: on or off', 'twentyseventeen' );
 
-	if ( 'off' !== $libre_franklin ) {
-		$fonts_url = get_template_directory_uri() . '/assets/fonts/font-libre-franklin.css';
-	}
+		if ( 'off' !== $libre_franklin ) {
+			$fonts_url = get_template_directory_uri() . '/assets/fonts/font-libre-franklin.css';
+		}
 
-	return esc_url_raw( $fonts_url );
+		return esc_url_raw( $fonts_url );
 	}
 endif;
 
