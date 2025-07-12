@@ -297,6 +297,8 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 }
 require_once ABSPATH . WPINC . '/classicpress/class-cp-customization-frontend.php';
 
+wp_script_modules()->add_hooks();
+
 $GLOBALS['wp_embed'] = new WP_Embed();
 
 /**
