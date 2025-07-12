@@ -32,10 +32,9 @@ class Tests_WP_Script_Modules extends WP_UnitTestCase {
 	 *
 	 * @return array Enqueued script module URLs, keyed by script module identifier.
 	 */
-<<<<<<< HEAD
-	public function get_enqueued_modules() {
-		$modules_markup   = get_echo( array( $this->modules, 'print_enqueued_modules' ) );
-		$enqueued_modules = array();
+	public function get_enqueued_script_modules() {
+		$modules_markup          = get_echo( array( $this->script_modules, 'print_enqueued_script_modules' ) );
+		$enqueued_script_modules = array();
 
 		preg_match_all( '/src="(\S*)" id="(\S*)"/', $modules_markup, $matches, PREG_SET_ORDER );
 
@@ -44,19 +43,8 @@ class Tests_WP_Script_Modules extends WP_UnitTestCase {
 				$id = isset( $match[2] ) ? str_replace( '-js-module', '', $match[2] ) : null;
 
 				if ( null !== $id ) {
-					$enqueued_modules[ $id ] = $match[1];
+					$enqueued_script_modules[ $id ] = $match[1];
 				}
-=======
-	public function get_enqueued_script_modules() {
-		$script_modules_markup   = get_echo( array( $this->script_modules, 'print_enqueued_script_modules' ) );
-		$p                       = new WP_HTML_Tag_Processor( $script_modules_markup );
-		$enqueued_script_modules = array();
-
-		while ( $p->next_tag( array( 'tag' => 'SCRIPT' ) ) ) {
-			if ( 'module' === $p->get_attribute( 'type' ) ) {
-				$id                             = preg_replace( '/-js-module$/', '', $p->get_attribute( 'id' ) );
-				$enqueued_script_modules[ $id ] = $p->get_attribute( 'src' );
->>>>>>> 3c4fbc353f (Script Modules API: Rename `wp_module` to `wp_script_module`)
 			}
 		}
 
@@ -79,10 +67,9 @@ class Tests_WP_Script_Modules extends WP_UnitTestCase {
 	 *
 	 * @return array Preloaded script module URLs, keyed by script module identifier.
 	 */
-<<<<<<< HEAD
-	public function get_preloaded_modules() {
-		$preloaded_markup  = get_echo( array( $this->modules, 'print_module_preloads' ) );
-		$preloaded_modules = array();
+	public function get_preloaded_script_modules() {
+		$preloaded_markup         = get_echo( array( $this->script_modules, 'print_script_module_preloads' ) );
+		$preloaded_script_modules = array();
 
 		preg_match_all( '/href="(\S*)" id="(\S*)"/', $preloaded_markup, $matches, PREG_SET_ORDER );
 
@@ -91,19 +78,8 @@ class Tests_WP_Script_Modules extends WP_UnitTestCase {
 				$id = isset( $match[2] ) ? str_replace( '-js-modulepreload', '', $match[2] ) : null;
 
 				if ( null !== $id ) {
-					$preloaded_modules[ $id ] = $match[1];
+					$preloaded_script_modules[ $id ] = $match[1];
 				}
-=======
-	public function get_preloaded_script_modules() {
-		$preloaded_markup         = get_echo( array( $this->script_modules, 'print_script_module_preloads' ) );
-		$p                        = new WP_HTML_Tag_Processor( $preloaded_markup );
-		$preloaded_script_modules = array();
-
-		while ( $p->next_tag( array( 'tag' => 'LINK' ) ) ) {
-			if ( 'modulepreload' === $p->get_attribute( 'rel' ) ) {
-				$id                              = preg_replace( '/-js-modulepreload$/', '', $p->get_attribute( 'id' ) );
-				$preloaded_script_modules[ $id ] = $p->get_attribute( 'href' );
->>>>>>> 3c4fbc353f (Script Modules API: Rename `wp_module` to `wp_script_module`)
 			}
 		}
 
