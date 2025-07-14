@@ -72,7 +72,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 	$themes_url  = current_user_can( 'switch_themes' ) ? admin_url( 'themes.php' ) : __( 'https://wordpress.org/themes/' );
 	$plugins_url = current_user_can( 'activate_plugins' ) ? admin_url( 'plugins.php' ) : __( 'https://wordpress.org/plugins/' );
 
-	printf( __( 'WordPress <a href="%2$s">themes</a> and <a href="%1$s">plugins</a> fall under the GPL or a similarly free and compatible license as well. If you get a theme or plugin from another source, make sure it has the right license. If it does not respect the ClassicPress license, we do not recommend it.' ), $themes_url, $plugins_url );
+	printf( __( 'WordPress <a href="%1$s">themes</a> and <a href="%2$s">plugins</a> fall under the GPL or a similarly free and compatible license as well. If you get a theme or plugin from another source, make sure it has the right license. If it does not respect the ClassicPress license, we do not recommend it.' ), $themes_url, $plugins_url );
 
 	?>
 	</p>
