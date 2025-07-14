@@ -91,9 +91,9 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 			<p>
 				<?php
 				printf(
-					/* translators: 1: link to ClassicPress FAQs page, 2: link to ClassicPress support forum */
-					__( 'If you need help with something else, please see our <a href="%1$s"><strong>FAQs page</strong></a>. If your question is not answered there, you can make a new post on our <a href="%2$s"><strong>support forum</strong></a>.' ),
-					'https://www.classicpress.net/faq/',
+					/* translators: 1: link to ClassicPress docs, 2: link to ClassicPress support forum */
+					__( 'If you need help with something else, please see our <a href="%1$s"><strong>documentation</strong></a>. If your question is not answered there, you can make a new post on our <a href="%2$s"><strong>support forum</strong></a>.' ),
+					'https://docs.classicpress.net/',
 					'https://forums.classicpress.net/c/support/'
 				);
 				?>
@@ -113,8 +113,8 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 			<p>
 				<?php
 				printf(
-					/* translators: link to ClassicPress 1.0.0 changelog */
-					__( 'For a list of new features and other changes from WordPress %1$s, see the <a href="%2$s"><strong>ClassicPress 2.0.0 (Bella) release notes</strong></a>.' ),
+					/* translators: link to ClassicPress 2.0.0 changelog */
+					__( 'ClassicPress 2.0.0 is a fork of the WordPress %1$s branch. See the <a href="%2$s"><strong>ClassicPress 2.0.0 (Bella) release notes</strong></a>.' ),
 					'6.2.x',
 					'https://forums.classicpress.net/t/classicpress-2-0-0-bella-release-notes/5099'
 				);
@@ -133,7 +133,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: link to ClassicPress release announcements subforum */
-					__( 'The changes and new features included in recent versions of ClassicPress can be found in our <a href="%s"><strong>Release Notes subforum</strong></a>.' ),
+					__( 'The changes and new features included in current and previous versions of ClassicPress can be found in our <a href="%s"><strong>Release Notes subforum</strong></a>.' ),
 					'https://forums.classicpress.net/c/announcements/release-notes'
 				);
 				?>
@@ -143,7 +143,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: link to ClassicPress 1.0.0 changelog */
-					__( 'For a list of new features and other changes in WordPress %1$s, see the <a href="%2$s"><strong>ClassicPress 1.0.0 (Aurora) release notes</strong></a>.' ),
+					__( 'ClassicPress 1.0.0 is a fork of the WordPress %1$s branch. See the <a href="%2$s"><strong>ClassicPress 1.0.0 (Aurora) release notes</strong></a>.' ),
 					'4.9.x',
 					'https://forums.classicpress.net/t/classicpress-1-0-0-aurora-release-notes/910'
 				);
