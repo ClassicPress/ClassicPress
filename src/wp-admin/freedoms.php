@@ -57,25 +57,31 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 
 	<p>
 	<?php
-
 	$cp_directory = 'https://directory.classicpress.net/';
 	$license_url = 'https://opensource.org/licenses/gpl-license';
-	$cp_directory_plugin = 'https://directory.classicpress.net/plugins/classicpress-directory-integration/';
-
-	printf( __( 'Every theme and plugin in the <a href="%1$s">ClassicPress Directory</a> falls under the <a href="%2$s">GPL</a> or a similarly free and compatible license. With the <a href="%3$s">ClassicPress Directory Integration</a> plugin you get access to themes and plugins that are built for ClassicPress. They will appear in the Appearance > Install CP Themes or Plugins > Install CP Plugins screen.' ), $cp_directory, $license_url, $cp_directory_plugin );
-
+	printf(
+		/* translators: 1: link to CP Directory, 2: link to GPL */
+		__( 'Every plugin and theme in the <a href="%1$s">ClassicPress Directory</a> falls under the <a href="%2$s">GPL</a> or a similarly free and compatible license.' ),
+		$cp_directory,
+		$license_url
+	);
 	?>
 	</p>
+
 	<p>
 	<?php
-
-	$themes_url  = current_user_can( 'switch_themes' ) ? admin_url( 'themes.php' ) : __( 'https://wordpress.org/themes/' );
 	$plugins_url = current_user_can( 'activate_plugins' ) ? admin_url( 'plugins.php' ) : __( 'https://wordpress.org/plugins/' );
-
-	printf( __( 'WordPress <a href="%1$s">themes</a> and <a href="%2$s">plugins</a> fall under the GPL or a similarly free and compatible license as well. If you get a theme or plugin from another source, make sure it has the right license. If it does not respect the ClassicPress license, we do not recommend it.' ), $themes_url, $plugins_url );
-
+	$themes_url  = current_user_can( 'switch_themes' ) ? admin_url( 'themes.php' ) : __( 'https://wordpress.org/themes/' );
+	printf(
+		/* translators: 1: link to WP Plugin Directory, 2: link to WP Theme Directory */
+		__( 'WordPress <a href="%1$s">plugins</a> and <a href="%2$s">themes</a> fall under the GPL or a similarly free and compatible license as well.' ),
+		$plugins_url,
+		$themes_url
+	);
 	?>
 	</p>
+
+	<p><?php _e( 'If you get a plugin or theme from another source, make sure it has the right license. If it does not respect the ClassicPress license, we do not recommend it.' ); ?></p>
 
 	<p><?php _e( 'Don&#8217;t you wish all software came with these freedoms? So do we! For more information, check out the <a href="https://www.fsf.org/">Free Software Foundation</a>.' ); ?></p>
 </div>
