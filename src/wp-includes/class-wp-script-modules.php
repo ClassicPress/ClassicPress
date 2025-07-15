@@ -213,7 +213,7 @@ class WP_Script_Modules {
 				wp_print_script_tag(
 					array(
 						'type' => 'module',
-					'src'  => $this->get_src( $id ),
+						'src'  => $this->get_src( $id ),
 						'id'   => $id . '-js-module',
 					)
 				);
