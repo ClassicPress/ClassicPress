@@ -77,6 +77,15 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 				);
 				?>
 			</p>
+			<p>
+				<?php
+				printf(
+					/* translators: link to ClassicPress Directory */
+					__( 'With the <a href="%s"><strong>ClassicPress Directory Integration</strong></a> plugin you get access to themes and plugins that are built for ClassicPress. They will appear in the Appearance > Install CP Themes or Plugins > Install CP Plugins screen.' ),
+					'https://directory.classicpress.net/plugins/classicpress-directory-integration/'
+				);
+				?>
+			</p>
 			<h3><?php _e( 'Join our growing community' ); ?></h3>
 			<p>
 				<?php
