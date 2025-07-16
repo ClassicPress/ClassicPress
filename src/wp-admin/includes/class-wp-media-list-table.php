@@ -224,7 +224,7 @@ class WP_Media_List_Table extends WP_List_Table {
 		$media_category = get_taxonomy( 'media_category' );
 		$terms = get_terms(
 			array(
-				'taxonomy' => 'media_category',
+				'taxonomy'   => 'media_category',
 				'hide_empty' => false,
 			)
 		);
