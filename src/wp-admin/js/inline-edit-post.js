@@ -47,7 +47,7 @@ window.wp = window.wp || {};
 		}
 
 		// Get list of tags and convert to an array
-		suggestions = document.getElementById( 'tags-list' ).value.split( ', ' );
+		suggestions = container.nextElementSibling.value.split( ', ' );
 
 		textarea.addEventListener( 'scroll', function() {
 			mirror.scrollTop = textarea.scrollTop;
