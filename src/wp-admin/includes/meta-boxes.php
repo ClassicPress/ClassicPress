@@ -610,7 +610,7 @@ function post_tags_meta_box( $post, $box ) {
 
 	<div class="ajaxtag hide-if-no-js">
 		<label class="screen-reader-text" for="new-tag-<?php echo $tax_name; ?>"><?php echo $taxonomy->labels->add_new_item; ?></label>
-		<input data-wp-taxonomy="<?php echo $tax_name; ?>" type="text" id="new-tag-<?php echo $tax_name; ?>" name="newtag[<?php echo $tax_name; ?>]" class="newtag form-input-tip" size="16" list="tags-list" autocomplete="off" aria-describedby="new-tag-<?php echo $tax_name; ?>-desc" value="">
+		<input data-wp-taxonomy="<?php echo $tax_name; ?>" type="text" id="new-tag-<?php echo $tax_name; ?>" name="newtag[<?php echo $tax_name; ?>]" class="newtag form-input-tip" size="16" list="<?php echo $datalist_id; ?>" autocomplete="off" aria-describedby="new-tag-<?php echo $tax_name; ?>-desc" value="">
 		<?php echo $tags_list; ?>
 		<input type="button" class="button tagadd" value="<?php esc_attr_e( 'Add' ); ?>">
 	</div>
