@@ -37,7 +37,7 @@
     "moment": "^2.29.4",
     "postcss": "8.5.6",
     "qunit": "^2.19.4",
-    "rollup": "4.44.2",
+    "rollup": "4.45.1",
     "sass": "1.89.2",
     "sinon": "^21.0.0",
     "sinon-test": "^3.1.5",
@@ -45,7 +45,7 @@
     "sync-request": "6.1.0",
     "terser": "5.42.0",
     "terser-webpack-plugin": "^5.3.7",
-    "webpack": "5.100.1"
+    "webpack": "5.100.2"
   },
   "dependencies": {
     "@wordpress/a11y": "4.26.0",
