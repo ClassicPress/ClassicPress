@@ -762,7 +762,8 @@ object {
 	text-align: center;
 }
 
-div.wp-playlist-item-length {
+/* Playlist caption in CP 2.5+ */
+li.wp-playlist-item .wp-playlist-item-length {
 	top: 3px;
 }
 
