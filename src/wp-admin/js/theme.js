@@ -550,7 +550,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				queryParams.delete( 'search' );
 				queryParams.set( 'theme', theme.id );
 				history.replaceState( null, null, '?' + queryParams.toString() );
-				previewDialog.querySelector( '.theme-install' ).href = theme.dataset.installNonce;
+				if ( e.target.parentNode.querySelector( '.theme-actions a' ).className.includes( 'disabled' ) ) {
+					previewDialog.querySelector( '.theme-install' ).setAttribute( 'disabled', true );
+					previewDialog.querySelector( '.theme-install' ).removeAttribute( 'href' );
+				} else {
+					previewDialog.querySelector( '.theme-install' ).removeAttribute( 'disabled' );
+					previewDialog.querySelector( '.theme-install' ).href = theme.dataset.installNonce;
+				}
 				if ( theme.querySelector( '.notice-success' ) ) {
 					previewDialog.querySelector( '.theme-install' ).href = theme.dataset.activateNonce;
 					previewDialog.querySelector( '.theme-install' ).textContent = _wpThemeSettings.l10n.activate;
