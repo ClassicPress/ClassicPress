@@ -552,9 +552,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				history.replaceState( null, null, '?' + queryParams.toString() );
 				if ( e.target.parentNode.querySelector( '.theme-actions a' ).className.includes( 'disabled' ) ) {
 					previewDialog.querySelector( '.theme-install' ).setAttribute( 'disabled', true );
+					previewDialog.querySelector( '.theme-install' ).setAttribute( 'inert', true );
 					previewDialog.querySelector( '.theme-install' ).removeAttribute( 'href' );
 				} else {
 					previewDialog.querySelector( '.theme-install' ).removeAttribute( 'disabled' );
+					previewDialog.querySelector( '.theme-install' ).removeAttribute( 'inert' );
 					previewDialog.querySelector( '.theme-install' ).href = theme.dataset.installNonce;
 				}
 				if ( theme.querySelector( '.notice-success' ) ) {
