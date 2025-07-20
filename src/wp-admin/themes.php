@@ -279,7 +279,7 @@ if ( ! validate_current_theme() || isset( $_GET['broken'] ) ) {
 } elseif ( isset( $_GET['activated'] ) ) {
 	if ( isset( $_GET['previewed'] ) ) {
 		wp_admin_notice(
-			__( 'Settings saved and theme activated.' ) . '<a href="' . esc_url( home_url( '/' ) ) . '">' . __( 'Visit site' ) . '</a>',
+			__( 'Settings saved and theme activated.' ) . ' <a href="' . esc_url( home_url( '/' ) ) . '">' . __( 'Visit site' ) . '</a>',
 			array(
 				'id'                 => 'message2',
 				'additional_classes' => array( 'updated' ),
@@ -288,7 +288,7 @@ if ( ! validate_current_theme() || isset( $_GET['broken'] ) ) {
 		);
 	} else {
 		wp_admin_notice(
-			__( 'New theme activated.' ) . '<a href="' . esc_url( home_url( '/' ) ) . '">' . __( 'Visit site' ) . '</a>',
+			__( 'New theme activated.' ) . ' <a href="' . esc_url( home_url( '/' ) ) . '">' . __( 'Visit site' ) . '</a>',
 			array(
 				'id'                 => 'message2',
 				'additional_classes' => array( 'updated' ),
