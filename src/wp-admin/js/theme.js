@@ -550,7 +550,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				queryParams.delete( 'search' );
 				queryParams.set( 'theme', theme.id );
 				history.replaceState( null, null, '?' + queryParams.toString() );
-				if ( e.target.parentNode.querySelector( '.theme-actions a' ).className.includes( 'disabled' ) ) {
+				if ( e.target.parentNode.querySelector( '.theme-actions a' ) && e.target.parentNode.querySelector( '.theme-actions a' ).className.includes( 'disabled' ) ) {
 					previewDialog.querySelector( '.theme-install' ).setAttribute( 'disabled', true );
 					previewDialog.querySelector( '.theme-install' ).setAttribute( 'inert', true );
 					previewDialog.querySelector( '.theme-install' ).removeAttribute( 'href' );
