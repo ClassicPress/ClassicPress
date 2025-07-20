@@ -4068,7 +4068,7 @@ function wp_ajax_query_themes() {
 				$aria_label = sprintf( _x( 'Activate %s', 'theme' ), $theme->name );
 				if ( $theme->activate_url ) {
 					if ( $theme->slug !== get_option( 'template' ) ) {
-						$theme_item .= '<a class="button button-primary activate" href="' . esc_url( $theme->activate_url ) . ' aria-label="' . esc_attr( $aria_label ) . '">' . __( 'Activate' ) . '</a>';
+						$theme_item .= '<a class="button button-primary activate" href="' . esc_url( $theme->activate_url ) . '" aria-label="' . esc_attr( $aria_label ) . '">' . __( 'Activate' ) . '</a>';
 					} else {
 						$theme_item .= '<button class="button button-primary disabled">' . _x( 'Activated', 'theme' ) . '</button>';
 					}
