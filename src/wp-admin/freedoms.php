@@ -68,19 +68,6 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 	?>
 	</p>
 
-	<p>
-	<?php
-	$plugins_url = current_user_can( 'activate_plugins' ) ? admin_url( 'plugins.php' ) : __( 'https://wordpress.org/plugins/' );
-	$themes_url  = current_user_can( 'switch_themes' ) ? admin_url( 'themes.php' ) : __( 'https://wordpress.org/themes/' );
-	printf(
-		/* translators: 1: link to WP Plugin Directory, 2: link to WP Theme Directory */
-		__( 'WordPress <a href="%1$s">plugins</a> and <a href="%2$s">themes</a> fall under the GPL or a similarly free and compatible license as well.' ),
-		$plugins_url,
-		$themes_url
-	);
-	?>
-	</p>
-
 	<p><?php _e( 'If you get a plugin or theme from another source, make sure it has the right license. If it does not respect the ClassicPress license, we do not recommend it.' ); ?></p>
 
 	<p><?php _e( 'Don&#8217;t you wish all software came with these freedoms? So do we! For more information, check out the <a href="https://www.fsf.org/">Free Software Foundation</a>.' ); ?></p>
