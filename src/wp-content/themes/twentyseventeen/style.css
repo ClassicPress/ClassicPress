@@ -3023,6 +3023,10 @@ p > object:only-child {
 	background: transparent;
 }
 
+.site-content .wp-playlist-item-length {
+	top: 5px;
+}
+
 /* Playlist Style Overrides for CP 2.5+ */
 
 .wp-playlist-light li.wp-playlist-item {
@@ -3046,6 +3050,10 @@ p > object:only-child {
 .wp-playlist-dark li.wp-playlist-item .wp-playlist-caption,
 .wp-playlist-dark li.wp-playlist-item .wp-playlist-item-length {
 	color: inherit;
+}
+
+li.wp-playlist-item .wp-playlist-item-length {
+	top: 0;
 }
 
 /* SVG Icons base styles */
