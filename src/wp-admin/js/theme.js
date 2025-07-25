@@ -16,6 +16,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		queryParams = new URLSearchParams( window.location.search ),
 		dialog = document.getElementById( 'theme-modal' ),
 		previewDialog = document.querySelector( '.theme-install-overlay' ),
+		install = previewDialog.querySelector( '.theme-install' ).textContent,
 		footer = document.querySelector( '.theme-install-php #wpfooter' ),
 		features = document.querySelectorAll( '.filter-group-feature input' ),
 		tagSearch = document.querySelector( '.theme-install-php #wp-filter-search-input' ),
@@ -550,20 +551,30 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				queryParams.delete( 'search' );
 				queryParams.set( 'theme', theme.id );
 				history.replaceState( null, null, '?' + queryParams.toString() );
-				if ( e.target.parentNode.querySelector( '.theme-actions a' ) && e.target.parentNode.querySelector( '.theme-actions a' ).className.includes( 'disabled' ) ) {
-					previewDialog.querySelector( '.theme-install' ).setAttribute( 'disabled', true );
-					previewDialog.querySelector( '.theme-install' ).setAttribute( 'inert', true );
-					previewDialog.querySelector( '.theme-install' ).removeAttribute( 'href' );
-				} else {
-					previewDialog.querySelector( '.theme-install' ).removeAttribute( 'disabled' );
-					previewDialog.querySelector( '.theme-install' ).removeAttribute( 'inert' );
-					previewDialog.querySelector( '.theme-install' ).href = theme.dataset.installNonce;
+				if ( e.target.parentNode.querySelector( '.theme-actions a' ) ) {
+					previewDialog.querySelector( '.theme-install' ).textContent = install;
+					if ( e.target.parentNode.querySelector( '.theme-actions a' ).className.includes( 'disabled' ) ) {
+						previewDialog.querySelector( '.theme-install' ).setAttribute( 'disabled', true );
+						previewDialog.querySelector( '.theme-install' ).setAttribute( 'inert', true );
+						previewDialog.querySelector( '.theme-install' ).removeAttribute( 'href' );
+					} else {
+						previewDialog.querySelector( '.theme-install' ).removeAttribute( 'disabled' );
+						previewDialog.querySelector( '.theme-install' ).removeAttribute( 'inert' );
+						previewDialog.querySelector( '.theme-install' ).href = theme.dataset.installNonce;
+					}
 				}
 				if ( theme.querySelector( '.notice-success' ) ) {
 					previewDialog.querySelector( '.theme-install' ).href = theme.dataset.activateNonce;
 					previewDialog.querySelector( '.theme-install' ).textContent = _wpThemeSettings.l10n.activate;
 					previewDialog.querySelector( '.theme-install' ).className = 'button button-primary activate';
 					if ( theme.className.includes( 'active' ) ) {
+						previewDialog.querySelector( '.activate' ).classList.add( 'disabled' );
+					}
+				}
+				if ( e.target.previousElementSibling.className.includes( 'notice-error' ) ) {
+					if ( previewDialog.querySelector( '.theme-install' ) ) {
+						previewDialog.querySelector( '.theme-install' ).classList.add( 'disabled' );
+					} else if ( previewDialog.querySelector( '.activate' ) ) {
 						previewDialog.querySelector( '.activate' ).classList.add( 'disabled' );
 					}
 				}
