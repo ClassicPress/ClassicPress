@@ -16,7 +16,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		queryParams = new URLSearchParams( window.location.search ),
 		dialog = document.getElementById( 'theme-modal' ),
 		previewDialog = document.querySelector( '.theme-install-overlay' ),
-		install = previewDialog.querySelector( '.theme-install' ).textContent,
+		install = previewDialog ? previewDialog.querySelector( '.theme-install' ).textContent : '',
 		footer = document.querySelector( '.theme-install-php #wpfooter' ),
 		features = document.querySelectorAll( '.filter-group-feature input' ),
 		tagSearch = document.querySelector( '.theme-install-php #wp-filter-search-input' ),
