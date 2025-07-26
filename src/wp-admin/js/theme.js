@@ -574,8 +574,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( e.target.previousElementSibling.className.includes( 'notice-error' ) ) {
 					if ( previewDialog.querySelector( '.theme-install' ) ) {
 						previewDialog.querySelector( '.theme-install' ).classList.add( 'disabled' );
+						previewDialog.querySelector( '.theme-install' ).setAttribute( 'disabled', true );
+						previewDialog.querySelector( '.theme-install' ).setAttribute( 'inert', true );
+						previewDialog.querySelector( '.theme-install' ).removeAttribute( 'href' );
 					} else if ( previewDialog.querySelector( '.activate' ) ) {
 						previewDialog.querySelector( '.activate' ).classList.add( 'disabled' );
+						previewDialog.querySelector( '.activate' ).setAttribute( 'disabled', true );
+						previewDialog.querySelector( '.activate' ).setAttribute( 'inert', true );
+						previewDialog.querySelector( '.activate' ).removeAttribute( 'href' );
 					}
 				}
 
