@@ -2048,7 +2048,6 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 @media screen and (min-width: 900px) {
 	#inner-header {
 		display: flex;
-		flex-grow: 1;
 		align-items: center;
 		justify-content: space-between;
 		gap: 0.5em;
