@@ -825,7 +825,6 @@ li.wp-playlist-item .wp-playlist-item-length {
 --------------------------------------------------------------*/
 #masthead {
 	display: flex;
-	align-items: center;
 	justify-content: space-between;
 	margin: 0;
 	padding: 0.75em 0;
@@ -2048,7 +2047,6 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 @media screen and (min-width: 900px) {
 	#inner-header {
 		display: flex;
-		align-items: center;
 		justify-content: space-between;
 		gap: 0.5em;
 		margin: 0 auto;
