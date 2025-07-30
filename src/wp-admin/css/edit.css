@@ -1418,6 +1418,7 @@ p.description code {
 
 .tagsdiv .newtag {
 	width: 180px;
+	line-height: 1;
 }
 
 .tagsdiv .the-tags {
