@@ -642,20 +642,20 @@ foreach ( $themes as $theme ) :
 		<?php } elseif ( $theme['compatibleWP'] && $theme['compatiblePHP'] ) { ?>
 			<?php
 			/* translators: %s: Theme name. */
-			$aria_label = sprintf( _x( 'Activate %s', 'theme' ), '{{ data.name }}' );
+			$aria_label = sprintf( _x( 'Activate %s', 'theme' ), $theme['name'] );
 			?>
 			<a class="button activate" href="<?php echo $theme['actions']['activate']; ?>" aria-label="<?php echo esc_attr( $aria_label ); ?>"><?php esc_html_e( 'Activate' ); ?></a>
 			<?php
 			if ( current_user_can( 'edit_theme_options' ) && current_user_can( 'customize' ) ) {
 				/* translators: %s: Theme name. */
-				$live_preview_aria_label = sprintf( _x( 'Live Preview %s', 'theme' ), '{{ data.name }}' );
+				$live_preview_aria_label = sprintf( _x( 'Live Preview %s', 'theme' ), $theme['name'] );
 				?>
 				<a aria-label="<?php echo esc_attr( $live_preview_aria_label ); ?>" class="button button-primary load-customize hide-if-no-customize" href="<?php echo $theme['actions']['customize']; ?>"><?php esc_html_e( 'Live Preview' ); ?></a>
 			<?php } ?>
 		<?php } else { ?>
 			<?php
 			/* translators: %s: Theme name. */
-			$aria_label = sprintf( _x( 'Cannot Activate %s', 'theme' ), '{{ data.name }}' );
+			$aria_label = sprintf( _x( 'Cannot Activate %s', 'theme' ), $theme['name'] );
 			?>
 			<a class="button disabled" aria-label="<?php echo esc_attr( $aria_label ); ?>"><?php _ex( 'Cannot Activate', 'theme' ); ?></a>
 			<?php if ( current_user_can( 'edit_theme_options' ) && current_user_can( 'customize' ) ) { ?>
@@ -872,7 +872,7 @@ if ( ! is_multisite() && $broken_themes ) {
 						}
 						?>
 					</p>
-				</div>	
+				</div>
 
 				<div class="notice inline notice-error notice-alt notice-large no-wp" hidden>
 					<p>
@@ -995,7 +995,7 @@ if ( ! is_multisite() && $broken_themes ) {
 					}
 					?>
 
-					<span class="auto-update-time" hidden>					
+					<span class="auto-update-time" hidden>
 						<br><?php wp_get_auto_update_message(); ?>
 					</span>
 
@@ -1029,7 +1029,7 @@ if ( ! is_multisite() && $broken_themes ) {
 				if ( current_user_can( 'edit_theme_options' ) ) {
 					if ( current_user_can( 'customize' ) ) {
 						?>
-				
+
 						<a href="" class="button button-primary customize load-customize hide-if-no-customize"><?php esc_html_e( 'Customize' ); ?></a>
 
 						<?php
