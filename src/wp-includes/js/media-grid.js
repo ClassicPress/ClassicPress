@@ -749,6 +749,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						div.className = 'notice notice-error is-dismissible';
 						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
 						document.querySelector( '.page-title-action' ).after( div );
+						close.click();
 					} else {
 						div = document.createElement( 'div' );
 						div.id = 'message';
