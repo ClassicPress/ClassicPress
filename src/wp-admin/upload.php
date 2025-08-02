@@ -183,8 +183,8 @@ if ( 'grid' === $mode ) {
 
 	// Get the maximum upload size.
 	$max_upload_size = wp_max_upload_size();
-	if ( ! $max_upload_size ) {
-		$max_upload_size = 0;
+	if ( empty( $max_upload_size ) ) {
+		$max_upload_size = 2097152;
 	}
 
 	// Get a list of allowed mime types.
