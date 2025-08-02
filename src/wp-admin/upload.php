@@ -183,7 +183,7 @@ if ( 'grid' === $mode ) {
 
 	// Get the maximum upload size.
 	$max_upload_size = wp_max_upload_size();
-	if ( empty( $max_upload_size ) ) {
+	if ( ! is_int( $max_upload_size ) ) {
 		$max_upload_size = 2097152;
 	}
 
