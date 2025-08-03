@@ -826,6 +826,7 @@ li.wp-playlist-item .wp-playlist-item-length {
 #masthead {
 	display: flex;
 	justify-content: space-between;
+	align-items: flex-start;
 	margin: 0;
 	padding: 0.75em 0;
 	background: rgba(5, 127, 153, 1);
@@ -1100,7 +1101,6 @@ img {
 	margin: 0;
 	padding: 0 1em;
 	flex-grow: 1;
-	align-self: start;
 }
 .menu,
 .menu ul {
@@ -1114,7 +1114,6 @@ img {
 	padding: 0.2em;
 	margin-right: 1em;
 	background: #fff;
-	align-self: start;
 }
 #primary-menu.menu li {
 	letter-spacing: 0.1em;
