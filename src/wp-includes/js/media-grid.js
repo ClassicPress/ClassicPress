@@ -330,6 +330,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '#media-audio' ).removeAttribute( 'hidden' );
 			dialog.querySelector( 'audio.wp-audio-shortcode' ).src = url;
 			dialog.querySelector( 'audio' ).setAttribute( 'type', mime );
+			dialog.querySelector( '.alt-text' ).style.display = 'none';
+			dialog.querySelector( '#alt-text-description' ).style.display = 'none';
 		} else if ( filetype === 'video' ) {
 			dialog.querySelector( '.wp-video' ).removeAttribute( 'style' );
 			dialog.querySelector( '#media-image' ).setAttribute( 'hidden', true );
@@ -337,6 +339,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '#media-video' ).removeAttribute( 'hidden' );
 			dialog.querySelector( 'video.wp-video-shortcode' ).src = url;
 			dialog.querySelector( 'video' ).setAttribute( 'type', mime );
+			dialog.querySelector( '.alt-text' ).style.display = 'none';
+			dialog.querySelector( '#alt-text-description' ).style.display = 'none';
 		} else {
 			dialog.querySelector( '#media-audio' ).setAttribute( 'hidden', true );
 			dialog.querySelector( '#media-video' ).setAttribute( 'hidden', true );
@@ -345,6 +349,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( filetype === 'image' ) {
 				dialog.querySelector( '.thumbnail-image img' ).src = url;
 				dialog.querySelector( '.edit-attachment' ).style.display = '';
+				dialog.querySelector( '.alt-text' ).style.display = '';
+				dialog.querySelector( '#alt-text-description' ).style.display = '';
 
 				if (
 					( mime === 'image/webp' && ! _wpMediaGridSettings.webp_editable ) ||
