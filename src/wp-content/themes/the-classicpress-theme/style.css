@@ -1188,7 +1188,6 @@ img {
 
 /* PAGE TITLE */
 #page-title {
-	padding: 4.2em 0 1em;
 	background: #006b81;
 	background: -moz-linear-gradient(
 		-135deg,
@@ -1219,7 +1218,7 @@ img {
 	color: #fff;
 	max-width: 72rem;
 	margin: 0 auto;
-	padding: 0.6em 0;
+	padding: 0.6em 15px;
 }
 
 /* PAGE CONTENT STRUCTURE */
@@ -1242,10 +1241,6 @@ img {
 /* body.ie11 class applied in JS */
 body.ie11 #sidebar {
 	max-width: 27rem;
-}
-header#page-title {
-	min-width: 100%;
-	padding: 0 1em;
 }
 
 /* CONTENT */
@@ -1922,7 +1917,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 }
 
 @media screen and (max-width: 899px) {
-	header#page-title h1 {
+	#page-title h1 {
 		max-width: 600px;
 	}
 	#primary {
@@ -2050,9 +2045,6 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		gap: 0.5em;
 		align-items: center;
 		margin: 0 auto;
-	}
-	#page-title h1 {
-		padding: 0.6em 15px;
 	}
 	#primary-menu.menu li {
 		text-transform: uppercase;
