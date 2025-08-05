@@ -826,7 +826,6 @@ li.wp-playlist-item .wp-playlist-item-length {
 #masthead {
 	display: flex;
 	justify-content: space-between;
-	align-items: flex-start;
 	margin: 0;
 	padding: 0.75em 0;
 	background: rgba(5, 127, 153, 1);
@@ -2048,6 +2047,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		display: flex;
 		justify-content: space-between;
 		gap: 0.5em;
+		align-items: center;
 		margin: 0 auto;
 	}
 	#page-title h1 {
@@ -2062,23 +2062,17 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		display: flex;
 		justify-content: space-between;
 		flex-wrap: wrap;
+		gap: 0.2em;
 		padding: 0;
 		margin: 0;
-		gap: 0.2em;
-		line-height: 3.5em;
 	}
 	#primary-menu.menu li a {
-		display: flex;
-		flex-grow: 1;
+		display: block;
 		padding: 0.4em 0.5em;
 	}
 	#primary-menu.menu .sub-menu li a {
 		line-height: 1.4em;
 		padding: 0.55em 0.85em;
-	}
-	#primary-menu.menu ul li {
-		padding: 0;
-		flex-direction: column;
 	}
 	#masthead > div > .get-started {
 		padding: 1em 2em;
@@ -2088,10 +2082,6 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	#primary-menu.menu ul.sub-menu li:last-child a,
 	#primary-menu.menu li.menu-item-has-children ul.sub-menu li:last-child a {
 		border-radius: 0 0 var(--tcpt-border-radius) var(--tcpt-border-radius);
-	}
-	#primary-menu .menu-item-has-children > a::after {
-		margin-left: 0.12em;
-		margin-top: 0.69em;
 	}
 	.nav--toggle-sub ul ul {
 		width: 180px;
