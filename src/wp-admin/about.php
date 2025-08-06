@@ -80,7 +80,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 			<p>
 				<?php
 				printf(
-					/* translators: link to ClassicPress Directory */
+					/* translators: link to plugin page in the ClassicPress Directory */
 					__( 'With the <a href="%s"><strong>ClassicPress Directory Integration</strong></a> plugin you get access to plugins and themes that are built for ClassicPress. They will appear in the Plugins > Install CP Plugins or Appearance > Install CP Themes screen.' ),
 					'https://directory.classicpress.net/plugins/classicpress-directory-integration/'
 				);
