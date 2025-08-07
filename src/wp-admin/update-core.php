@@ -348,8 +348,11 @@ function list_plugin_updates() {
 
 		// Get plugin compat for running version of ClassicPress.
 		if ( isset( $plugin_data->RequiresCP ) && ! empty( $plugin_data->RequiresCP ) ) {
-			if ( version_compare( substr( $plugin_data->RequiresCP, 0, 3 ), substr( $cur_cp_version, 0, 3 ) ) != 0 ) {
+			if ( version_compare( substr( $plugin_data->RequiresCP, 0, 1 ), substr( $cur_cp_version, 0, 1 ), '==' ) && version_compare( $plugin_data->RequiresCP, $cur_cp_version, '<=' ) ) {
 				$compat  = '<br>' . sprintf( __( 'Potentially compatible with ClassicPress %1$s.' ), $cur_cp_version );
+				$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
+			} else {
+				$compat  = '<br>' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: Unknown.' ), $cur_cp_version );
 				$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
 			}
 		} else {
@@ -359,14 +362,17 @@ function list_plugin_updates() {
 		// Get plugin compat for updated version of ClassicPress.
 		if ( $core_update_version ) {
 			if ( isset( $plugin_data->RequiresCP ) && ! empty( $plugin_data->RequiresCP ) ) {
-				if ( version_compare( substr( $plugin_data->RequiresCP, 0, 3 ), substr( $core_update_version, 0, 3 ) ) != 0 ) {
+				if ( version_compare( substr( $plugin_data->RequiresCP, 0, 1 ), substr( $core_update_version, 0, 1 ), '==' ) && version_compare( $plugin_data->RequiresCP, $core_update_version, '<=' ) ) {
 					$compat  = '<br>' . sprintf( __( 'Potentially compatible with ClassicPress %1$s.' ), $core_update_version );
+					$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
+				} else {
+					$compat  = '<br>' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: Unknown.' ), $core_update_version );
 					$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
 				}
 			} else {
 				$compat  = '<br>' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: Unknown.' ), $core_update_version );
 				$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
-			}
+			}	
 		}
 
 		$requires_php   = isset( $plugin_data->update->requires_php ) ? $plugin_data->update->requires_php : null;
