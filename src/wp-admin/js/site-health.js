@@ -305,7 +305,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		}
 
 		if ( SiteHealth.site_status.direct.length > 0 ) {
-			SiteHealth.site_status.direct.forEach(appendIssue);
+			SiteHealth.site_status.direct.forEach( appendIssue );
 		}
 		if ( SiteHealth.site_status.async.length > 0 ) {
 			maybeRunNextAsyncTest();
