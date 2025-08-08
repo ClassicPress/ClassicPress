@@ -281,21 +281,21 @@ if ( isset( $_GET['tab'] ) && ! empty( $_GET['tab'] ) ) {
 	</div>
 
 	<div class="site-health-view-more">
-		<button type="button" class="button site-health-view-passed" aria-expanded="false" aria-controls="health-check-issues-good">
-			<?php _e( 'Passed tests' ); ?>
-			<span class="icon"></span>
-		</button>
-	</div>
-
-	<div class="site-health-issues-wrapper hidden" id="health-check-issues-good">
-		<h3 class="site-health-issue-count-title">
-			<?php
-				/* translators: %s: Number of items with no issues. */
-				printf( _n( '%s item with no issues detected', '%s items with no issues detected', 0 ), '<span class="issue-count">0</span>' );
-			?>
-		</h3>
-
-		<div id="health-check-site-status-good" class="health-check-accordion issues"></div>
+		<details>
+			<summary class="button site-health-view-passed">
+				<?php _e( 'Passed tests' ); ?>
+				<span class="icon"></span>
+			</summary>
+			<div class="site-health-issues-wrapper" id="health-check-issues-good">
+				<h3 class="site-health-issue-count-title">
+					<?php
+						/* translators: %s: Number of items with no issues. */
+						printf( _n( '%s item with no issues detected', '%s items with no issues detected', 0 ), '<span class="issue-count">0</span>' );
+					?>
+				</h3>
+				<div id="health-check-site-status-good" class="health-check-accordion issues"></div>
+			</div>
+		</details>
 	</div>
 </div>
 
