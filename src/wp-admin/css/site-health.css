@@ -1,6 +1,52 @@
-/* Note: Any Site Health selectors that use
-duplicate styling from the Privacy settings screen
-are styled in the Privacy section of edit.css */
+.health-check-accordion-details {
+	border-bottom: 1px solid #c3c4c7;
+}
+
+.health-check-accordion-details:last-of-type {
+	border-bottom: none;
+}
+
+.health-check-accordion-summary {
+	cursor: pointer;
+	display: flex;
+	background: #fff;
+	font-weight: 400;
+	margin: 0;
+	padding: 0.5em 0 0.5em 1.5em;
+	min-height: 46px;
+	position: relative;
+	text-align: left;
+	align-items: center;
+	justify-content: space-between;
+	user-select: auto;
+}
+
+.health-check-accordion-summary:hover,
+.health-check-accordion-summary:focus {
+	background-color: #f6f7f7;
+}
+
+.health-check-accordion-summary .title {
+	font-weight: 700;
+}
+
+.health-check-accordion-summary .icon,
+.site-health-view-passed .icon {
+	border: solid #50575e;
+	border-width: 0 2px 2px 0;
+	height: 0.5rem;
+	pointer-events: none;
+	position: absolute;
+	right: 1.5em;
+	top: 50%;
+	transform: translateY(-70%) rotate(45deg);
+	width: 0.5rem;
+}
+
+.health-check-accordion-details[open] > .health-check-accordion-summary .icon,
+.site-health-view-passed[aria-expanded="true"] .icon {
+	transform: translateY(-30%) rotate(-135deg);
+}
 
 .health-check-body h2 {
 	line-height: 1.4;
@@ -354,4 +400,3 @@ are styled in the Privacy section of edit.css */
 		margin-bottom: 0;
 	}
 }
-
