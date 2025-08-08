@@ -300,23 +300,26 @@ if ( isset( $_GET['tab'] ) && ! empty( $_GET['tab'] ) ) {
 </div>
 
 <script id="tmpl-health-check-issue" type="text/template">
-	<h4 class="health-check-accordion-heading">
-		<button aria-expanded="false" class="health-check-accordion-trigger" aria-controls="health-check-accordion-block-{{ data.test }}" type="button">
-			<span class="title">{{ data.label }}</span>
-			<# if ( data.badge ) { #>
-				<span class="badge {{ data.badge.color }}">{{ data.badge.label }}</span>
+	<details class="health-check-accordion-details">
+		<summary class="health-check-accordion-summary">
+			<h4 class="health-check-accordion-heading">
+				<span class="title">{{ data.label }}</span>
+			
+				<# if ( data.badge ) { #>
+					<span class="badge {{ data.badge.color }}">{{ data.badge.label }}</span>
+				<# } #>
+				<span class="icon"></span>
+			</h4>
+		</summary>
+		<div id="health-check-accordion-block-{{ data.test }}" class="health-check-accordion-panel">
+			{{{ data.description }}}
+			<# if ( data.actions ) { #>
+				<div class="actions">
+					{{{ data.actions }}}
+				</div>
 			<# } #>
-			<span class="icon"></span>
-		</button>
-	</h4>
-	<div id="health-check-accordion-block-{{ data.test }}" class="health-check-accordion-panel" hidden="hidden">
-		{{{ data.description }}}
-		<# if ( data.actions ) { #>
-			<div class="actions">
-				{{{ data.actions }}}
-			</div>
-		<# } #>
-	</div>
+		</div>
+	</details>
 </script>
 
 	<?php
