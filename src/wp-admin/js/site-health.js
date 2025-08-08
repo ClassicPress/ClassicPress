@@ -14,7 +14,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		clipboard = document.querySelector( '.site-health-copy-buttons .copy-button' ),
 		isStatusTab = document.querySelectorAll( '.health-check-body.health-check-status-tab' ).length,
 		isDebugTab = document.querySelectorAll( '.health-check-body.health-check-debug-tab' ).length,
-		pathsSizesSection = document.querySelector( '#health-check-accordion-block-wp-paths-sizes' ),
+		pathsSizesSection = document.getElementById( 'health-check-accordion-block-wp-paths-sizes' )
 		menuCounterWrapper = document.querySelector( '#adminmenu .site-health-counter' ),
 		menuCounter = document.querySelector( '#adminmenu .site-health-counter .count' ),
 		successTimeout;
