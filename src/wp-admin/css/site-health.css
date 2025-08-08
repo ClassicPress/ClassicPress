@@ -27,7 +27,10 @@
 }
 
 .health-check-accordion-summary .title {
-	font-weight: 700;
+	pointer-events: none;
+	font-weight: 600;
+	flex-grow: 1;
+	padding-top: 0.15rem;
 }
 
 .health-check-accordion-summary .icon,
@@ -43,9 +46,23 @@
 	width: 0.5rem;
 }
 
-.health-check-accordion-details[open] > .health-check-accordion-summary .icon,
-.site-health-view-passed[aria-expanded="true"] .icon {
+.health-check-accordion-details[open] > .health-check-accordion-summary .icon {
 	transform: translateY(-30%) rotate(-135deg);
+}
+
+.health-check-accordion-summary .badge {
+	padding: 0.1rem 0.5rem 0.15rem;
+	color: #2c3338;
+	font-weight: 600;
+}
+
+.health-check-accordion-summary .badge.blue {
+	border: 1px solid #72aee6;
+}
+
+.health-check-accordion-heading {
+	display: flex;
+	width: 94%;
 }
 
 .health-check-body h2 {
