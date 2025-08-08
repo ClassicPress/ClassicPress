@@ -79,10 +79,13 @@ document.addEventListener( 'DOMContentLoaded', function () {
 	}
 
 	function appendIssue( issue ) {
-		var count,
-			template = wp.template( 'health-check-issue' ),
+		var count, actions,
+			heading = '',
+			template = document.getElementById( 'tmpl-health-check-issue' ),
+			clone = template.content.cloneNode( true ),
+			details = clone.querySelector( 'details' ),
 			issueWrapper = document.getElementById( 'health-check-issues-' + issue.status );
-
+console.log(issue.actions);
 		if ( issueWrapper == null || ! validateIssueData( issue ) ) {
 			return false;
 		}
@@ -94,7 +97,6 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			issue.test = issue.status + count;
 		}
 
-		var heading = '';
 		if ( issue.status === 'critical' ) {
 			heading = sprintf(
 				_n( '%s critical issue', '%s critical issues', count ),
@@ -128,7 +130,20 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			document.getElementById( 'health-check-issues-recommended' ).classList.remove( 'hidden' );
 		}
 
-		issueWrapper.querySelector( '.issues' ).insertAdjacentHTML( 'beforeend', template( issue ) );
+		details.querySelector( '.title' ).textContent = issue.label;
+		if ( issue.badge ) {
+			details.querySelector( '.badge' ).classList.add( issue.badge.color );
+			details.querySelector( '.badge' ).textContent = issue.badge.label;
+		}
+		details.querySelector( '.health-check-accordion-panel' ).innerHTML = issue.description;
+		if ( issue.actions ) {
+			actions = document.createElement( 'span' );
+			actions.className = 'actions';
+			actions.innerHTML = issue.actions;
+			details.querySelector( '.health-check-accordion-panel' ).append ( actions );
+		}
+
+		issueWrapper.querySelector( '.issues' ).append( details );
 	}
 
 	function recalculateProgression() {
