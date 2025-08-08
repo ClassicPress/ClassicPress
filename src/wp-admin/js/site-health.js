@@ -14,7 +14,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		clipboard = document.querySelector( '.site-health-copy-buttons .copy-button' ),
 		isStatusTab = document.querySelectorAll( '.health-check-body.health-check-status-tab' ).length,
 		isDebugTab = document.querySelectorAll( '.health-check-body.health-check-debug-tab' ).length,
-		pathsSizesSection = document.getElementById( 'health-check-accordion-block-wp-paths-sizes' )
+		pathsSizesSection = document.getElementById( 'health-check-accordion-block-wp-paths-sizes' ),
 		menuCounterWrapper = document.querySelector( '#adminmenu .site-health-counter' ),
 		menuCounter = document.querySelector( '#adminmenu .site-health-counter .count' ),
 		successTimeout;
@@ -55,15 +55,6 @@ document.addEventListener( 'DOMContentLoaded', function () {
 
 			// Handle success audible feedback.
 			wp.a11y.speak( wp.i18n.__( 'Site information has been copied to your clipboard.' ) );
-		} );
-	}
-
-	// Toggle "view passed" section
-	if ( document.querySelector( '.site-health-view-passed' ) ) {
-		document.querySelector( '.site-health-view-passed' ).addEventListener( 'click', function( e ) {
-			var goodIssuesWrapper = document.getElementById( 'health-check-issues-good' );
-			goodIssuesWrapper.classList.toggle( 'hidden' );
-			e.target.setAttribute( 'aria-expanded', ! goodIssuesWrapper.className.includes( 'hidden' ) );
 		} );
 	}
 
