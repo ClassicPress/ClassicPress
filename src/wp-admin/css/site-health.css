@@ -46,7 +46,8 @@
 	width: 0.5rem;
 }
 
-.health-check-accordion-details[open] > .health-check-accordion-summary .icon {
+.health-check-accordion-details[open] > .health-check-accordion-summary .icon,
+.site-health-view-more details[open] > summary .icon {
 	transform: translateY(-30%) rotate(-135deg);
 }
 
