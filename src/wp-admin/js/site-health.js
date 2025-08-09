@@ -85,7 +85,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			clone = template.content.cloneNode( true ),
 			details = clone.querySelector( 'details' ),
 			issueWrapper = document.getElementById( 'health-check-issues-' + issue.status );
-console.log(issue.actions);
+
 		if ( issueWrapper == null || ! validateIssueData( issue ) ) {
 			return false;
 		}
