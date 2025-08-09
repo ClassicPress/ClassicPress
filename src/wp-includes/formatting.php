@@ -5829,7 +5829,7 @@ function _print_emoji_detection_script() {
 		 *
 		 * @param string $url The emoji base URL for png images.
 		 */
-		'baseUrl' => apply_filters( 'emoji_url', 'https://twemoji.classicpress.net/14/72x72/' ),
+		'baseUrl' => apply_filters( 'emoji_url', 'https://twemoji.classicpress.net/16/72x72/' ),
 
 		/**
 		 * Filters the extension of the emoji png files.
@@ -5847,7 +5847,7 @@ function _print_emoji_detection_script() {
 		 *
 		 * @param string $url The emoji base URL for svg images.
 		 */
-		'svgUrl'  => apply_filters( 'emoji_svg_url', 'https://twemoji.classicpress.net/14/svg/' ),
+		'svgUrl'  => apply_filters( 'emoji_svg_url', 'https://twemoji.classicpress.net/16/svg/' ),
 
 		/**
 		 * Filters the extension of the emoji SVG files.
