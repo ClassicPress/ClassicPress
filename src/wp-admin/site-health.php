@@ -299,28 +299,18 @@ if ( isset( $_GET['tab'] ) && ! empty( $_GET['tab'] ) ) {
 	</div>
 </div>
 
-<script id="tmpl-health-check-issue" type="text/template">
+<template id="tmpl-health-check-issue">
 	<details class="health-check-accordion-details">
 		<summary class="health-check-accordion-summary">
 			<h4 class="health-check-accordion-heading">
-				<span class="title">{{ data.label }}</span>
-			
-				<# if ( data.badge ) { #>
-					<span class="badge {{ data.badge.color }}">{{ data.badge.label }}</span>
-				<# } #>
+				<span class="title"></span>			
+				<span class="badge"></span>
 				<span class="icon"></span>
 			</h4>
 		</summary>
-		<div id="health-check-accordion-block-{{ data.test }}" class="health-check-accordion-panel">
-			{{{ data.description }}}
-			<# if ( data.actions ) { #>
-				<div class="actions">
-					{{{ data.actions }}}
-				</div>
-			<# } #>
-		</div>
+		<div class="health-check-accordion-panel"></div>
 	</details>
-</script>
+</template>
 
 	<?php
 }
