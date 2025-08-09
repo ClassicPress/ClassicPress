@@ -21,8 +21,16 @@
 	user-select: auto;
 }
 
-.health-check-accordion-summary:hover,
+.health-check-accordion-summary:hover {
+	background-color: #f6f7f7;
+}
+
 .health-check-accordion-summary:focus {
+	color: #1d2327;
+	border: none;
+	box-shadow: none;
+	outline-offset: -1px;
+	outline: 2px solid #2271b1;
 	background-color: #f6f7f7;
 }
 
@@ -59,6 +67,14 @@
 
 .health-check-accordion-summary .badge.blue {
 	border: 1px solid #72aee6;
+}
+
+.health-check-accordion-summary .badge.orange {
+	border: 1px solid #dba617;
+}
+
+.health-check-accordion-summary .badge.green {
+	border: 1px solid #00ba37;
 }
 
 .health-check-accordion-heading {
@@ -290,6 +306,10 @@
 
 .site-health-view-more {
 	text-align: center;
+}
+
+#health-check-site-status-good {
+	text-align: left;
 }
 
 .site-health-issues-wrapper:first-of-type {
