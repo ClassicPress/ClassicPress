@@ -1,3 +1,6 @@
+/* Note: Any Site Health selectors that use
+duplicate styling from the Privacy settings screen
+are styled in the Privacy section of edit.css */
 .health-check-accordion-details {
 	border-bottom: 1px solid #c3c4c7;
 }
