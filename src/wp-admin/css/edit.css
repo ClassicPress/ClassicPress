@@ -859,8 +859,7 @@ form#tags-filter {
 	border-top: none;
 }
 
-.privacy-settings-accordion-trigger,
-.health-check-accordion-trigger {
+.privacy-settings-accordion-trigger {
 	background: #fff;
 	border: 0;
 	color: #2c3338;
@@ -881,14 +880,11 @@ form#tags-filter {
 }
 
 .privacy-settings-accordion-trigger:hover,
-.privacy-settings-accordion-trigger:active,
-.health-check-accordion-trigger:hover,
-.health-check-accordion-trigger:active {
+.privacy-settings-accordion-trigger:active {
 	background: #f6f7f7;
 }
 
-.privacy-settings-accordion-trigger:focus,
-.health-check-accordion-trigger:focus {
+.privacy-settings-accordion-trigger:focus {
 	color: #1d2327;
 	border: none;
 	box-shadow: none;
@@ -897,17 +893,14 @@ form#tags-filter {
 	background-color: #f6f7f7;
 }
 
-.privacy-settings-accordion-trigger .title,
-.health-check-accordion-trigger .title {
+.privacy-settings-accordion-trigger .title {
 	pointer-events: none;
 	font-weight: 600;
 	flex-grow: 1;
 }
 
 .privacy-settings-accordion-trigger .icon,
-.privacy-settings-view-read .icon,
-.health-check-accordion-trigger .icon,
-.site-health-view-passed .icon {
+.privacy-settings-view-read .icon {
 	border: solid #50575e;
 	border-width: 0 2px 2px 0;
 	height: 0.5rem;
@@ -919,8 +912,7 @@ form#tags-filter {
 	width: 0.5rem;
 }
 
-.privacy-settings-accordion-trigger .badge,
-.health-check-accordion-trigger .badge {
+.privacy-settings-accordion-trigger .badge {
 	padding: 0.1rem 0.5rem 0.15rem;
 	color: #2c3338;
 	font-weight: 600;
@@ -930,40 +922,32 @@ form#tags-filter {
 	margin-left: 0.5rem;
 }
 
-.privacy-settings-accordion-trigger .badge.blue,
-.health-check-accordion-trigger .badge.blue {
+.privacy-settings-accordion-trigger .badge.blue {
 	border: 1px solid #72aee6;
 }
 
-.privacy-settings-accordion-trigger .badge.orange,
-.health-check-accordion-trigger .badge.orange {
+.privacy-settings-accordion-trigger .badge.orange {
 	border: 1px solid #dba617;
 }
 
-.privacy-settings-accordion-trigger .badge.red,
-.health-check-accordion-trigger .badge.red {
+.privacy-settings-accordion-trigger .badge.red {
 	border: 1px solid #e65054;
 }
 
-.privacy-settings-accordion-trigger .badge.green,
-.health-check-accordion-trigger .badge.green {
+.privacy-settings-accordion-trigger .badge.green {
 	border: 1px solid #00ba37;
 }
 
-.privacy-settings-accordion-trigger .badge.purple,
-.health-check-accordion-trigger .badge.purple {
+.privacy-settings-accordion-trigger .badge.purple {
 	border: 1px solid #2271b1;
 }
 
-.privacy-settings-accordion-trigger .badge.gray,
-.health-check-accordion-trigger .badge.gray {
+.privacy-settings-accordion-trigger .badge.gray {
 	border: 1px solid #c3c4c7;
 }
 
 .privacy-settings-accordion-trigger[aria-expanded="true"] .icon,
-.privacy-settings-view-passed[aria-expanded="true"] .icon,
-.health-check-accordion-trigger[aria-expanded="true"] .icon,
-.site-health-view-passed[aria-expanded="true"] .icon {
+.privacy-settings-view-passed[aria-expanded="true"] .icon {
 	transform: translateY(-30%) rotate(-135deg)
 }
 
@@ -974,8 +958,7 @@ form#tags-filter {
 	background: #fff;
 }
 
-.privacy-settings-accordion-panel[hidden],
-.health-check-accordion-panel[hidden] {
+.privacy-settings-accordion-panel[hidden] {
 	display: none;
 }
 
