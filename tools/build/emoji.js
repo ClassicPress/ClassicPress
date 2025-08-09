@@ -1,11 +1,8 @@
 /* jshint node:true */
 /* jshint es3:false */
-/* jshint esversion:6 */
+/* jshint esversion:8 */
 
 const fs = require( 'fs' );
-
-// The grunt tasks we are using do not support async replacement.
-const request = require( 'sync-request' );
 
 let grunt = null;
 
@@ -14,14 +11,17 @@ exports.setGruntReference = _grunt => {
 };
 
 // See https://github.com/ClassicPress/ClassicPress-APIs/tree/master/twemoji
-function callTwemojiFilesAPI( url ) {
+async function callTwemojiFilesAPI( url ) {
 	// Grunt error handling is bad
 	try {
 		grunt.log.writeln( 'GET ' + url );
-		const res = request( 'GET', url, { json: true } );
+		const res = await fetch( url );
 
-		const body = res.getBody( 'UTF-8' );
-		const json = JSON.parse( body );
+		if ( ! res.ok ) {
+			grunt.fatal( `API Request failed: ${res} ${res.statusText}` );
+		}
+
+		const json = res.json();
 
 		return json;
 	} catch ( e ) {
@@ -29,12 +29,12 @@ function callTwemojiFilesAPI( url ) {
 	}
 }
 
-exports.replaceEmojiRegex = () => {
+exports.replaceEmojiRegex = async () => {
 	grunt.log.writeln( 'Fetching list of Twemoji files...' );
 
 	// Fetch a list of the files that Twemoji supplies
 
-	const entityNames = callTwemojiFilesAPI(
+	const entityNames = await callTwemojiFilesAPI(
 		'https://api-v1.classicpress.net/twemoji/16fb3e0_v_14.0.2_svg.json'
 	);
 
@@ -105,3 +105,4 @@ exports.replaceEmojiRegex = () => {
 
 	return replacement;
 };
+

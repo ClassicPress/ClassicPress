@@ -819,28 +819,6 @@ module.exports = function(grunt) {
 				src: `${BUILD_DIR}wp-includes/embed.php`,
 				dest: '.'
 			}
-		},
-		replace: {
-			emojiRegex: {
-				options: {
-					patterns: [
-						{
-							match: /\/\/ START: emoji arrays[\S\s]*\/\/ END: emoji arrays/g,
-							replacement: buildTools.replaceEmojiRegex
-						}
-					]
-				},
-				files: [
-					{
-						expand: true,
-						flatten: true,
-						src: [
-							`${SOURCE_DIR}wp-includes/formatting.php`
-						],
-						dest: `${SOURCE_DIR}wp-includes/`
-					}
-				]
-			}
 		}
 	});
 
@@ -939,7 +917,7 @@ module.exports = function(grunt) {
 	grunt.registerTask(
 		'precommit:emoji',
 		[
-			'replace:emojiRegex'
+			'emojiReplace'
 		]
 	);
 
@@ -1131,6 +1109,26 @@ module.exports = function(grunt) {
 				console.log( stdout );
 				console.error( stderr );
 				done();
+			} );
+		}
+	);
+
+	grunt.registerTask(
+		'emojiReplace',
+		function() {
+			const done = this.async();
+
+			buildTools.replaceEmojiRegex()
+			.then ( data => {
+				let content = grunt.file.read( `${SOURCE_DIR}wp-includes/formatting.php` );
+				content = content.replace( /\/\/ START: emoji arrays[\S\s]*\/\/ END: emoji arrays/g, data );
+				grunt.file.write( `${SOURCE_DIR}wp-includes/formatting.php`, content );
+				grunt.log.writeln( 'Emoji data replaced.' );
+				done();
+			} )
+			.catch( error => {
+				grunt.log.error( error );
+				done( false );
 			} );
 		}
 	);
