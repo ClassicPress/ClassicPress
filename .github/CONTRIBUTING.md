@@ -4,11 +4,11 @@ ClassicPress is a volunteer-driven open source project that thrives when we have
 
 We invite all contributors to not only submit pull requests (_PRs_) that are in line with the goals and direction of the project, but also to discuss and review other contributors' issues and pull requests. This will help us make the most of our limited time and review all contributions quickly.
 
-Before contributing to this repository, please read our [Democracy page](https://www.classicpress.net/democracy/) to understand how we make decisions about what is included in ClassicPress, and our [roadmap](https://www.classicpress.net/roadmap/) to see what's already planned for the next couple of releases.
+Before contributing to this repository, please read our [Democracy page](https://www.classicpress.net/democracy/) to understand how we make decisions about what is included in ClassicPress, and our [planned milestones at GitHub](https://github.com/ClassicPress/ClassicPress/milestones) to see what's already planned for the next couple of releases.
 
-The **petitions process** mentioned in our Democracy document is very important to help us prioritize new features based on the needs of our users. There are some [exceptions](https://www.classicpress.net/democracy/#democracy-exceptions) to this process for minor changes and bugfixes, but generally speaking it is a good idea to search or ask in one of our communication channels (see below) before undertaking a change, because most changes should go through the petitions process.
+Generally speaking it is a good idea to search or ask in one of our communication channels (see below) before undertaking a change, because most changes should go through a revieuw process.
 
-Also, please be sure to follow our [code of conduct](https://www.classicpress.net/democracy/#democracy-conduct) in all interactions with ClassicPress community members.
+Also, please be sure to follow our [code of conduct](https://www.classicpress.net/democracy/#code-of-conduct) in all interactions with ClassicPress community members.
 
 ## Table of Contents
 
@@ -29,15 +29,14 @@ Also, please be sure to follow our [code of conduct](https://www.classicpress.ne
 We encourage you to join and ask any questions you have about contributing.
 
 - [Zulip](https://classicpress.zulipchat.com/register/) - great for real-time chat, posting screenshots and asking questions about anything you're stuck on. Or just socializing.
-- [Petitions](https://forums.classicpress.net/c/governance/petitions/77) - for proposing new features or major changes for consideration by the community.
-- [GitHub issues](https://github.com/ClassicPress/ClassicPress/issues) - for proposing or discussing bugfixes, or minor improvements. Generally it is a good idea to create a petition for anything that may take a significant amount of time or that may have backwards compatibility implications.
-- [Forums](https://forums.classicpress.net/) - for posting questions and searching for solutions. The forums are our most active community channel other than Slack.
+- [GitHub issues](https://github.com/ClassicPress/ClassicPress/issues) - for proposing new features or major changes for consideration by the community.
+- [Forums](https://forums.classicpress.net/) - for posting questions and searching for solutions. The forums are our most active community channel other than Zulip.
 
 ## Review criteria
 
-When evaluating bug fixes and other code changes in pull requests (_PRs_), we look for these things, ideally all of them:
+When evaluating bug fixes and other code changes in [pull requests](https://github.com/ClassicPress/ClassicPress/pulls) (_PRs_), we look for these things, ideally all of them:
 
-1. The change impacts or is likely to impact existing ClassicPress users. Otherwise, there are literally thousands of things we could look at, but we need to prioritize our development time. Right now the best tool we have for this is [petitions](https://forums.classicpress.net/c/governance/petitions/77).
+1. The change impacts or is likely to impact existing ClassicPress users. Otherwise, there are literally thousands of things we could look at, but we need to prioritize our development time.
 2. The change is not going to break backward compatibility, and has minimal effects on the existing plugin and theme ecosystem. A good way to evaluate the effects of a change on plugins or themes is to do a search on [wpdirectory](https://wpdirectory.net). (Major changes are also a possibility but require a planning effort around when and how they will be released, as well as agreement from the community per our [democratic process](https://www.classicpress.net/democracy/).)
 3. The change has automated tests.
 4. We understand the code change very well or can ask questions of someone who understands it very well.
@@ -50,7 +49,7 @@ If you're not sure where to start contributing, here are some ideas:
 
 - [Set up a local development environment](#setting-up-a-local-development-environment) and try out ClassicPress on your own computer.
 - Review and test [existing PRs](https://github.com/ClassicPress/ClassicPress/pulls), especially looking at how well they fit the criteria described above. Let us know how you tested the changes and what you found. We need to be thorough and careful with any changes we make, and the more eyes we can get on our PRs the better. Screenshots and text instructions documenting the status and testing of all PRs are very useful, as well as videos and gifs if applicable. These help us know the status and completion of each PR so that we can be thorough and careful with any changes we make, and the more eyes we can get on our PRs the better.
-- Take a look at issues with the [`help wanted`](https://github.com/ClassicPress/ClassicPress/labels/help%20wanted) or [`good first issue`](https://github.com/ClassicPress/ClassicPress/labels/good%20first%20issue) labels.
+- Take a look at issues with the [`help wanted`](https://github.com/ClassicPress/ClassicPress/labels/help%20wanted) label.
 - Submit PRs based on our [planned milestones](https://github.com/ClassicPress/ClassicPress/milestones), or exploratory PRs with your own suggested changes. Please remember these will be subject to review to make sure they are in line with the project's direction.
 
 ## Setting up a local development environment
