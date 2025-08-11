@@ -1124,6 +1124,9 @@ img {
 	letter-spacing: 0;
 	margin: 0;
 }
+#primary-menu.menu li a {
+    outline-offset: -1px;
+}
 #primary-menu.menu li a,
 #primary-menu.menu li a:visited {
 	color: rgba(255, 255, 255, 1);
