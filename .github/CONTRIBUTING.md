@@ -29,7 +29,7 @@ Also, please be sure to follow our [code of conduct](https://www.classicpress.ne
 We encourage you to join and ask any questions you have about contributing.
 
 - [Zulip](https://classicpress.zulipchat.com/register/) - great for real-time chat, posting screenshots and asking questions about anything you're stuck on. Or just socializing.
-- [GitHub issues](https://github.com/ClassicPress/ClassicPress/issues) - for proposing or discussing bugfixes, or minor improvements. And for proposing new features or major changes for consideration by the community.
+- [GitHub issues](https://github.com/ClassicPress/ClassicPress/issues) - for proposing or discussing bugfixes and improvements. And for proposing new features or major changes for consideration by the community.
 - [Forums](https://forums.classicpress.net/) - for posting questions and searching for solutions. The forums are our most active community channel other than Zulip.
 
 ## Review criteria
