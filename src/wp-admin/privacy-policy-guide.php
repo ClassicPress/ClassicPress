@@ -93,9 +93,9 @@ wp_admin_notice(
 	</details>
 	<hr class="hr-separator">
 	<h3 class="section-title"><?php _e( 'Policies' ); ?></h3>
-	<div class="privacy-settings-accordion wp-privacy-policy-guide">
+	<details class="privacy-settings-accordion wp-privacy-policy-guide privacy-settings-accordion-details">
 		<?php WP_Privacy_Policy_Content::privacy_policy_guide(); ?>
-	</div>
+	</details>
 </div>
 <?php
 
