@@ -6,7 +6,7 @@ We invite all contributors to not only submit pull requests (_PRs_) that are in 
 
 Before contributing to this repository, please read our [Democracy page](https://www.classicpress.net/democracy/) to understand how we make decisions about what is included in ClassicPress, and our [planned milestones at GitHub](https://github.com/ClassicPress/ClassicPress/milestones) to see what's already planned for the next couple of releases.
 
-Generally speaking it is a good idea to search or ask in one of our communication channels (see below) before undertaking a change, because most changes should go through a revieuw process.
+Generally speaking it is a good idea to search or ask in one of our communication channels (see below) before undertaking a change, because most changes should go through a review process.
 
 Also, please be sure to follow our [code of conduct](https://www.classicpress.net/democracy/#code-of-conduct) in all interactions with ClassicPress community members.
 
