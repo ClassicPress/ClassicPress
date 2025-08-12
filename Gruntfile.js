@@ -138,6 +138,7 @@ module.exports = function(grunt) {
 						dot: true,
 						expand: true,
 						cwd: SOURCE_DIR,
+<<<<<<< HEAD
 						src: [
 							'**',
 							'!wp-includes/js/media/**',
@@ -161,6 +162,19 @@ module.exports = function(grunt) {
 							// Exclude version.php (handled in `copy:version` task)
 							'!wp-includes/version.php'
 						],
+=======
+						src: buildFiles.concat( [
+							'!wp-includes/assets/**', // Assets is extracted into separate copy tasks.
+							'!js/**', // JavaScript is extracted into separate copy tasks.
+							'!wp-includes/certificates/cacert.pem*', // Exclude raw root certificate files that are combined into ca-bundle.crt.
+							'!wp-includes/certificates/legacy-1024bit.pem',
+							'!.{svn,git}', // Exclude version control folders.
+							'!wp-includes/version.php', // Exclude version.php.
+							'!**/*.map', // The build doesn't need .map files.
+							'!index.php', '!wp-admin/index.php',
+							'!_index.php', '!wp-admin/_index.php'
+						] ),
+>>>>>>> 6db1a33402 (Security: Introduce Grunt task for updating Root Certificates.)
 						dest: BUILD_DIR
 					},
 					{
@@ -298,9 +312,30 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+<<<<<<< HEAD
 		webpack: {
 			min: webpackConfig( { environment: 'production', buildTarget: SOURCE_DIR } ),
 			dev: webpackConfig( { environment: 'development', buildTarget: SOURCE_DIR } )
+=======
+				src: '.github/workflows/*.yml',
+				dest: './'
+			},
+			'workflow-references-remote-to-local': {
+				options: {
+					processContent: function( src ) {
+						return src.replace( /uses: WordPress\/wordpress-develop\/\.github\/workflows\/([^\.]+)\.yml@trunk/g, function( match, $1 ) {
+							return 'uses: ./.github/workflows/' + $1 + '.yml';
+						} );
+					}
+				},
+				src: '.github/workflows/*.yml',
+				dest: './'
+			},
+			certificates: {
+				src: 'vendor/composer/ca-bundle/res/cacert.pem',
+				dest: SOURCE_DIR + 'wp-includes/certificates/cacert.pem'
+			}
+>>>>>>> 6db1a33402 (Security: Introduce Grunt task for updating Root Certificates.)
 		},
 		sass: {
 			colors: {
@@ -796,7 +831,211 @@ module.exports = function(grunt) {
 					`${BUILD_DIR}wp-includes/js/twemoji.min.js`,
 					`${BUILD_DIR}wp-includes/js/wp-emoji.min.js`
 				],
+<<<<<<< HEAD
 				dest: `${BUILD_DIR}wp-includes/js/wp-emoji-release.min.js`
+=======
+				dest: WORKING_DIR + 'wp-includes/js/wp-emoji-release.min.js'
+			},
+			certificates: {
+				options: {
+					separator: '\n\n'
+				},
+				src: [
+					SOURCE_DIR + 'wp-includes/certificates/legacy-1024bit.pem',
+					SOURCE_DIR + 'wp-includes/certificates/cacert.pem'
+				],
+				dest: SOURCE_DIR + 'wp-includes/certificates/ca-bundle.crt'
+			}
+		},
+		patch:{
+			options: {
+				file_mappings: {
+					'src/wp-admin/js/accordion.js': 'src/js/_enqueues/lib/accordion.js',
+					'src/wp-admin/js/application-passwords.js': 'src/js/_enqueues/admin/application-passwords.js',
+					'src/wp-admin/js/auth-app.js': 'src/js/_enqueues/admin/auth-app.js',
+					'src/wp-admin/js/code-editor.js': 'src/js/_enqueues/wp/code-editor.js',
+					'src/wp-admin/js/color-picker.js': 'src/js/_enqueues/lib/color-picker.js',
+					'src/wp-admin/js/comment.js': 'src/js/_enqueues/admin/comment.js',
+					'src/wp-admin/js/common.js': 'src/js/_enqueues/admin/common.js',
+					'src/wp-admin/js/custom-background.js': 'src/js/_enqueues/admin/custom-background.js',
+					'src/wp-admin/js/custom-header.js': 'src/js/_enqueues/admin/custom-header.js',
+					'src/wp-admin/js/customize-controls.js': 'src/js/_enqueues/wp/customize/controls.js',
+					'src/wp-admin/js/customize-nav-menus.js': 'src/js/_enqueues/wp/customize/nav-menus.js',
+					'src/wp-admin/js/customize-widgets.js': 'src/js/_enqueues/wp/customize/widgets.js',
+					'src/wp-admin/js/dashboard.js': 'src/js/_enqueues/wp/dashboard.js',
+					'src/wp-admin/js/edit-comments.js': 'src/js/_enqueues/admin/edit-comments.js',
+					'src/wp-admin/js/editor-expand.js': 'src/js/_enqueues/wp/editor/dfw.js',
+					'src/wp-admin/js/editor.js': 'src/js/_enqueues/wp/editor/base.js',
+					'src/wp-admin/js/gallery.js': 'src/js/_enqueues/lib/gallery.js',
+					'src/wp-admin/js/image-edit.js': 'src/js/_enqueues/lib/image-edit.js',
+					'src/wp-admin/js/inline-edit-post.js': 'src/js/_enqueues/admin/inline-edit-post.js',
+					'src/wp-admin/js/inline-edit-tax.js': 'src/js/_enqueues/admin/inline-edit-tax.js',
+					'src/wp-admin/js/language-chooser.js': 'src/js/_enqueues/lib/language-chooser.js',
+					'src/wp-admin/js/link.js': 'src/js/_enqueues/admin/link.js',
+					'src/wp-admin/js/media-gallery.js': 'src/js/_enqueues/deprecated/media-gallery.js',
+					'src/wp-admin/js/media-upload.js': 'src/js/_enqueues/admin/media-upload.js',
+					'src/wp-admin/js/media.js': 'src/js/_enqueues/admin/media.js',
+					'src/wp-admin/js/nav-menu.js': 'src/js/_enqueues/lib/nav-menu.js',
+					'src/wp-admin/js/password-strength-meter.js': 'src/js/_enqueues/wp/password-strength-meter.js',
+					'src/wp-admin/js/plugin-install.js': 'src/js/_enqueues/admin/plugin-install.js',
+					'src/wp-admin/js/post.js': 'src/js/_enqueues/admin/post.js',
+					'src/wp-admin/js/postbox.js': 'src/js/_enqueues/admin/postbox.js',
+					'src/wp-admin/js/revisions.js': 'src/js/_enqueues/wp/revisions.js',
+					'src/wp-admin/js/set-post-thumbnail.js': 'src/js/_enqueues/admin/set-post-thumbnail.js',
+					'src/wp-admin/js/svg-painter.js': 'src/js/_enqueues/wp/svg-painter.js',
+					'src/wp-admin/js/tags-box.js': 'src/js/_enqueues/admin/tags-box.js',
+					'src/wp-admin/js/tags-suggest.js': 'src/js/_enqueues/admin/tags-suggest.js',
+					'src/wp-admin/js/tags.js': 'src/js/_enqueues/admin/tags.js',
+					'src/wp-admin/js/theme-plugin-editor.js': 'src/js/_enqueues/wp/theme-plugin-editor.js',
+					'src/wp-admin/js/theme.js': 'src/js/_enqueues/wp/theme.js',
+					'src/wp-admin/js/updates.js': 'src/js/_enqueues/wp/updates.js',
+					'src/wp-admin/js/user-profile.js': 'src/js/_enqueues/admin/user-profile.js',
+					'src/wp-admin/js/user-suggest.js': 'src/js/_enqueues/lib/user-suggest.js',
+					'src/wp-admin/js/widgets/custom-html-widgets.js': 'src/js/_enqueues/wp/widgets/custom-html.js',
+					'src/wp-admin/js/widgets/media-audio-widget.js': 'src/js/_enqueues/wp/widgets/media-audio.js',
+					'src/wp-admin/js/widgets/media-gallery-widget.js': 'src/js/_enqueues/wp/widgets/media-gallery.js',
+					'src/wp-admin/js/widgets/media-image-widget.js': 'src/js/_enqueues/wp/widgets/media-image.js',
+					'src/wp-admin/js/widgets/media-video-widget.js': 'src/js/_enqueues/wp/widgets/media-video.js',
+					'src/wp-admin/js/widgets/media-widgets.js': 'src/js/_enqueues/wp/widgets/media.js',
+					'src/wp-admin/js/widgets/text-widgets.js': 'src/js/_enqueues/wp/widgets/text.js',
+					'src/wp-admin/js/widgets.js': 'src/js/_enqueues/admin/widgets.js',
+					'src/wp-admin/js/word-count.js': 'src/js/_enqueues/wp/utils/word-count.js',
+					'src/wp-admin/js/wp-fullscreen-stub.js': 'src/js/_enqueues/deprecated/fullscreen-stub.js',
+					'src/wp-admin/js/xfn.js': 'src/js/_enqueues/admin/xfn.js',
+					'src/wp-includes/js/admin-bar.js': 'src/js/_enqueues/lib/admin-bar.js',
+					'src/wp-includes/js/api-request.js': 'src/js/_enqueues/wp/api-request.js',
+					'src/wp-includes/js/autosave.js': 'src/js/_enqueues/wp/autosave.js',
+					'src/wp-includes/js/comment-reply.js': 'src/js/_enqueues/lib/comment-reply.js',
+					'src/wp-includes/js/customize-base.js': 'src/js/_enqueues/wp/customize/base.js',
+					'src/wp-includes/js/customize-loader.js': 'src/js/_enqueues/wp/customize/loader.js',
+					'src/wp-includes/js/customize-models.js': 'src/js/_enqueues/wp/customize/models.js',
+					'src/wp-includes/js/customize-preview-nav-menus.js': 'src/js/_enqueues/wp/customize/preview-nav-menus.js',
+					'src/wp-includes/js/customize-preview-widgets.js': 'src/js/_enqueues/wp/customize/preview-widgets.js',
+					'src/wp-includes/js/customize-preview.js': 'src/js/_enqueues/wp/customize/preview.js',
+					'src/wp-includes/js/customize-selective-refresh.js': 'src/js/_enqueues/wp/customize/selective-refresh.js',
+					'src/wp-includes/js/customize-views.js': 'src/js/_enqueues/wp/customize/views.js',
+					'src/wp-includes/js/heartbeat.js': 'src/js/_enqueues/wp/heartbeat.js',
+					'src/wp-includes/js/mce-view.js': 'src/js/_enqueues/wp/mce-view.js',
+					'src/wp-includes/js/media-editor.js': 'src/js/_enqueues/wp/media/editor.js',
+					'src/wp-includes/js/quicktags.js': 'src/js/_enqueues/lib/quicktags.js',
+					'src/wp-includes/js/shortcode.js': 'src/js/_enqueues/wp/shortcode.js',
+					'src/wp-includes/js/utils.js': 'src/js/_enqueues/lib/cookies.js',
+					'src/wp-includes/js/wp-ajax-response.js': 'src/js/_enqueues/lib/ajax-response.js',
+					'src/wp-includes/js/wp-api.js': 'src/js/_enqueues/wp/api.js',
+					'src/wp-includes/js/wp-auth-check.js': 'src/js/_enqueues/lib/auth-check.js',
+					'src/wp-includes/js/wp-backbone.js': 'src/js/_enqueues/wp/backbone.js',
+					'src/wp-includes/js/wp-custom-header.js': 'src/js/_enqueues/wp/custom-header.js',
+					'src/wp-includes/js/wp-embed-template.js': 'src/js/_enqueues/lib/embed-template.js',
+					'src/wp-includes/js/wp-embed.js': 'src/js/_enqueues/wp/embed.js',
+					'src/wp-includes/js/wp-emoji-loader.js': 'src/js/_enqueues/lib/emoji-loader.js',
+					'src/wp-includes/js/wp-emoji.js': 'src/js/_enqueues/wp/emoji.js',
+					'src/wp-includes/js/wp-list-revisions.js': 'src/js/_enqueues/lib/list-revisions.js',
+					'src/wp-includes/js/wp-lists.js': 'src/js/_enqueues/lib/lists.js',
+					'src/wp-includes/js/wp-pointer.js': 'src/js/_enqueues/lib/pointer.js',
+					'src/wp-includes/js/wp-sanitize.js': 'src/js/_enqueues/wp/sanitize.js',
+					'src/wp-includes/js/wp-util.js': 'src/js/_enqueues/wp/util.js',
+					'src/wp-includes/js/wpdialog.js': 'src/js/_enqueues/lib/dialog.js',
+					'src/wp-includes/js/wplink.js': 'src/js/_enqueues/lib/link.js',
+					'src/wp-includes/js/zxcvbn-async.js': 'src/js/_enqueues/lib/zxcvbn-async.js',
+					'src/wp-includes/js/media/controllers/audio-details.js' : 'src/js/media/controllers/audio-details.js',
+					'src/wp-includes/js/media/controllers/collection-add.js' : 'src/js/media/controllers/collection-add.js',
+					'src/wp-includes/js/media/controllers/collection-edit.js' : 'src/js/media/controllers/collection-edit.js',
+					'src/wp-includes/js/media/controllers/cropper.js' : 'src/js/media/controllers/cropper.js',
+					'src/wp-includes/js/media/controllers/customize-image-cropper.js' : 'src/js/media/controllers/customize-image-cropper.js',
+					'src/wp-includes/js/media/controllers/edit-attachment-metadata.js' : 'src/js/media/controllers/edit-attachment-metadata.js',
+					'src/wp-includes/js/media/controllers/edit-image.js' : 'src/js/media/controllers/edit-image.js',
+					'src/wp-includes/js/media/controllers/embed.js' : 'src/js/media/controllers/embed.js',
+					'src/wp-includes/js/media/controllers/featured-image.js' : 'src/js/media/controllers/featured-image.js',
+					'src/wp-includes/js/media/controllers/gallery-add.js' : 'src/js/media/controllers/gallery-add.js',
+					'src/wp-includes/js/media/controllers/gallery-edit.js' : 'src/js/media/controllers/gallery-edit.js',
+					'src/wp-includes/js/media/controllers/image-details.js' : 'src/js/media/controllers/image-details.js',
+					'src/wp-includes/js/media/controllers/library.js' : 'src/js/media/controllers/library.js',
+					'src/wp-includes/js/media/controllers/media-library.js' : 'src/js/media/controllers/media-library.js',
+					'src/wp-includes/js/media/controllers/region.js' : 'src/js/media/controllers/region.js',
+					'src/wp-includes/js/media/controllers/replace-image.js' : 'src/js/media/controllers/replace-image.js',
+					'src/wp-includes/js/media/controllers/site-icon-cropper.js' : 'src/js/media/controllers/site-icon-cropper.js',
+					'src/wp-includes/js/media/controllers/state-machine.js' : 'src/js/media/controllers/state-machine.js',
+					'src/wp-includes/js/media/controllers/state.js' : 'src/js/media/controllers/state.js',
+					'src/wp-includes/js/media/controllers/video-details.js' : 'src/js/media/controllers/video-details.js',
+					'src/wp-includes/js/media/models/attachment.js' : 'src/js/media/models/attachment.js',
+					'src/wp-includes/js/media/models/attachments.js' : 'src/js/media/models/attachments.js',
+					'src/wp-includes/js/media/models/post-image.js' : 'src/js/media/models/post-image.js',
+					'src/wp-includes/js/media/models/post-media.js' : 'src/js/media/models/post-media.js',
+					'src/wp-includes/js/media/models/query.js' : 'src/js/media/models/query.js',
+					'src/wp-includes/js/media/models/selection.js' : 'src/js/media/models/selection.js',
+					'src/wp-includes/js/media/routers/manage.js' : 'src/js/media/routers/manage.js',
+					'src/wp-includes/js/media/utils/selection-sync.js' : 'src/js/media/utils/selection-sync.js',
+					'src/wp-includes/js/media/views/attachment-compat.js' : 'src/js/media/views/attachment-compat.js',
+					'src/wp-includes/js/media/views/attachment-filters.js' : 'src/js/media/views/attachment-filters.js',
+					'src/wp-includes/js/media/views/attachment-filters/all.js' : 'src/js/media/views/attachment-filters/all.js',
+					'src/wp-includes/js/media/views/attachment-filters/date.js' : 'src/js/media/views/attachment-filters/date.js',
+					'src/wp-includes/js/media/views/attachment-filters/uploaded.js' : 'src/js/media/views/attachment-filters/uploaded.js',
+					'src/wp-includes/js/media/views/attachment.js' : 'src/js/media/views/attachment.js',
+					'src/wp-includes/js/media/views/attachment/details-two-column.js' : 'src/js/media/views/details-two-column.js',
+					'src/wp-includes/js/media/views/attachment/details.js' : 'src/js/media/views/details.js',
+					'src/wp-includes/js/media/views/attachment/edit-library.js' : 'src/js/media/views/edit-library.js',
+					'src/wp-includes/js/media/views/attachment/edit-selection.js' : 'src/js/media/views/edit-selection.js',
+					'src/wp-includes/js/media/views/attachment/library.js' : 'src/js/media/views/library.js',
+					'src/wp-includes/js/media/views/attachment/selection.js' : 'src/js/media/views/selection.js',
+					'src/wp-includes/js/media/views/attachment/attachments.js' : 'src/js/media/views/attachments.js',
+					'src/wp-includes/js/media/views/attachments/browser.js' : 'src/js/media/views/attachments/browser.js',
+					'src/wp-includes/js/media/views/attachments/selection.js' : 'src/js/media/views/attachments/selection.js',
+					'src/wp-includes/js/media/views/attachments/audio-details.js' : 'src/js/media/views/attachments/audio-details.js',
+					'src/wp-includes/js/media/views/attachments/button-group.js' : 'src/js/media/views/attachments/button-group.js',
+					'src/wp-includes/js/media/views/attachments/button.js' : 'src/js/media/views/attachments/button.js',
+					'src/wp-includes/js/media/views/button/delete-selected-permanently.js' : 'src/js/media/views/button/delete-selected-permanently.js',
+					'src/wp-includes/js/media/views/button/delete-selected.js' : 'src/js/media/views/button/delete-selected.js',
+					'src/wp-includes/js/media/views/button/select-mode-toggle.js' : 'src/js/media/views/button/select-mode-toggle.js',
+					'src/wp-includes/js/media/views/cropper.js' : 'src/js/media/views/cropper.js',
+					'src/wp-includes/js/media/views/edit-image-details.js' : 'src/js/media/views/edit-image-details.js',
+					'src/wp-includes/js/media/views/edit-image.js' : 'src/js/media/views/edit-image.js',
+					'src/wp-includes/js/media/views/embed.js' : 'src/js/media/views/embed.js',
+					'src/wp-includes/js/media/views/embed/image.js' : 'src/js/media/views/embed/image.js',
+					'src/wp-includes/js/media/views/embed/link.js' : 'src/js/media/views/embed/link.js',
+					'src/wp-includes/js/media/views/embed/url.js' : 'src/js/media/views/embed/url.js',
+					'src/wp-includes/js/media/views/focus-manager.js' : 'src/js/media/views/focus-manager.js',
+					'src/wp-includes/js/media/views/frame.js' : 'src/js/media/views/frame.js',
+					'src/wp-includes/js/media/views/frame/audio-details.js' : 'src/js/media/views/frame/audio-details.js',
+					'src/wp-includes/js/media/views/frame/edit-attachments.js' : 'src/js/media/views/frame/edit-attachments.js',
+					'src/wp-includes/js/media/views/frame/image-details.js' : 'src/js/media/views/frame/image-details.js',
+					'src/wp-includes/js/media/views/frame/manage.js' : 'src/js/media/views/frame/manage.js',
+					'src/wp-includes/js/media/views/frame/media-details.js' : 'src/js/media/views/frame/media-details.js',
+					'src/wp-includes/js/media/views/frame/post.js' : 'src/js/media/views/frame/post.js',
+					'src/wp-includes/js/media/views/frame/select.js' : 'src/js/media/views/frame/select.js',
+					'src/wp-includes/js/media/views/frame/video-details.js' : 'src/js/media/views/frame/video-details.js',
+					'src/wp-includes/js/media/views/iframe.js' : 'src/js/media/views/iframe.js',
+					'src/wp-includes/js/media/views/image-details.js' : 'src/js/media/views/image-details.js',
+					'src/wp-includes/js/media/views/label.js' : 'src/js/media/views/label.js',
+					'src/wp-includes/js/media/views/media-details.js' : 'src/js/media/views/media-details.js',
+					'src/wp-includes/js/media/views/media-frame.js' : 'src/js/media/views/media-frame.js',
+					'src/wp-includes/js/media/views/menu-item.js' : 'src/js/media/views/menu-item.js',
+					'src/wp-includes/js/media/views/menu.js' : 'src/js/media/views/menu.js',
+					'src/wp-includes/js/media/views/modal.js' : 'src/js/media/views/modal.js',
+					'src/wp-includes/js/media/views/priority-list.js' : 'src/js/media/views/priority-list.js',
+					'src/wp-includes/js/media/views/router-item.js' : 'src/js/media/views/router-item.js',
+					'src/wp-includes/js/media/views/router.js' : 'src/js/media/views/router.js',
+					'src/wp-includes/js/media/views/search.js' : 'src/js/media/views/search.js',
+					'src/wp-includes/js/media/views/selection.js' : 'src/js/media/views/selection.js',
+					'src/wp-includes/js/media/views/settings.js' : 'src/js/media/views/settings.js',
+					'src/wp-includes/js/media/views/settings/attachment-display.js' : 'src/js/media/views/settings/attachment-display.js',
+					'src/wp-includes/js/media/views/settings/gallery.js' : 'src/js/media/views/settings/gallery.js',
+					'src/wp-includes/js/media/views/settings/playlist.js' : 'src/js/media/views/settings/playlist.js',
+					'src/wp-includes/js/media/views/sidebar.js' : 'src/js/media/views/sidebar.js',
+					'src/wp-includes/js/media/views/site-icon-cropper.js' : 'src/js/media/views/site-icon-cropper.js',
+					'src/wp-includes/js/media/views/site-icon-preview.js' : 'src/js/media/views/site-icon-preview.js',
+					'src/wp-includes/js/media/views/spinner.js' : 'src/js/media/views/spinner.js',
+					'src/wp-includes/js/media/views/toolbar.js' : 'src/js/media/views/toolbar.js',
+					'src/wp-includes/js/media/views/toolbar/embed.js' : 'src/js/media/views/toolbar/embed.js',
+					'src/wp-includes/js/media/views/toolbar/select.js' : 'src/js/media/views/toolbar/select.js',
+					'src/wp-includes/js/media/views/uploader/editor.js' : 'src/js/media/views/uploader/editor.js',
+					'src/wp-includes/js/media/views/uploader/inline.js' : 'src/js/media/views/uploader/inline.js',
+					'src/wp-includes/js/media/views/uploader/status-error.js' : 'src/js/media/views/uploader/status-error.js',
+					'src/wp-includes/js/media/views/uploader/status.js' : 'src/js/media/views/uploader/status.js',
+					'src/wp-includes/js/media/views/uploader/window.js' : 'src/js/media/views/uploader/window.js',
+					'src/wp-includes/js/media/views/video-details.js' : 'src/js/media/views/video-details.js',
+					'src/wp-includes/js/media/views/view.js' : 'src/js/media/views/view.js'
+				}
+>>>>>>> 6db1a33402 (Security: Introduce Grunt task for updating Root Certificates.)
 			}
 		},
 		imagemin: {
@@ -1177,6 +1416,7 @@ module.exports = function(grunt) {
 			'rtl',
 			'cssmin:rtl',
 			'cssmin:colors',
+<<<<<<< HEAD
 			'terser:core',
 			'terser:embed',
 			'terser:jqueryui',
@@ -1191,6 +1431,182 @@ module.exports = function(grunt) {
 	grunt.registerTask(
 		'prerelease',
 		[
+=======
+		'usebanner'
+	] );
+
+	grunt.registerTask( 'certificates:update', 'Updates the Composer package responsible for root certificate updates.', function() {
+		var done = this.async();
+		var flags = this.flags;
+		var args = [ 'update' ];
+
+		grunt.util.spawn( {
+			cmd: 'composer',
+			args: args,
+			opts: { stdio: 'inherit' }
+		}, function( error ) {
+			if ( flags.error && error ) {
+				done( false );
+			} else {
+				done( true );
+			}
+		} );
+	} );
+
+	grunt.registerTask( 'build:certificates', [
+		'concat:certificates'
+	] );
+
+	grunt.registerTask( 'certificates:upgrade', [
+		'certificates:update',
+		'copy:certificates',
+		'build:certificates'
+	] );
+
+	grunt.registerTask( 'build:files', [
+		'clean:files',
+		'copy:files',
+		'copy:block-json',
+		'copy:version',
+	] );
+
+	grunt.registerTask( 'replace:workflow-references-local-to-remote', [
+		'copy:workflow-references-local-to-remote',
+	]);
+
+	grunt.registerTask( 'replace:workflow-references-remote-to-local', [
+		'copy:workflow-references-remote-to-local',
+	]);
+
+	/**
+	 * Build verification tasks.
+	 */
+	grunt.registerTask( 'verify:build', [
+		'verify:old-files',
+		'verify:source-maps',
+	] );
+
+	/**
+	 * Build assertions to ensure no project files are inside `$_old_files` in the build directory.
+	 *
+	 * @ticket 36083
+	 */
+	grunt.registerTask( 'verify:old-files', function() {
+		const file = `${ BUILD_DIR }wp-admin/includes/update-core.php`;
+
+		assert(
+			fs.existsSync( file ),
+			'The build/wp-admin/includes/update-core.php file does not exist.'
+		);
+
+		const contents = fs.readFileSync( file, {
+			encoding: 'utf8',
+		} );
+
+		assert(
+			contents.length > 0,
+			'The build/wp-admin/includes/update-core.php file must not be empty.'
+		);
+
+		const match = contents.match( /\$_old_files = array\(([^\)]+)\);/ );
+
+		assert(
+			match.length > 0,
+			'The build/wp-admin/includes/update-core.php file does not include an `$_old_files` array.'
+		);
+
+		const files = match[1].split( '\n\t' ).filter( function( file ) {
+			// Filter out empty lines.
+			if ( '' === file ) {
+				return false;
+			}
+
+			// Filter out commented out lines.
+			if ( 0 === file.indexOf( '/' ) ) {
+				return false;
+			}
+
+			return true;
+		} ).map( function( file ) {
+			// Strip leading and trailing single quotes and commas.
+			return file.replace( /^\'|\',$/g, '' );
+		} );
+
+		files.forEach(function( file ){
+			const search = `${ BUILD_DIR }${ file }`;
+			assert(
+				false === fs.existsSync( search ),
+				`${ search } should not be present in the $_old_files array.`
+			);
+		});
+	} );
+
+	/**
+	 * Compiled JavaScript files may link to sourcemaps. In some cases,
+	 * the source map may not be available, which can cause 404 errors when
+	 * browsers try to download the sourcemap from the referenced URLs.
+	 * Ensure that sourcemap links are not included in JavaScript files.
+	 *
+	 * @ticket 24994
+	 * @ticket 46218
+	 * @ticket 60348
+	 */
+	grunt.registerTask( 'verify:source-maps', function() {
+		const ignoredFiles = [
+			'build/wp-includes/js/dist/components.js',
+		];
+		const files = buildFiles.reduce( ( acc, path ) => {
+			// Skip excluded paths and any path that isn't a file.
+			if ( '!' === path[0] || '**' !== path.substr( -2 ) ) {
+				return acc;
+			}
+			acc.push( ...glob.sync( `${ BUILD_DIR }/${ path }/*.js` ) );
+			return acc;
+		}, [] );
+
+		assert(
+			files.length > 0,
+			'No JavaScript files found in the build directory.'
+		);
+
+		files
+			.filter(file => ! ignoredFiles.includes( file) )
+			.forEach( function( file ) {
+				const contents = fs.readFileSync( file, {
+					encoding: 'utf8',
+				} );
+				// `data:` URLs are allowed:
+				const doesNotHaveSourceMap = ! /^\/\/# sourceMappingURL=((?!data:).)/m.test(contents);
+
+				assert(
+					doesNotHaveSourceMap,
+					`The ${ file } file must not contain a sourceMappingURL.`
+				);
+			} );
+	} );
+
+	grunt.registerTask( 'build', function() {
+		if ( grunt.option( 'dev' ) ) {
+			grunt.task.run( [
+				'build:js',
+				'build:css',
+				'build:certificates'
+			] );
+		} else {
+			grunt.task.run( [
+				'build:certificates',
+				'build:files',
+				'build:js',
+				'build:css',
+				'replace:source-maps',
+				'verify:build'
+			] );
+		}
+	} );
+
+	grunt.registerTask( 'prerelease', [
+		'format:php:error',
+>>>>>>> 6db1a33402 (Security: Introduce Grunt task for updating Root Certificates.)
 			'precommit:php',
 			'precommit:js',
 			'precommit:css',
