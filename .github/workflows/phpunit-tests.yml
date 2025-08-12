@@ -125,7 +125,7 @@ jobs:
           echo "PHP_FPM_GID=$(id -g)" >> $GITHUB_ENV
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Read .nvmrc
         run: echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
