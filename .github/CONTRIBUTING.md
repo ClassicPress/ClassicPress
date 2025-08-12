@@ -52,6 +52,8 @@ If you're not sure where to start contributing, here are some ideas:
 - Take a look at issues with the [`help wanted`](https://github.com/ClassicPress/ClassicPress/labels/help%20wanted) label.
 - Submit PRs based on our [planned milestones](https://github.com/ClassicPress/ClassicPress/milestones), or exploratory PRs with your own suggested changes. Please remember these will be subject to review to make sure they are in line with the project's direction.
 
+Don’t think you have to be a GitHub command line guru before you can start contributing. A simpler option is to use GitHub Desktop and we have written a series of [basic tutorials](https://www.classicpress.net/github-desktop-a-really-really-simple-tutorial/) to help you get started and guide you through the process. This is a great way to learn how the process of submitting a Pull Request works, and will give you a better understanding of the inner workings of an open source project.
+
 ## Setting up a local development environment
 
 1. Make sure you have [git](https://git-scm.com/), [Apache](http://httpd.apache.org/) and [MySQL](https://www.mysql.com/)/MariaDB installed and working on your computer. Installing [Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/) may be useful for Windows user, for example when running `grunt` tasks (see below).
@@ -138,17 +140,19 @@ QUnit is used for testing JavaScript and these tests can be run in a browser at 
 
 ## Backporting changes from WordPress
 
-ClassicPress version `1.0.0` is a fork of [WordPress `4.9.x`](https://github.com/ClassicPress/ClassicPress/tree/LAST_WP_COMMIT). Since then, a number of changes have been made to WordPress for performance, bugfixes or new features.
+Since the release of ClassicPress version 2 in February 2024, ClassicPress version 1 is not under active development anymore.
 
-ClassicPress `1.x.x` is committed to keeping backward compatibility with the WordPress 4.9 branch. However, we're also open to merging bugfixes and enhancements from later versions of WordPress, **as long as the review criteria listed above are met**.
+ClassicPress version 2.0.0 is a fork of WordPress 6.2.x. Since then, a number of changes have been made to WordPress for performance, bugfixes or new features.
+
+ClassicPress 2.x.x is committed to keeping backward compatibility with the WordPress 6.2 branch.
 
 Changes must be proposed and reviewed **individually** - long lists of tickets or changesets from individual WordPress versions don't give us what we need in order to plan and understand each change well.
 
 If you're not sure about any of that, then it's a good idea to ask first. A good way is to create an issue for the specific change you're interested in, along with links to the relevant WordPress changesets and tickets, and any other information you have about how the change works.
 
-There are some changes that we already know we want to backport because they fit into our plans for future versions of ClassicPress. You can find some examples under the [`WP backport` label](https://github.com/ClassicPress/ClassicPress/labels/WP%20backport).
+There are some changes that we already know we want to backport because they fit into our plans for future versions of ClassicPress.
 
-You can see a list of all WordPress changes since the fork, along with information about which ones have already been included in ClassicPress, at [backports.classicpress.net](https://backports.classicpress.net).
+You can see a list of all WordPress changes since the fork, along with information about which ones have already been included in ClassicPress, at GitHub under the [WP backport label](https://github.com/ClassicPress/ClassicPress/labels/type%3A%20wp%20backport).
 
 ### Making a backport PR
 
