@@ -47,6 +47,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 <div class="about-wrap-content">
 	<p class="about-description"><?php printf( __( 'ClassicPress is Free and open source software, built by a distributed community of volunteer developers from around the world. ClassicPress comes with some awesome, worldview-changing rights courtesy of its <a href="%s">license</a>, the GPL.' ), 'https://opensource.org/licenses/gpl-license' ); ?></p>
 
+	<hr>
 	<h3><?php _e( 'The Four Freedoms' ); ?></h3>
 	<ul class="about-freedoms">
 		<li><h4><?php _e( 'The 1st Freedom' ); ?></h4><?php _e( 'To run the program for any purpose.' ); ?></li>
@@ -54,6 +55,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 		<li><h4><?php _e( 'The 3rd Freedom' ); ?></h4><?php _e( 'To redistribute.' ); ?></li>
 		<li><h4><?php _e( 'The 4th Freedom' ); ?></h4><?php _e( 'To distribute copies of your modified versions to others.' ); ?></li>
 	</ul>
+	<hr>
 
 	<p>
 	<?php
