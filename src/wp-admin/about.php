@@ -61,12 +61,11 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 
 			<p>
 				<?php
-				global $wp_version;
 				printf(
-					/* translators: link to ClassicPress site */
-					__( '<a href="%s"><strong>ClassicPress</strong></a> is a fork of the WordPress %s branch, including the battle-tested and proven classic editor interface using TinyMCE.' ),
+					/* translators: 1: link to ClassicPress site, 2: WP version */
+					__( '<a href="%1$s"><strong>ClassicPress</strong></a> is a fork of the WordPress %2$s branch, including the battle-tested and proven classic editor interface using TinyMCE.' ),
 					'https://www.classicpress.net',
-					$wp_version
+					'6.2.x'
 				);
 				?>
 			</p>
@@ -123,7 +122,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 			<p>
 				<?php
 				printf(
-					/* translators: link to ClassicPress 2.0.0 changelog */
+					/* translators: 1: WP version number, 2: link to ClassicPress 2.0.0 changelog */
 					__( 'ClassicPress 2.0.0 is a fork of the WordPress %1$s branch. See the <a href="%2$s"><strong>ClassicPress 2.0.0 (Bella) release notes</strong></a>.' ),
 					'6.2.x',
 					'https://forums.classicpress.net/t/classicpress-2-0-0-bella-release-notes/5099'
@@ -152,7 +151,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 			<p>
 				<?php
 				printf(
-					/* translators: link to ClassicPress 1.0.0 changelog */
+					/* translators: 1: WP version number, 2: link to ClassicPress 1.0.0 changelog */
 					__( 'ClassicPress 1.0.0 is a fork of the WordPress %1$s branch. See the <a href="%2$s"><strong>ClassicPress 1.0.0 (Aurora) release notes</strong></a>.' ),
 					'4.9.x',
 					'https://forums.classicpress.net/t/classicpress-1-0-0-aurora-release-notes/910'
