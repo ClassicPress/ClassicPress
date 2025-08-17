@@ -6086,6 +6086,20 @@ function wp_delete_attachment( $post_id, $force_delete = false ) {
 		delete_metadata_by_mid( 'post', $mid );
 	}
 
+	// Delete references to deleted images in gallery widgets.
+	$widget_options = get_option( 'widget_media_gallery' );
+	if ( ! empty( $widget_options ) ) {
+		foreach ( $widget_options as $key => $instance ) {
+			if ( isset( $instance['ids'] ) && is_array( $instance['ids'] ) ) {
+
+				// Remove the deleted image ID from the widget's stored IDs.
+				$instance['ids'] = array_diff( $instance['ids'], array( $post_id ) );
+				$widget_options[ $key ] = $instance;
+			}
+		}
+		update_option( 'widget_media_gallery', $widget_options ); // Update widget settings
+	}
+
 	/** This action is documented in wp-includes/post.php */
 	do_action( 'delete_post', $post_id, $post );
 	$result = $wpdb->delete( $wpdb->posts, array( 'ID' => $post_id ) );

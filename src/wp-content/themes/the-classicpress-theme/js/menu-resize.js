@@ -9,6 +9,11 @@
 document.addEventListener( 'DOMContentLoaded', function () {
 	'use strict'; // satisfy code inspectors
 
+	// Exit if no Primary Menu is set
+	if ( ! document.getElementById( 'primary-menu' ) ) {
+		return;
+	}
+
 	// Provide accessible labels for sub-menus
 	const subMenus = document.querySelectorAll( '.sub-menu' );
 	subMenus.forEach(sub => {
@@ -109,7 +114,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		}, false);
 
 	} else {
-		const menuItems = document.querySelectorAll( '#primary-menu .menu-item a' );
+		const menuItems = [...document.querySelectorAll( '#primary-menu .menu-item a' )];
 
 		/* Show or hide sub-menus by pressing appropriate keys for accessibility */
 		document.addEventListener( 'keydown', function (e) {
@@ -122,7 +127,9 @@ document.addEventListener( 'DOMContentLoaded', function () {
 					}
 				}
 				else if ( e.key === 'ArrowDown' ) {
-					e.preventDefault();
+					if ( menuItems.includes( e.target ) ) {
+						e.preventDefault();
+					}
 					if ( subMenus[i].style.display === 'none' ) {
 						subMenus[i].removeAttribute( 'style' );
 					}

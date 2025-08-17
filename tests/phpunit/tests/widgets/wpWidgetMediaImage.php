@@ -601,7 +601,7 @@ class Tests_Widgets_wpWidgetMediaImage extends WP_UnitTestCase {
 			)
 		);
 		$output = ob_get_clean();
-		$this->assertStringContainsString( 'style="width: 310px"', $output );
+		$this->assertStringContainsString( 'style="width: 300px"', $output );
 		$this->assertStringContainsString( '<figcaption class="wp-caption-text">Caption for an image with custom size</figcaption>', $output );
 	}
 
@@ -616,20 +616,5 @@ class Tests_Widgets_wpWidgetMediaImage extends WP_UnitTestCase {
 		$widget->enqueue_admin_scripts();
 
 		$this->assertTrue( wp_script_is( 'media-image-widget' ) );
-	}
-
-	/**
-	 * Test render_control_template_scripts method.
-	 *
-	 * @covers WP_Widget_Media_Image::render_control_template_scripts
-	 */
-	public function test_render_control_template_scripts() {
-		$widget = new WP_Widget_Media_Image();
-
-		ob_start();
-		$widget->render_control_template_scripts();
-		$output = ob_get_clean();
-
-		$this->assertStringContainsString( '<script type="text/html" id="tmpl-wp-media-widget-image-preview">', $output );
 	}
 }

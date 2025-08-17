@@ -1,8 +1,8 @@
 === Twenty Seventeen ===
-Contributors: the WordPress team
-Requires at least: WordPress 4.7
-Tested up to: WordPress 5.0-trunk
-Version: 1.7
+Contributors: the WordPress team and ClassicPress contributors
+Version: 99.3-upstream1.7
+Requires PHP: 5.6
+Requires CP: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: one-column, two-columns, right-sidebar, flexible-header, accessibility-ready, custom-colors, custom-header, custom-menu, custom-logo, editor-style, featured-images, footer-widgets, post-formats, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready
@@ -53,6 +53,11 @@ Source: https://necolas.github.io/normalize.css/
 Font Awesome icons, Copyright Dave Gandy
 License: SIL Open Font License, version 1.1.
 Source: http://fontawesome.io/
+
+Libre Franklin Font
+Copyright 2020 The LibreFranklin Project Authors (https://github.com/impallari/Libre-Franklin)
+License: SIL Open Font License, 1.1, https://opensource.org/licenses/OFL-1.1
+Source: https://fontsource.org/fonts/libre-franklin
 
 Bundled header image, Copyright Alvin Engler
 License: CC0 1.0 Universal (CC0 1.0)

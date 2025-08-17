@@ -876,7 +876,7 @@ border color while dragging a file over the uploader drop area */
 	clear: both;
 }
 
-.copy-to-clipboard-container .copy-attachment-url {
+.copy-to-clipboard-container button.copy-attachment-url {
 	white-space: normal;
 }
 
@@ -1178,6 +1178,13 @@ border color while dragging a file over the uploader drop area */
 	outline: 2px solid transparent;
 }
 
+/* Caret next to "Restore original image" */
+.button-link .imgedit-help-toggle {
+	margin: 0;
+	border: 0;
+	text-decoration: none;
+}
+
 .form-table td.imgedit-response {
 	padding: 0;
 }
@@ -1282,7 +1289,7 @@ audio, video {
 	.edit-attachment-frame textarea {
 		line-height: 1.5;
 	}
-	
+
 	.wp_attachment_details label[for="content"] {
 		font-size: 14px;
 		line-height: 1.5;
@@ -1407,10 +1414,39 @@ audio, video {
 	.edit-attachment-frame .attachment-media-view .thumbnail {
 		padding: 0 16px 16px;
 	}
+
+	.imgedit-settings .imgedit-scale-button-wrapper {
+		display: block;
+	}
 }
 
 @media only screen and (max-width: 640px), screen and (max-height: 400px) {
 	.upload-php .mode-grid .media-sidebar{
 		max-width: 100%;
+	}
+}
+
+@media only screen and (max-width: 900px) {
+	.attachment-details .attachment-info .copy-to-clipboard-container {
+		margin: 10px 0 0 0;
+		padding-top: 0;
+	}
+
+	.attachment-details .compat-item label span,
+	.attachment-details .setting .name,
+	.attachment-details .setting input[type="text"],
+	.attachment-details .setting textarea,
+	.attachment-details .setting + .description {
+		float: none;
+		width: 98%;
+		max-width: none;
+		height: auto;
+	}
+
+	.attachment-details .setting + .description {
+		clear: both;
+		font-size: 12px;
+		font-style: normal;
+		margin-bottom: 10px;
 	}
 }

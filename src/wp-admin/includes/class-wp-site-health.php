@@ -1945,7 +1945,7 @@ class WP_Site_Health {
 			$result['status'] = 'critical';
 			$result['label']  = sprintf(
 				/* translators: %s: wp-content */
-				__( 'Unable to locate WordPress content directory (%s)' ),
+				__( 'Unable to locate ClassicPress content directory (%s)' ),
 				'<code>wp-content</code>'
 			);
 			$result['description'] = sprintf(

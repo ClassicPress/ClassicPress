@@ -393,9 +393,13 @@ function get_comment_count( $post_id = 0 ) {
 		'all'                 => 0,
 	);
 
+	// Ensure post count reflect comments on available post types or passed URL parameter
+	$post_type = ( isset( $_REQUEST['post_type'] ) ) ? sanitize_key( $_REQUEST['post_type'] ) : get_post_types();
+
 	$args = array(
 		'count'                     => true,
 		'update_comment_meta_cache' => false,
+		'post_type'                 => $post_type,
 	);
 	if ( $post_id > 0 ) {
 		$args['post_id'] = $post_id;

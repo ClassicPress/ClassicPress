@@ -31,16 +31,6 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 				'mime_type'   => 'image',
 			)
 		);
-
-		$this->l10n = array_merge(
-			$this->l10n,
-			array(
-				'no_media_selected' => __( 'No images selected' ),
-				'add_media'         => _x( 'Add Images', 'label for button in the gallery widget; should not be longer than ~13 characters long' ),
-				'replace_media'     => '',
-				'edit_media'        => _x( 'Edit Gallery', 'label for button in the gallery widget; should not be longer than ~13 characters long' ),
-			)
-		);
 	}
 
 	/**
@@ -130,113 +120,6 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 	}
 
 	/**
-	 * Loads the required media files for the media manager and scripts for media widgets.
-	 *
-	 * @since 4.9.0
-	 */
-	public function enqueue_admin_scripts() {
-		parent::enqueue_admin_scripts();
-
-		$handle = 'media-gallery-widget';
-		wp_enqueue_script( $handle );
-
-		$exported_schema = array();
-		foreach ( $this->get_instance_schema() as $field => $field_schema ) {
-			$exported_schema[ $field ] = wp_array_slice_assoc( $field_schema, array( 'type', 'default', 'enum', 'minimum', 'format', 'media_prop', 'should_preview_update', 'items' ) );
-		}
-		wp_add_inline_script(
-			$handle,
-			sprintf(
-				'wp.mediaWidgets.modelConstructors[ %s ].prototype.schema = %s;',
-				wp_json_encode( $this->id_base ),
-				wp_json_encode( $exported_schema )
-			)
-		);
-
-		wp_add_inline_script(
-			$handle,
-			sprintf(
-				'
-					wp.mediaWidgets.controlConstructors[ %1$s ].prototype.mime_type = %2$s;
-					_.extend( wp.mediaWidgets.controlConstructors[ %1$s ].prototype.l10n, %3$s );
-				',
-				wp_json_encode( $this->id_base ),
-				wp_json_encode( $this->widget_options['mime_type'] ),
-				wp_json_encode( $this->l10n )
-			)
-		);
-	}
-
-	/**
-	 * Render form template scripts.
-	 *
-	 * @since 4.9.0
-	 */
-	public function render_control_template_scripts() {
-		parent::render_control_template_scripts();
-		?>
-		<script type="text/html" id="tmpl-wp-media-widget-gallery-preview">
-			<#
-			var ids = _.filter( data.ids, function( id ) {
-				return ( id in data.attachments );
-			} );
-			#>
-			<# if ( ids.length ) { #>
-				<ul class="gallery media-widget-gallery-preview" role="list">
-					<# _.each( ids, function( id, index ) { #>
-						<# var attachment = data.attachments[ id ]; #>
-						<# if ( index < 6 ) { #>
-							<li class="gallery-item">
-								<div class="gallery-icon">
-									<img alt="{{ attachment.alt }}"
-										<# if ( index === 5 && data.ids.length > 6 ) { #> aria-hidden="true" <# } #>
-										<# if ( attachment.sizes.thumbnail ) { #>
-											src="{{ attachment.sizes.thumbnail.url }}" width="{{ attachment.sizes.thumbnail.width }}" height="{{ attachment.sizes.thumbnail.height }}"
-										<# } else { #>
-											src="{{ attachment.url }}"
-										<# } #>
-										<# if ( ! attachment.alt && attachment.filename ) { #>
-											aria-label="
-											<?php
-											echo esc_attr(
-												sprintf(
-													/* translators: %s: The image file name. */
-													__( 'The current image has no alternative text. The file name is: %s' ),
-													'{{ attachment.filename }}'
-												)
-											);
-											?>
-											"
-										<# } #>
-									>
-									<# if ( index === 5 && data.ids.length > 6 ) { #>
-									<div class="gallery-icon-placeholder">
-										<p class="gallery-icon-placeholder-text" aria-label="
-										<?php
-											printf(
-												/* translators: %s: The amount of additional, not visible images in the gallery widget preview. */
-												__( 'Additional images added to this gallery: %s' ),
-												'{{ data.ids.length - 5 }}'
-											);
-										?>
-										">+{{ data.ids.length - 5 }}</p>
-									</div>
-									<# } #>
-								</div>
-							</li>
-						<# } #>
-					<# } ); #>
-				</ul>
-			<# } else { #>
-				<div class="attachment-media-view">
-					<button type="button" class="placeholder button-add-media"><?php echo esc_html( $this->l10n['add_media'] ); ?></button>
-				</div>
-			<# } #>
-		</script>
-		<?php
-	}
-
-	/**
 	 * Whether the widget has content to show.
 	 *
 	 * @since 4.9.0
@@ -257,4 +140,240 @@ class WP_Widget_Media_Gallery extends WP_Widget_Media {
 		}
 		return false;
 	}
+
+	/**
+	 * Back-end widget form.
+	 *
+	 * @since CP-2.5.0
+	 *
+	 * @see WP_Widget::form()
+	 *
+	 * @param array $instance Previously saved values from database.
+	 */
+	public function form( $instance ) {
+		$instance = array_merge( wp_list_pluck( $this->get_instance_schema(), 'default' ), $instance );
+
+		$title             = ! empty( $instance['title'] ) ? $instance['title'] : '';
+		$ids               = ! empty( $instance['ids'] ) ? implode( ',', $instance['ids'] ) : '';
+		$columns           = ! empty( $instance['columns'] ) ? $instance['columns'] : 3;
+		$size              = ! empty( $instance['size'] ) ? $instance['size'] : 'thumbnail';
+		$link_type         = ! empty( $instance['link_type'] ) ? $instance['link_type'] : 'post';
+		$orderby_random    = ! empty( $instance['orderby_random'] ) ? $instance['orderby_random'] : false;
+		$nonce             = wp_create_nonce( '_wpnonce' );
+		?>
+
+		<div class="media-widget-control selected">
+			<fieldset>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:' ); ?></label>
+				<input id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" data-property="title" class="widefat" value="<?php echo esc_attr( $title ); ?>">
+			</fieldset>
+
+			<?php
+			$files_exist = false;
+			if ( $ids ) {
+				foreach ( $instance['ids'] as $id ) {
+					if ( file_exists( get_attached_file( $id ) ) ) {
+						$files_exist = true;
+						break;
+					}
+				}
+			}
+
+			if ( $ids && $files_exist ) {
+				$gallery_html = '<ul class="gallery media-widget-gallery-preview">';
+				foreach ( $instance['ids'] as $id ) {
+					$attributes = '';
+					$thumbnail = wp_get_attachment_image_src( $id, 'thumbnail', false );
+					$alt = get_post_meta( $id, '_wp_attachment_image_alt', true );
+
+					if ( $thumbnail && $thumbnail[0] ) {
+
+						// Create an aria-label attribute if the image has no alt attribute.
+						if ( $alt === '' ) {
+							$aria_label = esc_attr(
+								sprintf(
+									/* translators: %s: The image file name. */
+									__( 'The current image has no alternative text. The file name is: %s' ),
+									basename( $thumbnail[0] )
+								)
+							);
+							$attributes .= ' aria-label="' . $aria_label . '"';
+						}
+
+						$gallery_html .= '<li class="gallery-item">';
+						$gallery_html .= '<div class="gallery-icon">';
+						$gallery_html .= '<img alt="' . $alt . '" src="' . $thumbnail[0] . '" width="150" height="150"' . $attributes . '>';
+						$gallery_html .= '</div>';
+						$gallery_html .= '</li>';
+					}
+				}
+				$gallery_html .= '</ul>';
+				?>
+
+				<div class="media-widget-preview media_gallery"><?php echo $gallery_html; ?></div>
+
+				<fieldset class="media-widget-buttons">
+					<button type="button" class="button edit-media selected" data-edit-nonce="<?php echo esc_attr( $nonce ); ?>" style="margin-top:0;"><?php esc_html_e( 'Edit Gallery' ); ?></button>
+				</fieldset>
+
+				<?php
+			} else {
+				?>
+
+				<div class="media-widget-preview media_gallery">
+					<div class="attachment-media-view">
+						<button type="button" class="select-media button-add-media" data-edit-nonce="<?php echo esc_attr( $nonce ); ?>"><?php esc_html_e( 'Add Images' ); ?></button>
+					</div>
+				</div>
+
+				<?php
+			}
+			?>
+
+			<input id="<?php echo esc_attr( $this->get_field_id( 'ids' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'ids' ) ); ?>" type="hidden" data-property="ids" class="media-widget-instance-property" value="<?php echo esc_attr( $ids ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'columns' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'columns' ) ); ?>" type="hidden" data-property="columns" class="media-widget-instance-property" value="<?php echo esc_attr( esc_attr( $columns ) ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'size' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'size' ) ); ?>" type="hidden" data-property="size" class="media-widget-instance-property" value="<?php echo esc_attr( esc_attr( $size ) ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'link_type' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'link_type' ) ); ?>" type="hidden" data-property="link_type" class="media-widget-instance-property" value="<?php echo esc_attr( $link_type ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'orderby_random' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'orderby_random' ) ); ?>" type="hidden" data-property="orderby_random" class="media-widget-instance-property" value="<?php echo esc_attr( $orderby_random ); ?>">
+
+		</div>
+		<?php
+	}
+
+	/**
+	 * Loads the required media files for the media manager and scripts for media widgets.
+	 *
+	 * @since 4.9.0
+	 */
+	public function enqueue_admin_scripts() {
+
+		// Identify permitted image file types
+		$image_file_types = array();
+		$allowed_mime_types = get_allowed_mime_types();
+		foreach ( $allowed_mime_types as $key => $mime ) {
+			if ( str_contains( $mime, 'image/' ) ) {
+				$extensions = explode( '|', $key );
+				foreach ( $extensions as $extension ) {
+					$image_file_types[] = $extension;
+				}
+			}
+		}
+
+		$user_id = get_current_user_id();
+		$per_page = get_user_meta( $user_id, 'media_grid_per_page', true );
+		if ( empty( $per_page ) || $per_page < 1 ) {
+			$per_page = 80;
+		}
+
+		wp_enqueue_script( 'media-gallery-widget' );
+		wp_localize_script(
+			'media-gallery-widget',
+			'GALLERY_WIDGET',
+			array(
+				'edit_gallery'               => _x( 'Edit Gallery', 'label for button in the image widget; should preferably not be longer than ~13 characters long' ),
+				'create_gallery'             => __( 'Create Gallery' ),
+				'cancel_gallery'             => '&larr; ' . __( 'Cancel Gallery' ),
+				'add_image'                  => __( 'Add Image' ),
+				'add_to_gallery'             => __( 'Add to Gallery' ),
+				'media_library'              => __( 'Media Library' ),
+				'deselect'                   => __( 'Deselect' ),
+				'caption'                    => __( 'Caption' ),
+				'save'                       => __( 'Save' ),
+				'media_items'                => __( 'media items' ),
+				'per_page'                   => $per_page,
+				'of'                         => __( 'of' ),
+				'by'                         => __( 'by' ),
+				'pixels'                     => __( 'pixels' ),
+				'deselect'                   => __( 'Deselect' ),
+				'failed_update'              => __( 'Failed to update media:' ),
+				'error'                      => __( 'Error:' ),
+				'delete_failed'              => __( 'Failed to delete attachment.' ),
+				'confirm_delete'             => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+				'confirm_multiple'           => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+			)
+		);
+	}
+}
+
+/**
+ * Renders the template for the modal content for the media gallery widget
+ *
+ * @since CP-2.5.0
+ *
+ * @return string
+ */
+function cp_render_media_gallery_template() {
+	ob_start();
+	?>
+
+	<template id="tmpl-edit-gallery-modal">
+
+		<section class="media-gallery-grid-section hidden">
+			<div class="media-gallery-grid-header">
+				<div class="instructions"><?php esc_html_e( 'Drag and drop to reorder media files.' ); ?></div>
+				<button type="button" class="button media-button button-large gallery-button-reverse"><?php esc_html_e( 'Reverse order' ); ?></button>
+			</div>
+			<ul id="gallery-grid" class="widget-modal-grid"></ul>
+		</section>
+
+		<div id="gallery-buttons">
+			<button id="menu-item-gallery-edit" type="button" class="media-menu-item" role="tab" aria-selected="false" hidden><?php esc_html_e( 'Edit Gallery' ); ?></button>
+			<button id="menu-item-gallery-library" type="button" class="media-menu-item" role="tab" aria-selected="false" hidden><?php esc_html_e( 'Add to Gallery' ); ?></button>
+		</div>
+
+		<div class="widget-modal-gallery-settings" hidden>
+			<h3><?php esc_html_e( 'Gallery Settings' ); ?></h3>
+			<fieldset>
+				<div class="setting">
+					<label for="gallery-settings-link-to" class="name"><?php esc_html_e( 'Link To' ); ?></label>
+					<select id="gallery-settings-link-to" class="link-to" data-setting="link">
+						<option value="post" selected><?php esc_html_e( 'Attachment Page' ); ?></option>
+						<option value="file"><?php esc_html_e( 'Media File' ); ?></option>
+						<option value="none"><?php esc_html_e( 'None' ); ?></option>
+					</select>
+				</div>
+
+				<div class="setting">
+					<label for="gallery-settings-columns" class="name select-label-inline"><?php esc_html_e( 'Columns' ); ?></label>
+					<select id="gallery-settings-columns" class="columns" name="columns" data-setting="columns">
+						<option value="1"><?php esc_html_e( '1' ); ?></option>
+						<option value="2"><?php esc_html_e( '2' ); ?></option>
+						<option value="3" selected><?php esc_html_e( '3' ); ?></option>
+						<option value="4"><?php esc_html_e( '4' ); ?></option>
+						<option value="5"><?php esc_html_e( '5' ); ?></option>
+						<option value="6"><?php esc_html_e( '6' ); ?></option>
+						<option value="7"><?php esc_html_e( '7' ); ?></option>
+						<option value="8"><?php esc_html_e( '8' ); ?></option>
+						<option value="9"><?php esc_html_e( '9' ); ?></option>
+					</select>
+				</div>
+
+				<div class="setting">
+					<input type="checkbox" id="gallery-settings-random-order" data-setting="_orderbyRandom">
+					<label for="gallery-settings-random-order" class="checkbox-label-inline"><?php esc_html_e( 'Random Order' ); ?></label>
+				</div>
+
+				<div class="setting size">
+					<label for="gallery-settings-size" class="name"><?php esc_html_e( 'Size' ); ?></label>
+					<select id="gallery-settings-size" class="size" name="size" data-setting="size">
+						<option value="thumbnail"><?php esc_html_e( 'Thumbnail' ); ?></option>
+						<option value="medium"><?php esc_html_e( 'Medium' ); ?></option>
+						<option value="large"><?php esc_html_e( 'Large' ); ?></option>
+						<option value="full"><?php esc_html_e( 'Full Size' ); ?></option>
+					</select>
+				</div>
+			</fieldset>
+		</div>
+
+		<footer class="widget-modal-footer">
+			<div class="widget-modal-footer-buttons">				
+				<button id="gallery-button-new" type="button" class="button media-button button-primary button-large media-button-gallery hidden" disabled><?php esc_html_e( 'Create a new gallery' ); ?></button>
+				<button id="gallery-button-insert" type="button" class="button media-button button-primary button-large media-button-insert hidden"><?php esc_html_e( 'Insert gallery' ); ?></button>
+				<button id="gallery-button-update" type="button" class="button media-button button-primary button-large media-button-select hidden" disabled><?php esc_html_e( 'Update gallery' ); ?></button>
+			</div>
+		</footer>
+	</template>
+
+	<?php
+	return ob_get_clean();
 }

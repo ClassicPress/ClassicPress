@@ -10,13 +10,20 @@ on:
   schedule:
     - cron: '0 0 * * 0'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+# Disable permissions for all available scopes by default.
+# Required permissions are configured at the job level.
+permissions: {}
+
 jobs:
   # Runs the PHPUnit tests for ClassicPress.
   #
   # Performs the following steps:
-  # - Cancel workflow if PR updated.
-  # - Checkout ClassicPress.
   # - Set environment variables.
+  # - Checkout ClassicPress.
   # - Read .nvmrc.
   # - Installs NodeJS.
   # - Sets up caching for NPM.
@@ -34,7 +41,9 @@ jobs:
   # - Clone PHP.net if needed for unit tests.
   # - Run PHPUnit Tests.
   test-php:
-    name: "PHP ${{ matrix.php }} on MySQL ${{matrix.mysql}}${{ matrix.memcached && ' with memcached' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
+    name: "${{ matrix.multisite && 'Multisite on ' || '' }}PHP ${{ matrix.php }} on MySQL ${{matrix.mysql}}${{ matrix.memcached && ' with memcached' || '' }}${{ 'xdebug' == matrix.coverage && ' with XDebug' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
+    permissions:
+      contents: read
     runs-on: ubuntu-22.04
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
     strategy:
@@ -42,48 +51,81 @@ jobs:
       matrix:
         php: [ '8.4', '8.3', '8.2', '8.1', '8.0', '7.4' ]
         mysql: [ '5.7', '8.0' ]
+        multisite: [ false, true ]
         memcached: [ false ]
+        coverage: [ none ]
         experimental: [ false ]
+        # Include jobs that test with memcached.
         include:
           - php: '8.0'
             mysql: '5.7'
+            multisite: false
             memcached: true
+            coverage: none
             experimental: false
           - php: '8.2'
             mysql: '5.7'
+            multisite: false
             memcached: true
+            coverage: none
             experimental: false
           - php: '8.3'
             mysql: '5.7'
+            multisite: false
             memcached: true
+            coverage: none
             experimental: false
           - php: '8.0'
             mysql: '8.0'
+            multisite: false
             memcached: true
+            coverage: none
             experimental: false
           - php: '8.2'
             mysql: '8.0'
+            multisite: false
             memcached: true
+            coverage: none
+            experimental: false
+          - php: '8.2'
+            mysql: '8.0'
+            multisite: true
+            memcached: true
+            coverage: none
             experimental: false
           - php: '8.3'
             mysql: '8.0'
+            multisite: false
             memcached: true
+            coverage: none
+            experimental: false
+          - php: '8.3'
+            mysql: '8.0'
+            multisite: true
+            memcached: true
+            coverage: none
+            experimental: false
+          - php: '8.3'
+            mysql: '8.0'
+            multisite: false
+            memcached: false
+            coverage: xdebug
+            experimental: false
+          - php: '8.3'
+            mysql: '8.0'
+            multisite: true
+            memcached: false
+            coverage: xdebug
             experimental: false
 
     steps:
-      - name: Cancel previous runs of this workflow (pull requests only)
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: styfle/cancel-workflow-action@0.12.1
-        with:
-          access_token: ${{ github.token }}
-
       - name: Configure environment variables
         run: |
           echo "PHP_FPM_UID=$(id -u)" >> $GITHUB_ENV
           echo "PHP_FPM_GID=$(id -g)" >> $GITHUB_ENV
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Read .nvmrc
         run: echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
@@ -162,7 +204,7 @@ jobs:
             soap,
             sqlite,
             zip
-          coverage: none
+          coverage: "${{ matrix.coverage }}"
 
       - name: Set up locale
         run: |
@@ -211,6 +253,7 @@ jobs:
         uses: niden/actions-memcached@v7
 
       - name: Run PHPUnit default
+        if: ${{ !matrix.multisite }}
         env:
           WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:default
@@ -223,6 +266,7 @@ jobs:
         continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit multisite
+        if: ${{ matrix.multisite }}
         env:
           WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:multisite

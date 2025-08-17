@@ -2,8 +2,6 @@
  * @output wp-admin/js/comment.js
  */
 
-/* global postboxes */
-
 /**
  * Binds to the document ready event.
  *
@@ -12,8 +10,6 @@
  * @param {jQuery} $ The jQuery object.
  */
 jQuery( function($) {
-
-	postboxes.add_postbox_toggles('comment');
 
 	var $timestampdiv = $('#timestampdiv'),
 		$timestamp = $( '#timestamp' ),
