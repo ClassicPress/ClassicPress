@@ -156,28 +156,40 @@ $submitted = sprintf(
 printf( __( 'Submitted on: %s' ), '<b>' . $submitted . '</b>' );
 ?>
 </span>
-<a href="#edit_timestamp" class="edit-timestamp hide-if-no-js"><span aria-hidden="true"><?php _e( 'Edit' ); ?></span> <span class="screen-reader-text">
-	<?php
-	/* translators: Hidden accessibility text. */
-	_e( 'Edit date and time' );
-	?>
-</span></a>
-<fieldset id='timestampdiv' class='hide-if-js'>
-<legend class="screen-reader-text">
-	<?php
-	/* translators: Hidden accessibility text. */
-	_e( 'Date and time' );
-	?>
-</legend>
-<?php
-/**
- * @global string $action
- */
-global $action;
 
-touch_time( ( 'editcomment' === $action ), 0 );
-?>
-</fieldset>
+<details>
+	<summary id="timestamp-comment">
+		<span><?php _e( 'Edit' ); ?></span>
+		<span class="screen-reader-text">
+
+			<?php
+			/* translators: Hidden accessibility text. */
+			_e( 'Edit date and time' );
+			?>
+
+		</span>
+	</summary>
+	<fieldset id="timestampdiv">
+		<legend class="screen-reader-text">
+
+			<?php
+			/* translators: Hidden accessibility text. */
+			_e( 'Date and time' );
+			?>
+
+		</legend>
+
+		<?php
+		/**
+		 * @global string $action
+		 */
+		global $action;
+
+		touch_time( ( 'editcomment' === $action ), 0 );
+		?>
+
+	</fieldset>
+</details>
 </div>
 
 <?php
