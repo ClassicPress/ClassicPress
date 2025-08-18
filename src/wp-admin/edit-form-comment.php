@@ -158,7 +158,7 @@ printf( __( 'Submitted on: %s' ), '<b>' . $submitted . '</b>' );
 </span>
 
 <details>
-	<summary id="timestamp-comment">
+	<summary class="edit-timestamp-summary">
 		<span><?php _e( 'Edit' ); ?></span>
 		<span class="screen-reader-text">
 
