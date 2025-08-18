@@ -169,7 +169,7 @@ printf( __( 'Submitted on: %s' ), '<b>' . $submitted . '</b>' );
 
 		</span>
 	</summary>
-	<fieldset id="timestampdiv">
+	<fieldset id="timestampdiv" inert="inert">
 		<legend class="screen-reader-text">
 
 			<?php
