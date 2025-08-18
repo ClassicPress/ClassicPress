@@ -2106,7 +2106,7 @@ details summary > * {
 }
 
 #poststuff #timestamp-comment {
-	margin-left: -0.8em;
+	margin: 0.5em 0 0 -0.8em;
 	border-bottom: 0;
 }
 
