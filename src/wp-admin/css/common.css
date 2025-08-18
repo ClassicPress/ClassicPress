@@ -2105,6 +2105,15 @@ details summary > * {
 	display: inline;
 }
 
+#poststuff #timestamp-comment {
+	margin-left: -0.8em;
+	border-bottom: 0;
+}
+
+#poststuff #timestamp-comment:focus {
+	outline: 2px solid #2271b1;
+}
+
 .metabox-holder details > summary::marker,
 .metabox-holder details > summary::-webkit-details-marker {
 	font-size: 1.3em;
