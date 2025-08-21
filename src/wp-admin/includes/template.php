@@ -898,7 +898,7 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
 
 <fieldset>
 	<button type="button" class="save-timestamp button"><?php _e( 'OK' ); ?></button>
-	<button type="button" class="cancel-timestamp button"><?php _e( 'Cancel' ); ?></button>
+	<button type="button" class="cancel-timestamp button-cancel"><?php _e( 'Cancel' ); ?></button>
 </fieldset>
 	<?php
 }
