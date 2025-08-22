@@ -206,14 +206,6 @@ module.exports = function(grunt) {
 						dest: `${SOURCE_DIR}wp-includes/js/dist/vendor/lodash.min.js`
 					},
 					{
-						src:  `./node_modules/moment/moment.js`,
-						dest: `${SOURCE_DIR}wp-includes/js/dist/vendor/moment.js`
-					},
-					{
-						src:  `./node_modules/moment/min/moment.min.js`,
-						dest: `${SOURCE_DIR}wp-includes/js/dist/vendor/moment.min.js`
-					},
-					{
 						src:  `./node_modules/clipboard/dist/clipboard.js`,
 						dest: `${SOURCE_DIR}wp-includes/js/clipboard.js`
 					},
