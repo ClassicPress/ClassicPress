@@ -4975,6 +4975,58 @@ function wp_ajax_install_plugin() {
 
 /**
  * Ajax handler for updating a plugin.
+ * Handles activating a plugin via AJAX.
+ *
+ * @since 6.5.0
+ */
+function wp_ajax_activate_plugin() {
+	check_ajax_referer( 'updates' );
+
+	if ( empty( $_POST['name'] ) || empty( $_POST['slug'] ) || empty( $_POST['plugin'] ) ) {
+		wp_send_json_error(
+			array(
+				'slug'         => '',
+				'pluginName'   => '',
+				'plugin'       => '',
+				'errorCode'    => 'no_plugin_specified',
+				'errorMessage' => __( 'No plugin specified.' ),
+			)
+		);
+	}
+
+	$status = array(
+		'activate'   => 'plugin',
+		'slug'       => wp_unslash( $_POST['slug'] ),
+		'pluginName' => wp_unslash( $_POST['name'] ),
+		'plugin'     => wp_unslash( $_POST['plugin'] ),
+	);
+
+	if ( ! current_user_can( 'activate_plugin', $status['plugin'] ) ) {
+		$status['errorMessage'] = __( 'Sorry, you are not allowed to activate plugins on this site.' );
+		wp_send_json_error( $status );
+	}
+
+	if ( is_plugin_active( $status['plugin'] ) ) {
+		$status['errorMessage'] = sprintf(
+			/* translators: %s: Plugin name. */
+			__( '%s is already active.' ),
+			$status['pluginName']
+		);
+	}
+
+	$activated = activate_plugin( $status['plugin'] );
+
+	if ( is_wp_error( $activated ) ) {
+		$status['errorMessage'] = $activated->get_error_message();
+		wp_send_json_error( $status );
+	}
+
+	wp_send_json_success( $status );
+}
+
+/**
+ * Handles updating a plugin via AJAX.
+>>>>>>> 2b08a77f5c (Upgrade/Install: Introduce Plugin Dependencies.)
  *
  * @since 4.2.0
  *
