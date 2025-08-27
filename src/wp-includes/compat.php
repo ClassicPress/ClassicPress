@@ -439,17 +439,3 @@ if ( ! function_exists( 'array_last' ) ) {
 	}
 }
 
-// IMAGETYPE_AVIF constant is only defined in PHP 8.x or later.
-if ( ! defined( 'IMAGETYPE_AVIF' ) ) {
-	define( 'IMAGETYPE_AVIF', 19 );
-}
-
-// IMG_AVIF constant is only defined in PHP 8.x or later.
-if ( ! defined( 'IMG_AVIF' ) ) {
-	define( 'IMG_AVIF', IMAGETYPE_AVIF );
-}
-
-// IMAGETYPE_HEIC constant is not yet defined in PHP as of PHP 8.3.
-if ( ! defined( 'IMAGETYPE_HEIC' ) ) {
-	define( 'IMAGETYPE_HEIC', 99 );
-}
