@@ -396,8 +396,6 @@ if ( ! function_exists( 'array_all' ) ) {
 		return true;
 	}
 }
-<<<<<<< HEAD
-=======
 
 if ( ! function_exists( 'array_first' ) ) {
 	/**
@@ -455,4 +453,3 @@ if ( ! defined( 'IMG_AVIF' ) ) {
 if ( ! defined( 'IMAGETYPE_HEIC' ) ) {
 	define( 'IMAGETYPE_HEIC', 99 );
 }
->>>>>>> fbc6af4ed6 (General: Add polyfills for new PHP 8.5 array functions: `array_first` and `array_last`.)
