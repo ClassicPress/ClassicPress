@@ -438,4 +438,3 @@ if ( ! function_exists( 'array_last' ) ) {
 		return $array[ array_key_last( $array ) ];
 	}
 }
-
