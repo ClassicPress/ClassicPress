@@ -142,7 +142,7 @@ QUnit is used for testing JavaScript and these tests can be run in a browser at 
 
 Since the release of ClassicPress version 2 in February 2024, ClassicPress version 1 is not under active development anymore.
 
-ClassicPress version 2.0.0 is a fork of WordPress 6.2.x that preserves the TinyMCE classic editor as the default option. Since then, a number of changes have been made to WordPress for performance, bugfixes or new features.
+ClassicPress version 2.0.0 is a fork of WordPress 6.2.x that preserves the TinyMCE classic editor and has no block editor (Gutenberg/Full Site Editing). Since then, a number of changes have been made to WordPress for performance, bugfixes or new features.
 
 ClassicPress 2.x.x is committed to keeping backward compatibility with the WordPress 6.2 branch.
 
