@@ -47,7 +47,7 @@ window.wp = window.wp || {};
 		}
 
 		// Get list of tags and convert to an array
-		suggestions = document.getElementById( 'tags-list' ).value.split( ', ' );
+		suggestions = container.nextElementSibling.value.split( ', ' );
 
 		textarea.addEventListener( 'scroll', function() {
 			mirror.scrollTop = textarea.scrollTop;
@@ -573,58 +573,73 @@ window.wp = window.wp || {};
 	 *                   Enter on a focused field.
 	 */
 	save : function(id) {
-		var params, fields, page = $('.post_status_page').val() || '';
+		var params, fields, page = $('.post_status_page').val() || '',
+			allValid = true;
 
 		if ( typeof(id) === 'object' ) {
 			id = this.getId(id);
 		}
 
-		$( 'table.widefat .spinner' ).addClass( 'is-active' );
+		$('#edit-'+id).find('input[pattern]').each( function(i, el) {
+			if ( ! el.checkValidity() ) {
+				// Show the first invalid field message
+				el.reportValidity();
 
-		params = {
-			action: 'inline-save',
-			post_type: typenow,
-			post_ID: id,
-			edit_date: 'true',
-			post_status: page
-		};
+				// Mark as invalid
+				allValid = false;
 
-		fields = $('#edit-'+id).find(':input').serialize();
-		params = fields + '&' + $.param(params);
+				// Stop after first invalid field
+				return false;
+			}
+		});
 
-		// Make Ajax request.
-		$.post( ajaxurl, params,
-			function(r) {
-				var $errorNotice = $( '#edit-' + id + ' .inline-edit-save .notice-error' ),
-					$error = $errorNotice.find( '.error' );
+		if ( allValid ) {
+			$( 'table.widefat .spinner' ).addClass( 'is-active' );
 
-				$( 'table.widefat .spinner' ).removeClass( 'is-active' );
+			params = {
+				action: 'inline-save',
+				post_type: typenow,
+				post_ID: id,
+				edit_date: 'true',
+				post_status: page
+			};
 
-				if (r) {
-					if ( -1 !== r.indexOf( '<tr' ) ) {
-						$(inlineEditPost.what+id).siblings('tr.hidden').addBack().remove();
-						$('#edit-'+id).before(r).remove();
-						$( inlineEditPost.what + id ).hide().fadeIn( 400, function() {
-							// Move focus back to the Quick Edit button. $( this ) is the row being animated.
-							$( this ).find( '.editinline' )
-								.attr( 'aria-expanded', 'false' )
-								.trigger( 'focus' );
-							wp.a11y.speak( wp.i18n.__( 'Changes saved.' ) );
-						});
+			fields = $('#edit-'+id).find(':input').serialize();
+			params = fields + '&' + $.param(params);
+
+			// Make Ajax request.
+			$.post( ajaxurl, params,
+				function(r) {
+					var $errorNotice = $( '#edit-' + id + ' .inline-edit-save .notice-error' ),
+						$error = $errorNotice.find( '.error' );
+
+					$( 'table.widefat .spinner' ).removeClass( 'is-active' );
+
+					if (r) {
+						if ( -1 !== r.indexOf( '<tr' ) ) {
+							$(inlineEditPost.what+id).siblings('tr.hidden').addBack().remove();
+							$('#edit-'+id).before(r).remove();
+							$( inlineEditPost.what + id ).hide().fadeIn( 400, function() {
+								// Move focus back to the Quick Edit button. $( this ) is the row being animated.
+								$( this ).find( '.editinline' )
+									.attr( 'aria-expanded', 'false' )
+									.trigger( 'focus' );
+								wp.a11y.speak( wp.i18n.__( 'Changes saved.' ) );
+							});
+						} else {
+							r = r.replace( /<.[^<>]*?>/g, '' );
+							$errorNotice.removeClass( 'hidden' );
+							$error.html( r );
+							wp.a11y.speak( $error.text() );
+						}
 					} else {
-						r = r.replace( /<.[^<>]*?>/g, '' );
 						$errorNotice.removeClass( 'hidden' );
-						$error.html( r );
-						wp.a11y.speak( $error.text() );
+						$error.text( wp.i18n.__( 'Error while saving the changes.' ) );
+						wp.a11y.speak( wp.i18n.__( 'Error while saving the changes.' ) );
 					}
-				} else {
-					$errorNotice.removeClass( 'hidden' );
-					$error.text( wp.i18n.__( 'Error while saving the changes.' ) );
-					wp.a11y.speak( wp.i18n.__( 'Error while saving the changes.' ) );
-				}
-			},
-		'html');
-
+				},
+			'html');
+		}
 		// Prevent submitting the form when pressing Enter on a focused field.
 		return false;
 	},

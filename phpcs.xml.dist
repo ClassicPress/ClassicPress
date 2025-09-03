@@ -89,6 +89,9 @@
 	<!-- Themes except the twenty* themes. -->
 	<exclude-pattern>/src/wp-content/themes/(?!twenty|the-classicpress-theme)*</exclude-pattern>
 
+	<!-- Languages. -->
+	<exclude-pattern>/src/wp-content/languages/*</exclude-pattern>
+
 	<rule ref="WordPress-Core"/>
 	<rule ref="Generic.CodeAnalysis.EmptyPHPStatement"/>
 
@@ -209,7 +212,7 @@
 	<rule ref="PEAR.Files.IncludingFile.UseRequireOnce">
 		<type>warning</type>
 	</rule>
-	<rule ref="Squiz.WhiteSpace.LanguageConstructSpacing"/>
+	<rule ref="Generic.WhiteSpace.LanguageConstructSpacing"/>
 
 	<!-- Assignments in while conditions are a valid method of looping over iterables. -->
 	<rule ref="Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition">

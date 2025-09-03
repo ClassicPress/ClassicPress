@@ -9,7 +9,7 @@
 	padding: 2em 0;
 	margin: 2em 0;
 	border: 4px dashed #c3c4c7;
-	background-color: #ECF7E9;
+	background-color: #ecf7e9;
 }
 .uploader-inline .close {
 	position: absolute;
@@ -69,7 +69,13 @@
 .imgedit-group-top h2 {
 	display: inline-block;
 }
-.imgedit-wrap {
+.media-modal-content .imgedit-wrap {
+	position: absolute;
+	overflow: auto;
+	top: 50px;
+	bottom: 0;
+	right: 0;
+	left: 0;
 	box-shadow: inset 0 4px 4px -4px rgba(0, 0, 0, 0.1);
 }
 .imgedit-settings .imgedit-help-toggle {
@@ -115,6 +121,7 @@
 }
 #post-upload-info {
 	margin-top: -6em;
+	position: relative;
 }
 .filepond--drop-label {
 	background-color: #ecf7e9;
@@ -122,7 +129,6 @@
 .filepond--credits {
 	display: none;
 }
-
 .media-grid-view {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -183,7 +189,7 @@
 	left: 0;
 	right: 0;
 	top: 0;
-	margin: auto;	
+	margin: auto;
 	object-fit: cover;
 }
 .media-thumbnail .icon {
@@ -233,10 +239,25 @@
 .media-modal * {
 	box-sizing: content-box;
 }
+.media-modal input[type="radio"] {
+	box-sizing: border-box;
+}
 .media-modal,
 .media-frame {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 	font-size: 12px;
+}
+.media-frame-title,
+.media-modal-content .edit-attachment-frame .edit-media-header {
+	position: sticky;
+	top: 0;
+	background-color: #fff;
+	z-index: 10;
+	border-bottom: 1px solid #dcdcde;
+}
+.media-modal-content .edit-attachment-frame .edit-media-header {
+	overflow: revert;
+	z-index: 11;
 }
 .media-frame-title h2 {
 	padding: 0 16px;
@@ -365,4 +386,34 @@ dialog::backdrop {
 	outline-offset: 0.125rem;
 	outline-style: solid;
 	outline-width: 0.125rem;
+}
+.filepond--root {
+	margin-bottom: 1.2em;
+}
+.filepond--drip {
+	opacity: 1;
+	background: #ecf7e9;
+}
+.filepond--file-info .filepond--file-info-main {
+	line-height: 1.3;
+}
+
+@media screen and (min-width: 481px) {
+	.media-modal-content .edit-attachment-frame .edit-media-header .media-navigation {
+		border-bottom: none;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.media-modal-content .edit-attachment-frame .media-frame-content {
+		margin-top: 64px;
+	}
+	.attachment-media-view .media-navigation {
+		margin-bottom: 1em;
+		position: fixed;
+		top: calc(5% + 50px);
+		background-color: #fff;
+		z-index: 10;
+		width: calc(100% - 30px);
+	}
 }

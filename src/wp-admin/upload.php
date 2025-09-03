@@ -108,9 +108,9 @@ if ( isset( $_GET['mode'] ) && in_array( $_GET['mode'], $modes, true ) ) {
 if ( 'grid' === $mode ) {
 	// Styles and scripts since CP-2.3.0
 	wp_enqueue_style( 'mediaelement-player' );
-	wp_enqueue_style( 'media-grid' );
 	wp_enqueue_style( 'cp-filepond-image-preview' );
 	wp_enqueue_style( 'cp-filepond' );
+	wp_enqueue_style( 'media-grid' );
 	wp_enqueue_script( 'wp-mediaelement' );
 	wp_enqueue_script( 'media-grid' );
 
@@ -166,7 +166,7 @@ if ( 'grid' === $mode ) {
 			'title'   => __( 'Attachment Details' ),
 			'content' =>
 				'<p>' . __( 'Clicking an item will display an Attachment Details dialog, which allows you to preview media and make quick edits. Any changes you make to the attachment details will be automatically saved.' ) . '</p>' .
-				'<p>' . __( 'Use the arrow buttons at the top of the dialog, or the left and right arrow keys on your keyboard, to navigate between media items quickly.' ) . '</p>' .
+				'<p>' . __( 'Use the arrow buttons at the top of the dialog, the left and right arrow keys on your keyboard, or swipe left and right on a touch device to navigate between media items.' ) . '</p>' .
 				'<p>' . __( 'You can also delete individual items and access the extended edit screen from the details dialog.' ) . '</p>',
 		)
 	);
@@ -183,8 +183,8 @@ if ( 'grid' === $mode ) {
 
 	// Get the maximum upload size.
 	$max_upload_size = wp_max_upload_size();
-	if ( ! $max_upload_size ) {
-		$max_upload_size = 0;
+	if ( ! is_int( $max_upload_size ) ) {
+		$max_upload_size = 2097152;
 	}
 
 	// Get a list of allowed mime types.
@@ -192,12 +192,10 @@ if ( 'grid' === $mode ) {
 	$mimes_list = implode( ',', $allowed_mimes );
 
 	// Get the user's preferred items per page.
-	$user = get_current_user_id();
-	$screen = get_current_screen();
-	$screen_option = $screen->get_option( 'per_page', 'option' );
-	$per_page = get_user_meta( $user, $screen_option, true );
+	$user_id = get_current_user_id();
+	$per_page = get_user_meta( $user_id, 'media_grid_per_page', true );
 	if ( empty( $per_page ) || $per_page < 1 ) {
-		$per_page = $screen->get_option( 'per_page', 'default' );
+		$per_page = 80;
 	}
 
 	// Fetch media items.
@@ -260,8 +258,8 @@ if ( 'grid' === $mode ) {
 				<span class="screen-reader-text">Close uploader</span>
 			</button>
 
-			<input type="file" id="filepond" class="filepond" name="filepond" multiple data-allow-reorder="true" data-max-file-size="<?php echo esc_attr( size_format( $max_upload_size ) ); ?>">
-			<input id="ajax-url" value="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" hidden>
+			<input type="file" id="filepond" class="filepond" name="filepond" multiple data-allow-reorder="true">
+			<input id="ajax-url" value="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" data-max-file-size="<?php echo esc_attr( size_format( $max_upload_size ) ); ?>" hidden>
 			<?php wp_nonce_field( 'media-form' ); ?>
 
 			<div class="post-upload-ui" id="post-upload-info">
@@ -373,7 +371,7 @@ if ( 'grid' === $mode ) {
 						<span class="paging-input">
 							<label for="current-page-selector" class="screen-reader-text"><?php esc_html_e( 'Current Page' ); ?></label>
 							<input class="current-page" id="current-page-selector" type="text" name="paged" value="<?php echo esc_attr( $paged ); ?>" size="4" aria-describedby="table-paging">
-							<span class="tablenav-paging-text"> <?php esc_html_e( 'of' ); ?> <span class="total-pages"><?php echo esc_html( $total_pages ); ?></span></span>
+							<span id="table-paging" class="tablenav-paging-text"> <?php esc_html_e( 'of' ); ?> <span class="total-pages"><?php echo esc_html( $total_pages ); ?></span></span>
 						</span>
 						<a class="next-page button" href="<?php echo admin_url( '/upload.php?paged=' . $next_page ); ?>"
 							<?php
@@ -412,29 +410,31 @@ if ( 'grid' === $mode ) {
 
 				<?php
 				foreach ( $attachments->posts as $key => $attachment ) {
-					$meta = wp_prepare_attachment_for_js( $attachment->ID );
-					$date         = $meta['dateFormatted'];
-					$author       = $meta['authorName'];
-					$author_link  = ! empty( $meta['authorLink'] ) ? $meta['authorLink'] : '';
-					$url          = $meta['url'];
-					$width        = ! empty( $meta['width'] ) ? $meta['width'] : '';
-					$height       = ! empty( $meta['height'] ) ? $meta['height'] : '';
-					$file_name    = $meta['filename'];
-					$file_type    = $meta['type'];
-					$subtype      = $meta['subtype'];
-					$mime_type    = $meta['mime'];
-					$size         = ! empty( $meta['filesizeHumanReadable'] ) ? $meta['filesizeHumanReadable'] : '';
-					$alt          = $meta['alt'];
-					$caption      = $meta['caption'];
-					$description  = $meta['description'];
-					$link         = $meta['link'];
-					$orientation  = ! empty( $meta['orientation'] ) ? $meta['orientation'] : 'landscape';
-					$menu_order   = $meta['menuOrder'];
-					$media_cats   = $meta['media_cats'] ? implode( ', ', $meta['media_cats'] ) : '';
-					$media_tags   = $meta['media_tags'] ? implode( ', ', $meta['media_tags'] ) : '';
-					$update_nonce = $meta['nonces']['update'];
-					$delete_nonce = $meta['nonces']['delete'];
-					$edit_nonce   = $meta['nonces']['edit'];
+					$data = wp_prepare_attachment_for_js( $attachment->ID );
+					$date         = $data['dateFormatted'];
+					$author       = $data['authorName'];
+					$author_link  = ! empty( $data['authorLink'] ) ? $data['authorLink'] : '';
+					$url          = $data['url'];
+					$width        = ! empty( $data['width'] ) ? $data['width'] : '';
+					$height       = ! empty( $data['height'] ) ? $data['height'] : '';
+					$file_name    = $data['filename'];
+					$file_type    = $data['type'];
+					$subtype      = $data['subtype'];
+					$mime_type    = $data['mime'];
+					$size         = ! empty( $data['filesizeHumanReadable'] ) ? $data['filesizeHumanReadable'] : '';
+					$alt          = $data['alt'];
+					$caption      = $data['caption'];
+					$description  = $data['description'];
+					$link         = $data['link'];
+					$orientation  = ! empty( $data['orientation'] ) ? $data['orientation'] : 'landscape';
+					$menu_order   = $data['menuOrder'];
+					$media_cats   = $data['media_cats'] ? implode( ', ', $data['media_cats'] ) : '';
+					$media_tags   = $data['media_tags'] ? implode( ', ', $data['media_tags'] ) : '';
+					$artist       = $data['meta'] && ! empty( $data['meta']['artist'] ) ? $data['meta']['artist'] : '';
+					$album        = $data['meta'] && ! empty( $data['meta']['album'] ) ? $data['meta']['album'] : '';
+					$update_nonce = $data['nonces']['update'];
+					$delete_nonce = $data['nonces']['delete'];
+					$edit_nonce   = $data['nonces']['edit'];
 					$image        = '<img src="' . esc_url( $url ) . '" alt="' . esc_attr( $alt ) . '">';
 
 					// Use an icon if the file uploaded is not an image
@@ -455,6 +455,7 @@ if ( 'grid' === $mode ) {
 
 					<li class="media-item" id="media-<?php echo esc_attr( $attachment->ID ); ?>" tabindex="0" role="checkbox" aria-checked="false"
 						aria-label="<?php echo esc_attr( $attachment->post_title ); ?>"
+						data-id ="<?php echo esc_attr( $attachment->ID ); ?>"
 						data-date="<?php echo esc_attr( $date ); ?>"
 						data-url="<?php echo esc_url( $url ); ?>"
 						data-filename="<?php echo esc_attr( $file_name ); ?>"
@@ -472,6 +473,8 @@ if ( 'grid' === $mode ) {
 						data-menu-order="<?php echo esc_attr( $menu_order ); ?>"
 						data-taxes="<?php echo esc_attr( $media_cats ); ?>"
 						data-tags="<?php echo esc_attr( $media_tags ); ?>"
+						data-artist="<?php echo esc_attr( $artist ); ?>"
+						data-album="<?php echo esc_attr( $album ); ?>"
 						data-order="<?php echo esc_attr( $key + 1 ); ?>"
 						data-update-nonce="<?php echo $update_nonce; ?>"
 						data-delete-nonce="<?php echo $delete_nonce; ?>"

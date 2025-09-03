@@ -115,10 +115,6 @@ abstract class WP_Widget_Media extends WP_Widget {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_preview_scripts' ) );
 		}
 
-		// Note that the widgets component in the customizer will also do
-		// the 'admin_footer-widgets.php' action in WP_Customize_Widgets::print_footer_scripts().
-		add_action( 'admin_footer-widgets.php', array( $this, 'render_control_template_scripts' ) );
-
 		add_filter( 'display_media_states', array( $this, 'display_media_state' ), 10, 2 );
 	}
 
@@ -326,12 +322,11 @@ abstract class WP_Widget_Media extends WP_Widget {
 	 * Note that the widget UI itself is rendered with JavaScript via `MediaWidgetControl#render()`.
 	 *
 	 * @since 4.8.0
-	 *
-	 * @see \WP_Widget_Media::render_control_template_scripts() Where the JS template is located.
+	 * @since CP-2.5.0 `form` function can be overridden by extending classes
 	 *
 	 * @param array $instance Current settings.
 	 */
-	final public function form( $instance ) {
+	public function form( $instance ) {
 		$instance_schema = $this->get_instance_schema();
 		$instance        = wp_array_slice_assoc(
 			wp_parse_args( (array) $instance, wp_list_pluck( $instance_schema, 'default' ) ),
@@ -401,43 +396,6 @@ abstract class WP_Widget_Media extends WP_Widget {
 	 */
 	public function enqueue_admin_scripts() {
 		wp_enqueue_media();
-		wp_enqueue_script( 'media-widgets' );
-	}
-
-	/**
-	 * Render form template scripts.
-	 *
-	 * @since 4.8.0
-	 */
-	public function render_control_template_scripts() {
-		?>
-		<script type="text/html" id="tmpl-widget-media-<?php echo esc_attr( $this->id_base ); ?>-control">
-			<# var elementIdPrefix = 'el' + String( Math.random() ) + '_' #>
-			<p>
-				<label for="{{ elementIdPrefix }}title"><?php esc_html_e( 'Title:' ); ?></label>
-				<input id="{{ elementIdPrefix }}title" type="text" class="widefat title">
-			</p>
-			<div class="media-widget-preview <?php echo esc_attr( $this->id_base ); ?>">
-				<div class="attachment-media-view">
-					<button type="button" class="select-media button-add-media not-selected">
-						<?php echo esc_html( $this->l10n['add_media'] ); ?>
-					</button>
-				</div>
-			</div>
-			<p class="media-widget-buttons">
-				<button type="button" class="button edit-media selected">
-					<?php echo esc_html( $this->l10n['edit_media'] ); ?>
-				</button>
-			<?php if ( ! empty( $this->l10n['replace_media'] ) ) : ?>
-				<button type="button" class="button change-media select-media selected">
-					<?php echo esc_html( $this->l10n['replace_media'] ); ?>
-				</button>
-			<?php endif; ?>
-			</p>
-			<div class="media-widget-fields">
-			</div>
-		</script>
-		<?php
 	}
 
 	/**
@@ -510,3 +468,28 @@ abstract class WP_Widget_Media extends WP_Widget {
 		return self::$l10n_defaults;
 	}
 }
+
+/**
+ * Restores the default widget status and schema after removing am audio or video file.
+ *
+ * @since CP-2.5.0
+ *
+ * @return  array  $defaults  Default widget schema
+ *
+ * @return  array  $instance  Current widget schema
+ */
+function cp_restore_default_media_widget_schema( $instance, $new_instance, $old_instance, $widget ) {
+	if ( isset( $_POST['reset_widget'] ) && $_POST['reset_widget'] === '1' ) {
+
+		# Get the default schema for the widget
+		$schema = $widget->get_instance_schema();
+		$defaults = array();
+		foreach ( $schema as $key => $data ) {
+			$defaults[ $key ] = isset( $data['default'] ) ? $data['default'] : '';
+		}
+		return $defaults;
+	}
+	return $instance;
+}
+add_filter( 'widget_update_callback', 'cp_restore_default_media_widget_schema', 10, 4 );
+

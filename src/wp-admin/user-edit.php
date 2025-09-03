@@ -546,52 +546,73 @@ switch ( $action ) {
 						</td>
 					</tr>
 
-					<?php
-					/**
-					 * Show user taxonomy terms.
-					 *
-					 * @since CP-2.1.0
-					 */
-					$tax_list = '';
-					$taxonomies = get_object_taxonomies( 'user', 'objects' );
-					if ( ! empty( $taxonomies ) ) {
+				</table>
 
-						$tax_list .= '<tr class="user-taxonomy-wrap">';
+				<?php
+				/**
+				 * Show user taxonomy terms.
+				 *
+				 * @since CP-2.1.0
+				 */
+				$tax_list = '<h2>' . __( 'User Taxonomies' ) . '</h2>';
 
-						foreach ( $taxonomies as $taxonomy ) {
-							$tax_list .= '<th><label for="' . esc_attr( $taxonomy->name ) . '">' . esc_html( $taxonomy->labels->name ) . '</label></th>';
+				/**
+				 * Filters user level taxonomy data used to create a table list.
+				 *
+				 * Taxonomy data can be amended in this filter, specific taxonomies can be removed.
+				 * The taxonomy data can be returned as empty to suppress table creation.
+				 * Using the user level data allows table creation to be tailored at user or user permission level.
+				 *
+				 * @since CP-2.5.0
+				 *
+				 * @param array   $taxonomies   The array of user taxonomy objects.
+				 * @param WP_User $profile_user The current WP_User object.
+				 */
+				$taxonomies = apply_filters( 'cp_user_taxonomies', get_object_taxonomies( 'user', 'objects' ), $profile_user );
+				if ( ! empty( $taxonomies ) ) {
 
-							$tax_names = array();
-							$user_terms = wp_get_object_terms( $profile_user->ID, $taxonomy->name );
-							if ( ! empty( $user_terms ) && ! is_wp_error( $user_terms ) ) {
-								foreach ( $user_terms as $user_term ) {
-									$tax_names[] = $user_term->name;
-								}
-							}
+					$tax_list .= '<table class="form-table" role="presentation"><tbody>';
 
-							$terms = get_terms(
-								array(
-									'taxonomy'   => $taxonomy->name,
-									'hide_empty' => false,
-								)
-							);
-							if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
-								$tax_list .= '<td><table><tr>';
-								foreach ( $terms as $term ) {
-									$tax_list .= '<td class="user-tax-term"><input id="taxonomy-' . esc_attr( $term->slug ) . '" name="' . esc_attr( $taxonomy->name ) . '[]" type="checkbox" value="' . esc_attr( $term->slug ) . '"' . checked( in_array( $term->name, $tax_names, true ), true, false ) . '>&nbsp;';
-									$tax_list .= '<label for="taxonomy-' . esc_attr( $term->slug ) . '">' . esc_html( $term->name ) . '</label></td>';
-								}
-								$tax_list .= '</tr></table></td>';
+					foreach ( $taxonomies as $taxonomy ) {
+						$tax_list .= '<tr class="user-taxonomy-wrap"><th><label for="taxonomy-' . esc_attr( $taxonomy->name ) . '">' . esc_html( $taxonomy->labels->name ) . '</label></th><td id="taxonomy-' . esc_attr( $taxonomy->name ) . '">';
+
+						$tax_names = array();
+						$user_terms = wp_get_object_terms( $profile_user->ID, $taxonomy->name );
+						if ( ! empty( $user_terms ) && ! is_wp_error( $user_terms ) ) {
+							foreach ( $user_terms as $user_term ) {
+								$tax_names[] = $user_term->name;
 							}
 						}
 
-						$tax_list .= '</tr>';
-
-						echo apply_filters( 'user_edit_taxonomies', $tax_list, $taxonomies, $profile_user );
+						$terms = get_terms(
+							array(
+								'taxonomy'   => $taxonomy->name,
+								'hide_empty' => false,
+							)
+						);
+						if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
+							foreach ( $terms as $term ) {
+								$tax_list .= '<input id="' . esc_attr( $taxonomy->name . '-term-' . $term->slug ) . '" name="' . esc_attr( $taxonomy->name ) . '[]" type="checkbox" value="' . esc_attr( $term->slug ) . '"' . checked( in_array( $term->name, $tax_names, true ), true, false ) . '>&nbsp;';
+								$tax_list .= '<label for="' . esc_attr( $taxonomy->name . '-term-' . $term->slug ) . '">' . esc_html( $term->name ) . '</label><br>';
+							}
+						}
+						$tax_list .= '</td></tr>';
 					}
-					?>
 
-				</table>
+					$tax_list .= '</tbody></table>';
+
+					/**
+					 * Filters a pre-formatted HTML table list of user taxonomy terms.
+					 *
+					 * @since CP-2.1.0
+					 *
+					 * @param string  $tax_list     An HTML-formatted table list of taxonomy terms with input checkboxes.
+					 * @param array   $taxonomies   An array of user taxonomy objects.
+					 * @param WP_User $profile_user The current WP_User object.
+					 */
+					echo apply_filters( 'user_edit_taxonomies', $tax_list, $taxonomies, $profile_user );
+				}
+				?>
 
 				<h2><?php _e( 'Contact Info' ); ?></h2>
 

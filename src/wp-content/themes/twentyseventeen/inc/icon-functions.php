@@ -210,7 +210,7 @@ function twentyseventeen_social_links_icons() {
 		'whatsapp.com'    => 'whatsapp',
 		'wordpress.org'   => 'wordpress',
 		'wordpress.com'   => 'wordpress',
-		'x.com'           => 'twitter',
+		'x.com'           => 'x',
 		'yelp.com'        => 'yelp',
 		'youtube.com'     => 'youtube',
 	);

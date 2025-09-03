@@ -89,16 +89,16 @@ function list_core_update( $update ) {
 			}
 
 			if ( ! $mysql_compat && ! $php_compat ) {
-				/* translators: 1: ClassicPress version number, 2: Minimum required PHP version number, 3: Minimum required MySQL version number, 4: Current PHP version number, 5: Current MySQL version number */
-				$message = sprintf( __( 'You cannot update because <a href="https://www.classicpress.net/version/%1$s">ClassicPress %1$s</a> requires PHP version %2$s or higher and MySQL version %3$s or higher. You are running PHP version %4$s and MySQL version %5$s.' ), $update->current, $update->php_version, $update->mysql_version, $php_version, $mysql_version );
+				/* translators: 1: ClassicPress version number, 2: ClassicPress version number, 3: Minimum required PHP version number, 4: Minimum required MySQL version number, 5: Current PHP version number, 6: Current MySQL version number */
+				$message = sprintf( __( 'You cannot update because <a href="https://www.classicpress.net/version/%1$s">ClassicPress %2$s</a> requires PHP version %3$s or higher and MySQL version %4$s or higher. You are running PHP version %5$s and MySQL version %6$s.' ), sanitize_title( $update->current ), $update->current, $update->php_version, $update->mysql_version, $php_version, $mysql_version );
 			} elseif ( ! $php_compat ) {
-				/* translators: 1: ClassicPress version number, 2: Minimum required PHP version number, 3: Current PHP version number */
-				$message = sprintf( __( 'You cannot update because <a href="https://www.classicpress.net/version/%1$s">ClassicPress %1$s</a> requires PHP version %2$s or higher. You are running version %3$s.' ), $update->current, $update->php_version, $php_version );
+				/* translators: 1: ClassicPress version number, 2: ClassicPress version number, 3: Minimum required PHP version number, 4: Current PHP version number */
+				$message = sprintf( __( 'You cannot update because <a href="https://www.classicpress.net/version/%1$s">ClassicPress %2$s</a> requires PHP version %3$s or higher. You are running version %4$s.' ), sanitize_title( $update->current ), $update->current, $update->php_version, $php_version );
 			} elseif ( ! $mysql_compat ) {
-				/* translators: 1: ClassicPress version number, 2: Minimum required MySQL version number, 3: Current MySQL version number */
-				$message = sprintf( __( 'You cannot update because <a href="https://www.classicpress.net/version/%1$s">ClassicPress %1$s</a> requires MySQL version %2$s or higher. You are running version %3$s.' ), $update->current, $update->mysql_version, $mysql_version );
+				/* translators: 1: ClassicPress version number, 2: ClassicPress version number, 3: Minimum required MySQL version number, 4: Current MySQL version number */
+				$message = sprintf( __( 'You cannot update because <a href="https://www.classicpress.net/version/%1$s">ClassicPress %2$s</a> requires MySQL version %3$s or higher. You are running version %4$s.' ), sanitize_title( $update->current ), $update->current, $update->mysql_version, $mysql_version );
 			} else {              /* translators: 1: ClassicPress version number, 2: ClassicPress version number including locale if necessary */
-				$message = sprintf( __( 'You can update to <a href="https://www.classicpress.net/version/%1$s">ClassicPress %2$s</a> automatically:' ), $update->current, $version_string );
+				$message = sprintf( __( 'You can update to <a href="https://www.classicpress.net/version/%1$s">ClassicPress %2$s</a> automatically:' ), sanitize_title( $update->current ), $version_string );
 			}
 			if ( ! $mysql_compat || ! $php_compat ) {
 				$show_buttons = false;
@@ -349,19 +349,19 @@ function list_plugin_updates() {
 		// Get plugin compat for running version of ClassicPress.
 		if ( isset( $plugin_data->update->tested ) && version_compare( $plugin_data->update->tested, $cur_wp_version, '>=' ) ) {
 			$compat  = '<br>' . sprintf( __( 'Potentially compatible with ClassicPress %1$s.' ), $cur_cp_version );
-			$compat .= ' <a href="https://www.classicpress.net/faq/#post-27980">' . __( 'More info.' ) . '</a>';
+			$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
 		} else {
 			$compat  = '<br>' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: Unknown.' ), $cur_cp_version );
-			$compat .= ' <a href="https://www.classicpress.net/faq/#post-27980">' . __( 'More info.' ) . '</a>';
+			$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
 		}
 		// Get plugin compat for updated version of ClassicPress.
 		if ( $core_update_version ) {
 			if ( isset( $plugin_data->update->tested ) && version_compare( $plugin_data->update->tested, $core_update_version, '>=' ) ) {
-				$compat  = '<br>' . sprintf( __( 'Potentially compatible with ClassicPress %1$s' ), $core_update_version );
-				$compat .= ' <a href="https://www.classicpress.net/faq/#post-27980">' . __( 'More info.' ) . '</a>';
+				$compat  = '<br>' . sprintf( __( 'Potentially compatible with ClassicPress %1$s.' ), $core_update_version );
+				$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
 			} else {
 				$compat  = '<br>' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: Unknown.' ), $core_update_version );
-				$compat .= ' <a href="https://www.classicpress.net/faq/#post-27980">' . __( 'More info.' ) . '</a>';
+				$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
 			}
 		}
 
@@ -456,9 +456,8 @@ function list_plugin_updates() {
  * @since 2.9.0
  */
 function list_theme_updates() {
-	$updates_from_api = get_site_transient( 'update_core' );
-	$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates ) && ! empty( $updates_from_api->updates );
-	$themes           = get_theme_updates();
+	$cp_has_update = classicpress_has_update();
+	$themes        = get_theme_updates();
 	if ( empty( $themes ) ) {
 		echo '<h2>' . __( 'Themes' ) . '</h2>';
 		echo '<p>' . __( 'Your themes are all up to date.' ) . '</p>';
@@ -519,7 +518,7 @@ function list_theme_updates() {
 		if ( ! $compatible_wp && ! $compatible_php ) {
 			$compat .= '<br>' . __( 'This update does not work with your versions of ClassicPress and PHP.' ) . '&nbsp;';
 			if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
-				if ( $cp_needs_update ) {
+				if ( $cp_has_update ) {
 					$compat .= sprintf(
 						/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
 						__( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
@@ -537,7 +536,7 @@ function list_theme_updates() {
 				if ( $annotation ) {
 					$compat .= '</p><p><em>' . $annotation . '</em>';
 				}
-			} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
+			} elseif ( current_user_can( 'update_core' ) && $cp_has_update ) {
 				$compat .= sprintf(
 					/* translators: %s: URL to WordPress Updates screen. */
 					__( '<a href="%s">Please update ClassicPress</a>.' ),
@@ -558,7 +557,7 @@ function list_theme_updates() {
 			}
 		} elseif ( ! $compatible_wp ) {
 			$compat .= '<br>' . __( 'This update does not work with your version of ClassicPress.' ) . '&nbsp;';
-			if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
+			if ( current_user_can( 'update_core' ) && $cp_has_update ) {
 				$compat .= sprintf(
 					/* translators: %s: URL to WordPress Updates screen. */
 					__( '<a href="%s">Please update ClassicPress</a>.' ),
@@ -854,7 +853,7 @@ get_current_screen()->add_help_tab(
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
 	'<p>' . __( '<a href="https://codex.wordpress.org/Dashboard_Updates_Screen">Documentation on Updating ClassicPress</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support Forums</a>' ) . '</p>'
+	'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support forums</a>' ) . '</p>'
 );
 
 if ( 'upgrade-core' === $action ) {

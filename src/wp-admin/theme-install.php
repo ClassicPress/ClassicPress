@@ -10,8 +10,7 @@
 require_once __DIR__ . '/admin.php';
 require ABSPATH . 'wp-admin/includes/theme-install.php';
 
-$updates_from_api = get_site_transient( 'update_core' );
-$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates ) && ! empty( $updates_from_api->updates );
+$cp_has_update = classicpress_has_update();
 
 wp_reset_vars( array( 'tab' ) );
 
@@ -75,6 +74,12 @@ wp_localize_script(
 			'expandSidebar'       => __( 'Expand Sidebar' ),
 			/* translators: Hidden accessibility text. */
 			'selectFeatureFilter' => __( 'Select one or more Theme features to filter by' ),
+			'version'             => __( 'Version' ),
+			'installing'          => __( 'Installing...' ),
+			'installing_wait'     => __( 'Installing... please wait.' ),
+			'installed'           => __( 'Installed' ),
+			'activate'            => __( 'Activate' ),
+			'ratings'             => __( 'ratings' ),
 		),
 		'installedThemes' => array_keys( $installed_themes ),
 		'activeTheme'     => get_stylesheet(),
@@ -150,6 +155,30 @@ get_current_screen()->set_help_sidebar(
 
 require_once ABSPATH . 'wp-admin/admin-header.php';
 
+// Make call to AJAX endpoint to get first 100 themes.
+$response = wp_remote_post(
+	admin_url( 'admin-ajax.php' ),
+	array(
+		'body' => array(
+			'action'  => 'query-themes',
+			'request' => array(
+				'per_page' => 100,
+				'page' => 1,
+				'browse' => 'popular',
+			),
+		),
+		'cookies' => $_COOKIE, // Maintain session
+	),
+);
+$body = '';
+$themes = '';
+$count = '';
+if ( ! is_wp_error( $response ) ) {
+	$body = json_decode( wp_remote_retrieve_body( $response ) );
+	$themes = $body->data->html;
+	$count = $body->data->count;
+}
+
 ?>
 <div class="wrap">
 	<h1 class="wp-heading-inline"><?php echo esc_html( $title ); ?></h1>
@@ -189,18 +218,24 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 	</h2>
 
 	<div class="wp-filter hide-if-no-js">
+
 		<div class="filter-count">
-			<span class="count theme-count"></span>
+			<span class="count theme-count"><?php esc_html_e( $count ); ?></span>
 		</div>
 
 		<ul class="filter-links">
-			<li><a href="#" data-sort="popular"><?php _ex( 'Popular', 'themes' ); ?></a></li>
-			<li><a href="#" data-sort="new"><?php _ex( 'Latest', 'themes' ); ?></a></li>
+			<li><a href="<?php echo esc_url( admin_url( 'theme-install.php?browse=popular' ) ); ?>" data-sort="popular"><?php _ex( 'Popular', 'themes' ); ?></a></li>
+			<li><a href="<?php echo esc_url( admin_url( 'theme-install.php?browse=new' ) ); ?>" data-sort="new"><?php _ex( 'Latest', 'themes' ); ?></a></li>
 		</ul>
 
-		<button type="button" class="button drawer-toggle" aria-expanded="false"><?php _e( 'Feature Filter' ); ?></button>
+		<button type="button" class="button drawer-toggle" aria-expanded="false"><?php esc_html_e( 'Feature Filter' ); ?></button>
 
-		<form class="search-form"></form>
+		<form class="search-form">
+			<fieldset class="search-box">
+				<label for="wp-filter-search-input" class="screen-reader-text"><?php esc_html_e( 'Search Themes' ); ?></label>
+				<input type="search" placeholder="<?php esc_html_e( 'Search Themes...' ); ?>" aria-describedby="live-search-desc" id="wp-filter-search-input" class="wp-filter-search">
+			</fieldset>
+		</form>
 
 		<div class="filter-drawer">
 			<div class="buttons">
@@ -242,11 +277,59 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 		_e( 'Themes list' );
 		?>
 	</h2>
-	<div class="theme-browser content-filterable"></div>
-	<div class="theme-install-overlay wp-full-overlay expanded"></div>
+	<div class="theme-browser content-filterable">
+		<ul class="themes wp-clearfix"><?php echo $themes; ?></ul>
+	</div>
 
 	<p class="no-themes"><?php _e( 'No themes found. Try a different search.' ); ?></p>
-	<span class="spinner"></span>
+
+	<dialog class="theme-install-overlay wp-full-overlay expanded no-navigation iframe-ready">
+		<div class="theme-install-container">
+			<div class="wp-full-overlay-sidebar">
+				<div class="wp-full-overlay-header">
+					<button class="close-full-overlay" autofocus>
+						<span class="screen-reader-text"><?php _e( 'Close' ); ?></span>
+					</button>
+					<button class="previous-theme">
+						<span class="screen-reader-text"><?php _e( 'Previous theme' ); ?></span>
+					</button>
+					<button class="next-theme">
+						<span class="screen-reader-text"><?php _e( 'Next theme' ); ?></span>
+					</button>
+
+					<a href="" class="button button-primary theme-install"><?php _e( 'Install' ); ?></a>
+				</div>
+				<div class="wp-full-overlay-sidebar-content">
+					<div class="install-theme-info">
+						<h3 class="theme-name"></h3>
+						<span class="theme-by"></span>
+
+						<div class="theme-screenshot">
+							<img class="theme-screenshot" src="" alt="">
+						</div>
+
+						<div class="theme-details">						
+							<div class="theme-rating">
+								<a class="num-ratings" href=""></a>
+							</div>
+							<div class="theme-version"></div>
+							<div class="theme-description"></div>
+						</div>
+					</div>
+				</div>
+				<div class="wp-full-overlay-footer">
+					<button type="button" class="collapse collapse-sidebar button" aria-expanded="true" aria-label="<?php _e( 'Collapse Sidebar' ); ?>">
+						<span class="collapse collapse-sidebar-arrow"></span>
+						<span class="collapse collapse-sidebar-label"><?php _e( 'Collapse' ); ?></span>
+					</button>
+				</div>
+			</div>
+
+			<div id="theme-preview-main" class="wp-full-overlay-main">
+				<iframe src="" title="<?php _e( 'Preview' ); ?>"></iframe>
+			</div>
+		</div>
+	</dialog>
 
 <?php
 if ( $tab ) {
@@ -275,323 +358,6 @@ if ( $tab ) {
 }
 ?>
 </div>
-
-<script id="tmpl-theme" type="text/template">
-	<# if ( data.screenshot_url ) { #>
-		<div class="theme-screenshot">
-			<img src="{{ data.screenshot_url }}?ver={{ data.version }}" alt="">
-		</div>
-	<# } else { #>
-		<div class="theme-screenshot blank"></div>
-	<# } #>
-
-	<# if ( data.installed ) { #>
-		<?php
-		wp_admin_notice(
-			_x( 'Installed', 'theme' ),
-			array(
-				'type'               => 'success',
-				'additional_classes' => array( 'notice-alt' ),
-			)
-		);
-		?>
-	<# } #>
-
-	<# if ( ! data.compatible_wp || ! data.compatible_php || ! data.compatible_cp ) { #>
-		<div class="notice notice-error notice-alt"><p>
-			<# if ( ! data.compatible_wp && ! data.compatible_php ) { #>
-				<?php
-				_e( 'This theme does not work with your versions of ClassicPress and PHP.' );
-				if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
-					if ( $cp_needs_update ) {
-						printf(
-							/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
-							' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
-							self_admin_url( 'update-core.php' ),
-							esc_url( wp_get_update_php_url() )
-						);
-					} else {
-						printf(
-						/* translators: %s: URL to Update PHP page. */
-							' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
-							esc_url( wp_get_update_php_url() )
-						);
-					}
-					wp_update_php_annotation( '</p><p><em>', '</em>' );
-				} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
-					printf(
-						/* translators: %s: URL to WordPress Updates screen. */
-						' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
-						self_admin_url( 'update-core.php' )
-					);
-				} elseif ( current_user_can( 'update_php' ) ) {
-					printf(
-						/* translators: %s: URL to Update PHP page. */
-						' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
-						esc_url( wp_get_update_php_url() )
-					);
-					wp_update_php_annotation( '</p><p><em>', '</em>' );
-				}
-				?>
-			<# } else if ( ! data.compatible_cp ) { #>
-				<?php
-				_e( "FSE themes don't work with ClassicPress." );
-				?>
-			<# } else if ( ! data.compatible_wp ) { #>
-				<?php
-				_e( 'This theme does not work with your version of ClassicPress.' );
-				if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
-					printf(
-						/* translators: %s: URL to WordPress Updates screen. */
-						' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
-						self_admin_url( 'update-core.php' )
-					);
-				}
-				?>
-			<# } else if ( ! data.compatible_php ) { #>
-				<?php
-				_e( 'This theme does not work with your version of PHP.' );
-				if ( current_user_can( 'update_php' ) ) {
-					printf(
-						/* translators: %s: URL to Update PHP page. */
-						' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
-						esc_url( wp_get_update_php_url() )
-					);
-					wp_update_php_annotation( '</p><p><em>', '</em>' );
-				}
-				?>
-			<# } #>
-		</p></div>
-	<# } #>
-
-	<span class="more-details"><?php _ex( 'Details &amp; Preview', 'theme' ); ?></span>
-	<div class="theme-author">
-		<?php
-		/* translators: %s: Theme author name. */
-		printf( __( 'By %s' ), '{{ data.author }}' );
-		?>
-	</div>
-
-	<div class="theme-id-container">
-		<h3 class="theme-name">{{ data.name }}</h3>
-
-		<div class="theme-actions">
-			<# if ( data.installed ) { #>
-				<# if ( data.compatible_wp && data.compatible_php && data.compatible_cp ) { #>
-					<?php
-					/* translators: %s: Theme name. */
-					$aria_label = sprintf( _x( 'Activate %s', 'theme' ), '{{ data.name }}' );
-					?>
-					<# if ( data.activate_url ) { #>
-						<# if ( ! data.active ) { #>
-							<a class="button button-primary activate" href="{{ data.activate_url }}" aria-label="<?php echo esc_attr( $aria_label ); ?>"><?php _e( 'Activate' ); ?></a>
-						<# } else { #>
-							<button class="button button-primary disabled"><?php _ex( 'Activated', 'theme' ); ?></button>
-						<# } #>
-					<# } #>
-					<# if ( data.customize_url ) { #>
-						<# if ( ! data.active ) { #>
-							<a class="button load-customize" href="{{ data.customize_url }}"><?php _e( 'Customize' ); ?></a>
-						<# } #>
-					<# } else { #>
-						<button class="button preview install-theme-preview"><?php _e( 'Preview' ); ?></button>
-					<# } #>
-				<# } else { #>
-					<?php
-					/* translators: %s: Theme name. */
-					$aria_label = sprintf( _x( 'Cannot Activate %s', 'theme' ), '{{ data.name }}' );
-					?>
-					<# if ( data.activate_url ) { #>
-						<a class="button button-primary disabled" aria-label="<?php echo esc_attr( $aria_label ); ?>"><?php _ex( 'Cannot Activate', 'theme' ); ?></a>
-					<# } #>
-					<# if ( data.customize_url ) { #>
-						<a class="button disabled"><?php _e( 'Live Preview' ); ?></a>
-					<# } else { #>
-						<button class="button disabled"><?php _e( 'Preview' ); ?></button>
-					<# } #>
-				<# } #>
-			<# } else { #>
-				<# if ( data.compatible_wp && data.compatible_php && data.compatible_cp ) { #>
-					<?php
-					/* translators: %s: Theme name. */
-					$aria_label = sprintf( _x( 'Install %s', 'theme' ), '{{ data.name }}' );
-					?>
-					<a class="button button-primary theme-install" data-name="{{ data.name }}" data-slug="{{ data.id }}" href="{{ data.install_url }}" aria-label="<?php echo esc_attr( $aria_label ); ?>"><?php _e( 'Install' ); ?></a>
-					<button class="button preview install-theme-preview"><?php _e( 'Preview' ); ?></button>
-				<# } else { #>
-					<?php
-					/* translators: %s: Theme name. */
-					$aria_label = sprintf( _x( 'Cannot Install %s', 'theme' ), '{{ data.name }}' );
-					?>
-					<a class="button button-primary disabled" data-name="{{ data.name }}" aria-label="<?php echo esc_attr( $aria_label ); ?>"><?php _ex( 'Cannot Install', 'theme' ); ?></a>
-					<button class="button disabled"><?php _e( 'Preview' ); ?></button>
-				<# } #>
-			<# } #>
-		</div>
-	</div>
-</script>
-
-<script id="tmpl-theme-preview" type="text/template">
-	<div class="wp-full-overlay-sidebar">
-		<div class="wp-full-overlay-header">
-			<button class="close-full-overlay"><span class="screen-reader-text">
-				<?php
-				/* translators: Hidden accessibility text. */
-				_e( 'Close' );
-				?>
-			</span></button>
-			<button class="previous-theme"><span class="screen-reader-text">
-				<?php
-				/* translators: Hidden accessibility text. */
-				_e( 'Previous theme' );
-				?>
-			</span></button>
-			<button class="next-theme"><span class="screen-reader-text">
-				<?php
-				/* translators: Hidden accessibility text. */
-				_e( 'Next theme' );
-				?>
-			</span></button>
-			<# if ( data.installed ) { #>
-				<# if ( data.compatible_wp && data.compatible_php && data.compatible_cp ) { #>
-					<?php
-					/* translators: %s: Theme name. */
-					$aria_label = sprintf( _x( 'Activate %s', 'theme' ), '{{ data.name }}' );
-					?>
-					<# if ( ! data.active ) { #>
-						<a class="button button-primary activate" href="{{ data.activate_url }}" aria-label="<?php echo esc_attr( $aria_label ); ?>"><?php _e( 'Activate' ); ?></a>
-					<# } else { #>
-						<button class="button button-primary disabled"><?php _ex( 'Activated', 'theme' ); ?></button>
-					<# } #>
-				<# } else { #>
-					<a class="button button-primary disabled" ><?php _ex( 'Cannot Activate', 'theme' ); ?></a>
-				<# } #>
-			<# } else { #>
-				<# if ( data.compatible_wp && data.compatible_php && data.compatible_cp ) { #>
-					<a href="{{ data.install_url }}" class="button button-primary theme-install" data-name="{{ data.name }}" data-slug="{{ data.id }}"><?php _e( 'Install' ); ?></a>
-				<# } else { #>
-					<a class="button button-primary disabled" ><?php _ex( 'Cannot Install', 'theme' ); ?></a>
-				<# } #>
-			<# } #>
-		</div>
-		<div class="wp-full-overlay-sidebar-content">
-			<div class="install-theme-info">
-				<h3 class="theme-name">{{ data.name }}</h3>
-					<span class="theme-by">
-						<?php
-						/* translators: %s: Theme author name. */
-						printf( __( 'By %s' ), '{{ data.author }}' );
-						?>
-					</span>
-
-					<div class="theme-screenshot">
-						<img class="theme-screenshot" src="{{ data.screenshot_url }}?ver={{ data.version }}" alt="">
-					</div>
-
-					<div class="theme-details">
-						<# if ( data.rating ) { #>
-							<div class="theme-rating">
-								{{{ data.stars }}}
-								<a class="num-ratings" href="{{ data.reviews_url }}">
-									<?php
-									/* translators: %s: Number of ratings. */
-									printf( __( '(%s ratings)' ), '{{ data.num_ratings }}' );
-									?>
-								</a>
-							</div>
-						<# } else { #>
-							<span class="no-rating"><?php _e( 'This theme has not been rated yet.' ); ?></span>
-						<# } #>
-
-						<div class="theme-version">
-							<?php
-							/* translators: %s: Theme version. */
-							printf( __( 'Version: %s' ), '{{ data.version }}' );
-							?>
-						</div>
-
-						<# if ( ! data.compatible_wp || ! data.compatible_php || ! data.compatible_cp ) { #>
-							<div class="notice notice-error notice-alt notice-large"><p>
-								<# if ( ! data.compatible_wp && ! data.compatible_php ) { #>
-									<?php
-									_e( 'This theme does not work with your versions of ClassicPress and PHP.' );
-									if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
-										if ( $cp_needs_update ) {
-											printf(
-												/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
-												' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
-												self_admin_url( 'update-core.php' ),
-												esc_url( wp_get_update_php_url() )
-											);
-										} else {
-											printf(
-											/* translators: %s: URL to Update PHP page. */
-												' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
-												esc_url( wp_get_update_php_url() )
-											);
-										}
-										wp_update_php_annotation( '</p><p><em>', '</em>' );
-									} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
-										printf(
-											/* translators: %s: URL to WordPress Updates screen. */
-											' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
-											self_admin_url( 'update-core.php' )
-										);
-									} elseif ( current_user_can( 'update_php' ) ) {
-										printf(
-											/* translators: %s: URL to Update PHP page. */
-											' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
-											esc_url( wp_get_update_php_url() )
-										);
-										wp_update_php_annotation( '</p><p><em>', '</em>' );
-									}
-									?>
-								<# } else if ( ! data.compatible_cp ) { #>
-									<?php
-									_e( "FSE themes don't work with ClassicPress." );
-									?>
-								<# } else if ( ! data.compatible_wp ) { #>
-									<?php
-									_e( 'This theme does not work with your version of ClassicPress.' );
-									if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
-										printf(
-											/* translators: %s: URL to WordPress Updates screen. */
-											' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
-											self_admin_url( 'update-core.php' )
-										);
-									}
-									?>
-								<# } else if ( ! data.compatible_php ) { #>
-									<?php
-									_e( 'This theme does not work with your version of PHP.' );
-									if ( current_user_can( 'update_php' ) ) {
-										printf(
-											/* translators: %s: URL to Update PHP page. */
-											' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
-											esc_url( wp_get_update_php_url() )
-										);
-										wp_update_php_annotation( '</p><p><em>', '</em>' );
-									}
-									?>
-								<# } #>
-							</p></div>
-						<# } #>
-
-						<div class="theme-description">{{{ data.description }}}</div>
-					</div>
-				</div>
-			</div>
-			<div class="wp-full-overlay-footer">
-				<button type="button" class="collapse-sidebar button" aria-expanded="true" aria-label="<?php esc_attr_e( 'Collapse Sidebar' ); ?>">
-					<span class="collapse-sidebar-arrow"></span>
-					<span class="collapse-sidebar-label"><?php _e( 'Collapse' ); ?></span>
-				</button>
-			</div>
-		</div>
-		<div class="wp-full-overlay-main">
-		<iframe src="{{ data.preview_url }}" title="<?php esc_attr_e( 'Preview' ); ?>"></iframe>
-	</div>
-</script>
 
 <?php
 wp_print_request_filesystem_credentials_modal();
