@@ -8743,3 +8743,13 @@ function wp_admin_notice( $message, $args = array() ) {
 
 	echo wp_kses_post( wp_get_admin_notice( $message, $args ) );
 }
+
+/**
+ * Load CP-Pepper text domain if plugin is active.
+ *
+ * @since CP-3.0.0
+ */
+function cp_pepper_load_plugin_textdomain() {
+	$cp_pepper_languages_path = apply_filters( 'cp_pepper_languages_path', 'cp-pepper/languages' );
+	load_plugin_textdomain( 'cp-pepper', false, $cp_pepper_languages_path );
+}

@@ -110,6 +110,7 @@ add_action( 'admin_init', 'default_password_nag_handler' );
 
 add_action( 'admin_notices', 'default_password_nag' );
 add_action( 'admin_notices', 'new_user_email_admin_notice' );
+add_action( 'admin_notices', 'password_reset_nag' );
 
 add_action( 'profile_update', 'default_password_nag_edit_user', 10, 2 );
 
