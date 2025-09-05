@@ -330,17 +330,4 @@ jQuery( function( $ ) {
 		e.preventDefault();
 		$( 'input#create-page' ).trigger( 'focus' );
 	} );
-
-	// Accordion handling in various new Privacy settings pages.
-	$( '.privacy-settings-accordion' ).on( 'click', '.privacy-settings-accordion-trigger', function() {
-		var isExpanded = ( 'true' === $( this ).attr( 'aria-expanded' ) );
-
-		if ( isExpanded ) {
-			$( this ).attr( 'aria-expanded', 'false' );
-			$( '#' + $( this ).attr( 'aria-controls' ) ).attr( 'hidden', true );
-		} else {
-			$( this ).attr( 'aria-expanded', 'true' );
-			$( '#' + $( this ).attr( 'aria-controls' ) ).attr( 'hidden', false );
-		}
-	} );
 });
