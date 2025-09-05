@@ -80,11 +80,6 @@ are styled in the Privacy section of edit.css */
 	border: 1px solid #00ba37;
 }
 
-.health-check-accordion-heading {
-	display: flex;
-	width: 94%;
-}
-
 .health-check-body h2 {
 	line-height: 1.4;
 }
