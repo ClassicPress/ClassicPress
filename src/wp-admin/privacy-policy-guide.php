@@ -77,7 +77,7 @@ wp_admin_notice(
 	<p><?php _e( 'The template contains a suggestion of sections you most likely will need. Under each section heading you will find a short summary of what information you should provide, which will help you to get started. Some sections include suggested policy content, others will have to be completed with information from your theme and plugins.' ); ?></p>
 	<p><?php _e( 'Please edit your privacy policy content, making sure to delete the summaries, and adding any information from your theme and plugins. Once you publish your policy page, remember to add it to your navigation menu.' ); ?></p>
 	<p><?php _e( 'It is your responsibility to write a comprehensive privacy policy, to make sure it reflects all national and international legal requirements on privacy, and to keep your policy current and accurate.' ); ?></p>
-	<details class="privacy-settings-accordion-details">
+	<details class="privacy-settings-accordion privacy-settings-accordion-details">
 		<summary class="privacy-settings-accordion-summary">
 			<h4 class="privacy-settings-accordion-heading">
 				<span class="title"><?php _e( 'Privacy Policy Guide' ); ?></span>
