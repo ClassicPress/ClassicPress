@@ -846,6 +846,8 @@ form#tags-filter {
 
 .privacy-settings-accordion-heading,
 .health-check-accordion-heading {
+	display: flex;
+	width: 94%;
 	margin: 0;
 	border-top: 1px solid #c3c4c7;
 	font-size: inherit;
@@ -896,6 +898,7 @@ form#tags-filter {
 	pointer-events: none;
 	font-weight: 600;
 	flex-grow: 1;
+	padding-top: 0.15rem;
 }
 
 .privacy-settings-accordion-summary .icon,
