@@ -275,6 +275,49 @@ function create_initial_taxonomies() {
 			'rest_controller_class' => 'WP_REST_Terms_Controller',
 		)
 	);
+
+	register_taxonomy(
+		'user_group',
+		'user',
+		array(
+			'hierarchical' => true,
+			'labels'       => array(
+				'name'                       => __( 'User Groups' ),
+				'singular_name'              => __( 'User Group' ),
+				'search_items'               => __( 'Search User Groups' ),
+				'popular_items'              => null,
+				'all_items'                  => __( 'All User Groups' ),
+				'edit_item'                  => __( 'Edit User Group' ),
+				'update_item'                => __( 'Update User Group' ),
+				'add_new_item'               => __( 'Add New User Group' ),
+				'new_item_name'              => __( 'New User Group Name' ),
+				'separate_items_with_commas' => null,
+				'add_or_remove_items'        => null,
+				'choose_from_most_used'      => null,
+				'back_to_items'              => __( '&larr; Go to User Groups' ),
+				'filter_by_item'             => __( 'Filter by user group' ),
+			),
+			'query_var'             => 'user_group_name',
+			'update_count_callback' => '_update_generic_term_count',
+			'rewrite'               => false,
+			'show_ui'               => true,
+			'show_in_menu'          => true,
+			'show_in_nav_menus'     => false,
+			'show_tagcloud'         => false,
+			'show_admin_column'     => true,
+			'has_default'           => false,
+			'_builtin'              => true,
+			'capabilities'          => array(
+				'manage_terms' => 'manage_categories',
+				'edit_terms'   => 'edit_categories',
+				'delete_terms' => 'delete_categories',
+				'assign_terms' => 'assign_categories',
+			),
+			'show_in_rest'          => true,
+			'rest_base'             => 'user_groups',
+			'rest_controller_class' => 'WP_REST_Terms_Controller',
+		)
+	);
 }
 
 /**
