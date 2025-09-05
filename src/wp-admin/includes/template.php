@@ -715,15 +715,17 @@ function meta_form( $post = null ) {
 		 */
 		$limit = apply_filters( 'postmeta_form_limit', 30 );
 
+		// Query changed to be routed via $wpdb->posts.
+		// @since CP-2.6.0
 		$keys = $wpdb->get_col(
 			$wpdb->prepare(
 				"SELECT DISTINCT meta_key
-				FROM $wpdb->postmeta
-				WHERE meta_key NOT BETWEEN '_' AND '_z'
-				HAVING meta_key NOT LIKE %s
-				ORDER BY meta_key
+				FROM $wpdb->posts as p
+				LEFT JOIN $wpdb->postmeta as m ON p.ID = m.post_id
+				WHERE post_type = '$post->post_type'
+				AND SUBSTR(meta_key,1,1) != '_'
+				ORDER BY ID DESC
 				LIMIT %d",
-				$wpdb->esc_like( '_' ) . '%',
 				$limit
 			)
 		);
