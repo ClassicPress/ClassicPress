@@ -37,19 +37,7 @@ function list_core_update( $update ) {
 	static $first_pass = true;
 
 	$wp_version     = get_bloginfo( 'version' );
-	$version_string = sprintf( '%s&ndash;%s', $update->current, get_locale() );
-
-	if ( 'en_US' === $update->locale && 'en_US' === get_locale() ) {
-		$version_string = $update->current;
-	} elseif ( 'en_US' === $update->locale && $update->packages->partial && $wp_version == $update->partial_version ) {
-		$updates = get_core_updates();
-		if ( $updates && 1 === count( $updates ) ) {
-			// If the only available update is a partial builds, it doesn't need a language-specific version string.
-			$version_string = $update->current;
-		}
-	} elseif ( 'en_US' === $update->locale && 'en_US' !== get_locale() ) {
-		$version_string = sprintf( '%s&ndash;%s', $update->current, $update->locale );
-	}
+	$version_string = $update->current;
 
 	$current = false;
 	if ( ! isset( $update->response ) || 'latest' === $update->response ) {
@@ -124,71 +112,9 @@ function list_core_update( $update ) {
 			submit_button( $submit, '', 'upgrade', false );
 		}
 	}
-	if ( 'en_US' !== $update->locale ) {
-		if ( ! isset( $update->dismissed ) || ! $update->dismissed ) {
-			submit_button( __( 'Hide this update' ), '', 'dismiss', false );
-		} else {
-			submit_button( __( 'Bring back this update' ), '', 'undismiss', false );
-		}
-	}
 	echo '</p>';
 
-	if ( 'en_US' !== $update->locale && ( ! isset( $wp_local_package ) || $wp_local_package != $update->locale ) ) {
-		echo '<p class="hint">' . __( 'This localized version contains both the translation and various other localization fixes.' ) . '</p>';
-	} elseif ( 'en_US' === $update->locale && 'en_US' !== get_locale() && ( ! $update->packages->partial && $wp_version == $update->partial_version ) ) {
-		// Partial builds don't need language-specific warnings.
-		echo '<p class="hint">' . sprintf(
-			/* translators: %s: WordPress version. */
-			__( 'You are about to install ClassicPress %s <strong>in English (US)</strong>. There is a chance this update will break your translation. You may prefer to wait for the localized version to be released.' ),
-			'development' !== $update->response ? $update->current : ''
-		) . '</p>';
-	}
-
 	echo '</form>';
-}
-
-/**
- * Display dismissed updates.
- *
- * @since 2.7.0
- */
-function dismissed_updates() {
-	$dismissed = get_core_updates(
-		array(
-			'dismissed' => true,
-			'available' => false,
-		)
-	);
-
-	if ( $dismissed ) {
-		$show_text = esc_js( __( 'Show hidden updates' ) );
-		$hide_text = esc_js( __( 'Hide hidden updates' ) );
-		?>
-		<script>
-			jQuery( function( $ ) {
-				$( '#show-dismissed' ).on( 'click', function() {
-					var isExpanded = ( 'true' === $( this ).attr( 'aria-expanded' ) );
-
-					if ( isExpanded ) {
-						$( this ).text( '<?php echo $show_text; ?>' ).attr( 'aria-expanded', 'false' );
-					} else {
-						$( this ).text( '<?php echo $hide_text; ?>' ).attr( 'aria-expanded', 'true' );
-					}
-
-					$( '#dismissed-updates' ).toggle( 'fast' );
-				});
-			});
-		</script>
-		<?php
-		echo '<p class="hide-if-no-js"><button type="button" class="button" id="show-dismissed" aria-expanded="false">' . __( 'Show hidden updates' ) . '</button></p>';
-		echo '<ul id="dismissed-updates" class="core-updates dismissed">';
-		foreach ( (array) $dismissed as $update ) {
-			echo '<li>';
-			list_core_update( $update );
-			echo '</li>';
-		}
-		echo '</ul>';
-	}
 }
 
 /**
