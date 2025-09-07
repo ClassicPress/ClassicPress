@@ -118,6 +118,50 @@ function list_core_update( $update ) {
 }
 
 /**
+ * Display dismissed updates.
+ *
+ * @since 2.7.0
+ */
+function dismissed_updates() {
+	$dismissed = get_core_updates(
+		array(
+			'dismissed' => true,
+			'available' => false,
+		)
+	);
+
+	if ( $dismissed ) {
+		$show_text = esc_js( __( 'Show hidden updates' ) );
+		$hide_text = esc_js( __( 'Hide hidden updates' ) );
+		?>
+		<script>
+			jQuery( function( $ ) {
+				$( '#show-dismissed' ).on( 'click', function() {
+					var isExpanded = ( 'true' === $( this ).attr( 'aria-expanded' ) );
+
+					if ( isExpanded ) {
+						$( this ).text( '<?php echo $show_text; ?>' ).attr( 'aria-expanded', 'false' );
+					} else {
+						$( this ).text( '<?php echo $hide_text; ?>' ).attr( 'aria-expanded', 'true' );
+					}
+
+					$( '#dismissed-updates' ).toggle( 'fast' );
+				});
+			});
+		</script>
+		<?php
+		echo '<p class="hide-if-no-js"><button type="button" class="button" id="show-dismissed" aria-expanded="false">' . __( 'Show hidden updates' ) . '</button></p>';
+		echo '<ul id="dismissed-updates" class="core-updates dismissed">';
+		foreach ( (array) $dismissed as $update ) {
+			echo '<li>';
+			list_core_update( $update );
+			echo '</li>';
+		}
+		echo '</ul>';
+	}
+}
+
+/**
  * Display upgrade ClassicPress for downloading latest or upgrading automatically form.
  *
  * @since 2.7.0
