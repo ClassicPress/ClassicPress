@@ -38,7 +38,7 @@
     "postcss": "8.5.6",
     "qunit": "^2.19.4",
     "rollup": "4.50.1",
-    "sass": "1.92.0",
+    "sass": "1.92.1",
     "sinon": "^21.0.0",
     "sinon-test": "^3.1.5",
     "source-map-loader": "^5.0.0",
