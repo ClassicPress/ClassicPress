@@ -24,7 +24,9 @@ if ( ! function_exists( 'susty_setup' ) ) :
 		 */
 		load_theme_textdomain( 'the-classicpress-theme', get_template_directory() . '/languages' );
 
-		// Add default posts and comments RSS feed links to head.
+		/**
+		 * Add default posts and comments RSS feed links to head.
+		 */
 		add_theme_support( 'automatic-feed-links' );
 
 		/*
@@ -42,7 +44,11 @@ if ( ! function_exists( 'susty_setup' ) ) :
 		 */
 		add_theme_support( 'post-thumbnails' );
 
-		// This theme uses wp_nav_menu() in two locations.
+		/**
+		 * This theme uses wp_nav_menu() in two locations.
+   		 *
+	  	 * @link https://developer.wordpress.org/themes/functionality/navigation-menus/
+		 */
 		register_nav_menus(
 			array(
 				'main-menu'   => esc_html__( 'MainMenu', 'the-classicpress-theme' ),
@@ -50,7 +56,11 @@ if ( ! function_exists( 'susty_setup' ) ) :
 			)
 		);
 
-		// Set up the WordPress core custom background feature.
+		/**
+		 * Set up the WordPress core custom background feature.
+   		 *
+	  	 * @link https://developer.wordpress.org/themes/functionality/custom-backgrounds/
+		 */
 		add_theme_support(
 			'custom-background',
 			apply_filters(
@@ -62,13 +72,15 @@ if ( ! function_exists( 'susty_setup' ) ) :
 			)
 		);
 
-		// Add theme support for selective refresh for widgets.
+		/**
+		 * Add theme support for selective refresh for widgets.
+		 */	
 		add_theme_support( 'customize-selective-refresh-widgets' );
 
 		/**
 		 * Add support for core custom logo.
 		 *
-		 * @link https://codex.wordpress.org/Theme_Logo
+		 * @link https://developer.wordpress.org/themes/functionality/custom-logo/
 		 */
 		add_theme_support(
 			'custom-logo',
@@ -124,33 +136,15 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
 
+/**
+ * Remove Emoji
+ */
 remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 remove_action( 'wp_print_styles', 'print_emoji_styles' );
 
-function susty_nav_rewrite_rule() {
-	add_rewrite_rule( 'menu', 'index.php?menu=true', 'top' );
-}
-
-add_action( 'init', 'susty_nav_rewrite_rule' );
-
-function susty_register_query_var( $vars ) {
-	$vars[] = 'menu';
-
-	return $vars;
-}
-add_filter( 'query_vars', 'susty_register_query_var' );
-
-add_filter(
-	'template_include',
-	function ( $path ) {
-		if ( get_query_var( 'menu' ) ) {
-			return get_template_directory() . '/menu.php';
-		}
-		return $path;
-	}
-);
-
-// Remove dashicons in frontend for unauthenticated users
+/**
+ * Remove dashicons in frontend for unauthenticated users
+ */
 function susty_dequeue_dashicons() {
 	if ( ! is_user_logged_in() ) {
 		wp_deregister_style( 'dashicons' );
@@ -215,14 +209,18 @@ if ( function_exists( 'register_sidebar' ) ) {
 	);
 }
 
-// Remove empty paragraph tags
+/**
+ * Remove empty paragraph tags
+ */
 function cp_remove_empty_p( $content ) {
 	$content = force_balance_tags( $content );
 	return preg_replace( '#<p>\s*+(<br\s*/*>)?\s*</p>#i', '', $content );
 }
 add_filter( 'the_content', 'cp_remove_empty_p', 20, 1 );
 
-// Add excerpts to pages
+/**
+ * Add excerpts to pages
+ */
 add_post_type_support( 'page', 'excerpt' );
 
 /**
