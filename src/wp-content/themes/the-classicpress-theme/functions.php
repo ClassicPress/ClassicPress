@@ -46,7 +46,7 @@ if ( ! function_exists( 'susty_setup' ) ) :
 
 		/**
 		 * This theme uses wp_nav_menu() in two locations.
-   		 *
+		 *
 		 * @link https://developer.wordpress.org/themes/functionality/navigation-menus/
 		 */
 		register_nav_menus(
@@ -74,7 +74,7 @@ if ( ! function_exists( 'susty_setup' ) ) :
 
 		/**
 		 * Add theme support for selective refresh for widgets.
-		 */	
+		 */
 		add_theme_support( 'customize-selective-refresh-widgets' );
 
 		/**
