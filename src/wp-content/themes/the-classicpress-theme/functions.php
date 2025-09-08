@@ -47,7 +47,7 @@ if ( ! function_exists( 'susty_setup' ) ) :
 		/**
 		 * This theme uses wp_nav_menu() in two locations.
    		 *
-	  	 * @link https://developer.wordpress.org/themes/functionality/navigation-menus/
+		 * @link https://developer.wordpress.org/themes/functionality/navigation-menus/
 		 */
 		register_nav_menus(
 			array(
@@ -58,8 +58,8 @@ if ( ! function_exists( 'susty_setup' ) ) :
 
 		/**
 		 * Set up the WordPress core custom background feature.
-   		 *
-	  	 * @link https://developer.wordpress.org/themes/functionality/custom-backgrounds/
+		 *
+		 * @link https://developer.wordpress.org/themes/functionality/custom-backgrounds/
 		 */
 		add_theme_support(
 			'custom-background',
