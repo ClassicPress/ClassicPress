@@ -158,6 +158,8 @@ module.exports = function(grunt) {
 							'**',
 							'!wp-includes/js/media/**',
 							'!**/.{svn,git}/**', // Ignore version control directories.
+							// Exclude raw root certificate files that are combined into ca-bundle.crt.
+							'!wp-includes/certificates/legacy-1024bit.pem',
 							// Exclude plugins unless specifically listed
 							'!wp-content/plugins/**',
 							'wp-content/plugins/index.php',
@@ -853,6 +855,16 @@ module.exports = function(grunt) {
 					`${BUILD_DIR}wp-includes/js/wp-emoji.min.js`
 				],
 				dest: `${BUILD_DIR}wp-includes/js/wp-emoji-release.min.js`
+			},
+			certificates: {
+				options: {
+					separator: '\n\n'
+				},
+				src: [
+					SOURCE_DIR + 'wp-includes/certificates/legacy-1024bit.pem',
+					'vendor/composer/ca-bundle/res/cacert.pem'
+				],
+				dest: SOURCE_DIR + 'wp-includes/certificates/ca-bundle.crt'
 			}
 		},
 		imagemin: {
@@ -1189,6 +1201,36 @@ module.exports = function(grunt) {
 				done();
 			} );
 		}
+	);
+
+	grunt.registerTask(
+		'certificates:update',
+		'Updates the Composer package responsible for root certificate updates.',
+		function() {
+			var done = this.async();
+			var flags = this.flags;
+			var args = [ 'update' ];
+
+			grunt.util.spawn( {
+				cmd: 'composer',
+				args: args,
+				opts: { stdio: 'inherit' }
+			}, function( error ) {
+				if ( flags.error && error ) {
+					done( false );
+				} else {
+					done( true );
+				}
+			} );
+		}
+	 );
+
+	grunt.registerTask(
+		'certificates:upgrade',
+		[
+			'certificates:update',
+			'concat:certificates'
+		]
 	);
 
 	grunt.registerTask(

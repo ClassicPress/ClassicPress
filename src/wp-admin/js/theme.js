@@ -16,6 +16,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		queryParams = new URLSearchParams( window.location.search ),
 		dialog = document.getElementById( 'theme-modal' ),
 		previewDialog = document.querySelector( '.theme-install-overlay' ),
+		install = previewDialog ? previewDialog.querySelector( '.theme-install' ).textContent : '',
 		footer = document.querySelector( '.theme-install-php #wpfooter' ),
 		features = document.querySelectorAll( '.filter-group-feature input' ),
 		tagSearch = document.querySelector( '.theme-install-php #wp-filter-search-input' ),
@@ -38,6 +39,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.getElementById( 'wp-filter-search-input' ).dispatchEvent( new KeyboardEvent( 'keyup', { 'key':'Enter' } ) );
 		} );
 	}
+
+	// Enable legible display of multiple error messages
+	document.querySelectorAll( 'li' ).forEach( function( item ) {
+		var secondError;
+		if ( item.querySelectorAll( '.notice-error' ).length > 1 ) {
+			secondError = item.querySelectorAll( '.notice-error' )[1];
+			item.querySelector( '.notice-error' ).insertAdjacentHTML( 'beforeend', secondError.innerHTML );
+			secondError.remove();
+		}
+	} );
 
 	// Reload the list of themes from wordpress.org using Intersection Observer
 	if ( footer ) {
@@ -346,7 +357,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						dialog.querySelector( '.has-update span' ).innerHTML = theme.dataset.update;
 						dialog.querySelector( '.has-update' ).removeAttribute( 'hidden' );
 					} else {
-						dialog.querySelector( '.incompat-update span' ).innerHTML = theme.dataset.update;
 						dialog.querySelector( '.incompat-update' ).removeAttribute( 'hidden' );
 						response = theme.dataset.updateResponse.split( '-' );
 						if ( response[0] !== '1' && response[1] !== '1' ) {
@@ -550,13 +560,37 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				queryParams.delete( 'search' );
 				queryParams.set( 'theme', theme.id );
 				history.replaceState( null, null, '?' + queryParams.toString() );
-				previewDialog.querySelector( '.theme-install' ).href = theme.dataset.installNonce;
+				if ( e.target.parentNode.querySelector( '.theme-actions a' ) ) {
+					previewDialog.querySelector( '.theme-install' ).textContent = install;
+					if ( e.target.parentNode.querySelector( '.theme-actions a' ).className.includes( 'disabled' ) ) {
+						previewDialog.querySelector( '.theme-install' ).setAttribute( 'disabled', true );
+						previewDialog.querySelector( '.theme-install' ).setAttribute( 'inert', true );
+						previewDialog.querySelector( '.theme-install' ).removeAttribute( 'href' );
+					} else {
+						previewDialog.querySelector( '.theme-install' ).removeAttribute( 'disabled' );
+						previewDialog.querySelector( '.theme-install' ).removeAttribute( 'inert' );
+						previewDialog.querySelector( '.theme-install' ).href = theme.dataset.installNonce;
+					}
+				}
 				if ( theme.querySelector( '.notice-success' ) ) {
 					previewDialog.querySelector( '.theme-install' ).href = theme.dataset.activateNonce;
 					previewDialog.querySelector( '.theme-install' ).textContent = _wpThemeSettings.l10n.activate;
 					previewDialog.querySelector( '.theme-install' ).className = 'button button-primary activate';
 					if ( theme.className.includes( 'active' ) ) {
 						previewDialog.querySelector( '.activate' ).classList.add( 'disabled' );
+					}
+				}
+				if ( e.target.previousElementSibling.className.includes( 'notice-error' ) ) {
+					if ( previewDialog.querySelector( '.theme-install' ) ) {
+						previewDialog.querySelector( '.theme-install' ).classList.add( 'disabled' );
+						previewDialog.querySelector( '.theme-install' ).setAttribute( 'disabled', true );
+						previewDialog.querySelector( '.theme-install' ).setAttribute( 'inert', true );
+						previewDialog.querySelector( '.theme-install' ).removeAttribute( 'href' );
+					} else if ( previewDialog.querySelector( '.activate' ) ) {
+						previewDialog.querySelector( '.activate' ).classList.add( 'disabled' );
+						previewDialog.querySelector( '.activate' ).setAttribute( 'disabled', true );
+						previewDialog.querySelector( '.activate' ).setAttribute( 'inert', true );
+						previewDialog.querySelector( '.activate' ).removeAttribute( 'href' );
 					}
 				}
 

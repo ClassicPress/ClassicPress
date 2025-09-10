@@ -222,7 +222,13 @@ class WP_Media_List_Table extends WP_List_Table {
 		}
 
 		$media_category = get_taxonomy( 'media_category' );
-		if ( is_object_in_taxonomy( 'attachment', 'media_category' ) ) {
+		$terms = get_terms(
+			array(
+				'taxonomy'   => 'media_category',
+				'hide_empty' => false,
+			)
+		);
+		if ( is_object_in_taxonomy( 'attachment', 'media_category' ) && ! empty( $terms ) ) {
 			$dropdown_options = array(
 				'show_option_all' => $media_category->labels->all_items,
 				'hide_empty'      => 0,

@@ -184,9 +184,10 @@ video.wp-video-shortcode,
 }
 
 .wp-playlist-item .wp-playlist-caption {
-	text-decoration: none;
-	color: #000;
-	max-width: calc(100% - 40px);
+	display: inline-block;
+	width: 100%;
+	max-width: calc(100% - 60px);
+	vertical-align: bottom;
 }
 
 .wp-playlist-item-meta {
@@ -234,6 +235,7 @@ video.wp-video-shortcode,
 	cursor: pointer;
 	padding: 0 3px;
 	border-bottom: 1px solid #ccc;
+	list-style-position: inside;
 }
 
 .wp-playlist-item:last-child {
