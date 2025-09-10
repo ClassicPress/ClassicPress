@@ -223,7 +223,7 @@ if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) :
 <table class="form-table" role="presentation">
 
 <tr>
-<th scope="row"><?php _e( 'Do you want to enable media attachment pages' ); ?></th>
+<th scope="row"><?php _e( 'Do you want to enable media attachment pages?' ); ?></th>
 <td class="td-full attachment-pages">
 
 <input type="hidden" name="wp_attachment_pages_enabled" value="0">
