@@ -53,6 +53,7 @@
     "@wordpress/url": "4.26.0",
     "clipboard": "^2.0.11",
     "lodash": "^4.17.21",
+    "mediaelement": "^7.0.7",
     "moment": "^2.30.1",
     "sortablejs": "^1.15.6"
   },
