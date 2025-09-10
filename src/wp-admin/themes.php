@@ -580,7 +580,7 @@ foreach ( $themes as $theme ) :
 			}
 		} elseif ( ! $theme['compatibleWP'] ) {
 			$message .= __( 'This theme does not work with your version of ClassicPress.' );
-			if ( current_user_can( 'update_core' ) ) {
+			if ( current_user_can( 'update_core' ) && $cp_has_update ) {
 				$message .= sprintf(
 					/* translators: %s: URL to WordPress Updates screen. */
 					' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
