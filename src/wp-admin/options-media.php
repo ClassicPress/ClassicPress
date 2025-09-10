@@ -228,7 +228,7 @@ if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) :
 
 <input type="hidden" name="wp_attachment_pages_enabled" value="0">
 <input id="attachment-pages" name="wp_attachment_pages_enabled" type="checkbox" value="1"<?php checked( '1', $attachment_pages_enabled ); ?>>
-<label for="attachment-pages"><?php _e( 'Media attachment pages enabled' ); ?></label>
+<label for="attachment-pages"><?php _e( 'Enable media attachment pages.' ); ?></label>
 <p class="description"><?php _e( 'A media attachment page displays information about a particular media file you have uploaded to your site.' ); ?></p>
 </td>
 </tr>
