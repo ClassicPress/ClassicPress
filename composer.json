@@ -18,7 +18,7 @@
 		"wp-coding-standards/wpcs": "3.2.0",
 		"phpcompatibility/phpcompatibility-wp": "2.1.7",
 		"yoast/phpunit-polyfills": "4.0.0",
-		"phpunit/phpunit": "^9"
+		"phpunit/phpunit": "^12"
 	},
 	"config": {
 		"allow-plugins": {
