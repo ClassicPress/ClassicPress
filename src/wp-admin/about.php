@@ -36,7 +36,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 					/* translators: link to updates page */
 					__( 'You must visit the <a href="%s">Updates Page</a> and Press the Re-Install Now button to complete the migration process!' ),
 					esc_url( $reinstall_url )
-				);	
+				);
 				?>
 				</strong></p>
 				<?php
