@@ -28,7 +28,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 			} else {
 				$reinstall_url = admin_url( 'update-core.php' );
 			}
-			if ( str_contains( classicpress_version(), 'migration' ) ) {
+			if ( strpos( classicpress_version(), 'migration' ) ) {
 				?>
 				<p><strong>
 				<?php
