@@ -4990,3 +4990,56 @@ function cp_hash_password_options() {
 		)
 	);
 }
+
+/**
+ * Retrieves the list of user groups for a user.
+ *
+ * Compatibility layer for themes and plugins. Also an easy layer of abstraction
+ * away from the complexity of the taxonomy layer.
+ *
+ * @since CP-2.6.0
+ *
+ * @see wp_get_object_terms()
+ *
+ * @param int   $user_id  Optional. The User ID. Default 0.
+ * @param array $args     Optional. User group query parameters. Default empty array.
+ *                        See WP_Term_Query::__construct() for supported arguments.
+ * @return array|WP_Error List of user groups. If the `$fields` argument passed via `$args` is 'all' or
+ *                        'all_with_object_id', an array of WP_Term objects will be returned. If `$fields` is 'ids',
+ *                        an array of user group IDs. If `$fields` is 'names', an array of user group names.
+ *                        WP_Error object if 'user_group' taxonomy doesn't exist.
+ */
+function cp_get_user_groups( $user_id = 0, $args = array() ) {
+	$user_id = (int) $user_id;
+
+	$defaults = array( 'fields' => 'ids' );
+	$args     = wp_parse_args( $args, $defaults );
+
+	return wp_get_object_terms( $user_id, 'user_group', $args );
+}
+
+/**
+ * Sets user groups for a user.
+ *
+ * Unlike post categories, there is no default user group.
+ *
+ * @since CP-2.6.0
+ *
+ * @param int       $user_id     Required. The User ID.
+ * @param int[]|int $user_groups Optional. List of user group IDs, or the ID of a single user group.
+ *                               Default empty array.
+ * @param bool      $append      If true, don't delete existing user groups, just add on.
+ *                               If false, replace the current user groups with the new user groups.
+ * @return array|false|WP_Error  Array of term taxonomy IDs of affected user groups. WP_Error or false on failure.
+ */
+function cp_set_user_groups( $user_id, $user_groups = array(), $append = false ) {
+	$user_id = absint( $user_id );
+	if ( $user_id === 0 ) {
+		return new WP_Error( 'invalid_user_id', __( 'Invalid User ID.' ) );
+	}
+
+	// If $user_groups isn't already an array, make it one.
+	$user_groups = (array) $user_groups;
+
+	return wp_set_object_terms( $user_id, $user_groups, 'user_group', $append );
+}
