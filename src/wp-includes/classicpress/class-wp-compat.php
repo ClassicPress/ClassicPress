@@ -58,7 +58,7 @@ class WP_Compat {
 
 		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
 		$active        = is_plugin_active( $plugin_file ) ? 'active' : '';
-		$shadow        = isset( $plugin_data['new_version'] ) ? 'style="box-shadow: none;"' : '';
+		$shadow        = isset( $plugin_data['update'] ) ? 'style="box-shadow: none;"' : '';
 		// Translators: %1$s is the plugin name.
 		$notice_msg    = sprintf( esc_html__( '%1$s uses block-related functions and may have issues.' ), $plugin_data['Name'] );
 		$notice_msg   .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-general-screen/#blocks-compatibility">' . __( 'Learn more' ) . '</a> | ';
