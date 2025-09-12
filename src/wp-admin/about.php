@@ -23,6 +23,26 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 			<?php printf( __( 'Version %s' ), classicpress_version() ); ?>
 			<?php classicpress_dev_version_info(); ?>
 		</p>
+		<?php
+		if ( is_multisite() ) {
+			$reinstall_url = network_admin_url( 'update-core.php' );
+		} else {
+			$reinstall_url = admin_url( 'update-core.php' );
+		}
+		if ( strpos( classicpress_version(), 'migration' ) ) {
+			?>
+			<p><strong>
+			<?php
+			printf(
+				/* translators: link to updates page */
+				__( 'You must visit the <a href="%s">Updates Page</a> and Press the Re-Install Now button to complete the migration process!' ),
+				esc_url( $reinstall_url )
+			);
+			?>
+			</strong></p>
+			<?php
+		}
+		?>
 		<p class="about-text">
 			<?php
 			printf(
