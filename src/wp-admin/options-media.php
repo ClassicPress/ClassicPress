@@ -210,6 +210,7 @@ if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) :
 	<?php _e( 'Organize uploads according to media category.' ); ?>
 	<?php echo $media_requires; ?>
 </label>
+<p class="description"><?php _e( 'By default uploads are organized into month- and year-based folders.' ); ?></p>
 </td>
 </tr>
 
@@ -222,12 +223,13 @@ if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) :
 <table class="form-table" role="presentation">
 
 <tr>
-<th scope="row"><?php _e( 'Do you want to enable attachment pages?' ); ?></th>
+<th scope="row"><?php _e( 'Do you want to enable media attachment pages?' ); ?></th>
 <td class="td-full attachment-pages">
 
 <input type="hidden" name="wp_attachment_pages_enabled" value="0">
 <input id="attachment-pages" name="wp_attachment_pages_enabled" type="checkbox" value="1"<?php checked( '1', $attachment_pages_enabled ); ?>>
 <label for="attachment-pages"><?php _e( 'Enable media attachment pages.' ); ?></label>
+<p class="description"><?php _e( 'A media attachment page displays information about a particular media file you have uploaded to your site.' ); ?></p>
 </td>
 </tr>
 
