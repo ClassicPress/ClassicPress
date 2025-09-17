@@ -67,10 +67,10 @@ __webpack_require__.d(__webpack_exports__, {
 /**
  * Validate a namespace string.
  *
- * @param {string} namespace The namespace to validate - should take the form
- *                           `vendor/plugin/function`.
+ * @param namespace The namespace to validate - should take the form
+ *                  `vendor/plugin/function`.
  *
- * @return {boolean} Whether the namespace is valid.
+ * @return Whether the namespace is valid.
  */
 function validateNamespace(namespace) {
   if ('string' !== typeof namespace || '' === namespace) {
@@ -91,11 +91,11 @@ function validateNamespace(namespace) {
 /**
  * Validate a hookName string.
  *
- * @param {string} hookName The hook name to validate. Should be a non empty string containing
- *                          only numbers, letters, dashes, periods and underscores. Also,
- *                          the hook name cannot begin with `__`.
+ * @param hookName The hook name to validate. Should be a non empty string containing
+ *                 only numbers, letters, dashes, periods and underscores. Also,
+ *                 the hook name cannot begin with `__`.
  *
- * @return {boolean} Whether the hook name is valid.
+ * @return Whether the hook name is valid.
  */
 function validateHookName(hookName) {
   if ('string' !== typeof hookName || '' === hookName) {
@@ -125,23 +125,17 @@ function validateHookName(hookName) {
 
 
 /**
- * @callback AddHook
  *
  * Adds the hook to the appropriate hooks container.
- *
- * @param {string}               hookName      Name of hook to add
- * @param {string}               namespace     The unique namespace identifying the callback in the form `vendor/plugin/function`.
- * @param {import('.').Callback} callback      Function to call when the hook is run
- * @param {number}               [priority=10] Priority of this hook
  */
 
 /**
  * Returns a function which, when invoked, will add a hook.
  *
- * @param {import('.').Hooks}    hooks    Hooks instance.
- * @param {import('.').StoreKey} storeKey
+ * @param hooks    Hooks instance.
+ * @param storeKey
  *
- * @return {AddHook} Function that adds a new hook.
+ * @return  Function that adds a new hook.
  */
 function createAddHook(hooks, storeKey) {
   return function addHook(hookName, namespace, callback, priority = 10) {
@@ -172,8 +166,6 @@ function createAddHook(hooks, storeKey) {
     if (hooksStore[hookName]) {
       // Find the correct insert index of the new hook.
       const handlers = hooksStore[hookName].handlers;
-
-      /** @type {number} */
       let i;
       for (i = handlers.length; i > 0; i--) {
         if (priority >= handlers[i - 1].priority) {
@@ -219,28 +211,21 @@ function createAddHook(hooks, storeKey) {
 
 
 /**
- * @callback RemoveHook
  * Removes the specified callback (or all callbacks) from the hook with a given hookName
  * and namespace.
- *
- * @param {string} hookName  The name of the hook to modify.
- * @param {string} namespace The unique namespace identifying the callback in the
- *                           form `vendor/plugin/function`.
- *
- * @return {number | undefined} The number of callbacks removed.
  */
 
 /**
  * Returns a function which, when invoked, will remove a specified hook or all
  * hooks by the given name.
  *
- * @param {import('.').Hooks}    hooks             Hooks instance.
- * @param {import('.').StoreKey} storeKey
- * @param {boolean}              [removeAll=false] Whether to remove all callbacks for a hookName,
- *                                                 without regard to namespace. Used to create
- *                                                 `removeAll*` functions.
+ * @param hooks             Hooks instance.
+ * @param storeKey
+ * @param [removeAll=false] Whether to remove all callbacks for a hookName,
+ *                          without regard to namespace. Used to create
+ *                          `removeAll*` functions.
  *
- * @return {RemoveHook} Function that removes hooks.
+ * @return Function that removes hooks.
  */
 function createRemoveHook(hooks, storeKey, removeAll = false) {
   return function removeHook(hookName, namespace) {
@@ -293,24 +278,22 @@ function createRemoveHook(hooks, storeKey, removeAll = false) {
 
 ;// ./node_modules/@wordpress/hooks/build-module/createHasHook.js
 /**
- * @callback HasHook
+ * Internal dependencies
+ */
+
+/**
  *
  * Returns whether any handlers are attached for the given hookName and optional namespace.
- *
- * @param {string} hookName    The name of the hook to check for.
- * @param {string} [namespace] Optional. The unique namespace identifying the callback
- *                             in the form `vendor/plugin/function`.
- *
- * @return {boolean} Whether there are handlers that are attached to the given hook.
  */
+
 /**
  * Returns a function which, when invoked, will return whether any handlers are
  * attached to a particular hook.
  *
- * @param {import('.').Hooks}    hooks    Hooks instance.
- * @param {import('.').StoreKey} storeKey
+ * @param hooks    Hooks instance.
+ * @param storeKey
  *
- * @return {HasHook} Function that returns whether any handlers are
+ * @return  Function that returns whether any handlers are
  *                   attached to a particular hook and optional namespace.
  */
 function createHasHook(hooks, storeKey) {
@@ -328,16 +311,20 @@ function createHasHook(hooks, storeKey) {
 
 ;// ./node_modules/@wordpress/hooks/build-module/createRunHook.js
 /**
+ * Internal dependencies
+ */
+
+/**
  * Returns a function which, when invoked, will execute all callbacks
  * registered to a hook of the specified type, optionally returning the final
  * value of the call chain.
  *
- * @param {import('.').Hooks}    hooks          Hooks instance.
- * @param {import('.').StoreKey} storeKey
- * @param {boolean}              returnFirstArg Whether each hook callback is expected to return its first argument.
- * @param {boolean}              async          Whether the hook callback should be run asynchronously
+ * @param hooks          Hooks instance.
+ * @param storeKey
+ * @param returnFirstArg Whether each hook callback is expected to return its first argument.
+ * @param async          Whether the hook callback should be run asynchronously
  *
- * @return {(hookName:string, ...args: unknown[]) => undefined|unknown} Function that runs hook callbacks.
+ * @return Function that runs hook callbacks.
  */
 function createRunHook(hooks, storeKey, returnFirstArg, async) {
   return function runHook(hookName, ...args) {
@@ -402,14 +389,18 @@ function createRunHook(hooks, storeKey, returnFirstArg, async) {
 
 ;// ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
 /**
+ * Internal dependencies
+ */
+
+/**
  * Returns a function which, when invoked, will return the name of the
  * currently running hook, or `null` if no hook of the given type is currently
  * running.
  *
- * @param {import('.').Hooks}    hooks    Hooks instance.
- * @param {import('.').StoreKey} storeKey
+ * @param hooks    Hooks instance.
+ * @param storeKey
  *
- * @return {() => string | null} Function that returns the current hook name or null.
+ * @return Function that returns the current hook name or null.
  */
 function createCurrentHook(hooks, storeKey) {
   return function currentHook() {
@@ -423,23 +414,22 @@ function createCurrentHook(hooks, storeKey) {
 
 ;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
 /**
- * @callback DoingHook
+ * Internal dependencies
+ */
+
+/**
  * Returns whether a hook is currently being executed.
  *
- * @param {string} [hookName] The name of the hook to check for.  If
- *                            omitted, will check for any hook being executed.
- *
- * @return {boolean} Whether the hook is being executed.
  */
 
 /**
  * Returns a function which, when invoked, will return whether a hook is
  * currently being executed.
  *
- * @param {import('.').Hooks}    hooks    Hooks instance.
- * @param {import('.').StoreKey} storeKey
+ * @param hooks    Hooks instance.
+ * @param storeKey
  *
- * @return {DoingHook} Function that returns whether a hook is currently
+ * @return Function that returns whether a hook is currently
  *                     being executed.
  */
 function createDoingHook(hooks, storeKey) {
@@ -464,23 +454,19 @@ function createDoingHook(hooks, storeKey) {
 
 
 /**
- * @callback DidHook
  *
  * Returns the number of times an action has been fired.
  *
- * @param {string} hookName The hook name to check.
- *
- * @return {number | undefined} The number of times the hook has run.
  */
 
 /**
  * Returns a function which, when invoked, will return the number of times a
  * hook has been called.
  *
- * @param {import('.').Hooks}    hooks    Hooks instance.
- * @param {import('.').StoreKey} storeKey
+ * @param hooks    Hooks instance.
+ * @param storeKey
  *
- * @return {DidHook} Function that returns a hook's call count.
+ * @return  Function that returns a hook's call count.
  */
 function createDidHook(hooks, storeKey) {
   return function didHook(hookName) {
@@ -504,7 +490,6 @@ function createDidHook(hooks, storeKey) {
 
 
 
-
 /**
  * Internal class for constructing hooks. Use `createHooks()` function
  *
@@ -514,11 +499,8 @@ function createDidHook(hooks, storeKey) {
  */
 class _Hooks {
   constructor() {
-    /** @type {import('.').Store} actions */
     this.actions = Object.create(null);
     this.actions.__current = new Set();
-
-    /** @type {import('.').Store} filters */
     this.filters = Object.create(null);
     this.filters.__current = new Set();
     this.addAction = build_module_createAddHook(this, 'actions');
@@ -541,13 +523,10 @@ class _Hooks {
     this.didFilter = build_module_createDidHook(this, 'filters');
   }
 }
-
-/** @typedef {_Hooks} Hooks */
-
 /**
  * Returns an instance of the hooks object.
  *
- * @return {Hooks} A Hooks instance.
+ * @return A Hooks instance.
  */
 function createHooks() {
   return new _Hooks();
@@ -559,39 +538,6 @@ function createHooks() {
  * Internal dependencies
  */
 
-
-/** @typedef {(...args: any[])=>any} Callback */
-
-/**
- * @typedef Handler
- * @property {Callback} callback  The callback
- * @property {string}   namespace The namespace
- * @property {number}   priority  The namespace
- */
-
-/**
- * @typedef Hook
- * @property {Handler[]} handlers Array of handlers
- * @property {number}    runs     Run counter
- */
-
-/**
- * @typedef Current
- * @property {string} name         Hook name
- * @property {number} currentIndex The index
- */
-
-/**
- * @typedef {Record<string, Hook> & {__current: Set<Current>}} Store
- */
-
-/**
- * @typedef {'actions' | 'filters'} StoreKey
- */
-
-/**
- * @typedef {import('./createHooks').Hooks} Hooks
- */
 
 const defaultHooks = build_module_createHooks();
 const {
