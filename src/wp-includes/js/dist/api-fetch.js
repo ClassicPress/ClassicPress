@@ -1,250 +1,10 @@
 /******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 58:
-/***/ (function(module, exports, __webpack_require__) {
-
-var __webpack_unused_export__;
-var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
-
-!function() {
-    'use strict'
-
-    var re = {
-        not_string: /[^s]/,
-        not_bool: /[^t]/,
-        not_type: /[^T]/,
-        not_primitive: /[^v]/,
-        number: /[diefg]/,
-        numeric_arg: /[bcdiefguxX]/,
-        json: /[j]/,
-        not_json: /[^j]/,
-        text: /^[^\x25]+/,
-        modulo: /^\x25{2}/,
-        placeholder: /^\x25(?:([1-9]\d*)\$|\(([^)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-gijostTuvxX])/,
-        key: /^([a-z_][a-z_\d]*)/i,
-        key_access: /^\.([a-z_][a-z_\d]*)/i,
-        index_access: /^\[(\d+)\]/,
-        sign: /^[+-]/
-    }
-
-    function sprintf(key) {
-        // `arguments` is not an array, but should be fine for this call
-        return sprintf_format(sprintf_parse(key), arguments)
-    }
-
-    function vsprintf(fmt, argv) {
-        return sprintf.apply(null, [fmt].concat(argv || []))
-    }
-
-    function sprintf_format(parse_tree, argv) {
-        var cursor = 1, tree_length = parse_tree.length, arg, output = '', i, k, ph, pad, pad_character, pad_length, is_positive, sign
-        for (i = 0; i < tree_length; i++) {
-            if (typeof parse_tree[i] === 'string') {
-                output += parse_tree[i]
-            }
-            else if (typeof parse_tree[i] === 'object') {
-                ph = parse_tree[i] // convenience purposes only
-                if (ph.keys) { // keyword argument
-                    arg = argv[cursor]
-                    for (k = 0; k < ph.keys.length; k++) {
-                        if (arg == undefined) {
-                            throw new Error(sprintf('[sprintf] Cannot access property "%s" of undefined value "%s"', ph.keys[k], ph.keys[k-1]))
-                        }
-                        arg = arg[ph.keys[k]]
-                    }
-                }
-                else if (ph.param_no) { // positional argument (explicit)
-                    arg = argv[ph.param_no]
-                }
-                else { // positional argument (implicit)
-                    arg = argv[cursor++]
-                }
-
-                if (re.not_type.test(ph.type) && re.not_primitive.test(ph.type) && arg instanceof Function) {
-                    arg = arg()
-                }
-
-                if (re.numeric_arg.test(ph.type) && (typeof arg !== 'number' && isNaN(arg))) {
-                    throw new TypeError(sprintf('[sprintf] expecting number but found %T', arg))
-                }
-
-                if (re.number.test(ph.type)) {
-                    is_positive = arg >= 0
-                }
-
-                switch (ph.type) {
-                    case 'b':
-                        arg = parseInt(arg, 10).toString(2)
-                        break
-                    case 'c':
-                        arg = String.fromCharCode(parseInt(arg, 10))
-                        break
-                    case 'd':
-                    case 'i':
-                        arg = parseInt(arg, 10)
-                        break
-                    case 'j':
-                        arg = JSON.stringify(arg, null, ph.width ? parseInt(ph.width) : 0)
-                        break
-                    case 'e':
-                        arg = ph.precision ? parseFloat(arg).toExponential(ph.precision) : parseFloat(arg).toExponential()
-                        break
-                    case 'f':
-                        arg = ph.precision ? parseFloat(arg).toFixed(ph.precision) : parseFloat(arg)
-                        break
-                    case 'g':
-                        arg = ph.precision ? String(Number(arg.toPrecision(ph.precision))) : parseFloat(arg)
-                        break
-                    case 'o':
-                        arg = (parseInt(arg, 10) >>> 0).toString(8)
-                        break
-                    case 's':
-                        arg = String(arg)
-                        arg = (ph.precision ? arg.substring(0, ph.precision) : arg)
-                        break
-                    case 't':
-                        arg = String(!!arg)
-                        arg = (ph.precision ? arg.substring(0, ph.precision) : arg)
-                        break
-                    case 'T':
-                        arg = Object.prototype.toString.call(arg).slice(8, -1).toLowerCase()
-                        arg = (ph.precision ? arg.substring(0, ph.precision) : arg)
-                        break
-                    case 'u':
-                        arg = parseInt(arg, 10) >>> 0
-                        break
-                    case 'v':
-                        arg = arg.valueOf()
-                        arg = (ph.precision ? arg.substring(0, ph.precision) : arg)
-                        break
-                    case 'x':
-                        arg = (parseInt(arg, 10) >>> 0).toString(16)
-                        break
-                    case 'X':
-                        arg = (parseInt(arg, 10) >>> 0).toString(16).toUpperCase()
-                        break
-                }
-                if (re.json.test(ph.type)) {
-                    output += arg
-                }
-                else {
-                    if (re.number.test(ph.type) && (!is_positive || ph.sign)) {
-                        sign = is_positive ? '+' : '-'
-                        arg = arg.toString().replace(re.sign, '')
-                    }
-                    else {
-                        sign = ''
-                    }
-                    pad_character = ph.pad_char ? ph.pad_char === '0' ? '0' : ph.pad_char.charAt(1) : ' '
-                    pad_length = ph.width - (sign + arg).length
-                    pad = ph.width ? (pad_length > 0 ? pad_character.repeat(pad_length) : '') : ''
-                    output += ph.align ? sign + arg + pad : (pad_character === '0' ? sign + pad + arg : pad + sign + arg)
-                }
-            }
-        }
-        return output
-    }
-
-    var sprintf_cache = Object.create(null)
-
-    function sprintf_parse(fmt) {
-        if (sprintf_cache[fmt]) {
-            return sprintf_cache[fmt]
-        }
-
-        var _fmt = fmt, match, parse_tree = [], arg_names = 0
-        while (_fmt) {
-            if ((match = re.text.exec(_fmt)) !== null) {
-                parse_tree.push(match[0])
-            }
-            else if ((match = re.modulo.exec(_fmt)) !== null) {
-                parse_tree.push('%')
-            }
-            else if ((match = re.placeholder.exec(_fmt)) !== null) {
-                if (match[2]) {
-                    arg_names |= 1
-                    var field_list = [], replacement_field = match[2], field_match = []
-                    if ((field_match = re.key.exec(replacement_field)) !== null) {
-                        field_list.push(field_match[1])
-                        while ((replacement_field = replacement_field.substring(field_match[0].length)) !== '') {
-                            if ((field_match = re.key_access.exec(replacement_field)) !== null) {
-                                field_list.push(field_match[1])
-                            }
-                            else if ((field_match = re.index_access.exec(replacement_field)) !== null) {
-                                field_list.push(field_match[1])
-                            }
-                            else {
-                                throw new SyntaxError('[sprintf] failed to parse named argument key')
-                            }
-                        }
-                    }
-                    else {
-                        throw new SyntaxError('[sprintf] failed to parse named argument key')
-                    }
-                    match[2] = field_list
-                }
-                else {
-                    arg_names |= 2
-                }
-                if (arg_names === 3) {
-                    throw new Error('[sprintf] mixing positional and named placeholders is not (yet) supported')
-                }
-
-                parse_tree.push(
-                    {
-                        placeholder: match[0],
-                        param_no:    match[1],
-                        keys:        match[2],
-                        sign:        match[3],
-                        pad_char:    match[4],
-                        align:       match[5],
-                        width:       match[6],
-                        precision:   match[7],
-                        type:        match[8]
-                    }
-                )
-            }
-            else {
-                throw new SyntaxError('[sprintf] unexpected placeholder')
-            }
-            _fmt = _fmt.substring(match[0].length)
-        }
-        return sprintf_cache[fmt] = parse_tree
-    }
-
-    /**
-     * export to either browser or node.js
-     */
-    /* eslint-disable quote-props */
-    if (true) {
-        __webpack_unused_export__ = sprintf
-        __webpack_unused_export__ = vsprintf
-    }
-    if (typeof window !== 'undefined') {
-        window['sprintf'] = sprintf
-        window['vsprintf'] = vsprintf
-
-        if (true) {
-            !(__WEBPACK_AMD_DEFINE_RESULT__ = (function() {
-                return {
-                    'sprintf': sprintf,
-                    'vsprintf': vsprintf
-                }
-            }).call(exports, __webpack_require__, exports, module),
-		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__))
-        }
-    }
-    /* eslint-enable quote-props */
-}(); // eslint-disable-line
-
-
-/***/ }),
-
-/***/ 257:
+/***/ 309:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
@@ -252,208 +12,6 @@ __webpack_require__.d(__webpack_exports__, {
 });
 
 // UNUSED EXPORTS: _n, _nx, _x, createI18n, defaultI18n, getLocaleData, hasTranslation, isRTL, resetLocaleData, setLocaleData, sprintf, subscribe
-
-;// ./node_modules/memize/dist/index.js
-/**
- * Memize options object.
- *
- * @typedef MemizeOptions
- *
- * @property {number} [maxSize] Maximum size of the cache.
- */
-
-/**
- * Internal cache entry.
- *
- * @typedef MemizeCacheNode
- *
- * @property {?MemizeCacheNode|undefined} [prev] Previous node.
- * @property {?MemizeCacheNode|undefined} [next] Next node.
- * @property {Array<*>}                   args   Function arguments for cache
- *                                               entry.
- * @property {*}                          val    Function result.
- */
-
-/**
- * Properties of the enhanced function for controlling cache.
- *
- * @typedef MemizeMemoizedFunction
- *
- * @property {()=>void} clear Clear the cache.
- */
-
-/**
- * Accepts a function to be memoized, and returns a new memoized function, with
- * optional options.
- *
- * @template {(...args: any[]) => any} F
- *
- * @param {F}             fn        Function to memoize.
- * @param {MemizeOptions} [options] Options object.
- *
- * @return {((...args: Parameters<F>) => ReturnType<F>) & MemizeMemoizedFunction} Memoized function.
- */
-function memize(fn, options) {
-	var size = 0;
-
-	/** @type {?MemizeCacheNode|undefined} */
-	var head;
-
-	/** @type {?MemizeCacheNode|undefined} */
-	var tail;
-
-	options = options || {};
-
-	function memoized(/* ...args */) {
-		var node = head,
-			len = arguments.length,
-			args,
-			i;
-
-		searchCache: while (node) {
-			// Perform a shallow equality test to confirm that whether the node
-			// under test is a candidate for the arguments passed. Two arrays
-			// are shallowly equal if their length matches and each entry is
-			// strictly equal between the two sets. Avoid abstracting to a
-			// function which could incur an arguments leaking deoptimization.
-
-			// Check whether node arguments match arguments length
-			if (node.args.length !== arguments.length) {
-				node = node.next;
-				continue;
-			}
-
-			// Check whether node arguments match arguments values
-			for (i = 0; i < len; i++) {
-				if (node.args[i] !== arguments[i]) {
-					node = node.next;
-					continue searchCache;
-				}
-			}
-
-			// At this point we can assume we've found a match
-
-			// Surface matched node to head if not already
-			if (node !== head) {
-				// As tail, shift to previous. Must only shift if not also
-				// head, since if both head and tail, there is no previous.
-				if (node === tail) {
-					tail = node.prev;
-				}
-
-				// Adjust siblings to point to each other. If node was tail,
-				// this also handles new tail's empty `next` assignment.
-				/** @type {MemizeCacheNode} */ (node.prev).next = node.next;
-				if (node.next) {
-					node.next.prev = node.prev;
-				}
-
-				node.next = head;
-				node.prev = null;
-				/** @type {MemizeCacheNode} */ (head).prev = node;
-				head = node;
-			}
-
-			// Return immediately
-			return node.val;
-		}
-
-		// No cached value found. Continue to insertion phase:
-
-		// Create a copy of arguments (avoid leaking deoptimization)
-		args = new Array(len);
-		for (i = 0; i < len; i++) {
-			args[i] = arguments[i];
-		}
-
-		node = {
-			args: args,
-
-			// Generate the result from original function
-			val: fn.apply(null, args),
-		};
-
-		// Don't need to check whether node is already head, since it would
-		// have been returned above already if it was
-
-		// Shift existing head down list
-		if (head) {
-			head.prev = node;
-			node.next = head;
-		} else {
-			// If no head, follows that there's no tail (at initial or reset)
-			tail = node;
-		}
-
-		// Trim tail if we're reached max size and are pending cache insertion
-		if (size === /** @type {MemizeOptions} */ (options).maxSize) {
-			tail = /** @type {MemizeCacheNode} */ (tail).prev;
-			/** @type {MemizeCacheNode} */ (tail).next = null;
-		} else {
-			size++;
-		}
-
-		head = node;
-
-		return node.val;
-	}
-
-	memoized.clear = function () {
-		head = null;
-		tail = null;
-		size = 0;
-	};
-
-	// Ignore reason: There's not a clear solution to create an intersection of
-	// the function with additional properties, where the goal is to retain the
-	// function signature of the incoming argument and add control properties
-	// on the return value.
-
-	// @ts-ignore
-	return memoized;
-}
-
-
-
-// EXTERNAL MODULE: ./node_modules/sprintf-js/src/sprintf.js
-var sprintf = __webpack_require__(58);
-;// ./node_modules/@wordpress/i18n/build-module/sprintf.js
-/**
- * External dependencies
- */
-
-
-
-/**
- * Log to console, once per message; or more precisely, per referentially equal
- * argument set. Because Jed throws errors, we log these to the console instead
- * to avoid crashing the application.
- *
- * @param {...*} args Arguments to pass to `console.error`
- */
-const logErrorOnce = memize(console.error); // eslint-disable-line no-console
-
-/**
- * Returns a formatted string. If an error occurs in applying the format, the
- * original format string is returned.
- *
- * @param {string} format The format of the string to generate.
- * @param {...*}   args   Arguments to apply to the format.
- *
- * @see https://www.npmjs.com/package/sprintf-js
- *
- * @return {string} The formatted string.
- */
-function sprintf_sprintf(format, ...args) {
-  try {
-    return sprintfjs.sprintf(format, ...args);
-  } catch (error) {
-    if (error instanceof Error) {
-      logErrorOnce('sprintf error: \n\n' + error.toString());
-    }
-    return format;
-  }
-}
 
 ;// ./node_modules/@tannin/postfix/index.js
 var PRECEDENCE, OPENERS, TERMINATORS, PATTERN;
@@ -966,18 +524,19 @@ Tannin.prototype.dcnpgettext = function( domain, context, singular, plural, n ) 
 
 
 /**
- * @typedef {Record<string,any>} LocaleData
+ * Internal dependencies
+ */
+
+/**
+ * WordPress dependencies
  */
 
 /**
  * Default locale data to use for Tannin domain when not otherwise provided.
  * Assumes an English plural forms expression.
- *
- * @type {LocaleData}
  */
 const DEFAULT_LOCALE_DATA = {
   '': {
-    /** @param {number} n */
     plural_forms(n) {
       return n === 1 ? 0 : 1;
     }
@@ -991,135 +550,17 @@ const DEFAULT_LOCALE_DATA = {
 const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
 
 /**
- * @typedef {(domain?: string) => LocaleData} GetLocaleData
- *
- * Returns locale data by domain in a
- * Jed-formatted JSON object shape.
- *
- * @see http://messageformat.github.io/Jed/
- */
-/**
- * @typedef {(data?: LocaleData, domain?: string) => void} SetLocaleData
- *
- * Merges locale data into the Tannin instance by domain. Note that this
- * function will overwrite the domain configuration. Accepts data in a
- * Jed-formatted JSON object shape.
- *
- * @see http://messageformat.github.io/Jed/
- */
-/**
- * @typedef {(data?: LocaleData, domain?: string) => void} AddLocaleData
- *
- * Merges locale data into the Tannin instance by domain. Note that this
- * function will also merge the domain configuration. Accepts data in a
- * Jed-formatted JSON object shape.
- *
- * @see http://messageformat.github.io/Jed/
- */
-/**
- * @typedef {(data?: LocaleData, domain?: string) => void} ResetLocaleData
- *
- * Resets all current Tannin instance locale data and sets the specified
- * locale data for the domain. Accepts data in a Jed-formatted JSON object shape.
- *
- * @see http://messageformat.github.io/Jed/
- */
-/** @typedef {() => void} SubscribeCallback */
-/** @typedef {() => void} UnsubscribeCallback */
-/**
- * @typedef {(callback: SubscribeCallback) => UnsubscribeCallback} Subscribe
- *
- * Subscribes to changes of locale data
- */
-/**
- * @typedef {(domain?: string) => string} GetFilterDomain
- * Retrieve the domain to use when calling domain-specific filters.
- */
-/**
- * @typedef {(text: string, domain?: string) => string} __
- *
- * Retrieve the translation of text.
- *
- * @see https://developer.wordpress.org/reference/functions/__/
- */
-/**
- * @typedef {(text: string, context: string, domain?: string) => string} _x
- *
- * Retrieve translated string with gettext context.
- *
- * @see https://developer.wordpress.org/reference/functions/_x/
- */
-/**
- * @typedef {(single: string, plural: string, number: number, domain?: string) => string} _n
- *
- * Translates and retrieves the singular or plural form based on the supplied
- * number.
- *
- * @see https://developer.wordpress.org/reference/functions/_n/
- */
-/**
- * @typedef {(single: string, plural: string, number: number, context: string, domain?: string) => string} _nx
- *
- * Translates and retrieves the singular or plural form based on the supplied
- * number, with gettext context.
- *
- * @see https://developer.wordpress.org/reference/functions/_nx/
- */
-/**
- * @typedef {() => boolean} IsRtl
- *
- * Check if current locale is RTL.
- *
- * **RTL (Right To Left)** is a locale property indicating that text is written from right to left.
- * For example, the `he` locale (for Hebrew) specifies right-to-left. Arabic (ar) is another common
- * language written RTL. The opposite of RTL, LTR (Left To Right) is used in other languages,
- * including English (`en`, `en-US`, `en-GB`, etc.), Spanish (`es`), and French (`fr`).
- */
-/**
- * @typedef {(single: string, context?: string, domain?: string) => boolean} HasTranslation
- *
- * Check if there is a translation for a given string in singular form.
- */
-/** @typedef {import('@wordpress/hooks').Hooks} Hooks */
-
-/**
- * An i18n instance
- *
- * @typedef I18n
- * @property {GetLocaleData}   getLocaleData   Returns locale data by domain in a Jed-formatted JSON object shape.
- * @property {SetLocaleData}   setLocaleData   Merges locale data into the Tannin instance by domain. Note that this
- *                                             function will overwrite the domain configuration. Accepts data in a
- *                                             Jed-formatted JSON object shape.
- * @property {AddLocaleData}   addLocaleData   Merges locale data into the Tannin instance by domain. Note that this
- *                                             function will also merge the domain configuration. Accepts data in a
- *                                             Jed-formatted JSON object shape.
- * @property {ResetLocaleData} resetLocaleData Resets all current Tannin instance locale data and sets the specified
- *                                             locale data for the domain. Accepts data in a Jed-formatted JSON object shape.
- * @property {Subscribe}       subscribe       Subscribes to changes of Tannin locale data.
- * @property {__}              __              Retrieve the translation of text.
- * @property {_x}              _x              Retrieve translated string with gettext context.
- * @property {_n}              _n              Translates and retrieves the singular or plural form based on the supplied
- *                                             number.
- * @property {_nx}             _nx             Translates and retrieves the singular or plural form based on the supplied
- *                                             number, with gettext context.
- * @property {IsRtl}           isRTL           Check if current locale is RTL.
- * @property {HasTranslation}  hasTranslation  Check if there is a translation for a given string.
- */
-
-/**
  * Create an i18n instance
  *
- * @param {LocaleData} [initialData]   Locale data configuration.
- * @param {string}     [initialDomain] Domain for which configuration applies.
- * @param {Hooks}      [hooks]         Hooks implementation.
+ * @param [initialData]   Locale data configuration.
+ * @param [initialDomain] Domain for which configuration applies.
+ * @param [hooks]         Hooks implementation.
  *
- * @return {I18n} I18n instance.
+ * @return I18n instance.
  */
 const createI18n = (initialData, initialDomain, hooks) => {
   /**
    * The underlying instance of Tannin to which exported functions interface.
-   *
-   * @type {Tannin}
    */
   const tannin = new Tannin({});
   const listeners = new Set();
@@ -1130,20 +571,18 @@ const createI18n = (initialData, initialDomain, hooks) => {
   /**
    * Subscribe to changes of locale data.
    *
-   * @param {SubscribeCallback} callback Subscription callback.
-   * @return {UnsubscribeCallback} Unsubscribe callback.
+   * @param callback Subscription callback.
+   * @return Unsubscribe callback.
    */
   const subscribe = callback => {
     listeners.add(callback);
     return () => listeners.delete(callback);
   };
-
-  /** @type {GetLocaleData} */
   const getLocaleData = (domain = 'default') => tannin.data[domain];
 
   /**
-   * @param {LocaleData} [data]
-   * @param {string}     [domain]
+   * @param [data]
+   * @param [domain]
    */
   const doSetLocaleData = (data, domain = 'default') => {
     tannin.data[domain] = {
@@ -1161,14 +600,10 @@ const createI18n = (initialData, initialDomain, hooks) => {
     // Clean up cached plural forms functions cache as it might be updated.
     delete tannin.pluralForms[domain];
   };
-
-  /** @type {SetLocaleData} */
   const setLocaleData = (data, domain) => {
     doSetLocaleData(data, domain);
     notifyListeners();
   };
-
-  /** @type {AddLocaleData} */
   const addLocaleData = (data, domain = 'default') => {
     tannin.data[domain] = {
       ...tannin.data[domain],
@@ -1186,8 +621,6 @@ const createI18n = (initialData, initialDomain, hooks) => {
     delete tannin.pluralForms[domain];
     notifyListeners();
   };
-
-  /** @type {ResetLocaleData} */
   const resetLocaleData = (data, domain) => {
     // Reset all current Tannin locale data.
     tannin.data = {};
@@ -1201,16 +634,16 @@ const createI18n = (initialData, initialDomain, hooks) => {
    * Wrapper for Tannin's `dcnpgettext`. Populates default locale data if not
    * otherwise previously assigned.
    *
-   * @param {string|undefined} domain   Domain to retrieve the translated text.
-   * @param {string|undefined} context  Context information for the translators.
-   * @param {string}           single   Text to translate if non-plural. Used as
-   *                                    fallback return value on a caught error.
-   * @param {string}           [plural] The text to be used if the number is
-   *                                    plural.
-   * @param {number}           [number] The number to compare against to use
-   *                                    either the singular or plural form.
+   * @param domain   Domain to retrieve the translated text.
+   * @param context  Context information for the translators.
+   * @param single   Text to translate if non-plural. Used as
+   *                 fallback return value on a caught error.
+   * @param [plural] The text to be used if the number is
+   *                 plural.
+   * @param [number] The number to compare against to use
+   *                 either the singular or plural form.
    *
-   * @return {string} The translated string.
+   * @return The translated string.
    */
   const dcnpgettext = (domain = 'default', context, single, plural, number) => {
     if (!tannin.data[domain]) {
@@ -1219,11 +652,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
     }
     return tannin.dcnpgettext(domain, context, single, plural, number);
   };
-
-  /** @type {GetFilterDomain} */
-  const getFilterDomain = (domain = 'default') => domain;
-
-  /** @type {__} */
+  const getFilterDomain = domain => domain || 'default';
   const __ = (text, domain) => {
     let translation = dcnpgettext(domain, undefined, text);
     if (!hooks) {
@@ -1233,16 +662,13 @@ const createI18n = (initialData, initialDomain, hooks) => {
     /**
      * Filters text with its translation.
      *
-     * @param {string} translation Translated text.
-     * @param {string} text        Text to translate.
-     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     * @param translation Translated text.
+     * @param text        Text to translate.
+     * @param domain      Text domain. Unique identifier for retrieving translated strings.
      */
-    translation = /** @type {string} */
-    /** @type {*} */hooks.applyFilters('i18n.gettext', translation, text, domain);
-    return /** @type {string} */ /** @type {*} */hooks.applyFilters('i18n.gettext_' + getFilterDomain(domain), translation, text, domain);
+    translation = hooks.applyFilters('i18n.gettext', translation, text, domain);
+    return hooks.applyFilters('i18n.gettext_' + getFilterDomain(domain), translation, text, domain);
   };
-
-  /** @type {_x} */
   const _x = (text, context, domain) => {
     let translation = dcnpgettext(domain, context, text);
     if (!hooks) {
@@ -1252,17 +678,14 @@ const createI18n = (initialData, initialDomain, hooks) => {
     /**
      * Filters text with its translation based on context information.
      *
-     * @param {string} translation Translated text.
-     * @param {string} text        Text to translate.
-     * @param {string} context     Context information for the translators.
-     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     * @param translation Translated text.
+     * @param text        Text to translate.
+     * @param context     Context information for the translators.
+     * @param domain      Text domain. Unique identifier for retrieving translated strings.
      */
-    translation = /** @type {string} */
-    /** @type {*} */hooks.applyFilters('i18n.gettext_with_context', translation, text, context, domain);
-    return /** @type {string} */ /** @type {*} */hooks.applyFilters('i18n.gettext_with_context_' + getFilterDomain(domain), translation, text, context, domain);
+    translation = hooks.applyFilters('i18n.gettext_with_context', translation, text, context, domain);
+    return hooks.applyFilters('i18n.gettext_with_context_' + getFilterDomain(domain), translation, text, context, domain);
   };
-
-  /** @type {_n} */
   const _n = (single, plural, number, domain) => {
     let translation = dcnpgettext(domain, undefined, single, plural, number);
     if (!hooks) {
@@ -1272,18 +695,15 @@ const createI18n = (initialData, initialDomain, hooks) => {
     /**
      * Filters the singular or plural form of a string.
      *
-     * @param {string} translation Translated text.
-     * @param {string} single      The text to be used if the number is singular.
-     * @param {string} plural      The text to be used if the number is plural.
-     * @param {string} number      The number to compare against to use either the singular or plural form.
-     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     * @param translation Translated text.
+     * @param single      The text to be used if the number is singular.
+     * @param plural      The text to be used if the number is plural.
+     * @param number      The number to compare against to use either the singular or plural form.
+     * @param domain      Text domain. Unique identifier for retrieving translated strings.
      */
-    translation = /** @type {string} */
-    /** @type {*} */hooks.applyFilters('i18n.ngettext', translation, single, plural, number, domain);
-    return /** @type {string} */ /** @type {*} */hooks.applyFilters('i18n.ngettext_' + getFilterDomain(domain), translation, single, plural, number, domain);
+    translation = hooks.applyFilters('i18n.ngettext', translation, single, plural, number, domain);
+    return hooks.applyFilters('i18n.ngettext_' + getFilterDomain(domain), translation, single, plural, number, domain);
   };
-
-  /** @type {_nx} */
   const _nx = (single, plural, number, context, domain) => {
     let translation = dcnpgettext(domain, context, single, plural, number);
     if (!hooks) {
@@ -1293,24 +713,19 @@ const createI18n = (initialData, initialDomain, hooks) => {
     /**
      * Filters the singular or plural form of a string with gettext context.
      *
-     * @param {string} translation Translated text.
-     * @param {string} single      The text to be used if the number is singular.
-     * @param {string} plural      The text to be used if the number is plural.
-     * @param {string} number      The number to compare against to use either the singular or plural form.
-     * @param {string} context     Context information for the translators.
-     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     * @param translation Translated text.
+     * @param single      The text to be used if the number is singular.
+     * @param plural      The text to be used if the number is plural.
+     * @param number      The number to compare against to use either the singular or plural form.
+     * @param context     Context information for the translators.
+     * @param domain      Text domain. Unique identifier for retrieving translated strings.
      */
-    translation = /** @type {string} */
-    /** @type {*} */hooks.applyFilters('i18n.ngettext_with_context', translation, single, plural, number, context, domain);
-    return /** @type {string} */ /** @type {*} */hooks.applyFilters('i18n.ngettext_with_context_' + getFilterDomain(domain), translation, single, plural, number, context, domain);
+    translation = hooks.applyFilters('i18n.ngettext_with_context', translation, single, plural, number, context, domain);
+    return hooks.applyFilters('i18n.ngettext_with_context_' + getFilterDomain(domain), translation, single, plural, number, context, domain);
   };
-
-  /** @type {IsRtl} */
   const isRTL = () => {
     return 'rtl' === _x('ltr', 'text direction');
   };
-
-  /** @type {HasTranslation} */
   const hasTranslation = (single, context, domain) => {
     const key = context ? context + '\u0004' + single : single;
     let result = !!tannin.data?.[domain !== null && domain !== void 0 ? domain : 'default']?.[key];
@@ -1318,15 +733,13 @@ const createI18n = (initialData, initialDomain, hooks) => {
       /**
        * Filters the presence of a translation in the locale data.
        *
-       * @param {boolean} hasTranslation Whether the translation is present or not..
-       * @param {string}  single         The singular form of the translated text (used as key in locale data)
-       * @param {string}  context        Context information for the translators.
-       * @param {string}  domain         Text domain. Unique identifier for retrieving translated strings.
+       * @param hasTranslation Whether the translation is present or not..
+       * @param single         The singular form of the translated text (used as key in locale data)
+       * @param context        Context information for the translators.
+       * @param domain         Text domain. Unique identifier for retrieving translated strings.
        */
-      result = /** @type { boolean } */
-      /** @type {*} */hooks.applyFilters('i18n.has_translation', result, single, context, domain);
-      result = /** @type { boolean } */
-      /** @type {*} */hooks.applyFilters('i18n.has_translation_' + getFilterDomain(domain), result, single, context, domain);
+      result = hooks.applyFilters('i18n.has_translation', result, single, context, domain);
+      result = hooks.applyFilters('i18n.has_translation_' + getFilterDomain(domain), result, single, context, domain);
     }
     return result;
   };
@@ -1335,7 +748,7 @@ const createI18n = (initialData, initialDomain, hooks) => {
   }
   if (hooks) {
     /**
-     * @param {string} hookName
+     * @param hookName
      */
     const onHookAddedOrRemoved = hookName => {
       if (I18N_HOOK_REGEXP.test(hookName)) {
@@ -1385,18 +798,12 @@ const i18n = createI18n(undefined, undefined, build_module.defaultHooks);
  */
 
 /**
- * @typedef {import('./create-i18n').LocaleData} LocaleData
- * @typedef {import('./create-i18n').SubscribeCallback} SubscribeCallback
- * @typedef {import('./create-i18n').UnsubscribeCallback} UnsubscribeCallback
- */
-
-/**
  * Returns locale data by domain in a Jed-formatted JSON object shape.
  *
  * @see http://messageformat.github.io/Jed/
  *
- * @param {string} [domain] Domain for which to get the data.
- * @return {LocaleData} Locale data.
+ * @param { string | undefined } [domain] Domain for which to get the data.
+ * @return { LocaleData } Locale data.
  */
 const getLocaleData = i18n.getLocaleData.bind(i18n);
 
@@ -1406,8 +813,8 @@ const getLocaleData = i18n.getLocaleData.bind(i18n);
  *
  * @see http://messageformat.github.io/Jed/
  *
- * @param {LocaleData} [data]   Locale data configuration.
- * @param {string}     [domain] Domain for which configuration applies.
+ * @param {LocaleData }        [data]   Locale data configuration.
+ * @param {string | undefined} [domain] Domain for which configuration applies.
  */
 const setLocaleData = i18n.setLocaleData.bind(i18n);
 
@@ -1417,8 +824,8 @@ const setLocaleData = i18n.setLocaleData.bind(i18n);
  *
  * @see http://messageformat.github.io/Jed/
  *
- * @param {LocaleData} [data]   Locale data configuration.
- * @param {string}     [domain] Domain for which configuration applies.
+ * @param {LocaleData}         [data]   Locale data configuration.
+ * @param {string | undefined} [domain] Domain for which configuration applies.
  */
 const resetLocaleData = i18n.resetLocaleData.bind(i18n);
 
@@ -1435,10 +842,12 @@ const subscribe = i18n.subscribe.bind(i18n);
  *
  * @see https://developer.wordpress.org/reference/functions/__/
  *
- * @param {string} text     Text to translate.
- * @param {string} [domain] Domain to retrieve the translated text.
+ * @template {string} Text
  *
- * @return {string} Translated text.
+ * @param {Text}               text   Text to translate.
+ * @param {string | undefined} domain Domain to retrieve the translated text.
+ *
+ * @return {TranslatableText<Text>} Translated text.
  */
 const __ = i18n.__.bind(i18n);
 
@@ -1447,11 +856,13 @@ const __ = i18n.__.bind(i18n);
  *
  * @see https://developer.wordpress.org/reference/functions/_x/
  *
- * @param {string} text     Text to translate.
- * @param {string} context  Context information for the translators.
- * @param {string} [domain] Domain to retrieve the translated text.
+ * @template {string} Text
  *
- * @return {string} Translated context string without pipe.
+ * @param {Text}               text    Text to translate.
+ * @param {string}             context Context information for the translators.
+ * @param {string | undefined} domain  Domain to retrieve the translated text.
+ *
+ * @return {TranslatableText<Text>} Translated context string without pipe.
  */
 const _x = i18n._x.bind(i18n);
 
@@ -1461,13 +872,16 @@ const _x = i18n._x.bind(i18n);
  *
  * @see https://developer.wordpress.org/reference/functions/_n/
  *
- * @param {string} single   The text to be used if the number is singular.
- * @param {string} plural   The text to be used if the number is plural.
- * @param {number} number   The number to compare against to use either the
- *                          singular or plural form.
- * @param {string} [domain] Domain to retrieve the translated text.
+ * @template {string} Single
+ * @template {string} Plural
  *
- * @return {string} The translated singular or plural form.
+ * @param {Single}             single The text to be used if the number is singular.
+ * @param {Plural}             plural The text to be used if the number is plural.
+ * @param {number}             number The number to compare against to use either the
+ *                                    singular or plural form.
+ * @param {string | undefined} domain Domain to retrieve the translated text.
+ *
+ * @return {TranslatableText<Single | Plural>} The translated singular or plural form.
  */
 const _n = i18n._n.bind(i18n);
 
@@ -1477,14 +891,18 @@ const _n = i18n._n.bind(i18n);
  *
  * @see https://developer.wordpress.org/reference/functions/_nx/
  *
- * @param {string} single   The text to be used if the number is singular.
- * @param {string} plural   The text to be used if the number is plural.
- * @param {number} number   The number to compare against to use either the
- *                          singular or plural form.
- * @param {string} context  Context information for the translators.
- * @param {string} [domain] Domain to retrieve the translated text.
+ * @template {string} Single
+ * @template {string} Plural
+ * @param {Single}             single   The text to be used if the number is singular.
  *
- * @return {string} The translated singular or plural form.
+ * @param {Single}             single   The text to be used if the number is singular.
+ * @param {Plural}             plural   The text to be used if the number is plural.
+ * @param {number}             number   The number to compare against to use either the
+ *                                      singular or plural form.
+ * @param {string}             context  Context information for the translators.
+ * @param {string | undefined} [domain] Domain to retrieve the translated text.
+ *
+ * @return {TranslatableText<Single | Plural>} The translated singular or plural form.
  */
 const _nx = i18n._nx.bind(i18n);
 
@@ -1503,9 +921,10 @@ const isRTL = i18n.isRTL.bind(i18n);
 /**
  * Check if there is a translation for a given string (in singular form).
  *
- * @param {string} single    Singular form of the string to look up.
- * @param {string} [context] Context information for the translators.
- * @param {string} [domain]  Domain to retrieve the translated text.
+ * @param {string} single  Singular form of the string to look up.
+ * @param {string} context Context information for the translators.
+ * @param {string} domain  Domain to retrieve the translated text.
+ *
  * @return {boolean} Whether the translation exists or not.
  */
 const hasTranslation = i18n.hasTranslation.bind(i18n);
@@ -1514,14 +933,13 @@ const hasTranslation = i18n.hasTranslation.bind(i18n);
 
 
 
-
+//# sourceMappingURL=index.js.map
 
 /***/ }),
 
 /***/ 673:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
@@ -1534,10 +952,10 @@ __webpack_require__.d(__webpack_exports__, {
 /**
  * Validate a namespace string.
  *
- * @param {string} namespace The namespace to validate - should take the form
- *                           `vendor/plugin/function`.
+ * @param namespace The namespace to validate - should take the form
+ *                  `vendor/plugin/function`.
  *
- * @return {boolean} Whether the namespace is valid.
+ * @return Whether the namespace is valid.
  */
 function validateNamespace(namespace) {
   if ('string' !== typeof namespace || '' === namespace) {
@@ -1558,11 +976,11 @@ function validateNamespace(namespace) {
 /**
  * Validate a hookName string.
  *
- * @param {string} hookName The hook name to validate. Should be a non empty string containing
- *                          only numbers, letters, dashes, periods and underscores. Also,
- *                          the hook name cannot begin with `__`.
+ * @param hookName The hook name to validate. Should be a non empty string containing
+ *                 only numbers, letters, dashes, periods and underscores. Also,
+ *                 the hook name cannot begin with `__`.
  *
- * @return {boolean} Whether the hook name is valid.
+ * @return Whether the hook name is valid.
  */
 function validateHookName(hookName) {
   if ('string' !== typeof hookName || '' === hookName) {
@@ -1592,23 +1010,17 @@ function validateHookName(hookName) {
 
 
 /**
- * @callback AddHook
  *
  * Adds the hook to the appropriate hooks container.
- *
- * @param {string}               hookName      Name of hook to add
- * @param {string}               namespace     The unique namespace identifying the callback in the form `vendor/plugin/function`.
- * @param {import('.').Callback} callback      Function to call when the hook is run
- * @param {number}               [priority=10] Priority of this hook
  */
 
 /**
  * Returns a function which, when invoked, will add a hook.
  *
- * @param {import('.').Hooks}    hooks    Hooks instance.
- * @param {import('.').StoreKey} storeKey
+ * @param hooks    Hooks instance.
+ * @param storeKey
  *
- * @return {AddHook} Function that adds a new hook.
+ * @return  Function that adds a new hook.
  */
 function createAddHook(hooks, storeKey) {
   return function addHook(hookName, namespace, callback, priority = 10) {
@@ -1639,8 +1051,6 @@ function createAddHook(hooks, storeKey) {
     if (hooksStore[hookName]) {
       // Find the correct insert index of the new hook.
       const handlers = hooksStore[hookName].handlers;
-
-      /** @type {number} */
       let i;
       for (i = handlers.length; i > 0; i--) {
         if (priority >= handlers[i - 1].priority) {
@@ -1686,28 +1096,21 @@ function createAddHook(hooks, storeKey) {
 
 
 /**
- * @callback RemoveHook
  * Removes the specified callback (or all callbacks) from the hook with a given hookName
  * and namespace.
- *
- * @param {string} hookName  The name of the hook to modify.
- * @param {string} namespace The unique namespace identifying the callback in the
- *                           form `vendor/plugin/function`.
- *
- * @return {number | undefined} The number of callbacks removed.
  */
 
 /**
  * Returns a function which, when invoked, will remove a specified hook or all
  * hooks by the given name.
  *
- * @param {import('.').Hooks}    hooks             Hooks instance.
- * @param {import('.').StoreKey} storeKey
- * @param {boolean}              [removeAll=false] Whether to remove all callbacks for a hookName,
- *                                                 without regard to namespace. Used to create
- *                                                 `removeAll*` functions.
+ * @param hooks             Hooks instance.
+ * @param storeKey
+ * @param [removeAll=false] Whether to remove all callbacks for a hookName,
+ *                          without regard to namespace. Used to create
+ *                          `removeAll*` functions.
  *
- * @return {RemoveHook} Function that removes hooks.
+ * @return Function that removes hooks.
  */
 function createRemoveHook(hooks, storeKey, removeAll = false) {
   return function removeHook(hookName, namespace) {
@@ -1760,24 +1163,22 @@ function createRemoveHook(hooks, storeKey, removeAll = false) {
 
 ;// ./node_modules/@wordpress/hooks/build-module/createHasHook.js
 /**
- * @callback HasHook
+ * Internal dependencies
+ */
+
+/**
  *
  * Returns whether any handlers are attached for the given hookName and optional namespace.
- *
- * @param {string} hookName    The name of the hook to check for.
- * @param {string} [namespace] Optional. The unique namespace identifying the callback
- *                             in the form `vendor/plugin/function`.
- *
- * @return {boolean} Whether there are handlers that are attached to the given hook.
  */
+
 /**
  * Returns a function which, when invoked, will return whether any handlers are
  * attached to a particular hook.
  *
- * @param {import('.').Hooks}    hooks    Hooks instance.
- * @param {import('.').StoreKey} storeKey
+ * @param hooks    Hooks instance.
+ * @param storeKey
  *
- * @return {HasHook} Function that returns whether any handlers are
+ * @return  Function that returns whether any handlers are
  *                   attached to a particular hook and optional namespace.
  */
 function createHasHook(hooks, storeKey) {
@@ -1795,16 +1196,20 @@ function createHasHook(hooks, storeKey) {
 
 ;// ./node_modules/@wordpress/hooks/build-module/createRunHook.js
 /**
+ * Internal dependencies
+ */
+
+/**
  * Returns a function which, when invoked, will execute all callbacks
  * registered to a hook of the specified type, optionally returning the final
  * value of the call chain.
  *
- * @param {import('.').Hooks}    hooks          Hooks instance.
- * @param {import('.').StoreKey} storeKey
- * @param {boolean}              returnFirstArg Whether each hook callback is expected to return its first argument.
- * @param {boolean}              async          Whether the hook callback should be run asynchronously
+ * @param hooks          Hooks instance.
+ * @param storeKey
+ * @param returnFirstArg Whether each hook callback is expected to return its first argument.
+ * @param async          Whether the hook callback should be run asynchronously
  *
- * @return {(hookName:string, ...args: unknown[]) => undefined|unknown} Function that runs hook callbacks.
+ * @return Function that runs hook callbacks.
  */
 function createRunHook(hooks, storeKey, returnFirstArg, async) {
   return function runHook(hookName, ...args) {
@@ -1869,14 +1274,18 @@ function createRunHook(hooks, storeKey, returnFirstArg, async) {
 
 ;// ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
 /**
+ * Internal dependencies
+ */
+
+/**
  * Returns a function which, when invoked, will return the name of the
  * currently running hook, or `null` if no hook of the given type is currently
  * running.
  *
- * @param {import('.').Hooks}    hooks    Hooks instance.
- * @param {import('.').StoreKey} storeKey
+ * @param hooks    Hooks instance.
+ * @param storeKey
  *
- * @return {() => string | null} Function that returns the current hook name or null.
+ * @return Function that returns the current hook name or null.
  */
 function createCurrentHook(hooks, storeKey) {
   return function currentHook() {
@@ -1890,23 +1299,22 @@ function createCurrentHook(hooks, storeKey) {
 
 ;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
 /**
- * @callback DoingHook
+ * Internal dependencies
+ */
+
+/**
  * Returns whether a hook is currently being executed.
  *
- * @param {string} [hookName] The name of the hook to check for.  If
- *                            omitted, will check for any hook being executed.
- *
- * @return {boolean} Whether the hook is being executed.
  */
 
 /**
  * Returns a function which, when invoked, will return whether a hook is
  * currently being executed.
  *
- * @param {import('.').Hooks}    hooks    Hooks instance.
- * @param {import('.').StoreKey} storeKey
+ * @param hooks    Hooks instance.
+ * @param storeKey
  *
- * @return {DoingHook} Function that returns whether a hook is currently
+ * @return Function that returns whether a hook is currently
  *                     being executed.
  */
 function createDoingHook(hooks, storeKey) {
@@ -1931,23 +1339,19 @@ function createDoingHook(hooks, storeKey) {
 
 
 /**
- * @callback DidHook
  *
  * Returns the number of times an action has been fired.
  *
- * @param {string} hookName The hook name to check.
- *
- * @return {number | undefined} The number of times the hook has run.
  */
 
 /**
  * Returns a function which, when invoked, will return the number of times a
  * hook has been called.
  *
- * @param {import('.').Hooks}    hooks    Hooks instance.
- * @param {import('.').StoreKey} storeKey
+ * @param hooks    Hooks instance.
+ * @param storeKey
  *
- * @return {DidHook} Function that returns a hook's call count.
+ * @return  Function that returns a hook's call count.
  */
 function createDidHook(hooks, storeKey) {
   return function didHook(hookName) {
@@ -1971,7 +1375,6 @@ function createDidHook(hooks, storeKey) {
 
 
 
-
 /**
  * Internal class for constructing hooks. Use `createHooks()` function
  *
@@ -1981,11 +1384,8 @@ function createDidHook(hooks, storeKey) {
  */
 class _Hooks {
   constructor() {
-    /** @type {import('.').Store} actions */
     this.actions = Object.create(null);
     this.actions.__current = new Set();
-
-    /** @type {import('.').Store} filters */
     this.filters = Object.create(null);
     this.filters.__current = new Set();
     this.addAction = build_module_createAddHook(this, 'actions');
@@ -2008,13 +1408,10 @@ class _Hooks {
     this.didFilter = build_module_createDidHook(this, 'filters');
   }
 }
-
-/** @typedef {_Hooks} Hooks */
-
 /**
  * Returns an instance of the hooks object.
  *
- * @return {Hooks} A Hooks instance.
+ * @return A Hooks instance.
  */
 function createHooks() {
   return new _Hooks();
@@ -2026,39 +1423,6 @@ function createHooks() {
  * Internal dependencies
  */
 
-
-/** @typedef {(...args: any[])=>any} Callback */
-
-/**
- * @typedef Handler
- * @property {Callback} callback  The callback
- * @property {string}   namespace The namespace
- * @property {number}   priority  The namespace
- */
-
-/**
- * @typedef Hook
- * @property {Handler[]} handlers Array of handlers
- * @property {number}    runs     Run counter
- */
-
-/**
- * @typedef Current
- * @property {string} name         Hook name
- * @property {number} currentIndex The index
- */
-
-/**
- * @typedef {Record<string, Hook> & {__current: Set<Current>}} Store
- */
-
-/**
- * @typedef {'actions' | 'filters'} StoreKey
- */
-
-/**
- * @typedef {import('./createHooks').Hooks} Hooks
- */
 
 const defaultHooks = build_module_createHooks();
 const {
@@ -2145,9 +1509,6 @@ const {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
-!function() {
-"use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
@@ -2156,17 +1517,19 @@ __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* binding */ api_fetch_build_module; }
 });
 
-// EXTERNAL MODULE: ./node_modules/@wordpress/i18n/build-module/index.js + 9 modules
-var build_module = __webpack_require__(257);
+// EXTERNAL MODULE: ./node_modules/@wordpress/i18n/build-module/index.js + 7 modules
+var build_module = __webpack_require__(309);
 ;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/nonce.js
 /**
- * @param {string} nonce
- * @return {import('../types').APIFetchMiddleware & { nonce: string }} A middleware to enhance a request with a nonce.
+ * Internal dependencies
+ */
+
+/**
+ * @param nonce
+ *
+ * @return  A middleware to enhance a request with a nonce.
  */
 function createNonceMiddleware(nonce) {
-  /**
-   * @type {import('../types').APIFetchMiddleware & { nonce: string }}
-   */
   const middleware = (options, next) => {
     const {
       headers = {}
@@ -2194,8 +1557,9 @@ function createNonceMiddleware(nonce) {
 
 ;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/namespace-endpoint.js
 /**
- * @type {import('../types').APIFetchMiddleware}
+ * Internal dependencies
  */
+
 const namespaceAndEndpointMiddleware = (options, next) => {
   let path = options.path;
   let namespaceTrimmed, endpointTrimmed;
@@ -2223,9 +1587,10 @@ const namespaceAndEndpointMiddleware = (options, next) => {
  */
 
 
+
 /**
- * @param {string} rootURL
- * @return {import('../types').APIFetchMiddleware} Root URL middleware.
+ * @param rootURL
+ * @return  Root URL middleware.
  */
 const createRootURLMiddleware = rootURL => (options, next) => {
   return namespace_endpoint(options, optionsWithPath => {
@@ -2260,9 +1625,9 @@ const createRootURLMiddleware = rootURL => (options, next) => {
  * will be treated as identical, regardless of order they appear in the original
  * text.
  *
- * @param {string} path Original path.
+ * @param path Original path.
  *
- * @return {string} Normalized path.
+ * @return Normalized path.
  */
 function normalizePath(path) {
   const split = path.split('?');
@@ -2295,9 +1660,9 @@ function normalizePath(path) {
  * Safely decodes a URI component with `decodeURIComponent`. Returns the URI component unmodified if
  * `decodeURIComponent` throws an error.
  *
- * @param {string} uriComponent URI component to decode.
+ * @param uriComponent URI component to decode.
  *
- * @return {string} Decoded URI component if possible.
+ * @return Decoded URI component if possible.
  */
 function safeDecodeURIComponent(uriComponent) {
   try {
@@ -2312,14 +1677,14 @@ function safeDecodeURIComponent(uriComponent) {
 /**
  * Returns the query string part of the URL.
  *
- * @param {string} url The full URL.
+ * @param url The full URL.
  *
  * @example
  * ```js
  * const queryString = getQueryString( 'http://localhost:8080/this/is/a/test?query=true#fragment' ); // 'query=true'
  * ```
  *
- * @return {string|void} The query string part of the URL.
+ * @return The query string part of the URL.
  */
 function getQueryString(url) {
   let query;
@@ -2337,20 +1702,13 @@ function getQueryString(url) {
  */
 
 
-
-/** @typedef {import('./get-query-arg').QueryArgParsed} QueryArgParsed */
-
-/**
- * @typedef {Record<string,QueryArgParsed>} QueryArgs
- */
-
 /**
  * Sets a value in object deeply by a given array of path segments. Mutates the
  * object reference.
  *
- * @param {Record<string,*>} object Object in which to assign.
- * @param {string[]}         path   Path segment at which to set value.
- * @param {*}                value  Value to set.
+ * @param object Object in which to assign.
+ * @param path   Path segment at which to set value.
+ * @param value  Value to set.
  */
 function setPath(object, path, value) {
   const length = path.length;
@@ -2390,7 +1748,7 @@ function setPath(object, path, value) {
  * Returns an object of query arguments of the given URL. If the given URL is
  * invalid or has no querystring, an empty object is returned.
  *
- * @param {string} url URL.
+ * @param url URL.
  *
  * @example
  * ```js
@@ -2398,7 +1756,7 @@ function setPath(object, path, value) {
  * // { "foo": "bar", "bar": "baz" }
  * ```
  *
- * @return {QueryArgs} Query args object.
+ * @return Query args object.
  */
 function getQueryArgs(url) {
   return (getQueryString(url) || ''
@@ -2440,9 +1798,9 @@ function getQueryArgs(url) {
  * // "simple=is%20ok&arrays%5B0%5D=are&arrays%5B1%5D=fine&arrays%5B2%5D=too&objects%5BevenNested%5D%5Bok%5D=yes"
  * ```
  *
- * @param {Record<string,*>} data Data to encode.
+ * @param data Data to encode.
  *
- * @return {string} Query string.
+ * @return Query string.
  */
 function buildQueryString(data) {
   let string = '';
@@ -2466,7 +1824,7 @@ function buildQueryString(data) {
       if (value === null) {
         value = '';
       }
-      string += '&' + [key, value].map(encodeURIComponent).join('=');
+      string += '&' + [key, String(value)].map(encodeURIComponent).join('=');
     }
   }
 
@@ -2480,7 +1838,7 @@ function buildQueryString(data) {
 /**
  * Returns the fragment part of the URL.
  *
- * @param {string} url The full URL
+ * @param url The full URL
  *
  * @example
  * ```js
@@ -2488,7 +1846,7 @@ function buildQueryString(data) {
  * const fragment2 = getFragment( 'https://wordpress.org#another-fragment?query=true' ); // '#another-fragment'
  * ```
  *
- * @return {string|void} The fragment part of the URL.
+ * @return The fragment part of the URL.
  */
 function getFragment(url) {
   const matches = /^\S+?(#[^\s\?]*)/.exec(url);
@@ -2510,16 +1868,16 @@ function getFragment(url) {
  * includes query arguments, the arguments are merged with (and take precedent
  * over) the existing set.
  *
- * @param {string} [url=''] URL to which arguments should be appended. If omitted,
- *                          only the resulting querystring is returned.
- * @param {Object} [args]   Query arguments to apply to URL.
+ * @param url  URL to which arguments should be appended. If omitted,
+ *             only the resulting querystring is returned.
+ * @param args Query arguments to apply to URL.
  *
  * @example
  * ```js
  * const newURL = addQueryArgs( 'https://google.com', { q: 'test' } ); // https://google.com/?q=test
  * ```
  *
- * @return {string} URL with arguments applied.
+ * @return URL with arguments applied.
  */
 function addQueryArgs(url = '', args) {
   // If no arguments are to be appended, return original URL.
@@ -2548,8 +1906,12 @@ function addQueryArgs(url = '', args) {
 
 
 /**
- * @param {Record<string, any>} preloadedData
- * @return {import('../types').APIFetchMiddleware} Preloading middleware.
+ * Internal dependencies
+ */
+
+/**
+ * @param preloadedData
+ * @return Preloading middleware.
  */
 function createPreloadingMiddleware(preloadedData) {
   const cache = Object.fromEntries(Object.entries(preloadedData).map(([path, data]) => [normalizePath(path), data]));
@@ -2557,7 +1919,6 @@ function createPreloadingMiddleware(preloadedData) {
     const {
       parse = true
     } = options;
-    /** @type {string | void} */
     let rawPath = options.path;
     if (!rawPath && options.url) {
       const {
@@ -2593,9 +1954,9 @@ function createPreloadingMiddleware(preloadedData) {
 /**
  * This is a helper function that sends a success response.
  *
- * @param {Record<string, any>} responseData
- * @param {boolean}             parse
- * @return {Promise<any>} Promise with the response.
+ * @param responseData
+ * @param parse
+ * @return Promise with the response.
  */
 function prepareResponse(responseData, parse) {
   if (parse) {
@@ -2611,7 +1972,7 @@ function prepareResponse(responseData, parse) {
     // See: https://github.com/WordPress/gutenberg/issues/67358#issuecomment-2621163926.
     Object.entries(responseData.headers).forEach(([key, value]) => {
       if (key.toLowerCase() === 'link') {
-        responseData.headers[key] = value.replace(/<([^>]+)>/, (/** @type {any} */_, /** @type {string} */url) => `<${encodeURI(url)}>`);
+        responseData.headers[key] = value.replace(/<([^>]+)>/, (_, url) => `<${encodeURI(url)}>`);
       }
     });
     return Promise.resolve(parse ? responseData.body : new window.Response(JSON.stringify(responseData.body), {
@@ -2633,13 +1994,12 @@ function prepareResponse(responseData, parse) {
  * Internal dependencies
  */
 
-
 /**
  * Apply query arguments to both URL and Path, whichever is present.
  *
- * @param {import('../types').APIFetchOptions} props
- * @param {Record<string, string | number>}    queryArgs
- * @return {import('../types').APIFetchOptions} The request with the modified query args
+ * @param {APIFetchOptions}                   props     The request options
+ * @param {Record< string, string | number >} queryArgs
+ * @return  The request with the modified query args
  */
 const modifyQuery = ({
   path,
@@ -2654,14 +2014,14 @@ const modifyQuery = ({
 /**
  * Duplicates parsing functionality from apiFetch.
  *
- * @param {Response} response
- * @return {Promise<any>} Parsed response json.
+ * @param response
+ * @return Parsed response json.
  */
 const parseResponse = response => response.json ? response.json() : Promise.reject(response);
 
 /**
- * @param {string | null} linkHeader
- * @return {{ next?: string }} The parsed link header.
+ * @param linkHeader
+ * @return The parsed link header.
  */
 const parseLinkHeader = linkHeader => {
   if (!linkHeader) {
@@ -2674,8 +2034,8 @@ const parseLinkHeader = linkHeader => {
 };
 
 /**
- * @param {Response} response
- * @return {string | undefined} The next page URL.
+ * @param response
+ * @return  The next page URL.
  */
 const getNextPageUrl = response => {
   const {
@@ -2685,8 +2045,8 @@ const getNextPageUrl = response => {
 };
 
 /**
- * @param {import('../types').APIFetchOptions} options
- * @return {boolean} True if the request contains an unbounded query.
+ * @param options
+ * @return True if the request contains an unbounded query.
  */
 const requestContainsUnboundedQuery = options => {
   const pathIsUnbounded = !!options.path && options.path.indexOf('per_page=-1') !== -1;
@@ -2698,8 +2058,8 @@ const requestContainsUnboundedQuery = options => {
  * The REST API enforces an upper limit on the per_page option. To handle large
  * collections, apiFetch consumers can pass `per_page=-1`; this middleware will
  * then recursively assemble a full response array from all available pages.
- *
- * @type {import('../types').APIFetchMiddleware}
+ * @param options
+ * @param next
  */
 const fetchAllMiddleware = async (options, next) => {
   if (options.parse === false) {
@@ -2731,7 +2091,7 @@ const fetchAllMiddleware = async (options, next) => {
   }
 
   // Iteratively fetch all remaining pages until no "next" header is found.
-  let mergedResults = /** @type {any[]} */[].concat(results);
+  let mergedResults = [].concat(results);
   while (nextPage) {
     const nextResponse = await api_fetch_build_module({
       ...options,
@@ -2751,9 +2111,11 @@ const fetchAllMiddleware = async (options, next) => {
 
 ;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/http-v1.js
 /**
+ * Internal dependencies
+ */
+
+/**
  * Set of HTTP methods which are eligible to be overridden.
- *
- * @type {Set<string>}
  */
 const OVERRIDE_METHODS = new Set(['PATCH', 'PUT', 'DELETE']);
 
@@ -2764,8 +2126,6 @@ const OVERRIDE_METHODS = new Set(['PATCH', 'PUT', 'DELETE']);
  * is `GET`."
  *
  * @see  https://fetch.spec.whatwg.org/#requests
- *
- * @type {string}
  */
 const DEFAULT_METHOD = 'GET';
 
@@ -2773,7 +2133,8 @@ const DEFAULT_METHOD = 'GET';
  * API Fetch middleware which overrides the request method for HTTP v1
  * compatibility leveraging the REST API X-HTTP-Method-Override header.
  *
- * @type {import('../types').APIFetchMiddleware}
+ * @param options
+ * @param next
  */
 const httpV1Middleware = (options, next) => {
   const {
@@ -2799,27 +2160,18 @@ const httpV1Middleware = (options, next) => {
  * Internal dependencies
  */
 
-
-/**
- * @typedef {{[key: string]: QueryArgParsed}} QueryArgObject
- */
-
-/**
- * @typedef {string|string[]|QueryArgObject} QueryArgParsed
- */
-
 /**
  * Returns a single query argument of the url
  *
- * @param {string} url URL.
- * @param {string} arg Query arg name.
+ * @param url URL.
+ * @param arg Query arg name.
  *
  * @example
  * ```js
  * const foo = getQueryArg( 'https://wordpress.org?foo=bar&bar=baz', 'foo' ); // bar
  * ```
  *
- * @return {QueryArgParsed|void} Query arg value.
+ * @return Query arg value.
  */
 function getQueryArg(url, arg) {
   return getQueryArgs(url)[arg];
@@ -2834,15 +2186,15 @@ function getQueryArg(url, arg) {
 /**
  * Determines whether the URL contains a given query arg.
  *
- * @param {string} url URL.
- * @param {string} arg Query arg name.
+ * @param url URL.
+ * @param arg Query arg name.
  *
  * @example
  * ```js
  * const hasBar = hasQueryArg( 'https://wordpress.org?foo=bar&bar=baz', 'bar' ); // true
  * ```
  *
- * @return {boolean} Whether or not the URL contains the query arg.
+ * @return Whether or not the URL contains the query arg.
  */
 function hasQueryArg(url, arg) {
   return getQueryArg(url, arg) !== undefined;
@@ -2855,8 +2207,9 @@ function hasQueryArg(url, arg) {
 
 
 /**
- * @type {import('../types').APIFetchMiddleware}
+ * Internal dependencies
  */
+
 const userLocaleMiddleware = (options, next) => {
   if (typeof options.url === 'string' && !hasQueryArg(options.url, '_locale')) {
     options.url = addQueryArgs(options.url, {
@@ -2879,73 +2232,55 @@ const userLocaleMiddleware = (options, next) => {
 
 
 /**
- * Parses the apiFetch response.
- *
- * @param {Response} response
- * @param {boolean}  shouldParseResponse
- *
- * @return {Promise<any> | null | Response} Parsed response.
- */
-const response_parseResponse = (response, shouldParseResponse = true) => {
-  if (shouldParseResponse) {
-    if (response.status === 204) {
-      return null;
-    }
-    return response.json ? response.json() : Promise.reject(response);
-  }
-  return response;
-};
-
-/**
  * Calls the `json` function on the Response, throwing an error if the response
  * doesn't have a json function or if parsing the json itself fails.
  *
- * @param {Response} response
- * @return {Promise<any>} Parsed response.
+ * @param response
+ * @return Parsed response.
  */
-const parseJsonAndNormalizeError = response => {
-  const invalidJsonError = {
-    code: 'invalid_json',
-    message: (0,build_module.__)('The response is not a valid JSON response.')
-  };
-  if (!response || !response.json) {
-    throw invalidJsonError;
+async function parseJsonAndNormalizeError(response) {
+  try {
+    return await response.json();
+  } catch {
+    throw {
+      code: 'invalid_json',
+      message: (0,build_module.__)('The response is not a valid JSON response.')
+    };
   }
-  return response.json().catch(() => {
-    throw invalidJsonError;
-  });
-};
+}
 
 /**
  * Parses the apiFetch response properly and normalize response errors.
  *
- * @param {Response} response
- * @param {boolean}  shouldParseResponse
+ * @param response
+ * @param shouldParseResponse
  *
- * @return {Promise<any>} Parsed response.
+ * @return Parsed response.
  */
-const parseResponseAndNormalizeError = (response, shouldParseResponse = true) => {
-  return Promise.resolve(response_parseResponse(response, shouldParseResponse)).catch(res => parseAndThrowError(res, shouldParseResponse));
-};
+async function parseResponseAndNormalizeError(response, shouldParseResponse = true) {
+  if (!shouldParseResponse) {
+    return response;
+  }
+  if (response.status === 204) {
+    return null;
+  }
+  return await parseJsonAndNormalizeError(response);
+}
 
 /**
  * Parses a response, throwing an error if parsing the response fails.
  *
- * @param {Response} response
- * @param {boolean}  shouldParseResponse
- * @return {Promise<any>} Parsed response.
+ * @param response
+ * @param shouldParseResponse
+ * @return Never returns, always throws.
  */
-function parseAndThrowError(response, shouldParseResponse = true) {
+async function parseAndThrowError(response, shouldParseResponse = true) {
   if (!shouldParseResponse) {
     throw response;
   }
-  return parseJsonAndNormalizeError(response).then(error => {
-    const unknownError = {
-      code: 'unknown_error',
-      message: (0,build_module.__)('An unknown error occurred.')
-    };
-    throw error || unknownError;
-  });
+
+  // Parse the response JSON and throw it as an error.
+  throw await parseJsonAndNormalizeError(response);
 }
 
 ;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/media-upload.js
@@ -2958,10 +2293,9 @@ function parseAndThrowError(response, shouldParseResponse = true) {
  * Internal dependencies
  */
 
-
 /**
- * @param {import('../types').APIFetchOptions} options
- * @return {boolean} True if the request is for media upload.
+ * @param options
+ * @return True if the request is for media upload.
  */
 function isMediaUploadRequest(options) {
   const isCreateMethod = !!options.method && options.method === 'POST';
@@ -2971,8 +2305,8 @@ function isMediaUploadRequest(options) {
 
 /**
  * Middleware handling media upload failures and retries.
- *
- * @type {import('../types').APIFetchMiddleware}
+ * @param options
+ * @param next
  */
 const mediaUploadMiddleware = (options, next) => {
   if (!isMediaUploadRequest(options)) {
@@ -2982,8 +2316,8 @@ const mediaUploadMiddleware = (options, next) => {
   const maxRetries = 5;
 
   /**
-   * @param {string} attachmentId
-   * @return {Promise<any>} Processed post response.
+   * @param attachmentId
+   * @return Processed post response.
    */
   const postProcess = attachmentId => {
     retries++;
@@ -3010,7 +2344,7 @@ const mediaUploadMiddleware = (options, next) => {
     parse: false
   }).catch(response => {
     // `response` could actually be an error thrown by `defaultFetchHandler`.
-    if (!response.headers) {
+    if (!(response instanceof globalThis.Response)) {
       return Promise.reject(response);
     }
     const attachmentId = response.headers.get('x-wp-upload-attachment-id');
@@ -3040,15 +2374,15 @@ const mediaUploadMiddleware = (options, next) => {
 /**
  * Removes arguments from the query string of the url
  *
- * @param {string}    url  URL.
- * @param {...string} args Query Args.
+ * @param url  URL.
+ * @param args Query Args.
  *
  * @example
  * ```js
  * const newUrl = removeQueryArgs( 'https://wordpress.org?foo=bar&bar=baz&baz=foobar', 'foo', 'bar' ); // https://wordpress.org?baz=foobar
  * ```
  *
- * @return {string} Updated URL.
+ * @return Updated URL.
  */
 function removeQueryArgs(url, ...args) {
   const fragment = url.replace(/^[^#]*/, '');
@@ -3070,6 +2404,9 @@ function removeQueryArgs(url, ...args) {
  * WordPress dependencies
  */
 
+/**
+ * Internal dependencies
+ */
 
 /**
  * This appends a `wp_theme_preview` parameter to the REST API request URL if
@@ -3078,8 +2415,8 @@ function removeQueryArgs(url, ...args) {
  * If the REST API request URL has contained the `wp_theme_preview` parameter as `''`,
  * then bypass this middleware.
  *
- * @param {Record<string, any>} themePath
- * @return {import('../types').APIFetchMiddleware} Preloading middleware.
+ * @param themePath
+ * @return  Preloading middleware.
  */
 const createThemePreviewMiddleware = themePath => (options, next) => {
   if (typeof options.url === 'string') {
@@ -3125,12 +2462,9 @@ const createThemePreviewMiddleware = themePath => (options, next) => {
 
 
 
-
 /**
  * Default set of header values which should be sent with every request unless
  * explicitly provided through apiFetch options.
- *
- * @type {Record<string, string>}
  */
 const DEFAULT_HEADERS = {
   // The backend uses the Accept header as a condition for considering an
@@ -3143,49 +2477,20 @@ const DEFAULT_HEADERS = {
 /**
  * Default set of fetch option values which should be sent with every request
  * unless explicitly provided through apiFetch options.
- *
- * @type {Object}
  */
 const DEFAULT_OPTIONS = {
   credentials: 'include'
 };
-
-/** @typedef {import('./types').APIFetchMiddleware} APIFetchMiddleware */
-/** @typedef {import('./types').APIFetchOptions} APIFetchOptions */
-
-/**
- * @type {import('./types').APIFetchMiddleware[]}
- */
 const middlewares = [user_locale, namespace_endpoint, http_v1, fetch_all_middleware];
 
 /**
  * Register a middleware
  *
- * @param {import('./types').APIFetchMiddleware} middleware
+ * @param middleware
  */
 function registerMiddleware(middleware) {
   middlewares.unshift(middleware);
 }
-
-/**
- * Checks the status of a response, throwing the Response as an error if
- * it is outside the 200 range.
- *
- * @param {Response} response
- * @return {Response} The response if the status is in the 200 range.
- */
-const checkStatus = response => {
-  if (response.status >= 200 && response.status < 300) {
-    return response;
-  }
-  throw response;
-};
-
-/** @typedef {(options: import('./types').APIFetchOptions) => Promise<any>} FetchHandler*/
-
-/**
- * @type {FetchHandler}
- */
 const defaultFetchHandler = nextOptions => {
   const {
     url,
@@ -3210,7 +2515,7 @@ const defaultFetchHandler = nextOptions => {
     body = JSON.stringify(data);
     headers['Content-Type'] = 'application/json';
   }
-  const responsePromise = window.fetch(
+  const responsePromise = globalThis.fetch(
   // Fall back to explicitly passing `window.location` which is the behavior if `undefined` is passed.
   url || path || window.location.href, {
     ...DEFAULT_OPTIONS,
@@ -3218,46 +2523,59 @@ const defaultFetchHandler = nextOptions => {
     body,
     headers
   });
-  return responsePromise.then(value => Promise.resolve(value).then(checkStatus).catch(response => parseAndThrowError(response, parse)).then(response => parseResponseAndNormalizeError(response, parse)), err => {
+  return responsePromise.then(response => {
+    // If the response is not 2xx, still parse the response body as JSON
+    // but throw the JSON as error.
+    if (!response.ok) {
+      return parseAndThrowError(response, parse);
+    }
+    return parseResponseAndNormalizeError(response, parse);
+  }, err => {
     // Re-throw AbortError for the users to handle it themselves.
     if (err && err.name === 'AbortError') {
       throw err;
     }
 
-    // Otherwise, there is most likely no network connection.
-    // Unfortunately the message might depend on the browser.
+    // If the browser reports being offline, we'll just assume that
+    // this is why the request failed.
+    if (!globalThis.navigator.onLine) {
+      throw {
+        code: 'offline_error',
+        message: (0,build_module.__)('Unable to connect. Please check your Internet connection.')
+      };
+    }
+
+    // Hard to diagnose further due to how Window.fetch reports errors.
     throw {
       code: 'fetch_error',
-      message: (0,build_module.__)('You are probably offline.')
+      message: (0,build_module.__)('Could not get a valid response from the server.')
     };
   });
 };
-
-/** @type {FetchHandler} */
 let fetchHandler = defaultFetchHandler;
 
 /**
  * Defines a custom fetch handler for making the requests that will override
  * the default one using window.fetch
  *
- * @param {FetchHandler} newFetchHandler The new fetch handler
+ * @param newFetchHandler The new fetch handler
  */
 function setFetchHandler(newFetchHandler) {
   fetchHandler = newFetchHandler;
 }
-
 /**
- * @template T
- * @param {import('./types').APIFetchOptions} options
- * @return {Promise<T>} A promise representing the request processed via the registered middlewares.
+ * Fetch
+ *
+ * @param options The options for the fetch.
+ * @return A promise representing the request processed via the registered middlewares.
  */
-function apiFetch(options) {
+const apiFetch = options => {
   // creates a nested function chain that calls all middlewares and finally the `fetchHandler`,
   // converting `middlewares = [ m1, m2, m3 ]` into:
   // ```
   // opts1 => m1( opts1, opts2 => m2( opts2, opts3 => m3( opts3, fetchHandler ) ) );
   // ```
-  const enhancedHandler = middlewares.reduceRight((/** @type {FetchHandler} */next, middleware) => {
+  const enhancedHandler = middlewares.reduceRight((next, middleware) => {
     return workingOptions => middleware(workingOptions, next);
   }, fetchHandler);
   return enhancedHandler(options).catch(error => {
@@ -3266,15 +2584,19 @@ function apiFetch(options) {
     }
 
     // If the nonce is invalid, refresh it and try again.
-    return window
-    // @ts-ignore
-    .fetch(apiFetch.nonceEndpoint).then(checkStatus).then(data => data.text()).then(text => {
-      // @ts-ignore
+    return globalThis.fetch(apiFetch.nonceEndpoint).then(response => {
+      // If the nonce refresh fails, it means we failed to recover from the original
+      // `rest_cookie_invalid_nonce` error and that it's time to finally re-throw it.
+      if (!response.ok) {
+        return Promise.reject(error);
+      }
+      return response.text();
+    }).then(text => {
       apiFetch.nonceMiddleware.nonce = text;
       return apiFetch(options);
     });
   });
-}
+};
 apiFetch.use = registerMiddleware;
 apiFetch.setFetchHandler = setFetchHandler;
 apiFetch.createNonceMiddleware = nonce;
@@ -3285,7 +2607,7 @@ apiFetch.mediaUploadMiddleware = media_upload;
 apiFetch.createThemePreviewMiddleware = theme_preview;
 /* harmony default export */ var api_fetch_build_module = (apiFetch);
 
-}();
+
 (window.wp = window.wp || {}).apiFetch = __webpack_exports__;
 /******/ })()
 ;
