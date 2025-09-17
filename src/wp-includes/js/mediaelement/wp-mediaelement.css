@@ -47,6 +47,10 @@
 	background: transparent;
 }
 
+.mejs-overlay-play {
+	max-width: 100%;
+}
+
 /* Override theme styles that may conflict with controls. */
 .mejs-controls button:hover {
 	border: none;

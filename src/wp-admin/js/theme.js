@@ -40,6 +40,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
+	// Enable legible display of multiple error messages
+	document.querySelectorAll( 'li' ).forEach( function( item ) {
+		var secondError;
+		if ( item.querySelectorAll( '.notice-error' ).length > 1 ) {
+			secondError = item.querySelectorAll( '.notice-error' )[1];
+			item.querySelector( '.notice-error' ).insertAdjacentHTML( 'beforeend', secondError.innerHTML );
+			secondError.remove();
+		}
+	} );
+
 	// Reload the list of themes from wordpress.org using Intersection Observer
 	if ( footer ) {
 		observer = new IntersectionObserver( function( entries ) {
@@ -347,7 +357,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						dialog.querySelector( '.has-update span' ).innerHTML = theme.dataset.update;
 						dialog.querySelector( '.has-update' ).removeAttribute( 'hidden' );
 					} else {
-						dialog.querySelector( '.incompat-update span' ).innerHTML = theme.dataset.update;
 						dialog.querySelector( '.incompat-update' ).removeAttribute( 'hidden' );
 						response = theme.dataset.updateResponse.split( '-' );
 						if ( response[0] !== '1' && response[1] !== '1' ) {
