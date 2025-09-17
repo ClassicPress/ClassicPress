@@ -1844,8 +1844,9 @@ class WP_Posts_List_Table extends WP_List_Table {
 							<?php
 							$taxonomy_name = esc_attr( $taxonomy->name );
 
-							$tags = get_tags(
+							$tags = get_terms(
 								array(
+									'taxonomy'   => $taxonomy_name,
 									'hide_empty' => false,
 									'fields'     => 'names',
 								)
@@ -1857,11 +1858,11 @@ class WP_Posts_List_Table extends WP_List_Table {
 							<label class="inline-edit-tags">
 								<span class="title"><?php echo esc_html( $taxonomy->labels->name ); ?></span>
 								<div id="inline-container" class="inline-container">
-									<textarea data-wp-taxonomy="<?php echo $taxonomy_name; ?>" cols="22" rows="1" name="tax_input[<?php echo esc_attr( $taxonomy->name ); ?>]" class="tax_input_<?php echo esc_attr( $taxonomy->name ); ?>" aria-describedby="inline-edit-<?php echo esc_attr( $taxonomy->name ); ?>-desc"></textarea>
+									<textarea data-wp-taxonomy="<?php echo $taxonomy_name; ?>" cols="22" rows="1" name="tax_input[<?php echo $taxonomy_name; ?>]" class="tax_input_<?php echo $taxonomy_name; ?>" aria-describedby="inline-edit-<?php echo $taxonomy_name; ?>-desc"></textarea>
 								</div>
-								<input id="tags-list" value="<?php echo $tags_string; ?>" hidden>
+								<input id="tags-list-<?php echo $taxonomy_name; ?>" value="<?php echo $tags_string; ?>" hidden>
 							</label>
-							<p class="howto" id="inline-edit-<?php echo esc_attr( $taxonomy->name ); ?>-desc"><?php echo esc_html( $taxonomy->labels->separate_items_with_commas ); ?></p>
+							<p class="howto" id="inline-edit-<?php echo $taxonomy_name; ?>-desc"><?php echo esc_html( $taxonomy->labels->separate_items_with_commas ); ?></p>
 							</div>
 						<?php endif; // current_user_can( 'assign_terms' ) ?>
 

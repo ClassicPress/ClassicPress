@@ -61,7 +61,8 @@ module.exports = function(grunt) {
 				dest: SOURCE_DIR,
 				src: [
 					'wp-admin/css/*.css',
-					'wp-includes/css/*.css'
+					'wp-includes/css/*.css',
+					'wp-includes/js/mediaelement/wp-*.css'
 				]
 			},
 			colors: {
@@ -123,6 +124,21 @@ module.exports = function(grunt) {
 					'!wp-includes/js/dist/vendor/**'
 				]
 			},
+			'mediaelement-js': {
+				expand: true,
+				cwd: SOURCE_DIR,
+				src: [
+					'wp-includes/js/mediaelement/mediaelement-and-player.js',
+					'wp-includes/js/mediaelement/mediaelement-and-player.min.js',
+					'wp-includes/js/mediaelement/mediaelement.js',
+					'wp-includes/js/mediaelement/mediaelement.min.js',
+					'wp-includes/js/mediaelement/mediaelementplayer-legacy.css',
+					'wp-includes/js/mediaelement/mediaelementplayer-legacy.min.css',
+					'wp-includes/js/mediaelement/mediaelementplayer.css',
+					'wp-includes/js/mediaelement/mediaelementplayer.min.css',
+					'wp-includes/js/mediaelement/mejs-controls.svg'
+				]
+			},
 			dynamic: {
 				dot: true,
 				expand: true,
@@ -142,6 +158,8 @@ module.exports = function(grunt) {
 							'**',
 							'!wp-includes/js/media/**',
 							'!**/.{svn,git}/**', // Ignore version control directories.
+							// Exclude raw root certificate files that are combined into ca-bundle.crt.
+							'!wp-includes/certificates/legacy-1024bit.pem',
 							// Exclude plugins unless specifically listed
 							'!wp-content/plugins/**',
 							'wp-content/plugins/index.php',
@@ -224,6 +242,46 @@ module.exports = function(grunt) {
 					{
 						src:  `./node_modules/sortablejs/Sortable.min.js`,
 						dest: `${SOURCE_DIR}wp-includes/js/sortable.min.js`
+					}
+				]
+			},
+			'mediaelement-js': {
+				files: [
+					{
+						src:  `./node_modules/mediaelement/build/mediaelement-and-player.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelement-and-player.js`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelement-and-player.min.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelement-and-player.min.js`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelement.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelement.js`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelement.min.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelement.min.js`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelementplayer-legacy.css`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelementplayer-legacy.css`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelementplayer-legacy.min.css`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelementplayer-legacy.min.css`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelementplayer.css`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelementplayer.css`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelementplayer.min.css`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelementplayer.min.css`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mejs-controls.svg`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mejs-controls.svg`
 					}
 				]
 			},
@@ -797,6 +855,16 @@ module.exports = function(grunt) {
 					`${BUILD_DIR}wp-includes/js/wp-emoji.min.js`
 				],
 				dest: `${BUILD_DIR}wp-includes/js/wp-emoji-release.min.js`
+			},
+			certificates: {
+				options: {
+					separator: '\n\n'
+				},
+				src: [
+					SOURCE_DIR + 'wp-includes/certificates/legacy-1024bit.pem',
+					'vendor/composer/ca-bundle/res/cacert.pem'
+				],
+				dest: SOURCE_DIR + 'wp-includes/certificates/ca-bundle.crt'
 			}
 		},
 		imagemin: {
@@ -1136,6 +1204,36 @@ module.exports = function(grunt) {
 	);
 
 	grunt.registerTask(
+		'certificates:update',
+		'Updates the Composer package responsible for root certificate updates.',
+		function() {
+			var done = this.async();
+			var flags = this.flags;
+			var args = [ 'update' ];
+
+			grunt.util.spawn( {
+				cmd: 'composer',
+				args: args,
+				opts: { stdio: 'inherit' }
+			}, function( error ) {
+				if ( flags.error && error ) {
+					done( false );
+				} else {
+					done( true );
+				}
+			} );
+		}
+	 );
+
+	grunt.registerTask(
+		'certificates:upgrade',
+		[
+			'certificates:update',
+			'concat:certificates'
+		]
+	);
+
+	grunt.registerTask(
 		'copy:script-loader',
 		[
 			'dev:git-version',
@@ -1159,10 +1257,12 @@ module.exports = function(grunt) {
 		[
 			'clean:vendor-js',
 			'clean:package-js',
+			'clean:mediaelement-js',
 			'copy:vendor-js',
 			'webpack:dev',
 			'webpack:min',
-			'usebanner:js'
+			'usebanner:js',
+			'copy:mediaelement-js'
 		]
 	);
 

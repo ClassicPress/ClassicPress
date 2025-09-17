@@ -349,19 +349,19 @@ function list_plugin_updates() {
 		// Get plugin compat for running version of ClassicPress.
 		if ( isset( $plugin_data->update->tested ) && version_compare( $plugin_data->update->tested, $cur_wp_version, '>=' ) ) {
 			$compat  = '<br>' . sprintf( __( 'Potentially compatible with ClassicPress %1$s.' ), $cur_cp_version );
-			$compat .= ' <a href="https://www.classicpress.net/faq/#post-27980">' . __( 'More info.' ) . '</a>';
+			$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
 		} else {
 			$compat  = '<br>' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: Unknown.' ), $cur_cp_version );
-			$compat .= ' <a href="https://www.classicpress.net/faq/#post-27980">' . __( 'More info.' ) . '</a>';
+			$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
 		}
 		// Get plugin compat for updated version of ClassicPress.
 		if ( $core_update_version ) {
 			if ( isset( $plugin_data->update->tested ) && version_compare( $plugin_data->update->tested, $core_update_version, '>=' ) ) {
 				$compat  = '<br>' . sprintf( __( 'Potentially compatible with ClassicPress %1$s.' ), $core_update_version );
-				$compat .= ' <a href="https://www.classicpress.net/faq/#post-27980">' . __( 'More info.' ) . '</a>';
+				$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
 			} else {
 				$compat  = '<br>' . sprintf( __( 'Expected compatibility with ClassicPress %1$s: Unknown.' ), $core_update_version );
-				$compat .= ' <a href="https://www.classicpress.net/faq/#post-27980">' . __( 'More info.' ) . '</a>';
+				$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
 			}
 		}
 
