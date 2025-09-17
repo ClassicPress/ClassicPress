@@ -41,7 +41,7 @@ jobs:
   # - Clone PHP.net if needed for unit tests.
   # - Run PHPUnit Tests.
   test-php:
-    name: "PHP ${{ matrix.php }} on MySQL ${{matrix.mysql}}${{ matrix.memcached && ' with memcached' || '' }}${{ 'xdebug' == matrix.coverage && ' with XDebug' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
+    name: "${{ matrix.multisite && 'Multisite on ' || '' }}PHP ${{ matrix.php }} on MySQL ${{matrix.mysql}}${{ matrix.memcached && ' with memcached' || '' }}${{ 'xdebug' == matrix.coverage && ' with XDebug' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
     permissions:
       contents: read
     runs-on: ubuntu-22.04
@@ -51,42 +51,69 @@ jobs:
       matrix:
         php: [ '8.4', '8.3', '8.2', '8.1', '8.0', '7.4' ]
         mysql: [ '5.7', '8.0' ]
+        multisite: [ false, true ]
         memcached: [ false ]
         coverage: [ none ]
         experimental: [ false ]
+        # Include jobs that test with memcached.
         include:
           - php: '8.0'
             mysql: '5.7'
+            multisite: false
             memcached: true
             coverage: none
             experimental: false
           - php: '8.2'
             mysql: '5.7'
+            multisite: false
             memcached: true
             coverage: none
             experimental: false
           - php: '8.3'
             mysql: '5.7'
+            multisite: false
             memcached: true
             coverage: none
             experimental: false
           - php: '8.0'
             mysql: '8.0'
+            multisite: false
             memcached: true
             coverage: none
             experimental: false
           - php: '8.2'
             mysql: '8.0'
+            multisite: false
+            memcached: true
+            coverage: none
+            experimental: false
+          - php: '8.2'
+            mysql: '8.0'
+            multisite: true
             memcached: true
             coverage: none
             experimental: false
           - php: '8.3'
             mysql: '8.0'
+            multisite: false
             memcached: true
             coverage: none
             experimental: false
           - php: '8.3'
             mysql: '8.0'
+            multisite: true
+            memcached: true
+            coverage: none
+            experimental: false
+          - php: '8.3'
+            mysql: '8.0'
+            multisite: false
+            memcached: false
+            coverage: xdebug
+            experimental: false
+          - php: '8.3'
+            mysql: '8.0'
+            multisite: true
             memcached: false
             coverage: xdebug
             experimental: false
@@ -98,14 +125,14 @@ jobs:
           echo "PHP_FPM_GID=$(id -g)" >> $GITHUB_ENV
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Read .nvmrc
         run: echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
         id: nvmrc
 
       - name: Install NodeJS
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '${{ steps.nvmrc.outputs.NVMRC }}'
 
@@ -226,6 +253,7 @@ jobs:
         uses: niden/actions-memcached@v7
 
       - name: Run PHPUnit default
+        if: ${{ !matrix.multisite }}
         env:
           WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:default
@@ -238,6 +266,7 @@ jobs:
         continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit multisite
+        if: ${{ matrix.multisite }}
         env:
           WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:multisite
@@ -250,6 +279,7 @@ jobs:
         continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit external-http
+        if: ${{ matrix.coverage != 'none' }}
         env:
           WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:external-http

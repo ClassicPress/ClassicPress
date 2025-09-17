@@ -762,7 +762,8 @@ object {
 	text-align: center;
 }
 
-div.wp-playlist-item-length {
+/* Playlist caption in CP 2.5+ */
+li.wp-playlist-item .wp-playlist-item-length {
 	top: 3px;
 }
 
@@ -824,7 +825,6 @@ div.wp-playlist-item-length {
 --------------------------------------------------------------*/
 #masthead {
 	display: flex;
-	align-items: center;
 	justify-content: space-between;
 	margin: 0;
 	padding: 0.75em 0;
@@ -1099,7 +1099,7 @@ img {
 	max-width: 72rem;
 	margin: 0;
 	padding: 0 1em;
-	align-self: start;
+	flex-grow: 1;
 }
 .menu,
 .menu ul {
@@ -1123,6 +1123,9 @@ img {
 	text-transform: none;
 	letter-spacing: 0;
 	margin: 0;
+}
+#primary-menu.menu li a {
+    outline-offset: -1px;
 }
 #primary-menu.menu li a,
 #primary-menu.menu li a:visited {
@@ -1188,7 +1191,6 @@ img {
 
 /* PAGE TITLE */
 #page-title {
-	padding: 4.2em 0 1em;
 	background: #006b81;
 	background: -moz-linear-gradient(
 		-135deg,
@@ -1219,7 +1221,7 @@ img {
 	color: #fff;
 	max-width: 72rem;
 	margin: 0 auto;
-	padding: 0.6em 0;
+	padding: 0.6em 15px;
 }
 
 /* PAGE CONTENT STRUCTURE */
@@ -1242,10 +1244,6 @@ img {
 /* body.ie11 class applied in JS */
 body.ie11 #sidebar {
 	max-width: 27rem;
-}
-header#page-title {
-	min-width: 100%;
-	padding: 0 1em;
 }
 
 /* CONTENT */
@@ -1922,7 +1920,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 }
 
 @media screen and (max-width: 899px) {
-	header#page-title h1 {
+	#page-title h1 {
 		max-width: 600px;
 	}
 	#primary {
@@ -1935,17 +1933,8 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	#primary-menu.menu li.menu-item-has-children ul.sub-menu li a {
 		padding-left: 1.2em;
 	}
-	#masthead .search-form {
-		display: flex;
-		gap: 0.5em;
-	}
-	#masthead .search-field {
-		font-size: 0.9em;
-		width: 100%;
-		max-width: 100%;
-	}
-	#masthead .search-submit {
-		font-size: 0.85em;
+	#primary-menu .search-submit {
+		margin-left: 0.2em;
 	}
 	#main,
 	#sidebar,
@@ -1989,14 +1978,6 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	.announcement {
 		flex-direction: column;
 	}
-	.home-hero {
-		padding-bottom: 2em;
-		flex-direction: column;
-	}
-	.home-hero-image {
-		margin: 0 auto 1em;
-		max-width: 600px;
-	}
 	.twocolumn {
 		display: block;
 	}
@@ -2016,8 +1997,8 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	#primary-menu {
 		display: none;
 		flex-direction: column;
-		margin: 1em 0 0 0;
 		gap: 1em;
+		margin: 1em 0;
 	}
 	.petitions-home,
 	.getinvolved,
@@ -2063,14 +2044,10 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 @media screen and (min-width: 900px) {
 	#inner-header {
 		display: flex;
-		flex-grow: 1;
-		align-items: center;
 		justify-content: space-between;
 		gap: 0.5em;
+		align-items: center;
 		margin: 0 auto;
-	}
-	#page-title h1 {
-		padding: 0.6em 15px;
 	}
 	#primary-menu.menu li {
 		text-transform: uppercase;
@@ -2081,23 +2058,17 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		display: flex;
 		justify-content: space-between;
 		flex-wrap: wrap;
+		gap: 0.2em;
 		padding: 0;
 		margin: 0;
-		gap: 0.2em;
-		line-height: 3.5em;
 	}
 	#primary-menu.menu li a {
-		display: flex;
-		flex-grow: 1;
+		display: block;
 		padding: 0.4em 0.5em;
 	}
 	#primary-menu.menu .sub-menu li a {
 		line-height: 1.4em;
 		padding: 0.55em 0.85em;
-	}
-	#primary-menu.menu ul li {
-		padding: 0;
-		flex-direction: column;
 	}
 	#masthead > div > .get-started {
 		padding: 1em 2em;
@@ -2107,10 +2078,6 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	#primary-menu.menu ul.sub-menu li:last-child a,
 	#primary-menu.menu li.menu-item-has-children ul.sub-menu li:last-child a {
 		border-radius: 0 0 var(--tcpt-border-radius) var(--tcpt-border-radius);
-	}
-	#primary-menu .menu-item-has-children > a::after {
-		margin-left: 0.12em;
-		margin-top: 0.69em;
 	}
 	.nav--toggle-sub ul ul {
 		width: 180px;
