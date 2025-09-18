@@ -406,8 +406,8 @@ table.media .column-title .filename {
 	transition: none;
 }
 
-#the-list tr:last-child td,
-#the-list tr:last-child th {
+#the-list tr:last-of-type td,
+#the-list tr:last-of-type th {
 	border-bottom: none !important;
 	box-shadow: none;
 }
