@@ -281,43 +281,36 @@ if ( isset( $_GET['tab'] ) && ! empty( $_GET['tab'] ) ) {
 	</div>
 
 	<div class="site-health-view-more">
-		<button type="button" class="button site-health-view-passed" aria-expanded="false" aria-controls="health-check-issues-good">
-			<?php _e( 'Passed tests' ); ?>
-			<span class="icon"></span>
-		</button>
-	</div>
-
-	<div class="site-health-issues-wrapper hidden" id="health-check-issues-good">
-		<h3 class="site-health-issue-count-title">
-			<?php
-				/* translators: %s: Number of items with no issues. */
-				printf( _n( '%s item with no issues detected', '%s items with no issues detected', 0 ), '<span class="issue-count">0</span>' );
-			?>
-		</h3>
-
-		<div id="health-check-site-status-good" class="health-check-accordion issues"></div>
+		<details>
+			<summary class="button site-health-view-passed">
+				<?php _e( 'Passed tests' ); ?>
+				<span class="icon"></span>
+			</summary>
+			<div class="site-health-issues-wrapper" id="health-check-issues-good">
+				<h3 class="site-health-issue-count-title">
+					<?php
+						/* translators: %s: Number of items with no issues. */
+						printf( _n( '%s item with no issues detected', '%s items with no issues detected', 0 ), '<span class="issue-count">0</span>' );
+					?>
+				</h3>
+				<div id="health-check-site-status-good" class="health-check-accordion issues"></div>
+			</div>
+		</details>
 	</div>
 </div>
 
-<script id="tmpl-health-check-issue" type="text/template">
-	<h4 class="health-check-accordion-heading">
-		<button aria-expanded="false" class="health-check-accordion-trigger" aria-controls="health-check-accordion-block-{{ data.test }}" type="button">
-			<span class="title">{{ data.label }}</span>
-			<# if ( data.badge ) { #>
-				<span class="badge {{ data.badge.color }}">{{ data.badge.label }}</span>
-			<# } #>
-			<span class="icon"></span>
-		</button>
-	</h4>
-	<div id="health-check-accordion-block-{{ data.test }}" class="health-check-accordion-panel" hidden="hidden">
-		{{{ data.description }}}
-		<# if ( data.actions ) { #>
-			<div class="actions">
-				{{{ data.actions }}}
-			</div>
-		<# } #>
-	</div>
-</script>
+<template id="tmpl-health-check-issue">
+	<details class="health-check-accordion-details">
+		<summary class="health-check-accordion-summary">
+			<h4 class="health-check-accordion-heading">
+				<span class="title"></span>			
+				<span class="badge"></span>
+				<span class="icon"></span>
+			</h4>
+		</summary>
+		<div class="health-check-accordion-panel"></div>
+	</details>
+</template>
 
 	<?php
 }

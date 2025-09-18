@@ -1,22 +1,22 @@
 /**
  * Interactions used by the Site Health modules in WordPress.
  *
+ * @since CP-2.6.0
+ *
  * @output wp-admin/js/site-health.js
  */
 
 /* global ajaxurl, SiteHealth, wp */
 
-jQuery( function( $ ) {
+document.addEventListener( 'DOMContentLoaded', function () {
 
-	var __ = wp.i18n.__,
-		_n = wp.i18n._n,
-		sprintf = wp.i18n.sprintf,
+	var { __, _n, sprintf } = wp.i18n,
 		clipboard = document.querySelector( '.site-health-copy-buttons .copy-button' ),
-		isStatusTab = $( '.health-check-body.health-check-status-tab' ).length,
-		isDebugTab = $( '.health-check-body.health-check-debug-tab' ).length,
-		pathsSizesSection = $( '#health-check-accordion-block-wp-paths-sizes' ),
-		menuCounterWrapper = $( '#adminmenu .site-health-counter' ),
-		menuCounter = $( '#adminmenu .site-health-counter .count' ),
+		isStatusTab = document.querySelectorAll( '.health-check-body.health-check-status-tab' ).length,
+		isDebugTab = document.querySelectorAll( '.health-check-body.health-check-debug-tab' ).length,
+		pathsSizesSection = document.getElementById( 'health-check-accordion-block-wp-paths-sizes' ),
+		menuCounterWrapper = document.querySelector( '#adminmenu .site-health-counter' ),
+		menuCounter = document.querySelector( '#adminmenu .site-health-counter .count' ),
 		successTimeout;
 
 	/*
@@ -27,7 +27,7 @@ jQuery( function( $ ) {
 	 *
 	 * @since CP-2.2.0
 	 */
-	if ( clipboard != null ) {
+	if ( clipboard ) {
 		clipboard.addEventListener( 'click', function() {
 			var copyText = clipboard.dataset.clipboardText,
 				input = document.createElement( 'input' );
@@ -58,120 +58,56 @@ jQuery( function( $ ) {
 		} );
 	}
 
-	// Accordion handling in various areas.
-	$( '.health-check-accordion' ).on( 'click', '.health-check-accordion-trigger', function() {
-		var isExpanded = ( 'true' === $( this ).attr( 'aria-expanded' ) );
-
-		if ( isExpanded ) {
-			$( this ).attr( 'aria-expanded', 'false' );
-			$( '#' + $( this ).attr( 'aria-controls' ) ).attr( 'hidden', true );
-		} else {
-			$( this ).attr( 'aria-expanded', 'true' );
-			$( '#' + $( this ).attr( 'aria-controls' ) ).attr( 'hidden', false );
-		}
-	} );
-
-	// Site Health test handling.
-
-	$( '.site-health-view-passed' ).on( 'click', function() {
-		var goodIssuesWrapper = $( '#health-check-issues-good' );
-
-		goodIssuesWrapper.toggleClass( 'hidden' );
-		$( this ).attr( 'aria-expanded', ! goodIssuesWrapper.hasClass( 'hidden' ) );
-	} );
-
-	/**
-	 * Validates the Site Health test result format.
-	 *
-	 * @since 5.6.0
-	 *
-	 * @param {Object} issue
-	 *
-	 * @return {boolean}
-	 */
 	function validateIssueData( issue ) {
-		// Expected minimum format of a valid SiteHealth test response.
 		var minimumExpected = {
-				test: 'string',
-				label: 'string',
-				description: 'string'
-			},
-			passed = true,
-			key, value, subKey, subValue;
+			test: 'string',
+			label: 'string',
+			description: 'string'
+		};
 
-		// If the issue passed is not an object, return a `false` state early.
-		if ( 'object' !== typeof( issue ) ) {
+		if ( typeof issue !== 'object' ) {
 			return false;
 		}
 
-		// Loop over expected data and match the data types.
-		for ( key in minimumExpected ) {
-			value = minimumExpected[ key ];
-
-			if ( 'object' === typeof( value ) ) {
-				for ( subKey in value ) {
-					subValue = value[ subKey ];
-
-					if ( 'undefined' === typeof( issue[ key ] ) ||
-						'undefined' === typeof( issue[ key ][ subKey ] ) ||
-						subValue !== typeof( issue[ key ][ subKey ] )
-					) {
-						passed = false;
-					}
-				}
-			} else {
-				if ( 'undefined' === typeof( issue[ key ] ) ||
-					value !== typeof( issue[ key ] )
-				) {
-					passed = false;
-				}
+		for ( var key in minimumExpected ) {
+			var expectedType = minimumExpected[key];
+			if ( typeof issue[key] === 'undefined' || typeof issue[key] !== expectedType ) {
+				return false;
 			}
 		}
-
-		return passed;
+		return true;
 	}
 
-	/**
-	 * Appends a new issue to the issue list.
-	 *
-	 * @since 5.2.0
-	 *
-	 * @param {Object} issue The issue data.
-	 */
 	function appendIssue( issue ) {
-		var template = wp.template( 'health-check-issue' ),
-			issueWrapper = $( '#health-check-issues-' + issue.status ),
-			heading,
-			count;
+		var count, actions,
+			heading = '',
+			template = document.getElementById( 'tmpl-health-check-issue' ),
+			clone = template.content.cloneNode( true ),
+			details = clone.querySelector( 'details' ),
+			issueWrapper = document.getElementById( 'health-check-issues-' + issue.status );
 
-		/*
-		 * Validate the issue data format before using it.
-		 * If the output is invalid, discard it.
-		 */
-		if ( ! validateIssueData( issue ) ) {
+		if ( issueWrapper == null || ! validateIssueData( issue ) ) {
 			return false;
 		}
 
-		SiteHealth.site_status.issues[ issue.status ]++;
+		SiteHealth.site_status.issues[issue.status]++;
+		count = SiteHealth.site_status.issues[issue.status];
 
-		count = SiteHealth.site_status.issues[ issue.status ];
-
-		// If no test name is supplied, append a placeholder for markup references.
 		if ( typeof issue.test === 'undefined' ) {
 			issue.test = issue.status + count;
 		}
 
-		if ( 'critical' === issue.status ) {
+		if ( issue.status === 'critical' ) {
 			heading = sprintf(
 				_n( '%s critical issue', '%s critical issues', count ),
 				'<span class="issue-count">' + count + '</span>'
 			);
-		} else if ( 'recommended' === issue.status ) {
+		} else if ( issue.status === 'recommended' ) {
 			heading = sprintf(
 				_n( '%s recommended improvement', '%s recommended improvements', count ),
 				'<span class="issue-count">' + count + '</span>'
 			);
-		} else if ( 'good' === issue.status ) {
+		} else if ( issue.status === 'good' ) {
 			heading = sprintf(
 				_n( '%s item with no issues detected', '%s items with no issues detected', count ),
 				'<span class="issue-count">' + count + '</span>'
@@ -179,293 +115,233 @@ jQuery( function( $ ) {
 		}
 
 		if ( heading ) {
-			$( '.site-health-issue-count-title', issueWrapper ).html( heading );
+			issueWrapper.querySelector( '.site-health-issue-count-title' ).innerHTML = heading;
 		}
 
-		menuCounter.text( SiteHealth.site_status.issues.critical );
+		menuCounter.textContent = SiteHealth.site_status.issues.critical;
 
-		if ( 0 < parseInt( SiteHealth.site_status.issues.critical, 0 ) ) {
-			$( '#health-check-issues-critical' ).removeClass( 'hidden' );
-
-			menuCounterWrapper.removeClass( 'count-0' );
+		if ( parseInt( SiteHealth.site_status.issues.critical, 10 ) > 0 ) {
+			document.getElementById( 'health-check-issues-critical' ).classList.remove( 'hidden' );
+			menuCounterWrapper.classList.remove( 'count-0' );
 		} else {
-			menuCounterWrapper.addClass( 'count-0' );
+			menuCounterWrapper.classList.add( 'count-0' );
 		}
-		if ( 0 < parseInt( SiteHealth.site_status.issues.recommended, 0 ) ) {
-			$( '#health-check-issues-recommended' ).removeClass( 'hidden' );
+		if ( parseInt( SiteHealth.site_status.issues.recommended, 10 ) > 0 ) {
+			document.getElementById( 'health-check-issues-recommended' ).classList.remove( 'hidden' );
 		}
 
-		$( '.issues', '#health-check-issues-' + issue.status ).append( template( issue ) );
+		details.querySelector( '.title' ).textContent = issue.label;
+		if ( issue.badge ) {
+			details.querySelector( '.badge' ).classList.add( issue.badge.color );
+			details.querySelector( '.badge' ).textContent = issue.badge.label;
+		}
+		details.querySelector( '.health-check-accordion-panel' ).innerHTML = issue.description;
+		if ( issue.actions ) {
+			actions = document.createElement( 'span' );
+			actions.className = 'actions';
+			actions.innerHTML = issue.actions;
+			details.querySelector( '.health-check-accordion-panel' ).append ( actions );
+		}
+
+		issueWrapper.querySelector( '.issues' ).append( details );
 	}
 
-	/**
-	 * Updates site health status indicator as asynchronous tests are run and returned.
-	 *
-	 * @since 5.2.0
-	 */
 	function recalculateProgression() {
-		var r, c, pct;
-		var $progress = $( '.site-health-progress' );
-		var $wrapper = $progress.closest( '.site-health-progress-wrapper' );
-		var $progressLabel = $( '.site-health-progress-label', $wrapper );
-		var $circle = $( '.site-health-progress svg #bar' );
-		var totalTests = parseInt( SiteHealth.site_status.issues.good, 0 ) +
-			parseInt( SiteHealth.site_status.issues.recommended, 0 ) +
-			( parseInt( SiteHealth.site_status.issues.critical, 0 ) * 1.5 );
-		var failedTests = ( parseInt( SiteHealth.site_status.issues.recommended, 0 ) * 0.5 ) +
-			( parseInt( SiteHealth.site_status.issues.critical, 0 ) * 1.5 );
-		var val = 100 - Math.ceil( ( failedTests / totalTests ) * 100 );
+		var r, c, pct,
+			progress = document.querySelector( '.site-health-progress' ),
+			wrapper = progress.closest( '.site-health-progress-wrapper' ),
+			progressLabel = wrapper.querySelector( '.site-health-progress-label' ),
+			circle = document.querySelector( '.site-health-progress svg #bar' ),
+			totalTests =
+				parseInt( SiteHealth.site_status.issues.good, 10 ) +
+				parseInt( SiteHealth.site_status.issues.recommended, 10 ) +
+				( parseInt( SiteHealth.site_status.issues.critical, 10 ) * 1.5 ),
+			failedTests =
+				( parseInt( SiteHealth.site_status.issues.recommended, 10 ) * 0.5 ) +
+				( parseInt( SiteHealth.site_status.issues.critical, 10 ) * 1.5 ),
+			val = 100 - Math.ceil( ( failedTests / totalTests ) * 100 );
 
-		if ( 0 === totalTests ) {
-			$progress.addClass( 'hidden' );
+		if ( totalTests === 0 ) {
+			progress.classList.add( 'hidden' );
 			return;
 		}
 
-		$wrapper.removeClass( 'loading' );
-
-		r = $circle.attr( 'r' );
+		wrapper.classList.remove( 'loading' );
+		r = circle.getAttribute( 'r' );
 		c = Math.PI * ( r * 2 );
-
-		if ( 0 > val ) {
-			val = 0;
-		}
-		if ( 100 < val ) {
-			val = 100;
-		}
+		val = Math.max( 0, Math.min( 100, val ) );
 
 		pct = ( ( 100 - val ) / 100 ) * c + 'px';
+		circle.style.strokeDashoffset = pct;
 
-		$circle.css( { strokeDashoffset: pct } );
-
-		if ( 80 <= val && 0 === parseInt( SiteHealth.site_status.issues.critical, 0 ) ) {
-			$wrapper.addClass( 'green' ).removeClass( 'orange' );
-
-			$progressLabel.text( __( 'Good' ) );
+		if ( val >= 80 && parseInt( SiteHealth.site_status.issues.critical, 10 ) === 0 ) {
+			wrapper.classList.add( 'green' );
+			wrapper.classList.remove( 'orange' );
+			progressLabel.textContent = __( 'Good' );
 			wp.a11y.speak( __( 'All site health tests have finished running. Your site is looking good, and the results are now available on the page.' ) );
 		} else {
-			$wrapper.addClass( 'orange' ).removeClass( 'green' );
-
-			$progressLabel.text( __( 'Should be improved' ) );
+			wrapper.classList.add( 'orange' );
+			wrapper.classList.remove( 'green' );
+			progressLabel.textContent = __( 'Should be improved' );
 			wp.a11y.speak( __( 'All site health tests have finished running. There are items that should be addressed, and the results are now available on the page.' ) );
 		}
 
 		if ( isStatusTab ) {
-			$.post(
-				ajaxurl,
-				{
-					'action': 'health-check-site-status-result',
-					'_wpnonce': SiteHealth.nonce.site_status_result,
-					'counts': SiteHealth.site_status.issues
-				}
-			);
+			fetch( ajaxurl, {
+				method: 'POST',
+				body: new URLSearchParams( {
+					action: 'health-check-site-status-result',
+					_wpnonce: SiteHealth.nonce.site_status_result,
+					counts: JSON.stringify( SiteHealth.site_status.issues )
+				} ),
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+			} );
 
-			if ( 100 === val ) {
-				$( '.site-status-all-clear' ).removeClass( 'hide' );
-				$( '.site-status-has-issues' ).addClass( 'hide' );
+			if ( val === 100 ) {
+				document.querySelector( '.site-status-all-clear' ).classList.remove( 'hide' );
+				document.querySelector( '.site-status-has-issues' ).classList.add( 'hide' );
 			}
 		}
 	}
 
-	/**
-	 * Queues the next asynchronous test when we're ready to run it.
-	 *
-	 * @since 5.2.0
-	 */
+	function addFailedSiteHealthCheckNotice( url, description ) {
+		var issue = {
+			status: 'recommended',
+			label: __( 'A test is unavailable' ),
+			badge: { color: 'red', label: __( 'Unavailable' ) },
+			description: '<p>' + url + '</p><p>' + description + '</p>',
+			actions: ''
+		};
+		appendIssue( wp.hooks.applyFilters( 'site_status_test_result', issue ) );
+	}
+
 	function maybeRunNextAsyncTest() {
 		var doCalculation = true;
-
-		if ( 1 <= SiteHealth.site_status.async.length ) {
-			$.each( SiteHealth.site_status.async, function() {
-				var data = {
-					'action': 'health-check-' + this.test.replace( '_', '-' ),
-					'_wpnonce': SiteHealth.nonce.site_status
-				};
-
-				if ( this.completed ) {
-					return true;
+		if ( SiteHealth.site_status.async.length >= 1 ) {
+			SiteHealth.site_status.async.forEach( function( testObj ) {
+				if ( testObj.completed ) {
+					return;
 				}
-
 				doCalculation = false;
+				testObj.completed = true;
 
-				this.completed = true;
-
-				if ( 'undefined' !== typeof( this.has_rest ) && this.has_rest ) {
+				if ( typeof testObj.has_rest !== 'undefined' && testObj.has_rest ) {
 					wp.apiRequest( {
-						url: wp.url.addQueryArgs( this.test, { _locale: 'user' } ),
-						headers: this.headers
-					} )
-						.done( function( response ) {
-							/** This filter is documented in wp-admin/includes/class-wp-site-health.php */
-							appendIssue( wp.hooks.applyFilters( 'site_status_test_result', response ) );
-						} )
-						.fail( function( response ) {
-							var description;
-
-							if ( 'undefined' !== typeof( response.responseJSON ) && 'undefined' !== typeof( response.responseJSON.message ) ) {
-								description = response.responseJSON.message;
-							} else {
-								description = __( 'No details available' );
-							}
-
-							addFailedSiteHealthCheckNotice( this.url, description );
-						} )
-						.always( function() {
-							maybeRunNextAsyncTest();
-						} );
-				} else {
-					$.post(
-						ajaxurl,
-						data
-					).done( function( response ) {
-						/** This filter is documented in wp-admin/includes/class-wp-site-health.php */
-						appendIssue( wp.hooks.applyFilters( 'site_status_test_result', response.data ) );
+						url: wp.url.addQueryArgs( testObj.test, { _locale: 'user' } ),
+						headers: testObj.headers
+					} ).done( function( response ) {
+						appendIssue( wp.hooks.applyFilters( 'site_status_test_result', response ) );
 					} ).fail( function( response ) {
-						var description;
-
-						if ( 'undefined' !== typeof( response.responseJSON ) && 'undefined' !== typeof( response.responseJSON.message ) ) {
-							description = response.responseJSON.message;
-						} else {
-							description = __( 'No details available' );
-						}
-
-						addFailedSiteHealthCheckNotice( this.url, description );
-					} ).always( function() {
-						maybeRunNextAsyncTest();
-					} );
+						var description = ( response.responseJSON && response.responseJSON.message ) || __( 'No details available' );
+						addFailedSiteHealthCheckNotice( testObj.url, description );
+					} ).always( maybeRunNextAsyncTest );
+				} else {
+					fetch( ajaxurl, {
+						method: 'POST',
+						body: new URLSearchParams( {
+							action: 'health-check-' + testObj.test.replace( '_', '-' ),
+							_wpnonce: SiteHealth.nonce.site_status
+						} ),
+						headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+					} ).then( function( r ) {
+						r.json();
+					} ).then( function( data ) {
+						appendIssue( wp.hooks.applyFilters( 'site_status_test_result', data.data ) );
+					} ).catch( function( response ) {
+						var description = ( response.responseJSON && response.responseJSON.message ) || __( 'No details available' );
+						addFailedSiteHealthCheckNotice( testObj.url, description );
+					} ).finally( maybeRunNextAsyncTest );
 				}
-
-				return false;
 			} );
 		}
-
 		if ( doCalculation ) {
 			recalculateProgression();
 		}
 	}
 
-	/**
-	 * Add the details of a failed asynchronous test to the list of test results.
-	 *
-	 * @since 5.6.0
-	 */
-	function addFailedSiteHealthCheckNotice( url, description ) {
-		var issue;
+	function getDirectorySizes() {
+		var timestamp = Date.now(),
+			timeout = setTimeout( function() {
+				wp.a11y.speak( __( 'Please wait...' ) );
+			}, 3000);
 
-		issue = {
-			'status': 'recommended',
-			'label': __( 'A test is unavailable' ),
-			'badge': {
-				'color': 'red',
-				'label': __( 'Unavailable' )
-			},
-			'description': '<p>' + url + '</p><p>' + description + '</p>',
-			'actions': ''
-		};
+		wp.apiRequest({
+			path: '/wp-site-health/v1/directory-sizes'
+		} ).done( function( response ) {
+			updateDirSizes( response || {} );
+		} ).always( function() {
+			var speakDelay,
+				delay = Date.now() - timestamp;
+			if ( document.querySelector( '.health-check-wp-paths-sizes.spinner' ) ) {
+				document.querySelector( '.health-check-wp-paths-sizes.spinner' ).style.visibility = 'hidden';
+			}
+			recalculateProgression();
 
-		/** This filter is documented in wp-admin/includes/class-wp-site-health.php */
-		appendIssue( wp.hooks.applyFilters( 'site_status_test_result', issue ) );
+			if ( delay > 3000 ) {
+				speakDelay = delay > 6000 ? 0 : 6500 - delay;
+				setTimeout( function() {
+					wp.a11y.speak( __( 'All site health tests have finished running.' ) );
+				}, speakDelay );
+			} else {
+				clearTimeout( timeout );
+			}
+
+			document.dispatchEvent( new Event( 'site-health-info-dirsizes-done' ) );
+		} );
 	}
 
-	if ( 'undefined' !== typeof SiteHealth ) {
-		if ( 0 === SiteHealth.site_status.direct.length && 0 === SiteHealth.site_status.async.length ) {
+	function updateDirSizes( data ) {
+		var copyButton = document.querySelector( 'button.button.copy-button' ),
+			clipboardText = copyButton.getAttribute( 'data-clipboard-text' );
+
+		Object.entries( data ).forEach( function( [name, value] ) {
+			var text = value.debug || value.size;
+			if ( typeof text !== 'undefined' ) {
+				clipboardText = clipboardText.replace( name + ': loading...', name + ': ' + text );
+			}
+		} );
+
+		copyButton.setAttribute( 'data-clipboard-text', clipboardText );
+
+		pathsSizesSection.querySelectorAll( 'td[class]' ).forEach( function( td ) {
+			var name = td.getAttribute( 'class' );
+			if ( data.hasOwnProperty( name ) && data[name].size ) {
+				td.textContent = data[name].size;
+			}
+		} );
+	}
+
+	// Init
+	if ( typeof SiteHealth !== 'undefined' ) {
+		if ( SiteHealth.site_status.direct.length === 0 && SiteHealth.site_status.async.length === 0 ) {
 			recalculateProgression();
 		} else {
-			SiteHealth.site_status.issues = {
-				'good': 0,
-				'recommended': 0,
-				'critical': 0
-			};
+			SiteHealth.site_status.issues = { good: 0, recommended: 0, critical: 0 };
 		}
 
-		if ( 0 < SiteHealth.site_status.direct.length ) {
-			$.each( SiteHealth.site_status.direct, function() {
-				appendIssue( this );
-			} );
+		if ( SiteHealth.site_status.direct.length > 0 ) {
+			SiteHealth.site_status.direct.forEach( appendIssue );
 		}
-
-		if ( 0 < SiteHealth.site_status.async.length ) {
+		if ( SiteHealth.site_status.async.length > 0 ) {
 			maybeRunNextAsyncTest();
 		} else {
 			recalculateProgression();
 		}
 	}
 
-	function getDirectorySizes() {
-		var timestamp = ( new Date().getTime() );
-
-		// After 3 seconds announce that we're still waiting for directory sizes.
-		var timeout = window.setTimeout( function() {
-			wp.a11y.speak( __( 'Please wait...' ) );
-		}, 3000 );
-
-		wp.apiRequest( {
-			path: '/wp-site-health/v1/directory-sizes'
-		} ).done( function( response ) {
-			updateDirSizes( response || {} );
-		} ).always( function() {
-			var delay = ( new Date().getTime() ) - timestamp;
-
-			$( '.health-check-wp-paths-sizes.spinner' ).css( 'visibility', 'hidden' );
-			recalculateProgression();
-
-			if ( delay > 3000 ) {
-				/*
-				 * We have announced that we're waiting.
-				 * Announce that we're ready after giving at least 3 seconds
-				 * for the first announcement to be read out, or the two may collide.
-				 */
-				if ( delay > 6000 ) {
-					delay = 0;
-				} else {
-					delay = 6500 - delay;
-				}
-
-				window.setTimeout( function() {
-					wp.a11y.speak( __( 'All site health tests have finished running.' ) );
-				}, delay );
-			} else {
-				// Cancel the announcement.
-				window.clearTimeout( timeout );
-			}
-
-			$( document ).trigger( 'site-health-info-dirsizes-done' );
-		} );
-	}
-
-	function updateDirSizes( data ) {
-		var copyButton = $( 'button.button.copy-button' );
-		var clipboardText = copyButton.attr( 'data-clipboard-text' );
-
-		$.each( data, function( name, value ) {
-			var text = value.debug || value.size;
-
-			if ( typeof text !== 'undefined' ) {
-				clipboardText = clipboardText.replace( name + ': loading...', name + ': ' + text );
-			}
-		} );
-
-		copyButton.attr( 'data-clipboard-text', clipboardText );
-
-		pathsSizesSection.find( 'td[class]' ).each( function( i, element ) {
-			var td = $( element );
-			var name = td.attr( 'class' );
-
-			if ( data.hasOwnProperty( name ) && data[ name ].size ) {
-				td.text( data[ name ].size );
-			}
-		} );
-	}
-
 	if ( isDebugTab ) {
-		if ( pathsSizesSection.length ) {
+		if ( pathsSizesSection ) {
 			getDirectorySizes();
 		} else {
 			recalculateProgression();
 		}
 	}
 
-	// Trigger a class toggle when the extended menu button is clicked.
-	$( '.health-check-offscreen-nav-wrapper' ).on( 'click', function() {
-		$( this ).toggleClass( 'visible' );
+	// Toggle navigation visibility
+	document.querySelectorAll( '.health-check-offscreen-nav-wrapper' ).forEach( function( el ) {
+		el.addEventListener( 'click', function() {
+			el.classList.toggle( 'visible' );
+		} );
 	} );
+
 } );

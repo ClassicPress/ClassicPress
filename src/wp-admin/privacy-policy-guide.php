@@ -77,25 +77,25 @@ wp_admin_notice(
 	<p><?php _e( 'The template contains a suggestion of sections you most likely will need. Under each section heading you will find a short summary of what information you should provide, which will help you to get started. Some sections include suggested policy content, others will have to be completed with information from your theme and plugins.' ); ?></p>
 	<p><?php _e( 'Please edit your privacy policy content, making sure to delete the summaries, and adding any information from your theme and plugins. Once you publish your policy page, remember to add it to your navigation menu.' ); ?></p>
 	<p><?php _e( 'It is your responsibility to write a comprehensive privacy policy, to make sure it reflects all national and international legal requirements on privacy, and to keep your policy current and accurate.' ); ?></p>
-	<div class="privacy-settings-accordion">
-		<h4 class="privacy-settings-accordion-heading">
-			<button aria-expanded="false" class="privacy-settings-accordion-trigger" aria-controls="privacy-settings-accordion-block-privacy-policy-guide" type="button">
+	<details class="privacy-settings-accordion privacy-settings-accordion-details">
+		<summary class="privacy-settings-accordion-summary">
+			<h4 class="privacy-settings-accordion-heading">
 				<span class="title"><?php _e( 'Privacy Policy Guide' ); ?></span>
 				<span class="icon"></span>
-			</button>
-		</h4>
-		<div id="privacy-settings-accordion-block-privacy-policy-guide" class="privacy-settings-accordion-panel" hidden="hidden">
+			</h4>
+		</summary>
+		<div id="privacy-settings-accordion-block-privacy-policy-guide" class="privacy-settings-accordion-panel">
 			<?php
 			$content = WP_Privacy_Policy_Content::get_default_content( true, false );
 			echo $content;
 			?>
 		</div>
-	</div>
+	</details>
 	<hr class="hr-separator">
 	<h3 class="section-title"><?php _e( 'Policies' ); ?></h3>
-	<div class="privacy-settings-accordion wp-privacy-policy-guide">
+	<details class="privacy-settings-accordion wp-privacy-policy-guide privacy-settings-accordion-details">
 		<?php WP_Privacy_Policy_Content::privacy_policy_guide(); ?>
-	</div>
+	</details>
 </div>
 <?php
 
