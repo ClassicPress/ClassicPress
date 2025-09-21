@@ -987,7 +987,7 @@ const hasTranslation = i18n.hasTranslation.bind(i18n);
 
 
 
-//# sourceMappingURL=index.js.map
+
 
 /***/ }),
 

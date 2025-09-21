@@ -1740,7 +1740,7 @@ const hasTranslation = i18n.hasTranslation.bind(i18n);
 
 
 
-//# sourceMappingURL=index.js.map
+
 (window.wp = window.wp || {}).i18n = __webpack_exports__;
 /******/ })()
 ;
