@@ -874,12 +874,12 @@ ul.CodeMirror-hints {
 }
 .widget-modal-container {
 	 display: flex;
-	 margin: -1em;
 }
 .widget-modal-left-sidebar {
 	width: 200px;
 	min-width: 200px;
-	padding: 0.5em 1em;
+	padding: 1em;
+	margin: -1em 0 -1em -1em;
 	background: #f6f7f7;
 	border-right: 1px solid #c3c4c7;
 	-webkit-user-select: none;
