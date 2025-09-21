@@ -45,12 +45,12 @@
     "webpack": "5.101.3"
   },
   "dependencies": {
-    "@wordpress/a11y": "4.30.0",
-    "@wordpress/api-fetch": "7.30.0",
-    "@wordpress/dom-ready": "4.30.0",
-    "@wordpress/hooks": "4.30.0",
-    "@wordpress/i18n": "6.3.0",
-    "@wordpress/url": "4.30.0",
+    "@wordpress/a11y": "4.31.0",
+    "@wordpress/api-fetch": "7.31.0",
+    "@wordpress/dom-ready": "4.31.0",
+    "@wordpress/hooks": "4.31.0",
+    "@wordpress/i18n": "6.4.0",
+    "@wordpress/url": "4.31.0",
     "clipboard": "^2.0.11",
     "lodash": "^4.17.21",
     "mediaelement": "^7.0.7",
