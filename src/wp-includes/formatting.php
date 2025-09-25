@@ -5963,7 +5963,7 @@ function wp_staticize_emoji( $text ) {
 	}
 
 	/** This filter is documented in wp-includes/formatting.php */
-	$cdn_url = apply_filters( 'emoji_url', 'https://twemoji.classicpress.net/14/72x72/' );
+	$cdn_url = apply_filters( 'emoji_url', 'https://twemoji.classicpress.net/16/72x72/' );
 
 	/** This filter is documented in wp-includes/formatting.php */
 	$ext = apply_filters( 'emoji_ext', '.png' );
