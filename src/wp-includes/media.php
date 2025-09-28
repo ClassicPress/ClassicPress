@@ -5317,9 +5317,10 @@ function cp_update_post_attachment_relationship( $post_id, $post_after, $post_be
  * @return string[] The relevant CSS file URLs.
  */
 function wpview_media_sandbox_styles() {
+	$suffix         = SCRIPT_DEBUG ? '' : '.min';
 	$version        = 'ver=' . get_bloginfo( 'version' );
-	$mediaelement   = includes_url( "js/mediaelement/mediaelementplayer-legacy.min.css?$version" );
-	$wpmediaelement = includes_url( "js/mediaelement/wp-mediaelement.css?$version" );
+	$mediaelement   = includes_url( "js/mediaelement/mediaelementplayer-legacy$suffix.css?$version" );
+	$wpmediaelement = includes_url( "js/mediaelement/wp-mediaelement$suffix.css?$version" );
 
 	return array( $mediaelement, $wpmediaelement );
 }

@@ -601,7 +601,7 @@ __webpack_require__.d(__webpack_exports__, {
 /**
  * Determines whether the given string looks like a URL.
  *
- * @param {string} url The string to scrutinise.
+ * @param url The string to scrutinise.
  *
  * @example
  * ```js
@@ -611,7 +611,7 @@ __webpack_require__.d(__webpack_exports__, {
  * @see https://url.spec.whatwg.org/
  * @see https://url.spec.whatwg.org/#valid-url-string
  *
- * @return {boolean} Whether or not it looks like a URL.
+ * @return Whether or not it looks like a URL.
  */
 function isURL(url) {
   // A URL can be considered value if the `URL` constructor is able to parse
@@ -630,14 +630,14 @@ const EMAIL_REGEXP = /^(mailto:)?[a-z0-9._%+-]+@[a-z0-9][a-z0-9.-]*\.[a-z]{2,63}
 /**
  * Determines whether the given string looks like an email.
  *
- * @param {string} email The string to scrutinise.
+ * @param email The string to scrutinise.
  *
  * @example
  * ```js
  * const isEmail = isEmail( 'hello@wordpress.org' ); // true
  * ```
  *
- * @return {boolean} Whether or not it looks like an email.
+ * @return Whether or not it looks like an email.
  */
 function isEmail(email) {
   return EMAIL_REGEXP.test(email);
@@ -649,14 +649,14 @@ const PHONE_REGEXP = /^(tel:)?(\+)?\d{6,15}$/;
 /**
  * Determines whether the given string looks like a phone number.
  *
- * @param {string} phoneNumber The string to scrutinize.
+ * @param phoneNumber The string to scrutinize.
  *
  * @example
  * ```js
  * const isPhoneNumber = isPhoneNumber('+1 (555) 123-4567'); // true
  * ```
  *
- * @return {boolean} Whether or not it looks like a phone number.
+ * @return Whether or not it looks like a phone number.
  */
 function isPhoneNumber(phoneNumber) {
   // Remove any separator from phone number.
@@ -668,7 +668,7 @@ function isPhoneNumber(phoneNumber) {
 /**
  * Returns the protocol part of the URL.
  *
- * @param {string} url The full URL.
+ * @param url The full URL.
  *
  * @example
  * ```js
@@ -676,7 +676,7 @@ function isPhoneNumber(phoneNumber) {
  * const protocol2 = getProtocol( 'https://wordpress.org' ); // 'https:'
  * ```
  *
- * @return {string|void} The protocol part of the URL.
+ * @return  The protocol part of the URL.
  */
 function getProtocol(url) {
   const matches = /^([^\s:]+:)/.exec(url);
@@ -689,7 +689,7 @@ function getProtocol(url) {
 /**
  * Tests if a url protocol is valid.
  *
- * @param {string} protocol The url protocol.
+ * @param protocol The url protocol.
  *
  * @example
  * ```js
@@ -697,7 +697,7 @@ function getProtocol(url) {
  * const isNotValid = isValidProtocol( 'https :' ); // false
  * ```
  *
- * @return {boolean} True if the argument is a valid protocol (e.g. http:, tel:).
+ * @return True if the argument is a valid protocol (e.g. http:, tel:).
  */
 function isValidProtocol(protocol) {
   if (!protocol) {
@@ -710,7 +710,7 @@ function isValidProtocol(protocol) {
 /**
  * Returns the authority part of the URL.
  *
- * @param {string} url The full URL.
+ * @param url The full URL.
  *
  * @example
  * ```js
@@ -718,7 +718,7 @@ function isValidProtocol(protocol) {
  * const authority2 = getAuthority( 'https://localhost:8080/test/' ); // 'localhost:8080'
  * ```
  *
- * @return {string|void} The authority part of the URL.
+ * @return The authority part of the URL.
  */
 function getAuthority(url) {
   const matches = /^[^\/\s:]+:(?:\/\/)?\/?([^\/\s#?]+)[\/#?]{0,1}\S*$/.exec(url);
@@ -731,7 +731,7 @@ function getAuthority(url) {
 /**
  * Checks for invalid characters within the provided authority.
  *
- * @param {string} authority A string containing the URL authority.
+ * @param authority A string containing the URL authority.
  *
  * @example
  * ```js
@@ -739,7 +739,7 @@ function getAuthority(url) {
  * const isNotValid = isValidAuthority( 'wordpress#org' ); // false
  * ```
  *
- * @return {boolean} True if the argument contains a valid authority.
+ * @return True if the argument contains a valid authority.
  */
 function isValidAuthority(authority) {
   if (!authority) {
@@ -752,7 +752,7 @@ function isValidAuthority(authority) {
 /**
  * Returns the path part of the URL.
  *
- * @param {string} url The full URL.
+ * @param url The full URL.
  *
  * @example
  * ```js
@@ -760,7 +760,7 @@ function isValidAuthority(authority) {
  * const path2 = getPath( 'https://wordpress.org/help/faq/' ); // 'help/faq'
  * ```
  *
- * @return {string|void} The path part of the URL.
+ * @return The path part of the URL.
  */
 function getPath(url) {
   const matches = /^[^\/\s:]+:(?:\/\/)?[^\/\s#?]+[\/]([^\s#?]+)[#?]{0,1}\S*$/.exec(url);
@@ -773,7 +773,7 @@ function getPath(url) {
 /**
  * Checks for invalid characters within the provided path.
  *
- * @param {string} path The URL path.
+ * @param path The URL path.
  *
  * @example
  * ```js
@@ -781,7 +781,7 @@ function getPath(url) {
  * const isNotValid = isValidPath( '/invalid?test/path/' ); // false
  * ```
  *
- * @return {boolean} True if the argument contains a valid path
+ * @return True if the argument contains a valid path
  */
 function isValidPath(path) {
   if (!path) {
@@ -795,14 +795,14 @@ function isValidPath(path) {
 /**
  * Returns the query string part of the URL.
  *
- * @param {string} url The full URL.
+ * @param url The full URL.
  *
  * @example
  * ```js
  * const queryString = getQueryString( 'http://localhost:8080/this/is/a/test?query=true#fragment' ); // 'query=true'
  * ```
  *
- * @return {string|void} The query string part of the URL.
+ * @return The query string part of the URL.
  */
 function getQueryString(url) {
   let query;
@@ -835,9 +835,9 @@ function getQueryString(url) {
  * // "simple=is%20ok&arrays%5B0%5D=are&arrays%5B1%5D=fine&arrays%5B2%5D=too&objects%5BevenNested%5D%5Bok%5D=yes"
  * ```
  *
- * @param {Record<string,*>} data Data to encode.
+ * @param data Data to encode.
  *
- * @return {string} Query string.
+ * @return Query string.
  */
 function buildQueryString(data) {
   let string = '';
@@ -861,7 +861,7 @@ function buildQueryString(data) {
       if (value === null) {
         value = '';
       }
-      string += '&' + [key, value].map(encodeURIComponent).join('=');
+      string += '&' + [key, String(value)].map(encodeURIComponent).join('=');
     }
   }
 
@@ -875,7 +875,7 @@ function buildQueryString(data) {
 /**
  * Checks for invalid characters within the provided query string.
  *
- * @param {string} queryString The query string.
+ * @param queryString The query string.
  *
  * @example
  * ```js
@@ -883,7 +883,7 @@ function buildQueryString(data) {
  * const isNotValid = isValidQueryString( 'query=true?another=false' ); // false
  * ```
  *
- * @return {boolean} True if the argument contains a valid query string.
+ * @return True if the argument contains a valid query string.
  */
 function isValidQueryString(queryString) {
   if (!queryString) {
@@ -901,7 +901,7 @@ function isValidQueryString(queryString) {
 /**
  * Returns the path part and query string part of the URL.
  *
- * @param {string} url The full URL.
+ * @param url The full URL.
  *
  * @example
  * ```js
@@ -909,7 +909,7 @@ function isValidQueryString(queryString) {
  * const pathAndQueryString2 = getPathAndQueryString( 'https://wordpress.org/help/faq/' ); // '/help/faq'
  * ```
  *
- * @return {string} The path part and query string part of the URL.
+ * @return The path part and query string part of the URL.
  */
 function getPathAndQueryString(url) {
   const path = getPath(url);
@@ -928,7 +928,7 @@ function getPathAndQueryString(url) {
 /**
  * Returns the fragment part of the URL.
  *
- * @param {string} url The full URL
+ * @param url The full URL
  *
  * @example
  * ```js
@@ -936,7 +936,7 @@ function getPathAndQueryString(url) {
  * const fragment2 = getFragment( 'https://wordpress.org#another-fragment?query=true' ); // '#another-fragment'
  * ```
  *
- * @return {string|void} The fragment part of the URL.
+ * @return The fragment part of the URL.
  */
 function getFragment(url) {
   const matches = /^\S+?(#[^\s\?]*)/.exec(url);
@@ -949,7 +949,7 @@ function getFragment(url) {
 /**
  * Checks for invalid characters within the provided fragment.
  *
- * @param {string} fragment The url fragment.
+ * @param fragment The url fragment.
  *
  * @example
  * ```js
@@ -957,7 +957,7 @@ function getFragment(url) {
  * const isNotValid = isValidFragment( '#invalid-#fragment' ); // false
  * ```
  *
- * @return {boolean} True if the argument contains a valid fragment.
+ * @return True if the argument contains a valid fragment.
  */
 function isValidFragment(fragment) {
   if (!fragment) {
@@ -971,9 +971,9 @@ function isValidFragment(fragment) {
  * Safely decodes a URI component with `decodeURIComponent`. Returns the URI component unmodified if
  * `decodeURIComponent` throws an error.
  *
- * @param {string} uriComponent URI component to decode.
+ * @param uriComponent URI component to decode.
  *
- * @return {string} Decoded URI component if possible.
+ * @return Decoded URI component if possible.
  */
 function safeDecodeURIComponent(uriComponent) {
   try {
@@ -989,20 +989,13 @@ function safeDecodeURIComponent(uriComponent) {
  */
 
 
-
-/** @typedef {import('./get-query-arg').QueryArgParsed} QueryArgParsed */
-
-/**
- * @typedef {Record<string,QueryArgParsed>} QueryArgs
- */
-
 /**
  * Sets a value in object deeply by a given array of path segments. Mutates the
  * object reference.
  *
- * @param {Record<string,*>} object Object in which to assign.
- * @param {string[]}         path   Path segment at which to set value.
- * @param {*}                value  Value to set.
+ * @param object Object in which to assign.
+ * @param path   Path segment at which to set value.
+ * @param value  Value to set.
  */
 function setPath(object, path, value) {
   const length = path.length;
@@ -1042,7 +1035,7 @@ function setPath(object, path, value) {
  * Returns an object of query arguments of the given URL. If the given URL is
  * invalid or has no querystring, an empty object is returned.
  *
- * @param {string} url URL.
+ * @param url URL.
  *
  * @example
  * ```js
@@ -1050,7 +1043,7 @@ function setPath(object, path, value) {
  * // { "foo": "bar", "bar": "baz" }
  * ```
  *
- * @return {QueryArgs} Query args object.
+ * @return Query args object.
  */
 function getQueryArgs(url) {
   return (getQueryString(url) || ''
@@ -1084,16 +1077,16 @@ function getQueryArgs(url) {
  * includes query arguments, the arguments are merged with (and take precedent
  * over) the existing set.
  *
- * @param {string} [url=''] URL to which arguments should be appended. If omitted,
- *                          only the resulting querystring is returned.
- * @param {Object} [args]   Query arguments to apply to URL.
+ * @param url  URL to which arguments should be appended. If omitted,
+ *             only the resulting querystring is returned.
+ * @param args Query arguments to apply to URL.
  *
  * @example
  * ```js
  * const newURL = addQueryArgs( 'https://google.com', { q: 'test' } ); // https://google.com/?q=test
  * ```
  *
- * @return {string} URL with arguments applied.
+ * @return URL with arguments applied.
  */
 function addQueryArgs(url = '', args) {
   // If no arguments are to be appended, return original URL.
@@ -1120,27 +1113,18 @@ function addQueryArgs(url = '', args) {
  * Internal dependencies
  */
 
-
-/**
- * @typedef {{[key: string]: QueryArgParsed}} QueryArgObject
- */
-
-/**
- * @typedef {string|string[]|QueryArgObject} QueryArgParsed
- */
-
 /**
  * Returns a single query argument of the url
  *
- * @param {string} url URL.
- * @param {string} arg Query arg name.
+ * @param url URL.
+ * @param arg Query arg name.
  *
  * @example
  * ```js
  * const foo = getQueryArg( 'https://wordpress.org?foo=bar&bar=baz', 'foo' ); // bar
  * ```
  *
- * @return {QueryArgParsed|void} Query arg value.
+ * @return Query arg value.
  */
 function getQueryArg(url, arg) {
   return getQueryArgs(url)[arg];
@@ -1155,15 +1139,15 @@ function getQueryArg(url, arg) {
 /**
  * Determines whether the URL contains a given query arg.
  *
- * @param {string} url URL.
- * @param {string} arg Query arg name.
+ * @param url URL.
+ * @param arg Query arg name.
  *
  * @example
  * ```js
  * const hasBar = hasQueryArg( 'https://wordpress.org?foo=bar&bar=baz', 'bar' ); // true
  * ```
  *
- * @return {boolean} Whether or not the URL contains the query arg.
+ * @return Whether or not the URL contains the query arg.
  */
 function hasQueryArg(url, arg) {
   return getQueryArg(url, arg) !== undefined;
@@ -1179,15 +1163,15 @@ function hasQueryArg(url, arg) {
 /**
  * Removes arguments from the query string of the url
  *
- * @param {string}    url  URL.
- * @param {...string} args Query Args.
+ * @param url  URL.
+ * @param args Query Args.
  *
  * @example
  * ```js
  * const newUrl = removeQueryArgs( 'https://wordpress.org?foo=bar&bar=baz&baz=foobar', 'foo', 'bar' ); // https://wordpress.org?baz=foobar
  * ```
  *
- * @return {string} Updated URL.
+ * @return Updated URL.
  */
 function removeQueryArgs(url, ...args) {
   const fragment = url.replace(/^[^#]*/, '');
@@ -1214,14 +1198,14 @@ const USABLE_HREF_REGEXP = /^(?:[a-z]+:|#|\?|\.|\/)/i;
 /**
  * Prepends "http://" to a url, if it looks like something that is meant to be a TLD.
  *
- * @param {string} url The URL to test.
+ * @param url The URL to test.
  *
  * @example
  * ```js
  * const actualURL = prependHTTP( 'wordpress.org' ); // http://wordpress.org
  * ```
  *
- * @return {string} The updated URL.
+ * @return The updated URL.
  */
 function prependHTTP(url) {
   if (!url) {
@@ -1239,14 +1223,14 @@ function prependHTTP(url) {
  * Safely decodes a URI with `decodeURI`. Returns the URI unmodified if
  * `decodeURI` throws an error.
  *
- * @param {string} uri URI to decode.
+ * @param uri URI to decode.
  *
  * @example
  * ```js
  * const badUri = safeDecodeURI( '%z' ); // does not throw an Error, simply returns '%z'
  * ```
  *
- * @return {string} Decoded URI if possible.
+ * @return Decoded URI if possible.
  */
 function safeDecodeURI(uri) {
   try {
@@ -1260,8 +1244,8 @@ function safeDecodeURI(uri) {
 /**
  * Returns a URL for display.
  *
- * @param {string}      url       Original URL.
- * @param {number|null} maxLength URL length.
+ * @param url       Original URL.
+ * @param maxLength URL length.
  *
  * @example
  * ```js
@@ -1269,7 +1253,7 @@ function safeDecodeURI(uri) {
  * const imageUrl = filterURLForDisplay( 'https://www.wordpress.org/wp-content/uploads/img.png', 20 ); // …ent/uploads/img.png
  * ```
  *
- * @return {string} Displayed URL.
+ * @return Displayed URL.
  */
 function filterURLForDisplay(url, maxLength = null) {
   if (!url) {
@@ -1326,9 +1310,9 @@ var remove_accents_default = /*#__PURE__*/__webpack_require__.n(remove_accents);
  * except hyphens. Converts remaining string to lowercase. It does not account
  * for octets, HTML entities, or other encoded characters.
  *
- * @param {string} string Title or slug to be processed.
+ * @param string Title or slug to be processed.
  *
- * @return {string} Processed string.
+ * @return Processed string.
  */
 function cleanForSlug(string) {
   if (!string) {
@@ -1356,7 +1340,7 @@ function cleanForSlug(string) {
 /**
  * Returns the filename part of the URL.
  *
- * @param {string} url The full URL.
+ * @param url The full URL.
  *
  * @example
  * ```js
@@ -1364,7 +1348,7 @@ function cleanForSlug(string) {
  * const filename2 = getFilename( '/this/is/a/test.png' ); // 'test.png'
  * ```
  *
- * @return {string|void} The filename part of the URL.
+ * @return The filename part of the URL.
  */
 function getFilename(url) {
   let filename;
@@ -1385,9 +1369,9 @@ function getFilename(url) {
  * will be treated as identical, regardless of order they appear in the original
  * text.
  *
- * @param {string} path Original path.
+ * @param path Original path.
  *
- * @return {string} Normalized path.
+ * @return Normalized path.
  */
 function normalizePath(path) {
   const split = path.split('?');
@@ -1426,14 +1410,14 @@ function normalizePath(path) {
  *
  * Note: this will not replace "http://" with "https://".
  *
- * @param {string} url The URL to test.
+ * @param url The URL to test.
  *
  * @example
  * ```js
  * const actualURL = prependHTTPS( 'wordpress.org' ); // https://wordpress.org
  * ```
  *
- * @return {string} The updated URL.
+ * @return The updated URL.
  */
 function prependHTTPS(url) {
   if (!url) {
