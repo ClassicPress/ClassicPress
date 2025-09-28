@@ -621,7 +621,7 @@ if ( class_exists( 'WP_Widget_Media_Image' ) ) {
  *
  * @since CP-2.5.0
  */
-if ( class_exists( 'WP_Widget_Media_Gallery' ) ) {
+if ( class_exists( 'WP_Widget_Media_Gallery' ) || class_exists( 'WP_Widget_Text' ) ) {
 	echo cp_render_media_gallery_template();
 }
 
