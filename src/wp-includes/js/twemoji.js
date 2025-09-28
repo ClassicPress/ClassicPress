@@ -1,11 +1,7 @@
 /*jslint indent: 2, browser: true, bitwise: true, plusplus: true */
 var twemoji = (function (
   /*! Copyright Twitter Inc. and other contributors. Licensed under MIT *//*
-<<<<<<< HEAD:src/wp-includes/js/twemoji.js
-    https://github.com/twitter/twemoji/blob/gh-pages/LICENSE
-=======
     https://github.com/jdecked/twemoji/blob/gh-pages/LICENSE
->>>>>>> 9b308c9fea (Emoji: Replace `twitter/twemoji` with `jdecked/twemoji`.):src/js/_enqueues/vendor/twemoji.js
   */
 
   // WARNING:   this file is generated automatically via
