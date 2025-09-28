@@ -6,13 +6,8 @@
  */
 class Tests_Formatting_Emoji extends WP_UnitTestCase {
 
-<<<<<<< HEAD:tests/phpunit/tests/formatting/Emoji.php
 	private $png_cdn = 'https://twemoji.classicpress.net/16/72x72/';
 	private $svn_cdn = 'https://twemoji.classicpress.net/16/svg/';
-=======
-	private $png_cdn = 'https://s.w.org/images/core/emoji/15.1.0/72x72/';
-	private $svn_cdn = 'https://s.w.org/images/core/emoji/15.1.0/svg/';
->>>>>>> 76a2ed752c (Emoji: Update the Twemoji library to 15.1.0.):tests/phpunit/tests/formatting/emoji.php
 
 	/**
 	 * @ticket 36525
