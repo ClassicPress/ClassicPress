@@ -279,6 +279,7 @@ jobs:
         continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit external-http
+        if: ${{ matrix.coverage != 'none' }}
         env:
           WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:external-http
