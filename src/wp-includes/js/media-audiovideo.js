@@ -1,7 +1,7 @@
 (function () {
 
 	var audiovideo_manifest = {};
-	var postID = document.getElementById( 'post_ID' ).value;
+
 	var postMedia;
 	var hasRequiredPostMedia;
 
@@ -931,7 +931,7 @@
 			tag: 'playlist',
 			editTitle : l10n.editPlaylistTitle,
 			defaults : {
-				id: postID,
+				id: wp.media.view.settings.post.id,
 				style: 'light',
 				tracklist: true,
 				tracknumbers: true,
@@ -955,7 +955,7 @@
 			coerce : wp.media.coerce,
 
 			defaults : {
-				id : postID,
+				id : wp.media.view.settings.post.id,
 				src : '',
 				loop : false,
 				autoplay : false,
@@ -1027,7 +1027,7 @@
 			coerce : wp.media.coerce,
 
 			defaults : {
-				id : postID,
+				id : wp.media.view.settings.post.id,
 				src : '',
 				poster : '',
 				loop : false,
