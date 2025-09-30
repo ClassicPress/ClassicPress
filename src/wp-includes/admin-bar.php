@@ -354,7 +354,13 @@ function wp_admin_bar_site_menu( $wp_admin_bar ) {
 		$blogname = sprintf( __( 'User Dashboard: %s' ), esc_html( get_network()->site_name ) );
 	}
 
-	$title = wp_html_excerpt( $blogname, 40, '&hellip;' );
+	if ( is_network_admin() || is_user_admin() ) {
+		$title = wp_html_excerpt( $blogname, 40, '&hellip;' );
+	} elseif ( is_admin() ) {
+		$title = __( 'Visit Site' );
+	} else {
+		$title = __( 'Dashboard' );
+	}
 
 	$wp_admin_bar->add_node(
 		array(
