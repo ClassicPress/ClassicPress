@@ -339,15 +339,11 @@ class WP_REST_Users_Controller extends WP_REST_Controller {
 
 		$users = array();
 
-<<<<<<< HEAD
 		foreach ( $query->get_results() as $user ) {
-=======
-		foreach ( $query->results as $user ) {
 			if ( 'edit' === $request['context'] && ! current_user_can( 'edit_user', $user->ID ) ) {
 				continue;
 			}
 
->>>>>>> d157ce3b88 (Grouped backports for the 6.2 branch.)
 			$data    = $this->prepare_item_for_response( $user, $request );
 			$users[] = $this->prepare_response_for_collection( $data );
 		}
