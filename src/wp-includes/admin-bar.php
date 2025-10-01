@@ -357,9 +357,9 @@ function wp_admin_bar_site_menu( $wp_admin_bar ) {
 	if ( is_network_admin() || is_user_admin() ) {
 		$title = wp_html_excerpt( $blogname, 40, '&hellip;' );
 	} elseif ( is_admin() ) {
-		$title = __( 'Visit Site' );
+		$title = wp_html_excerpt( $blogname, 40, '&hellip;' ) . ' | ' . __( 'Visit Site' );
 	} else {
-		$title = __( 'Dashboard' );
+		$title = wp_html_excerpt( $blogname, 40, '&hellip;' ) . ' | ' . __( 'Dashboard' );
 	}
 
 	$wp_admin_bar->add_node(
