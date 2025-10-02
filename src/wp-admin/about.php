@@ -51,7 +51,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 					printf(
 						/* translators: link to learn more about translating ClassicPress */
 						__( 'Help us translate ClassicPress into your language! <a href="%s">Learn more</a>.' ),
-						'https://www.classicpress.net/translating-classicpress/'
+						'https://docs.classicpress.net/user-guides/translating-classicpress/'
 					);
 					?>
 				</p>
