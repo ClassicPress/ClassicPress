@@ -186,15 +186,15 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 				);
 				?>
 				<?php
-					printf(
-						/* translators: %s: HelpHub URL. */
-						__( 'For more information, see <a href="%s">the release notes</a>.' ),
-						sprintf(
-							/* translators: %s: WordPress version. */
-							esc_url( __( 'https://wordpress.org/support/wordpress-version/version-%s/' ) ),
-							sanitize_title( '6.2.8' )
-						)
-					);
+				printf(
+					/* translators: %s: HelpHub URL. */
+					__( 'For more information, see <a href="%s">the release notes</a>.' ),
+					sprintf(
+						/* translators: %s: WordPress version. */
+						esc_url( __( 'https://wordpress.org/support/wordpress-version/version-%s/' ) ),
+						sanitize_title( '6.2.8' )
+					)
+				);
 				?>
 			</p>
 			<p>
