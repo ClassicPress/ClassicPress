@@ -357,9 +357,17 @@ function wp_admin_bar_site_menu( $wp_admin_bar ) {
 	if ( is_network_admin() || is_user_admin() ) {
 		$title = wp_html_excerpt( $blogname, 40, '&hellip;' );
 	} elseif ( is_admin() ) {
-		$title = wp_html_excerpt( $blogname, 30, '&hellip;' ) . ' | ' . __( 'Visit Site' );
+		$title = sprintf(
+			/* translators: %s: Truncated site title. */
+			__( '%s | Visit Site' ),
+			wp_html_excerpt( $blogname, 30, '&hellip;' )
+		);
 	} else {
-		$title = wp_html_excerpt( $blogname, 30, '&hellip;' ) . ' | ' . __( 'Dashboard' );
+		$title = sprintf(
+			/* translators: %s: Truncated site title. */
+			__( '%s | Dashboard' ),
+			wp_html_excerpt( $blogname, 30, '&hellip;' )
+		);
 	}
 
 	$wp_admin_bar->add_node(
