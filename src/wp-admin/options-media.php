@@ -28,7 +28,7 @@ if ( ! is_multisite()
 
 $media_options_help .= '<p>' . __( 'You can choose how you would like uploads to be organized after uploading. By default uploads are organized into month- and year-based folders.' ) . '</p>';
 
-$media_options_help .= '<p>' . __( 'Media attachments, including image, audio, video files, can have Attachment Pages. It displays information about a particular media file you have uploaded to your site. You can choose to enable or disable Attachment Pages.' ) . '</p>';
+$media_options_help .= '<p>' . __( 'Media attachments, including image, audio, video files, can have attachment pages. An attachment page displays information about a particular media file you have uploaded to your site. You can choose to enable or disable attachment pages.' ) . '</p>';
 
 $media_options_help .= '<p>' . __( 'You must click the Save Changes button at the bottom of the screen for new settings to take effect.' ) . '</p>';
 
