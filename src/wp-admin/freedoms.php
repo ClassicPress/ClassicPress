@@ -59,13 +59,11 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 
 	<p>
 	<?php
-	$cp_directory = 'https://directory.classicpress.net/';
-	$license_url = 'https://opensource.org/licenses/gpl-license';
 	printf(
 		/* translators: 1: link to CP Directory, 2: link to GPL */
 		__( 'Every plugin and theme in the <a href="%1$s">ClassicPress Directory</a> falls under the <a href="%2$s">GPL</a> or a similarly free and compatible license.' ),
-		$cp_directory,
-		$license_url
+		'https://directory.classicpress.net/',
+		'https://opensource.org/licenses/gpl-license'
 	);
 	?>
 	</p>
