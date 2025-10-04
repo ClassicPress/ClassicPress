@@ -111,36 +111,10 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 			<p>
 				<?php
 				printf(
-<<<<<<< HEAD
 					/* translators: 1: link to ClassicPress FAQs page, 2: link to ClassicPress support forum */
 					__( 'If you need help with something else, please see our <a href="%1$s"><strong>FAQs page</strong></a>. If your question is not answered there, you can make a new post on our <a href="%2$s"><strong>support forum</strong></a>.' ),
 					'https://www.classicpress.net/faq/',
 					'https://forums.classicpress.net/c/support/'
-=======
-					/* translators: %s: WordPress version. */
-					__( '<strong>Version %s</strong> addressed some security issues.' ),
-					'6.2.8'
-				);
-				?>
-				<?php
-				printf(
-					/* translators: %s: HelpHub URL. */
-					__( 'For more information, see <a href="%s">the release notes</a>.' ),
-					sprintf(
-						/* translators: %s: WordPress version. */
-						esc_url( __( 'https://wordpress.org/support/wordpress-version/version-%s/' ) ),
-						sanitize_title( '6.2.8' )
-					)
-				);
-				?>
-			</p>
-				<p>
-					<?php
-					printf(
-						/* translators: %s: WordPress version number. */
-						__( '<strong>Version %s</strong> addressed one security issue.' ),
-						'6.2.7'
->>>>>>> 2fd458e9fc (WordPress 6.2.8.)
 				);
 				?>
 			</p>
@@ -201,6 +175,26 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 				_e(
 					'This version of ClassicPress includes all changes from the following versions of WordPress:'
 				);
+				?>
+			</p>
+			<p>
+				<?php
+				printf(
+					/* translators: %s: WordPress version. */
+					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
+					'6.2.8'
+				);
+				?>
+				<?php
+					printf(
+						/* translators: %s: HelpHub URL. */
+						__( 'For more information, see <a href="%s">the release notes</a>.' ),
+						sprintf(
+							/* translators: %s: WordPress version. */
+							esc_url( __( 'https://wordpress.org/support/wordpress-version/version-%s/' ) ),
+							sanitize_title( '6.2.8' )
+						)
+					);
 				?>
 			</p>
 			<p>
