@@ -21,6 +21,8 @@ are styled in the Privacy section of edit.css */
 	text-align: left;
 	align-items: center;
 	justify-content: space-between;
+	-webkit-user-select: auto;
+	-moz-user-select: auto;
 	user-select: auto;
 }
 
