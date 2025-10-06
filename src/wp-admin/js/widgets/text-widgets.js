@@ -45,7 +45,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function handleWidgetUpdate( event ) {
 		var widget = event.detail.widget;
 		if ( widget.querySelector( '.id_base' ).value === 'text' ) {
-			initTextWidget( widget.querySelector( 'textarea' ) );
+			if ( document.body.className.includes( 'wp-customizer' ) ) {
+				if ( event.type !== 'widget-synced' ) {
+					setTimeout( function() {
+						initTextWidget( widget.querySelector( 'textarea' ) );
+					}, 100);
+				}
+			} else {
+				initTextWidget( widget.querySelector( 'textarea' ) );
+			}
 		}
 	}
 
