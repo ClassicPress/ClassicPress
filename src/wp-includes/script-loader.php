@@ -1234,7 +1234,7 @@ function wp_default_scripts( $scripts ) {
 
 		$scripts->add( 'link', "/wp-admin/js/link$suffix.js", array( 'wp-lists', 'postbox' ), false, 1 );
 
-		$scripts->add( 'comment', "/wp-admin/js/comment$suffix.js", array( 'jquery', 'postbox' ), false, 1 );
+		$scripts->add( 'comment', "/wp-admin/js/comment$suffix.js", array(), false, 1 );
 		$scripts->set_translations( 'comment' );
 
 		$scripts->add( 'admin-gallery', "/wp-admin/js/gallery$suffix.js", array( 'sortable-js' ) );
