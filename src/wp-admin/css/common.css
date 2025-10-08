@@ -2105,6 +2105,17 @@ details summary > * {
 	display: inline;
 }
 
+#poststuff .edit-timestamp-summary {
+	margin: 0.5em 0 2px 0;
+	padding: 2px 0 2px 2px;
+	outline-offset: 2px;
+	border-bottom: 0;
+}
+
+#poststuff .edit-timestamp-summary:focus {
+	outline: 2px solid #2271b1;
+}
+
 .metabox-holder details > summary::marker,
 .metabox-holder details > summary::-webkit-details-marker {
 	font-size: 1.3em;
