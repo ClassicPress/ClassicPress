@@ -89,7 +89,6 @@ class Test_WP_Customize_Nav_Menu_Item_Setting extends WP_UnitTestCase {
 			'classes'          => '',
 			'xfn'              => '',
 			'status'           => 'publish',
-			'original_title'   => '',
 			'nav_menu_term_id' => 0,
 			'_invalid'         => false,
 		);
@@ -581,7 +580,8 @@ class Test_WP_Customize_Nav_Menu_Item_Setting extends WP_UnitTestCase {
 			'classes'          => 'hello  inject',
 			'xfn'              => 'hello  inject',
 			'status'           => 'draft',
-			'original_title'   => 'Hi',
+			'original_title'   => 'Hi<script>unfilteredHtml()</script>',
+
 			'nav_menu_term_id' => 0,
 		);
 
