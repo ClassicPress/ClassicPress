@@ -7,34 +7,23 @@
  *
  * @since 2.5.0
  *
- * @param {jQuery} $ The jQuery object.
+ * Rewritten in vanilla JavaScript.
+ *
+ * @since CP-2.5.0
  */
-jQuery( function($) {
+document.addEventListener( 'DOMContentLoaded', function() {
 
-	var $timestampdiv = $('#timestampdiv'),
-		$timestamp = $( '#timestamp' ),
-		stamp = $timestamp.html(),
-		$timestampwrap = $timestampdiv.find( '.timestamp-wrap' ),
-		$edittimestamp = $timestampdiv.siblings( 'a.edit-timestamp' );
-
-	/**
-	 * Adds event that opens the time stamp form if the form is hidden.
-	 *
-	 * @listens $edittimestamp:click
-	 *
-	 * @param {Event} event The event object.
-	 * @return {void}
-	 */
-	$edittimestamp.on( 'click', function( event ) {
-		if ( $timestampdiv.is( ':hidden' ) ) {
-			// Slide down the form and set focus on the first field.
-			$timestampdiv.slideDown( 'fast', function() {
-				$( 'input, select', $timestampwrap ).first().trigger( 'focus' );
-			} );
-			$(this).hide();
-		}
-		event.preventDefault();
-	});
+	var timestampdiv = document.getElementById( 'timestampdiv' ),
+		timestamp = document.getElementById( 'timestamp' ),
+		stamp = timestamp.innerHTML,
+		details = timestamp.nextElementSibling,
+		summary = details.querySelector( 'summary' ),
+		timestampwrap = timestampdiv.querySelector( '.timestamp-wrap' ),
+		mmId = document.getElementById( 'mm' ),
+		jjId = document.getElementById( 'jj' ),
+		aaId = document.getElementById( 'aa' ),
+		hhId = document.getElementById( 'hh' ),
+		mnId = document.getElementById( 'mn' );
 
 	/**
 	 * Resets the time stamp values when the cancel button is clicked.
@@ -45,18 +34,20 @@ jQuery( function($) {
 	 * @return {void}
 	 */
 
-	$timestampdiv.find('.cancel-timestamp').on( 'click', function( event ) {
-		// Move focus back to the Edit link.
-		$edittimestamp.show().trigger( 'focus' );
-		$timestampdiv.slideUp( 'fast' );
-		$('#mm').val($('#hidden_mm').val());
-		$('#jj').val($('#hidden_jj').val());
-		$('#aa').val($('#hidden_aa').val());
-		$('#hh').val($('#hidden_hh').val());
-		$('#mn').val($('#hidden_mn').val());
-		$timestamp.html( stamp );
+	timestampdiv.querySelector( '.cancel-timestamp' ).addEventListener( 'click', function( event ) {
+		// Close disclosure widget and set focus
+		details.removeAttribute( 'open' );
+		summary.focus();
+
+		// Restore original values
+		mmId.value = document.getElementById( 'hidden_mm' ).value;
+		jjId.value = document.getElementById( 'hidden_jj' ).value;
+		aaId.value = document.getElementById( 'hidden_aa' ).value;
+		hhId.value = document.getElementById( 'hidden_hh' ).value;
+		mnId.value = document.getElementById( 'hidden_mn' ).value;
+		timestamp.innerHTML = stamp;
 		event.preventDefault();
-	});
+	} );
 
 	/**
 	 * Sets the time stamp values when the ok button is clicked.
@@ -66,33 +57,36 @@ jQuery( function($) {
 	 * @param {Event} event The event object.
 	 * @return {void}
 	 */
-	$timestampdiv.find('.save-timestamp').on( 'click', function( event ) { // Crazyhorse - multiple OK cancels.
-		var aa = $('#aa').val(), mm = $('#mm').val(), jj = $('#jj').val(), hh = $('#hh').val(), mn = $('#mn').val(),
+	timestampdiv.querySelector( '.save-timestamp' ).addEventListener( 'click', function( event ) { // Crazyhorse - multiple OK cancels.
+		var aa = aaId.value,
+			mm = mmId.value,
+			jj = jjId.value,
+			hh = hhId.value,
+			mn = mnId.value,
 			newD = new Date( aa, mm - 1, jj, hh, mn );
 
 		event.preventDefault();
 
-		if ( newD.getFullYear() != aa || (1 + newD.getMonth()) != mm || newD.getDate() != jj || newD.getMinutes() != mn ) {
-			$timestampwrap.addClass( 'form-invalid' );
+		if ( newD.getFullYear() != aa || ( 1 + newD.getMonth() ) != mm || newD.getDate() != jj || newD.getMinutes() != mn ) {
+			timestampwrap.classList.add( 'form-invalid' );
 			return;
 		} else {
-			$timestampwrap.removeClass( 'form-invalid' );
+			timestampwrap.classList.remove( 'form-invalid' );
 		}
 
-		$timestamp.html(
+		timestamp.innerHTML =
 			wp.i18n.__( 'Submitted on:' ) + ' <b>' +
 			/* translators: 1: Month, 2: Day, 3: Year, 4: Hour, 5: Minute. */
 			wp.i18n.__( '%1$s %2$s, %3$s at %4$s:%5$s' )
-				.replace( '%1$s', $( 'option[value="' + mm + '"]', '#mm' ).attr( 'data-text' ) )
+				.replace( '%1$s', document.querySelector( 'option[value="' + mm + '"]', '#mm' ).dataset.text )
 				.replace( '%2$s', parseInt( jj, 10 ) )
 				.replace( '%3$s', aa )
 				.replace( '%4$s', ( '00' + hh ).slice( -2 ) )
 				.replace( '%5$s', ( '00' + mn ).slice( -2 ) ) +
-				'</b> '
-		);
+				'</b> ';
 
-		// Move focus back to the Edit link.
-		$edittimestamp.show().trigger( 'focus' );
-		$timestampdiv.slideUp( 'fast' );
-	});
-});
+		// Close disclosure widget and set focus
+		details.removeAttribute( 'open' );
+		summary.focus();
+	} );
+} );
