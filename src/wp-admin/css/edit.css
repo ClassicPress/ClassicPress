@@ -543,7 +543,7 @@ form#tags-filter {
 	line-height: 1.76923076;
 }
 
-#timestampdiv p {
+#timestampdiv fieldset {
 	margin: 8px 0 6px;
 }
 
