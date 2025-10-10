@@ -720,8 +720,8 @@ function meta_form( $post = null ) {
 		$keys = $wpdb->get_col(
 			$wpdb->prepare(
 				"SELECT DISTINCT meta_key
-				FROM $wpdb->posts as p
-				LEFT JOIN $wpdb->postmeta as m ON p.ID = m.post_id
+				FROM $wpdb->posts as posts
+				LEFT JOIN $wpdb->postmeta as meta ON posts.ID = meta.post_id
 				WHERE post_type = %s
 				AND SUBSTR(meta_key,1,1) != '_'
 				LIMIT %d",
