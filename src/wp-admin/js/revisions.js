@@ -42,11 +42,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		fromSlider.value = list.indexOf( queryParams.get( 'from' ) );
 		toSlider.value = list.indexOf( queryParams.get( 'to' ) );
+		document.querySelector( '#ticks option[data-id="' + queryParams.get( 'from' ) + '"]' ).style.backgroundColor = '#fff';
+		document.querySelector( '#ticks option[data-id="' + queryParams.get( 'from' ) + '"]' ).style.border = '1px solid #00b3bc';
+		document.querySelector( '#ticks option[data-id="' + queryParams.get( 'to' ) + '"]' ).style.backgroundColor = '#fff';
+		document.querySelector( '#ticks option[data-id="' + queryParams.get( 'to' ) + '"]' ).style.border = '1px solid #00b3bc';
 		getDiff( queryParams.get( 'from' ) + ':' + queryParams.get( 'to' ) );
 	} else {
 		fromSliderWrapper.style.display = 'none';
 		revisionsArea.classList.remove( 'comparing-two-revisions' );
 		toSlider.value = list.indexOf( queryParams.get( 'revision' ) );
+		document.querySelector( '#ticks option[data-id="' + queryParams.get( 'revision' ) + '"]' ).style.backgroundColor = '#fff';
+		document.querySelector( '#ticks option[data-id="' + queryParams.get( 'revision' ) + '"]' ).style.border = '1px solid #00b3bc';
 
 		if ( parseInt( toSlider.value, 10 ) === 0 ) {
 			previousButton.disabled = true;
@@ -68,6 +74,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		fromRevision = isVisible( fromSlider ) ? list[ fromSlider.value ] : list[ 0 ];
 		toRevision = list[ toSlider.value ];
 		compareRevisions( fromRevision + ':' + toRevision );
+
+		// Highlight relevant revisions
+		ticksOptions.forEach( function( option ) {
+			if ( option.dataset.id === fromRevision || option.dataset.id === toRevision ) {
+				option.style.backgroundColor = '#fff';
+				option.style.border = '1px solid #00b3bc';
+			} else {
+				option.style.backgroundColor = 'transparent';
+				option.style.border = '1px solid transparent';				
+			}
+		} );
 
 		// Update URL
 		queryParams.delete( 'revision' );
@@ -98,6 +115,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			queryParams.delete( 'to' );
 			queryParams.set( 'revision', toRevision );
 		}
+
+		// Highlight relevant revisions
+		ticksOptions.forEach( function( option ) {
+			if ( option.dataset.id === fromRevision || option.dataset.id === toRevision ) {
+				option.style.backgroundColor = '#fff';
+				option.style.border = '1px solid #00b3bc';
+			} else {
+				option.style.backgroundColor = 'transparent';
+				option.style.border = '1px solid transparent';				
+			}
+		} );
 
 		// Disable and enable Next button
 		if ( parseInt( toSlider.value, 10 ) === 0 ) {
