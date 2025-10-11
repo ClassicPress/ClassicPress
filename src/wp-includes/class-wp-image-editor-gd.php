@@ -24,10 +24,10 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 	public function __destruct() {
 		if ( $this->image ) {
 			if ( PHP_VERSION_ID < 80000 ) { // imagedestroy() has no effect as of PHP 8.0.
-			// We don't need the original in memory anymore.
-			imagedestroy( $this->image );
+				// We don't need the original in memory anymore.
+				imagedestroy( $this->image );
+			}
 		}
-	}
 	}
 
 	/**
@@ -191,7 +191,7 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 
 		if ( is_gd_image( $resized ) ) {
 			if ( PHP_VERSION_ID < 80000 ) { // imagedestroy() has no effect as of PHP 8.0.
-			imagedestroy( $this->image );
+				imagedestroy( $this->image );
 			}
 
 			$this->image = $resized;
@@ -317,8 +317,8 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 			$saved = $this->_save( $resized );
 
 			if ( PHP_VERSION_ID < 80000 ) { // imagedestroy() has no effect as of PHP 8.0.
-			imagedestroy( $resized );
-		}
+				imagedestroy( $resized );
+			}
 		}
 
 		$this->size = $orig_size;
@@ -375,7 +375,7 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 
 		if ( is_gd_image( $dst ) ) {
 			if ( PHP_VERSION_ID < 80000 ) { // imagedestroy() has no effect as of PHP 8.0.
-			imagedestroy( $this->image );
+				imagedestroy( $this->image );
 			}
 
 			$this->image = $dst;
@@ -406,7 +406,7 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 				imagesavealpha( $rotated, true );
 
 				if ( PHP_VERSION_ID < 80000 ) { // imagedestroy() has no effect as of PHP 8.0.
-				imagedestroy( $this->image );
+					imagedestroy( $this->image );
 				}
 
 				$this->image = $rotated;
@@ -441,7 +441,7 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 
 			if ( imagecopyresampled( $dst, $this->image, 0, 0, $sx, $sy, $w, $h, $sw, $sh ) ) {
 				if ( PHP_VERSION_ID < 80000 ) { // imagedestroy() has no effect as of PHP 8.0.
-				imagedestroy( $this->image );
+					imagedestroy( $this->image );
 				}
 
 				$this->image = $dst;
