@@ -555,7 +555,7 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 
 		$property = new ReflectionProperty( $gd_image_editor, 'image' );
 		if ( PHP_VERSION_ID < 80100 ) {
-		$property->setAccessible( true );
+			$property->setAccessible( true );
 		}
 
 		$color_top_left = imagecolorat( $property->getValue( $gd_image_editor ), 0, 0 );
@@ -576,7 +576,7 @@ class Tests_Image_Editor_GD extends WP_Image_UnitTestCase {
 
 		$property = new ReflectionProperty( $gd_image_editor, 'image' );
 		if ( PHP_VERSION_ID < 80100 ) {
-		$property->setAccessible( true );
+			$property->setAccessible( true );
 		}
 
 		$color_top_left = imagecolorat( $property->getValue( $gd_image_editor ), 0, 0 );

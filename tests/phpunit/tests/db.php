@@ -2012,7 +2012,7 @@ class Tests_DB extends WP_UnitTestCase {
 
 		$property = new ReflectionProperty( $wpdb, 'allow_unsafe_unquoted_parameters' );
 		if ( PHP_VERSION_ID < 80100 ) {
-		$property->setAccessible( true );
+			$property->setAccessible( true );
 		}
 		$property->setValue( $wpdb, $allow );
 
@@ -2022,7 +2022,7 @@ class Tests_DB extends WP_UnitTestCase {
 		// Reset.
 		$property->setValue( $wpdb, $default );
 		if ( PHP_VERSION_ID < 80100 ) {
-		$property->setAccessible( false );
+			$property->setAccessible( false );
 		}
 
 		$this->assertSame( $expected, $actual );
