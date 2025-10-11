@@ -685,8 +685,37 @@ class Tests_Post_Query extends WP_UnitTestCase {
 		$this->assertEquals( 2, $q->max_num_pages );
 	}
 
+<<<<<<< HEAD
 	public function set_found_posts_provider() {
 		// count return 0 for null, but 1 for other data you may not expect
+=======
+	/**
+	 * @ticket 42860
+	 *
+	 * @dataProvider data_set_found_posts_not_posts_as_an_array
+	 */
+	public function test_set_found_posts_not_posts_as_an_array( $posts, $expected ) {
+		$q = new WP_Query(
+			array(
+				'post_type'      => 'wptests_pt',
+				'posts_per_page' => 1,
+			)
+		);
+
+		$q->posts = $posts;
+
+		$method = new ReflectionMethod( 'WP_Query', 'set_found_posts' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$method->setAccessible( true );
+		}
+		$method->invoke( $q, array( 'no_found_rows' => false ), array() );
+
+		$this->assertSame( $expected, $q->found_posts );
+	}
+
+	public function data_set_found_posts_not_posts_as_an_array() {
+		// Count return 0 for null, but 1 for other data you may not expect.
+>>>>>>> cbb79cabb6 (Code Modernization: Address reflection no-op function deprecations in PHP 8.5.)
 		return array(
 			array( null, 0 ),
 			array( '', 1 ),

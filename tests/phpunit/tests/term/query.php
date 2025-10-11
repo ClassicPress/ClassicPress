@@ -921,7 +921,9 @@ class Tests_Term_Query extends WP_UnitTestCase {
 		$request    = $query1->request;
 
 		$reflection = new ReflectionMethod( $query1, 'generate_cache_key' );
+		if ( PHP_VERSION_ID < 80100 ) {
 		$reflection->setAccessible( true );
+		}
 
 		$cache_key_1 = $reflection->invoke( $query1, $query_vars, $request );
 

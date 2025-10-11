@@ -137,6 +137,72 @@ if ( is_multisite() ) :
 		}
 
 		/**
+<<<<<<< HEAD
+=======
+	 * Tests that the `WP_Network::$id` property is stored as an integer.
+	 *
+	 * Uses reflection to access the private property.
+	 * Differs from using the public getter method, which casts to an integer.
+	 *
+	 * @ticket 62035
+	 *
+	 * @covers WP_Network::__construct
+	 */
+	public function test_wp_network_object_id_property_stored_as_int() {
+		$id = self::factory()->network->create();
+
+		$network = WP_Network::get_instance( $id );
+
+		$reflection = new ReflectionObject( $network );
+		$property   = $reflection->getProperty( 'id' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$property->setAccessible( true );
+		}
+
+		$this->assertSame( (int) $id, $property->getValue( $network ) );
+	}
+
+	/**
+	 * Tests that the `WP_Network::$blog_id` property is a string.
+	 *
+	 * @ticket 62035
+	 *
+	 * @covers WP_Network::__get
+	 */
+	public function test_wp_network_object_blog_id_property_is_int() {
+		$id = self::factory()->network->create();
+
+		$network = WP_Network::get_instance( $id );
+
+		$this->assertIsString( $network->blog_id );
+	}
+
+	/**
+	 * Tests that the `WP_Network::$blog_id` property is stored as a string.
+	 *
+	 * Uses reflection to access the private property.
+	 * Differs from using the public getter method, which casts to a string.
+	 *
+	 * @ticket 62035
+	 *
+	 * @covers WP_Network::__construct
+	 */
+	public function test_wp_network_object_blog_id_property_stored_as_string() {
+		$id = self::factory()->network->create();
+
+		$network = WP_Network::get_instance( $id );
+
+		$reflection = new ReflectionObject( $network );
+		$property   = $reflection->getProperty( 'blog_id' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$property->setAccessible( true );
+		}
+
+		$this->assertIsString( $property->getValue( $network ) );
+	}
+
+	/**
+>>>>>>> cbb79cabb6 (Code Modernization: Address reflection no-op function deprecations in PHP 8.5.)
 		 * @ticket 22917
 		 */
 		public function test_get_blog_count_no_filter_applied() {

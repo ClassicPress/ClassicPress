@@ -102,7 +102,9 @@ class Test_Query_CacheResults extends WP_UnitTestCase {
 		}
 
 		$reflection = new ReflectionMethod( $query1, 'generate_cache_key' );
+		if ( PHP_VERSION_ID < 80100 ) {
 		$reflection->setAccessible( true );
+		}
 
 		$cache_key_1 = $reflection->invoke( $query1, $query_vars, $request );
 		$cache_key_2 = $reflection->invoke( $query1, $query_vars, $request_no_placeholder );
@@ -158,7 +160,9 @@ class Test_Query_CacheResults extends WP_UnitTestCase {
 		$this->assertStringNotContainsString( $wpdb->placeholder_escape(), serialize( $query_vars ), 'Query vars should not contain the wpdb placeholder.' );
 
 		$reflection = new ReflectionMethod( $query1, 'generate_cache_key' );
+		if ( PHP_VERSION_ID < 80100 ) {
 		$reflection->setAccessible( true );
+		}
 
 		$cache_key_1 = $reflection->invoke( $query1, $query_vars, $request );
 
@@ -172,6 +176,256 @@ class Test_Query_CacheResults extends WP_UnitTestCase {
 	}
 
 	/**
+<<<<<<< HEAD
+=======
+	 * @covers WP_Query::generate_cache_key
+	 * @ticket 59442
+	 */
+	public function test_generate_cache_key_unregister_post_type() {
+		global $wpdb;
+		register_post_type(
+			'wptests_pt',
+			array(
+				'exclude_from_search' => false,
+			)
+		);
+		$query_vars = array(
+			'post_type' => 'any',
+		);
+		$fields     = "{$wpdb->posts}.ID";
+		$query1     = new WP_Query( $query_vars );
+		$request1   = str_replace( $fields, "{$wpdb->posts}.*", $query1->request );
+
+		$reflection = new ReflectionMethod( $query1, 'generate_cache_key' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$reflection->setAccessible( true );
+		}
+
+		$cache_key_1 = $reflection->invoke( $query1, $query_vars, $request1 );
+		unregister_post_type( 'wptests_pt' );
+		$cache_key_2 = $reflection->invoke( $query1, $query_vars, $request1 );
+
+		$this->assertNotSame( $cache_key_1, $cache_key_2, 'Cache key should differ after unregistering post type.' );
+	}
+
+	/**
+	 * @ticket 59516
+	 *
+	 * @covers WP_Query::generate_cache_key
+	 */
+	public function test_post_in_order_by_clauses_are_not_normalized() {
+		global $wpdb;
+
+		$post_ids = self::$posts;
+
+		$query_vars1 = array(
+			'post__in' => $post_ids,
+			'orderby'  => 'post__in',
+		);
+		$query_vars2 = array(
+			'post__in' => array_reverse( $post_ids ),
+			'orderby'  => 'post__in',
+		);
+
+		$fields   = "{$wpdb->posts}.ID";
+		$query1   = new WP_Query( $query_vars1 );
+		$request1 = str_replace( $fields, "{$wpdb->posts}.*", $query1->request );
+
+		$query2   = new WP_Query( $query_vars2 );
+		$request2 = str_replace( $fields, "{$wpdb->posts}.*", $query2->request );
+
+		$reflection_q1 = new ReflectionProperty( $query1, 'query_cache_key' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$reflection_q1->setAccessible( true );
+		}
+
+		$reflection_q2 = new ReflectionProperty( $query2, 'query_cache_key' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$reflection_q2->setAccessible( true );
+		}
+
+		$this->assertNotSame( $request1, $request2, 'Queries should not match' );
+
+		$cache_key_1 = $reflection_q1->getValue( $query1 );
+		$cache_key_2 = $reflection_q2->getValue( $query2 );
+
+		$this->assertNotSame( $cache_key_1, $cache_key_2, 'Cache key should differ.' );
+		$this->assertNotEmpty( $cache_key_1, 'Cache key for query one should not be empty.' );
+		$this->assertNotEmpty( $cache_key_2, 'Cache key for query two should not be empty.' );
+
+		// Test the posts are returned different orders.
+		$this->assertNotSame( wp_list_pluck( $query1->posts, 'ID' ), wp_list_pluck( $query2->posts, 'ID' ), 'Query one posts should not match the order of query two posts.' );
+		// Test the posts are the same sets.
+		$this->assertSameSets( wp_list_pluck( $query1->posts, 'ID' ), wp_list_pluck( $query2->posts, 'ID' ), 'Query one posts should match the set of query two posts.' );
+	}
+
+	/**
+	 * @ticket 59516
+	 *
+	 * @covers WP_Query::generate_cache_key
+	 */
+	public function test_post_parent_in_order_by_clauses_are_not_normalized() {
+		global $wpdb;
+
+		$parent_pages = self::$pages;
+		$post_names   = array( 'doctor-dillamond', 'elphaba', 'fiyero', 'glinda', 'the-wizard-of-oz' );
+		$child_pages  = array();
+		foreach ( $parent_pages as $key => $parent_page ) {
+			$child_pages[] = self::factory()->post->create(
+				array(
+					'post_parent' => $parent_page,
+					'post_type'   => 'page',
+					'post_name'   => $post_names[ $key ],
+				)
+			);
+		}
+
+		$query_vars1 = array(
+			'post_parent__in' => $parent_pages,
+			'post_type'       => 'page',
+			'orderby'         => 'post_parent__in',
+		);
+
+		$query_vars2 = array(
+			'post_parent__in' => array_reverse( $parent_pages ),
+			'post_type'       => 'page',
+			'orderby'         => 'post_parent__in',
+		);
+
+		$fields   = "{$wpdb->posts}.ID";
+		$query1   = new WP_Query( $query_vars1 );
+		$request1 = str_replace( $fields, "{$wpdb->posts}.*", $query1->request );
+
+		$query2   = new WP_Query( $query_vars2 );
+		$request2 = str_replace( $fields, "{$wpdb->posts}.*", $query2->request );
+
+		$reflection_q1 = new ReflectionProperty( $query1, 'query_cache_key' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$reflection_q1->setAccessible( true );
+		}
+
+		$reflection_q2 = new ReflectionProperty( $query2, 'query_cache_key' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$reflection_q2->setAccessible( true );
+		}
+
+		$this->assertNotSame( $request1, $request2, 'Queries should not match' );
+
+		$cache_key_1 = $reflection_q1->getValue( $query1 );
+		$cache_key_2 = $reflection_q2->getValue( $query2 );
+
+		$this->assertNotSame( $cache_key_1, $cache_key_2, 'Cache key should differ.' );
+		$this->assertNotEmpty( $cache_key_1, 'Cache key for query one should not be empty.' );
+		$this->assertNotEmpty( $cache_key_2, 'Cache key for query two should not be empty.' );
+
+		// Test the posts are returned in the correct order.
+		$this->assertSame( array( 'doctor-dillamond', 'elphaba', 'fiyero', 'glinda', 'the-wizard-of-oz' ), wp_list_pluck( $query1->posts, 'post_name' ), 'Query one posts should be in alphabetical order' );
+		$this->assertSame( array( 'the-wizard-of-oz', 'glinda', 'fiyero', 'elphaba', 'doctor-dillamond' ), wp_list_pluck( $query2->posts, 'post_name' ), 'Query two posts should be in reverse alphabetical order.' );
+		// Test the posts are the same sets.
+		$this->assertSameSets( wp_list_pluck( $query1->posts, 'ID' ), wp_list_pluck( $query2->posts, 'ID' ), 'Query one posts should match the set of query two posts.' );
+	}
+
+	/**
+	 * @ticket 59516
+	 *
+	 * @covers WP_Query::generate_cache_key
+	 */
+	public function test_post_name_in_order_by_clauses_are_not_normalized() {
+		global $wpdb;
+		$post_names = array( 'doctor-dillamond', 'elphaba', 'glinda', 'the-wizard-of-oz' );
+		$posts      = array();
+
+		foreach ( $post_names as $post_name ) {
+			$posts[] = self::factory()->post->create(
+				array(
+					'post_name' => $post_name,
+				)
+			);
+		}
+
+		$query_vars1 = array(
+			'post_name__in' => $post_names,
+			'orderby'       => 'post_name__in',
+		);
+
+		$query_vars2 = array(
+			'post_name__in' => array_reverse( $post_names ),
+			'orderby'       => 'post_name__in',
+		);
+
+		$fields   = "{$wpdb->posts}.ID";
+		$query1   = new WP_Query( $query_vars1 );
+		$request1 = str_replace( $fields, "{$wpdb->posts}.*", $query1->request );
+
+		$query2   = new WP_Query( $query_vars2 );
+		$request2 = str_replace( $fields, "{$wpdb->posts}.*", $query2->request );
+
+		$reflection_q1 = new ReflectionProperty( $query1, 'query_cache_key' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$reflection_q1->setAccessible( true );
+		}
+
+		$reflection_q2 = new ReflectionProperty( $query2, 'query_cache_key' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$reflection_q2->setAccessible( true );
+		}
+
+		$this->assertNotSame( $request1, $request2, 'Queries should not match' );
+
+		$cache_key_1 = $reflection_q1->getValue( $query1 );
+		$cache_key_2 = $reflection_q2->getValue( $query2 );
+
+		$this->assertNotSame( $cache_key_1, $cache_key_2, 'Cache key should differ.' );
+		$this->assertNotEmpty( $cache_key_1, 'Cache key for query one should not be empty.' );
+		$this->assertNotEmpty( $cache_key_2, 'Cache key for query two should not be empty.' );
+
+		// Test the posts are returned in the correct order.
+		$this->assertSame( array( 'doctor-dillamond', 'elphaba', 'glinda', 'the-wizard-of-oz' ), wp_list_pluck( $query1->posts, 'post_name' ), 'Query one posts should be in alphabetical order' );
+		$this->assertSame( array( 'the-wizard-of-oz', 'glinda', 'elphaba', 'doctor-dillamond' ), wp_list_pluck( $query2->posts, 'post_name' ), 'Query two posts should be in reverse alphabetical order.' );
+		// Test the posts are the same sets.
+		$this->assertSameSets( wp_list_pluck( $query1->posts, 'ID' ), wp_list_pluck( $query2->posts, 'ID' ), 'Query one posts should match the set of query two posts.' );
+	}
+
+	/**
+	 * @ticket 59442
+	 * @ticket 59516
+	 *
+	 * @covers WP_Query::generate_cache_key
+	 *
+	 * @dataProvider data_query_cache_duplicate
+	 */
+	public function test_generate_cache_key_normalize( $query_vars1, $query_vars2 ) {
+		global $wpdb;
+
+		$fields   = "{$wpdb->posts}.ID";
+		$query1   = new WP_Query( $query_vars1 );
+		$request1 = str_replace( $fields, "{$wpdb->posts}.*", $query1->request );
+
+		$query2   = new WP_Query( $query_vars2 );
+		$request2 = str_replace( $fields, "{$wpdb->posts}.*", $query2->request );
+
+		$reflection_q1 = new ReflectionProperty( $query1, 'query_cache_key' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$reflection_q1->setAccessible( true );
+		}
+
+		$reflection_q2 = new ReflectionProperty( $query2, 'query_cache_key' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$reflection_q2->setAccessible( true );
+		}
+
+		$this->assertSame( $request1, $request2, 'Queries should match' );
+
+		$cache_key_1 = $reflection_q1->getValue( $query1 );
+		$cache_key_2 = $reflection_q2->getValue( $query2 );
+
+		$this->assertSame( $cache_key_1, $cache_key_2, 'Cache key differs the same effective parameters.' );
+		$this->assertNotEmpty( $cache_key_1, 'Cache key for query one should not be empty.' );
+		$this->assertNotEmpty( $cache_key_2, 'Cache key for query two should not be empty.' );
+	}
+
+	/**
+>>>>>>> cbb79cabb6 (Code Modernization: Address reflection no-op function deprecations in PHP 8.5.)
 	 * @dataProvider data_query_cache
 	 * @ticket 22176
 	 */
