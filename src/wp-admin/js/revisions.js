@@ -17,7 +17,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 *
 	 * @since CP-2.1.0
 	 */
-	var fromRevision, toRevision,
+	var fromRevision, toRevision, observer,
 		chunks = {}, // This object will hold all the diffs and their metadata
 		revisionsArea = document.querySelector( '.revisions' ),
 		fromSliderWrapper = document.querySelector( '.from-slider-wrapper' ),
@@ -25,6 +25,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		toSlider = document.getElementById( 'to-slider' ),
 		previousButton = document.querySelector( '.revisions-previous .button' ),
 		nextButton = document.querySelector( '.revisions-next .button' ),
+		timeline = document.getElementById( 'ticks' ),
 		ticksOptions = document.querySelectorAll( '#ticks option' ),
 		list = document.getElementById( 'revisions-list' ).value.split( ', ' ),
 		fromAuthorCard = document.querySelector( '.diff-meta-from .author-card' ),
@@ -60,6 +61,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			nextButton.disabled = true;
 		}
 		getDiff( '0:' + queryParams.get( 'revision' ) ); // Will return an array of proximal diffs
+	}
+
+	// Check if timeline has wrapped and align first tick accordingly
+	if ( detectFlexWrap( timeline ) ) {
+		document.querySelector( '#ticks option' ).style.marginLeft = '1em';
 	}
 
 	// Track changes in From slider
@@ -318,4 +324,37 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function isVisible( elem ) {
 		return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
 	}
+
+	/**
+	 * Helper function to detect flex-wrapping
+	 *
+	 * @since CP-2.6.0
+	 */
+	function detectFlexWrap( container ) {
+		var firstTop,
+			children = container.children;
+
+		if ( children.length < 2 ) {
+			return false; // No wrap possible
+		}
+
+		firstTop = children[0].offsetTop;
+		for ( var i = 1, n = children.length; i < n; i++ ) {
+			if ( children[i].offsetTop > firstTop ) {
+				return true; // Wrapped!
+			}
+		}
+		return false; // Not wrapped
+	}
+
+	// Watch for wrapping if window is resized
+	observer = new ResizeObserver( function() {
+		if ( detectFlexWrap( timeline ) ) {
+			document.querySelector( '#ticks option' ).style.marginLeft = '1em';
+		} else {
+			document.querySelector( '#ticks option' ).style.marginLeft = '-2.5em';
+		}
+	} );
+	observer.observe( timeline );
+
 } );
