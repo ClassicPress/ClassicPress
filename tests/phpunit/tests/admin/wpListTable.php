@@ -53,11 +53,15 @@ class Tests_Admin_WpListTable extends WP_UnitTestCase {
 		$list_table = _get_list_table( $list_class );
 
 		$column_headers = new ReflectionProperty( $list_table, '_column_headers' );
+		if ( PHP_VERSION_ID < 80100 ) {
 		$column_headers->setAccessible( true );
+		}
 		$column_headers->setValue( $list_table, $headers );
 
 		$column_info = new ReflectionMethod( $list_table, 'get_column_info' );
+		if ( PHP_VERSION_ID < 80100 ) {
 		$column_info->setAccessible( true );
+		}
 
 		$this->assertSame( $expected, $column_info->invoke( $list_table ), 'The actual columns did not match the expected columns' );
 		$this->assertSame( $expected_hook_count, $hook->get_call_count(), 'The hook was not called the expected number of times' );
@@ -142,8 +146,14 @@ class Tests_Admin_WpListTable extends WP_UnitTestCase {
 	 * @param array $expected
 	 */
 	public function test_get_views_links( $link_data, $expected ) {
+<<<<<<< HEAD
 		$get_views_links = new ReflectionMethod( self::$list_table, 'get_views_links' );
+=======
+		$get_views_links = new ReflectionMethod( $this->list_table, 'get_views_links' );
+		if ( PHP_VERSION_ID < 80100 ) {
+>>>>>>> cbb79cabb6 (Code Modernization: Address reflection no-op function deprecations in PHP 8.5.)
 		$get_views_links->setAccessible( true );
+		}
 
 		$actual = $get_views_links->invokeArgs( self::$list_table, array( $link_data ) );
 
@@ -257,9 +267,17 @@ class Tests_Admin_WpListTable extends WP_UnitTestCase {
 	 * }
 	 */
 	public function test_get_views_links_doing_it_wrong( $link_data ) {
+<<<<<<< HEAD
 		$get_views_links = new ReflectionMethod( self::$list_table, 'get_views_links' );
 		$get_views_links->setAccessible( true );
 		$get_views_links->invokeArgs( self::$list_table, array( $link_data ) );
+=======
+		$get_views_links = new ReflectionMethod( $this->list_table, 'get_views_links' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$get_views_links->setAccessible( true );
+		}
+		$get_views_links->invokeArgs( $this->list_table, array( $link_data ) );
+>>>>>>> cbb79cabb6 (Code Modernization: Address reflection no-op function deprecations in PHP 8.5.)
 	}
 
 	/**

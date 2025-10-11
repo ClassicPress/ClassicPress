@@ -77,5 +77,31 @@ class Tests_WP_Hook_Remove_Filter extends WP_UnitTestCase {
 		$hook->remove_filter( $tag, $callback_one, $priority );
 		$this->assertFalse( isset( $hook->callbacks[ $priority ] ) );
 		$this->assertCount( 1, $hook->callbacks[ $priority + 1 ] );
+<<<<<<< HEAD
+=======
+		$this->check_priority_exists( $hook, $priority + 1, 'Should priority of 3' );
+	}
+
+	protected function check_priority_non_existent( $hook, $priority ) {
+		$priorities = $this->get_priorities( $hook );
+
+		$this->assertNotContains( $priority, $priorities );
+	}
+
+	protected function check_priority_exists( $hook, $priority ) {
+		$priorities = $this->get_priorities( $hook );
+
+		$this->assertContains( $priority, $priorities );
+	}
+
+	protected function get_priorities( $hook ) {
+		$reflection          = new ReflectionClass( $hook );
+		$reflection_property = $reflection->getProperty( 'priorities' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$reflection_property->setAccessible( true );
+		}
+
+		return $reflection_property->getValue( $hook );
+>>>>>>> cbb79cabb6 (Code Modernization: Address reflection no-op function deprecations in PHP 8.5.)
 	}
 }

@@ -291,4 +291,23 @@ class Tests_WP_Hook_Add_Filter extends WP_UnitTestCase {
 	public function _action_remove_and_add4() {
 		$this->action_output .= '4';
 	}
+<<<<<<< HEAD
+=======
+
+	protected function check_priority_exists( $hook, $priority ) {
+		$priorities = $this->get_priorities( $hook );
+
+		$this->assertContains( $priority, $priorities );
+	}
+
+	protected function get_priorities( $hook ) {
+		$reflection          = new ReflectionClass( $hook );
+		$reflection_property = $reflection->getProperty( 'priorities' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$reflection_property->setAccessible( true );
+		}
+
+		return $reflection_property->getValue( $hook );
+	}
+>>>>>>> cbb79cabb6 (Code Modernization: Address reflection no-op function deprecations in PHP 8.5.)
 }
