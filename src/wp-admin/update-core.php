@@ -286,6 +286,9 @@ function list_plugin_updates() {
 	global $cp_version;
 	$cur_cp_version = preg_replace( '/\+.*$/', '', $cp_version );
 
+	// Get only the Major version number of ClassicPress
+	preg_match( '/^(\d+)/', $cur_cp_version, $cur_cp_major_version );
+
 	require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
 	$plugins = get_plugin_updates();
 	if ( empty( $plugins ) ) {
@@ -347,7 +350,19 @@ function list_plugin_updates() {
 		}
 
 		// Get plugin compat for running version of ClassicPress.
-		if ( isset( $plugin_data->update->tested ) && version_compare( $plugin_data->update->tested, $cur_wp_version, '>=' ) ) {
+		if (
+			isset( $plugin_data->update->requires_cp )
+			&& str_starts_with( $plugin_data->update->requires_cp, $cur_cp_major_version[1] )
+			&& version_compare( $plugin_data->update->requires_cp, $cur_cp_version, '<=' )
+		) {
+			$compat  = '<br>' . sprintf( __( 'Potentially compatible with ClassicPress %1$s.' ), $cur_cp_version );
+			$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
+		} elseif (
+			isset( $plugin_data->update->tested )
+			&& version_compare( $plugin_data->update->tested, $cur_wp_version, '>=' )
+			&& isset( $plugin_data->update->requires )
+			&& version_compare( $plugin_data->update->requires, $cur_wp_version, '<=' )
+		) {
 			$compat  = '<br>' . sprintf( __( 'Potentially compatible with ClassicPress %1$s.' ), $cur_cp_version );
 			$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
 		} else {
@@ -356,7 +371,19 @@ function list_plugin_updates() {
 		}
 		// Get plugin compat for updated version of ClassicPress.
 		if ( $core_update_version ) {
-			if ( isset( $plugin_data->update->tested ) && version_compare( $plugin_data->update->tested, $core_update_version, '>=' ) ) {
+			if (
+				isset( $plugin_data->update->requires_cp )
+				&& str_starts_with( $plugin_data->update->requires_cp, $cur_cp_major_version[1] )
+				&& version_compare( $plugin_data->update->requires_cp, $core_update_version, '<=' )
+			) {
+				$compat  = '<br>' . sprintf( __( 'Potentially compatible with ClassicPress %1$s.' ), $core_update_version );
+				$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
+			} elseif (
+				isset( $plugin_data->update->tested )
+				&& version_compare( $plugin_data->update->tested, $cur_wp_version, '>=' )
+				&& isset( $plugin_data->update->requires )
+				&& version_compare( $plugin_data->update->requires, $cur_wp_version, '<=' )
+			) {
 				$compat  = '<br>' . sprintf( __( 'Potentially compatible with ClassicPress %1$s.' ), $core_update_version );
 				$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
 			} else {
