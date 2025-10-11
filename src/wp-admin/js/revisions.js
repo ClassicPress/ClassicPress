@@ -82,7 +82,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				option.style.border = '1px solid #00b3bc';
 			} else {
 				option.style.backgroundColor = 'transparent';
-				option.style.border = '1px solid transparent';				
+				option.style.border = '1px solid transparent';
 			}
 		} );
 
@@ -123,7 +123,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				option.style.border = '1px solid #00b3bc';
 			} else {
 				option.style.backgroundColor = 'transparent';
-				option.style.border = '1px solid transparent';				
+				option.style.border = '1px solid transparent';
 			}
 		} );
 
