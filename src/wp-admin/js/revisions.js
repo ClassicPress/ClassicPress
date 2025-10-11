@@ -6,7 +6,7 @@
  * @output wp-admin/js/revisions.js
  */
 
-/* global console, _wpRevisionsSettings, ajaxurl */
+/* global console, _wpRevisionsSettings, ajaxurl, ResizeObserver */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 
