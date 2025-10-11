@@ -3135,7 +3135,10 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 	if ( $type && ! $real_mime && extension_loaded( 'fileinfo' ) ) {
 		$finfo     = finfo_open( FILEINFO_MIME_TYPE );
 		$real_mime = finfo_file( $finfo, $file );
+
+		if ( PHP_VERSION_ID < 80100 ) { // finfo_close() has no effect as of PHP 8.1.
 		finfo_close( $finfo );
+		}
 
 		// fileinfo often misidentifies obscure files as one of these types.
 		$nonspecific_types = array(
@@ -3339,6 +3342,31 @@ function wp_get_image_mime( $file ) {
 			( 'avif' === hex2bin( $magic[2] ) || 'avis' === hex2bin( $magic[2] ) )
 		) {
 			$mime = 'image/avif';
+<<<<<<< HEAD
+=======
+			} elseif ( 'heic' === hex2bin( $magic[2] ) ) {
+				$mime = 'image/heic';
+			} elseif ( 'heif' === hex2bin( $magic[2] ) ) {
+				$mime = 'image/heif';
+			} else {
+				/*
+				 * HEIC/HEIF images and image sequences/animations may have other strings here
+				 * like mif1, msf1, etc. For now fall back to using finfo_file() to detect these.
+				 */
+				if ( extension_loaded( 'fileinfo' ) ) {
+					$fileinfo  = finfo_open( FILEINFO_MIME_TYPE );
+					$mime_type = finfo_file( $fileinfo, $file );
+
+					if ( PHP_VERSION_ID < 80100 ) { // finfo_close() has no effect as of PHP 8.1.
+						finfo_close( $fileinfo );
+					}
+
+					if ( wp_is_heic_image_mime_type( $mime_type ) ) {
+						$mime = $mime_type;
+					}
+				}
+			}
+>>>>>>> 9b6c234bc6 (Code Modernization: Address no-op function deprecations in PHP 8.5.)
 		}
 	} catch ( Exception $e ) {
 		$mime = false;
