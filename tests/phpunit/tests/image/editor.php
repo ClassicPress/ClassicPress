@@ -210,7 +210,7 @@ class Tests_Image_Editor extends WP_Image_UnitTestCase {
 
 		$property = new ReflectionProperty( $editor, 'size' );
 		if ( PHP_VERSION_ID < 80100 ) {
-		$property->setAccessible( true );
+			$property->setAccessible( true );
 		}
 		$property->setValue(
 			$editor,
@@ -258,7 +258,7 @@ class Tests_Image_Editor extends WP_Image_UnitTestCase {
 		);
 		$property = new ReflectionProperty( $editor, 'size' );
 		if ( PHP_VERSION_ID < 80100 ) {
-		$property->setAccessible( true );
+			$property->setAccessible( true );
 		}
 		$property->setValue( $editor, $size );
 
@@ -283,7 +283,7 @@ class Tests_Image_Editor extends WP_Image_UnitTestCase {
 		);
 		$property = new ReflectionProperty( $editor, 'size' );
 		if ( PHP_VERSION_ID < 80100 ) {
-		$property->setAccessible( true );
+			$property->setAccessible( true );
 		}
 		$property->setValue( $editor, $size );
 

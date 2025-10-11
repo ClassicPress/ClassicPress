@@ -772,7 +772,7 @@ class Tests_User_Query_Cache extends WP_UnitTestCase {
 
 		$reflection = new ReflectionMethod( $query1, 'generate_cache_key' );
 		if ( PHP_VERSION_ID < 80100 ) {
-		$reflection->setAccessible( true );
+			$reflection->setAccessible( true );
 		}
 
 		$cache_key_1 = $reflection->invoke( $query1, $query_vars, $request_with_placeholder );

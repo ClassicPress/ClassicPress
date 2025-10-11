@@ -217,7 +217,7 @@ class Tests_Functions_MaybeSerialize extends WP_UnitTestCase {
 			$new_value = unserialize( $serialized );
 			$property  = ( new ReflectionClass( 'WpOrg\Requests\Utility\FilteredIterator' ) )->getProperty( 'callback' );
 			if ( PHP_VERSION_ID < 80100 ) {
-			$property->setAccessible( true );
+				$property->setAccessible( true );
 			}
 			$callback_value = $property->getValue( $new_value );
 

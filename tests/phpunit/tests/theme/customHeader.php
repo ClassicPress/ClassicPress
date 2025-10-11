@@ -505,7 +505,7 @@ class Tests_Theme_CustomHeader extends WP_UnitTestCase {
 		$class    = new ReflectionClass( 'WP_Customize_Manager' );
 		$property = $class->getProperty( 'previewing' );
 		if ( PHP_VERSION_ID < 80100 ) {
-		$property->setAccessible( true );
+			$property->setAccessible( true );
 		}
 		$property->setValue( $this->customize_manager, $value );
 	}

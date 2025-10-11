@@ -360,7 +360,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		$ret  = wp_save_image_file( $file, $img, 'image/jpeg', 1 );
 
 		if ( PHP_VERSION_ID < 80000 ) { // imagedestroy() has no effect as of PHP 8.0.
-		imagedestroy( $img );
+			imagedestroy( $img );
 		}
 
 		unlink( $file );
