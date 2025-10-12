@@ -13,21 +13,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Native HTML5 range sliders
 	 *
-	 * Lays one slider over another to create illusion of two handles on one track/**
- * @file Revisions interface functions.
- *
- * Backbone-free since CP-2.5.0.
- *
- * @output wp-admin/js/revisions.js
- */
-
-/* global console, _wpRevisionsSettings, ajaxurl, ResizeObserver */
-
-document.addEventListener( 'DOMContentLoaded', function() {
-
-	/**
-	 * Native HTML5 range sliders
-	 *
 	 * Lays one slider over another to create illusion of two handles on one track
 	 *
 	 * @since CP-2.1.0
