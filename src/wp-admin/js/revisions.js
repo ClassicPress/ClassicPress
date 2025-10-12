@@ -357,7 +357,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( detectFlexWrap( timeline ) ) {
 			timeline.querySelector( 'option' ).style.marginLeft = '1em';
 			lastOption.style.marginRight = '1em';
-			
 		} else {
 			timeline.querySelector( 'option' ).style.marginLeft = '-2.5em';
 			lastOption.style.marginRight = '-2.5em';
