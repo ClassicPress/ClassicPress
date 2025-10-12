@@ -66,6 +66,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Check if timeline has wrapped and align first tick accordingly
 	if ( detectFlexWrap( timeline ) ) {
+		timeline.style.justifyContent = 'start';
 		timeline.querySelector( 'option' ).style.marginLeft = '1em';
 		lastOption.style.marginRight = '1em';
 	}
@@ -355,9 +356,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Watch for wrapping if window is resized
 	observer = new ResizeObserver( function() {
 		if ( detectFlexWrap( timeline ) ) {
+			timeline.style.justifyContent = 'start';
 			timeline.querySelector( 'option' ).style.marginLeft = '1em';
 			lastOption.style.marginRight = '1em';
 		} else {
+			timeline.style.justifyContent = 'space-between';
 			timeline.querySelector( 'option' ).style.marginLeft = '-2.5em';
 			lastOption.style.marginRight = '-2.5em';
 		}
