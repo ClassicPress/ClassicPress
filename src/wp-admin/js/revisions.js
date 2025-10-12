@@ -70,15 +70,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Track changes in From slider
 	fromSlider.addEventListener( 'input', function() {
+		var fromValue = parseInt( fromSlider.value, 10 ),
+			toValue = parseInt( toSlider.value, 10 );
 
 		// In Compare Two mode, ensure From is not equal to or greater than To
-		if ( isVisible( fromSlider ) && fromSlider.value >= toSlider.value ) {
-			fromSlider.value = parseInt( toSlider.value, 10 ) - 1;
+		if ( isVisible( fromSlider ) && fromValue >= toValue ) {
+			fromSlider.value = toValue - 1;
+			return; // exit handler after forced correction to avoid downstream bugs
 		}
 
 		// Call appropriate revisions
-		fromRevision = isVisible( fromSlider ) ? list[ fromSlider.value ] : list[ 0 ];
-		toRevision = list[ toSlider.value ];
+		fromRevision = isVisible( fromSlider ) ? list[ fromValue ] : list[ 0 ];
+		toRevision = list[ toValue ];
 		compareRevisions( fromRevision + ':' + toRevision );
 
 		// Highlight relevant revisions
