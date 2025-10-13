@@ -424,9 +424,9 @@ class WP_Widget_Text extends WP_Widget {
 	}
 
 	/**
-	 * Loads the required scripts and styles for the widget control.
+	 * Loads the required scripts for the text widget.
 	 *
-	 * @since 4.8.0
+	 * @since CP-2.6.0
 	 */
 	public function enqueue_admin_scripts() {
 		wp_enqueue_editor();
@@ -493,7 +493,8 @@ class WP_Widget_Text extends WP_Widget {
 				'insert_from_url'            => __( 'Insert from URL' ),
 				'unsupported_file_type'      => __( 'Unsupported file type' ),
 				'aria_label'                 => __( 'The current image has no alternative text. The file name is: ' ),
-				'image_file_types'           => $image_file_types,
+				'image_file_types'           => $image_file_types,				
+				'image_details'              => __( 'Image Details' ),
 				'wrong_url'                  => __( 'No file exists at the URL provided.' ),
 				'audio_file_types'           => $audio_file_types,
 				'video_file_types'           => $video_file_types,
@@ -563,6 +564,25 @@ class WP_Widget_Text extends WP_Widget {
 
 			<fieldset>
 				<label for="<?php echo esc_attr( $this->get_field_id( 'text' ) ); ?>" class="screen-reader-text"><?php _e( 'Content:' ); ?></label>
+
+				<?php
+				if ( ! user_can_richedit() ) :
+					?>
+
+					<fieldset id="<?php echo esc_attr( $this->get_field_id( 'text_toolbar' ) ); ?>" class="quicktags-toolbar">
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_strong' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Bold' ); ?>">b</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_em' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Italic' ); ?>">i</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_link' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Insert link' ); ?>">link</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_ul' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Bulleted list' ); ?>">ul</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_ol' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Numbered list' ); ?>">ol</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_li' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'List item' ); ?>">li</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_code' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Code' ); ?>">code</button>
+					</fieldset>
+
+					<?php
+				endif;
+				?>
+
 				<textarea id="<?php echo esc_attr( $this->get_field_id( 'text' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'text' ) ); ?>" class="widefat sync-input" style="height:200px;"><?php echo $escaped_text; ?></textarea>
 			</fieldset>
 
