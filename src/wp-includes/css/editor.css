@@ -1233,11 +1233,13 @@ i.mce-i-wp_code:before {
 	padding-right: 35px;
 }
 
-.wp-core-ui .quicktags-toolbar input.button.button-small {
+.wp-core-ui .quicktags-toolbar input.button.button-small,
+.wp-core-ui .quicktags-toolbar button.button.button-small {
 	margin: 2px;
 }
 
-.quicktags-toolbar input[value="link"] {
+.quicktags-toolbar input[value="link"],
+.quicktags-toolbar button[data-tag="link"] {
 	text-decoration: underline;
 }
 
@@ -1245,12 +1247,14 @@ i.mce-i-wp_code:before {
 	text-decoration: line-through;
 }
 
-.quicktags-toolbar input[value="i"] {
+.quicktags-toolbar input[value="i"],
+.quicktags-toolbar button[data-tag="i"] {
 	font-style: italic;
 }
 
-.quicktags-toolbar input[value="b"] {
-	font-weight: 600;
+.quicktags-toolbar input[value="b"],
+.quicktags-toolbar button[data-tag="b"] {
+	font-weight: 700;
 }
 
 .mce-toolbar .mce-btn-group .mce-btn.mce-wp-dfw,
@@ -1313,7 +1317,8 @@ i.mce-i-wp_code:before {
 }
 
 @media screen and (min-width: 782px) {
-	.wp-core-ui .quicktags-toolbar input.button.button-small {
+	.wp-core-ui .quicktags-toolbar input.button.button-small,
+	.wp-core-ui .quicktags-toolbar button.button-small {
 		/* .button-small is normally 11px, but a bit too small for these buttons. */
 		font-size: 12px;
 		min-height: 26px;
