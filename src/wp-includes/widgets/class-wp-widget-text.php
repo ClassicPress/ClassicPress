@@ -570,13 +570,13 @@ class WP_Widget_Text extends WP_Widget {
 					?>
 
 					<fieldset id="<?php echo esc_attr( $this->get_field_id( 'text_toolbar' ) ); ?>" class="quicktags-toolbar">
-						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_strong' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Bold' ); ?>">b</button>
-						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_em' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Italic' ); ?>">i</button>
-						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_link' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Insert link' ); ?>">link</button>
-						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_ul' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Bulleted list' ); ?>">ul</button>
-						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_ol' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Numbered list' ); ?>">ol</button>
-						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_li' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'List item' ); ?>">li</button>
-						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_code' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Code' ); ?>">code</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_strong' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Bold' ); ?>" data-tag="b">b</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_em' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Italic' ); ?>" data-tag="i">i</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_link' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Insert link' ); ?>" data-tag="link">link</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_ul' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Bulleted list' ); ?>" data-tag="ul">ul</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_ol' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Numbered list' ); ?>" data-tag="ol">ol</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_li' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'List item' ); ?>" data-tag="li">li</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_code' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Code' ); ?>" data-tag="code">code</button>
 					</fieldset>
 
 					<?php
