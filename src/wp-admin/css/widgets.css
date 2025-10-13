@@ -840,6 +840,10 @@ ul.CodeMirror-hints {
 	margin: 1em 0;
 	font-size: 1.2em;
 }
+.widget-content fieldset.quicktags-toolbar {
+	margin: 0;
+	padding: 3px;
+}
 .widget-content .media-widget-control fieldset {
 	font-size: 1.1em;
 }
