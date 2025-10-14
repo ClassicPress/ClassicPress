@@ -79,6 +79,7 @@
 	text-align: center;
 	width: 8em;
 	margin: 0 1em;
+	border: 1px solid transparent;
 }
 #ticks option:first-child {
 	margin-left: -2.5em;
