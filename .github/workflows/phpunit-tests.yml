@@ -117,6 +117,18 @@ jobs:
             memcached: false
             coverage: xdebug
             experimental: false
+          - php: '8.5'
+            mysql: '5.7'
+            multisite: false
+            memcached: false
+            coverage: none
+            experimental: true
+          - php: '8.5'
+            mysql: '8.0'
+            multisite: false
+            memcached: false
+            coverage: none
+            experimental: true
 
     steps:
       - name: Configure environment variables
