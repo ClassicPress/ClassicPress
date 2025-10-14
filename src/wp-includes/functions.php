@@ -5007,13 +5007,14 @@ function _wp_array_get( $input_array, $path, $default_value = null ) {
 	}
 
 	foreach ( $path as $path_element ) {
-		if (
-			! is_array( $input_array ) ||
-			( ! is_string( $path_element ) && ! is_integer( $path_element ) && ! is_null( $path_element ) ) ||
-			! array_key_exists( $path_element, $input_array )
+		if ( ! is_array( $input_array ) ) {
+			return $default_value;
+		}
+
+		if ( is_string( $path_element )
+			|| is_integer( $path_element )
+			|| null === $path_element
 		) {
-<<<<<<< HEAD
-=======
 			/*
 			 * Check if the path element exists in the input array.
 			 * We check with `isset()` first, as it is a lot faster
@@ -5034,10 +5035,7 @@ function _wp_array_get( $input_array, $path, $default_value = null ) {
 			}
 		}
 
->>>>>>> ee22a186e2 (Code Modernization: Fix instances of using `null` as an array offset.)
-			return $default_value;
-		}
-		$input_array = $input_array[ $path_element ];
+		return $default_value;
 	}
 
 	return $input_array;
