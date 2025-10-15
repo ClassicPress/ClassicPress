@@ -3806,38 +3806,35 @@
         labelDecimalSeparator: [getDecimalSeparator(), Type.STRING], // Default is locale separator
         labelThousandsSeparator: [getThousandsSeparator(), Type.STRING], // Default is locale separator
 
-        labelIdle: [
-            'Drag & Drop your files or <span class="filepond--label-action">Browse</span>',
-            Type.STRING,
-        ],
+        labelIdle: [_cpFilepondLabels.labelIdle, Type.STRING],
 
-        labelInvalidField: ['Field contains invalid files', Type.STRING],
-        labelFileWaitingForSize: ['Waiting for size', Type.STRING],
-        labelFileSizeNotAvailable: ['Size not available', Type.STRING],
-        labelFileCountSingular: ['file in list', Type.STRING],
-        labelFileCountPlural: ['files in list', Type.STRING],
-        labelFileLoading: ['Loading', Type.STRING],
-        labelFileAdded: ['Added', Type.STRING], // assistive only
-        labelFileLoadError: ['Error during load', Type.STRING],
-        labelFileRemoved: ['Removed', Type.STRING], // assistive only
-        labelFileRemoveError: ['Error during remove', Type.STRING],
-        labelFileProcessing: ['Uploading', Type.STRING],
-        labelFileProcessingComplete: ['Upload complete', Type.STRING],
-        labelFileProcessingAborted: ['Upload cancelled', Type.STRING],
-        labelFileProcessingError: ['Error during upload', Type.STRING],
-        labelFileProcessingRevertError: ['Error during revert', Type.STRING],
+        labelInvalidField: [_cpFilepondLabels.labelInvalidField, Type.STRING],
+        labelFileWaitingForSize: [_cpFilepondLabels.labelFileWaitingForSize, Type.STRING],
+        labelFileSizeNotAvailable: [_cpFilepondLabels.labelFileSizeNotAvailable, Type.STRING],
+        labelFileCountSingular: [_cpFilepondLabels.labelFileCountSingular, Type.STRING],
+        labelFileCountPlural: [_cpFilepondLabels.labelFileCountPlural, Type.STRING],
+        labelFileLoading: [_cpFilepondLabels.labelFileLoading, Type.STRING],
+        labelFileAdded: [_cpFilepondLabels.labelFileAdded, Type.STRING], // assistive only
+        labelFileLoadError: [_cpFilepondLabels.labelFileLoadError, Type.STRING],
+        labelFileRemoved: [_cpFilepondLabels.labelFileRemoved, Type.STRING], // assistive only
+        labelFileRemoveError: [_cpFilepondLabels.labelFileRemoveError, Type.STRING],
+        labelFileProcessing: [_cpFilepondLabels.labelFileProcessing, Type.STRING],
+        labelFileProcessingComplete: [_cpFilepondLabels.labelFileProcessingComplete, Type.STRING],
+        labelFileProcessingAborted: [_cpFilepondLabels.labelFileProcessingAborted, Type.STRING],
+        labelFileProcessingError: [_cpFilepondLabels.labelFileProcessingError, Type.STRING],
+        labelFileProcessingRevertError: [_cpFilepondLabels.labelFileProcessingRevertError, Type.STRING],
 
-        labelTapToCancel: ['tap to cancel', Type.STRING],
-        labelTapToRetry: ['tap to retry', Type.STRING],
-        labelTapToUndo: ['tap to undo', Type.STRING],
+        labelTapToCancel: [_cpFilepondLabels.labelTapToCancel, Type.STRING],
+        labelTapToRetry: [_cpFilepondLabels.labelTapToRetry, Type.STRING],
+        labelTapToUndo: [_cpFilepondLabels.labelTapToUndo, Type.STRING],
 
-        labelButtonRemoveItem: ['Remove', Type.STRING],
-        labelButtonAbortItemLoad: ['Abort', Type.STRING],
-        labelButtonRetryItemLoad: ['Retry', Type.STRING],
-        labelButtonAbortItemProcessing: ['Cancel', Type.STRING],
-        labelButtonUndoItemProcessing: ['Undo', Type.STRING],
-        labelButtonRetryItemProcessing: ['Retry', Type.STRING],
-        labelButtonProcessItem: ['Upload', Type.STRING],
+        labelButtonRemoveItem: [_cpFilepondLabels.labelButtonRemoveItem, Type.STRING],
+        labelButtonAbortItemLoad: [_cpFilepondLabels.labelButtonAbortItemLoad, Type.STRING],
+        labelButtonRetryItemLoad: [_cpFilepondLabels.labelButtonRetryItemLoad, Type.STRING],
+        labelButtonAbortItemProcessing: [_cpFilepondLabels.labelButtonAbortItemProcessing, Type.STRING],
+        labelButtonUndoItemProcessing: [_cpFilepondLabels.labelButtonUndoItemProcessing, Type.STRING],
+        labelButtonRetryItemProcessing: [_cpFilepondLabels.labelButtonRetryItemProcessing, Type.STRING],
+        labelButtonProcessItem: [_cpFilepondLabels.labelButtonProcessItem, Type.STRING],
 
         // make sure width and height plus viewpox are even numbers so icons are nicely centered
         iconRemove: [

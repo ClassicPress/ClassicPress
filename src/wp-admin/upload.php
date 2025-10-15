@@ -113,6 +113,7 @@ if ( 'grid' === $mode ) {
 	wp_enqueue_style( 'media-grid' );
 	wp_enqueue_script( 'wp-mediaelement' );
 	wp_enqueue_script( 'media-grid' );
+	wp_enqueue_script( 'cp-filepond' );
 
 	remove_action( 'admin_head', 'wp_admin_canonical_url' );
 
@@ -137,6 +138,39 @@ if ( 'grid' === $mode ) {
 			'webp_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) ),
 			'avif_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/avif' ) ),
 			'heic_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/heic' ) ),
+		)
+	);
+
+	wp_localize_script(
+		'cp-filepond',
+		'_cpFilepondLabels',
+		array(
+			'labelIdle'                      => __( 'Drag & Drop your files or <span class="filepond--label-action">Browse</span>' ),
+			'labelInvalidField'              => __( 'Field contains invalid files' ),
+			'labelFileWaitingForSize'        => __( 'Waiting for size' ),
+			'labelFileSizeNotAvailable'      => __( 'Size not available' ),
+			'labelFileCountSingular'         => __( 'file in list' ),
+			'labelFileCountPlural'           => __( 'files in list' ),
+			'labelFileLoading'               => __( 'Loading' ),
+			'labelFileAdded'                 => __( 'Added' ),
+			'labelFileLoadError'             => __( 'Error during load' ),
+			'labelFileRemoved'               => __( 'Removed' ),
+			'labelFileRemoveError'           => __( 'Error during remove' ),
+			'labelFileProcessing'            => __( 'Uploading' ),
+			'labelFileProcessingComplete'    => __( 'Upload complete' ),
+			'labelFileProcessingAborted'     => __( 'Upload cancelled' ),
+			'labelFileProcessingError'       => __( 'Error during upload' ),
+			'labelFileProcessingRevertError' => __( 'Error during revert' ),
+			'labelTapToCancel'               => __( 'tap to cancel' ),
+			'labelTapToRetry'                => __( 'tap to retry' ),
+			'labelTapToUndo'                 => __( 'tap to undo' ),
+			'labelButtonRemoveItem'          => __( 'Remove' ),
+			'labelButtonAbortItemLoad'       => __( 'Abort' ),
+			'labelButtonRetryItemLoad'       => __( 'Retry' ),
+			'labelButtonAbortItemProcessing' => __( 'Cancel' ),
+			'labelButtonUndoItemProcessing'  => __( 'Undo' ),
+			'labelButtonRetryItemProcessing' => __( 'Retry' ),
+			'labelButtonProcessItem'         => __( 'Upload' ),
 		)
 	);
 

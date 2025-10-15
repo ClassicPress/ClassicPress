@@ -118,7 +118,7 @@ function edit_user( $user_id = 0 ) {
 					$term_slugs[] = wp_unslash( $term_slug );
 				}
 				wp_set_object_terms( $user->ID, array_map( 'sanitize_title', array_unique( $term_slugs ) ), $taxonomy->name );
-			} else {
+			} elseif ( $update ) {
 				wp_delete_object_term_relationships( $user->ID, $taxonomy->name );
 			}
 		}
