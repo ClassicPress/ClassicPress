@@ -26,9 +26,9 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 <p class="about-text">
 	<?php
 	printf(
-		/* translators: link to "business-focused CMS" article */
+		/* translators: link to the ClassicPress site */
 		__( 'Thank you for using ClassicPress, the <a href="%s">CMS for Creators</a>.' ),
-		'https://link.classicpress.net/the-cms-for-creators'
+		'https://www.classicpress.net/'
 	);
 	?>
 	<br>
@@ -61,7 +61,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 	<?php
 	printf(
 		/* translators: 1: link to CP Directory, 2: link to GPL */
-		__( 'Every plugin and theme in the <a href="%1$s">ClassicPress Directory</a> falls under the <a href="%2$s">GPL</a> or a similarly free and compatible license.' ),
+		__( 'Every plugin and theme in the <a href="%1$s">ClassicPress Directory</a> is licensed under the <a href="%2$s">GPL</a> or a similarly free and compatible license.' ),
 		'https://directory.classicpress.net/',
 		'https://opensource.org/licenses/gpl-license'
 	);
