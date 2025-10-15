@@ -1092,11 +1092,10 @@ function cp_get_translation_updates() {
 		return;
 	}
 
-	$domains = array( 'admin', 'admin-network', 'continents-cities', 'default' );
 	$po_data = array();
 
-	foreach ( $domains as $domain ) {
-		foreach ( $installed_translations[ $domain ] as $locale => $data ) {
+	foreach ( $installed_translations as $domain ) {
+		foreach ( $domain as $locale => $data ) {
 			if ( ! isset( $po_data[ $locale ] ) ) {
 				$po_data[ $locale ] = strtotime( $data['PO-Revision-Date'] );
 			} else {
