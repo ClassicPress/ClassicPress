@@ -35,7 +35,7 @@ exports.replaceEmojiRegex = async () => {
 	// Fetch a list of the files that Twemoji supplies
 
 	const entityNames = await callTwemojiFilesAPI(
-		'https://api-v1.classicpress.net/twemoji/16fb3e0_v_14.0.2_svg.json'
+		'https://api-v1.classicpress.net/twemoji/49405cc_v_16.0.1_svg.json'
 	);
 
 	// Convert the list of emoji names into PHP code
