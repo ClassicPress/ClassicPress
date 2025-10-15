@@ -26,9 +26,9 @@ if ( ! is_multisite()
 	$media_options_help .= '<p>' . __( 'Uploading Files allows you to choose the folder and path for storing your uploaded files.' ) . '</p>';
 }
 
-$media_options_help .= '<p>' . __( 'You can choose how you would like uploads to be organized after uploading.' ) . '</p>';
+$media_options_help .= '<p>' . __( 'You can choose how you would like uploads to be organized after uploading. By default uploads are organized into month- and year-based folders.' ) . '</p>';
 
-$media_options_help .= '<p>' . __( 'Media attachments, including image, audio, video files, can have Attachment Pages if this is supported by your Theme. You can choose to enable or disable Attachment Pages.' ) . '</p>';
+$media_options_help .= '<p>' . __( 'Media attachments, including image, audio, video files, can have attachment pages. An attachment page displays information about a particular media file you have uploaded to your site. You can choose to enable or disable attachment pages.' ) . '</p>';
 
 $media_options_help .= '<p>' . __( 'You must click the Save Changes button at the bottom of the screen for new settings to take effect.' ) . '</p>';
 
@@ -222,7 +222,7 @@ if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) :
 <table class="form-table" role="presentation">
 
 <tr>
-<th scope="row"><?php _e( 'Do you want to enable attachment pages?' ); ?></th>
+<th scope="row"><?php _e( 'Do you want to enable media attachment pages?' ); ?></th>
 <td class="td-full attachment-pages">
 
 <input type="hidden" name="wp_attachment_pages_enabled" value="0">
