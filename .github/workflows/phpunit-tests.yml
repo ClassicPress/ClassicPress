@@ -141,7 +141,7 @@ jobs:
             memcached: false
             coverage: none
             experimental: true
-           php: '8.5'
+          - php: '8.5'
             mysql: '8.0'
             multisite: false
             memcached: true
