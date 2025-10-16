@@ -6122,8 +6122,6 @@ function validate_file( $file, $allowed_files = array() ) {
 
 	// Normalize path for Windows servers
 	$file = wp_normalize_path( $file );
-	// Normalize path for $allowed_files as well so it's an apples to apples comparison.
-	$allowed_files = array_map( 'wp_normalize_path', $allowed_files );
 
 	// `../` on its own is not allowed:
 	if ( '../' === $file ) {
