@@ -1817,12 +1817,8 @@ class Tests_Functions extends WP_UnitTestCase {
 	 * Test file path validation
 	 *
 	 * @ticket 42016
-<<<<<<< HEAD
-	 * @dataProvider data_test_validate_file
-=======
 	 * @ticket 61488
-	 * @dataProvider data_validate_file
->>>>>>> 3536182095 (Filesystem: Normalize allowed_files so comparison is apples to apples.)
+	 * @dataProvider data_test_validate_file
 	 *
 	 * @param string $file          File path.
 	 * @param array  $allowed_files List of allowed files.
