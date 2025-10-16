@@ -1817,7 +1817,12 @@ class Tests_Functions extends WP_UnitTestCase {
 	 * Test file path validation
 	 *
 	 * @ticket 42016
+<<<<<<< HEAD
 	 * @dataProvider data_test_validate_file
+=======
+	 * @ticket 61488
+	 * @dataProvider data_validate_file
+>>>>>>> 3536182095 (Filesystem: Normalize allowed_files so comparison is apples to apples.)
 	 *
 	 * @param string $file          File path.
 	 * @param array  $allowed_files List of allowed files.
@@ -1935,6 +1940,13 @@ class Tests_Functions extends WP_UnitTestCase {
 				'C:/WINDOWS/system32',
 				array( 'C:/WINDOWS/system32' ),
 				2,
+			),
+
+			// Windows Path with allowed file
+			array(
+				'Apache24\htdocs\wordpress/wp-content/themes/twentyten/style.css',
+				array( 'Apache24\htdocs\wordpress/wp-content/themes/twentyten/style.css' ),
+				0,
 			),
 
 			// Disallowed files:
