@@ -527,7 +527,9 @@ class Tests_WP_Script_Modules extends WP_UnitTestCase {
 	 */
 	public function test_get_src() {
 		$get_src = new ReflectionMethod( $this->script_modules, 'get_src' );
-		$get_src->setAccessible( true );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$get_src->setAccessible( true );
+		}
 
 		$this->script_modules->register(
 			'module_with_version',
