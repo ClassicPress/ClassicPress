@@ -3792,7 +3792,9 @@ function wp_ajax_get_revision_diffs() {
 		$diffs_array[ $diff['id'] ]['author_right'] = $author_right;
 
 		$diffs_string  = '<h3>' . esc_html__( 'Title' ) . '</h3>' . $diff['fields'][0]['diff'];
-		$diffs_string .= '<h3>' . esc_html__( 'Content' ) . '</h3>' . $diff['fields'][1]['diff'];
+		if ( ! empty( $diff['fields'][1] ) ) {
+			$diffs_string .= '<h3>' . esc_html__( 'Content' ) . '</h3>' . $diff['fields'][1]['diff'];
+		}
 		$diffs_array[ $diff['id'] ]['diffs'] = $diffs_string;
 	}
 
