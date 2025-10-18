@@ -289,7 +289,7 @@ if ( 'grid' === $mode ) {
 
 		<div class="uploader-inline" data-allowed-mimes="<?php echo esc_attr( $mimes_list ); ?>" hidden inert>
 			<button type="button" class="close dashicons dashicons-no">
-				<span class="screen-reader-text">Close uploader</span>
+				<span class="screen-reader-text"><?php esc_html_e( 'Close uploader' ); ?></span>
 			</button>
 
 			<input type="file" id="filepond" class="filepond" name="filepond" multiple data-allow-reorder="true">
