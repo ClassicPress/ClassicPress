@@ -1166,8 +1166,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		},
 		labelTapToUndo: _wpMediaGridSettings.tap_close,
 		fileRenameFunction: ( file ) =>
-			new Promise( function( resolve ) {
-				resolve( window.prompt( _wpMediaGridSettings.new_filename, file.name ) );
+			new Promise( ( resolve, reject ) => {
+				const newName = window.prompt(
+				_wpMediaGridSettings.new_filename,
+				file.name
+				);
+				resolve( newName === null ? file.name : newName );
 			} ),
 		acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 		labelFileTypeNotAllowed: _wpMediaGridSettings.invalid_type,
