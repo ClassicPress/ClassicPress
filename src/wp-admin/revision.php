@@ -103,11 +103,19 @@ switch ( $action ) {
 			break;
 		}
 
-		$post_edit_link = get_edit_post_link();
-		$post_title     = '<a href="' . $post_edit_link . '">' . _draft_or_post_title() . '</a>';
+		$post_edit_link      = get_edit_post_link();
+		$nonce               = wp_create_nonce( 'revisions-list' );
+		$revisions_list_link = admin_url( 'revisions-list.php?post_parent=' . absint( $post->ID ) . '&amp;_wpnonce=' . $nonce );
+		$post_title          = '<a href="' . $post_edit_link . '">' . _draft_or_post_title() . '</a>';
 		/* translators: %s: Post title. */
-		$h1             = sprintf( __( 'Compare Revisions of &#8220;%s&#8221;' ), $post_title );
-		$return_to_post = '<a href="' . $post_edit_link . '">' . __( '&larr; Go to editor' ) . '</a>';
+		$h1                  = sprintf( __( 'Compare Revisions of &#8220;%s&#8221;' ), $post_title );
+		$return_to_post      = '<div class="return-to-post">';
+		$return_to_post     .= '<a href="' . $post_edit_link . '">' . __( '&larr; Go to editor' ) . '</a>';
+		if ( wp_revisions_enabled( $post ) ) {
+			$return_to_post .= ' <a href="' . esc_url( $revisions_list_link ) . '">' . __( 'Go to list of revisions &rarr;' ) . '</a>';
+		}
+		$return_to_post     .= '</div>';
+
 		// Used in the HTML title tag.
 		$title = __( 'Revisions' );
 
