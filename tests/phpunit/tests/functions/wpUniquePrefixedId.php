@@ -86,12 +86,11 @@ class Tests_Functions_WpUniquePrefixedId extends WP_UnitTestCase {
 	 * @param array  $expected_ids              Expected unique IDs.
 	 */
 	public function test_should_raise_notice_and_use_empty_string_prefix_when_nonstring_given( $non_string_prefix, $number_of_ids_to_generate, $expected_message, $expected_ids ) {
-		$this->expectNotice();
-		$this->expectNoticeMessage( $expected_message );
+		$this->assertExpectedError( 'wp_unique_prefixed_id', array( $expected_message, $non_string_prefix ) );
 
 		$ids = array();
 		for ( $i = 0; $i < $number_of_ids_to_generate; $i++ ) {
-			$ids[] = wp_unique_prefixed_id( $non_string_prefix );
+			$ids[] = @wp_unique_prefixed_id( $non_string_prefix );
 		}
 
 		$this->assertSameSets( $ids, array_unique( $ids ), 'IDs are not unique.' );
