@@ -67,7 +67,8 @@ class CP_Post_Revisions_List_Table extends WP_List_Table {
 	public function column_cb( $item ) {
 		return sprintf(
 			'<label class="screen-reader-text" for="revision_%1$d">' . __( 'Select Revision %1$d' ) . '</label>' .
-			'<input type="checkbox" name="revision_ids[]" id="revision_%1$d" value="%1$d">', absint( $item->ID )
+			'<input type="checkbox" name="revision_ids[]" id="revision_%1$d" value="%1$d">',
+			absint( $item->ID )
 		);
 	}
 
@@ -94,10 +95,10 @@ class CP_Post_Revisions_List_Table extends WP_List_Table {
 				return date( 'j F Y H:i:s', strtotime( $item->post_date ) );
 			case 'view':
 				return '<button type="button" class="page-title-action">' . __( 'View' ) . '</button>';
-		    case 'delete':
+			case 'delete':
 				$delete_url = add_query_arg(
 					array(
-						'action'      => 'delete', 
+						'action'      => 'delete',
 						'revision_id' => $item->ID,
 						'post_parent' => $post_id,
 					),
@@ -109,7 +110,7 @@ class CP_Post_Revisions_List_Table extends WP_List_Table {
 				return '';
 		}
 	}
-	 
+
 	/**
 	 * Retrieves an associative array of bulk actions available on this table.
 	 *
@@ -119,7 +120,7 @@ class CP_Post_Revisions_List_Table extends WP_List_Table {
 	 */
 	public function get_bulk_actions() {
 		return array(
-			'bulk-delete' => __( 'Delete' )
+			'bulk-delete' => __( 'Delete' ),
 		);
 	}
 
@@ -135,7 +136,7 @@ class CP_Post_Revisions_List_Table extends WP_List_Table {
 				case 'bulk-delete':
 					$revision_ids = array_map( 'absint', $_GET['revision_ids'] );
 					$count = count( $revision_ids ) > 1 ? count( $revision_ids ) . ' ' . __( 'revisions' ) : '1 ' . __( 'revision' );
-					foreach( $revision_ids as $revision_id ) {
+					foreach ( $revision_ids as $revision_id ) {
 						wp_delete_post_revision( $revision_id );
 					}
 					break;
@@ -145,7 +146,7 @@ class CP_Post_Revisions_List_Table extends WP_List_Table {
 			}
 		}
 	}
-	
+
 	/**
 	 * Adds a modal at the bottom of the page
 	 *
