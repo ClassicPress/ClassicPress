@@ -159,20 +159,20 @@ class CP_Post_Revisions_List_Table extends WP_List_Table {
 		if ( $which === 'bottom' ) {
 			?>
 			
-			<dialog id="modal-revision" class="media-modal" aria-labelledby="modal-revision-title">
+			<dialog id="modal-revision" class="modal-revision" aria-labelledby="modal-revision-title">
 
-				<header class="modal-header">
+				<header class="modal-revision-header">
 					<h2 id="modal-revision-title"></h2>
-					<button type="button" id="dialog-close-button" class="dashicons-no dashicons" autofocus>
+					<button type="button" id="modal-revision-close-button" class="dashicons-no dashicons" autofocus>
 						<span class="screen-reader-text"><?php esc_html_e( 'Close dialog' ); ?></span>
 					</button>
 				</header>
 
-				<div class="modal-content">
-					<div id="modal-revision-content" class="modal-revision-content"></div>
+				<div class="modal-revision-content-outer">
+					<div id="modal-revision-content-inner" class="modal-revision-content"></div>
 
-					<footer class="modal-footer">
-						<button type="button" id="modal-button" class="modal-button"><?php esc_html_e( 'Close' ); ?></button>
+					<footer class="modal-revision-footer">
+						<button type="button" id="modal-revision-button" class="modal-revision-button"><?php esc_html_e( 'Close' ); ?></button>
 					</footer>
 				</div>
 
