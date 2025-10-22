@@ -151,7 +151,7 @@ class CP_Post_Revisions_List_Table extends WP_List_Table {
 	 * Adds a modal at the bottom of the page
 	 *
 	 * @since CP-2.6.0
-	 * 
+	 *
 	 * @param string $which bottom
 	 *
 	 * @return string
