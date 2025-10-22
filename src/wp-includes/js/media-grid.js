@@ -1168,11 +1168,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		fileRenameFunction: ( file ) =>
 			new Promise( ( resolve ) => {
 				const newName = window.prompt(
-				_wpMediaGridSettings.new_filename,
-				file.name
+					_wpMediaGridSettings.new_filename,
+					file.name
 				);
 				resolve( newName === null ? file.name : newName );
-			} ),
+			}
+		),
 		acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 		labelFileTypeNotAllowed: _wpMediaGridSettings.invalid_type,
 		fileValidateTypeLabelExpectedTypes: _wpMediaGridSettings.check_types
