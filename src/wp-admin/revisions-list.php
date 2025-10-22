@@ -1,7 +1,7 @@
 <?php
 
 /** ClassicPress Administration Bootstrap */
-require_once( dirname( __FILE__ ) . '/admin.php' );
+require_once __DIR__ . '/admin.php';
 
 // Clean up URL
 $_SERVER['REQUEST_URI'] = remove_query_arg( array( '_wp_http_referer' ), $_SERVER['REQUEST_URI'] );
