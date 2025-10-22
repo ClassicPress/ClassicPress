@@ -859,7 +859,7 @@ function wp_default_scripts( $scripts ) {
 	$scripts->add( 'mediaelement', "/wp-includes/js/mediaelement/mediaelement-and-player$suffix.js", array(), '7.0.3', 1 );
 
 	did_action( 'init' ) && $scripts->add_inline_script(
-		'mediaelement-core',
+		'mediaelement',
 		sprintf(
 			'var mejsL10n = %s;',
 			wp_json_encode(
