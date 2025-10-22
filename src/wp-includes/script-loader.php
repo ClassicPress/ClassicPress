@@ -830,6 +830,38 @@ function wp_default_scripts( $scripts ) {
 	$scripts->add( 'cp-filepond-file-rename', "/wp-includes/js/filepond/filepond-plugin-file-rename$suffix.js", array(), '1.1.8' );
 	$scripts->add( 'cp-filepond-plugin-image-preview', "/wp-includes/js/filepond/filepond-plugin-image-preview$suffix.js", array(), '4.6.12' );
 	$scripts->add( 'cp-filepond', "/wp-includes/js/filepond/cp-filepond$suffix.js", array(), '4.31.2' );
+	did_action( 'init' ) && $scripts->localize(
+		'cp-filepond',
+		'_cpFilepondLabels',
+		array(
+			'labelIdle'                      => __( 'Drag & Drop your files or <span class="filepond--label-action">Browse</span>' ),
+			'labelInvalidField'              => __( 'Field contains invalid files' ),
+			'labelFileWaitingForSize'        => __( 'Waiting for size' ),
+			'labelFileSizeNotAvailable'      => __( 'Size not available' ),
+			'labelFileCountSingular'         => __( 'file in list' ),
+			'labelFileCountPlural'           => __( 'files in list' ),
+			'labelFileLoading'               => __( 'Loading' ),
+			'labelFileAdded'                 => __( 'Added' ),
+			'labelFileLoadError'             => __( 'Error during load' ),
+			'labelFileRemoved'               => __( 'Removed' ),
+			'labelFileRemoveError'           => __( 'Error during remove' ),
+			'labelFileProcessing'            => __( 'Uploading' ),
+			'labelFileProcessingComplete'    => __( 'Upload complete' ),
+			'labelFileProcessingAborted'     => __( 'Upload cancelled' ),
+			'labelFileProcessingError'       => __( 'Error during upload' ),
+			'labelFileProcessingRevertError' => __( 'Error during revert' ),
+			'labelTapToCancel'               => __( 'tap to cancel' ),
+			'labelTapToRetry'                => __( 'tap to retry' ),
+			'labelTapToUndo'                 => __( 'tap to undo' ),
+			'labelButtonRemoveItem'          => __( 'Remove' ),
+			'labelButtonAbortItemLoad'       => __( 'Abort' ),
+			'labelButtonRetryItemLoad'       => __( 'Retry' ),
+			'labelButtonAbortItemProcessing' => __( 'Cancel' ),
+			'labelButtonUndoItemProcessing'  => __( 'Undo' ),
+			'labelButtonRetryItemProcessing' => __( 'Retry' ),
+			'labelButtonProcessItem'         => __( 'Upload' ),
+		)
+	);
 
 	$scripts->add( 'comment-reply', "/wp-includes/js/comment-reply$suffix.js", array(), false, 1 );
 
