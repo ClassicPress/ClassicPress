@@ -1317,6 +1317,31 @@ function wp_default_scripts( $scripts ) {
 			false,
 			1
 		);
+		did_action( 'init' ) && $scripts->localize(
+			'media-grid',
+			'_wpMediaGridSettings',
+			array(
+				'by'               => __( 'by' ),
+				'pixels'           => __( 'pixels' ),
+				'deselect'         => __( 'Deselect' ),
+				'failed_update'    => __( 'Failed to update media:' ),
+				'error'            => __( 'Error:' ),
+				'upload_failed'    => __( 'Upload failed' ),
+				'aborted'          => __( 'Upload aborted for' ),
+				'tap_close'        => __( 'Tap to close' ),
+				'new_filename'     => __( 'Enter new filename' ),
+				'invalid_type'     => __( 'Invalid file type' ),
+				'check_types'      => __( 'Check the list of accepted file types.' ),
+				'delete_failed'    => __( 'Failed to delete attachment.' ),
+				'confirm_delete'   => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+				'confirm_multiple' => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+				'includes_url'     => includes_url(),
+				'webp_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) ),
+				'avif_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/avif' ) ),
+				'heic_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/heic' ) ),
+			)
+		);
+
 		$scripts->add( 'media', "/wp-admin/js/media$suffix.js", array( 'jquery', 'wp-i18n', 'wp-a11y' ), false, 1 );
 		$scripts->set_translations( 'media' );
 
