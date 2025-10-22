@@ -6120,8 +6120,10 @@ function validate_file( $file, $allowed_files = array() ) {
 		return 0;
 	}
 
-	// Normalize path for Windows servers
+	// Normalize path for Windows servers.
 	$file = wp_normalize_path( $file );
+	// Normalize path for $allowed_files as well so it's an apples to apples comparison.
+	$allowed_files = array_map( 'wp_normalize_path', $allowed_files );
 
 	// `../` on its own is not allowed:
 	if ( '../' === $file ) {
@@ -7748,6 +7750,40 @@ function wp_is_uuid( $uuid, $version = null ) {
 function wp_unique_id( $prefix = '' ) {
 	static $id_counter = 0;
 	return $prefix . (string) ++$id_counter;
+}
+
+/**
+ * Generates an incremental ID that is independent per each different prefix.
+ *
+ * It is similar to `wp_unique_id`, but each prefix has its own internal ID
+ * counter to make each prefix independent from each other. The ID starts at 1
+ * and increments on each call. The returned value is not universally unique,
+ * but it is unique across the life of the PHP process and it's stable per
+ * prefix.
+ *
+ * @since 6.4.0
+ *
+ * @param string $prefix Optional. Prefix for the returned ID. Default empty string.
+ * @return string Incremental ID per prefix.
+ */
+function wp_unique_prefixed_id( $prefix = '' ) {
+	static $id_counters = array();
+
+	if ( ! is_string( $prefix ) ) {
+		wp_trigger_error(
+			__FUNCTION__,
+			sprintf( 'The prefix must be a string. "%s" data type given.', gettype( $prefix ) )
+		);
+		$prefix = '';
+	}
+
+	if ( ! isset( $id_counters[ $prefix ] ) ) {
+		$id_counters[ $prefix ] = 0;
+	}
+
+	$id = ++$id_counters[ $prefix ];
+
+	return $prefix . (string) $id;
 }
 
 /**
