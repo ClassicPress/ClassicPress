@@ -595,7 +595,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						var gridItem = populateGridItem( attachment );
 						mediaGrid.appendChild( gridItem );
 					} );
-					
+
 					// Reset grid order
 					items = document.querySelectorAll( '.media-item' );
 					items.forEach( function( item, index ) {
@@ -640,7 +640,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						document.getElementById( 'current-page-selector' ).setAttribute( 'value', paged ? paged : 1 );
 						document.getElementById( 'current-page-selector' ).value = paged ? paged : 1;
 						document.querySelector( '.total-pages' ).textContent = result.headers.max_pages;
-	
+
 						num = document.querySelector( '.displaying-num' ).textContent.split( ' ' );
 						document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
 
