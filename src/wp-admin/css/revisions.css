@@ -231,7 +231,7 @@ body.folded .revisions .loading-indicator {
 
 .revision-toggle-compare-mode {
 	position: absolute;
-	top: -5em;
+	top: -2em;
 	right: 0;
 }
 
@@ -664,6 +664,101 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
 
 .wp-slider.ui-slider-horizontal .ui-slider-range-max {
 	right: 0;
+}
+
+.return-to-post {
+	display: flex;
+	justify-content: space-between;
+}
+
+/* Revisions List */
+.modal-revision {
+	background: #fff;
+	width: 97%;	
+	max-width: 740px;
+	height: 90%;
+	padding: 1em;
+	font-size: 16px;
+}
+
+.modal-revision * {
+	box-sizing: content-box;
+}
+
+.modal-revision-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height:initial;
+	margin-bottom: 20px;
+	border-bottom: 1px solid black;
+}
+
+.modal-revision-close {
+	background: transparent;
+	border: 0;
+	cursor: pointer;
+	margin: 0;
+	padding: 0.2rem 0.3rem 0.1rem;
+	font-size: 24px;
+}
+
+.modal-revision-header .modal-revision-close::before {
+	content: "\2715";
+}
+
+.modal-revision-content-outer {
+	margin: 2rem 0;
+	line-height: 1.5;
+	font-size: 16px;
+}
+
+.modal-revision-content {
+	white-space: pre-line;
+}
+
+#modal-revision-close-button {
+	font-size: .875em;
+	padding: 1em;
+	background-color: #f6f7f7;
+	border-radius: .25em;
+	cursor: pointer;
+	line-height: 1.15;
+	margin: 1em 0;
+}
+
+#modal-revision-close-button::before {
+	font-size: 24px;
+	position: relative;
+	top: -4px;
+	left: -2px;
+}
+
+#modal-revision-close-button:hover,
+#modal-revision-close-button:focus {
+	outline: 1px solid;
+}
+
+.modal-revision-button {
+	font-size: .875em;
+	padding: 0.5em 1em;
+	background-color: #f6f7f7;
+	color: #2271b1;
+	border: 1px solid #2271b1;
+	border-radius: .25em;
+	cursor: pointer;
+	line-height: 1.15;
+	margin: 1em 0;
+}
+
+.modal-revision-button:hover,
+.modal-revision-button:focus {
+	outline: 1px solid #2271b1;
+}
+
+dialog::backdrop {
+	background: #000;
+	opacity: 0.7;
 }
 
 /* =Media Queries
