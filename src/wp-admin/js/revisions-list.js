@@ -10,8 +10,8 @@
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	var dialog = document.getElementById( 'modal-revision' ),
-		closeButton = document.getElementById( 'dialog-close-button' ),
-		modalButton = document.getElementById( 'modal-button' );
+		closeButton = document.getElementById( 'modal-revision-close-button' ),
+		modalButton = document.getElementById( 'modal-revision-button' );
 
 	// Open modal to view Revision on revisions-list.php
 	document.querySelectorAll( 'table button.page-title-action' ).forEach( function( button ) {
@@ -34,7 +34,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} )
 			.then( function( result ) {
 				dialog.querySelector( 'h2' ).textContent = result.data.post_title;
-				dialog.querySelector( '#modal-revision-content' ).innerHTML = result.data.post_content;
+				dialog.querySelector( '#modal-revision-content-inner' ).innerHTML = result.data.post_content;
 				dialog.showModal();
 			} )
 			.catch( function( error ) {
@@ -65,7 +65,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		document.body.style.overflow = '';
 		dialog.close();
 		dialog.querySelector( 'h2' ).textContent = '';
-		dialog.querySelector( '#modal-revision-content' ).innerHTML = '';
+		dialog.querySelector( '#modal-revision-content-inner' ).innerHTML = '';
 	}
 	closeButton.addEventListener( 'click', closeModalDialog );
 	modalButton.addEventListener( 'click', closeModalDialog );
