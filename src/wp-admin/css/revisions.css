@@ -738,21 +738,8 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
 	outline: none;
 }
 
-.modal-revision-button {
+#modal-revision-button {
 	font-size: .875em;
-	padding: 0.5em 1em;
-	background-color: #f6f7f7;
-	color: #2271b1;
-	border: 1px solid #2271b1;
-	border-radius: .25em;
-	cursor: pointer;
-	line-height: 1.15;
-	margin: 1em 0;
-}
-
-.modal-revision-button:hover,
-.modal-revision-button:focus {
-	outline: 1px solid #2271b1;
 }
 
 .modal-revision-content-outer {
