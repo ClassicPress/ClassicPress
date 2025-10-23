@@ -673,11 +673,11 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
 
 /* Revisions List */
 .modal-revision {
+	padding: 0;
 	background: #fff;
 	width: 97%;	
 	max-width: 740px;
 	height: 90%;
-	padding: 1em;
 	font-size: 16px;
 }
 
@@ -689,54 +689,53 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	height:initial;
-	margin-bottom: 20px;
-	border-bottom: 1px solid black;
+	height: 48px;
+	border-bottom: 1px solid #dcdcde;
 }
 
-.modal-revision-close {
-	background: transparent;
-	border: 0;
-	cursor: pointer;
-	margin: 0;
-	padding: 0.2rem 0.3rem 0.1rem;
-	font-size: 24px;
-}
-
-.modal-revision-header .modal-revision-close::before {
-	content: "\2715";
-}
-
-.modal-revision-content-outer {
-	margin: 2rem 0;
-	line-height: 1.5;
-	font-size: 16px;
-}
-
-.modal-revision-content {
-	white-space: pre-line;
+#modal-revision-title {
+	margin: 0 0 0 0.75em;
+	line-height: 2;
+	width: 85%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 #modal-revision-close-button {
-	font-size: .875em;
-	padding: 1em;
-	background-color: #f6f7f7;
-	border-radius: .25em;
+	padding: 0;
 	cursor: pointer;
-	line-height: 1.15;
-	margin: 1em 0;
+	height: 48px;
+	width: 50px;
+	text-align: center;
+	border: 0;
+	border-left: 1px solid #dcdcde;
+	background-color: transparent;
+	transition: color .1s ease-in-out, background .1s ease-in-out;
 }
 
 #modal-revision-close-button::before {
-	font-size: 24px;
-	position: relative;
-	top: -4px;
-	left: -2px;
+	font: normal 22px/50px dashicons !important;
+	color: #787c82;
+	display: inline-block;
+	content: "\f335";
+	font-weight: 300;
 }
 
-#modal-revision-close-button:hover,
+#modal-revision-close-button:hover {
+	background: #dcdcde;
+	border-color: #c3c4c7;
+	color: #000;
+}
+
+#modal-revision-close-button:focus::before,
+#modal-revision-close-button:hover::before {
+	color: #000;
+}
+
 #modal-revision-close-button:focus {
-	outline: 1px solid;
+	box-shadow: none;
+	outline: none;
 }
 
 .modal-revision-button {
@@ -754,6 +753,17 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
 .modal-revision-button:hover,
 .modal-revision-button:focus {
 	outline: 1px solid #2271b1;
+}
+
+.modal-revision-content-outer {
+	padding: 1em;
+	line-height: 1.5;
+	font-size: 16px;
+}
+
+.modal-revision-content {
+	margin-bottom:1em;
+	white-space: pre-line;
 }
 
 dialog::backdrop {
