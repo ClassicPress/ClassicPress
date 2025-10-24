@@ -1,4 +1,4 @@
-/* global MediaElementPlayer */
+/* global MediaElementPlayer, _wpmejsSettings */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 
