@@ -672,6 +672,10 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
 }
 
 /* Revisions List */
+.revisions-list .column-delete a {
+	color: #b32d2e;
+}
+
 .modal-revision {
 	padding: 0;
 	background: #fff;
