@@ -230,9 +230,8 @@ body.folded .revisions .loading-indicator {
 }
 
 .revision-toggle-compare-mode {
-	position: absolute;
-	top: -2em;
-	right: 0;
+	margin-left: calc(50% - 94px);
+	margin-top: 1em;
 }
 
 .comparing-two-revisions .revisions-previous,
@@ -273,6 +272,7 @@ body.folded .revisions .loading-indicator {
 
 .revisions-next {
 	float: right;
+	margin-top: -1.5em;
 }
 
 .revisions-controls .wp-slider {
@@ -792,6 +792,10 @@ dialog::backdrop {
 	.revisions-controls,
 	.comparing-two-revisions .revisions-controls {
 		height: 170px;
+	}
+
+	.revisions-next {
+		margin-top: -2.6em;
 	}
 
 	.revisions-tooltip {
