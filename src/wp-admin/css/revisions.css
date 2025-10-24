@@ -667,6 +667,7 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
 }
 
 .return-to-post {
+	margin: 1em 0;
 	display: flex;
 	justify-content: space-between;
 }
@@ -756,6 +757,7 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
 	margin-bottom: 1em;
 	line-height: 2.5;
 	white-space: pre-wrap;
+	font-family: Consolas, Monaco, monospace;
 }
 
 dialog::backdrop {
