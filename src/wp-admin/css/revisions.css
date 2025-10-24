@@ -749,8 +749,11 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
 }
 
 .modal-revision-content {
-	margin-bottom:1em;
-	white-space: pre-line;
+	margin-bottom: 1em;
+}
+
+.modal-revision-content p {
+	font-size: 1em;
 }
 
 dialog::backdrop {
