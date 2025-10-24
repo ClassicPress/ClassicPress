@@ -2947,7 +2947,13 @@ function wp_ajax_get_revision() {
 		wp_send_json_error();
 	}
 
-	wp_send_json_success( $post );
+	wp_send_json_success(
+		array(
+			'title'   => $post->post_title,
+			'content' => apply_filters( 'the_content', $post->post_content ),
+		),
+		200
+	);
 }
 
 /**
