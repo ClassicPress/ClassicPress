@@ -754,15 +754,8 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
 
 .modal-revision-content {
 	margin-bottom: 1em;
-}
-
-.modal-revision-content p {
-	font-size: 1em;
-}
-
-.modal-revision-content img {
-	max-width: 100%;
-	height: auto;
+	line-height: 2.5;
+	white-space: pre-wrap;
 }
 
 dialog::backdrop {
