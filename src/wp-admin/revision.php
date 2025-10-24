@@ -145,7 +145,6 @@ wp_enqueue_script( 'revisions' );
 wp_localize_script( 'revisions', '_wpRevisionsSettings', wp_prepare_revisions_for_js( $post, $revision_id, $from ) );
 
 /* Revisions Help Tab */
-
 $revisions_overview  = '<p>' . __( 'This screen is used for managing your content revisions.' ) . '</p>';
 $revisions_overview .= '<p>' . __( 'Revisions are saved copies of your post or page, which are periodically created as you update your content. The red text on the left shows the content that was removed. The green text on the right shows the content that was added.' ) . '</p>';
 $revisions_overview .= '<p>' . __( 'From this screen you can review, compare, and restore revisions:' ) . '</p>';
@@ -232,17 +231,14 @@ $ticks .= '</datalist>';
 					<div class="revisions-previous">
 						<input class="button" type="button" value="<?php echo esc_attr_x( 'Previous', 'Button label for a previous revision' ); ?>">
 					</div>
-					<div class="revisions-next">
-						<input class="button" type="button" value="<?php echo esc_attr_x( 'Next', 'Button label for a next revision' ); ?>">
-					</div>
-				</div>
-				<div class="revisions-checkbox">
 					<div class="revision-toggle-compare-mode">
 						<input id="compare-two-revisions" type="checkbox" class="compare-two-revisions">
 						<label for="compare-two-revisions"><?php esc_html_e( 'Compare any two revisions' ); ?></label>
 					</div>
+					<div class="revisions-next">
+						<input class="button" type="button" value="<?php echo esc_attr_x( 'Next', 'Button label for a next revision' ); ?>">
+					</div>
 				</div>
-				<div></div>
 				<div class="revisions-meta">
 					<div class="diff-meta diff-meta-from">
 						<div class="diff-title">
