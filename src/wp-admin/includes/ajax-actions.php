@@ -2950,7 +2950,7 @@ function wp_ajax_get_revision() {
 	wp_send_json_success(
 		array(
 			'title'   => $post->post_title,
-			'content' => apply_filters( 'the_content', $post->post_content ),
+			'content' => esc_html( apply_filters( 'the_content', $post->post_content ) ),
 		),
 		200
 	);
