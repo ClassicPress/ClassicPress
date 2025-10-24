@@ -171,7 +171,9 @@ unset( $messages );
 
 <div class="wrap">
 	<h1><?php esc_html_e( 'List of Revisions of ' ); ?>“<a href="<?php echo esc_url( admin_url( 'post.php?post=' . $post_id . '&action=edit' ) ); ?>"><?php esc_html_e( get_post( $post_id )->post_title ); ?></a>”</h1>
-	<a href="<?php echo esc_url( admin_url( 'revision.php?revision=' . $last_revision->ID ) ); ?>"><?php esc_html_e( '&larr; Go to revisions' ); ?></a>
+	<div class="return-to-post">
+		<a href="<?php echo esc_url( admin_url( 'revision.php?revision=' . $last_revision->ID ) ); ?>"><?php esc_html_e( '&larr; Go to revisions' ); ?></a>
+	</div>
 
 	<hr class="wp-header-end">
 
