@@ -33,8 +33,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				throw new Error( response.status );
 			} )
 			.then( function( result ) {
-				dialog.querySelector( 'h2' ).textContent = result.data.post_title;
-				dialog.querySelector( '#modal-revision-content-inner' ).innerHTML = result.data.post_content;
+				dialog.querySelector( 'h2' ).textContent = result.data.title;
+				dialog.querySelector( '#modal-revision-content-inner' ).innerHTML = result.data.content;
 				dialog.showModal();
 			} )
 			.catch( function( error ) {
