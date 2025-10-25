@@ -562,8 +562,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
-			var items, num;
-
 			if ( result.success ) {
 
 				// Clear existing grid
@@ -594,12 +592,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					result.data.forEach( function( attachment ) {
 						var gridItem = populateGridItem( attachment );
 						mediaGrid.appendChild( gridItem );
-					} );
-
-					// Reset grid order
-					items = document.querySelectorAll( '.media-item' );
-					items.forEach( function( item, index ) {
-						item.setAttribute( 'data-order', parseInt( index + 1 ) );
 					} );
 
 					// Reset pagination
@@ -640,9 +632,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						document.getElementById( 'current-page-selector' ).setAttribute( 'value', paged ? paged : 1 );
 						document.getElementById( 'current-page-selector' ).value = paged ? paged : 1;
 						document.querySelector( '.total-pages' ).textContent = result.headers.max_pages;
-
-						num = document.querySelector( '.displaying-num' ).textContent.split( ' ' );
-						document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
+						document.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, result.headers.total_posts );
 
 						queryParams.set( 'paged', paged );
 						history.replaceState( null, null, '?' + queryParams.toString() );
@@ -1114,13 +1104,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		server: {
 			process: function( fieldName, file, metadata, load, error, progress, abort ) {
 
-				// Create a new AbortController for this request
-				const controller = new AbortController();
-				const signal = controller.signal;
-		
-				// Prepare FormData
+				// Create FormData
 				var formData = new FormData();
-				file.id = file.name;
 				formData.append( 'async-upload', file, file.name );
 				formData.append( 'action', 'upload-attachment' );
 				formData.append( '_wpnonce', document.getElementById( '_wpnonce' ).value );
@@ -1129,8 +1114,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				fetch( ajaxurl, {
 					method: 'POST',
 					body: formData,
-					credentials: 'same-origin',
-					signal: signal
+					credentials: 'same-origin'
 				} )
 				.then( function( response ) {
 					if ( response.ok ) {
@@ -1159,12 +1143,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 				} )
 				.catch( function( err ) {
-					if ( err.name === 'AbortError' ) {
-						console.warn( _wpMediaGridSettings.aborted, file.name );
-					} else {
-						error(_wpMediaGridSettings.upload_failed);
-						console.error(_wpMediaGridSettings.error, err);
-					}
+					error( _wpMediaGridSettings.upload_failed );
+					console.error( _wpMediaGridSettings.error, err );
 				} );
 
 				// Return an abort function
@@ -1196,7 +1176,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		},
 		labelTapToUndo: _wpMediaGridSettings.tap_close,
 		fileRenameFunction: ( file ) =>
-			new Promise( ( resolve ) => {
+			new Promise( function( resolve ) {
 				const newName = window.prompt(
 					_wpMediaGridSettings.new_filename,
 					file.name
