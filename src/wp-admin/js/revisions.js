@@ -99,22 +99,25 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Track changes in To slider
 	toSlider.addEventListener( 'input', function() {
+		var fromValue = parseInt( fromSlider.value, 10 ),
+			toValue = parseInt( toSlider.value, 10 );
 
 		// Call appropriate revisions
 		if ( isVisible( fromSlider ) ) {
 
 			// In Compare Two mode, ensure To is not equal to or less than From
-			if ( toSlider.value <= fromSlider.value ) {
-				toSlider.value = parseInt( fromSlider.value, 10 ) + 1;
+			if ( toValue <= fromValue ) {
+				toSlider.value = fromValue + 1;
+				toValue = fromValue + 1;
 			}
-			fromRevision = list[ fromSlider.value ];
-			toRevision = list[ toSlider.value ];
+			fromRevision = list[ fromValue ];
+			toRevision = list[ toValue ];
 			queryParams.delete( 'revision' );
 			queryParams.set( 'from', fromRevision );
 			queryParams.set( 'to', toRevision );
 		} else {
-			fromRevision = list[ parseInt( toSlider.value, 10 ) - 1 ];
-			toRevision = list[ toSlider.value ];
+			fromRevision = list[ toValue - 1 ];
+			toRevision = list[ toValue ];
 			queryParams.delete( 'from' );
 			queryParams.delete( 'to' );
 			queryParams.set( 'revision', toRevision );
