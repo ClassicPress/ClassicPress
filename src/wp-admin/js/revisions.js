@@ -350,7 +350,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Watch for wrapping if window is resized
 	 *
 	 * @since CP-2.6.0
-	 */	
+	 */
 	observer = new ResizeObserver( function() {
 		detectFlexWrap( timeline );
 	} );
