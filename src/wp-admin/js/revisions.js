@@ -64,13 +64,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		getDiff( '0:' + queryParams.get( 'revision' ) ); // Will return an array of proximal diffs
 	}
 
-	// Check if timeline has wrapped and align first tick accordingly
-	if ( detectFlexWrap( timeline ) ) {
-		timeline.style.justifyContent = 'start';
-		timeline.querySelector( 'option' ).style.marginLeft = '1em';
-		lastOption.style.marginRight = '1em';
-	}
-
 	// Track changes in From slider
 	fromSlider.addEventListener( 'input', function() {
 		var fromValue = parseInt( fromSlider.value, 10 ),
@@ -347,23 +340,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		firstTop = children[0].offsetTop;
 		for ( var i = 1, n = children.length; i < n; i++ ) {
 			if ( children[i].offsetTop > firstTop ) {
-				return true; // Wrapped!
+				document.body.classList.add( 'timeline-wrapped' ); // Wrapped!
+			} else {
+				document.body.classList.remove( 'timeline-wrapped' ); // Not wrapped
 			}
 		}
-		return false; // Not wrapped
 	}
 
-	// Watch for wrapping if window is resized
+	/*
+	 * Watch for wrapping if window is resized
+	 *
+	 * @since CP-2.6.0
+	 */	
 	observer = new ResizeObserver( function() {
-		if ( detectFlexWrap( timeline ) ) {
-			timeline.style.justifyContent = 'start';
-			timeline.querySelector( 'option' ).style.marginLeft = '1em';
-			lastOption.style.marginRight = '1em';
-		} else {
-			timeline.style.justifyContent = 'space-between';
-			timeline.querySelector( 'option' ).style.marginLeft = '-2.5em';
-			lastOption.style.marginRight = '-2.5em';
-		}
+		detectFlexWrap( timeline );
 	} );
 	observer.observe( timeline );
 
