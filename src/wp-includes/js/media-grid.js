@@ -1,7 +1,8 @@
 /* global console, _wpMediaGridSettings, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
 
 document.addEventListener( 'DOMContentLoaded', function() {
-	var pond, itemID, focusID, uploadID,
+	var pond, itemID, focusID,
+		uploadID = null,
 		{ FilePond } = window, // import FilePond
 		queryParams = new URLSearchParams( window.location.search ),
 		addNew = document.querySelector( '.page-title-action' ),
@@ -1155,8 +1156,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						pond.removeFile( file.id, { revert: true } );
 
 						// If the file has already been uploaded to the server, delete it
-						if ( uploadID ) {
+						if ( uploadID !== null ) {
 							deleteItem( uploadID );
+							uploadID = null;
 						}
 
 						// Tell filePond to stop tracking the file
