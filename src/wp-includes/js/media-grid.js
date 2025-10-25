@@ -1,7 +1,7 @@
 /* global console, _wpMediaGridSettings, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
 
 document.addEventListener( 'DOMContentLoaded', function() {
-	var pond, itemID, focusID,
+	var pond, itemID, focusID, uploadID,
 		{ FilePond } = window, // import FilePond
 		queryParams = new URLSearchParams( window.location.search ),
 		addNew = document.querySelector( '.page-title-action' ),
@@ -562,6 +562,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
+			var items, num;
+
 			if ( result.success ) {
 
 				// Clear existing grid
@@ -592,6 +594,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					result.data.forEach( function( attachment ) {
 						var gridItem = populateGridItem( attachment );
 						mediaGrid.appendChild( gridItem );
+					} );
+
+					// Reset grid order
+					items = document.querySelectorAll( '.media-item' );
+					items.forEach( function( item, index ) {
+						item.setAttribute( 'data-order', parseInt( index + 1 ) );
 					} );
 
 					// Reset pagination
@@ -632,7 +640,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						document.getElementById( 'current-page-selector' ).setAttribute( 'value', paged ? paged : 1 );
 						document.getElementById( 'current-page-selector' ).value = paged ? paged : 1;
 						document.querySelector( '.total-pages' ).textContent = result.headers.max_pages;
-						document.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, result.headers.total_posts );
+
+						num = document.querySelector( '.displaying-num' ).textContent.split( ' ' );
+						document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
 
 						queryParams.set( 'paged', paged );
 						history.replaceState( null, null, '?' + queryParams.toString() );
@@ -1104,8 +1114,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		server: {
 			process: function( fieldName, file, metadata, load, error, progress, abort ) {
 
-				// Create FormData
+				// Create a new AbortController for this request
+				const controller = new AbortController();
+				const signal = controller.signal;
+		
+				// Prepare FormData
 				var formData = new FormData();
+				file.id = file.name;
 				formData.append( 'async-upload', file, file.name );
 				formData.append( 'action', 'upload-attachment' );
 				formData.append( '_wpnonce', document.getElementById( '_wpnonce' ).value );
@@ -1114,7 +1129,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				fetch( ajaxurl, {
 					method: 'POST',
 					body: formData,
-					credentials: 'same-origin'
+					credentials: 'same-origin',
+					signal: signal
 				} )
 				.then( function( response ) {
 					if ( response.ok ) {
@@ -1126,6 +1142,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					var gridItem;
 					if ( result.success ) {
 						load( result.data );
+						uploadID = result.data.id;
 						gridItem = populateGridItem( result.data );
 						mediaGrid.prepend( gridItem );
 
@@ -1142,14 +1159,27 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 				} )
 				.catch( function( err ) {
-					error( _wpMediaGridSettings.upload_failed );
-					console.error( _wpMediaGridSettings.error, err );
+					if ( err.name === 'AbortError' ) {
+						console.warn( _wpMediaGridSettings.aborted, file.name );
+					} else {
+						error(_wpMediaGridSettings.upload_failed);
+						console.error(_wpMediaGridSettings.error, err);
+					}
 				} );
 
 				// Return an abort function
 				return {
-					abort: function() {
-						// This function is called when the user aborts the upload
+					abort: () => {
+
+						// Cancel the fetch request
+						pond.removeFile( file.id, { revert: true } );
+
+						// If the file has already been uploaded to the server, delete it
+						if ( uploadID ) {
+							deleteItem( uploadID );
+						}
+
+						// Tell filePond to stop tracking the file
 						abort();
 					}
 				};
@@ -1166,12 +1196,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		},
 		labelTapToUndo: _wpMediaGridSettings.tap_close,
 		fileRenameFunction: ( file ) =>
-			new Promise( function( resolve ) {
+			new Promise( ( resolve ) => {
 				const newName = window.prompt(
 					_wpMediaGridSettings.new_filename,
 					file.name
 				);
-				resolve( newName === null ? file.name : newName );
+				resolve( newName === null ? pond.removeFile( file.id, { revert: true } ) : newName );
 			}
 		),
 		acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
