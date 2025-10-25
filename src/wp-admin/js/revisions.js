@@ -27,7 +27,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		nextButton = document.querySelector( '.revisions-next .button' ),
 		timeline = document.getElementById( 'ticks' ),
 		ticksOptions = timeline.querySelectorAll( 'option' ),
-		lastOption = ticksOptions[ticksOptions.length - 1],
 		list = document.getElementById( 'revisions-list' ).value.split( ', ' ),
 		fromAuthorCard = document.querySelector( '.diff-meta-from .author-card' ),
 		toAuthorCard = document.querySelector( '.diff-meta-to .author-card' ),
