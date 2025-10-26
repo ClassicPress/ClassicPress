@@ -3,6 +3,7 @@
 document.addEventListener( 'DOMContentLoaded', function() {
 	var pond, itemID, focusID,
 		uploadID = null,
+		_cancelNames = new Set(),
 		{ FilePond } = window, // import FilePond
 		queryParams = new URLSearchParams( window.location.search ),
 		addNew = document.querySelector( '.page-title-action' ),
@@ -1185,14 +1186,25 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				);
 				if ( newName === null ) { // Upload cancelled
 
-					// Stop all pending uploads, clear queue, reset UI
-					pond.removeFiles( { revert: true } );
-					return;
+					// Mark this file name for cancellation
+					_cancelNames.add( file.name );
+
+					// Allow the file to be added, but we'll remove it immediately below in onaddfile
+					resolve( file.name );
 				} else { // Continue uploading file
 					resolve( newName );
 				}
+			} ),
+		onaddfile: ( error, fileItem ) => {
+			if (_cancelNames.has( fileItem.file.name ) ) {
+
+				// Remove the file right after it appears
+				setTimeout( () => {
+					pond.removeFile( fileItem.id, { revert: true } );
+					_cancelNames.delete( fileItem.file.name );
+				}, 0 );
 			}
-		),
+		},
 		acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 		labelFileTypeNotAllowed: _wpMediaGridSettings.invalid_type,
 		fileValidateTypeLabelExpectedTypes: _wpMediaGridSettings.check_types
