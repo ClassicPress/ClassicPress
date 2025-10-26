@@ -1178,7 +1178,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		},
 		labelTapToUndo: _wpMediaGridSettings.tap_close,
 		fileRenameFunction: ( file ) =>
-			new Promise( function( resolve ) {
+			new Promise( ( resolve, reject ) => {
 				const newName = window.prompt(
 					_wpMediaGridSettings.new_filename,
 					file.name
