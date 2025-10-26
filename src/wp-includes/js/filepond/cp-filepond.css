@@ -626,15 +626,10 @@
 	left: 0;
 	right: 0;
 	z-index: 1;
-
 	padding: 0;
 	margin: 0.25em;
-
-	will-change: transform, opacity;
-
+	will-change: auto !important;
 	touch-action: none;
-
-	/* item children order */
 }
 .filepond--item > .filepond--panel {
 	z-index: -1;
