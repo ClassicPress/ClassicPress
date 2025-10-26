@@ -1183,7 +1183,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					_wpMediaGridSettings.new_filename,
 					file.name
 				);
-				resolve( newName === null ? pond.removeFile( file.id, { revert: true } ) : newName );
+				if ( newName === null ) { // Upload cancelled
+
+					// Stop all pending uploads, clear queue, reset UI
+					pond.removeFiles( { revert: true } );
+					return;
+				} else { // Continue uploading file
+					resolve( newName );
+				}
 			}
 		),
 		acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
