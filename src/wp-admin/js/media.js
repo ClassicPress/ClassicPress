@@ -1708,7 +1708,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Make notices dismissible.
 		document.addEventListener( 'click', function( e ) {
 			if ( e.target.className === 'notice-dismiss' ) {
-				document.querySelector( '.is-dismissible' ).remove();
+				e.target.closest( '.is-dismissible' ).remove();
 			}
 		} );
 	}
