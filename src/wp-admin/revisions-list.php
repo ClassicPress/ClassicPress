@@ -35,24 +35,26 @@ if ( empty( $_GET['_wpnonce'] ) ) {
 	wp_die( __( 'You cannot do this.' ) );
 }
 
-if ( ! empty( $_GET['revision_id'] ) ) { // delete individual revision
-	$revision_id = $_GET['revision_id'];
-	if ( absint( $revision_id ) === 0 ) {
-		wp_die( __( 'No revision ID.' ) );
+if ( ! empty( $_GET['action'] ) ) {
+	if ( $_GET['action'] === 'delete' && ! empty( $_GET['revision_id'] ) ) { // delete individual revision
+		$revision_id = $_GET['revision_id'];
+		if ( absint( $revision_id ) === 0 ) {
+			wp_die( __( 'No revision ID.' ) );
+		}
+
+		// Delete specific revision
+		check_admin_referer( 'delete_revision_' . $revision_id ); // check nonce
+		wp_delete_post_revision( $revision_id );
+	} elseif ( $_GET['action'] === 'bulk-delete' && ! empty( $_GET['revision_ids'] ) ) { // bulk delete revisions
+		$revision_ids = array_map( 'absint', $_GET['revision_ids'] );
+		if ( in_array( 0, $revision_ids, true ) ) {
+			wp_die( __( 'Incorrect revision ID.' ) );
+		}
+
+		// Process bulk deletions
+		check_admin_referer( 'bulk-revisions-list' ); // check nonce
+		$list_table->process_bulk_action();
 	}
-	check_admin_referer( 'delete_revision_' . $revision_id ); // check nonce
-	wp_delete_post_revision( $revision_id );
-
-} elseif ( ! empty( $_GET['revision_ids'] ) ) { // bulk delete revisions
-	$revision_ids = array_map( 'absint', $_GET['revision_ids'] );
-	if ( in_array( 0, $revision_ids, true ) ) {
-		wp_die( __( 'Incorrect revision ID.' ) );
-	}
-
-	// Process bulk actions
-	check_admin_referer( 'bulk-revisions-list' ); // check nonce
-	$list_table->process_bulk_action();
-
 } else { // load page after following link from revision.php
 	check_admin_referer( 'revisions-list' ); // check nonce
 }
