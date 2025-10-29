@@ -139,7 +139,6 @@ class CP_Post_Revisions_List_Table extends WP_List_Table {
 						break;
 					}
 					$revision_ids = array_map( 'absint', $_GET['revision_ids'] );
-					$count = count( $revision_ids ) > 1 ? count( $revision_ids ) . ' ' . __( 'revisions' ) : '1 ' . __( 'revision' );
 					foreach ( $revision_ids as $revision_id ) {
 						wp_delete_post_revision( $revision_id );
 					}
