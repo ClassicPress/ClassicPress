@@ -1,7 +1,7 @@
 module.exports = [
 	{
 		"languageOptions": {
-			"ecmaVersion": 6
+			"ecmaVersion": 11
 		},
 		"rules": {
 			"block-scoped-var": "error",
