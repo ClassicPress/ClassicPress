@@ -27,7 +27,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		nextButton = document.querySelector( '.revisions-next .button' ),
 		timeline = document.getElementById( 'ticks' ),
 		ticksOptions = timeline.querySelectorAll( 'option' ),
-		lastOption = ticksOptions[ticksOptions.length - 1],
 		list = document.getElementById( 'revisions-list' ).value.split( ', ' ),
 		fromAuthorCard = document.querySelector( '.diff-meta-from .author-card' ),
 		toAuthorCard = document.querySelector( '.diff-meta-to .author-card' ),
@@ -62,13 +61,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			nextButton.disabled = true;
 		}
 		getDiff( '0:' + queryParams.get( 'revision' ) ); // Will return an array of proximal diffs
-	}
-
-	// Check if timeline has wrapped and align first tick accordingly
-	if ( detectFlexWrap( timeline ) ) {
-		timeline.style.justifyContent = 'start';
-		timeline.querySelector( 'option' ).style.marginLeft = '1em';
-		lastOption.style.marginRight = '1em';
 	}
 
 	// Track changes in From slider
@@ -107,22 +99,25 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Track changes in To slider
 	toSlider.addEventListener( 'input', function() {
+		var fromValue = parseInt( fromSlider.value, 10 ),
+			toValue = parseInt( toSlider.value, 10 );
 
 		// Call appropriate revisions
 		if ( isVisible( fromSlider ) ) {
 
 			// In Compare Two mode, ensure To is not equal to or less than From
-			if ( toSlider.value <= fromSlider.value ) {
-				toSlider.value = parseInt( fromSlider.value, 10 ) + 1;
+			if ( toValue <= fromValue ) {
+				toSlider.value = fromValue + 1;
+				toValue = fromValue + 1;
 			}
-			fromRevision = list[ fromSlider.value ];
-			toRevision = list[ toSlider.value ];
+			fromRevision = list[ fromValue ];
+			toRevision = list[ toValue ];
 			queryParams.delete( 'revision' );
 			queryParams.set( 'from', fromRevision );
 			queryParams.set( 'to', toRevision );
 		} else {
-			fromRevision = list[ parseInt( toSlider.value, 10 ) - 1 ];
-			toRevision = list[ toSlider.value ];
+			fromRevision = list[ toValue - 1 ];
+			toRevision = list[ toValue ];
 			queryParams.delete( 'from' );
 			queryParams.delete( 'to' );
 			queryParams.set( 'revision', toRevision );
@@ -347,23 +342,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		firstTop = children[0].offsetTop;
 		for ( var i = 1, n = children.length; i < n; i++ ) {
 			if ( children[i].offsetTop > firstTop ) {
-				return true; // Wrapped!
+				document.body.classList.add( 'timeline-wrapped' ); // Wrapped!
+			} else {
+				document.body.classList.remove( 'timeline-wrapped' ); // Not wrapped
 			}
 		}
-		return false; // Not wrapped
 	}
 
-	// Watch for wrapping if window is resized
+	/*
+	 * Watch for wrapping if window is resized
+	 *
+	 * @since CP-2.6.0
+	 */
 	observer = new ResizeObserver( function() {
-		if ( detectFlexWrap( timeline ) ) {
-			timeline.style.justifyContent = 'start';
-			timeline.querySelector( 'option' ).style.marginLeft = '1em';
-			lastOption.style.marginRight = '1em';
-		} else {
-			timeline.style.justifyContent = 'space-between';
-			timeline.querySelector( 'option' ).style.marginLeft = '-2.5em';
-			lastOption.style.marginRight = '-2.5em';
-		}
+		detectFlexWrap( timeline );
 	} );
 	observer.observe( timeline );
 

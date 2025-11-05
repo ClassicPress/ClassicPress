@@ -562,6 +562,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
+			var items, num;
+
 			if ( result.success ) {
 
 				// Clear existing grid
@@ -592,6 +594,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					result.data.forEach( function( attachment ) {
 						var gridItem = populateGridItem( attachment );
 						mediaGrid.appendChild( gridItem );
+					} );
+
+					// Reset grid order
+					items = document.querySelectorAll( '.media-item' );
+					items.forEach( function( item, index ) {
+						item.setAttribute( 'data-order', parseInt( index + 1 ) );
 					} );
 
 					// Reset pagination
@@ -632,7 +640,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						document.getElementById( 'current-page-selector' ).setAttribute( 'value', paged ? paged : 1 );
 						document.getElementById( 'current-page-selector' ).value = paged ? paged : 1;
 						document.querySelector( '.total-pages' ).textContent = result.headers.max_pages;
-						document.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, result.headers.total_posts );
+
+						num = document.querySelector( '.displaying-num' ).textContent.split( ' ' );
+						document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
 
 						queryParams.set( 'paged', paged );
 						history.replaceState( null, null, '?' + queryParams.toString() );
