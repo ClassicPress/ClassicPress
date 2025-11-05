@@ -2920,6 +2920,43 @@ function wp_ajax_dismiss_wp_pointer() {
 }
 
 /**
+ * Ajax handler for getting a revision.
+ *
+ * @since CP-2.6.0
+ */
+function wp_ajax_get_revision() {
+	if ( ! isset( $_REQUEST['id'] ) ) {
+		wp_send_json_error();
+	}
+
+	$id = absint( $_REQUEST['id'] );
+	if ( ! $id ) {
+		wp_send_json_error();
+	}
+
+	$post = get_post( $id );
+	if ( ! $post ) {
+		wp_send_json_error();
+	}
+
+	if ( 'revision' !== $post->post_type ) {
+		wp_send_json_error();
+	}
+
+	if ( ! current_user_can( 'read_post', $post->post_parent ) || ! current_user_can( 'edit_post', $post->post_parent ) || ! current_user_can( 'delete_post', $post->post_parent ) ) {
+		wp_send_json_error();
+	}
+
+	wp_send_json_success(
+		array(
+			'title'   => $post->post_title,
+			'content' => esc_html( apply_filters( 'the_content', $post->post_content ) ),
+		),
+		200
+	);
+}
+
+/**
  * Ajax handler for getting an attachment.
  *
  * @since 3.5.0
@@ -3792,7 +3829,9 @@ function wp_ajax_get_revision_diffs() {
 		$diffs_array[ $diff['id'] ]['author_right'] = $author_right;
 
 		$diffs_string  = '<h3>' . esc_html__( 'Title' ) . '</h3>' . $diff['fields'][0]['diff'];
-		$diffs_string .= '<h3>' . esc_html__( 'Content' ) . '</h3>' . $diff['fields'][1]['diff'];
+		if ( ! empty( $diff['fields'][1] ) ) {
+			$diffs_string .= '<h3>' . esc_html__( 'Content' ) . '</h3>' . $diff['fields'][1]['diff'];
+		}
 		$diffs_array[ $diff['id'] ]['diffs'] = $diffs_string;
 	}
 

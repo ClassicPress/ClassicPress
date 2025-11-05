@@ -117,63 +117,6 @@ if ( 'grid' === $mode ) {
 
 	remove_action( 'admin_head', 'wp_admin_canonical_url' );
 
-	wp_localize_script(
-		'media-grid',
-		'_wpMediaGridSettings',
-		array(
-			'by'               => __( 'by' ),
-			'pixels'           => __( 'pixels' ),
-			'deselect'         => __( 'Deselect' ),
-			'failed_update'    => __( 'Failed to update media:' ),
-			'error'            => __( 'Error:' ),
-			'upload_failed'    => __( 'Upload failed' ),
-			'tap_close'        => __( 'Tap to close' ),
-			'new_filename'     => __( 'Enter new filename' ),
-			'invalid_type'     => __( 'Invalid file type' ),
-			'check_types'      => __( 'Check the list of accepted file types.' ),
-			'delete_failed'    => __( 'Failed to delete attachment.' ),
-			'confirm_delete'   => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
-			'confirm_multiple' => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
-			'includes_url'     => includes_url(),
-			'webp_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) ),
-			'avif_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/avif' ) ),
-			'heic_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/heic' ) ),
-		)
-	);
-
-	wp_localize_script(
-		'cp-filepond',
-		'_cpFilepondLabels',
-		array(
-			'labelIdle'                      => __( 'Drag & Drop your files or <span class="filepond--label-action">Browse</span>' ),
-			'labelInvalidField'              => __( 'Field contains invalid files' ),
-			'labelFileWaitingForSize'        => __( 'Waiting for size' ),
-			'labelFileSizeNotAvailable'      => __( 'Size not available' ),
-			'labelFileCountSingular'         => __( 'file in list' ),
-			'labelFileCountPlural'           => __( 'files in list' ),
-			'labelFileLoading'               => __( 'Loading' ),
-			'labelFileAdded'                 => __( 'Added' ),
-			'labelFileLoadError'             => __( 'Error during load' ),
-			'labelFileRemoved'               => __( 'Removed' ),
-			'labelFileRemoveError'           => __( 'Error during remove' ),
-			'labelFileProcessing'            => __( 'Uploading' ),
-			'labelFileProcessingComplete'    => __( 'Upload complete' ),
-			'labelFileProcessingAborted'     => __( 'Upload cancelled' ),
-			'labelFileProcessingError'       => __( 'Error during upload' ),
-			'labelFileProcessingRevertError' => __( 'Error during revert' ),
-			'labelTapToCancel'               => __( 'tap to cancel' ),
-			'labelTapToRetry'                => __( 'tap to retry' ),
-			'labelTapToUndo'                 => __( 'tap to undo' ),
-			'labelButtonRemoveItem'          => __( 'Remove' ),
-			'labelButtonAbortItemLoad'       => __( 'Abort' ),
-			'labelButtonRetryItemLoad'       => __( 'Retry' ),
-			'labelButtonAbortItemProcessing' => __( 'Cancel' ),
-			'labelButtonUndoItemProcessing'  => __( 'Undo' ),
-			'labelButtonRetryItemProcessing' => __( 'Retry' ),
-			'labelButtonProcessItem'         => __( 'Upload' ),
-		)
-	);
-
 	add_screen_option(
 		'per_page',
 		array(
@@ -289,7 +232,7 @@ if ( 'grid' === $mode ) {
 
 		<div class="uploader-inline" data-allowed-mimes="<?php echo esc_attr( $mimes_list ); ?>" hidden inert>
 			<button type="button" class="close dashicons dashicons-no">
-				<span class="screen-reader-text">Close uploader</span>
+				<span class="screen-reader-text"><?php esc_html_e( 'Close uploader' ); ?></span>
 			</button>
 
 			<input type="file" id="filepond" class="filepond" name="filepond" multiple data-allow-reorder="true">

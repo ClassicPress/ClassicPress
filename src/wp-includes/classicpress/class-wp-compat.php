@@ -72,10 +72,10 @@ class WP_Compat {
 			<td colspan="<?php echo $wp_list_table->get_column_count(); ?>" class="plugin-update colspanchange" <?php echo $shadow; ?>>
 				<?php wp_admin_notice( $notice_msg, $notice_args ); ?>
 			</td>
+			<script>
+				document.querySelector('tr[data-plugin="<?php echo $plugin_file; ?>"').classList.add('update');
+			</script>
 		</tr>
-		<script>
-			document.querySelector('tr[data-plugin="<?php echo $plugin_file; ?>"').classList.add('update');
-		</script>
 		<?php
 	}
 

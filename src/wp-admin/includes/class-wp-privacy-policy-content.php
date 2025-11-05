@@ -395,16 +395,16 @@ final class WP_Privacy_Policy_Content {
 
 			$sanitized_policy_name = sanitize_title_with_dashes( $plugin_name );
 			?>
-			<h4 class="privacy-settings-accordion-heading">
-			<button aria-expanded="false" class="privacy-settings-accordion-trigger" aria-controls="privacy-settings-accordion-block-<?php echo $sanitized_policy_name; ?>" type="button">
-				<span class="title"><?php echo $plugin_name; ?></span>
-				<?php if ( ! empty( $section['removed'] ) || ! empty( $section['updated'] ) ) : ?>
-				<span class="badge <?php echo $badge_class; ?>"> <?php echo $badge_title; ?></span>
-				<?php endif; ?>
-				<span class="icon"></span>
-			</button>
-			</h4>
-			<div id="privacy-settings-accordion-block-<?php echo $sanitized_policy_name; ?>" class="privacy-settings-accordion-panel privacy-text-box-body" hidden="hidden">
+			<summary class="privacy-settings-accordion-summary">
+				<h4 class="privacy-settings-accordion-heading">
+					<span class="title"><?php echo $plugin_name; ?></span>
+					<?php if ( ! empty( $section['removed'] ) || ! empty( $section['updated'] ) ) : ?>
+					<span class="badge <?php echo $badge_class; ?>"> <?php echo $badge_title; ?></span>
+					<?php endif; ?>
+					<span class="icon"></span>
+				</h4>
+			</summary>
+			<div id="privacy-settings-accordion-block-<?php echo $sanitized_policy_name; ?>" class="privacy-settings-accordion-panel privacy-text-box-body">
 				<?php
 				echo $removed;
 				echo $section['policy_text'];

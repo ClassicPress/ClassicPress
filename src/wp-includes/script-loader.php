@@ -830,6 +830,38 @@ function wp_default_scripts( $scripts ) {
 	$scripts->add( 'cp-filepond-file-rename', "/wp-includes/js/filepond/filepond-plugin-file-rename$suffix.js", array(), '1.1.8' );
 	$scripts->add( 'cp-filepond-plugin-image-preview', "/wp-includes/js/filepond/filepond-plugin-image-preview$suffix.js", array(), '4.6.12' );
 	$scripts->add( 'cp-filepond', "/wp-includes/js/filepond/cp-filepond$suffix.js", array(), '4.31.2' );
+	did_action( 'init' ) && $scripts->localize(
+		'cp-filepond',
+		'_cpFilepondLabels',
+		array(
+			'labelIdle'                      => __( 'Drag & Drop your files or <span class="filepond--label-action">Browse</span>' ),
+			'labelInvalidField'              => __( 'Field contains invalid files' ),
+			'labelFileWaitingForSize'        => __( 'Waiting for size' ),
+			'labelFileSizeNotAvailable'      => __( 'Size not available' ),
+			'labelFileCountSingular'         => __( 'file in list' ),
+			'labelFileCountPlural'           => __( 'files in list' ),
+			'labelFileLoading'               => __( 'Loading' ),
+			'labelFileAdded'                 => __( 'Added' ),
+			'labelFileLoadError'             => __( 'Error during load' ),
+			'labelFileRemoved'               => __( 'Removed' ),
+			'labelFileRemoveError'           => __( 'Error during remove' ),
+			'labelFileProcessing'            => __( 'Uploading' ),
+			'labelFileProcessingComplete'    => __( 'Upload complete' ),
+			'labelFileProcessingAborted'     => __( 'Upload cancelled' ),
+			'labelFileProcessingError'       => __( 'Error during upload' ),
+			'labelFileProcessingRevertError' => __( 'Error during revert' ),
+			'labelTapToCancel'               => __( 'tap to cancel' ),
+			'labelTapToRetry'                => __( 'tap to retry' ),
+			'labelTapToUndo'                 => __( 'tap to undo' ),
+			'labelButtonRemoveItem'          => __( 'Remove' ),
+			'labelButtonAbortItemLoad'       => __( 'Abort' ),
+			'labelButtonRetryItemLoad'       => __( 'Retry' ),
+			'labelButtonAbortItemProcessing' => __( 'Cancel' ),
+			'labelButtonUndoItemProcessing'  => __( 'Undo' ),
+			'labelButtonRetryItemProcessing' => __( 'Retry' ),
+			'labelButtonProcessItem'         => __( 'Upload' ),
+		)
+	);
 
 	$scripts->add( 'comment-reply', "/wp-includes/js/comment-reply$suffix.js", array(), false, 1 );
 
@@ -853,47 +885,55 @@ function wp_default_scripts( $scripts ) {
 	$scripts->add( 'wp-backbone', "/wp-includes/js/wp-backbone$suffix.js", array( 'backbone', 'wp-util' ), false, 1 );
 
 	$scripts->add( 'revisions', "/wp-admin/js/revisions$suffix.js", array(), false, 1 );
+	$scripts->add( 'revisions-list', "/wp-admin/js/revisions-list$suffix.js", array(), false, 1 );
 
 	$scripts->add( 'imgareaselect', "/wp-includes/js/imgareaselect/jquery.imgareaselect$suffix.js", array( 'jquery' ), false, 1 );
 
 	$scripts->add( 'mediaelement', "/wp-includes/js/mediaelement/mediaelement-and-player$suffix.js", array(), '7.0.3', 1 );
-
+	$mejs_settings = array(
+		'pluginPath'  => includes_url( 'js/mediaelement/', 'relative' ),
+		'classPrefix' => 'mejs-',
+		'stretching'  => 'responsive',
+		'iconSprite'  => includes_url( 'js/mediaelement/', 'relative' ) . 'mejs-controls.svg',
+	);
+	did_action( 'init' ) && $scripts->localize(
+		'mediaelement',
+		'_wpmejsSettings',
+		/**
+		 * Filters the MediaElement configuration settings.
+		 *
+		 * @since 4.4.0
+		 *
+		 * @param array $mejs_settings MediaElement settings array.
+		 */
+		apply_filters( 'mejs_settings', $mejs_settings )
+	);
 	did_action( 'init' ) && $scripts->add_inline_script(
-		'mediaelement-core',
+		'mediaelement',
 		sprintf(
 			'var mejsL10n = %s;',
 			wp_json_encode(
 				array(
 					'language' => strtolower( strtok( determine_locale(), '_-' ) ),
 					'strings'  => array(
-						'mejs.fullscreen-off'      => __( 'Turn off Fullscreen' ),
-						'mejs.fullscreen-on'       => __( 'Go Fullscreen' ),
-						'mejs.download-video'      => __( 'Download Video' ),
+						'mejs.download-file'       => __( 'Download File' ),
 						'mejs.fullscreen'          => __( 'Fullscreen' ),
-						'mejs.time-jump-forward'   => array( __( 'Jump forward 1 second' ), __( 'Jump forward %1 seconds' ) ),
-						'mejs.loop'                => __( 'Toggle Loop' ),
 						'mejs.play'                => __( 'Play' ),
 						'mejs.pause'               => __( 'Pause' ),
-						'mejs.close'               => __( 'Close' ),
 						'mejs.time-slider'         => __( 'Time Slider' ),
 						'mejs.time-help-text'      => __( 'Use Left/Right Arrow keys to advance one second, Up/Down arrows to advance ten seconds.' ),
-						'mejs.time-skip-back'      => array( __( 'Skip back 1 second' ), __( 'Skip back %1 seconds' ) ),
-						'mejs.captions-subtitles'  => __( 'Captions/Subtitles' ),
-						'mejs.captions-chapters'   => __( 'Chapters' ),
-						'mejs.none'                => __( 'None' ),
-						'mejs.mute-toggle'         => __( 'Mute Toggle' ),
+						'mejs.live-broadcast'      => __( 'Live Broadcast' ),
+						'mejs.current'             => __( 'Current time' ),
+						'mejs.duration'            => __( 'Total duration' ),
 						'mejs.volume-help-text'    => __( 'Use Up/Down Arrow keys to increase or decrease volume.' ),
 						'mejs.unmute'              => __( 'Unmute' ),
 						'mejs.mute'                => __( 'Mute' ),
 						'mejs.volume-slider'       => __( 'Volume Slider' ),
 						'mejs.video-player'        => __( 'Video Player' ),
 						'mejs.audio-player'        => __( 'Audio Player' ),
-						'mejs.ad-skip'             => __( 'Skip ad' ),
-						'mejs.ad-skip-info'        => array( __( 'Skip in 1 second' ), __( 'Skip in %1 seconds' ) ),
-						'mejs.source-chooser'      => __( 'Source Chooser' ),
-						'mejs.stop'                => __( 'Stop' ),
-						'mejs.speed-rate'          => __( 'Speed Rate' ),
-						'mejs.live-broadcast'      => __( 'Live Broadcast' ),
+						'mejs.captions-subtitles'  => __( 'Captions/Subtitles' ),
+						'mejs.captions-chapters'   => __( 'Chapters' ),
+						'mejs.none'                => __( 'None' ),
 						'mejs.afrikaans'           => __( 'Afrikaans' ),
 						'mejs.albanian'            => __( 'Albanian' ),
 						'mejs.arabic'              => __( 'Arabic' ),
@@ -975,23 +1015,6 @@ function wp_default_scripts( $scripts ) {
 
 	$scripts->add( 'mediaelement-vimeo', '/wp-includes/js/mediaelement/renderers/vimeo.min.js', array( 'mediaelement' ), '4.2.17', 1 );
 	$scripts->add( 'wp-mediaelement', "/wp-includes/js/mediaelement/wp-mediaelement$suffix.js", array( 'mediaelement' ), false, 1 );
-	$mejs_settings = array(
-		'pluginPath'  => includes_url( 'js/mediaelement/', 'relative' ),
-		'classPrefix' => 'mejs-',
-		'stretching'  => 'responsive',
-	);
-	did_action( 'init' ) && $scripts->localize(
-		'mediaelement',
-		'_wpmejsSettings',
-		/**
-		 * Filters the MediaElement configuration settings.
-		 *
-		 * @since 4.4.0
-		 *
-		 * @param array $mejs_settings MediaElement settings array.
-		 */
-		apply_filters( 'mejs_settings', $mejs_settings )
-	);
 
 	$scripts->add( 'wp-codemirror', '/wp-includes/js/codemirror/codemirror.min.js', array(), '5.29.1-alpha-ee20357' );
 	$scripts->add( 'csslint', '/wp-includes/js/codemirror/csslint.js', array(), '1.0.5' );
@@ -1269,7 +1292,7 @@ function wp_default_scripts( $scripts ) {
 			)
 		);
 
-		$scripts->add( 'site-health', "/wp-admin/js/site-health$suffix.js", array( 'jquery', 'wp-util', 'wp-a11y', 'wp-api-request', 'wp-url', 'wp-i18n', 'wp-hooks' ), false, 1 );
+		$scripts->add( 'site-health', "/wp-admin/js/site-health$suffix.js", array( 'wp-a11y', 'wp-api-request', 'wp-url', 'wp-i18n', 'wp-hooks' ), false, 1 );
 		$scripts->set_translations( 'site-health' );
 
 		$scripts->add( 'privacy-tools', "/wp-admin/js/privacy-tools$suffix.js", array( 'jquery', 'wp-a11y' ), false, 1 );
@@ -1317,6 +1340,31 @@ function wp_default_scripts( $scripts ) {
 			false,
 			1
 		);
+		did_action( 'init' ) && $scripts->localize(
+			'media-grid',
+			'_wpMediaGridSettings',
+			array(
+				'by'               => __( 'by' ),
+				'pixels'           => __( 'pixels' ),
+				'deselect'         => __( 'Deselect' ),
+				'failed_update'    => __( 'Failed to update media:' ),
+				'error'            => __( 'Error:' ),
+				'upload_failed'    => __( 'Upload failed' ),
+				'aborted'          => __( 'Upload aborted for' ),
+				'tap_close'        => __( 'Tap to close' ),
+				'new_filename'     => __( 'Enter new filename' ),
+				'invalid_type'     => __( 'Invalid file type' ),
+				'check_types'      => __( 'Check the list of accepted file types.' ),
+				'delete_failed'    => __( 'Failed to delete attachment.' ),
+				'confirm_delete'   => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+				'confirm_multiple' => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+				'includes_url'     => includes_url(),
+				'webp_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) ),
+				'avif_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/avif' ) ),
+				'heic_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/heic' ) ),
+			)
+		);
+
 		$scripts->add( 'media', "/wp-admin/js/media$suffix.js", array( 'jquery', 'wp-i18n', 'wp-a11y' ), false, 1 );
 		$scripts->set_translations( 'media' );
 

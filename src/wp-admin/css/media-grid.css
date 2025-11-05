@@ -106,10 +106,8 @@
 	padding: 0 10px;
 }
 .max-upload-size {
-	 text-align: center;
-}
-.filepond--root {
-	padding-bottom: 12em;
+	margin: 0;
+	text-align: center;
 }
 .filepond--file-info .filepond--file-info-main,
 .filepond--file-status .filepond--file-status-main {
@@ -120,8 +118,7 @@
 	font-size: 0.9em;
 }
 #post-upload-info {
-	margin-top: -6em;
-	position: relative;
+	margin-bottom: 1em;
 }
 .filepond--drop-label {
 	background-color: #ecf7e9;
@@ -388,7 +385,7 @@ dialog::backdrop {
 	outline-width: 0.125rem;
 }
 .filepond--root {
-	margin-bottom: 1.2em;
+	margin-bottom: 1em;
 }
 .filepond--drip {
 	opacity: 1;

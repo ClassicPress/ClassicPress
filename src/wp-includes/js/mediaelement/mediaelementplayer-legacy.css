@@ -154,6 +154,7 @@ Reference: http://blog.rrwd.nl/2015/04/04/the-screen-reader-text-class-why-and-h
 .mejs-overlay-button {
     background: transparent;
     border: 0;
+	padding: 0;
 }
 
 .mejs-overlay:hover .mejs-overlay-button svg {

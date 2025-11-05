@@ -103,11 +103,19 @@ switch ( $action ) {
 			break;
 		}
 
-		$post_edit_link = get_edit_post_link();
-		$post_title     = '<a href="' . $post_edit_link . '">' . _draft_or_post_title() . '</a>';
+		$post_edit_link      = get_edit_post_link();
+		$nonce               = wp_create_nonce( 'revisions-list' );
+		$revisions_list_link = admin_url( 'revisions-list.php?post_parent=' . absint( $post->ID ) . '&amp;_wpnonce=' . $nonce );
+		$post_title          = '<a href="' . $post_edit_link . '">' . _draft_or_post_title() . '</a>';
 		/* translators: %s: Post title. */
-		$h1             = sprintf( __( 'Compare Revisions of &#8220;%s&#8221;' ), $post_title );
-		$return_to_post = '<a href="' . $post_edit_link . '">' . __( '&larr; Go to editor' ) . '</a>';
+		$h1                  = sprintf( __( 'Compare Revisions of &#8220;%s&#8221;' ), $post_title );
+		$return_to_post      = '<div class="return-to-post">';
+		$return_to_post     .= '<a href="' . $post_edit_link . '">' . __( '&larr; Go to editor' ) . '</a>';
+		if ( wp_revisions_enabled( $post ) ) {
+			$return_to_post .= ' <a href="' . esc_url( $revisions_list_link ) . '">' . __( 'Go to list of revisions &rarr;' ) . '</a>';
+		}
+		$return_to_post     .= '</div>';
+
 		// Used in the HTML title tag.
 		$title = __( 'Revisions' );
 
@@ -137,7 +145,6 @@ wp_enqueue_script( 'revisions' );
 wp_localize_script( 'revisions', '_wpRevisionsSettings', wp_prepare_revisions_for_js( $post, $revision_id, $from ) );
 
 /* Revisions Help Tab */
-
 $revisions_overview  = '<p>' . __( 'This screen is used for managing your content revisions.' ) . '</p>';
 $revisions_overview .= '<p>' . __( 'Revisions are saved copies of your post or page, which are periodically created as you update your content. The red text on the left shows the content that was removed. The green text on the right shows the content that was added.' ) . '</p>';
 $revisions_overview .= '<p>' . __( 'From this screen you can review, compare, and restore revisions:' ) . '</p>';
@@ -224,17 +231,14 @@ $ticks .= '</datalist>';
 					<div class="revisions-previous">
 						<input class="button" type="button" value="<?php echo esc_attr_x( 'Previous', 'Button label for a previous revision' ); ?>">
 					</div>
-					<div class="revisions-next">
-						<input class="button" type="button" value="<?php echo esc_attr_x( 'Next', 'Button label for a next revision' ); ?>">
-					</div>
-				</div>
-				<div class="revisions-checkbox">
 					<div class="revision-toggle-compare-mode">
 						<input id="compare-two-revisions" type="checkbox" class="compare-two-revisions">
 						<label for="compare-two-revisions"><?php esc_html_e( 'Compare any two revisions' ); ?></label>
 					</div>
+					<div class="revisions-next">
+						<input class="button" type="button" value="<?php echo esc_attr_x( 'Next', 'Button label for a next revision' ); ?>">
+					</div>
 				</div>
-				<div></div>
 				<div class="revisions-meta">
 					<div class="diff-meta diff-meta-from">
 						<div class="diff-title">
