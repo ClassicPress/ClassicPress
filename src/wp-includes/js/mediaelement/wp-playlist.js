@@ -1,4 +1,4 @@
-/* global MediaElementPlayer */
+/* global MediaElementPlayer, _wpmejsSettings */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 
@@ -142,9 +142,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Initialize medialement player
 	mediaElements.forEach( function( el ) {
-		new MediaElementPlayer( el, {
-			stretching: 'responsive',
-			classPrefix: 'mejs-'
-		} );
+
+		// Merge global settings
+		var settings;
+		if ( typeof _wpmejsSettings !== 'undefined' ) {
+			settings = Object.assign( {}, _wpmejsSettings );
+		}
+
+		new MediaElementPlayer( el, settings );
 	} );
 } );

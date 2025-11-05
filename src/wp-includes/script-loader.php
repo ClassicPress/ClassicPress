@@ -890,7 +890,24 @@ function wp_default_scripts( $scripts ) {
 	$scripts->add( 'imgareaselect', "/wp-includes/js/imgareaselect/jquery.imgareaselect$suffix.js", array( 'jquery' ), false, 1 );
 
 	$scripts->add( 'mediaelement', "/wp-includes/js/mediaelement/mediaelement-and-player$suffix.js", array(), '7.0.3', 1 );
-
+	$mejs_settings = array(
+		'pluginPath'  => includes_url( 'js/mediaelement/', 'relative' ),
+		'classPrefix' => 'mejs-',
+		'stretching'  => 'responsive',
+		'iconSprite'  => includes_url( 'js/mediaelement/', 'relative' ) . 'mejs-controls.svg',
+	);
+	did_action( 'init' ) && $scripts->localize(
+		'mediaelement',
+		'_wpmejsSettings',
+		/**
+		 * Filters the MediaElement configuration settings.
+		 *
+		 * @since 4.4.0
+		 *
+		 * @param array $mejs_settings MediaElement settings array.
+		 */
+		apply_filters( 'mejs_settings', $mejs_settings )
+	);
 	did_action( 'init' ) && $scripts->add_inline_script(
 		'mediaelement',
 		sprintf(
@@ -998,23 +1015,6 @@ function wp_default_scripts( $scripts ) {
 
 	$scripts->add( 'mediaelement-vimeo', '/wp-includes/js/mediaelement/renderers/vimeo.min.js', array( 'mediaelement' ), '4.2.17', 1 );
 	$scripts->add( 'wp-mediaelement', "/wp-includes/js/mediaelement/wp-mediaelement$suffix.js", array( 'mediaelement' ), false, 1 );
-	$mejs_settings = array(
-		'pluginPath'  => includes_url( 'js/mediaelement/', 'relative' ),
-		'classPrefix' => 'mejs-',
-		'stretching'  => 'responsive',
-	);
-	did_action( 'init' ) && $scripts->localize(
-		'mediaelement',
-		'_wpmejsSettings',
-		/**
-		 * Filters the MediaElement configuration settings.
-		 *
-		 * @since 4.4.0
-		 *
-		 * @param array $mejs_settings MediaElement settings array.
-		 */
-		apply_filters( 'mejs_settings', $mejs_settings )
-	);
 
 	$scripts->add( 'wp-codemirror', '/wp-includes/js/codemirror/codemirror.min.js', array(), '5.29.1-alpha-ee20357' );
 	$scripts->add( 'csslint', '/wp-includes/js/codemirror/csslint.js', array(), '1.0.5' );
