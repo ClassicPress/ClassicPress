@@ -1027,18 +1027,6 @@ function wp_default_scripts( $scripts ) {
 	$scripts->set_translations( 'wp-theme-plugin-editor' );
 
 	$scripts->add( 'wp-playlist', "/wp-includes/js/mediaelement/wp-playlist$suffix.js", array( 'wp-util', 'mediaelement' ), false, 1 );
-	did_action( 'init' ) && $scripts->localize(
-		'wp-playlist',
-		'_wpmejsSettings',
-		/**
-		 * Filters the MediaElement configuration settings.
-		 *
-		 * @since 4.4.0
-		 *
-		 * @param array $mejs_settings MediaElement settings array.
-		 */
-		apply_filters( 'mejs_settings', $mejs_settings )
-	);
 
 	$scripts->add( 'zxcvbn-async', "/wp-includes/js/zxcvbn-async$suffix.js", array(), '1.0' );
 	did_action( 'init' ) && $scripts->localize(
