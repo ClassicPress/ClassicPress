@@ -221,6 +221,227 @@ function _mb_strlen( $str, $encoding = null ) {
 	return --$count;
 }
 
+<<<<<<< HEAD
+=======
+if ( ! function_exists( 'hash_hmac' ) ) :
+	/**
+	 * Compat function to mimic hash_hmac().
+	 *
+	 * The Hash extension is bundled with PHP by default since PHP 5.1.2.
+	 * However, the extension may be explicitly disabled on select servers.
+	 * As of PHP 7.4.0, the Hash extension is a core PHP extension and can no
+	 * longer be disabled.
+	 * I.e. when PHP 7.4.0 becomes the minimum requirement, this polyfill
+	 * and the associated `_hash_hmac()` function can be safely removed.
+	 *
+	 * @ignore
+	 * @since 3.2.0
+	 *
+	 * @see _hash_hmac()
+	 *
+	 * @param string $algo   Hash algorithm. Accepts 'md5' or 'sha1'.
+	 * @param string $data   Data to be hashed.
+	 * @param string $key    Secret key to use for generating the hash.
+	 * @param bool   $binary Optional. Whether to output raw binary data (true),
+	 *                       or lowercase hexits (false). Default false.
+	 * @return string|false The hash in output determined by `$binary`.
+	 *                      False if `$algo` is unknown or invalid.
+	 */
+	function hash_hmac( $algo, $data, $key, $binary = false ) {
+		return _hash_hmac( $algo, $data, $key, $binary );
+	}
+endif;
+
+/**
+ * Internal compat function to mimic hash_hmac().
+ *
+ * @ignore
+ * @since 3.2.0
+ *
+ * @param string $algo   Hash algorithm. Accepts 'md5' or 'sha1'.
+ * @param string $data   Data to be hashed.
+ * @param string $key    Secret key to use for generating the hash.
+ * @param bool   $binary Optional. Whether to output raw binary data (true),
+ *                       or lowercase hexits (false). Default false.
+ * @return string|false The hash in output determined by `$binary`.
+ *                      False if `$algo` is unknown or invalid.
+ */
+function _hash_hmac( $algo, $data, $key, $binary = false ) {
+	$packs = array(
+		'md5'  => 'H32',
+		'sha1' => 'H40',
+	);
+
+	if ( ! isset( $packs[ $algo ] ) ) {
+		return false;
+	}
+
+	$pack = $packs[ $algo ];
+
+	if ( strlen( $key ) > 64 ) {
+		$key = pack( $pack, $algo( $key ) );
+	}
+
+	$key = str_pad( $key, 64, chr( 0 ) );
+
+	$ipad = ( substr( $key, 0, 64 ) ^ str_repeat( chr( 0x36 ), 64 ) );
+	$opad = ( substr( $key, 0, 64 ) ^ str_repeat( chr( 0x5C ), 64 ) );
+
+	$hmac = $algo( $opad . pack( $pack, $algo( $ipad . $data ) ) );
+
+	if ( $binary ) {
+		return pack( $pack, $hmac );
+	}
+
+	return $hmac;
+}
+
+if ( ! function_exists( 'hash_equals' ) ) :
+	/**
+	 * Timing attack safe string comparison.
+	 *
+	 * Compares two strings using the same time whether they're equal or not.
+	 *
+	 * Note: It can leak the length of a string when arguments of differing length are supplied.
+	 *
+	 * This function was added in PHP 5.6.
+	 * However, the Hash extension may be explicitly disabled on select servers.
+	 * As of PHP 7.4.0, the Hash extension is a core PHP extension and can no
+	 * longer be disabled.
+	 * I.e. when PHP 7.4.0 becomes the minimum requirement, this polyfill
+	 * can be safely removed.
+	 *
+	 * @since 3.9.2
+	 *
+	 * @param string $known_string Expected string.
+	 * @param string $user_string  Actual, user supplied, string.
+	 * @return bool Whether strings are equal.
+	 */
+	function hash_equals( $known_string, $user_string ) {
+		$known_string_length = strlen( $known_string );
+
+		if ( strlen( $user_string ) !== $known_string_length ) {
+			return false;
+		}
+
+		$result = 0;
+
+		// Do not attempt to "optimize" this.
+		for ( $i = 0; $i < $known_string_length; $i++ ) {
+			$result |= ord( $known_string[ $i ] ) ^ ord( $user_string[ $i ] );
+		}
+
+		return 0 === $result;
+	}
+endif;
+
+// sodium_crypto_box() was introduced in PHP 7.2.
+if ( ! function_exists( 'sodium_crypto_box' ) ) {
+	require ABSPATH . WPINC . '/sodium_compat/autoload.php';
+}
+
+if ( ! function_exists( 'is_countable' ) ) {
+	/**
+	 * Polyfill for is_countable() function added in PHP 7.3.
+	 *
+	 * Verify that the content of a variable is an array or an object
+	 * implementing the Countable interface.
+	 *
+	 * @since 4.9.6
+	 *
+	 * @param mixed $value The value to check.
+	 * @return bool True if `$value` is countable, false otherwise.
+	 */
+	function is_countable( $value ) {
+		return ( is_array( $value )
+			|| $value instanceof Countable
+			|| $value instanceof SimpleXMLElement
+			|| $value instanceof ResourceBundle
+		);
+	}
+}
+
+if ( ! function_exists( 'array_key_first' ) ) {
+	/**
+	 * Polyfill for array_key_first() function added in PHP 7.3.
+	 *
+	 * Get the first key of the given array without affecting
+	 * the internal array pointer.
+	 *
+	 * @since 5.9.0
+	 *
+	 * @param array $array An array.
+	 * @return string|int|null The first key of array if the array
+	 *                         is not empty; `null` otherwise.
+	 */
+	function array_key_first( array $array ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.arrayFound
+		if ( empty( $array ) ) {
+			return null;
+		}
+
+		foreach ( $array as $key => $value ) {
+			return $key;
+		}
+	}
+}
+
+if ( ! function_exists( 'array_key_last' ) ) {
+	/**
+	 * Polyfill for `array_key_last()` function added in PHP 7.3.
+	 *
+	 * Get the last key of the given array without affecting the
+	 * internal array pointer.
+	 *
+	 * @since 5.9.0
+	 *
+	 * @param array $array An array.
+	 * @return string|int|null The last key of array if the array
+	 *.                        is not empty; `null` otherwise.
+	 */
+	function array_key_last( array $array ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.arrayFound
+		if ( empty( $array ) ) {
+			return null;
+		}
+
+		end( $array );
+
+		return key( $array );
+	}
+}
+
+if ( ! function_exists( 'array_is_list' ) ) {
+	/**
+	 * Polyfill for `array_is_list()` function added in PHP 8.1.
+	 *
+	 * Determines if the given array is a list.
+	 *
+	 * An array is considered a list if its keys consist of consecutive numbers from 0 to count($array)-1.
+	 *
+	 * @see https://github.com/symfony/polyfill-php81/tree/main
+	 *
+	 * @since 6.5.0
+	 *
+	 * @param array<mixed> $arr The array being evaluated.
+	 * @return bool True if array is a list, false otherwise.
+	 */
+	function array_is_list( $arr ) {
+		if ( ( array() === $arr ) || ( array_values( $arr ) === $arr ) ) {
+			return true;
+		}
+
+		$next_key = -1;
+
+		foreach ( $arr as $k => $v ) {
+			if ( ++$next_key !== $k ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+}
+
+>>>>>>> af1682d4d3 (Coding Standards: Explicitly return `null` instead of coercing `void`.)
 if ( ! function_exists( 'str_contains' ) ) {
 	/**
 	 * Polyfill for `str_contains()` function added in PHP 8.0.
