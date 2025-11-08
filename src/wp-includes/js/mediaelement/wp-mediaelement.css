@@ -63,6 +63,10 @@
 	max-width: 100%;
 }
 
+.mejs-overlay-button {
+	padding: 0;
+}
+
 /* Override theme styles that may conflict with controls. */
 .mejs-controls button:hover {
 	border: none;
