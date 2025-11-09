@@ -571,7 +571,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					if ( responseText && responseText.length > 2 ) {
 						widget.querySelector( '.widget-content' ).innerHTML = responseText;
 
-						let title = widget.querySelector( 'input[id*="-title"]' ).value || '';
+						let title = widget.querySelector( 'input[id*="-title"]' ) ? widget.querySelector( 'input[id*="-title"]' ).value : '';
 						if ( title ) {
 							title = ': ' + title.replace( /<[^<>]+>/g, '' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
 						}
