@@ -735,7 +735,7 @@ EOT;
 		$subject = 'Test email with plain text derived from html version';
 		$message = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body><p>Hello World! γειά σου Κόσμε</p></body></html>';
 
-		$set_alt_body = static function ( WP_PHPMailer $mailer ) {
+		$set_alt_body = static function ( MockPHPMailer $mailer ) {
 			$mailer->AltBody = strip_tags( $mailer->Body );
 		};
 		add_action( 'phpmailer_init', $set_alt_body );
