@@ -1026,8 +1026,7 @@ ul.CodeMirror-hints {
 }
 .widget-modal-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-	gap: 6px;
+	grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
 	margin-bottom: 20px;
 }
 .widget-modal-grid li {
