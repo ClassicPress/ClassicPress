@@ -8,6 +8,7 @@
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   e: function() { return /* binding */ getQueryString; }
 /* harmony export */ });
+// packages/url/src/get-query-string.ts
 function getQueryString(url) {
   let query;
   try {
@@ -30,6 +31,7 @@ function getQueryString(url) {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   T: function() { return /* binding */ safeDecodeURIComponent; }
 /* harmony export */ });
+// packages/url/src/safe-decode-uri-component.ts
 function safeDecodeURIComponent(uriComponent) {
   try {
     return decodeURIComponent(uriComponent);
@@ -50,8 +52,9 @@ function safeDecodeURIComponent(uriComponent) {
 /* harmony export */   A: function() { return /* binding */ root_url_default; }
 /* harmony export */ });
 /* harmony import */ var _namespace_endpoint__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(403);
+// packages/api-fetch/src/middlewares/root-url.ts
 
-const createRootURLMiddleware = (rootURL) => (options, next) => {
+var createRootURLMiddleware = (rootURL) => (options, next) => {
   return (0,_namespace_endpoint__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A)(options, (optionsWithPath) => {
     let url = optionsWithPath.url;
     let path = optionsWithPath.path;
@@ -103,6 +106,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
 /* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _types__WEBPACK_IMPORTED_MODULE_11__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = function(key) { return _types__WEBPACK_IMPORTED_MODULE_11__[key]; }.bind(0, __WEBPACK_IMPORT_KEY__)
 /* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
+// packages/api-fetch/src/index.ts
 
 
 
@@ -114,17 +118,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const DEFAULT_HEADERS = {
+
+var DEFAULT_HEADERS = {
   // The backend uses the Accept header as a condition for considering an
   // incoming request as a REST request.
   //
   // See: https://core.trac.wordpress.org/ticket/44534
   Accept: "application/json, */*;q=0.1"
 };
-const DEFAULT_OPTIONS = {
+var DEFAULT_OPTIONS = {
   credentials: "include"
 };
-const middlewares = [
+var middlewares = [
   _middlewares_user_locale__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .A,
   _middlewares_namespace_endpoint__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .A,
   _middlewares_http_v1__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .A,
@@ -133,7 +138,7 @@ const middlewares = [
 function registerMiddleware(middleware) {
   middlewares.unshift(middleware);
 }
-const defaultFetchHandler = (nextOptions) => {
+var defaultFetchHandler = (nextOptions) => {
   const { url, path, data, parse = true, ...remainingOptions } = nextOptions;
   let { body, headers } = nextOptions;
   headers = { ...DEFAULT_HEADERS, ...headers };
@@ -179,11 +184,11 @@ const defaultFetchHandler = (nextOptions) => {
     }
   );
 };
-let fetchHandler = defaultFetchHandler;
+var fetchHandler = defaultFetchHandler;
 function setFetchHandler(newFetchHandler) {
   fetchHandler = newFetchHandler;
 }
-const apiFetch = (options) => {
+var apiFetch = (options) => {
   const enhancedHandler = middlewares.reduceRight(
     (next, middleware) => {
       return (workingOptions) => middleware(workingOptions, next);
@@ -214,7 +219,6 @@ apiFetch.fetchAllMiddleware = _middlewares_fetch_all_middleware__WEBPACK_IMPORTE
 apiFetch.mediaUploadMiddleware = _middlewares_media_upload__WEBPACK_IMPORTED_MODULE_8__/* ["default"] */ .A;
 apiFetch.createThemePreviewMiddleware = _middlewares_theme_preview__WEBPACK_IMPORTED_MODULE_9__/* ["default"] */ .A;
 var index_default = apiFetch;
-
 
 
 
@@ -737,16 +741,17 @@ Tannin.prototype.dcnpgettext = function( domain, context, singular, plural, n ) 
 };
 
 ;// ./node_modules/@wordpress/i18n/build-module/create-i18n.js
+// packages/i18n/src/create-i18n.ts
 
-const DEFAULT_LOCALE_DATA = {
+var DEFAULT_LOCALE_DATA = {
   "": {
     plural_forms(n) {
       return n === 1 ? 0 : 1;
     }
   }
 };
-const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
-const createI18n = (initialData, initialDomain, hooks) => {
+var I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
+var createI18n = (initialData, initialDomain, hooks) => {
   const tannin = new Tannin({});
   const listeners = /* @__PURE__ */ new Set();
   const notifyListeners = () => {
@@ -950,23 +955,25 @@ const createI18n = (initialData, initialDomain, hooks) => {
 // EXTERNAL MODULE: ./node_modules/@wordpress/hooks/build-module/index.js
 var build_module = __webpack_require__(427);
 ;// ./node_modules/@wordpress/i18n/build-module/default-i18n.js
+// packages/i18n/src/default-i18n.ts
 
 
-const i18n = createI18n(void 0, void 0, build_module.defaultHooks);
+var i18n = createI18n(void 0, void 0, build_module.defaultHooks);
 var default_i18n_default = (/* unused pure expression or super */ null && (i18n));
-const getLocaleData = i18n.getLocaleData.bind(i18n);
-const setLocaleData = i18n.setLocaleData.bind(i18n);
-const resetLocaleData = i18n.resetLocaleData.bind(i18n);
-const subscribe = i18n.subscribe.bind(i18n);
-const __ = i18n.__.bind(i18n);
-const _x = i18n._x.bind(i18n);
-const _n = i18n._n.bind(i18n);
-const _nx = i18n._nx.bind(i18n);
-const isRTL = i18n.isRTL.bind(i18n);
-const hasTranslation = i18n.hasTranslation.bind(i18n);
+var getLocaleData = i18n.getLocaleData.bind(i18n);
+var setLocaleData = i18n.setLocaleData.bind(i18n);
+var resetLocaleData = i18n.resetLocaleData.bind(i18n);
+var subscribe = i18n.subscribe.bind(i18n);
+var __ = i18n.__.bind(i18n);
+var _x = i18n._x.bind(i18n);
+var _n = i18n._n.bind(i18n);
+var _nx = i18n._nx.bind(i18n);
+var isRTL = i18n.isRTL.bind(i18n);
+var hasTranslation = i18n.hasTranslation.bind(i18n);
 
 
 ;// ./node_modules/@wordpress/i18n/build-module/index.js
+// packages/i18n/src/index.ts
 
 
 
@@ -982,9 +989,10 @@ const hasTranslation = i18n.hasTranslation.bind(i18n);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   A: function() { return /* binding */ http_v1_default; }
 /* harmony export */ });
-const OVERRIDE_METHODS = /* @__PURE__ */ new Set(["PATCH", "PUT", "DELETE"]);
-const DEFAULT_METHOD = "GET";
-const httpV1Middleware = (options, next) => {
+// packages/api-fetch/src/middlewares/http-v1.ts
+var OVERRIDE_METHODS = /* @__PURE__ */ new Set(["PATCH", "PUT", "DELETE"]);
+var DEFAULT_METHOD = "GET";
+var httpV1Middleware = (options, next) => {
   const { method = DEFAULT_METHOD } = options;
   if (OVERRIDE_METHODS.has(method.toUpperCase())) {
     options = {
@@ -1012,6 +1020,7 @@ var http_v1_default = httpV1Middleware;
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   A: function() { return /* binding */ nonce_default; }
 /* harmony export */ });
+// packages/api-fetch/src/middlewares/nonce.ts
 function createNonceMiddleware(nonce) {
   const middleware = (options, next) => {
     const { headers = {} } = options;
@@ -1044,7 +1053,8 @@ var nonce_default = createNonceMiddleware;
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   A: function() { return /* binding */ namespace_endpoint_default; }
 /* harmony export */ });
-const namespaceAndEndpointMiddleware = (options, next) => {
+// packages/api-fetch/src/middlewares/namespace-endpoint.ts
+var namespaceAndEndpointMiddleware = (options, next) => {
   let path = options.path;
   let namespaceTrimmed, endpointTrimmed;
   if (typeof options.namespace === "string" && typeof options.endpoint === "string") {
@@ -1078,15 +1088,16 @@ var namespace_endpoint_default = namespaceAndEndpointMiddleware;
 /* harmony export */ });
 /* harmony import */ var _wordpress_url__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(790);
 /* harmony import */ var ___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(296);
+// packages/api-fetch/src/middlewares/fetch-all-middleware.ts
 
 
-const modifyQuery = ({ path, url, ...options }, queryArgs) => ({
+var modifyQuery = ({ path, url, ...options }, queryArgs) => ({
   ...options,
   url: url && (0,_wordpress_url__WEBPACK_IMPORTED_MODULE_0__/* .addQueryArgs */ .F)(url, queryArgs),
   path: path && (0,_wordpress_url__WEBPACK_IMPORTED_MODULE_0__/* .addQueryArgs */ .F)(path, queryArgs)
 });
-const parseResponse = (response) => response.json ? response.json() : Promise.reject(response);
-const parseLinkHeader = (linkHeader) => {
+var parseResponse = (response) => response.json ? response.json() : Promise.reject(response);
+var parseLinkHeader = (linkHeader) => {
   if (!linkHeader) {
     return {};
   }
@@ -1095,16 +1106,16 @@ const parseLinkHeader = (linkHeader) => {
     next: match[1]
   } : {};
 };
-const getNextPageUrl = (response) => {
+var getNextPageUrl = (response) => {
   const { next } = parseLinkHeader(response.headers.get("link"));
   return next;
 };
-const requestContainsUnboundedQuery = (options) => {
+var requestContainsUnboundedQuery = (options) => {
   const pathIsUnbounded = !!options.path && options.path.indexOf("per_page=-1") !== -1;
   const urlIsUnbounded = !!options.url && options.url.indexOf("per_page=-1") !== -1;
   return pathIsUnbounded || urlIsUnbounded;
 };
-const fetchAllMiddleware = async (options, next) => {
+var fetchAllMiddleware = async (options, next) => {
   if (options.parse === false) {
     return next(options);
   }
@@ -1157,10 +1168,11 @@ var fetch_all_middleware_default = fetchAllMiddleware;
 /* harmony export */ });
 /* unused harmony exports actions, addAction, addFilter, applyFilters, applyFiltersAsync, currentAction, currentFilter, didAction, didFilter, doAction, doActionAsync, doingAction, doingFilter, filters, hasAction, hasFilter, removeAction, removeAllActions, removeAllFilters, removeFilter */
 /* harmony import */ var _createHooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(507);
+// packages/hooks/src/index.ts
 
 
-const defaultHooks = (0,_createHooks__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A)();
-const {
+var defaultHooks = (0,_createHooks__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A)();
+var {
   addAction,
   addFilter,
   removeAction,
@@ -1200,6 +1212,7 @@ __webpack_require__.d(__webpack_exports__, {
 // UNUSED EXPORTS: _Hooks
 
 ;// ./node_modules/@wordpress/hooks/build-module/validateNamespace.js
+// packages/hooks/src/validateNamespace.ts
 function validateNamespace(namespace) {
   if ("string" !== typeof namespace || "" === namespace) {
     console.error("The namespace must be a non-empty string.");
@@ -1217,6 +1230,7 @@ var validateNamespace_default = validateNamespace;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/validateHookName.js
+// packages/hooks/src/validateHookName.ts
 function validateHookName(hookName) {
   if ("string" !== typeof hookName || "" === hookName) {
     console.error("The hook name must be a non-empty string.");
@@ -1238,6 +1252,7 @@ var validateHookName_default = validateHookName;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createAddHook.js
+// packages/hooks/src/createAddHook.ts
 
 
 function createAddHook(hooks, storeKey) {
@@ -1299,6 +1314,7 @@ var createAddHook_default = createAddHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
+// packages/hooks/src/createRemoveHook.ts
 
 
 function createRemoveHook(hooks, storeKey, removeAll = false) {
@@ -1344,6 +1360,7 @@ var createRemoveHook_default = createRemoveHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createHasHook.js
+// packages/hooks/src/createHasHook.ts
 function createHasHook(hooks, storeKey) {
   return function hasHook(hookName, namespace) {
     const hooksStore = hooks[storeKey];
@@ -1359,6 +1376,7 @@ var createHasHook_default = createHasHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createRunHook.js
+// packages/hooks/src/createRunHook.ts
 function createRunHook(hooks, storeKey, returnFirstArg, async) {
   return function runHook(hookName, ...args) {
     const hooksStore = hooks[storeKey];
@@ -1420,6 +1438,7 @@ var createRunHook_default = createRunHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
+// packages/hooks/src/createCurrentHook.ts
 function createCurrentHook(hooks, storeKey) {
   return function currentHook() {
     const hooksStore = hooks[storeKey];
@@ -1431,6 +1450,7 @@ var createCurrentHook_default = createCurrentHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
+// packages/hooks/src/createDoingHook.ts
 function createDoingHook(hooks, storeKey) {
   return function doingHook(hookName) {
     const hooksStore = hooks[storeKey];
@@ -1446,6 +1466,7 @@ var createDoingHook_default = createDoingHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createDidHook.js
+// packages/hooks/src/createDidHook.ts
 
 function createDidHook(hooks, storeKey) {
   return function didHook(hookName) {
@@ -1460,6 +1481,7 @@ var createDidHook_default = createDidHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createHooks.js
+// packages/hooks/src/createHooks.ts
 
 
 
@@ -1467,7 +1489,7 @@ var createDidHook_default = createDidHook;
 
 
 
-class _Hooks {
+var _Hooks = class {
   actions;
   filters;
   addAction;
@@ -1512,7 +1534,7 @@ class _Hooks {
     this.didAction = createDidHook_default(this, "actions");
     this.didFilter = createDidHook_default(this, "filters");
   }
-}
+};
 function createHooks() {
   return new _Hooks();
 }
@@ -1538,6 +1560,7 @@ var createHooks_default = createHooks;
 /* harmony export */ });
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(309);
 /* harmony import */ var _utils_response__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(959);
+// packages/api-fetch/src/middlewares/media-upload.ts
 
 
 function isMediaUploadRequest(options) {
@@ -1545,7 +1568,7 @@ function isMediaUploadRequest(options) {
   const isMediaEndpoint = !!options.path && options.path.indexOf("/wp/v2/media") !== -1 || !!options.url && options.url.indexOf("/wp/v2/media") !== -1;
   return isMediaEndpoint && isCreateMethod;
 }
-const mediaUploadMiddleware = (options, next) => {
+var mediaUploadMiddleware = (options, next) => {
   if (!isMediaUploadRequest(options)) {
     return next(options);
   }
@@ -1607,6 +1630,7 @@ var media_upload_default = mediaUploadMiddleware;
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   G: function() { return /* binding */ buildQueryString; }
 /* harmony export */ });
+// packages/url/src/build-query-string.ts
 function buildQueryString(data) {
   let string = "";
   const stack = Object.entries(data);
@@ -1640,6 +1664,7 @@ function buildQueryString(data) {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   h: function() { return /* binding */ getFragment; }
 /* harmony export */ });
+// packages/url/src/get-fragment.ts
 function getFragment(url) {
   const matches = /^\S+?(#[^\s\?]*)/.exec(url);
   if (matches) {
@@ -1662,6 +1687,7 @@ __webpack_require__.d(__webpack_exports__, {
 });
 
 ;// ./node_modules/@wordpress/url/build-module/normalize-path.js
+// packages/url/src/normalize-path.ts
 function normalizePath(path) {
   const split = path.split("?");
   const query = split[1];
@@ -1678,6 +1704,7 @@ var get_query_args = __webpack_require__(759);
 // EXTERNAL MODULE: ./node_modules/@wordpress/url/build-module/add-query-args.js
 var add_query_args = __webpack_require__(790);
 ;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/preloading.js
+// packages/api-fetch/src/middlewares/preloading.ts
 
 function createPreloadingMiddleware(preloadedData) {
   const cache = Object.fromEntries(
@@ -1765,6 +1792,7 @@ __webpack_require__.d(__webpack_exports__, {
 // EXTERNAL MODULE: ./node_modules/@wordpress/url/build-module/get-query-arg.js
 var get_query_arg = __webpack_require__(891);
 ;// ./node_modules/@wordpress/url/build-module/has-query-arg.js
+// packages/url/src/has-query-arg.ts
 
 function hasQueryArg(url, arg) {
   return (0,get_query_arg/* getQueryArg */.d)(url, arg) !== void 0;
@@ -1774,8 +1802,9 @@ function hasQueryArg(url, arg) {
 // EXTERNAL MODULE: ./node_modules/@wordpress/url/build-module/add-query-args.js
 var add_query_args = __webpack_require__(790);
 ;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/user-locale.js
+// packages/api-fetch/src/middlewares/user-locale.ts
 
-const userLocaleMiddleware = (options, next) => {
+var userLocaleMiddleware = (options, next) => {
   if (typeof options.url === "string" && !hasQueryArg(options.url, "_locale")) {
     options.url = (0,add_query_args/* addQueryArgs */.F)(options.url, { _locale: "user" });
   }
@@ -1799,6 +1828,7 @@ var user_locale_default = userLocaleMiddleware;
 /* harmony export */ });
 /* harmony import */ var _safe_decode_uri_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(119);
 /* harmony import */ var _get_query_string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(83);
+// packages/url/src/get-query-args.ts
 
 
 function setPath(object, path, value) {
@@ -1850,6 +1880,7 @@ function getQueryArgs(url) {
 /* harmony import */ var _get_query_args__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(759);
 /* harmony import */ var _build_query_string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(623);
 /* harmony import */ var _get_fragment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(629);
+// packages/url/src/add-query-args.ts
 
 
 
@@ -1879,6 +1910,7 @@ function addQueryArgs(url = "", args) {
 /* harmony export */   d: function() { return /* binding */ getQueryArg; }
 /* harmony export */ });
 /* harmony import */ var _get_query_args__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(759);
+// packages/url/src/get-query-arg.ts
 
 function getQueryArg(url, arg) {
   return (0,_get_query_args__WEBPACK_IMPORTED_MODULE_0__/* .getQueryArgs */ .u)(url)[arg];
@@ -1907,6 +1939,7 @@ var get_query_args = __webpack_require__(759);
 // EXTERNAL MODULE: ./node_modules/@wordpress/url/build-module/build-query-string.js
 var build_query_string = __webpack_require__(623);
 ;// ./node_modules/@wordpress/url/build-module/remove-query-args.js
+// packages/url/src/remove-query-args.ts
 
 
 function removeQueryArgs(url, ...args) {
@@ -1926,8 +1959,9 @@ function removeQueryArgs(url, ...args) {
 
 
 ;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/theme-preview.js
+// packages/api-fetch/src/middlewares/theme-preview.ts
 
-const createThemePreviewMiddleware = (themePath) => (options, next) => {
+var createThemePreviewMiddleware = (themePath) => (options, next) => {
   if (typeof options.url === "string") {
     const wpThemePreview = (0,get_query_arg/* getQueryArg */.d)(
       options.url,
@@ -1977,6 +2011,7 @@ var theme_preview_default = createThemePreviewMiddleware;
 /* harmony export */   f: function() { return /* binding */ parseResponseAndNormalizeError; }
 /* harmony export */ });
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(309);
+// packages/api-fetch/src/utils/response.ts
 
 async function parseJsonAndNormalizeError(response) {
   try {
