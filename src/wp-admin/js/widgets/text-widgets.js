@@ -117,7 +117,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function setAddedTaxonomyFields( id ) {
 		var form = document.createElement( 'form' ),
-			inputs = dialog.querySelectorAll( '.widget-modal-right-sidebar-info input, .widget-modal-right-sidebar-info textarea' );
+			inputs = dialog.querySelectorAll( '.widget-modal-right-sidebar-info input, .widget-modal-right-sidebar-info textarea, .widget-modal-right-sidebar-info button.delete-attachment' );
 
 		inputs.forEach( function( input ) {
 			input.dataset.id = id;
@@ -378,7 +378,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} )
 		.then( function( result ) {
 			if ( result === 1 ) {
-				closeModal();
+				if ( dialog ) {
+					dialog.querySelector( '#media-' + id ).remove();
+					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+				}
 			} else {
 				console.log( TEXT_WIDGET.delete_failed );
 			}
@@ -875,8 +878,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		.then( function( result ) {
 			if ( result.success ) {
 
-				// Show relevant button and clear grid
-				addButton = dialog.querySelector( '#media-button-insert' );
+				// Clear grid
 				dialog.querySelector( '.widget-modal-grid' ).innerHTML = '';
 
 				if ( result.data.length === 0 ) {
@@ -950,7 +952,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 					// Open modal to show details about file, or select files for deletion
 					if ( dialog.querySelector( '.media-item.selected' ) == null ) {
-						addButton.setAttribute( 'disabled', true );
+						dialog.querySelector( '.widget-modal-footer-buttons button' ).setAttribute( 'disabled', true );
 						dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
 					}
 					dialog.querySelectorAll( '.media-item' ).forEach( function( item ) {
@@ -2360,10 +2362,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} else if ( e.target === itemUpload ) {
 					itemBrowse.classList.remove( 'active' );
 					itemBrowse.setAttribute( 'aria-selected', false );
-					mediaButton.classList.remove( 'active' );
-					mediaButton.setAttribute( 'aria-selected', false );
-					itemEmbed.classList.remove( 'active' );
-					itemEmbed.setAttribute( 'aria-selected', false );
 					e.target.classList.add ( 'active' );
 					e.target.setAttribute( 'aria-selected', true );
 					uploadPanel.removeAttribute( 'hidden' );
@@ -2406,26 +2404,33 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Delete an item from the media library
 				} else if ( e.target.className.includes( 'delete-attachment' ) ) {
-					// Protect against XSS vulnerability
-					selectedIds = '';
-					dom = parser.parseFromString( widgetEl.querySelector( 'textarea' ).textContent, 'text/html' );
-					shortcodes = dom.body.textContent.split( 'ids="' );
-					shortcodes.forEach( function( selected, index ) {
-						if ( index !== 0 ) {
-							selected.replace( '[gallery', '' ).replace( '[playlist', '' ).replace( '[playlist type="video"', '' );
-							selectedIds += selected.split( '"]' );
+					if ( dialog ) {
+						if ( window.confirm( TEXT_WIDGET.confirm_delete ) ) {
+							deleteItem( e.target.dataset.id );
+							resetDataOrdering();
 						}
-					} );
-					if ( selectedIds ) {
-						libraryItems.forEach( function( item ) {
-							//if ( item.className.includes( 'selected' ) ) {
-								if ( ! selectedIds.split( ',' ).includes( item.dataset.id ) ) {
-									if ( window.confirm( TEXT_WIDGET.confirm_delete ) ) {
-										deleteItem( item.dataset.id );
-									}
-								}
-							//}
+					} else {
+						// Protect against XSS vulnerability
+						selectedIds = '';
+						dom = parser.parseFromString( widgetEl.querySelector( 'textarea' ).textContent, 'text/html' );
+						shortcodes = dom.body.textContent.split( 'ids="' );
+						shortcodes.forEach( function( selected, index ) {
+							if ( index !== 0 ) {
+								selected.replace( '[gallery', '' ).replace( '[playlist', '' ).replace( '[playlist type="video"', '' );
+								selectedIds += selected.split( '"]' );
+							}
 						} );
+						if ( selectedIds ) {
+							libraryItems.forEach( function( item ) {
+								//if ( item.className.includes( 'selected' ) ) {
+									if ( ! selectedIds.split( ',' ).includes( item.dataset.id ) ) {
+										if ( window.confirm( TEXT_WIDGET.confirm_delete ) ) {
+											deleteItem( item.dataset.id );
+										}
+									}
+								//}
+							} );
+						}
 					}
 
 				// Copy URL
@@ -2534,7 +2539,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				process: function( fieldName, file, metadata, load, error, progress, abort ) {
 
 					// Create FormData
-					var formData = new FormData();
+					var uploadID = null,
+						formData = new FormData();
+
 					formData.append( 'async-upload', file, file.name );
 					formData.append( 'action', 'upload-attachment' );
 					formData.append( '_wpnonce', document.getElementById( '_wpnonce' ).value );
@@ -2553,7 +2560,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					} )
 					.then( function( result ) {
 						if ( result.success ) {
-							load( 'finished' );
+							load( result.data );
+							uploadID = result.data.id;
 						} else {
 							error( TEXT_WIDGET.upload_failed );
 						}
@@ -2566,7 +2574,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					// Return an abort function
 					return {
 						abort: function() {
-							// This function is called when the user aborts the upload
+							// Cancel the fetch request
+							pond.removeFile( file.id, { revert: true } );
+console.log(uploadID);
+							// If the file has already been uploaded to the server, delete it
+							if ( uploadID !== null ) {
+								setTimeout( function() {
+									deleteItem( uploadID );
+								}, 0 );
+								uploadID = null;
+							}
+
+							// Tell filePond to stop tracking the file
 							abort();
 						}
 					};
