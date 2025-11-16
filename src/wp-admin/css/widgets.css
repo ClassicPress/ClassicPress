@@ -882,7 +882,6 @@ ul.CodeMirror-hints {
 .widget-modal-left-sidebar {
 	width: 200px;
 	min-width: 200px;
-	padding: 1em;
 	margin: -1em 0 -1em -1em;
 	background: #f6f7f7;
 	border-right: 1px solid #c3c4c7;
@@ -896,10 +895,7 @@ ul.CodeMirror-hints {
 }
 .widget-modal-left-heading {
 	font-size: 13px;
-	margin-left: 0.5em;
-}
-.widget-modal-left-tablist {
-	margin-left: -1em;
+	margin-left: 1.5em;
 }
 .widget-modal-left-tablist .media-menu-item {
 	text-align: left;
