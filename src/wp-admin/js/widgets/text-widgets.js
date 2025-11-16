@@ -171,7 +171,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	function updateDetails( input, id ) {console.log(id);
+	function updateDetails( input, id ) {
 		var successTimeout,
 			nonce = document.getElementById( 'media-' + id ).dataset.updateNonce,
 			data = new FormData();
