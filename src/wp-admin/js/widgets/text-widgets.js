@@ -250,10 +250,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function updateMediaTaxOrTag( input, id ) {
 		var successTimeout, newTaxes,
 			data = new FormData(),
+			nonce = document.getElementById( 'media-' + id ).dataset.updateNonce,
 			taxonomy = input.getAttribute( 'name' ).replace( 'attachments[' + id + '][' , '' ).replace( ']', '' );
 
+		if ( ! nonce ) {
+			return;
+		}
+
 		data.append( 'action', 'save-attachment-compat' );
-		data.append( 'nonce', document.getElementById( 'media-' + id ).dataset.updateNonce );
+		data.append( 'nonce', nonce);
 		data.append( 'id', id );
 		data.append( 'taxonomy', taxonomy );
 		data.append( 'attachments[' + id + '][' + taxonomy + ']', input.value );
@@ -275,7 +280,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					newTaxes = result.data.media_cats.join( ', ' );
 					input.value = newTaxes;
 					document.getElementById( 'media-' + id ).setAttribute( 'data-taxes', newTaxes );
-				} else if ( taxonomy === 'media_tag' ) {
+				} else if ( taxonomy === 'media_post_tag' ) {
 					newTaxes = result.data.media_tags.join( ', ' );
 					input.value = newTaxes;
 					document.getElementById( 'media-' + id ).setAttribute( 'data-tags', newTaxes );
