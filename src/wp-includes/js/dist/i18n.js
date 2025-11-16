@@ -198,6 +198,7 @@ function sprintf(string, ...args) {
 }
 
 ;// ./node_modules/@wordpress/i18n/build-module/sprintf.js
+// packages/i18n/src/sprintf.ts
 
 function sprintf_sprintf(format, ...args) {
   return sprintf(format, ...args);
@@ -215,10 +216,11 @@ function sprintf_sprintf(format, ...args) {
 /* harmony export */ });
 /* unused harmony exports actions, addAction, addFilter, applyFilters, applyFiltersAsync, currentAction, currentFilter, didAction, didFilter, doAction, doActionAsync, doingAction, doingFilter, filters, hasAction, hasFilter, removeAction, removeAllActions, removeAllFilters, removeFilter */
 /* harmony import */ var _createHooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(507);
+// packages/hooks/src/index.ts
 
 
-const defaultHooks = (0,_createHooks__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A)();
-const {
+var defaultHooks = (0,_createHooks__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A)();
+var {
   addAction,
   addFilter,
   removeAction,
@@ -257,6 +259,7 @@ __webpack_require__.d(__webpack_exports__, {
 // UNUSED EXPORTS: _Hooks
 
 ;// ./node_modules/@wordpress/hooks/build-module/validateNamespace.js
+// packages/hooks/src/validateNamespace.ts
 function validateNamespace(namespace) {
   if ("string" !== typeof namespace || "" === namespace) {
     console.error("The namespace must be a non-empty string.");
@@ -274,6 +277,7 @@ var validateNamespace_default = validateNamespace;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/validateHookName.js
+// packages/hooks/src/validateHookName.ts
 function validateHookName(hookName) {
   if ("string" !== typeof hookName || "" === hookName) {
     console.error("The hook name must be a non-empty string.");
@@ -295,6 +299,7 @@ var validateHookName_default = validateHookName;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createAddHook.js
+// packages/hooks/src/createAddHook.ts
 
 
 function createAddHook(hooks, storeKey) {
@@ -356,6 +361,7 @@ var createAddHook_default = createAddHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
+// packages/hooks/src/createRemoveHook.ts
 
 
 function createRemoveHook(hooks, storeKey, removeAll = false) {
@@ -401,6 +407,7 @@ var createRemoveHook_default = createRemoveHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createHasHook.js
+// packages/hooks/src/createHasHook.ts
 function createHasHook(hooks, storeKey) {
   return function hasHook(hookName, namespace) {
     const hooksStore = hooks[storeKey];
@@ -416,6 +423,7 @@ var createHasHook_default = createHasHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createRunHook.js
+// packages/hooks/src/createRunHook.ts
 function createRunHook(hooks, storeKey, returnFirstArg, async) {
   return function runHook(hookName, ...args) {
     const hooksStore = hooks[storeKey];
@@ -477,6 +485,7 @@ var createRunHook_default = createRunHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
+// packages/hooks/src/createCurrentHook.ts
 function createCurrentHook(hooks, storeKey) {
   return function currentHook() {
     const hooksStore = hooks[storeKey];
@@ -488,6 +497,7 @@ var createCurrentHook_default = createCurrentHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
+// packages/hooks/src/createDoingHook.ts
 function createDoingHook(hooks, storeKey) {
   return function doingHook(hookName) {
     const hooksStore = hooks[storeKey];
@@ -503,6 +513,7 @@ var createDoingHook_default = createDoingHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createDidHook.js
+// packages/hooks/src/createDidHook.ts
 
 function createDidHook(hooks, storeKey) {
   return function didHook(hookName) {
@@ -517,6 +528,7 @@ var createDidHook_default = createDidHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createHooks.js
+// packages/hooks/src/createHooks.ts
 
 
 
@@ -524,7 +536,7 @@ var createDidHook_default = createDidHook;
 
 
 
-class _Hooks {
+var _Hooks = class {
   actions;
   filters;
   addAction;
@@ -569,7 +581,7 @@ class _Hooks {
     this.didAction = createDidHook_default(this, "actions");
     this.didFilter = createDidHook_default(this, "filters");
   }
-}
+};
 function createHooks() {
   return new _Hooks();
 }
@@ -1163,16 +1175,17 @@ Tannin.prototype.dcnpgettext = function( domain, context, singular, plural, n ) 
 };
 
 ;// ./node_modules/@wordpress/i18n/build-module/create-i18n.js
+// packages/i18n/src/create-i18n.ts
 
-const DEFAULT_LOCALE_DATA = {
+var DEFAULT_LOCALE_DATA = {
   "": {
     plural_forms(n) {
       return n === 1 ? 0 : 1;
     }
   }
 };
-const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
-const createI18n = (initialData, initialDomain, hooks) => {
+var I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
+var createI18n = (initialData, initialDomain, hooks) => {
   const tannin = new Tannin({});
   const listeners = /* @__PURE__ */ new Set();
   const notifyListeners = () => {
@@ -1376,23 +1389,25 @@ const createI18n = (initialData, initialDomain, hooks) => {
 // EXTERNAL MODULE: ./node_modules/@wordpress/hooks/build-module/index.js
 var build_module = __webpack_require__(427);
 ;// ./node_modules/@wordpress/i18n/build-module/default-i18n.js
+// packages/i18n/src/default-i18n.ts
 
 
-const i18n = createI18n(void 0, void 0, build_module.defaultHooks);
+var i18n = createI18n(void 0, void 0, build_module.defaultHooks);
 var default_i18n_default = i18n;
-const getLocaleData = i18n.getLocaleData.bind(i18n);
-const setLocaleData = i18n.setLocaleData.bind(i18n);
-const resetLocaleData = i18n.resetLocaleData.bind(i18n);
-const subscribe = i18n.subscribe.bind(i18n);
-const __ = i18n.__.bind(i18n);
-const _x = i18n._x.bind(i18n);
-const _n = i18n._n.bind(i18n);
-const _nx = i18n._nx.bind(i18n);
-const isRTL = i18n.isRTL.bind(i18n);
-const hasTranslation = i18n.hasTranslation.bind(i18n);
+var getLocaleData = i18n.getLocaleData.bind(i18n);
+var setLocaleData = i18n.setLocaleData.bind(i18n);
+var resetLocaleData = i18n.resetLocaleData.bind(i18n);
+var subscribe = i18n.subscribe.bind(i18n);
+var __ = i18n.__.bind(i18n);
+var _x = i18n._x.bind(i18n);
+var _n = i18n._n.bind(i18n);
+var _nx = i18n._nx.bind(i18n);
+var isRTL = i18n.isRTL.bind(i18n);
+var hasTranslation = i18n.hasTranslation.bind(i18n);
 
 
 ;// ./node_modules/@wordpress/i18n/build-module/index.js
+// packages/i18n/src/index.ts
 
 
 

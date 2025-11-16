@@ -14,6 +14,7 @@ __webpack_require__.d(__webpack_exports__, {
 // UNUSED EXPORTS: _Hooks
 
 ;// ./node_modules/@wordpress/hooks/build-module/validateNamespace.js
+// packages/hooks/src/validateNamespace.ts
 function validateNamespace(namespace) {
   if ("string" !== typeof namespace || "" === namespace) {
     console.error("The namespace must be a non-empty string.");
@@ -31,6 +32,7 @@ var validateNamespace_default = validateNamespace;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/validateHookName.js
+// packages/hooks/src/validateHookName.ts
 function validateHookName(hookName) {
   if ("string" !== typeof hookName || "" === hookName) {
     console.error("The hook name must be a non-empty string.");
@@ -52,6 +54,7 @@ var validateHookName_default = validateHookName;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createAddHook.js
+// packages/hooks/src/createAddHook.ts
 
 
 function createAddHook(hooks, storeKey) {
@@ -113,6 +116,7 @@ var createAddHook_default = createAddHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
+// packages/hooks/src/createRemoveHook.ts
 
 
 function createRemoveHook(hooks, storeKey, removeAll = false) {
@@ -158,6 +162,7 @@ var createRemoveHook_default = createRemoveHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createHasHook.js
+// packages/hooks/src/createHasHook.ts
 function createHasHook(hooks, storeKey) {
   return function hasHook(hookName, namespace) {
     const hooksStore = hooks[storeKey];
@@ -173,6 +178,7 @@ var createHasHook_default = createHasHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createRunHook.js
+// packages/hooks/src/createRunHook.ts
 function createRunHook(hooks, storeKey, returnFirstArg, async) {
   return function runHook(hookName, ...args) {
     const hooksStore = hooks[storeKey];
@@ -234,6 +240,7 @@ var createRunHook_default = createRunHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
+// packages/hooks/src/createCurrentHook.ts
 function createCurrentHook(hooks, storeKey) {
   return function currentHook() {
     const hooksStore = hooks[storeKey];
@@ -245,6 +252,7 @@ var createCurrentHook_default = createCurrentHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
+// packages/hooks/src/createDoingHook.ts
 function createDoingHook(hooks, storeKey) {
   return function doingHook(hookName) {
     const hooksStore = hooks[storeKey];
@@ -260,6 +268,7 @@ var createDoingHook_default = createDoingHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createDidHook.js
+// packages/hooks/src/createDidHook.ts
 
 function createDidHook(hooks, storeKey) {
   return function didHook(hookName) {
@@ -274,6 +283,7 @@ var createDidHook_default = createDidHook;
 
 
 ;// ./node_modules/@wordpress/hooks/build-module/createHooks.js
+// packages/hooks/src/createHooks.ts
 
 
 
@@ -281,7 +291,7 @@ var createDidHook_default = createDidHook;
 
 
 
-class _Hooks {
+var _Hooks = class {
   actions;
   filters;
   addAction;
@@ -326,7 +336,7 @@ class _Hooks {
     this.didAction = createDidHook_default(this, "actions");
     this.didFilter = createDidHook_default(this, "filters");
   }
-}
+};
 function createHooks() {
   return new _Hooks();
 }
@@ -446,10 +456,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
 /* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _types__WEBPACK_IMPORTED_MODULE_1__) if(["default","actions","addAction","addFilter","applyFilters","applyFiltersAsync","createHooks","currentAction","currentFilter","defaultHooks","didAction","didFilter","doAction","doActionAsync","doingAction","doingFilter","filters","hasAction","hasFilter","removeAction","removeAllActions","removeAllFilters","removeFilter"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = function(key) { return _types__WEBPACK_IMPORTED_MODULE_1__[key]; }.bind(0, __WEBPACK_IMPORT_KEY__)
 /* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
+// packages/hooks/src/index.ts
 
 
-const defaultHooks = (0,_createHooks__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A)();
-const {
+var defaultHooks = (0,_createHooks__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A)();
+var {
   addAction,
   addFilter,
   removeAction,
