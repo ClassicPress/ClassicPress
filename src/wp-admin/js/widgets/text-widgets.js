@@ -110,12 +110,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	/**
-	 * Update taxonomy details within modal.
+	 * Update taxonomy details and data IDs within modal.
 	 *
 	 * @abstract
 	 * @return {void}
 	 */
-	function setAddedMediaFields( id ) {
+	function setAddedTaxonomyFields( id ) {
 		var form = document.createElement( 'form' ),
 			inputs = dialog.querySelectorAll( '.widget-modal-right-sidebar-info input, .widget-modal-right-sidebar-info textarea' );
 
@@ -171,7 +171,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	function updateDetails( input, id ) {
+	function updateDetails( input, id ) {console.log(id);
 		var successTimeout,
 			nonce = document.getElementById( 'media-' + id ).dataset.updateNonce,
 			data = new FormData();
@@ -193,6 +193,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			data.append( 'changes[caption]', input.value );
 		} else if ( input.parentNode.dataset.setting === 'description' ) {
 			data.append( 'changes[description]', input.value );
+		} else if ( input.parentNode.dataset.setting === 'artist' ) {
+			data.append( 'changes[artist]', input.value );
+		} else if ( input.parentNode.dataset.setting === 'album' ) {
+			data.append( 'changes[album]', input.value );
 		}
 
 		fetch( ajaxurl, {
@@ -220,6 +224,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					document.getElementById( 'media-' + id ).setAttribute( 'data-caption', input.value );
 				} else if ( input.parentNode.dataset.setting === 'description' ) {
 					document.getElementById( 'media-' + id ).setAttribute( 'data-description', input.value );
+				} else if ( input.parentNode.dataset.setting === 'artist' ) {
+					data.append( 'changes[artist]', input.value );
+				} else if ( input.parentNode.dataset.setting === 'album' ) {
+					data.append( 'changes[album]', input.value );
 				}
 
 				// Show success visual feedback.
@@ -444,8 +452,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '.wp_video_shortcode' ).remove();
 		}
 		details.removeAttribute( 'style' );
+		
+		// Set taxonomy fields
+		setAddedTaxonomyFields( id );
 
-		// Set metadata correctly
+		// Set metadata
 		if ( item.dataset.filetype === 'image' ) {
 			dialog.querySelector( '.attachment-dimensions' ).textContent = width + ' ' + TEXT_WIDGET.by + ' ' + height + ' ' + TEXT_WIDGET.pixels;
 			thumbnail.style.display = '';
@@ -493,8 +504,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 			}
 		}
-
-		setAddedMediaFields( id );
 
 		// Populate modal with attachment details
 		dialog.querySelector( '.attachment-date' ).textContent = date;
