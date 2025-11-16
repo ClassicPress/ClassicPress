@@ -110,33 +110,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	/**
-	 * Update details within modal.
-	 *
-	 * @abstract
-	 * @return {void}
-	 */
-	function setAddedMetaFields( artist, album ) {
-		var fields = document.createElement( 'div' );
-		fields.className = 'artist-album';
-		fields.innerHTML = '<div class="setting" data-setting="artist">' +
-			'<label for="attachment-details-artist" class="name">' + TEXT_WIDGET.artist + '</label>' +
-			'<input type="text" id="attachment-details-artist" value="' + artist + '">' +
-			'</div>' +
-			'<div class="setting" data-setting="album">' +
-			'<label for="attachment-details-album" class="name">' + TEXT_WIDGET.album + '</label>' +
-			'<input type="text" id="attachment-details-album" value="' + album + '">' +
-			'</div>';
-		document.querySelector( '.widget-modal-descriptions .settings-save-status' ).after( fields );
-	}
-
-	/**
-	 * Update details within modal.
+	 * Update taxonomy details within modal.
 	 *
 	 * @abstract
 	 * @return {void}
 	 */
 	function setAddedMediaFields( id ) {
-		var form = document.createElement( 'form' );
+		var form = document.createElement( 'form' ),
+			inputs = dialog.querySelectorAll( '.widget-modal-right-sidebar-info input, .widget-modal-right-sidebar-info textarea' );
+
+		inputs.forEach( function( input ) {
+			input.dataset.id = id;
+		} );
+
 		form.className = 'compat-item';
 		form.innerHTML = '<input type="hidden" id="menu-order" name="attachments[' + id + '][menu_order]" value="0">' +
 			'<p class="media-types media-types-required-info"><span class="required-field-message">Required fields are marked <span class="required">*</span></span></p>' +
@@ -144,19 +130,39 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				'<label for="attachments-' + id + '-media_category" style="width:30%;">' +
 					'<span class="alignleft">Media Categories</span>' +
 				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" value="">' +
+				'<input type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" data-id="' + id + '" value="">' +
 			'</div>' +
 			'<div class="setting" data-setting="media_post_tag">' +
 				'<label for="attachments-' + id + '-media_post_tag">' +
 					'<span class="alignleft">Media Tags</span>' +
 				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" value="">' +
+				'<input type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" data-id="' + id + '" value="">' +
 			'</div>';
 
 		if ( document.querySelector( '.compat-item' ) != null ) {
 			document.querySelector( '.compat-item' ).remove();
 		}
 		document.querySelector( '.attachment-compat' ).append( form );
+	}
+
+	/**
+	 * Update meta details for audio files within modal.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function setAddedMetaFields( artist, album, id ) {
+		var fields = document.createElement( 'div' );
+		fields.className = 'artist-album';
+		fields.innerHTML = '<div class="setting" data-setting="artist">' +
+			'<label for="attachments-details-artist" class="name">' + TEXT_WIDGET.artist + '</label>' +
+			'<input type="text" id="attachments-details-artist" data-id="' + id + '" value="' + artist + '">' +
+			'</div>' +
+			'<div class="setting" data-setting="album">' +
+			'<label for="attachments-details-album" class="name">' + TEXT_WIDGET.album + '</label>' +
+			'<input type="text" id="attachments-details-album" data-id="' + id + '" value="' + album + '">' +
+			'</div>';
+		document.querySelector( '.widget-modal-descriptions .settings-save-status' ).after( fields );
 	}
 
 	/**
@@ -167,11 +173,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function updateDetails( input, id ) {
 		var successTimeout,
+			nonce = document.getElementById( 'media-' + id ).dataset.updateNonce,
 			data = new FormData();
+
+		if ( ! nonce ) {
+			return;
+		}
 
 		data.append( 'action', 'save-attachment' );
 		data.append( 'id', id );
-		data.append( 'nonce', document.getElementById( 'media-' + id ).dataset.updateNonce );
+		data.append( 'nonce', nonce );
 
 		// Append metadata fields
 		if ( input.parentNode.dataset.setting === 'alt' || input.id === 'embed-image-settings-alt-text' ) {
@@ -453,7 +464,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			if ( item.dataset.filetype === 'audio' ) {
 				img.style.display = 'none';
-				setAddedMetaFields( artist, album );
+				setAddedMetaFields( artist, album, id );
 				if ( audioClone ) {
 					audioClone.querySelector( 'source' ).src = url;
 					if ( dialog.querySelector( '.wp_audio_shortcode' ) ) {
@@ -519,22 +530,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '.widget-modal-right-sidebar-info' ).removeAttribute( 'hidden' );
 
 		// Update media attachment details
-		if ( dialog.querySelector( '.media-library-grid-section' ) ) {
-			dialog.querySelectorAll( '.widget-modal-right-sidebar-info input, .widget-modal-right-sidebar-info textarea' ).forEach( function( input ) {
-				input.setAttribute( 'readonly', true );
+		dialog.querySelectorAll( '.widget-modal-right-sidebar-info input, .widget-modal-right-sidebar-info textarea' ).forEach( function( input ) {
+			input.addEventListener( 'change', function() {
+				if ( input.parentNode.parentNode.className === 'compat-item' ) {
+					updateMediaTaxOrTag( input, input.dataset.id ); // Update media categories and tags
+				} else {
+					updateDetails( input, input.dataset.id );
+				}
 			} );
-		} else {
-			dialog.querySelectorAll( '.widget-modal-right-sidebar-info input, .widget-modal-right-sidebar-info textarea' ).forEach( function( input ) {
-				input.addEventListener( 'change', function() {
-					input.removeAttribute( 'readonly' );
-					if ( input.parentNode.parentNode.className === 'compat-item' ) {
-						updateMediaTaxOrTag( input, id ); // Update media categories and tags
-					} else {
-						updateDetails( input, id );
-					}
-				} );
-			} );
-		}
+		} );
 
 		// Uncheck item if clicked on
 		if ( item.className.includes( 'selected' ) ) {
