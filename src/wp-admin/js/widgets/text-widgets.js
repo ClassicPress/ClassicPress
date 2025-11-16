@@ -225,9 +225,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} else if ( input.parentNode.dataset.setting === 'description' ) {
 					document.getElementById( 'media-' + id ).setAttribute( 'data-description', input.value );
 				} else if ( input.parentNode.dataset.setting === 'artist' ) {
-					data.append( 'changes[artist]', input.value );
+					document.getElementById( 'media-' + id ).setAttribute( 'data-artist', input.value );
 				} else if ( input.parentNode.dataset.setting === 'album' ) {
-					data.append( 'changes[album]', input.value );
+					document.getElementById( 'media-' + id ).setAttribute( 'data-album', input.value );
 				}
 
 				// Show success visual feedback.
