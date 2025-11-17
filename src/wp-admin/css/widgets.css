@@ -1245,12 +1245,18 @@ ul.CodeMirror-hints {
 .widget-modal-footer-selection-view ul {
 	display: flex;
 }
+.widget-modal-footer-selection .icon {
+	box-shadow: none;
+}
 .widget-modal-footer-selection .media-thumbnail img {
 	width: 45px;
 	height: 45px;
 	margin-right: 0.5em;
 	margin-top: -5px;
 	object-fit: cover;
+}
+.widget-modal-footer-selection .media-thumbnail .filename {
+	display: none;
 }
 .widget-modal-footer-buttons {
 	padding-right: 1em;
