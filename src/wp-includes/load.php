@@ -786,6 +786,47 @@ function wp_start_object_cache() {
 }
 
 /**
+ * Installs an object-cache.php file, if one does not already exist, to
+ * make use of the APCu extension as an external object cache.
+ *
+ * @since CP-2.7.0
+ * @access private
+ */
+function cp_install_apcu_object_cache() {
+
+	// Abort if the apcu extension is not installed.
+	if ( ! extension_loaded( 'apcu' ) ) {
+		return;
+	}
+
+	// Abort if there is already an object cache set by something other than ClassicPress core.
+	$cp_object_cache = absint( get_option( 'cp_object_cache' ) );
+	if ( 2 === $cp_object_cache ) {
+		return;
+	}
+
+	// Remove object-cache.php file if user requests
+	if ( empty( $cp_object_cache ) ) {
+		if ( file_exists( WP_CONTENT_DIR . '/object-cache.php' ) ) {
+			unlink( WP_CONTENT_DIR . '/object-cache.php' );
+		} else { // Otherwise abort
+			return;
+		}
+
+	// Locate the source file containing the object-cache code.
+	} else {
+		$source_file = __DIR__ . '/object-cache.php';
+
+		// Copy and paste the source file into place.
+		if ( file_exists( $source_file ) ) {
+			if ( ! copy( $source_file, WP_CONTENT_DIR . '/object-cache.php' ) ) {
+				error_log( 'Failed to copy object-cache.php to wp-content folder.' );
+			}
+		}
+	}
+}
+
+/**
  * Redirect to the installer if WordPress is not installed.
  *
  * Dies with an error message when Multisite is enabled.
