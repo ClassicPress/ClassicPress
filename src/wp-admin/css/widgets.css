@@ -1240,7 +1240,7 @@ ul.CodeMirror-hints {
 .widget-modal-footer-selection .count {
 	font-weight: 600;
 }
-.widget-modal-footer-selection .clear-selection {
+.widget-modal-footer-selection .button-link.clear-selection {
 	color: #d63638;
 }
 .widget-modal-footer-selection-view ul {
