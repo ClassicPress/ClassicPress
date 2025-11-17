@@ -283,8 +283,9 @@ elseif ( file_exists( WP_CONTENT_DIR . '/object-cache.php' ) ) :
 		<?php
 	} else {
 		?>
-		<input id="cp_object_cache" type="checkbox" name="cp_object_cache" value="2" checked inert>
+		<input id="cp_object_cache" type="checkbox" checked inert>
 		<label for="cp_object_cache"><?php esc_html_e( 'Enable object caching' ); ?></label>
+		<input type="hidden" name="cp_object_cache" value="2">
 		<p><?php esc_html_e( 'Object caching has already been installed on this site by a plugin or other code. You will not be able to uncheck this box unless you first deactivate the plugin or other code.' ); ?></p>
 		<?php
 	}
