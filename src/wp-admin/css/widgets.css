@@ -1082,8 +1082,8 @@ ul.CodeMirror-hints {
 	width: 24px;
 	padding: 0;
 	border: 0;
-	top: -5px;
-	right: -5px;
+	top: 5px;
+	right: 5px;
 	position: absolute;
 	z-index: 10;
 	outline: none;
@@ -1221,11 +1221,36 @@ ul.CodeMirror-hints {
 }
 .widget-modal-footer {
 	position: sticky;
+	display: flex;
+	justify-content: space-between;
 	bottom: -1em;
-	height: 50px;
+	height: 60px;
 	z-index: 999;
 	background: #fff;
 	border-top: 1px solid #dcdcde;
+}
+.widget-modal-footer-selection {
+	 display: flex;
+	 justify-content: flex-start;
+}
+.widget-modal-footer-selection-info {
+	padding: 1em;
+}
+.widget-modal-footer-selection .count {
+	font-weight: 600;
+}
+.widget-modal-footer-selection .clear-selection {
+	color: #d63638;
+}
+.widget-modal-footer-selection-view ul {
+	display: flex;
+}
+.widget-modal-footer-selection .media-thumbnail img {
+	width: 45px;
+	height: 45px;
+	margin-right: 0.5em;
+	margin-top: -5px;
+	object-fit: cover;
 }
 .widget-modal-footer-buttons {
 	padding-right: 1em;
@@ -1233,7 +1258,7 @@ ul.CodeMirror-hints {
 }
 .wp-core-ui .widget-modal-footer-buttons .button-primary {
 	cursor: pointer;
-	margin-top: 0.75em;
+	margin-top: 1em;
 }
 #image-modal-content .media-embed,
 .imgedit-wrap > div:not( .hidden ) {
