@@ -430,7 +430,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			cloneVideo = videoTemplate.content.cloneNode( true ),
 			videoClone = cloneVideo.querySelector( 'video' ),
 			linkTo = dialog.querySelector( '#attachment-display-settings-link-to' ),
-			linkToCustom = dialog.querySelector( '#attachment-display-settings-link-to-custom' );
+			linkToCustom = dialog.querySelector( '#attachment-display-settings-link-to-custom' ),
+			count = 0,
+			ul = dialog.querySelector( '.widget-modal-footer-selection-view ul' ),
+			li = document.createElement( 'li' );
 
 		// Clean up from previous use of this function
 		if ( dialog.querySelector( '.alt-text' ) ) {
@@ -508,6 +511,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 
+		li.role = 'checkbox';
+		li.setAttribute( 'tabindex', '0' );
+		li.setAttribute( 'aria-label', filename );
+		li.setAttribute( 'aria-checked', true );
+		li.dataset.id = id;
+		li.className = 'attachment selection details selected save-ready';
+		li.innerHTML = item.querySelector( '.select-attachment-preview' ).outerHTML;
+		count++;console.log(count);
+		dialog.querySelector( '.widget-modal-footer .count' ).textContent = count === 1 ? '1 ' + TEXT_WIDGET.item_selected : count + ' ' + TEXT_WIDGET.items_selected;
+		ul.append( li );
+		ul.parentNode.parentNode.style.visibility = 'visible';
+
 		// Populate modal with attachment details
 		dialog.querySelector( '.attachment-date' ).textContent = date;
 		dialog.querySelector( '.attachment-filename' ).textContent = filename;
@@ -570,8 +585,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				item.querySelector( '.check' ).style.display = 'none';
 				dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
 
-				// Disable add to widget button if no media items are selected
+				// If no media items are selected
 				if ( document.querySelector( '.media-item.selected' ) == null ) {
+
+					// Empty and hide footer selection
+					ul.innerHTML = '';
+					ul.parentNode.parentNode.style.visibility = 'hidden';
+
+					// Disable add to widget button 
 					if ( addButton ) {
 						addButton.setAttribute( 'disabled', true );
 					}
