@@ -366,6 +366,16 @@ function cp_render_media_video_template() {
 		</div>
 
 		<footer class="widget-modal-footer">
+			<div class="widget-modal-footer-selection">
+				<div class="widget-modal-footer-selection-info" hidden>
+					<span class="count"></span>
+					<br>
+					<button type="button" class="button-link clear-selection"><?php esc_html_e( 'Clear' ); ?></button>
+				</div>
+				<div class="widget-modal-footer-selection-view" hidden>
+					<ul tabindex="-1"></ul>
+				</div>
+			</div>
 			<div class="widget-modal-footer-buttons" style="padding-right: 2em;">
 				<button id="video-button-update" type="button" class="button media-button button-primary button-large media-button-select" disabled><?php esc_html_e( 'Update' ); ?></button>
 			</div>
