@@ -1232,6 +1232,7 @@ ul.CodeMirror-hints {
 .widget-modal-footer-selection {
 	 display: flex;
 	 justify-content: flex-start;
+	 visibility: hidden;
 }
 .widget-modal-footer-selection-info {
 	padding: 1em;
