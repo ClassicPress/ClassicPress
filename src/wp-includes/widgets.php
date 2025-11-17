@@ -2327,12 +2327,12 @@ function cp_render_widget_upload_template() {
 
 		<footer class="widget-modal-footer">
 			<div class="widget-modal-footer-selection">
-				<div class="widget-modal-footer-selection-info" hidden>
+				<div class="widget-modal-footer-selection-info">
 					<span class="count"></span>
 					<br>
 					<button type="button" class="button-link clear-selection"><?php esc_html_e( 'Clear' ); ?></button>
 				</div>
-				<div class="widget-modal-footer-selection-view" hidden>
+				<div class="widget-modal-footer-selection-view">
 					<ul tabindex="-1"></ul>
 				</div>
 			</div>
