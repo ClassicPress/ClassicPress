@@ -52,7 +52,7 @@ get_current_screen()->add_help_tab(
 	array(
 		'id'      => 'object-cache',
 		'title'   => __( 'Object caching' ),
-		'content' => '<p>' . __( 'The <a href="site-health.php">Site Health</a> tool recommends that you use an object cache to reduce the load on your site\'s database and potentially speed up the responsiveness of your site. If you have not already installed an object cache and would like ClassicPress to do so for you, click the checkbox next to &#8220;Install object cache&#8221; and click the Save Changes button at the bottom of the screen.' ) . '</p>' .
+		'content' => '<p>' . __( 'The <a href="site-health.php">Site Health</a> tool recommends that you use an object cache to reduce the load on your site\'s database and potentially speed up the responsiveness of your site. If you have not already installed an object cache and would like ClassicPress to do so for you, click the checkbox next to &#8220;Object cache&#8221; and click the Save Changes button at the bottom of the screen.' ) . '</p>' .
 			'<p>' . __( 'Note that an object cache is different from page caching. You may have them both running on your site; ClassicPress\'s object caching will not conflict with page caching plugins.' ) . '</p>' .
 			'<p>' . __( 'Unlike page caching, object caching will work even when a user is logged in. This makes it particularly useful for membership sites and intranets.' ) . '</p>',
 	)
