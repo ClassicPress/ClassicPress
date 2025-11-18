@@ -131,7 +131,6 @@ wp_set_wpdb_vars();
 
 // Start the ClassicPress object cache, or an external object cache if the drop-in is present.
 wp_start_object_cache();
-cp_install_apcu_object_cache();
 
 // Attach the default filters.
 require ABSPATH . WPINC . '/default-filters.php';
@@ -375,6 +374,9 @@ do_action( 'muplugins_loaded' );
 if ( is_multisite() ) {
 	ms_cookie_constants();
 }
+
+// Install APCu object cache, if appropriate.
+cp_install_apcu_object_cache();
 
 // Define constants after multisite is loaded.
 wp_cookie_constants();
