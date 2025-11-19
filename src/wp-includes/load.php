@@ -831,7 +831,7 @@ function cp_install_apcu_object_cache() {
 			}
 			$success = $wp_filesystem->delete( $object_cache_file );
 			if ( ! $success ) {
-				error_log( 'Failed to delete the file: ' . $object_cache_file );
+				error_log( __( 'Failed to delete the file: ' ) . $object_cache_file );
 			}
 
 		// Otherwise abort.
@@ -849,7 +849,7 @@ function cp_install_apcu_object_cache() {
 
 				// Copy and paste the file using the WP_Filesystem.
 				if ( ! $wp_filesystem->copy( $source_file, $object_cache_file ) ) {
-					error_log( 'Failed to copy object-cache.php to wp-content folder.' );
+					error_log( __( 'Failed to copy object-cache.php to wp-content folder.' ) );
 				}
             }
         }
