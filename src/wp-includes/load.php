@@ -808,6 +808,9 @@ function cp_install_apcu_object_cache() {
 	// Remove object-cache.php file if user requests
 	if ( empty( $cp_object_cache ) ) {
 		if ( file_exists( WP_CONTENT_DIR . '/object-cache.php' ) ) {
+			if ( function_exists( 'apcu_clear_cache' ) ) {
+				apcu_clear_cache();
+			}
 			unlink( WP_CONTENT_DIR . '/object-cache.php' );
 		} else { // Otherwise abort
 			return;
