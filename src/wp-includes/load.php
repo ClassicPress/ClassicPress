@@ -835,11 +835,9 @@ function cp_install_apcu_object_cache() {
 			if ( ! $success ) {
 				error_log( __( 'Failed to delete the file: ' ) . $object_cache_file );
 			}
-
 		} else { // Otherwise abort
 			return;
 		}
-
 	} else { // Otherwise install object cache
 
 		// Check if object-cache.php exists using $wp_filesystem.
