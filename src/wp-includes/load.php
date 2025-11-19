@@ -806,14 +806,14 @@ function cp_install_apcu_object_cache() {
 	}
 
 	// Setup the filesystem abstraction
-    if ( ! function_exists( 'WP_Filesystem' ) ) {
-        require_once ABSPATH . 'wp-admin/includes/file.php';
-    }
-    global $wp_filesystem;
+	if ( ! function_exists( 'WP_Filesystem' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+	}
+	global $wp_filesystem;
 
-    if ( empty( $wp_filesystem ) ) {
-        WP_Filesystem();
-    }
+	if ( empty( $wp_filesystem ) ) {
+		WP_Filesystem();
+	}
 
 	// Define wp-content/object-cache.php path.
 	$wp_content_dir    = defined( 'WP_CONTENT_DIR' ) ? WP_CONTENT_DIR : __DIR__ . '/wp-content';
@@ -834,25 +834,23 @@ function cp_install_apcu_object_cache() {
 				error_log( __( 'Failed to delete the file: ' ) . $object_cache_file );
 			}
 
-		// Otherwise abort.
-		} else {
+		} else { // Otherwise abort
 			return;
 		}
 
-	// Otherwise install object cache.
-	} else {
+	} else { // Otherwise install object cache
 
 		// Check if object-cache.php exists using $wp_filesystem.
 		if ( ! $wp_filesystem->exists( $object_cache_file ) ) {
 			$source_file = __DIR__ . '/object-cache.php';
 			if ( $wp_filesystem->exists( $source_file ) ) {
 
-				// Copy and paste the file using the WP_Filesystem.
+				// Copy and paste the file using the WP_Filesystem
 				if ( ! $wp_filesystem->copy( $source_file, $object_cache_file ) ) {
 					error_log( __( 'Failed to copy object-cache.php to wp-content folder.' ) );
 				}
-            }
-        }
+			}
+		}
 	}
 }
 
