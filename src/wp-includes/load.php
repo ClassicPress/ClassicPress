@@ -829,6 +829,8 @@ function cp_install_apcu_object_cache() {
 			if ( function_exists( 'apcu_clear_cache' ) ) {
 				apcu_clear_cache();
 			}
+
+			// Delete the object cache.
 			$success = $wp_filesystem->delete( $object_cache_file );
 			if ( ! $success ) {
 				error_log( __( 'Failed to delete the file: ' ) . $object_cache_file );
