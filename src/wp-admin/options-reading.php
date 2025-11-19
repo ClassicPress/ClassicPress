@@ -269,11 +269,11 @@ else :
 <td><fieldset>
 <?php
 if ( ! extension_loaded( 'apcu' ) ) :
-?>
+	?>
 	<input id="cp_object_cache" type="checkbox" name="cp_object_cache" value="0" disabled inert>
 	<label for="cp_object_cache"><?php esc_html_e( 'Enable object caching' ); ?></label>
 	<p><?php esc_html_e( 'The APCu extension for PHP is not installed. If you wish to have ClassicPress to activate object caching, you should ask your host to install the APCu extension.' ); ?></p>
-<?php
+	<?php
 elseif ( file_exists( WP_CONTENT_DIR . '/object-cache.php' ) ) :
 	if ( get_option( 'cp_object_cache' ) && 1 === absint( get_option( 'cp_object_cache' ) ) ) {
 		?>
@@ -290,11 +290,11 @@ elseif ( file_exists( WP_CONTENT_DIR . '/object-cache.php' ) ) :
 		<?php
 	}
 else :
-?>
+	?>
 	<input id="cp_object_cache" type="checkbox" name="cp_object_cache" value="1">
 	<label for="cp_object_cache"><?php esc_html_e( 'Enable object caching' ); ?></label>
 	<p><?php esc_html_e( 'You do not currently have an object cache installed on this site. Check the box if you want ClassicPress to install one for you.' ); ?></p>
-<?php
+	<?php
 endif;
 ?>
 </fieldset></td>

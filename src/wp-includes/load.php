@@ -812,9 +812,8 @@ function cp_install_apcu_object_cache() {
 		} else { // Otherwise abort
 			return;
 		}
-
-	// Locate the source file containing the object-cache code.
 	} else {
+		// Locate the source file containing the object-cache code.
 		$source_file = __DIR__ . '/object-cache.php';
 
 		// Copy and paste the source file into place.
