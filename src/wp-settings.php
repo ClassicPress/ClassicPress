@@ -373,10 +373,10 @@ do_action( 'muplugins_loaded' );
 
 if ( is_multisite() ) {
 	ms_cookie_constants();
+} else {
+	// Install APCu object cache, if appropriate.
+	cp_install_apcu_object_cache();
 }
-
-// Install APCu object cache, if appropriate.
-cp_install_apcu_object_cache();
 
 // Define constants after multisite is loaded.
 wp_cookie_constants();
