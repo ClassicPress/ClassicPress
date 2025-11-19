@@ -805,26 +805,54 @@ function cp_install_apcu_object_cache() {
 		return;
 	}
 
-	// Remove object-cache.php file if user requests
+	// Setup the filesystem abstraction
+    if ( ! function_exists( 'WP_Filesystem' ) ) {
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+    }
+    global $wp_filesystem;
+
+    if ( empty( $wp_filesystem ) ) {
+        WP_Filesystem();
+    }
+
+	// Define wp-content/object-cache.php path.
+	$wp_content_dir    = defined( 'WP_CONTENT_DIR' ) ? WP_CONTENT_DIR : __DIR__ . '/wp-content';
+	$object_cache_file = $wp_content_dir . '/object-cache.php';
+
+	// Remove object-cache.php file if user requests.
 	if ( empty( $cp_object_cache ) ) {
-		if ( file_exists( WP_CONTENT_DIR . '/object-cache.php' ) ) {
+
+		// Check if object-cache.php exists using $wp_filesystem.
+		if ( $wp_filesystem->exists( $object_cache_file ) ) {
+
+			// Clear the object cache.
 			if ( function_exists( 'apcu_clear_cache' ) ) {
 				apcu_clear_cache();
 			}
-			unlink( WP_CONTENT_DIR . '/object-cache.php' );
-		} else { // Otherwise abort
+			$success = $wp_filesystem->delete( $object_cache_file );
+			if ( ! $success ) {
+				error_log( 'Failed to delete the file: ' . $object_cache_file );
+			}
+
+		// Otherwise abort.
+		} else {
 			return;
 		}
-	} else {
-		// Locate the source file containing the object-cache code.
-		$source_file = __DIR__ . '/object-cache.php';
 
-		// Copy and paste the source file into place.
-		if ( file_exists( $source_file ) ) {
-			if ( ! copy( $source_file, WP_CONTENT_DIR . '/object-cache.php' ) ) {
-				error_log( 'Failed to copy object-cache.php to wp-content folder.' );
-			}
-		}
+	// Otherwise install object cache.
+	} else {
+
+		// Check if object-cache.php exists using $wp_filesystem.
+		if ( ! $wp_filesystem->exists( $object_cache_file ) ) {
+			$source_file = __DIR__ . '/object-cache.php';
+			if ( $wp_filesystem->exists( $source_file ) ) {
+
+				// Copy and paste the file using the WP_Filesystem.
+				if ( ! $wp_filesystem->copy( $source_file, $object_cache_file ) ) {
+					error_log( 'Failed to copy object-cache.php to wp-content folder.' );
+				}
+            }
+        }
 	}
 }
 
