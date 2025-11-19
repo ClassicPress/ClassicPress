@@ -272,21 +272,21 @@ if ( ! extension_loaded( 'apcu' ) ) :
 	?>
 	<input id="cp_object_cache" type="checkbox" name="cp_object_cache" value="0" disabled inert>
 	<label for="cp_object_cache"><?php esc_html_e( 'Enable object caching' ); ?></label>
-	<p class="description"><?php esc_html_e( 'The APCu extension for PHP is not installed. If you wish to have ClassicPress to activate object caching, you should ask your host to install the APCu extension.' ); ?></p>
+	<p class="description"><?php esc_html_e( 'The APCu extension for PHP is not installed. If you wish to have ClassicPress activate object caching, you should ask your host to install the APCu extension.' ); ?></p>
 	<?php
 elseif ( file_exists( WP_CONTENT_DIR . '/object-cache.php' ) ) :
 	if ( get_option( 'cp_object_cache' ) && 1 === absint( get_option( 'cp_object_cache' ) ) ) {
 		?>
 		<input id="cp_object_cache" type="checkbox" name="cp_object_cache" value="1" checked>
 		<label for="cp_object_cache"><?php esc_html_e( 'Enable object caching' ); ?></label>
-		<p class="description"><?php esc_html_e( 'You have activated ClassicPress\'s object caching on this site.' ); ?></p>
+		<p class="description"><?php esc_html_e( 'You have activated ClassicPress\'s object cache on this site.' ); ?></p>
 		<?php
 	} else {
 		?>
 		<input id="cp_object_cache" type="checkbox" checked inert>
 		<label for="cp_object_cache"><?php esc_html_e( 'Enable object caching' ); ?></label>
 		<input type="hidden" name="cp_object_cache" value="2">
-		<p class="description"><?php esc_html_e( 'Object caching has already been installed on this site by a plugin or other code. You will not be able to uncheck this box unless you first deactivate the plugin or other code.' ); ?></p>
+		<p class="description"><?php esc_html_e( 'An object cache has already been installed on this site by a plugin or other code. You will not be able to uncheck this box unless you first deactivate the plugin or other code.' ); ?></p>
 		<?php
 	}
 else :
