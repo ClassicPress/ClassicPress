@@ -316,7 +316,9 @@ if ( ! is_multisite() ) :
 <?php
 endif;
 
-do_settings_fields( 'reading', 'default' ); ?>
+do_settings_fields( 'reading', 'default' );
+?>
+
 </table>
 
 <?php do_settings_sections( 'reading' ); ?>
