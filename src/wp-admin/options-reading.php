@@ -300,20 +300,20 @@ if ( ! is_multisite() ) :
 			<?php
 		}
 	} else {
-	?>
+		?>
 
 		<input id="cp_object_cache" type="checkbox" name="cp_object_cache" value="1">
 		<label for="cp_object_cache"><?php esc_html_e( 'Enable object caching' ); ?></label>
 		<p class="description"><?php esc_html_e( 'You do not currently have an object cache installed on this site. Check the box if you want ClassicPress to install one for you.' ); ?></p>
 
-	<?php
+		<?php
 	}
 	?>
 
 	</fieldset></td>
 	</tr>
 
-<?php
+	<?php
 endif;
 
 do_settings_fields( 'reading', 'default' );
