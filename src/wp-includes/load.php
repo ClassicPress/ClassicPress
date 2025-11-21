@@ -799,18 +799,12 @@ function cp_install_apcu_object_cache() {
 		return;
 	}
 
-	// Abort if there is already an object cache set by something other than ClassicPress core.
-	$cp_object_cache = absint( get_option( 'cp_object_cache' ) );
-	if ( 2 === $cp_object_cache ) {
-		return;
-	}
-
 	// Setup the filesystem abstraction
 	if ( ! function_exists( 'WP_Filesystem' ) ) {
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 	}
-	global $wp_filesystem;
 
+	global $wp_filesystem;
 	if ( empty( $wp_filesystem ) ) {
 		WP_Filesystem();
 	}
@@ -820,6 +814,7 @@ function cp_install_apcu_object_cache() {
 	$object_cache_file = $wp_content_dir . '/object-cache.php';
 
 	// Remove object-cache.php file if set by ClassicPress and the user requests.
+	$cp_object_cache = absint( get_option( 'cp_object_cache' ) );
 	if ( empty( $cp_object_cache ) ) {
 
 		// Check if object-cache.php exists using $wp_filesystem.
