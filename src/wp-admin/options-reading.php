@@ -272,6 +272,18 @@ if ( ! is_multisite() ) :
 	<td><fieldset>
 
 	<?php
+	// Setup the filesystem abstraction
+	if ( ! function_exists( 'WP_Filesystem' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+	}
+
+	global $wp_filesystem;
+	if ( empty( $wp_filesystem ) ) {
+		WP_Filesystem();
+	}
+
+	$wp_content_dir = defined( 'WP_CONTENT_DIR' ) ? WP_CONTENT_DIR : __DIR__ . '/wp-content';
+
 	if ( ! extension_loaded( 'apcu' ) ) {
 		?>
 
@@ -280,8 +292,8 @@ if ( ! is_multisite() ) :
 		<p class="description"><?php esc_html_e( 'The APCu extension for PHP is not installed. If you wish to have ClassicPress activate object caching, you should ask your host to install the APCu extension.' ); ?></p>
 
 		<?php
-	} elseif ( file_exists( WP_CONTENT_DIR . '/object-cache.php' ) ) {
-		if ( get_option( 'cp_object_cache' ) && 1 === absint( get_option( 'cp_object_cache' ) ) ) {
+	} elseif ( $wp_filesystem->exists( $wp_content_dir . '/object-cache.php' ) ) {
+		if ( 1 === absint( get_option( 'cp_object_cache' ) ) ) {
 			?>
 
 			<input id="cp_object_cache" type="checkbox" name="cp_object_cache" value="1" checked>
@@ -294,7 +306,6 @@ if ( ! is_multisite() ) :
 
 			<input id="cp_object_cache" type="checkbox" checked inert>
 			<label for="cp_object_cache"><?php esc_html_e( 'Enable object caching' ); ?></label>
-			<input type="hidden" name="cp_object_cache" value="2">
 			<p class="description"><?php esc_html_e( 'Object caching has already been installed on this site by a plugin or other code. You will not be able to uncheck this box unless you first deactivate the plugin or other code.' ); ?></p>
 
 			<?php
