@@ -305,7 +305,7 @@ if ( ! is_multisite() ) :
 			?>
 
 			<input id="cp_object_cache" type="checkbox" checked inert>
-			<label for="cp_object_cache"><?php esc_html_e( 'Enable object caching' ); ?></label>
+			<label for="cp_object_cache" inert><?php esc_html_e( 'Enable object caching' ); ?></label>
 			<p class="description"><?php esc_html_e( 'Object caching has already been installed on this site by a plugin or other code. You will not be able to uncheck this box unless you first deactivate the plugin or other code.' ); ?></p>
 
 			<?php
