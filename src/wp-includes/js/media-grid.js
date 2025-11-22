@@ -1037,14 +1037,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.target.textContent = 'Bulk select';
 			dateFilter.style.display = '';
 			typeFilter.style.display = '';
-			mediaCatSelect.style.display = '';
+			if ( mediaCatSelect ) {
+				mediaCatSelect.style.display = '';
+			}
 			deleteButton.classList.add( 'hidden' );
 			toolbar.classList.remove( 'media-toolbar-mode-select' );
 		} else {
 			e.target.textContent = 'Cancel';
 			dateFilter.style.display = 'none';
 			typeFilter.style.display = 'none';
-			mediaCatSelect.style.display = 'none';
+			if ( mediaCatSelect ) {
+				mediaCatSelect.style.display = 'none';
+			}
 			deleteButton.classList.remove( 'hidden' );
 			toolbar.classList.add( 'media-toolbar-mode-select' );
 
