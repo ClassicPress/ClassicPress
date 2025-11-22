@@ -1041,6 +1041,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				mediaCatSelect.style.display = '';
 			}
 			deleteButton.classList.add( 'hidden' );
+			deleteButton.disabled = true;
 			toolbar.classList.remove( 'media-toolbar-mode-select' );
 		} else {
 			e.target.textContent = 'Cancel';
