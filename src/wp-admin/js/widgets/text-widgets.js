@@ -431,9 +431,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			videoClone = cloneVideo.querySelector( 'video' ),
 			linkTo = dialog.querySelector( '#attachment-display-settings-link-to' ),
 			linkToCustom = dialog.querySelector( '#attachment-display-settings-link-to-custom' ),
-			count = 0,
 			ul = dialog.querySelector( '.widget-modal-footer-selection-view ul' ),
-			li = document.createElement( 'li' );
+			li = document.createElement( 'li' ),
+			count = ul.childNodes.length;
 
 		// Clean up from previous use of this function
 		if ( dialog.querySelector( '.alt-text' ) ) {
@@ -511,18 +511,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 
-		li.role = 'checkbox';
-		li.setAttribute( 'tabindex', '0' );
-		li.setAttribute( 'aria-label', filename );
-		li.setAttribute( 'aria-checked', true );
-		li.dataset.id = id;
-		li.className = 'attachment selection details selected save-ready';
-		li.innerHTML = item.querySelector( '.select-attachment-preview' ).outerHTML;
-		count++;console.log(count);
-		dialog.querySelector( '.widget-modal-footer .count' ).textContent = count === 1 ? '1 ' + TEXT_WIDGET.item_selected : count + ' ' + TEXT_WIDGET.items_selected;
-		ul.append( li );
-		ul.parentNode.parentNode.style.visibility = 'visible';
-
 		// Populate modal with attachment details
 		dialog.querySelector( '.attachment-date' ).textContent = date;
 		dialog.querySelector( '.attachment-filename' ).textContent = filename;
@@ -574,6 +562,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Uncheck item if clicked on
 		if ( item.className.includes( 'selected' ) ) {
+			count--;
 			if ( clicked === false ) {
 				item.querySelector( '.check' ).style.display = 'block';
 				if ( addButton ) {
@@ -598,14 +587,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
 				}
+				if ( ul.querySelector( '[data-id="' + id + '"]' ) ) {
+					ul.querySelector( '[data-id="' + id + '"]' ).remove();
+				}
 			}
 		} else {
+			count++;
+
 			// Prevent selection of multiple items unless creating a gallery or playlist
 			if ( selectedItems && fileType === 'all' ) {
 				selectedItems.forEach( function( selectedItem ) {
 					selectedItem.classList.remove( 'selected' );
 					selectedItem.setAttribute( 'aria-checked', false );
 					selectedItem.querySelector( '.check' ).style.display = 'none';
+				} );
+				ul.childNodes.forEach( function( node ) {
+					node.remove();
 				} );
 			}
 
@@ -614,11 +611,28 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( item.querySelector( '.check' ) ) {
 				item.querySelector( '.check' ).style.display = 'block';
 			}
+			
+			li.role = 'checkbox';
+			li.setAttribute( 'tabindex', '0' );
+			li.setAttribute( 'aria-label', filename );
+			li.setAttribute( 'aria-checked', true );
+			li.dataset.id = id;
+			li.className = 'attachment selection details selected save-ready';
+			li.innerHTML = item.querySelector( '.select-attachment-preview' ).outerHTML;
+			ul.append( li );
+			ul.parentNode.parentNode.style.visibility = 'visible';
 
 			// Enable add to widget button
 			if ( addButton ) {
 				addButton.removeAttribute( 'disabled' );
 			}
+		}
+
+		// Update text in modal footer
+		if ( count === 1 || fileType === 'all' ) {
+			dialog.querySelector( '.widget-modal-footer .count' ).textContent = '1 ' + TEXT_WIDGET.item_selected;
+		} else {
+			dialog.querySelector( '.widget-modal-footer .count' ).textContent = count + ' ' + TEXT_WIDGET.items_selected;
 		}
 	}
 
@@ -2099,7 +2113,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			widgetEl = document.getElementById( widgetId );
 			base     = widgetEl.querySelector( '.id_base' );
 
-			// Only run on a media image widget
+			// Only run on a media text widget
 			if ( base && base.value === 'text' ) {
 				mediaButton     = dialog.querySelector( '#menu-item-add' );
 				galleryButton   = dialog.querySelector( '#menu-item-gallery' );
@@ -2199,6 +2213,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					e.target.parentNode.querySelector( 'audio' ).remove();
 					e.target.remove();
 					dialog.querySelector( '#audio-button-update' ).disabled = false;
+
+				// Empty the modal footer
+				} else if ( e.target.className === 'button-link clear-selection' ) {
+					dialog.querySelectorAll( '.widget-modal-grid .selected' ).forEach( function( item ) {
+						item.querySelector( '.check' ).style.display = 'none';
+						item.classList.remove( 'selected' );
+					} );
+					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+					e.target.parentNode.parentNode.style.visibility = 'hidden';
+					dialog.querySelector( '.widget-modal-footer-selection-view ul' ).innerHTML = '';
+					dialog.querySelector( '.widget-modal-footer-buttons button' ).disabled = true;
 
 				// Search or go to a specific page in the media library grid
 				} else if ( e.target.parentNode.className === 'pagination-links' && e.target.tagName === 'BUTTON' ) {
@@ -2597,7 +2622,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						abort: function() {
 							// Cancel the fetch request
 							pond.removeFile( file.id, { revert: true } );
-console.log(uploadID);
+
 							// If the file has already been uploaded to the server, delete it
 							if ( uploadID !== null ) {
 								setTimeout( function() {
