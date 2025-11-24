@@ -44,23 +44,33 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 								// Edit an image or gallery
 								editor.on( 'click', function( e ) {
-									var dom, attachmentId;
+									var content, attachmentId
+										nan = false;
 
 									if ( e.target.nodeName === 'IMG' ) {
 										if ( e.target.className.includes( 'wp-gallery' ) ) { // gallery
+											content = editor.getContent();
+											selectedIds = content.match( /\[gallery\s+ids="([^"]+)"\]/ );
+											if ( selectedIds && selectedIds[1] ) {
 
-											// Protect against XSS vulnerability
-											dom = parser.parseFromString( e.target.dataset.wpMedia, 'text/html' );
-											selectedIds = dom.body.textContent.split( 'ids%3D%22' )[1];
-											if ( selectedIds ) {
-												selectedIds = selectedIds.split( '%22%5D' )[0].replaceAll( '%2C', ',' );
-												editGallery( widget, JSON.parse( '[' + selectedIds + ']' ) ); // Array of IDs
+												// Check that IDs are positive integers
+												for( var i, n = selectedIds[1].length; i < n; i++ ) {
+													if ( ! Number.isInteger( Number( selectedIds[1][i] ) ) || Number( selectedIds[1][i] ) <= 0 ) {
+														nan = true;
+														break;
+													}
+												}
+												if ( nan === true ) {
+													return;
+												}
+
+												editGallery( widget, JSON.parse( '[' + selectedIds[1] + ']' ) ); // Array of IDs
 												dialog.querySelector( '#menu-item-gallery' ).classList.add( 'update' );
 											}
 										} else if ( e.target.height ) { // single image
 
 											// Get attachment ID and set it as a data attribute on the widget
-											attachmentId = e.target.className.split( 'wp-image-' )[1].split( ' ' )[0];
+											attachmentId = e.target.className.split( '-' ).pop();
 											dialog.dataset.attachmentId = attachmentId;
 											if ( e.target.closest( 'a' ) ) {
 												dialog.dataset.linkUrl = e.target.closest( 'a' ).href;
@@ -185,11 +195,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		data.append( 'nonce', nonce );
 
 		// Append metadata fields
-		if ( input.parentNode.dataset.setting === 'alt' || input.id === 'embed-image-settings-alt-text' ) {
+		if ( input.parentNode.dataset.setting === 'alt' || input.id === 'embed-image-settings-alt-text' || input.id === 'image-details-alt-text' ) {
 			data.append( 'changes[alt]', input.value );
 		} else if ( input.parentNode.dataset.setting === 'title' ) {
 			data.append( 'changes[title]', input.value );
-		} else if ( input.parentNode.dataset.setting === 'caption' || input.id === 'embed-image-settings-caption' ) {
+		} else if ( input.parentNode.dataset.setting === 'caption' || input.id === 'embed-image-settings-caption' || input.id === 'image-details-caption' ) {
 			data.append( 'changes[caption]', input.value );
 		} else if ( input.parentNode.dataset.setting === 'description' ) {
 			data.append( 'changes[description]', input.value );
@@ -1639,10 +1649,36 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function editImage( widget ) {
-		var formData,
-			attachmentId = dialog.dataset.attachmentId,
-			linkUrl = dialog.dataset.linkUrl ? dialog.dataset.linkUrl : '';
+		var header, imageSize, linkTo, linkToCustom, editOriginal, image,
+			widthField, heightField, customSizeField, updateButton,
+			attachmentId    = dialog.dataset.attachmentId,
+			content         = tinymce.activeEditor.getContent(),
+			doc             = parser.parseFromString( content, 'text/html' ),
+			imgEl           = doc.querySelector( 'img.wp-image-' + attachmentId );
+			alt             = imgEl.getAttribute( 'alt' ),
+			title           = imgEl.getAttribute ( 'title' ),
+			url             = imgEl.src,
+			width           = imgEl.width,
+			height          = imgEl.height,
+			imageClasses    = imgEl.className,
+			size            = imageClasses.split( ' ' )[0].split( '-' )[1],
+			link            = imgEl.parentNode && imgEl.parentNode.tagName === 'A' ? imgEl.parentNode.href : '',
+			linkType        = 'none',
+			linkClasses     = link ? imgEl.parentNode.className : '',
+			linkRel         = link ? imgEl.parentNode.getAttribute( 'rel' ) : '',
+			linkTargetBlank = link ? imgEl.parentNode.getAttribute( 'target' ) : '',
+			template        = document.getElementById( 'tmpl-edit-image-modal' ),
+			clone           = template.content.cloneNode( true ),
 
+			// Regex to detect caption shortcode wrapping imgEl
+			captionRegex = new RegExp(
+				'\\[caption[^\\]]*id=["\']attachment_' + attachmentId + '["\'][^\\]]*\\][\\s\\S]*?<img[^>]*class=["\'][^"\']*wp-image-' + attachmentId + '[^"\']*["\'][^>]*>[\\s\\S]*?\\[\\/caption\\]',
+				'i'
+			),
+			match = content.match( captionRegex ),
+			caption = match ? match[0].split( '/>')[1].replace( '</a>', '' ).replace( '[/caption]', '' ).trim() : '';
+
+		// Get available sizes
 		formData = new FormData();
 		formData.append( 'action', 'get-attachment' );
 		formData.append( 'id', attachmentId );
@@ -1660,27 +1696,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
-			var	header, imageSize, linkTo, linkToCustom, editOriginal, image,
-				widthField, heightField, customSizeField, updateButton,
-				alt             = result.data.alt,
-				caption         = result.data.caption,
-				filename        = result.data.filename,
-				width           = result.data.width,
-				height          = result.data.height,
-				size            = result.data.size,
-				sizes           = result.data.meta.sizes,
-				sizeOptions     = '',
-				nonces          = result.data.nonces,
-				url             = result.data.url,
-				link            = result.data.link,
-				linkType        = 'none',
-				imageClasses    = '',
-				linkClasses     = '',
-				linkRel         = '',
-				linkTargetBlank = '',
-				linkImageTitle  = '',
-				template        = document.getElementById( 'tmpl-edit-image-modal' ),
-				clone           = template.content.cloneNode( true );
+			var sizeOptions,
+				sizes  = result.data.meta.sizes,
+				nonces = result.data.nonces;
+
+			// Get available size options
+			for ( var dimension in sizes ) {
+				sizeOptions = '<option value="' + dimension + '">' + dimension[0].toUpperCase() + dimension.slice(1) + ' – ' + sizes[dimension].width + ' x ' + sizes[dimension].height + '</option>';
+			}
 
 			if ( widget.dataset.linkUrl ) {
 				if ( widget.dataset.linkUrl === url ) {
@@ -1690,11 +1713,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} else {
 					linkType = 'custom';
 				}
-			}
-
-			// Get available size options
-			for ( var dimension in sizes ) {
-				sizeOptions += '<option value="' + dimension + '">' + dimension[0].toUpperCase() + dimension.slice(1) + ' – ' + sizes[dimension].width + ' x ' + sizes[dimension].height + '</option>';
 			}
 
 			// Append cloned template and establish new variables
@@ -1725,12 +1743,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			customSizeField = imageSize.closest( 'fieldset' ).querySelector( '.custom-size' );
 
 			// Change editOriginal ID to avoid conflict with image widget
+			dialog.querySelector( '.widget-modal-footer' ).style.display = 'block';
 			editOriginal.id = 'edit-original-text';
 			document.getElementById( 'media-button-update' ).id = 'media-button-update-text';
 
 			// Set available sizes select dropdown
 			imageSize.insertAdjacentHTML( 'afterbegin', sizeOptions );
-			if ( size === undefined || size === 'custom' ) {
+			if ( size === undefined || size === 'custom' || size === 'full' ) {
 				size = 'custom';
 				widthField.value = width;
 				heightField.value = height;
@@ -1793,9 +1812,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Widget-specific details
 			dialog.querySelector( '#image-details-alt-text' ).value = alt;
 			dialog.querySelector( '#image-details-caption' ).value = caption;
-			dialog.querySelector( '#image-details-title-attribute' ).value = linkImageTitle;
+			dialog.querySelector( '#image-details-title-attribute' ).value = title;
 			dialog.querySelector( '#image-details-css-class' ).value = imageClasses;
-			dialog.querySelector( '#image-details-link-target' ).value = linkTargetBlank;
+			dialog.querySelector( '#image-details-link-target' ).checked = false;
+			if ( linkTargetBlank === '_blank' ) {
+				dialog.querySelector( '#image-details-link-target' ).checked = true;
+			}
 			dialog.querySelector( '#image-details-link-rel' ).value = linkRel;
 			dialog.querySelector( '#image-details-link-css-class' ).value = linkClasses;
 
@@ -1849,12 +1871,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function updateEditedImage( widgetId ) {
-		var width, height, replacedContent,
-			anchor = '',
-			endAnchor = '',
+		var width, height, doc, imgEl, hyperlink, updatedContent,
+			itemId = '',
 			alignment = '';
 			attachmentId = dialog.dataset.attachmentId,
-			imgSrc = '',
 			imageClass = dialog.querySelector( '#image-details-css-class' ).value,
 			alt = dialog.querySelector( '#image-details-alt-text' ).value,
 			caption = dialog.querySelector( '#image-details-caption' ).value,
@@ -1876,26 +1896,105 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			height = parseInt( selectedOption.split( ' x ' )[1] );
 		}
 
-		anchor = '<a href="' + linkUrl + '">';
-		endAnchor = '</a>';
-
-		dialog.close();
 		dialog.querySelector( '#image-modal-content' ).remove();
 		dialog.querySelector( '.widget-modal-footer' ).remove();
+		dialog.close();
 
-		replacedContent = content.replace(
-			new RegExp( '\\[caption\\s+id="attachment_' + attachmentId + '"([^\\]]*)\\](.*?)\\[\\/caption\\]', 'gis' ),
-			function( match, afterId, inner ) {
-				// "afterId" contains attributes/substrings after id, before closing ]
-				console.log(afterId);
-				// inner is what is between the shortcode tags
-				console.log(inner);
-				// Replace with whatever HTML you need instead:
-				return '[caption id="attachment_' + attachmentId + '" align="alignnone" width="' + width + '"]' + anchor + '<img class="size-medium" src="' + imgSrc + '" alt="' + alt + '" width="'+ width + '" height="'+ height + '">' + endAnchor + ' ' + caption + '[/caption]';
+		// Parse content in a temporary DOM container
+		doc = parser.parseFromString( content, 'text/html' );
+
+		// Find the img element with class containing wp-image-{ID}
+		imgEl = doc.querySelector( 'img.wp-image-' + attachmentId );
+
+		if ( imgEl ) {
+
+			// Regex to find caption shortcode with matching ID (non-greedy)
+			const captionRegex = new RegExp(
+				`(\\[caption\\s+[^\\]]*id=["']attachment_${attachmentId}["'][^\\]]*\\])([\\s\\S]*?)(\\[\\/caption\\])`,
+				'i'
+			);
+			const match = content.match( captionRegex );
+
+			if ( match ) {
+				let fullShortcode = match[0]; // Entire matched shortcode string
+				let openingTag = match[1];    // [caption …]
+				let captionInner = match[2];  // Inner HTML/text of caption
+				let closingTag = match[3];    // [/caption]
+
+				// Modify align attribute in opening tag
+				let newAlign = 'aligncenter'; // new value for align attribute
+				let updatedOpeningTag = openingTag.replace( /align="[^"]*"/i, 'align="' + newAlign + '"' );
+
+				// --- Modify anchor href attribute if <a> wrapping the <img> exists ---
+				const anchorRegex = /<a\s+[^>]*href=["']([^"']*)["'][^>]*>/i;
+				anchorMatch = captionInner.match(anchorRegex);
+
+				if ( anchorMatch ) {
+					const anchorTag = anchorMatch[0];
+
+					// Replace href attribute value in anchor tag
+					const updatedAnchorTag = anchorTag.replace( /href=["'][^"']*["']/, 'href="' + linkUrl + '"' );
+
+					// Replace old anchor tag in captionInner with updated one
+					captionInner = captionInner.replace( anchorTag, updatedAnchorTag );
+				}
+
+				// --- Modify image attributes inside captionInner ---
+				// Regex to find img tag inside captionInner
+				const imgRegex = /<img\s+[^>]*class=["']?([^"'\s]+)["']?[^>]*>/i;
+				const imgMatch = captionInner.match( imgRegex );
+
+				if ( imgMatch ) {
+					const imgTag = imgMatch[0];
+
+					// Modify alt, width, height using regex replacements
+					let updatedImgTag = imgTag
+						.replace( /alt="[^"]*"/i, 'alt="' + alt + '"' )           // Update alt attribute
+						.replace( /width="[^"]*"/i, 'width="' + width + '"' )     // Update width
+						.replace( /height="[^"]*"/i, 'height="' + height + '"' ); // Update height
+
+					// Replace old img tag in captionInner with updated one
+					captionInner = captionInner.replace( imgTag, updatedImgTag );
+				}
+
+				// --- Modify caption text ---
+				const anchorClosePos = captionInner.lastIndexOf( '</a>' );
+
+				if ( anchorClosePos !== -1 ) {
+					captionInner = captionInner.substring( 0, anchorClosePos + 4 ) + caption;
+				} else {
+					captionInner = captionInner.trim() + caption;
+				}
+
+				// Construct updated shortcode
+				const updatedShortcode = updatedOpeningTag + captionInner + closingTag;
+
+				// Replace the old shortcode string in content with updated shortcode
+				content = content.replace( fullShortcode, updatedShortcode );
+
+				// Set the updated content back to the editor
+				tinymce.activeEditor.setContent( content );
+			} else {
+
+				// Get hyperlink (if one exists) and modify href attribute
+				hyperlink = imgEl.parentNode;
+				if ( hyperlink ) {
+					hyperlink.href = linkUrl;
+				}
+
+				// Modify desired attributes
+				imgEl.setAttribute( 'alt', alt );
+				imgEl.setAttribute( 'width', width );
+				imgEl.setAttribute( 'height', height );
+
+				// Serialize the updated document back to HTML string
+				// We want only the inner body content (the whole editor content)
+				updatedContent = doc.body.innerHTML;
+
+				// Re-insert updated content back into TinyMCE editor
+				tinymce.activeEditor.setContent( updatedContent );
 			}
-		);
-
-		tinymce.activeEditor.insertContent( replacedContent );
+		}
 
 		if ( document.body.className.includes( 'widgets-php' ) ) {
 			widget.classList.add( 'widget-dirty' );
@@ -2073,7 +2172,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			itemCancel, itemUpload, itemBrowse, galleryInsert, galleryUpdate, uploadPanel,
 			librarySelect, headerButtons, galleryGrid, libraryGrid,libraryItems, content,
 			sidebarSettings, sidebarInfo, gridSubPanel, ul, fieldset, dom, shortcodes,
-			editor, editorContainer, tinyWidget,
+			editor, editorContainer, tinyWidget, dom, image, attachmentId,
 			selectedItems = [],
 			widget = e.target.closest( '.widget' );
 
@@ -2098,6 +2197,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( e.target.closest( '.mce-inline-toolbar-grp' ) && e.target.className.includes( 'dashicons-edit' ) ) {
 			editor = tinymce.activeEditor;
 			if ( editor ) {
+
+				// Identify widget
 				editorContainer = editor.getContainer();
 				tinyWidget = editorContainer.closest( '.widget' );
 				editImage( tinyWidget );
