@@ -1319,7 +1319,7 @@ ul.CodeMirror-hints {
 #image-modal-content .column-settings .setting.link-to label,
 #image-modal-content .column-settings .setting.link-to-url label,
 #image-modal-content .column-settings .custom-size-setting label {
-	width: 30%;
+	width: 29%;
 	display: inline-block;
 	text-align: right;
 	padding-right: 0.5em;
@@ -1332,11 +1332,11 @@ ul.CodeMirror-hints {
 	padding-left: 1em;
 }
 #alt-text-description {
-	margin: -0.5em 0 1em 30%;
+	margin: -0.5em 0 1em 29%;
 }
 #image-details-link-target,
 .sep {
-	margin-left: 30%;
+	margin-left: 29%;
 }
 #image-modal-content .custom-size-setting input {
 	width: 115px !important;
