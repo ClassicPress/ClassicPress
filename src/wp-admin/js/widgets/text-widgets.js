@@ -65,7 +65,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 													return;
 												}
 
-												editGallery( widget, JSON.parse( '[' + selectedIds[1] + ']' ) ); // Array of IDs
+												editList( widget, JSON.parse( '[' + selectedIds[1] + ']' ), 'image' );
 												dialog.querySelector( '#menu-item-gallery' ).classList.add( 'update' );
 											}
 										} else if ( e.target.height ) { // single image
@@ -1173,29 +1173,40 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
-	 * Open the modal to edit a gallery.
+	 * Open the modal to edit a gallery or playlist.
 	 *
 	 * @abstract
 	 * @return {void}
 	 */
-	function editGallery( widget, selectedIds ) {
-		var itemAdd, itemEdit, galleryAdd, galleryInsert, galleryUpdate, formData,
+	function editList( widget, selectedIds, fileType ) {
+		var itemAdd, itemEdit, galleryAdd, galleryInsert, galleryUpdate, formData, listClone,
 			template        = document.getElementById( 'tmpl-media-grid-modal' ),
 			clone           = template.content.cloneNode( true ),
 			dialogButtons   = clone.querySelector( '.widget-modal-header-buttons' ),
 			dialogContent   = clone.querySelector( '#widget-modal-media-content' ),
 			header          = dialog.querySelector( 'header' ),
-			galleryTemplate = document.getElementById( 'tmpl-edit-gallery-modal' ),
-			galleryClone    = galleryTemplate.content.cloneNode( true ),
+			galleryTemplate = fileType === 'image' ? document.getElementById( 'tmpl-edit-gallery-modal' ) : '',
+			galleryClone    = galleryTemplate ? galleryTemplate.content.cloneNode( true ) : '',
+			audioTemplate   = fileType === 'audio' ? document.getElementById( 'tmpl-edit-audio-modal' ) : '',
+			audioClone      = audioTemplate ? audioTemplate.content.cloneNode( true ) : '',
+			videoTemplate   = fileType === 'video' ? document.getElementById( 'tmpl-edit-video-modal' ) : '',
+			videoClone      = videoTemplate ? videoTemplate.content.cloneNode( true ) : '',
 			selectedItems   = [];
 
 		// Append cloned template and show relevant elements
 		header.append( dialogButtons );
 		header.after( dialogContent );
-		dialog.querySelector( '.separator' ).insertAdjacentHTML( 'afterend', galleryClone.querySelector( '#gallery-buttons' ).innerHTML ),
-		dialog.querySelector( '.media-library-grid-section' ).after( galleryClone.querySelector( '.media-gallery-grid-section' ) ),
-		dialog.querySelector( '.widget-modal-right-sidebar' ).prepend( galleryClone.querySelector( '.widget-modal-gallery-settings' ) );
-		dialog.querySelector( 'footer' ).replaceWith( galleryClone.querySelector( 'footer' ) ),
+		if ( fileType === 'image' ) {
+			dialog.querySelector( '.separator' ).insertAdjacentHTML( 'afterend', galleryClone.querySelector( '#gallery-buttons' ).innerHTML );
+			dialog.querySelector( '.media-library-grid-section' ).after( galleryClone.querySelector( '.media-gallery-grid-section' ) );
+			dialog.querySelector( '.widget-modal-right-sidebar' ).prepend( galleryClone.querySelector( '.widget-modal-gallery-settings' ) );
+			dialog.querySelector( 'footer' ).replaceWith( galleryClone.querySelector( 'footer' ) );
+		} else if ( fileType === 'audio' ) {
+			
+		} else if ( fileType === 'video' ) {
+			
+		}
+
 		dialog.querySelector( '#menu-item-embed' ).removeAttribute( 'hidden' );
 		dialog.querySelector( '.media-library-select-section').classList.add( 'hidden' );
 		dialog.querySelector( '#widget-modal-title h2' ).textContent = TEXT_WIDGET.edit_gallery;
@@ -1223,8 +1234,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		galleryAdd.classList.add( 'cancel' );
 		galleryAdd.textContent = TEXT_WIDGET.cancel_gallery;
 		galleryAdd.removeAttribute( 'hidden' );
-		galleryInsert = dialog.querySelector( '#gallery-button-insert' ),
-		galleryUpdate = dialog.querySelector( '#gallery-button-update' ),
+		galleryInsert = dialog.querySelector( '#gallery-button-insert' );
+		galleryUpdate = dialog.querySelector( '#gallery-button-update' );
 
 		setTimeout( function() {
 			if ( dialog.querySelector( '#menu-item-gallery' ).className.includes( 'update' ) ) {
@@ -1244,7 +1255,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		formData.append( 'action', 'query-attachments' );
 		formData.append( 'query[post__in]', selectedIds );
 		formData.append( 'query[orderby]', 'post__in' );
-		formData.append( 'query[post_mime_type]', 'image' );
+		formData.append( 'query[post_mime_type]', fileType );
 		formData.append( 'query[paged]', 1 );
 
 		// Make AJAX request
@@ -1390,14 +1401,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	function updateLibrary( widget ) {
+	function updateLibrary( widget, fileType ) {
 		var gridSection,
 			updatedItems = [],
 			formData = new FormData();
 
 		formData.append( 'action', 'query-attachments' );
 		formData.append( 'query[post__not_in]', selectedIds );
-		formData.append( 'query[post_mime_type]', 'image' );
+		formData.append( 'query[post_mime_type]', fileType );
 		formData.append( 'query[paged]', 1 );
 
 		// Make AJAX request
@@ -1416,7 +1427,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( result.success ) {
 				gridSection = dialog.querySelector( '.media-library-grid-section' );
 				gridSection.querySelector( 'ul' ).innerHTML = '';
-				dialog.querySelector( '.widget-modal-title h2' ).textContent = TEXT_WIDGET.add_to_gallery;
+				if ( fileType === 'image' ) {
+					dialog.querySelector( '.widget-modal-title h2' ).textContent = TEXT_WIDGET.add_to_gallery;
+				} else if ( fileType === 'audio' ) {
+					dialog.querySelector( '.widget-modal-title h2' ).textContent = TEXT_WIDGET.add_to_playlist;
+				} else if ( fileType === 'video' ) {
+					dialog.querySelector( '.widget-modal-title h2' ).textContent = TEXT_WIDGET.add_to_video_playlist;
+				}
 
 				if ( result.data.length === 0 ) {
 
@@ -1469,7 +1486,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					// Show details about file, or select files for deletion
 					dialog.querySelectorAll( '.media-item' ).forEach( function( item ) {
 						item.addEventListener( 'click', function() {
-							selectItemToAdd( item, widget, 'image', true );
+							selectItemToAdd( item, widget, fileType, true );
 						} );
 					} );
 
@@ -2269,12 +2286,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				if ( activeButton === mediaButton ) {
 					fileType = 'all';
-				} else if ( activeButton === galleryButton ) {
+				} else if ( activeButton === galleryButton || ( galleryButton.className.includes( 'cancel' ) && ! galleryButton.hasAttribute( 'hidden' ) ) ) {
 					fileType = 'image';
-				} else if ( activeButton === playlistButton ) {
+					galleryInsert.textContent = TEXT_WIDGET.insert_gallery;
+					galleryUpdate.textContent = TEXT_WIDGET.update_gallery;
+				} else if ( activeButton === playlistButton || ( playlistButton.className.includes( 'cancel' ) && ! playlistButton.hasAttribute( 'hidden' ) ) ) {
 					fileType = 'audio';
-				} else if ( activeButton === videoListButton ) {
+					galleryInsert.textContent = TEXT_WIDGET.insert_playlist;
+					galleryUpdate.textContent = TEXT_WIDGET.update_playlist;
+				} else if ( activeButton === videoListButton || ( videoListButton.className.includes( 'cancel' ) && ! videoListButton.hasAttribute( 'hidden' ) ) ) {
 					fileType = 'video';
+					galleryInsert.textContent = TEXT_WIDGET.insert_video_playlist;
+					galleryUpdate.textContent = TEXT_WIDGET.update_video_playlist;
 				}
 
 				if ( e.target.id === 'audio-button-update' ) {
@@ -2350,7 +2373,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					page = e.target.parentNode.dataset.page;
 					updateGrid( widgetEl, page, fileType );
 
-				// Open the library to add images to current gallery or playlist
+				// Open the library to add items to current gallery or playlist
 				} else if ( e.target === itemLibrary ) {
 					sidebarInfo.setAttribute( 'hidden', true );
 					sidebarSettings.setAttribute( 'hidden', true );
@@ -2368,7 +2391,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					sidebarInfo.setAttribute( 'hidden', true );
 					libraryGrid.classList.remove( 'hidden' );
 
-					updateLibrary( widgetEl );
+					updateLibrary( widgetEl, fileType );
 					galleryUpdate.classList.remove( 'hidden' );
 					galleryUpdate.removeAttribute( 'disabled' );
 
@@ -2556,7 +2579,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					} );
 
 					cleanup();
-					editGallery( widgetEl, selectedIds );
+					editList( widgetEl, selectedIds, fileType );
 
 				// Reverse the order of items in the gallery or playlist
 				} else if ( e.target.className.includes( 'gallery-button-reverse' ) ) {
