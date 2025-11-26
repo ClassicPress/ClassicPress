@@ -1319,7 +1319,7 @@ ul.CodeMirror-hints {
 #image-modal-content .column-settings .setting.link-to label,
 #image-modal-content .column-settings .setting.link-to-url label,
 #image-modal-content .column-settings .custom-size-setting label {
-	width: 29%;
+	width: 30%;
 	display: inline-block;
 	text-align: right;
 	padding-right: 0.5em;
@@ -1332,18 +1332,18 @@ ul.CodeMirror-hints {
 	padding-left: 1em;
 }
 #alt-text-description {
-	margin: -0.5em 0 1em 29%;
+	margin: -0.5em 0 1em 30%;
 }
 #image-details-link-target,
 .sep {
-	margin-left: 29%;
+	margin-left: 30%;
 }
 #image-modal-content .custom-size-setting input {
 	width: 115px !important;
 	margin-left: 0 !important;
 }
 #image-modal-content .column-settings .setting.link-to #image-details-link-to-custom {
-	max-width: 70%;
+	max-width: 69%;
 	margin: 0.5em 0 0;
 }
 #edit-original {
