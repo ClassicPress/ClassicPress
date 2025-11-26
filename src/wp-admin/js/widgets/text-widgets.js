@@ -9,7 +9,7 @@
  * @since CP 2.5.0
  */
 document.addEventListener( 'DOMContentLoaded', function() {
-	var addButton, pond,
+	var addButton, pond, content,
 		{ FilePond } = window, // import FilePond
 		selectedIds = [],
 		parser = new DOMParser,
@@ -44,12 +44,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 								// Edit an image or gallery
 								editor.on( 'click', function( e ) {
-									var content, attachmentId
+									var attachmentId,
 										nan = false;
 
 									if ( e.target.nodeName === 'IMG' ) {
+										content = editor.getContent();
+
 										if ( e.target.className.includes( 'wp-gallery' ) ) { // gallery
-											content = editor.getContent();
 											selectedIds = content.match( /\[gallery\s+ids="([^"]+)"\]/ );
 											if ( selectedIds && selectedIds[1] ) {
 
@@ -72,8 +73,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 											// Get attachment ID and set it as a data attribute on the widget
 											attachmentId = e.target.className.split( '-' ).pop();
 											dialog.dataset.attachmentId = attachmentId;
-											if ( e.target.closest( 'a' ) ) {
-												dialog.dataset.linkUrl = e.target.closest( 'a' ).href;
+											if ( e.target.parentNode && e.target.parentNode.tagName === 'A' ) {
+												dialog.dataset.linkUrl = e.target.parentNode.href;
 											}
 										}
 									}
@@ -1648,25 +1649,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	function editImage( widget ) {
+	function editImage( editor, widget ) {
 		var header, imageSize, linkTo, linkToCustom, editOriginal, image,
 			widthField, heightField, customSizeField, updateButton,
 			attachmentId    = dialog.dataset.attachmentId,
-			content         = tinymce.activeEditor.getContent(),
 			doc             = parser.parseFromString( content, 'text/html' ),
-			imgEl           = doc.querySelector( 'img.wp-image-' + attachmentId );
+			imgEl           = doc.querySelector( 'img.wp-image-' + attachmentId ),
 			alt             = imgEl.getAttribute( 'alt' ),
 			title           = imgEl.getAttribute ( 'title' ),
 			url             = imgEl.src,
 			width           = imgEl.width,
 			height          = imgEl.height,
-			imageClasses    = imgEl.className,
-			size            = imageClasses.split( ' ' )[0].split( '-' )[1],
-			link            = imgEl.parentNode && imgEl.parentNode.tagName === 'A' ? imgEl.parentNode.href : '',
+			size            = imgEl.className.split( 'size-' )[1].split( ' ' )[0],
+			imageClasses    = imgEl.className.replace( 'alignnone size-' + size + ' wp-image-' + attachmentId, '' ).trim(),
+			anchor          = imgEl.parentNode && imgEl.parentNode.tagName === 'A' ? imgEl.parentNode : '',
+			linkUrl         = anchor ? anchor.href : '',
+			linkClasses     = anchor ? anchor.className : '',
+			linkRel         = anchor ? anchor.getAttribute( 'rel' ) : '',
+			linkTargetBlank = anchor ? anchor.getAttribute( 'target' ) : '',
 			linkType        = 'none',
-			linkClasses     = link ? imgEl.parentNode.className : '',
-			linkRel         = link ? imgEl.parentNode.getAttribute( 'rel' ) : '',
-			linkTargetBlank = link ? imgEl.parentNode.getAttribute( 'target' ) : '',
+			attachmentPages = false,
 			template        = document.getElementById( 'tmpl-edit-image-modal' ),
 			clone           = template.content.cloneNode( true ),
 
@@ -1696,23 +1698,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
-			var sizeOptions,
-				sizes  = result.data.meta.sizes,
+			var sizeOptions = '',
+				sizes  = result.data.sizes,
 				nonces = result.data.nonces;
 
 			// Get available size options
 			for ( var dimension in sizes ) {
-				sizeOptions = '<option value="' + dimension + '">' + dimension[0].toUpperCase() + dimension.slice(1) + ' – ' + sizes[dimension].width + ' x ' + sizes[dimension].height + '</option>';
-			}
-
-			if ( widget.dataset.linkUrl ) {
-				if ( widget.dataset.linkUrl === url ) {
-					linkType = 'file';
-				} else if ( widget.dataset.linkUrl === link ) {
-					linkType = 'attachment';
-				} else {
-					linkType = 'custom';
-				}
+				sizeOptions += '<option value="' + dimension + '">' + dimension[0].toUpperCase() + dimension.slice(1) + ' – ' + sizes[dimension].width + ' x ' + sizes[dimension].height + '</option>';
 			}
 
 			// Append cloned template and establish new variables
@@ -1749,7 +1741,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Set available sizes select dropdown
 			imageSize.insertAdjacentHTML( 'afterbegin', sizeOptions );
-			if ( size === undefined || size === 'custom' || size === 'full' ) {
+			if ( size === undefined || size === 'custom' ) {
 				size = 'custom';
 				widthField.value = width;
 				heightField.value = height;
@@ -1786,27 +1778,45 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				updateButton.removeAttribute( 'disabled' ); // trigger Update button
 			} );
 
-			// Show or hide Custom URL depending on link type
+			// Determine link type, if any
+			if ( ! anchor ) {
+				linkType = 'none';
+			} else if ( dialog.dataset.linkUrl ) {
+				if ( dialog.dataset.linkUrl === url ) {
+					linkType = 'file';
+				} else if ( dialog.dataset.linkUrl === linkUrl ) {
+					linkType = 'post';
+				} else {
+					linkType = 'custom';
+				}
+			}
+
 			linkTo.querySelectorAll( 'option' ).forEach( function( option ) {
 				option.removeAttribute( 'selected' );
 				if ( option.value === linkType ) {
 					option.setAttribute( 'selected', true );
 				}
+				if ( option.value === 'post' ) {
+					attachmentPages = true; // the site uses attachment pages
+				}
 			} );
 
-			if ( linkType !== 'none' ) {
-				linkToCustom.parentNode.style.display = 'block';
+			if ( linkType === 'none' ) {
+				linkTo.value = 'none';
+				linkToCustom.parentNode.setAttribute( 'hidden', true );
+				linkToCustom.value = '';
+			} else {
+				linkToCustom.parentNode.removeAttribute( 'hidden' );
 				if ( linkType === 'file' ) {
 					linkToCustom.value = url;
 				} else if ( linkType === 'post' ) {
 					linkToCustom.value = url;
+					if ( attachmentPages === false ) {
+						linkType = 'file';
+					}
 				} else if ( linkType === 'custom' ) {
 					linkToCustom.value = linkUrl;
 				}
-			} else {
-				linkTo.value = 'none';
-				linkToCustom.parentNode.style.display = 'none';
-				linkToCustom.value = '';
 			}
 
 			// Widget-specific details
@@ -1837,7 +1847,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 				selectedOption.setAttribute( 'selected', true );
 				if ( selectedOption.value === 'none' ) {
-					linkToCustom.parentNode.style.display = 'none';
+					linkToCustom.parentNode.setAttribute( 'hidden', true );
 					linkToCustom.value = '';
 				} else {
 					if ( selectedOption.value === 'file' ) {
@@ -1847,7 +1857,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					} else if ( selectedOption.value === 'custom' ) {
 						linkToCustom.value = linkUrl;
 					}
-					linkToCustom.parentNode.style.display = 'block';
+					linkToCustom.parentNode.removeAttribute( 'hidden' );
 				}
 				updateButton.removeAttribute( 'disabled' ); // trigger update button
 			} );
@@ -1871,9 +1881,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function updateEditedImage( widgetId ) {
-		var width, height, doc, imgEl, hyperlink, updatedContent,
-			itemId = '',
-			alignment = '';
+		var width, height, doc, imgEl, hyperlink, updatedContent, captionRegex,
+			match, captionShortcode, captionInnerString, anchorRegex, anchorMatch,
+			anchorTag, updatedAnchorTag, imgRegex,imgMatch,	imgTag, updatedimgTag,
+			updatedShortcode, parts,
+			captionOpeningTag = '',
+			captionClosingTag = '',
+			linkClassAttribute = '',
+			linkRelAttribute = '',
+			linkTargetAttribute = '',
+			fragment = document.createDocumentFragment(),
 			attachmentId = dialog.dataset.attachmentId,
 			imageClass = dialog.querySelector( '#image-details-css-class' ).value,
 			alt = dialog.querySelector( '#image-details-alt-text' ).value,
@@ -1881,19 +1898,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			linkUrl = dialog.querySelector( '#image-details-link-to-custom' ).value,
 			linkClass = dialog.querySelector( '#image-details-link-css-class' ).value;
 			title = dialog.querySelector( '#image-details-title-attribute' ).value,
-			linkType = dialog.querySelector( '#image-details-link-to' ).value,
 			rel = dialog.querySelector( '#image-details-link-rel' ).value,
-			linkTarget = dialog.querySelector( '#image-details-link-target' ).checked ? 'noopener' : '',
-			size = dialog.querySelector( '#image-details-size' ).value,
-			widget = document.getElementById( widgetId ),
-			content = tinymce.activeEditor.getContent();
+			linkTarget = dialog.querySelector( '#image-details-link-target' ).checked ? '_blank' : '',
+			size = dialog.querySelector( '#image-details-size' ),
+			widget = document.getElementById( widgetId );
 
-		if ( size === 'custom' ) {
+		if ( size.value === 'custom' ) {
 			width = dialog.querySelector( '#image-details-size-width' ).value;
 			height = dialog.querySelector( '#image-details-size-height' ).value;
 		} else {
-			width = parseInt( selectedOption.split( ' – ' )[1] );
-			height = parseInt( selectedOption.split( ' x ' )[1] );
+			width = parseInt( size.options[size.selectedIndex].text.split( ' – ' )[1] );
+			height = parseInt( size.options[size.selectedIndex].text.split( ' x ' )[1] );
 		}
 
 		dialog.querySelector( '#image-modal-content' ).remove();
@@ -1909,86 +1924,163 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( imgEl ) {
 
 			// Regex to find caption shortcode with matching ID (non-greedy)
-			const captionRegex = new RegExp(
-				`(\\[caption\\s+[^\\]]*id=["']attachment_${attachmentId}["'][^\\]]*\\])([\\s\\S]*?)(\\[\\/caption\\])`,
+			captionRegex = new RegExp(
+				'(\\[caption\\s+[^\\]]*id=["\']attachment_' + attachmentId + '["\'][^\\]]*\\])([\\s\\S]*?)(\\[\\/caption\\])',
 				'i'
 			);
-			const match = content.match( captionRegex );
+			match = content.match( captionRegex );
 
 			if ( match ) {
-				let fullShortcode = match[0]; // Entire matched shortcode string
-				let openingTag = match[1];    // [caption …]
-				let captionInner = match[2];  // Inner HTML/text of caption
-				let closingTag = match[3];    // [/caption]
+				captionShortcode   = match[0];
+				captionOpeningTag  = match[1];
+				captionInnerString = match[2]; // Inner HTML/text of caption
+				captionClosingTag  = match[3];
 
-				// Modify align attribute in opening tag
-				let newAlign = 'aligncenter'; // new value for align attribute
-				let updatedOpeningTag = openingTag.replace( /align="[^"]*"/i, 'align="' + newAlign + '"' );
-
-				// --- Modify anchor href attribute if <a> wrapping the <img> exists ---
-				const anchorRegex = /<a\s+[^>]*href=["']([^"']*)["'][^>]*>/i;
-				anchorMatch = captionInner.match(anchorRegex);
-
-				if ( anchorMatch ) {
-					const anchorTag = anchorMatch[0];
-
-					// Replace href attribute value in anchor tag
-					const updatedAnchorTag = anchorTag.replace( /href=["'][^"']*["']/, 'href="' + linkUrl + '"' );
-
-					// Replace old anchor tag in captionInner with updated one
-					captionInner = captionInner.replace( anchorTag, updatedAnchorTag );
+				// Get hyperlink attributes and class name
+				if ( linkClass ) {
+					classAttribute = ' class="' + linkClass + '"';
+				}
+				if ( rel ) {
+					relAttribute = ' rel="' + rel + '"';
+				}
+				if ( linkTarget ) {
+					linkTargetAttribute = ' target="' + linkTarget + '"';
 				}
 
-				// --- Modify image attributes inside captionInner ---
-				// Regex to find img tag inside captionInner
-				const imgRegex = /<img\s+[^>]*class=["']?([^"'\s]+)["']?[^>]*>/i;
-				const imgMatch = captionInner.match( imgRegex );
+				// --- Modify anchor href attribute if <a> wrapping the <img> exists ---
+				anchorRegex = /<a\s+[^>]*href=["']([^"']*)["'][^>]*>/i;
+				anchorMatch = captionInnerString.match( anchorRegex );
+
+				if ( anchorMatch ) {
+					anchorTag = anchorMatch[0];
+
+					// Replace href attribute value in anchor tag
+					if ( linkUrl === '' ) {
+						updatedAnchorTag = ''; // remove anchor tag if it has no href attribute
+					} else {
+						updatedAnchorTag = anchorTag.replace( /href=["'][^"']*["']/, 'href="' + linkUrl + '"' );
+					}
+
+					// Replace old anchor tag in captionInnerString with updated one
+					captionInnerString = captionInnerString.replace( anchorTag, updatedAnchorTag );
+				} else if ( linkUrl ) { // Hyperlink has been added
+					captionOpeningTag = captionOpeningTag + '<a href="' + linkUrl + '"' + classAttribute + linkTargetAttribute + relAttribute + '>';
+					captionClosingTag = '</a>' + captionClosingTag;
+				}
+
+				// --- Modify image attributes inside captionInnerString ---
+				// Regex to find img tag inside captionInnerString
+				imgRegex = /<img\s+[^>]*class=["']?([^"'\s]+)["']?[^>]*>/i;
+				imgMatch = captionInnerString.match( imgRegex );
 
 				if ( imgMatch ) {
-					const imgTag = imgMatch[0];
+					imgTag = imgMatch[0];
 
 					// Modify alt, width, height using regex replacements
-					let updatedImgTag = imgTag
+					updatedImgTag = imgTag
+						.replace( /class="[^"]*"/i, 'class="alignnone size-' + size.value + ' wp-image-' + attachmentId + ' ' + imageClass + '"' ) // Update class name
 						.replace( /alt="[^"]*"/i, 'alt="' + alt + '"' )           // Update alt attribute
 						.replace( /width="[^"]*"/i, 'width="' + width + '"' )     // Update width
 						.replace( /height="[^"]*"/i, 'height="' + height + '"' ); // Update height
 
-					// Replace old img tag in captionInner with updated one
-					captionInner = captionInner.replace( imgTag, updatedImgTag );
+					// Replace old img tag in captionInnerString with updated one
+					captionInnerString = captionInnerString.replace( imgTag, updatedImgTag );
 				}
 
-				// --- Modify caption text ---
-				const anchorClosePos = captionInner.lastIndexOf( '</a>' );
-
-				if ( anchorClosePos !== -1 ) {
-					captionInner = captionInner.substring( 0, anchorClosePos + 4 ) + caption;
+				// Modify caption text
+				if ( captionInnerString.toLowerCase().includes( '</a>' ) ) {
+					parts = captionInnerString.split( /<\/a>/i );
+					if ( parts.length > 1 ) {
+						captionInnerString = parts[0] + '</a> ' + caption;
+					}
 				} else {
-					captionInner = captionInner.trim() + caption;
+					parts = captionInnerString.split( /\/>/i );
+					if ( parts.length > 1 ) {
+						captionInnerString = parts[0] + '/> ' + caption;
+					}
 				}
 
 				// Construct updated shortcode
-				const updatedShortcode = updatedOpeningTag + captionInner + closingTag;
+				updatedShortcode = captionOpeningTag + captionInnerString + captionClosingTag;
 
 				// Replace the old shortcode string in content with updated shortcode
-				content = content.replace( fullShortcode, updatedShortcode );
+				content = content.replace( captionShortcode, updatedShortcode );
 
 				// Set the updated content back to the editor
 				tinymce.activeEditor.setContent( content );
 			} else {
-
-				// Get hyperlink (if one exists) and modify href attribute
-				hyperlink = imgEl.parentNode;
-				if ( hyperlink ) {
-					hyperlink.href = linkUrl;
+				// Check if a caption has been added
+				if ( caption ) {
+					captionOpeningTag = '[caption id="attachment_' + attachmentId + '" align="alignnone" width="' + width + '"]';
+					captionClosingTag = ' ' + caption + '[/caption]';
 				}
 
-				// Modify desired attributes
+				// Get hyperlink (if one exists) and modify href attribute
+				if ( imgEl.parentNode && imgEl.parentNode.tagName === 'A' ) {
+					hyperlink = imgEl.parentNode;
+					if ( hyperlink ) {
+						if ( linkUrl === '' ) {
+							fragment.innerHTML = '';
+							fragment.append( imgEl );
+							hyperlink.replaceWith( fragment );
+						} else {
+							hyperlink.href = linkUrl;
+							if ( linkClass ) {
+								hyperlink.className = linkClass;
+							}
+							if ( linkTarget ) {
+								hyperlink.setAttribute( 'target', linkTarget );
+							}
+							if ( rel ) {
+								hyperlink.setAttribute( 'rel', rel );
+							}
+							if ( captionOpeningTag !== '' ) {
+								fragment.innerHTML = '';
+								fragment.append( captionOpeningTag );
+								hyperlink.before( fragment );
+							}
+						}
+					}
+				} else if ( linkUrl ) { // Hyperlink has been added
+					hyperlink = document.createElement( 'a' );
+					hyperlink.href = linkUrl;
+					if ( linkClass ) {
+						hyperlink.className = linkClass;
+					}
+					if ( linkTarget ) {
+						hyperlink.setAttribute( 'target', linkTarget );
+					}
+					if ( rel ) {
+						hyperlink.setAttribute( 'rel', rel );
+					}
+					imgEl.before( hyperlink );
+					hyperlink.append( imgEl );
+					if ( captionOpeningTag !== '' ) {
+						fragment.innerHTML = '';
+						fragment.append( captionOpeningTag );
+						hyperlink.before( fragment );
+					}
+				} else {
+					if ( captionOpeningTag !== '' ) {
+						fragment.innerHTML = '';
+						fragment.append( captionOpeningTag );
+						imgEl.before( fragment );
+					}
+				}
+
+				// Modify desired attributes and class name
 				imgEl.setAttribute( 'alt', alt );
 				imgEl.setAttribute( 'width', width );
 				imgEl.setAttribute( 'height', height );
+				imgEl.className = 'alignnone size-' + size.value + ' wp-image-' + attachmentId;
+				if ( captionClosingTag !== '' ) {
+					fragment.innerHTML = '';
+					fragment.append( captionClosingTag );
+					imgEl.after( fragment );
+				}
 
 				// Serialize the updated document back to HTML string
-				// We want only the inner body content (the whole editor content)
+				// We want the whole editor content
 				updatedContent = doc.body.innerHTML;
 
 				// Re-insert updated content back into TinyMCE editor
@@ -2166,13 +2258,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	document.addEventListener( 'click', function( e ) {
 		var base, page, widgetId, widgetEl, mediaButton, galleryButton,
 			playlistButton, videoListButton, activeButton, fileType,
-			itemEmbed, itemBrowse, itemUpload, gridPanel, uploadPanel, urlPanel,
-			modalButtons, rightSidebar, modalPages, tinymceWidgetId,
+			itemEmbed, itemBrowse, itemUpload, gridPanel, uploadPanel,
+			urlPanel, modalButtons, rightSidebar, modalPages, tinymceWidgetId,
 			preview, itemEdit, itemLibrary, modalPages, div, urlSettings,
-			itemCancel, itemUpload, itemBrowse, galleryInsert, galleryUpdate, uploadPanel,
-			librarySelect, headerButtons, galleryGrid, libraryGrid,libraryItems, content,
-			sidebarSettings, sidebarInfo, gridSubPanel, ul, fieldset, dom, shortcodes,
-			editor, editorContainer, tinyWidget, dom, image, attachmentId,
+			itemCancel, itemUpload, itemBrowse, galleryInsert, galleryUpdate,
+			uploadPanel, librarySelect, headerButtons, galleryGrid, libraryGrid,
+			libraryItems, content, sidebarSettings, sidebarInfo, gridSubPanel,
+			ul, fieldset, dom, shortcodes, editor, selectedNode, editorContainer,
+			tinyWidget, dom, image, attachmentId,
 			selectedItems = [],
 			widget = e.target.closest( '.widget' );
 
@@ -2197,11 +2290,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( e.target.closest( '.mce-inline-toolbar-grp' ) && e.target.className.includes( 'dashicons-edit' ) ) {
 			editor = tinymce.activeEditor;
 			if ( editor ) {
+				selectedNode = editor.selection.getNode();
 
 				// Identify widget
-				editorContainer = editor.getContainer();
-				tinyWidget = editorContainer.closest( '.widget' );
-				editImage( tinyWidget );
+				if ( selectedNode.nodeName === 'IMG' ) {
+					editorContainer = editor.getContainer();
+					tinyWidget = editorContainer.closest( '.widget' );
+					editImage( editor, tinyWidget );
+				}
 			}
 
 		// Update an edited image
