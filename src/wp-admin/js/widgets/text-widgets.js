@@ -1651,17 +1651,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function editImage( editor, widget ) {
 		var header, imageSize, linkTo, linkToCustom, editOriginal, image,
-			widthField, heightField, customSizeField, updateButton,
+			widthField, heightField, customSizeField, updateButton, substring,
 			attachmentId    = dialog.dataset.attachmentId,
 			doc             = parser.parseFromString( content, 'text/html' ),
 			imgEl           = doc.querySelector( 'img.wp-image-' + attachmentId ),
 			alt             = imgEl.getAttribute( 'alt' ),
 			title           = imgEl.getAttribute ( 'title' ),
+			caption         = '',
 			url             = imgEl.src,
 			width           = imgEl.width,
 			height          = imgEl.height,
 			size            = imgEl.className.split( 'size-' )[1].split( ' ' )[0],
-			imageClasses    = imgEl.className.replace( 'alignnone size-' + size + ' wp-image-' + attachmentId, '' ).trim(),
+			imageClass      = imgEl.className.replace( 'alignnone size-' + size + ' wp-image-' + attachmentId, '' ).trim(),
 			anchor          = imgEl.parentNode && imgEl.parentNode.tagName === 'A' ? imgEl.parentNode : '',
 			linkUrl         = anchor ? anchor.href : '',
 			linkClasses     = anchor ? anchor.className : '',
@@ -1671,14 +1672,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			attachmentPages = false,
 			template        = document.getElementById( 'tmpl-edit-image-modal' ),
 			clone           = template.content.cloneNode( true ),
+			openingTag      = normalizeString( '[caption id="attachment_' + attachmentId );
 
-			// Regex to detect caption shortcode wrapping imgEl
-			captionRegex = new RegExp(
-				'\\[caption[^\\]]*id=["\']attachment_' + attachmentId + '["\'][^\\]]*\\][\\s\\S]*?<img[^>]*class=["\'][^"\']*wp-image-' + attachmentId + '[^"\']*["\'][^>]*>[\\s\\S]*?\\[\\/caption\\]',
-				'i'
-			),
-			match = content.match( captionRegex ),
-			caption = match ? match[0].split( '/>')[1].replace( '</a>', '' ).replace( '[/caption]', '' ).trim() : '';
+		// Detect caption
+		if ( doc.body.textContent.includes( openingTag ) ) {
+			substring = doc.body.textContent.substring(
+				doc.body.textContent.indexOf( openingTag ),
+				doc.body.textContent.indexOf( '[/caption]', doc.body.textContent.indexOf( openingTag ) )
+			);
+			caption = substring.split( ']' )[1].trim();
+		}
 
 		// Get available sizes
 		formData = new FormData();
@@ -1823,7 +1826,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '#image-details-alt-text' ).value = alt;
 			dialog.querySelector( '#image-details-caption' ).value = caption;
 			dialog.querySelector( '#image-details-title-attribute' ).value = title;
-			dialog.querySelector( '#image-details-css-class' ).value = imageClasses;
+			dialog.querySelector( '#image-details-css-class' ).value = imageClass;
 			dialog.querySelector( '#image-details-link-target' ).checked = false;
 			if ( linkTargetBlank === '_blank' ) {
 				dialog.querySelector( '#image-details-link-target' ).checked = true;
@@ -1881,18 +1884,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function updateEditedImage( widgetId ) {
-		var width, height, doc, imgEl, hyperlink, updatedContent, captionRegex,
-			match, captionShortcode, captionInnerString, anchorRegex, anchorMatch,
-			anchorTag, updatedAnchorTag, imgRegex,imgMatch,	imgTag, updatedimgTag,
-			updatedShortcode, parts,
+		var width, height, imgEl, substring, hyperlink, updatedContent,
+			doc = parser.parseFromString( content, 'text/html' ),
+			attachmentId = dialog.dataset.attachmentId,
+			originalOpeningTag = normalizeString( '[caption id="attachment_' + attachmentId ),
+			originalClosingTag = '',
 			captionOpeningTag = '',
 			captionClosingTag = '',
-			linkClassAttribute = '',
-			linkRelAttribute = '',
-			linkTargetAttribute = '',
 			fragment = document.createDocumentFragment(),
-			attachmentId = dialog.dataset.attachmentId,
-			imageClass = dialog.querySelector( '#image-details-css-class' ).value,
+			imageClass = dialog.querySelector( '#image-details-css-class' ).value !== '' ? ' ' + dialog.querySelector( '#image-details-css-class' ).value : '',
 			alt = dialog.querySelector( '#image-details-alt-text' ).value,
 			caption = dialog.querySelector( '#image-details-caption' ).value,
 			linkUrl = dialog.querySelector( '#image-details-link-to-custom' ).value,
@@ -1915,177 +1915,97 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '.widget-modal-footer' ).remove();
 		dialog.close();
 
-		// Parse content in a temporary DOM container
-		doc = parser.parseFromString( content, 'text/html' );
-
 		// Find the img element with class containing wp-image-{ID}
 		imgEl = doc.querySelector( 'img.wp-image-' + attachmentId );
 
 		if ( imgEl ) {
+			// Check for a current caption
+			if ( doc.body.textContent.includes( originalOpeningTag ) ) {
+				substring = doc.body.textContent.substring(
+					doc.body.textContent.indexOf( originalOpeningTag ),
+					doc.body.textContent.indexOf( '[/caption]', doc.body.textContent.indexOf( originalOpeningTag ) )
+				);
+				originalClosingTag = substring.split( ']' )[1] + '[/caption]';
+			}
 
-			// Regex to find caption shortcode with matching ID (non-greedy)
-			captionRegex = new RegExp(
-				'(\\[caption\\s+[^\\]]*id=["\']attachment_' + attachmentId + '["\'][^\\]]*\\])([\\s\\S]*?)(\\[\\/caption\\])',
-				'i'
-			);
-			match = content.match( captionRegex );
+			// Create a new or updated caption
+			if ( caption ) {
+				captionOpeningTag = '[caption id="attachment_' + attachmentId + '" align="alignnone" width="' + width + '"]';
+				captionClosingTag = ' ' + caption + '[/caption]';
+			}
 
-			if ( match ) {
-				captionShortcode   = match[0];
-				captionOpeningTag  = match[1];
-				captionInnerString = match[2]; // Inner HTML/text of caption
-				captionClosingTag  = match[3];
-
-				// Get hyperlink attributes and class name
-				if ( linkClass ) {
-					classAttribute = ' class="' + linkClass + '"';
-				}
-				if ( rel ) {
-					relAttribute = ' rel="' + rel + '"';
-				}
-				if ( linkTarget ) {
-					linkTargetAttribute = ' target="' + linkTarget + '"';
-				}
-
-				// --- Modify anchor href attribute if <a> wrapping the <img> exists ---
-				anchorRegex = /<a\s+[^>]*href=["']([^"']*)["'][^>]*>/i;
-				anchorMatch = captionInnerString.match( anchorRegex );
-
-				if ( anchorMatch ) {
-					anchorTag = anchorMatch[0];
-
-					// Replace href attribute value in anchor tag
+			// Get hyperlink (if one exists) and modify href attribute
+			if ( imgEl.parentNode && imgEl.parentNode.tagName === 'A' ) {
+				hyperlink = imgEl.parentNode;
+				if ( hyperlink ) {
 					if ( linkUrl === '' ) {
-						updatedAnchorTag = ''; // remove anchor tag if it has no href attribute
+						fragment.innerHTML = '';
+						fragment.append( imgEl );
+						hyperlink.replaceWith( fragment );
 					} else {
-						updatedAnchorTag = anchorTag.replace( /href=["'][^"']*["']/, 'href="' + linkUrl + '"' );
-					}
-
-					// Replace old anchor tag in captionInnerString with updated one
-					captionInnerString = captionInnerString.replace( anchorTag, updatedAnchorTag );
-				} else if ( linkUrl ) { // Hyperlink has been added
-					captionOpeningTag = captionOpeningTag + '<a href="' + linkUrl + '"' + classAttribute + linkTargetAttribute + relAttribute + '>';
-					captionClosingTag = '</a>' + captionClosingTag;
-				}
-
-				// --- Modify image attributes inside captionInnerString ---
-				// Regex to find img tag inside captionInnerString
-				imgRegex = /<img\s+[^>]*class=["']?([^"'\s]+)["']?[^>]*>/i;
-				imgMatch = captionInnerString.match( imgRegex );
-
-				if ( imgMatch ) {
-					imgTag = imgMatch[0];
-
-					// Modify alt, width, height using regex replacements
-					updatedImgTag = imgTag
-						.replace( /class="[^"]*"/i, 'class="alignnone size-' + size.value + ' wp-image-' + attachmentId + ' ' + imageClass + '"' ) // Update class name
-						.replace( /alt="[^"]*"/i, 'alt="' + alt + '"' )           // Update alt attribute
-						.replace( /width="[^"]*"/i, 'width="' + width + '"' )     // Update width
-						.replace( /height="[^"]*"/i, 'height="' + height + '"' ); // Update height
-
-					// Replace old img tag in captionInnerString with updated one
-					captionInnerString = captionInnerString.replace( imgTag, updatedImgTag );
-				}
-
-				// Modify caption text
-				if ( captionInnerString.toLowerCase().includes( '</a>' ) ) {
-					parts = captionInnerString.split( /<\/a>/i );
-					if ( parts.length > 1 ) {
-						captionInnerString = parts[0] + '</a> ' + caption;
-					}
-				} else {
-					parts = captionInnerString.split( /\/>/i );
-					if ( parts.length > 1 ) {
-						captionInnerString = parts[0] + '/> ' + caption;
-					}
-				}
-
-				// Construct updated shortcode
-				updatedShortcode = captionOpeningTag + captionInnerString + captionClosingTag;
-
-				// Replace the old shortcode string in content with updated shortcode
-				content = content.replace( captionShortcode, updatedShortcode );
-
-				// Set the updated content back to the editor
-				tinymce.activeEditor.setContent( content );
-			} else {
-				// Check if a caption has been added
-				if ( caption ) {
-					captionOpeningTag = '[caption id="attachment_' + attachmentId + '" align="alignnone" width="' + width + '"]';
-					captionClosingTag = ' ' + caption + '[/caption]';
-				}
-
-				// Get hyperlink (if one exists) and modify href attribute
-				if ( imgEl.parentNode && imgEl.parentNode.tagName === 'A' ) {
-					hyperlink = imgEl.parentNode;
-					if ( hyperlink ) {
-						if ( linkUrl === '' ) {
+						hyperlink.href = linkUrl;
+						if ( linkClass ) {
+							hyperlink.className = linkClass;
+						}
+						if ( linkTarget ) {
+							hyperlink.setAttribute( 'target', linkTarget );
+						}
+						if ( rel ) {
+							hyperlink.setAttribute( 'rel', rel );
+						}
+						if ( captionOpeningTag !== '' ) {
 							fragment.innerHTML = '';
-							fragment.append( imgEl );
-							hyperlink.replaceWith( fragment );
-						} else {
-							hyperlink.href = linkUrl;
-							if ( linkClass ) {
-								hyperlink.className = linkClass;
-							}
-							if ( linkTarget ) {
-								hyperlink.setAttribute( 'target', linkTarget );
-							}
-							if ( rel ) {
-								hyperlink.setAttribute( 'rel', rel );
-							}
-							if ( captionOpeningTag !== '' ) {
-								fragment.innerHTML = '';
-								fragment.append( captionOpeningTag );
-								hyperlink.before( fragment );
-							}
+							fragment.append( captionOpeningTag );
+							hyperlink.before( fragment );
 						}
 					}
-				} else if ( linkUrl ) { // Hyperlink has been added
-					hyperlink = document.createElement( 'a' );
-					hyperlink.href = linkUrl;
-					if ( linkClass ) {
-						hyperlink.className = linkClass;
-					}
-					if ( linkTarget ) {
-						hyperlink.setAttribute( 'target', linkTarget );
-					}
-					if ( rel ) {
-						hyperlink.setAttribute( 'rel', rel );
-					}
-					imgEl.before( hyperlink );
-					hyperlink.append( imgEl );
-					if ( captionOpeningTag !== '' ) {
-						fragment.innerHTML = '';
-						fragment.append( captionOpeningTag );
-						hyperlink.before( fragment );
-					}
-				} else {
-					if ( captionOpeningTag !== '' ) {
-						fragment.innerHTML = '';
-						fragment.append( captionOpeningTag );
-						imgEl.before( fragment );
-					}
 				}
-
-				// Modify desired attributes and class name
-				imgEl.setAttribute( 'alt', alt );
-				imgEl.setAttribute( 'width', width );
-				imgEl.setAttribute( 'height', height );
-				imgEl.className = 'alignnone size-' + size.value + ' wp-image-' + attachmentId;
-				if ( captionClosingTag !== '' ) {
+			} else if ( linkUrl ) { // Hyperlink has been added
+				hyperlink = document.createElement( 'a' );
+				hyperlink.href = linkUrl;
+				if ( linkClass ) {
+					hyperlink.className = linkClass;
+				}
+				if ( linkTarget ) {
+					hyperlink.setAttribute( 'target', linkTarget );
+				}
+				if ( rel ) {
+					hyperlink.setAttribute( 'rel', rel );
+				}
+				imgEl.before( hyperlink );
+				hyperlink.append( imgEl );
+				if ( captionOpeningTag !== '' ) {
 					fragment.innerHTML = '';
-					fragment.append( captionClosingTag );
-					imgEl.after( fragment );
+					fragment.append( captionOpeningTag );
+					hyperlink.before( fragment );
 				}
-
-				// Serialize the updated document back to HTML string
-				// We want the whole editor content
-				updatedContent = doc.body.innerHTML;
-
-				// Re-insert updated content back into TinyMCE editor
-				tinymce.activeEditor.setContent( updatedContent );
+			} else {
+				if ( captionOpeningTag !== '' ) {
+					fragment.innerHTML = '';
+					fragment.append( captionOpeningTag );
+					imgEl.before( fragment );
+				}
 			}
+
+			// Modify desired attributes and class name of image
+			imgEl.setAttribute( 'alt', alt );
+			imgEl.setAttribute( 'width', width );
+			imgEl.setAttribute( 'height', height );
+			if ( title ) {
+				imgEl.setAttribute( 'title', title );
+			}
+			imgEl.className = 'alignnone size-' + size.value + ' wp-image-' + attachmentId + imageClass;
+			if ( captionClosingTag !== '' ) {
+				fragment.innerHTML = '';
+				fragment.append( captionClosingTag );
+				imgEl.after( fragment );
+			}
+
+			// Serialize the updated document back to HTML string
+			updatedContent = doc.body.innerHTML.replace( originalClosingTag, '' );
+
+			// Re-insert updated content back into TinyMCE editor
+			tinymce.activeEditor.setContent( updatedContent );
 		}
 
 		if ( document.body.className.includes( 'widgets-php' ) ) {
@@ -2972,5 +2892,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		textarea.value = textarea.value.slice( 0, start ) + newText + textarea.value.slice( end );
 		textarea.setSelectionRange( start, start + newText.length );
 		textarea.focus();
+	}
+
+	// Normalize string
+	function normalizeString( str ) {
+		return str.replace( /[\s\r\n]+/g, ' ' ).replace( /&quot;/g, '"' ).trim();
 	}
 } );
