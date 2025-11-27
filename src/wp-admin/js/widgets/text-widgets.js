@@ -1185,27 +1185,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialogButtons   = clone.querySelector( '.widget-modal-header-buttons' ),
 			dialogContent   = clone.querySelector( '#widget-modal-media-content' ),
 			header          = dialog.querySelector( 'header' ),
-			galleryTemplate = fileType === 'image' ? document.getElementById( 'tmpl-edit-gallery-modal' ) : '',
+			galleryTemplate = document.getElementById( 'tmpl-edit-gallery-modal' ),
 			galleryClone    = galleryTemplate ? galleryTemplate.content.cloneNode( true ) : '',
-			audioTemplate   = fileType === 'audio' ? document.getElementById( 'tmpl-edit-audio-modal' ) : '',
-			audioClone      = audioTemplate ? audioTemplate.content.cloneNode( true ) : '',
-			videoTemplate   = fileType === 'video' ? document.getElementById( 'tmpl-edit-video-modal' ) : '',
-			videoClone      = videoTemplate ? videoTemplate.content.cloneNode( true ) : '',
 			selectedItems   = [];
 
 		// Append cloned template and show relevant elements
 		header.append( dialogButtons );
 		header.after( dialogContent );
-		if ( fileType === 'image' ) {
-			dialog.querySelector( '.separator' ).insertAdjacentHTML( 'afterend', galleryClone.querySelector( '#gallery-buttons' ).innerHTML );
-			dialog.querySelector( '.media-library-grid-section' ).after( galleryClone.querySelector( '.media-gallery-grid-section' ) );
-			dialog.querySelector( '.widget-modal-right-sidebar' ).prepend( galleryClone.querySelector( '.widget-modal-gallery-settings' ) );
-			dialog.querySelector( 'footer' ).replaceWith( galleryClone.querySelector( 'footer' ) );
-		} else if ( fileType === 'audio' ) {
-			
-		} else if ( fileType === 'video' ) {
-			
-		}
+		dialog.querySelector( '.separator' ).insertAdjacentHTML( 'afterend', galleryClone.querySelector( '#gallery-buttons' ).innerHTML );
+		dialog.querySelector( '.media-library-grid-section' ).after( galleryClone.querySelector( '.media-gallery-grid-section' ) );
+		dialog.querySelector( '.widget-modal-right-sidebar' ).prepend( galleryClone.querySelector( '.widget-modal-gallery-settings' ) );
+		dialog.querySelector( 'footer' ).replaceWith( galleryClone.querySelector( 'footer' ) );
 
 		dialog.querySelector( '#menu-item-embed' ).removeAttribute( 'hidden' );
 		dialog.querySelector( '.media-library-select-section').classList.add( 'hidden' );
@@ -1227,17 +1217,35 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		itemEdit.setAttribute( 'aria-selected', true );
 
 		dialog.querySelector( '#gallery-button-new' ).classList.add( 'hidden' );
-		dialog.querySelector( '#menu-item-gallery-library' ).removeAttribute( 'hidden' );
 		dialog.querySelector( '.widget-modal-gallery-settings' ).removeAttribute( 'hidden' );
 
 		galleryAdd = dialog.querySelector( '#menu-item-gallery' );
 		galleryAdd.classList.add( 'cancel' );
-		galleryAdd.textContent = TEXT_WIDGET.cancel_gallery;
 		galleryAdd.removeAttribute( 'hidden' );
 		galleryInsert = dialog.querySelector( '#gallery-button-insert' );
 		galleryUpdate = dialog.querySelector( '#gallery-button-update' );
+		
+		if ( fileType === 'image' ) {
+			dialog.querySelector( 'h2' ).textContent = TEXT_WIDGET.edit_gallery;
+			galleryAdd.textContent = TEXT_WIDGET.cancel_gallery;
+			itemEdit.textContent = TEXT_WIDGET.edit_gallery;
+			dialog.querySelector( '#menu-item-gallery-library' ).textContent = TEXT_WIDGET.add_to_gallery;
+			galleryInsert.textContent = TEXT_WIDGET.insert_gallery;
+		} else if ( fileType === 'audio' ) {
+			dialog.querySelector( 'h2' ).textContent = TEXT_WIDGET.edit_playlist;
+			galleryAdd.textContent = TEXT_WIDGET.cancel_playlist;
+			itemEdit.textContent = TEXT_WIDGET.edit_playlist;
+			dialog.querySelector( '#menu-item-gallery-library' ).textContent = TEXT_WIDGET.add_to_playlist;
+			galleryInsert.textContent = TEXT_WIDGET.insert_playlist;
+		} else if ( fileType === 'video' ) {
+			dialog.querySelector( 'h2' ).textContent = TEXT_WIDGET.edit_video_playlist;
+			galleryAdd.textContent = TEXT_WIDGET.cancel_video_playlist;
+			itemEdit.textContent = TEXT_WIDGET.edit_video_playlist;
+			dialog.querySelector( '#menu-item-gallery-library' ).textContent = TEXT_WIDGET.add_to_video_playlist;
+			galleryInsert.textContent = TEXT_WIDGET.insert_video_playlist;
+		}
 
-		setTimeout( function() {
+		setTimeout( function() { // necessary to allow for cleanup first
 			if ( dialog.querySelector( '#menu-item-gallery' ).className.includes( 'update' ) ) {
 				galleryInsert.classList.add( 'hidden' );
 				galleryInsert.setAttribute( 'disabled', true );
@@ -1249,6 +1257,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				galleryInsert.classList.remove( 'hidden' );
 				galleryInsert.removeAttribute( 'disabled' );
 			}
+			dialog.querySelector( '#gallery-button-new' ).classList.add( fileType );
+			dialog.querySelector( '#menu-item-gallery-library' ).removeAttribute( 'hidden' );
 		}, 0);
 
 		formData = new FormData();
@@ -2286,15 +2296,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				if ( activeButton === mediaButton ) {
 					fileType = 'all';
-				} else if ( activeButton === galleryButton || ( galleryButton.className.includes( 'cancel' ) && ! galleryButton.hasAttribute( 'hidden' ) ) ) {
+				} else if ( activeButton === galleryButton || dialog.querySelector( '#gallery-button-new' ).className.includes( 'image' ) ) {
 					fileType = 'image';
 					galleryInsert.textContent = TEXT_WIDGET.insert_gallery;
 					galleryUpdate.textContent = TEXT_WIDGET.update_gallery;
-				} else if ( activeButton === playlistButton || ( playlistButton.className.includes( 'cancel' ) && ! playlistButton.hasAttribute( 'hidden' ) ) ) {
+				} else if ( activeButton === playlistButton || dialog.querySelector( '#gallery-button-new' ).className.includes( 'audio' ) ) {
 					fileType = 'audio';
 					galleryInsert.textContent = TEXT_WIDGET.insert_playlist;
 					galleryUpdate.textContent = TEXT_WIDGET.update_playlist;
-				} else if ( activeButton === videoListButton || ( videoListButton.className.includes( 'cancel' ) && ! videoListButton.hasAttribute( 'hidden' ) ) ) {
+				} else if ( activeButton === videoListButton || dialog.querySelector( '#gallery-button-new' ).className.includes( 'video' ) ) {
 					fileType = 'video';
 					galleryInsert.textContent = TEXT_WIDGET.insert_video_playlist;
 					galleryUpdate.textContent = TEXT_WIDGET.update_video_playlist;
