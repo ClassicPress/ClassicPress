@@ -9,12 +9,28 @@
  * @since CP 2.5.0
  */
 document.addEventListener( 'DOMContentLoaded', function() {
-	var addButton, pond, content,
+	var observer, addButton, pond, content,
 		{ FilePond } = window, // import FilePond
 		selectedIds = [],
 		parser = new DOMParser,
 		dialog = document.getElementById( 'widget-modal' );
 
+	// If in Customizer, remove old-style dialog
+	// Preventing it from opening would be a breaking change, so just remove it asap for now
+	if ( document.body.className.includes( 'wp-customizer' ) ) {
+		observer = new MutationObserver( function( mutations, obs ) {
+			var oldModal = document.querySelector( '.media-modal.wp-core-ui' );
+			if ( oldModal ) {
+				oldModal.parentNode.remove();
+			}
+		} );
+		observer.observe( document.documentElement, {
+			childList: true,
+			subtree: true
+		} );
+	}
+
+	// Initialize the editor in the widget
 	function initTextWidget( widget ) {
 		var textarea = widget.querySelector( 'textarea' );
 
