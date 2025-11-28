@@ -472,13 +472,17 @@ class WP_Widget_Text extends WP_Widget {
 				'cancel_gallery'             => '&larr; ' . __( 'Cancel gallery' ),
 				'cancel_playlist'            => '&larr; ' . __( 'Cancel audio playlist' ),
 				'cancel_video_playlist'      => '&larr; ' . __( 'Cancel video playlist' ),
-				'insert_gallery'               => __( 'Insert gallery' ),
-				'insert_playlist'              => __( 'Insert audio playlist' ),
-				'insert_video_playlist'        => __( 'Insert video playlist' ),
+				'insert_gallery'             => __( 'Insert gallery' ),
+				'insert_playlist'            => __( 'Insert audio playlist' ),
+				'insert_video_playlist'      => __( 'Insert video playlist' ),
+				'update_gallery'             => __( 'Update gallery' ),
+				'update_playlist'            => __( 'Update audio playlist' ),
+				'update_video_playlist'      => __( 'Update video playlist' ),
 				'add_media'                  => __( 'Add media' ),
 				'add_to_gallery'             => __( 'Add to gallery' ),
 				'add_to_playlist'            => __( 'Add to audio playlist' ),
 				'add_to_video_playlist'      => __( 'Add to video playlist' ),
+				'replace'                    => __( 'Replace' ),
 				'media_library'              => __( 'Media Library' ),
 				'link_text'                  => __( 'Link Text' ),
 				'deselect'                   => __( 'Deselect' ),
@@ -486,14 +490,18 @@ class WP_Widget_Text extends WP_Widget {
 				'artist'                     => __( 'Artist' ),
 				'album'                      => __( 'Album' ),
 				'save'                       => __( 'Save' ),
+				'show_tracklist'             => __( 'Show Tracklist' ),
+				'show_video_list'            => __( 'Show Video List' ),
 				'media_items'                => __( 'media items' ),
+				'item_selected'              => __( 'item selected' ),
+				'items_selected'             => __( 'items selected' ),
 				'per_page'                   => $per_page,
 				'includes_url'               => includes_url(),
 				'wrong_url'                  => __( 'Wrong URL' ),
 				'insert_from_url'            => __( 'Insert from URL' ),
 				'unsupported_file_type'      => __( 'Unsupported file type' ),
 				'aria_label'                 => __( 'The current image has no alternative text. The file name is: ' ),
-				'image_file_types'           => $image_file_types,				
+				'image_file_types'           => $image_file_types,
 				'image_details'              => __( 'Image Details' ),
 				'wrong_url'                  => __( 'No file exists at the URL provided.' ),
 				'audio_file_types'           => $audio_file_types,
@@ -564,7 +572,7 @@ class WP_Widget_Text extends WP_Widget {
 
 			<fieldset>
 				<label for="<?php echo esc_attr( $this->get_field_id( 'text' ) ); ?>" class="screen-reader-text"><?php _e( 'Content:' ); ?></label>
-
+				
 				<?php
 				if ( ! user_can_richedit() ) :
 					?>
