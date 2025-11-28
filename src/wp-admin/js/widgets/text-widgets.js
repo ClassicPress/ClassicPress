@@ -1972,13 +1972,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function updateEditedImage( widgetId ) {
-		var width, height, imgEl, substring, hyperlink, updatedContent,
+		var width, height, imgEl, fullContent, shortcodeRegex, shortcodeMatch,
+			fullShortcode, innerContent, cleanedInner, newInnerContent,
+			newCaptionShortcodeStart, newCaptionShortcodeEnd, parentContainer,
+			hyperlink, updatedContent,
 			doc = parser.parseFromString( content, 'text/html' ),
 			attachmentId = dialog.dataset.attachmentId,
 			originalOpeningTag = normalizeString( '[caption id="attachment_' + attachmentId ),
+			updatedShortcode = '',
 			originalClosingTag = '',
 			captionOpeningTag = '',
-			captionClosingTag = '',
 			fragment = document.createDocumentFragment(),
 			imageClass = dialog.querySelector( '#image-details-css-class' ).value !== '' ? ' ' + dialog.querySelector( '#image-details-css-class' ).value : '',
 			alt = dialog.querySelector( '#image-details-alt-text' ).value,
@@ -2005,88 +2008,100 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Find the img element with class containing wp-image-{ID}
 		imgEl = doc.querySelector( 'img.wp-image-' + attachmentId );
-
 		if ( imgEl ) {
-			// Check for a current caption
-			if ( doc.body.textContent.includes( originalOpeningTag ) ) {
-				substring = doc.body.textContent.substring(
-					doc.body.textContent.indexOf( originalOpeningTag ),
-					doc.body.textContent.indexOf( '[/caption]', doc.body.textContent.indexOf( originalOpeningTag ) )
-				);
-				originalClosingTag = substring.split( ']' )[1] + '[/caption]';
+			fullContent = doc.body.innerHTML;
+			shortcodeRegex = new RegExp(
+				'\\[caption[^\\]]*id=["\']attachment_' + attachmentId + '["\'][^\\]]*\\]([\\s\\S]*?)\\[\\/caption\\]',
+				'i'
+			);
+			shortcodeMatch = fullContent.match( shortcodeRegex );
+			if ( shortcodeMatch ) {
+
+				// Caption shortcode exists
+				fullShortcode = shortcodeMatch[0];  // Entire [caption]...[/caption]
+				innerContent = shortcodeMatch[1];   // Content inside shortcode
+
+				// Remove old caption text immediately (after </a> or />)
+				cleanedInner = innerContent.replace( /(<\/a>|\/>)([\s\S]*)$/i, '$1' );
+    
+				// Build new inner content with new caption
+				newInnerContent = cleanedInner + ( caption ? ' ' + caption : '' );
+    
+				// Create updated shortcode
+				updatedShortcode = '[caption id="attachment_' + attachmentId + '" align="alignnone" width="' + width + '"]' + newInnerContent + '[/caption]';
+    
+				// Replace the entire shortcode block immediately
+				doc.body.innerHTML = fullContent.replace( fullShortcode, updatedShortcode );
+			} else if ( caption ) {
+
+				// No caption shortcode, but user wants to ADD one
+				newCaptionShortcodeStart = '[caption id="attachment_' + attachmentId + '" align="alignnone" width="' + width + '"]';
+				newCaptionShortcodeEnd = caption + '[/caption]';
+    
+				// Insert caption shortcode wrapper around imgEl (and its hyperlink if exists)
+				parentContainer = imgEl.parentNode && imgEl.parentNode.tagName === 'A' ? imgEl.parentNode : imgEl;
+				parentContainer.outerHTML = newCaptionShortcodeStart + parentContainer.outerHTML + newCaptionShortcodeEnd;
 			}
 
-			// Create a new or updated caption
-			if ( caption ) {
-				captionOpeningTag = '[caption id="attachment_' + attachmentId + '" align="alignnone" width="' + width + '"]';
-				captionClosingTag = ' ' + caption + '[/caption]';
-			}
+			// Re-find imgEl after potential DOM changes
+			imgEl = doc.querySelector( 'img.wp-image-' + attachmentId );
+			if ( imgEl ) {
 
-			// Get hyperlink (if one exists) and modify href attribute
-			if ( imgEl.parentNode && imgEl.parentNode.tagName === 'A' ) {
-				hyperlink = imgEl.parentNode;
-				if ( hyperlink ) {
-					if ( linkUrl === '' ) {
-						fragment.innerHTML = '';
-						fragment.append( imgEl );
-						hyperlink.replaceWith( fragment );
-					} else {
-						hyperlink.href = linkUrl;
-						if ( linkClass ) {
-							hyperlink.className = linkClass;
-						}
-						if ( linkTarget ) {
-							hyperlink.setAttribute( 'target', linkTarget );
-						}
-						if ( rel ) {
-							hyperlink.setAttribute( 'rel', rel );
-						}
-						if ( captionOpeningTag !== '' ) {
+				// Update image attributes
+				imgEl.setAttribute( 'alt', alt );
+				imgEl.setAttribute( 'width', width );
+				imgEl.setAttribute( 'height', height );
+				if ( title ) {
+					imgEl.setAttribute( 'title', title );
+				}
+				imgEl.className = 'alignnone size-' + size.value + ' wp-image-' + attachmentId + imageClass;
+
+				// Get hyperlink (if one exists) and modify href attribute
+				if ( imgEl.parentNode && imgEl.parentNode.tagName === 'A' ) {
+					hyperlink = imgEl.parentNode;
+					if ( hyperlink ) {
+						if ( linkUrl === '' ) {
 							fragment.innerHTML = '';
-							fragment.append( captionOpeningTag );
-							hyperlink.before( fragment );
+							fragment.append( imgEl );
+							hyperlink.replaceWith( fragment );
+						} else {
+							hyperlink.href = linkUrl;
+							if ( linkClass ) {
+								hyperlink.className = linkClass;
+							}
+							if ( linkTarget ) {
+								hyperlink.setAttribute( 'target', linkTarget );
+							}
+							if ( rel ) {
+								hyperlink.setAttribute( 'rel', rel );
+							}
+							if ( captionOpeningTag !== '' ) {
+								fragment.innerHTML = '';
+								fragment.append( captionOpeningTag );
+								hyperlink.before( fragment );
+							}
 						}
 					}
+				} else if ( linkUrl ) { // Hyperlink has been added
+					hyperlink = document.createElement( 'a' );
+					hyperlink.href = linkUrl;
+					if ( linkClass ) {
+						hyperlink.className = linkClass;
+					}
+					if ( linkTarget ) {
+						hyperlink.setAttribute( 'target', linkTarget );
+					}
+					if ( rel ) {
+						hyperlink.setAttribute( 'rel', rel );
+					}
+					imgEl.before( hyperlink );
+					hyperlink.append( imgEl );
+					if ( captionOpeningTag !== '' ) {
+						fragment.innerHTML = '';
+						fragment.append( captionOpeningTag );
+						hyperlink.before( fragment );
+					}
 				}
-			} else if ( linkUrl ) { // Hyperlink has been added
-				hyperlink = document.createElement( 'a' );
-				hyperlink.href = linkUrl;
-				if ( linkClass ) {
-					hyperlink.className = linkClass;
-				}
-				if ( linkTarget ) {
-					hyperlink.setAttribute( 'target', linkTarget );
-				}
-				if ( rel ) {
-					hyperlink.setAttribute( 'rel', rel );
-				}
-				imgEl.before( hyperlink );
-				hyperlink.append( imgEl );
-				if ( captionOpeningTag !== '' ) {
-					fragment.innerHTML = '';
-					fragment.append( captionOpeningTag );
-					hyperlink.before( fragment );
-				}
-			} else {
-				if ( captionOpeningTag !== '' ) {
-					fragment.innerHTML = '';
-					fragment.append( captionOpeningTag );
-					imgEl.before( fragment );
-				}
-			}
-
-			// Modify desired attributes and class name of image
-			imgEl.setAttribute( 'alt', alt );
-			imgEl.setAttribute( 'width', width );
-			imgEl.setAttribute( 'height', height );
-			if ( title ) {
-				imgEl.setAttribute( 'title', title );
-			}
-			imgEl.className = 'alignnone size-' + size.value + ' wp-image-' + attachmentId + imageClass;
-			if ( captionClosingTag !== '' ) {
-				fragment.innerHTML = '';
-				fragment.append( captionClosingTag );
-				imgEl.after( fragment );
 			}
 
 			// Serialize the updated document back to HTML string
