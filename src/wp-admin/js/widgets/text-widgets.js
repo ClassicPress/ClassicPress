@@ -54,7 +54,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 										if ( e.target.className.includes( 'wp-gallery' ) ) { // gallery
 											selectedIdsMatch = content.match( /\[(gallery)\s+ids=["']([^"']+)["'][^[\]]*]/i );
 											if ( selectedIdsMatch ) {
-												selectedIds = selectedIdsMatch[2];
+												selectedIds = selectedIdsMatch[2].split( ',' );
 
 												// Check that IDs are positive integers
 												for( var i, n = selectedIds.length; i < n; i++ ) {
@@ -759,7 +759,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	function selectMedia( widget, fileType ) {
+	function selectMedia( widget, fileType, gallery ) {
 		var template = document.getElementById( 'tmpl-media-grid-modal' ),
 			clone = template.content.cloneNode( true ),
 			dialogButtons = clone.querySelector( '.widget-modal-header-buttons' ),
@@ -794,6 +794,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
+			var backButton = document.createElement( 'button' );
 			if ( result.success ) {
 
 				// Append cloned template and show relevant elements
@@ -808,13 +809,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				playlistButton.removeAttribute( 'hidden' );
 				videoListButton.removeAttribute( 'hidden' );
 
-				if ( fileType === 'all' ) {
+				if ( fileType === 'all' || gallery === false ) {
 					mediaButton.textContent = TEXT_WIDGET.add_media;
 					mediaButton.classList.add( 'active' );
 					mediaButton.removeAttribute( 'hidden' );
 					mediaButton.setAttribute( 'aria-selected', true );
-
 					addButton = dialog.querySelector( '#media-button-insert' );
+					if ( gallery === false ) {
+						addButton.textContent = TEXT_WIDGET.replace;
+					}
 				} else {
 					mediaButton.setAttribute( 'aria-selected', false );
 					mediaButton.classList.remove( 'active' );
@@ -827,7 +830,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					addButton = dialog.querySelector( '#gallery-button-new' );
 					addButton.classList.remove( 'hidden' );
 
-					if ( fileType === 'image' ) {
+					if ( fileType === 'image' && gallery === true ) {
 						dialog.querySelector( '.widget-modal-title h2' ).textContent = TEXT_WIDGET.create_gallery;
 						galleryButton.classList.add( 'active' );
 						galleryButton.removeAttribute( 'hidden' );
@@ -1739,7 +1742,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function editImage( editor, widget ) {
 		var header, imageSize, linkTo, linkToCustom, editOriginal, image,
-			widthField, heightField, customSizeField, updateButton, substring,
+			widthField, heightField, customSizeField, updateButton,
+			substring, replaceButton,
 			attachmentId    = dialog.dataset.attachmentId,
 			doc             = parser.parseFromString( content, 'text/html' ),
 			imgEl           = doc.querySelector( 'img.wp-image-' + attachmentId ),
@@ -1927,6 +1931,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( editOriginal != null ) {
 				editOriginal.setAttribute( 'data-href', editOriginal.dataset.href.replace( 'item=xxx', 'item=' + attachmentId ) );
 				editOriginal.setAttribute( 'data-widget-id', widget.id );
+				
+			replaceButton   = document.createElement( 'input' ),
+			replaceButton.id = 'replace-image-button';
+			replaceButton.type = 'button';
+			replaceButton.className = 'replace-attachment button';
+			replaceButton.value = 'Replace';
+			replaceButton.style.marginLeft = '6px';
+			editOriginal.after( replaceButton );
 			}
 			dialog.showModal();
 
@@ -1978,7 +1990,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			hyperlink, updatedContent,
 			doc = parser.parseFromString( content, 'text/html' ),
 			attachmentId = dialog.dataset.attachmentId,
-			originalOpeningTag = normalizeString( '[caption id="attachment_' + attachmentId ),
 			updatedShortcode = '',
 			originalClosingTag = '',
 			captionOpeningTag = '',
@@ -2293,18 +2304,28 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			selectedItems = [],
 			widget = e.target.closest( '.widget' );
 
-		// Add, replace, or edit an image in a media image widget
+		// Add a media file
 		if ( widget ) {
 			base = widget.querySelector( '.id_base' );
 			if ( base && base.value === 'text' && e.target.tagName === 'BUTTON' ) {
 				if ( e.target.className.includes( 'add_media' ) ) {
-					selectMedia( widget, 'all' );
+					selectMedia( widget, 'all', true );
 				}
 			}
 
-		// Edit the image in a widget
-		} else if ( e.target.id === 'edit-original-text' ) {
-			imageEdit( dialog.querySelector( '#image-modal-content' ).dataset.widgetId );
+		// Modifying an image
+		} else if ( dialog.querySelector( '#image-modal-content' ) ) {
+			
+			// Edit the image in a widget
+			if ( e.target.id === 'edit-original-text' ) {
+				imageEdit( dialog.querySelector( '#image-modal-content' ).dataset.widgetId );
+
+			// Replace current image
+			} else if ( e.target.id = 'replace-image-button' ) {
+				widget = document.getElementById( dialog.querySelector( '#image-modal-content' ).dataset.widgetId );
+				cleanup();				
+				selectMedia( widget, 'image', false );
+			}
 
 		// Close the modal
 		} else if ( e.target.id === 'widget-modal-close' ) {
@@ -2393,7 +2414,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				// Add a media file
 				} else if ( e.target === mediaButton ) {
 					cleanup();
-					selectMedia( widgetEl, 'all' );
+					selectMedia( widgetEl, 'all', true );
 
 				// Create or cancel a gallery or playlist
 				} else if ( e.target === galleryButton ) {
@@ -2404,9 +2425,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						if ( e.target.className.includes( 'cancel' ) ) {
 							e.target.textContent = TEXT_WIDGET.create_gallery;
 							e.target.classList.remove( 'cancel' );
-							selectMedia( widgetEl, 'all' );
+							selectMedia( widgetEl, 'all', true );
 						} else {
-							selectMedia( widgetEl, 'image' );
+							selectMedia( widgetEl, 'image', true );
 						}
 					}
 
@@ -2416,9 +2437,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					if ( e.target.className.includes( 'cancel' ) ) {
 						e.target.textContent = TEXT_WIDGET.create_playlist;
 						e.target.classList.remove( 'cancel' );
-						selectMedia( widgetEl, 'all' );
+						selectMedia( widgetEl, 'all', true );
 					} else {
-						selectMedia( widgetEl, 'audio' );
+						selectMedia( widgetEl, 'audio', true );
 					}
 
 				// Create a video playlist
@@ -2427,9 +2448,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					if ( e.target.className.includes( 'cancel' ) ) {
 						e.target.textContent = TEXT_WIDGET.create_video_playlist;
 						e.target.classList.remove( 'cancel' );
-						selectMedia( widgetEl, 'all' );
+						selectMedia( widgetEl, 'all', true );
 					} else {
-						selectMedia( widgetEl, 'video' );
+						selectMedia( widgetEl, 'video', true );
 					}
 
 				} else if ( e.target.className === 'media-menu-item cancel' ) {
