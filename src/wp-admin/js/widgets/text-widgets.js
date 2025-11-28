@@ -44,19 +44,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 								// Edit an image or gallery
 								editor.on( 'click', function( e ) {
-									var attachmentId,
-										nan = false;
+									var selectedIdsMatch, attachmentId, fullShortcode, paramRegex, paramMatch,
+										nan = false,
+										params = { columns: '3', size: 'thumbnail', link: 'post', orderby: false };
 
 									if ( e.target.nodeName === 'IMG' ) {
 										content = editor.getContent();
 
 										if ( e.target.className.includes( 'wp-gallery' ) ) { // gallery
-											selectedIds = content.match( /\[gallery\s+ids="([^"]+)"\]/ );
-											if ( selectedIds && selectedIds[1] ) {
+											selectedIdsMatch = content.match( /\[(gallery)\s+ids=["']([^"']+)["'][^[\]]*]/i );
+											if ( selectedIdsMatch ) {
+												selectedIds = selectedIdsMatch[2];
 
 												// Check that IDs are positive integers
-												for( var i, n = selectedIds[1].length; i < n; i++ ) {
-													if ( ! Number.isInteger( Number( selectedIds[1][i] ) ) || Number( selectedIds[1][i] ) <= 0 ) {
+												for( var i, n = selectedIds.length; i < n; i++ ) {
+													if ( ! Number.isInteger( Number( selectedIds[i] ) ) || Number( selectedIds[i] ) <= 0 ) {
 														nan = true;
 														break;
 													}
@@ -65,7 +67,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 													return;
 												}
 
-												editList( widget, JSON.parse( '[' + selectedIds[1] + ']' ), 'image' );
+												// Now extract other parameters from within the matched shortcode only
+												fullShortcode = selectedIdsMatch[0];
+												paramRegex = /(\bcolumns|size|link|orderby)=["']([^"']+)["']/gi;
+												while ( ( paramMatch = paramRegex.exec( fullShortcode ) ) !== null ) {
+													key = paramMatch[1];
+													value = paramMatch[2];
+													if ( params.hasOwnProperty( key ) ) {
+														params[key] = value;
+													}
+												}
+
+												editList( widget, JSON.parse( '[' + selectedIds + ']' ), 'image', params );
 												dialog.querySelector( '#menu-item-gallery' ).classList.add( 'update' );
 											}
 										} else if ( e.target.height ) { // single image
@@ -174,6 +187,34 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			'<input type="text" id="attachments-details-album" data-id="' + id + '" value="' + album + '">' +
 			'</div>';
 		document.querySelector( '.widget-modal-descriptions .settings-save-status' ).after( fields );
+	}
+
+	/**
+	 * Update audio and video playlist settings.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function playlistSettings( fileType ) {
+		var fields = document.createElement( 'div' ),
+			showlist = fileType === 'audio' ?  TEXT_WIDGET.show_tracklist : TEXT_WIDGET.show_video_list,
+			block = fileType === 'audio' ?  'block' : 'none';
+
+		fields.className = 'collection-settings playlist-settings';
+		fields.innerHTML = '<h2>Playlist Settings</h2>' +
+			'<span class="setting" style="display: block;margin-bottom: 0.5em;">' +
+			'<input type="checkbox" id="playlist-settings-show-list" data-setting="tracklist" checked="" style="margin-right: 8px;">' +
+			'<label for="playlist-settings-show-list" class="checkbox-label-inline">' + showlist + '</label>' +
+			'</span>' +
+			'<span class="setting" style="display:' + block + ';margin-bottom: 0.5em;"">' +
+			'<input type="checkbox" id="playlist-settings-show-artist" data-setting="artists" checked="" style="margin-right: 8px;">' +
+			'<label for="playlist-settings-show-artist" class="checkbox-label-inline">Show Artist Name in Tracklist</label>' +
+			'</span>' +
+			'<span class="setting" style="display: block;margin-bottom: 0.5em;"">' +
+			'<input type="checkbox" id="playlist-settings-show-images" data-setting="images" checked="" style="margin-right: 8px;">' +
+			'<label for="playlist-settings-show-images" class="checkbox-label-inline">Show Images</label>' +
+			'</span>';
+		document.querySelector( '.widget-modal-right-sidebar' ).prepend( fields );
 	}
 
 	/**
@@ -1178,7 +1219,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	function editList( widget, selectedIds, fileType ) {
+	function editList( widget, selectedIds, fileType, params ) {
 		var itemAdd, itemEdit, galleryAdd, galleryInsert, galleryUpdate, formData, listClone,
 			template        = document.getElementById( 'tmpl-media-grid-modal' ),
 			clone           = template.content.cloneNode( true ),
@@ -1217,32 +1258,42 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		itemEdit.setAttribute( 'aria-selected', true );
 
 		dialog.querySelector( '#gallery-button-new' ).classList.add( 'hidden' );
-		dialog.querySelector( '.widget-modal-gallery-settings' ).removeAttribute( 'hidden' );
 
 		galleryAdd = dialog.querySelector( '#menu-item-gallery' );
 		galleryAdd.classList.add( 'cancel' );
 		galleryAdd.removeAttribute( 'hidden' );
 		galleryInsert = dialog.querySelector( '#gallery-button-insert' );
 		galleryUpdate = dialog.querySelector( '#gallery-button-update' );
-		
+
 		if ( fileType === 'image' ) {
 			dialog.querySelector( 'h2' ).textContent = TEXT_WIDGET.edit_gallery;
 			galleryAdd.textContent = TEXT_WIDGET.cancel_gallery;
 			itemEdit.textContent = TEXT_WIDGET.edit_gallery;
 			dialog.querySelector( '#menu-item-gallery-library' ).textContent = TEXT_WIDGET.add_to_gallery;
 			galleryInsert.textContent = TEXT_WIDGET.insert_gallery;
+			dialog.querySelector( '.widget-modal-gallery-settings' ).removeAttribute( 'hidden' );
+
+			// Get values from shortcode parameters
+			dialog.querySelector( '#gallery-settings-columns' ).value = params.columns;
+			dialog.querySelector( '#gallery-settings-size' ).value = params.size;
+			dialog.querySelector( '#gallery-settings-link-to' ).value = params.link;
+			dialog.querySelector( '#gallery-settings-random-order' ).checked = params.orderby;
 		} else if ( fileType === 'audio' ) {
 			dialog.querySelector( 'h2' ).textContent = TEXT_WIDGET.edit_playlist;
 			galleryAdd.textContent = TEXT_WIDGET.cancel_playlist;
 			itemEdit.textContent = TEXT_WIDGET.edit_playlist;
 			dialog.querySelector( '#menu-item-gallery-library' ).textContent = TEXT_WIDGET.add_to_playlist;
 			galleryInsert.textContent = TEXT_WIDGET.insert_playlist;
+			dialog.querySelector( '.widget-modal-gallery-settings' ).setAttribute( 'hidden', true );
+			playlistSettings( 'audio' );
 		} else if ( fileType === 'video' ) {
 			dialog.querySelector( 'h2' ).textContent = TEXT_WIDGET.edit_video_playlist;
 			galleryAdd.textContent = TEXT_WIDGET.cancel_video_playlist;
 			itemEdit.textContent = TEXT_WIDGET.edit_video_playlist;
 			dialog.querySelector( '#menu-item-gallery-library' ).textContent = TEXT_WIDGET.add_to_video_playlist;
 			galleryInsert.textContent = TEXT_WIDGET.insert_video_playlist;
+			dialog.querySelector( '.widget-modal-gallery-settings' ).setAttribute( 'hidden', true );
+			playlistSettings( 'video' );
 		}
 
 		setTimeout( function() { // necessary to allow for cleanup first
@@ -1561,7 +1612,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function addItemToWidget( widget ) {
-		var url, file, fileType, selectedItems, selectedItem,
+		var url, file, fileType, selectedItems, selectedItem, columns,
+			size, link, orderby, tracklist, tracknumbers, images, artists,
 			items     = '',
 			text      = '',
 			alt       = '',
@@ -1643,11 +1695,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 
 				if ( selectedItem.dataset.filetype === 'image' ) {
-					tinymce.activeEditor.insertContent( '[gallery ids="' + items + '"]' );
+					columns = dialog.querySelector( '#gallery-settings-columns' ).value;
+					size = dialog.querySelector( '#gallery-settings-size' ).value;
+					link = dialog.querySelector( '#gallery-settings-link-to' ).value;
+					orderby = dialog.querySelector( '#gallery-settings-random-order' ).checked ? ' orderby="rand"' : '';
+					tinymce.activeEditor.insertContent( '[gallery ids="' + items + '" columns="' + columns + '" size="' + size + '" link="' + link + '"' + orderby + ']' );
 				} else if ( selectedItem.dataset.filetype === 'audio' ) {
-					tinymce.activeEditor.insertContent( '[playlist ids="' + items + '"]' );
+					tracklist = dialog.querySelector( '#playlist-settings-show-list' ).checked ? true : false;
+					images = dialog.querySelector( '#playlist-settings-show-images' ).checked ? true : false;
+					artists = dialog.querySelector( '#playlist-settings-show-artist' ).checked ? true : false;
+					tinymce.activeEditor.insertContent( '[playlist ids="' + items + '" tracklist="' + tracklist + '" images="' + images + '" artists="' + artists + '"]' );
 				} else if ( selectedItem.dataset.filetype === 'video' ) {
-					tinymce.activeEditor.insertContent( '[playlist type="video" ids="' + items + '"]' );
+					tracklist = dialog.querySelector( '#playlist-settings-show-list' ).checked ? true : false;
+					images = dialog.querySelector( '#playlist-settings-show-images' ).checked ? true : false;
+					tinymce.activeEditor.insertContent( '[playlist type="video" ids="' + items + '" tracklist="' + tracklist + '" images="' + images + '"]' );
 				}
 			}
 		}
@@ -2213,6 +2274,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			libraryItems, content, sidebarSettings, sidebarInfo, gridSubPanel,
 			ul, fieldset, dom, shortcodes, editor, selectedNode, editorContainer,
 			tinyWidget, dom, image, attachmentId,
+			params = '',
 			selectedItems = [],
 			widget = e.target.closest( '.widget' );
 
@@ -2424,6 +2486,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						dialog.querySelector( 'h2' ).textContent = TEXT_WIDGET.edit_gallery;
 						playlistButton.setAttribute( 'hidden', true );
 						videoListButton.setAttribute( 'hidden', true );
+						sidebarSettings.removeAttribute( 'hidden' );
 						itemCancel.textContent = TEXT_WIDGET.cancel_gallery;
 						itemEdit.textContent = TEXT_WIDGET.edit_gallery;
 						itemLibrary.textContent = TEXT_WIDGET.add_to_gallery;
@@ -2432,18 +2495,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						dialog.querySelector( 'h2' ).textContent = TEXT_WIDGET.edit_playlist;
 						galleryButton.setAttribute( 'hidden', true );
 						videoListButton.setAttribute( 'hidden', true );
+						sidebarSettings.setAttribute( 'hidden', true );
 						itemCancel.textContent = TEXT_WIDGET.cancel_playlist;
 						itemEdit.textContent = TEXT_WIDGET.edit_playlist;
 						itemLibrary.textContent = TEXT_WIDGET.add_to_playlist;
 						galleryInsert.textContent = TEXT_WIDGET.insert_playlist;
+						playlistSettings( 'audio' );
 					} else if ( e.target.className.includes ( 'video' ) ) {
 						dialog.querySelector( 'h2' ).textContent = TEXT_WIDGET.edit_video_playlist;
 						galleryButton.setAttribute( 'hidden', true );
 						playlistButton.setAttribute( 'hidden', true );
+						sidebarSettings.setAttribute( 'hidden', true );
 						itemCancel.textContent = TEXT_WIDGET.cancel_video_playlist;
 						itemEdit.textContent = TEXT_WIDGET.edit_video_playlist;
 						itemLibrary.textContent = TEXT_WIDGET.add_to_video_playlist;
 						galleryInsert.textContent = TEXT_WIDGET.insert_video_playlist;
+						playlistSettings( 'video' );
 					}
 					itemCancel.removeAttribute( 'hidden' );
 					itemCancel.classList.remove( 'active' );
@@ -2456,7 +2523,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 					galleryGrid.classList.remove( 'hidden' );
 					galleryInsert.classList.remove( 'hidden' );
-					dialog.querySelector( '.widget-modal-gallery-settings' ).removeAttribute( 'hidden' );
 
 					libraryItems.forEach( function( item ) {
 						if ( item.className.includes( 'selected' ) ) {
@@ -2588,8 +2654,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						}
 					} );
 
+					// Update gallery settings
+					if ( fileType === 'image' ) {
+						params = { columns: '3', size: 'thumbnail', link: 'post', orderby: false };
+					}
+					params.columns = dialog.querySelector( '#gallery-settings-columns' ).value;
+					params.size = dialog.querySelector( '#gallery-settings-size' ).value;
+					params.link = dialog.querySelector( '#gallery-settings-link-to' ).value;
+					if ( dialog.querySelector( '#gallery-settings-random-order' ).checked ) {
+						params.orderby = true;
+					}
+
 					cleanup();
-					editList( widgetEl, selectedIds, fileType );
+					editList( widgetEl, selectedIds, fileType, params );
 
 				// Reverse the order of items in the gallery or playlist
 				} else if ( e.target.className.includes( 'gallery-button-reverse' ) ) {
