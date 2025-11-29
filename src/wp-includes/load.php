@@ -792,7 +792,7 @@ function wp_start_object_cache() {
  * @since CP-2.7.0
  * @access private
  */
-function cp_install_apcu_object_cache() {
+function cp_maybe_install_apcu_object_cache() {
 
 	// Abort if the apcu extension is not installed.
 	if ( ! extension_loaded( 'apcu' ) ) {
