@@ -2331,13 +2331,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Modifying an image
 		} else if ( dialog.querySelector( '#image-modal-content' ) ) {
-			
+
 			// Edit the image in a widget
-			if ( e.target.id === 'edit-original-text' ) {
+			if ( e.target === dialog.querySelector( '#edit-original-text' ) ) {
 				imageEdit( dialog.querySelector( '#image-modal-content' ).dataset.widgetId );
 
 			// Replace current image
-			} else if ( e.target.id = 'replace-image-button' ) {
+			} else if ( e.target === dialog.querySelector( '#replace-image-button' ) ) {
 				widget = document.getElementById( dialog.querySelector( '#image-modal-content' ).dataset.widgetId );
 				cleanup();				
 				selectMedia( widget, 'image', false );
