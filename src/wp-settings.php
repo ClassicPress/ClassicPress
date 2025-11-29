@@ -375,7 +375,7 @@ if ( is_multisite() ) {
 	ms_cookie_constants();
 } else {
 	// Install APCu object cache, if appropriate.
-	cp_install_apcu_object_cache();
+	cp_maybe_install_apcu_object_cache();
 }
 
 // Define constants after multisite is loaded.
