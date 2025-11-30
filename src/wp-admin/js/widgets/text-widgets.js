@@ -2,7 +2,7 @@
  * @output wp-admin/js/widgets/text-widgets.js
  */
 
-/* global wp, tinymce, ajaxurl, TEXT_WIDGET, Sortable, console, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
+/* global wp, tinymce, ajaxurl, TEXT_WIDGET, Sortable, console, prompt, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
 /* eslint consistent-this: [ "error", "control" ] */
 
 /**
@@ -1093,7 +1093,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			error    = document.createElement( 'div' ),
 			message  = dialog.querySelector( '#message' ),
 			img      = new Image(),
-			widgetId = dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId,
 			fields   = dialog.querySelectorAll( '#widget-modal-url-settings input, #widget-modal-url-settings textarea' );
 
 		if ( TEXT_WIDGET.image_file_types.includes( fileType.toLowerCase() ) ) {
