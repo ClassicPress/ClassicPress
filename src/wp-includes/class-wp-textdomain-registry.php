@@ -304,6 +304,7 @@ class WP_Textdomain_Registry {
 
 				if ( $mo_path === $path ) {
 					$found_location = rtrim( $location, '/' ) . '/';
+					break 2;
 				}
 			}
 		}
