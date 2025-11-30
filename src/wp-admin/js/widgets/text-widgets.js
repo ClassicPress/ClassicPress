@@ -524,7 +524,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '.wp_video_shortcode' ).remove();
 		}
 		details.removeAttribute( 'style' );
-		
+
 		// Set taxonomy fields
 		setAddedTaxonomyFields( id );
 
@@ -647,7 +647,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					ul.innerHTML = '';
 					ul.parentNode.parentNode.style.visibility = 'hidden';
 
-					// Disable add to widget button 
+					// Disable add to widget button
 					if ( addButton ) {
 						addButton.setAttribute( 'disabled', true );
 					}
@@ -677,7 +677,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( item.querySelector( '.check' ) ) {
 				item.querySelector( '.check' ).style.display = 'block';
 			}
-			
+
 			li.role = 'checkbox';
 			li.setAttribute( 'tabindex', '0' );
 			li.setAttribute( 'aria-label', filename );
@@ -1153,7 +1153,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			widgetId = dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId,
 			htmlString = tinymce.get( 'widget-text-' + widgetId.split( '-' ).pop() + '-text' ).getContent(),
 			doc = parser.parseFromString( htmlString, 'text/html' ),
-			embedLinkText = dialog.querySelector( '#embed-link-settings-link-text' ),			
+			embedLinkText = dialog.querySelector( '#embed-link-settings-link-text' ),
 			embedAlt = dialog.querySelector( '#embed-image-settings-alt-text' ),
 			embedCaption = dialog.querySelector( '#embed-image-settings-caption' ),
 			embedLinkTo = dialog.querySelector( '#link-to' ),
@@ -1936,7 +1936,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( editOriginal != null ) {
 				editOriginal.setAttribute( 'data-href', editOriginal.dataset.href.replace( 'item=xxx', 'item=' + attachmentId ) );
 				editOriginal.setAttribute( 'data-widget-id', widget.id );
-				
+
 			replaceButton   = document.createElement( 'input' ),
 			replaceButton.id = 'replace-image-button';
 			replaceButton.type = 'button';
@@ -2039,13 +2039,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Remove old caption text immediately (after </a> or />)
 				cleanedInner = innerContent.replace( /(<\/a>|\/>)([\s\S]*)$/i, '$1' );
-    
+
 				// Build new inner content with new caption
 				newInnerContent = cleanedInner + ( caption ? ' ' + caption : '' );
-    
+
 				// Create updated shortcode
 				updatedShortcode = '[caption id="attachment_' + attachmentId + '" align="alignnone" width="' + width + '"]' + newInnerContent + '[/caption]';
-    
+
 				// Replace the entire shortcode block immediately
 				doc.body.innerHTML = fullContent.replace( fullShortcode, updatedShortcode );
 			} else if ( caption ) {
@@ -2053,7 +2053,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				// No caption shortcode, but user wants to ADD one
 				newCaptionShortcodeStart = '[caption id="attachment_' + attachmentId + '" align="alignnone" width="' + width + '"]';
 				newCaptionShortcodeEnd = caption + '[/caption]';
-    
+
 				// Insert caption shortcode wrapper around imgEl (and its hyperlink if exists)
 				parentContainer = imgEl.parentNode && imgEl.parentNode.tagName === 'A' ? imgEl.parentNode : imgEl;
 				parentContainer.outerHTML = newCaptionShortcodeStart + parentContainer.outerHTML + newCaptionShortcodeEnd;
@@ -2326,14 +2326,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Replace current image
 			} else if ( e.target === dialog.querySelector( '#replace-image-button' ) ) {
 				widget = document.getElementById( dialog.querySelector( '#image-modal-content' ).dataset.widgetId );
-				cleanup();				
+				cleanup();
 				selectMedia( widget, 'image', false );
 			}
 
 		// Close the modal
 		} else if ( e.target.id === 'widget-modal-close' ) {
 			closeModal();
-					
+
 		// Edit an image file
 		} else if ( e.target.closest( '.mce-inline-toolbar-grp' ) && e.target.className.includes( 'dashicons-edit' ) ) {
 			editor = tinymce.activeEditor;
@@ -2421,7 +2421,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					if ( e.target.className.includes( 'update' ) ) {
 						closeModal();
 					} else {
-						cleanup();						
+						cleanup();
 						if ( e.target.className.includes( 'cancel' ) ) {
 							e.target.textContent = TEXT_WIDGET.create_gallery;
 							e.target.classList.remove( 'cancel' );
@@ -2954,7 +2954,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( typeof tinymce === 'undefined' ) {
 			setTimeout( function() {
 				widget.querySelector( '.quicktags-toolbar' ).addEventListener( 'click', function( e ) {
-					var textarea, start, end, selection; 
+					var textarea, start, end, selection;
 					if ( e.target.tagName !== 'BUTTON' ) {
 						return;
 					}
