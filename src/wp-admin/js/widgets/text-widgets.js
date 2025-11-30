@@ -2,7 +2,7 @@
  * @output wp-admin/js/widgets/text-widgets.js
  */
 
-/* global wp, tinymce, ajaxurl, TEXT_WIDGET, console, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
+/* global wp, tinymce, ajaxurl, TEXT_WIDGET, Sortable, console, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
 /* eslint consistent-this: [ "error", "control" ] */
 
 /**
@@ -12,13 +12,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	var observer, addButton, pond, content,
 		{ FilePond } = window, // import FilePond
 		selectedIds = [],
-		parser = new DOMParser,
+		parser = new DOMParser(),
 		dialog = document.getElementById( 'widget-modal' );
 
 	// If in Customizer, remove old-style dialog
 	// Preventing it from opening would be a breaking change, so just remove it asap for now
 	if ( document.body.className.includes( 'wp-customizer' ) ) {
-		observer = new MutationObserver( function( mutations, obs ) {
+		observer = new MutationObserver( function() {
 			var oldModal = document.querySelector( '.media-modal.wp-core-ui' );
 			if ( oldModal ) {
 				oldModal.parentNode.remove();
@@ -60,7 +60,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 								// Edit an image or gallery
 								editor.on( 'click', function( e ) {
-									var selectedIdsMatch, attachmentId, fullShortcode, paramRegex, paramMatch,
+									var selectedIdsMatch, attachmentId, fullShortcode, paramRegex, paramMatch, key, value,
 										nan = false,
 										params = { columns: '3', size: 'thumbnail', link: 'post', orderby: false };
 
@@ -497,8 +497,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			videoTemplate = document.getElementById( 'tmpl-edit-video-modal' ),
 			cloneVideo = videoTemplate.content.cloneNode( true ),
 			videoClone = cloneVideo.querySelector( 'video' ),
-			linkTo = dialog.querySelector( '#attachment-display-settings-link-to' ),
-			linkToCustom = dialog.querySelector( '#attachment-display-settings-link-to-custom' ),
 			ul = dialog.querySelector( '.widget-modal-footer-selection-view ul' ),
 			li = document.createElement( 'li' ),
 			count = ul.childNodes.length;
@@ -710,9 +708,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	function populateGridItem( attachment, widget ) {
+	function populateGridItem( attachment ) {
 		var selected = '',
-			idsArray = [],
 			gridItem = document.createElement( 'li' ),
 			image = '<img src="' + attachment.url + '" alt="' + attachment.alt + '">';
 
@@ -810,7 +807,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
-			var backButton = document.createElement( 'button' );
 			if ( result.success ) {
 
 				// Append cloned template and show relevant elements
@@ -1098,7 +1094,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			message  = dialog.querySelector( '#message' ),
 			img      = new Image(),
 			widgetId = dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId,
-			widget   = document.getElementById( widgetId ),
 			fields   = dialog.querySelectorAll( '#widget-modal-url-settings input, #widget-modal-url-settings textarea' );
 
 		if ( TEXT_WIDGET.image_file_types.includes( fileType.toLowerCase() ) ) {
@@ -1239,7 +1234,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function editList( widget, selectedIds, fileType, params ) {
-		var itemAdd, itemEdit, galleryAdd, galleryInsert, galleryUpdate, formData, listClone,
+		var itemAdd, itemEdit, galleryAdd, galleryInsert, galleryUpdate, formData,
 			template        = document.getElementById( 'tmpl-media-grid-modal' ),
 			clone           = template.content.cloneNode( true ),
 			dialogButtons   = clone.querySelector( '.widget-modal-header-buttons' ),
@@ -1632,21 +1627,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function addItemToWidget( widget ) {
 		var url, file, fileType, selectedItems, selectedItem, columns,
-			size, link, orderby, tracklist, tracknumbers, images, artists,
+			size, link, orderby, tracklist, images, artists, width, height,
 			items     = '',
 			text      = '',
 			alt       = '',
 			caption   = '',
-			alignment = '',
 			anchor    = '',
 			endAnchor = '',
 			linkTo    = '',
 			linkUrl   = '',
-			editNonce = '',
-			tab       = 'mce',
-			preview   = widget.querySelector( '.media-widget-preview' ),
-			fieldset  = document.createElement( 'fieldset' ),
-			number    = widget.querySelector( '.multi_number' ).value;
+			tab       = 'mce';
 
 		// Check which tab is currently open
 		if ( widget.querySelector( '.wp-editor-wrap' ).className.includes( 'html-active' ) ) {
@@ -1759,7 +1749,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function editImage( editor, widget ) {
 		var header, imageSize, linkTo, linkToCustom, editOriginal, image,
 			widthField, heightField, customSizeField, updateButton,
-			substring, replaceButton,
+			substring, replaceButton, formData,
 			attachmentId    = dialog.dataset.attachmentId,
 			doc             = parser.parseFromString( content, 'text/html' ),
 			imgEl           = doc.querySelector( 'img.wp-image-' + attachmentId ),
@@ -2014,7 +2004,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			alt = dialog.querySelector( '#image-details-alt-text' ).value,
 			caption = dialog.querySelector( '#image-details-caption' ).value,
 			linkUrl = dialog.querySelector( '#image-details-link-to-custom' ).value,
-			linkClass = dialog.querySelector( '#image-details-link-css-class' ).value;
+			linkClass = dialog.querySelector( '#image-details-link-css-class' ).value,
 			title = dialog.querySelector( '#image-details-title-attribute' ).value,
 			rel = dialog.querySelector( '#image-details-link-rel' ).value,
 			linkTarget = dialog.querySelector( '#image-details-link-target' ).checked ? '_blank' : '',
@@ -2307,15 +2297,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	document.addEventListener( 'click', function( e ) {
 		var base, page, widgetId, widgetEl, mediaButton, galleryButton,
-			playlistButton, videoListButton, activeButton, fileType,
-			itemEmbed, itemBrowse, itemUpload, gridPanel, uploadPanel,
-			urlPanel, modalButtons, rightSidebar, modalPages, tinymceWidgetId,
-			preview, itemEdit, itemLibrary, modalPages, div, urlSettings,
-			itemCancel, itemUpload, itemBrowse, galleryInsert, galleryUpdate,
-			uploadPanel, librarySelect, headerButtons, galleryGrid, libraryGrid,
-			libraryItems, content, sidebarSettings, sidebarInfo, gridSubPanel,
-			ul, fieldset, dom, shortcodes, editor, selectedNode, editorContainer,
-			tinyWidget, dom, image, attachmentId,
+			playlistButton, videoListButton, activeButton, fileType, itemEmbed,
+			itemBrowse, itemUpload, gridPanel, uploadPanel, urlPanel,
+			modalButtons, rightSidebar, modalPages, tinymceWidgetId, itemEdit,
+			itemLibrary, div, urlSettings, itemCancel, galleryInsert, galleryUpdate,
+			librarySelect, headerButtons, galleryGrid, libraryGrid, libraryItems,
+			content, sidebarSettings, sidebarInfo, gridSubPanel, dom, shortcodes,
+			editor, selectedNode, editorContainer, tinyWidget,
 			params = '',
 			selectedItems = [],
 			widget = e.target.closest( '.widget' );
@@ -2424,11 +2412,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					galleryUpdate.textContent = TEXT_WIDGET.update_video_playlist;
 				}
 
-				if ( e.target.id === 'audio-button-update' ) {
-					updateAudioToWidget( widgetEl );
-
 				// Add a media file
-				} else if ( e.target === mediaButton ) {
+				if ( e.target === mediaButton ) {
 					cleanup();
 					selectMedia( widgetEl, 'all', true );
 
@@ -2999,7 +2984,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							wrapSelection( textarea, '<li>', '</li>' );
 							break;
 						case 'code':
-							wrapSelection( textarea, '<code>', '</code>' );;
+							wrapSelection( textarea, '<code>', '</code>' );
 							break;
 					}
 					widget.classList.add( 'widget-dirty' );
