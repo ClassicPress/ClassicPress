@@ -148,6 +148,24 @@ if ( ! empty( $tabs['upload'] ) && current_user_can( 'upload_plugins' ) ) {
 		__( 'Browse Plugins' )
 	);
 }
+if (
+		current_user_can( 'install_plugins' ) &&
+		! is_file( WP_PLUGIN_DIR . '/classicpress-directory-integration/classicpress-directory-integration.php' )
+	) {
+		echo '<p>' . sprintf( __( 'You can browse other plugins in the ClassicPress Directory at <a href="%1$s" target="_blank">%1$s</a>.' ), esc_url( 'https://directory.classicpress.net/plugins/' ) ) . '<br>';
+		$url = wp_nonce_url(
+			add_query_arg(
+				array(
+					'action' => 'install-plugin',
+					'plugin' => 'classicpress-directory-integration',
+					'from'   => 'index',
+				),
+				self_admin_url( 'update.php' )
+			),
+			'install-plugin_' . 'classicpress-directory-integration'
+		);
+		echo sprintf( __( '<a href="%1$s">Install</a> the ClassicPress Directory Integration plugin to install ClassicPress specific plugins from the Plugin Menu.' ), $url ) . '</p>';
+}
 ?>
 
 <hr class="wp-header-end">
