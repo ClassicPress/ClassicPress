@@ -120,11 +120,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			removeButton.disabled = true;
 		}
 
-		// If last inactive widget deleted
-		else if ( e.target.closest( 'ul' ) == null ) { // catches undefined too
-			removeButton.disabled = true;
-		}
-
 		else if ( e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' ) {
 
 			// Add chooser
