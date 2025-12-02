@@ -164,7 +164,7 @@ if (
 			),
 			'install-plugin_' . 'classicpress-directory-integration'
 		);
-		echo sprintf( __( '<a href="%1$s">Install</a> the ClassicPress Directory Integration plugin to install ClassicPress specific plugins from the Plugin Menu.' ), $url ) . '</p>';
+		echo sprintf( __( '<a href="%1$s">Install</a> the ClassicPress Directory Integration plugin to install ClassicPress specific plugins from the Plugins Menu.' ), $url ) . '</p>';
 }
 ?>
 
