@@ -10,6 +10,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Set variables for the whole file
 	var newMultiValue, timeNow,
+		itemID = '',
 		widgetList = document.getElementById( 'widget-list' ),
 		sortables = document.querySelectorAll( '.widgets-sortables' ),
 		sidebarWrappers = document.querySelectorAll( '.widgets-holder-wrap' ),
@@ -226,6 +227,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		setData: ghostImage,
 		onChoose: function( e ) {
 			var multi;
+			itemID = e.item.id ? e.item.id : '';
 			if ( e.item.className.includes( 'widget' ) ) {
 				multi = e.item.querySelector( 'input.multi_number' );
 				multi.value = newMultiValue = parseInt( multi.value, 10 ) + 1;
@@ -235,6 +237,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			var widget = e.clone.querySelector( 'details' );
 			if ( widget.hasAttribute( 'open' ) ) {
 				widget.removeAttribute( 'open' );
+			}
+			if ( itemID !== '' ) {
+				e.clone.id = itemID;
 			}
 			widgetToggled( widget );
 		}
