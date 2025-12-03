@@ -1139,6 +1139,7 @@ ul.CodeMirror-hints {
 	width: 50%;
 	padding-left: 1em;
 	display: inline-block;
+	box-sizing: border-box;
 }
 .widget-modal-attachment-info .button-link.delete-attachment {
 	color: #d63638;
