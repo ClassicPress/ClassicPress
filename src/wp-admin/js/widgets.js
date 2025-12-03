@@ -123,7 +123,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		else if ( e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' ) {
 
 			// Add chooser
-			if ( e.target.closest( 'ul' ).id === 'widget-list' ) {
+			if ( e.target.closest( 'ul' ) === document.getElementById( 'widget-list' ) ) {
 				if ( e.target.className.includes( 'widgets-chooser-add' ) ) {
 					addWidget( chooser );
 					e.target.closest( '.widget-top' ).removeAttribute( 'open' );
@@ -704,7 +704,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 
 			widget.id = widgetId.replace( '__i__', newMultiValue );
-			document.getElementById( widgetId ).querySelector( 'input.multi_number' ).value = newMultiValue;
+			widget.querySelector( 'input.multi_number' ).value = newMultiValue;
 		} else if ( 'single' === add ) {
 			widget.id = 'new-' + widgetId;
 			document.getElementById( widgetId ).style.display = 'none';
@@ -755,5 +755,4 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 		}
 	}
-
 } );
