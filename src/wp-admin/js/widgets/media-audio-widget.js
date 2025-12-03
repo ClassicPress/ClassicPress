@@ -831,7 +831,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			source = document.createElement( 'source' ),
 			fieldset = document.createElement( 'fieldset' );
 
-		// Append source to audio element
+		// Add attributes to audio element
 		audioElement.className = 'wp_audio_shortcode';
 		audioElement.style.width = '100%';
 		audioElement.controls = true;
@@ -865,6 +865,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		widget.querySelector( '[data-property="url"]' ).value = source.src;
 		widget.querySelector( '[data-property="' + fileType + '"]' ).value = source.src;
 
+		// Append source to audio element
 		audioElement.append( source );
 		widget.querySelector( '.media_audio' ).innerHTML = '';
 		widget.querySelector( '.media_audio' ).prepend( audioElement );
