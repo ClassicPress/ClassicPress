@@ -240,6 +240,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 			if ( itemID !== '' ) {
 				e.clone.id = itemID;
+				itemID = ''; // reset
 			}
 			widgetToggled( widget );
 		}
