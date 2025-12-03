@@ -21,12 +21,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 
 				// The tag of the added node itself is audio
-				if ( node.matches( 'audio, video' ) ) {
+				if ( node.matches( 'audio' ) ) {
 					initMediaElement( node );
 				}
 
 				// The audio tag is nested inside the added node
-				const mediaNodes = node.querySelectorAll?.( 'audio, video' );
+				const mediaNodes = node.querySelectorAll?.( 'audio' );
 				if ( mediaNodes && mediaNodes.length ) {
 					mediaNodes.forEach( initMediaElement );
 				}
