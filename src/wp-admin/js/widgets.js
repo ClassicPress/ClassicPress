@@ -217,7 +217,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/*
 	 * Attach SortableJS to Available Widgets sidebar
 	 */
-	var widgetSortable = Sortable.create( widgetList, {
+	Sortable.create( widgetList, {
 		group: {
 			name: 'widget-list',
 			pull: 'clone',
@@ -244,7 +244,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			widgetToggled( widget );
 		},
 		onUnchoose: function( e ) {
-			if ( e.clone && e.to === e.from ) { // dropped where it came from
+			if ( e.clone && e.to === e.from ) { // dropped where it came from after triggering cloning
 				document.getElementById( e.item.id ).id = originalID;
 			}
 			originalID = ''; // reset
@@ -724,7 +724,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			widget.querySelector( 'input.multi_number' ).value = newMultiValue;
 		} else if ( 'single' === add ) {
 			widget.id = 'new-' + widgetId;
-			document.getElementById( widgetId ).style.display = 'none';
+			widget.style.display = 'none';
 		}
 
 		// Open the sidebar and insert widget.
