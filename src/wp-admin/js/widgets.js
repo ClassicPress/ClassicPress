@@ -10,7 +10,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Set variables for the whole file
 	var newMultiValue, timeNow,
-		itemID = '',
+		originalID = '',
 		widgetList = document.getElementById( 'widget-list' ),
 		sortables = document.querySelectorAll( '.widgets-sortables' ),
 		sidebarWrappers = document.querySelectorAll( '.widgets-holder-wrap' ),
@@ -217,7 +217,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/*
 	 * Attach SortableJS to Available Widgets sidebar
 	 */
-	Sortable.create( widgetList, {
+	var widgetSortable = Sortable.create( widgetList, {
 		group: {
 			name: 'widget-list',
 			pull: 'clone',
@@ -227,7 +227,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		setData: ghostImage,
 		onChoose: function( e ) {
 			var multi;
-			itemID = e.item.id ? e.item.id : '';
+			originalID = e.item.id ? e.item.id : '';
 			if ( e.item.className.includes( 'widget' ) ) {
 				multi = e.item.querySelector( 'input.multi_number' );
 				multi.value = newMultiValue = parseInt( multi.value, 10 ) + 1;
@@ -238,14 +238,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( widget.hasAttribute( 'open' ) ) {
 				widget.removeAttribute( 'open' );
 			}
-			if ( itemID !== '' ) {
-				e.clone.id = itemID;
-				itemID = ''; // reset
+			if ( originalID !== '' ) {
+				e.clone.id = originalID;
 			}
 			widgetToggled( widget );
+		},
+		onUnchoose: function( e ) {
+			if ( e.clone && e.to === e.from ) { // dropped where it came from
+				document.getElementById( e.item.id ).id = originalID;
+			}
+			originalID = ''; // reset
 		}
 	} );
-
 
 	/*
 	 * Attach listeners and SortableJS to active sidebars
@@ -469,6 +473,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					widget.addEventListener( 'input', unsavedWidget );
 					widget.addEventListener( 'change', unsavedWidget );
 				}
+			} else {
+				widget.innerHTML = widget.innerHTML.replace( /<[^<>]+>/g, function( tag ) {
+					return tag.replace( /__i__|%i%/g, newMultiValue );
+				} );
+
+				widget.id = widget.id.replace( '__i__', newMultiValue );
+				widget.querySelector( 'input.multi_number' ).value = newMultiValue;
 			}
 
 			list = widget.closest( 'details' );
