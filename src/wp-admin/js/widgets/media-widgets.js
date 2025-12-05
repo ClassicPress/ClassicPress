@@ -20,15 +20,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					continue; // ELEMENT_NODE
 				}
 
-				// The tag of the added node itself is audio
-				if ( node.matches( 'audio' ) ) {
+				// The tag of the added node itself is audio or video
+				if ( node.matches( 'audio, video' ) ) {
 					initMediaElement( node );
 				}
 
-				// The audio tag is nested inside the added node
-				const mediaNodes = node.querySelectorAll?.( 'audio' );
+				// The audio or video tag is nested inside the added node
+				const mediaNodes = node.querySelectorAll?.( 'audio, video' );
 				if ( mediaNodes && mediaNodes.length ) {
-					mediaNodes.forEach( initMediaElement );
+					mediaNodes.forEach( function( mediaNode ) {
+						initMediaElement( mediaNode );
+					} );
 				}
 			}
 		}
@@ -54,6 +56,23 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( typeof _wpmejsSettings !== 'undefined' ) {
 			settings = Object.assign( {}, _wpmejsSettings );
 		}
-		new MediaElementPlayer( el, settings );
+
+		if ( el.tagName === 'audio' ) {
+			new MediaElementPlayer( el, settings );
+		} else {
+			// Wait for video metadata to load before MediaElement init
+			function tryInit() {
+				if ( el.readyState >= 1 ) {  // HAVE_METADATA
+					new MediaElementPlayer( el, settings );
+				} else {
+					setTimeout( tryInit, 0 );
+				}
+			}
+
+			// Trigger load and wait
+			el.preload = 'metadata';
+			el.load();
+			tryInit();
+		}
 	}
 } );
