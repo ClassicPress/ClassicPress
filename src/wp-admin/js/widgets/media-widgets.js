@@ -66,7 +66,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			settings = Object.assign( {}, _wpmejsSettings );
 		}
 
-		if ( el.tagName === 'audio' ) {
+		if ( el.tagName === 'AUDIO' ) {
 			new MediaElementPlayer( el, settings );
 		} else {
 			// Trigger video load and wait
