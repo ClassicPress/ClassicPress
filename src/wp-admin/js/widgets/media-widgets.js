@@ -28,7 +28,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				// The audio or video tag is nested inside the added node
 				const mediaNodes = node.querySelectorAll?.( 'audio, video' );
 				if ( mediaNodes && mediaNodes.length ) {
-					mediaNodes.forEach( function( el ) {
+					mediaNodes.forEach( function( el ) { // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall -- Widget DOM init pattern
 						initMediaElement( el );
 					} );
 				}
@@ -53,6 +53,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 
+		// Abort if there is no relevant element
 		if ( ! el || el.classList.contains( 'mejs__player' ) ) {
 			return;
 		}
@@ -70,8 +71,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( el.tagName === 'audio' ) {
 			new MediaElementPlayer( el, settings );
 		} else {
-
-			// Trigger load and wait
+			// Trigger video load and wait
 			el.preload = 'metadata';
 			el.load();
 			tryInit();
