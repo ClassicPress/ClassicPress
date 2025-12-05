@@ -28,8 +28,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				// The audio or video tag is nested inside the added node
 				const mediaNodes = node.querySelectorAll?.( 'audio, video' );
 				if ( mediaNodes && mediaNodes.length ) {
-					mediaNodes.forEach( function( mediaNode ) {
-						initMediaElement( mediaNode );
+					mediaNodes.forEach( function( el ) {
+						initMediaElement( el );
 					} );
 				}
 			}
@@ -43,6 +43,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	function initMediaElement( el ) {
 		var settings;
+
+		// Wait for video metadata to load before MediaElement init
+		function tryInit() {
+			if ( el.readyState >= 1 ) { // HAVE_METADATA
+				new MediaElementPlayer( el, settings );
+			} else {
+				setTimeout( tryInit, 0 );
+			}
+		}
+
 		if ( ! el || el.classList.contains( 'mejs__player' ) ) {
 			return;
 		}
@@ -60,14 +70,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( el.tagName === 'audio' ) {
 			new MediaElementPlayer( el, settings );
 		} else {
-			// Wait for video metadata to load before MediaElement init
-			function tryInit() {
-				if ( el.readyState >= 1 ) {  // HAVE_METADATA
-					new MediaElementPlayer( el, settings );
-				} else {
-					setTimeout( tryInit, 0 );
-				}
-			}
 
 			// Trigger load and wait
 			el.preload = 'metadata';
