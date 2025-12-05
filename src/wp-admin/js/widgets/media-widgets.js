@@ -28,9 +28,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				// The audio or video tag is nested inside the added node
 				const mediaNodes = node.querySelectorAll?.( 'audio, video' );
 				if ( mediaNodes && mediaNodes.length ) {
-					mediaNodes.forEach( function( el ) { /* phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall -- Widget DOM init pattern */
-						initMediaElement( el );
-					} );
+					mediaNodes.forEach( initMediaElement );
 				}
 			}
 		}
