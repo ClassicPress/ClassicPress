@@ -332,7 +332,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '.widget-modal-right-sidebar-info' ).removeAttribute( 'hidden' );
 		document.dispatchEvent( new CustomEvent( 'widget-media-video', {
 			detail: {
-				element: dialog,
+				element: dialog
 			}
 		} ) );
 
@@ -381,7 +381,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			addButton.removeAttribute( 'disabled' );
 			document.dispatchEvent( new CustomEvent( 'widget-media-video', {
 				detail: {
-					element: dialog,
+					element: dialog
 				}
 			} ) );
 		}
@@ -862,7 +862,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		widget.dispatchEvent( new Event( 'change' ) );
 		document.dispatchEvent( new CustomEvent( 'widget-media-video', {
 			detail: {
-				element: widget,
+				element: widget
 			}
 		} ) );
 
@@ -900,7 +900,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		widget.dispatchEvent( new Event( 'change' ) );
 		document.dispatchEvent( new CustomEvent( 'widget-media-video', {
 			detail: {
-				element: widget,
+				element: widget
 			}
 		} ) );
 
@@ -993,7 +993,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.showModal();
 		document.dispatchEvent( new CustomEvent( 'widget-media-video', {
 			detail: {
-				element: dialog,
+				element: dialog
 			}
 		} ) );
 
