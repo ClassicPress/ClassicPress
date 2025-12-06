@@ -251,7 +251,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	} );
 
-	
+
 	/*
 	 * Attach listeners and SortableJS to active sidebars
 	 */
