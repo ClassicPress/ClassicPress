@@ -66,7 +66,7 @@ function videoWidgetPlayer( event ) {
 	if ( typeof _wpmejsSettings !== 'undefined' ) {
 		settings = Object.assign( {}, _wpmejsSettings );
 	}
-	
+
 	// Trigger video load and wait
 	el.preload = 'metadata';
 	el.load();
