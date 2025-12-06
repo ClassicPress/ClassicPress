@@ -357,6 +357,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#attachments-' + id + '-media_post_tag').value = tags;
 
 		dialog.querySelector( '.widget-modal-right-sidebar-info' ).removeAttribute( 'hidden' );
+		document.dispatchEvent( new CustomEvent( 'widget-media-audio', {
+			detail: {
+				element: dialog,
+			}
+		} ) );
 
 		// Update media attachment details
 		dialog.querySelectorAll( '.widget-modal-right-sidebar-info input, .widget-modal-right-sidebar-info textarea' ).forEach( function( input ) {
@@ -401,6 +406,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Enable add to widget button
 			addButton.removeAttribute( 'disabled' );
+			document.dispatchEvent( new CustomEvent( 'widget-media-audio', {
+				detail: {
+					element: dialog,
+				}
+			} ) );
 		}
 	}
 
@@ -880,6 +890,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 		widget.querySelector( '.widget-control-save' ).textContent = AUDIO_WIDGET.save;
 		widget.dispatchEvent( new Event( 'change' ) );
+		document.dispatchEvent( new CustomEvent( 'widget-media-audio', {
+			detail: {
+				element: widget,
+			}
+		} ) );
 
 		// Explicitly enable Save button (required by some browsers)
 		widget.querySelector( '.widget-control-save' ).disabled = false;
@@ -917,6 +932,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 		widget.querySelector( '.widget-control-save' ).textContent = AUDIO_WIDGET.save;
 		widget.dispatchEvent( new Event( 'change' ) );
+		document.dispatchEvent( new CustomEvent( 'widget-media-audio', {
+			detail: {
+				element: widget,
+			}
+		} ) );
 
 		// Explicitly enable Save button (required by some browsers)
 		widget.querySelector( '.widget-control-save' ).disabled = false;
@@ -1001,6 +1021,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#audio-details-loop' ).checked = widget.querySelector( '[data-property="loop"]' ).value === '1' ? true : false;
 
 		dialog.showModal();
+		document.dispatchEvent( new CustomEvent( 'widget-media-audio', {
+			detail: {
+				element: dialog,
+			}
+		} ) );
 
 		// Trigger update button when other changes made to inputs or textareas
 		preloaded = dialog.querySelector( '#preload' );
