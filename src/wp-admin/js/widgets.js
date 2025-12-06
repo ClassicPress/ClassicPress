@@ -251,6 +251,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	} );
 
+	
 	/*
 	 * Attach listeners and SortableJS to active sidebars
 	 */
@@ -508,8 +509,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 
+		// If the last widget was moved from a now-empty Inactive Widgets sidebar, disable the Clear button.
+		if ( e.from.id === 'wp_inactive_widgets' && document.querySelector( '#wp_inactive_widgets li' ) === null ) {
+			document.getElementById( 'inactive-widgets-control-remove' ).disabled = true;
+
 		// If the last widget was moved out of an orphaned sidebar, close and remove it.
-		if ( e.from.id.indexOf( 'orphaned_widgets' ) > -1 && ! e.from.querySelector( '.widget' ).length ) {
+		} else if ( e.from.id === 'orphaned_widgets' && e.from.querySelector( '.widget' ) === null ) {
 			e.from.closest( 'details' ).removeAttribute( 'open' );
 			e.from.remove();
 		}
