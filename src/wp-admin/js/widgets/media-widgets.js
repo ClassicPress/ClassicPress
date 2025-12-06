@@ -15,9 +15,8 @@ document.addEventListener( 'change', function( e ) {
 // Listen for when audio file is added to page
 function audioWidgetPlayer( event ) {
 	var settings,
-		element = event.detail.element;
-
-	el = element.querySelector( 'audio' );
+		element = event.detail.element,
+		el = element.querySelector( 'audio' );
 
 	// Abort if there is no relevant element
 	if ( ! el || el.classList.contains( 'mejs__player' ) ) {
@@ -41,7 +40,8 @@ document.addEventListener( 'widget-media-audio', audioWidgetPlayer );
 // Listen for when video file is added to page
 function videoWidgetPlayer( event ) {
 	var settings,
-		element = event.detail.element;
+		element = event.detail.element,
+		el = element.querySelector( 'video' );
 
 	// Wait for video metadata to load before MediaElement init
 	function tryInit() {
@@ -51,8 +51,6 @@ function videoWidgetPlayer( event ) {
 			setTimeout( tryInit, 0 );
 		}
 	}
-
-	el = element.querySelector( 'video' );
 
 	// Abort if there is no relevant element
 	if ( ! el || el.classList.contains( 'mejs__player' ) ) {
