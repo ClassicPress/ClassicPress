@@ -357,11 +357,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#attachments-' + id + '-media_post_tag').value = tags;
 
 		dialog.querySelector( '.widget-modal-right-sidebar-info' ).removeAttribute( 'hidden' );
-		document.dispatchEvent( new CustomEvent( 'widget-media-audio', {
-			detail: {
-				element: dialog
-			}
-		} ) );
 
 		// Update media attachment details
 		dialog.querySelectorAll( '.widget-modal-right-sidebar-info input, .widget-modal-right-sidebar-info textarea' ).forEach( function( input ) {
@@ -406,11 +401,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Enable add to widget button
 			addButton.removeAttribute( 'disabled' );
-			document.dispatchEvent( new CustomEvent( 'widget-media-audio', {
-				detail: {
-					element: dialog
-				}
-			} ) );
 		}
 	}
 
@@ -841,7 +831,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			source = document.createElement( 'source' ),
 			fieldset = document.createElement( 'fieldset' );
 
-		// Add attributes to audio element
+		// Append source to audio element
 		audioElement.className = 'wp_audio_shortcode';
 		audioElement.style.width = '100%';
 		audioElement.controls = true;
@@ -875,7 +865,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		widget.querySelector( '[data-property="url"]' ).value = source.src;
 		widget.querySelector( '[data-property="' + fileType + '"]' ).value = source.src;
 
-		// Append source to audio element
 		audioElement.append( source );
 		widget.querySelector( '.media_audio' ).innerHTML = '';
 		widget.querySelector( '.media_audio' ).prepend( audioElement );
@@ -890,11 +879,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 		widget.querySelector( '.widget-control-save' ).textContent = AUDIO_WIDGET.save;
 		widget.dispatchEvent( new Event( 'change' ) );
-		document.dispatchEvent( new CustomEvent( 'widget-media-audio', {
-			detail: {
-				element: widget
-			}
-		} ) );
 
 		// Explicitly enable Save button (required by some browsers)
 		widget.querySelector( '.widget-control-save' ).disabled = false;
@@ -932,11 +916,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 		widget.querySelector( '.widget-control-save' ).textContent = AUDIO_WIDGET.save;
 		widget.dispatchEvent( new Event( 'change' ) );
-		document.dispatchEvent( new CustomEvent( 'widget-media-audio', {
-			detail: {
-				element: widget
-			}
-		} ) );
 
 		// Explicitly enable Save button (required by some browsers)
 		widget.querySelector( '.widget-control-save' ).disabled = false;
@@ -1021,11 +1000,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#audio-details-loop' ).checked = widget.querySelector( '[data-property="loop"]' ).value === '1' ? true : false;
 
 		dialog.showModal();
-		document.dispatchEvent( new CustomEvent( 'widget-media-audio', {
-			detail: {
-				element: dialog
-			}
-		} ) );
 
 		// Trigger update button when other changes made to inputs or textareas
 		preloaded = dialog.querySelector( '#preload' );
@@ -1267,7 +1241,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					addItemToWidget( widgetEl );
 
 				// Delete an attachment
-				} else if ( e.target.classList && e.target.classList.contains( 'delete-attachment' ) ) {
+				} else if ( e.target.className.includes( 'delete-attachment' ) ) {
 					if ( widgetEl.querySelector( '[data-property="attachment_id"]' ) ) {
 						if ( dialog.querySelector( '.widget-modal-grid .selected' ).dataset.id != widgetEl.querySelector( '[data-property="attachment_id"]' ).value ) {
 							if ( window.confirm( AUDIO_WIDGET.confirm_delete ) ) {
@@ -1277,7 +1251,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 
 				// Copy URL
-				} else if ( e.target.classList && e.target.classList.contains( 'copy-attachment-url' ) ) {
+				} else if ( e.target.className.includes( 'copy-attachment-url' ) ) {
 					copyToClipboard( e.target );
 				}
 			}
