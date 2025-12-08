@@ -12,64 +12,68 @@ document.addEventListener( 'change', function( e ) {
 } );
 
 
-// Listen for when audio file is added to page
-function audioWidgetPlayer( event ) {
-	var settings,
-		element = event.detail.element,
-		el = element.querySelector( 'audio' );
+// Watch for new MediaelementPlayer added to page and initialize
+document.addEventListener( 'DOMContentLoaded', function() {
+	var observer = new MutationObserver( function( mutations ) {
+		for ( var mutation of mutations ) {
+			for ( var node of mutation.addedNodes ) {
+				if ( node.nodeType !== 1 ) {
+					continue; // ELEMENT_NODE
+				}
 
-	// Abort if there is no relevant element
-	if ( ! el || el.classList.contains( 'mejs__player' ) ) {
-		return;
-	}
+				// The tag of the added node itself is audio or video
+				if ( node.matches( 'audio, video' ) ) {
+					initMediaElement( node );
+				}
 
-	// Avoid double-init: MediaElement wraps the media in a container
-	if ( el.closest( '.mejs__container' ) ) {
-		return;
-	}
+				// The audio or video tag is nested inside the added node
+				const mediaNodes = node.querySelectorAll?.( 'audio, video' );
+				if ( mediaNodes && mediaNodes.length ) {
+					mediaNodes.forEach( initMediaElement );
+				}
+			}
+		}
+	} );
 
-	// Merge global Medialelement settings and initialize player
-	if ( typeof _wpmejsSettings !== 'undefined' ) {
-		settings = Object.assign( {}, _wpmejsSettings );
-	}
-	new MediaElementPlayer( el, settings );
-}
-document.addEventListener( 'widget-media-audio', audioWidgetPlayer );
+	observer.observe( document.documentElement, {
+		childList: true,
+		subtree: true
+	} );
 
+	function initMediaElement( el ) {
+		var settings;
 
-// Listen for when video file is added to page
-function videoWidgetPlayer( event ) {
-	var settings,
-		element = event.detail.element,
-		el = element.querySelector( 'video' );
+		// Wait for video metadata to load before MediaElement init
+		function tryInit() {
+			if ( el.readyState >= 1 ) { // HAVE_METADATA
+				new MediaElementPlayer( el, settings );
+			} else {
+				setTimeout( tryInit, 50 );
+			}
+		}
 
-	// Wait for video metadata to load before MediaElement init
-	function tryInit() {
-		if ( el.readyState >= 1 ) { // HAVE_METADATA
+		// Abort if there is no relevant element
+		if ( ! el || el.classList.contains( 'mejs__player' ) ) {
+			return;
+		}
+
+		// Avoid double-init: MediaElement wraps the media in a container
+		if ( el.closest( '.mejs__container' ) ) {
+			return;
+		}
+
+		// Merge global Medialelement settings and initialize player
+		if ( typeof _wpmejsSettings !== 'undefined' ) {
+			settings = Object.assign( {}, _wpmejsSettings );
+		}
+
+		if ( el.tagName === 'AUDIO' ) {
 			new MediaElementPlayer( el, settings );
 		} else {
-			setTimeout( tryInit, 50 );
+			// Trigger video load and wait
+			el.preload = 'metadata';
+			el.load();
+			tryInit();
 		}
 	}
-
-	// Abort if there is no relevant element
-	if ( ! el || el.classList.contains( 'mejs__player' ) ) {
-		return;
-	}
-
-	// Avoid double-init: MediaElement wraps the media in a container
-	if ( el.closest( '.mejs__container' ) ) {
-		return;
-	}
-
-	// Merge global Medialelement settings and initialize player
-	if ( typeof _wpmejsSettings !== 'undefined' ) {
-		settings = Object.assign( {}, _wpmejsSettings );
-	}
-
-	// Trigger video load and wait
-	el.preload = 'metadata';
-	el.load();
-	tryInit();
-}
-document.addEventListener( 'widget-media-video', videoWidgetPlayer );
+} );
