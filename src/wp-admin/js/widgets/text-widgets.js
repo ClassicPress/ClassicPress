@@ -575,15 +575,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					img.removeAttribute( 'style' );
 				}
 			}
-
-			// Initialize mediaelement player if appropriate
-			if ( item.dataset.filetype === 'audio' || item.dataset.filetype === 'video' ) {
-				document.dispatchEvent( new CustomEvent( 'widget-media-' + item.dataset.filetype, {
-					detail: {
-						element: dialog
-					}
-				} ) );
-			}
 		}
 
 		// Populate modal with attachment details
@@ -700,15 +691,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Enable add to widget button
 			if ( addButton ) {
 				addButton.removeAttribute( 'disabled' );
-			}
-
-			// Initialize mediaelement player if appropriate
-			if ( fileType === 'audio' || fileType === 'video' ) {
-				document.dispatchEvent( new CustomEvent( 'widget-media-' + fileType, {
-					detail: {
-						element: dialog
-					}
-				} ) );
 			}
 		}
 
