@@ -48,7 +48,7 @@ function videoWidgetPlayer( event ) {
 		if ( el.readyState >= 1 ) { // HAVE_METADATA
 			new MediaElementPlayer( el, settings );
 		} else {
-			setTimeout( tryInit, 0 );
+			setTimeout( tryInit, 50 );
 		}
 	}
 
