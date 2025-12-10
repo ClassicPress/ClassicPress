@@ -53,6 +53,7 @@ for ( split /\r?\n/, $diff ) {
 		next if $fn =~ /^wp-includes\/js\/jquery\/ui\/.*\.js$/;
 		next if $fn =~ /^wp-includes\/js\/media\/.*\.js$/;
 		next if $fn =~ /^wp-includes\/js\/media\/.*\.ejs$/;
+		next if $fn eq 'wp-includes/certificates/legacy-1024bit.pem';
 	}
 
 	# If we get here, there's a problem
