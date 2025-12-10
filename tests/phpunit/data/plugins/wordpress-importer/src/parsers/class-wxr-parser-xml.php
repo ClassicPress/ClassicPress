@@ -100,7 +100,10 @@ class WXR_Parser_XML {
 			$error_string   = xml_error_string( $error_code );
 			return new WP_Error( 'XML_parse_error', 'There was an error when reading this WXR file', array( $current_line, $current_column, $error_string ) );
 		}
-		xml_parser_free( $xml );
+
+		if ( PHP_VERSION_ID < 80000 ) { // xml_parser_free() has no effect as of PHP 8.0.
+			xml_parser_free( $xml );
+		}
 
 		if ( ! preg_match( '/^\d+\.\d+$/', $this->wxr_version ) ) {
 			return new WP_Error( 'WXR_parse_error', __( 'This does not appear to be a WXR file, missing/invalid WXR version number', 'wordpress-importer' ) );

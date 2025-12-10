@@ -562,6 +562,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
+			var items, num;
+
 			if ( result.success ) {
 
 				// Clear existing grid
@@ -592,6 +594,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					result.data.forEach( function( attachment ) {
 						var gridItem = populateGridItem( attachment );
 						mediaGrid.appendChild( gridItem );
+					} );
+
+					// Reset grid order
+					items = document.querySelectorAll( '.media-item' );
+					items.forEach( function( item, index ) {
+						item.setAttribute( 'data-order', parseInt( index + 1 ) );
 					} );
 
 					// Reset pagination
@@ -632,7 +640,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						document.getElementById( 'current-page-selector' ).setAttribute( 'value', paged ? paged : 1 );
 						document.getElementById( 'current-page-selector' ).value = paged ? paged : 1;
 						document.querySelector( '.total-pages' ).textContent = result.headers.max_pages;
-						document.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, result.headers.total_posts );
+
+						num = document.querySelector( '.displaying-num' ).textContent.split( ' ' );
+						document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
 
 						queryParams.set( 'paged', paged );
 						history.replaceState( null, null, '?' + queryParams.toString() );
@@ -1027,14 +1037,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.target.textContent = 'Bulk select';
 			dateFilter.style.display = '';
 			typeFilter.style.display = '';
-			mediaCatSelect.style.display = '';
+			if ( mediaCatSelect ) {
+				mediaCatSelect.style.display = '';
+			}
 			deleteButton.classList.add( 'hidden' );
+			deleteButton.disabled = true;
 			toolbar.classList.remove( 'media-toolbar-mode-select' );
 		} else {
 			e.target.textContent = 'Cancel';
 			dateFilter.style.display = 'none';
 			typeFilter.style.display = 'none';
-			mediaCatSelect.style.display = 'none';
+			if ( mediaCatSelect ) {
+				mediaCatSelect.style.display = 'none';
+			}
 			deleteButton.classList.remove( 'hidden' );
 			toolbar.classList.add( 'media-toolbar-mode-select' );
 
@@ -1167,8 +1182,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		labelTapToUndo: _wpMediaGridSettings.tap_close,
 		fileRenameFunction: ( file ) =>
 			new Promise( function( resolve ) {
-				resolve( window.prompt( _wpMediaGridSettings.new_filename, file.name ) );
-			} ),
+				const newName = window.prompt(
+					_wpMediaGridSettings.new_filename,
+					file.name
+				);
+				resolve( newName === null ? file.name : newName );
+			}
+		),
 		acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 		labelFileTypeNotAllowed: _wpMediaGridSettings.invalid_type,
 		fileValidateTypeLabelExpectedTypes: _wpMediaGridSettings.check_types

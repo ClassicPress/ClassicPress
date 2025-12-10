@@ -704,8 +704,7 @@ var MediaElement = function MediaElement(idOrNode, options, sources) {
 
 		fakeNodeName: 'div',
 
-		/* Modified for ClassicPress */
-		iconSprite: _wpmejsSettings.pluginPath + 'mejs-controls.svg'
+		iconSprite: 'mejs-controls.svg'
 	};
 
 	options = Object.assign(t.defaults, options);
@@ -1117,7 +1116,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var mejs = {};
 
-mejs.version = '7.0.3';
+mejs.version = '7.1.0';
 
 mejs.html5media = {
 	properties: ['volume', 'src', 'currentTime', 'muted', 'duration', 'paused', 'ended', 'buffered', 'error', 'networkState', 'readyState', 'seeking', 'seekable', 'currentSrc', 'preload', 'bufferedBytes', 'bufferedTime', 'initialTime', 'startOffsetTime', 'defaultPlaybackRate', 'playbackRate', 'played', 'autoplay', 'loop', 'controls'],
@@ -1252,10 +1251,6 @@ _mejs2.default.Renderers = renderer;
 },{"8":8}],10:[function(_dereq_,module,exports){
 'use strict';
 
-var _window = _dereq_(3);
-
-var _window2 = _interopRequireDefault(_window);
-
 var _document = _dereq_(2);
 
 var _document2 = _interopRequireDefault(_document);
@@ -1297,8 +1292,6 @@ Object.assign(_player2.default.prototype, {
 
 	isNativeFullScreen: false,
 
-	isInIframe: false,
-
 	isPluginClickThroughCreated: false,
 
 	fullscreenMode: '',
@@ -1309,8 +1302,6 @@ Object.assign(_player2.default.prototype, {
 		if (!player.isVideo) {
 			return;
 		}
-
-		player.isInIframe = _window2.default.location !== _window2.default.parent.location;
 
 		player.detectFullscreenMode();
 
@@ -1408,8 +1399,8 @@ Object.assign(_player2.default.prototype, {
 			return;
 		}
 
-		if (t.options.useFakeFullscreen === false && (Features.IS_IOS || Features.IS_SAFARI) && Features.HAS_IOS_FULLSCREEN && typeof t.media.originalNode.webkitEnterFullscreen === 'function' && t.media.originalNode.canPlayType((0, _media.getTypeFromFile)(t.media.getSrc()))) {
-			t.media.originalNode.webkitEnterFullscreen();
+		if (t.options.useFakeFullscreen === false && (Features.IS_IOS || Features.IS_SAFARI) && Features.HAS_IOS_FULLSCREEN && typeof t.node.webkitEnterFullscreen === 'function' && t.node.canPlayType((0, _media.getTypeFromFile)(t.media.getSrc()))) {
+			t.node.webkitEnterFullscreen();
 			return;
 		}
 
@@ -1421,40 +1412,12 @@ Object.assign(_player2.default.prototype, {
 
 		if (t.fullscreenMode === 'native-native' || t.fullscreenMode === 'plugin-native') {
 			Features.requestFullScreen(t.getElement(t.container));
-
-			if (t.isInIframe) {
-				setTimeout(function checkFullscreen() {
-
-					if (t.isNativeFullScreen) {
-						var percentErrorMargin = 0.002,
-						    windowWidth = _window2.default.innerWidth || _document2.default.documentElement.clientWidth || _document2.default.body.clientWidth,
-						    screenWidth = screen.width,
-						    absDiff = Math.abs(screenWidth - windowWidth),
-						    marginError = screenWidth * percentErrorMargin;
-
-						if (absDiff > marginError) {
-							t.exitFullScreen();
-						} else {
-							setTimeout(checkFullscreen, 500);
-						}
-					}
-				}, 1000);
-			}
 		}
 
 		t.getElement(t.container).style.width = '100%';
 		t.getElement(t.container).style.height = '100%';
 
-		t.containerSizeTimeout = setTimeout(function () {
-			t.getElement(t.container).style.width = '100%';
-			t.getElement(t.container).style.height = '100%';
-			t.setControlsSize();
-		}, 500);
-
-		if (isNative) {
-			t.node.style.width = '100%';
-			t.node.style.height = '100%';
-		} else {
+		if (isNative) {} else {
 			var elements = t.getElement(t.container).querySelectorAll('embed, object, video'),
 			    _total = elements.length;
 			for (var i = 0; i < _total; i++) {
@@ -1463,7 +1426,7 @@ Object.assign(_player2.default.prototype, {
 			}
 		}
 
-		if (t.options.setDimensions && typeof t.media.setSize === 'function') {
+		if (t.options.setDimensions && typeof t.media.setSize === 'function' && !isNative) {
 			t.media.setSize(screen.width, screen.height);
 		}
 
@@ -1479,8 +1442,14 @@ Object.assign(_player2.default.prototype, {
 			(0, _dom.addClass)(t.fullscreenBtn, t.options.classPrefix + 'unfullscreen');
 		}
 
-		t.setControlsSize();
 		t.isFullScreen = true;
+		t.setControlsSize();
+
+		if (!isNative) {
+			requestAnimationFrame(function () {
+				t.setPlayerSize(screen.width, screen.height);
+			});
+		}
 
 		var zoomFactor = Math.min(screen.width / t.width, screen.height / t.height),
 		    captionText = t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'captions-text');
@@ -1545,6 +1514,8 @@ Object.assign(_player2.default.prototype, {
 		t.setControlsSize();
 		t.isFullScreen = false;
 
+		t.setPlayerSize(t.normalWidth, t.normalHeight);
+
 		var captionText = t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'captions-text');
 		if (captionText) {
 			captionText.style.fontSize = '';
@@ -1556,7 +1527,7 @@ Object.assign(_player2.default.prototype, {
 	}
 });
 
-},{"17":17,"2":2,"24":24,"25":25,"26":26,"27":27,"28":28,"3":3,"6":6}],11:[function(_dereq_,module,exports){
+},{"17":17,"2":2,"24":24,"25":25,"26":26,"27":27,"28":28,"6":6}],11:[function(_dereq_,module,exports){
 'use strict';
 
 var _document = _dereq_(2);
@@ -1986,13 +1957,10 @@ Object.assign(_player2.default.prototype, {
 						seekTime = duration;
 						break;
 					case 13:
-					case 32:
-						if (_constants.IS_FIREFOX) {
-							if (t.paused) {
-								t.play();
-							} else {
-								t.pause();
-							}
+						if (t.paused) {
+							t.play();
+						} else {
+							t.pause();
 						}
 						return;
 					default:
@@ -2231,6 +2199,10 @@ var _player = _dereq_(17);
 
 var _player2 = _interopRequireDefault(_player);
 
+var _i18n = _dereq_(6);
+
+var _i18n2 = _interopRequireDefault(_i18n);
+
 var _time = _dereq_(30);
 
 var _dom = _dereq_(25);
@@ -2251,7 +2223,7 @@ Object.assign(_player2.default.prototype, {
 		time.className = t.options.classPrefix + 'time';
 		time.setAttribute('role', 'timer');
 		time.setAttribute('aria-live', 'off');
-		time.innerHTML = '<span class="' + t.options.classPrefix + 'currenttime">' + (0, _time.secondsToTimeCode)(0, player.options.alwaysShowHours, player.options.showTimecodeFrameCount, player.options.framesPerSecond, player.options.secondsDecimalLength, player.options.timeFormat) + '</span>';
+		time.innerHTML = '<span class="mejs__offscreen">' + _i18n2.default.t('mejs.current') + '</span><span class="' + t.options.classPrefix + 'currenttime">' + (0, _time.secondsToTimeCode)(0, player.options.alwaysShowHours, player.options.showTimecodeFrameCount, player.options.framesPerSecond, player.options.secondsDecimalLength, player.options.timeFormat) + '</span>';
 
 		t.addControlElement(time, 'current');
 		player.updateCurrent();
@@ -2270,7 +2242,7 @@ Object.assign(_player2.default.prototype, {
 		    currTime = controls.lastChild.querySelector('.' + t.options.classPrefix + 'currenttime');
 
 		if (currTime) {
-			controls.querySelector('.' + t.options.classPrefix + 'time').innerHTML += t.options.timeAndDurationSeparator + '<span class="' + t.options.classPrefix + 'duration">' + ((0, _time.secondsToTimeCode)(t.options.duration, t.options.alwaysShowHours, t.options.showTimecodeFrameCount, t.options.framesPerSecond, t.options.secondsDecimalLength, t.options.timeFormat) + '</span>');
+			controls.querySelector('.' + t.options.classPrefix + 'time').innerHTML += t.options.timeAndDurationSeparator + '<span class="mejs__offscreen">' + _i18n2.default.t('mejs.duration') + '</span><span class="' + t.options.classPrefix + 'duration">' + ((0, _time.secondsToTimeCode)(t.options.duration, t.options.alwaysShowHours, t.options.showTimecodeFrameCount, t.options.framesPerSecond, t.options.secondsDecimalLength, t.options.timeFormat) + '</span>');
 		} else {
 			if (controls.querySelector('.' + t.options.classPrefix + 'currenttime')) {
 				(0, _dom.addClass)(controls.querySelector('.' + t.options.classPrefix + 'currenttime').parentNode, t.options.classPrefix + 'currenttime-container');
@@ -2278,7 +2250,7 @@ Object.assign(_player2.default.prototype, {
 
 			var duration = _document2.default.createElement('div');
 			duration.className = t.options.classPrefix + 'time ' + t.options.classPrefix + 'duration-container';
-			duration.innerHTML = '<span class="' + t.options.classPrefix + 'duration">' + ((0, _time.secondsToTimeCode)(t.options.duration, t.options.alwaysShowHours, t.options.showTimecodeFrameCount, t.options.framesPerSecond, t.options.secondsDecimalLength, t.options.timeFormat) + '</span>');
+			duration.innerHTML = '<span class="mejs__offscreen">' + _i18n2.default.t('mejs.duration') + '</span><span class="' + t.options.classPrefix + 'duration">' + ((0, _time.secondsToTimeCode)(t.options.duration, t.options.alwaysShowHours, t.options.showTimecodeFrameCount, t.options.framesPerSecond, t.options.secondsDecimalLength, t.options.timeFormat) + '</span>');
 
 			t.addControlElement(duration, 'duration');
 		}
@@ -2342,7 +2314,7 @@ Object.assign(_player2.default.prototype, {
 	}
 });
 
-},{"17":17,"2":2,"25":25,"30":30}],14:[function(_dereq_,module,exports){
+},{"17":17,"2":2,"25":25,"30":30,"6":6}],14:[function(_dereq_,module,exports){
 'use strict';
 
 var _document = _dereq_(2);
@@ -2438,13 +2410,12 @@ Object.assign(_player2.default.prototype, {
 
     if (t.options.toggleCaptionsButtonWhenOnlyOne && subtitles.length === 1) {
       player.captionsButton.classList.add(t.options.classPrefix + 'captions-button-toggle');
-      player.captionsButton.addEventListener('click', function (e) {
+      player.captionsButton.addEventListener('click', function () {
         var trackId = 'none';
         if (player.selectedTrack === null) {
           trackId = player.getSubtitles()[0].trackId;
         }
-        var keyboard = e.keyCode || e.which;
-        player.setTrack(trackId, typeof keyboard !== 'undefined');
+        player.setTrack(trackId);
       });
     } else {
       var labels = player.captionsButton.querySelectorAll('.' + t.options.classPrefix + 'captions-selector-label'),
@@ -2468,9 +2439,8 @@ Object.assign(_player2.default.prototype, {
 
       for (var _i3 = 0; _i3 < captions.length; _i3++) {
         captions[_i3].addEventListener('click', function (e) {
-          var keyboard = e.keyCode || e.which;
           if (!e.target.disabled) {
-            player.setTrack(this.value, typeof keyboard !== 'undefined');
+            player.setTrack(this.value);
           }
         });
       }
@@ -2677,7 +2647,7 @@ Object.assign(_player2.default.prototype, {
       }
     }
   },
-  setTrack: function setTrack(trackId, setByKeyboard) {
+  setTrack: function setTrack(trackId) {
     var t = this,
         radios = t.captionsButton.querySelectorAll('input[type="radio"]'),
         captions = t.captionsButton.querySelectorAll('.' + t.options.classPrefix + 'captions-selected'),
@@ -2717,12 +2687,6 @@ Object.assign(_player2.default.prototype, {
     var event = (0, _general.createEvent)('captionschange', t.media);
     event.detail.caption = t.selectedTrack;
     t.media.dispatchEvent(event);
-
-    if (!setByKeyboard) {
-      setTimeout(function () {
-        t.getElement(t.container).focus();
-      }, 500);
-    }
   },
   hideAllTracks: function hideAllTracks() {
     if (this.node.textTracks) {
@@ -3398,6 +3362,9 @@ var EN = exports.EN = {
 	'mejs.time-slider': 'Time Slider',
 	'mejs.time-help-text': 'Use Left/Right Arrow keys to advance one second, Up/Down arrows to advance ten seconds.',
 	'mejs.live-broadcast': 'Live Broadcast',
+
+	'mejs.current': 'Current time',
+	'mejs.duration': 'Total duration',
 
 	'mejs.volume-help-text': 'Use Up/Down Arrow keys to increase or decrease volume.',
 	'mejs.unmute': 'Unmute',
@@ -4234,6 +4201,20 @@ var MediaElementPlayer = function () {
 					}
 				});
 
+				if (t.options.enableKeyboard) {
+					t.getElement(t.container).addEventListener('keydown', function (e) {
+						var keyCode = e.keyCode || e.which || 0;
+
+						if (e.target === t.container && keyCode === 13) {
+							if (t.paused) {
+								t.play();
+							} else {
+								t.pause();
+							}
+						}
+					});
+				}
+
 				t.getElement(t.container).addEventListener('click', function (e) {
 					dom.addClass(e.currentTarget, t.options.classPrefix + 'container-keyboard-inactive');
 				});
@@ -4266,13 +4247,14 @@ var MediaElementPlayer = function () {
 				}, 0);
 
 				t.globalResizeCallback = function () {
-					if (!(t.isFullScreen || _constants.HAS_TRUE_NATIVE_FULLSCREEN && _document2.default.webkitIsFullScreen)) {
+					if (t.isFullScreen || _constants.HAS_TRUE_NATIVE_FULLSCREEN && _document2.default.webkitIsFullScreen) {
+						t.setPlayerSize(screen.width, screen.height);
+					} else {
 						t.setPlayerSize(t.width, t.height);
 					}
 
 					t.setControlsSize();
 				};
-
 				t.globalBind('resize', t.globalResizeCallback);
 			}
 
@@ -4357,6 +4339,11 @@ var MediaElementPlayer = function () {
 
 			if (typeof height !== 'undefined') {
 				t.height = height;
+			}
+
+			if (t.isFullScreen || _constants.HAS_TRUE_NATIVE_FULLSCREEN && _document2.default.webkitIsFullScreen) {
+				t.setDimensions(t.width, t.height);
+				return;
 			}
 
 			switch (t.options.stretching) {
@@ -4622,6 +4609,12 @@ var MediaElementPlayer = function () {
 
 			t.getElement(t.container).style.width = width;
 			t.getElement(t.container).style.height = height;
+
+			var isNative = t.media.rendererName !== null && /(html5|native)/i.test(t.media.rendererName);
+			if ((t.isFullScreen || _constants.HAS_TRUE_NATIVE_FULLSCREEN && _document2.default.webkitIsFullScreen) && !isNative) {
+				t.node.style.width = width;
+				t.node.style.height = height;
+			}
 
 			var layers = t.getElement(t.layers).children;
 			for (var i = 0, total = layers.length; i < total; i++) {
@@ -4915,16 +4908,6 @@ var MediaElementPlayer = function () {
 
 					button.setAttribute('aria-pressed', !!pressed);
 					t.getElement(t.container).focus();
-				}
-			});
-
-			bigPlay.addEventListener('keydown', function (e) {
-				var keyPressed = e.keyCode || e.which || 0;
-
-				if (keyPressed === 13 || _constants.IS_FIREFOX && keyPressed === 32) {
-					var event = (0, _general.createEvent)('click', bigPlay);
-					bigPlay.dispatchEvent(event);
-					return false;
 				}
 			});
 
@@ -6796,24 +6779,7 @@ var IS_FIREFOX = exports.IS_FIREFOX = /firefox/i.test(UA);
 var IS_SAFARI = exports.IS_SAFARI = /safari/i.test(UA) && !IS_CHROME;
 var IS_STOCK_ANDROID = exports.IS_STOCK_ANDROID = /^mozilla\/\d+\.\d+\s\(linux;\su;/i.test(UA);
 var HAS_MSE = exports.HAS_MSE = 'MediaSource' in _window2.default;
-var SUPPORT_POINTER_EVENTS = exports.SUPPORT_POINTER_EVENTS = function () {
-	var element = _document2.default.createElement('x'),
-	    documentElement = _document2.default.documentElement,
-	    getComputedStyle = _window2.default.getComputedStyle;
-
-	if (!('pointerEvents' in element.style)) {
-		return false;
-	}
-
-	element.style.pointerEvents = 'auto';
-	element.style.pointerEvents = 'x';
-	documentElement.appendChild(element);
-	var supports = getComputedStyle && (getComputedStyle(element, '') || {}).pointerEvents === 'auto';
-	element.remove();
-	return !!supports;
-}();
-
-var SUPPORT_PASSIVE_EVENT = exports.SUPPORT_PASSIVE_EVENT = function () {
+var SUPPORT_POINTER_EVENTS = exports.SUPPORT_POINTER_EVENTS = true;var SUPPORT_PASSIVE_EVENT = exports.SUPPORT_PASSIVE_EVENT = function () {
 	var supportsPassive = false;
 	try {
 		var opts = Object.defineProperty({}, 'passive', {

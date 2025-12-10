@@ -221,6 +221,38 @@ function _mb_strlen( $str, $encoding = null ) {
 	return --$count;
 }
 
+if ( ! function_exists( 'array_is_list' ) ) {
+	/**
+	 * Polyfill for `array_is_list()` function added in PHP 8.1.
+	 *
+	 * Determines if the given array is a list.
+	 *
+	 * An array is considered a list if its keys consist of consecutive numbers from 0 to count($array)-1.
+	 *
+	 * @see https://github.com/symfony/polyfill-php81/tree/main
+	 *
+	 * @since 6.5.0
+	 *
+	 * @param array<mixed> $arr The array being evaluated.
+	 * @return bool True if array is a list, false otherwise.
+	 */
+	function array_is_list( $arr ) {
+		if ( ( array() === $arr ) || ( array_values( $arr ) === $arr ) ) {
+			return true;
+		}
+
+		$next_key = -1;
+
+		foreach ( $arr as $k => $v ) {
+			if ( ++$next_key !== $k ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+}
+
 if ( ! function_exists( 'str_contains' ) ) {
 	/**
 	 * Polyfill for `str_contains()` function added in PHP 8.0.
@@ -394,5 +426,47 @@ if ( ! function_exists( 'array_all' ) ) {
 		}
 
 		return true;
+	}
+}
+
+if ( ! function_exists( 'array_first' ) ) {
+	/**
+	 * Polyfill for `array_first()` function added in PHP 8.5.
+	 *
+	 * Returns the first element of an array.
+	 *
+	 * @since 6.9.0
+	 *
+	 * @param array $array The array to get the first element from.
+	 * @return mixed|null The first element of the array, or null if the array is empty.
+	 */
+	function array_first( array $array ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.arrayFound
+		if ( empty( $array ) ) {
+			return null;
+		}
+
+		foreach ( $array as $value ) {
+			return $value;
+		}
+	}
+}
+
+if ( ! function_exists( 'array_last' ) ) {
+	/**
+	 * Polyfill for `array_last()` function added in PHP 8.5.
+	 *
+	 * Returns the last element of an array.
+	 *
+	 * @since 6.9.0
+	 *
+	 * @param array $array The array to get the last element from.
+	 * @return mixed|null The last element of the array, or null if the array is empty.
+	 */
+	function array_last( array $array ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.arrayFound
+		if ( empty( $array ) ) {
+			return null;
+		}
+
+		return $array[ array_key_last( $array ) ];
 	}
 }

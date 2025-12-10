@@ -73,17 +73,41 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	flex-wrap: wrap;
 }
+
+.timeline-wrapped #ticks {
+	margin-left: 1.25em;
+	justify-content: start;
+}
+
 #ticks option {
 	text-align: center;
 	width: 8em;
+	margin: 0 1em;
+	border: 1px solid transparent;
 }
+
+.timeline-wrapped #ticks option {
+	margin-left: 1em;
+}
+
 #ticks option:first-child {
 	margin-left: -2.5em;
 }
+
+.timeline-wrapped #ticks option:first-child {
+	margin-left: 1em;
+}
+
 #ticks option:last-child {
 	margin-right: -2.5em;
 }
+
+.timeline-wrapped #ticks option:last-child {
+	margin-right: 1em;
+}
+
 .from-slider-wrapper {
 	display: none;
 }
@@ -158,14 +182,6 @@
 	border-width: 0;
 }
 
-.comparing-two-revisions .revisions-controls {
-	height: 140px;
-}
-
-.comparing-two-revisions.pinned .revisions-controls {
-	height: 124px;
-}
-
 .revisions .diff-error {
 	position: absolute;
 	text-align: center;
@@ -226,10 +242,15 @@ body.folded .revisions .loading-indicator {
 	box-shadow: none;
 }
 
-.revision-toggle-compare-mode {
-	position: absolute;
-	top: -5em;
-	right: 0;
+.revisions-buttons {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.comparing-two-revisions .revision-toggle-compare-mode {
+	margin-left: calc(50% - 78px);
+	margin-top: 0.4em;
 }
 
 .comparing-two-revisions .revisions-previous,
@@ -256,20 +277,6 @@ body.folded .revisions .loading-indicator {
 
 .revisions.pinned .revisions-buttons {
 	padding: 0 11px;
-}
-
-.revisions-previous,
-.revisions-next {
-	position: relative;
-	z-index: 1;
-}
-
-.revisions-previous {
-	float: left;
-}
-
-.revisions-next {
-	float: right;
 }
 
 .revisions-controls .wp-slider {
@@ -663,6 +670,105 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
 	right: 0;
 }
 
+.return-to-post {
+	margin: 1em 0;
+	display: flex;
+	justify-content: space-between;
+}
+
+/* Revisions List */
+.revisions-list .column-delete a {
+	color: #b32d2e;
+}
+
+.modal-revision {
+	padding: 0;
+	background: #fff;
+	width: 97%;	
+	max-width: 740px;
+	height: 90%;
+	font-size: 16px;
+}
+
+.modal-revision * {
+	box-sizing: content-box;
+}
+
+.modal-revision-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 48px;
+	border-bottom: 1px solid #dcdcde;
+}
+
+#modal-revision-title {
+	margin: 0 0 0 0.75em;
+	line-height: 2;
+	width: 85%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#modal-revision-close-button {
+	padding: 0;
+	cursor: pointer;
+	height: 48px;
+	width: 50px;
+	text-align: center;
+	border: 0;
+	border-left: 1px solid #dcdcde;
+	background-color: transparent;
+	transition: color .1s ease-in-out, background .1s ease-in-out;
+}
+
+#modal-revision-close-button::before {
+	font: normal 22px/50px dashicons !important;
+	color: #787c82;
+	display: inline-block;
+	content: "\f335";
+	font-weight: 300;
+}
+
+#modal-revision-close-button:hover {
+	background: #dcdcde;
+	border-color: #c3c4c7;
+	color: #000;
+}
+
+#modal-revision-close-button:focus::before,
+#modal-revision-close-button:hover::before {
+	color: #000;
+}
+
+#modal-revision-close-button:focus {
+	box-shadow: none;
+	outline: none;
+}
+
+#modal-revision-button {
+	font-size: .875em;
+}
+
+.modal-revision-content-outer {
+	padding: 1em;
+	line-height: 1.5;
+	font-size: 16px;
+}
+
+.modal-revision-content {
+	margin-bottom: 1em;
+	line-height: 2.5;
+	white-space: pre-wrap;
+	font-family: Consolas, Monaco, monospace;
+}
+
+dialog::backdrop {
+	background: #000;
+	opacity: 0.7;
+}
+
 /* =Media Queries
 -------------------------------------------------------------- */
 
@@ -677,6 +783,15 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
 }
 
 @media screen and (max-width: 782px) {
+	#current-tooltip {
+		color: transparent !important;
+		background-color: transparent !important;
+	}
+
+	.timeline-wrapped #ticks {
+		margin-left: 2.5em;
+	}
+
 	#diff-next-revision,
 	#diff-previous-revision {
 		margin-top: -1em;

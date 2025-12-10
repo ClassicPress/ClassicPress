@@ -6,7 +6,6 @@ class MockPHPMailer extends PHPMailer\PHPMailer\PHPMailer {
 	public $mock_sent = array();
 
 	public function preSend() {
-		$this->Encoding = '8bit';
 		return parent::preSend();
 	}
 

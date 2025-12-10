@@ -3135,7 +3135,10 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 	if ( $type && ! $real_mime && extension_loaded( 'fileinfo' ) ) {
 		$finfo     = finfo_open( FILEINFO_MIME_TYPE );
 		$real_mime = finfo_file( $finfo, $file );
-		finfo_close( $finfo );
+
+		if ( PHP_VERSION_ID < 80100 ) { // finfo_close() has no effect as of PHP 8.1.
+			finfo_close( $finfo );
+		}
 
 		// fileinfo often misidentifies obscure files as one of these types.
 		$nonspecific_types = array(
@@ -5004,14 +5007,35 @@ function _wp_array_get( $input_array, $path, $default_value = null ) {
 	}
 
 	foreach ( $path as $path_element ) {
-		if (
-			! is_array( $input_array ) ||
-			( ! is_string( $path_element ) && ! is_integer( $path_element ) && ! is_null( $path_element ) ) ||
-			! array_key_exists( $path_element, $input_array )
-		) {
+		if ( ! is_array( $input_array ) ) {
 			return $default_value;
 		}
-		$input_array = $input_array[ $path_element ];
+
+		if ( is_string( $path_element )
+			|| is_integer( $path_element )
+			|| null === $path_element
+		) {
+			/*
+			 * Check if the path element exists in the input array.
+			 * We check with `isset()` first, as it is a lot faster
+			 * than `array_key_exists()`.
+			 */
+			if ( isset( $path_element, $input_array[ $path_element ] ) ) {
+				$input_array = $input_array[ $path_element ];
+				continue;
+			}
+
+			/*
+			 * If `isset()` returns false, we check with `array_key_exists()`,
+			 * which also checks for `null` values.
+			 */
+			if ( isset( $path_element ) && array_key_exists( $path_element, $input_array ) ) {
+				$input_array = $input_array[ $path_element ];
+				continue;
+			}
+		}
+
+		return $default_value;
 	}
 
 	return $input_array;
@@ -6120,8 +6144,10 @@ function validate_file( $file, $allowed_files = array() ) {
 		return 0;
 	}
 
-	// Normalize path for Windows servers
+	// Normalize path for Windows servers.
 	$file = wp_normalize_path( $file );
+	// Normalize path for $allowed_files as well so it's an apples to apples comparison.
+	$allowed_files = array_map( 'wp_normalize_path', $allowed_files );
 
 	// `../` on its own is not allowed:
 	if ( '../' === $file ) {
@@ -7748,6 +7774,40 @@ function wp_is_uuid( $uuid, $version = null ) {
 function wp_unique_id( $prefix = '' ) {
 	static $id_counter = 0;
 	return $prefix . (string) ++$id_counter;
+}
+
+/**
+ * Generates an incremental ID that is independent per each different prefix.
+ *
+ * It is similar to `wp_unique_id`, but each prefix has its own internal ID
+ * counter to make each prefix independent from each other. The ID starts at 1
+ * and increments on each call. The returned value is not universally unique,
+ * but it is unique across the life of the PHP process and it's stable per
+ * prefix.
+ *
+ * @since 6.4.0
+ *
+ * @param string $prefix Optional. Prefix for the returned ID. Default empty string.
+ * @return string Incremental ID per prefix.
+ */
+function wp_unique_prefixed_id( $prefix = '' ) {
+	static $id_counters = array();
+
+	if ( ! is_string( $prefix ) ) {
+		wp_trigger_error(
+			__FUNCTION__,
+			sprintf( 'The prefix must be a string. "%s" data type given.', gettype( $prefix ) )
+		);
+		$prefix = '';
+	}
+
+	if ( ! isset( $id_counters[ $prefix ] ) ) {
+		$id_counters[ $prefix ] = 0;
+	}
+
+	$id = ++$id_counters[ $prefix ];
+
+	return $prefix . (string) $id;
 }
 
 /**

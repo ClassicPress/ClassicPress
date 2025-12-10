@@ -287,6 +287,8 @@ require ABSPATH . WPINC . '/sitemaps/class-wp-sitemaps-stylesheet.php';
 require ABSPATH . WPINC . '/sitemaps/providers/class-wp-sitemaps-posts.php';
 require ABSPATH . WPINC . '/sitemaps/providers/class-wp-sitemaps-taxonomies.php';
 require ABSPATH . WPINC . '/sitemaps/providers/class-wp-sitemaps-users.php';
+require ABSPATH . WPINC . '/class-wp-script-modules.php';
+require ABSPATH . WPINC . '/script-modules.php';
 if ( 0 !== (int) get_option( 'blocks_compatibility_level', 1 ) ) {
 	require ABSPATH . WPINC . '/classicpress/class-wp-compat.php';
 }
@@ -294,6 +296,8 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	require ABSPATH . WPINC . '/class-fix-wpcli.php';
 }
 require_once ABSPATH . WPINC . '/classicpress/class-cp-customization-frontend.php';
+
+wp_script_modules()->add_hooks();
 
 $GLOBALS['wp_embed'] = new WP_Embed();
 
@@ -307,6 +311,7 @@ $GLOBALS['wp_embed'] = new WP_Embed();
  * @global WP_Textdomain_Registry $wp_textdomain_registry WordPress Textdomain Registry.
  */
 $GLOBALS['wp_textdomain_registry'] = new WP_Textdomain_Registry();
+$GLOBALS['wp_textdomain_registry']->init();
 
 // Load multisite-specific files.
 if ( is_multisite() ) {

@@ -113,32 +113,9 @@ if ( 'grid' === $mode ) {
 	wp_enqueue_style( 'media-grid' );
 	wp_enqueue_script( 'wp-mediaelement' );
 	wp_enqueue_script( 'media-grid' );
+	wp_enqueue_script( 'cp-filepond' );
 
 	remove_action( 'admin_head', 'wp_admin_canonical_url' );
-
-	wp_localize_script(
-		'media-grid',
-		'_wpMediaGridSettings',
-		array(
-			'by'               => __( 'by' ),
-			'pixels'           => __( 'pixels' ),
-			'deselect'         => __( 'Deselect' ),
-			'failed_update'    => __( 'Failed to update media:' ),
-			'error'            => __( 'Error:' ),
-			'upload_failed'    => __( 'Upload failed' ),
-			'tap_close'        => __( 'Tap to close' ),
-			'new_filename'     => __( 'Enter new filename' ),
-			'invalid_type'     => __( 'Invalid file type' ),
-			'check_types'      => __( 'Check the list of accepted file types.' ),
-			'delete_failed'    => __( 'Failed to delete attachment.' ),
-			'confirm_delete'   => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
-			'confirm_multiple' => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
-			'includes_url'     => includes_url(),
-			'webp_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) ),
-			'avif_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/avif' ) ),
-			'heic_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/heic' ) ),
-		)
-	);
 
 	add_screen_option(
 		'per_page',
@@ -255,7 +232,7 @@ if ( 'grid' === $mode ) {
 
 		<div class="uploader-inline" data-allowed-mimes="<?php echo esc_attr( $mimes_list ); ?>" hidden inert>
 			<button type="button" class="close dashicons dashicons-no">
-				<span class="screen-reader-text">Close uploader</span>
+				<span class="screen-reader-text"><?php esc_html_e( 'Close uploader' ); ?></span>
 			</button>
 
 			<input type="file" id="filepond" class="filepond" name="filepond" multiple data-allow-reorder="true">

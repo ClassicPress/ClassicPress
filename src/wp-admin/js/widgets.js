@@ -120,15 +120,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			removeButton.disabled = true;
 		}
 
-		// If last inactive widget deleted
-		else if ( e.target.closest( 'ul' ) == null ) { // catches undefined too
-			removeButton.disabled = true;
-		}
-
 		else if ( e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' ) {
 
 			// Add chooser
-			if ( e.target.closest( 'ul' ).id === 'widget-list' ) {
+			if ( e.target.closest( 'ul' ) === document.getElementById( 'widget-list' ) ) {
 				if ( e.target.className.includes( 'widgets-chooser-add' ) ) {
 					addWidget( chooser );
 					e.target.closest( '.widget-top' ).removeAttribute( 'open' );
@@ -571,7 +566,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					if ( responseText && responseText.length > 2 ) {
 						widget.querySelector( '.widget-content' ).innerHTML = responseText;
 
-						let title = widget.querySelector( 'input[id*="-title"]' ).value || '';
+						let title = widget.querySelector( 'input[id*="-title"]' ) ? widget.querySelector( 'input[id*="-title"]' ).value : '';
 						if ( title ) {
 							title = ': ' + title.replace( /<[^<>]+>/g, '' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
 						}
@@ -709,7 +704,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 
 			widget.id = widgetId.replace( '__i__', newMultiValue );
-			document.getElementById( widgetId ).querySelector( 'input.multi_number' ).value = newMultiValue;
+			widget.querySelector( 'input.multi_number' ).value = newMultiValue;
 		} else if ( 'single' === add ) {
 			widget.id = 'new-' + widgetId;
 			document.getElementById( widgetId ).style.display = 'none';
@@ -760,5 +755,4 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 		}
 	}
-
 } );

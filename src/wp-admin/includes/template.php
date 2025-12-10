@@ -715,15 +715,17 @@ function meta_form( $post = null ) {
 		 */
 		$limit = apply_filters( 'postmeta_form_limit', 30 );
 
+		// Query changed to be routed via $wpdb->posts.
+		// @since CP-2.6.0
 		$keys = $wpdb->get_col(
 			$wpdb->prepare(
 				"SELECT DISTINCT meta_key
-				FROM $wpdb->postmeta
-				WHERE meta_key NOT BETWEEN '_' AND '_z'
-				HAVING meta_key NOT LIKE %s
-				ORDER BY meta_key
+				FROM $wpdb->posts as posts
+				LEFT JOIN $wpdb->postmeta as meta ON posts.ID = meta.post_id
+				WHERE post_type = %s
+				AND SUBSTR(meta_key,1,1) != '_'
 				LIMIT %d",
-				$wpdb->esc_like( '_' ) . '%',
+				$post->post_type,
 				$limit
 			)
 		);
@@ -896,10 +898,10 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
 	}
 	?>
 
-<p>
-<a href="#edit_timestamp" class="save-timestamp hide-if-no-js button"><?php _e( 'OK' ); ?></a>
-<a href="#edit_timestamp" class="cancel-timestamp hide-if-no-js button-cancel"><?php _e( 'Cancel' ); ?></a>
-</p>
+<fieldset>
+	<button type="button" class="save-timestamp button"><?php _e( 'OK' ); ?></button>
+	<button type="button" class="cancel-timestamp button-cancel"><?php _e( 'Cancel' ); ?></button>
+</fieldset>
 	<?php
 }
 

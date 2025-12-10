@@ -126,6 +126,8 @@ class WP_Test_REST_Schema_Initialization extends WP_Test_REST_TestCase {
 			'/wp/v2/categories/(?P<id>[\\d]+)',
 			'/wp/v2/tags',
 			'/wp/v2/tags/(?P<id>[\\d]+)',
+			'/wp/v2/user_groups',
+			'/wp/v2/user_groups/(?P<id>[\d]+)',
 			'/wp/v2/users',
 			'/wp/v2/users/(?P<id>[\\d]+)',
 			'/wp/v2/users/me',

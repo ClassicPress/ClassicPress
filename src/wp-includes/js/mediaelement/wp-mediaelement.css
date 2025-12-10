@@ -14,6 +14,18 @@
 	background: #222;
 }
 
+.mejs__offscreen {
+	border: 0;
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important;
+}
+
 .mejs-time {
 	font-weight: normal;
 	word-wrap: normal;
@@ -45,6 +57,14 @@
 
 .mejs-overlay-loading {
 	background: transparent;
+}
+
+.mejs-overlay-play {
+	max-width: 100%;
+}
+
+.mejs-overlay-button {
+	padding: 0;
 }
 
 /* Override theme styles that may conflict with controls. */

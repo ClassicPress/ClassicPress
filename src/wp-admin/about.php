@@ -23,6 +23,26 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 			<?php printf( __( 'Version %s' ), classicpress_version() ); ?>
 			<?php classicpress_dev_version_info(); ?>
 		</p>
+		<?php
+		if ( is_multisite() ) {
+			$reinstall_url = network_admin_url( 'update-core.php' );
+		} else {
+			$reinstall_url = admin_url( 'update-core.php' );
+		}
+		if ( strpos( classicpress_version(), 'migration' ) ) {
+			?>
+			<p><strong>
+			<?php
+			printf(
+				/* translators: link to updates page */
+				__( 'You must visit the <a href="%s">Updates Page</a> and Press the Re-Install Now button to complete the migration process!' ),
+				esc_url( $reinstall_url )
+			);
+			?>
+			</strong></p>
+			<?php
+		}
+		?>
 		<p class="about-text">
 			<?php
 			printf(
@@ -43,7 +63,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 			<a href="privacy.php" class="nav-tab"><?php _e( 'Privacy' ); ?></a>
 		</h2>
 
-		<div class="changelog point-releases about-wrap-content">
+		<div class="about-wrap-content">
 
 			<?php if ( get_locale() !== 'en_US' ) { ?>
 				<p class="about-inline-notice notice-warning">
@@ -51,7 +71,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 					printf(
 						/* translators: link to learn more about translating ClassicPress */
 						__( 'Help us translate ClassicPress into your language! <a href="%s">Learn more</a>.' ),
-						'https://www.classicpress.net/translating-classicpress/'
+						'https://docs.classicpress.net/user-guides/translating-classicpress/'
 					);
 					?>
 				</p>
@@ -61,12 +81,11 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 
 			<p>
 				<?php
-				global $wp_version;
 				printf(
-					/* translators: link to ClassicPress site */
-					__( '<a href="%s"><strong>ClassicPress</strong></a> is a fork of the WordPress %s branch, including the battle-tested and proven classic editor interface using TinyMCE.' ),
+					/* translators: 1: link to ClassicPress site, 2: WP version */
+					__( '<a href="%1$s"><strong>ClassicPress</strong></a> is a fork of the WordPress %2$s branch, including the battle-tested and proven classic editor interface using TinyMCE.' ),
 					'https://www.classicpress.net',
-					$wp_version
+					'6.2.x'
 				);
 				?>
 			</p>
@@ -74,6 +93,15 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				_e(
 					'This has been a solid foundation for millions of sites for many years, and we believe it will also be an excellent foundation for the future.'
+				);
+				?>
+			</p>
+			<p>
+				<?php
+				printf(
+					/* translators: link to plugin page in the ClassicPress Directory */
+					__( 'With the <a href="%s"><strong>ClassicPress Directory Integration</strong></a> plugin you get access to plugins and themes that are built for ClassicPress. They will appear in the Plugins > Install CP Plugins or Appearance > Install CP Themes screen.' ),
+					'https://directory.classicpress.net/plugins/classicpress-directory-integration/'
 				);
 				?>
 			</p>
@@ -91,9 +119,9 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 			<p>
 				<?php
 				printf(
-					/* translators: 1: link to ClassicPress FAQs page, 2: link to ClassicPress support forum */
-					__( 'If you need help with something else, please see our <a href="%1$s"><strong>FAQs page</strong></a>. If your question is not answered there, you can make a new post on our <a href="%2$s"><strong>support forum</strong></a>.' ),
-					'https://www.classicpress.net/faq/',
+					/* translators: 1: link to ClassicPress docs, 2: link to ClassicPress support forum */
+					__( 'If you need help with something else, please see our <a href="%1$s"><strong>documentation</strong></a>. If your question is not answered there, you can make a new post on our <a href="%2$s"><strong>support forum</strong></a>.' ),
+					'https://docs.classicpress.net/',
 					'https://forums.classicpress.net/c/support/'
 				);
 				?>
@@ -108,13 +136,14 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 				);
 				?>
 			</p>
+			<hr>
 			<h3><?php _e( 'ClassicPress changelogs' ); ?></h3>
 			<h4><?php _e( 'ClassicPress 2.0.0' ); ?></h4>
 			<p>
 				<?php
 				printf(
-					/* translators: link to ClassicPress 1.0.0 changelog */
-					__( 'For a list of new features and other changes from WordPress %1$s, see the <a href="%2$s"><strong>ClassicPress 2.0.0 (Bella) release notes</strong></a>.' ),
+					/* translators: 1: WP version number, 2: link to ClassicPress 2.0.0 changelog */
+					__( 'ClassicPress 2.0.0 is a fork of the WordPress %1$s branch. See the <a href="%2$s"><strong>ClassicPress 2.0.0 (Bella) release notes</strong></a>.' ),
 					'6.2.x',
 					'https://forums.classicpress.net/t/classicpress-2-0-0-bella-release-notes/5099'
 				);
@@ -133,7 +162,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				printf(
 					/* translators: link to ClassicPress release announcements subforum */
-					__( 'The changes and new features included in recent versions of ClassicPress can be found in our <a href="%s"><strong>Release Notes subforum</strong></a>.' ),
+					__( 'The changes and new features included in current and previous versions of ClassicPress can be found in our <a href="%s"><strong>Release Notes subforum</strong></a>.' ),
 					'https://forums.classicpress.net/c/announcements/release-notes'
 				);
 				?>
@@ -142,8 +171,8 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 			<p>
 				<?php
 				printf(
-					/* translators: link to ClassicPress 1.0.0 changelog */
-					__( 'For a list of new features and other changes in WordPress %1$s, see the <a href="%2$s"><strong>ClassicPress 1.0.0 (Aurora) release notes</strong></a>.' ),
+					/* translators: 1: WP version number, 2: link to ClassicPress 1.0.0 changelog */
+					__( 'ClassicPress 1.0.0 is a fork of the WordPress %1$s branch. See the <a href="%2$s"><strong>ClassicPress 1.0.0 (Aurora) release notes</strong></a>.' ),
 					'4.9.x',
 					'https://forums.classicpress.net/t/classicpress-1-0-0-aurora-release-notes/910'
 				);
@@ -154,6 +183,26 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 				<?php
 				_e(
 					'This version of ClassicPress includes all changes from the following versions of WordPress:'
+				);
+				?>
+			</p>
+			<p>
+				<?php
+				printf(
+					/* translators: %s: WordPress version. */
+					__( '<strong>WordPress version %s</strong> addressed some security issues.' ),
+					'6.2.8'
+				);
+				?>
+				<?php
+				printf(
+					/* translators: %s: HelpHub URL. */
+					__( 'For more information, see <a href="%s">the release notes</a>.' ),
+					sprintf(
+						/* translators: %s: WordPress version. */
+						esc_url( __( 'https://wordpress.org/support/wordpress-version/version-%s/' ) ),
+						sanitize_title( '6.2.8' )
+					)
 				);
 				?>
 			</p>
