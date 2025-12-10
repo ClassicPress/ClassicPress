@@ -47,18 +47,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		function tryInit() {
 			if ( el.readyState >= 1 ) { // HAVE_METADATA
 				new MediaElementPlayer( el, settings );
+				return;
 			} else {
 				setTimeout( tryInit, 50 );
 			}
 		}
 
-		// Abort if there is no relevant element
-		if ( ! el || el.classList.contains( 'mejs__player' ) ) {
-			return;
-		}
-
-		// Avoid double-init: MediaElement wraps the media in a container
-		if ( el.closest( '.mejs__container' ) ) {
+		// Abort if no element, already initialized, or wrapped
+		if ( ! el || el.classList.contains( 'mejs__player' ) || el.closest( '.mejs__container' ) ) {
 			return;
 		}
 
@@ -69,11 +65,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		if ( el.tagName === 'AUDIO' ) {
 			new MediaElementPlayer( el, settings );
-		} else {
-			// Trigger video load and wait
-			el.preload = 'metadata';
-			el.load();
-			tryInit();
+			return;
 		}
+
+		// VIDEO: Avoid full-screen autoconversion
+		el.setAttribute( 'playsinline', '' );
+		el.preload = 'metadata';
+		el.load();
+		tryInit();
 	}
 } );
