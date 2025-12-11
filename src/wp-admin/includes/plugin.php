@@ -64,7 +64,7 @@
  *     @type string $TextDomain  Plugin textdomain.
  *     @type string $DomainPath  Plugin's relative directory path to .mo files.
  *     @type bool   $Network     Whether the plugin can only be activated network-wide.
- *     @type string $RequiresWP  Minimum required version of ClassicPress.
+ *     @type string $RequiresWP  Minimum required version of WordPress.
  *     @type string $RequiresCP  Minimum required version of ClassicPress.
  *     @type string $RequiresPHP Minimum required version of PHP.
  *     @type string $UpdateURI   ID of the plugin for update purposes, should be a URI.
@@ -126,6 +126,17 @@ function get_plugin_data( $plugin_file, $markup = true, $translate = true ) {
 		$plugin_data['AuthorName'] = $plugin_data['Author'];
 	}
 
+	/**
+	 * Filters the Plugin data returned by get_plugin_data().
+	 *
+	 * @since 2.7.0
+	 *
+	 * @param array  $plugin_data Plugin data.
+	 * @param string $plugin_file Absolute path to the main plugin file.
+	 * @param bool   $markup      If the returned data should have HTML markup applied.
+	 * @param bool   $translate   If the returned data should be translated. Default true.
+	 */
+	$plugin_data = apply_filters( 'get_plugin_data', $plugin_data, $plugin_file, $markup, $translate );
 	return $plugin_data;
 }
 
