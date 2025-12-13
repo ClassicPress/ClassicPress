@@ -285,26 +285,26 @@ do_action( 'customize_controls_head' );
 
 													<?php
 													// Display the active theme first
-													foreach( $installed_themes as $theme ) {error_log(print_r($theme, true));
-														if ( $theme['Name'] === $top_items['themes']['title'] ) {
+													foreach( $installed_themes as $theme ) {
+														if ( $theme->name === $top_items['themes']['title'] ) {
 															?>
 
-															<li id="customize-control-installed_theme_<?php esc_attr_e( sanitize_title( $theme['Name'] ) ); ?>" class="customize-control customize-control-theme">
+															<li id="customize-control-installed_theme_<?php esc_attr_e( $theme->get_stylesheet() ); ?>" class="customize-control customize-control-theme">
 																<div class="customize-control-notifications-container" style="display: none;">
 																	<ul></ul>
 																</div>
-																<div class="theme active" tabindex="0" aria-describedby="installed_themes-<?php esc_attr_e( sanitize_title( $theme['Name'] ) ); ?>-action">
+																<div class="theme active" tabindex="0" aria-describedby="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-action">
 																	<div class="theme-screenshot">
-																		<img data-src="<?php echo esc_url( home_url( '/wp-content/themes/' . sanitize_title( $theme['Name'] ) . '/screenshot.png' ) );?>" alt="" src="<?php echo esc_url( home_url( '/wp-content/themes/' . sanitize_title( $theme['Name'] ) . '/screenshot.png' ) ); ?>">
+																		<img data-src="<?php echo esc_url( $theme->get_screenshot() ); ?>" alt="" src="<?php echo esc_url( $theme->get_screenshot() ); ?>">
 																	</div>
-																	<span class="more-details theme-details" id="installed_themes-<?php esc_attr_e( sanitize_title( $theme['Name'] ) ); ?>-action" aria-label="<?php esc_attr_e( 'Details for theme:' ); ?> <?php esc_html_e( $theme['Name'] ); ?>"><?php esc_html_e( 'Theme Details' ); ?></span>
+																	<span class="more-details theme-details" id="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-action" aria-label="<?php esc_attr_e( 'Details for theme:' ); ?> <?php esc_html_e( $theme->name ); ?>"><?php esc_html_e( 'Theme Details' ); ?></span>
 																	<div class="theme-author"><?php esc_html_e( 'By' ); ?> <?php esc_html_e( $theme['Author'] ); ?></div>
 																	<div class="theme-id-container">
-																		<h3 class="theme-name" id="installed_themes-<?php esc_attr_e( sanitize_title( $theme['Name'] ) ); ?>-name">
-																			<span><?php esc_html_e( 'Previewing:' ); ?></span> <?php esc_html_e( $theme['Name'] ); ?>
+																		<h3 class="theme-name" id="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-name">
+																			<span><?php esc_html_e( 'Previewing:' ); ?></span> <?php esc_html_e( $theme->name ); ?>
 																		</h3>
 																		<div class="theme-actions">
-																			<button type="button" class="button button-primary customize-theme" aria-label="<?php esc_attr_e( 'Customize theme:' ); ?> <?php esc_html_e( $theme['Name'] ); ?>"><?php esc_html_e( 'Customize' ); ?></button>
+																			<button type="button" class="button button-primary customize-theme" aria-label="<?php esc_attr_e( 'Customize theme:' ); ?> <?php esc_html_e( $theme->name ); ?>"><?php esc_html_e( 'Customize' ); ?></button>
 																		</div>
 																	</div>
 																	<div class="notice notice-success notice-alt">
@@ -319,25 +319,25 @@ do_action( 'customize_controls_head' );
 							
 													// Now display the rest
 													foreach( $installed_themes as $theme ) {
-														if ( $theme['Name'] !== $top_items['themes']['title'] ) {
+														if ( $theme->name !== $top_items['themes']['title'] ) {
 															?>
 
-															<li id="customize-control-installed_theme_<?php esc_attr_e( sanitize_title( $theme['Name'] ) ); ?>" class="customize-control customize-control-theme">
+															<li id="customize-control-installed_theme_<?php esc_attr_e( $theme->get_stylesheet() ); ?>" class="customize-control customize-control-theme">
 																<div class="customize-control-notifications-container" style="display: none;">
 																	<ul></ul>
 																</div>
-																<div class="theme" tabindex="0" aria-describedby="installed_themes-<?php esc_attr_e( sanitize_title( $theme['Name'] ) ); ?>-action">
+																<div class="theme" tabindex="0" aria-describedby="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-action">
 																	<div class="theme-screenshot">
-																		<img data-src="<?php echo esc_url( home_url( '/wp-content/themes/' . sanitize_title( $theme['Name'] ) . '/screenshot.png' ) );?>" alt="" src="<?php echo esc_url( home_url( '/wp-content/themes/' . sanitize_title( $theme['Name'] ) . '/screenshot.png' ) ); ?>">
+																		<img data-src="<?php echo esc_url( $theme->get_screenshot() ); ?>" alt="" src="<?php echo esc_url( $theme->get_screenshot() ); ?>">
 																	</div>
-																	<span class="more-details theme-details" id="installed_themes-<?php esc_attr_e( sanitize_title( $theme['Name'] ) ); ?>-action" aria-label="<?php esc_attr_e( 'Details for theme:' ); ?> <?php esc_html_e( $theme['Name'] ); ?>"><?php esc_html_e( 'Theme Details' ); ?></span>
+																	<span class="more-details theme-details" id="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-action" aria-label="<?php esc_attr_e( 'Details for theme:' ); ?> <?php esc_html_e( $theme->name ); ?>"><?php esc_html_e( 'Theme Details' ); ?></span>
 																	<div class="theme-author"><?php esc_html_e( 'By' ); ?> <?php esc_html_e( $theme['Author'] ); ?></div>
 																	<div class="theme-id-container">
-																		<h3 class="theme-name" id="installed_themes-<?php esc_attr_e( sanitize_title( $theme['Name'] ) ); ?>-name">
-																			<span><?php esc_html_e( 'Previewing:' ); ?></span> <?php esc_html_e( $theme['Name'] ); ?>
+																		<h3 class="theme-name" id="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-name">
+																			<span><?php esc_html_e( 'Previewing:' ); ?></span> <?php esc_html_e( $theme->name ); ?>
 																		</h3>
 																		<div class="theme-actions">
-																			<button type="button" class="button button-primary customize-theme" aria-label="<?php esc_attr_e( 'Customize theme:' ); ?> <?php esc_html_e( $theme['Name'] ); ?>"><?php esc_html_e( 'Customize' ); ?></button>
+																			<button type="button" class="button button-primary customize-theme" aria-label="<?php esc_attr_e( 'Customize theme:' ); ?> <?php esc_html_e( $theme->name ); ?>"><?php esc_html_e( 'Customize' ); ?></button>
 																		</div>
 																	</div>
 																	<div class="notice notice-success notice-alt">
