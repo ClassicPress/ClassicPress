@@ -3858,6 +3858,69 @@ final class WP_Customize_Manager {
 	}
 
 	/**
+	 * Get all controls data (PHP equivalent of JS template `data` object).
+	 *
+	 * @since CP-2.7.0
+	 *
+	 * @return array Control data indexed by control ID.
+	 */
+	public function get_all_controls_data() {
+		$data = array();
+
+		foreach ( $this->controls() as $control ) {
+			if ( empty( $control->section ) ) {
+				continue;
+			}
+
+			$section_id = $control->section;
+
+			if ( ! isset( $data[ $section_id ] ) ) {
+				$data[ $section_id ] = array();
+			}
+
+			$setting_id = null;
+			$value      = null;
+
+			// Normalize settings to a single primary ID + value for PHP-only rendering.
+			if ( property_exists( $control, 'settings' ) && is_array( $control->settings ) ) {
+				$first = reset( $control->settings );
+				if ( $first instanceof WP_Customize_Setting ) {
+					$setting_id = $first->id;
+					$value      = $first->value();
+				} elseif ( is_string( $first ) ) {
+					$setting_id = $first;
+					$setting    = $this->get_setting( $setting_id );
+					if ( $setting ) {
+						$value = $setting->value();
+					}
+				}
+			} elseif ( property_exists( $control, 'setting' ) ) { // single setting
+				if ( $control->setting instanceof WP_Customize_Setting ) {
+					$setting_id = $control->setting->id;
+					$value      = $control->setting->value();
+				} elseif ( is_string( $control->setting ) ) {
+					$setting_id = $control->setting;
+					$setting    = $this->get_setting( $setting_id );
+					if ( $setting ) {
+						$value = $setting->value();
+					}
+				}
+			}
+
+			$data[ $section_id ][ $control->id ] = array(
+				'id'         => $control->id,
+				'label'      => $control->label,
+				'description'=> $control->description,
+				'type'       => $control->type,
+				'priority'   => $control->priority,
+				'setting_id' => $setting_id,
+				'value'      => $value,
+			);
+		}
+		return $data;
+	}
+
+	/**
 	 * Removes a customize setting.
 	 *
 	 * Note that removing the setting doesn't destroy the WP_Customize_Setting instance or remove its filters.
