@@ -11,7 +11,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		isReducedMotion = reducedMotionMediaQuery.matches,
 		childPanes = document.querySelectorAll( 'customize-pane-child' ),
 		isCollapsed = document.querySelector( '.wp-full-overlay' )?.classList.contains( 'collapsed' ),
-		form = document.querySelector( 'form' );
+		form = document.querySelector( 'form' ),
+		devicesWrapper = form.querySelector('.devices'),
+		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
+		previewFrame = document.getElementById( 'customize-preview' );
 
 	reducedMotionMediaQuery.addEventListener( 'change' , function handleReducedMotionChange( event ) {
 		isReducedMotion = event.matches;
@@ -49,7 +52,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Go down to the next level and back
 	document.addEventListener( 'click', function( e ) {
 		var id;
-		if ( ( e.target.tagName === 'H3' || e.target.tagName === 'BUTTON' ) && e.target.closest( 'ul' ).className === 'customize-pane-parent' ) {
+		if ( ( e.target.tagName === 'H3' || e.target.tagName === 'BUTTON' ) && e.target.closest( 'ul' ) && e.target.closest( 'ul' ).classList.contains( 'customize-pane-parent' ) ) {
 			e.preventDefault();
 			id = e.target.closest( 'li' ).id;
 			e.target.closest( 'ul' ).style.display = 'none';
@@ -60,7 +63,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.getElementById( 'customize-info' ).style.display = 'none';
 			document.getElementById( 'sub-' + id ).style.display = 'block';
 			document.querySelector( '#sub-' + id + ' button' ).focus();
-		} else if ( e.target.className === 'customize-section-back' || e.target.className === 'customize-panel-back' ) {
+		} else if ( e.target.classList && ( e.target.classList.contains === 'customize-section-back' || e.target.classList.contains === 'customize-panel-back' ) ) {
 			e.preventDefault();
 			id = e.target.closest( 'ul' ).id;
 			document.getElementById( id ).style.display = 'none';
@@ -156,6 +159,33 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		isCollapsed = ! isCollapsed;
 		setCollapsed( isCollapsed );
 	} );
+
+	/**
+	 * Enable different device views.
+	 */
+    buttons.forEach( function( button ) {
+        button.addEventListener( 'click', function () {
+            var device = button.getAttribute( 'data-device' );
+
+            // Update button active state + aria-pressed
+            buttons.forEach(function ( btn ) {
+                var isActive = ( btn === button );
+                btn.classList.toggle( 'active', isActive );
+                btn.setAttribute( 'aria-pressed', isActive ? 'true' : 'false' );
+            } );
+
+            if ( ! previewFrame ) {
+                return;
+            }
+
+            // Use a data attribute and drive CSS from it
+            previewFrame.setAttribute('data-device', device);
+        } );
+    } );
+
+
+
+
 
 	/**
 	 * Code for the Iris color picker.
@@ -270,3 +300,4 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			console.error( error );
 		} );
 	}
+} );
