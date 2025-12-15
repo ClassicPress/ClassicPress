@@ -88,10 +88,6 @@ body:not(.ready) #customize-save-button-wrapper .save {
 }
 
 #customize-sidebar-outer-content {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
 	visibility: hidden;
 	overflow-x: hidden;
 	overflow-y: auto;
@@ -102,7 +98,7 @@ body:not(.ready) #customize-save-button-wrapper .save {
 	transition: left .18s;
 	border-right: 1px solid #dcdcde;
 	border-left: 1px solid #dcdcde;
-	height: 100%;
+	height: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -113,6 +109,10 @@ body:not(.ready) #customize-save-button-wrapper .save {
 
 #customize-theme-controls .control-section-outer {
 	display: none !important;
+}
+
+#customize-theme-controls .accordion-section {
+	position: relative;
 }
 
 #customize-outer-theme-controls .accordion-section-content {
@@ -197,6 +197,7 @@ body.trashing #publish-settings {
 #customize-controls .wp-full-overlay-sidebar-content {
 	overflow-y: auto;
 	overflow-x: hidden;
+	position: static !important;
 }
 
 .outer-section-open #customize-controls .wp-full-overlay-sidebar-content {
@@ -426,6 +427,7 @@ body.trashing #publish-settings {
 	border-right: none;
 	border-bottom: none;
 	cursor: default;
+	position: static;
 }
 
 #customize-controls .customize-info.open .accordion-section-title:after,
@@ -634,11 +636,6 @@ body.trashing #publish-settings {
 }
 
 #customize-theme-controls .accordion-section-content {
-	position: absolute;
-	top: 0;
-	left: 100%;
-	width: 100%;
-	margin: 0;
 	padding: 12px;
 	box-sizing: border-box;
 }
@@ -668,23 +665,11 @@ body.trashing #publish-settings {
 
 #customize-info,
 #customize-theme-controls .customize-pane-parent {
-	position: relative;
 	visibility: visible;
 	height: auto;
 	max-height: none;
 	overflow: auto;
 	transform: none;
-}
-
-#customize-theme-controls .customize-pane-child {
-	position: absolute;
-	top: 0;
-	left: 0;
-	visibility: hidden;
-	height: 0;
-	max-height: none;
-	overflow: hidden;
-	transform: translateX(100%);
 }
 
 #customize-theme-controls .customize-pane-child.open,
@@ -823,7 +808,7 @@ h3.customize-section-title {
 	display: block;
 	float: left;
 	width: 48px;
-	height: 71px;
+	height: 78px;
 	padding: 0 24px 0 0;
 	margin: 0;
 	background: #fff;
@@ -1124,7 +1109,6 @@ p.customize-section-description {
 #customize-preview iframe {
 	width: 100%;
 	height: 100%;
-	position: absolute;
 }
 #customize-preview iframe + iframe {
 	visibility: hidden;
@@ -1179,7 +1163,6 @@ p.customize-section-description {
 }
 
 #customize-controls #customize-notifications-area {
-	position: absolute;
 	top: 46px;
 	width: 100%;
 	border-bottom: 1px solid #dcdcde;
@@ -1431,7 +1414,6 @@ p.customize-section-description {
 
 .customize-control-header .inner {
 	display: none;
-	position: absolute;
 	width: 100%;
 	color: #50575e;
 	white-space: nowrap;
@@ -1920,7 +1902,7 @@ p.customize-section-description {
 	color: #50575e;
 }
 
-.control-panel-themes .customize-themes-section-title {
+.customize-themes-section-title {
 	width: 100%;
 	background: #fff;
 	box-shadow: none;
@@ -1943,13 +1925,12 @@ p.customize-section-description {
 	border-top: 1px solid #dcdcde;
 }
 
-.control-panel-themes .theme-section {
+.theme-section {
 	margin: 0;
-	position: relative;
 }
 
-.control-panel-themes .customize-themes-section-title:focus,
-.control-panel-themes .customize-themes-section-title:hover {
+.customize-themes-section-title:focus,
+.customize-themes-section-title:hover {
 	border-left-color: #2271b1;
 	color: #2271b1;
 	background: #f6f7f7;
@@ -1968,7 +1949,7 @@ p.customize-section-description {
 	background: #fff;
 }
 
-.control-panel-themes .theme-section .customize-themes-section-title.selected:after {
+.theme-section .customize-themes-section-title.selected:after {
 	content: "\f147";
 	font: 16px/1 dashicons;
 	box-sizing: border-box;
@@ -1983,7 +1964,7 @@ p.customize-section-description {
 	color: #fff;
 }
 
-.control-panel-themes .customize-themes-section-title.selected {
+.customize-themes-section-title.selected {
 	color: #2271b1;
 }
 
@@ -2036,6 +2017,21 @@ p.customize-section-description {
 	clear: none;
 }
 
+.cp-color-result {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border: 1px solid #8c8f94;
+    vertical-align: middle;
+}
+.customize-control input.cp-color-picker {
+    width: 100px;
+    vertical-align: middle;
+    margin-left: -3px;
+    border-radius: 0;
+}
+
+
 /* 5 columns above 2100px */
 @media screen and (min-width: 2101px) {
 	.customize-control.customize-control-theme {
@@ -2073,7 +2069,7 @@ p.customize-section-description {
 }
 
 .wp-customizer .theme-browser .themes {
-	padding: 0 0 25px 25px;
+	padding: 13px 0 13px 13px;
 	transition: .18s margin-top linear;
 }
 
@@ -2104,7 +2100,7 @@ p.customize-section-description {
 
 @media screen and (min-width: 1670px) {
 	.customize-preview-header.themes-filter-bar {
-		width: 82%;
+		width: calc(82% + 1px);
 		right: 0;
 		left: initial;
 	}
@@ -2281,14 +2277,6 @@ p.customize-section-description {
 	right: 0;
 	bottom: 0;
 	z-index: 109;
-}
-
-/* Avoid a z-index war by resetting elements that should be under the overlay.
-   This is likely required because of the way that sections and panels are positioned. */
-.wp-customizer.modal-open #customize-header-actions,
-.wp-customizer.modal-open .control-panel-themes .filter-themes-count,
-.wp-customizer.modal-open .control-panel-themes .customize-themes-section-title.selected:after {
-	z-index: -1;
 }
 
 .wp-full-overlay.in-themes-panel.themes-panel-expanded #customize-controls .wp-full-overlay-sidebar-content {
