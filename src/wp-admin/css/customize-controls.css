@@ -190,10 +190,6 @@ body.trashing #publish-settings {
 	visibility: visible;
 }
 
-#customize-header-actions {
-	border-bottom: 1px solid #dcdcde;
-}
-
 #customize-controls .wp-full-overlay-sidebar-content {
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -787,12 +783,13 @@ h3.customize-section-title {
 	top: 0;
 	left: 0;
 	width: 45px;
-	height: 41px;
+	height: 40px;
 	padding: 0 2px 0 0;
 	background: #f0f0f1;
 	border: none;
 	border-top: 4px solid #f0f0f1;
 	border-right: 1px solid #dcdcde;
+	border-bottom: 1px solid #dcdcde;
 	color: #3c434a;
 	text-align: left;
 	cursor: pointer;
@@ -807,7 +804,7 @@ h3.customize-section-title {
 .customize-section-back {
 	display: block;
 	float: left;
-	width: 48px;
+	width: 49px;
 	height: 78px;
 	padding: 0 24px 0 0;
 	margin: 0;
@@ -1114,11 +1111,32 @@ p.customize-section-description {
 	visibility: hidden;
 }
 
+/*
+ * Flexbox
+ */
+.wp-full-overlay {
+    display: flex;
+}
+
 .wp-full-overlay-sidebar {
 	background: #f0f0f1;
 	border-right: 1px solid #dcdcde;
+	flex: 0 0 18%; /* default width */
 }
 
+.wp-full-overlay-sidebar.collapsed {
+    flex-basis: 0;
+}
+
+.wp-full-overlay-main {
+    flex: 1 1 auto;
+}
+
+/* Sidebar fully collapsed */
+.wp-full-overlay.collapsed .wp-full-overlay-sidebar {
+    width: 0;
+    margin-left: -320px;
+}
 
 /**
  * Notifications
@@ -2069,7 +2087,7 @@ p.customize-section-description {
 }
 
 .wp-customizer .theme-browser .themes {
-	padding: 13px 0 13px 13px;
+	padding: 13px 0;
 	transition: .18s margin-top linear;
 }
 
@@ -2106,6 +2124,12 @@ p.customize-section-description {
 	}
 }
 
+@media screen and (min-width: 1020px) {
+	.wp-customizer .theme-browser .themes {
+		padding: 13px;
+	}
+}
+
 .themes-filter-bar .themes-filter-container {
 	margin: 0;
 	padding: 0;
@@ -2137,7 +2161,6 @@ p.customize-section-description {
 		top: 46px;
 	}
 	.wp-customizer .theme-browser .themes {
-		padding: 0 0 25px 25px;
 		overflow: hidden;
 	}
 
