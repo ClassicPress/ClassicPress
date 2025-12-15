@@ -447,169 +447,234 @@ wp_print_scripts();
 										$field_name  = $control_data['setting_id'] ?: $control_data['id'];
 										$field_value = $control_data['value'];
 										$type        = $control_data['type'];
+										?>
 
-										echo '<li id="customize-control-' . esc_attr( $field_name ) . '" class="customize-control customize-control-text">';
-										echo '<div class="customize-control customize-control-' . esc_attr( $type ) . '">';
+										<li id="customize-control-<?php esc_attr_e( $field_name ); ?>" class="customize-control customize-control-text">
+											<div class="customize-control customize-control-<?php esc_attr_e( $type ); ?>">
 
-										if ( 'site_icon' !== $type ) {
-											echo '<label class="customize-control-title" for="' . esc_attr( $field_name ) . '">';
-											echo esc_html( $control_data['label'] ?: $control_data['id'] );
-											echo '</label>';
-										}
+												<?php
+												if ( 'site_icon' !== $type ) {
+													?>
 
-										// Very simple type-to-input mapping. error_log(print_r($control_data, true));
-										if ( in_array( $type, [ 'text', 'url', 'email', 'number' ], true ) ) {
-											echo '<input type="text" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( $field_value ) . '" class="regular-text">';
-										} elseif ( 'checkbox' === $type ) {
-											$checked = $field_value ? ' checked="checked"' : '';
-											echo '<input type="checkbox" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="1"' . $checked . ' style="margin: 0;">';
-										} elseif ( 'textarea' === $type ) {
-											echo '<textarea id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" rows="4" class="large-text">' . esc_textarea( (string) $field_value ) . '</textarea>';
-										} elseif ( 'color' === $type ) {
-											$raw_value = (string) $field_value;
+													<label class="customize-control-title" for="<?php esc_attr_e( $field_name ); ?>">
+														<?php esc_html_e( $control_data['label'] ?: $control_data['id'] ); ?>
+													</label>
+													
+													<?php
+												}
 
-											// If it looks like a bare 3/6-digit hex, prefix with #.
-											if ( preg_match( '/^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/', $raw_value ) ) {
-												$color_value = '#' . $raw_value;
-											} else {
-												$color_value = $raw_value;
-											}
-											?>
+												// Very simple type-to-input mapping. error_log(print_r($control_data, true));
+												if ( in_array( $type, [ 'text', 'url', 'email', 'number' ], true ) ) {
+													?>
 
-											<div class="customize-control-content">
-												<input type="text" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" class="cp-color-picker" value="<?php esc_attr_e( $color_value ); ?>" data-default-color="<?php esc_attr_e( $color_value ); ?>" placeholder="<?php esc_attr_e( 'Select Color' ); ?>">
+													<input type="text" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="<?php esc_attr_e( $field_value ); ?>" class="regular-text">
+
+													<?php
+												} elseif ( 'checkbox' === $type ) {
+													$checked = $field_value ? ' checked="checked"' : '';
+													?>
+
+													<input type="checkbox" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="1"' . $checked . ' style="margin: 0;">
+
+													<?php
+												} elseif ( 'textarea' === $type ) {
+													?>
+
+													<textarea id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" rows="4" class="large-text"><?php echo esc_textarea( (string) $field_value ); ?></textarea>
+
+													<?php
+												} elseif ( 'color' === $type ) {
+													$raw_value = (string) $field_value;
+
+													// If it looks like a bare 3/6-digit hex, prefix with #.
+													if ( preg_match( '/^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/', $raw_value ) ) {
+														$color_value = '#' . $raw_value;
+													} else {
+														$color_value = $raw_value;
+													}
+													?>
+
+													<div class="customize-control-content">
+														<input type="text" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" class="cp-color-picker" value="<?php esc_attr_e( $color_value ); ?>" data-default-color="<?php esc_attr_e( $color_value ); ?>" placeholder="<?php esc_attr_e( 'Select Color' ); ?>">
+													</div>
+
+													<?php
+												} elseif ( 'site_icon' === $type ) {
+													?>
+
+													<span class="customize-control-title"><?php esc_html_e( $control_data['label'] ); ?></span>
+													<div class="customize-control-notifications-container" style="display: none;">
+														<ul></ul>
+													</div>
+
+													<?php
+												} elseif ( 'cropped_image' === $type ) {
+													?>
+
+													<div class="attachment-media-view">
+														<div class="site-icon-preview wp-clearfix customize-control-site_icon">
+															<div class="favicon-preview">
+																<img src="<?php echo esc_url( admin_url( '/images/browser.png' ) ); ?>" class="browser-preview" alt="">
+																<div class="favicon">
+
+																	<?php
+																	if ( get_site_icon_url() !== '' ) {
+																		?>
+
+																		<img src="<?php echo esc_url( get_site_icon_url() ); ?>" alt="<?php esc_attr_e( 'Preview as a browser icon' ); ?>">';
+
+																		<?php
+																	}
+																	?>
+
+																</div>
+																<span class="browser-title" aria-hidden="true"><?php esc_html_e( get_bloginfo( 'name' ) ); ?></span>
+															</div>
+
+															<?php
+															if ( get_site_icon_url() !== '' ) {
+																echo '<img class="app-icon-preview" src="' . esc_url( get_site_icon_url() ) . '" alt="' . esc_attr( 'Preview as an app icon' ) . '">';
+															}
+															?>
+
+														</div>
+														<div class="actions">	
+															<button type="button" class="button remove-button"><?php esc_html_e( 'Remove' ); ?></button>
+															<button type="button" class="button upload-button"><?php esc_html_e( 'Change image' ); ?></button>
+														</div>
+													</div>
+
+													<?php
+												} else {
+													// Fallback generic input.
+													?>
+
+													<input type="text" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="<?php esc_attr_e( (string) $field_value ); ?>" class="regular-text">
+
+													<?php
+												}
+
+												if ( ! empty( $control_data['description'] ) ) {
+													?>
+
+													<div class="description customize-control-description"><?php echo wp_kses_post( $control_data['description'] ); ?></div>
+
+													<?php
+												}
+												?>
+
 											</div>
+										</li>
 
-											<?php
-										} elseif ( 'site_icon' === $type ) {
-											echo '<span class="customize-control-title">' . esc_html( $control_data['label'] ) . '</span>';
-											echo '<div class="customize-control-notifications-container" style="display: none;">';
-											echo '<ul></ul>';
-											echo '</div>';
-										} elseif ( 'cropped_image' === $type ) {
-											echo '<div class="attachment-media-view">';
-											echo '<div class="site-icon-preview wp-clearfix customize-control-site_icon">';
-											echo '<div class="favicon-preview">';
-											echo '<img src="' . esc_url( admin_url( '/images/browser.png' ) ). '" class="browser-preview" alt="">';
-											echo '<div class="favicon">';
-
-											if ( get_site_icon_url() !== '' ) {
-												echo '<img src="' . esc_url( get_site_icon_url() ) . '" alt="' . esc_attr( 'Preview as a browser icon' ) . '">';
-											}
-
-											echo '</div>';
-											echo '<span class="browser-title" aria-hidden="true">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
-											echo '</div>';
-
-											if ( get_site_icon_url() !== '' ) {
-												echo '<img class="app-icon-preview" src="' . esc_url( get_site_icon_url() ) . '" alt="' . esc_attr( 'Preview as an app icon' ) . '">';
-											}
-
-											echo '</div>';
-											echo '<div class="actions">';
-											echo '<button type="button" class="button remove-button">' . esc_html( 'Remove' ) . '</button>';
-											echo '<button type="button" class="button upload-button">' . esc_html( 'Change image' ) . '</button>';
-											echo '</div>';
-											echo '</div>';
-										} else {
-											// Fallback generic input.
-											echo '<input type="text" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( (string) $field_value ) . '" class="regular-text">';
-										}
-
-										if ( ! empty( $control_data['description'] ) ) {
-											echo '<div class="description customize-control-description">' . wp_kses_post( $control_data['description'] ) . '</div>';
-										}
-										echo '</li>';
+										<?php
 									}
 								}
 								?>
 
 							</ul>
-						<?php
+
+							<?php
 						} else {
 							// For a panel, list child sections.
 							foreach ( $sections as $section ) {
 								if ( $section->panel === $item['id'] ) {
 									?>
 
-											<ul id="sub-accordion-panel-<?php esc_attr_e( $section->panel ); ?>" class="customize-pane-child accordion-section-content accordion-section control-section control-section-default" style="display: none;">
-												<li class="customize-section-description-container section-meta no-drag">
-													<div class="customize-section-title">
-														<button class="customize-section-back" tabindex="0">
-															<span class="screen-reader-text"><?php esc_html_e( 'Back' ); ?></span>
-														</button>
-														<h3>
-															<span class="customize-action"><?php esc_html_e( 'Customizing' ); ?></span> <?php esc_html_e( $item['title'] ); ?>
-														</h3>
-														<div class="customize-control-notifications-container"></div>
-													</div>
-												</li>
-													<span class="customize-section-label"><?php esc_html( $section->title ); ?></span>
-
-													<?php
-													// Controls inside this section.
-													$sid = $section->id;
-													if ( isset( $cp_controls_by_section[ $sid ] ) ) {
-														foreach ( $cp_controls_by_section[ $sid ] as $control_data ) {
-															$field_name  = $control_data['setting_id'] ?: $control_data['id'];
-															$field_value = $control_data['value'];
-															$type        = $control_data['type'];
-
-															echo '<div class="customize-control customize-control-' . esc_attr( $type ) . '">';
-															echo '<label class="customize-control-title" for="' . esc_attr( $field_name ) . '">';
-															echo esc_html( $control_data['label'] ?: $control_data['id'] );
-															echo '</label>';
-
-															// Very simple type-to-input mapping.
-															if ( in_array( $type, [ 'text', 'url', 'email', 'number' ], true ) ) {
-																echo '<input type="text" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( $field_value ) . '" class="regular-text">';
-															} elseif ( 'checkbox' === $type ) {
-																$checked = $field_value ? ' checked="checked"' : '';
-																echo '<input type="checkbox" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="1"' . $checked . '>';
-															} elseif ( 'textarea' === $type ) {
-																echo '<textarea id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" rows="4" class="large-text">' . esc_textarea( (string) $field_value ) . '</textarea>';
-															} elseif ( 'color' === $type ) {
-																$raw_value = (string) $field_value;
-
-																// If it looks like a bare 3/6-digit hex, prefix with #.
-																if ( preg_match( '/^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/', $raw_value ) ) {
-																	$color_value = '#' . $raw_value;
-																} else {
-																	$color_value = $raw_value;
-																}
-																echo '<input type="color" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( $color_value ) . '">';
-															} else {
-																// Fallback generic input.
-																//echo '<input type="text" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( (string) $field_value ) . '" class="regular-text" />';
-															}
-
-															if ( ! empty( $control_data['description'] ) ) {
-																echo '<div class="description">' . wp_kses_post( $control_data['description'] ) . '</div>';
-															}
-
-															echo '</div>';
-														}
-													}
-													?>
-												</li>
-											</ul>
+									<ul id="sub-accordion-panel-<?php esc_attr_e( $section->panel ); ?>" class="customize-pane-child accordion-section-content accordion-section control-section control-section-default" style="display: none;">
+										<li class="customize-section-description-container section-meta no-drag">
+											<div class="customize-section-title">
+												<button class="customize-section-back" tabindex="0">
+													<span class="screen-reader-text"><?php esc_html_e( 'Back' ); ?></span>
+												</button>
+												<h3>
+													<span class="customize-action"><?php esc_html_e( 'Customizing' ); ?></span> <?php esc_html_e( $item['title'] ); ?>
+												</h3>
+												<div class="customize-control-notifications-container"></div>
+											</div>
+										</li>
+										<span class="customize-section-label"><?php esc_html( $section->title ); ?></span>
 
 										<?php
+										// Controls inside this section.
+										if ( isset( $cp_controls_by_section[ $section->id ] ) ) {
+											foreach ( $cp_controls_by_section[ $section->id ] as $control_data ) {
+												$field_name  = $control_data['setting_id'] ?: $control_data['id'];
+												$field_value = $control_data['value'];
+												$type        = $control_data['type'];
+												?>
+
+												<li class="customize-control customize-control-<?php esc_attr_e( $type ); ?>">
+													<label class="customize-control-title" for="<?php esc_attr_e( $field_name ); ?>">
+														<?php esc_html_e( $control_data['label'] ?: $control_data['id'] ); ?>
+													</label>
+
+													<?php
+													// Very simple type-to-input mapping.
+													if ( in_array( $type, [ 'text', 'url', 'email', 'number' ], true ) ) {
+														?>
+
+														<input type="text" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="<?php esc_attr_e( $field_value ); ?>" class="regular-text">
+
+														<?php
+													} elseif ( 'checkbox' === $type ) {
+														$checked = $field_value ? ' checked="checked"' : '';
+														?>
+
+														<input type="checkbox" id="' . esc_attr( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="1"' . $checked . '>
+
+														<?php
+													} elseif ( 'textarea' === $type ) {
+														?>
+
+														<textarea id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" rows="4" class="large-text"><?php echo esc_textarea( (string) $field_value ); ?></textarea>
+
+														<?php
+													} elseif ( 'color' === $type ) {
+														$raw_value = (string) $field_value;
+
+														// If it looks like a bare 3/6-digit hex, prefix with #.
+														if ( preg_match( '/^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/', $raw_value ) ) {
+															$color_value = '#' . $raw_value;
+														} else {
+															$color_value = $raw_value;
+														}
+														?>
+
+														<input type="color" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="<?php esc_attr_e( $color_value ); ?>">
+
+														<?php
+													} else {
+														// Fallback generic input.
+														?>
+
+														<input type="text" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="<?php esc_attr_e( (string) $field_value ); ?>" class="regular-text">
+
+														<?php
+													}
+													if ( ! empty( $control_data['description'] ) ) {
+														?>
+
+														<div class="description"><?php wp_kses_post( $control_data['description'] ); ?></div>
+
+														<?php
+													}
+													?>
+
+												</li>
+
+												<?php
+											}
 										}
-									}
+										?>
+
+									</ul>
+
+									<?php
 								}
+							}
+						}
 					}
 					?>
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
 					
 				</div>
 			</div>
