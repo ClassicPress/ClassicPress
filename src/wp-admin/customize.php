@@ -722,7 +722,7 @@ wp_print_scripts();
 		<input type="hidden" name="customize_form_stage" value="php-first-paint">
 	</form><!-- /#customize-controls -->
 
-	<div id="customize-preview" class="wp-full-overlay-main iframe-ready" style="position: static;width: 82%;">
+	<div id="customize-preview" class="wp-full-overlay-main iframe-ready">
 		<iframe title="<?php esc_attr_e( 'Site Preview' ); ?>" name="customize-preview-0" onmousewheel="" src="<?php echo esc_url( $preview_url ); ?>"></iframe>
 	</div>
 
