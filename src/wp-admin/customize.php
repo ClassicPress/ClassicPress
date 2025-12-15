@@ -150,7 +150,7 @@ wp_print_scripts();
 <dialog class="wp-full-overlay preview-desktop" aria-labelledby="customizer-modal-title" style="display: flex;justify-content: space-between;min-width: 100%;position: static;margin: -1.3em;" open>
 
 	<h2 id="customizer-modal-title" class="screen-reader-text"><?php esc_html_e( 'Customizing: ' .  get_bloginfo( 'name' ) ); ?></h2>
-	<form id="customize-controls" class="wrap wp-full-overlay-sidebar expanded" style="position: static;width: 18%;">
+	<form id="customize-controls" class="wrap wp-full-overlay-sidebar" style="position: static;width: 18%;">
 		<div id="customize-header-actions" class="wp-full-overlay-header" style="position: static;">
 
 			<?php
@@ -241,7 +241,7 @@ wp_print_scripts();
 				<div id="customize-theme-controls">
 					<ul class="customize-pane-parent">
 						<li id="accordion-section-themes" class="accordion-section control-panel-themes" aria-owns="sub-accordion-section-themes">
-							<h3 class="accordion-section-title">
+							<h3 class="accordion-section-title" tabindex="0">
 								<span class="customize-action"><?php esc_html_e( 'Active theme' ); ?></span>
 								<?php esc_html_e( $top_items['themes']['title'] ); ?>
 								<button type="button" class="button change-theme" aria-label="Change theme"><?php esc_html_e( 'Change' ); ?></button>
@@ -312,10 +312,10 @@ wp_print_scripts();
 							<button type="button" class="customize-themes-section-title themes-section-wporg_themes" aria-expanded="false"><?php esc_html_e( 'WordPress.org themes' ); ?></button>
 						</li>
 						<li class="customize-themes-full-container-container">
-							<dialog class="customize-themes-full-container animate" style="top: 3.5em; right: 0;left: max(calc(18% - 1px), 300px);border: 0;" open>
+							<dialog class="customize-themes-full-container animate" style="top: 3.5em; right: 0;left: max(calc(18% - 1px), 300px);border: 0;height: 100vh;min-width: calc(100% - max(calc(18% - 1px), 300px));" open>
 								<div class="customize-themes-notifications"></div>
 								<div class="customize-themes-section themes-section-installed_themes control-section-content themes-php current-section">											
-									<div class="theme-browser rendered">
+									<div class="theme-browser rendered local">
 										<div class="customize-preview-header themes-filter-bar">
 											<button type="button" class="button button-primary customize-section-back customize-themes-mobile-back" style="display: none;"><?php esc_html_e( 'Go to theme sources' ); ?></button>
 											<div class="themes-filter-container">
@@ -421,6 +421,7 @@ wp_print_scripts();
 					</ul>
 					
 					<?php
+					$rendered_controls = array();
 					foreach ( $top_items as $item ) {
 						if ( $item['id'] === 'themes' ) { // Don't repeat the active theme
 							continue;
@@ -444,6 +445,13 @@ wp_print_scripts();
 								<?php
 								if ( isset( $cp_controls_by_section[ $item['id'] ] ) ) {
 									foreach ( $cp_controls_by_section[ $item['id'] ] as $control_data ) {
+
+										// Skip if this control has already been rendered for this section.
+										if ( isset( $rendered_controls[ $item['id'] ][ $control_data['id'] ] ) ) {
+											continue;
+										}
+										$rendered_controls[ $item['id'] ][ $control_data['id'] ] = true;
+
 										$field_name  = $control_data['setting_id'] ?: $control_data['id'];
 										$field_value = $control_data['value'];
 										$type        = $control_data['type'];
@@ -464,7 +472,7 @@ wp_print_scripts();
 												}
 
 												// Very simple type-to-input mapping. error_log(print_r($control_data, true));
-												if ( in_array( $type, [ 'text', 'url', 'email', 'number' ], true ) ) {
+												if ( in_array( $type, array( 'text', 'url', 'email', 'number' ), true ) ) {
 													?>
 
 													<input type="text" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="<?php esc_attr_e( $field_value ); ?>" class="regular-text">
@@ -598,6 +606,13 @@ wp_print_scripts();
 										// Controls inside this section.
 										if ( isset( $cp_controls_by_section[ $section->id ] ) ) {
 											foreach ( $cp_controls_by_section[ $section->id ] as $control_data ) {
+
+												// Skip if this control has already been rendered for this section.
+												if ( isset( $rendered_controls[ $item['id'] ][ $control_data['id'] ] ) ) {
+													continue;
+												}
+												$rendered_controls[ $item['id'] ][ $control_data['id'] ] = true;
+
 												$field_name  = $control_data['setting_id'] ?: $control_data['id'];
 												$field_value = $control_data['value'];
 												$type        = $control_data['type'];
@@ -610,7 +625,7 @@ wp_print_scripts();
 
 													<?php
 													// Very simple type-to-input mapping.
-													if ( in_array( $type, [ 'text', 'url', 'email', 'number' ], true ) ) {
+													if ( in_array( $type, array( 'text', 'url', 'email', 'number' ), true ) ) {
 														?>
 
 														<input type="text" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="<?php esc_attr_e( $field_value ); ?>" class="regular-text">
@@ -645,11 +660,11 @@ wp_print_scripts();
 														<?php
 													} else {
 														// Fallback generic input.
-														?>
+														/* ?>
 
 														<input type="text" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="<?php esc_attr_e( (string) $field_value ); ?>" class="regular-text">
 
-														<?php
+														<?php */
 													}
 													if ( ! empty( $control_data['description'] ) ) {
 														?>
@@ -681,7 +696,7 @@ wp_print_scripts();
 		</div>
 
 		<div id="customize-footer-actions" class="wp-full-overlay-footer">
-			<button type="button" class="collapse-sidebar button" aria-expanded="true" aria-label="Hide Controls">
+			<button type="button" class="collapse-sidebar button" aria-expanded="true" aria-label="<?php esc_html_e( 'Hide Controls' ); ?>">
 				<span class="collapse-sidebar-arrow"></span>
 				<span class="collapse-sidebar-label"><?php esc_html_e( 'Hide Controls' ); ?></span>
 			</button>
