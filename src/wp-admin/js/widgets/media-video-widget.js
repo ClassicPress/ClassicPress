@@ -1212,7 +1212,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					addItemToWidget( widgetEl );
 
 				// Delete an attachment
-				} else if ( e.target.className.includes( 'delete-attachment' ) ) {
+				} else if ( e.target.className && e.target.className.includes( 'delete-attachment' ) ) {
 					if ( widgetEl.querySelector( '[data-property="attachment_id"]' ) ) {
 						if ( dialog.querySelector( '.widget-modal-grid .selected' ).dataset.id != widgetEl.querySelector( '[data-property="attachment_id"]' ).value ) {
 							if ( window.confirm( VIDEO_WIDGET.confirm_delete ) ) {
@@ -1222,7 +1222,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 
 				// Copy URL
-				} else if ( e.target.className.includes( 'copy-attachment-url' ) ) {
+				} else if ( e.target.className && e.target.className.includes( 'copy-attachment-url' ) ) {
 					copyToClipboard( e.target );
 				}
 			}
