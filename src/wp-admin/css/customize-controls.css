@@ -1128,10 +1128,6 @@ p.customize-section-description {
     flex-basis: 0;
 }
 
-.wp-full-overlay-main {
-    flex: 1 1 auto;
-}
-
 /* Sidebar fully collapsed */
 .wp-full-overlay.collapsed .wp-full-overlay-sidebar {
     width: 0;
@@ -2557,11 +2553,6 @@ body.cheatin p {
  * New widget and Add-menu-items modes and panels
  */
 
-.wp-full-overlay-main {
-	right: auto; /* this overrides a right: 0; which causes the preview to resize, I'd rather have it go off screen at the normal size. */
-	width: 100%;
-}
-
 body.adding-widget .add-new-widget,
 body.adding-widget .add-new-widget:hover,
 .adding-menu-items .add-new-menu-item,
@@ -3012,4 +3003,27 @@ body.adding-widget .add-new-widget:before,
 	body.wp-customizer.outer-section-open .wp-full-overlay.expanded #customize-sidebar-outer-content {
 		left: 0;
 	}
+}
+
+#customize-preview,
+#customize-preview[data-device="desktop"] {
+	position: static;
+    width: 82%;
+    height: 100%;
+    border: 0;
+    flex: 1 1 auto;
+}
+
+/* Tablet – e.g. 720x1080 viewport */
+#customize-preview[data-device="tablet"] {
+    width: 720px;
+    margin: auto;
+    flex: 0 0 auto;
+}
+
+/* Mobile – e.g. 320x480 viewport */
+#customize-preview[data-device="mobile"] {
+    width: 320px;
+    margin: auto;
+    flex: 0 0 auto;
 }
