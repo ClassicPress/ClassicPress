@@ -93,9 +93,6 @@ wp_enqueue_style( 'customize-controls' );
  */
 do_action( 'customize_controls_enqueue_scripts' );
 
-// Let's roll.
-header( 'Content-Type: ' . get_option( 'html_type' ) . '; charset=' . get_option( 'blog_charset' ) );
-
 wp_user_settings();
 _wp_admin_html_begin();
 
@@ -119,11 +116,26 @@ $admin_title = sprintf( $wp_customize->get_document_title_template(), __( 'Loadi
 
 ?>
 <title><?php echo esc_html( $admin_title ); ?></title>
-<?php
 
-do_action( 'admin_enqueue_scripts', 'customize.php' );
-do_action( 'admin_print_styles', 'customize.php' );
-do_action( 'admin_head', 'customize.php' );
+<script>
+var ajaxurl = <?php echo wp_json_encode( admin_url( 'admin-ajax.php', 'relative' ) ); ?>,
+	pagenow = 'customize';
+</script>
+
+<?php
+/**
+ * Fires when Customizer control styles are printed.
+ *
+ * @since 3.4.0
+ */
+do_action( 'customize_controls_print_styles' );
+
+/**
+ * Fires when Customizer control scripts are printed.
+ *
+ * @since 3.4.0
+ */
+do_action( 'customize_controls_print_scripts' );
 
 /**
  * Fires in head section of Customizer controls.
@@ -131,13 +143,15 @@ do_action( 'admin_head', 'customize.php' );
  * @since 5.5.0
  */
 do_action( 'customize_controls_head' );
+wp_print_scripts();
 ?>
-</head>
-<body class="<?php echo esc_attr( $body_class ); ?>">
-<div class="wp-full-overlay expanded preview-desktop">
+<body class="<?php esc_attr_e( $body_class ); ?>">
+<h1 class="screen-reader-text"><?php esc_html_e( 'Customizer' ); ?></h1>
+<dialog class="wp-full-overlay preview-desktop" aria-labelledby="customizer-modal-title" style="display: flex;justify-content: space-between;min-width: 100%;position: static;margin: -1.3em;" open>
 
-	<form id="customize-controls" class="wrap wp-full-overlay-sidebar">
-		<div id="customize-header-actions" class="wp-full-overlay-header">
+	<h2 id="customizer-modal-title" class="screen-reader-text"><?php esc_html_e( 'Customizing: ' .  get_bloginfo( 'name' ) ); ?></h2>
+	<form id="customize-controls" class="wrap wp-full-overlay-sidebar expanded" style="position: static;width: 18%;">
+		<div id="customize-header-actions" class="wp-full-overlay-header" style="position: static;">
 
 			<?php
 			$compatible_wp  = is_wp_version_compatible( $wp_customize->theme()->get( 'RequiresWP' ) );
@@ -188,7 +202,7 @@ do_action( 'customize_controls_head' );
 			</div>
 		</div><!-- #customize-sidebar-outer-content -->
 
-		<div id="widgets-right" class="wp-clearfix"><!-- For Widget Customizer, many widgets try to look for instances under div#widgets-right, so we have to add that ID to a container div in the Customizer for compat -->
+		<div id="widgets-right" class="wp-clearfix"  style="overflow-y: scroll;max-height: calc(100vh - 90px);"><!-- For Widget Customizer, many widgets try to look for instances under div#widgets-right, so we have to add that ID to a container div in the Customizer for compat -->
 			<div id="customize-notifications-area" class="customize-control-notifications-container">
 				<ul></ul>
 			</div>
@@ -226,147 +240,15 @@ do_action( 'customize_controls_head' );
 
 				<div id="customize-theme-controls">
 					<ul class="customize-pane-parent">
-						<li id="accordion-section-themes" class="accordion-section control-panel-themes" aria-owns="sub-accordion-section-themes" style="">
+						<li id="accordion-section-themes" class="accordion-section control-panel-themes" aria-owns="sub-accordion-section-themes">
 							<h3 class="accordion-section-title">
 								<span class="customize-action"><?php esc_html_e( 'Active theme' ); ?></span>
 								<?php esc_html_e( $top_items['themes']['title'] ); ?>
 								<button type="button" class="button change-theme" aria-label="Change theme"><?php esc_html_e( 'Change' ); ?></button>
 							</h3>
-							<ul id="sub-accordion-section-themes">
-								<li class="panel-meta customize-info accordion-section ">
-									<button class="customize-panel-back" tabindex="0" type="button">
-										<span class="screen-reader-text"><?php esc_html_e( 'Back' ); ?></span>
-									</button>
-									<div class="accordion-section-title">
-										<span class="preview-notice"><?php esc_html_e( 'You are browsing' ); ?> <strong class="panel-title"><?php esc_html_e( 'Themes' ); ?></strong></span>
-										<button class="customize-help-toggle dashicons dashicons-editor-help" type="button" aria-expanded="false"><span class="screen-reader-text"><?php esc_html_e( 'Help' ); ?></span></button>
-									</div>
-									<div class="description customize-panel-description">
-										<p><?php esc_html_e( 'Looking for a theme? You can search or browse the WordPress.org theme directory, install and preview themes, then activate them right here.' ); ?></p>
-										<p><?php esc_html_e( 'While previewing a new theme, you can continue to tailor things like widgets and menus, and explore theme-specific options.' ); ?></p>
-									</div>
-									<div class="customize-control-notifications-container" style="display: none;">
-										<ul></ul>
-									</div>
-								</li>
-								<li id="accordion-section-installed_themes" class="theme-section control-subsection">
-									<button type="button" class="customize-themes-section-title themes-section-installed_themes selected" aria-expanded="true"><?php esc_html_e( 'Installed themes' ); ?></button>
-								</li>
-								<li id="accordion-section-wporg_themes" class="theme-section control-subsection">
-									<button type="button" class="customize-themes-section-title themes-section-wporg_themes" aria-expanded="false"><?php esc_html_e( 'WordPress.org themes' ); ?></button>
-								</li>
-								<li class="customize-themes-full-container-container">
-									<div class="customize-themes-full-container animate" style="display:none;">
-										<div class="customize-themes-notifications"></div>
-										<div class="customize-themes-section themes-section-installed_themes control-section-content themes-php current-section">											
-											<div class="theme-overlay" tabindex="0" role="dialog" aria-label="<?php esc_attr_e( 'Theme Details' ); ?>"></div>
-											<div class="theme-browser rendered">
-												<div class="customize-preview-header themes-filter-bar">
-													<button type="button" class="button button-primary customize-section-back customize-themes-mobile-back"><?php esc_html_e( 'Go to theme sources' ); ?></button>
-													<div class="themes-filter-container">
-														<label for="installed_themes-themes-filter" class="screen-reader-text"><?php esc_html_e( 'Search themes…' ); ?></label>
-														<input type="search" id="installed_themes-themes-filter" placeholder="<?php esc_attr_e( 'Search themes…' ); ?>" aria-describedby="installed_themes-live-search-desc" class="wp-filter-search wp-filter-search-themes">
-														<div class="search-icon" aria-hidden="true"></div>
-														<span id="installed_themes-live-search-desc" class="screen-reader-text">
-															<?php esc_html_e( 'The search results will be updated as you type.' ); ?>
-														</span>
-													</div>
-													<div class="filter-themes-count">
-														<span class="themes-displayed" style="">
-															<span class="theme-count"><?php esc_html_e( $count_themes ); ?></span>
-															<?php esc_html_e( 'themes' ); ?>
-														</span>
-													</div>
-												</div>
-												<div class="error unexpected-error" style="display: none; ">
-													<p><?php esc_html_e( 'An unexpected error occurred. Something may be wrong with WordPress.org, ClassicPress.net or this server’s configuration. If you continue to have problems, please try the <a href="https://forums.classicpress.net/c/support/">support forums</a>' ); ?>.</p>
-												</div>
-												<ul class="themes">
-
-													<?php
-													// Display the active theme first
-													foreach( $installed_themes as $theme ) {
-														if ( $theme->name === $top_items['themes']['title'] ) {
-															?>
-
-															<li id="customize-control-installed_theme_<?php esc_attr_e( $theme->get_stylesheet() ); ?>" class="customize-control customize-control-theme">
-																<div class="customize-control-notifications-container" style="display: none;">
-																	<ul></ul>
-																</div>
-																<div class="theme active" tabindex="0" aria-describedby="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-action">
-																	<div class="theme-screenshot">
-																		<img data-src="<?php echo esc_url( $theme->get_screenshot() ); ?>" alt="" src="<?php echo esc_url( $theme->get_screenshot() ); ?>">
-																	</div>
-																	<span class="more-details theme-details" id="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-action" aria-label="<?php esc_attr_e( 'Details for theme:' ); ?> <?php esc_html_e( $theme->name ); ?>"><?php esc_html_e( 'Theme Details' ); ?></span>
-																	<div class="theme-author"><?php esc_html_e( 'By' ); ?> <?php esc_html_e( $theme['Author'] ); ?></div>
-																	<div class="theme-id-container">
-																		<h3 class="theme-name" id="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-name">
-																			<span><?php esc_html_e( 'Previewing:' ); ?></span> <?php esc_html_e( $theme->name ); ?>
-																		</h3>
-																		<div class="theme-actions">
-																			<button type="button" class="button button-primary customize-theme" aria-label="<?php esc_attr_e( 'Customize theme:' ); ?> <?php esc_html_e( $theme->name ); ?>"><?php esc_html_e( 'Customize' ); ?></button>
-																		</div>
-																	</div>
-																	<div class="notice notice-success notice-alt">
-																		<p><?php esc_html_e( 'Installed' ); ?></p>
-																	</div>			
-																</div>
-															</li>
-
-															<?php
-														}
-													}
-							
-													// Now display the rest
-													foreach( $installed_themes as $theme ) {
-														if ( $theme->name !== $top_items['themes']['title'] ) {
-															?>
-
-															<li id="customize-control-installed_theme_<?php esc_attr_e( $theme->get_stylesheet() ); ?>" class="customize-control customize-control-theme">
-																<div class="customize-control-notifications-container" style="display: none;">
-																	<ul></ul>
-																</div>
-																<div class="theme" tabindex="0" aria-describedby="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-action">
-																	<div class="theme-screenshot">
-																		<img data-src="<?php echo esc_url( $theme->get_screenshot() ); ?>" alt="" src="<?php echo esc_url( $theme->get_screenshot() ); ?>">
-																	</div>
-																	<span class="more-details theme-details" id="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-action" aria-label="<?php esc_attr_e( 'Details for theme:' ); ?> <?php esc_html_e( $theme->name ); ?>"><?php esc_html_e( 'Theme Details' ); ?></span>
-																	<div class="theme-author"><?php esc_html_e( 'By' ); ?> <?php esc_html_e( $theme['Author'] ); ?></div>
-																	<div class="theme-id-container">
-																		<h3 class="theme-name" id="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-name">
-																			<span><?php esc_html_e( 'Previewing:' ); ?></span> <?php esc_html_e( $theme->name ); ?>
-																		</h3>
-																		<div class="theme-actions">
-																			<button type="button" class="button button-primary customize-theme" aria-label="<?php esc_attr_e( 'Customize theme:' ); ?> <?php esc_html_e( $theme->name ); ?>"><?php esc_html_e( 'Customize' ); ?></button>
-																		</div>
-																	</div>
-																	<div class="notice notice-success notice-alt">
-																		<p><?php esc_html_e( 'Installed' ); ?></p>
-																	</div>			
-																</div>
-														
-															</li>
-
-															<?php
-														}
-													}
-													?>
-
-												</ul>
-											</div>											
-										</div>
-										<div class="customize-themes-section themes-section-wporg_themes control-section-content themes-php">
-											<div class="theme-overlay" tabindex="0" role="dialog" aria-label="<?php esc_attr_e( 'Theme Details' ); ?>"></div>
-											<div class="theme-browser rendered">
-											
-											</div>											
-										</div>
-									</div>
-								</li>
-							</ul>
 						</li>
 						
-						<li id="accordion-section-publish_settings" class="accordion-section control-section control-section-outer" aria-owns="sub-accordion-section-publish_settings" style="">
+						<li id="accordion-section-publish_settings" class="accordion-section control-section control-section-outer" aria-owns="sub-accordion-section-publish_settings">
 							<h3 class="accordion-section-title" tabindex="0">
 								<?php esc_html_e( 'Publish Settings' ); ?>
 								<span class="screen-reader-text"><?php esc_html_e( 'Press return or enter to open this section' ); ?></span>
@@ -377,42 +259,291 @@ do_action( 'customize_controls_head' );
 						foreach ( $top_items as $item ) {
 							if ( $item['id'] === 'themes' ) { // Don't repeat the active theme
 								continue;
-							}
+							}			
+							if ( $item['type'] === 'section'  ) {
+								?>
 
-							$item_id	= $item['id'];
-							$item_title = $item['title'];
-							$item_type  = $item['type']; // panel | section
-							?>
-
-							<li id="accordion-section-<?php esc_attr_e( $item_id ); ?>" class="accordion-section control-section
-								<?php echo $item_type === 'panel' ? 'control-panel' : 'control-section-default'; ?>
-								aria-owns="sub-accordion-section-<?php esc_attr_e( $item_id ); ?>">
-								<h3 class="accordion-section-title" tabindex="0">
-									<?php esc_html_e( $item_title ); ?>
-									<span class="screen-reader-text"><?php esc_html_e( 'Press return or enter to open this section' ); ?></span>
-								</h3>
+								<li id="accordion-section-<?php esc_attr_e( $item['id'] ); ?>" class="accordion-section control-section control-section-default" aria-owns="sub-accordion-section-<?php esc_attr_e( $item['id'] ); ?>">
+									<h3 class="accordion-section-title" tabindex="0">
+										<?php esc_html_e( $item['title'] ); ?>
+										<span class="screen-reader-text"><?php esc_html_e( 'Press return or enter to open this section' ); ?></span>
+									</h3>
+								</li>
 
 								<?php
-								if ( 'panel' === $item_type ) {
+							} else { // panel
+								?>
 
-									// For a panel, list child sections.
-									foreach ( $sections as $section ) {
-										if ( $section->panel === $item_id ) {
-											?>
+								<li id="accordion-panel-<?php esc_attr_e( $item['id'] ); ?>" class="accordion-section control-section control-panel control-panel-<?php esc_attr_e( $item['id'] ); ?>" aria-owns="sub-accordion-section-<?php esc_attr_e( $item['id'] ); ?>">
+									<h3 class="accordion-section-title" tabindex="0">
+										<?php esc_html_e( $item['title'] ); ?>
+										<span class="screen-reader-text"><?php esc_html_e( 'Press return or enter to open this section' ); ?></span>
+									</h3>
+								</li>
 
-											<ul id="sub-accordion-panel-<?php esc_attr_e( $section->panel ); ?>" class="customize-pane-child accordion-sub-container control-panel-content accordion-section control-panel-<?php esc_attr_e( $section->panel ); ?>">
-												<li class="customize-section-description-container section-meta no-drag">
-													<div class="customize-section-title">
-														<button class="customize-section-back" tabindex="0">
-															<span class="screen-reader-text">Back</span>
-														</button>
-														<h3>
-															<span class="customize-action">Customizing</span>Site Identity
-														</h3>
+							<?php
+							}
+						}
+						?>
+
+					</ul>
+
+					<ul id="sub-accordion-section-themes" clas="customize-pane-child accordion-sub-container control-panel-content accordion-section control-panel-themes current-panel" style="display: none;">
+						<li class="panel-meta customize-info accordion-section">
+							<button class="customize-panel-back" tabindex="0" type="button">
+								<span class="screen-reader-text"><?php esc_html_e( 'Back' ); ?></span>
+							</button>
+							<div class="accordion-section-title">
+								<span class="preview-notice"><?php esc_html_e( 'You are browsing' ); ?> <strong class="panel-title"><?php esc_html_e( 'Themes' ); ?></strong></span>
+								<button class="customize-help-toggle dashicons dashicons-editor-help" type="button" aria-expanded="false"><span class="screen-reader-text"><?php esc_html_e( 'Help' ); ?></span></button>
+							</div>
+							<div class="description customize-panel-description">
+								<p><?php esc_html_e( 'Looking for a theme? You can search or browse the WordPress.org theme directory, install and preview themes, then activate them right here.' ); ?></p>
+								<p><?php esc_html_e( 'While previewing a new theme, you can continue to tailor things like widgets and menus, and explore theme-specific options.' ); ?></p>
+							</div>
+							<div class="customize-control-notifications-container" style="display: none;">
+								<ul></ul>
+							</div>
+						</li>
+						<li id="accordion-section-installed_themes" class="theme-section control-subsection">
+							<button type="button" class="customize-themes-section-title themes-section-installed_themes selected" aria-expanded="true"><?php esc_html_e( 'Installed themes' ); ?></button>
+						</li>
+						<li id="accordion-section-wporg_themes" class="theme-section control-subsection">
+							<button type="button" class="customize-themes-section-title themes-section-wporg_themes" aria-expanded="false"><?php esc_html_e( 'WordPress.org themes' ); ?></button>
+						</li>
+						<li class="customize-themes-full-container-container">
+							<dialog class="customize-themes-full-container animate" style="top: 3.5em; right: 0;left: max(calc(18% - 1px), 300px);border: 0;" open>
+								<div class="customize-themes-notifications"></div>
+								<div class="customize-themes-section themes-section-installed_themes control-section-content themes-php current-section">											
+									<div class="theme-browser rendered">
+										<div class="customize-preview-header themes-filter-bar">
+											<button type="button" class="button button-primary customize-section-back customize-themes-mobile-back" style="display: none;"><?php esc_html_e( 'Go to theme sources' ); ?></button>
+											<div class="themes-filter-container">
+												<label for="installed_themes-themes-filter" class="screen-reader-text"><?php esc_html_e( 'Search themes…' ); ?></label>
+												<input type="search" id="installed_themes-themes-filter" placeholder="<?php esc_attr_e( 'Search themes…' ); ?>" aria-describedby="installed_themes-live-search-desc" class="wp-filter-search wp-filter-search-themes">
+												<div class="search-icon" aria-hidden="true"></div>
+												<span id="installed_themes-live-search-desc" class="screen-reader-text">
+													<?php esc_html_e( 'The search results will be updated as you type.' ); ?>
+												</span>
+											</div>
+											<div class="filter-themes-count" style="float: right; margin-top: 0.5em;">
+												<span class="themes-displayed">
+													<span class="theme-count"><?php echo absint( $count_themes ); ?></span>
+													<?php esc_html_e( 'themes' ); ?>
+												</span>
+											</div>
+										</div>
+										<div class="error unexpected-error" style="display: none; ">
+											<p><?php esc_html_e( 'An unexpected error occurred. Something may be wrong with WordPress.org, ClassicPress.net or this server’s configuration. If you continue to have problems, please try the <a href="https://forums.classicpress.net/c/support/">support forums</a>' ); ?>.</p>
+										</div>
+										<ul class="themes" style="overflow-y: scroll;max-height: 100vh;">
+											<?php
+											// Display the active theme first
+											foreach( $installed_themes as $theme ) {
+												if ( $theme->name !== $top_items['themes']['title'] ) {
+													continue;
+												} else {
+													?>
+
+													<li id="customize-control-installed_theme_<?php esc_attr_e( $theme->get_stylesheet() ); ?>" class="customize-control customize-control-theme">
 														<div class="customize-control-notifications-container" style="display: none;">
 															<ul></ul>
 														</div>
+														<div class="theme active" tabindex="0" aria-describedby="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-action">
+															<div class="theme-screenshot">
+																<img data-src="<?php echo esc_url( $theme->get_screenshot() ); ?>" alt="" src="<?php echo esc_url( $theme->get_screenshot() ); ?>">
+															</div>
+															<span class="more-details theme-details" id="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-action" aria-label="<?php esc_attr_e( 'Details for theme:' ); ?> <?php esc_html_e( $theme->name ); ?>"><?php esc_html_e( 'Theme Details' ); ?></span>
+															<div class="theme-author"><?php esc_html_e( 'By' ); ?> <?php esc_html_e( $theme['Author'] ); ?></div>
+															<div class="theme-id-container">
+																<h3 class="theme-name" id="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-name">
+																	<span><?php esc_html_e( 'Previewing:' ); ?></span> <?php esc_html_e( $theme->name ); ?>
+																</h3>
+																<div class="theme-actions">
+																	<button type="button" class="button button-primary customize-theme" aria-label="<?php esc_attr_e( 'Customize theme:' ); ?> <?php esc_html_e( $theme->name ); ?>"><?php esc_html_e( 'Customize' ); ?></button>
+																</div>
+															</div>
+															<div class="notice notice-success notice-alt">
+																<p><?php esc_html_e( 'Installed' ); ?></p>
+															</div>			
+														</div>
+													</li>
+
+													<?php
+													break; // No need to cycle through other themes
+												}
+											}
+							
+											// Now display the rest
+											foreach( $installed_themes as $theme ) {
+												if ( $theme->name === $top_items['themes']['title'] ) {
+													continue;
+												}
+												?>
+
+												<li id="customize-control-installed_theme_<?php esc_attr_e( $theme->get_stylesheet() ); ?>" class="customize-control customize-control-theme">
+													<div class="customize-control-notifications-container" style="display: none;">
+														<ul></ul>
 													</div>
+													<div class="theme" tabindex="0" aria-describedby="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-action">
+														<div class="theme-screenshot">
+															<img data-src="<?php echo esc_url( $theme->get_screenshot() ); ?>" alt="" src="<?php echo esc_url( $theme->get_screenshot() ); ?>">
+														</div>
+														<span class="more-details theme-details" id="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-action" aria-label="<?php esc_attr_e( 'Details for theme:' ); ?> <?php esc_html_e( $theme->name ); ?>"><?php esc_html_e( 'Theme Details' ); ?></span>
+														<div class="theme-author"><?php esc_html_e( 'By' ); ?> <?php esc_html_e( $theme['Author'] ); ?></div>
+														<div class="theme-id-container">
+															<h3 class="theme-name" id="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-name">
+																<span><?php esc_html_e( 'Previewing:' ); ?></span> <?php esc_html_e( $theme->name ); ?>
+															</h3>
+															<div class="theme-actions">
+																<button type="button" class="button button-primary customize-theme" aria-label="<?php esc_attr_e( 'Customize theme:' ); ?> <?php esc_html_e( $theme->name ); ?>"><?php esc_html_e( 'Customize' ); ?></button>
+															</div>
+														</div>
+														<div class="notice notice-success notice-alt">
+															<p><?php esc_html_e( 'Installed' ); ?></p>
+														</div>			
+													</div>
+												</li>
+
+											<?php
+											}
+											?>
+
+										</ul>
+									</div>											
+								</div>
+								<div class="customize-themes-section themes-section-wporg_themes control-section-content themes-php">
+									<div class="theme-overlay" tabindex="0" role="dialog" aria-label="<?php esc_attr_e( 'Theme Details' ); ?>"></div>
+									<div class="theme-browser rendered"></div>											
+								</div>
+							</dialog>
+						</li>
+					</ul>
+					
+					<?php
+					foreach ( $top_items as $item ) {
+						if ( $item['id'] === 'themes' ) { // Don't repeat the active theme
+							continue;
+						}
+						if ( 'section' === $item['type'] ) {
+							?>
+
+							<ul id="sub-accordion-section-<?php esc_attr_e( $item['id'] ); ?>" class="customize-pane-child accordion-section-content accordion-section control-section control-section-default" style="display: none;">
+								<li class="customize-section-description-container section-meta no-drag">
+									<div class="customize-section-title">
+										<button class="customize-section-back" tabindex="0">
+											<span class="screen-reader-text"><?php esc_html_e( 'Back' ); ?></span>
+										</button>
+										<h3><span class="customize-action"><?php esc_html_e( 'Customizing' ); ?></span> <?php esc_html_e( $item['title'] ); ?></h3>
+										<div class="customize-control-notifications-container" style="display: none;">
+											<ul></ul>
+										</div>
+									</div>
+								</li>
+
+								<?php
+								if ( isset( $cp_controls_by_section[ $item['id'] ] ) ) {
+									foreach ( $cp_controls_by_section[ $item['id'] ] as $control_data ) {
+										$field_name  = $control_data['setting_id'] ?: $control_data['id'];
+										$field_value = $control_data['value'];
+										$type        = $control_data['type'];
+
+										echo '<li id="customize-control-' . esc_attr( $field_name ) . '" class="customize-control customize-control-text">';
+										echo '<div class="customize-control customize-control-' . esc_attr( $type ) . '">';
+
+										if ( 'site_icon' !== $type ) {
+											echo '<label class="customize-control-title" for="' . esc_attr( $field_name ) . '">';
+											echo esc_html( $control_data['label'] ?: $control_data['id'] );
+											echo '</label>';
+										}
+
+										// Very simple type-to-input mapping. error_log(print_r($control_data, true));
+										if ( in_array( $type, [ 'text', 'url', 'email', 'number' ], true ) ) {
+											echo '<input type="text" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( $field_value ) . '" class="regular-text">';
+										} elseif ( 'checkbox' === $type ) {
+											$checked = $field_value ? ' checked="checked"' : '';
+											echo '<input type="checkbox" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="1"' . $checked . ' style="margin: 0;">';
+										} elseif ( 'textarea' === $type ) {
+											echo '<textarea id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" rows="4" class="large-text">' . esc_textarea( (string) $field_value ) . '</textarea>';
+										} elseif ( 'color' === $type ) {
+											$raw_value = (string) $field_value;
+
+											// If it looks like a bare 3/6-digit hex, prefix with #.
+											if ( preg_match( '/^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/', $raw_value ) ) {
+												$color_value = '#' . $raw_value;
+											} else {
+												$color_value = $raw_value;
+											}
+											?>
+
+											<div class="customize-control-content">
+												<input type="text" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" class="cp-color-picker" value="<?php esc_attr_e( $color_value ); ?>" data-default-color="<?php esc_attr_e( $color_value ); ?>" placeholder="<?php esc_attr_e( 'Select Color' ); ?>">
+											</div>
+
+											<?php
+										} elseif ( 'site_icon' === $type ) {
+											echo '<span class="customize-control-title">' . esc_html( $control_data['label'] ) . '</span>';
+											echo '<div class="customize-control-notifications-container" style="display: none;">';
+											echo '<ul></ul>';
+											echo '</div>';
+										} elseif ( 'cropped_image' === $type ) {
+											echo '<div class="attachment-media-view">';
+											echo '<div class="site-icon-preview wp-clearfix customize-control-site_icon">';
+											echo '<div class="favicon-preview">';
+											echo '<img src="' . esc_url( admin_url( '/images/browser.png' ) ). '" class="browser-preview" alt="">';
+											echo '<div class="favicon">';
+
+											if ( get_site_icon_url() !== '' ) {
+												echo '<img src="' . esc_url( get_site_icon_url() ) . '" alt="' . esc_attr( 'Preview as a browser icon' ) . '">';
+											}
+
+											echo '</div>';
+											echo '<span class="browser-title" aria-hidden="true">' . esc_html( get_bloginfo( 'name' ) ) . '</span>';
+											echo '</div>';
+
+											if ( get_site_icon_url() !== '' ) {
+												echo '<img class="app-icon-preview" src="' . esc_url( get_site_icon_url() ) . '" alt="' . esc_attr( 'Preview as an app icon' ) . '">';
+											}
+
+											echo '</div>';
+											echo '<div class="actions">';
+											echo '<button type="button" class="button remove-button">' . esc_html( 'Remove' ) . '</button>';
+											echo '<button type="button" class="button upload-button">' . esc_html( 'Change image' ) . '</button>';
+											echo '</div>';
+											echo '</div>';
+										} else {
+											// Fallback generic input.
+											echo '<input type="text" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( (string) $field_value ) . '" class="regular-text">';
+										}
+
+										if ( ! empty( $control_data['description'] ) ) {
+											echo '<div class="description customize-control-description">' . wp_kses_post( $control_data['description'] ) . '</div>';
+										}
+										echo '</li>';
+									}
+								}
+								?>
+
+							</ul>
+						<?php
+						} else {
+							// For a panel, list child sections.
+							foreach ( $sections as $section ) {
+								if ( $section->panel === $item['id'] ) {
+									?>
+
+											<ul id="sub-accordion-panel-<?php esc_attr_e( $section->panel ); ?>" class="customize-pane-child accordion-section-content accordion-section control-section control-section-default" style="display: none;">
+												<li class="customize-section-description-container section-meta no-drag">
+													<div class="customize-section-title">
+														<button class="customize-section-back" tabindex="0">
+															<span class="screen-reader-text"><?php esc_html_e( 'Back' ); ?></span>
+														</button>
+														<h3>
+															<span class="customize-action"><?php esc_html_e( 'Customizing' ); ?></span> <?php esc_html_e( $item['title'] ); ?>
+														</h3>
+														<div class="customize-control-notifications-container"></div>
+													</div>
+												</li>
 													<span class="customize-section-label"><?php esc_html( $section->title ); ?></span>
 
 													<?php
@@ -422,30 +553,38 @@ do_action( 'customize_controls_head' );
 														foreach ( $cp_controls_by_section[ $sid ] as $control_data ) {
 															$field_name  = $control_data['setting_id'] ?: $control_data['id'];
 															$field_value = $control_data['value'];
-															$type		= $control_data['type'];
+															$type        = $control_data['type'];
 
 															echo '<div class="customize-control customize-control-' . esc_attr( $type ) . '">';
-															echo '<label class="customize-control-label" for="' . esc_attr( $field_name ) . '">';
+															echo '<label class="customize-control-title" for="' . esc_attr( $field_name ) . '">';
 															echo esc_html( $control_data['label'] ?: $control_data['id'] );
 															echo '</label>';
 
 															// Very simple type-to-input mapping.
 															if ( in_array( $type, [ 'text', 'url', 'email', 'number' ], true ) ) {
-																echo '<input type="text" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( $field_value ) . '" class="regular-text" />';
+																echo '<input type="text" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( $field_value ) . '" class="regular-text">';
 															} elseif ( 'checkbox' === $type ) {
 																$checked = $field_value ? ' checked="checked"' : '';
-																echo '<input type="checkbox" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="1"' . $checked . ' />';
+																echo '<input type="checkbox" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="1"' . $checked . '>';
 															} elseif ( 'textarea' === $type ) {
 																echo '<textarea id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" rows="4" class="large-text">' . esc_textarea( (string) $field_value ) . '</textarea>';
 															} elseif ( 'color' === $type ) {
-																echo '<input type="color" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( (string) $field_value ) . '" />';
+																$raw_value = (string) $field_value;
+
+																// If it looks like a bare 3/6-digit hex, prefix with #.
+																if ( preg_match( '/^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/', $raw_value ) ) {
+																	$color_value = '#' . $raw_value;
+																} else {
+																	$color_value = $raw_value;
+																}
+																echo '<input type="color" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( $color_value ) . '">';
 															} else {
 																// Fallback generic input.
 																//echo '<input type="text" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( (string) $field_value ) . '" class="regular-text" />';
 															}
 
 															if ( ! empty( $control_data['description'] ) ) {
-																echo '<p class="description">' . esc_html( $control_data['description'] ) . '</p>';
+																echo '<div class="description">' . wp_kses_post( $control_data['description'] ) . '</div>';
 															}
 
 															echo '</div>';
@@ -455,59 +594,23 @@ do_action( 'customize_controls_head' );
 												</li>
 											</ul>
 
-											<?php
-										} else {
-											// Top-level section: list its own controls.
-											$sid = $item_id;
-											echo '<div class="customize-section">';
-											echo '<span class="customize-section-label">' . esc_html( $item_title ) . '</span>';
-
-											if ( isset( $cp_controls_by_section[ $sid ] ) ) {
-												foreach ( $cp_controls_by_section[ $sid ] as $control_data ) {
-													$field_name  = $control_data['setting_id'] ?: $control_data['id'];
-													$field_value = $control_data['value'];
-													$type		= $control_data['type'];
-
-													echo '<div class="customize-control customize-control-' . esc_attr( $type ) . '">';
-													echo '<label class="customize-control-label" for="' . esc_attr( $field_name ) . '">';
-													echo esc_html( $control_data['label'] ?: $control_data['id'] );
-													echo '</label>';
-
-													// Very simple type-to-input mapping.
-													if ( in_array( $type, [ 'text', 'url', 'email', 'number' ], true ) ) {
-														echo '<input type="text" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( $field_value ) . '" class="regular-text" />';
-													} elseif ( 'checkbox' === $type ) {
-														$checked = $field_value ? ' checked="checked"' : '';
-														echo '<input type="checkbox" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="1"' . $checked . ' />';
-													} elseif ( 'textarea' === $type ) {
-														echo '<textarea id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" rows="4" class="large-text">' . esc_textarea( (string) $field_value ) . '</textarea>';
-													} elseif ( 'color' === $type ) {
-														echo '<input type="color" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( (string) $field_value ) . '" />';
-													} else {
-														// Fallback generic input.
-														echo '<input type="text" id="' . esc_attr( $field_name ) . '" name="' . esc_attr( $field_name ) . '" value="' . esc_attr( (string) $field_value ) . '" class="regular-text" />';
-													}
-
-													if ( ! empty( $control_data['description'] ) ) {
-														echo '<p class="description">' . esc_html( $control_data['description'] ) . '</p>';
-													}
-
-													echo '</div>';
-												}
-											}
-											echo '</div>';
+										<?php
 										}
 									}
 								}
-								?>
-
-							</li>
-
-						<?php
-						}
-						?>
-
-					</ul>
+					}
+					?>
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
 				</div>
 			</div>
 		</div>
@@ -539,11 +642,11 @@ do_action( 'customize_controls_head' );
 		<input type="hidden" name="customize_form_stage" value="php-first-paint">
 	</form><!-- /#customize-controls -->
 
-	<div id="customize-preview" class="wp-full-overlay-main iframe-ready">
+	<div id="customize-preview" class="wp-full-overlay-main iframe-ready" style="position: static;width: 82%;">
 		<iframe title="<?php esc_attr_e( 'Site Preview' ); ?>" name="customize-preview-0" onmousewheel="" src="<?php echo esc_url( $preview_url ); ?>"></iframe>
 	</div>
 
-</div><!-- .wp-full-overlay expanded preview-desktop -->
+</dialog><!-- .wp-full-overlay expanded preview-desktop -->
 
 <?php /* Enables the modal for media widgets */ ?>
 <dialog id="widget-modal">
