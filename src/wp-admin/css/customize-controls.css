@@ -717,12 +717,6 @@ body.trashing #publish-settings {
 	margin-bottom: 15px;
 }
 
-.control-section-nav_menu .customize-control,
-.control-section-new_menu .customize-control {
-	/* Override default `margin-bottom` for `.customize-control` */
-	margin-bottom: 0;
-}
-
 .customize-section-title {
 	margin: -12px -12px 0;
 	border-bottom: 1px solid #dcdcde;
@@ -1881,8 +1875,6 @@ p.customize-section-description {
 }
 
 .control-panel-themes .filter-themes-count {
-	position: relative;
-	float: right;
 	line-height: 2.6;
 }
 
@@ -2083,7 +2075,7 @@ p.customize-section-description {
 }
 
 .wp-customizer .theme-browser .themes {
-	padding: 13px 0;
+	padding: 2px 0 25px 25px;
 	transition: .18s margin-top linear;
 }
 
@@ -2100,6 +2092,8 @@ p.customize-section-description {
 }
 
 .customize-preview-header.themes-filter-bar {
+	display: flex;
+    justify-content: space-between;
 	position: fixed;
 	top: 0;
 	left: 300px;
@@ -2122,7 +2116,7 @@ p.customize-section-description {
 
 @media screen and (min-width: 1020px) {
 	.wp-customizer .theme-browser .themes {
-		padding: 13px;
+		padding: 2px 0 25px 25px;
 	}
 }
 
