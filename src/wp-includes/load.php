@@ -786,6 +786,87 @@ function wp_start_object_cache() {
 }
 
 /**
+ * Installs an object-cache.php file, if one does not already exist, to
+ * make use of the APCu extension as an external object cache.
+ *
+ * @since CP-2.7.0
+ * @access private
+ */
+function cp_maybe_install_apcu_object_cache() {
+
+	// Abort if the apcu extension is not installed.
+	if ( ! extension_loaded( 'apcu' ) ) {
+		return;
+	}
+
+	// Setup the filesystem abstraction
+	if ( ! function_exists( 'WP_Filesystem' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+	}
+
+	global $wp_filesystem;
+	if ( empty( $wp_filesystem ) ) {
+		WP_Filesystem();
+	}
+
+	// Define wp-content/object-cache.php path.
+	$wp_content_dir    = defined( 'WP_CONTENT_DIR' ) ? WP_CONTENT_DIR : __DIR__ . '/wp-content';
+	$object_cache_file = $wp_content_dir . '/object-cache.php';
+
+	// Remove object-cache.php file if set by ClassicPress and the user requests.
+	$cp_object_cache = absint( get_option( 'cp_object_cache' ) );
+	if ( empty( $cp_object_cache ) ) {
+
+		// Check if object-cache.php exists using $wp_filesystem.
+		if ( $wp_filesystem->exists( $object_cache_file ) ) {
+
+			// Match the header comment block
+			$file_data = file_get_contents( $object_cache_file );
+			if ( preg_match( '/\/\*.*?\*\//s', $file_data, $matches ) ) {
+				$header_block = $matches[0];
+
+				// Look for the Plugin Name line
+				if ( preg_match( '/Plugin Name:\s*(.*)/i', $header_block, $plugin_name_match ) ) {
+					$plugin_name = trim( $plugin_name_match[1] );
+
+					// Compare to your target string
+					if ( $plugin_name === 'WordPress APCu Object Cache Backend' ) {
+
+						// Match found, so clear the object cache ...
+						if ( function_exists( 'apcu_clear_cache' ) ) {
+							apcu_clear_cache();
+						}
+
+						// ... and delete the object cache file.
+						$success = $wp_filesystem->delete( $object_cache_file );
+						if ( ! $success ) {
+							error_log( __( 'Failed to delete the file: ' ) . $object_cache_file );
+						}
+					} else { // Object cache file installed by a plugin or other node, not CP core
+						return; // So abort
+					}
+				}
+			}
+		} else { // Otherwise abort
+			return;
+		}
+	} else { // Otherwise install object cache
+
+		// Check if object-cache.php exists using $wp_filesystem.
+		if ( ! $wp_filesystem->exists( $object_cache_file ) ) {
+			$source_file = __DIR__ . '/object-cache.php';
+			if ( $wp_filesystem->exists( $source_file ) ) {
+
+				// Copy and paste the file using the WP_Filesystem
+				if ( ! $wp_filesystem->copy( $source_file, $object_cache_file ) ) {
+					error_log( __( 'Failed to copy object-cache.php to wp-content folder.' ) );
+				}
+			}
+		}
+	}
+}
+
+/**
  * Redirect to the installer if WordPress is not installed.
  *
  * Dies with an error message when Multisite is enabled.

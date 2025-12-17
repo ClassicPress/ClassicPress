@@ -151,6 +151,7 @@ $allowed_options            = array(
 		'page_on_front',
 		'page_for_posts',
 		'blog_public',
+		'cp_object_cache',
 	),
 	'writing'    => array(
 		'default_category',
