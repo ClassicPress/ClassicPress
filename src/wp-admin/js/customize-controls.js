@@ -4,7 +4,7 @@
 
 /* global _wpCustomizeControlsL10n, _wpCustomizeHeader, _wpCustomizeBackground, MediaElementPlayer, console, confirm */
 document.addEventListener( 'DOMContentLoaded', function() {
-	var intersectionObserver, orgThemes, localThemes,
+	var intersectionObserver, orgThemes, localThemes, previousAccordionPane,
 		i = 1,
 		installedThemesHTML = document.querySelector( '.themes')?.innerHTML,
 		reducedMotionMediaQuery = window.matchMedia( '(prefers-reduced-motion: reduce)' ),
@@ -49,33 +49,68 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	}
 
-	// Go down to the next level and back
+	// Click management
 	document.addEventListener( 'click', function( e ) {
 		var id;
-		if ( ( e.target.tagName === 'H3' || e.target.tagName === 'BUTTON' ) && e.target.closest( 'ul' ) && e.target.closest( 'ul' ).classList.contains( 'customize-pane-parent' ) ) {
+		if ( ( e.target.tagName === 'H3' || e.target.classList && e.target.classList.contains( 'change-theme' ) ) && e.target.closest( 'ul' ) ) {
 			e.preventDefault();
+			previousAccordionPane = e.target.closest( 'ul' );
 			id = e.target.closest( 'li' ).id;
-			e.target.closest( 'ul' ).style.display = 'none';
-			childPanes.forEach( function( childPane ) {
-				e.preventDefault();
-				childPane.style.display = 'none';
-			} );
-			document.getElementById( 'customize-info' ).style.display = 'none';
-			document.getElementById( 'sub-' + id ).style.display = 'block';
-			document.querySelector( '#sub-' + id + ' button' ).focus();
-		} else if ( e.target.classList && ( e.target.classList.contains === 'customize-section-back' || e.target.classList.contains === 'customize-panel-back' ) ) {
+
+			// Go down to the second level
+			if ( e.target.closest( 'ul' ).classList.contains( 'customize-pane-parent' ) ) {
+				e.target.closest( 'ul' ).style.display = 'none';
+				childPanes.forEach( function( childPane ) {
+					e.preventDefault();
+					childPane.style.display = 'none';
+				} );
+				document.getElementById( 'customize-info' ).style.display = 'none';
+				document.getElementById( 'sub-' + id ).style.display = 'block';
+				document.querySelector( '#sub-' + id + ' button' ).focus();
+
+			// Go down to the third level
+			} else if ( e.target.closest( 'ul' ).classList.contains( 'customize-pane-child' ) ) {
+				e.target.closest( 'ul' ).style.display = 'none';
+				document.getElementById( 'sub-' + id ).style.display = 'block';
+				document.querySelector( '#sub-' + id + ' button' ).focus();				
+			}
+		} else if ( e.target.classList && ( e.target.classList.contains( 'customize-section-back' ) || e.target.classList.contains( 'customize-panel-back' ) ) ) {
 			e.preventDefault();
-			id = e.target.closest( 'ul' ).id;
-			document.getElementById( id ).style.display = 'none';
-			document.getElementById( 'customize-info' ).style.display = 'block';
-			document.querySelector( '.customize-pane-parent' ).style.display = 'block';
-			document.querySelector( '.customize-pane-parent h3' ).focus();
+			e.target.closest( 'ul' ).style.display = 'none';
+
+			// Go back to the top level
+			if ( e.target.parentNode.classList.contains( 'panel-meta' ) ) {
+				document.getElementById( 'customize-info' ).style.display = 'block';
+				document.querySelector( '.customize-pane-parent' ).style.display = 'block';
+				document.querySelector( '.customize-pane-parent h3' ).focus();
+
+			// Go back to the second level	
+			} else {			
+				previousAccordionPane.style.display = 'block';
+				previousAccordionPane.querySelector( '.customize-panel-back' ).focus();
+			}
+			
+		// Open and close description
+		} else if ( e.target.classList && e.target.classList.contains( 'customize-help-toggle' ) ) {
+			if ( e.target.parentNode.classList.contains( 'open' ) ) {
+				e.target.parentNode.classList.remove( 'open' )
+				e.target.parentNode.nextElementSibling.style.display = 'none';
+				e.target.setAttribute( 'aria-expanded', false );
+			} else {
+				e.target.parentNode.classList.add( 'open' );
+				e.target.parentNode.nextElementSibling.style.display = 'block';
+				e.target.setAttribute( 'aria-expanded', true );
+			}
+
+		// Browse installed themes
 		} else if ( e.target.classList.contains( 'themes-section-wporg_themes' ) ) {
 			form.querySelector( '.themes-section-installed_themes' ).classList.remove( 'selected' );
 			e.target.classList.add( 'selected' );
 			document.querySelector( '.theme-browser' ).classList.remove( 'local' );
 			document.querySelector( '.theme-browser' ).classList.add( 'wp-org' );
 			updateThemes( 'browse', 'new' );
+
+		// Browse themes at wp.org
 		} else if ( e.target.classList.contains( 'themes-section-installed_themes' ) ) {
 			form.querySelector( '.themes-section-wporg_themes' ).classList.remove( 'selected' );
 			e.target.classList.add( 'selected' );
