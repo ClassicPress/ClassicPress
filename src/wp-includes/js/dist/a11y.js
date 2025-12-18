@@ -2,8 +2,8 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 269:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ 269
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": function() { return /* binding */ domReady; }
@@ -22,10 +22,10 @@ function domReady(callback) {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ 309:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ 309
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 
 // EXPORTS
@@ -779,10 +779,10 @@ var hasTranslation = i18n.hasTranslation.bind(i18n);
 
 
 
-/***/ }),
+/***/ },
 
-/***/ 427:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ 427
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   defaultHooks: function() { return /* binding */ defaultHooks; }
@@ -818,10 +818,10 @@ var {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ 507:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ 507
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 
 // EXPORTS
@@ -1162,7 +1162,7 @@ var createHooks_default = createHooks;
 
 
 
-/***/ })
+/***/ }
 
 /******/ 	});
 /************************************************************************/
