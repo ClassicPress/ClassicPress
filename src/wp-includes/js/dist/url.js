@@ -1,8 +1,8 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 681:
-/***/ (function(module) {
+/***/ 681
+(module) {
 
 var characterMap = {
 	"À": "A",
@@ -487,7 +487,7 @@ module.exports.has = hasAccents;
 module.exports.remove = removeAccents;
 
 
-/***/ })
+/***/ }
 
 /******/ 	});
 /************************************************************************/
