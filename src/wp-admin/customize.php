@@ -32,7 +32,7 @@ $wp_customize->register_controls();
  * @since CP-2.7.0
  */
 // Themes
-$installed_themes = wp_get_themes();
+$installed_themes = wp_prepare_themes_for_js();
 $count_themes     = count( $installed_themes );
 
 // Menus
@@ -107,6 +107,9 @@ wp_enqueue_style( 'customize-controls' );
  */
 do_action( 'customize_controls_enqueue_scripts' );
 
+// Let's roll.
+header( 'Content-Type: ' . get_option( 'html_type' ) . '; charset=' . get_option( 'blog_charset' ) );
+
 wp_user_settings();
 _wp_admin_html_begin();
 
@@ -159,9 +162,10 @@ do_action( 'customize_controls_print_scripts' );
 do_action( 'customize_controls_head' );
 wp_print_scripts();
 ?>
+</head>
 <body class="<?php esc_attr_e( $body_class ); ?>">
 <h1 class="screen-reader-text"><?php esc_html_e( 'Customizer' ); ?></h1>
-<dialog class="wp-full-overlay preview-desktop" aria-labelledby="customizer-modal-title" style="display: flex;justify-content: space-between;min-width: 100%;position: static;margin: -1.3em;" open>
+<div class="wp-full-overlay preview-desktop" aria-labelledby="customizer-modal-title" style="display: flex;justify-content: space-between;min-width: 100%;position: static;margin: 0;" open>
 
 	<h2 id="customizer-modal-title" class="screen-reader-text"><?php esc_html_e( 'Customizing: ' .  get_bloginfo( 'name' ) ); ?></h2>
 	<form id="customize-controls" class="wrap wp-full-overlay-sidebar" style="position: static;width: 18%;">
@@ -184,7 +188,9 @@ wp_print_scripts();
 				?>
 
 				<div id="customize-save-button-wrapper" class="customize-save-button-wrapper disabled" >
-					<button class="button button-primary disabled" aria-label="<?php esc_attr_e( 'Publish Settings' ); ?>" aria-expanded="false" disabled><?php echo $save_text; ?></button>
+					<button class="button button-primary disabled" aria-label="<?php esc_attr_e( 'Publish Settings' ); ?>" aria-expanded="false" disabled>
+						<?php echo $save_text; ?>
+					</button>
 				</div>
 				<?php
 			}
@@ -252,9 +258,13 @@ wp_print_scripts();
 					<ul class="customize-pane-parent">
 						<li id="accordion-section-themes" class="accordion-section control-panel-themes" aria-owns="sub-accordion-section-themes">
 							<h3 class="accordion-section-title" tabindex="0">
-								<span class="customize-action"><?php esc_html_e( 'Active theme' ); ?></span>
+								<span class="customize-action">
+									<?php esc_html_e( 'Active theme' ); ?>
+								</span>
 								<?php esc_html_e( $top_items['themes']['title'] ); ?>
-								<button type="button" class="button change-theme" aria-label="Change theme"><?php esc_html_e( 'Change' ); ?></button>
+								<button type="button" class="button change-theme" aria-label="Change theme">
+									<?php esc_html_e( 'Change' ); ?>
+								</button>
 							</h3>
 						</li>
 						
@@ -284,7 +294,9 @@ wp_print_scripts();
 								<li id="accordion-panel-<?php esc_attr_e( $item['id'] ); ?>" class="accordion-section control-section control-panel control-panel-<?php esc_attr_e( $item['id'] ); ?>" aria-owns="sub-accordion-section-<?php esc_attr_e( $item['id'] ); ?>">
 									<h3 class="accordion-section-title" tabindex="0">
 										<?php esc_html_e( $item['title'] ); ?>
-										<span class="screen-reader-text"><?php esc_html_e( 'Press return or enter to open this section' ); ?></span>
+										<span class="screen-reader-text">
+											<?php esc_html_e( 'Press return or enter to open this section' ); ?>
+										</span>
 									</h3>
 								</li>
 							<?php
@@ -299,8 +311,17 @@ wp_print_scripts();
 								<span class="screen-reader-text"><?php esc_html_e( 'Back' ); ?></span>
 							</button>
 							<div class="accordion-section-title">
-								<span class="preview-notice"><?php esc_html_e( 'You are browsing' ); ?> <strong class="panel-title"><?php esc_html_e( 'Themes' ); ?></strong></span>
-								<button class="customize-help-toggle dashicons dashicons-editor-help" type="button" aria-expanded="false"><span class="screen-reader-text"><?php esc_html_e( 'Help' ); ?></span></button>
+								<span class="preview-notice">
+									<?php esc_html_e( 'You are browsing' ); ?>
+									<strong class="panel-title">
+										<?php esc_html_e( 'Themes' ); ?>
+									</strong>
+								</span>
+								<button class="customize-help-toggle dashicons dashicons-editor-help" type="button" aria-expanded="false">
+									<span class="screen-reader-text">
+										<?php esc_html_e( 'Help' ); ?>
+									</span>
+								</button>
 							</div>
 							<div class="description customize-panel-description">
 								<?php echo wp_kses_post( $panels['themes']->description ); ?></p>
@@ -316,8 +337,29 @@ wp_print_scripts();
 							<button type="button" class="customize-themes-section-title themes-section-wporg_themes" aria-expanded="false"><?php esc_html_e( 'WordPress.org themes' ); ?></button>
 						</li>
 						<li class="customize-themes-full-container-container">
-							<dialog class="customize-themes-full-container animate" style="top: 0; right: 0;border: 0;height: 100vh;min-width: calc(100% - max(calc(18% - 1px), 300px));" open>
+							<div class="customize-themes-full-container animate" style="top: 0; right: 0;border: 0;height: 100vh;min-width: calc(100% - max(18%, 300px));" open>
 								<div class="customize-themes-notifications"></div>
+								<div class="filter-drawer">
+									<?php
+									// Tags to filter list of themes.
+									// Use the core list, rather than the .org API, due to inconsistencies
+									// and to ensure tags are translated.
+									$feature_list = get_theme_feature_list( false );
+
+									foreach ( $feature_list as $feature_group => $features ) {
+										echo '<fieldset class="filter-group">';
+										echo '<legend>' . esc_html( $feature_group ) . '</legend>';
+										echo '<div class="filter-group-feature">';
+										foreach ( $features as $feature => $feature_name ) {
+											$feature = esc_attr( $feature );
+											echo '<input type="checkbox" id="filter-id-' . $feature . '" value="' . $feature . '"> ';
+											echo '<label for="filter-id-' . $feature . '">' . esc_html( $feature_name ) . '</label>';
+										}
+										echo '</div>';
+										echo '</fieldset>';
+									}
+									?>
+								</div>
 								<div class="customize-themes-section themes-section-installed_themes control-section-content themes-php current-section">											
 									<div class="theme-browser rendered local">
 										<div class="customize-preview-header themes-filter-bar">
@@ -332,9 +374,17 @@ wp_print_scripts();
 											</div>
 											<div class="filter-themes-count">
 												<span class="themes-displayed">
-													<span class="theme-count"><?php echo absint( $count_themes ); ?></span>
+													<span class="theme-count">
+														<?php echo absint( $count_themes ); ?>
+													</span>
 													<?php esc_html_e( 'themes' ); ?>
 												</span>
+												<button type="button" class="button feature-filter-toggle" aria-expanded="false">
+													<span class="filter-count-0"><?php esc_html_e( 'Filter themes' ); ?></span>
+													<span class="filter-count-filters">
+														Filter themes (<span class="theme-filter-count">0</span>)
+													</span>
+												</button>												
 											</div>
 										</div>
 										<div class="error unexpected-error" style="display: none; ">
@@ -344,59 +394,77 @@ wp_print_scripts();
 											<?php
 											// Display the active theme first
 											foreach ( $installed_themes as $theme ) {
-												if ( $theme->name !== $top_items['themes']['title'] ) {
+												if ( $theme['name'] !== $top_items['themes']['title'] ) {
 													continue;
 												}
 												?>
-												<li id="customize-control-installed_theme_<?php esc_attr_e( $theme->get_stylesheet() ); ?>" class="customize-control customize-control-theme">
+												<li id="customize-control-installed_theme_<?php esc_attr_e( $theme['id'] ); ?>" class="customize-control customize-control-theme" data-id="<?php esc_attr_e( $theme['id'] ); ?>" data-customize="<?php esc_attr_e( $theme['actions']['customize'] ); ?>" data-delete="<?php esc_attr_e( $theme['actions']['delete'] ); ?>" data-description="<?php esc_attr_e( $theme['description'] ); ?>" data-author="<?php esc_attr_e( $theme['author'] ); ?>" data-tags="<?php esc_attr_e( $theme['tags'] ); ?>" data-num-ratings="" data-version="<?php esc_attr_e( $theme['version'] ); ?>" data-wp="<?php esc_attr_e( $theme['compatibleWP'] ); ?>" data-php="<?php esc_attr_e( $theme['compatiblePHP'] ); ?>">
 													<div class="customize-control-notifications-container" style="display: none;">
 														<ul></ul>
 													</div>
-													<div class="theme active" tabindex="0" aria-describedby="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-action">
+													<div class="theme active" tabindex="0" aria-describedby="installed_themes-<?php esc_attr_e( $theme['id'] ); ?>-action">
 														<div class="theme-screenshot">
-															<img data-src="<?php echo esc_url( $theme->get_screenshot() ); ?>" alt="" src="<?php echo esc_url( $theme->get_screenshot() ); ?>">
+															<img src="<?php echo esc_url( $theme['screenshot'][0] ); ?>" alt="" data-src="<?php echo esc_url( $theme['screenshot'][0] ); ?>">
 														</div>
-														<span class="more-details theme-details" id="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-action" aria-label="<?php esc_attr_e( 'Details for theme:' ); ?> <?php esc_html_e( $theme->name ); ?>"><?php esc_html_e( 'Theme Details' ); ?></span>
-														<div class="theme-author"><?php esc_html_e( 'By' ); ?> <?php esc_html_e( $theme['Author'] ); ?></div>
+														<span class="more-details theme-details" id="installed_themes-<?php esc_attr_e( $theme['id'] ); ?>-action" aria-label="<?php esc_attr_e( 'Details for theme:' ); ?> <?php esc_html_e( $theme['name'] ); ?>">
+															<?php esc_html_e( 'Theme Details' ); ?>
+														</span>
+														<div class="theme-author">
+															<?php esc_html_e( 'By' ); ?>
+															<?php esc_html_e( $theme['author'] ); ?>
+														</div>
 														<div class="theme-id-container">
-															<h3 class="theme-name" id="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-name">
-																<span><?php esc_html_e( 'Previewing:' ); ?></span> <?php esc_html_e( $theme->name ); ?>
+															<h3 class="theme-name" id="installed_themes-<?php esc_attr_e( $theme['id'] ); ?>-name">
+																<span><?php esc_html_e( 'Previewing:' ); ?></span>
+																<?php esc_html_e( $theme['name'] ); ?>
 															</h3>
 															<div class="theme-actions">
-																<button type="button" class="button button-primary customize-theme" aria-label="<?php esc_attr_e( 'Customize theme:' ); ?> <?php esc_html_e( $theme->name ); ?>"><?php esc_html_e( 'Customize' ); ?></button>
+																<button type="button" class="button button-primary customize-theme" aria-label="<?php esc_attr_e( 'Customize theme:' ); ?> <?php esc_html_e( $theme['name'] ); ?>">
+																	<?php esc_html_e( 'Customize' ); ?>
+																</button>
 															</div>
 														</div>
 														<div class="notice notice-success notice-alt">
-															<p><?php esc_html_e( 'Installed' ); ?></p>
+															<p>
+																<?php esc_html_e( 'Installed' ); ?>
+															</p>
 														</div>			
 													</div>
 												</li>
 												<?php
 												break; // No need to cycle through other themes
 											}
-							
+
 											// Now display the rest
 											foreach ( $installed_themes as $theme ) {
-												if ( $theme->name === $top_items['themes']['title'] ) {
+												if ( $theme['name'] === $top_items['themes']['title'] ) {
 													continue;
 												}
 												?>
-												<li id="customize-control-installed_theme_<?php esc_attr_e( $theme->get_stylesheet() ); ?>" class="customize-control customize-control-theme">
+												<li id="customize-control-installed_theme_<?php esc_attr_e( $theme['id'] ); ?>" class="customize-control customize-control-theme" data-id="<?php esc_attr_e( $theme['id'] ); ?>" data-activate="<?php esc_attr_e( $theme['actions']['activate'] ); ?>" data-customize="<?php esc_attr_e( $theme['actions']['customize'] ); ?>" data-delete="<?php esc_attr_e( $theme['actions']['delete'] ); ?>" data-description="<?php esc_attr_e( $theme['description'] ); ?>" data-author="<?php esc_attr_e( $theme['author'] ); ?>" data-tags="<?php esc_attr_e( $theme['tags'] ); ?>" data-num-ratings="" data-version="<?php esc_attr_e( $theme['version'] ); ?>" data-wp="<?php esc_attr_e( $theme['compatibleWP'] ); ?>" data-php="<?php esc_attr_e( $theme['compatiblePHP'] ); ?>">
 													<div class="customize-control-notifications-container" style="display: none;">
 														<ul></ul>
 													</div>
-													<div class="theme" tabindex="0" aria-describedby="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-action">
+													<div class="theme" tabindex="0" aria-describedby="installed_themes-<?php esc_attr_e( $theme['id'] ); ?>-action">
 														<div class="theme-screenshot">
-															<img data-src="<?php echo esc_url( $theme->get_screenshot() ); ?>" alt="" src="<?php echo esc_url( $theme->get_screenshot() ); ?>">
+															<img src="<?php echo esc_url( $theme['screenshot'][0] ); ?>" alt="" data-src="<?php echo esc_url( $theme['screenshot'][0] ); ?>">
 														</div>
-														<span class="more-details theme-details" id="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-action" aria-label="<?php esc_attr_e( 'Details for theme:' ); ?> <?php esc_html_e( $theme->name ); ?>"><?php esc_html_e( 'Theme Details' ); ?></span>
-														<div class="theme-author"><?php esc_html_e( 'By' ); ?> <?php esc_html_e( $theme['Author'] ); ?></div>
+														<span id="installed_themes-<?php esc_attr_e( $theme['id'] ); ?>-action" class="more-details theme-details" aria-label="<?php esc_attr_e( 'Details for theme:' ); ?> <?php esc_html_e( $theme['name'] ); ?>">
+															<?php esc_html_e( 'Theme Details' ); ?>
+														</span>
+														<div class="theme-author">
+															<?php esc_html_e( 'By' ); ?>
+															<?php esc_html_e( $theme['author'] ); ?>
+														</div>
 														<div class="theme-id-container">
-															<h3 class="theme-name" id="installed_themes-<?php esc_attr_e( $theme->get_stylesheet() ); ?>-name">
-																<span><?php esc_html_e( 'Previewing:' ); ?></span> <?php esc_html_e( $theme->name ); ?>
+															<h3 id="installed_themes-<?php esc_attr_e( $theme['id'] ); ?>-name" class="theme-name">
+																<span><?php esc_html_e( 'Previewing:' ); ?></span>
+																<?php esc_html_e( $theme['name'] ); ?>
 															</h3>
 															<div class="theme-actions">
-																<button type="button" class="button button-primary customize-theme" aria-label="<?php esc_attr_e( 'Customize theme:' ); ?> <?php esc_html_e( $theme->name ); ?>"><?php esc_html_e( 'Customize' ); ?></button>
+																<button type="button" class="button button-primary preview-theme" aria-label="<?php esc_attr_e( 'Live preview theme:' ); ?> <?php esc_html_e( $theme['name'] ); ?>">
+																	<?php esc_html_e( 'Live Preview' ); ?>
+																</button>
 															</div>
 														</div>
 														<div class="notice notice-success notice-alt">
@@ -410,11 +478,7 @@ wp_print_scripts();
 										</ul>
 									</div>											
 								</div>
-								<div class="customize-themes-section themes-section-wporg_themes control-section-content themes-php">
-									<div class="theme-overlay" tabindex="0" role="dialog" aria-label="<?php esc_attr_e( 'Theme Details' ); ?>"></div>
-									<div class="theme-browser rendered"></div>											
-								</div>
-							</dialog>
+							</div>
 						</li>
 					</ul>
 
@@ -427,7 +491,9 @@ wp_print_scripts();
 						<ul id="sub-accordion-panel-nav_menus" class="customize-pane-child accordion-sub-container control-panel-content accordion-section control-panel-nav_menus" style="display: none;">
 							<li class="panel-meta customize-info accordion-section">
 								<button class="customize-panel-back" type="button" tabindex="0">
-									<span class="screen-reader-text"><?php esc_html_e( 'Back' ); ?></span>
+									<span class="screen-reader-text">
+										<?php esc_html_e( 'Back' ); ?>
+									</span>
 								</button>
 								<div class="accordion-section-title">
 									<span class="preview-notice">
@@ -440,7 +506,9 @@ wp_print_scripts();
 										?>
 									</span>
 									<button class="customize-help-toggle dashicons dashicons-editor-help" type="button" aria-expanded="false">
-										<span class="screen-reader-text"><?php esc_html_e( 'Help' ); ?></span>
+										<span class="screen-reader-text">
+											<?php esc_html_e( 'Help' ); ?>
+										</span>
 									</button>
 								</div>
 								<div class="description customize-panel-description">
@@ -721,7 +789,7 @@ wp_print_scripts();
 												} else {
 													// Fallback generic input.
 													?>
-													<input type="text" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="<?php esc_attr_e( (string) $field_value ); ?>" class="regular-text">
+													<input type="text" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="<?php //esc_attr_e( $field_value ); ?>" class="regular-text">
 													<?php
 												}
 												if ( ! empty ( $control_data['description'] ) ) {
@@ -1185,7 +1253,7 @@ wp_print_scripts();
 							?>
 						</ul>
 
-						<ul class="customize-pane-child accordion-section-content accordion-section control-section control-section-nav_menu field-title-attribute-active menu open" id="menu-to-edit" style="display: none;">
+						<ul id="menu-to-edit" class="customize-pane-child accordion-section-content accordion-section control-section control-section-nav_menu field-title-attribute-active menu open" style="display: none;">
 							<li class="customize-section-description-container section-meta no-drag">
 								<div class="customize-section-title">
 									<button class="customize-section-back" tabindex="0">
@@ -1199,7 +1267,7 @@ wp_print_scripts();
 											printf(
 												/* translators: &#9656; is the unicode right-pointing triangle. %s: Section title in the Customizer. */
 												__( 'Customizing &#9656; %s' ),
-												__( 'Widgets' )
+												__( 'Menus' )
 											);
 											?>
 										</span>
@@ -1369,7 +1437,16 @@ wp_print_scripts();
 		<iframe title="<?php esc_attr_e( 'Site Preview' ); ?>" name="customize-preview-0" onmousewheel="" src="<?php echo esc_url( $preview_url ); ?>"></iframe>
 	</div>
 
-</dialog><!-- .wp-full-overlay expanded preview-desktop -->
+</div><!-- .wp-full-overlay expanded preview-desktop -->
+
+
+<?php
+/**
+ * Enables the modal for themes
+ */
+customize_themes_print_templates();
+?>
+
 
 <?php /* Enables the modal for media widgets */ ?>
 <dialog id="widget-modal">
