@@ -692,7 +692,6 @@ body.trashing #publish-settings {
 #customize-theme-controls .customize-pane-child.open,
 #customize-theme-controls .customize-pane-child.current-panel,
 #customize-theme-controls .customize-pane-child.busy {
-	visibility: visible;
 	height: auto;
 	overflow: auto;
 }
@@ -777,7 +776,7 @@ h3.customize-section-title {
 	top: 0;
 	left: 0;
 	width: 45px;
-	height: 40px;
+	height: 41px;
 	padding: 0 2px 0 0;
 	background: #f0f0f1;
 	border: none;
@@ -1810,8 +1809,8 @@ p.customize-section-description {
 }
 
 .themes-filter-bar .feature-filter-toggle {
-	float: right;
 	margin: 3px 0 3px 25px;
+	display: none;
 }
 
 .themes-filter-bar .feature-filter-toggle:before {
@@ -1836,10 +1835,7 @@ p.customize-section-description {
 .filter-drawer {
 	box-sizing: border-box;
 	width: 100%;
-	position: absolute;
-	top: 46px;
-	left: 0;
-	padding: 25px 0 25px 25px;
+	padding: 0 0 25px 25px;
 	border-top: 0;
 	margin: 0;
 	background: #f0f0f1;
