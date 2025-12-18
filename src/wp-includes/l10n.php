@@ -815,7 +815,7 @@ function load_textdomain( $domain, $mofile, $locale = null ) {
 		if ( $success ) {
 			if ( isset( $l10n[ $domain ] ) && $l10n[ $domain ] instanceof MO ) {
 				$i18n_controller->load_file( $l10n[ $domain ]->get_filename(), $domain, $locale );
-	}
+			}
 
 			// Unset NOOP_Translations reference in get_translations_for_domain().
 			unset( $l10n[ $domain ] );
