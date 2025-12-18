@@ -782,9 +782,8 @@ function customize_themes_print_templates() {
 	$cp_has_update = classicpress_has_update();
 
 	?>
-	<script type="text/html" id="tmpl-customize-themes-details-view">
-		<div class="theme-backdrop"></div>
-		<div class="theme-wrap wp-clearfix" role="document">
+	<dialog id="tmpl-customize-themes-details-view">
+		<div class="theme-wrap wp-clearfix">
 			<div class="theme-header">
 				<button type="button" class="left dashicons dashicons-no"><span class="screen-reader-text">
 					<?php
@@ -807,47 +806,26 @@ function customize_themes_print_templates() {
 			</div>
 			<div class="theme-about wp-clearfix">
 				<div class="theme-screenshots">
-				<# if ( data.screenshot && data.screenshot[0] ) { #>
-					<div class="screenshot"><img src="{{ data.screenshot[0] }}?ver={{ data.version }}" alt=""></div>
-				<# } else { #>
-					<div class="screenshot blank"></div>
-				<# } #>
+					<div class="screenshot"></div>
 				</div>
 
 				<div class="theme-info">
-					<# if ( data.active ) { #>
-						<span class="current-label"><?php _e( 'Active Theme' ); ?></span>
-					<# } #>
-					<h2 class="theme-name">{{{ data.name }}}<span class="theme-version">
-						<?php
-						/* translators: %s: Theme version. */
-						printf( __( 'Version: %s' ), '{{ data.version }}' );
-						?>
-					</span></h2>
-					<h3 class="theme-author">
-						<?php
-						/* translators: %s: Theme author link. */
-						printf( __( 'By %s' ), '{{{ data.authorAndUri }}}' );
-						?>
-					</h3>
+					<span class="current-label hidden"><?php _e( 'Active Theme' ); ?></span>
+					<h2 class="theme-name">
+						<?php _e( 'Version:' ); ?>
+						<span class="theme-version"></span>
+					</h2>
+					<h3 class="theme-author"></h3>
+					<div class="theme-rating">
+						<a class="num-ratings" target="_blank" href="">
+							<span class="screen-reader-text"><?php _e( '(opens in a new tab)' ); ?></span>
+						</a>
+					</div>
 
-					<# if ( data.stars && 0 != data.num_ratings ) { #>
-						<div class="theme-rating">
-							{{{ data.stars }}}
-							<a class="num-ratings" target="_blank" href="{{ data.reviews_url }}">
-								<?php
-								printf(
-									'%1$s <span class="screen-reader-text">%2$s</span>',
-									/* translators: %s: Number of ratings. */
-									sprintf( __( '(%s ratings)' ), '{{ data.num_ratings }}' ),
-									/* translators: Hidden accessibility text. */
-									__( '(opens in a new tab)' )
-								);
-								?>
-							</a>
-						</div>
-					<# } #>
 
+				</div>
+			</div>
+<?php /*
 					<# if ( data.hasUpdate ) { #>
 						<# if ( data.updateResponse.compatibleWP && data.updateResponse.compatiblePHP ) { #>
 							<div class="notice notice-warning notice-alt notice-large" data-slug="{{ data.id }}">
@@ -861,21 +839,21 @@ function customize_themes_print_templates() {
 									<# if ( ! data.updateResponse.compatibleWP && ! data.updateResponse.compatiblePHP ) { #>
 										<?php
 										printf(
-											/* translators: %s: Theme name. */
+											/* translators: %s: Theme name. *
 											__( 'There is a new version of %s available, but it does not work with your versions of ClassicPress and PHP.' ),
 											'{{{ data.name }}}'
 										);
 										if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
 											if ( $cp_has_update ) {
 												printf(
-													/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
+													/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. *
 													' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
 													self_admin_url( 'update-core.php' ),
 													esc_url( wp_get_update_php_url() )
 												);
 											} else {
 												printf(
-													/* translators: %s: URL to Update PHP page. */
+													/* translators: %s: URL to Update PHP page. *
 													' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 													esc_url( wp_get_update_php_url() )
 												);
@@ -883,13 +861,13 @@ function customize_themes_print_templates() {
 											wp_update_php_annotation( '</p><p><em>', '</em>' );
 										} elseif ( current_user_can( 'update_core' ) && $cp_has_update ) {
 											printf(
-												/* translators: %s: URL to WordPress Updates screen. */
+												/* translators: %s: URL to WordPress Updates screen. *
 												' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 												self_admin_url( 'update-core.php' )
 											);
 										} elseif ( current_user_can( 'update_php' ) ) {
 											printf(
-												/* translators: %s: URL to Update PHP page. */
+												/* translators: %s: URL to Update PHP page. *
 												' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 												esc_url( wp_get_update_php_url() )
 											);
@@ -899,13 +877,13 @@ function customize_themes_print_templates() {
 									<# } else if ( ! data.updateResponse.compatibleWP ) { #>
 										<?php
 										printf(
-											/* translators: %s: Theme name. */
+											/* translators: %s: Theme name. *
 											__( 'There is a new version of %s available, but it does not work with your version of ClassicPress.' ),
 											'{{{ data.name }}}'
 										);
 										if ( current_user_can( 'update_core' ) && $cp_has_update ) {
 											printf(
-												/* translators: %s: URL to WordPress Updates screen. */
+												/* translators: %s: URL to WordPress Updates screen. *
 												' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 												self_admin_url( 'update-core.php' )
 											);
@@ -914,13 +892,13 @@ function customize_themes_print_templates() {
 									<# } else if ( ! data.updateResponse.compatiblePHP ) { #>
 										<?php
 										printf(
-											/* translators: %s: Theme name. */
+											/* translators: %s: Theme name. *
 											__( 'There is a new version of %s available, but it does not work with your version of PHP.' ),
 											'{{{ data.name }}}'
 										);
 										if ( current_user_can( 'update_php' ) ) {
 											printf(
-												/* translators: %s: URL to Update PHP page. */
+												/* translators: %s: URL to Update PHP page. *
 												' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 												esc_url( wp_get_update_php_url() )
 											);
@@ -937,7 +915,7 @@ function customize_themes_print_templates() {
 						<p class="parent-theme">
 							<?php
 							printf(
-								/* translators: %s: Theme name. */
+								/* translators: %s: Theme name. *
 								__( 'This is a child theme of %s.' ),
 								'<strong>{{{ data.parent }}}</strong>'
 							);
@@ -953,14 +931,14 @@ function customize_themes_print_templates() {
 								if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
 									if ( $cp_has_update ) {
 										printf(
-											/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
+											/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. *
 											' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
 											self_admin_url( 'update-core.php' ),
 											esc_url( wp_get_update_php_url() )
 										);
 									} else {
 										printf(
-											/* translators: %s: URL to Update PHP page. */
+											/* translators: %s: URL to Update PHP page. *
 											' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 											esc_url( wp_get_update_php_url() )
 										);
@@ -968,13 +946,13 @@ function customize_themes_print_templates() {
 									wp_update_php_annotation( '</p><p><em>', '</em>' );
 								} elseif ( current_user_can( 'update_core' ) && $cp_has_update ) {
 									printf(
-										/* translators: %s: URL to WordPress Updates screen. */
+										/* translators: %s: URL to WordPress Updates screen. *
 										' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 										self_admin_url( 'update-core.php' )
 									);
 								} elseif ( current_user_can( 'update_php' ) ) {
 									printf(
-										/* translators: %s: URL to Update PHP page. */
+										/* translators: %s: URL to Update PHP page. *
 										' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 										esc_url( wp_get_update_php_url() )
 									);
@@ -986,7 +964,7 @@ function customize_themes_print_templates() {
 								_e( 'This theme does not work with your version of ClassicPress.' );
 								if ( current_user_can( 'update_core' ) && $cp_has_update ) {
 									printf(
-										/* translators: %s: URL to WordPress Updates screen. */
+										/* translators: %s: URL to WordPress Updates screen. *
 										' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 										self_admin_url( 'update-core.php' )
 									);
@@ -997,7 +975,7 @@ function customize_themes_print_templates() {
 								_e( 'This theme does not work with your version of PHP.' );
 								if ( current_user_can( 'update_php' ) ) {
 									printf(
-										/* translators: %s: URL to Update PHP page. */
+										/* translators: %s: URL to Update PHP page. *
 										' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 										esc_url( wp_get_update_php_url() )
 									);
@@ -1014,7 +992,7 @@ function customize_themes_print_templates() {
 						<# if ( data.actions.activate ) { #>
 							<?php
 							printf(
-								/* translators: %s: URL to the themes page (also it activates the theme). */
+								/* translators: %s: URL to the themes page (also it activates the theme). *
 								' ' . __( 'However, you can still <a href="%s">activate this theme</a>, and use the Site Editor to customize it.' ),
 								'{{{ data.actions.activate }}}'
 							);
@@ -1039,7 +1017,7 @@ function customize_themes_print_templates() {
 
 					<# if ( data.blockTheme ) { #>
 						<?php
-							/* translators: %s: Theme name. */
+							/* translators: %s: Theme name. *
 							$aria_label = sprintf( _x( 'Activate %s', 'theme' ), '{{ data.name }}' );
 						?>
 						<# if ( data.compatibleWP && data.compatiblePHP && data.actions.activate && data.compatibleCP !== false ) { #>
@@ -1061,9 +1039,9 @@ function customize_themes_print_templates() {
 						<button type="button" class="button button-primary disabled"><?php _e( 'Install &amp; Preview' ); ?></button>
 					<# } #>
 				<# } #>
-			</div>
+			</div>*/ ?>
 		</div>
-	</script>
+	</dialog>
 	<?php
 }
 
