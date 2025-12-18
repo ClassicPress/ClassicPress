@@ -13,7 +13,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		form = document.querySelector( 'form' ),
 		devicesWrapper = form.querySelector('.devices'),
 		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
-		previewFrame = document.getElementById( 'customize-preview' );
+		previewFrame = document.getElementById( 'customize-preview' ),
+		themeModal = document.getElementById( 'tmpl-customize-themes-details-view' ),
+		queryParams = new URLSearchParams( window.location.search );
 
 	reducedMotionMediaQuery.addEventListener( 'change' , function handleReducedMotionChange( event ) {
 		isReducedMotion = event.matches;
@@ -49,7 +51,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	// Click management
-	document.addEventListener( 'click', function( e ) {
+	document.addEventListener( 'click', function( e ) {//console.log(e);
 		var id;
 		if ( ( e.target.tagName === 'H3' || e.target.classList && e.target.classList.contains( 'change-theme' ) ) && e.target.closest( 'ul' ) ) {
 			e.preventDefault();
@@ -74,23 +76,25 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.target.closest( 'ul' ).style.display = 'none';
 
 			// Go up to the top level
-			if ( e.target.parentNode.classList.contains( 'panel-meta' ) ) {
+			if ( e.target.parentNode.classList.contains( 'panel-meta' ) || e.target.closest( 'ul' ).id === 'sub-accordion-section-menu_locations' ) {
 				document.getElementById( 'customize-info' ).style.display = 'block';
 				document.querySelector( '.customize-pane-parent' ).style.display = 'block';
 				document.querySelector( '.customize-pane-parent h3' ).focus();
 
-			// Go up to the second level	
-			} else {			
+			// Go up to the second (or maybe top) level	
+			} else {
 				previousAccordionPane.style.display = 'block';
 				if ( previousAccordionPane.querySelector( '.customize-panel-back' ) ) {
 					previousAccordionPane.querySelector( '.customize-panel-back' ).focus();
-				} else {
+				} else if ( previousAccordionPane.querySelector( '.customize-section-back' ) ) {
 					previousAccordionPane.querySelector( '.customize-section-back' ).focus();
+				} else { // top level
+					document.querySelector( '.customize-pane-parent h3' ).focus();
 				}
 			}
 
-		// Open Create New Menu panel
-		} else if ( e.target.classList && e.target.classList.contains( 'customize-add-menu-button' ) ) {
+		// Open New Menu panel
+		} else if ( e.target.classList && ( e.target.classList.contains( 'customize-add-menu-button' ) || e.target.classList.contains( 'create-menu' ) ) ) {
 			e.preventDefault();			
 			previousAccordionPane = e.target.closest( 'ul' );
 			e.target.closest( 'ul' ).style.display = 'none';
@@ -99,7 +103,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Open Next panel to create new menu
 		} else if ( e.target.id === 'customize-new-menu-submit' ) {
 			e.preventDefault();			
-			previousAccordionPane = e.target.closest( 'ul' );
+			previousAccordionPane = document.getElementById( 'sub-accordion-panel-nav_menus' );
 			e.target.closest( 'ul' ).style.display = 'none';
 			document.getElementById( 'menu-to-edit' ).style.display = 'block';
 
@@ -108,7 +112,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.preventDefault();			
 			e.target.closest( 'ul' ).style.display = 'none';
 			document.getElementById( 'sub-accordion-panel-widgets' ).style.display = 'block';
-			
+
 		// Open and close description
 		} else if ( e.target.classList && e.target.classList.contains( 'customize-help-toggle' ) ) {
 			if ( e.target.parentNode.classList.contains( 'open' ) ) {
@@ -122,24 +126,52 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 		// Browse installed themes
-		} else if ( e.target.classList.contains( 'themes-section-installed_themes' ) ) {
+		} else if ( e.target.classList && e.target.classList.contains( 'themes-section-installed_themes' ) ) {
 			form.querySelector( '.themes-section-wporg_themes' ).classList.remove( 'selected' );
 			e.target.classList.add( 'selected' );
 			if ( document.querySelector( '.wp-org' ) ) {
 				document.querySelector( '.themes').innerHTML = installedThemesHTML;
 				document.querySelector( '.theme-browser' ).classList.remove( 'wp-org' );
 				document.querySelector( '.theme-browser' ).classList.add( 'local' );
-				intersectionObserver.unobserve( orgThemes[orgThemes.length - 1] ); // deactivate Intersection Observer
+				document.querySelector( '.feature-filter-toggle' ).style.display = 'none';
 				document.querySelector( '.filter-themes-count .theme-count' ).textContent = document.querySelectorAll( '.local .themes li' ).length;
+			}
+			if ( orgThemes ) {
+				intersectionObserver.unobserve( orgThemes[orgThemes.length - 1] ); // deactivate Intersection Observer
 			}
 
 		// Browse themes at wp.org
-		} else if ( e.target.classList.contains( 'themes-section-wporg_themes' ) ) {
+		} else if ( e.target.classList && e.target.classList.contains( 'themes-section-wporg_themes' ) ) {
 			form.querySelector( '.themes-section-installed_themes' ).classList.remove( 'selected' );
 			e.target.classList.add( 'selected' );
 			document.querySelector( '.theme-browser' ).classList.remove( 'local' );
 			document.querySelector( '.theme-browser' ).classList.add( 'wp-org' );
+			document.querySelector( '.feature-filter-toggle' ).style.display = 'inline-block';
 			updateThemes( 'browse', 'new' );
+
+		// Select theme tags
+		} else if ( e.target.parentNode === document.querySelector( '.feature-filter-toggle' ) ) {
+			if ( isVisible( document.querySelector( '.filter-drawer' ) ) ) {
+				document.querySelector( '.filter-drawer' ).style.display = 'none';
+			} else {
+				document.querySelector( '.filter-drawer' ).style.display = 'block';
+			}
+
+		// Display theme modal
+		} else if ( e.target.classList && e.target.classList.contains( 'more-details' ) ) {
+			e.preventDefault();
+			showThemeModal( e.target.closest( '.theme' ) );
+
+		// Customize current theme
+		} else if ( e.target.classList && e.target.classList.contains( 'customize-theme' ) ) {
+			e.preventDefault();
+			location = window.location.pathname;
+
+		// Preview non-active theme in Customizer
+		} else if ( e.target.classList && e.target.classList.contains( 'preview-theme' ) ) {
+			e.preventDefault();
+			queryParams.set( 'theme', e.target.closest( 'li' ).dataset.id );
+			location = window.location.pathname + '?' + queryParams.toString();
 		}
 	} );
 
@@ -150,7 +182,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.querySelectorAll( '.iris-picker' ).forEach( function( iris ) {
 					iris.style.display = 'none';
 				} );
-			} else {
+			} else if ( ! isVisible( themeModal ) ) {
 				e.preventDefault();
 				e.target.closest( 'ul' ).style.display = 'none';
 				document.getElementById( 'customize-info' ).style.display = 'block';
@@ -179,7 +211,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( ! overlay || ! sidebar || ! preview || ! button ) {
 			return;
 		}
-    
+
 		// Overlay classes.
 		overlay.classList.toggle( 'collapsed', collapsed );
 		overlay.classList.toggle( 'expanded', ! collapsed );
@@ -271,7 +303,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	} );
 
-	// Themes
+	/**
+	 * Themes
+	 */
 	document.querySelector( '#installed_themes-themes-filter' )?.addEventListener( 'keyup', _.debounce( function( e ) {
 		var localThemes = document.querySelectorAll( '.local .themes li' ),
 			count = localThemes.length;
@@ -279,22 +313,27 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		e.preventDefault();
 
 		if ( e.key === 'Enter' || e.target.value.length > 2 ) { // requires at least 3 characters
-			localThemes.forEach( function( theme ) {
-				if ( ! theme.id.includes( e.target.value ) ) {
-					theme.style.display = 'none';
-					count--;
-				}
-			} );
-		} else {
+			if ( document.querySelector( '.theme-browser' ).classList.contains( 'wp-org' ) ) {
+				updateThemes( 'search', e.target.value );
+			} else {
+				localThemes.forEach( function( theme ) {
+					if ( ! theme.id.includes( e.target.value ) ) {
+						theme.style.display = 'none';
+						count--;
+					}
+				} );
+				document.querySelector( '.filter-themes-count .theme-count' ).textContent = count;
+			}
+		} else if ( document.querySelector( '.theme-browser' ).classList.contains( 'local' ) ) {
 			localThemes.forEach( function( theme ) {
 				theme.style.display = '';
 			} );
 			count = localThemes.length - 1;
+			document.querySelector( '.filter-themes-count .theme-count' ).textContent = count;
 		}
-		document.querySelector( '.filter-themes-count .theme-count' ).textContent = count;
 	}, 500 ) );
-	
-	// Reload the list of themes from wordpress.org using Intersection Observer
+
+	// Update the list of themes from wordpress.org using Intersection Observer
 	intersectionObserver = new IntersectionObserver( function( entries ) {
 		const isIntersecting = entries[0]?.isIntersecting ?? false;
 		if ( isIntersecting ) {
@@ -303,6 +342,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	} );
 
+	// Search themes by tags
+	document.addEventListener( 'change', function( e ) {
+		if ( e.target.tagName === 'INPUT' && e.target.closest( 'fieldset' ) && e.target.closest( 'fieldset' ).classList.contains( 'filter-group' ) ) {
+			var tagsToSend = [];
+			document.querySelectorAll( '.filter-drawer input' ).forEach( function( tag ) {
+				if ( tag.checked ) {
+					tagsToSend.push( tag.value );
+				}
+			} );
+			updateThemes( 'tag', tagsToSend );
+		}
+	} );
+
+	// Update themes listed from wp.org
 	function updateThemes( updateType, updateValue ) {
 		var themesGrid = document.querySelector( '.themes' ),
 
@@ -317,8 +370,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			params.append( 'request[browse]', updateValue ); // popular or new
 		} else if ( updateType === 'search' ) {
 			params.append( 'request[search]', updateValue );
-		} else if ( updateType === 'tag' ) { // array
-			params.append( 'request[tag]', updateValueArray );
+		} else if ( updateType === 'tag' ) {
+			params.append( 'request[tag]', updateValue ); // array
 		}
 
 		fetch( ajaxurl, {
@@ -347,11 +400,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Update count
 			document.querySelector( '.filter-themes-count .theme-count' ).textContent = orgThemes.length;
-
-			intersectionObserver.observe( orgThemes[orgThemes.length - 1] );
+			if ( orgThemes.length ) {
+				intersectionObserver.observe( orgThemes[orgThemes.length - 1] );
+			}
 		} )
 		.catch( function( error ) {
 			console.error( error );
 		} );
+	}
+
+	// Show theme modal
+	function showThemeModal( theme ) {
+		if ( theme.classList.contains( 'active' ) ) {
+			themeModal.querySelector( '.current-label' ).classList.remove( 'hidden' );
+		}
+		themeModal.querySelector( '.screenshot' ).innerHTML = theme.querySelector( '.theme-screenshot img' ).outerHTML;
+		themeModal.querySelector( '.theme-name' ).textContent = theme.querySelector( '.theme-name' ).textContent;
+		//themeModal.querySelector( '.theme-version' ).textContent = theme.dataset.version;
+		//themeModal.querySelector( '.theme-rating' ).textContent = theme.dataset.ratings.textContent;
+		//themeModal.querySelector( '.num-ratings' ).href = 'https://wordpress.org/support/theme/' + theme.id + '/reviews/';
+		themeModal.querySelector( '.num-ratings .screen-reader-text' ).insertAdjacentHTML( 'afterbegin', theme.dataset.numRatings );
+		themeModal.showModal();
 	}
 } );
