@@ -3389,6 +3389,7 @@ function check_theme_switched() {
 			/** This action is documented in wp-includes/theme.php */
 			do_action( 'after_switch_theme', $stylesheet, $old_theme );
 		}
+		delete_transient( 'core_true_stylesheet' );
 
 		flush_rewrite_rules();
 
