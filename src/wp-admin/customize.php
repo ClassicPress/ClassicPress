@@ -27,10 +27,10 @@ global $wp_customize;
 
 // Preview URL
 if ( isset( $_GET['theme'] ) ) { // live preview
-	$requested_theme = sanitize_text_field( $_GET['theme'] );
-	if ( wp_get_theme( $requested_theme )->exists() && $requested_theme !== get_stylesheet() ) {
+	$requested_theme = sanitize_key( $_GET['theme'] );
+	if ( wp_get_theme( $requested_theme )->exists() && $requested_theme !== get_transient( 'core_true_stylesheet' ) ) {
 		$args = array();
-		$args['theme'] = sanitize_text_field( $_GET['theme'] );
+		$args['theme'] = $requested_theme;
 		$wp_customize = new WP_Customize_Manager( $args );	
 	}
 }
@@ -61,7 +61,7 @@ $menus_index    = array();
 foreach ( $menus_by_id as $menu_term ) {
     $menus_index[ $menu_term->term_id ] = $menu_term;
 }
-$add_items      = __( 'Add Items' );
+
 $unique_nav_id  = uniqid( 'customize-control-nav_menu--', true );
 $unique_add_id  = uniqid( 'customize-nav-menu-auto-add-control-' );
 $unique_loc_id  = uniqid( 'customize-nav-menu-control-location-' );
@@ -274,7 +274,13 @@ wp_print_scripts();
 						<li id="accordion-section-themes" class="accordion-section control-panel-themes" aria-owns="sub-accordion-section-themes">
 							<h3 class="accordion-section-title" tabindex="0">
 								<span class="customize-action">
-									<?php esc_html_e( 'Active theme' ); ?>
+									<?php
+									if ( is_customize_preview() ) {
+										esc_html_e( 'Previewing theme' );
+									} else {
+										esc_html_e( 'Active theme' );
+									}
+									?>
 								</span>
 								<?php esc_html_e( $top_items['themes']['title'] ); ?>
 								<button type="button" class="button change-theme" aria-label="Change theme">
@@ -409,7 +415,7 @@ wp_print_scripts();
 											<?php
 											// Display the active theme first
 											foreach ( $installed_themes as $theme ) {
-												if ( $theme['name'] !== $top_items['themes']['title'] ) {
+												if ( $theme['id'] !== get_transient( 'core_true_stylesheet' ) ) {
 													continue;
 												}
 												?>
@@ -430,7 +436,6 @@ wp_print_scripts();
 														</div>
 														<div class="theme-id-container">
 															<h3 class="theme-name" id="installed_themes-<?php esc_attr_e( $theme['id'] ); ?>-name">
-																<span><?php esc_html_e( 'Previewing:' ); ?></span>
 																<?php esc_html_e( $theme['name'] ); ?>
 															</h3>
 															<div class="theme-actions">
@@ -452,7 +457,7 @@ wp_print_scripts();
 
 											// Now display the rest
 											foreach ( $installed_themes as $theme ) {
-												if ( $theme['name'] === $top_items['themes']['title'] ) {
+												if ( $theme['id'] === get_transient( 'core_true_stylesheet' ) ) {
 													continue;
 												}
 												?>
@@ -473,7 +478,6 @@ wp_print_scripts();
 														</div>
 														<div class="theme-id-container">
 															<h3 id="installed_themes-<?php esc_attr_e( $theme['id'] ); ?>-name" class="theme-name">
-																<span><?php esc_html_e( 'Previewing:' ); ?></span>
 																<?php esc_html_e( $theme['name'] ); ?>
 															</h3>
 															<div class="theme-actions">
@@ -1313,13 +1317,13 @@ wp_print_scripts();
 									printf(
 										/* translators: %s: "Add Items" button text. */
 										__( 'Time to add some links! Click &#8220;%s&#8221; to start putting pages, categories, and custom links in your menu. Add as many things as you would like.' ),
-										$add_items
+										__( 'Add Items' )
 									);
 									?>
 								</p>
 								<div class="customize-control-nav_menu-buttons">
 									<button type="button" class="button add-new-menu-item" aria-label="<?php esc_attr_e( 'Add or remove menu items' ); ?>" aria-expanded="false" aria-controls="available-menu-items">
-										<?php echo $add_items; ?>
+										<?php esc_html_e( 'Add Items' ); ?>
 									</button>
 									<button type="button" class="button-link reorder-toggle" aria-label="<?php esc_attr_e( 'Reorder menu items' ); ?>" aria-describedby="reorder-items-desc-<?php esc_attr_e( $unique_nav_id ); ?>">
 										<span class="reorder"><?php esc_html_e( 'Reorder' ); ?></span>
