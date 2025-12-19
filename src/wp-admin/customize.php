@@ -105,6 +105,40 @@ uasort(
 );
 
 /**
+ * Widgets
+ */
+require_once ABSPATH . 'wp-admin/includes/widgets.php'; // ensures helpers & globals are set
+
+global $wp_registered_widgets, $wp_registered_widget_controls;
+
+// Collect widgets in a name-keyed array for sorting.
+$available_widgets = array();
+
+foreach ( $wp_registered_widgets as $id => $widget ) {
+	if ( empty( $widget['name'] ) ) {
+		continue;
+	}
+
+	// Derive id_base
+	$id_base = _get_widget_id_base( $id );
+
+	// Get the control (admin form) for this widget, if there is one.
+	$control = isset( $wp_registered_widget_controls[ $id ] )
+		? $wp_registered_widget_controls[ $id ]
+		: null;
+
+	$available_widgets[ $widget['name'] . '|' . $id ] = array(
+		'id'      => $id,
+		'id_base' => $id_base,
+		'name'    => $widget['name'],
+		'desc'    => isset( $widget['description'] ) ? $widget['description'] : '',
+		'control' => $control,
+	);
+}
+// Sort alphabetically by name (and id as tiebreaker).
+ksort( $available_widgets, SORT_NATURAL | SORT_FLAG_CASE );
+
+/**
  * Fires when Customizer controls are initialized, before scripts are enqueued.
  *
  * @since 3.4.0
@@ -1456,8 +1490,117 @@ wp_print_scripts();
 		<iframe title="<?php esc_attr_e( 'Site Preview' ); ?>" name="customize-preview-0" onmousewheel="" src="<?php echo esc_url( $preview_url ); ?>" style="position: relative;z-index: 1;"></iframe>
 	</div>
 
-</div><!-- .wp-full-overlay expanded preview-desktop -->
+	<div id="widgets-left">
+		<!-- compatibility with JS which looks for widget templates here -->
+		<div id="available-widgets-filter">
+			<label class="screen-reader-text" for="widgets-search">
+					Search Widgets
+			</label>
+			<input type="text" id="widgets-search" placeholder="Search widgets…" aria-describedby="widgets-search-desc">
+			<div class="search-icon" aria-hidden="true"></div>
+			<button type="button" class="clear-results">
+				<span class="screen-reader-text">
+					Clear Results
+				</span>
+			</button>
+			<p class="screen-reader-text" id="widgets-search-desc">
+				The search results will be updated as you type.
+			</p>
+		</div>
+		<ul id="available-widgets-list">
+			<?php
+			$number = 0;
+			foreach ( $available_widgets as $widget_data ) :
+				$id       = $widget_data['id'];
+				$id_base  = $widget_data['id_base'];
+				$name     = $widget_data['name'];
+				$desc     = $widget_data['desc'];
+				$control  = $widget_data['control'];
+				$tpl_id   = $id_base . '-' . ++$number;
+				?>
+				<li id="widget-tpl-<?php esc_attr_e( $tpl_id ); ?>"
+					class="widget widget-tpl-<?php esc_attr_e( $tpl_id ); ?>"
+					data-widget-id="<?php esc_attr_e( $tpl_id ); ?>"
+					data-id_base="<?php esc_attr_e( $id_base ); ?>"
+					tabindex="0"
+					style="display: list-item;"
+				>
+					<div id="widget-<?php esc_attr_e( $number . '_' . $id_base ); ?>-__i__" class="widget">
+						<details class="widget-top">
+							<summary class="widget-title">
+								<h3>
+									<?php esc_html_e( $widget['name'] ); ?>
+								</h3>
+							</summary>
+							<div class="widget-title-action">
+								<a class="widget-control-edit hide-if-js" href="<?php echo esc_url( admin_url() ); ?>customize.php?url=http%3A%2F%2Flocalhost%2Ftorts%2Fwelcome%2F&amp;editwidget=media_audio-1&amp;addnew=1&amp;num=2&amp;base=media_audio">
+									<span class="edit"><?php esc_attr_e( 'Edit' ); ?></span>
+									<span class="add"><?php esc_attr_e( 'Add' ); ?></span>
+									<span class="screen-reader-text"><?php esc_attr_e( 'Audio' ); ?></span>
+								</a>
+							</div>
 
+							<div class="widget-inside">
+								<div class="form">
+									<div class="widget-content">
+										<?php
+										if ( $control && ! empty( $control['callback'] ) && is_callable( $control['callback'] ) ) {
+											$widget_args = array(
+												'widget_id'   => $control['id'],
+												'widget_name' => $control['name'],
+											);
+											call_user_func( $control['callback'], $widget_args, $control );
+										} else {
+											echo '<p>' . esc_html__( 'This widget has no configurable options.' ) . '</p>';
+										}
+										wp_nonce_field( 'save-sidebar-widgets', '_wpnonce' );
+										?>
+									</div>
+
+									<input type="hidden" name="widget-id" value="<?php esc_attr_e( $id ); ?>">
+									<input type="hidden" name="id_base" value="<?php esc_attr_e( $id_base ); ?>">
+									<input type="hidden" name="widget_number" value="<?php esc_attr_e( $number ); ?>">
+									<input type="hidden" name="widget-width" class="widget-width" value="">
+									<input type="hidden" name="widget-height" class="widget-height" value="">
+									<input type="hidden" name="multi_number" class="multi_number" value="">
+									<input type="hidden" name="add_new" value="">
+
+									<div class="widget-control-actions">
+										<div class="alignleft">
+											<button type="button" class="button-link button-link-delete widget-control-remove">
+												<?php esc_html_e( 'Delete' ); ?>
+											</button>
+											<span class="widget-control-close-wrapper">
+												|
+												<button type="button" class="button-link widget-control-close">
+													<?php esc_html_e( 'Done' ); ?>
+												</button>
+											</span>
+										</div>
+										<div class="alignright">
+											<input type="submit" name="savewidget" id="widget-media_audio-__i__-savewidget" class="button button-primary widget-control-save right" value="Save">
+											<span class="spinner"></span>
+										</div>
+										<br class="clear">
+									</div>
+								</div><!-- .form -->
+							</div>
+						</details>
+						<?php
+						if ( $desc ) {
+							?>
+							<div class="widget-description">
+								<?php echo esc_html( $desc ); ?>
+							</div>
+							<?php
+						}
+						?>
+					</div>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+	</div>
+</div><!-- .wp-full-overlay expanded preview-desktop -->
 
 <?php
 /**
@@ -1465,7 +1608,6 @@ wp_print_scripts();
  */
 customize_themes_print_templates();
 ?>
-
 
 <?php /* Enables the modal for media widgets */ ?>
 <dialog id="widget-modal">
