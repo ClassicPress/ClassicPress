@@ -25,6 +25,24 @@ if ( ! current_user_can( 'customize' ) ) {
  */
 global $wp_customize;
 
+// Preview URL
+if ( isset( $_GET['theme'] ) ) { // live preview
+	$requested_theme = sanitize_text_field( $_GET['theme'] );
+	if ( wp_get_theme( $requested_theme )->exists() && $requested_theme !== get_stylesheet() ) {
+		$args = array();
+		$args['theme'] = sanitize_text_field( $_GET['theme'] );
+		$wp_customize = new WP_Customize_Manager( $args );	
+	}
+}
+$preview_url = add_query_arg(
+    array(
+        'customize_changeset_uuid'    => $wp_customize->changeset_uuid(),
+        'customize_theme'             => $wp_customize->theme()->stylesheet,
+        'customize_messenger_channel' => 'preview-0',
+    ),
+    home_url( '/' )
+);
+
 $wp_customize->setup_theme();
 $wp_customize->register_controls();
 
@@ -84,24 +102,6 @@ uasort(
 		$bp = isset ( $b['priority'] ) ? (int) $b['priority'] : 999;
 		return $ap <=> $bp;
 	}
-);
-
-// Preview URL
-if ( isset( $_GET['theme'] ) ) { // live preview
-	$requested_theme = sanitize_text_field( $_GET['theme'] );
-	if ( wp_get_theme( $requested_theme )->exists() && $requested_theme !== get_stylesheet() ) {
-		$args = array();
-		$args['theme'] = sanitize_text_field( $_GET['theme'] );
-		$wp_customize = new WP_Customize_Manager( $args );	
-	}
-}
-$preview_url = add_query_arg(
-    array(
-        'customize_changeset_uuid'    => $wp_customize->changeset_uuid(),
-        'customize_theme'             => $wp_customize->theme()->stylesheet,
-        'customize_messenger_channel' => 'preview-0',
-    ),
-    home_url( '/' )
 );
 
 /**
