@@ -15,9 +15,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
 		previewFrame = document.getElementById( 'customize-preview' ),
 		themeModal = document.getElementById( 'tmpl-customize-themes-details-view' ),
-		queryParams = new URLSearchParams( window.location.search );
+		queryParams = new URLSearchParams( window.location.search ),
+		cleanUrl = window.location.origin + window.location.pathname;
 
-	reducedMotionMediaQuery.addEventListener( 'change' , function handleReducedMotionChange( event ) {
+	// Clean the URL if previewing the active theme
+	if ( queryParams.get( 'theme' ) === _wpCustomizeControlsL10n.activeTheme ) {
+        window.history.replaceState( {}, '', cleanUrl );
+	}
+
+	// Limit motion where appropriate
+	reducedMotionMediaQuery.addEventListener( 'change', function handleReducedMotionChange( event ) {
 		isReducedMotion = event.matches;
 	} );
 
@@ -165,13 +172,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Customize current theme
 		} else if ( e.target.classList && e.target.classList.contains( 'customize-theme' ) ) {
 			e.preventDefault();
-			location = window.location.pathname;
+			location = cleanUrl;
 
 		// Preview non-active theme in Customizer
 		} else if ( e.target.classList && e.target.classList.contains( 'preview-theme' ) ) {
 			e.preventDefault();
 			queryParams.set( 'theme', e.target.closest( 'li' ).dataset.id );
-			location = window.location.pathname + '?' + queryParams.toString();
+			location = cleanUrl + '?' + queryParams.toString();
 		}
 	} );
 
