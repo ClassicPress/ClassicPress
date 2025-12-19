@@ -1186,7 +1186,7 @@ function wp_default_scripts( $scripts ) {
 					__( 'Use Site Editor' )
 				)
 			),
-			'activeTheme'             => get_stylesheet(),
+			'activeTheme'             => get_transient( 'core_true_stylesheet' ) ?: get_option( 'stylesheet' ),
 		)
 	);
 	$scripts->add( 'customize-selective-refresh', "/wp-includes/js/customize-selective-refresh$suffix.js", array( 'jquery', 'wp-util', 'customize-preview' ), false, 1 );
