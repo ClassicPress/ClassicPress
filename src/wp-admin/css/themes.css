@@ -1908,7 +1908,7 @@ body.full-overlay-active {
 	position: absolute;
 	left: 50%;
 	top: 50%;
-	z-index: -1;
+	z-index: 0;
 	margin: -10px 0 0 -10px;
 	transform: translateZ(0);
 	background: transparent url(../images/spinner.gif) no-repeat center center;
