@@ -87,7 +87,22 @@ uasort(
 );
 
 // Preview URL
-$preview_url = $wp_customize->get_preview_url();
+if ( isset( $_GET['theme'] ) ) { // live preview
+	$requested_theme = sanitize_text_field( $_GET['theme'] );
+	if ( wp_get_theme( $requested_theme )->exists() && $requested_theme !== get_stylesheet() ) {
+		$args = array();
+		$args['theme'] = sanitize_text_field( $_GET['theme'] );
+		$wp_customize = new WP_Customize_Manager( $args );	
+	}
+}
+$preview_url = add_query_arg(
+    array(
+        'customize_changeset_uuid'    => $wp_customize->changeset_uuid(),
+        'customize_theme'             => $wp_customize->theme()->stylesheet,
+        'customize_messenger_channel' => 'preview-0',
+    ),
+    home_url( '/' )
+);
 
 /**
  * Fires when Customizer controls are initialized, before scripts are enqueued.
@@ -1434,7 +1449,7 @@ wp_print_scripts();
 	</form><!-- /#customize-controls -->
 
 	<div id="customize-preview" class="wp-full-overlay-main iframe-ready">
-		<iframe title="<?php esc_attr_e( 'Site Preview' ); ?>" name="customize-preview-0" onmousewheel="" src="<?php echo esc_url( $preview_url ); ?>"></iframe>
+		<iframe title="<?php esc_attr_e( 'Site Preview' ); ?>" name="customize-preview-0" onmousewheel="" src="<?php echo esc_url( $preview_url ); ?>" style="position: relative;z-index: 1;"></iframe>
 	</div>
 
 </div><!-- .wp-full-overlay expanded preview-desktop -->
