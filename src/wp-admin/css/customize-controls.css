@@ -793,6 +793,11 @@ h3.customize-section-title {
 	box-sizing: content-box;
 }
 
+.collapsed .customize-controls-close,
+.collapsed .devices-wrapper {
+	display: none;
+}
+
 .customize-panel-back,
 .customize-section-back {
 	display: block;
@@ -1107,14 +1112,24 @@ p.customize-section-description {
 /*
  * Flexbox
  */
-.wp-full-overlay {
-    display: flex;
+.wp-full-overlay,
+.wp-full-overlay.expanded {
+	display: flex;
+	justify-content: space-between;
+	min-width: 100%;
+	position: static;
+	margin: 0;
+}
+
+#customizer-sidebar-container {
+	display: flex;
+	flex: 0 0 auto; /* default width */
 }
 
 .wp-full-overlay-sidebar {
 	background: #f0f0f1;
 	border-right: 1px solid #dcdcde;
-	flex: 0 0 18%; /* default width */
+	width: 345px;
 }
 
 .wp-full-overlay-sidebar.collapsed {
@@ -1124,7 +1139,7 @@ p.customize-section-description {
 /* Sidebar fully collapsed */
 .wp-full-overlay.collapsed .wp-full-overlay-sidebar {
     width: 0;
-    margin-left: -320px;
+    margin-left: -665px;
 }
 
 /**
@@ -2561,7 +2576,6 @@ body.adding-widget .add-new-widget:before,
 	transform: rotate(45deg);
 }
 
-#available-widgets,
 #available-menu-items {
 	position: absolute;
 	top: 0;
@@ -2583,12 +2597,18 @@ body.adding-widget .add-new-widget:before,
 	display: none;
 }
 
-#available-widgets-list {
-	top: 60px;
-	position: absolute;
+.wp-customizer #widgets-left {
 	overflow: auto;
-	bottom: 0;
-	width: 100%;
+	border-top: 1px solid #dcdcde;
+	width: 300px;
+	margin: 0;
+	padding: 0;
+	display: none;
+}
+
+#available-widgets-list {
+	margin: 0;
+	background: #f0f0f1;
 	border-top: 1px solid #dcdcde;
 }
 
@@ -2596,12 +2616,10 @@ body.adding-widget .add-new-widget:before,
 	border-top: none;
 }
 
-#available-widgets-filter {
-	position: fixed;
-	top: 0;
-	z-index: 1;
+.wp-customizer #available-widgets-filter {
 	width: 300px;
 	background: #f0f0f1;
+	margin: 0;
 }
 
 /* search field container */
@@ -2617,11 +2635,6 @@ body.adding-widget .add-new-widget:before,
 	min-height: 32px;
 	margin: 1px 0;
 	padding: 0 30px;
-}
-
-#available-widgets-filter input::-ms-clear,
-#available-menu-items-search input::-ms-clear {
-	display: none; /* remove the "x" in IE, which conflicts with the "x" icon on button.clear-results */
 }
 
 #available-menu-items-search .search-icon,
@@ -2998,7 +3011,7 @@ body.adding-widget .add-new-widget:before,
 #customize-preview,
 #customize-preview[data-device="desktop"] {
 	position: static;
-    width: 82%;
+    width: 100%;
     height: 100%;
     border: 0;
     flex: 1 1 auto;
