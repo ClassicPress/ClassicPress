@@ -16,11 +16,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		previewFrame = document.getElementById( 'customize-preview' ),
 		themeModal = document.getElementById( 'tmpl-customize-themes-details-view' ),
 		queryParams = new URLSearchParams( window.location.search ),
-		cleanUrl = window.location.origin + window.location.pathname;
+		addWidgetButtons = document.querySelectorAll( '.add-new-widget' );
 
 	// Clean the URL if previewing the active theme
 	if ( queryParams.get( 'theme' ) === _wpCustomizeControlsL10n.activeTheme ) {
-       window.history.replaceState( {}, '', cleanUrl );
+       window.history.replaceState( {}, '', window.location.origin + window.location.pathname );
 	}
 
 	// Limit motion where appropriate
@@ -169,19 +169,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.preventDefault();
 			showThemeModal( e.target.closest( '.theme' ) );
 
-		// Customize current theme
-		} else if ( e.target.classList && e.target.classList.contains( 'customize-theme' ) ) {
-			e.preventDefault();
-			location = cleanUrl;
-
-		// Preview non-active theme in Customizer
-		} else if ( e.target.classList && e.target.classList.contains( 'preview-theme' ) ) {
-			e.preventDefault();
-			queryParams.set( 'theme', e.target.closest( 'li' ).dataset.id );
-			location = cleanUrl + '?' + queryParams.toString();
-
 		// Add a widget
 		} else if ( e.target.classList && e.target.classList.contains( 'add-new-widget' ) ) {
+			document.body.classList.toggle( 'adding-widget' );
 			if ( e.target.getAttribute( 'aria-expanded' ) === 'false' ) {
 				document.getElementById( 'widgets-left' ).style.display = 'block';
 				e.target.setAttribute( 'aria-expanded', true );
@@ -206,9 +196,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 			} else if ( ! isVisible( themeModal ) ) {
 				e.preventDefault();
+				document.body.classList.remove( 'adding-widget' );
+				document.getElementById( 'widgets-left' ).style.display = 'none';
+				document.getElementById( 'available-menu-items' ).style.display = 'none';
 				e.target.closest( 'ul' ).style.display = 'none';
 				document.getElementById( 'customize-info' ).style.display = 'block';
 				document.querySelector( '.customize-pane-parent' ).style.display = 'block';
+				addWidgetButtons.forEach( function( add ) {
+					add.setAttribute( 'aria-expanded', false );
+				} );
 			}
 		} else if ( e.key === 'Tab' ) {
 			if ( document.querySelector( '.devices-wrapper' ) ) {
@@ -229,10 +225,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		overlay.classList.toggle( 'expanded' );
 
 		// Sidebar / preview.
+		document.body.classList.remove( 'adding-widget' );
 		document.getElementById( 'widgets-left' ).style.display = 'none';
+		document.getElementById( 'available-menu-items' ).style.display = 'none';
 		document.getElementById( 'customizer-sidebar-container' ).classList.toggle( 'collapsed' );
 		document.getElementById( 'customize-preview' ).classList.toggle( 'expanded-preview' );
-		document.querySelectorAll( '.add-new-widget' ).forEach( function( add ) {
+		addWidgetButtons.forEach( function( add ) {
 			add.setAttribute( 'aria-expanded', false );
 		} );
 
