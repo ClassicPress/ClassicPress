@@ -2577,19 +2577,13 @@ body.adding-widget .add-new-widget:before,
 }
 
 #available-menu-items {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: -301px;
-	visibility: hidden;
-	overflow-x: hidden;
-	overflow-y: auto;
 	width: 300px;
 	margin: 0;
-	z-index: 4;
 	background: #f0f0f1;
 	transition: left .18s;
 	border-right: 1px solid #dcdcde;
+	display: none;
+	overflow-y: scroll;
 }
 
 #available-widgets .customize-section-title,
@@ -2598,12 +2592,13 @@ body.adding-widget .add-new-widget:before,
 }
 
 .wp-customizer #widgets-left {
-	overflow: auto;
 	border-top: 1px solid #dcdcde;
 	width: 300px;
 	margin: 0;
 	padding: 0;
-	display: none;
+	transition: left .18s;
+	display: none;	
+	overflow-y: scroll;
 }
 
 #available-widgets-list {
