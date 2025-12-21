@@ -20,7 +20,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Clean the URL if previewing the active theme
 	if ( queryParams.get( 'theme' ) === _wpCustomizeControlsL10n.activeTheme ) {
-        window.history.replaceState( {}, '', cleanUrl );
+       window.history.replaceState( {}, '', cleanUrl );
 	}
 
 	// Limit motion where appropriate
@@ -179,6 +179,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.preventDefault();
 			queryParams.set( 'theme', e.target.closest( 'li' ).dataset.id );
 			location = cleanUrl + '?' + queryParams.toString();
+
+		// Add a widget
+		} else if ( e.target.classList && e.target.classList.contains( 'add-new-widget' ) ) {
+			if ( e.target.getAttribute( 'aria-expanded' ) === 'false' ) {
+				document.getElementById( 'widgets-left' ).style.display = 'block';
+				e.target.setAttribute( 'aria-expanded', true );
+			} else {
+				document.getElementById( 'widgets-left' ).style.display = 'none';
+				e.target.setAttribute( 'aria-expanded', false );
+			}
+
+		// Collapse or expand sidebar
+		} else if ( e.target.parentNode.classList && e.target.parentNode.classList.contains( 'collapse-sidebar' ) ) { console.log('me');
+			e.preventDefault();
+			sidebarCollapseExpand( e.target.parentNode );
 		}
 	} );
 
@@ -205,51 +220,31 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Expand and collapse the sidebar.
 	 */
-	function setCollapsed( collapsed ) {
-		var overlay       = document.querySelector( '.wp-full-overlay' ),
-			sidebar       = document.getElementById( 'customize-controls' ),
-			preview       = document.getElementById( 'customize-preview' ),
-			footer        = document.getElementById( 'customize-footer-actions' ),
-			button        = footer ? footer.querySelector( '.collapse-sidebar' ) : null,
-			closeButton   = document.querySelector( '.customize-controls-close' ),
-			footerDevices = footer ? footer.querySelector( '.devices-wrapper' ) : null,
-			labelEl       = button.querySelector( '.collapse-sidebar-label' );
-
-		if ( ! overlay || ! sidebar || ! preview || ! button ) {
-			return;
-		}
+	function sidebarCollapseExpand( button ) {
+		var overlay = document.querySelector( '.wp-full-overlay' ),
+			labelEl = button.querySelector( '.collapse-sidebar-label' );
 
 		// Overlay classes.
-		overlay.classList.toggle( 'collapsed', collapsed );
-		overlay.classList.toggle( 'expanded', ! collapsed );
+		overlay.classList.toggle( 'collapsed' );
+		overlay.classList.toggle( 'expanded' );
 
 		// Sidebar / preview.
-		sidebar.classList.toggle( 'collapsed', collapsed );
-		preview.classList.toggle( 'expanded-preview', collapsed );
+		document.getElementById( 'widgets-left' ).style.display = 'none';
+		document.getElementById( 'customizer-sidebar-container' ).classList.toggle( 'collapsed' );
+		document.getElementById( 'customize-preview' ).classList.toggle( 'expanded-preview' );
+		document.querySelectorAll( '.add-new-widget' ).forEach( function( add ) {
+			add.setAttribute( 'aria-expanded', false );
+		} );
 
 		// Button ARIA + label text.
-		button.setAttribute( 'aria-expanded', collapsed ? 'false' : 'true' );
-		if ( labelEl ) {
-			labelEl.textContent = collapsed ? 'Show Controls' : 'Hide Controls';
-		}
-
-		// Hide close button in header when collapsed.
-		if ( closeButton ) {
-			closeButton.style.display = collapsed ? 'none' : '';
-		}
-
-		// Hide footer actions except the arrow when collapsed.
-		if ( footerDevices ) {
-			footerDevices.style.display = collapsed ? 'none' : '';
+		if ( button.getAttribute( 'aria-expanded' ) === 'true' ) {
+			button.setAttribute( 'aria-expanded', false );
+			labelEl.textContent = 'Show Controls';
+		} else {
+			button.setAttribute( 'aria-expanded', true );
+			labelEl.textContent = 'Hide Controls';
 		}
 	}
-	setCollapsed( isCollapsed );
-
-	document.querySelector( '.collapse-sidebar' ).addEventListener( 'click', function ( e ) {
-		e.preventDefault();
-		isCollapsed = ! isCollapsed;
-		setCollapsed( isCollapsed );
-	} );
 
 	/**
 	 * Enable different device views.
