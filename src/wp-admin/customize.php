@@ -212,96 +212,109 @@ do_action( 'customize_controls_head' );
 wp_print_scripts();
 ?>
 </head>
+
 <body class="<?php esc_attr_e( $body_class ); ?>">
+
 <h1 class="screen-reader-text"><?php esc_html_e( 'Customizer' ); ?></h1>
-<div class="wp-full-overlay preview-desktop" aria-labelledby="customizer-modal-title" style="display: flex;justify-content: space-between;min-width: 100%;position: static;margin: 0;" open>
 
-	<h2 id="customizer-modal-title" class="screen-reader-text"><?php esc_html_e( 'Customizing: ' .  get_bloginfo( 'name' ) ); ?></h2>
-	<form id="customize-controls" class="wrap wp-full-overlay-sidebar" style="position: static;width: 18%;">
-		<div id="customize-header-actions" class="wp-full-overlay-header" style="position: static;">
+<div class="wp-full-overlay preview-desktop expanded" aria-labelledby="customizer-modal-title">
+	<div id="customizer-sidebar-container">
+		<h2 id="customizer-modal-title" class="screen-reader-text"><?php esc_html_e( 'Customizing: ' .  get_bloginfo( 'name' ) ); ?></h2>
+		<form id="customize-controls" class="wrap wp-full-overlay-sidebar" style="position: static;">
+			<div id="customize-header-actions" class="wp-full-overlay-header" style="position: static;">
 
-			<?php
-			$compatible_wp  = is_wp_version_compatible( $wp_customize->theme()->get( 'RequiresWP' ) );
-			$compatible_php = is_php_version_compatible( $wp_customize->theme()->get( 'RequiresPHP' ) );
-
-			if ( $compatible_wp && $compatible_php ) {
-				$save_text = $wp_customize->is_theme_active() ? __( 'Published' ) : __( 'Activate &amp; Publish' );
-				?>
-				<div id="customize-save-button-wrapper" class="customize-save-button-wrapper" disabled>
-					<input type="submit" name="save" id="save" class="button button-primary save" value="<?php esc_html_e( 'Published' ); ?>" disabled>
-					<button id="publish-settings" class="publish-settings button-primary button dashicons dashicons-admin-generic" aria-label="<?php esc_attr_e( 'Publish Settings' ); ?>" aria-expanded="false" style="display: none;"></button>
-				</div>
 				<?php
-			} else {
-				$save_text = _x( 'Cannot Activate', 'theme' );
-				?>
+				$compatible_wp  = is_wp_version_compatible( $wp_customize->theme()->get( 'RequiresWP' ) );
+				$compatible_php = is_php_version_compatible( $wp_customize->theme()->get( 'RequiresPHP' ) );
 
-				<div id="customize-save-button-wrapper" class="customize-save-button-wrapper disabled" >
-					<button class="button button-primary disabled" aria-label="<?php esc_attr_e( 'Publish Settings' ); ?>" aria-expanded="false" disabled>
-						<?php echo $save_text; ?>
-					</button>
-				</div>
-				<?php
-			}
-			?>
-			<span class="spinner"></span>
-			<button type="button" class="customize-controls-preview-toggle">
-				<span class="controls"><?php _e( 'Customize' ); ?></span>
-				<span class="preview"><?php _e( 'Preview' ); ?></span>
-			</button>
-			<a class="customize-controls-close" href="<?php echo esc_url( $wp_customize->get_return_url() ); ?>">
-				<span class="screen-reader-text">
-					<?php
-					/* translators: Hidden accessibility text. */
-					esc_html_e( 'Close the Customizer and go back to the previous page' );
+				if ( $compatible_wp && $compatible_php ) {
+					$save_text = $wp_customize->is_theme_active() ? __( 'Published' ) : __( 'Activate &amp; Publish' );
 					?>
-				</span>
-			</a>
-		</div><!-- #customize-header-actions -->
+					<div id="customize-save-button-wrapper" class="customize-save-button-wrapper" disabled>
+						<input type="submit" name="save" id="save" class="button button-primary save" value="<?php esc_html_e( 'Published' ); ?>" disabled>
+						<button id="publish-settings"
+							class="publish-settings button-primary button dashicons dashicons-admin-generic"
+							aria-label="<?php esc_attr_e( 'Publish Settings' ); ?>"
+							aria-expanded="false" style="display: none;"
+						></button>
+					</div>
+					<?php
+				} else {
+					$save_text = _x( 'Cannot Activate', 'theme' );
+					?>
 
-		<div id="customize-sidebar-outer-content">
-			<div id="customize-outer-theme-controls">
-				<ul class="customize-outer-pane-parent">
-					 <!-- Outer panel and sections are not implemented, but its here as a placeholder to avoid any side-effect in api.Section. -->
-				</ul>
-			</div>
-		</div><!-- #customize-sidebar-outer-content -->
-
-		<div id="widgets-right" class="wp-clearfix"  style="overflow-y: scroll;max-height: calc(100vh - 90px);"><!-- For Widget Customizer, many widgets try to look for instances under div#widgets-right, so we have to add that ID to a container div in the Customizer for compat -->
-			<div id="customize-notifications-area" class="customize-control-notifications-container">
-				<ul></ul>
-			</div>
-			<div class="wp-full-overlay-sidebar-content" tabindex="-1">
-				<div id="customize-info" class="accordion-section customize-info" style="position: relative;">
-					<div class="accordion-section-title">
-						<span class="preview-notice">
-							<?php
-								/* translators: %s: The site/panel title in the Customizer. */
-								printf( __( 'You are customizing %s' ), '<strong class="panel-title site-title">' . get_bloginfo( 'name', 'display' ) . '</strong>' );
-							?>
-						</span>
-						<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false">
-							<span class="screen-reader-text">
-								<?php
-								/* translators: Hidden accessibility text. */
-								esc_html_e( 'Help' );
-								?>
-							</span>
+					<div id="customize-save-button-wrapper" class="customize-save-button-wrapper disabled" >
+						<button class="button button-primary disabled" aria-label="<?php esc_attr_e( 'Publish Settings' ); ?>" aria-expanded="false" disabled>
+							<?php echo $save_text; ?>
 						</button>
 					</div>
-					<div class="customize-panel-description">
-						<p>
-							<?php
-							_e( 'The Customizer allows you to preview changes to your site before publishing them. You can navigate to different pages on your site within the preview. Edit shortcuts are shown for some editable elements. The Customizer is intended for use with non-block themes.' );
-							?>
-						</p>
-						<p>
-							<?php
-							_e( '<a href="https://wordpress.org/documentation/article/customizer/">Documentation on Customizer</a>' );
-							?>
-						</p>
-					</div>
+					<?php
+				}
+				?>
+				<span class="spinner"></span>
+				<button type="button" class="customize-controls-preview-toggle">
+					<span class="controls"><?php _e( 'Customize' ); ?></span>
+					<span class="preview"><?php _e( 'Preview' ); ?></span>
+				</button>
+				<a class="customize-controls-close" href="<?php echo esc_url( $wp_customize->get_return_url() ); ?>">
+					<span class="screen-reader-text">
+						<?php
+						/* translators: Hidden accessibility text. */
+						esc_html_e( 'Close the Customizer and go back to the previous page' );
+						?>
+					</span>
+				</a>
+			</div><!-- #customize-header-actions -->
+
+			<div id="customize-sidebar-outer-content">
+				<div id="customize-outer-theme-controls">
+					<ul class="customize-outer-pane-parent">
+						<!-- Outer panel and sections are not implemented, but its here as a placeholder to avoid any side-effect in api.Section. -->
+					</ul>
 				</div>
+			</div><!-- #customize-sidebar-outer-content -->
+
+			<div id="widgets-right" class="wp-clearfix"  style="overflow-y: scroll;max-height: calc(100vh - 90px);"><!-- For Widget Customizer, many widgets try to look for instances under div#widgets-right, so we have to add that ID to a container div in the Customizer for compat -->
+				<div id="customize-notifications-area" class="customize-control-notifications-container">
+					<ul></ul>
+				</div>
+				<div class="wp-full-overlay-sidebar-content" tabindex="-1">
+					<div id="customize-info" class="accordion-section customize-info" style="position: relative;">
+						<div class="accordion-section-title">
+							<span class="preview-notice">
+								<?php
+									/* translators: %s: The site/panel title in the Customizer. */
+									printf( __( 'You are customizing %s' ), '<strong class="panel-title site-title">' . get_bloginfo( 'name', 'display' ) . '</strong>' );
+								?>
+							</span>
+							<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false">
+								<span class="screen-reader-text">
+									<?php
+									/* translators: Hidden accessibility text. */
+									esc_html_e( 'Help' );
+									?>
+								</span>
+							</button>
+						</div>
+						<div class="customize-panel-description">
+							<p>
+								<?php
+								_e( 'The Customizer allows you to preview changes to your site before publishing them. You can navigate to different pages on your site within the preview. Edit shortcuts are shown for some editable elements. The Customizer is intended for use with non-block themes.' );
+								?>
+							</p>
+							<p>
+								<?php
+								_e( '<a href="https://wordpress.org/documentation/article/customizer/">Documentation on Customizer</a>' );
+								?>
+							</p>
+						</div>
+					</div>
+
+
+
+
+
+
 
 				<div id="customize-theme-controls">
 					<ul class="customize-pane-parent">
@@ -712,9 +725,9 @@ wp_print_scripts();
 									continue;
 								}
 								?>
-								<li id="accordion-section-<?php echo esc_attr( $section->id ); ?>" class="accordion-section control-section control-section-widgets control-subsection" aria-owns="sub-accordion-section-<?php echo esc_attr( $section->id ); ?>">
+								<li id="accordion-section-<?php esc_attr_e( $section->id ); ?>" class="accordion-section control-section control-section-widgets control-subsection" aria-owns="sub-accordion-section-<?php esc_attr_e( $section->id ); ?>">
 									<h3 class="accordion-section-title" tabindex="0">
-										<?php echo esc_html( $section->title ); ?>
+										<?php esc_html_e( $section->title ); ?>
 										<span class="screen-reader-text">
 											<?php esc_html_e( 'Press return or enter to open this section' ); ?>
 										</span>
@@ -1072,7 +1085,7 @@ wp_print_scripts();
 						}
 						?>
 
-						<ul id="sub-accordion-section-<?php esc_attr_e( $section->id ); ?>" class="customize-pane-child accordion-section-content accordion-section control-section <?php echo esc_attr( $section_class ); ?>" style="display: none;">
+						<ul id="sub-accordion-section-<?php esc_attr_e( $section->id ); ?>" class="customize-pane-child accordion-section-content accordion-section control-section <?php esc_attr_e( $section_class ); ?>" style="display: none;">
 							<li class="customize-section-description-container section-meta no-drag">
 								<div class="customize-section-title">
 									<button class="customize-section-back" type="button" tabindex="0">
@@ -1112,7 +1125,7 @@ wp_print_scripts();
 								$field_value = $control_data['value'];
 								$type        = $control_data['type'];
 								?>
-								<li id="customize-control-<?php echo esc_attr( $field_name ); ?>" class="customize-control customize-control-<?php echo esc_attr( $type ); ?>">
+								<li id="customize-control-<?php esc_attr_e( $field_name ); ?>" class="customize-control customize-control-<?php esc_attr_e( $type ); ?>">
 									<div class="customize-control-inner">
 										<?php
 										if ( ! empty ( $control_data['label'] ) ) {
@@ -1125,12 +1138,12 @@ wp_print_scripts();
 										// Very simple type-to-input mapping; you can refine per-widget type later.
 										if ( in_array( $type, array( 'text', 'url', 'email', 'number' ), true ) ) {
 											?>
-											<input type="text" id="<?php echo esc_attr( $field_name ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( (string) $field_value ); ?>" class="regular-text">
+											<input type="text" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="<?php esc_attr_e( (string) $field_value ); ?>" class="regular-text">
 											<?php
 										} elseif ( 'checkbox' === $type ) {
 											$checked = $field_value ? ' checked="checked"' : '';
 											?>
-											<input type="checkbox" id="<?php echo esc_attr( $field_name ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="1"<?php echo $checked; ?>>
+											<input type="checkbox" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="1"<?php echo $checked; ?>>
 											<?php
 										} elseif ( 'textarea' === $type ) {
 											?>
@@ -1146,7 +1159,7 @@ wp_print_scripts();
 												$color_value = $raw_value;
 											}
 											?>
-											<input id="<?php esc_attr_e( $field_name ); ?>" type="color" name="<?php esc_attr_e( $field_name ); ?>" value="<?php echo esc_attr( $color_value ); ?>">
+											<input id="<?php esc_attr_e( $field_name ); ?>" type="color" name="<?php esc_attr_e( $field_name ); ?>" value="<?php esc_attr_e( $color_value ); ?>">
 											<?php
 										} elseif ( 'nav_menu_location' === $type ) {										
 											$value_hidden_class    = '';
@@ -1173,7 +1186,7 @@ wp_print_scripts();
 										} else {
 											// Fallback generic input.
 											?>
-											<input type="text" id="<?php echo esc_attr( $field_name ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php // echo esc_attr( (string) $field_value ); ?>" class="regular-text">
+											<input type="text" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="<?php // esc_attr_e( (string) $field_value ); ?>" class="regular-text">
 											<?php
 										}
 
@@ -1206,7 +1219,10 @@ wp_print_scripts();
 						}
 						?>
 
-						<ul id="sub-accordion-section-<?php echo esc_attr( $section->id ); ?>" class="customize-pane-child accordion-section-content accordion-section control-section control-section-sidebar" style="display: none;">
+						<ul id="sub-accordion-section-<?php esc_attr_e( $section->id ); ?>"
+							class="customize-pane-child accordion-section-content accordion-section control-section control-section-sidebar"
+							style="display: none;"
+						>
 							<li class="customize-section-description-container section-meta no-drag">
 								<div class="customize-section-title">
 									<button class="customize-section-back" type="button" tabindex="0">
@@ -1224,7 +1240,7 @@ wp_print_scripts();
 											);
 											?>
 										</span>
-										<?php echo esc_html( $section->title ); ?>
+										<?php esc_html_e( $section->title ); ?>
 									</h3>
 									<div class="customize-control-notifications-container" style="display:none;">
 										<ul></ul>
@@ -1249,29 +1265,29 @@ wp_print_scripts();
 								$type        = $control_data['type'];
 								?>
 
-								<li id="customize-control-<?php echo esc_attr( $field_name ); ?>" class="customize-control customize-control-<?php echo esc_attr( $type ); ?>">
+								<li id="customize-control-<?php esc_attr_e( $field_name ); ?>" class="customize-control customize-control-<?php esc_attr_e( $type ); ?>">
 									<div class="customize-control-inner">
 										<?php
 										if ( ! empty ( $control_data['label'] ) ) {
 											?>
-											<label class="customize-control-title" for="<?php echo esc_attr( $field_name ); ?>">
-												<?php echo esc_html( $control_data['label'] ); ?>
+											<label class="customize-control-title" for="<?php esc_attr_e( $field_name ); ?>">
+												<?php esc_html_e( $control_data['label'] ); ?>
 											</label>
 											<?php
 										}
 										// Very simple type-to-input mapping; you can refine per-widget type later.
 										if ( in_array( $type, array( 'text', 'url', 'email', 'number' ), true ) ) {
 											?>
-											<input type="text" id="<?php echo esc_attr( $field_name ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( (string) $field_value ); ?>" class="regular-text">
+											<input type="text" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="<?php esc_attr_e( (string) $field_value ); ?>" class="regular-text">
 											<?php
 										} elseif ( 'checkbox' === $type ) {
 											$checked = $field_value ? ' checked="checked"' : '';
 											?>
-											<input type="checkbox" id="<?php echo esc_attr( $field_name ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="1"<?php echo $checked; ?>>
+											<input type="checkbox" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="1"<?php echo $checked; ?>>
 											<?php
 										} elseif ( 'textarea' === $type ) {
 											?>
-											<textarea id="<?php echo esc_attr( $field_name ); ?>" name="<?php echo esc_attr( $field_name ); ?>" rows="4" class="large-text">
+											<textarea id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" rows="4" class="large-text">
 												<?php echo esc_textarea( (string) $field_value ); ?>
 											</textarea>
 											<?php
@@ -1283,12 +1299,12 @@ wp_print_scripts();
 												$color_value = $raw_value;
 											}
 											?>
-											<input type="color" id="<?php echo esc_attr( $field_name ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $color_value ); ?>">
+											<input type="color" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="<?php esc_attr_e( $color_value ); ?>">
 											<?php
 										} else {
 											// Fallback generic input.
 											?>
-											<input type="text" id="<?php echo esc_attr( $field_name ); ?>" name="<?php echo esc_attr( $field_name ); ?>" value="<?php // echo esc_attr( (string) $field_value ); ?>" class="regular-text">
+											<input type="text" id="<?php esc_attr_e( $field_name ); ?>" name="<?php esc_attr_e( $field_name ); ?>" value="<?php // esc_attr_e( (string) $field_value ); ?>" class="regular-text">
 											<?php
 										}
 										if ( ! empty ( $control_data['description'] ) ) {
@@ -1300,6 +1316,21 @@ wp_print_scripts();
 										}
 										?>
 									</div>
+								</li>
+								<li id="customize-control-sidebars_widgets-sidebar1" class="customize-control customize-control-sidebar_widgets no-drag">
+									<div class="customize-control-notifications-container" style="display: none;">
+										<ul></ul>
+									</div>
+									<button type="button" class="button add-new-widget" aria-expanded="false" aria-controls="widgets-left">
+										<?php esc_html_e( 'Add a Widget' ); ?>
+									</button>
+									<button type="button" class="button-link reorder-toggle" aria-label="Reorder widgets" aria-describedby="reorder-widgets-desc-sidebars_widgets-sidebar1">
+										<span class="reorder"><?php esc_html_e( 'Reorder' ); ?></span>
+										<span class="reorder-done"><?php esc_html_e( 'Done' ); ?></span>
+									</button>
+									<p class="screen-reader-text" id="reorder-widgets-desc-sidebars_widgets-sidebar1">
+										<?php esc_html_e( 'When in reorder mode, additional controls to reorder widgets will be available in the widgets list above.' ); ?>
+									</p>
 								</li>
 								<?php
 							}
@@ -1486,15 +1517,12 @@ wp_print_scripts();
 		<input type="hidden" name="customize_form_stage" value="php-first-paint">
 	</form><!-- /#customize-controls -->
 
-	<div id="customize-preview" class="wp-full-overlay-main iframe-ready">
-		<iframe title="<?php esc_attr_e( 'Site Preview' ); ?>" name="customize-preview-0" onmousewheel="" src="<?php echo esc_url( $preview_url ); ?>" style="position: relative;z-index: 1;"></iframe>
-	</div>
-
 	<div id="widgets-left">
 		<!-- compatibility with JS which looks for widget templates here -->
+		<div id="available-widgets">
 		<div id="available-widgets-filter">
 			<label class="screen-reader-text" for="widgets-search">
-					Search Widgets
+				Search Widgets
 			</label>
 			<input type="text" id="widgets-search" placeholder="Search widgets…" aria-describedby="widgets-search-desc">
 			<div class="search-icon" aria-hidden="true"></div>
@@ -1519,7 +1547,7 @@ wp_print_scripts();
 				$tpl_id   = $id_base . '-' . ++$number;
 				?>
 				<li id="widget-tpl-<?php esc_attr_e( $tpl_id ); ?>"
-					class="widget widget-tpl-<?php esc_attr_e( $tpl_id ); ?>"
+					class="widget-tpl <?php esc_attr_e( $tpl_id ); ?>"
 					data-widget-id="<?php esc_attr_e( $tpl_id ); ?>"
 					data-id_base="<?php esc_attr_e( $id_base ); ?>"
 					tabindex="0"
@@ -1529,7 +1557,7 @@ wp_print_scripts();
 						<details class="widget-top">
 							<summary class="widget-title">
 								<h3>
-									<?php esc_html_e( $widget['name'] ); ?>
+									<?php esc_html_e( $name ); ?>
 								</h3>
 							</summary>
 							<div class="widget-title-action">
@@ -1590,7 +1618,7 @@ wp_print_scripts();
 						if ( $desc ) {
 							?>
 							<div class="widget-description">
-								<?php echo esc_html( $desc ); ?>
+								<?php esc_html_e( $desc ); ?>
 							</div>
 							<?php
 						}
@@ -1598,7 +1626,13 @@ wp_print_scripts();
 					</div>
 				</li>
 			<?php endforeach; ?>
-		</ul>
+		</ul><!-- #available-widgets-list -->
+	</div><!-- #available-widgets -->
+	</div><!-- #widgets-left -->
+</div>
+
+	<div id="customize-preview" class="wp-full-overlay-main iframe-ready">
+		<iframe title="<?php esc_attr_e( 'Site Preview' ); ?>" name="customize-preview-0" onmousewheel="" src="<?php echo esc_url( $preview_url ); ?>" style="position: relative;z-index: 1;"></iframe>
 	</div>
 </div><!-- .wp-full-overlay expanded preview-desktop -->
 
