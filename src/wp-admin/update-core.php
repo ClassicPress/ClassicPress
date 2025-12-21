@@ -207,7 +207,7 @@ function core_upgrade_preamble() {
 		/* translators: 1: Link to Backups documentation page, 2: Link to Updating documentation page */
 		printf(
 			__( '<strong>Important:</strong> before updating, please <a href="%1$s">back up your database and files</a>. For help with updates, visit the <a href="%2$s">Updating ClassicPress</a> documentation page.' ),
-			'https://codex.wordpress.org/WordPress_Backups',
+			'https://developer.wordpress.org/advanced-administration/security/backup/',
 			'https://docs.classicpress.net/updating-classicpress/'
 		);
 		echo '</p></div>';
@@ -849,7 +849,7 @@ get_current_screen()->add_help_tab(
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-	'<p>' . __( '<a href="https://codex.wordpress.org/Dashboard_Updates_Screen">Documentation on Updating ClassicPress</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://wordpress.org/documentation/article/dashboard-updates-screen/">Documentation on Updating ClassicPress</a>' ) . '</p>' .
 	'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support forums</a>' ) . '</p>'
 );
 
