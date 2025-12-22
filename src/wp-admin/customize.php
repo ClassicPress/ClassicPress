@@ -1209,19 +1209,34 @@ wp_print_scripts();
 
 									// **MENU ITEMS - Only for nav_menu[ID] sections**
 									if ( $menu_id && 0 === strpos( $section->id, 'nav_menu[' ) ) {
+										?>
+										<li id="customize-control-nav_menu-<?php esc_attr_e( $menu_id ); ?>-name" class="customize-control customize-control-nav_menu_name no-drag">
+											<label>
+												<span class="customize-control-title">
+													<?php esc_html_e( 'Menu Name' ); ?>
+												</span>
+												<div class="customize-control-notifications-container" style="display: none;">
+													<ul></ul>
+												</div>
+												<input type="text" class="menu-name-field live-update-section-title" value="<?php esc_attr_e( $menus_index[$menu_id]->name ); ?>">
+											</label>
+										</li>
+
+										<?php
 										$menu_items = wp_get_nav_menu_items( $menu_id );
-                
-										if ( empty( $menu_items ) ) :
+										if ( empty( $menu_items ) ) {
 											?>
 											<li class="no-items-message">
 												<p><?php esc_html_e( 'This menu is currently empty. Add items using the Add Items panel.' ); ?></p>
 											</li>
-										<?php else : ?>
-											<?php foreach ( $menu_items as $menu_item ) : ?>
-												<li id="menu-item-<?php echo (int) $menu_item->ID; ?>" class="menu-item menu-item-depth-0 menu-item-<?php echo (int) $menu_item->ID; ?>">
+											<?php
+										} else {
+											foreach ( $menu_items as $menu_item ) {
+												?>
+												<li id="menu-item-<?php esc_attr_e( $menu_item->ID ); ?>" class="menu-item menu-item-depth-0 menu-item-<?php esc_attr_e( $menu_item->ID ); ?>">
 													<div class="menu-item-handle">
 														<span class="item-title">
-															<span class="menu-item-title"><?php echo esc_html( $menu_item->post_title ?: $menu_item->title ); ?></span>
+															<span class="menu-item-title"><?php esc_html_e( $menu_item->post_title ?: $menu_item->title ); ?></span>
 														</span>
 														<span class="item-controls">
 															<a class="item-edit" href="#"><?php _e( 'Edit' ); ?></a>
@@ -1232,9 +1247,9 @@ wp_print_scripts();
 														</span>
 													</div>
 												</li>
-											<?php endforeach; ?>
-										<?php endif; ?>
-										<?php
+												<?php
+											}
+										}
 										// Skip rest of controls loop for menu sections
 										break;
             
@@ -1243,32 +1258,44 @@ wp_print_scripts();
 										$value_hidden_class    = $field_value ? ' hidden' : '';
 										$no_value_hidden_class = empty( $field_value ) ? ' hidden' : '';
 										?>
-										<li id="customize-control-<?php echo esc_attr( $field_id ); ?>" class="customize-control customize-control-<?php echo esc_attr( $field_type ); ?>">
+										<li id="customize-control-<?php esc_attr_e( $field_id ); ?>" class="customize-control customize-control-<?php esc_attr_e( $field_type ); ?>">
 											<div class="customize-control-inner">
-												<?php if ( ! empty( $control_data['label'] ) ) : ?>
-													<label class="customize-control-title" for="<?php echo esc_attr( $field_id ); ?>">
-														<?php echo esc_html( $control_data['label'] ); ?>
+												<?php
+												if ( ! empty( $control_data['label'] ) ) {
+													?>
+													<label class="customize-control-title" for="<?php esc_attr_e( $field_id ); ?>">
+														<?php esc_html_e( $control_data['label'] ); ?>
 													</label>
-												<?php endif; ?>
-												<select id="<?php echo esc_attr( $field_id ); ?>" data-customize-setting-link="<?php echo esc_attr( $field_id ); ?>">
+													<?php
+												}
+												?>
+												<select id="<?php esc_attr_e( $field_id ); ?>" data-customize-setting-link="<?php esc_attr_e( $field_id ); ?>">
 													<option value="0">— Select —</option>
-													<?php foreach ( $menus_index as $menu ) : ?>
-														<option value="<?php echo esc_attr( $menu->term_id ); ?>" <?php selected( $field_value, $menu->term_id ); ?>>
-															<?php echo esc_html( $menu->name ); ?>
+													<?php
+													foreach ( $menus_index as $menu ) {
+														?>
+														<option value="<?php esc_attr_e( $menu->term_id ); ?>" <?php selected( $field_value, $menu->term_id ); ?>>
+															<?php esc_html_e( $menu->name ); ?>
 														</option>
-													<?php endforeach; ?>
+														<?php
+													}
+													?>
 												</select>
-												<button type="button" class="button-link create-menu<?php echo $value_hidden_class; ?>" data-location-id="<?php echo esc_attr( substr( $field_id, strlen( 'nav_menu_locations[' ), -1 ) ); ?>" aria-label="<?php esc_attr_e( 'Create a menu for this location' ); ?>">
-													<?php _e( '+ Create New Menu' ); ?>
+												<button type="button" class="button-link create-menu<?php echo $value_hidden_class; ?>" data-location-id="<?php esc_attr_e( substr( $field_id, strlen( 'nav_menu_locations[' ), -1 ) ); ?>" aria-label="<?php esc_attr_e( 'Create a menu for this location' ); ?>">
+													<?php esc_html_e( '+ Create New Menu' ); ?>
 												</button>
 												<button type="button" class="button-link edit-menu<?php echo $no_value_hidden_class; ?>" aria-label="<?php esc_attr_e( 'Edit selected menu' ); ?>">
-													<?php _e( 'Edit Menu' ); ?>
+													<?php esc_html_e( 'Edit Menu' ); ?>
 												</button>
-												<?php if ( ! empty( $control_data['description'] ) ) : ?>
+												<?php
+												if ( ! empty( $control_data['description'] ) ) {
+													?>
 													<div class="description customize-control-description">
 														<?php echo wp_kses_post( $control_data['description'] ); ?>
 													</div>
-												<?php endif; ?>
+													<?php
+												}
+												?>
 											</div>
 										</li>
 										<?php
