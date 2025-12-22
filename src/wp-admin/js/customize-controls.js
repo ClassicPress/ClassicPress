@@ -16,6 +16,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		previewFrame = document.getElementById( 'customize-preview' ),
 		themeModal = document.getElementById( 'tmpl-customize-themes-details-view' ),
 		queryParams = new URLSearchParams( window.location.search ),
+		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
 		addWidgetButtons = document.querySelectorAll( '.add-new-widget' );
 
 	// Clean the URL if previewing the active theme
@@ -113,12 +114,34 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			previousAccordionPane = document.getElementById( 'sub-accordion-panel-nav_menus' );
 			e.target.closest( 'ul' ).style.display = 'none';
 			document.getElementById( 'menu-to-edit' ).style.display = 'block';
+			
+		// Add a menu item
+		} else if ( e.target.classList && e.target.classList.contains( 'add-new-menu-item' ) ) {
+			document.body.classList.toggle( 'adding-menu-items' );
+			if ( e.target.getAttribute( 'aria-expanded' ) === 'false' ) {
+				document.getElementById( 'available-menu-items' ).style.display = 'block';
+				e.target.setAttribute( 'aria-expanded', true );
+			} else {
+				document.getElementById( 'available-menu-items' ).style.display = 'none';
+				e.target.setAttribute( 'aria-expanded', false );
+			}
 
 		// Go to widgets panel
 		} else if ( e.target.tagName === 'A' && ( e.target.closest( 'li' ).id === 'accordion-section-menu_locations' || e.target.closest( 'ul' ).id === 'sub-accordion-section-menu_locations' ) ) {
 			e.preventDefault();			
 			e.target.closest( 'ul' ).style.display = 'none';
 			document.getElementById( 'sub-accordion-panel-widgets' ).style.display = 'block';
+
+		// Add a widget
+		} else if ( e.target.classList && e.target.classList.contains( 'add-new-widget' ) ) {
+			document.body.classList.toggle( 'adding-widget' );
+			if ( e.target.getAttribute( 'aria-expanded' ) === 'false' ) {
+				document.getElementById( 'widgets-left' ).style.display = 'block';
+				e.target.setAttribute( 'aria-expanded', true );
+			} else {
+				document.getElementById( 'widgets-left' ).style.display = 'none';
+				e.target.setAttribute( 'aria-expanded', false );
+			}
 
 		// Open and close description
 		} else if ( e.target.classList && e.target.classList.contains( 'customize-help-toggle' ) ) {
@@ -169,19 +192,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.preventDefault();
 			showThemeModal( e.target.closest( '.theme' ) );
 
-		// Add a widget
-		} else if ( e.target.classList && e.target.classList.contains( 'add-new-widget' ) ) {
-			document.body.classList.toggle( 'adding-widget' );
-			if ( e.target.getAttribute( 'aria-expanded' ) === 'false' ) {
-				document.getElementById( 'widgets-left' ).style.display = 'block';
-				e.target.setAttribute( 'aria-expanded', true );
-			} else {
-				document.getElementById( 'widgets-left' ).style.display = 'none';
-				e.target.setAttribute( 'aria-expanded', false );
-			}
-
 		// Collapse or expand sidebar
-		} else if ( e.target.parentNode.classList && e.target.parentNode.classList.contains( 'collapse-sidebar' ) ) { console.log('me');
+		} else if ( e.target.parentNode.classList && e.target.parentNode.classList.contains( 'collapse-sidebar' ) ) {
 			e.preventDefault();
 			sidebarCollapseExpand( e.target.parentNode );
 		}
@@ -196,12 +208,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 			} else if ( ! isVisible( themeModal ) ) {
 				e.preventDefault();
+				document.body.classList.remove( 'adding-menu-items' );
 				document.body.classList.remove( 'adding-widget' );
 				document.getElementById( 'widgets-left' ).style.display = 'none';
 				document.getElementById( 'available-menu-items' ).style.display = 'none';
 				e.target.closest( 'ul' ).style.display = 'none';
 				document.getElementById( 'customize-info' ).style.display = 'block';
 				document.querySelector( '.customize-pane-parent' ).style.display = 'block';
+				addMenuButtons.forEach( function( add ) {console.log(add);
+					add.setAttribute( 'aria-expanded', false );
+				} );
 				addWidgetButtons.forEach( function( add ) {
 					add.setAttribute( 'aria-expanded', false );
 				} );
@@ -225,11 +241,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		overlay.classList.toggle( 'expanded' );
 
 		// Sidebar / preview.
+		document.body.classList.remove( 'adding-menu-items' );
 		document.body.classList.remove( 'adding-widget' );
 		document.getElementById( 'widgets-left' ).style.display = 'none';
 		document.getElementById( 'available-menu-items' ).style.display = 'none';
 		document.getElementById( 'customizer-sidebar-container' ).classList.toggle( 'collapsed' );
 		document.getElementById( 'customize-preview' ).classList.toggle( 'expanded-preview' );
+		addMenuButtons.forEach( function( add ) {
+			add.setAttribute( 'aria-expanded', false );
+		} );
 		addWidgetButtons.forEach( function( add ) {
 			add.setAttribute( 'aria-expanded', false );
 		} );
