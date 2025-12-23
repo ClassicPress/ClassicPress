@@ -867,244 +867,170 @@ wp_print_scripts();
 							if ( in_array( $item['id'], array( 'themes', 'nav_menus', 'widgets' ), true ) ) {
 								continue;
 							}
-							if ( 'section' === $item['type'] ) {
-								// Default section handling.
-								?>
+							if ( 'section' !== $item['type'] ) { // i.e. do not process panels here
+								continue;
+							}
+							?>
 
-								<ul id="sub-accordion-section-<?php esc_attr_e( $item['id'] ); ?>"
-									class="customize-pane-child accordion-section-content accordion-section control-section control-section-default"
-									style="display: none;"
-								>
-									<li class="customize-section-description-container section-meta no-drag">
-										<div class="customize-section-title">
-											<button class="customize-section-back" tabindex="0">
-												<span class="screen-reader-text"><?php esc_html_e( 'Back' ); ?></span>
-											</button>
-											<h3>
-												<span class="customize-action">
-													<?php esc_html_e( 'Customizing' ); ?>
-												</span>
-												<?php esc_html_e( $item['title'] ); ?>
-											</h3>
-											<div class="customize-control-notifications-container" style="display: none;">
-												<ul></ul>
-											</div>
+							<ul id="sub-accordion-section-<?php esc_attr_e( $item['id'] ); ?>"
+								class="customize-pane-child accordion-section-content accordion-section control-section control-section-default"
+								style="display: none;"
+							>
+								<li class="customize-section-description-container section-meta no-drag">
+									<div class="customize-section-title">
+										<button class="customize-section-back" tabindex="0">
+											<span class="screen-reader-text"><?php esc_html_e( 'Back' ); ?></span>
+										</button>
+										<h3>
+											<span class="customize-action">
+												<?php esc_html_e( 'Customizing' ); ?>
+											</span>
+											<?php esc_html_e( $item['title'] ); ?>
+										</h3>
+										<div class="customize-control-notifications-container" style="display: none;">
+											<ul></ul>
 										</div>
-									</li>
+									</div>
+								</li>
 
-									<?php
-									if ( isset ( $controls[ $item['id'] ] ) ) {
-										foreach ( $controls[ $item['id'] ] as $control_data ) {
-											$field_id    = $control_data['setting_id'] ?: $control_data['id'];
-											$field_value = $control_data['value'];
-											$field_type  = $control_data['type'];
-											?>
+								<?php
+								if ( isset ( $controls[ $item['id'] ] ) ) {
+									foreach ( $controls[ $item['id'] ] as $control_data ) {
+										$field_id    = $control_data['setting_id'] ?: $control_data['id'];
+										$field_value = $control_data['value'];
+										$field_type  = $control_data['type'];
+										error_log(print_r( 'section ' . $field_type, true ));
+										?>
 
-											<li id="customize-control-<?php esc_attr_e( $field_id ); ?>" class="customize-control customize-control-text">
-												<div class="customize-control customize-control-<?php esc_attr_e( $field_type ); ?>">
+										<li id="customize-control-<?php esc_attr_e( $field_id ); ?>" class="customize-control customize-control-text">
+											<div class="customize-control customize-control-<?php esc_attr_e( $field_type ); ?>">
+												<?php
+												if ( 'site_icon' !== $field_type ) {
+													?>
+													<label class="customize-control-title" for="<?php esc_attr_e( $field_id ); ?>">
+														<?php esc_html_e( $control_data['label'] ?: $control_data['id'] ); ?>
+													</label>
 													<?php
-													if ( 'site_icon' !== $field_type ) {
-														?>
-														<label class="customize-control-title" for="<?php esc_attr_e( $field_id ); ?>">
-															<?php esc_html_e( $control_data['label'] ?: $control_data['id'] ); ?>
-														</label>
-														<?php
+												}
+												// Very simple type-to-input mapping. error_log(print_r($control_data, true));
+												if ( in_array( $field_type, array( 'text', 'url', 'email', 'number' ), true ) ) {
+													?>
+													<input type="text"
+														id="<?php esc_attr_e( $field_id ); ?>"
+														name="<?php esc_attr_e( $field_id ); ?>"
+														value="<?php esc_attr_e( $field_value ); ?>"
+														class="regular-text"
+													>
+													<?php
+												} elseif ( 'checkbox' === $field_type ) {
+													$checked = $field_value ? ' checked="checked"' : '';
+													?>
+													<input type="checkbox"
+														id="<?php esc_attr_e( $field_id ); ?>"
+														name="<?php esc_attr_e( $field_id ); ?>"
+														value="1"' . $checked . '
+														style="margin: 0;"
+													>
+													<?php
+												} elseif ( 'radio' === $field_type ) {
+													$checked = $field_value ? ' checked="checked"' : '';
+													?>
+													<input type="radio"
+														id="<?php esc_attr_e( $field_id ); ?>"
+														name="<?php esc_attr_e( $field_id ); ?>"
+														value="1"' . $checked . '
+														style="margin: 0;"
+													>
+													<?php
+												} elseif ( 'textarea' === $field_type ) {
+													?>
+													<textarea id="<?php esc_attr_e( $field_id ); ?>"
+														name="<?php esc_attr_e( $field_id ); ?>"
+														rows="4"
+														class="large-text"
+													>
+														<?php echo esc_textarea( (string) $field_value ); ?>
+													</textarea>
+													<?php
+												} elseif ( 'color' === $field_type ) {
+													$raw_value = (string) $field_value;
+
+													// If it looks like a bare 3/6-digit hex, prefix with #.
+													if ( preg_match( '/^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/', $raw_value ) ) {
+														$color_value = '#' . $raw_value;
+													} else {
+														$color_value = $raw_value;
 													}
-													// Very simple type-to-input mapping. error_log(print_r($control_data, true));
-													if ( in_array( $field_type, array( 'text', 'url', 'email', 'number' ), true ) ) {
-														?>
+													?>
+													<div class="customize-control-content">
 														<input type="text"
 															id="<?php esc_attr_e( $field_id ); ?>"
 															name="<?php esc_attr_e( $field_id ); ?>"
-															value="<?php esc_attr_e( $field_value ); ?>"
-															class="regular-text"
+															class="cp-color-picker"
+															value="<?php esc_attr_e( $color_value ); ?>"
+															data-default-color="<?php esc_attr_e( $color_value ); ?>"
+															placeholder="<?php esc_attr_e( 'Select Color' ); ?>"
 														>
-														<?php
-													} elseif ( 'checkbox' === $field_type ) {
-														$checked = $field_value ? ' checked="checked"' : '';
-														?>
-														<input type="checkbox"
-															id="<?php esc_attr_e( $field_id ); ?>"
-															name="<?php esc_attr_e( $field_id ); ?>"
-															value="1"' . $checked . '
-															style="margin: 0;"
-														>
-														<?php
-													} elseif ( 'textarea' === $field_type ) {
-														?>
-														<textarea id="<?php esc_attr_e( $field_id ); ?>"
-															name="<?php esc_attr_e( $field_id ); ?>"
-															rows="4"
-															class="large-text"
-														>
-															<?php echo esc_textarea( (string) $field_value ); ?>
-														</textarea>
-														<?php
-													} elseif ( 'color' === $field_type ) {
-														$raw_value = (string) $field_value;
-
-														// If it looks like a bare 3/6-digit hex, prefix with #.
-														if ( preg_match( '/^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/', $raw_value ) ) {
-															$color_value = '#' . $raw_value;
-														} else {
-															$color_value = $raw_value;
-														}
-														?>
-														<div class="customize-control-content">
-															<input type="text"
-																id="<?php esc_attr_e( $field_id ); ?>"
-																name="<?php esc_attr_e( $field_id ); ?>"
-																class="cp-color-picker"
-																value="<?php esc_attr_e( $color_value ); ?>"
-																data-default-color="<?php esc_attr_e( $color_value ); ?>"
-																placeholder="<?php esc_attr_e( 'Select Color' ); ?>"
-															>
-														</div>
-														<?php
-													} elseif ( 'site_icon' === $field_type ) {
-														?>
-														<span class="customize-control-title"><?php esc_html_e( $control_data['label'] ); ?></span>
-														<div class="customize-control-notifications-container" style="display: none;">
-															<ul></ul>
-														</div>
-														<?php
-													} elseif ( 'cropped_image' === $field_type ) {
-														?>
-														<div class="attachment-media-view">
-															<div class="site-icon-preview wp-clearfix customize-control-site_icon">
-																<div class="favicon-preview">
-																	<img src="<?php echo esc_url( admin_url( '/images/browser.png' ) ); ?>" class="browser-preview" alt="">
-																	<div class="favicon">
-																		<?php
-																		if ( get_site_icon_url() !== '' ) {
-																			?>
-																			<img src="<?php echo esc_url( get_site_icon_url() ); ?>" alt="<?php esc_attr_e( 'Preview as a browser icon' ); ?>">';
-																			<?php
-																		}
-																		?>
-																	</div>
-																	<span class="browser-title" aria-hidden="true"><?php esc_html_e( get_bloginfo( 'name' ) ); ?></span>
-																</div>
-																<?php
-																if ( get_site_icon_url() !== '' ) {
-																	?>
-																	<img class="app-icon-preview" src="<?php echo esc_url( get_site_icon_url() ); ?>" alt="<?php esc_attr_e( 'Preview as an app icon' ); ?>">
+													</div>
+													<?php
+												} elseif ( 'site_icon' === $field_type ) {
+													?>
+													<span class="customize-control-title"><?php esc_html_e( $control_data['label'] ); ?></span>
+													<div class="customize-control-notifications-container" style="display: none;">
+														<ul></ul>
+													</div>
+													<?php
+												} elseif ( 'cropped_image' === $field_type ) {
+													?>
+													<div class="attachment-media-view">
+														<div class="site-icon-preview wp-clearfix customize-control-site_icon">
+															<div class="favicon-preview">
+																<img src="<?php echo esc_url( admin_url( '/images/browser.png' ) ); ?>" class="browser-preview" alt="">
+																<div class="favicon">
 																	<?php
-																}
+																	if ( get_site_icon_url() !== '' ) {
+																		?>
+																		<img src="<?php echo esc_url( get_site_icon_url() ); ?>" alt="<?php esc_attr_e( 'Preview as a browser icon' ); ?>">';
+																		<?php
+																	}
+																	?>
+																</div>
+																<span class="browser-title" aria-hidden="true"><?php esc_html_e( get_bloginfo( 'name' ) ); ?></span>
+															</div>
+															<?php
+															if ( get_site_icon_url() !== '' ) {
 																?>
-															</div>
-															<div class="actions">	
-																<button type="button" class="button remove-button"><?php esc_html_e( 'Remove' ); ?></button>
-																<button type="button" class="button upload-button"><?php esc_html_e( 'Change image' ); ?></button>
-															</div>
-														</div>
-														<?php
-													} else {
-														// Fallback generic input.
-														?>
-														<input type="text" id="<?php esc_attr_e( $field_id ); ?>" name="<?php esc_attr_e( $field_id ); ?>" value="<?php //esc_attr_e( $field_value ); ?>" class="regular-text">
-														<?php
-													}
-													if ( ! empty ( $control_data['description'] ) ) {
-														?>
-														<div class="description customize-control-description"><?php echo wp_kses_post( $control_data['description'] ); ?></div>
-														<?php
-													}
-													?>
-												</div>
-											</li>
-											<?php
-										}
-									}
-									?>
-								</ul>
-								<?php
-							} else { // panel
-								// Default panel handling (for panels other than nav_menus).
-								foreach ( $sections as $section ) {
-									if ( $section->panel === $item['id'] ) {
-										?>
-
-										<ul id="sub-accordion-panel-<?php esc_attr_e( $section->panel ); ?>" class="customize-pane-child accordion-section-content accordion-section control-section control-section-default" style="display: none;">
-											<li class="customize-section-description-container section-meta no-drag">
-												<div class="customize-section-title">
-													<button class="customize-section-back" tabindex="0">
-														<span class="screen-reader-text"><?php esc_html_e( 'Back' ); ?></span>
-													</button>
-													<h3>
-														<span class="customize-action">
-															<?php esc_html_e( 'Customizing' ); ?>
-														</span>
-														<?php esc_html_e( $item['title'] ); ?>
-													</h3>
-													<div class="customize-control-notifications-container"></div>
-												</div>
-											</li>
-											<span class="customize-section-label"><?php esc_html( $section->title ); ?></span>
-
-											<?php
-											// Controls inside this section.
-											if ( isset ( $controls[ $section->id ] ) ) {
-												foreach ( $controls[ $section->id ] as $control_data ) {
-													$field_id  = $control_data['setting_id'] ?: $control_data['id'];
-													$field_value = $control_data['value'];
-													$field_type  = $control_data['type'];
-													?>
-
-													<li class="customize-control customize-control-<?php esc_attr_e( $field_type ); ?>">
-														<label class="customize-control-title" for="<?php esc_attr_e( $field_id ); ?>">
-															<?php esc_html_e( $control_data['label'] ?: $control_data['id'] ); ?>
-														</label>
-
-														<?php
-														// Very simple type-to-input mapping.
-														if ( in_array( $field_type, array( 'text', 'url', 'email', 'number' ), true ) ) {
-															?>
-															<input type="text" id="<?php esc_attr_e( $field_id ); ?>" name="<?php esc_attr_e( $field_id ); ?>" value="<?php esc_attr_e( $field_value ); ?>" class="regular-text">
-															<?php
-														} elseif ( 'checkbox' === $field_type ) {
-															$checked = $field_value ? ' checked="checked"' : '';
-															?>
-															<input type="checkbox" id="' . esc_attr( $field_id ); ?>" name="<?php esc_attr_e( $field_id ); ?>" value="1"' . $checked . '>
-															<?php
-														} elseif ( 'textarea' === $field_type ) {
-															?>
-															<textarea id="<?php esc_attr_e( $field_id ); ?>" name="<?php esc_attr_e( $field_id ); ?>" rows="4" class="large-text"><?php echo esc_textarea( (string) $field_value ); ?></textarea>
-															<?php
-														} elseif ( 'color' === $field_type ) {
-															$raw_value = (string) $field_value;
-
-															// If it looks like a bare 3/6-digit hex, prefix with #.
-															if ( preg_match( '/^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/', $raw_value ) ) {
-																$color_value = '#' . $raw_value;
-															} else {
-																$color_value = $raw_value;
+																<img class="app-icon-preview" src="<?php echo esc_url( get_site_icon_url() ); ?>" alt="<?php esc_attr_e( 'Preview as an app icon' ); ?>">
+																<?php
 															}
 															?>
-															<input type="color" id="<?php esc_attr_e( $field_id ); ?>" name="<?php esc_attr_e( $field_id ); ?>" value="<?php esc_attr_e( $color_value ); ?>">
-															<?php
-														} else {
-															// Fallback generic input.
-															/* ?>
-															<input type="text" id="<?php esc_attr_e( $field_id ); ?>" name="<?php esc_attr_e( $field_id ); ?>" value="<?php esc_attr_e( (string) $field_value ); ?>" class="regular-text">
-															<?php */
-														}
-														if ( ! empty ( $control_data['description'] ) ) {
-															?>
-															<div class="description"><?php echo wp_kses_post( $control_data['description'] ); ?></div>
-															<?php
-														}
-														?>
-													</li>
+														</div>
+														<div class="actions">	
+															<button type="button" class="button remove-button"><?php esc_html_e( 'Remove' ); ?></button>
+															<button type="button" class="button upload-button"><?php esc_html_e( 'Change image' ); ?></button>
+														</div>
+													</div>
+													<?php
+												} else {
+													// Fallback generic input.
+													?>
+													<input type="text" id="<?php esc_attr_e( $field_id ); ?>" name="<?php esc_attr_e( $field_id ); ?>" value="<?php //esc_attr_e( $field_value ); ?>" class="regular-text">
 													<?php
 												}
-											}
-											?>
-										</ul>
+												if ( ! empty ( $control_data['description'] ) ) {
+													?>
+													<div class="description customize-control-description"><?php echo wp_kses_post( $control_data['description'] ); ?></div>
+													<?php
+												}
+												?>
+											</div>
+										</li>
 										<?php
 									}
 								}
-							}
+								?>
+							</ul>
+							<?php
 						}
 						?>
 
@@ -1311,7 +1237,9 @@ wp_print_scripts();
 									// Memu items - only for nav_menu[ID] sections
 									if ( $menu_id && 0 === strpos( $section->id, 'nav_menu[' ) ) {
 										?>
-										<li id="customize-control-nav_menu-<?php esc_attr_e( $menu_id ); ?>-name" class="customize-control customize-control-nav_menu_name no-drag">
+										<li id="customize-control-nav_menu-<?php esc_attr_e( $menu_id ); ?>-name"
+											class="customize-control customize-control-nav_menu_name no-drag"
+										>
 											<label>
 												<span class="customize-control-title">
 													<?php esc_html_e( 'Menu Name' ); ?>
@@ -1319,7 +1247,10 @@ wp_print_scripts();
 												<div class="customize-control-notifications-container" style="display: none;">
 													<ul></ul>
 												</div>
-												<input type="text" class="menu-name-field live-update-section-title" value="<?php esc_attr_e( $menus_index[$menu_id]->name ); ?>">
+												<input type="text"
+													class="menu-name-field live-update-section-title"
+													value="<?php esc_attr_e( $menus_index[$menu_id]->name ); ?>"
+												>
 											</label>
 										</li>
 
@@ -1337,7 +1268,8 @@ wp_print_scripts();
 												$depth_map[ $menu_item->ID ] = get_menu_item_depth( $menu_items, $menu_item->ID );
 												?>
 												<li id="customize-control-nav_menu_item-<?php esc_attr_e( $menu_item->ID ); ?>"
-													class="customize-control customize-control-nav_menu_item menu-item menu-item-depth-<?php echo absint( $depth_map[ $menu_item->ID ] ); ?> menu-item-custom menu-item-edit-inactive move-left-disabled move-up-disabled move-right-disabled move-down-disabled">
+													class="customize-control customize-control-nav_menu_item menu-item menu-item-depth-<?php echo absint( $depth_map[ $menu_item->ID ] ); ?> menu-item-custom menu-item-edit-inactive move-left-disabled move-up-disabled move-right-disabled move-down-disabled"
+												>
 													<div class="menu-item-bar">
 														<details class="menu-item-handle">
 															<summary>
@@ -1422,7 +1354,8 @@ wp_print_scripts();
 																</p>
 																<p class="field-css-classes description description-thin">
 																	<label for="edit-menu-item-classes-<?php echo absint( $menu_item->ID ); ?>">
-																		<?php esc_html_e( 'CSS Classes' ); ?><br>
+																		<?php esc_html_e( 'CSS Classes' ); ?>
+																		<br>
 																		<input type="text" id="edit-menu-item-classes-<?php echo absint( $menu_item->ID ); ?>"
 																			class="widefat code edit-menu-item-classes"
 																			name="menu-item-classes"
@@ -1452,17 +1385,19 @@ wp_print_scripts();
 																		</textarea>
 																	</label>
 																</p>
+
 																<?php
 																/**
 																 * Fires after the display of menu item custom fields.
 																 * 
-																 * @param int     $item_id   Menu item ID.
+																 * @param string  $item_id   Menu item ID.
 																 * @param WP_Post $item      Menu item data object.
 																 * @param array   $args      Arguments from Walker_Nav_Menu_Edit.
 																 * @param int     $menu_id   Menu ID.
 																 */
 																do_action( 'wp_nav_menu_item_custom_fields', (string) $menu_item->ID, $menu_item, $depth_map[ $menu_item->ID ], (object) array(), $menu_id );
 																?>
+
 																<button type="button" class="button-link button-link-delete item-delete submitdelete deletion">
 																	<?php esc_html_e( 'Remove' ); ?>
 																</button>
@@ -1487,7 +1422,9 @@ wp_print_scripts();
 											}
 										}
 										?>
-										<li id="customize-control-nav_menu-<?php esc_attr_e( $menu_id ); ?>" class="customize-control customize-control-nav_menu no-drag">
+										<li id="customize-control-nav_menu-<?php esc_attr_e( $menu_id ); ?>"
+											class="customize-control customize-control-nav_menu no-drag"
+										>
 											<div class="customize-control-notifications-container" style="display: none;">
 												<ul></ul>
 											</div>
@@ -1601,7 +1538,9 @@ wp_print_scripts();
 										$value_hidden_class    = $field_value ? ' hidden' : '';
 										$no_value_hidden_class = empty( $field_value ) ? ' hidden' : '';
 										?>
-										<li id="customize-control-<?php esc_attr_e( $field_id ); ?>" class="customize-control customize-control-<?php esc_attr_e( $field_type ); ?>">
+										<li id="customize-control-<?php esc_attr_e( $field_id ); ?>"
+											class="customize-control customize-control-<?php esc_attr_e( $field_type ); ?>"
+										>
 											<div class="customize-control-inner">
 												<?php
 												if ( ! empty( $control_data['label'] ) ) {
@@ -1624,10 +1563,17 @@ wp_print_scripts();
 													}
 													?>
 												</select>
-												<button type="button" class="button-link create-menu<?php echo $value_hidden_class; ?>" data-location-id="<?php esc_attr_e( substr( $field_id, strlen( 'nav_menu_locations[' ), -1 ) ); ?>" aria-label="<?php esc_attr_e( 'Create a menu for this location' ); ?>">
+												<button type="button"
+													class="button-link create-menu<?php echo $value_hidden_class; ?>"
+													data-location-id="<?php esc_attr_e( substr( $field_id, strlen( 'nav_menu_locations[' ), -1 ) ); ?>"
+													aria-label="<?php esc_attr_e( 'Create a menu for this location' ); ?>"
+												>
 													<?php esc_html_e( '+ Create New Menu' ); ?>
 												</button>
-												<button type="button" class="button-link edit-menu<?php echo $no_value_hidden_class; ?>" aria-label="<?php esc_attr_e( 'Edit selected menu' ); ?>">
+												<button type="button"
+													class="button-link edit-menu<?php echo $no_value_hidden_class; ?>"
+													aria-label="<?php esc_attr_e( 'Edit selected menu' ); ?>"
+												>
 													<?php esc_html_e( 'Edit Menu' ); ?>
 												</button>
 												<?php
@@ -1708,9 +1654,13 @@ wp_print_scripts();
 									$field_type  = $control_data['type'];
 									$widget_id   = isset( $section->controls[$index]->widget_id ) ? $section->controls[$index]->widget_id : '';
 
-									if ( $widget_id === '' || $field_type !== 'widget_form' ) {
+									if ( $widget_id === '' ) {
 										continue;
 									}
+									if ( $field_type !== 'widget_form' ) { // 'sidebar-widgets' 
+										continue;
+									}
+
 									$first_last_widget = '';
 									if ( $index === 0 ) {
 										if ( $index === count( $section->controls ) - 2 ) { // 2 allows for both counting from 0 and $widget_id === ''
@@ -1735,15 +1685,21 @@ wp_print_scripts();
 													</h3>
 													<div class="widget-reorder-nav">
 														<span class="move-widget" tabindex="0" style="">
-															Custom HTMLMove to another area…Move downMove up: Move to another area…
+															<?php esc_html_e( $control_data['label'] ); ?>
+															<?php esc_html_e( 'Move to another area.' ); ?>
 														</span>
 														<span class="move-widget-down" tabindex="0">
-															Custom HTMLCustom HTMLMove to another area…Move downMove up: Move to another area…Move downMove up: Move down</span><span class="move-widget-up" tabindex="-1">Custom HTMLCustom HTMLMove to another area…Move downMove up: Move to another area…Custom HTMLCustom HTMLMove to another area…Move downMove up: Move to another area…Move downMove up: Move downMove up: Move up
+															<?php esc_html_e( $control_data['label'] ); ?>
+															<?php esc_html_e( ' Move down' ); ?>
+														</span>
+														<span class="move-widget-up" tabindex="-1">
+															<?php esc_html_e( $control_data['label'] ); ?>
+															<?php esc_html_e( 'Move up' ); ?>
 														</span>
 													</div>
 												</summary>
 												<div class="widget-title-action">
-													<a class="widget-control-edit hide-if-js" href="/torts/wp-admin/customize.php?url=http%3A%2F%2Flocalhost%2Ftorts%2Fwelcome%2F&amp;editwidget=custom_html-2&amp;key=-1">
+													<a class="widget-control-edit hide-if-js" href="#">
 														<span class="edit">
 															<?php esc_html_e( 'Edit' ); ?>
 														</span>
@@ -1836,7 +1792,9 @@ wp_print_scripts();
 									<?php
 								}
 								?>
-								<li id="customize-control-sidebars_widgets-sidebar1" class="customize-control customize-control-sidebar_widgets no-drag">
+								<li id="customize-control-sidebars_widgets-sidebar1"
+									class="customize-control customize-control-sidebar_widgets no-drag"
+								>
 									<div class="customize-control-notifications-container" style="display: none;">
 										<ul></ul>
 									</div>
@@ -1857,7 +1815,10 @@ wp_print_scripts();
 						}
 						?>
 
-						<ul id="menu-to-edit" class="customize-pane-child accordion-section-content accordion-section control-section control-section-nav_menu field-title-attribute-active menu open" style="display: none;">
+						<ul id="menu-to-edit"
+							class="customize-pane-child accordion-section-content accordion-section control-section control-section-nav_menu field-title-attribute-active menu open"
+							style="display: none;"
+						>
 							<li class="customize-section-description-container section-meta no-drag">
 								<div class="customize-section-title">
 									<button class="customize-section-back" tabindex="0">
@@ -1889,20 +1850,31 @@ wp_print_scripts();
 			</div>
 
 			<div id="customize-footer-actions" class="wp-full-overlay-footer">
-				<button type="button" class="collapse-sidebar button" aria-expanded="true" aria-label="<?php esc_html_e( 'Hide Controls' ); ?>">
+				<button type="button" class="collapse-sidebar button"
+					aria-expanded="true"
+					aria-label="<?php esc_html_e( 'Hide Controls' ); ?>"
+				>
 					<span class="collapse-sidebar-arrow"></span>
-					<span class="collapse-sidebar-label"><?php esc_html_e( 'Hide Controls' ); ?></span>
+					<span class="collapse-sidebar-label">
+						<?php esc_html_e( 'Hide Controls' ); ?>
+					</span>
 				</button>
 				<div class="devices-wrapper">
 					<div class="devices">
 						<button type="button" class="preview-desktop active" aria-pressed="true" data-device="desktop">
-							<span class="screen-reader-text"><?php esc_html_e( 'Enter desktop preview mode' ); ?></span>
+							<span class="screen-reader-text">
+								<?php esc_html_e( 'Enter desktop preview mode' ); ?>
+							</span>
 						</button>
 						<button type="button" class="preview-tablet" aria-pressed="false" data-device="tablet">
-							<span class="screen-reader-text"><?php esc_html_e( 'Enter tablet preview mode' ); ?></span>
+							<span class="screen-reader-text">
+								<?php esc_html_e( 'Enter tablet preview mode' ); ?>
+							</span>
 						</button>
 						<button type="button" class="preview-mobile" aria-pressed="false" data-device="mobile">
-							<span class="screen-reader-text"><?php esc_html_e( 'Enter mobile preview mode' ); ?></span>
+							<span class="screen-reader-text">
+								<?php esc_html_e( 'Enter mobile preview mode' ); ?>
+							</span>
 						</button>
 					</div>
 				</div>
@@ -1922,7 +1894,11 @@ wp_print_scripts();
 					<label class="screen-reader-text" for="widgets-search">
 						<?php esc_html_e( 'Search Widgets' ); ?>
 					</label>
-					<input type="text" id="widgets-search" placeholder="<?php esc_attr_e( 'Search widgets…' ); ?>" aria-describedby="widgets-search-desc">
+					<input type="text"
+						id="widgets-search"
+						placeholder="<?php esc_attr_e( 'Search widgets…' ); ?>"
+						aria-describedby="widgets-search-desc"
+					>
 					<div class="search-icon" aria-hidden="true"></div>
 					<button type="button" class="clear-results">
 						<span class="screen-reader-text">
@@ -1936,7 +1912,7 @@ wp_print_scripts();
 				<ul id="available-widgets-list">
 					<?php
 					$number = 0;
-					foreach ( $available_widgets as $widget_data ) :
+					foreach ( $available_widgets as $widget_data ) {
 						$id       = $widget_data['id'];
 						$id_base  = $widget_data['id_base'];
 						$name     = $widget_data['name'];
@@ -1960,9 +1936,15 @@ wp_print_scripts();
 									</summary>
 									<div class="widget-title-action">
 										<a class="widget-control-edit hide-if-js" href="<?php echo esc_url( admin_url( 'customize.php?url=' ) ); ?>">
-											<span class="edit"><?php esc_attr_e( 'Edit' ); ?></span>
-											<span class="add"><?php esc_attr_e( 'Add' ); ?></span>
-											<span class="screen-reader-text"><?php esc_attr_e( 'Audio' ); ?></span>
+											<span class="edit">
+												<?php esc_attr_e( 'Edit' ); ?>
+											</span>
+											<span class="add">
+												<?php esc_attr_e( 'Add' ); ?>
+											</span>
+											<span class="screen-reader-text">
+												<?php esc_attr_e( 'Audio' ); ?>
+											</span>
 										</a>
 									</div>
 
@@ -1978,7 +1960,9 @@ wp_print_scripts();
 													call_user_func( $control['callback'], $widget_args, $control );
 												} else {
 													?>
-													<p><?php esc_html_e( 'This widget has no configurable options.' ); ?></p>
+													<p>
+														<?php esc_html_e( 'This widget has no configurable options.' ); ?>
+													</p>
 													<?php
 												}
 												wp_nonce_field( 'save-sidebar-widgets', '_wpnonce' );
@@ -2030,7 +2014,9 @@ wp_print_scripts();
 								?>
 							</div>
 						</li>
-					<?php endforeach; ?>
+						<?php
+					}
+					?>
 				</ul><!-- #available-widgets-list -->
 			</div><!-- #available-widgets -->
 		</div><!-- #widgets-left -->
