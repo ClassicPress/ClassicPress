@@ -1701,29 +1701,69 @@ wp_print_scripts();
 								</li>
 
 								<?php
+								$index = 0;
 								foreach ( $controls[ $section->id ] as $control_data ) {
 									$field_id    = $control_data['setting_id'] ?: $control_data['id'];
 									$field_value = $control_data['value'];
 									$field_type  = $control_data['type'];
+									$widget_id   = isset( $section->controls[$index]->widget_id ) ? $section->controls[$index]->widget_id : '';
+
+									if ( $widget_id === '' || $field_type !== 'widget_form' ) {
+										continue;
+									}
+									$first_last_widget = '';
+									if ( $index === 0 ) {
+										if ( $index === count( $section->controls ) - 2 ) { // 2 allows for both counting from 0 and $widget_id === ''
+											$first_last_widget = ' first-widget last-widget';
+										} else {
+											$first_last_widget = ' first-widget';
+										}
+									} elseif ( $index === count( $section->controls ) - 2 ) {
+										$first_last_widget = ' last-widget';
+									}
 									?>
 
-									<li id="customize-control-<?php esc_attr_e( $field_id ); ?>" class="customize-control customize-control-<?php esc_attr_e( $field_type ); ?>">
-										<div class="customize-control-inner">
-											<?php
-											if ( ! empty ( $control_data['label'] ) ) {
-												?>
-												<label class="customize-control-title" for="<?php esc_attr_e( $field_id ); ?>">
-													<?php esc_html_e( $control_data['label'] ); ?>
-												</label>
-												<?php
-											}
-											if ( $field_type === 'widget_form' ) {
-												$widget_base = explode( '[', $field_id )[0];
-												$widget_id_base = substr( $widget_base, 7 );
+									<li id="customize-control-widget-<?php esc_attr_e( $widget_id ); ?>"
+										class="customize-control customize-control-widget_form<?php esc_attr_e( $first_last_widget ); ?> widget-rendered"
+									>
+										<div id="widget-<?php esc_attr_e( $index . '_' . $widget_id ); ?>" class="widget">
+											<details class="widget-top">
+												<summary class="widget-title">
+													<h3>
+														<?php esc_html_e( $control_data['label'] ); ?>
+														<span class="in-widget-title"></span>
+													</h3>
+													<div class="widget-reorder-nav">
+														<span class="move-widget" tabindex="0" style="">
+															Custom HTMLMove to another area…Move downMove up: Move to another area…
+														</span>
+														<span class="move-widget-down" tabindex="0">
+															Custom HTMLCustom HTMLMove to another area…Move downMove up: Move to another area…Move downMove up: Move down</span><span class="move-widget-up" tabindex="-1">Custom HTMLCustom HTMLMove to another area…Move downMove up: Move to another area…Custom HTMLCustom HTMLMove to another area…Move downMove up: Move to another area…Move downMove up: Move downMove up: Move up
+														</span>
+													</div>
+												</summary>
+												<div class="widget-title-action">
+													<a class="widget-control-edit hide-if-js" href="/torts/wp-admin/customize.php?url=http%3A%2F%2Flocalhost%2Ftorts%2Fwelcome%2F&amp;editwidget=custom_html-2&amp;key=-1">
+														<span class="edit">
+															<?php esc_html_e( 'Edit' ); ?>
+														</span>
+														<span class="add">
+															<?php esc_html_e( 'Add' ); ?>
+														</span>
+														<span class="screen-reader-text">
+															<?php esc_html_e( $control_data['label'] ); ?>
+														</span>
+													</a>
+												</div>
 
-												global $wp_widget_factory;
+												<?php
+												$widget_id_split = explode( '-', $widget_id );
+												$widget_id_base  = $widget_id_split[0];
+												$widget_number   = $widget_id_split[1];
+												$index++;
 
 												// Find widget by ID base in factory
+												global $wp_widget_factory;
 												$widget_obj = null;
 												foreach ( $wp_widget_factory->widgets as $id_base => $obj ) {
 													if ( $obj->id_base === $widget_id_base ) {
@@ -1735,53 +1775,82 @@ wp_print_scripts();
 													return;
 												}
 												$widget_settings = is_array( $field_value ) ? $field_value : array();
-												$widget_settings['title'] = $widget_settings['title'] ?? '';
 												?>
-												<div class="widget-content">
-													<p>
-														<label for="<?php echo esc_attr( $field_id ); ?>[title]">
-															<?php _e( 'Title' ); ?>:
-														</label>
-														<input type="text" 
-															class="widefat widget-title" 
-															id="<?php echo esc_attr( $field_id ); ?>[title]" 
-															name="<?php echo esc_attr( $field_id ); ?>[title]" 
-															value="<?php echo esc_attr( $widget_settings['title'] ); ?>"
-														>
-													</p>
-													<?php $widget_obj->form( $widget_settings ); ?>
-													<p class="widget-control-save">
-														<a class="button-link button-link-delete">
-															<?php _e( 'Delete' ); ?>
-														</a> |
-														<a class="button-link">
-															<?php _e( 'Done' ); ?>
-														</a>
-													</p>
-												</div>
-												<?php
-											}
-											?>
+
+												<div class="widget-inside">
+													<div class="customize-control-notifications-container" style="display: none;">
+														<ul></ul>
+													</div>
+													<div class="form">
+														<div class="widget-content">
+															<?php $widget_obj->form( $widget_settings ); ?>
+														</div>
+														<input type="hidden" name="id_base" class="id_base" value="<?php esc_attr_e( $widget_id_base ); ?>">
+														<input type="hidden" name="widget_number" class="widget_number" value="<?php esc_attr_e( $widget_number ); ?>">
+														<input type="hidden" name="widget_id" class="widget_id" value="<?php esc_attr_e( $widget_id ); ?>">
+														<input type="hidden" name="sidebar_id" class="sidebar_id" value="<?php esc_attr_e( $section->id ); ?>">
+														<input type="hidden" name="multi_number" class="multi_number" value="">
+														<input type="hidden" name="width" class="width" value="auto">
+														<input type="hidden" name="height" class="height" value="auto">
+														<input type="hidden" name="add_new" class="add_new" value="">
+														<div class="widget-control-actions">
+															<div class="alignleft">
+																<button type="button" class="button-link button-link-delete widget-control-remove">
+																	<?php esc_html_e( 'Delete' ); ?>
+																</button>
+																<span class="widget-control-close-wrapper">
+																	|
+																	<button type="button" class="button-link widget-control-close">
+																		<?php esc_html_e( 'Done' ); ?>
+																	</button>
+																</span>
+															</div>
+															<div class="alignright">
+																<input type="submit"
+																	name="savewidget"
+																	id="widget-<?php esc_attr_e( $widget_id_base ); ?>-__i__-savewidget"
+																	class="button button-primary widget-control-save right"
+																	value="Save"
+																>
+																<span class="spinner"></span>
+															</div>
+															<br class="clear">
+														</div>
+													</div><!-- .form -->
+
+													<?php
+													/**
+													 * Fires at the end of the widget control form.
+													 * 
+													 * @param WP_Widget $widget_obj      Widget instance.
+													 * @param null      $return          Return null if new fields are added.
+													 * @param array     $widget_settings An array of the widget’s settings.
+													 */
+													do_action( 'in_widget_form', $widget_obj, $return = null, $widget_settings );
+													?>
+
+												</div><!-- .widget-inside -->
+											</details>
 										</div>
-									</li>
-									<li id="customize-control-sidebars_widgets-sidebar1" class="customize-control customize-control-sidebar_widgets no-drag">
-										<div class="customize-control-notifications-container" style="display: none;">
-											<ul></ul>
-										</div>
-										<button type="button" class="button add-new-widget" aria-expanded="false" aria-controls="widgets-left">
-											<?php esc_html_e( 'Add a Widget' ); ?>
-										</button>
-										<button type="button" class="button-link reorder-toggle" aria-label="Reorder widgets" aria-describedby="reorder-widgets-desc-sidebars_widgets-sidebar1">
-											<span class="reorder"><?php esc_html_e( 'Reorder' ); ?></span>
-											<span class="reorder-done"><?php esc_html_e( 'Done' ); ?></span>
-										</button>
-										<p class="screen-reader-text" id="reorder-widgets-desc-sidebars_widgets-sidebar1">
-											<?php esc_html_e( 'When in reorder mode, additional controls to reorder widgets will be available in the widgets list above.' ); ?>
-										</p>
 									</li>
 									<?php
 								}
 								?>
+								<li id="customize-control-sidebars_widgets-sidebar1" class="customize-control customize-control-sidebar_widgets no-drag">
+									<div class="customize-control-notifications-container" style="display: none;">
+										<ul></ul>
+									</div>
+									<button type="button" class="button add-new-widget" aria-expanded="false" aria-controls="widgets-left">
+										<?php esc_html_e( 'Add a Widget' ); ?>
+									</button>
+									<button type="button" class="button-link reorder-toggle" aria-label="Reorder widgets" aria-describedby="reorder-widgets-desc-sidebars_widgets-sidebar1">
+										<span class="reorder"><?php esc_html_e( 'Reorder' ); ?></span>
+										<span class="reorder-done"><?php esc_html_e( 'Done' ); ?></span>
+									</button>
+									<p class="screen-reader-text" id="reorder-widgets-desc-sidebars_widgets-sidebar1">
+										<?php esc_html_e( 'When in reorder mode, additional controls to reorder widgets will be available in the widgets list above.' ); ?>
+									</p>
+								</li>
 							</ul>
 
 							<?php
@@ -1844,7 +1913,7 @@ wp_print_scripts();
 			// eventually submit changes (stage 2+).
 			?>
 			<input type="hidden" name="customize_form_stage" value="php-first-paint">
-		</form><!-- /#customize-controls -->
+		</form><!-- #customize-controls -->
 
 		<div id="widgets-left">
 			<!-- compatibility with JS which looks for widget templates here -->
@@ -1919,8 +1988,8 @@ wp_print_scripts();
 											<input type="hidden" name="widget-id" value="<?php esc_attr_e( $id ); ?>">
 											<input type="hidden" name="id_base" value="<?php esc_attr_e( $id_base ); ?>">
 											<input type="hidden" name="widget_number" value="<?php esc_attr_e( $number ); ?>">
-											<input type="hidden" name="widget-width" class="widget-width" value="">
-											<input type="hidden" name="widget-height" class="widget-height" value="">
+											<input type="hidden" name="widget-width" class="widget-width" value="auto">
+											<input type="hidden" name="widget-height" class="widget-height" value="auto">
 											<input type="hidden" name="multi_number" class="multi_number" value="">
 											<input type="hidden" name="add_new" value="">
 
@@ -1937,7 +2006,12 @@ wp_print_scripts();
 													</span>
 												</div>
 												<div class="alignright">
-													<input type="submit" name="savewidget" id="widget-<?php esc_attr_e( $id_base ); ?>-__i__-savewidget" class="button button-primary widget-control-save right" value="Save">
+													<input type="submit"
+														name="savewidget"
+														id="widget-<?php esc_attr_e( $id_base ); ?>-__i__-savewidget"
+														class="button button-primary widget-control-save right"
+														value="Save"
+													>
 													<span class="spinner"></span>
 												</div>
 												<br class="clear">
