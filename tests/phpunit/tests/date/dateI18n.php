@@ -3,6 +3,11 @@
 /**
  * @group date
  * @group datetime
+<<<<<<< HEAD
+=======
+ *
+ * @covers ::date_i18n
+>>>>>>> 2a6b527f73 (Tests: Improve the `@group` annotation accuracy and consistency.)
  */
 class Tests_Date_I18n extends WP_UnitTestCase {
 	public function test_should_format_date() {
