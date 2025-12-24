@@ -6,8 +6,6 @@
  * See query/dateQuery.php for tests that require WP_Query.
  *
  * @group date
-<<<<<<< HEAD
-=======
  * @group datetime
  * @group datequery
  *
@@ -16,9 +14,7 @@
 class Tests_Date_Query extends WP_UnitTestCase {
 	/**
 	 * @var WP_Date_Query $q
->>>>>>> 2a6b527f73 (Tests: Improve the `@group` annotation accuracy and consistency.)
- */
-class Tests_WP_Date_Query extends WP_UnitTestCase {
+	 */
 	public $q;
 
 	public function set_up() {
