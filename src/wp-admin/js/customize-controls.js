@@ -65,6 +65,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.preventDefault();
 			previousAccordionPane = e.target.closest( 'ul' );
 			id = e.target.closest( 'li' ).id;
+			document.body.classList.remove( 'adding-menu-items' );
+			document.body.classList.remove( 'adding-widget' );
+			document.getElementById( 'widgets-left' ).style.display = 'none';
+			document.getElementById( 'available-menu-items' ).style.display = 'none';
+			addMenuButtons.forEach( function( add ) {
+				add.setAttribute( 'aria-expanded', false );
+			} );
+			addWidgetButtons.forEach( function( add ) {
+				add.setAttribute( 'aria-expanded', false );
+			} );
 
 			// Go down to the second level
 			if ( e.target.closest( 'ul' ).classList.contains( 'customize-pane-parent' ) ) {
@@ -74,7 +84,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();
 
 			// Go down to the third level
-			} else if ( e.target.closest( 'ul' ).classList.contains( 'customize-pane-child' ) ) {
+			} else if ( ! e.target.closest( 'li' ).classList.contains( 'customize-control-widget_form' ) && e.target.closest( 'ul' ).classList.contains( 'customize-pane-child' ) ) {
 				e.target.closest( 'ul' ).style.display = 'none';
 				document.getElementById( 'sub-' + id ).style.display = 'block';
 				document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();				
@@ -82,6 +92,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( e.target.classList && ( e.target.classList.contains( 'customize-section-back' ) || e.target.classList.contains( 'customize-panel-back' ) ) ) {
 			e.preventDefault();
 			e.target.closest( 'ul' ).style.display = 'none';
+			document.body.classList.remove( 'adding-menu-items' );
+			document.body.classList.remove( 'adding-widget' );
+			document.getElementById( 'widgets-left' ).style.display = 'none';
+			document.getElementById( 'available-menu-items' ).style.display = 'none';
+			addMenuButtons.forEach( function( add ) {
+				add.setAttribute( 'aria-expanded', false );
+			} );
+			addWidgetButtons.forEach( function( add ) {
+				add.setAttribute( 'aria-expanded', false );
+			} );
 
 			// Go up to the top level
 			if ( e.target.parentNode.classList.contains( 'panel-meta' ) || e.target.closest( 'ul' ).id === 'sub-accordion-section-menu_locations' ) {
@@ -142,6 +162,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.getElementById( 'widgets-left' ).style.display = 'none';
 				e.target.setAttribute( 'aria-expanded', false );
 			}
+
+		// Reorder widgets
+		} else if ( e.target.className === 'reorder' ) {
+			e.target.closest( 'ul' ).classList.add( 'reordering' );
+
+		// Finish reordering
+		} else if ( e.target.className === 'reorder-done' ) {
+			e.target.closest( 'ul' ).classList.remove( 'reordering' );
 
 		// Open and close description
 		} else if ( e.target.classList && e.target.classList.contains( 'customize-help-toggle' ) ) {
@@ -215,7 +243,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				e.target.closest( 'ul' ).style.display = 'none';
 				document.getElementById( 'customize-info' ).style.display = 'block';
 				document.querySelector( '.customize-pane-parent' ).style.display = 'block';
-				addMenuButtons.forEach( function( add ) {console.log(add);
+				addMenuButtons.forEach( function( add ) {
 					add.setAttribute( 'aria-expanded', false );
 				} );
 				addWidgetButtons.forEach( function( add ) {
@@ -287,17 +315,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
         } );
     } );
 
-
-
-
-
 	/**
 	 * Code for the Iris color picker.
 	 */
-	jQuery( '.cp-color-picker' ).wpColorPicker(); // Iris requires jQuery
+	jQuery( '.color-picker-hue, .color-picker-hex' ).wpColorPicker(); // Iris requires jQuery
 
 	// Focus/click: ensure picker shows.
-	document.querySelectorAll( '.cp-color-picker' ).forEach( function( input ) {
+	document.querySelectorAll( '.color-picker-hue, .color-picker-hex' ).forEach( function( input ) {
 		var container = input.closest( '.wp-picker-container' );
 		if ( ! container ) {
 			return;
