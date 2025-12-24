@@ -132,7 +132,7 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 						maxlength="7"
 						placeholder="<?php esc_attr_e( $default_value ); ?>"
 						value="<?php esc_attr_e( $this->value() ); ?>"
-						data-default-color="<?php esc_attr_e( $color_value ); ?>"
+						<?php echo $default_value_attr; // data-default-color ?>
 						<?php $this->link(); ?>
 					>
 					<?php
