@@ -899,87 +899,38 @@ wp_print_scripts();
 										$field_id    = $control_data['setting_id'] ?: $control_data['id'];
 										$field_value = $control_data['value'];
 										$field_type  = $control_data['type'];
-										error_log(print_r( 'section ' . $field_type, true ));
+										$field_label = $control_data['label'];
+										$description = $control_data['description'];
+										$input_id    = '_customize-input-' . $field_id;
+										$description_id = '_customize-description-' . $field_id;
+										$describedby_attr = $description ? ' aria-describedby="' . $description_id . '" ' : '';
+										$control = $wp_customize->get_control( $field_id );
+										if ( $control ) {
+											$control->maybe_render();
+											$control->print_template();
+										}
+
 										?>
 
-										<li id="customize-control-<?php esc_attr_e( $field_id ); ?>" class="customize-control customize-control-text">
+										<li id="customize-control-<?php esc_attr_e( $field_id ); ?>" class="customize-control customize-control-<?php esc_attr_e( $field_id ); ?>">
 											<div class="customize-control customize-control-<?php esc_attr_e( $field_type ); ?>">
 												<?php
-												if ( 'site_icon' !== $field_type ) {
+												if ( 'site_icon' === $field_type ) {
 													?>
-													<label class="customize-control-title" for="<?php esc_attr_e( $field_id ); ?>">
-														<?php esc_html_e( $control_data['label'] ?: $control_data['id'] ); ?>
-													</label>
-													<?php
-												}
-												// Very simple type-to-input mapping. error_log(print_r($control_data, true));
-												if ( in_array( $field_type, array( 'text', 'url', 'email', 'number' ), true ) ) {
-													?>
-													<input type="text"
-														id="<?php esc_attr_e( $field_id ); ?>"
-														name="<?php esc_attr_e( $field_id ); ?>"
-														value="<?php esc_attr_e( $field_value ); ?>"
-														class="regular-text"
-													>
-													<?php
-												} elseif ( 'checkbox' === $field_type ) {
-													$checked = $field_value ? ' checked="checked"' : '';
-													?>
-													<input type="checkbox"
-														id="<?php esc_attr_e( $field_id ); ?>"
-														name="<?php esc_attr_e( $field_id ); ?>"
-														value="1"' . $checked . '
-														style="margin: 0;"
-													>
-													<?php
-												} elseif ( 'radio' === $field_type ) {
-													$checked = $field_value ? ' checked="checked"' : '';
-													?>
-													<input type="radio"
-														id="<?php esc_attr_e( $field_id ); ?>"
-														name="<?php esc_attr_e( $field_id ); ?>"
-														value="1"' . $checked . '
-														style="margin: 0;"
-													>
-													<?php
-												} elseif ( 'textarea' === $field_type ) {
-													?>
-													<textarea id="<?php esc_attr_e( $field_id ); ?>"
-														name="<?php esc_attr_e( $field_id ); ?>"
-														rows="4"
-														class="large-text"
-													>
-														<?php echo esc_textarea( (string) $field_value ); ?>
-													</textarea>
-													<?php
-												} elseif ( 'color' === $field_type ) {
-													$raw_value = (string) $field_value;
-
-													// If it looks like a bare 3/6-digit hex, prefix with #.
-													if ( preg_match( '/^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/', $raw_value ) ) {
-														$color_value = '#' . $raw_value;
-													} else {
-														$color_value = $raw_value;
-													}
-													?>
-													<div class="customize-control-content">
-														<input type="text"
-															id="<?php esc_attr_e( $field_id ); ?>"
-															name="<?php esc_attr_e( $field_id ); ?>"
-															class="cp-color-picker"
-															value="<?php esc_attr_e( $color_value ); ?>"
-															data-default-color="<?php esc_attr_e( $color_value ); ?>"
-															placeholder="<?php esc_attr_e( 'Select Color' ); ?>"
-														>
-													</div>
-													<?php
-												} elseif ( 'site_icon' === $field_type ) {
-													?>
-													<span class="customize-control-title"><?php esc_html_e( $control_data['label'] ); ?></span>
+													<span class="customize-control-title">
+														<?php esc_html_e( $field_label ); ?>
+													</span>
 													<div class="customize-control-notifications-container" style="display: none;">
 														<ul></ul>
 													</div>
 													<?php
+													if ( ! empty( $description ) ) {
+														?>
+														<span id="<?php esc_attr_e( $description_id ); ?>" class="description customize-control-description">
+															<?php echo $description; ?>
+														</span>
+														<?php
+													}
 												} elseif ( 'cropped_image' === $field_type ) {
 													?>
 													<div class="attachment-media-view">
@@ -990,12 +941,14 @@ wp_print_scripts();
 																	<?php
 																	if ( get_site_icon_url() !== '' ) {
 																		?>
-																		<img src="<?php echo esc_url( get_site_icon_url() ); ?>" alt="<?php esc_attr_e( 'Preview as a browser icon' ); ?>">';
+																		<img src="<?php echo esc_url( get_site_icon_url() ); ?>" alt="<?php esc_attr_e( 'Preview as a browser icon' ); ?>">
 																		<?php
 																	}
 																	?>
 																</div>
-																<span class="browser-title" aria-hidden="true"><?php esc_html_e( get_bloginfo( 'name' ) ); ?></span>
+																<span class="browser-title" aria-hidden="true">
+																	<?php esc_html_e( get_bloginfo( 'name' ) ); ?>
+																</span>
 															</div>
 															<?php
 															if ( get_site_icon_url() !== '' ) {
@@ -1006,21 +959,116 @@ wp_print_scripts();
 															?>
 														</div>
 														<div class="actions">	
-															<button type="button" class="button remove-button"><?php esc_html_e( 'Remove' ); ?></button>
-															<button type="button" class="button upload-button"><?php esc_html_e( 'Change image' ); ?></button>
+															<button type="button" class="button remove-button">
+																<?php esc_html_e( 'Remove' ); ?>
+															</button>
+															<button type="button" class="button upload-button">
+																<?php esc_html_e( 'Change image' ); ?>
+															</button>
 														</div>
 													</div>
 													<?php
-												} else {
-													// Fallback generic input.
+													if ( ! empty( $description ) ) {
+														?>
+														<span id="<?php esc_attr_e( $description_id ); ?>" class="description customize-control-description">
+															<?php echo $description; ?>
+														</span>
+														<?php
+													}
+												} elseif ( 'media' === $field_type ) {
+													
+												} elseif ( 'header' === $field_type ) {
+													// Core header_image setting - Site Identity header background
+													$header_image = get_header_image();
+													$header_id = 'header_image';
 													?>
-													<input type="text" id="<?php esc_attr_e( $field_id ); ?>" name="<?php esc_attr_e( $field_id ); ?>" value="<?php //esc_attr_e( $field_value ); ?>" class="regular-text">
+    
+													<div class="customize-control-header">
+														<label>
+															<?php
+															if ( $header_image ) {
+																?>
+																<img class="header-image-thumbnail" 
+																	src="<?php echo esc_url( $header_image ); ?>" 
+																	style="max-width: 100px; height: auto; vertical-align: middle;"
+																>
+																<?php
+															}
+															?>
+															<span class="title">
+																<?php _e( 'Header Image', 'default' ); ?>
+															</span>
+														</label>
+														<p class="description">
+															<?php
+															printf(
+																__( 'Click %1$s to select a header image, or %2$s to remove it.' ),
+																'<a href="#" data-customize-setting-link="' . esc_attr( $header_id ) . '">' . __( 'change' ) . '</a>',
+																'<a href="#" class="remove-header-image">' . __( 'remove' ) . '</a>'
+															);
+															?>
+														</p>
+													</div> 
+													<input type="hidden" 
+														id="<?php esc_attr_e( $field_id ); ?>" 
+														name="<?php esc_attr_e( $field_id ); ?>" 
+														value="<?php esc_attr_e( $header_image ); ?>" 
+														data-customize-setting-link="<?php esc_attr_e( $header_id ); ?>"
+													>
 													<?php
-												}
-												if ( ! empty ( $control_data['description'] ) ) {
+													if ( ! empty( $description ) ) {
+														?>
+														<span id="<?php esc_attr_e( $description_id ); ?>" class="description customize-control-description">
+															<?php echo $description; ?>
+														</span>
+														<?php
+													}
+												} elseif ( 'background' === $field_type ) {
+													
+												} elseif ( 'background_position' === $field_type ) {
+													
+												} elseif ( 'code_editor' === $field_type ) {
+													$code_value = is_array( $field_value ) ? ( $field_value['content'] ?? '' ) : (string) $field_value;
 													?>
-													<div class="description customize-control-description"><?php echo wp_kses_post( $control_data['description'] ); ?></div>
+													<span class="customize-control-title">
+														<?php esc_html_e( $field_label ); ?>
+													</span>
+													<textarea id="<?php esc_attr_e( $field_id ); ?>" 
+														class="code-editor" 
+														name="<?php esc_attr_e( $field_id ); ?>[content]" 
+														rows="15" 
+														data-customize-setting-link="<?php esc_attr_e( $field_id ); ?>"
+														spellcheck="false"
+													>
+														<?php echo esc_textarea( $code_value ); ?>
+													</textarea>
+    
 													<?php
+													// Language mode (core passes via 'choices')
+													if ( isset ( $control->choices['language'] ) ) {
+														?>
+														<input type="hidden"
+															name="<?php esc_attr_e( $field_id ); ?>[language]"
+															value="<?php esc_attr_e( $control->choices['language'] ); ?>"
+														>
+														<?php
+													}													
+												} else { // 'text', 'url', 'email', 'number', 'password', 'hidden', 'date'
+													?>
+													<input type="<?php esc_attr_e( $field_type ); ?>"
+														id="<?php esc_attr_e( $field_id ); ?>"
+														name="<?php esc_attr_e( $field_id ); ?>"
+														value="<?php esc_attr_e( $field_value ); ?>"
+														class="regular-text"
+													>
+													<?php
+													if ( ! empty ( $description ) ) {
+														?>
+														<div class="description customize-control-description">
+															<?php echo wp_kses_post( $description ); ?>
+														</div>
+														<?php
+													}
 												}
 												?>
 											</div>
@@ -1233,6 +1281,9 @@ wp_print_scripts();
 									$field_id    = $control_data['setting_id'] ?: $control_data['id'];
 									$field_value = $control_data['value'];
 									$field_type  = $control_data['type'];
+									$field_label = $control_data['label'];
+									$description = $control_data['description'];
+									$priority    = $control_data['priority'];
 
 									// Memu items - only for nav_menu[ID] sections
 									if ( $menu_id && 0 === strpos( $section->id, 'nav_menu[' ) ) {
@@ -1543,10 +1594,10 @@ wp_print_scripts();
 										>
 											<div class="customize-control-inner">
 												<?php
-												if ( ! empty( $control_data['label'] ) ) {
+												if ( ! empty( $field_label ) ) {
 													?>
 													<label class="customize-control-title" for="<?php esc_attr_e( $field_id ); ?>">
-														<?php esc_html_e( $control_data['label'] ); ?>
+														<?php esc_html_e( $field_label ); ?>
 													</label>
 													<?php
 												}
@@ -1577,10 +1628,10 @@ wp_print_scripts();
 													<?php esc_html_e( 'Edit Menu' ); ?>
 												</button>
 												<?php
-												if ( ! empty( $control_data['description'] ) ) {
+												if ( ! empty( $description ) ) {
 													?>
 													<div class="description customize-control-description">
-														<?php echo wp_kses_post( $control_data['description'] ); ?>
+														<?php echo wp_kses_post( $description ); ?>
 													</div>
 													<?php
 												}
@@ -1651,7 +1702,8 @@ wp_print_scripts();
 								foreach ( $controls[ $section->id ] as $control_data ) {
 									$field_id    = $control_data['setting_id'] ?: $control_data['id'];
 									$field_value = $control_data['value'];
-									$field_type  = $control_data['type'];
+									$field_type  = $control_data['type'];									
+									$field_label = $control_data['label'];
 									$widget_id   = isset( $section->controls[$index]->widget_id ) ? $section->controls[$index]->widget_id : '';
 
 									if ( $widget_id === '' ) {
@@ -1680,20 +1732,20 @@ wp_print_scripts();
 											<details class="widget-top">
 												<summary class="widget-title">
 													<h3>
-														<?php esc_html_e( $control_data['label'] ); ?>
+														<?php esc_html_e( $field_label ); ?>
 														<span class="in-widget-title"></span>
 													</h3>
 													<div class="widget-reorder-nav">
 														<span class="move-widget" tabindex="0" style="">
-															<?php esc_html_e( $control_data['label'] ); ?>
+															<?php esc_html_e( $field_label ); ?>
 															<?php esc_html_e( 'Move to another area.' ); ?>
 														</span>
 														<span class="move-widget-down" tabindex="0">
-															<?php esc_html_e( $control_data['label'] ); ?>
+															<?php esc_html_e( $field_label ); ?>
 															<?php esc_html_e( ' Move down' ); ?>
 														</span>
 														<span class="move-widget-up" tabindex="-1">
-															<?php esc_html_e( $control_data['label'] ); ?>
+															<?php esc_html_e( $field_label ); ?>
 															<?php esc_html_e( 'Move up' ); ?>
 														</span>
 													</div>
@@ -1707,7 +1759,7 @@ wp_print_scripts();
 															<?php esc_html_e( 'Add' ); ?>
 														</span>
 														<span class="screen-reader-text">
-															<?php esc_html_e( $control_data['label'] ); ?>
+															<?php esc_html_e( $field_label ); ?>
 														</span>
 													</a>
 												</div>
