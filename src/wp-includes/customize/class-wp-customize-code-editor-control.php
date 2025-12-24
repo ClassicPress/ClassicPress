@@ -78,34 +78,85 @@ class WP_Customize_Code_Editor_Control extends WP_Customize_Control {
 	}
 
 	/**
-	 * Don't render the control content from PHP, as it's rendered via JS on load.
+	 * Render the control content from PHP.
 	 *
-	 * @since 4.9.0
+	 * @since CP-2.7.0
 	 */
-	public function render_content() {}
+	public function render_content() {
+		$element_id_prefix = 'el' . uniqid();
+		if ( $this->label ) {
+			?>
 
-	/**
-	 * Render a JS template for control display.
-	 *
-	 * @since 4.9.0
-	 */
-	public function content_template() {
-		?>
-		<# var elementIdPrefix = 'el' + String( Math.random() ); #>
-		<# if ( data.label ) { #>
-			<label for="{{ elementIdPrefix }}_editor" class="customize-control-title">
-				{{ data.label }}
+			<label for="<?php esc_attr_e( $element_id_prefix . '_editor' ); ?>" class="customize-control-title">
+				<?php esc_html_e( $this->label ); ?>
 			</label>
-		<# } #>
-		<# if ( data.description ) { #>
-			<span class="description customize-control-description">{{{ data.description }}}</span>
-		<# } #>
-		<div class="customize-control-notifications-container"></div>
-		<textarea id="{{ elementIdPrefix }}_editor"
-			<# _.each( _.extend( { 'class': 'code' }, data.input_attrs ), function( value, key ) { #>
-				{{{ key }}}="{{ value }}"
-			<# }); #>
-			></textarea>
+
+			<?php
+		}
+
+		$section_description = '';
+		if ( $this->section ) {
+			$section = $this->manager->get_section( $this->section );
+			if ( $section && $section->description ) {
+				$section_description = $section->description;
+			}
+		}
+
+		if ( $this->description || $section->description ) {
+			?>
+
+			<div class="description customize-section-description open">
+				<?php echo wp_kses_post( $this->description ?: $section_description ); ?>
+			</div>
+
+			<?php
+		}
+		?>
+
+		<div class="customize-control-notifications-container">
+			<ul></ul>
+		</div>
+
+		<?php
+		// Merge default class "code" with any input_attrs from JS/JSON
+		$input_attrs = (array) $this->input_attrs;
+		if ( isset( $input_attrs['class'] ) ) {
+			$input_attrs['class'] .= ' code';
+		} else {
+			$input_attrs['class'] = 'code';
+		}
+		?>
+
+		<textarea id="<?php esc_attr_e( $element_id_prefix . '_editor' ); ?>" 
+
+			<?php
+			// Print all input attributes
+			foreach ( $input_attrs as $key => $value ) {
+				printf(
+					' %s="%s"',
+					esc_attr( $key ),
+					esc_attr( $value )
+				);
+			}
+
+			// Link the textarea to the setting, like $this->link() would
+			$this->link();
+			?>
+		>
+			<?php 
+			// Initial content value
+			echo esc_textarea( $this->value() );
+			?>
+
+		</textarea>
+
 		<?php
 	}
+
+	/**
+	 * Redundant JS template.
+	 *
+	 * @since CP-2.7.0
+	 */
+	public function content_template() {}
 }
