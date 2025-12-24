@@ -52,7 +52,9 @@ class Tests_Filesystem_WpFilesystemDirect_Chmod extends WP_Filesystem_Direct_Uni
 	 * @param string $type The type of path. "FILE" for file, "DIR" for directory.
 	 */
 	public function test_should_handle_set_mode_when_not_passed( $path, $type ) {
-		define( 'FS_CHMOD_' . $type, ( 'FILE' === $type ? 0644 : 0755 ) );
+		if ( ! defined( 'FS_CHMOD_' . $type ) ) {
+			define( 'FS_CHMOD_' . $type, ( 'FILE' === $type ? 0644 : 0755 ) );
+		}
 
 		$this->assertTrue( self::$filesystem->chmod( self::$file_structure['test_dir']['path'] . $path, false ) );
 	}

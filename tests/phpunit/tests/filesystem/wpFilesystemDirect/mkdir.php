@@ -36,7 +36,9 @@ class Tests_Filesystem_WpFilesystemDirect_Mkdir extends WP_Filesystem_Direct_Uni
 	 * @param mixed $path The path to create.
 	 */
 	public function test_should_create_directory( $path ) {
-		define( 'FS_CHMOD_DIR', 0755 );
+		if ( ! defined( 'FS_CHMOD_DIR' ) ) {
+			define( 'FS_CHMOD_DIR', 0755 );
+		}
 
 		$path   = str_replace( 'TEST_DIR', self::$file_structure['test_dir']['path'], $path );
 		$actual = self::$filesystem->mkdir( $path );
@@ -84,7 +86,9 @@ class Tests_Filesystem_WpFilesystemDirect_Mkdir extends WP_Filesystem_Direct_Uni
 	 * @param mixed $path     The path to create.
 	 */
 	public function test_should_not_create_directory( $path ) {
-		define( 'FS_CHMOD_DIR', 0755 );
+		if ( ! defined( 'FS_CHMOD_DIR' ) ) {
+			define( 'FS_CHMOD_DIR', 0755 );
+		}
 
 		$path   = str_replace( 'TEST_DIR', self::$file_structure['test_dir']['path'], $path );
 		$actual = self::$filesystem->mkdir( $path );
@@ -149,7 +153,9 @@ class Tests_Filesystem_WpFilesystemDirect_Mkdir extends WP_Filesystem_Direct_Uni
 	 * @preserveGlobalState disabled
 	 */
 	public function test_should_set_owner() {
-		define( 'FS_CHMOD_DIR', 0755 );
+		if ( ! defined( 'FS_CHMOD_DIR' ) ) {
+			define( 'FS_CHMOD_DIR', 0755 );
+		}
 
 		$path = self::$file_structure['test_dir']['path'] . 'directory-to-create';
 
@@ -186,7 +192,9 @@ class Tests_Filesystem_WpFilesystemDirect_Mkdir extends WP_Filesystem_Direct_Uni
 	 * @preserveGlobalState disabled
 	 */
 	public function test_should_set_group() {
-		define( 'FS_CHMOD_DIR', 0755 );
+		if ( ! defined( 'FS_CHMOD_DIR' ) ) {
+			define( 'FS_CHMOD_DIR', 0755 );
+		}
 
 		$path = self::$file_structure['test_dir']['path'] . 'directory-to-create';
 
