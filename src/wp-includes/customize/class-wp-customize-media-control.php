@@ -120,91 +120,191 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 	}
 
 	/**
-	 * Don't render any content for this control from PHP.
+	 * Render content for this control from PHP.
 	 *
-	 * @since 3.4.0
+	 * @since CP-2.7.0
 	 * @since 4.2.0 Moved from WP_Customize_Upload_Control.
-	 *
-	 * @see WP_Customize_Media_Control::content_template()
 	 */
-	public function render_content() {}
+	public function render_content() {
+		$attachment_id  = (int) $this->value(); // Media control stores attachment ID
+		$description_id = uniqid( 'customize-media-control-description' );
+		$described_by   = $this->description ? ' aria-describedby="' . description_id . '" ' : '';
+		$default_id     = (int) $this->setting->default;
 
-	/**
-	 * Render a JS template for the content of the media control.
-	 *
-	 * @since 4.1.0
-	 * @since 4.2.0 Moved from WP_Customize_Upload_Control.
-	 */
-	public function content_template() {
+		if ( $attachment_id ) {
+			$title       = get_the_title( $attachment_id );
+			$mime_type   = get_post_mime_type( $attachment_id );
+			$icon        = wp_mime_type_icon( $mime_type );
+			$src         = wp_get_attachment_url( $attachment_id );
+			$icon_html   = wp_get_attachment_image( $attachment_id, 'thumbnail', true );
+			$meta        = wp_get_attachment_metadata( $attachment_id );
+			$orientation = ( $meta['height'] > $meta['width'] ) ? 'portrait' : 'landscape';
+			$sizes       = $meta['sizes'] ?? []; // Array of thumbnail/medium/large
+			$alt_text    = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
+			$album       = get_post_meta( $attachment_id, 'album', true );
+			$artist      = get_post_meta( $attachment_id, 'artist', true );
+		}
 		?>
-		<#
-		var descriptionId = _.uniqueId( 'customize-media-control-description-' );
-		var describedByAttr = data.description ? ' aria-describedby="' + descriptionId + '" ' : '';
-		#>
-		<# if ( data.label ) { #>
-			<span class="customize-control-title">{{ data.label }}</span>
-		<# } #>
-		<div class="customize-control-notifications-container"></div>
-		<# if ( data.description ) { #>
-			<span id="{{ descriptionId }}" class="description customize-control-description">{{{ data.description }}}</span>
-		<# } #>
 
-		<# if ( data.attachment && data.attachment.id ) { #>
-			<div class="attachment-media-view attachment-media-view-{{ data.attachment.type }} {{ data.attachment.orientation }}">
-				<div class="thumbnail thumbnail-{{ data.attachment.type }}">
-					<# if ( 'image' === data.attachment.type && data.attachment.sizes && data.attachment.sizes.medium ) { #>
-						<img class="attachment-thumb" src="{{ data.attachment.sizes.medium.url }}" draggable="false" alt="">
-					<# } else if ( 'image' === data.attachment.type && data.attachment.sizes && data.attachment.sizes.full ) { #>
-						<img class="attachment-thumb" src="{{ data.attachment.sizes.full.url }}" draggable="false" alt="">
-					<# } else if ( 'audio' === data.attachment.type ) { #>
-						<# if ( data.attachment.image && data.attachment.image.src && data.attachment.image.src !== data.attachment.icon ) { #>
-							<img src="{{ data.attachment.image.src }}" class="thumbnail" draggable="false" alt="">
-						<# } else { #>
-							<img src="{{ data.attachment.icon }}" class="attachment-thumb type-icon" draggable="false" alt="">
-						<# } #>
-						<p class="attachment-meta attachment-meta-title">&#8220;{{ data.attachment.title }}&#8221;</p>
-						<# if ( data.attachment.album || data.attachment.meta.album ) { #>
-						<p class="attachment-meta"><em>{{ data.attachment.album || data.attachment.meta.album }}</em></p>
-						<# } #>
-						<# if ( data.attachment.artist || data.attachment.meta.artist ) { #>
-						<p class="attachment-meta">{{ data.attachment.artist || data.attachment.meta.artist }}</p>
-						<# } #>
+		<span class="customize-control-title">
+			<?php esc_html_e( $this->label ); ?>
+		</span>
+		<div class="customize-control-notifications-container">
+			<ul></ul>
+		</div>
+
+		<?php
+		if ( $this->description ) {
+			?>
+			<span id="<?php esc_attr_e( $description_id ); ?>" class="description customize-control-description">
+				<?php echo wp_kses_post( $this->description ); ?>
+			</span>
+			<?php
+		}
+
+		if ( $attachment_id && $src ) {
+			?>
+			<div class="attachment-media-view attachment-media-view-<?php esc_attr_e( $mime_type ); ?> <?php esc_attr_e( $orientation ); ?>">
+				<div class="thumbnail thumbnail-<?php esc_attr_e( $mime_type ); ?>">
+					<?php
+					if ( 'image' === $mime_type && $sizes && $sizes['medium'] ) {
+						$medium_src = wp_get_attachment_image_url( $attachment_id, 'medium' );
+						?>
+						<img class="attachment-thumb"
+							src="<?php echo esc_url( $medium_src ); ?>"
+							draggable="false"
+							alt="<?php esc_attr_e( $alt_text ); ?>"
+						>
+						<?php
+					} elseif ( 'image' === $mime_type && $sizes && $sizes['full'] ) {
+						$full_src = wp_get_attachment_image_url( $attachment_id, 'full' );
+						?>						
+						<img class="attachment-thumb"
+							src="<?php echo esc_url( $full_src ); ?>"
+							draggable="false"
+							alt="<?php esc_attr_e( $alt_text ); ?>"
+						>
+						<?php
+					} elseif ( 'audio' === $mime_type ) {
+						if ( $src && $src !== $icon ) {
+							?>
+							<img src="<?php echo esc_url( $src ); ?>"
+								class="thumbnail"
+								draggable="false"
+								alt="<?php esc_attr_e( $alt_text ); ?>"
+							>
+							<?php
+						} else {
+							?>
+							<img src="<?php esc_attr_e( $icon ); ?>"
+								class="attachment-thumb type-icon"
+								draggable="false"
+								alt="<?php esc_attr_e( $alt_text ); ?>"
+							>
+							<?php
+						}
+						?>
+						<p class="attachment-meta attachment-meta-title">
+							&#8220;<?php esc_html_e( $title ); ?>&#8221;
+						</p>
+						<?php
+						if ( $album ) {
+							?>
+							<p class="attachment-meta">
+								<em><?php esc_html_e( $album ); ?></em>
+							</p>
+							<?php
+						}
+						if ( $artist ) {
+							?>
+							<p class="attachment-meta">
+								<?php esc_html_e( $artist ); ?>
+							</p>
+							<?php
+						}
+						?>
 						<audio style="visibility: hidden" controls class="wp-audio-shortcode" width="100%" preload="none">
-							<source type="{{ data.attachment.mime }}" src="{{ data.attachment.url }}">
+							<source type="<?php esc_attr_e( $mime_type ); ?>" src="<?php echo esc_url( $src ); ?>">
 						</audio>
-					<# } else if ( 'video' === data.attachment.type ) { #>
+						<?php
+					} elseif ( 'video' === $mime_type ) {
+						?>
 						<div class="wp-media-wrapper wp-video">
 							<video controls class="wp-video-shortcode" preload="metadata"
-								<# if ( data.attachment.image && data.attachment.image.src !== data.attachment.icon ) { #>poster="{{ data.attachment.image.src }}"<# } #>>
-								<source type="{{ data.attachment.mime }}" src="{{ data.attachment.url }}">
+								<?php
+								if ( $src && $src !== $icon ) {
+									?>
+									poster="<?php echo esc_url( $src ); ?>"
+									<?php
+								}
+								?>
+							>
+								<source type="<?php esc_attr_e( $mime_type ); ?>" src="<?php echo esc_url( $src ); ?>">
 							</video>
 						</div>
-					<# } else { #>
-						<img class="attachment-thumb type-icon icon" src="{{ data.attachment.icon }}" draggable="false" alt="">
-						<p class="attachment-title">{{ data.attachment.title }}</p>
-					<# } #>
+						<?php
+					} else {
+						?>
+						<img class="attachment-thumb type-icon icon"
+							src="<?php esc_attr_e( $icon ); ?>"
+							draggable="false"
+							alt="<?php esc_attr_e( $alt_text ); ?>"
+						>
+						<p class="attachment-title">
+							<?php esc_html_e( $title ); ?>
+						</p>
+						<?php
+					}
+					?>
 				</div>
 				<div class="actions">
-					<# if ( data.canUpload ) { #>
-					<button type="button" class="button remove-button">{{ data.button_labels.remove }}</button>
-					<button type="button" class="button upload-button control-focus" {{{ describedByAttr }}}>{{ data.button_labels.change }}</button>
-					<# } #>
+					<?php
+					if ( current_user_can( 'upload_files' ) ) {
+						?>
+						<button type="button" class="button remove-button">
+							<?php esc_html_e( $this->button_labels['remove'] ); ?>
+						</button>
+						<button type="button" class="button upload-button control-focus"<?php esc_attr_e( $described_by ); ?>>
+							<?php esc_html_e( $this->button_labels['change'] ); ?>
+						</button>
+						<?php
+					}
+					?>
 				</div>
 			</div>
-		<# } else { #>
+			<?php
+		} else {
+			?>
 			<div class="attachment-media-view">
-				<# if ( data.canUpload ) { #>
-					<button type="button" class="upload-button button-add-media" {{{ describedByAttr }}}>{{ data.button_labels.select }}</button>
-				<# } #>
 				<div class="actions">
-					<# if ( data.defaultAttachment ) { #>
-						<button type="button" class="button default-button">{{ data.button_labels['default'] }}</button>
-					<# } #>
+					<?php
+					if ( current_user_can( 'upload_files' ) ) {
+						?>
+						<button type="button" class="upload-button button-add-media"<?php esc_attr_e( $described_by ); ?>>
+							<?php esc_html_e( $this->button_labels['select'] ); ?>
+						</button>
+						<?php
+						if ( $default_id ) {
+							?>
+							<button type="button" class="button default-button">
+								<?php esc_html_e( $this->button_labels['change'] ); ?>
+							</button>
+							<?php
+						}
+					}
+					?>
 				</div>
 			</div>
-		<# } #>
-		<?php
+			<?php
+		}
 	}
+
+	/**
+	 * Redundant JS template.
+	 *
+	 * @since CP-2.7.0
+	 */
+	public function content_template() {}
 
 	/**
 	 * Get default button labels.
