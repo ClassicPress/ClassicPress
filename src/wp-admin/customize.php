@@ -63,8 +63,6 @@ foreach ( $menus_by_id as $menu_term ) {
 }
 
 $unique_nav_id  = uniqid( 'customize-control-nav_menu--', true );
-$unique_add_id  = uniqid( 'customize-nav-menu-auto-add-control-' );
-$unique_loc_id  = uniqid( 'customize-nav-menu-control-location-' );
 
 // Panels, sections, and controls
 $panels   = $wp_customize->panels();
@@ -895,8 +893,14 @@ wp_print_scripts();
 
 								<?php
 								if ( isset ( $controls[ $item['id'] ] ) ) {
-									foreach ( $controls[ $item['id'] ] as $control_data ) {
-										$field_id    = $control_data['setting_id'] ?: $control_data['id'];
+									// Sort in ascending order of priority
+									usort( $controls[ $item['id'] ], function( $a, $b ) {
+										$a_priority = $a['priority'] ?? 10;
+										$b_priority = $b['priority'] ?? 10;
+										return $a_priority - $b_priority;
+									} );
+									foreach ( $controls[ $item['id'] ] as $control_data ) {//error_log(print_r($control_data, true));
+										$field_id    = $control_data['id'];
 										$field_value = $control_data['value'];
 										$field_type  = $control_data['type'];
 										$field_label = $control_data['label'];
@@ -907,31 +911,15 @@ wp_print_scripts();
 										$control = $wp_customize->get_control( $field_id );
 										if ( $control ) {
 											$control->maybe_render();
-											$control->print_template();
-										}
-
+											//error_log(print_r( '<!-- CONTROL CLASS: ' . get_class( $control ) . ' -->', true ));
+											//error_log(print_r( '<!-- CONTROL TYPE: ' . $control->type . ' -->', true ));
+										}/*
 										?>
 
 										<li id="customize-control-<?php esc_attr_e( $field_id ); ?>" class="customize-control customize-control-<?php esc_attr_e( $field_id ); ?>">
 											<div class="customize-control customize-control-<?php esc_attr_e( $field_type ); ?>">
-												<?php
-												if ( 'site_icon' === $field_type ) {
-													?>
-													<span class="customize-control-title">
-														<?php esc_html_e( $field_label ); ?>
-													</span>
-													<div class="customize-control-notifications-container" style="display: none;">
-														<ul></ul>
-													</div>
-													<?php
-													if ( ! empty( $description ) ) {
-														?>
-														<span id="<?php esc_attr_e( $description_id ); ?>" class="description customize-control-description">
-															<?php echo $description; ?>
-														</span>
-														<?php
-													}
-												} elseif ( 'cropped_image' === $field_type ) {
+												<?php /*
+												if ( 'cropped_image' === $field_type ) {
 													?>
 													<div class="attachment-media-view">
 														<div class="site-icon-preview wp-clearfix customize-control-site_icon">
@@ -1019,7 +1007,7 @@ wp_print_scripts();
 													if ( ! empty( $description ) ) {
 														?>
 														<span id="<?php esc_attr_e( $description_id ); ?>" class="description customize-control-description">
-															<?php echo $description; ?>
+															<?php wp_kses_post( $description ); ?>
 														</span>
 														<?php
 													}
@@ -1027,34 +1015,8 @@ wp_print_scripts();
 													
 												} elseif ( 'background_position' === $field_type ) {
 													
-												} elseif ( 'code_editor' === $field_type ) {
-													$code_value = is_array( $field_value ) ? ( $field_value['content'] ?? '' ) : (string) $field_value;
-													?>
-													<span class="customize-control-title">
-														<?php esc_html_e( $field_label ); ?>
-													</span>
-													<textarea id="<?php esc_attr_e( $field_id ); ?>" 
-														class="code-editor" 
-														name="<?php esc_attr_e( $field_id ); ?>[content]" 
-														rows="15" 
-														data-customize-setting-link="<?php esc_attr_e( $field_id ); ?>"
-														spellcheck="false"
-													>
-														<?php echo esc_textarea( $code_value ); ?>
-													</textarea>
-    
-													<?php
-													// Language mode (core passes via 'choices')
-													if ( isset ( $control->choices['language'] ) ) {
-														?>
-														<input type="hidden"
-															name="<?php esc_attr_e( $field_id ); ?>[language]"
-															value="<?php esc_attr_e( $control->choices['language'] ); ?>"
-														>
-														<?php
-													}													
 												} else { // 'text', 'url', 'email', 'number', 'password', 'hidden', 'date'
-													?>
+													/*?>
 													<input type="<?php esc_attr_e( $field_type ); ?>"
 														id="<?php esc_attr_e( $field_id ); ?>"
 														name="<?php esc_attr_e( $field_id ); ?>"
@@ -1069,11 +1031,11 @@ wp_print_scripts();
 														</div>
 														<?php
 													}
-												}
+												//}
 												?>
 											</div>
 										</li>
-										<?php
+										<?php */
 									}
 								}
 								?>
