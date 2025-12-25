@@ -1643,10 +1643,7 @@ p.customize-section-description {
 }
 
 .customize-section-description-container + #customize-control-custom_css:last-child {
-	margin-left: -12px;
 	width: 299px;
-	width: calc( 100% + 24px );
-	margin-bottom: -12px;
 }
 
 .customize-section-description-container + #customize-control-custom_css:last-child .CodeMirror {
