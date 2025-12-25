@@ -197,10 +197,18 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 
 	/**
 	 */
-	public function render_content() {
+	public function render_content() {error_log(print_r($this->settings, true));
 		$visibility = $this->get_current_image_src() ? '' : ' style="display:none" ';
 		$width      = absint( get_theme_support( 'custom-header', 'width' ) );
 		$height     = absint( get_theme_support( 'custom-header', 'height' ) );
+
+		$header_image      = get_header_image(); // Current header image
+		$header_images     = get_uploaded_header_images(); // All site header images previously uploaded
+		$header_image_data = function_exists( 'get_header_image_data' ) ? get_header_image_data() : [];
+		$suggested = array_merge( 
+			$header_image_data['theme_image'] ? [ $header_image_data ] : [], 
+			$header_image_data['next_image_link'] ? [] : []
+		);
 		?>
 		<div class="customize-control-content">
 			<?php
@@ -244,28 +252,81 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 				</div>
 			</div>
 			<div class="actions">
-				<?php if ( current_user_can( 'upload_files' ) ) : ?>
-				<button type="button"<?php echo $visibility; ?> class="button remove" aria-label="<?php esc_attr_e( 'Hide header image' ); ?>"><?php _e( 'Hide image' ); ?></button>
-				<button type="button" class="button new" id="header_image-button" aria-label="<?php esc_attr_e( 'Add new header image' ); ?>"><?php _e( 'Add new image' ); ?></button>
-				<?php endif; ?>
+				<?php
+				if ( current_user_can( 'upload_files' ) ) {
+					?>
+					<button type="button"<?php echo $visibility; ?> class="button remove" aria-label="<?php esc_attr_e( 'Hide header image' ); ?>">
+						<?php _e( 'Hide image' ); ?>
+					</button>
+					<button type="button" class="upload-button button new" id="header_image-button" aria-label="<?php esc_attr_e( 'Add new header image' ); ?>" <?php $this->link(); ?>>
+						<?php _e( 'Add image' ); ?>
+					</button>
+					<?php
+				}
+				?>
 			</div>
 			<div class="choices">
-				<span class="customize-control-title header-previously-uploaded">
-					<?php _ex( 'Previously uploaded', 'custom headers' ); ?>
-				</span>
-				<div class="uploaded">
-					<div class="list">
+
+				<?php
+				if ( ! empty( $header_images ) ) {
+					?>
+
+					<span class="customize-control-title header-previously-uploaded">
+						<?php _ex( 'Previously uploaded', 'custom headers' ); ?>
+					</span>
+					<div class="uploaded">
+						<div class="list">
+							<?php
+							foreach ( array_slice( $header_images, 0, 4 ) as $image ) {
+								?>
+								<div class="header-image-item">
+									<img src="<?php echo esc_url( $image['url'] ); ?>" 
+										alt="<?php esc_attr_e( $image['label'] ); ?>"
+									>
+									<span class="title">
+										<?php esc_html_e( $image['label'] ); ?>
+									</span>
+									<button class="choice" data-customize-url="<?php echo esc_url( $image['url'] ); ?>">
+										<?php esc_html_e( $this->button_labels['frame_button'] ); ?>
+									</button>
+								</div>
+								<?php
+							}
+							?>
+						</div>
 					</div>
-				</div>
-				<span class="customize-control-title header-default">
-					<?php _ex( 'Suggested', 'custom headers' ); ?>
-				</span>
-				<div class="default">
-					<div class="list">
+
+					<?php
+				}
+				if ( $header_image_data['theme_image'] ) {
+					?>
+
+					<span class="customize-control-title header-default">
+						<?php _ex( 'Suggested', 'custom headers' ); ?>
+					</span>
+					<div class="default">
+						<div class="list">
+							<div class="header-image-item">
+								<img src="<?php echo esc_url( $header_image_data['theme_image'] ); ?>" 
+									alt="<?php esc_attr_e( $header_image_data['title'] ); ?>"
+								>
+								<span class="title">
+									<?php esc_html_e( $header_image_data['title'] ); ?>
+								</span>
+								<button class="choice" data-customize-url="<?php echo esc_url( $header_image_data['theme_image'] ); ?>">
+									<?php esc_html_e( $this->button_labels['frame_button'] ); ?>
+								</button>
+							</div>
+						</div>
 					</div>
-				</div>
+
+					<?php
+				}
+				?>
+
 			</div>
 		</div>
+
 		<?php
 	}
 }
