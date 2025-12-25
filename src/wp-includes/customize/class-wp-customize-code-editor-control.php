@@ -87,7 +87,7 @@ class WP_Customize_Code_Editor_Control extends WP_Customize_Control {
 		if ( $this->label ) {
 			?>
 
-			<label for="<?php esc_attr_e( $element_id_prefix . '_editor' ); ?>" class="customize-control-title">
+			<label for="<?php esc_attr_e( $element_id_prefix . '_editor' ); ?>" class="customize-control-title screen-reader-text">
 				<?php esc_html_e( $this->label ); ?>
 			</label>
 
