@@ -121,10 +121,11 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 			if ( empty( $login_custom_image_src ) ) {
 				if ( current_user_can( 'upload_files' ) ) {
 					?>
-					<button class="upload-button button-add-media" type="button">
-						<?php esc_html_e( $this->button_labels['select'] ); ?>
-					</button>
-					<div class="actions"></div>
+					<div class="actions">
+						<button class="upload-button button-add-media" type="button">
+							<?php esc_html_e( $this->button_labels['select'] ); ?>
+						</button>
+					</div>
 					<?php
 				}
 			} else {
@@ -137,12 +138,18 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 					>
 				</div>
 				<div class="actions">
-					<button type="button" class="button remove-button">
-						<?php esc_html_e( $this->button_labels['remove'] ); ?>
-					</button>
-					<button type="button" class="button upload-button">
-						<?php esc_html_e( $this->button_labels['change'] ); ?>
-					</button>
+					<?php
+					if ( current_user_can( 'upload_files' ) ) {
+						?>
+						<button type="button" class="button remove-button">
+							<?php esc_html_e( $this->button_labels['remove'] ); ?>
+						</button>
+						<button type="button" class="button upload-button">
+							<?php esc_html_e( $this->button_labels['change'] ); ?>
+						</button>
+						<?php
+					}
+					?>
 				</div>
 
 				<?php
