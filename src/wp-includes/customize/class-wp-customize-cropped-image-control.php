@@ -82,4 +82,74 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 		$this->json['flex_width']  = absint( $this->flex_width );
 		$this->json['flex_height'] = absint( $this->flex_height );
 	}
+
+	/**
+	 * Render the control content from PHP.
+	 *
+	 * @since CP-2.7.0
+	 */
+	public function render_content() {//error_log(print_r(get_theme_mod( 'custom_logo' ), true));
+		$login_custom_image_state = (int) get_option( 'login_custom_image_state' );
+		$login_custom_image_id    = (int) get_option( 'login_custom_image_id' );
+		if ( $login_custom_image_state < 0 || $login_custom_image_state > 2 ) {
+			$login_custom_image_state = 0;
+		}
+		if ( $login_custom_image_id ) {
+			$login_custom_image_src = wp_get_attachment_image_url( $login_custom_image_id, 'full' );
+			$alt_text = get_post_meta( $login_custom_image_id, '_wp_attachment_image_alt', true );
+		} else {
+			$custom_logo_id = get_theme_mod( 'custom_logo' );
+			$login_custom_image_src = wp_get_attachment_image_url( $custom_logo_id , 'full' );
+			$alt_text = get_post_meta( $custom_logo_id, '_wp_attachment_image_alt', true );
+		}
+
+		$class = 'attachment-media-view';
+		if ( ! empty( $login_custom_image_src ) ) {
+			$class = 'attachment-media-view attachment-media-view-image landscape';
+		}
+		?>
+
+		<span class="customize-control-title">
+			<?php esc_html_e( $this->label ); ?>
+		</span>
+		<div class="customize-control-notifications-container" style="display: none;">
+			<ul></ul>
+		</div>
+		<div class="<?php esc_attr_e( $class ); ?>">
+
+			<?php
+			if ( empty( $login_custom_image_src ) ) {
+				if ( current_user_can( 'upload_files' ) ) {
+					?>
+					<button class="upload-button button-add-media" type="button">
+						<?php esc_html_e( $this->button_labels['select'] ); ?>
+					</button>
+					<div class="actions"></div>
+					<?php
+				}
+			} else {
+				?>
+				<div class="thumbnail thumbnail-image">
+					<img class="attachment-thumb"
+						src="<?php echo esc_url( $login_custom_image_src ); ?>"
+						draggable="false"
+						alt="<?php esc_attr_e( $alt_text ); ?>"
+					>
+				</div>
+				<div class="actions">
+					<button type="button" class="button remove-button">
+						<?php esc_html_e( $this->button_labels['remove'] ); ?>
+					</button>
+					<button type="button" class="button upload-button">
+						<?php esc_html_e( $this->button_labels['change'] ); ?>
+					</button>
+				</div>
+
+				<?php
+			}
+			?>
+
+		</div>
+		<?php
+	}
 }
