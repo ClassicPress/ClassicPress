@@ -899,139 +899,19 @@ wp_print_scripts();
 										$b_priority = $b['priority'] ?? 10;
 										return $a_priority - $b_priority;
 									} );
-									foreach ( $controls[ $item['id'] ] as $control_data ) {//error_log(print_r($control_data, true));
-										$field_id    = $control_data['id'];
-										$field_value = $control_data['value'];
-										$field_type  = $control_data['type'];
-										$field_label = $control_data['label'];
-										$description = $control_data['description'];
-										$input_id    = '_customize-input-' . $field_id;
-										$description_id = '_customize-description-' . $field_id;
-										$describedby_attr = $description ? ' aria-describedby="' . $description_id . '" ' : '';
-										$control = $wp_customize->get_control( $field_id );
+									foreach ( $controls[ $item['id'] ] as $control_data ) {
+										$field_id = $control_data['id'];
+										$control  = $wp_customize->get_control( $field_id );
 										if ( $control ) {
 											$control->maybe_render();
-											//error_log(print_r( '<!-- CONTROL CLASS: ' . get_class( $control ) . ' -->', true ));
-											//error_log(print_r( '<!-- CONTROL TYPE: ' . $control->type . ' -->', true ));
 										}/*
 										?>
 
 										<li id="customize-control-<?php esc_attr_e( $field_id ); ?>" class="customize-control customize-control-<?php esc_attr_e( $field_id ); ?>">
 											<div class="customize-control customize-control-<?php esc_attr_e( $field_type ); ?>">
-												<?php /*
-												if ( 'cropped_image' === $field_type ) {
-													?>
-													<div class="attachment-media-view">
-														<div class="site-icon-preview wp-clearfix customize-control-site_icon">
-															<div class="favicon-preview">
-																<img src="<?php echo esc_url( admin_url( '/images/browser.png' ) ); ?>" class="browser-preview" alt="">
-																<div class="favicon">
-																	<?php
-																	if ( get_site_icon_url() !== '' ) {
-																		?>
-																		<img src="<?php echo esc_url( get_site_icon_url() ); ?>" alt="<?php esc_attr_e( 'Preview as a browser icon' ); ?>">
-																		<?php
-																	}
-																	?>
-																</div>
-																<span class="browser-title" aria-hidden="true">
-																	<?php esc_html_e( get_bloginfo( 'name' ) ); ?>
-																</span>
-															</div>
-															<?php
-															if ( get_site_icon_url() !== '' ) {
-																?>
-																<img class="app-icon-preview" src="<?php echo esc_url( get_site_icon_url() ); ?>" alt="<?php esc_attr_e( 'Preview as an app icon' ); ?>">
-																<?php
-															}
-															?>
-														</div>
-														<div class="actions">	
-															<button type="button" class="button remove-button">
-																<?php esc_html_e( 'Remove' ); ?>
-															</button>
-															<button type="button" class="button upload-button">
-																<?php esc_html_e( 'Change image' ); ?>
-															</button>
-														</div>
-													</div>
-													<?php
-													if ( ! empty( $description ) ) {
-														?>
-														<span id="<?php esc_attr_e( $description_id ); ?>" class="description customize-control-description">
-															<?php echo $description; ?>
-														</span>
-														<?php
-													}
-												} elseif ( 'media' === $field_type ) {
+												<?php /*if ( 'background' === $field_type ) {
 													
-												} elseif ( 'header' === $field_type ) {
-													// Core header_image setting - Site Identity header background
-													$header_image = get_header_image();
-													$header_id = 'header_image';
-													?>
-    
-													<div class="customize-control-header">
-														<label>
-															<?php
-															if ( $header_image ) {
-																?>
-																<img class="header-image-thumbnail" 
-																	src="<?php echo esc_url( $header_image ); ?>" 
-																	style="max-width: 100px; height: auto; vertical-align: middle;"
-																>
-																<?php
-															}
-															?>
-															<span class="title">
-																<?php _e( 'Header Image', 'default' ); ?>
-															</span>
-														</label>
-														<p class="description">
-															<?php
-															printf(
-																__( 'Click %1$s to select a header image, or %2$s to remove it.' ),
-																'<a href="#" data-customize-setting-link="' . esc_attr( $header_id ) . '">' . __( 'change' ) . '</a>',
-																'<a href="#" class="remove-header-image">' . __( 'remove' ) . '</a>'
-															);
-															?>
-														</p>
-													</div> 
-													<input type="hidden" 
-														id="<?php esc_attr_e( $field_id ); ?>" 
-														name="<?php esc_attr_e( $field_id ); ?>" 
-														value="<?php esc_attr_e( $header_image ); ?>" 
-														data-customize-setting-link="<?php esc_attr_e( $header_id ); ?>"
-													>
-													<?php
-													if ( ! empty( $description ) ) {
-														?>
-														<span id="<?php esc_attr_e( $description_id ); ?>" class="description customize-control-description">
-															<?php wp_kses_post( $description ); ?>
-														</span>
-														<?php
-													}
-												} elseif ( 'background' === $field_type ) {
-													
-												} elseif ( 'background_position' === $field_type ) {
-													
-												} else { // 'text', 'url', 'email', 'number', 'password', 'hidden', 'date'
-													/*?>
-													<input type="<?php esc_attr_e( $field_type ); ?>"
-														id="<?php esc_attr_e( $field_id ); ?>"
-														name="<?php esc_attr_e( $field_id ); ?>"
-														value="<?php esc_attr_e( $field_value ); ?>"
-														class="regular-text"
-													>
-													<?php
-													if ( ! empty ( $description ) ) {
-														?>
-														<div class="description customize-control-description">
-															<?php echo wp_kses_post( $description ); ?>
-														</div>
-														<?php
-													}
-												//}
+												}
 												?>
 											</div>
 										</li>
@@ -1437,7 +1317,7 @@ wp_print_scripts();
 										?>
 										<li id="customize-control-nav_menu-<?php esc_attr_e( $menu_id ); ?>"
 											class="customize-control customize-control-nav_menu no-drag"
-										>
+										><?php // Look at nav-menu-control.php ?>
 											<div class="customize-control-notifications-container" style="display: none;">
 												<ul></ul>
 											</div>
