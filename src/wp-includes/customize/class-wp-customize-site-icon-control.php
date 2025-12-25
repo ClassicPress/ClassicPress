@@ -117,23 +117,21 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 		} else {
 			?>
 			<div class="attachment-media-view">
-				<?php
-				if ( current_user_can( 'upload_files' ) ) {
-					?>
-					<button type="button" class="upload-button button-add-media">
-						<?php esc_html_e( $this->button_labels['site_icon'] ); ?>
-					</button>
-					<?php
-				}
-				?>
 				<div class="actions">
 					<?php
-					if ( $default_icon_url ) {
+					if ( current_user_can( 'upload_files' ) ) {
 						?>
-						<button type="button" class="button default-button">
-							<?php esc_html_e( $this->button_labels['default'] ); ?>
+						<button type="button" class="upload-button button-add-media">
+							<?php esc_html_e( $this->button_labels['site_icon'] ); ?>
 						</button>
 						<?php
+						if ( $default_icon_url ) {
+							?>
+							<button type="button" class="button default-button">
+								<?php esc_html_e( $this->button_labels['default'] ); ?>
+							</button>
+							<?php
+						}
 					}
 					?>
 				</div>
