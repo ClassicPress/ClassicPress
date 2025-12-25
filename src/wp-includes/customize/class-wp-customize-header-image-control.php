@@ -97,92 +97,19 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 
 	/**
 	 * @global Custom_Image_Header $custom_image_header
+	 *
+	 * @since CP-2.7.0
+	 *
+	 * Redundant since CP_2.7.0
 	 */
-	public function prepare_control() {
-		global $custom_image_header;
-		if ( empty( $custom_image_header ) ) {
-			return;
-		}
-
-		add_action( 'customize_controls_print_footer_scripts', array( $this, 'print_header_image_template' ) );
-
-		// Process default headers and uploaded headers.
-		$custom_image_header->process_default_headers();
-		$this->default_headers  = $custom_image_header->get_default_header_images();
-		$this->uploaded_headers = $custom_image_header->get_uploaded_header_images();
-	}
+	public function prepare_control() {}
 
 	/**
+	 * Redundant JS templates.
+	 *
+	 * @since CP-2.7.0
 	 */
-	public function print_header_image_template() {
-		?>
-		<script type="text/template" id="tmpl-header-choice">
-			<# if (data.random) { #>
-			<button type="button" class="button display-options random">
-				<span class="dashicons dashicons-randomize dice"></span>
-				<# if ( data.type === 'uploaded' ) { #>
-					<?php _e( 'Randomize uploaded headers' ); ?>
-				<# } else if ( data.type === 'default' ) { #>
-					<?php _e( 'Randomize suggested headers' ); ?>
-				<# } #>
-			</button>
-
-			<# } else { #>
-
-			<button type="button" class="choice thumbnail"
-				data-customize-image-value="{{data.header.url}}"
-				data-customize-header-image-data="{{JSON.stringify(data.header)}}">
-				<span class="screen-reader-text">
-					<?php
-					/* translators: Hidden accessibility text. */
-					_e( 'Set image' );
-					?>
-				</span>
-				<img src="{{data.header.thumbnail_url}}" alt="{{data.header.alt_text || data.header.description}}">
-			</button>
-
-			<# if ( data.type === 'uploaded' ) { #>
-				<button type="button" class="dashicons dashicons-no close">
-					<span class="screen-reader-text">
-						<?php
-						/* translators: Hidden accessibility text. */
-						_e( 'Remove image' );
-						?>
-					</span>
-				</button>
-			<# } #>
-
-			<# } #>
-		</script>
-
-		<script type="text/template" id="tmpl-header-current">
-			<# if (data.choice) { #>
-				<# if (data.random) { #>
-
-			<div class="placeholder">
-				<span class="dashicons dashicons-randomize dice"></span>
-				<# if ( data.type === 'uploaded' ) { #>
-					<?php _e( 'Randomizing uploaded headers' ); ?>
-				<# } else if ( data.type === 'default' ) { #>
-					<?php _e( 'Randomizing suggested headers' ); ?>
-				<# } #>
-			</div>
-
-				<# } else { #>
-
-			<img src="{{data.header.thumbnail_url}}" alt="{{data.header.alt_text || data.header.description}}">
-
-				<# } #>
-			<# } else { #>
-
-			<div class="placeholder">
-				<?php _e( 'No image set' ); ?>
-			</div>
-
-			<# } #>
-		</script>
-		<?php
-	}
+	public function print_header_image_template() {}
 
 	/**
 	 * @return string|void
@@ -196,19 +123,22 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 	}
 
 	/**
+	 * Render the template via PHP.
+	 *
+	 * @since CP-2.7.0
 	 */
-	public function render_content() {error_log(print_r($this->settings, true));
-		$visibility = $this->get_current_image_src() ? '' : ' style="display:none" ';
-		$width      = absint( get_theme_support( 'custom-header', 'width' ) );
-		$height     = absint( get_theme_support( 'custom-header', 'height' ) );
+	public function render_content() {
+		global $custom_image_header;
 
-		$header_image      = get_header_image(); // Current header image
-		$header_images     = get_uploaded_header_images(); // All site header images previously uploaded
-		$header_image_data = function_exists( 'get_header_image_data' ) ? get_header_image_data() : [];
-		$suggested = array_merge( 
-			$header_image_data['theme_image'] ? [ $header_image_data ] : [], 
-			$header_image_data['next_image_link'] ? [] : []
-		);
+		// Process default headers and uploaded headers.
+		$custom_image_header->process_default_headers();
+		$this->default_headers  = $custom_image_header->get_default_header_images();
+		$this->uploaded_headers = $custom_image_header->get_uploaded_header_images();
+
+		$visibility   = $this->get_current_image_src() ? '' : ' style="display:none" ';
+		$width        = absint( get_theme_support( 'custom-header', 'width' ) );
+		$height       = absint( get_theme_support( 'custom-header', 'height' ) );
+		$header_image = get_header_image(); // Current header image
 		?>
 		<div class="customize-control-content">
 			<?php
@@ -268,7 +198,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 			<div class="choices">
 
 				<?php
-				if ( ! empty( $header_images ) ) {
+				if ( ! empty( $this->uploaded_headers ) ) {
 					?>
 
 					<span class="customize-control-title header-previously-uploaded">
@@ -277,16 +207,16 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 					<div class="uploaded">
 						<div class="list">
 							<?php
-							foreach ( array_slice( $header_images, 0, 4 ) as $image ) {
+							foreach ( array_slice( $this->uploaded_headers, 0, 4 ) as $header ) {
 								?>
 								<div class="header-image-item">
-									<img src="<?php echo esc_url( $image['url'] ); ?>" 
-										alt="<?php esc_attr_e( $image['label'] ); ?>"
+									<img src="<?php echo esc_url( $header['url'] ); ?>" 
+										alt="<?php esc_attr_e( $header['label'] ); ?>"
 									>
 									<span class="title">
-										<?php esc_html_e( $image['label'] ); ?>
+										<?php esc_html_e( $header['label'] ); ?>
 									</span>
-									<button class="choice" data-customize-url="<?php echo esc_url( $image['url'] ); ?>">
+									<button class="choice" data-customize-url="<?php echo esc_url( $header['url'] ); ?>">
 										<?php esc_html_e( $this->button_labels['frame_button'] ); ?>
 									</button>
 								</div>
@@ -298,7 +228,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 
 					<?php
 				}
-				if ( $header_image_data['theme_image'] ) {
+				if ( ! empty( $this->default_headers ) ) {
 					?>
 
 					<span class="customize-control-title header-default">
@@ -306,17 +236,21 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 					</span>
 					<div class="default">
 						<div class="list">
-							<div class="header-image-item">
-								<img src="<?php echo esc_url( $header_image_data['theme_image'] ); ?>" 
-									alt="<?php esc_attr_e( $header_image_data['title'] ); ?>"
-								>
-								<span class="title">
-									<?php esc_html_e( $header_image_data['title'] ); ?>
-								</span>
-								<button class="choice" data-customize-url="<?php echo esc_url( $header_image_data['theme_image'] ); ?>">
-									<?php esc_html_e( $this->button_labels['frame_button'] ); ?>
-								</button>
-							</div>
+							<?php
+							foreach ( array_slice( $this->default_headers, 0, 4 ) as $header ) {
+								?>
+								<div class="default-header-image">
+									<img src="<?php echo esc_url( $header['url'] ); ?>">
+									<span>
+										<?php echo esc_html( $header['label'] ); ?>
+									</span>
+									<button class="choice" data-customize-url="<?php echo esc_url( $header['url'] ); ?>">
+										<?php esc_html_e( $this->button_labels['frame_button'] ); ?>
+									</button>
+								</div>
+								<?php
+							}
+							?>
 						</div>
 					</div>
 
