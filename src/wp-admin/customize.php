@@ -67,7 +67,7 @@ $unique_nav_id  = uniqid( 'customize-control-nav_menu--', true );
 // Panels, sections, and controls
 $panels   = $wp_customize->panels();
 $sections = $wp_customize->sections();
-$controls = $wp_customize->get_all_controls_data();
+$controls = $wp_customize->controls_data_by_section;
 
 // Build top-level items: panels + sections without panel.
 $top_items = array();
@@ -889,33 +889,32 @@ wp_print_scripts();
 											<ul></ul>
 										</div>
 									</div>
+									<?php
+									if ( $item['id'] === 'header_image' ) { // to account for the description being hard-coded in core
+										?>
+										<div class="description customize-section-description">
+											<?php
+											global $cp_header_image_section_description;
+											echo wp_kses_post( $cp_header_image_section_description );
+											?>
+										</div>
+										<?php
+									}
+									?>
 								</li>
 
 								<?php
 								if ( isset ( $controls[ $item['id'] ] ) ) {
 									// Sort in ascending order of priority
 									usort( $controls[ $item['id'] ], function( $a, $b ) {
-										$a_priority = $a['priority'] ?? 10;
-										$b_priority = $b['priority'] ?? 10;
-										return $a_priority - $b_priority;
+										return $a['priority'] - $b['priority'];
 									} );
 									foreach ( $controls[ $item['id'] ] as $control_data ) {
 										$field_id = $control_data['id'];
 										$control  = $wp_customize->get_control( $field_id );
 										if ( $control ) {
 											$control->maybe_render();
-										}/*
-										?>
-
-										<li id="customize-control-<?php esc_attr_e( $field_id ); ?>" class="customize-control customize-control-<?php esc_attr_e( $field_id ); ?>">
-											<div class="customize-control customize-control-<?php esc_attr_e( $field_type ); ?>">
-												<?php /*if ( 'background' === $field_type ) {
-													
-												}
-												?>
-											</div>
-										</li>
-										<?php */
+										}
 									}
 								}
 								?>
@@ -1542,7 +1541,7 @@ wp_print_scripts();
 								<?php
 								$index = 0;
 								foreach ( $controls[ $section->id ] as $control_data ) {
-									$field_id    = $control_data['setting_id'] ?: $control_data['id'];
+									$field_id    = $control_data['id'];
 									$field_value = $control_data['value'];
 									$field_type  = $control_data['type'];									
 									$field_label = $control_data['label'];
