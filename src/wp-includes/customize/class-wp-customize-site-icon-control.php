@@ -105,7 +105,7 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 						<button type="button" class="button remove-button">
 							<?php esc_html_e( $this->button_labels['remove'] ); ?>
 						</button>
-						<button type="button" class="button upload-button">
+						<button type="button" class="button">
 							<?php esc_html_e( $this->button_labels['change'] ); ?>
 						</button>
 						<?php
