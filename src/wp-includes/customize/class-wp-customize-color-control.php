@@ -94,7 +94,7 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 		if ( $this->description ) {
 			?>
 			<span class="description customize-control-description">
-				<?php wp_kses_post( $this->description ); ?>
+				<?php echo wp_kses_post( $this->description ); ?>
 			</span>
 			<?php
 		}
