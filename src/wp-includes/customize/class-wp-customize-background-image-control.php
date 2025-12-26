@@ -125,7 +125,9 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 					?>
 
 					<div class="actions" <?php $this->link(); ?>>
-						<button type="button" class="upload-button button"><?php esc_html_e( 'Select Image' ); ?></button>
+						<button type="button" class="upload-button button">
+							<?php esc_html_e( 'Select Image' ); ?>
+						</button>
 
 						<?php
 						if ( $this->setting->default ) {
