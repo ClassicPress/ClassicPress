@@ -140,14 +140,26 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 		$height       = absint( get_theme_support( 'custom-header', 'height' ) );
 		$header_image = get_header_image(); // Current header image
 		?>
+
 		<div class="customize-control-content">
+
 			<?php
 			if ( current_theme_supports( 'custom-header', 'video' ) ) {
-				echo '<span class="customize-control-title">' . $this->label . '</span>';
+				?>
+
+				<div class="customize-control-title">
+					<?php esc_html_e( $this->label ); ?>
+				</div>
+
+				<?php
 			}
 			?>
-			<div class="customize-control-notifications-container"></div>
+
+			<div class="customize-control-notifications-container">
+				<ul></ul>
+			</div>
 			<p class="customizer-section-intro customize-control-description">
+
 				<?php
 				if ( current_theme_supports( 'custom-header', 'video' ) ) {
 					_e( 'Click &#8220;Add new image&#8221; to upload an image file from your computer. Your theme works best with an image that matches the size of your video &#8212; you&#8217;ll be able to crop your image once you upload it for a perfect fit.' );
@@ -171,6 +183,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 					);
 				}
 				?>
+
 			</p>
 			<div class="current">
 				<label for="header_image-button">
@@ -182,18 +195,22 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 				</div>
 			</div>
 			<div class="actions">
+
 				<?php
 				if ( current_user_can( 'upload_files' ) ) {
 					?>
+
 					<button type="button"<?php echo $visibility; ?> class="button remove" aria-label="<?php esc_attr_e( 'Hide header image' ); ?>">
 						<?php _e( 'Hide image' ); ?>
 					</button>
 					<button type="button" class="upload-button button new" id="header_image-button" aria-label="<?php esc_attr_e( 'Add new header image' ); ?>" <?php $this->link(); ?>>
 						<?php _e( 'Add image' ); ?>
 					</button>
+
 					<?php
 				}
 				?>
+
 			</div>
 			<div class="choices">
 
@@ -206,9 +223,11 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 					</span>
 					<div class="uploaded">
 						<div class="list">
+
 							<?php
 							foreach ( array_slice( $this->uploaded_headers, 0, 4 ) as $header ) {
 								?>
+
 								<div class="header-image-item">
 									<img src="<?php echo esc_url( $header['url'] ); ?>" 
 										alt="<?php esc_attr_e( $header['label'] ); ?>"
@@ -220,14 +239,17 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 										<?php esc_html_e( $this->button_labels['frame_button'] ); ?>
 									</button>
 								</div>
+
 								<?php
 							}
 							?>
+
 						</div>
 					</div>
 
 					<?php
 				}
+
 				if ( ! empty( $this->default_headers ) ) {
 					?>
 
@@ -236,9 +258,11 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 					</span>
 					<div class="default">
 						<div class="list">
+
 							<?php
 							foreach ( array_slice( $this->default_headers, 0, 4 ) as $header ) {
 								?>
+
 								<div class="default-header-image">
 									<img src="<?php echo esc_url( $header['url'] ); ?>">
 									<span>
@@ -248,9 +272,11 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 										<?php esc_html_e( $this->button_labels['frame_button'] ); ?>
 									</button>
 								</div>
+
 								<?php
 							}
 							?>
+
 						</div>
 					</div>
 
