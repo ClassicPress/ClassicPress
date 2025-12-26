@@ -63,4 +63,87 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 			)
 		);
 	}
+
+	/**
+	 * Render the control content from PHP.
+	 *
+	 * @since CP-2.7.0
+	 */
+	public function render_content() {
+		$bg_image = get_background_image();
+    
+		if ( $this->label ) {
+			?>
+
+			<span class="customize-control-title">
+				<?php esc_html_e( $this->label ); ?>
+			</span>
+
+			<?php
+		}
+		?>
+
+		<div class="customize-control-notifications-container" style="display: none;">
+			<ul></ul>
+		</div>
+
+		<?php
+		if ( $bg_image ) {
+			?>
+
+			<div class="attachment-media-view attachment-media-view-image landscape">
+				<div class="thumbnail thumbnail-image">
+					<img class="attachment-thumb" src="<?php echo esc_url( $bg_image ); ?>" draggable="false" alt="">					
+				</div>
+
+				<?php
+				if ( current_user_can( 'upload_files' ) ) {
+					?>
+					<div class="actions" <?php $this->link(); ?>>
+						<button type="button" class="button remove-button">
+							<?php esc_html_e( 'Remove' ); ?>
+						</button>
+						<button type="button" class="button upload-button control-focus">
+							<?php esc_html_e( 'Change Image' ); ?>
+						</button>
+					</div>
+
+					<?php
+				}
+				?>
+
+			</div>
+
+			<?php
+		} else {
+			?>
+
+			<div class="attachment-media-view">
+
+				<?php
+				if ( current_user_can( 'upload_files' ) ) {
+					?>
+
+					<div class="actions" <?php $this->link(); ?>>
+						<button type="button" class="upload-button button"><?php esc_html_e( 'Select Image' ); ?></button>
+
+						<?php
+						if ( $this->setting->default ) {
+							?>
+							<button type="button" class="button default">
+								<?php esc_html_e( 'Default' ); ?>
+							</button>
+							<?php
+						}
+						?>
+
+					</div>
+					<?php
+				}
+				?>
+
+			</div>
+			<?php
+		}
+	}
 }
