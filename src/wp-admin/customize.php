@@ -43,15 +43,7 @@ $preview_url = add_query_arg(
     home_url( '/' )
 );
 
-$wp_customize->setup_theme();
 $wp_customize->register_controls();
-
-/**
- * @since CP-2.7.0
- */
-// Themes
-$installed_themes = wp_prepare_themes_for_js();
-$count_themes     = count( $installed_themes );
 
 // Menus
 $locations      = get_registered_nav_menus(); // slug => human label
@@ -520,123 +512,9 @@ wp_print_scripts();
 											</div>
 											<ul class="themes" style="overflow-y: scroll;max-height: 100vh;">
 												<?php
-												// Display the active theme first
-												foreach ( $installed_themes as $theme ) {
-													if ( $theme['id'] !== get_transient( 'core_true_stylesheet' ) ) {
-														continue;
-													}
-													?>
-													<li id="customize-control-installed_theme_<?php esc_attr_e( $theme['id'] ); ?>"
-														class="customize-control customize-control-theme"
-														data-id="<?php esc_attr_e( $theme['id'] ); ?>"
-														data-customize="<?php esc_attr_e( $theme['actions']['customize'] ); ?>"
-														data-delete="<?php esc_attr_e( $theme['actions']['delete'] ); ?>"
-														data-description="<?php esc_attr_e( $theme['description'] ); ?>"
-														data-author="<?php esc_attr_e( $theme['author'] ); ?>"
-														data-tags="<?php esc_attr_e( $theme['tags'] ); ?>"
-														data-num-ratings=""
-														data-version="<?php esc_attr_e( $theme['version'] ); ?>"
-														data-wp="<?php esc_attr_e( $theme['compatibleWP'] ); ?>" 
-														data-php="<?php esc_attr_e( $theme['compatiblePHP'] ); ?>"
-													>
-														<div class="customize-control-notifications-container" style="display: none;">
-															<ul></ul>
-														</div>
-														<div class="theme active" tabindex="0" aria-describedby="installed_themes-<?php esc_attr_e( $theme['id'] ); ?>-action">
-															<div class="theme-screenshot">
-																<img src="<?php echo esc_url( $theme['screenshot'][0] ); ?>" alt="" data-src="<?php echo esc_url( $theme['screenshot'][0] ); ?>">
-															</div>
-															<span class="more-details theme-details"
-																id="installed_themes-<?php esc_attr_e( $theme['id'] ); ?>-action"
-																aria-label="<?php esc_attr_e( 'Details for theme:' ); ?> <?php esc_html_e( $theme['name'] ); ?>"
-															>
-																<?php esc_html_e( 'Theme Details' ); ?>
-															</span>
-															<div class="theme-author">
-																<?php esc_html_e( 'By' ); ?>
-																<?php esc_html_e( $theme['author'] ); ?>
-															</div>
-															<div class="theme-id-container">
-																<h3 class="theme-name" id="installed_themes-<?php esc_attr_e( $theme['id'] ); ?>-name">
-																	<?php esc_html_e( $theme['name'] ); ?>
-																</h3>
-																<div class="theme-actions">
-																	<a href="?theme=<?php esc_attr_e( $theme['id'] ); ?>"
-																		class="button button-primary customize-theme"
-																		aria-label="<?php esc_attr_e( 'Customize theme:' ); ?> <?php esc_html_e( $theme['name'] ); ?>"
-																	>
-																		<?php esc_html_e( 'Customize' ); ?>
-																	</a>
-																</div>
-															</div>
-															<div class="notice notice-success notice-alt">
-																<p>
-																	<?php esc_html_e( 'Installed' ); ?>
-																</p>
-															</div>			
-														</div>
-													</li>
-													<?php
-													break; // No need to cycle through other themes
-												}
-
-												// Now display the rest
-												foreach ( $installed_themes as $theme ) {
-													if ( $theme['id'] === get_transient( 'core_true_stylesheet' ) ) {
-														continue;
-													}
-													?>
-													<li id="customize-control-installed_theme_<?php esc_attr_e( $theme['id'] ); ?>"
-														class="customize-control customize-control-theme"
-														data-id="<?php esc_attr_e( $theme['id'] ); ?>"
-														data-activate="<?php esc_attr_e( $theme['actions']['activate'] ); ?>" 
-														data-customize="<?php esc_attr_e( $theme['actions']['customize'] ); ?>"
-														data-delete="<?php esc_attr_e( $theme['actions']['delete'] ); ?>"
-														data-description="<?php esc_attr_e( $theme['description'] ); ?>"
-														data-author="<?php esc_attr_e( $theme['author'] ); ?>"
-														data-tags="<?php esc_attr_e( $theme['tags'] ); ?>"
-														data-num-ratings=""
-														data-version="<?php esc_attr_e( $theme['version'] ); ?>"
-														data-wp="<?php esc_attr_e( $theme['compatibleWP'] ); ?>"
-														data-php="<?php esc_attr_e( $theme['compatiblePHP'] ); ?>"
-													>
-														<div class="customize-control-notifications-container" style="display: none;">
-															<ul></ul>
-														</div>
-														<div class="theme" tabindex="0" aria-describedby="installed_themes-<?php esc_attr_e( $theme['id'] ); ?>-action">
-															<div class="theme-screenshot">
-																<img src="<?php echo esc_url( $theme['screenshot'][0] ); ?>" alt="" data-src="<?php echo esc_url( $theme['screenshot'][0] ); ?>">
-															</div>
-															<span id="installed_themes-<?php esc_attr_e( $theme['id'] ); ?>-action"
-																class="more-details theme-details"
-																aria-label="<?php esc_attr_e( 'Details for theme:' ); ?> <?php esc_html_e( $theme['name'] ); ?>"
-															>
-																<?php esc_html_e( 'Theme Details' ); ?>
-															</span>
-															<div class="theme-author">
-																<?php esc_html_e( 'By' ); ?>
-																<?php esc_html_e( $theme['author'] ); ?>
-															</div>
-															<div class="theme-id-container">
-																<h3 id="installed_themes-<?php esc_attr_e( $theme['id'] ); ?>-name" class="theme-name">
-																	<?php esc_html_e( $theme['name'] ); ?>
-																</h3>
-																<div class="theme-actions">
-																	<a href="?theme=<?php esc_attr_e( $theme['id'] ); ?>"
-																		class="button button-primary preview-theme"
-																		aria-label="<?php esc_attr_e( 'Live preview theme:' ); ?> <?php esc_html_e( $theme['name'] ); ?>"
-																	>
-																		<?php esc_html_e( 'Live Preview' ); ?>
-																	</a>
-																</div>
-															</div>
-															<div class="notice notice-success notice-alt">
-																<p><?php esc_html_e( 'Installed' ); ?></p>
-															</div>			
-														</div>
-													</li>
-												<?php
-												}
+												// Create a bare Theme Control instance and render it.
+												$tmp = new WP_Customize_Theme_Control( $wp_customize, 'tmp', array() );
+												$tmp->render_content();
 												?>
 											</ul>
 										</div>											
@@ -910,8 +788,7 @@ wp_print_scripts();
 										return $a['priority'] - $b['priority'];
 									} );
 									foreach ( $controls[ $item['id'] ] as $control_data ) {
-										$field_id = $control_data['id'];
-										$control  = $wp_customize->get_control( $field_id );
+										$control = $wp_customize->get_control( $control_data['id'] );
 										if ( $control ) {
 											$control->maybe_render();
 										}
