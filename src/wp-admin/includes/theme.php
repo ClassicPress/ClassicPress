@@ -732,6 +732,7 @@ function wp_prepare_themes_for_js( $themes = null ) {
 			'updateResponse' => array(
 				'compatibleWP'  => is_wp_version_compatible( $update_requires_wp ),
 				'compatiblePHP' => is_php_version_compatible( $update_requires_php ),
+				'compatibleCP'  => ! array_key_exists( 'full-site-editing', $theme->tags ),
 			),
 			'parent'         => $parent,
 			'active'         => $slug === $current_theme,
