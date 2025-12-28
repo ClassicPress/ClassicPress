@@ -211,7 +211,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 					<?php
 					$this->updates_render( $theme );
 
-					if ( ! $theme['actions']['customize'] ) {
+					if ( ! $theme['actions']['customize'] || ! $theme['updateResponse']['compatibleCP'] ) {
 						?>
 
 						<div class="theme-id-container">
