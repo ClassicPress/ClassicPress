@@ -115,7 +115,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 
 					</div>
 
-					<?php $this->render_updates( $theme ); ?>
+					<?php $this->notify_updates( $theme ); ?>
 
 					<div class="theme-id-container">
 						<h3 class="theme-name" id="installed_themes-<?php esc_attr_e( $theme['id'] ); ?>-name">
@@ -209,7 +209,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 					</div>
 
 					<?php
-					$this->render_updates( $theme );
+					$this->notify_updates( $theme );
 
 					if ( ! $theme['actions']['customize'] || ! $theme['updateResponse']['compatibleCP'] ) {
 						?>
@@ -322,7 +322,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 	 *
 	 * @since CP-2.7.0
 	 */
-	protected function render_updates( $theme ) {
+	protected function notify_updates( $theme ) {
 		ob_start();
 
 		if ( $theme['hasUpdate'] ) {
