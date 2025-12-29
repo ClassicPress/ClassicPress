@@ -182,7 +182,7 @@ function wp_register_script( $handle, $src, $deps = array(), $ver = false, $args
 		if ( ! isset( $args['in_footer'] ) ) {
 			$args['in_footer'] = $in_footer;
 		}
-		_deprecated_argument( __FUNCTION__, 'CP3.0.0', __( 'Use the `$args` paramater instead.' ) );
+		_deprecated_argument( __FUNCTION__, 'CP3.0.0', __( 'Use the `$args` parameter instead.' ) );
 	}
 
 	if ( ! is_array( $args ) ) {
