@@ -12,7 +12,11 @@ class Tests_Option_CacheOption extends WP_UnitTestCase {
 	}
 
 	public static function wpTearDownAfterClass() {
-		// make sure to tidy up
+		// make sure to tidy up if needed
+		if ( class_exists( 'Memcache' ) ) {
+			return;
+		}
+
 		$wp_content_dir    = defined( 'WP_CONTENT_DIR' ) ? WP_CONTENT_DIR : ABSPATH . 'wp-content';
 		$object_cache_file = $wp_content_dir . '/object-cache.php';
 
@@ -46,6 +50,10 @@ class Tests_Option_CacheOption extends WP_UnitTestCase {
 	public function test_object_cache_uninstalled() {
 		if ( ! extension_loaded( 'apcu' ) ) {
 			$this->markTestSkipped( 'APCu extension is not available.' );
+		}
+
+		if ( class_exists( 'Memcache' ) ) {
+			$this->markTestSkipped( 'Leave object cache in place for Memcached tests.' );
 		}
 
 		update_option( 'cp_object_cache', 0 );
