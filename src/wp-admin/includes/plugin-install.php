@@ -372,6 +372,7 @@ function install_plugins_favorites_form() {
  */
 function display_plugins_categories_list() {
 	$categories = array(
+		'classicpress' => __( 'ClassicPress' ),
 		'form'         => __( 'Forms' ),
 		'widget'       => __( 'Widgets' ),
 		'admin'        => __( 'Admin Utilities' ),

@@ -307,6 +307,29 @@ function list_plugin_updates() {
 		$auto_update_notice = ' | ' . wp_get_auto_update_message();
 	}
 
+	$tagged_plugins = get_transient( 'tagged_classicpress_plugins' );
+	if ( $tagged_plugins === false ) {
+		$tagged_from_api = plugins_api(
+			'query_plugins',
+			array(
+				'tag'      => 'classicpress',
+				'per_page' => 100,
+				'fields'   => array(
+					'slug'              => true,
+					'short_description' => false,
+					'description'       => false,
+				),
+			)
+		);
+		$tagged_plugins = array();
+		if ( ! is_wp_error( $tagged_from_api ) && is_array( $tagged_from_api->plugins ) ) {
+			foreach ( $tagged_from_api->plugins as $tagged_plugin ) {
+				$tagged_plugins[] = $tagged_plugin['slug'];
+			}
+			set_transient( 'tagged_classicpress_plugins', $tagged_plugins, DAY_IN_SECONDS );
+		}
+	}
+
 	foreach ( (array) $plugins as $plugin_file => $plugin_data ) {
 		$plugin_data = (object) _get_plugin_data_markup_translate( $plugin_file, (array) $plugin_data, false, true );
 
@@ -326,6 +349,15 @@ function list_plugin_updates() {
 			&& version_compare( $plugin_data->update->requires_cp, $cur_cp_version, '<=' )
 		) {
 			$compat  = '<br>' . sprintf( __( 'Potentially compatible with ClassicPress %1$s.' ), $cur_cp_version );
+			$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
+		} elseif (
+			isset( $plugin_data->update->tested )
+			&& version_compare( $plugin_data->update->tested, $cur_wp_version, '>=' )
+			&& isset( $plugin_data->update->requires )
+			&& version_compare( $plugin_data->update->requires, $cur_wp_version, '<=' )
+			&& in_array( $plugin_data->update->slug, $tagged_plugins )
+		) {
+			$compat  = '<br>' . sprintf( __( 'Marked as compatible with ClassicPress by the author.' ), $cur_cp_version );
 			$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
 		} elseif (
 			isset( $plugin_data->update->tested )

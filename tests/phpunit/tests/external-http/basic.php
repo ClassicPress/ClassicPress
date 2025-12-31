@@ -4,6 +4,34 @@
  */
 class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 
+	public function test_there_are_less_than_100_tagged_plugins() {
+		$args = array(
+			'tag'      => 'classicpress',
+			'per_page' => 100,
+			'fields'   => array(
+				'slug'              => true,
+				'short_description' => false,
+				'description'      => false,
+			),
+		);
+		$args = (object) $args;
+		$url = 'https://api.wordpress.org/plugins/info/1.2/';
+		$url = add_query_arg(
+			array(
+				'action'  => 'query_plugins',
+				'request' => $args,
+			),
+			$url
+		);
+		$response = json_decode( $this->get_response_body( $url ) );
+
+		$this->assertEquals(
+			1,
+			$response->info->pages,
+			'There are more than 100 plugins tagged ClassicPress (' . $response->info->results . ' now). Please review code in wp-admin/update-core.php.'
+		);
+	}
+
 	public function test_readme_recommended_php_version() {
 		// This test is designed to only run on develop.
 		$this->skipOnAutomatedBranches();
