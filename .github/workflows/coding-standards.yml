@@ -153,7 +153,7 @@ jobs:
 
       - name: Bypass Cloudflare for GitHub Action
         if: ${{ github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false ) }}
-        uses: xiaotianxt/bypass-cloudflare-for-github-action@v2.0.1
+        uses: xiaotianxt/bypass-cloudflare-for-github-action@v2.1.0
         with:
           cf_account_id: ${{ secrets.CF_ACCOUNT_ID }}
           cf_zone_id: ${{ secrets.CF_ZONE_ID }}
