@@ -333,9 +333,6 @@ function list_plugin_updates() {
 	foreach ( (array) $plugins as $plugin_file => $plugin_data ) {
 		$plugin_data = (object) _get_plugin_data_markup_translate( $plugin_file, (array) $plugin_data, false, true );
 
-		$plugin_api_info = plugins_api( 'plugin_information', array( 'slug' => $plugin_data->update->slug ) );
-		$plugin_api_tags = $plugin_api_info->tags;
-
 		$icon            = '<span class="dashicons dashicons-admin-plugins"></span>';
 		$preferred_icons = array( 'svg', '2x', '1x', 'default' );
 		foreach ( $preferred_icons as $preferred_icon ) {
