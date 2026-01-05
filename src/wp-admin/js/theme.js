@@ -255,9 +255,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				theme.querySelector( '.theme-actions' ).style.display = 'block';
 			} );
 			theme.addEventListener( 'mouseout', function() {
-				theme.querySelector( '.more-details' ).style.opacity = '0';
-				theme.querySelector( '.theme-actions' ).style.opacity = '0';
-				theme.querySelector( '.theme-actions' ).style.display = 'none';
+				if ( ! theme.hasFocus() ) {
+					theme.querySelector( '.more-details' ).style.opacity = '0';
+					theme.querySelector( '.theme-actions' ).style.opacity = '0';
+					theme.querySelector( '.theme-actions' ).style.display = 'none';
+				}
 			} );
 			theme.addEventListener( 'touchleave', function() {
 				theme.querySelector( '.more-details' ).style.opacity = '0';
