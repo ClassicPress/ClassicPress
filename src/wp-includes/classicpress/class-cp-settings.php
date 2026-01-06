@@ -14,6 +14,9 @@ class CP_Settings {
 
 	/**
 	 * Trigger code to add or remove object cache handler file on setting change
+	 *
+	 * @since CP-2.7.0
+	 *
 	 */
 	public function cp_apcu_cache_option_change( $old_value, $new_value, $option_name ) {
 		if ( $option_name === 'cp_object_cache' && $new_value !== $old_value ) {
@@ -25,8 +28,7 @@ class CP_Settings {
 	 * Installs an object-cache.php file, if one does not already exist, to
 	 * make use of the APCu extension as an external object cache.
 	 *
-	 * @since CP-2.6.0
-	 * @since CP-2.7.0 Moved into class file structure
+	 * @since CP-2.7.0
 	 *
 	 * @access private
 	 */
