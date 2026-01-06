@@ -255,7 +255,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				theme.querySelector( '.theme-actions' ).style.display = 'block';
 			} );
 			theme.addEventListener( 'mouseout', function() {
-				if ( ! document.hasFocus() ) {
+				if ( ! theme.matches( ':has(:focus)' ) ) {
 					theme.querySelector( '.more-details' ).style.opacity = '0';
 					theme.querySelector( '.theme-actions' ).style.opacity = '0';
 					theme.querySelector( '.theme-actions' ).style.display = 'none';
