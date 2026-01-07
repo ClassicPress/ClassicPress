@@ -92,6 +92,10 @@ $_old_files = array(
 	'wp-includes/blocks',
 	'wp-includes/html-api',
 	'wp-includes/style-engine',
+
+	// Upgrade to SimplePie 1.9.0
+	'wp-includes/SimplePie/src/Decode',
+	'wp-includes/SimplePie/src/Core.php',
 );
 
 /**

@@ -793,9 +793,12 @@ function fetch_feed( $url ) {
 
 	$feed = new SimplePie\SimplePie();
 
-	$feed->set_sanitize_class( 'WP_SimplePie_Sanitize_KSES' );
-	// We must manually overwrite $feed->sanitize because SimplePie's constructor
-	// sets it before we have a chance to set the sanitization class.
+	$feed->get_registry()->register( SimplePie\Sanitize::class, 'WP_SimplePie_Sanitize_KSES', true );
+
+	/*
+	 * We must manually overwrite $feed->sanitize because SimplePie's constructor
+	 * sets it before we have a chance to set the sanitization class.
+	 */
 	$feed->sanitize = new WP_SimplePie_Sanitize_KSES();
 
 	// Register the cache handler using the recommended method for SimplePie 1.3 or later.
@@ -808,7 +811,7 @@ function fetch_feed( $url ) {
 		$feed->set_cache_class( 'WP_Feed_Cache' );
 	}
 
-	$feed->set_file_class( 'WP_SimplePie_File' );
+	$feed->get_registry()->register( SimplePie\File::class, 'WP_SimplePie_File', true );
 
 	$feed->set_feed_url( $url );
 	/** This filter is documented in wp-includes/class-wp-feed-cache-transient.php */
@@ -825,7 +828,7 @@ function fetch_feed( $url ) {
 	do_action_ref_array( 'wp_feed_options', array( &$feed, $url ) );
 
 	$feed->init();
-	$feed->set_output_encoding( get_option( 'blog_charset' ) );
+	$feed->set_output_encoding( get_bloginfo( 'charset' ) );
 
 	if ( $feed->error() ) {
 		return new WP_Error( 'simplepie-error', $feed->error() );
