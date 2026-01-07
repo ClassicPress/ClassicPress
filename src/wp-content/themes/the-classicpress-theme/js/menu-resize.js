@@ -34,7 +34,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		form.role = 'search';
 		form.className = 'search-form';
 		form.action = document.querySelector( '#inner-header .logo a' ).href;
-		form.innerHTML = '<label><span class="screen-reader-text">Search for:</span><input type="search" class="search-field" placeholder="Search …" value="" name="s"></label><input type="submit" class="search-submit" value="Search">';
+		form.innerHTML = '<label><span class="screen-reader-text">'+cp_menu_object.SearchFor+'</span><input type="search" class="search-field" placeholder="'+cp_menu_object.SearchFor+'" value="" name="s"></label><input type="submit" class="search-submit" value="'+cp_menu_object.Search+'">';
 		primaryMenu.append(form);
 
 		// Toggle menu open and closed
@@ -64,21 +64,32 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			menuToggle.focus();
 		}, false);
 
-		//
-		parents.forEach( function ( parent ) {
-			parent.addEventListener( 'click', function ( e ) {
-				e.preventDefault();
-				let parentSub = parent.nextElementSibling;
-				if ( parentSub.className.includes( 'closed' ) ) {
-					parentSub.style.display = 'block';
-					parentSub.classList.remove( 'closed' );
-					parentSub.classList.add( 'open' );
-					parents.forEach(sub => sub.setAttribute( 'aria-expanded', true));
+		// Submenus
+		parents.forEach( function( parent ) {
+			const button = document.createElement( 'button' );
+			button.role = 'button';
+			button.setAttribute( 'aria-haspopup', true );
+			button.setAttribute( 'aria-expanded', false );
+			button.innerHTML = '<span>&#x25BC;<span class="screen-reader-text">'+cp_menu_object.OpenSubMenu+'</span></span>';
+
+			parent.parentNode.classList.remove( 'menu-item-has-children' );
+			parent.after( button );
+
+			button.addEventListener( 'click', function(e) {
+
+				let submenu = button.nextElementSibling;
+				if (submenu.className.includes( 'closed' ) ) {
+					submenu.style.display = 'block';
+					submenu.classList.remove( 'closed' );
+					submenu.classList.add( 'open' );
+					submenu.setAttribute( 'aria-hidden', false );
+					button.setAttribute( 'aria-expanded', true );
 				} else {
-					parentSub.style.display = 'none';
-					parentSub.classList.remove( 'open' );
-					parentSub.classList.add( 'closed' );
-					parents.forEach(sub => sub.setAttribute( 'aria-expanded', false));
+					submenu.style.display = 'none';
+					submenu.classList.remove( 'open' );
+					submenu.classList.add( 'closed' );
+					submenu.setAttribute( 'aria-hidden', true );
+					button.setAttribute( 'aria-expanded', false );
 				}
 			});
 		}, false);
