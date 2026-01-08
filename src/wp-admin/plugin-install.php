@@ -152,7 +152,7 @@ if (
 		current_user_can( 'install_plugins' ) &&
 		! is_file( WP_PLUGIN_DIR . '/classicpress-directory-integration/classicpress-directory-integration.php' )
 	) {
-		echo '<p>' . sprintf( __( 'You can browse other plugins in the ClassicPress Directory at <a href="%1$s" target="_blank">%1$s</a>.' ), esc_url( 'https://directory.classicpress.net/plugins/' ) ) . '<br>';
+		echo '<div class="notice notice-info"><p>' . sprintf( __( 'You can browse other plugins in the ClassicPress Directory at <a href="%1$s" target="_blank">%1$s</a>.' ), esc_url( 'https://directory.classicpress.net/plugins/' ) ) . '<br>';
 		$url = wp_nonce_url(
 			add_query_arg(
 				array(
@@ -164,7 +164,7 @@ if (
 			),
 			'install-plugin_' . 'classicpress-directory-integration'
 		);
-		echo sprintf( __( '<a href="%1$s">Install now</a> | ClassicPress Directory Integration plugin: install ClassicPress specific plugins from the Plugins Menu.' ), $url ) . '</p>';
+		echo sprintf( __( '<a href="%1$s">Install now</a> | ClassicPress Directory Integration plugin: install ClassicPress specific plugins from the Plugins Menu.' ), $url ) . '</p></div>';
 }
 ?>
 

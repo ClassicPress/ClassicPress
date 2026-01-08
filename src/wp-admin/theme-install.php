@@ -201,7 +201,7 @@ if ( ! is_wp_error( $response ) ) {
 			current_user_can( 'install_themes' ) &&
 			! is_file( WP_PLUGIN_DIR . '/classicpress-directory-integration/classicpress-directory-integration.php' )
 		) {
-			echo '<p>' . sprintf( __( 'You can browse other themes in the ClassicPress Directory at <a href="%1$s" target="_blank">%1$s</a>.' ), esc_url( 'https://directory.classicpress.net/themes/' ) ) . '<br>';
+			echo '<div class="notice notice-info"><p>' . sprintf( __( 'You can browse other themes in the ClassicPress Directory at <a href="%1$s" target="_blank">%1$s</a>.' ), esc_url( 'https://directory.classicpress.net/themes/' ) ) . '<br>';
 			$url = wp_nonce_url(
 				add_query_arg(
 					array(
@@ -213,7 +213,7 @@ if ( ! is_wp_error( $response ) ) {
 				),
 				'install-plugin_' . 'classicpress-directory-integration'
 			);
-			echo sprintf( __( '<a href="%1$s">Install now</a> | ClassicPress Directory Integration plugin: install ClassicPress specific themes from the Appearance Menu.' ), $url ) . '</p>';
+			echo sprintf( __( '<a href="%1$s">Install now</a> | ClassicPress Directory Integration plugin: install ClassicPress specific themes from the Appearance Menu.' ), $url ) . '</p></div>';
 	}
 	?>
 
