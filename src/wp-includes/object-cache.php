@@ -1,14 +1,14 @@
 <?php
 /*
 Plugin Name: WordPress APCu Object Cache Backend
-Plugin URI: https://github.com/l3rady/WordPress-APCu-Object-Cache
+Plugin URI: https://github.com/l3rady/object-cache-apcu
 Description: APCu backend for WordPress' Object Cache
-Version: 1.1
+Version: 1.2
 Author: Scott Cariss
-Author URI: http://scott.cariss.dev
+Author URI: https://cariss.dev
 */
 
-/*  Copyright 2019  Scott Cariss  (email : scott@cariss.dev)
+/*  Copyright 2024  Scott Cariss  (email : scott@cariss.dev)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,6 +42,22 @@ defined('ABSPATH') or exit;
 function wp_cache_add($key, $data, $group = 'default', $expire = 0)
 {
     return WP_Object_Cache::instance()->add($key, $data, $group, $expire);
+}
+
+
+/**
+ * Adds multiple values to the cache in one call.
+ *
+ * @param array  $data   Array of keys and values to be set.
+ * @param string $group  Optional. Where the cache contents are grouped. Default default.
+ * @param int    $expire Optional. When to expire the cache contents, in seconds.
+ *                       Default 0 (no expiration).
+ * @return bool[] Array of return values, grouped by key. Each value is either
+ *                true on success, or false if cache key and group already exist.
+ */
+function wp_cache_add_multiple(array $data, $group = 'default', $expire = 0)
+{
+	return WP_Object_Cache::instance()->add_multiple($data, $group, $expire);
 }
 
 
@@ -91,6 +107,20 @@ function wp_cache_delete($key, $group = 'default')
 
 
 /**
+ * Deletes multiple values from the cache in one call.
+ *
+ * @param array  $keys  Array of keys under which the cache to deleted.
+ * @param string $group Optional. Where the cache contents are grouped. Default default.
+ * @return bool[] Array of return values, grouped by key. Each value is either
+ *                true on success, or false if the contents were not deleted.
+ */
+function wp_cache_delete_multiple(array $keys, $group = 'default')
+{
+	return WP_Object_Cache::instance()->delete_multiple($keys, $group);
+}
+
+
+/**
  * Removes all cache items.
  *
  * @return bool False on failure, true on success
@@ -98,6 +128,17 @@ function wp_cache_delete($key, $group = 'default')
 function wp_cache_flush()
 {
     return WP_Object_Cache::instance()->flush();
+}
+
+
+/**
+ * Removes all cache items from the in-memory runtime cache.
+ *
+ * @return bool True on success, false on failure.
+ */
+function wp_cache_flush_runtime()
+{
+    return WP_Object_Cache::instance()->flush_runtime();
 }
 
 
@@ -118,21 +159,18 @@ function wp_cache_get($key, $group = 'default', $force = false, &$found = null)
 
 
 /**
- * Retrieve multiple values from cache.
+ * Retrieves multiple values from the cache in one call.
  *
- * Gets multiple values from cache, including across multiple groups
- *
- * Usage: array( 'group0' => array( 'key0', 'key1', 'key2', ), 'group1' => array( 'key0' ) )
- *
- * @param array $groups Array of groups and keys to retrieve
- *
- * @return array Array of cached values as
- *    array( 'group0' => array( 'key0' => 'value0', 'key1' => 'value1', 'key2' => 'value2', ) )
- *    Non-existent keys are not returned.
+ * @param array  $keys  Array of keys under which the cache contents are stored.
+ * @param string $group Optional. Where the cache contents are grouped. Default empty.
+ * @param bool   $force Optional. Whether to force an update of the local cache
+ *                      from the persistent cache. Default false.
+ * @return array Array of return values, grouped by key. Each value is either
+ *               the cache contents on success, or false on failure.
  */
-function wp_cache_get_multi($groups)
+function wp_cache_get_multiple($keys, $group = 'default', $force = false)
 {
-    return WP_Object_Cache::instance()->get_multi($groups);
+    return WP_Object_Cache::instance()->get_multiple($keys, $group, $force);
 }
 
 
@@ -191,6 +229,22 @@ function wp_cache_replace($key, $data, $group = 'default', $expire = 0)
 function wp_cache_set($key, $data, $group = 'default', $expire = 0)
 {
     return WP_Object_Cache::instance()->set($key, $data, $group, $expire);
+}
+
+
+/**
+ * Sets multiple values to the cache in one call.
+ *
+ * @param array  $data   Array of keys and values to be set.
+ * @param string $group  Optional. Where the cache contents are grouped. Default default.
+ * @param int    $expire Optional. When to expire the cache contents, in seconds.
+ *                       Default 0 (no expiration).
+ * @return bool[] Array of return values, grouped by key. Each value is either
+ *                true on success, or false on failure.
+ */
+function wp_cache_set_multiple(array $data, $group = 'default', $expire = 0)
+{
+    return WP_Object_Cache::instance()->set_multiple($data, $group, $expire);
 }
 
 
@@ -269,6 +323,32 @@ function wp_cache_flush_group($groups = 'default')
 
 
 /**
+ * Determines whether the object cache implementation supports a particular feature.
+ *
+ * @since 6.1.0
+ *
+ * @param string $feature Name of the feature to check for. Possible values include:
+ *                        'add_multiple', 'set_multiple', 'get_multiple', 'delete_multiple',
+ *                        'flush_runtime', 'flush_group'.
+ * @return bool True if the feature is supported, false otherwise.
+ */
+function wp_cache_supports( $feature ) {
+    switch ( $feature ) {
+        case 'add_multiple':
+        case 'set_multiple':
+        case 'get_multiple':
+        case 'delete_multiple':
+        case 'flush_runtime':
+        case 'flush_group':
+            return true;
+
+    default:
+        return false;
+    }
+}
+
+
+/**
  * WordPress APCu Object Cache Backend
  *
  * The WordPress Object Cache is used to save on trips to the database. The
@@ -282,18 +362,18 @@ class WP_Object_Cache
     /**
      * @var string MD5 hash of the current installation ABSPATH
      */
-    private $abspath;
+    private $_absPath;
 
     /**
      * @var bool Stores if APCu is available.
      */
-    private $apcu_available;
+    private $_apcuAvailable;
 
     /**
      * @var int The sites current blog ID. This only
      *    differs if running a multi-site installations
      */
-    private $blog_prefix;
+    private $_blogPrefix;
 
     /**
      * @var int Keeps count of how many times the
@@ -311,39 +391,39 @@ class WP_Object_Cache
      * @var array Holds a list of cache groups that are
      *    shared across all sites in a multi-site installation
      */
-    private $global_groups = [];
+    private $_globalGroups = [];
 
     /**
      * @var array Holds an array of versions of the retrieved groups
      */
-    private $group_versions = [];
+    private $_groupVersions = [];
 
     /**
      * @var bool True if the current installation is a multi-site
      */
-    private $multi_site;
+    private $_multiSite;
 
     /**
      * @var array Holds cache that is to be non persistent
      */
-    private $non_persistent_cache = [];
+    private $_nonPersistentCache = [];
 
     /**
      * @var array Holds a list of cache groups that are not to be saved to APCu
      */
-    private $non_persistent_groups = [];
+    private $_nonPersistentGroups = [];
 
     /**
      * @var array
      */
-    private $local_cache = [];
+    private $_localCache = [];
 
     /**
      * @var array Holds an array of versions of the retrieved sites
      */
-    private $site_versions = [];
+    private $_siteVersions = [];
 
-    private static $instance;
+    private static $_instance;
 
     /**
      * Singleton. Return instance of WP_Object_Cache
@@ -352,11 +432,11 @@ class WP_Object_Cache
      */
     public static function instance()
     {
-        if (self::$instance === null) {
-            self::$instance = new WP_Object_Cache();
+        if (self::$_instance === null) {
+            self::$_instance = new WP_Object_Cache();
         }
 
-        return self::$instance;
+        return self::$_instance;
     }
 
     /**
@@ -389,10 +469,24 @@ class WP_Object_Cache
             define('WP_APCU_LOCAL_CACHE', true);
         }
 
-        $this->abspath = md5(ABSPATH);
-        $this->apcu_available = (extension_loaded('apcu') && ini_get('apc.enabled'));
-        $this->multi_site = is_multisite();
-        $this->blog_prefix = $this->multi_site ? $blog_id : 1;
+        $this->_absPath = md5(ABSPATH);
+        $this->_apcuAvailable = (extension_loaded('apcu') && ini_get('apc.enabled'));
+        $this->_multiSite = is_multisite();
+        $this->_blogPrefix = $this->_multiSite ? $blog_id : 1;
+    }
+
+    public function stats()
+    {
+        echo '<p>';
+        echo "<strong>Cache Hits:</strong> {$this->cache_hits}<br />";
+        echo "<strong>Cache Misses:</strong> {$this->cache_misses}<br />";
+        echo '</p>';
+        echo '<ul>';
+
+        foreach ( $this->_localCache as $group => $cache ) {
+            echo '<li><strong>Group:</strong> ' . esc_html( $group ) . ' - ( ' . number_format( strlen( serialize( $cache ) ) / KB_IN_BYTES, 2 ) . 'k )</li>';
+        }
+        echo '</ul>';
     }
 
     /**
@@ -407,17 +501,38 @@ class WP_Object_Cache
      */
     public function add($key, $var, $group = 'default', $ttl = 0)
     {
-        if (wp_suspend_cache_addition()) {
+        if (function_exists('wp_suspend_cache_addition') && wp_suspend_cache_addition()) {
             return false;
         }
 
         $key = $this->_key($key, $group);
 
-        if (!$this->apcu_available || $this->_is_non_persistent_group($group)) {
+        if (!$this->_apcuAvailable || $this->_is_non_persistent_group($group)) {
             return $this->_add_np($key, $var);
         }
 
         return $this->_add($key, $var, $ttl);
+    }
+
+    /**
+     * Adds multiple values to the cache in one call.
+     *
+     * @param array  $data   Array of keys and values to be added.
+     * @param string $group  Optional. Where the cache contents are grouped. Default default.
+     * @param int    $ttl    Optional. When to expire the cache contents, in seconds.
+     *                       Default 0 (no expiration).
+     * @return bool[] Array of return values, grouped by key. Each value is either
+     *                true on success, or false if cache key and group already exist.
+     */
+    public function add_multiple(array $data, $group = 'default', $ttl = 0)
+    {
+        $values = [];
+
+        foreach ($data as $key => $value) {
+            $values[$key] = $this->add($key, $value, $group, $ttl);
+        }
+
+        return $values;
     }
 
     /**
@@ -433,7 +548,7 @@ class WP_Object_Cache
     {
         if (apcu_add($key, $var, max((int)$ttl, 0))) {
             if (WP_APCU_LOCAL_CACHE) {
-                $this->local_cache[$key] = is_object($var) ? clone $var : $var;
+                $this->_localCache[$key] = is_object($var) ? clone $var : $var;
             }
             return true;
         }
@@ -465,7 +580,7 @@ class WP_Object_Cache
     public function add_global_groups($groups)
     {
         foreach ((array)$groups as $group) {
-            $this->global_groups[$group] = true;
+            $this->_globalGroups[$group] = true;
         }
     }
 
@@ -477,7 +592,7 @@ class WP_Object_Cache
     public function add_non_persistent_groups($groups)
     {
         foreach ((array)$groups as $group) {
-            $this->non_persistent_groups[$group] = true;
+            $this->_nonPersistentGroups[$group] = true;
         }
     }
 
@@ -494,7 +609,7 @@ class WP_Object_Cache
     {
         $key = $this->_key($key, $group);
 
-        if (!$this->apcu_available || $this->_is_non_persistent_group($group)) {
+        if (!$this->_apcuAvailable || $this->_is_non_persistent_group($group)) {
             return $this->_decr_np($key, $offset);
         }
 
@@ -518,7 +633,7 @@ class WP_Object_Cache
 
         $value = apcu_dec($key, max((int)$offset, 0));
         if ($value !== false && WP_APCU_LOCAL_CACHE) {
-            $this->local_cache[$key] = $value;
+            $this->_localCache[$key] = $value;
         }
         return $value;
     }
@@ -560,11 +675,30 @@ class WP_Object_Cache
     {
         $key = $this->_key($key, $group);
 
-        if (!$this->apcu_available || $this->_is_non_persistent_group($group)) {
+        if (!$this->_apcuAvailable || $this->_is_non_persistent_group($group)) {
             return $this->_delete_np($key);
         }
 
         return $this->_delete($key);
+    }
+
+    /**
+     * Deletes multiple values from the cache in one call.
+     *
+     * @param array  $keys  Array of keys to be deleted.
+     * @param string $group Optional. Where the cache contents are grouped. Default default.
+     * @return bool[] Array of return values, grouped by key. Each value is either
+     *                true on success, or false if the contents were not deleted.
+     */
+    public function delete_multiple(array $keys, $group = 'default')
+    {
+        $values = [];
+
+        foreach ($keys as $key) {
+            $values[$key] = $this->delete($key, $group);
+        }
+
+        return $values;
     }
 
     /**
@@ -578,7 +712,7 @@ class WP_Object_Cache
      */
     private function _delete($key)
     {
-        unset($this->local_cache[$key]);
+        unset($this->_localCache[$key]);
         return apcu_delete($key);
     }
 
@@ -593,8 +727,8 @@ class WP_Object_Cache
      */
     private function _delete_np($key)
     {
-        if (array_key_exists($key, $this->non_persistent_cache)) {
-            unset($this->non_persistent_cache[$key]);
+        if (array_key_exists($key, $this->_nonPersistentCache)) {
+            unset($this->_nonPersistentCache[$key]);
 
             return true;
         }
@@ -611,7 +745,7 @@ class WP_Object_Cache
      */
     private function _exists_np($key)
     {
-        return array_key_exists($key, $this->non_persistent_cache);
+        return array_key_exists($key, $this->_nonPersistentCache);
     }
 
     /**
@@ -621,13 +755,31 @@ class WP_Object_Cache
      */
     public function flush()
     {
-        $this->non_persistent_cache = [];
+        $this->_nonPersistentCache = [];
 
         if (WP_APCU_LOCAL_CACHE) {
-            $this->local_cache = [];
+            $this->_localCache = [];
         }
 
-        if ($this->apcu_available) {
+        if ($this->_apcuAvailable) {
+            apcu_clear_cache();
+        }
+
+        return true;
+    }
+
+    /**
+     * if using local cache clear that else flush all
+     *
+     * @return bool Always returns true
+     */
+    public function flush_runtime()
+    {
+        $this->_nonPersistentCache = [];
+
+        if (WP_APCU_LOCAL_CACHE) {
+            $this->_localCache = [];
+        } elseif ($this->_apcuAvailable) {
             apcu_clear_cache();
         }
 
@@ -670,7 +822,7 @@ class WP_Object_Cache
         $sites = (array)$sites;
 
         if (empty($sites)) {
-            $sites = [$this->blog_prefix];
+            $sites = [$this->_blogPrefix];
         }
 
         // Add global groups (site 0) to be flushed.
@@ -706,7 +858,7 @@ class WP_Object_Cache
     {
         $key = $this->_key($key, $group);
 
-        if (!$this->apcu_available || $this->_is_non_persistent_group($group)) {
+        if (!$this->_apcuAvailable || $this->_is_non_persistent_group($group)) {
             $var = $this->_get_np($key, $success);
         } else {
             $var = $this->_get($key, $success);
@@ -731,14 +883,14 @@ class WP_Object_Cache
      */
     private function _get($key, &$success = null)
     {
-        if (WP_APCU_LOCAL_CACHE && array_key_exists($key, $this->local_cache)
+        if (WP_APCU_LOCAL_CACHE && array_key_exists($key, $this->_localCache)
         ) {
             $success = true;
-            $var = $this->local_cache[$key];
+            $var = $this->_localCache[$key];
         } else {
             $var = apcu_fetch($key, $success);
             if ($success && WP_APCU_LOCAL_CACHE) {
-                $this->local_cache[$key] = $var;
+                $this->_localCache[$key] = $var;
             }
         }
 
@@ -759,9 +911,9 @@ class WP_Object_Cache
      */
     private function _get_np($key, &$success = null)
     {
-        if (array_key_exists($key, $this->non_persistent_cache)) {
+        if (array_key_exists($key, $this->_nonPersistentCache)) {
             $success = true;
-            return $this->non_persistent_cache[$key];
+            return $this->_nonPersistentCache[$key];
         }
 
         $success = false;
@@ -777,10 +929,10 @@ class WP_Object_Cache
      */
     private function _get_cache_version($key)
     {
-        if ($this->apcu_available) {
+        if ($this->_apcuAvailable) {
             $version = (int)apcu_fetch($key);
-        } elseif (array_key_exists($key, $this->non_persistent_cache)) {
-            $version = (int)$this->non_persistent_cache[$key];
+        } elseif (array_key_exists($key, $this->_nonPersistentCache)) {
+            $version = (int)$this->_nonPersistentCache[$key];
         } else {
             $version = 0;
         }
@@ -798,7 +950,7 @@ class WP_Object_Cache
      */
     private function _get_cache_version_key($type, $value)
     {
-        return WP_APCU_KEY_SALT . ':' . $this->abspath . ':' . $type . ':' . $value;
+        return WP_APCU_KEY_SALT . ':' . $this->_absPath . ':' . $type . ':' . $value;
     }
 
     /**
@@ -810,8 +962,8 @@ class WP_Object_Cache
      */
     private function _get_group_cache_version($group)
     {
-        if (!isset($this->group_versions[$group])) {
-            $this->group_versions[$group] = $this->_get_cache_version(
+        if (!isset($this->_groupVersions[$group])) {
+            $this->_groupVersions[$group] = $this->_get_cache_version(
                 $this->_get_cache_version_key(
                     'GroupVersion',
                     $group
@@ -819,45 +971,31 @@ class WP_Object_Cache
             );
         }
 
-        return $this->group_versions[$group];
+        return $this->_groupVersions[$group];
     }
+
 
     /**
-     * Retrieve multiple values from cache.
+     * Retrieves multiple values from the cache in one call.
      *
-     * Gets multiple values from cache, including across multiple groups
-     *
-     * Usage: array( 'group0' => array( 'key0', 'key1', 'key2', ), 'group1' => array( 'key0' ) )
-     *
-     * @param array $groups Array of groups and keys to retrieve
-     *
-     * @return array|bool Array of cached values as
-     *    array( 'group0' => array( 'key0' => 'value0', 'key1' => 'value1', 'key2' => 'value2', ) )
-     *    Non-existent keys are not returned.
+     * @param array  $keys  Array of keys under which the cache contents are stored.
+     * @param string $group Optional. Where the cache contents are grouped. Default 'default'.
+     * @param bool   $force Optional. Whether to force an update of the local cache
+     *                      from the persistent cache. Default false.
+     * @return array Array of return values, grouped by key. Each value is either
+     *               the cache contents on success, or false on failure.
      */
-    public function get_multi($groups)
+    public function get_multiple($keys, $group = 'default', $force = false)
     {
-        if (empty($groups) || !is_array($groups)) {
-            return false;
+        $values = [];
+
+        foreach ($keys as $key) {
+            $values[$key] = $this->get($key, $group, $force);
         }
 
-        $vars = [];
-        $success = false;
-
-        foreach ($groups as $group => $keys) {
-            $vars[$group] = [];
-
-            foreach ($keys as $key) {
-                $var = $this->get($key, $group, false, $success);
-
-                if ($success) {
-                    $vars[$group][$key] = $var;
-                }
-            }
-        }
-
-        return $vars;
+        return $values;
     }
+
 
     /**
      * Get the sites cache version
@@ -868,8 +1006,8 @@ class WP_Object_Cache
      */
     private function _get_site_cache_version($site)
     {
-        if (!isset($this->site_versions[$site])) {
-            $this->site_versions[$site] = $this->_get_cache_version(
+        if (!isset($this->_siteVersions[$site])) {
+            $this->_siteVersions[$site] = $this->_get_cache_version(
                 $this->_get_cache_version_key(
                     'SiteVersion',
                     $site
@@ -877,7 +1015,7 @@ class WP_Object_Cache
             );
         }
 
-        return $this->site_versions[$site];
+        return $this->_siteVersions[$site];
     }
 
     /**
@@ -893,7 +1031,7 @@ class WP_Object_Cache
     {
         $key = $this->_key($key, $group);
 
-        if (!$this->apcu_available || $this->_is_non_persistent_group($group)) {
+        if (!$this->_apcuAvailable || $this->_is_non_persistent_group($group)) {
             return $this->_incr_np($key, $offset);
         }
 
@@ -917,7 +1055,7 @@ class WP_Object_Cache
 
         $value = apcu_inc($key, max((int)$offset, 0));
         if ($value !== false && WP_APCU_LOCAL_CACHE) {
-            $this->local_cache[$key] = $value;
+            $this->_localCache[$key] = $value;
         }
         return $value;
     }
@@ -953,7 +1091,7 @@ class WP_Object_Cache
      */
     private function _is_non_persistent_group($group)
     {
-        return isset($this->non_persistent_groups[$group]);
+        return isset($this->_nonPersistentGroups[$group]);
     }
 
     /**
@@ -972,14 +1110,14 @@ class WP_Object_Cache
 
         $prefix = 0;
 
-        if (!isset($this->global_groups[$group])) {
-            $prefix = $this->blog_prefix;
+        if (!isset($this->_globalGroups[$group])) {
+            $prefix = $this->_blogPrefix;
         }
 
         $group_version = $this->_get_group_cache_version($group);
         $site_version = $this->_get_site_cache_version($prefix);
 
-        return WP_APCU_KEY_SALT . ':' . $this->abspath . ':' . $prefix . ':' . $group . ':' . $key . ':v' . $site_version . '.' . $group_version;
+        return WP_APCU_KEY_SALT . ':' . $this->_absPath . ':' . $prefix . ':' . $group . ':' . $key . ':v' . $site_version . '.' . $group_version;
     }
 
     /**
@@ -996,7 +1134,7 @@ class WP_Object_Cache
     {
         $key = $this->_key($key, $group);
 
-        if (!$this->apcu_available || $this->_is_non_persistent_group($group)) {
+        if (!$this->_apcuAvailable || $this->_is_non_persistent_group($group)) {
             return $this->_replace_np($key, $var);
         }
 
@@ -1053,11 +1191,31 @@ class WP_Object_Cache
     {
         $key = $this->_key($key, $group);
 
-        if (!$this->apcu_available || $this->_is_non_persistent_group($group)) {
+        if (!$this->_apcuAvailable || $this->_is_non_persistent_group($group)) {
             return $this->_set_np($key, $var);
         }
 
         return $this->_set($key, $var, $ttl);
+    }
+
+    /**
+     * Sets multiple values to the cache in one call.
+     *
+     * @param array  $data   Array of key and value to be set.
+     * @param string $group  Optional. Where the cache contents are grouped. Default default.
+     * @param int    $ttl    Optional. When to expire the cache contents, in seconds.
+     *                       Default 0 (no expiration).
+     * @return bool[] Array of return values, grouped by key. Each value is always true.
+     */
+    public function set_multiple(array $data, $group = 'default', $ttl = 0)
+    {
+        $values = [];
+
+        foreach ( $data as $key => $var ) {
+            $values[$key] = $this->set($key, $var, $group, $ttl);
+        }
+
+        return $values;
     }
 
     /**
@@ -1077,7 +1235,7 @@ class WP_Object_Cache
 
         if (apcu_store($key, $var, max((int)$ttl, 0))) {
             if (WP_APCU_LOCAL_CACHE) {
-                $this->local_cache[$key] = $var;
+                $this->_localCache[$key] = $var;
             }
             return true;
         }
@@ -1099,7 +1257,7 @@ class WP_Object_Cache
             $var = clone $var;
         }
 
-        return $this->non_persistent_cache[$key] = $var;
+        return $this->_nonPersistentCache[$key] = $var;
     }
 
     /**
@@ -1112,11 +1270,11 @@ class WP_Object_Cache
      */
     private function _set_cache_version($key, $version)
     {
-        if ($this->apcu_available) {
+        if ($this->_apcuAvailable) {
             return apcu_store($key, $version);
         }
 
-        return $this->non_persistent_cache[$key] = $version;
+        return $this->_nonPersistentCache[$key] = $version;
     }
 
     /**
@@ -1150,15 +1308,15 @@ class WP_Object_Cache
      */
     public function switch_to_blog($blog_id)
     {
-        $this->blog_prefix = $this->multi_site ? $blog_id : 1;
+        $this->_blogPrefix = $this->_multiSite ? $blog_id : 1;
     }
 
     /**
      * @return string
      */
-    public function getAbspath()
+    public function getAbsPath()
     {
-        return $this->abspath;
+        return $this->_absPath;
     }
 
     /**
@@ -1166,7 +1324,7 @@ class WP_Object_Cache
      */
     public function getApcuAvailable()
     {
-        return $this->apcu_available;
+        return $this->_apcuAvailable;
     }
 
     /**
@@ -1174,7 +1332,7 @@ class WP_Object_Cache
      */
     public function getBlogPrefix()
     {
-        return $this->blog_prefix;
+        return $this->_blogPrefix;
     }
 
     /**
@@ -1198,7 +1356,7 @@ class WP_Object_Cache
      */
     public function getGlobalGroups()
     {
-        return $this->global_groups;
+        return $this->_globalGroups;
     }
 
     /**
@@ -1206,7 +1364,7 @@ class WP_Object_Cache
      */
     public function getGroupVersions()
     {
-        return $this->group_versions;
+        return $this->_groupVersions;
     }
 
     /**
@@ -1214,7 +1372,7 @@ class WP_Object_Cache
      */
     public function getMultiSite()
     {
-        return $this->multi_site;
+        return $this->_multiSite;
     }
 
     /**
@@ -1222,7 +1380,7 @@ class WP_Object_Cache
      */
     public function getNonPersistentCache()
     {
-        return $this->non_persistent_cache;
+        return $this->_nonPersistentCache;
     }
 
     /**
@@ -1230,7 +1388,7 @@ class WP_Object_Cache
      */
     public function getNonPersistentGroups()
     {
-        return $this->non_persistent_groups;
+        return $this->_nonPersistentGroups;
     }
 
     /**
@@ -1238,6 +1396,6 @@ class WP_Object_Cache
      */
     public function getSiteVersions()
     {
-        return $this->site_versions;
+        return $this->_siteVersions;
     }
 }

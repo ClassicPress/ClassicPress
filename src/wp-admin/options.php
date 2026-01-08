@@ -17,6 +17,7 @@
 
 /** ClassicPress Administration Bootstrap */
 require_once __DIR__ . '/admin.php';
+require_once ABSPATH . WPINC . '/classicpress/class-cp-settings.php';
 
 // Used in the HTML title tag.
 $title       = __( 'Settings' );
