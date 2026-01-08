@@ -377,7 +377,7 @@ function display_plugins_categories_list() {
 		'widget'       => __( 'Widgets' ),
 		'admin'        => __( 'Admin Utilities' ),
 		'page-builder' => __( 'Page Builders' ),
-		'e-commerce'   => __( 'eCommerce' ),
+		'ecommerce'    => __( 'eCommerce' ),
 		'media'        => __( 'Media' ),
 		'seo'          => __( 'SEO' ),
 		'social'       => __( 'Social Networking' ),
