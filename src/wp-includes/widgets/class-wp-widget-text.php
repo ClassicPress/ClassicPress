@@ -426,7 +426,7 @@ class WP_Widget_Text extends WP_Widget {
 	/**
 	 * Loads the required scripts for the text widget.
 	 *
-	 * @since CP-2.6.0
+	 * @since CP-2.7.0
 	 */
 	public function enqueue_admin_scripts() {
 		wp_enqueue_editor();
