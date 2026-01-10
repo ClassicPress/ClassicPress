@@ -32,18 +32,25 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Initialize the editor in the widget
 	function initTextWidget( widget ) {
-		var textarea = widget.querySelector( 'textarea' );
+		var widgetNumber = widget.id.split( '-' ).pop(),
+			textareaId = 'widget-text-' + widgetNumber + '-text',
+			textarea = widget.querySelector( '#' + textareaId );
+
+		if ( ! textarea ) {
+			textarea = widget.querySelector( '.widget-content .wp-editor-area' );
+		}
+		if ( ! textarea ) {
+			return;
+		}
 
 		function initTinyMCE() {
 			if ( typeof tinymce !== 'undefined' && tinymce ) {
 
 				// Remove existing editor instance if present
 				setTimeout( function() {
-					var ed = tinymce.get( textarea.id );
-
-					if ( ed ) {
+					if ( textarea.id && wp && wp.editor && typeof wp.editor.remove === 'function') {
 						try {
-							ed.remove();
+							wp.editor.remove( textarea.id );
 						} catch( e ) {
 							// Ignore errors
 						}
@@ -55,7 +62,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							setup: function( editor ) {
 								editor.on( 'change', function() {
 									editor.save(); // Sync content to textarea on change
+									widget.classList.add( 'widget-dirty' );
 									textarea.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+									widget.querySelector( '.widget-control-save' ).disabled = false;
 								} );
 
 								// Edit an image or gallery
