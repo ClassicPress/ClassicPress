@@ -792,11 +792,6 @@ require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-name-cont
 require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-locations-control.php';
 
 /**
- * WP_Customize_Nav_Menu_Auto_Add_Control class.
- */
-require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-auto-add-control.php';
-
-/**
  * WP_Customize_Date_Time_Control class.
  */
 require_once ABSPATH . WPINC . '/customize/class-wp-customize-date-time-control.php';
