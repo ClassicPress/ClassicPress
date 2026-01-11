@@ -1245,7 +1245,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				if ( mediaArea ) {
 					mediaArea.innerHTML = ''; // Clear existing video
-                    
+
 					// Get URL from any data-property field
 					url = widget.querySelector( '[data-property="url"]' );
 					if ( url && url.value ) {
@@ -1253,10 +1253,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						video.className = 'wp_video_shortcode';
 						video.controls = true;
 						video.style.width = '100%';
-						
+
 						source = document.createElement( 'source' );
 						source.src = url.value;
-    
+
 						video.appendChild( source );
 						mediaArea.appendChild( video );
 						video.style.pointerEvents = 'auto';
