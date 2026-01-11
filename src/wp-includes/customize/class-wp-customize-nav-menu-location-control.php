@@ -67,11 +67,15 @@ class WP_Customize_Nav_Menu_Location_Control extends WP_Customize_Control {
 		?>
 		<label>
 			<?php if ( ! empty( $this->label ) ) : ?>
-			<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
+				<span class="customize-control-title">
+					<?php esc_html_e( $this->label ); ?>
+				</span>
 			<?php endif; ?>
 
 			<?php if ( ! empty( $this->description ) ) : ?>
-			<span class="description customize-control-description"><?php echo $this->description; ?></span>
+				<span class="description customize-control-description">
+					<?php echo wp_kses_post( $this->description ); ?>
+				</span>
 			<?php endif; ?>
 
 			<select <?php $this->link(); ?>>
@@ -82,8 +86,18 @@ class WP_Customize_Nav_Menu_Location_Control extends WP_Customize_Control {
 				?>
 			</select>
 		</label>
-		<button type="button" class="button-link create-menu<?php echo $value_hidden_class; ?>" data-location-id="<?php echo esc_attr( $this->location_id ); ?>" aria-label="<?php esc_attr_e( 'Create a menu for this location' ); ?>"><?php _e( '+ Create New Menu' ); ?></button>
-		<button type="button" class="button-link edit-menu<?php echo $no_value_hidden_class; ?>" aria-label="<?php esc_attr_e( 'Edit selected menu' ); ?>"><?php _e( 'Edit Menu' ); ?></button>
+		<button type="button" class="button-link create-menu<?php echo $value_hidden_class; ?>"
+			data-location-id="<?php esc_attr_e( $this->location_id ); ?>"
+			aria-label="<?php esc_attr_e( 'Create a menu for this location' ); ?>"
+		>
+			<?php esc_html_e( '+ Create New Menu' ); ?>
+		</button>
+		<button type="button" class="button-link edit-menu<?php echo $no_value_hidden_class; ?>"
+			aria-label="<?php esc_attr_e( 'Edit selected menu' ); ?>"
+		>
+			<?php esc_html_e( 'Edit Menu' ); ?>
+		</button>
+
 		<?php
 	}
 }
