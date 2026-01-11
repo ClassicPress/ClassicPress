@@ -807,6 +807,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		videoElement.style.width = '100%';
 		videoElement.controls = true;
 		videoElement.setAttribute( 'draggable', false );
+		videoElement.type = 'video/mp4';
 
 		// Add from URL
 		if ( ! dialog.querySelector( '#insert-from-url-panel' ).hasAttribute( 'hidden' ) ) {
@@ -1228,6 +1229,45 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 	} );
+
+	/**
+	 * Fix video widget preview after updates/moves.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function handleVideoWidgetUpdate( event ) {
+		var widget = event.detail.widget;
+		if ( widget.querySelector( '.id_base' ).value === 'media_video' ) {
+			setTimeout( function() {
+				var url, video, source,
+					mediaArea = widget.querySelector( '.media_video' );
+
+				if ( mediaArea ) {
+					mediaArea.innerHTML = ''; // Clear existing video
+                    
+					// Get URL from any data-property field
+					url = widget.querySelector( '[data-property="url"]' );
+					if ( url && url.value ) {
+						video = document.createElement( 'video' );
+						video.className = 'wp_video_shortcode';
+						video.controls = true;
+						video.style.width = '100%';
+						
+						source = document.createElement( 'source' );
+						source.src = url.value;
+    
+						video.appendChild( source );
+						mediaArea.appendChild( video );
+						video.style.pointerEvents = 'auto';
+					}
+				}
+			}, 500 );
+		}
+	}
+
+	// Listen when widget updated.
+	document.addEventListener( 'widget-updated', handleVideoWidgetUpdate );
 
 	/**
 	 * Enable searching for items within grid.
