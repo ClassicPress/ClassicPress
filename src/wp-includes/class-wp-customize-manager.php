@@ -313,7 +313,6 @@ final class WP_Customize_Manager {
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-code-editor-control.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-widget-area-customize-control.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-widget-form-customize-control.php';
-		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-control.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-item-control.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-location-control.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-name-control.php';
