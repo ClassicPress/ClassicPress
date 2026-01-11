@@ -1257,7 +1257,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 	} );
-	
+
 	/**
 	 * Fix audio widget preview after updates/moves.
 	 *
@@ -1281,10 +1281,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						audio.className = 'wp_audio_shortcode';
 						audio.controls = true;
 						audio.style.width = '100%';
-						
+
 						source = document.createElement( 'source' );
 						source.src = url.value;
-    
+
 						audio.appendChild( source );
 						mediaArea.appendChild( audio );
 						audio.style.pointerEvents = 'auto';
