@@ -1244,11 +1244,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					mediaArea = widget.querySelector( '.media_video' );
 
 				if ( mediaArea ) {
-					mediaArea.innerHTML = ''; // Clear existing video
-
-					// Get URL from any data-property field
 					url = widget.querySelector( '[data-property="url"]' );
 					if ( url && url.value ) {
+						mediaArea.innerHTML = ''; // Clear existing video
+
 						video = document.createElement( 'video' );
 						video.className = 'wp_video_shortcode';
 						video.controls = true;
