@@ -265,9 +265,18 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 
 								<div class="default-header-image">
 									<img src="<?php echo esc_url( $header['url'] ); ?>">
-									<span>
-										<?php echo esc_html( $header['label'] ); ?>
-									</span>
+
+									<?php if ( isset( $header['label'] ) ) {
+										?>
+
+										<span>
+											<?php esc_html_e( $header['label'] ); ?>
+										</span>
+
+										<?php
+									}
+									?>
+
 									<button class="choice" data-customize-url="<?php echo esc_url( $header['url'] ); ?>">
 										<?php esc_html_e( $this->button_labels['frame_button'] ); ?>
 									</button>
