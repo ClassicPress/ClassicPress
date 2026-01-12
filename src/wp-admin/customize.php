@@ -43,7 +43,77 @@ $preview_url = add_query_arg(
     home_url( '/' )
 );
 
+$wp_customize->setup_theme();
 $wp_customize->register_controls();
+
+/**
+ * Process submitted form.
+ */
+if ( isset( $_POST['cp_publish_submit'] ) ) {
+    // 1) Collect essentials from the manager.
+    $uuid        = $wp_customize->changeset_uuid();              // required for preview context
+    $stylesheet  = $wp_customize->get_stylesheet();              // nonce is tied to this
+    $nonce       = wp_create_nonce( 'save-customize_' . $stylesheet );
+
+    // 2) Build your changeset payload from submitted form values.
+    //    Here we assume your form posts setting values as: customize_post_value[SETTING_ID]
+    $submitted   = isset( $_POST['customize_post_value'] ) ? (array) $_POST['customize_post_value'] : array();
+    $changeset   = array();
+
+    foreach ( $submitted as $setting_id => $raw_value ) {
+        // Optional: sanitize via the registered setting, if present.
+        if ( $setting = $wp_customize->get_setting( $setting_id ) ) {
+            $value = $setting->sanitize( wp_unslash( $raw_value ) );
+        } else {
+            $value = wp_unslash( $raw_value );
+        }
+        // The save() endpoint expects: setting_id => [ 'value' => ... ]
+        $changeset[ $setting_id ] = array( 'value' => $value );
+    }
+
+    // 3) Compose POST body for the Ajax save endpoint.
+    $body = array(
+        'action'                     => 'customize_save',
+        'nonce'                      => $nonce,
+        'customize_changeset_uuid'   => $uuid,
+        'customize_changeset_status' => 'publish', // 'draft'/'pending'/'future' also valid
+        'customize_changeset_title'  => 'PHP publish from customize.php',
+        'customize_changeset_data'   => wp_json_encode( $changeset ),
+    );
+
+    // 4) Carry current admin cookies so the request is authenticated.
+    $args = array(
+        'timeout' => 15,
+        'headers' => array( 'Cookie' => isset( $_SERVER['HTTP_COOKIE'] ) ? $_SERVER['HTTP_COOKIE'] : '' ),
+        'body'    => $body,
+    );
+
+    // 5) POST to core Ajax handler; this invokes WP_Customize_Manager::save().
+    $url      = admin_url( 'admin-ajax.php' );
+    $response = wp_remote_post( $url, $args );
+
+    // 6) Handle response (save() returns JSON with success/error).
+    if ( is_wp_error( $response ) ) {
+        // Show/record error; do NOT fatal. save() may return strings like 'not_preview', etc.
+        error_log( 'Customizer save transport error: ' . $response->get_error_message() );
+    } else {
+        $code = wp_remote_retrieve_response_code( $response );
+        $json = json_decode( wp_remote_retrieve_body( $response ), true );
+        if ( $code !== 200 || empty( $json['success'] ) ) {
+            error_log( 'Customizer save failed: HTTP ' . $code . ' — ' . print_r( $json, true ) );
+        } else {
+            // Optional: redirect back to the Customizer with the UUID (same as JS flow).
+            wp_safe_redirect( add_query_arg( 'customize_changeset_uuid', $uuid, admin_url( 'customize.php' ) ) );
+            error_log( 'Customizer save succeeded: HTTP ' . $code . ' — ' . print_r( $json, true ) );
+            exit;
+        }
+    }
+}
+
+
+// Themes
+$installed_themes = wp_prepare_themes_for_js();
+$count_themes     = count( $installed_themes );
 
 // Menus
 $locations      = get_registered_nav_menus(); // slug => human label
@@ -237,7 +307,9 @@ wp_print_scripts();
 		<h2 id="customizer-title" class="screen-reader-text">
 			<?php esc_html_e( 'Customizing: ' .  get_bloginfo( 'name' ) ); ?>
 		</h2>
-		<form id="customize-controls" class="wrap wp-full-overlay-sidebar" style="position: static;">
+		<form id="customize-controls" class="wrap wp-full-overlay-sidebar" style="position: static;"
+			action="<?php echo esc_url( admin_url( 'customize.php' ) ); ?>"
+		>
 			<div id="customize-header-actions" class="wp-full-overlay-header" style="position: static;">
 
 				<?php
@@ -256,6 +328,8 @@ wp_print_scripts();
 							class="publish-settings button-primary button dashicons dashicons-admin-generic"
 							aria-label="<?php esc_attr_e( 'Publish Settings' ); ?>"
 							aria-expanded="false" style="display: none;"
+							name="cp_publish_submit"
+							value="1"
 						></button>
 					</div>
 					<?php
@@ -323,13 +397,13 @@ wp_print_scripts();
 						<div class="customize-panel-description">
 							<p>
 								<?php
-								_e( 'The Customizer allows you to preview changes to your site before publishing them. You can navigate to different pages on your site within the preview. Edit shortcuts are shown for some editable elements. The Customizer is intended for use with non-block themes.' );
+								esc_html_e( 'The Customizer allows you to preview changes to your site before publishing them. You can navigate to different pages on your site within the preview. Edit shortcuts are shown for some editable elements. The Customizer is intended for use with non-block themes.' );
 								?>
 							</p>
 							<p>
-								<?php
-								_e( '<a href="https://wordpress.org/documentation/article/customizer/">Documentation on Customizer</a>' );
-								?>
+								<a href="https://wordpress.org/documentation/article/customizer/">
+									<?php esc_html_e( 'Documentation on Customizer' ); ?>
+								</a>
 							</p>
 						</div>
 					</div>
@@ -530,40 +604,20 @@ wp_print_scripts();
 							?>
 
 							<ul id="sub-accordion-panel-nav_menus" class="customize-pane-child accordion-sub-container control-panel-content accordion-section control-panel-nav_menus" style="display: none;">
-								<li class="panel-meta customize-info accordion-section">
-									<button class="customize-panel-back" type="button" tabindex="0">
-										<span class="screen-reader-text">
-											<?php esc_html_e( 'Back' ); ?>
-										</span>
-									</button>
-									<div class="accordion-section-title">
-										<span class="preview-notice">
-											<?php
-											printf(
-												/* translators: %s: Panel title. */
-												esc_html__( 'You are customizing %s' ),
-												'<strong class="panel-title">' . esc_html( $menus_panel->title ) . '</strong>'
-											);
-											?>
-										</span>
-										<button class="customize-help-toggle dashicons dashicons-editor-help" type="button" aria-expanded="false">
-											<span class="screen-reader-text">
-												<?php esc_html_e( 'Help' ); ?>
-											</span>
-										</button>
-									</div>
-									<div class="description customize-panel-description">
-										<?php echo wp_kses_post( $menus_panel->description ); ?></p>
-									</div>
-									<div class="customize-control-notifications-container" style="display:none;">
-										<ul></ul>
-									</div>
-								</li>
-								<li class="customize-control-title customize-section-title-nav_menus-heading">
-									<?php esc_html_e( $menus_panel->title ); ?>
-								</li>
 
 								<?php
+								$nav_menus_panel = new WP_Customize_Nav_Menus_Panel(
+									$wp_customize,
+									'nav_menus_panel_id',  // Unique ID
+									array(
+										'title'           => 'Menus',
+										'description'     => 'Manage your menus',
+										'priority'        => 100,
+										'active_callback' => '__return_true',
+									)
+								);
+								$nav_menus_panel->render_content();
+
 								// Each individual menu section (assigned-to-menu-location, etc.).
 								foreach ( $sections as $section ) {
 									if ( $section->panel === 'nav_menus' ) {
@@ -827,18 +881,24 @@ wp_print_scripts();
 							</li>
 							<li id="customize-control-add_menu-name" class="customize-control customize-control-nav_menu_name">
 								<label>
-									<span class="customize-control-title"><?php esc_html_e( 'Menu Name' ); ?></span>
+									<span class="customize-control-title">
+										<?php esc_html_e( 'Menu Name' ); ?>
+									</span>
 									<div class="customize-control-notifications-container" style="display: none;">
 										<ul></ul>
 									</div>
 									<input type="text" class="menu-name-field live-update-section-title" aria-describedby="add_menu-description">
 								</label>
-								<p id="add_menu-description"><?php esc_html_e( 'If your theme has multiple menus, giving them clear names will help you manage them.' ); ?></p>
+								<p id="add_menu-description">
+									<?php esc_html_e( 'If your theme has multiple menus, giving them clear names will help you manage them.' ); ?>
+								</p>
 							</li>
 							<li id="customize-control-add_menu-locations" class="customize-control customize-control-nav_menu_locations">
 								<ul class="menu-location-settings">
 									<li class="customize-control assigned-menu-locations-title">
-										<span class="customize-control-title"><?php esc_html_e( 'Menu Locations' ); ?></span>
+										<span class="customize-control-title">
+											<?php esc_html_e( 'Menu Locations' ); ?>
+										</span>
 										<div class="customize-control-notifications-container" style="display: none;">
 											<ul></ul>
 										</div>
@@ -1036,157 +1096,25 @@ wp_print_scripts();
 											foreach ( $menu_items as $menu_item ) {
 												$depth_map[ $menu_item->ID ] = get_menu_item_depth( $menu_items, $menu_item->ID );
 												?>
+
 												<li id="customize-control-nav_menu_item-<?php esc_attr_e( $menu_item->ID ); ?>"
 													class="customize-control customize-control-nav_menu_item menu-item menu-item-depth-<?php echo absint( $depth_map[ $menu_item->ID ] ); ?> menu-item-custom menu-item-edit-inactive move-left-disabled move-up-disabled move-right-disabled move-down-disabled"
 												>
-													<div class="menu-item-bar">
-														<details class="menu-item-handle">
-															<summary>
-																<span class="item-title" aria-hidden="true">
-																	<span class="menu-item-title">
-																		<?php esc_html_e( $menu_item->post_title ?: $menu_item->title ); ?>
-																	</span>
-																</span>
-																<span class="item-controls">
-																	<button type="button" class="button-link item-delete submitdelete deletion">
-																		<span class="screen-reader-text">
-																			<?php esc_html_e( 'Remove Menu Item:' ); ?>
-																			<?php esc_html_e( $menu_item->post_title ?: $menu_item->title ); ?>
-																			(<?php esc_html_e( $menu_item->type_label ); ?>)	
-																		</span>
-																	</button>
-																</span>
-																<div class="menu-item-reorder-nav">
-																	<button type="button" class="menus-move-up" tabindex="-1" aria-hidden="true">
-																		<?php esc_html_e( 'Move up' ); ?>
-																	</button>
-																	<button type="button" class="menus-move-down" tabindex="-1" aria-hidden="true">
-																		<?php esc_html_e( 'Move down' ); ?>
-																	</button>
-																	<button type="button" class="menus-move-left" tabindex="-1" aria-hidden="true">
-																		<?php esc_html_e( 'Move one level up' ); ?>
-																	</button>
-																	<button type="button" class="menus-move-right" tabindex="-1" aria-hidden="true">
-																		<?php esc_html_e( 'Move one level down' ); ?>
-																	</button>
-																</div>
-																<span class="item-type" aria-hidden="true">
-																	<?php esc_html_e( $menu_item->type_label ); ?>
-																</span>
-															</summary>
-															<div id="menu-item-settings-<?php esc_attr_e( $menu_item->ID ); ?>" class="menu-item-settings">
-																<div class="customize-control-notifications-container" style="display: none;">
-																	<ul></ul>
-																</div>
-																<p class="field-url description description-thin">
-																	<label for="edit-menu-item-url-<?php echo absint( $menu_item->ID ); ?>">
-																		<?php esc_html_e( 'URL' ); ?>
-																		<br>
-																		<input type="text" id="edit-menu-item-url-<?php echo absint( $menu_item->ID ); ?>"
-																			class="widefat code edit-menu-item-url"
-																			name="menu-item[<?php echo absint( $menu_item->ID ); ?>][menu-item-url]"
-																			value="<?php echo esc_url( $menu_item->url ); ?>"
-																		>
-																	</label>
-																</p>
-																<p class="description description-thin">
-																	<label for="edit-menu-item-title-<?php echo absint( $menu_item->ID ); ?>">
-																		<?php esc_html_e( 'Navigation Label' ); ?>
-																		<br>
-																		<input id="edit-menu-item-title-<?php echo absint( $menu_item->ID ); ?>"
-																			class="widefat edit-menu-item-title"
-																			name="menu-item-title"
-																			placeholder=""
-																		>
-																	</label>
-																</p>
-																<p class="field-link-target description description-thin">
-																	<label for="edit-menu-item-target-<?php echo absint( $menu_item->ID ); ?>">
-																		<input type="checkbox"
-																			id="edit-menu-item-target-<?php echo absint( $menu_item->ID ); ?>"
-																			name="menu-item[<?php echo absint( $menu_item->ID ); ?>][menu-item-target]"
-																			value="_blank" <?php checked( '_blank', $menu_item->target ); ?>
-																		>
-																		<?php esc_html_e( 'Link Target' ); ?>
-																	</label>
-																</p>
-																<p class="field-title-attribute field-attr-title description description-thin">
-																	<label for="edit-menu-item-title-<?php echo absint( $menu_item->ID ); ?>">
-																		<?php esc_html_e( 'Title Attribute' ); ?>
-																		<br>
-																		<input type="text" id="edit-menu-item-title-<?php echo (int) $menu_item->ID; ?>"
-																			class="widefat edit-menu-item-title"
-																			name="menu-item[<?php echo absint( $menu_item->ID ); ?>][menu-item-title]"
-																			value="<?php esc_html_e( $menu_item->post_title ?: $menu_item->title ); ?>"
-																		>
-																	</label>
-																</p>
-																<p class="field-css-classes description description-thin">
-																	<label for="edit-menu-item-classes-<?php echo absint( $menu_item->ID ); ?>">
-																		<?php esc_html_e( 'CSS Classes' ); ?>
-																		<br>
-																		<input type="text" id="edit-menu-item-classes-<?php echo absint( $menu_item->ID ); ?>"
-																			class="widefat code edit-menu-item-classes"
-																			name="menu-item-classes"
-																		>
-																	</label>
-																</p>
-																<p class="field-xfn description description-thin">
-																	<label for="edit-menu-item-xfn-<?php echo absint( $menu_item->ID ); ?>">
-																		<?php esc_html_e( 'Link Relationship (XFN)' ); ?>
-																		<br>
-																		<input type="text" id="edit-menu-item-xfn-<?php echo absint( $menu_item->ID ); ?>"
-																			class="widefat code edit-menu-item-xfn"
-																			name="menu-item-xfn"
-																		>
-																	</label>
-																</p>
-																<p class="field-description description description-thin">
-																	<label for="edit-menu-item-description-<?php echo absint( $menu_item->ID ); ?>">
-																		<?php esc_html_e( 'Description' ); ?>
-																		<br>
-																		<textarea id="edit-menu-item-description-<?php echo absint( $menu_item->ID ); ?>"
-																			class="widefat edit-menu-item-description"
-																			name="menu-item[<?php echo absint( $menu_item->ID ); ?>][menu-item-description]"
-																			rows="3"
-																		>
-																			<?php echo esc_textarea( $menu_item->post_content ); ?>
-																		</textarea>
-																	</label>
-																</p>
 
-																<?php
-																/**
-																 * Fires after the display of menu item custom fields.
-																 * 
-																 * @param string  $item_id   Menu item ID.
-																 * @param WP_Post $item      Menu item data object.
-																 * @param array   $args      Arguments from Walker_Nav_Menu_Edit.
-																 * @param int     $menu_id   Menu ID.
-																 */
-																do_action( 'wp_nav_menu_item_custom_fields', (string) $menu_item->ID, $menu_item, $depth_map[ $menu_item->ID ], (object) array(), $menu_id );
-																?>
+													<?php
+													$nav_menu_item_control = new WP_Customize_Nav_Menu_Item_Control(
+														$wp_customize,
+														'nav_menu_item[' . $menu_item->ID . ']',
+														array(
+															'label'    => $menu_item->post_title ?: $menu_item->title,
+															'section'  => 'nav_menu_items[' . $menu_id . ']',  // Menu section
+														)
+													);
+													$nav_menu_item_control->render_content();
+													?>
 
-																<button type="button" class="button-link button-link-delete item-delete submitdelete deletion">
-																	<?php esc_html_e( 'Remove' ); ?>
-																</button>
-																<span class="spinner"></span>
-															</div>
-															<!-- .menu-item-settings -->
-															<input type="hidden"
-																name="menu-item-db-id[<?php echo absint( $menu_item->ID ); ?>]"
-																class="menu-item-data-db-id"
-																value="<?php echo absint( $menu_item->ID ); ?>"
-															>
-															<input type="hidden"
-																name="menu-item-parent-id[<?php echo absint( $menu_item->ID ); ?>]"
-																class="menu-item-data-parent-id"
-																value="<?php echo absint( $menu_item->post_parent ); ?>"
-															>
-															<ul class="menu-item-transport"></ul>
-														</details>
-													</div>
 												</li>
+
 												<?php
 											}
 										}
@@ -1223,7 +1151,7 @@ wp_print_scripts();
 													</span>
 												</button>
 											</div>
-											<p class="screen-reader-text" id="reorder-items-desc-19">
+											<p class="screen-reader-text" id="reorder-items-desc-<?php esc_attr_e( $menu_id ); ?>">
 												<?php esc_html_e( 'When in reorder mode, additional controls to reorder menu items will be available in the items list above.' ); ?>
 											</p>
 										</li>
@@ -1282,8 +1210,8 @@ wp_print_scripts();
 												<ul></ul>
 											</div>
 											<span class="customize-inside-control-row">
-												<input id="customize-nav-menu-auto-add-control-22" type="checkbox" class="auto_add">
-												<label for="customize-nav-menu-auto-add-control-22">
+												<input id="customize-nav-menu-auto-add-control-<?php esc_attr_e( $menu_id ); ?>" type="checkbox" class="auto_add">
+												<label for="customize-nav-menu-auto-add-control-<?php esc_attr_e( $menu_id ); ?>">
 													<?php esc_html_e( 'Automatically add new top-level pages to this menu' ); ?>
 												</label>
 											</span>
@@ -1304,56 +1232,31 @@ wp_print_scripts();
             
 									// Menu locations
 									} elseif ( 'nav_menu_location' === $field_type ) {
-										$value_hidden_class    = $field_value ? ' hidden' : '';
-										$no_value_hidden_class = empty( $field_value ) ? ' hidden' : '';
 										?>
+
 										<li id="customize-control-<?php esc_attr_e( $field_id ); ?>"
 											class="customize-control customize-control-<?php esc_attr_e( $field_type ); ?>"
 										>
 											<div class="customize-control-inner">
+
 												<?php
-												if ( ! empty( $field_label ) ) {
-													?>
-													<label class="customize-control-title" for="<?php esc_attr_e( $field_id ); ?>">
-														<?php esc_html_e( $field_label ); ?>
-													</label>
-													<?php
-												}
+												$choices = wp_list_pluck( wp_get_nav_menus(), 'name', 'term_id' );
+												$choices = array( 0 => '— Select —' ) + $choices;  // Format for select
+
+												$nav_menu_location_control = new WP_Customize_Nav_Menu_Location_Control(
+													$wp_customize,  // WP_Customize_Manager instance
+													$field_id,  // Unique ID (setting ID)
+													array(
+														'label'       => $field_label,
+														'description' => $description,
+														'section'     => 'menu_locations',  // Must exist
+														'location_id' => $field_id,  // Theme location slug from register_nav_menus()
+														'choices'     => $choices,  // Menu options
+													)
+												);
+												$nav_menu_location_control->render_content();
 												?>
-												<select id="<?php esc_attr_e( $field_id ); ?>" data-customize-setting-link="<?php esc_attr_e( $field_id ); ?>">
-													<option value="0">— Select —</option>
-													<?php
-													foreach ( $menus_index as $menu ) {
-														?>
-														<option value="<?php esc_attr_e( $menu->term_id ); ?>" <?php selected( $field_value, $menu->term_id ); ?>>
-															<?php esc_html_e( $menu->name ); ?>
-														</option>
-														<?php
-													}
-													?>
-												</select>
-												<button type="button"
-													class="button-link create-menu<?php echo $value_hidden_class; ?>"
-													data-location-id="<?php esc_attr_e( substr( $field_id, strlen( 'nav_menu_locations[' ), -1 ) ); ?>"
-													aria-label="<?php esc_attr_e( 'Create a menu for this location' ); ?>"
-												>
-													<?php esc_html_e( '+ Create New Menu' ); ?>
-												</button>
-												<button type="button"
-													class="button-link edit-menu<?php echo $no_value_hidden_class; ?>"
-													aria-label="<?php esc_attr_e( 'Edit selected menu' ); ?>"
-												>
-													<?php esc_html_e( 'Edit Menu' ); ?>
-												</button>
-												<?php
-												if ( ! empty( $description ) ) {
-													?>
-													<div class="description customize-control-description">
-														<?php echo wp_kses_post( $description ); ?>
-													</div>
-													<?php
-												}
-												?>
+
 											</div>
 										</li>
 										<?php
@@ -1654,6 +1557,12 @@ wp_print_scripts();
 			// Hidden field placeholder to align with the idea that this sidebar will
 			// eventually submit changes (stage 2+).
 			?>
+			<input type="hidden" name="customize_changeset_uuid"
+				value="<?php esc_attr_e( $wp_customize->changeset_uuid() ); ?>"
+			>
+			<input type="hidden" name="nonce"
+				value="<?php esc_attr_e( wp_create_nonce( 'save-customize_' . $wp_customize->get_stylesheet() ) ); ?>"
+			>
 			<input type="hidden" name="customize_form_stage" value="php-first-paint">
 		</form><!-- #customize-controls -->
 
