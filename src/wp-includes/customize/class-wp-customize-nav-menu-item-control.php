@@ -50,81 +50,114 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 	}
 
 	/**
-	 * Don't render the control's content - it's rendered with a JS template.
+	 * Render the control's content via PHP.
 	 *
-	 * @since 4.3.0
+	 * @since CP-2.7.0
 	 */
-	public function render_content() {}
-
-	/**
-	 * JS/Underscore template for the control UI.
-	 *
-	 * @since 4.3.0
-	 */
-	public function content_template() {
+	public function render_content() {
+		$item     = $this->value();
+		$title    = $item['title'] ?: $item['original_title'];
+		$no_title = $title ? '' : 'no-title';
 		?>
+
 		<div class="menu-item-bar">
 			<details class="menu-item-handle">
 
 				<summary>
 					<span class="item-title" aria-hidden="true">
-						<span class="menu-item-title<# if ( ! data.title && ! data.original_title ) { #> no-title<# } #>">{{ data.title || data.original_title || wp.customize.Menus.data.l10n.untitled }}</span>
+						<span class="menu-item-title<?php echo $no_title; ?>">
+							<?php esc_html_e( $title ); ?>
+						</span>
 					</span>
 					<span class="item-controls">
-						<button type="button" class="button-link item-delete submitdelete deletion"><span class="screen-reader-text">
-						<?php
-							/* translators: 1: Title of a menu item, 2: Type of a menu item. */
-							printf( __( 'Remove Menu Item: %1$s (%2$s)' ), '{{ data.title || wp.customize.Menus.data.l10n.untitled }}', '{{ data.item_type_label }}' );
-						?>
-						</span></button>
+						<button type="button" class="button-link item-delete submitdelete deletion">
+							<span class="screen-reader-text">
+								<?php
+									/* translators: 1: Title of a menu item, 2: Type of a menu item. */
+									printf( __( 'Remove Menu Item: %1$s (%2$s)' ), esc_html__( $title ?: 'Untitled' ), esc_html__( $item['type_label'] ) );
+								?>
+							</span>
+						</button>
 					</span>
-					<span class="item-type" aria-hidden="true">{{ data.item_type_label }}</span>
+					
+					<div class="menu-item-reorder-nav">
+						<button type="button" class="menus-move-up" tabindex="-1" aria-hidden="true">
+							<?php esc_html_e( 'Move up' ); ?>
+						</button>
+						<button type="button" class="menus-move-down" tabindex="-1" aria-hidden="true">
+							<?php esc_html_e( 'Move down' ); ?>
+						</button>
+						<button type="button" class="menus-move-left" tabindex="-1" aria-hidden="true">
+							<?php esc_html_e( 'Move one level up' ); ?>
+						</button>
+						<button type="button" class="menus-move-right" tabindex="-1" aria-hidden="true">
+							<?php esc_html_e( 'Move one level down' ); ?>
+						</button>
+					</div>
+
+					<span class="item-type" aria-hidden="true">
+						<?php esc_html_e( $item['type_label'] ); ?>
+					</span>
 				</summary>
 
-				<div class="menu-item-settings" id="menu-item-settings-{{ data.menu_item_id }}">
-					<# if ( 'custom' === data.item_type ) { #>
-					<p class="field-url description description-thin">
-						<label for="edit-menu-item-url-{{ data.menu_item_id }}">
-							<?php _e( 'URL' ); ?><br>
-							<input class="widefat code edit-menu-item-url" type="text" id="edit-menu-item-url-{{ data.menu_item_id }}" name="menu-item-url">
-						</label>
-					</p>
-				<# } #>
+				<div class="menu-item-settings" id="menu-item-settings-<?php esc_attr_e( $item['object_id'] ); ?>">
+
+					<?php
+					if ( 'custom' === $item['type'] ) {
+						?>
+						<p class="field-url description description-thin">
+							<label for="edit-menu-item-url-<?php esc_attr_e( $item['object_id'] ); ?>">
+								<?php esc_html_e( 'URL' ); ?><br>
+								<input class="widefat code edit-menu-item-url"
+									type="text"
+									id="edit-menu-item-url-<?php esc_attr_e( $item['object_id'] ); ?>"
+									name="menu-item-url"
+								>
+							</label>
+						</p>
+						<?php
+					}
+					?>
+
 					<p class="description description-thin">
-						<label for="edit-menu-item-title-{{ data.menu_item_id }}">
-							<?php _e( 'Navigation Label' ); ?><br>
-							<input type="text" id="edit-menu-item-title-{{ data.menu_item_id }}" placeholder="{{ data.original_title }}" class="widefat edit-menu-item-title" name="menu-item-title">
+						<label for="edit-menu-item-title-<?php esc_attr_e( $item['object_id'] ); ?>">
+							<?php esc_html_e( 'Navigation Label' ); ?><br>
+							<input type="text" id="edit-menu-item-title-<?php esc_attr_e( $item['object_id'] ); ?>" placeholder="<?php esc_attr_e( $item['original_title'] ); ?>" class="widefat edit-menu-item-title" name="menu-item-title">
 						</label>
 					</p>
 					<p class="field-link-target description description-thin">
-						<label for="edit-menu-item-target-{{ data.menu_item_id }}">
-							<input type="checkbox" id="edit-menu-item-target-{{ data.menu_item_id }}" class="edit-menu-item-target" value="_blank" name="menu-item-target">
-							<?php _e( 'Open link in a new tab' ); ?>
+						<label for="edit-menu-item-target-<?php esc_attr_e( $item['object_id'] ); ?>">
+							<input type="checkbox" id="edit-menu-item-target-<?php esc_attr_e( $item['object_id'] ); ?>" class="edit-menu-item-target" value="_blank" name="menu-item-target">
+							<?php esc_html_e( 'Open link in a new tab' ); ?>
 						</label>
 					</p>
 					<p class="field-title-attribute field-attr-title description description-thin">
-						<label for="edit-menu-item-attr-title-{{ data.menu_item_id }}">
-							<?php _e( 'Title Attribute' ); ?><br>
-							<input type="text" id="edit-menu-item-attr-title-{{ data.menu_item_id }}" class="widefat edit-menu-item-attr-title" name="menu-item-attr-title">
+						<label for="edit-menu-item-attr-title-<?php esc_attr_e( $item['object_id'] ); ?>">
+							<?php esc_html_e( 'Title Attribute' ); ?><br>
+							<input type="text" id="edit-menu-item-attr-title-<?php esc_attr_e( $item['object_id'] ); ?>" class="widefat edit-menu-item-attr-title" name="menu-item-attr-title">
 						</label>
 					</p>
 					<p class="field-css-classes description description-thin">
-						<label for="edit-menu-item-classes-{{ data.menu_item_id }}">
-							<?php _e( 'CSS Classes' ); ?><br>
-							<input type="text" id="edit-menu-item-classes-{{ data.menu_item_id }}" class="widefat code edit-menu-item-classes" name="menu-item-classes">
+						<label for="edit-menu-item-classes-<?php esc_attr_e( $item['object_id'] ); ?>">
+							<?php esc_html_e( 'CSS Classes' ); ?><br>
+							<input type="text" id="edit-menu-item-classes-<?php esc_attr_e( $item['object_id'] ); ?>" class="widefat code edit-menu-item-classes" name="menu-item-classes">
 						</label>
 					</p>
 					<p class="field-xfn description description-thin">
-						<label for="edit-menu-item-xfn-{{ data.menu_item_id }}">
-							<?php _e( 'Link Relationship (XFN)' ); ?><br>
-							<input type="text" id="edit-menu-item-xfn-{{ data.menu_item_id }}" class="widefat code edit-menu-item-xfn" name="menu-item-xfn">
+						<label for="edit-menu-item-xfn-<?php esc_attr_e( $item['object_id'] ); ?>">
+							<?php esc_html_e( 'Link Relationship (XFN)' ); ?><br>
+							<input type="text" id="edit-menu-item-xfn-<?php esc_attr_e( $item['object_id'] ); ?>" class="widefat code edit-menu-item-xfn" name="menu-item-xfn">
 						</label>
 					</p>
 					<p class="field-description description description-thin">
-						<label for="edit-menu-item-description-{{ data.menu_item_id }}">
-							<?php _e( 'Description' ); ?><br>
-							<textarea id="edit-menu-item-description-{{ data.menu_item_id }}" class="widefat edit-menu-item-description" rows="3" cols="20" name="menu-item-description">{{ data.description }}</textarea>
-							<span class="description"><?php _e( 'The description will be displayed in the menu if the active theme supports it.' ); ?></span>
+						<label for="edit-menu-item-description-<?php esc_attr_e( $item['object_id'] ); ?>">
+							<?php esc_html_e( 'Description' ); ?><br>
+							<textarea id="edit-menu-item-description-<?php esc_attr_e( $item['object_id'] ); ?>" class="widefat edit-menu-item-description" rows="3" cols="20" name="menu-item-description">
+								<?php echo $item['description']; ?>
+							</textarea>
+							<span class="description">
+								<?php esc_html_e( 'The description will be displayed in the menu if the active theme supports it.' ); ?>
+							</span>
 						</label>
 					</p>
 
@@ -140,27 +173,44 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 					?>
 
 					<div class="menu-item-actions description-thin submitbox">
-						<# if ( ( 'post_type' === data.item_type || 'taxonomy' === data.item_type ) && '' !== data.original_title ) { #>
-						<p class="link-to-original">
-							<?php
-								/* translators: Nav menu item original title. %s: Original title. */
-								printf( __( 'Original: %s' ), '<a class="original-link" href="{{ data.url }}">{{ data.original_title }}</a>' );
-							?>
-						</p>
-						<# } #>
 
-						<button type="button" class="button-link button-link-delete item-delete submitdelete deletion"><?php _e( 'Remove' ); ?></button>
+						<?php
+						if ( ( 'post_type' === $item['type'] || 'taxonomy' === $item['type'] ) && '' !== $item['original_title'] ) {
+							?>
+
+							<p class="link-to-original">
+								<?php
+									/* translators: Nav menu item original title. %s: Original title. */
+									printf( __( 'Original: %s' ), '<a class="original-link" href="' . esc_url( $item['url'] ) . '">' . esc_html__( $item['original_title'] ) . '</a>' );
+								?>
+							</p>
+
+							<?php
+						}
+						?>
+
+						<button type="button" class="button-link button-link-delete item-delete submitdelete deletion">
+							<?php esc_html_e( 'Remove' ); ?>
+						</button>
 						<span class="spinner"></span>
 					</div>
-					<input type="hidden" name="menu-item-db-id[{{ data.menu_item_id }}]" class="menu-item-data-db-id" value="{{ data.menu_item_id }}">
-					<input type="hidden" name="menu-item-parent-id[{{ data.menu_item_id }}]" class="menu-item-data-parent-id" value="{{ data.parent }}">
+					<input type="hidden" name="menu-item-db-id[<?php esc_attr_e( $item['object_id'] ); ?>]" class="menu-item-data-db-id" value="<?php esc_attr_e( $item['object_id'] ); ?>">
+					<input type="hidden" name="menu-item-parent-id[<?php esc_attr_e( $item['object_id'] ); ?>]" class="menu-item-data-parent-id" value="<?php esc_attr_e( $item['menu_item_parent'] ); ?>">
 				</div><!-- .menu-item-settings-->
 				<ul class="menu-item-transport"></ul>
 
 			</details>
 		</div>
+
 		<?php
 	}
+
+	/**
+	 * Redundant JS/Underscore template for the control UI.
+	 *
+	 * @since 4.3.0
+	 */
+	public function content_template() {}
 
 	/**
 	 * Return parameters for this control.
