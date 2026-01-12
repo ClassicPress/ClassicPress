@@ -1465,7 +1465,7 @@ wp_print_scripts();
 									<?php
 								}
 								?>
-								<li id="customize-control-sidebars_widgets-sidebar1"
+								<li id="customize-control-sidebars_widgets-<?php esc_attr_e( $section->id ); ?>"
 									class="customize-control customize-control-sidebar_widgets no-drag"
 								>
 									<div class="customize-control-notifications-container" style="display: none;">
@@ -1474,11 +1474,15 @@ wp_print_scripts();
 									<button type="button" class="button add-new-widget" aria-expanded="false" aria-controls="widgets-left">
 										<?php esc_html_e( 'Add a Widget' ); ?>
 									</button>
-									<button type="button" class="button-link reorder-toggle" aria-label="Reorder widgets" aria-describedby="reorder-widgets-desc-sidebars_widgets-sidebar1">
+									<button type="button"
+										class="button-link reorder-toggle"
+										aria-label="<?php esc_attr_e( 'Reorder widgets' ); ?>"
+										aria-describedby="reorder-widgets-desc-sidebars_widgets-<?php esc_attr_e( $section->id ); ?>"
+									>
 										<span class="reorder"><?php esc_html_e( 'Reorder' ); ?></span>
 										<span class="reorder-done"><?php esc_html_e( 'Done' ); ?></span>
 									</button>
-									<p class="screen-reader-text" id="reorder-widgets-desc-sidebars_widgets-sidebar1">
+									<p class="screen-reader-text" id="reorder-widgets-desc-sidebars_widgets-<?php esc_attr_e( $section->id ); ?>">
 										<?php esc_html_e( 'When in reorder mode, additional controls to reorder widgets will be available in the widgets list above.' ); ?>
 									</p>
 								</li>
