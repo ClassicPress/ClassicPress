@@ -199,31 +199,6 @@ foreach ( $wp_registered_widgets as $id => $widget ) {
 ksort( $available_widgets, SORT_NATURAL | SORT_FLAG_CASE );
 
 /**
- * Menus
- */
-$nav_menus = $wp_customize->nav_menus;
-$nav_menu_item_types = $nav_menus->available_item_types();
-
-// Reorder to ensure Pages first, then Posts, then taxonomies.
-$ordered_types = array();
-foreach ( $nav_menu_item_types as $type ) {
-	$key = $type['type'] . ':' . $type['object'];
-
-	// Canonical order: Pages → Posts → Categories → Tags → CPTs → other taxonomies
-	$priority = match( $key ) {
-		'post_type:page'    => 0,
-		'post_type:post'    => 10,
-		'taxonomy:category' => 20,
-		'taxonomy:post_tag' => 30,
-		default             => 999,
-	};
-
-	$ordered_types[ $priority . '|' . $key ] = $type;
-}
-ksort( $ordered_types ); // Sort by priority
-$nav_menu_item_types = array_values( $ordered_types );
-
-/**
  * Fires when Customizer controls are initialized, before scripts are enqueued.
  *
  * @since 3.4.0
@@ -1704,148 +1679,14 @@ wp_print_scripts();
 			</div><!-- #available-widgets -->
 		</div><!-- #widgets-left -->
 
-		<ul id="available-menu-items" class="accordion-container">
-			<div class="customize-section-title">
-				<button type="button" class="customize-section-back" tabindex="-1">
-					<span class="screen-reader-text">
-						<?php esc_html_e( 'Back' ); ?>
-					</span>
-				</button>
-				<h3>
-					<span class="customize-action">
-						<?php
-						printf(
-							/* translators: &#9656; is the unicode right-pointing triangle. %s: Section title in the Customizer. */
-							__( 'Customizing &#9656; %s' ),
-							__( 'Menus' )
-						);
-						?>
-					</span>
-					<?php esc_html_e( 'Add Menu Items' ); ?>
-				</h3>
-			</div>
+		<?php
+		// Get the nav menus component (WP_Customize_Nav_Menus).
+		$nav_menus = $wp_customize->nav_menus;
+		if ( $nav_menus instanceof WP_Customize_Nav_Menus ) {
+			$nav_menus->available_items_template();
+		}
+		?>
 
-			<li id="available-menu-items-search" class="accordion-section cannot-expand">
-				<div class="accordion-section-title">
-					<label class="screen-reader-text" for="menu-items-search">
-						<?php esc_html_e( 'Search Menu Items' ); ?>
-					</label>
-					<input type="text" id="menu-items-search" placeholder="Search menu items…" aria-describedby="menu-items-search-desc">
-					<p class="screen-reader-text" id="menu-items-search-desc">
-						<?php esc_html_e( 'The search results will be updated as you type.' ); ?>
-					</p>
-					<span class="spinner"></span>
-				</div>
-				<div class="search-icon" aria-hidden="true"></div>
-				<button type="button" class="clear-results">
-					<span class="screen-reader-text">
-						<?php esc_html_e( 'Clear Results' ); ?>
-					</span>
-				</button>
-				<ul class="accordion-section-content available-menu-items-list" data-type="search"></ul>
-			</li>
-
-			<li id="new-custom-menu-item" class="accordion-section">
-				<details>
-					<summary class="accordion-section-title">
-						<?php esc_html_e( 'Custom Links' ); ?>
-					</summary>
-					<div class="accordion-section-content customlinkdiv" style="max-height: 132px;">
-						<input type="hidden" value="custom" id="custom-menu-item-type" name="menu-item[-1][menu-item-type]">
-						<p id="menu-item-url-wrap" class="wp-clearfix">
-							<label class="howto" for="custom-menu-item-url">
-								<?php esc_html_e( 'URL' ); ?>
-							</label>
-							<input id="custom-menu-item-url" name="menu-item[-1][menu-item-url]" type="text" class="code menu-item-textbox" placeholder="https://">
-						</p>
-						<p id="menu-item-name-wrap" class="wp-clearfix">
-							<label class="howto" for="custom-menu-item-name">
-								<?php esc_html_e( 'Link Text' ); ?>
-							</label>
-							<input id="custom-menu-item-name" name="menu-item[-1][menu-item-title]" type="text" class="regular-text menu-item-textbox">
-						</p>
-						<p class="button-controls">
-							<span class="add-to-menu">
-								<input type="submit" class="button submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu' ); ?>" name="add-custom-menu-item" id="custom-menu-item-submit">
-								<span class="spinner"></span>
-							</span>
-						</p>
-					</div>
-				</details>
-			</li>
-
-			<?php
-			foreach ( $nav_menu_item_types as $item_type ) {
-				$items = $nav_menus->load_available_items_query( $item_type['type'], $item_type['object'], 0, '' );
-				if ( empty( $items ) ) {
-					continue;
-				}
-				?>
-				<li id="available-menu-items-<?php esc_attr_e( $item_type['type'] . '-' . $item_type['object'] ); ?>" class="accordion-section">
-					<details>
-						<summary class="accordion-section-title">
-							<?php esc_html_e( $item_type['type_label'] ); ?>
-						</summary>
-						<div class="accordion-section-content" style="max-height: 132px;">
-							<div class="new-content-item">
-								<label for="create-item-input-<?php esc_attr_e( $item_type['object'] ); ?>" class="screen-reader-text">
-									<?php esc_html_e( 'Add New' ); ?>
-									<?php esc_html_e( $item_type['type_label'] ); ?>
-								</label>
-								<input type="text"
-									id="create-item-input-<?php esc_attr_e( $item_type['object'] ); ?>"
-									class="create-item-input"
-									placeholder="<?php esc_attr_e( 'Add New' ); ?> <?php esc_attr_e( $item_type['type_label'] ); ?>"
-								>
-								<button type="button" class="button add-content">
-									<?php esc_html_e( 'Add' ); ?>
-								</button>
-							</div>
-							<ul class="available-menu-items-list"
-								data-type="<?php esc_attr_e( $item_type['type'] ); ?>"
-								data-object="<?php esc_attr_e( $item_type['object'] ); ?>"
-								data-type_label="<?php esc_attr_e( $item_type['type_label'] ); ?>"
-								style="max-height: 72px;"
-							>
-								<?php foreach ( $items as $item ) {						
-									?>
-									<li id="<?php esc_attr_e( $item['id'] ); ?>"
-										class="menu-item-tpl"
-										data-menu-item-id="<?php esc_attr_e( $item['id'] ); ?>"
-									>
-										<div class="menu-item-bar">
-											<div class="menu-item-handle">
-												<button type="button" class="button-link item-add">
-													<span class="screen-reader-text">
-														<?php esc_html_e( 'Add to menu:' ); ?>
-														<?php esc_html_e( $item['title'] ); ?>
-														<?php _e( '(' . $item['type_label'] . ')' ); ?>
-													</span>
-												</button>
-												<span class="item-split">
-													<span class="item-title" aria-hidden="true">
-														<span class="menu-item-title">
-															<?php esc_html_e( $item['title'] ); ?>
-														</span>
-													</span>
-													<span class="item-type" aria-hidden="true">
-														<?php esc_html_e( $item['type_label'] ); ?>
-													</span>
-												</span>
-											</div>
-										</div>
-									</li>
-									<?php
-								}
-								?>
-							</ul>
-						</div>
-					</details>
-				</li>
-				<?php
-			}
-			?>
-		</ul><!-- #available-menu-items -->
 	</div>
 
 	<div id="customize-preview" class="wp-full-overlay-main iframe-ready">
