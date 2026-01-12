@@ -1272,11 +1272,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					mediaArea = widget.querySelector( '.media_audio' );
 
 				if ( mediaArea ) {
-					mediaArea.innerHTML = ''; // Clear existing audio
-
-					// Get URL from any data-property field
 					url = widget.querySelector( '[data-property="url"]' );
 					if ( url && url.value ) {
+						mediaArea.innerHTML = ''; // Clear existing audio
+
 						audio = document.createElement( 'audio' );
 						audio.className = 'wp_audio_shortcode';
 						audio.controls = true;
