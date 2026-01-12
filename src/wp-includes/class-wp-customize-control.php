@@ -771,17 +771,6 @@ require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-item-cont
 require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-location-control.php';
 
 /**
- * WP_Customize_Nav_Menu_Name_Control class.
- *
- * As this file is deprecated, it will trigger a deprecation notice if instantiated. In a subsequent
- * release, the require_once here will be removed and _deprecated_file() will be called if file is
- * required at all.
- *
- * @deprecated 4.9.0 This file is no longer used due to new menu creation UX.
- */
-require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-name-control.php';
-
-/**
  * WP_Customize_Date_Time_Control class.
  */
 require_once ABSPATH . WPINC . '/customize/class-wp-customize-date-time-control.php';
