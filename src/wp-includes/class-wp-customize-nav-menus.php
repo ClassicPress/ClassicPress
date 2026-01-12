@@ -1191,12 +1191,14 @@ final class WP_Customize_Nav_Menus {
 					<span class="spinner"></span>
 				</div>
 				<div class="search-icon" aria-hidden="true"></div>
-				<button type="button" class="clear-results"><span class="screen-reader-text">
-					<?php
-					/* translators: Hidden accessibility text. */
-					esc_html_e( 'Clear Results' );
-					?>
-				</span></button>
+				<button type="button" class="clear-results">
+					<span class="screen-reader-text">
+						<?php
+						/* translators: Hidden accessibility text. */
+						esc_html_e( 'Clear Results' );
+						?>
+					</span>
+				</button>
 				<ul class="accordion-section-content available-menu-items-list" data-type="search"></ul>
 			</li>
 
@@ -1206,6 +1208,7 @@ final class WP_Customize_Nav_Menus {
 
 			// Then ensure the following order: Pages → Posts → Categories → Tags → CPTs → other taxonomies.
 			$nav_menu_item_types = $this->available_item_types();
+
 			$ordered_types = array();
 			foreach ( $nav_menu_item_types as $type ) {
 				$key = $type['type'] . ':' . $type['object'];
@@ -1214,11 +1217,11 @@ final class WP_Customize_Nav_Menus {
 					'post_type:post'    => 10,
 					'taxonomy:category' => 20,
 					'taxonomy:post_tag' => 30,
-					default             => 999,
+					default             => 50,
 				};
 				$ordered_types[ $priority . '|' . $key ] = $type;
 			}
-			ksort( $ordered_types ); // Sort by priority
+			ksort( $ordered_types ); // Sort by ascending priority
 			$nav_menu_item_types = array_values( $ordered_types );
 
 			// Containers and items for per-post-type item browsing.
@@ -1263,7 +1266,7 @@ final class WP_Customize_Nav_Menus {
 							<ul class="available-menu-items-list"
 								data-type="<?php esc_attr_e( $available_item_type['type'] ); ?>"
 								data-object="<?php esc_attr_e( $available_item_type['object'] ); ?>"
-								data-type_label="<?php echo esc_attr( isset( $available_item_type['type_label'] ) ? $available_item_type['type_label'] : $available_item_type['type'] ); ?>"
+								data-type_label="<?php esc_attr_e( isset( $available_item_type['type_label'] ) ? $available_item_type['type_label'] : $available_item_type['type'] ); ?>"
 								style="max-height: 72px;"
 							>
 								<?php foreach ( $items as $item ) {						
