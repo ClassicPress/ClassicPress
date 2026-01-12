@@ -658,7 +658,11 @@ final class WP_Customize_Nav_Menus {
 		// Create a panel for Menus.
 		$description = '<p>' . __( 'This panel is used for managing navigation menus for content you have already published on your site. You can create menus and add items for existing content such as pages, posts, categories, tags, formats, or custom links.' ) . '</p>';
 		if ( current_theme_supports( 'widgets' ) ) {
-			$description .= '<p>' . __( 'Menus can be displayed in locations defined by your theme or in <a href="#">widget areas</a> by adding a &#8220;Navigation Menu&#8221; widget.' ) . '</p>';
+			$description .= '<p>' . sprintf(
+				/* translators: %s: URL to the Widgets panel of the Customizer. */
+				__( 'Menus can be displayed in locations defined by your theme or in <a href="%s">widget areas</a> by adding a &#8220;Navigation Menu&#8221; widget.' ),
+				'customize.php#sub-accordion-panel-widgets'
+			) . '</p>';
 		} else {
 			$description .= '<p>' . __( 'Menus can be displayed in locations defined by your theme.' ) . '</p>';
 		}
@@ -693,7 +697,11 @@ final class WP_Customize_Nav_Menus {
 
 		if ( current_theme_supports( 'widgets' ) ) {
 			/* translators: URL to the Widgets panel of the Customizer. */
-			$description .= '<p>' . __( 'If your theme has widget areas, you can also add menus there. Visit the <a href="#">Widgets panel</a> and add a &#8220;Navigation Menu widget&#8221; to display a menu in a sidebar or footer.' ) . '</p>';
+			$description .= '<p>' . sprintf(
+				/* translators: %s: URL to the Widgets panel of the Customizer. */
+				__( 'Menus can be displayed in locations defined by your theme or in <a href="%s">widget areas</a> by adding a &#8220;Navigation Menu&#8221; widget.' ),
+				'customize.php#sub-accordion-panel-widgets'
+			) . '</p>';
 		}
 
 		$this->manager->add_section(
@@ -1151,7 +1159,7 @@ final class WP_Customize_Nav_Menus {
 					<span class="screen-reader-text">
 						<?php
 						/* translators: Hidden accessibility text. */
-						_e( 'Back' );
+						esc_html_e( 'Back' );
 						?>
 					</span>
 				</button>
@@ -1162,7 +1170,7 @@ final class WP_Customize_Nav_Menus {
 							printf( __( 'Customizing &#9656; %s' ), esc_html( $this->manager->get_panel( 'nav_menus' )->title ) );
 						?>
 					</span>
-					<?php _e( 'Add Menu Items' ); ?>
+					<?php esc_html_e( 'Add Menu Items' ); ?>
 				</h3>
 			</div>
 			<li id="available-menu-items-search" class="accordion-section cannot-expand">
@@ -1170,14 +1178,14 @@ final class WP_Customize_Nav_Menus {
 					<label class="screen-reader-text" for="menu-items-search">
 						<?php
 						/* translators: Hidden accessibility text. */
-						_e( 'Search Menu Items' );
+						esc_html_e( 'Search Menu Items' );
 						?>
 					</label>
 					<input type="text" id="menu-items-search" placeholder="<?php esc_attr_e( 'Search menu items&hellip;' ); ?>" aria-describedby="menu-items-search-desc">
 					<p class="screen-reader-text" id="menu-items-search-desc">
 						<?php
 						/* translators: Hidden accessibility text. */
-						_e( 'The search results will be updated as you type.' );
+						esc_html_e( 'The search results will be updated as you type.' );
 						?>
 					</p>
 					<span class="spinner"></span>
@@ -1186,72 +1194,117 @@ final class WP_Customize_Nav_Menus {
 				<button type="button" class="clear-results"><span class="screen-reader-text">
 					<?php
 					/* translators: Hidden accessibility text. */
-					_e( 'Clear Results' );
+					esc_html_e( 'Clear Results' );
 					?>
 				</span></button>
 				<ul class="accordion-section-content available-menu-items-list" data-type="search"></ul>
 			</li>
+
 			<?php
-
-			// Ensure the page post type comes first in the list.
-			$item_types     = $this->available_item_types();
-			$page_item_type = null;
-			foreach ( $item_types as $i => $item_type ) {
-				if ( isset( $item_type['object'] ) && 'page' === $item_type['object'] ) {
-					$page_item_type = $item_type;
-					unset( $item_types[ $i ] );
-				}
-			}
-
+			// Custom Links go first in the available items menu.
 			$this->print_custom_links_available_menu_item();
-			if ( $page_item_type ) {
-				$this->print_post_type_container( $page_item_type );
+
+			// Then ensure the following order: Pages → Posts → Categories → Tags → CPTs → other taxonomies.
+			$nav_menu_item_types = $this->available_item_types();
+			$ordered_types = array();
+			foreach ( $nav_menu_item_types as $type ) {
+				$key = $type['type'] . ':' . $type['object'];
+				$priority = match( $key ) {
+					'post_type:page'    => 0,
+					'post_type:post'    => 10,
+					'taxonomy:category' => 20,
+					'taxonomy:post_tag' => 30,
+					default             => 999,
+				};
+				$ordered_types[ $priority . '|' . $key ] = $type;
 			}
-			// Containers for per-post-type item browsing; items are added with JS.
-			foreach ( $item_types as $item_type ) {
-				$this->print_post_type_container( $item_type );
+			ksort( $ordered_types ); // Sort by priority
+			$nav_menu_item_types = array_values( $ordered_types );
+
+			// Containers and items for per-post-type item browsing.
+			foreach ( $nav_menu_item_types as $available_item_type ) {
+				$items = $this->load_available_items_query( $available_item_type['type'], $available_item_type['object'], 0, '' );
+				if ( empty( $items ) ) {
+					continue;
+				}
+				?>
+				<li id="available-menu-items-<?php esc_attr_e( $available_item_type['type'] . '-' . $available_item_type['object'] ); ?>" class="accordion-section">
+					<details>
+						<summary class="accordion-section-title">
+							<?php esc_html_e( $available_item_type['type_label'] ); ?>
+						</summary>
+						<div class="accordion-section-content" style="max-height: 132px;">
+							
+							<?php
+							if ( 'post_type' === $available_item_type['type'] ) {
+								$post_type_obj = get_post_type_object( $available_item_type['object'] );
+								if ( current_user_can( $post_type_obj->cap->create_posts ) && current_user_can( $post_type_obj->cap->publish_posts ) ) {
+									?>
+					
+									<div class="new-content-item">
+										<label for="create-item-input-<?php esc_attr_e( $available_item_type['object'] ); ?>" class="screen-reader-text">
+											<?php esc_html_e( $post_type_obj->labels->add_new_item ); ?>
+										</label>
+										<input type="text"
+											id="create-item-input-<?php esc_attr_e( $available_item_type['object'] ); ?>"
+											class="create-item-input"
+											placeholder="<?php echo esc_attr( $post_type_obj->labels->add_new_item ); ?>"
+										>
+										<button type="button" class="button add-content">
+											<?php esc_html_e( 'Add' ); ?>
+										</button>
+									</div>
+
+									<?php
+								}
+							}
+							?>
+
+							<ul class="available-menu-items-list"
+								data-type="<?php esc_attr_e( $available_item_type['type'] ); ?>"
+								data-object="<?php esc_attr_e( $available_item_type['object'] ); ?>"
+								data-type_label="<?php echo esc_attr( isset( $available_item_type['type_label'] ) ? $available_item_type['type_label'] : $available_item_type['type'] ); ?>"
+								style="max-height: 72px;"
+							>
+								<?php foreach ( $items as $item ) {						
+									?>
+									<li id="<?php esc_attr_e( $item['id'] ); ?>"
+										class="menu-item-tpl"
+										data-menu-item-id="<?php esc_attr_e( $item['id'] ); ?>"
+									>
+										<div class="menu-item-bar">
+											<div class="menu-item-handle">
+												<button type="button" class="button-link item-add">
+													<span class="screen-reader-text">
+														<?php esc_html_e( 'Add to menu:' ); ?>
+														<?php esc_html_e( $item['title'] ); ?>
+														<?php _e( '(' . $item['type_label'] . ')' ); ?>
+													</span>
+												</button>
+												<span class="item-split">
+													<span class="item-title" aria-hidden="true">
+														<span class="menu-item-title">
+															<?php esc_html_e( $item['title'] ); ?>
+														</span>
+													</span>
+													<span class="item-type" aria-hidden="true">
+														<?php esc_html_e( $item['type_label'] ); ?>
+													</span>
+												</span>
+											</div>
+										</div>
+									</li>
+									<?php
+								}
+								?>
+							</ul>
+						</div>
+					</details>
+				</li>
+				<?php
 			}
 			?>
 		</ul><!-- #available-menu-items -->
-		<?php
-	}
-
-	/**
-	 * Prints the markup for new menu items.
-	 *
-	 * To be used in the template #available-menu-items.
-	 *
-	 * @since 4.7.0
-	 * @since CP-2.0.0 - Implement HTML5 <details> tag
-	 *
-	 * Details and summary tags added for accessibility
-	 *
-	 * @param array $available_item_type Menu item data to output, including title, type, and label.
-	 */
-	protected function print_post_type_container( $available_item_type ) {
-		$id = sprintf( 'available-menu-items-%s-%s', $available_item_type['type'], $available_item_type['object'] );
-		?>
-		<li id="<?php echo esc_attr( $id ); ?>" class="accordion-section">
-			<details>
-				<summary class="accordion-section-title">
-					<?php echo esc_html( $available_item_type['title'] ); ?>
-					<span class="no-items"><?php _e( 'No items' ); ?></span>
-				</summary>
-				<div class="accordion-section-content">
-					<?php if ( 'post_type' === $available_item_type['type'] ) : ?>
-						<?php $post_type_obj = get_post_type_object( $available_item_type['object'] ); ?>
-						<?php if ( current_user_can( $post_type_obj->cap->create_posts ) && current_user_can( $post_type_obj->cap->publish_posts ) ) : ?>
-							<div class="new-content-item">
-								<label for="<?php echo esc_attr( 'create-item-input-' . $available_item_type['object'] ); ?>" class="screen-reader-text"><?php echo esc_html( $post_type_obj->labels->add_new_item ); ?></label>
-								<input type="text" id="<?php echo esc_attr( 'create-item-input-' . $available_item_type['object'] ); ?>" class="create-item-input" placeholder="<?php echo esc_attr( $post_type_obj->labels->add_new_item ); ?>">
-								<button type="button" class="button add-content"><?php _e( 'Add' ); ?></button>
-							</div>
-						<?php endif; ?>
-					<?php endif; ?>
-					<ul class="available-menu-items-list" data-type="<?php echo esc_attr( $available_item_type['type'] ); ?>" data-object="<?php echo esc_attr( $available_item_type['object'] ); ?>" data-type_label="<?php echo esc_attr( isset( $available_item_type['type_label'] ) ? $available_item_type['type_label'] : $available_item_type['type'] ); ?>"></ul>
-				</div>
-			</details>
-		</li>
 		<?php
 	}
 
