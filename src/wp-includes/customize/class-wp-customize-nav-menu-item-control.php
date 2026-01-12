@@ -58,6 +58,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 		$item     = $this->value();
 		$title    = $item['title'] ?: $item['original_title'];
 		$no_title = $title ? '' : 'no-title';
+		$untitled = _x( '(no label)', 'missing menu item navigation label' );
 		?>
 
 		<div class="menu-item-bar">
@@ -66,7 +67,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 				<summary>
 					<span class="item-title" aria-hidden="true">
 						<span class="menu-item-title<?php echo $no_title; ?>">
-							<?php esc_html_e( $title ); ?>
+							<?php esc_html_e( $title ?: $untitled ); ?>
 						</span>
 					</span>
 					<span class="item-controls">
@@ -74,7 +75,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 							<span class="screen-reader-text">
 								<?php
 									/* translators: 1: Title of a menu item, 2: Type of a menu item. */
-									printf( __( 'Remove Menu Item: %1$s (%2$s)' ), esc_html__( $title ?: 'Untitled' ), esc_html__( $item['type_label'] ) );
+									printf( __( 'Remove Menu Item: %1$s (%2$s)' ), esc_html__( $title ?: $untitled ), esc_html__( $item['type_label'] ) );
 								?>
 							</span>
 						</button>
