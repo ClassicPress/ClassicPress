@@ -80,20 +80,19 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 							</span>
 						</button>
 					</span>
-					
+
 					<div class="menu-item-reorder-nav">
-						<button type="button" class="menus-move-up" tabindex="-1" aria-hidden="true">
-							<?php esc_html_e( 'Move up' ); ?>
-						</button>
-						<button type="button" class="menus-move-down" tabindex="-1" aria-hidden="true">
-							<?php esc_html_e( 'Move down' ); ?>
-						</button>
-						<button type="button" class="menus-move-left" tabindex="-1" aria-hidden="true">
-							<?php esc_html_e( 'Move one level up' ); ?>
-						</button>
-						<button type="button" class="menus-move-right" tabindex="-1" aria-hidden="true">
-							<?php esc_html_e( 'Move one level down' ); ?>
-						</button>
+
+						<?php
+						printf(
+							'<button type="button" class="menus-move-up">%1$s</button><button type="button" class="menus-move-down">%2$s</button><button type="button" class="menus-move-left">%3$s</button><button type="button" class="menus-move-right">%4$s</button>',
+							__( 'Move up' ),
+							__( 'Move down' ),
+							__( 'Move one level up' ),
+							__( 'Move one level down' )
+						);
+						?>
+
 					</div>
 
 					<span class="item-type" aria-hidden="true">
