@@ -2752,7 +2752,6 @@ body.adding-widget .add-new-widget:before,
 		.15s background-color ease-in-out,
 		.15s border-color ease-in-out;
 	cursor: pointer;
-	display: none;
 }
 
 #available-widgets .widget,
