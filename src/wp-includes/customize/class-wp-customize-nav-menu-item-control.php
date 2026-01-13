@@ -208,7 +208,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 	/**
 	 * Redundant JS/Underscore template for the control UI.
 	 *
-	 * @since 4.3.0
+	 * @since CP-2.7.0
 	 */
 	public function content_template() {}
 
