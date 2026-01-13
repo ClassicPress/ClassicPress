@@ -347,6 +347,11 @@ body.trashing #publish-settings {
 	margin-right: 0;
 }
 
+.customize-control .actions .upload-button.button {
+	width: 100%;
+	padding: 9px 0;
+}
+
 .date-time-fields .date-input.month {
 	width: auto;
 	margin: 0;
@@ -2612,6 +2617,7 @@ body.adding-widget .add-new-widget:before,
 	width: 300px;
 	background: #f0f0f1;
 	margin: 0;
+	position: relative;
 }
 
 /* search field container */
