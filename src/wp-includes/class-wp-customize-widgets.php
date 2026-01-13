@@ -824,59 +824,92 @@ final class WP_Customize_Widgets {
 	 */
 	public function output_widget_control_templates() {
 		?>
+
 		<div id="widgets-left"><!-- compatibility with JS which looks for widget templates here -->
-		<div id="available-widgets">
-			<div class="customize-section-title">
-				<button class="customize-section-back" tabindex="-1">
-					<span class="screen-reader-text">
+			<div id="available-widgets">
+				<div class="customize-section-title">
+					<button class="customize-section-back" tabindex="-1">
+						<span class="screen-reader-text">
+
+							<?php
+							/* translators: Hidden accessibility text. */
+							esc_html_e( 'Back' );
+							?>
+
+						</span>
+					</button>
+					<h3>
+						<span class="customize-action">
+
+						<?php
+							/* translators: &#9656; is the unicode right-pointing triangle. %s: Section title in the Customizer. */
+							printf( __( 'Customizing &#9656; %s' ), esc_html( $this->manager->get_panel( 'widgets' )->title ) );
+						?>
+
+						</span>
+
+						<?php esc_html_e( 'Add a Widget' ); ?>
+
+					</h3>
+				</div>
+				<div id="available-widgets-filter">
+					<label class="screen-reader-text" for="widgets-search">
+
 						<?php
 						/* translators: Hidden accessibility text. */
-						_e( 'Back' );
+						esc_html_e( 'Search Widgets' );
 						?>
-					</span>
-				</button>
-				<h3>
-					<span class="customize-action">
+
+					</label>
+					<input type="text" id="widgets-search"
+						placeholder="<?php esc_attr_e( 'Search widgets&hellip;' ); ?>"
+						aria-describedby="widgets-search-desc"
+					>
+					<div class="search-icon" aria-hidden="true"></div>
+					<button type="button" class="clear-results">
+						<span class="screen-reader-text">
+
+							<?php
+							/* translators: Hidden accessibility text. */
+							esc_html_e( 'Clear Results' );
+							?>
+
+						</span>
+					</button>
+					<p class="screen-reader-text" id="widgets-search-desc">
+
+						<?php
+						/* translators: Hidden accessibility text. */
+						esc_html_e( 'The search results will be updated as you type.' );
+						?>
+
+					</p>
+				</div>
+				<ul id="available-widgets-list">
+
 					<?php
-						/* translators: &#9656; is the unicode right-pointing triangle. %s: Section title in the Customizer. */
-						printf( __( 'Customizing &#9656; %s' ), esc_html( $this->manager->get_panel( 'widgets' )->title ) );
+					foreach ( $this->get_available_widgets() as $available_widget ) {
+						?>
+
+						<li id="widget-tpl-<?php esc_attr_e( $available_widget['id'] ); ?>"
+							data-widget-id="<?php esc_attr_e( $available_widget['id'] ); ?>"
+							class="widget-tpl <?php esc_attr_e( $available_widget['id'] ); ?>"
+							tabindex="0"
+						>
+							<?php echo $available_widget['control_tpl']; ?>
+						</li>
+
+						<?php
+					}
 					?>
-					</span>
-					<?php _e( 'Add a Widget' ); ?>
-				</h3>
-			</div>
-			<div id="available-widgets-filter">
-				<label class="screen-reader-text" for="widgets-search">
-					<?php
-					/* translators: Hidden accessibility text. */
-					_e( 'Search Widgets' );
-					?>
-				</label>
-				<input type="text" id="widgets-search" placeholder="<?php esc_attr_e( 'Search widgets&hellip;' ); ?>" aria-describedby="widgets-search-desc">
-				<div class="search-icon" aria-hidden="true"></div>
-				<button type="button" class="clear-results"><span class="screen-reader-text">
-					<?php
-					/* translators: Hidden accessibility text. */
-					_e( 'Clear Results' );
-					?>
-				</span></button>
-				<p class="screen-reader-text" id="widgets-search-desc">
-					<?php
-					/* translators: Hidden accessibility text. */
-					_e( 'The search results will be updated as you type.' );
-					?>
-				</p>
-			</div>
-			<ul id="available-widgets-list">
-			<?php foreach ( $this->get_available_widgets() as $available_widget ) : ?>
-				<li id="widget-tpl-<?php echo esc_attr( $available_widget['id'] ); ?>" data-widget-id="<?php echo esc_attr( $available_widget['id'] ); ?>" class="widget-tpl <?php echo esc_attr( $available_widget['id'] ); ?>" tabindex="0">
-					<?php echo $available_widget['control_tpl']; ?>
-				</li>
-			<?php endforeach; ?>
-			<p class="no-widgets-found-message"><?php _e( 'No widgets found.' ); ?></p>
-			</ul><!-- #available-widgets-list -->
-		</div><!-- #available-widgets -->
+
+					<p class="no-widgets-found-message">
+						<?php _e( 'No widgets found.' ); ?>
+					</p>
+				</ul><!-- #available-widgets-list -->
+			</div><!-- #available-widgets -->
 		</div><!-- #widgets-left -->
+
 		<?php
 	}
 
