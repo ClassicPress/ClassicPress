@@ -1841,7 +1841,7 @@ function cp_dashboard_directory() {
 	<p>
 	<?php
 	echo '<p>' . __( 'We would like to let you know about the ClassicPress Directory.' ) . '</p>';
-	echo '<p>' . sprintf( __( 'You can browse the new directory at <a href="%1$s" target="_blank">%1$s</a>.' ), esc_url( 'https://directory.classicpress.net' ) ) . '</p>';
+	echo '<p>' . sprintf( __( 'You can browse the directory at <a href="%1$s" target="_blank">%1$s</a>.' ), esc_url( 'https://directory.classicpress.net' ) ) . '</p>';
 	$url = wp_nonce_url(
 		add_query_arg(
 			array(
