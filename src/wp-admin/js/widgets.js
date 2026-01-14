@@ -481,6 +481,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				widget.id = widget.id.replace( '__i__', newMultiValue );
 				widget.querySelector( 'input.multi_number' ).value = newMultiValue;
+				document.dispatchEvent( new CustomEvent( 'widget-updated', {
+					detail: { widget: widget }
+				} ) );
 			}
 
 			list = widget.closest( 'details' );

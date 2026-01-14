@@ -612,36 +612,28 @@ echo cp_render_widget_upload_template();
  *
  * @since CP-2.5.0
  */
-if ( class_exists( 'WP_Widget_Media_Image' ) ) {
-	echo cp_render_media_image_template();
-}
+echo cp_render_media_image_template();
 
 /**
  * Renders the template for the media gallery widget
  *
  * @since CP-2.5.0
  */
-if ( class_exists( 'WP_Widget_Media_Gallery' ) ) {
-	echo cp_render_media_gallery_template();
-}
+echo cp_render_media_gallery_template();
 
 /**
  * Renders the template for the media audio widget
  *
  * @since CP-2.5.0
  */
-if ( class_exists( 'WP_Widget_Media_Audio' ) ) {
-	echo cp_render_media_audio_template();
-}
+echo cp_render_media_audio_template();
 
 /**
  * Renders the template for the media video widget
  *
  * @since CP-2.5.0
  */
-if ( class_exists( 'WP_Widget_Media_Video' ) ) {
-	echo cp_render_media_video_template();
-}
+echo cp_render_media_video_template();
 
 /**
  * Fires after the available widgets and sidebars have loaded, before the admin footer.
