@@ -344,8 +344,7 @@ wp_print_scripts();
 				</div>
 			</div><!-- #customize-sidebar-outer-content -->
 
-			<div id="widgets-right" class="wp-clearfix"  style="overflow-y: scroll;max-height: calc(100vh - 90px);">
-				<!-- For Widget Customizer, many widgets try to look for instances under div#widgets-right, so we have to add that ID to a container div in the Customizer for compat -->
+			<div id="widgets-right" class="wp-clearfix" style="overflow-y: scroll;max-height: calc(100vh - 90px);">
 				<div id="customize-notifications-area" class="customize-control-notifications-container">
 					<ul></ul>
 				</div>
@@ -419,12 +418,12 @@ wp_print_scripts();
 									continue;
 								}			
 
-								$obj = $item['type'] === 'section' 
+								$top_object = $item['type'] === 'section' 
 									? $wp_customize->get_section( $item['id'] )
 									: $wp_customize->get_panel( $item['id'] );
         
-								if ( $obj ) {
-									$obj->maybe_render();
+								if ( $top_object ) {
+									$top_object->maybe_render();
 								}
 							}
 							?>
