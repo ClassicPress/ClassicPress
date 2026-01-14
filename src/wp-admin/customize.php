@@ -719,9 +719,12 @@ wp_print_scripts();
 							<?php
 						endif;
 
-						// Special case: header_image (hard-coded description in core)
+						// Remaining top items
 						foreach ( $top_items as $item ) {
-							if ( $item['id'] !== 'header_image' || $item['type'] !== 'section' ) {
+							if ( in_array( $item['id'], array( 'themes', 'nav_menus', 'widgets' ), true ) ) {
+								continue;
+							}
+							if ( 'section' !== $item['type'] ) { // i.e. do not process panels here
 								continue;
 							}
 							?>
@@ -747,14 +750,24 @@ wp_print_scripts();
 											<ul></ul>
 										</div>
 									</div>
-									<div class="description customize-section-description">
 
-										<?php
-										global $cp_header_image_section_description;
-										echo wp_kses_post( $cp_header_image_section_description );
+									<?php
+									if ( $item['id'] === 'header_image' ) { // to account for the description being hard-coded in core
 										?>
 
-									</div>
+										<div class="description customize-section-description">
+
+											<?php
+											global $cp_header_image_section_description;
+											echo wp_kses_post( $cp_header_image_section_description );
+											?>
+
+										</div>
+
+										<?php
+									}
+									?>
+
 								</li>
 
 								<?php
