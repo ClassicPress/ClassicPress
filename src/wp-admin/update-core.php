@@ -308,7 +308,8 @@ function list_plugin_updates() {
 	}
 
 	$tagged_plugins = get_transient( 'tagged_classicpress_plugins' );
-	if ( $tagged_plugins === false ) {
+
+	if ( false === $tagged_plugins ) {
 		$tagged_from_api = plugins_api(
 			'query_plugins',
 			array(
@@ -321,7 +322,9 @@ function list_plugin_updates() {
 				),
 			)
 		);
+
 		$tagged_plugins = array();
+
 		if ( ! is_wp_error( $tagged_from_api ) && is_array( $tagged_from_api->plugins ) ) {
 			foreach ( $tagged_from_api->plugins as $tagged_plugin ) {
 				$tagged_plugins[] = $tagged_plugin['slug'];
@@ -345,14 +348,14 @@ function list_plugin_updates() {
 		// Get plugin compat for running version of ClassicPress.
 		if ( $core_update_version === false ) {
 			if (
-				// For plugins on the CP Directory
+				// For plugins in the CP Directory
 				isset( $plugin_data->update->requires_cp )
 				&& str_starts_with( $plugin_data->update->requires_cp, $cur_cp_major_version[1] )
 				&& version_compare( $plugin_data->update->requires_cp, $cur_cp_version, '<=' )
 			) {
 				$compat  = '<br>' . sprintf( __( 'Compatible with ClassicPress %1$s (according to its author).' ), $cur_cp_version );
 			} elseif (
-				// For plugins on the WP Repository
+				// For plugins in the WP Repository
 				isset( $plugin_data->update->tested )
 				&& version_compare( $plugin_data->update->tested, $cur_wp_version, '>=' )
 			) {
@@ -367,6 +370,7 @@ function list_plugin_updates() {
 			}
 			$compat .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/#plugin-updates">' . __( 'More info.' ) . '</a>';
 		}
+
 		// Get plugin compat for updated version of ClassicPress.
 		if ( $core_update_version ) {
 			if (
