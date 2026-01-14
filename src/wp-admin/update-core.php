@@ -374,14 +374,14 @@ function list_plugin_updates() {
 		// Get plugin compat for updated version of ClassicPress.
 		if ( $core_update_version ) {
 			if (
-				// For plugins on the CP Directory
+				// For plugins in the CP Directory
 				isset( $plugin_data->update->requires_cp )
 				&& str_starts_with( $plugin_data->update->requires_cp, $cur_cp_major_version[1] )
 				&& version_compare( $plugin_data->update->requires_cp, $core_update_version, '<=' )
 			) {
 				$compat  = '<br>' . sprintf( __( 'Compatible with ClassicPress %1$s (according to its author).' ), $core_update_version );
 			} elseif (
-				// For plugins on the WP Repository
+				// For plugins in the WP Repository
 				isset( $plugin_data->update->tested )
 				&& version_compare( $plugin_data->update->tested, $cur_wp_version, '>=' )
 			) {
