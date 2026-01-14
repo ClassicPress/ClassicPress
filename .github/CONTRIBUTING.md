@@ -81,7 +81,8 @@ At this point you have a working local development environment. Here are some fu
   - Run `npm install` to install/update the ClassicPress `npm` dependencies. Run this step periodically.
   - Run `npm install -g grunt-cli` to make the grunt command line available globally. When changing Node versions, you may need to run this command again.
   - Run `grunt build` to create your own build of ClassicPress (in the `build` directory) or run `grunt precommit:verify` to test whether any other files may need to be updated for your PR. There are many other `grunt` commands available in the `Gruntfile.js` file.
-  - Pro Tip for New Contributors: To ensure a seamless start, follow our [Beginner Setup Guide](#setting-up-a-local-development-environment) for detailed steps, troubleshooting tips, and common pitfalls. This will help you get up and running quickly and make your contribution process smoother.
+
+**Pro Tip for New Contributors**: To ensure a seamless start, follow our [Beginner Setup Guide](#setting-up-a-local-development-environment) for detailed steps, troubleshooting tips, and common pitfalls. This will help you get up and running quickly and make your contribution process smoother.
 
 ## Tips for good PRs
 
