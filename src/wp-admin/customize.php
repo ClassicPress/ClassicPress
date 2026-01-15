@@ -131,7 +131,7 @@ $controls = $wp_customize->controls_data_by_section;
 
 // Build top-level items: panels + sections without panel.
 $top_items = array();
-$section_panels = array();
+$middle_sections = array();
 
 foreach ( $panels as $panel ) {
 	$top_items[ $panel->id ] = array(
@@ -157,7 +157,7 @@ foreach ( $sections as $section ) {
 		if ( in_array( $section->id, array( 'installed_themes', 'wporg_themes', 'menu_locations', 'add_menu' ), true ) ) {
 			continue;
 		}
-		$section_panels[ $section->id ] = array(
+		$middle_sections[ $section->id ] = array(
 			'id'       => $section->id,
 			'title'    => $section->title,
 			'priority' => $section->priority,
@@ -808,7 +808,7 @@ wp_print_scripts();
 								</ul>
 
 								<?php
-								foreach ( $section_panels as $section_panel ) {
+								foreach ( $middle_sections as $section_panel ) {
 									foreach ( $sections as $section ) {
 										if ( $section->panel === $item['id'] ) {
 										}
