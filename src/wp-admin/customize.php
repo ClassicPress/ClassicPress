@@ -131,6 +131,7 @@ $controls = $wp_customize->controls_data_by_section;
 
 // Build top-level items: panels + sections without panel.
 $top_items = array();
+$section_panels = array();
 
 foreach ( $panels as $panel ) {
 	$top_items[ $panel->id ] = array(
@@ -144,6 +145,19 @@ foreach ( $panels as $panel ) {
 foreach ( $sections as $section ) {
 	if ( ! $section->panel ) {
 		$top_items[ $section->id ] = array(
+			'id'       => $section->id,
+			'title'    => $section->title,
+			'priority' => $section->priority,
+			'type'	   => 'section',
+		);
+	} else {
+		if ( str_starts_with( $section->id, 'sidebar-widgets-' ) || str_starts_with( $section->id, 'nav_menu[' ) ) {
+			continue;
+		}
+		if ( in_array( $section->id, array( 'installed_themes', 'wporg_themes', 'menu_locations', 'add_menu' ), true ) ) {
+			continue;
+		}
+		$section_panels[ $section->id ] = array(
 			'id'       => $section->id,
 			'title'    => $section->title,
 			'priority' => $section->priority,
@@ -719,75 +733,204 @@ wp_print_scripts();
 							<?php
 						endif;
 
-						// Remaining top items
+						// Remaining sub-accordions
 						foreach ( $top_items as $item ) {
 							if ( in_array( $item['id'], array( 'themes', 'nav_menus', 'widgets' ), true ) ) {
 								continue;
 							}
-							if ( 'section' !== $item['type'] ) { // i.e. do not process panels here
-								continue;
-							}
-							?>
-
-							<ul id="sub-accordion-section-<?php esc_attr_e( $item['id'] ); ?>"
-								class="customize-pane-child accordion-section-content accordion-section control-section control-section-default"
-								style="display: none;"
-							>
-								<li class="customize-section-description-container section-meta no-drag">
-									<div class="customize-section-title">
-										<button class="customize-section-back" tabindex="0">
+							if ( $item['type'] === 'panel' ) {
+								$panel = $wp_customize->get_panel( $item['id'] );
+								?>
+								<ul id="sub-accordion-panel-<?php esc_attr_e( $item['id'] ); ?>"
+									class="customize-pane-child accordion-sub-container control-panel-content accordion-section control-panel-<?php esc_attr_e( $item['id'] ); ?>"
+									style="display: none;"
+								>
+									<li class="panel-meta customize-info accordion-section cannot-expand">
+										<button class="customize-panel-back" tabindex="0" type="button">
 											<span class="screen-reader-text">
 												<?php esc_html_e( 'Back' ); ?>
 											</span>
 										</button>
-										<h3>
-											<span class="customize-action">
-												<?php esc_html_e( 'Customizing' ); ?>
+										<div class="accordion-section-title">
+											<span class="preview-notice">
+
+												<?php
+												/* translators: %s: Panel title. */
+												printf( __( 'You are customizing %s' ), '<strong class="panel-title">' . esc_html( $panel->title ) . '</strong>' );
+												?>
+
 											</span>
-											<?php esc_html_e( $item['title'] ); ?>
-										</h3>
-										<div class="customize-control-notifications-container" style="display: none;">
-											<ul></ul>
-										</div>
-									</div>
-
-									<?php
-									if ( $item['id'] === 'header_image' ) { // to account for the description being hard-coded in core
-										?>
-
-										<div class="description customize-section-description">
-
-											<?php
-											global $cp_header_image_section_description;
-											echo wp_kses_post( $cp_header_image_section_description );
-											?>
-
+											<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false">
+												<span class="screen-reader-text">
+													<?php esc_html_e( 'Help' ); ?>
+												</span>
+											</button>
 										</div>
 
 										<?php
+										if ( ! empty( $panel->description ) ) {
+											?>
+											<div class="description customize-panel-description">
+												<?php echo wp_kses_post( $panel->description ); ?>
+											</div>
+											<?php
+										}
+										?>
+
+										<div class="customize-control-notifications-container" style="display: none;">
+											<ul></ul>
+										</div>
+									</li>
+
+									<?php
+									// Render child sections
+									foreach ( $sections as $section ) {
+										if ( $section->panel === $item['id'] ) {
+											?>
+
+											<li id="accordion-section-<?php esc_attr_e( $section->id ); ?>"
+												class="accordion-section control-section control-section-<?php esc_attr_e( $section->type ?: 'default' ); ?> control-subsection"
+												aria-owns="sub-accordion-section-<?php esc_attr_e( $section->id ); ?>"
+											>
+												<h3 class="accordion-section-title" tabindex="0">
+													<?php esc_html_e( $section->title ); ?>
+													<span class="screen-reader-text">
+														<?php esc_html_e( 'Press return or enter to open this section' ); ?>
+													</span>
+												</h3>
+											</li>
+											
+											<?php
+										}
 									}
 									?>
 
-								</li>
+								</ul>
 
 								<?php
-								if ( isset ( $controls[ $item['id'] ] ) ) {
-									// Sort in ascending order of priority
-									usort( $controls[ $item['id'] ], function( $a, $b ) {
-										return $a['priority'] - $b['priority'];
-									} );
-									foreach ( $controls[ $item['id'] ] as $control_data ) {
-										$control = $wp_customize->get_control( $control_data['id'] );
-										if ( $control ) {
-											$control->maybe_render();
+								foreach ( $section_panels as $section_panel ) {
+									foreach ( $sections as $section ) {
+										if ( $section->panel === $item['id'] ) {
 										}
 									}
+									?>
+
+									<ul id="sub-accordion-section-<?php esc_attr_e( $section_panel['id'] ); ?>"
+										class="customize-pane-child accordion-section-content accordion-section control-section control-section-default"
+										style="display: none;"
+									>
+										<li class="customize-section-description-container section-meta no-drag">
+											<div class="customize-section-title">
+												<button class="customize-section-back" tabindex="0">
+													<span class="screen-reader-text">
+														<?php esc_html_e( 'Back' ); ?>
+													</span>
+												</button>
+												<h3>
+													<span class="customize-action">
+														<?php
+														printf(
+															/* translators: &#9656; is the unicode right-pointing triangle. %s: Section title in the Customizer. */
+															__( 'Customizing &#9656; %s' ),
+															__( $item['title'] )
+														);
+														?>
+													</span>
+													<?php esc_html_e( $section_panel['title'] ); ?>
+												</h3>
+												<div class="customize-control-notifications-container" style="display: none;">
+													<ul></ul>
+												</div>
+											</div>
+											
+											<?php
+											if ( ! empty( $section_panel['description'] ) ) {
+												?>
+												<div class="description customize-section-description">
+													<?php echo wp_kses_post( $section_panel['description'] ); ?>
+												</div>
+												<?php
+											}
+											?>
+
+										</li>
+
+										<?php
+										/* NEED CONTROL HERE */
+										?>
+									</ul>
+									<?php
 								}
+
+							} elseif ( $item['type'] === 'section' ) {
 								?>
 
-							</ul>
+								<ul id="sub-accordion-section-<?php esc_attr_e( $item['id'] ); ?>"
+									class="customize-pane-child accordion-section-content accordion-section control-section control-section-default"
+									style="display: none;"
+								>
+									<li class="customize-section-description-container section-meta no-drag">
+										<div class="customize-section-title">
+											<button class="customize-section-back" tabindex="0">
+												<span class="screen-reader-text">
+													<?php esc_html_e( 'Back' ); ?>
+												</span>
+											</button>
+											<h3>
+												<span class="customize-action">
+													<?php esc_html_e( 'Customizing' ); ?>
+												</span>
+												<?php esc_html_e( $item['title'] ); ?>
+											</h3>
+											<div class="customize-control-notifications-container" style="display: none;">
+												<ul></ul>
+											</div>
+										</div>
 
-							<?php
+										<?php
+										if ( $item['id'] === 'header_image' ) { // to account for the description being hard-coded in core
+											?>
+
+											<div class="description customize-section-description">
+
+												<?php
+												global $cp_header_image_section_description;
+												echo wp_kses_post( $cp_header_image_section_description );
+												?>
+
+											</div>
+
+											<?php
+										} elseif ( ! empty( $item['description'] ) ) {
+											?>
+											<div class="description customize-section-description">
+												<?php echo wp_kses_post( $item['description'] ); ?>
+											</div>
+											<?php
+										}
+										?>
+
+									</li>
+
+									<?php
+									if ( isset ( $controls[ $item['id'] ] ) ) {
+										// Sort in ascending order of priority
+										usort( $controls[ $item['id'] ], function( $a, $b ) {
+											return $a['priority'] - $b['priority'];
+										} );
+										foreach ( $controls[ $item['id'] ] as $control_data ) {
+											$control = $wp_customize->get_control( $control_data['id'] );
+											if ( $control ) {
+												$control->maybe_render();
+											}
+										}
+									}
+									?>
+
+								</ul>
+
+								<?php
+							}
 						}
 						?>
 
@@ -993,7 +1136,7 @@ wp_print_scripts();
         
 								<?php
 								foreach ( $controls[ $section->id ] as $control_data ) {
-									$field_id    = $control_data['setting_id'] ?: $control_data['id'];
+									$field_id    = $control_data['id'];
 									$field_value = $control_data['value'];
 									$field_type  = $control_data['type'];
 									$field_label = $control_data['label'];
