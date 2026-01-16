@@ -558,7 +558,37 @@ add_action( 'wp_default_scripts', 'wp_default_packages' );
 
 add_action( 'wp_enqueue_scripts', 'wp_localize_jquery_ui_datepicker', 1000 );
 add_action( 'admin_enqueue_scripts', 'wp_localize_jquery_ui_datepicker', 1000 );
+<<<<<<< HEAD
 add_filter( 'wp_print_scripts', 'wp_just_in_time_script_localization' );
+=======
+add_action( 'admin_enqueue_scripts', 'wp_common_block_scripts_and_styles' );
+add_action( 'admin_enqueue_scripts', 'wp_enqueue_command_palette_assets' );
+add_action( 'admin_enqueue_scripts', 'wp_enqueue_view_transitions_admin_css' );
+add_action( 'enqueue_block_assets', 'wp_enqueue_classic_theme_styles' );
+add_action( 'enqueue_block_assets', 'wp_enqueue_registered_block_scripts_and_styles' );
+add_action( 'enqueue_block_assets', 'enqueue_block_styles_assets', 30 );
+add_action( 'init', 'wp_load_classic_theme_block_styles_on_demand', 8 ); // Must happen before register_core_block_style_handles() at priority 9.
+/*
+ * `wp_enqueue_registered_block_scripts_and_styles` is bound to both
+ * `enqueue_block_editor_assets` and `enqueue_block_assets` hooks
+ * since the introduction of the block editor in WordPress 5.0.
+ *
+ * The way this works is that the block assets are loaded before any other assets.
+ * For example, this is the order of styles for the editor:
+ *
+ * - front styles registered for blocks, via `styles` handle (block.json)
+ * - editor styles registered for blocks, via `editorStyles` handle (block.json)
+ * - editor styles enqueued via `enqueue_block_editor_assets` hook
+ * - front styles enqueued via `enqueue_block_assets` hook
+ */
+add_action( 'enqueue_block_editor_assets', 'wp_enqueue_registered_block_scripts_and_styles' );
+add_action( 'enqueue_block_editor_assets', 'enqueue_editor_block_styles_assets' );
+add_action( 'enqueue_block_editor_assets', 'wp_enqueue_editor_block_directory_assets' );
+add_action( 'enqueue_block_editor_assets', 'wp_enqueue_editor_format_library_assets' );
+add_action( 'enqueue_block_editor_assets', 'wp_enqueue_block_editor_script_modules' );
+add_action( 'enqueue_block_editor_assets', 'wp_enqueue_global_styles_css_custom_properties' );
+add_action( 'wp_print_scripts', 'wp_just_in_time_script_localization' );
+>>>>>>> bee3356838 (Administration: Add view transitions throughout WP Admin.)
 add_filter( 'print_scripts_array', 'wp_prototype_before_jquery' );
 add_filter( 'customize_controls_print_styles', 'wp_resource_hints', 1 );
 

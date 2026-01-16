@@ -1532,7 +1532,157 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'thickbox', '/wp-includes/js/thickbox/thickbox.css', array( 'dashicons' ) ); // No longer used since CP-2.2.0
 	$styles->add( 'wp-pointer', "/wp-includes/css/wp-pointer$suffix.css", array( 'dashicons' ) ); // No longer used since CP-2.6.0
 
+<<<<<<< HEAD
 	// RTL CSS
+=======
+	// Noto Serif is no longer used by core, but may be relied upon by themes and plugins.
+	$fonts_url = '';
+
+	/*
+	 * translators: Use this to specify the proper Google Font name and variants
+	 * to load that is supported by your language. Do not translate.
+	 * Set to 'off' to disable loading.
+	 */
+	$font_family = _x( 'Noto Serif:400,400i,700,700i', 'Google Font Name and Variants' );
+	if ( 'off' !== $font_family ) {
+		$fonts_url = 'https://fonts.googleapis.com/css?family=' . urlencode( $font_family );
+	}
+	$styles->add( 'wp-editor-font', $fonts_url ); // No longer used in core as of 5.7.
+	$block_library_theme_path = WPINC . "/css/dist/block-library/theme$suffix.css";
+	$styles->add( 'wp-block-library-theme', "/$block_library_theme_path" );
+	$styles->add_data( 'wp-block-library-theme', 'path', ABSPATH . $block_library_theme_path );
+
+	$classic_theme_styles_path = WPINC . "/css/classic-themes$suffix.css";
+	$styles->add( 'classic-theme-styles', "/$classic_theme_styles_path" );
+	$styles->add_data( 'classic-theme-styles', 'path', ABSPATH . $classic_theme_styles_path );
+
+	$styles->add(
+		'wp-reset-editor-styles',
+		"/wp-includes/css/dist/block-library/reset$suffix.css",
+		array( 'common', 'forms' ) // Make sure the reset is loaded after the default WP Admin styles.
+	);
+
+	$styles->add(
+		'wp-editor-classic-layout-styles',
+		"/wp-includes/css/dist/edit-post/classic$suffix.css",
+		array()
+	);
+
+	$styles->add(
+		'wp-block-editor-content',
+		"/wp-includes/css/dist/block-editor/content$suffix.css",
+		array( 'wp-components' )
+	);
+
+	// Only add CONTENT styles here that should be enqueued in the iframe!
+	$wp_edit_blocks_dependencies = array(
+		'wp-components',
+		/*
+		 * This needs to be added before the block library styles,
+		 * The block library styles override the "reset" styles.
+		 */
+		'wp-reset-editor-styles',
+		'wp-block-library',
+		'wp-block-editor-content',
+	);
+
+	// Only load the default layout and margin styles for themes without theme.json file.
+	if ( ! wp_theme_has_theme_json() ) {
+		$wp_edit_blocks_dependencies[] = 'wp-editor-classic-layout-styles';
+	}
+
+	if (
+		current_theme_supports( 'wp-block-styles' ) &&
+		( ! is_array( $editor_styles ) || count( $editor_styles ) === 0 )
+	) {
+		/*
+		 * Include opinionated block styles if the theme supports block styles and
+		 * no $editor_styles are declared, so the editor never appears broken.
+		 */
+		$wp_edit_blocks_dependencies[] = 'wp-block-library-theme';
+	}
+
+	$styles->add(
+		'wp-edit-blocks',
+		"/wp-includes/css/dist/block-library/editor$suffix.css",
+		$wp_edit_blocks_dependencies
+	);
+
+	$styles->add( 'wp-view-transitions-admin', false );
+	did_action( 'init' ) && $styles->add_inline_style( 'wp-view-transitions-admin', wp_get_view_transitions_admin_css() );
+
+	$package_styles = array(
+		'block-editor'         => array( 'wp-components', 'wp-preferences' ),
+		'block-library'        => array(),
+		'block-directory'      => array(),
+		'components'           => array(),
+		'commands'             => array( 'wp-components' ),
+		'edit-post'            => array(
+			'wp-components',
+			'wp-block-editor',
+			'wp-editor',
+			'wp-edit-blocks',
+			'wp-block-library',
+			'wp-commands',
+			'wp-preferences',
+		),
+		'editor'               => array(
+			'wp-components',
+			'wp-block-editor',
+			'wp-reusable-blocks',
+			'wp-patterns',
+			'wp-preferences',
+		),
+		'format-library'       => array(),
+		'list-reusable-blocks' => array( 'wp-components' ),
+		'reusable-blocks'      => array( 'wp-components' ),
+		'patterns'             => array( 'wp-components' ),
+		'preferences'          => array( 'wp-components' ),
+		'nux'                  => array( 'wp-components' ),
+		'widgets'              => array(
+			'wp-components',
+		),
+		'edit-widgets'         => array(
+			'wp-widgets',
+			'wp-block-editor',
+			'wp-editor',
+			'wp-edit-blocks',
+			'wp-block-library',
+			'wp-patterns',
+			'wp-preferences',
+		),
+		'customize-widgets'    => array(
+			'wp-widgets',
+			'wp-block-editor',
+			'wp-editor',
+			'wp-edit-blocks',
+			'wp-block-library',
+			'wp-patterns',
+			'wp-preferences',
+		),
+		'edit-site'            => array(
+			'wp-components',
+			'wp-block-editor',
+			'wp-editor',
+			'wp-edit-blocks',
+			'wp-commands',
+			'wp-preferences',
+		),
+	);
+
+	foreach ( $package_styles as $package => $dependencies ) {
+		$handle = 'wp-' . $package;
+		$path   = "/wp-includes/css/dist/$package/style$suffix.css";
+
+		if ( 'block-library' === $package && wp_should_load_separate_core_block_assets() ) {
+			$path = "/wp-includes/css/dist/$package/common$suffix.css";
+		}
+		$styles->add( $handle, $path, $dependencies );
+		$styles->add_data( $handle, 'path', ABSPATH . $path );
+	}
+
+	// RTL CSS.
+>>>>>>> bee3356838 (Administration: Add view transitions throughout WP Admin.)
 	$rtl_styles = array(
 		// Admin CSS.
 		'common',
