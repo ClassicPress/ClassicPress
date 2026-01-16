@@ -68,7 +68,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	document.addEventListener( 'widget-updated', handleWidgetUpdate );
 
 	// Ensure Code Mirror loads on page load
-	document.querySelectorAll( '#widgets-right .id_base' ).forEach( function( base ) {
+	document.querySelectorAll( '#widgets-right .id_base, #wp_inactive_widgets .id_base' ).forEach( function( base ) {
 		if ( base.value === 'custom_html' ) {
 			initCodeMirror( base.closest ( '.widget' ) );
 		}
