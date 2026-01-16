@@ -289,7 +289,6 @@ require ABSPATH . WPINC . '/sitemaps/providers/class-wp-sitemaps-taxonomies.php'
 require ABSPATH . WPINC . '/sitemaps/providers/class-wp-sitemaps-users.php';
 require ABSPATH . WPINC . '/class-wp-script-modules.php';
 require ABSPATH . WPINC . '/script-modules.php';
-<<<<<<< HEAD
 if ( 0 !== (int) get_option( 'blocks_compatibility_level', 1 ) ) {
 	require ABSPATH . WPINC . '/classicpress/class-wp-compat.php';
 }
@@ -297,16 +296,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	require ABSPATH . WPINC . '/class-fix-wpcli.php';
 }
 require_once ABSPATH . WPINC . '/classicpress/class-cp-customization-frontend.php';
-=======
-require ABSPATH . WPINC . '/interactivity-api/class-wp-interactivity-api.php';
-require ABSPATH . WPINC . '/interactivity-api/class-wp-interactivity-api-directives-processor.php';
-require ABSPATH . WPINC . '/interactivity-api/interactivity-api.php';
-require ABSPATH . WPINC . '/class-wp-plugin-dependencies.php';
-require ABSPATH . WPINC . '/class-wp-url-pattern-prefixer.php';
-require ABSPATH . WPINC . '/class-wp-speculation-rules.php';
-require ABSPATH . WPINC . '/speculative-loading.php';
 require ABSPATH . WPINC . '/view-transitions.php';
->>>>>>> bee3356838 (Administration: Add view transitions throughout WP Admin.)
 
 wp_script_modules()->add_hooks();
 
