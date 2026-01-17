@@ -119,7 +119,6 @@ if ( isset( $_POST['cp_publish_submit'] ) ) {
     }
 }
 
-
 // Themes
 $installed_themes = wp_prepare_themes_for_js();
 $count_themes     = count( $installed_themes );
@@ -127,11 +126,7 @@ $count_themes     = count( $installed_themes );
 // Menus
 $locations      = get_registered_nav_menus(); // slug => human label
 $menu_locations = get_nav_menu_locations();   // slug => menu ID
-$menus_by_id    = wp_get_nav_menus();         // list of WP_Term
-$menus_index    = array();
-foreach ( $menus_by_id as $menu_term ) {
-    $menus_index[ $menu_term->term_id ] = $menu_term;
-}
+$menus          = wp_get_nav_menus( array( 'fields' => 'id=>name' ) );
 
 // Panels, sections, and controls
 $panels   = $wp_customize->panels();
@@ -140,6 +135,8 @@ $controls = $wp_customize->controls_data_by_section;
 
 // Build top-level items: panels + sections without panel.
 $top_items = array();
+
+// Build mid-level sections
 $middle_sections = array();
 
 foreach ( $panels as $panel ) {
@@ -186,38 +183,39 @@ uasort(
 );
 
 /**
- * Widgets
+ * Collect widgets in a name-keyed array for sorting.
  */
-require_once ABSPATH . 'wp-admin/includes/widgets.php'; // ensures helpers & globals are set
-
-global $wp_registered_widgets, $wp_registered_widget_controls;
-
-// Collect widgets in a name-keyed array for sorting.
 $available_widgets = array();
+$widgets_panel = isset( $panels['widgets'] ) ? $panels['widgets'] : null;
+if ( $widgets_panel ) {
+	require_once( ABSPATH . 'wp-admin/includes/widgets.php' );
+	global $wp_registered_widgets, $wp_registered_widget_controls;
 
-foreach ( $wp_registered_widgets as $id => $widget ) {
-	if ( empty( $widget['name'] ) ) {
-		continue;
+	// Collect widgets in a name-keyed array for sorting.
+	foreach ( $wp_registered_widgets as $id => $widget ) {
+		if ( empty( $widget['name'] ) ) {
+			continue;
+		}
+
+		// Derive id_base
+		$id_base = _get_widget_id_base( $id );
+
+		// Get the control (admin form) for this widget, if there is one.
+		$control = isset( $wp_registered_widget_controls[ $id ] )
+			? $wp_registered_widget_controls[ $id ]
+			: null;
+
+		$available_widgets[ $widget['name'] . '||' . $id ] = array(
+			'id'      => $id,
+			'id_base' => $id_base,
+			'name'    => $widget['name'],
+			'desc'    => isset( $widget['description'] ) ? $widget['description'] : '',
+			'control' => $control,
+		);
 	}
-
-	// Derive id_base
-	$id_base = _get_widget_id_base( $id );
-
-	// Get the control (admin form) for this widget, if there is one.
-	$control = isset( $wp_registered_widget_controls[ $id ] )
-		? $wp_registered_widget_controls[ $id ]
-		: null;
-
-	$available_widgets[ $widget['name'] . '|' . $id ] = array(
-		'id'      => $id,
-		'id_base' => $id_base,
-		'name'    => $widget['name'],
-		'desc'    => isset( $widget['description'] ) ? $widget['description'] : '',
-		'control' => $control,
-	);
+	ksort( $available_widgets, SORT_NATURAL | SORT_FLAG_CASE );
 }
-// Sort alphabetically by name (and id as tiebreaker).
-ksort( $available_widgets, SORT_NATURAL | SORT_FLAG_CASE );
+
 
 /**
  * Fires when Customizer controls are initialized, before scripts are enqueued.
@@ -1138,11 +1136,11 @@ wp_print_scripts();
 													<?php esc_html_e( $location ); ?>
 													<span class="theme-location-set">
 														<?php
-														if ( isset ( $menus_index[$menu_locations[$key]] ) ) {
+														if ( isset ( $menus[$menu_locations[$key]] ) ) {
 															printf(
 																__( '(Current: <span class="current-menu-location-name-main-nav">%s</span>)</span>' ),
 																/* translators: Name of menu. */
-																$menus_index[$menu_locations[$key]]->name
+																$menus[$menu_locations[$key]]
 															);
 														}
 														?>
@@ -1281,7 +1279,7 @@ wp_print_scripts();
 												</div>
 												<input type="text"
 													class="menu-name-field live-update-section-title"
-													value="<?php esc_attr_e( $menus_index[$menu_id]->name ); ?>"
+													value="<?php esc_attr_e( $menus[$menu_id] ); ?>"
 												>
 											</label>
 										</li>
@@ -1389,11 +1387,11 @@ wp_print_scripts();
 																<?php esc_html_e( $location ); ?>
 																<span class="theme-location-set">
 																	<?php
-																	if ( isset ( $menus_index[$menu_locations[$key]] ) ) {
+																	if ( isset ( $menus[$menu_locations[$key]] ) ) {
 																		printf(
 																			__( '(Current: <span class="current-menu-location-name-main-nav">%s</span>)</span>' ),
 																			/* translators: Name of menu. */
-																			$menus_index[$menu_locations[$key]]->name
+																			$menus[$menu_locations[$key]]
 																		);
 																	}
 																	?>
