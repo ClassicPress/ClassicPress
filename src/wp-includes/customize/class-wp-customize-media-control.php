@@ -128,7 +128,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 	public function render_content() {
 		$attachment_id  = (int) $this->value(); // Media control stores attachment ID
 		$description_id = uniqid( 'customize-media-control-description' );
-		$described_by   = $this->description ? ' aria-describedby="' . description_id . '" ' : '';
+		$described_by   = ( ! empty( $this->description ) ) ? ' aria-describedby="' . $description_id . '"' : '';
 		$default_id     = (int) $this->setting->default;
 
 		if ( $attachment_id ) {
@@ -143,12 +143,18 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 			$alt_text    = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
 			$album       = get_post_meta( $attachment_id, 'album', true );
 			$artist      = get_post_meta( $attachment_id, 'artist', true );
+			$poster      = $src !== $icon ? ' poster="' . esc_url( $src ) . '"' : '';
+		}
+
+		if ( $this->label ) {
+			?>
+			<span class="customize-control-title">
+				<?php esc_html_e( $this->label ); ?>
+			</span>
+			<?php
 		}
 		?>
 
-		<span class="customize-control-title">
-			<?php esc_html_e( $this->label ); ?>
-		</span>
 		<div class="customize-control-notifications-container">
 			<ul></ul>
 		</div>
@@ -230,16 +236,8 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 					} elseif ( 'video' === $mime_type ) {
 						?>
 						<div class="wp-media-wrapper wp-video">
-							<video controls class="wp-video-shortcode" preload="metadata"
-								<?php
-								if ( $src && $src !== $icon ) {
-									?>
-									poster="<?php echo esc_url( $src ); ?>"
-									<?php
-								}
-								?>
-							>
-								<source type="<?php esc_attr_e( $mime_type ); ?>" src="<?php echo esc_url( $src ); ?>">
+							<video controls class="wp-video-shortcode" preload="metadata">
+								<source type="<?php esc_attr_e( $mime_type ); ?>" src="<?php echo esc_url( $src ); ?>"<?php echo $poster; ?>>
 							</video>
 						</div>
 						<?php
