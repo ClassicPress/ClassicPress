@@ -200,10 +200,19 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 				if ( current_user_can( 'upload_files' ) ) {
 					?>
 
-					<button type="button"<?php echo $visibility; ?> class="button remove" aria-label="<?php esc_attr_e( 'Hide header image' ); ?>">
+					<button type="button"<?php echo $visibility; ?>
+						class="button remove"
+						aria-label="<?php esc_attr_e( 'Hide header image' ); ?>"
+					>
 						<?php _e( 'Hide image' ); ?>
 					</button>
-					<button type="button" class="upload-button button new" id="header_image-button" aria-label="<?php esc_attr_e( 'Add new header image' ); ?>" <?php $this->link(); ?>>
+					<button type="button"
+						class="upload-button button new"
+						id="header_image-button"
+						aria-label="<?php esc_attr_e( 'Add new header image' ); ?>"
+						<?php $this->link(); ?>
+						data-required-type="<?php esc_attr_e( $this->mime_type ); ?>"
+					>
 						<?php _e( 'Add image' ); ?>
 					</button>
 
