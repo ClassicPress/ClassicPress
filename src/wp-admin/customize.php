@@ -870,7 +870,6 @@ wp_print_scripts();
 								continue;
 							}
 							if ( $item['type'] === 'panel' ) {
-								$panel = $wp_customize->get_panel( $item['id'] );
 								?>
 								<ul id="sub-accordion-panel-<?php echo esc_attr( $item['id'] ); ?>"
 									class="customize-pane-child accordion-sub-container control-panel-content accordion-section control-panel-<?php echo esc_attr( $item['id'] ); ?>"
@@ -887,7 +886,7 @@ wp_print_scripts();
 
 												<?php
 												/* translators: %s: Panel title. */
-												printf( __( 'You are customizing %s' ), '<strong class="panel-title">' . esc_html( $panel->title ) . '</strong>' );
+												printf( __( 'You are customizing %s' ), '<strong class="panel-title">' . esc_html( $item['title'] ) . '</strong>' );
 												?>
 
 											</span>
@@ -899,10 +898,10 @@ wp_print_scripts();
 										</div>
 
 										<?php
-										if ( ! empty( $panel->description ) ) {
+										if ( ! empty( $item['description'] ) ) {
 											?>
 											<div class="description customize-panel-description">
-												<?php echo wp_kses_post( $panel->description ); ?>
+												<?php echo wp_kses_post( $item['description'] ); ?>
 											</div>
 											<?php
 										}
