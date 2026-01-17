@@ -103,7 +103,10 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 						<button type="button" class="button remove-button">
 							<?php esc_html_e( 'Remove' ); ?>
 						</button>
-						<button type="button" class="button upload-button control-focus">
+						<button type="button"
+							class="button upload-button control-focus"
+							data-required-type="<?php esc_attr_e( $this->mime_type ); ?>"
+						>
 							<?php esc_html_e( 'Change Image' ); ?>
 						</button>
 					</div>
@@ -125,7 +128,10 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 					?>
 
 					<div class="actions" <?php $this->link(); ?>>
-						<button type="button" class="upload-button button">
+						<button type="button"
+							class="upload-button button"
+							data-required-type="<?php esc_attr_e( $this->mime_type ); ?>"
+						>
 							<?php esc_html_e( 'Select Image' ); ?>
 						</button>
 
