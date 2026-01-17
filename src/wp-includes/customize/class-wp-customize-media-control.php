@@ -264,7 +264,10 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 						<button type="button" class="button remove-button">
 							<?php esc_html_e( $this->button_labels['remove'] ); ?>
 						</button>
-						<button type="button" class="button upload-button control-focus"<?php esc_attr_e( $described_by ); ?>>
+						<button type="button"
+							class="button upload-button control-focus"<?php esc_attr_e( $described_by ); ?>
+							data-required-type="<?php esc_attr_e( $this->mime_type ); ?>"
+						>
 							<?php esc_html_e( $this->button_labels['change'] ); ?>
 						</button>
 						<?php
@@ -280,7 +283,10 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 					<?php
 					if ( current_user_can( 'upload_files' ) ) {
 						?>
-						<button type="button" class="upload-button button-add-media"<?php esc_attr_e( $described_by ); ?>>
+						<button type="button"
+							class="upload-button button-add-media"<?php esc_attr_e( $described_by ); ?>
+							data-required-type="<?php esc_attr_e( $this->mime_type ); ?>"
+						>
 							<?php esc_html_e( $this->button_labels['select'] ); ?>
 						</button>
 						<?php
