@@ -971,7 +971,7 @@ wp_print_scripts();
 											// Sort controls by priority, lowest first.
 											usort(
 												$controls[ $middle_section['id'] ],
-													static function ( $a, $b ) {
+												static function ( $a, $b ) {
 													$ap = isset( $a['priority'] ) ? (int) $a['priority'] : 999;
 													$bp = isset( $b['priority'] ) ? (int) $b['priority'] : 999;
 													return $ap - $bp;
