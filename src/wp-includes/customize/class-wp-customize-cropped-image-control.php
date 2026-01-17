@@ -122,7 +122,10 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 				if ( current_user_can( 'upload_files' ) ) {
 					?>
 					<div class="actions">
-						<button class="upload-button button-add-media" type="button">
+						<button class="upload-button button-add-media"
+							type="button"
+							data-required-type="<?php esc_attr_e( $this->mime_type ); ?>"
+						>
 							<?php esc_html_e( $this->button_labels['select'] ); ?>
 						</button>
 					</div>
@@ -144,7 +147,10 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 						<button type="button" class="button remove-button">
 							<?php esc_html_e( $this->button_labels['remove'] ); ?>
 						</button>
-						<button type="button" class="button">
+						<button type="button"
+							class="button"
+							data-required-type="<?php esc_attr_e( $this->mime_type ); ?>"
+						>
 							<?php esc_html_e( $this->button_labels['change'] ); ?>
 						</button>
 						<?php
