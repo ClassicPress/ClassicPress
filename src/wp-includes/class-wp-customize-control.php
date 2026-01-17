@@ -487,7 +487,7 @@ class WP_Customize_Control {
 	protected function render_content() {
 		$input_id         = '_customize-input-' . $this->id;
 		$description_id   = '_customize-description-' . $this->id;
-		$describedby_attr = ( ! empty( $this->description ) ) ? ' aria-describedby="' . esc_attr( $description_id ) . '" ' : '';
+		$describedby_attr = ( ! empty( $this->description ) ) ? ' aria-describedby="' . esc_attr( $description_id ) . '"' : '';
 		switch ( $this->type ) {
 			case 'checkbox':
 				?>
@@ -679,13 +679,7 @@ class WP_Customize_Control {
 	 *
 	 * @since 4.1.0
 	 */
-	final public function print_template() {
-		?>
-		<script type="text/html" id="tmpl-customize-control-<?php echo esc_attr( $this->type ); ?>-content">
-			<?php $this->content_template(); ?>
-		</script>
-		<?php
-	}
+	final public function print_template() {}
 
 	/**
 	 * An Underscore (JS) template for this control's content (but not its container).
