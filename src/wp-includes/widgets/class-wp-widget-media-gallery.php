@@ -366,6 +366,16 @@ function cp_render_media_gallery_template() {
 		</div>
 
 		<footer class="widget-modal-footer">
+			<div class="widget-modal-footer-selection">
+				<div class="widget-modal-footer-selection-info">
+					<span class="count"></span>
+					<br>
+					<button type="button" class="button-link clear-selection"><?php esc_html_e( 'Clear' ); ?></button>
+				</div>
+				<div class="widget-modal-footer-selection-view">
+					<ul tabindex="-1"></ul>
+				</div>
+			</div>
 			<div class="widget-modal-footer-buttons">				
 				<button id="gallery-button-new" type="button" class="button media-button button-primary button-large media-button-gallery hidden" disabled><?php esc_html_e( 'Create a new gallery' ); ?></button>
 				<button id="gallery-button-insert" type="button" class="button media-button button-primary button-large media-button-insert hidden"><?php esc_html_e( 'Insert gallery' ); ?></button>

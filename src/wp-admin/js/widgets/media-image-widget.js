@@ -1030,6 +1030,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		header = dialog.querySelector( 'header' );
 		header.after( clone.querySelector( '#image-modal-content' ) );
 		dialog.querySelector( '.widget-modal-main' ).append( clone.querySelector( 'footer' ) );
+		dialog.querySelector( '.widget-modal-footer' ).style.display = 'block';
 		dialog.style.width = '85%';
 		dialog.style.height = '85%';
 		header.querySelector( '.widget-modal-headings' ).style.padding = '0 0.5em 0 0.75em';

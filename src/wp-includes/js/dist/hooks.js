@@ -1,8 +1,8 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 507:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ 507
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
@@ -344,14 +344,14 @@ var createHooks_default = createHooks;
 
 
 
-/***/ }),
+/***/ },
 
-/***/ 770:
-/***/ (function() {
+/***/ 770
+() {
 
 
 
-/***/ })
+/***/ }
 
 /******/ 	});
 /************************************************************************/

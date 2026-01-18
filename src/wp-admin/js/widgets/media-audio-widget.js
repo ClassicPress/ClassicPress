@@ -1241,7 +1241,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					addItemToWidget( widgetEl );
 
 				// Delete an attachment
-				} else if ( e.target.className.includes( 'delete-attachment' ) ) {
+				} else if ( e.target.classList && e.target.classList.contains( 'delete-attachment' ) ) {
 					if ( widgetEl.querySelector( '[data-property="attachment_id"]' ) ) {
 						if ( dialog.querySelector( '.widget-modal-grid .selected' ).dataset.id != widgetEl.querySelector( '[data-property="attachment_id"]' ).value ) {
 							if ( window.confirm( AUDIO_WIDGET.confirm_delete ) ) {
@@ -1251,12 +1251,50 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 
 				// Copy URL
-				} else if ( e.target.className.includes( 'copy-attachment-url' ) ) {
+				} else if ( e.target.classList && e.target.classList.contains( 'copy-attachment-url' ) ) {
 					copyToClipboard( e.target );
 				}
 			}
 		}
 	} );
+
+	/**
+	 * Fix audio widget preview after updates/moves.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function handleAudioWidgetUpdate( event ) {
+		var widget = event.detail.widget;
+		if ( widget.querySelector( '.id_base' ).value === 'media_audio' ) {
+			setTimeout( function() {
+				var url, audio, source,
+					mediaArea = widget.querySelector( '.media_audio' );
+
+				if ( mediaArea ) {
+					url = widget.querySelector( '[data-property="url"]' );
+					if ( url && url.value ) {
+						mediaArea.innerHTML = ''; // Clear existing audio
+
+						audio = document.createElement( 'audio' );
+						audio.className = 'wp_audio_shortcode';
+						audio.controls = true;
+						audio.style.width = '100%';
+
+						source = document.createElement( 'source' );
+						source.src = url.value;
+
+						audio.appendChild( source );
+						mediaArea.appendChild( audio );
+						audio.style.pointerEvents = 'auto';
+					}
+				}
+			}, 500 );
+		}
+	}
+
+	// Listen when widget updated.
+	document.addEventListener( 'widget-updated', handleAudioWidgetUpdate );
 
 	/**
 	 * Enable searching for items within grid.

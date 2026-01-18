@@ -170,6 +170,16 @@ function cp_susty_enqueue_assets() {
 		null,
 		cp_susty_get_asset_version(),
 	);
+	/* localize menu script */
+	wp_localize_script(
+		'cp-menu-resize',
+		'cp_menu_object',
+		array(
+			'Search'      => esc_html__( 'Search', 'the-classicpress-theme' ),
+			'SearchFor'   => esc_html__( 'Search for...', 'the-classicpress-theme' ),
+			'OpenSubMenu' => esc_html__( 'Click to open sub-menu.', 'the-classicpress-theme' ),
+		)
+	);
 }
 add_action( 'wp_enqueue_scripts', 'cp_susty_enqueue_assets' );
 
