@@ -17,20 +17,17 @@
 			'<h1>',
 			'</h1>'
 		);
+		?>
 
-		if ( 'post' === get_post_type() ) :
+		<?php if ( 'post' === get_post_type() ) : ?>
+		<p class="entry-meta">
+			<?php
+			susty_wp_posted_on();
+			susty_wp_posted_by();
+			esc_html_e( ' | Category: ', 'the-classicpress-theme' );
+			the_category( ', ' );
 			?>
-			<p class="entry-meta">
-				<!--span class="author-avatar">
-					<?php //echo get_avatar( get_the_author_meta( 'ID' ), '50' ); ?>
-				</span-->
-				<span class="post-meta">
-					<?php susty_wp_posted_on(); ?>
-					<?php susty_wp_posted_by(); ?>
-					<?php esc_html_e( ' | Category: ', 'the-classicpress-theme' ); ?>
-					<?php the_category( ', ' ); ?>
-				</span>
-			</p><!-- .entry-meta -->
+		</p><!-- .entry-meta -->
 		<?php endif; ?>
 	</header>
 
@@ -44,20 +41,19 @@
 		?>
 	</header>
 <?php endif; ?>
-	
+
 	<?php
 	if ( is_singular() ) {
 		susty_wp_post_thumbnail();
 	}
 	?>
 
-	<div>
-
+	<div id="post-content">
 		<?php
 		the_content(
 			sprintf(
 				wp_kses(
-				/* translators: %s: Name of current post. Only visible to screen readers */
+					/* translators: %s: Name of current post. Only visible to screen readers */
 					__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'the-classicpress-theme' ),
 					array(
 						'span' => array(
@@ -78,6 +74,25 @@
 		?>
 	</div>
 
-	<footer>
-	</footer>
+	<?php if ( get_edit_post_link() ) : ?>
+		<?php
+		edit_post_link(
+			sprintf(
+				wp_kses(
+					/* translators: %s: Name of current post. Only visible to screen readers */
+					__( 'Edit <span class="screen-reader-text">%s</span>', 'the-classicpress-theme' ),
+					array(
+						'span' => array(
+							'class' => array(),
+						),
+					)
+				),
+				get_the_title()
+			),
+			' <div class="edit-link">',
+			'</div>'
+		);
+		?>
+	<?php endif; ?>
+
 </article><!-- #post-<?php the_ID(); ?> -->
