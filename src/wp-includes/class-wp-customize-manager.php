@@ -238,6 +238,15 @@ final class WP_Customize_Manager {
 	private $_changeset_data;
 
 	/**
+	 * Map of section IDs to their breadcrumb parent title,
+	 * used by customize.php for mid-level sections.
+	 *
+	 * @since CP-2.7.0
+	 * @var array
+	 */
+	public $cp_breadcrumb_parents = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 3.4.0
@@ -931,7 +940,11 @@ final class WP_Customize_Manager {
 
 		$this->controls_data_by_section = $this->get_all_controls_data();
 
-		// Accommodates hard-coding of header_image description in core
+		/**
+		 * Accommodates hard-coding of header_image description in core.
+		 *
+		 * @since CP-2.7.0
+		 */
 		$section = $this->get_section( 'header_image' );
 		if ( $section && ! empty( $section->description ) ) {
 			$GLOBALS['cp_header_image_section_description'] = (string) $section->description;
@@ -945,6 +958,32 @@ final class WP_Customize_Manager {
 
 		if ( $this->is_preview() && ! is_admin() ) {
 			$this->customize_preview_init();
+		}
+
+		/**
+		 * Build breadcrumb parent titles for mid-level sections.
+		 *
+		 * @since CP-2.7.0
+		 */
+		$this->cp_breadcrumb_parents = array();
+		$sections = $this->sections();
+		foreach ( $sections as $section_id => $section ) {
+			// Skip root sections (no panel).
+			if ( empty( $section->panel ) ) {
+				continue;
+			}
+
+			// Safe panel title lookup.
+			$breadcrumb_parent_title = '';
+			$panel = $this->get_panel( $section->panel );
+			if ( $panel ) {
+				$breadcrumb_parent_title = $panel->title;
+			}
+
+			// Store non-empty result for customize.php.
+			if ( $breadcrumb_parent_title ) {
+				$this->cp_breadcrumb_parents[ $section_id ] = $breadcrumb_parent_title;
+			}
 		}
 	}
 
