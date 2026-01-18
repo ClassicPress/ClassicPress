@@ -97,7 +97,6 @@ if ( isset( $_POST['cp_publish_submit'] ) || isset( $_POST['save'] ) ) {
     exit;
 }
 
-
 // Themes
 $installed_themes = wp_prepare_themes_for_js();
 $count_themes     = count( $installed_themes );
@@ -107,8 +106,9 @@ $locations      = get_registered_nav_menus(); // slug => human label
 $menu_locations = get_nav_menu_locations();   // slug => menu ID
 $menus          = wp_get_nav_menus( array( 'fields' => 'id=>name' ) );
 
-// Controls and panels
+// Controls and breadcrumb parents
 $controls = $wp_customize->controls_data_by_section;
+$breadcrumb_parents = isset( $wp_customize->cp_breadcrumb_parents ) ? $wp_customize->cp_breadcrumb_parents : array();
 
 // Build top-level items: panels + sections without panel.
 $top_items = array();
@@ -923,6 +923,10 @@ wp_print_scripts();
 
 								<?php
 								foreach ( $middle_sections as $middle_section ) {
+									$parent_title = '';
+									if ( isset( $breadcrumb_parents[ $middle_section['id'] ] ) ) {
+										$parent_title = $breadcrumb_parents[ $middle_section['id'] ];
+									}
 									?>
 
 									<ul id="sub-accordion-section-<?php echo esc_attr( $middle_section['id'] ); ?>"
@@ -942,7 +946,7 @@ wp_print_scripts();
 														printf(
 															/* translators: &#9656; is the unicode right-pointing triangle. %s: Section title in the Customizer. */
 															__( 'Customizing &#9656; %s' ),
-															esc_html( $item['title'] )
+															esc_html( $parent_title )
 														);
 														?>
 													</span>
