@@ -1202,6 +1202,22 @@ module.exports = function(grunt) {
 	);
 
 	grunt.registerTask(
+		'postProcessWebpack',
+		function() {
+			const packages = [ "a11y", "api-fetch", "dom-ready", "hooks", "i18n", "url" ];
+
+			packages.forEach(
+				function ( wppackage ) {
+					let content = grunt.file.read( `${SOURCE_DIR}wp-includes/js/dist/${wppackage}.js` );
+					content = content.replace( /\n\/\/# sourceMappingURL=.+\.map\n/g, '\n' );
+					grunt.file.write( `${SOURCE_DIR}wp-includes/js/dist/${wppackage}.js`, content );
+					grunt.log.writeln( `Comments replaced in ${wppackage}.js.` );
+				}
+			);
+		}
+	);
+
+	grunt.registerTask(
 		'certificates:update',
 		'Updates the Composer package responsible for root certificate updates.',
 		function() {
@@ -1259,6 +1275,7 @@ module.exports = function(grunt) {
 			'copy:vendor-js',
 			'webpack:dev',
 			'webpack:min',
+			'postProcessWebpack',
 			'usebanner:js',
 			'copy:mediaelement-js'
 		]
