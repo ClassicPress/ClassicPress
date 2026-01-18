@@ -1,25 +1,24 @@
 <?php
 /**
- * The main template file
+ * The template for displaying posts at blog page
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
- *
- * @package Susty
  */
 
 get_header();
 ?>
+
 	<div id="primary">
 		<main id="main">
 
 		<?php
 		if ( have_posts() ) :
 			?>
-		
+
 			<div class="blog-list"> 
 			<?php
 
-				/* Start the Loop */
+			/* Start the Loop */
 			while ( have_posts() ) :
 				the_post();
 

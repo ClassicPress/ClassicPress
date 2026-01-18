@@ -1323,10 +1323,6 @@ p.text-rightcol,
 .page-main .post-thumbnail {
 	margin: 0.6em 0 1.4em;
 }
-.blog-list .hentry {
-	margin: 0;
-	border-bottom: 1px solid rgb(235 243 246 / 46%);
-}
 .blog-list .blog-post img {
 	max-width: 100%;
 }
@@ -1413,8 +1409,8 @@ p.text-rightcol,
 .nav-next {
 	text-align: right;
 }
-.archive-desc {
-	margin: -10px 0 1em 0;
+.taxonomy-description {
+	margin: 0 0 1em;
 	font-style: italic;
 }
 #main p.entry-meta {
@@ -1423,6 +1419,9 @@ p.text-rightcol,
 	font-size: 0.84em;
 	line-height: 1.2;
 	font-style: italic;
+}
+#main .blog-list p.entry-meta {
+	margin-bottom: 1em;
 }
 #main .blog-post p {
 	line-height: 1.55;
@@ -1832,7 +1831,6 @@ table.cp-logo-list .cp-logo-description {
 	/*listing*/
 	width: 100%;
 	margin-bottom: 1em;
-	padding-bottom: 0.5em;
 }
 .post-meta {
 	margin-top: 0.5em;
@@ -1841,9 +1839,6 @@ table.cp-logo-list .cp-logo-description {
 }
 .nav-links a {
 	color: #89288f;
-}
-.blog #main p.entry-meta {
-	margin: 0em 0 1.5em;
 }
 
 /* Comments linked to Discourse forums */
@@ -1934,12 +1929,12 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		padding-left: 1.2em;
 	}
 	#primary-menu li button {
-		margin-left: 0.6em;
+		margin-left: 0.8em;
 		padding: 0;
 		background: #fff0;
 		color: #fff;
 		font-weight: 400;
-		font-size: 0.7em;
+		font-size: 0.8em;
 	}
 	#primary-menu .search-submit {
 		margin-left: 0.2em;
