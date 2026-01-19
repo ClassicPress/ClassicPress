@@ -15,21 +15,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		parser = new DOMParser(),
 		dialog = document.getElementById( 'widget-modal' );
 
-	// If in Customizer, remove old-style dialog
-	// Preventing it from opening would be a breaking change, so just remove it asap for now
-	if ( document.body.className.includes( 'wp-customizer' ) ) {
-		observer = new MutationObserver( function() {
-			var oldModal = document.querySelector( '.media-modal.wp-core-ui' );
-			if ( oldModal ) {
-				oldModal.parentNode.remove();
-			}
-		} );
-		observer.observe( document.documentElement, {
-			childList: true,
-			subtree: true
-		} );
-	}
-
 	// Initialize the editor in the widget
 	function initTextWidget( widget ) {
 		var widgetNumber = widget.id.split( '-' ).pop(),
@@ -2311,13 +2296,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			itemLibrary, div, urlSettings, itemCancel, galleryInsert, galleryUpdate,
 			librarySelect, headerButtons, galleryGrid, libraryGrid, libraryItems,
 			content, sidebarSettings, sidebarInfo, gridSubPanel, dom, shortcodes,
-			editor, selectedNode, editorContainer, tinyWidget,
+			editor, selectedNode, editorContainer, tinyWidget, oldModal,
 			params = '',
 			selectedItems = [],
 			widget = e.target.closest( '.widget' );
 
 		// Add a media file
 		if ( widget ) {
+			// If in Customizer, remove old-style dialog
+			// Preventing it from opening would be a breaking change, so just remove it asap for now
+			if ( document.body.className.includes( 'wp-customizer' ) ) {
+				oldModal = document.querySelector( '.media-modal.wp-core-ui' );
+				if ( oldModal ) {
+					oldModal.parentNode.remove();
+				}
+			}
+
 			base = widget.querySelector( '.id_base' );
 			if ( base && base.value === 'text' && e.target.tagName === 'BUTTON' ) {
 				if ( e.target.className.includes( 'add_media' ) ) {
