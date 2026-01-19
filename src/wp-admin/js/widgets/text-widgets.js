@@ -9,7 +9,7 @@
  * @since CP 2.5.0
  */
 document.addEventListener( 'DOMContentLoaded', function() {
-	var observer, addButton, pond, content,
+	var addButton, pond, content,
 		{ FilePond } = window, // import FilePond
 		selectedIds = [],
 		parser = new DOMParser(),
