@@ -1792,9 +1792,6 @@ p.customize-section-description {
 #customize-footer-actions .collapse-sidebar {
 	bottom: 0;
 	transition: .18s bottom ease-in-out;
-}
-
-.expanded .wp-full-overlay-footer {
 	z-index: 999;
 }
 
