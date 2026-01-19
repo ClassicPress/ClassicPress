@@ -1794,6 +1794,10 @@ p.customize-section-description {
 	transition: .18s bottom ease-in-out;
 }
 
+.expanded .wp-full-overlay-footer {
+	z-index: 999;
+}
+
 .in-themes-panel:not(.animating) #customize-header-actions .spinner,
 .in-themes-panel:not(.animating) #customize-header-actions .customize-controls-preview-toggle,
 .in-themes-panel:not(.animating) #customize-preview,
