@@ -110,23 +110,27 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 		?>
 
 		<span class="customize-control-title">
-			<?php esc_html_e( $this->label ); ?>
+			<?php echo esc_html( $this->label ); ?>
 		</span>
 		<div class="customize-control-notifications-container" style="display: none;">
 			<ul></ul>
 		</div>
-		<div class="<?php esc_attr_e( $class ); ?>">
+		<div class="<?php echo esc_attr( $class ); ?>">
 
 			<?php
 			if ( empty( $login_custom_image_src ) ) {
 				if ( current_user_can( 'upload_files' ) ) {
 					?>
-					<div class="actions">
+					<div class="actions"
+						data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
+						data-empty="<?php echo esc_attr( $this->button_labels['select'] ); ?>"
+						data-full="<?php echo esc_attr( $this->button_labels['change'] ); ?>"
+					>
 						<button class="upload-button button-add-media"
 							type="button"
-							data-required-type="<?php esc_attr_e( $this->mime_type ); ?>"
+							data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
 						>
-							<?php esc_html_e( $this->button_labels['select'] ); ?>
+							<?php echo esc_html( $this->button_labels['select'] ); ?>
 						</button>
 					</div>
 					<?php
@@ -137,21 +141,25 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 					<img class="attachment-thumb"
 						src="<?php echo esc_url( $login_custom_image_src ); ?>"
 						draggable="false"
-						alt="<?php esc_attr_e( $alt_text ); ?>"
+						alt="<?php echo esc_attr( $alt_text ); ?>"
 					>
 				</div>
-				<div class="actions">
+				<div class="actions"
+					data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
+					data-empty="<?php echo esc_attr( $this->button_labels['select'] ); ?>"
+					data-full="<?php echo esc_attr( $this->button_labels['change'] ); ?>"
+				>
 					<?php
 					if ( current_user_can( 'upload_files' ) ) {
 						?>
 						<button type="button" class="button remove-button">
-							<?php esc_html_e( $this->button_labels['remove'] ); ?>
+							<?php echo esc_html( $this->button_labels['remove'] ); ?>
 						</button>
 						<button type="button"
 							class="button"
-							data-required-type="<?php esc_attr_e( $this->mime_type ); ?>"
+							data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
 						>
-							<?php esc_html_e( $this->button_labels['change'] ); ?>
+							<?php echo esc_html( $this->button_labels['change'] ); ?>
 						</button>
 						<?php
 					}
