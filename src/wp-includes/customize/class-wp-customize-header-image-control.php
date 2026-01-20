@@ -211,7 +211,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 						<?php esc_html_e( 'Hide image' ); ?>
 					</button>
 					<button type="button"
-						class="upload-button button new"
+						class="upload-button button new select-button"
 						id="header_image-button"
 						aria-label="<?php esc_attr_e( 'Add new header image' ); ?>"
 						<?php $this->link(); ?>
