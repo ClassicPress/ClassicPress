@@ -76,7 +76,7 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 			?>
 
 			<span class="customize-control-title">
-				<?php esc_html_e( $this->label ); ?>
+				<?php echo esc_html( $this->label ); ?>
 			</span>
 
 			<?php
@@ -91,7 +91,11 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 		if ( $bg_image ) {
 			?>
 
-			<div class="attachment-media-view attachment-media-view-image landscape">
+			<div class="attachment-media-view attachment-media-view-image landscape"
+				data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
+				data-empty="<?php esc_attr_e( 'Select Image' ); ?>"
+				data-full="<?php esc_attr_e( 'Change Image' ); ?>"
+			>
 				<div class="thumbnail thumbnail-image">
 					<img class="attachment-thumb" src="<?php echo esc_url( $bg_image ); ?>" draggable="false" alt="">					
 				</div>
@@ -103,10 +107,7 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 						<button type="button" class="button remove-button">
 							<?php esc_html_e( 'Remove' ); ?>
 						</button>
-						<button type="button"
-							class="button upload-button control-focus"
-							data-required-type="<?php esc_attr_e( $this->mime_type ); ?>"
-						>
+						<button type="button" class="button upload-button control-focus">
 							<?php esc_html_e( 'Change Image' ); ?>
 						</button>
 					</div>
@@ -121,17 +122,18 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 		} else {
 			?>
 
-			<div class="attachment-media-view">
+			<div class="attachment-media-view"
+				data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
+				data-empty="<?php esc_attr_e( 'Select Image' ); ?>"
+				data-full="<?php esc_attr_e( 'Change Image' ); ?>"
+			>
 
 				<?php
 				if ( current_user_can( 'upload_files' ) ) {
 					?>
 
 					<div class="actions" <?php $this->link(); ?>>
-						<button type="button"
-							class="upload-button button"
-							data-required-type="<?php esc_attr_e( $this->mime_type ); ?>"
-						>
+						<button type="button" class="upload-button button">
 							<?php esc_html_e( 'Select Image' ); ?>
 						</button>
 
