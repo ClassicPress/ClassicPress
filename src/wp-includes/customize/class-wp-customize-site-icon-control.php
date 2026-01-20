@@ -54,7 +54,7 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 			?>
 
 			<span class="customize-control-title">
-				<?php esc_html_e( $this->label ); ?>
+				<?php echo esc_html( $this->label ); ?>
 			</span>
 
 			<?php
@@ -90,7 +90,7 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 							>
 						</div>
 						<span class="browser-title" aria-hidden="true">
-							<?php esc_html_e( get_bloginfo( 'name' ) ); ?>
+							<?php echo esc_html( get_bloginfo( 'name' ) ); ?>
 						</span>
 					</div>
 					<img class="app-icon-preview"
@@ -98,15 +98,19 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 						alt="<?php esc_attr_e( 'Preview as an app icon' ); ?>"
 					>
 				</div>
-				<div class="actions">
+				<div class="actions"
+					data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
+					data-empty="<?php echo esc_attr( $this->button_labels['site_icon'] ); ?>"
+					data-full="<?php echo esc_attr( $this->button_labels['change'] ); ?>"
+				>
 					<?php
 					if ( current_user_can( 'upload_files' ) ) {
 						?>
 						<button type="button" class="button remove-button">
-							<?php esc_html_e( $this->button_labels['remove'] ); ?>
+							<?php echo esc_html( $this->button_labels['remove'] ); ?>
 						</button>
-						<button type="button" class="button upload-button" data-required-type="<?php esc_attr_e( $this->mime_type ); ?>">
-							<?php esc_html_e( $this->button_labels['change'] ); ?>
+						<button type="button" class="button upload-button" data-required-type="<?php echo esc_attr( $this->mime_type ); ?>">
+							<?php echo esc_html( $this->button_labels['change'] ); ?>
 						</button>
 						<?php
 					}
@@ -117,18 +121,22 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 		} else {
 			?>
 			<div class="attachment-media-view">
-				<div class="actions">
+				<div class="actions"
+					data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
+					data-empty="<?php echo esc_attr( $this->button_labels['site_icon'] ); ?>"
+					data-full="<?php echo esc_attr( $this->button_labels['change'] ); ?>"
+				>
 					<?php
 					if ( current_user_can( 'upload_files' ) ) {
 						?>
-						<button type="button" class="upload-button button-add-media" data-required-type="<?php esc_attr_e( $this->mime_type ); ?>">
-							<?php esc_html_e( $this->button_labels['site_icon'] ); ?>
+						<button type="button" class="upload-button button-add-media" data-required-type="<?php echo esc_attr( $this->mime_type ); ?>">
+							<?php echo esc_html( $this->button_labels['site_icon'] ); ?>
 						</button>
 						<?php
 						if ( $default_icon_url ) {
 							?>
-							<button type="button" class="button default-button" data-required-type="<?php esc_attr_e( $this->mime_type ); ?>">
-								<?php esc_html_e( $this->button_labels['default'] ); ?>
+							<button type="button" class="button default-button" data-required-type="<?php echo esc_attr( $this->mime_type ); ?>">
+								<?php echo esc_html( $this->button_labels['default'] ); ?>
 							</button>
 							<?php
 						}
