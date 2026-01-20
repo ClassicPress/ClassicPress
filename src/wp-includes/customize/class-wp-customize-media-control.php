@@ -266,7 +266,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 						<button type="button" class="button remove-button">
 							<?php echo esc_html( $this->button_labels['remove'] ); ?>
 						</button>
-						<button type="button" class="button upload-button control-focus"<?php echo esc_attr( $described_by ); ?>>
+						<button type="button" class="button upload-button control-focus select-button"<?php echo esc_attr( $described_by ); ?>>
 							<?php echo esc_html( $this->button_labels['change'] ); ?>
 						</button>
 						<?php
@@ -286,7 +286,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 					<?php
 					if ( current_user_can( 'upload_files' ) ) {
 						?>
-						<button type="button" class="upload-button button-add-media"<?php echo esc_attr( $described_by ); ?>>
+						<button type="button" class="upload-button button-add-media select-button"<?php echo esc_attr( $described_by ); ?>>
 							<?php echo esc_html( $this->button_labels['select'] ); ?>
 						</button>
 						<?php
