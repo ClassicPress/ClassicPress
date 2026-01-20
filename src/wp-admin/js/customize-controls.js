@@ -1128,10 +1128,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function removeMedia() {
-		var div	= document.createElement( 'div' );
+		var div, button;
 		if ( ! customizeButton.nextElementSibling.id || customizeButton.nextElementSibling.id  !== 'header_image-button' ) {
-			customizeButton.parentNode.querySelector( '.thumbnail thumbnail-image' ).remove();
+			button	= document.createElement( 'button' );
+			button.className = 'upload-button button';
+			button.type = 'button';
+			button.textContent = 'Select';
+			customizeButton.parentNode.previousElementSibling.replaceWith( button );
+			customizeButton.parentNode.innerHTML = '';
 		} else { // header image
+			div	= document.createElement( 'div' );
 			div.className = 'placeholder';
 			div.textContent = 'No image set';
 			customizeButton.parentNode.previousElementSibling.querySelector( '.container' ).childNodes[0].replaceWith( div );
@@ -1224,8 +1230,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	document.addEventListener( 'click', function( e ) {
-		var id, page, itemBrowse,
-			itemUpload, gridPanel, uploadPanel,
+		var id, page, itemBrowse, itemUpload, gridPanel, uploadPanel,
 			modalButtons, rightSidebar, modalPages,
 			widget = e.target.closest( '.widget' );
 
@@ -1399,12 +1404,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			sidebarCollapseExpand( e.target.parentNode );
 
 		// Add media file
-		} else if ( e.target.classList.contains( 'upload-button' ) || e.target.id === 'header_image-button' ) {
+		} else if ( e.target.tagName === 'BUTTON' && ( e.target.classList.contains( 'upload-button' ) || ( e.target.classList.contains( 'button' ) && e.target.dataset.requiredType ) || e.target.id === 'header_image-button' ) ) {
 			customizeButton = e.target;
 			selectMedia();
 
 		// Remove media file
-		} else if ( e.target.classList.contains( 'button remove' ) || e.target.classList.contains( 'button remove-button' ) ) {
+		} else if ( e.target.tagName === 'BUTTON' && ( e.target.classList.contains( 'remove' ) || e.target.classList.contains( 'remove-button' ) ) ) {
 			customizeButton = e.target;
 			removeMedia();
 
