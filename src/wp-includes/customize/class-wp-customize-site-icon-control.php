@@ -109,7 +109,7 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 						<button type="button" class="button remove-button">
 							<?php echo esc_html( $this->button_labels['remove'] ); ?>
 						</button>
-						<button type="button" class="button upload-button">
+						<button type="button" class="button upload-button select-button">
 							<?php echo esc_html( $this->button_labels['change'] ); ?>
 						</button>
 						<?php
@@ -129,7 +129,7 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 					<?php
 					if ( current_user_can( 'upload_files' ) ) {
 						?>
-						<button type="button" class="upload-button button-add-media">
+						<button type="button" class="upload-button button-add-media select-button">
 							<?php echo esc_html( $this->button_labels['site_icon'] ); ?>
 						</button>
 						<?php
