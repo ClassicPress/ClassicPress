@@ -24,7 +24,7 @@ get_header();
 
 				get_template_part( 'template-parts/content-blog', get_post_type() );
 
-				endwhile;
+			endwhile;
 			?>
 
 			</div> 
