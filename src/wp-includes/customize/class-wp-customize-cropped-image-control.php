@@ -126,10 +126,7 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 						data-empty="<?php echo esc_attr( $this->button_labels['select'] ); ?>"
 						data-full="<?php echo esc_attr( $this->button_labels['change'] ); ?>"
 					>
-						<button class="upload-button button-add-media"
-							type="button"
-							data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
-						>
+						<button class="upload-button button-add-media" type="button">
 							<?php echo esc_html( $this->button_labels['select'] ); ?>
 						</button>
 					</div>
@@ -155,10 +152,7 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 						<button type="button" class="button remove-button">
 							<?php echo esc_html( $this->button_labels['remove'] ); ?>
 						</button>
-						<button type="button"
-							class="button"
-							data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
-						>
+						<button type="button" class="button">
 							<?php echo esc_html( $this->button_labels['change'] ); ?>
 						</button>
 						<?php
