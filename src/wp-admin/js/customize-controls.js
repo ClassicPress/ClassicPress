@@ -830,7 +830,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			params = new URLSearchParams( {
 				'action': 'query-attachments',
 				'query[posts_per_page]': IMAGE_WIDGET.per_page,
-				'query[post_mime_type]': customizeButton.dataset.requiredType,
+				'query[post_mime_type]': customizeButton.parentNode.dataset.requiredType,
 				'query[paged]': 1
 			} );
 
@@ -946,7 +946,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				'query[posts_per_page]': IMAGE_WIDGET.per_page,
 				'query[monthnum]': dateFilter.value ? parseInt( dateFilter.value.substr( 4, 2 ), 10 ) : 0,
 				'query[year]': dateFilter.value ? parseInt( dateFilter.value.substr( 0, 4 ), 10 ) : 0,
-				'query[post_mime_type]': customizeButton.dataset.requiredType,
+				'query[post_mime_type]': customizeButton.parentNode.dataset.requiredType,
 				'query[s]': search.value ? search.value : '',
 				'query[paged]': paged ? paged : 1,
 				'query[media_category_name]': mediaCatSelect.value ? mediaCatSelect.value : ''
@@ -1076,47 +1076,43 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function addItemToCustomizer() {
-		var imageElement, source, sizesObject, selectedItem, current,
-			sizeOptions = '',
-			editNonce = '',
-			replaceText = IMAGE_WIDGET.replace_image,
-			div	= document.createElement( 'div' );
+		var selectedItem, imageElement,
+			parent = customizeButton.parentNode,
+			removeButton = document.createElement( 'button' ),
+			selectButton = document.createElement( 'button' );
 
-		if ( customizeButton.dataset.requireType === 'video' ) {
-			replaceText = VIDEO_WIDGET.replace_video;
-		}
+		removeButton.className = 'button remove-button';
+		removeButton.type = 'button';
+		removeButton.textContent = 'Remove';
+
+		selectButton.className = 'button select-button';
+		selectButton.type = 'button';
+		selectButton.textContent = customizeButton.parentNode.dataset.full;
 
 		if ( ! dialog.querySelector( '#media-library-grid' ).hasAttribute( 'hidden' ) ) {
 			selectedItem = dialog.querySelector( '.widget-modal-grid .selected' );
-			editNonce = selectedItem.dataset.editNonce;
 			imageElement = selectedItem.querySelector( 'img' );
-			sizesObject = JSON.parse( selectedItem.dataset.sizes );
-			for ( var dimension in sizesObject ) {
-				sizeOptions += '<option value="' + dimension + '">' + dimension[0].toUpperCase() + dimension.slice(1) + ' – ' + sizesObject[dimension].width + ' x ' + sizesObject[dimension].height + '</option>';
-			}
 		}
-
-		// Add Remove and Change buttons
-		div.innerHTML = '<button type="button" class="button remove-button">Remove</button>' +
-			'<button type="button" class="button upload-button">' + replaceText + '</button>';
 
 		// Insert image according to whether this is a new insertion or replacement
 		if ( ! customizeButton.id || customizeButton.id !== 'header_image-button' ) {
 			imageElement.className = 'thumbnail thumbnail-image';
-			if ( customizeButton.parentNode.className !== 'actions' ) {
-				customizeButton.nextElementSibling.insertAdjacentHTML( 'afterbegin', div.innerHTML );
-				customizeButton.replaceWith( imageElement );
-			} else { // replacement
-				customizeButton.parentNode.querySelector( '.thumbnail thumbnail-image' ).replaceWith( imageElement );
+			if ( parent.parentNode.querySelector( 'img' ) || parent.parentNode.querySelector( 'video' ) ) {
+				parent.parentNode.querySelector( 'img' )?.replaceWith( imageElement );
+				parent.parentNode.querySelector( 'video' )?.replaceWith( imageElement );
+			} else {
+				parent.parentNode.prepend( imageElement );
+				parent.prepend( removeButton );
+				customizeButton.replaceWith( selectButton );
+				setTimeout( function() {
+					selectButton.focus();
+				} );
 			}
 		} else { // header image
-			current = customizeButton.parentNode.previousElementSibling.querySelector( '.container' ).childNodes[0];
-			current.replaceWith( imageElement );
-			if ( customizeButton.parentNode.previousElementSibling.querySelector( '.placeholder' ) ) {
-				customizeButton.parentNode.previousElementSibling.querySelector( '.placeholder' ).remove();
-			}
+			parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
+			parent.previousElementSibling.querySelector( '.container' ).append( imageElement );
 			customizeButton.previousElementSibling.style.display = '';
-			customizeButton.textContent = replaceText;
+			customizeButton.classList.remove( 'upload-button' );
 		}
 		closeModal();
 	}
@@ -1128,19 +1124,29 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function removeMedia() {
-		var div, button;
-		if ( ! customizeButton.nextElementSibling.id || customizeButton.nextElementSibling.id  !== 'header_image-button' ) {
-			button	= document.createElement( 'button' );
-			button.className = 'upload-button button';
+		var button,
+			parent = customizeButton.parentNode;
+
+		if ( ! customizeButton.nextElementSibling.id || customizeButton.nextElementSibling.id !== 'header_image-button' ) {
+			button = document.createElement( 'button' );
+			button.className = 'upload-button button select-button';
 			button.type = 'button';
-			button.textContent = 'Select';
-			customizeButton.parentNode.previousElementSibling.replaceWith( button );
-			customizeButton.parentNode.innerHTML = '';
+			button.textContent = customizeButton.parentNode.dataset.empty;
+			parent.parentNode.querySelector( 'img' )?.remove();
+			parent.parentNode.querySelector( 'video' )?.remove();
+			parent.innerHTML = '';
+			parent.append( button );
+			setTimeout( function() {
+				button.focus();
+			} );
 		} else { // header image
-			div	= document.createElement( 'div' );
-			div.className = 'placeholder';
-			div.textContent = 'No image set';
-			customizeButton.parentNode.previousElementSibling.querySelector( '.container' ).childNodes[0].replaceWith( div );
+			parent.previousElementSibling.querySelector( 'img' )?.remove();
+			parent.previousElementSibling.querySelector( 'video' )?.remove();
+			customizeButton.style.display = 'none';
+			customizeButton.nextElementSibling.className = 'upload-button button new select-button';
+			setTimeout( function() {
+				customizeButton.nextElementSibling.focus();
+			} );
 		}
 	}
 
@@ -1403,15 +1409,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.preventDefault();
 			sidebarCollapseExpand( e.target.parentNode );
 
-		// Add media file
-		} else if ( e.target.tagName === 'BUTTON' && ( e.target.classList.contains( 'upload-button' ) || ( e.target.classList.contains( 'button' ) && e.target.dataset.requiredType ) || e.target.id === 'header_image-button' ) ) {
-			customizeButton = e.target;
-			selectMedia();
-
 		// Remove media file
 		} else if ( e.target.tagName === 'BUTTON' && ( e.target.classList.contains( 'remove' ) || e.target.classList.contains( 'remove-button' ) ) ) {
 			customizeButton = e.target;
 			removeMedia();
+
+		// Add media file
+		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'select-button' ) ) {
+			customizeButton = e.target;
+			selectMedia();
 
 		// Edit the image
 		} else if ( e.target.id === 'edit-original' ) {
