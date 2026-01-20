@@ -148,7 +148,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 				?>
 
 				<div class="customize-control-title">
-					<?php esc_html_e( $this->label ); ?>
+					<?php echo esc_html( $this->label ); ?>
 				</div>
 
 				<?php
@@ -188,13 +188,17 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 			<div class="current">
 				<label for="header_image-button">
 					<span class="customize-control-title">
-						<?php _e( 'Current header' ); ?>
+						<?php esc_html_e( 'Current header' ); ?>
 					</span>
 				</label>
 				<div class="container">
 				</div>
 			</div>
-			<div class="actions">
+			<div class="actions"
+				data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
+				data-empty="<?php esc_attr_e( 'Add image' ); ?>"
+				data-full="<?php esc_attr_e( 'Add image' ); ?>"
+			>
 
 				<?php
 				if ( current_user_can( 'upload_files' ) ) {
@@ -204,16 +208,15 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 						class="button remove"
 						aria-label="<?php esc_attr_e( 'Hide header image' ); ?>"
 					>
-						<?php _e( 'Hide image' ); ?>
+						<?php esc_html_e( 'Hide image' ); ?>
 					</button>
 					<button type="button"
 						class="upload-button button new"
 						id="header_image-button"
 						aria-label="<?php esc_attr_e( 'Add new header image' ); ?>"
 						<?php $this->link(); ?>
-						data-required-type="<?php esc_attr_e( $this->mime_type ); ?>"
 					>
-						<?php _e( 'Add image' ); ?>
+						<?php esc_html_e( 'Add image' ); ?>
 					</button>
 
 					<?php
@@ -239,13 +242,13 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 
 								<div class="header-image-item">
 									<img src="<?php echo esc_url( $header['url'] ); ?>" 
-										alt="<?php esc_attr_e( $header['label'] ); ?>"
+										alt="<?php echo esc_attr( $header['label'] ); ?>"
 									>
 									<span class="title">
-										<?php esc_html_e( $header['label'] ); ?>
+										<?php echo esc_html( $header['label'] ); ?>
 									</span>
 									<button class="choice" data-customize-url="<?php echo esc_url( $header['url'] ); ?>">
-										<?php esc_html_e( $this->button_labels['frame_button'] ); ?>
+										<?php echo esc_html( $this->button_labels['frame_button'] ); ?>
 									</button>
 								</div>
 
@@ -279,7 +282,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 										?>
 
 										<span>
-											<?php esc_html_e( $header['label'] ); ?>
+											<?php echo esc_html( $header['label'] ); ?>
 										</span>
 
 										<?php
@@ -287,7 +290,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 									?>
 
 									<button class="choice" data-customize-url="<?php echo esc_url( $header['url'] ); ?>">
-										<?php esc_html_e( $this->button_labels['frame_button'] ); ?>
+										<?php echo esc_html( $this->button_labels['frame_button'] ); ?>
 									</button>
 								</div>
 
