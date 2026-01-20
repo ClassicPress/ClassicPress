@@ -149,7 +149,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 		if ( $this->label ) {
 			?>
 			<span class="customize-control-title">
-				<?php esc_html_e( $this->label ); ?>
+				<?php echo esc_html( $this->label ); ?>
 			</span>
 			<?php
 		}
@@ -162,7 +162,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 		<?php
 		if ( $this->description ) {
 			?>
-			<span id="<?php esc_attr_e( $description_id ); ?>" class="description customize-control-description">
+			<span id="<?php echo esc_attr( $description_id ); ?>" class="description customize-control-description">
 				<?php echo wp_kses_post( $this->description ); ?>
 			</span>
 			<?php
@@ -170,8 +170,8 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 
 		if ( $attachment_id && $src ) {
 			?>
-			<div class="attachment-media-view attachment-media-view-<?php esc_attr_e( $mime_type ); ?> <?php esc_attr_e( $orientation ); ?>">
-				<div class="thumbnail thumbnail-<?php esc_attr_e( $mime_type ); ?>">
+			<div class="attachment-media-view attachment-media-view-<?php echo esc_attr( $mime_type ); ?> <?php echo esc_attr( $orientation ); ?>">
+				<div class="thumbnail thumbnail-<?php echo esc_attr( $mime_type ); ?>">
 					<?php
 					if ( 'image' === $mime_type && $sizes && $sizes['medium'] ) {
 						$medium_src = wp_get_attachment_image_url( $attachment_id, 'medium' );
@@ -179,7 +179,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 						<img class="attachment-thumb"
 							src="<?php echo esc_url( $medium_src ); ?>"
 							draggable="false"
-							alt="<?php esc_attr_e( $alt_text ); ?>"
+							alt="<?php echo esc_attr( $alt_text ); ?>"
 						>
 						<?php
 					} elseif ( 'image' === $mime_type && $sizes && $sizes['full'] ) {
@@ -188,7 +188,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 						<img class="attachment-thumb"
 							src="<?php echo esc_url( $full_src ); ?>"
 							draggable="false"
-							alt="<?php esc_attr_e( $alt_text ); ?>"
+							alt="<?php echo esc_attr( $alt_text ); ?>"
 						>
 						<?php
 					} elseif ( 'audio' === $mime_type ) {
@@ -197,76 +197,77 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 							<img src="<?php echo esc_url( $src ); ?>"
 								class="thumbnail"
 								draggable="false"
-								alt="<?php esc_attr_e( $alt_text ); ?>"
+								alt="<?php echo esc_attr( $alt_text ); ?>"
 							>
 							<?php
 						} else {
 							?>
-							<img src="<?php esc_attr_e( $icon ); ?>"
+							<img src="<?php echo esc_attr( $icon ); ?>"
 								class="attachment-thumb type-icon"
 								draggable="false"
-								alt="<?php esc_attr_e( $alt_text ); ?>"
+								alt="<?php echo esc_attr( $alt_text ); ?>"
 							>
 							<?php
 						}
 						?>
 						<p class="attachment-meta attachment-meta-title">
-							&#8220;<?php esc_html_e( $title ); ?>&#8221;
+							&#8220;<?php echo esc_html( $title ); ?>&#8221;
 						</p>
 						<?php
 						if ( $album ) {
 							?>
 							<p class="attachment-meta">
-								<em><?php esc_html_e( $album ); ?></em>
+								<em><?php echo esc_html( $album ); ?></em>
 							</p>
 							<?php
 						}
 						if ( $artist ) {
 							?>
 							<p class="attachment-meta">
-								<?php esc_html_e( $artist ); ?>
+								<?php echo esc_html( $artist ); ?>
 							</p>
 							<?php
 						}
 						?>
 						<audio style="visibility: hidden" controls class="wp-audio-shortcode" width="100%" preload="none">
-							<source type="<?php esc_attr_e( $mime_type ); ?>" src="<?php echo esc_url( $src ); ?>">
+							<source type="<?php echo esc_attr( $mime_type ); ?>" src="<?php echo esc_url( $src ); ?>">
 						</audio>
 						<?php
 					} elseif ( 'video' === $mime_type ) {
 						?>
 						<div class="wp-media-wrapper wp-video">
 							<video controls class="wp-video-shortcode" preload="metadata">
-								<source type="<?php esc_attr_e( $mime_type ); ?>" src="<?php echo esc_url( $src ); ?>"<?php echo $poster; ?>>
+								<source type="<?php echo esc_attr( $mime_type ); ?>" src="<?php echo esc_url( $src ); ?>"<?php echo $poster; ?>>
 							</video>
 						</div>
 						<?php
 					} else {
 						?>
 						<img class="attachment-thumb type-icon icon"
-							src="<?php esc_attr_e( $icon ); ?>"
+							src="<?php echo esc_attr( $icon ); ?>"
 							draggable="false"
-							alt="<?php esc_attr_e( $alt_text ); ?>"
+							alt="<?php echo esc_attr( $alt_text ); ?>"
 						>
 						<p class="attachment-title">
-							<?php esc_html_e( $title ); ?>
+							<?php echo esc_html( $title ); ?>
 						</p>
 						<?php
 					}
 					?>
 				</div>
-				<div class="actions">
+				<div class="actions"
+					data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
+					data-empty="<?php echo esc_attr( $this->button_labels['select'] ); ?>"
+					data-full="<?php echo esc_attr( $this->button_labels['change'] ); ?>"
+				>
 					<?php
 					if ( current_user_can( 'upload_files' ) ) {
 						?>
 						<button type="button" class="button remove-button">
-							<?php esc_html_e( $this->button_labels['remove'] ); ?>
+							<?php echo esc_html( $this->button_labels['remove'] ); ?>
 						</button>
-						<button type="button"
-							class="button upload-button control-focus"<?php esc_attr_e( $described_by ); ?>
-							data-required-type="<?php esc_attr_e( $this->mime_type ); ?>"
-						>
-							<?php esc_html_e( $this->button_labels['change'] ); ?>
+						<button type="button" class="button upload-button control-focus"<?php echo esc_attr( $described_by ); ?>>
+							<?php echo esc_html( $this->button_labels['change'] ); ?>
 						</button>
 						<?php
 					}
@@ -277,21 +278,22 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 		} else {
 			?>
 			<div class="attachment-media-view">
-				<div class="actions">
+				<div class="actions"
+					data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
+					data-empty="<?php echo esc_attr( $this->button_labels['select'] ); ?>"
+					data-full="<?php echo esc_attr( $this->button_labels['change'] ); ?>"
+				>
 					<?php
 					if ( current_user_can( 'upload_files' ) ) {
 						?>
-						<button type="button"
-							class="upload-button button-add-media"<?php esc_attr_e( $described_by ); ?>
-							data-required-type="<?php esc_attr_e( $this->mime_type ); ?>"
-						>
-							<?php esc_html_e( $this->button_labels['select'] ); ?>
+						<button type="button" class="upload-button button-add-media"<?php echo esc_attr( $described_by ); ?>>
+							<?php echo esc_html( $this->button_labels['select'] ); ?>
 						</button>
 						<?php
 						if ( $default_id ) {
 							?>
 							<button type="button" class="button default-button">
-								<?php esc_html_e( $this->button_labels['change'] ); ?>
+								<?php echo esc_html( $this->button_labels['change'] ); ?>
 							</button>
 							<?php
 						}
