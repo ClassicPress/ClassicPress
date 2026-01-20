@@ -91,11 +91,7 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 		if ( $bg_image ) {
 			?>
 
-			<div class="attachment-media-view attachment-media-view-image landscape"
-				data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
-				data-empty="<?php esc_attr_e( 'Select Image' ); ?>"
-				data-full="<?php esc_attr_e( 'Change Image' ); ?>"
-			>
+			<div class="attachment-media-view attachment-media-view-image landscape">
 				<div class="thumbnail thumbnail-image">
 					<img class="attachment-thumb" src="<?php echo esc_url( $bg_image ); ?>" draggable="false" alt="">					
 				</div>
@@ -103,11 +99,15 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 				<?php
 				if ( current_user_can( 'upload_files' ) ) {
 					?>
-					<div class="actions" <?php $this->link(); ?>>
+					<div class="actions" <?php $this->link(); ?>
+						data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
+						data-empty="<?php esc_attr_e( 'Select Image' ); ?>"
+						data-full="<?php esc_attr_e( 'Change Image' ); ?>"
+					>
 						<button type="button" class="button remove-button">
 							<?php esc_html_e( 'Remove' ); ?>
 						</button>
-						<button type="button" class="button upload-button control-focus">
+						<button type="button" class="button upload-button control-focus select-button">
 							<?php esc_html_e( 'Change Image' ); ?>
 						</button>
 					</div>
@@ -122,18 +122,18 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 		} else {
 			?>
 
-			<div class="attachment-media-view"
-				data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
-				data-empty="<?php esc_attr_e( 'Select Image' ); ?>"
-				data-full="<?php esc_attr_e( 'Change Image' ); ?>"
-			>
+			<div class="attachment-media-view">
 
 				<?php
 				if ( current_user_can( 'upload_files' ) ) {
 					?>
 
-					<div class="actions" <?php $this->link(); ?>>
-						<button type="button" class="upload-button button">
+					<div class="actions" <?php $this->link(); ?>
+						data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
+						data-empty="<?php esc_attr_e( 'Select Image' ); ?>"
+						data-full="<?php esc_attr_e( 'Change Image' ); ?>"
+					>
+						<button type="button" class="upload-button button select-button">
 							<?php esc_html_e( 'Select Image' ); ?>
 						</button>
 
