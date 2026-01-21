@@ -10,6 +10,19 @@
 class CP_Settings {
 	public function __construct() {
 		add_action( 'update_option_cp_object_cache', array( $this, 'cp_apcu_cache_option_change' ), 10, 3 );
+		add_action( 'add_option_cp_object_cache', array( $this, 'cp_apcu_cache_option_add' ), 10, 1 );
+	}
+
+	/**
+	 * Trigger code to add or remove object cache handler file on add setting
+	 *
+	 * @since CP-2.7.0
+	 *
+	 */
+	public function cp_apcu_cache_option_add( $option_name ) {
+		if ( $option_name === 'cp_object_cache' ) {
+			$this->_cp_maybe_install_apcu_object_cache();
+		}
 	}
 
 	/**
