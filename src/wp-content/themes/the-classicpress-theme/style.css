@@ -1324,7 +1324,8 @@ p.text-rightcol,
 	margin: 1.5em 0;
 	border-bottom: 10px solid #057f99;
 }
-.page-main .post-thumbnail {
+.page-main .post-thumbnail,
+.post-main .post-thumbnail {
 	margin: 0.6em 0 1.4em;
 }
 .blog-list .blog-post img {
