@@ -937,7 +937,6 @@ svg * {
 	src: local("Source Sans Pro Bold"), local("SourceSansPro-Bold"),
 		url("fonts/source-sans-pro-v12-latin-700.woff2") format("woff2");
 }
-
 @font-face {
 	font-family: "Source Sans Pro";
 	font-style: italic;
@@ -1251,6 +1250,11 @@ body.home #content,
 body.single #content {
 	margin-top: 2.6em;
 }
+.blog-post {
+	/*listing*/
+	width: 100%;
+	margin-bottom: 1em;
+}
 .center {
 	text-align: center;
 }
@@ -1343,6 +1347,9 @@ p.text-rightcol,
 	text-align: center;
 	letter-spacing: 0.1em;
 }
+.attachment-post-thumbnail {
+	max-width: 100%;
+}
 #main .blog-list .blog-post h2 {
 	line-height: 1.1;
 	margin-bottom: 0.3em;
@@ -1402,6 +1409,9 @@ p.text-rightcol,
 	justify-content: space-between;
 	gap: 1em;
 }
+.nav-links a {
+	color: #89288f;
+}
 .nav-previous,
 .nav-next {
 	flex: 1;
@@ -1426,8 +1436,6 @@ p.text-rightcol,
 #main .blog-post p {
 	line-height: 1.55;
 }
-
-/* BLOG LISTING */
 #content p.button {
 	margin: 1.5em 0;
 }
@@ -1821,24 +1829,6 @@ table.cp-logo-list .cp-logo-description {
 }
 .cppolicy {
 	text-align: right;
-}
-
-/* BLOG PAGE */
-.attachment-post-thumbnail {
-	max-width: 100%;
-}
-.blog-post {
-	/*listing*/
-	width: 100%;
-	margin-bottom: 1em;
-}
-.post-meta {
-	margin-top: 0.5em;
-	font-style: italic;
-	display: inline-block;
-}
-.nav-links a {
-	color: #89288f;
 }
 
 /* Comments linked to Discourse forums */
