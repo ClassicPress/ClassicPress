@@ -26,7 +26,7 @@
 		<?php endif; ?>
 	</header>
 
-	<div class="post-content">
+	<div class="excerpt">
 		<?php the_excerpt(); ?>
 	</div>
 
