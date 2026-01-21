@@ -1,22 +1,8 @@
 <?php
-/**
- * Mock PHPMailer class for testing.
- *
- * @package WordPress
- * @subpackage UnitTests
- * @since 4.5.0
- */
-
 require_once ABSPATH . 'wp-includes/PHPMailer/PHPMailer.php';
 require_once ABSPATH . 'wp-includes/PHPMailer/Exception.php';
-require_once ABSPATH . 'wp-includes/class-wp-phpmailer.php';
 
-/**
- * Test class extending WP_PHPMailer.
- *
- * @since 4.5.0
- */
-class MockPHPMailer extends WP_PHPMailer {
+class MockPHPMailer extends PHPMailer\PHPMailer\PHPMailer {
 	public $mock_sent = array();
 
 	public function preSend() {
