@@ -10,37 +10,37 @@
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
-<?php if ( is_singular() ) : ?>
-	<header>
-		<?php
-		the_title(
-			'<h1>',
-			'</h1>'
-		);
-		?>
-
-		<?php if ( 'post' === get_post_type() ) : ?>
-		<p class="entry-meta">
+	<?php if ( is_singular() ) : ?>
+		<header>
 			<?php
-			susty_wp_posted_on();
-			susty_wp_posted_by();
-			esc_html_e( ' | Category: ', 'the-classicpress-theme' );
-			the_category( ', ' );
+			the_title(
+				'<h1>',
+				'</h1>'
+			);
 			?>
-		</p><!-- .entry-meta -->
-		<?php endif; ?>
-	</header>
 
-<?php else : ?>
-	<header class="blog">
-		<?php
-		the_title(
-			'<h2><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">',
-			'</a></h2>'
-		);
-		?>
-	</header>
-<?php endif; ?>
+			<?php if ( 'post' === get_post_type() ) : ?>
+			<p class="entry-meta">
+				<?php
+				susty_wp_posted_on();
+				susty_wp_posted_by();
+				esc_html_e( ' | Category: ', 'the-classicpress-theme' );
+				the_category( ', ' );
+				?>
+			</p><!-- .entry-meta -->
+			<?php endif; ?>
+		</header>
+
+	<?php else : ?>
+		<header class="blog">
+			<?php
+			the_title(
+				'<h2><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">',
+				'</a></h2>'
+			);
+			?>
+		</header>
+	<?php endif; ?>
 
 	<?php
 	if ( is_singular() ) {
@@ -48,22 +48,9 @@
 	}
 	?>
 
-	<div id="post-content">
+	<div class="post-content">
 		<?php
-		the_content(
-			sprintf(
-				wp_kses(
-					/* translators: %s: Name of current post. Only visible to screen readers */
-					__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'the-classicpress-theme' ),
-					array(
-						'span' => array(
-							'class' => array(),
-						),
-					)
-				),
-				get_the_title()
-			)
-		);
+		the_content();
 
 		wp_link_pages(
 			array(

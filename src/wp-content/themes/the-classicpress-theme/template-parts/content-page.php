@@ -11,7 +11,7 @@
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
-	<div id="page-content">
+	<div class="page-content">
 		<?php
 		the_content();
 

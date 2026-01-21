@@ -24,7 +24,7 @@
 			?>
 		</p><!-- .entry-meta -->
 
-		<div class="excerpt">
+		<div class="post-content">
 			<?php the_excerpt(); ?>
 		</div>
 
