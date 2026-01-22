@@ -32,14 +32,9 @@
 			<?php
 			edit_post_link(
 				sprintf(
-					wp_kses(
+					wp_kses_post(
 						/* translators: %s: Name of current post. Only visible to screen readers */
-						__( 'Edit <span class="screen-reader-text">%s</span>', 'the-classicpress-theme' ),
-						array(
-							'span' => array(
-								'class' => array(),
-							),
-						)
+						__( 'Edit', 'the-classicpress-theme' ) . ' <span class="screen-reader-text">%s</span>'
 					),
 					get_the_title()
 				),
