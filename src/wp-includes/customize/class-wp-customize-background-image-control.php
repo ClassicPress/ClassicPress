@@ -71,7 +71,7 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 	 */
 	public function render_content() {
 		$bg_image = get_background_image();
-    
+
 		if ( $this->label ) {
 			?>
 
