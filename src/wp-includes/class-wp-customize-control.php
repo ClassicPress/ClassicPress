@@ -426,7 +426,14 @@ class WP_Customize_Control {
 		$id    = 'customize-control-' . str_replace( array( '[', ']' ), array( '-', '' ), $this->id );
 		$class = 'customize-control customize-control-' . $this->type;
 
-		printf( '<li id="%s" class="%s">', esc_attr( $id ), esc_attr( $class ) );
+		// Get the setting ID.
+		$settings = (array) $this->settings;
+		$setting_id = '';
+		foreach ( $settings as $setting ) {
+			$setting_id = $setting->id;
+		}
+
+		printf( '<li id="%s" class="%s" data-setting-id="%s">', esc_attr( $id ), esc_attr( $class ), esc_attr( $setting_id ) );
 		$this->render_content();
 		echo '</li>';
 	}
@@ -636,11 +643,11 @@ class WP_Customize_Control {
 						<label for="create-input-<?php echo esc_attr( $this->id ); ?>"><span class="screen-reader-text">
 							<?php
 							/* translators: Hidden accessibility text. */
-							_e( 'New page title' );
+							esc_html_e( 'New page title' );
 							?>
 						</span></label>
 						<input type="text" id="create-input-<?php echo esc_attr( $this->id ); ?>" class="create-item-input" placeholder="<?php esc_attr_e( 'New page title&hellip;' ); ?>">
-						<button type="button" class="button add-content"><?php _e( 'Add' ); ?></button>
+						<button type="button" class="button add-content"><?php esc_html_e( 'Add' ); ?></button>
 					</div>
 				<?php endif; ?>
 				<?php
