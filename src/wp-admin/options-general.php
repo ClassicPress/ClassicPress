@@ -32,8 +32,7 @@ $options_help = '<p>' . __( 'The fields on this screen determine some of the bas
 	'<p>' . __( 'Most themes show the site title at the top of every page, in the title bar of the browser, and as the identifying name for syndicated feeds. Many themes also show the tagline.' ) . '</p>';
 
 if ( ! is_multisite() ) {
-	$options_help .= '<p>' . __( 'Two terms you will want to know are the ClassicPress URL and the site URL. The ClassicPress URL is where the core ClassicPress installation files are, and the site URL is the address a visitor uses in the browser to go to your site.' ) . '</p>' .
-		'<p>' . __( 'Though the terms refer to two different concepts, in practice, they can be the same address or different. For example, you can have the core ClassicPress installation files in the root directory (<code>https://example.com</code>), in which case the two URLs would be the same. Or the ClassicPress files can be in a subdirectory (<code>https://example.com/classicpress</code>). In that case, the ClassicPress URL and the site URL would be different.' ) . '</p>' .
+	$options_help .= '<p>' . __( 'The ClassicPress URL and the site URL can be the same (example.com) or different; for example, having the ClassicPress core files (example.com/classicpress) in a subdirectory instead of the root directory.' ) . '</p>' .
 		'<p>' . __( 'If you want site visitors to be able to register themselves, check the membership box. If you want the site administrator to register every new user, leave the box unchecked. In either case, you can set a default user role for all new users.' ) . '</p>';
 }
 
