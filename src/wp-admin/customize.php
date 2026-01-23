@@ -48,14 +48,11 @@ $preview_url = add_query_arg(
     home_url( '/' )
 );
 
-// Handle form submission (supports both your hidden publish button and the default "save" submit).
+// Handle form submission (supports both the disabled publish button and the default "save" submit).
 if ( isset( $_POST['cp_publish_submit'] ) || isset( $_POST['save'] ) ) {
 
     // Security: nonce + capability
-    $uuid       = isset( $_POST['customize_changeset_uuid'] ) ? sanitize_text_field( wp_unslash( $_POST['customize_changeset_uuid'] ) ) : '';
-    $stylesheet = $wp_customize->get_stylesheet(); // Nonce is tied to the stylesheet.
-
-    if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'save-customize_' . $stylesheet ) ) {
+    if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'save-customize_' . $wp_customize->get_stylesheet() ) ) {
         wp_die( esc_html__( 'Security check failed.' ), 403 );
     }
 
@@ -66,16 +63,16 @@ if ( isset( $_POST['cp_publish_submit'] ) || isset( $_POST['save'] ) ) {
     // Collect submitted values without blanket sanitize_text_field()
     // Let registered settings sanitize via their sanitize_callback.
     $submitted = isset( $_POST['customize_post_value'] ) ? (array) wp_unslash( $_POST['customize_post_value'] ) : array();
-
     foreach ( $submitted as $setting_id => $raw_value ) {
         $setting = $wp_customize->get_setting( $setting_id );
         if ( $setting ) {
-            // This ensures validation/sanitization and live preview behavior are consistent.
+            // This ensures that validation/sanitization and live preview behavior are consistent.
             $wp_customize->set_post_value( $setting_id, $raw_value );
         }
     }
 
     // Make sure we’re saving to the expected changeset UUID
+    $uuid = isset( $_POST['customize_changeset_uuid'] ) ? sanitize_text_field( wp_unslash( $_POST['customize_changeset_uuid'] ) ) : '';
     if ( $uuid && $uuid !== $wp_customize->changeset_uuid() ) {
         $wp_customize->set_changeset_uuid( $uuid );
     }
@@ -212,6 +209,15 @@ do_action( 'customize_controls_init' );
 
 wp_enqueue_script( 'heartbeat' );
 wp_enqueue_script( 'customize-controls' );
+wp_localize_script(
+    'customize-controls',
+    'CPCustomizeSave',
+    array(
+        'nonce'            => wp_create_nonce( 'save-customize_' . $wp_customize->get_stylesheet() ),
+        'theme_stylesheet' => wp_get_theme()->get_stylesheet(),
+        'changeset_uuid'   => $wp_customize->changeset_uuid(),
+    )
+);
 wp_enqueue_style( 'customize-controls' );
 
 /**
@@ -350,7 +356,7 @@ wp_print_scripts();
 			<div id="customize-sidebar-outer-content">
 				<div id="customize-outer-theme-controls">
 					<ul class="customize-outer-pane-parent">
-						<!-- Outer panel and sections are not implemented, but its here as a placeholder to avoid any side-effect in api.Section. -->
+						<!-- Outer panel and sections are not implemented, but it's here as a placeholder to avoid any side-effect in api.Section. -->
 					</ul>
 				</div>
 			</div><!-- #customize-sidebar-outer-content -->
@@ -718,8 +724,26 @@ wp_print_scripts();
 
 								<?php
 								$nav_menus_panel = $wp_customize->get_panel( 'nav_menus' );
-								$nav_menus_panel->render_content();
+								?>
 
+								<li class="panel-meta customize-info accordion-section">
+									<button class="customize-panel-back" tabindex="0" type="button">
+										<span class="screen-reader-text">
+											<?php esc_html_e( 'Back' ); ?>
+										</span>
+									</button>
+									<div class="accordion-section-title">
+										<span class="preview-notice">
+											<?php esc_html_e( 'You are browsing' ); ?>
+										</span>
+										<strong class="panel-title">
+											<?php echo esc_html( $nav_menus_panel->title ); ?>
+										</strong>
+									</div>
+									<?php if ( method_exists( $nav_menus_panel, 'maybe_render_description' ) ) $nav_menus_panel->maybe_render_description(); ?>
+								</li>
+
+								<?php
 								// Each individual menu section (assigned-to-menu-location, etc.).
 								foreach ( $sections_by_panel['nav_menus'] as $section ) {
 
@@ -783,6 +807,7 @@ wp_print_scripts();
 									<li id="accordion-section-<?php echo esc_attr( $add_menu_section->id ); ?>"
 										class="accordion-section control-section control-section-new_menu control-subsection"
 										aria-owns="sub-accordion-section-<?php echo esc_attr( $add_menu_section->id ); ?>"
+										data-setting-id=<?php echo esc_attr( $add_menu_section->id ); ?>"
 									>
 										<?php
 										if ( empty ( $menus ) ) {
@@ -973,14 +998,9 @@ wp_print_scripts();
 										// Render controls that belong to this section-panel hybrid container.
 										if ( isset( $controls[ $middle_section['id'] ] ) && is_array( $controls[ $middle_section['id'] ] ) ) {
 											// Sort controls by priority, lowest first.
-											usort(
-												$controls[ $middle_section['id'] ],
-												static function ( $a, $b ) {
-													$ap = isset( $a['priority'] ) ? (int) $a['priority'] : 999;
-													$bp = isset( $b['priority'] ) ? (int) $b['priority'] : 999;
-													return $ap - $bp;
-												}
-											);
+											usort( $controls[ $middle_section['id'] ], function( $a, $b ) {
+												return $a['priority'] - $b['priority'];
+											} );
 
 											foreach ( $controls[ $middle_section['id'] ] as $control_data ) {
 												$control = $wp_customize->get_control( $control_data['id'] );
@@ -1278,7 +1298,7 @@ wp_print_scripts();
 									$field_type  = $control_data['type'];
 									$field_label = $control_data['label'];
 									$description = $control_data['description'];
-									$priority    = $control_data['priority'];
+									$setting_id  = $control_data['setting_id'];
 
 									// Memu items - only for nav_menu[ID] sections
 									if ( $menu_id && str_starts_with( $section->id, 'nav_menu[' ) ) {
@@ -1316,6 +1336,7 @@ wp_print_scripts();
 
 												<li id="customize-control-nav_menu_item-<?php echo esc_attr( $menu_item->ID ); ?>"
 													class="customize-control customize-control-nav_menu_item menu-item menu-item-depth-<?php echo absint( $depth_map[ $menu_item->ID ] ); ?> menu-item-custom menu-item-edit-inactive move-left-disabled move-up-disabled move-right-disabled move-down-disabled"
+													data-setting-id="nav_menu_item[<?php echo esc_attr( $menu_item->ID ); ?>]"
 												>
 
 													<?php
@@ -1463,6 +1484,7 @@ wp_print_scripts();
 
 										<li id="customize-control-<?php echo esc_attr( $field_id ); ?>"
 											class="customize-control customize-control-<?php echo esc_attr( $field_type ); ?>"
+											data-setting-id="<?php echo esc_attr( $setting_id ); ?>"
 										>
 											<div class="customize-control-inner">
 
@@ -1539,6 +1561,7 @@ wp_print_scripts();
 									$field_value = $control_data['value'];
 									$field_type  = $control_data['type'];									
 									$field_label = $control_data['label'];
+									$setting_id  = $control_data['setting_id'];
 									$widget_id   = isset( $section->controls[$index]->widget_id ) ? $section->controls[$index]->widget_id : '';
 
 									if ( $widget_id === '' ) {
@@ -1562,6 +1585,7 @@ wp_print_scripts();
 
 									<li id="customize-control-widget-<?php echo esc_attr( $widget_id ); ?>"
 										class="customize-control customize-control-widget_form<?php echo esc_attr( $first_last_widget ); ?> widget-rendered"
+										data-setting-id="<?php echo esc_attr( $setting_id ); ?>"
 									>
 										<div id="widget-<?php echo esc_attr( $index . '_' . $widget_id ); ?>" class="widget">
 											<details class="widget-top">
