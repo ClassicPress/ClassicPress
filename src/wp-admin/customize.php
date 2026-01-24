@@ -209,15 +209,6 @@ do_action( 'customize_controls_init' );
 
 wp_enqueue_script( 'heartbeat' );
 wp_enqueue_script( 'customize-controls' );
-wp_localize_script(
-    'customize-controls',
-    'CPCustomizeSave',
-    array(
-        'nonce'            => wp_create_nonce( 'save-customize_' . $wp_customize->get_stylesheet() ),
-        'theme_stylesheet' => wp_get_theme()->get_stylesheet(),
-        'changeset_uuid'   => $wp_customize->changeset_uuid(),
-    )
-);
 wp_enqueue_style( 'customize-controls' );
 
 /**
@@ -1799,13 +1790,22 @@ wp_print_scripts();
 			// Hidden field placeholder to align with the idea that this sidebar will
 			// eventually submit changes (stage 2+).
 			?>
-			<input type="hidden" name="customize_changeset_uuid"
+			<input type="hidden"
+				id="customize_changeset_uuid"
+				name="customize_changeset_uuid"
 				value="<?php echo esc_attr( $wp_customize->changeset_uuid() ); ?>"
 			>
-			<input type="hidden" name="nonce"
+			<input type="hidden"
+				id="customizer_nonce"
+				name="nonce"
 				value="<?php echo esc_attr( wp_create_nonce( 'save-customize_' . $wp_customize->get_stylesheet() ) ); ?>"
 			>
-			<input type="hidden" name="customize_form_stage" value="php-first-paint">
+			<input type="hidden"
+				id="theme_stylesheet"
+				name="theme_stylesheet"
+				value="<?php echo esc_attr( wp_get_theme()->get_stylesheet() ); ?>"
+			>
+			<input type="hidden" id="customize_form_stage" name="customize_form_stage" value="php-first-paint">
 		</form><!-- #customize-controls -->
 
 		<?php
