@@ -4,6 +4,7 @@
  * External dependencies
  */
 const TerserPlugin = require( 'terser-webpack-plugin' );
+const StripSourceMapURLPlugin = require('./strip-sourcemap');
 const { join } = require( 'path' );
 
 const baseDir = join( __dirname, '../../' );
@@ -14,8 +15,11 @@ const baseConfig = ( env ) => {
 	const config = {
 		target: 'browserslist',
 		mode,
+		plugins: [
+			new StripSourceMapURLPlugin( mode ),
+		],
 		optimization: {
-			moduleIds: mode === 'production' ? 'deterministic' : 'named',
+			moduleIds: 'deterministic',
 			minimizer: [
 				new TerserPlugin( {
 					parallel: true,
@@ -31,7 +35,6 @@ const baseConfig = ( env ) => {
 							reserved: [ '__', '_n', '_nx', '_x' ],
 						},
 					},
-					extractComments: mode === 'production' ? true : false,
 				} ),
 			]
 		},
@@ -54,10 +57,10 @@ const baseConfig = ( env ) => {
 	};
 
 	if ( mode === 'development' ) {
+		// force readable output for unminified js files
 		config.mode = 'production';
 		config.optimization = {
 			minimize: false,
-			moduleIds: 'deterministic',
 		};
 	}
 
