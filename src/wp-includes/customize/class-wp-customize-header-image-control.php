@@ -132,13 +132,13 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 
 		// Process default headers and uploaded headers.
 		$custom_image_header->process_default_headers();
-		$this->default_headers  = $custom_image_header->get_default_header_images();
-		$this->uploaded_headers = $custom_image_header->get_uploaded_header_images();
+		$this->default_headers = $custom_image_header->get_default_header_images();
 
-		$visibility   = $this->get_current_image_src() ? '' : ' style="display:none" ';
-		$width        = absint( get_theme_support( 'custom-header', 'width' ) );
-		$height       = absint( get_theme_support( 'custom-header', 'height' ) );
-		$header_image = get_header_image(); // Current header image
+		$visibility    = $this->get_current_image_src() ? '' : ' style="display:none" ';
+		$width         = absint( get_theme_support( 'custom-header', 'width' ) );
+		$height        = absint( get_theme_support( 'custom-header', 'height' ) );
+		$header_image  = get_header_image(); // Current header image
+		$attachment_id = $header_image ? attachment_url_to_postid( $header_image ) : '';
 		?>
 
 		<div class="customize-control-content">
@@ -192,7 +192,9 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 					</span>
 				</label>
 				<div class="container">
+					<?php echo get_header_image_tag(); ?>
 				</div>
+				<input type="hidden" value="<?php echo esc_attr( $attachment_id ); ?>">
 			</div>
 			<div class="actions"
 				data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
