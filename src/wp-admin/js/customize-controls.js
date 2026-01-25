@@ -19,6 +19,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		isReducedMotion = reducedMotionMediaQuery.matches,
 		isCollapsed = document.querySelector( '.wp-full-overlay' )?.classList.contains( 'collapsed' ),
 		form = document.querySelector( 'form' ),
+		inputs = form.querySelectorAll( 'input, select, textarea' ),
+		saveButton = form.querySelector( '#save' ),
 		devicesWrapper = document.querySelector( '.devices' ),
 		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
 		previewFrame = document.getElementById( 'customize-preview' ),
@@ -31,18 +33,43 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	if ( queryParams.get( 'theme' ) === _wpCustomizeControlsL10n.activeTheme ) {
        window.history.replaceState( {}, '', window.location.origin + window.location.pathname );
 	}
+/*
+					delete queryParams.customize_changeset_uuid;
+					delete queryParams.customize_theme;
+					delete queryParams.customize_messenger_channel;
+					delete queryParams.customize_autosaved;
+					*/
 
 	// Limit motion where appropriate
 	reducedMotionMediaQuery.addEventListener( 'change', function handleReducedMotionChange( event ) {
 		isReducedMotion = event.matches;
 	} );
 
-	/*
+	/**
 	 * Helper function copied from jQuery
 	 */
 	function isVisible( elem ) {
 		return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
 	}
+
+	/**
+	 * Trigger activation of Publish button
+	 */
+	function activatePublishButton() {
+		saveButton.disabled = false;
+		saveButton.value = _wpCustomizeControlsL10n.publish;
+	}
+
+	inputs.forEach( function( input ) {
+		input.addEventListener( 'input', function() {
+			input.closest( 'li' ).classList.add( 'dirty' );
+			activatePublishButton();
+		} );
+        input.addEventListener( 'change', function() {
+			input.closest( 'li' ).classList.add( 'dirty' );
+			activatePublishButton();
+		} );
+	} );
 
 	/**
 	 * Prevent tabbing out of dialog form.
@@ -157,7 +184,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Code for the Iris color picker.
 	 */
-	jQuery( '.color-picker-hue, .color-picker-hex' ).wpColorPicker(); // Iris requires jQuery
+	jQuery( '.color-picker-hue, .color-picker-hex' ).wpColorPicker( { // Iris requires jQuery
+        change: function( event, ui ) {
+            // Update the input's value in the DOM.
+            event.target.setAttribute( 'value', ui.color.toString() );
+            event.target.closest( 'li' ).classList.add( 'dirty' );
+
+            // Enable Publish.
+            activatePublishButton();
+        },
+        clear: function( event ) {
+			event.target.closest( 'li' ).classList.add( 'dirty' );
+            activatePublishButton();
+        }
+    } );
 
 	// Focus/click: ensure picker shows.
 	document.querySelectorAll( '.color-picker-hue, .color-picker-hex' ).forEach( function( input ) {
@@ -175,15 +215,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		input.addEventListener( 'focus', showPicker );
 		input.addEventListener( 'click', showPicker );
-
-		// Color change: update the preview swatch.
-		// wpColorPicker triggers a native 'change' event on the input with its current value.
-		input.addEventListener( 'change', function() {
-			var swatch = container.querySelector( '.wp-color-result' );
-			if ( swatch ) {
-				swatch.style.backgroundColor = input.value;
-			}
-		} );
 	} );
 
 	/**
@@ -306,96 +337,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		themeModal.showModal();
 	}
 
-/*
- * 
-<!-- Your Publish button -->
-<button id="my-publish-button">Publish</button>
-  (function () {
-    const btn = document.getElementById('my-publish-button');
-
-    btn.addEventListener('click', async (e) => {
-      e.preventDefault();
-
-      // 1) Endpoint: admin-ajax.php (WordPress/ClassicPress core AJAX endpoint)
-      // If WordPress localized 'ajaxurl' is present, use it; otherwise fall back.
-      const ajaxUrl =
-        (window.ajaxurl && String(window.ajaxurl)) ||
-        '/wp-admin/admin-ajax.php';
-
-      // 2) Nonce: required and validated by WP_Customize_Manager::save()
-      // If running inside Customizer, this is available as wp.customize.settings.nonce.save
-      // Otherwise, inject your own nonce (see PHP snippet below).
-      const saveNonce =
-        window.wp?.customize?.settings?.nonce?.save ||
-        window.CP_CUSTOMIZE_SAVE_NONCE /* <-- set from PHP if outside Customizer *;
-
-      if (!saveNonce) {
-        alert('Missing save nonce. See the PHP snippet below to output it.');
-        return;
-      }
-
-      // 3) Build the changeset payload.
-      // If inside the Customizer, you can read live values directly:
-      // e.g., blogname setting (site title). Replace with your setting IDs.
-      const changesetData = {};
-
-      if (window.wp?.customize) {
-        // Example of grabbing a couple of settings from the Customizer:
-        if (wp.customize('blogname')) {
-          changesetData['blogname'] = { value: wp.customize('blogname')() };
-        }
-        if (wp.customize('blogdescription')) {
-          changesetData['blogdescription'] = { value: wp.customize('blogdescription')() };
-        }
-      } else {
-        // Outside the Customizer: construct whatever settings you want to save.
-        // Replace 'theme_mod_or_option_id' with actual setting IDs registered server-side.
-        changesetData['theme_mod_or_option_id'] = { value: 'New value' };
-      }
-
-      // 4) Prepare the POST body using FormData
-      const form = new FormData();
-      form.append('action', 'customize_save');                 // AJAX action
-      form.append('nonce', saveNonce);                         // required nonce
-      form.append('customize_changeset_status', 'publish');    // 'draft' | 'pending' | 'publish' | 'future'
-      form.append('customize_changeset_data', JSON.stringify(changesetData));
-      // Optional fields supported by WP_Customize_Manager::save():
-      // form.append('customize_changeset_title', 'My changeset title');
-      // form.append('customize_changeset_date', '2025-12-28 23:05:00'); // local time (or ISO/relative)
-      // If your request originates outside the Customizer UI, you may also include:
-      // form.append('wp_customize', 'on'); // helps ensure the request is treated as a Customizer preview
-
-      try {
-        const res = await fetch(ajaxUrl, {
-          method: 'POST',
-          credentials: 'same-origin', // include cookies for authenticated request
-          body: form
-        });
-
-        const payload = await res.json();
-
-        // 5) Handle response
-        if (!res.ok || payload.success === false) {
-          // Common server-side errors from WP_Customize_Manager::save():
-          // 'unauthenticated', 'invalid_nonce', 'changeset_publish_unauthorized',
-          // 'bad_customize_changeset_status', 'not_preview', etc.
-          console.error('Publish failed:', payload);
-          alert(
-            'Publish failed: ' +
-            (payload?.data || payload?.message || 'Unknown error')
-          );
-          return;
-        }
-
-        console.log('Publish succeeded:', payload);
-        alert('Customizer changes published successfully!');
-      } catch (err) {
-        console.error('Network or parsing error:', err);
-        alert('Network error while publishing changes.');
-      }
-    });
-  })();
-*/
 
 	/**
 	 * Update details within modal.
@@ -658,8 +599,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			alt = item.querySelector( 'img' ).getAttribute( 'alt' ),
 			updateNonce = item.dataset.updateNonce,
 			deleteNonce = item.dataset.deleteNonce,
-			inputs = dialog.querySelectorAll( '.widget-modal-right-sidebar input, .widget-modal-right-sidebar textarea, .widget-modal-media-embed input, .widget-modal-media-embed textarea' ),
-			selects = dialog.querySelectorAll( '.widget-modal-right-sidebar select, .widget-modal-media-embed select' );
+			widgetInputs = dialog.querySelectorAll( '.widget-modal-right-sidebar input, .widget-modal-right-sidebar textarea, .widget-modal-media-embed input, .widget-modal-media-embed textarea' ),
+			widgetSelects = dialog.querySelectorAll( '.widget-modal-right-sidebar select, .widget-modal-media-embed select' );
 
 		// Update available size options in hidden field
 		for ( var dimension in sizesObject ) {
@@ -690,24 +631,24 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Set status of items according to user's capabilities
 		if ( updateNonce ) {
-			inputs.forEach( function( input ) {
+			widgetInputs.forEach( function( input ) {
 				input.removeAttribute( 'readonly' );
 			} );
 			dialog.querySelector( '#edit-more' ).parentNode.removeAttribute( 'hidden' );
 		} else {
-			inputs.forEach( function( input ) {
+			widgetInputs.forEach( function( input ) {
 				input.setAttribute( 'readonly', true );
 			} );
 			dialog.querySelector( '#edit-more' ).parentNode.setAttribute( 'hidden', true );
 		}
 
 		if ( deleteNonce ) {
-			selects.forEach( function( select ) {
+			widgetSelects.forEach( function( select ) {
 				select.removeAttribute( 'disabled' );
 			} );
 			dialog.querySelector( '.delete-attachment' ).parentNode.removeAttribute( 'hidden' );
 		} else {
-			selects.forEach( function( select ) {
+			widgetSelects.forEach( function( select ) {
 				select.setAttribute( 'disabled', true );
 			} );
 			dialog.querySelector( '.delete-attachment' ).parentNode.setAttribute( 'hidden', true );
@@ -1108,13 +1049,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					selectButton.focus();
 				} );
 			}
+			parent.parentNode.querySelector( 'input' ).value = selectedItem.dataset.id;
 		} else { // header image
 			parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
 			parent.previousElementSibling.querySelector( '.container' ).append( imageElement );
 			customizeButton.previousElementSibling.style.display = '';
 			customizeButton.classList.remove( 'upload-button' );
+			parent.previousElementSibling.querySelector( 'input' ).value = selectedItem.dataset.id;
 		}
+		parent.closest( 'li' ).classList.add( 'dirty' );
 		closeModal();
+		activatePublishButton();
 	}
 
 	/**
@@ -1148,6 +1093,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				customizeButton.nextElementSibling.focus();
 			} );
 		}
+		parent.closest( 'li' ).classList.add( 'dirty' );
+		activatePublishButton();
 	}
 
 	/**
@@ -1228,6 +1175,68 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '.widget-modal-header-buttons' )?.remove();
 		dialog.querySelector( '#widget-modal-media-content' )?.remove();
 	}
+
+	/**
+	 * Publish updates by clicking Publish button.
+	 *
+	 * @abstract
+	 * @return {void} //////////////////////////////////////////////
+	 */
+	form.addEventListener( 'submit', function( e ) {
+		e.preventDefault(); // prevent form submission via PHP
+		var updated = {},
+			submittedChanges = {},
+			formData = new FormData();
+
+		document.querySelectorAll( '.dirty' ).forEach( function( dirty ) {
+			if ( dirty.hasAttribute( 'data-setting-id' ) ) {
+				if ( dirty.querySelector( 'input' ) ) {
+					updated[dirty.dataset.settingId] = dirty.querySelector( 'input' ).value;
+				} else if ( dirty.querySelector( 'select' ) ) {
+					updated[dirty.dataset.settingId] = dirty.querySelector( 'select' ).value;
+				} else if ( dirty.querySelector( 'textarea' ) ) {
+					updated[dirty.dataset.settingId] = dirty.querySelector( 'textarea' ).textContent;
+				}
+			}
+		} );
+
+		Object.keys( updated ).forEach( function( settingId ) {
+			submittedChanges[ settingId ] = {
+				value: updated[ settingId ]
+			};
+		} );
+
+		formData.append( 'action', 'customize_save' );
+		formData.append( 'nonce', document.getElementById( 'customizer_nonce' ).value );
+		formData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
+		formData.append( 'customize_changeset_data', JSON.stringify( submittedChanges ) );
+		formData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
+		formData.append( 'customize_changeset_status', 'publish' ); // 'draft' | 'pending' | 'publish' | 'future'
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: formData,
+			credentials: 'same-origin',
+		} ).then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} ).then( function( object ) { console.log( object.data );
+			if ( object && object.success ) {
+				saveButton.disabled = true;
+				saveButton.value = _wpCustomizeControlsL10n.published;
+				document.getElementById( 'customize_changeset_uuid' ).value = object.data.next_changeset_uuid;
+				document.querySelectorAll( '.dirty' ).forEach( function( dirty ) {
+					dirty.classList.remove( 'dirty' );
+				} );
+			}
+		} ).catch( function( error ) {
+			console.error( error );
+			saveButton.disabled = false;
+			saveButton.value = _wpCustomizeControlsL10n.publish;
+		} );
+	} );
 
 	/**
 	 * Handle clicks on buttons.
