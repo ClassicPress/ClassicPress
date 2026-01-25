@@ -3,7 +3,7 @@
 class StripSourceMapURLPlugin {
 	constructor( mode ) {
 		this.mode = mode;
-	};
+	}
 	apply( compiler ) {
 		if ( 'production' === this.mode ) {
 			return;
