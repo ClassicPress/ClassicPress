@@ -27,18 +27,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		themeModal = document.getElementById( 'tmpl-customize-themes-details-view' ),
 		queryParams = new URLSearchParams( window.location.search ),
 		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
-		addWidgetButtons = document.querySelectorAll( '.add-new-widget' );
+		addWidgetButtons = document.querySelectorAll( '.add-new-widget' ),
+		updatedControls = {};
 
 	// Clean the URL if previewing the active theme
 	if ( queryParams.get( 'theme' ) === _wpCustomizeControlsL10n.activeTheme ) {
        window.history.replaceState( {}, '', window.location.origin + window.location.pathname );
 	}
-/*
-					delete queryParams.customize_changeset_uuid;
-					delete queryParams.customize_theme;
-					delete queryParams.customize_messenger_channel;
-					delete queryParams.customize_autosaved;
-					*/
 
 	// Limit motion where appropriate
 	reducedMotionMediaQuery.addEventListener( 'change', function handleReducedMotionChange( event ) {
@@ -61,13 +56,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	inputs.forEach( function( input ) {
+		var li = input.closest( 'li' );
 		input.addEventListener( 'input', function() {
-			input.closest( 'li' ).classList.add( 'dirty' );
-			activatePublishButton();
+			if ( li && li.hasAttribute( 'data-setting-id' ) ) {
+				if ( input.tagName === 'TEXTAREA' ) {
+					updatedControls[li.dataset.settingId] = input.textContent;
+				} else {
+					updatedControls[li.dataset.settingId] = input.value;
+				}
+				activatePublishButton();
+			}
 		} );
         input.addEventListener( 'change', function() {
-			input.closest( 'li' ).classList.add( 'dirty' );
-			activatePublishButton();
+			if ( li && li.hasAttribute( 'data-setting-id' ) ) {
+				if ( input.tagName === 'TEXTAREA' ) {
+					updatedControls[li.dataset.settingId] = input.textContent;
+				} else {
+					updatedControls[li.dataset.settingId] = input.value;
+				}
+				activatePublishButton();
+			}
 		} );
 	} );
 
@@ -188,13 +196,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
         change: function( event, ui ) {
             // Update the input's value in the DOM.
             event.target.setAttribute( 'value', ui.color.toString() );
-            event.target.closest( 'li' ).classList.add( 'dirty' );
+            updatedControls[event.target.closest( 'li' ).dataset.settingId] = ui.color.toString();
 
             // Enable Publish.
             activatePublishButton();
         },
         clear: function( event ) {
-			event.target.closest( 'li' ).classList.add( 'dirty' );
+			updatedControls[event.target.closest( 'li' ).dataset.settingId] = '';
             activatePublishButton();
         }
     } );
@@ -1057,7 +1065,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			customizeButton.classList.remove( 'upload-button' );
 			parent.previousElementSibling.querySelector( 'input' ).value = selectedItem.dataset.id;
 		}
-		parent.closest( 'li' ).classList.add( 'dirty' );
+		updatedControls[parent.closest( 'li' ).dataset.settingId] = selectedItem.dataset.id;
 		closeModal();
 		activatePublishButton();
 	}
@@ -1093,7 +1101,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				customizeButton.nextElementSibling.focus();
 			} );
 		}
-		parent.closest( 'li' ).classList.add( 'dirty' );
+		updatedControls[parent.closest( 'li' ).dataset.settingId] = '';
 		activatePublishButton();
 	}
 
@@ -1184,25 +1192,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	form.addEventListener( 'submit', function( e ) {
 		e.preventDefault(); // prevent form submission via PHP
-		var updated = {},
-			submittedChanges = {},
+		var submittedChanges = {},
 			formData = new FormData();
 
-		document.querySelectorAll( '.dirty' ).forEach( function( dirty ) {
-			if ( dirty.hasAttribute( 'data-setting-id' ) ) {
-				if ( dirty.querySelector( 'input' ) ) {
-					updated[dirty.dataset.settingId] = dirty.querySelector( 'input' ).value;
-				} else if ( dirty.querySelector( 'select' ) ) {
-					updated[dirty.dataset.settingId] = dirty.querySelector( 'select' ).value;
-				} else if ( dirty.querySelector( 'textarea' ) ) {
-					updated[dirty.dataset.settingId] = dirty.querySelector( 'textarea' ).textContent;
-				}
-			}
-		} );
-
-		Object.keys( updated ).forEach( function( settingId ) {
+		Object.keys( updatedControls ).forEach( function( settingId ) {
 			submittedChanges[ settingId ] = {
-				value: updated[ settingId ]
+				value: updatedControls[ settingId ]
 			};
 		} );
 
@@ -1227,9 +1222,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				saveButton.disabled = true;
 				saveButton.value = _wpCustomizeControlsL10n.published;
 				document.getElementById( 'customize_changeset_uuid' ).value = object.data.next_changeset_uuid;
-				document.querySelectorAll( '.dirty' ).forEach( function( dirty ) {
-					dirty.classList.remove( 'dirty' );
-				} );
+				updatedControls = {}; // reset
 			}
 		} ).catch( function( error ) {
 			console.error( error );
