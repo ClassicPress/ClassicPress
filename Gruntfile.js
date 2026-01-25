@@ -357,8 +357,8 @@ module.exports = function(grunt) {
 			}
 		},
 		webpack: {
-			min: webpackConfig( { environment: 'production', buildTarget: SOURCE_DIR } ),
-			dev: webpackConfig( { environment: 'development', buildTarget: SOURCE_DIR } )
+			min: webpackConfig( { environment: 'production', buildTarget: SOURCE_DIR, minify: true } ),
+			dev: webpackConfig( { environment: 'production', buildTarget: SOURCE_DIR, minify: false } )
 		},
 		sass: {
 			colors: {

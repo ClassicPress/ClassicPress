@@ -16,10 +16,11 @@ const baseConfig = ( env ) => {
 		target: 'browserslist',
 		mode,
 		plugins: [
-			new StripSourceMapURLPlugin( mode ),
+			new StripSourceMapURLPlugin( env.minify ),
 		],
 		optimization: {
 			moduleIds: 'deterministic',
+			minimize: env.minify,
 			minimizer: [
 				new TerserPlugin( {
 					parallel: true,
@@ -55,14 +56,6 @@ const baseConfig = ( env ) => {
 		},
 		stats: 'errors-only',
 	};
-
-	if ( mode === 'development' ) {
-		// force readable output for unminified js files
-		config.mode = 'production';
-		config.optimization = {
-			minimize: false,
-		};
-	}
 
 	return config;
 };

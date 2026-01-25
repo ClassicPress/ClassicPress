@@ -1,11 +1,11 @@
 // Custom Strip Source Map plugin
 
 class StripSourceMapURLPlugin {
-	constructor( mode ) {
-		this.mode = mode;
+	constructor( minify ) {
+		this.minify = minify;
 	}
 	apply( compiler ) {
-		if ( 'production' === this.mode ) {
+		if ( this.minify ) {
 			return;
 		}
 		compiler.hooks.compilation.tap( 'StripSourceMapURLPlugin', compilation => {
