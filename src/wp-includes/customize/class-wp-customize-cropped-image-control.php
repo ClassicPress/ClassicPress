@@ -88,7 +88,7 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 	 *
 	 * @since CP-2.7.0
 	 */
-	public function render_content() {//error_log(print_r(get_theme_mod( 'custom_logo' ), true));
+	public function render_content() {
 		$login_custom_image_state = (int) get_option( 'login_custom_image_state' );
 		$login_custom_image_id    = (int) get_option( 'login_custom_image_id' );
 		if ( $login_custom_image_state < 0 || $login_custom_image_state > 2 ) {
@@ -116,6 +116,7 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 			<ul></ul>
 		</div>
 		<div class="<?php echo esc_attr( $class ); ?>">
+			<input type="hidden" value="<?php echo esc_attr( $login_custom_image_id ?: $custom_logo_id ); ?>">
 
 			<?php
 			if ( empty( $login_custom_image_src ) ) {
