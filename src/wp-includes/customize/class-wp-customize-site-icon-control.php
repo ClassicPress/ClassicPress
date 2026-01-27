@@ -98,40 +98,51 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 						alt="<?php esc_attr_e( 'Preview as an app icon' ); ?>"
 					>
 				</div>
-				<div class="actions"
-					data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
-					data-empty="<?php echo esc_attr( $this->button_labels['site_icon'] ); ?>"
-					data-full="<?php echo esc_attr( $this->button_labels['change'] ); ?>"
-				>
-					<?php
-					if ( current_user_can( 'upload_files' ) ) {
-						?>
+				<input type="hidden" value="<?php echo esc_attr( $attachment_id ); ?>">
+
+				<?php
+				if ( current_user_can( 'upload_files' ) ) {
+					?>
+
+					<div class="actions"
+						data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
+						data-empty="<?php echo esc_attr( $this->button_labels['site_icon'] ); ?>"
+						data-full="<?php echo esc_attr( $this->button_labels['change'] ); ?>"
+					>
 						<button type="button" class="button remove-button">
 							<?php echo esc_html( $this->button_labels['remove'] ); ?>
 						</button>
-						<button type="button" class="button upload-button select-button">
+						<button type="button" class="button select-button">
 							<?php echo esc_html( $this->button_labels['change'] ); ?>
 						</button>
-						<?php
-					}
-					?>
-				</div>
+					</div>
+
+					<?php
+				}
+				?>
+
 			</div>
+
 			<?php
 		} else {
 			?>
+
 			<div class="attachment-media-view">
-				<div class="actions"
-					data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
-					data-empty="<?php echo esc_attr( $this->button_labels['site_icon'] ); ?>"
-					data-full="<?php echo esc_attr( $this->button_labels['change'] ); ?>"
-				>
-					<?php
-					if ( current_user_can( 'upload_files' ) ) {
-						?>
+				<input type="hidden" value="<?php echo esc_attr( $attachment_id ); ?>">
+
+				<?php
+				if ( current_user_can( 'upload_files' ) ) {
+					?>
+
+					<div class="actions"
+						data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
+						data-empty="<?php echo esc_attr( $this->button_labels['site_icon'] ); ?>"
+						data-full="<?php echo esc_attr( $this->button_labels['change'] ); ?>"
+					>
 						<button type="button" class="upload-button button-add-media select-button">
 							<?php echo esc_html( $this->button_labels['site_icon'] ); ?>
 						</button>
+
 						<?php
 						if ( $default_icon_url ) {
 							?>
@@ -140,9 +151,13 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 							</button>
 							<?php
 						}
-					}
-					?>
-				</div>
+						?>
+
+					</div>
+					<?php
+				}
+				?>
+
 			</div>
 			<?php
 		}
