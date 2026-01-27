@@ -122,7 +122,7 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 					<input class="color-picker-hue" 
 						type="text" 
 						data-type="hue"
-						value="<?php esc_attr_e( $this->value() ); ?>"
+						value="#<?php esc_attr_e( $this->value() ); ?>"
 						<?php $this->link(); ?>
 					>
 					<?php
@@ -132,7 +132,7 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 						type="text"
 						maxlength="7"
 						placeholder="<?php esc_attr_e( $default_value ); ?>"
-						value="<?php esc_attr_e( $this->value() ); ?>"
+						value="#<?php esc_attr_e( $this->value() ); ?>"
 						<?php echo $default_value_attr; // data-default-color ?>
 						<?php $this->link(); ?>
 					>
