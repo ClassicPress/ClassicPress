@@ -70,7 +70,7 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 	 * @since CP-2.7.0
 	 */
 	public function render_content() {
-		$background_img = get_background_image();
+		$background_img = get_theme_mod( 'background_image' ); //get_background_image();
 		$attachment_id  = $background_img ? attachment_url_to_postid( $background_img ) : '';
 
 		if ( $this->label ) {
@@ -109,7 +109,7 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 						<button type="button" class="button remove-button">
 							<?php esc_html_e( 'Remove' ); ?>
 						</button>
-						<button type="button" class="button upload-button control-focus select-button">
+						<button type="button" class="button control-focus select-button">
 							<?php esc_html_e( 'Change Image' ); ?>
 						</button>
 					</div>
