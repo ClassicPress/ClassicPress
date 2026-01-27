@@ -3,7 +3,7 @@
  */
 
 /* eslint consistent-this: [ "error", "control" ] */
-/* global _wpCustomizeControlsL10n, _wpCustomizeHeader, _wpCustomizeBackground,
+/* global wp, _wpCustomizeControlsL10n, _wpCustomizeHeader, _wpCustomizeBackground,
  * MediaElementPlayer, console, confirm,  ajaxurl, IMAGE_WIDGET, console,
  * FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
  * FilePondPluginFileRename, FilePondPluginImagePreview
@@ -56,22 +56,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	inputs.forEach( function( input ) {
-		var settingId, value,
-			li = input.closest( 'li' );
+		var li = input.closest( 'li' );
 
 		if ( ! li?.hasAttribute( 'data-setting-id' ) ) {
 			return;
 		}
 
-		settingId = li.dataset.settingId;
-		value = input.tagName === 'TEXTAREA' ? input.textContent : input.value;
-
 		input.addEventListener( 'input', function() {
-			updatedControls[settingId] = value;
+			updatedControls[li.dataset.settingId] = input.value.trim();
 			activatePublishButton();
 		} );
         input.addEventListener( 'change', function() {
-			updatedControls[settingId] = value;
+			updatedControls[li.dataset.settingId] = input.value.trim();
 			activatePublishButton();
 		} );
 	} );
@@ -1022,12 +1018,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function addItemToCustomizer() {
-		var selectedItem, imageElement,
-			parent = customizeButton.parentNode,
-			setting = parent.closest( 'li' ),
-			settingId = setting.dataset.settingId,
+		var selectedItem, imageElement, setting, settingId,
+			parent = customizeButton.parentNode,			
 			removeButton = document.createElement( 'button' ),
 			selectButton = document.createElement( 'button' );
+
+		if ( ! parent ) {
+			return;
+		}
+
+		setting = parent.closest( 'li' );
+		settingId = setting.dataset.settingId;
 
 		removeButton.className = 'button remove-button';
 		removeButton.type = 'button';
@@ -1035,7 +1036,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		selectButton.className = 'button select-button';
 		selectButton.type = 'button';
-		selectButton.textContent = customizeButton.parentNode.dataset.full;
+		selectButton.textContent = parent.dataset.full;
 
 		if ( ! dialog.querySelector( '#media-library-grid' ).hasAttribute( 'hidden' ) ) {
 			selectedItem = dialog.querySelector( '.widget-modal-grid .selected' );
@@ -1248,9 +1249,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 			throw new Error( response.status );
 		} ).then( function( object ) {
-console.log( 'RAW customize_save response:', object );
-//console.log( 'setting_validities:', object.setting_validities );
-//console.log( 'saved_changeset_values:', object.saved_changeset_values );
 			if ( object && object.success ) {
 				saveButton.disabled = true;
 				saveButton.value = _wpCustomizeControlsL10n.published;
