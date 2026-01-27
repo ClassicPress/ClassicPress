@@ -56,26 +56,23 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	inputs.forEach( function( input ) {
-		var li = input.closest( 'li' );
+		var settingId, value,
+			li = input.closest( 'li' );
+
+		if ( ! li?.hasAttribute( 'data-setting-id' ) ) {
+			return;
+		}
+
+		settingId = li.dataset.settingId;
+		value = input.tagName === 'TEXTAREA' ? input.textContent : input.value;
+
 		input.addEventListener( 'input', function() {
-			if ( li && li.hasAttribute( 'data-setting-id' ) ) {
-				if ( input.tagName === 'TEXTAREA' ) {
-					updatedControls[li.dataset.settingId] = input.textContent;
-				} else {
-					updatedControls[li.dataset.settingId] = input.value;
-				}
-				activatePublishButton();
-			}
+			updatedControls[settingId] = value;
+			activatePublishButton();
 		} );
         input.addEventListener( 'change', function() {
-			if ( li && li.hasAttribute( 'data-setting-id' ) ) {
-				if ( input.tagName === 'TEXTAREA' ) {
-					updatedControls[li.dataset.settingId] = input.textContent;
-				} else {
-					updatedControls[li.dataset.settingId] = input.value;
-				}
-				activatePublishButton();
-			}
+			updatedControls[settingId] = value;
+			activatePublishButton();
 		} );
 	} );
 
@@ -1027,6 +1024,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function addItemToCustomizer() {
 		var selectedItem, imageElement,
 			parent = customizeButton.parentNode,
+			setting = parent.closest( 'li' ),
+			settingId = setting.dataset.settingId,
 			removeButton = document.createElement( 'button' ),
 			selectButton = document.createElement( 'button' );
 
@@ -1043,8 +1042,23 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			imageElement = selectedItem.querySelector( 'img' );
 		}
 
-		// Insert image according to whether this is a new insertion or replacement
-		if ( ! customizeButton.id || customizeButton.id !== 'header_image-button' ) {
+		// Update header image
+		if ( settingId === 'header_image_data' ) {			
+			parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
+			parent.previousElementSibling.querySelector( '.container' ).append( imageElement );
+			customizeButton.previousElementSibling.style.display = '';
+			customizeButton.classList.remove( 'upload-button' );
+			parent.previousElementSibling.querySelector( 'input' ).value = selectedItem.dataset.id;
+			updatedControls[settingId] = {
+				attachment_id: parseInt( selectedItem.dataset.id ),
+				url: selectedItem.dataset.url,
+				thumbnail_url: selectedItem.dataset.sizes?.thumbnail?.url || selectedItem.dataset.url,
+				width: selectedItem.dataset.width,
+				height: selectedItem.dataset.height,
+			};
+
+		// Insert other images according to whether this is a new insertion or replacement
+		} else {
 			imageElement.className = 'thumbnail thumbnail-image';
 			if ( parent.parentNode.querySelector( 'img' ) || parent.parentNode.querySelector( 'video' ) ) {
 				parent.parentNode.querySelector( 'img' )?.replaceWith( imageElement );
@@ -1057,15 +1071,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					selectButton.focus();
 				} );
 			}
-			parent.parentNode.querySelector( 'input' ).value = selectedItem.dataset.id;
-		} else { // header image
-			parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
-			parent.previousElementSibling.querySelector( '.container' ).append( imageElement );
-			customizeButton.previousElementSibling.style.display = '';
-			customizeButton.classList.remove( 'upload-button' );
-			parent.previousElementSibling.querySelector( 'input' ).value = selectedItem.dataset.id;
+			if ( settingId === 'background_image' ) {
+				parent.parentNode.querySelector( 'input' ).value = selectedItem.dataset.url;
+				updatedControls[settingId] = selectedItem.dataset.url;
+			} else {
+				parent.parentNode.querySelector( 'input' ).value = selectedItem.dataset.id;
+				updatedControls[settingId] = selectedItem.dataset.id;
+			}
 		}
-		updatedControls[parent.closest( 'li' ).dataset.settingId] = selectedItem.dataset.id;
 		closeModal();
 		activatePublishButton();
 	}
@@ -1087,6 +1100,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			button.textContent = customizeButton.parentNode.dataset.empty;
 			parent.parentNode.querySelector( 'img' )?.remove();
 			parent.parentNode.querySelector( 'video' )?.remove();
+			parent.parentNode.querySelector( 'input' ).value = '';
 			parent.innerHTML = '';
 			parent.append( button );
 			setTimeout( function() {
@@ -1095,13 +1109,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else { // header image
 			parent.previousElementSibling.querySelector( 'img' )?.remove();
 			parent.previousElementSibling.querySelector( 'video' )?.remove();
+			parent.previousElementSibling.querySelector( 'input' ).value = '';
 			customizeButton.style.display = 'none';
 			customizeButton.nextElementSibling.className = 'upload-button button new select-button';
 			setTimeout( function() {
 				customizeButton.nextElementSibling.focus();
 			} );
 		}
-		updatedControls[parent.closest( 'li' ).dataset.settingId] = '';
 		activatePublishButton();
 	}
 
@@ -1188,14 +1202,30 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Publish updates by clicking Publish button.
 	 *
 	 * @abstract
-	 * @return {void} //////////////////////////////////////////////
+	 * @return {void}
 	 */
 	form.addEventListener( 'submit', function( e ) {
-		e.preventDefault(); // prevent form submission via PHP
 		var submittedChanges = {},
 			formData = new FormData();
 
+		// Prevent form submission via PHP
+		e.preventDefault();
+
+		// Prepare changeset object
 		Object.keys( updatedControls ).forEach( function( settingId ) {
+			if ( /^nav_menu_item\[\d+\]$/.test( settingId ) ) {
+				var current = existing[ settingId ];
+				if ( current && typeof current === 'object' ) {
+					// Example: update only the title from your input.
+					current.title = updated[ settingId ];
+
+					submittedChanges[ settingId ] = {
+						value: current
+					};
+				}
+				return;
+			}
+    
 			submittedChanges[ settingId ] = {
 				value: updatedControls[ settingId ]
 			};
@@ -1217,7 +1247,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				return response.json(); // no errors
 			}
 			throw new Error( response.status );
-		} ).then( function( object ) { console.log( object.data );
+		} ).then( function( object ) {
+console.log( 'RAW customize_save response:', object );
+//console.log( 'setting_validities:', object.setting_validities );
+//console.log( 'saved_changeset_values:', object.saved_changeset_values );
 			if ( object && object.success ) {
 				saveButton.disabled = true;
 				saveButton.value = _wpCustomizeControlsL10n.published;
