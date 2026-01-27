@@ -89,22 +89,17 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 	 * @since CP-2.7.0
 	 */
 	public function render_content() {
-		$login_custom_image_state = (int) get_option( 'login_custom_image_state' );
-		$login_custom_image_id    = (int) get_option( 'login_custom_image_id' );
-		if ( $login_custom_image_state < 0 || $login_custom_image_state > 2 ) {
-			$login_custom_image_state = 0;
-		}
-		if ( $login_custom_image_id ) {
-			$login_custom_image_src = wp_get_attachment_image_url( $login_custom_image_id, 'full' );
-			$alt_text = get_post_meta( $login_custom_image_id, '_wp_attachment_image_alt', true );
-		} else {
-			$custom_logo_id = get_theme_mod( 'custom_logo' );
-			$login_custom_image_src = wp_get_attachment_image_url( $custom_logo_id , 'full' );
-			$alt_text = get_post_meta( $custom_logo_id, '_wp_attachment_image_alt', true );
+		$attachment_id = (int) $this->value();
+		$image_src = '';
+		$alt_text = '';
+
+		if ( $attachment_id ) {
+			$image_src = wp_get_attachment_image_url( $attachment_id, 'full' );
+			$alt_text = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
 		}
 
 		$class = 'attachment-media-view';
-		if ( ! empty( $login_custom_image_src ) ) {
+		if ( ! empty( $image_src ) ) {
 			$class = 'attachment-media-view attachment-media-view-image landscape';
 		}
 		?>
@@ -116,12 +111,13 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 			<ul></ul>
 		</div>
 		<div class="<?php echo esc_attr( $class ); ?>">
-			<input type="hidden" value="<?php echo esc_attr( $login_custom_image_id ?: $custom_logo_id ); ?>">
+			<input type="hidden" value="<?php echo esc_attr( $attachment_id ); ?>">
 
 			<?php
-			if ( empty( $login_custom_image_src ) ) {
+			if ( empty( $image_src ) ) {
 				if ( current_user_can( 'upload_files' ) ) {
 					?>
+
 					<div class="actions"
 						data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
 						data-empty="<?php echo esc_attr( $this->button_labels['select'] ); ?>"
@@ -131,37 +127,39 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 							<?php echo esc_html( $this->button_labels['select'] ); ?>
 						</button>
 					</div>
+
 					<?php
 				}
 			} else {
 				?>
+
 				<div class="thumbnail thumbnail-image">
 					<img class="attachment-thumb"
-						src="<?php echo esc_url( $login_custom_image_src ); ?>"
+						src="<?php echo esc_url( $image_src ); ?>"
 						draggable="false"
 						alt="<?php echo esc_attr( $alt_text ); ?>"
 					>
 				</div>
-				<div class="actions"
-					data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
-					data-empty="<?php echo esc_attr( $this->button_labels['select'] ); ?>"
-					data-full="<?php echo esc_attr( $this->button_labels['change'] ); ?>"
-				>
-					<?php
-					if ( current_user_can( 'upload_files' ) ) {
-						?>
+
+				<?php
+				if ( current_user_can( 'upload_files' ) ) {
+					?>
+
+					<div class="actions"
+						data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
+						data-empty="<?php echo esc_attr( $this->button_labels['select'] ); ?>"
+						data-full="<?php echo esc_attr( $this->button_labels['change'] ); ?>"
+					>
 						<button type="button" class="button remove-button">
 							<?php echo esc_html( $this->button_labels['remove'] ); ?>
 						</button>
 						<button type="button" class="button select-button">
 							<?php echo esc_html( $this->button_labels['change'] ); ?>
 						</button>
-						<?php
-					}
-					?>
-				</div>
+					</div>
 
-				<?php
+					<?php
+				}
 			}
 			?>
 
