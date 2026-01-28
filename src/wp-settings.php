@@ -301,6 +301,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	require ABSPATH . WPINC . '/class-fix-wpcli.php';
 }
 require_once ABSPATH . WPINC . '/classicpress/class-cp-customization-frontend.php';
+require ABSPATH . WPINC . '/view-transitions.php';
 
 wp_script_modules()->add_hooks();
 
