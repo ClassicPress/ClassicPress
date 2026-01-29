@@ -1,4 +1,5 @@
 /* jshint node:true */
+<<<<<<< HEAD
 /* jshint es3:false */
 /* jshint esversion:6 */
 /* jshint quotmark:false */
@@ -13,6 +14,13 @@ const SOURCE_DIR = 'src/';
 const BUILD_DIR = 'build/';
 const BANNER_TEXT = '/*! This file is auto-generated */';
 const autoprefixer = require( 'autoprefixer' );
+=======
+/* jshint esversion: 6 */
+/* eslint-env es6 */
+/* globals Set */
+var webpackConfig = require( './webpack.config' );
+var installChanged = require( 'install-changed' );
+>>>>>>> 438132fd36 (External Libraries: Upgrade CodeMirror to latest v5 in addition to updating CSSLint, Esprima, HTMLHint, and JSONLint.)
 
 module.exports = function(grunt) {
 	// First do `npm install` if package.json has changed.
@@ -81,6 +89,17 @@ module.exports = function(grunt) {
 					banner: BANNER_TEXT,
 					linebreak: true
 				},
+			codemirror: {
+				options: {
+					linebreak: false,
+					banner: require( './tools/webpack/codemirror-banner' )
+				},
+				files: {
+					src: [
+						WORKING_DIR + 'wp-includes/js/codemirror/codemirror.min.css'
+					]
+				}
+			},
 				files: {
 					src: [
 						`${BUILD_DIR}wp-admin/css/*.min.css`,
@@ -187,6 +206,199 @@ module.exports = function(grunt) {
 					}
 				]
 			},
+<<<<<<< HEAD
+=======
+			'npm-packages': {
+				files: [
+					{
+						[ WORKING_DIR + 'wp-includes/js/backbone.js' ]: [ './node_modules/backbone/backbone.js' ],
+						[ WORKING_DIR + 'wp-includes/js/clipboard.js' ]: [ './node_modules/clipboard/dist/clipboard.js' ],
+						[ WORKING_DIR + 'wp-includes/js/hoverIntent.js' ]: [ './node_modules/jquery-hoverintent/jquery.hoverIntent.js' ],
+
+						// Renamed to avoid conflict with jQuery hoverIntent.min.js (after minifying).
+						[ WORKING_DIR + 'wp-includes/js/hoverintent-js.min.js' ]: [ './node_modules/hoverintent/dist/hoverintent.min.js' ],
+
+						[ WORKING_DIR + 'wp-includes/js/imagesloaded.min.js' ]: [ './node_modules/imagesloaded/imagesloaded.pkgd.min.js' ],
+						[ WORKING_DIR + 'wp-includes/js/jquery/jquery.js' ]: [ './node_modules/jquery/dist/jquery.js' ],
+						[ WORKING_DIR + 'wp-includes/js/jquery/jquery.min.js' ]: [ './node_modules/jquery/dist/jquery.min.js' ],
+						[ WORKING_DIR + 'wp-includes/js/jquery/jquery.form.js' ]: [ './node_modules/jquery-form/src/jquery.form.js' ],
+						[ WORKING_DIR + 'wp-includes/js/jquery/jquery.color.min.js' ]: [ './node_modules/jquery-color/dist/jquery.color.min.js' ],
+						[ WORKING_DIR + 'wp-includes/js/masonry.min.js' ]: [ './node_modules/masonry-layout/dist/masonry.pkgd.min.js' ],
+						[ WORKING_DIR + 'wp-includes/js/underscore.js' ]: [ './node_modules/underscore/underscore.js' ],
+					}
+				]
+			},
+			'codemirror': {
+				options: {
+					process: function( content, srcpath ) {
+						if ( srcpath.includes( 'htmlhint.min.js' ) ) {
+							return content + '\nif ( window.HTMLHint && window.HTMLHint.HTMLHint ) { window.HTMLHint = window.HTMLHint.HTMLHint; }';
+						}
+						return content;
+					}
+				},
+				files: [
+					{
+						[ WORKING_DIR + 'wp-includes/js/codemirror/csslint.js' ]: [ './node_modules/csslint/dist/csslint.js' ],
+						[ WORKING_DIR + 'wp-includes/js/codemirror/esprima.js' ]: [ './node_modules/esprima/dist/esprima.js' ],
+						[ WORKING_DIR + 'wp-includes/js/codemirror/htmlhint.js' ]: [ './node_modules/htmlhint/dist/htmlhint.min.js' ],
+						[ WORKING_DIR + 'wp-includes/js/codemirror/jsonlint.js' ]: [ './node_modules/jsonlint/web/jsonlint.js' ],
+					},
+					{
+						expand: true,
+						cwd: SOURCE_DIR + 'js/_enqueues/vendor/codemirror/',
+						src: [
+							'fakejshint.js',
+							'htmlhint-kses.js',
+						],
+						dest: WORKING_DIR + 'wp-includes/js/codemirror/'
+					}
+				]
+			},
+			'vendor-js': {
+				files: [
+					{
+						expand: true,
+						cwd: SOURCE_DIR + 'js/_enqueues/vendor/',
+						src: [
+							'**/*',
+							'!farbtastic.js',
+							'!iris.min.js',
+							'!deprecated/**',
+							'!README.md',
+							// Ignore unminified version of vendor lib we don't ship.
+							'!jquery/jquery.masonry.js',
+							'!tinymce/tinymce.js'
+						],
+						dest: WORKING_DIR + 'wp-includes/js/'
+					},
+					{
+						expand: true,
+						cwd: SOURCE_DIR + 'js/_enqueues/vendor/',
+						src: [
+							'farbtastic.js',
+							'iris.min.js'
+						],
+						dest: WORKING_DIR + 'wp-admin/js/'
+					},
+					{
+						expand: true,
+						cwd: SOURCE_DIR + 'js/_enqueues/vendor/deprecated',
+						src: [
+							'suggest*'
+						],
+						dest: WORKING_DIR + 'wp-includes/js/jquery/'
+					}
+				].concat(
+					// Copy tinymce.js only when building to /src.
+					WORKING_DIR === SOURCE_DIR ? {
+						expand: true,
+						cwd: SOURCE_DIR + 'js/_enqueues/vendor/tinymce/',
+						src: 'tinymce.js',
+						dest: SOURCE_DIR + 'wp-includes/js/tinymce/'
+					} : []
+				)
+			},
+			'admin-js': {
+				files: {
+					[ WORKING_DIR + 'wp-admin/js/accordion.js' ]: [ './src/js/_enqueues/lib/accordion.js' ],
+					[ WORKING_DIR + 'wp-admin/js/application-passwords.js' ]: [ './src/js/_enqueues/admin/application-passwords.js' ],
+					[ WORKING_DIR + 'wp-admin/js/auth-app.js' ]: [ './src/js/_enqueues/admin/auth-app.js' ],
+					[ WORKING_DIR + 'wp-admin/js/code-editor.js' ]: [ './src/js/_enqueues/wp/code-editor.js' ],
+					[ WORKING_DIR + 'wp-admin/js/color-picker.js' ]: [ './src/js/_enqueues/lib/color-picker.js' ],
+					[ WORKING_DIR + 'wp-admin/js/comment.js' ]: [ './src/js/_enqueues/admin/comment.js' ],
+					[ WORKING_DIR + 'wp-admin/js/common.js' ]: [ './src/js/_enqueues/admin/common.js' ],
+					[ WORKING_DIR + 'wp-admin/js/custom-background.js' ]: [ './src/js/_enqueues/admin/custom-background.js' ],
+					[ WORKING_DIR + 'wp-admin/js/custom-header.js' ]: [ './src/js/_enqueues/admin/custom-header.js' ],
+					[ WORKING_DIR + 'wp-admin/js/customize-controls.js' ]: [ './src/js/_enqueues/wp/customize/controls.js' ],
+					[ WORKING_DIR + 'wp-admin/js/customize-nav-menus.js' ]: [ './src/js/_enqueues/wp/customize/nav-menus.js' ],
+					[ WORKING_DIR + 'wp-admin/js/customize-widgets.js' ]: [ './src/js/_enqueues/wp/customize/widgets.js' ],
+					[ WORKING_DIR + 'wp-admin/js/dashboard.js' ]: [ './src/js/_enqueues/wp/dashboard.js' ],
+					[ WORKING_DIR + 'wp-admin/js/edit-comments.js' ]: [ './src/js/_enqueues/admin/edit-comments.js' ],
+					[ WORKING_DIR + 'wp-admin/js/editor-expand.js' ]: [ './src/js/_enqueues/wp/editor/dfw.js' ],
+					[ WORKING_DIR + 'wp-admin/js/editor.js' ]: [ './src/js/_enqueues/wp/editor/base.js' ],
+					[ WORKING_DIR + 'wp-admin/js/gallery.js' ]: [ './src/js/_enqueues/lib/gallery.js' ],
+					[ WORKING_DIR + 'wp-admin/js/image-edit.js' ]: [ './src/js/_enqueues/lib/image-edit.js' ],
+					[ WORKING_DIR + 'wp-admin/js/inline-edit-post.js' ]: [ './src/js/_enqueues/admin/inline-edit-post.js' ],
+					[ WORKING_DIR + 'wp-admin/js/inline-edit-tax.js' ]: [ './src/js/_enqueues/admin/inline-edit-tax.js' ],
+					[ WORKING_DIR + 'wp-admin/js/language-chooser.js' ]: [ './src/js/_enqueues/lib/language-chooser.js' ],
+					[ WORKING_DIR + 'wp-admin/js/link.js' ]: [ './src/js/_enqueues/admin/link.js' ],
+					[ WORKING_DIR + 'wp-admin/js/media-gallery.js' ]: [ './src/js/_enqueues/deprecated/media-gallery.js' ],
+					[ WORKING_DIR + 'wp-admin/js/media-upload.js' ]: [ './src/js/_enqueues/admin/media-upload.js' ],
+					[ WORKING_DIR + 'wp-admin/js/media.js' ]: [ './src/js/_enqueues/admin/media.js' ],
+					[ WORKING_DIR + 'wp-admin/js/nav-menu.js' ]: [ './src/js/_enqueues/lib/nav-menu.js' ],
+					[ WORKING_DIR + 'wp-admin/js/password-strength-meter.js' ]: [ './src/js/_enqueues/wp/password-strength-meter.js' ],
+					[ WORKING_DIR + 'wp-admin/js/password-toggle.js' ]: [ './src/js/_enqueues/admin/password-toggle.js' ],
+					[ WORKING_DIR + 'wp-admin/js/plugin-install.js' ]: [ './src/js/_enqueues/admin/plugin-install.js' ],
+					[ WORKING_DIR + 'wp-admin/js/post.js' ]: [ './src/js/_enqueues/admin/post.js' ],
+					[ WORKING_DIR + 'wp-admin/js/postbox.js' ]: [ './src/js/_enqueues/admin/postbox.js' ],
+					[ WORKING_DIR + 'wp-admin/js/revisions.js' ]: [ './src/js/_enqueues/wp/revisions.js' ],
+					[ WORKING_DIR + 'wp-admin/js/set-post-thumbnail.js' ]: [ './src/js/_enqueues/admin/set-post-thumbnail.js' ],
+					[ WORKING_DIR + 'wp-admin/js/svg-painter.js' ]: [ './src/js/_enqueues/wp/svg-painter.js' ],
+					[ WORKING_DIR + 'wp-admin/js/tags-box.js' ]: [ './src/js/_enqueues/admin/tags-box.js' ],
+					[ WORKING_DIR + 'wp-admin/js/tags-suggest.js' ]: [ './src/js/_enqueues/admin/tags-suggest.js' ],
+					[ WORKING_DIR + 'wp-admin/js/tags.js' ]: [ './src/js/_enqueues/admin/tags.js' ],
+					[ WORKING_DIR + 'wp-admin/js/site-health.js' ]: [ './src/js/_enqueues/admin/site-health.js' ],
+					[ WORKING_DIR + 'wp-admin/js/site-icon.js' ]: [ './src/js/_enqueues/admin/site-icon.js' ],
+					[ WORKING_DIR + 'wp-admin/js/privacy-tools.js' ]: [ './src/js/_enqueues/admin/privacy-tools.js' ],
+					[ WORKING_DIR + 'wp-admin/js/theme-plugin-editor.js' ]: [ './src/js/_enqueues/wp/theme-plugin-editor.js' ],
+					[ WORKING_DIR + 'wp-admin/js/theme.js' ]: [ './src/js/_enqueues/wp/theme.js' ],
+					[ WORKING_DIR + 'wp-admin/js/updates.js' ]: [ './src/js/_enqueues/wp/updates.js' ],
+					[ WORKING_DIR + 'wp-admin/js/user-profile.js' ]: [ './src/js/_enqueues/admin/user-profile.js' ],
+					[ WORKING_DIR + 'wp-admin/js/user-suggest.js' ]: [ './src/js/_enqueues/lib/user-suggest.js' ],
+					[ WORKING_DIR + 'wp-admin/js/widgets/custom-html-widgets.js' ]: [ './src/js/_enqueues/wp/widgets/custom-html.js' ],
+					[ WORKING_DIR + 'wp-admin/js/widgets/media-audio-widget.js' ]: [ './src/js/_enqueues/wp/widgets/media-audio.js' ],
+					[ WORKING_DIR + 'wp-admin/js/widgets/media-gallery-widget.js' ]: [ './src/js/_enqueues/wp/widgets/media-gallery.js' ],
+					[ WORKING_DIR + 'wp-admin/js/widgets/media-image-widget.js' ]: [ './src/js/_enqueues/wp/widgets/media-image.js' ],
+					[ WORKING_DIR + 'wp-admin/js/widgets/media-video-widget.js' ]: [ './src/js/_enqueues/wp/widgets/media-video.js' ],
+					[ WORKING_DIR + 'wp-admin/js/widgets/media-widgets.js' ]: [ './src/js/_enqueues/wp/widgets/media.js' ],
+					[ WORKING_DIR + 'wp-admin/js/widgets/text-widgets.js' ]: [ './src/js/_enqueues/wp/widgets/text.js' ],
+					[ WORKING_DIR + 'wp-admin/js/widgets.js' ]: [ './src/js/_enqueues/admin/widgets.js' ],
+					[ WORKING_DIR + 'wp-admin/js/word-count.js' ]: [ './src/js/_enqueues/wp/utils/word-count.js' ],
+					[ WORKING_DIR + 'wp-admin/js/wp-fullscreen-stub.js' ]: [ './src/js/_enqueues/deprecated/fullscreen-stub.js' ],
+					[ WORKING_DIR + 'wp-admin/js/xfn.js' ]: [ './src/js/_enqueues/admin/xfn.js' ]
+				}
+			},
+			'includes-js': {
+				files: {
+					[ WORKING_DIR + 'wp-includes/js/admin-bar.js' ]: [ './src/js/_enqueues/lib/admin-bar.js' ],
+					[ WORKING_DIR + 'wp-includes/js/api-request.js' ]: [ './src/js/_enqueues/wp/api-request.js' ],
+					[ WORKING_DIR + 'wp-includes/js/autosave.js' ]: [ './src/js/_enqueues/wp/autosave.js' ],
+					[ WORKING_DIR + 'wp-includes/js/comment-reply.js' ]: [ './src/js/_enqueues/lib/comment-reply.js' ],
+					[ WORKING_DIR + 'wp-includes/js/customize-base.js' ]: [ './src/js/_enqueues/wp/customize/base.js' ],
+					[ WORKING_DIR + 'wp-includes/js/customize-loader.js' ]: [ './src/js/_enqueues/wp/customize/loader.js' ],
+					[ WORKING_DIR + 'wp-includes/js/customize-models.js' ]: [ './src/js/_enqueues/wp/customize/models.js' ],
+					[ WORKING_DIR + 'wp-includes/js/customize-preview-nav-menus.js' ]: [ './src/js/_enqueues/wp/customize/preview-nav-menus.js' ],
+					[ WORKING_DIR + 'wp-includes/js/customize-preview-widgets.js' ]: [ './src/js/_enqueues/wp/customize/preview-widgets.js' ],
+					[ WORKING_DIR + 'wp-includes/js/customize-preview.js' ]: [ './src/js/_enqueues/wp/customize/preview.js' ],
+					[ WORKING_DIR + 'wp-includes/js/customize-selective-refresh.js' ]: [ './src/js/_enqueues/wp/customize/selective-refresh.js' ],
+					[ WORKING_DIR + 'wp-includes/js/customize-views.js' ]: [ './src/js/_enqueues/wp/customize/views.js' ],
+					[ WORKING_DIR + 'wp-includes/js/heartbeat.js' ]: [ './src/js/_enqueues/wp/heartbeat.js' ],
+					[ WORKING_DIR + 'wp-includes/js/mce-view.js' ]: [ './src/js/_enqueues/wp/mce-view.js' ],
+					[ WORKING_DIR + 'wp-includes/js/media-editor.js' ]: [ './src/js/_enqueues/wp/media/editor.js' ],
+					[ WORKING_DIR + 'wp-includes/js/quicktags.js' ]: [ './src/js/_enqueues/lib/quicktags.js' ],
+					[ WORKING_DIR + 'wp-includes/js/shortcode.js' ]: [ './src/js/_enqueues/wp/shortcode.js' ],
+					[ WORKING_DIR + 'wp-includes/js/utils.js' ]: [ './src/js/_enqueues/lib/cookies.js' ],
+					[ WORKING_DIR + 'wp-includes/js/wp-ajax-response.js' ]: [ './src/js/_enqueues/lib/ajax-response.js' ],
+					[ WORKING_DIR + 'wp-includes/js/wp-api.js' ]: [ './src/js/_enqueues/wp/api.js' ],
+					[ WORKING_DIR + 'wp-includes/js/wp-auth-check.js' ]: [ './src/js/_enqueues/lib/auth-check.js' ],
+					[ WORKING_DIR + 'wp-includes/js/wp-backbone.js' ]: [ './src/js/_enqueues/wp/backbone.js' ],
+					[ WORKING_DIR + 'wp-includes/js/wp-custom-header.js' ]: [ './src/js/_enqueues/wp/custom-header.js' ],
+					[ WORKING_DIR + 'wp-includes/js/wp-embed-template.js' ]: [ './src/js/_enqueues/lib/embed-template.js' ],
+					[ WORKING_DIR + 'wp-includes/js/wp-embed.js' ]: [ './src/js/_enqueues/wp/embed.js' ],
+					[ WORKING_DIR + 'wp-includes/js/wp-emoji-loader.js' ]: [ './src/js/_enqueues/lib/emoji-loader.js' ],
+					[ WORKING_DIR + 'wp-includes/js/wp-emoji.js' ]: [ './src/js/_enqueues/wp/emoji.js' ],
+					[ WORKING_DIR + 'wp-includes/js/wp-list-revisions.js' ]: [ './src/js/_enqueues/lib/list-revisions.js' ],
+					[ WORKING_DIR + 'wp-includes/js/wp-lists.js' ]: [ './src/js/_enqueues/lib/lists.js' ],
+					[ WORKING_DIR + 'wp-includes/js/wp-pointer.js' ]: [ './src/js/_enqueues/lib/pointer.js' ],
+					[ WORKING_DIR + 'wp-includes/js/wp-sanitize.js' ]: [ './src/js/_enqueues/wp/sanitize.js' ],
+					[ WORKING_DIR + 'wp-includes/js/wp-util.js' ]: [ './src/js/_enqueues/wp/util.js' ],
+					[ WORKING_DIR + 'wp-includes/js/wpdialog.js' ]: [ './src/js/_enqueues/lib/dialog.js' ],
+					[ WORKING_DIR + 'wp-includes/js/wplink.js' ]: [ './src/js/_enqueues/lib/link.js' ],
+					[ WORKING_DIR + 'wp-includes/js/zxcvbn-async.js' ]: [ './src/js/_enqueues/lib/zxcvbn-async.js' ]
+				}
+			},
+>>>>>>> 438132fd36 (External Libraries: Upgrade CodeMirror to latest v5 in addition to updating CSSLint, Esprima, HTMLHint, and JSONLint.)
 			'wp-admin-css-compat-rtl': {
 				options: {
 					processContent(src) {
@@ -376,6 +588,22 @@ module.exports = function(grunt) {
 		cssmin: {
 			options: {
 				compatibility: 'ie7'
+			},
+			codemirror: {
+				files: {
+					[ WORKING_DIR + 'wp-includes/js/codemirror/codemirror.min.css' ]: [
+						'node_modules/codemirror/lib/codemirror.css',
+						'node_modules/codemirror/addon/hint/show-hint.css',
+						'node_modules/codemirror/addon/lint/lint.css',
+						'node_modules/codemirror/addon/dialog/dialog.css',
+						'node_modules/codemirror/addon/display/fullscreen.css',
+						'node_modules/codemirror/addon/fold/foldgutter.css',
+						'node_modules/codemirror/addon/merge/merge.css',
+						'node_modules/codemirror/addon/scroll/simplescrollbars.css',
+						'node_modules/codemirror/addon/search/matchesonscrollbar.css',
+						'node_modules/codemirror/addon/tern/tern.css'
+					]
+				}
 			},
 			core: {
 				expand: true,
@@ -828,6 +1056,15 @@ module.exports = function(grunt) {
 				dest: `${SOURCE_DIR}wp-includes/js/imgareaselect/jquery.imgareaselect.min.js`
 			}
 		},
+<<<<<<< HEAD
+=======
+		webpack: {
+			prod: webpackConfig( { environment: 'production', buildTarget: WORKING_DIR } ),
+			dev: webpackConfig( { environment: 'development', buildTarget: WORKING_DIR } ),
+			watch: webpackConfig( { environment: 'development', watch: true } ),
+			codemirror: require( './tools/webpack/codemirror.config.js' )( { buildTarget: WORKING_DIR } ),
+		},
+>>>>>>> 438132fd36 (External Libraries: Upgrade CodeMirror to latest v5 in addition to updating CSSLint, Esprima, HTMLHint, and JSONLint.)
 		concat: {
 			tinymce: {
 				options: {
@@ -1201,6 +1438,7 @@ module.exports = function(grunt) {
 		}
 	);
 
+<<<<<<< HEAD
 	grunt.registerTask(
 		'certificates:update',
 		'Updates the Composer package responsible for root certificate updates.',
@@ -1243,6 +1481,50 @@ module.exports = function(grunt) {
 		'copy:all',
 		[
 			'copy:files',
+=======
+	grunt.registerTask( 'copy:js', [
+		'copy:npm-packages',
+		'copy:vendor-js',
+		'copy:admin-js',
+		'copy:includes-js'
+	] );
+
+	grunt.registerTask( 'uglify:all', [
+		'uglify:core',
+		'uglify:emoji-loader',
+		'uglify:jquery-ui',
+		'uglify:imgareaselect',
+		'uglify:jqueryform',
+		'uglify:moment'
+	] );
+
+	grunt.registerTask( 'build:codemirror', [
+		'webpack:codemirror',
+		'cssmin:codemirror',
+		'usebanner:codemirror',
+		'copy:codemirror'
+	] );
+
+	grunt.registerTask( 'build:webpack', [
+		'clean:webpack-assets',
+		'webpack:prod',
+		'webpack:dev',
+		'clean:interactivity-assets',
+	] );
+
+	grunt.registerTask( 'build:js', [
+		'clean:js',
+		'build:webpack',
+		'copy:js',
+		'file_append',
+		'uglify:all',
+		'concat:tinymce',
+		'concat:emoji'
+	] );
+
+	grunt.registerTask( 'build:css', [
+		'clean:css',
+>>>>>>> 438132fd36 (External Libraries: Upgrade CodeMirror to latest v5 in addition to updating CSSLint, Esprima, HTMLHint, and JSONLint.)
 			'copy:wp-admin-css-compat-rtl',
 			'copy:wp-admin-css-compat-min',
 			'copy:script-loader',
@@ -1275,6 +1557,7 @@ module.exports = function(grunt) {
 			'rtl',
 			'cssmin:rtl',
 			'cssmin:colors',
+<<<<<<< HEAD
 			'terser:core',
 			'terser:embed',
 			'terser:jqueryui',
@@ -1289,6 +1572,256 @@ module.exports = function(grunt) {
 	grunt.registerTask(
 		'prerelease',
 		[
+=======
+		'cssmin:themes',
+		'usebanner:files'
+	] );
+
+	grunt.registerTask( 'certificates:upgrade-package', 'Upgrades the package responsible for supplying the certificate authority certificate store bundled with WordPress.', function() {
+		var done = this.async();
+		var flags = this.flags;
+		var spawn = require( 'child_process' ).spawnSync;
+		var fs = require( 'fs' );
+
+		// Ensure that `composer update` has been run and the dependency is installed.
+		if ( ! fs.existsSync( 'vendor' ) || ! fs.existsSync( 'vendor/composer' ) || ! fs.existsSync( 'vendor/composer/ca-bundle' ) ) {
+			grunt.log.error( 'composer/ca-bundle dependency is missing. Please run `composer update` before attempting to upgrade the certificate bundle.' );
+			done( false );
+			return;
+		}
+
+		/*
+		 * Because the `composer/ca-bundle` is pinned to an exact version to ensure upgrades are applied intentionally,
+		 * the `composer update` command will not upgrade the dependency. Instead, `composer require` must be called,
+		 * but the specific version being upgraded to must be known and passed to the command.
+		 */
+		var outdatedResult = spawn( 'composer', [ 'outdated', 'composer/ca-bundle', '--format=json' ] );
+
+		if ( outdatedResult.status !== 0 ) {
+			grunt.log.error( 'Failed to get the package information for composer/ca-bundle.' );
+			done( false );
+			return;
+		}
+
+		var packageInfo;
+		try {
+			var stdout = outdatedResult.stdout.toString().trim();
+			if ( ! stdout ) {
+				grunt.log.writeln( 'The latest version is already installed.' );
+				done( true );
+				return;
+			}
+			packageInfo = JSON.parse( stdout );
+		} catch ( e ) {
+			grunt.log.error( 'Failed to parse the package information for composer/ca-bundle.' );
+			done( false );
+			return;
+		}
+
+		// Check for the version information needed to perform the necessary comparisons.
+		if ( ! packageInfo.versions || ! packageInfo.versions[0] || ! packageInfo.latest ) {
+			grunt.log.error( 'Could not determine version information for composer/ca-bundle.' );
+			done( false );
+			return;
+		}
+
+		var currentVersion = packageInfo.versions[0];
+		var latestVersion = packageInfo.latest;
+
+		// Compare versions to ensure we actually need to update
+		if ( currentVersion === latestVersion ) {
+			grunt.log.writeln( 'The latest version is already installed: ' + latestVersion + '.' );
+			done( true );
+			return;
+		}
+
+		grunt.log.writeln( 'Installed version: ' + currentVersion );
+		grunt.log.writeln( 'New version found: ' + latestVersion );
+
+		// Upgrade to the latest version and change the pinned version in composer.json.
+		var args = [ 'require', 'composer/ca-bundle:' + latestVersion, '--dev' ];
+
+		grunt.util.spawn( {
+			cmd: 'composer',
+			args: args,
+			opts: { stdio: 'inherit' }
+		}, function( error ) {
+			if ( flags.error && error ) {
+				done( false );
+			} else {
+				grunt.log.writeln( 'Successfully updated composer/ca-bundle to ' + latestVersion );
+				done( true );
+			}
+		} );
+	} );
+
+	grunt.registerTask( 'build:certificates', [
+		'concat:certificates'
+	] );
+
+	grunt.registerTask( 'certificates:upgrade', [
+		'certificates:upgrade-package',
+		'copy:certificates',
+		'build:certificates'
+	] );
+
+	grunt.registerTask( 'build:files', [
+		'clean:files',
+		'copy:files',
+		'copy:version',
+	] );
+
+	grunt.registerTask( 'replace:workflow-references-local-to-remote', [
+		'copy:workflow-references-local-to-remote',
+	]);
+
+	grunt.registerTask( 'replace:workflow-references-remote-to-local', [
+		'copy:workflow-references-remote-to-local',
+	]);
+
+	grunt.registerTask( 'post-branching', [
+		'clean:workflows',
+		'replace:workflow-references-local-to-remote'
+	]);
+
+	/**
+	 * Build verification tasks.
+	 */
+	grunt.registerTask( 'verify:build', [
+		'verify:old-files',
+		'verify:source-maps',
+	] );
+
+	/**
+	 * Build assertions to ensure no project files are inside `$_old_files` in the build directory.
+	 *
+	 * @ticket 36083
+	 */
+	grunt.registerTask( 'verify:old-files', function() {
+		const file = `${ BUILD_DIR }wp-admin/includes/update-core.php`;
+
+		assert(
+			fs.existsSync( file ),
+			'The build/wp-admin/includes/update-core.php file does not exist.'
+		);
+
+		const contents = fs.readFileSync( file, {
+			encoding: 'utf8',
+		} );
+
+		assert(
+			contents.length > 0,
+			'The build/wp-admin/includes/update-core.php file must not be empty.'
+		);
+
+		const match = contents.match( /\$_old_files = array\(([^\)]+)\);/ );
+
+		assert(
+			match.length > 0,
+			'The build/wp-admin/includes/update-core.php file does not include an `$_old_files` array.'
+		);
+
+		const files = match[1].split( '\n\t' ).filter( function( file ) {
+			// Filter out empty lines.
+			if ( '' === file ) {
+				return false;
+			}
+
+			// Filter out commented out lines.
+			if ( 0 === file.indexOf( '/' ) ) {
+				return false;
+			}
+
+			return true;
+		} ).map( function( file ) {
+			// Strip leading and trailing single quotes and commas.
+			return file.replace( /^\'|\',$/g, '' );
+		} );
+
+		files.forEach(function( file ){
+			const search = `${ BUILD_DIR }${ file }`;
+			assert(
+				false === fs.existsSync( search ),
+				`${ search } should not be present in the $_old_files array.`
+			);
+		});
+	} );
+
+	/**
+	 * Compiled JavaScript files may link to sourcemaps. In some cases,
+	 * the source map may not be available, which can cause 404 errors when
+	 * browsers try to download the sourcemap from the referenced URLs.
+	 * Ensure that sourcemap links are not included in JavaScript files.
+	 *
+	 * @ticket 24994
+	 * @ticket 46218
+	 * @ticket 60348
+	 */
+	grunt.registerTask( 'verify:source-maps', function() {
+		const ignoredFiles = [
+			'build/wp-includes/js/dist/components.js',
+			'build/wp-includes/js/dist/data.js',
+		];
+		const files = buildFiles.reduce( ( acc, path ) => {
+			// Skip excluded paths and any path that isn't a file.
+			if ( '!' === path[0] || '**' !== path.substr( -2 ) ) {
+				return acc;
+			}
+			acc.push( ...glob.sync( `${ BUILD_DIR }/${ path }/*.js` ) );
+			return acc;
+		}, [] );
+
+		assert(
+			files.length > 0,
+			'No JavaScript files found in the build directory.'
+		);
+
+		files
+			.filter(file => ! ignoredFiles.includes( file) )
+			.forEach( function( file ) {
+				const contents = fs.readFileSync( file, {
+					encoding: 'utf8',
+				} );
+				// `data:` URLs are allowed:
+				const doesNotHaveSourceMap = ! /^\/\/# sourceMappingURL=((?!data:).)/m.test(contents);
+
+				assert(
+					doesNotHaveSourceMap,
+					`The ${ file } file must not contain a sourceMappingURL.`
+				);
+			} );
+	} );
+
+	grunt.registerTask( 'build', function() {
+		if ( grunt.option( 'dev' ) ) {
+			grunt.task.run( [
+				'build:js',
+				'build:css',
+				'build:codemirror',
+				'gutenberg-sync',
+				'gutenberg-copy',
+				'copy-vendor-scripts',
+				'build:certificates'
+			] );
+		} else {
+			grunt.task.run( [
+				'build:certificates',
+				'build:files',
+				'build:js',
+				'build:css',
+				'build:codemirror',
+				'gutenberg-sync',
+				'gutenberg-copy',
+				'copy-vendor-scripts',
+				'replace:source-maps',
+				'verify:build'
+			] );
+		}
+	} );
+
+	grunt.registerTask( 'prerelease', [
+		'format:php:error',
+>>>>>>> 438132fd36 (External Libraries: Upgrade CodeMirror to latest v5 in addition to updating CSSLint, Esprima, HTMLHint, and JSONLint.)
 			'precommit:php',
 			'precommit:js',
 			'precommit:css',
