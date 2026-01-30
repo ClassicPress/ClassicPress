@@ -474,11 +474,16 @@ class Tests_Admin_wpSiteHealth extends WP_UnitTestCase {
 		return array(
 			array( 'comments_count', 0 ),
 			array( 'posts_count', 0 ),
+<<<<<<< HEAD
 			array( 'terms_count', 1 ),
 			array( 'options_count', 100 ),
+=======
+			array( 'terms_count', 0 ),
+			array( 'options_count', 1 ),
+>>>>>>> 13eac41110 (Site Health: Reduce thresholds for object cache threshold tests.)
 			array( 'users_count', 0 ),
-			array( 'alloptions_count', 100 ),
-			array( 'alloptions_bytes', 1000 ),
+			array( 'alloptions_count', 1 ),
+			array( 'alloptions_bytes', 10 ),
 		);
 	}
 }
