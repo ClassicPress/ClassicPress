@@ -1049,9 +1049,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		dialog.removeAttribute( 'style' );
-		menuItemAdd.textContent = VIDEO_WIDGET.add_media;
-		menuItemAdd.classList.remove( 'cancel' );
-		menuItemAdd.setAttribute( 'aria-selected', true );
+		menuItemAdd?.textContent = VIDEO_WIDGET.add_media;
+		menuItemAdd?.classList.remove( 'cancel' );
+		menuItemAdd?.setAttribute( 'aria-selected', true );
 		dialog.querySelector( '.widget-modal-headings' ).removeAttribute( 'style' );
 		dialog.querySelector( '.widget-modal-left-sidebar' ).classList.remove( 'hidden' );
 	}
