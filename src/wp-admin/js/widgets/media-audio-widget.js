@@ -1057,31 +1057,33 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function closeModal() {
 		var menuItemAdd = dialog.querySelector( '#menu-item-add' );
+		if ( menuItemAdd ) {
 
-		dialog.close();
+			dialog.close();
 
-		if ( dialog.querySelector( '.widget-modal-header-buttons' ) ) {
-			dialog.querySelector( '.widget-modal-header-buttons' ).remove();
-		}
-		if ( dialog.querySelector( '#widget-modal-media-content' ) ) {
-			dialog.querySelector( '#widget-modal-media-content' ).remove();
-		}
-		if ( dialog.querySelector( '#audio-modal-content' ) ) {
-			dialog.querySelector( '#audio-modal-content' ).remove();
-		}
-		if ( dialog.querySelector( '.widget-modal-footer' ) ) {
-			dialog.querySelector( '.widget-modal-footer' ).remove();
-		}
-		if ( dialog.querySelector( '#menu-item-audio-details' ) ) {
-			dialog.querySelector( '#menu-item-audio-details' ).remove();
-		}
+			if ( dialog.querySelector( '.widget-modal-header-buttons' ) ) {
+				dialog.querySelector( '.widget-modal-header-buttons' ).remove();
+			}
+			if ( dialog.querySelector( '#widget-modal-media-content' ) ) {
+				dialog.querySelector( '#widget-modal-media-content' ).remove();
+			}
+			if ( dialog.querySelector( '#video-modal-content' ) ) {
+				dialog.querySelector( '#video-modal-content' ).remove();
+			}
+			if ( dialog.querySelector( '.widget-modal-footer' ) ) {
+				dialog.querySelector( '.widget-modal-footer' ).remove();
+			}
+			if ( dialog.querySelector( '#menu-item-audio-details' ) ) {
+				dialog.querySelector( '#menu-item-audio-details' ).remove();
+			}
 
-		dialog.removeAttribute( 'style' );
-		menuItemAdd.textContent = AUDIO_WIDGET.add_media;
-		menuItemAdd.classList.remove( 'cancel' );
-		menuItemAdd.setAttribute( 'aria-selected', true );
-		dialog.querySelector( '.widget-modal-headings' ).removeAttribute( 'style' );
-		dialog.querySelector( '.widget-modal-left-sidebar' ).classList.remove( 'hidden' );
+			dialog.removeAttribute( 'style' );
+			menuItemAdd.textContent = AUDIO_WIDGET.add_media;
+			menuItemAdd.classList.remove( 'cancel' );
+			menuItemAdd.setAttribute( 'aria-selected', true );
+			dialog.querySelector( '.widget-modal-headings' ).removeAttribute( 'style' );
+			dialog.querySelector( '.widget-modal-left-sidebar' ).classList.remove( 'hidden' );
+		}
 	}
 
 	/**
