@@ -11,6 +11,16 @@ module.exports = ( env = { buildTarget: 'src/' } ) => {
 	return {
 		target: 'browserslist',
 		mode: 'production',
+		performance: {
+			maxAssetSize: 650000,
+			maxEntrypointSize: 650000
+		},
+		ignoreWarnings: [
+			{
+				module: /node_modules\/codemirror\/addon\/mode\/loadmode\.js/,
+				message: /the request of a dependency is an expression/,
+			},
+		],
 		entry: './tools/vendors/codemirror-entry.js',
 		output: {
 			path: path.resolve( __dirname, '../../', buildTarget, 'wp-includes/js/codemirror' ),
