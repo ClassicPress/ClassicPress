@@ -1292,7 +1292,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 		dialog.removeAttribute( 'style' );
 		dialog.querySelector( '.widget-modal-headings' ).removeAttribute( 'style' );
-		dialog.querySelector( '.widget-modal-left-sidebar' ).classList.remove( 'hidden' );
+		if ( dialog.querySelector( '.widget-modal-left-sidebar' ).classList.contains( 'hidden' ) ) {
+			dialog.querySelector( '.widget-modal-left-sidebar' ).classList.remove( 'hidden' );
+		}
 	}
 
 	/**
