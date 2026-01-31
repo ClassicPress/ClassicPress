@@ -2224,6 +2224,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			videoListButton = dialog.querySelector( '#menu-item-video-playlist' ),
 			urlButton = dialog.querySelector( '#menu-item-embed' );
 
+		if ( ! mediaButton ) {
+			return;
+		}
+
 		if ( dialog.querySelector( '.widget-modal-header-buttons' ) ) {
 			dialog.querySelector( '.widget-modal-header-buttons' ).remove();
 		}
