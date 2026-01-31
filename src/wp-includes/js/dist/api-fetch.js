@@ -1193,7 +1193,6 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  apiFetch: function() { return /* binding */ apiFetch; },
   "default": function() { return /* binding */ index_default; }
 });
 
