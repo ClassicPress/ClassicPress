@@ -4041,7 +4041,7 @@ function cp_add_cats_and_tags_to_attachment_for_js( $response, $attachment, $met
 			array(
 				'taxonomy'   => 'media_category',
 				'object_ids' => $attachment->ID,
-				'fields'     => 'slugs',
+				'fields'     => 'names',
 			)
 		);
 	}
@@ -4067,7 +4067,7 @@ function cp_add_cats_and_tags_to_attachment_for_js( $response, $attachment, $met
 			array(
 				'taxonomy'   => 'media_post_tag',
 				'object_ids' => $attachment->ID,
-				'fields'     => 'slugs',
+				'fields'     => 'names',
 			)
 		);
 	}

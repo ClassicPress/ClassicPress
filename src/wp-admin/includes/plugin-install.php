@@ -372,14 +372,14 @@ function install_plugins_favorites_form() {
  */
 function display_plugins_categories_list() {
 	$categories = array(
+		'classicpress' => __( 'ClassicPress' ),
 		'form'         => __( 'Forms' ),
 		'widget'       => __( 'Widgets' ),
 		'admin'        => __( 'Admin Utilities' ),
 		'page-builder' => __( 'Page Builders' ),
-		'e-commerce'   => __( 'eCommerce' ),
+		'ecommerce'    => __( 'eCommerce' ),
 		'media'        => __( 'Media' ),
 		'seo'          => __( 'SEO' ),
-		'ads'          => __( 'Advertising' ),
 		'social'       => __( 'Social Networking' ),
 		'membership'   => __( 'Membership' ),
 		'newsletter'   => __( 'Newsletters' ),

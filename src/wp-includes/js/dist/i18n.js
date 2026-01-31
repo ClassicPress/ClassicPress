@@ -2,8 +2,8 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 416:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ 80
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 
 // EXPORTS
@@ -197,7 +197,7 @@ function sprintf(string, ...args) {
 	});
 }
 
-;// ./node_modules/@wordpress/i18n/build-module/sprintf.js
+;// ./node_modules/@wordpress/i18n/build-module/sprintf.mjs
 // packages/i18n/src/sprintf.ts
 
 function sprintf_sprintf(format, ...args) {
@@ -206,59 +206,20 @@ function sprintf_sprintf(format, ...args) {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ 427:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   defaultHooks: function() { return /* binding */ defaultHooks; }
-/* harmony export */ });
-/* unused harmony exports actions, addAction, addFilter, applyFilters, applyFiltersAsync, currentAction, currentFilter, didAction, didFilter, doAction, doActionAsync, doingAction, doingFilter, filters, hasAction, hasFilter, removeAction, removeAllActions, removeAllFilters, removeFilter */
-/* harmony import */ var _createHooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(507);
-// packages/hooks/src/index.ts
-
-
-var defaultHooks = (0,_createHooks__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A)();
-var {
-  addAction,
-  addFilter,
-  removeAction,
-  removeFilter,
-  hasAction,
-  hasFilter,
-  removeAllActions,
-  removeAllFilters,
-  doAction,
-  doActionAsync,
-  applyFilters,
-  applyFiltersAsync,
-  currentAction,
-  currentFilter,
-  doingAction,
-  doingFilter,
-  didAction,
-  didFilter,
-  actions,
-  filters
-} = defaultHooks;
-
-
-
-/***/ }),
-
-/***/ 507:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ 685
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  A: function() { return /* binding */ createHooks_default; }
+  defaultHooks: function() { return /* binding */ defaultHooks; }
 });
 
-// UNUSED EXPORTS: _Hooks
+// UNUSED EXPORTS: actions, addAction, addFilter, applyFilters, applyFiltersAsync, createHooks, currentAction, currentFilter, didAction, didFilter, doAction, doActionAsync, doingAction, doingFilter, filters, hasAction, hasFilter, removeAction, removeAllActions, removeAllFilters, removeFilter
 
-;// ./node_modules/@wordpress/hooks/build-module/validateNamespace.js
+;// ./node_modules/@wordpress/hooks/build-module/validateNamespace.mjs
 // packages/hooks/src/validateNamespace.ts
 function validateNamespace(namespace) {
   if ("string" !== typeof namespace || "" === namespace) {
@@ -276,7 +237,7 @@ function validateNamespace(namespace) {
 var validateNamespace_default = validateNamespace;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/validateHookName.js
+;// ./node_modules/@wordpress/hooks/build-module/validateHookName.mjs
 // packages/hooks/src/validateHookName.ts
 function validateHookName(hookName) {
   if ("string" !== typeof hookName || "" === hookName) {
@@ -298,7 +259,7 @@ function validateHookName(hookName) {
 var validateHookName_default = validateHookName;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/createAddHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createAddHook.mjs
 // packages/hooks/src/createAddHook.ts
 
 
@@ -360,7 +321,7 @@ function createAddHook(hooks, storeKey) {
 var createAddHook_default = createAddHook;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createRemoveHook.mjs
 // packages/hooks/src/createRemoveHook.ts
 
 
@@ -406,7 +367,7 @@ function createRemoveHook(hooks, storeKey, removeAll = false) {
 var createRemoveHook_default = createRemoveHook;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/createHasHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createHasHook.mjs
 // packages/hooks/src/createHasHook.ts
 function createHasHook(hooks, storeKey) {
   return function hasHook(hookName, namespace) {
@@ -422,7 +383,7 @@ function createHasHook(hooks, storeKey) {
 var createHasHook_default = createHasHook;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/createRunHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createRunHook.mjs
 // packages/hooks/src/createRunHook.ts
 function createRunHook(hooks, storeKey, returnFirstArg, async) {
   return function runHook(hookName, ...args) {
@@ -484,7 +445,7 @@ function createRunHook(hooks, storeKey, returnFirstArg, async) {
 var createRunHook_default = createRunHook;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createCurrentHook.mjs
 // packages/hooks/src/createCurrentHook.ts
 function createCurrentHook(hooks, storeKey) {
   return function currentHook() {
@@ -496,7 +457,7 @@ function createCurrentHook(hooks, storeKey) {
 var createCurrentHook_default = createCurrentHook;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.mjs
 // packages/hooks/src/createDoingHook.ts
 function createDoingHook(hooks, storeKey) {
   return function doingHook(hookName) {
@@ -512,7 +473,7 @@ function createDoingHook(hooks, storeKey) {
 var createDoingHook_default = createDoingHook;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/createDidHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createDidHook.mjs
 // packages/hooks/src/createDidHook.ts
 
 function createDidHook(hooks, storeKey) {
@@ -527,7 +488,7 @@ function createDidHook(hooks, storeKey) {
 var createDidHook_default = createDidHook;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/createHooks.js
+;// ./node_modules/@wordpress/hooks/build-module/createHooks.mjs
 // packages/hooks/src/createHooks.ts
 
 
@@ -588,8 +549,36 @@ function createHooks() {
 var createHooks_default = createHooks;
 
 
+;// ./node_modules/@wordpress/hooks/build-module/index.mjs
+// packages/hooks/src/index.ts
 
-/***/ })
+var defaultHooks = createHooks_default();
+var {
+  addAction,
+  addFilter,
+  removeAction,
+  removeFilter,
+  hasAction,
+  hasFilter,
+  removeAllActions,
+  removeAllFilters,
+  doAction,
+  doActionAsync,
+  applyFilters,
+  applyFiltersAsync,
+  currentAction,
+  currentFilter,
+  doingAction,
+  doingFilter,
+  didAction,
+  didFilter,
+  actions,
+  filters
+} = defaultHooks;
+
+
+
+/***/ }
 
 /******/ 	});
 /************************************************************************/
@@ -668,8 +657,8 @@ __webpack_require__.d(__webpack_exports__, {
   subscribe: function() { return /* reexport */ subscribe; }
 });
 
-// EXTERNAL MODULE: ./node_modules/@wordpress/i18n/build-module/sprintf.js + 1 modules
-var sprintf = __webpack_require__(416);
+// EXTERNAL MODULE: ./node_modules/@wordpress/i18n/build-module/sprintf.mjs + 1 modules
+var sprintf = __webpack_require__(80);
 ;// ./node_modules/@tannin/postfix/index.js
 var PRECEDENCE, OPENERS, TERMINATORS, PATTERN;
 
@@ -1174,7 +1163,7 @@ Tannin.prototype.dcnpgettext = function( domain, context, singular, plural, n ) 
 	return index === 0 ? singular : plural;
 };
 
-;// ./node_modules/@wordpress/i18n/build-module/create-i18n.js
+;// ./node_modules/@wordpress/i18n/build-module/create-i18n.mjs
 // packages/i18n/src/create-i18n.ts
 
 var DEFAULT_LOCALE_DATA = {
@@ -1386,9 +1375,9 @@ var createI18n = (initialData, initialDomain, hooks) => {
 };
 
 
-// EXTERNAL MODULE: ./node_modules/@wordpress/hooks/build-module/index.js
-var build_module = __webpack_require__(427);
-;// ./node_modules/@wordpress/i18n/build-module/default-i18n.js
+// EXTERNAL MODULE: ./node_modules/@wordpress/hooks/build-module/index.mjs + 10 modules
+var build_module = __webpack_require__(685);
+;// ./node_modules/@wordpress/i18n/build-module/default-i18n.mjs
 // packages/i18n/src/default-i18n.ts
 
 
@@ -1406,7 +1395,7 @@ var isRTL = i18n.isRTL.bind(i18n);
 var hasTranslation = i18n.hasTranslation.bind(i18n);
 
 
-;// ./node_modules/@wordpress/i18n/build-module/index.js
+;// ./node_modules/@wordpress/i18n/build-module/index.mjs
 // packages/i18n/src/index.ts
 
 

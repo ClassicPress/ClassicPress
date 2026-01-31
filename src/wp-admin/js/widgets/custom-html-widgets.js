@@ -6,7 +6,8 @@
 document.addEventListener( 'DOMContentLoaded', function() {
 	var codeMirrorInstances = {};
 
-	function initCodeMirror( textarea ) {
+	function initCodeMirror( widget ) {
+		var textarea = widget.querySelector( 'textarea' );
 		if ( textarea && wp.codeEditor ) {
 
 			// Within the Customizer only, check if CodeMirror is already initialized for this textarea
@@ -15,6 +16,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					return;
 				}
 			}
+
+			// Remove any orphaned CodeMirror instances in this widget.
+			var cmElements = widget.querySelectorAll( '.CodeMirror' );
+			cmElements.forEach( function( cm ) {
+				if ( ! cm.contains( textarea ) ) {
+					cm.remove();
+				}
+			} );
 
 			var editor = wp.codeEditor.initialize( textarea, {
 				codemirror: {
@@ -35,7 +44,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			editor.codemirror.on( 'change', function( cm ) {
 				textarea.value = cm.getValue();
-				textarea.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+				widget.classList.add( 'widget-dirty' );
+				widget.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+				widget.querySelector( '.widget-control-save' ).disabled = false;
 			} );
 
 			// Specify explicit values for when a new widget is added in the Customizer
@@ -47,7 +58,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function handleWidgetUpdate( event ) {
 		var widget = event.detail.widget;
 		if ( widget.querySelector( '.id_base' ).value === 'custom_html' ) {
-			initCodeMirror( widget.querySelector( 'textarea' ) );
+			initCodeMirror( widget );
 		}
 	}
 
@@ -57,9 +68,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	document.addEventListener( 'widget-updated', handleWidgetUpdate );
 
 	// Ensure Code Mirror loads on page load
-	document.querySelectorAll( '#widgets-right .id_base' ).forEach( function( base ) {
+	document.querySelectorAll( '#widgets-right .id_base, #wp_inactive_widgets .id_base' ).forEach( function( base ) {
 		if ( base.value === 'custom_html' ) {
-			initCodeMirror( base.closest ( '.widget' ).querySelector( 'textarea' ) );
+			initCodeMirror( base.closest ( '.widget' ) );
 		}
 	} );
 } );

@@ -357,8 +357,8 @@ module.exports = function(grunt) {
 			}
 		},
 		webpack: {
-			min: webpackConfig( { environment: 'production', buildTarget: SOURCE_DIR } ),
-			dev: webpackConfig( { environment: 'development', buildTarget: SOURCE_DIR } )
+			min: webpackConfig( { environment: 'production', buildTarget: SOURCE_DIR, minify: true } ),
+			dev: webpackConfig( { environment: 'production', buildTarget: SOURCE_DIR, minify: false } )
 		},
 		sass: {
 			colors: {
@@ -1100,7 +1100,7 @@ module.exports = function(grunt) {
 
 			grunt.util.spawn( {
 				cmd: 'bash',
-				args: [ '-c', "git ls-files -z | xargs -0 grep -E -C3 -n --binary-files=without-match '(<<" + "<<|^=======(\\s|$)|>>" + ">>)'" ]
+				args: [ '-c', "git ls-files -z | xargs -0 grep -E -C3 -n --binary-files=without-match '(<<" + "<<<<<|^=======(\\s|$)|>>>>>" + ">>)'" ]
 			}, ( error, { stdout, stderr }, code ) => {
 				// Ignore error because it is populated for non-zero exit codes:
 				// https://gruntjs.com/api/grunt.util#grunt.util.spawn

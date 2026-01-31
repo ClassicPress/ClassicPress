@@ -1,233 +1,382 @@
 /******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 83:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ 685
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   e: function() { return /* binding */ getQueryString; }
-/* harmony export */ });
-// packages/url/src/get-query-string.ts
-function getQueryString(url) {
-  let query;
-  try {
-    query = new URL(url, "http://example.com").search.substring(1);
-  } catch (error) {
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  defaultHooks: function() { return /* binding */ defaultHooks; }
+});
+
+// UNUSED EXPORTS: actions, addAction, addFilter, applyFilters, applyFiltersAsync, createHooks, currentAction, currentFilter, didAction, didFilter, doAction, doActionAsync, doingAction, doingFilter, filters, hasAction, hasFilter, removeAction, removeAllActions, removeAllFilters, removeFilter
+
+;// ./node_modules/@wordpress/hooks/build-module/validateNamespace.mjs
+// packages/hooks/src/validateNamespace.ts
+function validateNamespace(namespace) {
+  if ("string" !== typeof namespace || "" === namespace) {
+    console.error("The namespace must be a non-empty string.");
+    return false;
   }
-  if (query) {
-    return query;
+  if (!/^[a-zA-Z][a-zA-Z0-9_.\-\/]*$/.test(namespace)) {
+    console.error(
+      "The namespace can only contain numbers, letters, dashes, periods, underscores and slashes."
+    );
+    return false;
   }
+  return true;
 }
+var validateNamespace_default = validateNamespace;
 
 
-
-/***/ }),
-
-/***/ 119:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   T: function() { return /* binding */ safeDecodeURIComponent; }
-/* harmony export */ });
-// packages/url/src/safe-decode-uri-component.ts
-function safeDecodeURIComponent(uriComponent) {
-  try {
-    return decodeURIComponent(uriComponent);
-  } catch (uriComponentError) {
-    return uriComponent;
+;// ./node_modules/@wordpress/hooks/build-module/validateHookName.mjs
+// packages/hooks/src/validateHookName.ts
+function validateHookName(hookName) {
+  if ("string" !== typeof hookName || "" === hookName) {
+    console.error("The hook name must be a non-empty string.");
+    return false;
   }
+  if (/^__/.test(hookName)) {
+    console.error("The hook name cannot begin with `__`.");
+    return false;
+  }
+  if (!/^[a-zA-Z][a-zA-Z0-9_.-]*$/.test(hookName)) {
+    console.error(
+      "The hook name can only contain numbers, letters, dashes, periods and underscores."
+    );
+    return false;
+  }
+  return true;
 }
+var validateHookName_default = validateHookName;
 
 
+;// ./node_modules/@wordpress/hooks/build-module/createAddHook.mjs
+// packages/hooks/src/createAddHook.ts
 
-/***/ }),
 
-/***/ 272:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   A: function() { return /* binding */ root_url_default; }
-/* harmony export */ });
-/* harmony import */ var _namespace_endpoint__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(403);
-// packages/api-fetch/src/middlewares/root-url.ts
-
-var createRootURLMiddleware = (rootURL) => (options, next) => {
-  return (0,_namespace_endpoint__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A)(options, (optionsWithPath) => {
-    let url = optionsWithPath.url;
-    let path = optionsWithPath.path;
-    let apiRoot;
-    if (typeof path === "string") {
-      apiRoot = rootURL;
-      if (-1 !== rootURL.indexOf("?")) {
-        path = path.replace("?", "&");
-      }
-      path = path.replace(/^\//, "");
-      if ("string" === typeof apiRoot && -1 !== apiRoot.indexOf("?")) {
-        path = path.replace("?", "&");
-      }
-      url = apiRoot + path;
+function createAddHook(hooks, storeKey) {
+  return function addHook(hookName, namespace, callback, priority = 10) {
+    const hooksStore = hooks[storeKey];
+    if (!validateHookName_default(hookName)) {
+      return;
     }
-    return next({
-      ...optionsWithPath,
-      url
-    });
-  });
-};
-var root_url_default = createRootURLMiddleware;
-
-
-
-/***/ }),
-
-/***/ 296:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": function() { return /* binding */ index_default; }
-/* harmony export */ });
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(309);
-/* harmony import */ var _middlewares_nonce__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(361);
-/* harmony import */ var _middlewares_root_url__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(272);
-/* harmony import */ var _middlewares_preloading__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(692);
-/* harmony import */ var _middlewares_fetch_all_middleware__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(425);
-/* harmony import */ var _middlewares_namespace_endpoint__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(403);
-/* harmony import */ var _middlewares_http_v1__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(320);
-/* harmony import */ var _middlewares_user_locale__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(697);
-/* harmony import */ var _middlewares_media_upload__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(622);
-/* harmony import */ var _middlewares_theme_preview__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(923);
-/* harmony import */ var _utils_response__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(959);
-/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(597);
-/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_types__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _types__WEBPACK_IMPORTED_MODULE_11__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = function(key) { return _types__WEBPACK_IMPORTED_MODULE_11__[key]; }.bind(0, __WEBPACK_IMPORT_KEY__)
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
-// packages/api-fetch/src/index.ts
-
-
-
-
-
-
-
-
-
-
-
-
-var DEFAULT_HEADERS = {
-  // The backend uses the Accept header as a condition for considering an
-  // incoming request as a REST request.
-  //
-  // See: https://core.trac.wordpress.org/ticket/44534
-  Accept: "application/json, */*;q=0.1"
-};
-var DEFAULT_OPTIONS = {
-  credentials: "include"
-};
-var middlewares = [
-  _middlewares_user_locale__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .A,
-  _middlewares_namespace_endpoint__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .A,
-  _middlewares_http_v1__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .A,
-  _middlewares_fetch_all_middleware__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .A
-];
-function registerMiddleware(middleware) {
-  middlewares.unshift(middleware);
-}
-var defaultFetchHandler = (nextOptions) => {
-  const { url, path, data, parse = true, ...remainingOptions } = nextOptions;
-  let { body, headers } = nextOptions;
-  headers = { ...DEFAULT_HEADERS, ...headers };
-  if (data) {
-    body = JSON.stringify(data);
-    headers["Content-Type"] = "application/json";
-  }
-  const responsePromise = globalThis.fetch(
-    // Fall back to explicitly passing `window.location` which is the behavior if `undefined` is passed.
-    url || path || window.location.href,
-    {
-      ...DEFAULT_OPTIONS,
-      ...remainingOptions,
-      body,
-      headers
+    if (!validateNamespace_default(namespace)) {
+      return;
     }
-  );
-  return responsePromise.then(
-    (response) => {
-      if (!response.ok) {
-        return (0,_utils_response__WEBPACK_IMPORTED_MODULE_10__/* .parseAndThrowError */ .J)(response, parse);
+    if ("function" !== typeof callback) {
+      console.error("The hook callback must be a function.");
+      return;
+    }
+    if ("number" !== typeof priority) {
+      console.error(
+        "If specified, the hook priority must be a number."
+      );
+      return;
+    }
+    const handler = { callback, priority, namespace };
+    if (hooksStore[hookName]) {
+      const handlers = hooksStore[hookName].handlers;
+      let i;
+      for (i = handlers.length; i > 0; i--) {
+        if (priority >= handlers[i - 1].priority) {
+          break;
+        }
       }
-      return (0,_utils_response__WEBPACK_IMPORTED_MODULE_10__/* .parseResponseAndNormalizeError */ .f)(response, parse);
-    },
-    (err) => {
-      if (err && err.name === "AbortError") {
-        throw err;
+      if (i === handlers.length) {
+        handlers[i] = handler;
+      } else {
+        handlers.splice(i, 0, handler);
       }
-      if (!globalThis.navigator.onLine) {
-        throw {
-          code: "offline_error",
-          message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)(
-            "Unable to connect. Please check your Internet connection."
-          )
-        };
-      }
-      throw {
-        code: "fetch_error",
-        message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)(
-          "Could not get a valid response from the server."
-        )
+      hooksStore.__current.forEach((hookInfo) => {
+        if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
+          hookInfo.currentIndex++;
+        }
+      });
+    } else {
+      hooksStore[hookName] = {
+        handlers: [handler],
+        runs: 0
       };
     }
-  );
-};
-var fetchHandler = defaultFetchHandler;
-function setFetchHandler(newFetchHandler) {
-  fetchHandler = newFetchHandler;
-}
-var apiFetch = (options) => {
-  const enhancedHandler = middlewares.reduceRight(
-    (next, middleware) => {
-      return (workingOptions) => middleware(workingOptions, next);
-    },
-    fetchHandler
-  );
-  return enhancedHandler(options).catch((error) => {
-    if (error.code !== "rest_cookie_invalid_nonce") {
-      return Promise.reject(error);
+    if (hookName !== "hookAdded") {
+      hooks.doAction(
+        "hookAdded",
+        hookName,
+        namespace,
+        callback,
+        priority
+      );
     }
-    return globalThis.fetch(apiFetch.nonceEndpoint).then((response) => {
-      if (!response.ok) {
-        return Promise.reject(error);
+  };
+}
+var createAddHook_default = createAddHook;
+
+
+;// ./node_modules/@wordpress/hooks/build-module/createRemoveHook.mjs
+// packages/hooks/src/createRemoveHook.ts
+
+
+function createRemoveHook(hooks, storeKey, removeAll = false) {
+  return function removeHook(hookName, namespace) {
+    const hooksStore = hooks[storeKey];
+    if (!validateHookName_default(hookName)) {
+      return;
+    }
+    if (!removeAll && !validateNamespace_default(namespace)) {
+      return;
+    }
+    if (!hooksStore[hookName]) {
+      return 0;
+    }
+    let handlersRemoved = 0;
+    if (removeAll) {
+      handlersRemoved = hooksStore[hookName].handlers.length;
+      hooksStore[hookName] = {
+        runs: hooksStore[hookName].runs,
+        handlers: []
+      };
+    } else {
+      const handlers = hooksStore[hookName].handlers;
+      for (let i = handlers.length - 1; i >= 0; i--) {
+        if (handlers[i].namespace === namespace) {
+          handlers.splice(i, 1);
+          handlersRemoved++;
+          hooksStore.__current.forEach((hookInfo) => {
+            if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
+              hookInfo.currentIndex--;
+            }
+          });
+        }
       }
-      return response.text();
-    }).then((text) => {
-      apiFetch.nonceMiddleware.nonce = text;
-      return apiFetch(options);
-    });
-  });
+    }
+    if (hookName !== "hookRemoved") {
+      hooks.doAction("hookRemoved", hookName, namespace);
+    }
+    return handlersRemoved;
+  };
+}
+var createRemoveHook_default = createRemoveHook;
+
+
+;// ./node_modules/@wordpress/hooks/build-module/createHasHook.mjs
+// packages/hooks/src/createHasHook.ts
+function createHasHook(hooks, storeKey) {
+  return function hasHook(hookName, namespace) {
+    const hooksStore = hooks[storeKey];
+    if ("undefined" !== typeof namespace) {
+      return hookName in hooksStore && hooksStore[hookName].handlers.some(
+        (hook) => hook.namespace === namespace
+      );
+    }
+    return hookName in hooksStore;
+  };
+}
+var createHasHook_default = createHasHook;
+
+
+;// ./node_modules/@wordpress/hooks/build-module/createRunHook.mjs
+// packages/hooks/src/createRunHook.ts
+function createRunHook(hooks, storeKey, returnFirstArg, async) {
+  return function runHook(hookName, ...args) {
+    const hooksStore = hooks[storeKey];
+    if (!hooksStore[hookName]) {
+      hooksStore[hookName] = {
+        handlers: [],
+        runs: 0
+      };
+    }
+    hooksStore[hookName].runs++;
+    const handlers = hooksStore[hookName].handlers;
+    if (false) // removed by dead control flow
+{}
+    if (!handlers || !handlers.length) {
+      return returnFirstArg ? args[0] : void 0;
+    }
+    const hookInfo = {
+      name: hookName,
+      currentIndex: 0
+    };
+    async function asyncRunner() {
+      try {
+        hooksStore.__current.add(hookInfo);
+        let result = returnFirstArg ? args[0] : void 0;
+        while (hookInfo.currentIndex < handlers.length) {
+          const handler = handlers[hookInfo.currentIndex];
+          result = await handler.callback.apply(null, args);
+          if (returnFirstArg) {
+            args[0] = result;
+          }
+          hookInfo.currentIndex++;
+        }
+        return returnFirstArg ? result : void 0;
+      } finally {
+        hooksStore.__current.delete(hookInfo);
+      }
+    }
+    function syncRunner() {
+      try {
+        hooksStore.__current.add(hookInfo);
+        let result = returnFirstArg ? args[0] : void 0;
+        while (hookInfo.currentIndex < handlers.length) {
+          const handler = handlers[hookInfo.currentIndex];
+          result = handler.callback.apply(null, args);
+          if (returnFirstArg) {
+            args[0] = result;
+          }
+          hookInfo.currentIndex++;
+        }
+        return returnFirstArg ? result : void 0;
+      } finally {
+        hooksStore.__current.delete(hookInfo);
+      }
+    }
+    return (async ? asyncRunner : syncRunner)();
+  };
+}
+var createRunHook_default = createRunHook;
+
+
+;// ./node_modules/@wordpress/hooks/build-module/createCurrentHook.mjs
+// packages/hooks/src/createCurrentHook.ts
+function createCurrentHook(hooks, storeKey) {
+  return function currentHook() {
+    const hooksStore = hooks[storeKey];
+    const currentArray = Array.from(hooksStore.__current);
+    return currentArray.at(-1)?.name ?? null;
+  };
+}
+var createCurrentHook_default = createCurrentHook;
+
+
+;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.mjs
+// packages/hooks/src/createDoingHook.ts
+function createDoingHook(hooks, storeKey) {
+  return function doingHook(hookName) {
+    const hooksStore = hooks[storeKey];
+    if ("undefined" === typeof hookName) {
+      return hooksStore.__current.size > 0;
+    }
+    return Array.from(hooksStore.__current).some(
+      (hook) => hook.name === hookName
+    );
+  };
+}
+var createDoingHook_default = createDoingHook;
+
+
+;// ./node_modules/@wordpress/hooks/build-module/createDidHook.mjs
+// packages/hooks/src/createDidHook.ts
+
+function createDidHook(hooks, storeKey) {
+  return function didHook(hookName) {
+    const hooksStore = hooks[storeKey];
+    if (!validateHookName_default(hookName)) {
+      return;
+    }
+    return hooksStore[hookName] && hooksStore[hookName].runs ? hooksStore[hookName].runs : 0;
+  };
+}
+var createDidHook_default = createDidHook;
+
+
+;// ./node_modules/@wordpress/hooks/build-module/createHooks.mjs
+// packages/hooks/src/createHooks.ts
+
+
+
+
+
+
+
+var _Hooks = class {
+  actions;
+  filters;
+  addAction;
+  addFilter;
+  removeAction;
+  removeFilter;
+  hasAction;
+  hasFilter;
+  removeAllActions;
+  removeAllFilters;
+  doAction;
+  doActionAsync;
+  applyFilters;
+  applyFiltersAsync;
+  currentAction;
+  currentFilter;
+  doingAction;
+  doingFilter;
+  didAction;
+  didFilter;
+  constructor() {
+    this.actions = /* @__PURE__ */ Object.create(null);
+    this.actions.__current = /* @__PURE__ */ new Set();
+    this.filters = /* @__PURE__ */ Object.create(null);
+    this.filters.__current = /* @__PURE__ */ new Set();
+    this.addAction = createAddHook_default(this, "actions");
+    this.addFilter = createAddHook_default(this, "filters");
+    this.removeAction = createRemoveHook_default(this, "actions");
+    this.removeFilter = createRemoveHook_default(this, "filters");
+    this.hasAction = createHasHook_default(this, "actions");
+    this.hasFilter = createHasHook_default(this, "filters");
+    this.removeAllActions = createRemoveHook_default(this, "actions", true);
+    this.removeAllFilters = createRemoveHook_default(this, "filters", true);
+    this.doAction = createRunHook_default(this, "actions", false, false);
+    this.doActionAsync = createRunHook_default(this, "actions", false, true);
+    this.applyFilters = createRunHook_default(this, "filters", true, false);
+    this.applyFiltersAsync = createRunHook_default(this, "filters", true, true);
+    this.currentAction = createCurrentHook_default(this, "actions");
+    this.currentFilter = createCurrentHook_default(this, "filters");
+    this.doingAction = createDoingHook_default(this, "actions");
+    this.doingFilter = createDoingHook_default(this, "filters");
+    this.didAction = createDidHook_default(this, "actions");
+    this.didFilter = createDidHook_default(this, "filters");
+  }
 };
-apiFetch.use = registerMiddleware;
-apiFetch.setFetchHandler = setFetchHandler;
-apiFetch.createNonceMiddleware = _middlewares_nonce__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .A;
-apiFetch.createPreloadingMiddleware = _middlewares_preloading__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .A;
-apiFetch.createRootURLMiddleware = _middlewares_root_url__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .A;
-apiFetch.fetchAllMiddleware = _middlewares_fetch_all_middleware__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .A;
-apiFetch.mediaUploadMiddleware = _middlewares_media_upload__WEBPACK_IMPORTED_MODULE_8__/* ["default"] */ .A;
-apiFetch.createThemePreviewMiddleware = _middlewares_theme_preview__WEBPACK_IMPORTED_MODULE_9__/* ["default"] */ .A;
-var index_default = apiFetch;
+function createHooks() {
+  return new _Hooks();
+}
+var createHooks_default = createHooks;
+
+
+;// ./node_modules/@wordpress/hooks/build-module/index.mjs
+// packages/hooks/src/index.ts
+
+var defaultHooks = createHooks_default();
+var {
+  addAction,
+  addFilter,
+  removeAction,
+  removeFilter,
+  hasAction,
+  hasFilter,
+  removeAllActions,
+  removeAllFilters,
+  doAction,
+  doActionAsync,
+  applyFilters,
+  applyFiltersAsync,
+  currentAction,
+  currentFilter,
+  doingAction,
+  doingFilter,
+  didAction,
+  didFilter,
+  actions,
+  filters
+} = defaultHooks;
 
 
 
-/***/ }),
+/***/ },
 
-/***/ 309:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/***/ 911
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
-"use strict";
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
@@ -740,7 +889,7 @@ Tannin.prototype.dcnpgettext = function( domain, context, singular, plural, n ) 
 	return index === 0 ? singular : plural;
 };
 
-;// ./node_modules/@wordpress/i18n/build-module/create-i18n.js
+;// ./node_modules/@wordpress/i18n/build-module/create-i18n.mjs
 // packages/i18n/src/create-i18n.ts
 
 var DEFAULT_LOCALE_DATA = {
@@ -952,9 +1101,9 @@ var createI18n = (initialData, initialDomain, hooks) => {
 };
 
 
-// EXTERNAL MODULE: ./node_modules/@wordpress/hooks/build-module/index.js
-var build_module = __webpack_require__(427);
-;// ./node_modules/@wordpress/i18n/build-module/default-i18n.js
+// EXTERNAL MODULE: ./node_modules/@wordpress/hooks/build-module/index.mjs + 10 modules
+var build_module = __webpack_require__(685);
+;// ./node_modules/@wordpress/i18n/build-module/default-i18n.mjs
 // packages/i18n/src/default-i18n.ts
 
 
@@ -972,7 +1121,7 @@ var isRTL = i18n.isRTL.bind(i18n);
 var hasTranslation = i18n.hasTranslation.bind(i18n);
 
 
-;// ./node_modules/@wordpress/i18n/build-module/index.js
+;// ./node_modules/@wordpress/i18n/build-module/index.mjs
 // packages/i18n/src/index.ts
 
 
@@ -980,46 +1129,76 @@ var hasTranslation = i18n.hasTranslation.bind(i18n);
 
 
 
-/***/ }),
+/***/ }
 
-/***/ 320:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
 
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   A: function() { return /* binding */ http_v1_default; }
-/* harmony export */ });
-// packages/api-fetch/src/middlewares/http-v1.ts
-var OVERRIDE_METHODS = /* @__PURE__ */ new Set(["PATCH", "PUT", "DELETE"]);
-var DEFAULT_METHOD = "GET";
-var httpV1Middleware = (options, next) => {
-  const { method = DEFAULT_METHOD } = options;
-  if (OVERRIDE_METHODS.has(method.toUpperCase())) {
-    options = {
-      ...options,
-      headers: {
-        ...options.headers,
-        "X-HTTP-Method-Override": method,
-        "Content-Type": "application/json"
-      },
-      method: "POST"
-    };
-  }
-  return next(options);
-};
-var http_v1_default = httpV1Middleware;
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  "default": function() { return /* binding */ index_default; }
+});
 
-
-
-/***/ }),
-
-/***/ 361:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   A: function() { return /* binding */ nonce_default; }
-/* harmony export */ });
+// EXTERNAL MODULE: ./node_modules/@wordpress/i18n/build-module/index.mjs + 7 modules
+var build_module = __webpack_require__(911);
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/nonce.mjs
 // packages/api-fetch/src/middlewares/nonce.ts
 function createNonceMiddleware(nonce) {
   const middleware = (options, next) => {
@@ -1043,16 +1222,7 @@ function createNonceMiddleware(nonce) {
 var nonce_default = createNonceMiddleware;
 
 
-
-/***/ }),
-
-/***/ 403:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   A: function() { return /* binding */ namespace_endpoint_default; }
-/* harmony export */ });
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/namespace-endpoint.mjs
 // packages/api-fetch/src/middlewares/namespace-endpoint.ts
 var namespaceAndEndpointMiddleware = (options, next) => {
   let path = options.path;
@@ -1076,560 +1246,113 @@ var namespaceAndEndpointMiddleware = (options, next) => {
 var namespace_endpoint_default = namespaceAndEndpointMiddleware;
 
 
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/root-url.mjs
+// packages/api-fetch/src/middlewares/root-url.ts
 
-/***/ }),
-
-/***/ 425:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   A: function() { return /* binding */ fetch_all_middleware_default; }
-/* harmony export */ });
-/* harmony import */ var _wordpress_url__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(790);
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(296);
-// packages/api-fetch/src/middlewares/fetch-all-middleware.ts
-
-
-var modifyQuery = ({ path, url, ...options }, queryArgs) => ({
-  ...options,
-  url: url && (0,_wordpress_url__WEBPACK_IMPORTED_MODULE_0__/* .addQueryArgs */ .F)(url, queryArgs),
-  path: path && (0,_wordpress_url__WEBPACK_IMPORTED_MODULE_0__/* .addQueryArgs */ .F)(path, queryArgs)
-});
-var parseResponse = (response) => response.json ? response.json() : Promise.reject(response);
-var parseLinkHeader = (linkHeader) => {
-  if (!linkHeader) {
-    return {};
-  }
-  const match = linkHeader.match(/<([^>]+)>; rel="next"/);
-  return match ? {
-    next: match[1]
-  } : {};
-};
-var getNextPageUrl = (response) => {
-  const { next } = parseLinkHeader(response.headers.get("link"));
-  return next;
-};
-var requestContainsUnboundedQuery = (options) => {
-  const pathIsUnbounded = !!options.path && options.path.indexOf("per_page=-1") !== -1;
-  const urlIsUnbounded = !!options.url && options.url.indexOf("per_page=-1") !== -1;
-  return pathIsUnbounded || urlIsUnbounded;
-};
-var fetchAllMiddleware = async (options, next) => {
-  if (options.parse === false) {
-    return next(options);
-  }
-  if (!requestContainsUnboundedQuery(options)) {
-    return next(options);
-  }
-  const response = await (0,___WEBPACK_IMPORTED_MODULE_1__["default"])({
-    ...modifyQuery(options, {
-      per_page: 100
-    }),
-    // Ensure headers are returned for page 1.
-    parse: false
-  });
-  const results = await parseResponse(response);
-  if (!Array.isArray(results)) {
-    return results;
-  }
-  let nextPage = getNextPageUrl(response);
-  if (!nextPage) {
-    return results;
-  }
-  let mergedResults = [].concat(results);
-  while (nextPage) {
-    const nextResponse = await (0,___WEBPACK_IMPORTED_MODULE_1__["default"])({
-      ...options,
-      // Ensure the URL for the next page is used instead of any provided path.
-      path: void 0,
-      url: nextPage,
-      // Ensure we still get headers so we can identify the next page.
-      parse: false
-    });
-    const nextResults = await parseResponse(nextResponse);
-    mergedResults = mergedResults.concat(nextResults);
-    nextPage = getNextPageUrl(nextResponse);
-  }
-  return mergedResults;
-};
-var fetch_all_middleware_default = fetchAllMiddleware;
-
-
-
-/***/ }),
-
-/***/ 427:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   defaultHooks: function() { return /* binding */ defaultHooks; }
-/* harmony export */ });
-/* unused harmony exports actions, addAction, addFilter, applyFilters, applyFiltersAsync, currentAction, currentFilter, didAction, didFilter, doAction, doActionAsync, doingAction, doingFilter, filters, hasAction, hasFilter, removeAction, removeAllActions, removeAllFilters, removeFilter */
-/* harmony import */ var _createHooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(507);
-// packages/hooks/src/index.ts
-
-
-var defaultHooks = (0,_createHooks__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A)();
-var {
-  addAction,
-  addFilter,
-  removeAction,
-  removeFilter,
-  hasAction,
-  hasFilter,
-  removeAllActions,
-  removeAllFilters,
-  doAction,
-  doActionAsync,
-  applyFilters,
-  applyFiltersAsync,
-  currentAction,
-  currentFilter,
-  doingAction,
-  doingFilter,
-  didAction,
-  didFilter,
-  actions,
-  filters
-} = defaultHooks;
-
-
-
-/***/ }),
-
-/***/ 507:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, {
-  A: function() { return /* binding */ createHooks_default; }
-});
-
-// UNUSED EXPORTS: _Hooks
-
-;// ./node_modules/@wordpress/hooks/build-module/validateNamespace.js
-// packages/hooks/src/validateNamespace.ts
-function validateNamespace(namespace) {
-  if ("string" !== typeof namespace || "" === namespace) {
-    console.error("The namespace must be a non-empty string.");
-    return false;
-  }
-  if (!/^[a-zA-Z][a-zA-Z0-9_.\-\/]*$/.test(namespace)) {
-    console.error(
-      "The namespace can only contain numbers, letters, dashes, periods, underscores and slashes."
-    );
-    return false;
-  }
-  return true;
-}
-var validateNamespace_default = validateNamespace;
-
-
-;// ./node_modules/@wordpress/hooks/build-module/validateHookName.js
-// packages/hooks/src/validateHookName.ts
-function validateHookName(hookName) {
-  if ("string" !== typeof hookName || "" === hookName) {
-    console.error("The hook name must be a non-empty string.");
-    return false;
-  }
-  if (/^__/.test(hookName)) {
-    console.error("The hook name cannot begin with `__`.");
-    return false;
-  }
-  if (!/^[a-zA-Z][a-zA-Z0-9_.-]*$/.test(hookName)) {
-    console.error(
-      "The hook name can only contain numbers, letters, dashes, periods and underscores."
-    );
-    return false;
-  }
-  return true;
-}
-var validateHookName_default = validateHookName;
-
-
-;// ./node_modules/@wordpress/hooks/build-module/createAddHook.js
-// packages/hooks/src/createAddHook.ts
-
-
-function createAddHook(hooks, storeKey) {
-  return function addHook(hookName, namespace, callback, priority = 10) {
-    const hooksStore = hooks[storeKey];
-    if (!validateHookName_default(hookName)) {
-      return;
-    }
-    if (!validateNamespace_default(namespace)) {
-      return;
-    }
-    if ("function" !== typeof callback) {
-      console.error("The hook callback must be a function.");
-      return;
-    }
-    if ("number" !== typeof priority) {
-      console.error(
-        "If specified, the hook priority must be a number."
-      );
-      return;
-    }
-    const handler = { callback, priority, namespace };
-    if (hooksStore[hookName]) {
-      const handlers = hooksStore[hookName].handlers;
-      let i;
-      for (i = handlers.length; i > 0; i--) {
-        if (priority >= handlers[i - 1].priority) {
-          break;
-        }
+var createRootURLMiddleware = (rootURL) => (options, next) => {
+  return namespace_endpoint_default(options, (optionsWithPath) => {
+    let url = optionsWithPath.url;
+    let path = optionsWithPath.path;
+    let apiRoot;
+    if (typeof path === "string") {
+      apiRoot = rootURL;
+      if (-1 !== rootURL.indexOf("?")) {
+        path = path.replace("?", "&");
       }
-      if (i === handlers.length) {
-        handlers[i] = handler;
-      } else {
-        handlers.splice(i, 0, handler);
+      path = path.replace(/^\//, "");
+      if ("string" === typeof apiRoot && -1 !== apiRoot.indexOf("?")) {
+        path = path.replace("?", "&");
       }
-      hooksStore.__current.forEach((hookInfo) => {
-        if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
-          hookInfo.currentIndex++;
-        }
-      });
-    } else {
-      hooksStore[hookName] = {
-        handlers: [handler],
-        runs: 0
-      };
+      url = apiRoot + path;
     }
-    if (hookName !== "hookAdded") {
-      hooks.doAction(
-        "hookAdded",
-        hookName,
-        namespace,
-        callback,
-        priority
-      );
-    }
-  };
-}
-var createAddHook_default = createAddHook;
-
-
-;// ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
-// packages/hooks/src/createRemoveHook.ts
-
-
-function createRemoveHook(hooks, storeKey, removeAll = false) {
-  return function removeHook(hookName, namespace) {
-    const hooksStore = hooks[storeKey];
-    if (!validateHookName_default(hookName)) {
-      return;
-    }
-    if (!removeAll && !validateNamespace_default(namespace)) {
-      return;
-    }
-    if (!hooksStore[hookName]) {
-      return 0;
-    }
-    let handlersRemoved = 0;
-    if (removeAll) {
-      handlersRemoved = hooksStore[hookName].handlers.length;
-      hooksStore[hookName] = {
-        runs: hooksStore[hookName].runs,
-        handlers: []
-      };
-    } else {
-      const handlers = hooksStore[hookName].handlers;
-      for (let i = handlers.length - 1; i >= 0; i--) {
-        if (handlers[i].namespace === namespace) {
-          handlers.splice(i, 1);
-          handlersRemoved++;
-          hooksStore.__current.forEach((hookInfo) => {
-            if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
-              hookInfo.currentIndex--;
-            }
-          });
-        }
-      }
-    }
-    if (hookName !== "hookRemoved") {
-      hooks.doAction("hookRemoved", hookName, namespace);
-    }
-    return handlersRemoved;
-  };
-}
-var createRemoveHook_default = createRemoveHook;
-
-
-;// ./node_modules/@wordpress/hooks/build-module/createHasHook.js
-// packages/hooks/src/createHasHook.ts
-function createHasHook(hooks, storeKey) {
-  return function hasHook(hookName, namespace) {
-    const hooksStore = hooks[storeKey];
-    if ("undefined" !== typeof namespace) {
-      return hookName in hooksStore && hooksStore[hookName].handlers.some(
-        (hook) => hook.namespace === namespace
-      );
-    }
-    return hookName in hooksStore;
-  };
-}
-var createHasHook_default = createHasHook;
-
-
-;// ./node_modules/@wordpress/hooks/build-module/createRunHook.js
-// packages/hooks/src/createRunHook.ts
-function createRunHook(hooks, storeKey, returnFirstArg, async) {
-  return function runHook(hookName, ...args) {
-    const hooksStore = hooks[storeKey];
-    if (!hooksStore[hookName]) {
-      hooksStore[hookName] = {
-        handlers: [],
-        runs: 0
-      };
-    }
-    hooksStore[hookName].runs++;
-    const handlers = hooksStore[hookName].handlers;
-    if (false) // removed by dead control flow
-{}
-    if (!handlers || !handlers.length) {
-      return returnFirstArg ? args[0] : void 0;
-    }
-    const hookInfo = {
-      name: hookName,
-      currentIndex: 0
-    };
-    async function asyncRunner() {
-      try {
-        hooksStore.__current.add(hookInfo);
-        let result = returnFirstArg ? args[0] : void 0;
-        while (hookInfo.currentIndex < handlers.length) {
-          const handler = handlers[hookInfo.currentIndex];
-          result = await handler.callback.apply(null, args);
-          if (returnFirstArg) {
-            args[0] = result;
-          }
-          hookInfo.currentIndex++;
-        }
-        return returnFirstArg ? result : void 0;
-      } finally {
-        hooksStore.__current.delete(hookInfo);
-      }
-    }
-    function syncRunner() {
-      try {
-        hooksStore.__current.add(hookInfo);
-        let result = returnFirstArg ? args[0] : void 0;
-        while (hookInfo.currentIndex < handlers.length) {
-          const handler = handlers[hookInfo.currentIndex];
-          result = handler.callback.apply(null, args);
-          if (returnFirstArg) {
-            args[0] = result;
-          }
-          hookInfo.currentIndex++;
-        }
-        return returnFirstArg ? result : void 0;
-      } finally {
-        hooksStore.__current.delete(hookInfo);
-      }
-    }
-    return (async ? asyncRunner : syncRunner)();
-  };
-}
-var createRunHook_default = createRunHook;
-
-
-;// ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
-// packages/hooks/src/createCurrentHook.ts
-function createCurrentHook(hooks, storeKey) {
-  return function currentHook() {
-    const hooksStore = hooks[storeKey];
-    const currentArray = Array.from(hooksStore.__current);
-    return currentArray.at(-1)?.name ?? null;
-  };
-}
-var createCurrentHook_default = createCurrentHook;
-
-
-;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
-// packages/hooks/src/createDoingHook.ts
-function createDoingHook(hooks, storeKey) {
-  return function doingHook(hookName) {
-    const hooksStore = hooks[storeKey];
-    if ("undefined" === typeof hookName) {
-      return hooksStore.__current.size > 0;
-    }
-    return Array.from(hooksStore.__current).some(
-      (hook) => hook.name === hookName
-    );
-  };
-}
-var createDoingHook_default = createDoingHook;
-
-
-;// ./node_modules/@wordpress/hooks/build-module/createDidHook.js
-// packages/hooks/src/createDidHook.ts
-
-function createDidHook(hooks, storeKey) {
-  return function didHook(hookName) {
-    const hooksStore = hooks[storeKey];
-    if (!validateHookName_default(hookName)) {
-      return;
-    }
-    return hooksStore[hookName] && hooksStore[hookName].runs ? hooksStore[hookName].runs : 0;
-  };
-}
-var createDidHook_default = createDidHook;
-
-
-;// ./node_modules/@wordpress/hooks/build-module/createHooks.js
-// packages/hooks/src/createHooks.ts
-
-
-
-
-
-
-
-var _Hooks = class {
-  actions;
-  filters;
-  addAction;
-  addFilter;
-  removeAction;
-  removeFilter;
-  hasAction;
-  hasFilter;
-  removeAllActions;
-  removeAllFilters;
-  doAction;
-  doActionAsync;
-  applyFilters;
-  applyFiltersAsync;
-  currentAction;
-  currentFilter;
-  doingAction;
-  doingFilter;
-  didAction;
-  didFilter;
-  constructor() {
-    this.actions = /* @__PURE__ */ Object.create(null);
-    this.actions.__current = /* @__PURE__ */ new Set();
-    this.filters = /* @__PURE__ */ Object.create(null);
-    this.filters.__current = /* @__PURE__ */ new Set();
-    this.addAction = createAddHook_default(this, "actions");
-    this.addFilter = createAddHook_default(this, "filters");
-    this.removeAction = createRemoveHook_default(this, "actions");
-    this.removeFilter = createRemoveHook_default(this, "filters");
-    this.hasAction = createHasHook_default(this, "actions");
-    this.hasFilter = createHasHook_default(this, "filters");
-    this.removeAllActions = createRemoveHook_default(this, "actions", true);
-    this.removeAllFilters = createRemoveHook_default(this, "filters", true);
-    this.doAction = createRunHook_default(this, "actions", false, false);
-    this.doActionAsync = createRunHook_default(this, "actions", false, true);
-    this.applyFilters = createRunHook_default(this, "filters", true, false);
-    this.applyFiltersAsync = createRunHook_default(this, "filters", true, true);
-    this.currentAction = createCurrentHook_default(this, "actions");
-    this.currentFilter = createCurrentHook_default(this, "filters");
-    this.doingAction = createDoingHook_default(this, "actions");
-    this.doingFilter = createDoingHook_default(this, "filters");
-    this.didAction = createDidHook_default(this, "actions");
-    this.didFilter = createDidHook_default(this, "filters");
-  }
-};
-function createHooks() {
-  return new _Hooks();
-}
-var createHooks_default = createHooks;
-
-
-
-/***/ }),
-
-/***/ 597:
-/***/ (function() {
-
-
-
-/***/ }),
-
-/***/ 622:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   A: function() { return /* binding */ media_upload_default; }
-/* harmony export */ });
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(309);
-/* harmony import */ var _utils_response__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(959);
-// packages/api-fetch/src/middlewares/media-upload.ts
-
-
-function isMediaUploadRequest(options) {
-  const isCreateMethod = !!options.method && options.method === "POST";
-  const isMediaEndpoint = !!options.path && options.path.indexOf("/wp/v2/media") !== -1 || !!options.url && options.url.indexOf("/wp/v2/media") !== -1;
-  return isMediaEndpoint && isCreateMethod;
-}
-var mediaUploadMiddleware = (options, next) => {
-  if (!isMediaUploadRequest(options)) {
-    return next(options);
-  }
-  let retries = 0;
-  const maxRetries = 5;
-  const postProcess = (attachmentId) => {
-    retries++;
     return next({
-      path: `/wp/v2/media/${attachmentId}/post-process`,
-      method: "POST",
-      data: { action: "create-image-subsizes" },
-      parse: false
-    }).catch(() => {
-      if (retries < maxRetries) {
-        return postProcess(attachmentId);
-      }
-      next({
-        path: `/wp/v2/media/${attachmentId}?force=true`,
-        method: "DELETE"
-      });
-      return Promise.reject();
+      ...optionsWithPath,
+      url
     });
-  };
-  return next({ ...options, parse: false }).catch((response) => {
-    if (!(response instanceof globalThis.Response)) {
-      return Promise.reject(response);
-    }
-    const attachmentId = response.headers.get(
-      "x-wp-upload-attachment-id"
-    );
-    if (response.status >= 500 && response.status < 600 && attachmentId) {
-      return postProcess(attachmentId).catch(() => {
-        if (options.parse !== false) {
-          return Promise.reject({
-            code: "post_process",
-            message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)(
-              "Media upload failed. If this is a photo or a large image, please scale it down and try again."
-            )
-          });
-        }
-        return Promise.reject(response);
-      });
-    }
-    return (0,_utils_response__WEBPACK_IMPORTED_MODULE_1__/* .parseAndThrowError */ .J)(response, options.parse);
-  }).then(
-    (response) => (0,_utils_response__WEBPACK_IMPORTED_MODULE_1__/* .parseResponseAndNormalizeError */ .f)(response, options.parse)
-  );
+  });
 };
-var media_upload_default = mediaUploadMiddleware;
+var root_url_default = createRootURLMiddleware;
 
 
+;// ./node_modules/@wordpress/url/build-module/normalize-path.mjs
+// packages/url/src/normalize-path.ts
+function normalizePath(path) {
+  const split = path.split("?");
+  const query = split[1];
+  const base = split[0];
+  if (!query) {
+    return base;
+  }
+  return base + "?" + query.split("&").map((entry) => entry.split("=")).map((pair) => pair.map(decodeURIComponent)).sort((a, b) => a[0].localeCompare(b[0])).map((pair) => pair.map(encodeURIComponent)).map((pair) => pair.join("=")).join("&");
+}
 
-/***/ }),
 
-/***/ 623:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+;// ./node_modules/@wordpress/url/build-module/safe-decode-uri-component.mjs
+// packages/url/src/safe-decode-uri-component.ts
+function safeDecodeURIComponent(uriComponent) {
+  try {
+    return decodeURIComponent(uriComponent);
+  } catch (uriComponentError) {
+    return uriComponent;
+  }
+}
 
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   G: function() { return /* binding */ buildQueryString; }
-/* harmony export */ });
+
+;// ./node_modules/@wordpress/url/build-module/get-query-string.mjs
+// packages/url/src/get-query-string.ts
+function getQueryString(url) {
+  let query;
+  try {
+    query = new URL(url, "http://example.com").search.substring(1);
+  } catch (error) {
+  }
+  if (query) {
+    return query;
+  }
+}
+
+
+;// ./node_modules/@wordpress/url/build-module/get-query-args.mjs
+// packages/url/src/get-query-args.ts
+
+
+function setPath(object, path, value) {
+  const length = path.length;
+  const lastIndex = length - 1;
+  for (let i = 0; i < length; i++) {
+    let key = path[i];
+    if (!key && Array.isArray(object)) {
+      key = object.length.toString();
+    }
+    key = ["__proto__", "constructor", "prototype"].includes(key) ? key.toUpperCase() : key;
+    const isNextKeyArrayIndex = !isNaN(Number(path[i + 1]));
+    object[key] = i === lastIndex ? (
+      // If at end of path, assign the intended value.
+      value
+    ) : (
+      // Otherwise, advance to the next object in the path, creating
+      // it if it does not yet exist.
+      object[key] || (isNextKeyArrayIndex ? [] : {})
+    );
+    if (Array.isArray(object[key]) && !isNextKeyArrayIndex) {
+      object[key] = { ...object[key] };
+    }
+    object = object[key];
+  }
+}
+function getQueryArgs(url) {
+  return (getQueryString(url) || "").replace(/\+/g, "%20").split("&").reduce((accumulator, keyValue) => {
+    const [key, value = ""] = keyValue.split("=").filter(Boolean).map(safeDecodeURIComponent);
+    if (key) {
+      const segments = key.replace(/\]/g, "").split("[");
+      setPath(accumulator, segments, value);
+    }
+    return accumulator;
+  }, /* @__PURE__ */ Object.create(null));
+}
+
+
+;// ./node_modules/@wordpress/url/build-module/build-query-string.mjs
 // packages/url/src/build-query-string.ts
 function buildQueryString(data) {
   let string = "";
@@ -1654,16 +1377,7 @@ function buildQueryString(data) {
 }
 
 
-
-/***/ }),
-
-/***/ 629:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   h: function() { return /* binding */ getFragment; }
-/* harmony export */ });
+;// ./node_modules/@wordpress/url/build-module/get-fragment.mjs
 // packages/url/src/get-fragment.ts
 function getFragment(url) {
   const matches = /^\S+?(#[^\s\?]*)/.exec(url);
@@ -1673,37 +1387,27 @@ function getFragment(url) {
 }
 
 
+;// ./node_modules/@wordpress/url/build-module/add-query-args.mjs
+// packages/url/src/add-query-args.ts
 
-/***/ }),
 
-/***/ 692:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, {
-  A: function() { return /* binding */ preloading_default; }
-});
-
-;// ./node_modules/@wordpress/url/build-module/normalize-path.js
-// packages/url/src/normalize-path.ts
-function normalizePath(path) {
-  const split = path.split("?");
-  const query = split[1];
-  const base = split[0];
-  if (!query) {
-    return base;
+function addQueryArgs(url = "", args) {
+  if (!args || !Object.keys(args).length) {
+    return url;
   }
-  return base + "?" + query.split("&").map((entry) => entry.split("=")).map((pair) => pair.map(decodeURIComponent)).sort((a, b) => a[0].localeCompare(b[0])).map((pair) => pair.map(encodeURIComponent)).map((pair) => pair.join("=")).join("&");
+  const fragment = getFragment(url) || "";
+  let baseUrl = url.replace(fragment, "");
+  const queryStringIndex = url.indexOf("?");
+  if (queryStringIndex !== -1) {
+    args = Object.assign(getQueryArgs(url), args);
+    baseUrl = baseUrl.substr(0, queryStringIndex);
+  }
+  return baseUrl + "?" + buildQueryString(args) + fragment;
 }
 
 
-// EXTERNAL MODULE: ./node_modules/@wordpress/url/build-module/get-query-args.js
-var get_query_args = __webpack_require__(759);
-// EXTERNAL MODULE: ./node_modules/@wordpress/url/build-module/add-query-args.js
-var add_query_args = __webpack_require__(790);
-;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/preloading.js
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/preloading.mjs
 // packages/api-fetch/src/middlewares/preloading.ts
 
 function createPreloadingMiddleware(preloadedData) {
@@ -1717,11 +1421,11 @@ function createPreloadingMiddleware(preloadedData) {
     const { parse = true } = options;
     let rawPath = options.path;
     if (!rawPath && options.url) {
-      const { rest_route: pathFromQuery, ...queryArgs } = (0,get_query_args/* getQueryArgs */.u)(
+      const { rest_route: pathFromQuery, ...queryArgs } = getQueryArgs(
         options.url
       );
       if (typeof pathFromQuery === "string") {
-        rawPath = (0,add_query_args/* addQueryArgs */.F)(pathFromQuery, queryArgs);
+        rawPath = addQueryArgs(pathFromQuery, queryArgs);
       }
     }
     if (typeof rawPath !== "string") {
@@ -1776,241 +1480,129 @@ function prepareResponse(responseData, parse) {
 var preloading_default = createPreloadingMiddleware;
 
 
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/fetch-all-middleware.mjs
+// packages/api-fetch/src/middlewares/fetch-all-middleware.ts
 
-/***/ }),
 
-/***/ 697:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, {
-  A: function() { return /* binding */ user_locale_default; }
+var modifyQuery = ({ path, url, ...options }, queryArgs) => ({
+  ...options,
+  url: url && addQueryArgs(url, queryArgs),
+  path: path && addQueryArgs(path, queryArgs)
 });
+var parseResponse = (response) => response.json ? response.json() : Promise.reject(response);
+var parseLinkHeader = (linkHeader) => {
+  if (!linkHeader) {
+    return {};
+  }
+  const match = linkHeader.match(/<([^>]+)>; rel="next"/);
+  return match ? {
+    next: match[1]
+  } : {};
+};
+var getNextPageUrl = (response) => {
+  const { next } = parseLinkHeader(response.headers.get("link"));
+  return next;
+};
+var requestContainsUnboundedQuery = (options) => {
+  const pathIsUnbounded = !!options.path && options.path.indexOf("per_page=-1") !== -1;
+  const urlIsUnbounded = !!options.url && options.url.indexOf("per_page=-1") !== -1;
+  return pathIsUnbounded || urlIsUnbounded;
+};
+var fetchAllMiddleware = async (options, next) => {
+  if (options.parse === false) {
+    return next(options);
+  }
+  if (!requestContainsUnboundedQuery(options)) {
+    return next(options);
+  }
+  const response = await index_default({
+    ...modifyQuery(options, {
+      per_page: 100
+    }),
+    // Ensure headers are returned for page 1.
+    parse: false
+  });
+  const results = await parseResponse(response);
+  if (!Array.isArray(results)) {
+    return results;
+  }
+  let nextPage = getNextPageUrl(response);
+  if (!nextPage) {
+    return results;
+  }
+  let mergedResults = [].concat(results);
+  while (nextPage) {
+    const nextResponse = await index_default({
+      ...options,
+      // Ensure the URL for the next page is used instead of any provided path.
+      path: void 0,
+      url: nextPage,
+      // Ensure we still get headers so we can identify the next page.
+      parse: false
+    });
+    const nextResults = await parseResponse(nextResponse);
+    mergedResults = mergedResults.concat(nextResults);
+    nextPage = getNextPageUrl(nextResponse);
+  }
+  return mergedResults;
+};
+var fetch_all_middleware_default = fetchAllMiddleware;
 
-// EXTERNAL MODULE: ./node_modules/@wordpress/url/build-module/get-query-arg.js
-var get_query_arg = __webpack_require__(891);
-;// ./node_modules/@wordpress/url/build-module/has-query-arg.js
-// packages/url/src/has-query-arg.ts
 
-function hasQueryArg(url, arg) {
-  return (0,get_query_arg/* getQueryArg */.d)(url, arg) !== void 0;
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/http-v1.mjs
+// packages/api-fetch/src/middlewares/http-v1.ts
+var OVERRIDE_METHODS = /* @__PURE__ */ new Set(["PATCH", "PUT", "DELETE"]);
+var DEFAULT_METHOD = "GET";
+var httpV1Middleware = (options, next) => {
+  const { method = DEFAULT_METHOD } = options;
+  if (OVERRIDE_METHODS.has(method.toUpperCase())) {
+    options = {
+      ...options,
+      headers: {
+        ...options.headers,
+        "X-HTTP-Method-Override": method,
+        "Content-Type": "application/json"
+      },
+      method: "POST"
+    };
+  }
+  return next(options);
+};
+var http_v1_default = httpV1Middleware;
+
+
+;// ./node_modules/@wordpress/url/build-module/get-query-arg.mjs
+// packages/url/src/get-query-arg.ts
+
+function getQueryArg(url, arg) {
+  return getQueryArgs(url)[arg];
 }
 
 
-// EXTERNAL MODULE: ./node_modules/@wordpress/url/build-module/add-query-args.js
-var add_query_args = __webpack_require__(790);
-;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/user-locale.js
+;// ./node_modules/@wordpress/url/build-module/has-query-arg.mjs
+// packages/url/src/has-query-arg.ts
+
+function hasQueryArg(url, arg) {
+  return getQueryArg(url, arg) !== void 0;
+}
+
+
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/user-locale.mjs
 // packages/api-fetch/src/middlewares/user-locale.ts
 
 var userLocaleMiddleware = (options, next) => {
   if (typeof options.url === "string" && !hasQueryArg(options.url, "_locale")) {
-    options.url = (0,add_query_args/* addQueryArgs */.F)(options.url, { _locale: "user" });
+    options.url = addQueryArgs(options.url, { _locale: "user" });
   }
   if (typeof options.path === "string" && !hasQueryArg(options.path, "_locale")) {
-    options.path = (0,add_query_args/* addQueryArgs */.F)(options.path, { _locale: "user" });
+    options.path = addQueryArgs(options.path, { _locale: "user" });
   }
   return next(options);
 };
 var user_locale_default = userLocaleMiddleware;
 
 
-
-/***/ }),
-
-/***/ 759:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   u: function() { return /* binding */ getQueryArgs; }
-/* harmony export */ });
-/* harmony import */ var _safe_decode_uri_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(119);
-/* harmony import */ var _get_query_string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(83);
-// packages/url/src/get-query-args.ts
-
-
-function setPath(object, path, value) {
-  const length = path.length;
-  const lastIndex = length - 1;
-  for (let i = 0; i < length; i++) {
-    let key = path[i];
-    if (!key && Array.isArray(object)) {
-      key = object.length.toString();
-    }
-    key = ["__proto__", "constructor", "prototype"].includes(key) ? key.toUpperCase() : key;
-    const isNextKeyArrayIndex = !isNaN(Number(path[i + 1]));
-    object[key] = i === lastIndex ? (
-      // If at end of path, assign the intended value.
-      value
-    ) : (
-      // Otherwise, advance to the next object in the path, creating
-      // it if it does not yet exist.
-      object[key] || (isNextKeyArrayIndex ? [] : {})
-    );
-    if (Array.isArray(object[key]) && !isNextKeyArrayIndex) {
-      object[key] = { ...object[key] };
-    }
-    object = object[key];
-  }
-}
-function getQueryArgs(url) {
-  return ((0,_get_query_string__WEBPACK_IMPORTED_MODULE_1__/* .getQueryString */ .e)(url) || "").replace(/\+/g, "%20").split("&").reduce((accumulator, keyValue) => {
-    const [key, value = ""] = keyValue.split("=").filter(Boolean).map(_safe_decode_uri_component__WEBPACK_IMPORTED_MODULE_0__/* .safeDecodeURIComponent */ .T);
-    if (key) {
-      const segments = key.replace(/\]/g, "").split("[");
-      setPath(accumulator, segments, value);
-    }
-    return accumulator;
-  }, /* @__PURE__ */ Object.create(null));
-}
-
-
-
-/***/ }),
-
-/***/ 790:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   F: function() { return /* binding */ addQueryArgs; }
-/* harmony export */ });
-/* harmony import */ var _get_query_args__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(759);
-/* harmony import */ var _build_query_string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(623);
-/* harmony import */ var _get_fragment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(629);
-// packages/url/src/add-query-args.ts
-
-
-
-function addQueryArgs(url = "", args) {
-  if (!args || !Object.keys(args).length) {
-    return url;
-  }
-  const fragment = (0,_get_fragment__WEBPACK_IMPORTED_MODULE_2__/* .getFragment */ .h)(url) || "";
-  let baseUrl = url.replace(fragment, "");
-  const queryStringIndex = url.indexOf("?");
-  if (queryStringIndex !== -1) {
-    args = Object.assign((0,_get_query_args__WEBPACK_IMPORTED_MODULE_0__/* .getQueryArgs */ .u)(url), args);
-    baseUrl = baseUrl.substr(0, queryStringIndex);
-  }
-  return baseUrl + "?" + (0,_build_query_string__WEBPACK_IMPORTED_MODULE_1__/* .buildQueryString */ .G)(args) + fragment;
-}
-
-
-
-/***/ }),
-
-/***/ 891:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   d: function() { return /* binding */ getQueryArg; }
-/* harmony export */ });
-/* harmony import */ var _get_query_args__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(759);
-// packages/url/src/get-query-arg.ts
-
-function getQueryArg(url, arg) {
-  return (0,_get_query_args__WEBPACK_IMPORTED_MODULE_0__/* .getQueryArgs */ .u)(url)[arg];
-}
-
-
-
-/***/ }),
-
-/***/ 923:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, {
-  A: function() { return /* binding */ theme_preview_default; }
-});
-
-// EXTERNAL MODULE: ./node_modules/@wordpress/url/build-module/get-query-arg.js
-var get_query_arg = __webpack_require__(891);
-// EXTERNAL MODULE: ./node_modules/@wordpress/url/build-module/add-query-args.js
-var add_query_args = __webpack_require__(790);
-// EXTERNAL MODULE: ./node_modules/@wordpress/url/build-module/get-query-args.js
-var get_query_args = __webpack_require__(759);
-// EXTERNAL MODULE: ./node_modules/@wordpress/url/build-module/build-query-string.js
-var build_query_string = __webpack_require__(623);
-;// ./node_modules/@wordpress/url/build-module/remove-query-args.js
-// packages/url/src/remove-query-args.ts
-
-
-function removeQueryArgs(url, ...args) {
-  const fragment = url.replace(/^[^#]*/, "");
-  url = url.replace(/#.*/, "");
-  const queryStringIndex = url.indexOf("?");
-  if (queryStringIndex === -1) {
-    return url + fragment;
-  }
-  const query = (0,get_query_args/* getQueryArgs */.u)(url);
-  const baseURL = url.substr(0, queryStringIndex);
-  args.forEach((arg) => delete query[arg]);
-  const queryString = (0,build_query_string/* buildQueryString */.G)(query);
-  const updatedUrl = queryString ? baseURL + "?" + queryString : baseURL;
-  return updatedUrl + fragment;
-}
-
-
-;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/theme-preview.js
-// packages/api-fetch/src/middlewares/theme-preview.ts
-
-var createThemePreviewMiddleware = (themePath) => (options, next) => {
-  if (typeof options.url === "string") {
-    const wpThemePreview = (0,get_query_arg/* getQueryArg */.d)(
-      options.url,
-      "wp_theme_preview"
-    );
-    if (wpThemePreview === void 0) {
-      options.url = (0,add_query_args/* addQueryArgs */.F)(options.url, {
-        wp_theme_preview: themePath
-      });
-    } else if (wpThemePreview === "") {
-      options.url = removeQueryArgs(
-        options.url,
-        "wp_theme_preview"
-      );
-    }
-  }
-  if (typeof options.path === "string") {
-    const wpThemePreview = (0,get_query_arg/* getQueryArg */.d)(
-      options.path,
-      "wp_theme_preview"
-    );
-    if (wpThemePreview === void 0) {
-      options.path = (0,add_query_args/* addQueryArgs */.F)(options.path, {
-        wp_theme_preview: themePath
-      });
-    } else if (wpThemePreview === "") {
-      options.path = removeQueryArgs(
-        options.path,
-        "wp_theme_preview"
-      );
-    }
-  }
-  return next(options);
-};
-var theme_preview_default = createThemePreviewMiddleware;
-
-
-
-/***/ }),
-
-/***/ 959:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   J: function() { return /* binding */ parseAndThrowError; },
-/* harmony export */   f: function() { return /* binding */ parseResponseAndNormalizeError; }
-/* harmony export */ });
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(309);
+;// ./node_modules/@wordpress/api-fetch/build-module/utils/response.mjs
 // packages/api-fetch/src/utils/response.ts
 
 async function parseJsonAndNormalizeError(response) {
@@ -2019,7 +1611,7 @@ async function parseJsonAndNormalizeError(response) {
   } catch {
     throw {
       code: "invalid_json",
-      message: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)("The response is not a valid JSON response.")
+      message: (0,build_module.__)("The response is not a valid JSON response.")
     };
   }
 }
@@ -2040,83 +1632,243 @@ async function parseAndThrowError(response, shouldParseResponse = true) {
 }
 
 
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/media-upload.mjs
+// packages/api-fetch/src/middlewares/media-upload.ts
 
-/***/ })
 
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__(296);
-/******/ 	(window.wp = window.wp || {}).apiFetch = __webpack_exports__;
-/******/ 	
+function isMediaUploadRequest(options) {
+  const isCreateMethod = !!options.method && options.method === "POST";
+  const isMediaEndpoint = !!options.path && options.path.indexOf("/wp/v2/media") !== -1 || !!options.url && options.url.indexOf("/wp/v2/media") !== -1;
+  return isMediaEndpoint && isCreateMethod;
+}
+var mediaUploadMiddleware = (options, next) => {
+  if (!isMediaUploadRequest(options)) {
+    return next(options);
+  }
+  let retries = 0;
+  const maxRetries = 5;
+  const postProcess = (attachmentId) => {
+    retries++;
+    return next({
+      path: `/wp/v2/media/${attachmentId}/post-process`,
+      method: "POST",
+      data: { action: "create-image-subsizes" },
+      parse: false
+    }).catch(() => {
+      if (retries < maxRetries) {
+        return postProcess(attachmentId);
+      }
+      next({
+        path: `/wp/v2/media/${attachmentId}?force=true`,
+        method: "DELETE"
+      });
+      return Promise.reject();
+    });
+  };
+  return next({ ...options, parse: false }).catch((response) => {
+    if (!(response instanceof globalThis.Response)) {
+      return Promise.reject(response);
+    }
+    const attachmentId = response.headers.get(
+      "x-wp-upload-attachment-id"
+    );
+    if (response.status >= 500 && response.status < 600 && attachmentId) {
+      return postProcess(attachmentId).catch(() => {
+        if (options.parse !== false) {
+          return Promise.reject({
+            code: "post_process",
+            message: (0,build_module.__)(
+              "Media upload failed. If this is a photo or a large image, please scale it down and try again."
+            )
+          });
+        }
+        return Promise.reject(response);
+      });
+    }
+    return parseAndThrowError(response, options.parse);
+  }).then(
+    (response) => parseResponseAndNormalizeError(response, options.parse)
+  );
+};
+var media_upload_default = mediaUploadMiddleware;
+
+
+;// ./node_modules/@wordpress/url/build-module/remove-query-args.mjs
+// packages/url/src/remove-query-args.ts
+
+
+function removeQueryArgs(url, ...args) {
+  const fragment = url.replace(/^[^#]*/, "");
+  url = url.replace(/#.*/, "");
+  const queryStringIndex = url.indexOf("?");
+  if (queryStringIndex === -1) {
+    return url + fragment;
+  }
+  const query = getQueryArgs(url);
+  const baseURL = url.substr(0, queryStringIndex);
+  args.forEach((arg) => delete query[arg]);
+  const queryString = buildQueryString(query);
+  const updatedUrl = queryString ? baseURL + "?" + queryString : baseURL;
+  return updatedUrl + fragment;
+}
+
+
+;// ./node_modules/@wordpress/api-fetch/build-module/middlewares/theme-preview.mjs
+// packages/api-fetch/src/middlewares/theme-preview.ts
+
+var createThemePreviewMiddleware = (themePath) => (options, next) => {
+  if (typeof options.url === "string") {
+    const wpThemePreview = getQueryArg(
+      options.url,
+      "wp_theme_preview"
+    );
+    if (wpThemePreview === void 0) {
+      options.url = addQueryArgs(options.url, {
+        wp_theme_preview: themePath
+      });
+    } else if (wpThemePreview === "") {
+      options.url = removeQueryArgs(
+        options.url,
+        "wp_theme_preview"
+      );
+    }
+  }
+  if (typeof options.path === "string") {
+    const wpThemePreview = getQueryArg(
+      options.path,
+      "wp_theme_preview"
+    );
+    if (wpThemePreview === void 0) {
+      options.path = addQueryArgs(options.path, {
+        wp_theme_preview: themePath
+      });
+    } else if (wpThemePreview === "") {
+      options.path = removeQueryArgs(
+        options.path,
+        "wp_theme_preview"
+      );
+    }
+  }
+  return next(options);
+};
+var theme_preview_default = createThemePreviewMiddleware;
+
+
+;// ./node_modules/@wordpress/api-fetch/build-module/index.mjs
+// packages/api-fetch/src/index.ts
+
+
+
+
+
+
+
+
+
+
+
+var DEFAULT_HEADERS = {
+  // The backend uses the Accept header as a condition for considering an
+  // incoming request as a REST request.
+  //
+  // See: https://core.trac.wordpress.org/ticket/44534
+  Accept: "application/json, */*;q=0.1"
+};
+var DEFAULT_OPTIONS = {
+  credentials: "include"
+};
+var middlewares = [
+  user_locale_default,
+  namespace_endpoint_default,
+  http_v1_default,
+  fetch_all_middleware_default
+];
+function registerMiddleware(middleware) {
+  middlewares.unshift(middleware);
+}
+var defaultFetchHandler = (nextOptions) => {
+  const { url, path, data, parse = true, ...remainingOptions } = nextOptions;
+  let { body, headers } = nextOptions;
+  headers = { ...DEFAULT_HEADERS, ...headers };
+  if (data) {
+    body = JSON.stringify(data);
+    headers["Content-Type"] = "application/json";
+  }
+  const responsePromise = globalThis.fetch(
+    // Fall back to explicitly passing `window.location` which is the behavior if `undefined` is passed.
+    url || path || window.location.href,
+    {
+      ...DEFAULT_OPTIONS,
+      ...remainingOptions,
+      body,
+      headers
+    }
+  );
+  return responsePromise.then(
+    (response) => {
+      if (!response.ok) {
+        return parseAndThrowError(response, parse);
+      }
+      return parseResponseAndNormalizeError(response, parse);
+    },
+    (err) => {
+      if (err && err.name === "AbortError") {
+        throw err;
+      }
+      if (!globalThis.navigator.onLine) {
+        throw {
+          code: "offline_error",
+          message: (0,build_module.__)(
+            "Unable to connect. Please check your Internet connection."
+          )
+        };
+      }
+      throw {
+        code: "fetch_error",
+        message: (0,build_module.__)(
+          "Could not get a valid response from the server."
+        )
+      };
+    }
+  );
+};
+var fetchHandler = defaultFetchHandler;
+function setFetchHandler(newFetchHandler) {
+  fetchHandler = newFetchHandler;
+}
+var apiFetch = (options) => {
+  const enhancedHandler = middlewares.reduceRight(
+    (next, middleware) => {
+      return (workingOptions) => middleware(workingOptions, next);
+    },
+    fetchHandler
+  );
+  return enhancedHandler(options).catch((error) => {
+    if (error.code !== "rest_cookie_invalid_nonce") {
+      return Promise.reject(error);
+    }
+    return globalThis.fetch(apiFetch.nonceEndpoint).then((response) => {
+      if (!response.ok) {
+        return Promise.reject(error);
+      }
+      return response.text();
+    }).then((text) => {
+      apiFetch.nonceMiddleware.nonce = text;
+      return apiFetch(options);
+    });
+  });
+};
+apiFetch.use = registerMiddleware;
+apiFetch.setFetchHandler = setFetchHandler;
+apiFetch.createNonceMiddleware = nonce_default;
+apiFetch.createPreloadingMiddleware = preloading_default;
+apiFetch.createRootURLMiddleware = root_url_default;
+apiFetch.fetchAllMiddleware = fetch_all_middleware_default;
+apiFetch.mediaUploadMiddleware = media_upload_default;
+apiFetch.createThemePreviewMiddleware = theme_preview_default;
+var index_default = apiFetch;
+
+
+(window.wp = window.wp || {}).apiFetch = __webpack_exports__;
 /******/ })()
 ;

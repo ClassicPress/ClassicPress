@@ -807,6 +807,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		videoElement.style.width = '100%';
 		videoElement.controls = true;
 		videoElement.setAttribute( 'draggable', false );
+		videoElement.type = 'video/mp4';
 
 		// Add from URL
 		if ( ! dialog.querySelector( '#insert-from-url-panel' ).hasAttribute( 'hidden' ) ) {
@@ -1212,7 +1213,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					addItemToWidget( widgetEl );
 
 				// Delete an attachment
-				} else if ( e.target.className && e.target.className.includes( 'delete-attachment' ) ) {
+				} else if ( e.target.classList && e.target.classList.contains( 'delete-attachment' ) ) {
 					if ( widgetEl.querySelector( '[data-property="attachment_id"]' ) ) {
 						if ( dialog.querySelector( '.widget-modal-grid .selected' ).dataset.id != widgetEl.querySelector( '[data-property="attachment_id"]' ).value ) {
 							if ( window.confirm( VIDEO_WIDGET.confirm_delete ) ) {
@@ -1222,12 +1223,50 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 
 				// Copy URL
-				} else if ( e.target.className && e.target.className.includes( 'copy-attachment-url' ) ) {
+				} else if ( e.target.classList && e.target.classList.contains( 'copy-attachment-url' ) ) {
 					copyToClipboard( e.target );
 				}
 			}
 		}
 	} );
+
+	/**
+	 * Fix video widget preview after updates/moves.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function handleVideoWidgetUpdate( event ) {
+		var widget = event.detail.widget;
+		if ( widget.querySelector( '.id_base' ).value === 'media_video' ) {
+			setTimeout( function() {
+				var url, video, source,
+					mediaArea = widget.querySelector( '.media_video' );
+
+				if ( mediaArea ) {
+					url = widget.querySelector( '[data-property="url"]' );
+					if ( url && url.value ) {
+						mediaArea.innerHTML = ''; // Clear existing video
+
+						video = document.createElement( 'video' );
+						video.className = 'wp_video_shortcode';
+						video.controls = true;
+						video.style.width = '100%';
+
+						source = document.createElement( 'source' );
+						source.src = url.value;
+
+						video.appendChild( source );
+						mediaArea.appendChild( video );
+						video.style.pointerEvents = 'auto';
+					}
+				}
+			}, 500 );
+		}
+	}
+
+	// Listen when widget updated.
+	document.addEventListener( 'widget-updated', handleVideoWidgetUpdate );
 
 	/**
 	 * Enable searching for items within grid.

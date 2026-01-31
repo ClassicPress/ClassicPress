@@ -87,10 +87,13 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 			$attachment = get_post( $instance['attachment_id'] );
 		}
 
+		$src = $instance['url'];
 		if ( $attachment ) {
 			$src = wp_get_attachment_url( $attachment->ID );
-		} else {
-			$src = $instance['url'];
+		}
+
+		if ( empty( $src ) ) {
+			return;
 		}
 
 		echo wp_audio_shortcode(
@@ -147,7 +150,7 @@ class WP_Widget_Media_Audio extends WP_Widget_Media {
 			</fieldset>
 
 			<?php
-			if ( $url && file_exists( get_attached_file( $attachment_id ) ) ) {
+			if ( $url ) {
 				?>
 
 				<div class="media-widget-preview media_audio populated"><?php echo wp_audio_shortcode( array( 'src' => $url ) ); ?></div>
@@ -308,6 +311,17 @@ function cp_render_media_audio_template() {
 		</div>
 
 		<footer class="widget-modal-footer">
+			<div class="widget-modal-footer-selection">
+				<div class="widget-modal-footer-selection-info">
+					<span class="count"></span>
+					<br>
+					<button type="button" class="button-link clear-selection"><?php esc_html_e( 'Clear' ); ?></button>
+				</div>
+				<div class="widget-modal-footer-selection-view">
+					<ul tabindex="-1"></ul>
+				</div>
+			</div>
+			<div class="widget-modal-footer-selection"></div>
 			<div class="widget-modal-footer-buttons" style="padding-right: 2em;">
 				<button id="audio-button-update" type="button" class="button media-button button-primary button-large media-button-select" disabled><?php esc_html_e( 'Update' ); ?></button>
 			</div>

@@ -38,7 +38,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": function() { return /* binding */ domReady; }
 /* harmony export */ });
-// packages/dom-ready/src/index.js
+// packages/dom-ready/src/index.ts
 function domReady(callback) {
   if (typeof document === "undefined") {
     return;
