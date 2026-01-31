@@ -1306,7 +1306,8 @@ module.exports = function(grunt) {
 			'webpack:dev',
 			'webpack:min',
 			'usebanner:js',
-			'copy:mediaelement-js'
+			'copy:mediaelement-js',
+			'build:codemirror'
 		]
 	);
 
@@ -1331,6 +1332,20 @@ module.exports = function(grunt) {
 			'rtl',
 			'cssmin:rtl',
 			'cssmin:colors',
+			'terser:core',
+			'terser:embed',
+			'terser:jqueryui',
+			'concat:tinymce',
+			'concat:emoji',
+			'includes:emoji',
+			'includes:embed',
+			'usebanner:css'
+		]
+	);
+
+	grunt.registerTask(
+		'prerelease',
+		[
 			'precommit:php',
 			'precommit:js',
 			'precommit:css',
