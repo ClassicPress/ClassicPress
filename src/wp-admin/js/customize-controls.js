@@ -879,7 +879,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	function updateGrid( widget, paged ) {
+	function updateGrid( paged ) {
 		var dateFilter = dialog.querySelector( '#filter-by-date' ),
 			mediaCatSelect = dateFilter.nextElementSibling,
 			search = dialog.querySelector( '#widget-modal-search-input' ),
@@ -933,7 +933,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 					// Populate grid with new items
 					result.data.forEach( function( attachment ) {
-						var gridItem = populateGridItem( attachment, widget );
+						var gridItem = populateGridItem( attachment );
 						dialog.querySelector( '.widget-modal-grid' ).append( gridItem );
 					} );
 
@@ -1477,10 +1477,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Search or go to a specific page in the media library grid
 			if ( e.target.parentNode.className === 'pagination-links' && e.target.tagName === 'BUTTON' ) {
 				page = e.target.dataset.page;
-				updateGrid( widgetEl, page );
+				updateGrid( page );
 			} else if ( e.target.parentNode.parentNode && e.target.parentNode.parentNode.className === 'pagination-links' && e.target.parentNode.tagName === 'BUTTON' ) {
 				page = e.target.parentNode.dataset.page;
-				updateGrid( widgetEl, page );
+				updateGrid( page );
 
 			// Add a new image to a widget via the image's URL
 			} else if ( e.target.id === 'menu-item-embed' ) {
@@ -1574,26 +1574,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	dialog.addEventListener( 'change', function( e ) {
-		var widgetId, widgetEl, base;
-		if ( dialog.querySelector( '#widget-modal-media-content' ) ) {
-			widgetId = dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId;
-			widgetEl = document.getElementById( widgetId );
-			base     = widgetEl.querySelector( '.id_base' );
-
-			// Only run on a media image widget
-			if ( base && base.value === 'media_image' ) {
-				if ( e.target.id === 'filter-by-date' ) {
-					updateGrid( widgetEl, 1 );
-				} else if ( e.target.className === 'postform' ) {
-					updateGrid( widgetEl, 1 );
-				} else if ( e.target.id === 'current-page-selector' ) {
-					updateGrid( widgetEl, e.target.value );
-				} else if ( e.target.id === 'widget-modal-search-input' ) {
-					updateGrid( widgetEl, 1 );
-					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
-				}
-			} else if ( dialog.querySelector( '#image-modal-content' ) ) {
-				widgetId = dialog.querySelector( '#image-modal-content' ).dataset.widgetId;
+		// Do not run if file sought from widget
+		if ( ! e.target.closest( 'widget' ) ) {
+			if ( e.target.id === 'filter-by-date' ) {
+				updateGrid( 1 );
+			} else if ( e.target.className === 'postform' ) {
+				updateGrid( 1 );
+			} else if ( e.target.id === 'current-page-selector' ) {
+				updateGrid( e.target.value );
+			} else if ( e.target.id === 'widget-modal-search-input' ) {
+				updateGrid( 1 );
+				dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
 			}
 		}
 	} );
