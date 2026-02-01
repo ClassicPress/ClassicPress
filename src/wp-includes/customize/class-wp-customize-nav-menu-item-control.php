@@ -70,17 +70,6 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 							<?php esc_html_e( $title ?: $untitled ); ?>
 						</span>
 					</span>
-					<span class="item-controls">
-						<button type="button" class="button-link item-delete submitdelete deletion">
-							<span class="screen-reader-text">
-								<?php
-									/* translators: 1: Title of a menu item, 2: Type of a menu item. */
-									printf( __( 'Remove Menu Item: %1$s (%2$s)' ), esc_html__( $title ?: $untitled ), esc_html__( $item['type_label'] ) );
-								?>
-							</span>
-						</button>
-					</span>
-
 					<div class="menu-item-reorder-nav">
 
 						<?php
@@ -94,9 +83,18 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 						?>
 
 					</div>
-
 					<span class="item-type" aria-hidden="true">
 						<?php esc_html_e( $item['type_label'] ); ?>
+					</span>
+					<span class="item-controls">
+						<button type="button" class="button-link item-delete submitdelete deletion">
+							<span class="screen-reader-text">
+								<?php
+									/* translators: 1: Title of a menu item, 2: Type of a menu item. */
+									printf( __( 'Remove Menu Item: %1$s (%2$s)' ), esc_html__( $title ?: $untitled ), esc_html__( $item['type_label'] ) );
+								?>
+							</span>
+						</button>
 					</span>
 				</summary>
 
