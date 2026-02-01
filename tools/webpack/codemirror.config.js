@@ -18,13 +18,13 @@ module.exports = ( env = { buildTarget: 'src/' } ) => {
 		ignoreWarnings: [
 			{
 				module: /node_modules\/codemirror\/addon\/mode\/loadmode\.js/,
-				message: /the request of a dependency is an expression/,
-			},
+				message: /the request of a dependency is an expression/
+			}
 		],
 		entry: './tools/vendors/codemirror-entry.js',
 		output: {
 			path: path.resolve( __dirname, '../../', buildTarget, 'wp-includes/js/codemirror' ),
-			filename: 'codemirror.min.js',
+			filename: 'codemirror.min.js'
 		},
 		optimization: {
 			minimize: true,
@@ -32,25 +32,25 @@ module.exports = ( env = { buildTarget: 'src/' } ) => {
 				new TerserPlugin( {
 					terserOptions: {
 						format: {
-							comments: /^!/,
-						},
+							comments: /^!/
+						}
 					},
-					extractComments: false,
-				} ),
-			],
+					extractComments: false
+				} )
+			]
 		},
 		externals: {
 			'csslint': 'window.CSSLint',
 			'htmlhint': 'window.HTMLHint',
 			'jshint': 'window.JSHINT',
-			'jsonlint': 'window.jsonlint',
+			'jsonlint': 'window.jsonlint'
 		},
 		plugins: [
 			new webpack.BannerPlugin( {
 				banner: codemirrorBanner,
 				raw: true,
-				entryOnly: true,
-			} ),
-		],
+				entryOnly: true
+			} )
+		]
 	};
 };
