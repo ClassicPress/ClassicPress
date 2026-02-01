@@ -1270,8 +1270,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	document.addEventListener( 'click', function( e ) {
 		var id, page, itemBrowse, itemUpload, gridPanel, uploadPanel,
-			modalButtons, rightSidebar, modalPages,
-			widget = e.target.closest( '.widget' );
+			modalButtons, rightSidebar, modalPages;
 
 		// Abort if this comes from a widget
 		if ( e.target.closest( '.widget' ) ) {
@@ -1575,17 +1574,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	dialog.addEventListener( 'change', function( e ) {
 		// Do not run if file sought from widget
-		if ( ! e.target.closest( 'widget' ) ) {
-			if ( e.target.id === 'filter-by-date' ) {
-				updateGrid( 1 );
-			} else if ( e.target.className === 'postform' ) {
-				updateGrid( 1 );
-			} else if ( e.target.id === 'current-page-selector' ) {
-				updateGrid( e.target.value );
-			} else if ( e.target.id === 'widget-modal-search-input' ) {
-				updateGrid( 1 );
-				dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
-			}
+		if ( e.target.closest( '.widget' ) ) {
+			return;
+		}
+
+		if ( e.target.id === 'filter-by-date' ) {
+			updateGrid( 1 );
+		} else if ( e.target.className === 'postform' ) {
+			updateGrid( 1 );
+		} else if ( e.target.id === 'current-page-selector' ) {
+			updateGrid( e.target.value );
+		} else if ( e.target.id === 'widget-modal-search-input' ) {
+			updateGrid( 1 );
+			dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
 		}
 	} );
 
