@@ -154,8 +154,8 @@
 }
 
 .wp-customizer .item-controls {
-	right: 19px;
-	margin-top: 0;
+	right: 5px;
+	margin-top: 10px;
 }
 
 .reordering .menu-item-reorder-nav {
@@ -459,6 +459,7 @@
 	color: #d63638;
 	cursor: pointer;
 	display: none;
+	text-decoration: none;
 }
 
 .menu-item-bar .item-delete:before {
