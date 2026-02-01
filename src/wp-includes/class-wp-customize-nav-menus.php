@@ -1109,8 +1109,8 @@ final class WP_Customize_Nav_Menus {
 						?>
 					</p>
 					<span class="spinner"></span>
+					<div class="search-icon" aria-hidden="true"></div>
 				</div>
-				<div class="search-icon" aria-hidden="true"></div>
 				<button type="button" class="clear-results">
 					<span class="screen-reader-text">
 						<?php
