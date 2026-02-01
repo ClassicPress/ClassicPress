@@ -24,8 +24,8 @@ module.exports = function( env = { environment: 'production', buildTarget: false
 				library: {
 					name: ['wp', camelCaseDash( packageName ) ],
 					type: 'window',
-					export: undefined,
-				},
+					export: undefined
+				}
 			};
 
 			return memo;
@@ -36,9 +36,9 @@ module.exports = function( env = { environment: 'production', buildTarget: false
 			path: normalizeJoin( baseDir, `${ buildTarget }/js/dist` ),
 			environment: {
 				arrowFunction: env.minify,
-				const: env.minify,
+				const: env.minify
 			}
-		},
+		}
 	};
 
 	return config;

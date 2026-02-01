@@ -499,7 +499,11 @@ module.exports = function(grunt) {
 		jshint: {
 			options: grunt.file.readJSON('.jshintrc'),
 			grunt: {
-				src: ['Gruntfile.js', 'tools/**/*.js', '!tools/build/grunt-terser.js']
+				src: [
+					'Gruntfile.js',
+					'tools/**/*.js',
+					'!tools/build/grunt-terser.js'
+				]
 			},
 			tests: {
 				src: [
@@ -632,7 +636,9 @@ module.exports = function(grunt) {
 			},
 			grunt: {
 				src: [
-					'Gruntfile.js'
+					'Gruntfile.js',
+					'tools/**/*.js',
+					'!tools/build/grunt-terser.js'
 				]
 			},
 			core: {

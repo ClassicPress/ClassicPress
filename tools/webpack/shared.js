@@ -1,4 +1,5 @@
 /* jshint es3: false, esversion: 9 */
+/* eslint func-style: ["error", "declaration", { "allowArrowFunctions": true }] */
 /* global __dirname*/
 /**
  * External dependencies
@@ -16,7 +17,7 @@ const baseConfig = ( env ) => {
 		target: 'browserslist',
 		mode,
 		plugins: [
-			new StripSourceMapURLPlugin( env.minify ),
+			new StripSourceMapURLPlugin( env.minify )
 		],
 		optimization: {
 			moduleIds: 'deterministic',
@@ -27,16 +28,16 @@ const baseConfig = ( env ) => {
 					terserOptions: {
 						output: {
 							comments: /translators:/i,
-							keep_quoted_props: true,
+							keep_quoted_props: true
 						},
 						compress: {
-							passes: 2,
+							passes: 2
 						},
 						mangle: {
-							reserved: [ '__', '_n', '_nx', '_x' ],
-						},
-					},
-				} ),
+							reserved: [ '__', '_n', '_nx', '_x' ]
+						}
+					}
+				} )
 			]
 		},
 		module: {
@@ -44,17 +45,17 @@ const baseConfig = ( env ) => {
 				{
 					test: /\.js$/,
 					use: [ 'source-map-loader' ],
-					enforce: 'pre',
-				},
-			],
+					enforce: 'pre'
+				}
+			]
 		},
 		resolve: {
 			modules: [
 				baseDir,
-				'node_modules',
-			],
+				'node_modules'
+			]
 		},
-		stats: 'errors-only',
+		stats: 'errors-only'
 	};
 
 	return config;
@@ -70,5 +71,5 @@ module.exports = {
 	baseDir,
 	baseConfig,
 	normalizeJoin,
-	camelCaseDash,
+	camelCaseDash
 };
