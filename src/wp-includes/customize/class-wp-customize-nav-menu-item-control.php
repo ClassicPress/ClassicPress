@@ -190,7 +190,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 								cols="20"
 								name="menu-item-description"
 							>
-								<?php echo $item['description']; ?>
+								<?php echo wp_kses_post( $item['description'] ); ?>
 							</textarea>
 							<span class="description">
 								<?php esc_html_e( 'The description will be displayed in the menu if the active theme supports it.' ); ?>
