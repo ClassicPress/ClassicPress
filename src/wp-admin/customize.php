@@ -1,5 +1,6 @@
 <?php
 declare( strict_types = 1 ); // Forces exact type matching
+
 /**
  * Theme Customize Screen.
  *
@@ -47,6 +48,21 @@ $preview_url = add_query_arg(
     ),
     home_url( '/' )
 );
+add_action( '_wp_customize_publish_changeset', function( $changeset_post_id ) {
+    error_log( 'PUBLISH changeset: ' . $changeset_post_id );
+    
+    global $wp_customize;
+    $setting = $wp_customize->get_setting( 'background_image' );
+    if ( $setting ) {
+        error_log( 'background_image value BEFORE publish: ' . var_export( $setting->value(), true ) );
+    }
+}, 10, 1 );
+
+add_action( 'customize_save_after', function( $wp_customize ) {
+    error_log( 'customize_save_after fired' );
+    $setting = $wp_customize->get_setting( 'background_image' );
+    error_log( 'background_image AFTER save: ' . var_export( $setting->value(), true ) );
+}, 10, 1 );
 
 // Handle form submission (supports both the disabled publish button and the default "save" submit).
 if ( isset( $_POST['cp_publish_submit'] ) || isset( $_POST['save'] ) ) {
@@ -71,13 +87,13 @@ if ( isset( $_POST['cp_publish_submit'] ) || isset( $_POST['save'] ) ) {
         }
     }
 
-    // Make sure we’re saving to the expected changeset UUID
+    // Make sure we’re saving to the expected changeset UUID.
     $uuid = isset( $_POST['customize_changeset_uuid'] ) ? sanitize_text_field( wp_unslash( $_POST['customize_changeset_uuid'] ) ) : '';
     if ( $uuid && $uuid !== $wp_customize->changeset_uuid() ) {
         $wp_customize->set_changeset_uuid( $uuid );
     }
 
-    // Save the changeset in-process (no loopback HTTP)
+    // Save the changeset in-process (no loopback HTTP).
     $result = $wp_customize->save_changeset_post( array(
         'status' => 'publish', // Or 'draft' / 'pending' / 'future'
         'title'  => 'PHP publish from customize.php',
@@ -87,9 +103,13 @@ if ( isset( $_POST['cp_publish_submit'] ) || isset( $_POST['save'] ) ) {
         wp_die( esc_html( $result->get_error_message() ), 500 );
     }
 
-    // Redirect back with the UUID like the JS flow does.
+    // Redirect back to customize.php with the UUID.
     wp_safe_redirect(
-        add_query_arg( 'customize_changeset_uuid', $wp_customize->changeset_uuid(), admin_url( 'customize.php' ) )
+        add_query_arg(
+			'customize_changeset_uuid',
+			$wp_customize->changeset_uuid(),
+			admin_url( 'customize.php' )
+		)
     );
     exit;
 }
@@ -174,7 +194,6 @@ if ( $widgets_panel ) {
 	require_once( ABSPATH . 'wp-admin/includes/widgets.php' );
 	global $wp_registered_widgets, $wp_registered_widget_controls;
 
-	// Collect widgets in a name-keyed array for sorting.
 	foreach ( $wp_registered_widgets as $id => $widget ) {
 		if ( empty( $widget['name'] ) ) {
 			continue;
@@ -183,7 +202,7 @@ if ( $widgets_panel ) {
 		// Derive id_base
 		$id_base = _get_widget_id_base( $id );
 
-		// Get the control (admin form) for this widget, if there is one.
+		// Get the control (admin form) for each widget, if there is one.
 		$control = isset( $wp_registered_widget_controls[ $id ] )
 			? $wp_registered_widget_controls[ $id ]
 			: null;
@@ -198,7 +217,6 @@ if ( $widgets_panel ) {
 	}
 	ksort( $available_widgets, SORT_NATURAL | SORT_FLAG_CASE );
 }
-
 
 /**
  * Fires when Customizer controls are initialized, before scripts are enqueued.
@@ -731,7 +749,13 @@ wp_print_scripts();
 											<?php echo esc_html( $nav_menus_panel->title ); ?>
 										</strong>
 									</div>
-									<?php if ( method_exists( $nav_menus_panel, 'maybe_render_description' ) ) $nav_menus_panel->maybe_render_description(); ?>
+
+									<?php
+									if ( method_exists( $nav_menus_panel, 'maybe_render_description' ) ) {
+										$nav_menus_panel->maybe_render_description();
+									}
+									?>
+
 								</li>
 
 								<?php
@@ -1032,7 +1056,7 @@ wp_print_scripts();
 										</div>
 
 										<?php
-										if ( $item['id'] === 'header_image' ) { // to account for the description being hard-coded in core
+										if ( $item['id'] === 'header_image' ) { // description of header_image is hard-coded in core
 											?>
 
 											<div class="description customize-section-description">
@@ -1880,6 +1904,121 @@ customize_themes_print_templates();
 		</div>
 	</div>
 </dialog>
+
+<template id="new-menu-item">
+	<li class="customize-control customize-control-nav_menu_item menu-item menu-item-depth-0 menu-item-custom menu-item-edit-inactive move-left-disabled move-up-disabled move-right-disabled move-down-disabled" data-setting-id="">
+		<div class="menu-item-bar">
+			<details class="menu-item-handle">
+				<summary>
+					<span class="item-title" aria-hidden="true">
+						<span class="menu-item-title"></span>
+					</span>
+					<div class="menu-item-reorder-nav">
+
+						<?php
+						printf(
+							'<button type="button" class="menus-move-up">%1$s</button><button type="button" class="menus-move-down">%2$s</button><button type="button" class="menus-move-left">%3$s</button><button type="button" class="menus-move-right">%4$s</button>',
+							__( 'Move up' ),
+							__( 'Move down' ),
+							__( 'Move one level up' ),
+							__( 'Move one level down' )
+						);
+						?>
+
+					</div>
+					<span class="item-type" aria-hidden="true"></span>
+					<span class="item-controls">
+						<button type="button" class="button-link item-delete submitdelete deletion">
+							<span class="screen-reader-text">
+								<?php esc_html_e( 'Remove Menu Item:' ); ?>
+							</span>
+						</button>
+					</span>
+				</summary>
+
+				<div id="menu-item-settings-" class="menu-item-settings">
+					<p class="field-url description description-thin" hidden>
+						<label for="edit-menu-item-url-">
+							<?php esc_html_e( 'URL' ); ?>
+							<br>
+							<input id="edit-menu-item-url-" class="widefat code edit-menu-item-url" type="text" name="menu-item-url">
+						</label>
+					</p>
+					<p class="description description-thin">
+						<label for="edit-menu-item-title-">
+							<?php esc_html_e( 'Navigation Label' ); ?>
+							<br>
+							<input type="text" id="edit-menu-item-title-" placeholder="" class="widefat edit-menu-item-title" name="menu-item-title">
+						</label>
+					</p>
+					<p class="field-link-target description description-thin">
+						<label for="edit-menu-item-target-">
+							<input id="edit-menu-item-target-" type="checkbox" class="edit-menu-item-target" value="_blank" name="menu-item-target">
+							<?php esc_html_e( 'Open link in a new tab' ); ?>
+						</label>
+					</p>
+					<p class="field-title-attribute field-attr-title description description-thin">
+						<label for="edit-menu-item-attr-title-">
+							<?php esc_html_e( 'Title Attribute' ); ?>
+							<br>
+							<input id="edit-menu-item-attr-title-" type="text" class="widefat edit-menu-item-attr-title" name="menu-item-attr-title">
+						</label>
+					</p>
+					<p class="field-css-classes description description-thin">
+						<label for="edit-menu-item-classes-">
+							<?php esc_html_e( 'CSS Classes' ); ?>
+							<br>
+							<input id="edit-menu-item-classes-" type="text" class="widefat code edit-menu-item-classes" name="menu-item-classes">
+						</label>
+					</p>
+					<p class="field-xfn description description-thin">
+						<label for="edit-menu-item-xfn-">
+							<?php esc_html_e( 'Link Relationship (XFN)' ); ?>
+							<br>
+							<input id="edit-menu-item-xfn-" type="text" class="widefat code edit-menu-item-xfn" name="menu-item-xfn">
+						</label>
+					</p>
+					<p class="field-description description description-thin">
+						<label for="edit-menu-item-description-">
+							<?php esc_html_e( 'Description' ); ?>
+							<br>
+							<textarea id="edit-menu-item-description-" class="widefat edit-menu-item-description" rows="3" cols="20" name="menu-item-description">															</textarea>
+							<span class="description">
+								<?php esc_html_e( 'The description will be displayed in the menu if the active theme supports it.' ); ?>
+							</span>
+						</label>
+					</p>
+
+					<?php
+					/**
+					 * Fires at the end of the form field template for nav menu items in the customizer.
+					 *
+					 * Additional fields can be rendered here and managed in JavaScript.
+					 *
+					 * @since 5.4.0
+					 */
+					do_action( 'wp_nav_menu_item_custom_fields_customize_template' );
+					?>
+
+					<div class="menu-item-actions description-thin submitbox">
+						<p class="link-to-original" inert>
+							<?php esc_html_e( 'Original:' ); ?>
+							<a class="original-link" href=""></a>
+						</p>
+						<button type="button" class="button-link button-link-delete item-delete submitdelete deletion">
+							<?php esc_html_e( 'Remove' ); ?>
+						</button>
+						<span class="spinner"></span>
+					</div>
+					<input type="hidden" name="menu-item-db-id[]" class="menu-item-data-db-id" value="">
+					<input type="hidden" name="menu-item-parent-id[]" class="menu-item-data-parent-id" value="0">
+
+				</div><!-- .menu-item-settings-->
+				<ul class="menu-item-transport"></ul>
+			</details>
+		</div>
+	</li>
+</template>
 
 <?php
 /**
