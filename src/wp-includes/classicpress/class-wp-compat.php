@@ -464,6 +464,20 @@ class WP_Compat {
 			}
 		}
 
+		if ( ! function_exists( 'do_blocks' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.7.0
+			 *
+			 * @return string ''.
+			 */
+			function do_blocks( ...$args ) {
+				WP_Compat::using_block_function();
+				return '';
+			}
+		}
+
 		// Load WP_Block_Type class file as polyfill.
 		require_once ABSPATH . WPINC . '/classicpress/class-wp-block-type.php';
 		require_once ABSPATH . WPINC . '/classicpress/class-wp-block-template.php';
