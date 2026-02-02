@@ -67,7 +67,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 				<summary>
 					<span class="item-title" aria-hidden="true">
 						<span class="menu-item-title<?php echo $no_title; ?>">
-							<?php esc_html_e( $title ?: $untitled ); ?>
+							<?php echo esc_html( $title ?: $untitled ); ?>
 						</span>
 					</span>
 					<div class="menu-item-reorder-nav">
@@ -84,7 +84,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 
 					</div>
 					<span class="item-type" aria-hidden="true">
-						<?php esc_html_e( $item['type_label'] ); ?>
+						<?php echo esc_html( $item['type_label'] ); ?>
 					</span>
 					<span class="item-controls">
 						<button type="button" class="button-link item-delete submitdelete deletion">
@@ -98,18 +98,20 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 					</span>
 				</summary>
 
-				<div class="menu-item-settings" id="menu-item-settings-<?php esc_attr_e( $item['object_id'] ); ?>">
+				<div class="menu-item-settings" id="menu-item-settings-<?php echo esc_attr( $item['object_id'] ); ?>">
 
 					<?php
 					if ( 'custom' === $item['type'] ) {
 						?>
 						<p class="field-url description description-thin">
-							<label for="edit-menu-item-url-<?php esc_attr_e( $item['object_id'] ); ?>">
-								<?php esc_html_e( 'URL' ); ?><br>
+							<label for="edit-menu-item-url-<?php echo esc_attr( $item['object_id'] ); ?>">
+								<?php esc_html_e( 'URL' ); ?>
+								<br>
 								<input class="widefat code edit-menu-item-url"
 									type="text"
-									id="edit-menu-item-url-<?php esc_attr_e( $item['object_id'] ); ?>"
+									id="edit-menu-item-url-<?php echo esc_attr( $item['object_id'] ); ?>"
 									name="menu-item-url"
+									value="<?php echo esc_html( $item['url'] ); ?>"
 								>
 							</label>
 						</p>
@@ -118,39 +120,77 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 					?>
 
 					<p class="description description-thin">
-						<label for="edit-menu-item-title-<?php esc_attr_e( $item['object_id'] ); ?>">
-							<?php esc_html_e( 'Navigation Label' ); ?><br>
-							<input type="text" id="edit-menu-item-title-<?php esc_attr_e( $item['object_id'] ); ?>" placeholder="<?php esc_attr_e( $item['original_title'] ); ?>" class="widefat edit-menu-item-title" name="menu-item-title">
+						<label for="edit-menu-item-title-<?php echo esc_attr( $item['object_id'] ); ?>">
+							<?php esc_html_e( 'Navigation Label' ); ?>
+							<br>
+							<input type="text"
+								id="edit-menu-item-title-<?php echo esc_attr( $item['object_id'] ); ?>"
+								placeholder="<?php echo esc_attr( $item['original_title'] ); ?>"
+								class="widefat edit-menu-item-title"
+								name="menu-item-title"
+								value="<?php echo esc_html( $item['title'] ) ?: esc_html( $item['original_title'] ); ?>"
+							>
 						</label>
 					</p>
 					<p class="field-link-target description description-thin">
-						<label for="edit-menu-item-target-<?php esc_attr_e( $item['object_id'] ); ?>">
-							<input type="checkbox" id="edit-menu-item-target-<?php esc_attr_e( $item['object_id'] ); ?>" class="edit-menu-item-target" value="_blank" name="menu-item-target">
+						<label for="edit-menu-item-target-<?php echo esc_attr( $item['object_id'] ); ?>">
+							<input type="checkbox"
+								id="edit-menu-item-target-<?php echo esc_attr( $item['object_id'] ); ?>"
+								class="edit-menu-item-target"
+								value="_blank"
+								name="menu-item-target"
+								value="<?php echo esc_html( $item['target'] ); ?>"
+							>
 							<?php esc_html_e( 'Open link in a new tab' ); ?>
 						</label>
 					</p>
 					<p class="field-title-attribute field-attr-title description description-thin">
-						<label for="edit-menu-item-attr-title-<?php esc_attr_e( $item['object_id'] ); ?>">
-							<?php esc_html_e( 'Title Attribute' ); ?><br>
-							<input type="text" id="edit-menu-item-attr-title-<?php esc_attr_e( $item['object_id'] ); ?>" class="widefat edit-menu-item-attr-title" name="menu-item-attr-title">
+						<label for="edit-menu-item-attr-title-<?php echo esc_attr( $item['object_id'] ); ?>">
+							<?php esc_html_e( 'Title Attribute' ); ?>
+							<br>
+							<input type="text"
+								id="edit-menu-item-attr-title-<?php echo esc_attr( $item['object_id'] ); ?>"
+								class="widefat edit-menu-item-attr-title"
+								name="menu-item-attr-title"
+								value="<?php echo esc_html( $item['attr_title'] ); ?>"
+							>
 						</label>
 					</p>
 					<p class="field-css-classes description description-thin">
-						<label for="edit-menu-item-classes-<?php esc_attr_e( $item['object_id'] ); ?>">
-							<?php esc_html_e( 'CSS Classes' ); ?><br>
-							<input type="text" id="edit-menu-item-classes-<?php esc_attr_e( $item['object_id'] ); ?>" class="widefat code edit-menu-item-classes" name="menu-item-classes">
+						<label for="edit-menu-item-classes-<?php echo esc_attr( $item['object_id'] ); ?>">
+							<?php esc_html_e( 'CSS Classes' ); ?>
+							<br>
+							<input type="text"
+								id="edit-menu-item-classes-<?php echo esc_attr( $item['object_id'] ); ?>"
+								class="widefat code edit-menu-item-classes"
+								name="menu-item-classes"
+								value="<?php echo esc_html( $item['classes'] ); ?>"
+							>
 						</label>
 					</p>
 					<p class="field-xfn description description-thin">
-						<label for="edit-menu-item-xfn-<?php esc_attr_e( $item['object_id'] ); ?>">
-							<?php esc_html_e( 'Link Relationship (XFN)' ); ?><br>
-							<input type="text" id="edit-menu-item-xfn-<?php esc_attr_e( $item['object_id'] ); ?>" class="widefat code edit-menu-item-xfn" name="menu-item-xfn">
+						<label for="edit-menu-item-xfn-<?php echo esc_attr( $item['object_id'] ); ?>">
+							<?php esc_html_e( 'Link Relationship (XFN)' ); ?>
+							<br>
+							<input type="text"
+								id="edit-menu-item-xfn-<?php echo esc_attr( $item['object_id'] ); ?>"
+								class="widefat code edit-menu-item-xfn"
+								name="menu-item-xfn"
+								value="<?php echo esc_html( $item['xfn'] ); ?>"
+							>
 						</label>
 					</p>
 					<p class="field-description description description-thin">
-						<label for="edit-menu-item-description-<?php esc_attr_e( $item['object_id'] ); ?>">
-							<?php esc_html_e( 'Description' ); ?><br>
-							<textarea id="edit-menu-item-description-<?php esc_attr_e( $item['object_id'] ); ?>" class="widefat edit-menu-item-description" rows="3" cols="20" name="menu-item-description">
+						<label for="edit-menu-item-description-<?php echo esc_attr( $item['object_id'] ); ?>">
+							<?php esc_html_e( 'Description' ); ?>
+							<br>
+							<textarea id="edit-menu-item-description-<?php echo esc_attr( $item['object_id'] ); ?>"
+								class="widefat edit-menu-item-description"
+								rows="3"
+								cols="20"
+								name="menu-item-description"
+								value="<?php echo esc_html( $item['description'] ); ?>"
+							>
 								<?php echo $item['description']; ?>
 							</textarea>
 							<span class="description">
@@ -173,7 +213,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 					<div class="menu-item-actions description-thin submitbox">
 
 						<?php
-						if ( ( 'post_type' === $item['type'] || 'taxonomy' === $item['type'] ) && '' !== $item['original_title'] ) {
+						if ( $item['original_title'] !== '' && in_array( $item['type'], array( 'post_type', 'taxonomy' ), true ) ) {
 							?>
 
 							<p class="link-to-original">
@@ -192,8 +232,8 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 						</button>
 						<span class="spinner"></span>
 					</div>
-					<input type="hidden" name="menu-item-db-id[<?php esc_attr_e( $item['object_id'] ); ?>]" class="menu-item-data-db-id" value="<?php esc_attr_e( $item['object_id'] ); ?>">
-					<input type="hidden" name="menu-item-parent-id[<?php esc_attr_e( $item['object_id'] ); ?>]" class="menu-item-data-parent-id" value="<?php esc_attr_e( $item['menu_item_parent'] ); ?>">
+					<input type="hidden" name="menu-item-db-id[<?php echo esc_attr( $item['object_id'] ); ?>]" class="menu-item-data-db-id" value="<?php echo esc_attr( $item['object_id'] ); ?>">
+					<input type="hidden" name="menu-item-parent-id[<?php echo esc_attr( $item['object_id'] ); ?>]" class="menu-item-data-parent-id" value="<?php echo esc_attr( $item['menu_item_parent'] ); ?>">
 				</div><!-- .menu-item-settings-->
 				<ul class="menu-item-transport"></ul>
 
