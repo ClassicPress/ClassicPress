@@ -189,7 +189,6 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 								rows="3"
 								cols="20"
 								name="menu-item-description"
-								value="<?php echo esc_html( $item['description'] ); ?>"
 							>
 								<?php echo $item['description']; ?>
 							</textarea>
