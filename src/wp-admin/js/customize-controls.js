@@ -1778,6 +1778,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				type       = e.target.parentNode.nextElementSibling.dataset.type;
 				label      = e.target.parentNode.nextElementSibling.dataset.type_label;
 				createNewPostOrPage( title, object, type, label, e.target.parentNode.nextElementSibling );
+				e.target.previousElementSibling.value = ''; // reset
 			} else if ( e.target.classList && e.target.className === 'button-link item-add' ) {
 				type     = e.target.closest( 'ul' ).dataset.type;
 				object   = e.target.closest( 'ul' ).dataset.object;
