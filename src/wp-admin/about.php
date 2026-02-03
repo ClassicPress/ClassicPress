@@ -106,7 +106,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 				);
 				?>
 				</p>
-			<?php }; ?>
+			<?php } ?>
 			<h3><?php _e( 'Join our growing community' ); ?></h3>
 			<p>
 				<?php
