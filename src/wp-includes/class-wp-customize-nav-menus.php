@@ -1151,10 +1151,10 @@ final class WP_Customize_Nav_Menus {
 					continue;
 				}
 				?>
-				<li id="available-menu-items-<?php esc_attr_e( $available_item_type['type'] . '-' . $available_item_type['object'] ); ?>" class="accordion-section">
+				<li id="available-menu-items-<?php echo esc_attr( $available_item_type['type'] . '-' . $available_item_type['object'] ); ?>" class="accordion-section">
 					<details>
 						<summary class="accordion-section-title">
-							<?php esc_html_e( $available_item_type['type_label'] ); ?>
+							<?php echo esc_html( $available_item_type['type_label'] ); ?>
 						</summary>
 						<div class="accordion-section-content" style="max-height: 132px;">
 							
@@ -1165,11 +1165,11 @@ final class WP_Customize_Nav_Menus {
 									?>
 					
 									<div class="new-content-item">
-										<label for="create-item-input-<?php esc_attr_e( $available_item_type['object'] ); ?>" class="screen-reader-text">
-											<?php esc_html_e( $post_type_obj->labels->add_new_item ); ?>
+										<label for="create-item-input-<?php echo esc_attr( $available_item_type['object'] ); ?>" class="screen-reader-text">
+											<?php echo esc_html( $post_type_obj->labels->add_new_item ); ?>
 										</label>
 										<input type="text"
-											id="create-item-input-<?php esc_attr_e( $available_item_type['object'] ); ?>"
+											id="create-item-input-<?php echo esc_attr( $available_item_type['object'] ); ?>"
 											class="create-item-input"
 											placeholder="<?php echo esc_attr( $post_type_obj->labels->add_new_item ); ?>"
 										>
@@ -1184,38 +1184,41 @@ final class WP_Customize_Nav_Menus {
 							?>
 
 							<ul class="available-menu-items-list"
-								data-type="<?php esc_attr_e( $available_item_type['type'] ); ?>"
-								data-object="<?php esc_attr_e( $available_item_type['object'] ); ?>"
-								data-type_label="<?php esc_attr_e( isset( $available_item_type['type_label'] ) ? $available_item_type['type_label'] : $available_item_type['type'] ); ?>"
+								data-type="<?php echo esc_attr( $available_item_type['type'] ); ?>"
+								data-object="<?php echo esc_attr( $available_item_type['object'] ); ?>"
+								data-type_label="<?php echo esc_attr( isset( $available_item_type['type_label'] ) ? $available_item_type['type_label'] : $available_item_type['type'] ); ?>"
 								style="max-height: 72px;"
 							>
-								<?php foreach ( $items as $item ) {						
+								<?php foreach ( $items as $item ) {	error_log(print_r($item, true ));
 									?>
-									<li id="<?php esc_attr_e( $item['id'] ); ?>"
+									<li id="<?php echo esc_attr( $item['id'] ); ?>"
 										class="menu-item-tpl"
-										data-menu-item-id="<?php esc_attr_e( $item['id'] ); ?>"
+										data-menu-item-id="<?php echo esc_attr( $item['id'] ); ?>"
 									>
 										<div class="menu-item-bar">
 											<div class="menu-item-handle">
 												<button type="button" class="button-link item-add">
 													<span class="screen-reader-text">
 														<?php esc_html_e( 'Add to menu:' ); ?>
-														<?php esc_html_e( $item['title'] ); ?>
-														<?php esc_html_e( '(' . $item['type_label'] . ')' ); ?>
+														<?php echo esc_html( $item['title'] ); ?>
+														<?php echo esc_html( '(' . $item['type_label'] . ')' ); ?>
 													</span>
 												</button>
 												<span class="item-split">
 													<span class="item-title" aria-hidden="true">
 														<span class="menu-item-title">
-															<?php esc_html_e( $item['title'] ); ?>
+															<?php echo esc_html( $item['title'] ); ?>
 														</span>
 													</span>
 													<span class="item-type" aria-hidden="true">
-														<?php esc_html_e( $item['type_label'] ); ?>
+														<?php echo esc_html( $item['type_label'] ); ?>
 													</span>
 												</span>
 											</div>
 										</div>
+										<span class="item-url" hidden>
+											<?php echo esc_html( $item['url'] ); ?>
+										</span>
 									</li>
 									<?php
 								}
@@ -1248,18 +1251,39 @@ final class WP_Customize_Nav_Menus {
 					<?php _e( 'Custom Links' ); ?>
 				</summary>
 				<div class="accordion-section-content customlinkdiv">
-					<input type="hidden" value="custom" id="custom-menu-item-type" name="menu-item[-1][menu-item-type]" />
+					<input type="hidden"
+						value="custom"
+						id="custom-menu-item-type"
+						name="menu-item[-1][menu-item-type]"
+					>
 					<p id="menu-item-url-wrap" class="wp-clearfix">
-						<label class="howto" for="custom-menu-item-url"><?php _e( 'URL' ); ?></label>
-						<input id="custom-menu-item-url" name="menu-item[-1][menu-item-url]" type="text" class="code menu-item-textbox" placeholder="https://">
+						<label class="howto" for="custom-menu-item-url">
+							<?php _e( 'URL' ); ?>
+						</label>
+						<input id="custom-menu-item-url"
+							name="menu-item[-1][menu-item-url]"
+							type="text" class="code menu-item-textbox"
+							placeholder="https://"
+						>
 					</p>
 					<p id="menu-item-name-wrap" class="wp-clearfix">
-						<label class="howto" for="custom-menu-item-name"><?php _e( 'Link Text' ); ?></label>
-						<input id="custom-menu-item-name" name="menu-item[-1][menu-item-title]" type="text" class="regular-text menu-item-textbox">
+						<label class="howto" for="custom-menu-item-name">
+							<?php _e( 'Link Text' ); ?>
+						</label>
+						<input id="custom-menu-item-name"
+							name="menu-item[-1][menu-item-title]"
+							type="text"
+							class="regular-text menu-item-textbox"
+						>
 					</p>
 					<p class="button-controls">
 						<span class="add-to-menu">
-							<input type="submit" class="button submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu' ); ?>" name="add-custom-menu-item" id="custom-menu-item-submit">
+							<input type="submit" 
+								class="button submit-add-to-menu right"
+								value="<?php esc_attr_e( 'Add to Menu' ); ?>"
+								name="add-custom-menu-item"
+								id="custom-menu-item-submit"
+							>
 							<span class="spinner"></span>
 						</span>
 					</p>
