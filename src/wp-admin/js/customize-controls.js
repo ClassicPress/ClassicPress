@@ -1569,23 +1569,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( type === 'custom' ) {
 			clone.querySelector( '.field-url' ).removeAttribute( 'hidden' );
 			clone.querySelector( '.edit-menu-item-url' ).value = url;
-		}
-		clone.querySelector( '.edit-menu-item-title' ).value = title;
-
-		if ( title !== '' && ( object === 'post_type' || object === 'taxonomy' ) ) {
-			clone.querySelector( '.link-to-original' ).removeAttribute( 'inert' );
+			clone.querySelector( '.link-to-original' ).remove();
+		} else {
 			clone.querySelector( '.link-to-original a' ).href = url;
 			clone.querySelector( '.link-to-original a' ).textContent = title;
 		}
+		clone.querySelector( '.edit-menu-item-title' ).value = title;
 
 		clone.querySelector( 'li' ).id = 'customize-control-nav_menu_item--' + menuItemId;
 		clone.querySelector( 'li' ).dataset.settingId = 'nav_menu_item--[' + menuItemId + ']';
 		clone.querySelector( '.menu-item-title' ).textContent = title;
 		clone.querySelector( '.item-controls .screen-reader-text' ).textContent = clone.querySelector( '.item-controls .screen-reader-text' ).textContent + ' ' + title + ' (' + label + ')';
 		clone.querySelector( '.item-type' ).textContent = label;
-		clone.querySelector( '.menu-item-data-db-id' ).name = 'menu-item-db-id[' + itemId + ']';
-		clone.querySelector( '.menu-item-data-db-id' ).value = itemId;
-		clone.querySelector( '.menu-item-data-parent-id' ).name = 'menu-item-parent-id[' + itemId + ']';
+		clone.querySelector( '.menu-item-data-db-id' ).name = 'menu-item-db-id[' + menuItemId + ']';
+		clone.querySelector( '.menu-item-data-db-id' ).value = menuItemId;
+		clone.querySelector( '.menu-item-data-parent-id' ).name = 'menu-item-parent-id[' + menuItemId + ']';
 
 		clone.querySelector( '.menu-item-settings' ).id = 'menu-item-settings--' + menuItemId;
 		clone.querySelectorAll( '.menu-item-settings p:not( .link-to-original )' ).forEach( function( para ) {
@@ -1610,6 +1608,59 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 
+	/**
+	 * Create a new post or page
+	 */
+	function createNewPostOrPage( title, object, type, label, itemsList ) {
+		var li,
+			data = new URLSearchParams( {
+				action: 'customize-nav-menus-insert-auto-draft',
+				wp_customize: 'on',
+				'params[post_title]': title,
+				'params[post_type]': object, // post or page
+				'customize-menus-nonce': _wpCustomizeControlsL10n.menusNonce,
+			} );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result.success ) {
+				li = document.createElement( 'li' );
+				li.id = result.data.id;
+				li.className = 'menu-item-tpl';
+				li.dataset.menuItemId = object + '-' + result.data.id;
+				li.innerHTML = '<div class="menu-item-bar">' +
+					'<div class="menu-item-handle">' +
+					'<button type="button" class="button-link item-add">' +
+					'<span class="screen-reader-text">Add to menu: ' + title	+ ' (' + label + ')</span>' +
+					'</button>' +
+					'<span class="item-split">' +
+					'<span class="item-title" aria-hidden="true">' +
+					'<span class="menu-item-title">' + title + '</span>' +
+					'</span>' +
+					'<span class="item-type" aria-hidden="true">' +	label + '</span>' +
+					'</span>' +
+					'</div>' +
+					'</div>' +
+					'<span class="item-url" hidden="">' + result.data.url + '</span>';
+				itemsList.prepend( li );
+				addMenuItem( type, object, result.data.id, title, label, result.data.url );
+			}
+		} )
+		.catch( function( err ) {
+			console.error( err );
+		} );
+	}
+
 
 	/**
 	 * Handle clicks on buttons.
@@ -1619,8 +1670,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	document.addEventListener( 'click', function( e ) {
 		var id, page, itemBrowse, itemUpload, gridPanel, uploadPanel,
-			modalButtons, rightSidebar, modalPages, title, type, object,
-			objectId, label, url;
+			modalButtons, rightSidebar, modalPages, title,
+			type, object, objectId, label, url, li;
 
 		// Abort if this comes from a widget
 		if ( e.target.closest( '.widget' ) ) {
@@ -1722,8 +1773,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Add a menu item
 		} else if ( availableMenuItems.contains( e.target ) ) {
 			if ( e.target.classList && e.target.className === 'button add-content' ) {
-				//addMenuItem( type, object, objectId, title, label, url )
-				//addMenuItem( e.target );
+				title      = e.target.previousElementSibling.value;
+				object     = e.target.parentNode.nextElementSibling.dataset.object;
+				type       = e.target.parentNode.nextElementSibling.dataset.type;
+				label      = e.target.parentNode.nextElementSibling.dataset.type_label;
+				createNewPostOrPage( title, object, type, label, e.target.parentNode.nextElementSibling );
 			} else if ( e.target.classList && e.target.className === 'button-link item-add' ) {
 				type     = e.target.closest( 'ul' ).dataset.type;
 				object   = e.target.closest( 'ul' ).dataset.object;
@@ -1731,6 +1785,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				title    = e.target.parentNode.querySelector( '.menu-item-title' ).textContent.trim();
 				label    = e.target.parentNode.querySelector( '.item-type' ).textContent.trim();
 				url      = e.target.closest( 'li' ).querySelector( '.item-url' ).textContent.trim();
+				e.target.parentNode.classList.add( 'item-added' ); 
 				addMenuItem( type, object, objectId, title, label, url );
 			} else if ( e.target.id && e.target.id === 'custom-menu-item-submit'  ) {
 				title = document.getElementById( 'custom-menu-item-name' ).value.trim();
