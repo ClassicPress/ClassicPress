@@ -9,7 +9,7 @@
  * FilePondPluginFileRename, FilePondPluginImagePreview
  */
 document.addEventListener( 'DOMContentLoaded', function() {
-	var addButton, pond, leftSidebar, customizeButton,
+	var addButton, pond, leftSidebar, customizeButton, currentMenuId,
 		intersectionObserver, orgThemes, localThemes, previousAccordionPane,
 		i = 1,
 		{ FilePond } = window, // import FilePond
@@ -27,6 +27,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		themeModal = document.getElementById( 'tmpl-customize-themes-details-view' ),
 		queryParams = new URLSearchParams( window.location.search ),
 		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
+		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		addWidgetButtons = document.querySelectorAll( '.add-new-widget' ),
 		updatedControls = {};
 
@@ -106,7 +107,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.body.classList.remove( 'adding-menu-items' );
 				document.body.classList.remove( 'adding-widget' );
 				document.getElementById( 'widgets-left' ).style.display = 'none';
-				document.getElementById( 'available-menu-items' ).style.display = 'none';
+				availableMenuItems.style.display = 'none';
 				e.target.closest( 'ul' ).style.display = 'none';
 				document.getElementById( 'customize-info' ).style.display = 'block';
 				document.querySelector( '.customize-pane-parent' ).style.display = 'block';
@@ -139,7 +140,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		document.body.classList.remove( 'adding-menu-items' );
 		document.body.classList.remove( 'adding-widget' );
 		document.getElementById( 'widgets-left' ).style.display = 'none';
-		document.getElementById( 'available-menu-items' ).style.display = 'none';
+		availableMenuItems.style.display = 'none';
 		document.getElementById( 'customizer-sidebar-container' ).classList.toggle( 'collapsed' );
 		document.getElementById( 'customize-preview' ).classList.toggle( 'expanded-preview' );
 		addMenuButtons.forEach( function( add ) {
@@ -1262,6 +1263,354 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	} );
 
+	
+	/**
+	 * @since CP-2.1.0
+	 */
+	function initSortables( listId ) {
+		var originalClientX, originalDepth, baseClientX, newClientX,
+			maxDepth = 11,
+			childrenInfo = {},
+			indent = 30,
+			editMenu = document.getElementById( listId ),
+			menuEdge = getOffset( editMenu ).left,
+			menusChanged = false,
+			isRTL = !! ( 'undefined' != typeof isRtl && isRtl );
+
+		// Use the right edge if RTL
+		menuEdge += isRTL ? editMenu.innerWidth : 0;
+
+		if ( editMenu.length > 0 ) {
+			document.querySelector( '.drag-instructions' ).style.display = '';
+		}
+
+		// Make sure some elements aren't draggable
+		editMenu.querySelectorAll( 'li:not(.menu-item)' ).forEach( function( elem ) {
+			elem.classList.add( 'no-drag');
+		} );
+
+		/**
+		 * Attach SortableJS to current menu
+		 */
+		var sortable = new Sortable( editMenu, {
+			group: 'menu',
+			handle: '.item-title',
+			filter: '.no-drag',
+			setData: function( dataTransfer, dragEl ) {
+				var ghostImage = document.createElement( 'li' );
+				ghostImage.id = 'sortable-ghost';
+				ghostImage.className = 'menu-item';
+				ghostImage.style.listStyle = 'none';
+				ghostImage.innerHTML = '<div class="menu-item-bar"><details class="menu-item-handle"><summary><span class="item-title"><span class="menu-item-title">' + dragEl.querySelector( '.menu-item-title' ).textContent + '</span></span></summary></details></div>';
+				ghostImage.style.position = 'absolute';
+				ghostImage.style.top = '-1000px';
+				ghostImage.style.width = dragEl.getBoundingClientRect().width + 'px';
+				document.body.appendChild( ghostImage );
+				dataTransfer.setDragImage( ghostImage, 30, 20 );
+			},
+			dataIdAttr: 'data-id', // HTML attribute that is used by the `toArray()` method in OnEnd
+
+			// Get position of menu item when chosen
+			onChoose: function( e ) {
+				originalClientX = e.originalEvent.clientX;
+				originalDepth = menuItemDepth( e.item );
+				baseClientX = e.originalEvent.clientX - ( originalDepth * indent );
+
+				// Ensure menu widget is closed before moving
+				e.item.querySelector( 'details' ).removeAttribute( 'open' );
+			},
+
+			// Start dragging
+			onStart: function( e ) {
+				var prevItem, children;
+
+				// Close menu item
+				if ( e.item.querySelector( 'details' ).hasAttribute( 'open' ) ) {
+					e.item.querySelector( 'details' ).removeAttribute( 'open' );
+				}
+
+				// Register event and create data ids for every menu item
+				editMenu.dispatchEvent( new CustomEvent( 'sortstart' ) );
+				editMenu.querySelectorAll( 'li' ).forEach( function( el ) {
+					el.dataset.id = el.id;
+				} );
+
+				// Continually update horizontal position of current item while dragging
+				editMenu.addEventListener( 'dragover', function( evt ) {
+					var xPos, prevDepth, diff;
+
+					if ( evt.target.closest( 'li' ) === e.item ) {
+						newClientX = evt.clientX;
+
+						// Continually update horizontal position of placeholder
+						xPos = evt.clientX - baseClientX;
+
+						// Get depth of previous item in list
+						prevItem = evt.target.closest( 'li' ).previousElementSibling;
+						if ( prevItem ) {
+							prevDepth = menuItemDepth( prevItem );
+						}
+
+						// Calculate left margin but prevent being indented more than once compared to previous item in list
+						if ( prevItem === null || xPos < 0 ) {
+							menuEdge = 0;
+						} else {
+							diff = Math.floor( xPos / indent );
+							if ( diff > maxDepth ) {
+								diff = maxDepth;
+							}
+							if ( diff > prevDepth + 1 ) {
+								diff = prevDepth + 1;
+							}
+							menuEdge = diff * indent;
+						}
+						document.querySelector( '.sortable-ghost' ).style.marginLeft = menuEdge + 'px';
+					}
+				} );
+
+				// Does this menu item have children?
+				children = childMenuItems( e.item );
+				if ( children.length > 0 ) {
+					childrenInfo.prevItem = e.item;
+					childrenInfo.menuItem = children[0];
+				}
+			},
+
+			// Keeps undraggable elements in fixed position in list
+			onMove: function( e ) {
+				if ( e.related.className.includes( 'no-drag' ) ) {
+					return false;
+				}
+			},
+
+			// Element dropped
+			onEnd: function( e ) {
+				var i, n, diff, prevItem, parent, parentDepth,
+					details = e.item.querySelector( 'details' ),
+					depth = 0,
+					prevDepth = 0,
+					draggedClasses = e.item.className.split( ' ' );
+
+				// Revert styling and set focus on move icon
+				e.item.style.marginLeft = '';
+				details.querySelector( 'summary' ).style.visibility = 'visible';
+				details.querySelector( 'summary' ).focus();
+
+				// Send list of menu items, ordered by IDs
+				editMenu.dispatchEvent( new CustomEvent( 'sortstop', {
+					detail: sortable.toArray()
+				} ) );
+
+				// Handle drop placement for RTL orientation
+				if ( isRTL ) {
+					e.item.style.marginLeft = 'auto';
+					e.item.style.marginRight = '';
+				}
+
+				// Get depth of previous item in list, allowing for two extra initial items
+				prevItem = e.item.previousElementSibling;
+				if ( prevItem && prevItem.className.includes( 'menu-item' ) ) {
+					prevDepth = menuItemDepth( prevItem );
+				}
+
+				// Set depth of current item
+				for ( i = 0, n = draggedClasses.length; i < n; i++ ) {
+					if ( draggedClasses[i].startsWith( 'menu-item-depth-' ) ) {
+						if ( e.newDraggableIndex < 3 || prevItem.className.includes( 'section-meta' ) || prevItem.className.includes( 'customize-control-nav_menu_name' ) ) { // first element
+							draggedClasses[i] = 'menu-item-depth-0'; // don't indent
+						} else {
+							diff = Math.floor( ( newClientX - originalClientX ) / indent );
+							depth = originalDepth + diff;
+							if ( depth > maxDepth ) {
+								depth = maxDepth;
+							} else if ( depth < 0 ) {
+								depth = 0;
+							}
+							if ( depth > ( prevDepth + 1 ) ) {
+								depth = prevDepth + 1;
+							}
+							draggedClasses[i] = 'menu-item-depth-' + depth;
+						}
+					}
+					e.item.className = draggedClasses.join( ' ' );
+
+					if ( depth === 0 ) {
+						e.item.querySelector( '.menu-item-data-parent-id' ).value = 0;
+					} else {
+						parentDepth = depth - 1,
+						parent = getPreviousSibling( e.item, '.menu-item-depth-' + parentDepth );
+						e.item.querySelector( '.menu-item-data-parent-id' ).value = parent.querySelector( '.menu-item-data-db-id' ).value;
+					}
+				}
+
+				// Set original clientX to current clientX to establish new starting position
+				originalClientX = newClientX;
+				menusChanged = true;
+
+				// Move sub-items if this is a parent
+				if ( Object.keys( childrenInfo ).length > 0 ) {
+					moveChildItems( childrenInfo.prevItem, childrenInfo.menuItem, depth + 1 );
+
+					// Reset for next drag and drop
+					childrenInfo = {};
+				}
+				activatePublishButton();
+			}
+
+		} );
+	}
+
+	/*
+	 * Get offset of item: copied from jQuery
+	 */
+	function getOffset( element ) {
+		var rect, win;
+
+		if ( ! element.getClientRects().length ) {
+			return { top: 0, left: 0 };
+		}
+
+		rect = element.getBoundingClientRect();
+		win = element.ownerDocument.defaultView;
+		return ( {
+			top: rect.top + win.pageYOffset,
+			left: rect.left + win.pageXOffset
+		} );
+	}
+
+	/*
+	 * Find the first previous sibling with the requisite selector
+	 */
+	function getPreviousSibling( elem, selector ) {
+
+		// Get the previous sibling element
+		var sibling = elem.previousElementSibling;
+
+		// If the sibling matches our selector, use it; otherwise move on to the next sibling
+		while ( sibling ) {
+			if ( sibling.matches( selector ) ) {
+				return sibling;
+			}
+			sibling = sibling.previousElementSibling;
+		}
+	}
+
+	// Get depth of menu item
+	function menuItemDepth( item ) {
+		var i, n, itemDepth,
+			itemClasses = item.className.split( ' ' );
+
+		for ( i = 0, n = itemClasses.length; i < n; i++ ) {
+			if ( itemClasses[i].startsWith( 'menu-item-depth-' ) ) {
+				itemDepth = parseInt( itemClasses[i].split('-').pop(), 10 );
+			}
+		}
+		return itemDepth || 0;
+	}
+
+	// Get children of menu item
+	function childMenuItems( item ) {
+		var childrenArray = [],
+			depth = menuItemDepth( item ),
+			next = item.nextElementSibling;
+
+		while( next && menuItemDepth( next ) > depth ) {
+			childrenArray.push( next );
+			next = next.nextElementSibling;
+		}
+		return childrenArray;
+	}
+
+	/**
+	 * Move sub-items if their parent item moves after dragging
+	 */
+	function moveChildItems( prevItem, thisItem, depth ) {
+		var i, n, startingDepth, nextDepth, newDepth,
+			newClasses = thisItem.className.split( ' ' ),
+			nextItem = thisItem.nextElementSibling;
+
+		// Move to new position
+		prevItem.after( thisItem );
+
+		// Set new depth of current item
+		for ( i = 0, n = newClasses.length; i < n; i++ ) {
+			if ( newClasses[i].startsWith( 'menu-item-depth-' ) ) {
+				startingDepth = parseInt( newClasses[i].split('-').pop(), 10 );
+				newClasses[i] = 'menu-item-depth-' + depth;
+			}
+		}
+		thisItem.className = newClasses.join( ' ' );
+		thisItem.style.marginLeft = '';
+
+		// Get depth of next item in list
+		if ( nextItem ) {
+			nextDepth = menuItemDepth( nextItem );
+
+			// Trigger to move sub-items if their parent moves
+			if ( startingDepth <= nextDepth ) {
+				newDepth = startingDepth === nextDepth ? depth : depth + 1;
+				moveChildItems( thisItem, nextItem, newDepth );
+			}
+		}
+	}
+
+	/**
+	 * Add menu item
+	 */
+	function addMenuItem( type, object, objectId, title, label, url ) {
+		var menu       = document.getElementById( 'sub-accordion-section-nav_menu[' + currentMenuId + ']' ),
+			menuItems  = menu.querySelectorAll( '.menu-item' ),
+			lastItem   = menuItems[menuItems.length - 1],
+			menuItemId = Date.now(),
+			itemId     = type === 'custom' ? '-' + menuItemId : objectId,
+			template   = document.getElementById( 'new-menu-item' ),
+			clone      = template.content.cloneNode( true );
+
+		if ( type === 'custom' ) {
+			clone.querySelector( '.field-url' ).removeAttribute( 'hidden' );
+			clone.querySelector( '.edit-menu-item-url' ).value = url;
+		}
+		clone.querySelector( '.edit-menu-item-title' ).value = title;
+
+		if ( title !== '' && ( object === 'post_type' || object === 'taxonomy' ) ) {
+			clone.querySelector( '.link-to-original' ).removeAttribute( 'inert' );
+			clone.querySelector( '.link-to-original a' ).href = url;
+			clone.querySelector( '.link-to-original a' ).textContent = title;
+		}
+
+		clone.querySelector( 'li' ).id = 'customize-control-nav_menu_item--' + menuItemId;
+		clone.querySelector( 'li' ).dataset.settingId = 'nav_menu_item--[' + menuItemId + ']';
+		clone.querySelector( '.menu-item-title' ).textContent = title;
+		clone.querySelector( '.item-controls .screen-reader-text' ).textContent = clone.querySelector( '.item-controls .screen-reader-text' ).textContent + ' ' + title + ' (' + label + ')';
+		clone.querySelector( '.item-type' ).textContent = label;
+		clone.querySelector( '.menu-item-data-db-id' ).name = 'menu-item-db-id[' + itemId + ']';
+		clone.querySelector( '.menu-item-data-db-id' ).value = itemId;
+		clone.querySelector( '.menu-item-data-parent-id' ).name = 'menu-item-parent-id[' + itemId + ']';
+
+		clone.querySelector( '.menu-item-settings' ).id = 'menu-item-settings--' + menuItemId;
+		clone.querySelectorAll( '.menu-item-settings p:not( .link-to-original )' ).forEach( function( para ) {
+			para.querySelector( 'label' ).htmlFor = para.querySelector( 'label' ).htmlFor + menuItemId;
+			if ( para.querySelector( 'textarea' ) ) {
+				para.querySelector( 'textarea' ).id = para.querySelector( 'textarea' ).id + menuItemId;
+			} else {
+				para.querySelector( 'input' ).id = para.querySelector( 'input' ).id + menuItemId;
+			}
+		} );
+
+		lastItem.after( clone );
+		activatePublishButton();
+	}
+
+	/**
+	 * Delete menu item
+	 */
+	function deleteMenuItem( item ) {
+		item.remove();
+		activatePublishButton();
+	}
+
+
+
 	/**
 	 * Handle clicks on buttons.
 	 *
@@ -1270,7 +1619,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	document.addEventListener( 'click', function( e ) {
 		var id, page, itemBrowse, itemUpload, gridPanel, uploadPanel,
-			modalButtons, rightSidebar, modalPages;
+			modalButtons, rightSidebar, modalPages, title, type, object,
+			objectId, label, url;
 
 		// Abort if this comes from a widget
 		if ( e.target.closest( '.widget' ) ) {
@@ -1284,7 +1634,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.body.classList.remove( 'adding-menu-items' );
 			document.body.classList.remove( 'adding-widget' );
 			document.getElementById( 'widgets-left' ).style.display = 'none';
-			document.getElementById( 'available-menu-items' ).style.display = 'none';
+			availableMenuItems.style.display = 'none';
 			addMenuButtons.forEach( function( add ) {
 				add.setAttribute( 'aria-expanded', false );
 			} );
@@ -1303,7 +1653,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} else if ( ! e.target.closest( 'li' ).classList.contains( 'customize-control-widget_form' ) && e.target.closest( 'ul' ).classList.contains( 'customize-pane-child' ) ) {
 				e.target.closest( 'ul' ).style.display = 'none';
 				document.getElementById( 'sub-' + id ).style.display = 'block';
-				document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();				
+				document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();
+				if ( id.startsWith( 'accordion-section-nav_menu[' ) ) { // nav menu
+					initSortables( 'sub-' + id ); // enable sorting of menu items
+				}
 			}
 		} else if ( e.target.classList && ( e.target.classList.contains( 'customize-section-back' ) || e.target.classList.contains( 'customize-panel-back' ) ) ) {
 			e.preventDefault();
@@ -1311,7 +1664,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.body.classList.remove( 'adding-menu-items' );
 			document.body.classList.remove( 'adding-widget' );
 			document.getElementById( 'widgets-left' ).style.display = 'none';
-			document.getElementById( 'available-menu-items' ).style.display = 'none';
+			availableMenuItems.style.display = 'none';
 			addMenuButtons.forEach( function( add ) {
 				add.setAttribute( 'aria-expanded', false );
 			} );
@@ -1351,16 +1704,43 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.target.closest( 'ul' ).style.display = 'none';
 			document.getElementById( 'menu-to-edit' ).style.display = 'block';
 			
-		// Add a menu item
+		// Enable adding of a menu item
 		} else if ( e.target.classList && e.target.classList.contains( 'add-new-menu-item' ) ) {
 			document.body.classList.toggle( 'adding-menu-items' );
-			if ( e.target.getAttribute( 'aria-expanded' ) === 'false' ) {
-				document.getElementById( 'available-menu-items' ).style.display = 'block';
+			if ( document.body.classList.contains( 'adding-menu-items' ) ) {
+				availableMenuItems.style.display = 'block';
 				e.target.setAttribute( 'aria-expanded', true );
+				currentMenuId = e.target.closest( 'li' ).id.split( '-' ).pop();
+				e.target.closest( 'ul' ).querySelectorAll( 'details' ).forEach( function( accordion ) {
+					accordion.removeAttribute( 'open' );
+				} );
 			} else {
-				document.getElementById( 'available-menu-items' ).style.display = 'none';
+				availableMenuItems.style.display = 'none';
 				e.target.setAttribute( 'aria-expanded', false );
 			}
+
+		// Add a menu item
+		} else if ( availableMenuItems.contains( e.target ) ) {
+			if ( e.target.classList && e.target.className === 'button add-content' ) {
+				//addMenuItem( type, object, objectId, title, label, url )
+				//addMenuItem( e.target );
+			} else if ( e.target.classList && e.target.className === 'button-link item-add' ) {
+				type     = e.target.closest( 'ul' ).dataset.type;
+				object   = e.target.closest( 'ul' ).dataset.object;
+				objectId = e.target.closest( 'li' ).id.split( '-' ).pop();
+				title    = e.target.parentNode.querySelector( '.menu-item-title' ).textContent.trim();
+				label    = e.target.parentNode.querySelector( '.item-type' ).textContent.trim();
+				url      = e.target.closest( 'li' ).querySelector( '.item-url' ).textContent.trim();
+				addMenuItem( type, object, objectId, title, label, url );
+			} else if ( e.target.id && e.target.id === 'custom-menu-item-submit'  ) {
+				title = document.getElementById( 'custom-menu-item-name' ).value.trim();
+				url   = document.getElementById( 'custom-menu-item-url' ).value.trim();
+				addMenuItem( 'custom', 'custom', '', title, 'Custom Link', url );
+			}
+
+		// Delete a menu item
+		} else if ( e.target.classList && e.target.className === 'button-link item-delete submitdelete deletion' ) {
+			deleteMenuItem( e.target.closest( 'li' ) );
 
 		// Go to widgets panel
 		} else if ( e.target.tagName === 'A' && ( e.target.closest( 'li' ).id === 'accordion-section-menu_locations' || e.target.closest( 'ul' ).id === 'sub-accordion-section-menu_locations' ) ) {
