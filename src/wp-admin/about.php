@@ -96,7 +96,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 				);
 				?>
 			</p>
-			<?php if ( current_user_can( 'install_plugins' ) && current_user_can( 'install_themes' ) && is_file( WP_PLUGIN_DIR . '/classicpress-directory-integration/classicpress-directory-integration.php' ) ) { ?>
+			<?php if ( current_user_can( 'install_plugins' ) && current_user_can( 'install_themes' ) && ! is_file( WP_PLUGIN_DIR . '/classicpress-directory-integration/classicpress-directory-integration.php' ) ) { ?>
 				<p>
 				<?php
 				printf(
