@@ -1254,7 +1254,7 @@ wp_print_scripts();
 							?>
 
 							<ul id="sub-accordion-section-<?php echo esc_attr( $section->id ); ?>"
-								class="customize-pane-child accordion-section-content accordion-section control-section <?php echo esc_attr( $section_class ); ?> assigned-to-menu-location field-title-attribute-active"
+								class="customize-pane-child accordion-section-content accordion-section control-section <?php echo esc_attr( $section_class ); ?> assigned-to-menu-location"
 								style="display: none;"
 							>
 								<li class="customize-section-description-container section-meta no-drag">
@@ -1731,7 +1731,7 @@ wp_print_scripts();
 						?>
 
 						<ul id="menu-to-edit"
-							class="customize-pane-child accordion-section-content accordion-section control-section control-section-nav_menu field-title-attribute-active menu open"
+							class="customize-pane-child accordion-section-content accordion-section control-section control-section-nav_menu menu open"
 							style="display: none;"
 						>
 							<li class="customize-section-description-container section-meta no-drag">
@@ -1986,7 +1986,7 @@ customize_themes_print_templates();
 					?>
 
 					<div class="menu-item-actions description-thin submitbox">
-						<p class="link-to-original" inert>
+						<p class="link-to-original">
 							<?php esc_html_e( 'Original:' ); ?>
 							<a class="original-link" href=""></a>
 						</p>
