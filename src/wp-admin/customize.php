@@ -48,21 +48,6 @@ $preview_url = add_query_arg(
     ),
     home_url( '/' )
 );
-add_action( '_wp_customize_publish_changeset', function( $changeset_post_id ) {
-    error_log( 'PUBLISH changeset: ' . $changeset_post_id );
-    
-    global $wp_customize;
-    $setting = $wp_customize->get_setting( 'background_image' );
-    if ( $setting ) {
-        error_log( 'background_image value BEFORE publish: ' . var_export( $setting->value(), true ) );
-    }
-}, 10, 1 );
-
-add_action( 'customize_save_after', function( $wp_customize ) {
-    error_log( 'customize_save_after fired' );
-    $setting = $wp_customize->get_setting( 'background_image' );
-    error_log( 'background_image AFTER save: ' . var_export( $setting->value(), true ) );
-}, 10, 1 );
 
 // Handle form submission (supports both the disabled publish button and the default "save" submit).
 if ( isset( $_POST['cp_publish_submit'] ) || isset( $_POST['save'] ) ) {
@@ -1938,51 +1923,51 @@ customize_themes_print_templates();
 
 				<div id="menu-item-settings-" class="menu-item-settings">
 					<p class="field-url description description-thin" hidden>
-						<label for="edit-menu-item-url-">
+						<label for="edit-menu-item-url--">
 							<?php esc_html_e( 'URL' ); ?>
 							<br>
-							<input id="edit-menu-item-url-" class="widefat code edit-menu-item-url" type="text" name="menu-item-url">
+							<input id="edit-menu-item-url--" class="widefat code edit-menu-item-url" type="text" name="menu-item-url">
 						</label>
 					</p>
 					<p class="description description-thin">
-						<label for="edit-menu-item-title-">
+						<label for="edit-menu-item-title--">
 							<?php esc_html_e( 'Navigation Label' ); ?>
 							<br>
-							<input type="text" id="edit-menu-item-title-" placeholder="" class="widefat edit-menu-item-title" name="menu-item-title">
+							<input type="text" id="edit-menu-item-title--" placeholder="" class="widefat edit-menu-item-title" name="menu-item-title">
 						</label>
 					</p>
 					<p class="field-link-target description description-thin">
-						<label for="edit-menu-item-target-">
-							<input id="edit-menu-item-target-" type="checkbox" class="edit-menu-item-target" value="_blank" name="menu-item-target">
+						<label for="edit-menu-item-target--">
+							<input id="edit-menu-item-target--" type="checkbox" class="edit-menu-item-target" value="_blank" name="menu-item-target">
 							<?php esc_html_e( 'Open link in a new tab' ); ?>
 						</label>
 					</p>
 					<p class="field-title-attribute field-attr-title description description-thin">
-						<label for="edit-menu-item-attr-title-">
+						<label for="edit-menu-item-attr-title--">
 							<?php esc_html_e( 'Title Attribute' ); ?>
 							<br>
-							<input id="edit-menu-item-attr-title-" type="text" class="widefat edit-menu-item-attr-title" name="menu-item-attr-title">
+							<input id="edit-menu-item-attr-title--" type="text" class="widefat edit-menu-item-attr-title" name="menu-item-attr-title">
 						</label>
 					</p>
 					<p class="field-css-classes description description-thin">
-						<label for="edit-menu-item-classes-">
+						<label for="edit-menu-item-classes--">
 							<?php esc_html_e( 'CSS Classes' ); ?>
 							<br>
-							<input id="edit-menu-item-classes-" type="text" class="widefat code edit-menu-item-classes" name="menu-item-classes">
+							<input id="edit-menu-item-classes--" type="text" class="widefat code edit-menu-item-classes" name="menu-item-classes">
 						</label>
 					</p>
 					<p class="field-xfn description description-thin">
-						<label for="edit-menu-item-xfn-">
+						<label for="edit-menu-item-xfn--">
 							<?php esc_html_e( 'Link Relationship (XFN)' ); ?>
 							<br>
-							<input id="edit-menu-item-xfn-" type="text" class="widefat code edit-menu-item-xfn" name="menu-item-xfn">
+							<input id="edit-menu-item-xfn--" type="text" class="widefat code edit-menu-item-xfn" name="menu-item-xfn">
 						</label>
 					</p>
 					<p class="field-description description description-thin">
-						<label for="edit-menu-item-description-">
+						<label for="edit-menu-item-description--">
 							<?php esc_html_e( 'Description' ); ?>
 							<br>
-							<textarea id="edit-menu-item-description-" class="widefat edit-menu-item-description" rows="3" cols="20" name="menu-item-description">															</textarea>
+							<textarea id="edit-menu-item-description--" class="widefat edit-menu-item-description" rows="3" cols="20" name="menu-item-description">															</textarea>
 							<span class="description">
 								<?php esc_html_e( 'The description will be displayed in the menu if the active theme supports it.' ); ?>
 							</span>
