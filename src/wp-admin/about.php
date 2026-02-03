@@ -96,7 +96,8 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 				);
 				?>
 			</p>
-			<p>
+			<?php if ( current_user_can( 'install_plugins' ) && current_user_can( 'install_themes' ) && is_file( WP_PLUGIN_DIR . '/classicpress-directory-integration/classicpress-directory-integration.php' ) ) { ?>
+				<p>
 				<?php
 				printf(
 					/* translators: link to plugin page in the ClassicPress Directory */
@@ -104,7 +105,8 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 					'https://directory.classicpress.net/plugins/classicpress-directory-integration/'
 				);
 				?>
-			</p>
+				</p>
+			<?php }; ?>
 			<h3><?php _e( 'Join our growing community' ); ?></h3>
 			<p>
 				<?php
