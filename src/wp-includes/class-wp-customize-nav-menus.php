@@ -1189,7 +1189,7 @@ final class WP_Customize_Nav_Menus {
 								data-type_label="<?php echo esc_attr( isset( $available_item_type['type_label'] ) ? $available_item_type['type_label'] : $available_item_type['type'] ); ?>"
 								style="max-height: 72px;"
 							>
-								<?php foreach ( $items as $item ) {	error_log(print_r($item, true ));
+								<?php foreach ( $items as $item ) {
 									?>
 									<li id="<?php echo esc_attr( $item['id'] ); ?>"
 										class="menu-item-tpl"
