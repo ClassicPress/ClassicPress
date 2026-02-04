@@ -2,6 +2,28 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 819
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ domReady; }
+/* harmony export */ });
+// packages/dom-ready/src/index.ts
+function domReady(callback) {
+  if (typeof document === "undefined") {
+    return;
+  }
+  if (document.readyState === "complete" || // DOMContentLoaded + Images/Styles/etc loaded, so we call directly.
+  document.readyState === "interactive") {
+    return void callback();
+  }
+  document.addEventListener("DOMContentLoaded", callback);
+}
+
+
+
+/***/ },
+
 /***/ 685
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
@@ -369,28 +391,6 @@ var {
   actions,
   filters
 } = defaultHooks;
-
-
-
-/***/ },
-
-/***/ 819
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": function() { return /* binding */ domReady; }
-/* harmony export */ });
-// packages/dom-ready/src/index.ts
-function domReady(callback) {
-  if (typeof document === "undefined") {
-    return;
-  }
-  if (document.readyState === "complete" || // DOMContentLoaded + Images/Styles/etc loaded, so we call directly.
-  document.readyState === "interactive") {
-    return void callback();
-  }
-  document.addEventListener("DOMContentLoaded", callback);
-}
 
 
 
