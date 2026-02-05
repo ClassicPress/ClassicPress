@@ -6,7 +6,7 @@ declare( strict_types = 1 ); // Forces exact type matching
  *
  * @package ClassicPress
  * @subpackage Customize
- * @since CP-2.7.0
+ * @since CP-2.8.0
  */
 
 define( 'IFRAME_REQUEST', true );
@@ -108,82 +108,8 @@ $locations      = get_registered_nav_menus(); // slug => human label
 $menu_locations = get_nav_menu_locations();   // slug => menu ID
 $menus          = wp_get_nav_menus( array( 'fields' => 'id=>name' ) );
 
-/**
- * Build a map of controls grouped by section.
- * Shape: [ section_id => [ {id, priority, type, label, description, setting_id, value}, ... ] ]
- * Includes controls from core, themes, and plugins (reads from $m->controls()).
- *
- * @param WP_Customize_Manager $m
- * @param bool $active_only  If true, exclude controls with active() === false.
- * @return array
- */
-function cp_controls_data_by_section( WP_Customize_Manager $manager, bool $active_only = false ) : array {
-	$primary_setting_id = function( $control ) : ?string {
-		$settings = $control->settings ?? null;
-
-		// Single setting id as string
-		if ( is_string( $settings ) ) {
-			return $settings;
-		}
-
-		// Single setting object with id
-		if ( is_object( $settings ) && isset( $settings->id ) && is_scalar( $settings->id ) ) {
-			return (string) $settings->id;
-		}
-
-		// Array of settings (strings or objects)
-		if ( is_array( $settings ) ) {
-			foreach ( $settings as $s ) {
-				if ( is_string( $s ) ) {
-					return $s;
-				}
-				if ( is_object( $s ) && isset( $s->id ) && is_scalar( $s->id ) ) {
-					return (string) $s->id;
-				}
-			}
-		}
-		return null;
-	};
-
-	$by_section = array();
-
-	foreach ( (array) $manager->controls() as $ctrl ) {
-		if ( ! is_object( $ctrl ) || empty( $ctrl->section ) ) {
-			continue;
-		}
-		if ( ! $ctrl->check_capabilities() ) {
-			continue;
-		}
-		if ( $active_only && ! $ctrl->active() ) {
-			continue;
-		}
-
-		$sid = $primary_setting_id( $ctrl );
-
-		$by_section[ $ctrl->section ][] = array(
-			'id'          => isset( $ctrl->id ) && is_scalar( $ctrl->id ) ? (string) $ctrl->id : '',
-			'priority'    => isset( $ctrl->priority ) && is_numeric( $ctrl->priority ) ? (int) $ctrl->priority : 999,
-			'type'        => (string) ( $ctrl->type ?? '' ),
-			'label'       => (string) ( $ctrl->label ?? '' ),
-		    'description' => (string) ( $ctrl->description ?? '' ),
-			'setting_id'  => $sid,
-			'value'       => null, // keep null here to avoid triggering a warning
-		);
-	}
-
-	foreach ( $by_section as $section => $rows ) {
-		usort( $rows, function ( $a, $b ) {
-			if ( $a['priority'] === $b['priority'] ) {
-				return strnatcasecmp( $a['id'], $b['id'] );
-			}
-			return $a['priority'] <=> $b['priority'];
-		} );
-		$by_section[ $section ] = $rows;
-	}
-
-	return $by_section;
-}
-$controls = cp_controls_data_by_section( $wp_customize, false );
+// Controls
+$controls = $wp_customize->get_controls_data_by_section( false );
 
 // Create breadcrumbs for middle sections
 $breadcrumb_parents = isset( $wp_customize->cp_breadcrumb_parents ) ? $wp_customize->cp_breadcrumb_parents : array();
