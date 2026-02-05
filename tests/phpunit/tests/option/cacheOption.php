@@ -42,4 +42,32 @@ class Tests_Option_CacheOption extends WP_UnitTestCase {
 
 		$this->assertFalse( file_exists( self::$object_cache_file ) );
 	}
+
+	/**
+	 * @ticket 2272
+	 */
+	public function test_object_cache_skipped_in_wp_cli() {
+		if ( ! extension_loaded( 'apcu' ) ) {
+			$this->markTestSkipped( 'APCu extension is not available.' );
+		}
+
+		if ( file_exists( self::$object_cache_file ) ) {
+			$this->markTestSkipped( 'Leave original object cache in place for Memcached tests.' );
+		}
+
+		update_option( 'cp_object_cache', 1 );
+		self::$cp_settings->_cp_maybe_install_apcu_object_cache();
+
+		$this->assertTrue( function_exists( 'wp_cache_init' ) );
+
+		define( 'WP_CLI', true );
+
+		$this->assertFalse( function_exists( 'wp_cache_init' ) );
+
+		define( 'WP_CLI', flase );
+
+		update_option( 'cp_object_cache', 0 );
+		self::$cp_settings->_cp_maybe_install_apcu_object_cache();
+	}
+
 }
