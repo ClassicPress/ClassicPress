@@ -41,62 +41,62 @@ $wp_customize->setup_theme();
 $wp_customize->register_controls();
 
 $preview_url = add_query_arg(
-    array(
-        'customize_changeset_uuid'    => $wp_customize->changeset_uuid(),
-        'customize_theme'             => $wp_customize->theme()->stylesheet,
-        'customize_messenger_channel' => 'preview-0',
-    ),
-    home_url( '/' )
+	array(
+		'customize_changeset_uuid'    => $wp_customize->changeset_uuid(),
+		'customize_theme'             => $wp_customize->theme()->stylesheet,
+		'customize_messenger_channel' => 'preview-0',
+	),
+	home_url( '/' )
 );
 
 // Handle form submission (supports both the disabled publish button and the default "save" submit).
 if ( isset( $_POST['cp_publish_submit'] ) || isset( $_POST['save'] ) ) {
 
-    // Security: nonce + capability
-    if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'save-customize_' . $wp_customize->get_stylesheet() ) ) {
-        wp_die( esc_html__( 'Security check failed.' ), 403 );
-    }
+	// Security: nonce + capability
+	if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'save-customize_' . $wp_customize->get_stylesheet() ) ) {
+		wp_die( esc_html__( 'Security check failed.' ), 403 );
+	}
 
-    if ( ! current_user_can( 'customize' ) ) {
-        wp_die( esc_html__( 'Insufficient permissions.' ), 403 );
-    }
+	if ( ! current_user_can( 'customize' ) ) {
+		wp_die( esc_html__( 'Insufficient permissions.' ), 403 );
+	}
 
-    // Collect submitted values without blanket sanitize_text_field()
-    // Let registered settings sanitize via their sanitize_callback.
-    $submitted = isset( $_POST['customize_post_value'] ) ? (array) wp_unslash( $_POST['customize_post_value'] ) : array();
-    foreach ( $submitted as $setting_id => $raw_value ) {
-        $setting = $wp_customize->get_setting( $setting_id );
-        if ( $setting ) {
-            // This ensures that validation/sanitization and live preview behavior are consistent.
-            $wp_customize->set_post_value( $setting_id, $raw_value );
-        }
-    }
+	// Collect submitted values without blanket sanitize_text_field()
+	// Let registered settings sanitize via their sanitize_callback.
+	$submitted = isset( $_POST['customize_post_value'] ) ? (array) wp_unslash( $_POST['customize_post_value'] ) : array();
+	foreach ( $submitted as $setting_id => $raw_value ) {
+		$setting = $wp_customize->get_setting( $setting_id );
+		if ( $setting ) {
+			// This ensures that validation/sanitization and live preview behavior are consistent.
+			$wp_customize->set_post_value( $setting_id, $raw_value );
+		}
+	}
 
-    // Make sure we’re saving to the expected changeset UUID.
-    $uuid = isset( $_POST['customize_changeset_uuid'] ) ? sanitize_text_field( wp_unslash( $_POST['customize_changeset_uuid'] ) ) : '';
-    if ( $uuid && $uuid !== $wp_customize->changeset_uuid() ) {
-        $wp_customize->set_changeset_uuid( $uuid );
-    }
+	// Make sure we’re saving to the expected changeset UUID.
+	$uuid = isset( $_POST['customize_changeset_uuid'] ) ? sanitize_text_field( wp_unslash( $_POST['customize_changeset_uuid'] ) ) : '';
+	if ( $uuid && $uuid !== $wp_customize->changeset_uuid() ) {
+		$wp_customize->set_changeset_uuid( $uuid );
+	}
 
-    // Save the changeset in-process (no loopback HTTP).
-    $result = $wp_customize->save_changeset_post( array(
-        'status' => 'publish', // Or 'draft' / 'pending' / 'future'
-        'title'  => 'PHP publish from customize.php',
-    ) );
+	// Save the changeset in-process (no loopback HTTP).
+	$result = $wp_customize->save_changeset_post( array(
+		'status' => 'publish', // Or 'draft' / 'pending' / 'future'
+		'title'  => 'PHP publish from customize.php',
+	) );
 
-    if ( is_wp_error( $result ) ) {
-        wp_die( esc_html( $result->get_error_message() ), 500 );
-    }
+	if ( is_wp_error( $result ) ) {
+		wp_die( esc_html( $result->get_error_message() ), 500 );
+	}
 
-    // Redirect back to customize.php with the UUID.
-    wp_safe_redirect(
-        add_query_arg(
+	// Redirect back to customize.php with the UUID.
+	wp_safe_redirect(
+		add_query_arg(
 			'customize_changeset_uuid',
 			$wp_customize->changeset_uuid(),
 			admin_url( 'customize.php' )
 		)
-    );
-    exit;
+	);
+	exit;
 }
 
 // Themes
@@ -108,8 +108,78 @@ $locations      = get_registered_nav_menus(); // slug => human label
 $menu_locations = get_nav_menu_locations();   // slug => menu ID
 $menus          = wp_get_nav_menus( array( 'fields' => 'id=>name' ) );
 
-// Controls and breadcrumb parents
-$controls = $wp_customize->controls_data_by_section;
+/**
+ * Build a map of controls grouped by section.
+ * Shape: [ section_id => [ {id, priority, type, label, description, setting_id, value}, ... ] ]
+ * Includes controls from core, themes, and plugins (reads from $m->controls()).
+ *
+ * @param WP_Customize_Manager $m
+ * @param bool $active_only  If true, exclude controls with active() === false.
+ * @return array
+ */
+function cp_controls_data_by_section( WP_Customize_Manager $m, bool $active_only = false ) : array {
+	$primary_setting_id = static function( $control ) : ?string {
+		if ( is_string( $control->settings ) ) {
+			return $control->settings;
+		}
+		if ( is_object( $control->settings ) && isset( $control->settings->id ) ) {
+			return (string) $control->settings->id;
+		}
+		if ( is_array( $control->settings ) ) {
+			foreach ( $control->settings as $s ) {
+				if ( is_string( $s ) ) {
+					return $s;
+				}
+				if ( is_object( $s ) && isset( $s->id ) ) {
+					return (string) $s->id;
+				}
+			}
+		}
+		return null;
+	};
+
+	$by_section = [];
+
+	foreach ( (array) $m->controls() as $ctrl ) {
+		// Skip anything that isn't an object or has no section
+		if ( ! is_object( $ctrl ) || empty( $ctrl->section ) ) {
+			continue;
+		}
+
+		if ( ! $ctrl->check_capabilities() ) {
+			continue;
+		}
+		if ( $active_only && ! $ctrl->active() ) {
+			continue;
+		}
+
+		$sid = $primary_setting_id( $ctrl );
+
+		$by_section[ $ctrl->section ][] = array(
+			'id'          => (string) $ctrl->id,
+			'priority'    => isset( $ctrl->priority ) ? (int) $ctrl->priority : 999,
+			'type'        => (string) ( $ctrl->type ?? '' ),
+			'label'       => (string) ( $ctrl->label ?? '' ),
+		    'description' => (string) ( $ctrl->description ?? '' ),
+			'setting_id'  => $sid,
+			'value'       => null, // keep null here to avoid triggering a warning
+		);
+	}
+
+	foreach ( $by_section as &$rows ) {
+		usort( $rows, static function ( $a, $b ) {
+			return ( $a['priority'] === $b['priority'] )
+				? strcmp( $a['id'], $b['id'] )
+				: ( $a['priority'] <=> $b['priority'] );
+		} );
+	}
+	unset( $rows );
+
+	return $by_section;
+}
+$controls = cp_controls_data_by_section( $wp_customize, false );
+
+// Create breadcrumbs for middle sections
 $breadcrumb_parents = isset( $wp_customize->cp_breadcrumb_parents ) ? $wp_customize->cp_breadcrumb_parents : array();
 
 // Build top-level items: panels + sections without panel.
@@ -1305,6 +1375,7 @@ wp_print_scripts();
 										?>
 										<li id="customize-control-nav_menu-<?php echo esc_attr( $menu_id ); ?>-name"
 											class="customize-control customize-control-nav_menu_name no-drag"
+											data-setting-id="nav_menu[<?php echo esc_attr( $menu_id ); ?>]"
 										>
 											<label>
 												<span class="customize-control-title">
