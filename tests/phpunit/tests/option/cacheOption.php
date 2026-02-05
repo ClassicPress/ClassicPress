@@ -57,6 +57,7 @@ class Tests_Option_CacheOption extends WP_UnitTestCase {
 
 		update_option( 'cp_object_cache', 1 );
 		self::$cp_settings->_cp_maybe_install_apcu_object_cache();
+		wp_cache_init();
 
 		$this->assertTrue( WP_APCU_LOCAL_CACHE );
 
