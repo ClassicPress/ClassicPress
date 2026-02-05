@@ -118,7 +118,7 @@ $menus          = wp_get_nav_menus( array( 'fields' => 'id=>name' ) );
  * @return array
  */
 function cp_controls_data_by_section( WP_Customize_Manager $m, bool $active_only = false ) : array {
-	$primary_setting_id = static function( $control ) : ?string {
+	$primary_setting_id = function( $control ) : ?string {
 		if ( is_string( $control->settings ) ) {
 			return $control->settings;
 		}
@@ -167,7 +167,7 @@ function cp_controls_data_by_section( WP_Customize_Manager $m, bool $active_only
 	}
 
 	foreach ( $by_section as &$rows ) {
-		usort( $rows, static function ( $a, $b ) {
+		usort( $rows, function ( $a, $b ) {
 			return ( $a['priority'] === $b['priority'] )
 				? strcmp( $a['id'], $b['id'] )
 				: ( $a['priority'] <=> $b['priority'] );
