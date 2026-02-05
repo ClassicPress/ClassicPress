@@ -64,6 +64,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		input.addEventListener( 'input', function() {
+			// if () {
+				//updatedControls[li.dataset.settingId]
+				// }
 			updatedControls[li.dataset.settingId] = input.value.trim();
 			activatePublishButton();
 		} );
@@ -1207,7 +1210,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	form.addEventListener( 'submit', function( e ) {
-		var submittedChanges = {},
+		var menuName,
+			submittedChanges = {},
 			formData = new FormData();
 
 		// Prevent form submission via PHP
@@ -1215,22 +1219,36 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Prepare changeset object
 		Object.keys( updatedControls ).forEach( function( settingId ) {
-			if ( /^nav_menu_item\[\d+\]$/.test( settingId ) ) {
-				var current = existing[ settingId ];
-				if ( current && typeof current === 'object' ) {
-					// Example: update only the title from your input.
-					current.title = updated[ settingId ];
-
-					submittedChanges[ settingId ] = {
-						value: current
-					};
-				}
-				return;
+			if ( settingId.startsWith( 'nav_menu[' ) ) {
+				menuName = updatedControls[ settingId ];
+				submittedChanges[ settingId ] = {
+					value: {
+						name: menuName.trim()
+					}
+				};
+			} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
+				submittedChanges[ settingId ] = {
+					value: {
+						title: updatedControls[settingId].title || '',
+						url: updatedControls[settingId].url || '',
+						original_title: updatedControls[settingId].original_title || '',
+						menu_item_parent: updatedControls[settingId].menu_item_parent || '0',
+						object_id: updatedControls[settingId].object_id || '',
+						object: updatedControls[settingId].object || '',
+						type: updatedControls[settingId].type || 'custom',
+						type_label: updatedControls[settingId].type_label || '',
+						classes: updatedControls[settingId].classes || [],
+						xfn: updatedControls[settingId].xfn || '',
+						target: updatedControls[settingId].target || '',
+						attr_title: updatedControls[settingId].attr_title || '',
+						description: updatedControls[settingId].description || ''
+					}
+				};
+			} else { // All other settings
+				submittedChanges[ settingId ] = {
+					value: updatedControls[ settingId ] || ''
+				};
 			}
-    
-			submittedChanges[ settingId ] = {
-				value: updatedControls[ settingId ]
-			};
 		} );
 
 		formData.append( 'action', 'customize_save' );
@@ -1249,11 +1267,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				return response.json(); // no errors
 			}
 			throw new Error( response.status );
-		} ).then( function( object ) {
-			if ( object && object.success ) {
+		} ).then( function( result ) { console.log(result);
+			if ( result && result.success ) {
 				saveButton.disabled = true;
 				saveButton.value = _wpCustomizeControlsL10n.published;
-				document.getElementById( 'customize_changeset_uuid' ).value = object.data.next_changeset_uuid;
+				document.getElementById( 'customize_changeset_uuid' ).value = result.data.next_changeset_uuid;
 				updatedControls = {}; // reset
 			}
 		} ).catch( function( error ) {
@@ -1296,6 +1314,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			group: 'menu',
 			handle: '.item-title',
 			filter: '.no-drag',
+			preventOnFilter: false,
 			setData: function( dataTransfer, dragEl ) {
 				var ghostImage = document.createElement( 'li' );
 				ghostImage.id = 'sortable-ghost';
@@ -1673,8 +1692,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			modalButtons, rightSidebar, modalPages, title,
 			type, object, objectId, label, url, li;
 
-		// Abort if this comes from a widget
-		if ( e.target.closest( '.widget' ) ) {
+		// Abort if this comes from a middle section heading or a widget
+		if ( ( e.target.tagName !== 'BUTTON' && e.target.closest( '.customize-section-title' ) ) || e.target.closest( '.widget' ) ) {
 			return;
 		}
 
@@ -1773,10 +1792,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Add a menu item
 		} else if ( availableMenuItems.contains( e.target ) ) {
 			if ( e.target.classList && e.target.className === 'button add-content' ) {
-				title      = e.target.previousElementSibling.value;
-				object     = e.target.parentNode.nextElementSibling.dataset.object;
-				type       = e.target.parentNode.nextElementSibling.dataset.type;
-				label      = e.target.parentNode.nextElementSibling.dataset.type_label;
+				title  = e.target.previousElementSibling.value;
+				object = e.target.parentNode.nextElementSibling.dataset.object;
+				type   = e.target.parentNode.nextElementSibling.dataset.type;
+				label  = e.target.parentNode.nextElementSibling.dataset.type_label;
 				createNewPostOrPage( title, object, type, label, e.target.parentNode.nextElementSibling );
 				e.target.previousElementSibling.value = ''; // reset
 			} else if ( e.target.classList && e.target.className === 'button-link item-add' ) {
