@@ -117,20 +117,27 @@ $menus          = wp_get_nav_menus( array( 'fields' => 'id=>name' ) );
  * @param bool $active_only  If true, exclude controls with active() === false.
  * @return array
  */
-function cp_controls_data_by_section( WP_Customize_Manager $m, bool $active_only = false ) : array {
+function cp_controls_data_by_section( WP_Customize_Manager $manager, bool $active_only = false ) : array {
 	$primary_setting_id = function( $control ) : ?string {
-		if ( is_string( $control->settings ) ) {
-			return $control->settings;
+		$settings = $control->settings ?? null;
+
+		// Single setting id as string
+		if ( is_string( $settings ) ) {
+			return $settings;
 		}
-		if ( is_object( $control->settings ) && isset( $control->settings->id ) ) {
-			return (string) $control->settings->id;
+
+		// Single setting object with id
+		if ( is_object( $settings ) && isset( $settings->id ) && is_scalar( $settings->id ) ) {
+			return (string) $settings->id;
 		}
-		if ( is_array( $control->settings ) ) {
-			foreach ( $control->settings as $s ) {
+
+		// Array of settings (strings or objects)
+		if ( is_array( $settings ) ) {
+			foreach ( $settings as $s ) {
 				if ( is_string( $s ) ) {
 					return $s;
 				}
-				if ( is_object( $s ) && isset( $s->id ) ) {
+				if ( is_object( $s ) && isset( $s->id ) && is_scalar( $s->id ) ) {
 					return (string) $s->id;
 				}
 			}
@@ -140,12 +147,10 @@ function cp_controls_data_by_section( WP_Customize_Manager $m, bool $active_only
 
 	$by_section = array();
 
-	foreach ( (array) $m->controls() as $ctrl ) {
-		// Skip anything that isn't an object or has no section
+	foreach ( (array) $manager->controls() as $ctrl ) {
 		if ( ! is_object( $ctrl ) || empty( $ctrl->section ) ) {
 			continue;
 		}
-
 		if ( ! $ctrl->check_capabilities() ) {
 			continue;
 		}
@@ -156,8 +161,8 @@ function cp_controls_data_by_section( WP_Customize_Manager $m, bool $active_only
 		$sid = $primary_setting_id( $ctrl );
 
 		$by_section[ $ctrl->section ][] = array(
-			'id'          => (string) $ctrl->id,
-			'priority'    => isset( $ctrl->priority ) ? (int) $ctrl->priority : 999,
+			'id'          => isset( $ctrl->id ) && is_scalar( $ctrl->id ) ? (string) $ctrl->id : '',
+			'priority'    => isset( $ctrl->priority ) && is_numeric( $ctrl->priority ) ? (int) $ctrl->priority : 999,
 			'type'        => (string) ( $ctrl->type ?? '' ),
 			'label'       => (string) ( $ctrl->label ?? '' ),
 		    'description' => (string) ( $ctrl->description ?? '' ),
@@ -166,14 +171,15 @@ function cp_controls_data_by_section( WP_Customize_Manager $m, bool $active_only
 		);
 	}
 
-	foreach ( $by_section as &$rows ) {
+	foreach ( $by_section as $section => $rows ) {
 		usort( $rows, function ( $a, $b ) {
-			return ( $a['priority'] === $b['priority'] )
-				? strcmp( $a['id'], $b['id'] )
-				: ( $a['priority'] <=> $b['priority'] );
+			if ( $a['priority'] === $b['priority'] ) {
+				return strnatcasecmp( $a['id'], $b['id'] );
+			}
+			return $a['priority'] <=> $b['priority'];
 		} );
+		$by_section[ $section ] = $rows;
 	}
-	unset( $rows );
 
 	return $by_section;
 }
@@ -1066,12 +1072,7 @@ wp_print_scripts();
 
 										<?php
 										// Render controls that belong to this section-panel hybrid container.
-										if ( isset( $controls[ $middle_section['id'] ] ) && is_array( $controls[ $middle_section['id'] ] ) ) {
-											// Sort controls by priority, lowest first.
-											usort( $controls[ $middle_section['id'] ], function( $a, $b ) {
-												return $a['priority'] - $b['priority'];
-											} );
-
+										if ( isset( $controls[ $middle_section['id'] ] ) ) {
 											foreach ( $controls[ $middle_section['id'] ] as $control_data ) {
 												$control = $wp_customize->get_control( $control_data['id'] );
 												if ( $control ) {
@@ -1137,10 +1138,6 @@ wp_print_scripts();
 
 									<?php
 									if ( isset ( $controls[ $item['id'] ] ) ) {
-										// Sort in ascending order of priority
-										usort( $controls[ $item['id'] ], function( $a, $b ) {
-											return $a['priority'] - $b['priority'];
-										} );
 										foreach ( $controls[ $item['id'] ] as $control_data ) {
 											$control = $wp_customize->get_control( $control_data['id'] );
 											if ( $control ) { 
