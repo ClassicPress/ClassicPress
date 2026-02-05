@@ -1180,15 +1180,15 @@ wp_print_scripts();
 								</div>
 							</li>
 							<li id="customize-control-add_menu-name" class="customize-control customize-control-nav_menu_name">
-								<label>
+								<label for="menu-title">
 									<span class="customize-control-title">
 										<?php esc_html_e( 'Menu Name' ); ?>
 									</span>
 									<div class="customize-control-notifications-container" style="display: none;">
 										<ul></ul>
 									</div>
-									<input type="text" class="menu-name-field live-update-section-title" aria-describedby="add_menu-description">
 								</label>
+								<input id="menu-title" type="text" class="menu-name-field live-update-section-title" aria-describedby="add_menu-description">
 								<p id="add_menu-description">
 									<?php esc_html_e( 'If your theme has multiple menus, giving them clear names will help you manage them.' ); ?>
 								</p>
@@ -1374,18 +1374,19 @@ wp_print_scripts();
 											class="customize-control customize-control-nav_menu_name no-drag"
 											data-setting-id="nav_menu[<?php echo esc_attr( $menu_id ); ?>]"
 										>
-											<label>
+											<label for="menu-name-title-<?php echo esc_attr( $menu_id ); ?>">
 												<span class="customize-control-title">
 													<?php esc_html_e( 'Menu Name' ); ?>
 												</span>
 												<div class="customize-control-notifications-container" style="display: none;">
 													<ul></ul>
 												</div>
-												<input type="text"
-													class="menu-name-field live-update-section-title"
-													value="<?php echo esc_attr( $menus[$menu_id] ); ?>"
-												>
 											</label>
+											<input id="menu-name-title-<?php echo esc_attr( $menu_id ); ?>"
+												type="text"
+												class="menu-name-field live-update-section-title"
+												value="<?php echo esc_attr( $menus[$menu_id] ); ?>"
+											>
 										</li>
 
 										<?php
@@ -1993,53 +1994,54 @@ customize_themes_print_templates();
 					<p class="field-url description description-thin" hidden>
 						<label for="edit-menu-item-url--">
 							<?php esc_html_e( 'URL' ); ?>
-							<br>
-							<input id="edit-menu-item-url--" class="widefat code edit-menu-item-url" type="text" name="menu-item-url">
 						</label>
+						<input id="edit-menu-item-url--" class="widefat code edit-menu-item-url" type="text" name="menu-item-url">
 					</p>
 					<p class="description description-thin">
 						<label for="edit-menu-item-title--">
 							<?php esc_html_e( 'Navigation Label' ); ?>
-							<br>
-							<input type="text" id="edit-menu-item-title--" placeholder="" class="widefat edit-menu-item-title" name="menu-item-title">
 						</label>
+						<input type="text" id="edit-menu-item-title--" placeholder="" class="widefat edit-menu-item-title" name="menu-item-title">
 					</p>
 					<p class="field-link-target description description-thin">
 						<label for="edit-menu-item-target--">
-							<input id="edit-menu-item-target--" type="checkbox" class="edit-menu-item-target" value="_blank" name="menu-item-target">
 							<?php esc_html_e( 'Open link in a new tab' ); ?>
 						</label>
+						<input id="edit-menu-item-target--" type="checkbox" class="edit-menu-item-target" value="_blank" name="menu-item-target">
 					</p>
 					<p class="field-title-attribute field-attr-title description description-thin">
 						<label for="edit-menu-item-attr-title--">
 							<?php esc_html_e( 'Title Attribute' ); ?>
-							<br>
-							<input id="edit-menu-item-attr-title--" type="text" class="widefat edit-menu-item-attr-title" name="menu-item-attr-title">
 						</label>
+						<input id="edit-menu-item-attr-title--" type="text" class="widefat edit-menu-item-attr-title" name="menu-item-attr-title">
 					</p>
 					<p class="field-css-classes description description-thin">
 						<label for="edit-menu-item-classes--">
 							<?php esc_html_e( 'CSS Classes' ); ?>
-							<br>
-							<input id="edit-menu-item-classes--" type="text" class="widefat code edit-menu-item-classes" name="menu-item-classes">
 						</label>
+						<input id="edit-menu-item-classes--" type="text" class="widefat code edit-menu-item-classes" name="menu-item-classes">
 					</p>
 					<p class="field-xfn description description-thin">
 						<label for="edit-menu-item-xfn--">
 							<?php esc_html_e( 'Link Relationship (XFN)' ); ?>
-							<br>
-							<input id="edit-menu-item-xfn--" type="text" class="widefat code edit-menu-item-xfn" name="menu-item-xfn">
 						</label>
+						<input id="edit-menu-item-xfn--" type="text" class="widefat code edit-menu-item-xfn" name="menu-item-xfn">
 					</p>
 					<p class="field-description description description-thin">
 						<label for="edit-menu-item-description--">
 							<?php esc_html_e( 'Description' ); ?>
-							<br>
-							<textarea id="edit-menu-item-description--" class="widefat edit-menu-item-description" rows="3" cols="20" name="menu-item-description">															</textarea>
-							<span class="description">
-								<?php esc_html_e( 'The description will be displayed in the menu if the active theme supports it.' ); ?>
-							</span>
 						</label>
+						<textarea id="edit-menu-item-description--"
+							class="widefat edit-menu-item-description"
+							rows="3"
+							cols="20"
+							name="menu-item-description"
+							aria-describedby="edit-menu-item-description"
+						>
+						</textarea>
+						<span id="edit-menu-item-description" class="description">
+							<?php esc_html_e( 'The description will be displayed in the menu if the active theme supports it.' ); ?>
+						</span>
 					</p>
 
 					<?php
