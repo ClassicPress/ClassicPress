@@ -58,16 +58,15 @@ class Tests_Option_CacheOption extends WP_UnitTestCase {
 		update_option( 'cp_object_cache', 1 );
 		self::$cp_settings->_cp_maybe_install_apcu_object_cache();
 
-		$this->assertTrue( function_exists( 'wp_cache_init' ) );
+		$this->assertTrue( WP_APCU_LOCAL_CACHE );
 
 		define( 'WP_CLI', true );
 
-		$this->assertFalse( function_exists( 'wp_cache_init' ) );
+		$this->assertFalse( WP_APCU_LOCAL_CACHE );
 
 		define( 'WP_CLI', flase );
 
 		update_option( 'cp_object_cache', 0 );
 		self::$cp_settings->_cp_maybe_install_apcu_object_cache();
 	}
-
 }
