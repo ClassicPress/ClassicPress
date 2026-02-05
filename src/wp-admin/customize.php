@@ -138,7 +138,7 @@ function cp_controls_data_by_section( WP_Customize_Manager $m, bool $active_only
 		return null;
 	};
 
-	$by_section = [];
+	$by_section = array();
 
 	foreach ( (array) $m->controls() as $ctrl ) {
 		// Skip anything that isn't an object or has no section
