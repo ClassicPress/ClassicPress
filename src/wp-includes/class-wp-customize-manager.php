@@ -4152,6 +4152,97 @@ final class WP_Customize_Manager {
 	}
 
 	/**
+	 * Returns Customizer controls grouped by section, optionally filtered to active controls.
+	 *
+	 * The result is sorted by each row's `priority` (ascending), then by `id` using
+	 * a natural, case-insensitive comparison for stable, human-friendly ordering.
+	 *
+	 * The `value` field is intentionally set to `null` to avoid eager setting fetches
+	 * or notices in contexts where value retrieval would be premature.
+	 *
+	 * @param bool $active_only Whether to include only controls that are currently active.
+	 * @return array<string, list<array{
+	 *   id: string,
+	 *   priority: int,
+	 *   type: string,
+	 *   label: string,
+	 *   description: string,
+	 *   setting_id: string|null,
+	 *   value: mixed
+	 * }>>
+	 *
+	 * @since CP 2.8.0
+	 */
+	public function get_controls_data_by_section( bool $active_only = false ) : array {
+		$primary_setting_id = function ( $control ) : ?string {
+			$settings = $control->settings ?? null;
+
+			// Single setting id as string.
+			if ( is_string( $settings ) ) {
+				return $settings;
+			}
+
+			// Single setting object with scalar id.
+			if ( is_object( $settings ) && isset( $settings->id ) && is_scalar( $settings->id ) ) {
+				return (string) $settings->id;
+			}
+
+			// Array of settings (strings or objects with id).
+			if ( is_array( $settings ) ) {
+				foreach ( $settings as $s ) {
+					if ( is_string( $s ) ) {
+						return $s;
+					}
+					if ( is_object( $s ) && isset( $s->id ) && is_scalar( $s->id ) ) {
+						return (string) $s->id;
+					}
+				}
+			}
+
+			return null;
+		};
+
+		$by_section = array();
+
+		foreach ( (array) $this->controls() as $ctrl ) {
+			if ( ! is_object( $ctrl ) || empty( $ctrl->section ) ) {
+				continue;
+			}
+			if ( ! $ctrl->check_capabilities() ) {
+				continue;
+			}
+			if ( $active_only && ! $ctrl->active() ) {
+				continue;
+			}
+
+			$sid = $primary_setting_id( $ctrl );
+
+			$by_section[ $ctrl->section ][] = array(
+				'id'          => ( isset( $ctrl->id ) && is_scalar( $ctrl->id ) ) ? (string) $ctrl->id : '',
+				'priority'    => ( isset( $ctrl->priority ) && is_numeric( $ctrl->priority ) ) ? (int) $ctrl->priority : 999,
+				'type'        => (string) ( $ctrl->type ?? '' ),
+				'label'       => (string) ( $ctrl->label ?? '' ),
+				'description' => (string) ( $ctrl->description ?? '' ),
+				'setting_id'  => $sid,
+				'value'       => null, // intentionally null to avoid premature fetching/warnings.
+			);
+		}
+
+		// Sort rows within each section by priority, then by id (natural, case-insensitive).
+		foreach ( $by_section as $section => $rows ) {
+			usort( $rows, function ( $a, $b ) {
+				if ( $a['priority'] === $b['priority'] ) {
+					return strnatcasecmp( $a['id'], $b['id'] );
+				}
+				return $a['priority'] <=> $b['priority'];
+			} );
+			$by_section[ $section ] = $rows;
+		}
+
+		return $by_section;
+	}
+
+	/**
 	 * Adds a customize control.
 	 *
 	 * @since 3.4.0
