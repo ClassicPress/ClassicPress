@@ -109,9 +109,9 @@ $menu_locations = get_nav_menu_locations();   // slug => menu ID
 $menus          = wp_get_nav_menus( array( 'fields' => 'id=>name' ) );
 
 // Controls
-$controls = $wp_customize->get_controls_data_by_section( false );
+$controls = $wp_customize->get_controls_data_by_section();
 
-// Create breadcrumbs for middle sections
+// Breadcrumbs for middle sections
 $breadcrumb_parents = isset( $wp_customize->cp_breadcrumb_parents ) ? $wp_customize->cp_breadcrumb_parents : array();
 
 // Build top-level items: panels + sections without panel.
