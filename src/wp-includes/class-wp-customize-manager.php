@@ -4160,7 +4160,6 @@ final class WP_Customize_Manager {
 	 * The `value` field is intentionally set to `null` to avoid eager setting fetches
 	 * or notices in contexts where value retrieval would be premature.
 	 *
-	 * @param bool $active_only Whether to include only controls that are currently active.
 	 * @return array<string, list<array{
 	 *   id: string,
 	 *   priority: int,
@@ -4173,7 +4172,7 @@ final class WP_Customize_Manager {
 	 *
 	 * @since CP 2.8.0
 	 */
-	public function get_controls_data_by_section( bool $active_only = false ) : array {
+	public function get_controls_data_by_section() : array {
 		$primary_setting_id = static function ( $control ) : ?string {
 			$settings = $control->settings ?? null;
 
@@ -4209,9 +4208,6 @@ final class WP_Customize_Manager {
 				continue;
 			}
 			if ( ! $ctrl->check_capabilities() ) {
-				continue;
-			}
-			if ( $active_only && ! $ctrl->active() ) {
 				continue;
 			}
 
