@@ -1210,7 +1210,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	form.addEventListener( 'submit', function( e ) {
-		var menuName,
+		var menuName, item,
 			submittedChanges = {},
 			formData = new FormData();
 
@@ -1219,34 +1219,37 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Prepare changeset object
 		Object.keys( updatedControls ).forEach( function( settingId ) {
+			item = updatedControls[ settingId ];
 			if ( settingId.startsWith( 'nav_menu[' ) ) {
-				menuName = updatedControls[ settingId ];
 				submittedChanges[ settingId ] = {
 					value: {
-						name: menuName.trim()
+						name: item.trim()
 					}
 				};
 			} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
 				submittedChanges[ settingId ] = {
 					value: {
-						title: updatedControls[settingId].title || '',
-						url: updatedControls[settingId].url || '',
-						original_title: updatedControls[settingId].original_title || '',
-						menu_item_parent: updatedControls[settingId].menu_item_parent || '0',
-						object_id: updatedControls[settingId].object_id || '',
-						object: updatedControls[settingId].object || '',
-						type: updatedControls[settingId].type || 'custom',
-						type_label: updatedControls[settingId].type_label || '',
-						classes: updatedControls[settingId].classes || [],
-						xfn: updatedControls[settingId].xfn || '',
-						target: updatedControls[settingId].target || '',
-						attr_title: updatedControls[settingId].attr_title || '',
-						description: updatedControls[settingId].description || ''
+						nav_menu_term_id: item.menu_id,
+						position: item.position,
+						title: item.title || '',
+						url: item.url || '',
+						original_title: item.original_title || '',
+						menu_item_parent: item.menu_item_parent || '0',
+						object_id: item.object_id || '',
+						object: item.object || '',
+						type: item.type || 'custom',
+						type_label: item.type_label || '',
+						classes: item.classes || [],
+						xfn: item.xfn || '',
+						target: item.target || '',
+						attr_title: item.attr_title || '',
+						description: item.description || '',
+						status: item.status || 'publish'
 					}
 				};
 			} else { // All other settings
 				submittedChanges[ settingId ] = {
-					value: updatedControls[ settingId ] || ''
+					value: item || ''
 				};
 			}
 		} );
@@ -1614,7 +1617,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} );
 
-		lastItem.after( clone );
+		// Prepare JS object for publishing
+		updatedControls[ 'nav_menu_item[-' + menuItemId + ']' ] = {
+			menu_id: currentMenuId,
+			title: title,
+			original_title: title,
+			url: url,
+			type: type,
+			type_label: label,
+			object: object,
+			object_id: objectId,
+			position: menu.querySelectorAll( '.menu-item' ).length,
+			status: 'publish'
+		};
+console.log(updatedControls);
+		// Add to menu
+		if ( lastItem ) { // menu currently has at least one item
+			lastItem.after( clone ); // add as last item to populated menu
+		} else { // menu is currently empty
+			menu.querySelector( '.customize-control-nav_menu_name' ).after( clone );
+		}
 		activatePublishButton();
 	}
 
