@@ -50,7 +50,7 @@
     "@wordpress/i18n": "6.12.0",
     "@wordpress/url": "4.39.0",
     "clipboard": "^2.0.11",
-    "codemirror": "5.65.20",
+    "codemirror": "5.65.21",
     "csslint": "1.0.5",
     "esprima": "4.0.1",
     "htmlhint": "1.8.1",
