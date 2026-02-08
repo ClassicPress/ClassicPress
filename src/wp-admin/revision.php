@@ -185,7 +185,7 @@ foreach ( $prepared['revisionData'] as $key => $revision ) {
 
 	$type = __( 'Revision by ' );
 	if ( $revision['autosave'] === true ) {
-		$type = '{{' . __( 'Autosave by ' );
+		$type = __( 'Autosave by ' );
 	} elseif ( $key === $count ) {
 		$type = __( 'Current Revision by ' );
 	}
