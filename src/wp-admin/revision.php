@@ -192,11 +192,7 @@ foreach ( $prepared['revisionData'] as $key => $revision ) {
 
 	$author = $revision['author']['name'];
 	$time_ago = $revision['timeAgo'];
-
 	$date = ' (' . $revision['date'] . ')';
-	if ( $revision['autosave'] === true ) {
-		$date = '}} (' . $revision['date'] . ')';
-	}
 
 	$ticks .= '<option data-tooltip="' . $type . '[[' . $author . ']]' . $time_ago . $date . '" data-id="' . $revision['id'] . '" value="' . $key . '">' . $revision['dateShort'] . '</option>';
 }
