@@ -704,7 +704,7 @@ class WP_Media_List_Table extends WP_List_Table {
 						if ( get_post_status( $parent_id ) !== false ) {
 							$parent_type_obj = get_post_type_object( $parent_type );
 							$title           = _draft_or_post_title( $parent_id );
-	
+
 							if ( $parent_type_obj->show_ui && current_user_can( 'edit_post', $parent_id ) ) {
 								$output .= '<strong><a href="' . esc_url( get_edit_post_link( $parent_id ) ) . '">' . esc_html( $title ) . '</a></strong><br>';
 							} else {
