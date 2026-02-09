@@ -347,7 +347,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						e.item.querySelector( '.is-submenu' ).style.display = 'none';
 						e.item.querySelector( '.menu-item-data-parent-id' ).value = 0;
 					} else {
-						parentDepth = depth - 1,
+						parentDepth = depth - 1;
 						parent = getPreviousSibling( e.item, '.menu-item-depth-' + parentDepth );
 						e.item.querySelector( '.is-submenu' ).style.display = '';
 						e.item.querySelector( '.menu-item-data-parent-id' ).value = parent.querySelector( '.menu-item-data-db-id' ).value;
