@@ -362,6 +362,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					childrenInfo = {};
 				}
 
+				// Update hidden position input field
+				editMenu.querySelectorAll( '.menu-item' ).forEach( function( li, idx ) {
+					li.querySelector( '.menu-item-data-position' ).value = idx + 1;
+				} );
+
 				// Set original clientX to current clientX to establish new starting position
 				originalClientX = newClientX;
 
