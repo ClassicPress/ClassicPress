@@ -1006,12 +1006,12 @@ function wp_default_scripts( $scripts ) {
 	$scripts->add( 'mediaelement-vimeo', '/wp-includes/js/mediaelement/renderers/vimeo.min.js', array( 'mediaelement' ), '4.2.17', 1 );
 	$scripts->add( 'wp-mediaelement', "/wp-includes/js/mediaelement/wp-mediaelement$suffix.js", array( 'mediaelement' ), false, 1 );
 
-	$scripts->add( 'wp-codemirror', '/wp-includes/js/codemirror/codemirror.min.js', array(), '5.29.1-alpha-ee20357' );
+	$scripts->add( 'wp-codemirror', '/wp-includes/js/codemirror/codemirror.min.js', array(), '5.65.20' );
 	$scripts->add( 'csslint', '/wp-includes/js/codemirror/csslint.js', array(), '1.0.5' );
-	$scripts->add( 'esprima', '/wp-includes/js/codemirror/esprima.js', array(), '4.0.0' );
+	$scripts->add( 'esprima', '/wp-includes/js/codemirror/esprima.js', array(), '4.0.1' );
 	$scripts->add( 'jshint', '/wp-includes/js/codemirror/fakejshint.js', array( 'esprima' ), '2.9.5' );
-	$scripts->add( 'jsonlint', '/wp-includes/js/codemirror/jsonlint.js', array(), '1.6.2' );
-	$scripts->add( 'htmlhint', '/wp-includes/js/codemirror/htmlhint.js', array(), '0.9.14-xwp' );
+	$scripts->add( 'jsonlint', '/wp-includes/js/codemirror/jsonlint.js', array(), '1.6.3' );
+	$scripts->add( 'htmlhint', '/wp-includes/js/codemirror/htmlhint.js', array(), '1.8.0' );
 	$scripts->add( 'htmlhint-kses', '/wp-includes/js/codemirror/htmlhint-kses.js', array( 'htmlhint' ) );
 	$scripts->add( 'code-editor', "/wp-admin/js/code-editor$suffix.js", array( 'jquery', 'wp-codemirror', 'underscore' ) );
 	$scripts->add( 'wp-theme-plugin-editor', "/wp-admin/js/theme-plugin-editor$suffix.js", array( 'common', 'wp-util', 'wp-sanitize', 'jquery', 'wp-a11y', 'underscore' ), false, 1 );
@@ -1511,7 +1511,7 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'mediaelement', "/wp-includes/js/mediaelement/mediaelementplayer-legacy$suffix.css", array(), '4.2.17' );
 	$styles->add( 'mediaelement-player', "/wp-includes/js/mediaelement/mediaelementplayer$suffix.css", array( 'mediaelement' ), '7.0.5' );
 	$styles->add( 'wp-mediaelement', "/wp-includes/js/mediaelement/wp-mediaelement$suffix.css", array( 'mediaelement' ) );
-	$styles->add( 'wp-codemirror', '/wp-includes/js/codemirror/codemirror.min.css', array(), '5.29.1-alpha-ee20357' );
+	$styles->add( 'wp-codemirror', '/wp-includes/js/codemirror/codemirror.min.css', array(), '5.65.20' );
 	$styles->add( 'cp-filepond', "/wp-includes/js/filepond/cp-filepond$suffix.css", array(), '0.1.0' );
 	$styles->add( 'cp-filepond-image-preview', "/wp-includes/js/filepond/filepond-plugin-image-preview$suffix.css", array(), '4.6.12' );
 

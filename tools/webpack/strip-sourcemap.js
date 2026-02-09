@@ -12,7 +12,7 @@ class StripSourceMapURLPlugin {
 			compilation.hooks.processAssets.tap(
 				{
 					name: 'StripSourceMapURLPlugin',
-					stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE,
+					stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE
 				},
 				assets => {
 					const re = /^\/[\/*][#@]\s*sourceMappingURL=.*?\n$/gm;

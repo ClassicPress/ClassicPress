@@ -46,6 +46,7 @@ class Tests_Compat_wordpress extends WP_UnitTestCase {
 		$this->assertTrue( function_exists( 'get_block_theme_folders' ) );
 		$this->assertTrue( function_exists( 'register_block_style' ) );
 		$this->assertTrue( function_exists( 'register_block_bindings_source' ) );
+		$this->assertTrue( function_exists( 'do_blocks' ) );
 	}
 
 	/**
