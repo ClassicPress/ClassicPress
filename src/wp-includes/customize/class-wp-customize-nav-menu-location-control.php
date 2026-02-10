@@ -57,6 +57,10 @@ class WP_Customize_Nav_Menu_Location_Control extends WP_Customize_Control {
 			return;
 		}
 
+		ob_start();
+		$this->link();
+		$id = str_replace( array( 'data-customize-setting-link="', '"' ), '', ob_get_clean() );
+
 		$value_hidden_class    = '';
 		$no_value_hidden_class = '';
 		if ( $this->value() ) {
@@ -65,10 +69,10 @@ class WP_Customize_Nav_Menu_Location_Control extends WP_Customize_Control {
 			$no_value_hidden_class = ' hidden';
 		}
 		?>
-		<label>
+		<label for="select-<?php echo esc_attr( $id ); ?>">
 			<?php if ( ! empty( $this->label ) ) : ?>
 				<span class="customize-control-title">
-					<?php esc_html_e( $this->label ); ?>
+					<?php echo esc_html( $this->label ); ?>
 				</span>
 			<?php endif; ?>
 
@@ -77,17 +81,16 @@ class WP_Customize_Nav_Menu_Location_Control extends WP_Customize_Control {
 					<?php echo wp_kses_post( $this->description ); ?>
 				</span>
 			<?php endif; ?>
-
-			<select <?php $this->link(); ?>>
-				<?php
-				foreach ( $this->choices as $value => $label ) :
-					echo '<option value="' . esc_attr( $value ) . '"' . selected( $this->value(), $value, false ) . '>' . $label . '</option>';
-				endforeach;
-				?>
-			</select>
 		</label>
+		<select id="select-<?php echo esc_attr( $id ); ?>" <?php $this->link(); ?>>
+			<?php
+			foreach ( $this->choices as $value => $label ) :
+				echo '<option value="' . esc_attr( $value ) . '"' . selected( $this->value(), $value, false ) . '>' . $label . '</option>';
+			endforeach;
+			?>
+		</select>
 		<button type="button" class="button-link create-menu<?php echo $value_hidden_class; ?>"
-			data-location-id="<?php esc_attr_e( $this->location_id ); ?>"
+			data-location-id="<?php echo esc_attr( $this->location_id ); ?>"
 			aria-label="<?php esc_attr_e( 'Create a menu for this location' ); ?>"
 		>
 			<?php esc_html_e( '+ Create New Menu' ); ?>
