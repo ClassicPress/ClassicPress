@@ -1390,7 +1390,7 @@ wp_print_scripts();
 											</p>
 										</li>
 										<li id="customize-control-nav_menu-<?php echo esc_attr( $menu_id ); ?>-locations" class="customize-control customize-control-nav_menu_locations no-drag">
-											<ul class="menu-location-settings">
+											<ul class="menu-location-settings" data-menu-id="<?php echo esc_attr( $menu_id ); ?>">
 												<li class="customize-control assigned-menu-locations-title no-drag">
 													<span class="customize-control-title">
 														<?php esc_html_e( 'Menu Locations' ); ?>
@@ -1408,13 +1408,15 @@ wp_print_scripts();
 													if ( isset( $menu_locations[$key] ) ) {
 														?>
 												
-														<li class="customize-control customize-control-checkbox assigned-menu-location no-drag">
+														<li class="customize-control customize-control-checkbox assigned-menu-location no-drag"
+															data-setting-id="<?php echo esc_attr( 'nav_menu_locations[' . $key . ']' ); ?>"
+														>
 															<span class="customize-inside-control-row">
-																<input id="customize-nav-menu-control-location-<?php echo esc_attr( $menu_locations[$key] ); ?>"
+																<input id="customize-nav-menu-control-location-<?php echo esc_attr( $key ); ?>"
 																	type="checkbox"
-																	data-menu-id="<?php echo esc_attr( $menu_id ); ?>"
-																	data-location-id="<?php echo esc_attr( $location ); ?>"
+																	data-location-id="<?php echo esc_attr( $key ); ?>"
 																	class="menu-location"
+																	value="<?php echo checked( $menu_locations[$key], $menu_id, false ) ? esc_attr( $menu_id ) : ''; ?>"
 																	<?php checked( $menu_locations[$key], $menu_id ); ?>
 																>
 																<label for="customize-nav-menu-control-location-<?php echo esc_attr( $menu_locations[$key] ); ?>">
