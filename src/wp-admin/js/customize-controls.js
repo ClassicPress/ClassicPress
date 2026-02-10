@@ -1308,7 +1308,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		Object.keys( updatedControls ).forEach( function( settingId ) {
 			const item = updatedControls[ settingId ];
 
-			if ( settingId.startsWith( 'nav_menu_item[' ) ) {
+			if ( settingId.startsWith( 'nav_menu[' ) && item === 'delete-menu' ) {
+				submittedChanges[ settingId ] = {
+					value: false // deletes menu
+				};
+			} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
 				submittedChanges[ settingId ] = {
 					value: {
 						nav_menu_term_id: item.menu_id,
@@ -1352,7 +1356,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				return response.json(); // no errors
 			}
 			throw new Error( response.status );
-		} ).then( function( result ) {
+		} ).then( function( result ) { //console.log(result);
 			if ( result && result.success ) {
 				saveButton.disabled = true;
 				saveButton.value = _wpCustomizeControlsL10n.published;
@@ -1592,15 +1596,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
-
-
-
-
-
-
-
-
-
 	/*
 	 * Get offset of item: copied from jQuery
 	 */
@@ -1767,6 +1762,32 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		activatePublishButton();
 	}
 
+	/**
+	 * Delete nav menu
+	 */
+	function deleteNavMenu( menuSettingId ) {
+		const menuId = menuSettingId.split( '[' )[1].replace( ']', '' );
+
+		// Prepare the nav_menu[] object for sending to the back-end
+		updatedControls[ menuSettingId ] = 'delete-menu'; // will be changed to false later, but cannot set that here
+
+		// Update the Customizer's visual appearance
+		document.getElementById( 'accordion-section-' + menuSettingId ).remove();
+		document.getElementById( 'sub-accordion-section-' + menuSettingId ).style.display = 'none';
+		document.getElementById( 'sub-accordion-panel-nav_menus' ).style.display = 'block';
+
+		// Remove from menu locations and prepare menu_locations[] objects for sending to back-end if appropriate
+		document.getElementById( 'sub-accordion-section-menu_locations' ).querySelectorAll( 'select' ).forEach( function( select ) {
+			if ( select.value === menuId ) {
+				updatedControls[ select.closest( 'li' ).dataset.settingId  ] = '';
+				select.value = '0';
+				select.querySelector( 'option[value="' + menuId + '"]' ).remove();
+				select.nextElementSibling.classList.remove( 'hidden' );
+				select.nextElementSibling.nextElementSibling.classList.add( 'hidden' );
+			}
+		} );
+		activatePublishButton();
+	}
 
 	/**
 	 * Create a new post or page
@@ -1957,6 +1978,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Delete a menu item
 		} else if ( e.target.classList && e.target.className === 'button-link item-delete submitdelete deletion' ) {
 			deleteMenuItem( e.target.closest( 'li' ) );
+
+		// Delete a nav menu
+		} else if ( e.target.classList && e.target.className === 'button-link button-link-delete' ) {
+			deleteNavMenu( e.target.closest( 'li' ).dataset.settingId );
 
 		// Go to widgets panel
 		} else if ( e.target.tagName === 'A' && ( e.target.closest( 'li' ).id === 'accordion-section-menu_locations' || e.target.closest( 'ul' ).id === 'sub-accordion-section-menu_locations' ) ) {
