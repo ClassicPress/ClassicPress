@@ -57,10 +57,6 @@ class WP_Customize_Nav_Menu_Location_Control extends WP_Customize_Control {
 			return;
 		}
 
-		ob_start();
-		$this->link();
-		$id = str_replace( array( 'data-customize-setting-link="', '"' ), '', ob_get_clean() );
-
 		$value_hidden_class    = '';
 		$no_value_hidden_class = '';
 		if ( $this->value() ) {
@@ -69,7 +65,7 @@ class WP_Customize_Nav_Menu_Location_Control extends WP_Customize_Control {
 			$no_value_hidden_class = ' hidden';
 		}
 		?>
-		<label for="select-<?php echo esc_attr( $id ); ?>">
+		<label for="select-<?php echo esc_attr( $this->id ); ?>">
 			<?php if ( ! empty( $this->label ) ) : ?>
 				<span class="customize-control-title">
 					<?php echo esc_html( $this->label ); ?>
@@ -82,7 +78,7 @@ class WP_Customize_Nav_Menu_Location_Control extends WP_Customize_Control {
 				</span>
 			<?php endif; ?>
 		</label>
-		<select id="select-<?php echo esc_attr( $id ); ?>" <?php $this->link(); ?>>
+		<select id="select-<?php echo esc_attr( $this->id ); ?>" <?php $this->link(); ?>>
 			<?php
 			foreach ( $this->choices as $value => $label ) :
 				echo '<option value="' . esc_attr( $value ) . '"' . selected( $this->value(), $value, false ) . '>' . $label . '</option>';
