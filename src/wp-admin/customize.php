@@ -1292,15 +1292,16 @@ wp_print_scripts();
 									$field_label = $control_data['label'];
 									$description = $control_data['description'];
 									$setting_id  = $control_data['setting_id'];
+									$menu_id     = absint( $menu_id );
 
 									// Memu items - only for nav_menu[ID] sections
 									if ( $menu_id && str_starts_with( $section->id, 'nav_menu[' ) ) {
 										?>
-										<li id="customize-control-nav_menu-<?php echo esc_attr( $menu_id ); ?>-name"
+										<li id="customize-control-nav_menu-<?php echo $menu_id; ?>-name"
 											class="customize-control customize-control-nav_menu_name no-drag"
-											data-setting-id="nav_menu[<?php echo esc_attr( $menu_id ); ?>]"
+											data-setting-id="nav_menu[<?php echo $menu_id; ?>]"
 										>
-											<label for="menu-name-title-<?php echo esc_attr( $menu_id ); ?>">
+											<label for="menu-name-title-<?php echo $menu_id; ?>">
 												<span class="customize-control-title">
 													<?php esc_html_e( 'Menu Name' ); ?>
 												</span>
@@ -1308,7 +1309,7 @@ wp_print_scripts();
 													<ul></ul>
 												</div>
 											</label>
-											<input id="menu-name-title-<?php echo esc_attr( $menu_id ); ?>"
+											<input id="menu-name-title-<?php echo $menu_id; ?>"
 												type="text"
 												class="menu-name-field live-update-section-title"
 												value="<?php echo esc_attr( $menus[$menu_id] ); ?>"
@@ -1353,7 +1354,7 @@ wp_print_scripts();
 											}
 										}
 										?>
-										<li id="customize-control-nav_menu-<?php echo esc_attr( $menu_id ); ?>"
+										<li id="customize-control-nav_menu-<?php echo $menu_id; ?>"
 											class="customize-control customize-control-nav_menu no-drag"
 										><?php // Look at nav-menu-control.php ?>
 											<div class="customize-control-notifications-container" style="display: none;">
@@ -1374,7 +1375,7 @@ wp_print_scripts();
 												<button type="button"
 													class="button-link reorder-toggle"
 													aria-label="<?php esc_attr_e( 'Reorder menu items' ); ?>"
-													aria-describedby="reorder-items-desc-<?php echo esc_attr( $menu_id ); ?>"
+													aria-describedby="reorder-items-desc-<?php echo $menu_id; ?>"
 													style="display: none;"
 												>
 													<span class="reorder">
@@ -1385,12 +1386,12 @@ wp_print_scripts();
 													</span>
 												</button>
 											</div>
-											<p class="screen-reader-text" id="reorder-items-desc-<?php echo esc_attr( $menu_id ); ?>">
+											<p class="screen-reader-text" id="reorder-items-desc-<?php echo $menu_id; ?>">
 												<?php esc_html_e( 'When in reorder mode, additional controls to reorder menu items will be available in the items list above.' ); ?>
 											</p>
 										</li>
-										<li id="customize-control-nav_menu-<?php echo esc_attr( $menu_id ); ?>-locations" class="customize-control customize-control-nav_menu_locations no-drag">
-											<ul class="menu-location-settings" data-menu-id="<?php echo esc_attr( $menu_id ); ?>">
+										<li id="customize-control-nav_menu-<?php echo $menu_id; ?>-locations" class="customize-control customize-control-nav_menu_locations no-drag">
+											<ul class="menu-location-settings" data-menu-id="<?php echo $menu_id; ?>">
 												<li class="customize-control assigned-menu-locations-title no-drag">
 													<span class="customize-control-title">
 														<?php esc_html_e( 'Menu Locations' ); ?>
@@ -1416,7 +1417,7 @@ wp_print_scripts();
 																	type="checkbox"
 																	data-location-id="<?php echo esc_attr( $key ); ?>"
 																	class="menu-location"
-																	value="<?php echo checked( $menu_locations[$key], $menu_id, false ) ? esc_attr( $menu_id ) : ''; ?>"
+																	value="<?php echo checked( $menu_locations[$key], $menu_id, false ) ? $menu_id : ''; ?>"
 																	<?php checked( $menu_locations[$key], $menu_id ); ?>
 																>
 																<label for="customize-nav-menu-control-location-<?php echo esc_attr( $menu_locations[$key] ); ?>">
@@ -1447,7 +1448,7 @@ wp_print_scripts();
 												?>
 											</ul>
 										</li>
-										<li id="customize-control-nav_menu-<?php echo esc_attr( $menu_id ); ?>-auto_add" class="customize-control customize-control-nav_menu_auto_add no-drag">
+										<li id="customize-control-nav_menu-<?php echo $menu_id; ?>-auto_add" class="customize-control customize-control-nav_menu_auto_add no-drag">
 											<span class="customize-control-title">
 												<?php esc_html_e( 'Menu Options' ); ?>
 											</span>
@@ -1455,13 +1456,16 @@ wp_print_scripts();
 												<ul></ul>
 											</div>
 											<span class="customize-inside-control-row">
-												<input id="customize-nav-menu-auto-add-control-<?php echo esc_attr( $menu_id ); ?>" type="checkbox" class="auto_add">
-												<label for="customize-nav-menu-auto-add-control-<?php echo esc_attr( $menu_id ); ?>">
+												<input id="customize-nav-menu-auto-add-control-<?php echo $menu_id; ?>" type="checkbox" class="auto_add">
+												<label for="customize-nav-menu-auto-add-control-<?php echo $menu_id; ?>">
 													<?php esc_html_e( 'Automatically add new top-level pages to this menu' ); ?>
 												</label>
 											</span>
 										</li>
-										<li id="customize-control-nav_menu-<?php echo esc_attr( $menu_id ); ?>-delete" class="customize-control customize-control-undefined no-drag">
+										<li id="customize-control-nav_menu-<?php echo $menu_id; ?>-delete"
+											class="customize-control customize-control-undefined no-drag"
+											data-setting-id="nav_menu[<?php echo $menu_id; ?>]"
+										>
 											<div class="customize-control-notifications-container" style="display: none;">
 												<ul></ul>
 											</div>
