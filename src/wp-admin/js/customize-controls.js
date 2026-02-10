@@ -101,6 +101,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		let menuId, title,
 			settingId = li.dataset.settingId;
 
+		if ( settingId.startsWith( 'nav_menu_locations[' ) ) {
+			if ( input.tagName === 'INPUT' ) {
+				if ( input.checked ) {				
+					input.value = li.parentNode.dataset.menuId;
+				} else {
+					input.value = '';
+				}
+			}
+		}
+
 		if ( settingId.startsWith( 'nav_menu[' ) ) {
 			updatedControls[ settingId ] = {
 				name: input.value.trim()
