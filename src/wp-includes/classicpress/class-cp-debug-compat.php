@@ -17,7 +17,7 @@ class CP_Debug_Compat {
 
 	public function add_to_site_health() {
 		add_filter( 'site_status_tests', array( $this, 'add_site_status_tests' ) );
-		add_filter( 'debug_information', array( $this, 'add_debug_information' ) );
+		//add_filter( 'debug_information', array( $this, 'add_debug_information' ) );
 	}
 
 	public function add_debug_information( $args ) {
@@ -235,7 +235,7 @@ class CP_Debug_Compat {
 			$active_paths = array_filter(
 				$active_paths,
 				function ( $path ) use ( $plugin ) {
-					return str_starts_with( $path, WP_PLUGIN_DIR . '/' . $plugin );
+					return str_starts_with( $path, wp_normalize_path( WP_PLUGIN_DIR ) . '/' . $plugin );
 				}
 			);
 			$plugin_path = array_pop( $active_paths );
