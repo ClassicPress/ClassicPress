@@ -196,7 +196,7 @@ class CP_Debug_Compat {
 	}
 
 	private static function plugin_folder( $path ) {
-		return preg_replace( '~^' . preg_quote( WP_PLUGIN_DIR ) . preg_quote( DIRECTORY_SEPARATOR ) . '([^' . preg_quote( DIRECTORY_SEPARATOR ) . ']*).*~', '$1', $path );
+		return preg_replace( '~^' . preg_quote( wp_normalize_path( WP_PLUGIN_DIR ) ) . '/([^/]*).*~', '$1', wp_normalize_path( $path ) );
 	}
 
 
