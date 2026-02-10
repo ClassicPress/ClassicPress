@@ -41,6 +41,44 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		isReducedMotion = event.matches;
 	} );
 
+	// Convert moustache-style attributes added to nav menu items by themes or plugins
+	form.querySelectorAll( 'label, input' ).forEach( function( el ) {
+		let itemNumber, nameValue,
+			closingBracket = '';
+
+		if ( ! el.closest( '.menu-item-settings' ) ) {
+			return;
+		}
+
+		itemNumber = el.closest( '.menu-item-settings' ).id.split( '-' ).pop();
+		if ( el.htmlFor && el.htmlFor.includes( '{{' ) ) {
+			el.htmlFor = el.htmlFor.split( '{{' )[0] + itemNumber;
+		}
+		if ( el.id && el.id.includes( '{{' ) ) {
+			el.id = el.id.split( '{{' )[0] + itemNumber;
+		}
+		if ( el.hasAttribute( 'name' ) ) {
+			nameValue = el.getAttribute( 'name' );
+			if ( nameValue.includes( ']' ) ) {
+				closingBracket = ']';
+			}
+			if ( nameValue.includes( '{{' ) ) {
+				el.setAttribute( 'name', nameValue.split( '{{' )[0] + itemNumber + closingBracket );
+			}
+		}
+	} );
+
+	/*
+	 * Show AYS dialog when there are unsaved widget changes.
+	 *
+	 * Note that browsers do not permit the display of a custom message.
+	 */
+	window.addEventListener( 'beforeunload', function( e ) {
+		if ( saveButton.disabled === false ) {
+			e.preventDefault();
+		}
+	} );
+
 	/**
 	 * Helper function copied from jQuery
 	 */
@@ -56,23 +94,63 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		saveButton.value = _wpCustomizeControlsL10n.publish;
 	}
 
+	/**
+	 * Prepare changed object for publication
+	 */
+	function inputChanged( input, li ) {
+		let menuId, title,
+			settingId = li.dataset.settingId;
+
+		if ( settingId.startsWith( 'nav_menu[' ) ) {
+			updatedControls[ settingId ] = {
+				name: input.value.trim()
+			};
+		} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
+			title = li.querySelector( '.edit-menu-item-title' ).value.trim();
+			li.querySelector( '.menu-item-title' ).textContent = title;
+
+			menuId = li.querySelector( '.menu-item-data-menu-id' ).value;
+			menuName = li.parentNode.querySelector( '[data-setting-id="nav_menu[' + menuId + ']"]' );
+			updatedControls[ 'nav_menu[' + menuId + ']' ] = {
+				name: menuName.querySelector( 'input' ).value.trim()
+			};
+			updatedControls[ settingId ] = {
+				menu_id: menuId,
+				title: title,
+				url: li.querySelector( '.edit-menu-item-url' )?.value.trim() || '',
+				menu_item_parent: li.querySelector( '.menu-item-data-parent-id' ).value,
+				position: li.querySelector( '.menu-item-data-position' ).value,
+				original_title: li.querySelector( '.original-link' )?.textContent || '',
+				object_id: li.querySelector( '.menu-item-data-object-id' ).value,
+				object: li.querySelector( '.menu-item-data-object' ).value,
+				type: li.querySelector( '.menu-item-data-type' ).value,
+				type_label: li.querySelector( '.item-type' ).value,
+				classes: li.querySelector( '.edit-menu-item-classes' ).value,
+				xfn: li.querySelector( '.edit-menu-item-xfn' ).value,
+				target: li.querySelector( '.edit-menu-item-target' ).value,
+				attr_title: li.querySelector( '.edit-menu-item-attr-title' ).value,
+				description: li.querySelector( '.edit-menu-item-description' ).value,
+				status: 'publish'
+			};
+		} else {
+			updatedControls[ settingId ] = input.value.trim();
+		}
+		activatePublishButton();
+	}
+
 	inputs.forEach( function( input ) {
-		var li = input.closest( 'li' );
+		let li = input.closest( 'li' );
 
 		if ( ! li?.hasAttribute( 'data-setting-id' ) ) {
 			return;
 		}
 
 		input.addEventListener( 'input', function() {
-			// if () {
-				//updatedControls[li.dataset.settingId]
-				// }
-			updatedControls[li.dataset.settingId] = input.value.trim();
-			activatePublishButton();
+			inputChanged( input, li );
 		} );
-        input.addEventListener( 'change', function() {
-			updatedControls[li.dataset.settingId] = input.value.trim();
-			activatePublishButton();
+
+		input.addEventListener( 'change', function() {
+			inputChanged( input, li );
 		} );
 	} );
 
@@ -1054,7 +1132,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			customizeButton.previousElementSibling.style.display = '';
 			customizeButton.classList.remove( 'upload-button' );
 			parent.previousElementSibling.querySelector( 'input' ).value = selectedItem.dataset.id;
-			updatedControls[settingId] = {
+			updatedControls[ settingId ] = {
 				attachment_id: parseInt( selectedItem.dataset.id ),
 				url: selectedItem.dataset.url,
 				thumbnail_url: selectedItem.dataset.sizes?.thumbnail?.url || selectedItem.dataset.url,
@@ -1078,10 +1156,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 			if ( settingId === 'background_image' ) {
 				parent.parentNode.querySelector( 'input' ).value = selectedItem.dataset.url;
-				updatedControls[settingId] = selectedItem.dataset.url;
+				updatedControls[ settingId ] = selectedItem.dataset.url;
 			} else {
 				parent.parentNode.querySelector( 'input' ).value = selectedItem.dataset.id;
-				updatedControls[settingId] = selectedItem.dataset.id;
+				updatedControls[ settingId ] = selectedItem.dataset.id;
 			}
 		}
 		closeModal();
@@ -1210,8 +1288,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	form.addEventListener( 'submit', function( e ) {
-		var menuName, item,
-			submittedChanges = {},
+		let submittedChanges = {},
 			formData = new FormData();
 
 		// Prevent form submission via PHP
@@ -1219,14 +1296,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Prepare changeset object
 		Object.keys( updatedControls ).forEach( function( settingId ) {
-			item = updatedControls[ settingId ];
-			if ( settingId.startsWith( 'nav_menu[' ) ) {
-				submittedChanges[ settingId ] = {
-					value: {
-						name: item.trim()
-					}
-				};
-			} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
+			const item = updatedControls[ settingId ];
+
+			if ( settingId.startsWith( 'nav_menu_item[' ) ) {
 				submittedChanges[ settingId ] = {
 					value: {
 						nav_menu_term_id: item.menu_id,
@@ -1270,7 +1342,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				return response.json(); // no errors
 			}
 			throw new Error( response.status );
-		} ).then( function( result ) { console.log(result);
+		} ).then( function( result ) {
 			if ( result && result.success ) {
 				saveButton.disabled = true;
 				saveButton.value = _wpCustomizeControlsL10n.published;
@@ -1286,7 +1358,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	
 	/**
-	 * @since CP-2.1.0
+	 * @since CP-2.7.0
 	 */
 	function initSortables( listId ) {
 		var originalClientX, originalDepth, baseClientX, newClientX,
@@ -1330,7 +1402,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.body.appendChild( ghostImage );
 				dataTransfer.setDragImage( ghostImage, 30, 20 );
 			},
-			dataIdAttr: 'data-id', // HTML attribute that is used by the `toArray()` method in OnEnd
+			dataIdAttr: 'data-setting-id', // HTML attribute that is used by the `toArray()` method in OnEnd
 
 			// Get position of menu item when chosen
 			onChoose: function( e ) {
@@ -1459,7 +1531,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					if ( depth === 0 ) {
 						e.item.querySelector( '.menu-item-data-parent-id' ).value = 0;
 					} else {
-						parentDepth = depth - 1,
+						parentDepth = parseInt( depth - 1, 10 );
 						parent = getPreviousSibling( e.item, '.menu-item-depth-' + parentDepth );
 						e.item.querySelector( '.menu-item-data-parent-id' ).value = parent.querySelector( '.menu-item-data-db-id' ).value;
 					}
@@ -1476,11 +1548,48 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					// Reset for next drag and drop
 					childrenInfo = {};
 				}
+
+				// Prepare updatedControls object with new order of menu items
+				editMenu.querySelectorAll( '.menu-item' ).forEach( function( li, idx ) {
+					const settingId = li.dataset.settingId,
+						parentId = li.querySelector( '.menu-item-data-parent-id' ).value;
+
+					li.querySelector( '.menu-item-data-position' ).value = idx + 1; // update hidden input field
+
+					updatedControls[ settingId ] = {
+						menu_id: li.querySelector( '.menu-item-data-menu-id' ).value,
+						position: idx + 1,
+						menu_item_parent: parentId,
+						title: li.querySelector( '.edit-menu-item-title' ).value.trim(),
+						url: li.querySelector( '.edit-menu-item-url' )?.value.trim() || '',
+						original_title: li.querySelector( '.original-link' )?.textContent || '',
+						object_id: li.querySelector( '.menu-item-data-object-id' ).value,
+						object: li.querySelector( '.menu-item-data-object' ).value,
+						type: li.querySelector( '.menu-item-data-type' ).value,
+						type_label: li.querySelector( '.item-type' ).value,
+						classes: li.querySelector( '.edit-menu-item-classes' ).value,
+						xfn: li.querySelector( '.edit-menu-item-xfn' ).value,
+						target: li.querySelector( '.edit-menu-item-target' ).value,
+						attr_title: li.querySelector( '.edit-menu-item-attr-title' ).value,
+						description: li.querySelector( '.edit-menu-item-description' ).value,
+						status: 'publish'
+					};
+				} );
+
 				activatePublishButton();
 			}
 
 		} );
 	}
+
+
+
+
+
+
+
+
+
 
 	/*
 	 * Get offset of item: copied from jQuery
@@ -1627,10 +1736,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			type_label: label,
 			object: object,
 			object_id: objectId,
-			position: menu.querySelectorAll( '.menu-item' ).length,
+			position: menuItems.length,
 			status: 'publish'
 		};
-console.log(updatedControls);
+
 		// Add to menu
 		if ( lastItem ) { // menu currently has at least one item
 			lastItem.after( clone ); // add as last item to populated menu
