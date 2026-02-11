@@ -752,16 +752,23 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
 }
 
 .modal-revision-content-outer {
-	padding: 1em;
 	line-height: 1.5;
 	font-size: 16px;
 }
 
 .modal-revision-content {
-	margin-bottom: 1em;
+	padding: 13px 16px;
 	line-height: 2.5;
 	white-space: pre-wrap;
+	overflow-wrap: break-word;
 	font-family: Consolas, Monaco, monospace;
+}
+
+.modal-revision-footer {
+	padding: 13px 16px;
+	background: #f6f7f7;
+	border-top: 1px solid #dcdcdc;
+	text-align: right;
 }
 
 dialog::backdrop {
