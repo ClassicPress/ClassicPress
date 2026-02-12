@@ -695,6 +695,11 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
 }
 
 .modal-revision-header {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	background: #fff;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -752,22 +757,28 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
 }
 
 .modal-revision-content-outer {
-	line-height: 1.5;
-	font-size: 16px;
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+	height: 100%;
 }
 
 .modal-revision-content {
-	padding: 13px 16px;
+	padding: 60px 16px 80px;
 	line-height: 2.5;
-	white-space: pre-wrap;
 	overflow-wrap: break-word;
+	white-space: pre-wrap;
 	font-family: Consolas, Monaco, monospace;
 }
 
 .modal-revision-footer {
 	padding: 13px 16px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 30px;
+	border-top: 1px solid #dcdcde;
 	background: #f6f7f7;
-	border-top: 1px solid #dcdcdc;
 	text-align: right;
 }
 
@@ -831,5 +842,9 @@ dialog::backdrop {
 
 	.diff-meta input.restore-revision {
 		margin-top: 0;
+	}
+
+	.modal-revision-footer {
+		height: 40px;
 	}
 }
