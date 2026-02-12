@@ -174,11 +174,11 @@ class CP_Post_Revisions_List_Table extends WP_List_Table {
 
 				<div class="modal-revision-content-outer">
 					<div id="modal-revision-content-inner" class="modal-revision-content"></div>
-
-					<footer class="modal-revision-footer">
-						<button type="button" id="modal-revision-button" class="button button-secondary"><?php esc_html_e( 'Close' ); ?></button>
-					</footer>
 				</div>
+
+				<footer class="modal-revision-footer">
+					<button type="button" id="modal-revision-button" class="button button-secondary"><?php esc_html_e( 'Close' ); ?></button>
+				</footer>
 
 			</dialog>
 			
