@@ -88,6 +88,9 @@ https://github.com/ClassicPress/ClassicPress/pull/1975
 * Remove closing PHP tags.
 * https://core.trac.wordpress.org/ticket/40039
 
+* Scaling Issue on Front Page Parallax Image Using Safari on iPadOS
+* https://core.trac.wordpress.org/ticket/48195
+
 = 2.9 =
 * Post title’s margin-bottom on front page is too large.
 * https://core.trac.wordpress.org/ticket/43628
