@@ -250,7 +250,7 @@ jobs:
 
       - name: Set up a Memcached server
         if: ${{ matrix.memcached }}
-        uses: niden/actions-memcached@v7
+        uses: niden/actions-memcached@v8
 
       - name: Run PHPUnit default
         if: ${{ !matrix.multisite }}
