@@ -846,7 +846,9 @@ wp_print_scripts();
 										</div>
 										<h3 class="accordion-section-title" tabindex="0">
 											<?php echo esc_html( $menu_locations_section->title ); ?>
-											<span class="screen-reader-text"><?php esc_html_e( 'Press return or enter to open this section' ); ?></span>
+											<span class="screen-reader-text">
+												<?php esc_html_e( 'Press return or enter to open this section' ); ?>
+											</span>
 										</h3>
 									</li>
 									<?php
@@ -1080,7 +1082,7 @@ wp_print_scripts();
 						}
 						?>
 
-						<ul id="sub-accordion-section-add_menu" class="customize-pane-child accordion-section-content accordion-section control-section control-section-new_menu open" style="display: none;">
+						<ul id="sub-accordion-section-add_menu" class="customize-pane-child accordion-section-content accordion-section control-section control-section-new_menu menu open" style="display: none;">
 							<li class="customize-section-description-container section-meta no-drag ">
 								<div class="customize-section-title">
 									<button class="customize-section-back" tabindex="0">
@@ -1733,6 +1735,8 @@ wp_print_scripts();
 
 						<ul id="menu-to-edit"
 							class="customize-pane-child accordion-section-content accordion-section control-section control-section-nav_menu menu open"
+							data-instruction="<?php esc_html_e( 'Press return or enter to open this section' ); ?>"
+							data-current="<?php esc_html_e( 'Currently set to:' ); ?>"
 							style="display: none;"
 						>
 							<li class="customize-section-description-container section-meta no-drag">
@@ -1759,7 +1763,7 @@ wp_print_scripts();
 									</div>
 								</div>
 							</li>
-							<!-- Further <li> blocks added with JS by moving menus in and out of here as required -->
+							<!-- Remaining li elements are added via template id="brand-new-nav" below -->
 						</ul>
 					</div>
 				</div>
@@ -1891,6 +1895,7 @@ customize_themes_print_templates();
 	</div>
 </dialog>
 
+<!-- Template for creation of new nav menu items -->
 <template id="new-menu-item">
 	<li class="customize-control customize-control-nav_menu_item menu-item menu-item-depth-0 menu-item-custom menu-item-edit-inactive move-left-disabled move-up-disabled move-right-disabled move-down-disabled" data-setting-id="">
 		<div class="menu-item-bar">
@@ -2003,6 +2008,148 @@ customize_themes_print_templates();
 				</div><!-- .menu-item-settings-->
 				<ul class="menu-item-transport"></ul>
 			</details>
+		</div>
+	</li>
+</template>
+
+<!-- Template for creation of new nav menus -->
+<template id="brand-new-nav">
+	<li id="customize-control-nav_menu-brand-new-name"
+		class="customize-control customize-control-nav_menu_name no-drag"
+		data-setting-id="nav_menu[brand-new]"
+	>
+		<label for="menu-name-title-brand-new">
+			<span class="customize-control-title">
+				<?php esc_html_e( 'Menu Name' ); ?>
+			</span>
+			<div class="customize-control-notifications-container" style="display: none;">
+				<ul></ul>
+			</div>
+		</label>
+		<input id="menu-name-title-brand-new"
+			type="text"
+			class="menu-name-field live-update-section-title"
+			value=""
+		>
+	</li>
+	<!-- Add nav menu items -->
+	<li id="customize-control-nav_menu-brand-new"
+		class="customize-control customize-control-nav_menu no-drag"
+	><?php // Look at nav-menu-control.php ?>
+		<div class="customize-control-notifications-container" style="display: none;">
+			<ul></ul>
+		</div>
+		<p class="new-menu-item-invitation" style="display: none;">
+			<?php esc_html_e( 'Time to add some links! Click “Add Items” to start putting pages, categories, and custom links in your menu. Add as many things as you would like.' );?>
+		</p>
+		<div class="customize-control-nav_menu-buttons">
+			<button type="button"
+				class="button add-new-menu-item"
+				aria-label="<?php esc_attr_e( 'Add or remove menu items' ); ?>"
+				aria-expanded="false"
+				aria-controls="available-menu-items"
+			>
+				<?php esc_html_e( 'Add Items' ); ?>
+			</button>
+			<button type="button"
+				class="button-link reorder-toggle"
+				aria-label="<?php esc_attr_e( 'Reorder menu items' ); ?>"
+				aria-describedby="reorder-items-desc-brand-new"
+				style="display: none;"
+			>
+				<span class="reorder">
+					<?php esc_html_e( 'Reorder' ); ?>
+				</span>
+				<span class="reorder-done">
+					<?php esc_html_e( 'Done' ); ?>
+				</span>
+			</button>
+		</div>
+		<p class="screen-reader-text" id="reorder-items-desc-brand-new">
+			<?php esc_html_e( 'When in reorder mode, additional controls to reorder menu items will be available in the items list above.' ); ?>
+		</p>
+	</li>
+	<li id="customize-control-nav_menu-brand-new-locations" class="customize-control customize-control-nav_menu_locations no-drag">
+		<ul class="menu-location-settings" data-menu-id="brand-new">
+			<li class="customize-control assigned-menu-locations-title no-drag">
+				<span class="customize-control-title">
+					<?php esc_html_e( 'Menu Locations' ); ?>
+				</span>
+				<div class="customize-control-notifications-container" style="display: none;">
+					<ul></ul>
+				</div>
+				<p>
+					<?php esc_html_e( 'Here’s where this menu appears. If you would like to change that, pick another location.' ); ?>
+				</p>
+			</li>
+
+			<?php
+			foreach ( $locations as $slug => $location ) {
+				?>
+
+				<li class="customize-control customize-control-checkbox assigned-menu-location no-drag"
+					data-setting-id="<?php echo esc_attr( 'nav_menu_locations[' . $slug . ']' ); ?>"
+				>
+					<span class="customize-inside-control-row">
+						<input id="customize-nav-menu-control-location-<?php echo esc_attr( $menu_locations[$slug] ); ?>"
+							type="checkbox"
+							data-location-id="<?php echo esc_attr( $slug ); ?>"
+							class="menu-location"
+							value=""
+						>
+						<label for="customize-nav-menu-control-location-<?php echo esc_attr( $menu_locations[$slug] ); ?>">
+							<?php echo esc_html( $location ); ?>
+							<span class="theme-location-set">
+
+								<?php
+								if ( isset ( $menus[$menu_locations[$slug]] ) ) {
+									printf(
+										wp_kses(
+											/* translators: %s is the current menu name wrapped in a span. */
+											__( '(Current: <span class="current-menu-location-name-main-nav">%s</span>)' ),
+											array( 'span' => array( 'class' => true ) )
+										),
+										esc_html( $menus[ $menu_locations[ $slug ] ] )
+									);
+								}
+								?>
+
+							</span>
+						</label>
+					</span>
+				</li>
+
+				<?php
+			}
+			?>
+
+		</ul>
+	</li>
+	<li id="customize-control-nav_menu-brand-new-auto_add" class="customize-control customize-control-nav_menu_auto_add no-drag">
+		<span class="customize-control-title">
+			<?php esc_html_e( 'Menu Options' ); ?>
+		</span>
+		<div class="customize-control-notifications-container" style="display: none;">
+			<ul></ul>
+		</div>
+		<span class="customize-inside-control-row">
+			<input id="customize-nav-menu-auto-add-control-brand-new" type="checkbox" class="auto_add">
+			<label for="customize-nav-menu-auto-add-control-brand-new">
+				<?php esc_html_e( 'Automatically add new top-level pages to this menu' ); ?>
+			</label>
+		</span>
+	</li>
+	<li id="customize-control-nav_menu-brand-new-delete"
+		class="customize-control customize-control-undefined no-drag"
+		data-setting-id="nav_menu[brand-new]"
+	>
+		<div class="customize-control-notifications-container" style="display: none;">
+			<ul></ul>
+		</div>
+		<div class="menu-delete-item">
+			<button type="button" class="button-link button-link-delete">
+				<?php esc_html_e( 'Delete Menu' ); ?>
+			</button>
 		</div>
 	</li>
 </template>
