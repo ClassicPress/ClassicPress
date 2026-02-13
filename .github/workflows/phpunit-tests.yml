@@ -155,10 +155,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Setup MySQL
-        uses: mirromutth/mysql-action@v1.1
+        uses: shogo82148/actions-setup-mysql@v1
         with:
-          mysql root password: "password"
-          mysql version: "${{ matrix.mysql }}"
+          root-password: "password"
+          mysql-version: "${{ matrix.mysql }}"
 
       - name: Wait for MySQL
         run: |
