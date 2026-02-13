@@ -1369,7 +1369,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			saveButton.value = _wpCustomizeControlsL10n.publish;
 		} );
 	} );
-
 	
 	/**
 	 * @since CP-2.7.0
@@ -1694,7 +1693,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Add menu item
 	 */
 	function addMenuItem( type, object, objectId, title, label, url ) {
-		var menu       = document.getElementById( 'sub-accordion-section-nav_menu[' + currentMenuId + ']' ),
+		var menu       = document.getElementById( 'sub-accordion-section-nav_menu[' + currentMenuId + ']' ) || document.getElementById( 'sub-accordion-section-nav_menu[-' + currentMenuId + ']' ),
 			menuItems  = menu.querySelectorAll( '.menu-item' ),
 			lastItem   = menuItems[menuItems.length - 1],
 			menuItemId = Date.now(),
@@ -1842,6 +1841,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
+	/**
+	 * Replace the substring 'brand-new' in new menu attributes
+	 */
+	function replaceBrandNewInAttributes( navMenuId ) {
+		const all = document.getElementById( 'menu-to-edit' ).querySelectorAll( '*' );
+		all.forEach( function( el ) {
+			const attrs = el.getAttributeNames();
+			attrs.forEach( function( attrName ) {
+				const value = el.getAttribute( attrName );
+				if ( value && value.includes( 'brand-new' ) ) {
+					const newValue = value.replaceAll( 'brand-new', navMenuId );
+					el.setAttribute( attrName, newValue );
+				}
+			} );
+		} );
+	}
 
 	/**
 	 * Handle clicks on buttons.
@@ -1851,17 +1866,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	document.addEventListener( 'click', function( e ) {
 		var id, page, itemBrowse, itemUpload, gridPanel, uploadPanel,
-			modalButtons, rightSidebar, modalPages, title,
-			type, object, objectId, label, url, li;
+			modalButtons, rightSidebar, modalPages, title, navMenuId,
+			type, object, objectId, label, url, li, template, clone,
+			menuName = '',
+			ul = e.target.closest( 'ul' ),
+			menuToEdit = document.getElementById( 'menu-to-edit' );
 
 		// Abort if this comes from a middle section heading or a widget
 		if ( ( e.target.tagName !== 'BUTTON' && e.target.closest( '.customize-section-title' ) ) || e.target.closest( '.widget' ) ) {
 			return;
 		}
 
-		if ( ( e.target.tagName === 'H3' || e.target.classList && e.target.classList.contains( 'change-theme' ) ) && e.target.closest( 'ul' ) ) {
+		if ( ( e.target.tagName === 'H3' || e.target.classList && e.target.classList.contains( 'change-theme' ) ) && ul ) {
 			e.preventDefault();
-			previousAccordionPane = e.target.closest( 'ul' );
+			previousAccordionPane = ul;
 			id = e.target.closest( 'li' ).id;
 			document.body.classList.remove( 'adding-menu-items' );
 			document.body.classList.remove( 'adding-widget' );
@@ -1875,24 +1893,30 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 
 			// Go down to the second level
-			if ( e.target.closest( 'ul' ).classList.contains( 'customize-pane-parent' ) ) {
-				e.target.closest( 'ul' ).style.display = 'none';
+			if ( ul.classList.contains( 'customize-pane-parent' ) ) {
+				ul.style.display = 'none';
 				document.getElementById( 'customize-info' ).style.display = 'none';
 				document.getElementById( 'sub-' + id ).style.display = 'block';
 				document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();
 
 			// Go down to the third level
-			} else if ( ! e.target.closest( 'li' ).classList.contains( 'customize-control-widget_form' ) && e.target.closest( 'ul' ).classList.contains( 'customize-pane-child' ) ) {
-				e.target.closest( 'ul' ).style.display = 'none';
-				document.getElementById( 'sub-' + id ).style.display = 'block';
-				document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();
+			} else if ( ! e.target.closest( 'li' ).classList.contains( 'customize-control-widget_form' ) && ul.classList.contains( 'customize-pane-child' ) ) {
+				ul.style.display = 'none';
 				if ( id.startsWith( 'accordion-section-nav_menu[' ) ) { // nav menu
+					if ( id.startsWith( 'accordion-section-nav_menu[-' ) ) { // new nav menu
+						clone = document.getElementById( 'menu-to-edit' ).cloneNode( true );
+						clone.id = 'sub-' + id;
+						currentMenuId = id.split( '[' )[1].replace( ']', '' );
+						document.getElementById( 'sub-accordion-section-menu_locations' ).after( clone );
+					}
 					initSortables( 'sub-' + id ); // enable sorting of menu items
 				}
+				document.getElementById( 'sub-' + id ).style.display = 'block';				
+				document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();
 			}
 		} else if ( e.target.classList && ( e.target.classList.contains( 'customize-section-back' ) || e.target.classList.contains( 'customize-panel-back' ) ) ) {
 			e.preventDefault();
-			e.target.closest( 'ul' ).style.display = 'none';
+			ul.style.display = 'none';
 			document.body.classList.remove( 'adding-menu-items' );
 			document.body.classList.remove( 'adding-widget' );
 			document.getElementById( 'widgets-left' ).style.display = 'none';
@@ -1905,7 +1929,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 
 			// Go up to the top level
-			if ( e.target.parentNode.classList.contains( 'panel-meta' ) || e.target.closest( 'ul' ).id === 'sub-accordion-section-menu_locations' ) {
+			if ( e.target.parentNode.classList.contains( 'panel-meta' ) || ul.id === 'sub-accordion-section-menu_locations' ) {
 				document.getElementById( 'customize-info' ).style.display = 'block';
 				document.querySelector( '.customize-pane-parent' ).style.display = 'block';
 				document.querySelector( '.customize-pane-parent h3' ).focus();
@@ -1925,16 +1949,55 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Open New Menu panel
 		} else if ( e.target.classList && ( e.target.classList.contains( 'customize-add-menu-button' ) || e.target.classList.contains( 'create-menu' ) ) ) {
 			e.preventDefault();			
-			previousAccordionPane = e.target.closest( 'ul' );
-			e.target.closest( 'ul' ).style.display = 'none';
+			previousAccordionPane = ul;
+			ul.style.display = 'none';
+			document.getElementById( 'sub-accordion-section-add_menu' ).querySelectorAll( 'input' ).forEach( function( input ) {
+				input.value = ''; // reset
+				input.checked = false; // reset
+			} );
 			document.getElementById( 'sub-accordion-section-add_menu' ).style.display = 'block';
 
 		// Open Next panel to create new menu
 		} else if ( e.target.id === 'customize-new-menu-submit' ) {
-			e.preventDefault();			
-			previousAccordionPane = document.getElementById( 'sub-accordion-panel-nav_menus' );
-			e.target.closest( 'ul' ).style.display = 'none';
-			document.getElementById( 'menu-to-edit' ).style.display = 'block';
+			e.preventDefault();
+			if ( ul.querySelector( '#menu-title' ).value !== '' ) {
+				previousAccordionPane = document.getElementById( 'sub-accordion-panel-nav_menus' );
+				navMenuId = '-' + Date.now();
+				title = ul.querySelector( '#menu-title' ).value;
+				template = document.getElementById( 'brand-new-nav' );
+				clone = template.content.cloneNode( true );
+				menuToEdit.append( clone );
+
+				// Update attributes and values
+				ul.style.display = 'none';
+				replaceBrandNewInAttributes( navMenuId );
+				document.getElementById( 'menu-name-title-' + navMenuId ).value = title;
+				menuToEdit.querySelectorAll( '.assigned-menu-location input' ).forEach( function( input, index ) {
+					if ( ul.querySelectorAll( '.assigned-menu-location input' )[index].checked ) {
+						input.checked = true;
+						menuName = input.nextElementSibling.textContent.trim();
+					}
+				} );
+				menuToEdit.style.display = 'block';
+
+				// Add menu to list of menus
+				li = document.createElement( 'li' );
+				li.id = 'accordion-section-nav_menu[' + navMenuId + ']';
+				li.className = 'accordion-section control-section control-section-nav_menu control-subsection assigned-to-menu-location';
+				li.setAttribute( 'aria-owns', 'sub-accordion-section-nav_menu[' + navMenuId + ']' );
+				li.innerHTML = '<h3 class="accordion-section-title" tabindex="0">' +
+					title +
+					'<span class="screen-reader-text">' +
+					menuToEdit.dataset.instruction +
+					'</span>' +
+					'<span class="menu-in-location"></span>' +
+					'</h3>';
+				if ( menuName !== '' ) {
+					li.querySelector( '.menu-in-location' ).textContent = '(' + menuToEdit.dataset.current + ' ' + menuName + ')';
+				}
+				document.getElementById( 'accordion-section-add_menu' ).before( li );
+				activatePublishButton();
+			}
 			
 		// Enable adding of a menu item
 		} else if ( e.target.classList && e.target.classList.contains( 'add-new-menu-item' ) ) {
@@ -1943,7 +2006,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				availableMenuItems.style.display = 'block';
 				e.target.setAttribute( 'aria-expanded', true );
 				currentMenuId = e.target.closest( 'li' ).id.split( '-' ).pop();
-				e.target.closest( 'ul' ).querySelectorAll( 'details' ).forEach( function( accordion ) {
+				ul.querySelectorAll( 'details' ).forEach( function( accordion ) {
 					accordion.removeAttribute( 'open' );
 				} );
 			} else {
@@ -1961,8 +2024,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				createNewPostOrPage( title, object, type, label, e.target.parentNode.nextElementSibling );
 				e.target.previousElementSibling.value = ''; // reset
 			} else if ( e.target.classList && e.target.className === 'button-link item-add' ) {
-				type     = e.target.closest( 'ul' ).dataset.type;
-				object   = e.target.closest( 'ul' ).dataset.object;
+				type     = ul.dataset.type;
+				object   = ul.dataset.object;
 				objectId = e.target.closest( 'li' ).id.split( '-' ).pop();
 				title    = e.target.parentNode.querySelector( '.menu-item-title' ).textContent.trim();
 				label    = e.target.parentNode.querySelector( '.item-type' ).textContent.trim();
@@ -1984,9 +2047,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			deleteNavMenu( e.target.closest( 'li' ).dataset.settingId );
 
 		// Go to widgets panel
-		} else if ( e.target.tagName === 'A' && ( e.target.closest( 'li' ).id === 'accordion-section-menu_locations' || e.target.closest( 'ul' ).id === 'sub-accordion-section-menu_locations' ) ) {
+		} else if ( e.target.tagName === 'A' && ( e.target.closest( 'li' ).id === 'accordion-section-menu_locations' || ul.id === 'sub-accordion-section-menu_locations' ) ) {
 			e.preventDefault();			
-			e.target.closest( 'ul' ).style.display = 'none';
+			ul.style.display = 'none';
 			document.getElementById( 'sub-accordion-panel-widgets' ).style.display = 'block';
 
 		// Add a widget
@@ -2002,11 +2065,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Reorder widgets
 		} else if ( e.target.className === 'reorder' ) {
-			e.target.closest( 'ul' ).classList.add( 'reordering' );
+			ul.classList.add( 'reordering' );
 
 		// Finish reordering
 		} else if ( e.target.className === 'reorder-done' ) {
-			e.target.closest( 'ul' ).classList.remove( 'reordering' );
+			ul.classList.remove( 'reordering' );
 
 		// Open and close description
 		} else if ( e.target.classList && e.target.classList.contains( 'customize-help-toggle' ) ) {
