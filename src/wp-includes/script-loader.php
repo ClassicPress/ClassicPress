@@ -1177,6 +1177,9 @@ function wp_default_scripts( $scripts ) {
 				)
 			),
 			'activeTheme'             => get_transient( 'core_true_stylesheet' ) ?: get_option( 'stylesheet' ),
+			'menusNonce'              => wp_create_nonce( 'customize-menus' ),
+			'current'                 => __( 'Current:' ),
+			'currently'               => __( 'Currently set to:' ),
 		)
 	);
 	$scripts->add( 'customize-selective-refresh', "/wp-includes/js/customize-selective-refresh$suffix.js", array( 'jquery', 'wp-util', 'customize-preview' ), false, 1 );
