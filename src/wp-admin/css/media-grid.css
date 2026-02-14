@@ -255,6 +255,7 @@
 .media-modal-content .edit-attachment-frame .edit-media-header {
 	overflow: revert;
 	z-index: 11;
+	border-bottom: none;
 }
 .media-frame-title h2 {
 	padding: 0 16px;
@@ -395,18 +396,17 @@ dialog::backdrop {
 	line-height: 1.3;
 }
 
-@media screen and (min-width: 481px) {
+@media screen and (min-width: 601px) {
 	.media-modal-content .edit-attachment-frame .edit-media-header .media-navigation {
 		border-bottom: none;
 	}
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 600px) {
 	.media-modal-content .edit-attachment-frame .media-frame-content {
-		margin-top: 64px;
+		margin-top: 50px;
 	}
 	.attachment-media-view .media-navigation {
-		margin-bottom: 1em;
 		position: fixed;
 		top: calc(5% + 50px);
 		background-color: #fff;

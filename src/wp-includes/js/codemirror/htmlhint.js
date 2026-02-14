@@ -1,7 +1,7 @@
 /*!
- * HTMLHint v1.8.1
+ * HTMLHint v1.9.1
  * https://htmlhint.com
- * Built on: 2026-02-06
+ * Built on: 2026-02-11
  * Copyright (c) 2026 HTMLHint
  * Licensed under MIT License
  */
