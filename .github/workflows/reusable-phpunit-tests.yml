@@ -30,7 +30,7 @@ on:
 
 jobs:
   test-php:
-    name: "${{ inputs.multisite && 'Multisite on' || '' }} ${{ 'mariadb' == inputs.db-type && 'MariaDB' || 'MySQL' }}${{ inputs.memcached && ' memcached' || '' }}${{ inputs.mysql }}${{ 'xdebug' == inputs.coverage && ' with XDebug' || '' }}${{ inputs.experimental && ' - Experimental' || '' }}"
+    name: "${{ inputs.multisite && 'Multisite on' || '' }} ${{ 'mariadb' == inputs.db-type && 'MariaDB' || 'MySQL' }} ${{ inputs.db-version }}${{ inputs.memcached && ' memcached' || '' }}${{ 'xdebug' == inputs.coverage && ' with XDebug' || '' }}${{ inputs.experimental && ' - Experimental' || '' }}"
     runs-on: inputs.os
     permissions:
       contents: read
