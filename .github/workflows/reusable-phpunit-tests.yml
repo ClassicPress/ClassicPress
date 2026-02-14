@@ -122,9 +122,9 @@ jobs:
       - name: Initialise MariaDB
         if: ${{ inputs.db-type == 'mariadb' }}
         run: |
-          mariadb-admin --host 127.0.0.1 --port 3306 -u root -ppassword -e "SELECT @@VERSION"
-          mariadb-admin --host 127.0.0.1 --port 3306 -u root -ppassword < tools/local-env/mysql-init.sql
-          mariadb-admin --host 127.0.0.1 --port 3306 -u root -ppassword -e "SHOW DATABASES"
+          mariadb --host 127.0.0.1 --port 3306 -u root -ppassword -e "SELECT @@VERSION"
+          mariadb --host 127.0.0.1 --port 3306 -u root -ppassword < tools/local-env/mysql-init.sql
+          mariadb --host 127.0.0.1 --port 3306 -u root -ppassword -e "SHOW DATABASES"
 
       - name: Install dependencies
         run: npx install-changed --install-command="npm ci"
