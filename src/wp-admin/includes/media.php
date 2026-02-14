@@ -1868,7 +1868,7 @@ function get_compat_media_markup( $attachment_id, $args = null ) {
 			$values = array();
 
 			foreach ( $terms as $term ) {
-				$values[] = $term->slug;
+				$values[] = $term->name;
 			}
 
 			$t['value']    = implode( ', ', $values );

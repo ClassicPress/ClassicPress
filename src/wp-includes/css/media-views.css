@@ -2491,6 +2491,9 @@
  * Responsive layout
  */
 @media only screen and (max-width: 900px) {
+	.media-modal .media-frame-title {
+		height: 40px;
+	}
 	.media-modal .media-frame-title h1 {
 		line-height: 2.22222222;
 		font-size: 18px;
