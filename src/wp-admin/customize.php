@@ -780,7 +780,7 @@ wp_print_scripts();
 									?>
 
 									<li id="accordion-section-<?php echo esc_attr( $section->id ); ?>"
-										class="accordion-section control-section control-section-nav_menu control-subsection assigned-to-menu-location"
+										class="accordion-section control-section control-section-nav_menu control-subsection menu assigned-to-menu-location"
 										aria-owns="sub-accordion-section-<?php echo esc_attr( $section->id ); ?>"
 									>
 										<h3 class="accordion-section-title" tabindex="0">
@@ -1019,6 +1019,7 @@ wp_print_scripts();
 
 								<ul id="sub-accordion-section-<?php echo esc_attr( $item['id'] ); ?>"
 									class="customize-pane-child accordion-section-content accordion-section control-section control-section-default"
+									data-id="<?php echo esc_attr( $item['id'] ); ?>"
 									style="display: none;"
 								>
 									<li class="customize-section-description-container section-meta no-drag">
@@ -1249,7 +1250,8 @@ wp_print_scripts();
 							?>
 
 							<ul id="sub-accordion-section-<?php echo esc_attr( $section->id ); ?>"
-								class="customize-pane-child accordion-section-content accordion-section control-section <?php echo esc_attr( $section_class ); ?> assigned-to-menu-location"
+								class="customize-pane-child accordion-section-content accordion-section control-section <?php echo esc_attr( $section_class ); ?> menu assigned-to-menu-location"
+								data-id="<?php echo esc_attr( $section->id ); ?>"
 								style="display: none;"
 							>
 								<li class="customize-section-description-container section-meta no-drag">
@@ -1358,6 +1360,7 @@ wp_print_scripts();
 										?>
 										<li id="customize-control-nav_menu-<?php echo $menu_id; ?>"
 											class="customize-control customize-control-nav_menu no-drag"
+											data-menu-id="<?php echo $menu_id; ?>"
 										><?php // Look at nav-menu-control.php ?>
 											<div class="customize-control-notifications-container" style="display: none;">
 												<ul></ul>
@@ -1520,6 +1523,7 @@ wp_print_scripts();
 
 							<ul id="sub-accordion-section-<?php echo esc_attr( $section->id ); ?>"
 								class="customize-pane-child accordion-section-content accordion-section control-section control-section-sidebar"
+								data-id="<?php echo esc_attr( $section->id ); ?>"
 								style="display: none;"
 							>
 								<li class="customize-section-description-container section-meta no-drag">
@@ -1736,34 +1740,9 @@ wp_print_scripts();
 						<ul id="menu-to-edit"
 							class="customize-pane-child accordion-section-content accordion-section control-section control-section-nav_menu menu open"
 							data-instruction="<?php esc_html_e( 'Press return or enter to open this section' ); ?>"
-							data-current="<?php esc_html_e( 'Currently set to:' ); ?>"
 							style="display: none;"
 						>
-							<li class="customize-section-description-container section-meta no-drag">
-								<div class="customize-section-title">
-									<button class="customize-section-back" tabindex="0">
-										<span class="screen-reader-text">
-											<?php esc_html_e( 'Back' ); ?>
-										</span>
-									</button>
-									<h3>
-										<span class="customize-action">
-											<?php
-											printf(
-												/* translators: &#9656; is the unicode right-pointing triangle. %s: Section title in the Customizer. */
-												__( 'Customizing &#9656; %s' ),
-												__( 'Menus' )
-											);
-											?>
-										</span>
-										<?php esc_html_e( 'New Menu' ); ?>
-									</h3>
-									<div class="customize-control-notifications-container" style="display: none;">
-										<ul></ul>
-									</div>
-								</div>
-							</li>
-							<!-- Remaining li elements are added via template id="brand-new-nav" below -->
+							<!-- li elements are added via template id="tmpl-brand-new-nav" below -->
 						</ul>
 					</div>
 				</div>
@@ -1896,7 +1875,7 @@ customize_themes_print_templates();
 </dialog>
 
 <!-- Template for creation of new nav menu items -->
-<template id="new-menu-item">
+<template id="tmpl-new-menu-item">
 	<li class="customize-control customize-control-nav_menu_item menu-item menu-item-depth-0 menu-item-custom menu-item-edit-inactive move-left-disabled move-up-disabled move-right-disabled move-down-disabled" data-setting-id="">
 		<div class="menu-item-bar">
 			<details class="menu-item-handle">
@@ -2013,7 +1992,33 @@ customize_themes_print_templates();
 </template>
 
 <!-- Template for creation of new nav menus -->
-<template id="brand-new-nav">
+<template id="tmpl-brand-new-nav">
+	<li class="customize-section-description-container section-meta no-drag">
+		<div class="customize-section-title">
+			<button class="customize-section-back" tabindex="0">
+				<span class="screen-reader-text">
+					<?php esc_html_e( 'Back' ); ?>
+				</span>
+			</button>
+			<h3>
+				<span class="customize-action">
+					<?php
+					printf(
+						/* translators: &#9656; is the unicode right-pointing triangle. %s: Section title in the Customizer. */
+						__( 'Customizing &#9656; %s' ),
+						__( 'Menus' )
+					);
+					?>
+				</span>
+				<span class="new-menu-title">
+					<?php esc_html_e( 'New Menu' ); ?>
+				</span>
+			</h3>
+			<div class="customize-control-notifications-container" style="display: none;">
+				<ul></ul>
+			</div>
+		</div>
+	</li>
 	<li id="customize-control-nav_menu-brand-new-name"
 		class="customize-control customize-control-nav_menu_name no-drag"
 		data-setting-id="nav_menu[brand-new]"
@@ -2035,6 +2040,7 @@ customize_themes_print_templates();
 	<!-- Add nav menu items -->
 	<li id="customize-control-nav_menu-brand-new"
 		class="customize-control customize-control-nav_menu no-drag"
+		data-menu-id="brand-new"
 	><?php // Look at nav-menu-control.php ?>
 		<div class="customize-control-notifications-container" style="display: none;">
 			<ul></ul>
