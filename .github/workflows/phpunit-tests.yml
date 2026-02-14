@@ -50,7 +50,7 @@ jobs:
       fail-fast: false
       matrix:
         php: [ '8.5', '8.4', '8.3', '8.2', '8.1', '8.0', '7.4' ]
-        mysql: [ '5.7', '8.0' ]
+        mysql: [ 'mysql-5.7', 'mysql-8.0', 'mariadb-10.4', 'mariadb-11.4' ]
         multisite: [ false, true ]
         memcached: [ false ]
         coverage: [ none ]
@@ -58,61 +58,61 @@ jobs:
         # Include jobs that test with memcached or xdebug.
         include:
           - php: '8.3'
-            mysql: '5.7'
+            mysql: 'mysql-5.7'
             multisite: false
             memcached: true
             coverage: none
             experimental: false
           - php: '8.4'
-            mysql: '5.7'
-            multisite: false
-            memcached: true
-            coverage: none
-            experimental: false
-          - php: '8.3'
-            mysql: '8.0'
-            multisite: false
-            memcached: true
-            coverage: none
-            experimental: false
-          - php: '8.4'
-            mysql: '8.0'
+            mysql: 'mysql-5.7'
             multisite: false
             memcached: true
             coverage: none
             experimental: false
           - php: '8.3'
-            mysql: '5.7'
+            mysql: 'mysql-8.0'
+            multisite: false
+            memcached: true
+            coverage: none
+            experimental: false
+          - php: '8.4'
+            mysql: 'mysql-8.0'
+            multisite: false
+            memcached: true
+            coverage: none
+            experimental: false
+          - php: '8.3'
+            mysql: 'mysql-5.7'
             multisite: true
             memcached: true
             coverage: none
             experimental: false
           - php: '8.4'
-            mysql: '5.7'
+            mysql: 'mysql-5.7'
             multisite: true
             memcached: true
             coverage: none
             experimental: false
           - php: '8.3'
-            mysql: '8.0'
+            mysql: 'mysql-8.0'
             multisite: true
             memcached: true
             coverage: none
             experimental: false
           - php: '8.4'
-            mysql: '8.0'
+            mysql: 'mysql-8.0'
             multisite: true
             memcached: true
             coverage: none
             experimental: false
           - php: '8.4'
-            mysql: '8.0'
+            mysql: 'mysql-8.0'
             multisite: false
             memcached: false
             coverage: xdebug
             experimental: false
           - php: '8.4'
-            mysql: '8.0'
+            mysql: 'mysql-8.0'
             multisite: true
             memcached: false
             coverage: xdebug
