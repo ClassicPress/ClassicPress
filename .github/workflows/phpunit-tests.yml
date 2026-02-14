@@ -41,7 +41,6 @@ jobs:
         coverage: [ none ]
         experimental: [ false ]
         include:
-          include:
           - os: ubuntu-22.04
             php: '8.3'
             db-version: '5.7'
