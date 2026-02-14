@@ -1900,19 +1900,15 @@ div.action-links,
 		text-overflow: ellipsis;
 	}
 
-	/* Hide ID column header cell in posts table to fix layout on mobile */
-	#posts-filter .wp-list-table th.column-id {
-		display: none !important;
-	}
-
-	/* Hide ID column in posts table to fix layout on mobile */
-	#posts-filter .wp-list-table td.column-id {
-		display: none !important;
-	}
-
 	.wp-list-table .is-expanded td:not(.hidden) {
 		display: block !important;
 		overflow: hidden; /* clearfix */
+	}
+
+	/* Hide ID column in posts table to fix layout on mobile */
+	#posts-filter .wp-list-table th.column-id,
+	#posts-filter .wp-list-table td.column-id {
+		display: none !important;
 	}
 
 	/* Special cases */
