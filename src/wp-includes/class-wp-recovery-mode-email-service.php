@@ -338,7 +338,7 @@ When seeking help with this issue, you may be asked for some of the following in
 	 */
 	private function get_debug( $extension ) {
 		$theme      = wp_get_theme();
-		$wp_version = get_bloginfo( 'version' );
+		$cp_version = classicpress_version();
 
 		if ( $extension ) {
 			$plugin = $this->get_plugin( $extension );
@@ -350,7 +350,7 @@ When seeking help with this issue, you may be asked for some of the following in
 			'wp'    => sprintf(
 				/* translators: %s: Current ClassicPress version number. */
 				__( 'ClassicPress version %s' ),
-				$wp_version
+				$cp_version
 			),
 			'theme' => sprintf(
 				/* translators: 1: Current active theme name. 2: Current active theme version. */
