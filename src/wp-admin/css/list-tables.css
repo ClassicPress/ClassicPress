@@ -1905,10 +1905,9 @@ div.action-links,
 		overflow: hidden; /* clearfix */
 	}
 
-	/* Hide ID column in posts table to fix layout on mobile */
-	#posts-filter .wp-list-table th.column-id,
-	#posts-filter .wp-list-table td.column-id {
-		display: none !important;
+	/* Hide ID column header cell in posts and pages table to fix layout on mobile */
+	#posts-filter .wp-list-table th.column-id {
+		display: none;
 	}
 
 	/* Special cases */
