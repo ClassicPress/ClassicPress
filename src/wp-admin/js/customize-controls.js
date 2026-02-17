@@ -1,5 +1,7 @@
 /**
  * @output wp-admin/js/customize-controls.js
+ *
+ * @since CP-2.8.0
  */
 
 /* eslint consistent-this: [ "error", "control" ] */
@@ -9,7 +11,7 @@
  * FilePondPluginFileRename, FilePondPluginImagePreview
  */
 document.addEventListener( 'DOMContentLoaded', function() {
-	var addButton, pond, leftSidebar, customizeButton, currentMenuId,
+	var addButton, pond, leftSidebar, customizeButton, currentMenuId, observer,
 		intersectionObserver, orgThemes, localThemes, previousAccordionPane,
 		i = 1,
 		{ FilePond } = window, // import FilePond
@@ -69,7 +71,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	} );
 
-	/*
+	/**
 	 * Show AYS dialog when there are unsaved widget changes.
 	 *
 	 * Note that browsers do not permit the display of a custom message.
@@ -79,6 +81,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.preventDefault();
 		}
 	} );
+
+	/**
+	 * Ensure auto_add checkbox works as intended when a new menu is created
+	 */
+	observer = new MutationObserver( function( mutations ) {
+		if ( menuToEdit.querySelector( '.auto_add' ) ) {
+			menuToEdit.querySelector( '.auto_add' ).addEventListener( 'input', function( e ) {
+				inputChanged( e.target, e.target.closest( 'li' ) );
+			} );
+			menuToEdit.querySelector( '.auto_add' ).addEventListener( 'input', function( e ) {
+				inputChanged( e.target, e.target.closest( 'li' ) );
+			} );
+			observer.disconnect();
+		}
+	} );
+	observer.observe( menuToEdit, { attributes: false, childList: true, characterData: false, subtree: true } );
 
 	/**
 	 * Helper function copied from jQuery
@@ -98,9 +116,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Prepare changed object for publication
 	 */
-	function inputChanged( input, li ) {
+	function inputChanged( input, li, navMenuId ) {
 		let menuId, title, menuLocations, assignments, span,
+			formData = new FormData(),
 			settingId = li.dataset.settingId,
+			value = input.value.trim(),
 			menuName = li.closest( '.customize-pane-child' ).querySelector( '.menu-name-field' ).value;
 
 		if ( settingId.startsWith( 'nav_menu_locations[' ) ) {
@@ -114,6 +134,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( input.checked ) {
 					span.textContent = menuName;
 					input.value = li.parentNode.dataset.menuId;
+					updatedControls[ settingId ] = li.parentNode.dataset.menuId;
 					input.nextElementSibling.querySelector( '.theme-location-set' ).innerHTML = '(' + _wpCustomizeControlsL10n.current + ' ' + span.outerHTML + ')';
 		
 					menuLocations.forEach( function( menuLocation ) {
@@ -148,11 +169,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					} );
 				}
 			}
-		}
-
-		if ( settingId.startsWith( 'nav_menu[' ) ) {
+		} else if ( settingId.startsWith( 'nav_menu[' ) ) {
 			updatedControls[ settingId ] = {
-				name: input.value.trim()
+				name: li.closest( 'ul' ).querySelector( '.menu-name-field' ).value.trim(),
+				auto_add: li.closest( 'ul' ).querySelector( '.auto_add' ).checked ? 1 : 0
 			};
 		} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
 			title = li.querySelector( '.edit-menu-item-title' ).value.trim();
@@ -182,7 +202,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				status: 'publish'
 			};
 		} else {
-			updatedControls[ settingId ] = input.value.trim();
+			updatedControls[ settingId ] = value;
 		}
 		activatePublishButton();
 	}
@@ -206,7 +226,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Prevent tabbing out of dialog form.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 *
 	 * @param event - Event.
 	 * @return {void}
@@ -315,6 +335,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	/**
 	 * Code for the Iris color picker.
+	 *
+	 * Requires jQuery.
 	 */
 	jQuery( '.color-picker-hue, .color-picker-hex' ).wpColorPicker( { // Iris requires jQuery
         change: function( event, ui ) {
@@ -1258,11 +1280,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function imageEdit( widgetId ) {
-		var formData,
+		var formData = new FormData(),
 			attachmentId = document.querySelector( '#' + widgetId + ' [data-property="attachment_id"]' ).value,
 			nonce = document.querySelector( '#' + widgetId + ' .edit-media' ).dataset.editNonce;
 
-		formData = new FormData();
 		formData.append( 'action', 'image-editor' );
 		formData.append( '_ajax_nonce', nonce );
 		formData.append( 'postid', attachmentId );
@@ -1335,13 +1356,107 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 *
 	 * @abstract
 	 * @return {void}
-	 */
-	form.addEventListener( 'submit', function( e ) {
-		let submittedChanges = {},
-			formData = new FormData();
+	 */ 
+	form.addEventListener( 'submit', async function( e ) {
+		let negativeId, menuId, result, newResult,
+			entries = Object.entries( updatedControls ),
+			navMenuChanges = {},
+			submittedChanges = {},
+			navMenuNegatives = [], // an array because we need it to be iterable
+			navMenuLocations = [],
+			navMenuItems = [],
+			formData = new FormData(),
+			updateData = new FormData();
 
 		// Prevent form submission via PHP
 		e.preventDefault();
+
+		// Populate arrays if a new menu is being added
+		for ( const [key, value] of entries ) {
+			if ( key.startsWith( 'nav_menu[-' ) ) {
+				navMenuNegatives.push( [key, value] ); // value is the menu name
+			}
+		}
+		if ( navMenuNegatives.length > 0 ) {
+			for ( const [key, value] of entries ) {
+				if ( key.startsWith( 'nav_menu_locations[' ) ) {
+					navMenuLocations.push( [key, value] );
+				} else if ( key.startsWith( 'nav_menu_item[' ) ) {
+					navMenuItems.push( [key, value] );
+				}
+			}
+		}
+
+		// Create new menus first
+		for ( const [key, object] of navMenuNegatives ) {
+			negativeId = key.replace( 'nav_menu[', '' ).replace( ']', '' );
+
+			// Build correct object for only this one menu
+			navMenuChanges = {};
+			navMenuChanges[key] = {
+				value: {
+					name: object.name,
+					auto_add: !! object.auto_add
+				}
+			};
+
+			// Append values to FormData for POSTing to back-end PHP handler
+			formData.append( 'action', 'customize_save' );
+			formData.append( 'nonce', document.getElementById( 'customizer_nonce' ).value );
+			formData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
+			formData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
+			formData.append( 'customize_changeset_status', 'publish' );
+			formData.append( 'customize_changeset_data', JSON.stringify( navMenuChanges ) );
+
+			try {
+				const response = await fetch( ajaxurl, {
+					method: 'POST',
+					body: formData,
+					credentials: 'same-origin'
+				} );
+
+				if ( ! response.ok ) {
+					throw new Error( response.status );
+				}
+				result = await response.json();
+			} catch ( err ) {
+				console.error( err );
+				continue;
+			}
+
+			if ( result && result.success ) {
+				menuId = result.data.nav_menu_updates[0].term_id;
+				if ( menuId ) {
+
+					// Update any menu location currently populated by negativeId
+					navMenuLocations.forEach( function( locationArray, index ) {
+						if ( locationArray[1] === negativeId ) {
+							updatedControls[locationArray[0]] = menuId;
+						}
+					} );
+
+					// Update any nav_menu_items attached to this menu
+					navMenuItems.forEach( function( array, index ) {
+						if ( array[1].menu_id === negativeId ) {
+							updatedControls[array[0]].menu_id = menuId;
+						}
+					} );
+
+					// Prevent duplicate submissions
+					delete updatedControls[key];
+					formData.delete( 'customize_changeset_data' );
+					navMenuChanges = {};
+
+					// Update DOM attributes that contain negativeId
+					replaceSubstringInAttributes( negativeId, menuId );
+				}
+
+				// If the server rolled the changeset UUID, update it before next call
+				if ( result.data.next_changeset_uuid ) {
+					document.getElementById( 'customize_changeset_uuid' ).value = result.data.next_changeset_uuid;
+				}
+			}
+		}
 
 		// Prepare changeset object
 		Object.keys( updatedControls ).forEach( function( settingId ) {
@@ -1350,6 +1465,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( settingId.startsWith( 'nav_menu[' ) && item === 'delete-menu' ) {
 				submittedChanges[ settingId ] = {
 					value: false // deletes menu
+				};
+			} else if ( settingId.startsWith( 'nav_menu[' ) ) {
+				submittedChanges[ settingId ] = {
+					value: {
+						name: ( typeof item === 'string' ) ? item : item.name || '',
+						description: item.description || '',
+						parent: item.parent ? parseInt( item.parent, 10 ) : 0,
+						auto_add: !! item.auto_add // default false
+					}
 				};
 			} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
 				submittedChanges[ settingId ] = {
@@ -1372,6 +1496,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						status: item.status || 'publish'
 					}
 				};
+			} else if ( settingId.startsWith( 'nav_menu_locations[' ) ) {
+				submittedChanges[ settingId ] = {
+					value: item || ''
+				};
 			} else { // All other settings
 				submittedChanges[ settingId ] = {
 					value: item || ''
@@ -1379,38 +1507,43 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} );
 
-		formData.append( 'action', 'customize_save' );
-		formData.append( 'nonce', document.getElementById( 'customizer_nonce' ).value );
-		formData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
-		formData.append( 'customize_changeset_data', JSON.stringify( submittedChanges ) );
-		formData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
-		formData.append( 'customize_changeset_status', 'publish' ); // 'draft' | 'pending' | 'publish' | 'future'
+		// Append new data for POSTing to PHP back-end handler
+		updateData.append( 'action', 'customize_save' );
+		updateData.append( 'nonce', document.getElementById( 'customizer_nonce' ).value );
+		updateData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
+		updateData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
+		updateData.append( 'customize_changeset_status', 'publish' );
+		updateData.append( 'customize_changeset_data', JSON.stringify( submittedChanges ) );
 
-		fetch( ajaxurl, {
-			method: 'POST',
-			body: formData,
-			credentials: 'same-origin',
-		} ).then( function( response ) {
-			if ( response.ok ) {
-				return response.json(); // no errors
+		try {
+			const response = await fetch( ajaxurl, {
+				method: 'POST',
+				body: updateData,
+				credentials: 'same-origin'
+			} );
+			if ( ! response.ok ) {
+				throw new Error( response.status );
 			}
-			throw new Error( response.status );
-		} ).then( function( result ) { //console.log(result);
-			if ( result && result.success ) {
-				saveButton.disabled = true;
-				saveButton.value = _wpCustomizeControlsL10n.published;
-				document.getElementById( 'customize_changeset_uuid' ).value = result.data.next_changeset_uuid;
-				updatedControls = {}; // reset
-			}
-		} ).catch( function( error ) {
-			console.error( error );
+			newResult = await response.json();
+		} catch ( err ) {
+			console.error( _wpCustomizeControlsL10n.saveBlockedError['plural'] + ':', err );
 			saveButton.disabled = false;
 			saveButton.value = _wpCustomizeControlsL10n.publish;
-		} );
+		}
+
+		// Update HTML
+		if ( newResult && newResult.success ) {
+			saveButton.disabled = true;
+			saveButton.value = _wpCustomizeControlsL10n.published;
+			document.getElementById( 'customize_changeset_uuid' ).value = newResult.data.next_changeset_uuid;
+			updatedControls = {}; // reset
+		}
 	} );
 	
 	/**
-	 * @since CP-2.7.0
+	 * Makes menu items sortable
+	 *
+	 * @since CP-2.8.0
 	 */
 	function initSortables( listId ) {
 		var originalClientX, originalDepth, baseClientX, newClientX,
@@ -1788,6 +1921,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			lastItem.after( clone ); // add as last item to populated menu
 		} else { // menu is currently empty
 			menu.querySelector( '.customize-control-nav_menu_name' ).after( clone );
+			menu.querySelector( '.no-items-message' ).remove();
 		}
 		activatePublishButton();
 	}
@@ -1881,16 +2015,24 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
-	 * Replace the substring 'brand-new' in new menu attributes
+	 * Replaces the substring 'brand-new' in new menu attributes with negative integer.
+	 * Then replaces the negative integer with menuId on new menu publication.
+	 * 
+	 * @since CP-2.8.0
 	 */
-	function replaceBrandNewInAttributes( navMenuId ) {
-		const all = document.getElementById( 'menu-to-edit' ).querySelectorAll( '*' );
+	function replaceSubstringInAttributes( original, replacement ) {
+		let all = menuToEdit.querySelectorAll( '*' );
+		if ( all.length < 1 || menuToEdit.querySelector( '.customize-control-nav_menu' ).dataset.menuId !== original ) { // menu already moved to new place
+			all = document.getElementById( 'sub-accordion-section-nav_menu[' + original + ']' ).querySelectorAll( '*' ); // locate moved menu and its attributes
+			document.getElementById( 'sub-accordion-section-nav_menu[' + original + ']' ).id = 'sub-accordion-section-nav_menu[' + replacement + ']';
+		}
+
 		all.forEach( function( el ) {
 			const attrs = el.getAttributeNames();
 			attrs.forEach( function( attrName ) {
 				const value = el.getAttribute( attrName );
-				if ( value && value.includes( 'brand-new' ) ) {
-					const newValue = value.replaceAll( 'brand-new', navMenuId );
+				if ( value && value.includes( original ) ) {
+					const newValue = value.replaceAll( original, replacement );
 					el.setAttribute( attrName, newValue );
 				}
 			} );
@@ -1904,14 +2046,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		const range = document.createRange(),
 			ul = document.createElement( 'ul' );
 		let fragment;
-		
+
+		currentMenuId = id.split( '[' )[1].replace( ']', '' );
 		range.selectNodeContents( menuToEdit );
-		fragment = range.extractContents(),
+		fragment = range.extractContents();
 		ul.id = 'sub-' + id;
 		ul.className = 'customize-pane-child accordion-section-content accordion-section control-section control-section-nav_menu menu assigned-to-menu-location';
 		ul.append( fragment );						
 		ul.querySelector( '.new-menu-title' ).textContent = ul.querySelector( '.menu-name-field' ).value.trim();
-		currentMenuId = id.split( '[' )[1].replace( ']', '' );
 		document.getElementById( 'sub-accordion-section-menu_locations' ).after( ul );
 	}
 
@@ -2032,21 +2174,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Update attributes and values
 				ul.style.display = 'none';
-				replaceBrandNewInAttributes( navMenuId );
-				document.getElementById( 'menu-name-title-' + navMenuId ).value = title;
+				document.getElementById( 'menu-name-title-brand-new' ).value = title;
+				replaceSubstringInAttributes( 'brand-new', navMenuId );
 				menuToEdit.querySelectorAll( '.assigned-menu-location input' ).forEach( function( input, index ) {
 					if ( ul.querySelectorAll( '.assigned-menu-location input' )[index]?.checked ) {
 						input.checked = true;
 						menuName = input.nextElementSibling.innerHTML.split( '<span' )[0].trim();
-						inputChanged( input, input.closest( 'li' ) );
+						inputChanged( input, input.closest( 'li' ), navMenuId );
 					}
 					input.addEventListener( 'input', function() {
-						inputChanged( input, input.closest( 'li' ) );
+						inputChanged( input, input.closest( 'li' ), navMenuId );
 					} );
 					input.addEventListener( 'change', function() {
-						inputChanged( input, input.closest( 'li' ) );
+						inputChanged( input, input.closest( 'li' ), navMenuId );
 					} );
 				} );
+				inputChanged( menuToEdit.querySelector( '.menu-name-field' ), menuToEdit.querySelector( '.menu-name-field' ).closest( 'li' ), navMenuId );
 				menuToEdit.style.display = 'block';
 
 				// Add menu to list of menus
