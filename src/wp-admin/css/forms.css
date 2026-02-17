@@ -1668,8 +1668,8 @@ table.form-table td .updated p {
 	}
 
 	p.search-box input[name="s"] {
-		width: 100%;
 		float: none;
+		width: 100%;
 		margin-bottom: 10px;
 		vertical-align: middle;
 	}
