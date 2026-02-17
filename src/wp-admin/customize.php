@@ -750,7 +750,7 @@ wp_print_scripts();
 								foreach ( $sections_by_panel['nav_menus'] as $section ) {
 
 									// Individual menus, e.g. nav_menu[2], nav_menu[primary], etc.
-									if ( 0 !== strpos( $section->id, 'nav_menu[' ) ) {
+									if ( ! str_starts_with( $section->id, 'nav_menu[' ) ) {
 										continue;
 									}
 
@@ -1232,15 +1232,10 @@ wp_print_scripts();
 						// Render controls for each nav_menus section (locations + individual menus).
 						foreach ( $sections_by_panel['nav_menus'] as $section ) {
 
-							// Skip if there are no controls collected for this section.
-							if ( empty( $controls[ $section->id ] ) ) {
-								continue;
-							}
-
 							// Extract menu term ID from section ID: nav_menu[123] => 123
 							$menu_id = 0;
 							if ( str_starts_with( $section->id, 'nav_menu[' ) ) {
-								$menu_id = substr( $section->id, strlen( 'nav_menu[' ), -1 );
+								$menu_id = absint( substr( $section->id, strlen( 'nav_menu[' ), -1 ) );
 							}
     
 							$section_class = 'control-section-nav_menu';
@@ -1289,203 +1284,204 @@ wp_print_scripts();
 								</li>
         
 								<?php
-								foreach ( $controls[ $section->id ] as $control_data ) {
-									$field_id    = $control_data['id'];
-									$field_value = $control_data['value'];
-									$field_type  = $control_data['type'];
-									$field_label = $control_data['label'];
-									$description = $control_data['description'];
-									$setting_id  = $control_data['setting_id'];
-									$menu_id     = absint( $menu_id );
-
-									// Memu items - only for nav_menu[ID] sections
-									if ( $menu_id && str_starts_with( $section->id, 'nav_menu[' ) ) {
-										?>
-										<li id="customize-control-nav_menu-<?php echo $menu_id; ?>-name"
-											class="customize-control customize-control-nav_menu_name no-drag"
-											data-setting-id="nav_menu[<?php echo $menu_id; ?>]"
+								// Menu items - only for nav_menu[ID] sections
+								if ( $menu_id && str_starts_with( $section->id, 'nav_menu[' ) ) {
+									?>
+									
+									<li id="customize-control-nav_menu-<?php echo $menu_id; ?>-name"
+										class="customize-control customize-control-nav_menu_name no-drag"
+										data-setting-id="nav_menu[<?php echo $menu_id; ?>]"
+									>
+										<label for="menu-name-title-<?php echo $menu_id; ?>">
+											<span class="customize-control-title">
+												<?php esc_html_e( 'Menu Name' ); ?>
+											</span>
+											<div class="customize-control-notifications-container" style="display: none;">
+												<ul></ul>
+											</div>
+										</label>
+										<input id="menu-name-title-<?php echo $menu_id; ?>"
+											type="text"
+											class="menu-name-field live-update-section-title"
+											value="<?php echo esc_attr( $menus[$menu_id] ); ?>"
 										>
-											<label for="menu-name-title-<?php echo $menu_id; ?>">
+									</li>
+
+									<?php
+									$menu_items = wp_get_nav_menu_items( $menu_id );
+									if ( empty( $menu_items ) ) {
+										?>
+
+										<li class="no-items-message">
+											<p><?php esc_html_e( 'This menu is currently empty. Add items using the Add Items panel.' ); ?></p>
+										</li>
+
+										<?php
+									} else {
+										$depth_map = array();
+										foreach ( $menu_items as $menu_item ) {
+											$depth_map[ $menu_item->ID ] = cp_get_menu_item_depth( $menu_items, $menu_item->ID );
+											?>
+
+											<li id="customize-control-nav_menu_item-<?php echo esc_attr( $menu_item->ID ); ?>"
+												class="customize-control customize-control-nav_menu_item menu-item menu-item-depth-<?php echo absint( $depth_map[ $menu_item->ID ] ); ?> menu-item-custom menu-item-edit-inactive move-left-disabled move-up-disabled move-right-disabled move-down-disabled"
+												data-setting-id="nav_menu_item[<?php echo esc_attr( $menu_item->ID ); ?>]"
+											>
+
+												<?php
+												// Individual menu items are not pre-registered and so need dynamic instantiation
+												$nav_menu_item_control = new WP_Customize_Nav_Menu_Item_Control(
+													$wp_customize,
+													'nav_menu_item[' . $menu_item->ID . ']',
+													array(
+														'label'    => $menu_item->post_title ?: $menu_item->title,
+														'section'  => 'nav_menu_items[' . $menu_id . ']',  // Menu section
+													)
+												);
+												$nav_menu_item_control->render_content();
+												?>
+
+											</li>
+
+											<?php
+										}
+									}
+									?>
+										
+									<li id="customize-control-nav_menu-<?php echo $menu_id; ?>"
+										class="customize-control customize-control-nav_menu no-drag"
+										data-menu-id="<?php echo $menu_id; ?>"
+									>
+										<div class="customize-control-notifications-container" style="display: none;">
+											<ul></ul>
+										</div>
+										<p class="new-menu-item-invitation" style="display: none;">
+											<?php esc_html_e( 'Time to add some links! Click “Add Items” to start putting pages, categories, and custom links in your menu. Add as many things as you would like.' );?>
+										</p>
+										<div class="customize-control-nav_menu-buttons">
+											<button type="button"
+												class="button add-new-menu-item"
+												aria-label="<?php esc_attr_e( 'Add or remove menu items' ); ?>"
+												aria-expanded="false"
+												aria-controls="available-menu-items"
+											>
+												<?php esc_html_e( 'Add Items' ); ?>
+											</button>
+											<button type="button"
+												class="button-link reorder-toggle"
+												aria-label="<?php esc_attr_e( 'Reorder menu items' ); ?>"
+												aria-describedby="reorder-items-desc-<?php echo $menu_id; ?>"
+												style="display: none;"
+											>
+												<span class="reorder">
+													<?php esc_html_e( 'Reorder' ); ?>
+												</span>
+												<span class="reorder-done">
+													<?php esc_html_e( 'Done' ); ?>
+												</span>
+											</button>
+										</div>
+										<p class="screen-reader-text" id="reorder-items-desc-<?php echo $menu_id; ?>">
+											<?php esc_html_e( 'When in reorder mode, additional controls to reorder menu items will be available in the items list above.' ); ?>
+										</p>
+									</li>
+									<li id="customize-control-nav_menu-<?php echo $menu_id; ?>-locations" class="customize-control customize-control-nav_menu_locations no-drag">
+										<ul class="menu-location-settings" data-menu-id="<?php echo $menu_id; ?>">
+											<li class="customize-control assigned-menu-locations-title no-drag">
 												<span class="customize-control-title">
-													<?php esc_html_e( 'Menu Name' ); ?>
+													<?php esc_html_e( 'Menu Locations' ); ?>
 												</span>
 												<div class="customize-control-notifications-container" style="display: none;">
 													<ul></ul>
 												</div>
-											</label>
-											<input id="menu-name-title-<?php echo $menu_id; ?>"
-												type="text"
-												class="menu-name-field live-update-section-title"
-												value="<?php echo esc_attr( $menus[$menu_id] ); ?>"
-											>
-										</li>
-
-										<?php
-										$menu_items = wp_get_nav_menu_items( $menu_id );
-										if ( empty( $menu_items ) ) {
-											?>
-											<li class="no-items-message">
-												<p><?php esc_html_e( 'This menu is currently empty. Add items using the Add Items panel.' ); ?></p>
+												<p>
+													<?php esc_html_e( 'Here’s where this menu appears. If you would like to change that, pick another location.' ); ?>
+												</p>
 											</li>
+												
 											<?php
-										} else {
-											$depth_map = array();
-											foreach ( $menu_items as $menu_item ) {
-												$depth_map[ $menu_item->ID ] = cp_get_menu_item_depth( $menu_items, $menu_item->ID );
-												?>
+											foreach ( $locations as $key => $location ) {
+												if ( isset( $menu_locations[$key] ) ) {
+													?>
+											
+													<li class="customize-control customize-control-checkbox assigned-menu-location no-drag"
+														data-setting-id="<?php echo esc_attr( 'nav_menu_locations[' . $key . ']' ); ?>"
+													>
+														<span class="customize-inside-control-row">
+															<input id="customize-nav-menu-control-location-<?php echo esc_attr( $key ); ?>"
+																type="checkbox"
+																data-location-id="<?php echo esc_attr( $key ); ?>"
+																class="menu-location"
+																value="<?php echo checked( $menu_locations[$key], $menu_id, false ) ? $menu_id : ''; ?>"
+																<?php checked( $menu_locations[$key], $menu_id ); ?>
+															>
+															<label for="customize-nav-menu-control-location-<?php echo esc_attr( $menu_locations[$key] ); ?>">
+																<?php echo esc_html( $location ); ?>
+																<span class="theme-location-set">
 
-												<li id="customize-control-nav_menu_item-<?php echo esc_attr( $menu_item->ID ); ?>"
-													class="customize-control customize-control-nav_menu_item menu-item menu-item-depth-<?php echo absint( $depth_map[ $menu_item->ID ] ); ?> menu-item-custom menu-item-edit-inactive move-left-disabled move-up-disabled move-right-disabled move-down-disabled"
-													data-setting-id="nav_menu_item[<?php echo esc_attr( $menu_item->ID ); ?>]"
-												>
+																	<?php
+																	if ( isset ( $menus[$menu_locations[$key]] ) ) {
+																		printf(
+																			wp_kses(
+																				/* translators: %s is the current menu name wrapped in a span. */
+																				__( '(Current: <span class="current-menu-location-name-main-nav">%s</span>)' ),
+																				array( 'span' => array( 'class' => true ) )
+																			),
+																			esc_html( $menus[ $menu_locations[ $key ] ] )
+																		);
+																	}
+																	?>
+
+																</span>
+															</label>
+														</span>
+													</li>
 
 													<?php
-													// Individual menu items are not pre-registered and so need dynamic instantiation
-													$nav_menu_item_control = new WP_Customize_Nav_Menu_Item_Control(
-														$wp_customize,
-														'nav_menu_item[' . $menu_item->ID . ']',
-														array(
-															'label'    => $menu_item->post_title ?: $menu_item->title,
-															'section'  => 'nav_menu_items[' . $menu_id . ']',  // Menu section
-														)
-													);
-													$nav_menu_item_control->render_content();
-													?>
-
-												</li>
-
-												<?php
-											}
-										}
-										?>
-										<li id="customize-control-nav_menu-<?php echo $menu_id; ?>"
-											class="customize-control customize-control-nav_menu no-drag"
-											data-menu-id="<?php echo $menu_id; ?>"
-										><?php // Look at nav-menu-control.php ?>
-											<div class="customize-control-notifications-container" style="display: none;">
-												<ul></ul>
-											</div>
-											<p class="new-menu-item-invitation" style="display: none;">
-												<?php esc_html_e( 'Time to add some links! Click “Add Items” to start putting pages, categories, and custom links in your menu. Add as many things as you would like.' );?>
-											</p>
-											<div class="customize-control-nav_menu-buttons">
-												<button type="button"
-													class="button add-new-menu-item"
-													aria-label="<?php esc_attr_e( 'Add or remove menu items' ); ?>"
-													aria-expanded="false"
-													aria-controls="available-menu-items"
-												>
-													<?php esc_html_e( 'Add Items' ); ?>
-												</button>
-												<button type="button"
-													class="button-link reorder-toggle"
-													aria-label="<?php esc_attr_e( 'Reorder menu items' ); ?>"
-													aria-describedby="reorder-items-desc-<?php echo $menu_id; ?>"
-													style="display: none;"
-												>
-													<span class="reorder">
-														<?php esc_html_e( 'Reorder' ); ?>
-													</span>
-													<span class="reorder-done">
-														<?php esc_html_e( 'Done' ); ?>
-													</span>
-												</button>
-											</div>
-											<p class="screen-reader-text" id="reorder-items-desc-<?php echo $menu_id; ?>">
-												<?php esc_html_e( 'When in reorder mode, additional controls to reorder menu items will be available in the items list above.' ); ?>
-											</p>
-										</li>
-										<li id="customize-control-nav_menu-<?php echo $menu_id; ?>-locations" class="customize-control customize-control-nav_menu_locations no-drag">
-											<ul class="menu-location-settings" data-menu-id="<?php echo $menu_id; ?>">
-												<li class="customize-control assigned-menu-locations-title no-drag">
-													<span class="customize-control-title">
-														<?php esc_html_e( 'Menu Locations' ); ?>
-													</span>
-													<div class="customize-control-notifications-container" style="display: none;">
-														<ul></ul>
-													</div>
-													<p>
-														<?php esc_html_e( 'Here’s where this menu appears. If you would like to change that, pick another location.' ); ?>
-													</p>
-												</li>
-												
-												<?php
-												foreach ( $locations as $key => $location ) {
-													if ( isset( $menu_locations[$key] ) ) {
-														?>
-												
-														<li class="customize-control customize-control-checkbox assigned-menu-location no-drag"
-															data-setting-id="<?php echo esc_attr( 'nav_menu_locations[' . $key . ']' ); ?>"
-														>
-															<span class="customize-inside-control-row">
-																<input id="customize-nav-menu-control-location-<?php echo esc_attr( $key ); ?>"
-																	type="checkbox"
-																	data-location-id="<?php echo esc_attr( $key ); ?>"
-																	class="menu-location"
-																	value="<?php echo checked( $menu_locations[$key], $menu_id, false ) ? $menu_id : ''; ?>"
-																	<?php checked( $menu_locations[$key], $menu_id ); ?>
-																>
-																<label for="customize-nav-menu-control-location-<?php echo esc_attr( $menu_locations[$key] ); ?>">
-																	<?php echo esc_html( $location ); ?>
-																	<span class="theme-location-set">
-
-																		<?php
-																		if ( isset ( $menus[$menu_locations[$key]] ) ) {
-																			printf(
-																				wp_kses(
-																					/* translators: %s is the current menu name wrapped in a span. */
-																					__( '(Current: <span class="current-menu-location-name-main-nav">%s</span>)' ),
-																					array( 'span' => array( 'class' => true ) )
-																				),
-																				esc_html( $menus[ $menu_locations[ $key ] ] )
-																			);
-																		}
-																		?>
-
-																	</span>
-																</label>
-															</span>
-														</li>
-
-														<?php
-													}
 												}
-												?>
-											</ul>
-										</li>
-										<li id="customize-control-nav_menu-<?php echo $menu_id; ?>-auto_add" class="customize-control customize-control-nav_menu_auto_add no-drag">
-											<span class="customize-control-title">
-												<?php esc_html_e( 'Menu Options' ); ?>
-											</span>
-											<div class="customize-control-notifications-container" style="display: none;">
-												<ul></ul>
-											</div>
-											<span class="customize-inside-control-row">
-												<input id="customize-nav-menu-auto-add-control-<?php echo $menu_id; ?>" type="checkbox" class="auto_add">
-												<label for="customize-nav-menu-auto-add-control-<?php echo $menu_id; ?>">
-													<?php esc_html_e( 'Automatically add new top-level pages to this menu' ); ?>
-												</label>
-											</span>
-										</li>
-										<li id="customize-control-nav_menu-<?php echo $menu_id; ?>-delete"
-											class="customize-control customize-control-undefined no-drag"
-											data-setting-id="nav_menu[<?php echo $menu_id; ?>]"
-										>
-											<div class="customize-control-notifications-container" style="display: none;">
-												<ul></ul>
-											</div>
-											<div class="menu-delete-item">
-												<button type="button" class="button-link button-link-delete">
-													<?php esc_html_e( 'Delete Menu' ); ?>
-												</button>
-											</div>
-										</li>
-										<?php
-										// Skip rest of controls loop for menu sections
-										break;
-            
-									// Menu locations
-									} elseif ( 'nav_menu_location' === $field_type ) {
+											}
+											?>
+
+										</ul>
+									</li>
+									<li id="customize-control-nav_menu-<?php echo $menu_id; ?>-auto_add"
+										class="customize-control customize-control-nav_menu_auto_add no-drag"
+										data-setting-id="nav_menu[<?php echo $menu_id; ?>]"
+									>
+										<span class="customize-control-title">
+											<?php esc_html_e( 'Menu Options' ); ?>
+										</span>
+										<div class="customize-control-notifications-container" style="display: none;">
+											<ul></ul>
+										</div>
+										<span class="customize-inside-control-row">
+											<input id="customize-nav-menu-auto-add-control-<?php echo $menu_id; ?>" type="checkbox" class="auto_add">
+											<label for="customize-nav-menu-auto-add-control-<?php echo $menu_id; ?>">
+												<?php esc_html_e( 'Automatically add new top-level pages to this menu' ); ?>
+											</label>
+										</span>
+									</li>
+									<li id="customize-control-nav_menu-<?php echo $menu_id; ?>-delete"
+										class="customize-control customize-control-undefined no-drag"
+										data-setting-id="nav_menu[<?php echo $menu_id; ?>]"
+									>
+										<div class="customize-control-notifications-container" style="display: none;">
+											<ul></ul>
+										</div>
+										<div class="menu-delete-item">
+											<button type="button" class="button-link button-link-delete">
+												<?php esc_html_e( 'Delete Menu' ); ?>
+											</button>
+										</div>
+									</li>
+										
+								<?php
+								// Menu locations
+								} elseif ( $section->id === 'menu_locations' ) {
+									foreach ( $controls[ $section->id ] as $control_data ) {
+										$field_id    = $control_data['id'];
+										$field_type  = $control_data['type'];
+										$setting_id  = $control_data['setting_id'];
 										?>
 
 										<li id="customize-control-<?php echo esc_attr( $field_id ); ?>"
@@ -1504,11 +1500,14 @@ wp_print_scripts();
 
 											</div>
 										</li>
+
 										<?php
 									}
 								}
 								?>
+
 							</ul>
+
 							<?php
 						}
 
@@ -2131,7 +2130,10 @@ customize_themes_print_templates();
 
 		</ul>
 	</li>
-	<li id="customize-control-nav_menu-brand-new-auto_add" class="customize-control customize-control-nav_menu_auto_add no-drag">
+	<li id="customize-control-nav_menu-brand-new-auto_add"
+		class="customize-control customize-control-nav_menu_auto_add no-drag"
+		data-setting-id="nav_menu[brand-new]"
+	>
 		<span class="customize-control-title">
 			<?php esc_html_e( 'Menu Options' ); ?>
 		</span>
