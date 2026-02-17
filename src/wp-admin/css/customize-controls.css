@@ -116,6 +116,10 @@ body:not(.ready) #customize-save-button-wrapper .save {
 	position: relative;
 }
 
+#customize-theme-controls .accordion-section .menu {
+	padding-top: 0;
+}
+
 #customize-outer-theme-controls .accordion-section-content {
 	padding: 12px;
 }
