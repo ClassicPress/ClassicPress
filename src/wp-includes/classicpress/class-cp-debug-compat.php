@@ -196,7 +196,7 @@ class CP_Debug_Compat {
 	}
 
 	private static function plugin_folder( $path ) {
-		return preg_replace( '~^' . preg_quote( WP_PLUGIN_DIR ) . preg_quote( DIRECTORY_SEPARATOR ) . '([^' . preg_quote( DIRECTORY_SEPARATOR ) . ']*).*~', '$1', $path );
+		return preg_replace( '~^' . preg_quote( wp_normalize_path( WP_PLUGIN_DIR ) ) . '/([^/]*).*~', '$1', wp_normalize_path( $path ) );
 	}
 
 
@@ -235,11 +235,11 @@ class CP_Debug_Compat {
 			$active_paths = array_filter(
 				$active_paths,
 				function ( $path ) use ( $plugin ) {
-					return str_starts_with( $path, WP_PLUGIN_DIR . '/' . $plugin );
+					return str_starts_with( wp_normalize_path( $path ), wp_normalize_path( WP_PLUGIN_DIR ) . '/' . $plugin );
 				}
 			);
 			$plugin_path = array_pop( $active_paths );
-			$plugin_data = get_plugin_data( $plugin_path );
+			$plugin_data = get_plugin_data( wp_normalize_path( $plugin_path ) );
 			$plugin_name = $plugin_data['Name'];
 			if ( ! isset( $options['data']['plugins'][ $plugin_name ] ) || ! in_array( $func, $options['data']['plugins'][ $plugin_name ] ) ) {
 				$options['data']['plugins'][ $plugin_name ][] = $func;
