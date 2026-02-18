@@ -92,6 +92,10 @@ $_old_files = array(
 	'wp-includes/blocks',
 	'wp-includes/html-api',
 	'wp-includes/style-engine',
+
+	// Upgrade to SimplePie 1.9.0
+	'wp-includes/SimplePie/src/Decode',
+	'wp-includes/SimplePie/src/Core.php',
 );
 
 /**
@@ -350,7 +354,7 @@ function update_core( $from, $to ) {
 	 * when updating from older WordPress versions, in which case
 	 * the polyfills from wp-includes/compat.php may not be available.
 	 */
-	$development_build = ( false !== strpos( $old_wp_version . $wp_version, '-' ) ); // A dash in the version indicates a development release.
+	$development_build = ( false !== strpos( $old_wp_version . $wp_version . $cp_version, '+' ) ); // A plus in the version indicates a development or nightly release.
 	$php_compat        = version_compare( $php_version, $required_php_version, '>=' );
 
 	if ( file_exists( WP_CONTENT_DIR . '/db.php' ) && empty( $wpdb->is_mysql ) ) {

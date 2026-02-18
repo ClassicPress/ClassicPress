@@ -149,7 +149,6 @@ get_current_screen()->add_help_tab(
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
 	'<p>' . __( '<a href="https://wordpress.org/documentation/article/appearance-themes-screen/#install-themes">Documentation on Adding New Themes</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://wordpress.org/documentation/article/block-themes/">Documentation on Block Themes</a>' ) . '</p>' .
 	'<p>' . __( '<a href="https://wordpress.org/support/forums/">Support forums</a>' ) . '</p>'
 );
 
@@ -197,6 +196,24 @@ if ( ! is_wp_error( $response ) ) {
 	$tabs = apply_filters( 'install_themes_tabs', array( 'upload' => __( 'Upload Theme' ) ) );
 	if ( ! empty( $tabs['upload'] ) && current_user_can( 'upload_themes' ) ) {
 		echo ' <button type="button" class="upload-view-toggle page-title-action hide-if-no-js" aria-expanded="false">' . __( 'Upload Theme' ) . '</button>';
+	}
+	if (
+			current_user_can( 'install_themes' ) &&
+			! is_file( WP_PLUGIN_DIR . '/classicpress-directory-integration/classicpress-directory-integration.php' )
+		) {
+			echo '<div class="notice notice-info"><p>' . sprintf( __( 'You can browse other themes in the <a href="%s" target="_blank">ClassicPress Directory</a>.' ), esc_url( 'https://directory.classicpress.net/themes/' ) ) . '<br>';
+			$url = wp_nonce_url(
+				add_query_arg(
+					array(
+						'action' => 'install-plugin',
+						'plugin' => 'classicpress-directory-integration',
+						'from'   => 'index',
+					),
+					self_admin_url( 'update.php' )
+				),
+				'install-plugin_' . 'classicpress-directory-integration'
+			);
+			echo sprintf( __( '<a href="%1$s">Install now</a> | ClassicPress Directory Integration plugin: install ClassicPress specific themes from the Appearance Menu.' ), $url ) . '</p></div>';
 	}
 	?>
 
@@ -308,7 +325,7 @@ if ( ! is_wp_error( $response ) ) {
 							<img class="theme-screenshot" src="" alt="">
 						</div>
 
-						<div class="theme-details">						
+						<div class="theme-details">
 							<div class="theme-rating">
 								<a class="num-ratings" href=""></a>
 							</div>

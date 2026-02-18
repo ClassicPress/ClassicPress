@@ -6,9 +6,18 @@
  * @covers ::wp_count_comments
  */
 class Tests_Comment_wpCountComments extends WP_UnitTestCase {
+	protected static $comment_post = null;
+
+	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
+		self::$comment_post = $factory->post->create_and_get();
+	}
 
 	public function test_wp_count_comments() {
-		$count = wp_count_comments();
+		$count = wp_count_comments(
+			array(
+				'comment_post_ID'  => self::$comment_post->ID,
+			)
+		);
 
 		$this->assertSame( 0, $count->approved );
 		$this->assertSame( 0, $count->moderated );
@@ -23,6 +32,7 @@ class Tests_Comment_wpCountComments extends WP_UnitTestCase {
 		self::factory()->comment->create(
 			array(
 				'comment_approved' => 1,
+				'comment_post_ID'  => self::$comment_post->ID,
 			)
 		);
 
@@ -41,6 +51,7 @@ class Tests_Comment_wpCountComments extends WP_UnitTestCase {
 		self::factory()->comment->create(
 			array(
 				'comment_approved' => 0,
+				'comment_post_ID'  => self::$comment_post->ID,
 			)
 		);
 
@@ -59,6 +70,7 @@ class Tests_Comment_wpCountComments extends WP_UnitTestCase {
 		self::factory()->comment->create(
 			array(
 				'comment_approved' => 'spam',
+				'comment_post_ID'  => self::$comment_post->ID,
 			)
 		);
 
@@ -77,6 +89,7 @@ class Tests_Comment_wpCountComments extends WP_UnitTestCase {
 		self::factory()->comment->create(
 			array(
 				'comment_approved' => 'trash',
+				'comment_post_ID'  => self::$comment_post->ID,
 			)
 		);
 
@@ -95,6 +108,7 @@ class Tests_Comment_wpCountComments extends WP_UnitTestCase {
 		self::factory()->comment->create(
 			array(
 				'comment_approved' => 'post-trashed',
+				'comment_post_ID'  => self::$comment_post->ID,
 			)
 		);
 

@@ -14,6 +14,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
 
+# Disable permissions for all available scopes by default.
+# Required permissions are configured at the job level.
+permissions: {}
+
 jobs:
   # Runs the PHPUnit tests for ClassicPress.
   #
@@ -37,50 +41,79 @@ jobs:
   # - Clone PHP.net if needed for unit tests.
   # - Run PHPUnit Tests.
   test-php:
-    name: "PHP ${{ matrix.php }} on MySQL ${{matrix.mysql}}${{ matrix.memcached && ' with memcached' || '' }}${{ 'xdebug' == matrix.coverage && ' with XDebug' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
+    name: "${{ matrix.multisite && 'Multisite on ' || '' }}PHP ${{ matrix.php }} on MySQL ${{matrix.mysql}}${{ matrix.memcached && ' with memcached' || '' }}${{ 'xdebug' == matrix.coverage && ' with XDebug' || '' }}${{ matrix.experimental && ' - Experimental' || '' }}"
+    permissions:
+      contents: read
     runs-on: ubuntu-24.04
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
     strategy:
       fail-fast: false
       matrix:
-        php: [ '8.4', '8.3', '8.2', '8.1', '8.0', '7.4' ]
+        php: [ '8.5', '8.4', '8.3', '8.2', '8.1', '8.0', '7.4' ]
         mysql: [ '5.7', '8.0' ]
+        multisite: [ false, true ]
         memcached: [ false ]
         coverage: [ none ]
         experimental: [ false ]
+        # Include jobs that test with memcached or xdebug.
         include:
-          - php: '8.0'
-            mysql: '5.7'
-            memcached: true
-            coverage: none
-            experimental: false
-          - php: '8.2'
-            mysql: '5.7'
-            memcached: true
-            coverage: none
-            experimental: false
           - php: '8.3'
             mysql: '5.7'
+            multisite: false
             memcached: true
             coverage: none
             experimental: false
-          - php: '8.0'
-            mysql: '8.0'
-            memcached: true
-            coverage: none
-            experimental: false
-          - php: '8.2'
-            mysql: '8.0'
+          - php: '8.4'
+            mysql: '5.7'
+            multisite: false
             memcached: true
             coverage: none
             experimental: false
           - php: '8.3'
             mysql: '8.0'
+            multisite: false
+            memcached: true
+            coverage: none
+            experimental: false
+          - php: '8.4'
+            mysql: '8.0'
+            multisite: false
+            memcached: true
+            coverage: none
+            experimental: false
+          - php: '8.3'
+            mysql: '5.7'
+            multisite: true
+            memcached: true
+            coverage: none
+            experimental: false
+          - php: '8.4'
+            mysql: '5.7'
+            multisite: true
             memcached: true
             coverage: none
             experimental: false
           - php: '8.3'
             mysql: '8.0'
+            multisite: true
+            memcached: true
+            coverage: none
+            experimental: false
+          - php: '8.4'
+            mysql: '8.0'
+            multisite: true
+            memcached: true
+            coverage: none
+            experimental: false
+          - php: '8.4'
+            mysql: '8.0'
+            multisite: false
+            memcached: false
+            coverage: xdebug
+            experimental: false
+          - php: '8.4'
+            mysql: '8.0'
+            multisite: true
             memcached: false
             coverage: xdebug
             experimental: false
@@ -92,19 +125,19 @@ jobs:
           echo "PHP_FPM_GID=$(id -g)" >> $GITHUB_ENV
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Read .nvmrc
         run: echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
         id: nvmrc
 
       - name: Install NodeJS
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '${{ steps.nvmrc.outputs.NVMRC }}'
 
       - name: Use cached Node modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         env:
           cache-name: cache-node-modules
         with:
@@ -134,10 +167,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Setup MySQL
-        uses: mirromutth/mysql-action@v1.1
+        uses: shogo82148/actions-setup-mysql@v1
         with:
-          mysql root password: "password"
-          mysql version: "${{ matrix.mysql }}"
+          root-password: "password"
+          mysql-version: "${{ matrix.mysql }}"
 
       - name: Wait for MySQL
         run: |
@@ -229,9 +262,10 @@ jobs:
 
       - name: Set up a Memcached server
         if: ${{ matrix.memcached }}
-        uses: niden/actions-memcached@v7
+        uses: niden/actions-memcached@v8
 
       - name: Run PHPUnit default
+        if: ${{ !matrix.multisite }}
         env:
           WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:default
@@ -244,6 +278,7 @@ jobs:
         continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit multisite
+        if: ${{ matrix.multisite }}
         env:
           WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:multisite
@@ -256,6 +291,7 @@ jobs:
         continue-on-error: ${{ matrix.experimental }}
 
       - name: Run PHPUnit external-http
+        if: ${{ matrix.coverage != 'none' }}
         env:
           WP_DB_HOST: 127.0.0.1:3306
         run: grunt phpunit:external-http

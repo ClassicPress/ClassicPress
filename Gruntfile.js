@@ -61,7 +61,8 @@ module.exports = function(grunt) {
 				dest: SOURCE_DIR,
 				src: [
 					'wp-admin/css/*.css',
-					'wp-includes/css/*.css'
+					'wp-includes/css/*.css',
+					'wp-includes/js/mediaelement/wp-*.css'
 				]
 			},
 			colors: {
@@ -101,6 +102,17 @@ module.exports = function(grunt) {
 						]
 					}
 				}
+			},
+			codemirror: {
+				options: {
+					linebreak: false,
+					banner: require( './tools/webpack/codemirror-banner' )
+				},
+				files: {
+					src: [
+						SOURCE_DIR + 'wp-includes/js/codemirror/codemirror.min.css'
+					]
+				}
 			}
 		},
 		clean: {
@@ -123,6 +135,21 @@ module.exports = function(grunt) {
 					'!wp-includes/js/dist/vendor/**'
 				]
 			},
+			'mediaelement-js': {
+				expand: true,
+				cwd: SOURCE_DIR,
+				src: [
+					'wp-includes/js/mediaelement/mediaelement-and-player.js',
+					'wp-includes/js/mediaelement/mediaelement-and-player.min.js',
+					'wp-includes/js/mediaelement/mediaelement.js',
+					'wp-includes/js/mediaelement/mediaelement.min.js',
+					'wp-includes/js/mediaelement/mediaelementplayer-legacy.css',
+					'wp-includes/js/mediaelement/mediaelementplayer-legacy.min.css',
+					'wp-includes/js/mediaelement/mediaelementplayer.css',
+					'wp-includes/js/mediaelement/mediaelementplayer.min.css',
+					'wp-includes/js/mediaelement/mejs-controls.svg'
+				]
+			},
 			dynamic: {
 				dot: true,
 				expand: true,
@@ -142,6 +169,8 @@ module.exports = function(grunt) {
 							'**',
 							'!wp-includes/js/media/**',
 							'!**/.{svn,git}/**', // Ignore version control directories.
+							// Exclude raw root certificate files that are combined into ca-bundle.crt.
+							'!wp-includes/certificates/legacy-1024bit.pem',
 							// Exclude plugins unless specifically listed
 							'!wp-content/plugins/**',
 							'wp-content/plugins/index.php',
@@ -166,6 +195,24 @@ module.exports = function(grunt) {
 					{
 						src: 'wp-config-sample.php',
 						dest: BUILD_DIR
+					}
+				]
+			},
+			'codemirror': {
+				options: {
+					process: function( content, srcpath ) {
+						if ( srcpath.includes( 'htmlhint.min.js' ) ) {
+							return content + '\nif ( window.HTMLHint && window.HTMLHint.HTMLHint ) { window.HTMLHint = window.HTMLHint.HTMLHint; }';
+						}
+						return content;
+					}
+				},
+				files: [
+					{
+						[ SOURCE_DIR + 'wp-includes/js/codemirror/csslint.js' ]: [ './node_modules/csslint/dist/csslint.js' ],
+						[ SOURCE_DIR + 'wp-includes/js/codemirror/esprima.js' ]: [ './node_modules/esprima/dist/esprima.js' ],
+						[ SOURCE_DIR + 'wp-includes/js/codemirror/htmlhint.js' ]: [ './node_modules/htmlhint/dist/htmlhint.min.js' ],
+						[ SOURCE_DIR + 'wp-includes/js/codemirror/jsonlint.js' ]: [ './node_modules/jsonlint/web/jsonlint.js' ]
 					}
 				]
 			},
@@ -224,6 +271,46 @@ module.exports = function(grunt) {
 					{
 						src:  `./node_modules/sortablejs/Sortable.min.js`,
 						dest: `${SOURCE_DIR}wp-includes/js/sortable.min.js`
+					}
+				]
+			},
+			'mediaelement-js': {
+				files: [
+					{
+						src:  `./node_modules/mediaelement/build/mediaelement-and-player.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelement-and-player.js`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelement-and-player.min.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelement-and-player.min.js`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelement.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelement.js`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelement.min.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelement.min.js`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelementplayer-legacy.css`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelementplayer-legacy.css`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelementplayer-legacy.min.css`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelementplayer-legacy.min.css`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelementplayer.css`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelementplayer.css`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mediaelementplayer.min.css`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mediaelementplayer.min.css`
+					},
+					{
+						src:  `./node_modules/mediaelement/build/mejs-controls.svg`,
+						dest: `${SOURCE_DIR}wp-includes/js/mediaelement/mejs-controls.svg`
 					}
 				]
 			},
@@ -299,8 +386,9 @@ module.exports = function(grunt) {
 			}
 		},
 		webpack: {
-			min: webpackConfig( { environment: 'production', buildTarget: SOURCE_DIR } ),
-			dev: webpackConfig( { environment: 'development', buildTarget: SOURCE_DIR } )
+			min: webpackConfig( { environment: 'production', buildTarget: SOURCE_DIR, minify: true } ),
+			dev: webpackConfig( { environment: 'production', buildTarget: SOURCE_DIR, minify: false } ),
+			codemirror: require( './tools/webpack/codemirror.config.js' )( { buildTarget: SOURCE_DIR } )
 		},
 		sass: {
 			colors: {
@@ -318,6 +406,22 @@ module.exports = function(grunt) {
 		cssmin: {
 			options: {
 				compatibility: 'ie7'
+			},
+			codemirror: {
+				files: {
+					[ SOURCE_DIR + 'wp-includes/js/codemirror/codemirror.min.css' ]: [
+						'node_modules/codemirror/lib/codemirror.css',
+						'node_modules/codemirror/addon/hint/show-hint.css',
+						'node_modules/codemirror/addon/lint/lint.css',
+						'node_modules/codemirror/addon/dialog/dialog.css',
+						'node_modules/codemirror/addon/display/fullscreen.css',
+						'node_modules/codemirror/addon/fold/foldgutter.css',
+						'node_modules/codemirror/addon/merge/merge.css',
+						'node_modules/codemirror/addon/scroll/simplescrollbars.css',
+						'node_modules/codemirror/addon/search/matchesonscrollbar.css',
+						'node_modules/codemirror/addon/tern/tern.css'
+					]
+				}
 			},
 			core: {
 				expand: true,
@@ -441,7 +545,11 @@ module.exports = function(grunt) {
 		jshint: {
 			options: grunt.file.readJSON('.jshintrc'),
 			grunt: {
-				src: ['Gruntfile.js', 'tools/**/*.js', '!tools/build/grunt-terser.js']
+				src: [
+					'Gruntfile.js',
+					'tools/**/*.js',
+					'!tools/build/grunt-terser.js'
+				]
 			},
 			tests: {
 				src: [
@@ -574,7 +682,9 @@ module.exports = function(grunt) {
 			},
 			grunt: {
 				src: [
-					'Gruntfile.js'
+					'Gruntfile.js',
+					'tools/**/*.js',
+					'!tools/build/grunt-terser.js'
 				]
 			},
 			core: {
@@ -797,6 +907,16 @@ module.exports = function(grunt) {
 					`${BUILD_DIR}wp-includes/js/wp-emoji.min.js`
 				],
 				dest: `${BUILD_DIR}wp-includes/js/wp-emoji-release.min.js`
+			},
+			certificates: {
+				options: {
+					separator: '\n\n'
+				},
+				src: [
+					SOURCE_DIR + 'wp-includes/certificates/legacy-1024bit.pem',
+					'vendor/composer/ca-bundle/res/cacert.pem'
+				],
+				dest: SOURCE_DIR + 'wp-includes/certificates/ca-bundle.crt'
 			}
 		},
 		imagemin: {
@@ -818,28 +938,6 @@ module.exports = function(grunt) {
 			embed: {
 				src: `${BUILD_DIR}wp-includes/embed.php`,
 				dest: '.'
-			}
-		},
-		replace: {
-			emojiRegex: {
-				options: {
-					patterns: [
-						{
-							match: /\/\/ START: emoji arrays[\S\s]*\/\/ END: emoji arrays/g,
-							replacement: buildTools.replaceEmojiRegex
-						}
-					]
-				},
-				files: [
-					{
-						expand: true,
-						flatten: true,
-						src: [
-							`${SOURCE_DIR}wp-includes/formatting.php`
-						],
-						dest: `${SOURCE_DIR}wp-includes/`
-					}
-				]
 			}
 		}
 	});
@@ -939,7 +1037,7 @@ module.exports = function(grunt) {
 	grunt.registerTask(
 		'precommit:emoji',
 		[
-			'replace:emojiRegex'
+			'emojiReplace'
 		]
 	);
 
@@ -1054,7 +1152,7 @@ module.exports = function(grunt) {
 
 			grunt.util.spawn( {
 				cmd: 'bash',
-				args: [ '-c', "git ls-files -z | xargs -0 grep -E -C3 -n --binary-files=without-match '(<<" + "<<|^=======(\\s|$)|>>" + ">>)'" ]
+				args: [ '-c', "git ls-files -z | xargs -0 grep -E -C3 -n --binary-files=without-match '(<<" + "<<<<<|^=======(\\s|$)|>>>>>" + ">>)'" ]
 			}, ( error, { stdout, stderr }, code ) => {
 				// Ignore error because it is populated for non-zero exit codes:
 				// https://gruntjs.com/api/grunt.util#grunt.util.spawn
@@ -1136,6 +1234,56 @@ module.exports = function(grunt) {
 	);
 
 	grunt.registerTask(
+		'emojiReplace',
+		function() {
+			const done = this.async();
+
+			buildTools.replaceEmojiRegex()
+			.then ( data => {
+				let content = grunt.file.read( `${SOURCE_DIR}wp-includes/formatting.php` );
+				content = content.replace( /\/\/ START: emoji arrays[\S\s]*\/\/ END: emoji arrays/g, data );
+				grunt.file.write( `${SOURCE_DIR}wp-includes/formatting.php`, content );
+				grunt.log.writeln( 'Emoji data replaced.' );
+				done();
+			} )
+			.catch( error => {
+				grunt.log.error( error );
+				done( false );
+			} );
+		}
+	);
+
+	grunt.registerTask(
+		'certificates:update',
+		'Updates the Composer package responsible for root certificate updates.',
+		function() {
+			var done = this.async();
+			var flags = this.flags;
+			var args = [ 'update' ];
+
+			grunt.util.spawn( {
+				cmd: 'composer',
+				args: args,
+				opts: { stdio: 'inherit' }
+			}, function( error ) {
+				if ( flags.error && error ) {
+					done( false );
+				} else {
+					done( true );
+				}
+			} );
+		}
+	);
+
+	grunt.registerTask(
+		'certificates:upgrade',
+		[
+			'certificates:update',
+			'concat:certificates'
+		]
+	);
+
+	grunt.registerTask(
 		'copy:script-loader',
 		[
 			'dev:git-version',
@@ -1159,10 +1307,23 @@ module.exports = function(grunt) {
 		[
 			'clean:vendor-js',
 			'clean:package-js',
+			'clean:mediaelement-js',
 			'copy:vendor-js',
 			'webpack:dev',
 			'webpack:min',
-			'usebanner:js'
+			'usebanner:js',
+			'copy:mediaelement-js',
+			'build:codemirror'
+		]
+	);
+
+	grunt.registerTask(
+		'build:codemirror',
+		[
+			'webpack:codemirror',
+			'cssmin:codemirror',
+			'usebanner:codemirror',
+			'copy:codemirror'
 		]
 	);
 

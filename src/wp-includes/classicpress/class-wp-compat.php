@@ -58,7 +58,7 @@ class WP_Compat {
 
 		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
 		$active        = is_plugin_active( $plugin_file ) ? 'active' : '';
-		$shadow        = isset( $plugin_data['new_version'] ) ? 'style="box-shadow: none;"' : '';
+		$shadow        = isset( $plugin_data['update'] ) ? 'style="box-shadow: none;"' : '';
 		// Translators: %1$s is the plugin name.
 		$notice_msg    = sprintf( esc_html__( '%1$s uses block-related functions and may have issues.' ), $plugin_data['Name'] );
 		$notice_msg   .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-general-screen/#blocks-compatibility">' . __( 'Learn more' ) . '</a> | ';
@@ -72,10 +72,10 @@ class WP_Compat {
 			<td colspan="<?php echo $wp_list_table->get_column_count(); ?>" class="plugin-update colspanchange" <?php echo $shadow; ?>>
 				<?php wp_admin_notice( $notice_msg, $notice_args ); ?>
 			</td>
+			<script>
+				document.querySelector('tr[data-plugin="<?php echo $plugin_file; ?>"').classList.add('update');
+			</script>
 		</tr>
-		<script>
-			document.querySelector('tr[data-plugin="<?php echo $plugin_file; ?>"').classList.add('update');
-		</script>
 		<?php
 	}
 
@@ -431,6 +431,48 @@ class WP_Compat {
 			 * @return string ''.
 			 */
 			function get_block_theme_folders( ...$args ) {
+				WP_Compat::using_block_function();
+				return '';
+			}
+		}
+
+		if ( ! function_exists( 'register_block_style' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.7.0
+			 *
+			 * @return bool False.
+			 */
+			function register_block_style( ...$args ) {
+				WP_Compat::using_block_function();
+				return false;
+			}
+		}
+
+		if ( ! function_exists( 'register_block_bindings_source' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.7.0
+			 *
+			 * @return bool False.
+			 */
+			function register_block_bindings_source( ...$args ) {
+				WP_Compat::using_block_function();
+				return false;
+			}
+		}
+
+		if ( ! function_exists( 'do_blocks' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.7.0
+			 *
+			 * @return string ''.
+			 */
+			function do_blocks( ...$args ) {
 				WP_Compat::using_block_function();
 				return '';
 			}

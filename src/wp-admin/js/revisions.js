@@ -6,7 +6,7 @@
  * @output wp-admin/js/revisions.js
  */
 
-/* global console, _wpRevisionsSettings, ajaxurl */
+/* global console, _wpRevisionsSettings, ajaxurl, ResizeObserver */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 
@@ -17,7 +17,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 *
 	 * @since CP-2.1.0
 	 */
-	var fromRevision, toRevision,
+	var fromRevision, toRevision, observer,
 		chunks = {}, // This object will hold all the diffs and their metadata
 		revisionsArea = document.querySelector( '.revisions' ),
 		fromSliderWrapper = document.querySelector( '.from-slider-wrapper' ),
@@ -25,7 +25,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		toSlider = document.getElementById( 'to-slider' ),
 		previousButton = document.querySelector( '.revisions-previous .button' ),
 		nextButton = document.querySelector( '.revisions-next .button' ),
-		ticksOptions = document.querySelectorAll( '#ticks option' ),
+		timeline = document.getElementById( 'ticks' ),
+		ticksOptions = timeline.querySelectorAll( 'option' ),
 		list = document.getElementById( 'revisions-list' ).value.split( ', ' ),
 		fromAuthorCard = document.querySelector( '.diff-meta-from .author-card' ),
 		toAuthorCard = document.querySelector( '.diff-meta-to .author-card' ),
@@ -42,11 +43,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		fromSlider.value = list.indexOf( queryParams.get( 'from' ) );
 		toSlider.value = list.indexOf( queryParams.get( 'to' ) );
+		timeline.querySelector( 'option[data-id="' + queryParams.get( 'from' ) + '"]' ).style.backgroundColor = '#fff';
+		timeline.querySelector( 'option[data-id="' + queryParams.get( 'from' ) + '"]' ).style.border = '1px solid #00b3bc';
+		timeline.querySelector( 'option[data-id="' + queryParams.get( 'to' ) + '"]' ).style.backgroundColor = '#fff';
+		timeline.querySelector( 'option[data-id="' + queryParams.get( 'to' ) + '"]' ).style.border = '1px solid #00b3bc';
 		getDiff( queryParams.get( 'from' ) + ':' + queryParams.get( 'to' ) );
 	} else {
 		fromSliderWrapper.style.display = 'none';
 		revisionsArea.classList.remove( 'comparing-two-revisions' );
 		toSlider.value = list.indexOf( queryParams.get( 'revision' ) );
+		timeline.querySelector( 'option[data-id="' + queryParams.get( 'revision' ) + '"]' ).style.backgroundColor = '#fff';
+		timeline.querySelector( 'option[data-id="' + queryParams.get( 'revision' ) + '"]' ).style.border = '1px solid #00b3bc';
 
 		if ( parseInt( toSlider.value, 10 ) === 0 ) {
 			previousButton.disabled = true;
@@ -58,16 +65,30 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Track changes in From slider
 	fromSlider.addEventListener( 'input', function() {
+		var fromValue = parseInt( fromSlider.value, 10 ),
+			toValue = parseInt( toSlider.value, 10 );
 
 		// In Compare Two mode, ensure From is not equal to or greater than To
-		if ( isVisible( fromSlider ) && fromSlider.value >= toSlider.value ) {
-			fromSlider.value = parseInt( toSlider.value, 10 ) - 1;
+		if ( isVisible( fromSlider ) && fromValue >= toValue ) {
+			fromSlider.value = toValue - 1;
+			return; // exit handler after forced correction to avoid downstream bugs
 		}
 
 		// Call appropriate revisions
-		fromRevision = isVisible( fromSlider ) ? list[ fromSlider.value ] : list[ 0 ];
-		toRevision = list[ toSlider.value ];
+		fromRevision = isVisible( fromSlider ) ? list[ fromValue ] : list[ 0 ];
+		toRevision = list[ toValue ];
 		compareRevisions( fromRevision + ':' + toRevision );
+
+		// Highlight relevant revisions
+		ticksOptions.forEach( function( option ) {
+			if ( option.dataset.id === fromRevision || option.dataset.id === toRevision ) {
+				option.style.backgroundColor = '#fff';
+				option.style.border = '1px solid #00b3bc';
+			} else {
+				option.style.backgroundColor = 'transparent';
+				option.style.border = '1px solid transparent';
+			}
+		} );
 
 		// Update URL
 		queryParams.delete( 'revision' );
@@ -78,26 +99,40 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Track changes in To slider
 	toSlider.addEventListener( 'input', function() {
+		var fromValue = parseInt( fromSlider.value, 10 ),
+			toValue = parseInt( toSlider.value, 10 );
 
 		// Call appropriate revisions
 		if ( isVisible( fromSlider ) ) {
 
 			// In Compare Two mode, ensure To is not equal to or less than From
-			if ( toSlider.value <= fromSlider.value ) {
-				toSlider.value = parseInt( fromSlider.value, 10 ) + 1;
+			if ( toValue <= fromValue ) {
+				toSlider.value = fromValue + 1;
+				toValue = fromValue + 1;
 			}
-			fromRevision = list[ fromSlider.value ];
-			toRevision = list[ toSlider.value ];
+			fromRevision = list[ fromValue ];
+			toRevision = list[ toValue ];
 			queryParams.delete( 'revision' );
 			queryParams.set( 'from', fromRevision );
 			queryParams.set( 'to', toRevision );
 		} else {
-			fromRevision = list[ parseInt( toSlider.value, 10 ) - 1 ];
-			toRevision = list[ toSlider.value ];
+			fromRevision = list[ toValue - 1 ];
+			toRevision = list[ toValue ];
 			queryParams.delete( 'from' );
 			queryParams.delete( 'to' );
 			queryParams.set( 'revision', toRevision );
 		}
+
+		// Highlight relevant revisions
+		ticksOptions.forEach( function( option ) {
+			if ( option.dataset.id === fromRevision || option.dataset.id === toRevision ) {
+				option.style.backgroundColor = '#fff';
+				option.style.border = '1px solid #00b3bc';
+			} else {
+				option.style.backgroundColor = 'transparent';
+				option.style.border = '1px solid transparent';
+			}
+		} );
 
 		// Disable and enable Next button
 		if ( parseInt( toSlider.value, 10 ) === 0 ) {
@@ -290,4 +325,38 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function isVisible( elem ) {
 		return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
 	}
+
+	/**
+	 * Helper function to detect flex-wrapping
+	 *
+	 * @since CP-2.6.0
+	 */
+	function detectFlexWrap( container ) {
+		var firstTop,
+			children = container.children;
+
+		if ( children.length < 2 ) {
+			return false; // No wrap possible
+		}
+
+		firstTop = children[0].offsetTop;
+		for ( var i = 1, n = children.length; i < n; i++ ) {
+			if ( children[i].offsetTop > firstTop ) {
+				document.body.classList.add( 'timeline-wrapped' ); // Wrapped!
+			} else {
+				document.body.classList.remove( 'timeline-wrapped' ); // Not wrapped
+			}
+		}
+	}
+
+	/*
+	 * Watch for wrapping if window is resized
+	 *
+	 * @since CP-2.6.0
+	 */
+	observer = new ResizeObserver( function() {
+		detectFlexWrap( timeline );
+	} );
+	observer.observe( timeline );
+
 } );

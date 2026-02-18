@@ -1679,6 +1679,9 @@ function cp_deprecated_styles() {
 		'wp-jquery-ui-dialog' => 'CP-2.2.0',
 		'farbtastic'          => 'CP-2.2.0',
 		'thickbox'            => 'CP-2.2.0',
+
+		// Deprecated since ClassicPress 2.6.0
+		'wp-pointer'          => 'CP-2.6.0',
 	);
 }
 

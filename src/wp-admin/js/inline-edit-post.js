@@ -47,7 +47,7 @@ window.wp = window.wp || {};
 		}
 
 		// Get list of tags and convert to an array
-		suggestions = document.getElementById( 'tags-list' ).value.split( ', ' );
+		suggestions = container.nextElementSibling.value.split( ', ' );
 
 		textarea.addEventListener( 'scroll', function() {
 			mirror.scrollTop = textarea.scrollTop;
@@ -283,8 +283,16 @@ window.wp = window.wp || {};
 			inlineEditPost.edit( this );
 		});
 
+		// Clone quick edit categories for the bulk editor.
+		var beCategories = $( '#inline-edit fieldset.inline-edit-categories' ).clone();
+
+		// Make "id" attributes globally unique.
+		beCategories.find( '*[id]' ).each( function() {
+			this.id = 'bulk-edit-' + this.id;
+		});
+
 		$('#bulk-edit').find('fieldset:first').after(
-			$('#inline-edit fieldset.inline-edit-categories').clone()
+			beCategories
 		).siblings( 'fieldset:last' ).prepend(
 			$( '#inline-edit .inline-edit-tags-wrap' ).clone()
 		);

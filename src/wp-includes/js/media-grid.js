@@ -248,7 +248,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Toggle media button navigation wrappers according to viewport width
 	function toggleMediaNavigation() {
-		if ( window.innerWidth > 480 ) {
+		if ( window.innerWidth > 600 ) {
 			mediaNavigation.style.display = '';
 			mediaNavigationMobile.style.display = 'none';
 		} else {
@@ -330,6 +330,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '#media-audio' ).removeAttribute( 'hidden' );
 			dialog.querySelector( 'audio.wp-audio-shortcode' ).src = url;
 			dialog.querySelector( 'audio' ).setAttribute( 'type', mime );
+			dialog.querySelector( '.alt-text' ).style.display = 'none';
+			dialog.querySelector( '#alt-text-description' ).style.display = 'none';
 		} else if ( filetype === 'video' ) {
 			dialog.querySelector( '.wp-video' ).removeAttribute( 'style' );
 			dialog.querySelector( '#media-image' ).setAttribute( 'hidden', true );
@@ -337,6 +339,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '#media-video' ).removeAttribute( 'hidden' );
 			dialog.querySelector( 'video.wp-video-shortcode' ).src = url;
 			dialog.querySelector( 'video' ).setAttribute( 'type', mime );
+			dialog.querySelector( '.alt-text' ).style.display = 'none';
+			dialog.querySelector( '#alt-text-description' ).style.display = 'none';
 		} else {
 			dialog.querySelector( '#media-audio' ).setAttribute( 'hidden', true );
 			dialog.querySelector( '#media-video' ).setAttribute( 'hidden', true );
@@ -345,6 +349,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( filetype === 'image' ) {
 				dialog.querySelector( '.thumbnail-image img' ).src = url;
 				dialog.querySelector( '.edit-attachment' ).style.display = '';
+				dialog.querySelector( '.alt-text' ).style.display = '';
+				dialog.querySelector( '#alt-text-description' ).style.display = '';
 
 				if (
 					( mime === 'image/webp' && ! _wpMediaGridSettings.webp_editable ) ||
@@ -556,6 +562,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
+			var items, num;
+
 			if ( result.success ) {
 
 				// Clear existing grid
@@ -586,6 +594,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					result.data.forEach( function( attachment ) {
 						var gridItem = populateGridItem( attachment );
 						mediaGrid.appendChild( gridItem );
+					} );
+
+					// Reset grid order
+					items = document.querySelectorAll( '.media-item' );
+					items.forEach( function( item, index ) {
+						item.setAttribute( 'data-order', parseInt( index + 1 ) );
 					} );
 
 					// Reset pagination
@@ -626,7 +640,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						document.getElementById( 'current-page-selector' ).setAttribute( 'value', paged ? paged : 1 );
 						document.getElementById( 'current-page-selector' ).value = paged ? paged : 1;
 						document.querySelector( '.total-pages' ).textContent = result.headers.max_pages;
-						document.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, result.headers.total_posts );
+
+						num = document.querySelector( '.displaying-num' ).textContent.split( ' ' );
+						document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
 
 						queryParams.set( 'paged', paged );
 						history.replaceState( null, null, '?' + queryParams.toString() );
@@ -749,6 +765,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						div.className = 'notice notice-error is-dismissible';
 						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
 						document.querySelector( '.page-title-action' ).after( div );
+						close.click();
 					} else {
 						div = document.createElement( 'div' );
 						div.id = 'message';
@@ -1020,14 +1037,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.target.textContent = 'Bulk select';
 			dateFilter.style.display = '';
 			typeFilter.style.display = '';
-			mediaCatSelect.style.display = '';
+			if ( mediaCatSelect ) {
+				mediaCatSelect.style.display = '';
+			}
 			deleteButton.classList.add( 'hidden' );
+			deleteButton.disabled = true;
 			toolbar.classList.remove( 'media-toolbar-mode-select' );
 		} else {
 			e.target.textContent = 'Cancel';
 			dateFilter.style.display = 'none';
 			typeFilter.style.display = 'none';
-			mediaCatSelect.style.display = 'none';
+			if ( mediaCatSelect ) {
+				mediaCatSelect.style.display = 'none';
+			}
 			deleteButton.classList.remove( 'hidden' );
 			toolbar.classList.add( 'media-toolbar-mode-select' );
 
@@ -1160,8 +1182,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		labelTapToUndo: _wpMediaGridSettings.tap_close,
 		fileRenameFunction: ( file ) =>
 			new Promise( function( resolve ) {
-				resolve( window.prompt( _wpMediaGridSettings.new_filename, file.name ) );
-			} ),
+				const newName = window.prompt(
+					_wpMediaGridSettings.new_filename,
+					file.name
+				);
+				resolve( newName === null ? file.name : newName );
+			}
+		),
 		acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 		labelFileTypeNotAllowed: _wpMediaGridSettings.invalid_type,
 		fileValidateTypeLabelExpectedTypes: _wpMediaGridSettings.check_types

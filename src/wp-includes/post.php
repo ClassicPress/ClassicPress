@@ -1129,7 +1129,7 @@ function register_post_status( $post_status, $args = array() ) {
 function get_post_status_object( $post_status ) {
 	global $wp_post_statuses;
 
-	if ( empty( $wp_post_statuses[ $post_status ] ) ) {
+	if ( ! is_string( $post_status ) || empty( $wp_post_statuses[ $post_status ] ) ) {
 		return null;
 	}
 
@@ -2036,6 +2036,10 @@ function is_post_type_viewable( $post_type ) {
  */
 function is_post_status_viewable( $post_status ) {
 	if ( is_scalar( $post_status ) ) {
+		if ( ! is_string( $post_status ) ) {
+			return false;
+		}
+
 		$post_status = get_post_status_object( $post_status );
 
 		if ( ! $post_status ) {
@@ -6084,6 +6088,20 @@ function wp_delete_attachment( $post_id, $force_delete = false ) {
 	$post_meta_ids = $wpdb->get_col( $wpdb->prepare( "SELECT meta_id FROM $wpdb->postmeta WHERE post_id = %d ", $post_id ) );
 	foreach ( $post_meta_ids as $mid ) {
 		delete_metadata_by_mid( 'post', $mid );
+	}
+
+	// Delete references to deleted images in gallery widgets.
+	$widget_options = get_option( 'widget_media_gallery' );
+	if ( ! empty( $widget_options ) ) {
+		foreach ( $widget_options as $key => $instance ) {
+			if ( isset( $instance['ids'] ) && is_array( $instance['ids'] ) ) {
+
+				// Remove the deleted image ID from the widget's stored IDs.
+				$instance['ids'] = array_diff( $instance['ids'], array( $post_id ) );
+				$widget_options[ $key ] = $instance;
+			}
+		}
+		update_option( 'widget_media_gallery', $widget_options ); // Update widget settings
 	}
 
 	/** This action is documented in wp-includes/post.php */

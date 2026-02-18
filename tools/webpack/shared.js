@@ -1,9 +1,11 @@
 /* jshint es3: false, esversion: 9 */
+/* eslint func-style: ["error", "declaration", { "allowArrowFunctions": true }] */
 /* global __dirname*/
 /**
  * External dependencies
  */
 const TerserPlugin = require( 'terser-webpack-plugin' );
+const StripSourceMapURLPlugin = require('./strip-sourcemap');
 const { join } = require( 'path' );
 
 const baseDir = join( __dirname, '../../' );
@@ -14,25 +16,28 @@ const baseConfig = ( env ) => {
 	const config = {
 		target: 'browserslist',
 		mode,
+		plugins: [
+			new StripSourceMapURLPlugin( env.minify )
+		],
 		optimization: {
-			moduleIds: mode === 'production' ? 'deterministic' : 'named',
+			moduleIds: 'deterministic',
+			minimize: env.minify,
 			minimizer: [
 				new TerserPlugin( {
 					parallel: true,
 					terserOptions: {
 						output: {
 							comments: /translators:/i,
-							keep_quoted_props: true,
+							keep_quoted_props: true
 						},
 						compress: {
-							passes: 2,
+							passes: 2
 						},
 						mangle: {
-							reserved: [ '__', '_n', '_nx', '_x' ],
-						},
-					},
-					extractComments: mode === 'production' ? true : false,
-				} ),
+							reserved: [ '__', '_n', '_nx', '_x' ]
+						}
+					}
+				} )
 			]
 		},
 		module: {
@@ -40,26 +45,18 @@ const baseConfig = ( env ) => {
 				{
 					test: /\.js$/,
 					use: [ 'source-map-loader' ],
-					enforce: 'pre',
-				},
-			],
+					enforce: 'pre'
+				}
+			]
 		},
 		resolve: {
 			modules: [
 				baseDir,
-				'node_modules',
-			],
+				'node_modules'
+			]
 		},
-		stats: 'errors-only',
+		stats: 'errors-only'
 	};
-
-	if ( mode === 'development' ) {
-		config.mode = 'production';
-		config.optimization = {
-			minimize: false,
-			moduleIds: 'deterministic',
-		};
-	}
 
 	return config;
 };
@@ -74,5 +71,5 @@ module.exports = {
 	baseDir,
 	baseConfig,
 	normalizeJoin,
-	camelCaseDash,
+	camelCaseDash
 };

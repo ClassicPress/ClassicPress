@@ -27,7 +27,7 @@
  *
  * @global string $cp_version
  */
-$cp_version = '2.4.1+dev';
+$cp_version = '2.6.0+dev';
 
 /**
  * The WordPress version string.
@@ -39,7 +39,7 @@ $cp_version = '2.4.1+dev';
  *
  * @global string $wp_version
  */
-$wp_version = '6.2.6';
+$wp_version = '6.2.8';
 
 /**
  * Holds the WordPress DB revision, increments when changes are made to the WordPress DB schema.
@@ -54,7 +54,7 @@ $wp_db_version = 56657;
  *
  * @global int $cp_db_version
  */
-$cp_db_version = 1446;
+$cp_db_version = 2275;
 
 /**
  * Holds the TinyMCE version.
