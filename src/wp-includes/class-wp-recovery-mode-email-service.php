@@ -159,7 +159,7 @@ First, visit your website (###SITEURL###) and check for any visible issues. Next
 
 ###SUPPORT###
 
-If your site appears broken and you can\'t access your dashboard normally, WordPress now has a special "recovery mode". This lets you safely login to your dashboard and investigate further.
+If your site appears broken and you can\'t access your dashboard normally, ClassicPress now has a special "recovery mode". This lets you safely login to your dashboard and investigate further.
 
 ###LINK###
 
@@ -338,7 +338,7 @@ When seeking help with this issue, you may be asked for some of the following in
 	 */
 	private function get_debug( $extension ) {
 		$theme      = wp_get_theme();
-		$wp_version = get_bloginfo( 'version' );
+		$cp_version = classicpress_version();
 
 		if ( $extension ) {
 			$plugin = $this->get_plugin( $extension );
@@ -348,9 +348,9 @@ When seeking help with this issue, you may be asked for some of the following in
 
 		$debug = array(
 			'wp'    => sprintf(
-				/* translators: %s: Current WordPress version number. */
+				/* translators: %s: Current ClassicPress version number. */
 				__( 'ClassicPress version %s' ),
-				$wp_version
+				$cp_version
 			),
 			'theme' => sprintf(
 				/* translators: 1: Current active theme name. 2: Current active theme version. */
