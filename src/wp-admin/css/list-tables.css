@@ -1900,14 +1900,14 @@ div.action-links,
 		text-overflow: ellipsis;
 	}
 
-	.wp-list-table .is-expanded td:not(.hidden) {
-		display: block !important;
-		overflow: hidden; /* clearfix */
-	}
-
 	/* Hide ID column header cell in posts and pages table to fix layout on mobile */
 	#posts-filter .wp-list-table th.column-id {
 		display: none;
+	}
+
+	.wp-list-table .is-expanded td:not(.hidden) {
+		display: block !important;
+		overflow: hidden; /* clearfix */
 	}
 
 	/* Special cases */
