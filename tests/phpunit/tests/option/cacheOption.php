@@ -6,13 +6,32 @@
 class Tests_Option_CacheOption extends WP_UnitTestCase {
 	private static $cp_settings;
 	private static $object_cache_file;
+	private static $memcached;
 
 	public static function wpSetUpBeforeClass() {
 		require_once ABSPATH . WPINC . '/classicpress/class-cp-settings.php';
 		self::$cp_settings = new CP_Settings();
+	}
 
-		$wp_content_dir    = defined( 'WP_CONTENT_DIR' ) ? WP_CONTENT_DIR : ABSPATH . 'wp-content';
+	public function set_up() {
+		parent::set_up();
+
+		$wp_content_dir          = defined( 'WP_CONTENT_DIR' ) ? WP_CONTENT_DIR : ABSPATH . 'wp-content';
 		self::$object_cache_file = $wp_content_dir . '/object-cache.php';
+
+		if ( file_exists( self::$object_cache_file ) ) {
+			self::$memcached = true;
+		} else {
+			self::$memcached = false;
+		}
+	}
+
+	public function tear_down() {
+		if ( ! self::$memcached && file_exists( self::$object_cache_file ) ) {
+			unlink( self::$object_cache_file );
+		}
+
+		parent::tear_down();
 	}
 
 	/**
@@ -23,7 +42,7 @@ class Tests_Option_CacheOption extends WP_UnitTestCase {
 			$this->markTestSkipped( 'APCu extension is not available.' );
 		}
 
-		if ( file_exists( self::$object_cache_file ) ) {
+		if ( self::$memcached ) {
 			$this->markTestSkipped( 'Leave original object cache in place for Memcached tests.' );
 		}
 
