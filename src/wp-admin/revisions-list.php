@@ -187,7 +187,7 @@ unset( $messages );
 	}
 	?>
 
-	<form method="get">
+	<form id="revisions-filter" method="get">
 		<input type="hidden" name="post_parent" value="<?php esc_attr_e( $post_id ); ?>">
 		<?php $list_table->display(); ?>
 	</form>

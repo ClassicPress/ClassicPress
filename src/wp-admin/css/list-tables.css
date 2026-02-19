@@ -1900,8 +1900,8 @@ div.action-links,
 		text-overflow: ellipsis;
 	}
 
-	/* Hide ID column header cell in post table to fix layout on mobile. */
-	.wp-list-table th.column-id {
+	/* Hide ID column header cell in posts and pages table to fix layout on mobile */
+	#posts-filter .wp-list-table th.column-id {
 		display: none;
 	}
 
