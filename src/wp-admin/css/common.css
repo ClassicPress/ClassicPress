@@ -1728,6 +1728,7 @@ p.auto-update-status {
 	display: flex;
 	justify-content: flex-end;
 	top: 32px;
+	z-index: 999;
 }
 
 /* screen options and help tabs revert */
