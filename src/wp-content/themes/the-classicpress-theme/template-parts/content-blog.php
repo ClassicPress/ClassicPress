@@ -2,7 +2,7 @@
 /**
  * Template part for displaying posts on blog page
  *
- * This theme will use it for displaying posts at archive page as well
+ * This theme will use it for displaying posts on archive page as well
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  */
