@@ -24,8 +24,8 @@
 		?>
 	</div>
 
-	<?php if ( get_edit_post_link() ) : ?>
-		<?php
+	<?php
+	if ( get_edit_post_link() ) :
 		edit_post_link(
 			sprintf(
 				wp_kses_post(
@@ -34,10 +34,10 @@
 				),
 				get_the_title()
 			),
-			' <div class="edit-link">',
-			'</div>'
+			' <span class="edit-link">',
+			'</span>'
 		);
-		?>
-	<?php endif; ?>
+	endif;
+	?>
 
 </article><!-- #post-<?php the_ID(); ?> -->

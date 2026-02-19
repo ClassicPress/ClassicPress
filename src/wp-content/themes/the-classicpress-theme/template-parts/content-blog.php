@@ -1,6 +1,6 @@
 <?php
 /**
- * Template part for displaying posts at blog page
+ * Template part for displaying posts on blog page
  *
  * This theme will use it for displaying posts at archive page as well
  *
@@ -28,8 +28,8 @@
 			<?php the_excerpt(); ?>
 		</div>
 
-		<?php if ( get_edit_post_link() ) : ?>
-			<?php
+		<?php
+		if ( get_edit_post_link() ) :
 			edit_post_link(
 				sprintf(
 					wp_kses_post(
@@ -38,13 +38,11 @@
 					),
 					get_the_title()
 				),
-				' <div class="edit-link">',
-				'</div>'
+				' <span class="edit-link">',
+				'</span>'
 			);
-			?>
-		<?php endif; ?>
+		endif;
 
-		<?php
 		wp_link_pages(
 			array(
 				'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'the-classicpress-theme' ),
