@@ -32,6 +32,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		addWidgetButtons = document.querySelectorAll( '.add-new-widget' ),
 		updatedControls = {},
+		newMenuItemIDs = [],
 		menuToEdit = document.getElementById( 'menu-to-edit' );
 
 	// Clean the URL if previewing the active theme
@@ -85,7 +86,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Ensure auto_add checkbox works as intended when a new menu is created
 	 */
-	observer = new MutationObserver( function( mutations ) {
+	addObserver = new MutationObserver( function( mutations ) {
 		if ( menuToEdit.querySelector( '.auto_add' ) ) {
 			menuToEdit.querySelector( '.auto_add' ).addEventListener( 'input', function( e ) {
 				inputChanged( e.target, e.target.closest( 'li' ) );
@@ -93,10 +94,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			menuToEdit.querySelector( '.auto_add' ).addEventListener( 'input', function( e ) {
 				inputChanged( e.target, e.target.closest( 'li' ) );
 			} );
-			observer.disconnect();
+			addObserver.disconnect();
 		}
 	} );
-	observer.observe( menuToEdit, { attributes: false, childList: true, characterData: false, subtree: true } );
+	addObserver.observe( menuToEdit, { attributes: false, childList: true, characterData: false, subtree: true } );
+
+	/**
+	 * Make items in new menu sortable
+	 */
+	itemObserver = new MutationObserver( function( mutations ) {
+		if ( menuToEdit.querySelector( '.menu-item' ) ) {
+			initSortables( menuToEdit.id );
+			itemObserver.disconnect();
+		}
+	} );
+	itemObserver.observe( menuToEdit, { attributes: false, childList: true, characterData: false, subtree: true } );
 
 	/**
 	 * Helper function copied from jQuery
@@ -1484,7 +1496,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						url: item.url || '',
 						original_title: item.original_title || '',
 						menu_item_parent: item.menu_item_parent || '0',
-						object_id: item.object_id || '',
+						object_id: item.object_id || 0,
 						object: item.object || '',
 						type: item.type || 'custom',
 						type_label: item.type_label || '',
@@ -1493,7 +1505,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						target: item.target || '',
 						attr_title: item.attr_title || '',
 						description: item.description || '',
-						status: item.status || 'publish'
+						status: item.status || 'publish',
+						placeholder_id: item.object_id || 0
 					}
 				};
 			} else if ( settingId.startsWith( 'nav_menu_locations[' ) ) {
@@ -1504,6 +1517,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				submittedChanges[ settingId ] = {
 					value: item || ''
 				};
+			}
+
+			if ( newMenuItemIDs.length > 0 ) {
+				submittedChanges['nav_menus_created_posts'] = {
+					value: newMenuItemIDs
+				}
 			}
 		} );
 
@@ -1533,6 +1552,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Update HTML
 		if ( newResult && newResult.success ) {
+			newResult.data.nav_menu_item_updates.forEach( function( item ) {
+				replaceSubstringInAttributes( item.previous_post_id, item.post_id );
+			} );
 			saveButton.disabled = true;
 			saveButton.value = _wpCustomizeControlsL10n.published;
 			document.getElementById( 'customize_changeset_uuid' ).value = newResult.data.next_changeset_uuid;
@@ -1868,7 +1890,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var menu       = document.getElementById( 'sub-accordion-section-nav_menu[' + currentMenuId + ']' ) || menuToEdit,
 			menuItems  = menu.querySelectorAll( '.menu-item' ),
 			lastItem   = menuItems[menuItems.length - 1],
-			menuItemId = Date.now(),
+			menuItemId = '-' + Date.now(),
 			itemId     = type === 'custom' ? '-' + menuItemId : objectId,
 			template   = document.getElementById( 'tmpl-new-menu-item' ),
 			clone      = template.content.cloneNode( true );
@@ -1883,16 +1905,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 		clone.querySelector( '.edit-menu-item-title' ).value = title;
 
-		clone.querySelector( 'li' ).id = 'customize-control-nav_menu_item--' + menuItemId;
-		clone.querySelector( 'li' ).dataset.settingId = 'nav_menu_item--[' + menuItemId + ']';
+		clone.querySelector( 'li' ).id = 'customize-control-nav_menu_item-' + menuItemId;
+		clone.querySelector( 'li' ).dataset.settingId = 'nav_menu_item[' + menuItemId + ']';
 		clone.querySelector( '.menu-item-title' ).textContent = title;
 		clone.querySelector( '.item-controls .screen-reader-text' ).textContent = clone.querySelector( '.item-controls .screen-reader-text' ).textContent + ' ' + title + ' (' + label + ')';
 		clone.querySelector( '.item-type' ).textContent = label;
-		clone.querySelector( '.menu-item-data-db-id' ).name = 'menu-item-db-id[' + menuItemId + ']';
 		clone.querySelector( '.menu-item-data-db-id' ).value = menuItemId;
-		clone.querySelector( '.menu-item-data-parent-id' ).name = 'menu-item-parent-id[' + menuItemId + ']';
+		clone.querySelector( '.menu-item-data-object-id' ).value = objectId;
+		clone.querySelector( '.menu-item-data-object' ).value = object;
+		clone.querySelector( '.menu-item-data-position' ).value = menuItems.length;
+		clone.querySelector( '.menu-item-data-type' ).value = type;
 
-		clone.querySelector( '.menu-item-settings' ).id = 'menu-item-settings--' + menuItemId;
+		clone.querySelector( '.menu-item-settings' ).id = 'menu-item-settings-' + menuItemId;
+		clone.querySelectorAll( '.menu-item-settings input[type="hidden"]' ).forEach( function( el ) {
+			el.name = el.name.replace( '[]', '[' + menuItemId + ']' );
+		} );
+
 		clone.querySelectorAll( '.menu-item-settings p:not( .link-to-original )' ).forEach( function( para ) {
 			para.querySelector( 'label' ).htmlFor = para.querySelector( 'label' ).htmlFor + menuItemId;
 			if ( para.querySelector( 'textarea' ) ) {
@@ -1903,7 +1931,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 
 		// Prepare JS object for publishing
-		updatedControls[ 'nav_menu_item[-' + menuItemId + ']' ] = {
+		updatedControls[ 'nav_menu_item[' + menuItemId + ']' ] = {
 			menu_id: currentMenuId,
 			title: title,
 			original_title: title,
@@ -1921,7 +1949,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			lastItem.after( clone ); // add as last item to populated menu
 		} else { // menu is currently empty
 			menu.querySelector( '.customize-control-nav_menu_name' ).after( clone );
-			menu.querySelector( '.no-items-message' ).remove();
+			menu.querySelector( '.no-items-message' )?.remove();
 		}
 		activatePublishButton();
 	}
@@ -1987,10 +2015,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} )
 		.then( function( result ) {
 			if ( result.success ) {
+				newMenuItemIDs.push( result.data.post_id );
 				li = document.createElement( 'li' );
-				li.id = result.data.id;
+				li.id = result.data.post_id;
 				li.className = 'menu-item-tpl';
-				li.dataset.menuItemId = object + '-' + result.data.id;
+				li.dataset.menuItemId = object + '-' + result.data.post_id;
 				li.innerHTML = '<div class="menu-item-bar">' +
 					'<div class="menu-item-handle">' +
 					'<button type="button" class="button-link item-add">' +
@@ -2006,7 +2035,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					'</div>' +
 					'<span class="item-url" hidden="">' + result.data.url + '</span>';
 				itemsList.prepend( li );
-				addMenuItem( type, object, result.data.id, title, label, result.data.url );
+				addMenuItem( type, object, result.data.post_id, title, label, result.data.url );
 			}
 		} )
 		.catch( function( err ) {
@@ -2022,7 +2051,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function replaceSubstringInAttributes( original, replacement ) {
 		let all = menuToEdit.querySelectorAll( '*' );
-		if ( all.length < 1 || menuToEdit.querySelector( '.customize-control-nav_menu' ).dataset.menuId !== original ) { // menu already moved to new place
+		if ( all.length < 1 ) { // menu already moved to new place
 			all = document.getElementById( 'sub-accordion-section-nav_menu[' + original + ']' ).querySelectorAll( '*' ); // locate moved menu and its attributes
 			document.getElementById( 'sub-accordion-section-nav_menu[' + original + ']' ).id = 'sub-accordion-section-nav_menu[' + replacement + ']';
 		}
