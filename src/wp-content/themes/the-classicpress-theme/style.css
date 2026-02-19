@@ -1458,6 +1458,9 @@ p.text-rightcol,
 #content p.button a:focus {
 	box-shadow: 0 0 3px 2px #89288f;
 }
+.edit-link {
+	display: block;
+}
 .edit-link a {
 	font-weight: 400;
 	text-transform: uppercase;
