@@ -220,6 +220,37 @@ if ( function_exists( 'register_sidebar' ) ) {
 }
 
 /**
+ * Customizer option to show or hide ClassicPress details in footer
+ */
+function cp_additional_customizer_settings( $wp_customize ) {
+ 	$wp_customize->add_setting(
+		'cp_footer_details',
+		array(
+			'capability' => 'edit_theme_options',
+			'sanitize_callback' => 'sanitize_text_field',
+			'default' => 'show',
+		)
+	);
+	$wp_customize->add_control( new WP_Customize_Control(
+		$wp_customize,
+		'cp_footer_details',
+		array(
+			'label' => __( 'Show ClassicPress details in footer', 'the-classicpress-theme' ),
+			'description' => __( 'Footer widgets will also hide the ClassicPress details.', 'the-classicpress-theme' ),
+			'section' => 'title_tagline',
+			'settings' => 'cp_footer_details',
+			'priority' => 99,
+			'type' => 'radio',
+			'choices' => array(
+				'show' => __( 'Yes', 'the-classicpress-theme' ),
+				'hide' => __( 'No', 'the-classicpress-theme' ),
+			),
+		)
+	) );
+}
+add_action( 'customize_register', 'cp_additional_customizer_settings' );
+
+/**
  * Remove empty paragraph tags
  */
 function cp_remove_empty_p( $content ) {
