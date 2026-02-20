@@ -1913,7 +1913,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		clone.querySelector( '.menu-item-data-db-id' ).value = menuItemId;
 		clone.querySelector( '.menu-item-data-object-id' ).value = objectId;
 		clone.querySelector( '.menu-item-data-object' ).value = object;
-		clone.querySelector( '.menu-item-data-position' ).value = menuItems.length;
+		clone.querySelector( '.menu-item-data-position' ).value = menuItems.length + 1;
 		clone.querySelector( '.menu-item-data-type' ).value = type;
 
 		clone.querySelector( '.menu-item-settings' ).id = 'menu-item-settings-' + menuItemId;
@@ -1940,7 +1940,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			type_label: label,
 			object: object,
 			object_id: objectId,
-			position: menuItems.length,
+			position: menuItems.length + 1,
 			status: 'publish'
 		};
 
