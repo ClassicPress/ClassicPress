@@ -2748,7 +2748,7 @@ body.adding-widget .add-new-widget:before,
 #available-menu-items .item-top:hover {
 	border: none;
 	background: transparent;
-	box-shadow: none;
+	box-shadow: none !important;
 }
 
 #available-widgets .widget-tpl,
