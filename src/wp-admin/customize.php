@@ -1886,7 +1886,7 @@ customize_themes_print_templates();
 <template id="tmpl-new-menu-item">
 	<li class="customize-control customize-control-nav_menu_item menu-item menu-item-depth-0 menu-item-custom menu-item-edit-inactive move-left-disabled move-up-disabled move-right-disabled move-down-disabled" data-setting-id="">
 		<div class="menu-item-bar">
-			<details class="menu-item-handle">
+			<details class="menu-item-handle" name="new-menu-item">
 				<summary>
 					<span class="item-title" aria-hidden="true">
 						<span class="menu-item-title"></span>
