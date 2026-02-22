@@ -63,7 +63,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 		?>
 
 		<div class="menu-item-bar">
-			<details class="menu-item-handle">
+			<details class="menu-item-handle" name="menu-<?php echo absint( $item['nav_menu_term_id'] ); ?>">
 
 				<summary>
 					<span class="item-title" aria-hidden="true">
