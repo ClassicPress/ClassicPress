@@ -6,7 +6,7 @@
 
 /* eslint consistent-this: [ "error", "control" ] */
 /* global wp, _wpCustomizeControlsL10n, _wpCustomizeHeader, _wpCustomizeBackground,
- * MediaElementPlayer, console, confirm,  ajaxurl, IMAGE_WIDGET, console,
+ * updatedControls, MediaElementPlayer, console, confirm,  ajaxurl, IMAGE_WIDGET, console,
  * FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
  * FilePondPluginFileRename, FilePondPluginImagePreview
  */
@@ -31,7 +31,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		addWidgetButtons = document.querySelectorAll( '.add-new-widget' ),
-		updatedControls = {},
 		newMenuItemIDs = [],
 		menuToEdit = document.getElementById( 'menu-to-edit' );
 
@@ -45,33 +44,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		isReducedMotion = event.matches;
 	} );
 
-	// Convert moustache-style attributes added to nav menu items by themes or plugins
-	form.querySelectorAll( 'label, input' ).forEach( function( el ) {
-		let itemNumber, nameValue,
-			closingBracket = '';
-
-		if ( ! el.closest( '.menu-item-settings' ) ) {
-			return;
-		}
-
-		itemNumber = el.closest( '.menu-item-settings' ).id.split( '-' ).pop();
-		if ( el.htmlFor && el.htmlFor.includes( '{{' ) ) {
-			el.htmlFor = el.htmlFor.split( '{{' )[0] + itemNumber;
-		}
-		if ( el.id && el.id.includes( '{{' ) ) {
-			el.id = el.id.split( '{{' )[0] + itemNumber;
-		}
-		if ( el.hasAttribute( 'name' ) ) {
-			nameValue = el.getAttribute( 'name' );
-			if ( nameValue.includes( ']' ) ) {
-				closingBracket = ']';
-			}
-			if ( nameValue.includes( '{{' ) ) {
-				el.setAttribute( 'name', nameValue.split( '{{' )[0] + itemNumber + closingBracket );
-			}
-		}
-	} );
-
 	/**
 	 * Show AYS dialog when there are unsaved widget changes.
 	 *
@@ -82,33 +54,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.preventDefault();
 		}
 	} );
-
-	/**
-	 * Ensure auto_add checkbox works as intended when a new menu is created
-	 */
-	addObserver = new MutationObserver( function( mutations ) {
-		if ( menuToEdit.querySelector( '.auto_add' ) ) {
-			menuToEdit.querySelector( '.auto_add' ).addEventListener( 'input', function( e ) {
-				inputChanged( e.target, e.target.closest( 'li' ) );
-			} );
-			menuToEdit.querySelector( '.auto_add' ).addEventListener( 'input', function( e ) {
-				inputChanged( e.target, e.target.closest( 'li' ) );
-			} );
-			addObserver.disconnect();
-		}
-	} );
-	addObserver.observe( menuToEdit, { attributes: false, childList: true, characterData: false, subtree: true } );
-
-	/**
-	 * Make items in new menu sortable
-	 */
-	itemObserver = new MutationObserver( function( mutations ) {
-		if ( menuToEdit.querySelector( '.menu-item' ) ) {
-			initSortables( menuToEdit.id );
-			itemObserver.disconnect();
-		}
-	} );
-	itemObserver.observe( menuToEdit, { attributes: false, childList: true, characterData: false, subtree: true } );
 
 	/**
 	 * Helper function copied from jQuery
@@ -126,103 +71,24 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
-	 * Prepare changed object for publication
+	 * Prepare changed object for publication.
 	 */
 	function inputChanged( input, li, navMenuId ) {
-		let menuId, title, menuLocations, assignments, span,
-			formData = new FormData(),
-			settingId = li.dataset.settingId,
-			value = input.value.trim(),
-			menuName = li.closest( '.customize-pane-child' ).querySelector( '.menu-name-field' ).value;
-
-		if ( settingId.startsWith( 'nav_menu_locations[' ) ) {
-			assignments = document.querySelectorAll( '.assigned-to-menu-location' );
-			menuLocations = document.querySelectorAll( '.assigned-to-menu-location [data-setting-id="' + settingId + '"]' );
-		
-			if ( input.tagName === 'INPUT' ) {
-				span = document.createElement( 'span' );
-				span.className = 'current-menu-location-name-main-nav';
-
-				if ( input.checked ) {
-					span.textContent = menuName;
-					input.value = li.parentNode.dataset.menuId;
-					updatedControls[ settingId ] = li.parentNode.dataset.menuId;
-					input.nextElementSibling.querySelector( '.theme-location-set' ).innerHTML = '(' + _wpCustomizeControlsL10n.current + ' ' + span.outerHTML + ')';
-		
-					menuLocations.forEach( function( menuLocation ) {
-						if ( menuLocation.querySelector( 'input' ) ) {
-							menuLocation.querySelector( '.theme-location-set' ).innerHTML = '(' + _wpCustomizeControlsL10n.current + ' ' + span.outerHTML + ')';
-							menuLocation.querySelector( 'input' ).value = li.parentNode.dataset.menuId;
-							if ( menuLocation.closest( '.menu-location-settings' ).dataset.menuId === li.parentNode.dataset.menuId ) {
-								menuLocation.querySelector( 'input' ).checked = true;
-								
-							} else {
-								menuLocation.querySelector( 'input' ).checked = false;
-							}
-						}
-					} );
-
-					// Update parenthetical message in menus list.
-					assignments.forEach( function( assign ) {
-						if ( assign.querySelector( '.menu-in-location' )?.textContent.trim() === '(' + _wpCustomizeControlsL10n.currently + ' ' + input.nextElementSibling.innerHTML.split( '<span' )[0].trim() + ')' ) {
-							assign.querySelector( '.menu-in-location' ).textContent = '';
-						}
-					} );
-				} else {
-					input.value = '';
-					menuLocations.forEach( function( menuLocation ) {
-						if ( menuLocation.querySelector( 'input' ) ) {
-							menuLocation.querySelector( 'input' ).value = '';
-							if ( menuLocation.closest( '.menu-location-settings' ).dataset.menuId === li.parentNode.dataset.menuId ) {
-								menuLocation.querySelector( 'input' ).checked = false;
-								menuLocation.querySelector( '.theme-location-set' ).innerHTML = span.outerHTML;
-							}
-						}
-					} );
-				}
-			}
-		} else if ( settingId.startsWith( 'nav_menu[' ) ) {
-			updatedControls[ settingId ] = {
-				name: li.closest( 'ul' ).querySelector( '.menu-name-field' ).value.trim(),
-				auto_add: li.closest( 'ul' ).querySelector( '.auto_add' ).checked ? 1 : 0
-			};
-		} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
-			title = li.querySelector( '.edit-menu-item-title' ).value.trim();
-			li.querySelector( '.menu-item-title' ).textContent = title;
-
-			menuId = li.querySelector( '.menu-item-data-menu-id' ).value;
-			menuName = li.parentNode.querySelector( '[data-setting-id="nav_menu[' + menuId + ']"]' );
-			updatedControls[ 'nav_menu[' + menuId + ']' ] = {
-				name: menuName.querySelector( 'input' ).value.trim()
-			};
-			updatedControls[ settingId ] = {
-				menu_id: menuId,
-				title: title,
-				url: li.querySelector( '.edit-menu-item-url' )?.value.trim() || '',
-				menu_item_parent: li.querySelector( '.menu-item-data-parent-id' ).value,
-				position: li.querySelector( '.menu-item-data-position' ).value,
-				original_title: li.querySelector( '.original-link' )?.textContent || '',
-				object_id: li.querySelector( '.menu-item-data-object-id' ).value,
-				object: li.querySelector( '.menu-item-data-object' ).value,
-				type: li.querySelector( '.menu-item-data-type' ).value,
-				type_label: li.querySelector( '.item-type' ).value,
-				classes: li.querySelector( '.edit-menu-item-classes' ).value,
-				xfn: li.querySelector( '.edit-menu-item-xfn' ).value,
-				target: li.querySelector( '.edit-menu-item-target' ).value,
-				attr_title: li.querySelector( '.edit-menu-item-attr-title' ).value,
-				description: li.querySelector( '.edit-menu-item-description' ).value,
-				status: 'publish'
-			};
-		} else {
-			updatedControls[ settingId ] = value;
-		}
+		updatedControls[ settingId ] = input.value.trim();
 		activatePublishButton();
 	}
 
 	inputs.forEach( function( input ) {
-		let li = input.closest( 'li' );
+		let settingId,
+			li = input.closest( 'li' );
 
 		if ( ! li?.hasAttribute( 'data-setting-id' ) ) {
+			return;
+		}
+
+		// Do not listen to menu-related changes
+		settingId = li.dataset.settingId;
+		if ( settingId.startsWith( 'nav_menu_locations[' ) || settingId.startsWith( 'nav_menu[' ) || settingId.startsWith( 'nav_menu_item[' ) ) {
 			return;
 		}
 
@@ -1789,260 +1655,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
-	/*
-	 * Get offset of item: copied from jQuery
-	 */
-	function getOffset( element ) {
-		var rect, win;
-
-		if ( ! element.getClientRects().length ) {
-			return { top: 0, left: 0 };
-		}
-
-		rect = element.getBoundingClientRect();
-		win = element.ownerDocument.defaultView;
-		return ( {
-			top: rect.top + win.pageYOffset,
-			left: rect.left + win.pageXOffset
-		} );
-	}
-
-	/*
-	 * Find the first previous sibling with the requisite selector
-	 */
-	function getPreviousSibling( elem, selector ) {
-
-		// Get the previous sibling element
-		var sibling = elem.previousElementSibling;
-
-		// If the sibling matches our selector, use it; otherwise move on to the next sibling
-		while ( sibling ) {
-			if ( sibling.matches( selector ) ) {
-				return sibling;
-			}
-			sibling = sibling.previousElementSibling;
-		}
-	}
-
-	// Get depth of menu item
-	function menuItemDepth( item ) {
-		var i, n, itemDepth,
-			itemClasses = item.className.split( ' ' );
-
-		for ( i = 0, n = itemClasses.length; i < n; i++ ) {
-			if ( itemClasses[i].startsWith( 'menu-item-depth-' ) ) {
-				itemDepth = parseInt( itemClasses[i].split('-').pop(), 10 );
-			}
-		}
-		return itemDepth || 0;
-	}
-
-	// Get children of menu item
-	function childMenuItems( item ) {
-		var childrenArray = [],
-			depth = menuItemDepth( item ),
-			next = item.nextElementSibling;
-
-		while( next && menuItemDepth( next ) > depth ) {
-			childrenArray.push( next );
-			next = next.nextElementSibling;
-		}
-		return childrenArray;
-	}
-
-	/**
-	 * Move sub-items if their parent item moves after dragging
-	 */
-	function moveChildItems( prevItem, thisItem, depth ) {
-		var i, n, startingDepth, nextDepth, newDepth,
-			newClasses = thisItem.className.split( ' ' ),
-			nextItem = thisItem.nextElementSibling;
-
-		// Move to new position
-		prevItem.after( thisItem );
-
-		// Set new depth of current item
-		for ( i = 0, n = newClasses.length; i < n; i++ ) {
-			if ( newClasses[i].startsWith( 'menu-item-depth-' ) ) {
-				startingDepth = parseInt( newClasses[i].split('-').pop(), 10 );
-				newClasses[i] = 'menu-item-depth-' + depth;
-			}
-		}
-		thisItem.className = newClasses.join( ' ' );
-		thisItem.style.marginLeft = '';
-
-		// Get depth of next item in list
-		if ( nextItem ) {
-			nextDepth = menuItemDepth( nextItem );
-
-			// Trigger to move sub-items if their parent moves
-			if ( startingDepth <= nextDepth ) {
-				newDepth = startingDepth === nextDepth ? depth : depth + 1;
-				moveChildItems( thisItem, nextItem, newDepth );
-			}
-		}
-	}
-
-	/**
-	 * Add menu item
-	 */
-	function addMenuItem( type, object, objectId, title, label, url ) {
-		var menu       = document.getElementById( 'sub-accordion-section-nav_menu[' + currentMenuId + ']' ) || menuToEdit,
-			menuItems  = menu.querySelectorAll( '.menu-item' ),
-			lastItem   = menuItems[menuItems.length - 1],
-			menuItemId = '-' + Date.now(),
-			itemId     = type === 'custom' ? '-' + menuItemId : objectId,
-			template   = document.getElementById( 'tmpl-new-menu-item' ),
-			clone      = template.content.cloneNode( true );
-
-		if ( type === 'custom' ) {
-			clone.querySelector( '.field-url' ).removeAttribute( 'hidden' );
-			clone.querySelector( '.edit-menu-item-url' ).value = url;
-			clone.querySelector( '.link-to-original' ).remove();
-		} else {
-			clone.querySelector( '.link-to-original a' ).href = url;
-			clone.querySelector( '.link-to-original a' ).textContent = title;
-		}
-		clone.querySelector( '.edit-menu-item-title' ).value = title;
-
-		clone.querySelector( 'li' ).id = 'customize-control-nav_menu_item-' + menuItemId;
-		clone.querySelector( 'li' ).dataset.settingId = 'nav_menu_item[' + menuItemId + ']';
-		clone.querySelector( '.menu-item-title' ).textContent = title;
-		clone.querySelector( '.item-controls .screen-reader-text' ).textContent = clone.querySelector( '.item-controls .screen-reader-text' ).textContent + ' ' + title + ' (' + label + ')';
-		clone.querySelector( '.item-type' ).textContent = label;
-		clone.querySelector( '.menu-item-data-db-id' ).value = menuItemId;
-		clone.querySelector( '.menu-item-data-object-id' ).value = objectId;
-		clone.querySelector( '.menu-item-data-object' ).value = object;
-		clone.querySelector( '.menu-item-data-position' ).value = menuItems.length + 1;
-		clone.querySelector( '.menu-item-data-type' ).value = type;
-
-		clone.querySelector( '.menu-item-settings' ).id = 'menu-item-settings-' + menuItemId;
-		clone.querySelectorAll( '.menu-item-settings input[type="hidden"]' ).forEach( function( el ) {
-			el.name = el.name.replace( '[]', '[' + menuItemId + ']' );
-		} );
-
-		clone.querySelectorAll( '.menu-item-settings p:not( .link-to-original )' ).forEach( function( para ) {
-			para.querySelector( 'label' ).htmlFor = para.querySelector( 'label' ).htmlFor + menuItemId;
-			if ( para.querySelector( 'textarea' ) ) {
-				para.querySelector( 'textarea' ).id = para.querySelector( 'textarea' ).id + menuItemId;
-			} else {
-				para.querySelector( 'input' ).id = para.querySelector( 'input' ).id + menuItemId;
-			}
-		} );
-
-		// Prepare JS object for publishing
-		updatedControls[ 'nav_menu_item[' + menuItemId + ']' ] = {
-			menu_id: currentMenuId,
-			title: title,
-			original_title: title,
-			url: url,
-			type: type,
-			type_label: label,
-			object: object,
-			object_id: objectId,
-			position: menuItems.length + 1,
-			status: 'publish'
-		};
-
-		// Add to menu
-		if ( lastItem ) { // menu currently has at least one item
-			lastItem.after( clone ); // add as last item to populated menu
-		} else { // menu is currently empty
-			menu.querySelector( '.customize-control-nav_menu_name' ).after( clone );
-			menu.querySelector( '.no-items-message' )?.remove();
-		}
-		activatePublishButton();
-	}
-
-	/**
-	 * Delete menu item
-	 */
-	function deleteMenuItem( item ) {
-		item.remove();
-		activatePublishButton();
-	}
-
-	/**
-	 * Delete nav menu
-	 */
-	function deleteNavMenu( menuSettingId ) {
-		const menuId = menuSettingId.split( '[' )[1].replace( ']', '' );
-
-		// Prepare the nav_menu[] object for sending to the back-end
-		updatedControls[ menuSettingId ] = 'delete-menu'; // will be changed to false later, but cannot set that here
-
-		// Update the Customizer's visual appearance
-		document.getElementById( 'accordion-section-' + menuSettingId ).remove();
-		document.getElementById( 'sub-accordion-section-' + menuSettingId ).style.display = 'none';
-		document.getElementById( 'sub-accordion-panel-nav_menus' ).style.display = 'block';
-
-		// Remove from menu locations and prepare menu_locations[] objects for sending to back-end if appropriate
-		document.getElementById( 'sub-accordion-section-menu_locations' ).querySelectorAll( 'select' ).forEach( function( select ) {
-			if ( select.value === menuId ) {
-				updatedControls[ select.closest( 'li' ).dataset.settingId  ] = '';
-				select.value = '0';
-				select.querySelector( 'option[value="' + menuId + '"]' ).remove();
-				select.nextElementSibling.classList.remove( 'hidden' );
-				select.nextElementSibling.nextElementSibling.classList.add( 'hidden' );
-			}
-		} );
-		activatePublishButton();
-	}
-
-	/**
-	 * Create a new post or page
-	 */
-	function createNewPostOrPage( title, object, type, label, itemsList ) {
-		var li,
-			data = new URLSearchParams( {
-				action: 'customize-nav-menus-insert-auto-draft',
-				wp_customize: 'on',
-				'params[post_title]': title,
-				'params[post_type]': object, // post or page
-				'customize-menus-nonce': _wpCustomizeControlsL10n.menusNonce,
-			} );
-
-		fetch( ajaxurl, {
-			method: 'POST',
-			body: data,
-			credentials: 'same-origin'
-		} )
-		.then( function( response ) {
-			if ( response.ok ) {
-				return response.json(); // no errors
-			}
-			throw new Error( response.status );
-		} )
-		.then( function( result ) {
-			if ( result.success ) {
-				newMenuItemIDs.push( result.data.post_id );
-				li = document.createElement( 'li' );
-				li.id = result.data.post_id;
-				li.className = 'menu-item-tpl';
-				li.dataset.menuItemId = object + '-' + result.data.post_id;
-				li.innerHTML = '<div class="menu-item-bar">' +
-					'<div class="menu-item-handle">' +
-					'<button type="button" class="button-link item-add">' +
-					'<span class="screen-reader-text">Add to menu: ' + title	+ ' (' + label + ')</span>' +
-					'</button>' +
-					'<span class="item-split">' +
-					'<span class="item-title" aria-hidden="true">' +
-					'<span class="menu-item-title">' + title + '</span>' +
-					'</span>' +
-					'<span class="item-type" aria-hidden="true">' +	label + '</span>' +
-					'</span>' +
-					'</div>' +
-					'</div>' +
-					'<span class="item-url" hidden="">' + result.data.url + '</span>';
-				itemsList.prepend( li );
-				addMenuItem( type, object, result.data.post_id, title, label, result.data.url );
-			}
-		} )
-		.catch( function( err ) {
-			console.error( err );
-		} );
-	}
-
 	/**
 	 * Replaces the substring 'brand-new' in new menu attributes with negative integer.
 	 * Then replaces the negative integer with menuId on new menu publication.
@@ -2069,24 +1681,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
-	 * Move new menu to its own ul element
-	 */
-	function moveNewMenu( id ) {
-		const range = document.createRange(),
-			ul = document.createElement( 'ul' );
-		let fragment;
-
-		currentMenuId = id.split( '[' )[1].replace( ']', '' );
-		range.selectNodeContents( menuToEdit );
-		fragment = range.extractContents();
-		ul.id = 'sub-' + id;
-		ul.className = 'customize-pane-child accordion-section-content accordion-section control-section control-section-nav_menu menu assigned-to-menu-location';
-		ul.append( fragment );						
-		ul.querySelector( '.new-menu-title' ).textContent = ul.querySelector( '.menu-name-field' ).value.trim();
-		document.getElementById( 'sub-accordion-section-menu_locations' ).after( ul );
-	}
-
-	/**
 	 * Handle clicks on buttons.
 	 *
 	 * @abstract
@@ -2101,6 +1695,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Abort if this comes from a middle section heading or a widget
 		if ( ( e.target.tagName !== 'BUTTON' && e.target.closest( '.customize-section-title' ) ) || e.target.closest( '.widget' ) ) {
+			return;
+		}
+
+		// Abort if this is menu-related
+		if ( e.target.closest( 'ul' ).classList.contains( 'menu' ) && ( ! e.target.classList.contains( 'customize-section-back' ) && ! e.target.classList.contains( 'customize-panel-back' ) ) ) {
+			return;
+		}		
+		if ( e.target.closest( 'ul' ).id === 'sub-accordion-section-add_menu' ) {
 			return;
 		}
 
@@ -2128,15 +1730,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Go down to the third level
 			} else if ( ! e.target.closest( 'li' ).classList.contains( 'customize-control-widget_form' ) && ul.classList.contains( 'customize-pane-child' ) ) {
-				ul.style.display = 'none';
-				if ( id.startsWith( 'accordion-section-nav_menu[' ) ) { // nav menu
-					if ( id.startsWith( 'accordion-section-nav_menu[-' ) && ! document.getElementById( 'sub-' + id ) ) { // new nav menu
-						moveNewMenu( id );
-					}
-					initSortables( 'sub-' + id ); // enable sorting of menu items
+				if ( ! id.startsWith( 'accordion-section-nav_menu[' ) ) { // not a nav menu
+					ul.style.display = 'none';
+					document.getElementById( 'sub-' + id ).style.display = 'block';
+					document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();
 				}
-				document.getElementById( 'sub-' + id ).style.display = 'block';				
-				document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();
 			}
 		} else if ( e.target.classList && ( e.target.classList.contains( 'customize-section-back' ) || e.target.classList.contains( 'customize-panel-back' ) ) ) {
 			e.preventDefault();
@@ -2169,123 +1767,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					document.querySelector( '.customize-pane-parent h3' ).focus();
 				}
 			}
-
-		// Open New Menu panel
-		} else if ( e.target.classList && ( e.target.classList.contains( 'customize-add-menu-button' ) || e.target.classList.contains( 'create-menu' ) ) ) {
-			e.preventDefault();			
-			previousAccordionPane = ul;
-			ul.style.display = 'none';
-			document.getElementById( 'sub-accordion-section-add_menu' ).querySelectorAll( 'input' ).forEach( function( input ) {
-				input.value = ''; // reset
-				input.checked = false; // reset
-			} );
-			document.getElementById( 'sub-accordion-section-add_menu' ).style.display = 'block';
-
-		// Open Next panel to create new menu
-		} else if ( e.target.id === 'customize-new-menu-submit' ) {
-			e.preventDefault();
-			if ( ul.querySelector( '#menu-title' ).value !== '' ) {
-
-				// If menu-to-edit is currently populated, move sub-nodes to their own ul element and hide it.
-				if ( menuToEdit.querySelector( 'li' ) ) {
-					id = menuToEdit.querySelector( '[data-setting-id]' ).dataset.settingId;
-					id = id.replace( 'nav_menu', 'accordion-section-nav_menu' );
-					moveNewMenu( id );
-					document.getElementById( 'sub-' + id ).style.display = 'none';
-				}
-				
-				previousAccordionPane = document.getElementById( 'sub-accordion-panel-nav_menus' );
-				navMenuId = '-' + Date.now();
-				title = ul.querySelector( '#menu-title' ).value;
-				template = document.getElementById( 'tmpl-brand-new-nav' );
-				clone = template.content.cloneNode( true );
-				menuToEdit.append( clone );
-
-				// Update attributes and values
-				ul.style.display = 'none';
-				document.getElementById( 'menu-name-title-brand-new' ).value = title;
-				replaceSubstringInAttributes( 'brand-new', navMenuId );
-				menuToEdit.querySelectorAll( '.assigned-menu-location input' ).forEach( function( input, index ) {
-					if ( ul.querySelectorAll( '.assigned-menu-location input' )[index]?.checked ) {
-						input.checked = true;
-						menuName = input.nextElementSibling.innerHTML.split( '<span' )[0].trim();
-						inputChanged( input, input.closest( 'li' ), navMenuId );
-					}
-					input.addEventListener( 'input', function() {
-						inputChanged( input, input.closest( 'li' ), navMenuId );
-					} );
-					input.addEventListener( 'change', function() {
-						inputChanged( input, input.closest( 'li' ), navMenuId );
-					} );
-				} );
-				inputChanged( menuToEdit.querySelector( '.menu-name-field' ), menuToEdit.querySelector( '.menu-name-field' ).closest( 'li' ), navMenuId );
-				menuToEdit.style.display = 'block';
-
-				// Add menu to list of menus
-				li = document.createElement( 'li' );
-				li.id = 'accordion-section-nav_menu[' + navMenuId + ']';
-				li.className = 'accordion-section control-section control-section-nav_menu control-subsection assigned-to-menu-location';
-				li.setAttribute( 'aria-owns', 'sub-accordion-section-nav_menu[' + navMenuId + ']' );
-				li.innerHTML = '<h3 class="accordion-section-title" tabindex="0">' +
-					title +
-					'<span class="screen-reader-text">' +
-					menuToEdit.dataset.instruction +
-					'</span>' +
-					'<span class="menu-in-location"></span>' +
-					'</h3>';
-				if ( menuName !== '' ) {
-					li.querySelector( '.menu-in-location' ).textContent = '(' + _wpCustomizeControlsL10n.currently + ' ' + menuName + ')';
-				}
-				document.getElementById( 'accordion-section-add_menu' ).before( li );
-				activatePublishButton();
-			}
-			
-		// Enable adding of a menu item
-		} else if ( e.target.classList && e.target.classList.contains( 'add-new-menu-item' ) ) {
-			currentMenuId = e.target.closest( 'li' ).dataset.menuId;
-			document.body.classList.toggle( 'adding-menu-items' );
-			if ( document.body.classList.contains( 'adding-menu-items' ) ) {
-				availableMenuItems.style.display = 'block';
-				e.target.setAttribute( 'aria-expanded', true );
-				ul.querySelectorAll( 'details' ).forEach( function( accordion ) {
-					accordion.removeAttribute( 'open' );
-				} );
-			} else {
-				availableMenuItems.style.display = 'none';
-				e.target.setAttribute( 'aria-expanded', false );
-			}
-
-		// Add a menu item
-		} else if ( availableMenuItems.contains( e.target ) ) {
-			if ( e.target.classList && e.target.className === 'button add-content' ) {
-				title  = e.target.previousElementSibling.value;
-				object = e.target.parentNode.nextElementSibling.dataset.object;
-				type   = e.target.parentNode.nextElementSibling.dataset.type;
-				label  = e.target.parentNode.nextElementSibling.dataset.type_label;
-				createNewPostOrPage( title, object, type, label, e.target.parentNode.nextElementSibling );
-				e.target.previousElementSibling.value = ''; // reset
-			} else if ( e.target.classList && e.target.className === 'button-link item-add' ) {
-				type     = ul.dataset.type;
-				object   = ul.dataset.object;
-				objectId = e.target.closest( 'li' ).id.split( '-' ).pop();
-				title    = e.target.parentNode.querySelector( '.menu-item-title' ).textContent.trim();
-				label    = e.target.parentNode.querySelector( '.item-type' ).textContent.trim();
-				url      = e.target.closest( 'li' ).querySelector( '.item-url' ).textContent.trim();
-				e.target.parentNode.classList.add( 'item-added' ); 
-				addMenuItem( type, object, objectId, title, label, url );
-			} else if ( e.target.id && e.target.id === 'custom-menu-item-submit'  ) {
-				title = document.getElementById( 'custom-menu-item-name' ).value.trim();
-				url   = document.getElementById( 'custom-menu-item-url' ).value.trim();
-				addMenuItem( 'custom', 'custom', '', title, 'Custom Link', url );
-			}
-
-		// Delete a menu item
-		} else if ( e.target.classList && e.target.className === 'button-link item-delete submitdelete deletion' ) {
-			deleteMenuItem( e.target.closest( 'li' ) );
-
-		// Delete a nav menu
-		} else if ( e.target.classList && e.target.className === 'button-link button-link-delete' ) {
-			deleteNavMenu( e.target.closest( 'li' ).dataset.settingId );
 
 		// Go to widgets panel
 		} else if ( e.target.tagName === 'A' && ( e.target.closest( 'li' ).id === 'accordion-section-menu_locations' || ul.id === 'sub-accordion-section-menu_locations' ) ) {
