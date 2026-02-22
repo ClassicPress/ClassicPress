@@ -212,9 +212,18 @@ if ( $widgets_panel ) {
  */
 do_action( 'customize_controls_init' );
 
+/**
+ * Enqueue styles and scripts.
+ *
+ * Also create global JS object to which to write changes.
+ *
+ * @since CP-2.8.0
+ */
+wp_enqueue_style( 'customize-controls' );
 wp_enqueue_script( 'heartbeat' );
 wp_enqueue_script( 'customize-controls' );
-wp_enqueue_style( 'customize-controls' );
+wp_add_inline_script( 'customize-controls', 'window.updatedControls = window.updatedControls || {};', 'before' );
+wp_enqueue_script( 'customize-nav-menus' );
 
 /**
  * Enqueue Customizer control scripts.
@@ -824,7 +833,7 @@ wp_print_scripts();
 										}
 										?>
 										<h3>
-											<button type="button" class="button customize-add-menu-button">
+											<button id="customize-add-menu-button" type="button" class="button customize-add-menu-button">
 												<?php esc_html_e( 'Create New Menu' ); ?>
 											</button>
 										</h3>
