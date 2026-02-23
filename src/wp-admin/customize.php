@@ -663,7 +663,7 @@ wp_print_scripts();
 														data-id="<?php echo esc_attr( $theme['id'] ); ?>"
 														data-activate="<?php echo esc_attr( $theme['actions']['activate'] ); ?>" 
 														data-customize="<?php echo esc_attr( $theme['actions']['customize'] ); ?>"
-														data-delete="<?php echo esc_attr( $theme['actions']['delete'] ); ?>"
+														data-delete="<?php echo esc_attr( array_key_exists( 'delete', $theme['actions'] ) ? $theme['actions']['delete'] : '' ); ?>"
 														data-description="<?php echo esc_attr( $theme['description'] ); ?>"
 														data-author="<?php echo esc_attr( $theme['author'] ); ?>"
 														data-tags="<?php echo esc_attr( $theme['tags'] ); ?>"
