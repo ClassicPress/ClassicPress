@@ -1209,35 +1209,6 @@ wp_print_scripts();
 						</ul>
 
 						<?php
-						/**
-						 * Calculate menu item depth by walking up the parent chain.
-						 */
-						if ( ! function_exists( 'cp_get_menu_item_depth' ) ) {
-							function cp_get_menu_item_depth( $menu_items, $item_id ) {
-								$depth = 0;
-								$current_id = $item_id;
-
-								while ( true ) {
-									$parent_id = 0;
-									foreach ( $menu_items as $item ) {
-										if ( $item->ID === $current_id ) {
-											$parent_id = (int) $item->menu_item_parent;
-											break;
-										}
-									}
-
-									if ( $parent_id === 0 || $parent_id === $current_id ) {
-										break;
-									}
-
-									$current_id = $parent_id;
-									$depth++;
-								}
-
-								return $depth;
-							}
-						}
-
 						// Render controls for each nav_menus section (locations + individual menus).
 						foreach ( $sections_by_panel['nav_menus'] as $section ) {
 
@@ -1327,13 +1298,18 @@ wp_print_scripts();
 
 										<?php
 									} else {
-										$depth_map = array();
+										$depths = array();
 										foreach ( $menu_items as $menu_item ) {
-											$depth_map[ $menu_item->ID ] = cp_get_menu_item_depth( $menu_items, $menu_item->ID );
+											$parent_id = (int) $menu_item->menu_item_parent ?? 0;
+											
+											// $depth = 0 for top-level; otherwise parent depth + 1
+											$depth = ( $parent_id === 0 ) ? 0 : ( ( $depths[$parent_id] ?? 0 ) + 1 );
+
+											$depths[$menu_item->ID] = $depth;
 											?>
 
 											<li id="customize-control-nav_menu_item-<?php echo esc_attr( $menu_item->ID ); ?>"
-												class="customize-control customize-control-nav_menu_item menu-item menu-item-depth-<?php echo absint( $depth_map[ $menu_item->ID ] ); ?> menu-item-custom menu-item-edit-inactive move-left-disabled move-up-disabled move-right-disabled move-down-disabled"
+												class="customize-control customize-control-nav_menu_item menu-item menu-item-depth-<?php echo absint( $depth ); ?> menu-item-custom menu-item-edit-inactive move-left-disabled move-up-disabled move-right-disabled move-down-disabled"
 												data-setting-id="nav_menu_item[<?php echo esc_attr( $menu_item->ID ); ?>]"
 											>
 
