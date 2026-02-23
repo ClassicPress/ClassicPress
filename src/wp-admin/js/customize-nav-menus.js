@@ -1,5 +1,6 @@
 /**
  * @since CP-2.8.0
+ * @requires SortableJS
  *
  * @output wp-admin/js/customize-nav-menus.js
  */
@@ -218,17 +219,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.querySelector( '.drag-instructions' ).style.display = '';
 		}
 
-		// Make sure some elements aren't draggable
-		editMenu.querySelectorAll( 'li:not(.menu-item)' ).forEach( function( elem ) {
-			elem.classList.add( 'no-drag');
-		} );
-
 		/**
 		 * Attach SortableJS to current menu
 		 */
 		var sortable = new Sortable( editMenu, {
 			group: 'menu',
-			handle: '.item-title',
+			handle: 'summary',
 			filter: '.no-drag',
 			preventOnFilter: false,
 			setData: function( dataTransfer, dragEl ) {
@@ -355,7 +351,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							draggedClasses[i] = 'menu-item-depth-0'; // don't indent
 						} else {
 							diff = Math.floor( ( newClientX - originalClientX ) / indent );
-							depth = originalDepth + diff;
+							depth = parseInt( originalDepth + diff, 10 );
+							if ( depth > prevDepth ) {
+								parent = prevItem;
+								e.item.querySelector( '.menu-item-data-parent-id' ).value = parent.querySelector( '.menu-item-data-db-id' ).value;
+							}
 							if ( depth > maxDepth ) {
 								depth = maxDepth;
 							} else if ( depth < 0 ) {
@@ -374,7 +374,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					} else {
 						parentDepth = parseInt( depth - 1, 10 );
 						parent = getPreviousSibling( e.item, '.menu-item-depth-' + parentDepth );
-						e.item.querySelector( '.menu-item-data-parent-id' ).value = parent.querySelector( '.menu-item-data-db-id' ).value;
+						if ( ! parent ) {
+							e.item.querySelector( '.menu-item-data-parent-id' ).value = 0;
+						} else {
+							e.item.querySelector( '.menu-item-data-parent-id' ).value = parent.querySelector( '.menu-item-data-db-id' ).value;
+						}
 					}
 				}
 
@@ -736,7 +740,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			ul = e.target.closest( 'ul' );
 
 		// Abort if not menu-related
-		if ( ! e.target.closest( 'ul' ).classList.contains( 'menu' ) && ! e.target.closest( 'ul' ).id === 'sub-accordion-section-add_menu' ) {
+		if ( ( e.target === saveButton ) || ! e.target.closest( 'ul' ).classList.contains( 'menu' ) && ! e.target.closest( 'ul' ).id === 'sub-accordion-section-add_menu' ) {
 			return;
 		}
 
@@ -858,7 +862,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			deleteNavMenu( e.target.closest( 'li' ).dataset.settingId );
 
 		// Make menus sortable
-		} else if ( id.startsWith( 'accordion-section-nav_menu[' ) ) {
+		} else if ( id?.startsWith( 'accordion-section-nav_menu[' ) ) {
 			ul.style.display = 'none';
 			if ( id.startsWith( 'accordion-section-nav_menu[-' ) && ! document.getElementById( 'sub-' + id ) ) { // new nav menu
 				moveNewMenu( id );
@@ -869,6 +873,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 			document.getElementById( 'sub-' + id ).style.display = 'block';
 			document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();
+
+		// Reorder menu items
+		} else if ( e.target.classList && e.target.className === 'reorder' ) {
+			ul.classList.add( 'reordering' );
+
+		// Finish reordering
+		} else if ( e.target.classList && e.target.className === 'reorder-done' ) {
+			ul.classList.remove( 'reordering' );
 		}
 	} );
 } );
