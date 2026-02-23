@@ -1216,7 +1216,7 @@ img {
 .homepage-widgets-inner {
 	width: 100%;
 	display: flex;
-	gap: 1em;
+	gap: 2em;
 }
 .homepage-widgets .widget-container {
 	flex-basis: 50%;
@@ -1785,7 +1785,7 @@ table.cp-logo-list .cp-logo-description {
 .footer-widgets {
 	width: 100%;
 	display: flex;
-	gap: 1em;
+	gap: 2em;
 }
 #footer-logo {
 	max-width: 90px;
