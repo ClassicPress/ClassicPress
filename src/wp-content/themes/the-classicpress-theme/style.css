@@ -1792,6 +1792,10 @@ table.cp-logo-list .cp-logo-description {
 	width: 100%;
 	margin-top: 0.2em;
 }
+#footer-logo:hover {
+	text-decoration: none;
+	border: none;
+}
 .footerleft img {
 	width: 100%;
 	margin: 0;
