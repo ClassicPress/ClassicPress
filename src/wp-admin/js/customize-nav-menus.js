@@ -18,33 +18,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		inputs = form.querySelectorAll( 'input, select, textarea' ),
 		saveButton = form.querySelector( '#save' );
 
-	// Convert moustache-style attributes added to nav menu items by themes or plugins
-	form.querySelectorAll( 'label, input' ).forEach( function( el ) {
-		let itemNumber, nameValue,
-			closingBracket = '';
-
-		if ( ! el.closest( '.menu-item-settings' ) ) {
-			return;
-		}
-
-		itemNumber = el.closest( '.menu-item-settings' ).id.split( '-' ).pop();
-		if ( el.htmlFor && el.htmlFor.includes( '{{' ) ) {
-			el.htmlFor = el.htmlFor.split( '{{' )[0] + itemNumber;
-		}
-		if ( el.id && el.id.includes( '{{' ) ) {
-			el.id = el.id.split( '{{' )[0] + itemNumber;
-		}
-		if ( el.hasAttribute( 'name' ) ) {
-			nameValue = el.getAttribute( 'name' );
-			if ( nameValue.includes( ']' ) ) {
-				closingBracket = ']';
-			}
-			if ( nameValue.includes( '{{' ) ) {
-				el.setAttribute( 'name', nameValue.split( '{{' )[0] + itemNumber + closingBracket );
-			}
-		}
-	} );
-
 	/**
 	 * Ensure auto_add checkbox works as intended when a new menu is created
 	 */
@@ -84,7 +57,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Prepare changed object for publication
 	 */
 	function inputChanged( input, li ) {
-		let menuId, title, menuLocations, assignments, span,
+		let menuId, title, menuLocations, assignments, span, itemId,
 			formData = new FormData(),
 			settingId = li.dataset.settingId,
 			value = input.value.trim(),
@@ -144,6 +117,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
 			title = li.querySelector( '.edit-menu-item-title' ).value.trim();
 			li.querySelector( '.menu-item-title' ).textContent = title;
+			itemId = li.querySelector( '.menu-item-data-db-id' ).value;
 
 			menuId = li.querySelector( '.menu-item-data-menu-id' ).value;
 			menuName = li.parentNode.querySelector( '[data-setting-id="nav_menu[' + menuId + ']"]' );
@@ -166,7 +140,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				target: li.querySelector( '.edit-menu-item-target' ).value,
 				attr_title: li.querySelector( '.edit-menu-item-attr-title' ).value,
 				description: li.querySelector( '.edit-menu-item-description' ).value,
-				status: 'publish'
+				status: 'publish',
+				// Fields for Nav Menu Roles plugin
+				display_mode: li.querySelector( 'input[name="nav-menu-display-mode[' + itemId + ']"]:checked' )?.value || '',
+				roles: Array.from( li.querySelectorAll( '.edit-menu-item-role[value]' ) ).filter( cb => cb.checked ).map( cb => cb.value )
 			};
 		} else {
 			updatedControls[ settingId ] = value;
@@ -554,9 +531,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		clone.querySelector( '.menu-item-data-position' ).value = menuItems.length + 1;
 		clone.querySelector( '.menu-item-data-type' ).value = type;
 
+		// Update property values
 		clone.querySelector( '.menu-item-settings' ).id = 'menu-item-settings-' + menuItemId;
-		clone.querySelectorAll( '.menu-item-settings input[type="hidden"]' ).forEach( function( el ) {
-			el.name = el.name.replace( '[]', '[' + menuItemId + ']' );
+		clone.querySelectorAll( '.menu-item-settings input' ).forEach( function( el ) {
+			if ( el.id ) {
+				el.id = el.id.replace( 'brand-new', menuItemId );
+			}
+			el.name = el.name.replace( 'brand-new', menuItemId );
+		} );
+		clone.querySelectorAll( '.menu-item-settings label' ).forEach( function( el ) {
+			if ( el.htmlFor ) {
+				el.htmlFor = el.htmlFor.replace( 'brand-new', menuItemId );
+			}
 		} );
 
 		clone.querySelectorAll( '.menu-item-settings p:not( .link-to-original )' ).forEach( function( para ) {
@@ -740,7 +726,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			ul = e.target.closest( 'ul' );
 
 		// Abort if not menu-related
-		if ( ( e.target === saveButton ) || ! e.target.closest( 'ul' ).classList.contains( 'menu' ) && ! e.target.closest( 'ul' ).id === 'sub-accordion-section-add_menu' ) {
+		if ( ( e.target === saveButton ) || ! e.target.closest( 'ul' )?.classList.contains( 'menu' ) && ! e.target.closest( 'ul' )?.id === 'sub-accordion-section-add_menu' ) {
 			return;
 		}
 
