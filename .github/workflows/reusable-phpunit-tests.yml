@@ -43,7 +43,7 @@ jobs:
     # - Read .nvmrc.
     # - Installs NodeJS.
     # - Sets up caching for NPM.
-    # - Manual build of libheif for AVIF image file write testing
+    # - Update apt and install libheif-plugin-aomenc
     # - Login at Docker Hub to increase access limits
     # - Setup, wait for and initialise Database.
     # - Installs NPM dependencies using install-changed to hash the `package.json` file.
@@ -86,17 +86,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
-      - name: Manual apt update and build of libheif
+      - name: Update apt and install libheif-plugin-aomenc
         run: |
             sudo apt update
-            sudo apt install build-essential git libde265-dev libx265-dev libaom-dev
-            git clone https://github.com/strukturag/libheif.git
-            cd libheif
-            mkdir build && cd build
-            cmake .. -DENABLE_AOM=ON -DENABLE_AVIF=ON
-            make -j"$(nproc)"
-            sudo make install
-            sudo ldconfig
+            sudo apt install libheif-plugin-aomenc
 
       - name: Login to Docker Hub
         if: ${{ github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false ) }}
