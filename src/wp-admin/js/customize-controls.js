@@ -1372,7 +1372,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						attr_title: item.attr_title || '',
 						description: item.description || '',
 						status: item.status || 'publish',
-						placeholder_id: item.object_id || 0
+						placeholder_id: item.object_id || 0,
+						display_mode: item.display_mode || '',
+						roles: item.roles || ''
 					}
 				};
 			} else if ( settingId.startsWith( 'nav_menu_locations[' ) ) {
@@ -1427,233 +1429,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			updatedControls = {}; // reset
 		}
 	} );
-	
-	/**
-	 * Makes menu items sortable
-	 *
-	 * @since CP-2.8.0
-	 */
-	function initSortables( listId ) {
-		var originalClientX, originalDepth, baseClientX, newClientX,
-			maxDepth = 11,
-			childrenInfo = {},
-			indent = 30,
-			editMenu = document.getElementById( listId ),
-			menuEdge = getOffset( editMenu ).left,
-			menusChanged = false,
-			isRTL = !! ( 'undefined' != typeof isRtl && isRtl );
-
-		// Use the right edge if RTL
-		menuEdge += isRTL ? editMenu.innerWidth : 0;
-
-		if ( editMenu.length > 0 ) {
-			document.querySelector( '.drag-instructions' ).style.display = '';
-		}
-
-		// Make sure some elements aren't draggable
-		editMenu.querySelectorAll( 'li:not(.menu-item)' ).forEach( function( elem ) {
-			elem.classList.add( 'no-drag');
-		} );
-
-		/**
-		 * Attach SortableJS to current menu
-		 */
-		var sortable = new Sortable( editMenu, {
-			group: 'menu',
-			handle: '.item-title',
-			filter: '.no-drag',
-			preventOnFilter: false,
-			setData: function( dataTransfer, dragEl ) {
-				var ghostImage = document.createElement( 'li' );
-				ghostImage.id = 'sortable-ghost';
-				ghostImage.className = 'menu-item';
-				ghostImage.style.listStyle = 'none';
-				ghostImage.innerHTML = '<div class="menu-item-bar"><details class="menu-item-handle"><summary><span class="item-title"><span class="menu-item-title">' + dragEl.querySelector( '.menu-item-title' ).textContent + '</span></span></summary></details></div>';
-				ghostImage.style.position = 'absolute';
-				ghostImage.style.top = '-1000px';
-				ghostImage.style.width = dragEl.getBoundingClientRect().width + 'px';
-				document.body.appendChild( ghostImage );
-				dataTransfer.setDragImage( ghostImage, 30, 20 );
-			},
-			dataIdAttr: 'data-setting-id', // HTML attribute that is used by the `toArray()` method in OnEnd
-
-			// Get position of menu item when chosen
-			onChoose: function( e ) {
-				originalClientX = e.originalEvent.clientX;
-				originalDepth = menuItemDepth( e.item );
-				baseClientX = e.originalEvent.clientX - ( originalDepth * indent );
-
-				// Ensure menu widget is closed before moving
-				e.item.querySelector( 'details' ).removeAttribute( 'open' );
-			},
-
-			// Start dragging
-			onStart: function( e ) {
-				var prevItem, children;
-
-				// Close menu item
-				if ( e.item.querySelector( 'details' ).hasAttribute( 'open' ) ) {
-					e.item.querySelector( 'details' ).removeAttribute( 'open' );
-				}
-
-				// Register event and create data ids for every menu item
-				editMenu.dispatchEvent( new CustomEvent( 'sortstart' ) );
-				editMenu.querySelectorAll( 'li' ).forEach( function( el ) {
-					el.dataset.id = el.id;
-				} );
-
-				// Continually update horizontal position of current item while dragging
-				editMenu.addEventListener( 'dragover', function( evt ) {
-					var xPos, prevDepth, diff;
-
-					if ( evt.target.closest( 'li' ) === e.item ) {
-						newClientX = evt.clientX;
-
-						// Continually update horizontal position of placeholder
-						xPos = evt.clientX - baseClientX;
-
-						// Get depth of previous item in list
-						prevItem = evt.target.closest( 'li' ).previousElementSibling;
-						if ( prevItem ) {
-							prevDepth = menuItemDepth( prevItem );
-						}
-
-						// Calculate left margin but prevent being indented more than once compared to previous item in list
-						if ( prevItem === null || xPos < 0 ) {
-							menuEdge = 0;
-						} else {
-							diff = Math.floor( xPos / indent );
-							if ( diff > maxDepth ) {
-								diff = maxDepth;
-							}
-							if ( diff > prevDepth + 1 ) {
-								diff = prevDepth + 1;
-							}
-							menuEdge = diff * indent;
-						}
-						document.querySelector( '.sortable-ghost' ).style.marginLeft = menuEdge + 'px';
-					}
-				} );
-
-				// Does this menu item have children?
-				children = childMenuItems( e.item );
-				if ( children.length > 0 ) {
-					childrenInfo.prevItem = e.item;
-					childrenInfo.menuItem = children[0];
-				}
-			},
-
-			// Keeps undraggable elements in fixed position in list
-			onMove: function( e ) {
-				if ( e.related.className.includes( 'no-drag' ) ) {
-					return false;
-				}
-			},
-
-			// Element dropped
-			onEnd: function( e ) {
-				var i, n, diff, prevItem, parent, parentDepth,
-					details = e.item.querySelector( 'details' ),
-					depth = 0,
-					prevDepth = 0,
-					draggedClasses = e.item.className.split( ' ' );
-
-				// Revert styling and set focus on move icon
-				e.item.style.marginLeft = '';
-				details.querySelector( 'summary' ).style.visibility = 'visible';
-				details.querySelector( 'summary' ).focus();
-
-				// Send list of menu items, ordered by IDs
-				editMenu.dispatchEvent( new CustomEvent( 'sortstop', {
-					detail: sortable.toArray()
-				} ) );
-
-				// Handle drop placement for RTL orientation
-				if ( isRTL ) {
-					e.item.style.marginLeft = 'auto';
-					e.item.style.marginRight = '';
-				}
-
-				// Get depth of previous item in list, allowing for two extra initial items
-				prevItem = e.item.previousElementSibling;
-				if ( prevItem && prevItem.className.includes( 'menu-item' ) ) {
-					prevDepth = menuItemDepth( prevItem );
-				}
-
-				// Set depth of current item
-				for ( i = 0, n = draggedClasses.length; i < n; i++ ) {
-					if ( draggedClasses[i].startsWith( 'menu-item-depth-' ) ) {
-						if ( e.newDraggableIndex < 3 || prevItem.className.includes( 'section-meta' ) || prevItem.className.includes( 'customize-control-nav_menu_name' ) ) { // first element
-							draggedClasses[i] = 'menu-item-depth-0'; // don't indent
-						} else {
-							diff = Math.floor( ( newClientX - originalClientX ) / indent );
-							depth = originalDepth + diff;
-							if ( depth > maxDepth ) {
-								depth = maxDepth;
-							} else if ( depth < 0 ) {
-								depth = 0;
-							}
-							if ( depth > ( prevDepth + 1 ) ) {
-								depth = prevDepth + 1;
-							}
-							draggedClasses[i] = 'menu-item-depth-' + depth;
-						}
-					}
-					e.item.className = draggedClasses.join( ' ' );
-
-					if ( depth === 0 ) {
-						e.item.querySelector( '.menu-item-data-parent-id' ).value = 0;
-					} else {
-						parentDepth = parseInt( depth - 1, 10 );
-						parent = getPreviousSibling( e.item, '.menu-item-depth-' + parentDepth );
-						e.item.querySelector( '.menu-item-data-parent-id' ).value = parent.querySelector( '.menu-item-data-db-id' ).value;
-					}
-				}
-
-				// Set original clientX to current clientX to establish new starting position
-				originalClientX = newClientX;
-				menusChanged = true;
-
-				// Move sub-items if this is a parent
-				if ( Object.keys( childrenInfo ).length > 0 ) {
-					moveChildItems( childrenInfo.prevItem, childrenInfo.menuItem, depth + 1 );
-
-					// Reset for next drag and drop
-					childrenInfo = {};
-				}
-
-				// Prepare updatedControls object with new order of menu items
-				editMenu.querySelectorAll( '.menu-item' ).forEach( function( li, idx ) {
-					const settingId = li.dataset.settingId,
-						parentId = li.querySelector( '.menu-item-data-parent-id' ).value;
-
-					li.querySelector( '.menu-item-data-position' ).value = idx + 1; // update hidden input field
-
-					updatedControls[ settingId ] = {
-						menu_id: li.querySelector( '.menu-item-data-menu-id' ).value,
-						position: idx + 1,
-						menu_item_parent: parentId,
-						title: li.querySelector( '.edit-menu-item-title' ).value.trim(),
-						url: li.querySelector( '.edit-menu-item-url' )?.value.trim() || '',
-						original_title: li.querySelector( '.original-link' )?.textContent || '',
-						object_id: li.querySelector( '.menu-item-data-object-id' ).value,
-						object: li.querySelector( '.menu-item-data-object' ).value,
-						type: li.querySelector( '.menu-item-data-type' ).value,
-						type_label: li.querySelector( '.item-type' ).value,
-						classes: li.querySelector( '.edit-menu-item-classes' ).value,
-						xfn: li.querySelector( '.edit-menu-item-xfn' ).value,
-						target: li.querySelector( '.edit-menu-item-target' ).value,
-						attr_title: li.querySelector( '.edit-menu-item-attr-title' ).value,
-						description: li.querySelector( '.edit-menu-item-description' ).value,
-						status: 'publish'
-					};
-				} );
-
-				activatePublishButton();
-			}
-
-		} );
-	}
 
 	/**
 	 * Replaces the substring 'brand-new' in new menu attributes with negative integer.
@@ -1662,10 +1437,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @since CP-2.8.0
 	 */
 	function replaceSubstringInAttributes( original, replacement ) {
-		let all = menuToEdit.querySelectorAll( '*' );
+		let all, menu;
+		if ( original === null || original === replacement ) {
+			return;
+		}
+		all = menuToEdit.querySelectorAll( '*' );
 		if ( all.length < 1 ) { // menu already moved to new place
-			all = document.getElementById( 'sub-accordion-section-nav_menu[' + original + ']' ).querySelectorAll( '*' ); // locate moved menu and its attributes
-			document.getElementById( 'sub-accordion-section-nav_menu[' + original + ']' ).id = 'sub-accordion-section-nav_menu[' + replacement + ']';
+			menu = document.getElementById( 'sub-accordion-section-nav_menu[' + original + ']' );
+			if ( menu ) {
+				all = menu.querySelectorAll( '*' ); // locate moved menu and its attributes
+				menu.id = 'sub-accordion-section-nav_menu[' + replacement + ']';
+			}
 		}
 
 		all.forEach( function( el ) {
@@ -1699,11 +1481,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		// Abort if this is menu-related
-		if ( e.target.closest( 'ul' ).classList.contains( 'menu' ) && ( ! e.target.classList.contains( 'customize-section-back' ) && ! e.target.classList.contains( 'customize-panel-back' ) ) ) {
-			return;
-		}		
-		if ( e.target.closest( 'ul' ).id === 'sub-accordion-section-add_menu' ) {
-			return;
+		if ( e.target.closest( 'ul' ) ) {
+			if ( e.target.closest( 'ul' ).classList && e.target.closest( 'ul' ).classList.contains( 'menu' ) && ( ! e.target.classList.contains( 'customize-section-back' ) && ! e.target.classList.contains( 'customize-panel-back' ) ) ) {
+				return;
+			}		
+			if ( e.target.closest( 'ul' ).id === 'sub-accordion-section-add_menu' ) {
+				return;
+			}
 		}
 
 		if ( ( e.target.tagName === 'H3' || e.target.classList && e.target.classList.contains( 'change-theme' ) ) && ul ) {
@@ -1786,11 +1570,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 		// Reorder widgets
-		} else if ( e.target.className === 'reorder' ) {
+		} else if ( e.target.classList && e.target.className === 'reorder' ) {
 			ul.classList.add( 'reordering' );
 
 		// Finish reordering
-		} else if ( e.target.className === 'reorder-done' ) {
+		} else if ( e.target.classList && e.target.className === 'reorder-done' ) {
 			ul.classList.remove( 'reordering' );
 
 		// Open and close description
