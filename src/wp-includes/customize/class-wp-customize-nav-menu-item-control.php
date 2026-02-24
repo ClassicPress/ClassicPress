@@ -52,7 +52,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 	/**
 	 * Render the control's content via PHP.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	public function render_content() {
 		$item      = $this->value();
@@ -201,13 +201,42 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 
 					<?php
 					/**
+					 * Creates an output buffer to convert mustache-style
+					 * attributes added to nav menu items by themes or
+					 * plugins into appropriate HTML.
+					 */
+					ob_start();
+
+					/**
 					 * Fires at the end of the form field template for nav menu items in the customizer.
 					 *
-					 * Additional fields can be rendered here and managed in JavaScript.
+					 * Additional fields can be rendered here.
 					 *
 					 * @since 5.4.0
+					 *
+					 * Parameters $item_id and $item added
+					 *
+					 * @since CP-2.8.0
+					 *
+					 * @param int     $item_id   The actual menu item ID.
+					 * @param object  $item      The menu item object.
 					 */
-					do_action( 'wp_nav_menu_item_custom_fields_customize_template' );
+					do_action( 'wp_nav_menu_item_custom_fields_customize_template', $item_id, $item );
+					$plugin_template = ob_get_clean();
+					
+					if ( $plugin_template ) { // Replace mustache-style placeholders with actual values.
+						$plugin_template = str_replace( '{{ data.menu_item_id }}', $item_id, $plugin_template );
+
+						// Mods for Nav Menu Roles plugin
+						// Get current values (DB + preview, emulating plugin logic).
+						$mode = get_post_meta( $item_id, '_nav_menu_role_display_mode', true ) ?: 'show';
+						$roles = (array) get_post_meta( $item_id, '_nav_menu_role', true ) ?: array();
+
+						// Inject values (Display Mode + Target Audience + Roles)
+						$plugin_template = cp_nav_menu_roles_injector( $plugin_template, $mode, $roles, $item_id );
+						
+						echo $plugin_template;
+					}
 					?>
 
 					<div class="menu-item-actions description-thin submitbox">
@@ -251,7 +280,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 	/**
 	 * Redundant JS/Underscore template for the control UI.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	public function content_template() {}
 
@@ -268,4 +297,41 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 
 		return $exported;
 	}
+}
+
+/**
+ * Injector function to ensure the functioning of the Nav Menu Roles plugin.
+ */
+function cp_nav_menu_roles_injector( $template, $mode, $roles, $item_id ) {
+
+	// Display Mode.
+    $show_input = sprintf(
+        'name="nav-menu-display-mode[%d]" id="edit-menu-item-role_display_mode_show-%d" value="show"',
+        $item_id, $item_id
+    );
+    $hide_input = sprintf(
+        'name="nav-menu-display-mode[%d]" id="edit-menu-item-role_display_mode_hide-%d" value="hide"',
+        $item_id, $item_id
+    );
+
+    $template = str_replace( $show_input, $show_input . checked( 'show', $mode, false ), $template );
+    $template = str_replace( $hide_input, $hide_input . checked( 'hide', $mode, false ), $template );
+
+    // Target Audience (Logged In/Out/Everyone).
+    $target_value = ! empty( $roles ) ? 'in' : '';
+    $template = str_replace( 'value="in"', 'value="in"' . checked( 'in',  $target_value, false ), $template );
+    $template = str_replace( 'value="out"', 'value="out"' . checked( 'out', $target_value, false ), $template );
+    $template = str_replace( 'value=""', 'value=""' . checked( '', $target_value, false ), $template );
+
+    // Roles checkboxes.
+    global $wp_roles;
+    $display_roles = apply_filters( 'nav_menu_roles', $wp_roles->role_names ?? array() );
+    asort( $display_roles );
+    foreach ( array_keys( $display_roles ) as $role_key ) {
+        $value_match = 'value="' . esc_attr( $role_key ) . '"';
+        $is_selected = in_array( $role_key, $roles, true );
+        $template = str_replace( $value_match, $value_match . checked( $is_selected, true, false ), $template );
+    }
+
+    return $template;
 }
