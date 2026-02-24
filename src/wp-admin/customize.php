@@ -224,6 +224,7 @@ wp_enqueue_script( 'heartbeat' );
 wp_enqueue_script( 'customize-controls' );
 wp_add_inline_script( 'customize-controls', 'window.updatedControls = window.updatedControls || {};', 'before' );
 wp_enqueue_script( 'customize-nav-menus' );
+wp_enqueue_script( 'customize-widgets' );
 
 /**
  * Enqueue Customizer control scripts.
@@ -1946,13 +1947,26 @@ customize_themes_print_templates();
 
 					<?php
 					/**
+					 * Creates an output buffer to convert mustache-style
+					 * attributes added to nav menu items by themes or
+					 * plugins into appropriate HTML.
+					 */
+					ob_start();
+
+					/**
 					 * Fires at the end of the form field template for nav menu items in the customizer.
 					 *
-					 * Additional fields can be rendered here and managed in JavaScript.
+					 * Additional fields can be rendered here.
 					 *
 					 * @since 5.4.0
 					 */
 					do_action( 'wp_nav_menu_item_custom_fields_customize_template' );
+					$plugin_template = ob_get_clean();
+					
+					if ( $plugin_template ) { // Replace mustache-style placeholders with actual values.
+						$plugin_template = str_replace( '{{ data.menu_item_id }}', $item_id, $plugin_template );
+						echo $plugin_template;
+					}
 					?>
 
 					<div class="menu-item-actions description-thin submitbox">
@@ -1965,13 +1979,13 @@ customize_themes_print_templates();
 						</button>
 						<span class="spinner"></span>
 					</div>
-					<input type="hidden" name="menu-item-db-id[]" class="menu-item-data-db-id" value="0">
-					<input type="hidden" name="menu-item-object-id[]" class="menu-item-data-object-id" value="0">
-					<input type="hidden" name="menu-item-object[]" class="menu-item-data-object" value="">
-					<input type="hidden" name="menu-item-parent-id[]" class="menu-item-data-parent-id" value="0">
-					<input type="hidden" name="menu-item-position[]" class="menu-item-data-position" value="">
-					<input type="hidden" name="menu-item-type[]" class="menu-item-data-type" value="">
-					<input type="hidden" name="menu-item-menu-id[]" class="menu-item-data-menu-id" value="0">
+					<input type="hidden" name="menu-item-db-id[brand-new]" class="menu-item-data-db-id" value="0">
+					<input type="hidden" name="menu-item-object-id[brand-new]" class="menu-item-data-object-id" value="0">
+					<input type="hidden" name="menu-item-object[brand-new]" class="menu-item-data-object" value="">
+					<input type="hidden" name="menu-item-parent-id[brand-new]" class="menu-item-data-parent-id" value="0">
+					<input type="hidden" name="menu-item-position[brand-new]" class="menu-item-data-position" value="">
+					<input type="hidden" name="menu-item-type[brand-new]" class="menu-item-data-type" value="">
+					<input type="hidden" name="menu-item-menu-id[brand-new]" class="menu-item-data-menu-id" value="0">
 
 				</div><!-- .menu-item-settings-->
 				<ul class="menu-item-transport"></ul>
