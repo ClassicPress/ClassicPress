@@ -1962,7 +1962,7 @@ customize_themes_print_templates();
 					 */
 					do_action( 'wp_nav_menu_item_custom_fields_customize_template' );
 					$plugin_template = ob_get_clean();
-					
+
 					if ( $plugin_template ) { // Replace mustache-style placeholders with actual values.
 						$plugin_template = str_replace( '{{ data.menu_item_id }}', 'brand-new', $plugin_template );
 						echo $plugin_template;
