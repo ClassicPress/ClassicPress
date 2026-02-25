@@ -757,7 +757,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				previousAccordionPane = document.getElementById( 'sub-accordion-panel-nav_menus' );
 				navMenuId = '-' + Date.now();
 				title = ul.querySelector( '#menu-title' ).value;
-				template = document.getElementById( 'tmpl-brand-new-nav' );
+				template = document.getElementById( 'tmpl-new-nav-menu' );
 				clone = template.content.cloneNode( true );
 				menuToEdit.append( clone );
 
