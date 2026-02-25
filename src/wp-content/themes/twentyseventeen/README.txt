@@ -65,6 +65,7 @@ Source: https://unsplash.com/@englr?photo=bIhpiQA009k
 
 == Backported from WordPress since 1.7 ==
 
+https://github.com/ClassicPress/ClassicPress/pull/2324
 https://github.com/ClassicPress/ClassicPress/pull/2022
 https://github.com/ClassicPress/ClassicPress/pull/1975
 
@@ -87,6 +88,9 @@ https://github.com/ClassicPress/ClassicPress/pull/1975
 = 3.1 =
 * Remove closing PHP tags.
 * https://core.trac.wordpress.org/ticket/40039
+
+* Scaling Issue on Front Page Parallax Image Using Safari on iPadOS
+* https://core.trac.wordpress.org/ticket/48195
 
 = 2.9 =
 * Post title’s margin-bottom on front page is too large.
