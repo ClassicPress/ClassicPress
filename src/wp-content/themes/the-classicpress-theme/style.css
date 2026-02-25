@@ -1189,6 +1189,62 @@ img {
 	border-radius: 0;
 }
 
+/* HOMEPAGE WIDGETS */
+#homepage-widgets-container {
+	background: #006b81;
+	background: -moz-linear-gradient(
+		-135deg,
+		#3ebca6 18%,
+		#057f99 50%,
+		#006b81 100%
+	);
+	background: -webkit-linear-gradient(
+		-135deg,
+		#3ebca6 18%,
+		#057f99 50%,
+		#006b81 100%
+	);
+	background: linear-gradient(
+		-135deg,
+		#3ebca6 18%,
+		#057f99 50%,
+		#006b81 100%
+	);
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#3ebca6', endColorstr='#006b81', GradientType=1);
+	border-bottom: 15px solid #89288f;
+	border-image-source: linear-gradient(
+		45deg,
+		rgb(137, 40, 143),
+		rgb(75, 32, 99)
+	);
+	border-image-slice: 1;
+}
+.homepage-widgets {
+	max-width: 72rem;
+	margin: 0 auto;
+	padding: 3em 1em 1em;
+	color: #fff;
+}
+.homepage-widgets a {
+	color: #fff;
+}
+.homepage-widgets h1,
+.homepage-widgets h2,
+.homepage-widgets h3 {
+	color: #fff;
+	padding-top: 0;
+}
+.homepage-widgets-inner {
+	width: 100%;
+	display: flex;
+	gap: 2em;
+}
+.homepage-widgets .widget-container {
+	flex-basis: 50%;
+	flex-grow: 1;
+	margin-top: 0;
+}
+
 /* PAGE TITLE */
 #page-title {
 	background: #006b81;
@@ -1204,7 +1260,12 @@ img {
 		#057f99 50%,
 		#006b81 100%
 	);
-	background: linear-gradient(-135deg, #3ebca6 18%, #057f99 50%, #006b81 100%);
+	background: linear-gradient(
+		-135deg,
+		#3ebca6 18%,
+		#057f99 50%,
+		#006b81 100%
+	);
 	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#3ebca6', endColorstr='#006b81', GradientType=1);
 	border-bottom: 10px solid #89288f;
 	border-image-source: linear-gradient(
@@ -1704,6 +1765,15 @@ table.cp-logo-list .cp-logo-description {
 	display: flex;
 	justify-content: space-between;
 }
+.classic a {
+	color: #fff;
+}
+.classic h1,
+.classic h2,
+.classic h3 {
+	color: #fff;
+	padding-top: 0;
+}
 .classic-front p {
 	max-width: unset;
 	margin-top: 3em;
@@ -1741,28 +1811,21 @@ table.cp-logo-list .cp-logo-description {
 .footer-widgets {
 	width: 100%;
 	display: flex;
-	gap: 1em;
+	gap: 2em;
 }
 #footer-logo {
 	max-width: 90px;
 	width: 100%;
 	margin-top: 0.2em;
 }
+#footer-logo:hover {
+	text-decoration: none;
+	border: none;
+}
 .footerleft img {
 	width: 100%;
 	margin: 0;
 	max-width: 90px;
-}
-.footerleft a {
-	color: #ddd;
-}
-.footerleft a:hover {
-	text-decoration: none;
-	border: 0;
-}
-.footer-widgets h3.widget-title {
-	padding-top: 0;
-	color: #fff;
 }
 .footer-widgets .widget-container {
 	flex-basis: 50%;
@@ -1943,6 +2006,10 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	}
 	#primary-menu .search-submit {
 		margin-left: 0.2em;
+	}
+	.homepage-widgets-inner {
+		display: block;
+		text-align: center;
 	}
 	#main,
 	#sidebar,

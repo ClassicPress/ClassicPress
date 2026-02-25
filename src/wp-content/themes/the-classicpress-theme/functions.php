@@ -209,6 +209,16 @@ if ( function_exists( 'register_sidebar' ) ) {
 	);
 	register_sidebar(
 		array(
+			'id'            => 'homepage',
+			'name'          => esc_html__( 'Homepage', 'the-classicpress-theme' ),
+			'before_widget' => '<div id="%1$s" class="widget-container %2$s">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h3 class="widget-title">',
+			'after_title'   => '</h3>',
+		)
+	);
+	register_sidebar(
+		array(
 			'id'            => 'footer',
 			'name'          => esc_html__( 'Footer', 'the-classicpress-theme' ),
 			'before_widget' => '<div id="%1$s" class="widget-container %2$s">',
