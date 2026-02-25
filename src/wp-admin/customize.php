@@ -1947,9 +1947,10 @@ customize_themes_print_templates();
 
 					<?php
 					/**
-					 * Creates an output buffer to convert mustache-style
-					 * attributes added to nav menu items by themes or
-					 * plugins into appropriate HTML.
+					 * Creates an output buffer to convert mustache-style attributes added to nav menu
+					 * items by plugins into appropriate HTML.
+					 *
+					 * @since CP-2.8.0
 					 */
 					ob_start();
 
