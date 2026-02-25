@@ -1727,7 +1727,7 @@ wp_print_scripts();
 							data-instruction="<?php esc_html_e( 'Press return or enter to open this section' ); ?>"
 							style="display: none;"
 						>
-							<!-- li elements are added via template id="tmpl-brand-new-nav" below -->
+							<!-- li elements are added via template id="tmpl-new-nav-menu" below -->
 						</ul>
 					</div>
 				</div>
@@ -1964,7 +1964,7 @@ customize_themes_print_templates();
 					$plugin_template = ob_get_clean();
 					
 					if ( $plugin_template ) { // Replace mustache-style placeholders with actual values.
-						$plugin_template = str_replace( '{{ data.menu_item_id }}', $item_id, $plugin_template );
+						$plugin_template = str_replace( '{{ data.menu_item_id }}', 'brand-new', $plugin_template );
 						echo $plugin_template;
 					}
 					?>
@@ -1995,7 +1995,7 @@ customize_themes_print_templates();
 </template>
 
 <!-- Template for creation of new nav menus -->
-<template id="tmpl-brand-new-nav">
+<template id="tmpl-new-nav-menu">
 	<li class="customize-section-description-container section-meta no-drag">
 		<div class="customize-section-title">
 			<button class="customize-section-back" tabindex="0">
