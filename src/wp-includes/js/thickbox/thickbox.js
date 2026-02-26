@@ -9,6 +9,7 @@ if ( typeof tb_pathToImage != 'string' ) {
 	var tb_pathToImage = thickboxL10n.loadingAnimation;
 }
 
+// Initialize global variables to prevent ReferenceError
 var TB_WIDTH = TB_WIDTH || 630;
 var TB_HEIGHT = TB_HEIGHT || 440;
 
