@@ -222,7 +222,26 @@ do_action( 'customize_controls_init' );
 wp_enqueue_style( 'customize-controls' );
 wp_enqueue_script( 'heartbeat' );
 wp_enqueue_script( 'customize-controls' );
-wp_add_inline_script( 'customize-controls', 'window.updatedControls = window.updatedControls || {};', 'before' );
+wp_add_inline_script(
+	'customize-controls',
+	'window.updatedControls = window.updatedControls || {};',
+	'before'
+);
+wp_add_inline_script( // prevent plugin-generated warnings
+	'customize-controls',
+	'if ( typeof wp === "undefined" || typeof wp.customize === "undefined" ) {
+		var wp = window.wp = window.wp || {};
+		wp.customize = { 
+			control: { 
+				bind: function(){}
+			},
+			Menus: {
+				MenuItemControl: function(){}
+			}
+		};
+	}',
+	'before'
+);
 wp_enqueue_script( 'customize-nav-menus' );
 wp_enqueue_script( 'customize-widgets' );
 
