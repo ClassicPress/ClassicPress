@@ -65,6 +65,7 @@ Source: https://unsplash.com/@englr?photo=bIhpiQA009k
 
 == Backported from WordPress since 1.7 ==
 
+https://github.com/ClassicPress/ClassicPress/pull/2344
 https://github.com/ClassicPress/ClassicPress/pull/2324
 https://github.com/ClassicPress/ClassicPress/pull/2022
 https://github.com/ClassicPress/ClassicPress/pull/1975
