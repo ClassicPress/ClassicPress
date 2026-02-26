@@ -1,7 +1,7 @@
 === Twenty Seventeen ===
 Contributors: the WordPress team and ClassicPress contributors
-Version: 99.3-upstream1.7
-Requires PHP: 5.6
+Version: 99.4-upstream1.7
+Requires PHP: 7.4
 Requires CP: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
