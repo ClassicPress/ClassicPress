@@ -1372,7 +1372,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						attr_title: item.attr_title || '',
 						description: item.description || '',
 						status: item.status || 'publish',
-						placeholder_id: item.object_id || 0,
 						display_mode: item.display_mode || '',
 						roles: item.roles || ''
 					}
@@ -1420,9 +1419,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Update HTML
 		if ( newResult && newResult.success ) {
-			newResult.data.nav_menu_item_updates.forEach( function( item ) {
-				replaceSubstringInAttributes( item.previous_post_id, item.post_id );
-			} );
+			if ( newResult.data.nav_menu_item_updates ) {
+				newResult.data.nav_menu_item_updates.forEach( function( item ) {
+					replaceSubstringInAttributes( item.previous_post_id, item.post_id );
+				} );
+			}
 			saveButton.disabled = true;
 			saveButton.value = _wpCustomizeControlsL10n.published;
 			document.getElementById( 'customize_changeset_uuid' ).value = newResult.data.next_changeset_uuid;
