@@ -1512,6 +1512,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.getElementById( 'customize-info' ).style.display = 'none';
 				document.getElementById( 'sub-' + id ).style.display = 'block';
 				document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();
+				window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-' + id );
 
 			// Go down to the third level
 			} else if ( ! e.target.closest( 'li' ).classList.contains( 'customize-control-widget_form' ) && ul.classList.contains( 'customize-pane-child' ) ) {
@@ -1520,6 +1521,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					document.getElementById( 'sub-' + id ).style.display = 'block';
 					document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();
 				}
+				window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-' + id );
 			}
 		} else if ( e.target.classList && ( e.target.classList.contains( 'customize-section-back' ) || e.target.classList.contains( 'customize-panel-back' ) ) ) {
 			e.preventDefault();
@@ -1540,6 +1542,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.getElementById( 'customize-info' ).style.display = 'block';
 				document.querySelector( '.customize-pane-parent' ).style.display = 'block';
 				document.querySelector( '.customize-pane-parent h3' ).focus();
+				window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#customize-info' );
 
 			// Go up to the second (or maybe top) level	
 			} else {
@@ -1551,6 +1554,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} else { // top level
 					document.querySelector( '.customize-pane-parent h3' ).focus();
 				}
+				window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#' + previousAccordionPane.id );
 			}
 
 		// Go to widgets panel
@@ -1558,6 +1562,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.preventDefault();			
 			ul.style.display = 'none';
 			document.getElementById( 'sub-accordion-panel-widgets' ).style.display = 'block';
+			window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-accordion-panel-widgets' );
 
 		// Add a widget
 		} else if ( e.target.classList && e.target.classList.contains( 'add-new-widget' ) ) {
