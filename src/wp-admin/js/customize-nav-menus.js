@@ -740,6 +740,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				input.checked = false; // reset
 			} );
 			document.getElementById( 'sub-accordion-section-add_menu' ).style.display = 'block';
+			document.getElementById( 'sub-accordion-section-add_menu' ).querySelector( '.customize-section-back' ).focus();
+			window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-accordion-section-add_menu' );
 
 		// Open Next panel to create new menu
 		} else if ( e.target.id === 'customize-new-menu-submit' ) {
@@ -780,6 +782,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 				inputChanged( menuToEdit.querySelector( '.menu-name-field' ), menuToEdit.querySelector( '.menu-name-field' ).closest( 'li' ) );
 				menuToEdit.style.display = 'block';
+				menuToEdit.querySelector( 'button' ).focus();
+				window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#' + menuToEdit.id );
 
 				// Add menu to list of menus
 				li = document.createElement( 'li' );
@@ -799,6 +803,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.getElementById( 'accordion-section-add_menu' ).before( li );
 				activatePublishButton();
 			}
+
+		// Return to list of menus from new menu
+		} else if ( e.target === document.getElementById( 'sub-accordion-section-add_menu' ).querySelector( '.customize-section-back' ) ) {
+			document.getElementById( 'sub-accordion-section-add_menu' ).style.display = 'none';
+			document.getElementById( 'sub-accordion-panel-nav_menus' ).style.display = 'block';
+			document.getElementById( 'sub-accordion-panel-nav_menus' ).querySelector( '.customize-panel-back' ).focus();
+			window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-accordion-panel-nav_menus' );
 			
 		// Enable adding of a menu item
 		} else if ( e.target.classList && e.target.classList.contains( 'add-new-menu-item' ) ) {
