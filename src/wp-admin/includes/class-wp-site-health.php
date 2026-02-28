@@ -1228,6 +1228,7 @@ class WP_Site_Health {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Tests if the database server is capable of using utf8mb4.
 	 *
 	 * @since 5.2.0
@@ -1346,6 +1347,8 @@ class WP_Site_Health {
 	}
 
 	/**
+=======
+>>>>>>> fa16bb37b2 (Database: Remove back-compat for database servers that don't support `utf8mb4`.)
 	 * Tests if the site can communicate with WordPress.org.
 	 *
 	 * @since 5.2.0
@@ -2683,10 +2686,6 @@ class WP_Site_Health {
 				'sql_server'                => array(
 					'label' => __( 'Database Server version' ),
 					'test'  => 'sql_server',
-				),
-				'utf8mb4_support'           => array(
-					'label' => __( 'MySQL utf8mb4 support' ),
-					'test'  => 'utf8mb4_support',
 				),
 				'ssl_support'               => array(
 					'label' => __( 'Secure communication' ),
