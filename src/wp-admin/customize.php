@@ -188,19 +188,8 @@ if ( $widgets_panel ) {
 
 		// Derive id_base
 		$id_base = _get_widget_id_base( $id );
-
-		// Get the control (admin form) for each widget, if there is one.
-		$control = isset( $wp_registered_widget_controls[ $id ] )
-			? $wp_registered_widget_controls[ $id ]
-			: null;
-
-		$available_widgets[ $widget['name'] . '||' . $id ] = array(
-			'id'      => $id,
-			'id_base' => $id_base,
-			'name'    => $widget['name'],
-			'desc'    => isset( $widget['description'] ) ? $widget['description'] : '',
-			'control' => $control,
-		);
+		$option_name = 'widget_' . preg_replace( '/__i__|%d/', '', $id_base );
+		$all_widget_settings[ $id_base ] = get_option( $option_name, array() );
 	}
 	ksort( $available_widgets, SORT_NATURAL | SORT_FLAG_CASE );
 }
@@ -1569,7 +1558,6 @@ wp_print_scripts();
 								$index = 0;
 								foreach ( $controls[ $section->id ] as $control_data ) {
 									$field_id    = $control_data['id'];
-									$field_value = $control_data['value'];
 									$field_type  = $control_data['type'];									
 									$field_label = $control_data['label'];
 									$setting_id  = $control_data['setting_id'];
@@ -1596,7 +1584,7 @@ wp_print_scripts();
 
 									<li id="customize-control-widget-<?php echo esc_attr( $widget_id ); ?>"
 										class="customize-control customize-control-widget_form<?php echo esc_attr( $first_last_widget ); ?> widget-rendered"
-										data-setting-id="<?php echo esc_attr( $setting_id ); ?>"
+										data-setting-id="<?php echo esc_attr( $setting_id ?: $field_id ); ?>"
 									>
 										<div id="widget-<?php echo esc_attr( $index . '_' . $widget_id ); ?>" class="widget">
 											<details class="widget-top">
@@ -1652,6 +1640,17 @@ wp_print_scripts();
 												if ( ! $widget_obj ) {
 													continue;
 												}
+												// Get real saved settings (never null)
+												$widget_settings_base = isset( $all_widget_settings[ $widget_id_base ] ) 
+													? $all_widget_settings[ $widget_id_base ] 
+													: array();
+
+												$field_value = isset( $widget_settings_base[ $widget_number ] ) 
+													? $widget_settings_base[ $widget_number ] 
+													: array();
+
+												$widget_obj->id = $widget_id;
+												$widget_obj->number = $widget_number;
 												$widget_settings = is_array( $field_value ) ? $field_value : array();
 												?>
 
@@ -1661,7 +1660,7 @@ wp_print_scripts();
 													</div>
 													<div class="form">
 														<div class="widget-content">
-															<?php $widget_obj->form( $widget_settings ); ?>
+															<?php $widget_obj->form( $field_value ); ?>
 														</div>
 														<input type="hidden" name="id_base" class="id_base" value="<?php echo esc_attr( $widget_id_base ); ?>">
 														<input type="hidden" name="widget_number" class="widget_number" value="<?php echo esc_attr( $widget_number ); ?>">
@@ -1686,7 +1685,7 @@ wp_print_scripts();
 															<div class="alignright">
 																<input type="submit"
 																	name="savewidget"
-																	id="widget-<?php echo esc_attr( $widget_id_base ); ?>-__i__-savewidget"
+																	id="widget-<?php echo esc_attr( $widget_id ); ?>-savewidget"
 																	class="button button-primary widget-control-save right"
 																	value="Save"
 																>
@@ -1793,16 +1792,13 @@ wp_print_scripts();
 				value="<?php echo esc_attr( $wp_customize->changeset_uuid() ); ?>"
 			>
 			<input type="hidden"
-				id="customizer_nonce"
-				name="nonce"
-				value="<?php echo esc_attr( wp_create_nonce( 'save-customize_' . $wp_customize->get_stylesheet() ) ); ?>"
-			>
-			<input type="hidden"
 				id="theme_stylesheet"
 				name="theme_stylesheet"
 				value="<?php echo esc_attr( wp_get_theme()->get_stylesheet() ); ?>"
 			>
 			<input type="hidden" id="customize_form_stage" name="customize_form_stage" value="php-first-paint">
+			<?php wp_nonce_field( 'save-customize_' . $wp_customize->get_stylesheet(), 'customizer_nonce', false ); ?>
+			<?php wp_nonce_field( 'save-sidebar-widgets', '_wpnonce_widgets', false ); ?>
 		</form><!-- #customize-controls -->
 
 		<?php
