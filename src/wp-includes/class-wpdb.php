@@ -3929,26 +3929,7 @@ class wpdb {
 			case 'set_charset':
 				return version_compare( $db_version, '5.0.7', '>=' );
 			case 'utf8mb4':      // @since 4.1.0
-<<<<<<< HEAD
-				if ( version_compare( $db_version, '5.5.3', '<' ) ) {
-					return false;
-				}
-
-					$client_version = mysqli_get_client_info();
-
-				/*
-				 * libmysql has supported utf8mb4 since 5.5.3, same as the MySQL server.
-				 * mysqlnd has supported utf8mb4 since 5.0.9.
-				 */
-				if ( str_contains( $client_version, 'mysqlnd' ) ) {
-					$client_version = preg_replace( '/^\D+([\d.]+).*/', '$1', $client_version );
-					return version_compare( $client_version, '5.0.9', '>=' );
-				} else {
-					return version_compare( $client_version, '5.5.3', '>=' );
-				}
-=======
 				return true;
->>>>>>> fa16bb37b2 (Database: Remove back-compat for database servers that don't support `utf8mb4`.)
 			case 'utf8mb4_520': // @since 4.6.0
 				return version_compare( $db_version, '5.6', '>=' );
 			case 'identifier_placeholders': // @since 6.2.0
