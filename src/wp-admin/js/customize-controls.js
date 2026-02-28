@@ -82,7 +82,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		let settingId,
 			li = input.closest( 'li' );
 
-		if ( ! li?.hasAttribute( 'data-setting-id' ) ) {
+		if ( ! li?.hasAttribute( 'data-setting-id' ) || li.className.includes( 'widget-rendered' ) ) {
 			return;
 		}
 
@@ -1477,7 +1477,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			ul = e.target.closest( 'ul' );
 
 		// Abort if this comes from a middle section heading or a widget
-		if ( ( e.target.tagName !== 'BUTTON' && e.target.closest( '.customize-section-title' ) ) || e.target.closest( '.widget' ) ) {
+		if ( ( e.target.tagName !== 'BUTTON' && e.target.closest( '.customize-section-title' ) ) || e.target.closest( '.widget-rendered' ) ) {
 			return;
 		}
 
