@@ -1234,7 +1234,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 *
 	 * @abstract
 	 * @return {void}
-	 */ 
+	 */
 	form.addEventListener( 'submit', async function( e ) {
 		let negativeId, menuId, result, newResult,
 			entries = Object.entries( updatedControls ),
