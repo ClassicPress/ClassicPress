@@ -15,6 +15,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		parser = new DOMParser(),
 		dialog = document.getElementById( 'widget-modal' );
 
+	// If in Customizer, remove old-style dialog
+	// Preventing it from opening would be a breaking change, so just remove it asap for now
+	if ( document.body.className.includes( 'wp-customizer' ) ) {
+		observer = new MutationObserver( function() {
+			var oldModal = document.querySelector( '.media-modal.wp-core-ui' );
+			if ( oldModal ) {
+				oldModal.parentNode.remove();
+			}
+		} );
+		observer.observe( document.documentElement, {
+			childList: true,
+			subtree: true
+		} );
+	}
+
 	// Initialize the editor in the widget
 	function initTextWidget( widget ) {
 		var widgetNumber = widget.id.split( '-' ).pop(),
@@ -139,7 +154,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Ensure TinyMCE loads on page load
 	document.querySelectorAll( '#widgets-right .id_base, #wp_inactive_widgets .id_base' ).forEach( function( base ) {
 		if ( base.value === 'text' ) {
-			initTextWidget( base.closest ( '.widget' ) );
+			initTextWidget( base.closest( '.widget' ) );
 		}
 	} );
 
