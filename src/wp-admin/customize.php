@@ -1516,7 +1516,7 @@ wp_print_scripts();
 
 							<ul id="sub-accordion-section-<?php echo esc_attr( $section->id ); ?>"
 								class="customize-pane-child accordion-section-content accordion-section control-section control-section-sidebar"
-								data-id="<?php echo esc_attr( $section->id ); ?>"
+								data-id="<?php echo esc_attr( $section->sidebar_id ); ?>"
 								style="display: none;"
 							>
 								<li class="customize-section-description-container section-meta no-drag">
@@ -1640,7 +1640,7 @@ wp_print_scripts();
 												if ( ! $widget_obj ) {
 													continue;
 												}
-												// Get real saved settings (never null)
+
 												$widget_settings_base = isset( $all_widget_settings[ $widget_id_base ] ) 
 													? $all_widget_settings[ $widget_id_base ] 
 													: array();
@@ -1797,8 +1797,12 @@ wp_print_scripts();
 				value="<?php echo esc_attr( wp_get_theme()->get_stylesheet() ); ?>"
 			>
 			<input type="hidden" id="customize_form_stage" name="customize_form_stage" value="php-first-paint">
-			<?php wp_nonce_field( 'save-customize_' . $wp_customize->get_stylesheet(), 'customizer_nonce', false ); ?>
-			<?php wp_nonce_field( 'save-sidebar-widgets', '_wpnonce_widgets', false ); ?>
+
+			<?php
+			wp_nonce_field( 'save-customize_' . $wp_customize->get_stylesheet(), 'customizer_nonce', false );
+			wp_nonce_field( 'save-sidebar-widgets', '_wpnonce_widgets', false );
+			wp_nonce_field( 'update-widget', 'nonce', false );
+			?>
 		</form><!-- #customize-controls -->
 
 		<?php
@@ -2217,6 +2221,13 @@ echo cp_render_media_audio_template();
  * @since CP-2.5.0
  */
 echo cp_render_media_video_template();
+
+/**
+ * Fire admin scripts in the footer
+ *
+ * @since CP-2.8.0
+ */
+do_action( 'admin_print_footer_scripts' );
 ?>
 
 </body>
