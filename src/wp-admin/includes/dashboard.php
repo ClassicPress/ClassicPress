@@ -1080,8 +1080,9 @@ function wp_dashboard_recent_comments( $total_items = 5 ) {
 	$comments = array();
 
 	$comments_query = array(
-		'number' => $total_items * 5,
-		'offset' => 0,
+		'number'    => $total_items * 5,
+		'offset'    => 0,
+		'post_type' => get_post_types(),
 	);
 
 	if ( ! current_user_can( 'edit_posts' ) ) {
@@ -1648,7 +1649,7 @@ function wp_dashboard_php_nag() {
 		if ( $response['is_lower_than_future_minimum'] ) {
 			$message = sprintf(
 				/* translators: %s: The server PHP version. */
-				__( 'Your site is running on an outdated version of PHP (%s), which does not receive security updates and soon will not be supported by WordPress. Ensure that PHP is updated on your server as soon as possible. Otherwise you will not be able to upgrade WordPress.' ),
+				__( 'Your site is running on an outdated version of PHP (%s), which does not receive security updates and soon will not be supported by ClassicPress. Ensure that PHP is updated on your server as soon as possible. Otherwise you will not be able to upgrade ClassicPress.' ),
 				PHP_VERSION
 			);
 		} else {
@@ -1661,7 +1662,7 @@ function wp_dashboard_php_nag() {
 	} elseif ( $response['is_lower_than_future_minimum'] ) {
 		$message = sprintf(
 			/* translators: %s: The server PHP version. */
-			__( 'Your site is running on an outdated version of PHP (%s), which soon will not be supported by WordPress. Ensure that PHP is updated on your server as soon as possible. Otherwise you will not be able to upgrade WordPress.' ),
+			__( 'Your site is running on an outdated version of PHP (%s), which soon will not be supported by ClassicPress. Ensure that PHP is updated on your server as soon as possible. Otherwise you will not be able to upgrade ClassicPress.' ),
 			PHP_VERSION
 		);
 	} else {
@@ -1840,7 +1841,7 @@ function cp_dashboard_directory() {
 	<p>
 	<?php
 	echo '<p>' . __( 'We would like to let you know about the ClassicPress Directory.' ) . '</p>';
-	echo '<p>' . sprintf( __( 'You can browse the new directory at <a href="%1$s" target="_blank">%1$s</a>.' ), esc_url( 'https://directory.classicpress.net' ) ) . '</p>';
+	echo '<p>' . sprintf( __( 'You can browse the directory at <a href="%1$s" target="_blank">%1$s</a>.' ), esc_url( 'https://directory.classicpress.net' ) ) . '</p>';
 	$url = wp_nonce_url(
 		add_query_arg(
 			array(

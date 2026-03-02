@@ -14,9 +14,15 @@ class Tests_HTTP_IncludeOldRequestsClass extends WP_UnitTestCase {
 	 * @coversNothing
 	 */
 	public function test_should_include_old_requests_class() {
-		$this->expectDeprecation();
-		$this->expectDeprecationMessage( 'The PSR-0 `Requests_...` class names in the Requests library are deprecated.' );
+		$expectDeprecationMessage = 'The PSR-0 `Requests_...` class names in the Requests library are deprecated.'
+		. ' Switch to the PSR-4 `WpOrg\Requests\...` class names at your earliest convenience.';
 
-		new Requests();
+		try {
+			new Requests();
+		} catch ( Requests_Exception $e ) {
+			throw $e;
+		} catch ( \Throwable $e ) {
+			$this->assertSame( $expectDeprecationMessage, $e->getMessage() );
+		}
 	}
 }

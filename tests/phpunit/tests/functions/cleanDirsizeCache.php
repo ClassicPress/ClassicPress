@@ -3,7 +3,9 @@
 /**
  * Tests specific to the directory size caching.
  *
- * @group functions.php
+ * @group functions
+ *
+ * @covers ::clean_dirsize_cache
  */
 class Tests_Functions_CleanDirsizeCache extends WP_UnitTestCase {
 
@@ -12,18 +14,13 @@ class Tests_Functions_CleanDirsizeCache extends WP_UnitTestCase {
 	 *
 	 * @ticket 52241
 	 *
-	 * @covers ::clean_dirsize_cache
-	 *
 	 * @dataProvider data_clean_dirsize_cache_with_invalid_inputs
 	 *
 	 * @param mixed  $path             Path input to use in the test.
 	 * @param string $expected_message Expected notice message.
 	 */
 	public function test_clean_dirsize_cache_with_invalid_inputs( $path, $expected_message ) {
-		$this->expectNotice();
-		$this->expectNoticeMessage( $expected_message );
-
-		clean_dirsize_cache( $path );
+		$this->assertExpectedError( 'clean_dirsize_cache', array( $expected_message, $path ) );
 	}
 
 	/**
@@ -56,8 +53,6 @@ class Tests_Functions_CleanDirsizeCache extends WP_UnitTestCase {
 	 * Tests the handling of a non-path text string passed as the $path parameter.
 	 *
 	 * @ticket 52241
-	 *
-	 * @covers ::clean_dirsize_cache
 	 *
 	 * @dataProvider data_clean_dirsize_cache_with_non_path_string
 	 *

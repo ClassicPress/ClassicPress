@@ -215,8 +215,6 @@ class WP_Widget_Custom_HTML extends WP_Widget {
 	 *
 	 * @since CP-2.3.0
 	 *
-	 * @see WP_Widget_Custom_HTML::render_control_template_scripts()
-	 *
 	 * @param array $instance Current instance.
 	 */
 	public function form( $instance ) {

@@ -877,7 +877,7 @@
 			}
 
 			wp.ajax.post( this.action, {
-				post_ID: media.view.settings.post.id,
+				post_ID: document.getElementById( 'post_ID' ).value,
 				type: this.shortcode.tag,
 				shortcode: this.shortcode.string(),
 				maxwidth: maxwidth

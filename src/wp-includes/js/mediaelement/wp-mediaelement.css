@@ -14,6 +14,18 @@
 	background: #222;
 }
 
+.mejs__offscreen {
+	border: 0;
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important;
+}
+
 .mejs-time {
 	font-weight: normal;
 	word-wrap: normal;
@@ -47,10 +59,17 @@
 	background: transparent;
 }
 
+.mejs-overlay-play {
+	max-width: 100%;
+}
+
+.mejs-overlay-button {
+	padding: 0;
+}
+
 /* Override theme styles that may conflict with controls. */
 .mejs-controls button:hover {
 	border: none;
-	-webkit-box-shadow: none;
 	box-shadow: none;
 }
 
@@ -181,10 +200,10 @@ video.wp-video-shortcode,
 }
 
 .wp-playlist-item .wp-playlist-caption {
-	text-decoration: none;
-	color: #000;
-	max-width: -webkit-calc(100% - 40px);
-	max-width: calc(100% - 40px);
+	display: inline-block;
+	width: 100%;
+	max-width: calc(100% - 60px);
+	vertical-align: bottom;
 }
 
 .wp-playlist-item-meta {
@@ -232,6 +251,7 @@ video.wp-video-shortcode,
 	cursor: pointer;
 	padding: 0 3px;
 	border-bottom: 1px solid #ccc;
+	list-style-position: inside;
 }
 
 .wp-playlist-item:last-child {

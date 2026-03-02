@@ -40,6 +40,23 @@ class Walker_Nav_Menu extends Walker {
 	);
 
 	/**
+	 * The URL to the privacy policy page.
+	 *
+	 * @since 6.8.0
+	 * @var string
+	 */
+	private $privacy_policy_url;
+
+	/**
+	 * Constructor.
+	 *
+	 * @since 6.8.0
+	 */
+	public function __construct() {
+		$this->privacy_policy_url = get_privacy_policy_url();
+	}
+
+	/**
 	 * Starts the list before the elements are added.
 	 *
 	 * @since 3.0.0
@@ -185,7 +202,7 @@ class Walker_Nav_Menu extends Walker {
 		}
 
 		if ( ! empty( $menu_item->url ) ) {
-			if ( get_privacy_policy_url() === $menu_item->url ) {
+			if ( $this->privacy_policy_url === $menu_item->url ) {
 				if ( ! empty( $menu_item->target && '_blank' === $menu_item->target && ! empty( $menu_item->xfn ) ) ) {
 					$atts['rel'] = 'nofollow privacy-policy';
 				} else {

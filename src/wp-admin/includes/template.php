@@ -715,15 +715,17 @@ function meta_form( $post = null ) {
 		 */
 		$limit = apply_filters( 'postmeta_form_limit', 30 );
 
+		// Query changed to be routed via $wpdb->posts.
+		// @since CP-2.6.0
 		$keys = $wpdb->get_col(
 			$wpdb->prepare(
 				"SELECT DISTINCT meta_key
-				FROM $wpdb->postmeta
-				WHERE meta_key NOT BETWEEN '_' AND '_z'
-				HAVING meta_key NOT LIKE %s
-				ORDER BY meta_key
+				FROM $wpdb->posts as posts
+				LEFT JOIN $wpdb->postmeta as meta ON posts.ID = meta.post_id
+				WHERE post_type = %s
+				AND SUBSTR(meta_key,1,1) != '_'
 				LIMIT %d",
-				$wpdb->esc_like( '_' ) . '%',
+				$post->post_type,
 				$limit
 			)
 		);
@@ -853,19 +855,19 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
 	$day = '<label><span class="screen-reader-text">' .
 		/* translators: Hidden accessibility text. */
 		__( 'Day' ) .
-	'</span><input type="text" ' . ( $multi ? '' : 'id="jj" ' ) . 'name="jj" value="' . $jj . '" size="2" maxlength="2"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
+	'</span><input type="text" ' . ( $multi ? '' : 'id="jj" ' ) . 'name="jj" value="' . $jj . '" size="2" maxlength="2" inputmode="numeric" pattern="^([1-9]|[012][0-9]|3[01])$"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
 	$year = '<label><span class="screen-reader-text">' .
 		/* translators: Hidden accessibility text. */
 		__( 'Year' ) .
-	'</span><input type="text" ' . ( $multi ? '' : 'id="aa" ' ) . 'name="aa" value="' . $aa . '" size="4" maxlength="4"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
+	'</span><input type="text" ' . ( $multi ? '' : 'id="aa" ' ) . 'name="aa" value="' . $aa . '" size="4" maxlength="4" inputmode="numeric" pattern="^([1-9][0-9]{3})$"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
 	$hour = '<label><span class="screen-reader-text">' .
 		/* translators: Hidden accessibility text. */
 		__( 'Hour' ) .
-	'</span><input type="text" ' . ( $multi ? '' : 'id="hh" ' ) . 'name="hh" value="' . $hh . '" size="2" maxlength="2"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
+	'</span><input type="text" ' . ( $multi ? '' : 'id="hh" ' ) . 'name="hh" value="' . $hh . '" size="2" maxlength="2" inputmode="numeric" pattern="^([0-9]|[01][0-9]|2[0-3])$"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
 	$minute = '<label><span class="screen-reader-text">' .
 		/* translators: Hidden accessibility text. */
 		__( 'Minute' ) .
-	'</span><input type="text" ' . ( $multi ? '' : 'id="mn" ' ) . 'name="mn" value="' . $mn . '" size="2" maxlength="2"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
+	'</span><input type="text" ' . ( $multi ? '' : 'id="mn" ' ) . 'name="mn" value="' . $mn . '" size="2" maxlength="2" inputmode="numeric" pattern="^([0-9]|[0-5][0-9])$"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
 
 	echo '<div class="timestamp-wrap">';
 	/* translators: 1: Month, 2: Day, 3: Year, 4: Hour, 5: Minute. */
@@ -896,10 +898,10 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
 	}
 	?>
 
-<p>
-<a href="#edit_timestamp" class="save-timestamp hide-if-no-js button"><?php _e( 'OK' ); ?></a>
-<a href="#edit_timestamp" class="cancel-timestamp hide-if-no-js button-cancel"><?php _e( 'Cancel' ); ?></a>
-</p>
+<fieldset>
+	<button type="button" class="save-timestamp button"><?php _e( 'OK' ); ?></button>
+	<button type="button" class="cancel-timestamp button-cancel"><?php _e( 'Cancel' ); ?></button>
+</fieldset>
 	<?php
 }
 

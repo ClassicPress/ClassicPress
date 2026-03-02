@@ -140,6 +140,7 @@ $core_actions_post = array(
 	'send-password-reset',
 	'quick-edit-attachment',
 	'media-cat-upload',
+	'get-revision',
 );
 
 // Deprecated.

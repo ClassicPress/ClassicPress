@@ -6,12 +6,6 @@
  * @covers ::comment_form
  */
 class Tests_Comment_CommentForm extends WP_UnitTestCase {
-	public static $post_id;
-
-	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
-		self::$post_id = $factory->post->create();
-	}
-
 	public function set_up() {
 		parent::set_up();
 		update_option( 'default_comment_status', 'open' );
@@ -140,5 +134,77 @@ class Tests_Comment_CommentForm extends WP_UnitTestCase {
 		$form_without_aria = get_echo( 'comment_form', array( $args, $p ) );
 
 		$this->assertStringNotContainsString( 'aria-describedby="email-notes"', $form_without_aria );
+	}
+
+	/**
+	 * @ticket 16576
+	 */
+	public function test_custom_fields_shown_default_fields_hidden_for_logged_in_users() {
+		$p = self::factory()->post->create();
+
+		$user_id = self::factory()->user->create(
+			array(
+				'role'       => 'subscriber',
+				'user_login' => 'testuser',
+				'user_email' => 'test@example.com',
+			)
+		);
+
+		wp_set_current_user( $user_id );
+		$this->assertTrue( is_user_logged_in() );
+
+		$args = array(
+			'fields' => array(
+				'author'       => '<p><label for="author">Name</label><input type="text" name="author" id="author" /></p>',
+				'email'        => '<p><label for="email">Email</label><input type="email" name="email" id="email" /></p>',
+				'url'          => '<p><label for="url">Website</label><input type="url" name="url" id="url" /></p>',
+				'cookies'      => '<p><input type="checkbox" name="wp-comment-cookies-consent" id="wp-comment-cookies-consent" /><label for="wp-comment-cookies-consent">Save my details</label></p>',
+				'custom_field' => '<p><label for="custom_field">Custom Field</label><input type="text" name="custom_field" id="custom_field" /></p>',
+				'department'   => '<p><label for="department">Department</label><select name="department" id="department"><option value="sales">Sales</option></select></p>',
+			),
+		);
+
+		$form = get_echo( 'comment_form', array( $args, $p ) );
+
+		// Custom fields should be present
+		$this->assertStringContainsString( 'name="custom_field"', $form );
+		$this->assertStringContainsString( 'name="department"', $form );
+		$this->assertStringContainsString( 'Custom Field', $form );
+		$this->assertStringContainsString( 'Department', $form );
+
+		// Default fields should NOT be present
+		$this->assertStringNotContainsString( 'name="author"', $form );
+		$this->assertStringNotContainsString( 'name="email"', $form );
+		$this->assertStringNotContainsString( 'name="url"', $form );
+		$this->assertStringNotContainsString( 'wp-comment-cookies-consent', $form );
+
+		wp_set_current_user( 0 );
+	}
+
+	/**
+	 * @ticket 16576
+	 */
+	public function test_all_fields_displayed_for_non_logged_in_users() {
+		$p = self::factory()->post->create();
+
+		wp_set_current_user( 0 );
+		$this->assertFalse( is_user_logged_in() );
+
+		$args = array(
+			'fields' => array(
+				'author'       => '<p><label for="author">Name</label><input type="text" name="author" id="author" /></p>',
+				'email'        => '<p><label for="email">Email</label><input type="email" name="email" id="email" /></p>',
+				'url'          => '<p><label for="url">Website</label><input type="url" name="url" id="url" /></p>',
+				'custom_field' => '<p><label for="custom_field">Custom Field</label><input type="text" name="custom_field" id="custom_field" /></p>',
+			),
+		);
+
+		$form = get_echo( 'comment_form', array( $args, $p ) );
+
+		// All fields should be present for non-logged-in users
+		$this->assertStringContainsString( 'name="author"', $form );
+		$this->assertStringContainsString( 'name="email"', $form );
+		$this->assertStringContainsString( 'name="url"', $form );
+		$this->assertStringContainsString( 'name="custom_field"', $form );
 	}
 }

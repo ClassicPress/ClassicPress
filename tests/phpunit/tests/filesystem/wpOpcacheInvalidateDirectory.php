@@ -3,7 +3,8 @@
 /**
  * Tests wp_opcache_invalidate_directory().
  *
- * @group file.php
+ * @group file
+ * @group filesystem
  *
  * @covers ::wp_opcache_invalidate_directory
  */
@@ -34,13 +35,9 @@ class Tests_Filesystem_WpOpcacheInvalidateDirectory extends WP_UnitTestCase {
 	 * @param mixed $dir An invalid directory path.
 	 */
 	public function test_should_trigger_error_with_invalid_dir( $dir ) {
-		$this->expectError();
-		$this->expectErrorMessage(
-			'<code>wp_opcache_invalidate_directory()</code>',
-			'The expected error was not triggered.'
-		);
+		$expectErrorMessage = '<code>wp_opcache_invalidate_directory()</code> expects a non-empty string.';
 
-		wp_opcache_invalidate_directory( $dir );
+		$this->assertExpectedError( 'wp_opcache_invalidate_directory', array( $expectErrorMessage, $dir ) );
 	}
 
 	/**

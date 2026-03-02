@@ -463,6 +463,36 @@ if ( ! /iPad|iPod|iPhone/.test( navigator.userAgent ) ) {
 				foreach ( $config_file as $line ) {
 					fwrite( $handle, $line );
 				}
+
+				if ( strtoupper( substr( PHP_OS, 0, 3 ) ) === 'WIN' ) {
+					$show_warning = false;
+					chmod( $path_to_wp_config, 0666 );
+				} else {
+					$file_owner = fileowner( $path_to_wp_config );
+					$file_group = filegroup( $path_to_wp_config );
+					$dir_owner = fileowner( dirname( $path_to_wp_config ) );
+					$dir_group = filegroup( dirname( $path_to_wp_config ) );
+
+					// Get PHP process effective user and group IDs if possible
+					$php_euid = function_exists( 'posix_geteuid' ) ? posix_geteuid() : fstat( $handle )['uid'];
+					$php_egid = function_exists( 'posix_getegid' ) ? posix_getegid() : fstat( $handle )['gid'];
+
+					// Determine if PHP process user is owner or in group of the file
+					$php_user_is_owner = ( $php_euid === $file_owner ) && ( $file_owner === $dir_owner );
+					$php_user_in_group = ( $php_egid === $file_group ) && ( $file_group === $dir_group );
+
+					if ( $php_user_is_owner ) {
+						$show_warning = false;
+						chmod( $path_to_wp_config, 0600 );
+					} elseif ( $php_user_in_group ) {
+						$show_warning = false;
+						chmod( $path_to_wp_config, 0660 );
+					} else {
+						$show_warning = true;
+						chmod( $path_to_wp_config, 0666 );
+					}
+				}
+
 				fclose( $handle );
 			} else {
 				$wp_config_perms = fileperms( $path_to_wp_config );
@@ -482,20 +512,36 @@ if ( ! /iPad|iPod|iPhone/.test( navigator.userAgent ) ) {
 				}
 			}
 
-			chmod( $path_to_wp_config, 0666 );
 			setup_config_display_header();
 
 			if ( false !== $handle ) :
 				?>
-<h1 class="screen-reader-text">
+				<h1 class="screen-reader-text">
 				<?php
 				/* translators: Hidden accessibility text. */
 				_e( 'Successful database connection' );
 				?>
-</h1>
-<p><?php _e( 'All right, sparky! You&#8217;ve made it through this part of the installation. ClassicPress can now communicate with your database. If you are ready, time now to&hellip;' ); ?></p>
+				</h1>
+				<p><?php _e( 'All right, sparky! You&#8217;ve made it through this part of the installation. ClassicPress can now communicate with your database. If you are ready, time now to&hellip;' ); ?></p>
 
-<p class="step"><a href="<?php echo $install; ?>" class="button button-large"><?php _e( 'Run the installation' ); ?></a></p>
+				<?php
+				if ( true === $show_warning ) :
+					?>
+					<p>
+					<?php
+					printf(
+						/* translators: 1: wp-config.php, 2: Documentation URL. */
+						__( 'The %1$s file has been created with open permissions. See <a href="%2$s">Working with wp-config.php file</a> for more information.' ),
+						'<code>wp-config.php</code>',
+						__( 'https://docs.classicpress.net/user-guides/editing-wp-config-php/' )
+					);
+					?>
+					</p>
+					<?php
+				endif;
+				?>
+
+				<p class="step"><a href="<?php echo $install; ?>" class="button button-large"><?php _e( 'Run the installation' ); ?></a></p>
 				<?php
 			else :
 				printf( '<p>%s</p>', $error_message );

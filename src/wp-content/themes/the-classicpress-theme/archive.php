@@ -14,6 +14,7 @@ get_header();
 
 		<?php
 		if ( have_posts() ) :
+			the_archive_description( '<div class="taxonomy-description">', '</div>' );
 			?>
 
 			<div class="blog-list"> 

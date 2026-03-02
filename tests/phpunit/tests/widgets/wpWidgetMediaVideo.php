@@ -337,19 +337,4 @@ class Tests_Widgets_wpWidgetMediaVideo extends WP_UnitTestCase {
 
 		$this->assertTrue( wp_script_is( 'media-video-widget' ) );
 	}
-
-	/**
-	 * Test render_control_template_scripts method.
-	 *
-	 * @covers WP_Widget_Media_Video::render_control_template_scripts
-	 */
-	public function test_render_control_template_scripts() {
-		$widget = new WP_Widget_Media_Video();
-
-		ob_start();
-		$widget->render_control_template_scripts();
-		$output = ob_get_clean();
-
-		$this->assertStringContainsString( '<script type="text/html" id="tmpl-wp-media-widget-video-preview">', $output );
-	}
 }

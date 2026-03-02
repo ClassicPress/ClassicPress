@@ -3,8 +3,8 @@
 require_once __DIR__ . '/base.php';
 
 /**
+ * @group file
  * @group filesystem
- * @group wp-filesystem
  */
 class WP_Filesystem_find_folder_UnitTestCases extends WP_Filesystem_UnitTestCase {
 

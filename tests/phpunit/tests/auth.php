@@ -284,10 +284,10 @@ class Tests_Auth extends WP_UnitTestCase {
 	 * @ticket 21022
 	 * @ticket 50027
 	 */
-	public function test_wp_check_password_does_not_support_md5_hashes() {
+	public function test_wp_check_password_supports_md5_hash() {
 		$password = 'password';
 		$hash     = md5( $password );
-		$this->assertFalse( wp_check_password( $password, $hash ) );
+		$this->assertTrue( wp_check_password( $password, $hash ) );
 		$this->assertSame( 1, did_filter( 'check_password' ) );
 	}
 

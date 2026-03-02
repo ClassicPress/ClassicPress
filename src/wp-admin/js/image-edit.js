@@ -915,10 +915,16 @@
 
 		queryParams.delete( 'mode' );
 		history.replaceState( null, null, '?' + queryParams.toString() ); // reset URL params
-		document.querySelector( '.imgedit-wrap' ).remove();
-		document.querySelector( '.attachment-details' ).removeAttribute( 'hidden' );
-		document.querySelector( '.attachment-details' ).removeAttribute( 'inert' );
-		document.querySelector( '.edit-attachment' ).focus();
+		if ( document.querySelector( '.imgedit-wrap' ) ) {
+			document.querySelector( '.imgedit-wrap' ).remove();
+		}
+		if ( document.querySelector( '.attachment-details' ) ) {
+			document.querySelector( '.attachment-details' ).removeAttribute( 'hidden' );
+			document.querySelector( '.attachment-details' ).removeAttribute( 'inert' );
+		}
+		if ( document.querySelector( '.edit-attachment' ) ) {
+			document.querySelector( '.edit-attachment' ).focus();
+		}
 	},
 
 	/**

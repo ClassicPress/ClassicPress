@@ -311,7 +311,6 @@ jQuery( function($) {
 		$postVisibilitySelect = $('#post-visibility-select'),
 		$timestampdiv = $('#timestampdiv'),
 		$postStatusSelect = $('#post-status-select'),
-		isMac = window.navigator.platform ? window.navigator.platform.indexOf( 'Mac' ) !== -1 : false,
 		copyAttachmentURL = document.querySelector( '.copy-attachment-url.edit-media' ),
 		copyAttachmentURLSuccessTimeout,
 		__ = wp.i18n.__, _x = wp.i18n._x;
@@ -430,25 +429,6 @@ jQuery( function($) {
 		}
 
 		$previewField.val('');
-	});
-
-	// This code is meant to allow tabbing from Title to Post content.
-	$('#title').on( 'keydown.editor-focus', function( event ) {
-		var editor;
-
-		if ( event.keyCode === 9 && ! event.ctrlKey && ! event.altKey && ! event.shiftKey ) {
-			editor = typeof tinymce != 'undefined' && tinymce.get('content');
-
-			if ( editor && ! editor.isHidden() ) {
-				editor.focus();
-			} else if ( $textarea.length ) {
-				$textarea.trigger( 'focus' );
-			} else {
-				return;
-			}
-
-			event.preventDefault();
-		}
 	});
 
 	// Auto save new posts after a title is typed.
@@ -676,8 +656,10 @@ jQuery( function($) {
 			'li.popular-category > label input[type="checkbox"]',
 			function() {
 				var t = $(this), c = t.is(':checked'), id = t.val();
-				if ( id && t.parents('#taxonomy-'+taxonomy).length )
-					$('#in-' + taxonomy + '-' + id + ', #in-popular-' + taxonomy + '-' + id).prop( 'checked', c );
+				if ( id && t.parents('#taxonomy-'+taxonomy).length ) {
+					$('input#in-' + taxonomy + '-' + id + ', input[id^="in-' + taxonomy + '-' + id + '-"]').prop('checked', c);
+					$('input#in-popular-' + taxonomy + '-' + id).prop('checked', c);
+				}
 			}
 		);
 
@@ -1256,22 +1238,13 @@ jQuery( function($) {
 	}
 
 	// Save on pressing [Ctrl]/[Command] + [S] in the Text editor.
-	$textarea.on( 'keydown.wp-autosave', function( event ) {
-		// Key [S] has code 83.
-		if ( event.which === 83 ) {
-			if (
-				event.shiftKey ||
-				event.altKey ||
-				( isMac && ( ! event.metaKey || event.ctrlKey ) ) ||
-				( ! isMac && ! event.ctrlKey )
-			) {
-				return;
-			}
-
-			wp.autosave && wp.autosave.server.triggerSave();
-			event.preventDefault();
+	document.addEventListener( 'keydown', function( e ) {
+		var updateButton = document.getElementById( 'save-post' ) ? document.getElementById( 'save-post' ) : document.getElementById( 'publish' );
+		if ( ( e.ctrlKey || e.metaKey ) && e.key.toLowerCase() === 's' ) {
+			e.preventDefault();
+			updateButton.click();
 		}
-	});
+	} );
 
 	// If the last status was auto-draft and the save is triggered, edit the current URL.
 	if ( $( '#original_post_status' ).val() === 'auto-draft' && window.history.replaceState ) {

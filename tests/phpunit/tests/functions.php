@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @group functions.php
+ * @group functions
  */
 class Tests_Functions extends WP_UnitTestCase {
 	public function test_wp_parse_args_object() {
@@ -1559,6 +1559,17 @@ class Tests_Functions extends WP_UnitTestCase {
 					'mime' => 'image/avif',
 				),
 			),
+			// Grid AVIF.
+			array(
+				DIR_TESTDATA . '/images/avif-alpha-grid2x1.avif',
+				array(
+					199,
+					200,
+					IMAGETYPE_AVIF,
+					'width="199" height="200"',
+					'mime' => 'image/avif',
+				),
+			),
 		);
 
 		return $data;
@@ -1806,6 +1817,7 @@ class Tests_Functions extends WP_UnitTestCase {
 	 * Test file path validation
 	 *
 	 * @ticket 42016
+	 * @ticket 61488
 	 * @dataProvider data_test_validate_file
 	 *
 	 * @param string $file          File path.
@@ -1924,6 +1936,13 @@ class Tests_Functions extends WP_UnitTestCase {
 				'C:/WINDOWS/system32',
 				array( 'C:/WINDOWS/system32' ),
 				2,
+			),
+
+			// Windows Path with allowed file
+			array(
+				'Apache24\htdocs\wordpress/wp-content/themes/twentyten/style.css',
+				array( 'Apache24\htdocs\wordpress/wp-content/themes/twentyten/style.css' ),
+				0,
 			),
 
 			// Disallowed files:

@@ -5,9 +5,8 @@
 const { normalizeJoin, baseConfig, baseDir, camelCaseDash } = require( './shared' );
 const { dependencies } = require( '../../package' );
 
-module.exports = function( env = { environment: 'production', buildTarget: false } ) {
-	const mode = env.environment;
-	const suffix = mode === 'production' ? '.min' : '';
+module.exports = function( env = { environment: 'production', buildTarget: false, minify: false } ) {
+	const suffix = env.minify === true ? '.min' : '';
 	let buildTarget = env.buildTarget + '/wp-includes';
 
 	const WORDPRESS_NAMESPACE = '@wordpress/';
@@ -25,8 +24,8 @@ module.exports = function( env = { environment: 'production', buildTarget: false
 				library: {
 					name: ['wp', camelCaseDash( packageName ) ],
 					type: 'window',
-					export: undefined,
-				},
+					export: undefined
+				}
 			};
 
 			return memo;
@@ -36,10 +35,10 @@ module.exports = function( env = { environment: 'production', buildTarget: false
 			filename: `[name]${ suffix }.js`,
 			path: normalizeJoin( baseDir, `${ buildTarget }/js/dist` ),
 			environment: {
-				arrowFunction: mode === 'production' ? true : false,
-				const: mode === 'production' ? true : false,
+				arrowFunction: env.minify,
+				const: env.minify
 			}
-		},
+		}
 	};
 
 	return config;

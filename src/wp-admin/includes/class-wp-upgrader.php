@@ -1200,8 +1200,7 @@ class WP_Upgrader {
 			if ( ! $wp_filesystem->delete( $temp_backup_dir, true ) ) {
 				$errors->add(
 					'temp_backup_delete_failed',
-					sprintf( $this->strings['temp_backup_delete_failed'] ),
-					$args['slug']
+					sprintf( $this->strings['temp_backup_delete_failed'], $args['slug'] )
 				);
 				continue;
 			}

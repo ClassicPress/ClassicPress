@@ -1012,14 +1012,22 @@ tr.inline-edit-row td {
 	padding: 0;
 }
 
-.inline-edit-row fieldset label span.input-text-wrap,
+.inline-edit-row fieldset span.input-text-wrap,
 .inline-edit-row fieldset .timestamp-wrap {
 	display: block;
 	margin-left: 6em;
 }
 
-.quick-edit-row-post fieldset.inline-edit-col-right label span.title {
+.quick-edit-row-post div.inline-edit-col {
+	clear: both;
+}
+
+.edit-php .quick-edit-row-post fieldset.inline-edit-col-right label span.title,
+.upload-php .quick-edit-row-post fieldset.inline-edit-col-right label span.title {
 	width: auto;
+}
+
+.edit-php .quick-edit-row-post fieldset.inline-edit-col-right label span.title {
 	padding-right: 0.5em;
 }
 
@@ -1040,7 +1048,7 @@ tr.inline-edit-row td {
 	vertical-align: middle;
 }
 
-.inline-edit-row fieldset label textarea {
+.inline-edit-row fieldset textarea {
 	width: 100%;
 	height: 4em;
 	vertical-align: top;
@@ -1102,13 +1110,29 @@ tr.inline-edit-row td {
 	width: 75%;
 }
 
-.inline-edit-row #post_parent,
+.inline-edit-row select[name="post_parent"],
 .inline-edit-row select[name="page_template"] {
 	max-width: 80%;
 }
 
 .quick-edit-row-post fieldset label.inline-edit-status {
 	float: left;
+}
+
+/* Consistent whitespace in Quick Edit across screens */
+.upload-php .inline-edit-row fieldset.inline-edit-date label {
+	display: none;
+}
+.edit-php .inline-edit-row fieldset.inline-edit-date input[name=jj] {
+	margin-right: 5px;
+}
+.edit-php .inline-edit-row fieldset.inline-edit-date input[name=hh] {
+	margin-right: 3px;
+}
+.upload-php .inline-edit-row fieldset.inline-edit-date input[name=aa],
+.edit-php .inline-edit-row fieldset.inline-edit-date input[name=aa],
+.edit-php .inline-edit-row fieldset.inline-edit-date input[name=mn] {
+	margin-left: 3px;
 }
 
 #bulk-titles,
@@ -1427,6 +1451,7 @@ ul.cat-checklist {
 .plugin-install-php #the-list {
 	display: flex;
 	flex-wrap: wrap;
+	margin-top: -1px;
 }
 
 .plugin-install-php .plugin-card {
@@ -1875,6 +1900,11 @@ div.action-links,
 		text-overflow: ellipsis;
 	}
 
+	/* Hide ID column header cell in posts and pages table to fix layout on mobile */
+	#posts-filter .wp-list-table th.column-id {
+		display: none;
+	}
+
 	.wp-list-table .is-expanded td:not(.hidden) {
 		display: block !important;
 		overflow: hidden; /* clearfix */
@@ -2084,7 +2114,7 @@ div.action-links,
 		padding: 0;
 	}
 
-	.inline-edit-row fieldset label span.input-text-wrap,
+	.inline-edit-row fieldset span.input-text-wrap,
 	.inline-edit-row fieldset .timestamp-wrap {
 		margin-left: 0;
 	}

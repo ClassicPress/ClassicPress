@@ -1,3 +1,5 @@
+/* global console, _wpMediaGridSettings, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
+
 document.addEventListener( 'DOMContentLoaded', function() {
 	var pond, itemID, focusID,
 		{ FilePond } = window, // import FilePond
@@ -8,17 +10,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		uploadCatSelect = document.getElementById( 'upload-category' ),
 		inputElement = document.getElementById( 'filepond' ),
 		ajaxurl = document.getElementById( 'ajax-url' ).value,
-		body = document.body,
 		dialog = document.getElementById( 'media-modal' ),
 		leftIcon = document.getElementById( 'left-dashicon' ),
 		rightIcon = document.getElementById( 'right-dashicon' ),
 		closeButton = document.getElementById( 'dialog-close-button' ),
+		leftIconMobile = document.getElementById( 'left-dashicon-mobile' ),
+		rightIconMobile = document.getElementById( 'right-dashicon-mobile' ),
+		mediaNavigation = document.querySelector( '.edit-media-header .media-navigation' ),
+		mediaNavigationMobile = document.querySelector( '.attachment-media-view .media-navigation' ),
 		paged = '1',
 		dateFilter = document.getElementById( 'filter-by-date' ) ? document.getElementById( 'filter-by-date' ) : '',
 		typeFilter = document.getElementById( 'filter-by-type' ) ? document.getElementById( 'filter-by-type' ) : '',
 		search = document.getElementById( 'media-search-input' ),
 		mediaCatSelect = document.getElementById( 'taxonomy=media_category&term' ) ? document.getElementById( 'taxonomy=media_category&term' ) : '',
-		mediaGrid = document.querySelector( '#media-grid ul' );
+		mediaGrid = document.querySelector( '#media-grid ul' ),
+		startTouchPosition = 0,
+		endTouchPosition = 0;
 
 	// Update details within modal
 	function setAddedMediaFields( id ) {
@@ -47,12 +54,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Update attachment details
 	function updateDetails( input, id ) {
+		var mediaItem = document.getElementById( 'media-' + id );
+		if ( ! mediaItem ) {
+			return;
+		}
 		var successTimeout,
 			data = new FormData();
 
 		data.append( 'action', 'save-attachment' );
 		data.append( 'id', id );
-		data.append( 'nonce', document.getElementById( 'media-' + id ).dataset.updateNonce );
+		data.append( 'nonce', mediaItem.dataset.updateNonce );
 
 		// Append metadata fields
 		if ( input.parentNode.dataset.setting === 'alt' ) {
@@ -81,13 +92,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Update data attributes
 				if ( input.parentNode.dataset.setting === 'alt' ) {
-					document.getElementById( 'media-' + id ).querySelector( 'img' ).setAttribute( 'alt', input.value );
+					mediaItem.querySelector( 'img' ).setAttribute( 'alt', input.value );
 				} else if ( input.parentNode.dataset.setting === 'title' ) {
-					document.getElementById( 'media-' + id ).setAttribute( 'aria-label', input.value );
+					mediaItem.setAttribute( 'aria-label', input.value );
 				} else if ( input.parentNode.dataset.setting === 'caption' ) {
-					document.getElementById( 'media-' + id ).setAttribute( 'data-caption', input.value );
+					mediaItem.setAttribute( 'data-caption', input.value );
 				} else if ( input.parentNode.dataset.setting === 'description' ) {
-					document.getElementById( 'media-' + id ).setAttribute( 'data-description', input.value );
+					mediaItem.setAttribute( 'data-description', input.value );
 				}
 
 				// Show success visual feedback.
@@ -111,12 +122,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Update media categories and tags
 	function updateMediaTaxOrTag( input, id ) {
+		var mediaItem = document.getElementById( 'media-' + id );
+		if ( ! mediaItem ) {
+			return;
+		}
 		var successTimeout, newTaxes,
 			data = new FormData(),
 			taxonomy = input.getAttribute( 'name' ).replace( 'attachments[' + id + '][' , '' ).replace( ']', '' );
 
 		data.append( 'action', 'save-attachment-compat' );
-		data.append( 'nonce', document.getElementById( 'media-' + id ).dataset.updateNonce );
+		data.append( 'nonce', mediaItem.dataset.updateNonce );
 		data.append( 'id', id );
 		data.append( 'taxonomy', taxonomy );
 		data.append( 'attachments[' + id + '][' + taxonomy + ']', input.value );
@@ -137,11 +152,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( taxonomy === 'media_category' ) {
 					newTaxes = result.data.media_cats.join( ', ' );
 					input.value = newTaxes;
-					document.getElementById( 'media-' + id ).setAttribute( 'data-taxes', newTaxes );
+					mediaItem.setAttribute( 'data-taxes', newTaxes );
 				} else if ( taxonomy === 'media_post_tag' ) {
 					newTaxes = result.data.media_tags.join( ', ' );
 					input.value = newTaxes;
-					document.getElementById( 'media-' + id ).setAttribute( 'data-tags', newTaxes );
+					mediaItem.setAttribute( 'data-tags', newTaxes );
 				}
 
 				// Show success visual feedback.
@@ -165,9 +180,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Delete attachment from within modal
 	function deleteItem( id ) {
+		var mediaItem = document.getElementById( 'media-' + id );
+		if ( ! mediaItem ) {
+			return;
+		}
 		var data = new URLSearchParams( {
 			action: 'delete-post',
-			_ajax_nonce: document.getElementById( 'media-' + id ).dataset.deleteNonce,
+			_ajax_nonce: mediaItem.dataset.deleteNonce,
 			id: id
 		} );
 
@@ -184,15 +203,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} )
 		.then( function( result ) {
 			if ( result === 1 ) { // success
-				if ( document.getElementById( 'media-' + id ).previousElementSibling != null ) {
-					focusID = document.getElementById( 'media-' + id ).previousElementSibling.id;
-				} else if ( document.getElementById( 'media-' + id ).nextElementSibling != null ) {
-					focusID = document.getElementById( 'media-' + id ).nextElementSibling.id;
+				if ( mediaItem.previousElementSibling != null ) {
+					focusID = mediaItem.previousElementSibling.id;
+				} else if ( mediaItem.nextElementSibling != null ) {
+					focusID = mediaItem.nextElementSibling.id;
 				} else {
 					focusID = addNew.id;
 				}
-				document.getElementById( 'media-' + id ).remove();
+				mediaItem.remove();
 				closeButton.click();
+				resetDataOrdering();
 			} else {
 				console.log( _wpMediaGridSettings.delete_failed );
 			}
@@ -202,9 +222,55 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
+	// Reset ordering of remaining media items after deletion
+	function resetDataOrdering() {
+		var items = document.querySelectorAll( '.media-item' ),
+			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
+			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
+			count5;
+
+		items.forEach( function( item, index ) {
+			item.setAttribute( 'data-order', parseInt( index + 1 ) );
+		} );
+
+		// Reset totals
+		if ( 5 in count ) { // allow for different languages
+			count5 = ' ' + count[5];
+		} else {
+			count5 = '';
+		}
+		document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + count5;
+
+		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
+		dialog.querySelector( '#total-media-items' ).textContent = items.length;
+		dialog.querySelector( '#total-media-items-mobile' ).textContent = items.length;
+	}
+
+	// Toggle media button navigation wrappers according to viewport width
+	function toggleMediaNavigation() {
+		if ( window.innerWidth > 600 ) {
+			mediaNavigation.style.display = '';
+			mediaNavigationMobile.style.display = 'none';
+		} else {
+			mediaNavigation.style.display = 'none';
+			mediaNavigationMobile.style.display = '';
+		}
+	}
+
+	window.addEventListener( 'resize', toggleMediaNavigation );
+
+	// Delete media item
+	dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
+		var id = location.search.match( /\d+/g )[0];
+		if ( window.confirm( _wpMediaGridSettings.confirm_delete ) ) {
+			deleteItem( id );
+			resetDataOrdering();
+		}
+	} );
+
 	// Open modal
 	function openModalDialog( item ) {
-		var id = item.id.replace( 'media-', '' ),
+		var id = item.dataset.id,
 			title = item.getAttribute( 'aria-label' ),
 			date = item.dataset.date,
 			filename = item.dataset.filename,
@@ -220,10 +286,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			url = item.dataset.url,
 			alt = item.querySelector( 'img' ).getAttribute( 'alt' ),
 			link = item.dataset.link,
+			author = item.dataset.author,
+			authorLink = item.dataset.authorLink,
 			orientation = item.dataset.orientation ? ' ' + item.dataset.orientation : '',
 			menuOrder = item.dataset.menuOrder,
+			updateNonce = item.dataset.updateNonce,
+			deleteNonce = item.dataset.deleteNonce,
 			prev = item.previousElementSibling ? item.previousElementSibling.id : '',
-			next = item.nextElementSibling ? item.nextElementSibling.id : '';
+			next = item.nextElementSibling ? item.nextElementSibling.id : '',
+			order = item.dataset.order,
+			total = parseInt( document.querySelector( '.displaying-num' ).textContent );
 
 		// Modify current URL
 		queryParams.set( 'item', id );
@@ -234,6 +306,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Populate modal with attachment details
 		dialog.querySelector( '.attachment-date' ).textContent = date;
+		dialog.querySelector( '.uploaded-by' ).children[1].textContent = author;
+		dialog.querySelector( '.uploaded-by' ).children[1].href = authorLink;
 		dialog.querySelector( '.attachment-filename' ).textContent = filename;
 		dialog.querySelector( '.attachment-filetype' ).textContent = mime;
 		dialog.querySelector( '.attachment-filesize' ).textContent = size;
@@ -256,6 +330,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '#media-audio' ).removeAttribute( 'hidden' );
 			dialog.querySelector( 'audio.wp-audio-shortcode' ).src = url;
 			dialog.querySelector( 'audio' ).setAttribute( 'type', mime );
+			dialog.querySelector( '.alt-text' ).style.display = 'none';
+			dialog.querySelector( '#alt-text-description' ).style.display = 'none';
 		} else if ( filetype === 'video' ) {
 			dialog.querySelector( '.wp-video' ).removeAttribute( 'style' );
 			dialog.querySelector( '#media-image' ).setAttribute( 'hidden', true );
@@ -263,6 +339,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '#media-video' ).removeAttribute( 'hidden' );
 			dialog.querySelector( 'video.wp-video-shortcode' ).src = url;
 			dialog.querySelector( 'video' ).setAttribute( 'type', mime );
+			dialog.querySelector( '.alt-text' ).style.display = 'none';
+			dialog.querySelector( '#alt-text-description' ).style.display = 'none';
 		} else {
 			dialog.querySelector( '#media-audio' ).setAttribute( 'hidden', true );
 			dialog.querySelector( '#media-video' ).setAttribute( 'hidden', true );
@@ -271,6 +349,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( filetype === 'image' ) {
 				dialog.querySelector( '.thumbnail-image img' ).src = url;
 				dialog.querySelector( '.edit-attachment' ).style.display = '';
+				dialog.querySelector( '.alt-text' ).style.display = '';
+				dialog.querySelector( '#alt-text-description' ).style.display = '';
 
 				if (
 					( mime === 'image/webp' && ! _wpMediaGridSettings.webp_editable ) ||
@@ -289,36 +369,86 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#view-attachment').href = link;
 		dialog.querySelector( '#edit-more' ).href = ajaxurl.replace( 'admin-ajax.php', 'post.php?post=' + id + '&action=edit' );
 		dialog.querySelector( '#download-file' ).href = url;
+
+		/*
+		 * Existence of nonce means that user capability has already been checked and verified.
+		 *
+		 * @see wp_prepare_attachment_for_js()
+		 */
+		if ( updateNonce ) {
+			dialog.querySelector( '#attachment-details-two-column-alt-text' ).removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachment-details-two-column-title' ).removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachment-details-two-column-caption' ).removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachment-details-two-column-description' ).removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachments-' + id + '-media_category' ).removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachments-' + id + '-media_post_tag' ).removeAttribute( 'readonly' );
+			dialog.querySelector( '.edit-attachment' ).style.display = '';
+		} else {
+			dialog.querySelector( '#attachment-details-two-column-alt-text' ).setAttribute( 'readonly', true );
+			dialog.querySelector( '#attachment-details-two-column-title' ).setAttribute( 'readonly', true );
+			dialog.querySelector( '#attachment-details-two-column-caption' ).setAttribute( 'readonly', true );
+			dialog.querySelector( '#attachment-details-two-column-description' ).setAttribute( 'readonly', true );
+			dialog.querySelector( '#attachments-' + id + '-media_category' ).setAttribute( 'readonly', true );
+			dialog.querySelector( '#attachments-' + id + '-media_post_tag' ).setAttribute( 'readonly', true );
+			dialog.querySelector( '.edit-attachment' ).style.display = 'none';
+		}
+
+		/*
+		 * Existence of nonce means that user capability has already been checked and verified.
+		 *
+		 * @see wp_prepare_attachment_for_js()
+		 */
+		if ( deleteNonce ) {
+			dialog.querySelector( '.delete-attachment' ).style.display = '';
+			dialog.querySelectorAll( '.links-separator' )[2].style.display = '';
+		} else {
+			dialog.querySelector( '.delete-attachment' ).style.display = 'none';
+			dialog.querySelectorAll( '.links-separator' )[2].style.display = 'none';
+		}
+
 		leftIcon.setAttribute( 'data-prev', prev );
 		rightIcon.setAttribute( 'data-next', next );
 
 		if ( prev === '' ) {
-			leftIcon.disabled = true;
+			leftIcon.setAttribute( 'aria-disabled', true );
+			leftIconMobile.setAttribute( 'aria-disabled', true );
 		} else {
-			leftIcon.disabled = false;
+			leftIcon.setAttribute( 'aria-disabled', false );
+			leftIconMobile.setAttribute( 'aria-disabled', false );
 		}
 
 		if ( next === '' ) {
-			rightIcon.disabled = true;
+			rightIcon.setAttribute( 'aria-disabled', true );
+			rightIconMobile.setAttribute( 'aria-disabled', true );
 		} else {
-			rightIcon.disabled = false;
+			rightIcon.setAttribute( 'aria-disabled', false );
+			rightIconMobile.setAttribute( 'aria-disabled', false );
 		}
+
+		// Set order of media item and total
+		dialog.querySelector( '#current-media-item' ).textContent = order;
+		dialog.querySelector( '#total-media-items' ).textContent = total;
+		dialog.querySelector( '#current-media-item-mobile' ).textContent = order;
+		dialog.querySelector( '#total-media-items-mobile' ).textContent = total;
+
+		toggleMediaNavigation();
 
 		// Show modal
 		dialog.classList.add( 'modal-loading' );
-		dialog.showModal();
 
-		// Delete media item
-		dialog.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
-			if ( confirm( _wpMediaGridSettings.confirm_delete ) ) {
-				deleteItem( id );
-			}
-		} );
+		document.body.style.overflow = 'hidden';
+
+		// Fix wrong image flash
+		setTimeout( function() {
+			dialog.showModal();
+		}, 1 );
 
 		// Update media categories and tags
 		dialog.querySelectorAll( '.compat-item input' ).forEach( function( input ) {
 			input.addEventListener( 'blur', function() {
-				updateMediaTaxOrTag( input, id );
+				if ( updateNonce ) {
+					updateMediaTaxOrTag( input, id );
+				}
 			} );
 		} );
 	}
@@ -377,7 +507,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		gridItem.setAttribute( 'data-mime', attachment.mime );
 		gridItem.setAttribute( 'data-width', attachment.width );
 		gridItem.setAttribute( 'data-height', attachment.height );
-		gridItem.setAttribute( 'data-size', attachment.filesizeHumanReadable )
+		gridItem.setAttribute( 'data-size', attachment.filesizeHumanReadable );
 		gridItem.setAttribute( 'data-caption', attachment.caption );
 		gridItem.setAttribute( 'data-description', attachment.description );
 		gridItem.setAttribute( 'data-link', attachment.link );
@@ -416,7 +546,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			'query[s]': search ? search.value : '',
 			'query[paged]': paged ? paged : '1',
 			'query[media_category_name]': mediaCatSelect ? mediaCatSelect.value : '',
-			'_ajax_nonce': document.getElementById( 'media_grid_nonce' ).value,
+			'_ajax_nonce': document.getElementById( 'media_grid_nonce' ).value
 		} );
 
 		// Make AJAX request
@@ -432,6 +562,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
+			var items, num;
+
 			if ( result.success ) {
 
 				// Clear existing grid
@@ -462,6 +594,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					result.data.forEach( function( attachment ) {
 						var gridItem = populateGridItem( attachment );
 						mediaGrid.appendChild( gridItem );
+					} );
+
+					// Reset grid order
+					items = document.querySelectorAll( '.media-item' );
+					items.forEach( function( item, index ) {
+						item.setAttribute( 'data-order', parseInt( index + 1 ) );
 					} );
 
 					// Reset pagination
@@ -502,7 +640,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						document.getElementById( 'current-page-selector' ).setAttribute( 'value', paged ? paged : 1 );
 						document.getElementById( 'current-page-selector' ).value = paged ? paged : 1;
 						document.querySelector( '.total-pages' ).textContent = result.headers.max_pages;
-						document.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, result.headers.total_posts );
+
+						num = document.querySelector( '.displaying-num' ).textContent.split( ' ' );
+						document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
 
 						queryParams.set( 'paged', paged );
 						history.replaceState( null, null, '?' + queryParams.toString() );
@@ -625,6 +765,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						div.className = 'notice notice-error is-dismissible';
 						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
 						document.querySelector( '.page-title-action' ).after( div );
+						close.click();
 					} else {
 						div = document.createElement( 'div' );
 						div.id = 'message';
@@ -741,48 +882,97 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	} );
 
+	/* Update media attachment details */
+	dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
+		input.addEventListener( 'blur', function() {
+			var id = queryParams.get( 'item' );
+			var item = document.getElementById( 'media-' + id );
+			if ( item.dataset.updateNonce ) {
+				updateDetails( input, id );
+			}
+		} );
+	} );
+
 	/* Close modal by clicking button */
-	closeButton.addEventListener( 'click', function() {
+	function closeModalDialog() {
 		queryParams.delete( 'item' );
 		queryParams.delete( 'mode' );
 		history.replaceState( null, null, location.href.split('?')[0] ); // reset URL params
 		dialog.classList.remove( 'modal-loading' );
+		document.body.style.overflow = '';
 		dialog.close();
 		if ( focusID != null ) { // set focus correctly
 			document.getElementById( focusID ).focus();
 			focusID = null; // reset focusID
 		}
 		removeImageEditWrap();
-	} );
-	
-	/* Update media attachment details */
-	dialog.querySelectorAll( '.settings input, .settings textarea' ).forEach( function( input ) {
-		input.addEventListener( 'blur', function() {
-			var id = queryParams.get( 'item' );
-			updateDetails( input, id );
-		} );
-	} );
+	}
+	closeButton.addEventListener( 'click', closeModalDialog );
 
-	leftIcon.addEventListener( 'click', function() {
+	function prevModalDialog() {
 		var id = leftIcon.dataset.prev;
-		focusID = id; // set focusID for when modal is closed
-		document.getElementById( id ).click();
+		if ( id ) {
+			focusID = id; // set focusID for when modal is closed
+			document.getElementById( id ).click();
+			mediaNavigation.style.display === '' ? leftIcon.focus() : leftIconMobile.focus();
+		}
 		removeImageEditWrap();
-	} );
+	}
+	leftIcon.addEventListener( 'click', prevModalDialog );
+	leftIconMobile.addEventListener( 'click', prevModalDialog );
 
-	rightIcon.addEventListener( 'click', function() {
+	function nextModalDialog() {
 		var id = rightIcon.dataset.next;
-		focusID = id; // set focusID for when modal is closed
-		document.getElementById( id ).click();
+		if ( id ) {
+			focusID = id; // set focusID for when modal is closed
+			document.getElementById( id ).click();
+			mediaNavigation.style.display === '' ? rightIcon.focus() : rightIconMobile.focus();
+		}
 		removeImageEditWrap();
-	} );
+	}
+	rightIcon.addEventListener( 'click', nextModalDialog );
+	rightIconMobile.addEventListener( 'click', nextModalDialog );
+
+	// Handle keyboard navigation
+	function keydownHandler( e ) {
+		if ( dialog.open ) {
+			if ( e.key === 'ArrowLeft' ) {
+				e.preventDefault();
+				prevModalDialog();
+			} else if ( e.key === 'ArrowRight' ) {
+				e.preventDefault();
+				nextModalDialog();
+			}
+		}
+	}
+	document.querySelector( '.edit-media-header' ).addEventListener( 'keydown', keydownHandler );
+	mediaNavigationMobile.addEventListener( 'keydown', keydownHandler );
+
+	// Handle touch navigation (touchstart event)
+	function touchStartHandler( e ) {
+		startTouchPosition = e.touches[0].clientX;
+	}
+	// Handle touch navigation (touchend event)
+	// The swipe is considered valid if the horizontal distance moved (difference between startTouchPosition and endTouchPosition) is more than 50 pixels. This threshold prevents accidental small touches from triggering a swipe.
+	function touchEndHandler( e ) {
+		endTouchPosition = e.changedTouches[0].clientX;
+
+		// Determine swipe direction
+		if ( endTouchPosition - startTouchPosition > 50 ) {
+			// Swipe left (next media)
+			prevModalDialog();
+		} else if ( startTouchPosition - endTouchPosition > 50 ) {
+			// Swipe right (previous media)
+			nextModalDialog();
+		}
+	}
+	dialog.addEventListener( 'touchstart', touchStartHandler );
+	dialog.addEventListener( 'touchend', touchEndHandler );
 
 	// Edit image
-	document.querySelector( '.edit-attachment' ).addEventListener( 'click', function( e ) {
+	document.querySelector( '.edit-attachment' ).addEventListener( 'click', function() {
 		var itemID = parseInt( queryParams.get( 'item' ) ),
 			item = document.getElementById( 'media-' + itemID ),
-			width = item.dataset.width,
-			height = item.dataset.height,
 			nonce = item.dataset.editNonce,
 			action = 'rotate-cw', // or any other valid action e.g. save, scale, restore
 			target = 'full'; // or 'thumbnail', etc.
@@ -800,7 +990,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		fetch( ajaxurl, {
 			method: 'POST',
 			body: formData,
-			credentials: 'same-origin',
+			credentials: 'same-origin'
 		} )
 		.then( function( response ) {
 			if ( response.ok ) {
@@ -809,6 +999,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
+			// Add navigation buttons
+			if ( dialog.querySelector( '#edit-image-navigation') == null ) {
+				var div = document.createElement( 'div' );
+				div.id = 'edit-image-navigation';
+				div.className = 'attachment-media-view landscape';
+				div.append( mediaNavigationMobile );
+				document.querySelector( '.media-frame-content' ).before( div );
+			}
+
 			document.querySelector( '.attachment-details' ).setAttribute( 'hidden', true );
 			document.querySelector( '.attachment-details' ).setAttribute( 'inert', true );
 			document.querySelector( '.media-frame-content' ).insertAdjacentHTML( 'beforeend', result.data.html );
@@ -838,24 +1037,32 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.target.textContent = 'Bulk select';
 			dateFilter.style.display = '';
 			typeFilter.style.display = '';
-			mediaCatSelect.style.display = '';
+			if ( mediaCatSelect ) {
+				mediaCatSelect.style.display = '';
+			}
 			deleteButton.classList.add( 'hidden' );
+			deleteButton.disabled = true;
 			toolbar.classList.remove( 'media-toolbar-mode-select' );
 		} else {
 			e.target.textContent = 'Cancel';
 			dateFilter.style.display = 'none';
 			typeFilter.style.display = 'none';
-			mediaCatSelect.style.display = 'none';
+			if ( mediaCatSelect ) {
+				mediaCatSelect.style.display = 'none';
+			}
 			deleteButton.classList.remove( 'hidden' );
 			toolbar.classList.add( 'media-toolbar-mode-select' );
 
 			deleteButton.addEventListener( 'click', function() {
-				if ( confirm( _wpMediaGridSettings.confirm_multiple ) ) {
-					document.querySelectorAll( '.media-item.selected' ).forEach( function( deleteSelect ) {
-						deleteItem( deleteSelect.id.replace( 'media-', '' ) );
-					} );
+				var selectedItems = document.querySelectorAll( '.media-item.selected' );
+				if ( selectedItems.length !== 0 ) {
+					if ( window.confirm( _wpMediaGridSettings.confirm_multiple ) ) {
+						selectedItems.forEach( function( deleteSelect ) {
+							deleteItem( deleteSelect.id.replace( 'media-', '' ) );
+						} );
+					}
+					document.querySelector( '.select-mode-toggle-button' ).click();
 				}
-				document.querySelector( '.select-mode-toggle-button' ).click();
 			} );
 		}
 	} );
@@ -910,7 +1117,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	pond = FilePond.create( inputElement, {
 		allowMultiple: true,
 		server: {
-			process: function( fieldName, file, metadata, load, error, progress, abort, transfer, options ) {
+			process: function( fieldName, file, metadata, load, error, progress, abort ) {
 
 				// Create FormData
 				var formData = new FormData();
@@ -962,16 +1169,28 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 				};
 			},
-			maxFileSize: document.getElementById( 'filepond' ).dataset.maxFileSize,
+			maxFileSize: document.getElementById( 'ajax-url' ).dataset.maxFileSize
+		},
+		onprocessfile: ( error, file ) => { // Called when an individual file upload completes
+			if ( ! error ) {
+				setTimeout( function() {
+					pond.removeFile( file.id );
+				}, 100 );
+				resetDataOrdering();
+			}
 		},
 		labelTapToUndo: _wpMediaGridSettings.tap_close,
 		fileRenameFunction: ( file ) =>
 			new Promise( function( resolve ) {
-				resolve( window.prompt( _wpMediaGridSettings.new_filename, file.name ) );
-			} ),
+				const newName = window.prompt(
+					_wpMediaGridSettings.new_filename,
+					file.name
+				);
+				resolve( newName === null ? file.name : newName );
+			}
+		),
 		acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 		labelFileTypeNotAllowed: _wpMediaGridSettings.invalid_type,
-		fileValidateTypeLabelExpectedTypes: _wpMediaGridSettings.check_types,
+		fileValidateTypeLabelExpectedTypes: _wpMediaGridSettings.check_types
 	} );
-
 } );

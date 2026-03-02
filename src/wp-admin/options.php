@@ -17,6 +17,7 @@
 
 /** ClassicPress Administration Bootstrap */
 require_once __DIR__ . '/admin.php';
+require_once ABSPATH . WPINC . '/classicpress/class-cp-settings.php';
 
 // Used in the HTML title tag.
 $title       = __( 'Settings' );
@@ -151,6 +152,7 @@ $allowed_options            = array(
 		'page_on_front',
 		'page_for_posts',
 		'blog_public',
+		'cp_object_cache',
 	),
 	'writing'    => array(
 		'default_category',
@@ -311,9 +313,10 @@ if ( 'update' === $action ) { // We are saving settings sent from a settings pag
 					'options.php',
 					'2.7.0',
 					sprintf(
-						/* translators: %s: The option/setting. */
-						__( 'The %s setting is unregistered. Unregistered settings are deprecated. See https://developer.wordpress.org/plugins/settings/settings-api/' ),
-						'<code>' . esc_html( $option ) . '</code>'
+						/* translators: 1: The option/setting, 2: Documentation URL. */
+						__( 'The %1$s setting is unregistered. Unregistered settings are deprecated. See <a href="%2$s">documentation on the Settings API</a>.' ),
+						'<code>' . esc_html( $option ) . '</code>',
+						__( 'https://developer.wordpress.org/plugins/settings/settings-api/' )
 					)
 				);
 			}

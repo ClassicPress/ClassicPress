@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * @group admin
  * @group site-health
  *
  * @coversDefaultClass WP_Site_Health
@@ -42,8 +43,9 @@ class Tests_Admin_wpSiteHealth extends WP_UnitTestCase {
 
 		$reflection          = new ReflectionClass( $this->instance );
 		$reflection_property = $reflection->getProperty( 'mysql_recommended_version' );
-		$reflection_property->setAccessible( true );
-
+		if ( PHP_VERSION_ID < 80100 ) {
+			$reflection_property->setAccessible( true );
+		}
 		$readme = file_get_contents( ABSPATH . 'readme.html' );
 
 		preg_match( '#Recommended.*MySQL</a> version <strong>([0-9.]*)#s', $readme, $matches );
@@ -472,11 +474,11 @@ class Tests_Admin_wpSiteHealth extends WP_UnitTestCase {
 		return array(
 			array( 'comments_count', 0 ),
 			array( 'posts_count', 0 ),
-			array( 'terms_count', 1 ),
-			array( 'options_count', 100 ),
+			array( 'terms_count', 0 ),
+			array( 'options_count', 1 ),
 			array( 'users_count', 0 ),
-			array( 'alloptions_count', 100 ),
-			array( 'alloptions_bytes', 1000 ),
+			array( 'alloptions_count', 1 ),
+			array( 'alloptions_bytes', 10 ),
 		);
 	}
 }

@@ -4257,15 +4257,28 @@ function the_shortlink( $text = '', $title = '', $before = '', $after = '' ) {
  *     Optional. Arguments to use instead of the default arguments.
  *
  *     @type int    $size           Height and width of the avatar in pixels. Default 96.
- *     @type string $default        URL for the default image or a default type. Accepts '404' (return
- *                                  a 404 instead of a default image), 'retro' (8bit), 'RoboHash' (robohash),
- *                                  'monsterid' (monster), 'wavatar' (cartoon face), 'indenticon' (the "quilt"),
- *                                  'mystery', 'mm', or 'mysteryman' (The Oyster Man), 'blank' (transparent GIF),
- *                                  or 'gravatar_default' (the Gravatar logo). Default is the value of the
- *                                  'avatar_default' option, with a fallback of 'mystery'.
- *     @type bool   $force_default  Whether to always show the default image, never the Gravatar. Default false.
- *     @type string $rating         What rating to display avatars up to. Accepts 'G', 'PG', 'R', 'X', and are
- *                                  judged in that order. Default is the value of the 'avatar_rating' option.
+ *     @type string $default        URL for the default image or a default type. Accepts:
+ *                                  - '404' (return a 404 instead of a default image)
+ *                                  - 'retro' (a 8-bit arcade-style pixelated face)
+ *                                  - 'robohash' (a robot)
+ *                                  - 'monsterid' (a monster)
+ *                                  - 'wavatar' (a cartoon face)
+ *                                  - 'identicon' (the "quilt", a geometric pattern)
+ *                                  - 'initials' (initials based avatar with background color)
+ *                                  - 'color' (generated background color)
+ *                                  - 'mystery', 'mm', or 'mysteryman' (The Oyster Man)
+ *                                  - 'blank' (transparent GIF)
+ *                                  - 'gravatar_default' (the Gravatar logo)
+ *                                  Default is the value of the 'avatar_default' option,
+ *                                  with a fallback of 'mystery'.
+ *     @type bool   $force_default  Whether to always show the default image, never the Gravatar.
+ *                                  Default false.
+ *     @type string $rating         What rating to display avatars up to. Accepts:
+ *                                  - 'G' (suitable for all audiences)
+ *                                  - 'PG' (possibly offensive, usually for audiences 13 and above)
+ *                                  - 'R' (intended for adult audiences above 17)
+ *                                  - 'X' (even more mature than above)
+ *                                  Default is the value of the 'avatar_rating' option.
  *     @type string $scheme         URL scheme to use. See set_url_scheme() for accepted values.
  *                                  Default null.
  *     @type array  $processed_args When the function returns, the value will be the processed/sanitized $args
@@ -4305,6 +4318,7 @@ function is_avatar_comment_type( $comment_type ) {
  * Retrieves default data about the avatar.
  *
  * @since 4.2.0
+ * @since 6.7.0 Gravatar URLs always use HTTPS.
  *
  * @param mixed $id_or_email The avatar to retrieve. Accepts a user ID, Gravatar MD5 hash,
  *                           user email, WP_User object, WP_Post object, or WP_Comment object.
@@ -4314,16 +4328,32 @@ function is_avatar_comment_type( $comment_type ) {
  *     @type int    $size           Height and width of the avatar image file in pixels. Default 96.
  *     @type int    $height         Display height of the avatar in pixels. Defaults to $size.
  *     @type int    $width          Display width of the avatar in pixels. Defaults to $size.
- *     @type string $default        URL for the default image or a default type. Accepts '404' (return
- *                                  a 404 instead of a default image), 'retro' (8bit), 'monsterid' (monster),
- *                                  'wavatar' (cartoon face), 'indenticon' (the "quilt"), 'mystery', 'mm',
- *                                  or 'mysteryman' (The Oyster Man), 'blank' (transparent GIF), or
- *                                  'gravatar_default' (the Gravatar logo). Default is the value of the
- *                                  'avatar_default' option, with a fallback of 'mystery'.
- *     @type bool   $force_default  Whether to always show the default image, never the Gravatar. Default false.
- *     @type string $rating         What rating to display avatars up to. Accepts 'G', 'PG', 'R', 'X', and are
- *                                  judged in that order. Default is the value of the 'avatar_rating' option.
+ *     @type string $default        URL for the default image or a default type. Accepts:
+ *                                  - '404' (return a 404 instead of a default image)
+ *                                  - 'retro' (a 8-bit arcade-style pixelated face)
+ *                                  - 'robohash' (a robot)
+ *                                  - 'monsterid' (a monster)
+ *                                  - 'wavatar' (a cartoon face)
+ *                                  - 'identicon' (the "quilt", a geometric pattern)
+ *                                  - 'initials' (initials based avatar with background color)
+ *                                  - 'color' (generated background color)
+ *                                  - 'mystery', 'mm', or 'mysteryman' (The Oyster Man)
+ *                                  - 'blank' (transparent GIF)
+ *                                  - 'gravatar_default' (the Gravatar logo)
+ *                                  Default is the value of the 'avatar_default' option,
+ *                                  with a fallback of 'mystery'.
+ *     @type bool   $force_default  Whether to always show the default image, never the Gravatar.
+ *                                  Default false.
+ *     @type string $rating         What rating to display avatars up to. Accepts:
+ *                                  - 'G' (suitable for all audiences)
+ *                                  - 'PG' (possibly offensive, usually for audiences 13 and above)
+ *                                  - 'R' (intended for adult audiences above 17)
+ *                                  - 'X' (even more mature than above)
+ *                                  Default is the value of the 'avatar_rating' option.
  *     @type string $scheme         URL scheme to use. See set_url_scheme() for accepted values.
+ *                                  For Gravatars this setting is ignored and HTTPS is used to avoid
+ *                                  unnecessary redirects. The setting is retained for systems using
+ *                                  the {@see 'pre_get_avatar_data'} filter to customize avatars.
  *                                  Default null.
  *     @type array  $processed_args When the function returns, the value will be the processed/sanitized $args
  *                                  plus a "found_avatar" guess. Pass as a reference. Default null.
@@ -4473,9 +4503,6 @@ function get_avatar_data( $id_or_email, $args = null ) {
 
 	if ( $email_hash ) {
 		$args['found_avatar'] = true;
-		$gravatar_server      = hexdec( $email_hash[0] ) % 3;
-	} else {
-		$gravatar_server = rand( 0, 2 );
 	}
 
 	$url_args = array(
@@ -4485,15 +4512,44 @@ function get_avatar_data( $id_or_email, $args = null ) {
 		'r' => $args['rating'],
 	);
 
-	if ( is_ssl() ) {
-		$url = 'https://secure.gravatar.com/avatar/' . $email_hash;
-	} else {
-		$url = sprintf( 'http://%d.gravatar.com/avatar/%s', $gravatar_server, $email_hash );
+	// Handle additional parameters for the 'initials' avatar type
+	if ( 'initials' === $args['default'] ) {
+		$name = '';
+
+		if ( $user ) {
+			$name = ! empty( $user->display_name ) ? $user->display_name :
+					( ! empty( $user->first_name ) && ! empty( $user->last_name ) ?
+					$user->first_name . ' ' . $user->last_name : $user->user_login );
+		} elseif ( is_object( $id_or_email ) && isset( $id_or_email->comment_author ) ) {
+			$name = $id_or_email->comment_author;
+		} elseif ( is_string( $id_or_email ) && false !== strpos( $id_or_email, '@' ) ) {
+			$name = str_replace( array( '.', '_', '-' ), ' ', substr( $id_or_email, 0, strpos( $id_or_email, '@' ) ) );
+		}
+
+		if ( ! empty( $name ) ) {
+			if ( preg_match( '/\p{Han}|\p{Hiragana}|\p{Katakana}|\p{Hangul}/u', $name ) || false === strpos( $name, ' ' ) ) {
+				$initials = mb_substr( $name, 0, min( 2, mb_strlen( $name, 'UTF-8' ) ), 'UTF-8' );
+			} else {
+				$first    = mb_substr( $name, 0, 1, 'UTF-8' );
+				$last     = mb_substr( $name, strrpos( $name, ' ' ) + 1, 1, 'UTF-8' );
+				$initials = $first . $last;
+			}
+
+			$url_args['initials'] = $initials;
+		}
 	}
+
+	/*
+	 * Gravatars are always served over HTTPS.
+	 *
+	 * The Gravatar website redirects HTTP requests to HTTPS URLs so always
+	 * use the HTTPS scheme to avoid unnecessary redirects.
+	 */
+	$url = 'https://secure.gravatar.com/avatar/' . $email_hash;
 
 	$url = add_query_arg(
 		rawurlencode_deep( array_filter( $url_args ) ),
-		set_url_scheme( $url, $args['scheme'] )
+		$url
 	);
 
 	/**
