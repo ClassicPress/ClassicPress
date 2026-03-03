@@ -1693,19 +1693,19 @@ wp_print_scripts();
 															</div>
 															<br class="clear">
 														</div>
+
+														<?php
+														/**
+														 * Fires at the end of the widget control form.
+														 * 
+														 * @param WP_Widget $widget_obj      Widget instance.
+														 * @param null      $return          Return null if new fields are added.
+														 * @param array     $widget_settings An array of the widget’s settings.
+														 */
+														do_action( 'in_widget_form', $widget_obj, $return = null, $widget_settings );
+														?>
+
 													</div><!-- .form -->
-
-													<?php
-													/**
-													 * Fires at the end of the widget control form.
-													 * 
-													 * @param WP_Widget $widget_obj      Widget instance.
-													 * @param null      $return          Return null if new fields are added.
-													 * @param array     $widget_settings An array of the widget’s settings.
-													 */
-													do_action( 'in_widget_form', $widget_obj, $return = null, $widget_settings );
-													?>
-
 												</div><!-- .widget-inside -->
 											</details>
 										</div>
