@@ -1662,14 +1662,26 @@ wp_print_scripts();
 														<div class="widget-content">
 															<?php $widget_obj->form( $field_value ); ?>
 														</div>
+														<input type="hidden" name="widget-id" class="widget-id" value="<?php echo esc_attr( $widget_id ); ?>">
 														<input type="hidden" name="id_base" class="id_base" value="<?php echo esc_attr( $widget_id_base ); ?>">
+														<input type="hidden" name="widget-width" class="widget-width" value="auto">
+														<input type="hidden" name="widget-height" class="widget-height" value="auto">
 														<input type="hidden" name="widget_number" class="widget_number" value="<?php echo esc_attr( $widget_number ); ?>">
-														<input type="hidden" name="widget_id" class="widget_id" value="<?php echo esc_attr( $widget_id ); ?>">
-														<input type="hidden" name="sidebar_id" class="sidebar_id" value="<?php echo esc_attr( $section->id ); ?>">
 														<input type="hidden" name="multi_number" class="multi_number" value="">
-														<input type="hidden" name="width" class="width" value="auto">
-														<input type="hidden" name="height" class="height" value="auto">
+														<input type="hidden" name="sidebar_id" class="sidebar_id" value="<?php echo esc_attr( $section->id ); ?>">
 														<input type="hidden" name="add_new" class="add_new" value="">
+
+														<?php
+														/**
+														 * Fires near the end of the widget control form.
+														 * 
+														 * @param WP_Widget $widget_obj      Widget instance.
+														 * @param null      $return          Return null if new fields are added.
+														 * @param array     $widget_settings An array of the widget’s settings.
+														 */
+														do_action( 'in_widget_form', $widget_obj, $return = null, $widget_settings );
+														?>
+
 														<div class="widget-control-actions">
 															<div class="alignleft">
 																<button type="button" class="button-link button-link-delete widget-control-remove">
@@ -1693,18 +1705,6 @@ wp_print_scripts();
 															</div>
 															<br class="clear">
 														</div>
-
-														<?php
-														/**
-														 * Fires at the end of the widget control form.
-														 * 
-														 * @param WP_Widget $widget_obj      Widget instance.
-														 * @param null      $return          Return null if new fields are added.
-														 * @param array     $widget_settings An array of the widget’s settings.
-														 */
-														do_action( 'in_widget_form', $widget_obj, $return = null, $widget_settings );
-														?>
-
 													</div><!-- .form -->
 												</div><!-- .widget-inside -->
 											</details>
