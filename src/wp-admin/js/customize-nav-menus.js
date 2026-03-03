@@ -223,9 +223,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				originalClientX = e.originalEvent.clientX;
 				originalDepth = menuItemDepth( e.item );
 				baseClientX = e.originalEvent.clientX - ( originalDepth * indent );
-
-				// Ensure menu widget is closed before moving
-				e.item.querySelector( 'details' ).removeAttribute( 'open' );
 			},
 
 			// Start dragging
@@ -698,17 +695,24 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function moveNewMenu( id ) {
 		const range = document.createRange(),
-			ul = document.createElement( 'ul' );
-		let fragment;
+			ul = document.createElement( 'ul' ),
+			currentMenuId = id.split( '[' )[1].replace( ']', '' );
+		let fragment, newMenuId, newMenuString;
 
-		currentMenuId = id.split( '[' )[1].replace( ']', '' );
 		range.selectNodeContents( menuToEdit );
 		fragment = range.extractContents();
-		ul.id = 'sub-' + id;
+		newMenuId = fragment.querySelector( '[data-menu-id]' ).dataset.menuId;
+		newMenuString = 'accordion-section-nav_menu[' + newMenuId + ']';
+
+		ul.id = 'sub-' + id.replace( currentMenuId, newMenuId );
 		ul.className = 'customize-pane-child accordion-section-content accordion-section control-section control-section-nav_menu menu assigned-to-menu-location';
 		ul.append( fragment );						
 		ul.querySelector( '.new-menu-title' ).textContent = ul.querySelector( '.menu-name-field' ).value.trim();
 		document.getElementById( 'sub-accordion-section-menu_locations' ).after( ul );
+
+		// Update menu on menu list
+		document.getElementById( 'accordion-section-nav_menu[' + currentMenuId + ']' ).id = newMenuString;
+		return newMenuString;
 	}
 
 	/**
@@ -720,7 +724,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	document.addEventListener( 'click', function( e ) {
 		var page, itemBrowse, itemUpload, gridPanel, uploadPanel,
 			modalButtons, rightSidebar, modalPages, title, navMenuId,
-			type, object, objectId, label, url, li, template, clone,
+			type, object, objectId, label, url, li, template, clone, newMenuId,
 			menuName = '',
 			id = e.target.closest( 'li' )?.id,
 			ul = e.target.closest( 'ul' );
@@ -805,6 +809,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 		// Return to list of menus from new menu
+		} else if ( e.target === menuToEdit.querySelector( '.customize-section-back' ) ) {
+			menuToEdit.style.display = 'none';
+			document.getElementById( 'sub-accordion-panel-nav_menus' ).style.display = 'block';
+			document.getElementById( 'sub-accordion-panel-nav_menus' ).querySelector( '.customize-panel-back' ).focus();
+			window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-accordion-panel-nav_menus' );
 		} else if ( e.target === document.getElementById( 'sub-accordion-section-add_menu' ).querySelector( '.customize-section-back' ) ) {
 			document.getElementById( 'sub-accordion-section-add_menu' ).style.display = 'none';
 			document.getElementById( 'sub-accordion-panel-nav_menus' ).style.display = 'block';
@@ -862,13 +871,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( id?.startsWith( 'accordion-section-nav_menu[' ) ) {
 			ul.style.display = 'none';
 			if ( id.startsWith( 'accordion-section-nav_menu[-' ) && ! document.getElementById( 'sub-' + id ) ) { // new nav menu
-				moveNewMenu( id );
+				newMenuId = moveNewMenu( id );
+				id = newMenuId;
 			}
-			initSortables( 'sub-' + id ); // enable sorting of menu items
 			if ( document.getElementById( 'sub-' + id ).querySelectorAll( '.menu-item' ).length > 1 ) {
 				document.getElementById( 'sub-' + id ).querySelector( '.reorder-toggle' ).style.display = '';
 			}
 			document.getElementById( 'sub-' + id ).style.display = 'block';
+			initSortables( 'sub-' + id ); // enable sorting of menu items
 			document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();
 
 		// Reorder menu items
