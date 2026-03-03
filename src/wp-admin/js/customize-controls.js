@@ -1249,6 +1249,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Prevent form submission via PHP
 		e.preventDefault();
 
+		// Prevent accidental form submissions
+		if ( e.submitter !== saveButton ) {
+			return;
+		}
+
 		// Populate arrays if a new menu is being added
 		for ( const [key, value] of entries ) {
 			if ( key.startsWith( 'nav_menu[-' ) ) {
@@ -1303,7 +1308,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 			if ( result && result.success ) {
-				menuId = result.data.nav_menu_updates[0].term_id;
+				menuId = result?.data?.nav_menu_updates?.[0]?.term_id;
 				if ( menuId ) {
 
 					// Update any menu location currently populated by negativeId
@@ -1424,6 +1429,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					replaceSubstringInAttributes( item.previous_post_id, item.post_id );
 				} );
 			}
+
+			// Reset hidden widget fields
+			form.querySelectorAll( '.multi_number' ).forEach( function( multi ) {
+				multi.value = '';
+			} );
+			form.querySelectorAll( '.add_new' ).forEach( function( add ) {
+				add.value = '';
+			} );
+
+			// Reset form
 			saveButton.disabled = true;
 			saveButton.value = _wpCustomizeControlsL10n.published;
 			document.getElementById( 'customize_changeset_uuid' ).value = newResult.data.next_changeset_uuid;
@@ -1523,7 +1538,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 				window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-' + id );
 			}
-		} else if ( e.target.classList && ( e.target.classList.contains( 'customize-section-back' ) || e.target.classList.contains( 'customize-panel-back' ) ) ) {
+		} else if ( e.target.closest( 'ul' ) !== menuToEdit && ( e.target.classList && ( e.target.classList.contains( 'customize-section-back' ) || e.target.classList.contains( 'customize-panel-back' ) ) ) ) {
 			e.preventDefault();
 			ul.style.display = 'none';
 			document.body.classList.remove( 'adding-menu-items' );
