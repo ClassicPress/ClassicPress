@@ -18,19 +18,23 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		form = document.querySelector( 'form' ),
 		saveButton = form.querySelector( '#save' ),
 		sortables = document.querySelectorAll( '.control-section-sidebar' ),
-		widgets = document.querySelectorAll( '.widget-rendered' );
+		widgets = document.querySelectorAll( '.widget-rendered' ),
+		availables = document.querySelectorAll( '#available-widgets-list > li' );
 
 	/**
 	 * Trigger activation of Publish button
+	 *
+	 * @since CP-2.8.0
 	 */
 	function activatePublishButton() {
 		saveButton.disabled = false;
 		saveButton.value = _wpCustomizeControlsL10n.publish;
 	}
 
-
 	/**
 	 * Keep widgets updated
+	 *
+	 * @since CP-2.8.0
 	 */
 	widgets.forEach( function( widget ) {
 		widget.addEventListener( 'input', function() {
@@ -57,19 +61,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @since CP-2.8.0
 	 */
 	function widgetInputChange( widget ) {
-		var formDiv = widget.querySelector( '.form' ),
+		var response, text,
+			json = null,
+			formData = new FormData(),
+			formDiv = widget.querySelector( '.form' ),
 			idBase = widget.querySelector( '.id_base' ).value,
 			widgetId = widget.querySelector( '.widget_id' ).value,
 			url = ajaxurl + ( ajaxurl.indexOf( '?' ) === -1 ? '?' : '&' ) + 'wp_customize=on';
 
-		// Enable the Publish/Save button
-		activatePublishButton();
-
 		// Debounced server call to get the WRAPPED instance.
 		_.debounce( async function() {
 			try {
-				var formData = new FormData();
-
 				formDiv.querySelectorAll( 'input[name], textarea[name], select[name]' ).forEach( function( field ) {
 					if ( field.type === 'radio' && ! field.checked ) {
 						return;
@@ -91,14 +93,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				formData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
 				formData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
 
-				const response = await fetch( url, {
+				// Get data sanitized by PHP handler
+				response = await fetch( url, {
 					method: 'POST',
 					body: formData,
 					credentials: 'same-origin'
 				} );
-				const text = await response.text();
-
-				let json = null;
+				text = await response.text();
 				try {
 					json = JSON.parse( text );
 				}
@@ -110,7 +111,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 
 				if ( json && json.success && json.data && json.data.instance ) {
+
+					// Add sanitized data to the updatedControls object
 					updatedControls[ widget.dataset.settingId ] = json.data.instance;
+
+					// Enable the Publish/Save button
+					activatePublishButton();
 				}
 			} catch ( err ) {
 				console.error( 'update-widget request failed:', err );
@@ -190,77 +196,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var currentSidebars, newSidebars,
 			sidebarId = e.target.dataset.id,
 			settingId = 'sidebars_widgets[' + sidebarId + ']',
-			widgets = e.target.querySelectorAll( '.widget-rendered' ),
-			newWidgetOrder = Array.from( widgets ).map( el => el.querySelector( '.widget_id' ).value );
+			newWidgetOrder = Array.from( e.target.querySelectorAll( '.widget-id' ) ).map( input => input.value );
 
 		currentSidebars = updatedControls[ 'sidebars_widgets' ];
 		newSidebars = Object.assign( {}, currentSidebars );
 		updatedControls[ settingId ] = newWidgetOrder.slice();
 		activatePublishButton();
-	}
-
-
-
-	function addWidget( chooser ) {
-		var widget, widgetId, add,
-			sidebarId = chooser.querySelector( '.widgets-chooser-selected' ).dataset.sidebarId,
-			sidebar = document.getElementById( sidebarId ),
-			rect = sidebar.getBoundingClientRect(),
-			offset = 130,
-			scroll = false;
-
-		widget = document.getElementById( 'available-widgets' ).querySelector( '.widget-in-question' ).cloneNode( true );
-		widgetId = widget.id;
-		add = widget.querySelector( 'input.add_new' ).value;
-
-		// Remove the cloned chooser from the widget.
-		widget.querySelector( '.widgets-chooser' ).remove();
-
-		if ( 'multi' === add ) {
-			widget.innerHTML = widget.innerHTML.replace( /<[^<>]+>/g, function( m ) {
-				return m.replace( /__i__|%i%/g, newMultiValue );
-			} );
-
-			widget.id = widgetId.replace( '__i__', newMultiValue );
-			widget.querySelector( 'input.multi_number' ).value = newMultiValue;
-		} else if ( 'single' === add ) {
-			widget.id = 'new-' + widgetId;
-			document.getElementById( widgetId ).style.display = 'none';
-		}
-
-		// Open the sidebar and insert widget.
-		sidebar.parentNode.setAttribute( 'open', 'open' );
-		sidebar.append( widget );
-
-		// Save widget
-		saveWidget( widget, 0, 0, 1 );
-
-		// No longer "new" widget.
-		widget.querySelector( 'input.add_new' ).value = '';
-
-		// Trigger event so that media, text, and HTML widgets get their fields
-		document.dispatchEvent( new CustomEvent( 'widget-added', {
-			detail: { widget: widget }
-		} ) );
-
-		/*
-		 * Check if any part of the sidebar is visible in the viewport. If it is, don't scroll.
-		 * Otherwise, scroll up to so the sidebar is in view.
-		 *
-		 * https://stackoverflow.com/questions/6215779/scroll-if-element-is-not-visible#answer-72866839
-		 */
-		if ( rect.top < offset ) {
-			scroll = true;
-		}
-		if ( rect.top > window.innerHeight ) {
-			scroll = true;
-		}
-		if ( scroll ) {
-			window.scrollTo( {
-				top: ( window.scrollY + rect.top ) - offset,
-				behavior: 'smooth'
-			} );
-		}
 	}
 
 	/*
@@ -324,6 +265,43 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			widget.querySelector( 'summary' ).focus();
 		}
 	}
+	
+	function deleteWidget( widget ) {
+		const widgetId = widget.querySelector( '.widget-id' ).value,
+			idBase = widgetId.split( '-' )[0],
+			number = widgetId.split( '-' ).pop(),
+			sidebar = widget.closest( 'ul' ),
+			sidebarId = sidebar.dataset.id,
+			sidebarKey = 'sidebars_widgets[' + sidebarId + ']',
+			widgetKey = 'widget_' + idBase + '[' + number + ']';
+
+		// Remove from sidebar array
+		if ( updatedControls[ sidebarKey ] ) {
+			updatedControls[ sidebarKey ] = updatedControls[ sidebarKey ].filter( id => id !== widgetId );
+		} else {
+			// Sidebar hasn't been touched yet this session — build the array from the DOM first, then filter
+			updatedControls[ sidebarKey ] = Array.from( sidebar.querySelectorAll( '.widget-id' ) ).map( input => input.value ).filter( id => id !== widgetId );
+		}
+
+		// Remove widget key from updatedControls entirely if it was pending
+		delete updatedControls[ widgetKey ];
+
+		// Animate out and remove from DOM
+		widget.style.transition = 'opacity 0.3s';
+		widget.style.opacity = '0';
+		setTimeout( function() {
+			widget.remove();
+
+			// Re-manage last-widget class on remaining widgets
+			const remaining = sidebar.querySelectorAll( '.customize-control-widget_form' );
+			if ( remaining.length ) {
+				remaining[ remaining.length - 1 ].classList.add( 'last-widget' );
+			}
+
+			activatePublishButton();
+		}, 300 );
+	}
+
 
 	/**
 	 * Area Chooser
@@ -351,6 +329,83 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		li.dataset.sidebarId = id;
 	} );
 
+	/**
+	 * Add widget to sidebar from available widget list
+	 *
+	 * @since CP-2.8.0
+	 */
+	availables.forEach( function( widget ) {
+		widget.addEventListener( 'click', function() {
+			let idBase, sidebarId, sidebarKey, widgetKey, allIds, multiNumber;
+
+			const clone = widget.cloneNode( true ),
+				widgetId = widget.dataset.widgetId,
+				ul = form.querySelector( '.control-section-sidebar[style*="display: block"]' ), // visible sidebar ul
+				buttons = ul.querySelector( '.customize-control-sidebar_widgets.no-drag' );
+
+			if ( ! widgetId || ! ul || ! buttons ) {
+				return;
+			}
+
+			multiNumber = widgetId.split( '-' ).pop();
+			idBase = widgetId.split( '-' + multiNumber )[0];
+			form.querySelectorAll( '.id_base[value="' + idBase + '"]' ).forEach( function( base ) {
+				let num = parseInt( base.parentNode.querySelector( '.widget_number' ).value, 10 );
+				if ( ! isNaN( num ) && num >= parseInt( multiNumber, 10 ) ) {
+					multiNumber = num + 1;
+				} else {
+					multiNumber = parseInt( multiNumber, 10 ) + 1;
+				}
+			} );
+
+			// Replace all __i__ placeholders with the actual number
+			clone.id = 'customize-control-widget-' + idBase + '-' + multiNumber;
+			clone.querySelectorAll( '*' ).forEach( function( el ) {
+				if ( el.id ) {
+					el.id = el.id.replace( /__i__/g, multiNumber );
+				}
+				if ( el.name ) {
+					el.name = el.name.replace( /__i__/g, multiNumber );
+				}
+				if ( el.htmlFor ) {
+					el.htmlFor = el.htmlFor.replace( /__i__/g, multiNumber );
+				}
+			} );
+
+			// Assign values to hidden inputs
+			clone.querySelector( '.widget-id' ).value = idBase + '-' + multiNumber;
+			clone.querySelector( '.widget_number' ).value = multiNumber;
+			clone.querySelector( '.multi_number' ).value = multiNumber;
+			clone.querySelector( '.add_new' ).value = 'multi';
+
+			// Update clone's properties and attributes
+			clone.id = clone.id.replace( 'widget-tpl', 'customize-control-widget' );
+			clone.className = 'customize-control customize-control-widget_form last-widget widget-rendered';
+			clone.dataset.settingId = 'widget_' + idBase + '[' + multiNumber + ']';
+			clone.removeAttribute( 'tabindex' );
+			clone.removeAttribute( 'data-widget-id' );
+			clone.querySelector( 'summary' ).insertAdjacentHTML( 'beforeend',  _wpCustomizeWidgetsSettings.tpl.widgetReorderNav );
+			buttons.previousElementSibling.classList.remove( 'last-widget' );
+			buttons.before( clone );
+
+			// Set variables for this sidebar and the widget instance
+			sidebarId  = ul.dataset.id;
+			sidebarKey = 'sidebars_widgets[' + sidebarId + ']';
+			widgetKey  = 'widget_' + idBase + '[' + multiNumber + ']';
+
+			// Collect all widget instance IDs in this section in order and push them into updatedControls object
+			allIds = Array.from( ul.querySelectorAll( '.widget-id' ) ).map( input => input.value );
+			updatedControls[sidebarKey] = allIds;
+
+			// Create the instance’s empty setting object (to be filled by PHP back-end on save)
+			if ( ! updatedControls[widgetKey] ) {
+				updatedControls[widgetKey] = {};
+			}
+
+			// Enable Save/Publish button
+			activatePublishButton();
+		} );
+	} );
 
 	/**
 	 * Add event handlers for buttons
@@ -371,25 +426,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 			}
 
-			// Save widget
-			else if ( e.target.className.includes( 'widget-control-save' ) ) {
-				saveWidget( e.target.closest( 'li.widget' ), 0, 1, 0 );
-				e.preventDefault();
-			}
-
 			// Remove widget
 			else if ( e.target.className.includes( 'widget-control-remove' ) ) {
-
-				// Check how many widgets there are on Inactive Widgets list before deleting one
-				if ( e.target.closest( 'ul' ).id === 'wp_inactive_widgets' ) {
-					if ( [ ...document.querySelectorAll( '#wp_inactive_widgets .widget' ) ].at(1) === undefined ) {
-						removeButton.disabled = true;
-					} else {
-						removeButton.disabled = false;
-					}
-				}
-
-				saveWidget( e.target.closest( 'li.widget' ), 1, 1, 0 );
+				e.preventDefault();
+				deleteWidget( e.target.closest( '.customize-control-widget_form' ) );
 			}
 
 			// Close widget
