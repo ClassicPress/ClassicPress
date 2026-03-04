@@ -218,16 +218,17 @@ wp_add_inline_script(
 );
 wp_add_inline_script( // prevent plugin-generated warnings
 	'customize-controls',
-	'if ( typeof wp === "undefined" || typeof wp.customize === "undefined" ) {
+	'if ( ! wp || ! wp.customize || ! wp.customize.bind ) {
 		var wp = window.wp = window.wp || {};
-		wp.customize = { 
-			control: { 
+		wp.customize = {
+			control: {
 				bind: function(){}
 			},
 			Menus: {
 				MenuItemControl: function(){}
 			}
 		};
+		wp.customize.bind = function(){};
 	}',
 	'before'
 );
