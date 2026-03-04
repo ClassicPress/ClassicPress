@@ -61,8 +61,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @since CP-2.8.0
 	 */
 	function widgetInputChange( widget, input ) {
-		var response, text,
-			formData = new FormData(),
+		var formData = new FormData(),
 			formDiv = widget.querySelector( '.form' ),
 			idBase = widget.querySelector( '.id_base' ).value,
 			widgetId = widget.querySelector( '.widget-id' ).value,
