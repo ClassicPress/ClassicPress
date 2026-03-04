@@ -37,11 +37,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @since CP-2.8.0
 	 */
 	widgets.forEach( function( widget ) {
-		widget.addEventListener( 'input', function() {
-			widgetInputChange( widget );
+		widget.addEventListener( 'input', function( e ) {
+			widgetInputChange( widget, e.target );
 		} );
-		widget.addEventListener( 'change', function() {
-			widgetInputChange( widget );
+		widget.addEventListener( 'change', function( e ) {
+			widgetInputChange( widget, e.target );
 		} );
 
 		// Enable closing of widget using Escape key
@@ -60,68 +60,58 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 *
 	 * @since CP-2.8.0
 	 */
-	function widgetInputChange( widget ) {
+	function widgetInputChange( widget, input ) {
 		var response, text,
-			json = null,
 			formData = new FormData(),
 			formDiv = widget.querySelector( '.form' ),
 			idBase = widget.querySelector( '.id_base' ).value,
-			widgetId = widget.querySelector( '.widget_id' ).value,
+			widgetId = widget.querySelector( '.widget-id' ).value,
 			url = ajaxurl + ( ajaxurl.indexOf( '?' ) === -1 ? '?' : '&' ) + 'wp_customize=on';
 
-		// Debounced server call to get the WRAPPED instance.
-		_.debounce( async function() {
-			try {
-				formDiv.querySelectorAll( 'input[name], textarea[name], select[name]' ).forEach( function( field ) {
-					if ( field.type === 'radio' && ! field.checked ) {
-						return;
-					}
-					if ( field.type === 'checkbox' ) {
-						if ( field.checked ) {
-							formData.append( field.name, '1' );
-						}
-					} else {
-						formData.append( field.name, field.value || '' );
-					}
-				} );
+		// Required params
+		formData.append( 'action', 'update-widget' );
+		formData.append( 'nonce', document.getElementById( 'nonce' ).value );
+		formData.append( 'id_base', idBase );
+		formData.append( 'widget-id', widgetId );
+		formData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
+		formData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
 
-				// Required params
-				formData.append( 'action', 'update-widget' );
-				formData.append( 'nonce', document.getElementById( 'nonce' ).value );
-				formData.append( 'id_base', idBase );
-				formData.append( 'widget-id', widgetId );
-				formData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
-				formData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
-
-				// Get data sanitized by PHP handler
-				response = await fetch( url, {
-					method: 'POST',
-					body: formData,
-					credentials: 'same-origin'
-				} );
-				text = await response.text();
-				try {
-					json = JSON.parse( text );
-				}
-				catch ( e ) {}
-
-				if ( ! response.ok || ! json ) {
-					console.error( 'update-widget raw response:', text );
-					throw new Error( response.status );
-				}
-
-				if ( json && json.success && json.data && json.data.instance ) {
-
-					// Add sanitized data to the updatedControls object
-					updatedControls[ widget.dataset.settingId ] = json.data.instance;
-
-					// Enable the Publish/Save button
-					activatePublishButton();
-				}
-			} catch ( err ) {
-				console.error( 'update-widget request failed:', err );
+		if ( input.type === 'radio' && ! input.checked ) {
+			return;
+		}
+		if ( input.type === 'checkbox' ) {
+			if ( input.checked ) {
+				formData.append( input.name, '1' );
 			}
-		}, 250 )();
+		} else {
+			formData.append( input.name, input.value || '' );
+		}
+
+		// Make the fetch request
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: formData,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result && result.success && result.data && result.data.instance ) {
+
+				// Add sanitized data to the updatedControls object
+				updatedControls[ widget.dataset.settingId ] = result.data.instance;
+
+				// Enable the Publish/Save button
+				activatePublishButton();
+			}
+		} )
+		.catch( function( error ) {
+			console.error( 'Error:', error );
+		} );
 	}
 
 	/*
