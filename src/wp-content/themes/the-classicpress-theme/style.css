@@ -937,7 +937,6 @@ svg * {
 	src: local("Source Sans Pro Bold"), local("SourceSansPro-Bold"),
 		url("fonts/source-sans-pro-v12-latin-700.woff2") format("woff2");
 }
-
 @font-face {
 	font-family: "Source Sans Pro";
 	font-style: italic;
@@ -1312,6 +1311,11 @@ body.home #content,
 body.single #content {
 	margin-top: 2.6em;
 }
+.blog-post {
+	/*listing*/
+	width: 100%;
+	margin-bottom: 1em;
+}
 .center {
 	text-align: center;
 }
@@ -1381,12 +1385,9 @@ p.text-rightcol,
 	margin: 1.5em 0;
 	border-bottom: 10px solid #057f99;
 }
-.page-main .post-thumbnail {
+.page-main .post-thumbnail,
+.post-main .post-thumbnail {
 	margin: 0.6em 0 1.4em;
-}
-.blog-list .hentry {
-	margin: 0;
-	border-bottom: 1px solid rgb(235 243 246 / 46%);
 }
 .blog-list .blog-post img {
 	max-width: 100%;
@@ -1407,6 +1408,9 @@ p.text-rightcol,
 	width: 100%;
 	text-align: center;
 	letter-spacing: 0.1em;
+}
+.attachment-post-thumbnail {
+	max-width: 100%;
 }
 #main .blog-list .blog-post h2 {
 	line-height: 1.1;
@@ -1467,6 +1471,9 @@ p.text-rightcol,
 	justify-content: space-between;
 	gap: 1em;
 }
+.nav-links a {
+	color: #89288f;
+}
 .nav-previous,
 .nav-next {
 	flex: 1;
@@ -1474,8 +1481,8 @@ p.text-rightcol,
 .nav-next {
 	text-align: right;
 }
-.archive-desc {
-	margin: -10px 0 1em 0;
+.taxonomy-description {
+	margin: 0 0 1em;
 	font-style: italic;
 }
 #main p.entry-meta {
@@ -1485,11 +1492,12 @@ p.text-rightcol,
 	line-height: 1.2;
 	font-style: italic;
 }
+#main .blog-list p.entry-meta {
+	margin-bottom: 1em;
+}
 #main .blog-post p {
 	line-height: 1.55;
 }
-
-/* BLOG LISTING */
 #content p.button {
 	margin: 1.5em 0;
 }
@@ -1510,6 +1518,9 @@ p.text-rightcol,
 #content p.button a:active,
 #content p.button a:focus {
 	box-shadow: 0 0 3px 2px #89288f;
+}
+.edit-link {
+	display: block;
 }
 .edit-link a {
 	font-weight: 400;
@@ -1887,28 +1898,6 @@ table.cp-logo-list .cp-logo-description {
 	text-align: right;
 }
 
-/* BLOG PAGE */
-.attachment-post-thumbnail {
-	max-width: 100%;
-}
-.blog-post {
-	/*listing*/
-	width: 100%;
-	margin-bottom: 1em;
-	padding-bottom: 0.5em;
-}
-.post-meta {
-	margin-top: 0.5em;
-	font-style: italic;
-	display: inline-block;
-}
-.nav-links a {
-	color: #89288f;
-}
-.blog #main p.entry-meta {
-	margin: 0em 0 1.5em;
-}
-
 /* Comments linked to Discourse forums */
 .discourse-comments-area .comment-list {
 	list-style: none;
@@ -1997,12 +1986,12 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		padding-left: 1.2em;
 	}
 	#primary-menu li button {
-		margin-left: 0.6em;
+		margin-left: 0.8em;
 		padding: 0;
 		background: #fff0;
 		color: #fff;
 		font-weight: 400;
-		font-size: 0.7em;
+		font-size: 0.8em;
 	}
 	#primary-menu .search-submit {
 		margin-left: 0.2em;
