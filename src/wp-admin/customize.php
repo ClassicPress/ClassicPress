@@ -1597,15 +1597,15 @@ wp_print_scripts();
 													</h3>
 													<div class="widget-reorder-nav">
 														<span class="move-widget" tabindex="0" style="">
-															<?php echo esc_html( $field_label ); ?>
-															<?php esc_html_e( 'Move to another area.' ); ?>
+															<?php echo esc_html( $field_label ); ?>:
+															<?php esc_html_e( 'Move to another area&hellip;' ); ?>
 														</span>
 														<span class="move-widget-down" tabindex="0">
-															<?php echo esc_html( $field_label ); ?>
-															<?php esc_html_e( ' Move down' ); ?>
+															<?php echo esc_html( $field_label ); ?>:
+															<?php esc_html_e( 'Move down' ); ?>
 														</span>
 														<span class="move-widget-up" tabindex="-1">
-															<?php echo esc_html( $field_label ); ?>
+															<?php echo esc_html( $field_label ); ?>:
 															<?php esc_html_e( 'Move up' ); ?>
 														</span>
 													</div>
