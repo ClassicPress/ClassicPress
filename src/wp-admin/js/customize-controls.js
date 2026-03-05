@@ -130,6 +130,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.querySelectorAll( '.iris-picker' ).forEach( function( iris ) {
 					iris.style.display = 'none';
 				} );
+			} else if ( isVisible( document.getElementById( 'move-widget-area' ) ) ) {
+				document.getElementById( 'move-widget-area' ).remove();
 			} else if ( ! isVisible( themeModal ) ) {
 				e.preventDefault();
 				document.body.classList.remove( 'adding-menu-items' );
