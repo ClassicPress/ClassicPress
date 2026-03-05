@@ -39,6 +39,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
        window.history.replaceState( {}, '', window.location.origin + window.location.pathname );
 	}
 
+	// Remove inert attribute to enable interactions with form
+	form.removeAttribute( 'inert' );
+
 	// Limit motion where appropriate
 	reducedMotionMediaQuery.addEventListener( 'change', function handleReducedMotionChange( event ) {
 		isReducedMotion = event.matches;
