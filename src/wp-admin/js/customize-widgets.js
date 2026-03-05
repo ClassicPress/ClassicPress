@@ -291,6 +291,33 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}, 300 );
 	}
 
+	/**
+	 * Reassess the positioning of widgets in a sidebar after a widget has moved
+	 *
+	 * @since CP-2.8.0
+	 */
+	function reassessPositioning( sidebar ) {
+		var	currentSidebars, newSidebars,
+			sidebarId = sidebar.dataset.id,
+			settingId = 'sidebars_widgets[' + sidebarId + ']',
+			newWidgetOrder = Array.from( sidebar.querySelectorAll( '.widget-id' ) ).map( input => input.value ),
+			widgets = sidebar.querySelectorAll( '.widget-rendered' );
+
+		widgets.forEach( function( widget, index ) {
+			widget.classList.remove( 'first-widget' );
+			widget.classList.remove( 'last-widget' );
+			if ( index === 0 ) {
+				widget.classList.add( 'first-widget' );
+			} else if ( index === widgets.length - 1 ) {
+				widget.classList.add( 'last-widget' );
+			}
+		} );
+
+		currentSidebars = updatedControls[ 'sidebars_widgets' ];
+		newSidebars = Object.assign( {}, currentSidebars );
+		updatedControls[ settingId ] = newWidgetOrder.slice();
+		activatePublishButton();
+	}
 
 	/**
 	 * Area Chooser
@@ -373,6 +400,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			clone.dataset.settingId = 'widget_' + idBase + '[' + multiNumber + ']';
 			clone.removeAttribute( 'tabindex' );
 			clone.removeAttribute( 'data-widget-id' );
+			clone.querySelector( '.widget-top' ).name = ul.dataset.id;
 			clone.querySelector( 'summary' ).insertAdjacentHTML( 'beforeend',  _wpCustomizeWidgetsSettings.tpl.widgetReorderNav );
 			buttons.previousElementSibling.classList.remove( 'last-widget' );
 			buttons.before( clone );
@@ -400,32 +428,90 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Add event handlers for buttons
 	 */
 	document.addEventListener( 'click', function( e ) {
-		if ( e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' ) {
+		var currentSidebars, newSidebars, sidebar, sidebarId, settingId,
+			template, clone, oldSidebar, newSidebarId, newSidebar,
+			widget = e.target.closest( '.customize-control-widget_form' );
 
-			// Add chooser
-			if ( e.target.closest( 'ul' ) === document.getElementById( 'widget-list' ) ) {
-				if ( e.target.className.includes( 'widgets-chooser-add' ) ) {
-					addWidget( chooser );
-					e.target.closest( '.widget-top' ).removeAttribute( 'open' );
-				}
-
-				// Close widget
-				else if ( e.target.className.includes( 'widgets-chooser-cancel' ) ) {
-					e.target.closest( '.widget-top' ).removeAttribute( 'open' );
-				}
-			}
-
-			// Remove widget
-			else if ( e.target.className.includes( 'widget-control-remove' ) ) {
-				e.preventDefault();
-				deleteWidget( e.target.closest( '.customize-control-widget_form' ) );
+		// Add chooser
+		if ( e.target.closest( 'ul' ) === document.getElementById( 'widget-list' ) ) {
+			if ( e.target.className.includes( 'widgets-chooser-add' ) ) {
+				addWidget( chooser );
+				e.target.closest( '.widget-top' ).removeAttribute( 'open' );
 			}
 
 			// Close widget
-			else if ( e.target.className.includes( 'widget-control-close' ) ) {
-				e.target.closest( 'details' ).removeAttribute( 'open' );
-				e.target.closest( 'details' ).querySelector( 'summary' ).focus();
+			else if ( e.target.className.includes( 'widgets-chooser-cancel' ) ) {
+				e.target.closest( '.widget-top' ).removeAttribute( 'open' );
 			}
+
+		// Remove widget
+		} else if ( e.target.className.includes( 'widget-control-remove' ) ) {
+			e.preventDefault();
+			deleteWidget( widget );
+
+		// Close widget
+		} else if ( e.target.className.includes( 'widget-control-close' ) ) {
+			e.target.closest( 'details' ).removeAttribute( 'open' );
+			e.target.closest( 'details' ).querySelector( 'summary' ).focus();
+
+		// Reorder widget or move to another sidebar
+		} else if ( e.target.parentNode.classList.contains( 'widget-reorder-nav' ) ) {
+			e.preventDefault();
+			e.stopPropagation();
+			e.target.closest( 'ul' ).querySelectorAll( 'details' ).forEach( function( details ) {
+				if ( details.hasAttribute( 'open' ) ) {
+					details.removeAttribute( 'open' );
+				}
+			} );
+			if ( e.target.className === 'move-widget' ) {
+				if ( document.getElementById( 'move-widget-area' ) ) { // check if already in use
+					widget.append( document.getElementById( 'move-widget-area' ) );
+				} else { // clone the template for first use
+					template = document.getElementById( 'tmpl-change-sidebar' );
+					clone = template.content.cloneNode( true );
+					widget.append( clone );
+				}
+
+				// Mark current sidebar as selected
+				document.getElementById( 'move-widget-area' ).querySelectorAll( 'li' ).forEach( function( li ) {
+					if ( li.dataset.id === widget.parentNode.dataset.id ) {
+						li.className = 'selected';
+					} else {
+						li.className = '';
+					}
+				} );
+			} else {
+				if ( e.target.className.includes( 'move-widget-down' ) ) {
+					widget.nextElementSibling.after( widget );
+				} else if ( e.target.className.includes( 'move-widget-up' ) ) {
+					widget.previousElementSibling.before( widget );
+				}
+				reassessPositioning( widget.parentNode );
+			}
+
+		// Enable selection of different sidebar
+		} else if ( widget?.querySelector( '.widget-area-select' ).contains( e.target ) ) {
+			widget.querySelector( '.widget-area-select .selected' ).classList.remove( 'selected' );
+			e.target.closest( 'li' ).className = 'selected';
+			if ( e.target.closest( 'li' ).dataset.id === widget.parentNode.dataset.id ) {
+				widget.querySelector( '.move-widget-btn' ).disabled = true;
+			} else {
+				widget.querySelector( '.move-widget-btn' ).disabled = false;
+			}
+
+		// Finish reordering
+		} else if ( e.target.className === 'reorder-done' ) {
+			document.getElementById( 'move-widget-area' ).remove();
+
+		// Finish moving widget to different sidebar
+		} else if ( e.target.className === 'move-widget-btn button' ) {
+			oldSidebar = widget.parentNode;
+			newSidebarId = document.getElementById( 'move-widget-area' ).querySelector( '.selected' ).dataset.id;
+			newSidebar = document.getElementById( 'sub-accordion-section-sidebar-widgets-' + newSidebarId );
+			newSidebar.querySelector( '.customize-control-sidebar_widgets' ).before( widget );
+			reassessPositioning( oldSidebar );
+			reassessPositioning( newSidebar );
+			document.getElementById( 'move-widget-area' ).remove();
 		}
 	} );
 } );
