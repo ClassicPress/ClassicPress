@@ -1588,7 +1588,7 @@ wp_print_scripts();
 										data-setting-id="<?php echo esc_attr( $setting_id ?: $field_id ); ?>"
 									>
 										<div id="widget-<?php echo esc_attr( $index . '_' . $widget_id ); ?>" class="widget">
-											<details class="widget-top">
+											<details class="widget-top" name="<?php echo esc_attr( $section->sidebar_id ); ?>">
 												<summary class="widget-title">
 													<h3>
 														<?php echo esc_html( $field_label ); ?>
@@ -2185,6 +2185,43 @@ customize_themes_print_templates();
 			</button>
 		</div>
 	</li>
+</template>
+
+<!-- Template for moving widget to different sidebar -->
+<template id="tmpl-change-sidebar">
+	<div id="move-widget-area" class="move-widget-area active" style="margin-top:-10px;margin-bottom:10px;">
+		<p class="description">
+			<?php esc_html_e( 'Select an area to move this widget into:' ); ?>
+		</p>
+		<ul class="widget-area-select">
+			
+			<?php
+			global $wp_registered_sidebars;
+			foreach( $wp_registered_sidebars as $sidebar ) {
+				?>
+
+				<li class="" data-id="<?php echo esc_attr( $sidebar['id'] ); ?>" tabindex="0">
+					<div>
+						<strong>
+							<?php echo esc_attr( $sidebar['name'] ); ?>
+						</strong>
+					</div>
+					<div>
+						<?php echo esc_attr( $sidebar['description'] ); ?>
+					</div>
+				</li>
+
+				<?php
+			}
+			?>
+
+		</ul>
+		<div class="move-widget-actions">
+			<button class="move-widget-btn button" type="button" disabled="">
+				<?php esc_html_e( 'Move' ); ?>
+			</button>
+		</div>
+	</div>
 </template>
 
 <?php
