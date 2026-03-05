@@ -314,6 +314,7 @@ wp_print_scripts();
 			action="<?php echo esc_url( admin_url( 'customize.php' ) ); ?>"
 			method="post"
 			accept-charset="<?php bloginfo( 'charset' ); ?>"
+			inert <?php // prevent early interaction with form before page loaded ?>
 		>
 			<div id="customize-header-actions" class="wp-full-overlay-header" style="position: static;">
 
@@ -1819,7 +1820,13 @@ wp_print_scripts();
 	</div>
 
 	<div id="customize-preview" class="wp-full-overlay-main iframe-ready">
-		<iframe title="<?php esc_attr_e( 'Site Preview' ); ?>" name="customize-preview-0" onmousewheel="" src="<?php echo esc_url( $preview_url ); ?>" style="position: relative;z-index: 1;"></iframe>
+		<iframe title="<?php esc_attr_e( 'Site Preview' ); ?>"
+			name="customize-preview-0"
+			onmousewheel=""
+			src="<?php echo esc_url( $preview_url ); ?>"
+			style="position: relative;z-index: 1;"
+			sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-same-origin allow-scripts"
+		></iframe>
 	</div>
 </div><!-- .wp-full-overlay expanded preview-desktop -->
 
