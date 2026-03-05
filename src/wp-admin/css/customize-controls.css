@@ -1128,7 +1128,7 @@ p.customize-section-description {
 	justify-content: space-between;
 	min-width: 100%;
 	position: static;
-	margin: 0;
+	margin: 0 !important;
 }
 
 #customizer-sidebar-container {
