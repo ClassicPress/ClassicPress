@@ -109,12 +109,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} )
 		.catch( function( error ) {
-			console.error( 'Error:', error );
+			console.error( _wpCustomizeWidgetsSettings.l10n.error, error );
 		} );
 	}
 
-	/*
+	/**
 	 * Attach listeners and SortableJS to active sidebars
+	 *
+	 * @since CP-2.1.0
 	 */
 	sortables.forEach( function( sortable ) {
 		sortable.querySelectorAll( '.widget' ).forEach( function( widget ) {
@@ -146,7 +148,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	} );
 
-
 	function ghostImage( dataTransfer, dragEl ) {
 		var ghostImage = document.createElement( 'details' );
 		ghostImage.id = 'sortable-ghost';
@@ -159,13 +160,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dataTransfer.setDragImage( ghostImage, 30, 20 );
 	}
 
-
 	function sortableStart( e ) {
 		if ( e.item.querySelector( 'details' ).hasAttribute( 'open' ) ) {
 			e.item.querySelector( 'details' ).removeAttribute( 'open' );
 		}
 	}
-
 
 	function sortableChange( e ) {
 		var widgets = e.target.querySelectorAll( '.widget-rendered' );
@@ -179,7 +178,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} );
 	}
-
 
 	function sortableEnd( e ) {
 		var currentSidebars, newSidebars,
@@ -218,8 +216,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	} );
 
-
-	// Widget toggled open or closed
+	/**
+	 * Widget toggled open or closed
+	 *
+	 * @since CP-2.8.0
+	 */
 	function widgetToggled( widget ) {
 		var chooserButtons;
 
@@ -254,7 +255,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			widget.querySelector( 'summary' ).focus();
 		}
 	}
-	
+
+	/**
+	 * Delete widget
+	 *
+	 * @since CP_2.8.0
+	 */
 	function deleteWidget( widget ) {
 		const widgetId = widget.querySelector( '.widget-id' ).value,
 			idBase = widgetId.split( '-' )[0],
@@ -320,32 +326,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
-	 * Area Chooser
-	 */
-	document.querySelectorAll( '#widgets-right .widgets-holder-wrap' ).forEach( function( wrapper, index ) {
-		var button = document.createElement( 'button' ),
-			ariaLabel = wrapper.querySelector( '.sidebar-name' ).dataset.addTo,
-			name = wrapper.querySelector( 'summary.sidebar-name' ).textContent || '',
-			li = document.createElement( 'li' ),
-			selectSidebar = chooser.querySelector( '.widgets-chooser-sidebars' ),
-			id = wrapper.querySelector( '.widgets-sortables' ).id;
-
-		button.type = 'button';
-		button.className = 'widgets-chooser-button';
-		button.setAttribute( 'aria-pressed', false );
-		button.setAttribute( 'aria-label', ariaLabel );
-		button.innerText = name.toString().trim();
-		li.append( button );
-
-		if ( index === 0 ) {
-			li.classList.add( 'widgets-chooser-selected' );
-			button.setAttribute( 'aria-pressed', 'true' );
-		}
-		selectSidebar.append( li );
-		li.dataset.sidebarId = id;
-	} );
-
-	/**
 	 * Add widget to sidebar from available widget list
 	 *
 	 * @since CP-2.8.0
@@ -402,6 +382,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			clone.removeAttribute( 'data-widget-id' );
 			clone.querySelector( '.widget-top' ).name = ul.dataset.id;
 			clone.querySelector( 'summary' ).insertAdjacentHTML( 'beforeend',  _wpCustomizeWidgetsSettings.tpl.widgetReorderNav );
+			clone.querySelectorAll( '.widget-reorder-nav span' ).forEach( function( span ) {
+				span.insertAdjacentHTML( 'afterbegin', clone.querySelector( '.widget-title h3' ).textContent + ':' );
+			} );
 			buttons.previousElementSibling.classList.remove( 'last-widget' );
 			buttons.before( clone );
 
@@ -426,10 +409,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	/**
 	 * Add event handlers for buttons
+	 *
+	 * @since CP-2.8.0
 	 */
 	document.addEventListener( 'click', function( e ) {
 		var currentSidebars, newSidebars, sidebar, sidebarId, settingId,
-			template, clone, oldSidebar, newSidebarId, newSidebar,
+			template, clone, oldSidebar, newSidebarId, newSidebar, widgetTitles,
 			widget = e.target.closest( '.customize-control-widget_form' );
 
 		// Add chooser
@@ -453,6 +438,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( e.target.className.includes( 'widget-control-close' ) ) {
 			e.target.closest( 'details' ).removeAttribute( 'open' );
 			e.target.closest( 'details' ).querySelector( 'summary' ).focus();
+
+		// Enable reordering
+		} else if ( e.target.className === 'reorder' ) {
+			e.target.parentNode.setAttribute( 'aria-label', _wpCustomizeWidgetsSettings.l10n.reorderLabelOn );
+			wp.a11y.speak( _wpCustomizeWidgetsSettings.l10n.reorderModeOn );
+
+			// Hide widget titles while reordering: title is already in the reorder controls.
+			widgetTitles = e.target.closest( 'ul' ).querySelectorAll( '.customize-control-widget_form .widget-title' );
+			widgetTitles.forEach( function( title ) {
+				title.setAttribute( 'aria-hidden', true );
+			} );
 
 		// Reorder widget or move to another sidebar
 		} else if ( e.target.parentNode.classList.contains( 'widget-reorder-nav' ) ) {
@@ -483,8 +479,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} else {
 				if ( e.target.className.includes( 'move-widget-down' ) ) {
 					widget.nextElementSibling.after( widget );
+					wp.a11y.speak( _wpCustomizeWidgetsSettings.l10n.widgetMovedDown );
 				} else if ( e.target.className.includes( 'move-widget-up' ) ) {
 					widget.previousElementSibling.before( widget );
+					wp.a11y.speak( _wpCustomizeWidgetsSettings.l10n.widgetMovedUp );
 				}
 				reassessPositioning( widget.parentNode );
 			}
@@ -501,7 +499,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Finish reordering
 		} else if ( e.target.className === 'reorder-done' ) {
-			document.getElementById( 'move-widget-area' ).remove();
+			document.getElementById( 'move-widget-area' )?.remove();
+			e.target.parentNode.setAttribute( 'aria-label', _wpCustomizeWidgetsSettings.l10n.reorderLabelOff );
+			wp.a11y.speak( _wpCustomizeWidgetsSettings.l10n.reorderModeOff );
+			widgetTitles = e.target.closest( 'ul' ).querySelectorAll( '.customize-control-widget_form .widget-title' );
+			widgetTitles.forEach( function( title ) {
+				title.setAttribute( 'aria-hidden', false );
+			} );
 
 		// Finish moving widget to different sidebar
 		} else if ( e.target.className === 'move-widget-btn button' ) {
