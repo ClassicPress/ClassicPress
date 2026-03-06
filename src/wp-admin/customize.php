@@ -1310,17 +1310,32 @@ wp_print_scripts();
 										<?php
 									} else {
 										$depths = array();
-										foreach ( $menu_items as $menu_item ) {
+										foreach ( $menu_items as $key => $menu_item ) {
+											$move_class = '';
+											if ( $key === 0 ) {
+												$move_class .= 'move-up-disabled move-right-disabled';
+											}
+											if ( $key === count( $menu_items ) - 1 ) {
+												$move_class .= ' move-down-disabled';
+											}
+
 											$parent_id = (int) $menu_item->menu_item_parent ?? 0;
-											
+											if ( $parent_id === 0 ) {
+												$move_class .= ' move-left-disabled';
+											}
+
 											// $depth = 0 for top-level; otherwise parent depth + 1
 											$depth = ( $parent_id === 0 ) ? 0 : ( ( $depths[$parent_id] ?? 0 ) + 1 );
+											if ( ( $depth === 11 && $key !== 0 ) || $depth > $depths[$key - 1] ) {
+												$move_class .= ' move-right-disabled';
+											}
 
 											$depths[$menu_item->ID] = $depth;
+											$depths[$key] = $depth;
 											?>
 
 											<li id="customize-control-nav_menu_item-<?php echo esc_attr( $menu_item->ID ); ?>"
-												class="customize-control customize-control-nav_menu_item menu-item menu-item-depth-<?php echo absint( $depth ); ?> menu-item-custom menu-item-edit-inactive move-left-disabled move-up-disabled move-right-disabled move-down-disabled"
+												class="customize-control customize-control-nav_menu_item menu-item menu-item-depth-<?php echo absint( $depth ); ?> menu-item-custom menu-item-edit-inactive <?php echo esc_attr( $move_class ); ?>"
 												data-setting-id="nav_menu_item[<?php echo esc_attr( $menu_item->ID ); ?>]"
 											>
 
@@ -1888,7 +1903,7 @@ customize_themes_print_templates();
 
 <!-- Template for creation of new nav menu items -->
 <template id="tmpl-new-menu-item">
-	<li class="customize-control customize-control-nav_menu_item menu-item menu-item-depth-0 menu-item-custom menu-item-edit-inactive move-left-disabled move-up-disabled move-right-disabled move-down-disabled" data-setting-id="">
+	<li class="customize-control customize-control-nav_menu_item menu-item menu-item-depth-0 menu-item-custom menu-item-edit-inactive move-left-disabled move-down-disabled" data-setting-id="">
 		<div class="menu-item-bar">
 			<details class="menu-item-handle" name="new-menu-item">
 				<summary>
