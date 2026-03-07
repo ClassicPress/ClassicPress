@@ -381,7 +381,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			clone.removeAttribute( 'tabindex' );
 			clone.removeAttribute( 'data-widget-id' );
 			clone.querySelector( '.widget-top' ).name = ul.dataset.id;
-			clone.querySelector( 'summary' ).insertAdjacentHTML( 'beforeend',  _wpCustomizeWidgetsSettings.tpl.widgetReorderNav );
+			clone.querySelector( 'summary' ).insertAdjacentHTML( 'beforeend', _wpCustomizeWidgetsSettings.tpl.widgetReorderNav );
 			clone.querySelectorAll( '.widget-reorder-nav span' ).forEach( function( span ) {
 				span.insertAdjacentHTML( 'afterbegin', clone.querySelector( '.widget-title h3' ).textContent + ':' );
 			} );
@@ -408,6 +408,42 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	/**
+	 * Search for widgets
+	 *
+	 * @since CP-2.8.0
+	 */
+	document.getElementById( 'widgets-search' ).addEventListener( 'input', _.debounce( function( e ) {
+		var message,
+			needle = e.target.value.toLowerCase().trim(),
+			matches = needle ? [...availables].filter( item => item.querySelector( '.widget-title h3' ).textContent.toLowerCase().includes( needle ) ) : [];
+
+		if ( needle.length ) {
+			document.querySelector( '.clear-results' ).classList.add( 'is-visible' );
+			availables.forEach( function( li ) {
+				li.style.display = 'none';
+			} );
+
+			if ( matches.length ) {
+				matches.forEach( function( li ) {
+					li.style.display = '';
+				} );
+				message = _wpCustomizeWidgetsSettings.l10n.widgetsFound.replace( '%d', matches.length );
+				document.getElementById( 'available-widgets' ).classList.remove( 'no-widgets-found' );
+			} else {
+				message = _wpCustomizeWidgetsSettings.l10n.noWidgetsFound;
+				document.getElementById( 'available-widgets' ).classList.add( 'no-widgets-found' );
+			}
+			wp.a11y.speak( message );
+		} else {
+			document.querySelector( '.clear-results' ).classList.remove( 'is-visible' );
+			availables.forEach( function( li ) {
+				li.style.display = '';
+			} );
+		}
+	}, 150 ) );
+
+
+	/**
 	 * Add event handlers for buttons
 	 *
 	 * @since CP-2.8.0
@@ -417,17 +453,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			template, clone, oldSidebar, newSidebarId, newSidebar, widgetTitles,
 			widget = e.target.closest( '.customize-control-widget_form' );
 
-		// Add chooser
-		if ( e.target.closest( 'ul' ) === document.getElementById( 'widget-list' ) ) {
-			if ( e.target.className.includes( 'widgets-chooser-add' ) ) {
-				addWidget( chooser );
-				e.target.closest( '.widget-top' ).removeAttribute( 'open' );
-			}
-
-			// Close widget
-			else if ( e.target.className.includes( 'widgets-chooser-cancel' ) ) {
-				e.target.closest( '.widget-top' ).removeAttribute( 'open' );
-			}
+		// Clear widget search string
+		if ( e.target.classList.contains( 'clear-results' ) ) {
+			document.getElementById( 'widgets-search' ).value = '';
+			e.target.classList.remove( 'is-visible' );
+			document.getElementById( 'available-widgets' ).classList.remove( 'no-widgets-found' );
+			availables.forEach( function( li ) {
+				li.style.display = '';
+			} );
 
 		// Remove widget
 		} else if ( e.target.className.includes( 'widget-control-remove' ) ) {
