@@ -5,7 +5,8 @@
  * @output wp-admin/js/customize-nav-menus.js
  */
 
-/* global _wpCustomizeControlsL10n, console, ajaxurl, updatedControls,
+/* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings,
+ * console, ajaxurl, updatedControls,
  * FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
  * FilePondPluginFileRename, FilePondPluginImagePreview
  */
@@ -388,8 +389,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					newPrevDepth = li.previousElementSibling.classList.contains( 'menu-item' ) ? parseInt( li.previousElementSibling.className.split( 'menu-item-depth-' )[1], 10 ) : 0;
 					if ( parentId === 0 || newDepth === 0 ) {
 						li.classList.add( 'move-left-disabled' );
-					} else if ( newDepth === maxDepth || newDepth > newPrevDepth ) {
+					} else if ( newDepth === maxDepth ) {
 						li.classList.add( 'move-right-disabled' );
+					}
+					if ( newDepth > newPrevDepth ) {
+						li.classList.add( 'move-up-disabled' );
+						li.classList.add( 'move-down-disabled' );
+						li.classList.add( 'move-right-disabled' );
+					} else if ( newDepth < newPrevDepth ) {
+						li.classList.add( 'move-up-disabled' );
+						li.classList.add( 'move-down-disabled' );
+						li.classList.add( 'move-left-disabled' );
 					}
 
 					updatedControls[ settingId ] = {
@@ -743,8 +753,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	document.addEventListener( 'click', function( e ) {
 		var page, itemBrowse, itemUpload, gridPanel, uploadPanel,
-			modalButtons, rightSidebar, modalPages, title, navMenuId,
-			type, object, objectId, label, url, li, template, clone, newMenuId,
+			modalButtons, rightSidebar, modalPages, title, navMenuId, 
+			type, object, objectId, label, url, li, template, clone,
+			newMenuId, position, depth, classNameSplits, prev, next,
+			allItems, updatedItems, liIndex, targetSibling,
+			targetSiblingIndex, insertAfter, newDepth, newParentId,
+			children = [],
+			targetChildren = [],
+			upperSibling = false,
+			lowerSibling = false,
 			menuName = '',
 			id = e.target.closest( 'li' )?.id,
 			ul = e.target.closest( 'ul' );
@@ -901,13 +918,235 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			initSortables( 'sub-' + id ); // enable sorting of menu items
 			document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();
 
-		// Reorder menu items
+		// Enable reordering of menu items by keyboard
 		} else if ( e.target.classList && e.target.className === 'reorder' ) {
+
+			// Update which items can be moved up or down
+			allItems = Array.from( ul.querySelectorAll( ':scope > .menu-item' ) );
+			ul.querySelectorAll( ':scope > .menu-item' ).forEach( function( li ) {
+				const liIndex = allItems.indexOf( li ),
+					itemParentId = li.querySelector( '.menu-item-data-parent-id' ).value;
+
+				let canMoveUp = false,
+					canMoveDown = false;
+
+				classNameSplits = li.className.split( 'menu-item-depth-' );
+				depth = parseInt( classNameSplits[1], 10 );
+
+				// Find previous sibling with same depth and same parent
+				for ( let k = liIndex - 1; k >= 0; k-- ) {
+					const kDepth = parseInt( allItems[k].className.split( 'menu-item-depth-' )[1], 10 );
+					if ( kDepth === depth && allItems[k].querySelector( '.menu-item-data-parent-id' ).value === itemParentId ) {
+						canMoveUp = true;
+						break;
+					}
+					if ( kDepth < depth ) {
+						break;
+					}
+				}
+
+				// Find next sibling with same depth and same parent
+				for ( let k = liIndex + 1, n = allItems.length; k < n; k++ ) {
+					const kDepth = parseInt( allItems[k].className.split( 'menu-item-depth-')[1], 10 );
+					if ( kDepth === depth && allItems[k].querySelector( '.menu-item-data-parent-id' ).value === itemParentId ) {
+						canMoveDown = true;
+						break;
+					}
+					if ( kDepth < depth ) {
+						break;
+					}
+				}
+
+				if ( ! canMoveUp ) {
+					li.classList.add( 'move-up-disabled' );
+				}
+				if ( ! canMoveDown ) {
+					li.classList.add( 'move-down-disabled' );
+				}
+			} );
 			ul.classList.add( 'reordering' );
 
 		// Finish reordering
 		} else if ( e.target.classList && e.target.className === 'reorder-done' ) {
 			ul.classList.remove( 'reordering' );
+
+		// Reposition menu item with the arrows
+		} else if ( e.target.parentNode.classList.contains( 'menu-item-reorder-nav' ) ) {
+			li = e.target.closest( 'li' );
+			position = parseInt(li.querySelector( '.menu-item-data-position').value, 10 );
+			classNameSplits = li.className.split( 'menu-item-depth-' );
+			depth = parseInt(  classNameSplits[1], 10 );
+
+			// Collect all items and this item's children (depth greater than current)
+			allItems = Array.from( ul.querySelectorAll( ':scope > .menu-item' ) );
+			liIndex = allItems.indexOf( li );
+			children = [];
+			for ( let k = liIndex + 1, n = allItems.length; k < n; k++ ) {
+				const kDepth = parseInt( allItems[k].className.split( 'menu-item-depth-')[1], 10 );
+				if ( kDepth > depth ) {
+					children.push( allItems[k] );
+				} else {
+					break;
+				}
+			}
+
+			if ( e.target.className.includes( 'menus-move-up' ) ) {
+
+				// Find the previous sibling with same depth and same parent
+				targetSibling = null;
+				for ( let k = liIndex - 1; k >= 0; k-- ) {
+					const kDepth = parseInt( allItems[k].className.split( 'menu-item-depth-' )[1], 10 );
+					if ( kDepth === depth && allItems[k].querySelector( '.menu-item-data-parent-id' ).value === li.querySelector( '.menu-item-data-parent-id' ).value ) {
+						targetSibling = allItems[k];
+						break;
+					}
+					if ( kDepth < depth ) {
+						break;
+					}
+				}
+				if ( targetSibling ) {
+					targetSibling.querySelector( '.menu-item-data-position' ).value = position;
+					li.querySelector( '.menu-item-data-position' ).value = position - 1;
+					targetSibling.before( li );
+					children.forEach( child => li.after( child ) );
+				}
+				wp.a11y.speak( _wpCustomizeNavMenusSettings.l10n.movedUp );
+
+			} else if ( e.target.className.includes( 'menus-move-down' ) ) {
+
+				// Find the next sibling with same depth and same parent, plus collect its children
+				targetSibling = null;
+				targetSiblingIndex = -1;
+				for ( let k = liIndex + children.length + 1, n = allItems.length; k < n; k++ ) {
+					const kDepth = parseInt( allItems[k].className.split( 'menu-item-depth-' )[1], 10 );
+					if ( kDepth === depth && allItems[k].querySelector( '.menu-item-data-parent-id' ).value === li.querySelector( '.menu-item-data-parent-id' ).value ) {
+						targetSibling = allItems[k];
+						targetSiblingIndex = k;
+						break;
+					}
+					if ( kDepth < depth ) {
+						break;
+					}
+				}
+				if ( targetSibling ) { // Collect target sibling's children
+					for ( let k = targetSiblingIndex + 1, n = allItems.length; k < n; k++ ) {
+						const kDepth = parseInt( allItems[k].className.split( 'menu-item-depth-' )[1], 10 );
+						if ( kDepth > depth ) {
+							targetChildren.push( allItems[k] );
+						} else {
+							break;
+						}
+					}
+					insertAfter = targetChildren.length ? targetChildren[targetChildren.length - 1] : targetSibling;
+					targetSibling.querySelector( '.menu-item-data-position' ).value = position;
+					li.querySelector( '.menu-item-data-position' ).value = position + 1;
+					insertAfter.after( li );
+					children.forEach( child => li.after( child ) );
+				}
+				wp.a11y.speak( _wpCustomizeNavMenusSettings.l10n.movedDown );
+
+			} else if ( e.target.className.includes( 'menus-move-left' ) ) {
+				newDepth = depth - 1;
+				li.className = classNameSplits[0] + 'menu-item-depth-' + newDepth + classNameSplits[1].slice( String( depth ).length );
+
+				// Find new parent: walk back to first item at newDepth - 1
+				newParentId = 0;
+				if ( newDepth > 0 ) {
+					for ( let k = liIndex - 1; k >= 0; k-- ) {
+						const kDepth = parseInt( allItems[k].className.split( 'menu-item-depth-' )[1], 10 );
+						if ( kDepth === newDepth - 1 ) {
+							newParentId = allItems[k].querySelector( '.menu-item-data-db-id' ).value;
+							break;
+						}
+					}
+				}
+				li.querySelector( '.menu-item-data-parent-id' ).value = newParentId;
+
+				// Update children depths and their parent IDs
+				children.forEach( function( child ) {
+					const childSplits = child.className.split( 'menu-item-depth-' );
+					const childDepth = parseInt( childSplits[1], 10 );
+					child.className = childSplits[0] + 'menu-item-depth-' + ( childDepth - 1 ) + childSplits[1].slice( String( childDepth ).length );
+				} );
+				wp.a11y.speak( _wpCustomizeNavMenusSettings.l10n.movedLeft );
+
+			} else if ( e.target.className.includes( 'menus-move-right' ) ) {
+				newDepth = depth + 1;
+				li.className = classNameSplits[0] + 'menu-item-depth-' + newDepth + classNameSplits[1].slice( String( depth ).length );
+
+				// New parent is the item immediately above at newDepth - 1
+				newParentId = 0;
+				for ( let k = liIndex - 1; k >= 0; k-- ) {
+					const kDepth = parseInt( allItems[k].className.split( 'menu-item-depth-' )[1], 10 );
+					if ( kDepth === newDepth - 1 ) {
+						newParentId = allItems[k].querySelector( '.menu-item-data-db-id' ).value;
+						break;
+					}
+				}
+				li.querySelector( '.menu-item-data-parent-id' ).value = newParentId;
+
+				// Update children depths
+				children.forEach( function( child ) {
+					const childSplits = child.className.split( 'menu-item-depth-' );
+					const childDepth = parseInt( childSplits[1], 10 );
+					child.className = childSplits[0] + 'menu-item-depth-' + ( childDepth + 1 ) + childSplits[1].slice( String( childDepth ).length );
+				} );
+				wp.a11y.speak( _wpCustomizeNavMenusSettings.l10n.movedRight );
+			}
+
+			// Recalculate move classes for all items after every action
+			updatedItems = Array.from( ul.querySelectorAll( ':scope > .menu-item' ) );
+			updatedItems.forEach( function( item, i ) {
+				const itemDepth = parseInt( item.className.split( 'menu-item-depth-' )[1], 10 ),
+					prevDepth = i > 0 ? parseInt( updatedItems[i - 1].className.split( 'menu-item-depth-' )[1], 10 ) : -1,
+					itemParentId = item.querySelector( '.menu-item-data-parent-id' ).value;
+
+				let canMoveUp = false,
+					canMoveDown = false;
+
+				// Find if there's any item above with same depth and same parent
+				for ( let k = i - 1; k >= 0; k-- ) {
+					const kDepth = parseInt( updatedItems[k].className.split( 'menu-item-depth-' )[1], 10 );
+					if ( kDepth === itemDepth ) {
+						if ( updatedItems[k].querySelector( '.menu-item-data-parent-id').value === itemParentId ) {
+							canMoveUp = true;
+						}
+						break;
+					}
+					if ( kDepth < itemDepth ) {
+						break; // hit a shallower item, no valid sibling above
+					}
+				}
+
+				// Find if there's any item below with same depth and same parent
+				for ( let k = i + 1, n = updatedItems.length; k < n; k++ ) {
+					const kDepth = parseInt( updatedItems[k].className.split( 'menu-item-depth-' )[1], 10 );
+					if ( kDepth === itemDepth ) {
+						if ( updatedItems[k].querySelector( '.menu-item-data-parent-id' ).value === itemParentId ) {
+							canMoveDown = true;
+						}
+						break;
+					}
+					if ( kDepth < itemDepth ) {
+						break; // hit a shallower item, no valid sibling below
+					}
+				}
+
+				item.classList.remove( 'move-up-disabled', 'move-down-disabled', 'move-left-disabled', 'move-right-disabled' );
+
+				if ( ! canMoveUp ) {
+					item.classList.add( 'move-up-disabled' );
+				}
+				if ( ! canMoveDown ) {
+					item.classList.add( 'move-down-disabled' );
+				}
+				if ( itemDepth === 0 ) {
+					item.classList.add( 'move-left-disabled' );
+				}
+				if ( i === 0 || itemDepth >= 11 || itemDepth >= prevDepth + 1 ) {
+					item.classList.add( 'move-right-disabled' );
+				}
+			} );
 		}
 	} );
 } );
