@@ -1146,7 +1146,28 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( i === 0 || itemDepth >= 11 || itemDepth >= prevDepth + 1 ) {
 					item.classList.add( 'move-right-disabled' );
 				}
+
+				updatedControls[ item.dataset.settingId ] = {
+					menu_id: item.querySelector( '.menu-item-data-menu-id' ).value,
+					position: i + 1,
+					menu_item_parent: parseInt( item.querySelector( '.menu-item-data-parent-id' ).value, 10 ) || 0,
+					title: item.querySelector( '.edit-menu-item-title' ).value.trim(),
+					url: item.querySelector( '.edit-menu-item-url' )?.value.trim() || '',
+					original_title: item.querySelector( '.original-link' )?.textContent || '',
+					object_id: item.querySelector( '.menu-item-data-object-id' ).value,
+					object: item.querySelector( '.menu-item-data-object' ).value,
+					type: item.querySelector( '.menu-item-data-type' ).value,
+					type_label: item.querySelector( '.item-type' ).value,
+					classes: item.querySelector( '.edit-menu-item-classes' ).value,
+					xfn: item.querySelector( '.edit-menu-item-xfn' ).value,
+					target: item.querySelector( '.edit-menu-item-target' ).value,
+					attr_title: item.querySelector( '.edit-menu-item-attr-title' ).value,
+					description: item.querySelector( '.edit-menu-item-description' ).value,
+					status: 'publish'
+				};
 			} );
+
+			activatePublishButton();
 		}
 	} );
 } );
