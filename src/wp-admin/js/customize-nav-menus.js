@@ -294,7 +294,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					details = e.item.querySelector( 'details' ),
 					depth = 0,
 					prevDepth = 0,
-					draggedClasses = e.item.className.split( ' ' );
+					draggedClasses = e.item.className.split( ' ' ),
+					menuItems = Array.from( editMenu.querySelectorAll( ':scope > .menu-item' ) );
 
 				// Revert styling and set focus on move icon
 				e.item.style.marginLeft = '';
@@ -369,11 +370,29 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 
 				// Prepare updatedControls object with new order of menu items
-				editMenu.querySelectorAll( '.menu-item' ).forEach( function( li, idx ) {
-					const settingId = li.dataset.settingId,
+				menuItems.forEach( function( li, idx ) {
+					var newDepth, newPrevDepth,
+						settingId = li.dataset.settingId,
 						parentId = li.querySelector( '.menu-item-data-parent-id' ).value;
 
 					li.querySelector( '.menu-item-data-position' ).value = idx + 1; // update hidden input field
+					li.className = li.className.split( 'menu-item-edit-inactive' )[0] + ' menu-item-edit-inactive';
+					if ( idx === 0 ) {
+						li.classList.add( 'move-up-disabled' );
+						li.classList.add( 'move-left-disabled' );
+						li.classList.add( 'move-right-disabled' );
+					}
+					if ( idx === menuItems.length - 1 ) {
+						li.classList.add( 'move-down-disabled' );
+					}
+
+					newDepth = parseInt( li.className.split( 'menu-item-depth-' )[1], 10 );
+					newPrevDepth = li.previousElementSibling.classList.contains( 'menu-item' ) ? parseInt( li.previousElementSibling.className.split( 'menu-item-depth-' )[1], 10 ) : 0;
+					if ( parentId === 0 || newDepth === 0 ) {
+						li.classList.add( 'move-left-disabled' );
+					} else if ( newDepth === 11 || newDepth > newPrevDepth ) {
+						li.classList.add( 'move-right-disabled' );
+					}
 
 					updatedControls[ settingId ] = {
 						menu_id: li.querySelector( '.menu-item-data-menu-id' ).value,
@@ -567,9 +586,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Add to menu
 		if ( lastItem ) { // menu currently has at least one item
+			lastitem.querySelector( 'li' ).classList.remove( 'move-down-disabled' );
 			lastItem.after( clone ); // add as last item to populated menu
 			menu.querySelector( '.reorder-toggle' ).style.display = '';
 		} else { // menu is currently empty
+			clone.querySelector( 'li' ).classList.add( 'move-up-disabled' );
+			clone.querySelector( 'li' ).classList.add( 'move-right-disabled' );
 			menu.querySelector( '.customize-control-nav_menu_name' ).after( clone );
 			menu.querySelector( '.no-items-message' )?.remove();
 		}
