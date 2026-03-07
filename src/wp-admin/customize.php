@@ -1313,25 +1313,25 @@ wp_print_scripts();
 										foreach ( $menu_items as $key => $menu_item ) {
 											$move_class = '';
 											if ( $key === 0 ) {
-												$move_class .= 'move-up-disabled move-right-disabled';
+												$move_class .= 'move-up-disabled move-left-disabled move-right-disabled';
 											}
 											if ( $key === count( $menu_items ) - 1 ) {
 												$move_class .= ' move-down-disabled';
 											}
 
 											$parent_id = (int) $menu_item->menu_item_parent ?? 0;
-											if ( $parent_id === 0 ) {
+											if ( $parent_id === 0 && $key !== 0 ) {
 												$move_class .= ' move-left-disabled';
 											}
 
 											// $depth = 0 for top-level; otherwise parent depth + 1
+											// 11 is highest depth
 											$depth = ( $parent_id === 0 ) ? 0 : ( ( $depths[$parent_id] ?? 0 ) + 1 );
-											if ( ( $depth === 11 && $key !== 0 ) || $depth > $depths[$key - 1] ) {
+											if ( ( $depth === 11 && $key !== 0 ) ) {
 												$move_class .= ' move-right-disabled';
 											}
 
 											$depths[$menu_item->ID] = $depth;
-											$depths[$key] = $depth;
 											?>
 
 											<li id="customize-control-nav_menu_item-<?php echo esc_attr( $menu_item->ID ); ?>"
