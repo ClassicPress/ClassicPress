@@ -329,15 +329,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							depth = parseInt( originalDepth + diff, 10 );
 							if ( depth > prevDepth ) {
 								parent = prevItem;
+								depth = prevDepth + 1;
 								e.item.querySelector( '.menu-item-data-parent-id' ).value = parent.querySelector( '.menu-item-data-db-id' ).value;
 							}
 							if ( depth > maxDepth ) {
 								depth = maxDepth;
 							} else if ( depth < 0 ) {
 								depth = 0;
-							}
-							if ( depth > ( prevDepth + 1 ) ) {
-								depth = prevDepth + 1;
 							}
 							draggedClasses[i] = 'menu-item-depth-' + depth;
 						}
@@ -376,7 +374,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						parentId = li.querySelector( '.menu-item-data-parent-id' ).value;
 
 					li.querySelector( '.menu-item-data-position' ).value = idx + 1; // update hidden input field
-					li.className = li.className.split( 'menu-item-edit-inactive' )[0] + ' menu-item-edit-inactive';
+					li.className = li.className.split( 'menu-item-edit-inactive' )[0] + 'menu-item-edit-inactive';
 					if ( idx === 0 ) {
 						li.classList.add( 'move-up-disabled' );
 						li.classList.add( 'move-left-disabled' );
@@ -390,7 +388,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					newPrevDepth = li.previousElementSibling.classList.contains( 'menu-item' ) ? parseInt( li.previousElementSibling.className.split( 'menu-item-depth-' )[1], 10 ) : 0;
 					if ( parentId === 0 || newDepth === 0 ) {
 						li.classList.add( 'move-left-disabled' );
-					} else if ( newDepth === 11 || newDepth > newPrevDepth ) {
+					} else if ( newDepth === maxDepth || newDepth > newPrevDepth ) {
 						li.classList.add( 'move-right-disabled' );
 					}
 
