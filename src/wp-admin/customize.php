@@ -212,6 +212,11 @@ wp_enqueue_style( 'customize-controls' );
 wp_enqueue_style( 'customize-preview' );
 wp_enqueue_script( 'heartbeat' );
 wp_enqueue_script( 'customize-controls' );
+wp_add_inline_script(
+	'customize-controls',
+	'window.updatedControls = window.updatedControls || {};',
+	'before'
+);
 wp_enqueue_script( 'customize-controls-proxy' );
 wp_enqueue_script( 'customize-nav-menus' );
 wp_enqueue_script( 'customize-widgets' );
