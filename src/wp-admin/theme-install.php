@@ -88,6 +88,8 @@ wp_localize_script(
 
 wp_enqueue_script( 'theme' );
 wp_enqueue_script( 'updates' );
+wp_enqueue_script( 'cp-filepond' );
+wp_enqueue_style( 'cp-filepond' );
 
 if ( $tab ) {
 	/**
@@ -379,5 +381,26 @@ if ( $tab ) {
 <?php
 wp_print_request_filesystem_credentials_modal();
 wp_print_admin_notice_templates();
+
+?>
+<script>
+document.addEventListener( 'DOMContentLoaded', function () {
+	var filepond = document.querySelector( 'input[type="file"][name="themezip"]' );
+	var button   = document.getElementById( 'install-theme-submit' );
+	var options = {
+		name:               'filepond',
+		storeAsFile:         true,
+		allowMultiple:       false,
+		acceptedFileTypes:   [ 'application/zip', 'application/x-zip-compressed' ],
+		dropOnPage:          true,
+		dropOnElement:       false,
+		credits:             false,
+		onaddfile:           function() { if ( button ) { button.disabled = false; } },
+		onremovefile:        function() { if ( button ) { button.disabled = true; } },
+	};
+	FilePond.create( filepond, options );
+} );
+</script>
+<?php
 
 require_once ABSPATH . 'wp-admin/admin-footer.php';
