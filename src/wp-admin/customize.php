@@ -217,11 +217,8 @@ wp_add_inline_script(
 	'window.updatedControls = window.updatedControls || {};',
 	'before'
 );
-wp_enqueue_script( 'customize-controls-proxy' );
 wp_enqueue_script( 'customize-nav-menus' );
 wp_enqueue_script( 'customize-widgets' );
-wp_enqueue_script( 'customize-preview' );
-wp_enqueue_script( 'customize-selective-refresh' );
 
 /**
  * Enqueue Customizer control scripts.
