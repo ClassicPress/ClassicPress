@@ -518,6 +518,15 @@
 			setValue( args[0], args[1], true );
 		} );
 
+		api.preview.bind( 'setting', function( args ) {
+			var id = args[0];
+			if ( id.startsWith( 'nav_menu[' ) || id.startsWith( 'nav_menu_item[' ) || id.startsWith( 'nav_menu_locations[' ) ) {
+				wp.customize.selectiveRefresh.partial.each( function( partial ) {
+					partial.refresh();
+				} );
+			}
+		} );
+
 		api.preview.bind( 'sync', function( events ) {
 			if ( events.settings && events['settings-modified-while-loading'] ) {
 				Object.keys( events.settings ).forEach( function( syncedSettingId ) {
@@ -536,6 +545,11 @@
 			api.preview.send( 'nonce', api.settings.nonce );
 			api.preview.send( 'documentTitle', document.title );
 			api.preview.send( 'scroll', window.scrollY );
+		} );
+
+		api.preview.bind( 'customized', function( data ) {
+			api._customized = data;
+			window.updatedControls = data;
 		} );
 
 		handleUpdatedChangesetUuid = function( uuid ) {
@@ -607,6 +621,38 @@
 		if ( api._settings[ cssSettingId ] ) {
 			api._settings[ cssSettingId ].bind( api.settingPreviewHandlers.custom_css );
 		}
+
+		// Core standard setting → DOM bindings
+		var coreTextBindings = {
+			'blogname':        '.site-title a, .site-title',
+			'blogdescription': '.site-description'
+		};
+		Object.keys( coreTextBindings ).forEach( function( id ) {
+			if ( ! api._settings[ id ] ) {
+				api.create( id, '' );
+			}
+			api._settings[ id ].bind( function( value ) {
+				document.querySelectorAll( coreTextBindings[ id ] ).forEach( function( el ) {
+					el.textContent = value;
+				} );
+			} );
+		} );
+
+		// Header text color
+		if ( ! api._settings['header_textcolor'] ) {
+			api.create( 'header_textcolor', '' );
+		}
+		api._settings['header_textcolor'].bind( function( value ) {
+			var style = document.getElementById( 'customize-preview-header-textcolor' );
+			if ( ! style ) {
+				style = document.createElement( 'style' );
+				style.id = 'customize-preview-header-textcolor';
+				document.head.appendChild( style );
+			}
+			style.textContent = value === 'blank'
+				? 'body .site-title a, body .site-description { visibility: hidden; }'
+				: 'body.has-header-image .site-title a, body.has-header-video .site-title a, body .site-title a, body .site-description { color: #' + value.replace( /^#/, '' ) + '; visibility: visible; }';
+		} );
 
 		api.preview.send( 'ready', {
 			currentUrl: api.settings.url.self,
