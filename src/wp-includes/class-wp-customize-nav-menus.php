@@ -1310,6 +1310,10 @@ final class WP_Customize_Nav_Menus {
 	 *
 	 * @since 4.5.0
 	 *
+	 * @since CP-2.8.0 $partial_args moved to follow array so that any
+	 * settings value already set in $partial_args will take precedence
+	 * over the empty default.
+	 *
 	 * @param array|false $partial_args Partial args.
 	 * @param string      $partial_id   Partial ID.
 	 * @return array Partial args.
@@ -1321,14 +1325,14 @@ final class WP_Customize_Nav_Menus {
 				$partial_args = array();
 			}
 			$partial_args = array_merge(
-				$partial_args,
 				array(
 					'type'                => 'nav_menu_instance',
 					'render_callback'     => array( $this, 'render_nav_menu_partial' ),
 					'container_inclusive' => true,
 					'settings'            => array(), // Empty because the nav menu instance may relate to a menu or a location.
 					'capability'          => 'edit_theme_options',
-				)
+				),
+				$partial_args
 			);
 		}
 
@@ -1494,6 +1498,29 @@ final class WP_Customize_Nav_Menus {
 
 		$args['customize_preview_nav_menus_args']                            = $exported_args;
 		$this->preview_nav_menu_instance_args[ $exported_args['args_hmac'] ] = $exported_args;
+
+		/**
+		 * Populate all the partials in the preview pane
+		 *
+		 * @since CP-2.8.0
+		 */
+		if ( $can_partial_refresh ) {
+			$hmac       = $exported_args['args_hmac'];
+			$partial_id = 'nav_menu_instance[' . $hmac . ']';
+			$location   = ! empty( $exported_args['theme_location'] ) ? $exported_args['theme_location'] : '';
+			$setting_id = $location ? 'nav_menu_locations[' . $location . ']' : 'nav_menu[' . $exported_args['menu'] . ']';
+
+			$this->manager->selective_refresh->add_partial( $partial_id, array(
+				'type'                         => 'nav_menu_instance',
+				'selector'                     => null,
+				'settings'                     => array( $setting_id ),
+				'primary_setting'              => $setting_id,
+				'fallback_refresh'             => true,
+				'container_inclusive'          => true,
+				'constructingContainerContext' => $exported_args,
+			) );
+		}
+
 		return $args;
 	}
 
