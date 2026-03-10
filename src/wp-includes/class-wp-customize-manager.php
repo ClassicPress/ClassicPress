@@ -4730,6 +4730,7 @@ final class WP_Customize_Manager {
 		foreach ( $this->controls as $control ) {
 			$control->enqueue();
 		}
+		wp_enqueue_script( 'customize-controls-proxy' );
 
 		if ( ! is_multisite() && ( current_user_can( 'install_themes' ) || current_user_can( 'update_themes' ) || current_user_can( 'delete_themes' ) ) ) {
 			wp_enqueue_script( 'updates' );
