@@ -5,8 +5,9 @@
  */
 
 /* eslint consistent-this: [ "error", "control" ] */
-/* global wp, _wpCustomizeControlsL10n, _wpCustomizeHeader, _wpCustomizeBackground,
- * updatedControls, MediaElementPlayer, console, confirm,  ajaxurl, IMAGE_WIDGET, console,
+/* global wp, _wpCustomizeControlsL10n, _wpCustomizeHeader,
+ * _wpCustomizeBackground, updatedControls, _updatedControlsWatcher,
+ * MediaElementPlayer, console, confirm,  ajaxurl, IMAGE_WIDGET, console,
  * FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
  * FilePondPluginFileRename, FilePondPluginImagePreview
  */
@@ -76,8 +77,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Prepare changed object for publication.
 	 */
-	function inputChanged( input, li, navMenuId ) {
-		updatedControls[ settingId ] = input.value.trim();
+	function inputChanged( input, settingId ) {
+		_updatedControlsWatcher[ settingId ] = input.value.trim();
 		activatePublishButton();
 	}
 
@@ -96,11 +97,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		input.addEventListener( 'input', function() {
-			inputChanged( input, li );
+			inputChanged( input, settingId );
 		} );
 
 		input.addEventListener( 'change', function() {
-			inputChanged( input, li );
+			inputChanged( input, settingId );
 		} );
 	} );
 
@@ -225,13 +226,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
         change: function( event, ui ) {
             // Update the input's value in the DOM.
             event.target.setAttribute( 'value', ui.color.toString() );
-            updatedControls[event.target.closest( 'li' ).dataset.settingId] = ui.color.toString();
+            _updatedControlsWatcher[event.target.closest( 'li' ).dataset.settingId] = ui.color.toString();
 
             // Enable Publish.
             activatePublishButton();
         },
         clear: function( event ) {
-			updatedControls[event.target.closest( 'li' ).dataset.settingId] = '';
+			_updatedControlsWatcher[event.target.closest( 'li' ).dataset.settingId] = '';
             activatePublishButton();
         }
     } );
@@ -1086,7 +1087,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			customizeButton.previousElementSibling.style.display = '';
 			customizeButton.classList.remove( 'upload-button' );
 			parent.previousElementSibling.querySelector( 'input' ).value = selectedItem.dataset.id;
-			updatedControls[ settingId ] = {
+			_updatedControlsWatcher[ settingId ] = {
 				attachment_id: parseInt( selectedItem.dataset.id ),
 				url: selectedItem.dataset.url,
 				thumbnail_url: selectedItem.dataset.sizes?.thumbnail?.url || selectedItem.dataset.url,
@@ -1110,10 +1111,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 			if ( settingId === 'background_image' ) {
 				parent.parentNode.querySelector( 'input' ).value = selectedItem.dataset.url;
-				updatedControls[ settingId ] = selectedItem.dataset.url;
+				_updatedControlsWatcher[ settingId ] = selectedItem.dataset.url;
 			} else {
 				parent.parentNode.querySelector( 'input' ).value = selectedItem.dataset.id;
-				updatedControls[ settingId ] = selectedItem.dataset.id;
+				_updatedControlsWatcher[ settingId ] = selectedItem.dataset.id;
 			}
 		}
 		closeModal();
@@ -1254,6 +1255,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Prevent form submission via PHP
 		e.preventDefault();
 
+		window._customizePublishing = true;
+
 		// Prevent accidental form submissions
 		if ( e.submitter !== saveButton ) {
 			return;
@@ -1319,14 +1322,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					// Update any menu location currently populated by negativeId
 					navMenuLocations.forEach( function( locationArray, index ) {
 						if ( locationArray[1] === negativeId ) {
-							updatedControls[locationArray[0]] = menuId;
+							_updatedControlsWatcher[locationArray[0]] = menuId;
 						}
 					} );
 
 					// Update any nav_menu_items attached to this menu
 					navMenuItems.forEach( function( array, index ) {
 						if ( array[1].menu_id === negativeId ) {
-							updatedControls[array[0]].menu_id = menuId;
+							_updatedControlsWatcher[array[0]].menu_id = menuId;
 						}
 					} );
 
@@ -1366,12 +1369,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
 				submittedChanges[ settingId ] = {
 					value: {
-						nav_menu_term_id: item.menu_id,
-						position: item.position,
+						nav_menu_term_id: parseInt( item.nav_menu_term_id, 10 ),
+						position: parseInt( item.position, 10 ),
 						title: item.title || '',
 						url: item.url || '',
 						original_title: item.original_title || '',
-						menu_item_parent: item.menu_item_parent || '0',
+						menu_item_parent: parseInt( item.menu_item_parent, 10 ) || 0,
 						object_id: item.object_id || 0,
 						object: item.object || '',
 						type: item.type || 'custom',
@@ -1447,7 +1450,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			saveButton.disabled = true;
 			saveButton.value = _wpCustomizeControlsL10n.published;
 			document.getElementById( 'customize_changeset_uuid' ).value = newResult.data.next_changeset_uuid;
-			updatedControls = {}; // reset
+
+			// Reset the buffer object and proxy
+			Object.keys( updatedControls ).forEach( function( key ) {
+				delete updatedControls[ key ];
+			} );
+			window._customizePublishing = false;
 		}
 	} );
 
