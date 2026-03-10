@@ -6,7 +6,7 @@
  */
 
 /* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings,
- * console, ajaxurl, updatedControls,
+ * console, ajaxurl, updatedControls, _updatedControlsWatcher,
  * FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
  * FilePondPluginFileRename, FilePondPluginImagePreview
  */
@@ -75,7 +75,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( input.checked ) {
 					span.textContent = menuName;
 					input.value = li.parentNode.dataset.menuId;
-					updatedControls[ settingId ] = li.parentNode.dataset.menuId;
+					_updatedControlsWatcher[ settingId ] = li.parentNode.dataset.menuId;
 					input.nextElementSibling.querySelector( '.theme-location-set' ).innerHTML = '(' + _wpCustomizeControlsL10n.current + ' ' + span.outerHTML + ')';
 		
 					menuLocations.forEach( function( menuLocation ) {
@@ -111,7 +111,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 			}
 		} else if ( settingId.startsWith( 'nav_menu[' ) ) {
-			updatedControls[ settingId ] = {
+			_updatedControlsWatcher[ settingId ] = {
 				name: li.closest( 'ul' ).querySelector( '.menu-name-field' ).value.trim(),
 				auto_add: li.closest( 'ul' ).querySelector( '.auto_add' ).checked ? 1 : 0
 			};
@@ -122,10 +122,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			menuId = li.querySelector( '.menu-item-data-menu-id' ).value;
 			menuName = li.parentNode.querySelector( '[data-setting-id="nav_menu[' + menuId + ']"]' );
-			updatedControls[ 'nav_menu[' + menuId + ']' ] = {
+			_updatedControlsWatcher[ 'nav_menu[' + menuId + ']' ] = {
 				name: menuName.querySelector( 'input' ).value.trim()
 			};
-			updatedControls[ settingId ] = {
+			_updatedControlsWatcher[ settingId ] = {
 				menu_id: menuId,
 				title: title,
 				url: li.querySelector( '.edit-menu-item-url' )?.value.trim() || '',
@@ -147,7 +147,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				roles: Array.from( li.querySelectorAll( '.edit-menu-item-role[value]' ) ).filter( cb => cb.checked ).map( cb => cb.value )
 			};
 		} else {
-			updatedControls[ settingId ] = value;
+			_updatedControlsWatcher[ settingId ] = value;
 		}
 		activatePublishButton();
 	}
@@ -402,8 +402,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						li.classList.add( 'move-left-disabled' );
 					}
 
-					updatedControls[ settingId ] = {
-						menu_id: li.querySelector( '.menu-item-data-menu-id' ).value,
+					_updatedControlsWatcher[ settingId ] = {
+						nav_menu_term_id: li.querySelector( '.menu-item-data-menu-id' ).value,
 						position: idx + 1,
 						menu_item_parent: parentId,
 						title: li.querySelector( '.edit-menu-item-title' ).value.trim(),
@@ -579,8 +579,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 
 		// Prepare JS object for publishing
-		updatedControls[ 'nav_menu_item[' + menuItemId + ']' ] = {
-			menu_id: currentMenuId,
+		_updatedControlsWatcher[ 'nav_menu_item[' + menuItemId + ']' ] = {
+			nav_menu_term_id: currentMenuId,
 			title: title,
 			original_title: title,
 			url: url,
@@ -621,7 +621,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		const menuId = menuSettingId.split( '[' )[1].replace( ']', '' );
 
 		// Prepare the nav_menu[] object for sending to the back-end
-		updatedControls[ menuSettingId ] = 'delete-menu'; // will be changed to false later, but cannot set that here
+		_updatedControlsWatcher[ menuSettingId ] = 'delete-menu'; // will be changed to false later, but cannot set that here
 
 		// Update the Customizer's visual appearance
 		document.getElementById( 'accordion-section-' + menuSettingId ).remove();
@@ -631,7 +631,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Remove from menu locations and prepare menu_locations[] objects for sending to back-end if appropriate
 		document.getElementById( 'sub-accordion-section-menu_locations' ).querySelectorAll( 'select' ).forEach( function( select ) {
 			if ( select.value === menuId ) {
-				updatedControls[ select.closest( 'li' ).dataset.settingId  ] = '';
+				_updatedControlsWatcher[ select.closest( 'li' ).dataset.settingId  ] = '';
 				select.value = '0';
 				select.querySelector( 'option[value="' + menuId + '"]' ).remove();
 				select.nextElementSibling.classList.remove( 'hidden' );
@@ -1097,7 +1097,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Recalculate move classes for all items after every action
 			updatedItems = Array.from( ul.querySelectorAll( ':scope > .menu-item' ) );
 			updatedItems.forEach( function( item, i ) {
-				const itemDepth = parseInt( item.className.split( 'menu-item-depth-' )[1], 10 ),
+				const maxDepth = 11,
+					itemDepth = parseInt( item.className.split( 'menu-item-depth-' )[1], 10 ),
 					prevDepth = i > 0 ? parseInt( updatedItems[i - 1].className.split( 'menu-item-depth-' )[1], 10 ) : -1,
 					itemParentId = item.querySelector( '.menu-item-data-parent-id' ).value;
 
@@ -1143,12 +1144,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( itemDepth === 0 ) {
 					item.classList.add( 'move-left-disabled' );
 				}
-				if ( i === 0 || itemDepth >= 11 || itemDepth >= prevDepth + 1 ) {
+				if ( i === 0 || itemDepth >= maxDepth || itemDepth >= prevDepth + 1 ) {
 					item.classList.add( 'move-right-disabled' );
 				}
 
-				updatedControls[ item.dataset.settingId ] = {
-					menu_id: item.querySelector( '.menu-item-data-menu-id' ).value,
+				_updatedControlsWatcher[ item.dataset.settingId ] = {
+					nav_menu_term_id: item.querySelector( '.menu-item-data-menu-id' ).value,
 					position: i + 1,
 					menu_item_parent: parseInt( item.querySelector( '.menu-item-data-parent-id' ).value, 10 ) || 0,
 					title: item.querySelector( '.edit-menu-item-title' ).value.trim(),
