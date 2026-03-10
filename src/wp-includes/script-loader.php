@@ -1096,7 +1096,7 @@ function wp_default_scripts( $scripts ) {
 
 	//$scripts->add( 'customize-base', "/wp-includes/js/customize-base$suffix.js", array( 'jquery', 'json2', 'underscore' ), false, 1 );
 	//$scripts->add( 'customize-loader', "/wp-includes/js/customize-loader$suffix.js", array( 'customize-base' ), false, 1 );
-	$scripts->add( 'customize-preview', "/wp-includes/js/customize-preview$suffix.js", array( 'customize-controls-proxy', 'wp-a11y' ), false, 1 );
+	$scripts->add( 'customize-preview', "/wp-includes/js/customize-preview$suffix.js", array( 'wp-a11y' ), false, 1 );
 	//$scripts->add( 'customize-models', '/wp-includes/js/customize-models.js', array( 'underscore', 'backbone' ), false, 1 );
 	//$scripts->add( 'customize-views', '/wp-includes/js/customize-views.js', array( 'jquery', 'underscore', 'imgareaselect', 'customize-models', 'media-editor', 'media-views' ), false, 1 );
 	$scripts->add( 'customize-controls-proxy',  "/wp-admin/js/customize-controls-proxy$suffix.js", array( 'customize-controls', 'underscore' ), false, 1 );
@@ -1185,7 +1185,7 @@ function wp_default_scripts( $scripts ) {
 			'customizeUrl'            => 'http' . ( ! empty( $_SERVER['HTTPS'] ) ? 's' : '' ) . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'],
 		)
 	);
-	$scripts->add( 'customize-selective-refresh', "/wp-includes/js/customize-selective-refresh$suffix.js", array( 'wp-util', 'customize-controls-proxy', 'customize-preview' ), false, 1 );
+	$scripts->add( 'customize-selective-refresh', "/wp-includes/js/customize-selective-refresh$suffix.js", array( 'wp-util', 'customize-preview' ), false, 1 );
 
 	$scripts->add( 'customize-widgets', "/wp-admin/js/customize-widgets$suffix.js", array( 'sortable-js', 'customize-controls', 'customize-controls-proxy' ), false, 1 );
 	//$scripts->add( 'customize-preview-widgets', "/wp-includes/js/customize-preview-widgets$suffix.js", array( 'jquery', 'wp-util', 'customize-preview', 'customize-selective-refresh' ), false, 1 );
