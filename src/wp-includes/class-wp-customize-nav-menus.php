@@ -1510,10 +1510,32 @@ final class WP_Customize_Nav_Menus {
 			$location   = ! empty( $exported_args['theme_location'] ) ? $exported_args['theme_location'] : '';
 			$setting_id = $location ? 'nav_menu_locations[' . $location . ']' : 'nav_menu[' . $exported_args['menu'] . ']';
 
+			// Build full settings list including all menu items for this menu
+			$settings = array( $setting_id );
+
+			// Note the ?? null coalescing on get_nav_menu_locations()[ $location ]
+			// If the location isn't assigned a menu yet, $menu_id will be 0 and wp_get_nav_menu_items won't be called. 
+			$menu_id = $location ? (int) get_nav_menu_locations()[ $location ] ?? 0 : (int) $exported_args['menu'];
+
+			if ( $menu_id ) {
+				// Include the nav_menu setting itself
+				$settings[] = 'nav_menu[' . $menu_id . ']';
+
+				// Include all nav_menu_item settings for this menu
+				$menu_items = wp_get_nav_menu_items( $menu_id, array( 'update_post_term_cache' => false ) );
+				if ( $menu_items ) {
+					foreach ( $menu_items as $menu_item ) {
+						$settings[] = 'nav_menu_item[' . $menu_item->ID . ']';
+					}
+				}
+			}
+
+			$settings = array_unique( $settings );
+
 			$this->manager->selective_refresh->add_partial( $partial_id, array(
 				'type'                         => 'nav_menu_instance',
 				'selector'                     => null,
-				'settings'                     => array( $setting_id ),
+				'settings'                     => $settings,
 				'primary_setting'              => $setting_id,
 				'fallback_refresh'             => true,
 				'container_inclusive'          => true,
