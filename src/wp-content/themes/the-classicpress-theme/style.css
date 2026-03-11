@@ -2109,7 +2109,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 	#inner-header {
 		display: flex;
 		justify-content: space-between;
-		gap: 0.5em;
+		gap: 1em;
 		align-items: center;
 		margin: 0 auto;
 	}
