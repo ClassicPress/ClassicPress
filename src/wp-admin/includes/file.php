@@ -1840,7 +1840,16 @@ function _unzip_file_pclzip( $file, $to, $needed_dirs = array() ) {
 			continue;
 		}
 
+<<<<<<< HEAD
 		$uncompressed_size += $archive_file['size'];
+=======
+		// Don't extract invalid files:
+		if ( 0 !== validate_file( $file['filename'] ) ) {
+			continue;
+		}
+
+		$uncompressed_size += $file['size'];
+>>>>>>> 93875af1c2 (Grouped backports for the 6.2 branch.)
 
 		$needed_dirs[] = $to . untrailingslashit( $archive_file['folder'] ? $archive_file['filename'] : dirname( $archive_file['filename'] ) );
 	}
