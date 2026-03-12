@@ -206,7 +206,7 @@ function install_themes_upload() {
 					_e( 'Theme zip file' );
 					?>
 				</label>
-				<input type="file" id="themezip" name="themezip" accept=".zip">
+				<input type="file" id="themezip" name="themezip">
 				<?php submit_button( __( 'Install Now' ), '', 'install-theme-submit', false, array( 'disabled' => 'disabled' ) ); ?>
 			</form>
 		</div>
