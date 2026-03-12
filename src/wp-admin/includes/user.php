@@ -766,3 +766,97 @@ function wp_is_authorize_application_redirect_url_valid( $url ) {
 
 	return true;
 }
+
+/**
+ * @since CP-3.0.0
+ *
+ * @global string $pagenow The filename of the current screen.
+ * @global int $user_ID    The ID of the current user.
+ */
+function password_reset_nag() {
+	global $pagenow, $user_ID;
+
+	if ( 'profile.php' === $pagenow ) {
+		return;
+	}
+
+	$pepper_loaded  = apply_filters( 'cp_pepper_loaded', false );
+	$pepper_plugin  = apply_filters( 'cp_pepper_plugin', false );
+	$peppered_hash  = get_user_meta( $user_ID, 'peppered_hash', true );
+	$pepper_renewed = get_user_meta( $user_ID, 'pepper_renewed', true );
+	$is_super_admin = is_multisite() ? current_user_can( 'manage_network_options' ) : current_user_can( 'manage_options' );
+
+	$pepper_renewed_message = sprintf(
+		'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
+		__( 'Warning:', 'cp-pepper' ),
+		__( 'Your password must be reset.', 'cp-pepper' ),
+		$is_super_admin ? sprintf(
+			'<p><strong>%1$s</strong> %2$s</p>',
+			__( 'Notice:', 'cp-pepper' ),
+			__( 'The pepper was renewed.', 'cp-pepper' )
+		) : '',
+		sprintf(
+			'<a href="%1$s">%2$s</a>',
+			esc_url( get_edit_profile_url() . '#password' ),
+			__( 'Take me to my profile page', 'cp-pepper' )
+		)
+	);
+
+	$pepper_disabled_message = sprintf(
+		'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
+		__( 'Warning:', 'cp-pepper' ),
+		__( 'Your password must be reset.', 'cp-pepper' ),
+		$is_super_admin ? sprintf(
+			'<p><strong>%1$s</strong> %2$s</p>',
+			__( 'Notice:', 'cp-pepper' ),
+			__( 'The pepper is disabled. The pepper file may have been moved or modified.', 'cp-pepper' )
+		) : '',
+		sprintf(
+			'<a href="%1$s">%2$s</a>',
+			esc_url( get_edit_profile_url() . '#password' ),
+			__( 'Take me to my profile page', 'cp-pepper' )
+		)
+	);
+
+	$pepper_plugin_missing_message = sprintf(
+		'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
+		__( 'Warning:', 'cp-pepper' ),
+		__( 'Your password must be reset.', 'cp-pepper' ),
+		$is_super_admin ? sprintf(
+			'<p><strong>%1$s</strong> %2$s</p>',
+			__( 'Notice:', 'cp-pepper' ),
+			__( 'ClassicPress Pepper for Passwords was deactivated or uninstalled.', 'cp-pepper' )
+		) : '',
+		sprintf(
+			'<a href="%1$s">%2$s</a>',
+			esc_url( get_edit_profile_url() . '#password' ),
+			__( 'Take me to my profile page', 'cp-pepper' )
+		)
+	);
+
+	if ( $pepper_renewed && $pepper_loaded ) {
+		wp_admin_notice(
+			$pepper_renewed_message,
+			array(
+				'additional_classes' => array( 'error', 'password-reset-nag' ),
+				'paragraph_wrap'     => false,
+			)
+		);
+	} elseif ( ( $peppered_hash || $pepper_renewed ) && ! $pepper_loaded && $pepper_plugin ) {
+		wp_admin_notice(
+			$pepper_disabled_message,
+			array(
+				'additional_classes' => array( 'error', 'password-reset-nag' ),
+				'paragraph_wrap'     => false,
+			)
+		);
+	} elseif ( ( $peppered_hash || $pepper_renewed ) && ! $pepper_loaded ) {
+		wp_admin_notice(
+			$pepper_plugin_missing_message,
+			array(
+				'additional_classes' => array( 'error', 'password-reset-nag' ),
+				'paragraph_wrap'     => false,
+			)
+		);
+	}
+}
