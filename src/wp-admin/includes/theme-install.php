@@ -191,7 +191,7 @@ function install_themes_dashboard() {
  * Displays a form to upload themes from zip files.
  *
  * @since 2.8.0
- * @since CP-2.8.0 JavaScript uploader used with browser fallback alternative
+ * @since CP-2.8.0 JavaScript uploader used
  */
 function install_themes_upload() {
 	?>
