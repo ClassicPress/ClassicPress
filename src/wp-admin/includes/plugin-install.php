@@ -338,7 +338,7 @@ function install_plugins_upload() {
 					_e( 'Plugin zip file' );
 					?>
 				</label>
-				<input type="file" id="pluginzip" name="pluginzip" accept=".zip">
+				<input type="file" id="pluginzip" name="pluginzip">
 				<?php submit_button( __( 'Install Now' ), '', 'install-plugin-submit', false, array( 'disabled' => 'disabled' ) ); ?>
 			</form>
 		</div>
