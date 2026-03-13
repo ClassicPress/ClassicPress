@@ -1,6 +1,6 @@
 === Twenty Seventeen ===
 Contributors: the WordPress team and ClassicPress contributors
-Version: 99.4-upstream1.7
+Version: 99.4.0
 Requires PHP: 7.4
 Requires CP: 1.0
 License: GPLv2 or later
@@ -65,6 +65,10 @@ https://github.com/ClassicPress/ClassicPress/pull/2344
 https://github.com/ClassicPress/ClassicPress/pull/2324
 https://github.com/ClassicPress/ClassicPress/pull/2022
 https://github.com/ClassicPress/ClassicPress/pull/1975
+
+= 4.1 =
+* Restore $post_id parameter to twentyseventeen_edit_link() which is being passed in some templates.
+* https://core.trac.wordpress.org/changeset/62000
 
 = 3.9 =
 * Update .screen-reader-text class, replacing the obsolete clip property with clip-path.
