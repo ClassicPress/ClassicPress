@@ -103,22 +103,30 @@ endif;
 
 if ( ! function_exists( 'twentyseventeen_edit_link' ) ) :
 	/**
-	 * Returns an accessibility-friendly link to edit a post or page.
+	 * Displays an accessibility-friendly link to edit a post or page.
 	 *
+<<<<<<< HEAD
 	 * This also gives us a little context about what exactly we're editing
 	 * (post or page?) so that users understand a bit more where they are in terms
 	 * of the template hierarchy and their content. Helpful when/if the single-page
 	 * layout with multiple posts/pages shown gets confusing.
+=======
+	 * @since Twenty Seventeen 1.0
+	 * @since Twenty Seventeen 4.1 Added `$post_id` parameter.
+	 *
+	 * @param int $post_id Post ID. Default 0.
+>>>>>>> b00c4ac639 (Twenty Seventeen: Restore `$post_id` parameter to `twentyseventeen_edit_link()` which is being passed in some templates.)
 	 */
-	function twentyseventeen_edit_link() {
+	function twentyseventeen_edit_link( $post_id = 0 ) {
 		edit_post_link(
 			sprintf(
 			/* translators: %s: Name of current post */
 				__( 'Edit<span class="screen-reader-text"> "%s"</span>', 'twentyseventeen' ),
-				get_the_title()
+				get_the_title( $post_id )
 			),
 			'<span class="edit-link">',
-			'</span>'
+			'</span>',
+			$post_id
 		);
 	}
 endif;
