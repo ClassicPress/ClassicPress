@@ -535,7 +535,7 @@
 					}
 				} );
 			} else {
-				 wp.customize.selectiveRefresh.partial.each( function( partial ) {
+				wp.customize.selectiveRefresh.partial.each( function( partial ) {
 					if ( partial.params.settings && partial.params.settings.indexOf( id ) !== -1 ) {
 						partial.refresh();
 					}
