@@ -14,8 +14,7 @@
 document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Set variables for the whole file
-	var newMultiValue, timeNow,
-		form = document.querySelector( 'form' ),
+	var form = document.querySelector( 'form' ),
 		saveButton = form.querySelector( '#save' ),
 		sortables = document.querySelectorAll( '.control-section-sidebar' ),
 		widgets = document.querySelectorAll( '.widget-rendered' ),
@@ -102,7 +101,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( result && result.success && result.data && result.data.instance ) {
 
 				// Add sanitized data to the updatedControls object
-				updatedControls[ widget.dataset.settingId ] = result.data.instance;
+				_updatedControlsWatcher[ widget.dataset.settingId ] = result.data.instance;
 
 				// Enable the Publish/Save button
 				activatePublishButton();
@@ -187,7 +186,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		currentSidebars = updatedControls[ 'sidebars_widgets' ];
 		newSidebars = Object.assign( {}, currentSidebars );
-		updatedControls[ settingId ] = newWidgetOrder.slice();
+		_updatedControlsWatcher[ settingId ] = newWidgetOrder.slice();
 		activatePublishButton();
 	}
 
@@ -217,46 +216,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	/**
-	 * Widget toggled open or closed
-	 *
-	 * @since CP-2.8.0
-	 */
-	function widgetToggled( widget ) {
-		var chooserButtons;
-
-		// Open the chooser.
-		if ( widget.hasAttribute( 'open' ) ) {
-
-			// Add CSS class and insert the chooser at the end of the details element.
-			clearWidgetSelection();
-			chooser.style.display = 'block';
-			chooser.removeAttribute( 'inert' ); // ensure that chooser is available
-			widget.parentNode.classList.add( 'widget-in-question' );
-			widget.append( chooser ); // append chooser to disclosure widget
-			document.getElementById( 'widgets-left' ).classList.add( 'chooser' );
-
-			chooserButtons = widget.querySelectorAll( '.widgets-chooser-button' );
-			chooserButtons.forEach( function( choice ) {
-				choice.addEventListener( 'click', function() {
-					widget.querySelector( '.widgets-chooser-selected' ).classList.remove( 'widgets-chooser-selected' );
-					chooserButtons.forEach( function( chosen ) {
-						chosen.setAttribute( 'aria-pressed', 'false' );
-					} );
-					choice.setAttribute( 'aria-pressed', 'true' );
-					choice.closest( 'li' ).classList.add( 'widgets-chooser-selected' );
-				} );
-			} );
-
-		} else {
-			document.getElementById( 'wpbody-content' ).append( chooser );
-			chooser.style.display = 'none';
-			document.getElementById( 'widgets-left' ).classList.remove( 'chooser' );
-			clearWidgetSelection();
-			widget.querySelector( 'summary' ).focus();
-		}
-	}
-
-	/**
 	 * Delete widget
 	 *
 	 * @since CP_2.8.0
@@ -272,10 +231,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Remove from sidebar array
 		if ( updatedControls[ sidebarKey ] ) {
-			updatedControls[ sidebarKey ] = updatedControls[ sidebarKey ].filter( id => id !== widgetId );
+			_updatedControlsWatcher[ sidebarKey ] = updatedControls[ sidebarKey ].filter( id => id !== widgetId );
 		} else {
 			// Sidebar hasn't been touched yet this session — build the array from the DOM first, then filter
-			updatedControls[ sidebarKey ] = Array.from( sidebar.querySelectorAll( '.widget-id' ) ).map( input => input.value ).filter( id => id !== widgetId );
+			_updatedControlsWatcher[ sidebarKey ] = Array.from( sidebar.querySelectorAll( '.widget-id' ) ).map( input => input.value ).filter( id => id !== widgetId );
 		}
 
 		// Remove widget key from updatedControls entirely if it was pending
@@ -321,7 +280,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		currentSidebars = updatedControls[ 'sidebars_widgets' ];
 		newSidebars = Object.assign( {}, currentSidebars );
-		updatedControls[ settingId ] = newWidgetOrder.slice();
+		_updatedControlsWatcher[ settingId ] = newWidgetOrder.slice();
 		activatePublishButton();
 	}
 
@@ -395,11 +354,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Collect all widget instance IDs in this section in order and push them into updatedControls object
 			allIds = Array.from( ul.querySelectorAll( '.widget-id' ) ).map( input => input.value );
-			updatedControls[sidebarKey] = allIds;
+			_updatedControlsWatcher[sidebarKey] = allIds;
 
 			// Create the instance’s empty setting object (to be filled by PHP back-end on save)
 			if ( ! updatedControls[widgetKey] ) {
-				updatedControls[widgetKey] = {};
+				window.updatedControls[widgetKey] = {};  // bypasses proxy, no postMessage
 			}
 
 			// Enable Save/Publish button
@@ -521,7 +480,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 		// Enable selection of different sidebar
-		} else if ( widget?.querySelector( '.widget-area-select' ).contains( e.target ) ) {
+		} else if ( widget?.querySelector( '.widget-area-select' )?.contains( e.target ) ) {
 			widget.querySelector( '.widget-area-select .selected' ).classList.remove( 'selected' );
 			e.target.closest( 'li' ).className = 'selected';
 			if ( e.target.closest( 'li' ).dataset.id === widget.parentNode.dataset.id ) {
