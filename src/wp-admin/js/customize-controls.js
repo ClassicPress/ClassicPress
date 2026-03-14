@@ -1519,6 +1519,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 
+		// Maintain correct previousAccordionPane after widget selection
+		if ( previousAccordionPane && previousAccordionPane.id === 'available-widgets-list' ) {
+			previousAccordionPane = document.getElementById( 'sub-accordion-panel-widgets' );
+		}
+
 		if ( ( e.target.tagName === 'H3' || e.target.classList && e.target.classList.contains( 'change-theme' ) ) && ul ) {
 			e.preventDefault();
 			previousAccordionPane = ul;
