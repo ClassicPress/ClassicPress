@@ -594,7 +594,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Add to menu
 		if ( lastItem ) { // menu currently has at least one item
-			lastitem.querySelector( 'li' ).classList.remove( 'move-down-disabled' );
+			lastItem.classList.remove( 'move-down-disabled' );
 			lastItem.after( clone ); // add as last item to populated menu
 			menu.querySelector( '.reorder-toggle' ).style.display = '';
 		} else { // menu is currently empty
