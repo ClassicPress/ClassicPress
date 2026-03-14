@@ -2,8 +2,8 @@
  * @output wp-includes/js/customize-selective-refresh.js
  */
 
-/* global _customizePartialRefreshExports, console */
-/** @namespace wp.customize.selectiveRefresh */
+/* global wp, _customizePartialRefreshExports, console */
+
 wp.customize.selectiveRefresh = ( function( api ) {
 	'use strict';
 
@@ -426,17 +426,6 @@ wp.customize.selectiveRefresh = ( function( api ) {
 		}
 	};
 
-	Partial.prototype.isRelatedSetting = function( setting ) {
-		var partial = this;
-		if ( 'string' === typeof setting ) {
-			setting = api._settings[ setting ];
-		}
-		if ( ! setting ) {
-			return false;
-		}
-		return -1 !== partial.settings().indexOf( setting.id );
-	};
-
 	Partial.prototype.showControl = function() {
 		var partial = this,
 			settingId = partial.params.primarySetting;
@@ -610,23 +599,6 @@ wp.customize.selectiveRefresh = ( function( api ) {
 	self.partialConstructor = {};
 	self.partial = makeValues( Partial );
 
-	self.getCustomizeQuery = function() {
-		var dirtyCustomized = {};
-		Object.keys( api._settings ).forEach( function( key ) {
-			var setting = api._settings[ key ];
-			if ( setting._dirty ) {
-				dirtyCustomized[ key ] = setting.get();
-			}
-		} );
-		return {
-			wp_customize: 'on',
-			nonce: api.settings.nonce.preview,
-			customize_theme: api.settings.theme.stylesheet,
-			customized: JSON.stringify( dirtyCustomized ),
-			customize_changeset_uuid: api.settings.changeset.uuid
-		};
-	};
-
 	self._pendingPartialRequests = {};
 	self._debouncedTimeoutId = null;
 	self._currentRequest = null;
@@ -659,10 +631,16 @@ wp.customize.selectiveRefresh = ( function( api ) {
 		partial = null;
 
 		self._debouncedTimeoutId = setTimeout( function() {
-			var data, partialPlacementContexts, partialsPlacements, xhr;
+			var data, partialPlacementContexts, partialsPlacements, controller, formData;
 
 			self._debouncedTimeoutId = null;
-			data = self.getCustomizeQuery();
+			data = {
+				wp_customize: 'on',
+				nonce: api.settings.nonce.preview,
+				customize_theme: api.settings.theme.stylesheet,
+				customized: JSON.stringify( window.updatedControls || {} ),
+				customize_changeset_uuid: api.settings.changeset.uuid
+			};
 			partialsPlacements = {};
 			partialPlacementContexts = {};
 
@@ -670,7 +648,10 @@ wp.customize.selectiveRefresh = ( function( api ) {
 				var pending = self._pendingPartialRequests[ partialId ];
 				partialsPlacements[ partialId ] = pending.partial.placements();
 				if ( ! self.partial.has( partialId ) ) {
-					pending.deferred.rejectWith( pending.partial, [ new Error( 'partial_removed' ), partialsPlacements[ partialId ] ] );
+					pending.deferred.rejectWith(
+						pending.partial,
+						[ new Error( 'partial_removed' ), partialsPlacements[ partialId ] ]
+					);
 				} else {
 					partialPlacementContexts[ partialId ] = partialsPlacements[ partialId ].map( function( placement ) {
 						return placement.context || {};
@@ -681,81 +662,99 @@ wp.customize.selectiveRefresh = ( function( api ) {
 			data.partials = JSON.stringify( partialPlacementContexts );
 			data[ self.data.renderQueryVar ] = '1';
 
-			var formData = new URLSearchParams( data ).toString();
+			formData = new URLSearchParams( data ); // serializes to x-www-form-urlencoded[web:15][web:17]
 
-			xhr = new XMLHttpRequest();
-			xhr.open( 'POST', api.settings.url.self, true );
-			xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
-			xhr.setRequestHeader( 'X-Requested-With', 'XMLHttpRequest' );
+			// Abort any in-flight request, then create a new one for fetch
+			if ( self._currentRequest && self._currentRequest.abort ) {
+				self._currentRequest.abort();
+				self._currentRequest = null;
+			}
 
-			self._currentRequest = xhr;
+			controller = new AbortController(); // fetch abort support[web:14][web:18][web:22]
+			self._currentRequest = controller;
 
-			xhr.onload = function() {
+			fetch( api.settings.url.self, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+					'X-Requested-With': 'XMLHttpRequest'
+				},
+				body: formData,
+				signal: controller.signal
+			} )
+			.then( function( response ) {
+				if ( ! response.ok ) {
+					throw response;
+				}
+				return response.text();
+			} )
+			.then( function( text ) {
 				var responseData;
-				if ( xhr.status >= 200 && xhr.status < 300 ) {
-					try {
-						responseData = JSON.parse( xhr.responseText );
-					} catch ( e ) {
-						Object.keys( self._pendingPartialRequests ).forEach( function( partialId ) {
-							var pending = self._pendingPartialRequests[ partialId ];
-							pending.deferred.rejectWith( pending.partial, [ new Error( 'json_parse_error' ), partialsPlacements[ partialId ] ] );
-						} );
-						self._pendingPartialRequests = {};
-						return;
-					}
-
-					self.trigger( 'render-partials-response', responseData );
-
-					if ( responseData.errors && 'undefined' !== typeof console && console.warn ) {
-						responseData.errors.forEach( function( error ) {
-							console.warn( error );
-						} );
-					}
-
-					Object.keys( self._pendingPartialRequests ).forEach( function( partialId ) {
-						var pending = self._pendingPartialRequests[ partialId ],
-							placementsContents;
-						if ( ! Array.isArray( responseData.contents[ partialId ] ) ) {
-							pending.deferred.rejectWith( pending.partial, [ new Error( 'unrecognized_partial' ), partialsPlacements[ partialId ] ] );
-						} else {
-							placementsContents = responseData.contents[ partialId ].map( function( content, i ) {
-								var partialPlacement = partialsPlacements[ partialId ][ i ];
-								if ( partialPlacement ) {
-									partialPlacement.addedContent = content;
-								} else {
-									partialPlacement = new Placement( {
-										partial: pending.partial,
-										addedContent: content
-									} );
-								}
-								return partialPlacement;
-							} );
-							pending.deferred.resolveWith( pending.partial, [ placementsContents ] );
-						}
-					} );
-					self._pendingPartialRequests = {};
-				} else {
+				try {
+					responseData = JSON.parse( text );
+				} catch ( e ) {
 					Object.keys( self._pendingPartialRequests ).forEach( function( partialId ) {
 						var pending = self._pendingPartialRequests[ partialId ];
-						pending.deferred.rejectWith( pending.partial, [ xhr, partialsPlacements[ partialId ] ] );
+						pending.deferred.rejectWith(
+							pending.partial,
+							[ new Error( 'json_parse_error' ), partialsPlacements[ partialId ] ]
+						);
 					} );
 					self._pendingPartialRequests = {};
+					return;
 				}
-			};
 
-			xhr.onerror = function() {
+				self.trigger( 'render-partials-response', responseData );
+
+				if ( responseData.data.errors && 'undefined' !== typeof console && console.warn ) {
+					responseData.data.errors.forEach( function( error ) {
+						console.warn( error );
+					} );
+				}
+
 				Object.keys( self._pendingPartialRequests ).forEach( function( partialId ) {
-					var pending = self._pendingPartialRequests[ partialId ];
-					pending.deferred.rejectWith( pending.partial, [ xhr, partialsPlacements[ partialId ] ] );
+					var pending = self._pendingPartialRequests[ partialId ],
+						placementsContents;
+
+					if ( ! Array.isArray( responseData.data.contents[ partialId ] ) ) {
+						pending.deferred.rejectWith(
+							pending.partial,
+							[ new Error( 'unrecognized_partial' ), partialsPlacements[ partialId ] ]
+						);
+					} else {
+						placementsContents = responseData.data.contents[ partialId ].map( function( content, i ) {
+							var partialPlacement = partialsPlacements[ partialId ][ i ];
+							if ( partialPlacement ) {
+								partialPlacement.addedContent = content;
+							} else {
+								partialPlacement = new Placement( {
+									partial: pending.partial,
+									addedContent: content
+								} );
+							}
+							return partialPlacement;
+						} );
+						pending.deferred.resolveWith( pending.partial, [ placementsContents ] );
+					}
 				} );
 				self._pendingPartialRequests = {};
-			};
+			} )
+			.catch( function( error ) {
+				// Abort is intentional: keep deferreds pending for reuse, like old onabort
+				if ( error && error.name === 'AbortError' ) {
+					return;
+				}
 
-			xhr.onabort = function() {
-				// Intentionally left blank — pending deferreds stay for reuse.
-			};
-
-			xhr.send( formData );
+				// Network or HTTP error: reject all pending partials
+				Object.keys( self._pendingPartialRequests ).forEach( function( partialId ) {
+					var pending = self._pendingPartialRequests[ partialId ];
+					pending.deferred.rejectWith(
+						pending.partial,
+						[ error, partialsPlacements[ partialId ] ]
+					);
+				} );
+				self._pendingPartialRequests = {};
+			} );
 
 		}, api.settings.timeouts.selectiveRefresh );
 
@@ -819,7 +818,12 @@ wp.customize.selectiveRefresh = ( function( api ) {
 	// -----------------------------------------------------------------------
 	// Bootstrap
 	// -----------------------------------------------------------------------
-	document.addEventListener( 'DOMContentLoaded', function() {
+	( function init() {
+		if ( document.readyState === 'loading' ) {
+			document.addEventListener( 'DOMContentLoaded', init );
+			return;
+		}
+
 		Object.assign( self.data, _customizePartialRefreshExports );
 
 		Object.keys( self.data.partials ).forEach( function( id ) {
@@ -846,8 +850,10 @@ wp.customize.selectiveRefresh = ( function( api ) {
 		} );
 
 		document.body.classList.add( 'customize-partial-edit-shortcuts-shown' );
-	} );
+
+	} )();
 
 	return self;
 
 } )( wp.customize );
+
