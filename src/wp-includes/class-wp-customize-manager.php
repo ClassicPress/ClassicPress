@@ -1864,6 +1864,7 @@ final class WP_Customize_Manager {
 	 */
 	public function post_value( $setting, $default_value = null ) {
 		$post_values = $this->unsanitized_post_values();
+
 		if ( ! array_key_exists( $setting->id, $post_values ) ) {
 			return $default_value;
 		}
