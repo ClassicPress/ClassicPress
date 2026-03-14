@@ -2618,6 +2618,7 @@ body.adding-widget .add-new-widget:before,
 	margin: 0;
 	background: #f0f0f1;
 	border-top: 1px solid #dcdcde;
+	height: 100%;
 }
 
 .no-widgets-found #available-widgets-list {
