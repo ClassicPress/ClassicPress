@@ -11,8 +11,8 @@
 //                                                            ///
 /////////////////////////////////////////////////////////////////
 
-if(!defined('GETID3_LIBXML_OPTIONS') && defined('LIBXML_VERSION')) {
-	if(LIBXML_VERSION >= 20621) {
+if (!defined('GETID3_LIBXML_OPTIONS') && defined('LIBXML_VERSION')) {
+	if (LIBXML_VERSION >= 20621) {
 		define('GETID3_LIBXML_OPTIONS', LIBXML_NONET | LIBXML_NOWARNING | LIBXML_COMPACT);
 	} else {
 		define('GETID3_LIBXML_OPTIONS', LIBXML_NONET | LIBXML_NOWARNING);
