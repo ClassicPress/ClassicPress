@@ -39,7 +39,7 @@ $cp_version = '2.6.0+dev';
  *
  * @global string $wp_version
  */
-$wp_version = '6.2.8';
+$wp_version = '6.2.9';
 
 /**
  * Holds the WordPress DB revision, increments when changes are made to the WordPress DB schema.
