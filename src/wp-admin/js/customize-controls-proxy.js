@@ -192,7 +192,8 @@ window.toPreviewSettingId = function( key ) {
 // Send data to iframe
 window._previewSenders = {};
 window._customizePublishing = false;
-window._cpDirtySettings = {};
+window._cpDirtySettings = {}; // raw keys, for publishing
+window._cpPreviewSettings = {}; // converted keys, for partial refresh
 
 window.sendSettingToPreview = function( id, value ) {
     var iframe, src, match;
@@ -240,11 +241,16 @@ window.sendCustomizedToPreview = function() {
 		return;
 	}
 
+    // Merge both formats:
+    // _cpPreviewSettings: Customizer JS format (widget[id_base][n]) for preview-side setValue()
+    // _cpDirtySettings:   PHP format (widget_id_base[n]) for server-side register_settings()
+    merged = Object.assign( {}, window._cpPreviewSettings, window._cpDirtySettings );
+
     iframe.contentWindow.postMessage(
         JSON.stringify( {
             channel: match[1],
             type: 'customized',
-            data: window._cpDirtySettings
+            data: merged
         } ),
         location.origin
     );
@@ -259,6 +265,7 @@ window._updatedControlsWatcher = new Proxy( window.updatedControls, {
         target[ key ] = value;
         window._cpDirtySettings[ key ] = value;
 		previewKey = window.toPreviewSettingId( key );
+		window._cpPreviewSettings[ previewKey ] = value;
 
 		// Keep api.instance(previewKey).get() from throwing/being undefined
 		if ( window.wp && wp.customize ) {
@@ -274,14 +281,21 @@ window._updatedControlsWatcher = new Proxy( window.updatedControls, {
 		}
 
 		// Send data to iframe pane
-        if ( ! window._previewSenders[ key ] ) {
-            window._previewSenders[ key ] = _.debounce( function() {
-                window.sendSettingToPreview( previewKey, target[ key ] );
-            }, 300 );
-        }
+        if ( ! window._previewSenders[ previewKey ] ) {
+			(function( pk, k ) {
+				window._previewSenders[ pk ] = _.debounce( function() {
+					window.sendSettingToPreview( pk, target[ k ] );
+				}, 300 );
+			})( previewKey, key );
+		}
+		window._previewSenders[ previewKey ]();
 
-        window._previewSenders[ key ]();
-        window.sendCustomizedToPreview();
+        if ( ! window._customizedSender ) {
+			window._customizedSender = _.debounce( function() {
+				window.sendCustomizedToPreview();
+			}, 350 ); // slightly longer than _previewSenders debounce of 300
+		}
+		window._customizedSender();
 
         return true;
     }
