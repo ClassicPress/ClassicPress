@@ -25,7 +25,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
-	 * Bind listeners to a newly-added widget
+	 * Bind listeners to a newly-added widget.
 	 *
 	 * @since CP-2.8.0
 	 */
@@ -43,37 +43,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			widgetInputChange( widget );
 		}, true );
 	}
-
-	/**
-	 * Observe creation of new widget controls
-	 *
-	 * @since CP-2.8.0
-	 */
-	const observer = new MutationObserver( function( mutations ) {
-		var idBase;
-		for ( const mut of mutations ) {
-			for ( const node of mut.addedNodes ) {
-				if ( ! ( node instanceof Element ) ) {
-					continue;
-				}
-
-				if ( node.matches( '.customize-control-widget_form.widget-rendered' ) ) {
-					bindWidget( node );
-
-					// Initialize CodeMirror for Custom HTML widget or TinyMCE for Text widget
-					idBase = node.querySelector( '.id_base' );
-					if ( idBase.value === 'custom_html' || idBase.value === 'text' ) {
-						document.dispatchEvent( new CustomEvent( 'widget-added', {
-							detail: {
-								widget: node
-							}
-						} ) );
-					}
-				}
-			}
-		}
-	} );
-	observer.observe( document.documentElement, { childList: true, subtree: true } );
 
 	/**
 	 * Keep widgets updated
@@ -171,6 +140,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Add sanitized data to the updatedControls object
 				_updatedControlsWatcher[ widget.dataset.settingId ] = result.data.instance;
+
+				// sendCustomizedToPreview is called by the proxy set handler above,
+				// but call it again explicitly to ensure the full blob is sent
+				// only after the instance value is confirmed in _cpDirtySettings.
+				window.sendCustomizedToPreview();
 
 				// Enable the Publish/Save button
 				activatePublishButton();
@@ -308,6 +282,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Remove widget key from updatedControls entirely if it was pending
 		delete updatedControls[ widgetKey ];
+		delete window._cpPreviewSettings[ window.toPreviewSettingId( widgetKey ) ];
 
 		// Animate out and remove from DOM
 		widget.style.transition = 'opacity 0.3s';
@@ -432,6 +407,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Enable Save/Publish button
 			activatePublishButton();
+
+			// Bind listeners to the newly-added widget
+			bindWidget( clone );
 		} );
 	} );
 
