@@ -199,24 +199,14 @@ class Walker_Nav_Menu_Edit extends Walker_Nav_Menu {
 						<?php endif; ?>
 						<p class="description description-wide">
 							<label for="edit-menu-item-title-<?php echo $item_id; ?>">
-<<<<<<< HEAD
 								<?php _e( 'Navigation Label' ); ?><br>
-								<input type="text" id="edit-menu-item-title-<?php echo $item_id; ?>" class="widefat edit-menu-item-title" name="menu-item-title[<?php echo $item_id; ?>]" value="<?php echo esc_attr( $menu_item->title ); ?>">
-=======
-						<?php _e( 'Navigation Label' ); ?><br />
-						<input type="text" id="edit-menu-item-title-<?php echo $item_id; ?>" class="widefat edit-menu-item-title" name="menu-item-title[<?php echo $item_id; ?>]" value="<?php echo htmlspecialchars( $menu_item->title, ENT_QUOTES ); ?>" />
->>>>>>> 93875af1c2 (Grouped backports for the 6.2 branch.)
+								<input type="text" id="edit-menu-item-title-<?php echo $item_id; ?>" class="widefat edit-menu-item-title" name="menu-item-title[<?php echo $item_id; ?>]" value="<?php echo htmlspecialchars( $menu_item->title, ENT_QUOTES ); ?>" />
 							</label>
 						</p>
 						<p class="field-title-attribute field-attr-title description description-wide">
 							<label for="edit-menu-item-attr-title-<?php echo $item_id; ?>">
-<<<<<<< HEAD
 								<?php _e( 'Title Attribute' ); ?><br>
-								<input type="text" id="edit-menu-item-attr-title-<?php echo $item_id; ?>" class="widefat edit-menu-item-attr-title" name="menu-item-attr-title[<?php echo $item_id; ?>]" value="<?php echo esc_attr( $menu_item->post_excerpt ); ?>">
-=======
-						<?php _e( 'Title Attribute' ); ?><br />
-						<input type="text" id="edit-menu-item-attr-title-<?php echo $item_id; ?>" class="widefat edit-menu-item-attr-title" name="menu-item-attr-title[<?php echo $item_id; ?>]" value="<?php echo htmlspecialchars( $menu_item->post_excerpt, ENT_QUOTES ); ?>" />
->>>>>>> 93875af1c2 (Grouped backports for the 6.2 branch.)
+								<input type="text" id="edit-menu-item-attr-title-<?php echo $item_id; ?>" class="widefat edit-menu-item-attr-title" name="menu-item-attr-title[<?php echo $item_id; ?>]" value="<?php echo htmlspecialchars( $menu_item->post_excerpt, ENT_QUOTES ); ?>" />
 							</label>
 						</p>
 						<p class="field-link-target description">
@@ -227,30 +217,20 @@ class Walker_Nav_Menu_Edit extends Walker_Nav_Menu {
 						</p>
 						<p class="field-css-classes description description-thin">
 							<label for="edit-menu-item-classes-<?php echo $item_id; ?>">
-<<<<<<< HEAD
 								<?php _e( 'CSS Classes (optional)' ); ?><br>
-								<input type="text" id="edit-menu-item-classes-<?php echo $item_id; ?>" class="widefat code edit-menu-item-classes" name="menu-item-classes[<?php echo $item_id; ?>]" value="<?php echo esc_attr( implode( ' ', $menu_item->classes ) ); ?>">
-=======
-						<?php _e( 'CSS Classes (optional)' ); ?><br />
-						<input type="text" id="edit-menu-item-classes-<?php echo $item_id; ?>" class="widefat code edit-menu-item-classes" name="menu-item-classes[<?php echo $item_id; ?>]" value="<?php echo htmlspecialchars( implode( ' ', $menu_item->classes ), ENT_QUOTES ); ?>" />
->>>>>>> 93875af1c2 (Grouped backports for the 6.2 branch.)
+								<input type="text" id="edit-menu-item-classes-<?php echo $item_id; ?>" class="widefat code edit-menu-item-classes" name="menu-item-classes[<?php echo $item_id; ?>]" value="<?php echo htmlspecialchars( implode( ' ', $menu_item->classes ), ENT_QUOTES ); ?>" />
 							</label>
 						</p>
 						<p class="field-xfn description description-thin">
 							<label for="edit-menu-item-xfn-<?php echo $item_id; ?>">
-<<<<<<< HEAD
 								<?php _e( 'Link Relationship (XFN)' ); ?><br>
-								<input type="text" id="edit-menu-item-xfn-<?php echo $item_id; ?>" class="widefat code edit-menu-item-xfn" name="menu-item-xfn[<?php echo $item_id; ?>]" value="<?php echo esc_attr( $menu_item->xfn ); ?>">
-=======
-						<?php _e( 'Link Relationship (XFN)' ); ?><br />
-						<input type="text" id="edit-menu-item-xfn-<?php echo $item_id; ?>" class="widefat code edit-menu-item-xfn" name="menu-item-xfn[<?php echo $item_id; ?>]" value="<?php echo htmlspecialchars( $menu_item->xfn, ENT_QUOTES ); ?>" />
->>>>>>> 93875af1c2 (Grouped backports for the 6.2 branch.)
+								<input type="text" id="edit-menu-item-xfn-<?php echo $item_id; ?>" class="widefat code edit-menu-item-xfn" name="menu-item-xfn[<?php echo $item_id; ?>]" value="<?php echo htmlspecialchars( $menu_item->xfn, ENT_QUOTES ); ?>" />
 							</label>
 						</p>
 						<p class="field-description description description-wide">
 							<label for="edit-menu-item-description-<?php echo $item_id; ?>">
 								<?php _e( 'Description' ); ?><br>
-								<textarea id="edit-menu-item-description-<?php echo $item_id; ?>" class="widefat edit-menu-item-description" rows="3" cols="20" name="menu-item-description[<?php echo $item_id; ?>]"><?php echo esc_html( $menu_item->description ); // textarea_escaped ?></textarea>
+								<textarea id="edit-menu-item-description-<?php echo $item_id; ?>" class="widefat edit-menu-item-description" rows="3" cols="20" name="menu-item-description[<?php echo $item_id; ?>]"><?php echo esc_textarea( $menu_item->description ); // textarea_escaped ?></textarea>
 								<span class="description"><?php _e( 'The description will be displayed in the menu if the active theme supports it.' ); ?></span>
 							</label>
 						</p>
