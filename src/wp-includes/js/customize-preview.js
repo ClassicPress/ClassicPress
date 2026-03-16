@@ -516,6 +516,7 @@
 
 		api.preview.bind( 'setting', function( args ) {
 			var sidebarId,
+				found = false,
 				id = args[0],
 				value = args[1];
 
@@ -523,6 +524,7 @@
 
 			if ( id.startsWith( 'sidebars_widgets[' ) ) {
 				sidebarId = id.replace( 'sidebars_widgets[', '' ).replace( ']', '' );
+				window._lastDirtySidebarId = sidebarId; // stored for use with newly-added widgets
 				wp.customize.selectiveRefresh.partial.each( function( partial ) {
 					if ( partial.id === sidebarId ) {
 						partial.refresh();
@@ -531,9 +533,19 @@
 			} else if ( id.startsWith( 'widget[' ) ) {
 				wp.customize.selectiveRefresh.partial.each( function( partial ) {
 					if ( partial.id === id ) {
+						found = true;
 						partial.refresh();
 					}
 				} );
+
+				if ( ! found && window._lastDirtySidebarId ) {
+					// Refresh the sidebar that was just updated
+					wp.customize.selectiveRefresh.partial.each( function( partial ) {
+						if ( partial.id === window._lastDirtySidebarId ) {
+							partial.refresh();
+						}
+					} );
+				}
 			} else {
 				wp.customize.selectiveRefresh.partial.each( function( partial ) {
 					if ( partial.params.settings && partial.params.settings.indexOf( id ) !== -1 ) {
