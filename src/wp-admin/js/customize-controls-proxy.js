@@ -139,7 +139,7 @@
 		api.sectionConstructor = {};
 	}
 	if ( ! api.panelConstructor ) {
-		api.panelConstructor   = {};
+		api.panelConstructor = {};
 	}
 
 	if ( typeof api.control === 'undefined' || typeof api.control.instance !== 'function' ) {
@@ -157,7 +157,7 @@
 		var seen = new Set();
 		function isCoreFile( src ) {
 			return /\/wp-admin\/js\/customize-controls(\.min)?\.js$/.test( src || '' ) ||
-             /customize-controls-proxy\.js$/.test( src || '' );
+			 /customize-controls-proxy\.js$/.test( src || '' );
 		}
 		window.addEventListener( 'error', function( e ) {
 			var src = ( e && e.filename ) || '';
@@ -182,92 +182,96 @@
  * Non-widget keys are returned unchanged.
  */
 window.toPreviewSettingId = function( key ) {
-    var m = key.match( /^widget_([^\[]+)\[(\d+)\]$/ );
-    if ( m ) {
-        return 'widget[' + m[1] + '-' + m[2] + ']';
-    }
-    return key;
+	var m = key.match( /^widget_([^\[]+)\[(\d+)\]$/ );
+	if ( m ) {
+		return 'widget[' + m[1] + '-' + m[2] + ']';
+	}
+	return key;
 };
 
 // Send data to iframe
 window._previewSenders = {};
 window._customizePublishing = false;
 window._cpDirtySettings = {}; // raw keys, for publishing
-window._cpPreviewSettings = {}; // converted keys, for partial refresh
+window._cpPreviewSettings = {}; // converted keys, for partial refresh AJAX
+
+/**
+ * Gets the customize messenger channel from the preview iframe src.
+ * Returns null if the iframe or channel is not available.
+ */
+window.getPreviewChannel = function() {
+	var src, match,
+		iframe = document.querySelector( '#customize-preview iframe' );
+
+	if ( ! iframe || ! iframe.contentWindow ) {
+		return null;
+	}
+	src = iframe.src || '';
+	match = src.match( /customize_messenger_channel=([^&]+)/ );
+	return match ? { iframe: iframe, channel: match[1] } : null;
+};
 
 window.sendSettingToPreview = function( id, value ) {
-    var iframe, src, match;
+	var target;
 
-    if ( window._customizePublishing ) {
+	if ( window._customizePublishing ) {
 		return;
 	}
 
-    iframe = document.querySelector( '#customize-preview iframe' );
-    if ( ! iframe || ! iframe.contentWindow ) {
+	target = window.getPreviewChannel();
+	if ( ! target ) {
 		return;
 	}
 
-    src = iframe.src || '';
-    match = src.match( /customize_messenger_channel=([^&]+)/ );
-    if ( ! match ) {
-		return;
-	}
-
-    iframe.contentWindow.postMessage(
-        JSON.stringify( {
-            channel: match[1],
-            type: 'setting',
-            data: [ id, value ]
-        } ),
-        location.origin
-    );
+	target.iframe.contentWindow.postMessage(
+		JSON.stringify( {
+			channel: target.channel,
+			type: 'setting',
+			data: [ id, value ]
+		} ),
+		location.origin
+	);
 };
 
 window.sendCustomizedToPreview = function() {
-    var iframe, src, match;
+	var target, merged;
 
-    if ( window._customizePublishing ) {
+	if ( window._customizePublishing ) {
 		return;
 	}
 
-    iframe = document.querySelector( '#customize-preview iframe' );
-    if ( ! iframe || ! iframe.contentWindow ) {
+	target = window.getPreviewChannel();
+	if ( ! target ) {
 		return;
 	}
 
-    src = iframe.src || '';
-    match = src.match( /customize_messenger_channel=([^&]+)/ );
-    if ( ! match ) {
-		return;
-	}
+	// Merge both key formats into a single customized blob:
+	// _cpPreviewSettings uses the JS format (widget[id_base-n]) for preview-side setValue()
+	// _cpDirtySettings uses the PHP format (widget_id_base[n]) for server-side register_settings()
+	merged = Object.assign( {}, window._cpPreviewSettings, window._cpDirtySettings );
 
-    // Merge both formats:
-    // _cpPreviewSettings: Customizer JS format (widget[id_base][n]) for preview-side setValue()
-    // _cpDirtySettings:   PHP format (widget_id_base[n]) for server-side register_settings()
-    merged = Object.assign( {}, window._cpPreviewSettings, window._cpDirtySettings );
-
-    iframe.contentWindow.postMessage(
-        JSON.stringify( {
-            channel: match[1],
-            type: 'customized',
-            data: merged
-        } ),
-        location.origin
-    );
+	target.iframe.contentWindow.postMessage(
+		JSON.stringify( {
+			channel: target.channel,
+			type: 'customized',
+			data: merged
+		} ),
+		location.origin
+	);
 };
 
 window.updatedControls = window.updatedControls || {};
 
 window._updatedControlsWatcher = new Proxy( window.updatedControls, {
-    set: function( target, key, value ) {
-		var previewKey, val;
+	set: function( target, key, value ) {
+		var val,
+			previewKey = window.toPreviewSettingId( key );
 
-        target[ key ] = value;
-        window._cpDirtySettings[ key ] = value;
-		previewKey = window.toPreviewSettingId( key );
+		target[ key ] = value;
+		window._cpDirtySettings[ key ] = value;
 		window._cpPreviewSettings[ previewKey ] = value;
 
-		// Keep api.instance(previewKey).get() from throwing/being undefined
+		// Keep api.instance(previewKey).get() from throwing or being undefined
 		if ( window.wp && wp.customize ) {
 			// Create/update a Value so early reader code can call .get()
 			if ( typeof wp.customize.add === 'function' ) {
@@ -281,23 +285,29 @@ window._updatedControlsWatcher = new Proxy( window.updatedControls, {
 		}
 
 		// Send data to iframe pane
-        if ( ! window._previewSenders[ previewKey ] ) {
-			(function( pk, k ) {
-				window._previewSenders[ pk ] = _.debounce( function() {
-					window.sendSettingToPreview( pk, target[ k ] );
-				}, 300 );
-			})( previewKey, key );
+		if ( ! window._previewSenders[ previewKey ] ) {
+			window._previewSenders[ previewKey ] = makeDebouncedSender( previewKey, key, target );
 		}
 		window._previewSenders[ previewKey ]();
 
-        if ( ! window._customizedSender ) {
-			window._customizedSender = _.debounce( function() {
-				window.sendCustomizedToPreview();
-			}, 350 ); // slightly longer than _previewSenders debounce of 300
+		// Send the full customized blob slightly after the individual setting,
+		// ensuring _cpPreviewSettings is fully populated before the AJAX fires.
+		if ( ! window._customizedSender ) {
+			window._customizedSender = _.debounce( window.sendCustomizedToPreview, 350 );
 		}
 		window._customizedSender();
 
-        return true;
-    }
+		return true;
+	}
 } );
 window.updatedControls = window._updatedControlsWatcher;
+
+/**
+ * Creates a debounced function that sends a single setting to the preview.
+ * Captures previewKey, rawKey and target at creation time to avoid closure issues.
+ */
+function makeDebouncedSender( previewKey, rawKey, target ) {
+	return _.debounce( function() {
+		window.sendSettingToPreview( previewKey, target[ rawKey ] );
+	}, 300 );
+}
