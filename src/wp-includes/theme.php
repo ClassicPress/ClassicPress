@@ -298,6 +298,20 @@ function get_locale_stylesheet_uri() {
 }
 
 /**
+ * Retrieves the true active theme stylesheet name directly from the database,
+ * bypassing any filters that may have been applied by WP_Customize_Manager
+ * during theme preview.
+ *
+ * @since CP-2.8.0
+ *
+ * @return string The stylesheet name of the genuinely active theme.
+ */
+function cp_get_true_active_stylesheet() {
+    global $wpdb;
+    return $wpdb->get_var( "SELECT option_value FROM $wpdb->options WHERE option_name = 'stylesheet' LIMIT 1" );
+}
+
+/**
  * Retrieves name of the active theme.
  *
  * @since 1.5.0
