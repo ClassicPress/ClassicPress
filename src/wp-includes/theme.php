@@ -308,7 +308,9 @@ function get_locale_stylesheet_uri() {
  */
 function cp_get_true_active_stylesheet() {
     global $wpdb;
-    return $wpdb->get_var( "SELECT option_value FROM $wpdb->options WHERE option_name = 'stylesheet' LIMIT 1" );
+    return $wpdb->get_var( 
+		$wpdb->prepare( "SELECT option_value FROM $wpdb->options WHERE option_name = 'stylesheet' LIMIT 1" )
+	);
 }
 
 /**
