@@ -1709,7 +1709,7 @@ final class WP_Customize_Widgets {
 					'settings'            => array( 'sidebars_widgets[' . $sidebar_id . ']' ),
 					'primary_setting'     => 'sidebars_widgets[' . $sidebar_id . ']',
 					'container_inclusive' => true, // we return the outer container ourselves
-					'render_callback'     => array( $this, 'render_sidebar_partial' ),
+					'render_callback'     => array( $this, 'cp_render_sidebar_partial' ),
 					'capability'          => 'edit_theme_options',
 				)
 			);
@@ -1736,104 +1736,16 @@ final class WP_Customize_Widgets {
 	 * @param WP_Customize_Partial $partial Partial instance.
 	 * @return string|false HTML (including outer wrapper) or false on failure.
 	 */
-	public function render_sidebar_partial( $partial ) {
+	public function cp_render_sidebar_partial( $partial ) {
 		$sidebar_id = $partial->id;
 
 		if ( ! is_registered_sidebar( $sidebar_id ) ) {
 			return false;
 		}
-
-		// The assigned widgets for this sidebar in the *preview* state.
-		$map      = wp_get_sidebars_widgets(); // reflects staged Customizer values during preview
-		$assigned = ( isset( $map[ $sidebar_id ] ) && is_array( $map[ $sidebar_id ] ) ) ? $map[ $sidebar_id ] : array();
-
-		// Render the sidebar exactly as the theme would, and capture the HTML.
-		ob_start();
-		dynamic_sidebar( $sidebar_id );
-		$rendered_html = ob_get_clean();
-
-		// Determine which assigned widgets actually printed markup.
-		$rendered = array();
-		foreach ( (array) $assigned as $widget_id ) {
-			if ( false !== strpos( $rendered_html, 'data-customize-widget-id="' . $widget_id . '"' )
-				|| false !== strpos( $rendered_html, 'id="' . $widget_id . '"' ) ) {
-				$rendered[ $widget_id ] = true;
-			}
-		}
-
-		// Look up the active theme’s widget wrapper for this sidebar (before/after_widget).
-		global $wp_registered_sidebars, $wp_registered_widgets;
-		$sb = isset( $wp_registered_sidebars[ $sidebar_id ] ) ? $wp_registered_sidebars[ $sidebar_id ] : array();
-
-		$before_widget = isset( $sb['before_widget'] ) && $sb['before_widget']
-			? $sb['before_widget']
-			: '<div id="%1$s" class="widget %2$s">';
-		$after_widget  = isset( $sb['after_widget'] ) && $sb['after_widget']
-			? $sb['after_widget']
-			: '</div>';
-
-		// Start the container.
 		ob_start();
 		echo '<div class="customize-partial-sidebar" data-customize-partial-id="', esc_attr( $sidebar_id ), '">';
-
-		// Output the actual theme-rendered HTML first (preserves order of anything that did render).
-		echo $rendered_html;
-
-		// For any assigned widget that produced no markup, append a *theme-matching* placeholder.
-		foreach ( (array) $assigned as $widget_id ) {
-			if ( ! empty( $rendered[ $widget_id ] ) ) {
-				continue; // already rendered real markup
-			}
-
-			// Compute a reasonable class list for %2$s.
-			$id_base = preg_replace( '/-\d+$/', '', $widget_id ); // e.g. "media_audio-7" -> "media_audio"
-
-			// If the widget has been registered, pick up its registered classname; otherwise fall back.
-			$registered_class = '';
-			if ( isset( $wp_registered_widgets[ $widget_id ]['classname'] ) ) {
-				$cn = $wp_registered_widgets[ $widget_id ]['classname'];
-				// $cn can be string|array|object; normalize to a string.
-				if ( is_string( $cn ) ) {
-					$registered_class = trim( $cn );
-				} elseif ( is_array( $cn ) ) {
-					$registered_class = trim( implode( ' ', array_map( 'sanitize_html_class', array_filter( array_map( 'strval', $cn ) ) ) ) );
-				} elseif ( is_object( $cn ) ) {
-					$registered_class = sanitize_html_class( get_class( $cn ) );
-				}
-			}
-
-			$classes = trim( implode( ' ', array_filter( array(
-				'widget',
-				$registered_class ?: 'widget_' . $id_base, // provides "widget_{id_base}" fallback
-				'widget-placeholder',
-			) ) ) );
-
-			// Build the theme’s opening wrapper with %1$s/%2$s substituted.
-			$open = sprintf( $before_widget, esc_attr( $widget_id ), esc_attr( $classes ) );
-
-			// Inject the data-* attributes into the FIRST opening tag of $open.
-			$attrs = sprintf(
-				' data-customize-partial-id="%s" data-customize-partial-type="widget" data-customize-widget-id="%s" data-customize-partial-placement-context="%s"',
-				esc_attr( 'widget[' . $widget_id . ']' ),
-				esc_attr( $widget_id ),
-				esc_attr( wp_json_encode( array(
-					'sidebar_id'              => $sidebar_id,
-					'sidebar_instance_number' => 1,
-				) ) )
-			);
-
-			// Replace `<tag ...>` with `<tag ... {attrs}>` once.
-			$open = preg_replace( '/^<([a-z0-9]+)([^>]*)>/i', '<$1$2' . $attrs . '>', $open, 1 );
-
-			echo $open;
-
-			// A11y hint for screen readers.
-			echo '<span class="screen-reader-text">' . esc_html__( 'Widget placeholder' ) . '</span>';
-			echo $after_widget;
-		}
-
+		dynamic_sidebar( $sidebar_id );
 		echo '</div>';
-
 		return ob_get_clean();
 	}
 
@@ -1856,7 +1768,8 @@ final class WP_Customize_Widgets {
 			? (int) $this->context_sidebar_instance_number
 			: ( isset( $this->sidebar_instance_count[ $sidebar_id ] ) ? (int) $this->sidebar_instance_count[ $sidebar_id ] : 1 );
 
-		echo '<div class="customize-partial-sidebar" data-customize-partial-id="' . esc_attr( $sidebar_id ) . '">';
+		echo '<div class="customize-partial-sidebar" data-customize-partial-id="' . esc_attr( $sidebar_id ) .
+			'" data-customize-partial-instance="' . esc_attr( $instance ) . '">';
 	}
 
 	/**
