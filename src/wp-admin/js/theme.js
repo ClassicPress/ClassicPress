@@ -176,7 +176,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function() {
-			var theme = document.getElementById( slug ),
+			var theme = document.getElementById( slug ) || document.getElementById( 'customize-control-installed_theme_' + slug ),
 				notice = theme.querySelector( '.update-message' );
 
 			notice.innerHTML = '<p>' + _wpThemeSettings.l10n.updated + '</p>';
@@ -499,9 +499,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			closeModal();
 
 		// Update a theme
-		} else if ( e.target.className.includes( 'update-button-link' ) ) {
+		} else if ( e.target.className.includes( 'update-button-link' ) ) { // themes.php
 			e.target.closest( '.update-message' ).classList.add( 'updating-message' );
 			updateIndividualTheme( e.target.closest( 'li' ).id );
+		} else if ( e.target.className.includes( 'update-theme' ) ) { // Customizer
+			e.target.closest( '.update-message' ).classList.add( 'updating-message' );
+			updateIndividualTheme( e.target.closest( 'li' ).dataset.id );
 
 		// Search for popular or latest themes at wordpress.org
 		} else if ( document.body.className.includes( 'theme-install-php' ) ) {
