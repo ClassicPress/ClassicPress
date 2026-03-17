@@ -1174,6 +1174,7 @@ function wp_default_scripts( $scripts ) {
 					__( 'Use Site Editor' )
 				)
 			),
+			'active_theme'            => __( 'Active theme' ),
 			'activeTheme'             => cp_get_true_active_stylesheet(),
 			'menusNonce'              => wp_create_nonce( 'customize-menus' ),
 			'current'                 => __( 'Current:' ),
@@ -1249,19 +1250,12 @@ function wp_default_scripts( $scripts ) {
 		$scripts->add( 'text-widgets', "/wp-admin/js/widgets/text-widgets$suffix.js", array( 'media-widgets', 'editor', 'image-edit', 'wp-util', 'wp-a11y', 'sortable-js' ) );
 		$scripts->add( 'custom-html-widgets', "/wp-admin/js/widgets/custom-html-widgets$suffix.js", array() );
 
-		$scripts->add( 'theme', "/wp-admin/js/theme$suffix.js", array( 'wp-a11y', 'updates' ), false, 1 );
+		$scripts->add( 'theme', "/wp-admin/js/theme$suffix.js", array( 'wp-a11y' ), false, 1 );
 		did_action( 'init' ) && $scripts->localize(
 			'theme',
 			'_wpThemeSettings',
 			array(
-				'themes'          => false,
-				'settings'        => array(
-					'isInstall'  => true,
-					'canInstall' => current_user_can( 'install_themes' ),
-					'installURI' => current_user_can( 'install_themes' ) ? self_admin_url( 'theme-install.php' ) : null,
-					'adminUrl'   => parse_url( self_admin_url(), PHP_URL_PATH ),
-				),
-				'l10n'            => array(
+				'l10n'           => array(
 					'addNew'              => __( 'Add New Theme' ),
 					'search'              => __( 'Search Themes' ),
 					'searchPlaceholder'   => __( 'Search themes...' ), // Placeholder (no ellipsis).
@@ -1286,6 +1280,9 @@ function wp_default_scripts( $scripts ) {
 					'installed'           => __( 'Installed' ),
 					'activate'            => __( 'Activate' ),
 					'ratings'             => __( 'ratings' ),
+					'cannot_activate'     => __( 'Cannot Activate' ),
+					'delete'              => __( 'Delete' ),
+					'updated'             => __( 'Updated!' ),
 				),
 				'installedThemes' => array_keys( search_theme_directories() ),
 				'activeTheme'     => get_stylesheet(),
