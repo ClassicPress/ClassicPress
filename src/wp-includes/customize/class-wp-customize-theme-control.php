@@ -70,80 +70,81 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 			?>
 		
 			<li id="customize-control-installed_theme_<?php echo esc_attr( $theme['id'] ); ?>"
-				class="customize-control customize-control-theme"
+				class="customize-control customize-control-theme theme active"
 				data-id="<?php echo esc_attr( $theme['id'] ); ?>"
+				data-activate-nonce="<?php echo esc_attr( $theme['actions']['activate'] ); ?>"
 				data-customize="<?php echo esc_attr( $theme['actions']['customize'] ); ?>"
-				data-delete="<?php echo esc_attr( $theme['actions']['delete'] ); ?>"
+				data-delete-nonce="<?php echo esc_attr( $theme['actions']['delete'] ); ?>"
 				data-description="<?php echo esc_attr( $theme['description'] ); ?>"
 				data-author="<?php echo esc_attr( $theme['author'] ); ?>"
 				data-tags="<?php echo esc_attr( $theme['tags'] ); ?>"
 				data-num-ratings=""
 				data-version="<?php echo esc_attr( $theme['version'] ); ?>"
-				data-wp="<?php echo esc_attr( $theme['compatibleWP'] ); ?>"
-				data-php="<?php echo esc_attr( $theme['compatiblePHP'] ); ?>"
+				data-compatible-wp="<?php echo esc_attr( $theme['compatibleWP'] ); ?>"
+				data-compatible-php="<?php echo esc_attr( $theme['compatiblePHP'] ); ?>"
+				data-has-update="<?php esc_attr_e( $theme['hasUpdate'] ); ?>"
+				data-update="<?php esc_attr_e( $theme['update'] ); ?>"
+				data-update-response="<?php esc_attr_e( $theme['updateResponse']['compatibleWP'] . '-' . $theme['updateResponse']['compatiblePHP'] ); ?>"
 				aria-describedby="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action"
 			>
 				<div class="customize-control-notifications-container" style="display: none;">
 					<ul></ul>
 				</div>
-				<div class="theme active" tabindex="0" aria-describedby="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action">
+
+				<?php
+				if ( $theme['screenshot'] && $theme['screenshot'][0] ) {
+					?>
+					<div class="theme-screenshot">
+						<img src="<?php echo esc_url( $theme['screenshot'][0] ); ?>" alt="" data-src="<?php echo esc_attr( $theme['screenshot'][0] . '?ver=' . $theme['version'] ); ?>">
+					</div>
+					<?php
+				} else {
+					?>
+					<div class="theme-screenshot blank"></div>
+					<?php						
+				}
+				?>
+
+				<span class="more-details"
+					id="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action"
+					aria-label="<?php echo esc_attr( $details_label ); ?>"
+				>
+					<?php esc_html_e( 'Theme Details' ); ?>
+				</span>
+				<div class="theme-author">
 
 					<?php
-					if ( $theme['screenshot'] && $theme['screenshot'][0] ) {
-						?>
-						<div class="theme-screenshot">
-							<img src="<?php echo esc_url( $theme['screenshot'][0] ); ?>" alt="" data-src="<?php echo esc_attr( $theme['screenshot'][0] . '?ver=' . $theme['version'] ); ?>">
-						</div>
-						<?php
-					} else {
-						?>
-						<div class="theme-screenshot blank"></div>
-						<?php						
-					}
+					/* translators: Theme author name. */
+					printf( _x( 'By %s', 'theme author' ), esc_html__( $theme['author'] ) );
 					?>
 
-					<span class="more-details theme-details"
-						id="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action"
-						aria-label="<?php echo esc_attr( $details_label ); ?>"
-					>
-						<?php esc_html_e( 'Theme Details' ); ?>
-					</span>
-					<div class="theme-author">
-
-						<?php
-						/* translators: Theme author name. */
-						printf( _x( 'By %s', 'theme author' ), esc_html__( $theme['author'] ) );
-						?>
-
-					</div>
-
-					<?php $this->notify_updates( $theme ); ?>
-
-					<div class="theme-id-container">
-						<h3 class="theme-name" id="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-name">
-							<span><?php _ex( 'Previewing:', 'theme' ); ?></span> <?php echo esc_html( $theme['name'] ); ?>
-						</h3>
-						<div class="theme-actions">
-							<a href="<?php echo esc_url( add_query_arg( 'theme', $theme['id'], admin_url( 'customize.php' ) ) ); ?>"
-								class="button button-primary customize-theme"
-								aria-label="<?php echo esc_attr( $customize_label ); ?>"
-							>
-								<?php esc_html_e( 'Customize' ); ?>
-							</a>
-						</div>
-					</div>
-
-					<?php
-					wp_admin_notice(
-						_x( 'Installed', 'theme' ),
-						array(
-							'type'               => 'success',
-							'additional_classes' => array( 'notice-alt' ),
-						)
-					);
-					?>		
-
 				</div>
+
+				<?php $this->notify_updates( $theme ); ?>
+
+				<div class="theme-id-container">
+					<h3 class="theme-name" id="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-name">
+						<span><?php _ex( 'Previewing:', 'theme' ); ?></span> <?php echo esc_html( $theme['name'] ); ?>
+					</h3>
+					<div class="theme-actions">
+						<a href="<?php echo esc_url( add_query_arg( 'theme', $theme['id'], admin_url( 'customize.php' ) ) ); ?>"
+							class="button button-primary customize-theme"
+							aria-label="<?php echo esc_attr( $customize_label ); ?>"
+						>
+							<?php esc_html_e( 'Customize' ); ?>
+						</a>
+					</div>
+				</div>
+
+				<?php
+				wp_admin_notice(
+					_x( 'Installed', 'theme' ),
+					array(
+						'type'               => 'success',
+						'additional_classes' => array( 'notice-alt' ),
+					)
+				);
+				?>
 			</li>
 
 			<?php
@@ -152,7 +153,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 
 		// Now display the rest
 		foreach ( $installed_themes as $theme ) {
-			if ( ! $theme['id'] === $active_stylesheet ) {
+			if ( $theme['id'] === $active_stylesheet ) {
 				continue;
 			}
 			
@@ -167,127 +168,122 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 			?>
 
 			<li id="customize-control-installed_theme_<?php echo esc_attr( $theme['id'] ); ?>"
-				class="customize-control customize-control-theme"
+				class="customize-control customize-control-theme theme"
 				data-id="<?php echo esc_attr( $theme['id'] ); ?>"
-				data-activate="<?php echo esc_attr( $theme['actions']['activate'] ); ?>" 
+				data-activate-nonce="<?php echo esc_attr( $theme['actions']['activate'] ); ?>" 
 				data-customize="<?php echo esc_attr( $theme['actions']['customize'] ); ?>"
-				data-delete="<?php echo esc_attr( $theme['actions']['delete'] ); ?>"
+				data-delete-nonce="<?php echo esc_attr( $theme['actions']['delete'] ); ?>"
 				data-description="<?php echo esc_attr( $theme['description'] ); ?>"
 				data-author="<?php echo esc_attr( $theme['author'] ); ?>"
 				data-tags="<?php echo esc_attr( $theme['tags'] ); ?>"
 				data-num-ratings=""
 				data-version="<?php echo esc_attr( $theme['version'] ); ?>"
-				data-wp="<?php echo esc_attr( $theme['compatibleWP'] ); ?>"
-				data-php="<?php echo esc_attr( $theme['compatiblePHP'] ); ?>"
+				data-compatible-wp="<?php echo esc_attr( $theme['compatibleWP'] ); ?>"
+				data-compatible-php="<?php echo esc_attr( $theme['compatiblePHP'] ); ?>"
+				data-has-update="<?php esc_attr_e( $theme['hasUpdate'] ); ?>"
+				data-update="<?php esc_attr_e( $theme['update'] ); ?>"
+				data-update-response="<?php esc_attr_e( $theme['updateResponse']['compatibleWP'] . '-' . $theme['updateResponse']['compatiblePHP'] ); ?>"
 				aria-describedby="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action"
 			>
 				<div class="customize-control-notifications-container" style="display: none;">
 					<ul></ul>
 				</div>
-				<div class="theme" tabindex="0" aria-describedby="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action">
 
+				<?php
+				if ( $theme['screenshot'] && $theme['screenshot'][0] ) {
+					?>
+					<div class="theme-screenshot">
+						<img src="<?php echo esc_url( $theme['screenshot'][0] ); ?>" alt="" data-src="<?php echo esc_attr( $theme['screenshot'][0] . '?ver=' . $theme['version'] ); ?>">
+					</div>
 					<?php
-					if ( $theme['screenshot'] && $theme['screenshot'][0] ) {
-						?>
-						<div class="theme-screenshot">
-							<img src="<?php echo esc_url( $theme['screenshot'][0] ); ?>" alt="" data-src="<?php echo esc_attr( $theme['screenshot'][0] . '?ver=' . $theme['version'] ); ?>">
-						</div>
-						<?php
-					} else {
-						?>
-						<div class="theme-screenshot blank"></div>
-						<?php						
-					}
+				} else {
+					?>
+					<div class="theme-screenshot blank"></div>
+					<?php						
+				}
+				?>
+
+				<span id="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action"
+					class="more-details"
+					aria-label="<?php echo esc_attr( $details_label ); ?>"
+				>
+					<?php esc_html_e( 'Theme Details' ); ?>
+				</span>
+				<div class="theme-author">
+					<?php
+					/* translators: Theme author name. */
+					printf( _x( 'By %s', 'theme author' ), esc_html__( $theme['author'] ) );
+					?>
+				</div>
+
+				<?php
+				$this->notify_updates( $theme );
+
+				if ( ! $theme['actions']['customize'] || ! $theme['updateResponse']['compatibleCP'] ) {
 					?>
 
-					<span id="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action"
-						class="more-details theme-details"
-						aria-label="<?php echo esc_attr( $details_label ); ?>"
-					>
-						<?php esc_html_e( 'Theme Details' ); ?>
-					</span>
-					<div class="theme-author">
-						<?php
-						/* translators: Theme author name. */
-						printf( _x( 'By %s', 'theme author' ), esc_html__( $theme['author'] ) );
-						?>
+					<div class="theme-id-container">
+						<h3 class="theme-name" id="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-name">
+							<?php echo esc_html( $theme['name'] ); ?>
+						</h3>
+						<div class="theme-actions">
+
+							<button type="button"
+								class="button button-primary preview-theme"
+								aria-label="<?php echo esc_attr( $preview_label ); ?>"
+								data-slug="<?php echo esc_attr( $theme['id'] ); ?>"
+							>
+								<?php esc_html_e( 'Incompatible Theme' ); ?>
+							</button>
+
+						</div>
 					</div>
 
 					<?php
-					$this->notify_updates( $theme );
+					$customizer_not_supported_message = __( 'This theme doesn\'t support ClassicPress.' );
+					wp_admin_notice(
+						$customizer_not_supported_message,
+						array(
+							'type'               => 'error',
+							'additional_classes' => array( 'notice-alt' ),
+						)
+					);
+				} else {
+					?>
 
-					if ( ! $theme['actions']['customize'] || ! $theme['updateResponse']['compatibleCP'] ) {
-						?>
-
-						<div class="theme-id-container">
-							<h3 class="theme-name" id="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-name">
-								<?php echo esc_html( $theme['name'] ); ?>
-							</h3>
-							<div class="theme-actions">
-
-								<button type="button"
-									class="button button-primary preview-theme"
-									aria-label="<?php echo esc_attr( $preview_label ); ?>"
-									data-slug="<?php echo esc_attr( $theme['id'] ); ?>"
-								>
-									<?php esc_html_e( 'Incompatible Theme' ); ?>
-								</button>
-
-							</div>
-						</div>
+					<div class="theme-id-container">
+						<h3 class="theme-name" id="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-name">
+							<?php echo esc_html( $theme['name'] ); ?>
+						</h3>
+						<div class="theme-actions">
 
 						<?php
-						$customizer_not_supported_message = __( 'This theme doesn\'t support ClassicPress.' );
-						wp_admin_notice(
-							$customizer_not_supported_message,
-							array(
-								'type'               => 'error',
-								'additional_classes' => array( 'notice-alt' ),
-							)
-						);
-					} else {
-						?>
-
-						<div class="theme-id-container">
-							<h3 class="theme-name" id="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-name">
-								<?php echo esc_html( $theme['name'] ); ?>
-							</h3>
-							<div class="theme-actions">
-
-							<?php
-							if ( $theme['updateResponse']['compatibleWP'] && $theme['updateResponse']['compatiblePHP'] && $theme['updateResponse']['compatibleCP'] ) {
+						if ( $theme['updateResponse']['compatibleWP'] && $theme['updateResponse']['compatiblePHP'] && $theme['updateResponse']['compatibleCP'] ) {
+							if ( $theme['actions']['customize'] ) {
+								/* translators: %s: Theme name. */
+								$aria_label = sprintf( _x( 'Live preview theme %s', 'theme' ), esc_html__( $theme['name'] ) );
 								?>
-
-								<?php
-								if ( $theme['actions']['customize'] ) {
-									/* translators: %s: Theme name. */
-									$aria_label = sprintf( _x( 'Live preview theme %s', 'theme' ), esc_html__( $theme['name'] ) );
-									?>
-									<a href="<?php echo esc_url( add_query_arg( 'theme', $theme['id'], admin_url( 'customize.php' ) ) ); ?>"
-										class="button button-primary preview-theme"
-										aria-label="<?php echo esc_attr( $aria_label ); ?>"
-									>
-										<?php esc_html_e( 'Live Preview' ); ?>
-									</a>
-									<?php
-								}
-								?>
-
-								<?php
-							} else {
-								?>
-
-								<button type="button"
-									class="button button-primary disabled"
-									aria-label="<?php echo esc_attr( $preview_label ); ?>"
+								<a href="<?php echo esc_url( add_query_arg( 'theme', $theme['id'], admin_url( 'customize.php' ) ) ); ?>"
+									class="button button-primary preview-theme"
+									aria-label="<?php echo esc_attr( $aria_label ); ?>"
 								>
 									<?php esc_html_e( 'Live Preview' ); ?>
-								</button>
+								</a>
 								<?php
 							}
+						} else {
 							?>
 
-						</div>
+							<button type="button"
+								class="button button-primary disabled"
+								aria-label="<?php echo esc_attr( $preview_label ); ?>"
+							>
+								<?php esc_html_e( 'Live Preview' ); ?>
+							</button>
+							<?php
+						}
+						?>
+
 					</div>
 
 					<?php
