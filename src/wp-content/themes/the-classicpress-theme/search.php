@@ -16,12 +16,12 @@ get_header();
 		<?php if ( have_posts() ) : ?>
 
 			<header>
-				<h3>
+				<h2>
 					<?php
 					/* translators: %s: search query. */
 					printf( esc_html__( 'Search term: %s', 'the-classicpress-theme' ), '<span>' . get_search_query() . '</span>' );
 					?>
-				</h3>
+				</h2>
 			</header><!-- .page-header -->
 
 			<?php
