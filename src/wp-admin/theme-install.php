@@ -396,9 +396,10 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		acceptedFileTypes:       [ 'application/zip', 'application/x-zip-compressed', 'application/x-zip' ],
 		dropOnPage:              true,
 		dropOnElement:           false,
+		labelIdle:               _cpFilepondLabels.labelZipIdle,
 		credits:                 false,
 		onaddfile:               function( error ) { if ( button && ! error ) { button.disabled = false; } },
-		onremovefile:            function() { if ( button ) { button.disabled = true; } },
+		onremovefile:            function() { if ( button ) { button.disabled = true; } }
 	};
 	FilePond.registerPlugin( FilePondPluginFileValidateType );
 	FilePond.create( filepond, options );
