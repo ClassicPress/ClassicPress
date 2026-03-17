@@ -156,7 +156,7 @@ foreach ( $sections as $section ) {
 		);
 	}
 }
-//error_log(print_r($sections, true));
+
 // Sort by priority
 uasort(
 	$top_items,
