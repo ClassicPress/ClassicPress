@@ -1094,11 +1094,7 @@ function wp_default_scripts( $scripts ) {
 	// JS-only version of hoverintent (no dependencies).
 	$scripts->add( 'hoverintent-js', '/wp-includes/js/hoverintent-js.min.js', array(), '2.2.1', 1 );
 
-	//$scripts->add( 'customize-base', "/wp-includes/js/customize-base$suffix.js", array( 'jquery', 'json2', 'underscore' ), false, 1 );
-	//$scripts->add( 'customize-loader', "/wp-includes/js/customize-loader$suffix.js", array( 'customize-base' ), false, 1 );
 	$scripts->add( 'customize-preview', "/wp-includes/js/customize-preview$suffix.js", array( 'wp-a11y' ), false, 1 );
-	//$scripts->add( 'customize-models', '/wp-includes/js/customize-models.js', array( 'underscore', 'backbone' ), false, 1 );
-	//$scripts->add( 'customize-views', '/wp-includes/js/customize-views.js', array( 'jquery', 'underscore', 'imgareaselect', 'customize-models', 'media-editor', 'media-views' ), false, 1 );
 	$scripts->add( 'customize-controls-proxy',  "/wp-admin/js/customize-controls-proxy$suffix.js", array( 'customize-controls', 'underscore' ), false, 1 );
 	$scripts->add( 'customize-controls', "/wp-admin/js/customize-controls$suffix.js", array( 'iris' ), false, 1 );
 	did_action( 'init' ) && $scripts->localize(
@@ -1178,7 +1174,7 @@ function wp_default_scripts( $scripts ) {
 					__( 'Use Site Editor' )
 				)
 			),
-			'activeTheme'             => get_transient( 'core_true_stylesheet' ) ?: get_option( 'stylesheet' ),
+			'activeTheme'             => cp_get_true_active_stylesheet(),
 			'menusNonce'              => wp_create_nonce( 'customize-menus' ),
 			'current'                 => __( 'Current:' ),
 			'currently'               => __( 'Currently set to:' ),
@@ -1186,28 +1182,11 @@ function wp_default_scripts( $scripts ) {
 		)
 	);
 	$scripts->add( 'customize-selective-refresh', "/wp-includes/js/customize-selective-refresh$suffix.js", array( 'wp-util', 'customize-preview' ), false, 1 );
-
 	$scripts->add( 'customize-widgets', "/wp-admin/js/customize-widgets$suffix.js", array( 'sortable-js', 'customize-controls', 'customize-controls-proxy' ), false, 1 );
-	//$scripts->add( 'customize-preview-widgets', "/wp-includes/js/customize-preview-widgets$suffix.js", array( 'jquery', 'wp-util', 'customize-preview', 'customize-selective-refresh' ), false, 1 );
-
 	$scripts->add( 'customize-nav-menus', "/wp-admin/js/customize-nav-menus$suffix.js", array( 'sortable-js', 'customize-controls', 'customize-controls-proxy', 'wp-sanitize' ), false, 1 );
-	//$scripts->add( 'customize-preview-nav-menus', "/wp-includes/js/customize-preview-nav-menus$suffix.js", array( 'jquery', 'wp-util', 'customize-preview', 'customize-selective-refresh' ), false, 1 );
 
 	$scripts->add( 'wp-custom-header', "/wp-includes/js/wp-custom-header$suffix.js", array( 'wp-a11y' ), false, 1 );
-
 	$scripts->add( 'shortcode', "/wp-includes/js/shortcode$suffix.js", array( 'underscore' ), false, 1 );
-/*	$scripts->add( 'media-models', "/wp-includes/js/media-models$suffix.js", array( 'wp-backbone' ), false, 1 );
-	did_action( 'init' ) && $scripts->localize(
-		'media-models',
-		'_wpMediaModelsL10n',
-		array(
-			'settings' => array(
-				'ajaxurl' => admin_url( 'admin-ajax.php', 'relative' ),
-				'post'    => array( 'id' => 0 ),
-			),
-		)
-	);
-*/
 	$scripts->add( 'wp-embed', "/wp-includes/js/wp-embed$suffix.js", array(), false, 1 );
 
 	// To enqueue media-views or media-editor, call wp_enqueue_media().
@@ -1270,7 +1249,48 @@ function wp_default_scripts( $scripts ) {
 		$scripts->add( 'text-widgets', "/wp-admin/js/widgets/text-widgets$suffix.js", array( 'media-widgets', 'editor', 'image-edit', 'wp-util', 'wp-a11y', 'sortable-js' ) );
 		$scripts->add( 'custom-html-widgets', "/wp-admin/js/widgets/custom-html-widgets$suffix.js", array() );
 
-		$scripts->add( 'theme', "/wp-admin/js/theme$suffix.js", array( 'wp-a11y', 'customize-base' ), false, 1 );
+		$scripts->add( 'theme', "/wp-admin/js/theme$suffix.js", array( 'wp-a11y', 'updates' ), false, 1 );
+		did_action( 'init' ) && $scripts->localize(
+			'theme',
+			'_wpThemeSettings',
+			array(
+				'themes'          => false,
+				'settings'        => array(
+					'isInstall'  => true,
+					'canInstall' => current_user_can( 'install_themes' ),
+					'installURI' => current_user_can( 'install_themes' ) ? self_admin_url( 'theme-install.php' ) : null,
+					'adminUrl'   => parse_url( self_admin_url(), PHP_URL_PATH ),
+				),
+				'l10n'            => array(
+					'addNew'              => __( 'Add New Theme' ),
+					'search'              => __( 'Search Themes' ),
+					'searchPlaceholder'   => __( 'Search themes...' ), // Placeholder (no ellipsis).
+					'upload'              => __( 'Upload Theme' ),
+					'back'                => __( 'Back' ),
+					'error'               => sprintf(
+						/* translators: %s: Support forums URL. */
+						__( 'An unexpected error occurred. Something may be wrong with WordPress.org, ClassicPress.net, or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+						__( 'https://wordpress.org/support/forums/' )
+					),
+					'tryAgain'            => __( 'Try Again' ),
+					/* translators: %d: Number of themes. */
+					'themesFound'         => __( 'Number of Themes found: %d' ),
+					'noThemesFound'       => __( 'No themes found. Try a different search.' ),
+					'collapseSidebar'     => __( 'Collapse Sidebar' ),
+					'expandSidebar'       => __( 'Expand Sidebar' ),
+					/* translators: Hidden accessibility text. */
+					'selectFeatureFilter' => __( 'Select one or more Theme features to filter by' ),
+					'version'             => __( 'Version' ),
+					'installing'          => __( 'Installing...' ),
+					'installing_wait'     => __( 'Installing... please wait.' ),
+					'installed'           => __( 'Installed' ),
+					'activate'            => __( 'Activate' ),
+					'ratings'             => __( 'ratings' ),
+				),
+				'installedThemes' => array_keys( search_theme_directories() ),
+				'activeTheme'     => get_stylesheet(),
+			)
+		);
 
 		$scripts->add( 'inline-edit-post', "/wp-admin/js/inline-edit-post$suffix.js", array( 'jquery', 'wp-a11y' ), false, 1 );
 		$scripts->set_translations( 'inline-edit-post' );
