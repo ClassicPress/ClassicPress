@@ -51,6 +51,9 @@ if ( $pagenum > $total_pages && $total_pages > 0 ) {
 $title       = __( 'Add Plugins' );
 $parent_file = 'plugins.php';
 
+wp_enqueue_script( 'cp-filepond-file-validate-type' );
+wp_enqueue_script( 'cp-filepond' );
+wp_enqueue_style( 'cp-filepond' );
 wp_enqueue_script( 'plugin-install' );
 
 $body_id = $tab;
@@ -217,6 +220,30 @@ do_action( "install_plugins_{$tab}", $paged );
 <?php
 wp_print_request_filesystem_credentials_modal();
 wp_print_admin_notice_templates();
+?>
+<script>
+document.addEventListener( 'DOMContentLoaded', function () {
+	var filepond = document.querySelector( 'input[type="file"][name="pluginzip"]' );
+	var button   = document.getElementById( 'install-plugin-submit' );
+	var options = {
+		name:                   'pluginzip',
+		storeAsFile:             true,
+		allowMultiple:           false,
+		allowFileTypeValidation: true,
+		acceptedFileTypes:       [ 'application/zip', 'application/x-zip-compressed', 'application/x-zip' ],
+		dropOnPage:              true,
+		dropOnElement:           false,
+		labelIdle:               _cpFilepondLabels.labelPluginIdle,
+		credits:                 false,
+		onaddfile:               function( error, fileItem ) { if ( button && ! error ) { button.disabled = false; } },
+		onremovefile:            function() { if ( button ) { button.disabled = true; } },
+	};
+	FilePond.registerPlugin( FilePondPluginFileValidateType );
+	FilePond.create( filepond, options );
+} );
+</script>
+<?php
+
 
 /**
  * ClassicPress Administration Template Footer.
