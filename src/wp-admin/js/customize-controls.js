@@ -27,7 +27,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		devicesWrapper = document.querySelector( '.devices' ),
 		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
 		previewFrame = document.getElementById( 'customize-preview' ),
-		themeModal = document.getElementById( 'tmpl-customize-themes-details-view' ),
+		//themeModal = document.getElementById( 'tmpl-customize-themes-details-view' ),
 		queryParams = new URLSearchParams( window.location.search ),
 		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
@@ -35,9 +35,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		newMenuItemIDs = [],
 		menuToEdit = document.getElementById( 'menu-to-edit' );
 
-	// Clean the URL if previewing the active theme
-	if ( queryParams.get( 'theme' ) === _wpCustomizeControlsL10n.activeTheme ) {
-       window.history.replaceState( {}, '', window.location.origin + window.location.pathname );
+	// Check if theme is set as a query arg
+	if ( queryParams.get( 'theme' ) ) {
+		// Clean the URL if previewing the active theme
+		if ( queryParams.get( 'theme' ) === _wpCustomizeControlsL10n.activeTheme ) {
+			window.history.replaceState( {}, '', window.location.origin + window.location.pathname );
+		} else { // otherwise enable Activate/Publish button
+			activatePublishButton();
+		}
 	}
 
 	// Remove inert attribute to enable interactions with form
@@ -136,7 +141,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 			} else if ( isVisible( document.getElementById( 'move-widget-area' ) ) ) {
 				document.getElementById( 'move-widget-area' ).remove();
-			} else if ( ! isVisible( themeModal ) ) {
+			}
+/*			} else if ( ! isVisible( themeModal ) ) {
 				e.preventDefault();
 				document.body.classList.remove( 'adding-menu-items' );
 				document.body.classList.remove( 'adding-widget' );
@@ -151,7 +157,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				addWidgetButtons.forEach( function( add ) {
 					add.setAttribute( 'aria-expanded', false );
 				} );
-			}
+			}*/
 		} else if ( e.key === 'Tab' ) {
 			if ( document.querySelector( '.devices-wrapper' ) ) {
 				constrainTab( e );
@@ -1438,6 +1444,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 			}
 
+			// Update theme heading
+			form.querySelector( '.accordion-section-title .customize-action' ).textContent = _wpCustomizeControlsL10n.active_theme;
+
 			// Reset hidden widget fields
 			form.querySelectorAll( '.multi_number' ).forEach( function( multi ) {
 				multi.value = '';
@@ -1659,11 +1668,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} else {
 				document.querySelector( '.filter-drawer' ).style.display = 'block';
 			}
-
-		// Display theme modal
-		} else if ( e.target.classList && e.target.classList.contains( 'more-details' ) ) {
-			e.preventDefault();
-			showThemeModal( e.target.closest( '.theme' ) );
 
 		// Collapse or expand sidebar
 		} else if ( e.target.parentNode.classList && e.target.parentNode.classList.contains( 'collapse-sidebar' ) ) {
