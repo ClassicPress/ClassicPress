@@ -307,6 +307,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Open the modal or perform other operations
 	document.addEventListener( 'click', function( e ) {
 		var img, template, clone, response, span,
+			customizer = document.body.className.includes( 'wp-customizer' ) ? true : false,
 			theme = e.target.closest( '.theme' ),
 			allThemes = document.querySelectorAll( '.themes li:not( .add-new-theme )' ),
 			firstElement = document.querySelector( '.themes li' ),
@@ -322,17 +323,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				dialog.querySelector( '.theme-wrap' ).append( clone );
 
 				// Set URL
-				queryParams.set( 'theme', theme.id );
+				queryParams.set( 'theme', customizer ? theme.dataset.id : theme.id );
 				history.replaceState( null, null, '?' + queryParams.toString() );
 
 				// Set theme ID and previous and next themes
-				dialog.dataset.highlightedTheme = theme.id;
-				prevElement = document.getElementById( dialog.dataset.highlightedTheme ).previousElementSibling;
+				dialog.dataset.highlightedTheme = customizer ? theme.dataset.id : theme.id;
+				prevElement = document.getElementById( theme.id ).previousElementSibling;
 				if ( prevElement == null ) { // first theme
 					dialog.querySelector( '.left.dashicons.dashicons-no' ).disabled = true;
 				}
 
-				nextElement = document.getElementById( dialog.dataset.highlightedTheme ).nextElementSibling;
+				nextElement = document.getElementById( theme.id ).nextElementSibling;
 				if ( nextElement == null ) { // last theme
 					dialog.querySelector( '.right.dashicons.dashicons-no' ).disabled = true;
 				}
