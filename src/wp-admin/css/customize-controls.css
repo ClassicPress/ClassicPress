@@ -2303,17 +2303,12 @@ p.customize-section-description {
 }
 
 /* Details View */
-.wp-customizer .theme-overlay {
-	display: none;
-}
-
 .wp-customizer.modal-open .theme-overlay {
 	position: fixed;
 	left: 0;
 	top: 0;
 	right: 0;
 	bottom: 0;
-	z-index: 109;
 }
 
 .wp-full-overlay.in-themes-panel.themes-panel-expanded #customize-controls .wp-full-overlay-sidebar-content {
@@ -2344,7 +2339,6 @@ p.customize-section-description {
 }
 
 .wp-customizer .theme-overlay .theme-actions {
-	text-align: right; /* Because there're only one or two actions, match the UI pattern of media modals and right-align the action. */
 	padding: 10px 25px;
 	background: #f0f0f1;
 	border-top: 1px solid #dcdcde;
