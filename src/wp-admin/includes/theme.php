@@ -1029,15 +1029,14 @@ function customize_themes_print_templates() {
 
 							<?php
 						}
-						if ( current_user_can( 'install_themes' ) ) {
-							//echo implode( ' ', $current_theme_actions );
-						}
 					}
 					?>
 
 				</div>
 				<div class="inactive-theme" hidden>
-					<a href="" class="button" aria-label=""><?php esc_html_e( 'Activate' ); ?></a>
+					<a href="" class="button" aria-label="">
+						<?php esc_html_e( 'Activate' ); ?>
+					</a>
 
 					<?php
 					if ( current_user_can( 'edit_theme_options' ) && current_user_can( 'customize' ) ) {
