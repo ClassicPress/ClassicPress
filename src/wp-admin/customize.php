@@ -31,7 +31,6 @@ $args = array();
 if ( isset( $_GET['theme'] ) ) { // live preview
     $args['theme'] = sanitize_key( $_GET['theme'] );
 }
-$wp_customize = new WP_Customize_Manager( $args );
 
 $wp_customize->setup_theme();
 $wp_customize->register_controls();
@@ -157,7 +156,7 @@ foreach ( $sections as $section ) {
 		);
 	}
 }
-
+//error_log(print_r($sections, true));
 // Sort by priority
 uasort(
 	$top_items,
@@ -215,6 +214,7 @@ wp_add_inline_script(
 );
 wp_enqueue_script( 'customize-nav-menus' );
 wp_enqueue_script( 'customize-widgets' );
+wp_enqueue_script( 'theme' );
 
 /**
  * Enqueue Customizer control scripts.
