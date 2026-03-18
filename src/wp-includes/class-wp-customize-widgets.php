@@ -866,7 +866,7 @@ final class WP_Customize_Widgets {
 
 					</p>
 				</div>
-				<ul id="available-widgets-list">
+				<ul id="available-widgets-list" data-parent-id="sub-accordion-panel-widgets">
 
 					<?php
 					foreach ( $this->get_available_widgets() as $available_widget ) {
