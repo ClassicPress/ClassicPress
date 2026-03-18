@@ -248,7 +248,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Toggle media button navigation wrappers according to viewport width
 	function toggleMediaNavigation() {
-		if ( window.innerWidth > 480 ) {
+		if ( window.innerWidth > 600 ) {
 			mediaNavigation.style.display = '';
 			mediaNavigationMobile.style.display = 'none';
 		} else {

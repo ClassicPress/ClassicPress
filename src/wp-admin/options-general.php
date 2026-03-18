@@ -33,7 +33,7 @@ $options_help = '<p>' . __( 'The fields on this screen determine some of the bas
 
 if ( ! is_multisite() ) {
 	$options_help .= '<p>' . __( 'The ClassicPress URL and the site URL can be the same (example.com) or different; for example, having the ClassicPress core files (example.com/classicpress) in a subdirectory instead of the root directory.' ) . '</p>' .
-		'<p>' . __( 'If you want site visitors to be able to register themselves, as opposed to by the site administrator, check the membership box. A default user role can be set for all new users, whether self-registered or registered by the site admin.' ) . '</p>';
+		'<p>' . __( 'If you want site visitors to be able to register themselves, check the membership box. If you want the site administrator to register every new user, leave the box unchecked. In either case, you can set a default user role for all new users.' ) . '</p>';
 }
 
 $options_help .= '<p>' . __( 'You can set the language, and the translation files will be automatically downloaded and installed (available if your filesystem is writable).' ) . '</p>' .

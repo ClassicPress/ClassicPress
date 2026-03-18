@@ -156,7 +156,7 @@ add_action( 'wp_enqueue_scripts', 'susty_dequeue_dashicons' );
  * Stylesheet version (cache buster)
  */
 function cp_susty_get_asset_version() {
-	return '20250825';
+	return '20260226';
 }
 
 /**
@@ -169,6 +169,16 @@ function cp_susty_enqueue_assets() {
 		get_template_directory_uri() . '/js/menu-resize.js',
 		null,
 		cp_susty_get_asset_version(),
+	);
+	/* localize menu script */
+	wp_localize_script(
+		'cp-menu-resize',
+		'cp_menu_object',
+		array(
+			'Search'      => esc_html__( 'Search', 'the-classicpress-theme' ),
+			'SearchFor'   => esc_html__( 'Search for...', 'the-classicpress-theme' ),
+			'OpenSubMenu' => esc_html__( 'Click to open sub-menu.', 'the-classicpress-theme' ),
+		)
 	);
 }
 add_action( 'wp_enqueue_scripts', 'cp_susty_enqueue_assets' );
@@ -191,6 +201,16 @@ if ( function_exists( 'register_sidebar' ) ) {
 		array(
 			'id'            => 'main-sidebar',
 			'name'          => esc_html__( 'Main Sidebar', 'the-classicpress-theme' ),
+			'before_widget' => '<div id="%1$s" class="widget-container %2$s">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h3 class="widget-title">',
+			'after_title'   => '</h3>',
+		)
+	);
+	register_sidebar(
+		array(
+			'id'            => 'homepage',
+			'name'          => esc_html__( 'Homepage', 'the-classicpress-theme' ),
 			'before_widget' => '<div id="%1$s" class="widget-container %2$s">',
 			'after_widget'  => '</div>',
 			'before_title'  => '<h3 class="widget-title">',

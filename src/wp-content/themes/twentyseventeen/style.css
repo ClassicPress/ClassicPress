@@ -1,10 +1,10 @@
 /*
 Theme Name: Twenty Seventeen
-Theme URI: https://wordpress.org/themes/twentyseventeen/
+Theme URI: https://directory.classicpress.net/themes/twenty-seventeen/
 Author: the WordPress team and ClassicPress contributors
-Author URI: https://wordpress.org/
+Author URI: https://classicpress.net/
 Description: Twenty Seventeen brings your site to life with header video and immersive featured images. With a focus on business sites, it features multiple sections on the front page as well as widgets, navigation and social menus, a logo, and more. Personalize its asymmetrical grid with a custom color scheme and showcase your multimedia content with post formats. Our default theme for 2017 works great in many languages, for any abilities, and on any device.
-Version: 99.3-upstream1.7
+Version: 99.3.1
 Requires PHP: 5.6
 Requires CP: 1.0
 License: GNU General Public License v2 or later
@@ -3790,6 +3790,13 @@ li.wp-playlist-item .wp-playlist-item-length {
 	/* With panel images 100% of the screen height, we're going to fix the background image where supported to create a parallax-like effect. */
 	.background-fixed .panel-image {
 		background-attachment: fixed;
+	}
+
+	@supports ( -webkit-touch-callout: none ) {
+		/* Image scrolls with the content in iOS Safari. */
+		.background-fixed .panel-image {
+			background-attachment: scroll;
+		}
 	}
 
 	.page-two-column .panel-content .entry-header {

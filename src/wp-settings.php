@@ -116,6 +116,11 @@ require ABSPATH . WPINC . '/class-wp-matchesmapregex.php';
 require ABSPATH . WPINC . '/class-wp.php';
 require ABSPATH . WPINC . '/class-wp-error.php';
 require ABSPATH . WPINC . '/pomo/mo.php';
+require ABSPATH . WPINC . '/l10n/class-wp-translation-controller.php';
+require ABSPATH . WPINC . '/l10n/class-wp-translations.php';
+require ABSPATH . WPINC . '/l10n/class-wp-translation-file.php';
+require ABSPATH . WPINC . '/l10n/class-wp-translation-file-mo.php';
+require ABSPATH . WPINC . '/l10n/class-wp-translation-file-php.php';
 
 /**
  * @global wpdb $wpdb WordPress database abstraction object.
@@ -128,6 +133,10 @@ require_wp_db();
 // Set the database table prefix and the format specifiers for database table columns.
 $GLOBALS['table_prefix'] = $table_prefix;
 wp_set_wpdb_vars();
+
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	require ABSPATH . WPINC . '/class-fix-wpcli.php';
+}
 
 // Start the ClassicPress object cache, or an external object cache if the drop-in is present.
 wp_start_object_cache();
@@ -292,10 +301,8 @@ require ABSPATH . WPINC . '/script-modules.php';
 if ( 0 !== (int) get_option( 'blocks_compatibility_level', 1 ) ) {
 	require ABSPATH . WPINC . '/classicpress/class-wp-compat.php';
 }
-if ( defined( 'WP_CLI' ) && WP_CLI ) {
-	require ABSPATH . WPINC . '/class-fix-wpcli.php';
-}
 require_once ABSPATH . WPINC . '/classicpress/class-cp-customization-frontend.php';
+require ABSPATH . WPINC . '/view-transitions.php';
 
 wp_script_modules()->add_hooks();
 

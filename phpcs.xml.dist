@@ -36,6 +36,7 @@
 	<exclude-pattern>/src/wp-admin/includes/class-pclzip\.php</exclude-pattern>
 	<exclude-pattern>/src/wp-admin/includes/deprecated\.php</exclude-pattern>
 	<exclude-pattern>/src/wp-admin/includes/ms-deprecated\.php</exclude-pattern>
+	<exclude-pattern>/src/wp-includes/object-cache\.php</exclude-pattern>
 
 	<exclude-pattern>/src/wp-includes/atomlib\.php</exclude-pattern>
 	<exclude-pattern>/src/wp-includes/class-IXR\.php</exclude-pattern>

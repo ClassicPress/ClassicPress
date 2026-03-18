@@ -85,7 +85,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function closePreviewDialog() {
 		document.body.style.overflow = '';
 		previewDialog.close();
-		document.getElementById( previewDialog.querySelector( '.theme-install-container' ).dataset.id ).focus();
+		document.getElementById( previewDialog.querySelector( '.theme-install-container' ).dataset.id )?.focus();
 		previewDialog.querySelector( '.previous-theme' ).disabled = false;
 		previewDialog.querySelector( '.next-theme' ).disabled = false;
 		restoreDefaultsPreviewDialog();
@@ -245,6 +245,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				theme.querySelector( '.theme-actions' ).style.opacity = '1';
 				theme.querySelector( '.theme-actions' ).style.display = 'block';
 			} );
+			theme.addEventListener( 'focusin', function() {
+				themes.forEach( function( other ) {
+					other.querySelector( '.more-details' ).style.opacity = '0';
+					other.querySelector( '.theme-actions' ).style.opacity = '0';
+				} );
+				theme.querySelector( '.more-details' ).style.opacity = '1';
+				theme.querySelector( '.theme-actions' ).style.opacity = '1';
+				theme.querySelector( '.theme-actions' ).style.display = 'block';
+			} );
 			theme.addEventListener( 'touchenter', function() {
 				themes.forEach( function( other ) {
 					other.querySelector( '.more-details' ).style.opacity = '0';
@@ -255,9 +264,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				theme.querySelector( '.theme-actions' ).style.display = 'block';
 			} );
 			theme.addEventListener( 'mouseout', function() {
-				theme.querySelector( '.more-details' ).style.opacity = '0';
-				theme.querySelector( '.theme-actions' ).style.opacity = '0';
-				theme.querySelector( '.theme-actions' ).style.display = 'none';
+				if ( ! theme.matches( ':has(:focus)' ) ) {
+					theme.querySelector( '.more-details' ).style.opacity = '0';
+					theme.querySelector( '.theme-actions' ).style.opacity = '0';
+					theme.querySelector( '.theme-actions' ).style.display = 'none';
+				}
 			} );
 			theme.addEventListener( 'touchleave', function() {
 				theme.querySelector( '.more-details' ).style.opacity = '0';

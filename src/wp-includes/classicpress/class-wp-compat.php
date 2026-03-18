@@ -171,7 +171,7 @@ class WP_Compat {
 	 * @return string
 	 */
 	private static function plugin_folder( $path ) {
-		return preg_replace( '~^' . preg_quote( WP_PLUGIN_DIR ) . preg_quote( DIRECTORY_SEPARATOR ) . '([^' . preg_quote( DIRECTORY_SEPARATOR ) . ']*).*~', '$1', $path );
+		return preg_replace( '~^' . preg_quote( wp_normalize_path( WP_PLUGIN_DIR ) ) . '/([^/]*).*~', '$1', wp_normalize_path( $path ) );
 	}
 
 	/**
@@ -431,6 +431,48 @@ class WP_Compat {
 			 * @return string ''.
 			 */
 			function get_block_theme_folders( ...$args ) {
+				WP_Compat::using_block_function();
+				return '';
+			}
+		}
+
+		if ( ! function_exists( 'register_block_style' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.7.0
+			 *
+			 * @return bool False.
+			 */
+			function register_block_style( ...$args ) {
+				WP_Compat::using_block_function();
+				return false;
+			}
+		}
+
+		if ( ! function_exists( 'register_block_bindings_source' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.7.0
+			 *
+			 * @return bool False.
+			 */
+			function register_block_bindings_source( ...$args ) {
+				WP_Compat::using_block_function();
+				return false;
+			}
+		}
+
+		if ( ! function_exists( 'do_blocks' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.7.0
+			 *
+			 * @return string ''.
+			 */
+			function do_blocks( ...$args ) {
 				WP_Compat::using_block_function();
 				return '';
 			}

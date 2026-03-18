@@ -2233,11 +2233,11 @@ function get_temp_dir() {
  * @return bool Whether the path is writable.
  */
 function wp_is_writable( $path ) {
-	if ( 'WIN' === strtoupper( substr( PHP_OS, 0, 3 ) ) ) {
+	if ( 'Windows' === PHP_OS_FAMILY ) {
 		return win_is_writable( $path );
-	} else {
-		return @is_writable( $path );
 	}
+
+		return @is_writable( $path );
 }
 
 /**
@@ -6525,7 +6525,7 @@ function wp_timezone_choice( $selected_zone, $locale = null ) {
 	if ( ! $mo_loaded || $locale !== $locale_loaded ) {
 		$locale_loaded = $locale ? $locale : get_locale();
 		$mofile        = WP_LANG_DIR . '/continents-cities-' . $locale_loaded . '.mo';
-		unload_textdomain( 'continents-cities' );
+		unload_textdomain( 'continents-cities', true );
 		load_textdomain( 'continents-cities', $mofile, $locale_loaded );
 		$mo_loaded = true;
 	}

@@ -10,6 +10,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Set variables for the whole file
 	var newMultiValue, timeNow,
+		originalID = '',
 		widgetList = document.getElementById( 'widget-list' ),
 		sortables = document.querySelectorAll( '.widgets-sortables' ),
 		sidebarWrappers = document.querySelectorAll( '.widgets-holder-wrap' ),
@@ -226,6 +227,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		setData: ghostImage,
 		onChoose: function( e ) {
 			var multi;
+			originalID = e.item.id ? e.item.id : '';
 			if ( e.item.className.includes( 'widget' ) ) {
 				multi = e.item.querySelector( 'input.multi_number' );
 				multi.value = newMultiValue = parseInt( multi.value, 10 ) + 1;
@@ -236,7 +238,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( widget.hasAttribute( 'open' ) ) {
 				widget.removeAttribute( 'open' );
 			}
+			if ( originalID !== '' ) {
+				e.clone.id = originalID;
+			}
 			widgetToggled( widget );
+		},
+		onUnchoose: function( e ) {
+			if ( e.clone && e.to === e.from ) { // dropped where it came from after triggering cloning
+				document.getElementById( e.item.id ).id = originalID;
+			}
+			originalID = ''; // reset
 		}
 	} );
 
@@ -463,6 +474,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					widget.addEventListener( 'input', unsavedWidget );
 					widget.addEventListener( 'change', unsavedWidget );
 				}
+			} else {
+				widget.innerHTML = widget.innerHTML.replace( /<[^<>]+>/g, function( tag ) {
+					return tag.replace( /__i__|%i%/g, newMultiValue );
+				} );
+
+				widget.id = widget.id.replace( '__i__', newMultiValue );
+				widget.querySelector( 'input.multi_number' ).value = newMultiValue;
+				document.dispatchEvent( new CustomEvent( 'widget-updated', {
+					detail: { widget: widget }
+				} ) );
 			}
 
 			list = widget.closest( 'details' );
@@ -491,8 +512,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 
+		// If the last widget was moved from a now-empty Inactive Widgets sidebar, disable the Clear button.
+		if ( e.from.id === 'wp_inactive_widgets' && document.querySelector( '#wp_inactive_widgets li' ) === null ) {
+			document.getElementById( 'inactive-widgets-control-remove' ).disabled = true;
+
 		// If the last widget was moved out of an orphaned sidebar, close and remove it.
-		if ( e.from.id.indexOf( 'orphaned_widgets' ) > -1 && ! e.from.querySelector( '.widget' ).length ) {
+		} else if ( e.from.id === 'orphaned_widgets' && e.from.querySelector( '.widget' ) === null ) {
 			e.from.closest( 'details' ).removeAttribute( 'open' );
 			e.from.remove();
 		}
@@ -707,7 +732,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			widget.querySelector( 'input.multi_number' ).value = newMultiValue;
 		} else if ( 'single' === add ) {
 			widget.id = 'new-' + widgetId;
-			document.getElementById( widgetId ).style.display = 'none';
+			widget.style.display = 'none';
 		}
 
 		// Open the sidebar and insert widget.

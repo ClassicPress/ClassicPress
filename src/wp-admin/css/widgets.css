@@ -840,6 +840,9 @@ ul.CodeMirror-hints {
 	margin: 1em 0;
 	font-size: 1.2em;
 }
+.widget-content fieldset.quicktags-toolbar {
+	margin: 0;
+}
 .widget-content .media-widget-control fieldset {
 	font-size: 1.1em;
 }
@@ -874,12 +877,11 @@ ul.CodeMirror-hints {
 }
 .widget-modal-container {
 	 display: flex;
-	 margin: -1em;
 }
 .widget-modal-left-sidebar {
 	width: 200px;
 	min-width: 200px;
-	padding: 0.5em 1em;
+	margin: -1em 0 -1em -1em;
 	background: #f6f7f7;
 	border-right: 1px solid #c3c4c7;
 	-webkit-user-select: none;
@@ -892,10 +894,7 @@ ul.CodeMirror-hints {
 }
 .widget-modal-left-heading {
 	font-size: 13px;
-	margin-left: 0.5em;
-}
-.widget-modal-left-tablist {
-	margin-left: -1em;
+	margin-left: 1.5em;
 }
 .widget-modal-left-tablist .media-menu-item {
 	text-align: left;
@@ -1026,14 +1025,18 @@ ul.CodeMirror-hints {
 }
 .widget-modal-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-	gap: 16px;
+	grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
 	margin-bottom: 20px;
 }
 .widget-modal-grid li {
 	cursor: pointer;
 	margin-bottom: 0;
 	position: relative;
+	padding: 10px;
+}
+.widget-modal-grid li.details,
+.widget-modal-grid li:focus {
+	box-shadow: inset 0 0 0 3px #fff, inset 0 0 0 7px #2271b1;
 }
 .widget-modal-grid .media-thumbnail {
 	position: relative;
@@ -1078,8 +1081,8 @@ ul.CodeMirror-hints {
 	width: 24px;
 	padding: 0;
 	border: 0;
-	top: -5px;
-	right: -5px;
+	top: 5px;
+	right: 5px;
 	position: absolute;
 	z-index: 10;
 	outline: none;
@@ -1129,11 +1132,9 @@ ul.CodeMirror-hints {
 }
 .widget-modal-attachment-info .thumbnail img,
 #media-widget-modal .image img {
-	width: 100%;
-	height: 100%;
+	max-width: 100%;
+	max-height: 500px;
 	margin: auto;
-	object-fit: cover;
-	aspect-ratio: 1;
 }
 .widget-modal-attachment-info .details {
 	width: 50%;
@@ -1218,11 +1219,43 @@ ul.CodeMirror-hints {
 }
 .widget-modal-footer {
 	position: sticky;
+	display: flex;
+	justify-content: space-between;
 	bottom: -1em;
-	height: 50px;
+	height: 60px;
 	z-index: 999;
 	background: #fff;
 	border-top: 1px solid #dcdcde;
+}
+.widget-modal-footer-selection {
+	 display: flex;
+	 justify-content: flex-start;
+	 visibility: hidden;
+}
+.widget-modal-footer-selection-info {
+	padding: 1em;
+}
+.widget-modal-footer-selection .count {
+	font-weight: 600;
+}
+.widget-modal-footer-selection .button-link.clear-selection {
+	color: #d63638;
+}
+.widget-modal-footer-selection-view ul {
+	display: flex;
+}
+.widget-modal-footer-selection .icon {
+	box-shadow: none;
+}
+.widget-modal-footer-selection .media-thumbnail img {
+	width: 45px;
+	height: 45px;
+	margin-right: 0.5em;
+	margin-top: -5px;
+	object-fit: cover;
+}
+.widget-modal-footer-selection .media-thumbnail .filename {
+	display: none;
 }
 .widget-modal-footer-buttons {
 	padding-right: 1em;
@@ -1230,7 +1263,7 @@ ul.CodeMirror-hints {
 }
 .wp-core-ui .widget-modal-footer-buttons .button-primary {
 	cursor: pointer;
-	margin-top: 0.75em;
+	margin-top: 1em;
 }
 #image-modal-content .media-embed,
 .imgedit-wrap > div:not( .hidden ) {
@@ -1308,7 +1341,7 @@ ul.CodeMirror-hints {
 	margin-left: 0 !important;
 }
 #image-modal-content .column-settings .setting.link-to #image-details-link-to-custom {
-	max-width: 70%;
+	max-width: 69%;
 	margin: 0.5em 0 0;
 }
 #edit-original {

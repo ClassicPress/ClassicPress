@@ -102,6 +102,17 @@ module.exports = function(grunt) {
 						]
 					}
 				}
+			},
+			codemirror: {
+				options: {
+					linebreak: false,
+					banner: require( './tools/webpack/codemirror-banner' )
+				},
+				files: {
+					src: [
+						SOURCE_DIR + 'wp-includes/js/codemirror/codemirror.min.css'
+					]
+				}
 			}
 		},
 		clean: {
@@ -184,6 +195,24 @@ module.exports = function(grunt) {
 					{
 						src: 'wp-config-sample.php',
 						dest: BUILD_DIR
+					}
+				]
+			},
+			'codemirror': {
+				options: {
+					process: function( content, srcpath ) {
+						if ( srcpath.includes( 'htmlhint.min.js' ) ) {
+							return content + '\nif ( window.HTMLHint && window.HTMLHint.HTMLHint ) { window.HTMLHint = window.HTMLHint.HTMLHint; }';
+						}
+						return content;
+					}
+				},
+				files: [
+					{
+						[ SOURCE_DIR + 'wp-includes/js/codemirror/csslint.js' ]: [ './node_modules/csslint/dist/csslint.js' ],
+						[ SOURCE_DIR + 'wp-includes/js/codemirror/esprima.js' ]: [ './node_modules/esprima/dist/esprima.js' ],
+						[ SOURCE_DIR + 'wp-includes/js/codemirror/htmlhint.js' ]: [ './node_modules/htmlhint/dist/htmlhint.min.js' ],
+						[ SOURCE_DIR + 'wp-includes/js/codemirror/jsonlint.js' ]: [ './node_modules/jsonlint/web/jsonlint.js' ]
 					}
 				]
 			},
@@ -357,8 +386,9 @@ module.exports = function(grunt) {
 			}
 		},
 		webpack: {
-			min: webpackConfig( { environment: 'production', buildTarget: SOURCE_DIR } ),
-			dev: webpackConfig( { environment: 'development', buildTarget: SOURCE_DIR } )
+			min: webpackConfig( { environment: 'production', buildTarget: SOURCE_DIR, minify: true } ),
+			dev: webpackConfig( { environment: 'production', buildTarget: SOURCE_DIR, minify: false } ),
+			codemirror: require( './tools/webpack/codemirror.config.js' )( { buildTarget: SOURCE_DIR } )
 		},
 		sass: {
 			colors: {
@@ -376,6 +406,22 @@ module.exports = function(grunt) {
 		cssmin: {
 			options: {
 				compatibility: 'ie7'
+			},
+			codemirror: {
+				files: {
+					[ SOURCE_DIR + 'wp-includes/js/codemirror/codemirror.min.css' ]: [
+						'node_modules/codemirror/lib/codemirror.css',
+						'node_modules/codemirror/addon/hint/show-hint.css',
+						'node_modules/codemirror/addon/lint/lint.css',
+						'node_modules/codemirror/addon/dialog/dialog.css',
+						'node_modules/codemirror/addon/display/fullscreen.css',
+						'node_modules/codemirror/addon/fold/foldgutter.css',
+						'node_modules/codemirror/addon/merge/merge.css',
+						'node_modules/codemirror/addon/scroll/simplescrollbars.css',
+						'node_modules/codemirror/addon/search/matchesonscrollbar.css',
+						'node_modules/codemirror/addon/tern/tern.css'
+					]
+				}
 			},
 			core: {
 				expand: true,
@@ -499,7 +545,11 @@ module.exports = function(grunt) {
 		jshint: {
 			options: grunt.file.readJSON('.jshintrc'),
 			grunt: {
-				src: ['Gruntfile.js', 'tools/**/*.js', '!tools/build/grunt-terser.js']
+				src: [
+					'Gruntfile.js',
+					'tools/**/*.js',
+					'!tools/build/grunt-terser.js'
+				]
 			},
 			tests: {
 				src: [
@@ -632,7 +682,9 @@ module.exports = function(grunt) {
 			},
 			grunt: {
 				src: [
-					'Gruntfile.js'
+					'Gruntfile.js',
+					'tools/**/*.js',
+					'!tools/build/grunt-terser.js'
 				]
 			},
 			core: {
@@ -1100,7 +1152,7 @@ module.exports = function(grunt) {
 
 			grunt.util.spawn( {
 				cmd: 'bash',
-				args: [ '-c', "git ls-files -z | xargs -0 grep -E -C3 -n --binary-files=without-match '(<<" + "<<|^=======(\\s|$)|>>" + ">>)'" ]
+				args: [ '-c', "git ls-files -z | xargs -0 grep -E -C3 -n --binary-files=without-match '(<<" + "<<<<<|^=======(\\s|$)|>>>>>" + ">>)'" ]
 			}, ( error, { stdout, stderr }, code ) => {
 				// Ignore error because it is populated for non-zero exit codes:
 				// https://gruntjs.com/api/grunt.util#grunt.util.spawn
@@ -1260,7 +1312,18 @@ module.exports = function(grunt) {
 			'webpack:dev',
 			'webpack:min',
 			'usebanner:js',
-			'copy:mediaelement-js'
+			'copy:mediaelement-js',
+			'build:codemirror'
+		]
+	);
+
+	grunt.registerTask(
+		'build:codemirror',
+		[
+			'webpack:codemirror',
+			'cssmin:codemirror',
+			'usebanner:codemirror',
+			'copy:codemirror'
 		]
 	);
 

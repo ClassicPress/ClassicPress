@@ -1,19 +1,69 @@
 /******/ (function() { // webpackBootstrap
-/******/ 	var __webpack_modules__ = ({
-
-/***/ 507:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
+/******/ 	"use strict";
+/******/ 	// The require scope
+/******/ 	var __webpack_require__ = {};
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  A: function() { return /* binding */ createHooks_default; }
+  actions: function() { return /* binding */ actions; },
+  addAction: function() { return /* binding */ addAction; },
+  addFilter: function() { return /* binding */ addFilter; },
+  applyFilters: function() { return /* binding */ applyFilters; },
+  applyFiltersAsync: function() { return /* binding */ applyFiltersAsync; },
+  createHooks: function() { return /* reexport */ createHooks_default; },
+  currentAction: function() { return /* binding */ currentAction; },
+  currentFilter: function() { return /* binding */ currentFilter; },
+  defaultHooks: function() { return /* binding */ defaultHooks; },
+  didAction: function() { return /* binding */ didAction; },
+  didFilter: function() { return /* binding */ didFilter; },
+  doAction: function() { return /* binding */ doAction; },
+  doActionAsync: function() { return /* binding */ doActionAsync; },
+  doingAction: function() { return /* binding */ doingAction; },
+  doingFilter: function() { return /* binding */ doingFilter; },
+  filters: function() { return /* binding */ filters; },
+  hasAction: function() { return /* binding */ hasAction; },
+  hasFilter: function() { return /* binding */ hasFilter; },
+  removeAction: function() { return /* binding */ removeAction; },
+  removeAllActions: function() { return /* binding */ removeAllActions; },
+  removeAllFilters: function() { return /* binding */ removeAllFilters; },
+  removeFilter: function() { return /* binding */ removeFilter; }
 });
 
-// UNUSED EXPORTS: _Hooks
-
-;// ./node_modules/@wordpress/hooks/build-module/validateNamespace.js
+;// ./node_modules/@wordpress/hooks/build-module/validateNamespace.mjs
 // packages/hooks/src/validateNamespace.ts
 function validateNamespace(namespace) {
   if ("string" !== typeof namespace || "" === namespace) {
@@ -31,7 +81,7 @@ function validateNamespace(namespace) {
 var validateNamespace_default = validateNamespace;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/validateHookName.js
+;// ./node_modules/@wordpress/hooks/build-module/validateHookName.mjs
 // packages/hooks/src/validateHookName.ts
 function validateHookName(hookName) {
   if ("string" !== typeof hookName || "" === hookName) {
@@ -53,7 +103,7 @@ function validateHookName(hookName) {
 var validateHookName_default = validateHookName;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/createAddHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createAddHook.mjs
 // packages/hooks/src/createAddHook.ts
 
 
@@ -115,7 +165,7 @@ function createAddHook(hooks, storeKey) {
 var createAddHook_default = createAddHook;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createRemoveHook.mjs
 // packages/hooks/src/createRemoveHook.ts
 
 
@@ -161,7 +211,7 @@ function createRemoveHook(hooks, storeKey, removeAll = false) {
 var createRemoveHook_default = createRemoveHook;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/createHasHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createHasHook.mjs
 // packages/hooks/src/createHasHook.ts
 function createHasHook(hooks, storeKey) {
   return function hasHook(hookName, namespace) {
@@ -177,7 +227,7 @@ function createHasHook(hooks, storeKey) {
 var createHasHook_default = createHasHook;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/createRunHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createRunHook.mjs
 // packages/hooks/src/createRunHook.ts
 function createRunHook(hooks, storeKey, returnFirstArg, async) {
   return function runHook(hookName, ...args) {
@@ -239,7 +289,7 @@ function createRunHook(hooks, storeKey, returnFirstArg, async) {
 var createRunHook_default = createRunHook;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createCurrentHook.mjs
 // packages/hooks/src/createCurrentHook.ts
 function createCurrentHook(hooks, storeKey) {
   return function currentHook() {
@@ -251,7 +301,7 @@ function createCurrentHook(hooks, storeKey) {
 var createCurrentHook_default = createCurrentHook;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.mjs
 // packages/hooks/src/createDoingHook.ts
 function createDoingHook(hooks, storeKey) {
   return function doingHook(hookName) {
@@ -267,7 +317,7 @@ function createDoingHook(hooks, storeKey) {
 var createDoingHook_default = createDoingHook;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/createDidHook.js
+;// ./node_modules/@wordpress/hooks/build-module/createDidHook.mjs
 // packages/hooks/src/createDidHook.ts
 
 function createDidHook(hooks, storeKey) {
@@ -282,7 +332,7 @@ function createDidHook(hooks, storeKey) {
 var createDidHook_default = createDidHook;
 
 
-;// ./node_modules/@wordpress/hooks/build-module/createHooks.js
+;// ./node_modules/@wordpress/hooks/build-module/createHooks.mjs
 // packages/hooks/src/createHooks.ts
 
 
@@ -343,123 +393,10 @@ function createHooks() {
 var createHooks_default = createHooks;
 
 
-
-/***/ }),
-
-/***/ 770:
-/***/ (function() {
-
-
-
-/***/ })
-
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/************************************************************************/
-var __webpack_exports__ = {};
-// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
-!function() {
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   actions: function() { return /* binding */ actions; },
-/* harmony export */   addAction: function() { return /* binding */ addAction; },
-/* harmony export */   addFilter: function() { return /* binding */ addFilter; },
-/* harmony export */   applyFilters: function() { return /* binding */ applyFilters; },
-/* harmony export */   applyFiltersAsync: function() { return /* binding */ applyFiltersAsync; },
-/* harmony export */   createHooks: function() { return /* reexport safe */ _createHooks__WEBPACK_IMPORTED_MODULE_0__.A; },
-/* harmony export */   currentAction: function() { return /* binding */ currentAction; },
-/* harmony export */   currentFilter: function() { return /* binding */ currentFilter; },
-/* harmony export */   defaultHooks: function() { return /* binding */ defaultHooks; },
-/* harmony export */   didAction: function() { return /* binding */ didAction; },
-/* harmony export */   didFilter: function() { return /* binding */ didFilter; },
-/* harmony export */   doAction: function() { return /* binding */ doAction; },
-/* harmony export */   doActionAsync: function() { return /* binding */ doActionAsync; },
-/* harmony export */   doingAction: function() { return /* binding */ doingAction; },
-/* harmony export */   doingFilter: function() { return /* binding */ doingFilter; },
-/* harmony export */   filters: function() { return /* binding */ filters; },
-/* harmony export */   hasAction: function() { return /* binding */ hasAction; },
-/* harmony export */   hasFilter: function() { return /* binding */ hasFilter; },
-/* harmony export */   removeAction: function() { return /* binding */ removeAction; },
-/* harmony export */   removeAllActions: function() { return /* binding */ removeAllActions; },
-/* harmony export */   removeAllFilters: function() { return /* binding */ removeAllFilters; },
-/* harmony export */   removeFilter: function() { return /* binding */ removeFilter; }
-/* harmony export */ });
-/* harmony import */ var _createHooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(507);
-/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(770);
-/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_types__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _types__WEBPACK_IMPORTED_MODULE_1__) if(["default","actions","addAction","addFilter","applyFilters","applyFiltersAsync","createHooks","currentAction","currentFilter","defaultHooks","didAction","didFilter","doAction","doActionAsync","doingAction","doingFilter","filters","hasAction","hasFilter","removeAction","removeAllActions","removeAllFilters","removeFilter"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = function(key) { return _types__WEBPACK_IMPORTED_MODULE_1__[key]; }.bind(0, __WEBPACK_IMPORT_KEY__)
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
+;// ./node_modules/@wordpress/hooks/build-module/index.mjs
 // packages/hooks/src/index.ts
 
-
-var defaultHooks = (0,_createHooks__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A)();
+var defaultHooks = createHooks_default();
 var {
   addAction,
   addFilter,
@@ -484,7 +421,6 @@ var {
 } = defaultHooks;
 
 
-}();
 (window.wp = window.wp || {}).hooks = __webpack_exports__;
 /******/ })()
 ;

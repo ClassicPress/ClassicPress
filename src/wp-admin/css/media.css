@@ -438,11 +438,6 @@
 	display: block;
 }
 
-/*
-#drag-drop-area:-moz-drag-over {
-	border-color: #83b4d8;
-}
-border color while dragging a file over the uploader drop area */
 .drag-drop.drag-over #drag-drop-area {
 	border-color: #9ec2e6;
 }
@@ -593,13 +588,13 @@ border color while dragging a file over the uploader drop area */
 }
 
 .media-search-input-label {
-	margin: 0 .2em 0 0;
+	margin: 0 0.2em 0 0;
 	vertical-align: baseline;
 }
 
 .media-frame.mode-grid .media-search-input-label {
 	position: static;
-	margin: 0 .5em 0 0;
+	margin: 0 0.5em 0 0;
 }
 
 .attachments-browser .media-toolbar-secondary > .media-button {
@@ -667,18 +662,15 @@ border color while dragging a file over the uploader drop area */
 	transition: color .1s ease-in-out, background .1s ease-in-out;
 }
 
-.upload-php .media-modal-close,
-.edit-attachment-frame .edit-media-header .media-navigation {
-	position: absolute;
-	top: 0;
-}
-
 .upload-php .media-modal-close {
+	position: absolute;
+	top: 0;	
 	right: 0;
 }
 
 .edit-attachment-frame .edit-media-header .media-navigation {
-	display: flex;
+	position: absolute;
+	top: 0;
 	right: 51px;
 }
 
@@ -770,20 +762,30 @@ border color while dragging a file over the uploader drop area */
 	cursor: default;
 }
 
+.edit-attachment-frame .media-frame-content,
 .edit-attachment-frame .media-frame-router {
 	left: 0;
 }
 
+.edit-attachment-frame .media-frame-title {
+	/* Fix ACF plugin */
+	left: 0;
+	right: 300px;
+}
+
+#media-modal .edit-attachment-frame .media-frame-title {
+	/* Fix ACF plugin */
+	height: auto;
+}
+
 .edit-attachment-frame .media-frame-content {
 	border-bottom: none;
+	/* Fix ACF plugin */
+	bottom: 0;
+	top: 50px;
 }
 
 .edit-attachment-frame .attachment-details {
-	overflow: auto;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
 	box-shadow: inset 0 4px 4px -4px rgba(0, 0, 0, 0.1);
 }
 
@@ -1142,7 +1144,7 @@ border color while dragging a file over the uploader drop area */
 
 .imgedit-applyto .imgedit-label {
 	display: block;
-	padding: .5em 0 0;
+	padding: 0.5em 0 0;
 }
 
 .imgedit-help {
@@ -1384,20 +1386,15 @@ audio, video {
 	.media-frame.mode-select .attachments-browser.fixed .media-toolbar {
 		top: 0;
 	}
-}
 
-@media only screen and (max-width: 480px) {
 	.edit-attachment-frame .media-frame-title {
+		/* Fix ACF plugin */
 		right: 110px;
 	}
 
 	.upload-php .media-modal-close {
 		width: 40px;
 		height: 40px;
-	}
-
-	.edit-attachment-frame .media-frame-content {
-		top: 40px;
 	}
 
 	.edit-attachment-frame .attachment-media-view {
@@ -1409,10 +1406,6 @@ audio, video {
 	.edit-attachment-frame .attachment-info {
 		height: auto;
 		width: 100%;
-	}
-
-	.edit-attachment-frame .attachment-media-view .thumbnail {
-		padding: 0 16px 16px;
 	}
 
 	.imgedit-settings .imgedit-scale-button-wrapper {

@@ -17,6 +17,7 @@
 
 /** ClassicPress Administration Bootstrap */
 require_once __DIR__ . '/admin.php';
+require_once ABSPATH . WPINC . '/classicpress/class-cp-settings.php';
 
 // Used in the HTML title tag.
 $title       = __( 'Settings' );
@@ -151,6 +152,7 @@ $allowed_options            = array(
 		'page_on_front',
 		'page_for_posts',
 		'blog_public',
+		'cp_object_cache',
 	),
 	'writing'    => array(
 		'default_category',

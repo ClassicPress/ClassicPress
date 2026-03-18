@@ -1,8 +1,8 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 681:
-/***/ (function(module) {
+/***/ 681
+(module) {
 
 var characterMap = {
 	"À": "A",
@@ -487,7 +487,7 @@ module.exports.has = hasAccents;
 module.exports.remove = removeAccents;
 
 
-/***/ })
+/***/ }
 
 /******/ 	});
 /************************************************************************/
@@ -516,18 +516,6 @@ module.exports.remove = removeAccents;
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	}();
-/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
@@ -596,7 +584,7 @@ __webpack_require__.d(__webpack_exports__, {
   safeDecodeURIComponent: function() { return /* reexport */ safeDecodeURIComponent; }
 });
 
-;// ./node_modules/@wordpress/url/build-module/is-url.js
+;// ./node_modules/@wordpress/url/build-module/is-url.mjs
 // packages/url/src/is-url.ts
 function isURL(url) {
   try {
@@ -608,7 +596,7 @@ function isURL(url) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/is-email.js
+;// ./node_modules/@wordpress/url/build-module/is-email.mjs
 // packages/url/src/is-email.ts
 var EMAIL_REGEXP = /^(mailto:)?[a-z0-9._%+-]+@[a-z0-9][a-z0-9.-]*\.[a-z]{2,63}$/i;
 function isEmail(email) {
@@ -616,7 +604,7 @@ function isEmail(email) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/is-phone-number.js
+;// ./node_modules/@wordpress/url/build-module/is-phone-number.mjs
 // packages/url/src/is-phone-number.ts
 var PHONE_REGEXP = /^(tel:)?(\+)?\d{6,15}$/;
 function isPhoneNumber(phoneNumber) {
@@ -625,7 +613,7 @@ function isPhoneNumber(phoneNumber) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/get-protocol.js
+;// ./node_modules/@wordpress/url/build-module/get-protocol.mjs
 // packages/url/src/get-protocol.ts
 function getProtocol(url) {
   const matches = /^([^\s:]+:)/.exec(url);
@@ -635,7 +623,7 @@ function getProtocol(url) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/is-valid-protocol.js
+;// ./node_modules/@wordpress/url/build-module/is-valid-protocol.mjs
 // packages/url/src/is-valid-protocol.ts
 function isValidProtocol(protocol) {
   if (!protocol) {
@@ -645,7 +633,7 @@ function isValidProtocol(protocol) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/get-authority.js
+;// ./node_modules/@wordpress/url/build-module/get-authority.mjs
 // packages/url/src/get-authority.ts
 function getAuthority(url) {
   const matches = /^[^\/\s:]+:(?:\/\/)?\/?([^\/\s#?]+)[\/#?]{0,1}\S*$/.exec(
@@ -657,7 +645,7 @@ function getAuthority(url) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/is-valid-authority.js
+;// ./node_modules/@wordpress/url/build-module/is-valid-authority.mjs
 // packages/url/src/is-valid-authority.ts
 function isValidAuthority(authority) {
   if (!authority) {
@@ -667,7 +655,7 @@ function isValidAuthority(authority) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/get-path.js
+;// ./node_modules/@wordpress/url/build-module/get-path.mjs
 // packages/url/src/get-path.ts
 function getPath(url) {
   const matches = /^[^\/\s:]+:(?:\/\/)?[^\/\s#?]+[\/]([^\s#?]+)[#?]{0,1}\S*$/.exec(url);
@@ -677,7 +665,7 @@ function getPath(url) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/is-valid-path.js
+;// ./node_modules/@wordpress/url/build-module/is-valid-path.mjs
 // packages/url/src/is-valid-path.ts
 function isValidPath(path) {
   if (!path) {
@@ -687,7 +675,7 @@ function isValidPath(path) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/get-query-string.js
+;// ./node_modules/@wordpress/url/build-module/get-query-string.mjs
 // packages/url/src/get-query-string.ts
 function getQueryString(url) {
   let query;
@@ -701,7 +689,7 @@ function getQueryString(url) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/build-query-string.js
+;// ./node_modules/@wordpress/url/build-module/build-query-string.mjs
 // packages/url/src/build-query-string.ts
 function buildQueryString(data) {
   let string = "";
@@ -726,7 +714,7 @@ function buildQueryString(data) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/is-valid-query-string.js
+;// ./node_modules/@wordpress/url/build-module/is-valid-query-string.mjs
 // packages/url/src/is-valid-query-string.ts
 function isValidQueryString(queryString) {
   if (!queryString) {
@@ -736,7 +724,7 @@ function isValidQueryString(queryString) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/get-path-and-query-string.js
+;// ./node_modules/@wordpress/url/build-module/get-path-and-query-string.mjs
 // packages/url/src/get-path-and-query-string.ts
 
 function getPathAndQueryString(url) {
@@ -753,7 +741,7 @@ function getPathAndQueryString(url) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/get-fragment.js
+;// ./node_modules/@wordpress/url/build-module/get-fragment.mjs
 // packages/url/src/get-fragment.ts
 function getFragment(url) {
   const matches = /^\S+?(#[^\s\?]*)/.exec(url);
@@ -763,7 +751,7 @@ function getFragment(url) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/is-valid-fragment.js
+;// ./node_modules/@wordpress/url/build-module/is-valid-fragment.mjs
 // packages/url/src/is-valid-fragment.ts
 function isValidFragment(fragment) {
   if (!fragment) {
@@ -773,7 +761,7 @@ function isValidFragment(fragment) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/safe-decode-uri-component.js
+;// ./node_modules/@wordpress/url/build-module/safe-decode-uri-component.mjs
 // packages/url/src/safe-decode-uri-component.ts
 function safeDecodeURIComponent(uriComponent) {
   try {
@@ -784,7 +772,7 @@ function safeDecodeURIComponent(uriComponent) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/get-query-args.js
+;// ./node_modules/@wordpress/url/build-module/get-query-args.mjs
 // packages/url/src/get-query-args.ts
 
 
@@ -824,7 +812,7 @@ function getQueryArgs(url) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/add-query-args.js
+;// ./node_modules/@wordpress/url/build-module/add-query-args.mjs
 // packages/url/src/add-query-args.ts
 
 
@@ -844,7 +832,7 @@ function addQueryArgs(url = "", args) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/get-query-arg.js
+;// ./node_modules/@wordpress/url/build-module/get-query-arg.mjs
 // packages/url/src/get-query-arg.ts
 
 function getQueryArg(url, arg) {
@@ -852,7 +840,7 @@ function getQueryArg(url, arg) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/has-query-arg.js
+;// ./node_modules/@wordpress/url/build-module/has-query-arg.mjs
 // packages/url/src/has-query-arg.ts
 
 function hasQueryArg(url, arg) {
@@ -860,7 +848,7 @@ function hasQueryArg(url, arg) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/remove-query-args.js
+;// ./node_modules/@wordpress/url/build-module/remove-query-args.mjs
 // packages/url/src/remove-query-args.ts
 
 
@@ -880,7 +868,7 @@ function removeQueryArgs(url, ...args) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/prepend-http.js
+;// ./node_modules/@wordpress/url/build-module/prepend-http.mjs
 // packages/url/src/prepend-http.ts
 
 var USABLE_HREF_REGEXP = /^(?:[a-z]+:|#|\?|\.|\/)/i;
@@ -896,7 +884,7 @@ function prependHTTP(url) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/safe-decode-uri.js
+;// ./node_modules/@wordpress/url/build-module/safe-decode-uri.mjs
 // packages/url/src/safe-decode-uri.ts
 function safeDecodeURI(uri) {
   try {
@@ -907,7 +895,7 @@ function safeDecodeURI(uri) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/filter-url-for-display.js
+;// ./node_modules/@wordpress/url/build-module/filter-url-for-display.mjs
 // packages/url/src/filter-url-for-display.ts
 function filterURLForDisplay(url, maxLength = null) {
   if (!url) {
@@ -939,19 +927,18 @@ function filterURLForDisplay(url, maxLength = null) {
 
 // EXTERNAL MODULE: ./node_modules/remove-accents/index.js
 var remove_accents = __webpack_require__(681);
-var remove_accents_default = /*#__PURE__*/__webpack_require__.n(remove_accents);
-;// ./node_modules/@wordpress/url/build-module/clean-for-slug.js
+;// ./node_modules/@wordpress/url/build-module/clean-for-slug.mjs
 // packages/url/src/clean-for-slug.ts
 
 function cleanForSlug(string) {
   if (!string) {
     return "";
   }
-  return remove_accents_default()(string).replace(/(&nbsp;|&ndash;|&mdash;)/g, "-").replace(/[\s\./]+/g, "-").replace(/&\S+?;/g, "").replace(/[^\p{L}\p{N}_-]+/gu, "").toLowerCase().replace(/-+/g, "-").replace(/(^-+)|(-+$)/g, "");
+  return remove_accents(string).replace(/(&nbsp;|&ndash;|&mdash;)/g, "-").replace(/[\s\./]+/g, "-").replace(/&\S+?;/g, "").replace(/[^\p{L}\p{N}_-]+/gu, "").toLowerCase().replace(/-+/g, "-").replace(/(^-+)|(-+$)/g, "");
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/get-filename.js
+;// ./node_modules/@wordpress/url/build-module/get-filename.mjs
 // packages/url/src/get-filename.ts
 function getFilename(url) {
   let filename;
@@ -968,7 +955,7 @@ function getFilename(url) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/normalize-path.js
+;// ./node_modules/@wordpress/url/build-module/normalize-path.mjs
 // packages/url/src/normalize-path.ts
 function normalizePath(path) {
   const split = path.split("?");
@@ -981,7 +968,7 @@ function normalizePath(path) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/prepend-https.js
+;// ./node_modules/@wordpress/url/build-module/prepend-https.mjs
 // packages/url/src/prepend-https.ts
 
 function prependHTTPS(url) {
@@ -996,7 +983,7 @@ function prependHTTPS(url) {
 }
 
 
-;// ./node_modules/@wordpress/url/build-module/index.js
+;// ./node_modules/@wordpress/url/build-module/index.mjs
 // packages/url/src/index.ts
 
 
