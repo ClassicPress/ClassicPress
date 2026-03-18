@@ -222,24 +222,14 @@
 			api.prepareLinkPreview( el );
 		} );
 
-		if ( 'undefined' !== typeof MutationObserver ) {
-			api.mutationObserver = new MutationObserver( function( mutations ) {
-				mutations.forEach( function( mutation ) {
-					mutation.target.querySelectorAll( 'a[href], area[href]' ).forEach( function( el ) {
-						api.prepareLinkPreview( el );
-					} );
+		api.mutationObserver = new MutationObserver( function( mutations ) {
+			mutations.forEach( function( mutation ) {
+				mutation.target.querySelectorAll( 'a[href], area[href]' ).forEach( function( el ) {
+					api.prepareLinkPreview( el );
 				} );
 			} );
-			api.mutationObserver.observe( document.documentElement, { childList: true, subtree: true } );
-		} else {
-			[ 'click', 'focus', 'mouseover' ].forEach( function( evt ) {
-				document.documentElement.addEventListener( evt, function( e ) {
-					if ( e.target.matches( 'a[href], area[href]' ) ) {
-						api.prepareLinkPreview( e.target );
-					}
-				} );
-			} );
-		}
+		} );
+		api.mutationObserver.observe( document.documentElement, { childList: true, subtree: true } );
 	};
 
 	// -----------------------------------------------------------------------
@@ -303,15 +293,86 @@
 			api.prepareFormPreview( form );
 		} );
 
-		if ( 'undefined' !== typeof MutationObserver ) {
-			new MutationObserver( function( mutations ) {
-				mutations.forEach( function( mutation ) {
-					mutation.target.querySelectorAll( 'form' ).forEach( function( form ) {
-						api.prepareFormPreview( form );
+		new MutationObserver( function( mutations ) {
+			mutations.forEach( function( mutation ) {
+				mutation.target.querySelectorAll( 'form' ).forEach( function( form ) {
+					api.prepareFormPreview( form );
+				} );
+			} );
+		} ).observe( document.documentElement, { childList: true, subtree: true } );
+	};
+
+	// Handle Shift + clicks on icons indicating live preview availability
+	api.addShortcutFocusing = function() {
+		function handleShortcutClick( e ) {
+			var container, partialId, partialType,
+				context = {};
+
+			if ( ! e.shiftKey ) { // must use Shift key
+				return;
+			}
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			container = e.currentTarget.closest( '[data-customize-partial-id]' );
+			if ( ! container ) {
+				return;
+			}
+
+			partialId   = container.dataset.customizePartialId;
+			partialType = container.dataset.customizePartialType;
+
+			// Map known partial types to their focus target
+			if ( partialType === 'nav_menu_instance' ) {
+				try {
+					context = JSON.parse( container.dataset.customizePartialPlacementContext || '{}' );
+				} catch( e ) {}
+
+				api.preview.send( 'focus-partial', {
+					id:     partialId,
+					type:   partialType,
+					place:  context.theme_location || null,
+					menuId: context.menu_id || null
+				} );
+			} else if ( partialType === 'widget' ) {
+				api.preview.send( 'focus-partial', {
+					id: partialId,
+					type: partialType
+				} );
+			} else {
+				// For simpler partials the partial ID is often the setting/section ID directly
+				api.preview.send( 'focus-partial', {
+					id: partialId,
+					type: partialType
+				} );
+			}
+		}
+
+		document.body.querySelectorAll( '.customize-partial-edit-shortcut-button' ).forEach( function( btn ) {
+			btn.addEventListener( 'click', handleShortcutClick );
+		} );
+
+		// Cover dynamically refreshed partials
+		new MutationObserver( function( mutations ) {
+			mutations.forEach( function( mutation ) {
+				mutation.addedNodes.forEach( function( node ) {
+					var btns = [];
+					if ( node.nodeType !== 1 ) {
+						return;
+					}
+					if ( node.matches( '.customize-partial-edit-shortcut-button' ) ) {
+						btns.push( node );
+					}
+					node.querySelectorAll( '.customize-partial-edit-shortcut-button' ).forEach( function( button ) {
+						btns.push( button );
+					} );
+					btns.forEach( function( btn ) {
+						btn.addEventListener( 'click', handleShortcutClick );
 					} );
 				} );
-			} ).observe( document.documentElement, { childList: true, subtree: true } );
-		}
+			} );
+		} ).observe( document.body, { childList: true, subtree: true } );
 	};
 
 	// -----------------------------------------------------------------------
@@ -426,6 +487,7 @@
 
 		api.addLinkPreviewing();
 		api.addFormPreviewing();
+		api.addShortcutFocusing();
 
 		if ( api.settings.channel ) {
 			document.body.addEventListener( 'click', function( e ) {
