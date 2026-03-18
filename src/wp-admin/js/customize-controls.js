@@ -12,8 +12,8 @@
  * FilePondPluginFileRename, FilePondPluginImagePreview
  */
 document.addEventListener( 'DOMContentLoaded', function() {
-	var addButton, pond, leftSidebar, customizeButton, currentMenuId, observer,
-		intersectionObserver, orgThemes, localThemes, previousAccordionPane,
+	var addButton, pond, leftSidebar, customizeButton, currentMenuId,
+		observer, intersectionObserver, orgThemes, localThemes,
 		i = 1,
 		{ FilePond } = window, // import FilePond
 		dialog = document.getElementById( 'widget-modal' ),
@@ -27,13 +27,25 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		devicesWrapper = document.querySelector( '.devices' ),
 		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
 		previewFrame = document.getElementById( 'customize-preview' ),
-		//themeModal = document.getElementById( 'tmpl-customize-themes-details-view' ),
 		queryParams = new URLSearchParams( window.location.search ),
 		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		addWidgetButtons = document.querySelectorAll( '.add-new-widget' ),
 		newMenuItemIDs = [],
 		menuToEdit = document.getElementById( 'menu-to-edit' );
+
+	const hash = window.location.hash.replace( '#', '' );
+	if ( hash ) {console.log(hash);
+		[...document.getElementById( 'customize-theme-controls' ).children].forEach( function( child ) {
+			child.style.display = 'none';
+		} );
+		document.getElementById( hash ).style.display = 'block';
+		setTimeout( function() {
+			document.getElementById( hash ).querySelector( 'button' ).focus();
+		}, 1500 );							
+	}
+
+
 
 	// Check if theme is set as a query arg
 	if ( queryParams.get( 'theme' ) ) {
@@ -142,22 +154,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} else if ( isVisible( document.getElementById( 'move-widget-area' ) ) ) {
 				document.getElementById( 'move-widget-area' ).remove();
 			}
-/*			} else if ( ! isVisible( themeModal ) ) {
-				e.preventDefault();
-				document.body.classList.remove( 'adding-menu-items' );
-				document.body.classList.remove( 'adding-widget' );
-				document.getElementById( 'widgets-left' ).style.display = 'none';
-				availableMenuItems.style.display = 'none';
-				e.target.closest( 'ul' ).style.display = 'none';
-				document.getElementById( 'customize-info' ).style.display = 'block';
-				document.querySelector( '.customize-pane-parent' ).style.display = 'block';
-				addMenuButtons.forEach( function( add ) {
-					add.setAttribute( 'aria-expanded', false );
-				} );
-				addWidgetButtons.forEach( function( add ) {
-					add.setAttribute( 'aria-expanded', false );
-				} );
-			}*/
 		} else if ( e.key === 'Tab' ) {
 			if ( document.querySelector( '.devices-wrapper' ) ) {
 				constrainTab( e );
@@ -366,21 +362,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			console.error( error );
 		} );
 	}
-
-	// Show theme modal
-	function showThemeModal( theme ) {
-		if ( theme.classList.contains( 'active' ) ) {
-			themeModal.querySelector( '.current-label' ).classList.remove( 'hidden' );
-		}
-		themeModal.querySelector( '.screenshot' ).innerHTML = theme.querySelector( '.theme-screenshot img' ).outerHTML;
-		themeModal.querySelector( '.theme-name' ).textContent = theme.querySelector( '.theme-name' ).textContent;
-		//themeModal.querySelector( '.theme-version' ).textContent = theme.dataset.version;
-		//themeModal.querySelector( '.theme-rating' ).textContent = theme.dataset.ratings.textContent;
-		//themeModal.querySelector( '.num-ratings' ).href = 'https://wordpress.org/support/theme/' + theme.id + '/reviews/';
-		themeModal.querySelector( '.num-ratings .screen-reader-text' ).insertAdjacentHTML( 'afterbegin', theme.dataset.numRatings );
-		themeModal.showModal();
-	}
-
 
 	/**
 	 * Update details within modal.
@@ -1518,24 +1499,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			return;
 		}
 
-		// Abort if this is menu-related
+		// Abort for some menu-related targets
 		if ( e.target.closest( 'ul' ) ) {
 			if ( e.target.closest( 'ul' ).classList && e.target.closest( 'ul' ).classList.contains( 'menu' ) && ( ! e.target.classList.contains( 'customize-section-back' ) && ! e.target.classList.contains( 'customize-panel-back' ) ) ) {
-				return;
-			}		
-			if ( e.target.closest( 'ul' ).id === 'sub-accordion-section-add_menu' ) {
 				return;
 			}
 		}
 
-		// Maintain correct previousAccordionPane after widget selection
-		if ( previousAccordionPane && previousAccordionPane.id === 'available-widgets-list' ) {
-			previousAccordionPane = document.getElementById( 'sub-accordion-panel-widgets' );
-		}
-
 		if ( ( e.target.tagName === 'H3' || e.target.classList && e.target.classList.contains( 'change-theme' ) ) && ul ) {
 			e.preventDefault();
-			previousAccordionPane = ul;
 			id = e.target.closest( 'li' ).id;
 			document.body.classList.remove( 'adding-menu-items' );
 			document.body.classList.remove( 'adding-widget' );
@@ -1565,7 +1537,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 				window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-' + id );
 			}
-		} else if ( e.target.closest( 'ul' ) !== menuToEdit && ( e.target.classList && ( e.target.classList.contains( 'customize-section-back' ) || e.target.classList.contains( 'customize-panel-back' ) ) ) ) {
+
+		//Go up a level
+		} else if ( e.target.classList && ( e.target.classList.contains( 'customize-section-back' ) || e.target.classList.contains( 'customize-panel-back' ) ) ) {
 			e.preventDefault();
 			ul.style.display = 'none';
 			document.body.classList.remove( 'adding-menu-items' );
@@ -1579,25 +1553,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				add.setAttribute( 'aria-expanded', false );
 			} );
 
-			// Go up to the top level
-			if ( e.target.parentNode.classList.contains( 'panel-meta' ) || ul.id === 'sub-accordion-section-menu_locations' ) {
-				document.getElementById( 'customize-info' ).style.display = 'block';
-				document.querySelector( '.customize-pane-parent' ).style.display = 'block';
-				document.querySelector( '.customize-pane-parent h3' ).focus();
-				window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#customize-info' );
-
-			// Go up to the second (or maybe top) level	
-			} else {
-				previousAccordionPane.style.display = 'block';
-				if ( previousAccordionPane.querySelector( '.customize-panel-back' ) ) {
-					previousAccordionPane.querySelector( '.customize-panel-back' ).focus();
-				} else if ( previousAccordionPane.querySelector( '.customize-section-back' ) ) {
-					previousAccordionPane.querySelector( '.customize-section-back' ).focus();
-				} else { // top level
-					document.querySelector( '.customize-pane-parent h3' ).focus();
-				}
-				window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#' + previousAccordionPane.id );
-			}
+			document.getElementById( ul.dataset.parentId ).style.display = 'block';
+			document.getElementById( ul.dataset.parentId ).querySelector( 'button' ).focus();
+			window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#' + ul.dataset.parentId );
 
 		// Go to widgets panel
 		} else if ( e.target.tagName === 'A' && ( e.target.closest( 'li' ).id === 'accordion-section-menu_locations' || ul.id === 'sub-accordion-section-menu_locations' ) ) {
