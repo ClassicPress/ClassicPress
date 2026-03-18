@@ -844,18 +844,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.getElementById( 'accordion-section-add_menu' ).before( li );
 				activatePublishButton();
 			}
-
-		// Return to list of menus from new menu
-		} else if ( e.target === menuToEdit.querySelector( '.customize-section-back' ) ) {
-			menuToEdit.style.display = 'none';
-			document.getElementById( 'sub-accordion-panel-nav_menus' ).style.display = 'block';
-			document.getElementById( 'sub-accordion-panel-nav_menus' ).querySelector( '.customize-panel-back' ).focus();
-			window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-accordion-panel-nav_menus' );
-		} else if ( e.target === document.getElementById( 'sub-accordion-section-add_menu' ).querySelector( '.customize-section-back' ) ) {
-			document.getElementById( 'sub-accordion-section-add_menu' ).style.display = 'none';
-			document.getElementById( 'sub-accordion-panel-nav_menus' ).style.display = 'block';
-			document.getElementById( 'sub-accordion-panel-nav_menus' ).querySelector( '.customize-panel-back' ).focus();
-			window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-accordion-panel-nav_menus' );
 			
 		// Enable adding of a menu item
 		} else if ( e.target.classList && e.target.classList.contains( 'add-new-menu-item' ) ) {
