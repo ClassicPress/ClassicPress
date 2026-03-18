@@ -1513,11 +1513,17 @@ final class WP_Customize_Nav_Menus {
 			// Build full settings list including all menu items for this menu
 			$settings = array( $setting_id );
 
-			// Note the ?? null coalescing on get_nav_menu_locations()[ $location ]
-			// If the location isn't assigned a menu yet, $menu_id will be 0 and wp_get_nav_menu_items won't be called. 
-			$menu_id = $location ? (int) get_nav_menu_locations()[ $location ] ?? 0 : (int) $exported_args['menu'];
+			if ( $location ) {
+				$locations = get_nav_menu_locations();
+				$menu_id   = isset( $locations[ $location ] ) ? (int) $locations[ $location ] : 0;
+			} else {
+				$menu_id = (int) $exported_args['menu'];
+			}
 
 			if ( $menu_id ) {
+				$exported_args['menu_id'] = $menu_id;
+				$args['customize_preview_nav_menus_args']['menu_id'] = $menu_id;
+
 				// Include the nav_menu setting itself
 				$settings[] = 'nav_menu[' . $menu_id . ']';
 
