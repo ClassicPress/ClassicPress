@@ -150,6 +150,19 @@ module.exports = function(grunt) {
 					'wp-includes/js/mediaelement/mejs-controls.svg'
 				]
 			},
+			'filepond': {
+				expand: true,
+					cwd: SOURCE_DIR,
+					src: [
+						'wp-includes/js/filepond/filepond.css',
+						'wp-includes/js/filepond/filepond.js',
+						'wp-includes/js/filepond/filepond-plugin-file-rename.js',
+						'wp-includes/js/filepond/filepond-plugin-file-validate-size.js',
+						'wp-includes/js/filepond/filepond-plugin-file-validate-type.js',
+						'wp-includes/js/filepond/filepond-plugin-image-preview.css',
+						'wp-includes/js/filepond/filepond-plugin-image-preview.js'
+					]
+			},
 			dynamic: {
 				dot: true,
 				expand: true,
@@ -215,6 +228,17 @@ module.exports = function(grunt) {
 						[ SOURCE_DIR + 'wp-includes/js/codemirror/jsonlint.js' ]: [ './node_modules/jsonlint/web/jsonlint.js' ]
 					}
 				]
+			},
+			'filepond': {
+				files: {
+					[ SOURCE_DIR + 'wp-includes/js/filepond/filepond.css' ]: [ './node_modules/filepond/dist/filepond.css' ],
+					[ SOURCE_DIR + 'wp-includes/js/filepond/filepond.js' ]: [ './node_modules/filepond/dist/filepond.js' ],
+					[ SOURCE_DIR + 'wp-includes/js/filepond/filepond-plugin-file-rename.js' ]: [ './node_modules/filepond-plugin-file-rename/dist/filepond-plugin-file-rename.js' ],
+					[ SOURCE_DIR + 'wp-includes/js/filepond/filepond-plugin-file-validate-size.js' ]: [ './node_modules/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js' ],
+					[ SOURCE_DIR + 'wp-includes/js/filepond/filepond-plugin-file-validate-type.js' ]: [ './node_modules/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js' ],
+					[ SOURCE_DIR + 'wp-includes/js/filepond/filepond-plugin-image-preview.css']: [ './node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css' ],
+					[ SOURCE_DIR + 'wp-includes/js/filepond/filepond-plugin-image-preview.js']: [ './node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js' ]
+				}
 			},
 			'wp-admin-css-compat-rtl': {
 				options: {
@@ -593,6 +617,7 @@ module.exports = function(grunt) {
 					'wp-includes/js/plupload/wp-plupload.js',
 					'wp-includes/js/tinymce/plugins/wordpress/plugin.js',
 					'wp-includes/js/tinymce/plugins/wp*/plugin.js',
+					'wp-includes/js/filepond/cp-filepond.js',
 					// Third party scripts
 					'!wp-includes/js/codemirror/*.js',
 					'!wp-includes/js/tinymce/plugins/**/*.js',
@@ -705,6 +730,7 @@ module.exports = function(grunt) {
 					'src/wp-includes/js/plupload/wp-plupload.js',
 					'src/wp-includes/js/tinymce/plugins/wordpress/plugin.js',
 					'src/wp-includes/js/tinymce/plugins/wp*/plugin.js',
+					'src/wp-includes/js/filepond/cp-filepond.js',
 					// Third party scripts
 					'!src/wp-includes/js/codemirror/*.js',
 					'!src/wp-includes/js/jquery/*.js',
@@ -1308,11 +1334,13 @@ module.exports = function(grunt) {
 			'clean:vendor-js',
 			'clean:package-js',
 			'clean:mediaelement-js',
+			'clean:filepond',
 			'copy:vendor-js',
 			'webpack:dev',
 			'webpack:min',
 			'usebanner:js',
 			'copy:mediaelement-js',
+			'copy:filepond',
 			'build:codemirror'
 		]
 	);
