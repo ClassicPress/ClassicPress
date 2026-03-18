@@ -172,7 +172,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				data-id="<?php echo esc_attr( $theme['id'] ); ?>"
 				data-activate-nonce="<?php echo esc_attr( $theme['actions']['activate'] ); ?>" 
 				data-customize="<?php echo esc_attr( $theme['actions']['customize'] ); ?>"
-				data-delete-nonce="<?php echo esc_attr( $theme['actions']['delete'] ); ?>"
+				data-delete-nonce="<?php echo isset( $theme['actions']['delete'] ) ? esc_attr( $theme['actions']['delete'] ) : ''; ?>"
 				data-description="<?php echo esc_attr( $theme['description'] ); ?>"
 				data-author="<?php echo esc_attr( $theme['author'] ); ?>"
 				data-tags="<?php echo esc_attr( $theme['tags'] ); ?>"
