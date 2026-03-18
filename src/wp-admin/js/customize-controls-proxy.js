@@ -311,3 +311,67 @@ function makeDebouncedSender( previewKey, rawKey, target ) {
 		window.sendSettingToPreview( previewKey, target[ rawKey ] );
 	}, 300 );
 }
+
+// -----------------------------------------------------------------------
+// Receive postMessages from the preview iframe
+// -----------------------------------------------------------------------
+window.addEventListener( 'message', function( event ) {
+	var message, target, data, id, type, place, menuId, hash;
+
+	if ( event.origin !== location.origin ) {
+		return;
+	}
+	try {
+		message = JSON.parse( event.data );
+	} catch( e ) {
+		return;
+	}
+	if ( ! message || ! message.type || message.type !== 'focus-partial' ) {
+		return;
+	}
+
+	// Verify it came from our preview channel
+	target = window.getPreviewChannel();
+	if ( target && message.channel && message.channel !== target.channel ) {
+		return;
+	}
+
+	data   = message.data;
+	id     = data.id;
+	type   = data.type;
+	place  = data.place || null;
+	menuId = data.menuId || null;
+
+	if ( type === 'nav_menu_instance' ) {
+		if ( menuId ) {
+			hash = 'sub-accordion-section-nav_menu[' + menuId + ']';
+		} else {
+			hash = 'sub-accordion-panel-nav_menus';
+		}
+		location.hash = '#' + hash;
+		[...document.getElementById( 'customize-theme-controls' ).children].forEach( function( child ) {
+			child.style.display = 'none';
+		} );
+		document.getElementById( hash ).style.display = 'block';
+		document.querySelector( '#sub-accordion-panel-nav_menus button' ).focus();
+	} else if ( type === 'widget' ) {console.log('WIDGET');
+		wp.customize.section.each( function( section ) {
+			if ( section.params && section.params.type === 'sidebar' ) {
+				( section.controls ? section.controls() : [] ).forEach( function( control ) {
+					if ( control.id === id ) {
+						section.focus();
+					}
+				} );
+			}
+		} );
+	} else {console.log(data);
+		console.log(id);
+		console.log(type);
+		// Try partial ID directly as a section or panel handle
+		if ( wp.customize.section.has( id ) ) {
+			wp.customize.section.instance( id ).focus();
+		} else if ( wp.customize.panel.has( id ) ) {
+			wp.customize.panel.instance( id ).focus();
+		}
+	}
+} );
