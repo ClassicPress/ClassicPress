@@ -394,7 +394,7 @@ wp_print_scripts();
 						</div>
 					</div>
 					<div id="customize-theme-controls">
-						<ul class="customize-pane-parent">
+						<ul id="customize-pane-parent" class="customize-pane-parent">
 							<li id="accordion-section-themes" class="accordion-section control-panel-themes"
 								aria-owns="sub-accordion-section-themes"
 							>
@@ -451,7 +451,11 @@ wp_print_scripts();
 							?>
 						</ul>
 
-						<ul id="sub-accordion-section-themes" class="customize-pane-child accordion-sub-container control-panel-content accordion-section control-panel-themes current-panel" style="display: none;">
+						<ul id="sub-accordion-section-themes"
+							class="customize-pane-child accordion-sub-container control-panel-content accordion-section control-panel-themes current-panel"
+							data-parent-id="customize-pane-parent"
+							style="display: none;"
+						>
 							<li class="panel-meta customize-info accordion-section">
 								<button class="customize-panel-back" tabindex="0" type="button">
 									<span class="screen-reader-text">
@@ -598,7 +602,11 @@ wp_print_scripts();
 						if ( $menus_panel ) :
 							?>
 
-							<ul id="sub-accordion-panel-nav_menus" class="customize-pane-child accordion-sub-container control-panel-content accordion-section control-panel-nav_menus" style="display: none;">
+							<ul id="sub-accordion-panel-nav_menus"
+								class="customize-pane-child accordion-sub-container control-panel-content accordion-section control-panel-nav_menus"
+								data-parent-id="customize-pane-parent"
+								style="display: none;"
+							>
 
 								<?php
 								$nav_menus_panel = $wp_customize->get_panel( 'nav_menus' );
@@ -747,6 +755,7 @@ wp_print_scripts();
 
 							<ul id="sub-accordion-panel-widgets"
 								class="customize-pane-child accordion-sub-container control-panel-content accordion-section control-section control-panel control-panel-widgets"
+								data-parent-id="customize-pane-parent"
 								style="display: none;"
 							>
 
@@ -784,6 +793,7 @@ wp_print_scripts();
 								?>
 								<ul id="sub-accordion-panel-<?php echo esc_attr( $item['id'] ); ?>"
 									class="customize-pane-child accordion-sub-container control-panel-content accordion-section control-panel-<?php echo esc_attr( $item['id'] ); ?>"
+									data-parent-id="customize-pane-parent"
 									style="display: none;"
 								>
 									<li class="panel-meta customize-info accordion-section cannot-expand">
@@ -842,6 +852,7 @@ wp_print_scripts();
 
 									<ul id="sub-accordion-section-<?php echo esc_attr( $middle_section['id'] ); ?>"
 										class="customize-pane-child accordion-section-content accordion-section control-section control-section-default"
+										data-parent-id="customize-pane-parent"
 										style="display: none;"
 									>
 										<li class="customize-section-description-container section-meta no-drag">
@@ -902,6 +913,7 @@ wp_print_scripts();
 								<ul id="sub-accordion-section-<?php echo esc_attr( $item['id'] ); ?>"
 									class="customize-pane-child accordion-section-content accordion-section control-section control-section-default"
 									data-id="<?php echo esc_attr( $item['id'] ); ?>"
+									data-parent-id="customize-pane-parent"
 									style="display: none;"
 								>
 									<li class="customize-section-description-container section-meta no-drag">
@@ -965,7 +977,11 @@ wp_print_scripts();
 						}
 						?>
 
-						<ul id="sub-accordion-section-add_menu" class="customize-pane-child accordion-section-content accordion-section control-section control-section-new_menu menu open" style="display: none;">
+						<ul id="sub-accordion-section-add_menu"
+							class="customize-pane-child accordion-section-content accordion-section control-section control-section-new_menu menu open"
+							data-parent-id="sub-accordion-panel-nav_menus"
+							style="display: none;"
+						>
 							<li class="customize-section-description-container section-meta no-drag ">
 								<div class="customize-section-title">
 									<button class="customize-section-back" tabindex="0">
@@ -1100,6 +1116,7 @@ wp_print_scripts();
 							<ul id="sub-accordion-section-<?php echo esc_attr( $section->id ); ?>"
 								class="customize-pane-child accordion-section-content accordion-section control-section <?php echo esc_attr( $section_class ); ?> menu assigned-to-menu-location"
 								data-id="<?php echo esc_attr( $section->id ); ?>"
+								data-parent-id="sub-accordion-panel-nav_menus"
 								style="display: none;"
 							>
 								<li class="customize-section-description-container section-meta no-drag">
@@ -1396,6 +1413,7 @@ wp_print_scripts();
 							<ul id="sub-accordion-section-<?php echo esc_attr( $section->id ); ?>"
 								class="customize-pane-child accordion-section-content accordion-section control-section control-section-sidebar"
 								data-id="<?php echo esc_attr( $section->sidebar_id ); ?>"
+								data-parent-id="sub-accordion-panel-widgets"
 								style="display: none;"
 							>
 								<li class="customize-section-description-container section-meta no-drag">
@@ -1622,6 +1640,7 @@ wp_print_scripts();
 						<ul id="menu-to-edit"
 							class="customize-pane-child accordion-section-content accordion-section control-section control-section-nav_menu menu open"
 							data-instruction="<?php esc_html_e( 'Press return or enter to open this section' ); ?>"
+							data-parent-id="sub-accordion-panel-nav_menus"
 							style="display: none;"
 						>
 							<!-- li elements are added via template id="tmpl-new-nav-menu" below -->
