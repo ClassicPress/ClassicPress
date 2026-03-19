@@ -80,6 +80,7 @@ wp_localize_script(
 			'installed'           => __( 'Installed' ),
 			'activate'            => __( 'Activate' ),
 			'ratings'             => __( 'ratings' ),
+			'themeURL'            => __( 'WordPress.org Theme Page »' ),
 		),
 		'installedThemes' => array_keys( $installed_themes ),
 		'activeTheme'     => get_stylesheet(),
