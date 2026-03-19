@@ -81,7 +81,7 @@ wp_localize_script(
 			'activate'            => __( 'Activate' ),
 			'ratings'             => __( 'ratings' ),
 			'themeUrl'            => __( 'https://wordpress.org/themes/' ),
-			'themeUrlLabel'       => __( 'WordPress.org Theme Page »' ),
+			'themeUrlLabel'       => __( 'WordPress.org Theme Page &#187;' ),
 		),
 		'installedThemes' => array_keys( $installed_themes ),
 		'activeTheme'     => get_stylesheet(),
