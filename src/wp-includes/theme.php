@@ -1747,6 +1747,7 @@ function is_header_video_active() {
  * The container div will always be returned in the Customizer preview.
  *
  * @since 4.7.0
+ * $attr added @since CP-2.8.0
  *
  * @return string The markup for a custom header on success.
  */
@@ -1755,8 +1756,19 @@ function get_custom_header_markup() {
 		return '';
 	}
 
+    $attr = '';
+    if ( is_customize_preview() ) {
+        $attr = ' data-customize-partial-id="header_image"'
+              . ' data-customize-partial-type="default"'
+              . sprintf(
+                    ' data-customize-partial-placement-context="%s"',
+                    esc_attr( wp_json_encode( array( 'partialId' => 'custom_header' ) ) )
+                );
+    }
+
 	return sprintf(
-		'<div id="wp-custom-header" class="wp-custom-header">%s</div>',
+		'<div id="wp-custom-header" class="wp-custom-header"%s>%s</div>',
+		$attr,
 		get_header_image_tag()
 	);
 }
