@@ -13,7 +13,7 @@
  */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addButton, pond, leftSidebar, customizeButton, currentMenuId,
-		observer, intersectionObserver, orgThemes, localThemes,
+		observer, intersectionObserver, orgThemes, localThemes, newUrl,
 		i = 1,
 		{ FilePond } = window, // import FilePond
 		dialog = document.getElementById( 'widget-modal' ),
@@ -34,27 +34,38 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		newMenuItemIDs = [],
 		menuToEdit = document.getElementById( 'menu-to-edit' );
 
+	// Go direct to appropriate Customizer panel if its hash is specified in the URL
 	const hash = window.location.hash.replace( '#', '' );
-	if ( hash ) {console.log(hash);
+	if ( hash ) {
 		[...document.getElementById( 'customize-theme-controls' ).children].forEach( function( child ) {
 			child.style.display = 'none';
 		} );
+
 		document.getElementById( hash ).style.display = 'block';
 		setTimeout( function() {
 			document.getElementById( hash ).querySelector( 'button' ).focus();
-		}, 1500 );							
+		}, 0 );
 	}
 
-
-
-	// Check if theme is set as a query arg
+	// Delete redundant query args from browser URL
+	history.replaceState( null, null, '?' + queryParams.toString() );
 	if ( queryParams.get( 'theme' ) ) {
-		// Clean the URL if previewing the active theme
-		if ( queryParams.get( 'theme' ) === _wpCustomizeControlsL10n.activeTheme ) {
-			window.history.replaceState( {}, '', window.location.origin + window.location.pathname );
-		} else { // otherwise enable Activate/Publish button
-			activatePublishButton();
+		if ( queryParams.get( 'theme' ) === _wpCustomizeControlsL10n.activeTheme ) { // active theme
+			history.replaceState( null, '', window.location.pathname );
+		} else {
+			queryParams.delete( 'return' );
+			newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
+			history.replaceState( null, '', newUrl );
+			saveButton.disabled = false;
+			saveButton.value = _wpCustomizeControlsL10n.activate;
 		}
+		setTimeout( function() {
+			document.getElementById( 'customize-pane-parent' ).querySelector( 'button' ).focus();
+		}, 0 );
+	} else {
+		queryParams.delete( 'return' );
+		newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
+		history.replaceState( null, '', newUrl );
 	}
 
 	// Remove inert attribute to enable interactions with form
@@ -1534,6 +1545,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					ul.style.display = 'none';
 					document.getElementById( 'sub-' + id ).style.display = 'block';
 					document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();
+					document.getElementById( 'sub-' + id ).setAttribute( 'data-parent-id', ul.id ); // update
 				}
 				window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-' + id );
 			}
@@ -1927,5 +1939,4 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
 	}
-
 } );
