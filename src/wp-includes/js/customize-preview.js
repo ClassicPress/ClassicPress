@@ -135,9 +135,11 @@
 		api.preview.trigger( message.type, message.data );
 	} );
 
-	// -----------------------------------------------------------------------
-	// Link previewing
-	// -----------------------------------------------------------------------
+	/**
+	 * Link previewing
+	 *
+	 * @since CP-2.8.0
+	 */
 	api.isLinkPreviewable = function( element, options ) {
 		var args = Object.assign( {}, { allowAdminAjax: false }, options || {} ),
 			elementHost,
@@ -232,9 +234,11 @@
 		api.mutationObserver.observe( document.documentElement, { childList: true, subtree: true } );
 	};
 
-	// -----------------------------------------------------------------------
-	// Form previewing
-	// -----------------------------------------------------------------------
+	/**
+	 * Form previewing
+	 *
+	 * @since CP-2.8.0
+	 */
 	api.prepareFormPreview = function( form ) {
 		var urlParser = document.createElement( 'a' ),
 			stateParams = {};
@@ -302,10 +306,14 @@
 		} ).observe( document.documentElement, { childList: true, subtree: true } );
 	};
 
-	// Handle Shift + clicks on icons indicating live preview availability
+	/**
+	 * Handle Shift + clicks on icons indicating live preview availability
+	 *
+	 * @since CP-2.8.0
+	 */
 	api.addShortcutFocusing = function() {
 		function handleShortcutClick( e ) {
-			var container, partialId, partialType,
+			var container, partialId, partialType, shortcut, match,
 				context = {};
 
 			if ( ! e.shiftKey ) { // must use Shift key
@@ -316,17 +324,24 @@
 			e.stopPropagation();
 
 			container = e.currentTarget.closest( '[data-customize-partial-id]' );
-			if ( ! container ) {
-				return;
+			if ( container ) {
+				partialId   = container.dataset.customizePartialId;
+				partialType = container.dataset.customizePartialType;
+			} else {
+				// Fall back to reading the partial ID from the shortcut span class
+				shortcut = e.currentTarget.closest( '.customize-partial-edit-shortcut' );
+				if ( ! shortcut ) {
+					return;
+				}
+				partialId   = shortcut.className.replace( 'customize-partial-edit-shortcut customize-partial-edit-shortcut-', '' );
+				partialType = 'default';
+				container   = shortcut.parentElement;
 			}
-
-			partialId   = container.dataset.customizePartialId;
-			partialType = container.dataset.customizePartialType;
 
 			// Map known partial types to their focus target
 			if ( partialType === 'nav_menu_instance' ) {
-				try {
-					context = JSON.parse( container.dataset.customizePartialPlacementContext || '{}' );
+				try { // use getAttribute instead of dataset to avoid potential problems with parsing escaped values
+					context = JSON.parse( container.getAttribute( 'data-customize-partial-placement-context' ) || '{}' );
 				} catch( e ) {}
 
 				api.preview.send( 'focus-partial', {
@@ -336,12 +351,17 @@
 					menuId: context.menu_id || null
 				} );
 			} else if ( partialType === 'widget' ) {
+				try { // use getAttribute instead of dataset to avoid potential problems with parsing escaped values
+					context = JSON.parse( container.getAttribute( 'data-customize-partial-placement-context' ) || '{}' );
+				} catch( e ) {}
+
 				api.preview.send( 'focus-partial', {
 					id: partialId,
-					type: partialType
+					type: partialType,
+					sidebarId: context.sidebar_id || null,
+					widgetId: container.dataset.customizeWidgetId || null
 				} );
-			} else {
-				// For simpler partials the partial ID is often the setting/section ID directly
+			} else { // partialType === 'default'
 				api.preview.send( 'focus-partial', {
 					id: partialId,
 					type: partialType
@@ -375,9 +395,11 @@
 		} ).observe( document.body, { childList: true, subtree: true } );
 	};
 
-	// -----------------------------------------------------------------------
-	// Setting preview handlers
-	// -----------------------------------------------------------------------
+	/**
+	 * Setting preview handlers
+	 *
+	 * @since CP-2.8.0
+	 */
 	api.settingPreviewHandlers = {
 		custom_logo: function( attachmentId ) {
 			document.body.classList.toggle( 'wp-custom-logo', !! attachmentId );
@@ -418,9 +440,11 @@
 		}
 	};
 
-	// -----------------------------------------------------------------------
-	// Keep-alive
-	// -----------------------------------------------------------------------
+	/**
+	 * Keep-alive
+	 *
+	 * @since CP-2.8.0
+	 */
 	api.keepAliveCurrentUrl = ( function() {
 		var previousPathName = location.pathname,
 			previousQueryString = location.search.substr( 1 ),
@@ -472,9 +496,11 @@
 		};
 	} )();
 
-	// -----------------------------------------------------------------------
-	// DOM ready
-	// -----------------------------------------------------------------------
+	/**
+	 * DOM ready
+	 *
+	 * @since CP-2.8.0
+	 */
 	document.addEventListener( 'DOMContentLoaded', function() {
 		var handleUpdatedChangesetUuid, cssSettingId;
 
