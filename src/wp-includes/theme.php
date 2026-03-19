@@ -1763,7 +1763,7 @@ function get_custom_header_markup() {
 			. sprintf(
 				' data-customize-partial-placement-context="%s"',
 				esc_attr( wp_json_encode( array( 'partialId' => 'custom_header' ) ) )
-		);
+			);
 	}
 
 	return sprintf(
