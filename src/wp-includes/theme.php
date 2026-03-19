@@ -1756,15 +1756,15 @@ function get_custom_header_markup() {
 		return '';
 	}
 
-    $attr = '';
+	$attr = '';
     if ( is_customize_preview() ) {
-        $attr = ' data-customize-partial-id="header_image"'
-              . ' data-customize-partial-type="default"'
-              . sprintf(
-                    ' data-customize-partial-placement-context="%s"',
-                    esc_attr( wp_json_encode( array( 'partialId' => 'custom_header' ) ) )
-                );
-    }
+		$attr = ' data-customize-partial-id="header_image"'
+			. ' data-customize-partial-type="default"'
+			. sprintf(
+				' data-customize-partial-placement-context="%s"',
+				esc_attr( wp_json_encode( array( 'partialId' => 'custom_header' ) ) )
+		);
+	}
 
 	return sprintf(
 		'<div id="wp-custom-header" class="wp-custom-header"%s>%s</div>',
