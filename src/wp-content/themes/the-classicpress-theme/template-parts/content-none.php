@@ -12,7 +12,7 @@
 <section>
 
 	<header>
-		<h1><?php esc_html_e( 'Nothing Found', 'the-classicpress-theme' ); ?></h1>
+		<h2><?php esc_html_e( 'Nothing Found', 'the-classicpress-theme' ); ?></h2>
 	</header><!-- .page-header -->
 
 	<div class="page-content">
