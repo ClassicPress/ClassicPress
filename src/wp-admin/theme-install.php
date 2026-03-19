@@ -332,6 +332,8 @@ if ( ! is_wp_error( $response ) ) {
 							<div class="theme-version"></div>
 							<div class="theme-description"></div>
 						</div>
+
+						<a class="theme-url" href="" target="_blank"></a>
 					</div>
 				</div>
 				<div class="wp-full-overlay-footer">
