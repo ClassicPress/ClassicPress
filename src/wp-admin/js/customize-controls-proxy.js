@@ -312,9 +312,9 @@ function makeDebouncedSender( previewKey, rawKey, target ) {
 	}, 300 );
 }
 
-// -----------------------------------------------------------------------
-// Receive postMessages from the preview iframe
-// -----------------------------------------------------------------------
+/**
+ * Receive postMessages from the preview iframe
+ */
 window.addEventListener( 'message', function( event ) {
 	var message, target, data, id, type, place, menuId, hash, itemId;
 
@@ -369,5 +369,7 @@ window.addEventListener( 'message', function( event ) {
 		child.style.display = 'none';
 	} );
 	document.getElementById( hash ).style.display = 'block';
-	document.querySelector( '#' + hash + ' button' ).focus();
+	setTimeout( function() {
+		document.getElementById( hash ).querySelector( 'button' ).focus();
+	}, 0 );
 } );
