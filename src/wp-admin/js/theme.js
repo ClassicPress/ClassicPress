@@ -613,8 +613,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				previewDialog.querySelector( '.num-ratings' ).href = 'https://wordpress.org/support/theme/' + theme.id + '/reviews/';
 				previewDialog.querySelector( '.theme-version' ).textContent = _wpThemeSettings.l10n.version + ' ' + theme.dataset.version;
 				previewDialog.querySelector( '.theme-description' ).textContent = theme.dataset.description;
-				previewDialog.querySelector('.theme-url').textContent = _wpThemeSettings.l10n.themeURL;
-				previewDialog.querySelector('.theme-url').href = 'https://wordpress.org/themes/' + theme.id;
+				previewDialog.querySelector('.theme-url').textContent = _wpThemeSettings.l10n.themeUrlLabel;
+				previewDialog.querySelector('.theme-url').href = _wpThemeSettings.l10n.themeUrl + theme.id;
 				previewDialog.querySelector( 'iframe' ).src = '//wp-themes.com/' + theme.id + '/';
 				document.body.style.overflow = 'hidden';
 				previewDialog.showModal();
