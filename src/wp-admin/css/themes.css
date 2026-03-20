@@ -944,11 +944,10 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 	.themes-php .wp-filter-search {
 		float: none;
 		clear: both;
+		top: 0;
 		left: 0;
-		right: 0;
-		margin: -5px 0 20px;
+		margin: 0 0 20px;
 		width: 100%;
-		max-width: 280px;
 	}
 
 	.theme-browser .theme.add-new-theme span:after {
