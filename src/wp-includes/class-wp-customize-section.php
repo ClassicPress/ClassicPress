@@ -318,13 +318,15 @@ class WP_Customize_Section {
 	/**
 	 * Render the section UI in a subclass.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	protected function render() {
 		?>
-		<li id="accordion-section-<?php esc_attr_e( $this->id ); ?>" class="accordion-section control-section control-section-<?php esc_attr_e( $this->type ); ?>">
+		<li id="accordion-section-<?php echo esc_attr( $this->id ); ?>"
+			class="accordion-section control-section control-section-<?php echo esc_attr( $this->type ); ?>"
+		>
 			<h3 class="accordion-section-title" tabindex="0">
-				<?php esc_html_e( $this->title ); ?>
+				<?php echo esc_html( $this->title ); ?>
 				<span class="screen-reader-text">
 					<?php
 					/* translators: Hidden accessibility text. */
