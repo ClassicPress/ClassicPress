@@ -401,25 +401,28 @@ wp_print_scripts();
 								<h3 class="accordion-section-title" tabindex="0">
 									<span class="customize-action">
 										<?php
-										if ( is_customize_preview() ) {
-											esc_html_e( 'Previewing theme' );
-										} else {
+										if ( $wp_customize->get_stylesheet() === cp_get_true_active_stylesheet() ) {
 											esc_html_e( 'Active theme' );
+										} else {
+											esc_html_e( 'Previewing theme' );
 										}
 										?>
 									</span>
 								
 									<?php
-									if ( isset( $top_items['themes']['title'] ) ) {
-										echo esc_html( $top_items['themes']['title'] );
-									} else {
-										esc_html_e( 'Themes' );
+									echo wp_get_theme()['Name'];
+
+									if ( current_user_can( 'switch_themes' ) ) {
+										?>
+
+										<button type="button" class="button change-theme" aria-label="Change theme">
+											<?php esc_html_e( 'Change' ); ?>
+										</button>
+										<?php
+
 									}
 									?>
 
-									<button type="button" class="button change-theme" aria-label="Change theme">
-										<?php esc_html_e( 'Change' ); ?>
-									</button>
 								</h3>
 							</li>
 							<li id="accordion-section-publish_settings"
@@ -464,20 +467,47 @@ wp_print_scripts();
 								</button>
 								<div class="accordion-section-title">
 									<span class="preview-notice">
-										<?php esc_html_e( 'You are browsing' ); ?>
-										<strong class="panel-title">
-											<?php esc_html_e( 'Themes' ); ?>
-										</strong>
+										<?php
+										printf(
+											/* translators: %s: Themes panel title in the Customizer. */
+											__( 'You are browsing %s' ),
+											'<strong class="panel-title">' . __( 'Themes' ) . '</strong>'
+										); // Separate strings for consistency with other panels.
+										?>
 									</span>
-									<button class="customize-help-toggle dashicons dashicons-editor-help" type="button" aria-expanded="false">
-										<span class="screen-reader-text">
-											<?php esc_html_e( 'Help' ); ?>
-										</span>
-									</button>
+									
+									<?php
+									if ( current_user_can( 'install_themes' ) && ! is_multisite() ) {
+										?>
+										<button class="customize-help-toggle dashicons dashicons-editor-help" type="button" aria-expanded="false">
+											<span class="screen-reader-text">
+												<?php
+												/* translators: Hidden accessibility text. */
+												esc_html_e( 'Help' );
+												?>
+											</span>
+										</button>
+										<?php
+									}
+									?>
+
 								</div>
-								<div class="description customize-panel-description">
-									<?php echo wp_kses_post( $panels['themes']->description ); ?></p>
-								</div>
+									
+								<?php
+								if ( current_user_can( 'install_themes' ) && ! is_multisite() ) {
+									?>
+									<div class="description customize-panel-description">
+										<p>
+											<?php esc_html_e( 'Looking for a theme? You can search or browse the WordPress.org theme directory, install and preview themes, then activate them right here.' ); ?>
+										</p>
+										<p>
+											<?php esc_html_e( 'While previewing a new theme, you can continue to tailor things like widgets and menus, and explore theme-specific options.' ); ?>
+										</p>
+									</div>
+									<?php
+								}
+								?>
+
 								<div class="customize-control-notifications-container" style="display: none;">
 									<ul></ul>
 								</div>
