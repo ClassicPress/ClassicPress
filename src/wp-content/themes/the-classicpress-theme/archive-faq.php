@@ -1,21 +1,20 @@
 <?php
 /**
- * The template for displaying archive pages
+ * The template for displaying FAQ pages
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
- *
- * @package Susty
  */
 
 get_header();
 ?>
+
 	<div id="primary">
 		<main id="main">
 
 		<?php
 		if ( have_posts() ) :
 
-				/* Start the Loop */
+			/* Start the Loop */
 			while ( have_posts() ) :
 				the_post();
 				?>
@@ -30,7 +29,7 @@ get_header();
 					</article><!-- #post-<?php the_ID(); ?> -->
 
 				<?php
-				endwhile;
+			endwhile;
 
 			the_posts_navigation();
 

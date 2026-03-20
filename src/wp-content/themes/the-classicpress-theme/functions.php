@@ -156,7 +156,7 @@ add_action( 'wp_enqueue_scripts', 'susty_dequeue_dashicons' );
  * Stylesheet version (cache buster)
  */
 function cp_susty_get_asset_version() {
-	return '20250825';
+	return '20260226';
 }
 
 /**
@@ -201,6 +201,16 @@ if ( function_exists( 'register_sidebar' ) ) {
 		array(
 			'id'            => 'main-sidebar',
 			'name'          => esc_html__( 'Main Sidebar', 'the-classicpress-theme' ),
+			'before_widget' => '<div id="%1$s" class="widget-container %2$s">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h3 class="widget-title">',
+			'after_title'   => '</h3>',
+		)
+	);
+	register_sidebar(
+		array(
+			'id'            => 'homepage',
+			'name'          => esc_html__( 'Homepage', 'the-classicpress-theme' ),
 			'before_widget' => '<div id="%1$s" class="widget-container %2$s">',
 			'after_widget'  => '</div>',
 			'before_title'  => '<h3 class="widget-title">',
