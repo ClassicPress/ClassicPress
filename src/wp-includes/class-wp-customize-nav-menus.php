@@ -1060,6 +1060,7 @@ final class WP_Customize_Nav_Menus {
 			$post = $r;
 			$data = array(
 				'post_id' => $post->ID,
+				'title'   => sanitize_text_field( $params['post_title'] ),
 				'url'     => get_permalink( $post->ID ),
 			);
 			wp_send_json_success( $data );
