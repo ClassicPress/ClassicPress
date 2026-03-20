@@ -97,17 +97,15 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 
 	/**
 	 * @global Custom_Image_Header $custom_image_header
-	 *
-	 * @since CP-2.7.0
-	 *
-	 * Redundant since CP_2.7.0
+	 *	 *
+	 * Redundant @since CP_2.8.0
 	 */
 	public function prepare_control() {}
 
 	/**
 	 * Redundant JS templates.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	public function print_header_image_template() {}
 
@@ -125,7 +123,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 	/**
 	 * Render the template via PHP.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	public function render_content() {
 		global $custom_image_header;
