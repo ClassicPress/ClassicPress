@@ -335,7 +335,6 @@ wp_print_scripts();
 					<?php
 				}
 				?>
-				<span class="spinner"></span>
 				<button type="button" class="customize-controls-preview-toggle">
 					<span class="controls"><?php _e( 'Customize' ); ?></span>
 					<span class="preview"><?php _e( 'Preview' ); ?></span>
@@ -566,7 +565,7 @@ wp_print_scripts();
 												</button>
 												<div class="themes-filter-container">
 													<label for="installed_themes-themes-filter" class="screen-reader-text">
-														<?php esc_html_e( 'Search themes…' ); ?>
+														<?php esc_html_e( 'Search themes&hellip;' ); ?>
 													</label>
 													<input type="search" id="installed_themes-themes-filter"
 														placeholder="<?php esc_attr_e( 'Search themes…' ); ?>"
@@ -1746,6 +1745,12 @@ wp_print_scripts();
 	</div>
 
 	<div id="customize-preview" class="wp-full-overlay-main iframe-ready">
+		<div id="customize-preview-loading" aria-live="polite">
+			<span class="spinner is-active"></span>
+			<span class="customize-preview-loading-text">
+				<?php esc_html_e( 'Setting up your live preview. This might take a while.' ); ?>
+			</span>
+		</div>
 		<iframe title="<?php esc_attr_e( 'Site Preview' ); ?>"
 			name="customize-preview-0"
 			onmousewheel=""
