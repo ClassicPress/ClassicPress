@@ -11,7 +11,7 @@
  * FilePondPluginFileRename, FilePondPluginImagePreview
  */
 document.addEventListener( 'DOMContentLoaded', function() {
-	var addObserver, itemObserver,
+	var addObserver, itemObserver, currentMenuId,
 		newMenuItemIDs = [],
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
@@ -27,7 +27,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			menuToEdit.querySelector( '.auto_add' ).addEventListener( 'input', function( e ) {
 				inputChanged( e.target, e.target.closest( 'li' ) );
 			} );
-			menuToEdit.querySelector( '.auto_add' ).addEventListener( 'input', function( e ) {
+			menuToEdit.querySelector( '.auto_add' ).addEventListener( 'change', function( e ) {
 				inputChanged( e.target, e.target.closest( 'li' ) );
 			} );
 			addObserver.disconnect();
@@ -59,7 +59,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function inputChanged( input, li ) {
 		let menuId, title, menuLocations, assignments, span, itemId,
-			formData = new FormData(),
 			settingId = li.dataset.settingId,
 			value = input.value.trim(),
 			menuName = li.closest( '.customize-pane-child' ).querySelector( '.menu-name-field' ).value;
@@ -193,7 +192,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Use the right edge if RTL
 		menuEdge += isRTL ? editMenu.innerWidth : 0;
 
-		if ( editMenu.length > 0 ) {
+		if ( editMenu.children.length > 0 ) {
 			document.querySelector( '.drag-instructions' ).style.display = '';
 		}
 
@@ -665,7 +664,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 			throw new Error( response.status );
 		} )
-		.then( function( result ) {
+		.then( function( result ) { console.log(result);
 			if ( result.success ) {
 				newMenuItemIDs.push( result.data.post_id );
 				li = document.createElement( 'li' );
@@ -675,11 +674,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				li.innerHTML = '<div class="menu-item-bar">' +
 					'<div class="menu-item-handle">' +
 					'<button type="button" class="button-link item-add">' +
-					'<span class="screen-reader-text">Add to menu: ' + title	+ ' (' + label + ')</span>' +
+					'<span class="screen-reader-text">Add to menu: ' + result.data.title + ' (' + label + ')</span>' +
 					'</button>' +
 					'<span class="item-split">' +
 					'<span class="item-title" aria-hidden="true">' +
-					'<span class="menu-item-title">' + title + '</span>' +
+					'<span class="menu-item-title">' + result.data.title + '</span>' +
 					'</span>' +
 					'<span class="item-type" aria-hidden="true">' +	label + '</span>' +
 					'</span>' +
@@ -687,7 +686,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					'</div>' +
 					'<span class="item-url" hidden="">' + result.data.url + '</span>';
 				itemsList.prepend( li );
-				addMenuItem( type, object, result.data.post_id, title, label, result.data.url );
+				addMenuItem( type, object, result.data.post_id, result.data.title, label, result.data.url );
 			}
 		} )
 		.catch( function( err ) {
@@ -773,8 +772,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Open New Menu panel
 		if ( e.target.id === 'customize-add-menu-button' || e.target.classList.contains( 'create-menu' ) ) {
-			e.preventDefault();			
-			previousAccordionPane = ul;
+			e.preventDefault();
 			ul.style.display = 'none';
 			document.getElementById( 'sub-accordion-section-add_menu' ).querySelectorAll( 'input' ).forEach( function( input ) {
 				input.value = ''; // reset
@@ -796,8 +794,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					moveNewMenu( id );
 					document.getElementById( 'sub-' + id ).style.display = 'none';
 				}
-				
-				previousAccordionPane = document.getElementById( 'sub-accordion-panel-nav_menus' );
+
 				navMenuId = '-' + Date.now();
 				title = ul.querySelector( '#menu-title' ).value;
 				template = document.getElementById( 'tmpl-new-nav-menu' );
