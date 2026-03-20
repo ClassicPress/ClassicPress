@@ -70,6 +70,9 @@ wp.customize.selectiveRefresh = ( function( api ) {
 		};
 
 		deferred.resolve = function() {
+			if ( deferred._state !== 'pending' ) {
+				return;
+			}
 			deferred._state = 'resolved';
 			deferred._args = arguments;
 			deferred._doneCallbacks.forEach( function( cb ) {
@@ -81,6 +84,9 @@ wp.customize.selectiveRefresh = ( function( api ) {
 		};
 
 		deferred.resolveWith = function( context, args ) {
+			if ( deferred._state !== 'pending' ) {
+				return;
+			}
 			deferred._context = context;
 			deferred._state = 'resolved';
 			deferred._args = args;
@@ -93,6 +99,9 @@ wp.customize.selectiveRefresh = ( function( api ) {
 		};
 
 		deferred.reject = function() {
+			if ( deferred._state !== 'pending' ) {
+				return;
+			}
 			deferred._state = 'rejected';
 			deferred._args = arguments;
 			deferred._failCallbacks.forEach( function( cb ) {
@@ -104,6 +113,9 @@ wp.customize.selectiveRefresh = ( function( api ) {
 		};
 
 		deferred.rejectWith = function( context, args ) {
+			if ( deferred._state !== 'pending' ) {
+				return;
+			}
 			deferred._context = context;
 			deferred._state = 'rejected';
 			deferred._args = args;
@@ -294,9 +306,6 @@ wp.customize.selectiveRefresh = ( function( api ) {
 
 		illegalContainerSelector = 'area, audio, base, bdi, bdo, br, button, canvas, col, colgroup, command, datalist, embed, head, hr, html, iframe, img, input, keygen, label, link, map, math, menu, meta, noscript, object, optgroup, option, param, progress, rp, rt, ruby, script, select, source, style, svg, table, tbody, textarea, tfoot, thead, title, tr, track, video, wbr';
 
-		if ( ! placement.container ) {
-			return;
-		}
 		if ( placement.container.closest( 'head' ) ) {
 			return;
 		}
@@ -497,7 +506,7 @@ wp.customize.selectiveRefresh = ( function( api ) {
 			return false;
 		}
 
-		self.orginalDocumentWrite = document.write;
+		self.originalDocumentWrite = document.write;
 		document.write = function() {
 			throw new Error( self.data.l10n.badDocumentWrite );
 		};
@@ -511,7 +520,7 @@ wp.customize.selectiveRefresh = ( function( api ) {
 
 			if ( partial.params.containerInclusive ) {
 				var tempDiv = document.createElement( 'div' );
-				tempDiv.innerHTML = content;
+				tempDiv.innerHTML = content; // safe as content is server-generated
 				newContainerElement = tempDiv.firstChild;
 
 				var newContext = newContainerElement.dataset.customizePartialPlacementContext;
@@ -532,20 +541,20 @@ wp.customize.selectiveRefresh = ( function( api ) {
 					fragment.appendChild( placement.container.firstChild );
 				}
 				placement.removedNodes = fragment;
-				placement.container.innerHTML = content;
+				placement.container.innerHTML = content; // safe as content is server-generated
 			}
 
 			placement.container.classList.remove( 'customize-render-content-error' );
 
 		} catch ( error ) {
-			if ( 'undefined' !== typeof console && console.error ) {
+			if ( console && console.error ) {
 				console.error( partial.id, error );
 			}
 			partial.fallback( error, [ placement ] );
 		}
 
-		document.write = self.orginalDocumentWrite;
-		self.orginalDocumentWrite = null;
+		document.write = self.originalDocumentWrite;
+		self.originalDocumentWrite = null;
 
 		partial.createEditShortcutForPlacement( placement );
 		placement.container.classList.remove( 'customize-partial-refreshing' );
@@ -706,7 +715,7 @@ wp.customize.selectiveRefresh = ( function( api ) {
 
 				self.trigger( 'render-partials-response', responseData );
 
-				if ( responseData.data.errors && 'undefined' !== typeof console && console.warn ) {
+				if ( responseData.data && responseData.data.errors && console && console.warn ) {
 					responseData.data.errors.forEach( function( error ) {
 						console.warn( error );
 					} );
@@ -716,7 +725,7 @@ wp.customize.selectiveRefresh = ( function( api ) {
 					var pending = self._pendingPartialRequests[ partialId ],
 						placementsContents;
 
-					if ( ! Array.isArray( responseData.data.contents[ partialId ] ) ) {
+					if ( ! responseData.data || ! Array.isArray( responseData.data.contents[ partialId ] ) ) {
 						pending.deferred.rejectWith(
 							pending.partial,
 							[ new Error( 'unrecognized_partial' ), partialsPlacements[ partialId ] ]
@@ -820,7 +829,7 @@ wp.customize.selectiveRefresh = ( function( api ) {
 	// -----------------------------------------------------------------------
 	( function init() {
 		if ( document.readyState === 'loading' ) {
-			document.addEventListener( 'DOMContentLoaded', init );
+			document.addEventListener( 'DOMContentLoaded', init, { once: true } );
 			return;
 		}
 
