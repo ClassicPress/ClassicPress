@@ -7,7 +7,7 @@
 /* eslint consistent-this: [ "error", "control" ] */
 /* global wp, _wpCustomizeControlsL10n, _wpCustomizeHeader,
  * _wpCustomizeBackground, updatedControls, _updatedControlsWatcher,
- * MediaElementPlayer, console, confirm,  ajaxurl, IMAGE_WIDGET, console,
+ * MediaElementPlayer, console, confirm,  ajaxurl, IMAGE_WIDGET,
  * FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
  * FilePondPluginFileRename, FilePondPluginImagePreview
  */
@@ -36,7 +36,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Go direct to appropriate Customizer panel if its hash is specified in the URL
 	const hash = window.location.hash.replace( '#', '' );
-	if ( hash ) {
+	if ( hash && document.getElementById( hash ) ) {
 		[...document.getElementById( 'customize-theme-controls' ).children].forEach( function( child ) {
 			child.style.display = 'none';
 		} );
@@ -53,7 +53,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( queryParams.get( 'theme' ) === _wpCustomizeControlsL10n.activeTheme ) { // active theme
 			history.replaceState( null, '', window.location.pathname );
 		} else {
-			//document.getElementById( 'customize-preview' ).textContent = _wpCustomizeControlsL10n.themePreviewWait;
 			queryParams.delete( 'return' );
 			newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
 			history.replaceState( null, '', newUrl );
@@ -108,7 +107,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( event.origin !== location.origin ) {
 			return;
 		}
-    
+
 		try {
 			message = JSON.parse( event.data );
 		} catch( e ) {
@@ -223,18 +222,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		document.getElementById( 'customizer-sidebar-container' ).classList.toggle( 'collapsed' );
 		document.getElementById( 'customize-preview' ).classList.toggle( 'expanded-preview' );
 		addMenuButtons.forEach( function( add ) {
-			add.setAttribute( 'aria-expanded', false );
+			add.setAttribute( 'aria-expanded', 'false' );
 		} );
 		addWidgetButtons.forEach( function( add ) {
-			add.setAttribute( 'aria-expanded', false );
+			add.setAttribute( 'aria-expanded', 'false' );
 		} );
 
 		// Button ARIA + label text.
 		if ( button.getAttribute( 'aria-expanded' ) === 'true' ) {
-			button.setAttribute( 'aria-expanded', false );
+			button.setAttribute( 'aria-expanded', 'false' );
 			labelEl.textContent = 'Show Controls';
 		} else {
-			button.setAttribute( 'aria-expanded', true );
+			button.setAttribute( 'aria-expanded', 'true' );
 			labelEl.textContent = 'Hide Controls';
 		}
 	}
@@ -392,7 +391,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			orgThemes = document.querySelectorAll( '.wp-org .themes li' );
 			orgThemes.forEach( function( theme ) {
 				theme.style.marginRight = '2%';
-				theme.stylemarginBottom = '2%';
+				theme.style.marginBottom = '2%';
 			} );
 
 			// Update count
@@ -1272,7 +1271,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	form.addEventListener( 'submit', async function( e ) {
-		let negativeId, menuId, result, newResult,
+		let negativeId, menuId, newResult,
 			entries = Object.entries( updatedControls ),
 			navMenuChanges = {},
 			submittedChanges = {},
@@ -1310,6 +1309,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Create new menus first
 		for ( const [key, object] of navMenuNegatives ) {
+			formData = new FormData(); // reset
 			negativeId = key.replace( 'nav_menu[', '' ).replace( ']', '' );
 
 			// Build correct object for only this one menu
@@ -1339,7 +1339,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( ! response.ok ) {
 					throw new Error( response.status );
 				}
-				result = await response.json();
+				const result = await response.json();
 			} catch ( err ) {
 				console.error( err );
 				continue;
@@ -1458,6 +1458,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			console.error( _wpCustomizeControlsL10n.saveBlockedError['plural'] + ':', err );
 			saveButton.disabled = false;
 			saveButton.value = _wpCustomizeControlsL10n.publish;
+			window._customizePublishing = false;
 		}
 
 		// Update HTML
@@ -1557,10 +1558,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.getElementById( 'widgets-left' ).style.display = 'none';
 			availableMenuItems.style.display = 'none';
 			addMenuButtons.forEach( function( add ) {
-				add.setAttribute( 'aria-expanded', false );
+				add.setAttribute( 'aria-expanded', 'false' );
 			} );
 			addWidgetButtons.forEach( function( add ) {
-				add.setAttribute( 'aria-expanded', false );
+				add.setAttribute( 'aria-expanded', 'false' );
 			} );
 
 			// Go down to the second level
@@ -1591,10 +1592,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.getElementById( 'widgets-left' ).style.display = 'none';
 			availableMenuItems.style.display = 'none';
 			addMenuButtons.forEach( function( add ) {
-				add.setAttribute( 'aria-expanded', false );
+				add.setAttribute( 'aria-expanded', 'false' );
 			} );
 			addWidgetButtons.forEach( function( add ) {
-				add.setAttribute( 'aria-expanded', false );
+				add.setAttribute( 'aria-expanded', 'false' );
 			} );
 
 			document.getElementById( ul.dataset.parentId ).style.display = 'block';
