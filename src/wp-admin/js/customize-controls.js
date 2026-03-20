@@ -35,15 +35,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		menuToEdit = document.getElementById( 'menu-to-edit' );
 
 	// Go direct to appropriate Customizer panel if its hash is specified in the URL
-	const hash = window.location.hash.replace( '#', '' );
-	if ( hash && document.getElementById( hash ) ) {
+	const hash = window.location.hash.replace( '#', '' ),
+		targetEl = document.getElementById( hash );
+
+	if ( hash && targetEl ) {
 		[...document.getElementById( 'customize-theme-controls' ).children].forEach( function( child ) {
 			child.style.display = 'none';
 		} );
 
-		document.getElementById( hash ).style.display = 'block';
+		targetEl.style.display = 'block';
 		setTimeout( function() {
-			document.getElementById( hash ).querySelector( 'button' ).focus();
+			targetEl.querySelector( 'button' ).focus();
 		}, 0 );
 	}
 
