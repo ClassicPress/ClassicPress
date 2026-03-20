@@ -297,13 +297,15 @@ class WP_Customize_Panel {
 	/**
 	 * Render the panel container, and then its contents (via `this->render_content()`) in a subclass.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	protected function render() {
 		?>
-		<li id="accordion-panel-<?php esc_attr_e( $this->id ); ?>" class="accordion-section control-section control-panel control-panel-<?php esc_attr_e( $this->type ); ?>">
+		<li id="accordion-panel-<?php echo esc_attr( $this->id ); ?>"
+			class="accordion-section control-section control-panel control-panel-<?php echo esc_attr( $this->type ); ?>"
+		>
 			<h3 class="accordion-section-title" tabindex="0">
-				<?php esc_html_e( $this->title ); ?>
+				<?php echo esc_html( $this->title ); ?>
 				<span class="screen-reader-text">
 					<?php
 					/* translators: Hidden accessibility text. */
@@ -330,7 +332,7 @@ class WP_Customize_Panel {
 		$cannot_expand = isset( $this->description ) ? '' : ' cannot-expand';
 		?>
 
-		<li class="panel-meta customize-info accordion-section<?php esc_attr_e( $cannot_expand ); ?>">
+		<li class="panel-meta customize-info accordion-section<?php echo esc_attr( $cannot_expand ); ?>">
 			<button class="customize-panel-back" tabindex="-1"><span class="screen-reader-text">
 				<?php
 				/* translators: Hidden accessibility text. */
@@ -342,7 +344,7 @@ class WP_Customize_Panel {
 
 				<?php
 					/* translators: %s: The site/panel title in the Customizer. */
-					printf( __( 'You are customizing %s' ), '<strong class="panel-title">' . esc_html__( $this->title ) . '</strong>' );
+					printf( __( 'You are customizing %s' ), '<strong class="panel-title">' . esc_html( $this->title ) . '</strong>' );
 				?>
 
 				</span>
@@ -389,14 +391,14 @@ class WP_Customize_Panel {
 	/**
 	 * Redundant Underscore (JS) template for rendering this panel's container.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	protected function render_template() {}
 
 	/**
 	 * Redundant Underscore (JS) template for this panel's content.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	protected function content_template() {}
 }
