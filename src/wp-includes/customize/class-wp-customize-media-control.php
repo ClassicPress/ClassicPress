@@ -122,7 +122,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 	/**
 	 * Render content for this control from PHP.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 * @since 4.2.0 Moved from WP_Customize_Upload_Control.
 	 */
 	public function render_content() {
@@ -308,7 +308,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 	/**
 	 * Redundant JS template.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	public function content_template() {}
 
