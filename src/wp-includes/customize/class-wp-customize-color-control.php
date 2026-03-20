@@ -81,13 +81,13 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 	/**
 	 * Render the control content from PHP on load.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	public function render_content() {
 		if ( $this->label ) {
 			?>
 			<span class="customize-control-title">
-				<?php esc_html_e( $this->label ); ?>
+				<?php echo esc_html( $this->label ); ?>
 			</span>
 			<?php
 		}
@@ -102,7 +102,7 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 		<div class="customize-control-content">
 			<label>
 				<span class="screen-reader-text">
-					<?php esc_html_e( $this->label ); ?>
+					<?php echo esc_html( $this->label ); ?>
 				</span>
 
 				<?php
@@ -122,7 +122,7 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 					<input class="color-picker-hue" 
 						type="text" 
 						data-type="hue"
-						value="#<?php esc_attr_e( $this->value() ); ?>"
+						value="#<?php echo esc_attr( $this->value() ); ?>"
 						<?php $this->link(); ?>
 					>
 					<?php
@@ -131,8 +131,8 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 					<input class="color-picker-hex"
 						type="text"
 						maxlength="7"
-						placeholder="<?php esc_attr_e( $default_value ); ?>"
-						value="#<?php esc_attr_e( $this->value() ); ?>"
+						placeholder="<?php echo esc_attr( $default_value ); ?>"
+						value="#<?php echo esc_attr( $this->value() ); ?>"
 						<?php echo $default_value_attr; // data-default-color ?>
 						<?php $this->link(); ?>
 					>
@@ -147,7 +147,7 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 	/**
 	 * JS template no longer required.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	public function content_template() {}
 }
