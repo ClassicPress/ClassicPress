@@ -70,6 +70,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Remove inert attribute to enable interactions with form
 	form.removeAttribute( 'inert' );
+	document.getElementById( 'customize-preview-loading' ).classList.add( 'hidden' );
 
 	// Limit motion where appropriate
 	reducedMotionMediaQuery.addEventListener( 'change', function handleReducedMotionChange( event ) {
@@ -84,37 +85,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	window.addEventListener( 'beforeunload', function( e ) {
 		if ( saveButton.disabled === false ) {
 			e.preventDefault();
-		}
-	} );
-
-	/**
-	 * Add and remove spinner and loading message on preview pane
-	 */
-	function showPreviewLoading() {
-		document.getElementById( 'customize-preview-loading' ).classList.remove( 'hidden' );
-	}
-
-	function hidePreviewLoading() {
-		document.getElementById( 'customize-preview-loading' ).classList.add( 'hidden' );
-	}
-
-	// Show when navigation starts
-	showPreviewLoading();
-
-	// Hide when preview signals it's ready
-	window.addEventListener( 'message', function( event ) {
-		var message;
-		if ( event.origin !== location.origin ) {
-			return;
-		}
-
-		try {
-			message = JSON.parse( event.data );
-		} catch( e ) {
-			return;
-		}
-		if ( message && message.type === 'ready' ) {
-			hidePreviewLoading();
 		}
 	} );
 
