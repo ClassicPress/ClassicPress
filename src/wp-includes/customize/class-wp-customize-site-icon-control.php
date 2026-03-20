@@ -47,7 +47,7 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 	/**
 	 * Render the control content from PHP.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	function render_content() {
 		if ( $this->label ) {
@@ -176,7 +176,7 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 	/**
 	 * Redundant JS template function.
 	 *
-	 * @since CP_2.7.0
+	 * @since CP_2.8.0
 	 */
 	public function content_template() {}
 }
