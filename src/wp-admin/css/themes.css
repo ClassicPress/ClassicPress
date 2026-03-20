@@ -1897,24 +1897,6 @@ body.full-overlay-active {
 	background-color: #f0f0f1;
 }
 
-#customize-preview.wp-full-overlay-main::before,
-.customize-loading #customize-container::before,
-#customize-controls .notice.notification-overlay.notification-loading::before,
-.theme-install-overlay .wp-full-overlay-main::before {
-	content: "";
-	display: block;
-	width: 20px;
-	height: 20px;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	z-index: 0;
-	margin: -10px 0 0 -10px;
-	transform: translateZ(0);
-	background: transparent url(../images/spinner.gif) no-repeat center center;
-	background-size: 20px 20px;
-}
-
 #theme-preview-main {
 	 position: fixed;
 	 left: unset;
