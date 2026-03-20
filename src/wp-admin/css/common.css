@@ -1723,8 +1723,12 @@ p.auto-update-status {
 }
 
 #screen-meta-links {
-	float: right;
-	margin: 0 20px 0 0;
+	margin: 0 20px -32px 0;
+	position: sticky;
+	display: flex;
+	justify-content: flex-end;
+	top: 32px;
+	z-index: 999;
 }
 
 /* screen options and help tabs revert */
@@ -3706,6 +3710,9 @@ img {
 	.my-sites li {
 		min-height: 0;
 	}
+	#screen-meta-links {
+		top: 0;
+	}
 }
 
 @media only screen and (min-width: 600px) {
@@ -4147,6 +4154,7 @@ img {
 	}
 
 	#screen-meta-links {
+		top: 42px;
 		margin-bottom: 20px; /* Add margins beneath links for better spacing between boxes and elements */
 	}
 
