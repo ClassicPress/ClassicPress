@@ -336,8 +336,8 @@ wp_print_scripts();
 				}
 				?>
 				<button type="button" class="customize-controls-preview-toggle">
-					<span class="controls"><?php _e( 'Customize' ); ?></span>
-					<span class="preview"><?php _e( 'Preview' ); ?></span>
+					<span class="controls"><?php esc_html_e( 'Customize' ); ?></span>
+					<span class="preview"><?php esc_html_e( 'Preview' ); ?></span>
 				</button>
 				<a class="customize-controls-close" href="<?php echo esc_url( $wp_customize->get_return_url() ); ?>">
 					<span class="screen-reader-text">
