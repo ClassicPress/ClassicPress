@@ -69,7 +69,7 @@
 			this.bind = function( fn ) {
 				if ( typeof fn === 'function' ) {
 					subs.push( fn );
-				};
+				}
 			};
 		};
 	}
@@ -316,7 +316,7 @@ function makeDebouncedSender( previewKey, rawKey, target ) {
  * Receive postMessages from the preview iframe
  */
 window.addEventListener( 'message', function( event ) {
-	var message, target, data, id, type, place, menuId, hash, itemId;
+	var message, target, data, id, type, place, menuId, hash, itemId, sidebarId;
 
 	if ( event.origin !== location.origin ) {
 		return;
@@ -336,7 +336,11 @@ window.addEventListener( 'message', function( event ) {
 		return;
 	}
 
-	data      = message.data;
+	data = message.data;
+	if ( ! data ) {
+		return;
+	}
+
 	id        = data.id;
 	type      = data.type || null;
 	place     = data.place || null;
@@ -360,7 +364,11 @@ window.addEventListener( 'message', function( event ) {
 			hash = 'sub-accordion-section-sidebar-widgets-' + id;
 		} else {
 			itemId = 'customize-control-' + id;
-			hash = document.getElementById( itemId ).parentNode.id;
+			if ( document.getElementById( itemId ) ) {
+				hash = document.getElementById( itemId ).parentNode.id;
+			} else {
+				return;
+			}
 		}
 	}
 
