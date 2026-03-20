@@ -7,10 +7,8 @@
  * @since CP-2.8.0
  */
 
-/*
- * global wp, _wpCustomizeControlsL10n, _wpCustomizeHeader, _wpCustomizeBackground,
- * updatedControls
- */
+/* global wp, _wpCustomizeControlsL10n, _wpCustomizeHeader, _wpCustomizeBackground,
+ * updatedControls */
 ( function( exports ) {
 	'use strict';
 
@@ -118,12 +116,17 @@
 	// Listen for messages from parent frame
 	window.addEventListener( 'message', function( event ) {
 		var message;
+
+		if ( event.origin !== parentOrigin ) {
+			return;
+		}
 		if ( ! event.data ) {
 			return;
 		}
+
 		try {
 			message = JSON.parse( event.data );
-		} catch( e ) {
+		} catch( e ) { // Malformed JSON in data attribute — not a fatal error.
 			return;
 		}
 		if ( ! message || ! message.type ) {
@@ -146,7 +149,7 @@
 			matchesAllowedUrl;
 
 		if ( 'javascript:' === element.protocol ) {
-			return true;
+			return false;
 		}
 		if ( 'https:' !== element.protocol && 'http:' !== element.protocol ) {
 			return false;
@@ -342,7 +345,9 @@
 			if ( partialType === 'nav_menu_instance' ) {
 				try { // use getAttribute instead of dataset to avoid potential problems with parsing escaped values
 					context = JSON.parse( container.getAttribute( 'data-customize-partial-placement-context' ) || '{}' );
-				} catch( e ) {}
+				} catch( e ) {
+					// Malformed JSON in data attribute — not a fatal error, proceed with empty context.
+				}
 
 				api.preview.send( 'focus-partial', {
 					id:     partialId,
@@ -353,7 +358,9 @@
 			} else if ( partialType === 'widget' ) {
 				try { // use getAttribute instead of dataset to avoid potential problems with parsing escaped values
 					context = JSON.parse( container.getAttribute( 'data-customize-partial-placement-context' ) || '{}' );
-				} catch( e ) {}
+				} catch( e ) {
+					// Malformed JSON in data attribute — not a fatal error, proceed with empty context.
+				}
 
 				api.preview.send( 'focus-partial', {
 					id: partialId,
@@ -434,7 +441,7 @@
 			}
 
 			bgCss = document.getElementById( 'custom-background-css' );
-			if ( bgCss ) {
+			if ( bgCss ) { // css values come from api.settings, which is server-populated
 				bgCss.textContent = 'body.custom-background { ' + css + ' }';
 			}
 		}
@@ -545,7 +552,8 @@
 			} );
 
 			document.body.addEventListener( 'submit', function( e ) {
-				var form = e.target,
+				var formParams,
+					form = e.target,
 					urlParser = document.createElement( 'a' );
 
 				urlParser.href = form.action;
@@ -557,10 +565,10 @@
 				}
 
 				if ( ! e.defaultPrevented ) {
-					if ( urlParser.search.length > 1 ) {
-						urlParser.search += '&';
+					formParams = new URLSearchParams( new FormData( form ) ).toString();
+					if ( formParams ) {
+						urlParser.search += ( urlParser.search.length > 1 ? '&' : '?' ) + formParams;
 					}
-					urlParser.search += new URLSearchParams( new FormData( form ) ).toString();
 					api.preview.send( 'url', urlParser.href );
 				}
 
