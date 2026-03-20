@@ -86,7 +86,7 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 	/**
 	 * Render the control content from PHP.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	public function render_content() {
 		$attachment_id = (int) $this->value();
