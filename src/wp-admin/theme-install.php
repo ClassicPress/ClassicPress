@@ -329,7 +329,7 @@ if ( ! is_wp_error( $response ) ) {
 
 						<div class="theme-details">
 							<div class="theme-rating">
-								<a class="num-ratings" href=""></a>
+								<a class="num-ratings" href="" target="_blank"></a>
 							</div>
 							<div class="theme-version"></div>
 							<div class="theme-description"></div>
