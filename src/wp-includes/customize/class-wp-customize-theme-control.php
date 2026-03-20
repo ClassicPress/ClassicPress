@@ -82,9 +82,9 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				data-version="<?php echo esc_attr( $theme['version'] ); ?>"
 				data-compatible-wp="<?php echo esc_attr( $theme['compatibleWP'] ); ?>"
 				data-compatible-php="<?php echo esc_attr( $theme['compatiblePHP'] ); ?>"
-				data-has-update="<?php esc_attr_e( $theme['hasUpdate'] ); ?>"
-				data-update="<?php esc_attr_e( $theme['update'] ); ?>"
-				data-update-response="<?php esc_attr_e( $theme['updateResponse']['compatibleWP'] . '-' . $theme['updateResponse']['compatiblePHP'] ); ?>"
+				data-has-update="<?php echo esc_attr( $theme['hasUpdate'] ); ?>"
+				data-update="<?php echo esc_attr( $theme['update'] ); ?>"
+				data-update-response="<?php echo esc_attr( $theme['updateResponse']['compatibleWP'] . '-' . $theme['updateResponse']['compatiblePHP'] ); ?>"
 				aria-describedby="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action"
 			>
 				<div class="customize-control-notifications-container" style="display: none;">
@@ -180,9 +180,9 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				data-version="<?php echo esc_attr( $theme['version'] ); ?>"
 				data-compatible-wp="<?php echo esc_attr( $theme['compatibleWP'] ); ?>"
 				data-compatible-php="<?php echo esc_attr( $theme['compatiblePHP'] ); ?>"
-				data-has-update="<?php esc_attr_e( $theme['hasUpdate'] ); ?>"
-				data-update="<?php esc_attr_e( $theme['update'] ); ?>"
-				data-update-response="<?php esc_attr_e( $theme['updateResponse']['compatibleWP'] . '-' . $theme['updateResponse']['compatiblePHP'] ); ?>"
+				data-has-update="<?php echo esc_attr( $theme['hasUpdate'] ); ?>"
+				data-update="<?php echo esc_attr( $theme['update'] ); ?>"
+				data-update-response="<?php echo esc_attr( $theme['updateResponse']['compatibleWP'] . '-' . $theme['updateResponse']['compatiblePHP'] ); ?>"
 				aria-describedby="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action"
 			>
 				<div class="customize-control-notifications-container" style="display: none;">
@@ -306,14 +306,14 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 	/**
 	 * Redundant JS template.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	public function content_template() {}
 
 	/**
 	 * Display update messages and explanations.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	protected function notify_updates( $theme ) {
 		$cp_has_update = classicpress_has_update();
