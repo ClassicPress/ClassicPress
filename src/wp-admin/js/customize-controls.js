@@ -50,7 +50,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	// Delete redundant query args from browser URL
-	history.replaceState( null, null, '?' + queryParams.toString() );
 	if ( queryParams.get( 'theme' ) ) {
 		if ( queryParams.get( 'theme' ) === _wpCustomizeControlsL10n.activeTheme ) { // active theme
 			history.replaceState( null, '', window.location.pathname );
