@@ -58,7 +58,7 @@ class WP_Customize_Nav_Menus_Panel extends WP_Customize_Panel {
 	/**
 	 * PHP rendering for this panel's content (but not its container).
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	public function render_content() {
 		$panels      = $this->manager->panels();
