@@ -4,7 +4,8 @@
  *
  * @output wp-admin/js/widgets.js
  */
-/* global Sortable, ajaxurl, console, _wpCustomizeWidgetsSettings, _updatedControlsWatcher */
+/* global Sortable, ajaxurl, console, _wpCustomizeWidgetsSettings,
+ * updatedControls, _updatedControlsWatcher, _wpCustomizeControlsL10n */
 document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Set variables for the whole file
@@ -50,6 +51,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @since CP-2.8.0
 	 */
 	widgets.forEach( function( widget ) {
+		widget.dataset._bound = '1'; // prevents double-binding if bindWidget() is called
+
 		widget.addEventListener( 'input', function() {
 			widgetInputChange( widget );
 		}, true ); // capture
@@ -169,8 +172,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				title = input.value || '';
 			}
 			if ( title ) {
-				title = ': ' + title.replace( /<[^<>]+>/g, '' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
-				widget.querySelector( '.in-widget-title' ).innerHTML = title;
+				widget.querySelector( '.in-widget-title' ).textContent = title;
 			}
 
 			if ( widget.querySelector( 'p.widget-error' ) != null ) {
@@ -222,13 +224,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	function sortableEnd( e ) {
-		var currentSidebars, newSidebars,
+		var currentSidebars,
 			sidebarId = e.target.dataset.id,
 			settingId = 'sidebars_widgets[' + sidebarId + ']',
 			newWidgetOrder = Array.from( e.target.querySelectorAll( '.widget-id' ) ).map( input => input.value );
 
 		currentSidebars = updatedControls[ 'sidebars_widgets' ];
-		newSidebars = Object.assign( {}, currentSidebars );
 		_updatedControlsWatcher[ settingId ] = newWidgetOrder.slice();
 		activatePublishButton();
 	}
@@ -306,7 +307,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @since CP-2.8.0
 	 */
 	function reassessPositioning( sidebar ) {
-		var	currentSidebars, newSidebars,
+		var	currentSidebars,
 			sidebarId = sidebar.dataset.id,
 			settingId = 'sidebars_widgets[' + sidebarId + ']',
 			newWidgetOrder = Array.from( sidebar.querySelectorAll( '.widget-id' ) ).map( input => input.value ),
@@ -323,7 +324,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 
 		currentSidebars = updatedControls[ 'sidebars_widgets' ];
-		newSidebars = Object.assign( {}, currentSidebars );
 		_updatedControlsWatcher[ settingId ] = newWidgetOrder.slice();
 		activatePublishButton();
 	}
@@ -486,7 +486,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Hide widget titles while reordering: title is already in the reorder controls.
 			widgetTitles = e.target.closest( 'ul' ).querySelectorAll( '.customize-control-widget_form .widget-title' );
 			widgetTitles.forEach( function( title ) {
-				title.setAttribute( 'aria-hidden', true );
+				title.setAttribute( 'aria-hidden', 'true' );
 			} );
 
 		// Reorder widget or move to another sidebar
@@ -543,7 +543,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			wp.a11y.speak( _wpCustomizeWidgetsSettings.l10n.reorderModeOff );
 			widgetTitles = e.target.closest( 'ul' ).querySelectorAll( '.customize-control-widget_form .widget-title' );
 			widgetTitles.forEach( function( title ) {
-				title.setAttribute( 'aria-hidden', false );
+				title.setAttribute( 'aria-hidden', 'false' );
 			} );
 
 		// Finish moving widget to different sidebar
