@@ -80,15 +80,15 @@ class WP_Customize_Code_Editor_Control extends WP_Customize_Control {
 	/**
 	 * Render the control content from PHP.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	public function render_content() {
 		$element_id_prefix = 'el' . uniqid();
 		if ( $this->label ) {
 			?>
 
-			<label for="<?php esc_attr_e( $element_id_prefix . '_editor' ); ?>" class="customize-control-title screen-reader-text">
-				<?php esc_html_e( $this->label ); ?>
+			<label for="<?php echo esc_attr( $element_id_prefix . '_editor' ); ?>" class="customize-control-title screen-reader-text">
+				<?php echo esc_html( $this->label ); ?>
 			</label>
 
 			<?php
@@ -127,7 +127,7 @@ class WP_Customize_Code_Editor_Control extends WP_Customize_Control {
 		}
 		?>
 
-		<textarea id="<?php esc_attr_e( $element_id_prefix . '_editor' ); ?>" 
+		<textarea id="<?php echo esc_attr( $element_id_prefix . '_editor' ); ?>" 
 
 			<?php
 			// Print all input attributes
@@ -156,7 +156,7 @@ class WP_Customize_Code_Editor_Control extends WP_Customize_Control {
 	/**
 	 * Redundant JS template.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	public function content_template() {}
 }
