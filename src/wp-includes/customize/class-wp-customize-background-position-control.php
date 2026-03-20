@@ -27,7 +27,7 @@ class WP_Customize_Background_Position_Control extends WP_Customize_Control {
 	/**
 	 * Render the control content from PHP.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	public function render_content() {
 		$options = array(
@@ -77,7 +77,7 @@ class WP_Customize_Background_Position_Control extends WP_Customize_Control {
 		if ( $this->label ) {
 			?>
 			<span class="customize-control-title">
-				<?php esc_attr_e( $this->label ); ?>
+				<?php echo esc_attr( $this->label ); ?>
 			</span>
 			<?php
 		}
@@ -85,7 +85,7 @@ class WP_Customize_Background_Position_Control extends WP_Customize_Control {
 		if ( $this->description ) {
 			?>
 			<span class="description customize-control-description">
-				<?php esc_attr_e( $this->description ); ?>
+				<?php echo esc_attr( $this->description ); ?>
 			</span>
 			<?php
 		}
@@ -97,7 +97,7 @@ class WP_Customize_Background_Position_Control extends WP_Customize_Control {
 					<span>
 						<?php
 						/* translators: Hidden accessibility text. */
-						_e( 'Image Position' );
+						esc_html_e( 'Image Position' );
 						?>
 					</span>
 				</legend>
@@ -126,7 +126,7 @@ class WP_Customize_Background_Position_Control extends WP_Customize_Control {
 	/**
 	 * Redundant JS template.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 */
 	public function content_template() {}
 }
