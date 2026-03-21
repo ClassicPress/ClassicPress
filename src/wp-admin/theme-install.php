@@ -329,13 +329,13 @@ if ( ! is_wp_error( $response ) ) {
 
 						<div class="theme-details">
 							<div class="theme-rating">
-								<a class="num-ratings" href="" target="_blank"></a>
+								<a class="num-ratings" href=""></a>
 							</div>
 							<div class="theme-version"></div>
 							<div class="theme-description"></div>
 						</div>
 
-						<a class="theme-url" href="" target="_blank"></a>
+						<a class="theme-url" href=""></a>
 					</div>
 				</div>
 				<div class="wp-full-overlay-footer">
