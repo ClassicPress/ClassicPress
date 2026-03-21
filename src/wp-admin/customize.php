@@ -1709,10 +1709,6 @@ wp_print_scripts();
 				</div>
 			</div>
 
-			<?php
-			// Hidden field placeholder to align with the idea that this sidebar will
-			// eventually submit changes (stage 2+).
-			?>
 			<input type="hidden"
 				id="customize_changeset_uuid"
 				name="customize_changeset_uuid"
@@ -1723,7 +1719,11 @@ wp_print_scripts();
 				name="theme_stylesheet"
 				value="<?php echo esc_attr( wp_get_theme()->get_stylesheet() ); ?>"
 			>
-			<input type="hidden" id="customize_form_stage" name="customize_form_stage" value="php-first-paint">
+			<input type="hidden"
+				id="customize_form_stage"
+				name="customize_form_stage"
+				value="php-first-paint"
+			>
 
 			<?php
 			wp_nonce_field( 'save-customize_' . $wp_customize->get_stylesheet(), 'customizer_nonce', false );
