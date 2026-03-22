@@ -5,9 +5,7 @@
  * @output wp-admin/js/customize-nav-menus.js
  */
 
-/* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings,
- * console, ajaxurl, updatedControls, _updatedControlsWatcher,
- * Sortable, isRTL */
+/* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings, console, ajaxurl, updatedControls, _updatedControlsWatcher, Sortable, isRTL */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addObserver, itemObserver, currentMenuId,
 		newMenuItemIDs = [],
