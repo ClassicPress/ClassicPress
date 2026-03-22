@@ -49,7 +49,7 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 	 *
 	 * @since CP-2.8.0
 	 */
-	function render_content() {
+	public function render_content() {
 		if ( $this->label ) {
 			?>
 
@@ -162,7 +162,7 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 			<?php
 		}
 
-		if ( $this->description  ) {
+		if ( $this->description ) {
 			?>
 
 			<div class="description customize-control-description">
