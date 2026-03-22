@@ -234,7 +234,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 
 						// Inject values (Display Mode + Target Audience + Roles)
 						$plugin_template = cp_nav_menu_roles_injector( $plugin_template, $mode, $roles, $item_id );
-						
+
 						echo $plugin_template;
 					}
 					?>
@@ -305,33 +305,35 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 function cp_nav_menu_roles_injector( $template, $mode, $roles, $item_id ) {
 
 	// Display Mode.
-    $show_input = sprintf(
-        'name="nav-menu-display-mode[%d]" id="edit-menu-item-role_display_mode_show-%d" value="show"',
-        $item_id, $item_id
-    );
-    $hide_input = sprintf(
-        'name="nav-menu-display-mode[%d]" id="edit-menu-item-role_display_mode_hide-%d" value="hide"',
-        $item_id, $item_id
-    );
+	$show_input = sprintf(
+		'name="nav-menu-display-mode[%d]" id="edit-menu-item-role_display_mode_show-%d" value="show"',
+		$item_id,
+		$item_id
+	);
+	$hide_input = sprintf(
+		'name="nav-menu-display-mode[%d]" id="edit-menu-item-role_display_mode_hide-%d" value="hide"',
+		$item_id,
+		$item_id
+	);
 
-    $template = str_replace( $show_input, $show_input . checked( 'show', $mode, false ), $template );
-    $template = str_replace( $hide_input, $hide_input . checked( 'hide', $mode, false ), $template );
+	$template = str_replace( $show_input, $show_input . checked( 'show', $mode, false ), $template );
+	$template = str_replace( $hide_input, $hide_input . checked( 'hide', $mode, false ), $template );
 
-    // Target Audience (Logged In/Out/Everyone).
-    $target_value = ! empty( $roles ) ? 'in' : '';
-    $template = str_replace( 'value="in"', 'value="in"' . checked( 'in',  $target_value, false ), $template );
-    $template = str_replace( 'value="out"', 'value="out"' . checked( 'out', $target_value, false ), $template );
-    $template = str_replace( 'value=""', 'value=""' . checked( '', $target_value, false ), $template );
+	// Target Audience (Logged In/Out/Everyone).
+	$target_value = ! empty( $roles ) ? 'in' : '';
+	$template = str_replace( 'value="in"', 'value="in"' . checked( 'in',  $target_value, false ), $template );
+	$template = str_replace( 'value="out"', 'value="out"' . checked( 'out', $target_value, false ), $template );
+	$template = str_replace( 'value=""', 'value=""' . checked( '', $target_value, false ), $template );
 
-    // Roles checkboxes.
-    global $wp_roles;
-    $display_roles = apply_filters( 'nav_menu_roles', $wp_roles->role_names ?? array() );
-    asort( $display_roles );
-    foreach ( array_keys( $display_roles ) as $role_key ) {
-        $value_match = 'value="' . esc_attr( $role_key ) . '"';
-        $is_selected = in_array( $role_key, $roles, true );
-        $template = str_replace( $value_match, $value_match . checked( $is_selected, true, false ), $template );
-    }
+	// Roles checkboxes.
+	global $wp_roles;
+	$display_roles = apply_filters( 'nav_menu_roles', $wp_roles->role_names ?? array() );
+	asort( $display_roles );
+	foreach ( array_keys( $display_roles ) as $role_key ) {
+		$value_match = 'value="' . esc_attr( $role_key ) . '"';
+		$is_selected = in_array( $role_key, $roles, true );
+		$template = str_replace( $value_match, $value_match . checked( $is_selected, true, false ), $template );
+	}
 
-    return $template;
+	return $template;
 }
