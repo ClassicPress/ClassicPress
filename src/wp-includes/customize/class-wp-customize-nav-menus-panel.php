@@ -62,7 +62,7 @@ class WP_Customize_Nav_Menus_Panel extends WP_Customize_Panel {
 	 */
 	public function render_content() {
 		$panels      = $this->manager->panels();
-		$menus_panel = isset ( $panels['nav_menus'] ) ? $panels['nav_menus'] : null;
+		$menus_panel = isset( $panels['nav_menus'] ) ? $panels['nav_menus'] : null;
 		if ( $menus_panel ) :
 			$cannot_expand = $menus_panel->description ? '' : ' cannot-expand';
 			?>
