@@ -106,7 +106,7 @@ class WP_Customize_Code_Editor_Control extends WP_Customize_Control {
 			?>
 
 			<div class="description customize-section-description open">
-				<?php echo wp_kses_post( $this->description ?: $section_description ); ?>
+				<?php echo wp_kses_post( $this->description ? $this->description : $section_description ); ?>
 			</div>
 
 			<?php
@@ -143,7 +143,7 @@ class WP_Customize_Code_Editor_Control extends WP_Customize_Control {
 			$this->link();
 			?>
 		>
-			<?php 
+			<?php
 			// Initial content value
 			echo esc_textarea( $this->value() );
 			?>
