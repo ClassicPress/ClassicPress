@@ -5,7 +5,7 @@
  *
  * @since CP-2.8.0
  */
-/* global wp, updatedControls, _updatedControlsWatcher */
+/* global wp */
 
 /* CONTROLS-frame compat shim: keep the pane stable if 3rd-party code runs early. */
 (function() {
