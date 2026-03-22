@@ -292,7 +292,7 @@ wp_print_scripts();
 		<h2 id="customizer-title" class="screen-reader-text">
 			<?php printf( esc_html__( 'Customizing: %s' ), esc_html( get_bloginfo( 'name', 'display' ) ) ); ?>
 		</h2>
-		<form id="customize-controls" class="wrap wp-full-overlay-sidebar" style="position: static;z-index: 0;"
+		<form id="customize-controls" class="wrap wp-full-overlay-sidebar" style="position: static;z-index: 5;"
 			action="<?php echo esc_url( admin_url( 'customize.php' ) ); ?>"
 			method="post"
 			accept-charset="<?php bloginfo( 'charset' ); ?>"
