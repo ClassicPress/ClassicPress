@@ -1724,7 +1724,7 @@ final class WP_Customize_Widgets {
 		 * @since CP-2.8.0
 		 */
 		add_action( 'dynamic_sidebar_before', array( $this, 'cp_print_sidebar_partial_container_open' ), 20 );
-		add_action( 'dynamic_sidebar_after',  array( $this, 'cp_print_sidebar_partial_container_close' ), 20 );
+		add_action( 'dynamic_sidebar_after', array( $this, 'cp_print_sidebar_partial_container_close' ), 20 );
 	}
 
 	/**
