@@ -1144,6 +1144,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			setTimeout( function() {
 				button.focus();
 			} );
+			_updatedControlsWatcher[ parent.closest( 'li' ).dataset.settingId ] = '';
 		} else { // header image
 			parent.previousElementSibling.querySelector( 'img' )?.remove();
 			parent.previousElementSibling.querySelector( 'video' )?.remove();
@@ -1153,6 +1154,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			setTimeout( function() {
 				customizeButton.nextElementSibling.focus();
 			} );
+			_updatedControlsWatcher[ 'header_image' ] = 'remove-header';
+			_updatedControlsWatcher[ 'header_image_data' ] = {};
 		}
 		activatePublishButton();
 	}
