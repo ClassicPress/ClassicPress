@@ -4171,8 +4171,8 @@ final class WP_Customize_Manager {
 	 *
 	 * @since CP 2.8.0
 	 */
-	public function get_controls_data_by_section() : array {
-		$primary_setting_id = static function ( $control ) : ?string {
+	public function get_controls_data_by_section(): array {
+		$primary_setting_id = static function ( $control ): ?string {
 			$settings = $control->settings ?? null;
 
 			// Single setting id as string.
@@ -4225,12 +4225,15 @@ final class WP_Customize_Manager {
 
 		// Sort rows within each section by priority, then by id (natural, case-insensitive).
 		foreach ( $by_section as $section => $rows ) {
-			usort( $rows, static function ( $a, $b ) {
-				if ( $a['priority'] === $b['priority'] ) {
-					return strnatcasecmp( $a['id'], $b['id'] );
+			usort(
+				$rows,
+				static function ( $a, $b ) {
+					if ( $a['priority'] === $b['priority'] ) {
+						return strnatcasecmp( $a['id'], $b['id'] );
+					}
+					return $a['priority'] <=> $b['priority'];
 				}
-				return $a['priority'] <=> $b['priority'];
-			} );
+			);
 			$by_section[ $section ] = $rows;
 		}
 
