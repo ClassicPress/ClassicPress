@@ -1190,7 +1190,8 @@ final class WP_Customize_Nav_Menus {
 								data-type_label="<?php echo esc_attr( isset( $available_item_type['type_label'] ) ? $available_item_type['type_label'] : $available_item_type['type'] ); ?>"
 								style="max-height: 72px;"
 							>
-								<?php foreach ( $items as $item ) {
+								<?php
+								foreach ( $items as $item ) {
 									?>
 									<li id="<?php echo esc_attr( $item['id'] ); ?>"
 										class="menu-item-tpl"
@@ -1539,15 +1540,18 @@ final class WP_Customize_Nav_Menus {
 
 			$settings = array_unique( $settings );
 
-			$this->manager->selective_refresh->add_partial( $partial_id, array(
-				'type'                         => 'nav_menu_instance',
-				'selector'                     => null,
-				'settings'                     => $settings,
-				'primary_setting'              => $setting_id,
-				'fallback_refresh'             => true,
-				'container_inclusive'          => true,
-				'constructingContainerContext' => $exported_args,
-			) );
+			$this->manager->selective_refresh->add_partial(
+				$partial_id,
+				array(
+					'type'                         => 'nav_menu_instance',
+					'selector'                     => null,
+					'settings'                     => $settings,
+					'primary_setting'              => $setting_id,
+					'fallback_refresh'             => true,
+					'container_inclusive'          => true,
+					'constructingContainerContext' => $exported_args,
+				)
+			);
 		}
 
 		return $args;
