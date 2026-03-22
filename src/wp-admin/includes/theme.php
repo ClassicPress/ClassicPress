@@ -992,7 +992,7 @@ function customize_themes_print_templates() {
 							<br><?php wp_get_auto_update_message(); ?>
 						</span>
 
-					<?php
+						<?php
 						wp_get_admin_notice(
 							'',
 							array(
