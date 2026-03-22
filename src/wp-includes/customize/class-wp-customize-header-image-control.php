@@ -97,7 +97,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 
 	/**
 	 * @global Custom_Image_Header $custom_image_header
-	 *	 *
+	 *
 	 * Redundant @since CP_2.8.0
 	 */
 	public function prepare_control() {}
@@ -280,7 +280,8 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 								<div class="default-header-image">
 									<img src="<?php echo esc_url( $header['url'] ); ?>">
 
-									<?php if ( isset( $header['label'] ) ) {
+									<?php
+									if ( isset( $header['label'] ) ) {
 										?>
 
 										<span>
