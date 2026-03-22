@@ -229,7 +229,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			settingId = 'sidebars_widgets[' + sidebarId + ']',
 			newWidgetOrder = Array.from( e.target.querySelectorAll( '.widget-id' ) ).map( input => input.value );
 
-		currentSidebars = updatedControls[ 'sidebars_widgets' ];
+		currentSidebars = updatedControls.sidebars_widgets;
 		_updatedControlsWatcher[ settingId ] = newWidgetOrder.slice();
 		activatePublishButton();
 	}
@@ -323,7 +323,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} );
 
-		currentSidebars = updatedControls[ 'sidebars_widgets' ];
+		currentSidebars = updatedControls.sidebars_widgets;
 		_updatedControlsWatcher[ settingId ] = newWidgetOrder.slice();
 		activatePublishButton();
 	}
@@ -455,8 +455,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @since CP-2.8.0
 	 */
 	document.addEventListener( 'click', function( e ) {
-		var currentSidebars, newSidebars, sidebar, sidebarId, settingId,
-			template, clone, oldSidebar, newSidebarId, newSidebar, widgetTitles,
+		var template, clone, oldSidebar, newSidebarId, newSidebar, widgetTitles,
 			widget = e.target.closest( '.customize-control-widget_form' );
 
 		// Clear widget search string
