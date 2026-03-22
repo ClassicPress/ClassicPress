@@ -129,7 +129,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 								placeholder="<?php echo esc_attr( $item['original_title'] ); ?>"
 								class="widefat edit-menu-item-title"
 								name="menu-item-title"
-								value="<?php esc_html( $item['title'] ) ? echo esc_html( $item['title'] ) : esc_html( $item['original_title'] ); ?>"
+								value="<?php echo $item['title'] ? esc_html( $item['title'] ) : esc_html( $item['original_title'] ); ?>"
 							>
 						</label>
 					</p>
