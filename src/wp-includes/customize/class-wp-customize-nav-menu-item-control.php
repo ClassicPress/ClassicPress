@@ -321,7 +321,7 @@ function cp_nav_menu_roles_injector( $template, $mode, $roles, $item_id ) {
 
 	// Target Audience (Logged In/Out/Everyone).
 	$target_value = ! empty( $roles ) ? 'in' : '';
-	$template = str_replace( 'value="in"', 'value="in"' . checked( 'in',  $target_value, false ), $template );
+	$template = str_replace( 'value="in"', 'value="in"' . checked( 'in', $target_value, false ), $template );
 	$template = str_replace( 'value="out"', 'value="out"' . checked( 'out', $target_value, false ), $template );
 	$template = str_replace( 'value=""', 'value=""' . checked( '', $target_value, false ), $template );
 
