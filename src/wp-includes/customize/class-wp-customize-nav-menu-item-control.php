@@ -57,7 +57,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 	public function render_content() {
 		$item      = $this->value();
 		$item_id   = absint( str_replace( array( 'nav_menu_item[', ']' ), '', $this->id ) );
-		$title     = $item['title'] ?: $item['original_title'];
+		$title     = $item['title'] ? $item['title'] : $item['original_title'];
 		$no_title  = $title ? '' : 'no-title';
 		$untitled  = _x( '(no label)', 'missing menu item navigation label' );
 		?>
@@ -68,7 +68,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 				<summary>
 					<span class="item-title" aria-hidden="true">
 						<span class="menu-item-title<?php echo $no_title; ?>">
-							<?php echo esc_html( $title ?: $untitled ); ?>
+							<?php echo esc_html( $title ? $title : $untitled ); ?>
 						</span>
 					</span>
 					<div class="menu-item-reorder-nav">
@@ -92,7 +92,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 							<span class="screen-reader-text">
 								<?php
 									/* translators: 1: Title of a menu item, 2: Type of a menu item. */
-									printf( __( 'Remove Menu Item: %1$s (%2$s)' ), esc_html__( $title ?: $untitled ), esc_html__( $item['type_label'] ) );
+									printf( __( 'Remove Menu Item: %1$s (%2$s)' ), esc_html__( $title ? $title : $untitled ), esc_html__( $item['type_label'] ) );
 								?>
 							</span>
 						</button>
@@ -129,7 +129,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 								placeholder="<?php echo esc_attr( $item['original_title'] ); ?>"
 								class="widefat edit-menu-item-title"
 								name="menu-item-title"
-								value="<?php echo esc_html( $item['title'] ) ?: esc_html( $item['original_title'] ); ?>"
+								value="<?php esc_html( $item['title'] ) ? echo esc_html( $item['title'] ) : esc_html( $item['original_title'] ); ?>"
 							>
 						</label>
 					</p>
@@ -223,14 +223,14 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 					 */
 					do_action( 'wp_nav_menu_item_custom_fields_customize_template', $item_id, $item );
 					$plugin_template = ob_get_clean();
-					
+
 					if ( $plugin_template ) { // Replace mustache-style placeholders with actual values.
 						$plugin_template = str_replace( '{{ data.menu_item_id }}', $item_id, $plugin_template );
 
 						// Mods for Nav Menu Roles plugin
 						// Get current values (DB + preview, emulating plugin logic).
-						$mode = get_post_meta( $item_id, '_nav_menu_role_display_mode', true ) ?: 'show';
-						$roles = (array) get_post_meta( $item_id, '_nav_menu_role', true ) ?: array();
+						$mode = get_post_meta( $item_id, '_nav_menu_role_display_mode', true ) ? get_post_meta( $item_id, '_nav_menu_role_display_mode', true ) : 'show';
+						$roles = get_post_meta( $item_id, '_nav_menu_role', true ) ? (array) get_post_meta( $item_id, '_nav_menu_role', true ) : array();
 
 						// Inject values (Display Mode + Target Audience + Roles)
 						$plugin_template = cp_nav_menu_roles_injector( $plugin_template, $mode, $roles, $item_id );
