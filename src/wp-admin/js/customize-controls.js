@@ -5,12 +5,10 @@
  */
 
 /* eslint consistent-this: [ "error", "control" ] */
-/* global wp, _wpCustomizeControlsL10n, updatedControls,
- * _updatedControlsWatcher, console, ajaxurl, IMAGE_WIDGET,
- * FilePondPluginFileValidateType, FilePondPluginImagePreview */
+/* global wp, _wpCustomizeControlsL10n, updatedControls, _updatedControlsWatcher, console, ajaxurl, IMAGE_WIDGET */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
-		intersectionObserver,
+		intersectionObserver, targetEl,
 		i = 1,
 		{ FilePond } = window, // import FilePond
 		dialog = document.getElementById( 'widget-modal' ),
@@ -28,11 +26,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		addWidgetButtons = document.querySelectorAll( '.add-new-widget' ),
 		newMenuItemIDs = [],
-		menuToEdit = document.getElementById( 'menu-to-edit' );
+		menuToEdit = document.getElementById( 'menu-to-edit' ),
+		hash = window.location.hash.replace( '#', '' );
 
 	// Go direct to appropriate Customizer panel if its hash is specified in the URL
-	const hash = window.location.hash.replace( '#', '' ),
-		targetEl = document.getElementById( hash );
+	if ( hash === 'menu-to-edit' ) {
+		hash = 'sub-accordion-panel-nav_menus';
+	}
+	targetEl = document.getElementById( hash );
 
 	if ( hash && targetEl ) {
 		[...document.getElementById( 'customize-theme-controls' ).children].forEach( function( child ) {
@@ -569,42 +570,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Handle success audible feedback.
 		wp.a11y.speak( wp.i18n.__( 'The file URL has been copied to your clipboard' ) );
-	}
-
-	/**
-	 * Delete attachment from within modal.
-	 *
-	 * @abstract
-	 * @return {void}
-	 */
-	function deleteItem( id ) {
-		var data = new URLSearchParams( {
-			action: 'delete-post',
-			_ajax_nonce: document.getElementById( 'media-' + id ).dataset.deleteNonce,
-			id: id
-		} );
-
-		fetch( ajaxurl, {
-			method: 'POST',
-			body: data,
-			credentials: 'same-origin'
-		} )
-		.then( function( response ) {
-			if ( response.ok ) {
-				return response.json(); // no errors
-			}
-			throw new Error( response.status );
-		} )
-		.then( function( result ) {
-			if ( result === 1 ) {
-				closeModal();
-			} else {
-				console.log( IMAGE_WIDGET.delete_failed );
-			}
-		} )
-		.catch( function( error ) {
-			console.error( IMAGE_WIDGET.error, error );
-		} );
 	}
 
 	/**
@@ -1784,111 +1749,4 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 	} );
-
-	/**
-	 * Upload files using FilePond
-	 */
-	function goFilepond( widgetId ) {
-
-		// Register FilePond plugins
-		FilePond.registerPlugin(
-			FilePondPluginFileValidateSize,
-			FilePondPluginFileValidateType,
-			FilePondPluginFileRename,
-			FilePondPluginImagePreview
-		);
-
-		// Create a FilePond instance
-		pond = FilePond.create( dialog.querySelector( '#filepond' ), {
-			allowMultiple: true,
-			server: {
-				process: function( fieldName, file, metadata, load, error, progress, abort ) {
-
-					// Create FormData
-					var formData = new FormData();
-					formData.append( 'async-upload', file, file.name );
-					formData.append( 'action', 'upload-attachment' );
-					formData.append( '_wpnonce', document.getElementById( '_wpnonce' ).value );
-
-					// Use Fetch to upload the file
-					fetch( ajaxurl, {
-						method: 'POST',
-						body: formData,
-						credentials: 'same-origin'
-					} )
-					.then( function( response ) {
-						if ( response.ok ) {
-							return response.json(); // no errors
-						}
-						throw new Error( response.status );
-					} )
-					.then( function( result ) {
-						if ( result.success ) {
-							load( 'finished' );
-						} else {
-							error( IMAGE_WIDGET.upload_failed );
-						}
-					} )
-					.catch( function( err ) {
-						error( IMAGE_WIDGET.upload_failed );
-						console.error( IMAGE_WIDGET.error, err );
-					} );
-
-					// Return an abort function
-					return {
-						abort: function() {
-							// This function is called when the user aborts the upload
-							abort();
-						}
-					};
-				},
-				maxFileSize: dialog.querySelector( '#ajax-url' ).dataset.maxFileSize
-			},
-			onprocessfile: ( error, file ) => { // Called when an individual file upload completes
-				if ( ! error ) {
-					setTimeout( function() {
-						pond.removeFile( file.id );
-					}, 100 );
-					resetDataOrdering();
-				}
-			},
-			onprocessfiles: () => { // Called when all files in the queue have finished uploading
-				updateGrid( document.getElementById( widgetId ), 1 );
-				dialog.querySelector( '#menu-item-browse' ).click();
-				setTimeout( function() {
-					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
-				}, 500 );
-			},
-			labelTapToUndo: IMAGE_WIDGET.tap_close,
-			fileRenameFunction: ( file ) =>
-				new Promise( function( resolve ) {
-					resolve( window.prompt( IMAGE_WIDGET.new_filename, file.name ) );
-				} ),
-			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
-			labelFileTypeNotAllowed: IMAGE_WIDGET.invalid_type,
-			fileValidateTypeLabelExpectedTypes: IMAGE_WIDGET.check_types
-		} );
-	}
-
-	// Reset ordering of remaining media items after deletion
-	function resetDataOrdering() {
-		var items = document.querySelectorAll( '.media-item' ),
-			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
-			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
-			count5;
-
-		items.forEach( function( item, index ) {
-			item.setAttribute( 'data-order', parseInt( index + 1 ) );
-		} );
-
-		// Reset totals
-		if ( 5 in count ) { // allow for different languages
-			count5 = ' ' + count[5];
-		} else {
-			count5 = '';
-		}
-		document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + count5;
-
-		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
-	}
 } );
