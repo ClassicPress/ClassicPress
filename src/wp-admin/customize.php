@@ -496,6 +496,7 @@ wp_print_scripts();
 								<?php
 								if ( current_user_can( 'install_themes' ) && ! is_multisite() ) {
 									?>
+
 									<div class="description customize-panel-description">
 										<p>
 											<?php esc_html_e( 'Looking for a theme? You can search or browse the WordPress.org theme directory, install and preview themes, then activate them right here.' ); ?>
@@ -504,6 +505,7 @@ wp_print_scripts();
 											<?php esc_html_e( 'While previewing a new theme, you can continue to tailor things like widgets and menus, and explore theme-specific options.' ); ?>
 										</p>
 									</div>
+
 									<?php
 								}
 								?>
@@ -852,9 +854,11 @@ wp_print_scripts();
 										<?php
 										if ( ! empty( $item['description'] ) ) {
 											?>
+
 											<div class="description customize-panel-description">
 												<?php echo wp_kses_post( $item['description'] ); ?>
 											</div>
+
 											<?php
 										}
 										?>
@@ -913,9 +917,11 @@ wp_print_scripts();
 											<?php
 											if ( ! empty( $middle_section['description'] ) ) {
 												?>
+
 												<div class="description customize-section-description">
 													<?php echo wp_kses_post( $middle_section['description'] ); ?>
 												</div>
+
 												<?php
 											}
 											?>
@@ -980,9 +986,11 @@ wp_print_scripts();
 											<?php
 										} elseif ( ! empty( $item['description'] ) ) {
 											?>
+
 											<div class="description customize-section-description">
 												<?php echo wp_kses_post( $item['description'] ); ?>
 											</div>
+
 											<?php
 										}
 										?>
@@ -1175,14 +1183,16 @@ wp_print_scripts();
 									<?php
 									if ( ! empty( $section->description ) ) :
 										?>
+
 										<div class="description customize-section-description">
 											<?php echo wp_kses_post( $section->description ); ?>
 										</div>
-									<?php
+
+										<?php
 									endif;
 									?>
 								</li>
-        
+
 								<?php
 								// Menu items - only for nav_menu[ID] sections
 								if ( $menu_id && str_starts_with( $section->id, 'nav_menu[' ) ) {
@@ -1254,7 +1264,7 @@ wp_print_scripts();
 													$wp_customize,
 													'nav_menu_item[' . $menu_item->ID . ']',
 													array(
-														'label'    => $menu_item->post_title ?: $menu_item->title,
+														'label'    => $menu_item->post_title ? $menu_item->post_title : $menu_item->title,
 														'section'  => 'nav_menu_items[' . $menu_id . ']',  // Menu section
 													)
 												);
@@ -1276,7 +1286,7 @@ wp_print_scripts();
 											<ul></ul>
 										</div>
 										<p class="new-menu-item-invitation" style="display: none;">
-											<?php esc_html_e( 'Time to add some links! Click “Add Items” to start putting pages, categories, and custom links in your menu. Add as many things as you would like.' );?>
+											<?php esc_html_e( 'Time to add some links! Click “Add Items” to start putting pages, categories, and custom links in your menu. Add as many things as you would like.' ); ?>
 										</p>
 										<div class="customize-control-nav_menu-buttons">
 											<button type="button"
@@ -1395,8 +1405,8 @@ wp_print_scripts();
 										</div>
 									</li>
 										
-								<?php
-								// Menu locations
+									<?php
+									// Menu locations
 								} elseif ( $section->id === 'menu_locations' ) {
 									foreach ( $controls[ $section->id ] as $control_data ) {
 										$field_id    = $control_data['id'];
@@ -1472,11 +1482,13 @@ wp_print_scripts();
 
 									<?php
 									if ( ! empty( $section->description ) ) :
-									?>
+										?>
+
 										<div class="description customize-section-description">
 											<?php echo wp_kses_post( $section->description ); ?>
 										</div>
-									<?php
+
+										<?php
 									endif;
 									?>
 								</li>
@@ -1485,7 +1497,7 @@ wp_print_scripts();
 								$index = 0;
 								foreach ( $controls[ $section->id ] as $control_data ) {
 									$field_id    = $control_data['id'];
-									$field_type  = $control_data['type'];									
+									$field_type  = $control_data['type'];
 									$field_label = $control_data['label'];
 									$setting_id  = $control_data['setting_id'];
 									$widget_id   = isset( $section->controls[ $index ]->widget_id ) ? $section->controls[ $index ]->widget_id : '';
