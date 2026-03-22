@@ -132,11 +132,12 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 		$custom_image_header->process_default_headers();
 		$this->default_headers = $custom_image_header->get_default_header_images();
 
-		$visibility    = $this->get_current_image_src() ? '' : ' style="display:none" ';
 		$width         = absint( get_theme_support( 'custom-header', 'width' ) );
 		$height        = absint( get_theme_support( 'custom-header', 'height' ) );
 		$header_image  = get_header_image(); // Current header image
 		$attachment_id = $header_image ? attachment_url_to_postid( $header_image ) : '';
+		$visibility    = $header_image ? '' : 'display:none';
+		$upload_button = $header_image ? '' : 'upload-button ';
 		?>
 
 		<div class="customize-control-content">
@@ -197,21 +198,22 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 			<div class="actions"
 				data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
 				data-empty="<?php esc_attr_e( 'Add image' ); ?>"
-				data-full="<?php esc_attr_e( 'Add image' ); ?>"
+				data-full="<?php esc_attr_e( 'Hide image' ); ?>"
 			>
 
 				<?php
 				if ( current_user_can( 'upload_files' ) ) {
 					?>
 
-					<button type="button"<?php echo $visibility; ?>
+					<button type="button"
 						class="button remove"
 						aria-label="<?php esc_attr_e( 'Hide header image' ); ?>"
+						style="<?php echo esc_attr( $visibility ); ?>"
 					>
 						<?php esc_html_e( 'Hide image' ); ?>
 					</button>
 					<button type="button"
-						class="upload-button button new select-button"
+						class="<?php echo esc_attr( $upload_button ); ?>button new select-button"
 						id="header_image-button"
 						aria-label="<?php esc_attr_e( 'Add new header image' ); ?>"
 						<?php $this->link(); ?>
