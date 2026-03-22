@@ -1133,7 +1133,7 @@ final class WP_Customize_Nav_Menus {
 			$ordered_types = array();
 			foreach ( $nav_menu_item_types as $type ) {
 				$key = $type['type'] . ':' . $type['object'];
-				$priority = match( $key ) {
+				$priority = match ( $key ) {
 					'post_type:page'    => 0,
 					'post_type:post'    => 10,
 					'taxonomy:category' => 20,
