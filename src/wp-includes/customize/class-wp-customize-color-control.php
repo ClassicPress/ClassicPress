@@ -111,8 +111,8 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 				$is_hue_slider = ( 'hue' === $this->mode );
 
 				if ( $this->setting->default && is_string( $this->setting->default ) && ! $is_hue_slider ) {
-					$default_value = ( '#' !== substr( $this->setting->default, 0, 1 ) ) 
-						? '#' . $this->setting->default 
+					$default_value = ( '#' !== substr( $this->setting->default, 0, 1 ) )
+						? '#' . $this->setting->default
 						: $this->setting->default;
 					$default_value_attr = ' data-default-color="' . esc_attr( $default_value ) . '"';
 				}
