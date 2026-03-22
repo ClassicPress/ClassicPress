@@ -81,7 +81,7 @@ class WP_Customize_Background_Position_Control extends WP_Customize_Control {
 			</span>
 			<?php
 		}
-		
+
 		if ( $this->description ) {
 			?>
 			<span class="description customize-control-description">
