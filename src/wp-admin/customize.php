@@ -1505,7 +1505,7 @@ wp_print_scripts();
 									if ( $widget_id === '' ) {
 										continue;
 									}
-									if ( $field_type !== 'widget_form' ) { // 'sidebar-widgets' 
+									if ( $field_type !== 'widget_form' ) { // 'sidebar-widgets'
 										continue;
 									}
 
@@ -1523,7 +1523,7 @@ wp_print_scripts();
 
 									<li id="customize-control-widget-<?php echo esc_attr( $widget_id ); ?>"
 										class="customize-control customize-control-widget_form<?php echo esc_attr( $first_last_widget ); ?> widget-rendered"
-										data-setting-id="<?php echo esc_attr( $setting_id ?: $field_id ); ?>"
+										data-setting-id="<?php echo esc_attr( $setting_id ? $setting_id : $field_id ); ?>"
 									>
 										<div id="widget-<?php echo esc_attr( $index . '_' . $widget_id ); ?>" class="widget">
 											<details class="widget-top" name="<?php echo esc_attr( $section->sidebar_id ); ?>">
@@ -1580,12 +1580,12 @@ wp_print_scripts();
 													continue;
 												}
 
-												$widget_settings_base = isset( $all_widget_settings[ $widget_id_base ] ) 
-													? $all_widget_settings[ $widget_id_base ] 
+												$widget_settings_base = isset( $all_widget_settings[ $widget_id_base ] )
+													? $all_widget_settings[ $widget_id_base ]
 													: array();
 
-												$field_value = isset( $widget_settings_base[ $widget_number ] ) 
-													? $widget_settings_base[ $widget_number ] 
+												$field_value = isset( $widget_settings_base[ $widget_number ] )
+													? $widget_settings_base[ $widget_number ]
 													: array();
 
 												$widget_obj->id = $widget_id;
@@ -1613,7 +1613,7 @@ wp_print_scripts();
 														<?php
 														/**
 														 * Fires near the end of the widget control form.
-														 * 
+														 *
 														 * @param WP_Widget $widget_obj      Widget instance.
 														 * @param null      $return          Return null if new fields are added.
 														 * @param array     $widget_settings An array of the widget’s settings.
@@ -2021,7 +2021,7 @@ customize_themes_print_templates();
 			<ul></ul>
 		</div>
 		<p class="new-menu-item-invitation" style="display: none;">
-			<?php esc_html_e( 'Time to add some links! Click “Add Items” to start putting pages, categories, and custom links in your menu. Add as many things as you would like.' );?>
+			<?php esc_html_e( 'Time to add some links! Click “Add Items” to start putting pages, categories, and custom links in your menu. Add as many things as you would like.' ); ?>
 		</p>
 		<div class="customize-control-nav_menu-buttons">
 			<button type="button"
@@ -2148,7 +2148,7 @@ customize_themes_print_templates();
 			
 			<?php
 			global $wp_registered_sidebars;
-			foreach( $wp_registered_sidebars as $sidebar ) {
+			foreach ( $wp_registered_sidebars as $sidebar ) {
 				?>
 
 				<li class="" data-id="<?php echo esc_attr( $sidebar['id'] ); ?>" tabindex="0">
