@@ -161,7 +161,7 @@ foreach ( $sections as $section ) {
 // Sort by priority
 uasort(
 	$top_items,
-	static function( $a, $b ) {
+	static function ( $a, $b ) {
 		$ap = isset( $a['priority'] ) ? (int) $a['priority'] : 999;
 		$bp = isset( $b['priority'] ) ? (int) $b['priority'] : 999;
 		return $ap <=> $bp;
@@ -441,12 +441,12 @@ wp_print_scripts();
 							foreach ( $top_items as $item ) {
 								if ( $item['id'] === 'themes' ) { // Don't repeat the active theme
 									continue;
-								}			
+								}
 
-								$top_object = $item['type'] === 'section' 
+								$top_object = $item['type'] === 'section'
 									? $wp_customize->get_section( $item['id'] )
 									: $wp_customize->get_panel( $item['id'] );
-        
+
 								if ( $top_object ) {
 									$top_object->maybe_render();
 								}
@@ -628,7 +628,7 @@ wp_print_scripts();
 
 						<?php
 						// The Menus panel.
-						$menus_panel = isset ( $panels['nav_menus'] ) ? $panels['nav_menus'] : null;
+						$menus_panel = isset( $panels['nav_menus'] ) ? $panels['nav_menus'] : null;
 						if ( $menus_panel ) :
 							?>
 
@@ -684,7 +684,7 @@ wp_print_scripts();
 										// Find which locations point to this menu ID.
 										$attached_locations = array();
 										foreach ( $menu_locations as $loc_slug => $loc_menu_id ) {
-											if ( (int) $loc_menu_id === $menu_id && isset ( $locations[ $loc_slug ] ) ) {
+											if ( (int) $loc_menu_id === $menu_id && isset( $locations[ $loc_slug ] ) ) {
 												$attached_locations[] = $locations[ $loc_slug ];
 											}
 										}
@@ -732,7 +732,7 @@ wp_print_scripts();
 										data-setting-id=<?php echo esc_attr( $add_menu_section->id ); ?>"
 									>
 										<?php
-										if ( empty ( $menus ) ) {
+										if ( empty( $menus ) ) {
 											?>
 											<p class="add-new-menu-notice">
 												<?php esc_html_e( 'It does not look like your site has any menus yet. Want to build one? Click the button to start.' ); ?>
@@ -775,11 +775,12 @@ wp_print_scripts();
 								}
 								?>
 							</ul>
-						<?php
+
+							<?php
 						endif;
 
 						// The Widgets panel.
-						$widgets_panel = isset ( $panels['widgets'] ) ? $panels['widgets'] : null;
+						$widgets_panel = isset( $panels['widgets'] ) ? $panels['widgets'] : null;
 						if ( $widgets_panel ) :
 							?>
 
@@ -990,7 +991,7 @@ wp_print_scripts();
 									</li>
 
 									<?php
-									if ( isset ( $controls[ $item['id'] ] ) ) {
+									if ( isset( $controls[ $item['id'] ] ) ) {
 										foreach ( $controls[ $item['id'] ] as $control_data ) {
 											$control = $wp_customize->get_control( $control_data['id'] );
 											if ( $control ) { 
@@ -1093,7 +1094,7 @@ wp_print_scripts();
 													<span class="theme-location-set">
 
 														<?php
-														if ( isset ( $menus[$menu_locations[$key]] ) ) {
+														if ( isset( $menus[$menu_locations[$key]] ) ) {
 															printf(
 																wp_kses(
 																	/* translators: %s is the current menu name wrapped in a span. */
@@ -1340,7 +1341,7 @@ wp_print_scripts();
 																<span class="theme-location-set">
 
 																	<?php
-																	if ( isset ( $menus[$menu_locations[$key]] ) ) {
+																	if ( isset( $menus[$menu_locations[$key]] ) ) {
 																		printf(
 																			wp_kses(
 																				/* translators: %s is the current menu name wrapped in a span. */
@@ -1435,7 +1436,7 @@ wp_print_scripts();
 						foreach ( $sections_by_panel['widgets'] as $section ) {
 
 							// No controls collected for this section?
-							if ( empty ( $controls[ $section->id ] ) ) {
+							if ( empty( $controls[ $section->id ] ) ) {
 								continue;
 							}
 							?>
@@ -1471,7 +1472,7 @@ wp_print_scripts();
 									</div>
 
 									<?php
-									if ( ! empty ( $section->description ) ) :
+									if ( ! empty( $section->description ) ) :
 									?>
 										<div class="description customize-section-description">
 											<?php echo wp_kses_post( $section->description ); ?>
@@ -2071,7 +2072,7 @@ customize_themes_print_templates();
 							<span class="theme-location-set">
 
 								<?php
-								if ( isset ( $menus[$menu_locations[$slug]] ) ) {
+								if ( isset( $menus[$menu_locations[$slug]] ) ) {
 									printf(
 										wp_kses(
 											/* translators: %s is the current menu name wrapped in a span. */
