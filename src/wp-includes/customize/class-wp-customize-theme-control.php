@@ -58,7 +58,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 			if ( $theme['id'] !== $active_stylesheet ) {
 				continue;
 			}
-			
+
 			/* translators: %s: Theme name. */
 			$details_label   = sprintf( __( 'Details for theme: %s' ), $theme['name'] );
 			/* translators: %s: Theme name. */
@@ -101,7 +101,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				} else {
 					?>
 					<div class="theme-screenshot blank"></div>
-					<?php						
+					<?php
 				}
 				?>
 
@@ -156,7 +156,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 			if ( $theme['id'] === $active_stylesheet ) {
 				continue;
 			}
-			
+
 			/* translators: %s: Theme name. */
 			$details_label   = sprintf( __( 'Details for theme: %s' ), $theme['name'] );
 			/* translators: %s: Theme name. */
@@ -199,7 +199,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				} else {
 					?>
 					<div class="theme-screenshot blank"></div>
-					<?php						
+					<?php
 				}
 				?>
 
