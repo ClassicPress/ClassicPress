@@ -7,7 +7,7 @@
 wp.customize.selectiveRefresh = ( function( api ) {
 	'use strict';
 
-	var self, Partial, Placement;
+	var self;
 
 	// -----------------------------------------------------------------------
 	// Minimal event emitter
@@ -506,7 +506,9 @@ wp.customize.selectiveRefresh = ( function( api ) {
 			return false;
 		}
 
+		// eslint-disable-next-line no-restricted-properties
 		self.originalDocumentWrite = document.write;
+		// eslint-disable-next-line no-restricted-properties
 		document.write = function() {
 			throw new Error( self.data.l10n.badDocumentWrite );
 		};
@@ -553,6 +555,7 @@ wp.customize.selectiveRefresh = ( function( api ) {
 			partial.fallback( error, [ placement ] );
 		}
 
+		// eslint-disable-next-line no-restricted-properties
 		document.write = self.originalDocumentWrite;
 		self.originalDocumentWrite = null;
 
@@ -679,7 +682,7 @@ wp.customize.selectiveRefresh = ( function( api ) {
 				self._currentRequest = null;
 			}
 
-			controller = new AbortController(); // fetch abort support[web:14][web:18][web:22]
+			controller = new AbortController(); // https://developer.mozilla.org/en-US/docs/Web/API/AbortController
 			self._currentRequest = controller;
 
 			fetch( api.settings.url.self, {
