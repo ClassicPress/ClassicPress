@@ -7,7 +7,7 @@
 /* eslint consistent-this: [ "error", "control" ] */
 /* global wp, _wpCustomizeControlsL10n, updatedControls, _updatedControlsWatcher, console, ajaxurl, IMAGE_WIDGET */
 document.addEventListener( 'DOMContentLoaded', function() {
-	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
+	var addButton, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver, targetEl,
 		i = 1,
 		dialog = document.getElementById( 'widget-modal' ),
