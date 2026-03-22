@@ -1,6 +1,4 @@
 <?php
-declare( strict_types = 1 ); // Forces exact type matching
-
 /**
  * Theme Customize Screen.
  *
@@ -8,6 +6,7 @@ declare( strict_types = 1 ); // Forces exact type matching
  * @subpackage Customize
  * @since CP-2.8.0
  */
+declare( strict_types = 1 ); // Forces exact type matching
 
 define( 'IFRAME_REQUEST', true );
 
@@ -29,7 +28,7 @@ global $wp_customize;
 
 $args = array();
 if ( isset( $_GET['theme'] ) ) { // live preview
-    $args['theme'] = sanitize_key( $_GET['theme'] );
+	$args['theme'] = sanitize_key( $_GET['theme'] );
 }
 
 $wp_customize->setup_theme();
@@ -74,10 +73,12 @@ if ( isset( $_POST['cp_publish_submit'] ) || isset( $_POST['save'] ) ) {
 	}
 
 	// Save the changeset in-process (no loopback HTTP).
-	$result = $wp_customize->save_changeset_post( array(
-		'status' => 'publish', // Or 'draft' / 'pending' / 'future'
-		'title'  => 'PHP publish from customize.php',
-	) );
+	$result = $wp_customize->save_changeset_post(
+		array(
+			'status' => 'publish', // Or 'draft' / 'pending' / 'future'
+			'title'  => 'PHP publish from customize.php',
+		)
+	);
 
 	if ( is_wp_error( $result ) ) {
 		wp_die( esc_html( $result->get_error_message() ), 500 );
@@ -120,7 +121,7 @@ $panels = $wp_customize->panels();
 foreach ( $panels as $panel ) {
 	$top_items[ $panel->id ] = array(
 		'id'       => $panel->id,
-		'title'	   => $panel->title,
+		'title'    => $panel->title,
 		'priority' => $panel->priority,
 		'type'     => 'panel',
 	);
@@ -132,14 +133,14 @@ $sections_by_id    = array();
 $sections_by_panel = array();
 foreach ( $sections as $section ) {
 	$sections_by_id[ $section->id ] = $section;
-	$sections_by_panel[ $section->panel ?: '_root' ][] = $section;
+	$sections_by_panel[ $section->panel ? $section->panel : '_root' ][] = $section;
 
 	if ( ! $section->panel ) {
 		$top_items[ $section->id ] = array(
 			'id'       => $section->id,
 			'title'    => $section->title,
 			'priority' => $section->priority,
-			'type'	   => 'section',
+			'type'     => 'section',
 		);
 	} else {
 		if ( str_starts_with( $section->id, 'sidebar-widgets-' ) || str_starts_with( $section->id, 'nav_menu[' ) ) {
@@ -152,7 +153,7 @@ foreach ( $sections as $section ) {
 			'id'       => $section->id,
 			'title'    => $section->title,
 			'priority' => $section->priority,
-			'type'	   => 'section',
+			'type'     => 'section',
 		);
 	}
 }
@@ -160,9 +161,9 @@ foreach ( $sections as $section ) {
 // Sort by priority
 uasort(
 	$top_items,
-	static function ( $a, $b ) {
-		$ap = isset ( $a['priority'] ) ? (int) $a['priority'] : 999;
-		$bp = isset ( $b['priority'] ) ? (int) $b['priority'] : 999;
+	static function( $a, $b ) {
+		$ap = isset( $a['priority'] ) ? (int) $a['priority'] : 999;
+		$bp = isset( $b['priority'] ) ? (int) $b['priority'] : 999;
 		return $ap <=> $bp;
 	}
 );
