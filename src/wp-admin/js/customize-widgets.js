@@ -4,8 +4,7 @@
  *
  * @output wp-admin/js/widgets.js
  */
-/* global Sortable, ajaxurl, console, _wpCustomizeWidgetsSettings,
- * updatedControls, _updatedControlsWatcher, _wpCustomizeControlsL10n */
+/* global Sortable, ajaxurl, console, _wpCustomizeWidgetsSettings, updatedControls, _updatedControlsWatcher, _wpCustomizeControlsL10n */
 document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Set variables for the whole file
