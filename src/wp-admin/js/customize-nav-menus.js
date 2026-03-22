@@ -7,9 +7,7 @@
 
 /* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings,
  * console, ajaxurl, updatedControls, _updatedControlsWatcher,
- * FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
- * FilePondPluginFileRename, FilePondPluginImagePreview
- */
+ * Sortable, isRTL */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addObserver, itemObserver, currentMenuId,
 		newMenuItemIDs = [],
@@ -19,15 +17,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		inputs = form.querySelectorAll( 'input, select, textarea' ),
 		saveButton = form.querySelector( '#save' );
 
+	// Enable menu item sorting if the page loads on a menu
+	const hash = window.location.hash.replace( '#', '' );
+	if ( hash.startsWith( 'sub-accordion-section-nav_menu[' ) ) {
+		initSortables( hash );
+	}
+
 	/**
 	 * Ensure auto_add checkbox works as intended when a new menu is created
 	 */
-	addObserver = new MutationObserver( function( mutations ) {
+	addObserver = new MutationObserver( function() {
 		if ( menuToEdit.querySelector( '.auto_add' ) ) {
-			menuToEdit.querySelector( '.auto_add' ).addEventListener( 'input', function( e ) {
+			menuToEdit.querySelector( '.auto_add' ).addEventListener( 'input', function( e ) { console.log('input-added');
 				inputChanged( e.target, e.target.closest( 'li' ) );
 			} );
-			menuToEdit.querySelector( '.auto_add' ).addEventListener( 'change', function( e ) {
+			menuToEdit.querySelector( '.auto_add' ).addEventListener( 'change', function( e ) { console.log('change-added');
 				inputChanged( e.target, e.target.closest( 'li' ) );
 			} );
 			addObserver.disconnect();
@@ -38,8 +42,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Make items in new menu sortable
 	 */
-	itemObserver = new MutationObserver( function( mutations ) {
-		if ( menuToEdit.querySelector( '.menu-item' ) ) {
+	itemObserver = new MutationObserver( function() {
+		if ( menuToEdit.querySelector( '.menu-item' ) ) { console.log('added');
 			initSortables( menuToEdit.id );
 			itemObserver.disconnect();
 		}
@@ -192,8 +196,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Use the right edge if RTL
 		menuEdge += isRTL ? editMenu.innerWidth : 0;
 
-		if ( editMenu.children.length > 0 ) {
-			document.querySelector( '.drag-instructions' ).style.display = '';
+		if ( editMenu.querySelectorAll( '.menu-item' )[1] ) { // at least two menu items
+			//document.querySelector( '.drag-instructions' ).style.display = 'block';
 		}
 
 		/**
@@ -529,7 +533,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			menuItems  = menu.querySelectorAll( '.menu-item' ),
 			lastItem   = menuItems[menuItems.length - 1],
 			menuItemId = '-' + Date.now(),
-			itemId     = type === 'custom' ? '-' + menuItemId : objectId,
 			template   = document.getElementById( 'tmpl-new-menu-item' ),
 			clone      = template.content.cloneNode( true );
 
@@ -664,7 +667,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 			throw new Error( response.status );
 		} )
-		.then( function( result ) { console.log(result);
+		.then( function( result ) {
 			if ( result.success ) {
 				newMenuItemIDs.push( result.data.post_id );
 				li = document.createElement( 'li' );
@@ -751,24 +754,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	document.addEventListener( 'click', function( e ) {
-		var page, itemBrowse, itemUpload, gridPanel, uploadPanel,
-			modalButtons, rightSidebar, modalPages, title, navMenuId, 
-			type, object, objectId, label, url, li, template, clone,
-			newMenuId, position, depth, classNameSplits, prev, next,
+		var title, navMenuId, type, object, objectId, label, url, li,
+			template, clone, newMenuId, position, depth, classNameSplits,
 			allItems, updatedItems, liIndex, targetSibling,
 			targetSiblingIndex, insertAfter, newDepth, newParentId,
 			children = [],
 			targetChildren = [],
-			upperSibling = false,
-			lowerSibling = false,
-			menuName = '',
 			id = e.target.closest( 'li' )?.id,
 			ul = e.target.closest( 'ul' );
-
-		// Abort if not menu-related
-		if ( ( e.target === saveButton ) || ! e.target.closest( 'ul' )?.classList.contains( 'menu' ) && ! e.target.closest( 'ul' )?.id === 'sub-accordion-section-add_menu' ) {
-			return;
-		}
 
 		// Open New Menu panel
 		if ( e.target.id === 'customize-add-menu-button' || e.target.classList.contains( 'create-menu' ) ) {
