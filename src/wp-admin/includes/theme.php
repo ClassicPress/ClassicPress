@@ -919,7 +919,7 @@ function customize_themes_print_templates() {
 								} else {
 									printf(
 										/* translators: %s: URL to Update PHP page. */
-									' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
+										' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 										esc_url( wp_get_update_php_url() )
 									);
 								}
