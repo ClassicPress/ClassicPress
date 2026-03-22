@@ -5,22 +5,18 @@
  */
 
 /* eslint consistent-this: [ "error", "control" ] */
-/* global wp, _wpCustomizeControlsL10n, _wpCustomizeHeader,
- * _wpCustomizeBackground, updatedControls, _updatedControlsWatcher,
- * MediaElementPlayer, console, confirm,  ajaxurl, IMAGE_WIDGET,
- * FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
- * FilePondPluginFileRename, FilePondPluginImagePreview
- */
+/* global wp, _wpCustomizeControlsL10n, updatedControls,
+ * _updatedControlsWatcher, console, ajaxurl, IMAGE_WIDGET,
+ * FilePondPluginFileValidateType, FilePondPluginImagePreview */
 document.addEventListener( 'DOMContentLoaded', function() {
-	var addButton, pond, leftSidebar, customizeButton, currentMenuId,
-		observer, intersectionObserver, orgThemes, localThemes, newUrl,
+	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
+		intersectionObserver,
 		i = 1,
 		{ FilePond } = window, // import FilePond
 		dialog = document.getElementById( 'widget-modal' ),
 		installedThemesHTML = document.querySelector( '.themes')?.innerHTML,
 		reducedMotionMediaQuery = window.matchMedia( '(prefers-reduced-motion: reduce)' ),
 		isReducedMotion = reducedMotionMediaQuery.matches,
-		isCollapsed = document.querySelector( '.wp-full-overlay' )?.classList.contains( 'collapsed' ),
 		form = document.querySelector( 'form' ),
 		inputs = form.querySelectorAll( 'input, select, textarea' ),
 		saveButton = form.querySelector( '#save' ),
@@ -752,7 +748,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function populateGridItem( attachment ) {
 		var selected = '',
-			idsArray = [],
 			gridItem = document.createElement( 'li' ),
 			image = '<img src="' + attachment.url + '" alt="' + attachment.alt + '">';
 
@@ -1154,8 +1149,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			setTimeout( function() {
 				customizeButton.nextElementSibling.focus();
 			} );
-			_updatedControlsWatcher[ 'header_image' ] = 'remove-header';
-			_updatedControlsWatcher[ 'header_image_data' ] = {};
+			_updatedControlsWatcher.header_image = 'remove-header';
+			_updatedControlsWatcher.header_image_data = {};
 		}
 		activatePublishButton();
 	}
@@ -1218,7 +1213,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( e.target.open ) {
 					embed = dialog.querySelector( '#menu-item-embed' );
 					embed.removeAttribute( 'hidden' );
-					details.append( itemAdd );
 					details.append( embed );
 				}
 			} );
@@ -1245,7 +1239,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	form.addEventListener( 'submit', async function( e ) {
-		let negativeId, menuId, newResult,
+		let negativeId, menuId, result, newResult,
 			entries = Object.entries( updatedControls ),
 			navMenuChanges = {},
 			submittedChanges = {},
@@ -1313,7 +1307,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( ! response.ok ) {
 					throw new Error( response.status );
 				}
-				const result = await response.json();
+				result = await response.json();
 			} catch ( err ) {
 				console.error( err );
 				continue;
@@ -1324,14 +1318,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( menuId ) {
 
 					// Update any menu location currently populated by negativeId
-					navMenuLocations.forEach( function( locationArray, index ) {
+					navMenuLocations.forEach( function( locationArray ) {
 						if ( locationArray[1] === negativeId ) {
 							_updatedControlsWatcher[locationArray[0]] = menuId;
 						}
 					} );
 
 					// Update any nav_menu_items attached to this menu
-					navMenuItems.forEach( function( array, index ) {
+					navMenuItems.forEach( function( array ) {
 						if ( array[1].menu_id === negativeId ) {
 							_updatedControlsWatcher[array[0]].menu_id = menuId;
 						}
@@ -1404,9 +1398,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 			if ( newMenuItemIDs.length > 0 ) {
-				submittedChanges['nav_menus_created_posts'] = {
+				submittedChanges.nav_menus_created_posts = {
 					value: newMenuItemIDs
-				}
+				};
 			}
 		} );
 
@@ -1429,7 +1423,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 			newResult = await response.json();
 		} catch ( err ) {
-			console.error( _wpCustomizeControlsL10n.saveBlockedError['plural'] + ':', err );
+			console.error( _wpCustomizeControlsL10n.saveBlockedError.plural + ':', err );
 			saveButton.disabled = false;
 			saveButton.value = _wpCustomizeControlsL10n.publish;
 			window._customizePublishing = false;
@@ -1507,9 +1501,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	document.addEventListener( 'click', function( e ) {
 		var id, page, itemBrowse, itemUpload, gridPanel, uploadPanel,
-			modalButtons, rightSidebar, modalPages, title, navMenuId,
-			type, object, objectId, label, url, li, template, clone,
-			menuName = '',
+			modalButtons, rightSidebar, modalPages,
 			ul = e.target.closest( 'ul' );
 
 		// Abort if this comes from a middle section heading or a widget
@@ -1605,7 +1597,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Open and close description
 		} else if ( e.target.classList && e.target.classList.contains( 'customize-help-toggle' ) ) {
 			if ( e.target.parentNode.classList.contains( 'open' ) ) {
-				e.target.parentNode.classList.remove( 'open' )
+				e.target.parentNode.classList.remove( 'open' );
 				e.target.parentNode.nextElementSibling.style.display = 'none';
 				e.target.setAttribute( 'aria-expanded', false );
 			} else {
@@ -1669,10 +1661,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( e.target.id === 'widget-modal-close' ) {
 			closeModal();
 
-		// Update an edited image
-		} if ( e.target.id === 'media-button-update' ) {
-			updateImageDetails( dialog.querySelector( '#edit-original' ).dataset.widgetId );
-
 		// Set variables for the rest of the options below
 		} else if ( dialog.querySelector( '#widget-modal-media-content' ) ) {
 			itemBrowse   = dialog.querySelector( '#menu-item-browse' );
@@ -1690,23 +1678,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} else if ( e.target.parentNode.parentNode && e.target.parentNode.parentNode.className === 'pagination-links' && e.target.parentNode.tagName === 'BUTTON' ) {
 				page = e.target.parentNode.dataset.page;
 				updateGrid( page );
-
-			// Add a new image to a widget via the image's URL
-			} else if ( e.target.id === 'menu-item-embed' ) {
-				dialog.querySelector( 'h2' ).textContent = IMAGE_WIDGET.insert_from_url;
-				itemBrowse.classList.remove( 'active' );
-				itemBrowse.setAttribute( 'aria-selected', false );
-				itemUpload.classList.remove( 'active' );
-				itemUpload.setAttribute( 'aria-selected', false );
-				e.target.classList.add ( 'active' );
-				e.target.setAttribute( 'aria-selected', true );
-				modalButtons.style.display = 'none';
-				uploadPanel.setAttribute( 'hidden', true );
-				uploadPanel.setAttribute( 'inert', true );
-				gridPanel.setAttribute( 'hidden', true );
-				gridPanel.setAttribute( 'inert', true );
-				rightSidebar.setAttribute( 'hidden', true );
-				insertEmbed();
 
 			// Search for a new image to add to a widget
 			} else if ( e.target.id === 'menu-item-add' ) {
@@ -1739,35 +1710,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				modalPages.removeAttribute( 'hidden' );
 				modalPages.removeAttribute( 'inert' );
 
-			// Upload a new attachment
-			} else if ( e.target.id === 'menu-item-upload' ) {
-				itemBrowse.classList.remove( 'active' );
-				itemBrowse.setAttribute( 'aria-selected', false );
-				e.target.classList.add ( 'active' );
-				e.target.setAttribute( 'aria-selected', true );
-				uploadPanel.removeAttribute( 'hidden' );
-				uploadPanel.removeAttribute( 'inert' );
-				gridPanel.setAttribute( 'hidden', true );
-				gridPanel.setAttribute( 'inert', true );
-				rightSidebar.setAttribute( 'hidden', true );
-				rightSidebar.setAttribute( 'inert', true );
-				modalPages.setAttribute( 'hidden', true );
-				modalPages.setAttribute( 'inert', true );
-				goFilepond( widgetId );
-
 			// Add item to Customizer control
 			} else if ( e.target.id === 'media-button-insert' ) {
 				addItemToCustomizer();
-
-			// Delete an attachment
-			} else if ( e.target.className.includes( 'delete-attachment' ) ) {
-				if ( widgetEl.querySelector( '[data-property="attachment_id"]' ) ) {
-					if ( dialog.querySelector( '.widget-modal-grid .selected' ).dataset.id != widgetEl.querySelector( '[data-property="attachment_id"]' ).value ) {
-						if ( window.confirm( IMAGE_WIDGET.confirm_delete ) ) {
-							deleteItem( dialog.querySelector( '.widget-modal-grid .selected' ).dataset.id );
-						}
-					}
-				}
 
 			// Copy URL
 			} else if ( e.target.className.includes( 'copy-attachment-url' ) ) {
