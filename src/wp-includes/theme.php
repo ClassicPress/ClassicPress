@@ -1757,7 +1757,7 @@ function get_custom_header_markup() {
 	}
 
 	$attr = '';
-    if ( is_customize_preview() ) {
+	if ( is_customize_preview() ) {
 		$attr = ' data-customize-partial-id="header_image"'
 			. ' data-customize-partial-type="default"'
 			. sprintf(
