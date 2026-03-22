@@ -139,7 +139,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 			$icon_html   = wp_get_attachment_image( $attachment_id, 'thumbnail', true );
 			$meta        = wp_get_attachment_metadata( $attachment_id );
 			$orientation = ( $meta['height'] > $meta['width'] ) ? 'portrait' : 'landscape';
-			$sizes       = $meta['sizes'] ?? []; // Array of thumbnail/medium/large
+			$sizes       = $meta['sizes'] ?? array(); // Array of thumbnail/medium/large
 			$alt_text    = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
 			$album       = get_post_meta( $attachment_id, 'album', true );
 			$artist      = get_post_meta( $attachment_id, 'artist', true );
@@ -184,7 +184,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 						<?php
 					} elseif ( 'image' === $mime_type && $sizes && $sizes['full'] ) {
 						$full_src = wp_get_attachment_image_url( $attachment_id, 'full' );
-						?>						
+						?>
 						<img class="attachment-thumb"
 							src="<?php echo esc_url( $full_src ); ?>"
 							draggable="false"
