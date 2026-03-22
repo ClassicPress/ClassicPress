@@ -866,7 +866,7 @@ wp_print_scripts();
 
 									<?php
 									// Render child sections
-									foreach ( $sections_by_panel[$item['id']] as $section ) {
+									foreach ( $sections_by_panel[ $item['id'] ] as $section ) {
 										$section->maybe_render();
 									}
 									?>
@@ -937,7 +937,6 @@ wp_print_scripts();
 									</ul>
 									<?php
 								}
-
 							} elseif ( $item['type'] === 'section' ) {
 								?>
 
@@ -994,7 +993,7 @@ wp_print_scripts();
 									if ( isset( $controls[ $item['id'] ] ) ) {
 										foreach ( $controls[ $item['id'] ] as $control_data ) {
 											$control = $wp_customize->get_control( $control_data['id'] );
-											if ( $control ) { 
+											if ( $control ) {
 												$control->maybe_render();
 											}
 										}
@@ -1083,18 +1082,18 @@ wp_print_scripts();
 										?>
 										<li class="customize-control customize-control-checkbox assigned-menu-location">
 											<span class="customize-inside-control-row">
-												<input id="customize-nav-menu-control-location-<?php echo esc_attr( $menu_locations[$key] ); ?>"
+												<input id="customize-nav-menu-control-location-<?php echo esc_attr( $menu_locations[ $key ] ); ?>"
 													type="checkbox"
-													data-menu-id="<?php echo esc_attr( $menu_locations[$key] ); ?>"
+													data-menu-id="<?php echo esc_attr( $menu_locations[ $key ] ); ?>"
 													data-location-id="<?php echo esc_attr( $location ); ?>"
 													class="menu-location"
 												>
-												<label for="customize-nav-menu-control-location-<?php echo esc_attr( $menu_locations[$key] ); ?>">
+												<label for="customize-nav-menu-control-location-<?php echo esc_attr( $menu_locations[ $key ] ); ?>">
 													<?php echo esc_html( $location ); ?>
 													<span class="theme-location-set">
 
 														<?php
-														if ( isset( $menus[$menu_locations[$key]] ) ) {
+														if ( isset( $menus[ $menu_locations[ $key ] ] ) ) {
 															printf(
 																wp_kses(
 																	/* translators: %s is the current menu name wrapped in a span. */
@@ -1137,7 +1136,7 @@ wp_print_scripts();
 							if ( str_starts_with( $section->id, 'nav_menu[' ) ) {
 								$menu_id = absint( substr( $section->id, strlen( 'nav_menu[' ), -1 ) );
 							}
-    
+
 							$section_class = 'control-section-nav_menu';
 							if ( 'nav_menu_locations' === $section->id || 'nav_menus[locations]' === $section->id ) {
 								$section_class = 'control-section-nav_menu_locations';
@@ -1204,7 +1203,7 @@ wp_print_scripts();
 										<input id="menu-name-title-<?php echo $menu_id; ?>"
 											type="text"
 											class="menu-name-field live-update-section-title"
-											value="<?php echo esc_attr( $menus[$menu_id] ); ?>"
+											value="<?php echo esc_attr( $menus[ $menu_id ] ); ?>"
 										>
 									</li>
 
@@ -1236,12 +1235,12 @@ wp_print_scripts();
 
 											// $depth = 0 for top-level; otherwise parent depth + 1
 											// 11 is highest depth
-											$depth = ( $parent_id === 0 ) ? 0 : ( ( $depths[$parent_id] ?? 0 ) + 1 );
+											$depth = ( $parent_id === 0 ) ? 0 : ( ( $depths[ $parent_id ] ?? 0 ) + 1 );
 											if ( ( $depth === 11 && $key !== 0 ) ) {
 												$move_class .= ' move-right-disabled';
 											}
 
-											$depths[$menu_item->ID] = $depth;
+											$depths[ $menu_item->ID ] = $depth;
 											?>
 
 											<li id="customize-control-nav_menu_item-<?php echo esc_attr( $menu_item->ID ); ?>"
@@ -1322,7 +1321,7 @@ wp_print_scripts();
 												
 											<?php
 											foreach ( $locations as $key => $location ) {
-												if ( isset( $menu_locations[$key] ) ) {
+												if ( isset( $menu_locations[ $key ] ) ) {
 													?>
 											
 													<li class="customize-control customize-control-checkbox assigned-menu-location no-drag"
@@ -1333,15 +1332,15 @@ wp_print_scripts();
 																type="checkbox"
 																data-location-id="<?php echo esc_attr( $key ); ?>"
 																class="menu-location"
-																value="<?php echo checked( $menu_locations[$key], $menu_id, false ) ? $menu_id : ''; ?>"
-																<?php checked( $menu_locations[$key], $menu_id ); ?>
+																value="<?php echo checked( $menu_locations[ $key ], $menu_id, false ) ? $menu_id : ''; ?>"
+																<?php checked( $menu_locations[ $key ], $menu_id ); ?>
 															>
-															<label for="customize-nav-menu-control-location-<?php echo esc_attr( $menu_locations[$key] ); ?>">
+															<label for="customize-nav-menu-control-location-<?php echo esc_attr( $menu_locations[ $key ] ); ?>">
 																<?php echo esc_html( $location ); ?>
 																<span class="theme-location-set">
 
 																	<?php
-																	if ( isset( $menus[$menu_locations[$key]] ) ) {
+																	if ( isset( $menus[ $menu_locations[ $key ] ] ) ) {
 																		printf(
 																			wp_kses(
 																				/* translators: %s is the current menu name wrapped in a span. */
@@ -1489,7 +1488,7 @@ wp_print_scripts();
 									$field_type  = $control_data['type'];									
 									$field_label = $control_data['label'];
 									$setting_id  = $control_data['setting_id'];
-									$widget_id   = isset( $section->controls[$index]->widget_id ) ? $section->controls[$index]->widget_id : '';
+									$widget_id   = isset( $section->controls[ $index ]->widget_id ) ? $section->controls[ $index ]->widget_id : '';
 
 									if ( $widget_id === '' ) {
 										continue;
@@ -2061,18 +2060,18 @@ customize_themes_print_templates();
 					data-setting-id="<?php echo esc_attr( 'nav_menu_locations[' . $slug . ']' ); ?>"
 				>
 					<span class="customize-inside-control-row">
-						<input id="customize-nav-menu-control-location-<?php echo esc_attr( $menu_locations[$slug] ); ?>"
+						<input id="customize-nav-menu-control-location-<?php echo esc_attr( $menu_locations[ $slug ] ); ?>"
 							type="checkbox"
 							data-location-id="<?php echo esc_attr( $slug ); ?>"
 							class="menu-location"
 							value=""
 						>
-						<label for="customize-nav-menu-control-location-<?php echo esc_attr( $menu_locations[$slug] ); ?>">
+						<label for="customize-nav-menu-control-location-<?php echo esc_attr( $menu_locations[ $slug ] ); ?>">
 							<?php echo esc_html( $location ); ?>
 							<span class="theme-location-set">
 
 								<?php
-								if ( isset( $menus[$menu_locations[$slug]] ) ) {
+								if ( isset( $menus[ $menu_locations[ $slug ] ] ) ) {
 									printf(
 										wp_kses(
 											/* translators: %s is the current menu name wrapped in a span. */
