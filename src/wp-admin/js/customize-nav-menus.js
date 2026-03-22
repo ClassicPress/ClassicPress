@@ -5,7 +5,7 @@
  * @output wp-admin/js/customize-nav-menus.js
  */
 
-/* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings, console, ajaxurl, updatedControls, _updatedControlsWatcher, Sortable, isRTL */
+/* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings, console, ajaxurl, _updatedControlsWatcher, Sortable, isRtl */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addObserver, itemObserver, currentMenuId,
 		newMenuItemIDs = [],
@@ -26,10 +26,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	addObserver = new MutationObserver( function() {
 		if ( menuToEdit.querySelector( '.auto_add' ) ) {
-			menuToEdit.querySelector( '.auto_add' ).addEventListener( 'input', function( e ) { console.log('input-added');
+			menuToEdit.querySelector( '.auto_add' ).addEventListener( 'input', function( e ) {
 				inputChanged( e.target, e.target.closest( 'li' ) );
 			} );
-			menuToEdit.querySelector( '.auto_add' ).addEventListener( 'change', function( e ) { console.log('change-added');
+			menuToEdit.querySelector( '.auto_add' ).addEventListener( 'change', function( e ) {
 				inputChanged( e.target, e.target.closest( 'li' ) );
 			} );
 			addObserver.disconnect();
@@ -756,6 +756,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			template, clone, newMenuId, position, depth, classNameSplits,
 			allItems, updatedItems, liIndex, targetSibling,
 			targetSiblingIndex, insertAfter, newDepth, newParentId,
+			menuName = '',
 			children = [],
 			targetChildren = [],
 			id = e.target.closest( 'li' )?.id,
