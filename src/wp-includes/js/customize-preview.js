@@ -7,8 +7,7 @@
  * @since CP-2.8.0
  */
 
-/* global wp, _wpCustomizeControlsL10n, _wpCustomizeHeader, _wpCustomizeBackground,
- * updatedControls */
+/* global wp */
 ( function( exports ) {
 	'use strict';
 
@@ -316,7 +315,7 @@
 	 */
 	api.addShortcutFocusing = function() {
 		function handleShortcutClick( e ) {
-			var container, partialId, partialType, shortcut, match,
+			var container, partialId, partialType, shortcut,
 				context = {};
 
 			if ( ! e.shiftKey ) { // must use Shift key
@@ -735,9 +734,9 @@
 		} );
 
 		// Custom logo
-		if ( api._settings['custom_logo'] ) {
-			api.settingPreviewHandlers.custom_logo( api._settings['custom_logo'].get() );
-			api._settings['custom_logo'].bind( api.settingPreviewHandlers.custom_logo );
+		if ( api._settings.custom_logo ) {
+			api.settingPreviewHandlers.custom_logo( api._settings.custom_logo.get() );
+			api._settings.custom_logo.bind( api.settingPreviewHandlers.custom_logo );
 		}
 
 		// Custom CSS
@@ -763,19 +762,17 @@
 		} );
 
 		// Header text color
-		if ( ! api._settings['header_textcolor'] ) {
+		if ( ! api._settings.header_textcolor ) {
 			api.create( 'header_textcolor', '' );
 		}
-		api._settings['header_textcolor'].bind( function( value ) {
+		api._settings.header_textcolor.bind( function( value ) {
 			var style = document.getElementById( 'customize-preview-header-textcolor' );
 			if ( ! style ) {
 				style = document.createElement( 'style' );
 				style.id = 'customize-preview-header-textcolor';
 				document.head.appendChild( style );
 			}
-			style.textContent = value === 'blank'
-				? 'body .site-title a, body .site-description { visibility: hidden; }'
-				: 'body.has-header-image .site-title a, body.has-header-video .site-title a, body .site-title a, body .site-description { color: #' + value.replace( /^#/, '' ) + '; visibility: visible; }';
+			style.textContent = value === 'blank' ? 'body .site-title a, body .site-description { visibility: hidden; }' : 'body.has-header-image .site-title a, body.has-header-video .site-title a, body .site-title a, body .site-description { color: #' + value.replace( /^#/, '' ) + '; visibility: visible; }';
 		} );
 
 		api.preview.send( 'ready', {
