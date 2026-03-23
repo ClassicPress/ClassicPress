@@ -1571,11 +1571,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( e.target.classList && e.target.classList.contains( 'customize-help-toggle' ) ) {
 			if ( e.target.parentNode.classList.contains( 'open' ) ) {
 				e.target.parentNode.classList.remove( 'open' );
-				e.target.parentNode.nextElementSibling.style.display = 'none';
+				if ( e.target.parentNode.tagName === 'DIV' ) {
+					e.target.parentNode.nextElementSibling.style.display = 'none';
+				} else {
+					e.target.nextElementSibling.style.display = 'none';
+				}
 				e.target.setAttribute( 'aria-expanded', false );
 			} else {
 				e.target.parentNode.classList.add( 'open' );
-				e.target.parentNode.nextElementSibling.style.display = 'block';
+				if ( e.target.parentNode.tagName === 'DIV' ) {
+					e.target.parentNode.nextElementSibling.style.display = 'block';
+				} else {
+					e.target.nextElementSibling.style.display = 'block';
+				}
 				e.target.setAttribute( 'aria-expanded', true );
 			}
 
