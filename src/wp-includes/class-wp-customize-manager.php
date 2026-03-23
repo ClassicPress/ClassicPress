@@ -5246,7 +5246,6 @@ final class WP_Customize_Manager {
 	public function register_controls() {
 
 		/* Site Identity */
-
 		$this->add_section(
 			'title_tagline',
 			array(
@@ -5453,7 +5452,6 @@ final class WP_Customize_Manager {
 		);
 
 		/* Custom Header */
-
 		if ( current_theme_supports( 'custom-header', 'video' ) ) {
 			$title       = __( 'Header Media' );
 			$description = '<p>' . __( 'If you add a video, the image will be used as a fallback while the video loads.' ) . '</p>';
@@ -5588,7 +5586,6 @@ final class WP_Customize_Manager {
 		);
 
 		/* Custom Background */
-
 		$this->add_section(
 			'background_image',
 			array(
@@ -5750,7 +5747,6 @@ final class WP_Customize_Manager {
 		 * See also https://core.trac.wordpress.org/ticket/19627 which introduces the static-front-page theme_support.
 		 * The following replicates behavior from options-reading.php.
 		 */
-
 		$this->add_section(
 			'static_front_page',
 			array(
