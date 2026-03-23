@@ -1,6 +1,6 @@
-#post-query-submit,
-.wp-core-ui .button.media-button {
-	margin: 11px 8px 0 8px;
+.wp-core-ui .wp-filter .button.media-button {
+	vertical-align: middle;
+	margin-bottom: 0;
 }
 .upload-php .media-toolbar-secondary {
 	float: none;

@@ -661,8 +661,19 @@ fieldset label,
 }
 
 p.search-box {
+	display: inline-block;
 	float: right;
 	margin: 0;
+}
+
+.plugins-php form.search-form.search-plugins {
+	display: inline-block;
+	float: right;
+}
+
+.plugins-php form.search-form.search-plugins p.search-box {
+	display: block;
+	float: none;
 }
 
 .network-admin.themes-php p.search-box {
@@ -1661,10 +1672,22 @@ table.form-table td .updated p {
 	}
 
 	p.search-box {
+		display: block;
 		float: none;
 		clear: both;
 		width: 100%;
 		margin-bottom: 20px;
+	}
+
+	.plugins-php form.search-form.search-plugins {
+		display: block;
+		float: none;
+		clear: both;
+		margin-bottom: 20px;
+	}
+
+	.plugins-php form.search-form.search-plugins p.search-box {
+		margin-bottom: 0;
 	}
 
 	p.search-box input[name="s"] {

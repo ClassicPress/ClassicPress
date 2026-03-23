@@ -28,14 +28,19 @@ body.js .theme-browser.search-loading {
 }
 
 /* Search form */
-.themes-php .search-form {
-	display: inline;
+.themes-php form.search-form {
+	display: inline-block;
+	position: relative;
+	top: -3px;
+	left: 20px;
+}
+
+.themes-php form.search-form p.search-box {
+	display: block;
+	float: none;
 }
 
 .themes-php .wp-filter-search {
-	position: relative;
-	top: -2px;
-	left: 20px;
 	margin: 0;
 	width: 280px;
 }
@@ -941,12 +946,18 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 		font-size: 13px;
 	}
 
-	.themes-php .wp-filter-search {
-		float: none;
-		clear: both;
+	.themes-php form.search-form {
+		display: block;
 		top: 0;
 		left: 0;
-		margin: 0 0 20px;
+		margin-bottom: 20px;
+	}
+
+	.themes-php form.search-form p.search-box {
+		margin-bottom: 0;
+	}
+
+	.themes-php .wp-filter-search {
 		width: 100%;
 	}
 
