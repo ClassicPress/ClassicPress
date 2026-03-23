@@ -1,6 +1,6 @@
 .wp-core-ui .wp-filter .button.media-button {
 	vertical-align: middle;
-	margin: 0;
+	margin: 0 8px 0 0;
 }
 .upload-php .media-toolbar-secondary {
 	float: none;
