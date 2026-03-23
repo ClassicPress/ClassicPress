@@ -642,7 +642,6 @@ wp_print_scripts();
 
 								<?php
 								$nav_menus_panel = $wp_customize->get_panel( 'nav_menus' );
-								error_log(print_r($nav_menus_panel, true));
 								?>
 
 								<li class="panel-meta customize-info accordion-section">
