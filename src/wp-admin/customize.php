@@ -859,11 +859,21 @@ wp_print_scripts();
 												?>
 
 											</span>
-											<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false">
-												<span class="screen-reader-text">
-													<?php esc_html_e( 'Help' ); ?>
-												</span>
-											</button>
+
+											<?php
+											if ( ! empty( $item['description'] ) ) {
+												?>
+
+												<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false">
+													<span class="screen-reader-text">
+														<?php esc_html_e( 'Help' ); ?>
+													</span>
+												</button>
+
+												<?php
+											}
+											?>	
+
 										</div>
 
 										<?php
@@ -924,6 +934,21 @@ wp_print_scripts();
 													</span>
 													<?php echo esc_html( $middle_section['title'] ); ?>
 												</h3>
+
+												<?php
+												if ( ! empty( $middle_section['description'] ) ) {
+													?>
+
+													<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false">
+														<span class="screen-reader-text">
+															<?php esc_html_e( 'Help' ); ?>
+														</span>
+													</button>
+
+													<?php
+												}
+												?>
+	
 												<div class="customize-control-notifications-container" style="display: none;">
 													<ul></ul>
 												</div>
@@ -959,6 +984,7 @@ wp_print_scripts();
 									<?php
 								}
 							} elseif ( $item['type'] === 'section' ) {
+								$customize_info = ( $item['id'] === 'custom_css' ) ? 'customize-info ' : '';
 								?>
 
 								<ul id="sub-accordion-section-<?php echo esc_attr( $item['id'] ); ?>"
@@ -967,7 +993,7 @@ wp_print_scripts();
 									data-parent-id="customize-pane-parent"
 									style="display: none;"
 								>
-									<li class="customize-section-description-container section-meta no-drag">
+									<li class="customize-section-description-container <?php echo esc_attr( $customize_info ); ?>section-meta no-drag">
 										<div class="customize-section-title">
 											<button class="customize-section-back" tabindex="0">
 												<span class="screen-reader-text">
@@ -980,6 +1006,21 @@ wp_print_scripts();
 												</span>
 												<?php echo esc_html( $item['title'] ); ?>
 											</h3>
+
+											<?php
+											if ( $item['id'] === 'custom_css' ) {
+												?>
+
+												<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false">
+													<span class="screen-reader-text">
+														<?php esc_html_e( 'Help' ); ?>
+													</span>
+												</button>
+
+												<?php
+											}
+											?>
+
 											<div class="customize-control-notifications-container" style="display: none;">
 												<ul></ul>
 											</div>
