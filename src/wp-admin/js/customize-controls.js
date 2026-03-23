@@ -1471,7 +1471,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	document.addEventListener( 'click', function( e ) {
 		var id, page, itemBrowse, itemUpload, gridPanel, uploadPanel,
-			modalButtons, rightSidebar, modalPages,
+			modalButtons, rightSidebar, modalPages, description,
 			ul = e.target.closest( 'ul' );
 
 		// Abort if this comes from a middle section heading or a widget
@@ -1569,21 +1569,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Open and close description
 		} else if ( e.target.classList && e.target.classList.contains( 'customize-help-toggle' ) ) {
+			if ( e.target.closest( 'ul' ) ) {
+				description = e.target.closest( 'ul' ).querySelector( '.description' );
+			} else {
+				description = e.target.parentNode.nextElementSibling;
+			}
 			if ( e.target.parentNode.classList.contains( 'open' ) ) {
 				e.target.parentNode.classList.remove( 'open' );
-				if ( e.target.parentNode.tagName === 'DIV' ) {
-					e.target.parentNode.nextElementSibling.style.display = 'none';
-				} else {
-					e.target.nextElementSibling.style.display = 'none';
-				}
+				description.style.display = 'none';
 				e.target.setAttribute( 'aria-expanded', false );
 			} else {
 				e.target.parentNode.classList.add( 'open' );
-				if ( e.target.parentNode.tagName === 'DIV' ) {
-					e.target.parentNode.nextElementSibling.style.display = 'block';
-				} else {
-					e.target.nextElementSibling.style.display = 'block';
-				}
+				description.style.display = 'block';
 				e.target.setAttribute( 'aria-expanded', true );
 			}
 
