@@ -953,6 +953,10 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 		margin-bottom: 20px;
 	}
 
+	.themes-php form.search-form p.search-box {
+		margin-bottom: 0;
+	}
+
 	.themes-php .wp-filter-search {
 		width: 100%;
 	}
