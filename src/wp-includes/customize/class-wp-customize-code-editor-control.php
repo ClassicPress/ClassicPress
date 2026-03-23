@@ -105,7 +105,7 @@ class WP_Customize_Code_Editor_Control extends WP_Customize_Control {
 		if ( $this->description || $section->description ) {
 			?>
 
-			<div class="description customize-section-description open">
+			<div class="description customize-section-description" style="display:none;">
 				<?php echo wp_kses_post( $this->description ? $this->description : $section_description ); ?>
 			</div>
 
