@@ -298,6 +298,20 @@ function get_locale_stylesheet_uri() {
 }
 
 /**
+ * Retrieves the true active theme stylesheet name directly from the database,
+ * bypassing any filters that may have been applied by WP_Customize_Manager
+ * during theme preview.
+ *
+ * @since CP-2.8.0
+ *
+ * @return string The stylesheet name of the genuinely active theme.
+ */
+function cp_get_true_active_stylesheet() {
+	global $wpdb;
+	return $wpdb->get_var( "SELECT option_value FROM $wpdb->options WHERE option_name = 'stylesheet' LIMIT 1" );
+}
+
+/**
  * Retrieves name of the active theme.
  *
  * @since 1.5.0
@@ -1733,6 +1747,7 @@ function is_header_video_active() {
  * The container div will always be returned in the Customizer preview.
  *
  * @since 4.7.0
+ * $attr added @since CP-2.8.0
  *
  * @return string The markup for a custom header on success.
  */
@@ -1741,8 +1756,19 @@ function get_custom_header_markup() {
 		return '';
 	}
 
+	$attr = '';
+	if ( is_customize_preview() ) {
+		$attr = ' data-customize-partial-id="header_image"'
+			. ' data-customize-partial-type="default"'
+			. sprintf(
+				' data-customize-partial-placement-context="%s"',
+				esc_attr( wp_json_encode( array( 'partialId' => 'custom_header' ) ) )
+			);
+	}
+
 	return sprintf(
-		'<div id="wp-custom-header" class="wp-custom-header">%s</div>',
+		'<div id="wp-custom-header" class="wp-custom-header"%s>%s</div>',
+		$attr,
 		get_header_image_tag()
 	);
 }

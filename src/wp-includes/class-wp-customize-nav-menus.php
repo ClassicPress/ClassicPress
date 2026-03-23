@@ -661,7 +661,7 @@ final class WP_Customize_Nav_Menus {
 			$description .= '<p>' . sprintf(
 				/* translators: %s: URL to the Widgets panel of the Customizer. */
 				__( 'Menus can be displayed in locations defined by your theme or in <a href="%s">widget areas</a> by adding a &#8220;Navigation Menu&#8221; widget.' ),
-				"javascript:wp.customize.panel( 'widgets' ).focus();"
+				'customize.php#sub-accordion-panel-widgets'
 			) . '</p>';
 		} else {
 			$description .= '<p>' . __( 'Menus can be displayed in locations defined by your theme.' ) . '</p>';
@@ -697,7 +697,11 @@ final class WP_Customize_Nav_Menus {
 
 		if ( current_theme_supports( 'widgets' ) ) {
 			/* translators: URL to the Widgets panel of the Customizer. */
-			$description .= '<p>' . sprintf( __( 'If your theme has widget areas, you can also add menus there. Visit the <a href="%s">Widgets panel</a> and add a &#8220;Navigation Menu widget&#8221; to display a menu in a sidebar or footer.' ), "javascript:wp.customize.panel( 'widgets' ).focus();" ) . '</p>';
+			$description .= '<p>' . sprintf(
+				/* translators: %s: URL to the Widgets panel of the Customizer. */
+				__( 'Menus can be displayed in locations defined by your theme or in <a href="%s">widget areas</a> by adding a &#8220;Navigation Menu&#8221; widget.' ),
+				'customize.php#sub-accordion-panel-widgets'
+			) . '</p>';
 		}
 
 		$this->manager->add_section(
@@ -1056,90 +1060,11 @@ final class WP_Customize_Nav_Menus {
 			$post = $r;
 			$data = array(
 				'post_id' => $post->ID,
+				'title'   => sanitize_text_field( $params['post_title'] ),
 				'url'     => get_permalink( $post->ID ),
 			);
 			wp_send_json_success( $data );
 		}
-	}
-
-	/**
-	 * Prints the JavaScript templates used to render Menu Customizer components.
-	 *
-	 * Templates are imported into the JS use wp.template.
-	 *
-	 * @since 4.3.0
-	 */
-	public function print_templates() {
-		?>
-		<script type="text/html" id="tmpl-available-menu-item">
-			<li id="menu-item-tpl-{{ data.id }}" class="menu-item-tpl" data-menu-item-id="{{ data.id }}">
-				<div class="menu-item-bar">
-					<div class="menu-item-handle">
-						<button type="button" class="button-link item-add">
-							<span class="screen-reader-text">
-							<?php
-								/* translators: Hidden accessibility text. 1: Title of a menu item, 2: Type of a menu item. */
-								printf( __( 'Add to menu: %1$s (%2$s)' ), '{{ data.title || wp.customize.Menus.data.l10n.untitled }}', '{{ data.type_label }}' );
-							?>
-							</span>
-						</button>
-						<span class="item-split">
-							<span class="item-title" aria-hidden="true">
-								<span class="menu-item-title<# if ( ! data.title ) { #> no-title<# } #>">{{ data.title || wp.customize.Menus.data.l10n.untitled }}</span>
-							</span>
-							<span class="item-type" aria-hidden="true">{{ data.type_label }}</span>
-						</span>
-					</div>
-				</div>
-			</li>
-		</script>
-
-		<script type="text/html" id="tmpl-menu-item-reorder-nav">
-			<div class="menu-item-reorder-nav">
-				<?php
-				printf(
-					'<button type="button" class="menus-move-up">%1$s</button><button type="button" class="menus-move-down">%2$s</button><button type="button" class="menus-move-left">%3$s</button><button type="button" class="menus-move-right">%4$s</button>',
-					__( 'Move up' ),
-					__( 'Move down' ),
-					__( 'Move one level up' ),
-					__( 'Move one level down' )
-				);
-				?>
-			</div>
-		</script>
-
-		<script type="text/html" id="tmpl-nav-menu-delete-button">
-			<div class="menu-delete-item">
-				<button type="button" class="button-link button-link-delete">
-					<?php _e( 'Delete Menu' ); ?>
-				</button>
-			</div>
-		</script>
-
-		<script type="text/html" id="tmpl-nav-menu-submit-new-button">
-			<p id="customize-new-menu-submit-description"><?php _e( 'Click &#8220;Next&#8221; to start adding links to your new menu.' ); ?></p>
-			<button id="customize-new-menu-submit" type="button" class="button" aria-describedby="customize-new-menu-submit-description"><?php _e( 'Next' ); ?></button>
-		</script>
-
-		<script type="text/html" id="tmpl-nav-menu-locations-header">
-			<span class="customize-control-title customize-section-title-menu_locations-heading">{{ data.l10n.locationsTitle }}</span>
-			<p class="customize-control-description customize-section-title-menu_locations-description">{{ data.l10n.locationsDescription }}</p>
-		</script>
-
-		<script type="text/html" id="tmpl-nav-menu-create-menu-section-title">
-			<p class="add-new-menu-notice">
-				<?php _e( 'It does not look like your site has any menus yet. Want to build one? Click the button to start.' ); ?>
-			</p>
-			<p class="add-new-menu-notice">
-				<?php _e( 'You&#8217;ll create a menu, assign it a location, and add menu items like links to pages and categories. If your theme has multiple menu areas, you might need to create more than one.' ); ?>
-			</p>
-			<h3>
-				<button type="button" class="button customize-add-menu-button">
-					<?php _e( 'Create New Menu' ); ?>
-				</button>
-			</h3>
-		</script>
-		<?php
 	}
 
 	/**
@@ -1155,7 +1080,7 @@ final class WP_Customize_Nav_Menus {
 					<span class="screen-reader-text">
 						<?php
 						/* translators: Hidden accessibility text. */
-						_e( 'Back' );
+						esc_html_e( 'Back' );
 						?>
 					</span>
 				</button>
@@ -1166,7 +1091,7 @@ final class WP_Customize_Nav_Menus {
 							printf( __( 'Customizing &#9656; %s' ), esc_html( $this->manager->get_panel( 'nav_menus' )->title ) );
 						?>
 					</span>
-					<?php _e( 'Add Menu Items' ); ?>
+					<?php esc_html_e( 'Add Menu Items' ); ?>
 				</h3>
 			</div>
 			<li id="available-menu-items-search" class="accordion-section cannot-expand">
@@ -1174,88 +1099,140 @@ final class WP_Customize_Nav_Menus {
 					<label class="screen-reader-text" for="menu-items-search">
 						<?php
 						/* translators: Hidden accessibility text. */
-						_e( 'Search Menu Items' );
+						esc_html_e( 'Search Menu Items' );
 						?>
 					</label>
 					<input type="text" id="menu-items-search" placeholder="<?php esc_attr_e( 'Search menu items&hellip;' ); ?>" aria-describedby="menu-items-search-desc">
 					<p class="screen-reader-text" id="menu-items-search-desc">
 						<?php
 						/* translators: Hidden accessibility text. */
-						_e( 'The search results will be updated as you type.' );
+						esc_html_e( 'The search results will be updated as you type.' );
 						?>
 					</p>
 					<span class="spinner"></span>
+					<div class="search-icon" aria-hidden="true"></div>
 				</div>
-				<div class="search-icon" aria-hidden="true"></div>
-				<button type="button" class="clear-results"><span class="screen-reader-text">
-					<?php
-					/* translators: Hidden accessibility text. */
-					_e( 'Clear Results' );
-					?>
-				</span></button>
+				<button type="button" class="clear-results">
+					<span class="screen-reader-text">
+						<?php
+						/* translators: Hidden accessibility text. */
+						esc_html_e( 'Clear Results' );
+						?>
+					</span>
+				</button>
 				<ul class="accordion-section-content available-menu-items-list" data-type="search"></ul>
 			</li>
+
 			<?php
-
-			// Ensure the page post type comes first in the list.
-			$item_types     = $this->available_item_types();
-			$page_item_type = null;
-			foreach ( $item_types as $i => $item_type ) {
-				if ( isset( $item_type['object'] ) && 'page' === $item_type['object'] ) {
-					$page_item_type = $item_type;
-					unset( $item_types[ $i ] );
-				}
-			}
-
+			// Custom Links go first in the available items menu.
 			$this->print_custom_links_available_menu_item();
-			if ( $page_item_type ) {
-				$this->print_post_type_container( $page_item_type );
+
+			// Then ensure the following order: Pages → Posts → Categories → Tags → CPTs → other taxonomies.
+			$nav_menu_item_types = $this->available_item_types();
+
+			$ordered_types = array();
+			foreach ( $nav_menu_item_types as $type ) {
+				$key = $type['type'] . ':' . $type['object'];
+				$priority = match ( $key ) {
+					'post_type:page'    => 0,
+					'post_type:post'    => 10,
+					'taxonomy:category' => 20,
+					'taxonomy:post_tag' => 30,
+					default             => 50,
+				};
+				$ordered_types[ $priority . '|' . $key ] = $type;
 			}
-			// Containers for per-post-type item browsing; items are added with JS.
-			foreach ( $item_types as $item_type ) {
-				$this->print_post_type_container( $item_type );
+			ksort( $ordered_types ); // Sort by ascending priority
+			$nav_menu_item_types = array_values( $ordered_types );
+
+			// Containers and items for per-post-type item browsing.
+			foreach ( $nav_menu_item_types as $available_item_type ) {
+				$items = $this->load_available_items_query( $available_item_type['type'], $available_item_type['object'], 0, '' );
+				if ( empty( $items ) ) {
+					continue;
+				}
+				?>
+				<li id="available-menu-items-<?php echo esc_attr( $available_item_type['type'] . '-' . $available_item_type['object'] ); ?>" class="accordion-section">
+					<details>
+						<summary class="accordion-section-title">
+							<?php echo esc_html( $available_item_type['type_label'] ); ?>
+						</summary>
+						<div class="accordion-section-content" style="max-height: 132px;">
+							
+							<?php
+							if ( 'post_type' === $available_item_type['type'] ) {
+								$post_type_obj = get_post_type_object( $available_item_type['object'] );
+								if ( current_user_can( $post_type_obj->cap->create_posts ) && current_user_can( $post_type_obj->cap->publish_posts ) ) {
+									?>
+					
+									<div class="new-content-item">
+										<label for="create-item-input-<?php echo esc_attr( $available_item_type['object'] ); ?>" class="screen-reader-text">
+											<?php echo esc_html( $post_type_obj->labels->add_new_item ); ?>
+										</label>
+										<input type="text"
+											id="create-item-input-<?php echo esc_attr( $available_item_type['object'] ); ?>"
+											class="create-item-input"
+											placeholder="<?php echo esc_attr( $post_type_obj->labels->add_new_item ); ?>"
+										>
+										<button type="button" class="button add-content">
+											<?php esc_html_e( 'Add' ); ?>
+										</button>
+									</div>
+
+									<?php
+								}
+							}
+							?>
+
+							<ul class="available-menu-items-list"
+								data-type="<?php echo esc_attr( $available_item_type['type'] ); ?>"
+								data-object="<?php echo esc_attr( $available_item_type['object'] ); ?>"
+								data-type_label="<?php echo esc_attr( isset( $available_item_type['type_label'] ) ? $available_item_type['type_label'] : $available_item_type['type'] ); ?>"
+								style="max-height: 72px;"
+							>
+								<?php
+								foreach ( $items as $item ) {
+									?>
+									<li id="<?php echo esc_attr( $item['id'] ); ?>"
+										class="menu-item-tpl"
+										data-menu-item-id="<?php echo esc_attr( $item['id'] ); ?>"
+									>
+										<div class="menu-item-bar">
+											<div class="menu-item-handle">
+												<button type="button" class="button-link item-add">
+													<span class="screen-reader-text">
+														<?php esc_html_e( 'Add to menu:' ); ?>
+														<?php echo esc_html( $item['title'] ); ?>
+														<?php echo esc_html( '(' . $item['type_label'] . ')' ); ?>
+													</span>
+												</button>
+												<span class="item-split">
+													<span class="item-title" aria-hidden="true">
+														<span class="menu-item-title">
+															<?php echo esc_html( $item['title'] ); ?>
+														</span>
+													</span>
+													<span class="item-type" aria-hidden="true">
+														<?php echo esc_html( $item['type_label'] ); ?>
+													</span>
+												</span>
+											</div>
+										</div>
+										<span class="item-url" hidden>
+											<?php echo esc_html( $item['url'] ); ?>
+										</span>
+									</li>
+									<?php
+								}
+								?>
+							</ul>
+						</div>
+					</details>
+				</li>
+				<?php
 			}
 			?>
 		</ul><!-- #available-menu-items -->
-		<?php
-	}
-
-	/**
-	 * Prints the markup for new menu items.
-	 *
-	 * To be used in the template #available-menu-items.
-	 *
-	 * @since 4.7.0
-	 * @since CP-2.0.0 - Implement HTML5 <details> tag
-	 *
-	 * Details and summary tags added for accessibility
-	 *
-	 * @param array $available_item_type Menu item data to output, including title, type, and label.
-	 */
-	protected function print_post_type_container( $available_item_type ) {
-		$id = sprintf( 'available-menu-items-%s-%s', $available_item_type['type'], $available_item_type['object'] );
-		?>
-		<li id="<?php echo esc_attr( $id ); ?>" class="accordion-section">
-			<details>
-				<summary class="accordion-section-title">
-					<?php echo esc_html( $available_item_type['title'] ); ?>
-					<span class="no-items"><?php _e( 'No items' ); ?></span>
-				</summary>
-				<div class="accordion-section-content">
-					<?php if ( 'post_type' === $available_item_type['type'] ) : ?>
-						<?php $post_type_obj = get_post_type_object( $available_item_type['object'] ); ?>
-						<?php if ( current_user_can( $post_type_obj->cap->create_posts ) && current_user_can( $post_type_obj->cap->publish_posts ) ) : ?>
-							<div class="new-content-item">
-								<label for="<?php echo esc_attr( 'create-item-input-' . $available_item_type['object'] ); ?>" class="screen-reader-text"><?php echo esc_html( $post_type_obj->labels->add_new_item ); ?></label>
-								<input type="text" id="<?php echo esc_attr( 'create-item-input-' . $available_item_type['object'] ); ?>" class="create-item-input" placeholder="<?php echo esc_attr( $post_type_obj->labels->add_new_item ); ?>">
-								<button type="button" class="button add-content"><?php _e( 'Add' ); ?></button>
-							</div>
-						<?php endif; ?>
-					<?php endif; ?>
-					<ul class="available-menu-items-list" data-type="<?php echo esc_attr( $available_item_type['type'] ); ?>" data-object="<?php echo esc_attr( $available_item_type['object'] ); ?>" data-type_label="<?php echo esc_attr( isset( $available_item_type['type_label'] ) ? $available_item_type['type_label'] : $available_item_type['type'] ); ?>"></ul>
-				</div>
-			</details>
-		</li>
 		<?php
 	}
 
@@ -1276,18 +1253,39 @@ final class WP_Customize_Nav_Menus {
 					<?php _e( 'Custom Links' ); ?>
 				</summary>
 				<div class="accordion-section-content customlinkdiv">
-					<input type="hidden" value="custom" id="custom-menu-item-type" name="menu-item[-1][menu-item-type]" />
+					<input type="hidden"
+						value="custom"
+						id="custom-menu-item-type"
+						name="menu-item[-1][menu-item-type]"
+					>
 					<p id="menu-item-url-wrap" class="wp-clearfix">
-						<label class="howto" for="custom-menu-item-url"><?php _e( 'URL' ); ?></label>
-						<input id="custom-menu-item-url" name="menu-item[-1][menu-item-url]" type="text" class="code menu-item-textbox" placeholder="https://">
+						<label class="howto" for="custom-menu-item-url">
+							<?php _e( 'URL' ); ?>
+						</label>
+						<input id="custom-menu-item-url"
+							name="menu-item[-1][menu-item-url]"
+							type="text" class="code menu-item-textbox"
+							placeholder="https://"
+						>
 					</p>
 					<p id="menu-item-name-wrap" class="wp-clearfix">
-						<label class="howto" for="custom-menu-item-name"><?php _e( 'Link Text' ); ?></label>
-						<input id="custom-menu-item-name" name="menu-item[-1][menu-item-title]" type="text" class="regular-text menu-item-textbox">
+						<label class="howto" for="custom-menu-item-name">
+							<?php _e( 'Link Text' ); ?>
+						</label>
+						<input id="custom-menu-item-name"
+							name="menu-item[-1][menu-item-title]"
+							type="text"
+							class="regular-text menu-item-textbox"
+						>
 					</p>
 					<p class="button-controls">
 						<span class="add-to-menu">
-							<input type="submit" class="button submit-add-to-menu right" value="<?php esc_attr_e( 'Add to Menu' ); ?>" name="add-custom-menu-item" id="custom-menu-item-submit">
+							<input type="submit" 
+								class="button submit-add-to-menu right"
+								value="<?php esc_attr_e( 'Add to Menu' ); ?>"
+								name="add-custom-menu-item"
+								id="custom-menu-item-submit"
+							>
 							<span class="spinner"></span>
 						</span>
 					</p>
@@ -1314,6 +1312,10 @@ final class WP_Customize_Nav_Menus {
 	 *
 	 * @since 4.5.0
 	 *
+	 * @since CP-2.8.0 $partial_args moved to follow array so that any
+	 * settings value already set in $partial_args will take precedence
+	 * over the empty default.
+	 *
 	 * @param array|false $partial_args Partial args.
 	 * @param string      $partial_id   Partial ID.
 	 * @return array Partial args.
@@ -1325,14 +1327,14 @@ final class WP_Customize_Nav_Menus {
 				$partial_args = array();
 			}
 			$partial_args = array_merge(
-				$partial_args,
 				array(
 					'type'                => 'nav_menu_instance',
 					'render_callback'     => array( $this, 'render_nav_menu_partial' ),
 					'container_inclusive' => true,
 					'settings'            => array(), // Empty because the nav menu instance may relate to a menu or a location.
 					'capability'          => 'edit_theme_options',
-				)
+				),
+				$partial_args
 			);
 		}
 
@@ -1498,6 +1500,60 @@ final class WP_Customize_Nav_Menus {
 
 		$args['customize_preview_nav_menus_args']                            = $exported_args;
 		$this->preview_nav_menu_instance_args[ $exported_args['args_hmac'] ] = $exported_args;
+
+		/**
+		 * Populate all the partials in the preview pane
+		 *
+		 * @since CP-2.8.0
+		 */
+		if ( $can_partial_refresh ) {
+			$hmac       = $exported_args['args_hmac'];
+			$partial_id = 'nav_menu_instance[' . $hmac . ']';
+			$location   = ! empty( $exported_args['theme_location'] ) ? $exported_args['theme_location'] : '';
+			$setting_id = $location ? 'nav_menu_locations[' . $location . ']' : 'nav_menu[' . $exported_args['menu'] . ']';
+
+			// Build full settings list including all menu items for this menu
+			$settings = array( $setting_id );
+
+			if ( $location ) {
+				$locations = get_nav_menu_locations();
+				$menu_id   = isset( $locations[ $location ] ) ? (int) $locations[ $location ] : 0;
+			} else {
+				$menu_id = (int) $exported_args['menu'];
+			}
+
+			if ( $menu_id ) {
+				$exported_args['menu_id'] = $menu_id;
+				$args['customize_preview_nav_menus_args']['menu_id'] = $menu_id;
+
+				// Include the nav_menu setting itself
+				$settings[] = 'nav_menu[' . $menu_id . ']';
+
+				// Include all nav_menu_item settings for this menu
+				$menu_items = wp_get_nav_menu_items( $menu_id, array( 'update_post_term_cache' => false ) );
+				if ( $menu_items ) {
+					foreach ( $menu_items as $menu_item ) {
+						$settings[] = 'nav_menu_item[' . $menu_item->ID . ']';
+					}
+				}
+			}
+
+			$settings = array_unique( $settings );
+
+			$this->manager->selective_refresh->add_partial(
+				$partial_id,
+				array(
+					'type'                         => 'nav_menu_instance',
+					'selector'                     => null,
+					'settings'                     => $settings,
+					'primary_setting'              => $setting_id,
+					'fallback_refresh'             => true,
+					'container_inclusive'          => true,
+					'constructingContainerContext' => $exported_args,
+				)
+			);
+		}
+
 		return $args;
 	}
 

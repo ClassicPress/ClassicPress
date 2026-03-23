@@ -378,6 +378,13 @@ if ( is_multisite() ) {
  */
 do_action( 'muplugins_loaded' );
 
+// Cache true active theme before any preview filters
+if ( ! wp_installing() && ! defined( 'DOING_AJAX' ) ) {
+	if ( ! get_transient( 'core_true_stylesheet' ) ) {
+		set_transient( 'core_true_stylesheet', get_option( 'stylesheet' ), 0 );
+	}
+}
+
 if ( is_multisite() ) {
 	ms_cookie_constants();
 }

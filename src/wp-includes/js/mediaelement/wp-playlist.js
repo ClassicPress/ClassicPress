@@ -134,8 +134,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Ensure that current track shows in boldface
 		} else if ( e.target.closest( '.mejs-play' ) || e.target.closest( '.mejs-overlay-play' ) ) {
 			playlist = e.target.closest( '.wp-playlist' );
-			if ( ! playlist.querySelector( '.wp-playlist-playing' ) ) {
-				e.target.closest( '.wp-playlist' ).querySelector( '.wp-playlist-item ' ).classList.add( 'wp-playlist-playing' );
+			if ( ! playlist?.querySelector( '.wp-playlist-playing' ) ) {
+				e.target.closest( '.wp-playlist' )?.querySelector( '.wp-playlist-item ' ).classList.add( 'wp-playlist-playing' );
 			}
 		}
 	} );

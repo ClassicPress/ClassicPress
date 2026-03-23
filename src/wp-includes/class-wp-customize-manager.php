@@ -238,6 +238,15 @@ final class WP_Customize_Manager {
 	private $_changeset_data;
 
 	/**
+	 * Map of section IDs to their breadcrumb parent title,
+	 * used by customize.php for mid-level sections.
+	 *
+	 * @since CP-2.7.0
+	 * @var array
+	 */
+	public $cp_breadcrumb_parents = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 3.4.0
@@ -313,17 +322,11 @@ final class WP_Customize_Manager {
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-code-editor-control.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-widget-area-customize-control.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-widget-form-customize-control.php';
-		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-control.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-item-control.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-location-control.php';
-		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-name-control.php';
-		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-locations-control.php';
-		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-auto-add-control.php';
 
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menus-panel.php';
 
-		require_once ABSPATH . WPINC . '/customize/class-wp-customize-themes-panel.php';
-		require_once ABSPATH . WPINC . '/customize/class-wp-customize-themes-section.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-sidebar-section.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-section.php';
 
@@ -933,6 +936,18 @@ final class WP_Customize_Manager {
 		 */
 		do_action( 'customize_register', $this );
 
+		$this->controls_data_by_section = $this->get_all_controls_data();
+
+		/**
+		 * Accommodates hard-coding of header_image description in core.
+		 *
+		 * @since CP-2.7.0
+		 */
+		$section = $this->get_section( 'header_image' );
+		if ( $section && ! empty( $section->description ) ) {
+			$GLOBALS['cp_header_image_section_description'] = (string) $section->description;
+		}
+
 		if ( $this->settings_previewed() ) {
 			foreach ( $this->settings as $setting ) {
 				$setting->preview();
@@ -941,6 +956,32 @@ final class WP_Customize_Manager {
 
 		if ( $this->is_preview() && ! is_admin() ) {
 			$this->customize_preview_init();
+		}
+
+		/**
+		 * Build breadcrumb parent titles for mid-level sections.
+		 *
+		 * @since CP-2.7.0
+		 */
+		$this->cp_breadcrumb_parents = array();
+		$sections = $this->sections();
+		foreach ( $sections as $section_id => $section ) {
+			// Skip root sections (no panel).
+			if ( empty( $section->panel ) ) {
+				continue;
+			}
+
+			// Safe panel title lookup.
+			$breadcrumb_parent_title = '';
+			$panel = $this->get_panel( $section->panel );
+			if ( $panel ) {
+				$breadcrumb_parent_title = $panel->title;
+			}
+
+			// Store non-empty result for customize.php.
+			if ( $breadcrumb_parent_title ) {
+				$this->cp_breadcrumb_parents[ $section_id ] = $breadcrumb_parent_title;
+			}
 		}
 	}
 
@@ -1821,6 +1862,7 @@ final class WP_Customize_Manager {
 	 */
 	public function post_value( $setting, $default_value = null ) {
 		$post_values = $this->unsanitized_post_values();
+
 		if ( ! array_key_exists( $setting->id, $post_values ) ) {
 			return $default_value;
 		}
@@ -3858,6 +3900,69 @@ final class WP_Customize_Manager {
 	}
 
 	/**
+	 * Get all controls data (PHP equivalent of JS template `data` object).
+	 *
+	 * @since CP-2.7.0
+	 *
+	 * @return array Control data indexed by control ID.
+	 */
+	public function get_all_controls_data() {
+		$data = array();
+
+		foreach ( $this->controls() as $control ) {
+			if ( empty( $control->section ) ) {
+				continue;
+			}
+
+			$section_id = $control->section;
+
+			if ( ! isset( $data[ $section_id ] ) ) {
+				$data[ $section_id ] = array();
+			}
+
+			$setting_id = null;
+			$value      = null;
+
+			// Normalize settings to a single primary ID + value for PHP-only rendering.
+			if ( property_exists( $control, 'settings' ) && is_array( $control->settings ) ) {
+				$first = reset( $control->settings );
+				if ( $first instanceof WP_Customize_Setting ) {
+					$setting_id = $first->id;
+					$value      = $first->value();
+				} elseif ( is_string( $first ) ) {
+					$setting_id = $first;
+					$setting    = $this->get_setting( $setting_id );
+					if ( $setting ) {
+						$value = $setting->value();
+					}
+				}
+			} elseif ( property_exists( $control, 'setting' ) ) { // single setting
+				if ( $control->setting instanceof WP_Customize_Setting ) {
+					$setting_id = $control->setting->id;
+					$value      = $control->setting->value();
+				} elseif ( is_string( $control->setting ) ) {
+					$setting_id = $control->setting;
+					$setting    = $this->get_setting( $setting_id );
+					if ( $setting ) {
+						$value = $setting->value();
+					}
+				}
+			}
+
+			$data[ $section_id ][ $control->id ] = array(
+				'id'          => $control->id,
+				'label'       => isset( $control->label ) ? $control->label : '',
+				'description' => isset( $control->description ) ? $control->description : '',
+				'type'        => $control->type,
+				'priority'    => isset( $control->priority ) ? (int) $control->priority : 10,
+				'setting_id'  => $setting_id,
+				'value'       => $value,
+			);
+		}
+		return $data;
+	}
+
+	/**
 	 * Removes a customize setting.
 	 *
 	 * Note that removing the setting doesn't destroy the WP_Customize_Setting instance or remove its filters.
@@ -4046,6 +4151,96 @@ final class WP_Customize_Manager {
 	}
 
 	/**
+	 * Returns Customizer controls grouped by section, optionally filtered to active controls.
+	 *
+	 * The result is sorted by each row's `priority` (ascending), then by `id` using
+	 * a natural, case-insensitive comparison for stable, human-friendly ordering.
+	 *
+	 * The `value` field is intentionally set to `null` to avoid eager setting fetches
+	 * or notices in contexts where value retrieval would be premature.
+	 *
+	 * @return array<string, list<array{
+	 *   id: string,
+	 *   priority: int,
+	 *   type: string,
+	 *   label: string,
+	 *   description: string,
+	 *   setting_id: string|null,
+	 *   value: mixed
+	 * }>>
+	 *
+	 * @since CP 2.8.0
+	 */
+	public function get_controls_data_by_section(): array {
+		$primary_setting_id = static function ( $control ): ?string {
+			$settings = $control->settings ?? null;
+
+			// Single setting id as string.
+			if ( is_string( $settings ) ) {
+				return $settings;
+			}
+
+			// Single setting object with scalar id.
+			if ( is_object( $settings ) && isset( $settings->id ) && is_scalar( $settings->id ) ) {
+				return (string) $settings->id;
+			}
+
+			// Array of settings (strings or objects with id).
+			if ( is_array( $settings ) ) {
+				foreach ( $settings as $s ) {
+					if ( is_string( $s ) ) {
+						return $s;
+					}
+					if ( is_object( $s ) && isset( $s->id ) && is_scalar( $s->id ) ) {
+						return (string) $s->id;
+					}
+				}
+			}
+
+			return null;
+		};
+
+		$by_section = array();
+
+		foreach ( (array) $this->controls() as $ctrl ) {
+			if ( ! is_object( $ctrl ) || empty( $ctrl->section ) ) {
+				continue;
+			}
+			if ( ! $ctrl->check_capabilities() ) {
+				continue;
+			}
+
+			$sid = $primary_setting_id( $ctrl );
+
+			$by_section[ $ctrl->section ][] = array(
+				'id'          => ( isset( $ctrl->id ) && is_scalar( $ctrl->id ) ) ? (string) $ctrl->id : '',
+				'priority'    => ( isset( $ctrl->priority ) && is_numeric( $ctrl->priority ) ) ? (int) $ctrl->priority : 999,
+				'type'        => (string) ( $ctrl->type ?? '' ),
+				'label'       => (string) ( $ctrl->label ?? '' ),
+				'description' => (string) ( $ctrl->description ?? '' ),
+				'setting_id'  => $sid,
+				'value'       => null, // intentionally null to avoid premature fetching/warnings.
+			);
+		}
+
+		// Sort rows within each section by priority, then by id (natural, case-insensitive).
+		foreach ( $by_section as $section => $rows ) {
+			usort(
+				$rows,
+				static function ( $a, $b ) {
+					if ( $a['priority'] === $b['priority'] ) {
+						return strnatcasecmp( $a['id'], $b['id'] );
+					}
+					return $a['priority'] <=> $b['priority'];
+				}
+			);
+			$by_section[ $section ] = $rows;
+		}
+
+		return $by_section;
+	}
+
+	/**
 	 * Adds a customize control.
 	 *
 	 * @since 3.4.0
@@ -4146,7 +4341,7 @@ final class WP_Customize_Manager {
 		?>
 
 		<script type="text/html" id="tmpl-customize-control-default-content">
-			<#
+			<# console.log(data);
 			var inputId = _.uniqueId( 'customize-control-default-input-' );
 			var descriptionId = _.uniqueId( 'customize-control-default-description-' );
 			var describedByAttr = data.description ? ' aria-describedby="' + descriptionId + '" ' : '';
@@ -4537,6 +4732,7 @@ final class WP_Customize_Manager {
 		foreach ( $this->controls as $control ) {
 			$control->enqueue();
 		}
+		wp_enqueue_script( 'customize-controls-proxy' );
 
 		if ( ! is_multisite() && ( current_user_can( 'install_themes' ) || current_user_can( 'update_themes' ) || current_user_can( 'delete_themes' ) ) ) {
 			wp_enqueue_script( 'updates' );
@@ -5048,66 +5244,6 @@ final class WP_Customize_Manager {
 	 * @since 3.4.0
 	 */
 	public function register_controls() {
-
-		/* Themes (controls are loaded via ajax) */
-
-		$this->add_panel(
-			new WP_Customize_Themes_Panel(
-				$this,
-				'themes',
-				array(
-					'title'       => $this->theme()->display( 'Name' ),
-					'description' => (
-					'<p>' . __( 'Looking for a theme? You can search or browse the WordPress.org theme directory, install and preview themes, then activate them right here.' ) . '</p>' .
-					'<p>' . __( 'While previewing a new theme, you can continue to tailor things like widgets and menus, and explore theme-specific options.' ) . '</p>'
-					),
-					'capability'  => 'switch_themes',
-					'priority'    => 0,
-				)
-			)
-		);
-
-		$this->add_section(
-			new WP_Customize_Themes_Section(
-				$this,
-				'installed_themes',
-				array(
-					'title'      => __( 'Installed themes' ),
-					'action'     => 'installed',
-					'capability' => 'switch_themes',
-					'panel'      => 'themes',
-					'priority'   => 0,
-				)
-			)
-		);
-
-		if ( ! is_multisite() ) {
-			$this->add_section(
-				new WP_Customize_Themes_Section(
-					$this,
-					'wporg_themes',
-					array(
-						'title'       => __( 'WordPress.org themes' ),
-						'action'      => 'wporg',
-						'filter_type' => 'remote',
-						'capability'  => 'install_themes',
-						'panel'       => 'themes',
-						'priority'    => 5,
-					)
-				)
-			);
-		}
-
-		// Themes Setting (unused - the theme is considerably more fundamental to the Customizer experience).
-		$this->add_setting(
-			new WP_Customize_Filter_Setting(
-				$this,
-				'active_theme',
-				array(
-					'capability' => 'switch_themes',
-				)
-			)
-		);
 
 		/* Site Identity */
 

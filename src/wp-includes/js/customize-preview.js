@@ -1,320 +1,177 @@
-/*
+/**
  * Script run inside a Customizer preview frame.
+ * Vanilla JS rewrite — no jQuery, no Backbone.
  *
  * @output wp-includes/js/customize-preview.js
+ *
+ * @since CP-2.8.0
  */
-(function( exports, $ ){
-	var api = wp.customize,
-		debounce,
-		currentHistoryState = {};
 
-	/*
-	 * Capture the state that is passed into history.replaceState() and history.pushState()
-	 * and also which is returned in the popstate event so that when the changeset_uuid
-	 * gets updated when transitioning to a new changeset there the current state will
-	 * be supplied in the call to history.replaceState().
-	 */
-	( function( history ) {
-		var injectUrlWithState;
+/* global wp */
+( function( exports ) {
+	'use strict';
 
-		if ( ! history.replaceState ) {
+	// Create api as a callable function from the outset
+	function api( id, callback ) {
+		if ( callback ) {
+			if ( api._settings[ id ] ) {
+				callback( api._settings[ id ] );
+			}
+			return;
+		}
+		return api._settings[ id ] ? api._settings[ id ].get() : undefined;
+	}
+
+	// Attach all properties directly to this function
+	api._settings = {};
+	api.settings = null;
+	api.messageHandlers = {};
+
+	api.has = function( id ) {
+		return id in api._settings;
+	};
+
+	api.each = function( callback ) {
+		Object.keys( api._settings ).forEach( function( id ) {
+			callback( api._settings[ id ] );
+		} );
+	};
+
+	api.create = function( id, value, options ) {
+		var setting = {
+			id: id,
+			value: value,
+			_dirty: ( options && options._dirty ) ? true : false,
+			_handlers: [],
+			get: function() {
+				return this.value;
+			},
+			set: function( newValue ) {
+				this.value = newValue;
+				this._handlers.forEach( function( h ) {
+					h( newValue );
+				} );
+			},
+			bind: function( handler ) {
+				this._handlers.push( handler );
+			}
+		};
+		api._settings[ id ] = setting;
+		return setting;
+	};
+
+	api.utils = {
+		parseQueryString: function( queryString ) {
+			var params = {};
+			if ( ! queryString ) {
+				return params;
+			}
+			queryString.split( '&' ).forEach( function( pair ) {
+				var parts = pair.split( '=' );
+				if ( parts[0] ) {
+					params[ decodeURIComponent( parts[0] ) ] = parts[1] ? decodeURIComponent( parts[1].replace( /\+/g, ' ' ) ) : '';
+				}
+			} );
+			return params;
+		}
+	};
+
+	var currentHistoryState = {},
+		parentOrigin = location.ancestorOrigins ? location.ancestorOrigins[0] : document.referrer.split( '/' ).slice( 0, 3 ).join( '/' );
+
+	api.preview = {
+		channel: null,
+		scheme: {
+			_value: location.protocol.replace( /:$/, '' ),
+			get: function() {
+				return this._value;
+			}
+		},
+		send: function( type, data ) {
+			if ( ! this.channel ) {
+				return;
+			}
+			window.parent.postMessage( JSON.stringify( {
+				channel: this.channel,
+				type: type,
+				data: data !== undefined ? data : null
+			} ), parentOrigin || '*' );
+		},
+		bind: function( type, handler ) {
+			if ( ! api.messageHandlers[ type ] ) {
+				api.messageHandlers[ type ] = [];
+			}
+			api.messageHandlers[ type ].push( handler );
+		},
+		trigger: function( type, data ) {
+			if ( api.messageHandlers[ type ] ) {
+				api.messageHandlers[ type ].forEach( function( handler ) {
+					handler( data );
+				} );
+			}
+		}
+	};
+
+	// Listen for messages from parent frame
+	window.addEventListener( 'message', function( event ) {
+		var message;
+
+		if ( event.origin !== parentOrigin ) {
+			return;
+		}
+		if ( ! event.data ) {
 			return;
 		}
 
-		/**
-		 * Amend the supplied URL with the customized state.
-		 *
-		 * @since 4.7.0
-		 * @access private
-		 *
-		 * @param {string} url URL.
-		 * @return {string} URL with customized state.
-		 */
-		injectUrlWithState = function( url ) {
-			var urlParser, oldQueryParams, newQueryParams;
-			urlParser = document.createElement( 'a' );
-			urlParser.href = url;
-			oldQueryParams = api.utils.parseQueryString( location.search.substr( 1 ) );
-			newQueryParams = api.utils.parseQueryString( urlParser.search.substr( 1 ) );
-
-			newQueryParams.customize_changeset_uuid = oldQueryParams.customize_changeset_uuid;
-			if ( oldQueryParams.customize_autosaved ) {
-				newQueryParams.customize_autosaved = 'on';
-			}
-			if ( oldQueryParams.customize_theme ) {
-				newQueryParams.customize_theme = oldQueryParams.customize_theme;
-			}
-			if ( oldQueryParams.customize_messenger_channel ) {
-				newQueryParams.customize_messenger_channel = oldQueryParams.customize_messenger_channel;
-			}
-			urlParser.search = $.param( newQueryParams );
-			return urlParser.href;
-		};
-
-		history.replaceState = ( function( nativeReplaceState ) {
-			return function historyReplaceState( data, title, url ) {
-				currentHistoryState = data;
-				return nativeReplaceState.call( history, data, title, 'string' === typeof url && url.length > 0 ? injectUrlWithState( url ) : url );
-			};
-		} )( history.replaceState );
-
-		history.pushState = ( function( nativePushState ) {
-			return function historyPushState( data, title, url ) {
-				currentHistoryState = data;
-				return nativePushState.call( history, data, title, 'string' === typeof url && url.length > 0 ? injectUrlWithState( url ) : url );
-			};
-		} )( history.pushState );
-
-		window.addEventListener( 'popstate', function( event ) {
-			currentHistoryState = event.state;
-		} );
-
-	}( history ) );
-
-	/**
-	 * Returns a debounced version of the function.
-	 *
-	 * @todo Require Underscore.js for this file and retire this.
-	 */
-	debounce = function( fn, delay, context ) {
-		var timeout;
-		return function() {
-			var args = arguments;
-
-			context = context || this;
-
-			clearTimeout( timeout );
-			timeout = setTimeout( function() {
-				timeout = null;
-				fn.apply( context, args );
-			}, delay );
-		};
-	};
-
-	/**
-	 * @memberOf wp.customize
-	 * @alias wp.customize.Preview
-	 *
-	 * @constructor
-	 * @augments wp.customize.Messenger
-	 * @augments wp.customize.Class
-	 * @mixes wp.customize.Events
-	 */
-	api.Preview = api.Messenger.extend(/** @lends wp.customize.Preview.prototype */{
-		/**
-		 * @param {Object} params  - Parameters to configure the messenger.
-		 * @param {Object} options - Extend any instance parameter or method with this object.
-		 */
-		initialize: function( params, options ) {
-			var preview = this, urlParser = document.createElement( 'a' );
-
-			api.Messenger.prototype.initialize.call( preview, params, options );
-
-			urlParser.href = preview.origin();
-			preview.add( 'scheme', urlParser.protocol.replace( /:$/, '' ) );
-
-			preview.body = $( document.body );
-			preview.window = $( window );
-
-			if ( api.settings.channel ) {
-
-				// If in an iframe, then intercept the link clicks and form submissions.
-				preview.body.on( 'click.preview', 'a', function( event ) {
-					preview.handleLinkClick( event );
-				} );
-				preview.body.on( 'submit.preview', 'form', function( event ) {
-					preview.handleFormSubmit( event );
-				} );
-
-				preview.window.on( 'scroll.preview', debounce( function() {
-					preview.send( 'scroll', preview.window.scrollTop() );
-				}, 200 ) );
-
-				preview.bind( 'scroll', function( distance ) {
-					preview.window.scrollTop( distance );
-				});
-			}
-		},
-
-		/**
-		 * Handle link clicks in preview.
-		 *
-		 * @since 4.7.0
-		 * @access public
-		 *
-		 * @param {jQuery.Event} event Event.
-		 */
-		handleLinkClick: function( event ) {
-			var preview = this, link, isInternalJumpLink;
-			link = $( event.target ).closest( 'a' );
-
-			// No-op if the anchor is not a link.
-			if ( _.isUndefined( link.attr( 'href' ) ) ) {
-				return;
-			}
-
-			// Allow internal jump links and JS links to behave normally without preventing default.
-			isInternalJumpLink = ( '#' === link.attr( 'href' ).substr( 0, 1 ) );
-			if ( isInternalJumpLink || ! /^https?:$/.test( link.prop( 'protocol' ) ) ) {
-				return;
-			}
-
-			// If the link is not previewable, prevent the browser from navigating to it.
-			if ( ! api.isLinkPreviewable( link[0] ) ) {
-				wp.a11y.speak( api.settings.l10n.linkUnpreviewable );
-				event.preventDefault();
-				return;
-			}
-
-			// Prevent initiating navigating from click and instead rely on sending url message to pane.
-			event.preventDefault();
-
-			/*
-			 * Note the shift key is checked so shift+click on widgets or
-			 * nav menu items can just result on focusing on the corresponding
-			 * control instead of also navigating to the URL linked to.
-			 */
-			if ( event.shiftKey ) {
-				return;
-			}
-
-			// Note: It's not relevant to send scroll because sending url message will have the same effect.
-			preview.send( 'url', link.prop( 'href' ) );
-		},
-
-		/**
-		 * Handle form submit.
-		 *
-		 * @since 4.7.0
-		 * @access public
-		 *
-		 * @param {jQuery.Event} event Event.
-		 */
-		handleFormSubmit: function( event ) {
-			var preview = this, urlParser, form;
-			urlParser = document.createElement( 'a' );
-			form = $( event.target );
-			urlParser.href = form.prop( 'action' );
-
-			// If the link is not previewable, prevent the browser from navigating to it.
-			if ( 'GET' !== form.prop( 'method' ).toUpperCase() || ! api.isLinkPreviewable( urlParser ) ) {
-				wp.a11y.speak( api.settings.l10n.formUnpreviewable );
-				event.preventDefault();
-				return;
-			}
-
-			/*
-			 * If the default wasn't prevented already (in which case the form
-			 * submission is already being handled by JS), and if it has a GET
-			 * request method, then take the serialized form data and add it as
-			 * a query string to the action URL and send this in a url message
-			 * to the customizer pane so that it will be loaded. If the form's
-			 * action points to a non-previewable URL, the customizer pane's
-			 * previewUrl setter will reject it so that the form submission is
-			 * a no-op, which is the same behavior as when clicking a link to an
-			 * external site in the preview.
-			 */
-			if ( ! event.isDefaultPrevented() ) {
-				if ( urlParser.search.length > 1 ) {
-					urlParser.search += '&';
-				}
-				urlParser.search += form.serialize();
-				preview.send( 'url', urlParser.href );
-			}
-
-			// Prevent default since navigation should be done via sending url message or via JS submit handler.
-			event.preventDefault();
+		try {
+			message = JSON.parse( event.data );
+		} catch( e ) { // Malformed JSON in data attribute — not a fatal error.
+			return;
 		}
-	});
+		if ( ! message || ! message.type ) {
+			return;
+		}
+		if ( api.preview.channel && message.channel && message.channel !== api.preview.channel ) {
+			return;
+		}
+		api.preview.trigger( message.type, message.data );
+	} );
 
 	/**
-	 * Inject the changeset UUID into links in the document.
+	 * Link previewing
 	 *
-	 * @since 4.7.0
-	 * @access protected
-	 * @access private
-	 *
-	 * @return {void}
+	 * @since CP-2.8.0
 	 */
-	api.addLinkPreviewing = function addLinkPreviewing() {
-		var linkSelectors = 'a[href], area[href]';
+	api.isLinkPreviewable = function( element, options ) {
+		var args = Object.assign( {}, { allowAdminAjax: false }, options || {} ),
+			elementHost,
+			matchesAllowedUrl;
 
-		// Inject links into initial document.
-		$( document.body ).find( linkSelectors ).each( function() {
-			api.prepareLinkPreview( this );
-		} );
-
-		// Inject links for new elements added to the page.
-		if ( 'undefined' !== typeof MutationObserver ) {
-			api.mutationObserver = new MutationObserver( function( mutations ) {
-				_.each( mutations, function( mutation ) {
-					$( mutation.target ).find( linkSelectors ).each( function() {
-						api.prepareLinkPreview( this );
-					} );
-				} );
-			} );
-			api.mutationObserver.observe( document.documentElement, {
-				childList: true,
-				subtree: true
-			} );
-		} else {
-
-			// If mutation observers aren't available, fallback to just-in-time injection.
-			$( document.documentElement ).on( 'click focus mouseover', linkSelectors, function() {
-				api.prepareLinkPreview( this );
-			} );
+		if ( 'javascript:' === element.protocol ) {
+			return false;
 		}
-	};
-
-	/**
-	 * Should the supplied link is previewable.
-	 *
-	 * @since 4.7.0
-	 * @access public
-	 *
-	 * @param {HTMLAnchorElement|HTMLAreaElement} element Link element.
-	 * @param {string} element.search Query string.
-	 * @param {string} element.pathname Path.
-	 * @param {string} element.host Host.
-	 * @param {Object} [options]
-	 * @param {Object} [options.allowAdminAjax=false] Allow admin-ajax.php requests.
-	 * @return {boolean} Is appropriate for changeset link.
-	 */
-	api.isLinkPreviewable = function isLinkPreviewable( element, options ) {
-		var matchesAllowedUrl, parsedAllowedUrl, args, elementHost;
-
-		args = _.extend( {}, { allowAdminAjax: false }, options || {} );
-
-		if ( 'javascript:' === element.protocol ) { // jshint ignore:line
-			return true;
-		}
-
-		// Only web URLs can be previewed.
 		if ( 'https:' !== element.protocol && 'http:' !== element.protocol ) {
 			return false;
 		}
 
 		elementHost = element.host.replace( /:(80|443)$/, '' );
-		parsedAllowedUrl = document.createElement( 'a' );
-		matchesAllowedUrl = ! _.isUndefined( _.find( api.settings.url.allowed, function( allowedUrl ) {
+		matchesAllowedUrl = api.settings.url.allowed.some( function( allowedUrl ) {
+			var parsedAllowedUrl = document.createElement( 'a' );
 			parsedAllowedUrl.href = allowedUrl;
-			return parsedAllowedUrl.protocol === element.protocol && parsedAllowedUrl.host.replace( /:(80|443)$/, '' ) === elementHost && 0 === element.pathname.indexOf( parsedAllowedUrl.pathname.replace( /\/$/, '' ) );
-		} ) );
+			return parsedAllowedUrl.protocol === element.protocol &&
+				parsedAllowedUrl.host.replace( /:(80|443)$/, '' ) === elementHost &&
+				element.pathname.indexOf( parsedAllowedUrl.pathname.replace( /\/$/, '' ) ) === 0;
+		} );
+
 		if ( ! matchesAllowedUrl ) {
 			return false;
 		}
-
-		// Skip wp login and signup pages.
 		if ( /\/wp-(login|signup)\.php$/.test( element.pathname ) ) {
 			return false;
 		}
-
-		// Allow links to admin ajax as faux frontend URLs.
 		if ( /\/wp-admin\/admin-ajax\.php$/.test( element.pathname ) ) {
 			return args.allowAdminAjax;
 		}
-
-		// Disallow links to admin, includes, and content.
 		if ( /\/wp-(admin|includes|content)(\/|$)/.test( element.pathname ) ) {
 			return false;
 		}
@@ -322,58 +179,35 @@
 		return true;
 	};
 
-	/**
-	 * Inject the customize_changeset_uuid query param into links on the frontend.
-	 *
-	 * @since 4.7.0
-	 * @access protected
-	 *
-	 * @param {HTMLAnchorElement|HTMLAreaElement} element Link element.
-	 * @param {string} element.search Query string.
-	 * @param {string} element.host Host.
-	 * @param {string} element.protocol Protocol.
-	 * @return {void}
-	 */
-	api.prepareLinkPreview = function prepareLinkPreview( element ) {
-		var queryParams, $element = $( element );
+	api.prepareLinkPreview = function( element ) {
+		var queryParams;
 
-        // Skip elements with no href attribute. Check first to avoid more expensive checks down the road.
-        if ( ! element.hasAttribute( 'href' ) ) {
-            return;
-        }
-
-		// Skip links in admin bar.
-		if ( $element.closest( '#wpadminbar' ).length ) {
+		if ( ! element.hasAttribute( 'href' ) ) {
 			return;
 		}
-
-		// Ignore links with href="#", href="#id", or non-HTTP protocols (e.g. javascript: and mailto:).
-		if ( '#' === $element.attr( 'href' ).substr( 0, 1 ) || ! /^https?:$/.test( element.protocol ) ) {
+		if ( element.closest( '#wpadminbar' ) ) {
 			return;
 		}
-
-		// Make sure links in preview use HTTPS if parent frame uses HTTPS.
-		if ( api.settings.channel && 'https' === api.preview.scheme.get() && 'http:' === element.protocol && -1 !== api.settings.url.allowedHosts.indexOf( element.host ) ) {
+		if ( '#' === element.getAttribute( 'href' ).substr( 0, 1 ) || ! /^https?:$/.test( element.protocol ) ) {
+			return;
+		}
+		if ( api.settings.channel && 'https' === api.preview.scheme.get() && 'http:' === element.protocol && api.settings.url.allowedHosts.indexOf( element.host ) !== -1 ) {
 			element.protocol = 'https:';
 		}
-
-		// Ignore links with class wp-playlist-caption.
-		if ( $element.hasClass( 'wp-playlist-caption' ) ) {
+		if ( element.classList.contains( 'wp-playlist-caption' ) ) {
 			return;
 		}
-
 		if ( ! api.isLinkPreviewable( element ) ) {
-
-			// Style link as unpreviewable only if previewing in iframe; if previewing on frontend, links will be allowed to work normally.
 			if ( api.settings.channel ) {
-				$element.addClass( 'customize-unpreviewable' );
+				element.classList.add( 'customize-unpreviewable' );
 			}
 			return;
 		}
-		$element.removeClass( 'customize-unpreviewable' );
 
+		element.classList.remove( 'customize-unpreviewable' );
 		queryParams = api.utils.parseQueryString( element.search.substring( 1 ) );
 		queryParams.customize_changeset_uuid = api.settings.changeset.uuid;
+
 		if ( api.settings.changeset.autosaved ) {
 			queryParams.customize_autosaved = 'on';
 		}
@@ -383,155 +217,55 @@
 		if ( api.settings.channel ) {
 			queryParams.customize_messenger_channel = api.settings.channel;
 		}
-		element.search = $.param( queryParams );
+
+		element.search = new URLSearchParams( queryParams ).toString();
 	};
 
-	/**
-	 * Inject the changeset UUID into Ajax requests.
-	 *
-	 * @since 4.7.0
-	 * @access protected
-	 *
-	 * @return {void}
-	 */
-	api.addRequestPreviewing = function addRequestPreviewing() {
-
-		/**
-		 * Rewrite Ajax requests to inject customizer state.
-		 *
-		 * @param {Object} options Options.
-		 * @param {string} options.type Type.
-		 * @param {string} options.url URL.
-		 * @param {Object} originalOptions Original options.
-		 * @param {XMLHttpRequest} xhr XHR.
-		 * @return {void}
-		 */
-		// eslint-disable-next-line func-style
-		var prefilterAjax = function( options, originalOptions, xhr ) {
-			var urlParser, queryParams, requestMethod, dirtyValues = {};
-			urlParser = document.createElement( 'a' );
-			urlParser.href = options.url;
-
-			// Abort if the request is not for this site.
-			if ( ! api.isLinkPreviewable( urlParser, { allowAdminAjax: true } ) ) {
-				return;
-			}
-			queryParams = api.utils.parseQueryString( urlParser.search.substring( 1 ) );
-
-			// Note that _dirty flag will be cleared with changeset updates.
-			api.each( function( setting ) {
-				if ( setting._dirty ) {
-					dirtyValues[ setting.id ] = setting.get();
-				}
-			} );
-
-			if ( ! _.isEmpty( dirtyValues ) ) {
-				requestMethod = options.type.toUpperCase();
-
-				// Override underlying request method to ensure unsaved changes to changeset can be included (force Backbone.emulateHTTP).
-				if ( 'POST' !== requestMethod ) {
-					xhr.setRequestHeader( 'X-HTTP-Method-Override', requestMethod );
-					queryParams._method = requestMethod;
-					options.type = 'POST';
-				}
-
-				// Amend the post data with the customized values.
-				if ( options.data ) {
-					options.data += '&';
-				} else {
-					options.data = '';
-				}
-				options.data += $.param( {
-					customized: JSON.stringify( dirtyValues )
-				} );
-			}
-
-			// Include customized state query params in URL.
-			queryParams.customize_changeset_uuid = api.settings.changeset.uuid;
-			if ( api.settings.changeset.autosaved ) {
-				queryParams.customize_autosaved = 'on';
-			}
-			if ( ! api.settings.theme.active ) {
-				queryParams.customize_theme = api.settings.theme.stylesheet;
-			}
-
-			// Ensure preview nonce is included with every customized request, to allow post data to be read.
-			queryParams.customize_preview_nonce = api.settings.nonce.preview;
-
-			urlParser.search = $.param( queryParams );
-			options.url = urlParser.href;
-		};
-
-		$.ajaxPrefilter( prefilterAjax );
-	};
-
-	/**
-	 * Inject changeset UUID into forms, allowing preview to persist through submissions.
-	 *
-	 * @since 4.7.0
-	 * @access protected
-	 *
-	 * @return {void}
-	 */
-	api.addFormPreviewing = function addFormPreviewing() {
-
-		// Inject inputs for forms in initial document.
-		$( document.body ).find( 'form' ).each( function() {
-			api.prepareFormPreview( this );
+	api.addLinkPreviewing = function() {
+		document.body.querySelectorAll( 'a[href], area[href]' ).forEach( function( el ) {
+			api.prepareLinkPreview( el );
 		} );
 
-		// Inject inputs for new forms added to the page.
-		if ( 'undefined' !== typeof MutationObserver ) {
-			api.mutationObserver = new MutationObserver( function( mutations ) {
-				_.each( mutations, function( mutation ) {
-					$( mutation.target ).find( 'form' ).each( function() {
-						api.prepareFormPreview( this );
-					} );
+		api.mutationObserver = new MutationObserver( function( mutations ) {
+			mutations.forEach( function( mutation ) {
+				mutation.target.querySelectorAll( 'a[href], area[href]' ).forEach( function( el ) {
+					api.prepareLinkPreview( el );
 				} );
 			} );
-			api.mutationObserver.observe( document.documentElement, {
-				childList: true,
-				subtree: true
-			} );
-		}
+		} );
+		api.mutationObserver.observe( document.documentElement, { childList: true, subtree: true } );
 	};
 
 	/**
-	 * Inject changeset into form inputs.
+	 * Form previewing
 	 *
-	 * @since 4.7.0
-	 * @access protected
-	 *
-	 * @param {HTMLFormElement} form Form.
-	 * @return {void}
+	 * @since CP-2.8.0
 	 */
-	api.prepareFormPreview = function prepareFormPreview( form ) {
-		var urlParser, stateParams = {};
+	api.prepareFormPreview = function( form ) {
+		var urlParser = document.createElement( 'a' ),
+			stateParams = {};
 
 		if ( ! form.action ) {
 			form.action = location.href;
 		}
 
-		urlParser = document.createElement( 'a' );
 		urlParser.href = form.action;
 
-		// Make sure forms in preview use HTTPS if parent frame uses HTTPS.
-		if ( api.settings.channel && 'https' === api.preview.scheme.get() && 'http:' === urlParser.protocol && -1 !== api.settings.url.allowedHosts.indexOf( urlParser.host ) ) {
+		if ( api.settings.channel && 'https' === api.preview.scheme.get() && 'http:' === urlParser.protocol && api.settings.url.allowedHosts.indexOf( urlParser.host ) !== -1 ) {
 			urlParser.protocol = 'https:';
 			form.action = urlParser.href;
 		}
 
 		if ( 'GET' !== form.method.toUpperCase() || ! api.isLinkPreviewable( urlParser ) ) {
-
-			// Style form as unpreviewable only if previewing in iframe; if previewing on frontend, all forms will be allowed to work normally.
 			if ( api.settings.channel ) {
-				$( form ).addClass( 'customize-unpreviewable' );
+				form.classList.add( 'customize-unpreviewable' );
 			}
 			return;
 		}
-		$( form ).removeClass( 'customize-unpreviewable' );
 
+		form.classList.remove( 'customize-unpreviewable' );
 		stateParams.customize_changeset_uuid = api.settings.changeset.uuid;
+
 		if ( api.settings.changeset.autosaved ) {
 			stateParams.customize_autosaved = 'on';
 		}
@@ -542,33 +276,180 @@
 			stateParams.customize_messenger_channel = api.settings.channel;
 		}
 
-		_.each( stateParams, function( value, name ) {
-			var input = $( form ).find( 'input[name="' + name + '"]' );
-			if ( input.length ) {
-				input.val( value );
+		Object.keys( stateParams ).forEach( function( name ) {
+			var input = form.querySelector( 'input[name="' + name + '"]' );
+			if ( input ) {
+				input.value = stateParams[ name ];
 			} else {
-				$( form ).prepend( $( '<input>', {
-					type: 'hidden',
-					name: name,
-					value: value
-				} ) );
+				var hidden = document.createElement( 'input' );
+				hidden.type = 'hidden';
+				hidden.name = name;
+				hidden.value = stateParams[ name ];
+				form.prepend( hidden );
 			}
 		} );
 
-		// Prevent links from breaking out of preview iframe.
 		if ( api.settings.channel ) {
 			form.target = '_self';
 		}
 	};
 
+	api.addFormPreviewing = function() {
+		document.body.querySelectorAll( 'form' ).forEach( function( form ) {
+			api.prepareFormPreview( form );
+		} );
+
+		new MutationObserver( function( mutations ) {
+			mutations.forEach( function( mutation ) {
+				mutation.target.querySelectorAll( 'form' ).forEach( function( form ) {
+					api.prepareFormPreview( form );
+				} );
+			} );
+		} ).observe( document.documentElement, { childList: true, subtree: true } );
+	};
+
 	/**
-	 * Watch current URL and send keep-alive (heartbeat) messages to the parent.
+	 * Handle Shift + clicks on icons indicating live preview availability
 	 *
-	 * Keep the customizer pane notified that the preview is still alive
-	 * and that the user hasn't navigated to a non-customized URL.
+	 * @since CP-2.8.0
+	 */
+	api.addShortcutFocusing = function() {
+		function handleShortcutClick( e ) {
+			var container, partialId, partialType, shortcut,
+				context = {};
+
+			if ( ! e.shiftKey ) { // must use Shift key
+				return;
+			}
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			container = e.currentTarget.closest( '[data-customize-partial-id]' );
+			if ( container ) {
+				partialId   = container.dataset.customizePartialId;
+				partialType = container.dataset.customizePartialType;
+			} else {
+				// Fall back to reading the partial ID from the shortcut span class
+				shortcut = e.currentTarget.closest( '.customize-partial-edit-shortcut' );
+				if ( ! shortcut ) {
+					return;
+				}
+				partialId   = shortcut.className.replace( 'customize-partial-edit-shortcut customize-partial-edit-shortcut-', '' );
+				partialType = 'default';
+				container   = shortcut.parentElement;
+			}
+
+			// Map known partial types to their focus target
+			if ( partialType === 'nav_menu_instance' ) {
+				try { // use getAttribute instead of dataset to avoid potential problems with parsing escaped values
+					context = JSON.parse( container.getAttribute( 'data-customize-partial-placement-context' ) || '{}' );
+				} catch( e ) {
+					// Malformed JSON in data attribute — not a fatal error, proceed with empty context.
+				}
+
+				api.preview.send( 'focus-partial', {
+					id:     partialId,
+					type:   partialType,
+					place:  context.theme_location || null,
+					menuId: context.menu_id || null
+				} );
+			} else if ( partialType === 'widget' ) {
+				try { // use getAttribute instead of dataset to avoid potential problems with parsing escaped values
+					context = JSON.parse( container.getAttribute( 'data-customize-partial-placement-context' ) || '{}' );
+				} catch( e ) {
+					// Malformed JSON in data attribute — not a fatal error, proceed with empty context.
+				}
+
+				api.preview.send( 'focus-partial', {
+					id: partialId,
+					type: partialType,
+					sidebarId: context.sidebar_id || null,
+					widgetId: container.dataset.customizeWidgetId || null
+				} );
+			} else { // partialType === 'default'
+				api.preview.send( 'focus-partial', {
+					id: partialId,
+					type: partialType
+				} );
+			}
+		}
+
+		document.body.querySelectorAll( '.customize-partial-edit-shortcut-button' ).forEach( function( btn ) {
+			btn.addEventListener( 'click', handleShortcutClick );
+		} );
+
+		// Cover dynamically refreshed partials
+		new MutationObserver( function( mutations ) {
+			mutations.forEach( function( mutation ) {
+				mutation.addedNodes.forEach( function( node ) {
+					var btns = [];
+					if ( node.nodeType !== 1 ) {
+						return;
+					}
+					if ( node.matches( '.customize-partial-edit-shortcut-button' ) ) {
+						btns.push( node );
+					}
+					node.querySelectorAll( '.customize-partial-edit-shortcut-button' ).forEach( function( button ) {
+						btns.push( button );
+					} );
+					btns.forEach( function( btn ) {
+						btn.addEventListener( 'click', handleShortcutClick );
+					} );
+				} );
+			} );
+		} ).observe( document.body, { childList: true, subtree: true } );
+	};
+
+	/**
+	 * Setting preview handlers
 	 *
-	 * @since 4.7.0
-	 * @access protected
+	 * @since CP-2.8.0
+	 */
+	api.settingPreviewHandlers = {
+		custom_logo: function( attachmentId ) {
+			document.body.classList.toggle( 'wp-custom-logo', !! attachmentId );
+		},
+		custom_css: function( value ) {
+			var el = document.getElementById( 'wp-custom-css' );
+			if ( el ) {
+				el.textContent = value;
+			}
+		},
+		background: function() {
+			var css = '',
+				props = [ 'color', 'image', 'preset', 'position_x', 'position_y', 'size', 'repeat', 'attachment' ],
+				settings = {},
+				bgCss;
+
+			props.forEach( function( prop ) {
+				settings[ prop ] = api( 'background_' + prop );
+			} );
+
+			document.body.classList.toggle( 'custom-background', !! ( settings.color || settings.image ) );
+
+			if ( settings.color ) {
+				css += 'background-color: ' + settings.color + ';';
+			}
+			if ( settings.image ) {
+				css += 'background-image: url("' + settings.image + '");';
+				css += 'background-size: ' + settings.size + ';';
+				css += 'background-position: ' + settings.position_x + ' ' + settings.position_y + ';';
+				css += 'background-repeat: ' + settings.repeat + ';';
+				css += 'background-attachment: ' + settings.attachment + ';';
+			}
+
+			bgCss = document.getElementById( 'custom-background-css' );
+			if ( bgCss ) { // css values come from api.settings, which is server-populated
+				bgCss.textContent = 'body.custom-background { ' + css + ' }';
+			}
+		}
+	};
+
+	/**
+	 * Keep-alive
+	 *
+	 * @since CP-2.8.0
 	 */
 	api.keepAliveCurrentUrl = ( function() {
 		var previousPathName = location.pathname,
@@ -579,30 +460,29 @@
 		return function keepAliveCurrentUrl() {
 			var urlParser, currentQueryParams;
 
-			// Short-circuit with keep-alive if previous URL is identical (as is normal case).
 			if ( previousQueryString === location.search.substr( 1 ) && previousPathName === location.pathname ) {
 				api.preview.send( 'keep-alive' );
 				return;
 			}
 
 			urlParser = document.createElement( 'a' );
+
 			if ( null === previousQueryParams ) {
 				urlParser.search = previousQueryString;
 				previousQueryParams = api.utils.parseQueryString( previousQueryString );
-				_.each( stateQueryParams, function( name ) {
+				stateQueryParams.forEach( function( name ) {
 					delete previousQueryParams[ name ];
 				} );
 			}
 
-			// Determine if current URL minus customized state params and URL hash.
 			urlParser.href = location.href;
 			currentQueryParams = api.utils.parseQueryString( urlParser.search.substr( 1 ) );
-			_.each( stateQueryParams, function( name ) {
+			stateQueryParams.forEach( function( name ) {
 				delete currentQueryParams[ name ];
 			} );
 
-			if ( previousPathName !== location.pathname || ! _.isEqual( previousQueryParams, currentQueryParams ) ) {
-				urlParser.search = $.param( currentQueryParams );
+			if ( previousPathName !== location.pathname || JSON.stringify( previousQueryParams ) !== JSON.stringify( currentQueryParams ) ) {
+				urlParser.search = new URLSearchParams( currentQueryParams ).toString();
 				urlParser.hash = '';
 				api.settings.url.self = urlParser.href;
 				api.preview.send( 'ready', {
@@ -615,185 +495,194 @@
 			} else {
 				api.preview.send( 'keep-alive' );
 			}
+
 			previousQueryParams = currentQueryParams;
 			previousQueryString = location.search.substr( 1 );
 			previousPathName = location.pathname;
 		};
 	} )();
 
-	api.settingPreviewHandlers = {
-
-		/**
-		 * Preview changes to custom logo.
-		 *
-		 * @param {number} attachmentId Attachment ID for custom logo.
-		 * @return {void}
-		 */
-		custom_logo: function( attachmentId ) {
-			$( 'body' ).toggleClass( 'wp-custom-logo', !! attachmentId );
-		},
-
-		/**
-		 * Preview changes to custom css.
-		 *
-		 * @param {string} value Custom CSS..
-		 * @return {void}
-		 */
-		custom_css: function( value ) {
-			$( '#wp-custom-css' ).text( value );
-		},
-
-		/**
-		 * Preview changes to any of the background settings.
-		 *
-		 * @return {void}
-		 */
-		background: function() {
-			var css = '', settings = {};
-
-			_.each( ['color', 'image', 'preset', 'position_x', 'position_y', 'size', 'repeat', 'attachment'], function( prop ) {
-				settings[ prop ] = api( 'background_' + prop );
-			} );
-
-			/*
-			 * The body will support custom backgrounds if either the color or image are set.
-			 *
-			 * See get_body_class() in /wp-includes/post-template.php
-			 */
-			$( document.body ).toggleClass( 'custom-background', !! ( settings.color() || settings.image() ) );
-
-			if ( settings.color() ) {
-				css += 'background-color: ' + settings.color() + ';';
-			}
-
-			if ( settings.image() ) {
-				css += 'background-image: url("' + settings.image() + '");';
-				css += 'background-size: ' + settings.size() + ';';
-				css += 'background-position: ' + settings.position_x() + ' ' + settings.position_y() + ';';
-				css += 'background-repeat: ' + settings.repeat() + ';';
-				css += 'background-attachment: ' + settings.attachment() + ';';
-			}
-
-			$( '#custom-background-css' ).text( 'body.custom-background { ' + css + ' }' );
-		}
-	};
-
-	$( function() {
-		var bg, setValue, handleUpdatedChangesetUuid;
+	/**
+	 * DOM ready
+	 *
+	 * @since CP-2.8.0
+	 */
+	document.addEventListener( 'DOMContentLoaded', function() {
+		var handleUpdatedChangesetUuid, cssSettingId;
 
 		api.settings = window._wpCustomizeSettings;
 		if ( ! api.settings ) {
 			return;
 		}
 
-		api.preview = new api.Preview({
-			url: window.location.href,
-			channel: api.settings.channel
-		});
+		api.preview.channel = api.settings.channel;
 
 		api.addLinkPreviewing();
-		api.addRequestPreviewing();
 		api.addFormPreviewing();
+		api.addShortcutFocusing();
 
-		/**
-		 * Create/update a setting value.
-		 *
-		 * @param {string}  id            - Setting ID.
-		 * @param {*}       value         - Setting value.
-		 * @param {boolean} [createDirty] - Whether to create a setting as dirty. Defaults to false.
-		 */
-		setValue = function( id, value, createDirty ) {
-			var setting = api( id );
+		if ( api.settings.channel ) {
+			document.body.addEventListener( 'click', function( e ) {
+				var link = e.target.closest( 'a' ),
+					isInternalJumpLink;
+
+				if ( ! link || ! link.hasAttribute( 'href' ) ) {
+					return;
+				}
+
+				isInternalJumpLink = '#' === link.getAttribute( 'href' ).substr( 0, 1 );
+
+				if ( isInternalJumpLink || ! /^https?:$/.test( link.protocol ) ) {
+					return;
+				}
+				if ( ! api.isLinkPreviewable( link ) ) {
+					wp.a11y.speak( api.settings.l10n.linkUnpreviewable );
+					e.preventDefault();
+					return;
+				}
+
+				e.preventDefault();
+
+				if ( e.shiftKey ) {
+					return;
+				}
+
+				api.preview.send( 'url', link.href );
+			} );
+
+			document.body.addEventListener( 'submit', function( e ) {
+				var formParams,
+					form = e.target,
+					urlParser = document.createElement( 'a' );
+
+				urlParser.href = form.action;
+
+				if ( 'GET' !== form.method.toUpperCase() || ! api.isLinkPreviewable( urlParser ) ) {
+					wp.a11y.speak( api.settings.l10n.formUnpreviewable );
+					e.preventDefault();
+					return;
+				}
+
+				if ( ! e.defaultPrevented ) {
+					formParams = new URLSearchParams( new FormData( form ) ).toString();
+					if ( formParams ) {
+						urlParser.search += ( urlParser.search.length > 1 ? '&' : '?' ) + formParams;
+					}
+					api.preview.send( 'url', urlParser.href );
+				}
+
+				e.preventDefault();
+			} );
+
+			window.addEventListener( 'scroll', _.debounce( function() {
+				api.preview.send( 'scroll', window.scrollY );
+			}, 200 ) );
+
+			api.preview.bind( 'scroll', function( distance ) {
+				window.scrollTo( 0, distance );
+			} );
+		}
+
+		function setValue( id, value, createDirty ) {
+			var setting = api._settings[ id ];
 			if ( setting ) {
 				setting.set( value );
 			} else {
-				createDirty = createDirty || false;
-				setting = api.create( id, value, {
-					id: id
-				} );
-
-				// Mark dynamically-created settings as dirty so they will get posted.
+				setting = api.create( id, value, { id: id } );
 				if ( createDirty ) {
 					setting._dirty = true;
 				}
 			}
-		};
+		}
 
 		api.preview.bind( 'settings', function( values ) {
-			$.each( values, setValue );
-		});
+			Object.keys( values ).forEach( function( id ) {
+				setValue( id, values[ id ] );
+			} );
+		} );
 
 		api.preview.trigger( 'settings', api.settings.values );
 
-		$.each( api.settings._dirty, function( i, id ) {
-			var setting = api( id );
-			if ( setting ) {
-				setting._dirty = true;
+		( api.settings._dirty || [] ).forEach( function( id ) {
+			if ( api._settings[ id ] ) {
+				api._settings[ id ]._dirty = true;
 			}
 		} );
 
 		api.preview.bind( 'setting', function( args ) {
-			var createDirty = true;
-			setValue.apply( null, args.concat( createDirty ) );
-		});
+			var sidebarId,
+				found = false,
+				id = args[0],
+				value = args[1];
+
+			setValue( id, value, true );
+
+			if ( id.startsWith( 'sidebars_widgets[' ) ) {
+				sidebarId = id.replace( 'sidebars_widgets[', '' ).replace( ']', '' );
+				window._lastDirtySidebarId = sidebarId; // stored for use with newly-added widgets
+				wp.customize.selectiveRefresh.partial.each( function( partial ) {
+					if ( partial.id === sidebarId ) {
+						partial.refresh();
+					}
+				} );
+			} else if ( id.startsWith( 'widget[' ) ) {
+				wp.customize.selectiveRefresh.partial.each( function( partial ) {
+					if ( partial.id === id ) {
+						found = true;
+						partial.refresh();
+					}
+				} );
+
+				if ( ! found && window._lastDirtySidebarId ) {
+					// Refresh the sidebar that was just updated
+					wp.customize.selectiveRefresh.partial.each( function( partial ) {
+						if ( partial.id === window._lastDirtySidebarId ) {
+							partial.refresh();
+						}
+					} );
+				}
+			} else {
+				wp.customize.selectiveRefresh.partial.each( function( partial ) {
+					if ( partial.params.settings && partial.params.settings.indexOf( id ) !== -1 ) {
+						partial.refresh();
+					}
+				} );
+			}
+		} );
 
 		api.preview.bind( 'sync', function( events ) {
-
-			/*
-			 * Delete any settings that already exist locally which haven't been
-			 * modified in the controls while the preview was loading. This prevents
-			 * situations where the JS value being synced from the pane may differ
-			 * from the PHP-sanitized JS value in the preview which causes the
-			 * non-sanitized JS value to clobber the PHP-sanitized value. This
-			 * is particularly important for selective refresh partials that
-			 * have a fallback refresh behavior since infinite refreshing would
-			 * result.
-			 */
 			if ( events.settings && events['settings-modified-while-loading'] ) {
-				_.each( _.keys( events.settings ), function( syncedSettingId ) {
-					if ( api.has( syncedSettingId ) && ! events['settings-modified-while-loading'][ syncedSettingId ] ) {
+				Object.keys( events.settings ).forEach( function( syncedSettingId ) {
+					if ( api._settings[ syncedSettingId ] && ! events['settings-modified-while-loading'][ syncedSettingId ] ) {
 						delete events.settings[ syncedSettingId ];
 					}
 				} );
 			}
-
-			$.each( events, function( event, args ) {
-				api.preview.trigger( event, args );
-			});
+			Object.keys( events ).forEach( function( event ) {
+				api.preview.trigger( event, events[ event ] );
+			} );
 			api.preview.send( 'synced' );
-		});
+		} );
 
 		api.preview.bind( 'active', function() {
 			api.preview.send( 'nonce', api.settings.nonce );
-
 			api.preview.send( 'documentTitle', document.title );
+			api.preview.send( 'scroll', window.scrollY );
+		} );
 
-			// Send scroll in case of loading via non-refresh.
-			api.preview.send( 'scroll', $( window ).scrollTop() );
-		});
+		api.preview.bind( 'customized', function( data ) {
+			api._customized = data;
+			window.updatedControls = data;
+		} );
 
-		/**
-		 * Handle update to changeset UUID.
-		 *
-		 * @param {string} uuid - UUID.
-		 * @return {void}
-		 */
 		handleUpdatedChangesetUuid = function( uuid ) {
 			api.settings.changeset.uuid = uuid;
-
-			// Update UUIDs in links and forms.
-			$( document.body ).find( 'a[href], area[href]' ).each( function() {
-				api.prepareLinkPreview( this );
+			document.body.querySelectorAll( 'a[href], area[href]' ).forEach( function( el ) {
+				api.prepareLinkPreview( el );
 			} );
-			$( document.body ).find( 'form' ).each( function() {
-				api.prepareFormPreview( this );
+			document.body.querySelectorAll( 'form' ).forEach( function( form ) {
+				api.prepareFormPreview( form );
 			} );
-
-			/*
-			 * Replace the UUID in the URL. Note that the wrapped history.replaceState()
-			 * will handle injecting the current api.settings.changeset.uuid into the URL,
-			 * so this is merely to trigger that logic.
-			 */
 			if ( history.replaceState ) {
 				history.replaceState( currentHistoryState, '', location.href );
 			}
@@ -805,49 +694,87 @@
 			if ( response.next_changeset_uuid ) {
 				handleUpdatedChangesetUuid( response.next_changeset_uuid );
 			}
-			api.trigger( 'saved', response );
 		} );
 
-		// Update the URLs to reflect the fact we've started autosaving.
 		api.preview.bind( 'autosaving', function() {
 			if ( api.settings.changeset.autosaved ) {
 				return;
 			}
-
-			api.settings.changeset.autosaved = true; // Start deferring to any autosave once changeset is updated.
-
-			$( document.body ).find( 'a[href], area[href]' ).each( function() {
-				api.prepareLinkPreview( this );
+			api.settings.changeset.autosaved = true;
+			document.body.querySelectorAll( 'a[href], area[href]' ).forEach( function( el ) {
+				api.prepareLinkPreview( el );
 			} );
-			$( document.body ).find( 'form' ).each( function() {
-				api.prepareFormPreview( this );
+			document.body.querySelectorAll( 'form' ).forEach( function( form ) {
+				api.prepareFormPreview( form );
 			} );
 			if ( history.replaceState ) {
 				history.replaceState( currentHistoryState, '', location.href );
 			}
 		} );
 
-		/*
-		 * Clear dirty flag for settings when saved to changeset so that they
-		 * won't be needlessly included in selective refresh or ajax requests.
-		 */
 		api.preview.bind( 'changeset-saved', function( data ) {
-			_.each( data.saved_changeset_values, function( value, settingId ) {
-				var setting = api( settingId );
-				if ( setting && _.isEqual( setting.get(), value ) ) {
+			Object.keys( data.saved_changeset_values ).forEach( function( settingId ) {
+				var setting = api._settings[ settingId ];
+				if ( setting && JSON.stringify( setting.get() ) === JSON.stringify( data.saved_changeset_values[ settingId ] ) ) {
 					setting._dirty = false;
 				}
 			} );
 		} );
 
 		api.preview.bind( 'nonce-refresh', function( nonce ) {
-			$.extend( api.settings.nonce, nonce );
+			Object.assign( api.settings.nonce, nonce );
 		} );
 
-		/*
-		 * Send a message to the parent customize frame with a list of which
-		 * containers and controls are active.
-		 */
+		// Background settings
+		[ 'color', 'image', 'preset', 'position_x', 'position_y', 'size', 'repeat', 'attachment' ].forEach( function( prop ) {
+			var setting = api._settings[ 'background_' + prop ];
+			if ( setting ) {
+				setting.bind( api.settingPreviewHandlers.background );
+			}
+		} );
+
+		// Custom logo
+		if ( api._settings.custom_logo ) {
+			api.settingPreviewHandlers.custom_logo( api._settings.custom_logo.get() );
+			api._settings.custom_logo.bind( api.settingPreviewHandlers.custom_logo );
+		}
+
+		// Custom CSS
+		cssSettingId = 'custom_css[' + api.settings.theme.stylesheet + ']';
+		if ( api._settings[ cssSettingId ] ) {
+			api._settings[ cssSettingId ].bind( api.settingPreviewHandlers.custom_css );
+		}
+
+		// Core standard setting → DOM bindings
+		var coreTextBindings = {
+			'blogname':        '.site-title a, .site-title',
+			'blogdescription': '.site-description'
+		};
+		Object.keys( coreTextBindings ).forEach( function( id ) {
+			if ( ! api._settings[ id ] ) {
+				api.create( id, '' );
+			}
+			api._settings[ id ].bind( function( value ) {
+				document.querySelectorAll( coreTextBindings[ id ] ).forEach( function( el ) {
+					el.textContent = value;
+				} );
+			} );
+		} );
+
+		// Header text color
+		if ( ! api._settings.header_textcolor ) {
+			api.create( 'header_textcolor', '' );
+		}
+		api._settings.header_textcolor.bind( function( value ) {
+			var style = document.getElementById( 'customize-preview-header-textcolor' );
+			if ( ! style ) {
+				style = document.createElement( 'style' );
+				style.id = 'customize-preview-header-textcolor';
+				document.head.appendChild( style );
+			}
+			style.textContent = value === 'blank' ? 'body .site-title a, body .site-description { visibility: hidden; }' : 'body.has-header-image .site-title a, body.has-header-video .site-title a, body .site-title a, body .site-description { color: #' + value.replace( /^#/, '' ) + '; visibility: visible; }';
+		} );
+
 		api.preview.send( 'ready', {
 			currentUrl: api.settings.url.self,
 			activePanels: api.settings.activePanels,
@@ -856,45 +783,18 @@
 			settingValidities: api.settings.settingValidities
 		} );
 
-		// Send ready when URL changes via JS.
 		setInterval( api.keepAliveCurrentUrl, api.settings.timeouts.keepAliveSend );
 
-		// Display a loading indicator when preview is reloading, and remove on failure.
-		api.preview.bind( 'loading-initiated', function () {
-			$( 'body' ).addClass( 'wp-customizer-unloading' );
-		});
-		api.preview.bind( 'loading-failed', function () {
-			$( 'body' ).removeClass( 'wp-customizer-unloading' );
-		});
-
-		/* Custom Backgrounds */
-		bg = $.map( ['color', 'image', 'preset', 'position_x', 'position_y', 'size', 'repeat', 'attachment'], function( prop ) {
-			return 'background_' + prop;
+		api.preview.bind( 'loading-initiated', function() {
+			document.body.classList.add( 'wp-customizer-unloading' );
 		} );
 
-		api.when.apply( api, bg ).done( function() {
-			$.each( arguments, function() {
-				this.bind( api.settingPreviewHandlers.background );
-			});
-		});
-
-		/**
-		 * Custom Logo
-		 *
-		 * Toggle the wp-custom-logo body class when a logo is added or removed.
-		 *
-		 * @since 4.5.0
-		 */
-		api( 'custom_logo', function ( setting ) {
-			api.settingPreviewHandlers.custom_logo.call( setting, setting.get() );
-			setting.bind( api.settingPreviewHandlers.custom_logo );
+		api.preview.bind( 'loading-failed', function() {
+			document.body.classList.remove( 'wp-customizer-unloading' );
 		} );
+	} );
 
-		api( 'custom_css[' + api.settings.theme.stylesheet + ']', function( setting ) {
-			setting.bind( api.settingPreviewHandlers.custom_css );
-		} );
+	// Expose as wp.customize
+	exports.customize = api;
 
-		api.trigger( 'preview-ready' );
-	});
-
-})( wp, jQuery );
+} )( wp );

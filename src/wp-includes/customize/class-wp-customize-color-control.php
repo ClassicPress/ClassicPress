@@ -79,44 +79,75 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 	}
 
 	/**
-	 * Don't render the control content from PHP, as it's rendered via JS on load.
+	 * Render the control content from PHP on load.
 	 *
-	 * @since 3.4.0
+	 * @since CP-2.8.0
 	 */
-	public function render_content() {}
-
-	/**
-	 * Render a JS template for the content of the color picker control.
-	 *
-	 * @since 4.1.0
-	 */
-	public function content_template() {
+	public function render_content() {
+		if ( $this->label ) {
+			?>
+			<span class="customize-control-title">
+				<?php echo esc_html( $this->label ); ?>
+			</span>
+			<?php
+		}
+		if ( $this->description ) {
+			?>
+			<span class="description customize-control-description">
+				<?php echo wp_kses_post( $this->description ); ?>
+			</span>
+			<?php
+		}
 		?>
-		<# var defaultValue = '#RRGGBB', defaultValueAttr = '',
-			isHueSlider = data.mode === 'hue';
-		if ( data.defaultValue && _.isString( data.defaultValue ) && ! isHueSlider ) {
-			if ( '#' !== data.defaultValue.substring( 0, 1 ) ) {
-				defaultValue = '#' + data.defaultValue;
-			} else {
-				defaultValue = data.defaultValue;
-			}
-			defaultValueAttr = ' data-default-color=' + defaultValue; // Quotes added automatically.
-		} #>
-		<# if ( data.label ) { #>
-			<span class="customize-control-title">{{{ data.label }}}</span>
-		<# } #>
-		<# if ( data.description ) { #>
-			<span class="description customize-control-description">{{{ data.description }}}</span>
-		<# } #>
 		<div class="customize-control-content">
-			<label><span class="screen-reader-text">{{{ data.label }}}</span>
-			<# if ( isHueSlider ) { #>
-				<input class="color-picker-hue" type="text" data-type="hue">
-			<# } else { #>
-				<input class="color-picker-hex" type="text" maxlength="7" placeholder="{{ defaultValue }}" {{ defaultValueAttr }}>
-			<# } #>
+			<label>
+				<span class="screen-reader-text">
+					<?php echo esc_html( $this->label ); ?>
+				</span>
+
+				<?php
+				$default_value = '#RRGGBB';
+				$default_value_attr = '';
+				$is_hue_slider = ( 'hue' === $this->mode );
+
+				if ( $this->setting->default && is_string( $this->setting->default ) && ! $is_hue_slider ) {
+					$default_value = ( '#' !== substr( $this->setting->default, 0, 1 ) )
+						? '#' . $this->setting->default
+						: $this->setting->default;
+					$default_value_attr = ' data-default-color="' . esc_attr( $default_value ) . '"';
+				}
+
+				if ( $is_hue_slider ) {
+					?>
+					<input class="color-picker-hue" 
+						type="text" 
+						data-type="hue"
+						value="#<?php echo esc_attr( $this->value() ); ?>"
+						<?php $this->link(); ?>
+					>
+					<?php
+				} else {
+					?>
+					<input class="color-picker-hex"
+						type="text"
+						maxlength="7"
+						placeholder="<?php echo esc_attr( $default_value ); ?>"
+						value="#<?php echo esc_attr( $this->value() ); ?>"
+						<?php echo $default_value_attr; // data-default-color ?>
+						<?php $this->link(); ?>
+					>
+					<?php
+				}
+				?>
 			</label>
 		</div>
 		<?php
 	}
+
+	/**
+	 * JS template no longer required.
+	 *
+	 * @since CP-2.8.0
+	 */
+	public function content_template() {}
 }
