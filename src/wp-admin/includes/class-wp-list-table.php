@@ -372,7 +372,7 @@ class WP_List_Table {
 			<input type="search" id="<?php echo esc_attr( $input_id ); ?>" name="s" value="<?php _admin_search_query(); ?>">
 			<?php submit_button( $text, '', '', false, array( 'id' => 'search-submit' ) ); ?>
 		</p>
-	<?php
+		<?php
 	}
 
 	/**
