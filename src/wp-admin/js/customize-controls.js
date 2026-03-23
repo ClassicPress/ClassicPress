@@ -39,6 +39,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			child.style.display = 'none';
 		} );
 
+		if ( hash === 'customize-pane-parent' ) {
+			document.getElementById( 'customize-info' ).style.display = 'block';
+		}
+
 		targetEl.style.display = 'block';
 		setTimeout( function() {
 			targetEl.querySelector( 'button' ).focus();
@@ -1528,6 +1532,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				add.setAttribute( 'aria-expanded', 'false' );
 			} );
 
+			if ( ul.dataset.parentId === 'customize-pane-parent' ) {
+				document.getElementById( 'customize-info' ).style.display = 'block';
+			}
 			document.getElementById( ul.dataset.parentId ).style.display = 'block';
 			document.getElementById( ul.dataset.parentId ).querySelector( 'button' ).focus();
 			window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#' + ul.dataset.parentId );
