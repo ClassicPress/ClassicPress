@@ -1671,6 +1671,14 @@ table.form-table td .updated p {
 		padding: 8px;
 	}
 
+	p.search-box {
+		display: block;
+		float: none;
+		clear: both;
+		width: 100%;
+		margin-bottom: 20px;
+	}
+
 	.plugins-php form.search-form.search-plugins {
 		display: block;
 		float: none;
@@ -1678,11 +1686,8 @@ table.form-table td .updated p {
 		margin-bottom: 20px;
 	}
 
-	p.search-box {
-		display: block;
-		float: none;
-		clear: both;
-		width: 100%;
+	.plugins-php form.search-form.search-plugins p.search-box {
+		margin-bottom: 0;
 	}
 
 	p.search-box input[name="s"] {
