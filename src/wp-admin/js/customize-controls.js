@@ -41,6 +41,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		if ( hash === 'customize-pane-parent' ) {
 			document.getElementById( 'customize-info' ).style.display = 'block';
+		} else {
+			document.getElementById( 'customize-info' ).style.display = 'none';
 		}
 
 		targetEl.style.display = 'block';
