@@ -1464,6 +1464,40 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Enable CodeMirror for the Additional CSS control
+	 */
+	function initCodeMirror( textarea ) {
+
+		// Eliminate unnecessary white space
+		textarea.value = textarea.value.trim();
+
+		if ( textarea && wp.codeEditor ) {
+			var settingId = textarea.closest( 'li' ).dataset.settingId,
+				editor = wp.codeEditor.initialize( textarea, {
+					codemirror: {
+						mode: 'css',
+						lineNumbers: true,
+						lineWrapping: true,
+						indentUnit: 2,
+						tabSize: 2,
+						autoCloseTags: true,
+						autoCloseBrackets: true,
+						matchBrackets: true,
+						foldGutter: true,
+						gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']
+					}
+				} );
+
+			editor.codemirror.on( 'change', function( cm ) {
+				textarea.value = cm.getValue();
+				_updatedControlsWatcher[ settingId ] = textarea.value.trim();
+				activatePublishButton();
+			} );
+		}
+	}
+	initCodeMirror( document.getElementById( 'customize-control-custom_css' ).querySelector( 'textarea' ) );
+
+	/**
 	 * Handle clicks on buttons.
 	 *
 	 * @abstract
