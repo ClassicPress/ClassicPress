@@ -642,6 +642,7 @@ wp_print_scripts();
 
 								<?php
 								$nav_menus_panel = $wp_customize->get_panel( 'nav_menus' );
+								error_log(print_r($nav_menus_panel, true));
 								?>
 
 								<li class="panel-meta customize-info accordion-section">
@@ -660,8 +661,23 @@ wp_print_scripts();
 									</div>
 
 									<?php
-									if ( method_exists( $nav_menus_panel, 'maybe_render_description' ) ) {
-										$nav_menus_panel->maybe_render_description();
+									if ( ! empty( $nav_menus_panel->description ) ) {
+										?>
+
+										<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false">
+											<span class="screen-reader-text">
+												<?php
+												/* translators: Hidden accessibility text. */
+												esc_html_e( 'Help' );
+												?>
+											</span>
+										</button>
+
+										<div class="description customize-panel-description">
+											<?php echo wp_kses_post( $nav_menus_panel->description ); ?>
+										</div>
+
+										<?php
 									}
 									?>
 
@@ -1180,8 +1196,9 @@ wp_print_scripts();
 											<ul></ul>
 										</div>
 									</div>
+
 									<?php
-									if ( ! empty( $section->description ) ) :
+									if ( ! empty( $section->description ) ) {
 										?>
 
 										<div class="description customize-section-description">
@@ -1189,8 +1206,9 @@ wp_print_scripts();
 										</div>
 
 										<?php
-									endif;
+									}
 									?>
+
 								</li>
 
 								<?php
@@ -1481,7 +1499,7 @@ wp_print_scripts();
 									</div>
 
 									<?php
-									if ( ! empty( $section->description ) ) :
+									if ( ! empty( $section->description ) ) {
 										?>
 
 										<div class="description customize-section-description">
@@ -1489,7 +1507,7 @@ wp_print_scripts();
 										</div>
 
 										<?php
-									endif;
+									}
 									?>
 								</li>
 
