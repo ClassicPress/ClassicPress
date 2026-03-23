@@ -194,10 +194,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Use the right edge if RTL
 		menuEdge += isRTL ? editMenu.innerWidth : 0;
 
-		if ( editMenu.querySelectorAll( '.menu-item' )[1] ) { // at least two menu items
-			//document.querySelector( '.drag-instructions' ).style.display = 'block';
-		}
-
 		/**
 		 * Attach SortableJS to current menu
 		 */
