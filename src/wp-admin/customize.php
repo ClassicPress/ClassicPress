@@ -872,7 +872,7 @@ wp_print_scripts();
 
 												<?php
 											}
-											?>	
+											?>
 
 										</div>
 
