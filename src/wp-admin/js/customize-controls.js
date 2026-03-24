@@ -1021,7 +1021,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function addItemToCustomizer() {
 		var selectedItem, imageElement, setting, settingId,
-			parent = customizeButton.parentNode,			
+			parent = customizeButton.parentNode,
 			removeButton = document.createElement( 'button' ),
 			selectButton = document.createElement( 'button' );
 
@@ -1046,7 +1046,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		// Update header image
-		if ( settingId === 'header_image_data' ) {			
+		if ( settingId === 'header_image_data' ) {
 			parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
 			parent.previousElementSibling.querySelector( '.container' ).append( imageElement );
 			customizeButton.previousElementSibling.style.display = '';
@@ -1057,7 +1057,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				url: selectedItem.dataset.url,
 				thumbnail_url: selectedItem.dataset.sizes?.thumbnail?.url || selectedItem.dataset.url,
 				width: selectedItem.dataset.width,
-				height: selectedItem.dataset.height,
+				height: selectedItem.dataset.height
 			};
 
 		// Insert other images according to whether this is a new insertion or replacement
@@ -1434,7 +1434,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Replaces the substring 'brand-new' in new menu attributes with negative integer.
 	 * Then replaces the negative integer with menuId on new menu publication.
-	 * 
+	 *
 	 * @since CP-2.8.0
 	 */
 	function replaceSubstringInAttributes( original, replacement ) {
@@ -1580,7 +1580,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Go to widgets panel
 		} else if ( e.target.tagName === 'A' && ( e.target.closest( 'li' ).id === 'accordion-section-menu_locations' || ul.id === 'sub-accordion-section-menu_locations' ) ) {
-			e.preventDefault();			
+			e.preventDefault();
 			ul.style.display = 'none';
 			document.getElementById( 'sub-accordion-panel-widgets' ).style.display = 'block';
 			window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-accordion-panel-widgets' );
