@@ -339,7 +339,7 @@
 
 			// Map known partial types to their focus target
 			if ( partialType === 'nav_menu_instance' ) {
-				// use getAttribute instead of dataset to avoid potential problems with parsing escaped values
+				// Use getAttribute instead of dataset to avoid potential problems with parsing escaped values
 				context = JSON.parse( container.getAttribute( 'data-customize-partial-placement-context' ) || '{}' );
 				api.preview.send( 'focus-partial', {
 					id:     partialId,
@@ -348,7 +348,7 @@
 					menuId: context.menu_id || null
 				} );
 			} else if ( partialType === 'widget' ) {
-				// use getAttribute instead of dataset to avoid potential problems with parsing escaped values
+				// Use getAttribute instead of dataset to avoid potential problems with parsing escaped values
 				context = JSON.parse( container.getAttribute( 'data-customize-partial-placement-context' ) || '{}' );
 				api.preview.send( 'focus-partial', {
 					id: partialId,
