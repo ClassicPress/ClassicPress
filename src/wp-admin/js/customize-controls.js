@@ -1209,7 +1209,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	form.addEventListener( 'submit', async function( e ) {
-		let negativeId, menuId, result, newResult,
+		let result, newResult,
 			entries = Object.entries( updatedControls ),
 			navMenuChanges = {},
 			submittedChanges = {},
@@ -1247,8 +1247,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Create new menus first
 		for ( const [key, object] of navMenuNegatives ) {
+			var negativeId = key.replace( 'nav_menu[', '' ).replace( ']', '' );
 			formData = new FormData(); // reset
-			negativeId = key.replace( 'nav_menu[', '' ).replace( ']', '' );
 
 			// Build correct object for only this one menu
 			navMenuChanges = {};
@@ -1284,7 +1284,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 			if ( result && result.success ) {
-				menuId = result?.data?.nav_menu_updates?.[0]?.term_id;
+				var menuId = result?.data?.nav_menu_updates?.[0]?.term_id;
 				if ( menuId ) {
 
 					// Update any menu location currently populated by negativeId
