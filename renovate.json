@@ -11,8 +11,5 @@
 		"### Pre-merge checks",
 		"- [ ] Make sure the GitHub Actions tests are passing.",
 		"- [ ] Run `bin/compare-build-branch.sh` locally on this branch and confirm that this PR is not causing unexpected changes to the build.  Requirements to run this script: `grunt build` and `nvm`."
-	],
-	"ignoreDeps": [
-		"uglify-js"
 	]
 }
