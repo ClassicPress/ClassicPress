@@ -1493,6 +1493,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				_updatedControlsWatcher[ settingId ] = textarea.value.trim();
 				activatePublishButton();
 			} );
+
+			textarea.parentNode.querySelector( '.CodeMirror-sizer' ).style.marginLeft = '39px';
+			textarea.parentNode.querySelector( '.CodeMirror-gutter.CodeMirror-linenumbers' ).style.width = '29px';
 		}
 	}
 	initCodeMirror( document.getElementById( 'customize-control-custom_css' ).querySelector( 'textarea' ) );
