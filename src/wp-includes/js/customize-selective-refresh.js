@@ -506,12 +506,12 @@ wp.customize.selectiveRefresh = ( function( api ) {
 			return false;
 		}
 
-		// eslint-disable-next-line no-restricted-properties
+		/* jshint evil: true */
 		self.originalDocumentWrite = document.write;
-		// eslint-disable-next-line no-restricted-properties
 		document.write = function() {
 			throw new Error( self.data.l10n.badDocumentWrite );
 		};
+		/* jshint evil: false */
 
 		try {
 			content = placement.addedContent;
@@ -555,8 +555,9 @@ wp.customize.selectiveRefresh = ( function( api ) {
 			partial.fallback( error, [ placement ] );
 		}
 
-		// eslint-disable-next-line no-restricted-properties
+		/* jshint evil: true */
 		document.write = self.originalDocumentWrite;
+		/* jshint evil: false */
 		self.originalDocumentWrite = null;
 
 		partial.createEditShortcutForPlacement( placement );
