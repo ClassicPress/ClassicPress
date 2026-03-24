@@ -5268,6 +5268,7 @@ final class WP_Customize_Manager {
 			array(
 				'label'   => __( 'Site Title' ),
 				'section' => 'title_tagline',
+				'priority' => 10,
 			)
 		);
 
@@ -5285,6 +5286,7 @@ final class WP_Customize_Manager {
 			array(
 				'label'   => __( 'Tagline' ),
 				'section' => 'title_tagline',
+				'priority' => 20,
 			)
 		);
 
