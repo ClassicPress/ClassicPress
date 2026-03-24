@@ -1096,7 +1096,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var button,
 			parent = customizeButton.parentNode;
 
-		if ( ! customizeButton.nextElementSibling.id || customizeButton.nextElementSibling.id !== 'header_image-button' ) {
+		if ( customizeButton.nextElementSibling.id && customizeButton.nextElementSibling.id === 'header_image-button' ) { // header image
+			parent.previousElementSibling.querySelector( 'img' )?.remove();
+			parent.previousElementSibling.querySelector( 'video' )?.remove();
+			parent.previousElementSibling.querySelector( 'input' ).value = '';
+			customizeButton.style.display = 'none';
+			customizeButton.nextElementSibling.className = 'upload-button button new select-button';
+			setTimeout( function() {
+				customizeButton.nextElementSibling.focus();
+			} );
+			_updatedControlsWatcher.header_image = 'remove-header';
+			_updatedControlsWatcher.header_image_data = {};
+		} else {
 			button = document.createElement( 'button' );
 			button.className = 'upload-button button select-button';
 			button.type = 'button';
@@ -1110,17 +1121,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				button.focus();
 			} );
 			_updatedControlsWatcher[ parent.closest( 'li' ).dataset.settingId ] = '';
-		} else { // header image
-			parent.previousElementSibling.querySelector( 'img' )?.remove();
-			parent.previousElementSibling.querySelector( 'video' )?.remove();
-			parent.previousElementSibling.querySelector( 'input' ).value = '';
-			customizeButton.style.display = 'none';
-			customizeButton.nextElementSibling.className = 'upload-button button new select-button';
-			setTimeout( function() {
-				customizeButton.nextElementSibling.focus();
-			} );
-			_updatedControlsWatcher.header_image = 'remove-header';
-			_updatedControlsWatcher.header_image_data = {};
 		}
 		activatePublishButton();
 	}
