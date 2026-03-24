@@ -9,7 +9,7 @@
 
 /* CONTROLS-frame compat shim: keep the pane stable if 3rd-party code runs early. */
 (function() {
-	
+
 	// Ensure wp.customize exists
 	if ( ! window.wp ) {
 		window.wp = {};
@@ -23,7 +23,7 @@
 	if ( typeof api.bind !== 'function' ) {
 		api.bind = function() {}; // no-op
 	}
-	
+
 	// Minimal Backbone-like base so Control/Section/Panel.extend(...) is safe
 	function makeExtendableBase() {
 		function Base() {}
