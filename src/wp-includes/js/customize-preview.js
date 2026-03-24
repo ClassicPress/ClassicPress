@@ -147,9 +147,6 @@
 			elementHost,
 			matchesAllowedUrl;
 
-		if ( 'javascript:' === element.protocol ) {
-			return false;
-		}
 		if ( 'https:' !== element.protocol && 'http:' !== element.protocol ) {
 			return false;
 		}
@@ -344,8 +341,9 @@
 			if ( partialType === 'nav_menu_instance' ) {
 				try { // use getAttribute instead of dataset to avoid potential problems with parsing escaped values
 					context = JSON.parse( container.getAttribute( 'data-customize-partial-placement-context' ) || '{}' );
-				} catch( e ) {
+				} catch() {
 					// Malformed JSON in data attribute — not a fatal error, proceed with empty context.
+					return false;
 				}
 
 				api.preview.send( 'focus-partial', {
@@ -357,8 +355,9 @@
 			} else if ( partialType === 'widget' ) {
 				try { // use getAttribute instead of dataset to avoid potential problems with parsing escaped values
 					context = JSON.parse( container.getAttribute( 'data-customize-partial-placement-context' ) || '{}' );
-				} catch( e ) {
+				} catch() {
 					// Malformed JSON in data attribute — not a fatal error, proceed with empty context.
+					return false;
 				}
 
 				api.preview.send( 'focus-partial', {
