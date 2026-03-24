@@ -69,7 +69,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} );
 	} );
-	
+
 	/**
 	 * Send changes to widgets to the updatedControls object.
 	 *
