@@ -55,7 +55,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		saveButton.disabled = false;
 		saveButton.value = _wpCustomizeControlsL10n.publish;
 	}
-	
+
 	/**
 	 * Prepare changed object for publication
 	 */
@@ -68,7 +68,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( settingId.startsWith( 'nav_menu_locations[' ) ) {
 			assignments = document.querySelectorAll( '.assigned-to-menu-location' );
 			menuLocations = document.querySelectorAll( '.assigned-to-menu-location [data-setting-id="' + settingId + '"]' );
-		
+
 			if ( input.tagName === 'INPUT' ) {
 				span = document.createElement( 'span' );
 				span.className = 'current-menu-location-name-main-nav';
@@ -78,14 +78,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					input.value = li.parentNode.dataset.menuId;
 					_updatedControlsWatcher[ settingId ] = li.parentNode.dataset.menuId;
 					input.nextElementSibling.querySelector( '.theme-location-set' ).innerHTML = '(' + _wpCustomizeControlsL10n.current + ' ' + span.outerHTML + ')';
-		
+
 					menuLocations.forEach( function( menuLocation ) {
 						if ( menuLocation.querySelector( 'input' ) ) {
 							menuLocation.querySelector( '.theme-location-set' ).innerHTML = '(' + _wpCustomizeControlsL10n.current + ' ' + span.outerHTML + ')';
 							menuLocation.querySelector( 'input' ).value = li.parentNode.dataset.menuId;
 							if ( menuLocation.closest( '.menu-location-settings' ).dataset.menuId === li.parentNode.dataset.menuId ) {
 								menuLocation.querySelector( 'input' ).checked = true;
-								
+
 							} else {
 								menuLocation.querySelector( 'input' ).checked = false;
 							}
@@ -647,7 +647,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				wp_customize: 'on',
 				'params[post_title]': title,
 				'params[post_type]': object, // post or page
-				'customize-menus-nonce': _wpCustomizeControlsL10n.menusNonce,
+				'customize-menus-nonce': _wpCustomizeControlsL10n.menusNonce
 			} );
 
 		fetch( ajaxurl, {
@@ -694,7 +694,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Replaces the substring 'brand-new' in new menu attributes with negative integer.
 	 * Then replaces the negative integer with menuId on new menu publication.
-	 * 
+	 *
 	 * @since CP-2.8.0
 	 */
 	function replaceSubstringInAttributes( original, replacement ) {
@@ -732,7 +732,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		ul.id = 'sub-' + id.replace( currentMenuId, newMenuId );
 		ul.className = 'customize-pane-child accordion-section-content accordion-section control-section control-section-nav_menu menu assigned-to-menu-location';
-		ul.append( fragment );						
+		ul.append( fragment );
 		ul.querySelector( '.new-menu-title' ).textContent = ul.querySelector( '.menu-name-field' ).value.trim();
 		document.getElementById( 'sub-accordion-section-menu_locations' ).after( ul );
 
@@ -829,7 +829,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.getElementById( 'accordion-section-add_menu' ).before( li );
 				activatePublishButton();
 			}
-			
+
 		// Enable adding of a menu item
 		} else if ( e.target.classList && e.target.classList.contains( 'add-new-menu-item' ) ) {
 			currentMenuId = e.target.closest( 'li' ).dataset.menuId;
@@ -861,7 +861,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				title    = e.target.parentNode.querySelector( '.menu-item-title' ).textContent.trim();
 				label    = e.target.parentNode.querySelector( '.item-type' ).textContent.trim();
 				url      = e.target.closest( 'li' ).querySelector( '.item-url' ).textContent.trim();
-				e.target.parentNode.classList.add( 'item-added' ); 
+				e.target.parentNode.classList.add( 'item-added' );
 				addMenuItem( type, object, objectId, title, label, url );
 			} else if ( e.target.id && e.target.id === 'custom-menu-item-submit'  ) {
 				title = document.getElementById( 'custom-menu-item-name' ).value.trim();
