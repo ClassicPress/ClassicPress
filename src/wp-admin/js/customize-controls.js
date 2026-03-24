@@ -1247,6 +1247,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Create new menus first
 		for ( const [key, object] of navMenuNegatives ) {
+			const negativeId = key.replace( 'nav_menu[', '' ).replace( ']', '' );
 			formData = new FormData(); // reset
 
 			// Build correct object for only this one menu
@@ -1283,19 +1284,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 			if ( result && result.success ) {
-				if ( result?.data?.nav_menu_updates?.[0]?.term_id ) {
+				const menuId = result?.data?.nav_menu_updates?.[0]?.term_id;
+				if ( menuId ) {
 
-					// Update any menu location currently populated by a negative ID
+					// Update any menu location currently populated by negativeId
 					navMenuLocations.forEach( function( locationArray ) {
-						if ( locationArray[1] === key.replace( 'nav_menu[', '' ).replace( ']', '' ) ) {
-							_updatedControlsWatcher[locationArray[0]] = result.data.nav_menu_updates[0].term_id;
+						if ( locationArray[1] === negativeId ) {
+							_updatedControlsWatcher[locationArray[0]] = menuId;
 						}
 					} );
 
 					// Update any nav_menu_items attached to this menu
 					navMenuItems.forEach( function( array ) {
-						if ( array[1].menu_id === key.replace( 'nav_menu[', '' ).replace( ']', '' ) ) {
-							_updatedControlsWatcher[array[0]].menu_id = result.data.nav_menu_updates[0].term_id;
+						if ( array[1].menu_id === negativeId ) {
+							_updatedControlsWatcher[array[0]].menu_id = menuId;
 						}
 					} );
 
