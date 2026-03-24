@@ -188,7 +188,7 @@ wp.customize.selectiveRefresh = ( function( api ) {
 		var currentValue = initialValue,
 			handlers = [];
 
-		var value = function( newValue ) {
+		function value( newValue ) {
 			if ( arguments.length ) {
 				var oldValue = currentValue;
 				currentValue = newValue;
@@ -198,7 +198,7 @@ wp.customize.selectiveRefresh = ( function( api ) {
 				return value;
 			}
 			return currentValue;
-		};
+		}
 
 		value.get = function() {
 			return currentValue;
