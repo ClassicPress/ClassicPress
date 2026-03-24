@@ -1286,16 +1286,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( result && result.success ) {
 				menuId = result?.data?.nav_menu_updates?.[0]?.term_id;
 				if ( menuId ) {
+					const navMenuLocationsClone = navMenuLocations,
+						navMenuItemsClone = navMenuItems;
 
 					// Update any menu location currently populated by negativeId
-					navMenuLocations.forEach( function( locationArray ) {
+					navMenuLocationsClone.forEach( function( locationArray ) {
 						if ( locationArray[1] === negativeId ) {
 							_updatedControlsWatcher[locationArray[0]] = menuId;
 						}
 					} );
 
 					// Update any nav_menu_items attached to this menu
-					navMenuItems.forEach( function( array ) {
+					navMenuItemsClone.forEach( function( array ) {
 						if ( array[1].menu_id === negativeId ) {
 							_updatedControlsWatcher[array[0]].menu_id = menuId;
 						}
