@@ -26,7 +26,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		addWidgetButtons = document.querySelectorAll( '.add-new-widget' ),
 		newMenuItemIDs = [],
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
-		hash = window.location.hash.replace( '#', '' );
+		hash = window.location.hash.replace( '#', '' ),
+		section = document.getElementById( 'sub-accordion-section-custom_css' );
 
 	// Go direct to appropriate Customizer panel if its hash is specified in the URL
 	if ( hash === 'menu-to-edit' ) {
@@ -1467,6 +1468,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Enable CodeMirror for the Additional CSS control
 	 */
 	function initCodeMirror( textarea ) {
+		var observer;
 
 		// Eliminate unnecessary white space
 		textarea.value = textarea.value.trim();
@@ -1494,11 +1496,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				activatePublishButton();
 			} );
 
+			observer = new MutationObserver( function( mutations ) {
+				mutations.forEach( function( mutation ) {
+					if ( mutation.attributeName === 'style' && section.style.display === 'block' ) {
+						editor.codemirror.refresh();
+					}
+				} );
+			} );
+			observer.observe( section, { attributes: true, attributeFilter: [ 'style' ] } );
+
 			textarea.parentNode.querySelector( '.CodeMirror-sizer' ).style.marginLeft = '39px';
 			textarea.parentNode.querySelector( '.CodeMirror-gutter.CodeMirror-linenumbers' ).style.width = '29px';
 		}
 	}
-	initCodeMirror( document.getElementById( 'customize-control-custom_css' ).querySelector( 'textarea' ) );
+	initCodeMirror( section.querySelector( 'textarea' ) );
 
 	/**
 	 * Handle clicks on buttons.
