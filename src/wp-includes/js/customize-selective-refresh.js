@@ -2,7 +2,7 @@
  * @output wp-includes/js/customize-selective-refresh.js
  */
 
-/* global wp, _customizePartialRefreshExports, console */
+/* global wp, _customizePartialRefreshExports, console, AbortController */
 
 wp.customize.selectiveRefresh = ( function( api ) {
 	'use strict';
