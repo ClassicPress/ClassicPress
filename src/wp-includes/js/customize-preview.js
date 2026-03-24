@@ -341,7 +341,10 @@
 			if ( partialType === 'nav_menu_instance' ) {
 				try { // use getAttribute instead of dataset to avoid potential problems with parsing escaped values
 					context = JSON.parse( container.getAttribute( 'data-customize-partial-placement-context' ) || '{}' );
-				} catch( e ) {} // Malformed JSON in data attribute — not a fatal error, proceed with empty context.
+				} catch() {
+					// Malformed JSON in data attribute — not a fatal error, proceed with empty context.
+					return false;
+				}
 
 				api.preview.send( 'focus-partial', {
 					id:     partialId,
@@ -352,7 +355,10 @@
 			} else if ( partialType === 'widget' ) {
 				try { // use getAttribute instead of dataset to avoid potential problems with parsing escaped values
 					context = JSON.parse( container.getAttribute( 'data-customize-partial-placement-context' ) || '{}' );
-				} catch( e ) {} // Malformed JSON in data attribute — not a fatal error, proceed with empty context.
+				} catch() {
+					// Malformed JSON in data attribute — not a fatal error, proceed with empty context.
+					return false;
+				}
 
 				api.preview.send( 'focus-partial', {
 					id: partialId,
