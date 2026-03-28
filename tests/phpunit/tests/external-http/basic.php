@@ -48,21 +48,19 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 
 		$this->assertNotEmpty( $matches );
 
-		$response_body = $this->get_response_body( "https://dev.mysql.com/doc/relnotes/mysql/{$matches[1]}/en/" );
+		$response_body = json_decode( $this->get_response_body( 'https://endoflife.date/api/mysql.json' ) );
+		$eol_date      = '';
 
-		preg_match(
-			'#(\d{4}-\d{2}-\d{2}), General Availability#',
-			$response_body,
-			$mysqlmatches
-		);
-		$this->assertNotEmpty( $mysqlmatches );
-
-		// Per https://www.mysql.com/support/, Oracle actively supports MySQL
-		// releases for 5 years from GA release
-		$mysql_eol = strtotime( $mysqlmatches[1] . ' +5 years' );
+		foreach ( $response_body as $version ) {
+			if ( $version->cycle === $matches[1] && false !== $version->eol ) {
+				$eol_date = $version->eol;
+				break;
+			}
+		}
+		$this->assertNotEmpty( $eol_date );
 
 		$this->assertLessThan(
-			$mysql_eol,
+			strtotime( $eol_date ),
 			time(),
 			"readme.html's Recommended MySQL version is too old."
 		);
