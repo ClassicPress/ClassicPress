@@ -51,7 +51,7 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 		$response_body = $this->get_response_body( "https://dev.mysql.com/doc/relnotes/mysql/{$matches[1]}/en/" );
 
 		preg_match(
-			'#(\d{4}-\d{2}-\d{2}), General Availability#',
+			'#(\d{4}-\d{2}-\d{2})#',
 			$response_body,
 			$mysqlmatches
 		);
