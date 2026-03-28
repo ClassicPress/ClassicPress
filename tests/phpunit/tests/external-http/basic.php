@@ -66,6 +66,38 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 		);
 	}
 
+	public function test_readme_recommended_mariadb_version() {
+		// This test is designed to only run on develop.
+		$this->skipOnAutomatedBranches();
+
+		$readme = file_get_contents( ABSPATH . 'readme.html' );
+
+		preg_match(
+			'#Recommended Setup.*MariaDB</a> version <strong>([0-9.]*)#s',
+			$readme,
+			$matches
+		);
+
+		$this->assertNotEmpty( $matches );
+
+		$response_body = json_decode( $this->get_response_body( 'https://endoflife.date/api/mariadb.json' ) );
+		$eol_date      = '';
+var_dump( $matches[1] );
+		foreach ( $response_body as $version ) {
+			if ( $version->cycle === $matches[1] ) {
+				$eol_date = $version->eol;
+				break;
+			}
+		}
+		$this->assertNotEmpty( $eol_date );
+var_dump( $eol_date );
+		$this->assertLessThan(
+			strtotime( $eol_date ),
+			time(),
+			"readme.html's Recommended MariaDB version is too old."
+		);
+	}
+
 	/**
 	 * Helper function to retrieve the response body or skip the test on HTTP timeout.
 	 *
