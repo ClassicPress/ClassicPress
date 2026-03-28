@@ -82,7 +82,7 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 
 		$response_body = json_decode( $this->get_response_body( 'https://endoflife.date/api/mariadb.json' ) );
 		$eol_date      = '';
-var_dump( $matches[1] );
+
 		foreach ( $response_body as $version ) {
 			if ( $version->cycle === $matches[1] ) {
 				$eol_date = $version->eol;
@@ -90,7 +90,7 @@ var_dump( $matches[1] );
 			}
 		}
 		$this->assertNotEmpty( $eol_date );
-var_dump( $eol_date );
+
 		$this->assertLessThan(
 			strtotime( $eol_date ),
 			time(),
