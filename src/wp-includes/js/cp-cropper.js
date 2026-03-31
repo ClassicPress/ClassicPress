@@ -122,7 +122,7 @@
 		    	highlight       : true,
 				background      : true,
 				responsive      : true,
-				checkOrientation: false,
+				checkOrientation: false
 			} );
 		};
 	}
@@ -141,7 +141,7 @@
 	function skipCrop() {
 		currentOpts.onSelect( {
 			id  : currentOpts.attachmentId,
-			url : currentOpts.imageUrl,
+			url : currentOpts.imageUrl
 		} );
 		close();
 	}
@@ -181,14 +181,14 @@
 			'cropDetails[width]'     : w,
 			'cropDetails[height]'    : h,
 		    'cropDetails[dst_width]' : dstWidth,
-			'cropDetails[dst_height]': dstHeight,
+			'cropDetails[dst_height]': dstHeight
 		} );
 
 		fetch( ajaxurl, {
 			method      : 'POST',
 			credentials : 'same-origin',
 			headers     : { 'Content-Type': 'application/x-www-form-urlencoded' },
-			body        : body.toString(),
+			body        : body.toString()
 		} )
 		.then( function ( response ) {
 			if ( ! response.ok ) {
