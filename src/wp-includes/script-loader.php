@@ -1553,8 +1553,8 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'wp-codemirror', '/wp-includes/js/codemirror/codemirror.min.css', array(), '5.29.1-alpha-ee20357' );
 	$styles->add( 'cp-filepond', "/wp-includes/js/filepond/cp-filepond$suffix.css", array(), '0.1.0' );
 	$styles->add( 'cp-filepond-image-preview', "/wp-includes/js/filepond/filepond-plugin-image-preview$suffix.css", array(), '4.6.12' );
-	$styles->add( 'cropperjs',  '/wp-includes/css/cropper.min.css', array(), '1.6.2' );
-	$styles->add( 'cp-cropper', "/wp-includes/css/cp-cropper$suffix.css",  array( 'cropperjs' ) );
+	$styles->add( 'cropperjs', '/wp-includes/css/cropper.min.css', array(), '1.6.2' );
+	$styles->add( 'cp-cropper', "/wp-includes/css/cp-cropper$suffix.css", array( 'cropperjs' ) );
 
 	// Deprecated CSS.
 	$styles->add( 'deprecated-media', "/wp-admin/css/deprecated-media$suffix.css" );
