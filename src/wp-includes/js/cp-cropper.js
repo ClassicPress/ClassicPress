@@ -21,7 +21,7 @@
  *     }
  *   });
  */
-/* global ajaxurl, console, CROPPER */
+/* global ajaxurl, console, Cropper, CROPPER */
 
 ( function( window, document ) {
 	'use strict';
@@ -199,9 +199,7 @@
 		.then( function ( data ) {
 			setLoading( false );
 			if ( ! data.success ) {
-				showError( ( data.data && data.data.message )
-					? data.data.message
-					: 'An error occurred while cropping the image.' );
+				showError( ( data.data && data.data.message ) ? data.data.message : 'An error occurred while cropping the image.' );
 				return;
 			}
 			currentOpts.onSelect( data.data );
