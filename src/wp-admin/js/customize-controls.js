@@ -8,7 +8,7 @@
 /* global wp, _wpCustomizeControlsL10n, updatedControls,
 _updatedControlsWatcher, console, ajaxurl, IMAGE_WIDGET,
 FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
-FilePondPluginFileRename, FilePondPluginImagePreview */
+FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver, targetEl,
@@ -1912,5 +1912,27 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			labelFileTypeNotAllowed: IMAGE_WIDGET.invalid_type,
 			fileValidateTypeLabelExpectedTypes: IMAGE_WIDGET.check_types
 		} );
+	}
+
+	// Reset ordering of media items
+	function resetDataOrdering() {
+		var items = document.querySelectorAll( '.media-item' ),
+			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
+			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
+			count5;
+
+		items.forEach( function( item, index ) {
+			item.setAttribute( 'data-order', parseInt( index + 1 ) );
+		} );
+
+		// Reset totals
+		if ( 5 in count ) { // allow for different languages
+			count5 = ' ' + count[5];
+		} else {
+			count5 = '';
+		}
+		document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + count5;
+
+		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
 	}
 } );
