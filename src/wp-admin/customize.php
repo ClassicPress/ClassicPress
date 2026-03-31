@@ -1552,8 +1552,7 @@ wp_print_scripts();
 								</li>
 
 								<?php
-								$index = 0;
-								foreach ( $controls[ $section->id ] as $control_data ) {
+								foreach ( $controls[ $section->id ] as $index => $control_data ) {
 									$field_id    = $control_data['id'];
 									$field_type  = $control_data['type'];
 									$field_label = $control_data['label'];
@@ -1620,10 +1619,10 @@ wp_print_scripts();
 												</div>
 
 												<?php
-												$widget_id_split = explode( '-', $widget_id );
-												$widget_id_base  = $widget_id_split[0];
-												$widget_number   = $widget_id_split[1];
-												$index++;
+												// Split on the LAST hyphen to correctly handle hyphenated ID bases
+												$last_hyphen    = strrpos( $widget_id, '-' );
+												$widget_id_base = substr( $widget_id, 0, $last_hyphen );
+												$widget_number  = substr( $widget_id, $last_hyphen + 1 );
 
 												// Find widget by ID base in factory
 												global $wp_widget_factory;
