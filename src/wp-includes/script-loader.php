@@ -650,6 +650,10 @@ function wp_default_scripts( $scripts ) {
 	// Not used in core, replaced by Jcrop.js.
 	$scripts->add( 'cropper', '/wp-includes/js/crop/cropper.js', array( 'scriptaculous-dragdrop' ) );
 
+	// New version of cropper, which replaces imgareaselect for cropping
+	$scripts->add( 'cropperjs', '/wp-includes/js/crop/cropper.min.js', array(), '1.6.2', 1 );
+	$scripts->add( 'cp-cropper', "/wp-includes/js/cp-cropper$suffix.js", array( 'cropperjs' ), false, 1 );
+
 	// jQuery.
 	// The unminified jquery.js and jquery-migrate.js are included to facilitate debugging.
 	$scripts->add( 'jquery', false, array( 'jquery-core', 'jquery-migrate' ), '3.6.3' );
@@ -1096,7 +1100,7 @@ function wp_default_scripts( $scripts ) {
 
 	$scripts->add( 'customize-preview', "/wp-includes/js/customize-preview$suffix.js", array( 'wp-a11y' ), false, 1 );
 	$scripts->add( 'customize-controls-proxy', "/wp-admin/js/customize-controls-proxy$suffix.js", array( 'customize-controls', 'underscore' ), false, 1 );
-	$scripts->add( 'customize-controls', "/wp-admin/js/customize-controls$suffix.js", array( 'iris' ), false, 1 );
+	$scripts->add( 'customize-controls', "/wp-admin/js/customize-controls$suffix.js", array( 'iris', 'cp-filepond', 'media-image-widget', 'cp-cropper' ), false, 1 );
 	did_action( 'init' ) && $scripts->localize(
 		'customize-controls',
 		'_wpCustomizeControlsL10n',
@@ -1511,7 +1515,7 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'login', "/wp-admin/css/login$suffix.css", array( 'dashicons', 'buttons', 'forms', 'l10n' ) );
 	$styles->add( 'install', "/wp-admin/css/install$suffix.css", array( 'dashicons', 'buttons', 'forms', 'l10n' ) );
 	$styles->add( 'wp-color-picker', "/wp-admin/css/color-picker$suffix.css" );
-	$styles->add( 'customize-controls', "/wp-admin/css/customize-controls$suffix.css", array( 'wp-admin', 'colors', 'imgareaselect' ) );
+	$styles->add( 'customize-controls', "/wp-admin/css/customize-controls$suffix.css", array( 'wp-admin', 'colors', 'cp-cropper' ) );
 	$styles->add( 'customize-widgets', "/wp-admin/css/customize-widgets$suffix.css", array( 'widgets', 'wp-admin', 'colors' ) );
 	$styles->add( 'customize-nav-menus', "/wp-admin/css/customize-nav-menus$suffix.css", array( 'wp-admin', 'colors' ) );
 	$styles->add( 'media-grid', "/wp-admin/css/media-grid$suffix.css", array( 'imgareaselect' ), '0.1.0' );
@@ -1537,6 +1541,8 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'wp-codemirror', '/wp-includes/js/codemirror/codemirror.min.css', array(), '5.29.1-alpha-ee20357' );
 	$styles->add( 'cp-filepond', "/wp-includes/js/filepond/cp-filepond$suffix.css", array(), '0.1.0' );
 	$styles->add( 'cp-filepond-image-preview', "/wp-includes/js/filepond/filepond-plugin-image-preview$suffix.css", array(), '4.6.12' );
+	$styles->add( 'cropperjs',  '/wp-includes/css/cropper.min.css', array(), '1.6.2' );
+	$styles->add( 'cp-cropper', "/wp-includes/css/cp-cropper$suffix.css",  array( 'cropperjs' ) );
 
 	// Deprecated CSS.
 	$styles->add( 'deprecated-media', "/wp-admin/css/deprecated-media$suffix.css" );
