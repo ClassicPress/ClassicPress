@@ -1,0 +1,20 @@
+#cp-cropper-dialog {
+	width: 95%;
+	height: 90%;
+
+	.widget-modal-header {
+		padding-bottom: 1em;
+	}
+
+	.widget-modal-content {
+		padding-left: 0;
+	}
+
+	.widget-modal-footer-buttons {
+		margin-top: 1em;
+	}
+
+	.widget-modal-footer-buttons .button-primary {
+		margin-top: 0;
+	}
+}
