@@ -5,11 +5,16 @@
  */
 
 /* eslint consistent-this: [ "error", "control" ] */
-/* global wp, _wpCustomizeControlsL10n, updatedControls, _updatedControlsWatcher, console, ajaxurl, IMAGE_WIDGET */
+/* global wp, _wpCustomizeControlsL10n, updatedControls,
+_updatedControlsWatcher, console, ajaxurl, IMAGE_WIDGET,
+FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
+FilePondPluginFileRename, FilePondPluginImagePreview */
 document.addEventListener( 'DOMContentLoaded', function() {
-	var addButton, leftSidebar, customizeButton, orgThemes, newUrl,
+	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver, targetEl,
 		i = 1,
+		{ FilePond } = window, // import FilePond
+		cropContext = false,
 		dialog = document.getElementById( 'widget-modal' ),
 		installedThemesHTML = document.querySelector( '.themes')?.innerHTML,
 		reducedMotionMediaQuery = window.matchMedia( '(prefers-reduced-motion: reduce)' ),
@@ -877,6 +882,30 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Crop an image for use as a logo or site icon image.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function cropImage( selectedItem, attachmentId, imageUrl, nonce, cropContext ) {
+		closeModal();
+		cpCropper.open( {
+			attachmentId : attachmentId,
+			imageUrl     : imageUrl,
+			context      : cropContext,
+			nonce        : nonce,
+			aspectRatio  : 1,
+			minWidth     : 512,
+			minHeight    : 512,
+			onSelect     : function( attachment ) {
+				const imageElement = new Image();
+				imageElement.src = attachment.url;
+				addItemToCustomizer( selectedItem, attachment.id, imageElement, attachment.url );
+			}
+		} );
+	}
+
+	/**
 	 * Update the grid with new images.
 	 *
 	 * @abstract
@@ -1020,8 +1049,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	function addItemToCustomizer() {
-		var selectedItem, imageElement, setting, settingId,
+	function addItemToCustomizer( selectedItem, attachmentId, imageElement, imageUrl ) {
+		var setting, settingId,
 			parent = customizeButton.parentNode,
 			removeButton = document.createElement( 'button' ),
 			selectButton = document.createElement( 'button' );
@@ -1041,22 +1070,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		selectButton.type = 'button';
 		selectButton.textContent = parent.dataset.full;
 
-		if ( ! dialog.querySelector( '#media-library-grid' ).hasAttribute( 'hidden' ) ) {
-			selectedItem = dialog.querySelector( '.widget-modal-grid .selected' );
-			imageElement = selectedItem.querySelector( 'img' );
-		}
-
 		// Update header image
 		if ( settingId === 'header_image_data' ) {
 			parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
 			parent.previousElementSibling.querySelector( '.container' ).append( imageElement );
 			customizeButton.previousElementSibling.style.display = '';
 			customizeButton.classList.remove( 'upload-button' );
-			parent.previousElementSibling.querySelector( 'input' ).value = selectedItem.dataset.id;
+			parent.previousElementSibling.querySelector( 'input' ).value = attachmentId;
 			_updatedControlsWatcher[ settingId ] = {
-				attachment_id: parseInt( selectedItem.dataset.id ),
+				attachment_id: parseInt( attachmentId ),
 				url: selectedItem.dataset.url,
-				thumbnail_url: selectedItem.dataset.sizes?.thumbnail?.url || selectedItem.dataset.url,
+				thumbnail_url: selectedItem.dataset.sizes?.thumbnail?.url || imageUrl,
 				width: selectedItem.dataset.width,
 				height: selectedItem.dataset.height
 			};
@@ -1076,11 +1100,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 			}
 			if ( settingId === 'background_image' ) {
-				parent.parentNode.querySelector( 'input' ).value = selectedItem.dataset.url;
-				_updatedControlsWatcher[ settingId ] = selectedItem.dataset.url;
+				parent.parentNode.querySelector( 'input' ).value = imageUrl;
+				_updatedControlsWatcher[ settingId ] = imageUrl;
 			} else {
-				parent.parentNode.querySelector( 'input' ).value = selectedItem.dataset.id;
-				_updatedControlsWatcher[ settingId ] = selectedItem.dataset.id;
+				parent.parentNode.querySelector( 'input' ).value = attachmentId;
+				_updatedControlsWatcher[ settingId ] = attachmentId;
 			}
 		}
 		closeModal();
@@ -1126,54 +1150,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		activatePublishButton();
 	}
 
-	/**
-	 * Insert a new media frame within the modal to enable editing of image.
-	 *
-	 * @abstract
-	 * @return {void}
-	 */
-	function imageEdit( widgetId ) {
-		var formData = new FormData(),
-			attachmentId = document.querySelector( '#' + widgetId + ' [data-property="attachment_id"]' ).value,
-			nonce = document.querySelector( '#' + widgetId + ' .edit-media' ).dataset.editNonce;
-
-		formData.append( 'action', 'image-editor' );
-		formData.append( '_ajax_nonce', nonce );
-		formData.append( 'postid', attachmentId );
-		formData.append( 'do', 'rotate-cw' );
-
-		// Make the fetch request
-		fetch( ajaxurl, {
-			method: 'POST',
-			body: formData,
-			credentials: 'same-origin'
-		} )
-		.then( function( response ) {
-			if ( response.ok ) {
-				return response.json(); // no errors
-			}
-			throw new Error( response.status );
-		} )
-		.then( function( result ) {
-			dialog.querySelector( '.media-embed' ).style.display = 'none';
-			dialog.querySelector( '.modal-image-details' ).insertAdjacentHTML( 'beforeend', result.data.html );
-
-			// Cancel
-			dialog.querySelector( '.imgedit-cancel-btn' ).addEventListener( 'click', function() {
-				dialog.querySelector( '.media-embed' ).style.display = '';
-			} );
-
-			// Submit changes
-			dialog.querySelector( '.imgedit-submit-btn' ).addEventListener( 'click', function() {
-				document.getElementById( widgetId ).dispatchEvent( new Event( 'change' ) );
-				closeModal();
-			} );
-		} )
-		.catch( function( error ) {
-			console.error( 'Error:', error );
-		} );
-	}
-
 	/* Enable choosing of panel on narrow screen */
 	function checkWindowWidth() {
 		var embed, details;
@@ -1201,6 +1177,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#media-widget-modal' ).prepend( leftSidebar );
 		dialog.querySelector( '.widget-modal-header-buttons' )?.remove();
 		dialog.querySelector( '#widget-modal-media-content' )?.remove();
+		cropContext = false;
 	}
 
 	/**
@@ -1511,6 +1488,24 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 	initCodeMirror( section.querySelector( 'textarea' ) );
 
+	// Ensure hitting Enter fires a click event on elements that are not automatically interactive
+	document.addEventListener( 'keyup', function( e ) {
+		var inputs = [ 'A', 'INPUT', 'BUTTON', 'SELECT', 'SUMMARY' ];
+		if ( e.key !== 'Enter' ) {
+			return;
+		}
+		if ( e.target.classList && e.target.classList.contains( 'collapse-sidebar' ) ) {
+			sidebarCollapseExpand( e.target ); // accounts for different mouse and Enter targets
+		} else {
+			if ( inputs.includes( e.target.tagName ) ) {
+				return;
+			}
+			e.preventDefault();
+			e.stopPropagation();
+			e.target.click();
+		}
+	} );
+
 	/**
 	 * Handle clicks on buttons.
 	 *
@@ -1520,6 +1515,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	document.addEventListener( 'click', function( e ) {
 		var id, page, itemBrowse, itemUpload, gridPanel, uploadPanel,
 			modalButtons, rightSidebar, modalPages, description,
+			selectedItem, image,
 			ul = e.target.closest( 'ul' );
 
 		// Abort if this comes from a middle section heading or a widget
@@ -1677,11 +1673,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Add media file
 		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'select-button' ) ) {
 			customizeButton = e.target;
+			if ( e.target.closest( 'ul' ).id === 'sub-accordion-section-title_tagline' ) {
+				cropContext = e.target.closest( 'li' ).dataset.settingId;
+			}
 			selectMedia();
-
-		// Edit the image
-		} else if ( e.target.id === 'edit-original' ) {
-			imageEdit( e.target.dataset.widgetId );
 
 		// Close the modal
 		} else if ( e.target.id === 'widget-modal-close' ) {
@@ -1736,9 +1731,32 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				modalPages.removeAttribute( 'hidden' );
 				modalPages.removeAttribute( 'inert' );
 
+			// Upload a new attachment
+			} else if ( e.target.id === 'menu-item-upload' ) {
+				itemBrowse.classList.remove( 'active' );
+				itemBrowse.setAttribute( 'aria-selected', false );
+				e.target.classList.add ( 'active' );
+				e.target.setAttribute( 'aria-selected', true );
+				uploadPanel.removeAttribute( 'hidden' );
+				uploadPanel.removeAttribute( 'inert' );
+				gridPanel.setAttribute( 'hidden', true );
+				gridPanel.setAttribute( 'inert', true );
+				rightSidebar.setAttribute( 'hidden', true );
+				rightSidebar.setAttribute( 'inert', true );
+				modalPages.setAttribute( 'hidden', true );
+				modalPages.setAttribute( 'inert', true );
+				goFilepond();
+
 			// Add item to Customizer control
 			} else if ( e.target.id === 'media-button-insert' ) {
-				addItemToCustomizer();
+				selectedItem = dialog.querySelector( '.widget-modal-grid .selected' );
+				image = selectedItem.querySelector( 'img' );
+				if ( cropContext ) {
+					cropImage( selectedItem, selectedItem.dataset.id, image.src, selectedItem.dataset.editNonce, cropContext );
+					cropContext = false;
+				} else {
+					addItemToCustomizer( selectedItem, selectedItem.dataset.id, image, image.src );
+				}
 
 			// Copy URL
 			} else if ( e.target.className.includes( 'copy-attachment-url' ) ) {
@@ -1810,4 +1828,89 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 	} );
+
+	/**
+	 * Upload files using FilePond
+	 */
+	function goFilepond() {
+
+		// Register FilePond plugins
+		FilePond.registerPlugin(
+			FilePondPluginFileValidateSize,
+			FilePondPluginFileValidateType,
+			FilePondPluginFileRename,
+			FilePondPluginImagePreview
+		);
+
+		// Create a FilePond instance
+		pond = FilePond.create( dialog.querySelector( '#filepond' ), {
+			allowMultiple: true,
+			server: {
+				process: function( fieldName, file, metadata, load, error, progress, abort ) {
+
+					// Create FormData
+					var formData = new FormData();
+					formData.append( 'async-upload', file, file.name );
+					formData.append( 'action', 'upload-attachment' );
+					formData.append( '_wpnonce', document.getElementById( '_wpnonce' ).value );
+
+					// Use Fetch to upload the file
+					fetch( ajaxurl, {
+						method: 'POST',
+						body: formData,
+						credentials: 'same-origin'
+					} )
+					.then( function( response ) {
+						if ( response.ok ) {
+							return response.json(); // no errors
+						}
+						throw new Error( response.status );
+					} )
+					.then( function( result ) {
+						if ( result.success ) {
+							load( 'finished' );
+						} else {
+							error( IMAGE_WIDGET.upload_failed );
+						}
+					} )
+					.catch( function( err ) {
+						error( IMAGE_WIDGET.upload_failed );
+						console.error( IMAGE_WIDGET.error, err );
+					} );
+
+					// Return an abort function
+					return {
+						abort: function() {
+							// This function is called when the user aborts the upload
+							abort();
+						}
+					};
+				},
+				maxFileSize: dialog.querySelector( '#ajax-url' ).dataset.maxFileSize
+			},
+			onprocessfile: ( error, file ) => { // Called when an individual file upload completes
+				if ( ! error ) {
+					setTimeout( function() {
+						pond.removeFile( file.id );
+					}, 100 );
+					resetDataOrdering();
+				}
+			},
+			onprocessfiles: () => { // Called when all files in the queue have finished uploading
+				updateGrid( 1 );
+				dialog.querySelector( '#menu-item-browse' ).click();
+				setTimeout( function() {
+					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+				}, 500 );
+			},
+			labelTapToUndo: IMAGE_WIDGET.tap_close,
+			fileRenameFunction: ( file ) =>
+				new Promise( function( resolve ) {
+					resolve( window.prompt( IMAGE_WIDGET.new_filename, file.name ) );
+				} ),
+			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
+			labelFileTypeNotAllowed: IMAGE_WIDGET.invalid_type,
+			fileValidateTypeLabelExpectedTypes: IMAGE_WIDGET.check_types
+		} );
+	}
 } );
