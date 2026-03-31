@@ -21,7 +21,7 @@
  *     }
  *   });
  */
-/* global ajaxurl, console */
+/* global ajaxurl, console, CROPPER */
 
 ( function( window, document ) {
 	'use strict';
@@ -37,40 +37,36 @@
 
 		dialog = document.createElement( 'dialog' );
 	    dialog.id        = 'cp-cropper-dialog';
-		dialog.innerHTML = `
-			<div id="cp-cropper-modal" class="widget-modal-container">
-				<div class="widget-modal-main">
-					<header class="widget-modal-header">
-						<div class="widget-modal-headings">
-							<div id="cp-cropper-title" class="widget-modal-title">
-								<h2>Crop Image</h2>
-							</div>
-							<button id="cp-cropper-close" type="button" class="widget-modal-close" autofocus>
-								<span id="cp-cropper-modal-icon" class="widget-modal-icon">
-									<span class="screen-reader-text">Close crop dialog</span>
-								</span>
-							</button>
-						</div>
-					</header>
-					<article id="cp-cropper-body" class="widget-modal-content">
-						<img id="cp-cropper-img" src="" alt="Image to crop">
-					</article>
-					<footer class="widget-modal-footer">
-						<p id="cp-cropper-skip-note">
-							You can skip cropping if you do not need to adjust the image.
-						</p>
-						<div id="cp-cropper-actions" class="widget-modal-footer-buttons">
-							<button type="button" id="cp-cropper-skip"  class="button">Skip Cropping</button>
-							<button type="button" id="cp-cropper-apply" class="button button-primary">Crop Image</button>
-						</div>
-					</footer>
-				</div>
-			</div>
-			<div id="cp-cropper-spinner" hidden aria-live="polite">
-				<span class="spinner is-active"></span>
-				<span>Saving&hellip;</span>
-			</div>
-		`;
+		dialog.innerHTML = '<div id="cp-cropper-modal" class="widget-modal-container">' +
+			'<div class="widget-modal-main">' +
+				'<header class="widget-modal-header">' +
+					'<div class="widget-modal-headings">' +
+						'<div id="cp-cropper-title" class="widget-modal-title">' +
+							'<h2>' + CROPPER.crop_image + '</h2>' +
+						'</div>' +
+						'<button id="cp-cropper-close" type="button" class="widget-modal-close" autofocus>' +
+							'<span id="cp-cropper-modal-icon" class="widget-modal-icon">' +
+								'<span class="screen-reader-text">' + CROPPER.close_crop + '</span>' +
+							'</span>' +
+						'</button>' +
+					'</div>' +
+				'</header>' +
+				'<article id="cp-cropper-body" class="widget-modal-content">' +
+					'<img id="cp-cropper-img" src="" alt="' + CROPPER.image_to_crop + '">' +
+				'</article>' +
+				'<footer class="widget-modal-footer">' +
+					'<p id="cp-cropper-skip-note">' + CROPPER.skip_note + '</p>' +
+					'<div id="cp-cropper-actions" class="widget-modal-footer-buttons">' +
+						'<button type="button" id="cp-cropper-skip"  class="button">' + CROPPER.skipping + '</button>' +
+						'<button type="button" id="cp-cropper-apply" class="button button-primary">' + CROPPER.crop_image + '</button>' +
+					'</div>' +
+				'</footer>' +
+			'</div>' +
+		'</div>' +
+		'<div id="cp-cropper-spinner" hidden aria-live="polite">' +
+			'<span class="spinner is-active"></span>' +
+			'<span>' + CROPPER.saving + '&hellip;</span>' +
+		'</div>';
 
 		document.body.appendChild( dialog );
 
