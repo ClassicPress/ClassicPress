@@ -653,6 +653,18 @@ function wp_default_scripts( $scripts ) {
 	// New version of cropper, which replaces imgareaselect for cropping
 	$scripts->add( 'cropperjs', '/wp-includes/js/crop/cropper.min.js', array(), '1.6.2', 1 );
 	$scripts->add( 'cp-cropper', "/wp-includes/js/cp-cropper$suffix.js", array( 'cropperjs' ), false, 1 );
+	did_action( 'init' ) && $scripts->localize(
+		'cp-cropper',
+		'CROPPER',
+		array(
+			'crop_image'    => __( 'Crop Image' ),
+			'close_crop'    => __( 'Close crop dialog' ),
+			'image_to_crop' => __( 'Image to crop' ),
+			'skip_note'     => __( 'You can skip cropping if you do not need to adjust the image.' ),
+			'skipping'      => __( 'Skip Cropping' ),
+			'saving'        => __( 'Saving' ),
+		)
+	);
 
 	// jQuery.
 	// The unminified jquery.js and jquery-migrate.js are included to facilitate debugging.
