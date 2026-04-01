@@ -385,7 +385,6 @@
 }
 
 @media screen and (max-width: 660px) {
-
 	.find-box {
 		top: 0;
 		bottom: 0;
@@ -394,7 +393,6 @@
 		margin: 0;
 		width: 100%;
 	}
-
 }
 
 .ui-find-overlay {
@@ -444,6 +442,12 @@
 
 #plupload-upload-ui {
 	position: relative;
+}
+
+.upload-plugin .drag-drop #drag-drop-area,
+.upload-theme .drag-drop #drag-drop-area {
+	height: auto;
+	padding: 1em 0 2em;
 }
 
 /**
@@ -664,7 +668,7 @@
 
 .upload-php .media-modal-close {
 	position: absolute;
-	top: 0;	
+	top: 0;
 	right: 0;
 }
 
