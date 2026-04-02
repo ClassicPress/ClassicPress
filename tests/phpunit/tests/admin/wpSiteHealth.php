@@ -38,14 +38,12 @@ class Tests_Admin_wpSiteHealth extends WP_UnitTestCase {
 	 * @covers ::__construct()
 	 */
 	public function test_mysql_recommended_version_matches_readme_html() {
-		// This test is designed to only run on trunk.
-		$this->skipOnAutomatedBranches();
-
 		$reflection          = new ReflectionClass( $this->instance );
 		$reflection_property = $reflection->getProperty( 'mysql_recommended_version' );
 		if ( PHP_VERSION_ID < 80100 ) {
 			$reflection_property->setAccessible( true );
 		}
+
 		$readme = file_get_contents( ABSPATH . 'readme.html' );
 
 		preg_match( '#Recommended.*MySQL</a> version <strong>([0-9.]*)#s', $readme, $matches );
