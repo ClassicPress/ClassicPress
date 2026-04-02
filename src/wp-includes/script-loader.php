@@ -835,13 +835,15 @@ function wp_default_scripts( $scripts ) {
 	$scripts->add( 'cp-filepond-file-validate-type', "/wp-includes/js/filepond/filepond-plugin-file-validate-type$suffix.js", array(), '1.2.9' );
 	$scripts->add( 'cp-filepond-file-rename', "/wp-includes/js/filepond/filepond-plugin-file-rename$suffix.js", array(), '1.1.8' );
 	$scripts->add( 'cp-filepond-plugin-image-preview', "/wp-includes/js/filepond/filepond-plugin-image-preview$suffix.js", array(), '4.6.12' );
-	$scripts->add( 'cp-filepond', "/wp-includes/js/filepond/cp-filepond$suffix.js", array(), '4.31.2' );
+	$scripts->add( 'filepond', "/wp-includes/js/filepond/filepond$suffix.js", array(), '4.32.12' );
+	$scripts->add( 'cp-filepond', "/wp-includes/js/filepond/cp-filepond$suffix.js", array( 'filepond' ), '4.32.12' );
 	did_action( 'init' ) && $scripts->localize(
 		'cp-filepond',
 		'_cpFilepondLabels',
 		array(
 			'labelIdle'                      => __( 'Drag & Drop your files or <span class="filepond--label-action">Browse</span>' ),
 			'labelPluginIdle'                => __( 'Drag & Drop your plugin zip file or <span class="filepond--label-action">Browse</span>' ),
+			'labelZipIdle'                   => __( 'Drag & Drop your zip file or <span class="filepond--label-action">Browse</span>' ),
 			'labelInvalidField'              => __( 'Field contains invalid files' ),
 			'labelFileWaitingForSize'        => __( 'Waiting for size' ),
 			'labelFileSizeNotAvailable'      => __( 'Size not available' ),
@@ -1365,6 +1367,7 @@ function wp_default_scripts( $scripts ) {
 				'cp-filepond-file-validate-type',
 				'cp-filepond-file-rename',
 				'cp-filepond-plugin-image-preview',
+				'filepond',
 				'cp-filepond',
 			),
 			false,
@@ -1550,8 +1553,9 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'mediaelement', "/wp-includes/js/mediaelement/mediaelementplayer-legacy$suffix.css", array(), '4.2.17' );
 	$styles->add( 'mediaelement-player', "/wp-includes/js/mediaelement/mediaelementplayer$suffix.css", array( 'mediaelement' ), '7.0.5' );
 	$styles->add( 'wp-mediaelement', "/wp-includes/js/mediaelement/wp-mediaelement$suffix.css", array( 'mediaelement' ) );
-	$styles->add( 'wp-codemirror', '/wp-includes/js/codemirror/codemirror.min.css', array(), '5.29.1-alpha-ee20357' );
-	$styles->add( 'cp-filepond', "/wp-includes/js/filepond/cp-filepond$suffix.css", array(), '0.1.0' );
+	$styles->add( 'wp-codemirror', '/wp-includes/js/codemirror/codemirror.min.css', array(), '5.65.20' );
+	$styles->add( 'filepond', "/wp-includes/js/filepond/filepond$suffix.css", array(), '4.32.12' );
+	$styles->add( 'cp-filepond', "/wp-includes/js/filepond/cp-filepond$suffix.css", array( 'filepond' ), '4.32.12' );
 	$styles->add( 'cp-filepond-image-preview', "/wp-includes/js/filepond/filepond-plugin-image-preview$suffix.css", array(), '4.6.12' );
 	$styles->add( 'cropperjs', '/wp-includes/css/cropper.min.css', array(), '1.6.2' );
 	$styles->add( 'cp-cropper', "/wp-includes/css/cp-cropper$suffix.css", array( 'cropperjs' ) );

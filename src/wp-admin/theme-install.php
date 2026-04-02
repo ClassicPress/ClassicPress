@@ -46,6 +46,9 @@ foreach ( $installed_themes as $theme_slug => $theme_data ) {
 
 wp_enqueue_script( 'theme' );
 wp_enqueue_script( 'updates' );
+wp_enqueue_script( 'cp-filepond-file-validate-type' );
+wp_enqueue_script( 'cp-filepond' );
+wp_enqueue_style( 'cp-filepond' );
 
 if ( $tab ) {
 	/**
@@ -319,5 +322,29 @@ if ( $tab ) {
 <?php
 wp_print_request_filesystem_credentials_modal();
 wp_print_admin_notice_templates();
+
+?>
+<script>
+document.addEventListener( 'DOMContentLoaded', function () {
+	var filepond = document.querySelector( 'input[type="file"][name="themezip"]' );
+	var button   = document.getElementById( 'install-theme-submit' );
+	var options = {
+		name:                    'themezip',
+		storeAsFile:             true,
+		allowMultiple:           false,
+		allowFileTypeValidation: true,
+		acceptedFileTypes:       [ 'application/zip', 'application/x-zip-compressed', 'application/x-zip' ],
+		dropOnPage:              true,
+		dropOnElement:           false,
+		labelIdle:               _cpFilepondLabels.labelZipIdle,
+		credits:                 false,
+		onaddfile:               function( error ) { if ( button && ! error ) { button.disabled = false; } },
+		onremovefile:            function() { if ( button ) { button.disabled = true; } }
+	};
+	FilePond.registerPlugin( FilePondPluginFileValidateType );
+	FilePond.create( filepond, options );
+} );
+</script>
+<?php
 
 require_once ABSPATH . 'wp-admin/admin-footer.php';

@@ -166,7 +166,7 @@ jobs:
           sudo update-locale LC_ALL="es_ES.UTF-8 fr_FR.UTF-8 ru_RU.UTF-8"
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
         with:
           composer-options: "--no-progress --no-ansi --no-interaction"
 

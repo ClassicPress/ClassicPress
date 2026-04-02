@@ -229,4 +229,3 @@
 
     return plugin;
 });
-
