@@ -65,7 +65,7 @@ class Tests_Admin_wpSiteHealth extends WP_UnitTestCase {
 		$readme = file_get_contents( ABSPATH . 'readme.html' );
 
 		preg_match( '#Recommended.*MariaDB</a> version <strong>([0-9.]*)#s', $readme, $matches );
-var_dump( $matches);
+
 		$this->assertSame( $matches[1], $reflection_property->getValue( $this->instance ) );
 	}
 

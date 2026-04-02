@@ -107,7 +107,7 @@ class Tests_Readme extends WP_UnitTestCase {
 		$this->assertNotEmpty( $eol_date );
 
 		// Per https://mariadb.org/about/#maintenance-policy, MariaDB releases are supported for 5 years.
-		$mariadb_eol  = gmdate( 'Y-m-d', strtotime(  $eol_date ) );
+		$mariadb_eol  = gmdate( 'Y-m-d', strtotime( $eol_date ) );
 		$current_date = gmdate( 'Y-m-d' );
 
 		$this->assertLessThan(
