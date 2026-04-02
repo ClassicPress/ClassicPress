@@ -835,8 +835,7 @@ function wp_default_scripts( $scripts ) {
 	$scripts->add( 'cp-filepond-file-validate-type', "/wp-includes/js/filepond/filepond-plugin-file-validate-type$suffix.js", array(), '1.2.9' );
 	$scripts->add( 'cp-filepond-file-rename', "/wp-includes/js/filepond/filepond-plugin-file-rename$suffix.js", array(), '1.1.8' );
 	$scripts->add( 'cp-filepond-plugin-image-preview', "/wp-includes/js/filepond/filepond-plugin-image-preview$suffix.js", array(), '4.6.12' );
-	$scripts->add( 'filepond', "/wp-includes/js/filepond/filepond$suffix.js", array(), '4.32.12' );
-	$scripts->add( 'cp-filepond', "/wp-includes/js/filepond/cp-filepond$suffix.js", array( 'filepond' ), '4.32.12' );
+	$scripts->add( 'cp-filepond', "/wp-includes/js/filepond/cp-filepond$suffix.js", array(), '4.31.2' );
 	did_action( 'init' ) && $scripts->localize(
 		'cp-filepond',
 		'_cpFilepondLabels',
@@ -1025,12 +1024,12 @@ function wp_default_scripts( $scripts ) {
 	$scripts->add( 'mediaelement-vimeo', '/wp-includes/js/mediaelement/renderers/vimeo.min.js', array( 'mediaelement' ), '4.2.17', 1 );
 	$scripts->add( 'wp-mediaelement', "/wp-includes/js/mediaelement/wp-mediaelement$suffix.js", array( 'mediaelement' ), false, 1 );
 
-	$scripts->add( 'wp-codemirror', '/wp-includes/js/codemirror/codemirror.min.js', array(), '5.29.1-alpha-ee20357' );
+	$scripts->add( 'wp-codemirror', '/wp-includes/js/codemirror/codemirror.min.js', array(), '5.65.20' );
 	$scripts->add( 'csslint', '/wp-includes/js/codemirror/csslint.js', array(), '1.0.5' );
-	$scripts->add( 'esprima', '/wp-includes/js/codemirror/esprima.js', array(), '4.0.0' );
+	$scripts->add( 'esprima', '/wp-includes/js/codemirror/esprima.js', array(), '4.0.1' );
 	$scripts->add( 'jshint', '/wp-includes/js/codemirror/fakejshint.js', array( 'esprima' ), '2.9.5' );
-	$scripts->add( 'jsonlint', '/wp-includes/js/codemirror/jsonlint.js', array(), '1.6.2' );
-	$scripts->add( 'htmlhint', '/wp-includes/js/codemirror/htmlhint.js', array(), '0.9.14-xwp' );
+	$scripts->add( 'jsonlint', '/wp-includes/js/codemirror/jsonlint.js', array(), '1.6.3' );
+	$scripts->add( 'htmlhint', '/wp-includes/js/codemirror/htmlhint.js', array(), '1.8.0' );
 	$scripts->add( 'htmlhint-kses', '/wp-includes/js/codemirror/htmlhint-kses.js', array( 'htmlhint' ) );
 	$scripts->add( 'code-editor', "/wp-admin/js/code-editor$suffix.js", array( 'jquery', 'wp-codemirror', 'underscore' ) );
 	$scripts->add( 'wp-theme-plugin-editor', "/wp-admin/js/theme-plugin-editor$suffix.js", array( 'common', 'wp-util', 'wp-sanitize', 'jquery', 'wp-a11y', 'underscore' ), false, 1 );
@@ -1367,7 +1366,6 @@ function wp_default_scripts( $scripts ) {
 				'cp-filepond-file-validate-type',
 				'cp-filepond-file-rename',
 				'cp-filepond-plugin-image-preview',
-				'filepond',
 				'cp-filepond',
 			),
 			false,
