@@ -52,6 +52,24 @@ class Tests_Admin_wpSiteHealth extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @ticket 55791
+	 * @covers ::__construct()
+	 */
+	public function test_mariadb_recommended_version_matches_readme_html() {
+		$reflection          = new ReflectionClass( $this->instance );
+		$reflection_property = $reflection->getProperty( 'mariadb_recommended_version' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$reflection_property->setAccessible( true );
+		}
+
+		$readme = file_get_contents( ABSPATH . 'readme.html' );
+
+		preg_match( '#Recommended.*MariaDB</a> version <strong>([0-9.]*)#s', $readme, $matches );
+var_dump( $matches);
+		$this->assertSame( $matches[1], $reflection_property->getValue( $this->instance ) );
+	}
+
+	/**
 	 * Ensure Site Health reports correctly cron job reports.
 	 *
 	 * @ticket 47223
