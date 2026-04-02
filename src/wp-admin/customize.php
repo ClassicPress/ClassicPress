@@ -225,6 +225,7 @@ wp_enqueue_script( 'theme' );
 do_action( 'customize_controls_enqueue_scripts' );
 
 // Let's roll.
+echo '<!DOCTYPE html>' . "\n";
 header( 'Content-Type: ' . get_option( 'html_type' ) . '; charset=' . get_option( 'blog_charset' ) );
 send_nosniff_header();
 nocache_headers();
