@@ -312,7 +312,7 @@
 	 */
 	api.addShortcutFocusing = function() {
 		function handleShortcutClick( e ) {
-			var container, partialId, partialType, shortcut,
+			var container, partialId, partialType, shortcut, splits,
 				context = {};
 
 			if ( ! e.shiftKey ) { // must use Shift key
@@ -334,7 +334,15 @@
 				}
 				partialId   = shortcut.className.replace( 'customize-partial-edit-shortcut customize-partial-edit-shortcut-', '' );
 				partialType = 'default';
-				container   = shortcut.parentElement;
+				if ( partialId.includes( '-' ) ) {
+					splits = partialId.split( '-' );
+					splits.forEach( function( split ) {
+						if ( split === 'widget' ) {
+							partialType = 'widget';
+						}
+					} );
+				}
+				container = shortcut.parentElement;
 			}
 
 			// Map known partial types to their focus target
