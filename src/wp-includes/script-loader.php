@@ -1112,8 +1112,8 @@ function wp_default_scripts( $scripts ) {
 	$scripts->add( 'hoverintent-js', '/wp-includes/js/hoverintent-js.min.js', array(), '2.2.1', 1 );
 
 	$scripts->add( 'customize-preview', "/wp-includes/js/customize-preview$suffix.js", array( 'wp-a11y' ), false, 1 );
-	$scripts->add( 'customize-controls-proxy', "/wp-admin/js/customize-controls-proxy$suffix.js", array( 'customize-controls', 'underscore' ), false, 1 );
-	$scripts->add( 'customize-controls', "/wp-admin/js/customize-controls$suffix.js", array( 'iris', 'cp-filepond', 'media-image-widget', 'cp-cropper' ), false, 1 );
+	$scripts->add( 'customize-controls-proxy', "/wp-admin/js/customize-controls-proxy$suffix.js", array( 'underscore' ), false, 1 );
+	$scripts->add( 'customize-controls', "/wp-admin/js/customize-controls$suffix.js", array( 'iris', 'cp-filepond', 'media-image-widget', 'cp-cropper', 'customize-controls-proxy' ), false, 1 );
 	did_action( 'init' ) && $scripts->localize(
 		'customize-controls',
 		'_wpCustomizeControlsL10n',
