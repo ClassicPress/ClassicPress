@@ -1,10 +1,16 @@
 <?php
 /**
+ * Validate recommended versions for dependencies referenced in `readme.html`,
+ * based on external site support pages.
+ *
  * @group external-http
  */
-class Tests_External_HTTP_Basic extends WP_UnitTestCase {
+class Tests_Readme extends WP_UnitTestCase {
 
-	public function test_readme_recommended_php_version() {
+	/**
+	 * @coversNothing
+	 */
+	public function test_readme_php_version() {
 		// This test is designed to only run on develop.
 		$this->skipOnAutomatedBranches();
 
@@ -34,7 +40,10 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 		);
 	}
 
-	public function test_readme_recommended_mysql_version() {
+	/**
+	 * @coversNothing
+	 */
+	public function test_readme_mysql_version() {
 		// This test is designed to only run on develop.
 		$this->skipOnAutomatedBranches();
 
@@ -59,14 +68,20 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 		}
 		$this->assertNotEmpty( $eol_date );
 
+		$mysql_eol    = gmdate( 'Y-m-d', strtotime( $eol_date ) );
+		$current_date = gmdate( 'Y-m-d' );
+
 		$this->assertLessThan(
-			strtotime( $eol_date ),
-			time(),
-			"readme.html's Recommended MySQL version is too old."
+			$mysql_eol,
+			$current_date,
+			"readme.html's Recommended MySQL version is too old. Remember to update the WordPress.org Requirements page, too."
 		);
 	}
 
-	public function test_readme_recommended_mariadb_version() {
+	/**
+	 * @coversNothing
+	 */
+	public function test_readme_mariadb_version() {
 		// This test is designed to only run on develop.
 		$this->skipOnAutomatedBranches();
 
@@ -91,10 +106,14 @@ class Tests_External_HTTP_Basic extends WP_UnitTestCase {
 		}
 		$this->assertNotEmpty( $eol_date );
 
+		// Per https://mariadb.org/about/#maintenance-policy, MariaDB releases are supported for 5 years.
+		$mariadb_eol  = gmdate( 'Y-m-d', strtotime( $eol_date ) );
+		$current_date = gmdate( 'Y-m-d' );
+
 		$this->assertLessThan(
-			strtotime( $eol_date ),
-			time(),
-			"readme.html's Recommended MariaDB version is too old."
+			$mariadb_eol,
+			$current_date,
+			"readme.html's Recommended MariaDB version is too old. Remember to update the WordPress.org Requirements page, too."
 		);
 	}
 
