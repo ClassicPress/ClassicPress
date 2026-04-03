@@ -117,12 +117,14 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 					$default_value_attr = ' data-default-color="' . esc_attr( $default_value ) . '"';
 				}
 
+				// Allow for inconsistencies between themes over whether they include the # in a hex color string
+				$color_value = str_replace( '#', '', $this->value() );
 				if ( $is_hue_slider ) {
 					?>
 					<input class="color-picker-hue" 
 						type="text" 
 						data-type="hue"
-						value="#<?php echo esc_attr( $this->value() ); ?>"
+						value="#<?php echo esc_attr( $color_value ); ?>"
 						<?php $this->link(); ?>
 					>
 					<?php
@@ -132,7 +134,7 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 						type="text"
 						maxlength="7"
 						placeholder="<?php echo esc_attr( $default_value ); ?>"
-						value="#<?php echo esc_attr( $this->value() ); ?>"
+						value="#<?php echo esc_attr( $color_value ); ?>"
 						<?php echo $default_value_attr; // data-default-color ?>
 						<?php $this->link(); ?>
 					>
