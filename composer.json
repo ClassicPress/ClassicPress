@@ -13,7 +13,7 @@
 		"php": ">=7.4"
 	},
 	"require-dev": {
-		"composer/ca-bundle": "1.5.10",
+		"composer/ca-bundle": "1.5.11",
 		"dealerdirect/phpcodesniffer-composer-installer": "1.2.0",
 		"wp-coding-standards/wpcs": "3.3.0",
 		"phpcompatibility/phpcompatibility-wp": "2.1.8",
