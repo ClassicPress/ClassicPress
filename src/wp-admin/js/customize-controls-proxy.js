@@ -7,16 +7,15 @@
  */
 /* global wp */
 
+// Ensure wp.customize exists before any other script runs.
+window.wp = window.wp || {};
+window.wp.customize = window.wp.customize || {};
+window.wp.customize.controlConstructor = window.wp.customize.controlConstructor || {};
+window.wp.customize.sectionConstructor = window.wp.customize.sectionConstructor || {};
+window.wp.customize.panelConstructor   = window.wp.customize.panelConstructor   || {};
+
 /* CONTROLS-frame compat shim: keep the pane stable if 3rd-party code runs early. */
 (function() {
-
-	// Ensure wp.customize exists
-	if ( ! window.wp ) {
-		window.wp = {};
-	}
-	if ( ! wp.customize ) {
-		wp.customize = {};
-	}
 
 	// No-op bind so early code like api.bind(...) doesn't fail.
 	var api = wp.customize;
