@@ -41,7 +41,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Make items in new menu sortable
 	 */
 	itemObserver = new MutationObserver( function() {
-		if ( menuToEdit.querySelector( '.menu-item' ) ) { console.log('added');
+		if ( menuToEdit.querySelector( '.menu-item' ) ) {
 			initSortables( menuToEdit.id );
 			itemObserver.disconnect();
 		}
@@ -523,12 +523,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Add menu item
 	 */
 	function addMenuItem( type, object, objectId, title, label, url ) {
-		var menu       = document.getElementById( 'sub-accordion-section-nav_menu[' + currentMenuId + ']' ) || menuToEdit,
+		var data,
+			menu       = document.getElementById( 'sub-accordion-section-nav_menu[' + currentMenuId + ']' ) || menuToEdit,
 			menuItems  = menu.querySelectorAll( '.menu-item' ),
 			lastItem   = menuItems[menuItems.length - 1],
 			menuItemId = '-' + Date.now(),
 			template   = document.getElementById( 'tmpl-new-menu-item' ),
 			clone      = template.content.cloneNode( true );
+
+		const addItemsPanel = document.getElementById( 'available-menu-items' );
 
 		if ( type === 'custom' ) {
 			clone.querySelector( '.field-url' ).removeAttribute( 'hidden' );
@@ -588,26 +591,129 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			status: 'publish'
 		};
 
-		// Add to menu
-		if ( lastItem ) { // menu currently has at least one item
-			lastItem.classList.remove( 'move-down-disabled' );
-			lastItem.after( clone ); // add as last item to populated menu
-			menu.querySelector( '.reorder-toggle' ).style.display = '';
-		} else { // menu is currently empty
-			clone.querySelector( 'li' ).classList.add( 'move-up-disabled' );
-			clone.querySelector( 'li' ).classList.add( 'move-right-disabled' );
-			menu.querySelector( '.customize-control-nav_menu_name' ).after( clone );
-			menu.querySelector( '.no-items-message' )?.remove();
-		}
-		activatePublishButton();
+		// Save to changeset
+		data = new URLSearchParams( {
+			action:                     'customize_save',
+			wp_customize:               'on',
+			customize_changeset_status: 'draft',
+			nonce:                      document.getElementById( 'customizer_nonce' ).value,
+			customize_changeset_uuid:   document.getElementById( 'customize_changeset_uuid' ).value,
+			customized:                 JSON.stringify( window._cpDirtySettings || {} )
+		} );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			var target;
+			if ( result.success ) {
+				// Trigger partial refresh
+				target = window.getPreviewChannel();
+				if ( target ) {
+					target.iframe.contentWindow.postMessage(
+						JSON.stringify( {
+							channel: target.channel,
+							type: 'setting',
+							data: 'nav_menu[' + currentMenuId + ']'
+						} ),
+						location.origin
+					);
+				}
+
+				// Clear dirty settings that have now been saved to the changeset
+				window._cpDirtySettings = {};
+				window._cpPreviewSettings = {};
+				
+				// Add to menu
+				if ( lastItem ) { // menu currently has at least one item
+					lastItem.classList.remove( 'move-down-disabled' );
+					lastItem.after( clone ); // add as last item to populated menu
+					menu.querySelector( '.reorder-toggle' ).style.display = '';
+				} else { // menu is currently empty
+					clone.querySelector( 'li' ).classList.add( 'move-up-disabled' );
+					clone.querySelector( 'li' ).classList.add( 'move-right-disabled' );
+					menu.querySelector( '.customize-control-nav_menu_name' ).after( clone );
+					menu.querySelector( '.no-items-message' )?.remove();
+				}
+
+				// Remove overlay and close "Add items" panel
+				document.body.classList.remove( 'adding-menu-items' );
+				if ( addItemsPanel ) {
+					addItemsPanel.style.display = 'none';
+				}
+
+				// Reset toggle buttons
+				document.querySelectorAll( '.add-new-menu-item' ).forEach( function( btn ) {
+					btn.setAttribute( 'aria-expanded', 'false' );
+				} );
+
+				activatePublishButton();
+			}
+		} )
+		.catch( function( err ) {
+			console.error( err );
+		} );
 	}
 
 	/**
 	 * Delete menu item
 	 */
 	function deleteMenuItem( item ) {
-		item.remove();
-		activatePublishButton();
+		var data,
+			menuItemId = item.querySelector( '.menu-item-data-db-id' ).value,
+			currentMenuId = item.querySelector( '.menu-item-data-menu-id' ).value,
+			deletionData = {};
+
+		_updatedControlsWatcher[ 'nav_menu_item[' + menuItemId + ']' ] = false;
+		deletionData[ 'nav_menu_item[' + menuItemId + ']' ] = {
+			value: false
+		};
+
+		// Save to changeset
+		data = new URLSearchParams( {
+			action:                     'customize_save',
+			wp_customize:               'on',
+			customize_changeset_status: 'draft',
+			nonce:                      document.getElementById( 'customizer_nonce' ).value,
+			customize_changeset_uuid:   document.getElementById( 'customize_changeset_uuid' ).value,
+			customize_changeset_data:   JSON.stringify( deletionData ),
+			customized:                 JSON.stringify( deletionData )
+		} );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result.success ) {
+
+				// Don't clear _cpDirtySettings — keep deletion flag for Publish
+				// Instead mark this item as deleted so Publish sends false for it
+				window._cpDeletedItems = window._cpDeletedItems || {};
+				window._cpDeletedItems[ 'nav_menu_item[' + menuItemId + ']' ] = false;
+
+				item.remove();
+				activatePublishButton();
+			}
+		} )
+		.catch( function( err ) {
+			console.error( err );
+		} );
 	}
 
 	/**
@@ -870,7 +976,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 		// Delete a menu item
-		} else if ( e.target.classList && e.target.className === 'button-link item-delete submitdelete deletion' ) {
+		} else if ( e.target.classList && e.target.className.includes( 'item-delete submitdelete deletion' ) ) {
 			deleteMenuItem( e.target.closest( 'li' ) );
 
 		// Delete a nav menu
