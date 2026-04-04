@@ -607,7 +607,7 @@
 		} );
 
 		api.preview.bind( 'setting', function( args ) {
-			var sidebarId,
+			var sidebarId, menuId,
 				found = false,
 				id = args[0],
 				value = args[1];
@@ -638,6 +638,15 @@
 						}
 					} );
 				}
+			} else if ( id.startsWith( 'nav_menu_item[' ) && value && value.nav_menu_term_id ) {
+				menuId = String( value.nav_menu_term_id );
+				wp.customize.selectiveRefresh.partial.each( function( partial ) {
+					partial.placements().forEach( function( placement ) {
+						if ( placement.context && String( placement.context.menu_id ) === menuId ) {
+							partial.refresh();
+						}
+					} );
+				} );
 			} else {
 				wp.customize.selectiveRefresh.partial.each( function( partial ) {
 					if ( partial.params.settings && partial.params.settings.indexOf( id ) !== -1 ) {
