@@ -7,15 +7,16 @@
  */
 /* global wp */
 
-// Ensure wp.customize exists before any other script runs.
-window.wp = window.wp || {};
-window.wp.customize = window.wp.customize || {};
-window.wp.customize.controlConstructor = window.wp.customize.controlConstructor || {};
-window.wp.customize.sectionConstructor = window.wp.customize.sectionConstructor || {};
-window.wp.customize.panelConstructor   = window.wp.customize.panelConstructor   || {};
-
 /* CONTROLS-frame compat shim: keep the pane stable if 3rd-party code runs early. */
 (function() {
+
+	// Ensure wp.customize exists
+	if ( ! window.wp ) {
+		window.wp = {};
+	}
+	if ( ! wp.customize ) {
+		wp.customize = {};
+	}
 
 	// No-op bind so early code like api.bind(...) doesn't fail.
 	var api = wp.customize;
@@ -312,7 +313,7 @@ function makeDebouncedSender( previewKey, rawKey, target ) {
 }
 
 /**
- * Receive postMessages from the preview iframe
+ * Receive postMessages from the preview iframe (apart from menu item updates, for which see below).
  */
 window.addEventListener( 'message', function( event ) {
 	var message, target, data, id, type, place, menuId, hash, itemId, sidebarId;
@@ -379,4 +380,35 @@ window.addEventListener( 'message', function( event ) {
 	setTimeout( function() {
 		document.getElementById( hash ).querySelector( 'button' ).focus();
 	}, 0 );
+} );
+
+/**
+ * Receive postMessages from the preview iframe about menu item updates
+ */
+window.addEventListener( 'message', function( event ) {
+	var message, target, src;
+
+	if ( event.origin !== location.origin ) {
+		return;
+	}
+	try {
+		message = JSON.parse( event.data );
+	} catch( e ) {
+		return;
+	}
+	if ( ! message || message.type !== 'refresh' ) {
+		return;
+	}
+
+	target = window.getPreviewChannel();
+	if ( ! target ) {
+		return;
+	}
+	if ( message.channel && message.channel !== target.channel ) {
+		return;
+	}
+
+	src = target.iframe.src;
+	target.iframe.src = '';
+	target.iframe.src = src;
 } );
