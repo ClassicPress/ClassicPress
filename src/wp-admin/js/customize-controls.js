@@ -1313,28 +1313,34 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 				};
 			} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
-				submittedChanges[ settingId ] = {
-					value: {
-						nav_menu_term_id: parseInt( item.nav_menu_term_id, 10 ),
-						position: parseInt( item.position, 10 ),
-						title: item.title || '',
-						url: item.url || '',
-						original_title: item.original_title || '',
-						menu_item_parent: parseInt( item.menu_item_parent, 10 ) || 0,
-						object_id: item.object_id || 0,
-						object: item.object || '',
-						type: item.type || 'custom',
-						type_label: item.type_label || '',
-						classes: item.classes || [],
-						xfn: item.xfn || '',
-						target: item.target || '',
-						attr_title: item.attr_title || '',
-						description: item.description || '',
-						status: item.status || 'publish',
-						display_mode: item.display_mode || '',
-						roles: item.roles || ''
-					}
-				};
+				if ( item === false ) {
+					submittedChanges[ settingId ] = {
+						value: false
+					};
+				} else {
+					submittedChanges[ settingId ] = {
+						value: {
+							nav_menu_term_id: parseInt( item.nav_menu_term_id, 10 ),
+							position: parseInt( item.position, 10 ),
+							title: item.title || '',
+							url: item.url || '',
+							original_title: item.original_title || '',
+							menu_item_parent: parseInt( item.menu_item_parent, 10 ) || 0,
+							object_id: item.object_id || 0,
+							object: item.object || '',
+							type: item.type || 'custom',
+							type_label: item.type_label || '',
+							classes: item.classes || [],
+							xfn: item.xfn || '',
+							target: item.target || '',
+							attr_title: item.attr_title || '',
+							description: item.description || '',
+							status: item.status || 'publish',
+							display_mode: item.display_mode || '',
+							roles: item.roles || ''
+						}
+					};
+				}
 			} else if ( settingId.startsWith( 'nav_menu_locations[' ) ) {
 				submittedChanges[ settingId ] = {
 					value: item || ''
