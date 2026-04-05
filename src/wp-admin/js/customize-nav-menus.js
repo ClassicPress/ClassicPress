@@ -668,7 +668,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function deleteMenuItem( item ) {
 		var data,
-			menuItemId = item.querySelector( '.menu-item-data-db-id' ).value
+			menuItemId = item.querySelector( '.menu-item-data-db-id' ).value,
 			deletionData = {};
 
 		_updatedControlsWatcher[ 'nav_menu_item[' + menuItemId + ']' ] = false;
