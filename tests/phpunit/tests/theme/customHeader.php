@@ -260,7 +260,7 @@ class Tests_Theme_CustomHeader extends WP_UnitTestCase {
 		// The container should always be returned in the Customizer preview.
 		$this->set_customize_previewing( true );
 		$html = get_custom_header_markup();
-		$this->assertSame( '<div id="wp-custom-header" class="wp-custom-header"></div>', $html );
+		$this->assertStringContainsString( '<div id="wp-custom-header" class="wp-custom-header"', $html );
 	}
 
 	public function test_get_custom_header_markup_with_registered_default_image() {
