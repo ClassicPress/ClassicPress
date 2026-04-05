@@ -66,7 +66,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Close modal and set focus on theme
 	function closeModal() {
 		dialog.close();
-		document.getElementById( dialog.dataset.highlightedTheme ).focus();
+		document.getElementById( dialog.dataset.highlightedTheme )?.focus();
 		dialog.querySelector( '.left.dashicons.dashicons-no' ).disabled = false;
 		dialog.querySelector( '.right.dashicons.dashicons-no' ).disabled = false;
 		cleanup();
@@ -74,7 +74,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Reset the dialog element to its default state
 	function cleanup() {
-		dialog.querySelector( '#theme-modal-insert-container' ).remove();
+		dialog.querySelector( '#theme-modal-insert-container' )?.remove();
 		dialog.dataset.highlightedTheme = '';
 
 		// Reset URL params
@@ -176,7 +176,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function() {
-			var theme = document.getElementById( slug ),
+			var theme = document.getElementById( slug ) || document.getElementById( 'customize-control-installed_theme_' + slug ),
 				notice = theme.querySelector( '.update-message' );
 
 			notice.innerHTML = '<p>' + _wpThemeSettings.l10n.updated + '</p>';
@@ -281,8 +281,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Navigate the modals by using the keyboard
 	document.addEventListener( 'keydown', function( e ) {
+		const topModal = document.getElementById( 'theme-update-modal' );
 		if ( dialog && dialog.open ) {
 			if ( e.key === 'Escape' ) {
+				topModal?.close();
+				topModal?.remove();
 				closeModal();
 			} else if ( e.key === 'ArrowLeft' || e.key === 'ArrowUp' ) {
 				e.preventDefault();
@@ -293,6 +296,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} else if ( previewDialog && previewDialog.open ) {
 			if ( e.key === 'Escape' ) {
+				topModal?.close();
+				topModal?.remove();
 				closePreviewDialog();
 			} else if ( e.key === 'ArrowLeft' || e.key === 'ArrowUp' ) {
 				e.preventDefault();
@@ -306,7 +311,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Open the modal or perform other operations
 	document.addEventListener( 'click', function( e ) {
-		var img, template, clone, response, span,
+		var img, template, clone, response, span, topModal,
+			customizer = document.body.className.includes( 'wp-customizer' ) ? true : false,
 			theme = e.target.closest( '.theme' ),
 			allThemes = document.querySelectorAll( '.themes li:not( .add-new-theme )' ),
 			firstElement = document.querySelector( '.themes li' ),
@@ -322,17 +328,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				dialog.querySelector( '.theme-wrap' ).append( clone );
 
 				// Set URL
-				queryParams.set( 'theme', theme.id );
+				queryParams.set( 'theme', customizer ? theme.dataset.id : theme.id );
 				history.replaceState( null, null, '?' + queryParams.toString() );
 
 				// Set theme ID and previous and next themes
-				dialog.dataset.highlightedTheme = theme.id;
-				prevElement = document.getElementById( dialog.dataset.highlightedTheme ).previousElementSibling;
+				dialog.dataset.highlightedTheme = customizer ? theme.dataset.id : theme.id;
+				prevElement = document.getElementById( theme.id ).previousElementSibling;
 				if ( prevElement == null ) { // first theme
 					dialog.querySelector( '.left.dashicons.dashicons-no' ).disabled = true;
 				}
 
-				nextElement = document.getElementById( dialog.dataset.highlightedTheme ).nextElementSibling;
+				nextElement = document.getElementById( theme.id ).nextElementSibling;
 				if ( nextElement == null ) { // last theme
 					dialog.querySelector( '.right.dashicons.dashicons-no' ).disabled = true;
 				}
@@ -494,14 +500,42 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				e.target.disabled = true;
 			}
 
-		// Close modal
-		} else if ( e.target.className === 'close dashicons dashicons-no' ) {
-			closeModal();
-
 		// Update a theme
-		} else if ( e.target.className.includes( 'update-button-link' ) ) {
+		} else if ( e.target.className.includes( 'update-button-link' ) ) { // themes.php
 			e.target.closest( '.update-message' ).classList.add( 'updating-message' );
 			updateIndividualTheme( e.target.closest( 'li' ).id );
+		} else if ( e.target.className.includes( 'update-theme' ) ) { // Customizer
+			e.target.closest( '.update-message' ).classList.add( 'updating-message' );
+			updateIndividualTheme( e.target.closest( 'li' ).dataset.id );
+
+		// Get further details about a theme when it has an update
+		} else if ( e.target.className.includes( 'open-plugin-details-modal' ) ) {
+			e.preventDefault();
+			topModal = document.createElement( 'dialog' );
+			topModal.id = 'theme-update-modal';
+			topModal.className = 'theme-overlay';
+			topModal.setAttribute( 'aria-label', e.target.getAttribute( 'aria-label' ) );
+			topModal.innerHTML = '<div class="theme-overlay">' +
+				'<div class="wp-clearfix">' +
+					'<div class="theme-header">' +
+						'<button id="theme-update-modal-close" class="close dashicons dashicons-no" autofocus>' +
+							'<span class="screen-reader-text">' + dialog.querySelector( '.close .screen-reader-text' ).textContent + '</span>' +
+						'</button>' +
+					'</div>' +
+					'<iframe src="' + e.target.href + '">' +
+					'</iframe>' +
+				'</div>';
+			document.body.append( topModal );
+			topModal.showModal();
+
+		// Close update modal
+		} else if ( e.target.id === 'theme-update-modal-close' ) {
+			document.getElementById( 'theme-update-modal' ).close();
+			document.getElementById( 'theme-update-modal' ).remove();
+
+		// Close other modal
+		} else if ( e.target.className === 'close dashicons dashicons-no' ) {
+			closeModal();
 
 		// Search for popular or latest themes at wordpress.org
 		} else if ( document.body.className.includes( 'theme-install-php' ) ) {
