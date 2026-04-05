@@ -173,24 +173,24 @@ uasort(
 
 // Sort sections within each panel by priority
 foreach ( $sections_by_panel as $panel_id => $panel_sections ) {
-    usort(
-        $sections_by_panel[ $panel_id ],
-        static function ( $a, $b ) {
-            $ap = isset( $a->priority ) ? (int) $a->priority : 999;
-            $bp = isset( $b->priority ) ? (int) $b->priority : 999;
-            return $ap <=> $bp;
-        }
-    );
+	usort(
+		$sections_by_panel[ $panel_id ],
+		static function ( $a, $b ) {
+			$ap = isset( $a->priority ) ? (int) $a->priority : 999;
+			$bp = isset( $b->priority ) ? (int) $b->priority : 999;
+			return $ap <=> $bp;
+		}
+	);
 }
 
 // Sort middle sections by priority
 uasort(
-    $middle_sections,
-    static function ( $a, $b ) {
-        $ap = isset( $a['priority'] ) ? (int) $a['priority'] : 999;
-        $bp = isset( $b['priority'] ) ? (int) $b['priority'] : 999;
-        return $ap <=> $bp;
-    }
+	$middle_sections,
+	static function ( $a, $b ) {
+		$ap = isset( $a['priority'] ) ? (int) $a['priority'] : 999;
+		$bp = isset( $b['priority'] ) ? (int) $b['priority'] : 999;
+		return $ap <=> $bp;
+	}
 );
 
 /**
