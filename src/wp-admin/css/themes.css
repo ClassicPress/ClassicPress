@@ -760,6 +760,21 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 	position: absolute;
 }
 
+#theme-update-modal {
+	display: flex;
+	width: 90%;
+	height: 95%;
+	max-width: 1024px;
+	max-height: 800px;
+}
+
+#theme-update-modal iframe {
+	position: absolute;
+	top: 49px;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
 /**
  * Basic Responsive structure...
  *
@@ -944,10 +959,11 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 	.themes-php .wp-filter-search {
 		float: none;
 		clear: both;
-		top: 0;
 		left: 0;
-		margin: 0 0 20px;
+		right: 0;
+		margin: -5px 0 20px;
 		width: 100%;
+		max-width: 280px;
 	}
 
 	.theme-browser .theme.add-new-theme span:after {
@@ -1894,24 +1910,6 @@ body.full-overlay-active {
 
 .customize-loading #customize-container {
 	background-color: #f0f0f1;
-}
-
-#customize-preview.wp-full-overlay-main::before,
-.customize-loading #customize-container::before,
-#customize-controls .notice.notification-overlay.notification-loading::before,
-.theme-install-overlay .wp-full-overlay-main::before {
-	content: "";
-	display: block;
-	width: 20px;
-	height: 20px;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	z-index: -1;
-	margin: -10px 0 0 -10px;
-	transform: translateZ(0);
-	background: transparent url(../images/spinner.gif) no-repeat center center;
-	background-size: 20px 20px;
 }
 
 #theme-preview-main {
