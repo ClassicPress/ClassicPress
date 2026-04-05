@@ -120,10 +120,11 @@ $middle_sections = array();
 $panels = $wp_customize->panels();
 foreach ( $panels as $panel ) {
 	$top_items[ $panel->id ] = array(
-		'id'       => $panel->id,
-		'title'    => $panel->title,
-		'priority' => $panel->priority,
-		'type'     => 'panel',
+		'id'          => $panel->id,
+		'title'       => $panel->title,
+		'description' => $panel->description,
+		'priority'    => $panel->priority,
+		'type'        => 'panel',
 	);
 }
 
@@ -137,10 +138,11 @@ foreach ( $sections as $section ) {
 
 	if ( ! $section->panel ) {
 		$top_items[ $section->id ] = array(
-			'id'       => $section->id,
-			'title'    => $section->title,
-			'priority' => $section->priority,
-			'type'     => 'section',
+			'id'          => $section->id,
+			'title'       => $section->title,
+			'description' => $section->description,
+			'priority'    => $section->priority,
+			'type'        => 'section',
 		);
 	} else {
 		if ( str_starts_with( $section->id, 'sidebar-widgets-' ) || str_starts_with( $section->id, 'nav_menu[' ) ) {
@@ -150,10 +152,11 @@ foreach ( $sections as $section ) {
 			continue;
 		}
 		$middle_sections[ $section->id ] = array(
-			'id'       => $section->id,
-			'title'    => $section->title,
-			'priority' => $section->priority,
-			'type'     => 'section',
+			'id'          => $section->id,
+			'title'       => $section->title,
+			'description' => $section->description,
+			'priority'    => $section->priority,
+			'type'        => 'section',
 		);
 	}
 }
@@ -166,6 +169,28 @@ uasort(
 		$bp = isset( $b['priority'] ) ? (int) $b['priority'] : 999;
 		return $ap <=> $bp;
 	}
+);
+
+// Sort sections within each panel by priority
+foreach ( $sections_by_panel as $panel_id => $panel_sections ) {
+    usort(
+        $sections_by_panel[ $panel_id ],
+        static function ( $a, $b ) {
+            $ap = isset( $a->priority ) ? (int) $a->priority : 999;
+            $bp = isset( $b->priority ) ? (int) $b->priority : 999;
+            return $ap <=> $bp;
+        }
+    );
+}
+
+// Sort middle sections by priority
+uasort(
+    $middle_sections,
+    static function ( $a, $b ) {
+        $ap = isset( $a['priority'] ) ? (int) $a['priority'] : 999;
+        $bp = isset( $b['priority'] ) ? (int) $b['priority'] : 999;
+        return $ap <=> $bp;
+    }
 );
 
 /**
