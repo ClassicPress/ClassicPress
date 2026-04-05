@@ -631,7 +631,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				// Clear dirty settings that have now been saved to the changeset
 				window._cpDirtySettings = {};
 				window._cpPreviewSettings = {};
-				
+
 				// Add to menu
 				if ( lastItem ) { // menu currently has at least one item
 					lastItem.classList.remove( 'move-down-disabled' );
