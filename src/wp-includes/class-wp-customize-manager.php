@@ -5771,13 +5771,14 @@ final class WP_Customize_Manager {
 		$this->add_control(
 			'show_on_front',
 			array(
-				'label'   => __( 'Your homepage displays' ),
-				'section' => 'static_front_page',
-				'type'    => 'radio',
-				'choices' => array(
+				'label'     => __( 'Your homepage displays' ),
+				'section'   => 'static_front_page',
+				'type'      => 'radio',
+				'choices'   => array(
 					'posts' => __( 'Your latest posts' ),
 					'page'  => __( 'A static page' ),
 				),
+				'priority'  => 10,
 			)
 		);
 
@@ -5796,6 +5797,7 @@ final class WP_Customize_Manager {
 				'section'        => 'static_front_page',
 				'type'           => 'dropdown-pages',
 				'allow_addition' => true,
+				'priority'       => 20,
 			)
 		);
 
@@ -5814,6 +5816,7 @@ final class WP_Customize_Manager {
 				'section'        => 'static_front_page',
 				'type'           => 'dropdown-pages',
 				'allow_addition' => true,
+				'priority'       => 30,
 			)
 		);
 
