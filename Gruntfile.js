@@ -124,7 +124,8 @@ module.exports = function(grunt) {
 					'wp-includes/js/dist/vendor/*.js',
 					'wp-includes/js/clipboard.js',
 					'wp-includes/js/clipboard.min.js',
-					'wp-includes/js/sortable.min.js'
+					'wp-includes/js/sortable.min.js',
+					'wp-includes/js/crop/cropper.min.js'
 				]
 			},
 			'package-js': {
@@ -295,6 +296,10 @@ module.exports = function(grunt) {
 					{
 						src:  `./node_modules/sortablejs/Sortable.min.js`,
 						dest: `${SOURCE_DIR}wp-includes/js/sortable.min.js`
+					},
+					{
+						src:  `./node_modules/cropperjs/dist/cropper.min.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/crop/cropper.min.js`
 					}
 				]
 			},
