@@ -7,14 +7,39 @@
 	padding-bottom: 1em;
 }
 
-#cp-cropper-dialog .widget-modal-content {
+#cp-cropper-dialog #cp-cropper-body {
+	width: 100%;
+	height: 100%;
 	padding-left: 0;
 }
 
+#cp-cropper-dialog cropper-canvas {
+	width: 100%;
+	display: block;
+}
+	
 #cp-cropper-dialog .widget-modal-footer-buttons {
 	margin-top: 1em;
 }
 
 #cp-cropper-dialog .widget-modal-footer-buttons .button-primary {
-	margin-top: 0;
+	margin: 0 -1em 0 1em;
 }
+
+@media ( max-width: 680px ) {
+	#cp-cropper-dialog .widget-modal-footer-buttons {
+		margin-top: 1em;
+	}
+}
+
+@media ( max-width: 614px ) {
+	#cp-cropper-dialog .widget-modal-footer-buttons {
+		margin-top: 1em;
+	}
+	#cp-cropper-skip {
+		display: block;
+		margin-right: -1em;
+		margin-bottom: 1em;
+	}
+}
+
