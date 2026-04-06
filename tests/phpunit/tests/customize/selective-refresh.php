@@ -54,7 +54,6 @@ class Test_WP_Customize_Selective_Refresh extends WP_UnitTestCase {
 		$handle  = 'customize-selective-refresh';
 
 		$this->assertArrayHasKey( $handle, $scripts->registered );
-
 	}
 
 	/**
