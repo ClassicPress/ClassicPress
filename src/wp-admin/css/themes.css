@@ -766,6 +766,7 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 	height: 95%;
 	max-width: 1024px;
 	max-height: 800px;
+	overflow: hidden;
 }
 
 #theme-update-modal iframe {
@@ -773,7 +774,7 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 	top: 49px;
 	left: 0;
 	width: 100%;
-	height: 100%;
+	height: calc(100% - 49px);
 }
 /**
  * Basic Responsive structure...
