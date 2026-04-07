@@ -284,7 +284,6 @@ video.wp-video-shortcode,
 .wp-playlist-current-item {
 	overflow: hidden;
 	margin-bottom: 10px;
-	height: 60px;
 }
 
 .wp-playlist .wp-playlist-current-item img {
