@@ -4162,6 +4162,7 @@ final class WP_Customize_Manager {
 	 * @return array<string, list<array{
 	 *   id: string,
 	 *   priority: int,
+	 *   instance_number: int,
 	 *   type: string,
 	 *   label: string,
 	 *   description: string,
@@ -4213,13 +4214,14 @@ final class WP_Customize_Manager {
 			$sid = $primary_setting_id( $ctrl );
 
 			$by_section[ $ctrl->section ][] = array(
-				'id'          => ( isset( $ctrl->id ) && is_scalar( $ctrl->id ) ) ? (string) $ctrl->id : '',
-				'priority'    => ( isset( $ctrl->priority ) && is_numeric( $ctrl->priority ) ) ? (int) $ctrl->priority : 999,
-				'type'        => (string) ( $ctrl->type ?? '' ),
-				'label'       => (string) ( $ctrl->label ?? '' ),
-				'description' => (string) ( $ctrl->description ?? '' ),
-				'setting_id'  => $sid,
-				'value'       => null, // intentionally null to avoid premature fetching/warnings.
+				'id'              => ( isset( $ctrl->id ) && is_scalar( $ctrl->id ) ) ? (string) $ctrl->id : '',
+				'priority'        => ( isset( $ctrl->priority ) && is_numeric( $ctrl->priority ) ) ? (int) $ctrl->priority : 10,
+				'instance_number' => ( isset( $ctrl->instance_number ) && is_numeric( $ctrl->instance_number ) ) ? (int) $ctrl->instance_number : PHP_INT_MAX,
+				'type'            => (string) ( $ctrl->type ?? '' ),
+				'label'           => (string) ( $ctrl->label ?? '' ),
+				'description'     => (string) ( $ctrl->description ?? '' ),
+				'setting_id'      => $sid,
+				'value'           => null, // intentionally null to avoid premature fetching/warnings.
 			);
 		}
 
@@ -4228,10 +4230,10 @@ final class WP_Customize_Manager {
 			usort(
 				$rows,
 				static function ( $a, $b ) {
-					if ( $a['priority'] === $b['priority'] ) {
-						return strnatcasecmp( $a['id'], $b['id'] );
+					if ( $a['priority'] !== $b['priority'] ) {
+						return $a['priority'] <=> $b['priority'];
 					}
-					return $a['priority'] <=> $b['priority'];
+					return $a['instance_number'] <=> $b['instance_number'];
 				}
 			);
 			$by_section[ $section ] = $rows;
