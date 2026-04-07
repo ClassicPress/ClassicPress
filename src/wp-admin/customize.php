@@ -113,9 +113,6 @@ $breadcrumb_parents = isset( $wp_customize->cp_breadcrumb_parents ) ? $wp_custom
 // Build top-level items: panels + sections without panel.
 $top_items = array();
 
-// Build mid-level sections
-$middle_sections = array();
-
 // Panels
 $panels = $wp_customize->panels();
 foreach ( $panels as $panel ) {
@@ -133,6 +130,7 @@ foreach ( $panels as $panel ) {
 $sections          = $wp_customize->sections();
 $sections_by_id    = array();
 $sections_by_panel = array();
+$middle_sections   = array();
 foreach ( $sections as $section ) {
 	$sections_by_id[ $section->id ] = $section;
 	$sections_by_panel[ $section->panel ? $section->panel : '_root' ][] = $section;
