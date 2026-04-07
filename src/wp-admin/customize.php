@@ -106,7 +106,6 @@ $menus          = wp_get_nav_menus( array( 'fields' => 'id=>name' ) );
 
 // Controls
 $controls = $wp_customize->get_controls_data_by_section();
-error_log(print_r($controls, true));
 
 // Breadcrumbs for middle sections
 $breadcrumb_parents = isset( $wp_customize->cp_breadcrumb_parents ) ? $wp_customize->cp_breadcrumb_parents : array();
