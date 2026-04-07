@@ -610,9 +610,19 @@
 			var sidebarId, menuId,
 				found = false,
 				id = args[0],
-				value = args[1];
+				value = args[1],
+				handledByPartial = false;
 
-			setValue( id, value, true );
+			wp.customize.selectiveRefresh.partial.each( function( partial ) {
+				if ( partial.params.settings && partial.params.settings.indexOf( id ) !== -1 ) {
+					partial.refresh();
+					handledByPartial = true;
+				}
+			} );
+
+			if ( ! handledByPartial ) {
+				setValue( id, value, true );
+			}
 
 			if ( id.startsWith( 'sidebars_widgets[' ) ) {
 				sidebarId = id.replace( 'sidebars_widgets[', '' ).replace( ']', '' );
@@ -622,7 +632,10 @@
 						partial.refresh();
 					}
 				} );
-			} else if ( id.startsWith( 'widget[' ) ) {
+				return;
+			}
+
+			if ( id.startsWith( 'widget[' ) ) {
 				wp.customize.selectiveRefresh.partial.each( function( partial ) {
 					if ( partial.id === id ) {
 						found = true;
@@ -638,7 +651,10 @@
 						}
 					} );
 				}
-			} else if ( id.startsWith( 'nav_menu_item[' ) && value && value.nav_menu_term_id ) {
+				return;
+			}
+
+			if ( id.startsWith( 'nav_menu_item[' ) && value && value.nav_menu_term_id ) {
 				menuId = String( value.nav_menu_term_id );
 				wp.customize.selectiveRefresh.partial.each( function( partial ) {
 					partial.placements().forEach( function( placement ) {
@@ -647,12 +663,7 @@
 						}
 					} );
 				} );
-			} else {
-				wp.customize.selectiveRefresh.partial.each( function( partial ) {
-					if ( partial.params.settings && partial.params.settings.indexOf( id ) !== -1 ) {
-						partial.refresh();
-					}
-				} );
+				return;
 			}
 		} );
 
