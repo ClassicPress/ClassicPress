@@ -58,7 +58,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 
 		if ( type === 'audio' ) {
-			playlistEl.querySelector( '.wp-playlist-current-item' ).append( img );
+			if ( playlistData.images ) {
+				playlistEl.querySelector( '.wp-playlist-current-item' ).append( img );
+			}
 			playlistEl.querySelector( '.wp-playlist-current-item' ).append( div );
 		} else {
 			playlistEl.querySelector( type ).preload = 'metadata';
@@ -73,6 +75,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		playlistEl.dataset.tracklist = playlistData.tracklist;
+		playlistEl.dataset.images = playlistData.images;
 		playlistEl.dataset.artists = playlistData.artists;
 
 		// Play next item in playlist
@@ -93,7 +96,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			playlistEl.querySelector( 'source' ).type = item.dataset.type;
 			playlistEl.querySelector( 'source' ).src = item.dataset.src;
 			if ( type === 'audio' ) {
-				playlistEl.querySelector( 'img' ).src = item.dataset.img;
+				if ( playlistEl.dataset.images === 'true' ) {
+					playlistEl.querySelector( 'img' ).src = item.dataset.img;
+				}
 				playlistEl.querySelector( '.wp-playlist-item-title' ).textContent = item.dataset.title;
 				playlistEl.querySelector( '.wp-playlist-item-album' ).textContent = item.dataset.album;
 				if ( playlistEl.dataset.artists === 'true' ) {
@@ -125,10 +130,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			playlist.querySelector( type ).src = item.dataset.src;
 
 			if ( type === 'audio' ) {
-				playlist.querySelector( 'img' ).src = item.dataset.img;
+				if ( playlist.dataset.images === 'true' ) {
+					playlist.querySelector( 'img' ).src = item.dataset.img;
+				}
 				playlist.querySelector( '.wp-playlist-item-title' ).textContent = item.dataset.title;
 				playlist.querySelector( '.wp-playlist-item-album' ).textContent = item.dataset.album;
-				 if ( playlist.dataset.artists === 'true' ) {
+				if ( playlistData.artists ) {
 					playlist.querySelector( '.wp-playlist-item-artist' ).textContent = item.dataset.artist;
 				}
 			}
