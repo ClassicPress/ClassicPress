@@ -5,7 +5,7 @@
  * Dependency: cropperjs@next  (https://fengyuanchen.github.io/cropperjs/)
  *   <script src="https://unpkg.com/cropperjs@next"></script>
  */
-/* global ajaxurl, console, Cropper, CROPPER */
+/* global ajaxurl, console, CROPPER */
 
 ( function ( window, document ) {
 	'use strict';
