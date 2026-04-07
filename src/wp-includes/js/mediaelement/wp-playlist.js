@@ -135,7 +135,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 				playlist.querySelector( '.wp-playlist-item-title' ).textContent = item.dataset.title;
 				playlist.querySelector( '.wp-playlist-item-album' ).textContent = item.dataset.album;
-				if ( playlistData.artists ) {
+				if ( playlist.dataset.artists === 'true' ) {
 					playlist.querySelector( '.wp-playlist-item-artist' ).textContent = item.dataset.artist;
 				}
 			}
