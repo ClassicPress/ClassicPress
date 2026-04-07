@@ -106,6 +106,7 @@ $menus          = wp_get_nav_menus( array( 'fields' => 'id=>name' ) );
 
 // Controls
 $controls = $wp_customize->get_controls_data_by_section();
+error_log(print_r($controls, true));
 
 // Breadcrumbs for middle sections
 $breadcrumb_parents = isset( $wp_customize->cp_breadcrumb_parents ) ? $wp_customize->cp_breadcrumb_parents : array();
@@ -121,7 +122,6 @@ foreach ( $panels as $panel ) {
 		'title'           => $panel->title,
 		'description'     => $panel->description,
 		'priority'        => $panel->priority,
-		'instance_number' => $panel->instance_number,
 		'type'            => 'panel',
 	);
 }
@@ -141,7 +141,6 @@ foreach ( $sections as $section ) {
 			'title'           => $section->title,
 			'description'     => $section->description,
 			'priority'        => $section->priority,
-			'instance_number' => $section->instance_number,
 			'type'            => 'section',
 		);
 	} else {
@@ -156,7 +155,6 @@ foreach ( $sections as $section ) {
 			'title'           => $section->title,
 			'description'     => $section->description,
 			'priority'        => $section->priority,
-			'instance_number' => $section->instance_number,
 			'type'            => 'section',
 		);
 	}
@@ -168,12 +166,7 @@ uasort(
 	static function ( $a, $b ) {
 		$ap = isset( $a['priority'] ) ? (int) $a['priority'] : 10;
 		$bp = isset( $b['priority'] ) ? (int) $b['priority'] : 10;
-		if ( $ap !== $bp ) {
-			return $ap <=> $bp;
-		}
-		$ai = isset( $a['instance_number'] ) ? (int) $a['instance_number'] : PHP_INT_MAX;
-		$bi = isset( $b['instance_number'] ) ? (int) $b['instance_number'] : PHP_INT_MAX;
-		return $ai <=> $bi;
+		return $ap <=> $bp;
 	}
 );
 
@@ -184,12 +177,7 @@ foreach ( $sections_by_panel as $panel_id => $panel_sections ) {
 		static function ( $a, $b ) {
 			$ap = isset( $a->priority ) ? (int) $a->priority : 10;
 			$bp = isset( $b->priority ) ? (int) $b->priority : 10;
-			if ( $ap !== $bp ) {
-				return $ap <=> $bp;
-			}
-			$ai = isset( $a->instance_number ) ? (int) $a->instance_number : PHP_INT_MAX;
-			$bi = isset( $b->instance_number ) ? (int) $b->instance_number : PHP_INT_MAX;
-			return $ai <=> $bi;
+			return $ap <=> $bp;
 		}
 	);
 }
@@ -200,12 +188,7 @@ uasort(
 	static function ( $a, $b ) {
 		$ap = isset( $a['priority'] ) ? (int) $a['priority'] : 10;
 		$bp = isset( $b['priority'] ) ? (int) $b['priority'] : 10;
-		if ( $ap !== $bp ) {
-			return $ap <=> $bp;
-		}
-		$ai = isset( $a['instance_number'] ) ? (int) $a['instance_number'] : PHP_INT_MAX;
-		$bi = isset( $b['instance_number'] ) ? (int) $b['instance_number'] : PHP_INT_MAX;
-		return $ai <=> $bi;
+		return $ap <=> $bp;
 	}
 );
 
