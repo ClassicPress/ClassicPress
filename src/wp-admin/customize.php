@@ -916,7 +916,7 @@ wp_print_scripts();
 
 								</ul>
 
-								<?php 
+								<?php
 							} elseif ( $item['type'] === 'section' ) {
 								$customize_info = ( $item['id'] === 'custom_css' ) ? 'customize-info ' : '';
 								?>
