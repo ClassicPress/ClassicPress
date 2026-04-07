@@ -27,7 +27,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		div.className = 'wp-playlist-caption';
 		div.innerHTML = '<span class="wp-playlist-item-meta wp-playlist-item-title">' + title + '</span>' +
 			'<span class="wp-playlist-item-meta wp-playlist-item-album">' + album +  '</span>' +
-			'<span class="wp-playlist-item-meta wp-playlist-item-artist">' + artist + '</span>';
+			( playlistData.artists ? '<span class="wp-playlist-item-meta wp-playlist-item-artist">' + artist + '</span>' : '' );
 
 		ol.className = 'wp-playlist-tracks';
 		if ( playlistEl.parentNode.className === 'textwidget' ) {
@@ -52,7 +52,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			li.dataset.description = track.description;
 			li.innerHTML = '<div class="wp-playlist-caption">' +
 				'<span class="wp-playlist-item-title">' + title + '</span> ' +
-				'<span class="wp-playlist-item-artist">' + artist + '</span></div>' +
+				( playlistData.artists ? '<span class="wp-playlist-item-artist">' + artist + '</span>' : '' ) + '</div>' +
 				'<div class="wp-playlist-item-length">' + length + '</div>';
 			ol.append( li );
 		} );
@@ -68,7 +68,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		source.src = firstTrack.src;
 		playlistEl.querySelector( type ).append( source );
 		playlistEl.querySelector( type ).src = firstTrack.src;
-		playlistEl.querySelector( '.wp-playlist-prev' ).after( ol );
+		if ( playlistData.tracklist ) {
+			playlistEl.querySelector( '.wp-playlist-prev' ).after( ol );
+		}
+
+		playlistEl.dataset.tracklist = playlistData.tracklist;
+		playlistEl.dataset.artists = playlistData.artists;
 
 		// Play next item in playlist
 		playlistEl.querySelector( type ).addEventListener( 'ended', function() {
@@ -91,7 +96,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				playlistEl.querySelector( 'img' ).src = item.dataset.img;
 				playlistEl.querySelector( '.wp-playlist-item-title' ).textContent = item.dataset.title;
 				playlistEl.querySelector( '.wp-playlist-item-album' ).textContent = item.dataset.album;
-				playlistEl.querySelector( '.wp-playlist-item-artist' ).textContent = item.dataset.artist;
+				if ( playlistEl.dataset.artists === 'true' ) {
+					playlistEl.querySelector( '.wp-playlist-item-artist' ).textContent = item.dataset.artist;
+				}
 			}
 
 			// Timeout required for promise
@@ -121,7 +128,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				playlist.querySelector( 'img' ).src = item.dataset.img;
 				playlist.querySelector( '.wp-playlist-item-title' ).textContent = item.dataset.title;
 				playlist.querySelector( '.wp-playlist-item-album' ).textContent = item.dataset.album;
-				playlist.querySelector( '.wp-playlist-item-artist' ).textContent = item.dataset.artist;
+				 if ( playlist.dataset.artists === 'true' ) {
+					playlist.querySelector( '.wp-playlist-item-artist' ).textContent = item.dataset.artist;
+				}
 			}
 			playlist.querySelector( 'source' ).type = item.dataset.type;
 			playlist.querySelector( 'source' ).src = item.dataset.src;
@@ -134,8 +143,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Ensure that current track shows in boldface
 		} else if ( e.target.closest( '.mejs-play' ) || e.target.closest( '.mejs-overlay-play' ) ) {
 			playlist = e.target.closest( '.wp-playlist' );
-			if ( ! playlist.querySelector( '.wp-playlist-playing' ) ) {
-				e.target.closest( '.wp-playlist' ).querySelector( '.wp-playlist-item ' ).classList.add( 'wp-playlist-playing' );
+			if ( ! playlist?.querySelector( '.wp-playlist-playing' ) ) {
+				e.target.closest( '.wp-playlist' )?.querySelector( '.wp-playlist-item ' ).classList.add( 'wp-playlist-playing' );
 			}
 		}
 	} );
