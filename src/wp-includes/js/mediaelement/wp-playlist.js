@@ -151,7 +151,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( e.target.closest( '.mejs-play' ) || e.target.closest( '.mejs-overlay-play' ) ) {
 			playlist = e.target.closest( '.wp-playlist' );
 			if ( ! playlist?.querySelector( '.wp-playlist-playing' ) ) {
-				e.target.closest( '.wp-playlist' )?.querySelector( '.wp-playlist-item ' ).classList.add( 'wp-playlist-playing' );
+				e.target.closest( '.wp-playlist' )?.querySelector( '.wp-playlist-item ' )?.classList.add( 'wp-playlist-playing' );
 			}
 		}
 	} );
