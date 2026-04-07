@@ -146,6 +146,21 @@ foreach ( $sections as $section ) {
 			'instance_number' => $section->instance_number,
 			'type'            => 'section',
 		);
+	} else {
+		if ( str_starts_with( $section->id, 'sidebar-widgets-' ) || str_starts_with( $section->id, 'nav_menu[' ) ) {
+			continue;
+		}
+		if ( in_array( $section->id, array( 'installed_themes', 'wporg_themes', 'menu_locations', 'add_menu' ), true ) ) {
+			continue;
+		}
+		$middle_sections[ $section->id ] = array(
+			'id'              => $section->id,
+			'title'           => $section->title,
+			'description'     => $section->description,
+			'priority'        => $section->priority,
+			'instance_number' => $section->instance_number,
+			'type'            => 'section',
+		);
 	}
 }
 
@@ -180,6 +195,21 @@ foreach ( $sections_by_panel as $panel_id => $panel_sections ) {
 		}
 	);
 }
+
+// Sort middle sections by priority
+uasort(
+	$middle_sections,
+	static function ( $a, $b ) {
+		$ap = isset( $a['priority'] ) ? (int) $a['priority'] : 10;
+		$bp = isset( $b['priority'] ) ? (int) $b['priority'] : 10;
+		if ( $ap !== $bp ) {
+			return $ap <=> $bp;
+		}
+		$ai = isset( $a['instance_number'] ) ? (int) $a['instance_number'] : PHP_INT_MAX;
+		$bi = isset( $b['instance_number'] ) ? (int) $b['instance_number'] : PHP_INT_MAX;
+		return $ai <=> $bi;
+	}
+);
 
 /**
  * Collect widgets in a name-keyed array for sorting.
@@ -917,6 +947,86 @@ wp_print_scripts();
 								</ul>
 
 								<?php
+								foreach ( $middle_sections as $middle_section ) {
+									$parent_title = '';
+									if ( isset( $breadcrumb_parents[ $middle_section['id'] ] ) ) {
+										$parent_title = $breadcrumb_parents[ $middle_section['id'] ];
+									}
+									?>
+
+									<ul id="sub-accordion-section-<?php echo esc_attr( $middle_section['id'] ); ?>"
+										class="customize-pane-child accordion-section-content accordion-section control-section control-section-default"
+										data-parent-id="customize-pane-parent"
+										style="display: none;"
+									>
+										<li class="customize-section-description-container customize-info section-meta no-drag">
+											<div class="customize-section-title">
+												<button class="customize-section-back" tabindex="0">
+													<span class="screen-reader-text">
+														<?php esc_html_e( 'Back' ); ?>
+													</span>
+												</button>
+												<h3>
+													<span class="customize-action">
+														<?php
+														printf(
+															/* translators: &#9656; is the unicode right-pointing triangle. %s: Section title in the Customizer. */
+															__( 'Customizing &#9656; %s' ),
+															esc_html( $parent_title )
+														);
+														?>
+													</span>
+													<?php echo esc_html( $middle_section['title'] ); ?>
+												</h3>
+
+												<?php
+												if ( ! empty( $middle_section['description'] ) ) {
+													?>
+
+													<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false">
+														<span class="screen-reader-text">
+															<?php esc_html_e( 'Help' ); ?>
+														</span>
+													</button>
+
+													<?php
+												}
+												?>
+	
+												<div class="customize-control-notifications-container" style="display: none;">
+													<ul></ul>
+												</div>
+											</div>
+											
+											<?php
+											if ( ! empty( $middle_section['description'] ) ) {
+												?>
+
+												<div class="description customize-section-description">
+													<?php echo wp_kses_post( $middle_section['description'] ); ?>
+												</div>
+
+												<?php
+											}
+											?>
+
+										</li>
+
+										<?php
+										// Render controls that belong to this section-panel hybrid container.
+										if ( isset( $controls[ $middle_section['id'] ] ) ) {
+											foreach ( $controls[ $middle_section['id'] ] as $control_data ) {
+												$control = $wp_customize->get_control( $control_data['id'] );
+												if ( $control ) {
+													$control->maybe_render();
+												}
+											}
+										}
+										?>
+
+									</ul>
+									<?php
+								}
 							} elseif ( $item['type'] === 'section' ) {
 								$customize_info = ( $item['id'] === 'custom_css' ) ? 'customize-info ' : '';
 								?>
