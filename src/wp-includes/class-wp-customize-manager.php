@@ -241,10 +241,19 @@ final class WP_Customize_Manager {
 	 * Map of section IDs to their breadcrumb parent title,
 	 * used by customize.php for mid-level sections.
 	 *
-	 * @since CP-2.7.0
+	 * @since CP-2.8.0
 	 * @var array
 	 */
 	public $cp_breadcrumb_parents = array();
+
+	/**
+	 * Cache of control data by section.
+	 * Lazy cache: only computes when first needed
+	 *
+	 * @since CP-2.8.0
+	 * @var array
+	 */
+	private ?array $controls_data_by_section_cache = null;
 
 	/**
 	 * Constructor.
@@ -936,12 +945,10 @@ final class WP_Customize_Manager {
 		 */
 		do_action( 'customize_register', $this );
 
-		$this->controls_data_by_section = $this->get_all_controls_data();
-
 		/**
 		 * Accommodates hard-coding of header_image description in core.
 		 *
-		 * @since CP-2.7.0
+		 * @since CP-2.8.0
 		 */
 		$section = $this->get_section( 'header_image' );
 		if ( $section && ! empty( $section->description ) ) {
@@ -961,7 +968,7 @@ final class WP_Customize_Manager {
 		/**
 		 * Build breadcrumb parent titles for mid-level sections.
 		 *
-		 * @since CP-2.7.0
+		 * @since CP-2.8.0
 		 */
 		$this->cp_breadcrumb_parents = array();
 		$sections = $this->sections();
@@ -3900,69 +3907,6 @@ final class WP_Customize_Manager {
 	}
 
 	/**
-	 * Get all controls data (PHP equivalent of JS template `data` object).
-	 *
-	 * @since CP-2.7.0
-	 *
-	 * @return array Control data indexed by control ID.
-	 */
-	public function get_all_controls_data() {
-		$data = array();
-
-		foreach ( $this->controls() as $control ) {
-			if ( empty( $control->section ) ) {
-				continue;
-			}
-
-			$section_id = $control->section;
-
-			if ( ! isset( $data[ $section_id ] ) ) {
-				$data[ $section_id ] = array();
-			}
-
-			$setting_id = null;
-			$value      = null;
-
-			// Normalize settings to a single primary ID + value for PHP-only rendering.
-			if ( property_exists( $control, 'settings' ) && is_array( $control->settings ) ) {
-				$first = reset( $control->settings );
-				if ( $first instanceof WP_Customize_Setting ) {
-					$setting_id = $first->id;
-					$value      = $first->value();
-				} elseif ( is_string( $first ) ) {
-					$setting_id = $first;
-					$setting    = $this->get_setting( $setting_id );
-					if ( $setting ) {
-						$value = $setting->value();
-					}
-				}
-			} elseif ( property_exists( $control, 'setting' ) ) { // single setting
-				if ( $control->setting instanceof WP_Customize_Setting ) {
-					$setting_id = $control->setting->id;
-					$value      = $control->setting->value();
-				} elseif ( is_string( $control->setting ) ) {
-					$setting_id = $control->setting;
-					$setting    = $this->get_setting( $setting_id );
-					if ( $setting ) {
-						$value = $setting->value();
-					}
-				}
-			}
-
-			$data[ $section_id ][ $control->id ] = array(
-				'id'          => $control->id,
-				'label'       => isset( $control->label ) ? $control->label : '',
-				'description' => isset( $control->description ) ? $control->description : '',
-				'type'        => $control->type,
-				'priority'    => isset( $control->priority ) ? (int) $control->priority : 10,
-				'setting_id'  => $setting_id,
-				'value'       => $value,
-			);
-		}
-		return $data;
-	}
-
-	/**
 	 * Removes a customize setting.
 	 *
 	 * Note that removing the setting doesn't destroy the WP_Customize_Setting instance or remove its filters.
@@ -4170,9 +4114,12 @@ final class WP_Customize_Manager {
 	 *   value: mixed
 	 * }>>
 	 *
-	 * @since CP 2.8.0
+	 * @since CP-2.8.0
 	 */
 	public function get_controls_data_by_section(): array {
+		if ( $this->controls_data_by_section_cache !== null ) {
+			return $this->controls_data_by_section_cache;
+		}
 		$primary_setting_id = static function ( $control ): ?string {
 			$settings = $control->settings ?? null;
 
@@ -4239,7 +4186,9 @@ final class WP_Customize_Manager {
 			$by_section[ $section ] = $rows;
 		}
 
-		return $by_section;
+		// Cache results
+		$this->controls_data_by_section_cache = $by_section;
+		return $this->controls_data_by_section_cache;
 	}
 
 	/**
@@ -5270,7 +5219,6 @@ final class WP_Customize_Manager {
 			array(
 				'label'   => __( 'Site Title' ),
 				'section' => 'title_tagline',
-				'priority' => 10,
 			)
 		);
 
@@ -5288,7 +5236,6 @@ final class WP_Customize_Manager {
 			array(
 				'label'   => __( 'Tagline' ),
 				'section' => 'title_tagline',
-				'priority' => 20,
 			)
 		);
 
