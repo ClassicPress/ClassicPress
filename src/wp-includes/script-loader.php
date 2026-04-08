@@ -651,8 +651,8 @@ function wp_default_scripts( $scripts ) {
 	$scripts->add( 'cropper', '/wp-includes/js/crop/cropper.js', array( 'scriptaculous-dragdrop' ) );
 
 	// New version of cropper, which replaces imgareaselect for cropping
-	$scripts->add( 'cropperjs', '/wp-includes/js/crop/cropper.min.js', array(), '2.1.0', 1 );
-	$scripts->add( 'cp-cropper', "/wp-includes/js/cp-cropper$suffix.js", array( 'cropperjs' ), '2.1.0', 1 );
+	$scripts->add( 'cropperjs', '/wp-includes/js/crop/cropper.min.js', array(), '2.1.1', 1 );
+	$scripts->add( 'cp-cropper', "/wp-includes/js/cp-cropper$suffix.js", array( 'cropperjs' ), '2.1.1', 1 );
 	did_action( 'init' ) && $scripts->localize(
 		'cp-cropper',
 		'CROPPER',
@@ -1556,7 +1556,7 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'filepond', "/wp-includes/js/filepond/filepond$suffix.css", array(), '4.32.12' );
 	$styles->add( 'cp-filepond', "/wp-includes/js/filepond/cp-filepond$suffix.css", array( 'filepond' ), '4.32.12' );
 	$styles->add( 'cp-filepond-image-preview', "/wp-includes/js/filepond/filepond-plugin-image-preview$suffix.css", array(), '4.6.12' );
-	$styles->add( 'cp-cropper', "/wp-includes/css/cp-cropper$suffix.css", array(), '2.1.0' );
+	$styles->add( 'cp-cropper', "/wp-includes/css/cp-cropper$suffix.css", array(), '2.1.1' );
 
 	// Deprecated CSS.
 	$styles->add( 'deprecated-media', "/wp-admin/css/deprecated-media$suffix.css" );
