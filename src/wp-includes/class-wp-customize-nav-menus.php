@@ -1131,15 +1131,17 @@ final class WP_Customize_Nav_Menus {
 			$nav_menu_item_types = $this->available_item_types();
 
 			$ordered_types = array();
+			$priorities    = array(
+				'post_type:page'    => 0,
+				'post_type:post'    => 10,
+				'taxonomy:category' => 20,
+				'taxonomy:post_tag' => 30,
+			);
+
 			foreach ( $nav_menu_item_types as $type ) {
-				$key = $type['type'] . ':' . $type['object'];
-				$priority = match ( $key ) {
-					'post_type:page'    => 0,
-					'post_type:post'    => 10,
-					'taxonomy:category' => 20,
-					'taxonomy:post_tag' => 30,
-					default             => 50,
-				};
+				$key      = $type['type'] . ':' . $type['object'];
+				$priority = isset( $priorities[ $key ] ) ? $priorities[ $key ] : 50;
+
 				$ordered_types[ $priority . '|' . $key ] = $type;
 			}
 			ksort( $ordered_types ); // Sort by ascending priority
@@ -1158,13 +1160,13 @@ final class WP_Customize_Nav_Menus {
 							<?php echo esc_html( $available_item_type['type_label'] ); ?>
 						</summary>
 						<div class="accordion-section-content" style="max-height: 132px;">
-							
+
 							<?php
 							if ( 'post_type' === $available_item_type['type'] ) {
 								$post_type_obj = get_post_type_object( $available_item_type['object'] );
 								if ( current_user_can( $post_type_obj->cap->create_posts ) && current_user_can( $post_type_obj->cap->publish_posts ) ) {
 									?>
-					
+
 									<div class="new-content-item">
 										<label for="create-item-input-<?php echo esc_attr( $available_item_type['object'] ); ?>" class="screen-reader-text">
 											<?php echo esc_html( $post_type_obj->labels->add_new_item ); ?>
@@ -1280,7 +1282,7 @@ final class WP_Customize_Nav_Menus {
 					</p>
 					<p class="button-controls">
 						<span class="add-to-menu">
-							<input type="submit" 
+							<input type="submit"
 								class="button submit-add-to-menu right"
 								value="<?php esc_attr_e( 'Add to Menu' ); ?>"
 								name="add-custom-menu-item"
