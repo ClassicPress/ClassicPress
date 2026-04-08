@@ -191,21 +191,35 @@ function login_header( $title = 'Log In', $message = '', $wp_error = null ) {
 	}
 
 	if ( $wp_error->has_errors() ) {
-		$errors   = '';
+		$error_list = array();
 		$messages = '';
 
 		foreach ( $wp_error->get_error_codes() as $code ) {
 			$severity = $wp_error->get_error_data( $code );
 			foreach ( $wp_error->get_error_messages( $code ) as $error_message ) {
 				if ( 'message' === $severity ) {
-					$messages .= '	' . $error_message . "<br>\n";
+					$messages .= '<p>' . $error_message . '</p>';
 				} else {
-					$errors .= '	' . $error_message . "<br>\n";
+					$error_list[] = $error_message;
 				}
 			}
 		}
 
-		if ( ! empty( $errors ) ) {
+		if ( ! empty( $error_list ) ) {
+			$errors = '';
+
+			if ( count( $error_list ) > 1 ) {
+				$errors .= '<ul class="login-error-list">';
+
+				foreach ( $error_list as $item ) {
+					$errors .= '<li>' . $item . '</li>';
+				}
+
+				$errors .= '</ul>';
+			} else {
+				$errors .= '<p>' . $error_message . '</p>';
+			}
+
 			/**
 			 * Filters the error messages displayed above the login form.
 			 *
@@ -213,7 +227,15 @@ function login_header( $title = 'Log In', $message = '', $wp_error = null ) {
 			 *
 			 * @param string $errors Login error message.
 			 */
-			echo '<div id="login_error">' . apply_filters( 'login_errors', $errors ) . "</div>\n";
+			$errors = apply_filters( 'login_errors', $errors );
+			wp_admin_notice(
+				$errors,
+				array(
+					'type'           => 'error',
+					'id'             => 'login_error',
+					'paragraph_wrap' => false,
+				)
+			);
 		}
 
 		if ( ! empty( $messages ) ) {
@@ -224,7 +246,16 @@ function login_header( $title = 'Log In', $message = '', $wp_error = null ) {
 			 *
 			 * @param string $messages Login messages.
 			 */
-			echo '<p class="message" id="login-message">' . apply_filters( 'login_messages', $messages ) . "</p>\n";
+			$messages = apply_filters( 'login_messages', $messages );
+			wp_admin_notice(
+				$messages,
+				array(
+					'type'               => 'info',
+					'id'                 => 'login-message',
+					'additional_classes' => array( 'message' ),
+					'paragraph_wrap'     => false,
+				)
+			);
 		}
 	}
 } // End of login_header().
@@ -362,7 +393,6 @@ function login_footer( $input_id = '' ) {
 	do_action( 'login_footer' );
 
 	?>
-	<div class="clear"></div>
 	</body>
 	</html>
 	<?php
@@ -697,9 +727,6 @@ switch ( $action ) {
 			exit;
 		}
 
-		require_once ABSPATH . WPINC . '/class-phpass.php';
-		$hasher = new PasswordHash( 8, true );
-
 		/**
 		 * Filters the life span of the post password cookie.
 		 *
@@ -719,6 +746,8 @@ switch ( $action ) {
 			$secure = false;
 		}
 
+		$hashed = wp_hash_password( wp_unslash( $_POST['post_password'] ) );
+
 		$cookie_options = array(
 			'expires' => $expire,
 			'path' => COOKIEPATH,
@@ -728,7 +757,7 @@ switch ( $action ) {
 			'samesite' => 'Strict',
 		);
 
-		setcookie( 'wp-postpass_' . COOKIEHASH, $hasher->HashPassword( wp_unslash( $_POST['post_password'] ) ), $cookie_options );
+		setcookie( 'wp-postpass_' . COOKIEHASH, $hashed, $cookie_options );
 
 		wp_safe_redirect( wp_get_referer() );
 		exit;
@@ -810,7 +839,17 @@ switch ( $action ) {
 		 */
 		do_action( 'lost_password', $errors );
 
-		login_header( __( 'Lost Password' ), '<p class="message">' . __( 'Please enter your username or email address. You will receive an email message with instructions on how to reset your password.' ) . '</p>', $errors );
+		login_header(
+			__( 'Lost Password' ),
+			wp_get_admin_notice(
+				__( 'Please enter your username or email address. You will receive an email message with instructions on how to reset your password.' ),
+				array(
+					'type'               => 'info',
+					'additional_classes' => array( 'message' ),
+				)
+			),
+			$errors
+		);
 
 		$user_login = '';
 
@@ -865,6 +904,14 @@ switch ( $action ) {
 	case 'rp':
 		list( $rp_path ) = explode( '?', wp_unslash( $_SERVER['REQUEST_URI'] ) );
 		$rp_cookie       = 'wp-resetpass-' . COOKIEHASH;
+
+		$referer = wp_get_referer();
+
+		if ( $referer ) {
+			$secure = ( 'https' === parse_url( $referer, PHP_URL_SCHEME ) );
+		} else {
+			$secure = false;
+		}
 
 		$cookie_options = array(
 			'expires' => 0,
@@ -938,7 +985,16 @@ switch ( $action ) {
 			reset_password( $user, $_POST['pass1'] );
 			$cookie_options['expires'] = time() - YEAR_IN_SECONDS;
 			setcookie( $rp_cookie, ' ', $cookie_options );
-			login_header( __( 'Password Reset' ), '<p class="message reset-pass">' . __( 'Your password has been reset.' ) . ' <a href="' . esc_url( wp_login_url() ) . '">' . __( 'Log in' ) . '</a></p>' );
+			login_header(
+				__( 'Password Reset' ),
+				wp_get_admin_notice(
+					__( 'Your password has been reset.' ) . ' <a href="' . esc_url( wp_login_url() ) . '">' . __( 'Log in' ) . '</a>',
+					array(
+						'type'               => 'info',
+						'additional_classes' => array( 'message', 'reset-pass' ),
+					)
+				)
+			);
 			login_footer();
 			exit;
 		}
@@ -946,7 +1002,17 @@ switch ( $action ) {
 		wp_enqueue_script( 'utils' );
 		wp_enqueue_script( 'user-profile' );
 
-		login_header( __( 'Reset Password' ), '<p class="message reset-pass">' . __( 'Enter your new password below or generate one.' ) . '</p>', $errors );
+		login_header(
+			__( 'Reset Password' ),
+			wp_get_admin_notice(
+				__( 'Enter your new password below or generate one.' ),
+				array(
+					'type'               => 'info',
+					'additional_classes' => array( 'message', 'reset-pass' ),
+				)
+			),
+			$errors
+		);
 
 		?>
 		<form name="resetpassform" id="resetpassform" action="<?php echo esc_url( network_site_url( 'wp-login.php?action=resetpass', 'login_post' ) ); ?>" method="post" autocomplete="off">
@@ -977,7 +1043,6 @@ switch ( $action ) {
 			</p>
 
 			<p class="description indicator-hint"><?php echo wp_get_password_hint(); ?></p>
-			<br class="clear">
 
 			<?php
 
@@ -1071,7 +1136,17 @@ switch ( $action ) {
 		 */
 		$redirect_to = apply_filters( 'registration_redirect', $registration_redirect, $errors );
 
-		login_header( __( 'Registration Form' ), '<p class="message register">' . __( 'Register For This Site' ) . '</p>', $errors );
+		login_header(
+			__( 'Registration Form' ),
+			wp_get_admin_notice(
+				__( 'Register For This Site' ),
+				array(
+					'type'               => 'info',
+					'additional_classes' => array( 'message', 'register' ),
+				)
+			),
+			$errors
+		);
 
 		?>
 		<form name="registerform" id="registerform" action="<?php echo esc_url( site_url( 'wp-login.php?action=register', 'login_post' ) ); ?>" method="post">
@@ -1096,8 +1171,7 @@ switch ( $action ) {
 			<p id="reg_passmail">
 				<?php _e( 'Registration confirmation will be emailed to you.' ); ?>
 			</p>
-			<br class="clear">
-			<input type="hidden" name="redirect_to" value="<?php echo esc_attr( $redirect_to ); ?>">
+			<input type="hidden" name="redirect_to" value="<?php echo esc_attr( $redirect_to ); ?>" />
 			<p class="submit">
 				<input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Register' ); ?>">
 			</p>

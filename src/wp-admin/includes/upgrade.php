@@ -975,6 +975,7 @@ function upgrade_101() {
  *
  * @ignore
  * @since 1.2.0
+ * @since CP-2.3.0 User passwords are no longer hashed with md5.
  *
  * @global wpdb $wpdb WordPress database abstraction object.
  */
@@ -990,19 +991,12 @@ function upgrade_110() {
 		}
 	}
 
-	$users = $wpdb->get_results( "SELECT ID, user_pass from $wpdb->users" );
-	foreach ( $users as $row ) {
-		if ( ! preg_match( '/^[A-Fa-f0-9]{32}$/', $row->user_pass ) ) {
-			$wpdb->update( $wpdb->users, array( 'user_pass' => md5( $row->user_pass ) ), array( 'ID' => $row->ID ) );
-		}
-	}
-
 	// Get the GMT offset, we'll use that later on.
 	$all_options = get_alloptions_110();
 
 	$time_difference = $all_options->time_difference;
 
-		$server_time = time() + gmdate( 'Z' );
+	$server_time    = time() + (int) gmdate( 'Z' );
 	$weblogger_time  = $server_time + $time_difference * HOUR_IN_SECONDS;
 	$gmt_time        = time();
 
@@ -3516,7 +3510,7 @@ function maybe_disable_automattic_widgets() {
 function maybe_disable_link_manager() {
 	global $wp_current_db_version, $wpdb;
 
-	if ( $wp_current_db_version >= 22006 && get_option( 'link_manager_enabled' ) && ! $wpdb->get_var( "SELECT link_id FROM $wpdb->links LIMIT 1" ) ) {
+	if ( $wp_current_db_version >= 22006 && get_option( 'link_manager_enabled' ) !== '1' && ! $wpdb->get_var( "SELECT link_id FROM $wpdb->links LIMIT 1" ) ) {
 		update_option( 'link_manager_enabled', 0 );
 	}
 }

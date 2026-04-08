@@ -11,11 +11,11 @@
 //                                                            ///
 /////////////////////////////////////////////////////////////////
 
-if(!defined('GETID3_LIBXML_OPTIONS') && defined('LIBXML_VERSION')) {
-	if(LIBXML_VERSION >= 20621) {
-		define('GETID3_LIBXML_OPTIONS', LIBXML_NOENT | LIBXML_NONET | LIBXML_NOWARNING | LIBXML_COMPACT);
+if (!defined('GETID3_LIBXML_OPTIONS') && defined('LIBXML_VERSION')) {
+	if (LIBXML_VERSION >= 20621) {
+		define('GETID3_LIBXML_OPTIONS', LIBXML_NONET | LIBXML_NOWARNING | LIBXML_COMPACT);
 	} else {
-		define('GETID3_LIBXML_OPTIONS', LIBXML_NOENT | LIBXML_NONET | LIBXML_NOWARNING);
+		define('GETID3_LIBXML_OPTIONS', LIBXML_NONET | LIBXML_NOWARNING);
 	}
 }
 
@@ -1788,7 +1788,7 @@ class getid3_lib
 			$commandline = 'ls -l '.escapeshellarg($path).' | awk \'{print $5}\'';
 		}
 		if (isset($commandline)) {
-			$output = trim(`$commandline`);
+			$output = trim(shell_exec($commandline));
 			if (ctype_digit($output)) {
 				$filesize = (float) $output;
 			}

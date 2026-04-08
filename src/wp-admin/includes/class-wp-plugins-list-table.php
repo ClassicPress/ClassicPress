@@ -25,6 +25,15 @@ class WP_Plugins_List_Table extends WP_List_Table {
 	protected $show_autoupdates = true;
 
 	/**
+	 * Whether ClassicPress has updates available.
+	 *
+	 * @since CP-2.5.0
+	 *
+	 * @var bool True if ClassicPress has updates available, false otherwise.
+	 */
+	protected $cp_has_update = null;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 3.1.0
@@ -63,6 +72,8 @@ class WP_Plugins_List_Table extends WP_List_Table {
 			&& current_user_can( 'update_plugins' )
 			&& ( ! is_multisite() || $this->screen->in_admin( 'network' ) )
 			&& ! in_array( $status, array( 'mustuse', 'dropins' ), true );
+
+		$this->cp_has_update = classicpress_has_update();
 	}
 
 	/**
@@ -705,10 +716,6 @@ class WP_Plugins_List_Table extends WP_List_Table {
 	 * @param array $item
 	 */
 	public function single_row( $item ) {
-
-		$updates_from_api = get_site_transient( 'update_core' );
-		$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates ) && ! empty( $updates_from_api->updates );
-
 		global $status, $page, $s, $totals;
 		static $plugin_id_attrs = array();
 
@@ -1026,7 +1033,6 @@ class WP_Plugins_List_Table extends WP_List_Table {
 		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
 
 		$auto_updates      = (array) get_site_option( 'auto_update_plugins', array() );
-		$available_updates = get_site_transient( 'update_plugins' );
 
 		foreach ( $columns as $column_name => $column_display_name ) {
 			$extra_classes = '';
@@ -1237,7 +1243,14 @@ class WP_Plugins_List_Table extends WP_List_Table {
 					 */
 					echo apply_filters( 'plugin_auto_update_setting_html', $html, $plugin_file, $plugin_data );
 
-					echo '<div class="notice notice-error notice-alt inline hidden"><p></p></div>';
+					wp_admin_notice(
+						'',
+						array(
+							'type'               => 'error',
+							'additional_classes' => array( 'notice-alt', 'inline', 'hidden' ),
+						)
+					);
+
 					echo '</td>';
 
 					break;
@@ -1268,65 +1281,73 @@ class WP_Plugins_List_Table extends WP_List_Table {
 		if ( ! $compatible_php || ! $compatible_wp ) {
 			printf(
 				'<tr class="plugin-update-tr">' .
-				'<td colspan="%s" class="plugin-update colspanchange">' .
-				'<div class="update-message notice inline notice-error notice-alt"><p>',
+				'<td colspan="%s" class="plugin-update colspanchange">',
 				esc_attr( $this->get_column_count() )
 			);
 
+			$incompatible_message = '';
 			if ( ! $compatible_php && ! $compatible_wp ) {
-				_e( 'This plugin does not work with your versions of ClassicPress and PHP.' );
+				$incompatible_message .= __( 'This plugin does not work with your versions of ClassicPress and PHP.' );
 				if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
-					if ( $cp_needs_update ) {
-						printf(
+					if ( $this->cp_has_update ) {
+						$incompatible_message .= sprintf(
 							/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
 							' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
 							self_admin_url( 'update-core.php' ),
 							esc_url( wp_get_update_php_url() )
 						);
 					} else {
-						printf(
+						$incompatible_message .= sprintf(
 							/* translators: %s: URL to Update PHP page. */
 							' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 							esc_url( wp_get_update_php_url() )
 						);
 					}
-					wp_update_php_annotation( '</p><p><em>', '</em>' );
+					$incompatible_message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
 				} elseif ( current_user_can( 'update_core' ) ) {
-					printf(
+					$incompatible_message .= sprintf(
 						/* translators: %s: URL to WordPress Updates screen. */
 						' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 						self_admin_url( 'update-core.php' )
 					);
 				} elseif ( current_user_can( 'update_php' ) ) {
-					printf(
+					$incompatible_message .= sprintf(
 						/* translators: %s: URL to Update PHP page. */
 						' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 						esc_url( wp_get_update_php_url() )
 					);
-					wp_update_php_annotation( '</p><p><em>', '</em>' );
+					$incompatible_message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
 				}
 			} elseif ( ! $compatible_wp ) {
-				_e( 'This plugin does not work with your version of ClassicPress.' );
-				if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
-					printf(
+				$incompatible_message .= __( 'This plugin does not work with your version of ClassicPress.' );
+				if ( current_user_can( 'update_core' ) && $this->cp_has_update ) {
+					$incompatible_message .= sprintf(
 						/* translators: %s: URL to WordPress Updates screen. */
 						' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
 						self_admin_url( 'update-core.php' )
 					);
 				}
 			} elseif ( ! $compatible_php ) {
-				_e( 'This plugin does not work with your version of PHP.' );
+				$incompatible_message .= __( 'This plugin does not work with your version of PHP.' );
 				if ( current_user_can( 'update_php' ) ) {
-					printf(
+					$incompatible_message .= sprintf(
 						/* translators: %s: URL to Update PHP page. */
 						' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
 						esc_url( wp_get_update_php_url() )
 					);
-					wp_update_php_annotation( '</p><p><em>', '</em>' );
+					$incompatible_message .= wp_update_php_annotation( '</p><p><em>', '</em>', false );
 				}
 			}
 
-			echo '</p></div></td></tr>';
+			wp_admin_notice(
+				$incompatible_message,
+				array(
+					'type'               => 'error',
+					'additional_classes' => array( 'notice-alt', 'inline', 'update-message' ),
+				)
+			);
+
+			echo '</td></tr>';
 		}
 
 		/**

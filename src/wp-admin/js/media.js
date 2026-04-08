@@ -12,7 +12,7 @@
 
 document.addEventListener( 'DOMContentLoaded', function() {
 
-	/*
+	/**
 	 * Autosuggest tags when bulk or quick editing
 	 *
 	 * Based on https://phuoc.ng/collection/mirror-a-text-area/add-autocomplete-to-your-text-area/
@@ -293,10 +293,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 *                   Enter on a focused field.
 	 */
 	function saveAttachments( quickEdit, id ) {
-		var params, inputs,
-			quickMonth     = quickEdit.querySelector( '#quick-month' ),
-			quickAuthor    = quickEdit.querySelector( '#quick-author' ),
-			quickMediaTags = quickEdit.querySelector( '#quick-media-tags' );
+		var params, inputs;
 
 		if ( typeof( id ) === 'object' ) {
 			id = this.getId( id );
@@ -309,7 +306,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			edit_date: 'true'
 		} );
 
-		inputs = quickEdit.querySelectorAll( 'input' );
+		inputs = quickEdit.querySelectorAll( 'input:not([readonly=""]), select, textarea' );
 		inputs.forEach( function( input ) {
 			if ( input.name === 'media_category[]' ) {
 				if ( input.checked ) {
@@ -319,10 +316,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				params.append( input.name, input.value );
 			}
 		} );
-
-		params.append( quickMonth.name, quickMonth.value );
-		params.append( quickAuthor.name, quickAuthor.value );
-		params.append( quickMediaTags.name, quickMediaTags.value );
 
 		fetch( ajaxurl, {
 			method: 'POST',
@@ -336,7 +329,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( success ) {
-			quickEdit.nextElementSibling.innerHTML = success.data;
+			document.getElementById( 'post-' + id ).innerHTML = success.data;
+			hideColumns( 'post-' + id );
 			wp.a11y.speak( wp.i18n.__( 'Changes saved.' ) );
 		} )
 		.catch( function() {
@@ -350,6 +344,61 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Ensures that columns in a Quick Edit response are hidden
+	 * if the relevant column is checked in Screen Options.
+	 *
+	 * @since CP-2.4.0
+	 */
+	function hideColumns( postID ) {
+		document.querySelectorAll( '.hide-column-tog' ).forEach( function( hide ) {
+			if ( hide.checked === false ) {
+				document.getElementById( postID ).querySelector( '.' + hide.value ).classList.add( 'hidden' );
+			}
+		} );
+	}
+
+	/**
+	 * @since CP-2.5.0
+	 */
+	function quickEditUpdate( quickEdit, tr ) {
+		var inputs = document.querySelector( '.inline-edit-wrapper' ).querySelectorAll( 'input[pattern]' ),
+			allValid = true;
+
+		for ( var i = 0, n = inputs.length; i < n; i++ ) {
+			if ( ! inputs[i].checkValidity() ) {
+				// Show the first invalid field message
+				inputs[i].reportValidity();
+
+				// Mark as invalid
+				allValid = false;
+
+				// Stop after first invalid field
+				break;
+			}
+		}
+
+		if ( allValid ) {
+			var id = tr.id.replace( 'post-', '' );
+			saveAttachments( quickEdit, id );
+			document.getElementById( 'bulk-action-selector-top' ).value = '-1';
+			document.getElementById( 'bulk-action-selector-bottom' ).value = '-1';
+
+			// Allow time for element to be updated.
+			setTimeout( function() {
+				tr.style.display = '';
+				quickEdit.style.display = 'none';
+				document.body.append( quickEdit );
+			}, 100 );
+
+			// Remove click event listener to prevent multiple AJAX submissions
+			if ( quickEditEventHandler !== null ) {
+				quickEditUpdateButton.removeEventListener( 'click', quickEditEventHandler );
+				quickEditEventHandler = null;
+			}
+		}
+	}
+
+	/**
 	 * Initializes the file once the DOM is fully loaded and attaches events to the
 	 * various form elements.
 	 *
@@ -359,7 +408,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	var settings, copyAttachmentURLs, copyAttachmentURLSuccessTimeout,
 		mediaGridWrap = document.getElementById( 'wp-media-grid' ),
-		uploadCatSelect = document.getElementById( 'upload-category' );
+		uploadCatSelect = document.getElementById( 'upload-category' ),
+		quickEditUpdateButton = document.getElementById( 'quick-edit-update' ),
+		quickEditEventHandler = null;
 
 	// Grid View: Opens a manage media frame into the grid.
 	if ( mediaGridWrap != null && window.wp && window.wp.media ) {
@@ -379,7 +430,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// List View
 		// Prevents the attach form submission if no post has been selected.
-		document.getElementById( 'find-posts-submit' ).addEventListener( 'click', function( event ) {
+		document.getElementById( 'find-posts-submit' )?.addEventListener( 'click', function( event ) {
 			var flag = false,
 				radios = document.querySelectorAll( '#find-posts-response input[type="radio"]' );
 
@@ -396,7 +447,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}, false );
 
 		// Submits the attach form search query when hitting the enter key in the search input.
-		document.getElementById( 'find-posts-input' ).addEventListener( 'keydown', function( event ) {
+		document.getElementById( 'find-posts-input' )?.addEventListener( 'keydown', function( event ) {
 			if ( 'Enter' == event.key ) {
 				event.preventDefault();
 				findPosts.send();
@@ -404,36 +455,35 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}, false );
 
 		// Binds the click event to the attach form search button.
-		document.getElementById( 'find-posts-search' ).addEventListener( 'click', findPosts.send );
+		document.getElementById( 'find-posts-search' )?.addEventListener( 'click', findPosts.send );
 
 		// Binds the attach form close dialog click event.
-		document.getElementById( 'find-posts-close' ).addEventListener( 'click', findPosts.close );
+		document.getElementById( 'find-posts-close' )?.addEventListener( 'click', findPosts.close );
 
 		// Binds the bulk action events to the submit buttons.
-		document.getElementById( 'doaction' ).addEventListener( 'click', function( event ) {
-			var quickEdit = document.getElementById( 'quick-edit' ),
-				bulkEdit = document.getElementById( 'bulk-edit' );
-
-			// Set default state in case a Bulk or Quick Edit has already been opened.
-			bulkEdit.style.display = 'none';
-			document.body.append( bulkEdit );
-			quickEdit.style.display = 'none';
-			document.body.append( quickEdit );
-
-			/*
-			 * Handle the bulk action based on its value.
-			 */
-			document.querySelectorAll( 'select[name="action"]', 'select[name="action2"]' ).forEach( function( select ) {
-				var tr, checkboxes, delButtons, dateSplit, author, authorsList,
-					cats, catsArray, categoriesList, mediaTags, hiddenTr, cancel,
+		var action = document.getElementById( 'doaction' );
+		if ( action ) {
+			action.addEventListener( 'click', function( event ) {
+				var tr, checkboxes, delButtons, dateSplit, author, authorsList, cats,
+					catsArray, categoriesList, mediaTags, hiddenTr, cancel, inputs,
 					te = '',
-					optionValue = select.value,
+					quickEdit = document.getElementById( 'quick-edit' ),
+					bulkEdit = document.getElementById( 'bulk-edit' ),
+					optionValue = document.querySelector( 'select[name="action"]' ).value,
 					number = 0,
 					count = 0,
-					columns = [ ...document.querySelector( '.widefat thead tr' ).children ],
-					selectAll1 = document.getElementById( 'cb-select-all-1' ),
-					selectAll2 = document.getElementById( 'cb-select-all-2' );
+					columns = [ ...document.querySelector( '.widefat thead tr' ).children ];
 
+				// Set default state in case a Bulk or Quick Edit has already been opened.
+				bulkEdit.style.display = 'none';
+				document.body.append( bulkEdit );
+				quickEdit.style.display = 'none';
+				document.body.append( quickEdit );
+				quickEdit.querySelector( '.inline-edit-save .notice-error' ).classList.add( 'hidden' );
+
+				/**
+				 * Handle the bulk action based on its value.
+				 */
 				// If Bulk Actions is selected, reload the page without any query args.
 				if ( '-1' === optionValue ) {
 					event.preventDefault();
@@ -459,7 +509,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					 * Create a HTML div with the title and a
 					 * link(delete-icon) for each selected media item.
 					 *
-					 * Get the selected posts based on the checked checkboxes in the post table.
+					 * Get the selected posts based on the checked
+					 * checkboxes in the post table.
 					 */
 					checkboxes.forEach( function( checkbox ) {
 
@@ -499,9 +550,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						quickEdit.style.display = 'none';
 						document.body.append( quickEdit );
 
-					} else if ( number === 1 && ! selectAll1.checked && ! selectAll2.checked ) {
+					} else if ( number === 1 ) {
 
-						// Quick Edit: replace the row with the Quick Edit row.
+						// Quick Edit: reset all fields except nonce and media_category[]
+						inputs = quickEdit.querySelectorAll( 'input:not(#_inline_edit_attachment):not([name="media_category[]"]), select, textarea' );
+						inputs.forEach( function( input ) {
+							input.value = '';
+						} );
+
+						// Replace the row with the Quick Edit row.
 						document.getElementById( 'the-list' ).prepend( hiddenTr );
 						quickEdit.dataset.id = tr.id;
 						tr.before( quickEdit );
@@ -534,15 +591,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						categoriesList.forEach( function( item ) {
 							if ( catsArray.includes( item.querySelector( 'label' ).textContent ) ) {
 								item.querySelector( 'input' ).checked = true;
+							} else {
+								item.querySelector( 'input' ).checked = false;
 							}
 						} );
 
 						// Enable autocomplete for tags.
-						mediaTags = tr.querySelector( '.column-taxonomy-media_post_tag a' ) ? tr.querySelector( '.column-taxonomy-media_post_tag a' ).textContent : '';
+						mediaTags = tr.querySelector( '.column-taxonomy-media_post_tag a' ) ? tr.querySelector( '.column-taxonomy-media_post_tag' ).textContent : '';
 						autoCompleteTextarea( quickEdit.querySelector( 'textarea' ) );
 
 						// Split date into year, month, and day.
-						dateSplit = tr.querySelector( '.column-date' ).textContent.split( '/' );
+						dateSplit = tr.querySelector( '.column-date time' ).getAttribute( 'datetime' ).split( '/' );
 						quickEdit.querySelector( '[name="mm"]' ).value = dateSplit[1];
 						quickEdit.querySelector( '[name="jj"]' ).value = dateSplit[2];
 						quickEdit.querySelector( '[name="aa"]' ).value = dateSplit[0];
@@ -550,25 +609,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						// Fill the other relevant boxes.
 						quickEdit.querySelector( '[name="post_title"]' ).value = tr.querySelector( '.column-title strong a' ).textContent.trim();
 						quickEdit.querySelector( '[name="post_name"]' ).value = tr.querySelector( '.column-title .row-actions .copy-attachment-url' ).dataset.clipboardText;
-						quickEdit.querySelector( '#quick-media-tags' ).textContent = mediaTags;
+						quickEdit.querySelector( '#quick-media-tags' ).value = mediaTags;
 						quickEdit.querySelector( '[name="alt"]' ).value = tr.querySelector( '.column-alt' ).textContent;
 						quickEdit.querySelector( '[name="post_excerpt"]' ).value = tr.querySelector( '.column-caption' ).textContent;
 						quickEdit.querySelector( '[name="post_content"]' ).value = tr.querySelector( '.column-desc' ).textContent;
 
 						// Update.
-						document.getElementById( 'quick-edit-update' ).addEventListener( 'click', function() {
-							var id = tr.id.replace( 'post-', '' );
-							saveAttachments( quickEdit, id );
-							document.getElementById( 'bulk-action-selector-top' ).value = '-1';
-							document.getElementById( 'bulk-action-selector-bottom' ).value = '-1';
-
-							// Allow time for element to be updated.
-							setTimeout( function() {
-								tr.style.display = '';
-								quickEdit.style.display = 'none';
-								document.body.append( quickEdit );
-							}, 100 );
-						} );
+						if ( quickEditEventHandler === null ) {
+							quickEditEventHandler = function() {
+								quickEditUpdate( quickEdit, tr );
+							};
+							quickEditUpdateButton.addEventListener( 'click', quickEditEventHandler );
+						}
 					} else {
 						document.querySelectorAll( 'tr' ).forEach( function( item ) {
 							if ( item.style.display === 'none' ) {
@@ -653,6 +705,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						document.body.append( bulkEdit );
 						quickEdit.style.display = 'none';
 						document.body.append( quickEdit );
+
+						// Remove click event listener to prevent multiple AJAX submissions
+						if ( quickEditEventHandler !== null ) {
+							quickEditUpdateButton.removeEventListener( 'click', quickEditEventHandler );
+							quickEditEventHandler = null;
+						}
 					} );
 
 					quickEdit.addEventListener( 'keydown', function( e ) {
@@ -668,7 +726,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					} );
 				}
 			} );
-		} );
+		}
 
 		/**
 		 * Enables clicking on the entire table row.
@@ -792,10 +850,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Make notices dismissible.
 		document.addEventListener( 'click', function( e ) {
 			if ( e.target.className === 'notice-dismiss' ) {
-				document.querySelector( '.is-dismissible' ).remove();
+				e.target.closest( '.is-dismissible' ).remove();
 			}
 		} );
 	}
 
 } );
-

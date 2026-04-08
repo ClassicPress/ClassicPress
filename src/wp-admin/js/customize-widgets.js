@@ -362,7 +362,7 @@
 			document.body.classList.add( 'adding-widget' );
 
 			if ( this.el.querySelector( '.selected' ) ) {
-				this.el.querySelector( '.selected' ).removeClass( 'selected' );
+				this.el.querySelector( '.selected' ).classList.remove( 'selected' );
 			}
 
 			// Reset search.
@@ -858,7 +858,7 @@
 			/**
 			 * Move widget to another sidebar
 			 */
-			this.container.find( '.move-widget-btn' ).click( function() {
+			this.container.find( '.move-widget-btn' ).on( 'click', function() {
 				self.getSidebarWidgetsControl().toggleReordering( false );
 
 				var oldSidebarId = self.params.sidebar_id,
@@ -1898,8 +1898,6 @@
 					document.body.appendChild( ghostImage );
 					dataTransfer.setDragImage( ghostImage, 30, 20 );
 				},
-				forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for webkit browsers
-				//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari
 				onStart: function( e ) {
 					if ( e.item.querySelector( 'details' ).hasAttribute( 'open' ) ) {
 						e.item.querySelector( 'details' ).removeAttribute( 'open' );

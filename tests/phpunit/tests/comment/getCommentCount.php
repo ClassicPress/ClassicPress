@@ -6,9 +6,18 @@
  * @covers ::get_comment_count
  */
 class Tests_Comment_GetCommentCount extends WP_UnitTestCase {
+	protected static $comment_post = null;
+
+	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
+		self::$comment_post = $factory->post->create_and_get();
+	}
 
 	public function test_get_comment_count() {
-		$count = get_comment_count();
+		$count = get_comment_count(
+			array(
+				'comment_post_ID'  => self::$comment_post->ID,
+			)
+		);
 
 		$this->assertSame( 0, $count['approved'] );
 		$this->assertSame( 0, $count['awaiting_moderation'] );
@@ -23,6 +32,7 @@ class Tests_Comment_GetCommentCount extends WP_UnitTestCase {
 		self::factory()->comment->create(
 			array(
 				'comment_approved' => 1,
+				'comment_post_ID'  => self::$comment_post->ID,
 			)
 		);
 
@@ -40,6 +50,7 @@ class Tests_Comment_GetCommentCount extends WP_UnitTestCase {
 		self::factory()->comment->create(
 			array(
 				'comment_approved' => 0,
+				'comment_post_ID'  => self::$comment_post->ID,
 			)
 		);
 
@@ -57,6 +68,7 @@ class Tests_Comment_GetCommentCount extends WP_UnitTestCase {
 		self::factory()->comment->create(
 			array(
 				'comment_approved' => 'spam',
+				'comment_post_ID'  => self::$comment_post->ID,
 			)
 		);
 
@@ -74,6 +86,7 @@ class Tests_Comment_GetCommentCount extends WP_UnitTestCase {
 		self::factory()->comment->create(
 			array(
 				'comment_approved' => 'trash',
+				'comment_post_ID'  => self::$comment_post->ID,
 			)
 		);
 
@@ -91,6 +104,7 @@ class Tests_Comment_GetCommentCount extends WP_UnitTestCase {
 		self::factory()->comment->create(
 			array(
 				'comment_approved' => 'post-trashed',
+				'comment_post_ID'  => self::$comment_post->ID,
 			)
 		);
 
@@ -111,7 +125,11 @@ class Tests_Comment_GetCommentCount extends WP_UnitTestCase {
 	 */
 	public function test_get_comment_count_validate_cache_comment_deleted() {
 
-		$comment_id = self::factory()->comment->create();
+		$comment_id = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => self::$comment_post->ID,
+			)
+		);
 
 		$count = get_comment_count();
 
@@ -156,7 +174,11 @@ class Tests_Comment_GetCommentCount extends WP_UnitTestCase {
 	 * @covers ::get_comment_count
 	 */
 	public function test_get_comment_count_validate_cache_comment_status() {
-		$comment_id = self::factory()->comment->create();
+		$comment_id = self::factory()->comment->create(
+			array(
+				'comment_post_ID' => self::$comment_post->ID,
+			)
+		);
 
 		$count = get_comment_count();
 

@@ -66,7 +66,6 @@ class Tests_Widgets_wpWidgetText extends WP_UnitTestCase {
 		$widget->_register();
 
 		$this->assertSame( 10, has_action( 'admin_print_scripts-widgets.php', array( $widget, 'enqueue_admin_scripts' ) ) );
-		$this->assertSame( 10, has_action( 'admin_footer-widgets.php', array( 'WP_Widget_Text', 'render_control_template_scripts' ) ) );
 		$this->assertFalse( has_action( 'wp_enqueue_scripts', array( $widget, 'enqueue_preview_scripts' ) ) );
 	}
 
@@ -986,19 +985,6 @@ class Tests_Widgets_wpWidgetText extends WP_UnitTestCase {
 		$widget->enqueue_admin_scripts();
 
 		$this->assertTrue( wp_script_is( 'text-widgets' ) );
-	}
-
-	/**
-	 * Test render_control_template_scripts method.
-	 *
-	 * @covers WP_Widget_Text::render_control_template_scripts
-	 */
-	public function test_render_control_template_scripts() {
-		ob_start();
-		WP_Widget_Text::render_control_template_scripts();
-		$output = ob_get_clean();
-
-		$this->assertStringContainsString( '<script type="text/html" id="tmpl-widget-text-control-fields">', $output );
 	}
 
 	/**

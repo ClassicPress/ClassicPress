@@ -138,19 +138,20 @@ final class WP_Privacy_Policy_Content {
 			return;
 		}
 
-		?>
-		<div class="policy-text-updated notice notice-warning is-dismissible">
-			<p>
-			<?php
-				printf(
-					/* translators: %s: Privacy Policy Guide URL. */
-					__( 'The suggested privacy policy text has changed. Please <a href="%s">review the guide</a> and update your privacy policy.' ),
-					esc_url( admin_url( 'privacy-policy-guide.php?tab=policyguide' ) )
-				);
-			?>
-			</p>
-		</div>
-		<?php
+		$privacy_message = sprintf(
+			/* translators: %s: Privacy Policy Guide URL. */
+			__( 'The suggested privacy policy text has changed. Please <a href="%s">review the guide</a> and update your privacy policy.' ),
+			esc_url( admin_url( 'privacy-policy-guide.php?tab=policyguide' ) )
+		);
+
+		wp_admin_notice(
+			$privacy_message,
+			array(
+				'type'               => 'warning',
+				'additional_classes' => array( 'policy-text-updated' ),
+				'dismissible'        => true,
+			)
+		);
 	}
 
 	/**
@@ -336,22 +337,20 @@ final class WP_Privacy_Policy_Content {
 		$url     = esc_url( admin_url( 'options-privacy.php?tab=policyguide' ) );
 		$label   = __( 'View Privacy Policy Guide.' );
 
-		?>
-		<div class="notice notice-warning inline wp-pp-notice">
-			<p>
-			<?php
-			echo $message;
-			printf(
-				' <a href="%s" target="_blank">%s <span class="screen-reader-text">%s</span></a>',
-				$url,
-				$label,
-				/* translators: Hidden accessibility text. */
-				__( '(opens in a new tab)' )
-			);
-			?>
-			</p>
-		</div>
-		<?php
+		$message .= sprintf(
+			' <a href="%s" target="_blank">%s <span class="screen-reader-text">%s</span></a>',
+			$url,
+			$label,
+			/* translators: Hidden accessibility text. */
+			__( '(opens in a new tab)' )
+		);
+		wp_admin_notice(
+			$message,
+			array(
+				'type'               => 'warning',
+				'additional_classes' => array( 'inline', 'wp-pp-notice' ),
+			)
+		);
 	}
 
 	/**
@@ -377,8 +376,14 @@ final class WP_Privacy_Policy_Content {
 				$badge_title = sprintf( __( 'Removed %s.' ), $date );
 
 				/* translators: %s: Date of plugin deactivation. */
-				$removed = __( 'You deactivated this plugin on %s and may no longer need this policy.' );
-				$removed = '<div class="notice notice-info inline"><p>' . sprintf( $removed, $date ) . '</p></div>';
+				$removed = sprintf( __( 'You deactivated this plugin on %s and may no longer need this policy.' ), $date );
+				$removed = wp_get_admin_notice(
+					$removed,
+					array(
+						'type'               => 'info',
+						'additional_classes' => array( 'inline' ),
+					)
+				);
 			} elseif ( ! empty( $section['updated'] ) ) {
 				$badge_class = ' blue';
 				$date        = date_i18n( $date_format, $section['updated'] );
@@ -390,16 +395,16 @@ final class WP_Privacy_Policy_Content {
 
 			$sanitized_policy_name = sanitize_title_with_dashes( $plugin_name );
 			?>
-			<h4 class="privacy-settings-accordion-heading">
-			<button aria-expanded="false" class="privacy-settings-accordion-trigger" aria-controls="privacy-settings-accordion-block-<?php echo $sanitized_policy_name; ?>" type="button">
-				<span class="title"><?php echo $plugin_name; ?></span>
-				<?php if ( ! empty( $section['removed'] ) || ! empty( $section['updated'] ) ) : ?>
-				<span class="badge <?php echo $badge_class; ?>"> <?php echo $badge_title; ?></span>
-				<?php endif; ?>
-				<span class="icon"></span>
-			</button>
-			</h4>
-			<div id="privacy-settings-accordion-block-<?php echo $sanitized_policy_name; ?>" class="privacy-settings-accordion-panel privacy-text-box-body" hidden="hidden">
+			<summary class="privacy-settings-accordion-summary">
+				<h4 class="privacy-settings-accordion-heading">
+					<span class="title"><?php echo $plugin_name; ?></span>
+					<?php if ( ! empty( $section['removed'] ) || ! empty( $section['updated'] ) ) : ?>
+					<span class="badge <?php echo $badge_class; ?>"> <?php echo $badge_title; ?></span>
+					<?php endif; ?>
+					<span class="icon"></span>
+				</h4>
+			</summary>
+			<div id="privacy-settings-accordion-block-<?php echo $sanitized_policy_name; ?>" class="privacy-settings-accordion-panel privacy-text-box-body">
 				<?php
 				echo $removed;
 				echo $section['policy_text'];

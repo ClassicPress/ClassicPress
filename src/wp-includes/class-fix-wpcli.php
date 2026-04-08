@@ -19,8 +19,9 @@ class Fix_WPCLI {
 	 * @since CP-1.5.0
 	 */
 	public function __construct() {
-		WP_CLI::add_hook( 'after_wp_load', array( __CLASS__, 'add_cp_version_to_scope' ) );
+		WP_CLI::add_hook( 'after_wp_config_load', array( __CLASS__, 'add_cp_version_to_scope' ) );
 		WP_CLI::add_hook( 'before_invoke:core check-update', array( __CLASS__, 'correct_core_check_update' ) );
+		add_filter( 'enable_loading_object_cache_dropin', '__return_false' );
 	}
 
 	/**

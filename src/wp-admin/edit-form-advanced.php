@@ -479,12 +479,29 @@ if ( isset( $post_new_file ) && current_user_can( $post_type_object->cap->create
 
 <hr class="wp-header-end">
 
-<?php if ( $notice ) : ?>
-<div id="notice" class="notice notice-warning"><p id="has-newer-autosave"><?php echo $notice; ?></p></div>
-<?php endif; ?>
-<?php if ( $message ) : ?>
-<div id="message" class="updated notice notice-success is-dismissible"><p><?php echo $message; ?></p></div>
-<?php endif; ?>
+<?php
+if ( $notice ) :
+	wp_admin_notice(
+		'<p id="has-newer-autosave">' . $notice . '</p>',
+		array(
+			'type'           => 'warning',
+			'id'             => 'notice',
+			'paragraph_wrap' => false,
+		)
+	);
+endif;
+if ( $message ) :
+	wp_admin_notice(
+		$message,
+		array(
+			'type'               => 'success',
+			'dismissible'        => true,
+			'id'                 => 'message',
+			'additional_classes' => array( 'updated' ),
+		)
+	);
+endif;
+?>
 <div id="lost-connection-notice" class="error hidden">
 	<p><span class="spinner"></span> <?php _e( '<strong>Connection lost.</strong> Saving has been disabled until you are reconnected.' ); ?>
 	<span class="hide-if-no-sessionstorage"><?php _e( 'This post is being backed up in your browser, just in case.' ); ?></span>
@@ -559,6 +576,7 @@ do_action( 'edit_form_top', $post );
 	?>
 	<label class="screen-reader-text" id="title-prompt-text" for="title"><?php echo $title_placeholder; ?></label>
 	<input type="text" name="post_title" size="30" value="<?php echo esc_attr( $post->post_title ); ?>" id="title" spellcheck="true" autocomplete="off">
+	<a href="#content" class="button-secondary screen-reader-text skiplink" onclick="if (tinymce) { tinymce.execCommand( 'mceFocus', false, 'content' ); }"><?php esc_html_e( 'Skip to Editor' ); ?></a>
 </div>
 	<?php
 	/**
@@ -634,18 +652,16 @@ if ( post_type_supports( $post_type, 'editor' ) ) {
 		array(
 			'_content_editor_dfw' => $_content_editor_dfw,
 			'drag_drop_upload'    => true,
-			'tabfocus_elements'   => 'content-html,save-post',
 			'editor_height'       => 300,
 			'tinymce'             => array(
-				'resize'                  => false,
-				'wp_autoresize_on'        => $_wp_editor_expand,
-				'add_unload_trigger'      => false,
-				'wp_keep_scroll_position' => ! $is_IE,
+				'resize'             => false,
+				'wp_autoresize_on'   => $_wp_editor_expand,
+				'add_unload_trigger' => false,
 			),
 		)
 	);
 	?>
-<table id="post-status-info"><tbody><tr>
+<table id="post-status-info" role="presentation"><tbody><tr>
 	<td id="wp-word-count" class="hide-if-no-js">
 	<?php
 	printf(

@@ -33,7 +33,7 @@ $options_help = '<p>' . __( 'The fields on this screen determine some of the bas
 
 if ( ! is_multisite() ) {
 	$options_help .= '<p>' . __( 'The ClassicPress URL and the site URL can be the same (example.com) or different; for example, having the ClassicPress core files (example.com/classicpress) in a subdirectory instead of the root directory.' ) . '</p>' .
-		'<p>' . __( 'If you want site visitors to be able to register themselves, as opposed to by the site administrator, check the membership box. A default user role can be set for all new users, whether self-registered or registered by the site admin.' ) . '</p>';
+		'<p>' . __( 'If you want site visitors to be able to register themselves, check the membership box. If you want the site administrator to register every new user, leave the box unchecked. In either case, you can set a default user role for all new users.' ) . '</p>';
 }
 
 $options_help .= '<p>' . __( 'You can set the language, and the translation files will be automatically downloaded and installed (available if your filesystem is writable).' ) . '</p>' .
@@ -238,25 +238,25 @@ if ( ! is_multisite() ) {
 <p class="description" id="new-admin-email-description"><?php _e( 'This address is used for admin purposes. If you change this, an email will be sent to your new address to confirm it. <strong>The new address will not become active until confirmed.</strong>' ); ?></p>
 <?php
 $new_admin_email = get_option( 'new_admin_email' );
-if ( $new_admin_email && get_option( 'admin_email' ) !== $new_admin_email ) :
-	?>
-	<div class="updated inline">
-	<p>
-	<?php
-		printf(
-			/* translators: %s: New admin email. */
-			__( 'There is a pending change of the admin email to %s.' ),
-			'<code>' . esc_html( $new_admin_email ) . '</code>'
-		);
-		printf(
-			' <a href="%1$s">%2$s</a>',
-			esc_url( wp_nonce_url( admin_url( 'options.php?dismiss=new_admin_email' ), 'dismiss-' . get_current_blog_id() . '-new_admin_email' ) ),
-			__( 'Cancel' )
-		);
-	?>
-	</p>
-	</div>
-<?php endif; ?>
+if ( $new_admin_email && get_option( 'admin_email' ) !== $new_admin_email ) {
+	$pending_admin_email_message  = sprintf(
+		/* translators: %s: New admin email. */
+		__( 'There is a pending change of the admin email to %s.' ),
+		'<code>' . esc_html( $new_admin_email ) . '</code>'
+	);
+	$pending_admin_email_message .= sprintf(
+		' <a href="%1$s">%2$s</a>',
+		esc_url( wp_nonce_url( admin_url( 'options.php?dismiss=new_admin_email' ), 'dismiss-' . get_current_blog_id() . '-new_admin_email' ) ),
+		__( 'Cancel' )
+	);
+	wp_admin_notice(
+		$pending_admin_email_message,
+		array(
+			'additional_classes' => array( 'updated', 'inline' ),
+		)
+	);
+}
+?>
 </td>
 </tr>
 
@@ -288,7 +288,7 @@ if ( $login_custom_image_src ) {
 		<legend class="screen-reader-text"><span><?php _e( 'Custom Login Image' ); ?></span></legend>
 		<p class="description" id="login_custom_image-description">
 			<?php _e( 'If you choose an image here and enable this option, then that image will be shown at the top of the login page instead of the ClassicPress logo.' ); ?>
-			<a href="https://link.classicpress.net/docs/custom-login-image">
+			<a href="https://docs.classicpress.net/user-guides/custom-login-image/">
 				<?php _e( 'Learn more.' ); ?>
 			</a>
 		</p>
@@ -517,11 +517,12 @@ if ( empty( $tzstring ) ) { // Create a UTC+- zone if no timezone string exists.
 	 * Filters the default date formats.
 	 *
 	 * @since 2.7.0
-	 * @since 4.0.0 Added ISO date standard YYYY-MM-DD format.
+	 * @since 4.0.0 Replaced the `Y/m/d` format with `Y-m-d` (ISO date standard YYYY-MM-DD).
+	 * @since 6.8.0 Added the `d.m.Y` format.
 	 *
 	 * @param string[] $default_date_formats Array of default date formats.
 	 */
-	$date_formats = array_unique( apply_filters( 'date_formats', array( __( 'F j, Y' ), 'Y-m-d', 'm/d/Y', 'd/m/Y' ) ) );
+	$date_formats = array_unique( apply_filters( 'date_formats', array( __( 'F j, Y' ), 'Y-m-d', 'm/d/Y', 'd/m/Y', 'd.m.Y' ) ) );
 
 	$custom = true;
 
@@ -666,6 +667,18 @@ for ( $index = 0; $index <= 2; $index++ ) {
 </span></legend><label for="disable_xml_rpc">
 <input name="disable_xml_rpc" type="checkbox" id="disable_xml_rpc" value="1" <?php checked( '1', get_option( 'disable_xml_rpc' ) ); ?>>
 	<?php _e( 'XML-RPC server disabled' ); ?></label>
+</fieldset></td>
+</tr>
+<tr>
+<th scope="row"><?php _e( 'Enable Link Manager' ); ?></th>
+<td> <fieldset><legend class="screen-reader-text"><span>
+	<?php
+	/* translators: Hidden accessibility text. */
+	_e( 'Enable Link Manager' );
+	?>
+</span></legend><label for="link_manager_enabled">
+<input name="link_manager_enabled" type="checkbox" id="link_manager_enabled" value="1" <?php checked( '1', get_option( 'link_manager_enabled' ) ); ?>>
+	<?php _e( 'Link Manager enabled' ); ?></label>
 </fieldset></td>
 </tr>
 

@@ -838,8 +838,7 @@ $( function() {
 			menu: $adminMenuWrap.height()
 		},
 		$headerEnd = $( '.wp-header-end' ),
-		topMenuItems = document.body.className.includes( 'wp-admin' ) ? $adminmenu[0].querySelectorAll( 'li.wp-has-submenu' ) : [];
-
+		topMenuItems = document.body.className.includes( 'wp-admin' ) && $adminmenu[0] ? $adminmenu[0].querySelectorAll( 'li.wp-has-submenu' ) : [];
 	/**
 	 * Makes the fly-out submenu header clickable, when the menu is folded.
 	 *
@@ -1081,7 +1080,7 @@ $( function() {
 			 * @return {void}
 			 */
 		}).find( 'li.wp-has-submenu.wp-not-current-submenu' ).on( 'focusin.adminmenu', function() {
-			adjustSubmenu( $( this ) );
+			adjustSubmenu( $( this )[0] );
 		});
 	}
 
@@ -2128,4 +2127,33 @@ $( function( $ ) {
 			}
 		});
 	});
+})();
+
+// Reposition ID column data cell in post table based on viewport width to fix layout on mobile.
+( function() {
+	function moveIdColumn() {
+		var tbody = document.querySelector( '.edit-php tbody#the-list' );
+		if ( tbody ) {
+			Array.from( tbody.rows ).forEach( row => {
+				if ( ! row.classList.contains( 'hidden' ) && ! row.classList.contains( 'inline-edit-row' ) ) {
+					var firstColumn = row.querySelector( 'td' );
+					var idColumn    = row.querySelector( 'td.column-id' );
+					var titleColumn = row.querySelector( 'td.column-title' );
+					if ( firstColumn && idColumn && titleColumn ) {
+						if ( window.innerWidth < 782 ) {
+							if ( firstColumn.classList.contains( 'id' ) ) {
+								row.insertBefore( titleColumn, idColumn );
+							}
+						} else {
+							if ( firstColumn.classList.contains( 'title' ) ) {
+								row.insertBefore( idColumn, titleColumn );
+							}
+						}
+					}
+				}
+			} );
+		}
+	}
+	moveIdColumn();
+	window.addEventListener( 'resize', moveIdColumn );
 })();

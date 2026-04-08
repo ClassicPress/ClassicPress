@@ -66,7 +66,7 @@ class CP_Debug_Compat {
 	public function test_plugin() {
 		$options = $this->get_options();
 		$result = array(
-			'label'       => esc_html__( 'Plugins using block functions' ),
+			'label'       => __( 'Plugins using block functions' ),
 			'status'      => 'good',
 			'badge'       => array(
 				'label' => 'Compatibility',
@@ -83,9 +83,17 @@ class CP_Debug_Compat {
 			return $result;
 		}
 		$action  = esc_html__( 'Plugins on this list may have issues.' );
-		$action .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/site-health-screen/#block-compatibility">' . esc_html__( 'Learn more.' ) . '</a>';
+		$action .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-general-screen/#blocks-compatibility">' . esc_html__( 'Learn more.' ) . '</a>';
+		$action .= sprintf(
+			'<p>%s</p>',
+			sprintf(
+				/* translators: %s: URL to Settings > General > Blocks Compatibility. */
+				__( 'You can reset this list by switching the <a href="%s">Blocks Compatibility</a> to "On" and back to "Troubleshooting" again.' ),
+				esc_url( admin_url( 'options-general.php#blocks_compatibility_level' ) )
+			)
+		);
 		$result = array(
-			'label'       => esc_html__( 'Plugins using block functions' ),
+			'label'       => __( 'Plugins using block functions' ),
 			'status'      => 'recommended',
 			'badge'       => array(
 				'label' => 'Compatibility',
@@ -101,7 +109,7 @@ class CP_Debug_Compat {
 	public function test_theme() {
 		$options = $this->get_options();
 		$result = array(
-			'label'       => esc_html__( 'Themes using block functions' ),
+			'label'       => __( 'Themes using block functions' ),
 			'status'      => 'good',
 			'badge'       => array(
 				'label' => 'Compatibility',
@@ -119,9 +127,17 @@ class CP_Debug_Compat {
 			return $result;
 		}
 		$action  = esc_html__( 'Themes on this list may have issues.' );
-		$action .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/site-health-screen/#block-compatibility">' . esc_html__( 'Learn more.' ) . '</a>';
+		$action .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-general-screen/#blocks-compatibility">' . esc_html__( 'Learn more.' ) . '</a>';
+		$action .= sprintf(
+			'<p>%s</p>',
+			sprintf(
+				/* translators: %s: URL to Settings > General > Blocks Compatibility. */
+				__( 'You can reset this list by switching the <a href="%s">Blocks Compatibility</a> to "On" and back to "Troubleshooting" again.' ),
+				esc_url( admin_url( 'options-general.php#blocks_compatibility_level' ) )
+			)
+		);
 		$result = array(
-			'label'       => esc_html__( 'Themes using block functions' ),
+			'label'       => __( 'Themes using block functions' ),
 			'status'      => 'recommended',
 			'badge'       => array(
 				'label' => 'Compatibility',
@@ -180,7 +196,7 @@ class CP_Debug_Compat {
 	}
 
 	private static function plugin_folder( $path ) {
-		return preg_replace( '~^' . preg_quote( WP_PLUGIN_DIR ) . preg_quote( DIRECTORY_SEPARATOR ) . '([^' . preg_quote( DIRECTORY_SEPARATOR ) . ']*).*~', '$1', $path );
+		return preg_replace( '~^' . preg_quote( wp_normalize_path( WP_PLUGIN_DIR ) ) . '/([^/]*).*~', '$1', wp_normalize_path( $path ) );
 	}
 
 
@@ -219,11 +235,11 @@ class CP_Debug_Compat {
 			$active_paths = array_filter(
 				$active_paths,
 				function ( $path ) use ( $plugin ) {
-					return str_starts_with( $path, WP_PLUGIN_DIR . '/' . $plugin );
+					return str_starts_with( wp_normalize_path( $path ), wp_normalize_path( WP_PLUGIN_DIR ) . '/' . $plugin );
 				}
 			);
 			$plugin_path = array_pop( $active_paths );
-			$plugin_data = get_plugin_data( $plugin_path );
+			$plugin_data = get_plugin_data( wp_normalize_path( $plugin_path ) );
 			$plugin_name = $plugin_data['Name'];
 			if ( ! isset( $options['data']['plugins'][ $plugin_name ] ) || ! in_array( $func, $options['data']['plugins'][ $plugin_name ] ) ) {
 				$options['data']['plugins'][ $plugin_name ][] = $func;

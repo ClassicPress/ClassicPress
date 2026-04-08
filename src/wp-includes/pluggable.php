@@ -158,9 +158,23 @@ if ( ! function_exists( 'wp_mail' ) ) :
 	 * The default charset is based on the charset used on the blog. The charset can
 	 * be set using the {@see 'wp_mail_charset'} filter.
 	 *
+	 * When using the `$embeds` parameter to embed images for use in HTML emails,
+	 * reference the embedded file in your HTML with a `cid:` URL whose value
+	 * matches the file's Content-ID. By default, the Content-ID (`cid`) used for
+	 * each embedded file is the key in the embeds array, unless modified via the
+	 * {@see 'wp_mail_embed_args'} filter. For example:
+	 *
+	 * `<img src="cid:0" alt="Logo">`
+	 * `<img src="cid:my-image" alt="Image">`
+	 *
+	 * You may also customize the Content-ID for each file by using the
+	 * {@see 'wp_mail_embed_args'} filter and setting the `cid` value.
+	 *
 	 * @since 1.2.1
 	 * @since 5.5.0 is_email() is used for email validation,
 	 *              instead of PHPMailer's default validator.
+	 * @since 6.9.0 Added $embeds parameter.
+	 * @since 6.9.0 Improved Content-Type header handling for multipart messages.
 	 *
 	 * @global PHPMailer\PHPMailer\PHPMailer $phpmailer
 	 *
@@ -169,9 +183,10 @@ if ( ! function_exists( 'wp_mail' ) ) :
 	 * @param string          $message     Message contents.
 	 * @param string|string[] $headers     Optional. Additional headers.
 	 * @param string|string[] $attachments Optional. Paths to files to attach.
+	 * @param string|string[] $embeds      Optional. Paths to files to embed.
 	 * @return bool Whether the email was sent successfully.
 	 */
-	function wp_mail( $to, $subject, $message, $headers = '', $attachments = array() ) {
+	function wp_mail( $to, $subject, $message, $headers = '', $attachments = array(), $embeds = array() ) {
 		// Compact the input, apply the filters, and extract them back out.
 
 		/**
@@ -187,9 +202,10 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		 *     @type string          $message     Message contents.
 		 *     @type string|string[] $headers     Additional headers.
 		 *     @type string|string[] $attachments Paths to files to attach.
+		 *     @type string|string[] $embeds      Paths to files to embed.
 		 * }
 		 */
-		$atts = apply_filters( 'wp_mail', compact( 'to', 'subject', 'message', 'headers', 'attachments' ) );
+		$atts = apply_filters( 'wp_mail', compact( 'to', 'subject', 'message', 'headers', 'attachments', 'embeds' ) );
 
 		/**
 		 * Filters whether to preempt sending an email.
@@ -209,6 +225,7 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		 *     @type string          $message     Message contents.
 		 *     @type string|string[] $headers     Additional headers.
 		 *     @type string|string[] $attachments Paths to files to attach.
+		 *     @type string|string[] $embeds      Paths to files to embed.
 		 * }
 		 */
 		$pre_wp_mail = apply_filters( 'pre_wp_mail', null, $atts );
@@ -244,6 +261,15 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		if ( ! is_array( $attachments ) ) {
 			$attachments = explode( "\n", str_replace( "\r\n", "\n", $attachments ) );
 		}
+
+		if ( isset( $atts['embeds'] ) ) {
+			$embeds = $atts['embeds'];
+		}
+
+		if ( ! is_array( $embeds ) ) {
+			$embeds = explode( "\n", str_replace( "\r\n", "\n", $embeds ) );
+		}
+
 		global $phpmailer;
 
 		// (Re)create it, if it's gone missing.
@@ -251,7 +277,8 @@ if ( ! function_exists( 'wp_mail' ) ) :
 			require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
 			require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
 			require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
-			$phpmailer = new PHPMailer\PHPMailer\PHPMailer( true );
+			require_once ABSPATH . WPINC . '/class-wp-phpmailer.php';
+			$phpmailer = new WP_PHPMailer( true );
 
 			$phpmailer::$validator = static function ( $email ) {
 				return (bool) is_email( $email );
@@ -323,6 +350,9 @@ if ( ! function_exists( 'wp_mail' ) ) :
 								} elseif ( false !== stripos( $charset_content, 'boundary=' ) ) {
 									$boundary = trim( str_replace( array( 'BOUNDARY=', 'boundary=', '"' ), '', $charset_content ) );
 									$charset  = '';
+									if ( preg_match( '~^multipart/(\S+)~', $content_type, $matches ) ) {
+										$content_type = 'multipart/' . strtolower( $matches[1] ) . '; boundary="' . $boundary . '"';
+									}
 								}
 
 								// Avoid setting an empty $content_type.
@@ -355,6 +385,15 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		$phpmailer->clearReplyTos();
 		$phpmailer->Body    = '';
 		$phpmailer->AltBody = '';
+
+		/*
+		 * Reset encoding to 8-bit, as it may have been automatically downgraded
+		 * to 7-bit by PHPMailer (based on the body contents) in a previous call
+		 * to wp_mail().
+		 *
+		 * See https://core.trac.wordpress.org/ticket/33972
+		 */
+		$phpmailer->Encoding = PHPMailer\PHPMailer\PHPMailer::ENCODING_8BIT;
 
 		// Set "From" name and email.
 
@@ -510,10 +549,6 @@ if ( ! function_exists( 'wp_mail' ) ) :
 					}
 				}
 			}
-
-			if ( false !== stripos( $content_type, 'multipart' ) && ! empty( $boundary ) ) {
-				$phpmailer->addCustomHeader( sprintf( 'Content-Type: %s; boundary="%s"', $content_type, $boundary ) );
-			}
 		}
 
 		if ( ! empty( $attachments ) ) {
@@ -522,6 +557,50 @@ if ( ! function_exists( 'wp_mail' ) ) :
 
 				try {
 					$phpmailer->addAttachment( $attachment, $filename );
+				} catch ( PHPMailer\PHPMailer\Exception $e ) {
+					continue;
+				}
+			}
+		}
+
+		if ( ! empty( $embeds ) ) {
+			foreach ( $embeds as $key => $embed_path ) {
+				/**
+				 * Filters the arguments for PHPMailer's addEmbeddedImage() method.
+				 *
+				 * @since 6.9.0
+				 *
+				 * @param array $args {
+				 *     An array of arguments for `addEmbeddedImage()`.
+				 *     @type string $path        The path to the file.
+				 *     @type string $cid         The Content-ID of the image. Default: The key in the embeds array.
+				 *     @type string $name        The filename of the image.
+				 *     @type string $encoding    The encoding of the image. Default: 'base64'.
+				 *     @type string $type        The MIME type of the image. Default: empty string, which lets PHPMailer auto-detect.
+				 *     @type string $disposition The disposition of the image. Default: 'inline'.
+				 * }
+				 */
+				$embed_args = apply_filters(
+					'wp_mail_embed_args',
+					array(
+						'path'        => $embed_path,
+						'cid'         => (string) $key,
+						'name'        => basename( $embed_path ),
+						'encoding'    => 'base64',
+						'type'        => '',
+						'disposition' => 'inline',
+					)
+				);
+
+				try {
+					$phpmailer->addEmbeddedImage(
+						$embed_args['path'],
+						$embed_args['cid'],
+						$embed_args['name'],
+						$embed_args['encoding'],
+						$embed_args['type'],
+						$embed_args['disposition']
+					);
 				} catch ( PHPMailer\PHPMailer\Exception $e ) {
 					continue;
 				}
@@ -537,7 +616,7 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		 */
 		do_action_ref_array( 'phpmailer_init', array( &$phpmailer ) );
 
-		$mail_data = compact( 'to', 'subject', 'message', 'headers', 'attachments' );
+		$mail_data = compact( 'to', 'subject', 'message', 'headers', 'attachments', 'embeds' );
 
 		// Send!
 		try {
@@ -560,6 +639,7 @@ if ( ! function_exists( 'wp_mail' ) ) :
 			 *     @type string   $message     Message contents.
 			 *     @type string[] $headers     Additional headers.
 			 *     @type string[] $attachments Paths to files to attach.
+			 *     @type string[] $embeds      Paths to files to embed.
 			 * }
 			 */
 			do_action( 'wp_mail_succeeded', $mail_data );
@@ -2221,7 +2301,7 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) :
 		/* translators: %s: User login. */
 		$message  = sprintf( __( 'Username: %s' ), $user->user_login ) . "\r\n\r\n";
 		$message .= __( 'To set your password, visit the following address:' ) . "\r\n\r\n";
-		$message .= network_site_url( "wp-login.php?action=rp&key=$key&login=" . rawurlencode( $user->user_login ), 'login' ) . "\r\n\r\n";
+		$message .= network_site_url( "wp-login.php?action=rp&key=$key&login=" . str_replace( '.', '%2e', rawurlencode( $user->user_login ) ), 'login' ) . "\r\n\r\n";
 
 		$message .= wp_login_url() . "\r\n";
 
@@ -2594,6 +2674,13 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 	 * @return bool False, if the $password does not match the hashed password.
 	 */
 	function wp_check_password( $password, $hash, $user_id = '' ) {
+		global $wp_hasher;
+
+		if ( ! empty( $wp_hasher ) ) {
+			// Check the password using the overridden hasher.
+			return $wp_hasher->CheckPassword( $password, $hash );
+		}
+
 		$check = false;
 
 		if ( strlen( $password ) > 4096 ) {
@@ -2615,72 +2702,90 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 		 * @param  string  String to be used as pepper.
 		 */
 		$pepper = apply_filters( 'cp_pepper_password', '' );
-		$peppered_password = hash_hmac( 'sha256', $password, $pepper );
+		if ( ! empty( $pepper ) ) {
+			$maybe_peppered_password = hash_hmac( 'sha256', $password, $pepper );
+		} else {
+			$maybe_peppered_password = $password;
+		}
 
-		if ( password_verify( $peppered_password, $hash ) ) {
+		if ( password_verify( $maybe_peppered_password, $hash ) ) {
 			// Handle password verification using PHP's PASSWORD_DEFAULT hashing algorithm.
 			$check = true;
-
-			/**
-			 * Filter enabling the password algorithm to be changed.
-			 *
-			 * @since CP-2.2.0
-			 *
-			 * @param  string    PASSWORD_DEFAULT    PHP's current default hashing algorithm.
-			 * @return string    $algorithm          Any algorithm recognized by PHP.
-			 */
-			$algorithm = apply_filters( 'cp_password_algorithm', PASSWORD_DEFAULT );
-
-			if ( password_needs_rehash( $hash, PASSWORD_DEFAULT, $options ) ) {
-
-				// Update to current password setting and verification method.
-				$hash = wp_set_password( $password, $user_id );
-			}
-		} elseif ( password_verify( $password, $hash ) ) {
-			// Handle password verification using PHP's PASSWORD_DEFAULT hashing algorithm.
-			$check = true;
-
-			/**
-			 * Filter enabling the password algorithm to be changed.
-			 *
-			 * @since CP-2.2.0
-			 *
-			 * @param  string    PASSWORD_DEFAULT    PHP's current default hashing algorithm.
-			 * @return string    $algorithm          Any algorithm recognized by PHP.
-			 */
-			$algorithm = apply_filters( 'cp_password_algorithm', PASSWORD_DEFAULT );
-
-			if ( ! empty( $pepper ) || password_needs_rehash( $hash, PASSWORD_DEFAULT, $options ) ) {
-
-				// Update to current password setting and verification method.
-				$hash = wp_set_password( $password, $user_id );
-			}
-		} elseif ( md5( $password ) === $hash ) {
+		} elseif ( md5( $maybe_peppered_password ) === $hash ) {
 			// Handle password verification when a temporary password has been set via Adminer or phpMyAdmin.
 			$check = true;
-
-			// Update to current password setting and verification method.
-			$hash = wp_set_password( $password, $user_id );
-
-		} elseif ( 0 === strpos( $hash, '$P$' ) ) {
+		} elseif ( str_starts_with( $hash, '$wp' ) ) {
+			// Handle password from WordPress 6.8 and above
+			$password_to_verify = base64_encode( hash_hmac( 'sha384', $maybe_peppered_password, 'wp-sha384', true ) );
+			$check              = password_verify( $password_to_verify, substr( $hash, 3 ) );
+		} elseif ( str_starts_with( $hash, '$P$' ) ) {
 			// Handle password verification by the traditional WordPress method.
-			global $wp_hasher;
-
-			if ( empty( $wp_hasher ) ) {
-				require_once( ABSPATH . WPINC . '/class-phpass.php' );
-
-				$wp_hasher = new PasswordHash( 8, true );
-			}
-
-			$check = $wp_hasher->CheckPassword( $password, $hash );
-
-			if ( $check && $user_id ) {
-
-				// Update to current password setting and verification method.
-				$hash = wp_set_password( $password, $user_id );
-			}
+			require_once ABSPATH . WPINC . '/class-phpass.php';
+			$check = ( new PasswordHash( 8, true ) )->CheckPassword( $maybe_peppered_password, $hash );
+		} else {
+			// Check the password using compat support for any non-prefixed hash.
+			$check = password_verify( $maybe_peppered_password, $hash );
 		}
+
+		/**
+		 * Filters whether the plaintext password matches the hashed password.
+		 *
+		 * @since 2.5.0
+		 * @since 6.8.0 Passwords are now hashed with bcrypt by default.
+		 *              Old passwords may still be hashed with phpass or md5.
+		 *
+		 * @param bool       $check    Whether the passwords match.
+		 * @param string     $password The plaintext password.
+		 * @param string     $hash     The hashed password.
+		 * @param string|int $user_id  Optional ID of a user associated with the password.
+		 *                             Can be empty.
+		 */
 		return apply_filters( 'check_password', $check, $password, $hash, $user_id );
+	}
+endif;
+
+if ( ! function_exists( 'wp_password_needs_rehash' ) ) :
+	/**
+	 * Checks whether a password hash needs to be rehashed.
+	 *
+	 * Passwords are hashed with bcrypt using the default cost. A password hashed in a prior version
+	 * of WordPress may still be hashed with phpass and will need to be rehashed. If the default cost
+	 * or algorithm is changed in PHP or WordPress then a password hashed in a previous version will
+	 * need to be rehashed.
+	 *
+	 * @since CP-2.3.0
+	 *
+	 * @global PasswordHash $wp_hasher phpass object.
+	 *
+	 * @param string $hash Hash of a password to check.
+	 * @return bool Whether the hash needs to be rehashed.
+	 */
+	function wp_password_needs_rehash( $hash ) {
+		global $wp_hasher;
+
+		if ( ! empty( $wp_hasher ) ) {
+			return false;
+		}
+
+		/** This filter is documented in wp-includes/pluggable.php */
+		$algorithm = apply_filters( 'cp_password_algorithm', PASSWORD_DEFAULT );
+
+		/*
+		 * Function cp_hash_password_options() is documented in wp-includes/user.php
+		 */
+		$options = cp_hash_password_options();
+
+		$needs_rehash  = password_needs_rehash( $hash, $algorithm, $options );
+
+		/**
+		 * Filters whether the password hash needs to be rehashed.
+		 *
+		 * @since 6.8.0
+		 *
+		 * @param bool       $needs_rehash Whether the password hash needs to be rehashed.
+		 * @param string     $hash         The password hash.
+		 */
+		return apply_filters( 'password_needs_rehash', $needs_rehash, $hash );
 	}
 endif;
 
@@ -2837,6 +2942,8 @@ if ( ! function_exists( 'wp_set_password' ) ) :
 	function wp_set_password( $password, $user_id ) {
 		global $wpdb;
 
+		$old_user_data = get_userdata( $user_id );
+
 		$hash = wp_hash_password( $password );
 		$wpdb->update(
 			$wpdb->users,
@@ -2853,11 +2960,13 @@ if ( ! function_exists( 'wp_set_password' ) ) :
 		 * Fires after the user password is set.
 		 *
 		 * @since 6.2.0
+		 * @since 6.7.0 The `$old_user_data` parameter was added.
 		 *
-		 * @param string $password The plaintext password just set.
-		 * @param int    $user_id  The ID of the user whose password was just set.
+		 * @param string  $password      The plaintext password just set.
+		 * @param int     $user_id       The ID of the user whose password was just set.
+		 * @param WP_User $old_user_data Object containing user's data prior to update.
 		 */
-		do_action( 'wp_set_password', $password, $user_id );
+		do_action( 'wp_set_password', $password, $user_id, $old_user_data );
 	}
 endif;
 
@@ -2870,14 +2979,23 @@ if ( ! function_exists( 'get_avatar' ) ) :
 	 *
 	 * @param mixed  $id_or_email   The Gravatar to retrieve. Accepts a user_id, gravatar md5 hash,
 	 *                              user email, WP_User object, WP_Post object, or WP_Comment object.
-	 * @param int    $size          Optional. Height and width of the avatar image file in pixels. Default 96.
-	 * @param string $default_value URL for the default image or a default type. Accepts '404' (return
-	 *                              a 404 instead of a default image), 'retro' (8bit), 'RoboHash' (robohash),
-	 *                              'monsterid' (monster), 'wavatar' (cartoon face), 'indenticon' (the "quilt"),
-	 *                              'mystery', 'mm', or 'mysteryman' (The Oyster Man), 'blank' (transparent GIF),
-	 *                              or 'gravatar_default' (the Gravatar logo). Default is the value of the
-	 *                              'avatar_default' option, with a fallback of 'mystery'.
-	 * @param string $alt           Optional. Alternative text to use in img tag. Default empty.
+	 * @param int    $size          Optional. Height and width of the avatar in pixels. Default 96.
+	 * @param string $default_value URL for the default image or a default type. Accepts:
+	 *                              - '404' (return a 404 instead of a default image)
+	 *                              - 'retro' (a 8-bit arcade-style pixelated face)
+	 *                              - 'robohash' (a robot)
+	 *                              - 'monsterid' (a monster)
+	 *                              - 'wavatar' (a cartoon face)
+	 *                              - 'identicon' (the "quilt", a geometric pattern)
+	 *                              - 'initials' (initials based avatar with background color)
+	 *                              - 'color' (generated background color)
+	 *                              - 'mystery', 'mm', or 'mysteryman' (The Oyster Man)
+	 *                              - 'blank' (transparent GIF)
+	 *                              - 'gravatar_default' (the Gravatar logo)
+	 *                              Default is the value of the 'avatar_default' option,
+	 *                              with a fallback of 'mystery'.
+	 * @param string $alt           Optional. Alternative text to use in the avatar image tag.
+	 *                              Default empty.
 	 * @param array  $args {
 	 *     Optional. Extra arguments to retrieve the avatar.
 	 *
@@ -2912,13 +3030,10 @@ if ( ! function_exists( 'get_avatar' ) ) :
 			'class'         => null,
 			'force_display' => false,
 			'loading'       => null,
+			'fetchpriority' => null,
 			'extra_attr'    => '',
 			'decoding'      => 'async',
 		);
-
-		if ( wp_lazy_loading_enabled( 'img', 'get_avatar' ) ) {
-			$defaults['loading'] = wp_get_loading_attr_default( 'get_avatar' );
-		}
 
 		if ( empty( $args ) ) {
 			$args = array();
@@ -2936,6 +3051,11 @@ if ( ! function_exists( 'get_avatar' ) ) :
 		if ( empty( $args['width'] ) ) {
 			$args['width'] = $args['size'];
 		}
+
+		// Update args with loading optimized attributes.
+		$loading_optimization_attr = wp_get_loading_optimization_attributes( 'img', $args, 'get_avatar' );
+
+		$args = array_merge( $args, $loading_optimization_attr );
 
 		if ( is_object( $id_or_email ) && isset( $id_or_email->comment_ID ) ) {
 			$id_or_email = get_comment( $id_or_email );
@@ -2989,7 +3109,7 @@ if ( ! function_exists( 'get_avatar' ) ) :
 			}
 		}
 
-		// Add `loading` and `decoding` attributes.
+		// Add `loading`, `fetchpriority` and `decoding` attributes.
 		$extra_attr = $args['extra_attr'];
 
 		if ( in_array( $args['loading'], array( 'lazy', 'eager' ), true )
@@ -3010,6 +3130,17 @@ if ( ! function_exists( 'get_avatar' ) ) :
 			}
 
 			$extra_attr .= "decoding='{$args['decoding']}'";
+		}
+
+		// Add support for `fetchpriority`.
+		if ( in_array( $args['fetchpriority'], array( 'high', 'low', 'auto' ), true )
+			&& ! preg_match( '/\bfetchpriority\s*=/', $extra_attr )
+		) {
+			if ( ! empty( $extra_attr ) ) {
+				$extra_attr .= ' ';
+			}
+
+			$extra_attr .= "fetchpriority='{$args['fetchpriority']}'";
 		}
 
 		$avatar = sprintf(

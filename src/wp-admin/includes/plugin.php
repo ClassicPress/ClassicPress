@@ -1017,6 +1017,7 @@ function delete_plugins( $plugins, $deprecated = '' ) {
 			foreach ( $translations as $translation => $data ) {
 				$wp_filesystem->delete( WP_LANG_DIR . '/plugins/' . $plugin_slug . '-' . $translation . '.po' );
 				$wp_filesystem->delete( WP_LANG_DIR . '/plugins/' . $plugin_slug . '-' . $translation . '.mo' );
+				$wp_filesystem->delete( WP_LANG_DIR . '/plugins/' . $plugin_slug . '-' . $translation . '.l10n.php' );
 
 				$json_translation_files = glob( WP_LANG_DIR . '/plugins/' . $plugin_slug . '-' . $translation . '-*.json' );
 				if ( $json_translation_files ) {
@@ -2505,12 +2506,16 @@ function paused_plugins_notice() {
 		return;
 	}
 
-	printf(
-		'<div class="notice notice-error"><p><strong>%s</strong><br>%s</p><p><a href="%s">%s</a></p></div>',
+	$message = sprintf(
+		'<strong>%s</strong><br>%s</p><p><a href="%s">%s</a>',
 		__( 'One or more plugins failed to load properly.' ),
 		__( 'You can find more details and make changes on the Plugins screen.' ),
 		esc_url( admin_url( 'plugins.php?plugin_status=paused' ) ),
 		__( 'Go to the Plugins screen' )
+	);
+	wp_admin_notice(
+		$message,
+		array( 'type' => 'error' )
 	);
 }
 
@@ -2579,8 +2584,8 @@ function deactivated_plugins_notice() {
 			);
 		}
 
-		printf(
-			'<div class="notice notice-warning"><p><strong>%s</strong><br>%s</p><p><a href="%s">%s</a></p></div>',
+		$message = sprintf(
+			'<strong>%s</strong><br>%s</p><p><a href="%s">%s</a>',
 			sprintf(
 				/* translators: %s: Name of deactivated plugin. */
 				__( '%s plugin deactivated during ClassicPress upgrade.' ),
@@ -2590,6 +2595,7 @@ function deactivated_plugins_notice() {
 			esc_url( admin_url( 'plugins.php?plugin_status=inactive' ) ),
 			__( 'Go to the Plugins screen' )
 		);
+		wp_admin_notice( $message, array( 'type' => 'warning' ) );
 	}
 
 	// Empty the options.

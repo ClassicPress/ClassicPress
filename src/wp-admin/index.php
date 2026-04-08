@@ -73,10 +73,6 @@ $screen->add_help_tab(
 
 $help = '<p>' . __( 'The boxes on your Dashboard screen are:' ) . '</p>';
 
-if ( current_user_can( 'edit_theme_options' ) ) {
-	$help .= '<p>' . __( '<strong>Welcome</strong> &mdash; Shows links for some of the most common tasks when setting up a new site.' ) . '</p>';
-}
-
 if ( current_user_can( 'view_site_health_checks' ) ) {
 	$help .= '<p>' . __( '<strong>Site Health Status</strong> &mdash; Informs you of any potential issues that should be addressed to improve the performance or security of your website.' ) . '</p>';
 }
@@ -133,20 +129,21 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 
 		// Only show the dashboard notice if it's been less than a minute since the message was postponed.
 		if ( $time_passed < MINUTE_IN_SECONDS ) :
-			?>
-		<div class="notice notice-success is-dismissible">
-			<p>
-				<?php
-				printf(
-					/* translators: %s: Human-readable time interval. */
-					__( 'The admin email verification page will reappear after %s.' ),
-					human_time_diff( time() + $remind_interval )
-				);
-				?>
-			</p>
-		</div>
-		<?php endif; ?>
-	<?php endif; ?>
+			$message = sprintf(
+				/* translators: %s: Human-readable time interval. */
+				__( 'The admin email verification page will reappear after %s.' ),
+				human_time_diff( time() + $remind_interval )
+			);
+			wp_admin_notice(
+				$message,
+				array(
+					'type'        => 'success',
+					'dismissible' => true,
+				)
+			);
+		endif;
+	endif;
+	?>
 
 <?php
 if ( has_action( 'welcome_panel' ) && current_user_can( 'edit_theme_options' ) ) :

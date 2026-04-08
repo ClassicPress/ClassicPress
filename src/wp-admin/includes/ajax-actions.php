@@ -2920,6 +2920,43 @@ function wp_ajax_dismiss_wp_pointer() {
 }
 
 /**
+ * Ajax handler for getting a revision.
+ *
+ * @since CP-2.6.0
+ */
+function wp_ajax_get_revision() {
+	if ( ! isset( $_REQUEST['id'] ) ) {
+		wp_send_json_error();
+	}
+
+	$id = absint( $_REQUEST['id'] );
+	if ( ! $id ) {
+		wp_send_json_error();
+	}
+
+	$post = get_post( $id );
+	if ( ! $post ) {
+		wp_send_json_error();
+	}
+
+	if ( 'revision' !== $post->post_type ) {
+		wp_send_json_error();
+	}
+
+	if ( ! current_user_can( 'read_post', $post->post_parent ) || ! current_user_can( 'edit_post', $post->post_parent ) || ! current_user_can( 'delete_post', $post->post_parent ) ) {
+		wp_send_json_error();
+	}
+
+	wp_send_json_success(
+		array(
+			'title'   => $post->post_title,
+			'content' => esc_html( apply_filters( 'the_content', $post->post_content ) ),
+		),
+		200
+	);
+}
+
+/**
  * Ajax handler for getting an attachment.
  *
  * @since 3.5.0
@@ -3009,6 +3046,20 @@ function wp_ajax_query_attachments() {
 		add_filter( 'wp_allow_query_attachment_by_filename', '__return_true' );
 	}
 
+	// Ensure that the list of posts to be retrieved is an array.
+	if ( isset( $query['post__in'] ) ) {
+		if ( ! is_array( $query['post__in'] ) ) {
+			$query['post__in'] = explode( ',', $query['post__in'] );
+		}
+	}
+
+	// Ensure that the list of posts to be excluded is an array.
+	if ( isset( $query['post__not_in'] ) ) {
+		if ( ! is_array( $query['post__not_in'] ) ) {
+			$query['post__not_in'] = explode( ',', $query['post__not_in'] );
+		}
+	}
+
 	/**
 	 * Filters the arguments passed to WP_Query during an Ajax
 	 * call for querying attachments.
@@ -3043,7 +3094,16 @@ function wp_ajax_query_attachments() {
 	header( 'X-WP-Total: ' . (int) $total_posts );
 	header( 'X-WP-TotalPages: ' . (int) $max_pages );
 
-	wp_send_json_success( $posts );
+	$response = array(
+		'data'    => $posts,
+		'headers' => array(
+			'total_posts' => (int) $total_posts,
+			'max_pages'   => (int) $max_pages,
+		),
+		'success' => true,
+	);
+
+	wp_send_json( $response );
 }
 
 /**
@@ -3271,20 +3331,20 @@ function wp_ajax_quick_edit_attachment() {
 	}
 
 	if ( isset( $_POST['post_title'] ) ) {
-		$attachment->post_title = wp_unslash( sanitize_text_field( $_POST['post_title'] ) );
+		$post_title = sanitize_text_field( wp_unslash( $_POST['post_title'] ) );
 	}
 
 	if ( isset( $_POST['post_excerpt'] ) ) {
-		$attachment->post_excerpt = wp_unslash( wp_kses_post( $_POST['post_excerpt'] ) );
+		$post_excerpt = wp_kses_post( wp_unslash( $_POST['post_excerpt'] ) );
 	}
 
 	if ( isset( $_POST['post_content'] ) ) {
-		$attachment->post_content = wp_unslash( wp_kses_post( $_POST['post_content'] ) );
+		$post_content = wp_kses_post( wp_unslash( $_POST['post_content'] ) );
 	}
 
 	if ( isset( $_POST['post_author'] ) && is_numeric( wp_unslash( $_POST['post_author'] ) ) ) {
-		$attachment->post_author = wp_unslash( $_POST['post_author'] );
-		$author = get_user_by( 'ID', $attachment->post_author );
+		$post_author = absint( wp_unslash( $_POST['post_author'] ) );
+		$author = get_user_by( 'id', $post_author );
 	}
 
 	if ( isset( $_POST['aa'] ) && isset( $_POST['mm'] ) && isset( $_POST['jj'] ) ) {
@@ -3297,12 +3357,22 @@ function wp_ajax_quick_edit_attachment() {
 		$exploded_date = explode( ' ', $current_date );
 		$new_date      = $year . '-' . $month . '-' . $day;
 		if ( $new_date !== $exploded_date[3] . '-' . $exploded_date[2] . '-' . $exploded_date[1] ) {
-			$attachment->post_date = $new_date . ' 00:00:00';
+			$post_date = $new_date . ' 00:00:00';
 		}
 	}
 
-	// Update attachment object.
-	wp_update_post( $attachment );
+	// Update attachment array.
+	$attachment_data = array(
+		'ID'           => $id,
+		'post_author'  => $post_author,
+		'post_date'    => $post_date,
+		'post_content' => $post_content,
+		'post_title'   => $post_title,
+		'post_excerpt' => $post_excerpt,
+		'post_type'    => 'attachment',
+		'post_name'    => strtolower( $post_title ),
+	);
+	wp_update_post( $attachment_data, true );
 
 	// Update taxonomies and meta.
 	if ( empty( $_POST['media_category'] ) ) {
@@ -3331,11 +3401,28 @@ function wp_ajax_quick_edit_attachment() {
 
 	// Include functions to identify where the media file is used or attached.
 	require_once ABSPATH . 'wp-admin/includes/class-wp-media-list-table.php';
-	$list_table = new WP_Media_List_Table();
-	$thumbnails = $list_table->column_thumbnail( $attachment );
-	$used_in    = $list_table->column_used_in( $attachment );
-	$media_cats = $list_table->column_default( $attachment, 'taxonomy-media_category' );
-	$media_tags = $list_table->column_default( $attachment, 'taxonomy-media_post_tag' );
+	$list_table   = new WP_Media_List_Table();
+	$thumbnails   = $list_table->column_thumbnail( $attachment );
+	$used_in      = $list_table->column_used_in( $attachment );
+	$media_cats   = $list_table->column_default( $attachment, 'taxonomy-media_category' );
+	$media_tags   = $list_table->column_default( $attachment, 'taxonomy-media_post_tag' );
+	list( $mime ) = explode( '/', $attachment->post_mime_type );
+	$thumb        = wp_get_attachment_image( $id, array( 60, 60 ), true, array( 'alt' => '' ) );
+	$class        = $thumb ? ' class="has-media-icon"' : '';
+	$media_icon   = $thumb ? '<span class="media-icon ' . sanitize_html_class( $mime . '-icon' ) . '">' . $thumb . '</span>' : '';
+	$file         = get_attached_file( $id );
+	$link_start   = '';
+	$link_end     = '';
+
+	if ( current_user_can( 'edit_post', $id ) ) {
+		$link_start = sprintf(
+			'<a href="%s" aria-label="%s">',
+			get_edit_post_link( $id ),
+			/* translators: %s: Attachment title. */
+			esc_attr( sprintf( __( '&#8220;%s&#8221; (Edit)' ), $post_title ) )
+		);
+		$link_end = '</a>';
+	}
 
 	/**
 	 * Output buffer is used here because the function prints directly
@@ -3346,37 +3433,31 @@ function wp_ajax_quick_edit_attachment() {
 	$attached_to = ob_get_clean();
 
 	$new_tr = '<th scope="row" class="check-column">
-		<label class="screen-reader-text" for="cb-select-' . $id . '">' . esc_html__( 'Select ' ) . esc_html( $attachment->post_title ) . '</label>
+		<label class="screen-reader-text" for="cb-select-' . $id . '">' . esc_html__( 'Select ' ) . esc_html( $post_title ) . '</label>
 		<input type="checkbox" name="media[]" id="cb-select-' . $id . '" value="' . $id . '">
 	</th>
 	<td class="title column-title has-row-actions column-primary" data-colname="' . esc_html__( 'File' ) . '">
-		<strong class="has-media-icon">
-			<a href="' . esc_url( home_url( '/wp-admin/post.php?post=' . $id . '&amp;action=edit' ) ) . '" aria-label="' . esc_attr__( sprintf( '“%s” (Edit)', $attachment->post_title ) ) . '">
-				<span class="media-icon image-icon">
-					<img width="60" height="60" src="' . esc_url( wp_get_attachment_image_src( $id )[0] ) . '" class="attachment-60x60 size-60x60" alt="" decoding="async" loading="lazy">
-				</span>' . esc_html( $attachment->post_title ) . '
-			</a>
-		</strong>
+		<strong ' . $class . '>' . $link_start . $media_icon . esc_html( $post_title ) . $link_end . _media_states( $attachment ) . '</strong>
 
 		<p class="filename">
-			<span class="screen-reader-text">' . esc_html__( 'File name: ' ) . '</span>' . esc_html( $attachment->post_title ) . '
+			<span class="screen-reader-text">' . esc_html__( 'File name: ' ) . '</span>' . esc_html( wp_basename( $file ) ) . '
 		</p>
 
 		<div class="row-actions">
-			<span class="edit"><a href="' . esc_url( home_url( '/wp-admin/post.php?post=' . $id . '&amp;action=edit' ) ) . '" aria-label="Edit “' . esc_attr( $attachment->post_title ) . '”">' . esc_html__( 'Edit' ) . '</a> | </span>
+			<span class="edit"><a href="' . esc_url( home_url( '/wp-admin/post.php?post=' . $id . '&amp;action=edit' ) ) . '" aria-label="Edit “' . esc_attr( $post_title ) . '”">' . esc_html__( 'Edit' ) . '</a> | </span>
 
-			<span class="delete"><a href="post.php?action=delete&amp;post=' . $id . '&amp;_wpnonce=' . esc_attr( $nonce ) . '" class="submitdelete aria-button-if-js" onclick="return showNotice.warn();" aria-label="' . esc_attr__( sprintf( 'Delete “%s” permanently', $attachment->post_title ) ) . '" role="button">' . esc_html__( 'Delete Permanently' ) . '</a> | </span>
+			<span class="delete"><a href="post.php?action=delete&amp;post=' . $id . '&amp;_wpnonce=' . esc_attr( $nonce ) . '" class="submitdelete aria-button-if-js" onclick="return showNotice.warn();" aria-label="' . esc_attr__( sprintf( 'Delete “%s” permanently', $post_title ) ) . '" role="button">' . esc_html__( 'Delete Permanently' ) . '</a> | </span>
 
-			<span class="view"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'View “%s”', $attachment->post_title ) ) . '" rel="bookmark">' . esc_html__( 'View' ) . '</a> | </span>
+			<span class="view"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'View “%s”', $post_title ) ) . '" rel="bookmark">' . esc_html__( 'View' ) . '</a> | </span>
 
 			<span class="copy">
 				<span class="copy-to-clipboard-container">
-					<button type="button" class="button-link copy-attachment-url media-library" data-clipboard-text="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'Copy “%s” URL to clipboard', $attachment->post_title ) ) . '">' . esc_html__( 'Copy URL' ) . '</button>
+					<button type="button" class="button-link copy-attachment-url media-library" data-clipboard-text="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'Copy “%s” URL to clipboard', $post_title ) ) . '">' . esc_html__( 'Copy URL' ) . '</button>
 					<span class="success hidden" aria-hidden="true">' . esc_html__( 'Copied!' ) . '</span>
 				</span> |
 			</span>
 
-			<span class="download"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'Download “%s”', $attachment->post_title ) ) . '" download="">' . esc_html__( 'Download file' ) . '</a></span>
+			<span class="download"><a href="' . esc_url( wp_get_attachment_url( $id ) ) . '" aria-label="' . esc_attr__( sprintf( 'Download “%s”', $post_title ) ) . '" download="">' . esc_html__( 'Download file' ) . '</a></span>
 		</div>
 		<button type="button" class="toggle-row">
 			<span class="screen-reader-text">' . esc_html__( 'Show more details' ) . '</span>
@@ -3384,7 +3465,7 @@ function wp_ajax_quick_edit_attachment() {
 	</td>
 
 	<td class="author column-author" data-colname="' . esc_attr__( 'Author' ) . '">
-		<a href="upload.php?author=' . absint( $attachment->post_author ) . '">' . esc_html( $author->display_name ) . '</a>
+		<a href="upload.php?author=' . $post_author . '">' . esc_html( $author->display_name ) . '</a>
 	</td>
 
 	<td class="taxonomy-media_category column-taxonomy-media_category" data-colname="' . esc_attr__( 'Media Categories' ) . '">' . $media_cats . '</td>
@@ -3397,7 +3478,7 @@ function wp_ajax_quick_edit_attachment() {
 
 	<td class="parent column-parent" data-colname="' . esc_attr__( 'Uploaded to' ) . '">' . $attached_to . '</td>
 
-	<td class="comments column-comments hidden" data-colname="' . esc_attr__( 'Comments' ) . '">
+	<td class="comments column-comments" data-colname="' . esc_attr__( 'Comments' ) . '">
 		<div class="post-com-count-wrapper">
 			<span aria-hidden="true">—</span>
 			<span class="screen-reader-text">' . esc_html__( 'No comments' ) . '</span>
@@ -3409,8 +3490,8 @@ function wp_ajax_quick_edit_attachment() {
 	</td>
 
 	<td class="alt column-alt" data-colname="' . esc_attr__( 'Alt Text' ) . '">' . esc_html( $alt ) . '</td>
-	<td class="caption column-caption" data-colname="' . esc_attr__( 'Caption' ) . '">' . esc_html( $attachment->post_excerpt ) . '</td>
-	<td class="desc column-desc" data-colname="' . esc_attr__( 'Description' ) . '">' . esc_html( $attachment->post_content ) . '</td>
+	<td class="caption column-caption" data-colname="' . esc_attr__( 'Caption' ) . '">' . esc_html( $post_excerpt ) . '</td>
+	<td class="desc column-desc" data-colname="' . esc_attr__( 'Description' ) . '">' . esc_html( $post_content ) . '</td>
 	<td class="date column-date" data-colname="' . esc_attr__( 'Date' ) . '">' . esc_html( $date ) . '</td>';
 
 	wp_send_json_success( $new_tr );
@@ -3653,6 +3734,10 @@ function wp_ajax_heartbeat() {
  * Ajax handler for getting revision diffs.
  *
  * @since 3.6.0
+ *
+ * Modified for use without backbone.js
+ *
+ * @since CP-2.5.0
  */
 function wp_ajax_get_revision_diffs() {
 	require ABSPATH . 'wp-admin/includes/revision.php';
@@ -3671,8 +3756,9 @@ function wp_ajax_get_revision_diffs() {
 	if ( ! $revisions ) {
 		wp_send_json_error();
 	}
+	$latest_revision_id = array_key_first( $revisions );
 
-	$return = array();
+	$diffs = array();
 
 	if ( function_exists( 'set_time_limit' ) ) {
 		set_time_limit( 0 );
@@ -3681,12 +3767,75 @@ function wp_ajax_get_revision_diffs() {
 	foreach ( $_REQUEST['compare'] as $compare_key ) {
 		list( $compare_from, $compare_to ) = explode( ':', $compare_key ); // from:to
 
-		$return[] = array(
+		$diffs[] = array(
 			'id'     => $compare_key,
 			'fields' => wp_get_revision_ui_diff( $post, $compare_from, $compare_to ),
 		);
 	}
-	wp_send_json_success( $return );
+
+	$show_avatars = get_option( 'show_avatars' );
+
+	$diffs_array = array();
+	foreach ( $diffs as $diff ) {
+		$post_ids = explode( ':', $diff['id'] );
+		$author_left_id = get_post_field( 'post_author', $post_ids[0] );
+		$author_left_name = get_the_author_meta( 'display_name', $author_left_id );
+
+		$author_right_id = get_post_field( 'post_author', $post_ids[1] );
+		$author_right_name = get_the_author_meta( 'display_name', $author_right_id );
+		$current = (int) $post_ids[1] === $latest_revision_id ? esc_html__( 'Current ' ) : '';
+		$locked = wp_check_post_lock( $post->ID ) ? ' disabled' : '';
+		$restore_link = str_replace(
+			'&amp;',
+			'&',
+			wp_nonce_url(
+				add_query_arg(
+					array(
+						'revision' => $post_ids[1],
+						'action'   => 'restore',
+					),
+					admin_url( 'revision.php' )
+				),
+				'restore-post_' . $post_ids[1]
+			)
+		);
+
+		$author_left  = $show_avatars ? get_avatar( $author_left_id, 32 ) : '';
+		$author_left .= '<div class="author-info';
+		$author_left .= wp_is_post_autosave( $post_ids[0] ) ? ' autosave' : '';
+		$author_left .= '">';
+		$author_left .= '<span class="byline">';
+		$author_left .= wp_is_post_autosave( $post_ids[0] ) ? esc_html__( 'Autosave by ' ) : esc_html__( 'Revision by ' );
+		$author_left .= '<span class="author-name">' . esc_html__( $author_left_name ) . '</span>';
+		$author_left .= '</span>';
+		$author_left .= '<span class="time-ago">' . sprintf( __( '%s ago' ), human_time_diff( get_post_timestamp( $post_ids[0] ), time() ) ) . '</span> ';
+		$author_left .= '<span class="date">(' . get_the_date( '', $post_ids[0] ) . ')</span>';
+		$author_left .= '</div>';
+		$diffs_array[ $diff['id'] ]['author_left'] = $author_left;
+
+		$author_right  = $show_avatars ? get_avatar( $author_right_id, 32 ) : '';
+		$author_right .= '<div class="author-info';
+		$author_right .= wp_is_post_autosave( $post_ids[1] ) ? ' autosave' : '';
+		$author_right .= '">';
+		$author_right .= '<span class="byline">';
+		$author_right .= wp_is_post_autosave( $post_ids[1] ) ? esc_html__( 'Autosave by ' ) : $current . esc_html__( 'Revision by ' );
+		$author_right .= '<span class="author-name">' . esc_html__( $author_right_name ) . '</span>';
+		$author_right .= '</span>';
+		$author_right .= '<span class="time-ago">' . sprintf( __( '%s ago' ), human_time_diff( get_post_timestamp( $post_ids[1] ), time() ) ) . '</span> ';
+		$author_right .= '<span class="date">(' . get_the_date( '', $post_ids[1] ) . ')</span>';
+		$author_right .= '</div>';
+		$author_right .= '<input type="button" class="restore-revision button button-primary" data-restore="' . $restore_link . '" value="';
+		$author_right .= wp_is_post_autosave( $post_ids[1] ) ? esc_attr__( 'Restore This Autosave' ) : esc_attr__( 'Restore This Revision' ) . '"' . $locked . '>';
+		$diffs_array[ $diff['id'] ]['author_right'] = $author_right;
+
+		$diffs_string  = '<h3>' . esc_html__( 'Title' ) . '</h3>' . $diff['fields'][0]['diff'];
+		if ( ! empty( $diff['fields'][1] ) ) {
+			$diffs_string .= '<h3>' . esc_html__( 'Content' ) . '</h3>' . $diff['fields'][1]['diff'];
+		}
+		$diffs_array[ $diff['id'] ]['diffs'] = $diffs_string;
+	}
+
+	wp_send_json_success( $diffs_array );
 }
 
 /**
@@ -3766,7 +3915,9 @@ function wp_ajax_query_themes() {
 		wp_send_json_error();
 	}
 
+	$count = $api->info['results'];
 	$update_php = network_admin_url( 'update.php?action=install-theme' );
+	$cp_has_update = classicpress_has_update();
 
 	$installed_themes = search_theme_directories();
 
@@ -3781,7 +3932,26 @@ function wp_ajax_query_themes() {
 		}
 	}
 
-	foreach ( $api->themes as &$theme ) {
+	// Get the current theme
+	$current_theme = wp_get_theme()->get( 'TextDomain' );
+
+	$themes_string = '';
+	foreach ( $api->themes as $theme ) {
+
+		// Don't show FSE themes
+		$theme->compatible_wp  = is_wp_version_compatible( $theme->requires );
+		$theme->compatible_php = is_php_version_compatible( $theme->requires_php );
+		$theme->compatible_cp  = ! array_key_exists( 'full-site-editing', $theme->tags );
+		if ( ! $theme->compatible_cp ) {
+			$count--; // Remove from total count shown
+			continue;
+		}
+
+		$active = '';
+		if ( $theme->slug === $current_theme ) {
+			$active = ' active';
+		}
+
 		$theme->install_url = add_query_arg(
 			array(
 				'theme'    => $theme->slug,
@@ -3842,12 +4012,159 @@ function wp_ajax_query_themes() {
 
 		$theme->num_ratings    = number_format_i18n( $theme->num_ratings );
 		$theme->preview_url    = set_url_scheme( $theme->preview_url );
-		$theme->compatible_wp  = is_wp_version_compatible( $theme->requires );
-		$theme->compatible_php = is_php_version_compatible( $theme->requires_php );
-		$theme->compatible_cp  = ! array_key_exists( 'full-site-editing', $theme->tags );
+
+		// Build HTML response
+		$theme_item = '<li id="' . esc_attr__( $theme->slug ) . '" class="theme' . esc_attr( $active ) . '" tabindex="0" data-install-nonce="' . esc_url( $theme->install_url ) . '" data-activate-nonce="' . esc_url( $theme->activate_url ) . '" data-customize="' . esc_url( $theme->customize_url ) . '" data-home="' . esc_url( $theme->homepage ) . '" data-description="' . esc_attr__( $theme->description ) . '" data-tags="' . esc_attr__( implode( ',', $theme->tags ) ) . '" data-ratings="' . esc_attr( $theme->stars ) . '" data-num-ratings="' . esc_attr( $theme->num_ratings ) . '" data-version="' . esc_attr( $theme->version ) . '">';
+
+		if ( ! empty( $theme->screenshot_url ) ) {
+			$theme_item .= '<div class="theme-screenshot"><img src="' . esc_url( $theme->screenshot_url ) . '" alt=""></div>';
+		} else {
+			$theme_item .= '<div class="theme-screenshot blank"></div>';
+		}
+
+		if ( $is_theme_installed ) {
+			$theme_item .= '<div class="notice inline notice-success notice-alt"><p>' . esc_html__( 'Installed' ) . '</p></div>';
+		}
+
+		if ( ! $theme->compatible_wp || ! $theme->compatible_php || ! $theme->compatible_cp ) {
+			$theme_item .= '<div class="notice inline notice-error notice-alt"><p>';
+
+			if ( ! $theme->compatible_wp && ! $theme->compatible_php ) {
+				$theme_item .= __( 'This theme does not work with your versions of ClassicPress and PHP.' );
+
+				if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
+					if ( $cp_has_update ) {
+						$theme_item .= sprintf(
+							/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
+							' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
+							self_admin_url( 'update-core.php' ),
+							esc_url( wp_get_update_php_url() )
+						);
+					} else {
+						$theme_item .= sprintf(
+							/* translators: %s: URL to Update PHP page. */
+							' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
+							esc_url( wp_get_update_php_url() )
+						);
+					}
+					wp_update_php_annotation( '</p><p><em>', '</em>' );
+				} elseif ( current_user_can( 'update_core' ) && $cp_has_update ) {
+					$theme_item .= sprintf(
+						/* translators: %s: URL to WordPress Updates screen. */
+						' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
+						self_admin_url( 'update-core.php' )
+					);
+				} elseif ( current_user_can( 'update_php' ) ) {
+					$theme_item .= sprintf(
+						/* translators: %s: URL to Update PHP page. */
+						' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
+						esc_url( wp_get_update_php_url() )
+					);
+					wp_update_php_annotation( '</p><p><em>', '</em>' );
+				}
+			} else if ( ! $theme->compatible_cp ) {
+				$theme_item .= __( "FSE themes don't work with ClassicPress." );
+
+			} else if ( ! $theme->compatible_wp ) {
+				$theme_item .= __( 'This theme does not work with your version of ClassicPress.' );
+
+				if ( current_user_can( 'update_core' ) && $cp_has_update ) {
+					$theme_item .= sprintf(
+						/* translators: %s: URL to WordPress Updates screen. */
+						' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
+						self_admin_url( 'update-core.php' )
+					);
+				}
+			} else if ( ! $theme->compatible_php ) {
+				$theme_item .= __( 'This theme does not work with your version of PHP.' );
+
+				if ( current_user_can( 'update_php' ) ) {
+					$theme_item .= sprintf(
+						/* translators: %s: URL to Update PHP page. */
+						' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
+						esc_url( wp_get_update_php_url() )
+					);
+					wp_update_php_annotation( '</p><p><em>', '</em>' );
+				}
+			}
+			$theme_item .= '</p></div>';
+		}
+
+		$theme_item .= '<button class="more-details">' . esc_html__( 'Details &amp; Preview' ) . '</button>';
+		$theme_item .= '<div class="theme-author">';
+			/* translators: %s: Theme author name. */
+			$theme_item .= sprintf( __( 'By %s' ), $theme->author );
+		$theme_item .= '</div>';
+
+		$theme_item .= '<div class="theme-id-container">';
+		$theme_item .= '<h3 class="theme-name">' . esc_html__( $theme->name ) . '</h3>';
+		$theme_item .= '<div class="theme-actions">';
+
+		if ( $is_theme_installed ) {
+			if ( $theme->compatible_wp && $theme->compatible_php && $theme->compatible_cp ) {
+
+				/* translators: %s: Theme name. */
+				$aria_label = sprintf( _x( 'Activate %s', 'theme' ), $theme->name );
+				if ( $theme->activate_url ) {
+					if ( $theme->slug !== get_option( 'template' ) ) {
+						$theme_item .= '<a class="button button-primary activate" href="' . esc_url( $theme->activate_url ) . '" aria-label="' . esc_attr( $aria_label ) . '">' . __( 'Activate' ) . '</a>';
+					} else {
+						$theme_item .= '<button class="button button-primary disabled">' . _x( 'Activated', 'theme' ) . '</button>';
+					}
+				}
+				if ( $theme->customize_url ) {
+					if ( $theme->slug !== get_option( 'template' ) ) {
+						$theme_item .= '<a class="button load-customize" href="' . esc_url( $theme->customize_url ) . '">' . __( 'Customize' ) . '</a>';
+					} else {
+						$theme_item .= '<button class="button preview install-theme-preview">' . __( 'Preview' ) . '</button>';
+					}
+				} else {
+					/* translators: %s: Theme name. */
+					$aria_label = sprintf( _x( 'Cannot Activate %s', 'theme' ), $theme->name );
+
+					if ( $theme->activate_url ) {
+						$theme_item .= '<a class="button button-primary disabled" aria-label="' . esc_attr( $aria_label ) . '">' . _x( 'Cannot Activate', 'theme' ) . '</a>';
+					}
+					if ( $theme->customize_url ) {
+						$theme_item .= '<a class="button disabled">' . __( 'Live Preview' ) . '</a>';
+					} else {
+						$theme_item .= '<button class="button disabled">' . __( 'Preview' ) . '</button>';
+					}
+				}
+			} else {
+				/* translators: %s: Theme name. */
+				$aria_label = sprintf( _x( 'Cannot Activate %s', 'theme' ), $theme->name );
+
+				$theme_item .= '<a class="button button-primary disabled" data-name="' . esc_attr__( $theme->name ) . '" aria-label="' . esc_attr( $aria_label ) . '">' . _x( 'Cannot Activate', 'theme' ) . '</a>';
+				$theme_item .= '<button class="button disabled">' . __( 'Preview' ) . '</button>';
+			}
+		} else {
+			if ( $theme->compatible_wp && $theme->compatible_php && $theme->compatible_cp ) {
+
+				/* translators: %s: Theme name. */
+				$aria_label = sprintf( _x( 'Install %s', 'theme' ), $theme->name );
+
+				$theme_item .= '<a class="button button-primary theme-install" data-name="' . esc_attr__( $theme->name ) . '" data-slug="' . esc_attr__( $theme->slug ) . '" href="' . esc_url( $theme->install_url ) . '" aria-label="' . esc_attr( $aria_label ) . '">' . __( 'Install' ) . '</a>';
+				$theme_item .= '<button class="button preview install-theme-preview">' . __( 'Preview' ) . '</button>';
+
+			} else {
+				/* translators: %s: Theme name. */
+				$aria_label = sprintf( _x( 'Cannot Install %s', 'theme' ), $theme->name );
+
+				$theme_item .= '<a class="button button-primary disabled" data-name="' . esc_attr__( $theme->name ) . '" aria-label="' . esc_attr( $aria_label ) . '">' . _x( 'Cannot Install', 'theme' ) . '</a>';
+				$theme_item .= '<button class="button disabled">' . __( 'Preview' ) . '</button>';
+			}
+		}
+		$theme_item .= '</div></div></li>';
+		$themes_string .= $theme_item;
 	}
 
-	wp_send_json_success( $api );
+	wp_send_json_success(
+		array(
+			'count' => $count,
+			'html'  => $themes_string,
+		)
+	);
 }
 
 /**
@@ -4063,8 +4380,6 @@ function wp_ajax_parse_media_shortcode() {
 	echo $parsed;
 
 	if ( 'playlist' === $_REQUEST['type'] ) {
-		wp_underscore_playlist_templates();
-
 		wp_print_scripts( 'wp-playlist' );
 	} else {
 		wp_print_scripts( array( 'mediaelement-vimeo', 'wp-mediaelement' ) );
@@ -4156,8 +4471,9 @@ function wp_ajax_crop_image() {
 
 			/** This filter is documented in wp-admin/includes/class-custom-image-header.php */
 			$cropped    = apply_filters( 'wp_create_file_in_uploads', $cropped, $attachment_id ); // For replication.
-			$attachment = $wp_site_icon->create_attachment_object( $cropped, $attachment_id );
-			unset( $attachment['ID'] );
+
+			// Copy attachment properties.
+			$attachment = wp_copy_parent_attachment_properties( $cropped, $attachment_id, $context );
 
 			// Update the attachment.
 			add_filter( 'intermediate_image_sizes_advanced', array( $wp_site_icon, 'additional_sizes' ) );
@@ -4185,46 +4501,8 @@ function wp_ajax_crop_image() {
 			/** This filter is documented in wp-admin/includes/class-custom-image-header.php */
 			$cropped = apply_filters( 'wp_create_file_in_uploads', $cropped, $attachment_id ); // For replication.
 
-			$parent_url      = wp_get_attachment_url( $attachment_id );
-			$parent_basename = wp_basename( $parent_url );
-			$url             = str_replace( $parent_basename, wp_basename( $cropped ), $parent_url );
-
-			$size       = wp_getimagesize( $cropped );
-			$image_type = ( $size ) ? $size['mime'] : 'image/jpeg';
-
-			// Get the original image's post to pre-populate the cropped image.
-			$original_attachment  = get_post( $attachment_id );
-			$sanitized_post_title = sanitize_file_name( $original_attachment->post_title );
-			$use_original_title   = (
-				( '' !== trim( $original_attachment->post_title ) ) &&
-				/*
-				 * Check if the original image has a title other than the "filename" default,
-				 * meaning the image had a title when originally uploaded or its title was edited.
-				 */
-				( $parent_basename !== $sanitized_post_title ) &&
-				( pathinfo( $parent_basename, PATHINFO_FILENAME ) !== $sanitized_post_title )
-			);
-			$use_original_description = ( '' !== trim( $original_attachment->post_content ) );
-
-			$attachment = array(
-				'post_title'     => $use_original_title ? $original_attachment->post_title : wp_basename( $cropped ),
-				'post_content'   => $use_original_description ? $original_attachment->post_content : $url,
-				'post_mime_type' => $image_type,
-				'guid'           => $url,
-				'context'        => $context,
-			);
-
-			// Copy the image caption attribute (post_excerpt field) from the original image.
-			if ( '' !== trim( $original_attachment->post_excerpt ) ) {
-				$attachment['post_excerpt'] = $original_attachment->post_excerpt;
-			}
-
-			// Copy the image alt text attribute from the original image.
-			if ( '' !== trim( $original_attachment->_wp_attachment_image_alt ) ) {
-				$attachment['meta_input'] = array(
-					'_wp_attachment_image_alt' => wp_slash( $original_attachment->_wp_attachment_image_alt ),
-				);
-			}
+			// Copy attachment properties.
+			$attachment = wp_copy_parent_attachment_properties( $cropped, $attachment_id, $context );
 
 			$attachment_id = wp_insert_attachment( $attachment, $cropped );
 			$metadata      = wp_generate_attachment_metadata( $attachment_id, $cropped );

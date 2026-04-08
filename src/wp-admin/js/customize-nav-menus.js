@@ -74,8 +74,6 @@
 					dataTransfer.setDragImage( ghostImage, 30, 20 );
 				},
 				dataIdAttr: 'data-id', // HTML attribute that is used by the `toArray()` method in OnEnd
-				forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for all webkit browsers
-				//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari only
 
 				// Get position of menu item when chosen
 				onChoose: function( e ) {
@@ -844,7 +842,13 @@
 				return;
 			}
 
-			this.currentMenuControl.addItemToMenu( menu_item.attributes );
+			// Leave the title as empty to reuse the original title as a placeholder if set.
+			var nav_menu_item = Object.assign( {}, menu_item.attributes );
+			if ( nav_menu_item.title === nav_menu_item.original_title ) {
+				nav_menu_item.title = '';
+			}
+
+			this.currentMenuControl.addItemToMenu( nav_menu_item );
 
 			$( menuitemTpl ).find( '.menu-item-handle' ).addClass( 'item-added' );
 		},
@@ -3312,7 +3316,6 @@
 				item,
 				{
 					nav_menu_term_id: menuControl.params.menu_id,
-					original_title: item.title,
 					position: position
 				}
 			);

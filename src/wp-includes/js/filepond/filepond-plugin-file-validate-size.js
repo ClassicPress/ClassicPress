@@ -171,4 +171,3 @@
 
     return plugin;
 });
-

@@ -58,25 +58,24 @@ class WP_Compat {
 
 		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
 		$active        = is_plugin_active( $plugin_file ) ? 'active' : '';
-		$shadow        = isset( $plugin_data['new_version'] ) ? 'style="box-shadow: none;"' : '';
+		$shadow        = isset( $plugin_data['update'] ) ? 'style="box-shadow: none;"' : '';
+		// Translators: %1$s is the plugin name.
+		$notice_msg    = sprintf( esc_html__( '%1$s uses block-related functions and may have issues.' ), $plugin_data['Name'] );
+		$notice_msg   .= ' <a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-general-screen/#blocks-compatibility">' . __( 'Learn more' ) . '</a> | ';
+		$notice_msg   .= '<a href="https://forums.classicpress.net/new-topic?category=plugins/plugin-support&tags=blocks-compatibility&title=' . urlencode( $plugin_data['Name'] ) . '+blocks+compatibility">' . __( 'Report an issue &rsaquo;' ) . '</a>';
+		$notice_args   = array(
+			'type'               => 'warning',
+			'additional_classes' => array( 'inline' ),
+		);
 		?>
 		<tr class="plugin-update-tr <?php echo $active; ?>">
 			<td colspan="<?php echo $wp_list_table->get_column_count(); ?>" class="plugin-update colspanchange" <?php echo $shadow; ?>>
-				<div class="notice inline notice-warning">
-					<p>
-						<?php
-						// Translators: %1$s is the plugin name.
-						printf( esc_html__( '%1$s uses block-related functions and may have issues.' ), $plugin_data['Name'] );
-						?>
-						<a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-general-screen/#blocks-compatibility"><?php _e( 'Learn more' ); ?></a> |
-						<a href="https://forums.classicpress.net/new-topic?category=plugins/plugin-support&tags=blocks-compatibility&title=<?php echo urlencode( $plugin_data['Name'] ); ?>+blocks+compatibility"><?php _e( 'Report an issue &rsaquo;' ); ?></a>
-					</p>
-				</div>
+				<?php wp_admin_notice( $notice_msg, $notice_args ); ?>
 			</td>
+			<script>
+				document.querySelector('tr[data-plugin="<?php echo $plugin_file; ?>"').classList.add('update');
+			</script>
 		</tr>
-		<script>
-			document.querySelector('tr[data-plugin="<?php echo $plugin_file; ?>"').classList.add('update');
-		</script>
 		<?php
 	}
 
@@ -172,7 +171,7 @@ class WP_Compat {
 	 * @return string
 	 */
 	private static function plugin_folder( $path ) {
-		return preg_replace( '~^' . preg_quote( WP_PLUGIN_DIR ) . preg_quote( DIRECTORY_SEPARATOR ) . '([^' . preg_quote( DIRECTORY_SEPARATOR ) . ']*).*~', '$1', $path );
+		return preg_replace( '~^' . preg_quote( wp_normalize_path( WP_PLUGIN_DIR ) ) . '/([^/]*).*~', '$1', wp_normalize_path( $path ) );
 	}
 
 	/**
@@ -418,6 +417,62 @@ class WP_Compat {
 			 * @return string ''.
 			 */
 			function get_dynamic_block_names( ...$args ) {
+				WP_Compat::using_block_function();
+				return '';
+			}
+		}
+
+		if ( ! function_exists( 'get_block_theme_folders' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.3.0
+			 *
+			 * @return string ''.
+			 */
+			function get_block_theme_folders( ...$args ) {
+				WP_Compat::using_block_function();
+				return '';
+			}
+		}
+
+		if ( ! function_exists( 'register_block_style' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.7.0
+			 *
+			 * @return bool False.
+			 */
+			function register_block_style( ...$args ) {
+				WP_Compat::using_block_function();
+				return false;
+			}
+		}
+
+		if ( ! function_exists( 'register_block_bindings_source' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.7.0
+			 *
+			 * @return bool False.
+			 */
+			function register_block_bindings_source( ...$args ) {
+				WP_Compat::using_block_function();
+				return false;
+			}
+		}
+
+		if ( ! function_exists( 'do_blocks' ) ) {
+			/**
+			 * Polyfill for block functions.
+			 *
+			 * @since CP-2.7.0
+			 *
+			 * @return string ''.
+			 */
+			function do_blocks( ...$args ) {
 				WP_Compat::using_block_function();
 				return '';
 			}

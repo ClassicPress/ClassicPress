@@ -503,30 +503,37 @@ class Custom_Image_Header {
 <div class="wrap">
 <h1><?php _e( 'Custom Header' ); ?></h1>
 
-		<?php if ( current_user_can( 'customize' ) ) { ?>
-<div class="notice notice-info hide-if-no-customize">
-	<p>
-			<?php
-			printf(
+		<?php
+		if ( current_user_can( 'customize' ) ) {
+			$message = sprintf(
 				/* translators: %s: URL to header image configuration in Customizer. */
 				__( 'You can now manage and live-preview Custom Header in the <a href="%s">Customizer</a>.' ),
 				admin_url( 'customize.php?autofocus[control]=header_image' )
 			);
-			?>
-	</p>
-</div>
-		<?php } ?>
+			wp_admin_notice(
+				$message,
+				array(
+					'type'               => 'info',
+					'additional_classes' => array( 'hide-if-no-customize' ),
+				)
+			);
+		}
 
-		<?php if ( ! empty( $this->updated ) ) { ?>
-<div id="message" class="updated">
-	<p>
-			<?php
+		if ( ! empty( $this->updated ) ) {
+			$updated_message = sprintf(
 			/* translators: %s: Home URL. */
-			printf( __( 'Header updated. <a href="%s">Visit your site</a> to see how it looks.' ), esc_url( home_url( '/' ) ) );
-			?>
-	</p>
-</div>
-		<?php } ?>
+				__( 'Header updated. <a href="%s">Visit your site</a> to see how it looks.' ),
+				esc_url( home_url( '/' ) )
+			);
+			wp_admin_notice(
+				$updated_message,
+				array(
+					'id'                 => 'message',
+					'additional_classes' => array( 'updated' ),
+				)
+			);
+		}
+		?>
 
 <h2><?php _e( 'Header Image' ); ?></h2>
 
@@ -1060,7 +1067,7 @@ endif;
 		/** This filter is documented in wp-admin/includes/class-custom-image-header.php */
 		$cropped = apply_filters( 'wp_create_file_in_uploads', $cropped, $attachment_id ); // For replication.
 
-		$attachment = $this->create_attachment_object( $cropped, $attachment_id );
+		$attachment = wp_copy_parent_attachment_properties( $cropped, $attachment_id, 'custom-header' );
 
 		if ( ! empty( $_POST['create-new-attachment'] ) ) {
 			unset( $attachment['ID'] );
@@ -1296,12 +1303,14 @@ endif;
 	 * Create an attachment 'object'.
 	 *
 	 * @since 3.9.0
+	 * @deprecated 6.5.0
 	 *
 	 * @param string $cropped              Cropped image URL.
 	 * @param int    $parent_attachment_id Attachment ID of parent image.
 	 * @return array An array with attachment object data.
 	 */
 	final public function create_attachment_object( $cropped, $parent_attachment_id ) {
+		_deprecated_function( __METHOD__, '6.5.0', 'wp_copy_parent_attachment_properties()' );
 		$parent     = get_post( $parent_attachment_id );
 		$parent_url = wp_get_attachment_url( $parent->ID );
 		$url        = str_replace( wp_basename( $parent_url ), wp_basename( $cropped ), $parent_url );
@@ -1403,7 +1412,7 @@ endif;
 		/** This filter is documented in wp-admin/includes/class-custom-image-header.php */
 		$cropped = apply_filters( 'wp_create_file_in_uploads', $cropped, $attachment_id ); // For replication.
 
-		$attachment = $this->create_attachment_object( $cropped, $attachment_id );
+		$attachment = wp_copy_parent_attachment_properties( $cropped, $attachment_id, 'custom-header' );
 
 		$previous = $this->get_previous_crop( $attachment );
 

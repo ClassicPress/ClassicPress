@@ -239,20 +239,20 @@ input+.iris-picker {
 }
 .iris-picker .iris-slider-offset {
 	position:absolute;
-	top:11px;
-	left:0;
+	top:0;
 	right:0;
-	bottom:-3px;
-	width:auto;
+	bottom:0;
 	height:auto;
 	background:transparent;
-	border:0;border-radius:0;
+	border:0;
+	border-radius:0;
 }
 .iris-strip-horiz .iris-slider-offset {
 	top:0;
 	bottom:0;
-	right:11px;
-	left:-3px;
+	right:0;
+	left:0;
+	width:auto;
 }
 .iris-picker .iris-square-handle {
 	background:transparent;

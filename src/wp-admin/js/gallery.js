@@ -9,14 +9,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	var gallerySortable, gallerySortableInit, sortIt, clearAll, w, desc = false;
 
 	gallerySortableInit = function() {
-		gallerySortable = Sortable.create( document.getElementById( '#media-items' ), {
+		gallerySortable = Sortable.create( document.getElementById( 'media-items' ), {
 			group: 'items',
 			sort: true,
 			placeholder: 'sorthelper',
 			handle: 'div.filename',
 			dataIdAttr: 'data-id', // HTML attribute that is used by the `toArray()` method in OnEnd
-			forceFallback: navigator.vendor.match(/apple/i) ? true : false, // forces fallback for all webkit browsers
-			//forceFallback: 'GestureEvent' in window ? true : false, // forces fallback for Safari only
 			fallbackTolerance: 2,
 
 			// Element dropped

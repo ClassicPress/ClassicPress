@@ -1868,7 +1868,7 @@ function get_compat_media_markup( $attachment_id, $args = null ) {
 			$values = array();
 
 			foreach ( $terms as $term ) {
-				$values[] = $term->slug;
+				$values[] = $term->name;
 			}
 
 			$t['value']    = implode( ', ', $values );
@@ -2152,6 +2152,11 @@ function media_upload_form( $errors = null ) {
 	// Check if WebP images can be edited.
 	if ( ! wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) ) ) {
 		$plupload_init['webp_upload_error'] = true;
+	}
+
+	// Check if AVIF images can be edited.
+	if ( ! wp_image_editor_supports( array( 'mime_type' => 'image/avif' ) ) ) {
+		$plupload_init['avif_upload_error'] = true;
 	}
 
 	/**
@@ -3863,10 +3868,12 @@ function bulk_edit_attachments( $attachment_data = null ) {
 		}
 
 		// Update attachment author.
-		if ( isset( $attachment_data['post_author'] ) ) {
-			$attachment = get_post( $attachment_id );
-			$attachment->post_author = $attachment_data['post_author'];
-			wp_update_post( $attachment );
+		if ( isset( $attachment_data['post_author'] ) && $attachment_data['post_author'] !== '-1' ) {
+			$args = array(
+				'ID' => $attachment_id,
+				'post_author' => absint( $attachment_data['post_author'] ),
+			);
+			wp_update_post( $args, true );
 			update_post_meta( $attachment_id, '_edit_last', get_current_user_id() );
 			$update = true;
 		}
@@ -4034,7 +4041,7 @@ function cp_add_cats_and_tags_to_attachment_for_js( $response, $attachment, $met
 			array(
 				'taxonomy'   => 'media_category',
 				'object_ids' => $attachment->ID,
-				'fields'     => 'slugs',
+				'fields'     => 'names',
 			)
 		);
 	}
@@ -4060,7 +4067,7 @@ function cp_add_cats_and_tags_to_attachment_for_js( $response, $attachment, $met
 			array(
 				'taxonomy'   => 'media_post_tag',
 				'object_ids' => $attachment->ID,
-				'fields'     => 'slugs',
+				'fields'     => 'names',
 			)
 		);
 	}
@@ -4077,3 +4084,25 @@ function cp_add_cats_and_tags_to_attachment_for_js( $response, $attachment, $met
 	return $response;
 }
 add_filter( 'wp_prepare_attachment_for_js', 'cp_add_cats_and_tags_to_attachment_for_js', 10, 3 );
+
+/**
+ * Adds metadata to the array of attachment details.
+ *
+ * @since CP-2.5.0
+ *
+ * @return array
+ */
+function cp_add_meta_to_attachment_for_js( $response, $attachment, $meta ) {
+
+	/**
+	 * Filters the metadata included in the array of attachment details.
+	 *
+	 * @since CP-2.5.0
+	 *
+	 * @return array  $meta  Media file metadata
+	 */
+	$response['meta'] = apply_filters( 'cp_media_meta_for_js', $meta );
+
+	return $response;
+}
+add_filter( 'wp_prepare_attachment_for_js', 'cp_add_meta_to_attachment_for_js', 10, 3 );

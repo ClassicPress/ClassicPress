@@ -137,6 +137,7 @@ class Tests_Pluggable_Signatures extends WP_UnitTestCase {
 				'message',
 				'headers'     => '',
 				'attachments' => array(),
+				'embeds'      => array(),
 			),
 			'wp_authenticate'                 => array( 'username', 'password' ),
 			'wp_logout'                       => array(),
@@ -215,6 +216,9 @@ class Tests_Pluggable_Signatures extends WP_UnitTestCase {
 				'password',
 				'hash',
 				'user_id' => '',
+			),
+			'wp_password_needs_rehash'        => array(
+				'hash',
 			),
 			'wp_generate_password'            => array(
 				'length'              => 12,

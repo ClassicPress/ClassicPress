@@ -74,6 +74,15 @@ ImageDetails = AttachmentDisplay.extend(/** @lends wp.media.view.ImageDetails.pr
 
 	postRender: function() {
 		setTimeout( _.bind( this.scrollToTop, this ), 10 );
+
+		if (
+			( this.model.attachment.attributes.mime === 'image/webp' && ! window._wpMediaViewsL10n.webp_editable ) ||
+			( this.model.attachment.attributes.mime === 'image/avif' && ! window._wpMediaViewsL10n.avif_editable ) ||
+			( this.model.attachment.attributes.mime === 'image/heic' && ! window._wpMediaViewsL10n.heic_editable )
+		) {
+			this.$( '.edit-attachment' ).addClass('hidden');
+		}
+
 		this.toggleLinkSettings();
 		if ( window.getUserSetting( 'advImgDetails' ) === 'show' ) {
 			this.toggleAdvanced( true );

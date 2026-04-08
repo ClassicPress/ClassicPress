@@ -510,9 +510,16 @@ function wp_comment_reply( $position = 1, $checkbox = false, $mode = 'single', $
 			<button type="button" class="cancel button"><?php _e( 'Cancel' ); ?></button>
 			<span class="waiting spinner"></span>
 		</p>
-		<div class="notice notice-error notice-alt inline hidden">
-			<p class="error"></p>
-		</div>
+		<?php
+		wp_admin_notice(
+			'<p class="error"></p>',
+			array(
+				'type'               => 'error',
+				'additional_classes' => array( 'notice-alt', 'inline', 'hidden' ),
+				'paragraph_wrap'     => false,
+			)
+		);
+		?>
 	</div>
 
 	<input type="hidden" name="action" id="action" value="">
@@ -708,15 +715,17 @@ function meta_form( $post = null ) {
 		 */
 		$limit = apply_filters( 'postmeta_form_limit', 30 );
 
+		// Query changed to be routed via $wpdb->posts.
+		// @since CP-2.6.0
 		$keys = $wpdb->get_col(
 			$wpdb->prepare(
 				"SELECT DISTINCT meta_key
-				FROM $wpdb->postmeta
-				WHERE meta_key NOT BETWEEN '_' AND '_z'
-				HAVING meta_key NOT LIKE %s
-				ORDER BY meta_key
+				FROM $wpdb->posts as posts
+				LEFT JOIN $wpdb->postmeta as meta ON posts.ID = meta.post_id
+				WHERE post_type = %s
+				AND SUBSTR(meta_key,1,1) != '_'
 				LIMIT %d",
-				$wpdb->esc_like( '_' ) . '%',
+				$post->post_type,
 				$limit
 			)
 		);
@@ -846,19 +855,19 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
 	$day = '<label><span class="screen-reader-text">' .
 		/* translators: Hidden accessibility text. */
 		__( 'Day' ) .
-	'</span><input type="text" ' . ( $multi ? '' : 'id="jj" ' ) . 'name="jj" value="' . $jj . '" size="2" maxlength="2"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
+	'</span><input type="text" ' . ( $multi ? '' : 'id="jj" ' ) . 'name="jj" value="' . $jj . '" size="2" maxlength="2" inputmode="numeric" pattern="^([1-9]|[012][0-9]|3[01])$"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
 	$year = '<label><span class="screen-reader-text">' .
 		/* translators: Hidden accessibility text. */
 		__( 'Year' ) .
-	'</span><input type="text" ' . ( $multi ? '' : 'id="aa" ' ) . 'name="aa" value="' . $aa . '" size="4" maxlength="4"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
+	'</span><input type="text" ' . ( $multi ? '' : 'id="aa" ' ) . 'name="aa" value="' . $aa . '" size="4" maxlength="4" inputmode="numeric" pattern="^([1-9][0-9]{3})$"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
 	$hour = '<label><span class="screen-reader-text">' .
 		/* translators: Hidden accessibility text. */
 		__( 'Hour' ) .
-	'</span><input type="text" ' . ( $multi ? '' : 'id="hh" ' ) . 'name="hh" value="' . $hh . '" size="2" maxlength="2"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
+	'</span><input type="text" ' . ( $multi ? '' : 'id="hh" ' ) . 'name="hh" value="' . $hh . '" size="2" maxlength="2" inputmode="numeric" pattern="^([0-9]|[01][0-9]|2[0-3])$"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
 	$minute = '<label><span class="screen-reader-text">' .
 		/* translators: Hidden accessibility text. */
 		__( 'Minute' ) .
-	'</span><input type="text" ' . ( $multi ? '' : 'id="mn" ' ) . 'name="mn" value="' . $mn . '" size="2" maxlength="2"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
+	'</span><input type="text" ' . ( $multi ? '' : 'id="mn" ' ) . 'name="mn" value="' . $mn . '" size="2" maxlength="2" inputmode="numeric" pattern="^([0-9]|[0-5][0-9])$"' . $tab_index_attribute . ' autocomplete="off" class="form-required"></label>';
 
 	echo '<div class="timestamp-wrap">';
 	/* translators: 1: Month, 2: Day, 3: Year, 4: Hour, 5: Minute. */
@@ -889,10 +898,10 @@ function touch_time( $edit = 1, $for_post = 1, $tab_index = 0, $multi = 0 ) {
 	}
 	?>
 
-<p>
-<a href="#edit_timestamp" class="save-timestamp hide-if-no-js button"><?php _e( 'OK' ); ?></a>
-<a href="#edit_timestamp" class="cancel-timestamp hide-if-no-js button-cancel"><?php _e( 'Cancel' ); ?></a>
-</p>
+<fieldset>
+	<button type="button" class="save-timestamp button"><?php _e( 'OK' ); ?></button>
+	<button type="button" class="cancel-timestamp button-cancel"><?php _e( 'Cancel' ); ?></button>
+</fieldset>
 	<?php
 }
 
@@ -1009,10 +1018,15 @@ function wp_import_upload_form( $action ) {
 	$size       = size_format( $bytes );
 	$upload_dir = wp_upload_dir();
 	if ( ! empty( $upload_dir['error'] ) ) :
-		?>
-		<div class="error"><p><?php _e( 'Before you can upload your import file, you will need to fix the following error:' ); ?></p>
-		<p><strong><?php echo $upload_dir['error']; ?></strong></p></div>
-		<?php
+		$upload_directory_error  = '<p>' . __( 'Before you can upload your import file, you will need to fix the following error:' ) . '</p>';
+		$upload_directory_error .= '<p><strong>' . $upload_dir['error'] . '</strong></p>';
+		wp_admin_notice(
+			$upload_directory_error,
+			array(
+				'additional_classes' => array( 'error' ),
+				'paragraph_wrap'    => false,
+			)
+		);
 	else :
 		?>
 <form enctype="multipart/form-data" id="import-upload-form" method="post" class="wp-upload-form" action="<?php echo esc_url( wp_nonce_url( $action, 'import-upload' ) ); ?>">
@@ -1272,9 +1286,10 @@ function do_meta_boxes( $screen, $context, $data_object ) {
 					 *
 					 * @since CP-2.0.0
 					 */
+					$classes        = ' ' . postbox_classes( $box['id'], $page );
 					$hidden_class   = ( in_array( $box['id'], $hidden, true ) ) ? ' hide-if-js' : '';
-					$open_attribute = postbox_classes( $box['id'], $page ) ? '' : ' open';
-					echo '<details id="' . $box['id'] . '" class="postbox' . $hidden_class . '"' . $open_attribute . '>' . "\n";
+					$open_attribute = str_contains( $classes, 'closed' ) ? '' : ' open';
+					echo '<details id="' . $box['id'] . '" class="postbox' . $classes . $hidden_class . '"' . $open_attribute . '>' . "\n";
 
 					echo '<summary>';
 					echo '<div>';
@@ -2577,17 +2592,22 @@ function convert_to_screen( $hook_name ) {
  * @access private
  */
 function _local_storage_notice() {
-	?>
-	<div id="local-storage-notice" class="hidden notice is-dismissible">
-	<p class="local-restore">
-		<?php _e( 'The backup of this post in your browser is different from the version below.' ); ?>
-		<button type="button" class="button restore-backup"><?php _e( 'Restore the backup' ); ?></button>
-	</p>
-	<p class="help">
-		<?php _e( 'This will replace the current editor content with the last backup version. You can use undo and redo in the editor to get the old content back or to return to the restored version.' ); ?>
-	</p>
-	</div>
-	<?php
+	$local_storage_message  = '<p class="local-restore">';
+	$local_storage_message .= __( 'The backup of this post in your browser is different from the version below.' );
+	$local_storage_message .= '<button type="button" class="button restore-backup">' . __( 'Restore the backup' ) . '</button></p>';
+	$local_storage_message .= '<p class="help">';
+	$local_storage_message .= __( 'This will replace the current editor content with the last backup version. You can use undo and redo in the editor to get the old content back or to return to the restored version.' );
+	$local_storage_message .= '</p>';
+
+	wp_admin_notice(
+		$local_storage_message,
+		array(
+			'id'                 => 'local-storage-notice',
+			'additional_classes' => array( 'hidden' ),
+			'dismissible'        => true,
+			'paragraph_wrap'     => false,
+		)
+	);
 }
 
 /**
@@ -2665,8 +2685,11 @@ function wp_star_rating( $args = array() ) {
  * @since 4.2.0
  */
 function _wp_posts_page_notice() {
-	printf(
-		'<div class="notice notice-warning inline"><p>%s</p></div>',
-		__( 'You are currently editing the page that shows your latest posts.' )
+	wp_admin_notice(
+		__( 'You are currently editing the page that shows your latest posts.' ),
+		array(
+			'type'               => 'warning',
+			'additional_classes' => array( 'inline' ),
+		)
 	);
 }

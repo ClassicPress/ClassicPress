@@ -102,26 +102,24 @@ function edit_user( $user_id = 0 ) {
 		$user->display_name = sanitize_text_field( $_POST['display_name'] );
 	}
 
+	 /** This filter is documented in wp-admin/user-edit.php */
+	$taxonomies = apply_filters( 'cp_user_taxonomies', get_object_taxonomies( 'user', 'objects' ), $user );
+
 	/**
-	 * Enable adding of user to user taxonomies.
+	 * Enable adding of user taxonomies using the filter above.
 	 *
 	 * @since CP-2.1.0
 	 */
-	$tax_array = array();
-	$taxonomies = get_object_taxonomies( 'user', 'objects' );
 	if ( ! empty( $taxonomies ) ) {
 		foreach ( $taxonomies as $taxonomy ) {
-			$tax_array[] = $taxonomy->name;
-			foreach ( $tax_array as $tax_field ) {
-				if ( isset( $_POST[ $tax_field ] ) ) {
-					$tax_names = array();
-					foreach ( $_POST[ $tax_field ] as $tax_name ) {
-						$tax_names[] = wp_unslash( $tax_name );
-					}
-					wp_set_object_terms( $user->ID, array_map( 'sanitize_text_field', $tax_names ), $taxonomy->name );
-				} else {
-					wp_delete_object_term_relationships( $user->ID, $taxonomy->name );
+			if ( isset( $_POST[ $taxonomy->name ] ) ) {
+				$term_slugs = array();
+				foreach ( $_POST[ $taxonomy->name ] as $term_slug ) {
+					$term_slugs[] = wp_unslash( $term_slug );
 				}
+				wp_set_object_terms( $user->ID, array_map( 'sanitize_title', array_unique( $term_slugs ) ), $taxonomy->name );
+			} elseif ( $update ) {
+				wp_delete_object_term_relationships( $user->ID, $taxonomy->name );
 			}
 		}
 	}
@@ -550,14 +548,29 @@ function default_password_nag() {
 		return;
 	}
 
-	echo '<div class="error default-password-nag">';
-	echo '<p>';
-	echo '<strong>' . __( 'Notice:' ) . '</strong> ';
-	_e( 'You&rsquo;re using the auto-generated password for your account. Would you like to change it?' );
-	echo '</p><p>';
-	printf( '<a href="%s">' . __( 'Yes, take me to my profile page' ) . '</a> | ', get_edit_profile_url() . '#password' );
-	printf( '<a href="%s" id="default-password-nag-no">' . __( 'No thanks, do not remind me again' ) . '</a>', '?default_password_nag=0' );
-	echo '</p></div>';
+	$default_password_nag_message  = sprintf(
+		'<p><strong>%1$s</strong> %2$s</p>',
+		__( 'Notice:' ),
+		__( 'You are using the auto-generated password for your account. Would you like to change it?' )
+	);
+	$default_password_nag_message .= sprintf(
+		'<p><a href="%1$s">%2$s</a> | ',
+		esc_url( get_edit_profile_url() . '#password' ),
+		__( 'Yes, take me to my profile page' )
+	);
+	$default_password_nag_message .= sprintf(
+		'<a href="%1$s" id="default-password-nag-no">%2$s</a></p>',
+		'?default_password_nag=0',
+		__( 'No thanks, do not remind me again' )
+	);
+
+	wp_admin_notice(
+		$default_password_nag_message,
+		array(
+			'additional_classes' => array( 'error', 'default-password-nag' ),
+			'paragraph_wrap'     => false,
+		)
+	);
 }
 
 /**

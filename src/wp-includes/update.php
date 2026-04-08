@@ -409,7 +409,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 
 	// Support updates for any plugins using the `Update URI` header field.
 	foreach ( $plugins as $plugin_file => $plugin_data ) {
-		if ( ! $plugin_data['UpdateURI'] || isset( $updates->response[ $plugin_file ] ) ) {
+		if ( ! $plugin_data['UpdateURI'] ) {
 			continue;
 		}
 
@@ -689,7 +689,7 @@ function wp_update_themes( $extra_stats = array() ) {
 
 	// Support updates for any themes using the `Update URI` header field.
 	foreach ( $themes as $theme_stylesheet => $theme_data ) {
-		if ( ! $theme_data['UpdateURI'] || isset( $new_update->response[ $theme_stylesheet ] ) ) {
+		if ( ! $theme_data['UpdateURI'] ) {
 			continue;
 		}
 
@@ -1018,12 +1018,134 @@ function wp_clean_update_cache() {
 	delete_site_transient( 'update_core' );
 }
 
+/**
+ * Schedules the removal of all contents in the temporary backup directory.
+ *
+ * @since 6.3.0
+ */
+function wp_delete_all_temp_backups() {
+	/*
+	 * Check if there is a lock, or if currently performing an Ajax request,
+	 * in which case there is a chance an update is running.
+	 * Reschedule for an hour from now and exit early.
+	 */
+	if ( get_option( 'core_updater.lock' ) || get_option( 'auto_updater.lock' ) || wp_doing_ajax() ) {
+		wp_schedule_single_event( time() + HOUR_IN_SECONDS, 'wp_delete_temp_updater_backups' );
+		return;
+	}
+
+	// This action runs on shutdown to make sure there are no plugin updates currently running.
+	add_action( 'shutdown', '_wp_delete_all_temp_backups' );
+}
+
+/**
+ * Deletes all contents in the temporary backup directory.
+ *
+ * @since 6.3.0
+ *
+ * @access private
+ *
+ * @global WP_Filesystem_Base $wp_filesystem WordPress filesystem subclass.
+ *
+ * @return void|WP_Error Void on success, or a WP_Error object on failure.
+ */
+function _wp_delete_all_temp_backups() {
+	global $wp_filesystem;
+
+	if ( ! $wp_filesystem ) {
+		require_once ABSPATH . '/wp-admin/includes/file.php';
+		WP_Filesystem();
+	}
+
+	if ( ! $wp_filesystem->wp_content_dir() ) {
+		return new WP_Error( 'fs_no_content_dir', __( 'Unable to locate ClassicPress content directory (wp-content).' ) );
+	}
+
+	$temp_backup_dir = $wp_filesystem->wp_content_dir() . 'upgrade-temp-backup/';
+	$dirlist         = $wp_filesystem->dirlist( $temp_backup_dir );
+	$dirlist         = $dirlist ? $dirlist : array();
+
+	foreach ( array_keys( $dirlist ) as $dir ) {
+		if ( '.' === $dir || '..' === $dir ) {
+			continue;
+		}
+
+		$wp_filesystem->delete( $temp_backup_dir . $dir, true );
+	}
+}
+
+/**
+ * Checks for translation file updates and adds to update transient
+ *
+ * Hooks to `wp_version_check` and looks for any installed translation file locales,
+ * compares the file PO-Revision-Date to the API date. Any translation file updates
+ * are injected into the `update_core` transient` for later processing.
+ *
+ * @since CP-2.5.0
+ */
+function cp_get_translation_updates() {
+	require_once ABSPATH . 'wp-admin/includes/translation-install.php';
+	$installed_translations = wp_get_installed_translations( 'core' );
+
+	// return if no translation files installed
+	if ( empty( $installed_translations ) ) {
+		return;
+	}
+
+	$po_data = array();
+
+	foreach ( $installed_translations as $domain ) {
+		foreach ( $domain as $locale => $data ) {
+			if ( ! isset( $po_data[ $locale ] ) ) {
+				$po_data[ $locale ] = strtotime( $data['PO-Revision-Date'] );
+			} else {
+				if ( strtotime( $data['PO-Revision-Date'] ) > $po_data[ $locale ] ) {
+					$po_data[ $locale ] = strtotime( $data['PO-Revision-Date'] );
+				}
+			}
+		}
+	}
+
+	$translations = wp_get_available_translations();
+
+	$translation_updates = array();
+
+	foreach ( $translations as $translation ) {
+		if ( array_key_exists( $translation['language'], $po_data ) ) {
+			if ( strtotime( $translation['updated'] ) > $po_data[ $translation['language'] ] ) {
+				$translation_updates[] = array(
+					'type'       => 'core',
+					'slug'       => 'default',
+					'language'   => $translation['language'],
+					'package'    => $translation['package'],
+					'version'    => $translation['version'],
+					'autoupdate' => true,
+				);
+			}
+		}
+	}
+
+	// return if no translation updates available
+	if ( empty( $translation_updates ) ) {
+		return;
+	}
+
+	$updates = get_site_transient( 'update_core' );
+	if ( isset( $updates->translations ) ) {
+		$updates->translations = array_unique( array_merge( $updates->translations, $translation_updates ), SORT_REGULAR );
+	} else {
+		$updates->translations = $translation_updates;
+	}
+	set_site_transient( 'update_core', $updates );
+}
+
 if ( ( ! is_main_site() && ! is_network_admin() ) || wp_doing_ajax() ) {
 	return;
 }
 
 add_action( 'admin_init', '_maybe_update_core' );
 add_action( 'wp_version_check', 'wp_version_check' );
+add_action( 'wp_version_check', 'cp_get_translation_updates' );
 
 add_action( 'load-plugins.php', 'wp_update_plugins' );
 add_action( 'load-update.php', 'wp_update_plugins' );
@@ -1037,8 +1159,12 @@ add_action( 'load-update-core.php', 'wp_update_themes' );
 add_action( 'admin_init', '_maybe_update_themes' );
 add_action( 'wp_update_themes', 'wp_update_themes' );
 
+add_action( 'load-update-core.php', 'cp_get_translation_updates' );
+
 add_action( 'update_option_WPLANG', 'wp_clean_update_cache', 10, 0 );
 
 add_action( 'wp_maybe_auto_update', 'wp_maybe_auto_update' );
 
 add_action( 'init', 'wp_schedule_update_checks' );
+
+add_action( 'wp_delete_temp_updater_backups', 'wp_delete_all_temp_backups' );

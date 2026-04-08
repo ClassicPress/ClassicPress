@@ -46,6 +46,8 @@ class WP_Widget_Text extends WP_Widget {
 	/**
 	 * Add hooks for enqueueing assets when registering all widget instances of this widget class.
 	 *
+	 * @since 4.8.0
+	 *
 	 * @param int $number Optional. The unique order number of this widget instance
 	 *                    compared to other instances of the same class. Default -1.
 	 */
@@ -56,8 +58,6 @@ class WP_Widget_Text extends WP_Widget {
 		}
 		$this->registered = true;
 
-		wp_add_inline_script( 'text-widgets', sprintf( 'wp.textWidgets.idBases.push( %s );', wp_json_encode( $this->id_base ) ) );
-
 		if ( $this->is_preview() ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_preview_scripts' ) );
 		}
@@ -65,10 +65,6 @@ class WP_Widget_Text extends WP_Widget {
 		// Note that the widgets component in the customizer will also do
 		// the 'admin_print_scripts-widgets.php' action in WP_Customize_Widgets::print_scripts().
 		add_action( 'admin_print_scripts-widgets.php', array( $this, 'enqueue_admin_scripts' ) );
-
-		// Note that the widgets component in the customizer will also do
-		// the 'admin_footer-widgets.php' action in WP_Customize_Widgets::print_footer_scripts().
-		add_action( 'admin_footer-widgets.php', array( 'WP_Widget_Text', 'render_control_template_scripts' ) );
 	}
 
 	/**
@@ -428,25 +424,113 @@ class WP_Widget_Text extends WP_Widget {
 	}
 
 	/**
-	 * Loads the required scripts and styles for the widget control.
+	 * Loads the required scripts for the text widget.
 	 *
-	 * @since 4.8.0
+	 * @since CP-2.7.0
 	 */
 	public function enqueue_admin_scripts() {
 		wp_enqueue_editor();
-		wp_enqueue_media();
+
+		// Identify permitted image file types
+		$image_file_types = array();
+		$allowed_mime_types = get_allowed_mime_types();
+		foreach ( $allowed_mime_types as $key => $mime ) {
+			if ( str_contains( $mime, 'image/' ) ) {
+				$extensions = explode( '|', $key );
+				foreach ( $extensions as $extension ) {
+					$image_file_types[] = $extension;
+				}
+			}
+		}
+
+		// Identify permitted audio file types
+		$audio_file_types = array( 'mp3', 'ogg', 'flac', 'm4a', 'wav' );
+
+		// Identify permitted video file types
+		$video_file_types = array( 'mp4', 'm4v', 'webm', 'ogv', 'flv', 'mov' );
+
+		$user_id = get_current_user_id();
+		$per_page = (int) get_user_meta( $user_id, 'media_grid_per_page', true );
+		if ( empty( $per_page ) || $per_page < 1 ) {
+			$per_page = 80;
+		}
+
 		wp_enqueue_script( 'text-widgets' );
-		wp_add_inline_script( 'text-widgets', 'wp.textWidgets.init();', 'after' );
+		wp_localize_script(
+			'text-widgets',
+			'TEXT_WIDGET',
+			array(
+				'create_gallery'             => __( 'Create gallery' ),
+				'create_playlist'            => __( 'Create audio playlist' ),
+				'create_video_playlist'      => __( 'Create video playlist' ),
+				'create_new_gallery'         => __( 'Create a new gallery' ),
+				'create_new_playlist'        => __( 'Create a new playlist' ),
+				'create_new_video_playlist'  => __( 'Create a new video playlist' ),
+				'edit_gallery'               => __( 'Edit gallery' ),
+				'edit_playlist'              => __( 'Edit audio playlist' ),
+				'edit_video_playlist'        => __( 'Edit video playlist' ),
+				'cancel_gallery'             => '&larr; ' . __( 'Cancel gallery' ),
+				'cancel_playlist'            => '&larr; ' . __( 'Cancel audio playlist' ),
+				'cancel_video_playlist'      => '&larr; ' . __( 'Cancel video playlist' ),
+				'insert_gallery'             => __( 'Insert gallery' ),
+				'insert_playlist'            => __( 'Insert audio playlist' ),
+				'insert_video_playlist'      => __( 'Insert video playlist' ),
+				'update_gallery'             => __( 'Update gallery' ),
+				'update_playlist'            => __( 'Update audio playlist' ),
+				'update_video_playlist'      => __( 'Update video playlist' ),
+				'add_media'                  => __( 'Add media' ),
+				'add_to_gallery'             => __( 'Add to gallery' ),
+				'add_to_playlist'            => __( 'Add to audio playlist' ),
+				'add_to_video_playlist'      => __( 'Add to video playlist' ),
+				'replace'                    => __( 'Replace' ),
+				'media_library'              => __( 'Media Library' ),
+				'link_text'                  => __( 'Link Text' ),
+				'deselect'                   => __( 'Deselect' ),
+				'caption'                    => __( 'Caption' ),
+				'artist'                     => __( 'Artist' ),
+				'album'                      => __( 'Album' ),
+				'save'                       => __( 'Save' ),
+				'show_tracklist'             => __( 'Show Tracklist' ),
+				'show_video_list'            => __( 'Show Video List' ),
+				'media_items'                => __( 'media items' ),
+				'item_selected'              => __( 'item selected' ),
+				'items_selected'             => __( 'items selected' ),
+				'per_page'                   => $per_page,
+				'includes_url'               => includes_url(),
+				'wrong_url'                  => __( 'Wrong URL' ),
+				'insert_from_url'            => __( 'Insert from URL' ),
+				'unsupported_file_type'      => __( 'Unsupported file type' ),
+				'aria_label'                 => __( 'The current image has no alternative text. The file name is: ' ),
+				'image_file_types'           => $image_file_types,
+				'image_details'              => __( 'Image Details' ),
+				'wrong_url'                  => __( 'No file exists at the URL provided.' ),
+				'audio_file_types'           => $audio_file_types,
+				'video_file_types'           => $video_file_types,
+				'upload_failed'              => __( 'Upload failed' ),
+				'tap_close'                  => __( 'Tap to close' ),
+				'new_filename'               => __( 'New filename' ),
+				'invalid_type'               => __( 'Invalid type' ),
+				'check_types'                => __( 'Check types' ),
+				'of'                         => __( 'of' ),
+				'by'                         => __( 'by' ),
+				'pixels'                     => __( 'pixels' ),
+				'deselect'                   => __( 'Deselect' ),
+				'failed_update'              => __( 'Failed to update media:' ),
+				'error'                      => __( 'Error:' ),
+				'delete_failed'              => __( 'Failed to delete attachment.' ),
+				'confirm_delete'             => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+				'confirm_multiple'           => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+			)
+		);
 	}
 
 	/**
 	 * Outputs the Text widget settings form.
 	 *
 	 * @since 2.8.0
-	 * @since 4.8.0 Form only contains hidden inputs which are synced with JS template.
 	 * @since 4.8.1 Restored original form to be displayed when in legacy mode.
+	 * @since CP-2.3.0 Form no longer relies on a JS template or backbone.js.
 	 *
-	 * @see WP_Widget_Text::render_control_template_scripts()
 	 * @see _WP_Editors::editor()
 	 *
 	 * @param array $instance Current settings.
@@ -459,9 +543,8 @@ class WP_Widget_Text extends WP_Widget {
 				'text'  => '',
 			)
 		);
-		?>
-		<?php if ( ! $this->is_legacy_instance( $instance ) ) : ?>
-			<?php
+
+		if ( ! $this->is_legacy_instance( $instance ) ) :
 
 			if ( user_can_richedit() ) {
 				add_filter( 'the_editor_content', 'format_for_editor', 10, 2 );
@@ -480,91 +563,77 @@ class WP_Widget_Text extends WP_Widget {
 
 			// Prevent premature closing of textarea in case format_for_editor() didn't apply or the_editor_content filter did a wrong thing.
 			$escaped_text = preg_replace( '#</textarea#i', '&lt;/textarea', $text );
-
 			?>
-			<input id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" class="title sync-input" type="hidden" value="<?php echo esc_attr( $instance['title'] ); ?>">
-			<textarea id="<?php echo $this->get_field_id( 'text' ); ?>" name="<?php echo $this->get_field_name( 'text' ); ?>" class="text sync-input" hidden><?php echo $escaped_text; ?></textarea>
-			<input id="<?php echo $this->get_field_id( 'filter' ); ?>" name="<?php echo $this->get_field_name( 'filter' ); ?>" class="filter sync-input" type="hidden" value="on">
-			<input id="<?php echo $this->get_field_id( 'visual' ); ?>" name="<?php echo $this->get_field_name( 'visual' ); ?>" class="visual sync-input" type="hidden" value="on">
+
+			<fieldset>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title:' ); ?></label>
+				<input id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" class="widefat title sync-input" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>">
+			</fieldset>
+
+			<fieldset>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'text' ) ); ?>" class="screen-reader-text"><?php _e( 'Content:' ); ?></label>
+				
+				<?php
+				if ( ! user_can_richedit() ) :
+					?>
+
+					<fieldset id="<?php echo esc_attr( $this->get_field_id( 'text_toolbar' ) ); ?>" class="quicktags-toolbar">
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_strong' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Bold' ); ?>" data-tag="b">b</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_em' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Italic' ); ?>" data-tag="i">i</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_link' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Insert link' ); ?>" data-tag="link">link</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_ul' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Bulleted list' ); ?>" data-tag="ul">ul</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_ol' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Numbered list' ); ?>" data-tag="ol">ol</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_li' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'List item' ); ?>" data-tag="li">li</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_code' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Code' ); ?>" data-tag="code">code</button>
+					</fieldset>
+
+					<?php
+				endif;
+				?>
+
+				<textarea id="<?php echo esc_attr( $this->get_field_id( 'text' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'text' ) ); ?>" class="widefat sync-input" style="height:200px;"><?php echo $escaped_text; ?></textarea>
+			</fieldset>
+
+			<input id="<?php echo esc_attr( $this->get_field_id( 'filter' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'filter' ) ); ?>" class="filter sync-input" type="hidden" value="on">
+
+			<input id="<?php echo esc_attr( $this->get_field_id( 'visual' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'visual' ) ); ?>" class="visual sync-input" type="hidden" value="on">
+
 		<?php else : ?>
-			<input id="<?php echo $this->get_field_id( 'visual' ); ?>" name="<?php echo $this->get_field_name( 'visual' ); ?>" class="visual" type="hidden" value="">
-			<p>
-				<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
-				<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>">
-			</p>
-			<div class="notice inline notice-info notice-alt">
-				<?php if ( ! isset( $instance['visual'] ) ) : ?>
-					<p><?php _e( 'This widget may contain code that may work better in the &#8220;Custom HTML&#8221; widget. How about trying that widget instead?' ); ?></p>
-				<?php else : ?>
-					<p><?php _e( 'This widget may have contained code that may work better in the &#8220;Custom HTML&#8221; widget. If you have not yet, how about trying that widget instead?' ); ?></p>
-				<?php endif; ?>
-			</div>
-			<p>
-				<label for="<?php echo $this->get_field_id( 'text' ); ?>"><?php _e( 'Content:' ); ?></label>
-				<textarea class="widefat" rows="16" cols="20" id="<?php echo $this->get_field_id( 'text' ); ?>" name="<?php echo $this->get_field_name( 'text' ); ?>"><?php echo esc_textarea( $instance['text'] ); ?></textarea>
-			</p>
-			<p>
-				<input id="<?php echo $this->get_field_id( 'filter' ); ?>" name="<?php echo $this->get_field_name( 'filter' ); ?>" type="checkbox"<?php checked( ! empty( $instance['filter'] ) ); ?>>&nbsp;<label for="<?php echo $this->get_field_id( 'filter' ); ?>"><?php _e( 'Automatically add paragraphs' ); ?></label>
-			</p>
+
+			<input id="<?php echo esc_attr( $this->get_field_id( 'visual' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'visual' ) ); ?>" class="visual" type="hidden" value="">
+
+			<fieldset>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title:' ); ?></label>
+				<input id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" class="widefat" type="text" value="<?php echo esc_attr( $instance['title'] ); ?>">
+			</fieldset>
+
+			<?php
+			if ( ! isset( $instance['visual'] ) ) {
+				$widget_info_message = __( 'This widget may contain code that may work better in the &#8220;Custom HTML&#8221; widget. How about trying that widget instead?' );
+			} else {
+				$widget_info_message = __( 'This widget may have contained code that may work better in the &#8220;Custom HTML&#8221; widget. If you have not yet, how about trying that widget instead?' );
+			}
+
+			wp_admin_notice(
+				$widget_info_message,
+				array(
+					'type'               => 'info',
+					'additional_classes' => array( 'notice-alt', 'inline' ),
+				)
+			);
+			?>
+
+			<fieldset>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'text' ) ); ?>"><?php _e( 'Content:' ); ?></label>
+				<textarea class="widefat" rows="16" cols="20" id="<?php echo esc_attr( $this->get_field_id( 'text' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'text' ) ); ?>"><?php echo esc_textarea( $instance['text'] ); ?></textarea>
+			</fieldset>
+
+			<fieldset>
+				<input id="<?php echo esc_attr( $this->get_field_id( 'filter' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'filter' ) ); ?>" type="checkbox"<?php checked( ! empty( $instance['filter'] ) ); ?>>&nbsp;
+				<label for="<?php echo esc_attr( $this->get_field_id( 'filter' ) ); ?>"><?php _e( 'Automatically add paragraphs' ); ?></label>
+			</fieldset>
+
 			<?php
 		endif;
-	}
-
-	/**
-	 * Render form template scripts.
-	 *
-	 * @since 4.8.0
-	 * @since 4.9.0 The method is now static.
-	 */
-	public static function render_control_template_scripts() {
-		$dismissed_pointers = explode( ',', (string) get_user_meta( get_current_user_id(), 'dismissed_wp_pointers', true ) );
-		?>
-		<script type="text/html" id="tmpl-widget-text-control-fields">
-			<# var elementIdPrefix = 'el' + String( Math.random() ).replace( /\D/g, '' ) + '_' #>
-			<p>
-				<label for="{{ elementIdPrefix }}title"><?php esc_html_e( 'Title:' ); ?></label>
-				<input id="{{ elementIdPrefix }}title" type="text" class="widefat title">
-			</p>
-
-			<?php if ( ! in_array( 'text_widget_custom_html', $dismissed_pointers, true ) ) : ?>
-				<div hidden class="wp-pointer custom-html-widget-pointer wp-pointer-top">
-					<div class="wp-pointer-content">
-						<h3><?php _e( 'New Custom HTML Widget' ); ?></h3>
-						<?php if ( is_customize_preview() ) : ?>
-							<p><?php _e( 'Did you know there is a &#8220;Custom HTML&#8221; widget now? You can find it by pressing the &#8220;<a class="add-widget" href="#">Add a Widget</a>&#8221; button and searching for &#8220;HTML&#8221;. Check it out to add some custom code to your site!' ); ?></p>
-						<?php else : ?>
-							<p><?php _e( 'Did you know there is a &#8220;Custom HTML&#8221; widget now? You can find it by scanning the list of available widgets on this screen. Check it out to add some custom code to your site!' ); ?></p>
-						<?php endif; ?>
-						<div class="wp-pointer-buttons">
-							<a class="close" href="#"><?php _e( 'Dismiss' ); ?></a>
-						</div>
-					</div>
-					<div class="wp-pointer-arrow">
-						<div class="wp-pointer-arrow-inner"></div>
-					</div>
-				</div>
-			<?php endif; ?>
-
-			<?php if ( ! in_array( 'text_widget_paste_html', $dismissed_pointers, true ) ) : ?>
-				<div hidden class="wp-pointer paste-html-pointer wp-pointer-top">
-					<div class="wp-pointer-content">
-						<h3><?php _e( 'Did you just paste HTML?' ); ?></h3>
-						<p><?php _e( 'Hey there, looks like you just pasted HTML into the &#8220;Visual&#8221; tab of the Text widget. You may want to paste your code into the &#8220;Text&#8221; tab instead. Alternately, try out the new &#8220;Custom HTML&#8221; widget!' ); ?></p>
-						<div class="wp-pointer-buttons">
-							<a class="close" href="#"><?php _e( 'Dismiss' ); ?></a>
-						</div>
-					</div>
-					<div class="wp-pointer-arrow">
-						<div class="wp-pointer-arrow-inner"></div>
-					</div>
-				</div>
-			<?php endif; ?>
-
-			<p>
-				<label for="{{ elementIdPrefix }}text" class="screen-reader-text"><?php /* translators: Hidden accessibility text. */ esc_html_e( 'Content:' ); ?></label>
-				<textarea id="{{ elementIdPrefix }}text" class="widefat text wp-editor-area" style="height: 200px" rows="16" cols="20"></textarea>
-			</p>
-		</script>
-		<?php
 	}
 }

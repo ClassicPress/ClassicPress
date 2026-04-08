@@ -314,7 +314,14 @@ function update_nag() {
 		);
 	}
 
-	echo "<div class='update-nag notice notice-warning inline'>$msg</div>";
+	wp_admin_notice(
+		$msg,
+		array(
+			'type'              => 'warning',
+			'additional_classes' => array( 'update-nag', 'inline' ),
+			'paragraph_wrap'    => false,
+		)
+	);
 }
 
 /**
@@ -634,10 +641,8 @@ function wp_theme_update_rows() {
  * @return void|false
  */
 function wp_theme_update_row( $theme_key, $theme ) {
-
-	$updates_from_api = get_site_transient( 'update_core' );
-	$cp_needs_update  = isset( $updates_from_api->updates ) && is_array( $updates_from_api->updates ) && ! empty( $updates_from_api->updates );
-	$current          = get_site_transient( 'update_themes' );
+	$cp_has_update = classicpress_has_update();
+	$current       = get_site_transient( 'update_themes' );
 
 	if ( ! isset( $current->response[ $theme_key ] ) ) {
 		return false;
@@ -730,7 +735,7 @@ function wp_theme_update_row( $theme_key, $theme ) {
 				$theme['Name']
 			);
 			if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
-				if ( $cp_needs_update ) {
+				if ( $cp_has_update ) {
 					printf(
 						/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
 						' ' . __( '<a href="%1$s">Please update ClassicPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
@@ -744,7 +749,7 @@ function wp_theme_update_row( $theme_key, $theme ) {
 						esc_url( wp_get_update_php_url() )
 					);              }
 				wp_update_php_annotation( '</p><p><em>', '</em>' );
-			} elseif ( current_user_can( 'update_core' ) && $cp_needs_update ) {
+			} elseif ( current_user_can( 'update_core' ) && $cp_has_update ) {
 				printf(
 					/* translators: %s: URL to WordPress Updates screen. */
 					' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
@@ -764,7 +769,7 @@ function wp_theme_update_row( $theme_key, $theme ) {
 				__( 'There is a new version of %s available, but it does not work with your version of ClassicPress.' ),
 				$theme['Name']
 			);
-			if ( current_user_can( 'update_core' ) && $cp_needs_update ) {
+			if ( current_user_can( 'update_core' ) && $cp_has_update ) {
 				printf(
 					/* translators: %s: URL to WordPress Updates screen. */
 					' ' . __( '<a href="%s">Please update ClassicPress</a>.' ),
@@ -856,7 +861,14 @@ function maintenance_nag() {
 		$msg = __( 'An automated ClassicPress update has failed to complete! Please notify the site administrator.' );
 	}
 
-	echo "<div class='update-nag notice notice-warning inline'>$msg</div>";
+	wp_admin_notice(
+		$msg,
+		array(
+			'type'               => 'warning',
+			'additional_classes' => array( 'update-nag', 'inline' ),
+			'paragraph_wrap'     => false,
+		)
+	);
 }
 
 /**
@@ -1021,19 +1033,12 @@ function wp_recovery_mode_nag() {
 	$url = add_query_arg( 'action', WP_Recovery_Mode::EXIT_ACTION, $url );
 	$url = wp_nonce_url( $url, WP_Recovery_Mode::EXIT_ACTION );
 
-	?>
-	<div class="notice notice-info">
-		<p>
-			<?php
-			printf(
-				/* translators: %s: Recovery Mode exit link. */
-				__( 'You are in recovery mode. This means there may be an error with a theme or plugin. To exit recovery mode, log out or use the Exit button. <a href="%s">Exit Recovery Mode</a>' ),
-				esc_url( $url )
-			);
-			?>
-		</p>
-	</div>
-	<?php
+	$message = sprintf(
+		/* translators: %s: Recovery Mode exit link. */
+		__( 'You are in recovery mode. This means there may be an error with a theme or plugin. To exit recovery mode, log out or use the Exit button. <a href="%s">Exit Recovery Mode</a>' ),
+		esc_url( $url )
+	);
+	wp_admin_notice( $message, array( 'type' => 'info' ) );
 }
 
 /**

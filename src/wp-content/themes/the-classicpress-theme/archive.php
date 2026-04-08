@@ -9,23 +9,25 @@
 
 get_header();
 ?>
+
 	<div id="primary">
 		<main id="main">
 
 		<?php
 		if ( have_posts() ) :
+			the_archive_description( '<div class="taxonomy-description">', '</div>' );
 			?>
 
 			<div class="blog-list"> 
 			<?php
 
-				/* Start the Loop */
+			/* Start the Loop */
 			while ( have_posts() ) :
 				the_post();
 
 				get_template_part( 'template-parts/content-blog', get_post_type() );
 
-				endwhile;
+			endwhile;
 			?>
 
 			</div><!-- .blog-list --> 

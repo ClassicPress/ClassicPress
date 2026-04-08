@@ -92,6 +92,8 @@ final class WP_User_Request {
 	 * Key used to confirm this request.
 	 *
 	 * @since 4.9.6
+	 * @since CP-2.3.0 The key is now hashed using bcrypt instead of phpass.
+	 *
 	 * @var string
 	 */
 	public $confirm_key = '';

@@ -182,7 +182,13 @@ function wp_authenticate_username_password( $user, $username, $password ) {
 		return $user;
 	}
 
-	if ( ! wp_check_password( $password, $user->user_pass, $user->ID ) ) {
+	$valid = wp_check_password( $password, $user->user_pass, $user->ID );
+
+	if ( $valid && wp_password_needs_rehash( $user->user_pass ) ) {
+		wp_set_password( $password, $user->ID );
+	}
+
+	if ( ! $valid ) {
 		return new WP_Error(
 			'incorrect_password',
 			sprintf(
@@ -254,7 +260,13 @@ function wp_authenticate_email_password( $user, $email, $password ) {
 		return $user;
 	}
 
-	if ( ! wp_check_password( $password, $user->user_pass, $user->ID ) ) {
+	$valid = wp_check_password( $password, $user->user_pass, $user->ID );
+
+	if ( $valid && wp_password_needs_rehash( $user->user_pass ) ) {
+		wp_set_password( $password, $user->ID );
+	}
+
+	if ( ! $valid ) {
 		return new WP_Error(
 			'incorrect_password',
 			sprintf(
@@ -407,8 +419,15 @@ function wp_authenticate_application_password( $input_user, $username, $password
 	$hashed_passwords = WP_Application_Passwords::get_user_application_passwords( $user->ID );
 
 	foreach ( $hashed_passwords as $key => $item ) {
-		if ( ! wp_check_password( $password, $item['password'], $user->ID ) ) {
+		$valid = wp_check_password( $password, $item['password'], $user->ID );
+
+		if ( ! $valid ) {
 			continue;
+		}
+
+		if ( wp_password_needs_rehash( $item['password'] ) ) {
+			$item['password'] = wp_hash_password( $password );
+			WP_Application_Passwords::update_application_password( $user->ID, $item['uuid'], $item );
 		}
 
 		$error = new WP_Error();
@@ -541,7 +560,7 @@ function wp_validate_logged_in_cookie( $user_id ) {
 		return $user_id;
 	}
 
-	if ( is_blog_admin() || is_network_admin() || empty( $_COOKIE[ LOGGED_IN_COOKIE ] ) ) {
+	if ( is_blog_admin() || is_network_admin() || empty( $_COOKIE[ LOGGED_IN_COOKIE ] ) || defined( 'WP_INSTALLING' ) ) {
 		return false;
 	}
 
@@ -2337,7 +2356,8 @@ function wp_insert_user( $userdata ) {
 	 * It only includes data in the users table, not any user metadata.
 	 *
 	 * @since 4.9.0
-	 * @since 5.8.0 The `$userdata` parameter was added.
+	 * @since 5.8.0    The `$userdata` parameter was added.
+	 * @since CP-2.3.0 The user's password is now hashed using bcrypt instead of phpass.
 	 *
 	 * @param array    $data {
 	 *     Values and keys for the user.
@@ -2950,16 +2970,11 @@ function get_password_reset_key( $user ) {
  *
  * @since 3.1.0
  *
- * @global wpdb         $wpdb      WordPress database object for queries.
- * @global PasswordHash $wp_hasher Portable PHP password hashing framework instance.
- *
- * @param string $key       Hash to validate sending user's password.
+ * @param string $key       The password reset key.
  * @param string $login     The user login.
  * @return WP_User|WP_Error WP_User object on success, WP_Error object for invalid or expired keys.
  */
 function check_password_reset_key( $key, $login ) {
-	global $wpdb, $wp_hasher;
-
 	$key = preg_replace( '/[^a-z0-9]/i', '', $key );
 
 	if ( empty( $key ) || ! is_string( $key ) ) {
@@ -2974,11 +2989,6 @@ function check_password_reset_key( $key, $login ) {
 
 	if ( ! $user ) {
 		return new WP_Error( 'invalid_key', __( 'Invalid key.' ) );
-	}
-
-	if ( empty( $wp_hasher ) ) {
-		require_once ABSPATH . WPINC . '/class-phpass.php';
-		$wp_hasher = new PasswordHash( 8, true );
 	}
 
 	/**
@@ -3002,7 +3012,7 @@ function check_password_reset_key( $key, $login ) {
 		return new WP_Error( 'invalid_key', __( 'Invalid key.' ) );
 	}
 
-	$hash_is_correct = $wp_hasher->CheckPassword( $key, $pass_key );
+	$hash_is_correct = wp_check_password( $key, $pass_key );
 
 	if ( $hash_is_correct && $expiration_time && time() < $expiration_time ) {
 		return $user;
@@ -3017,7 +3027,7 @@ function check_password_reset_key( $key, $login ) {
 
 		/**
 		 * Filters the return value of check_password_reset_key() when an
-		 * old-style key is used.
+		 * old-style key or an expired key is used.
 		 *
 		 * @since 3.7.0 Previously plain-text keys were stored in the database.
 		 * @since 4.3.0 Previously key hashes were stored without an expiration time.
@@ -3039,7 +3049,6 @@ function check_password_reset_key( $key, $login ) {
  * @since 5.7.0 Added `$user_login` parameter.
  *
  * @global wpdb         $wpdb       WordPress database abstraction object.
- * @global PasswordHash $wp_hasher  Portable PHP password hashing framework.
  *
  * @param string $user_login Optional. Username to send a password retrieval email for.
  *                           Defaults to `$_POST['user_login']` if not set.
@@ -3266,15 +3275,10 @@ function retrieve_password( $user_login = null ) {
 	if ( ! wp_mail( $to, $subject, $message, $headers ) ) {
 		$errors->add(
 			'retrieve_password_email_failure',
-			sprintf(
-				/* translators: %s: Documentation URL. */
-				__( '<strong>Error:</strong> The email could not be sent. Your site may not be correctly configured to send emails. <a href="%s">Get support for resetting your password</a>.' ),
-				esc_url( __( 'https://wordpress.org/documentation/article/reset-your-password/' ) )
-			)
+			__( '<strong>Error:</strong> The email could not be sent. The site may not be correctly configured to send emails.' )
 		);
 		return $errors;
 	}
-
 	return true;
 }
 
@@ -3754,8 +3758,12 @@ function new_user_email_admin_notice() {
 	if ( 'profile.php' === $pagenow && isset( $_GET['updated'] ) ) {
 		$email = get_user_meta( get_current_user_id(), '_new_email', true );
 		if ( $email ) {
+			$message = sprintf(
 			/* translators: %s: New email address. */
-			echo '<div class="notice notice-info"><p>' . sprintf( __( 'Your email address has not been updated yet. Please check your inbox at %s for a confirmation email.' ), '<code>' . esc_html( $email['newemail'] ) . '</code>' ) . '</p></div>';
+				__( 'Your email address has not been updated yet. Please check your inbox at %s for a confirmation email.' ),
+				'<code>' . esc_html( $email['newemail'] ) . '</code>'
+			);
+			wp_admin_notice( $message, array( 'type' => 'info' ) );
 		}
 	}
 }
@@ -4805,22 +4813,15 @@ All at ###SITENAME###
  * @return string Confirmation key.
  */
 function wp_generate_user_request_key( $request_id ) {
-	global $wp_hasher;
-
 	// Generate something random for a confirmation key.
 	$key = wp_generate_password( 20, false );
 
 	// Return the key, hashed.
-	if ( empty( $wp_hasher ) ) {
-		require_once ABSPATH . WPINC . '/class-phpass.php';
-		$wp_hasher = new PasswordHash( 8, true );
-	}
-
 	wp_update_post(
 		array(
 			'ID'            => $request_id,
 			'post_status'   => 'request-pending',
-			'post_password' => $wp_hasher->HashPassword( $key ),
+			'post_password' => wp_hash_password( $key ),
 		)
 	);
 
@@ -4837,8 +4838,6 @@ function wp_generate_user_request_key( $request_id ) {
  * @return true|WP_Error True on success, WP_Error on failure.
  */
 function wp_validate_user_request_key( $request_id, $key ) {
-	global $wp_hasher;
-
 	$request_id       = absint( $request_id );
 	$request          = wp_get_user_request( $request_id );
 	$saved_key        = $request->confirm_key;
@@ -4856,11 +4855,6 @@ function wp_validate_user_request_key( $request_id, $key ) {
 		return new WP_Error( 'missing_key', __( 'The confirmation key is missing from this personal data request.' ) );
 	}
 
-	if ( empty( $wp_hasher ) ) {
-		require_once ABSPATH . WPINC . '/class-phpass.php';
-		$wp_hasher = new PasswordHash( 8, true );
-	}
-
 	/**
 	 * Filters the expiration time of confirm keys.
 	 *
@@ -4871,7 +4865,7 @@ function wp_validate_user_request_key( $request_id, $key ) {
 	$expiration_duration = (int) apply_filters( 'user_request_key_expiration', DAY_IN_SECONDS );
 	$expiration_time     = $key_request_time + $expiration_duration;
 
-	if ( ! $wp_hasher->CheckPassword( $key, $saved_key ) ) {
+	if ( ! wp_hash_password( $key, $saved_key ) ) {
 		return new WP_Error( 'invalid_key', __( 'The confirmation key is invalid for this personal data request.' ) );
 	}
 
@@ -4995,4 +4989,57 @@ function cp_hash_password_options() {
 			'cost' => 12,
 		)
 	);
+}
+
+/**
+ * Retrieves the list of user groups for a user.
+ *
+ * Compatibility layer for themes and plugins. Also an easy layer of abstraction
+ * away from the complexity of the taxonomy layer.
+ *
+ * @since CP-2.6.0
+ *
+ * @see wp_get_object_terms()
+ *
+ * @param int   $user_id  Optional. The User ID. Default 0.
+ * @param array $args     Optional. User group query parameters. Default empty array.
+ *                        See WP_Term_Query::__construct() for supported arguments.
+ * @return array|WP_Error List of user groups. If the `$fields` argument passed via `$args` is 'all' or
+ *                        'all_with_object_id', an array of WP_Term objects will be returned. If `$fields` is 'ids',
+ *                        an array of user group IDs. If `$fields` is 'names', an array of user group names.
+ *                        WP_Error object if 'user_group' taxonomy doesn't exist.
+ */
+function cp_get_user_groups( $user_id = 0, $args = array() ) {
+	$user_id = (int) $user_id;
+
+	$defaults = array( 'fields' => 'ids' );
+	$args     = wp_parse_args( $args, $defaults );
+
+	return wp_get_object_terms( $user_id, 'user_group', $args );
+}
+
+/**
+ * Sets user groups for a user.
+ *
+ * Unlike post categories, there is no default user group.
+ *
+ * @since CP-2.6.0
+ *
+ * @param int       $user_id     Required. The User ID.
+ * @param int[]|int $user_groups Optional. List of user group IDs, or the ID of a single user group.
+ *                               Default empty array.
+ * @param bool      $append      If true, don't delete existing user groups, just add on.
+ *                               If false, replace the current user groups with the new user groups.
+ * @return array|false|WP_Error  Array of term taxonomy IDs of affected user groups. WP_Error or false on failure.
+ */
+function cp_set_user_groups( $user_id, $user_groups = array(), $append = false ) {
+	$user_id = absint( $user_id );
+	if ( $user_id === 0 ) {
+		return new WP_Error( 'invalid_user_id', __( 'Invalid User ID.' ) );
+	}
+
+	// If $user_groups isn't already an array, make it one.
+	$user_groups = (array) $user_groups;
+
+	return wp_set_object_terms( $user_id, $user_groups, 'user_group', $append );
 }

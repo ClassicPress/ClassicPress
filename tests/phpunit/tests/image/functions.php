@@ -111,6 +111,10 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 			'webp-lossless.webp',
 			'webp-lossy.webp',
 			'webp-transparent.webp',
+			'avif-animated.avif',
+			'avif-lossless.avif',
+			'avif-lossy.avif',
+			'avif-transparent.avif',
 		);
 
 		return $this->text_array_to_dataprovider( $files );
@@ -184,6 +188,17 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 			$files[] = 'webp-lossless.webp';
 			$files[] = 'webp-lossy.webp';
 			$files[] = 'webp-transparent.webp';
+		}
+
+		// Add AVIF images if the image editor supports them.
+		$file   = DIR_TESTDATA . '/images/avif-lossless.avif';
+		$editor = wp_get_image_editor( $file );
+
+		if ( ! is_wp_error( $editor ) && $editor->supports_mime_type( 'image/avif' ) ) {
+			$files[] = 'avif-animated.avif';
+			$files[] = 'avif-lossless.avif';
+			$files[] = 'avif-lossy.avif';
+			$files[] = 'avif-transparent.avif';
 		}
 
 		return $this->text_array_to_dataprovider( $files );
@@ -344,7 +359,10 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		$img  = imagecreatefromjpeg( DIR_TESTDATA . '/images/canola.jpg' );
 		$ret  = wp_save_image_file( $file, $img, 'image/jpeg', 1 );
 
-		imagedestroy( $img );
+		if ( PHP_VERSION_ID < 80000 ) { // imagedestroy() has no effect as of PHP 8.0.
+			imagedestroy( $img );
+		}
+
 		unlink( $file );
 
 		$this->assertTrue( $ret, 'Image failed to save.' );

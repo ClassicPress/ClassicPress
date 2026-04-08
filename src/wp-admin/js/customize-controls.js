@@ -1180,17 +1180,6 @@
 				}
 			} else if ( active ) {
 				headContainer.slideDown( duration, args.completeCallback );
-			} else {
-				if ( construct.expanded() ) {
-					construct.collapse({
-						duration: duration,
-						completeCallback: function() {
-							headContainer.slideUp( duration, args.completeCallback );
-						}
-					});
-				} else {
-					headContainer.slideUp( duration, args.completeCallback );
-				}
 			}
 		},
 
@@ -3769,7 +3758,9 @@
 		 * @return {void}
 		 */
 		ready: function() {
-			var control = this, newItem;
+			var control = this, newItem,
+				listItems = document.getElementById( 'customize-theme-controls' ).querySelectorAll( '.control-section-default' );
+
 			if ( 'dropdown-pages' === control.params.type && control.params.allow_addition ) {
 				newItem = control.container.find( '.new-content-item' );
 				newItem.hide(); // Hide in JS to preserve flex display when showing.
@@ -3786,6 +3777,16 @@
 						control.addNewPage();
 					}
 				});
+			}
+
+			// Ensure that custom panels and sub-panels are displayed.
+			if ( listItems.length > 0 ) {
+				listItems.forEach( function( listItem ) {
+					listItem.style.display = '';
+					listItem.querySelectorAll( '.customize-control' ).forEach( function( customControl ) {
+						customControl.style.display = '';
+					} );
+				} );
 			}
 		},
 

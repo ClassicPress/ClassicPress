@@ -322,22 +322,40 @@ function install_search_form( $deprecated = true ) {
  * Displays a form to upload plugins from zip files.
  *
  * @since 2.8.0
+ * @since CP-2.8.0 JavaScript uploader used with browser fallback alternative
  */
 function install_plugins_upload() {
 	?>
 <div class="upload-plugin">
 	<p class="install-help"><?php _e( 'If you have a plugin in a .zip format, you may install or update it by uploading it here.' ); ?></p>
-	<form method="post" enctype="multipart/form-data" class="wp-upload-form" action="<?php echo esc_url( self_admin_url( 'update.php?action=upload-plugin' ) ); ?>">
-		<?php wp_nonce_field( 'plugin-upload' ); ?>
-		<label class="screen-reader-text" for="pluginzip">
-			<?php
-			/* translators: Hidden accessibility text. */
-			_e( 'Plugin zip file' );
-			?>
-		</label>
-		<input type="file" id="pluginzip" name="pluginzip" accept=".zip">
-		<?php submit_button( __( 'Install Now' ), '', 'install-plugin-submit', false ); ?>
-	</form>
+	<div id="plupload-upload-ui" class="hide-if-no-js drag-drop">
+		<div id="drag-drop-area">
+			<form method="post" enctype="multipart/form-data" id="filepond" action="<?php echo esc_url( self_admin_url( 'update.php?action=upload-plugin' ) ); ?>">
+				<?php wp_nonce_field( 'plugin-upload' ); ?>
+				<label class="screen-reader-text" for="pluginzip">
+					<?php
+					/* translators: Hidden accessibility text. */
+					_e( 'Plugin zip file' );
+					?>
+				</label>
+				<input type="file" id="pluginzip" name="pluginzip">
+				<?php submit_button( __( 'Install Now' ), '', 'install-plugin-submit', false, array( 'disabled' => 'disabled' ) ); ?>
+			</form>
+		</div>
+	</div>
+	<noscript>
+		<form method="post" enctype="multipart/form-data" class="wp-upload-form" action="<?php echo esc_url( self_admin_url( 'update.php?action=upload-plugin' ) ); ?>">
+			<?php wp_nonce_field( 'plugin-upload' ); ?>
+			<label class="screen-reader-text" for="pluginzip">
+				<?php
+				/* translators: Hidden accessibility text. */
+				_e( 'Plugin zip file' );
+				?>
+			</label>
+			<input type="file" id="pluginzip" name="pluginzip" accept=".zip">
+			<?php submit_button( __( 'Install Now' ), '', 'install-plugin-submit', false ); ?>
+		</form>
+	</noscript>
 </div>
 	<?php
 }
@@ -372,14 +390,14 @@ function install_plugins_favorites_form() {
  */
 function display_plugins_categories_list() {
 	$categories = array(
+		'classicpress' => __( 'ClassicPress' ),
 		'form'         => __( 'Forms' ),
 		'widget'       => __( 'Widgets' ),
 		'admin'        => __( 'Admin Utilities' ),
 		'page-builder' => __( 'Page Builders' ),
-		'e-commerce'   => __( 'eCommerce' ),
+		'ecommerce'    => __( 'eCommerce' ),
 		'media'        => __( 'Media' ),
 		'seo'          => __( 'SEO' ),
-		'ads'          => __( 'Advertising' ),
 		'social'       => __( 'Social Networking' ),
 		'membership'   => __( 'Membership' ),
 		'newsletter'   => __( 'Newsletters' ),
@@ -825,45 +843,63 @@ function install_plugin_information() {
 	</div>
 	<div id="section-holder">
 	<?php
-	$requires_php = isset( $api->requires_php ) ? $api->requires_php : null;
-	$requires_wp  = isset( $api->requires ) ? $api->requires : null;
+	$cp_has_update  = classicpress_has_update();
+	$requires_php   = isset( $api->requires_php ) ? $api->requires_php : null;
+	$requires_wp    = isset( $api->requires ) ? $api->requires : null;
 
 	$compatible_php = is_php_version_compatible( $requires_php );
 	$compatible_wp  = is_wp_version_compatible( $requires_wp );
 	$tested_wp      = ( empty( $api->tested ) || version_compare( get_bloginfo( 'version' ), $api->tested, '<=' ) );
 
 	if ( ! $compatible_php ) {
-		echo '<div class="notice notice-error notice-alt"><p>';
-		_e( '<strong>Error:</strong> This plugin <strong>requires a newer version of PHP</strong>.' );
+		$compatible_php_notice_message  = '<p>';
+		$compatible_php_notice_message .= __( '<strong>Error:</strong> This plugin <strong>requires a newer version of PHP</strong>.' );
+
 		if ( current_user_can( 'update_php' ) ) {
-			printf(
+			$compatible_php_notice_message .= sprintf(
 				/* translators: %s: URL to Update PHP page. */
 				' ' . __( '<a href="%s" target="_blank">Click here to learn more about updating PHP</a>.' ),
 				esc_url( wp_get_update_php_url() )
-			);
-
-			wp_update_php_annotation( '</p><p><em>', '</em>' );
+			) . wp_update_php_annotation( '</p><p><em>', '</em>', false );
 		} else {
-			echo '</p>';
+			$compatible_php_notice_message .= '</p>';
 		}
-		echo '</div>';
+
+		wp_admin_notice(
+			$compatible_php_notice_message,
+			array(
+				'type'               => 'error',
+				'additional_classes' => array( 'notice-alt' ),
+				'paragraph_wrap'     => false,
+			)
+		);
 	}
 
 	if ( ! $tested_wp ) {
-		echo '<div class="notice notice-warning notice-alt"><p>';
-		_e( '<strong>Warning:</strong> This plugin <strong>has not been tested</strong> with your current version of ClassicPress.' );
-		echo '</p></div>';
+		wp_admin_notice(
+			__( '<strong>Warning:</strong> This plugin <strong>has not been tested</strong> with your version of ClassicPress.' ),
+			array(
+				'type'               => 'warning',
+				'additional_classes' => array( 'notice-alt' ),
+			)
+		);
 	} elseif ( ! $compatible_wp ) {
-		echo '<div class="notice notice-error notice-alt"><p>';
-		_e( '<strong>Error:</strong> This plugin <strong>requires a newer version of ClassicPress</strong>.' );
-		if ( current_user_can( 'update_core' ) ) {
-			printf(
+		$compatible_wp_notice_message = __( '<strong>Error:</strong> This plugin <strong>does not work</strong> with your version of ClassicPress.' );
+		if ( current_user_can( 'update_core' ) && $cp_has_update ) {
+			$compatible_wp_notice_message .= sprintf(
 				/* translators: %s: URL to WordPress Updates screen. */
-				' ' . __( '<a href="%s" target="_parent">Click here to update ClassicPress</a>.' ),
+				' ' . __( '<a href="%s" target="_parent">Please update ClassicPress</a>.' ),
 				esc_url( self_admin_url( 'update-core.php' ) )
 			);
 		}
-		echo '</p></div>';
+
+		wp_admin_notice(
+			$compatible_wp_notice_message,
+			array(
+				'type'               => 'error',
+				'additional_classes' => array( 'notice-alt' ),
+			)
+		);
 	}
 
 	foreach ( (array) $api->sections as $section_name => $content ) {
