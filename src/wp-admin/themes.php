@@ -152,6 +152,11 @@ if ( current_user_can( 'install_themes' ) ) {
 		$help_install = '<p>' . __( 'Installing themes on Multisite can only be done from the Network Admin section.' ) . '</p>';
 	} else {
 		$help_install = '<p>' . sprintf(
+			/* translators: %s: link to plugin page in the ClassicPress Directory */
+			__( 'With the <a href="%s"><strong>ClassicPress Directory Integration</strong></a> plugin you get access to themes that are built for ClassicPress. They will appear in the Appearance > Install CP Themes screen.' ),
+			__( 'https://directory.classicpress.net/plugins/classicpress-directory-integration/' )
+		) . '</p>';
+		$help_install .= '<p>' . sprintf(
 			/* translators: %s: https://wordpress.org/themes/ */
 			__( 'If you would like to see more themes to choose from, click on the &#8220;Add New&#8221; button and you will be able to browse or search for additional themes from the <a href="%s">WordPress Theme Directory</a>. Themes in the WordPress Theme Directory are designed and developed by third parties, and are compatible with the license WordPress uses. Oh, and they&#8217;re free!' ),
 			__( 'https://wordpress.org/themes/' )

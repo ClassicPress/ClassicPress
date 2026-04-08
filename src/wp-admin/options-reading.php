@@ -48,6 +48,16 @@ get_current_screen()->add_help_tab(
 	)
 );
 
+get_current_screen()->add_help_tab(
+	array(
+		'id'      => 'object-cache',
+		'title'   => __( 'Object cache' ),
+		'content' => '<p>' . __( 'The <a href="site-health.php">Site Health</a> tool recommends that you use an object cache to reduce the load on your site\'s database and potentially speed up the responsiveness of your site. If you have not already installed an object cache and would like ClassicPress to do so for you, click the checkbox next to &#8220;Object cache&#8221; and click the Save Changes button at the bottom of the screen.' ) . '</p>' .
+			'<p>' . __( 'Note that an object cache is different from page caching. You may have them both running on your site; ClassicPress\'s object cache will not conflict with page caching plugins.' ) . '</p>' .
+			'<p>' . __( 'Unlike page caching, object caching will work even when a user is logged in. This makes it particularly useful for membership sites and intranets.' ) . '</p>',
+	)
+);
+
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
 	'<p>' . __( '<a href="https://wordpress.org/documentation/article/settings-reading-screen/">Documentation on Reading Settings</a>' ) . '</p>' .
@@ -247,7 +257,79 @@ else :
 </fieldset></td>
 </tr>
 
-<?php do_settings_fields( 'reading', 'default' ); ?>
+<?php
+/**
+ * Enables the installation of an object cache if the APCu extension is available.
+ * Not appropriate for multisite.
+ *
+ * @since CP-2.7.0
+ */
+if ( ! is_multisite() ) :
+	?>
+
+	<tr class="object-caching">
+	<th scope="row"><?php _e( 'Object cache' ); ?></th>
+	<td><fieldset>
+
+	<?php
+	// Setup the filesystem abstraction
+	if ( ! function_exists( 'WP_Filesystem' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+	}
+
+	global $wp_filesystem;
+	if ( empty( $wp_filesystem ) ) {
+		WP_Filesystem();
+	}
+
+	$wp_content_dir = defined( 'WP_CONTENT_DIR' ) ? WP_CONTENT_DIR : __DIR__ . '/wp-content';
+
+	if ( ! extension_loaded( 'apcu' ) ) {
+		?>
+
+		<input id="cp_object_cache" type="checkbox" name="cp_object_cache" value="0" disabled inert>
+		<label for="cp_object_cache"><?php esc_html_e( 'Enable object caching' ); ?></label>
+		<p class="description"><?php esc_html_e( 'The APCu extension for PHP is not installed. If you wish to have ClassicPress activate object caching, you should ask your host to install the APCu extension.' ); ?></p>
+
+		<?php
+	} elseif ( $wp_filesystem->exists( $wp_content_dir . '/object-cache.php' ) ) {
+		if ( 1 === absint( get_option( 'cp_object_cache' ) ) ) {
+			?>
+
+			<input id="cp_object_cache" type="checkbox" name="cp_object_cache" value="1" checked>
+			<label for="cp_object_cache"><?php esc_html_e( 'Enable object caching' ); ?></label>
+			<p class="description"><?php esc_html_e( 'You have activated ClassicPress\'s object cache on this site.' ); ?></p>
+
+			<?php
+		} else {
+			?>
+
+			<input id="cp_object_cache" type="checkbox" checked inert>
+			<label for="cp_object_cache" inert><?php esc_html_e( 'Enable object caching' ); ?></label>
+			<p class="description"><?php esc_html_e( 'Object caching has already been installed on this site by a plugin or other code. You will not be able to uncheck this box unless you first deactivate the plugin or other code.' ); ?></p>
+
+			<?php
+		}
+	} else {
+		?>
+
+		<input id="cp_object_cache" type="checkbox" name="cp_object_cache" value="1">
+		<label for="cp_object_cache"><?php esc_html_e( 'Enable object caching' ); ?></label>
+		<p class="description"><?php esc_html_e( 'You do not currently have an object cache installed on this site. Check the box if you want ClassicPress to install one for you.' ); ?></p>
+
+		<?php
+	}
+	?>
+
+	</fieldset></td>
+	</tr>
+
+	<?php
+endif;
+
+do_settings_fields( 'reading', 'default' );
+?>
+
 </table>
 
 <?php do_settings_sections( 'reading' ); ?>

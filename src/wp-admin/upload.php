@@ -113,32 +113,9 @@ if ( 'grid' === $mode ) {
 	wp_enqueue_style( 'media-grid' );
 	wp_enqueue_script( 'wp-mediaelement' );
 	wp_enqueue_script( 'media-grid' );
+	wp_enqueue_script( 'cp-filepond' );
 
 	remove_action( 'admin_head', 'wp_admin_canonical_url' );
-
-	wp_localize_script(
-		'media-grid',
-		'_wpMediaGridSettings',
-		array(
-			'by'               => __( 'by' ),
-			'pixels'           => __( 'pixels' ),
-			'deselect'         => __( 'Deselect' ),
-			'failed_update'    => __( 'Failed to update media:' ),
-			'error'            => __( 'Error:' ),
-			'upload_failed'    => __( 'Upload failed' ),
-			'tap_close'        => __( 'Tap to close' ),
-			'new_filename'     => __( 'Enter new filename' ),
-			'invalid_type'     => __( 'Invalid file type' ),
-			'check_types'      => __( 'Check the list of accepted file types.' ),
-			'delete_failed'    => __( 'Failed to delete attachment.' ),
-			'confirm_delete'   => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
-			'confirm_multiple' => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
-			'includes_url'     => includes_url(),
-			'webp_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) ),
-			'avif_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/avif' ) ),
-			'heic_editable'    => wp_image_editor_supports( array( 'mime_type' => 'image/heic' ) ),
-		)
-	);
 
 	add_screen_option(
 		'per_page',
@@ -156,7 +133,7 @@ if ( 'grid' === $mode ) {
 			'content' =>
 				'<p>' . __( 'All the files you&#8217;ve uploaded are listed in the Media Library, with the most recent uploads listed first.' ) . '</p>' .
 				'<p>' . __( 'You can view your media in a simple visual grid or a list with columns. Switch between these views using the icons to the left above the media.' ) . '</p>' .
-				'<p>' . __( 'To delete media items, click the Bulk Select button at the top of the screen. Select any items you wish to delete, then click the Delete Selected button. Clicking the Cancel Selection button takes you back to viewing your media.' ) . '</p>',
+				'<p>' . __( 'To delete media items, click the <strong>Bulk select</strong> button at the top of the screen. Select any items you wish to delete, then click the <strong>Delete permanently</strong> button. Clicking the <strong>Cancel</strong> button takes you back to viewing your media.' ) . '</p>',
 		)
 	);
 
@@ -255,7 +232,7 @@ if ( 'grid' === $mode ) {
 
 		<div class="uploader-inline" data-allowed-mimes="<?php echo esc_attr( $mimes_list ); ?>" hidden inert>
 			<button type="button" class="close dashicons dashicons-no">
-				<span class="screen-reader-text">Close uploader</span>
+				<span class="screen-reader-text"><?php esc_html_e( 'Close uploader' ); ?></span>
 			</button>
 
 			<input type="file" id="filepond" class="filepond" name="filepond" multiple data-allow-reorder="true">

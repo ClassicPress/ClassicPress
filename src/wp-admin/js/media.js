@@ -430,7 +430,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// List View
 		// Prevents the attach form submission if no post has been selected.
-		document.getElementById( 'find-posts-submit' ).addEventListener( 'click', function( event ) {
+		document.getElementById( 'find-posts-submit' )?.addEventListener( 'click', function( event ) {
 			var flag = false,
 				radios = document.querySelectorAll( '#find-posts-response input[type="radio"]' );
 
@@ -447,7 +447,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}, false );
 
 		// Submits the attach form search query when hitting the enter key in the search input.
-		document.getElementById( 'find-posts-input' ).addEventListener( 'keydown', function( event ) {
+		document.getElementById( 'find-posts-input' )?.addEventListener( 'keydown', function( event ) {
 			if ( 'Enter' == event.key ) {
 				event.preventDefault();
 				findPosts.send();
@@ -455,10 +455,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}, false );
 
 		// Binds the click event to the attach form search button.
-		document.getElementById( 'find-posts-search' ).addEventListener( 'click', findPosts.send );
+		document.getElementById( 'find-posts-search' )?.addEventListener( 'click', findPosts.send );
 
 		// Binds the attach form close dialog click event.
-		document.getElementById( 'find-posts-close' ).addEventListener( 'click', findPosts.close );
+		document.getElementById( 'find-posts-close' )?.addEventListener( 'click', findPosts.close );
 
 		// Binds the bulk action events to the submit buttons.
 		var action = document.getElementById( 'doaction' );
@@ -850,7 +850,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Make notices dismissible.
 		document.addEventListener( 'click', function( e ) {
 			if ( e.target.className === 'notice-dismiss' ) {
-				document.querySelector( '.is-dismissible' ).remove();
+				e.target.closest( '.is-dismissible' ).remove();
 			}
 		} );
 	}

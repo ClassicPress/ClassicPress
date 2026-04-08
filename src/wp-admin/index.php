@@ -73,10 +73,6 @@ $screen->add_help_tab(
 
 $help = '<p>' . __( 'The boxes on your Dashboard screen are:' ) . '</p>';
 
-if ( current_user_can( 'edit_theme_options' ) ) {
-	$help .= '<p>' . __( '<strong>Welcome</strong> &mdash; Shows links for some of the most common tasks when setting up a new site.' ) . '</p>';
-}
-
 if ( current_user_can( 'view_site_health_checks' ) ) {
 	$help .= '<p>' . __( '<strong>Site Health Status</strong> &mdash; Informs you of any potential issues that should be addressed to improve the performance or security of your website.' ) . '</p>';
 }

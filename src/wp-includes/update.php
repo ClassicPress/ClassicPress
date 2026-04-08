@@ -409,7 +409,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 
 	// Support updates for any plugins using the `Update URI` header field.
 	foreach ( $plugins as $plugin_file => $plugin_data ) {
-		if ( ! $plugin_data['UpdateURI'] || isset( $updates->response[ $plugin_file ] ) ) {
+		if ( ! $plugin_data['UpdateURI'] ) {
 			continue;
 		}
 
@@ -689,7 +689,7 @@ function wp_update_themes( $extra_stats = array() ) {
 
 	// Support updates for any themes using the `Update URI` header field.
 	foreach ( $themes as $theme_stylesheet => $theme_data ) {
-		if ( ! $theme_data['UpdateURI'] || isset( $new_update->response[ $theme_stylesheet ] ) ) {
+		if ( ! $theme_data['UpdateURI'] ) {
 			continue;
 		}
 
@@ -1092,11 +1092,10 @@ function cp_get_translation_updates() {
 		return;
 	}
 
-	$domains = array( 'admin', 'admin-network', 'continents-cities', 'default' );
 	$po_data = array();
 
-	foreach ( $domains as $domain ) {
-		foreach ( $installed_translations[ $domain ] as $locale => $data ) {
+	foreach ( $installed_translations as $domain ) {
+		foreach ( $domain as $locale => $data ) {
 			if ( ! isset( $po_data[ $locale ] ) ) {
 				$po_data[ $locale ] = strtotime( $data['PO-Revision-Date'] );
 			} else {

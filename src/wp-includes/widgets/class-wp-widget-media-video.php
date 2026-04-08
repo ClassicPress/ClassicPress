@@ -106,24 +106,17 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 			return;
 		}
 
-		$youtube_pattern = '#^https?://(?:www\.)?(?:youtube\.com/watch|youtu\.be/)#';
-		$vimeo_pattern   = '#^https?://(.+\.)?vimeo\.com/.*#';
+		add_filter( 'wp_video_shortcode', array( $this, 'inject_video_max_width_style' ) );
 
-		if ( $attachment || preg_match( $youtube_pattern, $src ) || preg_match( $vimeo_pattern, $src ) ) {
-			add_filter( 'wp_video_shortcode', array( $this, 'inject_video_max_width_style' ) );
+		echo wp_video_shortcode(
+			array_merge(
+				$instance,
+				compact( 'src' )
+			),
+			$instance['content']
+		);
 
-			echo wp_video_shortcode(
-				array_merge(
-					$instance,
-					compact( 'src' )
-				),
-				$instance['content']
-			);
-
-			remove_filter( 'wp_video_shortcode', array( $this, 'inject_video_max_width_style' ) );
-		} else {
-			echo $this->inject_video_max_width_style( wp_oembed_get( $src ) );
-		}
+		remove_filter( 'wp_video_shortcode', array( $this, 'inject_video_max_width_style' ) );
 	}
 
 	/**
@@ -194,7 +187,7 @@ class WP_Widget_Media_Video extends WP_Widget_Media {
 			</fieldset>
 
 			<?php
-			if ( $url && file_exists( get_attached_file( $attachment_id ) ) ) {
+			if ( $url ) {
 				?>
 
 				<div class="media-widget-preview media_video populated"><?php echo wp_video_shortcode( array( 'src' => $url ) ); ?></div>
@@ -366,6 +359,17 @@ function cp_render_media_video_template() {
 		</div>
 
 		<footer class="widget-modal-footer">
+			<div class="widget-modal-footer-selection">
+				<div class="widget-modal-footer-selection-info">
+					<span class="count"></span>
+					<br>
+					<button type="button" class="button-link clear-selection"><?php esc_html_e( 'Clear' ); ?></button>
+				</div>
+				<div class="widget-modal-footer-selection-view">
+					<ul tabindex="-1"></ul>
+				</div>
+			</div>
+			<div class="widget-modal-footer-selection"></div>
 			<div class="widget-modal-footer-buttons" style="padding-right: 2em;">
 				<button id="video-button-update" type="button" class="button media-button button-primary button-large media-button-select" disabled><?php esc_html_e( 'Update' ); ?></button>
 			</div>

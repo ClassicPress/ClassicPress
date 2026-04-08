@@ -24,7 +24,9 @@ if ( ! function_exists( 'susty_setup' ) ) :
 		 */
 		load_theme_textdomain( 'the-classicpress-theme', get_template_directory() . '/languages' );
 
-		// Add default posts and comments RSS feed links to head.
+		/**
+		 * Add default posts and comments RSS feed links to head.
+		 */
 		add_theme_support( 'automatic-feed-links' );
 
 		/*
@@ -42,7 +44,11 @@ if ( ! function_exists( 'susty_setup' ) ) :
 		 */
 		add_theme_support( 'post-thumbnails' );
 
-		// This theme uses wp_nav_menu() in two locations.
+		/**
+		 * This theme uses wp_nav_menu() in two locations.
+		 *
+		 * @link https://developer.wordpress.org/themes/functionality/navigation-menus/
+		 */
 		register_nav_menus(
 			array(
 				'main-menu'   => esc_html__( 'MainMenu', 'the-classicpress-theme' ),
@@ -50,7 +56,11 @@ if ( ! function_exists( 'susty_setup' ) ) :
 			)
 		);
 
-		// Set up the WordPress core custom background feature.
+		/**
+		 * Set up the WordPress core custom background feature.
+		 *
+		 * @link https://developer.wordpress.org/themes/functionality/custom-backgrounds/
+		 */
 		add_theme_support(
 			'custom-background',
 			apply_filters(
@@ -62,13 +72,15 @@ if ( ! function_exists( 'susty_setup' ) ) :
 			)
 		);
 
-		// Add theme support for selective refresh for widgets.
+		/**
+		 * Add theme support for selective refresh for widgets.
+		 */
 		add_theme_support( 'customize-selective-refresh-widgets' );
 
 		/**
 		 * Add support for core custom logo.
 		 *
-		 * @link https://codex.wordpress.org/Theme_Logo
+		 * @link https://developer.wordpress.org/themes/functionality/custom-logo/
 		 */
 		add_theme_support(
 			'custom-logo',
@@ -118,39 +130,14 @@ require get_template_directory() . '/inc/template-functions.php';
 require get_template_directory() . '/inc/customizer.php';
 
 /**
- * Load Jetpack compatibility file.
+ * Remove Emoji
  */
-if ( defined( 'JETPACK__VERSION' ) ) {
-	require get_template_directory() . '/inc/jetpack.php';
-}
-
 remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 remove_action( 'wp_print_styles', 'print_emoji_styles' );
 
-function susty_nav_rewrite_rule() {
-	add_rewrite_rule( 'menu', 'index.php?menu=true', 'top' );
-}
-
-add_action( 'init', 'susty_nav_rewrite_rule' );
-
-function susty_register_query_var( $vars ) {
-	$vars[] = 'menu';
-
-	return $vars;
-}
-add_filter( 'query_vars', 'susty_register_query_var' );
-
-add_filter(
-	'template_include',
-	function ( $path ) {
-		if ( get_query_var( 'menu' ) ) {
-			return get_template_directory() . '/menu.php';
-		}
-		return $path;
-	}
-);
-
-// Remove dashicons in frontend for unauthenticated users
+/**
+ * Remove dashicons in frontend for unauthenticated users
+ */
 function susty_dequeue_dashicons() {
 	if ( ! is_user_logged_in() ) {
 		wp_deregister_style( 'dashicons' );
@@ -162,7 +149,7 @@ add_action( 'wp_enqueue_scripts', 'susty_dequeue_dashicons' );
  * Stylesheet version (cache buster)
  */
 function cp_susty_get_asset_version() {
-	return '20250825';
+	return '20260226';
 }
 
 /**
@@ -175,6 +162,16 @@ function cp_susty_enqueue_assets() {
 		get_template_directory_uri() . '/js/menu-resize.js',
 		null,
 		cp_susty_get_asset_version(),
+	);
+	/* localize menu script */
+	wp_localize_script(
+		'cp-menu-resize',
+		'cp_menu_object',
+		array(
+			'Search'      => esc_html__( 'Search', 'the-classicpress-theme' ),
+			'SearchFor'   => esc_html__( 'Search for...', 'the-classicpress-theme' ),
+			'OpenSubMenu' => esc_html__( 'Click to open sub-menu.', 'the-classicpress-theme' ),
+		)
 	);
 }
 add_action( 'wp_enqueue_scripts', 'cp_susty_enqueue_assets' );
@@ -205,6 +202,16 @@ if ( function_exists( 'register_sidebar' ) ) {
 	);
 	register_sidebar(
 		array(
+			'id'            => 'homepage',
+			'name'          => esc_html__( 'Homepage', 'the-classicpress-theme' ),
+			'before_widget' => '<div id="%1$s" class="widget-container %2$s">',
+			'after_widget'  => '</div>',
+			'before_title'  => '<h3 class="widget-title">',
+			'after_title'   => '</h3>',
+		)
+	);
+	register_sidebar(
+		array(
 			'id'            => 'footer',
 			'name'          => esc_html__( 'Footer', 'the-classicpress-theme' ),
 			'before_widget' => '<div id="%1$s" class="widget-container %2$s">',
@@ -215,14 +222,18 @@ if ( function_exists( 'register_sidebar' ) ) {
 	);
 }
 
-// Remove empty paragraph tags
+/**
+ * Remove empty paragraph tags
+ */
 function cp_remove_empty_p( $content ) {
 	$content = force_balance_tags( $content );
 	return preg_replace( '#<p>\s*+(<br\s*/*>)?\s*</p>#i', '', $content );
 }
 add_filter( 'the_content', 'cp_remove_empty_p', 20, 1 );
 
-// Add excerpts to pages
+/**
+ * Add excerpts to pages
+ */
 add_post_type_support( 'page', 'excerpt' );
 
 /**

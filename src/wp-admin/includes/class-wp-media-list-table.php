@@ -657,14 +657,16 @@ class WP_Media_List_Table extends WP_List_Table {
 			if ( ! empty( $relationship_ids ) ) {
 				foreach ( $relationship_ids as $relationship_id ) {
 					if ( absint( $relationship_id ) !== 0 ) {
-						$ancestor          = get_post( $relationship_id );
-						$ancestor_type_obj = get_post_type_object( $ancestor->post_type );
-						$title             = _draft_or_post_title( $relationship_id );
+						if ( get_post_status( $relationship_id ) !== false ) {
+							$ancestor          = get_post( $relationship_id );
+							$ancestor_type_obj = get_post_type_object( $ancestor->post_type );
+							$title             = _draft_or_post_title( $relationship_id );
 
-						if ( $ancestor_type_obj->show_ui && current_user_can( 'edit_post', $relationship_id ) ) {
-							$output .= '<strong><a href="' . esc_url( get_edit_post_link( $relationship_id ) ) . '">' . esc_html( $title ) . '</a></strong><br>';
-						} else {
-							$output .= $title . '<br>';
+							if ( $ancestor_type_obj->show_ui && current_user_can( 'edit_post', $relationship_id ) ) {
+								$output .= '<strong><a href="' . esc_url( get_edit_post_link( $relationship_id ) ) . '">' . esc_html( $title ) . '</a></strong><br>';
+							} else {
+								$output .= $title . '<br>';
+							}
 						}
 					}
 				}
@@ -699,13 +701,15 @@ class WP_Media_List_Table extends WP_List_Table {
 			if ( ! empty( $parent_ids ) ) {
 				foreach ( $parent_ids as $parent_id ) {
 					if ( absint( $parent_id ) !== 0 ) {
-						$parent_type_obj = get_post_type_object( $parent_type );
-						$title           = _draft_or_post_title( $parent_id );
+						if ( get_post_status( $parent_id ) !== false ) {
+							$parent_type_obj = get_post_type_object( $parent_type );
+							$title           = _draft_or_post_title( $parent_id );
 
-						if ( $parent_type_obj->show_ui && current_user_can( 'edit_post', $parent_id ) ) {
-							$output .= '<strong><a href="' . esc_url( get_edit_post_link( $parent_id ) ) . '">' . esc_html( $title ) . '</a></strong><br>';
-						} else {
-							$output .= $title . '<br>';
+							if ( $parent_type_obj->show_ui && current_user_can( 'edit_post', $parent_id ) ) {
+								$output .= '<strong><a href="' . esc_url( get_edit_post_link( $parent_id ) ) . '">' . esc_html( $title ) . '</a></strong><br>';
+							} else {
+								$output .= $title . '<br>';
+							}
 						}
 					}
 				}

@@ -82,6 +82,18 @@
 	}
 	?>
 
+	<?php if ( is_front_page() ) { ?>
+		<?php if ( is_active_sidebar( 'homepage' ) ) { ?>
+			<div id="homepage-widgets-container">
+				<div class="homepage-widgets">
+					<div class="homepage-widgets-inner">
+						<?php dynamic_sidebar( 'homepage' ); ?>
+					</div>
+				</div>
+			</div>
+		<?php } ?>
+	<?php } ?>
+
 	<?php
 	if ( ! is_front_page() && ! is_single() ) {
 			echo '<header id="page-title">';

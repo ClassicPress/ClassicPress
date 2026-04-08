@@ -585,6 +585,12 @@ function populate_options( array $options = array() ) {
 		'cp_db_version'                   => $cp_db_version,
 		'disable_emojis'                  => 0,
 		'disable_xml_rpc'                 => 0,
+
+		// CP-2.4.0
+		'link_manager_enabled'            => 0,
+
+		// CP-2.7.0
+		'cp_object_cache'                 => 0,
 	);
 
 	// 3.3.0

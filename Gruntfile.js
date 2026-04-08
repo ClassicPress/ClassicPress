@@ -102,6 +102,17 @@ module.exports = function(grunt) {
 						]
 					}
 				}
+			},
+			codemirror: {
+				options: {
+					linebreak: false,
+					banner: require( './tools/webpack/codemirror-banner' )
+				},
+				files: {
+					src: [
+						SOURCE_DIR + 'wp-includes/js/codemirror/codemirror.min.css'
+					]
+				}
 			}
 		},
 		clean: {
@@ -138,6 +149,19 @@ module.exports = function(grunt) {
 					'wp-includes/js/mediaelement/mediaelementplayer.min.css',
 					'wp-includes/js/mediaelement/mejs-controls.svg'
 				]
+			},
+			'filepond': {
+				expand: true,
+					cwd: SOURCE_DIR,
+					src: [
+						'wp-includes/js/filepond/filepond.css',
+						'wp-includes/js/filepond/filepond.js',
+						'wp-includes/js/filepond/filepond-plugin-file-rename.js',
+						'wp-includes/js/filepond/filepond-plugin-file-validate-size.js',
+						'wp-includes/js/filepond/filepond-plugin-file-validate-type.js',
+						'wp-includes/js/filepond/filepond-plugin-image-preview.css',
+						'wp-includes/js/filepond/filepond-plugin-image-preview.js'
+					]
 			},
 			dynamic: {
 				dot: true,
@@ -186,6 +210,35 @@ module.exports = function(grunt) {
 						dest: BUILD_DIR
 					}
 				]
+			},
+			'codemirror': {
+				options: {
+					process: function( content, srcpath ) {
+						if ( srcpath.includes( 'htmlhint.min.js' ) ) {
+							return content + '\nif ( window.HTMLHint && window.HTMLHint.HTMLHint ) { window.HTMLHint = window.HTMLHint.HTMLHint; }';
+						}
+						return content;
+					}
+				},
+				files: [
+					{
+						[ SOURCE_DIR + 'wp-includes/js/codemirror/csslint.js' ]: [ './node_modules/csslint/dist/csslint.js' ],
+						[ SOURCE_DIR + 'wp-includes/js/codemirror/esprima.js' ]: [ './node_modules/esprima/dist/esprima.js' ],
+						[ SOURCE_DIR + 'wp-includes/js/codemirror/htmlhint.js' ]: [ './node_modules/htmlhint/dist/htmlhint.min.js' ],
+						[ SOURCE_DIR + 'wp-includes/js/codemirror/jsonlint.js' ]: [ './node_modules/jsonlint/web/jsonlint.js' ]
+					}
+				]
+			},
+			'filepond': {
+				files: {
+					[ SOURCE_DIR + 'wp-includes/js/filepond/filepond.css' ]: [ './node_modules/filepond/dist/filepond.css' ],
+					[ SOURCE_DIR + 'wp-includes/js/filepond/filepond.js' ]: [ './node_modules/filepond/dist/filepond.js' ],
+					[ SOURCE_DIR + 'wp-includes/js/filepond/filepond-plugin-file-rename.js' ]: [ './node_modules/filepond-plugin-file-rename/dist/filepond-plugin-file-rename.js' ],
+					[ SOURCE_DIR + 'wp-includes/js/filepond/filepond-plugin-file-validate-size.js' ]: [ './node_modules/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js' ],
+					[ SOURCE_DIR + 'wp-includes/js/filepond/filepond-plugin-file-validate-type.js' ]: [ './node_modules/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js' ],
+					[ SOURCE_DIR + 'wp-includes/js/filepond/filepond-plugin-image-preview.css']: [ './node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css' ],
+					[ SOURCE_DIR + 'wp-includes/js/filepond/filepond-plugin-image-preview.js']: [ './node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js' ]
+				}
 			},
 			'wp-admin-css-compat-rtl': {
 				options: {
@@ -349,8 +402,9 @@ module.exports = function(grunt) {
 			}
 		},
 		webpack: {
-			min: webpackConfig( { environment: 'production', buildTarget: SOURCE_DIR } ),
-			dev: webpackConfig( { environment: 'development', buildTarget: SOURCE_DIR } )
+			min: webpackConfig( { environment: 'production', buildTarget: SOURCE_DIR, minify: true } ),
+			dev: webpackConfig( { environment: 'production', buildTarget: SOURCE_DIR, minify: false } ),
+			codemirror: require( './tools/webpack/codemirror.config.js' )( { buildTarget: SOURCE_DIR } )
 		},
 		sass: {
 			colors: {
@@ -368,6 +422,22 @@ module.exports = function(grunt) {
 		cssmin: {
 			options: {
 				compatibility: 'ie7'
+			},
+			codemirror: {
+				files: {
+					[ SOURCE_DIR + 'wp-includes/js/codemirror/codemirror.min.css' ]: [
+						'node_modules/codemirror/lib/codemirror.css',
+						'node_modules/codemirror/addon/hint/show-hint.css',
+						'node_modules/codemirror/addon/lint/lint.css',
+						'node_modules/codemirror/addon/dialog/dialog.css',
+						'node_modules/codemirror/addon/display/fullscreen.css',
+						'node_modules/codemirror/addon/fold/foldgutter.css',
+						'node_modules/codemirror/addon/merge/merge.css',
+						'node_modules/codemirror/addon/scroll/simplescrollbars.css',
+						'node_modules/codemirror/addon/search/matchesonscrollbar.css',
+						'node_modules/codemirror/addon/tern/tern.css'
+					]
+				}
 			},
 			core: {
 				expand: true,
@@ -491,7 +561,11 @@ module.exports = function(grunt) {
 		jshint: {
 			options: grunt.file.readJSON('.jshintrc'),
 			grunt: {
-				src: ['Gruntfile.js', 'tools/**/*.js', '!tools/build/grunt-terser.js']
+				src: [
+					'Gruntfile.js',
+					'tools/**/*.js',
+					'!tools/build/grunt-terser.js'
+				]
 			},
 			tests: {
 				src: [
@@ -535,6 +609,7 @@ module.exports = function(grunt) {
 					'wp-includes/js/plupload/wp-plupload.js',
 					'wp-includes/js/tinymce/plugins/wordpress/plugin.js',
 					'wp-includes/js/tinymce/plugins/wp*/plugin.js',
+					'wp-includes/js/filepond/cp-filepond.js',
 					// Third party scripts
 					'!wp-includes/js/codemirror/*.js',
 					'!wp-includes/js/tinymce/plugins/**/*.js',
@@ -624,7 +699,9 @@ module.exports = function(grunt) {
 			},
 			grunt: {
 				src: [
-					'Gruntfile.js'
+					'Gruntfile.js',
+					'tools/**/*.js',
+					'!tools/build/grunt-terser.js'
 				]
 			},
 			core: {
@@ -645,6 +722,7 @@ module.exports = function(grunt) {
 					'src/wp-includes/js/plupload/wp-plupload.js',
 					'src/wp-includes/js/tinymce/plugins/wordpress/plugin.js',
 					'src/wp-includes/js/tinymce/plugins/wp*/plugin.js',
+					'src/wp-includes/js/filepond/cp-filepond.js',
 					// Third party scripts
 					'!src/wp-includes/js/codemirror/*.js',
 					'!src/wp-includes/js/jquery/*.js',
@@ -879,28 +957,6 @@ module.exports = function(grunt) {
 				src: `${BUILD_DIR}wp-includes/embed.php`,
 				dest: '.'
 			}
-		},
-		replace: {
-			emojiRegex: {
-				options: {
-					patterns: [
-						{
-							match: /\/\/ START: emoji arrays[\S\s]*\/\/ END: emoji arrays/g,
-							replacement: buildTools.replaceEmojiRegex
-						}
-					]
-				},
-				files: [
-					{
-						expand: true,
-						flatten: true,
-						src: [
-							`${SOURCE_DIR}wp-includes/formatting.php`
-						],
-						dest: `${SOURCE_DIR}wp-includes/`
-					}
-				]
-			}
 		}
 	});
 
@@ -999,7 +1055,7 @@ module.exports = function(grunt) {
 	grunt.registerTask(
 		'precommit:emoji',
 		[
-			'replace:emojiRegex'
+			'emojiReplace'
 		]
 	);
 
@@ -1114,7 +1170,7 @@ module.exports = function(grunt) {
 
 			grunt.util.spawn( {
 				cmd: 'bash',
-				args: [ '-c', "git ls-files -z | xargs -0 grep -E -C3 -n --binary-files=without-match '(<<" + "<<|^=======(\\s|$)|>>" + ">>)'" ]
+				args: [ '-c', "git ls-files -z | xargs -0 grep -E -C3 -n --binary-files=without-match '(<<" + "<<<<<|^=======(\\s|$)|>>>>>" + ">>)'" ]
 			}, ( error, { stdout, stderr }, code ) => {
 				// Ignore error because it is populated for non-zero exit codes:
 				// https://gruntjs.com/api/grunt.util#grunt.util.spawn
@@ -1196,6 +1252,26 @@ module.exports = function(grunt) {
 	);
 
 	grunt.registerTask(
+		'emojiReplace',
+		function() {
+			const done = this.async();
+
+			buildTools.replaceEmojiRegex()
+			.then ( data => {
+				let content = grunt.file.read( `${SOURCE_DIR}wp-includes/formatting.php` );
+				content = content.replace( /\/\/ START: emoji arrays[\S\s]*\/\/ END: emoji arrays/g, data );
+				grunt.file.write( `${SOURCE_DIR}wp-includes/formatting.php`, content );
+				grunt.log.writeln( 'Emoji data replaced.' );
+				done();
+			} )
+			.catch( error => {
+				grunt.log.error( error );
+				done( false );
+			} );
+		}
+	);
+
+	grunt.registerTask(
 		'certificates:update',
 		'Updates the Composer package responsible for root certificate updates.',
 		function() {
@@ -1215,7 +1291,7 @@ module.exports = function(grunt) {
 				}
 			} );
 		}
-	 );
+	);
 
 	grunt.registerTask(
 		'certificates:upgrade',
@@ -1250,11 +1326,24 @@ module.exports = function(grunt) {
 			'clean:vendor-js',
 			'clean:package-js',
 			'clean:mediaelement-js',
+			'clean:filepond',
 			'copy:vendor-js',
 			'webpack:dev',
 			'webpack:min',
 			'usebanner:js',
-			'copy:mediaelement-js'
+			'copy:mediaelement-js',
+			'copy:filepond',
+			'build:codemirror'
+		]
+	);
+
+	grunt.registerTask(
+		'build:codemirror',
+		[
+			'webpack:codemirror',
+			'cssmin:codemirror',
+			'usebanner:codemirror',
+			'copy:codemirror'
 		]
 	);
 

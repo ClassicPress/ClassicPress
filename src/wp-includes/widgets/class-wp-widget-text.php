@@ -424,14 +424,104 @@ class WP_Widget_Text extends WP_Widget {
 	}
 
 	/**
-	 * Loads the required scripts and styles for the widget control.
+	 * Loads the required scripts for the text widget.
 	 *
-	 * @since 4.8.0
+	 * @since CP-2.7.0
 	 */
 	public function enqueue_admin_scripts() {
-		wp_enqueue_media();
 		wp_enqueue_editor();
+
+		// Identify permitted image file types
+		$image_file_types = array();
+		$allowed_mime_types = get_allowed_mime_types();
+		foreach ( $allowed_mime_types as $key => $mime ) {
+			if ( str_contains( $mime, 'image/' ) ) {
+				$extensions = explode( '|', $key );
+				foreach ( $extensions as $extension ) {
+					$image_file_types[] = $extension;
+				}
+			}
+		}
+
+		// Identify permitted audio file types
+		$audio_file_types = array( 'mp3', 'ogg', 'flac', 'm4a', 'wav' );
+
+		// Identify permitted video file types
+		$video_file_types = array( 'mp4', 'm4v', 'webm', 'ogv', 'flv', 'mov' );
+
+		$user_id = get_current_user_id();
+		$per_page = (int) get_user_meta( $user_id, 'media_grid_per_page', true );
+		if ( empty( $per_page ) || $per_page < 1 ) {
+			$per_page = 80;
+		}
+
 		wp_enqueue_script( 'text-widgets' );
+		wp_localize_script(
+			'text-widgets',
+			'TEXT_WIDGET',
+			array(
+				'create_gallery'             => __( 'Create gallery' ),
+				'create_playlist'            => __( 'Create audio playlist' ),
+				'create_video_playlist'      => __( 'Create video playlist' ),
+				'create_new_gallery'         => __( 'Create a new gallery' ),
+				'create_new_playlist'        => __( 'Create a new playlist' ),
+				'create_new_video_playlist'  => __( 'Create a new video playlist' ),
+				'edit_gallery'               => __( 'Edit gallery' ),
+				'edit_playlist'              => __( 'Edit audio playlist' ),
+				'edit_video_playlist'        => __( 'Edit video playlist' ),
+				'cancel_gallery'             => '&larr; ' . __( 'Cancel gallery' ),
+				'cancel_playlist'            => '&larr; ' . __( 'Cancel audio playlist' ),
+				'cancel_video_playlist'      => '&larr; ' . __( 'Cancel video playlist' ),
+				'insert_gallery'             => __( 'Insert gallery' ),
+				'insert_playlist'            => __( 'Insert audio playlist' ),
+				'insert_video_playlist'      => __( 'Insert video playlist' ),
+				'update_gallery'             => __( 'Update gallery' ),
+				'update_playlist'            => __( 'Update audio playlist' ),
+				'update_video_playlist'      => __( 'Update video playlist' ),
+				'add_media'                  => __( 'Add media' ),
+				'add_to_gallery'             => __( 'Add to gallery' ),
+				'add_to_playlist'            => __( 'Add to audio playlist' ),
+				'add_to_video_playlist'      => __( 'Add to video playlist' ),
+				'replace'                    => __( 'Replace' ),
+				'media_library'              => __( 'Media Library' ),
+				'link_text'                  => __( 'Link Text' ),
+				'deselect'                   => __( 'Deselect' ),
+				'caption'                    => __( 'Caption' ),
+				'artist'                     => __( 'Artist' ),
+				'album'                      => __( 'Album' ),
+				'save'                       => __( 'Save' ),
+				'show_tracklist'             => __( 'Show Tracklist' ),
+				'show_video_list'            => __( 'Show Video List' ),
+				'media_items'                => __( 'media items' ),
+				'item_selected'              => __( 'item selected' ),
+				'items_selected'             => __( 'items selected' ),
+				'per_page'                   => $per_page,
+				'includes_url'               => includes_url(),
+				'wrong_url'                  => __( 'Wrong URL' ),
+				'insert_from_url'            => __( 'Insert from URL' ),
+				'unsupported_file_type'      => __( 'Unsupported file type' ),
+				'aria_label'                 => __( 'The current image has no alternative text. The file name is: ' ),
+				'image_file_types'           => $image_file_types,
+				'image_details'              => __( 'Image Details' ),
+				'wrong_url'                  => __( 'No file exists at the URL provided.' ),
+				'audio_file_types'           => $audio_file_types,
+				'video_file_types'           => $video_file_types,
+				'upload_failed'              => __( 'Upload failed' ),
+				'tap_close'                  => __( 'Tap to close' ),
+				'new_filename'               => __( 'New filename' ),
+				'invalid_type'               => __( 'Invalid type' ),
+				'check_types'                => __( 'Check types' ),
+				'of'                         => __( 'of' ),
+				'by'                         => __( 'by' ),
+				'pixels'                     => __( 'pixels' ),
+				'deselect'                   => __( 'Deselect' ),
+				'failed_update'              => __( 'Failed to update media:' ),
+				'error'                      => __( 'Error:' ),
+				'delete_failed'              => __( 'Failed to delete attachment.' ),
+				'confirm_delete'             => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+				'confirm_multiple'           => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+			)
+		);
 	}
 
 	/**
@@ -482,6 +572,25 @@ class WP_Widget_Text extends WP_Widget {
 
 			<fieldset>
 				<label for="<?php echo esc_attr( $this->get_field_id( 'text' ) ); ?>" class="screen-reader-text"><?php _e( 'Content:' ); ?></label>
+				
+				<?php
+				if ( ! user_can_richedit() ) :
+					?>
+
+					<fieldset id="<?php echo esc_attr( $this->get_field_id( 'text_toolbar' ) ); ?>" class="quicktags-toolbar">
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_strong' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Bold' ); ?>" data-tag="b">b</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_em' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Italic' ); ?>" data-tag="i">i</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_link' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Insert link' ); ?>" data-tag="link">link</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_ul' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Bulleted list' ); ?>" data-tag="ul">ul</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_ol' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Numbered list' ); ?>" data-tag="ol">ol</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_li' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'List item' ); ?>" data-tag="li">li</button>
+						<button type="button" id="<?php echo esc_attr( $this->get_field_id( 'text_code' ) ); ?>" class="button button-small" aria-label="<?php esc_attr_e( 'Code' ); ?>" data-tag="code">code</button>
+					</fieldset>
+
+					<?php
+				endif;
+				?>
+
 				<textarea id="<?php echo esc_attr( $this->get_field_id( 'text' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'text' ) ); ?>" class="widefat sync-input" style="height:200px;"><?php echo $escaped_text; ?></textarea>
 			</fieldset>
 

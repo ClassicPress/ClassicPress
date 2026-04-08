@@ -51,6 +51,9 @@ if ( $pagenum > $total_pages && $total_pages > 0 ) {
 $title       = __( 'Add Plugins' );
 $parent_file = 'plugins.php';
 
+wp_enqueue_script( 'cp-filepond-file-validate-type' );
+wp_enqueue_script( 'cp-filepond' );
+wp_enqueue_style( 'cp-filepond' );
 wp_enqueue_script( 'plugin-install' );
 
 $body_id = $tab;
@@ -148,6 +151,24 @@ if ( ! empty( $tabs['upload'] ) && current_user_can( 'upload_plugins' ) ) {
 		__( 'Browse Plugins' )
 	);
 }
+if (
+		current_user_can( 'install_plugins' ) &&
+		! is_file( WP_PLUGIN_DIR . '/classicpress-directory-integration/classicpress-directory-integration.php' )
+	) {
+		echo '<div class="notice notice-info"><p>' . sprintf( __( 'You can browse other plugins in the <a href="%s" target="_blank">ClassicPress Directory</a>.' ), esc_url( 'https://directory.classicpress.net/plugins/' ) ) . '<br>';
+		$url = wp_nonce_url(
+			add_query_arg(
+				array(
+					'action' => 'install-plugin',
+					'plugin' => 'classicpress-directory-integration',
+					'from'   => 'index',
+				),
+				self_admin_url( 'update.php' )
+			),
+			'install-plugin_' . 'classicpress-directory-integration'
+		);
+		echo sprintf( __( '<a href="%1$s">Install now</a> | ClassicPress Directory Integration plugin: install ClassicPress specific plugins from the Plugins Menu.' ), $url ) . '</p></div>';
+}
 ?>
 
 <hr class="wp-header-end">
@@ -199,6 +220,30 @@ do_action( "install_plugins_{$tab}", $paged );
 <?php
 wp_print_request_filesystem_credentials_modal();
 wp_print_admin_notice_templates();
+?>
+<script>
+document.addEventListener( 'DOMContentLoaded', function () {
+	var filepond = document.querySelector( 'input[type="file"][name="pluginzip"]' );
+	var button   = document.getElementById( 'install-plugin-submit' );
+	var options = {
+		name:                   'pluginzip',
+		storeAsFile:             true,
+		allowMultiple:           false,
+		allowFileTypeValidation: true,
+		acceptedFileTypes:       [ 'application/zip', 'application/x-zip-compressed', 'application/x-zip' ],
+		dropOnPage:              true,
+		dropOnElement:           false,
+		labelIdle:               _cpFilepondLabels.labelZipIdle,
+		credits:                 false,
+		onaddfile:               function( error, fileItem ) { if ( button && ! error ) { button.disabled = false; } },
+		onremovefile:            function() { if ( button ) { button.disabled = true; } }
+	};
+	FilePond.registerPlugin( FilePondPluginFileValidateType );
+	FilePond.create( filepond, options );
+} );
+</script>
+<?php
+
 
 /**
  * ClassicPress Administration Template Footer.

@@ -34,7 +34,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -49,7 +49,7 @@ jobs:
           composer --version
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
         with:
           composer-options: "--no-progress --no-ansi --no-interaction"
 
@@ -91,19 +91,19 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Read .nvmrc
         run: echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
         id: nvmrc
 
       - name: Install NodeJS
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: '${{ steps.nvmrc.outputs.NVMRC }}'
 
       - name: Cache NodeJS modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         env:
           cache-name: cache-node-modules
         with:
@@ -116,13 +116,13 @@ jobs:
       - name: Set up PHP
         uses: "shivammathur/setup-php@v2"
         with:
-          php-version: 7.4
+          php-version: '8.4'
           ini-values: mysql.default_host=127.0.0.1,mysql.default_port=3306,mysql.default_socket=/var/run/mysqld/mysqld.sock
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, intl, gd, exif, iconv, imagick
           coverage: none
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
         with:
           composer-options: "--no-progress --no-ansi --no-interaction"
 
@@ -150,6 +150,15 @@ jobs:
           composer --version
           grunt --version
           mysql --version
+
+      - name: Bypass Cloudflare for GitHub Action
+        if: ${{ github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false ) }}
+        uses: xiaotianxt/bypass-cloudflare-for-github-action@v2.1.0
+        with:
+          cf_account_id: ${{ secrets.CF_ACCOUNT_ID }}
+          cf_zone_id: ${{ secrets.CF_ZONE_ID }}
+          cf_api_token: ${{ secrets.CF_API_TOKEN }}
+          disable_bot_fight_mode: 'true'
 
       - name: Install dependencies
         run: npx install-changed --install-command="npm ci"

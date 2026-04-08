@@ -72,6 +72,7 @@ class Tests_Query_Vars extends WP_UnitTestCase {
 				'post_format',
 				'media_category_name',
 				'media_tag',
+				'user_group_name',
 				'rest_route',
 				'sitemap',
 				'sitemap-subtype',

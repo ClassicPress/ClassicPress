@@ -322,22 +322,40 @@ function install_search_form( $deprecated = true ) {
  * Displays a form to upload plugins from zip files.
  *
  * @since 2.8.0
+ * @since CP-2.8.0 JavaScript uploader used with browser fallback alternative
  */
 function install_plugins_upload() {
 	?>
 <div class="upload-plugin">
 	<p class="install-help"><?php _e( 'If you have a plugin in a .zip format, you may install or update it by uploading it here.' ); ?></p>
-	<form method="post" enctype="multipart/form-data" class="wp-upload-form" action="<?php echo esc_url( self_admin_url( 'update.php?action=upload-plugin' ) ); ?>">
-		<?php wp_nonce_field( 'plugin-upload' ); ?>
-		<label class="screen-reader-text" for="pluginzip">
-			<?php
-			/* translators: Hidden accessibility text. */
-			_e( 'Plugin zip file' );
-			?>
-		</label>
-		<input type="file" id="pluginzip" name="pluginzip" accept=".zip">
-		<?php submit_button( __( 'Install Now' ), '', 'install-plugin-submit', false ); ?>
-	</form>
+	<div id="plupload-upload-ui" class="hide-if-no-js drag-drop">
+		<div id="drag-drop-area">
+			<form method="post" enctype="multipart/form-data" id="filepond" action="<?php echo esc_url( self_admin_url( 'update.php?action=upload-plugin' ) ); ?>">
+				<?php wp_nonce_field( 'plugin-upload' ); ?>
+				<label class="screen-reader-text" for="pluginzip">
+					<?php
+					/* translators: Hidden accessibility text. */
+					_e( 'Plugin zip file' );
+					?>
+				</label>
+				<input type="file" id="pluginzip" name="pluginzip">
+				<?php submit_button( __( 'Install Now' ), '', 'install-plugin-submit', false, array( 'disabled' => 'disabled' ) ); ?>
+			</form>
+		</div>
+	</div>
+	<noscript>
+		<form method="post" enctype="multipart/form-data" class="wp-upload-form" action="<?php echo esc_url( self_admin_url( 'update.php?action=upload-plugin' ) ); ?>">
+			<?php wp_nonce_field( 'plugin-upload' ); ?>
+			<label class="screen-reader-text" for="pluginzip">
+				<?php
+				/* translators: Hidden accessibility text. */
+				_e( 'Plugin zip file' );
+				?>
+			</label>
+			<input type="file" id="pluginzip" name="pluginzip" accept=".zip">
+			<?php submit_button( __( 'Install Now' ), '', 'install-plugin-submit', false ); ?>
+		</form>
+	</noscript>
 </div>
 	<?php
 }
@@ -372,14 +390,14 @@ function install_plugins_favorites_form() {
  */
 function display_plugins_categories_list() {
 	$categories = array(
+		'classicpress' => __( 'ClassicPress' ),
 		'form'         => __( 'Forms' ),
 		'widget'       => __( 'Widgets' ),
 		'admin'        => __( 'Admin Utilities' ),
 		'page-builder' => __( 'Page Builders' ),
-		'e-commerce'   => __( 'eCommerce' ),
+		'ecommerce'    => __( 'eCommerce' ),
 		'media'        => __( 'Media' ),
 		'seo'          => __( 'SEO' ),
-		'ads'          => __( 'Advertising' ),
 		'social'       => __( 'Social Networking' ),
 		'membership'   => __( 'Membership' ),
 		'newsletter'   => __( 'Newsletters' ),

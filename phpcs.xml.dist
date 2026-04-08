@@ -10,7 +10,7 @@
 
 	<!-- Set the memory limit to 256M.
 		 For most standard PHP configurations, this means the memory limit will temporarily be raised.
-		 Ref: https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#specifying-phpini-settings
+		 Ref: https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Advanced-Usage#specifying-phpini-settings
 	-->
 	<ini name="memory_limit" value="256M"/>
 
@@ -36,6 +36,7 @@
 	<exclude-pattern>/src/wp-admin/includes/class-pclzip\.php</exclude-pattern>
 	<exclude-pattern>/src/wp-admin/includes/deprecated\.php</exclude-pattern>
 	<exclude-pattern>/src/wp-admin/includes/ms-deprecated\.php</exclude-pattern>
+	<exclude-pattern>/src/wp-includes/object-cache\.php</exclude-pattern>
 
 	<exclude-pattern>/src/wp-includes/atomlib\.php</exclude-pattern>
 	<exclude-pattern>/src/wp-includes/class-IXR\.php</exclude-pattern>
@@ -150,7 +151,9 @@
 
 				<!-- From DOMDocument. -->
 				<element value="childNodes"/>
+				<element value="firstChild"/>
 				<element value="formatOutput"/>
+				<element value="lastChild"/>
 				<element value="nodeName"/>
 				<element value="nodeType"/>
 				<element value="parentNode"/>

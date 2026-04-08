@@ -2105,6 +2105,17 @@ details summary > * {
 	display: inline;
 }
 
+#poststuff .edit-timestamp-summary {
+	margin: 0.5em 0 2px 0;
+	padding: 2px 0 2px 2px;
+	outline-offset: 2px;
+	border-bottom: 0;
+}
+
+#poststuff .edit-timestamp-summary:focus {
+	outline: 2px solid #2271b1;
+}
+
 .metabox-holder details > summary::marker,
 .metabox-holder details > summary::-webkit-details-marker {
 	font-size: 1.3em;
@@ -2921,7 +2932,7 @@ div.action-links {
 	right: 0;
 	bottom: 0;
 	left: 0;
-	height: 25px; /* actual height: 25+13+13+1=52 */
+	height: 30px; /* actual height: 30+13+13+1=57 */
 	border-top: 1px solid #dcdcde;
 	background: #f6f7f7;
 }
