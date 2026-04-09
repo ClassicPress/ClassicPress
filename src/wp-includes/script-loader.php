@@ -126,8 +126,8 @@ function wp_default_packages_vendor( $scripts ) {
 	);
 
 	$vendor_scripts_versions = array(
-		'moment' => '2.29.4',
-		'lodash' => '4.17.19',
+		'moment' => '2.30.1',
+		'lodash' => '4.17.21',
 	);
 
 	foreach ( $vendor_scripts as $handle ) {
@@ -881,7 +881,7 @@ function wp_default_scripts( $scripts ) {
 
 	$scripts->add( 'imgareaselect', "/wp-includes/js/imgareaselect/jquery.imgareaselect$suffix.js", array( 'jquery' ), false, 1 );
 
-	$scripts->add( 'mediaelement', "/wp-includes/js/mediaelement/mediaelement-and-player$suffix.js", array(), '7.0.3', 1 );
+	$scripts->add( 'mediaelement', "/wp-includes/js/mediaelement/mediaelement-and-player$suffix.js", array(), '7.0.7', 1 );
 	$mejs_settings = array(
 		'pluginPath'  => includes_url( 'js/mediaelement/', 'relative' ),
 		'classPrefix' => 'mejs-',
@@ -996,7 +996,7 @@ function wp_default_scripts( $scripts ) {
 	 *
 	 * This is deprecated and will be removed in CP-3.0.0
 	 */
-	$scripts->add( 'mediaelement-aux', "/wp-includes/js/mediaelement/mediaelement$suffix.js", array(), '7.0.3', 1 );
+	$scripts->add( 'mediaelement-aux', "/wp-includes/js/mediaelement/mediaelement$suffix.js", array(), '7.0.7', 1 );
 	did_action( 'init' ) && $scripts->localize(
 		'mediaelement-aux',
 		'_cp_mediaelement_aux',
@@ -1008,12 +1008,12 @@ function wp_default_scripts( $scripts ) {
 	$scripts->add( 'mediaelement-vimeo', '/wp-includes/js/mediaelement/renderers/vimeo.min.js', array( 'mediaelement' ), '4.2.17', 1 );
 	$scripts->add( 'wp-mediaelement', "/wp-includes/js/mediaelement/wp-mediaelement$suffix.js", array( 'mediaelement' ), false, 1 );
 
-	$scripts->add( 'wp-codemirror', '/wp-includes/js/codemirror/codemirror.min.js', array(), '5.65.20' );
+	$scripts->add( 'wp-codemirror', '/wp-includes/js/codemirror/codemirror.min.js', array(), '5.65.21' );
 	$scripts->add( 'csslint', '/wp-includes/js/codemirror/csslint.js', array(), '1.0.5' );
 	$scripts->add( 'esprima', '/wp-includes/js/codemirror/esprima.js', array(), '4.0.1' );
 	$scripts->add( 'jshint', '/wp-includes/js/codemirror/fakejshint.js', array( 'esprima' ), '2.9.5' );
 	$scripts->add( 'jsonlint', '/wp-includes/js/codemirror/jsonlint.js', array(), '1.6.3' );
-	$scripts->add( 'htmlhint', '/wp-includes/js/codemirror/htmlhint.js', array(), '1.8.0' );
+	$scripts->add( 'htmlhint', '/wp-includes/js/codemirror/htmlhint.js', array(), '1.9.2' );
 	$scripts->add( 'htmlhint-kses', '/wp-includes/js/codemirror/htmlhint-kses.js', array( 'htmlhint' ) );
 	$scripts->add( 'code-editor', "/wp-admin/js/code-editor$suffix.js", array( 'jquery', 'wp-codemirror', 'underscore' ) );
 	$scripts->add( 'wp-theme-plugin-editor', "/wp-admin/js/theme-plugin-editor$suffix.js", array( 'common', 'wp-util', 'wp-sanitize', 'jquery', 'wp-a11y', 'underscore' ), false, 1 );
@@ -1234,7 +1234,7 @@ function wp_default_scripts( $scripts ) {
 
 		$scripts->add( 'xfn', "/wp-admin/js/xfn$suffix.js", array( 'jquery' ), false, 1 );
 
-		$scripts->add( 'sortable-js', '/wp-includes/js/sortable.min.js', array(), false, 1 );
+		$scripts->add( 'sortable-js', '/wp-includes/js/sortable.min.js', array(), '1.15.6', 1 );
 
 		$scripts->add( 'postbox', "/wp-admin/js/postbox$suffix.js", array( 'sortable-js', 'wp-a11y' ), false, 1 );
 		$scripts->set_translations( 'postbox' );
@@ -1510,8 +1510,8 @@ function wp_default_styles( $styles ) {
 
 	// External libraries and friends.
 	$styles->add( 'imgareaselect', '/wp-includes/js/imgareaselect/imgareaselect.css', array(), '0.9.8' );
-	$styles->add( 'mediaelement', "/wp-includes/js/mediaelement/mediaelementplayer-legacy$suffix.css", array(), '4.2.17' );
-	$styles->add( 'mediaelement-player', "/wp-includes/js/mediaelement/mediaelementplayer$suffix.css", array( 'mediaelement' ), '7.0.5' );
+	$styles->add( 'mediaelement', "/wp-includes/js/mediaelement/mediaelementplayer-legacy$suffix.css", array(), '7.0.7' );
+	$styles->add( 'mediaelement-player', "/wp-includes/js/mediaelement/mediaelementplayer$suffix.css", array( 'mediaelement' ), '7.0.7' );
 	$styles->add( 'wp-mediaelement', "/wp-includes/js/mediaelement/wp-mediaelement$suffix.css", array( 'mediaelement' ) );
 	$styles->add( 'wp-codemirror', '/wp-includes/js/codemirror/codemirror.min.css', array(), '5.65.20' );
 	$styles->add( 'filepond', "/wp-includes/js/filepond/filepond$suffix.css", array(), '4.32.12' );
