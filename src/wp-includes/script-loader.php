@@ -891,7 +891,7 @@ function wp_default_scripts( $scripts ) {
 		)
 	);
 
-	//$scripts->add( 'wp-backbone', "/wp-includes/js/wp-backbone$suffix.js", array( 'backbone', 'wp-util' ), false, 1 );
+	$scripts->add( 'wp-backbone', "/wp-includes/js/wp-backbone$suffix.js", array( 'backbone', 'wp-util' ), false, 1 );
 
 	$scripts->add( 'revisions', "/wp-admin/js/revisions$suffix.js", array(), false, 1 );
 	$scripts->add( 'revisions-list', "/wp-admin/js/revisions-list$suffix.js", array(), false, 1 );
@@ -1205,7 +1205,20 @@ function wp_default_scripts( $scripts ) {
 	$scripts->add( 'customize-nav-menus', "/wp-admin/js/customize-nav-menus$suffix.js", array( 'sortable-js', 'customize-controls', 'customize-controls-proxy', 'wp-sanitize' ), false, 1 );
 
 	$scripts->add( 'wp-custom-header', "/wp-includes/js/wp-custom-header$suffix.js", array( 'wp-a11y' ), false, 1 );
+
 	$scripts->add( 'shortcode', "/wp-includes/js/shortcode$suffix.js", array( 'underscore' ), false, 1 );
+	$scripts->add( 'media-models', "/wp-includes/js/media-models$suffix.js", array( 'wp-backbone' ), false, 1 );
+	did_action( 'init' ) && $scripts->localize(
+		'media-models',
+		'_wpMediaModelsL10n',
+		array(
+			'settings' => array(
+				'ajaxurl' => admin_url( 'admin-ajax.php', 'relative' ),
+				'post'    => array( 'id' => 0 ),
+			),
+		)
+	);
+
 	$scripts->add( 'wp-embed', "/wp-includes/js/wp-embed$suffix.js", array(), false, 1 );
 
 	// To enqueue media-views or media-editor, call wp_enqueue_media().
