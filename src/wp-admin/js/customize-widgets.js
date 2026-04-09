@@ -404,14 +404,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				window.updatedControls[widgetKey] = {};  // bypasses proxy, no postMessage
 			}
 
-			// Trigger loading of scripts for Custom HTML and Text widgets
-			if ( idBase === 'text' || idBase === 'custom_html' ) {
-				document.dispatchEvent( new CustomEvent( 'widget-added', {
-					detail: {
-						widget: clone.querySelector( '.widget' )
-					}
-				} ) );
-			}
+			// Trigger loading of scripts for appropriate widgets
+			document.dispatchEvent( new CustomEvent( 'widget-added', {
+				detail: {
+					widget: clone.querySelector( '.widget' )
+				}
+			} ) );
 
 			// Enable Save/Publish button
 			activatePublishButton();
