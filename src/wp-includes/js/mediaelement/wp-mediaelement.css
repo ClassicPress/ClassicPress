@@ -73,6 +73,11 @@
 	box-shadow: none;
 }
 
+.mejs-poster {
+    width: auto !important;
+    height: auto !important;
+}
+
 .me-cannotplay {
 	width: auto !important;
 }
