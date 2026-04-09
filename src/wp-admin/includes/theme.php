@@ -207,14 +207,6 @@ function get_theme_update_available( $theme ) {
 	if ( isset( $themes_update->response[ $stylesheet ] ) ) {
 		$update      = $themes_update->response[ $stylesheet ];
 		$theme_name  = $theme->display( 'Name' );
-		$details_url = add_query_arg(
-			array(
-				'TB_iframe' => 'true',
-				'width'     => 1024,
-				'height'    => 800,
-			),
-			$update['url']
-		); // Theme browser inside WP? Replace this. Also, theme preview JS will override this on the available list.
 		$update_url  = wp_nonce_url( admin_url( 'update.php?action=upgrade-theme&amp;theme=' . urlencode( $stylesheet ) ), 'upgrade-theme_' . $stylesheet );
 
 		if ( ! is_multisite() ) {
@@ -223,7 +215,7 @@ function get_theme_update_available( $theme ) {
 					/* translators: 1: Theme name, 2: Theme details URL, 3: Additional link attributes, 4: Version number. */
 					'<p><strong>' . __( 'There is a new version of %1$s available. <a href="%2$s" %3$s>View version %4$s details</a>.' ) . '</strong></p>',
 					$theme_name,
-					esc_url( $details_url ),
+					esc_url( $update['url'] ),
 					sprintf(
 						'class="thickbox open-plugin-details-modal" aria-label="%s"',
 						/* translators: 1: Theme name, 2: Version number. */
@@ -236,7 +228,7 @@ function get_theme_update_available( $theme ) {
 					/* translators: 1: Theme name, 2: Theme details URL, 3: Additional link attributes, 4: Version number. */
 					'<p><strong>' . __( 'There is a new version of %1$s available. <a href="%2$s" %3$s>View version %4$s details</a>. <em>Automatic update is unavailable for this theme.</em>' ) . '</strong></p>',
 					$theme_name,
-					esc_url( $details_url ),
+					esc_url( $update['url'] ),
 					sprintf(
 						'class="thickbox open-plugin-details-modal" aria-label="%s"',
 						/* translators: 1: Theme name, 2: Version number. */
@@ -249,7 +241,7 @@ function get_theme_update_available( $theme ) {
 					/* translators: 1: Theme name, 2: Theme details URL, 3: Additional link attributes, 4: Version number, 5: Update URL, 6: Additional link attributes. */
 					'<p><strong>' . __( 'There is a new version of %1$s available. <a href="%2$s" %3$s>View version %4$s details</a> or <a href="%5$s" %6$s>update now</a>.' ) . '</strong></p>',
 					$theme_name,
-					esc_url( $details_url ),
+					esc_url( $update['url'] ),
 					sprintf(
 						'class="thickbox open-plugin-details-modal" aria-label="%s"',
 						/* translators: 1: Theme name, 2: Version number. */

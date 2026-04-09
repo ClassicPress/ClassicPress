@@ -760,6 +760,23 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 	position: absolute;
 }
 
+#theme-update-modal {
+	display: flex;
+	width: 90%;
+	height: 95%;
+	max-width: 1024px;
+	max-height: 800px;
+	overflow: hidden;
+}
+
+#theme-update-modal iframe {
+	position: absolute;
+	top: 49px;
+	left: 0;
+	width: 100%;
+	height: calc(100% - 49px);
+}
+
 /**
  * Basic Responsive structure...
  *
