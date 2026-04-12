@@ -1724,13 +1724,13 @@ p.auto-update-status {
 
 #screen-meta-container {
 	position: fixed;
-	z-index: 999;
+	z-index: 1001;
 }
 
 #screen-meta-links {
 	position: fixed;
 	right: 18px;
-	z-index: 999;
+	z-index: 1001;
 }
 
 /* screen options and help tabs revert */
