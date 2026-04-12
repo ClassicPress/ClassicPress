@@ -32,16 +32,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-22.04 ]
+        os: [ ubuntu-24.04 ]
         php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5' ]
         db-type: [ 'mysql' ]
-        db-version: [ '5.7', '8.0' ]
+        db-version: [ '5.7', '8.4' ]
         multisite: [ false, true ]
         memcached: [ false ]
         coverage: [ none ]
         experimental: [ false ]
         include:
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             php: '8.3'
             db-version: '5.7'
             db-type: mysql
@@ -49,7 +49,7 @@ jobs:
             memcached: true
             coverage: none
             experimental: false
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             php: '8.4'
             db-version: '5.7'
             db-type: mysql
@@ -57,23 +57,23 @@ jobs:
             memcached: true
             coverage: none
             experimental: false
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             php: '8.3'
-            db-version: '8.0'
+            db-version: '8.4'
             db-type: mysql
             multisite: false
             memcached: true
             coverage: none
             experimental: false
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             php: '8.4'
-            db-version: '8.0'
+            db-version: '8.4'
             db-type: mysql
             multisite: false
             memcached: true
             coverage: none
             experimental: false
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             php: '8.3'
             db-version: '5.7'
             db-type: mysql
@@ -81,7 +81,7 @@ jobs:
             memcached: true
             coverage: none
             experimental: false
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             php: '8.4'
             db-version: '5.7'
             db-type: mysql
@@ -89,33 +89,33 @@ jobs:
             memcached: true
             coverage: none
             experimental: false
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             php: '8.3'
-            db-version: '8.0'
+            db-version: '8.4'
             db-type: mysql
             multisite: true
             memcached: true
             coverage: none
             experimental: false
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             php: '8.4'
-            db-version: '8.0'
+            db-version: '8.4'
             db-type: mysql
             multisite: true
             memcached: true
             coverage: none
             experimental: false
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             php: '8.4'
-            db-version: '8.0'
+            db-version: '8.4'
             db-type: mysql
             multisite: false
             memcached: false
             coverage: xdebug
             experimental: false
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             php: '8.4'
-            db-version: '8.0'
+            db-version: '8.4'
             db-type: mysql
             multisite: true
             memcached: false
@@ -141,10 +141,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-22.04 ]
+        os: [ ubuntu-24.04 ]
         php: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5' ]
         db-type: [ 'mariadb' ]
-        db-version: [ '10.4', '11.4' ]
+        db-version: [ '10.6', '11.4' ]
         multisite: [ false, true ]
         memcached: [ false ]
         coverage: [ none ]
