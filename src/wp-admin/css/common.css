@@ -1722,24 +1722,26 @@ p.auto-update-status {
 	margin-left: 0;
 }
 
+#screen-meta-container {
+	position: fixed;
+	z-index: 999;
+}
+
 #screen-meta-links {
-	margin: 0 20px -32px 0;
-	position: sticky;
-	display: flex;
-	justify-content: flex-end;
-	top: 32px;
+	position: fixed;
+	right: 18px;
 	z-index: 999;
 }
 
 /* screen options and help tabs revert */
 #screen-meta {
 	display: none;
-	margin: 0 20px -1px 0;
 	position: relative;
 	background-color: #fff;
 	border: 1px solid #c3c4c7;
 	border-top: none;
 	box-shadow: 0 0 0 transparent;
+	width: calc(100vw - 200px);
 }
 
 #screen-options-link-wrap,
@@ -3710,9 +3712,6 @@ img {
 	.my-sites li {
 		min-height: 0;
 	}
-	#screen-meta-links {
-		top: 0;
-	}
 }
 
 @media only screen and (min-width: 600px) {
@@ -3859,6 +3858,14 @@ img {
 
 }
 
+@media screen and (max-width: 960px) {
+
+	#screen-meta {
+		width: calc(100vw - 75px);
+	}
+
+}
+
 @media screen and (max-width: 782px) {
 	html.wp-toolbar {
 		padding-top: 46px;
@@ -3885,6 +3892,10 @@ img {
 
 	#wpbody-content {
 		padding-bottom: 100px;
+	}
+
+	#screen-meta {
+		width: calc(100vw - 25px);
 	}
 
 	.wrap {
@@ -4154,7 +4165,6 @@ img {
 	}
 
 	#screen-meta-links {
-		top: 42px;
 		margin-bottom: 20px; /* Add margins beneath links for better spacing between boxes and elements */
 	}
 
