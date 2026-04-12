@@ -263,10 +263,10 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 	<?php if ( ! is_multisite() && current_user_can( 'install_themes' ) ) : ?>
 		<a href="<?php echo esc_url( admin_url( 'theme-install.php' ) ); ?>" class="hide-if-no-js page-title-action"><?php echo esc_html_x( 'Add New', 'theme' ); ?></a>
 		<form class="search-form">
-			<p class="search-box">
+			<fieldset class="search-box">
 				<label class="screen-reader-text" for="wp-filter-search-input"><?php esc_html_e( 'Search Installed Themes' ); ?></label>
 				<input placeholder="<?php esc_html_e( 'Search installed themes...' ); ?>" type="search" aria-describedby="live-search-desc" id="wp-filter-search-input" class="wp-filter-search">
-			</p>
+			</fieldset>
 		</form>
 	<?php endif; ?>
 
