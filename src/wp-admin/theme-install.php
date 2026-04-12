@@ -248,8 +248,10 @@ if ( ! is_wp_error( $response ) ) {
 		<button type="button" class="button drawer-toggle" aria-expanded="false"><?php esc_html_e( 'Feature Filter' ); ?></button>
 
 		<form class="search-form">
-			<label for="wp-filter-search-input" class="screen-reader-text"><?php esc_html_e( 'Search Themes' ); ?></label>
-			<input type="search" placeholder="<?php esc_html_e( 'Search Themes...' ); ?>" aria-describedby="live-search-desc" id="wp-filter-search-input" class="wp-filter-search">
+			<fieldset class="search-box">
+				<label for="wp-filter-search-input" class="screen-reader-text"><?php esc_html_e( 'Search Themes' ); ?></label>
+				<input type="search" placeholder="<?php esc_html_e( 'Search Themes...' ); ?>" aria-describedby="live-search-desc" id="wp-filter-search-input" class="wp-filter-search">
+			</fieldset>
 		</form>
 
 		<div class="filter-drawer">
