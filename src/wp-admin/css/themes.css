@@ -35,11 +35,6 @@ body.js .theme-browser.search-loading {
 	left: 20px;
 }
 
-.themes-php form.search-form p.search-box {
-	display: block;
-	float: none;
-}
-
 .themes-php .wp-filter-search {
 	margin: 0;
 	width: 280px;
@@ -951,10 +946,6 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 		top: 0;
 		left: 0;
 		margin-bottom: 20px;
-	}
-
-	.themes-php form.search-form p.search-box {
-		margin-bottom: 0;
 	}
 
 	.themes-php .wp-filter-search {
