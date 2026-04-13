@@ -191,21 +191,26 @@ function install_themes_dashboard() {
  * Displays a form to upload themes from zip files.
  *
  * @since 2.8.0
+ * @since CP-2.8.0 JavaScript uploader used
  */
 function install_themes_upload() {
 	?>
-<p class="install-help"><?php _e( 'If you have a theme in a .zip format, you may install or update it by uploading it here.' ); ?></p>
-<form method="post" enctype="multipart/form-data" class="wp-upload-form" action="<?php echo esc_url( self_admin_url( 'update.php?action=upload-theme' ) ); ?>">
-	<?php wp_nonce_field( 'theme-upload' ); ?>
-	<label class="screen-reader-text" for="themezip">
-		<?php
-		/* translators: Hidden accessibility text. */
-		_e( 'Theme zip file' );
-		?>
-	</label>
-	<input type="file" id="themezip" name="themezip" accept=".zip">
-	<?php submit_button( __( 'Install Now' ), '', 'install-theme-submit', false ); ?>
-</form>
+	<p class="install-help"><?php _e( 'If you have a theme in a .zip format, you may install or update it by uploading it here.' ); ?></p>
+	<div id="plupload-upload-ui" class="hide-if-no-js drag-drop">
+		<div id="drag-drop-area">
+			<form method="post" enctype="multipart/form-data" id="filepond" action="<?php echo esc_url( self_admin_url( 'update.php?action=upload-theme' ) ); ?>">
+				<?php wp_nonce_field( 'theme-upload' ); ?>
+				<label class="screen-reader-text" for="themezip">
+					<?php
+					/* translators: Hidden accessibility text. */
+					_e( 'Theme zip file' );
+					?>
+				</label>
+				<input type="file" id="themezip" name="themezip">
+				<?php submit_button( __( 'Install Now' ), '', 'install-theme-submit', false, array( 'disabled' => 'disabled' ) ); ?>
+			</form>
+		</div>
+	</div>
 	<?php
 }
 

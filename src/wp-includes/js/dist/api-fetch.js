@@ -1559,9 +1559,9 @@ var httpV1Middleware = (options, next) => {
     options = {
       ...options,
       headers: {
+        "Content-Type": "application/json",
         ...options.headers,
-        "X-HTTP-Method-Override": method,
-        "Content-Type": "application/json"
+        "X-HTTP-Method-Override": method
       },
       method: "POST"
     };

@@ -1,31 +1,30 @@
 <?php
 /**
- * The main template file
+ * The template for displaying posts at blog page
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
- *
- * @package Susty
  */
 
 get_header();
 ?>
+
 	<div id="primary">
 		<main id="main">
 
 		<?php
 		if ( have_posts() ) :
 			?>
-		
+
 			<div class="blog-list"> 
 			<?php
 
-				/* Start the Loop */
+			/* Start the Loop */
 			while ( have_posts() ) :
 				the_post();
 
 				get_template_part( 'template-parts/content-blog', get_post_type() );
 
-				endwhile;
+			endwhile;
 			?>
 
 			</div> 
@@ -40,11 +39,11 @@ get_header();
 		endif;
 		?>
 
-		</main>
+		</main><!-- #main -->
 
 		<?php get_sidebar(); ?>
 
-	</div>
+	</div><!-- #primary -->
 
 <?php
 get_footer();

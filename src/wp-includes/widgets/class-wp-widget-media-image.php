@@ -540,7 +540,7 @@ function cp_render_media_image_template() {
 		<div id="image-modal-content">
 			<div class="modal-image-details">
 				<div class="media-embed">
-								
+
 					<div class="column-settings">
 						<div class="setting alt-text has-description">
 							<label for="image-details-alt-text" class="name"><?php esc_html_e( 'Alternative Text' ); ?></label>
@@ -580,7 +580,7 @@ function cp_render_media_image_template() {
 								<select id="image-details-link-to" name="link-type" data-setting="link">
 									<option value="none" selected><?php esc_html_e( 'None' ); ?></option>
 									<option value="file"><?php esc_html_e( 'Image URL' ); ?></option>
-														
+
 									<?php
 									// Enable Attachment page option only if available.
 									if ( '1' === get_option( 'wp_attachment_pages_enabled' ) ) {

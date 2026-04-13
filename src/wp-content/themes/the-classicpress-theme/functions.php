@@ -130,13 +130,6 @@ require get_template_directory() . '/inc/template-functions.php';
 require get_template_directory() . '/inc/customizer.php';
 
 /**
- * Load Jetpack compatibility file.
- */
-if ( defined( 'JETPACK__VERSION' ) ) {
-	require get_template_directory() . '/inc/jetpack.php';
-}
-
-/**
  * Remove Emoji
  */
 remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
@@ -156,7 +149,7 @@ add_action( 'wp_enqueue_scripts', 'susty_dequeue_dashicons' );
  * Stylesheet version (cache buster)
  */
 function cp_susty_get_asset_version() {
-	return '20250825';
+	return '20260226';
 }
 
 /**

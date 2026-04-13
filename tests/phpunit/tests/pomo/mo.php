@@ -176,16 +176,6 @@ class Tests_POMO_MO extends WP_UnitTestCase {
 		// echo "\nPerformance: ".(microtime(true) - $start)."\n";
 	}
 
-	public function test_overloaded_mb_functions() {
-		if ( ( ini_get( 'mbstring.func_overload' ) & 2 ) === 0 ) {
-			$this->markTestSkipped( 'This test requires mbstring.func_overload to be enabled.' );
-		}
-
-		$mo = new MO();
-		$mo->import_from_file( DIR_TESTDATA . '/pomo/overload.mo' );
-		$this->assertSame( array( 'Табло' ), $mo->entries['Dashboard']->translations );
-	}
-
 	public function test_load_pot_file() {
 		$mo = new MO();
 		$this->assertFalse( $mo->import_from_file( DIR_TESTDATA . '/pomo/mo.pot' ) );

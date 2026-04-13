@@ -2,7 +2,11 @@ name: Welcome New Contributors
 
 on:
   pull_request_target:
-    types: [ opened ]
+    types:
+      opened
+  issues:
+    types:
+      opened
 
 # Disable permissions for all available scopes by default.
 # Required permissions are configured at the job level.
@@ -14,12 +18,24 @@ jobs:
     name: Welcome message
     permissions:
       pull-requests: write
+      issues: write
     runs-on: ubuntu-latest
     steps:
-      - uses: wow-actions/welcome@v1
+      - uses: actions/first-interaction@v3
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FIRST_PR_COMMENT: >
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue_message: |
+            Hi @{{ author }}! 👋
+
+            Thank you for opening an issue at ClassicPress! 💖
+
+            It looks like this is your first issue. We appreciate and value your time!
+
+            If you haven't already, please give us as much information about the issue. If you can include steps on how to re-create the issue, that would be really helpful.
+
+            Thank you,
+            ClassicPress Core Team.
+          pr_message: |
             Hi @{{ author }}! 👋
 
             Thank you for your contribution to ClassicPress! 💖

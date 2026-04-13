@@ -9,6 +9,7 @@
 
 get_header();
 ?>
+
 	<div id="primary">
 		<main id="main">
 
@@ -20,13 +21,13 @@ get_header();
 			<div class="blog-list"> 
 			<?php
 
-				/* Start the Loop */
+			/* Start the Loop */
 			while ( have_posts() ) :
 				the_post();
 
 				get_template_part( 'template-parts/content-blog', get_post_type() );
 
-				endwhile;
+			endwhile;
 			?>
 
 			</div><!-- .blog-list --> 
