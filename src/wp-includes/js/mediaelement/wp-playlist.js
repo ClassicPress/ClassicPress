@@ -63,7 +63,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 			playlistEl.querySelector( '.wp-playlist-current-item' ).append( div );
 		} else {
-			if ( playlistData.images === 'true' && li.dataset.img ) {
+			if ( playlistData.images && ! firstTrack.thumb.src.endsWith( 'wp-includes/images/media/video.png' ) ) {
 				playlistEl.querySelector( 'video' ).poster = firstTrack.thumb.src;
 			}
 			playlistEl.querySelector( type ).preload = 'metadata';
