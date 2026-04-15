@@ -40,7 +40,7 @@
     "source-map-loader": "^5.0.0",
     "terser": "5.46.1",
     "terser-webpack-plugin": "^5.3.7",
-    "webpack": "5.106.1"
+    "webpack": "5.106.2"
   },
   "dependencies": {
     "@wordpress/a11y": "4.43.0",
