@@ -19,7 +19,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			div = document.createElement( 'div' ),
 			ol = document.createElement( 'ol' ),
 			playlistEl = playlist.closest( '.wp-playlist' ),
-			source = document.createElement( 'source' );
+			source = document.createElement( 'source' ),
+			currentIndex = 0;
 
 		img.src = firstTrack.image.src;
 		img.alt = '';
@@ -81,30 +82,40 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		playlistEl.dataset.artists = playlistData.artists;
 
 		// Play next item in playlist
-		playlistEl.querySelector( type ).addEventListener( 'ended', function() {
-			var item = playlistEl.querySelector( '.wp-playlist-playing' ),
+		playlistEl.querySelector( type ).addEventListener( 'ended', function( e ) {console.log( e);
+			var nextTrack,
+				items = playlistEl.querySelectorAll( '.wp-playlist-item' ),
+				item = playlistEl.querySelector( '.wp-playlist-playing' );
+
+			if ( item ) {
 				index = [...item.parentNode.children].indexOf( item );
 
-			playlistEl.querySelector( '.wp-playlist-playing' ).classList.remove( 'wp-playlist-playing' );
-
-			index++;
-			if ( index === tracks.length ) {
-				index = 0;
+				playlistEl.querySelector( '.wp-playlist-playing' ).classList.remove( 'wp-playlist-playing' );
 			}
-			playlistEl.querySelectorAll( '.wp-playlist-item' )[ index ].classList.add( 'wp-playlist-playing' );
-			item = playlistEl.querySelector( '.wp-playlist-playing' );
 
-			playlistEl.querySelector( type ).src = item.dataset.src;
-			playlistEl.querySelector( 'source' ).type = item.dataset.type;
-			playlistEl.querySelector( 'source' ).src = item.dataset.src;
+			// Advance index regardless of tracklist visibility the remainder operator
+			currentIndex = ( currentIndex + 1 ) % tracks.length;
+
+			// Update DOM if tracklist is rendered
+			if ( items.length ) {
+				items[ currentIndex ].classList.add( 'wp-playlist-playing' );
+				item = items[ currentIndex ];
+			}
+
+			// Get track data from the array directly (works with or without tracklist)
+			nextTrack = tracks[ currentIndex ];
+			playlistEl.querySelector( type ).src = nextTrack.src;
+			playlistEl.querySelector( 'source' ).type = nextTrack.type;
+			playlistEl.querySelector( 'source' ).src = nextTrack.src;
+
 			if ( type === 'audio' ) {
 				if ( playlistEl.dataset.images === 'true' ) {
-					playlistEl.querySelector( 'img' ).src = item.dataset.img;
+					playlistEl.querySelector( 'img' ).src = nextTrack.image.src;
 				}
-				playlistEl.querySelector( '.wp-playlist-item-title' ).textContent = item.dataset.title;
-				playlistEl.querySelector( '.wp-playlist-item-album' ).textContent = item.dataset.album;
+				playlistEl.querySelector( '.wp-playlist-item-title' ).textContent = nextTrack.title || '';
+				playlistEl.querySelector( '.wp-playlist-item-album' ).textContent = nextTrack.meta.album || '';
 				if ( playlistEl.dataset.artists === 'true' ) {
-					playlistEl.querySelector( '.wp-playlist-item-artist' ).textContent = item.dataset.artist;
+					playlistEl.querySelector( '.wp-playlist-item-artist' ).textContent = nextTrack.meta.artist || '';
 				}
 			} else {
 				playlistEl.querySelector( 'video' ).poster = '';
