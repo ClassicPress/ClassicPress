@@ -82,15 +82,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		playlistEl.dataset.artists = playlistData.artists;
 
 		// Play next item in playlist
-		playlistEl.querySelector( type ).addEventListener( 'ended', function( e ) {console.log( e);
+		playlistEl.querySelector( type ).addEventListener( 'ended', function() {
 			var nextTrack,
 				items = playlistEl.querySelectorAll( '.wp-playlist-item' ),
 				item = playlistEl.querySelector( '.wp-playlist-playing' );
 
 			if ( item ) {
-				index = [...item.parentNode.children].indexOf( item );
-
-				playlistEl.querySelector( '.wp-playlist-playing' ).classList.remove( 'wp-playlist-playing' );
+				currentIndex = [...item.parentNode.children].indexOf( item );
+				item.classList.remove( 'wp-playlist-playing' );
 			}
 
 			// Advance index regardless of tracklist visibility the remainder operator
