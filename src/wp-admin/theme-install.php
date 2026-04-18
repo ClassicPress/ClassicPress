@@ -80,6 +80,8 @@ wp_localize_script(
 			'installed'           => __( 'Installed' ),
 			'activate'            => __( 'Activate' ),
 			'ratings'             => __( 'ratings' ),
+			'themeUrl'            => __( 'https://wordpress.org/themes/' ),
+			'themeUrlLabel'       => __( 'WordPress.org Theme Page &#187;' ),
 		),
 		'installedThemes' => array_keys( $installed_themes ),
 		'activeTheme'     => get_stylesheet(),
@@ -335,6 +337,8 @@ if ( ! is_wp_error( $response ) ) {
 							<div class="theme-version"></div>
 							<div class="theme-description"></div>
 						</div>
+
+						<a class="theme-url" href=""></a>
 					</div>
 				</div>
 				<div class="wp-full-overlay-footer">
