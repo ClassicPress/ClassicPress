@@ -425,7 +425,7 @@ wp_print_scripts();
 								<h3 class="accordion-section-title" tabindex="0">
 									<span class="customize-action">
 										<?php
-										if ( $wp_customize->get_stylesheet() === cp_get_true_active_stylesheet() ) {
+										if ( $wp_customize->get_stylesheet() === cp_get_current_active_stylesheet() ) {
 											esc_html_e( 'Active theme' );
 										} else {
 											esc_html_e( 'Previewing theme' );
