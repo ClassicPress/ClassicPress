@@ -51,7 +51,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 	 */
 	public function render_content() {
 		$installed_themes  = wp_prepare_themes_for_js();
-		$active_stylesheet = cp_get_true_active_stylesheet();
+		$active_stylesheet = cp_get_current_active_stylesheet();
 
 		// Display the active theme first
 		foreach ( $installed_themes as $theme ) {
