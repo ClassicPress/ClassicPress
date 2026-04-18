@@ -4292,7 +4292,7 @@ final class WP_Customize_Manager {
 		?>
 
 		<script type="text/html" id="tmpl-customize-control-default-content">
-			<# console.log(data);
+			<#
 			var inputId = _.uniqueId( 'customize-control-default-input-' );
 			var descriptionId = _.uniqueId( 'customize-control-default-description-' );
 			var describedByAttr = data.description ? ' aria-describedby="' + descriptionId + '" ' : '';
