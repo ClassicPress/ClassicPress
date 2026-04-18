@@ -1193,7 +1193,7 @@ function wp_default_scripts( $scripts ) {
 				)
 			),
 			'active_theme'            => __( 'Active theme' ),
-			'activeTheme'             => cp_get_true_active_stylesheet(),
+			'activeTheme'             => cp_get_current_active_stylesheet(),
 			'menusNonce'              => wp_create_nonce( 'customize-menus' ),
 			'current'                 => esc_html__( 'Current:' ),
 			'currently'               => __( 'Currently set to:' ),
