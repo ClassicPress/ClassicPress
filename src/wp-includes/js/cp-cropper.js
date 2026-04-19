@@ -143,6 +143,33 @@
 		buildCropperTree();
 		dialog.showModal();
 
+		// Constrain initial selection to the image bounds.
+		cropperImage.$ready( function () {
+			const shadowRoot = cropperImage.$getShadowRoot();
+			const imgEl      = shadowRoot.querySelector( 'img' );
+			const natW       = imgEl ? imgEl.naturalWidth  : 0;
+			const natH       = imgEl ? imgEl.naturalHeight : 0;
+
+			if ( ! natW || ! natH ) {
+				return;
+			}
+
+			const canvasRect = cropperCanvas.getBoundingClientRect();
+			const imgRect    = ( imgEl || cropperImage ).getBoundingClientRect();
+			const dispW      = imgRect.width;
+			const dispH      = imgRect.height;
+			const size       = Math.min( dispW, dispH );
+			const offX       = imgRect.left - canvasRect.left;
+			const offY       = imgRect.top  - canvasRect.top;
+
+			cropperSel.$change(
+				offX + ( dispW - size ) / 2,
+				offY + ( dispH - size ) / 2,
+				size,
+				size
+			);
+		} );
+
 		window.addEventListener( 'resize', buildCropperTree );
 	}
 
