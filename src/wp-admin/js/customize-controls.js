@@ -1858,7 +1858,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					var formData = new FormData();
 					formData.append( 'async-upload', file, file.name );
 					formData.append( 'action', 'upload-attachment' );
-					formData.append( '_wpnonce', document.getElementById( '_wpnonce' ).value );
+					formData.append( '_wpnonce', IMAGE_WIDGET.media_nonce );
 
 					// Use Fetch to upload the file
 					fetch( ajaxurl, {
