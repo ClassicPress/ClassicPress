@@ -428,6 +428,8 @@ if ( 'grid' === $mode ) {
 						$image = '<div class="icon"><div class="centered"><img src="' . esc_url( includes_url() . 'images/media/audio.png' ) . '" draggable="false" alt=""></div><div class="filename"><div>' . esc_html( $attachment->post_title ) . '</div></div></div>';
 					} elseif ( $file_type === 'video' ) {
 						$image = '<div class="icon"><div class="centered"><img src="' . esc_url( includes_url() . 'images/media/video.png' ) . '" draggable="false" alt=""></div><div class="filename"><div>' . esc_html( $attachment->post_title ) . '</div></div></div>';
+					} elseif ( $file_type === 'text' ) {
+						$image = '<div class="icon"><div class="centered"><img src="' . esc_url( includes_url() . 'images/media/text.png' ) . '" draggable="false" alt=""></div><div class="filename"><div>' . esc_html( $attachment->post_title ) . '</div></div></div>';
 					}
 					?>
 
