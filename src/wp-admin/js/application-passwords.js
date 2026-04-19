@@ -184,8 +184,8 @@
 			method,
 			headers: {
 				'Content-Type': 'application/json',
-				'X-WP-Nonce':   wpApiSettings.nonce,
-			},
+				'X-WP-Nonce':   wpApiSettings.nonce
+			}
 		};
 
 		if ( data ) {
@@ -270,7 +270,7 @@
 			// Render and insert the new-password notice.
 			const noticeEl = renderNewPasswordNotice( {
 				name:     json.name,
-				password: json.password,
+				password: json.password
 			} );
 			newAppPassForm.insertAdjacentElement( 'afterend', noticeEl );
 			noticeEl.focus();
