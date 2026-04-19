@@ -194,24 +194,39 @@
 		// matrix[0] is the X scale factor (display px → natural px ratio).
 		cropperImage.$ready( function () {
 
-			const transform = cropperImage.$getTransform();
-			// transform = [a, b, c, d, e, f]  (CSS matrix)
-			// a = scaleX, d = scaleY, e = translateX, f = translateY
-			const scaleX = transform[ 0 ];   // display-to-natural ratio on X
-			const scaleY = transform[ 3 ];   // display-to-natural ratio on Y
-			const transX = transform[ 4 ];   // image left offset in display px
-			const transY = transform[ 5 ];   // image top  offset in display px
+			const shadowRoot = cropperImage.$getShadowRoot();
+			const imgEl      = shadowRoot.querySelector( 'img' );
+			const natW       = imgEl ? imgEl.naturalWidth  : 512;
+			const natH       = imgEl ? imgEl.naturalHeight : 512;
 
-			// Map selection from canvas-space into natural image-space.
-			// (selX/selY are relative to the canvas origin; transX/transY
-			//  is where the image origin sits inside the canvas.)
-			const x1 = Math.round( ( selX - transX ) / scaleX );
-			const y1 = Math.round( ( selY - transY ) / scaleY );
-			const w  = Math.round( selW / scaleX );
-			const h  = Math.round( selH / scaleY );
+			const canvasRect = cropperCanvas.getBoundingClientRect();
+			const imgRect    = ( imgEl || cropperImage ).getBoundingClientRect();
 
-			const dstWidth  = Math.max( w, currentOpts.minWidth  || w );
-			const dstHeight = Math.max( h, currentOpts.minHeight || h );
+			// Size of the image as currently displayed in the canvas (CSS px).
+			const dispW = imgRect.width;
+			const dispH = imgRect.height;
+
+			// Scale: natural pixels per display pixel.
+			const scaleX = natW / dispW;
+			const scaleY = natH / dispH;
+
+			// Image origin relative to canvas origin (in display px).
+			const offX = imgRect.left - canvasRect.left;
+			const offY = imgRect.top  - canvasRect.top;
+
+			// Snap near-zero origins to 0.
+			const x1 = snap( Math.round( ( selX - offX ) * scaleX ), 0, 1 );
+			const y1 = snap( Math.round( ( selY - offY ) * scaleY ), 0, 1 );
+			const w  = Math.round( selW * scaleX );
+			const h  = Math.round( selH * scaleY );
+
+			// Clamp so crop never exceeds image bounds.
+			// Snap width/height to natW/natH when within 1px.
+			const safeW = snap( Math.min( Math.round( selW * scaleX ), natW - x1 ), natW - x1, 1 );
+			const safeH = snap( Math.min( Math.round( selH * scaleY ), natH - y1 ), natH - y1, 1 );
+
+			const dstWidth  = safeW;
+			const dstHeight = safeH;
 
 			setLoading( true );
 
@@ -222,8 +237,8 @@
 				context                   : currentOpts.context,
 				'cropDetails[x1]'         : x1,
 				'cropDetails[y1]'         : y1,
-				'cropDetails[width]'      : w,
-				'cropDetails[height]'     : h,
+				'cropDetails[width]'      : safeW,
+				'cropDetails[height]'     : safeH,
 				'cropDetails[dst_width]'  : dstWidth,
 				'cropDetails[dst_height]' : dstHeight
 			} );
@@ -259,6 +274,10 @@
 	}
 
 	// ─── Helpers ─────────────────────────────────────────────────────────────
+
+	function snap( value, target, tolerance ) {
+		return Math.abs( value - target ) <= tolerance ? target : value;
+	}
 
 	function setLoading( isLoading ) {
 		dialog.querySelector( '#cp-cropper-spinner' ).hidden    = ! isLoading;
