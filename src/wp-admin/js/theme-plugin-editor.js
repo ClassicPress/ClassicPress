@@ -539,6 +539,8 @@ wp.themePluginEditor = ( function() {
 	 */
 	function renderFileEditorNotice( data ) {
 		var tmpl, content, msgEl, preEl, lintP, elementId, input, label, dismissTmpl,
+			RANDOM_ID_RADIX = 36,
+			RANDOM_ID_SLICE_OFFSET = 2,
 			wrapperTmpl = document.getElementById( 'tmpl-wp-file-editor-notice' ),
 			wrapper = wrapperTmpl.content.cloneNode( true ).querySelector( 'div' );
 
@@ -590,13 +592,13 @@ wp.themePluginEditor = ( function() {
 				lintP = content.querySelector( '.lint-errors-confirm' );
 				if ( lintP ) {
 					lintP.hidden = false;
-					elementId = 'el-' + Math.random().toString( 36 ).slice( 2 );
+					elementId = 'el-' + Math.random().toString( RANDOM_ID_RADIX ).slice( RANDOM_ID_SLICE_OFFSET );
 					input = lintP.querySelector( 'input' );
 
 					if ( input ) {
 						input.id = elementId;
 					}
-		
+
 					label = lintP.querySelector( 'label' );
 					if ( label ) {
 						label.setAttribute( 'for', elementId );
