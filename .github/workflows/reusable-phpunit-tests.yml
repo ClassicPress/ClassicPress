@@ -66,8 +66,7 @@ jobs:
       - name: Update apt and install libheif-plugin-aomenc
         run: |
             sudo apt-get update
-            sudo apt-get install -y libheif-plugin-aomenc
-            sudo apt-get install -y ghostscript
+            sudo apt-get install -y --no-install-recommends ghostscript libheif-plugin-aomenc
 
       - name: Checkout repository
         uses: actions/checkout@v6
