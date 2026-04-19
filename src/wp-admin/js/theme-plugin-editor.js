@@ -520,6 +520,99 @@ wp.themePluginEditor = ( function() {
 		return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
 	}
 
+	/**
+	 * Renders a file editor notice element from native <template> elements.
+	 *
+	 * @since CP-2.8.0
+	 *
+	 * @param {Object}  data
+	 * @param {string}  data.code
+	 * @param {string}  [data.type]        Defaults to 'info'.
+	 * @param {string}  [data.message]
+	 * @param {number}  [data.line]        php_error only.
+	 * @param {string}  [data.file]        php_error only.
+	 * @param {boolean} [data.alt]
+	 * @param {boolean} [data.dismissible]
+	 * @param {string}  [data.classes]
+	 * @returns {HTMLElement}
+	 */
+	function renderFileEditorNotice( data ) {
+		var tmpl, content, msgEl, preEl, lintP, elementId, input, label, dismissTmpl,
+			wrapperTmpl = document.getElementById( 'tmpl-wp-file-editor-notice' ),
+			wrapper = wrapperTmpl.content.cloneNode( true ).querySelector( 'div' );
+
+		wrapper.classList.add( 'notice-' + ( data.type || 'info' ) );
+		if ( data.alt ) {
+			wrapper.classList.add( 'notice-alt' );
+		}
+		if ( data.dismissible ) {
+			wrapper.classList.add( 'is-dismissible' );
+		}
+		if ( data.classes ) {
+			data.classes.split( ' ' ).filter( Boolean ).forEach( function( c ) {
+				wrapper.classList.add( c );
+			} );
+		}
+
+		if ( 'php_error' === data.code ) {
+			tmpl = document.getElementById( 'tmpl-wp-file-editor-notice-php-error' );
+			content = tmpl.content.cloneNode( true );
+			msgEl = content.querySelector( '[data-message]' );
+
+			if ( msgEl ) {
+				msgEl.textContent = fileEditorL10n.phpErrorTemplate.replace( '%1$s', data.line ).replace( '%2$s', data.file );
+				msgEl.removeAttribute( 'data-message' );
+			}
+
+			preEl = content.querySelector( '[data-raw-message]' );
+			if ( preEl ) {
+				preEl.textContent = data.message;
+				preEl.removeAttribute( 'data-raw-message' );
+			}
+			wrapper.appendChild( content );
+
+		} else if ( 'file_not_writable' === data.code ) {
+			tmpl = document.getElementById( 'tmpl-wp-file-editor-notice-not-writable' );
+			wrapper.appendChild( tmpl.content.cloneNode( true ) );
+
+		} else {
+			tmpl = document.getElementById( 'tmpl-wp-file-editor-notice-generic' );
+			content = tmpl.content.cloneNode( true );
+			msgEl = content.querySelector( '[data-message]' );
+
+			if ( msgEl ) {
+				msgEl.textContent = data.message || data.code;
+				msgEl.removeAttribute( 'data-message' );
+			}
+
+			if ( 'lint_errors' === data.code ) {
+				lintP = content.querySelector( '.lint-errors-confirm' );
+				if ( lintP ) {
+					lintP.hidden = false;
+					elementId = 'el-' + Math.random().toString( 36 ).slice( 2 );
+					input = lintP.querySelector( 'input' );
+
+					if ( input ) {
+						input.id = elementId;
+					}
+		
+					label = lintP.querySelector( 'label' );
+					if ( label ) {
+						label.setAttribute( 'for', elementId );
+					}
+				}
+			}
+			wrapper.appendChild( content );
+		}
+
+		if ( data.dismissible ) {
+			dismissTmpl = document.getElementById( 'tmpl-wp-file-editor-notice-dismiss' );
+			wrapper.appendChild( dismissTmpl.content.cloneNode( true ) );
+		}
+
+		return wrapper;
+	}
+
 	/* jshint ignore:start */
 	/* jscs:disable */
 	/* eslint-disable */
@@ -939,100 +1032,7 @@ wp.themePluginEditor = ( function() {
 		};
 
 		return TreeLinks;
-	})();
-
-	/**
-	 * Renders a file editor notice element from native <template> elements.
-	 *
-	 * @since CP-2.8.0
-	 *
-	 * @param {Object}  data
-	 * @param {string}  data.code
-	 * @param {string}  [data.type]        Defaults to 'info'.
-	 * @param {string}  [data.message]
-	 * @param {number}  [data.line]        php_error only.
-	 * @param {string}  [data.file]        php_error only.
-	 * @param {boolean} [data.alt]
-	 * @param {boolean} [data.dismissible]
-	 * @param {string}  [data.classes]
-	 * @returns {HTMLElement}
-	 */
-	function renderFileEditorNotice( data ) {
-		var tmpl, content, msgEl, preEl, lintP, elementId, input, label, dismissTmpl,
-			wrapperTmpl = document.getElementById( 'tmpl-wp-file-editor-notice' ),
-			wrapper = wrapperTmpl.content.cloneNode( true ).querySelector( 'div' );
-
-		wrapper.classList.add( 'notice-' + ( data.type || 'info' ) );
-		if ( data.alt ) {
-			wrapper.classList.add( 'notice-alt' );
-		}
-		if ( data.dismissible ) {
-			wrapper.classList.add( 'is-dismissible' );
-		}
-		if ( data.classes ) {
-			data.classes.split( ' ' ).filter( Boolean ).forEach( function( c ) {
-				wrapper.classList.add( c );
-			} );
-		}
-
-		if ( 'php_error' === data.code ) {
-			tmpl = document.getElementById( 'tmpl-wp-file-editor-notice-php-error' );
-			content = tmpl.content.cloneNode( true );
-			msgEl = content.querySelector( '[data-message]' );
-
-			if ( msgEl ) {
-				msgEl.textContent = fileEditorL10n.phpErrorTemplate.replace( '%1$s', data.line ).replace( '%2$s', data.file );
-				msgEl.removeAttribute( 'data-message' );
-			}
-
-			preEl = content.querySelector( '[data-raw-message]' );
-			if ( preEl ) {
-				preEl.textContent = data.message;
-				preEl.removeAttribute( 'data-raw-message' );
-			}
-			wrapper.appendChild( content );
-
-		} else if ( 'file_not_writable' === data.code ) {
-			tmpl = document.getElementById( 'tmpl-wp-file-editor-notice-not-writable' );
-			wrapper.appendChild( tmpl.content.cloneNode( true ) );
-
-		} else {
-			tmpl = document.getElementById( 'tmpl-wp-file-editor-notice-generic' );
-			content = tmpl.content.cloneNode( true );
-			msgEl = content.querySelector( '[data-message]' );
-
-			if ( msgEl ) {
-				msgEl.textContent = data.message || data.code;
-				msgEl.removeAttribute( 'data-message' );
-			}
-
-			if ( 'lint_errors' === data.code ) {
-				lintP = content.querySelector( '.lint-errors-confirm' );
-				if ( lintP ) {
-					lintP.hidden = false;
-					elementId = 'el-' + Math.random().toString( 36 ).slice( 2 );
-					input = lintP.querySelector( 'input' );
-
-					if ( input ) {
-						input.id = elementId;
-					}
-		
-					label = lintP.querySelector( 'label' );
-					if ( label ) {
-						label.setAttribute( 'for', elementId );
-					}
-				}
-			}
-			wrapper.appendChild( content );
-		}
-
-		if ( data.dismissible ) {
-			dismissTmpl = document.getElementById( 'tmpl-wp-file-editor-notice-dismiss' );
-			wrapper.appendChild( dismissTmpl.content.cloneNode( true ) );
-		}
-
-		return wrapper;
-	}
+	} )();
 
 	/* jshint ignore:end */
 	/* jscs:enable */
