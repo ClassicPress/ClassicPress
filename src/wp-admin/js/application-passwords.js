@@ -5,67 +5,89 @@
  */
 
 ( function () {
-	const appPassSection     = document.getElementById( 'application-passwords-section' );
-	const newAppPassForm     = appPassSection.querySelector( '.create-application-password' );
-	const newAppPassField    = newAppPassForm.querySelector( '.input' );
-	const newAppPassButton   = newAppPassForm.querySelector( '.button' );
-	const appPassTwrapper    = appPassSection.querySelector( '.application-passwords-list-table-wrapper' );
-	const appPassTbody       = appPassSection.querySelector( 'tbody' );
-	const appPassTrNoItems   = appPassTbody.querySelector( '.no-items' );
-	const removeAllBtn       = document.getElementById( 'revoke-all-application-passwords' );
-	const tmplNewAppPass     = document.getElementById( 'tmpl-new-application-password' );
-	const tmplAppPassRow     = document.getElementById( 'tmpl-application-password-row' );
-	const userId             = document.getElementById( 'user_id' ).value;
+	const appPassSection   = document.getElementById( 'application-passwords-section' );
+	const newAppPassForm   = appPassSection.querySelector( '.create-application-password' );
+	const newAppPassField  = newAppPassForm.querySelector( '.input' );
+	const newAppPassButton = newAppPassForm.querySelector( '.button' );
+	const appPassTwrapper  = appPassSection.querySelector( '.application-passwords-list-table-wrapper' );
+	const appPassTbody     = appPassSection.querySelector( 'tbody' );
+	const appPassTrNoItems = appPassTbody.querySelector( '.no-items' );
+	const removeAllBtn     = document.getElementById( 'revoke-all-application-passwords' );
+	const tmplNewAppPass   = document.getElementById( 'tmpl-new-application-password' );
+	const tmplAppPassRow   = document.getElementById( 'tmpl-application-password-row' );
+	const userId           = document.getElementById( 'user_id' ).value;
 
 	// ---------------------------------------------------------------------------
-	// Helpers: template rendering
+	// Template renderers
 	// ---------------------------------------------------------------------------
 
 	/**
-	 * Clones a <template> element and populates data-* placeholder elements.
+	 * Clones the new-password notice template and populates it with data.
 	 *
-	 * @param {HTMLTemplateElement} tmpl   The <template> element to clone.
-	 * @param {Object}             data   Key/value pairs mapped to [data-key] targets.
-	 * @returns {DocumentFragment}
+	 * @param {Object} data
+	 * @param {string} data.name     The application password name.
+	 * @param {string} data.password The plaintext password (shown once).
+	 * @returns {HTMLElement} The populated notice element.
 	 */
-	function renderTemplate( tmpl, data ) {
-		const fragment = tmpl.content.cloneNode( true );
+	function renderNewPasswordNotice( data ) {
+		const fragment = tmplNewAppPass.content.cloneNode( true );
 
-		// Standard data-* text/value population.
-		Object.entries( data ).forEach( ( [ key, value ] ) => {
-			fragment.querySelectorAll( '[data-' + key + ']' ).forEach( el => {
-				if ( el.tagName === 'INPUT' ) {
-					el.value = value;
-				} else {
-					el.textContent = value;
-				}
-			} );
+		fragment.querySelectorAll( '[data-name]' ).forEach( el => {
+			el.textContent = data.name;
 		} );
 
-		// Set uuid on the <tr> root.
+		const input = fragment.querySelector( 'input[data-password]' );
+		if ( input ) {
+			input.value = data.password;
+		}
+
+		return fragment.querySelector( '.new-application-password-notice' );
+	}
+
+	/**
+	 * Clones the password row template and populates it with data.
+	 *
+	 * @param {Object} data A REST API application password response object.
+	 * @returns {DocumentFragment} The populated row fragment.
+	 */
+	function renderPasswordRow( data ) {
+		const fragment = tmplAppPassRow.content.cloneNode( true );
+
+		// Set uuid on the <tr>.
 		const tr = fragment.querySelector( 'tr' );
-		if ( tr && data.uuid !== undefined ) {
+		if ( tr ) {
 			tr.dataset.uuid = data.uuid;
 		}
 
-		// Revoke button: complete the aria-label with the password name.
+		// Name cell.
+		const nameSpan = fragment.querySelector( 'span[data-name]' );
+		if ( nameSpan ) {
+			nameSpan.textContent = data.name;
+		}
+
+		// Last IP cell — fall back to an em-dash when absent.
+		const lastIpSpan = fragment.querySelector( 'span[data-last_ip]' );
+		if ( lastIpSpan ) {
+			lastIpSpan.textContent = data.last_ip || '\u2014';
+		}
+
+		// Revoke button: set id, name, and complete the aria-label.
 		const revokeBtn = fragment.querySelector( '.delete[data-aria-label]' );
-		if ( revokeBtn && data.name !== undefined ) {
-			const prefix = revokeBtn.dataset.ariaLabel; // "Revoke "" from PHP
+		if ( revokeBtn ) {
+			const identifier = 'revoke-application-password-' + data.uuid;
+			revokeBtn.setAttribute( 'name', identifier );
+			revokeBtn.setAttribute( 'id', identifier );
+
+			const prefix = revokeBtn.getAttribute( 'data-aria-label' );
 			revokeBtn.setAttribute( 'aria-label', prefix + data.name + '\u201d' );
 			revokeBtn.removeAttribute( 'data-aria-label' );
 		}
-
-		// last_ip: fall back to an em-dash when the value is absent or null.
-		fragment.querySelectorAll( '[data-last_ip]' ).forEach( el => {
-			el.textContent = data.last_ip || '\u2014';
-		} );
 
 		return fragment;
 	}
 
 	// ---------------------------------------------------------------------------
-	// Helpers: notices
+	// Notices
 	// ---------------------------------------------------------------------------
 
 	/**
@@ -106,21 +128,6 @@
 	 */
 	function clearNotices() {
 		appPassSection.querySelectorAll( '.notice' ).forEach( el => el.remove() );
-	}
-
-	// ---------------------------------------------------------------------------
-	// Helpers: error handling
-	// ---------------------------------------------------------------------------
-
-	/**
-	 * Handles an error response from the REST API.
-	 *
-	 * @param {Response} response  The fetch Response object.
-	 * @param {Object|null} json   The parsed JSON body, or null if unparseable.
-	 */
-	function handleErrorResponse( response, json ) {
-		const errorMessage = ( json && json.message ) ? json.message : response.statusText;
-		addNotice( errorMessage, 'error' );
 	}
 
 	// ---------------------------------------------------------------------------
@@ -197,6 +204,21 @@
 	}
 
 	// ---------------------------------------------------------------------------
+	// Error handler
+	// ---------------------------------------------------------------------------
+
+	/**
+	 * Handles an error response from the REST API.
+	 *
+	 * @param {Response}    response The fetch Response object.
+	 * @param {Object|null} json     The parsed JSON body, or null if unparseable.
+	 */
+	function handleErrorResponse( response, json ) {
+		const errorMessage = ( json && json.message ) ? json.message : response.statusText;
+		addNotice( errorMessage, 'error' );
+	}
+
+	// ---------------------------------------------------------------------------
 	// Event: Create new application password
 	// ---------------------------------------------------------------------------
 
@@ -243,23 +265,22 @@
 			}
 
 			newAppPassField.value = '';
-			newAppPassButton.disabled = false;
 
 			// Render and insert the new-password notice.
-			const noticeFragment = renderTemplate( tmplNewAppPass, {
+			const noticeEl = renderNewPasswordNotice( {
 				name:     json.name,
 				password: json.password,
 			} );
-
-			newAppPassForm.insertAdjacentElement( 'afterend', noticeFragment.firstElementChild ?? noticeFragment );
-			appPassSection.querySelector( '.new-application-password-notice' ).focus();
+			newAppPassForm.insertAdjacentElement( 'afterend', noticeEl );
+			noticeEl.focus();
 
 			// Render and prepend the new table row.
-			const rowFragment = renderTemplate( tmplAppPassRow, json );
-			appPassTbody.prepend( rowFragment );
+			appPassTbody.prepend( renderPasswordRow( json ) );
 
 			appPassTwrapper.style.display = '';
-			appPassTrNoItems && appPassTrNoItems.remove();
+			if ( appPassTrNoItems ) {
+				appPassTrNoItems.remove();
+			}
 
 			/**
 			 * Fires after an application password has been successfully created.
@@ -283,7 +304,9 @@
 
 	appPassTbody.addEventListener( 'click', async function ( e ) {
 		const deleteBtn = e.target.closest( '.delete' );
-		if ( ! deleteBtn ) return;
+		if ( ! deleteBtn ) {
+			return;
+		}
 
 		e.preventDefault();
 
