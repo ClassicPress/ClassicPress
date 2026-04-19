@@ -842,7 +842,6 @@ function wp_default_scripts( $scripts ) {
 		'_cpFilepondLabels',
 		array(
 			'labelIdle'                      => __( 'Drag & Drop your files or <span class="filepond--label-action">Browse</span>' ),
-			'labelPluginIdle'                => __( 'Drag & Drop your plugin zip file or <span class="filepond--label-action">Browse</span>' ),
 			'labelZipIdle'                   => __( 'Drag & Drop your zip file or <span class="filepond--label-action">Browse</span>' ),
 			'labelInvalidField'              => __( 'Field contains invalid files' ),
 			'labelFileWaitingForSize'        => __( 'Waiting for size' ),
