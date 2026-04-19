@@ -196,6 +196,10 @@ class WP_Application_Passwords_List_Table extends WP_List_Table {
 	 * Prints the JavaScript template for the new row item.
 	 *
 	 * @since 5.6.0
+	 *
+	 * Modified to use data attributes instead of backbone syntax
+	 *
+	 * @since CP-2.8.0
 	 */
 	public function print_js_template_row() {
 		list( $columns, $hidden, , $primary ) = $this->get_column_info();
