@@ -1078,7 +1078,7 @@ switch ( $action ) {
 				spinner.className = 'spinner language-install-spinner is-active';
 				submitButton.insertAdjacentElement( 'afterend', spinner );
 			}
-		});
+		} );
 	} );
 </script>
 
