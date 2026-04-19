@@ -412,7 +412,7 @@ if ( 'grid' === $mode ) {
 					$update_nonce = $data['nonces']['update'];
 					$delete_nonce = $data['nonces']['delete'];
 					$edit_nonce   = $data['nonces']['edit'];
-					$file_title   = strlen( $data['title'] ) > 50 ? substr( $data['title'], 0, 50 ).'&#46;&#46;&#46;' : $data['title'];
+					$file_title   = strlen( $data['title'] ) > 50 ? substr( $data['title'], 0, 50 ) . '&#46;&#46;&#46;' : $data['title'];
 					$image        = '<img src="' . esc_url( $url ) . '" alt="' . esc_attr( $alt ) . '"><div class="filename"><div>' . esc_html( $file_title ) . '</div></div>';
 
 					// Use an icon if the file uploaded is not an image
