@@ -412,7 +412,8 @@ if ( 'grid' === $mode ) {
 					$update_nonce = $data['nonces']['update'];
 					$delete_nonce = $data['nonces']['delete'];
 					$edit_nonce   = $data['nonces']['edit'];
-					$image        = '<img src="' . esc_url( $url ) . '" alt="' . esc_attr( $alt ) . '">';
+					$file_title   = strlen( $data['title'] ) > 50 ? substr( $data['title'], 0, 50 ) . '...' : $data['title'];
+					$image        = '<img src="' . esc_url( $url ) . '" alt="' . esc_attr( $alt ) . '"><div class="filename"><div>' . esc_html( $file_title ) . '</div></div>';
 
 					// Use an icon if the file uploaded is not an image
 					if ( $file_type === 'application' ) {
@@ -427,6 +428,8 @@ if ( 'grid' === $mode ) {
 						$image = '<div class="icon"><div class="centered"><img src="' . esc_url( includes_url() . 'images/media/audio.png' ) . '" draggable="false" alt=""></div><div class="filename"><div>' . esc_html( $attachment->post_title ) . '</div></div></div>';
 					} elseif ( $file_type === 'video' ) {
 						$image = '<div class="icon"><div class="centered"><img src="' . esc_url( includes_url() . 'images/media/video.png' ) . '" draggable="false" alt=""></div><div class="filename"><div>' . esc_html( $attachment->post_title ) . '</div></div></div>';
+					} elseif ( $file_type === 'text' ) {
+						$image = '<div class="icon"><div class="centered"><img src="' . esc_url( includes_url() . 'images/media/text.png' ) . '" draggable="false" alt=""></div><div class="filename"><div>' . esc_html( $attachment->post_title ) . '</div></div></div>';
 					}
 					?>
 
