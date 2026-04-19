@@ -1095,7 +1095,7 @@ switch ( $action ) {
 					);
 					?>
 				</label>
-				<input id="new-application-password-value" type="text" class="code" readonly>
+				<input id="new-application-password-value" type="text" class="code" data-password readonly>
 			</p>
 			<p><?php _e( 'Be sure to save this in a safe location. You will not be able to retrieve it.' ); ?></p>
 			<button type="button" class="notice-dismiss">
