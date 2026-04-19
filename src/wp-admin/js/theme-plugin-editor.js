@@ -3,6 +3,7 @@
  */
 
 /* eslint no-magic-numbers: ["error", { "ignore": [-1, 0, 1] }] */
+/* global wp, fileEditorL10n */
 
 if ( ! window.wp ) {
 	window.wp = {};
