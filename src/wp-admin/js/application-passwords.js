@@ -3,6 +3,7 @@
  *
  * @since CP-2.8.0
  */
+/* global wpApiSettings */
 
 ( function () {
 	const appPassSection   = document.getElementById( 'application-passwords-section' );
