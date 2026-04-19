@@ -217,8 +217,6 @@
 			// Snap near-zero origins to 0.
 			const x1 = snap( Math.round( ( selX - offX ) * scaleX ), 0, 1 );
 			const y1 = snap( Math.round( ( selY - offY ) * scaleY ), 0, 1 );
-			const w  = Math.round( selW * scaleX );
-			const h  = Math.round( selH * scaleY );
 
 			// Clamp so crop never exceeds image bounds.
 			// Snap width/height to natW/natH when within 1px.
