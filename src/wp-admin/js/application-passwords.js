@@ -1,5 +1,7 @@
 /**
  * @output wp-admin/js/application-passwords.js
+ *
+ * @since CP-2.8.0
  */
 
 ( function () {
