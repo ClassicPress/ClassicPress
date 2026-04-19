@@ -148,7 +148,7 @@
 
 		el.animate(
 			[ { opacity: 1 }, { opacity: 0 } ],
-			{ duration: 100, fill: 'forwards' }
+			{ duration: 100 }
 		).finished.then( () => {
 			const fullHeight = el.offsetHeight;
 
@@ -156,10 +156,10 @@
 
 			el.animate(
 				[
-					{ height: fullHeight + 'px', marginTop: '', marginBottom: '', paddingTop: '', paddingBottom: '' },
-					{ height: '0',               marginTop: '0', marginBottom: '0', paddingTop: '0', paddingBottom: '0' }
+					{ height: fullHeight + 'px' },
+					{ height: '0px' }
 				],
-				{ duration: 100, fill: 'forwards' }
+				{ duration: 100 }
 			).finished.then( () => {
 				el.remove();
 				newAppPassField.focus();
