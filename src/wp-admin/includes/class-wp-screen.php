@@ -841,9 +841,14 @@ final class WP_Screen {
 			$help_class .= ' no-sidebar';
 		}
 
-		// Time to render!
+		// Time to render! Don't apply to CP theme and plugin install screens
+		if ( ! in_array( get_current_screen()->id, array( 'appearance_page_classicpress-directory-integration-theme-install', 'plugins_page_classicpress-directory-integration-plugin-install' ), true ) ) {
+			?>
+			<div id="screen-meta-container">
+			<?php
+		}
 		?>
-		<div id="screen-meta-container">
+
 			<div id="screen-meta" class="metabox-prefs">
 
 				<div id="contextual-help-wrap" class="<?php echo esc_attr( $help_class ); ?>" tabindex="-1" aria-label="<?php esc_attr_e( 'Contextual Help Tab' ); ?>">
@@ -975,9 +980,13 @@ final class WP_Screen {
 			?>
 
 			</div>
-		</div>
 
 		<?php
+		if ( ! in_array( get_current_screen()->id, array( 'appearance_page_classicpress-directory-integration-theme-install', 'plugins_page_classicpress-directory-integration-plugin-install' ), true ) ) {
+			?>
+			</div>
+			<?php
+		}
 	}
 
 	/**
