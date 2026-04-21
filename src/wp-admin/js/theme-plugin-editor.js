@@ -259,11 +259,13 @@ wp.themePluginEditor = ( function() {
 			var notice = Object.assign(
 				{
 					code: 'save_error',
-					type: 'error',
-					dismissible: true,
 					message: __( 'Something went wrong. Your change may not have been saved. Please try again. There is also a chance that you may need to manually fix and upload the file over FTP.' )
 				},
-				response
+				response,
+				{
+					type: 'error',
+					dismissible: true
+				}
 			);
 			component.lastSaveNoticeCode = notice.code;
 			component.addNotice( notice );
