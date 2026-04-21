@@ -839,8 +839,10 @@ final class WP_Screen {
 		$help_class = 'hidden';
 		if ( ! $help_sidebar ) {
 			$help_class .= ' no-sidebar';
-		} else {
-			// Time to render! Don't apply to CP theme and plugin install screens
+		}
+
+		if ( $help_sidebar || $this->show_screen_options() ) {
+			// Time to render!
 			?>
 
 			<div id="screen-meta-container">
@@ -982,7 +984,7 @@ final class WP_Screen {
 			</div>
 
 		<?php
-		if ( $help_sidebar ) {
+		if ( $help_sidebar || $this->show_screen_options() ) {
 			?>
 
 			</div>
