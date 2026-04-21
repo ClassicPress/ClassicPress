@@ -151,6 +151,21 @@ $settings = array(
 wp_enqueue_script( 'wp-theme-plugin-editor' );
 wp_add_inline_script( 'wp-theme-plugin-editor', sprintf( 'wp.themePluginEditor.init( document.getElementById( "template" ), %s );', wp_json_encode( $settings ) ) );
 wp_add_inline_script( 'wp-theme-plugin-editor', sprintf( 'wp.themePluginEditor.themeOrPlugin = "plugin";' ) );
+wp_add_inline_script(
+	'wp-theme-plugin-editor',
+	sprintf(
+		'var wpThemePluginEditorL10n = %s;',
+		wp_json_encode( array(
+			'phpErrorTemplate' => sprintf(
+				/* translators: 1: Line number, 2: File path. */
+				__( 'Your PHP code changes were rolled back due to an error on line %1$s of file %2$s. Please fix and try saving again.' ),
+				'%1$s',
+				'%2$s'
+			),
+		) )
+	),
+	'before'
+);
 
 require_once ABSPATH . 'wp-admin/admin-header.php';
 
