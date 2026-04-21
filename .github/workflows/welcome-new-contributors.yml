@@ -23,9 +23,9 @@ jobs:
     steps:
       - uses: actions/first-interaction@v3
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
           issue_message: |
-            Hi @{{ author }}! 👋
+            Hi @${{ github.actor }}! 👋
 
             Thank you for opening an issue at ClassicPress! 💖
 
@@ -36,7 +36,7 @@ jobs:
             Thank you,
             ClassicPress Core Team.
           pr_message: |
-            Hi @{{ author }}! 👋
+            Hi @${{ github.actor }}! 👋
 
             Thank you for your contribution to ClassicPress! 💖
 

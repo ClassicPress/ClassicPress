@@ -1222,7 +1222,7 @@ __webpack_require__.d(__webpack_exports__, {
 // EXTERNAL MODULE: ./node_modules/@wordpress/dom-ready/build-module/index.mjs
 var build_module = __webpack_require__(819);
 ;// ./node_modules/@wordpress/a11y/build-module/script/add-container.mjs
-// packages/a11y/src/script/add-container.js
+// packages/a11y/src/script/add-container.ts
 function addContainer(ariaLive = "polite") {
   const container = document.createElement("div");
   container.id = `a11y-speak-${ariaLive}`;
@@ -1266,7 +1266,7 @@ function addIntroText() {
 
 
 ;// ./node_modules/@wordpress/a11y/build-module/shared/clear.mjs
-// packages/a11y/src/shared/clear.js
+// packages/a11y/src/shared/clear.ts
 function clear() {
   const regions = document.getElementsByClassName("a11y-speak-region");
   const introText = document.getElementById("a11y-speak-intro-text");
@@ -1280,7 +1280,7 @@ function clear() {
 
 
 ;// ./node_modules/@wordpress/a11y/build-module/shared/filter-message.mjs
-// packages/a11y/src/shared/filter-message.js
+// packages/a11y/src/shared/filter-message.ts
 var previousMessage = "";
 function filterMessage(message) {
   message = message.replace(/<[^<>]+>/g, " ");
@@ -1293,7 +1293,7 @@ function filterMessage(message) {
 
 
 ;// ./node_modules/@wordpress/a11y/build-module/shared/index.mjs
-// packages/a11y/src/shared/index.js
+// packages/a11y/src/shared/index.ts
 
 
 function speak(message, ariaLive) {
@@ -1316,7 +1316,7 @@ function speak(message, ariaLive) {
 
 
 ;// ./node_modules/@wordpress/a11y/build-module/index.mjs
-// packages/a11y/src/index.js
+// packages/a11y/src/index.ts
 
 
 
