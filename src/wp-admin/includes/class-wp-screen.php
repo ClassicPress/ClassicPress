@@ -839,12 +839,12 @@ final class WP_Screen {
 		$help_class = 'hidden';
 		if ( ! $help_sidebar ) {
 			$help_class .= ' no-sidebar';
-		}
-
-		// Time to render! Don't apply to CP theme and plugin install screens
-		if ( ! in_array( get_current_screen()->id, array( 'appearance_page_classicpress-directory-integration-theme-install', 'plugins_page_classicpress-directory-integration-plugin-install' ), true ) ) {
+		} else {
+			// Time to render! Don't apply to CP theme and plugin install screens
 			?>
+
 			<div id="screen-meta-container">
+
 			<?php
 		}
 		?>
@@ -982,9 +982,11 @@ final class WP_Screen {
 			</div>
 
 		<?php
-		if ( ! in_array( get_current_screen()->id, array( 'appearance_page_classicpress-directory-integration-theme-install', 'plugins_page_classicpress-directory-integration-plugin-install' ), true ) ) {
+		if ( $help_sidebar ) {
 			?>
+
 			</div>
+
 			<?php
 		}
 	}
