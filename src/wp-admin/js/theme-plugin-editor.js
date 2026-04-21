@@ -3,7 +3,7 @@
  */
 
 /* eslint no-magic-numbers: ["error", { "ignore": [-1, 0, 1] }] */
-/* global wp, fileEditorL10n */
+/* global wp, wpThemePluginEditorL10n */
 
 if ( ! window.wp ) {
 	window.wp = {};
@@ -208,7 +208,7 @@ wp.themePluginEditor = ( function() {
 			return;
 		}
 
-		component.isSaving          = true;
+		component.isSaving = true;
 		component.textarea.readOnly = true;
 
 		if ( component.instance ) {
@@ -216,6 +216,24 @@ wp.themePluginEditor = ( function() {
 		}
 
 		component.spinner.classList.add( 'is-active' );
+
+		// Safety net: if the Ajax response never arrives (e.g. due to a PHP
+		// fatal corrupting the response), re-enable the editor after 10 seconds.
+		var saveTimeout = setTimeout( function() {
+			component.spinner.classList.remove( 'is-active' );
+			component.isSaving = false;
+			component.textarea.readOnly = false;
+
+			if ( component.instance ) {
+				component.instance.codemirror.setOption( 'readOnly', false );
+			}
+			component.addNotice( {
+				code: 'save_error',
+				type: 'error',
+				dismissible: true,
+				message: __( 'Something went wrong. Your change may not have been saved. Please try again. There is also a chance that you may need to manually fix and upload the file over FTP.' )
+			} );
+		}, 10000 );
 
 		// Remove previous save notice before saving.
 		if ( component.lastSaveNoticeCode ) {
@@ -225,6 +243,7 @@ wp.themePluginEditor = ( function() {
 		request = wp.ajax.post( 'edit-theme-plugin-file', data );
 
 		request.done( function( response ) {
+			clearTimeout( saveTimeout );
 			component.lastSaveNoticeCode = 'file_saved';
 			component.addNotice( {
 				code: component.lastSaveNoticeCode,
@@ -239,21 +258,20 @@ wp.themePluginEditor = ( function() {
 			var notice = Object.assign(
 				{
 					code: 'save_error',
+					type: 'error',
+					dismissible: true,
 					message: __( 'Something went wrong. Your change may not have been saved. Please try again. There is also a chance that you may need to manually fix and upload the file over FTP.' )
 				},
-				response,
-				{
-					type: 'error',
-					dismissible: true
-				}
+				response
 			);
 			component.lastSaveNoticeCode = notice.code;
 			component.addNotice( notice );
 		} );
 
 		request.always( function() {
+			clearTimeout( saveTimeout );
 			component.spinner.classList.remove( 'is-active' );
-			component.isSaving          = false;
+			component.isSaving = false;
 			component.textarea.readOnly = false;
 
 			if ( component.instance ) {
@@ -563,7 +581,7 @@ wp.themePluginEditor = ( function() {
 			msgEl = content.querySelector( '[data-message]' );
 
 			if ( msgEl ) {
-				msgEl.textContent = fileEditorL10n.phpErrorTemplate.replace( '%1$s', data.line ).replace( '%2$s', data.file );
+				msgEl.textContent = wpThemePluginEditorL10n.phpErrorTemplate.replace( '%1$s', data.line ).replace( '%2$s', data.file );
 				msgEl.removeAttribute( 'data-message' );
 			}
 
