@@ -185,6 +185,7 @@ wp.themePluginEditor = ( function() {
 	component.submit = function( event ) {
 		var request,
 			data = {},
+			SAVE_TIMEOUT_MS = 10000,
 			fields = new FormData( component.form );
 
 		event.preventDefault();
@@ -233,7 +234,7 @@ wp.themePluginEditor = ( function() {
 				dismissible: true,
 				message: __( 'Something went wrong. Your change may not have been saved. Please try again. There is also a chance that you may need to manually fix and upload the file over FTP.' )
 			} );
-		}, 10000 );
+		}, SAVE_TIMEOUT_MS );
 
 		// Remove previous save notice before saving.
 		if ( component.lastSaveNoticeCode ) {
