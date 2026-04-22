@@ -197,6 +197,7 @@ final class WP_Customize_Widgets {
 	 * @since 4.2.0
 	 */
 	public function register_settings() {
+
 		$widget_setting_ids   = array();
 		$incoming_setting_ids = array_keys( $this->manager->unsanitized_post_values() );
 		foreach ( $incoming_setting_ids as $setting_id ) {
@@ -701,25 +702,6 @@ final class WP_Customize_Widgets {
 			__( 'Move up' )
 		);
 
-		$move_widget_area_tpl = str_replace(
-			array( '{description}', '{btn}' ),
-			array(
-				__( 'Select an area to move this widget into:' ),
-				_x( 'Move', 'Move widget' ),
-			),
-			'<div class="move-widget-area">
-				<p class="description">{description}</p>
-				<ul class="widget-area-select">
-					<% _.each( sidebars, function ( sidebar ){ %>
-						<li class="" data-id="<%- sidebar.id %>" title="<%- sidebar.description %>" tabindex="0"><%- sidebar.name %></li>
-					<% }); %>
-				</ul>
-				<div class="move-widget-actions">
-					<button class="move-widget-btn button" type="button">{btn}</button>
-				</div>
-			</div>'
-		);
-
 		/*
 		 * Gather all strings in PHP that may be needed by JS on the client.
 		 * Once JS i18n is implemented (in #20491), this can be removed.
@@ -795,7 +777,6 @@ final class WP_Customize_Widgets {
 			),
 			'tpl'                         => array(
 				'widgetReorderNav' => $widget_reorder_nav_tpl,
-				'moveWidgetArea'   => $move_widget_area_tpl,
 			),
 			'selectiveRefreshableWidgets' => $this->get_selective_refreshable_widgets(),
 		);
@@ -824,59 +805,92 @@ final class WP_Customize_Widgets {
 	 */
 	public function output_widget_control_templates() {
 		?>
+
 		<div id="widgets-left"><!-- compatibility with JS which looks for widget templates here -->
-		<div id="available-widgets">
-			<div class="customize-section-title">
-				<button class="customize-section-back" tabindex="-1">
-					<span class="screen-reader-text">
+			<div id="available-widgets">
+				<div class="customize-section-title">
+					<button class="customize-section-back" tabindex="-1">
+						<span class="screen-reader-text">
+
+							<?php
+							/* translators: Hidden accessibility text. */
+							esc_html_e( 'Back' );
+							?>
+
+						</span>
+					</button>
+					<h3>
+						<span class="customize-action">
+
+						<?php
+							/* translators: &#9656; is the unicode right-pointing triangle. %s: Section title in the Customizer. */
+							printf( __( 'Customizing &#9656; %s' ), esc_html( $this->manager->get_panel( 'widgets' )->title ) );
+						?>
+
+						</span>
+
+						<?php esc_html_e( 'Add a Widget' ); ?>
+
+					</h3>
+				</div>
+				<div id="available-widgets-filter">
+					<label class="screen-reader-text" for="widgets-search">
+
 						<?php
 						/* translators: Hidden accessibility text. */
-						_e( 'Back' );
+						esc_html_e( 'Search Widgets' );
 						?>
-					</span>
-				</button>
-				<h3>
-					<span class="customize-action">
+
+					</label>
+					<input type="text" id="widgets-search"
+						placeholder="<?php esc_attr_e( 'Search widgets&hellip;' ); ?>"
+						aria-describedby="widgets-search-desc"
+					>
+					<div class="search-icon" aria-hidden="true"></div>
+					<button type="button" class="clear-results">
+						<span class="screen-reader-text">
+
+							<?php
+							/* translators: Hidden accessibility text. */
+							esc_html_e( 'Clear Results' );
+							?>
+
+						</span>
+					</button>
+					<p class="screen-reader-text" id="widgets-search-desc">
+
+						<?php
+						/* translators: Hidden accessibility text. */
+						esc_html_e( 'The search results will be updated as you type.' );
+						?>
+
+					</p>
+				</div>
+				<ul id="available-widgets-list" data-parent-id="sub-accordion-panel-widgets">
+
 					<?php
-						/* translators: &#9656; is the unicode right-pointing triangle. %s: Section title in the Customizer. */
-						printf( __( 'Customizing &#9656; %s' ), esc_html( $this->manager->get_panel( 'widgets' )->title ) );
+					foreach ( $this->get_available_widgets() as $available_widget ) {
+						?>
+
+						<li id="widget-tpl-<?php esc_attr_e( $available_widget['id'] ); ?>"
+							data-widget-id="<?php esc_attr_e( $available_widget['id'] ); ?>"
+							class="widget-tpl <?php esc_attr_e( $available_widget['id'] ); ?>"
+							tabindex="0"
+						>
+							<?php echo $available_widget['control_tpl']; ?>
+						</li>
+
+						<?php
+					}
 					?>
-					</span>
-					<?php _e( 'Add a Widget' ); ?>
-				</h3>
-			</div>
-			<div id="available-widgets-filter">
-				<label class="screen-reader-text" for="widgets-search">
-					<?php
-					/* translators: Hidden accessibility text. */
-					_e( 'Search Widgets' );
-					?>
-				</label>
-				<input type="text" id="widgets-search" placeholder="<?php esc_attr_e( 'Search widgets&hellip;' ); ?>" aria-describedby="widgets-search-desc">
-				<div class="search-icon" aria-hidden="true"></div>
-				<button type="button" class="clear-results"><span class="screen-reader-text">
-					<?php
-					/* translators: Hidden accessibility text. */
-					_e( 'Clear Results' );
-					?>
-				</span></button>
-				<p class="screen-reader-text" id="widgets-search-desc">
-					<?php
-					/* translators: Hidden accessibility text. */
-					_e( 'The search results will be updated as you type.' );
-					?>
-				</p>
-			</div>
-			<ul id="available-widgets-list">
-			<?php foreach ( $this->get_available_widgets() as $available_widget ) : ?>
-				<li id="widget-tpl-<?php echo esc_attr( $available_widget['id'] ); ?>" data-widget-id="<?php echo esc_attr( $available_widget['id'] ); ?>" class="widget-tpl <?php echo esc_attr( $available_widget['id'] ); ?>" tabindex="0">
-					<?php echo $available_widget['control_tpl']; ?>
-				</li>
-			<?php endforeach; ?>
-			<p class="no-widgets-found-message"><?php _e( 'No widgets found.' ); ?></p>
-			</ul><!-- #available-widgets-list -->
-		</div><!-- #available-widgets -->
+
+					<p class="no-widgets-found-message">
+						<?php _e( 'No widgets found.' ); ?>
+					</p>
+				</ul><!-- #available-widgets-list -->
+			</div><!-- #available-widgets -->
 		</div><!-- #widgets-left -->
+
 		<?php
 	}
 
@@ -1678,6 +1692,101 @@ final class WP_Customize_Widgets {
 		add_filter( 'wp_kses_allowed_html', array( $this, 'filter_wp_kses_allowed_data_attributes' ) );
 		add_action( 'dynamic_sidebar_before', array( $this, 'start_dynamic_sidebar' ) );
 		add_action( 'dynamic_sidebar_after', array( $this, 'end_dynamic_sidebar' ) );
+
+		/**
+		 * Registers a partial for each sidebar
+		 *
+		 * @since CP-2.8.0
+		 */
+		global $wp_registered_sidebars;
+		$sr = $this->manager->selective_refresh;
+		foreach ( $wp_registered_sidebars as $sidebar ) {
+			$sidebar_id = $sidebar['id'];
+			$sr->add_partial(
+				$sidebar_id,
+				array(
+					'type'                => 'sidebar', // label only; no special client class needed
+					'settings'            => array( 'sidebars_widgets[' . $sidebar_id . ']' ),
+					'primary_setting'     => 'sidebars_widgets[' . $sidebar_id . ']',
+					'container_inclusive' => true, // we return the outer container ourselves
+					'render_callback'     => array( $this, 'cp_render_sidebar_partial' ),
+					'capability'          => 'edit_theme_options',
+				)
+			);
+		}
+
+		/**
+		 * Add two extra wrappers *in addition to* the original start/end
+		 * to enable the printing of a sidebar partial.
+		 * Uses a higher priority than the existing start and after, so
+		 * we wrap the rendered widgets without interfering with them.
+		 *
+		 * @since CP-2.8.0
+		 */
+		add_action( 'dynamic_sidebar_before', array( $this, 'cp_print_sidebar_partial_container_open' ), 20 );
+		add_action( 'dynamic_sidebar_after', array( $this, 'cp_print_sidebar_partial_container_close' ), 20 );
+	}
+
+	/**
+	 * Render the entire sidebar for selective refresh.
+	 * Returns a container-inclusive fragment that the client swaps in.
+	 *
+	 * @since CP-2.8.0
+	 *
+	 * @param WP_Customize_Partial $partial Partial instance.
+	 * @return string|false HTML (including outer wrapper) or false on failure.
+	 */
+	public function cp_render_sidebar_partial( $partial ) {
+		$sidebar_id = $partial->id;
+
+		if ( ! is_registered_sidebar( $sidebar_id ) ) {
+			return false;
+		}
+		ob_start();
+		echo '<div class="customize-partial-sidebar" data-customize-partial-id="', esc_attr( $sidebar_id ), '">';
+		dynamic_sidebar( $sidebar_id );
+		echo '</div>';
+		return ob_get_clean();
+	}
+
+	/**
+	 * Emit the opening container on initial render in the Customizer.
+	 * This is additive: it does not replace or modify start_dynamic_sidebar().
+	 */
+	public function cp_print_sidebar_partial_container_open( $sidebar_id ) {
+		// Do not output wrappers during selective refresh partial render requests.
+		if ( isset( $_REQUEST[ WP_Customize_Selective_Refresh::RENDER_QUERY_VAR ] ) ) { // 'wp_customize_render_partials'
+			return;
+		}
+
+		if ( ! is_customize_preview() ) {
+			return;
+		}
+
+		// Compute an instance index in case of rendering the same sidebar multiple times.
+		$instance = isset( $this->context_sidebar_instance_number )
+			? (int) $this->context_sidebar_instance_number
+			: ( isset( $this->sidebar_instance_count[ $sidebar_id ] ) ? (int) $this->sidebar_instance_count[ $sidebar_id ] : 1 );
+
+		echo '<div class="customize-partial-sidebar" data-customize-partial-id="' . esc_attr( $sidebar_id ) .
+			'" data-customize-partial-instance="' . esc_attr( $instance ) . '">';
+	}
+
+	/**
+	 * Emit the closing container on initial render in the Customizer.
+	 * This is additive: it does not replace or modify end_dynamic_sidebar().
+	 */
+	public function cp_print_sidebar_partial_container_close() {
+		// Do not output wrappers during selective refresh partial render requests.
+		if ( isset( $_REQUEST[ WP_Customize_Selective_Refresh::RENDER_QUERY_VAR ] ) ) { // 'wp_customize_render_partials'
+			return;
+		}
+
+		if ( ! is_customize_preview() ) {
+			return;
+		}
+
+		echo '</div>';
 	}
 
 	/**

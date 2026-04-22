@@ -450,11 +450,6 @@
 /**
  * Add-menu-items mode
  */
-
-.adding-menu-items .control-section {
-	opacity: .4;
-}
-
 .adding-menu-items .control-panel.control-section,
 .adding-menu-items .control-section.open {
 	opacity: 1;
@@ -464,6 +459,7 @@
 	color: #d63638;
 	cursor: pointer;
 	display: none;
+	text-decoration: none;
 }
 
 .menu-item-bar .item-delete:before {
