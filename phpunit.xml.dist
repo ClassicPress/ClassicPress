@@ -56,7 +56,6 @@
 				<file>src/wp-includes/class-IXR.php</file>
 				<file>src/wp-includes/class-json.php</file>
 				<file>src/wp-includes/class-phpass.php</file>
-				<file>src/wp-includes/class-pop3.php</file>
 				<file>src/wp-includes/class-requests.php</file>
 				<file>src/wp-includes/class-simplepie.php</file>
 				<file>src/wp-includes/class-snoopy.php</file>
