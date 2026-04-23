@@ -386,7 +386,7 @@ window.addEventListener( 'message', function( event ) {
  * Receive postMessages from the preview iframe about menu item updates
  */
 window.addEventListener( 'message', function( event ) {
-	var message, target, src;
+	var message, target, src, url;
 
 	if ( event.origin !== location.origin ) {
 		return;
@@ -409,6 +409,14 @@ window.addEventListener( 'message', function( event ) {
 	}
 
 	src = target.iframe.src;
+	url = new URL( src );
+	url.searchParams.set( 'customized', JSON.stringify( window._cpDirtySettings ) );
+
+	// After the full refresh fires, the iframe will have all current values baked in.
+	// Clear dirty settings so subsequent partial-refresh changes don't re-trigger a full reload.
+	window._cpDirtySettings = {};
+	window._cpPreviewSettings = {};
+
 	target.iframe.src = '';
-	target.iframe.src = src;
+	target.iframe.src = url.toString();
 } );
