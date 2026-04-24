@@ -125,6 +125,7 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 						type="text" 
 						data-type="hue"
 						value="#<?php echo esc_attr( $color_value ); ?>"
+						data-coloris
 						<?php $this->link(); ?>
 					>
 					<?php
@@ -136,6 +137,7 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 						placeholder="<?php echo esc_attr( $default_value ); ?>"
 						value="#<?php echo esc_attr( $color_value ); ?>"
 						<?php echo $default_value_attr; // data-default-color ?>
+						data-coloris
 						<?php $this->link(); ?>
 					>
 					<?php
