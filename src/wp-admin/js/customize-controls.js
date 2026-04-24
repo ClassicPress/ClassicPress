@@ -888,15 +888,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function cropImage( selectedItem, attachmentId, imageUrl, nonce, cropContext ) {
+		var aspectRatio = 1,
+			logoWidth   = 512,
+			logoHeight  = 512;
+
 		closeModal();
+
+		if ( cropContext === 'custom_logo' && _cpCustomLogo && _cpCustomLogo.width && _cpCustomLogo.height ) {
+			logoWidth   = _cpCustomLogo.width;
+			logoHeight  = _cpCustomLogo.height;
+			aspectRatio = logoWidth / logoHeight;
+		}
+
 		cpCropper.open( {
 			attachmentId : attachmentId,
 			imageUrl     : imageUrl,
 			context      : cropContext,
 			nonce        : nonce,
-			aspectRatio  : 1,
-			minWidth     : 512,
-			minHeight    : 512,
+			aspectRatio  : aspectRatio,
+			minWidth     : logoWidth,
+			minHeight    : logoHeight,
 			onSelect     : function( attachment ) {
 				const imageElement = new Image();
 				imageElement.src = attachment.url;
