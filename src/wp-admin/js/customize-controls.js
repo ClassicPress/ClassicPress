@@ -6,7 +6,7 @@
 
 /* eslint consistent-this: [ "error", "control" ] */
 /* global wp, _wpCustomizeControlsL10n, updatedControls,
-_updatedControlsWatcher, console, ajaxurl, IMAGE_WIDGET,
+_updatedControlsWatcher, console, ajaxurl, IMAGE_WIDGET, _cpCustomLogo,
 FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
 FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper */
 document.addEventListener( 'DOMContentLoaded', function() {
