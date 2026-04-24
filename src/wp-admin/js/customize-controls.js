@@ -5,7 +5,7 @@
  */
 
 /* eslint consistent-this: [ "error", "control" ] */
-/* global wp, _wpCustomizeControlsL10n, updatedControls,
+/* global wp, _wpCustomizeControlsL10n, updatedControls, Coloris,
 _updatedControlsWatcher, console, ajaxurl, IMAGE_WIDGET,
 FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
 FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper */
