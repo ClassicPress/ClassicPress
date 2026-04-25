@@ -100,9 +100,26 @@
 		cropperSel.setAttribute( 'movable', '' );
 		cropperSel.setAttribute( 'resizable', '' );
 		cropperSel.setAttribute( 'contain', '' );
+		cropperSel.setAttribute( 'tabindex', '0' );
 		if ( currentOpts.aspectRatio != null ) {
 			cropperSel.setAttribute( 'aspect-ratio', currentOpts.aspectRatio );
 		}
+
+		cropperSel.addEventListener( 'keydown', function( e ) {
+			var step = e.shiftKey ? 10 : 1;
+			var { x, y, width, height } = cropperSel;
+
+			switch ( e.key ) {
+				case 'ArrowLeft':  x -= step; break;
+				case 'ArrowRight': x += step; break;
+				case 'ArrowUp':    y -= step; break;
+				case 'ArrowDown':  y += step; break;
+				default: return;
+			}
+
+			e.preventDefault();
+			cropperSel.$change( x, y, width, height );
+		} );
 
 		const grid = document.createElement( 'cropper-grid' );
 		grid.setAttribute( 'role', 'none' );
