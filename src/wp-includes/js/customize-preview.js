@@ -611,7 +611,15 @@
 				found = false,
 				id = args[0],
 				value = args[1],
-				handledByPartial = false;
+				handledByPartial = false,
+				fullRefreshSettings = [ 'colorscheme', 'colorscheme_hue' ];
+
+			// Settings that require a full page refresh.
+			if ( fullRefreshSettings.indexOf( id ) !== -1 ) {
+				setValue( id, value, true );
+				api.preview.send( 'refresh' );
+				return;
+			}
 
 			wp.customize.selectiveRefresh.partial.each( function( partial ) {
 				if ( partial.params.settings && partial.params.settings.indexOf( id ) !== -1 ) {
@@ -622,6 +630,11 @@
 
 			if ( ! handledByPartial ) {
 				setValue( id, value, true );
+
+				// Only do a full refresh if the setting has no live preview binding
+				if ( ! api._settings[ id ] || api._settings[ id ]._handlers.length === 0 ) {
+					wp.customize.selectiveRefresh.requestFullRefresh();
+				}
 			}
 
 			if ( id.startsWith( 'sidebars_widgets[' ) ) {
