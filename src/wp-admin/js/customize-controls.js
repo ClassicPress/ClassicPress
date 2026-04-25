@@ -241,49 +241,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	/**
-	 * Code for the Coloris color picker.
-	 *
-	 * @since CP-2.8.0
-	 */
-	Coloris( {
-		alpha: false,
-		format: 'hex',
-		a11y: {
-			open: 'Open color picker',
-			close: 'Close color picker',
-			clear: 'Clear the selected color',
-			marker: 'Saturation: {s}. Brightness: {v}.',
-			hueSlider: 'Hue slider',
-			alphaSlider: 'Opacity slider',
-			input: 'Color value field',
-			format: 'Color format',
-			swatch: 'Color swatch',
-			instruction: 'Saturation and brightness selector. Use up, down, left and right arrow keys to select.'
-		},
-		swatches: [
-			'#264653',
-			'#2a9d8f',
-			'#e9c46a',
-			'#f4a261',
-			'#e76f51',
-			'#d62828',
-			'#000080',
-			'#0077bb',
-			'#0096c7',
-			'#00b4d8',
-			'#0077b6'
-		],
-		clearButton: true,
-		onChange: (color, inputEl) => {
-			inputEl.setAttribute( 'value', color );
-			_updatedControlsWatcher[inputEl.closest( 'li' ).dataset.settingId] = color;
-
-			// Enable Publish.
-			activatePublishButton();
-		}
-	} );
-
-	/**
 	 * Themes
 	 */
 	document.querySelector( '#installed_themes-themes-filter' )?.addEventListener( 'keyup', _.debounce( function( e ) {
@@ -1498,6 +1455,63 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	}
 	initCodeMirror( section.querySelector( 'textarea' ) );
+
+	/**
+	 * Code for the Coloris color picker.
+	 *
+	 * @since CP-2.8.0
+	 */
+	Coloris( {
+		alpha: false,
+		format: 'hex',
+		a11y: {
+			open: 'Open color picker',
+			close: 'Close color picker',
+			clear: 'Clear the selected color',
+			marker: 'Saturation: {s}. Brightness: {v}.',
+			hueSlider: 'Hue slider',
+			alphaSlider: 'Opacity slider',
+			input: 'Color value field',
+			format: 'Color format',
+			swatch: 'Color swatch',
+			instruction: 'Saturation and brightness selector. Use up, down, left and right arrow keys to select.'
+		},
+		swatches: [
+			'#264653',
+			'#2a9d8f',
+			'#e9c46a',
+			'#f4a261',
+			'#e76f51',
+			'#d62828',
+			'#000080',
+			'#0077bb',
+			'#0096c7',
+			'#00b4d8',
+			'#0077b6'
+		],
+		clearButton: true,
+		onChange: (color, inputEl) => {
+			inputEl.setAttribute( 'value', color );
+			_updatedControlsWatcher[inputEl.closest( 'li' ).dataset.settingId] = color;
+
+			// Enable Publish.
+			activatePublishButton();
+		}
+	} );
+
+	// Show/hide hue slider based on colour scheme selection.
+	function updateHueVisibility() {
+		const checkedScheme = form.querySelector( 'input[name="_customize-radio-colorscheme"]:checked' );
+		if ( hueControl ) {
+			hueControl.style.display = ( checkedScheme?.value === 'custom' ) ? '' : 'none';
+		}
+	}
+
+	colorSchemeInputs.forEach( function( input ) {
+		input.addEventListener( 'change', updateHueVisibility );
+	} );
+
+	updateHueVisibility();
 
 	// Ensure hitting Enter fires a click event on elements that are not automatically interactive
 	document.addEventListener( 'keyup', function( e ) {
