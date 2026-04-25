@@ -618,7 +618,7 @@ wp_print_scripts();
 														<span class="filter-count-filters">
 															<?php printf( __( 'Filter themes (%s)' ), '<span class="theme-filter-count">0</span>' ); ?>
 														</span>
-													</button>												
+													</button>
 												</div>
 											</div>
 											<div class="error unexpected-error" style="display: none; ">
@@ -638,7 +638,7 @@ wp_print_scripts();
 
 												</p>
 											</div>
-											<ul class="themes" style="overflow-y: scroll;max-height: 100vh;">
+											<ul class="themes wp-clearfix">
 
 												<?php
 												$themes_control = new WP_Customize_Theme_Control( $wp_customize, 'themes', array() );
