@@ -103,6 +103,8 @@
 		cropperSel.setAttribute( 'tabindex', '0' );
 		if ( currentOpts.aspectRatio != null ) {
 			cropperSel.setAttribute( 'aspect-ratio', currentOpts.aspectRatio );
+		} else if ( currentOpts.minWidth && currentOpts.minHeight ) {
+			cropperSel.setAttribute( 'aspect-ratio', currentOpts.minWidth / currentOpts.minHeight );
 		}
 
 		cropperSel.addEventListener( 'keydown', function( e ) {
@@ -208,19 +210,30 @@
 				const scaleX = dispW / natW;
 				const scaleY = dispH / natH;
 				const scale  = Math.min( scaleX, scaleY );
-				selW = currentOpts.minWidth  * scale;
-				selH = currentOpts.minHeight * scale;
-			} else if ( currentOpts.aspectRatio != null ) {
-				var ratio = currentOpts.aspectRatio;
-				if ( dispW / dispH > ratio ) {
-					selH = dispH * 0.5;
-					selW = selH * ratio;
+
+				// Desired output size in display pixels.
+				const desiredDispW = currentOpts.minWidth  * scale;
+				const desiredDispH = currentOpts.minHeight * scale;
+
+				if ( natW < currentOpts.minWidth || natH < currentOpts.minHeight ) {
+					// Image is smaller than desired — fit the crop to the image
+					// while maintaining the desired aspect ratio.
+					const desiredRatio = currentOpts.minWidth / currentOpts.minHeight;
+					const imageRatio   = dispW / dispH;
+
+					if ( imageRatio > desiredRatio ) {
+						// Image is wider than desired ratio — constrain by height.
+						selH = dispH;
+						selW = selH * desiredRatio;
+					} else {
+						// Image is taller — constrain by width.
+						selW = dispW;
+						selH = selW / desiredRatio;
+					}
 				} else {
-					selW = dispW * 0.5;
-					selH = selW / ratio;
+					selW = desiredDispW;
+					selH = desiredDispH;
 				}
-			} else {
-				selW = selH = Math.min( dispW, dispH ) * 0.5;
 			}
 
 			// Capture image bounds in canvas-space for the change listener.
@@ -336,8 +349,12 @@
 			const safeW = snap( Math.min( Math.round( selW * scaleX ), natW - x1 ), natW - x1, 1 );
 			const safeH = snap( Math.min( Math.round( selH * scaleY ), natH - y1 ), natH - y1, 1 );
 
-			const dstWidth  = currentOpts.minWidth  ? currentOpts.minWidth  : safeW;
-			const dstHeight = currentOpts.minHeight ? currentOpts.minHeight : safeH;
+			// If the source image is smaller than desired, ClassicPress will upscale
+			// via wp_crop_image() — just pass the full crop coordinates as-is.
+			// The dst_width/dst_height tell the server what size to produce.
+			const imageIsTooSmall = natW < currentOpts.minWidth || natH < currentOpts.minHeight;
+			const dstWidth  = currentOpts.minWidth  || safeW;
+			const dstHeight = currentOpts.minHeight || safeH;
 
 			setLoading( true );
 
