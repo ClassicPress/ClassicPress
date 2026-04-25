@@ -108,7 +108,10 @@
 		cropperSel.addEventListener( 'keydown', function( e ) {
 			var step = e.shiftKey ? 10 : 1,
 				{ x, y, width, height } = cropperSel,
-				newX = x, newY = y, newW = width, newH = height;
+				newX = x,
+				newY = y,
+				newW = width,
+				newH = height;
 
 			switch ( e.key ) {
 				case 'ArrowLeft':  newX -= step;
@@ -126,7 +129,6 @@
 					newX = x - ( newW - width  ) / 2;
 					newY = y - ( newH - height ) / 2;
 					break;
-
 				case '-':
 					newW = Math.max( 10, width  - step * 2 );
 					newH = currentOpts.aspectRatio ? newW / currentOpts.aspectRatio : Math.max( 10, height - step * 2 );
