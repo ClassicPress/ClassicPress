@@ -106,19 +106,39 @@
 		}
 
 		cropperSel.addEventListener( 'keydown', function( e ) {
-			var step = e.shiftKey ? 10 : 1;
-			var { x, y, width, height } = cropperSel;
+			var step = e.shiftKey ? 10 : 1,
+				{ x, y, width, height } = cropperSel,
+				newX = x, newY = y, newW = width, newH = height;
 
 			switch ( e.key ) {
-				case 'ArrowLeft':  x -= step; break;
-				case 'ArrowRight': x += step; break;
-				case 'ArrowUp':    y -= step; break;
-				case 'ArrowDown':  y += step; break;
+				case 'ArrowLeft':  newX -= step;
+					break;
+				case 'ArrowRight': newX += step;
+					break;
+				case 'ArrowUp':    newY -= step;
+					break;
+				case 'ArrowDown':  newY += step;
+					break;
+				case '+':
+				case '=':
+					newW = width  + step * 2;
+					newH = currentOpts.aspectRatio ? newW / currentOpts.aspectRatio : height + step * 2;
+					newX = x - ( newW - width  ) / 2;
+					newY = y - ( newH - height ) / 2;
+					break;
+
+				case '-':
+					newW = Math.max( 10, width  - step * 2 );
+					newH = currentOpts.aspectRatio ? newW / currentOpts.aspectRatio : Math.max( 10, height - step * 2 );
+					newX = x + ( width  - newW ) / 2;
+					newY = y + ( height - newH ) / 2;
+					break;
+
 				default: return;
 			}
 
 			e.preventDefault();
-			cropperSel.$change( x, y, width, height );
+			cropperSel.$change( newX, newY, newW, newH );
 		} );
 
 		const grid = document.createElement( 'cropper-grid' );
