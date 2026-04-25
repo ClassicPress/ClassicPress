@@ -84,16 +84,19 @@
 
 		cropperCanvas = document.createElement( 'cropper-canvas' );
 		cropperCanvas.setAttribute( 'background', '' );
+		cropperCanvas.style.width  = '100%';
+		cropperCanvas.style.height = '100%';
 
 		cropperImage = document.createElement( 'cropper-image' );
 		cropperImage.setAttribute( 'src', currentOpts.imageUrl );
 		cropperImage.setAttribute( 'alt', CROPPER.image_to_crop );
 		cropperImage.setAttribute( 'scalable', '' );
+		cropperImage.setAttribute( 'initial-center-size', 'contain' );
 
 		const shade = document.createElement( 'cropper-shade' );
 
 		cropperSel = document.createElement( 'cropper-selection' );
-		cropperSel.setAttribute( 'initial-coverage', '1' );
+		cropperSel.setAttribute( 'initial-coverage', '0' );
 		cropperSel.setAttribute( 'movable', '' );
 		cropperSel.setAttribute( 'resizable', '' );
 		cropperSel.setAttribute( 'contain', '' );
@@ -143,7 +146,6 @@
 		buildCropperTree();
 		dialog.showModal();
 
-		// Constrain initial selection to the image bounds.
 		cropperImage.$ready( function() {
 			const shadowRoot = cropperImage.$getShadowRoot();
 			const imgEl      = shadowRoot.querySelector( 'img' );
@@ -163,22 +165,30 @@
 
 			var selW, selH;
 
-			if ( currentOpts.aspectRatio != null ) {
-				// Fit the selection to the displayed image, respecting the aspect ratio.
-				var ratio = currentOpts.aspectRatio; // width / height
+			if ( currentOpts.minWidth && currentOpts.minHeight ) {
+				const scaleX = dispW / natW;
+				const scaleY = dispH / natH;
+				const scale  = Math.min( scaleX, scaleY );
+				selW = currentOpts.minWidth  * scale;
+				selH = currentOpts.minHeight * scale;
+			} else if ( currentOpts.aspectRatio != null ) {
+				var ratio = currentOpts.aspectRatio;
 				if ( dispW / dispH > ratio ) {
-					// Image is wider than the ratio — constrain by height.
-					selH = dispH;
+					selH = dispH * 0.5;
 					selW = selH * ratio;
 				} else {
-					// Image is taller than the ratio — constrain by width.
-					selW = dispW;
+					selW = dispW * 0.5;
 					selH = selW / ratio;
 				}
 			} else {
-				// No ratio set — fall back to the original square behaviour.
-				selW = selH = Math.min( dispW, dispH );
+				selW = selH = Math.min( dispW, dispH ) * 0.5;
 			}
+
+			// Capture image bounds in canvas-space for the change listener.
+			const imgMinX = offX;
+			const imgMinY = offY;
+			const imgMaxX = offX + dispW;
+			const imgMaxY = offY + dispH;
 
 			cropperSel.$change(
 				offX + ( dispW - selW ) / 2,
@@ -189,29 +199,19 @@
 
 			var isClamping = false;
 
-			cropperSel.addEventListener( 'change', function ( e ) {
+			cropperSel.addEventListener( 'change', function() {
 				if ( isClamping ) {
 					return;
 				}
 
-				const canvasRect = cropperCanvas.getBoundingClientRect();
-				const imgRect    = ( shadowRoot.querySelector( 'img' ) || cropperImage ).getBoundingClientRect();
-
-				const minX = imgRect.left - canvasRect.left;
-				const minY = imgRect.top  - canvasRect.top;
-				const maxX = minX + imgRect.width;
-				const maxY = minY + imgRect.height;
-
 				let { x, y, width, height } = cropperSel;
 
-				// Clamp position only — don't touch width/height.
-				x = Math.max( minX, Math.min( x, maxX - width ) );
-				y = Math.max( minY, Math.min( y, maxY - height ) );
+				const clampedX = Math.max( imgMinX, Math.min( x, imgMaxX - width ) );
+				const clampedY = Math.max( imgMinY, Math.min( y, imgMaxY - height ) );
 
-				if ( x !== cropperSel.x || y !== cropperSel.y ) {
-					e.preventDefault();
+				if ( clampedX !== x || clampedY !== y ) {
 					isClamping = true;
-					cropperSel.$change( x, y, width, height );
+					cropperSel.$change( clampedX, clampedY, width, height );
 					isClamping = false;
 				}
 			} );
