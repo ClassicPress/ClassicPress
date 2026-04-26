@@ -316,7 +316,8 @@ wp_print_scripts();
 		<h2 id="customizer-title" class="screen-reader-text">
 			<?php printf( esc_html__( 'Customizing: %s' ), esc_html( get_bloginfo( 'name', 'display' ) ) ); ?>
 		</h2>
-		<form id="customize-controls" class="wrap wp-full-overlay-sidebar" style="position: static;z-index: 5;"
+		<form id="customize-controls"
+			class="wrap wp-full-overlay-sidebar"
 			action="<?php echo esc_url( admin_url( 'customize.php' ) ); ?>"
 			method="post"
 			accept-charset="<?php bloginfo( 'charset' ); ?>"
@@ -549,7 +550,7 @@ wp_print_scripts();
 								</button>
 							</li>
 							<li class="customize-themes-full-container-container">
-								<div class="customize-themes-full-container animate" style="top: 0; right: 0;border: 0;height: 100vh;min-width: calc(100% - max(18%, 300px));" open>
+								<div class="customize-themes-full-container animate" open>
 									<div class="customize-themes-notifications"></div>
 									<div class="filter-drawer">
 										<?php
@@ -618,7 +619,7 @@ wp_print_scripts();
 														<span class="filter-count-filters">
 															<?php printf( __( 'Filter themes (%s)' ), '<span class="theme-filter-count">0</span>' ); ?>
 														</span>
-													</button>												
+													</button>
 												</div>
 											</div>
 											<div class="error unexpected-error" style="display: none; ">
@@ -638,7 +639,7 @@ wp_print_scripts();
 
 												</p>
 											</div>
-											<ul class="themes" style="overflow-y: scroll;max-height: 100vh;">
+											<ul class="themes wp-clearfix">
 
 												<?php
 												$themes_control = new WP_Customize_Theme_Control( $wp_customize, 'themes', array() );

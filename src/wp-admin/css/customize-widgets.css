@@ -234,6 +234,22 @@
 	width: auto !important;
 }
 
+#available-widgets {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: clamp(300px, 18%, 600px) !important;
+	visibility: hidden;
+	overflow-x: hidden;
+	overflow-y: auto;
+	width: 300px;
+	margin: 0;
+	z-index: 4;
+	background: #f0f0f1;
+	transition: left .18s;
+	border-right: 1px solid #dcdcde;
+}
+
 /* Keep rule that is no longer necessary on widgets.php. */
 #available-widgets .widget-action {
 	display: none;

@@ -70,7 +70,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 			?>
 		
 			<li id="customize-control-installed_theme_<?php echo esc_attr( $theme['id'] ); ?>"
-				class="customize-control customize-control-theme theme active"
+				class="theme active"
 				data-id="<?php echo esc_attr( $theme['id'] ); ?>"
 				data-activate-nonce="<?php echo esc_attr( $theme['actions']['activate'] ); ?>"
 				data-customize="<?php echo esc_attr( $theme['actions']['customize'] ); ?>"
@@ -168,7 +168,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 			?>
 
 			<li id="customize-control-installed_theme_<?php echo esc_attr( $theme['id'] ); ?>"
-				class="customize-control customize-control-theme theme"
+				class="theme"
 				data-id="<?php echo esc_attr( $theme['id'] ); ?>"
 				data-activate-nonce="<?php echo esc_attr( $theme['actions']['activate'] ); ?>" 
 				data-customize="<?php echo esc_attr( $theme['actions']['customize'] ); ?>"
