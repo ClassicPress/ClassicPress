@@ -34,6 +34,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		hash = window.location.hash.replace( '#', '' ),
 		section = document.getElementById( 'sub-accordion-section-custom_css' );
 
+	const colorSchemeInputs = form.querySelectorAll( 'input[name="_customize-radio-colorscheme"]' ),
+		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' );
+
 	// Go direct to appropriate Customizer panel if its hash is specified in the URL
 	if ( hash === 'menu-to-edit' ) {
 		hash = 'sub-accordion-panel-nav_menus';
