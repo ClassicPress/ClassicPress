@@ -212,7 +212,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 				mediaItem.remove();
 				closeButton.click();
-				resetDataOrdering();
+				resetDataOrdering( 'minus' );
 			} else {
 				console.log( _wpMediaGridSettings.delete_failed );
 			}
@@ -223,7 +223,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	// Reset ordering of remaining media items after deletion
-	function resetDataOrdering() {
+	function resetDataOrdering( sign ) {
 		var items = document.querySelectorAll( '.media-item' ),
 			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
 			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
@@ -263,7 +263,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var id = location.search.match( /\d+/g )[0];
 		if ( window.confirm( _wpMediaGridSettings.confirm_delete ) ) {
 			deleteItem( id );
-			resetDataOrdering();
 		}
 	} );
 
@@ -1175,7 +1174,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				setTimeout( function() {
 					pond.removeFile( file.id );
 				}, 100 );
-				resetDataOrdering();
+				resetDataOrdering( 'plus' );
 			}
 		},
 		labelTapToUndo: _wpMediaGridSettings.tap_close,
