@@ -1958,7 +1958,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 
 				const href = anchor.getAttribute( 'href' );
-				if ( ! href || href.startsWith( '#' ) || href.startsWith( 'javascript:' ) ) {
+				if ( ! href || href.startsWith( '#' ) ) {
+					return;
+				}
+
+				try {
+					const testUrl = new URL( href, iframeDoc.baseURI );
+					if ( testUrl.protocol === 'javascript:' ) {
+						return;
+					}
+				} catch ( e ) {
 					return;
 				}
 
