@@ -118,7 +118,6 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 				<input type="range" min="0" max="359"
 					id="cp-hue-slider"
 					class="hue-slider"
-					aria-labelledby="<?php echo esc_attr( $this->id ); ?>-label"
 					value="<?php echo esc_attr( $this->value() ); ?>"
 					<?php $this->link(); ?>
 				>
