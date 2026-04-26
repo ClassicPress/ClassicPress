@@ -978,7 +978,7 @@ p.customize-section-description {
 }
 
 input[type="range"].hue-slider {
-	-webkit-appearance: none;
+	-moz-appearance: none;
 	appearance: none;
 	width: 100%;
 	height: 24px;
@@ -1004,7 +1004,6 @@ input[type="range"].hue-slider {
 }
 
 input[type="range"].hue-slider::-webkit-slider-thumb {
-	-webkit-appearance: none;
 	appearance: none;
 	width: 20px;
 	height: 20px;
