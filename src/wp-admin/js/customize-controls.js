@@ -1969,7 +1969,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					return;
 				}
 
-				if ( url.protocol === 'javascript' + ':' ) {
+				if ( url.protocol !== 'https:' && url.protocol !== 'http:' ) {
 					return;
 				}
 
