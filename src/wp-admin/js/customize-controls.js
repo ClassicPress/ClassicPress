@@ -1976,7 +1976,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var items = document.querySelectorAll( '.media-item' ),
 			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
 			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
-			count2 = sign === 'minus' ? parseInt( count[2] - 1, 10 ) : parseInt( count[2] + 1, 10 ),
+			count2 = sign === 'minus' ? parseInt( count[2], 10 ) - 1 : parseInt( count[2], 10 ) + 1,
 			count5 = '';
 
 		items.forEach( function( item, index ) {
