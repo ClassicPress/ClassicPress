@@ -2600,13 +2600,19 @@ body.adding-widget .add-new-widget:before,
 }
 
 #available-menu-items {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: clamp(300px, 18%, 600px) !important;
+	visibility: hidden;
+	overflow-x: hidden;
+	overflow-y: auto;
 	width: 300px;
 	margin: 0;
+	z-index: 99;
 	background: #f0f0f1;
 	transition: left .18s;
 	border-right: 1px solid #dcdcde;
-	display: none;
-	overflow-y: scroll;
 }
 
 #available-widgets .customize-section-title,
