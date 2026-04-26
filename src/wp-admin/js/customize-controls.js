@@ -34,6 +34,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		hash = window.location.hash.replace( '#', '' ),
 		section = document.getElementById( 'sub-accordion-section-custom_css' );
 
+	const iframe = document.querySelector( '#customize-preview iframe' );
+
 	// Go direct to appropriate Customizer panel if its hash is specified in the URL
 	if ( hash === 'menu-to-edit' ) {
 		hash = 'sub-accordion-panel-nav_menus';
@@ -1941,4 +1943,53 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
 	}
+
+	/**
+	 * Enable navigation in the preview pane via hyperlinks.
+	 */
+	iframe.addEventListener( 'load', function () {
+		try {
+			const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+			iframeDoc.addEventListener( 'click', function ( e ) {
+				const anchor = e.target.closest( 'a' );
+				if ( ! anchor ) {
+					return;
+				}
+
+				const href = anchor.getAttribute( 'href' );
+				if ( ! href || href.startsWith( '#' ) ) {
+					return;
+				}
+
+				let url;
+				try {
+					url = new URL( href, iframeDoc.baseURI );
+				} catch ( urlError ) {
+					return;
+				}
+
+				if ( url.protocol !== 'https:' && url.protocol !== 'http:' ) {
+					return;
+				}
+
+				// Only follow same-origin links in the preview.
+				if ( url.origin !== window.location.origin ) {
+					return;
+				}
+
+				e.preventDefault();
+
+				// Preserve the customizer messenger params.
+			    url.searchParams.set( 'customize_changeset_uuid', iframe.src.match( /customize_changeset_uuid=([^&]+)/ )?.[1] ?? '' );
+				url.searchParams.set( 'customize_theme', iframe.src.match( /customize_theme=([^&]+)/ )?.[1] ?? '' );
+				url.searchParams.set( 'customize_messenger_channel', 'preview-0' );
+
+				iframe.src = url.toString();
+			} );
+		} catch ( err ) {
+			// Cross-origin guard, just in case
+			console.warn( '[Customizer] Could not attach preview link handler:', err );
+		}
+	} );
 } );
