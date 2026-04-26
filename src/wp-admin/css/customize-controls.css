@@ -892,7 +892,7 @@ h3.customize-section-title {
 }
 
 .theme-browser .themes {
-	padding: 2px 2em 3em;
+	padding: 2px 2em 1em;
 }
 
 
@@ -1225,7 +1225,6 @@ input[type="range"].hue-slider::-moz-range-track {
 .wp-full-overlay-sidebar {
 	background: #f0f0f1;
 	border-right: 1px solid #dcdcde;
-	width: 345px;
 }
 
 .wp-full-overlay-sidebar.collapsed {
@@ -2156,7 +2155,7 @@ input[type="range"].hue-slider::-moz-range-track {
 
 @media screen and (min-width: 1670px) {
 	.customize-preview-header.themes-filter-bar {
-		width: calc(82% + 1px);
+		width: 82%;
 		right: 0;
 		left: initial;
 	}
