@@ -2950,6 +2950,7 @@ body.adding-widget .add-new-widget:before,
 	body.adding-menu-items div#available-menu-items,
 	body.outer-section-open div#customize-sidebar-outer-content {
 		width: 100%;
+		left: 0 !important;
 	}
 
 	#available-widgets .customize-section-title,
