@@ -112,7 +112,11 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 			if ( $is_hue_slider ) {
 				?>
 
+				<label for="cp-hue-slider" class="screen-reader-text">
+					<?php esc_html_e( 'Custom Color Hue' ); ?>
+				</label>
 				<input type="range" min="0" max="359"
+					id="cp-hue-slider"
 					class="hue-slider"
 					aria-labelledby="<?php echo esc_attr( $this->id ); ?>-label"
 					value="<?php echo esc_attr( $this->value() ); ?>"
