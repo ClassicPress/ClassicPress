@@ -318,98 +318,26 @@ class WP_Customize_Section {
 	/**
 	 * Render the section UI in a subclass.
 	 *
-	 * Sections are now rendered in JS by default, see WP_Customize_Section::print_template().
-	 *
-	 * @since 3.4.0
+	 * @since CP-2.8.0
 	 */
-	protected function render() {}
-
-	/**
-	 * Render the section's JS template.
-	 *
-	 * This function is only run for section types that have been registered with
-	 * WP_Customize_Manager::register_section_type().
-	 *
-	 * @since 4.3.0
-	 *
-	 * @see WP_Customize_Manager::render_template()
-	 */
-	public function print_template() {
+	protected function render() {
 		?>
-		<script type="text/html" id="tmpl-customize-section-<?php echo $this->type; ?>">
-			<?php $this->render_template(); ?>
-		</script>
-		<?php
-	}
-
-	/**
-	 * An Underscore (JS) template for rendering this section.
-	 *
-	 * Class variables for this section class are available in the `data` JS object;
-	 * export custom variables by overriding WP_Customize_Section::json().
-	 *
-	 * @since 4.3.0
-	 *
-	 * @see WP_Customize_Section::print_template()
-	 */
-	protected function render_template() {
-		?>
-		<li id="accordion-section-{{ data.id }}" class="accordion-section control-section control-section-{{ data.type }}">
+		<li id="accordion-section-<?php echo esc_attr( $this->id ); ?>"
+			class="accordion-section control-section control-section-<?php echo esc_attr( $this->type ); ?>"
+		>
 			<h3 class="accordion-section-title" tabindex="0">
-				{{ data.title }}
+				<?php echo esc_html( $this->title ); ?>
 				<span class="screen-reader-text">
 					<?php
 					/* translators: Hidden accessibility text. */
-					_e( 'Press return or enter to open this section' );
+					esc_html_e( 'Press return or enter to open this section' );
 					?>
 				</span>
 			</h3>
-			<ul class="accordion-section-content">
-				<li class="customize-section-description-container section-meta no-drag <# if ( data.description_hidden ) { #>customize-info<# } #>">
-					<div class="customize-section-title">
-						<button class="customize-section-back" tabindex="-1">
-							<span class="screen-reader-text">
-								<?php
-								/* translators: Hidden accessibility text. */
-								_e( 'Back' );
-								?>
-							</span>
-						</button>
-						<h3>
-							<span class="customize-action">
-								{{{ data.customizeAction }}}
-							</span>
-							{{ data.title }}
-						</h3>
-						<# if ( data.description && data.description_hidden ) { #>
-							<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false"><span class="screen-reader-text">
-								<?php
-								/* translators: Hidden accessibility text. */
-								_e( 'Help' );
-								?>
-							</span></button>
-							<div class="description customize-section-description">
-								{{{ data.description }}}
-							</div>
-						<# } #>
-
-						<div class="customize-control-notifications-container"></div>
-					</div>
-
-					<# if ( data.description && ! data.description_hidden ) { #>
-						<div class="description customize-section-description">
-							{{{ data.description }}}
-						</div>
-					<# } #>
-				</li>
-			</ul>
 		</li>
 		<?php
 	}
 }
-
-/** WP_Customize_Themes_Section class */
-require_once ABSPATH . WPINC . '/customize/class-wp-customize-themes-section.php';
 
 /** WP_Customize_Sidebar_Section class */
 require_once ABSPATH . WPINC . '/customize/class-wp-customize-sidebar-section.php';
