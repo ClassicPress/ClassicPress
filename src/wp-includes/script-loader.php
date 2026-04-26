@@ -1197,6 +1197,7 @@ function wp_default_scripts( $scripts ) {
 			'current'                 => esc_html__( 'Current:' ),
 			'currently'               => __( 'Currently set to:' ),
 			'customizeUrl'            => 'http' . ( ! empty( $_SERVER['HTTPS'] ) ? 's' : '' ) . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'],
+			'new_filename'            => __( 'Enter new filename' ),
 		)
 	);
 	$scripts->add( 'customize-selective-refresh', "/wp-includes/js/customize-selective-refresh$suffix.js", array( 'wp-util', 'customize-preview' ), false, 1 );
