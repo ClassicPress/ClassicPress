@@ -1962,17 +1962,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					return;
 				}
 
+				let url;
 				try {
-					const testUrl = new URL( href, iframeDoc.baseURI );
-					if ( testUrl.protocol === 'javascript:' ) {
-						return;
-					}
-				} catch ( e ) {
+					url = new URL( href, iframeDoc.baseURI );
+				} catch ( urlError ) {
 					return;
 				}
 
-				// Resolve to absolute URL.
-				const url = new URL( href, iframeDoc.baseURI );
+				if ( url.protocol === 'javascript:' ) {
+					return;
+				}
 
 				// Only follow same-origin links in the preview.
 				if ( url.origin !== window.location.origin ) {
