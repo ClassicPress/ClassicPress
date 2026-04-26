@@ -4070,8 +4070,8 @@ function wp_get_canonical_url( $post = null ) {
  */
 function rel_canonical() {
 	if ( is_front_page() && is_home() ) {
-        echo '<link rel="canonical" href="' . esc_url( home_url( '/' ) ) . '">' . "\n";
-    } elseif ( ! is_singular() ) {
+		echo '<link rel="canonical" href="' . esc_url( home_url( '/' ) ) . '">' . "\n";
+	} elseif ( ! is_singular() ) {
 		return;
 	}
 
