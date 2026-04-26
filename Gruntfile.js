@@ -589,7 +589,6 @@ module.exports = function(grunt) {
 				src: [
 					'twenty*/**/*.js',
 					// Third party scripts
-					'!twentyseventeen/assets/js/html5.js',
 					'!twentyseventeen/assets/js/jquery.scrollTo.js'
 				]
 			},
