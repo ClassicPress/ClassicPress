@@ -1767,6 +1767,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Copy URL
 			} else if ( e.target.className.includes( 'copy-attachment-url' ) ) {
 				copyToClipboard( e.target );
+
+			// Delete media item
+			} else if ( e.target.className.includes( 'delete-attachment' ) ) {
+				id = document.querySelector( '.media-item.selected' ).id;
+				if ( id && window.confirm( _wpCustomizeControlsL10n.confirm_delete ) ) {
+					deleteItem( id );
+				}
 			}
 		}
 	} );
@@ -1899,7 +1906,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					setTimeout( function() {
 						pond.removeFile( file.id );
 					}, 100 );
-					resetDataOrdering();
+					resetDataOrdering( 'plus' );
 				}
 			},
 			onprocessfiles: () => { // Called when all files in the queue have finished uploading
@@ -1920,25 +1927,67 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
+	// Delete attachment from within modal
+	function deleteItem( id ) {
+		var mediaItem = document.getElementById( id );
+		if ( ! mediaItem ) {
+			return;
+		}
+		var data = new URLSearchParams( {
+			action: 'delete-post',
+			_ajax_nonce: mediaItem.dataset.deleteNonce,
+			id: id.replace( 'media-', '' )
+		} );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result === 1 ) { // success
+				if ( mediaItem.previousElementSibling != null ) {
+					document.getElementById( mediaItem.previousElementSibling.id ).focus();
+				} else if ( mediaItem.nextElementSibling != null ) {
+					document.getElementById( mediaItem.nextElementSibling.id ).focus();
+				} else {
+					closeModal();
+				}
+				mediaItem.remove();
+				document.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+				resetDataOrdering( 'minus' );
+			} else {
+				console.log( _wpCustomizeControlsL10n.delete_failed );
+			}
+		} )
+		.catch( function( error ) {
+			console.error( _wpCustomizeControlsL10n.error, error );
+		} );
+	}
+
 	// Reset ordering of media items
-	function resetDataOrdering() {
+	function resetDataOrdering( sign ) {
 		var items = document.querySelectorAll( '.media-item' ),
 			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
 			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
-			count5;
+			count2 = sign === 'minus' ? parseInt( count[2] - 1, 10 ) : parseInt( count[2] + 1, 10 ),
+			count5 = '';
 
 		items.forEach( function( item, index ) {
 			item.setAttribute( 'data-order', parseInt( index + 1 ) );
 		} );
 
 		// Reset totals
-		if ( 5 in count ) { // allow for different languages
+		if ( count[5] ) { // allow for different languages
 			count5 = ' ' + count[5];
-		} else {
-			count5 = '';
 		}
-		document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + count5;
-
+		document.querySelector( '.load-more-count' ).textContent = items.length + ' ' + count[1] + ' ' + count2 + ' ' + count[4] + count5;
 		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
 	}
 } );
