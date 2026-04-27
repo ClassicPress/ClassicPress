@@ -4066,9 +4066,12 @@ function wp_get_canonical_url( $post = null ) {
  *
  * @since 2.9.0
  * @since 4.6.0 Adjusted to use `wp_get_canonical_url()`.
+ * @since CP-2.8.0 Adjusted to enable usage on home page.
  */
 function rel_canonical() {
-	if ( ! is_singular() ) {
+	if ( is_front_page() && is_home() ) {
+		echo '<link rel="canonical" href="' . esc_url( home_url( '/' ) ) . '">' . "\n";
+	} elseif ( ! is_singular() ) {
 		return;
 	}
 
