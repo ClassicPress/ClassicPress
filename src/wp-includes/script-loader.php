@@ -1113,7 +1113,7 @@ function wp_default_scripts( $scripts ) {
 
 	$scripts->add( 'customize-preview', "/wp-includes/js/customize-preview$suffix.js", array( 'wp-a11y' ), false, 1 );
 	$scripts->add( 'customize-controls-proxy', "/wp-admin/js/customize-controls-proxy$suffix.js", array( 'underscore' ), false, 1 );
-	$scripts->add( 'customize-controls', "/wp-admin/js/customize-controls$suffix.js", array( 'iris', 'cp-filepond', 'media-image-widget', 'cp-cropper', 'customize-controls-proxy' ), false, 1 );
+	$scripts->add( 'customize-controls', "/wp-admin/js/customize-controls$suffix.js", array( 'coloris', 'cp-filepond', 'media-image-widget', 'cp-cropper', 'customize-controls-proxy' ), false, 1 );
 	did_action( 'init' ) && $scripts->localize(
 		'customize-controls',
 		'_wpCustomizeControlsL10n',
@@ -1354,6 +1354,7 @@ function wp_default_scripts( $scripts ) {
 
 		$scripts->add( 'farbtastic', '/wp-admin/js/farbtastic.js', array( 'jquery' ), '1.2' );
 
+		// Deprecated since CP-2.8.0 Replaced by Coloris
 		$scripts->add( 'iris', "/wp-admin/js/iris$suffix.js", array( 'jquery-ui-widget' ), '1.1.1', 1 );
 		did_action( 'init' ) && $scripts->localize(
 			'iris',
@@ -1362,8 +1363,19 @@ function wp_default_scripts( $scripts ) {
 				'blank' => esc_url( site_url( '/wp-includes/images/blank.gif' ) ),
 			)
 		);
+
+		// Deprecated since CP-2.8.0
 		$scripts->add( 'wp-color-picker', "/wp-admin/js/color-picker$suffix.js", array( 'iris' ), false, 1 );
 		$scripts->set_translations( 'wp-color-picker' );
+
+		$scripts->add( 'coloris', '/wp-includes/js/coloris/coloris.min.js', array(), '0.25.0', 1 );
+		did_action( 'init' ) && $scripts->localize(
+			'coloris',
+			'COLORIS',
+			array(
+				'blank' => esc_url( site_url( '/wp-includes/images/blank.gif' ) ),
+			)
+		);
 
 		$scripts->add( 'dashboard', "/wp-admin/js/dashboard$suffix.js", array( 'jquery', 'admin-comments', 'postbox', 'wp-util', 'wp-a11y' ), false, 1 );
 		$scripts->set_translations( 'dashboard' );
@@ -1540,8 +1552,8 @@ function wp_default_styles( $styles ) {
 
 	$styles->add( 'login', "/wp-admin/css/login$suffix.css", array( 'dashicons', 'buttons', 'forms', 'l10n' ) );
 	$styles->add( 'install', "/wp-admin/css/install$suffix.css", array( 'dashicons', 'buttons', 'forms', 'l10n' ) );
-	$styles->add( 'wp-color-picker', "/wp-admin/css/color-picker$suffix.css" );
-	$styles->add( 'customize-controls', "/wp-admin/css/customize-controls$suffix.css", array( 'wp-admin', 'colors', 'cp-cropper' ) );
+	$styles->add( 'coloris', '/wp-includes/js/coloris/coloris.min.css', array(), '0.25.0' );
+	$styles->add( 'customize-controls', "/wp-admin/css/customize-controls$suffix.css", array( 'wp-admin', 'coloris', 'colors', 'cp-cropper' ) );
 	$styles->add( 'customize-widgets', "/wp-admin/css/customize-widgets$suffix.css", array( 'widgets', 'wp-admin', 'colors' ) );
 	$styles->add( 'customize-nav-menus', "/wp-admin/css/customize-nav-menus$suffix.css", array( 'wp-admin', 'colors' ) );
 	$styles->add( 'media-grid', "/wp-admin/css/media-grid$suffix.css", array( 'imgareaselect' ), '0.1.0' );
@@ -1579,6 +1591,7 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'wp-jquery-ui-dialog', "/wp-includes/css/jquery-ui-dialog$suffix.css", array( 'dashicons' ) ); // No longer used since CP-2.2.0
 	$styles->add( 'thickbox', '/wp-includes/js/thickbox/thickbox.css', array( 'dashicons' ) ); // No longer used since CP-2.2.0
 	$styles->add( 'wp-pointer', "/wp-includes/css/wp-pointer$suffix.css", array( 'dashicons' ) ); // No longer used since CP-2.6.0
+	$styles->add( 'wp-color-picker', "/wp-admin/css/color-picker$suffix.css" ); // No longer used since CP-2.8.0
 
 	// RTL CSS
 	$rtl_styles = array(
@@ -1598,7 +1611,6 @@ function wp_default_styles( $styles ) {
 		'site-icon',
 		'l10n',
 		'install',
-		'wp-color-picker',
 		'customize-controls',
 		'customize-widgets',
 		'customize-nav-menus',
@@ -1616,6 +1628,7 @@ function wp_default_styles( $styles ) {
 		// Deprecated CSS.
 		'deprecated-media',
 		'farbtastic',
+		'wp-color-picker',
 	);
 
 	foreach ( $rtl_styles as $rtl_style ) {
