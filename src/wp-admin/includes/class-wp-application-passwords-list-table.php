@@ -196,11 +196,15 @@ class WP_Application_Passwords_List_Table extends WP_List_Table {
 	 * Prints the JavaScript template for the new row item.
 	 *
 	 * @since 5.6.0
+	 *
+	 * Modified to use data attributes instead of backbone syntax
+	 *
+	 * @since CP-2.8.0
 	 */
 	public function print_js_template_row() {
 		list( $columns, $hidden, , $primary ) = $this->get_column_info();
 
-		echo '<tr data-uuid="{{ data.uuid }}">';
+		echo '<tr data-uuid>';
 
 		foreach ( $columns as $column_name => $display_name ) {
 			$is_primary = $primary === $column_name;
@@ -218,7 +222,8 @@ class WP_Application_Passwords_List_Table extends WP_List_Table {
 
 			switch ( $column_name ) {
 				case 'name':
-					echo '{{ data.name }}';
+					// Populated by renderTemplate() via data-name.
+					echo '<span data-name></span>';
 					break;
 				case 'created':
 					// JSON encoding automatically doubles backslashes to ensure they don't get lost when printing the inline JS.
@@ -228,13 +233,14 @@ class WP_Application_Passwords_List_Table extends WP_List_Table {
 					echo '—';
 					break;
 				case 'last_ip':
-					echo "{{ data.last_ip || '—' }}";
+					// Populated by renderTemplate(); JS falls back to — when absent.
+					echo '<span data-last_ip></span>';
 					break;
 				case 'revoke':
 					printf(
-						'<button type="button" class="button delete" aria-label="%1$s">%2$s</button>',
+						'<button type="button" class="button delete" data-aria-label="%1$s">%2$s</button>',
 						/* translators: %s: the application password's given name. */
-						esc_attr( sprintf( __( 'Revoke "%s"' ), '{{ data.name }}' ) ),
+						esc_attr( sprintf( __( 'Revoke "%s"' ), '' ) ), // Name suffix appended by JS
 						esc_html__( 'Revoke' )
 					);
 					break;
