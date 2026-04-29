@@ -1833,6 +1833,8 @@ final class WP_Customize_Manager {
 			if ( ! isset( $this->_post_values ) ) {
 				if ( isset( $_POST['customized'] ) ) {
 					$post_values = json_decode( wp_unslash( $_POST['customized'] ), true );
+				} elseif ( isset( $_GET['customized'] ) ) {
+					$post_values = json_decode( wp_unslash( $_GET['customized'] ), true );
 				} else {
 					$post_values = array();
 				}

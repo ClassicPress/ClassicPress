@@ -236,6 +236,28 @@ wp_add_inline_script(
 	'window.updatedControls = window.updatedControls || {};',
 	'before'
 );
+
+// Custom logo dimensions
+$logo_support = get_theme_support( 'custom-logo' );
+$logo_data = array(
+	'width'      => null,
+	'height'     => null,
+	'flexWidth'  => false,
+	'flexHeight' => false,
+);
+if ( $logo_support && ! empty( $logo_support[0] ) ) {
+	$largs = $logo_support[0];
+	$logo_data['width'] = isset( $largs['width'] ) ? (int) $largs['width'] : null;
+	$logo_data['height'] = isset( $largs['height'] ) ? (int) $largs['height'] : null;
+	$logo_data['flexWidth'] = ! empty( $largs['flex-width'] );
+	$logo_data['flexHeight'] = ! empty( $largs['flex-height'] );
+}
+wp_add_inline_script(
+	'customize-controls',
+	'var _cpCustomLogo = ' . wp_json_encode( $logo_data ) . ';',
+	'before'
+);
+
 wp_enqueue_script( 'customize-nav-menus' );
 wp_enqueue_script( 'customize-widgets' );
 wp_enqueue_script( 'theme' );

@@ -386,7 +386,7 @@ window.addEventListener( 'message', function( event ) {
  * Receive postMessages from the preview iframe about menu item updates
  */
 window.addEventListener( 'message', function( event ) {
-	var message, target, src;
+	var message, target, url;
 
 	if ( event.origin !== location.origin ) {
 		return;
@@ -408,7 +408,9 @@ window.addEventListener( 'message', function( event ) {
 		return;
 	}
 
-	src = target.iframe.src;
+	url = new URL( target.iframe.src );
+	url.searchParams.set( 'customized', JSON.stringify( window._cpDirtySettings ) );
+
 	target.iframe.src = '';
-	target.iframe.src = src;
+	target.iframe.src = url.toString();
 } );

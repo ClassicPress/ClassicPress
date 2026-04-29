@@ -622,6 +622,11 @@
 
 			if ( ! handledByPartial ) {
 				setValue( id, value, true );
+
+				// Only do a full refresh if the setting has no live preview binding
+				if ( ! api._settings[ id ] || api._settings[ id ]._handlers.length === 0 ) {
+					wp.customize.selectiveRefresh.requestFullRefresh();
+				}
 			}
 
 			if ( id.startsWith( 'sidebars_widgets[' ) ) {
