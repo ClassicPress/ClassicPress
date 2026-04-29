@@ -176,7 +176,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function() {
-			var theme = document.getElementById( slug ),
+			var theme = document.getElementById( slug ) || document.getElementById( 'customize-control-installed_theme_' + slug ),
 				notice = theme.querySelector( '.update-message' );
 
 			notice.innerHTML = '<p>' + _wpThemeSettings.l10n.updated + '</p>';
@@ -312,6 +312,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Open the modal or perform other operations
 	document.addEventListener( 'click', function( e ) {
 		var img, template, clone, response, span, topModal,
+			customizer = document.body.className.includes( 'wp-customizer' ) ? true : false,
 			theme = e.target.closest( '.theme' ),
 			allThemes = document.querySelectorAll( '.themes li:not( .add-new-theme )' ),
 			firstElement = document.querySelector( '.themes li' ),
@@ -327,17 +328,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				dialog.querySelector( '.theme-wrap' ).append( clone );
 
 				// Set URL
-				queryParams.set( 'theme', theme.id );
+				queryParams.set( 'theme', customizer ? theme.dataset.id : theme.id );
 				history.replaceState( null, null, '?' + queryParams.toString() );
 
 				// Set theme ID and previous and next themes
-				dialog.dataset.highlightedTheme = theme.id;
-				prevElement = document.getElementById( dialog.dataset.highlightedTheme ).previousElementSibling;
+				dialog.dataset.highlightedTheme = customizer ? theme.dataset.id : theme.id;
+				prevElement = document.getElementById( theme.id ).previousElementSibling;
 				if ( prevElement == null ) { // first theme
 					dialog.querySelector( '.left.dashicons.dashicons-no' ).disabled = true;
 				}
 
-				nextElement = document.getElementById( dialog.dataset.highlightedTheme ).nextElementSibling;
+				nextElement = document.getElementById( theme.id ).nextElementSibling;
 				if ( nextElement == null ) { // last theme
 					dialog.querySelector( '.right.dashicons.dashicons-no' ).disabled = true;
 				}
@@ -500,9 +501,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 		// Update a theme
-		} else if ( e.target.className.includes( 'update-button-link' ) ) {
+		} else if ( e.target.className.includes( 'update-button-link' ) ) { // themes.php
 			e.target.closest( '.update-message' ).classList.add( 'updating-message' );
 			updateIndividualTheme( e.target.closest( 'li' ).id );
+		} else if ( e.target.className.includes( 'update-theme' ) ) { // Customizer
+			e.target.closest( '.update-message' ).classList.add( 'updating-message' );
+			updateIndividualTheme( e.target.closest( 'li' ).dataset.id );
 
 		// Get further details about a theme when it has an update
 		} else if ( e.target.className.includes( 'open-plugin-details-modal' ) ) {

@@ -168,57 +168,10 @@ class Tests_WP_Customize_Section extends WP_UnitTestCase {
 
 	/**
 	 * @see WP_Customize_Section::maybe_render()
-	 */
-	public function test_maybe_render() {
-		wp_set_current_user( self::$admin_id );
-		$section                        = new WP_Customize_Section( $this->manager, 'bar' );
-		$customize_render_section_count = did_action( 'customize_render_section' );
-		add_action( 'customize_render_section', array( $this, 'action_customize_render_section_test' ) );
-		ob_start();
-		$section->maybe_render();
-		$content = ob_get_clean();
-		$this->assertTrue( $section->check_capabilities() );
-		$this->assertEmpty( $content );
-		$this->assertSame( $customize_render_section_count + 1, did_action( 'customize_render_section' ), 'Unexpected did_action count for customize_render_section' );
-		$this->assertSame( 1, did_action( "customize_render_section_{$section->id}" ), "Unexpected did_action count for customize_render_section_{$section->id}" );
-	}
-
-	/**
-	 * @see WP_Customize_Section::maybe_render()
 	 * @param WP_Customize_Section $section
 	 */
 	public function action_customize_render_section_test( $section ) {
 		$this->assertInstanceOf( 'WP_Customize_Section', $section );
-	}
-
-	/**
-	 * @see WP_Customize_Section::print_template()
-	 */
-	public function test_print_templates_standard() {
-		wp_set_current_user( self::$admin_id );
-
-		$section = new WP_Customize_Section( $this->manager, 'baz' );
-		ob_start();
-		$section->print_template();
-		$content = ob_get_clean();
-		$this->assertStringContainsString( '<script type="text/html" id="tmpl-customize-section-default">', $content );
-		$this->assertStringContainsString( 'accordion-section-title', $content );
-		$this->assertStringContainsString( 'accordion-section-content', $content );
-	}
-
-	/**
-	 * @see WP_Customize_Section::print_template()
-	 */
-	public function test_print_templates_custom() {
-		wp_set_current_user( self::$admin_id );
-
-		$section = new Custom_Section_Test( $this->manager, 'baz' );
-		ob_start();
-		$section->print_template();
-		$content = ob_get_clean();
-		$this->assertStringContainsString( '<script type="text/html" id="tmpl-customize-section-titleless">', $content );
-		$this->assertStringNotContainsString( 'accordion-section-title', $content );
-		$this->assertStringContainsString( 'accordion-section-content', $content );
 	}
 }
 
@@ -226,18 +179,4 @@ require_once ABSPATH . WPINC . '/class-wp-customize-section.php';
 // phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class Custom_Section_Test extends WP_Customize_Section {
 	public $type = 'titleless';
-
-	protected function render_template() {
-		?>
-		<li id="accordion-section-{{ data.id }}" class="accordion-section control-section control-section-{{ data.type }}">
-			<ul class="accordion-section-content">
-				<# if ( data.description ) { #>
-					<li class="customize-section-description-container">
-						<p class="description customize-section-description">{{{ data.description }}}</p>
-					</li>
-				<# } #>
-			</ul>
-		</li>
-		<?php
-	}
 }

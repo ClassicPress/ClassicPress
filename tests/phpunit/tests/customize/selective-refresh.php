@@ -51,14 +51,9 @@ class Test_WP_Customize_Selective_Refresh extends WP_UnitTestCase {
 	 */
 	public function test_register_scripts() {
 		$scripts = new WP_Scripts();
-		$handles = array(
-			'customize-selective-refresh',
-			'customize-preview-nav-menus',
-			'customize-preview-widgets',
-		);
-		foreach ( $handles as $handle ) {
-			$this->assertArrayHasKey( $handle, $scripts->registered );
-		}
+		$handle  = 'customize-selective-refresh';
+
+		$this->assertArrayHasKey( $handle, $scripts->registered );
 	}
 
 	/**

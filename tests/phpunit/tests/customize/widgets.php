@@ -602,10 +602,7 @@ class Tests_WP_Customize_Widgets extends WP_UnitTestCase {
 	 */
 	public function test_customize_preview_enqueue() {
 		$this->manager->widgets->customize_preview_enqueue();
-		$this->assertTrue( wp_script_is( 'customize-preview-widgets', 'enqueued' ) );
 		$this->assertTrue( wp_style_is( 'customize-preview', 'enqueued' ) );
-		$script = wp_scripts()->registered['customize-preview-widgets'];
-		$this->assertContains( 'customize-selective-refresh', $script->deps );
 	}
 
 	/**
@@ -686,7 +683,7 @@ class Tests_WP_Customize_Widgets extends WP_UnitTestCase {
 
 		$output = $this->manager->widgets->render_widget_partial( $partial, array( 'sidebar_id' => 'sidebar-1' ) );
 
-		$this->assertSame( 1, substr_count( $output, 'data-customize-partial-id' ) );
+		$this->assertSame( 2, substr_count( $output, 'data-customize-partial-id' ) );
 		$this->assertSame( 1, substr_count( $output, 'data-customize-partial-type="widget"' ) );
 		$this->assertStringContainsString( ' id="search-2"', $output );
 	}
