@@ -841,121 +841,156 @@ final class WP_Screen {
 			$help_class .= ' no-sidebar';
 		}
 
-		// Time to render!
+		if ( $help_sidebar || $this->show_screen_options() ) {
+			// Time to render!
+			?>
+
+			<div id="screen-meta-container">
+
+			<?php
+		}
 		?>
-		<div id="screen-meta" class="metabox-prefs">
 
-			<div id="contextual-help-wrap" class="<?php echo esc_attr( $help_class ); ?>" tabindex="-1" aria-label="<?php esc_attr_e( 'Contextual Help Tab' ); ?>">
-				<div id="contextual-help-back"></div>
-				<div id="contextual-help-columns">
-					<div class="contextual-help-tabs">
-						<ul>
-						<?php
-						$class = ' class="active"';
-						foreach ( $this->get_help_tabs() as $tab ) :
-							$link_id  = "tab-link-{$tab['id']}";
-							$panel_id = "tab-panel-{$tab['id']}";
-							?>
+			<div id="screen-meta" class="metabox-prefs">
 
-							<li id="<?php echo esc_attr( $link_id ); ?>"<?php echo $class; ?>>
-								<a href="<?php echo esc_url( "#$panel_id" ); ?>" aria-controls="<?php echo esc_attr( $panel_id ); ?>">
-									<?php echo esc_html( $tab['title'] ); ?>
-								</a>
-							</li>
+				<div id="contextual-help-wrap" class="<?php echo esc_attr( $help_class ); ?>" tabindex="-1" aria-label="<?php esc_attr_e( 'Contextual Help Tab' ); ?>">
+					<div id="contextual-help-back"></div>
+					<div id="contextual-help-columns">
+						<div class="contextual-help-tabs">
+							<ul>
+
 							<?php
-							$class = '';
-						endforeach;
-						?>
-						</ul>
-					</div>
-
-					<?php if ( $help_sidebar ) : ?>
-					<div class="contextual-help-sidebar">
-						<?php echo $help_sidebar; ?>
-					</div>
-					<?php endif; ?>
-
-					<div class="contextual-help-tabs-wrap">
-						<?php
-						$classes = 'help-tab-content active';
-						foreach ( $this->get_help_tabs() as $tab ) :
-							$panel_id = "tab-panel-{$tab['id']}";
-							?>
-
-							<div id="<?php echo esc_attr( $panel_id ); ?>" class="<?php echo $classes; ?>">
-								<?php
-								// Print tab content.
-								echo $tab['content'];
-
-								// If it exists, fire tab callback.
-								if ( ! empty( $tab['callback'] ) ) {
-									call_user_func_array( $tab['callback'], array( $this, $tab ) );
-								}
+							$class = ' class="active"';
+							foreach ( $this->get_help_tabs() as $tab ) :
+								$link_id  = "tab-link-{$tab['id']}";
+								$panel_id = "tab-panel-{$tab['id']}";
 								?>
-							</div>
+
+								<li id="<?php echo esc_attr( $link_id ); ?>"<?php echo $class; ?>>
+									<a href="<?php echo esc_url( "#$panel_id" ); ?>" aria-controls="<?php echo esc_attr( $panel_id ); ?>">
+										<?php echo esc_html( $tab['title'] ); ?>
+									</a>
+								</li>
+
+								<?php
+								$class = '';
+							endforeach;
+							?>
+
+							</ul>
+						</div>
+
+						<?php if ( $help_sidebar ) : ?>
+						<div class="contextual-help-sidebar">
+							<?php echo $help_sidebar; ?>
+						</div>
+						<?php endif; ?>
+
+						<div class="contextual-help-tabs-wrap">
+
 							<?php
-							$classes = 'help-tab-content';
-						endforeach;
-						?>
+							$classes = 'help-tab-content active';
+							foreach ( $this->get_help_tabs() as $tab ) :
+								$panel_id = "tab-panel-{$tab['id']}";
+								?>
+
+								<div id="<?php echo esc_attr( $panel_id ); ?>" class="<?php echo $classes; ?>">
+									<?php
+									// Print tab content.
+									echo $tab['content'];
+
+									// If it exists, fire tab callback.
+									if ( ! empty( $tab['callback'] ) ) {
+										call_user_func_array( $tab['callback'], array( $this, $tab ) );
+									}
+									?>
+								</div>
+
+								<?php
+								$classes = 'help-tab-content';
+							endforeach;
+							?>
+						</div>
 					</div>
 				</div>
+
+				<?php
+				// Setup layout columns.
+
+				/**
+				 * Filters the array of screen layout columns.
+				 *
+				 * This hook provides back-compat for plugins using the back-compat
+				 * Filters instead of add_screen_option().
+				 *
+				 * @since 2.8.0
+				 *
+				 * @param array     $empty_columns Empty array.
+				 * @param string    $screen_id     Screen ID.
+				 * @param WP_Screen $screen        Current WP_Screen instance.
+				 */
+				$columns = apply_filters( 'screen_layout_columns', array(), $this->id, $this );
+
+				if ( ! empty( $columns ) && isset( $columns[ $this->id ] ) ) {
+					$this->add_option( 'layout_columns', array( 'max' => $columns[ $this->id ] ) );
+				}
+
+				if ( $this->get_option( 'layout_columns' ) ) {
+					$this->columns = (int) get_user_option( "screen_layout_$this->id" );
+
+					if ( ! $this->columns && $this->get_option( 'layout_columns', 'default' ) ) {
+						$this->columns = $this->get_option( 'layout_columns', 'default' );
+					}
+				}
+				$GLOBALS['screen_layout_columns'] = $this->columns; // Set the global for back-compat.
+
+				// Add screen options.
+				if ( $this->show_screen_options() ) {
+					$this->render_screen_options();
+				}
+				?>
+
 			</div>
-		<?php
-		// Setup layout columns.
 
-		/**
-		 * Filters the array of screen layout columns.
-		 *
-		 * This hook provides back-compat for plugins using the back-compat
-		 * Filters instead of add_screen_option().
-		 *
-		 * @since 2.8.0
-		 *
-		 * @param array     $empty_columns Empty array.
-		 * @param string    $screen_id     Screen ID.
-		 * @param WP_Screen $screen        Current WP_Screen instance.
-		 */
-		$columns = apply_filters( 'screen_layout_columns', array(), $this->id, $this );
-
-		if ( ! empty( $columns ) && isset( $columns[ $this->id ] ) ) {
-			$this->add_option( 'layout_columns', array( 'max' => $columns[ $this->id ] ) );
-		}
-
-		if ( $this->get_option( 'layout_columns' ) ) {
-			$this->columns = (int) get_user_option( "screen_layout_$this->id" );
-
-			if ( ! $this->columns && $this->get_option( 'layout_columns', 'default' ) ) {
-				$this->columns = $this->get_option( 'layout_columns', 'default' );
-			}
-		}
-		$GLOBALS['screen_layout_columns'] = $this->columns; // Set the global for back-compat.
-
-		// Add screen options.
-		if ( $this->show_screen_options() ) {
-			$this->render_screen_options();
-		}
-		?>
-		</div>
-		<?php
-		if ( ! $this->get_help_tabs() && ! $this->show_screen_options() ) {
-			return;
-		}
-		?>
-		<div id="screen-meta-links">
-		<?php if ( $this->show_screen_options() ) : ?>
-			<div id="screen-options-link-wrap" class="hide-if-no-js screen-meta-toggle">
-			<button type="button" id="show-settings-link" class="button show-settings" aria-controls="screen-options-wrap" aria-expanded="false"><?php _e( 'Screen Options' ); ?></button>
-			</div>
 			<?php
-		endif;
-		if ( $this->get_help_tabs() ) :
+			if ( ! $this->get_help_tabs() && ! $this->show_screen_options() ) {
+				return;
+			}
 			?>
-			<div id="contextual-help-link-wrap" class="hide-if-no-js screen-meta-toggle">
-			<button type="button" id="contextual-help-link" class="button show-settings" aria-controls="contextual-help-wrap" aria-expanded="false"><?php _e( 'Help' ); ?></button>
+
+			<div id="screen-meta-links">
+
+			<?php
+			if ( $this->show_screen_options() ) :
+				?>
+
+				<div id="screen-options-link-wrap" class="hide-if-no-js screen-meta-toggle">
+					<button type="button" id="show-settings-link" class="button show-settings" aria-controls="screen-options-wrap" aria-expanded="false"><?php _e( 'Screen Options' ); ?></button>
+				</div>
+
+				<?php
+			endif;
+			if ( $this->get_help_tabs() ) :
+				?>
+
+				<div id="contextual-help-link-wrap" class="hide-if-no-js screen-meta-toggle">
+					<button type="button" id="contextual-help-link" class="button show-settings" aria-controls="contextual-help-wrap" aria-expanded="false"><?php _e( 'Help' ); ?></button>
+				</div>
+
+				<?php
+			endif;
+			?>
+
 			</div>
-		<?php endif; ?>
-		</div>
+
 		<?php
+		if ( $help_sidebar || $this->show_screen_options() ) {
+			?>
+
+			</div>
+
+			<?php
+		}
 	}
 
 	/**
