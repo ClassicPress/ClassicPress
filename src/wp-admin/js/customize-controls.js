@@ -1891,8 +1891,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						throw new Error( response.status );
 					} )
 					.then( function( result ) {
+						var gridItem;
 						if ( result.success ) {
-							load( 'finished' );
+							load( result.data );
+							gridItem = populateGridItem( result.data );
+							document.querySelector( '#media-library-grid ul' ).prepend( gridItem );
 						} else {
 							error( IMAGE_WIDGET.upload_failed );
 						}
@@ -1930,8 +1933,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			labelTapToUndo: IMAGE_WIDGET.tap_close,
 			fileRenameFunction: ( file ) =>
 				new Promise( function( resolve ) {
-					resolve( window.prompt( IMAGE_WIDGET.new_filename, file.name ) );
-				} ),
+					const newName = window.prompt(
+						_wpCustomizeControlsL10n.new_filename,
+						file.name
+					);
+					resolve( newName === null ? file.name : newName );
+				}
+			),
 			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 			labelFileTypeNotAllowed: IMAGE_WIDGET.invalid_type,
 			fileValidateTypeLabelExpectedTypes: IMAGE_WIDGET.check_types
