@@ -44,48 +44,6 @@ foreach ( $installed_themes as $theme_slug => $theme_data ) {
 	}
 }
 
-wp_localize_script(
-	'theme',
-	'_wpThemeSettings',
-	array(
-		'themes'          => false,
-		'settings'        => array(
-			'isInstall'  => true,
-			'canInstall' => current_user_can( 'install_themes' ),
-			'installURI' => current_user_can( 'install_themes' ) ? self_admin_url( 'theme-install.php' ) : null,
-			'adminUrl'   => parse_url( self_admin_url(), PHP_URL_PATH ),
-		),
-		'l10n'            => array(
-			'addNew'              => __( 'Add New Theme' ),
-			'search'              => __( 'Search Themes' ),
-			'searchPlaceholder'   => __( 'Search themes...' ), // Placeholder (no ellipsis).
-			'upload'              => __( 'Upload Theme' ),
-			'back'                => __( 'Back' ),
-			'error'               => sprintf(
-				/* translators: %s: Support forums URL. */
-				__( 'An unexpected error occurred. Something may be wrong with WordPress.org, ClassicPress.net, or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
-				__( 'https://wordpress.org/support/forums/' )
-			),
-			'tryAgain'            => __( 'Try Again' ),
-			/* translators: %d: Number of themes. */
-			'themesFound'         => __( 'Number of Themes found: %d' ),
-			'noThemesFound'       => __( 'No themes found. Try a different search.' ),
-			'collapseSidebar'     => __( 'Collapse Sidebar' ),
-			'expandSidebar'       => __( 'Expand Sidebar' ),
-			/* translators: Hidden accessibility text. */
-			'selectFeatureFilter' => __( 'Select one or more Theme features to filter by' ),
-			'version'             => __( 'Version' ),
-			'installing'          => __( 'Installing...' ),
-			'installing_wait'     => __( 'Installing... please wait.' ),
-			'installed'           => __( 'Installed' ),
-			'activate'            => __( 'Activate' ),
-			'ratings'             => __( 'ratings' ),
-		),
-		'installedThemes' => array_keys( $installed_themes ),
-		'activeTheme'     => get_stylesheet(),
-	)
-);
-
 wp_enqueue_script( 'theme' );
 wp_enqueue_script( 'updates' );
 wp_enqueue_script( 'cp-filepond-file-validate-type' );

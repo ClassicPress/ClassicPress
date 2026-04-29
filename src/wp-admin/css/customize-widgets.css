@@ -273,6 +273,7 @@
 body.adding-widget #available-widgets {
 	left: 0;
 	visibility: visible;
+	height: 100%;
 }
 
 body.adding-widget .wp-full-overlay-main {

@@ -650,6 +650,22 @@ function wp_default_scripts( $scripts ) {
 	// Not used in core, replaced by Jcrop.js.
 	$scripts->add( 'cropper', '/wp-includes/js/crop/cropper.js', array( 'scriptaculous-dragdrop' ) );
 
+	// New version of cropper, which replaces imgareaselect for cropping
+	$scripts->add( 'cropperjs', '/wp-includes/js/crop/cropper.min.js', array(), '2.1.1', 1 );
+	$scripts->add( 'cp-cropper', "/wp-includes/js/cp-cropper$suffix.js", array( 'cropperjs' ), '2.1.1', 1 );
+	did_action( 'init' ) && $scripts->localize(
+		'cp-cropper',
+		'CROPPER',
+		array(
+			'crop_image'    => __( 'Crop Image' ),
+			'close_crop'    => __( 'Close crop dialog' ),
+			'image_to_crop' => __( 'Image to crop' ),
+			'skip_note'     => __( 'You can skip cropping if you do not need to adjust the image.' ),
+			'skipping'      => __( 'Skip Cropping' ),
+			'saving'        => __( 'Saving' ),
+		)
+	);
+
 	// jQuery.
 	// The unminified jquery.js and jquery-migrate.js are included to facilitate debugging.
 	$scripts->add( 'jquery', false, array( 'jquery-core', 'jquery-migrate' ), '3.6.3' );
@@ -1095,12 +1111,9 @@ function wp_default_scripts( $scripts ) {
 	// JS-only version of hoverintent (no dependencies).
 	$scripts->add( 'hoverintent-js', '/wp-includes/js/hoverintent-js.min.js', array(), '2.2.1', 1 );
 
-	$scripts->add( 'customize-base', "/wp-includes/js/customize-base$suffix.js", array( 'jquery', 'json2', 'underscore' ), false, 1 );
-	$scripts->add( 'customize-loader', "/wp-includes/js/customize-loader$suffix.js", array( 'customize-base' ), false, 1 );
-	$scripts->add( 'customize-preview', "/wp-includes/js/customize-preview$suffix.js", array( 'wp-a11y', 'customize-base' ), false, 1 );
-	$scripts->add( 'customize-models', '/wp-includes/js/customize-models.js', array( 'underscore', 'backbone' ), false, 1 );
-	$scripts->add( 'customize-views', '/wp-includes/js/customize-views.js', array( 'jquery', 'underscore', 'imgareaselect', 'customize-models', 'media-editor', 'media-views' ), false, 1 );
-	$scripts->add( 'customize-controls', "/wp-admin/js/customize-controls$suffix.js", array( 'customize-base', 'wp-a11y', 'wp-util' ), false, 1 );
+	$scripts->add( 'customize-preview', "/wp-includes/js/customize-preview$suffix.js", array( 'wp-a11y' ), false, 1 );
+	$scripts->add( 'customize-controls-proxy', "/wp-admin/js/customize-controls-proxy$suffix.js", array( 'underscore' ), false, 1 );
+	$scripts->add( 'customize-controls', "/wp-admin/js/customize-controls$suffix.js", array( 'iris', 'cp-filepond', 'media-image-widget', 'cp-cropper', 'customize-controls-proxy' ), false, 1 );
 	did_action( 'init' ) && $scripts->localize(
 		'customize-controls',
 		'_wpCustomizeControlsL10n',
@@ -1178,15 +1191,17 @@ function wp_default_scripts( $scripts ) {
 					__( 'Use Site Editor' )
 				)
 			),
+			'active_theme'            => __( 'Active theme' ),
+			'activeTheme'             => cp_get_current_active_stylesheet(),
+			'menusNonce'              => wp_create_nonce( 'customize-menus' ),
+			'current'                 => esc_html__( 'Current:' ),
+			'currently'               => __( 'Currently set to:' ),
+			'customizeUrl'            => 'http' . ( ! empty( $_SERVER['HTTPS'] ) ? 's' : '' ) . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'],
 		)
 	);
-	$scripts->add( 'customize-selective-refresh', "/wp-includes/js/customize-selective-refresh$suffix.js", array( 'jquery', 'wp-util', 'customize-preview' ), false, 1 );
-
-	$scripts->add( 'customize-widgets', "/wp-admin/js/customize-widgets$suffix.js", array( 'jquery', 'sortable-js', 'wp-backbone', 'customize-controls' ), false, 1 );
-	$scripts->add( 'customize-preview-widgets', "/wp-includes/js/customize-preview-widgets$suffix.js", array( 'jquery', 'wp-util', 'customize-preview', 'customize-selective-refresh' ), false, 1 );
-
-	$scripts->add( 'customize-nav-menus', "/wp-admin/js/customize-nav-menus$suffix.js", array( 'jquery', 'sortable-js', 'wp-backbone', 'customize-controls', 'wp-sanitize' ), false, 1 );
-	$scripts->add( 'customize-preview-nav-menus', "/wp-includes/js/customize-preview-nav-menus$suffix.js", array( 'jquery', 'wp-util', 'customize-preview', 'customize-selective-refresh' ), false, 1 );
+	$scripts->add( 'customize-selective-refresh', "/wp-includes/js/customize-selective-refresh$suffix.js", array( 'wp-util', 'customize-preview' ), false, 1 );
+	$scripts->add( 'customize-widgets', "/wp-admin/js/customize-widgets$suffix.js", array( 'sortable-js', 'customize-controls', 'customize-controls-proxy' ), false, 1 );
+	$scripts->add( 'customize-nav-menus', "/wp-admin/js/customize-nav-menus$suffix.js", array( 'sortable-js', 'customize-controls', 'customize-controls-proxy', 'wp-sanitize' ), false, 1 );
 
 	$scripts->add( 'wp-custom-header', "/wp-includes/js/wp-custom-header$suffix.js", array( 'wp-a11y' ), false, 1 );
 
@@ -1265,7 +1280,44 @@ function wp_default_scripts( $scripts ) {
 		$scripts->add( 'text-widgets', "/wp-admin/js/widgets/text-widgets$suffix.js", array( 'media-widgets', 'editor', 'image-edit', 'wp-util', 'wp-a11y', 'sortable-js' ) );
 		$scripts->add( 'custom-html-widgets', "/wp-admin/js/widgets/custom-html-widgets$suffix.js", array() );
 
-		$scripts->add( 'theme', "/wp-admin/js/theme$suffix.js", array( 'wp-a11y', 'customize-base' ), false, 1 );
+		$scripts->add( 'theme', "/wp-admin/js/theme$suffix.js", array( 'wp-a11y' ), false, 1 );
+		did_action( 'init' ) && $scripts->localize(
+			'theme',
+			'_wpThemeSettings',
+			array(
+				'l10n'           => array(
+					'addNew'              => __( 'Add New Theme' ),
+					'search'              => __( 'Search Themes' ),
+					'searchPlaceholder'   => __( 'Search themes...' ), // Placeholder (no ellipsis).
+					'upload'              => __( 'Upload Theme' ),
+					'back'                => __( 'Back' ),
+					'error'               => sprintf(
+						/* translators: %s: Support forums URL. */
+						__( 'An unexpected error occurred. Something may be wrong with WordPress.org, ClassicPress.net, or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+						__( 'https://wordpress.org/support/forums/' )
+					),
+					'tryAgain'            => __( 'Try Again' ),
+					/* translators: %d: Number of themes. */
+					'themesFound'         => __( 'Number of Themes found: %d' ),
+					'noThemesFound'       => __( 'No themes found. Try a different search.' ),
+					'collapseSidebar'     => __( 'Collapse Sidebar' ),
+					'expandSidebar'       => __( 'Expand Sidebar' ),
+					/* translators: Hidden accessibility text. */
+					'selectFeatureFilter' => __( 'Select one or more Theme features to filter by' ),
+					'version'             => __( 'Version' ),
+					'installing'          => __( 'Installing...' ),
+					'installing_wait'     => __( 'Installing... please wait.' ),
+					'installed'           => __( 'Installed' ),
+					'activate'            => __( 'Activate' ),
+					'ratings'             => __( 'ratings' ),
+					'cannot_activate'     => __( 'Cannot Activate' ),
+					'delete'              => __( 'Delete' ),
+					'updated'             => __( 'Updated!' ),
+				),
+				'installedThemes' => array_keys( search_theme_directories() ),
+				'activeTheme'     => get_stylesheet(),
+			)
+		);
 
 		$scripts->add( 'inline-edit-post', "/wp-admin/js/inline-edit-post$suffix.js", array( 'jquery', 'wp-a11y' ), false, 1 );
 		$scripts->set_translations( 'inline-edit-post' );
@@ -1327,7 +1379,6 @@ function wp_default_scripts( $scripts ) {
 				'cp-filepond-file-validate-type',
 				'cp-filepond-file-rename',
 				'cp-filepond-plugin-image-preview',
-				'filepond',
 				'cp-filepond',
 			),
 			false,
@@ -1490,7 +1541,7 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'login', "/wp-admin/css/login$suffix.css", array( 'dashicons', 'buttons', 'forms', 'l10n' ) );
 	$styles->add( 'install', "/wp-admin/css/install$suffix.css", array( 'dashicons', 'buttons', 'forms', 'l10n' ) );
 	$styles->add( 'wp-color-picker', "/wp-admin/css/color-picker$suffix.css" );
-	$styles->add( 'customize-controls', "/wp-admin/css/customize-controls$suffix.css", array( 'wp-admin', 'colors', 'imgareaselect' ) );
+	$styles->add( 'customize-controls', "/wp-admin/css/customize-controls$suffix.css", array( 'wp-admin', 'colors', 'cp-cropper' ) );
 	$styles->add( 'customize-widgets', "/wp-admin/css/customize-widgets$suffix.css", array( 'widgets', 'wp-admin', 'colors' ) );
 	$styles->add( 'customize-nav-menus', "/wp-admin/css/customize-nav-menus$suffix.css", array( 'wp-admin', 'colors' ) );
 	$styles->add( 'media-grid', "/wp-admin/css/media-grid$suffix.css", array( 'imgareaselect' ), '0.1.0' );
@@ -1517,6 +1568,7 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'filepond', "/wp-includes/js/filepond/filepond$suffix.css", array(), '4.32.12' );
 	$styles->add( 'cp-filepond', "/wp-includes/js/filepond/cp-filepond$suffix.css", array( 'filepond' ), '4.32.12' );
 	$styles->add( 'cp-filepond-image-preview', "/wp-includes/js/filepond/filepond-plugin-image-preview$suffix.css", array(), '4.6.12' );
+	$styles->add( 'cp-cropper', "/wp-includes/css/cp-cropper$suffix.css", array(), '2.1.1' );
 
 	// Deprecated CSS.
 	$styles->add( 'deprecated-media', "/wp-admin/css/deprecated-media$suffix.css" );
