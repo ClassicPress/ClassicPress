@@ -1,0 +1,75 @@
+name: Cleanup GitHub runner caches
+
+on:
+  # Clean up caches when a PR is closed
+  pull_request:
+    types:
+      - closed
+
+  # Run on a schedule to periodically purge develop branch caches
+  schedule:
+    - cron: '0 22 1-7 * 6'  # First Saturday each month at 10pm
+
+  # Allow manual runs from the Actions tab to purge develop branch caches
+  workflow_dispatch:
+
+jobs:
+  cleanup-pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Delete caches for closed PR
+        run: |
+          echo "Fetching list of cache keys for PR #${{ github.event.pull_request.number }}"
+          cacheKeysForPR=$(gh cache list --ref $BRANCH --limit 100 --json id --jq '.[].id')
+
+          set +e
+          echo "Deleting caches..."
+          for cacheKey in $cacheKeysForPR
+          do
+            gh cache delete $cacheKey
+          done
+          echo "Done"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          BRANCH: refs/pull/${{ github.event.pull_request.number }}/merge
+
+  cleanup-develop:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Delete caches older than one month on develop
+        run: |
+          echo "Fetching cache list for develop branch..."
+
+          # Collect IDs of caches on main that are older than $MAX_AGE_DAYS days
+          CUTOFF=$(date -d "-${MAX_AGE_DAYS} days" --utc +%Y-%m-%dT%H:%M:%SZ)
+
+          staleKeys=$(gh cache list \
+            --ref refs/heads/develop \
+            --limit 100 \
+            --json id,createdAt \
+            --jq --arg cutoff "$CUTOFF" \
+              '[.[] | select(.createdAt < $cutoff)] | .[].id')
+
+          if [ -z "$staleKeys" ]; then
+            echo "No stale caches found."
+            exit 0
+          fi
+
+          set +e
+          echo "Deleting stale caches older than ${MAX_AGE_DAYS} days..."
+          for cacheKey in $staleKeys
+          do
+            gh cache delete $cacheKey
+          done
+          echo "Done"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          MAX_AGE_DAYS: 28
