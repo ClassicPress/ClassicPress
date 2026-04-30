@@ -414,3 +414,46 @@ window.addEventListener( 'message', function( event ) {
 	target.iframe.src = '';
 	target.iframe.src = url.toString();
 } );
+
+/**
+ * Re-apply dirty settings after navigation
+ */
+window.addEventListener( 'message', function( event ) {
+    var message, target;
+
+    if ( event.origin !== location.origin ) {
+        return;
+    }
+    try {
+        message = JSON.parse( event.data );
+    } catch( e ) {
+        return;
+    }
+    if ( ! message || message.type !== 'ready' ) {
+        return;
+    }
+    if ( ! message.data || ! message.data.currentUrl ) {
+        return;
+    }
+
+    target = window.getPreviewChannel();
+    if ( ! target ) {
+        return;
+    }
+
+    window.sendCustomizedToPreview();
+
+    target.iframe.contentWindow.postMessage(
+        JSON.stringify( {
+            channel: target.channel,
+            type: 'settings',
+            data: window._cpPreviewSettings
+        } ),
+        location.origin
+    );
+
+	setTimeout( function() {
+		target.iframe.style.visibility = 'visible';
+	}, 0 );
+} );
+
