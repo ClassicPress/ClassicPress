@@ -60,6 +60,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	// Delete redundant query args from browser URL
+	if ( queryParams.get( 'url' ) ) {
+		iframe.src = queryParams.get( 'url' ); // load Customizer on current page
+		queryParams.delete( 'url' );
+		newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
+		history.replaceState( null, '', newUrl );
+	}
+
 	if ( queryParams.get( 'theme' ) ) {
 		if ( queryParams.get( 'theme' ) === _wpCustomizeControlsL10n.activeTheme ) { // active theme
 			history.replaceState( null, '', window.location.pathname );
