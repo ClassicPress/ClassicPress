@@ -770,7 +770,7 @@
 		// Core standard setting → DOM bindings
 		var coreTextBindings = {
 			'blogname':        '.site-title a, .site-title',
-			'blogdescription': '.site-description'
+			'blogdescription': '.site-description, .site-tagline'
 		};
 		Object.keys( coreTextBindings ).forEach( function( id ) {
 			if ( ! api._settings[ id ] ) {
@@ -794,7 +794,7 @@
 				style.id = 'customize-preview-header-textcolor';
 				document.head.appendChild( style );
 			}
-			style.textContent = value === 'blank' ? 'body .site-title a, body .site-description { visibility: hidden; }' : 'body.has-header-image .site-title a, body.has-header-video .site-title a, body .site-title a, body .site-description { color: #' + value.replace( /^#/, '' ) + '; visibility: visible; }';
+			style.textContent = value === 'blank' ? 'body .site-title a, body .site-description, body .site-tagline { visibility: hidden; }' : 'body.has-header-image .site-title a, body.has-header-video .site-title a, body .site-title a, body .site-description, body .site-tagline { color: #' + value.replace( /^#/, '' ) + '; visibility: visible; }';
 		} );
 
 		api.preview.send( 'ready', {
