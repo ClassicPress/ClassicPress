@@ -54,7 +54,7 @@ jobs:
             --ref refs/heads/develop \
             --limit 100 \
             --json id,createdAt \
-            --jq --arg cutoff "$CUTOFF" \
+            | jq -r --arg cutoff "$CUTOFF" \
               '[.[] | select(.createdAt < $cutoff)] | .[].id')
 
           if [ -z "$staleKeys" ]; then
