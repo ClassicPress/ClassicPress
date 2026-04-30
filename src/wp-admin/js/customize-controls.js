@@ -2054,13 +2054,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 
 				e.preventDefault();
+				iframe.style.visibility = 'hidden'; // avoid showing old values while dirty settings are re-applied
+				iframe.src = url.toString();
 
 				// Preserve the customizer messenger params.
 			    url.searchParams.set( 'customize_changeset_uuid', iframe.src.match( /customize_changeset_uuid=([^&]+)/ )?.[1] ?? '' );
 				url.searchParams.set( 'customize_theme', iframe.src.match( /customize_theme=([^&]+)/ )?.[1] ?? '' );
 				url.searchParams.set( 'customize_messenger_channel', 'preview-0' );
-
-				iframe.src = url.toString();
 			} );
 		} catch ( err ) {
 			// Cross-origin guard, just in case
