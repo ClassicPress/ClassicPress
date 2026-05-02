@@ -977,59 +977,6 @@ p.customize-section-description {
 	margin: 0;
 }
 
-input[type="range"].hue-slider {
-	-moz-appearance: none;
-	appearance: none;
-	width: 100%;
-	height: 24px;
-	border-radius: 12px;
-	background: linear-gradient(
-		to right,
-		hsl(0, 100%, 50%),
-		hsl(30, 100%, 50%),
-		hsl(60, 100%, 50%),
-		hsl(90, 100%, 50%),
-		hsl(120, 100%, 50%),
-		hsl(150, 100%, 50%),
-		hsl(180, 100%, 50%),
-		hsl(210, 100%, 50%),
-		hsl(240, 100%, 50%),
-		hsl(270, 100%, 50%),
-		hsl(300, 100%, 50%),
-		hsl(330, 100%, 50%),
-		hsl(360, 100%, 50%)
-	);
-	outline: none;
-	cursor: pointer;
-}
-
-input[type="range"].hue-slider::-webkit-slider-thumb {
-	appearance: none;
-	width: 20px;
-	height: 20px;
-	border-radius: 50%;
-	background: #fff;
-	border: 2px solid rgba(0, 0, 0, 0.3);
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-	cursor: pointer;
-}
-
-input[type="range"].hue-slider::-moz-range-thumb {
-	width: 20px;
-	height: 20px;
-	border-radius: 50%;
-	background: #fff;
-	border: 2px solid rgba(0, 0, 0, 0.3);
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-	cursor: pointer;
-}
-
-input[type="range"].hue-slider::-moz-range-track {
-	background: transparent;
-	height: 24px;
-	border-radius: 12px;
-}
-
 .customize-control-hidden {
 	margin: 0;
 }
