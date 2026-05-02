@@ -193,7 +193,10 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				if ( $theme['screenshot'] && $theme['screenshot'][0] ) {
 					?>
 					<div class="theme-screenshot">
-						<img src="<?php echo esc_url( $theme['screenshot'][0] ); ?>" alt="" data-src="<?php echo esc_attr( $theme['screenshot'][0] . '?ver=' . $theme['version'] ); ?>">
+						<img src="<?php echo esc_url( $theme['screenshot'][0] ); ?>"
+							alt="<?php printf( __( 'Screenshot of theme: %s' ), $theme['name'] ); ?>"
+							data-src="<?php echo esc_attr( $theme['screenshot'][0] . '?ver=' . $theme['version'] ); ?>"
+						>
 					</div>
 					<?php
 				} else {
