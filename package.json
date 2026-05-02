@@ -43,6 +43,7 @@
     "webpack": "5.106.2"
   },
   "dependencies": {
+    "@melloware/coloris": "^0.25.0",
     "@wordpress/a11y": "4.44.0",
     "@wordpress/api-fetch": "7.44.0",
     "@wordpress/dom-ready": "4.44.0",
