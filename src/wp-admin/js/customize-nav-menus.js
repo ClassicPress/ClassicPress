@@ -872,6 +872,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			template, clone, newMenuId, position, depth, classNameSplits,
 			allItems, updatedItems, liIndex, targetSibling,
 			targetSiblingIndex, insertAfter, newDepth, newParentId,
+			input, errorSpan, itemsList,
 			menuName = '',
 			children = [],
 			targetChildren = [],
@@ -976,7 +977,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				type      = itemsList.dataset.type;
 				label     = itemsList.dataset.type_label;
 				createNewPostOrPage( input, title, object, type, label, itemsList, errorSpan );
-				e.target.previousElementSibling.value = ''; // reset
+				input.value = ''; // reset
 			} else if ( e.target.classList && e.target.className === 'button-link item-add' ) {
 				type     = ul.dataset.type;
 				object   = ul.dataset.object;
