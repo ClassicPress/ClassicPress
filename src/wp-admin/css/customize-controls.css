@@ -381,7 +381,7 @@ body.trashing #publish-settings {
 
 .customize-control .actions .upload-button.button {
 	width: 100%;
-	padding: 9px 0;
+	padding: 5px 0;
 }
 
 .date-time-fields .date-input.month {
@@ -476,6 +476,9 @@ body.trashing #publish-settings {
 #customize-controls .customize-info .preview-notice {
 	font-size: 13px;
 	line-height: 1.9;
+	margin: 0;
+	font-weight: 400;
+	color: #50575e;
 }
 
 #customize-controls .customize-pane-child .customize-section-title h3,
@@ -839,9 +842,9 @@ h3.customize-section-title {
 .customize-section-back {
 	display: block;
 	float: left;
-	width: 49px;
+	width: 43px;
 	height: 72px;
-	padding: 0 24px 0 0;
+	padding: 0;
 	margin: 0;
 	background: #fff;
 	border: none;
@@ -849,6 +852,7 @@ h3.customize-section-title {
 	border-left: 4px solid #fff;
 	box-shadow: none;
 	cursor: pointer;
+	text-decoration: none;
 	transition:
 		color .15s ease-in-out,
 		border-color .15s ease-in-out,
@@ -1460,7 +1464,11 @@ p.customize-section-description {
 .customize-control .attachment-media-view .button-add-media {
 	cursor: pointer;
 	background-color: #f0f0f1;
-	color: #2c3338;
+	color: #2271b1;
+	border: 1px solid #2271b1;
+	background: #f6f7f7;
+	vertical-align: top;
+	border-radius: 3px;
 }
 
 .customize-control .attachment-media-view .button-add-media:hover {
@@ -2622,6 +2630,19 @@ body.adding-widget .add-new-widget:before,
 
 #available-widgets .customize-section-title,
 #available-menu-items .customize-section-title {
+ 	border: 0;
+ 	clip-path: inset(50%);
+ 	height: 1px;
+ 	margin: -1px;
+ 	overflow: hidden;
+ 	padding: 0;
+ 	position: absolute;
+ 	width: 1px;
+ 	word-wrap: normal !important;
+}
+
+#available-widgets .customize-section-title button,
+#available-menu-items .customize-section-title button {
 	display: none;
 }
 
@@ -2959,8 +2980,19 @@ body.adding-widget .add-new-widget:before,
 
 	#available-widgets .customize-section-title,
 	#available-menu-items .customize-section-title {
-		display: block;
+		border: 0;
+		clip-path: none;
+		height: inherit;
 		margin: 0;
+		overflow: hidden;
+		padding: 0;
+		width: auto;
+		position: static;
+	}
+
+	#available-widgets .customize-section-title button,
+	#available-menu-items .customize-section-title button {
+		display: block;
 	}
 
 	#available-widgets .customize-section-back,
