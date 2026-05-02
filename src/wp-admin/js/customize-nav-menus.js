@@ -745,7 +745,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Create a new post or page
 	 */
-	function createNewPostOrPage( title, object, type, label, itemsList ) {
+	function createNewPostOrPage( input, title, object, type, label, itemsList, errorSpan ) {
 		var li,
 			data = new URLSearchParams( {
 				action: 'customize-nav-menus-insert-auto-draft',
@@ -754,6 +754,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				'params[post_type]': object, // post or page
 				'customize-menus-nonce': _wpCustomizeControlsL10n.menusNonce
 			} );
+
+		if ( ! title ) {
+			errorSpan.style.padding = '15px';
+			errorSpan.style.display = 'block';
+			input.classList.add( 'form-invalid' );
+			input.setAttribute( 'aria-invalid', 'true' );
+			input.setAttribute( 'aria-describedby', errorSpan.id );
+			wp.a11y.speak( errorSpan.textContent );
+			return;
+		} else {
+			errorSpan.style.display = 'none';
+			input.classList.remove( 'form-invalid' );
+			input.removeAttribute( 'aria-invalid' );
+			input.removeAttribute( 'aria-describedby' );
+		}
 
 		fetch( ajaxurl, {
 			method: 'POST',
@@ -857,6 +872,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			template, clone, newMenuId, position, depth, classNameSplits,
 			allItems, updatedItems, liIndex, targetSibling,
 			targetSiblingIndex, insertAfter, newDepth, newParentId,
+			input, errorSpan, itemsList,
 			menuName = '',
 			children = [],
 			targetChildren = [],
@@ -913,8 +929,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 				inputChanged( menuToEdit.querySelector( '.menu-name-field' ), menuToEdit.querySelector( '.menu-name-field' ).closest( 'li' ) );
 				menuToEdit.style.display = 'block';
-				menuToEdit.querySelector( 'button' ).focus();
+				menuToEdit.querySelector( 'a' ).href = '#' + menuToEdit.dataset.parentId;
+				menuToEdit.querySelector( 'a' ).focus();
 				window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#' + menuToEdit.id );
+				window.dispatchEvent( new HashChangeEvent( 'hashchange' ) );
 
 				// Add menu to list of menus
 				li = document.createElement( 'li' );
@@ -953,12 +971,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Add a menu item
 		} else if ( availableMenuItems.contains( e.target ) ) {
 			if ( e.target.classList && e.target.className === 'button add-content' ) {
-				title  = e.target.previousElementSibling.value;
-				object = e.target.parentNode.nextElementSibling.dataset.object;
-				type   = e.target.parentNode.nextElementSibling.dataset.type;
-				label  = e.target.parentNode.nextElementSibling.dataset.type_label;
-				createNewPostOrPage( title, object, type, label, e.target.parentNode.nextElementSibling );
-				e.target.previousElementSibling.value = ''; // reset
+				input     = e.target.previousElementSibling;
+				title     = input.value;
+				errorSpan = e.target.parentNode.nextElementSibling;
+				itemsList = errorSpan.nextElementSibling;
+				object    = itemsList.dataset.object;
+				type      = itemsList.dataset.type;
+				label     = itemsList.dataset.type_label;
+				createNewPostOrPage( input, title, object, type, label, itemsList, errorSpan );
+				input.value = ''; // reset
 			} else if ( e.target.classList && e.target.className === 'button-link item-add' ) {
 				type     = ul.dataset.type;
 				object   = ul.dataset.object;
