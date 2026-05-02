@@ -141,7 +141,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 					_x( 'Installed', 'theme' ),
 					array(
 						'type'               => 'success',
-						'additional_classes' => array( 'notice-alt' ),
+						'additional_classes' => array( 'notice-alt', 'inline' ),
 					)
 				);
 				?>
@@ -245,7 +245,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 						$customizer_not_supported_message,
 						array(
 							'type'               => 'error',
-							'additional_classes' => array( 'notice-alt' ),
+							'additional_classes' => array( 'notice-alt', 'inline' ),
 						)
 					);
 				} else {
@@ -291,7 +291,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 						_x( 'Installed', 'theme' ),
 						array(
 							'type'               => 'success',
-							'additional_classes' => array( 'notice-alt' ),
+							'additional_classes' => array( 'notice-alt', 'inline' ),
 						)
 					);
 				}
@@ -425,7 +425,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 		if ( ! $theme['updateResponse']['compatibleWP'] || ! $theme['updateResponse']['compatiblePHP'] || ! $theme['updateResponse']['compatibleCP'] ) {
 			?>
 
-			<div class="notice notice-error notice-alt">
+			<div class="notice inline notice-error notice-alt">
 				<p>
 
 					<?php
