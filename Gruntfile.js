@@ -127,7 +127,7 @@ module.exports = function(grunt) {
 					'wp-includes/js/sortable.min.js',
 					'wp-includes/js/crop/cropper.min.js',
 					'wp-includes/js/coloris/coloris.min.js',
-					'wp-includes/js/coloris/coloris.min.css',
+ 					'wp-includes/js/coloris/coloris.min.css'
 				]
 			},
 			'package-js': {
