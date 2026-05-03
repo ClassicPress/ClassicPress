@@ -104,7 +104,7 @@ body:not(.ready) #customize-save-button-wrapper .save {
 	float: left;
 	border-radius: 3px;
 	box-shadow: none; /* @todo Adjust box shadow based on the disable states of paired button. */
-	margin-top: 0;
+	margin-top: 3px;
 }
 
 #customize-save-button-wrapper .save:focus, #publish-settings:focus {
@@ -210,6 +210,10 @@ body:not(.ready) #publish-settings,
 body.trashing #customize-save-button-wrapper .save,
 body.trashing #publish-settings {
 	display: none;
+}
+
+#customize-header-actions {
+	position: static;
 }
 
 #customize-header-actions .spinner {
@@ -819,13 +823,17 @@ h3.customize-section-title {
 	width: 100%;
 }
 
+.wp-customizer .wp-full-overlay-sidebar .wp-full-overlay-header {
+	height: 49px;
+}
+
 .customize-controls-close {
 	display: block;
 	position: absolute;
-	top: 0;
+	top: 4px;
 	left: 0;
 	width: 45px;
-	height: 41px;
+	height: 45px;
 	padding: 0 2px 0 0;
 	background: #f0f0f1;
 	border: none;
@@ -1177,6 +1185,8 @@ p.customize-section-description {
 }
 
 .wp-full-overlay-sidebar {
+	position: static;
+	z-index: 5;
 	background: #f0f0f1;
 	border-right: 1px solid #dcdcde;
 	width: 345px;
@@ -1196,38 +1206,10 @@ p.customize-section-description {
  * Notifications
  */
 
-#customize-controls .customize-control-notifications-container { /* Scoped to #customize-controls for specificity over notification styles in common.css. */
-	margin: 4px 0 8px;
-	padding: 0;
-	cursor: default;
-}
-
 #customize-controls .customize-control-widget_form.has-error .widget .widget-top,
 .customize-control-nav_menu_item.has-error .menu-item-bar .menu-item-handle {
 	box-shadow: inset 0 0 0 2px #d63638;
 	transition: .15s box-shadow linear;
-}
-
-#customize-controls .customize-control-notifications-container li.notice {
-	list-style: none;
-	margin: 0 0 6px;
-	padding: 9px 14px;
-	overflow: hidden;
-}
-#customize-controls .customize-control-notifications-container .notice.is-dismissible {
-	padding-right: 38px;
-}
-
-.customize-control-notifications-container li.notice:last-child {
-	margin-bottom: 0;
-}
-
-#customize-controls .customize-control-nav_menu_item .customize-control-notifications-container {
-	margin-top: 0;
-}
-
-#customize-controls .customize-control-widget_form .customize-control-notifications-container {
-	margin-top: 8px;
 }
 
 .customize-control-text.has-error input {
@@ -1247,39 +1229,23 @@ p.customize-section-description {
 	display: none !important;
 }
 
-#customize-controls #customize-notifications-area:not(.has-overlay-notifications),
-#customize-controls .customize-section-title > .customize-control-notifications-container:not(.has-overlay-notifications),
-#customize-controls .panel-meta > .customize-control-notifications-container:not(.has-overlay-notifications) {
+#customize-controls #customize-notifications-area:not(.has-overlay-notifications) {
 	max-height: 210px;
 	overflow-x: hidden;
 	overflow-y: auto;
 }
 
 #customize-controls #customize-notifications-area > ul,
-#customize-controls #customize-notifications-area .notice,
-#customize-controls .panel-meta > .customize-control-notifications-container,
-#customize-controls .panel-meta > .customize-control-notifications-container .notice,
-#customize-controls .customize-section-title > .customize-control-notifications-container,
-#customize-controls .customize-section-title > .customize-control-notifications-container .notice {
+#customize-controls #customize-notifications-area .notice {
 	margin: 0;
 }
-#customize-controls .panel-meta > .customize-control-notifications-container,
-#customize-controls .customize-section-title > .customize-control-notifications-container {
-	border-top: 1px solid #dcdcde;
-}
-#customize-controls #customize-notifications-area .notice,
-#customize-controls .panel-meta > .customize-control-notifications-container .notice,
-#customize-controls .customize-section-title > .customize-control-notifications-container .notice {
+#customize-controls #customize-notifications-area .notice {
 	padding: 9px 14px;
 }
-#customize-controls #customize-notifications-area .notice.is-dismissible,
-#customize-controls .panel-meta > .customize-control-notifications-container .notice.is-dismissible,
-#customize-controls .customize-section-title > .customize-control-notifications-container .notice.is-dismissible {
+#customize-controls #customize-notifications-area .notice.is-dismissible {
 	padding-right: 38px;
 }
-#customize-controls #customize-notifications-area .notice + .notice,
-#customize-controls .panel-meta > .customize-control-notifications-container .notice + .notice,
-#customize-controls .customize-section-title > .customize-control-notifications-container .notice + .notice {
+#customize-controls #customize-notifications-area .notice + .notice {
 	margin-top: 1px;
 }
 
@@ -1292,11 +1258,6 @@ p.customize-section-description {
 #customize-controls #customize-notifications-area .notice.notification-overlay {
 	margin: 0;
 	border-left: 0; /* @todo Appropriate styles could be added for notice-error, notice-warning, notice-success, etc */
-}
-
-#customize-controls .customize-control-notifications-container.has-overlay-notifications {
-	animation: customize-fade-in 0.5s;
-	z-index: 30;
 }
 
 /* Note: Styles for this are also defined in themes.css */
@@ -1322,9 +1283,6 @@ p.customize-section-description {
 
 #customize-control-show_on_front.has-error {
 	margin-bottom: 0;
-}
-#customize-control-show_on_front.has-error .customize-control-notifications-container {
-	margin-top: 12px;
 }
 
 /**
@@ -1681,9 +1639,6 @@ p.customize-section-description {
 	border-bottom: none;
 }
 
-#sub-accordion-section-custom_css .customize-control-notifications-container {
-	margin-bottom: 15px;
-}
 
 #customize-control-custom_css textarea {
 	display: block;
@@ -1712,11 +1667,6 @@ p.customize-section-description {
 .CodeMirror-lint-tooltip,
 .CodeMirror-hints {
 	z-index: 500000 !important;
-}
-
-.customize-section-description-container + #customize-control-custom_css:last-child .customize-control-notifications-container {
-	margin-left: 12px;
-	margin-right: 12px;
 }
 
 .theme-browser .theme.active .theme-actions,
