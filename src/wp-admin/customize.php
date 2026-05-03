@@ -331,17 +331,17 @@ wp_print_scripts();
 
 <body class="<?php echo esc_attr( $body_class ); ?>">
 
-<h1 class="screen-reader-text"><?php esc_html_e( 'Customizer' ); ?></h1>
+<h1 id="customizer-title" class="screen-reader-text"><?php esc_html_e( 'Customizer' ); ?></h1>
 
 <div class="wp-full-overlay preview-desktop expanded" aria-labelledby="customizer-title">
 	<div id="customizer-sidebar-container">
-		<form id="customize-controls" class="wrap wp-full-overlay-sidebar" style="position: static;z-index: 5;"
+		<form id="customize-controls"
+			class="wrap wp-full-overlay-sidebar"
 			action="<?php echo esc_url( admin_url( 'customize.php' ) ); ?>"
 			method="post"
 			accept-charset="<?php bloginfo( 'charset' ); ?>"
-			inert <?php // prevent early interaction with form before page loaded ?>
 		>
-			<header id="customize-header-actions" class="wp-full-overlay-header" style="position: static;">
+			<header id="customize-header-actions" class="wp-full-overlay-header">
 
 				<?php
 				$compatible_wp  = is_wp_version_compatible( $wp_customize->theme()->get( 'RequiresWP' ) );
@@ -351,14 +351,14 @@ wp_print_scripts();
 					$save_text = $wp_customize->is_theme_active() ? __( 'Published' ) : __( 'Activate &amp; Publish' );
 					?>
 					<div id="customize-save-button-wrapper" class="customize-save-button-wrapper">
-						<input type="submit" name="save" id="save" class="button button-primary save"
-							value="<?php esc_attr_e( 'Published' ); ?>"
-							disabled
-						>
+						<button type="submit" name="save" id="save" class="button button-primary save" disabled>
+							<?php esc_attr_e( 'Published' ); ?>
+						</button>
 						<button id="publish-settings"
 							class="publish-settings button-primary button dashicons dashicons-admin-generic"
 							aria-label="<?php esc_attr_e( 'Publish Settings' ); ?>"
-							aria-expanded="false" style="display: none;"
+							aria-expanded="false"
+							style="display: none;"
 							name="cp_publish_submit"
 							value="1"
 						></button>
@@ -393,18 +393,7 @@ wp_print_scripts();
 				</a>
 			</header><!-- #customize-header-actions -->
 
-			<div id="customize-sidebar-outer-content">
-				<div id="customize-outer-theme-controls">
-					<ul class="customize-outer-pane-parent">
-						<!-- Outer panel and sections are not implemented, but it's here as a placeholder to avoid any side-effect in api.Section. -->
-					</ul>
-				</div>
-			</div><!-- #customize-sidebar-outer-content -->
-
 			<main id="widgets-right" class="wp-clearfix" style="overflow-y: scroll;max-height: calc(100vh - 90px);">
-				<div id="customize-notifications-area" class="customize-control-notifications-container">
-					<ul></ul>
-				</div>
 				<div class="wp-full-overlay-sidebar-content" tabindex="-1">
 					<div id="customize-info" class="accordion-section customize-info" style="position: relative;">
 						<div class="accordion-section-title">
@@ -437,65 +426,66 @@ wp_print_scripts();
 						</div>
 					</div>
 					<div id="customize-theme-controls">
-						<ul id="customize-pane-parent" class="customize-pane-parent">
-							<li id="accordion-section-themes" class="accordion-section control-panel-themes"
-								aria-owns="sub-accordion-section-themes"
-							>
-								<h3 class="accordion-section-title" tabindex="0">
-									<span class="customize-action">
+						<nav id="customize-pane-parent" aria-label="<?php esc_html_e( 'Customizer sections' ); ?>">
+							<ul class="customize-pane-parent">
+								<li id="accordion-section-themes"
+									class="accordion-section control-panel-themes"
+									aria-owns="sub-accordion-section-themes"
+								>
+									<h3 class="accordion-section-title" tabindex="0">
+										<span class="customize-action">
+											<?php
+											if ( $wp_customize->get_stylesheet() === cp_get_current_active_stylesheet() ) {
+												esc_html_e( 'Active theme' );
+											} else {
+												esc_html_e( 'Previewing theme' );
+											}
+											?>
+										</span>
+								
 										<?php
-										if ( $wp_customize->get_stylesheet() === cp_get_current_active_stylesheet() ) {
-											esc_html_e( 'Active theme' );
-										} else {
-											esc_html_e( 'Previewing theme' );
+										echo wp_get_theme()['Name'];
+
+										if ( current_user_can( 'switch_themes' ) ) {
+											?>
+
+											<a href="#sub-accordion-section-themes" class="button change-theme" aria-label="Change theme">
+												<?php esc_html_e( 'Change' ); ?>
+											</a>
+
+											<?php
 										}
 										?>
-									</span>
-								
-									<?php
-									echo wp_get_theme()['Name'];
 
-									if ( current_user_can( 'switch_themes' ) ) {
-										?>
+									</h3>
+								</li>
+								<li id="accordion-section-publish_settings"
+									class="accordion-section control-section control-section-outer"
+									aria-owns="sub-accordion-section-publish_settings"
+								>
+									<h3 class="accordion-section-title" tabindex="0">
+										<?php esc_html_e( 'Publish Settings' ); ?>
+										<span class="screen-reader-text">
+											<?php esc_html_e( 'Press return or enter to open this section' ); ?>
+										</span>
+									</h3>
+								</li>
 
-										<a href="#sub-accordion-section-themes" class="button change-theme" aria-label="Change theme">
-											<?php esc_html_e( 'Change' ); ?>
-										</a>
-										<?php
-
+								<?php
+								foreach ( $top_items as $item ) {
+									if ( $item['id'] === 'themes' ) { // Don't repeat the active theme
+										continue;
 									}
-									?>
 
-								</h3>
-							</li>
-							<li id="accordion-section-publish_settings"
-								class="accordion-section control-section control-section-outer"
-								aria-owns="sub-accordion-section-publish_settings"
-							>
-								<h3 class="accordion-section-title" tabindex="0">
-									<?php esc_html_e( 'Publish Settings' ); ?>
-									<span class="screen-reader-text">
-										<?php esc_html_e( 'Press return or enter to open this section' ); ?>
-									</span>
-								</h3>
-							</li>
-
-							<?php
-							foreach ( $top_items as $item ) {
-								if ( $item['id'] === 'themes' ) { // Don't repeat the active theme
-									continue;
+									$top_object = $item['type'] === 'section' ? $wp_customize->get_section( $item['id'] ) : $wp_customize->get_panel( $item['id'] );
+									if ( $top_object ) {
+										$top_object->maybe_render();
+									}
 								}
+								?>
 
-								$top_object = $item['type'] === 'section'
-									? $wp_customize->get_section( $item['id'] )
-									: $wp_customize->get_panel( $item['id'] );
-
-								if ( $top_object ) {
-									$top_object->maybe_render();
-								}
-							}
-							?>
-						</ul>
+							</ul>
+						</nav>
 
 						<ul id="sub-accordion-section-themes"
 							class="customize-pane-child accordion-sub-container control-panel-content accordion-section control-panel-themes current-panel"
@@ -552,9 +542,6 @@ wp_print_scripts();
 								}
 								?>
 
-								<div class="customize-control-notifications-container" style="display: none;">
-									<ul></ul>
-								</div>
 							</li>
 							<li id="accordion-section-installed_themes" class="theme-section control-subsection">
 								<button type="button" class="customize-themes-section-title themes-section-installed_themes selected" aria-expanded="true">
@@ -924,9 +911,6 @@ wp_print_scripts();
 										}
 										?>
 
-										<div class="customize-control-notifications-container" style="display: none;">
-											<ul></ul>
-										</div>
 									</li>
 
 									<?php
@@ -983,10 +967,7 @@ wp_print_scripts();
 													<?php
 												}
 												?>
-	
-												<div class="customize-control-notifications-container" style="display: none;">
-													<ul></ul>
-												</div>
+
 											</div>
 											
 											<?php
@@ -1055,9 +1036,6 @@ wp_print_scripts();
 											}
 											?>
 
-											<div class="customize-control-notifications-container" style="display: none;">
-												<ul></ul>
-											</div>
 										</div>
 
 										<?php
@@ -1128,9 +1106,6 @@ wp_print_scripts();
 										</span>
 										<?php esc_html_e( 'New Menu' ); ?>
 									</h3>
-									<div class="customize-control-notifications-container" style="display: none;">
-										<ul></ul>
-									</div>
 								</div>
 							</li>
 							<li id="customize-control-add_menu-name" class="customize-control customize-control-nav_menu_name">
@@ -1138,9 +1113,6 @@ wp_print_scripts();
 									<span class="customize-control-title">
 										<?php esc_html_e( 'Menu Name' ); ?>
 									</span>
-									<div class="customize-control-notifications-container" style="display: none;">
-										<ul></ul>
-									</div>
 								</label>
 								<input id="menu-title" type="text" class="menu-name-field live-update-section-title" aria-describedby="add_menu-description">
 								<p id="add_menu-description">
@@ -1153,9 +1125,6 @@ wp_print_scripts();
 										<h3 class="customize-control-title">
 											<?php esc_html_e( 'Menu Locations' ); ?>
 										</h3>
-										<div class="customize-control-notifications-container" style="display: none;">
-											<ul></ul>
-										</div>
 										<p>
 											<?php esc_html_e( 'Where do you want this menu to appear?' ); ?>
 											<?php
@@ -1212,9 +1181,6 @@ wp_print_scripts();
 								</ul>
 							</li>
 							<li id="customize-control-add_menu-submit" class="customize-control customize-control-undefined">
-								<div class="customize-control-notifications-container" style="display: none;">
-									<ul></ul>
-								</div>
 								<p id="customize-new-menu-submit-description">
 									<?php esc_html_e( 'Click &#8220;Next&#8221; to start adding links to your new menu.' ); ?>
 								</p>
@@ -1264,9 +1230,6 @@ wp_print_scripts();
 											</span>
 											<?php echo esc_html( $section->title ); ?>
 										</h3>
-										<div class="customize-control-notifications-container" style="display:none;">
-											<ul></ul>
-										</div>
 									</div>
 
 									<?php
@@ -1296,9 +1259,6 @@ wp_print_scripts();
 											<span class="customize-control-title">
 												<?php esc_html_e( 'Menu Name' ); ?>
 											</span>
-											<div class="customize-control-notifications-container" style="display: none;">
-												<ul></ul>
-											</div>
 										</label>
 										<input id="menu-name-title-<?php echo $menu_id; ?>"
 											type="text"
@@ -1372,9 +1332,6 @@ wp_print_scripts();
 										class="customize-control customize-control-nav_menu no-drag"
 										data-menu-id="<?php echo $menu_id; ?>"
 									>
-										<div class="customize-control-notifications-container" style="display: none;">
-											<ul></ul>
-										</div>
 										<p class="new-menu-item-invitation" style="display: none;">
 											<?php esc_html_e( 'Time to add some links! Click “Add Items” to start putting pages, categories, and custom links in your menu. Add as many things as you would like.' ); ?>
 										</p>
@@ -1411,9 +1368,6 @@ wp_print_scripts();
 												<h3 class="customize-control-title">
 													<?php esc_html_e( 'Menu Locations' ); ?>
 												</h3>
-												<div class="customize-control-notifications-container" style="display: none;">
-													<ul></ul>
-												</div>
 												<p>
 													<?php esc_html_e( 'Here’s where this menu appears. If you would like to change that, pick another location.' ); ?>
 												</p>
@@ -1471,9 +1425,6 @@ wp_print_scripts();
 										<h3 class="customize-control-title">
 											<?php esc_html_e( 'Menu Options' ); ?>
 										</h3>
-										<div class="customize-control-notifications-container" style="display: none;">
-											<ul></ul>
-										</div>
 										<span class="customize-inside-control-row">
 											<input id="customize-nav-menu-auto-add-control-<?php echo $menu_id; ?>" type="checkbox" class="auto_add">
 											<label for="customize-nav-menu-auto-add-control-<?php echo $menu_id; ?>">
@@ -1485,9 +1436,6 @@ wp_print_scripts();
 										class="customize-control customize-control-undefined no-drag"
 										data-setting-id="nav_menu[<?php echo $menu_id; ?>]"
 									>
-										<div class="customize-control-notifications-container" style="display: none;">
-											<ul></ul>
-										</div>
 										<div class="menu-delete-item">
 											<button type="button" class="button-link button-link-delete">
 												<?php esc_html_e( 'Delete Menu' ); ?>
@@ -1564,9 +1512,6 @@ wp_print_scripts();
 											</span>
 											<?php echo esc_html( $section->title ); ?>
 										</h3>
-										<div class="customize-control-notifications-container" style="display:none;">
-											<ul></ul>
-										</div>
 									</div>
 
 									<?php
@@ -1682,9 +1627,6 @@ wp_print_scripts();
 												?>
 
 												<div class="widget-inside">
-													<div class="customize-control-notifications-container" style="display: none;">
-														<ul></ul>
-													</div>
 													<div class="form">
 														<div class="widget-content">
 															<?php $widget_obj->form( $field_value ); ?>
@@ -1743,9 +1685,6 @@ wp_print_scripts();
 								<li id="customize-control-sidebars_widgets-<?php echo esc_attr( $section->id ); ?>"
 									class="customize-control customize-control-sidebar_widgets no-drag"
 								>
-									<div class="customize-control-notifications-container" style="display: none;">
-										<ul></ul>
-									</div>
 									<button type="button" class="button add-new-widget" aria-expanded="false" aria-controls="widgets-left">
 										<?php esc_html_e( 'Add a Widget' ); ?>
 									</button>
@@ -2078,9 +2017,6 @@ customize_themes_print_templates();
 					<?php esc_html_e( 'New Menu' ); ?>
 				</span>
 			</h3>
-			<div class="customize-control-notifications-container" style="display: none;">
-				<ul></ul>
-			</div>
 		</div>
 	</li>
 	<li id="customize-control-nav_menu-brand-new-name"
@@ -2091,9 +2027,6 @@ customize_themes_print_templates();
 			<span class="customize-control-title">
 				<?php esc_html_e( 'Menu Name' ); ?>
 			</span>
-			<div class="customize-control-notifications-container" style="display: none;">
-				<ul></ul>
-			</div>
 		</label>
 		<input id="menu-name-title-brand-new"
 			type="text"
@@ -2106,9 +2039,6 @@ customize_themes_print_templates();
 		class="customize-control customize-control-nav_menu no-drag"
 		data-menu-id="brand-new"
 	><?php // Look at nav-menu-control.php ?>
-		<div class="customize-control-notifications-container" style="display: none;">
-			<ul></ul>
-		</div>
 		<p class="new-menu-item-invitation" style="display: none;">
 			<?php esc_html_e( 'Time to add some links! Click “Add Items” to start putting pages, categories, and custom links in your menu. Add as many things as you would like.' ); ?>
 		</p>
@@ -2145,9 +2075,6 @@ customize_themes_print_templates();
 				<h3 class="customize-control-title">
 					<?php esc_html_e( 'Menu Locations' ); ?>
 				</h3>
-				<div class="customize-control-notifications-container" style="display: none;">
-					<ul></ul>
-				</div>
 				<p>
 					<?php esc_html_e( 'Here’s where this menu appears. If you would like to change that, pick another location.' ); ?>
 				</p>
@@ -2202,9 +2129,6 @@ customize_themes_print_templates();
 		<h3 class="customize-control-title">
 			<?php esc_html_e( 'Menu Options' ); ?>
 		</h3>
-		<div class="customize-control-notifications-container" style="display: none;">
-			<ul></ul>
-		</div>
 		<span class="customize-inside-control-row">
 			<input id="customize-nav-menu-auto-add-control-brand-new" type="checkbox" class="auto_add">
 			<label for="customize-nav-menu-auto-add-control-brand-new">
@@ -2216,9 +2140,6 @@ customize_themes_print_templates();
 		class="customize-control customize-control-undefined no-drag"
 		data-setting-id="nav_menu[brand-new]"
 	>
-		<div class="customize-control-notifications-container" style="display: none;">
-			<ul></ul>
-		</div>
 		<div class="menu-delete-item">
 			<button type="button" class="button-link button-link-delete">
 				<?php esc_html_e( 'Delete Menu' ); ?>
