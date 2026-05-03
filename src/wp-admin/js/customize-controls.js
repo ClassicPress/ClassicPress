@@ -52,10 +52,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		if ( hash === 'customize-pane-parent' ) {
 			document.getElementById( 'customize-info' ).style.display = 'block';
-			document.querySelector( '.customize-controls-close' ).focus();
+			setTimeout( function() {
+				document.querySelector( '.customize-controls-close' ).focus();
+			}, 0 );
 		} else {
 			document.getElementById( 'customize-info' ).style.display = 'none';
-			targetEl.querySelector( 'a' ).focus();
+			setTimeout( function() {
+				targetEl.querySelector( 'a' ).focus();
+			}, 0 );
 		}
 
 		if ( hash === 'sub-accordion-section-themes' ) {
@@ -76,8 +80,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			customizerControls.forEach( function( child ) {
 				child.style.display = 'none';
 			} );
-			//ul.style.display = 'none';
-			//document.getElementById( 'sub-' + id ).querySelector( 'a' ).href = '#' + ul.id; // update
 			targetEl.style.display = 'block';
 
 			if ( newHash === 'customize-pane-parent' ) {
@@ -142,8 +144,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		history.replaceState( null, '', newUrl );
 	}
 
-	// Remove inert attribute to enable interactions with form
-	form.removeAttribute( 'inert' );
 	document.getElementById( 'customize-preview-loading' ).classList.add( 'hidden' );
 
 	// Limit motion where appropriate
