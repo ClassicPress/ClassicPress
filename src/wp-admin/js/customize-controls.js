@@ -133,7 +133,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
 			history.replaceState( null, '', newUrl );
 			saveButton.disabled = false;
-			saveButton.value = _wpCustomizeControlsL10n.activate;
+			saveButton.textContent = _wpCustomizeControlsL10n.activate;
 		}
 		setTimeout( function() {
 			document.getElementById( 'customize-pane-parent' ).querySelector( 'button' ).focus();
@@ -174,7 +174,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function activatePublishButton() {
 		saveButton.disabled = false;
-		saveButton.value = _wpCustomizeControlsL10n.publish;
+		saveButton.textContent = _wpCustomizeControlsL10n.publish;
 	}
 
 	/**
@@ -1455,7 +1455,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} catch ( err ) {
 			console.error( _wpCustomizeControlsL10n.saveBlockedError.plural + ':', err );
 			saveButton.disabled = false;
-			saveButton.value = _wpCustomizeControlsL10n.publish;
+			saveButton.textContent = _wpCustomizeControlsL10n.publish;
 			window._customizePublishing = false;
 		}
 
@@ -1480,7 +1480,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Reset form
 			saveButton.disabled = true;
-			saveButton.value = _wpCustomizeControlsL10n.published;
+			saveButton.textContent = _wpCustomizeControlsL10n.published;
 			document.getElementById( 'customize_changeset_uuid' ).value = newResult.data.next_changeset_uuid;
 
 			// Reset the buffer object and proxy
