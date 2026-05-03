@@ -4,9 +4,9 @@
  *
  * @output wp-admin/js/customize-nav-menus.js
  */
-
 /* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings,
 console, ajaxurl, _updatedControlsWatcher, Sortable, isRtl */
+
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addObserver, itemObserver, currentMenuId,
 		newMenuItemIDs = [],
@@ -63,7 +63,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		let menuId, title, menuLocations, assignments, span, itemId,
 			settingId = li.dataset.settingId,
 			value = input.value.trim(),
-			menuName = li.closest( '.customize-pane-child' ).querySelector( '.menu-name-field' ).value;
+			menuName = li.closest( '.customize-pane-child' ).querySelector( '.menu-name-field' )?.value || '';
 
 		if ( settingId.startsWith( 'nav_menu_locations[' ) ) {
 			assignments = document.querySelectorAll( '.assigned-to-menu-location' );
@@ -155,7 +155,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		activatePublishButton();
 	}
 
-	function handleMenuEvent( e ) { console.log(e);
+	function handleMenuEvent( e ) {
 		const input = e.target,
 			li = input.closest( 'li[data-setting-id]' );
 
