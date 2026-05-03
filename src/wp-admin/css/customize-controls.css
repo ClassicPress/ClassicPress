@@ -1186,7 +1186,7 @@ p.customize-section-description {
 
 .wp-full-overlay-sidebar {
 	position: static;
-	z-index: 5;
+	z-index: 10;
 	background: #f0f0f1;
 	border-right: 1px solid #dcdcde;
 	width: 345px;
