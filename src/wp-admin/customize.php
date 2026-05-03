@@ -393,9 +393,9 @@ wp_print_scripts();
 				</a>
 			</header><!-- #customize-header-actions -->
 
-			<main id="widgets-right" class="wp-clearfix" style="overflow-y: scroll;max-height: calc(100vh - 90px);">
+			<main id="widgets-right" class="wp-clearfix">
 				<div class="wp-full-overlay-sidebar-content" tabindex="-1">
-					<div id="customize-info" class="accordion-section customize-info" style="position: relative;">
+					<div id="customize-info" class="accordion-section customize-info">
 						<div class="accordion-section-title">
 							<h2 class="preview-notice">
 								<?php
