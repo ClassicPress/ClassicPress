@@ -772,7 +772,7 @@ wp_print_scripts();
 									<li id="accordion-section-<?php echo esc_attr( $add_menu_section->id ); ?>"
 										class="accordion-section control-section control-section-new_menu control-subsection"
 										aria-owns="sub-accordion-section-<?php echo esc_attr( $add_menu_section->id ); ?>"
-										data-setting-id=<?php echo esc_attr( $add_menu_section->id ); ?>"
+										data-setting-id="<?php echo esc_attr( $add_menu_section->id ); ?>"
 									>
 										<?php
 										if ( empty( $menus ) ) {
@@ -787,9 +787,9 @@ wp_print_scripts();
 										}
 										?>
 										<h3>
-											<button id="customize-add-menu-button" type="button" class="button customize-add-menu-button">
+											<a id="customize-add-menu-button" href="#sub-accordion-section-add_menu" class="button customize-add-menu-button">
 												<?php esc_html_e( 'Create New Menu' ); ?>
-											</button>
+											</a>
 										</h3>
 									</li>
 									<?php
@@ -1184,9 +1184,9 @@ wp_print_scripts();
 								<p id="customize-new-menu-submit-description">
 									<?php esc_html_e( 'Click &#8220;Next&#8221; to start adding links to your new menu.' ); ?>
 								</p>
-								<button id="customize-new-menu-submit" type="button" class="button" aria-describedby="customize-new-menu-submit-description">
+								<a id="customize-new-menu-submit" href="#menu-to-edit" class="button" aria-describedby="customize-new-menu-submit-description">
 									<?php esc_html_e( 'Next' ); ?>
-								</button>
+								</a>
 							</li>
 						</ul>
 
