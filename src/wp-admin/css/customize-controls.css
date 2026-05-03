@@ -104,7 +104,7 @@ body:not(.ready) #customize-save-button-wrapper .save {
 	float: left;
 	border-radius: 3px;
 	box-shadow: none; /* @todo Adjust box shadow based on the disable states of paired button. */
-	margin-top: 3px;
+	margin-top: 0;
 }
 
 #customize-save-button-wrapper .save:focus, #publish-settings:focus {
@@ -507,7 +507,7 @@ body.trashing #publish-settings {
 
 #customize-controls .customize-info .customize-help-toggle {
 	position: absolute;
-	top: 4px;
+	top: 4px; /*55px*/
 	right: 1px;
 	padding: 20px 20px 10px 10px;
 	width: 20px;
@@ -689,6 +689,10 @@ body.trashing #publish-settings {
 	box-sizing: border-box;
 }
 
+#customize-info {
+	position: relative;
+}
+
 #customize-info,
 #customize-theme-controls .customize-pane-parent,
 #customize-theme-controls .customize-pane-child {
@@ -830,10 +834,10 @@ h3.customize-section-title {
 .customize-controls-close {
 	display: block;
 	position: absolute;
-	top: 4px;
+	top: 0;
 	left: 0;
 	width: 45px;
-	height: 45px;
+	height: 43px;
 	padding: 0 2px 0 0;
 	background: #f0f0f1;
 	border: none;
@@ -2578,6 +2582,11 @@ body.adding-widget .add-new-widget:before,
 	transform: rotate(45deg);
 }
 
+#widgets-right {
+	overflow-y: auto;
+	max-height: calc(100vh - 90px);
+}
+
 #available-menu-items {
 	width: 300px;
 	margin: 0;
@@ -3036,6 +3045,7 @@ body.adding-widget .add-new-widget:before,
     width: 100%;
     height: 100%;
     border: 0;
+    display: flex;
     flex: 1 1 auto;
 }
 
