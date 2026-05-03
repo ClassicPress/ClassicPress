@@ -53,7 +53,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function activatePublishButton() {
 		saveButton.disabled = false;
-		saveButton.value = _wpCustomizeControlsL10n.publish;
+		saveButton.textContent = _wpCustomizeControlsL10n.publish;
 	}
 
 	/**
