@@ -99,12 +99,13 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 					</span>
 				</summary>
 
-				<div class="menu-item-settings" id="menu-item-settings-<?php echo $item_id; ?>">
+				<fieldset class="menu-item-settings" id="menu-item-settings-<?php echo $item_id; ?>">
+					<legend class="screen-reader-text"><?php esc_html_e( 'Menu Item Settings' ); ?></legend>
 
 					<?php
 					if ( 'custom' === $item['type'] ) {
 						?>
-						<p class="field-url description description-thin">
+						<div class="field-url description description-thin">
 							<label for="edit-menu-item-url-<?php echo $item_id; ?>">
 								<?php esc_html_e( 'URL' ); ?>
 								<br>
@@ -115,12 +116,12 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 									value="<?php echo esc_html( $item['url'] ); ?>"
 								>
 							</label>
-						</p>
+						</div>
 						<?php
 					}
 					?>
 
-					<p class="description description-thin">
+					<div class="description description-thin">
 						<label for="edit-menu-item-title-<?php echo $item_id; ?>">
 							<?php esc_html_e( 'Navigation Label' ); ?>
 							<br>
@@ -132,8 +133,8 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 								value="<?php echo $item['title'] ? esc_html( $item['title'] ) : esc_html( $item['original_title'] ); ?>"
 							>
 						</label>
-					</p>
-					<p class="field-link-target description description-thin">
+					</div>
+					<div class="field-link-target description description-thin">
 						<label for="edit-menu-item-target-<?php echo $item_id; ?>">
 							<input type="checkbox"
 								id="edit-menu-item-target-<?php echo $item_id; ?>"
@@ -144,8 +145,8 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 							>
 							<?php esc_html_e( 'Open link in a new tab' ); ?>
 						</label>
-					</p>
-					<p class="field-title-attribute field-attr-title description description-thin">
+					</div>
+					<div class="field-title-attribute field-attr-title description description-thin">
 						<label for="edit-menu-item-attr-title-<?php echo $item_id; ?>">
 							<?php esc_html_e( 'Title Attribute' ); ?>
 							<br>
@@ -156,8 +157,8 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 								value="<?php echo esc_html( $item['attr_title'] ); ?>"
 							>
 						</label>
-					</p>
-					<p class="field-css-classes description description-thin">
+					</div>
+					<div class="field-css-classes description description-thin">
 						<label for="edit-menu-item-classes-<?php echo $item_id; ?>">
 							<?php esc_html_e( 'CSS Classes' ); ?>
 							<br>
@@ -168,8 +169,8 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 								value="<?php echo esc_html( $item['classes'] ); ?>"
 							>
 						</label>
-					</p>
-					<p class="field-xfn description description-thin">
+					</div>
+					<div class="field-xfn description description-thin">
 						<label for="edit-menu-item-xfn-<?php echo $item_id; ?>">
 							<?php esc_html_e( 'Link Relationship (XFN)' ); ?>
 							<br>
@@ -180,8 +181,8 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 								value="<?php echo esc_html( $item['xfn'] ); ?>"
 							>
 						</label>
-					</p>
-					<p class="field-description description description-thin">
+					</div>
+					<div class="field-description description description-thin">
 						<label for="edit-menu-item-description-<?php echo $item_id; ?>">
 							<?php esc_html_e( 'Description' ); ?>
 							<br>
@@ -197,7 +198,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 								<?php esc_html_e( 'The description will be displayed in the menu if the active theme supports it.' ); ?>
 							</span>
 						</label>
-					</p>
+					</div>
 
 					<?php
 					/**
@@ -268,7 +269,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 					<input type="hidden" name="menu-item-position[<?php echo $item_id; ?>]" class="menu-item-data-position" value="<?php echo absint( $item['position'] ); ?>">
 					<input type="hidden" name="menu-item-type[<?php echo $item_id; ?>]" class="menu-item-data-type" value="<?php echo esc_attr( $item['type'] ); ?>">
 					<input type="hidden" name="menu-item-menu-id[<?php echo $item_id; ?>]" class="menu-item-data-menu-id" value="<?php echo absint( $item['nav_menu_term_id'] ); ?>">
-				</div><!-- .menu-item-settings-->
+				</fieldset><!-- .menu-item-settings-->
 				<ul class="menu-item-transport"></ul>
 
 			</details>
