@@ -87,9 +87,6 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				data-update-response="<?php echo esc_attr( $theme['updateResponse']['compatibleWP'] . '-' . $theme['updateResponse']['compatiblePHP'] ); ?>"
 				aria-describedby="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action"
 			>
-				<div class="customize-control-notifications-container" style="display: none;">
-					<ul></ul>
-				</div>
 
 				<?php
 				if ( $theme['screenshot'] && $theme['screenshot'][0] ) {
@@ -185,9 +182,6 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				data-update-response="<?php echo esc_attr( $theme['updateResponse']['compatibleWP'] . '-' . $theme['updateResponse']['compatiblePHP'] ); ?>"
 				aria-describedby="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action"
 			>
-				<div class="customize-control-notifications-container" style="display: none;">
-					<ul></ul>
-				</div>
 
 				<?php
 				if ( $theme['screenshot'] && $theme['screenshot'][0] ) {
