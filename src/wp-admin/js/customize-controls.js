@@ -76,7 +76,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var newHash = e.newURL.split( '#' )[1],
 			targetEl = document.getElementById( newHash );
 
-		if ( newHash ) {
+		if ( newHash && targetEl ) {
 			customizerControls.forEach( function( child ) {
 				child.style.display = 'none';
 			} );
