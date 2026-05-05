@@ -325,14 +325,10 @@ class WP_Customize_Section {
 		<li id="accordion-section-<?php echo esc_attr( $this->id ); ?>"
 			class="accordion-section control-section control-section-<?php echo esc_attr( $this->type ); ?>"
 		>
-			<h3 class="accordion-section-title" tabindex="0">
-				<?php echo esc_html( $this->title ); ?>
-				<span class="screen-reader-text">
-					<?php
-					/* translators: Hidden accessibility text. */
-					esc_html_e( 'Press return or enter to open this section' );
-					?>
-				</span>
+			<h3 class="accordion-section-title">
+				<a href="#sub-accordion-section-<?php echo esc_attr( $this->id ); ?>">
+					<?php echo esc_html( $this->title ); ?>
+				</a>
 			</h3>
 		</li>
 		<?php

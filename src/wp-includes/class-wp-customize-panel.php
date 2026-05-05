@@ -304,14 +304,10 @@ class WP_Customize_Panel {
 		<li id="accordion-panel-<?php echo esc_attr( $this->id ); ?>"
 			class="accordion-section control-section control-panel control-panel-<?php echo esc_attr( $this->type ); ?>"
 		>
-			<h3 class="accordion-section-title" tabindex="0">
-				<?php echo esc_html( $this->title ); ?>
-				<span class="screen-reader-text">
-					<?php
-					/* translators: Hidden accessibility text. */
-					esc_html_e( 'Press return or enter to open this panel' );
-					?>
-				</span>
+			<h3 class="accordion-section-title">
+				<a href="#sub-accordion-panel-<?php echo esc_attr( $this->id ); ?>">
+					<?php echo esc_html( $this->title ); ?>
+				</a>
 			</h3>
 			<ul class="accordion-sub-container control-panel-content"></ul>
 		</li>

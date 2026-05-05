@@ -180,7 +180,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				notice = theme.querySelector( '.update-message' );
 
 			notice.innerHTML = '<p>' + _wpThemeSettings.l10n.updated + '</p>';
-			notice.className = 'notice inline notice-success notice-alt';
+			notice.className = 'notice inline updated-message notice-success notice-alt';
 		} )
 		.catch( function( error ) {
 			console.error( _wpThemeSettings.error, error );

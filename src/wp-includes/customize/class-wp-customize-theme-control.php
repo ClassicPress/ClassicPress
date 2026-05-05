@@ -87,9 +87,6 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				data-update-response="<?php echo esc_attr( $theme['updateResponse']['compatibleWP'] . '-' . $theme['updateResponse']['compatiblePHP'] ); ?>"
 				aria-describedby="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action"
 			>
-				<div class="customize-control-notifications-container" style="display: none;">
-					<ul></ul>
-				</div>
 
 				<?php
 				if ( $theme['screenshot'] && $theme['screenshot'][0] ) {
@@ -141,7 +138,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 					_x( 'Installed', 'theme' ),
 					array(
 						'type'               => 'success',
-						'additional_classes' => array( 'notice-alt' ),
+						'additional_classes' => array( 'notice-alt', 'inline' ),
 					)
 				);
 				?>
@@ -185,15 +182,15 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				data-update-response="<?php echo esc_attr( $theme['updateResponse']['compatibleWP'] . '-' . $theme['updateResponse']['compatiblePHP'] ); ?>"
 				aria-describedby="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action"
 			>
-				<div class="customize-control-notifications-container" style="display: none;">
-					<ul></ul>
-				</div>
 
 				<?php
 				if ( $theme['screenshot'] && $theme['screenshot'][0] ) {
 					?>
 					<div class="theme-screenshot">
-						<img src="<?php echo esc_url( $theme['screenshot'][0] ); ?>" alt="" data-src="<?php echo esc_attr( $theme['screenshot'][0] . '?ver=' . $theme['version'] ); ?>">
+						<img src="<?php echo esc_url( $theme['screenshot'][0] ); ?>"
+							alt="<?php printf( __( 'Screenshot of theme: %s' ), $theme['name'] ); ?>"
+							data-src="<?php echo esc_attr( $theme['screenshot'][0] . '?ver=' . $theme['version'] ); ?>"
+						>
 					</div>
 					<?php
 				} else {
@@ -245,7 +242,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 						$customizer_not_supported_message,
 						array(
 							'type'               => 'error',
-							'additional_classes' => array( 'notice-alt' ),
+							'additional_classes' => array( 'notice-alt', 'inline' ),
 						)
 					);
 				} else {
@@ -291,7 +288,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 						_x( 'Installed', 'theme' ),
 						array(
 							'type'               => 'success',
-							'additional_classes' => array( 'notice-alt' ),
+							'additional_classes' => array( 'notice-alt', 'inline' ),
 						)
 					);
 				}
@@ -425,7 +422,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 		if ( ! $theme['updateResponse']['compatibleWP'] || ! $theme['updateResponse']['compatiblePHP'] || ! $theme['updateResponse']['compatibleCP'] ) {
 			?>
 
-			<div class="notice notice-error notice-alt">
+			<div class="notice inline notice-error notice-alt">
 				<p>
 
 					<?php
