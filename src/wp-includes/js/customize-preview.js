@@ -777,7 +777,7 @@
 
 		// Core standard setting → DOM bindings
 		var coreTextBindings = {
-			'blogname':        '.site-title a, .site-title',
+			'blogname':        '.site-title a',
 			'blogdescription': '.site-description'
 		};
 		Object.keys( coreTextBindings ).forEach( function( id ) {
@@ -786,7 +786,17 @@
 			}
 			api._settings[ id ].bind( function( value ) {
 				document.querySelectorAll( coreTextBindings[ id ] ).forEach( function( el ) {
-					el.textContent = value;
+
+					// Update only the text node, preserving child elements like the pencil shortcut
+					var textNode = Array.from( el.childNodes ).find( function( node ) {
+						return node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '';
+					} );
+
+					if ( textNode ) {
+						textNode.textContent = value;
+					} else {
+						el.appendChild( document.createTextNode( value ) );
+					}
 				} );
 			} );
 		} );
