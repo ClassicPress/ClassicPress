@@ -70,12 +70,6 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 			?>
 
 			<div class="attachment-media-view">
-
-				<?php
-				$full_size = wp_get_attachment_image_src( $attachment_id, 'full' );
-				$image_url = $full_size ? $full_size[0] : wp_get_attachment_url( $attachment_id );
-				?>
-
 				<div class="site-icon-preview customizer">
 					<div class="favicon-preview">
 						<img src="<?php echo esc_url( admin_url( 'images/' . ( is_rtl() ? 'browser-rtl.png' : 'browser.png' ) ) ); ?>"
