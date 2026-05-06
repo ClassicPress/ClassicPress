@@ -124,26 +124,24 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 
 				<?php
 			} else {
-				$default_value = '#RRGGBB';
+				$default_value = '';
 				$default_value_attr = '';
 				$is_hue_slider = ( 'hue' === $this->mode );
 
 				if ( $this->setting->default && is_string( $this->setting->default ) ) {
-					$default_value = ( '#' !== substr( $this->setting->default, 0, 1 ) )
-						? '#' . $this->setting->default
-						: $this->setting->default;
-					$default_value_attr = ' data-default-color="' . esc_attr( $default_value ) . '"';
+					$default_value = str_replace( '#', '', $this->setting->default );
+					$default_value_attr = ' data-default-color="#' . esc_attr( $default_value ) . '"';
 				}
 
 				// Allow for inconsistencies between themes over whether they include the # in a hex color string
-				$color_value = str_replace( '#', '', $this->value() );
+				$color_value = $this->value() ? str_replace( '#', '', $this->value() ) : $default_value;
 				?>
 
 				<input class="color-picker-hex"
 					type="text"
 					aria-labelledby="<?php echo esc_attr( $this->id ); ?>-label"
 					maxlength="7"
-					placeholder="<?php echo esc_attr( $default_value ); ?>"
+					placeholder="#<?php echo esc_attr( $default_value ); ?>"
 					value="#<?php echo esc_attr( $color_value ); ?>"
 					<?php echo $default_value_attr; // data-default-color ?>
 					data-coloris
@@ -154,7 +152,6 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 			}
 			?>
 
-			</label>
 		</div>
 		<?php
 	}
