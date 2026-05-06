@@ -611,7 +611,15 @@
 				found = false,
 				id = args[0],
 				value = args[1],
-				handledByPartial = false;
+				handledByPartial = false,
+				fullRefreshSettings = [ 'colorscheme', 'colorscheme_hue' ];
+
+			// Settings that require a full page refresh.
+			if ( fullRefreshSettings.indexOf( id ) !== -1 ) {
+				setValue( id, value, true );
+				api.preview.send( 'refresh' );
+				return;
+			}
 
 			wp.customize.selectiveRefresh.partial.each( function( partial ) {
 				if ( partial.params.settings && partial.params.settings.indexOf( id ) !== -1 ) {

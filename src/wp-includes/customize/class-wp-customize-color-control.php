@@ -84,33 +84,51 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 	 * @since CP-2.8.0
 	 */
 	public function render_content() {
+		$is_hue_slider = ( 'hue' === $this->mode );
+
 		if ( $this->label ) {
 			?>
-			<span class="customize-control-title">
+
+			<span id="<?php echo esc_attr( $this->id ); ?>-label" class="customize-control-title">
 				<?php echo esc_html( $this->label ); ?>
 			</span>
+
 			<?php
 		}
 		if ( $this->description ) {
 			?>
+
 			<span class="description customize-control-description">
 				<?php echo wp_kses_post( $this->description ); ?>
 			</span>
+
 			<?php
 		}
 		?>
+
 		<div class="customize-control-content">
-			<label>
-				<span class="screen-reader-text">
-					<?php echo esc_html( $this->label ); ?>
-				</span>
+
+			<?php
+			if ( $is_hue_slider ) {
+				?>
+
+				<label for="cp-hue-slider" class="screen-reader-text">
+					<?php esc_html_e( 'Custom Color Hue' ); ?>
+				</label>
+				<input type="range" min="0" max="359"
+					id="cp-hue-slider"
+					class="hue-slider"
+					value="<?php echo esc_attr( $this->value() ); ?>"
+					<?php $this->link(); ?>
+				>
 
 				<?php
+			} else {
 				$default_value = '#RRGGBB';
 				$default_value_attr = '';
 				$is_hue_slider = ( 'hue' === $this->mode );
 
-				if ( $this->setting->default && is_string( $this->setting->default ) && ! $is_hue_slider ) {
+				if ( $this->setting->default && is_string( $this->setting->default ) ) {
 					$default_value = ( '#' !== substr( $this->setting->default, 0, 1 ) )
 						? '#' . $this->setting->default
 						: $this->setting->default;
@@ -119,28 +137,23 @@ class WP_Customize_Color_Control extends WP_Customize_Control {
 
 				// Allow for inconsistencies between themes over whether they include the # in a hex color string
 				$color_value = str_replace( '#', '', $this->value() );
-				if ( $is_hue_slider ) {
-					?>
-					<input class="color-picker-hue" 
-						type="text" 
-						data-type="hue"
-						value="#<?php echo esc_attr( $color_value ); ?>"
-						<?php $this->link(); ?>
-					>
-					<?php
-				} else {
-					?>
-					<input class="color-picker-hex"
-						type="text"
-						maxlength="7"
-						placeholder="<?php echo esc_attr( $default_value ); ?>"
-						value="#<?php echo esc_attr( $color_value ); ?>"
-						<?php echo $default_value_attr; // data-default-color ?>
-						<?php $this->link(); ?>
-					>
-					<?php
-				}
 				?>
+
+				<input class="color-picker-hex"
+					type="text"
+					aria-labelledby="<?php echo esc_attr( $this->id ); ?>-label"
+					maxlength="7"
+					placeholder="<?php echo esc_attr( $default_value ); ?>"
+					value="#<?php echo esc_attr( $color_value ); ?>"
+					<?php echo $default_value_attr; // data-default-color ?>
+					data-coloris
+					<?php $this->link(); ?>
+				>
+
+				<?php
+			}
+			?>
+
 			</label>
 		</div>
 		<?php

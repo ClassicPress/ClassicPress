@@ -5,7 +5,7 @@
  */
 
 /* eslint consistent-this: [ "error", "control" ] */
-/* global wp, _wpCustomizeControlsL10n, updatedControls,
+/* global wp, _wpCustomizeControlsL10n, updatedControls, Coloris,
 _updatedControlsWatcher, console, ajaxurl, IMAGE_WIDGET, _cpCustomLogo,
 FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
 FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper */
@@ -33,6 +33,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
 		hash = window.location.hash.replace( '#', '' ),
 		section = document.getElementById( 'sub-accordion-section-custom_css' );
+
+	const colorSchemeInputs = form.querySelectorAll( 'input[name="_customize-radio-colorscheme"]' ),
+		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' );
 
 	// Go direct to appropriate Customizer panel if its hash is specified in the URL
 	if ( hash === 'menu-to-edit' ) {
@@ -238,44 +241,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Use a data attribute and drive CSS from it
 			previewFrame.setAttribute( 'data-device', device );
 		} );
-	} );
-
-	/**
-	 * Code for the Iris color picker.
-	 *
-	 * Requires jQuery.
-	 */
-	jQuery( '.color-picker-hue, .color-picker-hex' ).wpColorPicker( { // Iris requires jQuery
-		change: function( event, ui ) {
-			// Update the input's value in the DOM.
-			event.target.setAttribute( 'value', ui.color.toString() );
-			_updatedControlsWatcher[event.target.closest( 'li' ).dataset.settingId] = ui.color.toString();
-
-			// Enable Publish.
-			activatePublishButton();
-		},
-		clear: function( event ) {
-			_updatedControlsWatcher[event.target.closest( 'li' ).dataset.settingId] = '';
-			activatePublishButton();
-		}
-	} );
-
-	// Focus/click: ensure picker shows.
-	document.querySelectorAll( '.color-picker-hue, .color-picker-hex' ).forEach( function( input ) {
-		var container = input.closest( '.wp-picker-container' );
-		if ( ! container ) {
-			return;
-		}
-
-		function showPicker() {
-			var holder = container.querySelector( '.wp-picker-holder' );
-			if ( holder ) {
-				holder.style.display = '';
-			}
-		}
-
-		input.addEventListener( 'focus', showPicker );
-		input.addEventListener( 'click', showPicker );
 	} );
 
 	/**
@@ -1504,6 +1469,63 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	}
 	initCodeMirror( section.querySelector( 'textarea' ) );
+
+	/**
+	 * Code for the Coloris color picker.
+	 *
+	 * @since CP-2.8.0
+	 */
+	Coloris( {
+		alpha: false,
+		format: 'hex',
+		a11y: {
+			open: 'Open color picker',
+			close: 'Close color picker',
+			clear: 'Clear the selected color',
+			marker: 'Saturation: {s}. Brightness: {v}.',
+			hueSlider: 'Hue slider',
+			alphaSlider: 'Opacity slider',
+			input: 'Color value field',
+			format: 'Color format',
+			swatch: 'Color swatch',
+			instruction: 'Saturation and brightness selector. Use up, down, left and right arrow keys to select.'
+		},
+		swatches: [
+			'#264653',
+			'#2a9d8f',
+			'#e9c46a',
+			'#f4a261',
+			'#e76f51',
+			'#d62828',
+			'#000080',
+			'#0077bb',
+			'#0096c7',
+			'#00b4d8',
+			'#0077b6'
+		],
+		clearButton: true,
+		onChange: (color, inputEl) => {
+			inputEl.setAttribute( 'value', color );
+			_updatedControlsWatcher[inputEl.closest( 'li' ).dataset.settingId] = color;
+
+			// Enable Publish.
+			activatePublishButton();
+		}
+	} );
+
+	// Show/hide hue slider based on colour scheme selection.
+	function updateHueVisibility() {
+		const checkedScheme = form.querySelector( 'input[name="_customize-radio-colorscheme"]:checked' );
+		if ( hueControl ) {
+			hueControl.style.display = ( checkedScheme?.value === 'custom' ) ? '' : 'none';
+		}
+	}
+
+	colorSchemeInputs.forEach( function( input ) {
+		input.addEventListener( 'change', updateHueVisibility );
+	} );
+
+	updateHueVisibility();
 
 	// Ensure hitting Enter fires a click event on elements that are not automatically interactive
 	document.addEventListener( 'keyup', function( e ) {
