@@ -1063,6 +1063,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function addItemToCustomizer( selectedItem, attachmentId, imageElement, imageUrl ) {
 		var setting, settingId,
 			parent = customizeButton.parentNode,
+			li = customizeButton.closest( 'li' ),
 			removeButton = document.createElement( 'button' ),
 			selectButton = document.createElement( 'button' );
 
@@ -1095,6 +1096,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				width: selectedItem.dataset.width,
 				height: selectedItem.dataset.height
 			};
+
+		// Update site icon
+		} else if ( settingId === 'site_icon' ) {
+			imageElement.className = 'app-icon-preview';
+			li.querySelector( '.site-icon-preview' ).removeAttribute( 'hidden' );
+			li.querySelector( '.site-icon-preview' ).append( imageElement );
+			parent.prepend( removeButton );
+			customizeButton.replaceWith( selectButton );
+			setTimeout( function() {
+				selectButton.focus();
+			} );
+			li.querySelector( 'input' ).value = attachmentId;
+			_updatedControlsWatcher[ settingId ] = attachmentId;
 
 		// Insert other images according to whether this is a new insertion or replacement
 		} else {
@@ -1148,9 +1162,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			button.className = 'upload-button button select-button';
 			button.type = 'button';
 			button.textContent = customizeButton.parentNode.dataset.empty;
-			parent.parentNode.querySelector( 'img' )?.remove();
-			parent.parentNode.querySelector( 'video' )?.remove();
-			parent.parentNode.querySelector( 'input' ).value = '';
+			if ( document.querySelector( '.site-icon-preview' ) ) {
+				document.querySelector( '.site-icon-preview' ).setAttribute( 'hidden', 'true' );
+				document.querySelector( '.app-icon-preview' ).remove();
+			} else {
+				parent.parentNode.querySelector( 'img' )?.remove();
+				parent.parentNode.querySelector( 'video' )?.remove();
+				parent.parentNode.querySelector( 'input' ).value = '';
+			}
 			parent.innerHTML = '';
 			parent.append( button );
 			setTimeout( function() {
