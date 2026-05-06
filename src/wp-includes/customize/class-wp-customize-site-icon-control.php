@@ -59,7 +59,7 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 
 			<?php
 		}
-		
+
 		$attachment_id    = (int) $this->value();
 		$default_icon_url = get_site_icon_url();  // Theme default favicon
 		$image_url        = '';
