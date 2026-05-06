@@ -1173,13 +1173,19 @@ final class WP_Customize_Nav_Menus {
 										</label>
 										<input type="text"
 											id="create-item-input-<?php echo esc_attr( $available_item_type['object'] ); ?>"
-											class="create-item-input"
+											class="create-item-input form-required"
 											placeholder="<?php echo esc_attr( $post_type_obj->labels->add_new_item ); ?>"
 										>
 										<button type="button" class="button add-content">
 											<?php esc_html_e( 'Add' ); ?>
 										</button>
 									</div>
+									<span id="create-input-<?php echo esc_attr( $available_item_type['object'] ); ?>-error"
+										class="create-item-error error-message"
+										style="display: none;"
+									>
+										<?php esc_html_e( 'Please enter an item title' ); ?>
+									</span>
 
 									<?php
 								}
