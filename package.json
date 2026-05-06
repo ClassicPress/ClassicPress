@@ -35,7 +35,7 @@
     "qunit": "^2.19.4",
     "rollup": "4.60.3",
     "sass": "1.99.0",
-    "sinon": "^21.0.0",
+    "sinon": "^22.0.0",
     "sinon-test": "^3.1.5",
     "source-map-loader": "^5.0.0",
     "terser": "5.46.2",
