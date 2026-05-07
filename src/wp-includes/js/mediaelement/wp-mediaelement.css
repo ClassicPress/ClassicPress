@@ -70,7 +70,7 @@
 /* Override theme styles that may conflict with controls. */
 .mejs-overlay button,
 .mejs-controls button {
-	background:transparent !important;
+	background: transparent !important;
 }
 
 .mejs-controls a {
