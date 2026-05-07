@@ -411,6 +411,80 @@ window.addEventListener( 'message', function( event ) {
 	url = new URL( target.iframe.src );
 	url.searchParams.set( 'customized', JSON.stringify( window._cpDirtySettings ) );
 
-	target.iframe.src = '';
+	target.iframe.src = url.toString();
+} );
+
+/**
+ * Re-apply dirty settings after navigation
+ */
+window.addEventListener( 'message', function( event ) {
+    var message, target;
+
+    if ( event.origin !== location.origin ) {
+        return;
+    }
+    try {
+        message = JSON.parse( event.data );
+    } catch( e ) {
+        return;
+    }
+    if ( ! message || message.type !== 'ready' ) {
+        return;
+    }
+    if ( ! message.data || ! message.data.currentUrl ) {
+        return;
+    }
+
+    target = window.getPreviewChannel();
+    if ( ! target ) {
+        return;
+    }
+
+    window.sendCustomizedToPreview();
+
+    target.iframe.contentWindow.postMessage(
+        JSON.stringify( {
+            channel: target.channel,
+            type: 'settings',
+            data: window._cpPreviewSettings
+        } ),
+        location.origin
+    );
+
+	setTimeout( function() {
+		target.iframe.style.visibility = 'visible';
+	}, 0 );
+} );
+
+/**
+ * Process hyperlinks in preview pane
+ */
+window.addEventListener( 'message', function( event ) {
+	var message, target, url;
+
+	if ( event.origin !== location.origin ) {
+		return;
+	}
+	try {
+		message = JSON.parse( event.data );
+	} catch(e) {
+		return;
+	}
+	if ( ! message || message.type !== 'url' ) {
+		return;
+	}
+
+	target = window.getPreviewChannel();
+	if ( ! target ) {
+		return;
+	}
+
+	url = new URL( message.data );
+	url.searchParams.set( 'customize_changeset_uuid', target.iframe.src.match( /customize_changeset_uuid=([^&]+)/ )?.[1] ?? '' );
+	url.searchParams.set( 'customize_theme', target.iframe.src.match( /customize_theme=([^&]+)/ )?.[1] ?? '' );
+	url.searchParams.set( 'customize_messenger_channel', 'preview-0' );
+	url.searchParams.set( 'customized', JSON.stringify( window._cpDirtySettings ) );
+
+	target.iframe.style.visibility = 'hidden';
 	target.iframe.src = url.toString();
 } );
