@@ -1117,7 +1117,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
-	 * Add image to widget.
+	 * Add image to Customizer.
 	 *
 	 * @abstract
 	 * @return {void}
