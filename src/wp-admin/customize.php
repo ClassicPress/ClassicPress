@@ -581,11 +581,8 @@ wp_print_scripts();
 							<?php esc_html_e( 'Preview Link' ); ?>
 						</label>
 						<a href="<?php echo esc_url( home_url( '/' ) ); ?>"
-							target="_blank"
-							rel="noopener noreferrer"
+							target="<?php echo esc_attr( $wp_customize->changeset_uuid() ); ?>"
 							class="disabled"
-							aria-disabled="true"
-							tabindex="-1"
 						>
 							<span class="preview-control-element" data-component="url">
 								<?php echo esc_url( home_url( '/' ) ); ?>
