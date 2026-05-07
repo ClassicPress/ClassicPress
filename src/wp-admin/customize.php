@@ -34,13 +34,16 @@ if ( isset( $_GET['theme'] ) ) { // live preview
 $wp_customize->setup_theme();
 $wp_customize->register_controls();
 
+if ( isset( $_GET['url'] ) ) {
+	$wp_customize->set_preview_url( wp_unslash( $_GET['url'] ) );
+}
 $preview_url = add_query_arg(
 	array(
 		'customize_changeset_uuid'    => $wp_customize->changeset_uuid(),
 		'customize_theme'             => $wp_customize->theme()->stylesheet,
 		'customize_messenger_channel' => 'preview-0',
 	),
-	home_url( '/' )
+	$wp_customize->get_preview_url()
 );
 
 // Handle form submission (supports both the disabled publish button and the default "save" submit).
