@@ -35,8 +35,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		hash = window.location.hash.replace( '#', '' ),
 		section = document.getElementById( 'sub-accordion-section-custom_css' );
 
-	const iframe = document.querySelector( '#customize-preview iframe' );
-
 	// Go direct to appropriate Customizer panel if its hash is specified in the URL
 	if ( hash === 'menu-to-edit' ) {
 		hash = 'sub-accordion-panel-nav_menus';
@@ -119,7 +117,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Delete redundant query args from browser URL
 	if ( queryParams.get( 'url' ) ) {
-		iframe.src = queryParams.get( 'url' ); // load Customizer on current page
 		queryParams.delete( 'url' );
 		newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
 		history.replaceState( null, '', newUrl );
