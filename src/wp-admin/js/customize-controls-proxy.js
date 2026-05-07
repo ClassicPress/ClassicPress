@@ -211,6 +211,57 @@ window.getPreviewChannel = function() {
 	return match ? { iframe: iframe, channel: match[1] } : null;
 };
 
+/**
+ * Updates the preview link control with the current previewed URL.
+ *
+ * @param {string} currentUrl The URL currently shown in the preview iframe.
+ */
+window.updatePreviewLink = function( currentUrl ) {
+	var uuid    = document.getElementById( 'customize-changeset-uuid' ),
+		status  = document.getElementById( 'customize-changeset-status' ),
+		anchor  = document.querySelector( '#customize-control-changeset_preview_link .preview-link-wrapper a' ),
+		urlSpan = document.querySelector( '#customize-control-changeset_preview_link [data-component="url"]' ),
+		input   = document.getElementById( 'customize-preview-link-input' ),
+		copy    = document.querySelector( '.customize-copy-preview-link' ),
+		saveBtn = document.querySelector( '[name="save"]' ),
+		urlParser, params, frontendUrl, unsaved;
+
+	if ( ! anchor || ! currentUrl ) {
+		return;
+	}
+
+	// Build the shareable URL — append changeset UUID unless already published
+	urlParser = new URL( currentUrl );
+	params    = Object.fromEntries( urlParser.searchParams );
+
+	if ( status && status.value && status.value !== 'publish' ) {
+		params.customize_changeset_uuid = uuid ? uuid.value : '';
+	} else {
+		delete params.customize_changeset_uuid;
+	}
+
+	urlParser.search = new URLSearchParams( params ).toString();
+	frontendUrl = urlParser.href;
+
+	// Unsaved = save button is still active (user has unpublished changes)
+	unsaved = saveBtn && ! saveBtn.disabled;
+
+	anchor.href = frontendUrl;
+	anchor.classList.toggle( 'disabled', unsaved );
+	anchor.setAttribute( 'aria-disabled', unsaved ? 'true' : 'false' );
+	anchor.tabIndex = unsaved ? -1 : 0;
+
+	if ( urlSpan ) {
+		urlSpan.textContent = frontendUrl;
+	}
+	if ( input ) {
+		input.value = frontendUrl;
+	}
+	if ( copy ) {
+		copy.disabled = unsaved;
+	}
+};
+
 window.sendSettingToPreview = function( id, value ) {
 	var target;
 
@@ -451,6 +502,8 @@ window.addEventListener( 'message', function( event ) {
         location.origin
     );
 
+	window.updatePreviewLink( message.data.currentUrl );
+
 	setTimeout( function() {
 		target.iframe.style.visibility = 'visible';
 	}, 0 );
@@ -487,4 +540,30 @@ window.addEventListener( 'message', function( event ) {
 
 	target.iframe.style.visibility = 'hidden';
 	target.iframe.src = url.toString();
+} );
+
+/**
+ * Enable copying
+ */
+document.addEventListener( 'DOMContentLoaded', function() {
+	var copy = document.querySelector( '.customize-copy-preview-link' );
+	if ( ! copy ) {
+		return;
+	}
+	copy.addEventListener( 'click', function() {
+		var input = document.getElementById( 'customize-preview-link-input' );
+		if ( ! input || ! input.value ) {
+			return;
+		}
+		if ( navigator.clipboard ) {
+			navigator.clipboard.writeText( input.value );
+		} else {
+			input.select();
+			document.execCommand( 'copy' );
+		}
+		copy.textContent = copy.dataset.copiedText;
+		setTimeout( function() {
+			copy.textContent = copy.dataset.copyText;
+		}, 2000 );
+	} );
 } );
