@@ -1511,8 +1511,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		],
 		clearButton: true,
 		onChange: (color, inputEl) => {
-			inputEl.setAttribute( 'value', color );
-			_updatedControlsWatcher[inputEl.closest( 'li' ).dataset.settingId] = color;
+			var effectiveColor = color || inputEl.dataset.defaultColor || '';
+
+			if ( ! color && effectiveColor ) {
+				// After clearing, restore the value then re-fire 'input' so
+				// Coloris's own updateColorPreview listener repaints the swatch
+				inputEl.value = effectiveColor;
+				inputEl.dispatchEvent( new Event( 'input', { bubbles: true } ) );
+			}
+
+			inputEl.setAttribute( 'value', effectiveColor );
+			_updatedControlsWatcher[inputEl.closest( 'li' ).dataset.settingId] = effectiveColor;
 
 			// Enable Publish.
 			activatePublishButton();
