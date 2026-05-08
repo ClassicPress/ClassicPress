@@ -1067,18 +1067,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function addItemToCustomizer( selectedItem, attachmentId, imageElement, imageUrl ) {
-		var setting, settingId,
-			parent = customizeButton.parentNode,
-			li = customizeButton.closest( 'li' ),
+		var parent = customizeButton.parentNode,
+			grandparent = parent.parentNode,
+			li = parent.closest( 'li' ),
+			settingId = li.dataset.settingId,
 			removeButton = document.createElement( 'button' ),
 			selectButton = document.createElement( 'button' );
 
 		if ( ! parent ) {
 			return;
 		}
-
-		setting = parent.closest( 'li' );
-		settingId = setting.dataset.settingId;
 
 		removeButton.className = 'button remove-button';
 		removeButton.type = 'button';
@@ -1119,11 +1117,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Insert other images according to whether this is a new insertion or replacement
 		} else {
 			imageElement.className = 'thumbnail thumbnail-image';
-			if ( parent.parentNode.querySelector( 'img' ) || parent.parentNode.querySelector( 'video' ) ) {
-				parent.parentNode.querySelector( 'img' )?.replaceWith( imageElement );
-				parent.parentNode.querySelector( 'video' )?.replaceWith( imageElement );
+			if ( grandparent.querySelector( 'img' ) || grandparent.querySelector( 'video' ) ) {
+				grandparent.querySelector( 'img' )?.replaceWith( imageElement );
+				grandparent.querySelector( 'video' )?.replaceWith( imageElement );
 			} else {
-				parent.parentNode.prepend( imageElement );
+				grandparent.prepend( imageElement );
 				parent.prepend( removeButton );
 				customizeButton.replaceWith( selectButton );
 				setTimeout( function() {
@@ -1131,10 +1129,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 			}
 			if ( settingId === 'background_image' ) {
-				parent.parentNode.querySelector( 'input' ).value = imageUrl;
+				grandparent.querySelector( 'input' ).value = imageUrl;
 				_updatedControlsWatcher[ settingId ] = imageUrl;
 			} else {
-				parent.parentNode.querySelector( 'input' ).value = attachmentId;
+				grandparent.querySelector( 'input' ).value = attachmentId;
 				_updatedControlsWatcher[ settingId ] = attachmentId;
 			}
 		}
@@ -1150,7 +1148,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function removeMedia() {
 		var button,
-			parent = customizeButton.parentNode;
+			parent = customizeButton.parentNode,
+			grandparent = parent.parentNode;
 
 		if ( customizeButton.nextElementSibling.id && customizeButton.nextElementSibling.id === 'header_image-button' ) { // header image
 			parent.previousElementSibling.querySelector( 'img' )?.remove();
@@ -1168,13 +1167,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			button.className = 'upload-button button select-button';
 			button.type = 'button';
 			button.textContent = customizeButton.parentNode.dataset.empty;
-			if ( document.querySelector( '.site-icon-preview' ) ) {
-				document.querySelector( '.site-icon-preview' ).setAttribute( 'hidden', 'true' );
-				document.querySelector( '.app-icon-preview' ).remove();
+			if ( grandparent.querySelector( '.site-icon-preview' ) ) {
+				grandparent.querySelector( '.site-icon-preview' ).setAttribute( 'hidden', 'true' );
+				grandparent.querySelector( '.app-icon-preview' ).remove();
+				grandparent.querySelector( 'input' ).value = '';
 			} else {
-				parent.parentNode.querySelector( 'img' )?.remove();
-				parent.parentNode.querySelector( 'video' )?.remove();
-				parent.parentNode.querySelector( 'input' ).value = '';
+				grandparent.querySelector( 'img' )?.remove();
+				grandparent.querySelector( 'video' )?.remove();
+				grandparent.querySelector( 'input' ).value = '';
 			}
 			parent.innerHTML = '';
 			parent.append( button );
