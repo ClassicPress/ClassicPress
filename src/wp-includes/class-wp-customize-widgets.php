@@ -809,7 +809,7 @@ final class WP_Customize_Widgets {
 		<div id="widgets-left"><!-- compatibility with JS which looks for widget templates here -->
 			<div id="available-widgets">
 				<div class="customize-section-title">
-					<button class="customize-section-back" tabindex="-1">
+					<a href="#customize-pane-parent" class="customize-section-back">
 						<span class="screen-reader-text">
 
 							<?php
@@ -818,7 +818,7 @@ final class WP_Customize_Widgets {
 							?>
 
 						</span>
-					</button>
+					</a>
 					<h3>
 						<span class="customize-action">
 
