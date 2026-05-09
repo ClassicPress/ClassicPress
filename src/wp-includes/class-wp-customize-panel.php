@@ -329,12 +329,14 @@ class WP_Customize_Panel {
 		?>
 
 		<li class="panel-meta customize-info accordion-section<?php echo esc_attr( $cannot_expand ); ?>">
-			<button class="customize-panel-back" tabindex="-1"><span class="screen-reader-text">
-				<?php
-				/* translators: Hidden accessibility text. */
-				esc_html_e( 'Back' );
-				?>
-			</span></button>
+			<a href="#customize-pane-parent" class="customize-panel-back">
+				<span class="screen-reader-text">
+					<?php
+					/* translators: Hidden accessibility text. */
+					esc_html_e( 'Back' );
+					?>
+				</span>
+			</a>
 			<div class="accordion-section-title">
 				<span class="preview-notice">
 
