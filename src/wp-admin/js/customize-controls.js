@@ -13,6 +13,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver, targetEl,
 		i = 1,
+		customizerControls = [...document.getElementById( 'customize-theme-controls' ).children],
 		{ FilePond } = window, // import FilePond
 		cropContext = false,
 		dialog = document.getElementById( 'widget-modal' ),
@@ -22,6 +23,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		form = document.querySelector( 'form' ),
 		inputs = form.querySelectorAll( 'input, select, textarea' ),
 		saveButton = form.querySelector( '#save' ),
+		publishSettings = form.querySelector( '#publish-settings' ),
+		publishSettingsPanel = document.getElementById( 'sub-accordion-section-publish_settings' ),
 		devicesWrapper = document.querySelector( '.devices' ),
 		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
 		previewFrame = document.getElementById( 'customize-preview' ),
@@ -32,7 +35,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		newMenuItemIDs = [],
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
 		hash = window.location.hash.replace( '#', '' ),
-		section = document.getElementById( 'sub-accordion-section-custom_css' );
+		section = document.getElementById( 'sub-accordion-section-custom_css' ),
+		discardingChangeset = false,
+		changesetStatus = 'publish';
 
 	// Go direct to appropriate Customizer panel if its hash is specified in the URL
 	if ( hash === 'menu-to-edit' ) {
@@ -41,21 +46,79 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	targetEl = document.getElementById( hash );
 
 	if ( hash && targetEl ) {
-		[...document.getElementById( 'customize-theme-controls' ).children].forEach( function( child ) {
+		customizerControls.forEach( function( child ) {
 			child.style.display = 'none';
 		} );
 
+		targetEl.style.display = 'block';
+
 		if ( hash === 'customize-pane-parent' ) {
 			document.getElementById( 'customize-info' ).style.display = 'block';
+			setTimeout( function() {
+				document.querySelector( '.customize-controls-close' ).focus();
+			}, 0 );
 		} else {
 			document.getElementById( 'customize-info' ).style.display = 'none';
+			setTimeout( function() {
+				targetEl.querySelector( 'a' ).focus();
+			}, 0 );
 		}
 
-		targetEl.style.display = 'block';
-		setTimeout( function() {
-			targetEl.querySelector( 'button' ).focus();
-		}, 0 );
+		if ( hash === 'sub-accordion-section-themes' ) {
+			document.getElementById( 'customize-footer-actions' ).style.bottom = '-45px';
+		} else {
+			document.getElementById( 'customize-footer-actions' ).style.bottom = '0';
+		}
 	}
+
+	/**
+	 * Show and hide panels according to hash value after initial page load
+	 */
+	window.addEventListener( 'hashchange', function( e ) {
+		var newHash = e.newURL.split( '#' )[1],
+			targetEl = document.getElementById( newHash );
+
+		if ( newHash && targetEl ) {
+			customizerControls.forEach( function( child ) {
+				child.style.display = 'none';
+			} );
+			publishSettingsPanel.style.display = 'none';
+			targetEl.style.display = 'block';
+
+			if ( newHash === 'customize-pane-parent' ) {
+				document.getElementById( 'customize-info' ).style.display = 'block';
+				document.querySelector( '.customize-controls-close' ).focus();
+			} else {
+				document.getElementById( 'customize-info' ).style.display = 'none';
+				targetEl.querySelector( 'a' ).focus();
+			}
+
+			if ( ! newHash.startsWith( 'sub-accordion-section-nav_menu[' ) ) {
+				document.body.classList.remove( 'adding-menu-items' );
+				availableMenuItems.style.display = 'none';
+				addMenuButtons.forEach( function( add ) {
+					add.setAttribute( 'aria-expanded', 'false' );
+				} );
+				if ( ! newHash.startsWith( 'sub-accordion-section-sidebar-widgets-' ) ) {
+					document.getElementById( 'widgets-left' ).style.display = 'none';
+				}
+			}
+
+			if ( ! newHash.startsWith( 'sub-accordion-section-sidebar-widgets-' ) ) {
+				document.body.classList.remove( 'adding-widget' );
+				availableMenuItems.style.display = 'none';
+				addWidgetButtons.forEach( function( add ) {
+					add.setAttribute( 'aria-expanded', 'false' );
+				} );
+			}
+
+			if ( newHash === 'sub-accordion-section-themes' ) {
+				document.getElementById( 'customize-footer-actions' ).style.bottom = '-45px';
+			} else {
+				document.getElementById( 'customize-footer-actions' ).style.bottom = '0';
+			}
+		}
+	} );
 
 	// Delete redundant query args from browser URL
 	if ( queryParams.get( 'url' ) ) {
@@ -72,7 +135,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
 			history.replaceState( null, '', newUrl );
 			saveButton.disabled = false;
-			saveButton.value = _wpCustomizeControlsL10n.activate;
+			saveButton.textContent = _wpCustomizeControlsL10n.activate;
 		}
 		setTimeout( function() {
 			document.getElementById( 'customize-pane-parent' ).querySelector( 'button' ).focus();
@@ -83,9 +146,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		history.replaceState( null, '', newUrl );
 	}
 
-	// Remove inert attribute to enable interactions with form
-	form.removeAttribute( 'inert' );
 	document.getElementById( 'customize-preview-loading' ).classList.add( 'hidden' );
+	setScheduledDateToNow();
 
 	// Limit motion where appropriate
 	reducedMotionMediaQuery.addEventListener( 'change', function handleReducedMotionChange( event ) {
@@ -98,7 +160,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Note that browsers do not permit the display of a custom message.
 	 */
 	window.addEventListener( 'beforeunload', function( e ) {
-		if ( saveButton.disabled === false ) {
+		if ( saveButton.disabled === false && ! discardingChangeset ) {
 			e.preventDefault();
 		}
 	} );
@@ -115,7 +177,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function activatePublishButton() {
 		saveButton.disabled = false;
-		saveButton.value = _wpCustomizeControlsL10n.publish;
+		saveButton.textContent = _wpCustomizeControlsL10n.publish;
+		publishSettings.style.display = 'block';
 	}
 
 	/**
@@ -561,9 +624,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @param {MouseEvent} event A click event.
 	 * @return {void}
 	 */
-	function copyToClipboard( button ) {
+	function copyToClipboard( context, button ) {
 		var copyAttachmentURLSuccessTimeout,
-			copyText = dialog.querySelector( '#attachment-details-copy-link' ).value,
+			copyText = ( context === 'attachment' ) ? dialog.querySelector( '#attachment-details-copy-link' ).value : document.querySelector( '.preview-control-element' ).textContent,
 			input = document.createElement( 'input' );
 
 		if ( navigator.clipboard ) {
@@ -577,16 +640,27 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Show success visual feedback.
 		clearTimeout( copyAttachmentURLSuccessTimeout );
-		button.nextElementSibling.classList.remove( 'hidden' );
 		input.remove();
 
-		// Hide success visual feedback after 3 seconds since last success and unfocus the trigger.
-		copyAttachmentURLSuccessTimeout = setTimeout( function() {
-			button.nextElementSibling.classList.add( 'hidden' );
-		}, 3000 );
+		if ( context === 'attachment' ) {
+			button.nextElementSibling.classList.remove( 'hidden' );
 
-		// Handle success audible feedback.
-		wp.a11y.speak( wp.i18n.__( 'The file URL has been copied to your clipboard' ) );
+			// Hide success visual feedback after 3 seconds since last success and unfocus the trigger.
+			copyAttachmentURLSuccessTimeout = setTimeout( function() {
+				button.nextElementSibling.classList.add( 'hidden' );
+			}, 3000 );
+
+			// Handle success audible feedback.
+			wp.a11y.speak( wp.i18n.__( 'The file URL has been copied to your clipboard' ) );
+		} else {
+			button.textContent = document.querySelector( '.customize-copy-preview-link' ).dataset.copiedText;
+			copyAttachmentURLSuccessTimeout = setTimeout( function() {
+				button.textContent = document.querySelector( '.customize-copy-preview-link' ).dataset.copyText;
+			}, 3000 );
+
+			// Handle success audible feedback.
+			wp.a11y.speak( wp.i18n.__( 'The preview URL has been copied to your clipboard' ) );
+		}
 	}
 
 	/**
@@ -1061,23 +1135,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
-	 * Add image to widget.
+	 * Add image to Customizer.
 	 *
 	 * @abstract
 	 * @return {void}
 	 */
 	function addItemToCustomizer( selectedItem, attachmentId, imageElement, imageUrl ) {
-		var setting, settingId,
-			parent = customizeButton.parentNode,
+		var parent = customizeButton.parentNode,
+			grandparent = parent.parentNode,
+			li = parent.closest( 'li' ),
+			settingId = li.dataset.settingId,
 			removeButton = document.createElement( 'button' ),
 			selectButton = document.createElement( 'button' );
 
 		if ( ! parent ) {
 			return;
 		}
-
-		setting = parent.closest( 'li' );
-		settingId = setting.dataset.settingId;
 
 		removeButton.className = 'button remove-button';
 		removeButton.type = 'button';
@@ -1102,14 +1175,27 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				height: selectedItem.dataset.height
 			};
 
+		// Update site icon
+		} else if ( settingId === 'site_icon' ) {
+			imageElement.className = 'app-icon-preview';
+			li.querySelector( '.site-icon-preview' ).removeAttribute( 'hidden' );
+			li.querySelector( '.site-icon-preview' ).append( imageElement );
+			parent.prepend( removeButton );
+			customizeButton.replaceWith( selectButton );
+			setTimeout( function() {
+				selectButton.focus();
+			} );
+			li.querySelector( 'input' ).value = attachmentId;
+			_updatedControlsWatcher[ settingId ] = attachmentId;
+
 		// Insert other images according to whether this is a new insertion or replacement
 		} else {
 			imageElement.className = 'thumbnail thumbnail-image';
-			if ( parent.parentNode.querySelector( 'img' ) || parent.parentNode.querySelector( 'video' ) ) {
-				parent.parentNode.querySelector( 'img' )?.replaceWith( imageElement );
-				parent.parentNode.querySelector( 'video' )?.replaceWith( imageElement );
+			if ( grandparent.querySelector( 'img' ) || grandparent.querySelector( 'video' ) ) {
+				grandparent.querySelector( 'img' )?.replaceWith( imageElement );
+				grandparent.querySelector( 'video' )?.replaceWith( imageElement );
 			} else {
-				parent.parentNode.prepend( imageElement );
+				grandparent.prepend( imageElement );
 				parent.prepend( removeButton );
 				customizeButton.replaceWith( selectButton );
 				setTimeout( function() {
@@ -1117,10 +1203,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 			}
 			if ( settingId === 'background_image' ) {
-				parent.parentNode.querySelector( 'input' ).value = imageUrl;
+				grandparent.querySelector( 'input' ).value = imageUrl;
 				_updatedControlsWatcher[ settingId ] = imageUrl;
 			} else {
-				parent.parentNode.querySelector( 'input' ).value = attachmentId;
+				grandparent.querySelector( 'input' ).value = attachmentId;
 				_updatedControlsWatcher[ settingId ] = attachmentId;
 			}
 		}
@@ -1136,7 +1222,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function removeMedia() {
 		var button,
-			parent = customizeButton.parentNode;
+			parent = customizeButton.parentNode,
+			grandparent = parent.parentNode;
 
 		if ( customizeButton.nextElementSibling.id && customizeButton.nextElementSibling.id === 'header_image-button' ) { // header image
 			parent.previousElementSibling.querySelector( 'img' )?.remove();
@@ -1154,9 +1241,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			button.className = 'upload-button button select-button';
 			button.type = 'button';
 			button.textContent = customizeButton.parentNode.dataset.empty;
-			parent.parentNode.querySelector( 'img' )?.remove();
-			parent.parentNode.querySelector( 'video' )?.remove();
-			parent.parentNode.querySelector( 'input' ).value = '';
+			if ( grandparent.querySelector( '.site-icon-preview' ) ) {
+				grandparent.querySelector( '.site-icon-preview' ).setAttribute( 'hidden', 'true' );
+				grandparent.querySelector( '.app-icon-preview' ).remove();
+				grandparent.querySelector( 'input' ).value = '';
+			} else {
+				grandparent.querySelector( 'img' )?.remove();
+				grandparent.querySelector( 'video' )?.remove();
+				grandparent.querySelector( 'input' ).value = '';
+			}
 			parent.innerHTML = '';
 			parent.append( button );
 			setTimeout( function() {
@@ -1198,6 +1291,36 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Get date and time of intended future publication os changeset
+	 */
+	function getScheduledDate() {
+		return [
+			document.getElementById( 'date-time-year' ).value,
+			String( document.getElementById( 'date-time-month' ).value ).padStart( 2, '0' ),
+			String( document.getElementById( 'date-time-day' ).value ).padStart( 2, '0' ),
+			document.getElementById( 'date-time-hour' ).value,
+			document.getElementById( 'date-time-minute' ).value,
+			document.getElementById( 'date-time-meridian' ).value
+		];
+	}
+
+	/**
+	 * Set current date and time within scheduled publication settings
+	 */
+	 function setScheduledDateToNow() {
+		var now    = new Date(),
+			hour24 = now.getHours(),
+			hour12 = hour24 % 12 || 12;
+
+		document.getElementById( 'date-time-month' ).value    = now.getMonth() + 1;
+		document.getElementById( 'date-time-day' ).value      = now.getDate();
+		document.getElementById( 'date-time-year' ).value     = now.getFullYear();
+		document.getElementById( 'date-time-hour' ).value     = hour12;
+		document.getElementById( 'date-time-minute' ).value   = String( now.getMinutes() ).padStart( 2, '0' );
+		document.getElementById( 'date-time-meridian' ).value = hour24 >= 12 ? 'pm' : 'am';
+	}
+
+	/**
 	 * Publish updates by clicking Publish button.
 	 *
 	 * @abstract
@@ -1212,7 +1335,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			navMenuLocations = [],
 			navMenuItems = [],
 			formData = new FormData(),
-			updateData = new FormData();
+			updateData = new FormData(),
+			previewLink = document.getElementById( 'preview-link' ),
+			changesetId = document.getElementById( 'customize_changeset_uuid' ).value;
 
 		// Prevent form submission via PHP
 		e.preventDefault();
@@ -1258,9 +1383,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			formData.append( 'action', 'customize_save' );
 			formData.append( 'nonce', document.getElementById( 'customizer_nonce' ).value );
 			formData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
-			formData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
-			formData.append( 'customize_changeset_status', 'publish' );
+			formData.append( 'customize_changeset_uuid', changesetId );
+			formData.append( 'customize_changeset_status', changesetStatus );
 			formData.append( 'customize_changeset_data', JSON.stringify( navMenuChanges ) );
+
+			if ( changesetStatus === 'future' ) {
+				var d = getScheduledDate();
+				formData.append( 'customize_changeset_date', d[0] + '-' + d[1] + '-' + d[2] + ' ' + d[3] + ':' + d[4] + ' ' + d[5] );
+			}
 
 			try {
 				const response = await fetch( ajaxurl, {
@@ -1379,9 +1509,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		updateData.append( 'action', 'customize_save' );
 		updateData.append( 'nonce', document.getElementById( 'customizer_nonce' ).value );
 		updateData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
-		updateData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
-		updateData.append( 'customize_changeset_status', 'publish' );
+		updateData.append( 'customize_changeset_uuid', changesetId );
+		updateData.append( 'customize_changeset_status', changesetStatus );
 		updateData.append( 'customize_changeset_data', JSON.stringify( submittedChanges ) );
+
+		if ( changesetStatus === 'future' ) {
+			var d = getScheduledDate();
+			updateData.append( 'customize_changeset_date', d[0] + '-' + d[1] + '-' + d[2] + ' ' + d[3] + ':' + d[4] + ' ' + d[5] );
+		}
 
 		try {
 			const response = await fetch( ajaxurl, {
@@ -1396,7 +1531,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} catch ( err ) {
 			console.error( _wpCustomizeControlsL10n.saveBlockedError.plural + ':', err );
 			saveButton.disabled = false;
-			saveButton.value = _wpCustomizeControlsL10n.publish;
+			saveButton.textContent = _wpCustomizeControlsL10n.publish;
 			window._customizePublishing = false;
 		}
 
@@ -1420,14 +1555,31 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 
 			// Reset form
-			saveButton.disabled = true;
-			saveButton.value = _wpCustomizeControlsL10n.published;
-			document.getElementById( 'customize_changeset_uuid' ).value = newResult.data.next_changeset_uuid;
+			if ( changesetStatus === 'publish' || changesetStatus === 'future' ) {
+				if ( changesetStatus === 'publish' ) {
+					saveButton.textContent = _wpCustomizeControlsL10n.published;
+				} else if ( changesetStatus === 'future' ) {
+					saveButton.textContent = _wpCustomizeControlsL10n.scheduled;
+				}
+				publishSettings.style.display = 'none';
+				publishSettings.setAttribute( 'aria-expanded', 'false' );
+				publishSettingsPanel.style.display = 'none';
+			} else if ( changesetStatus === 'draft' ) {
+				saveButton.textContent = _wpCustomizeControlsL10n.draftSaved;
+				publishSettings.setAttribute( 'aria-expanded', 'true' );
+				publishSettingsPanel.style.display = 'block';
+				publishSettingsPanel.querySelector( '.notice-info' ).style.display = 'none';
+				previewLink.removeAttribute( 'inert' );
+				previewLink.style.color = '#2271b1';
+				document.querySelector( '.customize-copy-preview-link' ).removeAttribute( 'disabled' );
+			}
 
 			// Reset the buffer object and proxy
 			Object.keys( updatedControls ).forEach( function( key ) {
 				delete updatedControls[ key ];
 			} );
+			saveButton.disabled = true;
+			document.getElementById( 'customize_changeset_uuid' ).value = newResult.data.next_changeset_uuid;
 			window._customizePublishing = false;
 		}
 	} );
@@ -1462,6 +1614,25 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 			} );
 		} );
+	}
+
+	/**
+	 * Discard all changes in the current changeset
+	 */
+	function discardChangeset() {
+		if ( ! window.confirm( _wpCustomizeControlsL10n.trashConfirm ) ) {
+			return;
+		}
+
+		// Clear all tracked changes
+		Object.keys( updatedControls ).forEach( function( key ) {
+			delete updatedControls[ key ];
+		} );
+
+		// Reload the page to restore the original state
+		discardingChangeset = true;
+		window.location.reload( true );
+		saveButton.disabled = true;
 	}
 
 	/**
@@ -1553,67 +1724,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 
-		if ( ( e.target.tagName === 'H3' || e.target.classList && e.target.classList.contains( 'change-theme' ) ) && ul ) {
-			e.preventDefault();
-			id = e.target.closest( 'li' ).id;
-			document.body.classList.remove( 'adding-menu-items' );
-			document.body.classList.remove( 'adding-widget' );
-			document.getElementById( 'widgets-left' ).style.display = 'none';
-			availableMenuItems.style.display = 'none';
-			addMenuButtons.forEach( function( add ) {
-				add.setAttribute( 'aria-expanded', 'false' );
-			} );
-			addWidgetButtons.forEach( function( add ) {
-				add.setAttribute( 'aria-expanded', 'false' );
-			} );
-
-			// Go down to the second level
-			if ( ul.classList.contains( 'customize-pane-parent' ) ) {
-				ul.style.display = 'none';
-				document.getElementById( 'customize-info' ).style.display = 'none';
-				document.getElementById( 'sub-' + id ).style.display = 'block';
-				document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();
-				window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-' + id );
-
-			// Go down to the third level
-			} else if ( ! e.target.closest( 'li' ).classList.contains( 'customize-control-widget_form' ) && ul.classList.contains( 'customize-pane-child' ) ) {
-				if ( ! id.startsWith( 'accordion-section-nav_menu[' ) ) { // not a nav menu
-					ul.style.display = 'none';
-					document.getElementById( 'sub-' + id ).style.display = 'block';
-					document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();
-					document.getElementById( 'sub-' + id ).setAttribute( 'data-parent-id', ul.id ); // update
-				}
-				window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-' + id );
+		// Choose how to publish settings
+		if ( e.target === publishSettings ) {
+			if ( publishSettings.getAttribute( 'aria-expanded' ) === 'false' ) {
+				publishSettings.setAttribute( 'aria-expanded', 'true' );
+				publishSettingsPanel.style.display = 'block';
+				setTimeout( function() {
+					document.getElementById( 'changeset-status-publish' ).focus();
+				}, 0 );
+			} else {
+				publishSettings.setAttribute( 'aria-expanded', 'false' );
+				publishSettingsPanel.style.display = 'none';
 			}
 
-		//Go up a level
-		} else if ( e.target.classList && ( e.target.classList.contains( 'customize-section-back' ) || e.target.classList.contains( 'customize-panel-back' ) ) ) {
-			e.preventDefault();
-			ul.style.display = 'none';
-			document.body.classList.remove( 'adding-menu-items' );
-			document.body.classList.remove( 'adding-widget' );
-			document.getElementById( 'widgets-left' ).style.display = 'none';
-			availableMenuItems.style.display = 'none';
-			addMenuButtons.forEach( function( add ) {
-				add.setAttribute( 'aria-expanded', 'false' );
-			} );
-			addWidgetButtons.forEach( function( add ) {
-				add.setAttribute( 'aria-expanded', 'false' );
-			} );
+		// Discard changes in changeset
+		} else if ( e.target.classList?.contains( 'button-link-delete' ) && e.target.parentNode.id === 'customize-control-trash_changeset' ) {
+			discardChangeset();
 
-			if ( ul.dataset.parentId === 'customize-pane-parent' ) {
-				document.getElementById( 'customize-info' ).style.display = 'block';
-			}
-			document.getElementById( ul.dataset.parentId ).style.display = 'block';
-			document.getElementById( ul.dataset.parentId ).querySelector( 'button' ).focus();
-			window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#' + ul.dataset.parentId );
-
-		// Go to widgets panel
-		} else if ( e.target.tagName === 'A' && ( e.target.closest( 'li' ).id === 'accordion-section-menu_locations' || ul.id === 'sub-accordion-section-menu_locations' ) ) {
-			e.preventDefault();
-			ul.style.display = 'none';
-			document.getElementById( 'sub-accordion-panel-widgets' ).style.display = 'block';
-			window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-accordion-panel-widgets' );
+		// Copy preview link
+		} else if ( e.target.classList?.contains( 'customize-copy-preview-link' ) ) {
+			copyToClipboard( 'preview', e.target );
 
 		// Add a widget
 		} else if ( e.target.classList && e.target.classList.contains( 'add-new-widget' ) ) {
@@ -1783,7 +1913,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Copy URL
 			} else if ( e.target.className.includes( 'copy-attachment-url' ) ) {
-				copyToClipboard( e.target );
+				copyToClipboard( 'attachment', e.target );
 
 			// Delete media item
 			} else if ( e.target.className.includes( 'delete-attachment' ) ) {
@@ -1794,6 +1924,24 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 	} );
+
+	/**
+	 * Change mode of publishing settings
+	 */
+	document.getElementById( 'customize-control-changeset_status' ).addEventListener( 'change', function( e ) {
+		let scheduled = document.getElementById( 'customize-control-changeset_scheduled_date' );
+        if ( e.target.type === 'radio' && e.target.name === 'changeset-status' ) {
+			changesetStatus = e.target.value;
+            saveButton.textContent = e.target.nextElementSibling.textContent;
+ 
+            if ( changesetStatus === 'future' ) {
+				setScheduledDateToNow(); // Refresh to current time each time Schedule is selected
+				scheduled.style.display = 'block';
+			} else {
+				scheduled.style.display = 'none';
+			}
+        }
+    } );
 
 	/**
 	 * Enable searching for items within grid.
