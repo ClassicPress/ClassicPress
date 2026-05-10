@@ -361,6 +361,7 @@ wp_print_scripts();
 						<button id="publish-settings"
 							class="publish-settings button-primary button dashicons dashicons-admin-generic"
 							aria-label="<?php esc_attr_e( 'Publish Settings' ); ?>"
+							aria-controls="sub-accordion-section-publish_settings"
 							aria-expanded="false"
 							style="display: none;"
 							name="cp_publish_submit"
@@ -462,17 +463,6 @@ wp_print_scripts();
 										}
 										?>
 
-									</h3>
-								</li>
-								<li id="accordion-section-publish_settings"
-									class="accordion-section control-section control-section-outer"
-									aria-owns="sub-accordion-section-publish_settings"
-								>
-									<h3 class="accordion-section-title" tabindex="0">
-										<?php esc_html_e( 'Publish Settings' ); ?>
-										<span class="screen-reader-text">
-											<?php esc_html_e( 'Press return or enter to open this section' ); ?>
-										</span>
 									</h3>
 								</li>
 
@@ -1803,6 +1793,7 @@ wp_print_scripts();
 						value="publish"
 						name="changeset-status"
 						data-customize-setting-key-link="default"
+						checked
 					>
 					<label for="changeset-status-publish">
 						<?php esc_html_e( 'Publish' ); ?>
@@ -1969,8 +1960,9 @@ wp_print_scripts();
 						<?php esc_html_e( 'Preview Link' ); ?>
 					</label>
 					<a href="<?php echo esc_url( home_url( '/' ) ); ?>"
+						id="preview-link"
 						target="<?php echo esc_attr( $wp_customize->changeset_uuid() ); ?>"
-						class="disabled"
+						inert
 					>
 						<span class="preview-control-element" data-component="url">
 							<?php echo esc_url( home_url( '/' ) ); ?>
