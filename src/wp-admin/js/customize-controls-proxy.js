@@ -216,50 +216,50 @@ window.getPreviewChannel = function() {
  *
  * @param {string} currentUrl The URL currently shown in the preview iframe.
  */
+var previewReady = false;
 window.updatePreviewLink = function( currentUrl ) {
-	var uuid    = document.getElementById( 'customize-changeset-uuid' ),
-		status  = document.getElementById( 'customize-changeset-status' ),
-		anchor  = document.querySelector( '#customize-control-changeset_preview_link .preview-link-wrapper a' ),
-		urlSpan = document.querySelector( '#customize-control-changeset_preview_link [data-component="url"]' ),
-		input   = document.getElementById( 'customize-preview-link-input' ),
-		copy    = document.querySelector( '.customize-copy-preview-link' ),
-		saveBtn = document.querySelector( '[name="save"]' ),
-		urlParser, params, frontendUrl, unsaved;
+	var liveUrl, frontendUrl,
+		uuid    = document.getElementById( 'customize_changeset_uuid' ),
+		iframe  = document.querySelector( '#customize-preview iframe' ),
+		anchor  = document.getElementById( 'preview-link' ),
+		urlSpan = document.querySelector( '#customize-control-changeset_preview_link [data-component="url"]' );
 
-	if ( ! anchor || ! currentUrl ) {
+	// Don't run on initial page load
+    if ( ! previewReady ) {
+        previewReady = true;
+        return;
+    }
+
+	if ( ! anchor ) {
+		return;
+	}
+
+	// Prefer the passed-in URL, otherwise read it from the iframe
+	try {
+		liveUrl = currentUrl || ( iframe.contentWindow.location.href );
+	} catch ( e ) {
+		console.warn( 'updatePreviewLink: invalid URL:', liveUrl, e );
+		return;
+	}
+
+	if ( ! liveUrl ) {
 		return;
 	}
 
 	// Build the shareable URL — append changeset UUID unless already published
-	urlParser = new URL( currentUrl );
-	params    = Object.fromEntries( urlParser.searchParams );
-
-	if ( status && status.value && status.value !== 'publish' ) {
-		params.customize_changeset_uuid = uuid ? uuid.value : '';
-	} else {
-		delete params.customize_changeset_uuid;
-	}
-
-	urlParser.search = new URLSearchParams( params ).toString();
-	frontendUrl = urlParser.href;
-
-	// Unsaved = save button is still active (user has unpublished changes)
-	unsaved = saveBtn && ! saveBtn.disabled;
-
+	frontendUrl = location.origin + liveUrl.split( '?' )[0].replace( location.origin, '' ) + '?customize_changeset_uuid=' + ( uuid ? uuid.value : '' );
 	anchor.href = frontendUrl;
-	anchor.classList.toggle( 'disabled', unsaved );
-	anchor.setAttribute( 'aria-disabled', unsaved ? 'true' : 'false' );
-	anchor.tabIndex = unsaved ? -1 : 0;
+	urlSpan.textContent = frontendUrl;
 
-	if ( urlSpan ) {
-		urlSpan.textContent = frontendUrl;
-	}
-	if ( input ) {
-		input.value = frontendUrl;
-	}
-	if ( copy ) {
-		copy.disabled = unsaved;
-	}
+	// Re-run whenever the iframe navigates to a new page
+	iframe.addEventListener( 'load', function() {
+		try {
+			window.updatePreviewLink( iframe.contentWindow.location.href );
+		} catch ( e ) {
+			// Cross-origin — the URL is unavailable; call with whatever we last had
+			window.updatePreviewLink( null );
+		}
+	} );
 };
 
 window.sendSettingToPreview = function( id, value ) {
@@ -485,6 +485,8 @@ window.addEventListener( 'message', function( event ) {
     if ( ! message.data || ! message.data.currentUrl ) {
         return;
     }
+ 
+    window.updatePreviewLink( message.data.currentUrl );
 
     target = window.getPreviewChannel();
     if ( ! target ) {
@@ -501,8 +503,6 @@ window.addEventListener( 'message', function( event ) {
         } ),
         location.origin
     );
-
-	window.updatePreviewLink( message.data.currentUrl );
 
 	setTimeout( function() {
 		target.iframe.style.visibility = 'visible';
@@ -540,30 +540,4 @@ window.addEventListener( 'message', function( event ) {
 
 	target.iframe.style.visibility = 'hidden';
 	target.iframe.src = url.toString();
-} );
-
-/**
- * Enable copying
- */
-document.addEventListener( 'DOMContentLoaded', function() {
-	var copy = document.querySelector( '.customize-copy-preview-link' );
-	if ( ! copy ) {
-		return;
-	}
-	copy.addEventListener( 'click', function() {
-		var input = document.getElementById( 'customize-preview-link-input' );
-		if ( ! input || ! input.value ) {
-			return;
-		}
-		if ( navigator.clipboard ) {
-			navigator.clipboard.writeText( input.value );
-		} else {
-			input.select();
-			document.execCommand( 'copy' );
-		}
-		copy.textContent = copy.dataset.copiedText;
-		setTimeout( function() {
-			copy.textContent = copy.dataset.copyText;
-		}, 2000 );
-	} );
 } );
