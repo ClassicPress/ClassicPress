@@ -354,6 +354,7 @@ body.trashing #publish-settings {
 	bottom: 14px;
 	font-size: 14px;
 	text-decoration: none;
+	color: #a7aaad;
 }
 
 #customize-control-changeset_preview_link a.disabled,
@@ -1038,6 +1039,10 @@ p.customize-section-description {
 	padding-left: 3px;
 	display: inline-block;
 	text-decoration: none;
+}
+
+.customize-control-notifications-container .notice {
+	margin: 5px 0 2px;
 }
 
 .customize-control-color .color-picker,
@@ -2583,7 +2588,7 @@ body.adding-widget .add-new-widget:before,
 
 #sub-accordion-section-publish_settings {
 	width: 300px;
-	padding: 14px 12px 15px;
+	padding: 14px 10px 15px;
 }
 
 #widgets-right {
