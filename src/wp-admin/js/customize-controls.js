@@ -1944,7 +1944,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
         if ( e.target.type === 'radio' && e.target.name === 'changeset-status' ) {
 			changesetStatus = e.target.value;
             saveButton.textContent = e.target.nextElementSibling.textContent;
- 
+
             if ( changesetStatus === 'future' ) {
 				setScheduledDateToNow(); // Refresh to current time each time Schedule is selected
 				scheduled.style.display = 'block';
