@@ -398,213 +398,6 @@ wp_print_scripts();
 				</a>
 			</header><!-- #customize-header-actions -->
 
-			<section id="sub-accordion-section-publish_settings"
-				class="customize-pane-child accordion-section-content accordion-section control-section control-section-outer open"
-				style="display:none"
-			>
-				<h3 class="screen-reader-text">
-					<?php esc_html_e( 'Publish status' ); ?>
-				</h3>
-				<fieldset id="customize-control-changeset_status" class="customize-control customize-control-radio">
-					<legend class="customize-control-title">
-						<?php esc_html_e( 'Action' ); ?>
-					</legend>
-					<div class="customize-inside-control-row">
-						<input id="changeset-status-publish"
-							type="radio"
-							value="publish"
-							name="changeset-status"
-							data-customize-setting-key-link="default"
-						>
-						<label for="changeset-status-publish">
-							<?php esc_html_e( 'Publish' ); ?>
-						</label>
-					</div>
-					<div class="customize-inside-control-row">
-						<input id="changeset-status-draft"
-							type="radio"
-							value="draft"
-							name="changeset-status"
-							data-customize-setting-key-link="default"
-						>
-						<label for="changeset-status-draft">
-							<?php esc_html_e( 'Save Draft' ); ?>
-						</label>
-					</div>
-					<div class="customize-inside-control-row">
-						<input id="changeset-status-future"
-							type="radio"
-							value="future"
-							name="changeset-status"
-							data-customize-setting-key-link="default"
-						>
-						<label for="changeset-status-future">
-							<?php esc_html_e( 'Schedule' ); ?>
-						</label>
-					</div>
-				</fieldset>
-				<div id="customize-control-changeset_scheduled_date"
-					class="customize-control customize-control-date_time"
-					style="display: none;"
-				>
-					<p id="schedule-desc" class="description customize-control-description">
-						<?php esc_html_e( 'Schedule your customization changes to publish ("go live") at a future date.' ); ?>
-					</p>
-					<div class="date-time-fields includes-time" aria-describedby="schedule-desc">
-						<fieldset class="day-row">
-							<legend class="title-day ">
-								<?php esc_html_e( 'Date' ); ?>
-							</legend>
-							<div class="day-fields clear">
-								<label for="date-time-month" class="screen-reader-text">
-									<?php esc_html_e( 'Month' ); ?>
-								</label>
-								<select id="date-time-month" class="date-input month" data-component="month">
-									<option value="1"><?php esc_html_e( '1-Jan' ); ?></option>
-									<option value="2"><?php esc_html_e( '2-Feb' ); ?></option>
-									<option value="3"><?php esc_html_e( '3-Mar' ); ?></option>
-									<option value="4"><?php esc_html_e( '4-Apr' ); ?></option>
-									<option value="5"><?php esc_html_e( '5-May' ); ?></option>
-									<option value="6"><?php esc_html_e( '6-Jun' ); ?></option>
-									<option value="7"><?php esc_html_e( '7-Jul' ); ?></option>
-									<option value="8"><?php esc_html_e( '8-Aug' ); ?></option>
-									<option value="9"><?php esc_html_e( '9-Sep' ); ?></option>
-									<option value="10"><?php esc_html_e( '10-Oct' ); ?></option>
-									<option value="11"><?php esc_html_e( '11-Nov' ); ?></option>
-									<option value="12"><?php esc_html_e( '12-Dec' ); ?></option>
-								</select>
-								<label for="date-time-day" class="screen-reader-text">
-									<?php esc_html_e( 'Day' ); ?>
-								</label>
-								<input id="date-time-day"
-									type="number"
-									size="2"
-									autocomplete="off"
-									class="date-input day tiny-text"
-									data-component="day"
-									min="1"
-									max="31"
-								>
-								<span aria-hidden="true">,</span>
-								<label for="date-time-year" class="screen-reader-text">
-									<?php esc_html_e( 'Year' ); ?>
-								</label>
-								<input id="date-time-year"
-									type="number"
-									size="4"
-									autocomplete="off"
-									class="date-input year tiny-text"
-									data-component="year"
-									min="<?php echo date( 'Y' ); ?>"
-									max="9999"
-								>
-							</div>
-						</fieldset>
-						<fieldset class="time-row clear">
-							<legend class="title-time">
-								<?php esc_html_e( 'Time' ); ?>
-							</legend>
-							<div class="time-fields clear">
-								<label for="date-time-hour" class="screen-reader-text">
-									<?php esc_html_e( 'Hour' ); ?>
-								</label>
-								<input id="date-time-hour"
-									type="number"
-									size="2"
-									autocomplete="off"
-									class="date-input hour tiny-text"
-									data-component="hour"
-									min="1"
-									max="12"
-								>
-								<span aria-hidden="true">:</span>
-								<label for="date-time-minute" class="screen-reader-text">
-									<?php esc_html_e( 'Minute' ); ?>
-								</label>
-								<input id="date-time-minute"
-									type="number"
-									size="2"
-									autocomplete="off"
-									class="date-input minute tiny-text"
-									data-component="minute"
-									min="0"
-									max="59"
-								>
-								<label for="date-time-meridian" class="screen-reader-text">
-									<?php esc_html_e( 'Morning or Afternoon' ); ?>
-								</label>
-								<select id="date-time-meridian" class="date-input meridian" data-component="meridian">
-									<option value="am"><?php esc_html_e( 'AM' ); ?></option>
-									<option value="pm"><?php esc_html_e( 'PM' ); ?></option>
-								</select>
-							</div>
-						</fieldset>
-						<p class="timezone-info">
-							<?php echo $timezone_info['description']; ?>
-						</p>
-					</div>
-				</div>
-
-				<!-- Discard Changes -->
-				<div id="customize-control-trash_changeset" class="customize-control customize-control-button">
-					<button type="button"
-						class="button-link button-link-delete"
-						data-customize-setting-key-link="default"
-						aria-describedby="discard-warning"
-					>
-						<?php esc_html_e( 'Discard changes' ); ?>
-					</button>
-					<p id="discard-warning" class="screen-reader-text">
-						<?php esc_html_e( 'This will permanently discard all unsaved customizer changes.' ); ?>
-					</p>
-				</div>
-
-				<!-- Share Preview Link -->
-				<div id="customize-control-changeset_preview_link" class="customize-control customize-control-undefined has-notifications">
-					<h4 class="customize-control-title">
-						<?php esc_html_e( 'Share Preview Link' ); ?>
-					</h4>
-					<p class="description customize-control-description">
-						<?php esc_html_e( 'See how changes would look live on your website, and share the preview with people who can\'t access the Customizer.' ); ?>
-					</p>
-					<div class="customize-control-notifications-container" role="status" aria-live="polite">
-						<ul role="list">
-							<li class="notice notice-info" data-code="changes_not_saved" data-type="info">
-								<div class="notification-message">
-									<?php esc_html_e( 'Please save your changes in order to share the preview.' ); ?>
-								</div>
-							</li>
-						</ul>
-					</div>
-					<div class="preview-link-wrapper">
-						<label for="customize-preview-link-input"class="screen-reader-text">
-							<?php esc_html_e( 'Preview Link' ); ?>
-						</label>
-						<a href="<?php echo esc_url( home_url( '/' ) ); ?>"
-							target="<?php echo esc_attr( $wp_customize->changeset_uuid() ); ?>"
-							class="disabled"
-						>
-							<span class="preview-control-element" data-component="url">
-								<?php echo esc_url( home_url( '/' ) ); ?>
-							</span>
-							<span class="screen-reader-text">
-								<?php esc_html_e( '(opens in a new tab)' ); ?>
-							</span>
-						</a>
-						<input id="customize-preview-link-input" type="url" readonly="" tabindex="-1" class="preview-control-element" data-component="input" aria-label="Shareable preview URL">
-						<button class="customize-copy-preview-link preview-control-element button button-secondary"
-							data-component="button"
-							data-copy-text="Copy"
-							data-copied-text="Copied"
-							aria-label="Copy preview link to clipboard"
-							disabled
-						>
-							<?php esc_html_e( 'Copy' ); ?>
-						</button>
-					</div>
-				</div>
-			</section>
-
 			<main id="widgets-right" class="wp-clearfix">
 				<div class="wp-full-overlay-sidebar-content" tabindex="-1">
 					<div id="customize-info" class="accordion-section customize-info">
@@ -897,20 +690,29 @@ wp_print_scripts();
 										<strong class="panel-title">
 											<?php echo esc_html( $nav_menus_panel->title ); ?>
 										</strong>
+
+										<?php
+										if ( ! empty( $nav_menus_panel->description ) ) {
+											?>
+
+											<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false">
+												<span class="screen-reader-text">
+													<?php
+													/* translators: Hidden accessibility text. */
+													esc_html_e( 'Help' );
+													?>
+												</span>
+											</button>
+
+											<?php
+										}
+										?>
+
 									</div>
 
 									<?php
 									if ( ! empty( $nav_menus_panel->description ) ) {
 										?>
-
-										<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false">
-											<span class="screen-reader-text">
-												<?php
-												/* translators: Hidden accessibility text. */
-												esc_html_e( 'Help' );
-												?>
-											</span>
-										</button>
 
 										<div class="description customize-panel-description">
 											<?php echo wp_kses_post( $nav_menus_panel->description ); ?>
@@ -1983,6 +1785,213 @@ wp_print_scripts();
 			wp_nonce_field( 'update-widget', 'nonce', false );
 			?>
 		</form><!-- #customize-controls -->
+		
+		<section id="sub-accordion-section-publish_settings"
+			class="customize-pane-child accordion-section-content accordion-section control-section control-section-outer open"
+			style="display:none"
+		>
+			<h3 class="screen-reader-text">
+				<?php esc_html_e( 'Publish status' ); ?>
+			</h3>
+			<fieldset id="customize-control-changeset_status" class="customize-control customize-control-radio">
+				<legend class="customize-control-title">
+					<?php esc_html_e( 'Action' ); ?>
+				</legend>
+				<div class="customize-inside-control-row">
+					<input id="changeset-status-publish"
+						type="radio"
+						value="publish"
+						name="changeset-status"
+						data-customize-setting-key-link="default"
+					>
+					<label for="changeset-status-publish">
+						<?php esc_html_e( 'Publish' ); ?>
+					</label>
+				</div>
+				<div class="customize-inside-control-row">
+					<input id="changeset-status-draft"
+						type="radio"
+						value="draft"
+						name="changeset-status"
+						data-customize-setting-key-link="default"
+					>
+					<label for="changeset-status-draft">
+						<?php esc_html_e( 'Save Draft' ); ?>
+					</label>
+				</div>
+				<div class="customize-inside-control-row">
+					<input id="changeset-status-future"
+						type="radio"
+						value="future"
+						name="changeset-status"
+						data-customize-setting-key-link="default"
+					>
+					<label for="changeset-status-future">
+						<?php esc_html_e( 'Schedule' ); ?>
+					</label>
+				</div>
+			</fieldset>
+			<div id="customize-control-changeset_scheduled_date"
+				class="customize-control customize-control-date_time"
+				style="display: none;"
+			>
+				<p id="schedule-desc" class="description customize-control-description">
+					<?php esc_html_e( 'Schedule your customization changes to publish ("go live") at a future date.' ); ?>
+				</p>
+				<div class="date-time-fields includes-time" aria-describedby="schedule-desc">
+					<fieldset class="day-row">
+						<legend class="title-day ">
+							<?php esc_html_e( 'Date' ); ?>
+						</legend>
+						<div class="day-fields clear">
+							<label for="date-time-month" class="screen-reader-text">
+								<?php esc_html_e( 'Month' ); ?>
+							</label>
+							<select id="date-time-month" class="date-input month" data-component="month">
+								<option value="1"><?php esc_html_e( '1-Jan' ); ?></option>
+								<option value="2"><?php esc_html_e( '2-Feb' ); ?></option>
+								<option value="3"><?php esc_html_e( '3-Mar' ); ?></option>
+								<option value="4"><?php esc_html_e( '4-Apr' ); ?></option>
+								<option value="5"><?php esc_html_e( '5-May' ); ?></option>
+								<option value="6"><?php esc_html_e( '6-Jun' ); ?></option>
+								<option value="7"><?php esc_html_e( '7-Jul' ); ?></option>
+								<option value="8"><?php esc_html_e( '8-Aug' ); ?></option>
+								<option value="9"><?php esc_html_e( '9-Sep' ); ?></option>
+								<option value="10"><?php esc_html_e( '10-Oct' ); ?></option>
+								<option value="11"><?php esc_html_e( '11-Nov' ); ?></option>
+								<option value="12"><?php esc_html_e( '12-Dec' ); ?></option>
+							</select>
+							<label for="date-time-day" class="screen-reader-text">
+								<?php esc_html_e( 'Day' ); ?>
+							</label>
+							<input id="date-time-day"
+								type="number"
+								size="2"
+								autocomplete="off"
+								class="date-input day tiny-text"
+								data-component="day"
+								min="1"
+								max="31"
+							>
+							<span aria-hidden="true">,</span>
+							<label for="date-time-year" class="screen-reader-text">
+								<?php esc_html_e( 'Year' ); ?>
+							</label>
+							<input id="date-time-year"
+								type="number"
+								size="4"
+								autocomplete="off"
+								class="date-input year tiny-text"
+								data-component="year"
+								min="<?php echo date( 'Y' ); ?>"
+								max="9999"
+							>
+						</div>
+					</fieldset>
+					<fieldset class="time-row clear">
+						<legend class="title-time">
+							<?php esc_html_e( 'Time' ); ?>
+						</legend>
+						<div class="time-fields clear">
+							<label for="date-time-hour" class="screen-reader-text">
+								<?php esc_html_e( 'Hour' ); ?>
+							</label>
+							<input id="date-time-hour"
+								type="number"
+								size="2"
+								autocomplete="off"
+								class="date-input hour tiny-text"
+								data-component="hour"
+								min="1"
+								max="12"
+							>
+							<span aria-hidden="true">:</span>
+							<label for="date-time-minute" class="screen-reader-text">
+								<?php esc_html_e( 'Minute' ); ?>
+							</label>
+							<input id="date-time-minute"
+								type="number"
+								size="2"
+								autocomplete="off"
+								class="date-input minute tiny-text"
+								data-component="minute"
+								min="0"
+								max="59"
+							>
+							<label for="date-time-meridian" class="screen-reader-text">
+								<?php esc_html_e( 'Morning or Afternoon' ); ?>
+							</label>
+							<select id="date-time-meridian" class="date-input meridian" data-component="meridian">
+								<option value="am"><?php esc_html_e( 'AM' ); ?></option>
+								<option value="pm"><?php esc_html_e( 'PM' ); ?></option>
+							</select>
+						</div>
+						</fieldset>
+					<p class="timezone-info">
+						<?php echo $timezone_info['description']; ?>
+					</p>
+				</div>
+			</div>
+
+			<!-- Discard Changes -->
+			<div id="customize-control-trash_changeset" class="customize-control customize-control-button">
+				<button type="button"
+					class="button-link button-link-delete"
+					data-customize-setting-key-link="default"
+					aria-describedby="discard-warning"
+				>
+					<?php esc_html_e( 'Discard changes' ); ?>
+				</button>
+				<p id="discard-warning" class="screen-reader-text">
+					<?php esc_html_e( 'This will permanently discard all unsaved customizer changes.' ); ?>
+				</p>
+			</div>
+
+			<!-- Share Preview Link -->
+			<div id="customize-control-changeset_preview_link" class="customize-control customize-control-undefined has-notifications">
+				<h4 class="customize-control-title">
+					<?php esc_html_e( 'Share Preview Link' ); ?>
+				</h4>
+				<p class="description customize-control-description">
+					<?php esc_html_e( 'See how changes would look live on your website, and share the preview with people who can\'t access the Customizer.' ); ?>
+				</p>
+				<div class="customize-control-notifications-container" role="status" aria-live="polite">
+					<ul role="list">
+						<li class="notice notice-info" data-code="changes_not_saved" data-type="info">
+							<div class="notification-message">
+								<?php esc_html_e( 'Please save your changes in order to share the preview.' ); ?>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="preview-link-wrapper">
+					<label for="customize-preview-link-input"class="screen-reader-text">
+						<?php esc_html_e( 'Preview Link' ); ?>
+					</label>
+					<a href="<?php echo esc_url( home_url( '/' ) ); ?>"
+						target="<?php echo esc_attr( $wp_customize->changeset_uuid() ); ?>"
+						class="disabled"
+					>
+						<span class="preview-control-element" data-component="url">
+							<?php echo esc_url( home_url( '/' ) ); ?>
+						</span>
+						<span class="screen-reader-text">
+							<?php esc_html_e( '(opens in a new tab)' ); ?>
+						</span>
+					</a>
+					<input id="customize-preview-link-input" type="url" readonly="" tabindex="-1" class="preview-control-element" data-component="input" aria-label="Shareable preview URL">
+					<button class="customize-copy-preview-link preview-control-element button button-secondary"
+						data-component="button"
+						data-copy-text="Copy"
+						data-copied-text="Copied"
+						aria-label="Copy preview link to clipboard"
+						disabled
+					>
+						<?php esc_html_e( 'Copy' ); ?>
+					</button>
+				</div>
+			</div>
+		</section>
 
 		<?php
 		// Display available widgets.
