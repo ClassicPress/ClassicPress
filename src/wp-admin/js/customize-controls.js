@@ -1377,7 +1377,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 			}
 		}
-console.log(d);
+
 		// Create new menus first
 		for ( const [key, object] of navMenuNegatives ) {
 			const negativeId = key.replace( 'nav_menu[', '' ).replace( ']', '' );
@@ -1545,7 +1545,7 @@ console.log(d);
 			saveButton.textContent = _wpCustomizeControlsL10n.publish;
 			window._customizePublishing = false;
 		}
-console.log(newResult);
+
 		// Update HTML
 		if ( newResult && newResult.success ) {
 			if ( newResult.data.nav_menu_item_updates ) {
