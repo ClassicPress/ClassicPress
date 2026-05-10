@@ -688,20 +688,28 @@ wp_print_scripts();
 										<strong class="panel-title">
 											<?php echo esc_html( $nav_menus_panel->title ); ?>
 										</strong>
+
+										<?php
+										if ( ! empty( $nav_menus_panel->description ) ) {
+											?>
+
+											<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false">
+												<span class="screen-reader-text">
+													<?php
+													/* translators: Hidden accessibility text. */
+													esc_html_e( 'Help' );
+													?>
+												</span>
+											</button>
+
+											<?php
+										}
+										?>
 									</div>
 
 									<?php
 									if ( ! empty( $nav_menus_panel->description ) ) {
 										?>
-
-										<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false">
-											<span class="screen-reader-text">
-												<?php
-												/* translators: Hidden accessibility text. */
-												esc_html_e( 'Help' );
-												?>
-											</span>
-										</button>
 
 										<div class="description customize-panel-description">
 											<?php echo wp_kses_post( $nav_menus_panel->description ); ?>
