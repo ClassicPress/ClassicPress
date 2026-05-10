@@ -8,7 +8,7 @@
 /* global wp, _wpCustomizeControlsL10n, updatedControls,
 _updatedControlsWatcher, console, ajaxurl, IMAGE_WIDGET, _cpCustomLogo,
 FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
-FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper */
+FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver, targetEl,
@@ -1327,7 +1327,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	form.addEventListener( 'submit', async function( e ) {
-		let result, newResult,
+		let result, newResult, timeStr,
 			entries = Object.entries( updatedControls ),
 			navMenuChanges = {},
 			submittedChanges = {},
@@ -1337,7 +1337,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			formData = new FormData(),
 			updateData = new FormData(),
 			previewLink = document.getElementById( 'preview-link' ),
-			changesetId = document.getElementById( 'customize_changeset_uuid' ).value;
+			changesetId = document.getElementById( 'customize_changeset_uuid' ).value,
+			d = getScheduledDate();
 
 		// Prevent form submission via PHP
 		e.preventDefault();
@@ -1348,6 +1349,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( e.submitter !== saveButton ) {
 			return;
 		}
+
+		if ( changesetStatus === 'future' ) {
+			var hours = parseInt( d[3], 10 );
+			if ( d[5] === 'pm' && hours !== 12 ) {
+				hours += 12;
+			}
+			if ( d[5] === 'am' && hours === 12 ) {
+				hours = 0;
+			}
+			timeStr = String( hours ).padStart( 2, '0' ) + ':' + d[4] + ':00';
+		}
+
 
 		// Populate arrays if a new menu is being added
 		for ( const [key, value] of entries ) {
@@ -1364,7 +1377,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 			}
 		}
-
+console.log(d);
 		// Create new menus first
 		for ( const [key, object] of navMenuNegatives ) {
 			const negativeId = key.replace( 'nav_menu[', '' ).replace( ']', '' );
@@ -1388,8 +1401,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			formData.append( 'customize_changeset_data', JSON.stringify( navMenuChanges ) );
 
 			if ( changesetStatus === 'future' ) {
-				var d = getScheduledDate();
-				formData.append( 'customize_changeset_date', d[0] + '-' + d[1] + '-' + d[2] + ' ' + d[3] + ':' + d[4] + ' ' + d[5] );
+				formData.append( 'customize_changeset_date', d[0] + '-' + d[1] + '-' + d[2] + ' ' + timeStr );
 			}
 
 			try {
@@ -1514,8 +1526,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		updateData.append( 'customize_changeset_data', JSON.stringify( submittedChanges ) );
 
 		if ( changesetStatus === 'future' ) {
-			var d = getScheduledDate();
-			updateData.append( 'customize_changeset_date', d[0] + '-' + d[1] + '-' + d[2] + ' ' + d[3] + ':' + d[4] + ' ' + d[5] );
+			updateData.append( 'customize_changeset_date', d[0] + '-' + d[1] + '-' + d[2] + ' ' + timeStr );
 		}
 
 		try {
@@ -1534,7 +1545,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			saveButton.textContent = _wpCustomizeControlsL10n.publish;
 			window._customizePublishing = false;
 		}
-
+console.log(newResult);
 		// Update HTML
 		if ( newResult && newResult.success ) {
 			if ( newResult.data.nav_menu_item_updates ) {
