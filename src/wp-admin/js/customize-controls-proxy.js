@@ -485,7 +485,7 @@ window.addEventListener( 'message', function( event ) {
     if ( ! message.data || ! message.data.currentUrl ) {
         return;
     }
- 
+
     window.updatePreviewLink( message.data.currentUrl );
 
     target = window.getPreviewChannel();
