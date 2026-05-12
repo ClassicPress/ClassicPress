@@ -206,7 +206,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					publishSettings.focus();
 				} else if ( event.target.classList?.contains( 'button-link-delete' ) && lastButton.hasAttribute( 'disabled' ) ) {
 					event.preventDefault();
-					publishSettings.focus();					
+					publishSettings.focus();
 				}
 			} else if ( isVisible( widgetSearch ) ) {
 				if ( event.target.classList?.contains( 'add-new-widget' ) ) {
@@ -235,7 +235,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					} );
 				}
 			}
-		} 
+		}
 	}
 
 	// Keyboard navigation management
