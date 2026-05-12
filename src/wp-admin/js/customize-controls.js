@@ -1621,6 +1621,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( e.target.getAttribute( 'aria-expanded' ) === 'false' ) {
 				document.getElementById( 'widgets-left' ).style.display = 'block';
 				e.target.setAttribute( 'aria-expanded', true );
+				setTimeout( function() {
+					document.getElementById( 'widgets-search' ).focus();
+				}, 0 );
 			} else {
 				document.getElementById( 'widgets-left' ).style.display = 'none';
 				e.target.setAttribute( 'aria-expanded', false );
