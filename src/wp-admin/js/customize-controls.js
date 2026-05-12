@@ -159,16 +159,81 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function constrainTab( event ) {
 		var first = form.querySelector( '#customize-save-button-wrapper' ).disabled === false ? form.querySelector( '#customize-save-button-wrapper' ) : form.querySelector( '.customize-controls-close' ),
-			last = form.querySelector( '.preview-mobile' );
+			last = form.querySelector( '.preview-mobile' ),
+			lastButton = [...publishSettingsPanel.querySelectorAll( 'button' )].pop(),
+			widgetSearch = document.getElementById( 'widgets-search' ),
+			lastWidget = [...document.querySelectorAll( '#available-widgets-list .widget-title' )].pop(),
+			menuSearch = document.getElementById( 'menu-items-search' ),
+			lastMenuItem = [...availableMenuItems.querySelectorAll( '.accordion-section-title' )].pop();
 
 		event.stopPropagation();
-		if ( event.target === last && ! event.shiftKey ) {
-			event.preventDefault();
-			first.focus();
-		} else if ( event.target === first && event.shiftKey ) {
-			event.preventDefault();
-			last.focus();
-		}
+		if ( event.shiftKey ) {
+			if ( event.target === first ) {
+				event.preventDefault();
+				last.focus();
+			} else if ( event.target.id === 'changeset-status-publish' ) {
+				event.preventDefault();
+				publishSettings.focus();
+			} else if ( event.target === widgetSearch ) {
+				event.preventDefault();
+				addWidgetButtons.forEach( function( add ) {
+					if ( isVisible( add ) ) {
+						add.focus();
+						return;
+					}
+				} );
+			} else if ( event.target === menuSearch ) {
+				event.preventDefault();
+				addMenuButtons.forEach( function( add ) {
+					if ( isVisible( add ) ) {
+						add.focus();
+						return;
+					}
+				} );
+			}
+		} else {
+			if ( event.target === last ) {
+				event.preventDefault();
+				first.focus();
+			} else if ( isVisible( publishSettingsPanel ) ) {
+				if ( event.target === publishSettings ) {
+					event.preventDefault();
+					document.getElementById( 'changeset-status-publish' ).focus();
+				} else if ( event.target === lastButton ) {
+					event.preventDefault();
+					publishSettings.focus();
+				} else if ( event.target.classList?.contains( 'button-link-delete' ) && lastButton.hasAttribute( 'disabled' ) ) {
+					event.preventDefault();
+					publishSettings.focus();					
+				}
+			} else if ( isVisible( widgetSearch ) ) {
+				if ( event.target.classList?.contains( 'add-new-widget' ) ) {
+					event.preventDefault();
+					widgetSearch.focus();
+				} else if ( event.target === lastWidget ) {
+					event.preventDefault();
+					addWidgetButtons.forEach( function( add ) {
+						if ( isVisible( add ) ) {
+							add.focus();
+							return;
+						}
+					} );
+				}
+			} else if ( isVisible( menuSearch ) ) {
+				if ( event.target.classList?.contains( 'add-new-menu-item' ) ) {
+					event.preventDefault();
+					menuSearch.focus();
+				} else if ( event.target === lastMenuItem ) {
+					event.preventDefault();
+					addMenuButtons.forEach( function( add ) {
+						if ( isVisible( add ) ) {
+							add.focus();
+							return;
+						}
+					} );
+				}
+			}
+		} 
 	}
 
 	// Keyboard navigation management
