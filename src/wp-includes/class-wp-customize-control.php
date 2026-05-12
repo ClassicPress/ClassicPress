@@ -767,6 +767,11 @@ require_once ABSPATH . WPINC . '/customize/class-wp-customize-background-positio
 require_once ABSPATH . WPINC . '/customize/class-wp-customize-cropped-image-control.php';
 
 /**
+ * WP_Customize_Date_Time_Control class.
+ */
+require_once ABSPATH . WPINC . '/customize/class-wp-customize-date-time-control.php';
+
+/**
  * WP_Customize_Site_Icon_Control class.
  */
 require_once ABSPATH . WPINC . '/customize/class-wp-customize-site-icon-control.php';
