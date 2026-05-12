@@ -94,30 +94,6 @@ class WP_Customize_Code_Editor_Control extends WP_Customize_Control {
 			<?php
 		}
 
-		$section_description = '';
-		if ( $this->section ) {
-			$section = $this->manager->get_section( $this->section );
-			if ( $section && $section->description ) {
-				$section_description = $section->description;
-			}
-		}
-
-		if ( $this->description || $section->description ) {
-			?>
-
-			<div class="description customize-section-description" style="display:none;">
-				<?php echo wp_kses_post( $this->description ? $this->description : $section_description ); ?>
-			</div>
-
-			<?php
-		}
-		?>
-
-		<div class="customize-control-notifications-container">
-			<ul></ul>
-		</div>
-
-		<?php
 		// Merge default class "code" with any input_attrs from JS/JSON
 		$input_attrs = (array) $this->input_attrs;
 		if ( isset( $input_attrs['class'] ) ) {
