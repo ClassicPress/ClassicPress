@@ -800,8 +800,3 @@ require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-item-cont
  * WP_Customize_Nav_Menu_Location_Control class.
  */
 require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-location-control.php';
-
-/**
- * WP_Customize_Date_Time_Control class.
- */
-require_once ABSPATH . WPINC . '/customize/class-wp-customize-date-time-control.php';
