@@ -68,9 +68,14 @@
 }
 
 /* Override theme styles that may conflict with controls. */
-.mejs-controls button:hover {
-	border: none;
-	box-shadow: none;
+.mejs-overlay button,
+.mejs-controls button {
+	background: transparent !important;
+}
+
+.mejs-controls a {
+	text-decoration: none !important;
+	box-shadow: none !important;
 }
 
 .mejs-poster {
