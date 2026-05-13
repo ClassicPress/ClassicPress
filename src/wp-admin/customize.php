@@ -686,7 +686,7 @@ wp_print_scripts();
 											<?php
 											printf(
 												/* translators: %s: Menus panel title in the Customizer. */
-												__( 'You are browsing %s' ),
+												__( 'You are customizing %s' ),
 												'<strong class="panel-title">' . esc_html( $nav_menus_panel->title ) . '</strong>'
 											); // Separate strings for consistency with other panels.
 											?>
