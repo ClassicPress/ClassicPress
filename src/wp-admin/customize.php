@@ -683,11 +683,14 @@ wp_print_scripts();
 									</a>
 									<div class="accordion-section-title">
 										<span class="preview-notice">
-											<?php esc_html_e( 'You are browsing' ); ?>
+											<?php
+											printf(
+												/* translators: %s: Menus panel title in the Customizer. */
+												__( 'You are browsing %s' ),
+												'<strong class="panel-title">' . esc_html( $nav_menus_panel->title ) . '</strong>'
+											); // Separate strings for consistency with other panels.
+											?>
 										</span>
-										<strong class="panel-title">
-											<?php echo esc_html( $nav_menus_panel->title ); ?>
-										</strong>
 
 										<?php
 										if ( ! empty( $nav_menus_panel->description ) ) {
