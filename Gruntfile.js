@@ -125,7 +125,9 @@ module.exports = function(grunt) {
 					'wp-includes/js/clipboard.js',
 					'wp-includes/js/clipboard.min.js',
 					'wp-includes/js/sortable.min.js',
-					'wp-includes/js/crop/cropper.min.js'
+					'wp-includes/js/crop/cropper.min.js',
+					'wp-includes/js/coloris/coloris.min.js',
+ 					'wp-includes/js/coloris/coloris.min.css'
 				]
 			},
 			'package-js': {
@@ -300,6 +302,14 @@ module.exports = function(grunt) {
 					{
 						src:  `./node_modules/cropperjs/dist/cropper.min.js`,
 						dest: `${SOURCE_DIR}wp-includes/js/crop/cropper.min.js`
+					},
+					{
+						src:  `./node_modules/@melloware/coloris/dist/umd/coloris.min.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/coloris/coloris.min.js`
+					},
+					{
+						src:  `./node_modules/@melloware/coloris/dist/coloris.min.css`,
+						dest: `${SOURCE_DIR}wp-includes/js/coloris/coloris.min.css`
 					}
 				]
 			},
