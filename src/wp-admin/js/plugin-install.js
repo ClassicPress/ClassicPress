@@ -10,7 +10,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		uploadViewToggle = document.querySelector( '.upload-view-toggle' ),
 		wrap = document.querySelector( '.wrap' ),
 		body = document.body,
-		openers = document.querySelectorAll( '.thickbox' ),
 		width = window.innerWidth,
 		height = window.innerHeight,
 		dialog = document.createElement( 'dialog' );
@@ -19,27 +18,27 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	dialog.style.padding = '0';
 	body.append( dialog ); // append dialog element to page
 
-	/*
+	/**
 	 * Open modal dialog (replacing previous thickbox)
 	 *
 	 * @since CP-2.1.0
 	 */
-	openers.forEach( function( opener ) {
-		opener.addEventListener( 'click', function( e ) {
+	document.addEventListener( 'click', function( e ) {
+		if ( e.target.classList?.contains( 'thickbox' ) ) {
 			var urlNoQuery,
-				url = opener.href || opener.alt,
-				title = opener.dataset.title ?
+				url = e.target.href || e.target.alt,
+				title = e.target.dataset.title ?
 					wp.i18n.sprintf(
 						// translators: %s: Plugin name.
 						wp.i18n.__( 'Plugin: %s' ),
-						opener.dataset.title
+						e.target.dataset.title
 					) :
 					wp.i18n.__( 'Plugin details' );
 
 			e.preventDefault();
 			e.stopPropagation();
 
-			urlNoQuery = url.split('TB_');
+			urlNoQuery = url.split( 'TB_' );
 
 			dialog.classList.add( 'modal-loading' );
 			dialog.showModal();
@@ -69,8 +68,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						iframe.remove();
 					}
 					closeButton.remove();
-				}
-				else if ( e.key === 'Enter' && e.target.id === 'dialog-close-button' ) {
+				} else if ( e.key === 'Enter' && e.target.id === 'dialog-close-button' ) {
 					e.preventDefault();
 					dialog.close();
 					if ( iframe != null ) {
@@ -79,10 +77,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					closeButton.remove();
 				}
 			} );
-		} );
+		}
 	} );
 
-	/*
+	/**
 	 * Called when iframe has loaded
 	 *
 	 * @since CP-2.1.0
@@ -115,7 +113,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
-	/*
+	/**
 	 * Get the tabbable elements.
 	 * Called after the iframe has fully loaded so we have all the elements we need.
 	 * Called again each time a Tab gets clicked.
@@ -163,14 +161,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
-	/*
+	/**
 	 * Helper function copied from jQuery
 	 */
 	function isVisible( elem ) {
 		return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
 	}
 
-	/*
+	/**
 	 * Helper function to find ancesors with specific selector (e.g. class)
 	 */
 	function hasAncestorWithMatchingSelector( target, selector ) {
@@ -192,7 +190,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	}
 
-	/*
+	/**
 	 * When a user presses the "Upload Plugin" button, show the upload form in place
 	 * rather than sending them to the devoted upload plugin page.
 	 * The `?tab=upload` page still exists for no-js support and for plugins that
