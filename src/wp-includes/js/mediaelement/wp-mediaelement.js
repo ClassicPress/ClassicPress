@@ -84,6 +84,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			return;
 		}
 
+		// Skip anything that isn't a true HTMLMediaElement
+		if ( ! ( el instanceof HTMLMediaElement ) ) {
+			return;
+		}
+
 		if ( el.tagName === 'AUDIO' ) {
 			new MediaElementPlayer( el, settings );
 			return;
