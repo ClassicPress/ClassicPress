@@ -1657,6 +1657,10 @@ function cp_deprecated_scripts() {
 		// Deprecated since ClassicPress 2.3.0
 		'wp-api' => 'CP-2.3.0',
 		'moment' => 'CP-2.3.0',
+
+		// Deprecated since ClassicPress 2.8.0
+		'iris'            => 'CP-2.8.0',
+		'wp-color-picker' => 'CP-2.8.0',
 	);
 }
 
@@ -1682,6 +1686,9 @@ function cp_deprecated_styles() {
 
 		// Deprecated since ClassicPress 2.6.0
 		'wp-pointer'          => 'CP-2.6.0',
+
+		// Deprecated since ClassicPress 2.8.0
+		'wp-color-picker'     => 'CP-2.8.0',
 	);
 }
 
