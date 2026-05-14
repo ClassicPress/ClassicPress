@@ -1443,6 +1443,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				editor = wp.codeEditor.initialize( textarea, {
 					codemirror: {
 						mode: 'css',
+						lint: true,
 						lineNumbers: true,
 						lineWrapping: true,
 						indentUnit: 2,
@@ -1451,7 +1452,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						autoCloseBrackets: true,
 						matchBrackets: true,
 						foldGutter: true,
-						gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']
+						gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers']
 					}
 				} );
 
@@ -1469,9 +1470,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 			} );
 			observer.observe( section, { attributes: true, attributeFilter: [ 'style' ] } );
-
-			textarea.parentNode.querySelector( '.CodeMirror-sizer' ).style.marginLeft = '39px';
-			textarea.parentNode.querySelector( '.CodeMirror-gutter.CodeMirror-linenumbers' ).style.width = '29px';
 		}
 	}
 	initCodeMirror( section.querySelector( 'textarea' ) );
