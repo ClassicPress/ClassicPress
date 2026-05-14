@@ -4320,16 +4320,6 @@ final class WP_Customize_Manager {
 		</script>
 
 		<?php
-		/* The following template is obsolete in core but retained for plugins. */
-		?>
-		<script type="text/html" id="tmpl-customize-control-notifications">
-			<ul>
-				<# _.each( data.notifications, function( notification ) { #>
-					<li class="notice notice-{{ notification.type || 'info' }} {{ data.altNotice ? 'notice-alt' : '' }}" data-code="{{ notification.code }}" data-type="{{ notification.type }}">{{{ notification.message || notification.code }}}</li>
-				<# } ); #>
-			</ul>
-		</script>
-		<?php
 	}
 
 	/**
