@@ -1201,6 +1201,7 @@ function wp_default_scripts( $scripts ) {
 			'confirm_delete'          => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
 			'delete_failed'           => __( 'Failed to delete attachment.' ),
 			'error'                   => __( 'Error:' ),
+			'dismiss'                 => __( 'Dismiss' ),
 		)
 	);
 	$scripts->add( 'customize-selective-refresh', "/wp-includes/js/customize-selective-refresh$suffix.js", array( 'wp-util', 'customize-preview' ), false, 1 );
