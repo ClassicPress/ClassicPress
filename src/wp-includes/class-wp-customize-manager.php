@@ -4260,69 +4260,6 @@ final class WP_Customize_Manager {
 	}
 
 	/**
-	 * Renders JS templates for all registered control types.
-	 *
-	 * @since 4.1.0
-	 */
-	public function render_control_templates() {
-		if ( $this->branching() ) {
-			$l10n = array(
-				/* translators: %s: User who is customizing the changeset in customizer. */
-				'locked'                => __( '%s is already customizing this changeset. Please wait until they are done to try customizing. Your latest changes have been autosaved.' ),
-				/* translators: %s: User who is customizing the changeset in customizer. */
-				'locked_allow_override' => __( '%s is already customizing this changeset. Do you want to take over?' ),
-			);
-		} else {
-			$l10n = array(
-				/* translators: %s: User who is customizing the changeset in customizer. */
-				'locked'                => __( '%s is already customizing this site. Please wait until they are done to try customizing. Your latest changes have been autosaved.' ),
-				/* translators: %s: User who is customizing the changeset in customizer. */
-				'locked_allow_override' => __( '%s is already customizing this site. Do you want to take over?' ),
-			);
-		}
-
-		foreach ( $this->registered_control_types as $control_type ) {
-			$control = new $control_type(
-				$this,
-				'temp',
-				array(
-					'settings' => array(),
-				)
-			);
-			$control->print_template();
-		}
-		?>
-
-		<script type="text/html" id="tmpl-customize-notification">
-			<li class="notice notice-{{ data.type || 'info' }} {{ data.alt ? 'notice-alt' : '' }} {{ data.dismissible ? 'is-dismissible' : '' }} {{ data.containerClasses || '' }}" data-code="{{ data.code }}" data-type="{{ data.type }}">
-				<div class="notification-message">{{{ data.message || data.code }}}</div>
-				<# if ( data.dismissible ) { #>
-					<button type="button" class="notice-dismiss"><span class="screen-reader-text">
-						<?php
-						/* translators: Hidden accessibility text. */
-						_e( 'Dismiss' );
-						?>
-					</span></button>
-				<# } #>
-			</li>
-		</script>
-
-		<script type="text/html" id="tmpl-customize-code-editor-lint-error-notification">
-			<li class="notice notice-{{ data.type || 'info' }} {{ data.alt ? 'notice-alt' : '' }} {{ data.dismissible ? 'is-dismissible' : '' }} {{ data.containerClasses || '' }}" data-code="{{ data.code }}" data-type="{{ data.type }}">
-				<div class="notification-message">{{{ data.message || data.code }}}</div>
-
-				<p>
-					<# var elementId = 'el-' + String( Math.random() ); #>
-					<input id="{{ elementId }}" type="checkbox">
-					<label for="{{ elementId }}"><?php _e( 'Update anyway, even though it might break your site?' ); ?></label>
-				</p>
-			</li>
-		</script>
-
-		<?php
-	}
-
-	/**
 	 * Helper function to compare two objects by priority, ensuring sort stability via instance_number.
 	 *
 	 * @since 3.4.0
