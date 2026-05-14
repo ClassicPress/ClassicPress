@@ -647,7 +647,7 @@ wp_print_scripts();
 													</button>
 												</div>
 											</div>
-											<div class="error unexpected-error" style="display: none; ">
+											<div class="error unexpected-error" style="display: none;">
 												<p>
 
 												<?php
@@ -1875,7 +1875,6 @@ wp_print_scripts();
 			name="customize-preview-0"
 			onmousewheel=""
 			src="<?php echo esc_url( $preview_url ); ?>"
-			style="position: relative;z-index: 1;"
 			sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-same-origin allow-scripts"
 		></iframe>
 	</div>
@@ -2247,7 +2246,7 @@ customize_themes_print_templates();
 
 <!-- Template for moving widget to different sidebar -->
 <template id="tmpl-change-sidebar">
-	<div id="move-widget-area" class="move-widget-area active" style="margin-top:-10px;margin-bottom:10px;">
+	<div id="move-widget-area" class="move-widget-area active">
 		<p class="description">
 			<?php esc_html_e( 'Select an area to move this widget into:' ); ?>
 		</p>
