@@ -552,6 +552,10 @@ body.trashing #publish-settings {
 	margin-bottom: 15px;
 }
 
+#customize-controls #sub-accordion-section-custom_css .customize-info .customize-section-description {
+	margin: 0px -1em;
+}
+
 #customize-controls .customize-info .customize-panel-description p:first-child,
 #customize-controls .customize-info .customize-section-description p:first-child {
 	margin-top: 0;
@@ -1738,7 +1742,9 @@ input[type="range"].hue-slider::-moz-range-track {
 }
 
 .customize-section-description-container + #customize-control-custom_css:last-child {
-	width: 299px;
+	margin-left: -12px;
+	width: calc( 100% + 24px );
+	margin-bottom: -12px;
 }
 
 .customize-section-description-container + #customize-control-custom_css:last-child .CodeMirror {
