@@ -1681,6 +1681,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				description.style.display = 'block';
 				e.target.setAttribute( 'aria-expanded', true );
 			}
+		} else if ( e.target.classList && e.target.classList.contains( 'section-description-close' ) ) {
+			description = e.target.closest( '.customize-section-description' );
+			description.style.display = 'none';
+			description.previousElementSibling.classList.remove( 'open' );
+			description.previousElementSibling.querySelector( '.customize-help-toggle' ).setAttribute( 'aria-expanded', false );
 
 		// Browse installed themes
 		} else if ( e.target.classList && e.target.classList.contains( 'themes-section-installed_themes' ) ) {
