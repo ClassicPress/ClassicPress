@@ -891,11 +891,6 @@ h3.customize-section-title {
 	outline: 1px solid transparent;
 }
 
-.theme-browser .themes {
-	padding: 2px 2em 1em;
-}
-
-
 #customize-theme-controls .accordion-section-title:focus .customize-action {
 	/* Only visible in Windows High Contrast mode */
 	outline: 1px solid transparent;
@@ -2110,6 +2105,27 @@ input[type="range"].hue-slider::-moz-range-track {
 	display: none; /* Hide "installed" notice on installed themes tab. */
 }
 
+.customize-control-theme .theme {
+	width: 100%;
+	margin: 0;
+	border: 1px solid #dcdcde;
+	background: #fff;
+}
+
+.customize-control-theme .theme .theme-name, .customize-control-theme .theme .theme-actions {
+	background: #fff;
+	border: none;
+}
+
+.customize-control.customize-control-theme { /* override most properties on .customize-control */
+	box-sizing: border-box;
+	width: 25%;
+	max-width: 600px; /* Max. screenshot size / 2 */
+	margin: 0 25px 25px 0;
+	padding: 0;
+	clear: none;
+}
+
 .cp-color-result {
 	display: inline-block;
 	width: 28px;
@@ -2161,11 +2177,9 @@ input[type="range"].hue-slider::-moz-range-track {
 	}
 }
 
-.customize-control input.cp-color-picker {
-	width: 100px;
-	vertical-align: middle;
-	margin-left: -3px;
-	border-radius: 0;
+.wp-customizer .theme-browser .themes {
+	padding: 2px 0 25px 25px;
+	transition: .18s margin-top linear;
 }
 
 .wp-customizer .theme-browser .theme .theme-actions {
@@ -2197,9 +2211,15 @@ input[type="range"].hue-slider::-moz-range-track {
 
 @media screen and (min-width: 1670px) {
 	.customize-preview-header.themes-filter-bar {
-		width: 82%;
+		width: calc(82% + 1px);
 		right: 0;
 		left: initial;
+	}
+}
+
+@media screen and (min-width: 1020px) {
+	.wp-customizer .theme-browser .themes {
+		padding: 2px 0 25px 25px;
 	}
 }
 
@@ -2643,19 +2663,13 @@ body.adding-widget .add-new-widget:before,
 }
 
 #available-menu-items {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: clamp(300px, 18%, 600px) !important;
-	visibility: hidden;
-	overflow-x: hidden;
-	overflow-y: auto;
 	width: 300px;
 	margin: 0;
-	z-index: 99;
 	background: #f0f0f1;
 	transition: left .18s;
 	border-right: 1px solid #dcdcde;
+	display: none;
+	overflow-y: scroll;
 }
 
 #available-widgets .customize-section-title,
@@ -2993,7 +3007,6 @@ body.adding-widget .add-new-widget:before,
 	body.adding-menu-items div#available-menu-items,
 	body.outer-section-open div#customize-sidebar-outer-content {
 		width: 100%;
-		left: 0 !important;
 	}
 
 	#available-widgets .customize-section-title,
