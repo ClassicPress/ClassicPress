@@ -125,7 +125,9 @@ module.exports = function(grunt) {
 					'wp-includes/js/clipboard.js',
 					'wp-includes/js/clipboard.min.js',
 					'wp-includes/js/sortable.min.js',
-					'wp-includes/js/crop/cropper.min.js'
+					'wp-includes/js/crop/cropper.min.js',
+					'wp-includes/js/coloris/coloris.min.js',
+ 					'wp-includes/js/coloris/coloris.min.css'
 				]
 			},
 			'package-js': {
@@ -300,6 +302,14 @@ module.exports = function(grunt) {
 					{
 						src:  `./node_modules/cropperjs/dist/cropper.min.js`,
 						dest: `${SOURCE_DIR}wp-includes/js/crop/cropper.min.js`
+					},
+					{
+						src:  `./node_modules/@melloware/coloris/dist/umd/coloris.min.js`,
+						dest: `${SOURCE_DIR}wp-includes/js/coloris/coloris.min.js`
+					},
+					{
+						src:  `./node_modules/@melloware/coloris/dist/coloris.min.css`,
+						dest: `${SOURCE_DIR}wp-includes/js/coloris/coloris.min.css`
 					}
 				]
 			},
@@ -593,10 +603,7 @@ module.exports = function(grunt) {
 				cwd: `${SOURCE_DIR}wp-content/themes`,
 				src: [
 					'twenty*/**/*.js',
-					'!twenty{eleven,twelve,thirteen}/**',
 					// Third party scripts
-					'!twenty{fourteen,fifteen,sixteen}/js/html5.js',
-					'!twentyseventeen/assets/js/html5.js',
 					'!twentyseventeen/assets/js/jquery.scrollTo.js'
 				]
 			},
@@ -630,7 +637,6 @@ module.exports = function(grunt) {
 					'!wp-admin/js/iris.js',
 					'!wp-includes/js/backbone*.js',
 					'!wp-includes/js/clipboard.js',
-					'!wp-includes/js/swfobject.js',
 					'!wp-includes/js/underscore*.js',
 					'!wp-includes/js/colorpicker.js',
 					'!wp-includes/js/hoverIntent.js',
@@ -744,7 +750,6 @@ module.exports = function(grunt) {
 					'!src/wp-admin/js/iris.js',
 					'!src/wp-includes/js/backbone*.js',
 					'!src/wp-includes/js/clipboard.js',
-					'!src/wp-includes/js/swfobject.js',
 					'!src/wp-includes/js/underscore*.js',
 					'!src/wp-includes/js/colorpicker.js',
 					'!src/wp-includes/js/hoverIntent.js',
@@ -857,7 +862,6 @@ module.exports = function(grunt) {
 					'!wp-admin/js/iris.min.js',
 					'!wp-includes/js/backbone.*',
 					'!wp-includes/js/masonry.min.js',
-					'!wp-includes/js/swfobject.js',
 					'!wp-includes/js/underscore.*',
 					'!wp-includes/js/zxcvbn.min.js',
 					'!wp-includes/js/wp-embed.js' // We have extra options for this, see terser:embed

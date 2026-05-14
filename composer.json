@@ -14,7 +14,7 @@
 	},
 	"require-dev": {
 		"composer/ca-bundle": "1.5.11",
-		"dealerdirect/phpcodesniffer-composer-installer": "1.2.0",
+		"dealerdirect/phpcodesniffer-composer-installer": "1.2.1",
 		"wp-coding-standards/wpcs": "3.3.0",
 		"phpcompatibility/phpcompatibility-wp": "2.1.8",
 		"yoast/phpunit-polyfills": "4.0.0",
