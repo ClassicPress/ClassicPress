@@ -1189,6 +1189,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			return;
 		}
 
+		// Clear stale notifications
+		document.querySelectorAll( '.customize-control-notifications-container' ).forEach( function( container ) {
+			container.innerHTML = '';
+		} );
+
 		// Populate arrays if a new menu is being added
 		for ( const [key, value] of entries ) {
 			if ( key.startsWith( 'nav_menu[-' ) ) {
