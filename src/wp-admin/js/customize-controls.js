@@ -1443,7 +1443,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				editor = wp.codeEditor.initialize( textarea, {
 					codemirror: {
 						mode: 'css',
-						lint: true,
+						lint: {
+							options: {
+								'known-properties': false,
+								'vendor-prefix': false,
+								'compatible-vendor-prefixes': false
+							}
+						},
 						lineNumbers: true,
 						lineWrapping: true,
 						indentUnit: 2,
