@@ -4307,37 +4307,6 @@ final class WP_Customize_Manager {
 			</li>
 		</script>
 
-		<script type="text/html" id="tmpl-customize-changeset-locked-notification">
-			<li class="notice notice-{{ data.type || 'info' }} {{ data.containerClasses || '' }}" data-code="{{ data.code }}" data-type="{{ data.type }}">
-				<div class="notification-message customize-changeset-locked-message">
-					<img class="customize-changeset-locked-avatar" src="{{ data.lockUser.avatar }}" alt="{{ data.lockUser.name }}">
-					<p class="currently-editing">
-						<# if ( data.message ) { #>
-							{{{ data.message }}}
-						<# } else if ( data.allowOverride ) { #>
-							<?php
-							echo esc_html( sprintf( $l10n['locked_allow_override'], '{{ data.lockUser.name }}' ) );
-							?>
-						<# } else { #>
-							<?php
-							echo esc_html( sprintf( $l10n['locked'], '{{ data.lockUser.name }}' ) );
-							?>
-						<# } #>
-					</p>
-					<p class="notice notice-error notice-alt" hidden></p>
-					<p class="action-buttons">
-						<# if ( data.returnUrl !== data.previewUrl ) { #>
-							<a class="button customize-notice-go-back-button" href="{{ data.returnUrl }}"><?php _e( 'Go back' ); ?></a>
-						<# } #>
-						<a class="button customize-notice-preview-button" href="{{ data.frontendPreviewUrl }}"><?php _e( 'Preview' ); ?></a>
-						<# if ( data.allowOverride ) { #>
-							<button class="button button-primary wp-tab-last customize-notice-take-over-button"><?php _e( 'Take over' ); ?></button>
-						<# } #>
-					</p>
-				</div>
-			</li>
-		</script>
-
 		<script type="text/html" id="tmpl-customize-code-editor-lint-error-notification">
 			<li class="notice notice-{{ data.type || 'info' }} {{ data.alt ? 'notice-alt' : '' }} {{ data.dismissible ? 'is-dismissible' : '' }} {{ data.containerClasses || '' }}" data-code="{{ data.code }}" data-type="{{ data.type }}">
 				<div class="notification-message">{{{ data.message || data.code }}}</div>
