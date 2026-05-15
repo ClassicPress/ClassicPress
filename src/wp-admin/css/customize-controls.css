@@ -3061,6 +3061,12 @@ body.adding-widget .add-new-widget:before,
 }
 
 @media screen and (max-width: 600px) {
+	.wp-full-overlay,
+	.wp-full-overlay.expanded,
+	.wp-full-overlay-sidebar,
+	#customize-controls .wp-full-overlay-sidebar-content {
+		position: fixed !important;
+	}
 	.wp-full-overlay.expanded {
 		margin-left: 0;
 	}
