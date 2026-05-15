@@ -1242,6 +1242,8 @@ input[type="range"].hue-slider::-moz-range-track {
 }
 
 .wp-full-overlay-sidebar {
+	position: static;
+	z-index: 10;
 	background: #f0f0f1;
 	border-right: 1px solid #dcdcde;
 	width: 345px;
