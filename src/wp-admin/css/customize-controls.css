@@ -2178,7 +2178,7 @@ input[type="range"].hue-slider::-moz-range-track {
 }
 
 .wp-customizer .theme-browser .themes {
-	padding: 2px 0 25px 25px;
+	padding: 2px 2em 3em;
 	transition: .18s margin-top linear;
 }
 
@@ -2214,12 +2214,6 @@ input[type="range"].hue-slider::-moz-range-track {
 		width: calc(82% + 1px);
 		right: 0;
 		left: initial;
-	}
-}
-
-@media screen and (min-width: 1020px) {
-	.wp-customizer .theme-browser .themes {
-		padding: 2px 0 25px 25px;
 	}
 }
 
@@ -2478,10 +2472,6 @@ input[type="range"].hue-slider::-moz-range-track {
 		right: 0;
 		top: 0;
 		bottom: 0;
-	}
-
-	.wp-customizer .theme-browser .themes {
-		padding-right: 25px;
 	}
 }
 
