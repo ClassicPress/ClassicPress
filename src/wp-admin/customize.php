@@ -397,6 +397,9 @@ wp_print_scripts();
 			</header><!-- #customize-header-actions -->
 
 			<main id="widgets-right" class="wp-clearfix">
+				<div id="customize-notifications-area" class="customize-control-notifications-container">
+					<ul></ul>
+				</div>
 				<div class="wp-full-overlay-sidebar-content" tabindex="-1">
 					<div id="customize-info" class="accordion-section customize-info">
 						<div class="accordion-section-title">
