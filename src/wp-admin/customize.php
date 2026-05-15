@@ -504,7 +504,7 @@ wp_print_scripts();
 									</span>
 								</a>
 								<div class="accordion-section-title">
-									<span class="preview-notice">
+									<h2 class="preview-notice">
 										<?php
 										printf(
 											/* translators: %s: Themes panel title in the Customizer. */
@@ -512,7 +512,7 @@ wp_print_scripts();
 											'<strong class="panel-title">' . __( 'Themes' ) . '</strong>'
 										); // Separate strings for consistency with other panels.
 										?>
-									</span>
+									</h2>
 									
 									<?php
 									if ( current_user_can( 'install_themes' ) && ! is_multisite() ) {
@@ -685,7 +685,7 @@ wp_print_scripts();
 										</span>
 									</a>
 									<div class="accordion-section-title">
-										<span class="preview-notice">
+										<h2 class="preview-notice">
 											<?php
 											printf(
 												/* translators: %s: Menus panel title in the Customizer. */
@@ -693,7 +693,7 @@ wp_print_scripts();
 												'<strong class="panel-title">' . esc_html( $nav_menus_panel->title ) . '</strong>'
 											); // Separate strings for consistency with other panels.
 											?>
-										</span>
+										</h2>
 
 										<?php
 										if ( ! empty( $nav_menus_panel->description ) ) {
@@ -891,14 +891,14 @@ wp_print_scripts();
 											</span>
 										</a>
 										<div class="accordion-section-title">
-											<span class="preview-notice">
+											<h2 class="preview-notice">
 
 												<?php
 												/* translators: %s: Panel title. */
 												printf( __( 'You are customizing %s' ), '<strong class="panel-title">' . esc_html( $item['title'] ) . '</strong>' );
 												?>
 
-											</span>
+											</h2>
 
 											<?php
 											if ( ! empty( $item['description'] ) ) {
