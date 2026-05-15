@@ -575,7 +575,7 @@ wp_print_scripts();
 								</button>
 							</li>
 							<li class="customize-themes-full-container-container">
-								<div class="customize-themes-full-container animate" open>
+								<div class="customize-themes-full-container animate">
 									<div class="customize-themes-notifications"></div>
 									<div class="filter-drawer">
 										<?php
