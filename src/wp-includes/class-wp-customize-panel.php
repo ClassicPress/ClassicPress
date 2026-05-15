@@ -338,14 +338,14 @@ class WP_Customize_Panel {
 				</span>
 			</a>
 			<div class="accordion-section-title">
-				<span class="preview-notice">
+				<h2 class="preview-notice">
 
 				<?php
 					/* translators: %s: The site/panel title in the Customizer. */
 					printf( __( 'You are customizing %s' ), '<strong class="panel-title">' . esc_html( $this->title ) . '</strong>' );
 				?>
 
-				</span>
+				</h2>
 
 				<?php
 				if ( $this->description ) {
