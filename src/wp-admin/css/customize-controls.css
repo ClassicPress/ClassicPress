@@ -2247,6 +2247,9 @@ input[type="range"].hue-slider::-moz-range-track {
 
 	.wp-full-overlay-sidebar {
 		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
 	}
 
 	.control-panel-themes .customize-themes-full-container {
