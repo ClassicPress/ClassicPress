@@ -1426,15 +1426,6 @@ body.full-overlay-active {
 	z-index: 1000;
 }
 
-.wp-full-overlay-main {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	height: 100%;
-}
-
 .wp-full-overlay-sidebar .wp-full-overlay-header {
 	height: 45px;
 	padding: 0 15px;
