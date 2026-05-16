@@ -2106,27 +2106,6 @@ input[type="range"].hue-slider::-moz-range-track {
 	display: none; /* Hide "installed" notice on installed themes tab. */
 }
 
-.customize-control-theme .theme {
-	width: 100%;
-	margin: 0;
-	border: 1px solid #dcdcde;
-	background: #fff;
-}
-
-.customize-control-theme .theme .theme-name, .customize-control-theme .theme .theme-actions {
-	background: #fff;
-	border: none;
-}
-
-.customize-control.customize-control-theme { /* override most properties on .customize-control */
-	box-sizing: border-box;
-	width: 25%;
-	max-width: 600px; /* Max. screenshot size / 2 */
-	margin: 0 25px 25px 0;
-	padding: 0;
-	clear: none;
-}
-
 .cp-color-result {
 	display: inline-block;
 	width: 28px;
@@ -2139,43 +2118,6 @@ input[type="range"].hue-slider::-moz-range-track {
 	vertical-align: middle;
 	margin-left: -3px;
 	border-radius: 0;
-}
-
-
-/* 5 columns above 2100px */
-@media screen and (min-width: 2101px) {
-	.customize-control.customize-control-theme {
-		width: calc( ( 100% - 125px ) / 5 - 1px ); /* 1px offset accounts for browser rounding, typical all grids */
-	}
-}
-
-/* 4 columns up to 2100px */
-@media screen and (min-width: 1601px) and (max-width: 2100px) {
-	.customize-control.customize-control-theme {
-		width: calc( ( 100% - 100px ) / 4 - 1px );
-	}
-}
-
-/* 3 columns up to 1600px */
-@media screen and (min-width: 1201px) and (max-width: 1600px) {
-	.customize-control.customize-control-theme {
-		width: calc( ( 100% - 75px ) / 3 - 1px );
-	}
-}
-
-/* 2 columns up to 1200px */
-@media screen and (min-width: 851px) and (max-width: 1200px) {
-	.customize-control.customize-control-theme {
-		width: calc( ( 100% - 50px ) / 2 - 1px );
-
-	}
-}
-
-/* 1 column up to 850 px */
-@media screen and (max-width: 850px) {
-	.customize-control.customize-control-theme {
-		width: 100%;
-	}
 }
 
 .wp-customizer .theme-browser .themes {
