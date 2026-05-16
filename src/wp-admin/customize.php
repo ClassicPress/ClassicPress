@@ -574,7 +574,7 @@ wp_print_scripts();
 								</button>
 							</li>
 							<li class="customize-themes-full-container-container">
-								<div class="customize-themes-full-container animate" style="top: 0; right: 0;border: 0;height: 100vh;min-width: calc(100% - max(18%, 300px));" open>
+								<div class="customize-themes-full-container animate">
 									<div class="customize-themes-notifications"></div>
 									<div class="filter-drawer">
 										<?php
@@ -643,10 +643,10 @@ wp_print_scripts();
 														<span class="filter-count-filters">
 															<?php printf( __( 'Filter themes (%s)' ), '<span class="theme-filter-count">0</span>' ); ?>
 														</span>
-													</button>												
+													</button>
 												</div>
 											</div>
-											<div class="error unexpected-error" style="display: none; ">
+											<div class="error unexpected-error" style="display: none;">
 												<p>
 
 												<?php
@@ -663,7 +663,7 @@ wp_print_scripts();
 
 												</p>
 											</div>
-											<ul class="themes" style="overflow-y: scroll;max-height: 100vh;">
+											<ul class="themes wp-clearfix">
 
 												<?php
 												$themes_control = new WP_Customize_Theme_Control( $wp_customize, 'themes', array() );
@@ -1874,7 +1874,6 @@ wp_print_scripts();
 			name="customize-preview-0"
 			onmousewheel=""
 			src="<?php echo esc_url( $preview_url ); ?>"
-			style="position: relative;z-index: 1;"
 			sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-same-origin allow-scripts"
 		></iframe>
 	</div>
