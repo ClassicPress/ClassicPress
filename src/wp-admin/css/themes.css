@@ -1436,9 +1436,6 @@ body.full-overlay-active {
 }
 
 .wp-full-overlay-sidebar .wp-full-overlay-header {
-	position: absolute;
-	left: 0;
-	right: 0;
 	height: 45px;
 	padding: 0 15px;
 	line-height: 3.2;
