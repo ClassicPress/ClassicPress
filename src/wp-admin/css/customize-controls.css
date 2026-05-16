@@ -1836,12 +1836,12 @@ input[type="range"].hue-slider::-moz-range-track {
 .control-panel-themes .customize-themes-full-container {
 	position: fixed;
 	top: 0;
-	left: 0;
+	left: 45px;
 	transition: .18s left ease-in-out;
 	margin: 0 0 0 300px;
 	padding: 71px 0 25px;
 	overflow-y: scroll;
-	width: calc(100% - 300px);
+	width: calc(100% - 345px);
 	height: calc(100% - 96px);
 	background: #f0f0f1;
 	z-index: 20;
@@ -2192,7 +2192,7 @@ input[type="range"].hue-slider::-moz-range-track {
 		margin-top: 0;
 		padding: 0;
 		height: 100%;
-		width: calc(100% - 300px);
+		width: calc(100% - 345px);
 	}
 }
 
