@@ -1404,9 +1404,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				Object.entries( newResult.data.setting_validities ).forEach( function( [settingId, validity] ) {
 					if ( validity !== true ) {
 						Object.entries( validity ).forEach( function( [code, error] ) {
-							var control = document.querySelector( '[data-setting-id="' + settingId + '"]' );
-							if ( control ) {
-								var container = control.querySelector( '.customize-control-notifications-container' );
+							var setting = document.querySelector( '[data-setting-id="' + settingId + '"]' );
+							if ( setting ) {
+								var container = setting.querySelector( '.customize-control-notifications-container' );
 								if ( container ) {
 									container.appendChild( buildNotification( {
 										type: 'error',
