@@ -1216,12 +1216,6 @@ input[type="range"].hue-slider::-moz-range-track {
 	flex: 0 0 auto; /* default width */
 }
 
-.wp-full-overlay-sidebar {
-	background: #f0f0f1;
-	border-right: 1px solid #dcdcde;
-	width: 345px;
-}
-
 .wp-full-overlay-sidebar.collapsed {
 	flex-basis: 0;
 }
@@ -2249,6 +2243,10 @@ input[type="range"].hue-slider::-moz-range-track {
 	.wp-full-overlay.showing-themes .control-panel-themes .filter-themes-count .filter-themes {
 		display: block;
 		float: right;
+	}
+
+	.wp-full-overlay-sidebar {
+		position: fixed;
 	}
 
 	.control-panel-themes .customize-themes-full-container {
