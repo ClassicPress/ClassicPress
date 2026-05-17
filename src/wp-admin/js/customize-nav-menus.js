@@ -860,7 +860,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					menuField.style.display = 'block';
 				} );
 			}
-
 		} );
 
 		const data = new URLSearchParams( {
