@@ -507,7 +507,7 @@ body.trashing #publish-settings {
 
 #customize-controls .customize-info .customize-help-toggle {
 	position: absolute;
-	top: 4px; /*55px*/
+	top: 4px;
 	right: 1px;
 	padding: 20px 20px 10px 10px;
 	width: 20px;
