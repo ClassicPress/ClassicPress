@@ -5,7 +5,8 @@
  * @output wp-admin/js/customize-nav-menus.js
  */
 
-/* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings, console, ajaxurl, _updatedControlsWatcher, Sortable, isRtl */
+/* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings, console,
+ajaxurl, _updatedControlsWatcher, Sortable, _cpCustomizeNavMenusL10n, isRtl */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addObserver, itemObserver, currentMenuId,
 		newMenuItemIDs = [],
@@ -13,7 +14,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
 		form = document.querySelector( 'form' ),
 		inputs = form.querySelectorAll( 'input, select, textarea' ),
-		saveButton = form.querySelector( '#save' );
+		saveButton = form.querySelector( '#save' ),
+		wrap = document.getElementById( 'screen-options-wrap' ),
+		menuItemPreferences = wrap.querySelectorAll( 'fieldset.metabox-prefs input.hide-column-tog' );
 
 	// Enable menu item sorting if the page loads on a menu
 	const hash = window.location.hash.replace( '#', '' );
@@ -820,6 +823,65 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 		} );
 	}
+
+	/**
+	 * Updates the advanced menu settings on a per user basis.
+	 *
+	 * @since CP-2.8.0
+	 */
+	function updateAdvancedMenuSettings() {
+		const hidden = [];
+
+		menuItemPreferences.forEach( function( setting ) {
+			if ( ! setting.checked ) {
+				hidden.push( setting.value );
+			}
+		} );
+
+		const data = new URLSearchParams( {
+			action: 'hidden-columns',
+			screenoptionnonce: document.getElementById( 'screenoptionnonce' ).value,
+			page: 'customize',
+			hidden: hidden.join(',')
+		} );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+			},
+			body: data.toString(),
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( ! response.ok ) {
+				throw new Error( 'HTTP ' + response.status + ' ' + response.statusText );
+			}
+			return response.text();
+		} )
+		.then( function( text ) {
+			text = text.trim();
+
+			if ( '1' !== text ) {
+				if ( '-1' === text ) {
+					throw new Error( _cpCustomizeNavMenusL10n.nonceFailed );
+				}
+
+				if ( '0' === text ) {
+					throw new Error( _cpCustomizeNavMenusL10n.serverRejection );
+				}
+
+				throw new Error( _cpCustomizeNavMenusL10n.unexpectedResponse + text );
+			}
+		} )
+		.catch( function( error ) {
+			console.error( _cpCustomizeNavMenusL10n.failedSettingsSave, error );
+		} );
+	}
+
+	menuItemPreferences.forEach( function( setting ) {
+		setting.addEventListener( 'change', updateAdvancedMenuSettings );
+	} );
 
 	/**
 	 * Move new menu to its own ul element
