@@ -64,6 +64,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function inputChanged( input, li ) {
 		let menuId, title, menuLocations, assignments, span, itemId,
+			payload, isAdvancedField,
 			settingId = li.dataset.settingId,
 			value = input.value.trim(),
 			menuName = li.closest( '.customize-pane-child' ).querySelector( '.menu-name-field' ).value;
@@ -120,16 +121,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				auto_add: li.closest( 'ul' ).querySelector( '.auto_add' ).checked ? 1 : 0
 			};
 		} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
+			isAdvancedField = ( input.classList?.contains( 'edit-menu-item-target' ) ||
+				input.classList?.contains( 'edit-menu-item-attr-title' ) ||
+				input.classList?.contains( 'edit-menu-item-classes' ) ||
+				input.classList?.contains( 'edit-menu-item-xfn' ) ||
+				input.classList?.contains( 'edit-menu-item-description' )
+			);
+
 			title = li.querySelector( '.edit-menu-item-title' ).value.trim();
 			li.querySelector( '.menu-item-title' ).textContent = title;
 			itemId = li.querySelector( '.menu-item-data-db-id' ).value;
 
 			menuId = li.querySelector( '.menu-item-data-menu-id' ).value;
 			menuName = li.parentNode.querySelector( '[data-setting-id="nav_menu[' + menuId + ']"]' );
-			_updatedControlsWatcher[ 'nav_menu[' + menuId + ']' ] = {
-				name: menuName.querySelector( 'input' ).value.trim()
-			};
-			_updatedControlsWatcher[ settingId ] = {
+
+			payload = {
 				menu_id: menuId,
 				title: title,
 				url: li.querySelector( '.edit-menu-item-url' )?.value.trim() || '',
@@ -140,9 +146,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				object: li.querySelector( '.menu-item-data-object' ).value,
 				type: li.querySelector( '.menu-item-data-type' ).value,
 				type_label: li.querySelector( '.item-type' ).value,
+				target: li.querySelector( '.edit-menu-item-target' )?.checked ? '_blank' : '',
 				classes: li.querySelector( '.edit-menu-item-classes' ).value,
 				xfn: li.querySelector( '.edit-menu-item-xfn' ).value,
-				target: li.querySelector( '.edit-menu-item-target' ).value,
 				attr_title: li.querySelector( '.edit-menu-item-attr-title' ).value,
 				description: li.querySelector( '.edit-menu-item-description' ).value,
 				status: 'publish',
@@ -150,6 +156,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				display_mode: li.querySelector( 'input[name="nav-menu-display-mode[' + itemId + ']"]:checked' )?.value || '',
 				roles: Array.from( li.querySelectorAll( '.edit-menu-item-role[value]' ) ).filter( cb => cb.checked ).map( cb => cb.value )
 			};
+
+			if ( isAdvancedField ) {
+				window._cpDirtySettings = window._cpDirtySettings || {};
+				window._cpDirtySettings[ settingId ] = payload;
+			} else {
+				_updatedControlsWatcher[ 'nav_menu[' + menuId + ']' ] = {
+					name: menuName.querySelector( 'input' ).value.trim()
+				};
+				_updatedControlsWatcher[ settingId ] = payload;
+			}
 		} else {
 			_updatedControlsWatcher[ settingId ] = value;
 		}
