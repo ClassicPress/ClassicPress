@@ -1340,6 +1340,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} );
 
+		// Add advanced menu-item changes directly to the outgoing
+		// publish payload without touching updatedControls.
+		// This avoids crashing the live preview.
+		Object.entries( window._cpDirtySettings || {} ).forEach( function( [ settingId, item ] ) {
+			if ( ! settingId.startsWith( 'nav_menu_item[' ) ) {
+				return;
+			}
+
+			submittedChanges[ settingId ] = {
+				value: item
+			};
+		} );
+
 		// Append new data for POSTing to PHP back-end handler
 		updateData.append( 'action', 'customize_save' );
 		updateData.append( 'nonce', document.getElementById( 'customizer_nonce' ).value );
