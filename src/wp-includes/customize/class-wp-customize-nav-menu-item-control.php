@@ -139,9 +139,9 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 						<input type="checkbox"
 							id="edit-menu-item-target-<?php echo $item_id; ?>"
 							class="edit-menu-item-target"
-							value="_blank"
 							name="menu-item-target"
-							value="<?php echo esc_html( $item['target'] ); ?>"
+							value="_blank"
+							<?php checked( $item['target'], '_blank' ); ?>
 						>
 						<label for="edit-menu-item-target-<?php echo $item_id; ?>">
 							<?php esc_html_e( 'Open link in a new tab' ); ?>
