@@ -720,6 +720,11 @@ wp_print_scripts();
 												?>
 											</span>
 										</button>
+										<button type="button" class="customize-screen-options-toggle" aria-expanded="false" aria-controls="screen-options-wrap">
+											<span class="screen-reader-text">
+												<?php esc_html_e( 'Menu Properties' ); ?>
+											</span>
+										</button>
 
 										<div class="description customize-panel-description">
 											<?php echo wp_kses_post( $nav_menus_panel->description ); ?>
@@ -729,6 +734,26 @@ wp_print_scripts();
 									}
 									?>
 
+									<div id="screen-options-wrap" style="display: none;">
+										<fieldset class="metabox-prefs">
+											<legend><?php esc_html_e( 'Show advanced menu properties' ); ?></legend>
+											<input class="hide-column-tog" name="link-target-hide" type="checkbox" id="link-target-hide" value="link-target">
+											<label for="link-target-hide"><?php esc_html_e( 'Link Target' ); ?></label>
+											<br>
+											<input class="hide-column-tog" name="title-attribute-hide" type="checkbox" id="title-attribute-hide" value="title-attribute">
+											<label for="title-attribute-hide"><?php esc_html_e( 'Title Attribute' ); ?></label>
+											<br>
+											<input class="hide-column-tog" name="css-classes-hide" type="checkbox" id="css-classes-hide" value="css-classes">
+											<label for="css-classes-hide"><?php esc_html_e( 'CSS Classes' ); ?></label>
+											<br>
+											<input class="hide-column-tog" name="xfn-hide" type="checkbox" id="xfn-hide" value="xfn">
+											<label for="xfn-hide"><?php esc_html_e( 'Link Relationship (XFN)' ); ?></label>
+											<br>
+											<input class="hide-column-tog" name="description-hide" type="checkbox" id="description-hide" value="description">
+											<label for="description-hide"><?php esc_html_e( 'Description' ); ?></label>
+										</fieldset>
+										<?php echo wp_nonce_field( 'screen-options-nonce', 'screenoptionnonce', false, false ); ?>
+									</div>
 								</li>
 
 								<?php
