@@ -198,9 +198,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 							cols="20"
 							name="menu-item-description"
 							aria-describedby="field-description-description"
-						>
-							<?php echo wp_kses_post( $item['description'] ); ?>
-						</textarea>
+						><?php echo esc_textarea( trim( $item['description'] ) ); ?></textarea>
 						<p id="field-description-description" class="description">
 							<?php esc_html_e( 'The description will be displayed in the menu if the active theme supports it.' ); ?>
 						</p>
