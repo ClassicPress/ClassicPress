@@ -150,7 +150,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				classes: li.querySelector( '.edit-menu-item-classes' ).value,
 				xfn: li.querySelector( '.edit-menu-item-xfn' ).value,
 				attr_title: li.querySelector( '.edit-menu-item-attr-title' ).value,
-				description: li.querySelector( '.edit-menu-item-description' ).value,
+				description: li.querySelector( '.edit-menu-item-description' ).value.trim(),
 				status: 'publish',
 				// Fields for Nav Menu Roles plugin
 				display_mode: li.querySelector( 'input[name="nav-menu-display-mode[' + itemId + ']"]:checked' )?.value || '',
@@ -1338,7 +1338,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					xfn: item.querySelector( '.edit-menu-item-xfn' ).value,
 					target: item.querySelector( '.edit-menu-item-target' ).value,
 					attr_title: item.querySelector( '.edit-menu-item-attr-title' ).value,
-					description: item.querySelector( '.edit-menu-item-description' ).value,
+					description: item.querySelector( '.edit-menu-item-description' ).value.trim(),
 					status: 'publish'
 				};
 			} );
