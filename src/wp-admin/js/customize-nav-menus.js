@@ -833,9 +833,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		const hidden = [];
 
 		menuItemPreferences.forEach( function( setting ) {
+			var menuItemFields = document.querySelectorAll( '.field-' + setting.value );
 			if ( ! setting.checked ) {
 				hidden.push( setting.value );
+				menuItemFields.forEach( function( menuField ) {
+					menuField.style.display = 'none';
+				} );
+			} else {
+				menuItemFields.forEach( function( menuField ) {
+					menuField.style.display = 'block';
+				} );
 			}
+				
 		} );
 
 		const data = new URLSearchParams( {
