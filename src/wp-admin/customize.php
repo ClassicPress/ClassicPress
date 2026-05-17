@@ -106,6 +106,7 @@ $count_themes     = count( $installed_themes );
 $locations      = get_registered_nav_menus(); // slug => human label
 $menu_locations = get_nav_menu_locations();   // slug => menu ID
 $menus          = wp_get_nav_menus( array( 'fields' => 'id=>name' ) );
+$hidden         = get_hidden_columns( 'customize' ); // for advanced menu options
 
 // Controls
 $controls = $wp_customize->get_controls_data_by_section();
@@ -736,21 +737,63 @@ wp_print_scripts();
 
 									<div id="screen-options-wrap" style="display: none;">
 										<fieldset class="metabox-prefs">
-											<legend><?php esc_html_e( 'Show advanced menu properties' ); ?></legend>
-											<input class="hide-column-tog" name="link-target-hide" type="checkbox" id="link-target-hide" value="link-target">
-											<label for="link-target-hide"><?php esc_html_e( 'Link Target' ); ?></label>
+											<legend>
+												<?php esc_html_e( 'Show advanced menu properties' ); ?>
+											</legend>
+											<input class="hide-column-tog"
+												name="link-target-hide"
+												type="checkbox"
+												id="link-target-hide"
+												value="link-target"
+												<?php checked( ! in_array( 'link-target', $hidden, true ) ); ?>
+											>
+											<label for="link-target-hide">
+												<?php esc_html_e( 'Link Target' ); ?>
+											</label>
 											<br>
-											<input class="hide-column-tog" name="title-attribute-hide" type="checkbox" id="title-attribute-hide" value="title-attribute">
-											<label for="title-attribute-hide"><?php esc_html_e( 'Title Attribute' ); ?></label>
+											<input class="hide-column-tog"
+												name="title-attribute-hide"
+												type="checkbox"
+												id="title-attribute-hide"
+												value="title-attribute"
+												<?php checked( ! in_array( 'title-attribute', $hidden, true ) ); ?>
+											>
+											<label for="title-attribute-hide">
+												<?php esc_html_e( 'Title Attribute' ); ?>
+											</label>
 											<br>
-											<input class="hide-column-tog" name="css-classes-hide" type="checkbox" id="css-classes-hide" value="css-classes">
-											<label for="css-classes-hide"><?php esc_html_e( 'CSS Classes' ); ?></label>
+											<input class="hide-column-tog"
+												name="css-classes-hide"
+												type="checkbox"
+												id="css-classes-hide"
+												value="css-classes"
+												<?php checked( ! in_array( 'css-classes', $hidden, true ) ); ?>
+											>
+											<label for="css-classes-hide">
+												<?php esc_html_e( 'CSS Classes' ); ?>
+											</label>
 											<br>
-											<input class="hide-column-tog" name="xfn-hide" type="checkbox" id="xfn-hide" value="xfn">
-											<label for="xfn-hide"><?php esc_html_e( 'Link Relationship (XFN)' ); ?></label>
+											<input class="hide-column-tog"
+												name="xfn-hide"
+												type="checkbox"
+												id="xfn-hide"
+												value="xfn"
+												<?php checked( ! in_array( 'xfn', $hidden, true ) ); ?>
+											>
+											<label for="xfn-hide">
+												<?php esc_html_e( 'Link Relationship (XFN)' ); ?>
+											</label>
 											<br>
-											<input class="hide-column-tog" name="description-hide" type="checkbox" id="description-hide" value="description">
-											<label for="description-hide"><?php esc_html_e( 'Description' ); ?></label>
+											<input class="hide-column-tog"
+												name="description-hide"
+												type="checkbox"
+												id="description-hide"
+												value="description"
+												<?php checked( ! in_array( 'description', $hidden, true ) ); ?>
+											>
+											<label for="description-hide">
+												<?php esc_html_e( 'Description' ); ?>
+											</label>
 										</fieldset>
 										<?php echo wp_nonce_field( 'screen-options-nonce', 'screenoptionnonce', false, false ); ?>
 									</div>
