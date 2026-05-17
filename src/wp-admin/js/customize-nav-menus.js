@@ -935,6 +935,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				activatePublishButton();
 			}
 
+		// Show or hide advanced menu properties
+		} else if ( e.target.classList?.contains( 'customize-screen-options-toggle' ) ) {
+			if ( e.target.getAttribute( 'aria-expanded' ) === 'false' ) {
+				document.getElementById( 'screen-options-wrap' ).style.display = 'block';
+				e.target.setAttribute( 'aria-expanded', 'true' );
+			} else {
+				document.getElementById( 'screen-options-wrap' ).style.display = 'none';
+				e.target.setAttribute( 'aria-expanded', 'false' );
+			}
+
 		// Enable adding of a menu item
 		} else if ( e.target.classList && e.target.classList.contains( 'add-new-menu-item' ) ) {
 			currentMenuId = e.target.closest( 'li' ).dataset.menuId;
