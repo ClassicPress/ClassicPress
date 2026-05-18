@@ -1709,6 +1709,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.querySelector( '.theme-browser' ).classList.add( 'local' );
 				document.querySelector( '.feature-filter-toggle' ).style.display = 'none';
 				document.querySelector( '.filter-themes-count .theme-count' ).textContent = document.querySelectorAll( '.local .themes li' ).length;
+				if ( window.innerWidth <= 600 ) {
+					document.querySelector( '#customize-header-actions .preview' ).style.display = 'none';
+					document.querySelector( '#customize-header-actions .controls' ).style.display = 'block';
+					document.querySelector( '.customize-themes-full-container' ).style.display = 'block';
+				}
 			}
 			if ( orgThemes ) {
 				intersectionObserver.unobserve( orgThemes[orgThemes.length - 1] ); // deactivate Intersection Observer
@@ -1721,6 +1726,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.querySelector( '.theme-browser' ).classList.remove( 'local' );
 			document.querySelector( '.theme-browser' ).classList.add( 'wp-org' );
 			document.querySelector( '.feature-filter-toggle' ).style.display = 'inline-block';
+			if ( window.innerWidth <= 600 ) {
+				document.querySelector( '#customize-header-actions .preview' ).style.display = 'none';
+				document.querySelector( '#customize-header-actions .controls' ).style.display = 'block';
+				document.querySelector( '.customize-themes-full-container' ).style.display = 'block';
+			}
 			updateThemes( 'browse', 'new' );
 
 		// Select theme tags
