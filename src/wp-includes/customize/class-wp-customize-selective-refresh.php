@@ -154,6 +154,7 @@ final class WP_Customize_Selective_Refresh {
 	 * @since 4.5.0
 	 */
 	public function enqueue_preview_scripts() {
+		wp_enqueue_script( 'wp-util' );
 		wp_enqueue_script( 'customize-selective-refresh' );
 		add_action( 'wp_footer', array( $this, 'export_preview_data' ), 1000 );
 	}

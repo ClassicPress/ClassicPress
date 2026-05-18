@@ -1722,9 +1722,16 @@ p.auto-update-status {
 	margin-left: 0;
 }
 
+#screen-meta-container {
+	position: fixed;
+	top: 32px;
+	z-index: 1001;
+}
+
 #screen-meta-links {
-	float: right;
-	margin: 0 20px 0 0;
+	position: fixed;
+	right: 18px;
+	z-index: 1001;
 }
 
 /* screen options and help tabs revert */
@@ -1736,6 +1743,7 @@ p.auto-update-status {
 	border: 1px solid #c3c4c7;
 	border-top: none;
 	box-shadow: 0 0 0 transparent;
+	width: calc(100vw - 200px);
 }
 
 #screen-options-link-wrap,
@@ -3852,6 +3860,14 @@ img {
 
 }
 
+@media screen and (max-width: 960px) {
+
+	#screen-meta {
+		width: calc(100vw - 75px);
+	}
+
+}
+
 @media screen and (max-width: 782px) {
 	html.wp-toolbar {
 		padding-top: 46px;
@@ -3878,6 +3894,14 @@ img {
 
 	#wpbody-content {
 		padding-bottom: 100px;
+	}
+
+	#screen-meta-container {
+		top: 46px;
+	}
+
+	#screen-meta {
+		width: calc(100vw - 25px);
 	}
 
 	.wrap {
@@ -4170,6 +4194,16 @@ img {
 
 	html.wp-toolbar {
 		padding-top: 0;
+	}
+
+	#screen-meta-container {
+		position: static;
+	}
+
+	#screen-meta-links {
+		position: static;
+		float: right;
+		margin-right: 28px;
 	}
 
 	.screen-reader-shortcut:focus {

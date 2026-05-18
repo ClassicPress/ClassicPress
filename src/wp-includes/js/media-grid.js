@@ -212,7 +212,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 				mediaItem.remove();
 				closeButton.click();
-				resetDataOrdering();
+				resetDataOrdering( 'minus' );
 			} else {
 				console.log( _wpMediaGridSettings.delete_failed );
 			}
@@ -223,10 +223,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	// Reset ordering of remaining media items after deletion
-	function resetDataOrdering() {
+	function resetDataOrdering( sign ) {
 		var items = document.querySelectorAll( '.media-item' ),
 			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
 			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
+			count3 = sign === 'minus' ? parseInt( count[3], 10 ) - 1 : parseInt( count[3], 10 ) + 1,
 			count5;
 
 		items.forEach( function( item, index ) {
@@ -234,12 +235,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 
 		// Reset totals
-		if ( 5 in count ) { // allow for different languages
+		if ( count[5] ) { // allow for different languages
 			count5 = ' ' + count[5];
-		} else {
-			count5 = '';
 		}
-		document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + count5;
+		document.querySelector( '.load-more-count' ).textContent = items.length + ' ' + count[2] + ' ' + count3 + ' ' + count[4] + count5;
 
 		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
 		dialog.querySelector( '#total-media-items' ).textContent = items.length;
@@ -264,7 +263,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var id = location.search.match( /\d+/g )[0];
 		if ( window.confirm( _wpMediaGridSettings.confirm_delete ) ) {
 			deleteItem( id );
-			resetDataOrdering();
 		}
 	} );
 
@@ -1176,7 +1174,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				setTimeout( function() {
 					pond.removeFile( file.id );
 				}, 100 );
-				resetDataOrdering();
+				resetDataOrdering( 'plus' );
 			}
 		},
 		labelTapToUndo: _wpMediaGridSettings.tap_close,

@@ -681,7 +681,7 @@ function getQueryString(url) {
   let query;
   try {
     query = new URL(url, "http://example.com").search.substring(1);
-  } catch (error) {
+  } catch {
   }
   if (query) {
     return query;
@@ -766,7 +766,7 @@ function isValidFragment(fragment) {
 function safeDecodeURIComponent(uriComponent) {
   try {
     return decodeURIComponent(uriComponent);
-  } catch (uriComponentError) {
+  } catch {
     return uriComponent;
   }
 }
@@ -889,7 +889,7 @@ function prependHTTP(url) {
 function safeDecodeURI(uri) {
   try {
     return decodeURI(uri);
-  } catch (uriError) {
+  } catch {
     return uri;
   }
 }
@@ -947,7 +947,7 @@ function getFilename(url) {
   }
   try {
     filename = new URL(url, "http://example.com").pathname.split("/").pop();
-  } catch (error) {
+  } catch {
   }
   if (filename) {
     return filename;

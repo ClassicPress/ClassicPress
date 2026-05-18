@@ -1115,37 +1115,39 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var imageButton = dialog.querySelector( '#menu-item-add' ),
 			galleryButton = dialog.querySelector( '#menu-item-gallery' );
 
-		if ( dialog.querySelector( '.widget-modal-header-buttons' ) ) {
-			dialog.querySelector( '.widget-modal-header-buttons' ).remove();
+		if ( imageButton && galleryButton ) {
+			if ( dialog.querySelector( '.widget-modal-header-buttons' ) ) {
+				dialog.querySelector( '.widget-modal-header-buttons' ).remove();
+			}
+			if ( dialog.querySelector( '#widget-modal-media-content' ) ) {
+				dialog.querySelector( '#widget-modal-media-content' ).remove();
+			}
+			if ( dialog.querySelector( '#image-modal-content' ) ) {
+				dialog.querySelector( '#image-modal-content' ).remove();
+			}
+			if ( dialog.querySelector( '.widget-modal-footer' ) ) {
+				dialog.querySelector( '.widget-modal-footer' ).remove();
+			}
+			if ( dialog.querySelector( '#menu-item-gallery-edit' ) ) {
+				dialog.querySelector( '#menu-item-gallery-edit' ).remove();
+			}
+			if ( dialog.querySelector( '#menu-item-gallery-library' ) ) {
+				dialog.querySelector( '#menu-item-gallery-library' ).remove();
+			}
+			if ( dialog.querySelector( '.media-gallery-grid-section' ) ) {
+				dialog.querySelector( '.media-gallery-grid-section' ).remove();
+			}
+			if ( dialog.querySelector( '.widget-modal-gallery-settings' ) ) {
+				dialog.querySelector( '.widget-modal-gallery-settings' ).remove();
+			}
+			dialog.removeAttribute( 'style' );
+			imageButton.removeAttribute( 'hidden' );
+			imageButton.setAttribute( 'aria-selected', true );
+			galleryButton.setAttribute( 'hidden', true );
+			galleryButton.setAttribute( 'aria-selected', false );
+			dialog.querySelector( '.widget-modal-headings' ).removeAttribute( 'style' );
+			dialog.querySelector( '.widget-modal-title h2' ).textContent = GALLERY_WIDGET.media_library;
 		}
-		if ( dialog.querySelector( '#widget-modal-media-content' ) ) {
-			dialog.querySelector( '#widget-modal-media-content' ).remove();
-		}
-		if ( dialog.querySelector( '#image-modal-content' ) ) {
-			dialog.querySelector( '#image-modal-content' ).remove();
-		}
-		if ( dialog.querySelector( '.widget-modal-footer' ) ) {
-			dialog.querySelector( '.widget-modal-footer' ).remove();
-		}
-		if ( dialog.querySelector( '#menu-item-gallery-edit' ) ) {
-			dialog.querySelector( '#menu-item-gallery-edit' ).remove();
-		}
-		if ( dialog.querySelector( '#menu-item-gallery-library' ) ) {
-			dialog.querySelector( '#menu-item-gallery-library' ).remove();
-		}
-		if ( dialog.querySelector( '.media-gallery-grid-section' ) ) {
-			dialog.querySelector( '.media-gallery-grid-section' ).remove();
-		}
-		if ( dialog.querySelector( '.widget-modal-gallery-settings' ) ) {
-			dialog.querySelector( '.widget-modal-gallery-settings' ).remove();
-		}
-		dialog.removeAttribute( 'style' );
-		imageButton.removeAttribute( 'hidden' );
-		imageButton.setAttribute( 'aria-selected', true );
-		galleryButton.setAttribute( 'hidden', true );
-		galleryButton.setAttribute( 'aria-selected', false );
-		dialog.querySelector( '.widget-modal-headings' ).removeAttribute( 'style' );
-		dialog.querySelector( '.widget-modal-title h2' ).textContent = GALLERY_WIDGET.media_library;
 	}
 
 	/**
@@ -1181,7 +1183,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( dialog.querySelector( '#widget-modal-media-content' ) ) {
 			widgetId        = dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId;
 			widgetEl        = document.getElementById( widgetId );
-			base            = widgetEl.querySelector( '.id_base' );
+			base            = widgetEl?.querySelector( '.id_base' );
 
 			// Only run on a media gallery widget
 			if ( base && base.value === 'media_gallery' ) {

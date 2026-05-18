@@ -299,54 +299,57 @@ function wp_get_theme_file_editable_extensions( $theme ) {
  * Prints file editor templates (for plugins and themes).
  *
  * @since 4.9.0
+ *
+ * Uses HTML5 templates instead of backbone.js templates
+ *
+ * @since CP-2.8.0
  */
 function wp_print_file_editor_templates() {
 	?>
-	<script type="text/html" id="tmpl-wp-file-editor-notice">
-		<div class="notice inline notice-{{ data.type || 'info' }} {{ data.alt ? 'notice-alt' : '' }} {{ data.dismissible ? 'is-dismissible' : '' }} {{ data.classes || '' }}">
-			<# if ( 'php_error' === data.code ) { #>
-				<p>
-					<?php
-					printf(
-						/* translators: 1: Line number, 2: File path. */
-						__( 'Your PHP code changes were rolled back due to an error on line %1$s of file %2$s. Please fix and try saving again.' ),
-						'{{ data.line }}',
-						'{{ data.file }}'
-					);
-					?>
-				</p>
-				<pre>{{ data.message }}</pre>
-			<# } else if ( 'file_not_writable' === data.code ) { #>
-				<p>
-					<?php
-					printf(
-						/* translators: %s: Documentation URL. */
-						__( 'You need to make this file writable before you can save your changes. See <a href="%s">Changing File Permissions</a> for more information.' ),
-						__( 'https://wordpress.org/documentation/article/changing-file-permissions/' )
-					);
-					?>
-				</p>
-			<# } else { #>
-				<p>{{ data.message || data.code }}</p>
+	<!-- Base notice wrapper -->
+	<template id="tmpl-wp-file-editor-notice">
+		<div class="notice inline"></div>
+	</template>
 
-				<# if ( 'lint_errors' === data.code ) { #>
-					<p>
-						<# var elementId = 'el-' + String( Math.random() ); #>
-						<input id="{{ elementId }}"  type="checkbox">
-						<label for="{{ elementId }}"><?php _e( 'Update anyway, even though it might break your site?' ); ?></label>
-					</p>
-				<# } #>
-			<# } #>
-			<# if ( data.dismissible ) { #>
-				<button type="button" class="notice-dismiss"><span class="screen-reader-text">
-					<?php
-					/* translators: Hidden accessibility text. */
-					_e( 'Dismiss' );
-					?>
-				</span></button>
-			<# } #>
-		</div>
-	</script>
+	<!-- PHP error branch -->
+	<template id="tmpl-wp-file-editor-notice-php-error">
+		<p data-message></p>
+		<pre data-raw-message></pre>
+	</template>
+
+	<!-- File not writable branch -->
+	<template id="tmpl-wp-file-editor-notice-not-writable">
+		<p>
+			<?php
+			printf(
+				/* translators: %s: Documentation URL. */
+				__( 'You need to make this file writable before you can save your changes. See <a href="%s">Changing File Permissions</a> for more information.' ),
+				__( 'https://wordpress.org/documentation/article/changing-file-permissions/' )
+			);
+			?>
+		</p>
+	</template>
+
+	<!-- Generic / lint error branch -->
+	<template id="tmpl-wp-file-editor-notice-generic">
+		<p data-message></p>
+		<p class="lint-errors-confirm" hidden>
+			<input type="checkbox">
+			<label><?php _e( 'Update anyway, even though it might break your site?' ); ?></label>
+		</p>
+	</template>
+
+	<!-- Dismiss button (conditionally appended by JS) -->
+	<template id="tmpl-wp-file-editor-notice-dismiss">
+		<button type="button" class="notice-dismiss">
+			<span class="screen-reader-text">
+				<?php
+				/* translators: Hidden accessibility text. */
+				_e( 'Dismiss' );
+				?>
+			</span>
+		</button>
+	</template>
 	<?php
 }
 

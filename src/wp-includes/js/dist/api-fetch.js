@@ -1292,7 +1292,7 @@ function normalizePath(path) {
 function safeDecodeURIComponent(uriComponent) {
   try {
     return decodeURIComponent(uriComponent);
-  } catch (uriComponentError) {
+  } catch {
     return uriComponent;
   }
 }
@@ -1304,7 +1304,7 @@ function getQueryString(url) {
   let query;
   try {
     query = new URL(url, "http://example.com").search.substring(1);
-  } catch (error) {
+  } catch {
   }
   if (query) {
     return query;

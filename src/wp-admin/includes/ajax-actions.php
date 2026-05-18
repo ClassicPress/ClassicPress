@@ -4144,8 +4144,7 @@ function wp_ajax_query_themes() {
 				/* translators: %s: Theme name. */
 				$aria_label = sprintf( _x( 'Install %s', 'theme' ), $theme->name );
 
-				$theme_item .= '<a class="button button-primary theme-install" data-name="' . esc_attr__( $theme->name ) . '" data-slug="' . esc_attr__( $theme->slug ) . '" href="' . esc_url( $theme->install_url ) . '" aria-label="' . esc_attr( $aria_label ) . '">' . __( 'Install' ) . '</a>';
-				$theme_item .= '<button class="button preview install-theme-preview">' . __( 'Preview' ) . '</button>';
+				$theme_item .= '<a class="button button-primary theme-install" data-name="' . esc_attr__( $theme->name ) . '" data-slug="' . esc_attr__( $theme->slug ) . '" href="' . esc_url( $theme->install_url ) . '" aria-label="' . esc_attr( $aria_label ) . '">' . __( 'Install & Preview' ) . '</a>';
 
 			} else {
 				/* translators: %s: Theme name. */

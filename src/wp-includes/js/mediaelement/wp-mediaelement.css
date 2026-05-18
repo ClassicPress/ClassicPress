@@ -68,9 +68,19 @@
 }
 
 /* Override theme styles that may conflict with controls. */
-.mejs-controls button:hover {
-	border: none;
-	box-shadow: none;
+.mejs-overlay button,
+.mejs-controls button {
+	background: transparent !important;
+}
+
+.mejs-controls a {
+	text-decoration: none !important;
+	box-shadow: none !important;
+}
+
+.mejs-poster {
+	width: auto !important;
+	height: auto !important;
 }
 
 .me-cannotplay {
@@ -284,7 +294,6 @@ video.wp-video-shortcode,
 .wp-playlist-current-item {
 	overflow: hidden;
 	margin-bottom: 10px;
-	height: 60px;
 }
 
 .wp-playlist .wp-playlist-current-item img {

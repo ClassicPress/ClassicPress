@@ -25,18 +25,11 @@ class WP_Customize_Background_Position_Control extends WP_Customize_Control {
 	public $type = 'background_position';
 
 	/**
-	 * Don't render the control content from PHP, as it's rendered via JS on load.
+	 * Render the control content from PHP.
 	 *
-	 * @since 4.7.0
+	 * @since CP-2.8.0
 	 */
-	public function render_content() {}
-
-	/**
-	 * Render a JS template for the content of the position control.
-	 *
-	 * @since 4.7.0
-	 */
-	public function content_template() {
+	public function render_content() {
 		$options = array(
 			array(
 				'left top'   => array(
@@ -81,29 +74,45 @@ class WP_Customize_Background_Position_Control extends WP_Customize_Control {
 				),
 			),
 		);
+		if ( $this->label ) {
+			?>
+			<span class="customize-control-title">
+				<?php echo esc_attr( $this->label ); ?>
+			</span>
+			<?php
+		}
+
+		if ( $this->description ) {
+			?>
+			<span class="description customize-control-description">
+				<?php echo esc_attr( $this->description ); ?>
+			</span>
+			<?php
+		}
 		?>
-		<# if ( data.label ) { #>
-			<span class="customize-control-title">{{{ data.label }}}</span>
-		<# } #>
-		<# if ( data.description ) { #>
-			<span class="description customize-control-description">{{{ data.description }}}</span>
-		<# } #>
+
 		<div class="customize-control-content">
 			<fieldset>
-				<legend class="screen-reader-text"><span>
-					<?php
-					/* translators: Hidden accessibility text. */
-					_e( 'Image Position' );
-					?>
-				</span></legend>
+				<legend class="screen-reader-text">
+					<span>
+						<?php
+						/* translators: Hidden accessibility text. */
+						esc_html_e( 'Image Position' );
+						?>
+					</span>
+				</legend>
 				<div class="background-position-control">
 				<?php foreach ( $options as $group ) : ?>
 					<div class="button-group">
 					<?php foreach ( $group as $value => $input ) : ?>
 						<label>
 							<input class="ui-helper-hidden-accessible" name="background-position" type="radio" value="<?php echo esc_attr( $value ); ?>">
-							<span class="button display-options position"><span class="<?php echo esc_attr( $input['icon'] ); ?>" aria-hidden="true"></span></span>
-							<span class="screen-reader-text"><?php echo $input['label']; ?></span>
+							<span class="button display-options position">
+								<span class="<?php echo esc_attr( $input['icon'] ); ?>" aria-hidden="true"></span>
+							</span>
+							<span class="screen-reader-text">
+								<?php echo $input['label']; ?>
+							</span>
 						</label>
 					<?php endforeach; ?>
 					</div>
@@ -113,4 +122,11 @@ class WP_Customize_Background_Position_Control extends WP_Customize_Control {
 		</div>
 		<?php
 	}
+
+	/**
+	 * Redundant JS template.
+	 *
+	 * @since CP-2.8.0
+	 */
+	public function content_template() {}
 }
