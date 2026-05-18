@@ -1682,6 +1682,23 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				e.target.setAttribute( 'aria-expanded', true );
 			}
 
+		// Show and hide live preview on narrow screens
+		} else if ( e.target.parentNode.parentNode.id === 'customize-header-actions' ) {
+			if ( e.target.className === 'preview' ) {
+				e.target.style.display = 'none';
+				e.target.previousElementSibling.style.display = 'block';
+				if ( window.location.hash === '#sub-accordion-section-themes' ) {
+					document.querySelector( '.customize-themes-full-container' ).style.display = 'block';
+				} else {
+					previewFrame.style.zIndex = '10';
+				}
+			} else if ( e.target.className === 'controls' ) {
+				e.target.style.display = 'none';
+				e.target.nextElementSibling.style.display = 'block';
+				document.querySelector( '.customize-themes-full-container' ).style.display = 'none';
+				previewFrame.style.zIndex = '1';
+			}
+
 		// Browse installed themes
 		} else if ( e.target.classList && e.target.classList.contains( 'themes-section-installed_themes' ) ) {
 			form.querySelector( '.themes-section-wporg_themes' ).classList.remove( 'selected' );
