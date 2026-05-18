@@ -1707,6 +1707,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.querySelector( '.themes').innerHTML = installedThemesHTML;
 				document.querySelector( '.theme-browser' ).classList.remove( 'wp-org' );
 				document.querySelector( '.theme-browser' ).classList.add( 'local' );
+				document.querySelector( '.themes-section-installed_themes' ).setAttribute( 'aria-expanded', 'true' );
+				document.querySelector( '.themes-section-wporg_themes' ).setAttribute( 'aria-expanded', 'false' );
 				document.querySelector( '.feature-filter-toggle' ).style.display = 'none';
 				document.querySelector( '.filter-themes-count .theme-count' ).textContent = document.querySelectorAll( '.local .themes li' ).length;
 				if ( window.innerWidth <= 600 ) {
@@ -1725,6 +1727,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.target.classList.add( 'selected' );
 			document.querySelector( '.theme-browser' ).classList.remove( 'local' );
 			document.querySelector( '.theme-browser' ).classList.add( 'wp-org' );
+			document.querySelector( '.themes-section-installed_themes' ).setAttribute( 'aria-expanded', 'false' );
+			document.querySelector( '.themes-section-wporg_themes' ).setAttribute( 'aria-expanded', 'true' );
 			document.querySelector( '.feature-filter-toggle' ).style.display = 'inline-block';
 			if ( window.innerWidth <= 600 ) {
 				document.querySelector( '#customize-header-actions .preview' ).style.display = 'none';
