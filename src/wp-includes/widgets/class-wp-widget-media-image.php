@@ -125,6 +125,15 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 					'description'           => __( 'Open link in a new tab' ),
 					'should_preview_update' => false,
 				),
+				'fetchpriority'     => array(
+					'type'                  => 'string',
+					'enum'                  => array( 'high', 'low', 'auto' ),
+					'default'               => 'auto',
+					'sanitize_callback'     => 'wp_sanitize_fetchpriority',
+					'media_prop'            => 'fetchpriority',
+					'description'           => __( 'Fetch priority' ),
+					'should_preview_update' => false,
+				),
 				'image_title'       => array(
 					'type'                  => 'string',
 					'default'               => '',
@@ -157,6 +166,8 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 	 */
 	public function render_media( $instance ) {
 		$instance = array_merge( wp_list_pluck( $this->get_instance_schema(), 'default' ), $instance );
+		$this->prepare_fetchpriority_instance( $instance );
+
 		$instance = wp_parse_args(
 			$instance,
 			array(
@@ -190,6 +201,8 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 			if ( ! empty( $instance['alt'] ) ) {
 				$image_attributes['alt'] = $instance['alt'];
 			}
+
+			$image_attributes = array_merge( $image_attributes, wp_get_fetchpriority_img_attributes( $instance['fetchpriority'] ) );
 
 			$size = $instance['size'];
 
@@ -237,7 +250,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 				'widget_media_image'
 			);
 
-			$attr = array_merge( $attr, $loading_optimization_attr );
+			$attr = array_merge( $attr, $loading_optimization_attr, wp_get_fetchpriority_img_attributes( $instance['fetchpriority'] ) );
 
 			$attr  = array_map( 'esc_attr', $attr );
 			$image = '<img';
@@ -299,6 +312,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 	 */
 	public function form( $instance ) {
 		$instance = array_merge( wp_list_pluck( $this->get_instance_schema(), 'default' ), $instance );
+		$this->prepare_fetchpriority_instance( $instance );
 
 		$title             = ! empty( $instance['title'] ) ? $instance['title'] : '';
 		$attachment_id     = ! empty( $instance['attachment_id'] ) ? $instance['attachment_id'] : 0;
@@ -314,6 +328,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 		$link_classes      = ! empty( $instance['link_classes'] ) ? $instance['link_classes'] : '';
 		$link_rel          = ! empty( $instance['link_rel'] ) ? $instance['link_rel'] : '';
 		$link_target_blank = ! empty( $instance['link_target_blank'] ) ? '_blank' : '';
+		$fetchpriority     = $instance['fetchpriority'];
 		$link_image_title  = ! empty( $instance['link_image_title'] ) ? $instance['link_image_title'] : '';
 
 		$attributes        = 'alt="' . $alt . '"';
@@ -443,6 +458,7 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 			<input id="<?php echo esc_attr( $this->get_field_id( 'link_classes' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'link_classes' ) ); ?>" type="hidden" data-property="link_classes" class="media-widget-instance-property" value="<?php echo esc_attr( $link_classes ); ?>">
 			<input id="<?php echo esc_attr( $this->get_field_id( 'link_rel' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'link_rel' ) ); ?>" type="hidden" data-property="link_rel" class="media-widget-instance-property" value="<?php echo esc_url( $link_rel ); ?>">
 			<input id="<?php echo esc_attr( $this->get_field_id( 'link_target_blank' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'link_target_blank' ) ); ?>" type="hidden" data-property="link_target_blank" class="media-widget-instance-property" value="<?php echo esc_attr( $link_target_blank ); ?>">
+			<input id="<?php echo esc_attr( $this->get_field_id( 'fetchpriority' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'fetchpriority' ) ); ?>" type="hidden" data-property="fetchpriority" class="media-widget-instance-property" value="<?php echo esc_attr( $fetchpriority ); ?>">
 			<input id="<?php echo esc_attr( $this->get_field_id( 'link_image_title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'link_image_title' ) ); ?>" type="hidden" data-property="link_image_title" class="media-widget-instance-property" value="<?php echo esc_attr( $link_image_title ); ?>">
 			<input id="<?php echo esc_attr( $this->get_field_id( 'attachment_id' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'attachment_id' ) ); ?>" type="hidden" data-property="attachment_id" class="media-widget-instance-property" value="<?php echo esc_attr( $attachment_id ); ?>">
 			<input id="<?php echo esc_attr( $this->get_field_id( 'url' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'url' ) ); ?>" type="hidden" data-property="url" class="media-widget-instance-property" value="<?php echo esc_url( $url ); ?>">
@@ -524,6 +540,39 @@ class WP_Widget_Media_Image extends WP_Widget_Media {
 			)
 		);
 	}
+
+	/**
+	 * Normalizes fetchpriority on a widget instance before render or form display.
+	 *
+	 * @since CP-2.7.0
+	 *
+	 * @param array $instance Widget instance. Passed by reference.
+	 */
+	private function prepare_fetchpriority_instance( array &$instance ) {
+		if ( ! empty( $instance['fetchpriority_high'] ) ) {
+			$instance['fetchpriority'] = 'high';
+		}
+
+		$instance['fetchpriority'] = wp_sanitize_fetchpriority( $instance['fetchpriority'] ?? 'auto' );
+	}
+}
+
+/**
+ * Outputs the fetchpriority select for image detail modals.
+ *
+ * @since CP-2.7.0
+ */
+function cp_image_details_fetchpriority_field() {
+	?>
+	<span class="setting fetchpriority">
+		<label for="image-details-fetchpriority" class="name"><?php esc_html_e( 'Fetch priority' ); ?></label>
+		<select id="image-details-fetchpriority" data-setting="fetchpriority">
+			<option value="high"><?php esc_html_e( 'High' ); ?></option>
+			<option value="low"><?php esc_html_e( 'Low' ); ?></option>
+			<option value="auto"><?php esc_html_e( 'Auto' ); ?></option>
+		</select>
+	</span>
+	<?php
 }
 
 /**
@@ -614,6 +663,7 @@ function cp_render_media_image_template() {
 										<label for="image-details-css-class" class="name"><?php esc_html_e( 'Image CSS Class' ); ?> </label>
 										<input type="text" id="image-details-css-class" data-setting="extraClasses" value="">
 									</div>
+									<?php cp_image_details_fetchpriority_field(); ?>
 								</div>
 								<div class="advanced-link">
 									<div class="setting link-target">

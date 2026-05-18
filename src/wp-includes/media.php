@@ -5899,6 +5899,52 @@ function wp_increase_content_media_count( $amount = 1 ) {
 }
 
 /**
+ * Sanitizes a fetchpriority value for use on img elements.
+ *
+ * @since CP-2.7.0
+ *
+ * @param mixed $value Raw value.
+ * @return string One of 'high', 'low', 'auto'.
+ */
+function wp_sanitize_fetchpriority( $value ) {
+	$value = strtolower( (string) $value );
+
+	if ( in_array( $value, array( 'high', 'low', 'auto' ), true ) ) {
+		return $value;
+	}
+
+	return 'auto';
+}
+
+/**
+ * Returns img attribute overrides for a fetchpriority setting.
+ *
+ * Omits fetchpriority when the value is 'auto'. Sets loading to eager when high.
+ *
+ * @since CP-2.7.0
+ *
+ * @param string $fetchpriority Sanitized priority.
+ * @return array Attribute key/value pairs to merge.
+ */
+function wp_get_fetchpriority_img_attributes( $fetchpriority ) {
+	$fetchpriority = wp_sanitize_fetchpriority( $fetchpriority );
+
+	if ( 'auto' === $fetchpriority ) {
+		return array();
+	}
+
+	$attributes = array(
+		'fetchpriority' => $fetchpriority,
+	);
+
+	if ( 'high' === $fetchpriority ) {
+		$attributes['loading'] = 'eager';
+	}
+
+	return $attributes;
+}
+
+/**
  * Determines whether to add `fetchpriority='high'` to loading attributes.
  *
  * @since 6.3.0

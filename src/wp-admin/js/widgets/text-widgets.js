@@ -15,6 +15,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		parser = new DOMParser(),
 		dialog = document.getElementById( 'widget-modal' );
 
+	function normalizeFetchpriority( value ) {
+		value = ( value || 'auto' ).toLowerCase();
+		if ( value === 'high' || value === 'low' || value === 'auto' ) {
+			return value;
+		}
+		return 'auto';
+	}
+
 	// If in Customizer, remove old-style dialog
 	// Preventing it from opening would be a breaking change, so just remove it asap for now
 	if ( document.body.className.includes( 'wp-customizer' ) ) {
@@ -1774,6 +1782,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			linkClasses     = anchor ? anchor.className : '',
 			linkRel         = anchor ? anchor.getAttribute( 'rel' ) : '',
 			linkTargetBlank = anchor ? anchor.getAttribute( 'target' ) : '',
+			fetchpriorityAttr = normalizeFetchpriority( imgEl.getAttribute( 'fetchpriority' ) ),
 			linkType        = 'none',
 			attachmentPages = false,
 			template        = document.getElementById( 'tmpl-edit-image-modal' ),
@@ -1937,6 +1946,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( linkTargetBlank === '_blank' ) {
 				dialog.querySelector( '#image-details-link-target' ).checked = true;
 			}
+			dialog.querySelector( '#image-details-fetchpriority' ).value = fetchpriorityAttr;
 			dialog.querySelector( '#image-details-link-rel' ).value = linkRel;
 			dialog.querySelector( '#image-details-link-css-class' ).value = linkClasses;
 
@@ -2016,6 +2026,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			title = dialog.querySelector( '#image-details-title-attribute' ).value,
 			rel = dialog.querySelector( '#image-details-link-rel' ).value,
 			linkTarget = dialog.querySelector( '#image-details-link-target' ).checked ? '_blank' : '',
+			fetchpriorityChoice = dialog.querySelector( '#image-details-fetchpriority' ).value,
 			size = dialog.querySelector( '#image-details-size' ),
 			widget = document.getElementById( widgetId );
 
@@ -2080,6 +2091,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					imgEl.setAttribute( 'title', title );
 				}
 				imgEl.className = 'alignnone size-' + size.value + ' wp-image-' + attachmentId + imageClass;
+
+				fetchpriorityChoice = normalizeFetchpriority( fetchpriorityChoice );
+				if ( fetchpriorityChoice === 'auto' ) {
+					imgEl.removeAttribute( 'fetchpriority' );
+				} else {
+					imgEl.setAttribute( 'fetchpriority', fetchpriorityChoice );
+					if ( fetchpriorityChoice === 'high' && imgEl.getAttribute( 'loading' ) === 'lazy' ) {
+						imgEl.setAttribute( 'loading', 'eager' );
+					}
+				}
 
 				// Get hyperlink (if one exists) and modify href attribute
 				if ( imgEl.parentNode && imgEl.parentNode.tagName === 'A' ) {

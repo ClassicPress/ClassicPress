@@ -5,6 +5,14 @@ tinymce.PluginManager.add( 'wpeditimage', function( editor ) {
 		trim = tinymce.trim,
 		iOS = tinymce.Env.iOS;
 
+	function normalizeFetchpriority( value ) {
+		value = ( value || 'auto' ).toLowerCase();
+		if ( value === 'high' || value === 'low' || value === 'auto' ) {
+			return value;
+		}
+		return 'auto';
+	}
+
 	function isPlaceholder( node ) {
 		return !! ( editor.dom.getAttrib( node, 'data-mce-placeholder' ) || editor.dom.getAttrib( node, 'data-mce-object' ) );
 	}
@@ -252,12 +260,14 @@ tinymce.PluginManager.add( 'wpeditimage', function( editor ) {
 			linkClassName: '',
 			linkTargetBlank: false,
 			linkRel: '',
-			title: ''
+			title: '',
+			fetchpriority: 'auto'
 		};
 
 		metadata.url = dom.getAttrib( imageNode, 'src' );
 		metadata.alt = dom.getAttrib( imageNode, 'alt' );
 		metadata.title = dom.getAttrib( imageNode, 'title' );
+		metadata.fetchpriority = normalizeFetchpriority( tinymce.trim( dom.getAttrib( imageNode, 'fetchpriority' ) ) );
 
 		width = dom.getAttrib( imageNode, 'width' );
 		height = dom.getAttrib( imageNode, 'height' );
@@ -350,7 +360,7 @@ tinymce.PluginManager.add( 'wpeditimage', function( editor ) {
 	function updateImage( $imageNode, imageData ) {
 		var classes, className, node, html, parent, wrap, linkNode, imageNode,
 			captionNode, dd, dl, id, attrs, linkAttrs, width, height, align,
-			$imageNode, srcset, src,
+			$imageNode, srcset, src, fp,
 			dom = editor.dom;
 
 		if ( ! $imageNode || ! $imageNode.length ) {
@@ -395,6 +405,16 @@ tinymce.PluginManager.add( 'wpeditimage', function( editor ) {
 
 		// Preserve empty alt attributes.
 		$imageNode.attr( 'alt', imageData.alt || '' );
+
+		fp = normalizeFetchpriority( imageData.fetchpriority );
+		if ( fp === 'auto' ) {
+			dom.setAttrib( imageNode, 'fetchpriority', null );
+		} else {
+			dom.setAttrib( imageNode, 'fetchpriority', fp );
+			if ( fp === 'high' && dom.getAttrib( imageNode, 'loading' ) === 'lazy' ) {
+				dom.setAttrib( imageNode, 'loading', 'eager' );
+			}
+		}
 
 		linkAttrs = {
 			href: imageData.linkUrl,

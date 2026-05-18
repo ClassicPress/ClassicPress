@@ -1262,6 +1262,7 @@ function wp_print_media_templates() {
 									<label for="image-details-css-class" class="name"><?php _e( 'Image CSS Class' ); ?></label>
 									<input type="text" id="image-details-css-class" data-setting="extraClasses" value="{{ data.model.extraClasses }}">
 								</span>
+								<?php cp_image_details_fetchpriority_field(); ?>
 							</div>
 							<div class="advanced-link">
 								<span class="setting link-target">

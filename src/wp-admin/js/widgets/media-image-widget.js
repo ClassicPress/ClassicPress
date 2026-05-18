@@ -9,6 +9,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		{ FilePond } = window, // import FilePond
 		dialog = document.getElementById( 'widget-modal' );
 
+	function normalizeFetchpriority( value ) {
+		value = ( value || 'auto' ).toLowerCase();
+		if ( value === 'high' || value === 'low' || value === 'auto' ) {
+			return value;
+		}
+		return 'auto';
+	}
+
 	/**
 	 * Update details within modal.
 	 *
@@ -1019,6 +1027,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			linkClasses     = widget.querySelector( '[data-property="link_classes"]' ).value,
 			linkRel         = widget.querySelector( '[data-property="link_rel"]' ).value,
 			linkTargetBlank = widget.querySelector( '[data-property="link_target_blank"]' ).value,
+			fetchpriorityEl = widget.querySelector( '[data-property="fetchpriority"]' ),
+			fetchpriority = fetchpriorityEl ? fetchpriorityEl.value : 'auto',
 			linkImageTitle  = widget.querySelector( '[data-property="link_image_title"]' ).value,
 			attachmentId    = widget.querySelector( '[data-property="attachment_id"]' ).value,
 			url             = widget.querySelector( '[data-property="url"]' ).value,
@@ -1113,7 +1123,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#image-details-caption' ).value = caption;
 		dialog.querySelector( '#image-details-title-attribute' ).value = linkImageTitle;
 		dialog.querySelector( '#image-details-css-class' ).value = imageClasses;
-		dialog.querySelector( '#image-details-link-target' ).value = linkTargetBlank;
+		dialog.querySelector( '#image-details-link-target' ).checked = linkTargetBlank === '_blank';
+		dialog.querySelector( '#image-details-fetchpriority' ).value = normalizeFetchpriority( fetchpriority );
 		dialog.querySelector( '#image-details-link-rel' ).value = linkRel;
 		dialog.querySelector( '#image-details-link-css-class' ).value = linkClasses;
 
@@ -1175,6 +1186,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		widget.querySelector( '[data-property="link_url"]' ).value = dialog.querySelector( '#image-details-link-to-custom' ).value,
 		widget.querySelector( '[data-property="image_classes"]' ).value = dialog.querySelector( '#image-details-css-class' ).value,
 		widget.querySelector( '[data-property="link_target_blank"]' ).value = dialog.querySelector( '#image-details-link-target' ).checked ? '_blank' : '',
+		widget.querySelector( '[data-property="fetchpriority"]' ).value = normalizeFetchpriority( dialog.querySelector( '#image-details-fetchpriority' ).value ),
 		widget.querySelector( '[data-property="link_rel"]' ).value = dialog.querySelector( '#image-details-link-rel' ).value,
 		widget.querySelector( '[data-property="link_classes"]' ).value = dialog.querySelector( '#image-details-link-css-class' ).value;
 

@@ -1302,6 +1302,7 @@ ul.CodeMirror-hints {
 	max-width: 200px;
 }
 #image-modal-content .column-settings textarea,
+#image-modal-content .column-settings select,
 #image-modal-content .column-settings input:not( #image-details-link-target ) {
 	width: 70%;
 	max-width: 70%;
@@ -1309,12 +1310,14 @@ ul.CodeMirror-hints {
 }
 #image-modal-content .column-settings .setting.size,
 #image-modal-content .column-settings .setting.link-to,
+#image-modal-content .column-settings .setting.fetchpriority,
 #image-modal-content .column-settings .setting.link-target,
 #image-modal-content .column-settings .custom-size-setting {
 	display: block;
 }
 #image-modal-content .column-settings .setting.size label,
 #image-modal-content .column-settings .setting.link-to label,
+#image-modal-content .column-settings .setting.fetchpriority label,
 #image-modal-content .column-settings .setting.link-to-url label,
 #image-modal-content .column-settings .custom-size-setting label {
 	width: 30%;

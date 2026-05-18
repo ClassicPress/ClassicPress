@@ -3179,6 +3179,62 @@ EOF;
 	}
 
 	/**
+	 * @covers ::wp_sanitize_fetchpriority
+	 * @dataProvider data_wp_sanitize_fetchpriority
+	 */
+	public function test_wp_sanitize_fetchpriority( $input, $expected ) {
+		$this->assertSame( $expected, wp_sanitize_fetchpriority( $input ) );
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @return array[]
+	 */
+	public function data_wp_sanitize_fetchpriority() {
+		return array(
+			'high'    => array( 'high', 'high' ),
+			'low'     => array( 'low', 'low' ),
+			'auto'    => array( 'auto', 'auto' ),
+			'upper'   => array( 'HIGH', 'high' ),
+			'invalid' => array( 'urgent', 'auto' ),
+			'empty'   => array( '', 'auto' ),
+		);
+	}
+
+	/**
+	 * @covers ::wp_get_fetchpriority_img_attributes
+	 */
+	public function test_wp_get_fetchpriority_img_attributes_auto() {
+		$this->assertSame( array(), wp_get_fetchpriority_img_attributes( 'auto' ) );
+	}
+
+	/**
+	 * @covers ::wp_get_fetchpriority_img_attributes
+	 */
+	public function test_wp_get_fetchpriority_img_attributes_high() {
+		$this->assertSame(
+			array(
+				'fetchpriority' => 'high',
+				'loading'       => 'eager',
+			),
+			wp_get_fetchpriority_img_attributes( 'high' )
+		);
+	}
+
+	/**
+	 * @covers ::wp_get_fetchpriority_img_attributes
+	 */
+	public function test_wp_get_fetchpriority_img_attributes_low() {
+		$this->assertSame(
+			array(
+				'fetchpriority' => 'low',
+			),
+			wp_get_fetchpriority_img_attributes( 'low' )
+		);
+	}
+
+	/**
 	 * @ticket 57086
 	 *
 	 * @dataProvider data_wp_get_attachment_image_decoding_attr
