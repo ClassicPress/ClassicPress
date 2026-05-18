@@ -64,9 +64,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		if ( hash === 'sub-accordion-section-themes' ) {
-			document.getElementById( 'customize-footer-actions' ).style.bottom = '-45px';
+			document.getElementById( 'customize-footer-actions' ).style.display = 'none';
 		} else {
-			document.getElementById( 'customize-footer-actions' ).style.bottom = '0';
+			document.getElementById( 'customize-footer-actions' ).style.display = 'block';
 		}
 	}
 
@@ -111,9 +111,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 			if ( newHash === 'sub-accordion-section-themes' ) {
-				document.getElementById( 'customize-footer-actions' ).style.bottom = '-45px';
+				document.getElementById( 'customize-footer-actions' ).style.display = 'none';
 			} else {
-				document.getElementById( 'customize-footer-actions' ).style.bottom = '0';
+				document.getElementById( 'customize-footer-actions' ).style.display = 'block';
 			}
 		}
 	} );
