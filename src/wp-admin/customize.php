@@ -2037,43 +2037,75 @@ customize_themes_print_templates();
 				</summary>
 
 				<div id="menu-item-settings-" class="menu-item-settings">
-					<p class="field-url description description-thin" hidden>
+					<div class="field-url description description-thin" hidden>
 						<label for="edit-menu-item-url--">
 							<?php esc_html_e( 'URL' ); ?>
 						</label>
 						<input id="edit-menu-item-url--" class="widefat code edit-menu-item-url" type="text" name="menu-item-url">
-					</p>
-					<p class="description description-thin">
+					</div>
+					<div class="description description-thin">
 						<label for="edit-menu-item-title--">
 							<?php esc_html_e( 'Navigation Label' ); ?>
 						</label>
-						<input type="text" id="edit-menu-item-title--" placeholder="" class="widefat edit-menu-item-title" name="menu-item-title">
-					</p>
-					<p class="field-link-target description description-thin">
+						<input type="text"
+							id="edit-menu-item-title--"
+							placeholder=""
+							class="widefat edit-menu-item-title"
+							name="menu-item-title"
+						>
+					</div>
+					<div class="field-link-target description description-thin"
+						style="<?php echo esc_attr( in_array( 'link-target', $hidden, true ) ? 'display: none;' : 'display: block;' ); ?>"
+					>
+						<input id="edit-menu-item-target--"
+							type="checkbox"
+							class="edit-menu-item-target"
+							value="_blank"
+							name="menu-item-target"
+						>
 						<label for="edit-menu-item-target--">
 							<?php esc_html_e( 'Open link in a new tab' ); ?>
 						</label>
-						<input id="edit-menu-item-target--" type="checkbox" class="edit-menu-item-target" value="_blank" name="menu-item-target">
-					</p>
-					<p class="field-title-attribute field-attr-title description description-thin">
+					</div>
+					<div class="field-title-attribute field-attr-title description description-thin"
+						style="<?php echo esc_attr( in_array( 'title-attribute', $hidden, true ) ? 'display: none;' : 'display: block;' ); ?>"
+					>
 						<label for="edit-menu-item-attr-title--">
 							<?php esc_html_e( 'Title Attribute' ); ?>
 						</label>
-						<input id="edit-menu-item-attr-title--" type="text" class="widefat edit-menu-item-attr-title" name="menu-item-attr-title">
-					</p>
-					<p class="field-css-classes description description-thin">
+						<input id="edit-menu-item-attr-title--"
+							type="text"
+							class="widefat edit-menu-item-attr-title"
+							name="menu-item-attr-title"
+						>
+					</div>
+					<div class="field-css-classes description description-thin"
+						style="<?php echo esc_attr( in_array( 'css-classes', $hidden, true ) ? 'display: none;' : 'display: block;' ); ?>"
+					>
 						<label for="edit-menu-item-classes--">
 							<?php esc_html_e( 'CSS Classes' ); ?>
 						</label>
-						<input id="edit-menu-item-classes--" type="text" class="widefat code edit-menu-item-classes" name="menu-item-classes">
-					</p>
-					<p class="field-xfn description description-thin">
+						<input id="edit-menu-item-classes--"
+							type="text"
+							class="widefat code edit-menu-item-classes"
+							name="menu-item-classes"
+						>
+					</div>
+					<div class="field-xfn description description-thin"
+						style="<?php echo esc_attr( in_array( 'xfn', $hidden, true ) ? 'display: none;' : 'display: block;' ); ?>"
+					>
 						<label for="edit-menu-item-xfn--">
 							<?php esc_html_e( 'Link Relationship (XFN)' ); ?>
 						</label>
-						<input id="edit-menu-item-xfn--" type="text" class="widefat code edit-menu-item-xfn" name="menu-item-xfn">
-					</p>
-					<p class="field-description description description-thin">
+						<input id="edit-menu-item-xfn--"
+							type="text"
+							class="widefat code edit-menu-item-xfn"
+							name="menu-item-xfn"
+						>
+					</div>
+					<div class="field-description description description-thin"
+						style="<?php echo esc_attr( in_array( 'description', $hidden, true ) ? 'display: none;' : 'display: block;' ); ?>"
+					>
 						<label for="edit-menu-item-description--">
 							<?php esc_html_e( 'Description' ); ?>
 						</label>
@@ -2088,7 +2120,7 @@ customize_themes_print_templates();
 						<span id="edit-menu-item-description" class="description">
 							<?php esc_html_e( 'The description will be displayed in the menu if the active theme supports it.' ); ?>
 						</span>
-					</p>
+					</div>
 
 					<?php
 					/**
