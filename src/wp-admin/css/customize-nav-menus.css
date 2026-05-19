@@ -307,7 +307,7 @@
 }
 
 .wp-customizer .metabox-prefs label {
-	display: block;
+	display: inline-block;
 	padding-right: 0;
 	line-height: 30px;
 }
