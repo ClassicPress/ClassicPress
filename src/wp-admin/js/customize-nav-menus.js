@@ -4,15 +4,15 @@
  *
  * @output wp-admin/js/customize-nav-menus.js
  */
+/* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings,
+console, ajaxurl, _updatedControlsWatcher, Sortable, isRtl */
 
-/* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings, console, ajaxurl, _updatedControlsWatcher, Sortable, isRtl */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addObserver, itemObserver, currentMenuId,
 		newMenuItemIDs = [],
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
 		form = document.querySelector( 'form' ),
-		inputs = form.querySelectorAll( 'input, select, textarea' ),
 		saveButton = form.querySelector( '#save' );
 
 	// Enable menu item sorting if the page loads on a menu
@@ -53,7 +53,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function activatePublishButton() {
 		saveButton.disabled = false;
-		saveButton.value = _wpCustomizeControlsL10n.publish;
+		saveButton.textContent = _wpCustomizeControlsL10n.publish;
 	}
 
 	/**
@@ -63,7 +63,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		let menuId, title, menuLocations, assignments, span, itemId,
 			settingId = li.dataset.settingId,
 			value = input.value.trim(),
-			menuName = li.closest( '.customize-pane-child' ).querySelector( '.menu-name-field' ).value;
+			menuName = li.closest( '.customize-pane-child' ).querySelector( '.menu-name-field' )?.value || '';
 
 		if ( settingId.startsWith( 'nav_menu_locations[' ) ) {
 			assignments = document.querySelectorAll( '.assigned-to-menu-location' );
@@ -85,7 +85,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							menuLocation.querySelector( 'input' ).value = li.parentNode.dataset.menuId;
 							if ( menuLocation.closest( '.menu-location-settings' ).dataset.menuId === li.parentNode.dataset.menuId ) {
 								menuLocation.querySelector( 'input' ).checked = true;
-
 							} else {
 								menuLocation.querySelector( 'input' ).checked = false;
 							}
@@ -100,6 +99,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					} );
 				} else {
 					input.value = '';
+					_updatedControlsWatcher[ settingId ] = '';
+					input.nextElementSibling.querySelector( '.theme-location-set' ).innerHTML = '';
+
 					menuLocations.forEach( function( menuLocation ) {
 						if ( menuLocation.querySelector( 'input' ) ) {
 							menuLocation.querySelector( 'input' ).value = '';
@@ -153,28 +155,24 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		activatePublishButton();
 	}
 
-	inputs.forEach( function( input ) {
-		let settingId,
-			li = input.closest( 'li' );
+	function handleMenuEvent( e ) {
+		const input = e.target,
+			li = input.closest( 'li[data-setting-id]' );
 
-		if ( ! li?.hasAttribute( 'data-setting-id' ) ) {
+		if ( ! li ) {
 			return;
 		}
 
-		// Only listen to menu-related changes
-		settingId = li.dataset.settingId;
+		const settingId = li.dataset.settingId;
 		if ( ! settingId.startsWith( 'nav_menu_locations[' ) && ! settingId.startsWith( 'nav_menu[' ) && ! settingId.startsWith( 'nav_menu_item[' ) ) {
 			return;
 		}
 
-		input.addEventListener( 'input', function() {
-			inputChanged( input, li );
-		} );
+		inputChanged( input, li );
+	}
 
-		input.addEventListener( 'change', function() {
-			inputChanged( input, li );
-		} );
-	} );
+	form.addEventListener( 'input', handleMenuEvent );
+	form.addEventListener( 'change', handleMenuEvent );
 
 	/**
 	 * Makes menu items sortable
@@ -865,75 +863,69 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Open New Menu panel
 		if ( e.target.id === 'customize-add-menu-button' || e.target.classList.contains( 'create-menu' ) ) {
-			e.preventDefault();
-			ul.style.display = 'none';
 			document.getElementById( 'sub-accordion-section-add_menu' ).querySelectorAll( 'input' ).forEach( function( input ) {
 				input.value = ''; // reset
 				input.checked = false; // reset
 			} );
-			document.getElementById( 'sub-accordion-section-add_menu' ).style.display = 'block';
-			document.getElementById( 'sub-accordion-section-add_menu' ).querySelector( '.customize-section-back' ).focus();
-			window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-accordion-section-add_menu' );
 
 		// Open Next panel to create new menu
 		} else if ( e.target.id === 'customize-new-menu-submit' ) {
-			e.preventDefault();
-			if ( ul.querySelector( '#menu-title' ).value !== '' ) {
-
-				// If menu-to-edit is currently populated, move sub-nodes to their own ul element and hide it.
-				if ( menuToEdit.querySelector( 'li' ) ) {
-					id = menuToEdit.querySelector( '[data-setting-id]' ).dataset.settingId;
-					id = id.replace( 'nav_menu', 'accordion-section-nav_menu' );
-					moveNewMenu( id );
-					document.getElementById( 'sub-' + id ).style.display = 'none';
-				}
-
-				navMenuId = '-' + Date.now();
-				title = ul.querySelector( '#menu-title' ).value;
-				template = document.getElementById( 'tmpl-new-nav-menu' );
-				clone = template.content.cloneNode( true );
-				menuToEdit.append( clone );
-
-				// Update attributes and values
-				ul.style.display = 'none';
-				document.getElementById( 'menu-name-title-brand-new' ).value = title;
-				replaceSubstringInAttributes( 'brand-new', navMenuId );
-				menuToEdit.querySelectorAll( '.assigned-menu-location input' ).forEach( function( input, index ) {
-					if ( ul.querySelectorAll( '.assigned-menu-location input' )[index]?.checked ) {
-						input.checked = true;
-						menuName = input.nextElementSibling.innerHTML.split( '<span' )[0].trim();
-						inputChanged( input, input.closest( 'li' ) );
-					}
-					input.addEventListener( 'input', function() {
-						inputChanged( input, input.closest( 'li' ) );
-					} );
-					input.addEventListener( 'change', function() {
-						inputChanged( input, input.closest( 'li' ) );
-					} );
-				} );
-				inputChanged( menuToEdit.querySelector( '.menu-name-field' ), menuToEdit.querySelector( '.menu-name-field' ).closest( 'li' ) );
-				menuToEdit.style.display = 'block';
-				menuToEdit.querySelector( 'button' ).focus();
-				window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#' + menuToEdit.id );
-
-				// Add menu to list of menus
-				li = document.createElement( 'li' );
-				li.id = 'accordion-section-nav_menu[' + navMenuId + ']';
-				li.className = 'accordion-section control-section control-section-nav_menu control-subsection assigned-to-menu-location';
-				li.setAttribute( 'aria-owns', 'sub-accordion-section-nav_menu[' + navMenuId + ']' );
-				li.innerHTML = '<h3 class="accordion-section-title" tabindex="0">' +
-					title +
-					'<span class="screen-reader-text">' +
-					menuToEdit.dataset.instruction +
-					'</span>' +
-					'<span class="menu-in-location"></span>' +
-					'</h3>';
-				if ( menuName !== '' ) {
-					li.querySelector( '.menu-in-location' ).textContent = '(' + _wpCustomizeControlsL10n.currently + ' ' + menuName + ')';
-				}
-				document.getElementById( 'accordion-section-add_menu' ).before( li );
-				activatePublishButton();
+			if ( ul.querySelector( '#menu-title' ).value === '' ) {
+				e.preventDefault(); // prevent opening if the menu has no title
+				return;
 			}
+
+			// If menu-to-edit is currently populated, move sub-nodes to their own ul element and hide it.
+			if ( menuToEdit.querySelector( 'li' ) ) {
+				id = menuToEdit.querySelector( '[data-setting-id]' ).dataset.settingId;
+				id = id.replace( 'nav_menu', 'accordion-section-nav_menu' );
+				moveNewMenu( id );
+				document.getElementById( 'sub-' + id ).style.display = 'none';
+			}
+
+			navMenuId = '-' + Date.now();
+			title = ul.querySelector( '#menu-title' ).value;
+			template = document.getElementById( 'tmpl-new-nav-menu' );
+			clone = template.content.cloneNode( true );
+			menuToEdit.append( clone );
+
+			// Update attributes and values
+			document.getElementById( 'menu-name-title-brand-new' ).value = title;
+			replaceSubstringInAttributes( 'brand-new', navMenuId );
+			menuToEdit.querySelectorAll( '.assigned-menu-location input' ).forEach( function( input, index ) {
+				if ( ul.querySelectorAll( '.assigned-menu-location input' )[index]?.checked ) {
+					input.checked = true;
+					menuName = input.nextElementSibling.innerHTML.split( '<span' )[0].trim();
+					inputChanged( input, input.closest( 'li' ) );
+				}
+				input.addEventListener( 'input', function() {
+					inputChanged( input, input.closest( 'li' ) );
+				} );
+				input.addEventListener( 'change', function() {
+					inputChanged( input, input.closest( 'li' ) );
+				} );
+			} );
+			inputChanged( menuToEdit.querySelector( '.menu-name-field' ), menuToEdit.querySelector( '.menu-name-field' ).closest( 'li' ) );
+			menuToEdit.querySelector( 'a' ).href = '#' + menuToEdit.dataset.parentId;
+			menuToEdit.querySelector( 'a' ).focus();
+
+			// Add menu to list of menus
+			li = document.createElement( 'li' );
+			li.id = 'accordion-section-nav_menu[' + navMenuId + ']';
+			li.className = 'accordion-section control-section control-section-nav_menu control-subsection assigned-to-menu-location';
+			li.setAttribute( 'aria-owns', 'sub-accordion-section-nav_menu[' + navMenuId + ']' );
+			li.innerHTML = '<h3 class="accordion-section-title" tabindex="0">' +
+				title +
+				'<span class="screen-reader-text">' +
+				menuToEdit.dataset.instruction +
+				'</span>' +
+				'<span class="menu-in-location"></span>' +
+				'</h3>';
+			if ( menuName !== '' ) {
+				li.querySelector( '.menu-in-location' ).textContent = '(' + _wpCustomizeControlsL10n.currently + ' ' + menuName + ')';
+			}
+			document.getElementById( 'accordion-section-add_menu' ).before( li );
+			activatePublishButton();
 
 		// Enable adding of a menu item
 		} else if ( e.target.classList && e.target.classList.contains( 'add-new-menu-item' ) ) {
