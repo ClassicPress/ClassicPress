@@ -100,7 +100,8 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 					</span>
 				</summary>
 
-				<div class="menu-item-settings" id="menu-item-settings-<?php echo $item_id; ?>">
+				<fieldset class="menu-item-settings" id="menu-item-settings-<?php echo $item_id; ?>">
+					<legend class="screen-reader-text"><?php esc_html_e( 'Menu Item Settings' ); ?></legend>
 
 					<?php
 					if ( 'custom' === $item['type'] ) {
@@ -273,7 +274,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 					<input type="hidden" name="menu-item-position[<?php echo $item_id; ?>]" class="menu-item-data-position" value="<?php echo absint( $item['position'] ); ?>">
 					<input type="hidden" name="menu-item-type[<?php echo $item_id; ?>]" class="menu-item-data-type" value="<?php echo esc_attr( $item['type'] ); ?>">
 					<input type="hidden" name="menu-item-menu-id[<?php echo $item_id; ?>]" class="menu-item-data-menu-id" value="<?php echo absint( $item['nav_menu_term_id'] ); ?>">
-				</div><!-- .menu-item-settings-->
+				</fieldset><!-- .menu-item-settings-->
 				<ul class="menu-item-transport"></ul>
 
 			</details>
