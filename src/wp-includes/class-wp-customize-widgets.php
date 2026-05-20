@@ -806,19 +806,9 @@ final class WP_Customize_Widgets {
 	public function output_widget_control_templates() {
 		?>
 
-		<div id="widgets-left"><!-- compatibility with JS which looks for widget templates here -->
+		<section id="widgets-left"><!-- compatibility with JS which looks for widget templates here -->
 			<div id="available-widgets">
 				<div class="customize-section-title">
-					<button class="customize-section-back" tabindex="-1">
-						<span class="screen-reader-text">
-
-							<?php
-							/* translators: Hidden accessibility text. */
-							esc_html_e( 'Back' );
-							?>
-
-						</span>
-					</button>
 					<h3>
 						<span class="customize-action">
 
@@ -889,7 +879,7 @@ final class WP_Customize_Widgets {
 					</p>
 				</ul><!-- #available-widgets-list -->
 			</div><!-- #available-widgets -->
-		</div><!-- #widgets-left -->
+		</section><!-- #widgets-left -->
 
 		<?php
 	}

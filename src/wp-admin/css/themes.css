@@ -840,6 +840,13 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 	}
 }
 
+@media only screen and (max-width: 850px) {
+	.wp-customizer .theme-browser .theme {
+		width: 100%;
+		margin-right: 0;
+	}
+}
+
 /* Admin menu is folded */
 @media only screen and (max-width: 960px) {
 	.theme-overlay .theme-wrap {
@@ -1369,14 +1376,8 @@ body.full-overlay-active {
 
 .wp-full-overlay-sidebar {
 	box-sizing: border-box;
-	position: fixed;
-	min-width: 300px;
-	max-width: 600px;
-	width: 18%;
+	width: 345px;
 	height: 100%;
-	top: 0;
-	bottom: 0;
-	left: 0;
 	padding: 0;
 	margin: 0;
 	z-index: 10;
@@ -1432,19 +1433,7 @@ body.full-overlay-active {
 	z-index: 1000;
 }
 
-.wp-full-overlay-main {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	height: 100%;
-}
-
 .wp-full-overlay-sidebar .wp-full-overlay-header {
-	position: absolute;
-	left: 0;
-	right: 0;
 	height: 45px;
 	padding: 0 15px;
 	line-height: 3.2;
