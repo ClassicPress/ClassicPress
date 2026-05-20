@@ -59,24 +59,17 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 
 			<?php
 		}
-		?>
 
-		<div class="customize-control-notifications-container" style="display: none;">
-			<ul></ul>
-		</div>
-
-		<?php
 		$attachment_id    = (int) $this->value();
 		$default_icon_url = get_site_icon_url();  // Theme default favicon
 		$image_url        = '';
 
 		if ( $attachment_id ) {
+			$full_size = wp_get_attachment_image_src( $attachment_id, 'full' );
+			$image_url = $full_size ? $full_size[0] : wp_get_attachment_url( $attachment_id );
 			?>
+
 			<div class="attachment-media-view">
-				<?php
-				$full_size = wp_get_attachment_image_src( $attachment_id, 'full' );
-				$image_url = $full_size ? $full_size[0] : wp_get_attachment_url( $attachment_id );
-				?>
 				<div class="site-icon-preview customizer">
 					<div class="favicon-preview">
 						<img src="<?php echo esc_url( admin_url( 'images/' . ( is_rtl() ? 'browser-rtl.png' : 'browser.png' ) ) ); ?>"
@@ -128,6 +121,23 @@ class WP_Customize_Site_Icon_Control extends WP_Customize_Cropped_Image_Control 
 			?>
 
 			<div class="attachment-media-view">
+				<div class="site-icon-preview customizer" hidden>
+					<div class="favicon-preview">
+						<img src="<?php echo esc_url( admin_url( 'images/' . ( is_rtl() ? 'browser-rtl.png' : 'browser.png' ) ) ); ?>"
+							class="browser-preview"
+							width="182"
+							alt=""
+						>
+						<div class="favicon">
+							<img src="<?php echo esc_url( $image_url ); ?>"
+								alt="<?php esc_attr_e( 'Preview as a browser icon' ); ?>"
+							>
+						</div>
+						<span class="browser-title" aria-hidden="true">
+							<?php echo esc_html( get_bloginfo( 'name' ) ); ?>
+						</span>
+					</div>
+				</div>
 				<input type="hidden" value="<?php echo esc_attr( $attachment_id ); ?>">
 
 				<?php
