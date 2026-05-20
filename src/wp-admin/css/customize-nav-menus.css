@@ -51,6 +51,7 @@
 #customize-new-menu-submit {
 	float: right;
 	min-width: 85px;
+	text-align: center;
 }
 
 .wp-customizer .menu-item-bar .menu-item-handle,

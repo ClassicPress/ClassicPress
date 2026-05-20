@@ -140,6 +140,8 @@
 	background: #fff;
 	border: 1px solid #c3c4c7;
 	border-top: none;
+	margin-top: -10px;
+	margin-bottom: 10px;
 	cursor: auto;
 }
 
