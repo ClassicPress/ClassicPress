@@ -554,6 +554,8 @@ body.trashing #publish-settings {
 
 #customize-controls #sub-accordion-section-custom_css .customize-info .customize-section-description {
 	margin: 0px -1em;
+	border-top: 0;
+	border-bottom: 1px solid #dcdcde;
 }
 
 #customize-controls .customize-info .customize-panel-description p:first-child,
