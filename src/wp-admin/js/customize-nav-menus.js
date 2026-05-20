@@ -13,7 +13,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
 		form = document.querySelector( 'form' ),
-		inputs = form.querySelectorAll( 'input, select, textarea' ),
 		saveButton = form.querySelector( '#save' ),
 		wrap = document.getElementById( 'screen-options-wrap' ),
 		menuItemPreferences = wrap.querySelectorAll( 'fieldset.metabox-prefs input.hide-column-tog' );
