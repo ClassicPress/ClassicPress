@@ -68,9 +68,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		if ( hash === 'sub-accordion-section-themes' ) {
-			document.getElementById( 'customize-footer-actions' ).style.bottom = '-45px';
+			document.getElementById( 'customize-footer-actions' ).style.display = 'none';
 		} else {
-			document.getElementById( 'customize-footer-actions' ).style.bottom = '0';
+			document.getElementById( 'customize-footer-actions' ).style.display = 'block';
 		}
 	}
 
@@ -116,9 +116,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 			if ( newHash === 'sub-accordion-section-themes' ) {
-				document.getElementById( 'customize-footer-actions' ).style.bottom = '-45px';
+				document.getElementById( 'customize-footer-actions' ).style.display = 'none';
 			} else {
-				document.getElementById( 'customize-footer-actions' ).style.bottom = '0';
+				document.getElementById( 'customize-footer-actions' ).style.display = 'block';
 			}
 		}
 	} );
@@ -1625,6 +1625,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				editor = wp.codeEditor.initialize( textarea, {
 					codemirror: {
 						mode: 'css',
+						lint: {
+							options: {
+								'known-properties': false,
+								'vendor-prefix': false,
+								'compatible-vendor-prefixes': false
+							}
+						},
 						lineNumbers: true,
 						lineWrapping: true,
 						indentUnit: 2,
@@ -1633,7 +1640,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						autoCloseBrackets: true,
 						matchBrackets: true,
 						foldGutter: true,
-						gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']
+						gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers']
 					}
 				} );
 
@@ -1651,9 +1658,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 			} );
 			observer.observe( section, { attributes: true, attributeFilter: [ 'style' ] } );
-
-			textarea.parentNode.querySelector( '.CodeMirror-sizer' ).style.marginLeft = '39px';
-			textarea.parentNode.querySelector( '.CodeMirror-gutter.CodeMirror-linenumbers' ).style.width = '29px';
 		}
 	}
 	initCodeMirror( section.querySelector( 'textarea' ) );
@@ -1788,7 +1792,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			copyToClipboard( 'preview', e.target );
 
 		// Add a widget
-		} else if ( e.target.classList && e.target.classList.contains( 'add-new-widget' ) ) {
+		} else if ( e.target.classList?.contains( 'add-new-widget' ) ) {
 			document.body.classList.toggle( 'adding-widget' );
 			if ( e.target.getAttribute( 'aria-expanded' ) === 'false' ) {
 				document.getElementById( 'widgets-left' ).style.display = 'block';
@@ -1822,6 +1826,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				description.style.display = 'block';
 				e.target.setAttribute( 'aria-expanded', true );
 			}
+		} else if ( e.target.classList && e.target.classList.contains( 'section-description-close' ) ) {
+			description = e.target.closest( '.customize-section-description' );
+			description.style.display = 'none';
+			description.previousElementSibling.classList.remove( 'open' );
+			description.previousElementSibling.querySelector( '.customize-help-toggle' ).setAttribute( 'aria-expanded', false );
 
 		// Browse installed themes
 		} else if ( e.target.classList && e.target.classList.contains( 'themes-section-installed_themes' ) ) {

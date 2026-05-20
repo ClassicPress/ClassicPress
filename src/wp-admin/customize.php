@@ -339,8 +339,10 @@ wp_print_scripts();
 
 <div class="wp-full-overlay preview-desktop expanded" aria-labelledby="customizer-title">
 	<div id="customizer-sidebar-container">
-		<form id="customize-controls"
-			class="wrap wp-full-overlay-sidebar"
+		<h2 id="customizer-title" class="screen-reader-text">
+			<?php printf( esc_html__( 'Customizing: %s' ), esc_html( get_bloginfo( 'name', 'display' ) ) ); ?>
+		</h2>
+		<form id="customize-controls" class="wrap wp-full-overlay-sidebar"
 			action="<?php echo esc_url( admin_url( 'customize.php' ) ); ?>"
 			method="post"
 			accept-charset="<?php bloginfo( 'charset' ); ?>"
@@ -400,6 +402,9 @@ wp_print_scripts();
 			</header><!-- #customize-header-actions -->
 
 			<main id="widgets-right" class="wp-clearfix">
+				<div id="customize-notifications-area" class="customize-control-notifications-container">
+					<ul></ul>
+				</div>
 				<div class="wp-full-overlay-sidebar-content" tabindex="-1">
 					<div id="customize-info" class="accordion-section customize-info">
 						<div class="accordion-section-title">
@@ -465,6 +470,17 @@ wp_print_scripts();
 
 									</h3>
 								</li>
+								<li id="accordion-section-publish_settings"
+									class="accordion-section control-section control-section-outer"
+									aria-owns="sub-accordion-section-publish_settings"
+								>
+									<h3 class="accordion-section-title" tabindex="0">
+										<?php esc_html_e( 'Publish Settings' ); ?>
+										<span class="screen-reader-text">
+											<?php esc_html_e( 'Press return or enter to open this section' ); ?>
+										</span>
+									</h3>
+								</li>
 
 								<?php
 								foreach ( $top_items as $item ) {
@@ -493,7 +509,7 @@ wp_print_scripts();
 									</span>
 								</a>
 								<div class="accordion-section-title">
-									<span class="preview-notice">
+									<h2 class="preview-notice">
 										<?php
 										printf(
 											/* translators: %s: Themes panel title in the Customizer. */
@@ -501,7 +517,7 @@ wp_print_scripts();
 											'<strong class="panel-title">' . __( 'Themes' ) . '</strong>'
 										); // Separate strings for consistency with other panels.
 										?>
-									</span>
+									</h2>
 									
 									<?php
 									if ( current_user_can( 'install_themes' ) && ! is_multisite() ) {
@@ -549,7 +565,7 @@ wp_print_scripts();
 								</button>
 							</li>
 							<li class="customize-themes-full-container-container">
-								<div class="customize-themes-full-container animate" style="top: 0; right: 0;border: 0;height: 100vh;min-width: calc(100% - max(18%, 300px));" open>
+								<div class="customize-themes-full-container animate">
 									<div class="customize-themes-notifications"></div>
 									<div class="filter-drawer">
 										<?php
@@ -618,10 +634,10 @@ wp_print_scripts();
 														<span class="filter-count-filters">
 															<?php printf( __( 'Filter themes (%s)' ), '<span class="theme-filter-count">0</span>' ); ?>
 														</span>
-													</button>												
+													</button>
 												</div>
 											</div>
-											<div class="error unexpected-error" style="display: none; ">
+											<div class="error unexpected-error" style="display: none;">
 												<p>
 
 												<?php
@@ -638,7 +654,7 @@ wp_print_scripts();
 
 												</p>
 											</div>
-											<ul class="themes" style="overflow-y: scroll;max-height: 100vh;">
+											<ul class="themes wp-clearfix">
 
 												<?php
 												$themes_control = new WP_Customize_Theme_Control( $wp_customize, 'themes', array() );
@@ -674,12 +690,15 @@ wp_print_scripts();
 										</span>
 									</a>
 									<div class="accordion-section-title">
-										<span class="preview-notice">
-											<?php esc_html_e( 'You are browsing' ); ?>
-										</span>
-										<strong class="panel-title">
-											<?php echo esc_html( $nav_menus_panel->title ); ?>
-										</strong>
+										<h2 class="preview-notice">
+											<?php
+											printf(
+												/* translators: %s: Menus panel title in the Customizer. */
+												__( 'You are customizing %s' ),
+												'<strong class="panel-title">' . esc_html( $nav_menus_panel->title ) . '</strong>'
+											); // Separate strings for consistency with other panels.
+											?>
+										</h2>
 
 										<?php
 										if ( ! empty( $nav_menus_panel->description ) ) {
@@ -878,14 +897,14 @@ wp_print_scripts();
 											</span>
 										</a>
 										<div class="accordion-section-title">
-											<span class="preview-notice">
+											<h2 class="preview-notice">
 
 												<?php
 												/* translators: %s: Panel title. */
 												printf( __( 'You are customizing %s' ), '<strong class="panel-title">' . esc_html( $item['title'] ) . '</strong>' );
 												?>
 
-											</span>
+											</h2>
 
 											<?php
 											if ( ! empty( $item['description'] ) ) {
@@ -2008,7 +2027,6 @@ wp_print_scripts();
 			name="customize-preview-0"
 			onmousewheel=""
 			src="<?php echo esc_url( $preview_url ); ?>"
-			style="position: relative;z-index: 1;"
 			sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-same-origin allow-scripts"
 		></iframe>
 	</div>
