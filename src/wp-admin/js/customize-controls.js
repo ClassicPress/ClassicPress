@@ -13,6 +13,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver, targetEl,
 		i = 1,
+		customizerControls = [...document.getElementById( 'customize-theme-controls' ).children],
 		{ FilePond } = window, // import FilePond
 		cropContext = false,
 		dialog = document.getElementById( 'widget-modal' ),
@@ -44,21 +45,78 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	targetEl = document.getElementById( hash );
 
 	if ( hash && targetEl ) {
-		[...document.getElementById( 'customize-theme-controls' ).children].forEach( function( child ) {
+		customizerControls.forEach( function( child ) {
 			child.style.display = 'none';
 		} );
 
+		targetEl.style.display = 'block';
+
 		if ( hash === 'customize-pane-parent' ) {
 			document.getElementById( 'customize-info' ).style.display = 'block';
+			setTimeout( function() {
+				document.querySelector( '.customize-controls-close' ).focus();
+			}, 0 );
 		} else {
 			document.getElementById( 'customize-info' ).style.display = 'none';
+			setTimeout( function() {
+				targetEl.querySelector( 'a' ).focus();
+			}, 0 );
 		}
 
-		targetEl.style.display = 'block';
-		setTimeout( function() {
-			targetEl.querySelector( 'button' ).focus();
-		}, 0 );
+		if ( hash === 'sub-accordion-section-themes' ) {
+			document.getElementById( 'customize-footer-actions' ).style.display = 'none';
+		} else {
+			document.getElementById( 'customize-footer-actions' ).style.display = 'block';
+		}
 	}
+
+	/**
+	 * Show and hide panels according to hash value after initial page load
+	 */
+	window.addEventListener( 'hashchange', function( e ) {
+		var newHash = e.newURL.split( '#' )[1],
+			targetEl = document.getElementById( newHash );
+
+		if ( newHash && targetEl ) {
+			customizerControls.forEach( function( child ) {
+				child.style.display = 'none';
+			} );
+			targetEl.style.display = 'block';
+
+			if ( newHash === 'customize-pane-parent' ) {
+				document.getElementById( 'customize-info' ).style.display = 'block';
+				document.querySelector( '.customize-controls-close' ).focus();
+			} else {
+				document.getElementById( 'customize-info' ).style.display = 'none';
+				targetEl.querySelector( 'a' ).focus();
+			}
+
+			if ( ! newHash.startsWith( 'sub-accordion-section-nav_menu[' ) ) {
+				document.body.classList.remove( 'adding-menu-items' );
+				availableMenuItems.style.display = 'none';
+				addMenuButtons.forEach( function( add ) {
+					add.setAttribute( 'aria-expanded', 'false' );
+				} );
+				if ( ! newHash.startsWith( 'sub-accordion-section-sidebar-widgets-' ) ) {
+					document.getElementById( 'widgets-left' ).style.display = 'none';
+				}
+			}
+
+			if ( ! newHash.startsWith( 'sub-accordion-section-sidebar-widgets-' ) ) {
+				document.body.classList.remove( 'adding-widget' );
+				availableMenuItems.style.display = 'none';
+				addWidgetButtons.forEach( function( add ) {
+					add.setAttribute( 'aria-expanded', 'false' );
+				} );
+			}
+
+			if ( newHash === 'sub-accordion-section-themes' ) {
+				document.getElementById( 'customize-footer-actions' ).style.display = 'none';
+			} else {
+				document.getElementById( 'customize-footer-actions' ).style.display = 'block';
+			}
+		}
+	} );
 
 	// Delete redundant query args from browser URL
 	if ( queryParams.get( 'url' ) ) {
@@ -75,7 +133,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
 			history.replaceState( null, '', newUrl );
 			saveButton.disabled = false;
-			saveButton.value = _wpCustomizeControlsL10n.activate;
+			saveButton.textContent = _wpCustomizeControlsL10n.activate;
 		}
 		setTimeout( function() {
 			document.getElementById( 'customize-pane-parent' ).querySelector( 'button' ).focus();
@@ -86,8 +144,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		history.replaceState( null, '', newUrl );
 	}
 
-	// Remove inert attribute to enable interactions with form
-	form.removeAttribute( 'inert' );
 	document.getElementById( 'customize-preview-loading' ).classList.add( 'hidden' );
 
 	// Limit motion where appropriate
@@ -118,7 +174,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function activatePublishButton() {
 		saveButton.disabled = false;
-		saveButton.value = _wpCustomizeControlsL10n.publish;
+		saveButton.textContent = _wpCustomizeControlsL10n.publish;
 	}
 
 	/**
@@ -1026,23 +1082,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
-	 * Add image to widget.
+	 * Add image to Customizer.
 	 *
 	 * @abstract
 	 * @return {void}
 	 */
 	function addItemToCustomizer( selectedItem, attachmentId, imageElement, imageUrl ) {
-		var setting, settingId,
-			parent = customizeButton.parentNode,
+		var parent = customizeButton.parentNode,
+			grandparent = parent.parentNode,
+			li = parent.closest( 'li' ),
+			settingId = li.dataset.settingId,
 			removeButton = document.createElement( 'button' ),
 			selectButton = document.createElement( 'button' );
 
 		if ( ! parent ) {
 			return;
 		}
-
-		setting = parent.closest( 'li' );
-		settingId = setting.dataset.settingId;
 
 		removeButton.className = 'button remove-button';
 		removeButton.type = 'button';
@@ -1067,14 +1122,27 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				height: selectedItem.dataset.height
 			};
 
+		// Update site icon
+		} else if ( settingId === 'site_icon' ) {
+			imageElement.className = 'app-icon-preview';
+			li.querySelector( '.site-icon-preview' ).removeAttribute( 'hidden' );
+			li.querySelector( '.site-icon-preview' ).append( imageElement );
+			parent.prepend( removeButton );
+			customizeButton.replaceWith( selectButton );
+			setTimeout( function() {
+				selectButton.focus();
+			} );
+			li.querySelector( 'input' ).value = attachmentId;
+			_updatedControlsWatcher[ settingId ] = attachmentId;
+
 		// Insert other images according to whether this is a new insertion or replacement
 		} else {
 			imageElement.className = 'thumbnail thumbnail-image';
-			if ( parent.parentNode.querySelector( 'img' ) || parent.parentNode.querySelector( 'video' ) ) {
-				parent.parentNode.querySelector( 'img' )?.replaceWith( imageElement );
-				parent.parentNode.querySelector( 'video' )?.replaceWith( imageElement );
+			if ( grandparent.querySelector( 'img' ) || grandparent.querySelector( 'video' ) ) {
+				grandparent.querySelector( 'img' )?.replaceWith( imageElement );
+				grandparent.querySelector( 'video' )?.replaceWith( imageElement );
 			} else {
-				parent.parentNode.prepend( imageElement );
+				grandparent.prepend( imageElement );
 				parent.prepend( removeButton );
 				customizeButton.replaceWith( selectButton );
 				setTimeout( function() {
@@ -1082,10 +1150,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 			}
 			if ( settingId === 'background_image' ) {
-				parent.parentNode.querySelector( 'input' ).value = imageUrl;
+				grandparent.querySelector( 'input' ).value = imageUrl;
 				_updatedControlsWatcher[ settingId ] = imageUrl;
 			} else {
-				parent.parentNode.querySelector( 'input' ).value = attachmentId;
+				grandparent.querySelector( 'input' ).value = attachmentId;
 				_updatedControlsWatcher[ settingId ] = attachmentId;
 			}
 		}
@@ -1101,7 +1169,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function removeMedia() {
 		var button,
-			parent = customizeButton.parentNode;
+			parent = customizeButton.parentNode,
+			grandparent = parent.parentNode;
 
 		if ( customizeButton.nextElementSibling.id && customizeButton.nextElementSibling.id === 'header_image-button' ) { // header image
 			parent.previousElementSibling.querySelector( 'img' )?.remove();
@@ -1119,9 +1188,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			button.className = 'upload-button button select-button';
 			button.type = 'button';
 			button.textContent = customizeButton.parentNode.dataset.empty;
-			parent.parentNode.querySelector( 'img' )?.remove();
-			parent.parentNode.querySelector( 'video' )?.remove();
-			parent.parentNode.querySelector( 'input' ).value = '';
+			if ( grandparent.querySelector( '.site-icon-preview' ) ) {
+				grandparent.querySelector( '.site-icon-preview' ).setAttribute( 'hidden', 'true' );
+				grandparent.querySelector( '.app-icon-preview' ).remove();
+				grandparent.querySelector( 'input' ).value = '';
+			} else {
+				grandparent.querySelector( 'img' )?.remove();
+				grandparent.querySelector( 'video' )?.remove();
+				grandparent.querySelector( 'input' ).value = '';
+			}
 			parent.innerHTML = '';
 			parent.append( button );
 			setTimeout( function() {
@@ -1361,7 +1436,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} catch ( err ) {
 			console.error( _wpCustomizeControlsL10n.saveBlockedError.plural + ':', err );
 			saveButton.disabled = false;
-			saveButton.value = _wpCustomizeControlsL10n.publish;
+			saveButton.textContent = _wpCustomizeControlsL10n.publish;
 			window._customizePublishing = false;
 		}
 
@@ -1386,7 +1461,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Reset form
 			saveButton.disabled = true;
-			saveButton.value = _wpCustomizeControlsL10n.published;
+			saveButton.textContent = _wpCustomizeControlsL10n.published;
 			document.getElementById( 'customize_changeset_uuid' ).value = newResult.data.next_changeset_uuid;
 
 			// Reset the buffer object and proxy
@@ -1443,6 +1518,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				editor = wp.codeEditor.initialize( textarea, {
 					codemirror: {
 						mode: 'css',
+						lint: {
+							options: {
+								'known-properties': false,
+								'vendor-prefix': false,
+								'compatible-vendor-prefixes': false
+							}
+						},
 						lineNumbers: true,
 						lineWrapping: true,
 						indentUnit: 2,
@@ -1451,7 +1533,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						autoCloseBrackets: true,
 						matchBrackets: true,
 						foldGutter: true,
-						gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']
+						gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers']
 					}
 				} );
 
@@ -1469,9 +1551,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 			} );
 			observer.observe( section, { attributes: true, attributeFilter: [ 'style' ] } );
-
-			textarea.parentNode.querySelector( '.CodeMirror-sizer' ).style.marginLeft = '39px';
-			textarea.parentNode.querySelector( '.CodeMirror-gutter.CodeMirror-linenumbers' ).style.width = '29px';
 		}
 	}
 	initCodeMirror( section.querySelector( 'textarea' ) );
@@ -1584,70 +1663,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 
-		if ( ( e.target.tagName === 'H3' || e.target.classList && e.target.classList.contains( 'change-theme' ) ) && ul ) {
-			e.preventDefault();
-			id = e.target.closest( 'li' ).id;
-			document.body.classList.remove( 'adding-menu-items' );
-			document.body.classList.remove( 'adding-widget' );
-			document.getElementById( 'widgets-left' ).style.display = 'none';
-			availableMenuItems.style.display = 'none';
-			addMenuButtons.forEach( function( add ) {
-				add.setAttribute( 'aria-expanded', 'false' );
-			} );
-			addWidgetButtons.forEach( function( add ) {
-				add.setAttribute( 'aria-expanded', 'false' );
-			} );
-
-			// Go down to the second level
-			if ( ul.classList.contains( 'customize-pane-parent' ) ) {
-				ul.style.display = 'none';
-				document.getElementById( 'customize-info' ).style.display = 'none';
-				document.getElementById( 'sub-' + id ).style.display = 'block';
-				document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();
-				window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-' + id );
-
-			// Go down to the third level
-			} else if ( ! e.target.closest( 'li' ).classList.contains( 'customize-control-widget_form' ) && ul.classList.contains( 'customize-pane-child' ) ) {
-				if ( ! id.startsWith( 'accordion-section-nav_menu[' ) ) { // not a nav menu
-					ul.style.display = 'none';
-					document.getElementById( 'sub-' + id ).style.display = 'block';
-					document.getElementById( 'sub-' + id ).querySelector( 'button' ).focus();
-					document.getElementById( 'sub-' + id ).setAttribute( 'data-parent-id', ul.id ); // update
-				}
-				window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-' + id );
-			}
-
-		//Go up a level
-		} else if ( e.target.classList && ( e.target.classList.contains( 'customize-section-back' ) || e.target.classList.contains( 'customize-panel-back' ) ) ) {
-			e.preventDefault();
-			ul.style.display = 'none';
-			document.body.classList.remove( 'adding-menu-items' );
-			document.body.classList.remove( 'adding-widget' );
-			document.getElementById( 'widgets-left' ).style.display = 'none';
-			availableMenuItems.style.display = 'none';
-			addMenuButtons.forEach( function( add ) {
-				add.setAttribute( 'aria-expanded', 'false' );
-			} );
-			addWidgetButtons.forEach( function( add ) {
-				add.setAttribute( 'aria-expanded', 'false' );
-			} );
-
-			if ( ul.dataset.parentId === 'customize-pane-parent' ) {
-				document.getElementById( 'customize-info' ).style.display = 'block';
-			}
-			document.getElementById( ul.dataset.parentId ).style.display = 'block';
-			document.getElementById( ul.dataset.parentId ).querySelector( 'button' ).focus();
-			window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#' + ul.dataset.parentId );
-
-		// Go to widgets panel
-		} else if ( e.target.tagName === 'A' && ( e.target.closest( 'li' ).id === 'accordion-section-menu_locations' || ul.id === 'sub-accordion-section-menu_locations' ) ) {
-			e.preventDefault();
-			ul.style.display = 'none';
-			document.getElementById( 'sub-accordion-panel-widgets' ).style.display = 'block';
-			window.history.pushState( {}, '', _wpCustomizeControlsL10n.customizeUrl + '#sub-accordion-panel-widgets' );
-
 		// Add a widget
-		} else if ( e.target.classList && e.target.classList.contains( 'add-new-widget' ) ) {
+		if ( e.target.classList && e.target.classList.contains( 'add-new-widget' ) ) {
 			document.body.classList.toggle( 'adding-widget' );
 			if ( e.target.getAttribute( 'aria-expanded' ) === 'false' ) {
 				document.getElementById( 'widgets-left' ).style.display = 'block';
@@ -1681,6 +1698,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				description.style.display = 'block';
 				e.target.setAttribute( 'aria-expanded', true );
 			}
+		} else if ( e.target.classList && e.target.classList.contains( 'section-description-close' ) ) {
+			description = e.target.closest( '.customize-section-description' );
+			description.style.display = 'none';
+			description.previousElementSibling.classList.remove( 'open' );
+			description.previousElementSibling.querySelector( '.customize-help-toggle' ).setAttribute( 'aria-expanded', false );
 
 		// Show and hide live preview on narrow screens
 		} else if ( e.target.parentNode.parentNode.id === 'customize-header-actions' ) {

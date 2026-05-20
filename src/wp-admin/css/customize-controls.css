@@ -212,6 +212,10 @@ body.trashing #publish-settings {
 	display: none;
 }
 
+#customize-header-actions {
+	position: static;
+}
+
 #customize-header-actions .spinner {
 	margin-top: 13px;
 	margin-right: 4px;
@@ -381,7 +385,7 @@ body.trashing #publish-settings {
 
 .customize-control .actions .upload-button.button {
 	width: 100%;
-	padding: 9px 0;
+	padding: 5px 0;
 }
 
 .date-time-fields .date-input.month {
@@ -476,6 +480,9 @@ body.trashing #publish-settings {
 #customize-controls .customize-info .preview-notice {
 	font-size: 13px;
 	line-height: 1.9;
+	margin: 0;
+	font-weight: 400;
+	color: #50575e;
 }
 
 #customize-controls .customize-pane-child .customize-section-title h3,
@@ -552,6 +559,12 @@ body.trashing #publish-settings {
 	margin-bottom: 15px;
 }
 
+#customize-controls #sub-accordion-section-custom_css .customize-info .customize-section-description {
+	margin: 0px -1em;
+	border-top: 0;
+	border-bottom: 1px solid #dcdcde;
+}
+
 #customize-controls .customize-info .customize-panel-description p:first-child,
 #customize-controls .customize-info .customize-section-description p:first-child {
 	margin-top: 0;
@@ -601,6 +614,15 @@ body.trashing #publish-settings {
 	content: "\f345";
 	font: normal 20px/1 dashicons;
 	color: #a7aaad;
+}
+
+#customize-theme-controls .accordion-section-title > a,
+#customize-outer-theme-controls .accordion-section-title > a {
+	display: block;
+	color: inherit;
+	text-decoration: none;
+	margin: -10px -10px -11px -14px;
+	padding: 10px 10px 11px 14px;
 }
 
 #customize-theme-controls .accordion-section-content,
@@ -671,6 +693,10 @@ body.trashing #publish-settings {
 #customize-theme-controls .accordion-section-content {
 	padding: 12px;
 	box-sizing: border-box;
+}
+
+#customize-info {
+	position: relative;
 }
 
 #customize-info,
@@ -807,13 +833,17 @@ h3.customize-section-title {
 	width: 100%;
 }
 
+.wp-customizer .wp-full-overlay-sidebar .wp-full-overlay-header {
+	height: 49px;
+}
+
 .customize-controls-close {
 	display: block;
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 45px;
-	height: 41px;
+	height: 43px;
 	padding: 0 2px 0 0;
 	background: #f0f0f1;
 	border: none;
@@ -839,9 +869,9 @@ h3.customize-section-title {
 .customize-section-back {
 	display: block;
 	float: left;
-	width: 49px;
+	width: 43px;
 	height: 72px;
-	padding: 0 24px 0 0;
+	padding: 0;
 	margin: 0;
 	background: #fff;
 	border: none;
@@ -849,6 +879,7 @@ h3.customize-section-title {
 	border-left: 4px solid #fff;
 	box-shadow: none;
 	cursor: pointer;
+	text-decoration: none;
 	transition:
 		color .15s ease-in-out,
 		border-color .15s ease-in-out,
@@ -1216,12 +1247,6 @@ input[type="range"].hue-slider::-moz-range-track {
 	flex: 0 0 auto; /* default width */
 }
 
-.wp-full-overlay-sidebar {
-	background: #f0f0f1;
-	border-right: 1px solid #dcdcde;
-	width: 345px;
-}
-
 .wp-full-overlay-sidebar.collapsed {
 	flex-basis: 0;
 }
@@ -1236,38 +1261,10 @@ input[type="range"].hue-slider::-moz-range-track {
  * Notifications
  */
 
-#customize-controls .customize-control-notifications-container { /* Scoped to #customize-controls for specificity over notification styles in common.css. */
-	margin: 4px 0 8px;
-	padding: 0;
-	cursor: default;
-}
-
 #customize-controls .customize-control-widget_form.has-error .widget .widget-top,
 .customize-control-nav_menu_item.has-error .menu-item-bar .menu-item-handle {
 	box-shadow: inset 0 0 0 2px #d63638;
 	transition: .15s box-shadow linear;
-}
-
-#customize-controls .customize-control-notifications-container li.notice {
-	list-style: none;
-	margin: 0 0 6px;
-	padding: 9px 14px;
-	overflow: hidden;
-}
-#customize-controls .customize-control-notifications-container .notice.is-dismissible {
-	padding-right: 38px;
-}
-
-.customize-control-notifications-container li.notice:last-child {
-	margin-bottom: 0;
-}
-
-#customize-controls .customize-control-nav_menu_item .customize-control-notifications-container {
-	margin-top: 0;
-}
-
-#customize-controls .customize-control-widget_form .customize-control-notifications-container {
-	margin-top: 8px;
 }
 
 .customize-control-text.has-error input {
@@ -1287,39 +1284,23 @@ input[type="range"].hue-slider::-moz-range-track {
 	display: none !important;
 }
 
-#customize-controls #customize-notifications-area:not(.has-overlay-notifications),
-#customize-controls .customize-section-title > .customize-control-notifications-container:not(.has-overlay-notifications),
-#customize-controls .panel-meta > .customize-control-notifications-container:not(.has-overlay-notifications) {
+#customize-controls #customize-notifications-area:not(.has-overlay-notifications) {
 	max-height: 210px;
 	overflow-x: hidden;
 	overflow-y: auto;
 }
 
 #customize-controls #customize-notifications-area > ul,
-#customize-controls #customize-notifications-area .notice,
-#customize-controls .panel-meta > .customize-control-notifications-container,
-#customize-controls .panel-meta > .customize-control-notifications-container .notice,
-#customize-controls .customize-section-title > .customize-control-notifications-container,
-#customize-controls .customize-section-title > .customize-control-notifications-container .notice {
+#customize-controls #customize-notifications-area .notice {
 	margin: 0;
 }
-#customize-controls .panel-meta > .customize-control-notifications-container,
-#customize-controls .customize-section-title > .customize-control-notifications-container {
-	border-top: 1px solid #dcdcde;
-}
-#customize-controls #customize-notifications-area .notice,
-#customize-controls .panel-meta > .customize-control-notifications-container .notice,
-#customize-controls .customize-section-title > .customize-control-notifications-container .notice {
+#customize-controls #customize-notifications-area .notice {
 	padding: 9px 14px;
 }
-#customize-controls #customize-notifications-area .notice.is-dismissible,
-#customize-controls .panel-meta > .customize-control-notifications-container .notice.is-dismissible,
-#customize-controls .customize-section-title > .customize-control-notifications-container .notice.is-dismissible {
+#customize-controls #customize-notifications-area .notice.is-dismissible {
 	padding-right: 38px;
 }
-#customize-controls #customize-notifications-area .notice + .notice,
-#customize-controls .panel-meta > .customize-control-notifications-container .notice + .notice,
-#customize-controls .customize-section-title > .customize-control-notifications-container .notice + .notice {
+#customize-controls #customize-notifications-area .notice + .notice {
 	margin-top: 1px;
 }
 
@@ -1332,11 +1313,6 @@ input[type="range"].hue-slider::-moz-range-track {
 #customize-controls #customize-notifications-area .notice.notification-overlay {
 	margin: 0;
 	border-left: 0; /* @todo Appropriate styles could be added for notice-error, notice-warning, notice-success, etc */
-}
-
-#customize-controls .customize-control-notifications-container.has-overlay-notifications {
-	animation: customize-fade-in 0.5s;
-	z-index: 30;
 }
 
 /* Note: Styles for this are also defined in themes.css */
@@ -1362,9 +1338,6 @@ input[type="range"].hue-slider::-moz-range-track {
 
 #customize-control-show_on_front.has-error {
 	margin-bottom: 0;
-}
-#customize-control-show_on_front.has-error .customize-control-notifications-container {
-	margin-top: 12px;
 }
 
 /**
@@ -1513,7 +1486,11 @@ input[type="range"].hue-slider::-moz-range-track {
 .customize-control .attachment-media-view .button-add-media {
 	cursor: pointer;
 	background-color: #f0f0f1;
-	color: #2c3338;
+	color: #2271b1;
+	border: 1px solid #2271b1;
+	background: #f6f7f7;
+	vertical-align: top;
+	border-radius: 3px;
 }
 
 .customize-control .attachment-media-view .button-add-media:hover {
@@ -1717,9 +1694,6 @@ input[type="range"].hue-slider::-moz-range-track {
 	border-bottom: none;
 }
 
-#sub-accordion-section-custom_css .customize-control-notifications-container {
-	margin-bottom: 15px;
-}
 
 #customize-control-custom_css textarea {
 	display: block;
@@ -1738,7 +1712,9 @@ input[type="range"].hue-slider::-moz-range-track {
 }
 
 .customize-section-description-container + #customize-control-custom_css:last-child {
-	width: 299px;
+	margin-left: -12px;
+	width: calc( 100% + 24px );
+	margin-bottom: -12px;
 }
 
 .customize-section-description-container + #customize-control-custom_css:last-child .CodeMirror {
@@ -1748,11 +1724,6 @@ input[type="range"].hue-slider::-moz-range-track {
 .CodeMirror-lint-tooltip,
 .CodeMirror-hints {
 	z-index: 500000 !important;
-}
-
-.customize-section-description-container + #customize-control-custom_css:last-child .customize-control-notifications-container {
-	margin-left: 12px;
-	margin-right: 12px;
 }
 
 .theme-browser .theme.active .theme-actions,
@@ -1824,8 +1795,9 @@ input[type="range"].hue-slider::-moz-range-track {
 #customize-theme-controls .control-panel-themes .accordion-section-title .change-theme {
 	position: absolute;
 	right: 10px;
-	top: 50%;
-	margin-top: -14px;
+	top: 25%;
+	margin: 0;
+	padding: 0 10px;
 	font-weight: 400;
 }
 
@@ -1842,12 +1814,12 @@ input[type="range"].hue-slider::-moz-range-track {
 .control-panel-themes .customize-themes-full-container {
 	position: fixed;
 	top: 0;
-	left: 0;
+	left: 45px;
 	transition: .18s left ease-in-out;
 	margin: 0 0 0 300px;
 	padding: 71px 0 25px;
 	overflow-y: scroll;
-	width: calc(100% - 300px);
+	width: calc(100% - 345px);
 	height: calc(100% - 96px);
 	background: #f0f0f1;
 	z-index: 20;
@@ -2106,27 +2078,6 @@ input[type="range"].hue-slider::-moz-range-track {
 	display: none; /* Hide "installed" notice on installed themes tab. */
 }
 
-.customize-control-theme .theme {
-	width: 100%;
-	margin: 0;
-	border: 1px solid #dcdcde;
-	background: #fff;
-}
-
-.customize-control-theme .theme .theme-name, .customize-control-theme .theme .theme-actions {
-	background: #fff;
-	border: none;
-}
-
-.customize-control.customize-control-theme { /* override most properties on .customize-control */
-	box-sizing: border-box;
-	width: 25%;
-	max-width: 600px; /* Max. screenshot size / 2 */
-	margin: 0 25px 25px 0;
-	padding: 0;
-	clear: none;
-}
-
 .cp-color-result {
 	display: inline-block;
 	width: 28px;
@@ -2141,45 +2092,8 @@ input[type="range"].hue-slider::-moz-range-track {
 	border-radius: 0;
 }
 
-
-/* 5 columns above 2100px */
-@media screen and (min-width: 2101px) {
-	.customize-control.customize-control-theme {
-		width: calc( ( 100% - 125px ) / 5 - 1px ); /* 1px offset accounts for browser rounding, typical all grids */
-	}
-}
-
-/* 4 columns up to 2100px */
-@media screen and (min-width: 1601px) and (max-width: 2100px) {
-	.customize-control.customize-control-theme {
-		width: calc( ( 100% - 100px ) / 4 - 1px );
-	}
-}
-
-/* 3 columns up to 1600px */
-@media screen and (min-width: 1201px) and (max-width: 1600px) {
-	.customize-control.customize-control-theme {
-		width: calc( ( 100% - 75px ) / 3 - 1px );
-	}
-}
-
-/* 2 columns up to 1200px */
-@media screen and (min-width: 851px) and (max-width: 1200px) {
-	.customize-control.customize-control-theme {
-		width: calc( ( 100% - 50px ) / 2 - 1px );
-
-	}
-}
-
-/* 1 column up to 850 px */
-@media screen and (max-width: 850px) {
-	.customize-control.customize-control-theme {
-		width: 100%;
-	}
-}
-
 .wp-customizer .theme-browser .themes {
-	padding: 2px 0 25px 25px;
+	padding: 2px 2em 3em;
 	transition: .18s margin-top linear;
 }
 
@@ -2215,12 +2129,6 @@ input[type="range"].hue-slider::-moz-range-track {
 		width: calc(82% + 1px);
 		right: 0;
 		left: initial;
-	}
-}
-
-@media screen and (min-width: 1020px) {
-	.wp-customizer .theme-browser .themes {
-		padding: 2px 0 25px 25px;
 	}
 }
 
@@ -2262,7 +2170,7 @@ input[type="range"].hue-slider::-moz-range-track {
 		margin-top: 0;
 		padding: 0;
 		height: 100%;
-		width: calc(100% - 300px);
+		width: calc(100% - 345px);
 	}
 }
 
@@ -2315,9 +2223,16 @@ input[type="range"].hue-slider::-moz-range-track {
 		float: right;
 	}
 
+  .wp-full-overlay-sidebar {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+	}
+  
 	#customize-preview {
 		margin-top: 45px;
-	}
+  }
 
 	.control-panel-themes .customize-themes-full-container {
 		width: 100%;
@@ -2483,10 +2398,6 @@ input[type="range"].hue-slider::-moz-range-track {
 		right: 0;
 		top: 0;
 		bottom: 0;
-	}
-
-	.wp-customizer .theme-browser .themes {
-		padding-right: 25px;
 	}
 }
 
@@ -2667,6 +2578,11 @@ body.adding-widget .add-new-widget:before,
 	transform: rotate(45deg);
 }
 
+#widgets-right {
+	overflow-y: auto;
+	max-height: calc(100vh - 90px);
+}
+
 #available-menu-items {
 	width: 300px;
 	margin: 0;
@@ -2679,6 +2595,19 @@ body.adding-widget .add-new-widget:before,
 
 #available-widgets .customize-section-title,
 #available-menu-items .customize-section-title {
+ 	border: 0;
+ 	clip-path: inset(50%);
+ 	height: 1px;
+ 	margin: -1px;
+ 	overflow: hidden;
+ 	padding: 0;
+ 	position: absolute;
+ 	width: 1px;
+ 	word-wrap: normal !important;
+}
+
+#available-widgets .customize-section-title button,
+#available-menu-items .customize-section-title button {
 	display: none;
 }
 
@@ -3016,8 +2945,19 @@ body.adding-widget .add-new-widget:before,
 
 	#available-widgets .customize-section-title,
 	#available-menu-items .customize-section-title {
-		display: block;
+		border: 0;
+		clip-path: none;
+		height: inherit;
 		margin: 0;
+		overflow: hidden;
+		padding: 0;
+		width: auto;
+		position: static;
+	}
+
+	#available-widgets .customize-section-title button,
+	#available-menu-items .customize-section-title button {
+		display: block;
 	}
 
 	#available-widgets .customize-section-back,
@@ -3097,7 +3037,6 @@ body.adding-widget .add-new-widget:before,
 
 #customize-preview,
 #customize-preview[data-device="desktop"] {
-	position: static;
 	width: 100%;
 	height: 100%;
 	border: 0;
