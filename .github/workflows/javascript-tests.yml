@@ -70,5 +70,14 @@ jobs:
       - name: Install dependencies
         run: npx install-changed --install-command="npm ci"
 
+      - name: Cache Puppeteer browsers
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/puppeteer
+          key: puppeteer-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Puppeteer Chrome
+        run: npx puppeteer browsers install chrome
+
       - name: Run QUnit tests
         run: grunt qunit:compiled
