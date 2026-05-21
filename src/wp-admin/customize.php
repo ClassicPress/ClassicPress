@@ -2246,7 +2246,7 @@ customize_themes_print_templates();
 
 <!-- Template for moving widget to different sidebar -->
 <template id="tmpl-change-sidebar">
-	<div id="move-widget-area" class="move-widget-area active" style="margin-top:-10px;margin-bottom:10px;">
+	<div id="move-widget-area" class="move-widget-area active">
 		<p class="description">
 			<?php esc_html_e( 'Select an area to move this widget into:' ); ?>
 		</p>
