@@ -880,27 +880,27 @@ function maintenance_nag() {
  * No longer uses backbone.js
  */
 function wp_print_admin_notice_templates() {
-    ?>
-    <template id="tmpl-wp-updates-admin-notice">
-        <div class="notice">
+	?>
+	<template id="tmpl-wp-updates-admin-notice">
+		<div class="notice">
 			<p></p>
 		</div>
-    </template>
+	</template>
 
-    <template id="tmpl-wp-bulk-updates-admin-notice">
-        <div class="notice">
-            <p>
-                <span class="bulk-updates-success-count"></span>
-                <button class="button-link bulk-action-errors-collapsed" aria-expanded="false" hidden>
-                    <span class="bulk-updates-error-count"></span>
-                    <span class="screen-reader-text"><?php _e( 'Show more details' ); ?></span>
-                    <span class="toggle-indicator" aria-hidden="true"></span>
-                </button>
-            </p>
-            <ul class="bulk-action-errors hidden"></ul>
-        </div>
-    </template>
-    <?php
+	<template id="tmpl-wp-bulk-updates-admin-notice">
+		<div class="notice">
+			<p>
+				<span class="bulk-updates-success-count"></span>
+				<button class="button-link bulk-action-errors-collapsed" aria-expanded="false" hidden>
+					<span class="bulk-updates-error-count"></span>
+					<span class="screen-reader-text"><?php _e( 'Show more details' ); ?></span>
+					<span class="toggle-indicator" aria-hidden="true"></span>
+				</button>
+			</p>
+			<ul class="bulk-action-errors hidden"></ul>
+		</div>
+	</template>
+	<?php
 }
 
 /**
@@ -912,21 +912,21 @@ function wp_print_admin_notice_templates() {
  * No longer uses backbone.js
  */
 function wp_print_update_row_templates() {
-    ?>
-    <template id="tmpl-item-update-row">
-        <tr class="plugin-update-tr update">
-            <td class="plugin-update colspanchange"></td>
-        </tr>
-    </template>
+	?>
+	<template id="tmpl-item-update-row">
+		<tr class="plugin-update-tr update">
+			<td class="plugin-update colspanchange"></td>
+		</tr>
+	</template>
 
-    <template id="tmpl-item-deleted-row">
-        <tr class="plugin-deleted-tr inactive deleted">
-            <td class="plugin-update colspanchange">
+	<template id="tmpl-item-deleted-row">
+		<tr class="plugin-deleted-tr inactive deleted">
+			<td class="plugin-update colspanchange">
 				<p></p>
 			</td>
-        </tr>
-    </template>
-    <?php
+		</tr>
+	</template>
+	<?php
 }
 
 /**
