@@ -1216,7 +1216,7 @@
 		// Add a plugin update row if it doesn't exist yet.
 		if ( ! $pluginUpdateRow.length ) {
 			$plugin.addClass( 'update' ).after(
-				pluginUpdateRow( {
+				fillUpdateRow( {
 					slug:    response.slug,
 					plugin:  response.plugin || response.slug,
 					colspan: $( '#bulk-action-form' ).find( 'thead th:not(.hidden), thead td' ).length,
