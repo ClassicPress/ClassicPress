@@ -338,10 +338,8 @@ wp_print_scripts();
 
 <div class="wp-full-overlay preview-desktop expanded" aria-labelledby="customizer-title">
 	<div id="customizer-sidebar-container">
-		<h2 id="customizer-title" class="screen-reader-text">
-			<?php printf( esc_html__( 'Customizing: %s' ), esc_html( get_bloginfo( 'name', 'display' ) ) ); ?>
-		</h2>
-		<form id="customize-controls" class="wrap wp-full-overlay-sidebar"
+		<form id="customize-controls"
+			class="wrap wp-full-overlay-sidebar"
 			action="<?php echo esc_url( admin_url( 'customize.php' ) ); ?>"
 			method="post"
 			accept-charset="<?php bloginfo( 'charset' ); ?>"
