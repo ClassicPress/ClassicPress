@@ -1353,6 +1353,15 @@ function wp_default_scripts( $scripts ) {
 			'_wpUpdatesSettings',
 			array(
 				'ajax_nonce' => wp_installing() ? '' : wp_create_nonce( 'updates' ),
+				'pluginUpdatedSingular' => __( '%s plugin successfully updated.' ),
+				'pluginUpdatedPlural'   => __( '%s plugins successfully updated.' ),
+				'themeUpdatedSingular'  => __( '%s theme successfully updated.' ),
+				'themeUpdatedPlural'    => __( '%s themes successfully updated.' ),
+				'updateFailedSingular'  => __( '%s update failed.' ),
+				'updateFailedPlural'    => __( '%s updates failed.' ),
+				'showMoreDetails'       => __( 'Show more details' ),
+				'pluginDeletedSuccess'  => _x( '%s was successfully deleted.', 'plugin' ),
+				'themeDeletedSuccess'   => _x( '%s was successfully deleted.', 'theme' ),
 			)
 		);
 
