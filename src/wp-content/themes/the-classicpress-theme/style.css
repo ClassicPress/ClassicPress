@@ -1296,7 +1296,7 @@ img {
 	padding: 0 1em 1em;
 	min-height: 300px;
 }
-#main.no-sidebar {
+#main.page-no-sidebar {
 	max-width: 72rem;
 }
 #sidebar {
@@ -2005,7 +2005,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		text-align: center;
 	}
 	#main,
-	#main.no-sidebar,
+	#main.page-no-sidebar,
 	#sidebar,
 	.classic {
 		max-width: 600px;
