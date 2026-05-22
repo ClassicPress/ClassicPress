@@ -12,7 +12,7 @@ get_header();
 ?>
 
 	<div id="primary">
-		<main id="main" class="page-main no-sidebar">
+		<main id="main" class="page-main page-no-sidebar">
 
 		<?php
 		susty_wp_post_thumbnail();
