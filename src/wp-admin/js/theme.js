@@ -65,8 +65,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Close modal and set focus on theme
 	function closeModal() {
+		var highlightedTheme = document.getElementById( dialog.dataset.highlightedTheme );
+		if ( ! highlightedTheme ) {
+			highlightedTheme = document.getElementById( 'customize-control-installed_theme_' + dialog.dataset.highlightedTheme );
+		}
+
 		dialog.close();
-		document.getElementById( dialog.dataset.highlightedTheme ).focus();
+		highlightedTheme.focus();
+		highlightedTheme.querySelector( '.more-details' ).setAttribute( 'aria-expanded', 'false' );
 		dialog.querySelector( '.left.dashicons.dashicons-no' ).disabled = false;
 		dialog.querySelector( '.right.dashicons.dashicons-no' ).disabled = false;
 		cleanup();
@@ -326,6 +332,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				template = document.getElementById( 'theme-modal-insert' );
 				clone = template.content.cloneNode( true );
 				dialog.querySelector( '.theme-wrap' ).append( clone );
+				e.target.setAttribute( 'aria-expanded', 'true' );
 
 				// Set URL
 				queryParams.set( 'theme', customizer ? theme.dataset.id : theme.id );
