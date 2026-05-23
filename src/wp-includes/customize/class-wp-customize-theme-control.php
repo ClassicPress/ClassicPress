@@ -105,6 +105,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				<span class="more-details"
 					id="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action"
 					aria-label="<?php echo esc_attr( $details_label ); ?>"
+					tabindex="0"
 				>
 					<?php esc_html_e( 'Theme Details' ); ?>
 				</span>
@@ -203,6 +204,7 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				<span id="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action"
 					class="more-details"
 					aria-label="<?php echo esc_attr( $details_label ); ?>"
+					tabindex="0"
 				>
 					<?php esc_html_e( 'Theme Details' ); ?>
 				</span>
