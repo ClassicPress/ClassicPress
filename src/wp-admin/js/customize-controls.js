@@ -1766,6 +1766,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( orgThemes ) {
 				intersectionObserver.unobserve( orgThemes[orgThemes.length - 1] ); // deactivate Intersection Observer
 			}
+			showAndHide( document.querySelectorAll( '.themes li:not( .add-new-theme )' ) );
 
 		// Browse themes at wp.org
 		} else if ( e.target.classList && e.target.classList.contains( 'themes-section-wporg_themes' ) ) {
