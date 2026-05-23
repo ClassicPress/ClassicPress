@@ -551,7 +551,7 @@
 
 #available-menu-items .available-menu-items-list {
 	overflow-y: auto;
-	max-height: 200px; /* This gets set in JS to fit the screen size, and based on # of sections. */
+	max-height: 200px;
 	background: transparent;
 }
 
