@@ -34,11 +34,11 @@
     "postcss": "8.5.15",
     "qunit": "^2.19.4",
     "rollup": "4.60.4",
-    "sass": "1.99.0",
+    "sass": "1.100.0",
     "sinon": "^22.0.0",
     "sinon-test": "^3.1.5",
     "source-map-loader": "^5.0.0",
-    "terser": "5.47.1",
+    "terser": "5.48.0",
     "terser-webpack-plugin": "^5.3.7",
     "webpack": "5.107.1"
   },
