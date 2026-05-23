@@ -400,6 +400,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				theme.style.marginBottom = '2%';
 			} );
 
+			showAndHide( document.querySelectorAll( '.themes li:not( .add-new-theme )' ) );
+
 			// Update count
 			document.querySelector( '.filter-themes-count .theme-count' ).textContent = orgThemes.length;
 			if ( orgThemes.length ) {
@@ -1638,6 +1640,52 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.target.click();
 		}
 	} );
+
+	// Show and hide each theme's details button when hovering over and out of a theme
+	function showAndHide( themes ) {
+		themes.forEach( function( theme ) {
+			theme.addEventListener( 'mouseover', function() {
+				themes.forEach( function( other ) {
+					other.querySelector( '.more-details' ).style.opacity = '0';
+					other.querySelector( '.theme-actions' ).style.opacity = '0';
+				} );
+				theme.querySelector( '.more-details' ).style.opacity = '1';
+				theme.querySelector( '.theme-actions' ).style.opacity = '1';
+				theme.querySelector( '.theme-actions' ).style.display = 'block';
+			} );
+			theme.addEventListener( 'focusin', function() {
+				themes.forEach( function( other ) {
+					other.querySelector( '.more-details' ).style.opacity = '0';
+					other.querySelector( '.theme-actions' ).style.opacity = '0';
+				} );
+				theme.querySelector( '.more-details' ).style.opacity = '1';
+				theme.querySelector( '.theme-actions' ).style.opacity = '1';
+				theme.querySelector( '.theme-actions' ).style.display = 'block';
+			} );
+			theme.addEventListener( 'touchenter', function() {
+				themes.forEach( function( other ) {
+					other.querySelector( '.more-details' ).style.opacity = '0';
+					other.querySelector( '.theme-actions' ).style.opacity = '0';
+				} );
+				theme.querySelector( '.more-details' ).style.opacity = '1';
+				theme.querySelector( '.theme-actions' ).style.opacity = '1';
+				theme.querySelector( '.theme-actions' ).style.display = 'block';
+			} );
+			theme.addEventListener( 'mouseout', function() {
+				if ( ! theme.matches( ':has(:focus)' ) ) {
+					theme.querySelector( '.more-details' ).style.opacity = '0';
+					theme.querySelector( '.theme-actions' ).style.opacity = '0';
+					theme.querySelector( '.theme-actions' ).style.display = 'none';
+				}
+			} );
+			theme.addEventListener( 'touchleave', function() {
+				theme.querySelector( '.more-details' ).style.opacity = '0';
+				theme.querySelector( '.theme-actions' ).style.opacity = '0';
+				theme.querySelector( '.theme-actions' ).style.display = 'none';
+			} );
+		} );
+	}
+	showAndHide( document.querySelectorAll( '.themes li:not( .add-new-theme )' ) );
 
 	/**
 	 * Handle clicks on buttons.
