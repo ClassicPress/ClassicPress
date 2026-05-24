@@ -245,7 +245,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			theme.addEventListener( 'mouseover', function() {
 				themes.forEach( function( other ) {
 					other.querySelector( '.more-details' ).style.opacity = '0';
-					other.querySelector( '.theme-actions' ).style.opacity = '0';
+					if ( ! document.body.className.includes( 'wp-customizer' ) ) {
+						other.querySelector( '.theme-actions' ).style.opacity = '0';
+					}
 				} );
 				theme.querySelector( '.more-details' ).style.opacity = '1';
 				theme.querySelector( '.theme-actions' ).style.opacity = '1';
@@ -254,7 +256,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			theme.addEventListener( 'focusin', function() {
 				themes.forEach( function( other ) {
 					other.querySelector( '.more-details' ).style.opacity = '0';
-					other.querySelector( '.theme-actions' ).style.opacity = '0';
+					if ( ! document.body.className.includes( 'wp-customizer' ) ) {
+						other.querySelector( '.theme-actions' ).style.opacity = '0';
+					}
 				} );
 				theme.querySelector( '.more-details' ).style.opacity = '1';
 				theme.querySelector( '.theme-actions' ).style.opacity = '1';
@@ -263,23 +267,27 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			theme.addEventListener( 'touchenter', function() {
 				themes.forEach( function( other ) {
 					other.querySelector( '.more-details' ).style.opacity = '0';
-					other.querySelector( '.theme-actions' ).style.opacity = '0';
+					if ( ! document.body.className.includes( 'wp-customizer' ) ) {
+						other.querySelector( '.theme-actions' ).style.opacity = '0';
+					}
 				} );
 				theme.querySelector( '.more-details' ).style.opacity = '1';
 				theme.querySelector( '.theme-actions' ).style.opacity = '1';
 				theme.querySelector( '.theme-actions' ).style.display = 'block';
 			} );
 			theme.addEventListener( 'mouseout', function() {
-				if ( ! theme.matches( ':has(:focus)' ) ) {
+				if ( ! theme.matches( ':has(:focus)' ) && ! document.body.className.includes( 'wp-customizer' ) ) {
 					theme.querySelector( '.more-details' ).style.opacity = '0';
 					theme.querySelector( '.theme-actions' ).style.opacity = '0';
 					theme.querySelector( '.theme-actions' ).style.display = 'none';
 				}
 			} );
 			theme.addEventListener( 'touchleave', function() {
-				theme.querySelector( '.more-details' ).style.opacity = '0';
-				theme.querySelector( '.theme-actions' ).style.opacity = '0';
-				theme.querySelector( '.theme-actions' ).style.display = 'none';
+				if ( ! document.body.className.includes( 'wp-customizer' ) ) {
+					theme.querySelector( '.more-details' ).style.opacity = '0';
+					theme.querySelector( '.theme-actions' ).style.opacity = '0';
+					theme.querySelector( '.theme-actions' ).style.display = 'none';
+				}
 			} );
 		} );
 	}
