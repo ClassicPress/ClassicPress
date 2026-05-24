@@ -243,33 +243,36 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function showAndHide( themes ) {
 		themes.forEach( function( theme ) {
 			theme.addEventListener( 'mouseover', function() {
+				if ( document.body.className.includes( 'wp-customizer' ) ) {
+					return;
+				}
 				themes.forEach( function( other ) {
 					other.querySelector( '.more-details' ).style.opacity = '0';
-					if ( ! document.body.className.includes( 'wp-customizer' ) ) {
-						other.querySelector( '.theme-actions' ).style.opacity = '0';
-					}
+					other.querySelector( '.theme-actions' ).style.opacity = '0';
 				} );
 				theme.querySelector( '.more-details' ).style.opacity = '1';
 				theme.querySelector( '.theme-actions' ).style.opacity = '1';
 				theme.querySelector( '.theme-actions' ).style.display = 'block';
 			} );
 			theme.addEventListener( 'focusin', function() {
+				if ( document.body.className.includes( 'wp-customizer' ) ) {
+					return;
+				}
 				themes.forEach( function( other ) {
 					other.querySelector( '.more-details' ).style.opacity = '0';
-					if ( ! document.body.className.includes( 'wp-customizer' ) ) {
-						other.querySelector( '.theme-actions' ).style.opacity = '0';
-					}
+					other.querySelector( '.theme-actions' ).style.opacity = '0';
 				} );
 				theme.querySelector( '.more-details' ).style.opacity = '1';
 				theme.querySelector( '.theme-actions' ).style.opacity = '1';
 				theme.querySelector( '.theme-actions' ).style.display = 'block';
 			} );
 			theme.addEventListener( 'touchenter', function() {
+				if ( document.body.className.includes( 'wp-customizer' ) ) {
+					return;
+				}
 				themes.forEach( function( other ) {
 					other.querySelector( '.more-details' ).style.opacity = '0';
-					if ( ! document.body.className.includes( 'wp-customizer' ) ) {
-						other.querySelector( '.theme-actions' ).style.opacity = '0';
-					}
+					other.querySelector( '.theme-actions' ).style.opacity = '0';
 				} );
 				theme.querySelector( '.more-details' ).style.opacity = '1';
 				theme.querySelector( '.theme-actions' ).style.opacity = '1';
