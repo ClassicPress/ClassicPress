@@ -1531,15 +1531,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 
 			// Reset form
-			if ( changesetStatus === 'publish' || changesetStatus === 'future' ) {
-				if ( changesetStatus === 'publish' ) {
-					saveButton.textContent = _wpCustomizeControlsL10n.published;
-				} else if ( changesetStatus === 'future' ) {
-					saveButton.textContent = _wpCustomizeControlsL10n.scheduled;
-				}
+			if ( changesetStatus === 'publish' ) {
+				saveButton.textContent = _wpCustomizeControlsL10n.published;
 				publishSettings.style.display = 'none';
 				publishSettings.setAttribute( 'aria-expanded', 'false' );
 				publishSettingsPanel.style.display = 'none';
+			} else if ( changesetStatus === 'future' ) {
+				saveButton.textContent = _wpCustomizeControlsL10n.scheduled;
+				publishSettings.setAttribute( 'aria-expanded', 'true' );
+				publishSettingsPanel.style.display = 'block';
+				publishSettingsPanel.querySelector( '.notice-info' ).style.display = 'none';
+				previewLink.removeAttribute( 'inert' );
+				previewLink.style.color = '#2271b1';
+				document.querySelector( '.customize-copy-preview-link' ).removeAttribute( 'disabled' );
 			} else if ( changesetStatus === 'draft' ) {
 				saveButton.textContent = _wpCustomizeControlsL10n.draftSaved;
 				publishSettings.setAttribute( 'aria-expanded', 'true' );
@@ -1549,7 +1553,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				previewLink.style.color = '#2271b1';
 				document.querySelector( '.customize-copy-preview-link' ).removeAttribute( 'disabled' );
 			}
-
 			// Reset the buffer object and proxy
 			Object.keys( updatedControls ).forEach( function( key ) {
 				delete updatedControls[ key ];
