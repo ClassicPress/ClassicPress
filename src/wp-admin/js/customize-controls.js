@@ -1986,6 +1986,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		let scheduled = document.getElementById( 'customize-control-changeset_scheduled_date' );
         if ( e.target.type === 'radio' && e.target.name === 'changeset-status' ) {
 			changesetStatus = e.target.value;
+			saveButton.disabled = false;
             saveButton.textContent = e.target.nextElementSibling.textContent;
 
             if ( changesetStatus === 'future' ) {
