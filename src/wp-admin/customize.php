@@ -354,26 +354,48 @@ wp_print_scripts();
 				$compatible_php = is_php_version_compatible( $wp_customize->theme()->get( 'RequiresPHP' ) );
 
 				if ( $compatible_wp && $compatible_php ) {
-					$save_text = $wp_customize->is_theme_active() ? __( 'Published' ) : __( 'Activate &amp; Publish' );
+					$changeset_status = 'auto-draft';
+					$changeset_post_id = $wp_customize->changeset_post_id();
+
+					if ( $changeset_post_id ) {
+						$changeset_post   = get_post( $changeset_post_id );
+						$changeset_status = $changeset_post ? $changeset_post->post_status : 'auto-draft';
+					}
+
+					if ( $changeset_status === 'draft' ) {
+						$save_label = __( 'Draft Saved' );
+					} elseif ( $changeset_status === 'future' ) {
+						$save_label = __( 'Scheduled' );
+					} elseif ( $changeset_status === 'publish' ) {
+						$save_label = $wp_customize->is_theme_active() ? __( 'Published' ) : __( 'Activate &amp; Publish' );
+					} else { // auto-draft or anything else — no saved changeset yet
+						$save_label = $wp_customize->is_theme_active() ? __( 'Publish' ) : __( 'Activate &amp; Publish' );
+					}
+
+					$settings_btn_style = in_array( $changeset_status, array( 'draft', 'future' ), true ) ? '' : 'display: none;';
 					?>
+
 					<div id="customize-save-button-wrapper" class="customize-save-button-wrapper">
-						<button type="submit" name="save" id="save" class="button button-primary save" disabled>
-							<?php esc_attr_e( 'Published' ); ?>
+						<button id="save" type="submit" name="save" class="button button-primary save" disabled>
+							<?php echo esc_html( $save_label ); ?>
 						</button>
 						<button id="publish-settings"
+							type="button"
 							class="publish-settings button-primary button dashicons dashicons-admin-generic"
 							aria-label="<?php esc_attr_e( 'Publish Settings' ); ?>"
 							aria-controls="sub-accordion-section-publish_settings"
 							aria-expanded="false"
-							style="display: none;"
+							style="<?php echo esc_attr( $settings_btn_style ); ?>"
 							name="cp_publish_submit"
 							value="1"
 						></button>
 					</div>
+
 					<?php
 				} else {
 					$save_text = _x( 'Cannot Activate', 'theme' );
 					?>
+
 					<div id="customize-save-button-wrapper" class="customize-save-button-wrapper disabled" >
 						<button class="button button-primary disabled"
 							aria-label="<?php esc_attr_e( 'Publish Settings' ); ?>"
