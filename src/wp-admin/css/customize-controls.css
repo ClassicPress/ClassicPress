@@ -2872,25 +2872,6 @@ body.adding-widget .add-new-widget:before,
 		bottom: 0;
 	}
 
-	.customize-controls-preview-toggle {
-		display: block;
-		position: absolute;
-		top: 0;
-		left: 48px;
-		line-height: 2.6;
-		font-size: 14px;
-		padding: 0 12px 4px;
-		margin: 0;
-		height: 45px;
-		background: #f0f0f1;
-		border: 0;
-		border-right: 1px solid #dcdcde;
-		border-top: 4px solid #f0f0f1;
-		color: #50575e;
-		cursor: pointer;
-		transition: color .1s ease-in-out, background .1s ease-in-out;
-	}
-
 	#customize-footer-actions,
 	/*#customize-preview,*/
 	.customize-controls-preview-toggle .controls,
@@ -3017,6 +2998,25 @@ body.adding-widget .add-new-widget:before,
 @media screen and (max-width: 600px) {
 	.wp-full-overlay.expanded {
 		margin-left: 0;
+	}
+
+	.customize-controls-preview-toggle {
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 48px;
+		line-height: 2.6;
+		font-size: 14px;
+		padding: 0 12px 4px;
+		margin: 0;
+		height: 45px;
+		background: #f0f0f1;
+		border: 0;
+		border-right: 1px solid #dcdcde;
+		border-top: 4px solid #f0f0f1;
+		color: #50575e;
+		cursor: pointer;
+		transition: color .1s ease-in-out, background .1s ease-in-out;
 	}
 
 	body.adding-widget div#available-widgets,
