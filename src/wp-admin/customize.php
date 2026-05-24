@@ -1835,7 +1835,7 @@ wp_print_scripts();
 						value="publish"
 						name="changeset-status"
 						data-customize-setting-key-link="default"
-						checked
+						<?php checked( $changeset_status, 'publish' ); ?>
 					>
 					<label for="changeset-status-publish">
 						<?php esc_html_e( 'Publish' ); ?>
@@ -1847,6 +1847,7 @@ wp_print_scripts();
 						value="draft"
 						name="changeset-status"
 						data-customize-setting-key-link="default"
+						<?php checked( $changeset_status, 'draft' ); ?>
 					>
 					<label for="changeset-status-draft">
 						<?php esc_html_e( 'Save Draft' ); ?>
@@ -1858,6 +1859,7 @@ wp_print_scripts();
 						value="future"
 						name="changeset-status"
 						data-customize-setting-key-link="default"
+						<?php checked( $changeset_status, 'future' ); ?>
 					>
 					<label for="changeset-status-future">
 						<?php esc_html_e( 'Schedule' ); ?>
