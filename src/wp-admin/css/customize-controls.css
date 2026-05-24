@@ -2223,7 +2223,7 @@ input[type="range"].hue-slider::-moz-range-track {
 		float: right;
 	}
 
-  .wp-full-overlay-sidebar {
+	.wp-full-overlay-sidebar {
 		position: fixed;
 		top: 0;
 		bottom: 0;
@@ -2232,7 +2232,7 @@ input[type="range"].hue-slider::-moz-range-track {
   
 	#customize-preview {
 		margin-top: 45px;
-  }
+	}
 
 	.control-panel-themes .customize-themes-full-container {
 		width: 100%;
