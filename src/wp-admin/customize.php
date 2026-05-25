@@ -1978,6 +1978,7 @@ wp_print_scripts();
 				<p id="discard-warning" class="screen-reader-text">
 					<?php esc_html_e( 'This will permanently discard all unsaved customizer changes.' ); ?>
 				</p>
+				<input type="hidden" id="customize-trash-nonce" value="<?php echo wp_create_nonce( 'trash_customize_changeset' ); ?>">
 			</div>
 
 			<!-- Share Preview Link -->
