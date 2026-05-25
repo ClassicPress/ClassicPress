@@ -1109,18 +1109,45 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Update header image
 		if ( settingId === 'header_image_data' ) {
-			parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
-			parent.previousElementSibling.querySelector( '.container' ).append( imageElement );
-			customizeButton.previousElementSibling.style.display = '';
-			customizeButton.classList.remove( 'upload-button' );
-			parent.previousElementSibling.querySelector( 'input' ).value = attachmentId;
-			_updatedControlsWatcher[ settingId ] = {
-				attachment_id: parseInt( attachmentId ),
-				url: selectedItem.dataset.url,
-				thumbnail_url: selectedItem.dataset.sizes?.thumbnail?.url || imageUrl,
-				width: selectedItem.dataset.width,
-				height: selectedItem.dataset.height
-			};
+			if ( selectedItem.className === 'choice' ) {
+				li.querySelector( '.container' ).innerHTML = '';
+				li.querySelector( '.container' ).append( imageElement );
+
+				// Find the matching entry from the localized data
+				headerData = Object.values( _wpCustomizeHeader.defaults ).find(
+					h => h.url === selectedItem.dataset.customizeUrl
+				);
+				if ( ! headerData ) {
+					return;
+				}
+
+				_updatedControlsWatcher[ 'header_image' ] = selectedItem.dataset.customizeUrl;
+				_updatedControlsWatcher[ settingId ] = {
+					attachment_id: 0,
+					url:           headerData.url,
+					thumbnail_url: headerData.thumbnail_url || headerData.url,
+					width:         headerData.width  || _wpCustomizeHeader.data.width,
+					height:        headerData.height || _wpCustomizeHeader.data.height,
+				};
+
+				activatePublishButton();
+				document.getElementById( 'sub-accordion-section-header_image ' ).querySelector( 'a' ).focus();
+			} else {
+				parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
+				parent.previousElementSibling.querySelector( '.container' ).append( imageElement );
+				customizeButton.previousElementSibling.style.display = '';
+				customizeButton.classList.remove( 'upload-button' );
+				parent.previousElementSibling.querySelector( 'input' ).value = attachmentId;
+
+				_updatedControlsWatcher[ 'header_image' ] = selectedItem.dataset.url;
+				_updatedControlsWatcher[ settingId ] = {
+					attachment_id: parseInt( attachmentId ),
+					url: selectedItem.dataset.url,
+					thumbnail_url: selectedItem.dataset.sizes?.thumbnail?.url || imageUrl,
+					width: selectedItem.dataset.width,
+					height: selectedItem.dataset.height
+				};
+			}
 
 		// Update site icon
 		} else if ( settingId === 'site_icon' ) {
@@ -1749,10 +1776,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Add media file
 		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'select-button' ) ) {
 			customizeButton = e.target;
-			if ( e.target.closest( 'ul' ).id === 'sub-accordion-section-title_tagline' ) {
-				cropContext = e.target.closest( 'li' ).dataset.settingId;
-			}
+			cropContext = e.target.closest( 'li' ).dataset.settingId;
 			selectMedia();
+		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'choice' ) ) {
+			image = e.target.previousElementSibling;
+			addItemToCustomizer( e.target, 0, image, image.src );
 
 		// Close the modal
 		} else if ( e.target.id === 'widget-modal-close' ) {
