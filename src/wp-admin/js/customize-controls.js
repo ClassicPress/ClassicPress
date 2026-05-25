@@ -1128,7 +1128,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					url:           headerData.url,
 					thumbnail_url: headerData.thumbnail_url || headerData.url,
 					width:         headerData.width  || _wpCustomizeHeader.data.width,
-					height:        headerData.height || _wpCustomizeHeader.data.height,
+					height:        headerData.height || _wpCustomizeHeader.data.height
 				};
 
 				activatePublishButton();
