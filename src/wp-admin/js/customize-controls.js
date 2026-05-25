@@ -1088,7 +1088,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function addItemToCustomizer( selectedItem, attachmentId, imageElement, imageUrl ) {
-		var parent = customizeButton.parentNode,
+		var headerData,
+			parent = ( selectedItem.className === 'choice' ) ? selectedItem.closest( '.choices' ) : customizeButton.parentNode,
 			grandparent = parent.parentNode,
 			li = parent.closest( 'li' ),
 			settingId = li.dataset.settingId,
@@ -1121,7 +1122,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					return;
 				}
 
-				_updatedControlsWatcher[ 'header_image' ] = selectedItem.dataset.customizeUrl;
+				_updatedControlsWatcher.header_image = selectedItem.dataset.customizeUrl;
 				_updatedControlsWatcher[ settingId ] = {
 					attachment_id: 0,
 					url:           headerData.url,
@@ -1139,7 +1140,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				customizeButton.classList.remove( 'upload-button' );
 				parent.previousElementSibling.querySelector( 'input' ).value = attachmentId;
 
-				_updatedControlsWatcher[ 'header_image' ] = selectedItem.dataset.url;
+				_updatedControlsWatcher.header_image = selectedItem.dataset.url;
 				_updatedControlsWatcher[ settingId ] = {
 					attachment_id: parseInt( attachmentId ),
 					url: selectedItem.dataset.url,
