@@ -5,10 +5,10 @@
  */
 
 /* eslint consistent-this: [ "error", "control" ] */
-/* global wp, _wpCustomizeControlsL10n, updatedControls, Coloris,
-_updatedControlsWatcher, console, ajaxurl, IMAGE_WIDGET, _cpCustomLogo,
+/* global wp, _wpCustomizeControlsL10n, _wpCustomizeHeader, updatedControls,
+_updatedControlsWatcher, Coloris, ajaxurl, IMAGE_WIDGET, _cpCustomLogo,
 FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
-FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper */
+FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver, targetEl,
