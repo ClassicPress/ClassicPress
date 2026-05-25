@@ -366,10 +366,8 @@ wp_print_scripts();
 						$save_label = __( 'Draft Saved' );
 					} elseif ( $changeset_status === 'future' ) {
 						$save_label = __( 'Scheduled' );
-					} elseif ( $changeset_status === 'publish' ) {
+					} elseif ( in_array( $changeset_status, array( 'publish', 'auto-draft' ), true ) ) {
 						$save_label = $wp_customize->is_theme_active() ? __( 'Published' ) : __( 'Activate &amp; Publish' );
-					} else { // auto-draft or anything else — no saved changeset yet
-						$save_label = $wp_customize->is_theme_active() ? __( 'Publish' ) : __( 'Activate &amp; Publish' );
 					}
 
 					$settings_btn_style = in_array( $changeset_status, array( 'draft', 'future' ), true ) ? '' : 'display: none;';
