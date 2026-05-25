@@ -1814,8 +1814,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				publishSettings.setAttribute( 'aria-expanded', 'true' );
 				publishSettingsPanel.style.display = 'block';
 				setTimeout( function() {
-					let status = saveButton.textContent.toLowerCase(),
-						focused = document.getElementById( 'changeset-status-' + status );
+					let focused = document.getElementById( 'changeset-status-' + changesetStatus );
 					focused.checked = true;
 					focused.focus();
 				}, 0 );
