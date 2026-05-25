@@ -1599,19 +1599,54 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Discard all changes in the current changeset
 	 */
 	function discardChangeset() {
+		var formData;
+
 		if ( ! window.confirm( _wpCustomizeControlsL10n.trashConfirm ) ) {
 			return;
 		}
 
-		// Clear all tracked changes
-		Object.keys( updatedControls ).forEach( function( key ) {
-			delete updatedControls[ key ];
-		} );
+		formData = new FormData();
+		formData.append( 'action', 'customize_trash' );
+		formData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
+		formData.append( 'nonce', document.getElementById( 'customize-trash-nonce' ).value );
+		formData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
 
-		// Reload the page to restore the original state
+		// Suppress the beforeunload dialog before anything async happens
 		discardingChangeset = true;
-		window.location.reload( true );
-		saveButton.disabled = true;
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: formData,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {console.log(response);
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function() {
+			var newUrl,
+				url = new URL( window.location.href );
+
+			// Clear tracked changes
+			Object.keys( updatedControls ).forEach( function( key ) {
+				delete updatedControls[ key ];
+			} );
+
+			// Reload to a clean Customizer URL without the old changeset UUID
+			url.searchParams.delete( 'customize_changeset_uuid' );
+			newUrl = url.toString();
+			if ( newUrl === window.location.href ) {
+				window.location.reload( true );
+			} else {
+				window.location.href = newUrl;
+			}
+		} )
+		.catch( function( err ) {
+			console.error( err );
+			discardingChangeset = false; // Re-arm beforeunload if something went wrong
+		} );
 	}
 
 	/**
@@ -1779,7 +1814,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				publishSettings.setAttribute( 'aria-expanded', 'true' );
 				publishSettingsPanel.style.display = 'block';
 				setTimeout( function() {
-					document.getElementById( 'changeset-status-publish' ).focus();
+					let status = saveButton.textContent.toLowerCase(),
+						focused = document.getElementById( 'changeset-status-' + status );
+					focused.checked = true;
+					focused.focus();
 				}, 0 );
 			} else {
 				publishSettings.setAttribute( 'aria-expanded', 'false' );
