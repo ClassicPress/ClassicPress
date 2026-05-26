@@ -596,8 +596,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function copyToClipboard( context, button ) {
 		var copyAttachmentURLSuccessTimeout,
-			copyText = ( context === 'attachment' ) ? dialog.querySelector( '#attachment-details-copy-link' ).value : document.querySelector( '.preview-control-element' ).textContent,
+			copyText = document.querySelector( '.preview-control-element' ).textContent.trim(),
 			input = document.createElement( 'input' );
+
+		if ( context === 'attachment' ) {
+			copyText = dialog.querySelector( '#attachment-details-copy-link' ).value;
+		}
 
 		if ( navigator.clipboard ) {
 			navigator.clipboard.writeText( copyText );
