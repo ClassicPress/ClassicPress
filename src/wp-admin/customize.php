@@ -360,11 +360,15 @@ wp_print_scripts();
 					if ( $changeset_post_id ) {
 						$changeset_post   = get_post( $changeset_post_id );
 						$changeset_status = $changeset_post ? $changeset_post->post_status : 'publish';
+						if ( $changeset_status === 'future' ) {
+							$changeset_date = $changeset_post->post_date;
+						}
 					}
 					?>
 
 					<script>
 					var _wpCustomizeChangesetStatus = <?php echo wp_json_encode( $changeset_status ); ?>;
+					var _wpCustomizeChangesetDate   = <?php echo wp_json_encode( $changeset_date ); ?>;
 					</script>
 
 					<?php
