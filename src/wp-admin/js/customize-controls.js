@@ -181,6 +181,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function activatePublishButton() {
 		saveButton.disabled = false;
 		saveButton.textContent = _wpCustomizeControlsL10n.publish;
+		if ( changesetStatus === 'draft' ) {
+			saveButton.textContent = _wpCustomizeControlsL10n.saveDraft;
+		} else if ( changesetStatus === 'future' ) {
+			saveButton.textContent = _wpCustomizeControlsL10n.schedule;
+		}
 		publishSettings.style.display = 'block';
 	}
 
