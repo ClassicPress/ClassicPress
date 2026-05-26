@@ -1289,7 +1289,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function setSavedScheduledDate() {
 		var hour24,
-			parts = _wpCustomizeChangesetDate.match(
+			parts = window._wpCustomizeChangesetDate.match(
 			/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})/
 		);
 		if ( parts ) {
