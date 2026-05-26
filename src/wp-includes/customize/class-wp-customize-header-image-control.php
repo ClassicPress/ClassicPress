@@ -244,10 +244,10 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 
 								<div class="header-image-item">
 									<img src="<?php echo esc_url( $header['url'] ); ?>" 
-										alt="<?php echo esc_attr( $header['label'] ); ?>"
+										alt="<?php echo esc_attr( $header['label'] ? $header['label'] : '' ); ?>"
 									>
 									<span class="title">
-										<?php echo esc_html( $header['label'] ); ?>
+										<?php echo esc_html( $header['label'] ? $header['label'] : '' ); ?>
 									</span>
 									<button class="choice" data-customize-url="<?php echo esc_url( $header['url'] ); ?>">
 										<?php echo esc_html( $this->button_labels['frame_button'] ); ?>
