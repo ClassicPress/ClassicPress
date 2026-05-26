@@ -354,14 +354,20 @@ wp_print_scripts();
 				$compatible_php = is_php_version_compatible( $wp_customize->theme()->get( 'RequiresPHP' ) );
 
 				if ( $compatible_wp && $compatible_php ) {
-					$changeset_status = 'auto-draft';
+					$changeset_status = 'publish';
 					$changeset_post_id = $wp_customize->changeset_post_id();
 
 					if ( $changeset_post_id ) {
 						$changeset_post   = get_post( $changeset_post_id );
-						$changeset_status = $changeset_post ? $changeset_post->post_status : 'auto-draft';
+						$changeset_status = $changeset_post ? $changeset_post->post_status : 'publish';
 					}
+					?>
 
+					<script>
+					var _wpCustomizeChangesetStatus = <?php echo wp_json_encode( $changeset_status ); ?>;
+					</script>
+
+					<?php
 					if ( $changeset_status === 'draft' ) {
 						$save_label = __( 'Draft Saved' );
 					} elseif ( $changeset_status === 'future' ) {
