@@ -11,7 +11,7 @@ FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
 FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
-		intersectionObserver, targetEl, parts,
+		intersectionObserver, targetEl,
 		i = 1,
 		customizerControls = [...document.getElementById( 'customize-theme-controls' ).children],
 		{ FilePond } = window, // import FilePond
@@ -153,22 +153,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Set scheduled time for future publication
 	if ( changesetStatus === 'future' && window._wpCustomizeChangesetDate ) {
-		parts = _wpCustomizeChangesetDate.match(
-			/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})/
-		);
-		if ( parts ) {
-			var hour24 = parseInt( parts[4], 10 );
-			document.getElementById( 'date-time-year' ).value     = parts[1];
-			document.getElementById( 'date-time-month' ).value    = parseInt( parts[2], 10 );
-			document.getElementById( 'date-time-day' ).value      = parseInt( parts[3], 10 );
-			document.getElementById( 'date-time-hour' ).value     = hour24 % 12 || 12;
-			document.getElementById( 'date-time-minute' ).value   = parts[5];
-			document.getElementById( 'date-time-meridian' ).value = hour24 >= 12 ? 'pm' : 'am';
-
-			publishSettings.setAttribute( 'aria-expanded', 'true' );
-			publishSettingsPanel.style.display = 'block';
-			document.getElementById( 'customize-control-changeset_scheduled_date' ).style.display = 'block';
-		}
+		setSavedScheduledDate();
 	} else {
 		setScheduledDateToNow();
 	}
@@ -1300,6 +1285,29 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Set saved scheduled time for future publication
+	 */
+	function setSavedScheduledDate() {
+		var hour24,
+			parts = _wpCustomizeChangesetDate.match(
+			/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})/
+		);
+		if ( parts ) {
+			hour24 = parseInt( parts[4], 10 );
+			document.getElementById( 'date-time-year' ).value     = parts[1];
+			document.getElementById( 'date-time-month' ).value    = parseInt( parts[2], 10 );
+			document.getElementById( 'date-time-day' ).value      = parseInt( parts[3], 10 );
+			document.getElementById( 'date-time-hour' ).value     = hour24 % 12 || 12;
+			document.getElementById( 'date-time-minute' ).value   = parts[5];
+			document.getElementById( 'date-time-meridian' ).value = hour24 >= 12 ? 'pm' : 'am';
+
+			publishSettings.setAttribute( 'aria-expanded', 'true' );
+			publishSettingsPanel.style.display = 'block';
+			document.getElementById( 'customize-control-changeset_scheduled_date' ).style.display = 'block';
+		}
+	}
+
+	/**
 	 * Set current date and time within scheduled publication settings
 	 */
 	 function setScheduledDateToNow() {
@@ -2057,7 +2065,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
             saveButton.textContent = e.target.nextElementSibling.textContent;
 
             if ( changesetStatus === 'future' ) {
-				setScheduledDateToNow(); // Refresh to current time each time Schedule is selected
+				if ( window._wpCustomizeChangesetDate ) {
+					setSavedScheduledDate();
+				} else {
+					setScheduledDateToNow(); // Refresh to current time each time Schedule is selected
+				}
 				scheduled.style.display = 'block';
 			} else {
 				scheduled.style.display = 'none';
