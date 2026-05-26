@@ -11,7 +11,7 @@ FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
 FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
-		intersectionObserver, targetEl,
+		intersectionObserver, targetEl, parts,
 		i = 1,
 		customizerControls = [...document.getElementById( 'customize-theme-controls' ).children],
 		{ FilePond } = window, // import FilePond
@@ -150,7 +150,28 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	document.getElementById( 'customize-preview-loading' ).classList.add( 'hidden' );
-	setScheduledDateToNow();
+
+	// Set scheduled time for future publication
+	if ( changesetStatus === 'future' && window._wpCustomizeChangesetDate ) {
+		parts = _wpCustomizeChangesetDate.match(
+			/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})/
+		);
+		if ( parts ) {
+			var hour24 = parseInt( parts[4], 10 );
+			document.getElementById( 'date-time-year' ).value     = parts[1];
+			document.getElementById( 'date-time-month' ).value    = parseInt( parts[2], 10 );
+			document.getElementById( 'date-time-day' ).value      = parseInt( parts[3], 10 );
+			document.getElementById( 'date-time-hour' ).value     = hour24 % 12 || 12;
+			document.getElementById( 'date-time-minute' ).value   = parts[5];
+			document.getElementById( 'date-time-meridian' ).value = hour24 >= 12 ? 'pm' : 'am';
+
+			publishSettings.setAttribute( 'aria-expanded', 'true' );
+			publishSettingsPanel.style.display = 'block';
+			document.getElementById( 'customize-control-changeset_scheduled_date' ).style.display = 'block';
+		}
+	} else {
+		setScheduledDateToNow();
+	}
 
 	// Limit motion where appropriate
 	reducedMotionMediaQuery.addEventListener( 'change', function handleReducedMotionChange( event ) {
