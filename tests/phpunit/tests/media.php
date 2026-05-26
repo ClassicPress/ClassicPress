@@ -462,7 +462,12 @@ https://w.org</a>',
 		);
 		wp_set_current_user( $user );
 
-		$parent_id = self::factory()->post->create( array( 'post_type' => 'notregistered', 'post_title' => 'Parent Title', ) );
+		$parent_id = self::factory()->post->create(
+			array(
+				'post_type'  => 'notregistered',
+				'post_title' => 'Parent Title',
+			)
+		);
 		$id = wp_insert_attachment(
 			array(
 				'post_title'     => 'Attachment Title',
@@ -472,13 +477,13 @@ https://w.org</a>',
 			$parent_id
 		);
 		$post          = get_post( $id );
-		$post_parent   = get_post( $post->post_parent  );
+		$post_parent   = get_post( $post->post_parent );
 		$prepped       = wp_prepare_attachment_for_js( $post );
 		$post_type_obj = get_post_type_object( $post_parent->post_type );
 
 		$this->assertNull( $post_type_obj );
-		$this->assertFalse( array_key_exists( 'uploadedToLink',  $prepped ) );
-		$this->assertFalse( array_key_exists( 'uploadedToTitle',  $prepped ) );
+		$this->assertFalse( array_key_exists( 'uploadedToLink', $prepped ) );
+		$this->assertFalse( array_key_exists( 'uploadedToTitle', $prepped ) );
 
 		wp_set_current_user( $old_user );
 	}
