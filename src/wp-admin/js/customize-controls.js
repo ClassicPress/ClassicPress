@@ -1112,7 +1112,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( settingId === 'header_image_data' ) {
 			if ( selectedItem.className === 'choice' ) {
 				li.querySelector( '.container' ).innerHTML = '';
-				li.querySelector( '.container' ).append( imageElement );
+				li.querySelector( '.container' ).append( imageElement.cloneNode() );
+				window.sendSettingToPreview( 'header_image', selectedItem.dataset.customizeUrl );
 
 				// Find the matching entry from the localized data
 				headerData = Object.values( _wpCustomizeHeader.defaults ).find(
