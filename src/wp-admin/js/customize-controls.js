@@ -37,7 +37,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		hash = window.location.hash.replace( '#', '' ),
 		section = document.getElementById( 'sub-accordion-section-custom_css' ),
 		discardingChangeset = false,
-		changesetStatus = 'publish';
+		changesetStatus = window._wpCustomizeChangesetStatus || 'publish';
 
 	const colorSchemeInputs = form.querySelectorAll( 'input[name="_customize-radio-colorscheme"]' ),
 		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' );
