@@ -1182,7 +1182,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				grandparent.querySelector( 'input' ).value = imageUrl;
 				_updatedControlsWatcher[ settingId ] = imageUrl;
 			} else {
-				grandparent.querySelector( 'input' ).value = attachmentId;
+				if ( grandparent.querySelector( 'input' ) ) {
+					grandparent.querySelector( 'input' ).value = attachmentId;
+				}
 				_updatedControlsWatcher[ settingId ] = attachmentId;
 			}
 		}
