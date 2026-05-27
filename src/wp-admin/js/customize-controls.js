@@ -1299,9 +1299,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.getElementById( 'date-time-hour' ).value     = hour24 % 12 || 12;
 			document.getElementById( 'date-time-minute' ).value   = parts[5];
 			document.getElementById( 'date-time-meridian' ).value = hour24 >= 12 ? 'pm' : 'am';
-
-			publishSettings.setAttribute( 'aria-expanded', 'true' );
-			publishSettingsPanel.style.display = 'block';
 			document.getElementById( 'customize-control-changeset_scheduled_date' ).style.display = 'block';
 		}
 	}
