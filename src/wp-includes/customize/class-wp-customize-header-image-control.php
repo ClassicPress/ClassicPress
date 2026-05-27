@@ -252,6 +252,11 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 									<button class="choice" data-customize-url="<?php echo esc_url( $header['url'] ); ?>">
 										<?php echo esc_html( $this->button_labels['frame_button'] ); ?>
 									</button>
+									<button type="button" class="dashicons dashicons-no close">
+										<span class="screen-reader-text">
+											<?php esc_html_e( 'Remove image' ); ?>
+										</span>
+									</button>
 								</div>
 
 								<?php
