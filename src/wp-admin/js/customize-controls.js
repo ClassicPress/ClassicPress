@@ -7,7 +7,7 @@
 /* eslint consistent-this: [ "error", "control" ] */
 /* global wp, _wpCustomizeControlsL10n, updatedControls, Coloris,
 _updatedControlsWatcher, console, ajaxurl, IMAGE_WIDGET, _cpCustomLogo,
-FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
+FilePondPluginFileValidateSize, FilePondPluginFileValidateType, _wpCustomizeHeader,
 FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
@@ -915,17 +915,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function cropImage( selectedItem, attachmentId, imageUrl, nonce, cropContext ) {
-		var aspectRatio = 1,
-			logoWidth   = 512,
-			logoHeight  = 512;
+		var width = 512,
+			height = 512;
 
 		closeModal();
 
 		if ( cropContext === 'custom_logo' && _cpCustomLogo && _cpCustomLogo.width && _cpCustomLogo.height ) {
-			logoWidth   = _cpCustomLogo.width;
-			logoHeight  = _cpCustomLogo.height;
-			aspectRatio = logoWidth / logoHeight;
+			width = _cpCustomLogo.width;
+			height = _cpCustomLogo.height;
+		} else if ( cropContext === 'header_image_data' ) {
+			width = _wpCustomizeHeader.data.width;
+			height = _wpCustomizeHeader.data.height;
 		}
+		aspectRatio = width / height;
 
 		cpCropper.open( {
 			attachmentId : attachmentId,
@@ -933,8 +935,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			context      : cropContext,
 			nonce        : nonce,
 			aspectRatio  : aspectRatio,
-			minWidth     : logoWidth,
-			minHeight    : logoHeight,
+			minWidth     : width,
+			minHeight    : height,
 			onSelect     : function( attachment ) {
 				const imageElement = new Image();
 				imageElement.src = attachment.url;
