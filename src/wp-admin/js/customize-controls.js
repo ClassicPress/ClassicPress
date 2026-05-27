@@ -7,7 +7,7 @@
 /* eslint consistent-this: [ "error", "control" ] */
 /* global wp, _wpCustomizeControlsL10n, updatedControls, Coloris,
 _updatedControlsWatcher, console, ajaxurl, IMAGE_WIDGET, _cpCustomLogo,
-FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
+FilePondPluginFileValidateSize, FilePondPluginFileValidateType, _wpCustomizeHeader,
 FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
@@ -1678,6 +1678,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( e.target.classList && e.target.className === 'reorder' ) {
 			ul.classList.add( 'reordering' );
 
+		// Finish reordering
+		} else if ( e.target.classList && e.target.className === 'reorder-done' ) {
+			ul.classList.remove( 'reordering' );
+
 		// Delete previous header image
 		} else if ( e.target.className === 'dashicons dashicons-no close' ) {
 			fetch( ajaxurl, {
@@ -1695,7 +1699,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 				throw new Error( response.status );
 			} )
-			.then( function( result ) {
+			.then( function() {
 				let choices = e.target.closest( '.choices' );
 				e.target.parentNode.remove();
 				if ( ! choices.querySelector( '.header-image-item' ) ) {
@@ -1705,10 +1709,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			.catch( function( error ) {
 				console.error( error );
 			} );
-
-		// Finish reordering
-		} else if ( e.target.classList && e.target.className === 'reorder-done' ) {
-			ul.classList.remove( 'reordering' );
 
 		// Open and close description
 		} else if ( e.target.classList && e.target.classList.contains( 'customize-help-toggle' ) ) {
