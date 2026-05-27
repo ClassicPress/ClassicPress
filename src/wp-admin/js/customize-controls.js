@@ -163,7 +163,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	/**
-	 * Load iframe here instead of via PHP for faster page loading 
+	 * Load iframe here instead of via PHP for faster page loading
 	 */
 	window.addEventListener( 'load', function() {
 		const frame = document.querySelector( '#customize-preview iframe' );
