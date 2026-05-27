@@ -1,4 +1,4 @@
-a/**
+/**
  * @output wp-admin/js/customize-controls.js
  *
  * @since CP-2.8.0
