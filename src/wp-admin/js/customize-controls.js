@@ -163,6 +163,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	/**
+	 * Load iframe here instead of via PHP for faster page loading 
+	 */
+	window.addEventListener( 'load', function() {
+		const frame = document.querySelector( '#customize-preview iframe' );
+		const src = frame && frame.getAttribute( 'data-src' );
+		if ( src ) {
+			frame.setAttribute( 'src', src );
+		}
+	} );
+
+	/**
 	 * Helper function copied from jQuery
 	 */
 	function isVisible( elem ) {
