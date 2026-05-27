@@ -1,4 +1,4 @@
-/**
+a/**
  * @output wp-admin/js/customize-controls.js
  *
  * @since CP-2.8.0
@@ -85,6 +85,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			customizerControls.forEach( function( child ) {
 				child.style.display = 'none';
 			} );
+			publishSettings.setAttribute( 'aria-expanded', 'false' );
 			publishSettingsPanel.style.display = 'none';
 			targetEl.style.display = 'block';
 
@@ -1671,6 +1672,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Reload to a clean Customizer URL without the old changeset UUID
 			url.searchParams.delete( 'customize_changeset_uuid' );
 			newUrl = url.toString();
+			changesetStatus = 'publish';
+			publishSettings.style.display = 'none';
 			if ( newUrl === window.location.href ) {
 				window.location.reload( true );
 			} else {
