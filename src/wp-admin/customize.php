@@ -1888,7 +1888,7 @@ wp_print_scripts();
 		<iframe title="<?php esc_attr_e( 'Site Preview' ); ?>"
 			name="customize-preview-0"
 			onmousewheel=""
-			src="<?php echo esc_url( $preview_url ); ?>"
+			data-src="<?php echo esc_url( $preview_url ); ?>"
 			sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-same-origin allow-scripts"
 		></iframe>
 	</div>
