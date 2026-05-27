@@ -1690,8 +1690,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				body: new URLSearchParams( {
 					action: 'custom-header-remove',
 					nonce: _wpCustomizeHeader.nonces.remove,
-					attachment_id: e.target.dataset.id,
-				} ),
+					attachment_id: e.target.dataset.id
+				} )
 			} )
 			.then( function( response ) {
 				if ( response.ok ) {
