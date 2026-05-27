@@ -915,7 +915,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function cropImage( selectedItem, attachmentId, imageUrl, nonce, cropContext ) {
-		var width = 512,
+		var aspectRatio = 1,
+			width = 512,
 			height = 512;
 
 		closeModal();
