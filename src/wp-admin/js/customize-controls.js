@@ -909,7 +909,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
-	 * Crop an image for use as a logo or site icon image.
+	 * Crop an image.
 	 *
 	 * @abstract
 	 * @return {void}
