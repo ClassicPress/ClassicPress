@@ -181,37 +181,6 @@ function wp_default_packages_vendor( $scripts ) {
 function wp_default_packages_inline_scripts( $scripts ) {
 	global $wp_locale, $wpdb;
 
-	if ( isset( $scripts->registered['wp-api-fetch'] ) ) {
-		$scripts->registered['wp-api-fetch']->deps[] = 'wp-hooks';
-	}
-	$scripts->add_inline_script(
-		'wp-api-fetch',
-		sprintf(
-			'wp.apiFetch.use( wp.apiFetch.createRootURLMiddleware( "%s" ) );',
-			sanitize_url( get_rest_url() )
-		),
-		'after'
-	);
-	$scripts->add_inline_script(
-		'wp-api-fetch',
-		implode(
-			"\n",
-			array(
-				sprintf(
-					'wp.apiFetch.nonceMiddleware = wp.apiFetch.createNonceMiddleware( "%s" );',
-					wp_installing() ? '' : wp_create_nonce( 'wp_rest' )
-				),
-				'wp.apiFetch.use( wp.apiFetch.nonceMiddleware );',
-				'wp.apiFetch.use( wp.apiFetch.mediaUploadMiddleware );',
-				sprintf(
-					'wp.apiFetch.nonceEndpoint = "%s";',
-					admin_url( 'admin-ajax.php?action=rest-nonce' )
-				),
-			)
-		),
-		'after'
-	);
-
 	// Loading the old editor and its config to ensure the classic block works as expected.
 	$scripts->add_inline_script(
 		'editor',
@@ -446,10 +415,6 @@ function wp_default_packages_scripts( $scripts ) {
 	$assets = array(
 		'a11y' => array(
 			'dependencies' => array( 'wp-dom-ready', 'wp-i18n' ),
-			'version'      => $version,
-		),
-		'api-fetch' => array(
-			'dependencies' => array( 'wp-i18n', 'wp-url' ),
 			'version'      => $version,
 		),
 		'dom-ready' => array(

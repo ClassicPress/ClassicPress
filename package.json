@@ -45,7 +45,6 @@
   "dependencies": {
     "@melloware/coloris": "0.25.0",
     "@wordpress/a11y": "4.46.0",
-    "@wordpress/api-fetch": "7.46.0",
     "@wordpress/dom-ready": "4.46.0",
     "@wordpress/hooks": "4.46.0",
     "@wordpress/i18n": "6.19.0",
