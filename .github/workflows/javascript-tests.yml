@@ -69,6 +69,8 @@ jobs:
 
       - name: Install dependencies
         run: npx install-changed --install-command="npm ci"
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: true
 
       - name: Run QUnit tests
         run: grunt qunit:compiled
