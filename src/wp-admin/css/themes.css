@@ -1376,50 +1376,21 @@ body.full-overlay-active {
 
 .wp-full-overlay-sidebar {
 	box-sizing: border-box;
+	position: fixed;
 	width: 345px;
 	height: 100%;
+	top: 0;
+	bottom: 0;
+	left: 0;
 	padding: 0;
 	margin: 0;
 	z-index: 10;
 	background: #f0f0f1;
-	border-right: none;
+	border-right: 1px solid #dcdcde;
 }
 
 .wp-full-overlay.collapsed .wp-full-overlay-sidebar {
-	overflow: visible;
-}
-
-.wp-full-overlay.collapsed,
-.wp-full-overlay.expanded .wp-full-overlay-sidebar {
-	margin-left: 0 !important;
-}
-
-.wp-full-overlay.expanded {
-	margin-left: 300px;
-}
-
-.wp-full-overlay.collapsed .wp-full-overlay-sidebar {
-	margin-left: -300px;
-}
-
-@media screen and (min-width: 1667px) {
-	.wp-full-overlay.expanded {
-		margin-left: 18%;
-	}
-
-	.wp-full-overlay.collapsed .wp-full-overlay-sidebar {
-		margin-left: -18%;
-	}
-}
-
-@media screen and (min-width: 3333px) {
-	.wp-full-overlay.expanded {
-		margin-left: 600px;
-	}
-
-	.wp-full-overlay.collapsed .wp-full-overlay-sidebar {
-		margin-left: -600px;
-	}
+	margin-left: -345px;
 }
 
 .wp-full-overlay-sidebar:after {
@@ -1647,10 +1618,7 @@ body.full-overlay-active {
 	position: fixed;
 	bottom: 0;
 	left: 0;
-	min-width: 299px;
-	max-width: 599px;
-	width: 18%;
-	width: calc( 18% - 1px );
+	width: 344px;
 	height: 45px;
 	border-top: 1px solid #dcdcde;
 	background: #f0f0f1;
@@ -1855,6 +1823,8 @@ body.full-overlay-active {
 	position: absolute;
 	left: 0;
 	top: 0;
+	margin-top: 0;
+	border: none;
 }
 
 .install-theme-info .theme-screenshot:after {
@@ -1883,31 +1853,31 @@ body.full-overlay-active {
 	margin: 8px 10px 0 0;
 }
 
-.theme-install-overlay .wp-full-overlay-sidebar {
-	background: #f0f0f1;
-	border-right: 1px solid #dcdcde;
-}
-
 .theme-install-overlay .wp-full-overlay-sidebar-content {
 	background: #fff;
 	border-top: 1px solid #dcdcde;
-	border-bottom: 1px solid #dcdcde;
-}
-
-.theme-install-overlay .wp-full-overlay-main {
-	position: absolute;
-	z-index: 0;
-	background-color: #f0f0f1;
 }
 
 .customize-loading #customize-container {
 	background-color: #f0f0f1;
 }
 
-#theme-preview-main {
-	 position: fixed;
-	 left: unset;
-	 width: calc(100% - 300px);
+.wp-full-overlay-main {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: calc(100% - 345px);
+	height: 100%;
+}
+
+.wp-full-overlay.expanded .wp-full-overlay-main {
+	margin-left: 345px;
+}
+
+.wp-full-overlay.collapsed .wp-full-overlay-main {
+	width: 100%;
 }
 
 /* =Media Queries
