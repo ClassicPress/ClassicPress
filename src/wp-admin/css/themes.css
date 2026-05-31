@@ -1362,7 +1362,7 @@ body.full-overlay-active {
 }
 
 .wp-full-overlay {
-	background: transparent;
+	background: #1d2327;
 	z-index: 500000;
 	position: fixed;
 	overflow: visible;
@@ -1375,17 +1375,17 @@ body.full-overlay-active {
 }
 
 .wp-full-overlay-sidebar {
+	background: #f0f0f1;
 	box-sizing: border-box;
 	position: fixed;
-	width: 345px;
-	height: 100%;
 	top: 0;
 	bottom: 0;
 	left: 0;
+	width: 345px;
+	height: 100%;
 	padding: 0;
 	margin: 0;
 	z-index: 10;
-	background: #f0f0f1;
 	border-right: 1px solid #dcdcde;
 }
 
@@ -1405,12 +1405,14 @@ body.full-overlay-active {
 }
 
 .wp-full-overlay-main {
+	background: #f0f0f1;
 	position: fixed;
 	top: 0;
 	bottom: 0;
 	right: 0;
 	width: calc(100% - 345px);
 	height: 100%;
+	z-index: 0;
 }
 
 .wp-full-overlay.expanded .wp-full-overlay-main {
@@ -1623,14 +1625,6 @@ body.full-overlay-active {
 }
 
 /* Device/preview size toggles */
-
-.wp-full-overlay {
-	background: #1d2327;
-}
-
-.wp-full-overlay-main {
-	background-color: #f0f0f1;
-}
 
 .expanded .wp-full-overlay-footer {
 	position: fixed;
