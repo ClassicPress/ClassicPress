@@ -1404,6 +1404,24 @@ body.full-overlay-active {
 	z-index: 1000;
 }
 
+.wp-full-overlay-main {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	width: calc(100% - 345px);
+	height: 100%;
+}
+
+.wp-full-overlay.expanded .wp-full-overlay-main {
+	margin-left: 345px;
+}
+
+.wp-full-overlay.collapsed .wp-full-overlay-main {
+	left: 0;
+	width: 100%;
+}
+
 .wp-full-overlay-sidebar .wp-full-overlay-header {
 	height: 45px;
 	padding: 0 15px;
@@ -1862,23 +1880,6 @@ body.full-overlay-active {
 	background-color: #f0f0f1;
 }
 
-.wp-full-overlay-main {
-	position: fixed;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	width: calc(100% - 345px);
-	height: 100%;
-}
-
-.wp-full-overlay.expanded .wp-full-overlay-main {
-	margin-left: 345px;
-}
-
-.wp-full-overlay.collapsed .wp-full-overlay-main {
-	width: 100%;
-}
 
 /* =Media Queries
 -------------------------------------------------------------- */
