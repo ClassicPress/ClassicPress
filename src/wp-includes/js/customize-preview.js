@@ -95,7 +95,7 @@
 				channel: this.channel,
 				type: type,
 				data: data !== undefined ? data : null
-			} ), parentOrigin || '*' );
+			} ), '*' );
 		},
 		bind: function( type, handler ) {
 			if ( ! api.messageHandlers[ type ] ) {

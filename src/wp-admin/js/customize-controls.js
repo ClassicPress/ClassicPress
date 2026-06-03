@@ -5,10 +5,10 @@
  */
 
 /* eslint consistent-this: [ "error", "control" ] */
-/* global wp, _wpCustomizeControlsL10n, updatedControls, Coloris,
-_updatedControlsWatcher, console, ajaxurl, IMAGE_WIDGET, _cpCustomLogo,
+/* global wp, _wpCustomizeControlsL10n, _wpCustomizeHeader, updatedControls,
+_updatedControlsWatcher, Coloris, ajaxurl, IMAGE_WIDGET, _cpCustomLogo,
 FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
-FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper */
+FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver, targetEl,
@@ -399,6 +399,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				theme.style.marginRight = '2%';
 				theme.style.marginBottom = '2%';
 			} );
+
+			showAndHide( document.querySelectorAll( '.themes li:not( .add-new-theme )' ) );
 
 			// Update count
 			document.querySelector( '.filter-themes-count .theme-count' ).textContent = orgThemes.length;
@@ -1088,7 +1090,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function addItemToCustomizer( selectedItem, attachmentId, imageElement, imageUrl ) {
-		var parent = customizeButton.parentNode,
+		var headerData,
+			parent = ( selectedItem.className === 'choice' ) ? selectedItem.closest( '.choices' ) : customizeButton.parentNode,
 			grandparent = parent.parentNode,
 			li = parent.closest( 'li' ),
 			settingId = li.dataset.settingId,
@@ -1109,18 +1112,46 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Update header image
 		if ( settingId === 'header_image_data' ) {
-			parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
-			parent.previousElementSibling.querySelector( '.container' ).append( imageElement );
-			customizeButton.previousElementSibling.style.display = '';
-			customizeButton.classList.remove( 'upload-button' );
-			parent.previousElementSibling.querySelector( 'input' ).value = attachmentId;
-			_updatedControlsWatcher[ settingId ] = {
-				attachment_id: parseInt( attachmentId ),
-				url: selectedItem.dataset.url,
-				thumbnail_url: selectedItem.dataset.sizes?.thumbnail?.url || imageUrl,
-				width: selectedItem.dataset.width,
-				height: selectedItem.dataset.height
-			};
+			if ( selectedItem.className === 'choice' ) {
+				li.querySelector( '.container' ).innerHTML = '';
+				li.querySelector( '.container' ).append( imageElement.cloneNode() );
+				window.sendSettingToPreview( 'header_image', selectedItem.dataset.customizeUrl );
+
+				// Find the matching entry from the localized data
+				headerData = Object.values( _wpCustomizeHeader.defaults ).find(
+					h => h.url === selectedItem.dataset.customizeUrl
+				);
+				if ( ! headerData ) {
+					return;
+				}
+
+				_updatedControlsWatcher.header_image = selectedItem.dataset.customizeUrl;
+				_updatedControlsWatcher[ settingId ] = {
+					attachment_id: 0,
+					url:           headerData.url,
+					thumbnail_url: headerData.thumbnail_url || headerData.url,
+					width:         headerData.width  || _wpCustomizeHeader.data.width,
+					height:        headerData.height || _wpCustomizeHeader.data.height
+				};
+
+				activatePublishButton();
+				document.getElementById( 'sub-accordion-section-header_image ' ).querySelector( 'a' ).focus();
+			} else {
+				parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
+				parent.previousElementSibling.querySelector( '.container' ).append( imageElement );
+				customizeButton.previousElementSibling.style.display = '';
+				customizeButton.classList.remove( 'upload-button' );
+				parent.previousElementSibling.querySelector( 'input' ).value = attachmentId;
+
+				_updatedControlsWatcher.header_image = selectedItem.dataset.url;
+				_updatedControlsWatcher[ settingId ] = {
+					attachment_id: parseInt( attachmentId ),
+					url: selectedItem.dataset.url,
+					thumbnail_url: selectedItem.dataset.sizes?.thumbnail?.url || imageUrl,
+					width: selectedItem.dataset.width,
+					height: selectedItem.dataset.height
+				};
+			}
 
 		// Update site icon
 		} else if ( settingId === 'site_icon' ) {
@@ -1153,7 +1184,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				grandparent.querySelector( 'input' ).value = imageUrl;
 				_updatedControlsWatcher[ settingId ] = imageUrl;
 			} else {
-				grandparent.querySelector( 'input' ).value = attachmentId;
+				if ( grandparent.querySelector( 'input' ) ) {
+					grandparent.querySelector( 'input' ).value = attachmentId;
+				}
 				_updatedControlsWatcher[ settingId ] = attachmentId;
 			}
 		}
@@ -1415,6 +1448,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} );
 
+		// Add advanced menu-item changes directly to the outgoing
+		// publish payload without touching updatedControls.
+		// This avoids crashing the live preview.
+		Object.entries( window._cpDirtySettings || {} ).forEach( function( [ settingId, item ] ) {
+			if ( ! settingId.startsWith( 'nav_menu_item[' ) ) {
+				return;
+			}
+
+			submittedChanges[ settingId ] = {
+				value: item
+			};
+		} );
+
 		// Append new data for POSTing to PHP back-end handler
 		updateData.append( 'action', 'customize_save' );
 		updateData.append( 'nonce', document.getElementById( 'customizer_nonce' ).value );
@@ -1639,6 +1685,39 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	} );
 
+	// Show and hide each theme's details button when hovering over and out of a theme
+	function showAndHide( themes ) {
+		themes.forEach( function( theme ) {
+			theme.addEventListener( 'mouseover', function() {
+				themes.forEach( function( other ) {
+					other.querySelector( '.more-details' ).style.opacity = '0';
+				} );
+				theme.querySelector( '.more-details' ).style.opacity = '1';
+			} );
+			theme.addEventListener( 'focusin', function() {
+				themes.forEach( function( other ) {
+					other.querySelector( '.more-details' ).style.opacity = '0';
+				} );
+				theme.querySelector( '.more-details' ).style.opacity = '1';
+			} );
+			theme.addEventListener( 'touchenter', function() {
+				themes.forEach( function( other ) {
+					other.querySelector( '.more-details' ).style.opacity = '0';
+				} );
+				theme.querySelector( '.more-details' ).style.opacity = '1';
+			} );
+			theme.addEventListener( 'mouseout', function() {
+				if ( ! theme.matches( ':has(:focus)' ) ) {
+					theme.querySelector( '.more-details' ).style.opacity = '0';
+				}
+			} );
+			theme.addEventListener( 'touchleave', function() {
+				theme.querySelector( '.more-details' ).style.opacity = '0';
+			} );
+		} );
+	}
+	showAndHide( document.querySelectorAll( '.themes li:not( .add-new-theme )' ) );
+
 	/**
 	 * Handle clicks on buttons.
 	 *
@@ -1704,6 +1783,23 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			description.previousElementSibling.classList.remove( 'open' );
 			description.previousElementSibling.querySelector( '.customize-help-toggle' ).setAttribute( 'aria-expanded', false );
 
+		// Show and hide live preview on narrow screens
+		} else if ( e.target.parentNode.parentNode.id === 'customize-header-actions' ) {
+			if ( e.target.className === 'preview' ) {
+				e.target.style.display = 'none';
+				e.target.previousElementSibling.style.display = 'block';
+				if ( window.location.hash === '#sub-accordion-section-themes' ) {
+					document.querySelector( '.customize-themes-full-container' ).style.display = 'block';
+				} else {
+					previewFrame.style.zIndex = '10';
+				}
+			} else if ( e.target.className === 'controls' ) {
+				e.target.style.display = 'none';
+				e.target.nextElementSibling.style.display = 'block';
+				document.querySelector( '.customize-themes-full-container' ).style.display = 'none';
+				previewFrame.style.zIndex = '1';
+			}
+
 		// Browse installed themes
 		} else if ( e.target.classList && e.target.classList.contains( 'themes-section-installed_themes' ) ) {
 			form.querySelector( '.themes-section-wporg_themes' ).classList.remove( 'selected' );
@@ -1712,12 +1808,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.querySelector( '.themes').innerHTML = installedThemesHTML;
 				document.querySelector( '.theme-browser' ).classList.remove( 'wp-org' );
 				document.querySelector( '.theme-browser' ).classList.add( 'local' );
+				document.querySelector( '.themes-section-installed_themes' ).setAttribute( 'aria-expanded', 'true' );
+				document.querySelector( '.themes-section-wporg_themes' ).setAttribute( 'aria-expanded', 'false' );
 				document.querySelector( '.feature-filter-toggle' ).style.display = 'none';
 				document.querySelector( '.filter-themes-count .theme-count' ).textContent = document.querySelectorAll( '.local .themes li' ).length;
+				if ( window.innerWidth <= 600 ) {
+					document.querySelector( '#customize-header-actions .preview' ).style.display = 'none';
+					document.querySelector( '#customize-header-actions .controls' ).style.display = 'block';
+					document.querySelector( '.customize-themes-full-container' ).style.display = 'block';
+				}
 			}
 			if ( orgThemes ) {
 				intersectionObserver.unobserve( orgThemes[orgThemes.length - 1] ); // deactivate Intersection Observer
 			}
+			showAndHide( document.querySelectorAll( '.themes li:not( .add-new-theme )' ) );
 
 		// Browse themes at wp.org
 		} else if ( e.target.classList && e.target.classList.contains( 'themes-section-wporg_themes' ) ) {
@@ -1725,7 +1829,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.target.classList.add( 'selected' );
 			document.querySelector( '.theme-browser' ).classList.remove( 'local' );
 			document.querySelector( '.theme-browser' ).classList.add( 'wp-org' );
+			document.querySelector( '.themes-section-installed_themes' ).setAttribute( 'aria-expanded', 'false' );
+			document.querySelector( '.themes-section-wporg_themes' ).setAttribute( 'aria-expanded', 'true' );
 			document.querySelector( '.feature-filter-toggle' ).style.display = 'inline-block';
+			if ( window.innerWidth <= 600 ) {
+				document.querySelector( '#customize-header-actions .preview' ).style.display = 'none';
+				document.querySelector( '#customize-header-actions .controls' ).style.display = 'block';
+				document.querySelector( '.customize-themes-full-container' ).style.display = 'block';
+			}
 			updateThemes( 'browse', 'new' );
 
 		// Select theme tags
@@ -1749,10 +1860,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Add media file
 		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'select-button' ) ) {
 			customizeButton = e.target;
-			if ( e.target.closest( 'ul' ).id === 'sub-accordion-section-title_tagline' ) {
-				cropContext = e.target.closest( 'li' ).dataset.settingId;
-			}
+			cropContext = e.target.closest( 'li' ).dataset.settingId;
 			selectMedia();
+		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'choice' ) ) {
+			image = e.target.previousElementSibling;
+			addItemToCustomizer( e.target, 0, image, image.src );
 
 		// Close the modal
 		} else if ( e.target.id === 'widget-modal-close' ) {
