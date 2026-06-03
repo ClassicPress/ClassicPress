@@ -41,7 +41,7 @@ body {
 
 #customize-controls img {
 	max-width: 100%;
-	object-fit: cover;
+	height: auto;
 }
 
 #customize-controls .submit {
@@ -210,10 +210,6 @@ body:not(.ready) #publish-settings,
 body.trashing #customize-save-button-wrapper .save,
 body.trashing #publish-settings {
 	display: none;
-}
-
-#customize-header-actions {
-	position: static;
 }
 
 #customize-header-actions .spinner {
@@ -560,7 +556,7 @@ body.trashing #publish-settings {
 }
 
 #customize-controls #sub-accordion-section-custom_css .customize-info .customize-section-description {
-	margin: 0px -1em;
+	margin: 0px -12px;
 	border-top: 0;
 	border-bottom: 1px solid #dcdcde;
 }
@@ -582,6 +578,7 @@ body.trashing #publish-settings {
 #customize-theme-controls .control-section,
 #customize-outer-theme-controls .control-section {
 	border: none;
+	box-shadow: none;
 }
 
 #customize-theme-controls .accordion-section-title,
@@ -833,17 +830,13 @@ h3.customize-section-title {
 	width: 100%;
 }
 
-.wp-customizer .wp-full-overlay-sidebar .wp-full-overlay-header {
-	height: 49px;
-}
-
 .customize-controls-close {
 	display: block;
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 45px;
-	height: 43px;
+	height: 41px;
 	padding: 0 2px 0 0;
 	background: #f0f0f1;
 	border: none;
@@ -1238,7 +1231,6 @@ input[type="range"].hue-slider::-moz-range-track {
 	display: flex;
 	justify-content: space-between;
 	min-width: 100%;
-	position: static;
 	margin: 0 !important;
 }
 
@@ -1272,8 +1264,6 @@ input[type="range"].hue-slider::-moz-range-track {
 }
 
 #customize-controls #customize-notifications-area {
-	top: 46px;
-	width: 100%;
 	border-bottom: 1px solid #dcdcde;
 	display: block;
 	padding: 0;
@@ -1814,11 +1804,11 @@ input[type="range"].hue-slider::-moz-range-track {
 .control-panel-themes .customize-themes-full-container {
 	position: fixed;
 	top: 0;
-	left: 45px;
+	right: 0;
 	transition: .18s left ease-in-out;
-	margin: 0 0 0 300px;
+	margin: 0;
 	padding: 71px 0 25px;
-	overflow-y: scroll;
+	overflow-y: auto;
 	width: calc(100% - 345px);
 	height: calc(100% - 96px);
 	background: #f0f0f1;
@@ -1828,14 +1818,6 @@ input[type="range"].hue-slider::-moz-range-track {
 @media (prefers-reduced-motion: reduce) {
 	.control-panel-themes .customize-themes-full-container {
 		transition: none;
-	}
-}
-
-@media screen and (min-width: 1670px) {
-	.control-panel-themes .customize-themes-full-container {
-		width: 82%;
-		right: 0;
-		left: initial;
 	}
 }
 
@@ -1917,7 +1899,7 @@ input[type="range"].hue-slider::-moz-range-track {
 	width: 100%;
 	padding: 0 0 25px 25px;
 	border-top: 0;
-	margin: 0;
+	margin: 0 0 25px;
 	background: #f0f0f1;
 	border-bottom: 1px solid #dcdcde;
 }
@@ -1925,7 +1907,7 @@ input[type="range"].hue-slider::-moz-range-track {
 .filter-drawer .filter-group {
 	margin: 0 25px 0 0;
 	width: calc( (100% - 75px) / 3);
-	min-width: 200px;
+	min-width: 180px;
 	max-width: 320px;
 }
 
@@ -2114,22 +2096,14 @@ input[type="range"].hue-slider::-moz-range-track {
 	justify-content: space-between;
 	position: fixed;
 	top: 0;
-	left: 300px;
-	width: calc(100% - 300px);
+	right: 0;
+	width: calc(100% - 345px);
 	height: 46px;
 	background: #f0f0f1;
 	z-index: 10;
 	padding: 6px 25px;
 	box-sizing: border-box;
 	border-bottom: 1px solid #dcdcde;
-}
-
-@media screen and (min-width: 1670px) {
-	.customize-preview-header.themes-filter-bar {
-		width: calc(82% + 1px);
-		right: 0;
-		left: initial;
-	}
 }
 
 .themes-filter-bar .themes-filter-container {
@@ -2150,37 +2124,11 @@ input[type="range"].hue-slider::-moz-range-track {
 	margin: 1px 0;
 }
 
-/* Unstick the filter bar on short windows/screens. This breakpoint is based on the
-   current length of .org feature filters assuming translations do not wrap lines. */
-@media screen and (max-height: 540px), screen and (max-width: 1018px) {
-	.customize-preview-header.themes-filter-bar {
-		position: relative;
-		left: 0;
-		width: 100%;
-		margin: 0 0 25px;
-	}
-	.filter-drawer {
-		top: 46px;
-	}
-	.wp-customizer .theme-browser .themes {
-		overflow: hidden;
-	}
-
-	.control-panel-themes .customize-themes-full-container {
-		margin-top: 0;
-		padding: 0;
-		height: 100%;
-		width: calc(100% - 345px);
-	}
-}
-
 @media screen and (max-width: 1018px) {
 	.filter-drawer .filter-group {
 		width: calc( (100% - 50px) / 2);
 	}
-}
 
-@media screen and (max-width: 900px) {
 	.customize-preview-header.themes-filter-bar {
 		height: 86px;
 		padding-top: 46px;
@@ -2192,12 +2140,14 @@ input[type="range"].hue-slider::-moz-range-track {
 		min-width: 200px;
 	}
 
-	.filter-drawer {
-		top: 86px;
+	.control-panel-themes .filter-themes-count {
+		display: flex;
+		justify-content: space-between;
+		flex: 1;
 	}
 
-	.control-panel-themes .filter-themes-count {
-		float: left;
+	.control-panel-themes .customize-themes-full-container {
+		padding-top: 111px;
 	}
 }
 
@@ -2212,7 +2162,12 @@ input[type="range"].hue-slider::-moz-range-track {
 }
 
 /* Mobile - toggle between themes and filters */
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 640px) {
+	.customize-preview-header.themes-filter-bar {
+		width: 100%;
+		top: 46px;
+		left: 0;
+	}
 
 	.filter-drawer {
 		top: 132px;
@@ -2236,8 +2191,8 @@ input[type="range"].hue-slider::-moz-range-track {
 
 	.control-panel-themes .customize-themes-full-container {
 		width: 100%;
+		top: 46px;
 		left: 0;
-		margin: 45px 0 0;
 		height: calc(100% - 46px);
 		z-index: 1;
 		display: none;
@@ -2580,17 +2535,22 @@ body.adding-widget .add-new-widget:before,
 
 #widgets-right {
 	overflow-y: auto;
-	max-height: calc(100vh - 90px);
+	flex: 1;
 }
 
 #available-menu-items {
 	width: 300px;
 	margin: 0;
+	padding: 0;
 	background: #f0f0f1;
 	transition: left .18s;
 	border-right: 1px solid #dcdcde;
 	display: none;
-	overflow-y: scroll;
+	overflow-y: auto;
+}
+
+#available-menu-items ul {
+	margin-top: 0;
 }
 
 #available-widgets .customize-section-title,
@@ -2612,20 +2572,24 @@ body.adding-widget .add-new-widget:before,
 }
 
 .wp-customizer #widgets-left {
-	border-top: 1px solid #dcdcde;
 	width: 300px;
 	margin: 0;
 	padding: 0;
+	background: #f0f0f1;
 	transition: left .18s;
-	display: none;	
-	overflow-y: scroll;
+	border-top: 1px solid #dcdcde;
+	display: none;
+	overflow-y: auto;
 }
 
 #available-widgets-list {
 	margin: 0;
 	background: #f0f0f1;
 	border-top: 1px solid #dcdcde;
-	height: 100%;
+}
+
+#widgets-left #available-widgets {
+	height: auto;
 }
 
 .no-widgets-found #available-widgets-list {
@@ -2633,7 +2597,6 @@ body.adding-widget .add-new-widget:before,
 }
 
 .wp-customizer #available-widgets-filter {
-	width: 300px;
 	background: #f0f0f1;
 	margin: 0;
 	position: relative;
@@ -2778,6 +2741,10 @@ body.adding-widget .add-new-widget:before,
 	position: static;
 }
 
+#available-menu-items #available-menu-items-search ul.available-menu-items-list {
+	position: relative;
+	top: 0;
+}
 
 /* Responsive */
 .customize-controls-preview-toggle {
@@ -2852,16 +2819,7 @@ body.adding-widget .add-new-widget:before,
 	}
 }
 
-@media screen and (max-width: 1200px) {
-	.outer-section-open .wp-full-overlay.expanded.preview-mobile .wp-full-overlay-main,
-	.adding-menu-items .wp-full-overlay.expanded.preview-mobile .wp-full-overlay-main,
-	.adding-widget .wp-full-overlay.expanded.preview-mobile .wp-full-overlay-main {
-		left: 67%;
-	}
-}
-
 @media screen and (max-width: 640px) {
-
 	/* when the sidebar is collapsed and switching to responsive view,
 	   bring it back see ticket #35220 */
 	.wp-full-overlay.collapsed #customize-controls {
@@ -2872,12 +2830,14 @@ body.adding-widget .add-new-widget:before,
 		bottom: 0;
 	}
 
-	#customize-footer-actions,
-	/*#customize-preview,*/
 	.customize-controls-preview-toggle .controls,
 	.preview-only .wp-full-overlay-sidebar-content,
 	.preview-only .customize-controls-preview-toggle .preview {
 		display: none;
+	}
+
+	#customize-footer-actions {
+		display:none !important;
 	}
 
 	.preview-only #customize-save-button-wrapper {
@@ -2916,12 +2876,6 @@ body.adding-widget .add-new-widget:before,
 
 	#customize-control-changeset_status .customize-inside-control-row {
 		padding-top: 15px;
-	}
-
-	body.adding-widget div#available-widgets,
-	body.adding-menu-items div#available-menu-items,
-	body.outer-section-open div#customize-sidebar-outer-content {
-		width: 100%;
 	}
 
 	#available-widgets .customize-section-title,
@@ -2993,9 +2947,7 @@ body.adding-widget .add-new-widget:before,
 	.wp-core-ui .themes-filter-bar .feature-filter-toggle {
 		margin: 0;
 	}
-}
 
-@media screen and (max-width: 600px) {
 	.wp-full-overlay.expanded {
 		margin-left: 0;
 	}
@@ -3009,7 +2961,7 @@ body.adding-widget .add-new-widget:before,
 		font-size: 14px;
 		padding: 0 12px 4px;
 		margin: 0;
-		height: 45px;
+		height: 41px;
 		background: #f0f0f1;
 		border: 0;
 		border-right: 1px solid #dcdcde;
@@ -3019,10 +2971,15 @@ body.adding-widget .add-new-widget:before,
 		transition: color .1s ease-in-out, background .1s ease-in-out;
 	}
 
-	body.adding-widget div#available-widgets,
-	body.adding-menu-items div#available-menu-items,
-	body.outer-section-open div#customize-sidebar-outer-content {
-		top: 46px;
+	body.adding-widget #widgets-left,
+	body.adding-menu-items #available-menu-items,
+	body.outer-section-open .control-section-outer {
+		position: fixed;
+        top: 46px;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		width: 100%;
 		z-index: 10;
 	}
 
@@ -3033,6 +2990,10 @@ body.adding-widget .add-new-widget:before,
 	body.wp-customizer.outer-section-open .wp-full-overlay.expanded #customize-sidebar-outer-content {
 		left: 0;
 	}
+
+	body.adding-widget #customize-preview {
+		opacity: 1 !important;
+	}
 }
 
 #customize-preview,
@@ -3041,6 +3002,7 @@ body.adding-widget .add-new-widget:before,
 	height: 100%;
 	border: 0;
 	flex: 1 1 auto;
+	left: 0;
 }
 
 /* Tablet – e.g. 720x1080 viewport */
@@ -3048,6 +3010,7 @@ body.adding-widget .add-new-widget:before,
 	width: 720px;
 	margin: auto;
 	flex: 0 0 auto;
+	left: 0;
 }
 
 /* Mobile – e.g. 320x480 viewport */
@@ -3055,4 +3018,5 @@ body.adding-widget .add-new-widget:before,
 	width: 320px;
 	margin: auto;
 	flex: 0 0 auto;
+	left: 0;
 }

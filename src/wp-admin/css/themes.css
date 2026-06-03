@@ -1374,19 +1374,34 @@ body.full-overlay-active {
 	min-width: 0;
 }
 
-.wp-full-overlay-sidebar {
-	background: #f0f0f1;
-	box-sizing: border-box;
+.theme-install-container {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
 	position: fixed;
+	overflow: visible;
 	top: 0;
 	bottom: 0;
 	left: 0;
+	right: 0;
+}
+
+.wp-full-overlay-sidebar {
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
+	box-sizing: border-box;
 	width: 345px;
 	height: 100%;
 	padding: 0;
 	margin: 0;
 	z-index: 10;
+	background: #f0f0f1;
 	border-right: 1px solid #dcdcde;
+}
+
+.wp-full-overlay.collapsed .wp-full-overlay-sidebar {
+	overflow: visible;
 }
 
 .wp-full-overlay.collapsed .wp-full-overlay-sidebar {
@@ -1404,54 +1419,26 @@ body.full-overlay-active {
 	z-index: 1000;
 }
 
-.wp-full-overlay-main {
-	background: #f0f0f1;
-	position: fixed;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	width: calc(100% - 345px);
-	height: 100%;
-	z-index: 0;
-}
-
-.wp-full-overlay.expanded .wp-full-overlay-main {
-	margin-left: 345px;
-}
-
-.wp-full-overlay.collapsed .wp-full-overlay-main {
-	left: 0;
-	width: 100%;
-}
-
 .wp-full-overlay-sidebar .wp-full-overlay-header {
 	height: 45px;
 	padding: 0 15px;
 	line-height: 3.2;
-	z-index: 10;
-	margin: 0;
-	border-top: none;
-	box-shadow: none;
+	border-bottom: 1px solid #dcdcde;
+	position: relative; /* Fix for themes that add buttons here */
 }
 
 .wp-full-overlay-sidebar .wp-full-overlay-header a.back {
 	margin-top: 9px;
 }
 
-.wp-full-overlay-sidebar .wp-full-overlay-footer {
-	bottom: 0;
-	border-bottom: none;
-	border-top: none;
-	box-shadow: none;
+.wp-full-overlay-sidebar .wp-full-overlay-sidebar-content {
+	overflow: auto;
+	flex: 1;
 }
 
-.wp-full-overlay-sidebar .wp-full-overlay-sidebar-content {
-	position: absolute;
-	top: 45px;
-	bottom: 45px;
-	left: 0;
-	right: 0;
-	overflow: auto;
+.wp-full-overlay-main {
+	background-color: #f0f0f1;
+	flex: 1;
 }
 
 /* Close & Navigation Links */
@@ -1627,10 +1614,6 @@ body.full-overlay-active {
 /* Device/preview size toggles */
 
 .expanded .wp-full-overlay-footer {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	width: 344px;
 	height: 45px;
 	border-top: 1px solid #dcdcde;
 	background: #f0f0f1;
@@ -1788,10 +1771,6 @@ body.full-overlay-active {
 	transition: opacity 0.3s;
 }
 
-#customize-controls {
-	margin-top: 0;
-}
-
 .theme-install-overlay.single-theme {
 	display: block;
 }
@@ -1867,7 +1846,6 @@ body.full-overlay-active {
 
 .theme-install-overlay .wp-full-overlay-sidebar-content {
 	background: #fff;
-	border-top: 1px solid #dcdcde;
 }
 
 .customize-loading #customize-container {
