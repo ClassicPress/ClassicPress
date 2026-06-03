@@ -1468,6 +1468,8 @@ switch ( $action ) {
 
 		login_header( __( 'Log In' ), '', $errors );
 
+		$user_login = '';
+
 		if ( isset( $_POST['log'] ) ) {
 			$user_login = ( 'incorrect_password' === $errors->get_error_code() || 'empty_password' === $errors->get_error_code() ) ? esc_attr( wp_unslash( $_POST['log'] ) ) : '';
 		}
@@ -1597,7 +1599,7 @@ switch ( $action ) {
 		 *
 		 * @param bool $print Whether to print the function call. Default true.
 		 */
-		if ( apply_filters( 'enable_login_autofocus', true ) && ! $error ) {
+		if ( apply_filters( 'enable_login_autofocus', true ) && empty( $error ) ) {
 			$login_script .= "wp_attempt_focus();\n";
 		}
 
