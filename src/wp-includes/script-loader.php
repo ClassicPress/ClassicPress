@@ -1201,11 +1201,22 @@ function wp_default_scripts( $scripts ) {
 			'confirm_delete'          => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
 			'delete_failed'           => __( 'Failed to delete attachment.' ),
 			'error'                   => __( 'Error:' ),
+			'dismiss'                 => __( 'Dismiss' ),
 		)
 	);
 	$scripts->add( 'customize-selective-refresh', "/wp-includes/js/customize-selective-refresh$suffix.js", array( 'wp-util', 'customize-preview' ), false, 1 );
 	$scripts->add( 'customize-widgets', "/wp-admin/js/customize-widgets$suffix.js", array( 'sortable-js', 'customize-controls', 'customize-controls-proxy' ), false, 1 );
 	$scripts->add( 'customize-nav-menus', "/wp-admin/js/customize-nav-menus$suffix.js", array( 'sortable-js', 'customize-controls', 'customize-controls-proxy', 'wp-sanitize' ), false, 1 );
+	did_action( 'init' ) && $scripts->localize(
+		'customize-nav-menus',
+		'_cpCustomizeNavMenusL10n',
+		array(
+			'nonceFailed'        => __( 'Nonce check failed. Please refresh the page.' ),
+			'serverRejection'    => __( 'The server rejected the request.' ),
+			'unexpectedResponse' => __( 'Unexpected server response: ' ),
+			'failedSettingsSave' => __( 'Failed to save advanced menu settings:' ),
+		)
+	);
 
 	$scripts->add( 'wp-custom-header', "/wp-includes/js/wp-custom-header$suffix.js", array( 'wp-a11y' ), false, 1 );
 
@@ -1353,6 +1364,15 @@ function wp_default_scripts( $scripts ) {
 			'_wpUpdatesSettings',
 			array(
 				'ajax_nonce' => wp_installing() ? '' : wp_create_nonce( 'updates' ),
+				'pluginUpdatedSingular' => __( '%s plugin successfully updated.' ),
+				'pluginUpdatedPlural'   => __( '%s plugins successfully updated.' ),
+				'themeUpdatedSingular'  => __( '%s theme successfully updated.' ),
+				'themeUpdatedPlural'    => __( '%s themes successfully updated.' ),
+				'updateFailedSingular'  => __( '%s update failed.' ),
+				'updateFailedPlural'    => __( '%s updates failed.' ),
+				'showMoreDetails'       => __( 'Show more details' ),
+				'pluginDeletedSuccess'  => _x( '%s was successfully deleted.', 'plugin' ),
+				'themeDeletedSuccess'   => _x( '%s was successfully deleted.', 'theme' ),
 			)
 		);
 

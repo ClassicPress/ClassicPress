@@ -830,6 +830,7 @@ li.wp-playlist-item .wp-playlist-item-length {
 	padding: 0.75em 0;
 	background: rgba(5, 127, 153, 1);
 	border-bottom: #034a59;
+	color: #fff;
 }
 #masthead h1,
 #masthead p {
@@ -1294,6 +1295,9 @@ img {
 	max-width: 52rem;
 	padding: 0 1em 1em;
 	min-height: 300px;
+}
+#main.page-no-sidebar {
+	max-width: 72rem;
 }
 #sidebar {
 	width: 100%;
@@ -2001,6 +2005,7 @@ body.page-checkout .woocommerce-form-coupon-toggle {
 		text-align: center;
 	}
 	#main,
+	#main.page-no-sidebar,
 	#sidebar,
 	.classic {
 		max-width: 600px;
