@@ -3020,3 +3020,12 @@ body.adding-widget .add-new-widget:before,
 	flex: 0 0 auto;
 	left: 0;
 }
+
+/* Stretch Tablet and Mobile preview in small screen */
+@media screen and (max-width: 640px) {
+	#customize-preview[data-device="tablet"],
+	#customize-preview[data-device="mobile"] {
+		width: 100%;
+		top: 46px;
+	}
+}
