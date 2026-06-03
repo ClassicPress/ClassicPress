@@ -1297,6 +1297,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			return;
 		}
 
+		// Clear stale notifications
+		document.querySelectorAll( '.customize-control-notifications-container' ).forEach( function( container ) {
+			container.innerHTML = '';
+		} );
+
 		// Populate arrays if a new menu is being added
 		for ( const [key, value] of entries ) {
 			if ( key.startsWith( 'nav_menu[-' ) ) {
@@ -1515,8 +1520,65 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				delete updatedControls[ key ];
 			} );
 			window._customizePublishing = false;
+		} else if ( newResult && ! newResult.success ) {
+			if ( newResult.data && newResult.data.setting_validities ) {
+				Object.entries( newResult.data.setting_validities ).forEach( function( [settingId, validity] ) {
+					if ( validity !== true ) {
+						Object.entries( validity ).forEach( function( [code, error] ) {
+							var setting = document.querySelector( '[data-setting-id="' + settingId + '"]' );
+							if ( setting ) {
+								var container = setting.querySelector( '.customize-control-notifications-container' );
+								if ( container ) {
+									container.appendChild( buildNotification( {
+										type: 'error',
+										code: code,
+										message: error.message
+									} ) );
+								}
+							}
+						} );
+					}
+				} );
+			}
+			saveButton.disabled = false;
+			window._customizePublishing = false;
 		}
 	} );
+
+	/**
+	 * Builds a notification system in case errors are returned from the server.
+	 */
+	function buildNotification( data ) {
+		var btn = document.createElement( 'button' ),
+			msg = document.createElement( 'div' ),
+			li = document.createElement( 'li' );
+
+		li.className = [
+			'notice',
+			'notice-' + ( data.type || 'info' ),
+			data.alt          ? 'notice-alt'      : '',
+			data.dismissible  ? 'is-dismissible'  : '',
+			data.containerClasses || ''
+		].filter( Boolean ).join( ' ' );
+		li.dataset.code = data.code || '';
+		li.dataset.type = data.type || '';
+
+		msg.className = 'notification-message';
+		msg.innerHTML = data.message || data.code || '';
+		li.appendChild( msg );
+
+		if ( data.dismissible ) {
+			btn.type = 'button';
+			btn.className = 'notice-dismiss';
+			btn.innerHTML = '<span class="screen-reader-text">' + _wpCustomizeControlsL10n.dismiss + '</span>';
+			btn.addEventListener( 'click', function() {
+				li.remove();
+			} );
+			li.appendChild( btn );
+		}
+
+		return li;
+	}
 
 	/**
 	 * Replaces the substring 'brand-new' in new menu attributes with negative integer.

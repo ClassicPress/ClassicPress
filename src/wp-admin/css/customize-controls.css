@@ -1099,6 +1099,11 @@ input[type="range"].hue-slider::-moz-range-track {
 	text-decoration: none;
 }
 
+.customize-control-notifications-container .notice {
+	margin: 5px 0 2px;
+	padding: 0.5em;
+}
+
 .customize-control-color .color-picker,
 .customize-control-upload div {
 	line-height: 28px;
