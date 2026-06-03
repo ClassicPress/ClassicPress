@@ -461,7 +461,6 @@ foreach ( $themes as $theme ) :
 
 <li id="<?php esc_html_e( $theme['id'] ); ?>"
 	class="theme<?php echo $active_class; ?>"
-	tabindex="0"
 	data-active="<?php esc_attr_e( $theme['active'] ); ?>"
 	data-activate-nonce="<?php echo $activate_nonce; ?>"
 	data-customize="<?php echo $customize_action; ?>"
@@ -640,7 +639,15 @@ foreach ( $themes as $theme ) :
 	/* translators: %s: Theme name. */
 	$details_aria_label = sprintf( _x( 'View Theme Details for %s', 'theme' ), $theme['name'] );
 	?>
-	<button type="button" aria-label="<?php echo esc_attr( $details_aria_label ); ?>" class="more-details" id="<?php echo esc_attr( $aria_action ); ?>"><?php esc_html_e( 'Theme Details' ); ?></button>
+	<button type="button"
+		id="<?php echo esc_attr( $aria_action ); ?>"
+		class="more-details"
+		aria-label="<?php echo esc_attr( $details_aria_label ); ?>"
+		aria-controls="theme-modal"
+		aria-expanded="false"
+	>
+		<?php esc_html_e( 'Theme Details' ); ?>
+	</button>
 	<div class="theme-author">
 		<?php
 		/* translators: %s: Theme author name. */

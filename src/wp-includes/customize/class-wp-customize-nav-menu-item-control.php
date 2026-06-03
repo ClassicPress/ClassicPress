@@ -60,6 +60,7 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 		$title     = $item['title'] ? $item['title'] : $item['original_title'];
 		$no_title  = $title ? '' : 'no-title';
 		$untitled  = _x( '(no label)', 'missing menu item navigation label' );
+		$hidden    = get_hidden_columns( 'customize' );
 		?>
 
 		<div class="menu-item-bar">
@@ -124,80 +125,84 @@ class WP_Customize_Nav_Menu_Item_Control extends WP_Customize_Control {
 					<div class="description description-thin">
 						<label for="edit-menu-item-title-<?php echo $item_id; ?>">
 							<?php esc_html_e( 'Navigation Label' ); ?>
-							<br>
-							<input type="text"
-								id="edit-menu-item-title-<?php echo $item_id; ?>"
-								placeholder="<?php echo esc_attr( $item['original_title'] ); ?>"
-								class="widefat edit-menu-item-title"
-								name="menu-item-title"
-								value="<?php echo $item['title'] ? esc_html( $item['title'] ) : esc_html( $item['original_title'] ); ?>"
-							>
 						</label>
+						<input type="text"
+							id="edit-menu-item-title-<?php echo $item_id; ?>"
+							placeholder="<?php echo esc_attr( $item['original_title'] ); ?>"
+							class="widefat edit-menu-item-title"
+							name="menu-item-title"
+							value="<?php echo $item['title'] ? esc_html( $item['title'] ) : esc_html( $item['original_title'] ); ?>"
+						>
 					</div>
-					<div class="field-link-target description description-thin">
+					<div class="field-link-target description description-thin"
+						style="<?php echo esc_attr( in_array( 'link-target', $hidden, true ) ? 'display: none;' : 'display: block;' ); ?>"
+					>
+						<input type="checkbox"
+							id="edit-menu-item-target-<?php echo $item_id; ?>"
+							class="edit-menu-item-target"
+							name="menu-item-target"
+							value="_blank"
+							<?php checked( $item['target'], '_blank' ); ?>
+						>
 						<label for="edit-menu-item-target-<?php echo $item_id; ?>">
-							<input type="checkbox"
-								id="edit-menu-item-target-<?php echo $item_id; ?>"
-								class="edit-menu-item-target"
-								value="_blank"
-								name="menu-item-target"
-								value="<?php echo esc_html( $item['target'] ); ?>"
-							>
 							<?php esc_html_e( 'Open link in a new tab' ); ?>
 						</label>
 					</div>
-					<div class="field-title-attribute field-attr-title description description-thin">
+					<div class="field-title-attribute field-attr-title description description-thin"
+						style="<?php echo esc_attr( in_array( 'title-attribute', $hidden, true ) ? 'display: none;' : 'display: block;' ); ?>"
+					>
 						<label for="edit-menu-item-attr-title-<?php echo $item_id; ?>">
 							<?php esc_html_e( 'Title Attribute' ); ?>
-							<br>
-							<input type="text"
-								id="edit-menu-item-attr-title-<?php echo $item_id; ?>"
-								class="widefat edit-menu-item-attr-title"
-								name="menu-item-attr-title"
-								value="<?php echo esc_html( $item['attr_title'] ); ?>"
-							>
 						</label>
+						<input type="text"
+							id="edit-menu-item-attr-title-<?php echo $item_id; ?>"
+							class="widefat edit-menu-item-attr-title"
+							name="menu-item-attr-title"
+							value="<?php echo esc_html( $item['attr_title'] ); ?>"
+						>
 					</div>
-					<div class="field-css-classes description description-thin">
+					<div class="field-css-classes description description-thin"
+						style="<?php echo esc_attr( in_array( 'css-classes', $hidden, true ) ? 'display: none;' : 'display: block;' ); ?>"
+					>
 						<label for="edit-menu-item-classes-<?php echo $item_id; ?>">
 							<?php esc_html_e( 'CSS Classes' ); ?>
-							<br>
-							<input type="text"
-								id="edit-menu-item-classes-<?php echo $item_id; ?>"
-								class="widefat code edit-menu-item-classes"
-								name="menu-item-classes"
-								value="<?php echo esc_html( $item['classes'] ); ?>"
-							>
 						</label>
+						<input type="text"
+							id="edit-menu-item-classes-<?php echo $item_id; ?>"
+							class="widefat code edit-menu-item-classes"
+							name="menu-item-classes"
+							value="<?php echo esc_html( $item['classes'] ); ?>"
+						>
 					</div>
-					<div class="field-xfn description description-thin">
+					<div class="field-xfn description description-thin"
+						style="<?php echo esc_attr( in_array( 'xfn', $hidden, true ) ? 'display: none;' : 'display: block;' ); ?>"
+					>
 						<label for="edit-menu-item-xfn-<?php echo $item_id; ?>">
 							<?php esc_html_e( 'Link Relationship (XFN)' ); ?>
-							<br>
-							<input type="text"
-								id="edit-menu-item-xfn-<?php echo $item_id; ?>"
-								class="widefat code edit-menu-item-xfn"
-								name="menu-item-xfn"
-								value="<?php echo esc_html( $item['xfn'] ); ?>"
-							>
 						</label>
+						<input type="text"
+							id="edit-menu-item-xfn-<?php echo $item_id; ?>"
+							class="widefat code edit-menu-item-xfn"
+							name="menu-item-xfn"
+							value="<?php echo esc_html( $item['xfn'] ); ?>"
+						>
 					</div>
-					<div class="field-description description description-thin">
+					<div class="field-description description description-thin"
+						style="<?php echo esc_attr( in_array( 'description', $hidden, true ) ? 'display: none;' : 'display: block;' ); ?>"
+					>
 						<label for="edit-menu-item-description-<?php echo $item_id; ?>">
 							<?php esc_html_e( 'Description' ); ?>
-							<br>
-							<textarea id="edit-menu-item-description-<?php echo $item_id; ?>"
-								class="widefat edit-menu-item-description"
-								rows="3"
-								cols="20"
-								name="menu-item-description"
-							>
-								<?php echo wp_kses_post( $item['description'] ); ?>
-							</textarea>
-							<span class="description">
-								<?php esc_html_e( 'The description will be displayed in the menu if the active theme supports it.' ); ?>
-							</span>
 						</label>
+						<textarea id="edit-menu-item-description-<?php echo $item_id; ?>"
+							class="widefat edit-menu-item-description"
+							rows="3"
+							cols="20"
+							name="menu-item-description"
+							aria-describedby="field-description-description"
+						><?php echo esc_textarea( trim( $item['description'] ) ); ?></textarea>
+						<p id="field-description-description" class="description">
+							<?php esc_html_e( 'The description will be displayed in the menu if the active theme supports it.' ); ?>
+						</p>
 					</div>
 
 					<?php

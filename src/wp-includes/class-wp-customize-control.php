@@ -435,6 +435,7 @@ class WP_Customize_Control {
 
 		printf( '<li id="%s" class="%s" data-setting-id="%s">', esc_attr( $id ), esc_attr( $class ), esc_attr( $setting_id ) );
 		$this->render_content();
+		echo '<div class="customize-control-notifications-container" aria-live="polite" aria-atomic="true"></div>';
 		echo '</li>';
 	}
 

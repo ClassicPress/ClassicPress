@@ -106,6 +106,7 @@ $count_themes     = count( $installed_themes );
 $locations      = get_registered_nav_menus(); // slug => human label
 $menu_locations = get_nav_menu_locations();   // slug => menu ID
 $menus          = wp_get_nav_menus( array( 'fields' => 'id=>name' ) );
+$hidden         = get_hidden_columns( 'customize' ); // for advanced menu options
 
 // Controls
 $controls = $wp_customize->get_controls_data_by_section();
@@ -338,10 +339,8 @@ wp_print_scripts();
 
 <div class="wp-full-overlay preview-desktop expanded" aria-labelledby="customizer-title">
 	<div id="customizer-sidebar-container">
-		<h2 id="customizer-title" class="screen-reader-text">
-			<?php printf( esc_html__( 'Customizing: %s' ), esc_html( get_bloginfo( 'name', 'display' ) ) ); ?>
-		</h2>
-		<form id="customize-controls" class="wrap wp-full-overlay-sidebar"
+		<form id="customize-controls"
+			class="wrap wp-full-overlay-sidebar"
 			action="<?php echo esc_url( admin_url( 'customize.php' ) ); ?>"
 			method="post"
 			accept-charset="<?php bloginfo( 'charset' ); ?>"
@@ -719,6 +718,20 @@ wp_print_scripts();
 									if ( ! empty( $nav_menus_panel->description ) ) {
 										?>
 
+										<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false">
+											<span class="screen-reader-text">
+												<?php
+												/* translators: Hidden accessibility text. */
+												esc_html_e( 'Help' );
+												?>
+											</span>
+										</button>
+										<button type="button" class="customize-screen-options-toggle" aria-expanded="false" aria-controls="screen-options-wrap">
+											<span class="screen-reader-text">
+												<?php esc_html_e( 'Menu Properties' ); ?>
+											</span>
+										</button>
+
 										<div class="description customize-panel-description">
 											<?php echo wp_kses_post( $nav_menus_panel->description ); ?>
 										</div>
@@ -727,6 +740,68 @@ wp_print_scripts();
 									}
 									?>
 
+									<div id="screen-options-wrap" style="display: none;">
+										<fieldset class="metabox-prefs">
+											<legend>
+												<?php esc_html_e( 'Show advanced menu properties' ); ?>
+											</legend>
+											<input class="hide-column-tog"
+												name="link-target-hide"
+												type="checkbox"
+												id="link-target-hide"
+												value="link-target"
+												<?php checked( ! in_array( 'link-target', $hidden, true ) ); ?>
+											>
+											<label for="link-target-hide">
+												<?php esc_html_e( 'Link Target' ); ?>
+											</label>
+											<br>
+											<input class="hide-column-tog"
+												name="title-attribute-hide"
+												type="checkbox"
+												id="title-attribute-hide"
+												value="title-attribute"
+												<?php checked( ! in_array( 'title-attribute', $hidden, true ) ); ?>
+											>
+											<label for="title-attribute-hide">
+												<?php esc_html_e( 'Title Attribute' ); ?>
+											</label>
+											<br>
+											<input class="hide-column-tog"
+												name="css-classes-hide"
+												type="checkbox"
+												id="css-classes-hide"
+												value="css-classes"
+												<?php checked( ! in_array( 'css-classes', $hidden, true ) ); ?>
+											>
+											<label for="css-classes-hide">
+												<?php esc_html_e( 'CSS Classes' ); ?>
+											</label>
+											<br>
+											<input class="hide-column-tog"
+												name="xfn-hide"
+												type="checkbox"
+												id="xfn-hide"
+												value="xfn"
+												<?php checked( ! in_array( 'xfn', $hidden, true ) ); ?>
+											>
+											<label for="xfn-hide">
+												<?php esc_html_e( 'Link Relationship (XFN)' ); ?>
+											</label>
+											<br>
+											<input class="hide-column-tog"
+												name="description-hide"
+												type="checkbox"
+												id="description-hide"
+												value="description"
+												<?php checked( ! in_array( 'description', $hidden, true ) ); ?>
+											>
+											<label for="description-hide">
+												<?php esc_html_e( 'Description' ); ?>
+											</label>
+										</fieldset>
+										<?php echo wp_nonce_field( 'screen-options-nonce', 'screenoptionnonce', false, false ); ?>
+									</div>
 								</li>
 
 								<?php
@@ -1919,33 +1994,65 @@ customize_themes_print_templates();
 						<label for="edit-menu-item-title--">
 							<?php esc_html_e( 'Navigation Label' ); ?>
 						</label>
-						<input type="text" id="edit-menu-item-title--" placeholder="" class="widefat edit-menu-item-title" name="menu-item-title">
+						<input type="text"
+							id="edit-menu-item-title--"
+							placeholder=""
+							class="widefat edit-menu-item-title"
+							name="menu-item-title"
+						>
 					</div>
-					<div class="field-link-target description description-thin">
+					<div class="field-link-target description description-thin"
+						style="<?php echo esc_attr( in_array( 'link-target', $hidden, true ) ? 'display: none;' : 'display: block;' ); ?>"
+					>
+						<input id="edit-menu-item-target--"
+							type="checkbox"
+							class="edit-menu-item-target"
+							value="_blank"
+							name="menu-item-target"
+						>
 						<label for="edit-menu-item-target--">
 							<?php esc_html_e( 'Open link in a new tab' ); ?>
 						</label>
-						<input id="edit-menu-item-target--" type="checkbox" class="edit-menu-item-target" value="_blank" name="menu-item-target">
 					</div>
-					<div class="field-title-attribute field-attr-title description description-thin">
+					<div class="field-title-attribute field-attr-title description description-thin"
+						style="<?php echo esc_attr( in_array( 'title-attribute', $hidden, true ) ? 'display: none;' : 'display: block;' ); ?>"
+					>
 						<label for="edit-menu-item-attr-title--">
 							<?php esc_html_e( 'Title Attribute' ); ?>
 						</label>
-						<input id="edit-menu-item-attr-title--" type="text" class="widefat edit-menu-item-attr-title" name="menu-item-attr-title">
+						<input id="edit-menu-item-attr-title--"
+							type="text"
+							class="widefat edit-menu-item-attr-title"
+							name="menu-item-attr-title"
+						>
 					</div>
-					<div class="field-css-classes description description-thin">
+					<div class="field-css-classes description description-thin"
+						style="<?php echo esc_attr( in_array( 'css-classes', $hidden, true ) ? 'display: none;' : 'display: block;' ); ?>"
+					>
 						<label for="edit-menu-item-classes--">
 							<?php esc_html_e( 'CSS Classes' ); ?>
 						</label>
-						<input id="edit-menu-item-classes--" type="text" class="widefat code edit-menu-item-classes" name="menu-item-classes">
+						<input id="edit-menu-item-classes--"
+							type="text"
+							class="widefat code edit-menu-item-classes"
+							name="menu-item-classes"
+						>
 					</div>
-					<div class="field-xfn description description-thin">
+					<div class="field-xfn description description-thin"
+						style="<?php echo esc_attr( in_array( 'xfn', $hidden, true ) ? 'display: none;' : 'display: block;' ); ?>"
+					>
 						<label for="edit-menu-item-xfn--">
 							<?php esc_html_e( 'Link Relationship (XFN)' ); ?>
 						</label>
-						<input id="edit-menu-item-xfn--" type="text" class="widefat code edit-menu-item-xfn" name="menu-item-xfn">
+						<input id="edit-menu-item-xfn--"
+							type="text"
+							class="widefat code edit-menu-item-xfn"
+							name="menu-item-xfn"
+						>
 					</div>
-					<div class="field-description description description-thin">
+					<div class="field-description description description-thin"
+						style="<?php echo esc_attr( in_array( 'description', $hidden, true ) ? 'display: none;' : 'display: block;' ); ?>"
+					>
 						<label for="edit-menu-item-description--">
 							<?php esc_html_e( 'Description' ); ?>
 						</label>
@@ -2168,7 +2275,7 @@ customize_themes_print_templates();
 
 <!-- Template for moving widget to different sidebar -->
 <template id="tmpl-change-sidebar">
-	<div id="move-widget-area" class="move-widget-area active" style="margin-top:-10px;margin-bottom:10px;">
+	<div id="move-widget-area" class="move-widget-area active">
 		<p class="description">
 			<?php esc_html_e( 'Select an area to move this widget into:' ); ?>
 		</p>
