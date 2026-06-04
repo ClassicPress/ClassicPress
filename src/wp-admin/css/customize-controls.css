@@ -2128,9 +2128,7 @@ input[type="range"].hue-slider::-moz-range-track {
 	.filter-drawer .filter-group {
 		width: calc( (100% - 50px) / 2);
 	}
-}
 
-@media screen and (max-width: 900px) {
 	.customize-preview-header.themes-filter-bar {
 		height: 86px;
 		padding-top: 46px;
