@@ -2993,7 +2993,9 @@ body.adding-widget .add-new-widget:before,
 		left: 0;
 	}
 
-	body.adding-widget #customize-preview {
+	body.adding-widget #customize-preview,
+	body.adding-menu-items #customize-preview,
+	body.outer-section-open	#customize-preview {
 		opacity: 1 !important;
 	}
 }
