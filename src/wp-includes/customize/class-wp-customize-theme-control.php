@@ -102,12 +102,14 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				}
 				?>
 
-				<span class="more-details"
+				<button class="more-details"
 					id="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action"
 					aria-label="<?php echo esc_attr( $details_label ); ?>"
+					aria-controls="theme-modal"
+					aria-expanded="false"
 				>
 					<?php esc_html_e( 'Theme Details' ); ?>
-				</span>
+				</button>
 				<div class="theme-author">
 
 					<?php
@@ -200,12 +202,14 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				}
 				?>
 
-				<span id="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action"
+				<button id="installed_themes-<?php echo esc_attr( $theme['id'] ); ?>-action"
 					class="more-details"
 					aria-label="<?php echo esc_attr( $details_label ); ?>"
+					aria-controls="theme-modal"
+					aria-expanded="false"
 				>
 					<?php esc_html_e( 'Theme Details' ); ?>
-				</span>
+				</button>
 				<div class="theme-author">
 					<?php
 					/* translators: Theme author name. */

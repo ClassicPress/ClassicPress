@@ -457,7 +457,7 @@ class Tests_WP_Customize_Widgets extends WP_UnitTestCase {
 		$params  = $control->json();
 
 		$this->assertSame( 'widget_form', $params['type'] );
-		$this->assertMatchesRegularExpression( '#^<li[^>]+>\s*</li>$#', $params['content'] );
+		$this->assertMatchesRegularExpression( '#^<li[^>]+><div[^>]+>\s*</div></li>$#', $params['content'] );
 		$this->assertMatchesRegularExpression( '#^<li[^>]*class=\'widget\'[^>]*#s', $params['widget_control'] );
 		$this->assertStringContainsString( '<div class="widget-content"></div>', $params['widget_control'] );
 		$this->assertStringNotContainsString( '<input class="widefat"', $params['widget_control'] );

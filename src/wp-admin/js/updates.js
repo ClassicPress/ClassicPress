@@ -202,7 +202,107 @@
 	 *
 	 * @type {function}
 	 */
-	wp.updates.adminNotice = wp.template( 'wp-updates-admin-notice' );
+	wp.updates.adminNotice = fillAdminNotice;
+
+	/**
+	 * Template helpers.
+	 * Each function clones an HTML <template> element and populates it with
+	 * the provided data, replacing the former wp.template() / Backbone pattern.
+	 */
+	function fillAdminNotice( data ) {
+		const tmpl = document.getElementById( 'tmpl-wp-updates-admin-notice' ),
+			el = tmpl.content.cloneNode( true ).firstElementChild;
+
+		if ( data.id ) {
+			el.id = data.id;
+		}
+		el.classList.add( ...data.className.split( ' ' ) );
+		el.querySelector( 'p' ).innerHTML = data.message;
+
+		return el;
+	}
+
+	function fillBulkUpdatesAdminNotice( data ) {
+		const tmpl = document.getElementById( 'tmpl-wp-bulk-updates-admin-notice' ),
+			el = tmpl.content.cloneNode( true ).firstElementChild,
+			successSpan = el.querySelector( '.bulk-updates-success-count' ),
+			errorBtn = el.querySelector( '.bulk-action-errors-collapsed' ),
+			errorList = el.querySelector( '.bulk-action-errors' );
+
+		el.id = data.id;
+		el.classList.add( ...data.className.split( ' ' ) );
+		el.classList.add( data.errors ? 'notice-error' : 'notice-success' );
+
+		// Success count sentence
+		if ( data.successes ) {
+			if ( data.type === 'plugin' ) {
+				successSpan.textContent = data.successes === 1 ? settings.pluginUpdatedSingular.replace( '%s', data.successes ) : settings.pluginUpdatedPlural.replace( '%s', data.successes );
+			} else {
+				successSpan.textContent = data.successes === 1 ? settings.themeUpdatedSingular.replace( '%s', data.successes ) : settings.themeUpdatedPlural.replace( '%s', data.successes );
+			}
+		}
+
+		// Error button
+		if ( data.errors ) {
+			errorBtn.hidden = false;
+			el.querySelector( '.bulk-updates-error-count' ).textContent = data.errors === 1 ? settings.updateFailedSingular.replace( '%s', data.errors ) : settings.updateFailedPlural.replace( '%s', data.errors );
+		}
+
+		// Error list
+		if ( data.errors && data.errorMessages && data.errorMessages.length ) {
+			data.errorMessages.forEach( function( msg ) {
+				const li = document.createElement( 'li' );
+				li.textContent = msg;
+				errorList.appendChild( li );
+			} );
+		}
+
+		return el;
+	}
+
+	function fillUpdateRow( data ) {
+		const tmpl = document.getElementById( 'tmpl-item-update-row' ),
+			el = tmpl.content.cloneNode( true ).firstElementChild,
+			td = el.querySelector( 'td' );
+
+		el.id = data.slug + '-update';
+		el.dataset.slug = data.slug;
+		if ( data.plugin ) {
+			el.dataset.plugin = data.plugin;
+		}
+
+		td.colSpan = data.colspan;
+		td.innerHTML = data.content;
+
+		return el;
+	}
+
+	function fillDeletedRow( data ) {
+		const tmpl = document.getElementById( 'tmpl-item-deleted-row' ),
+			el = tmpl.content.cloneNode( true ).firstElementChild,
+			td = el.querySelector( 'td' ),
+			strong = document.createElement( 'strong' ),
+			context = data.plugin ? 'plugin' : 'theme',
+			parts = ( context === 'plugin' ? settings.pluginDeletedSuccess : settings.themeDeletedSuccess ).split( '%s' );
+
+		el.id = data.slug + '-deleted';
+		el.dataset.slug = data.slug;
+		if ( data.plugin ) {
+			el.dataset.plugin = data.plugin;
+		}
+
+		td.colSpan = data.colspan;
+
+		// Build "<strong>Name</strong> was successfully deleted."
+		strong.textContent = data.name;
+		td.querySelector( 'p' ).replaceWith(
+			document.createTextNode( parts[0] ),
+			strong,
+			document.createTextNode( parts[1] || '' )
+		);
+
+		return el;
+	}
 
 	/**
 	 * Update queue.
@@ -974,7 +1074,6 @@
 				$currentView     = $views.find( '[aria-current="page"]' ),
 				$itemsCount      = $( '.displaying-num' ),
 				columnCount      = $form.find( 'thead th:not(.hidden), thead td' ).length,
-				pluginDeletedRow = wp.template( 'item-deleted-row' ),
 				/**
 				 * Plugins Base names of plugins in their different states.
 				 *
@@ -986,7 +1085,7 @@
 			// Add a success message after deleting a plugin.
 			if ( ! $pluginRow.hasClass( 'plugin-update-tr' ) ) {
 				$pluginRow.after(
-					pluginDeletedRow( {
+					fillDeletedRow( {
 						slug:    response.slug,
 						plugin:  response.plugin,
 						colspan: columnCount,
@@ -1093,7 +1192,6 @@
 	 */
 	wp.updates.deletePluginError = function( response ) {
 		var $plugin, $pluginUpdateRow,
-			pluginUpdateRow  = wp.template( 'item-update-row' ),
 			noticeContent    = wp.updates.adminNotice( {
 				className: 'update-message notice-error notice-alt',
 				message:   response.errorMessage
@@ -1118,7 +1216,7 @@
 		// Add a plugin update row if it doesn't exist yet.
 		if ( ! $pluginUpdateRow.length ) {
 			$plugin.addClass( 'update' ).after(
-				pluginUpdateRow( {
+				fillUpdateRow( {
 					slug:    response.slug,
 					plugin:  response.plugin || response.slug,
 					colspan: $( '#bulk-action-form' ).find( 'thead th:not(.hidden), thead td' ).length,
@@ -1558,12 +1656,11 @@
 			$themeRows.css( { backgroundColor: '#faafaa' } ).fadeOut( 350, function() {
 				var $views     = $( '.subsubsub' ),
 					$themeRow  = $( this ),
-					themes     = settings.themes,
-					deletedRow = wp.template( 'item-deleted-row' );
+					themes     = settings.themes;
 
 				if ( ! $themeRow.hasClass( 'plugin-update-tr' ) ) {
 					$themeRow.after(
-						deletedRow( {
+						fillDeletedRow( {
 							slug:    response.slug,
 							colspan: $( '#bulk-action-form' ).find( 'thead th:not(.hidden), thead td' ).length,
 							name:    $themeRow.find( '.theme-title strong' ).text()
@@ -1640,7 +1737,6 @@
 	wp.updates.deleteThemeError = function( response ) {
 		var $themeRow    = $( 'tr.inactive[data-slug="' + response.slug + '"]' ),
 			$button      = $( '.theme-actions .delete-theme' ),
-			updateRow    = wp.template( 'item-update-row' ),
 			$updateRow   = $themeRow.siblings( '#' + response.slug + '-update' ),
 			errorMessage = sprintf(
 				/* translators: %s: Error string for a failed deletion. */
@@ -1659,7 +1755,7 @@
 		if ( 'themes-network' === pagenow ) {
 			if ( ! $updateRow.length ) {
 				$themeRow.addClass( 'update' ).after(
-					updateRow( {
+					fillUpdateRow( {
 						slug: response.slug,
 						colspan: $( '#bulk-action-form' ).find( 'thead th:not(.hidden), thead td' ).length,
 						content: $message
@@ -2494,7 +2590,7 @@
 
 				$itemRow.find( 'input[name="checked[]"]:checked' ).prop( 'checked', false );
 
-				wp.updates.adminNotice = wp.template( 'wp-bulk-updates-admin-notice' );
+				wp.updates.adminNotice = fillBulkUpdatesAdminNotice;
 
 				wp.updates.addAdminNotice( {
 					id:            'bulk-action-notice',
@@ -2521,7 +2617,7 @@
 
 			// Reset admin notice template after #bulk-action-notice was added.
 			$document.on( 'wp-updates-notice-added', function() {
-				wp.updates.adminNotice = wp.template( 'wp-updates-admin-notice' );
+				wp.updates.adminNotice = fillAdminNotice;
 			} );
 
 			// Check the queue, now that the event handlers have been added.

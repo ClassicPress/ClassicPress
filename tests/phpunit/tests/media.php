@@ -453,6 +453,41 @@ https://w.org</a>',
 		$this->assertArrayHasKey( 'sizes', $prepped );
 	}
 
+	public function test_wp_prepare_attachment_for_js_with_unregistered_post_type() {
+		$old_user = get_current_user_id();
+		$user = self::factory()->user->create(
+			array(
+				'role' => 'administrator',
+			)
+		);
+		wp_set_current_user( $user );
+
+		$parent_id = self::factory()->post->create(
+			array(
+				'post_type'  => 'notregistered',
+				'post_title' => 'Parent Title',
+			)
+		);
+		$id = wp_insert_attachment(
+			array(
+				'post_title'     => 'Attachment Title',
+				'post_mime_type' => 'image/jpeg',
+			),
+			false,
+			$parent_id
+		);
+		$post          = get_post( $id );
+		$post_parent   = get_post( $post->post_parent );
+		$prepped       = wp_prepare_attachment_for_js( $post );
+		$post_type_obj = get_post_type_object( $post_parent->post_type );
+
+		$this->assertNull( $post_type_obj );
+		$this->assertFalse( array_key_exists( 'uploadedToLink', $prepped ) );
+		$this->assertFalse( array_key_exists( 'uploadedToTitle', $prepped ) );
+
+		wp_set_current_user( $old_user );
+	}
+
 	/**
 	 * @ticket 19067
 	 * @expectedDeprecated wp_convert_bytes_to_hr

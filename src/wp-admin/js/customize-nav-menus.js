@@ -4,8 +4,8 @@
  *
  * @output wp-admin/js/customize-nav-menus.js
  */
-/* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings,
-console, ajaxurl, _updatedControlsWatcher, Sortable, isRtl */
+/* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings, console,
+ajaxurl, _updatedControlsWatcher, Sortable, _cpCustomizeNavMenusL10n, isRtl */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addObserver, itemObserver, currentMenuId,
@@ -13,7 +13,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
 		form = document.querySelector( 'form' ),
-		saveButton = form.querySelector( '#save' );
+		saveButton = form.querySelector( '#save' ),
+		wrap = document.getElementById( 'screen-options-wrap' ),
+		menuItemPreferences = wrap.querySelectorAll( 'fieldset.metabox-prefs input.hide-column-tog' );
 
 	// Enable menu item sorting if the page loads on a menu
 	const hash = window.location.hash.replace( '#', '' );
@@ -61,6 +63,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function inputChanged( input, li ) {
 		let menuId, title, menuLocations, assignments, span, itemId,
+			payload, isAdvancedField,
 			settingId = li.dataset.settingId,
 			value = input.value.trim(),
 			menuName = li.closest( '.customize-pane-child' ).querySelector( '.menu-name-field' )?.value || '';
@@ -119,16 +122,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				auto_add: li.closest( 'ul' ).querySelector( '.auto_add' ).checked ? 1 : 0
 			};
 		} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
+			isAdvancedField = ( input.classList?.contains( 'edit-menu-item-target' ) ||
+				input.classList?.contains( 'edit-menu-item-attr-title' ) ||
+				input.classList?.contains( 'edit-menu-item-classes' ) ||
+				input.classList?.contains( 'edit-menu-item-xfn' ) ||
+				input.classList?.contains( 'edit-menu-item-description' )
+			);
+
 			title = li.querySelector( '.edit-menu-item-title' ).value.trim();
 			li.querySelector( '.menu-item-title' ).textContent = title;
 			itemId = li.querySelector( '.menu-item-data-db-id' ).value;
 
 			menuId = li.querySelector( '.menu-item-data-menu-id' ).value;
 			menuName = li.parentNode.querySelector( '[data-setting-id="nav_menu[' + menuId + ']"]' );
-			_updatedControlsWatcher[ 'nav_menu[' + menuId + ']' ] = {
-				name: menuName.querySelector( 'input' ).value.trim()
-			};
-			_updatedControlsWatcher[ settingId ] = {
+
+			payload = {
 				menu_id: menuId,
 				title: title,
 				url: li.querySelector( '.edit-menu-item-url' )?.value.trim() || '',
@@ -139,16 +147,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				object: li.querySelector( '.menu-item-data-object' ).value,
 				type: li.querySelector( '.menu-item-data-type' ).value,
 				type_label: li.querySelector( '.item-type' ).value,
+				target: li.querySelector( '.edit-menu-item-target' )?.checked ? '_blank' : '',
 				classes: li.querySelector( '.edit-menu-item-classes' ).value,
 				xfn: li.querySelector( '.edit-menu-item-xfn' ).value,
-				target: li.querySelector( '.edit-menu-item-target' ).value,
 				attr_title: li.querySelector( '.edit-menu-item-attr-title' ).value,
-				description: li.querySelector( '.edit-menu-item-description' ).value,
+				description: li.querySelector( '.edit-menu-item-description' ).value.trim(),
 				status: 'publish',
 				// Fields for Nav Menu Roles plugin
 				display_mode: li.querySelector( 'input[name="nav-menu-display-mode[' + itemId + ']"]:checked' )?.value || '',
 				roles: Array.from( li.querySelectorAll( '.edit-menu-item-role[value]' ) ).filter( cb => cb.checked ).map( cb => cb.value )
 			};
+
+			if ( isAdvancedField ) {
+				window._cpDirtySettings = window._cpDirtySettings || {};
+				window._cpDirtySettings[ settingId ] = payload;
+			} else {
+				_updatedControlsWatcher[ 'nav_menu[' + menuId + ']' ] = {
+					name: menuName.querySelector( 'input' ).value.trim()
+				};
+				_updatedControlsWatcher[ settingId ] = payload;
+			}
 		} else {
 			_updatedControlsWatcher[ settingId ] = value;
 		}
@@ -835,6 +853,73 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Updates the advanced menu settings on a per user basis.
+	 *
+	 * @since CP-2.8.0
+	 */
+	function updateAdvancedMenuSettings() {
+		const hidden = [];
+
+		menuItemPreferences.forEach( function( setting ) {
+			var menuItemFields = document.querySelectorAll( '.field-' + setting.value );
+			if ( ! setting.checked ) {
+				hidden.push( setting.value );
+				menuItemFields.forEach( function( menuField ) {
+					menuField.style.display = 'none';
+				} );
+			} else {
+				menuItemFields.forEach( function( menuField ) {
+					menuField.style.display = 'block';
+				} );
+			}
+		} );
+
+		const data = new URLSearchParams( {
+			action: 'hidden-columns',
+			screenoptionnonce: document.getElementById( 'screenoptionnonce' ).value,
+			page: 'customize',
+			hidden: hidden.join(',')
+		} );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+			},
+			body: data.toString(),
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( ! response.ok ) {
+				throw new Error( 'HTTP ' + response.status + ' ' + response.statusText );
+			}
+			return response.text();
+		} )
+		.then( function( text ) {
+			text = text.trim();
+
+			if ( '1' !== text ) {
+				if ( '-1' === text ) {
+					throw new Error( _cpCustomizeNavMenusL10n.nonceFailed );
+				}
+
+				if ( '0' === text ) {
+					throw new Error( _cpCustomizeNavMenusL10n.serverRejection );
+				}
+
+				throw new Error( _cpCustomizeNavMenusL10n.unexpectedResponse + text );
+			}
+		} )
+		.catch( function( error ) {
+			console.error( _cpCustomizeNavMenusL10n.failedSettingsSave, error );
+		} );
+	}
+
+	menuItemPreferences.forEach( function( setting ) {
+		setting.addEventListener( 'change', updateAdvancedMenuSettings );
+	} );
+
+	/**
 	 * Move new menu to its own ul element
 	 */
 	function moveNewMenu( id ) {
@@ -942,6 +1027,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 			document.getElementById( 'accordion-section-add_menu' ).before( li );
 			activatePublishButton();
+
+		// Show or hide advanced menu properties
+		} else if ( e.target.classList?.contains( 'customize-screen-options-toggle' ) ) {
+			if ( e.target.getAttribute( 'aria-expanded' ) === 'false' ) {
+				document.getElementById( 'screen-options-wrap' ).style.display = 'block';
+				e.target.setAttribute( 'aria-expanded', 'true' );
+			} else {
+				document.getElementById( 'screen-options-wrap' ).style.display = 'none';
+				e.target.setAttribute( 'aria-expanded', 'false' );
+			}
 
 		// Enable adding of a menu item
 		} else if ( e.target.classList && e.target.classList.contains( 'add-new-menu-item' ) ) {
@@ -1252,7 +1347,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					xfn: item.querySelector( '.edit-menu-item-xfn' ).value,
 					target: item.querySelector( '.edit-menu-item-target' ).value,
 					attr_title: item.querySelector( '.edit-menu-item-attr-title' ).value,
-					description: item.querySelector( '.edit-menu-item-description' ).value,
+					description: item.querySelector( '.edit-menu-item-description' ).value.trim(),
 					status: 'publish'
 				};
 			} );

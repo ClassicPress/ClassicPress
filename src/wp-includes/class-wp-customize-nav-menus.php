@@ -1162,7 +1162,7 @@ final class WP_Customize_Nav_Menus {
 							<summary class="accordion-section-title">
 								<?php echo esc_html( $available_item_type['type_label'] ); ?>
 							</summary>
-							<div class="accordion-section-content" style="max-height: 132px;">
+							<div class="accordion-section-content">
 
 								<?php
 								if ( 'post_type' === $available_item_type['type'] ) {
@@ -1193,7 +1193,6 @@ final class WP_Customize_Nav_Menus {
 									data-type="<?php echo esc_attr( $available_item_type['type'] ); ?>"
 									data-object="<?php echo esc_attr( $available_item_type['object'] ); ?>"
 									data-type_label="<?php echo esc_attr( isset( $available_item_type['type_label'] ) ? $available_item_type['type_label'] : $available_item_type['type'] ); ?>"
-									style="max-height: 72px;"
 								>
 
 									<?php
