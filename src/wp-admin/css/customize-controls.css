@@ -1231,6 +1231,7 @@ input[type="range"].hue-slider::-moz-range-track {
 	display: flex;
 	justify-content: space-between;
 	min-width: 100%;
+	position: static;
 	margin: 0 !important;
 }
 
@@ -2183,6 +2184,7 @@ input[type="range"].hue-slider::-moz-range-track {
 		top: 0;
 		bottom: 0;
 		left: 0;
+		right: 0;
 	}
   
 	#customize-preview {
@@ -2858,7 +2860,7 @@ body.adding-widget .add-new-widget:before,
 	}
 
 	.preview-only #customize-controls {
-		height: 45px;
+		height: 46px;
 	}
 
 	.preview-only #customize-preview,
@@ -2946,10 +2948,6 @@ body.adding-widget .add-new-widget:before,
 
 	.wp-core-ui .themes-filter-bar .feature-filter-toggle {
 		margin: 0;
-	}
-
-	.wp-full-overlay.expanded {
-		margin-left: 0;
 	}
 
 	.customize-controls-preview-toggle {
