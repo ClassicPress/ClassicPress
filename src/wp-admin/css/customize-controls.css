@@ -5,6 +5,7 @@ body {
 
 #customize-preview {
 	position: relative;
+	left: 0;
 }
 
 #customize-preview-loading {
@@ -2192,9 +2193,10 @@ input[type="range"].hue-slider::-moz-range-track {
 		left: 0;
 		right: 0;
 	}
-  
+
 	#customize-preview {
-		margin-top: 45px;
+		margin-top: 46px;
+		opacity: 1 !important;
 	}
 
 	.control-panel-themes .customize-themes-full-container {
@@ -2994,12 +2996,6 @@ body.adding-widget .add-new-widget:before,
 	body.wp-customizer.outer-section-open .wp-full-overlay.expanded #customize-sidebar-outer-content {
 		left: 0;
 	}
-
-	body.adding-widget #customize-preview,
-	body.adding-menu-items #customize-preview,
-	body.outer-section-open	#customize-preview {
-		opacity: 1 !important;
-	}
 }
 
 #customize-preview,
@@ -3008,7 +3004,6 @@ body.adding-widget .add-new-widget:before,
 	height: 100%;
 	border: 0;
 	flex: 1 1 auto;
-	left: 0;
 }
 
 /* Tablet – e.g. 720x1080 viewport */
@@ -3016,7 +3011,6 @@ body.adding-widget .add-new-widget:before,
 	width: 720px;
 	margin: auto;
 	flex: 0 0 auto;
-	left: 0;
 }
 
 /* Mobile – e.g. 320x480 viewport */
@@ -3024,7 +3018,6 @@ body.adding-widget .add-new-widget:before,
 	width: 320px;
 	margin: auto;
 	flex: 0 0 auto;
-	left: 0;
 }
 
 /* Stretch Tablet and Mobile preview in small screen */
@@ -3032,6 +3025,5 @@ body.adding-widget .add-new-widget:before,
 	#customize-preview[data-device="tablet"],
 	#customize-preview[data-device="mobile"] {
 		width: 100%;
-		top: 46px;
 	}
 }
