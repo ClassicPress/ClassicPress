@@ -5,10 +5,10 @@
  */
 
 /* eslint consistent-this: [ "error", "control" ] */
-/* global wp, _wpCustomizeControlsL10n, updatedControls, Coloris,
-_updatedControlsWatcher, console, ajaxurl, IMAGE_WIDGET, _cpCustomLogo,
+/* global wp, _wpCustomizeControlsL10n, _wpCustomizeHeader, updatedControls,
+_updatedControlsWatcher, Coloris, ajaxurl, IMAGE_WIDGET, _cpCustomLogo,
 FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
-FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper */
+FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver, targetEl,
@@ -1090,7 +1090,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function addItemToCustomizer( selectedItem, attachmentId, imageElement, imageUrl ) {
-		var parent = customizeButton.parentNode,
+		var headerData,
+			parent = ( selectedItem.className === 'choice' ) ? selectedItem.closest( '.choices' ) : customizeButton.parentNode,
 			grandparent = parent.parentNode,
 			li = parent.closest( 'li' ),
 			settingId = li.dataset.settingId,
@@ -1111,18 +1112,46 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Update header image
 		if ( settingId === 'header_image_data' ) {
-			parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
-			parent.previousElementSibling.querySelector( '.container' ).append( imageElement );
-			customizeButton.previousElementSibling.style.display = '';
-			customizeButton.classList.remove( 'upload-button' );
-			parent.previousElementSibling.querySelector( 'input' ).value = attachmentId;
-			_updatedControlsWatcher[ settingId ] = {
-				attachment_id: parseInt( attachmentId ),
-				url: selectedItem.dataset.url,
-				thumbnail_url: selectedItem.dataset.sizes?.thumbnail?.url || imageUrl,
-				width: selectedItem.dataset.width,
-				height: selectedItem.dataset.height
-			};
+			if ( selectedItem.className === 'choice' ) {
+				li.querySelector( '.container' ).innerHTML = '';
+				li.querySelector( '.container' ).append( imageElement.cloneNode() );
+				window.sendSettingToPreview( 'header_image', selectedItem.dataset.customizeUrl );
+
+				// Find the matching entry from the localized data
+				headerData = Object.values( _wpCustomizeHeader.defaults ).find(
+					h => h.url === selectedItem.dataset.customizeUrl
+				);
+				if ( ! headerData ) {
+					return;
+				}
+
+				_updatedControlsWatcher.header_image = selectedItem.dataset.customizeUrl;
+				_updatedControlsWatcher[ settingId ] = {
+					attachment_id: 0,
+					url:           headerData.url,
+					thumbnail_url: headerData.thumbnail_url || headerData.url,
+					width:         headerData.width  || _wpCustomizeHeader.data.width,
+					height:        headerData.height || _wpCustomizeHeader.data.height
+				};
+
+				activatePublishButton();
+				document.getElementById( 'sub-accordion-section-header_image ' ).querySelector( 'a' ).focus();
+			} else {
+				parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
+				parent.previousElementSibling.querySelector( '.container' ).append( imageElement );
+				customizeButton.previousElementSibling.style.display = '';
+				customizeButton.classList.remove( 'upload-button' );
+				parent.previousElementSibling.querySelector( 'input' ).value = attachmentId;
+
+				_updatedControlsWatcher.header_image = selectedItem.dataset.url;
+				_updatedControlsWatcher[ settingId ] = {
+					attachment_id: parseInt( attachmentId ),
+					url: selectedItem.dataset.url,
+					thumbnail_url: selectedItem.dataset.sizes?.thumbnail?.url || imageUrl,
+					width: selectedItem.dataset.width,
+					height: selectedItem.dataset.height
+				};
+			}
 
 		// Update site icon
 		} else if ( settingId === 'site_icon' ) {
@@ -1155,7 +1184,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				grandparent.querySelector( 'input' ).value = imageUrl;
 				_updatedControlsWatcher[ settingId ] = imageUrl;
 			} else {
-				grandparent.querySelector( 'input' ).value = attachmentId;
+				if ( grandparent.querySelector( 'input' ) ) {
+					grandparent.querySelector( 'input' ).value = attachmentId;
+				}
 				_updatedControlsWatcher[ settingId ] = attachmentId;
 			}
 		}
@@ -1265,6 +1296,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( e.submitter !== saveButton ) {
 			return;
 		}
+
+		// Clear stale notifications
+		document.querySelectorAll( '.customize-control-notifications-container' ).forEach( function( container ) {
+			container.innerHTML = '';
+		} );
 
 		// Populate arrays if a new menu is being added
 		for ( const [key, value] of entries ) {
@@ -1484,8 +1520,65 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				delete updatedControls[ key ];
 			} );
 			window._customizePublishing = false;
+		} else if ( newResult && ! newResult.success ) {
+			if ( newResult.data && newResult.data.setting_validities ) {
+				Object.entries( newResult.data.setting_validities ).forEach( function( [settingId, validity] ) {
+					if ( validity !== true ) {
+						Object.entries( validity ).forEach( function( [code, error] ) {
+							var setting = document.querySelector( '[data-setting-id="' + settingId + '"]' );
+							if ( setting ) {
+								var container = setting.querySelector( '.customize-control-notifications-container' );
+								if ( container ) {
+									container.appendChild( buildNotification( {
+										type: 'error',
+										code: code,
+										message: error.message
+									} ) );
+								}
+							}
+						} );
+					}
+				} );
+			}
+			saveButton.disabled = false;
+			window._customizePublishing = false;
 		}
 	} );
+
+	/**
+	 * Builds a notification system in case errors are returned from the server.
+	 */
+	function buildNotification( data ) {
+		var btn = document.createElement( 'button' ),
+			msg = document.createElement( 'div' ),
+			li = document.createElement( 'li' );
+
+		li.className = [
+			'notice',
+			'notice-' + ( data.type || 'info' ),
+			data.alt          ? 'notice-alt'      : '',
+			data.dismissible  ? 'is-dismissible'  : '',
+			data.containerClasses || ''
+		].filter( Boolean ).join( ' ' );
+		li.dataset.code = data.code || '';
+		li.dataset.type = data.type || '';
+
+		msg.className = 'notification-message';
+		msg.innerHTML = data.message || data.code || '';
+		li.appendChild( msg );
+
+		if ( data.dismissible ) {
+			btn.type = 'button';
+			btn.className = 'notice-dismiss';
+			btn.innerHTML = '<span class="screen-reader-text">' + _wpCustomizeControlsL10n.dismiss + '</span>';
+			btn.addEventListener( 'click', function() {
+				li.remove();
+			} );
+			li.appendChild( btn );
+		}
+
+		return li;
+	}
 
 	/**
 	 * Replaces the substring 'brand-new' in new menu attributes with negative integer.
@@ -1829,10 +1922,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Add media file
 		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'select-button' ) ) {
 			customizeButton = e.target;
-			if ( e.target.closest( 'ul' ).id === 'sub-accordion-section-title_tagline' ) {
-				cropContext = e.target.closest( 'li' ).dataset.settingId;
-			}
+			cropContext = e.target.closest( 'li' ).dataset.settingId;
 			selectMedia();
+		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'choice' ) ) {
+			image = e.target.previousElementSibling;
+			addItemToCustomizer( e.target, 0, image, image.src );
 
 		// Close the modal
 		} else if ( e.target.id === 'widget-modal-close' ) {
