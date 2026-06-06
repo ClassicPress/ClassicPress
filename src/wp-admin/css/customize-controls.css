@@ -2195,7 +2195,7 @@ input[type="range"].hue-slider::-moz-range-track {
 	}
 
 	#customize-preview {
-		margin-top: 46px;
+		top: 46px;
 		opacity: 1 !important;
 	}
 
