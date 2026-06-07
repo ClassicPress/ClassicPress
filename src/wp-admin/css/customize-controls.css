@@ -2586,7 +2586,7 @@ body.adding-widget .add-new-widget:before,
 
 #widgets-right {
 	overflow-y: auto;
-	max-height: calc(100vh - 90px);
+	flex: 1;
 }
 
 #available-menu-items {
