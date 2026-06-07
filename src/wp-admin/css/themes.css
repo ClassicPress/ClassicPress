@@ -1424,7 +1424,6 @@ body.full-overlay-active {
 	padding: 0 15px;
 	line-height: 3.2;
 	border-bottom: 1px solid #dcdcde;
-	position: relative; /* Fix for themes that add buttons here */
 }
 
 .wp-full-overlay-sidebar .wp-full-overlay-header a.back {
