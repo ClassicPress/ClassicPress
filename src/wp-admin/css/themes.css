@@ -1402,9 +1402,6 @@ body.full-overlay-active {
 
 .wp-full-overlay.collapsed .wp-full-overlay-sidebar {
 	overflow: visible;
-}
-
-.wp-full-overlay.collapsed .wp-full-overlay-sidebar {
 	margin-left: -345px;
 }
 
