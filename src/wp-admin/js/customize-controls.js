@@ -1815,6 +1815,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				e.target.setAttribute( 'aria-expanded', false );
 			}
 
+		// Close add widgets sub-panel
+		} else if ( document.body.classList.contains( 'adding-widget' ) && e.target.classList && e.target.classList.contains( 'customize-section-back' ) ) {
+			document.body.classList.remove( 'adding-widget' );
+			document.getElementById( 'widgets-left' ).style.display = 'none';
+			addWidgetButtons.forEach( function( add ) {
+				if ( add.getAttribute( 'aria-expanded' ) === 'true' ) {
+					add.setAttribute( 'aria-expanded', 'false' );
+					add.focus();
+					return;
+				}
+			} );
+
 		// Reorder widgets
 		} else if ( e.target.classList && e.target.className === 'reorder' ) {
 			ul.classList.add( 'reordering' );
