@@ -1099,6 +1099,11 @@ input[type="range"].hue-slider::-moz-range-track {
 	text-decoration: none;
 }
 
+.customize-control-notifications-container .notice {
+	margin: 5px 0 2px;
+	padding: 0.5em;
+}
+
 .customize-control-color .color-picker,
 .customize-control-upload div {
 	line-height: 28px;
@@ -1438,11 +1443,12 @@ input[type="range"].hue-slider::-moz-range-track {
 .customize-control-header .uploaded button:not(.random),
 .customize-control-header .default button:not(.random) {
 	width: 100%;
-	padding: 0;
-	margin: 0;
+	padding: 9px 0;
+	margin-top: 8px;
 	background: none;
-	border: none;
-	color: inherit;
+	border: 1px solid #2271b1;
+	border-radius: 3px;
+	color: #2271b1;
 	cursor: pointer;
 }
 

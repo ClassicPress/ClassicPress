@@ -67,13 +67,10 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 	/**
 	 */
 	public function enqueue() {
-		wp_enqueue_media();
-		wp_enqueue_script( 'customize-views' );
-
 		$this->prepare_control();
 
 		wp_localize_script(
-			'customize-views',
+			'customize-controls',
 			'_wpCustomizeHeader',
 			array(
 				'data'     => array(
@@ -91,16 +88,22 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 				'defaults' => $this->default_headers,
 			)
 		);
-
-		parent::enqueue();
 	}
 
 	/**
 	 * @global Custom_Image_Header $custom_image_header
-	 *
-	 * Redundant @since CP_2.8.0
 	 */
-	public function prepare_control() {}
+	public function prepare_control() {
+		global $custom_image_header;
+		if ( empty( $custom_image_header ) ) {
+			return;
+		}
+
+		// Process default headers and uploaded headers.
+		$custom_image_header->process_default_headers();
+		$this->default_headers  = $custom_image_header->get_default_header_images();
+		$this->uploaded_headers = $custom_image_header->get_uploaded_header_images();
+	}
 
 	/**
 	 * Redundant JS templates.
@@ -154,9 +157,6 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 			}
 			?>
 
-			<div class="customize-control-notifications-container">
-				<ul></ul>
-			</div>
 			<p class="customizer-section-intro customize-control-description">
 
 				<?php
@@ -243,12 +243,9 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 								?>
 
 								<div class="header-image-item">
-									<img src="<?php echo esc_url( $header['url'] ); ?>" 
-										alt="<?php echo esc_attr( $header['label'] ); ?>"
+									<img src="<?php echo esc_url( $header['url'] ); ?>"
+										alt="<?php echo esc_attr( $header['alt_text'] && $header['alt_text'][0] ? $header['alt_text'][0] : '' ); ?>"
 									>
-									<span class="title">
-										<?php echo esc_html( $header['label'] ); ?>
-									</span>
 									<button class="choice" data-customize-url="<?php echo esc_url( $header['url'] ); ?>">
 										<?php echo esc_html( $this->button_labels['frame_button'] ); ?>
 									</button>
@@ -278,20 +275,9 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 								?>
 
 								<div class="default-header-image">
-									<img src="<?php echo esc_url( $header['url'] ); ?>">
-
-									<?php
-									if ( isset( $header['label'] ) ) {
-										?>
-
-										<span>
-											<?php echo esc_html( $header['label'] ); ?>
-										</span>
-
-										<?php
-									}
-									?>
-
+									<img src="<?php echo esc_url( $header['url'] ); ?>"
+										alt="<?php echo esc_attr( $header['description'] ); ?>"
+									>
 									<button class="choice" data-customize-url="<?php echo esc_url( $header['url'] ); ?>">
 										<?php echo esc_html( $this->button_labels['frame_button'] ); ?>
 									</button>

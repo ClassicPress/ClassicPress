@@ -181,37 +181,6 @@ function wp_default_packages_vendor( $scripts ) {
 function wp_default_packages_inline_scripts( $scripts ) {
 	global $wp_locale, $wpdb;
 
-	if ( isset( $scripts->registered['wp-api-fetch'] ) ) {
-		$scripts->registered['wp-api-fetch']->deps[] = 'wp-hooks';
-	}
-	$scripts->add_inline_script(
-		'wp-api-fetch',
-		sprintf(
-			'wp.apiFetch.use( wp.apiFetch.createRootURLMiddleware( "%s" ) );',
-			sanitize_url( get_rest_url() )
-		),
-		'after'
-	);
-	$scripts->add_inline_script(
-		'wp-api-fetch',
-		implode(
-			"\n",
-			array(
-				sprintf(
-					'wp.apiFetch.nonceMiddleware = wp.apiFetch.createNonceMiddleware( "%s" );',
-					wp_installing() ? '' : wp_create_nonce( 'wp_rest' )
-				),
-				'wp.apiFetch.use( wp.apiFetch.nonceMiddleware );',
-				'wp.apiFetch.use( wp.apiFetch.mediaUploadMiddleware );',
-				sprintf(
-					'wp.apiFetch.nonceEndpoint = "%s";',
-					admin_url( 'admin-ajax.php?action=rest-nonce' )
-				),
-			)
-		),
-		'after'
-	);
-
 	// Loading the old editor and its config to ensure the classic block works as expected.
 	$scripts->add_inline_script(
 		'editor',
@@ -446,10 +415,6 @@ function wp_default_packages_scripts( $scripts ) {
 	$assets = array(
 		'a11y' => array(
 			'dependencies' => array( 'wp-dom-ready', 'wp-i18n' ),
-			'version'      => $version,
-		),
-		'api-fetch' => array(
-			'dependencies' => array( 'wp-i18n', 'wp-url' ),
 			'version'      => $version,
 		),
 		'dom-ready' => array(
@@ -1201,6 +1166,7 @@ function wp_default_scripts( $scripts ) {
 			'confirm_delete'          => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
 			'delete_failed'           => __( 'Failed to delete attachment.' ),
 			'error'                   => __( 'Error:' ),
+			'dismiss'                 => __( 'Dismiss' ),
 		)
 	);
 	$scripts->add( 'customize-selective-refresh', "/wp-includes/js/customize-selective-refresh$suffix.js", array( 'wp-util', 'customize-preview' ), false, 1 );
@@ -1363,6 +1329,15 @@ function wp_default_scripts( $scripts ) {
 			'_wpUpdatesSettings',
 			array(
 				'ajax_nonce' => wp_installing() ? '' : wp_create_nonce( 'updates' ),
+				'pluginUpdatedSingular' => __( '%s plugin successfully updated.' ),
+				'pluginUpdatedPlural'   => __( '%s plugins successfully updated.' ),
+				'themeUpdatedSingular'  => __( '%s theme successfully updated.' ),
+				'themeUpdatedPlural'    => __( '%s themes successfully updated.' ),
+				'updateFailedSingular'  => __( '%s update failed.' ),
+				'updateFailedPlural'    => __( '%s updates failed.' ),
+				'showMoreDetails'       => __( 'Show more details' ),
+				'pluginDeletedSuccess'  => _x( '%s was successfully deleted.', 'plugin' ),
+				'themeDeletedSuccess'   => _x( '%s was successfully deleted.', 'theme' ),
 			)
 		);
 
