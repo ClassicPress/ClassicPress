@@ -1053,6 +1053,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				e.target.setAttribute( 'aria-expanded', false );
 			}
 
+		// Close menu items sub-panel
+		} else if ( document.body.classList.contains( 'adding-menu-items' ) && e.target.classList && e.target.classList.contains( 'customize-section-back' ) ) {
+			document.body.classList.remove( 'adding-menu-items' );
+			availableMenuItems.style.display = 'none';
+			document.querySelectorAll( '.add-new-menu-item' ).forEach( function( add ) {
+				if ( add.getAttribute( 'aria-expanded' ) === 'true' ) {
+					add.setAttribute( 'aria-expanded', 'false' );
+					add.focus();
+					return;
+				}
+			} );
+
 		// Add a menu item
 		} else if ( availableMenuItems.contains( e.target ) ) {
 			if ( e.target.classList && e.target.className === 'button add-content' ) {
