@@ -940,10 +940,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			aspectRatio  : aspectRatio,
 			minWidth     : width,
 			minHeight    : height,
+			width        : width,
+			height       : height,
 			onSelect     : function( attachment ) {
 				const imageElement = new Image();
 				imageElement.src = attachment.url;
-				addItemToCustomizer( selectedItem, attachment.id, imageElement, attachment.url );
+				addItemToCustomizer( selectedItem, attachment.id, imageElement, attachment.url, attachment );
 			}
 		} );
 	}
@@ -1092,7 +1094,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	function addItemToCustomizer( selectedItem, attachmentId, imageElement, imageUrl ) {
+	function addItemToCustomizer( selectedItem, attachmentId, imageElement, imageUrl, attachment ) {
 		var headerData,
 			parent = ( selectedItem.className === 'choice' ) ? selectedItem.closest( '.choices' ) : customizeButton.parentNode,
 			grandparent = parent.parentNode,
@@ -1149,10 +1151,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				_updatedControlsWatcher.header_image = selectedItem.dataset.url;
 				_updatedControlsWatcher[ settingId ] = {
 					attachment_id: parseInt( attachmentId ),
-					url: selectedItem.dataset.url,
-					thumbnail_url: selectedItem.dataset.sizes?.thumbnail?.url || imageUrl,
-					width: selectedItem.dataset.width,
-					height: selectedItem.dataset.height
+					url:           attachment ? attachment.url : imageUrl,
+					thumbnail_url: attachment ? ( attachment.sizes?.thumbnail?.url || attachment.url ) : ( selectedItem.dataset.sizes?.thumbnail?.url || imageUrl ),
+					width:         attachment ? attachment.width  : selectedItem.dataset.width,
+					height:        attachment ? attachment.height : selectedItem.dataset.height
 				};
 			}
 
