@@ -9,7 +9,8 @@ ajaxurl, _updatedControlsWatcher, Sortable, _cpCustomizeNavMenusL10n, isRtl */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addObserver, itemObserver, currentMenuId,
-		newMenuItemIDs = [],
+		newMenuItemIDs = [],		
+		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
 		form = document.querySelector( 'form' ),
@@ -667,7 +668,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 
 				// Reset toggle buttons
-				document.querySelectorAll( '.add-new-menu-item' ).forEach( function( btn ) {
+				addMenuButtons.forEach( function( btn ) {
 					btn.setAttribute( 'aria-expanded', 'false' );
 				} );
 
@@ -1057,13 +1058,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( document.body.classList.contains( 'adding-menu-items' ) && e.target.classList && e.target.classList.contains( 'customize-section-back' ) ) {
 			document.body.classList.remove( 'adding-menu-items' );
 			availableMenuItems.style.display = 'none';
-			document.querySelectorAll( '.add-new-menu-item' ).forEach( function( add ) {
-				if ( add.getAttribute( 'aria-expanded' ) === 'true' ) {
-					add.setAttribute( 'aria-expanded', 'false' );
-					add.focus();
+			for ( let i = 0, n = addMenuButtons.length; i < n; i++ ) {
+				if ( addMenuButtons[i].getAttribute( 'aria-expanded' ) === 'true' ) {
+					addMenuButtons[i].setAttribute( 'aria-expanded', 'false' );
+					addMenuButtons[i].focus();
 					return;
 				}
-			} );
+			}
 
 		// Add a menu item
 		} else if ( availableMenuItems.contains( e.target ) ) {
