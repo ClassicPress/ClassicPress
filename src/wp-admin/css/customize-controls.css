@@ -2952,6 +2952,11 @@ body.adding-widget .add-new-widget:before,
 		height: 69px;
 	}
 
+	#available-widgets .customize-section-back:before,
+	#available-menu-items .customize-section-back:before {
+		left: 0;
+	}
+
 	#available-widgets .customize-section-title h3,
 	#available-menu-items .customize-section-title h3 {
 		font-size: 20px;
