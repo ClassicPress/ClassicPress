@@ -1077,14 +1077,14 @@ final class WP_Customize_Nav_Menus {
 
 		<section id="available-menu-items" class="accordion-container">
 			<div class="customize-section-title">
-				<a href="#sub-accordion-panel-nav_menus" class="customize-section-back" tabindex="-1">
+				<button type="button" class="customize-section-back">
 					<span class="screen-reader-text">
 						<?php
 						/* translators: Hidden accessibility text. */
 						esc_html_e( 'Back' );
 						?>
 					</span>
-				</a>
+				</button>
 				<h3>
 					<span class="customize-action">
 						<?php
