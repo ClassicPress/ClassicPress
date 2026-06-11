@@ -1653,6 +1653,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			Object.keys( updatedControls ).forEach( function( key ) {
 				delete updatedControls[ key ];
 			} );
+
 			saveButton.disabled = true;
 			document.getElementById( 'customize_changeset_uuid' ).value = newResult.data.next_changeset_uuid;
 			window._customizePublishing = false;
@@ -1998,7 +1999,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Choose how to publish settings
 		if ( e.target === publishSettings ) {
-			if ( publishSettings.getAttribute( 'aria-expanded' ) === 'false' ) {
+			if ( document.body.classList.contains( 'outer-section-open' ) ) {
+				document.body.classList.remove( 'outer-section-open' );
+				publishSettings.setAttribute( 'aria-expanded', 'false' );
+				publishSettingsPanel.style.display = 'none';
+			} else {
+				document.body.classList.add( 'outer-section-open' );
 				publishSettings.setAttribute( 'aria-expanded', 'true' );
 				publishSettingsPanel.style.display = 'block';
 				setTimeout( function() {
@@ -2006,9 +2012,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					focused.checked = true;
 					focused.focus();
 				}, 0 );
-			} else {
-				publishSettings.setAttribute( 'aria-expanded', 'false' );
-				publishSettingsPanel.style.display = 'none';
 			}
 
 		// Discard changes in changeset
