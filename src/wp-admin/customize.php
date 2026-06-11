@@ -2085,16 +2085,16 @@ wp_print_scripts();
 					</ul>
 				</div>
 				<div class="preview-link-wrapper">
-					<label for="customize-preview-link-input"class="screen-reader-text">
+					<label for="customize-preview-link-input" class="screen-reader-text">
 						<?php esc_html_e( 'Preview Link' ); ?>
 					</label>
-					<a href="<?php echo esc_url( home_url( '/' ) ); ?>"
-						id="preview-link"
+					<a id="preview-link"
+						href="<?php echo esc_url( home_url( '/?customize_changeset_uuid=' . $wp_customize->changeset_uuid() ) ); ?>"
 						target="<?php echo esc_attr( $wp_customize->changeset_uuid() ); ?>"
 						inert
 					>
 						<span class="preview-control-element" data-component="url">
-							<?php echo esc_url( home_url( '/' ) ); ?>
+							<?php echo esc_url( home_url( '/?customize_changeset_uuid=' . $wp_customize->changeset_uuid() ) ); ?>
 						</span>
 						<span class="screen-reader-text">
 							<?php esc_html_e( '(opens in a new tab)' ); ?>
