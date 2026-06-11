@@ -65,8 +65,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Close modal and set focus on theme
 	function closeModal() {
+		var highlightedTheme = document.getElementById( dialog.dataset.highlightedTheme );
+		if ( ! highlightedTheme ) {
+			highlightedTheme = document.getElementById( 'customize-control-installed_theme_' + dialog.dataset.highlightedTheme );
+		}
+
 		dialog.close();
-		document.getElementById( dialog.dataset.highlightedTheme ).focus();
+		highlightedTheme.focus();
+		highlightedTheme.querySelector( '.more-details' ).setAttribute( 'aria-expanded', 'false' );
 		dialog.querySelector( '.left.dashicons.dashicons-no' ).disabled = false;
 		dialog.querySelector( '.right.dashicons.dashicons-no' ).disabled = false;
 		cleanup();
@@ -95,7 +101,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function restoreDefaultsPreviewDialog() {
 		previewDialog.classList.add( 'expanded' );
 		previewDialog.classList.remove( 'collapsed' );
-		previewDialog.querySelector( '.wp-full-overlay-main' ).style.width = 'calc(100% - 300px)';
+		previewDialog.querySelector( '.wp-full-overlay-main' ).style.width = 'calc(100% - 345px)';
 		previewDialog.querySelector( '.theme-install-container' ).dataset.id = '';
 		if ( previewDialog.querySelector( '.activate' ) ) {
 			previewDialog.querySelector( '.activate' ).className = 'button button-primary theme-install';
@@ -237,6 +243,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function showAndHide( themes ) {
 		themes.forEach( function( theme ) {
 			theme.addEventListener( 'mouseover', function() {
+				if ( document.body.className.includes( 'wp-customizer' ) ) {
+					return;
+				}
 				themes.forEach( function( other ) {
 					other.querySelector( '.more-details' ).style.opacity = '0';
 					other.querySelector( '.theme-actions' ).style.opacity = '0';
@@ -246,6 +255,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				theme.querySelector( '.theme-actions' ).style.display = 'block';
 			} );
 			theme.addEventListener( 'focusin', function() {
+				if ( document.body.className.includes( 'wp-customizer' ) ) {
+					return;
+				}
 				themes.forEach( function( other ) {
 					other.querySelector( '.more-details' ).style.opacity = '0';
 					other.querySelector( '.theme-actions' ).style.opacity = '0';
@@ -255,6 +267,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				theme.querySelector( '.theme-actions' ).style.display = 'block';
 			} );
 			theme.addEventListener( 'touchenter', function() {
+				if ( document.body.className.includes( 'wp-customizer' ) ) {
+					return;
+				}
 				themes.forEach( function( other ) {
 					other.querySelector( '.more-details' ).style.opacity = '0';
 					other.querySelector( '.theme-actions' ).style.opacity = '0';
@@ -264,16 +279,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				theme.querySelector( '.theme-actions' ).style.display = 'block';
 			} );
 			theme.addEventListener( 'mouseout', function() {
-				if ( ! theme.matches( ':has(:focus)' ) ) {
+				if ( ! theme.matches( ':has(:focus)' ) && ! document.body.className.includes( 'wp-customizer' ) ) {
 					theme.querySelector( '.more-details' ).style.opacity = '0';
 					theme.querySelector( '.theme-actions' ).style.opacity = '0';
 					theme.querySelector( '.theme-actions' ).style.display = 'none';
 				}
 			} );
 			theme.addEventListener( 'touchleave', function() {
-				theme.querySelector( '.more-details' ).style.opacity = '0';
-				theme.querySelector( '.theme-actions' ).style.opacity = '0';
-				theme.querySelector( '.theme-actions' ).style.display = 'none';
+				if ( ! document.body.className.includes( 'wp-customizer' ) ) {
+					theme.querySelector( '.more-details' ).style.opacity = '0';
+					theme.querySelector( '.theme-actions' ).style.opacity = '0';
+					theme.querySelector( '.theme-actions' ).style.display = 'none';
+				}
 			} );
 		} );
 	}
@@ -326,6 +343,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				template = document.getElementById( 'theme-modal-insert' );
 				clone = template.content.cloneNode( true );
 				dialog.querySelector( '.theme-wrap' ).append( clone );
+				e.target.setAttribute( 'aria-expanded', 'true' );
 
 				// Set URL
 				queryParams.set( 'theme', customizer ? theme.dataset.id : theme.id );
@@ -704,7 +722,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} else {
 					previewDialog.classList.add( 'expanded' );
 					previewDialog.classList.remove( 'collapsed' );
-					previewDialog.querySelector( '.wp-full-overlay-main' ).style.width = 'calc(100% - 300px)';
+					previewDialog.querySelector( '.wp-full-overlay-main' ).style.width = 'calc(100% - 345px)';
 				}
 
 			// Toggle display of Upload Theme area
