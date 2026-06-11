@@ -132,6 +132,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		history.replaceState( null, '', newUrl );
 	}
 
+	if ( queryParams.get( 'discarded' ) ) {
+		queryParams.delete( 'discarded' );
+	}
+
 	if ( queryParams.get( 'theme' ) ) {
 		if ( queryParams.get( 'theme' ) === _wpCustomizeControlsL10n.activeTheme ) { // active theme
 			history.replaceState( null, '', window.location.pathname );
@@ -1390,7 +1394,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			formData = new FormData(),
 			updateData = new FormData(),
 			previewLink = document.getElementById( 'preview-link' ),
-			changesetId = document.getElementById( 'customize_changeset_uuid' ).value,
 			d = getScheduledDate();
 
 		// Prevent form submission via PHP
@@ -1453,7 +1456,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			formData.append( 'action', 'customize_save' );
 			formData.append( 'nonce', document.getElementById( 'customizer_nonce' ).value );
 			formData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
-			formData.append( 'customize_changeset_uuid', changesetId );
+			formData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
 			formData.append( 'customize_changeset_status', changesetStatus );
 			formData.append( 'customize_changeset_data', JSON.stringify( navMenuChanges ) );
 
@@ -1591,7 +1594,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		updateData.append( 'action', 'customize_save' );
 		updateData.append( 'nonce', document.getElementById( 'customizer_nonce' ).value );
 		updateData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
-		updateData.append( 'customize_changeset_uuid', changesetId );
+		updateData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
 		updateData.append( 'customize_changeset_status', changesetStatus );
 		updateData.append( 'customize_changeset_data', JSON.stringify( submittedChanges ) );
 
@@ -1618,6 +1621,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Update HTML
 		if ( newResult && newResult.success ) {
+
+			// Update the in-memory date so the Schedule radio restores correctly
+			if ( changesetStatus === 'future' ) {
+				window.wpCustomizeChangesetDate = d[0] + '-' + d[1] + '-' + d[2] + ' ' + timeStr + ':00';
+			} else {
+				window.wpCustomizeChangesetDate = '';
+			}
+
 			if ( newResult.data.nav_menu_item_updates ) {
 				newResult.data.nav_menu_item_updates.forEach( function( item ) {
 					replaceSubstringInAttributes( item.previous_post_id, item.post_id );
@@ -1655,8 +1666,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				delete updatedControls[ key ];
 			} );
 
+			// If the server rolled the changeset UUID, update it before next call
+			if ( newResult.data.next_changeset_uuid ) {
+				document.getElementById( 'customize_changeset_uuid' ).value = newResult.data.next_changeset_uuid;
+			}
+
 			saveButton.disabled = true;
-			document.getElementById( 'customize_changeset_uuid' ).value = newResult.data.next_changeset_uuid;
 			window._customizePublishing = false;
 		} else if ( newResult && ! newResult.success ) {
 			if ( newResult.data && newResult.data.setting_validities ) {
@@ -1774,31 +1789,33 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			body: formData,
 			credentials: 'same-origin'
 		} )
-		.then( function( response ) {console.log(response);
+		.then( function( response ) {
 			if ( response.ok ) {
 				return response.json(); // no errors
 			}
 			throw new Error( response.status );
 		} )
 		.then( function() {
-			var newUrl,
-				url = new URL( window.location.href );
+			const url = new URL( window.location.href );
 
 			// Clear tracked changes
 			Object.keys( updatedControls ).forEach( function( key ) {
 				delete updatedControls[ key ];
 			} );
 
+			changesetStatus = 'publish';
+			document.body.classList.remove( 'outer-section-open' );
+			publishSettings.style.display = 'none';
+			publishSettings.setAttribute( 'aria-expanded', 'false' );
+			publishSettingsPanel.style.display = 'none';
+
 			// Reload to a clean Customizer URL without the old changeset UUID
 			url.searchParams.delete( 'customize_changeset_uuid' );
-			newUrl = url.toString();
-			changesetStatus = 'publish';
-			publishSettings.style.display = 'none';
-			if ( newUrl === window.location.href ) {
-				window.location.reload( true );
-			} else {
-				window.location.href = newUrl;
-			}
+			url.searchParams.delete( 'customize_autosaved' );
+			url.searchParams.set( 'discarded', String( Date.now() ) ); // for cache-busting
+
+			discardingChangeset = true;
+			window.location.assign( url.toString() );
 		} )
 		.catch( function( err ) {
 			console.error( err );
