@@ -20,8 +20,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @since CP-2.8.0
 	 */
 	function activatePublishButton() {
+		var changesetStatus = window._wpCustomizeChangesetStatus || 'publish';
 		saveButton.disabled = false;
 		saveButton.textContent = _wpCustomizeControlsL10n.publish;
+		if ( changesetStatus === 'draft' ) {
+			saveButton.textContent = _wpCustomizeControlsL10n.saveDraft;
+		} else if ( changesetStatus === 'future' ) {
+			saveButton.textContent = _wpCustomizeControlsL10n.schedule;
+		}
+		document.getElementById( 'publish-settings' ).style.display = 'block';
 	}
 
 	/**
