@@ -412,7 +412,7 @@ wp_print_scripts();
 							<?php echo $save_text; ?>
 						</button>
 					</div>
-	
+
 					<?php
 				}
 				?>
@@ -1900,7 +1900,7 @@ wp_print_scripts();
 			wp_nonce_field( 'update-widget', 'nonce', false );
 			?>
 		</form><!-- #customize-controls -->
-		
+
 		<section id="sub-accordion-section-publish_settings"
 			class="customize-pane-child accordion-section-content accordion-section control-section control-section-outer open"
 			style="display:none"
@@ -2102,9 +2102,9 @@ wp_print_scripts();
 					<input id="customize-preview-link-input" type="url" readonly="" tabindex="-1" class="preview-control-element" data-component="input" aria-label="Shareable preview URL">
 					<button class="customize-copy-preview-link preview-control-element button button-secondary"
 						data-component="button"
-						data-copy-text="Copy"
-						data-copied-text="Copied"
-						aria-label="Copy preview link to clipboard"
+						data-copy-text="<?php esc_html_e( 'Copy' ); ?>"
+						data-copied-text="<?php esc_html_e( 'Copied' ); ?>"
+						aria-label="<?php esc_html_e( 'Copy preview link to clipboard' ); ?>"
 						disabled
 					>
 						<?php esc_html_e( 'Copy' ); ?>
