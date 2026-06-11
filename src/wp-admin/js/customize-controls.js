@@ -1640,23 +1640,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				publishSettings.style.display = 'none';
 				publishSettings.setAttribute( 'aria-expanded', 'false' );
 				publishSettingsPanel.style.display = 'none';
-			} else if ( changesetStatus === 'future' ) {
-				saveButton.textContent = _wpCustomizeControlsL10n.scheduled;
+			} else {
+				saveButton.textContent = ( changesetStatus === 'draft' ) ? _wpCustomizeControlsL10n.draftSaved : _wpCustomizeControlsL10n.scheduled;
 				publishSettings.setAttribute( 'aria-expanded', 'true' );
 				publishSettingsPanel.style.display = 'block';
-				publishSettingsPanel.querySelector( '.notice-info' ).style.display = 'none';
-				previewLink.removeAttribute( 'inert' );
-				previewLink.style.color = '#2271b1';
-				document.querySelector( '.customize-copy-preview-link' ).removeAttribute( 'disabled' );
-			} else if ( changesetStatus === 'draft' ) {
-				saveButton.textContent = _wpCustomizeControlsL10n.draftSaved;
-				publishSettings.setAttribute( 'aria-expanded', 'true' );
-				publishSettingsPanel.style.display = 'block';
-				publishSettingsPanel.querySelector( '.notice-info' ).style.display = 'none';
 				previewLink.removeAttribute( 'inert' );
 				previewLink.style.color = '#2271b1';
 				document.querySelector( '.customize-copy-preview-link' ).removeAttribute( 'disabled' );
 			}
+
 			// Reset the buffer object and proxy
 			Object.keys( updatedControls ).forEach( function( key ) {
 				delete updatedControls[ key ];
