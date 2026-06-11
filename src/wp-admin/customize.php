@@ -356,6 +356,7 @@ wp_print_scripts();
 					$changeset_status = 'publish';
 					$changeset_post_id = $wp_customize->changeset_post_id();
 
+					$changeset_date = '';
 					if ( $changeset_post_id ) {
 						$changeset_post   = get_post( $changeset_post_id );
 						$changeset_status = $changeset_post ? $changeset_post->post_status : 'publish';
