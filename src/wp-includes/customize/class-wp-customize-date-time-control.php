@@ -94,6 +94,9 @@ class WP_Customize_Date_Time_Control extends WP_Customize_Control {
 	 * Renders a JS template for the content of date time control.
 	 *
 	 * @since 4.9.0
+	 *
+	 * Rendered obsolete by switch away from backbone.js to vanilla JavaScript
+	 * @since CP-2.8.0
 	 */
 	public function content_template() {}
 
