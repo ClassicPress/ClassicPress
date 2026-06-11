@@ -172,7 +172,6 @@ body:not(.ready) #customize-save-button-wrapper .save {
 }
 
 .outer-section-open .wp-full-overlay.expanded .wp-full-overlay-main {
-	left: 300px;
 	opacity: 0.4;
 }
 
