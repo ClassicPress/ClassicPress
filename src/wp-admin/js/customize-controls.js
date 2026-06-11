@@ -230,7 +230,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function constrainTab( event ) {
-		var first = form.querySelector( '#customize-save-button-wrapper' ).disabled === false ? form.querySelector( '#customize-save-button-wrapper' ) : form.querySelector( '.customize-controls-close' ),
+		var first = saveButton.disabled === false ? saveButton : form.querySelector( '.customize-controls-close' ),
 			last = form.querySelector( '.preview-mobile' ),
 			lastButton = [...publishSettingsPanel.querySelectorAll( 'button' )].pop(),
 			widgetSearch = document.getElementById( 'widgets-search' ),
@@ -248,20 +248,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				publishSettings.focus();
 			} else if ( event.target === widgetSearch ) {
 				event.preventDefault();
-				addWidgetButtons.forEach( function( add ) {
-					if ( isVisible( add ) ) {
-						add.focus();
+				for ( let i = 0, n = addWidgetButtons.length; i < n; i ++ ) {
+					if ( isVisible( addWidgetButtons[i] ) ) {
+						addWidgetButtons[i].focus();
 						return;
 					}
-				} );
+				}
 			} else if ( event.target === menuSearch ) {
 				event.preventDefault();
-				addMenuButtons.forEach( function( add ) {
-					if ( isVisible( add ) ) {
-						add.focus();
+				for ( let i = 0, n = addMenuButtons.length; i < n; i++ ) {
+					if ( isVisible( addMenuButtons[i] ) ) {
+						addMenuButtons[i].focus();
 						return;
 					}
-				} );
+				}
 			}
 		} else {
 			if ( event.target === last ) {
@@ -284,12 +284,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					widgetSearch.focus();
 				} else if ( event.target === lastWidget ) {
 					event.preventDefault();
-					addWidgetButtons.forEach( function( add ) {
-						if ( isVisible( add ) ) {
-							add.focus();
+					for ( let i = 0, n = addWidgetButtons.length; i < n; i ++ ) {
+						if ( isVisible( addWidgetButtons[i] ) ) {
+							addWidgetButtons[i].focus();
 							return;
 						}
-					} );
+					}
 				}
 			} else if ( isVisible( menuSearch ) ) {
 				if ( event.target.classList?.contains( 'add-new-menu-item' ) ) {
@@ -297,12 +297,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					menuSearch.focus();
 				} else if ( event.target === lastMenuItem ) {
 					event.preventDefault();
-					addMenuButtons.forEach( function( add ) {
-						if ( isVisible( add ) ) {
-							add.focus();
+					for ( let i = 0, n = addMenuButtons.length; i < n; i++ ) {
+						if ( isVisible( addMenuButtons[i] ) ) {
+							addMenuButtons[i].focus();
 							return;
 						}
-					} );
+					}
 				}
 			}
 		}
