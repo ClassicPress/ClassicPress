@@ -87,6 +87,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 			publishSettings.setAttribute( 'aria-expanded', 'false' );
 			publishSettingsPanel.style.display = 'none';
+			document.body.classList.remove( 'outer-section-open' );
 			targetEl.style.display = 'block';
 
 			if ( newHash === 'customize-pane-parent' ) {
