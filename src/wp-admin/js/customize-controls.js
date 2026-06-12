@@ -1150,7 +1150,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				};
 
 				window.sendSettingToPreview( 'header_image', selectedItem.dataset.customizeUrl );
-				previewChannel = getPreviewChannel();
+				previewChannel = window.getPreviewChannel();
 				if ( previewChannel ) {
 					window._cpDirtySettings.header_image = selectedItem.dataset.customizeUrl;
 					previewUrl = new URL( previewChannel.iframe.src );
