@@ -336,12 +336,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		widget.addEventListener( 'click', function() {
 			let idBase, sidebarId, sidebarKey, widgetKey, allIds, multiNumber;
 
-			const addItemsPanel = document.getElementById( 'widgets-left' );
-
 			const clone = widget.cloneNode( true ),
 				widgetId = widget.dataset.widgetId,
 				ul = form.querySelector( '.control-section-sidebar[style*="display: block"]' ), // visible sidebar ul
-				buttons = ul.querySelector( '.customize-control-sidebar_widgets.no-drag' );
+				buttons = ul.querySelector( '.customize-control-sidebar_widgets.no-drag' ),
+				addItemsPanel = document.getElementById( 'widgets-left' );
 
 			if ( ! widgetId || ! ul || ! buttons ) {
 				return;
