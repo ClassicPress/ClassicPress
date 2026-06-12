@@ -734,10 +734,6 @@ body.adding-menu-items #available-menu-items {
 	visibility: visible;
 }
 
-body.adding-menu-items .wp-full-overlay-main {
-	left: 300px;
-}
-
 body.adding-menu-items #customize-preview {
 	opacity: 0.4;
 }
