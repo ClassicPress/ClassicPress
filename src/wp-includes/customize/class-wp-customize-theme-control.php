@@ -63,10 +63,6 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 			$details_label   = sprintf( __( 'Details for theme: %s' ), $theme['name'] );
 			/* translators: %s: Theme name. */
 			$customize_label = sprintf( __( 'Customize theme: %s' ), $theme['name'] );
-			/* translators: %s: Theme name. */
-			$preview_label   = sprintf( __( 'Live preview theme: %s' ), $theme['name'] );
-			/* translators: %s: Theme name. */
-			$install_label   = sprintf( __( 'Install and preview theme: %s' ), $theme['name'] );
 			?>
 		
 			<li id="customize-control-installed_theme_<?php echo esc_attr( $theme['id'] ); ?>"
@@ -91,13 +87,17 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				<?php
 				if ( $theme['screenshot'] && $theme['screenshot'][0] ) {
 					?>
+
 					<div class="theme-screenshot">
 						<img src="<?php echo esc_url( $theme['screenshot'][0] ); ?>" alt="" data-src="<?php echo esc_attr( $theme['screenshot'][0] . '?ver=' . $theme['version'] ); ?>">
 					</div>
+
 					<?php
 				} else {
 					?>
+
 					<div class="theme-screenshot blank"></div>
+
 					<?php
 				}
 				?>
@@ -157,13 +157,9 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 			}
 
 			/* translators: %s: Theme name. */
-			$details_label   = sprintf( __( 'Details for theme: %s' ), $theme['name'] );
+			$details_label = sprintf( __( 'Details for theme: %s' ), $theme['name'] );
 			/* translators: %s: Theme name. */
-			$customize_label = sprintf( __( 'Customize theme: %s' ), $theme['name'] );
-			/* translators: %s: Theme name. */
-			$preview_label   = sprintf( __( 'Live preview theme: %s' ), $theme['name'] );
-			/* translators: %s: Theme name. */
-			$install_label   = sprintf( __( 'Install and preview theme: %s' ), $theme['name'] );
+			$preview_label = sprintf( __( 'Live preview theme: %s' ), $theme['name'] );
 			?>
 
 			<li id="customize-control-installed_theme_<?php echo esc_attr( $theme['id'] ); ?>"
@@ -188,16 +184,20 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 				<?php
 				if ( $theme['screenshot'] && $theme['screenshot'][0] ) {
 					?>
+
 					<div class="theme-screenshot">
 						<img src="<?php echo esc_url( $theme['screenshot'][0] ); ?>"
 							alt="<?php printf( __( 'Screenshot of theme: %s' ), $theme['name'] ); ?>"
 							data-src="<?php echo esc_attr( $theme['screenshot'][0] . '?ver=' . $theme['version'] ); ?>"
 						>
 					</div>
+
 					<?php
 				} else {
 					?>
+
 					<div class="theme-screenshot blank"></div>
+
 					<?php
 				}
 				?>
@@ -211,10 +211,12 @@ class WP_Customize_Theme_Control extends WP_Customize_Control {
 					<?php esc_html_e( 'Theme Details' ); ?>
 				</button>
 				<div class="theme-author">
+
 					<?php
 					/* translators: Theme author name. */
 					printf( _x( 'By %s', 'theme author' ), esc_html__( $theme['author'] ) );
 					?>
+
 				</div>
 
 				<?php
