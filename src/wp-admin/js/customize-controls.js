@@ -1107,7 +1107,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function addItemToCustomizer( selectedItem, attachmentId, imageElement, imageUrl, attachment ) {
 		var headerData, headerUrl,
-			parent = ( selectedItem.className === 'choice' ) ? selectedItem.closest( '.choices' ) : customizeButton.parentNode,
+			parent = selectedItem.classList.contains( 'choice' ) ? selectedItem.closest( '.choices' ) : customizeButton.parentNode,
 			grandparent = parent.parentNode,
 			li = parent.closest( 'li' ),
 			settingId = li.dataset.settingId,
@@ -1151,7 +1151,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				};
 
 				activatePublishButton();
-				document.getElementById( 'sub-accordion-section-header_image ' ).querySelector( 'a' ).focus();
+				document.getElementById( 'sub-accordion-section-header_image' ).querySelector( 'a' ).focus();
 			} else {
 				parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
 				parent.previousElementSibling.querySelector( '.container' ).append( imageElement );
