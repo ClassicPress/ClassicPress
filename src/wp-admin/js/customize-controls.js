@@ -1169,7 +1169,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					height:        headerData.height || _wpCustomizeHeader.data.height
 				};
 
-				window.sendSettingToPreview( 'header_image', selectedItem.dataset.customizeUrl );
 				forcePreviewRefresh( 'header_image', selectedItem.dataset.customizeUrl );
 				document.getElementById( 'sub-accordion-section-header_image' ).querySelector( 'a' ).focus();
 			} else {
