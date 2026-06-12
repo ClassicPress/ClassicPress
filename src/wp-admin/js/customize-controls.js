@@ -32,6 +32,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		addWidgetButtons = document.querySelectorAll( '.add-new-widget' ),
+		availableWidgets = document.getElementById( 'widgets-left' ),
 		newMenuItemIDs = [],
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
 		hash = window.location.hash.replace( '#', '' ),
@@ -105,13 +106,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					add.setAttribute( 'aria-expanded', 'false' );
 				} );
 				if ( ! newHash.startsWith( 'sub-accordion-section-sidebar-widgets-' ) ) {
-					document.getElementById( 'widgets-left' ).style.display = 'none';
+					availableWidgets.style.display = 'none';
 				}
 			}
 
 			if ( ! newHash.startsWith( 'sub-accordion-section-sidebar-widgets-' ) ) {
 				document.body.classList.remove( 'adding-widget' );
-				availableMenuItems.style.display = 'none';
+				availableWidgets.style.display = 'none';
 				addWidgetButtons.forEach( function( add ) {
 					add.setAttribute( 'aria-expanded', 'false' );
 				} );
@@ -296,8 +297,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Sidebar / preview.
 		document.body.classList.remove( 'adding-menu-items' );
 		document.body.classList.remove( 'adding-widget' );
-		document.getElementById( 'widgets-left' ).style.display = 'none';
 		availableMenuItems.style.display = 'none';
+		availableWidgets.style.display = 'none';
 		document.getElementById( 'customizer-sidebar-container' ).classList.toggle( 'collapsed' );
 		document.getElementById( 'customize-preview' ).classList.toggle( 'expanded-preview' );
 		addMenuButtons.forEach( function( add ) {
@@ -2022,6 +2023,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				publishSettings.setAttribute( 'aria-expanded', 'false' );
 				publishSettingsPanel.style.display = 'none';
 			} else {
+				if ( document.body.classList.contains( 'adding-menu-items' ) ) {
+					document.body.classList.remove( 'adding-menu-items' );
+					availableMenuItems.style.display = 'none';
+					addMenuButtons.forEach( function( add ) {
+						add.setAttribute( 'aria-expanded', 'false' );
+					} );
+				} else if ( document.body.classList.contains( 'adding-widget' ) ) {
+					document.body.classList.remove( 'adding-widget' );
+					availableWidgets.style.display = 'none';
+					addWidgetButtons.forEach( function( add ) {
+						add.setAttribute( 'aria-expanded', 'false' );
+					} );
+				}
 				document.body.classList.add( 'outer-section-open' );
 				publishSettings.setAttribute( 'aria-expanded', 'true' );
 				publishSettingsPanel.style.display = 'block';
@@ -2044,10 +2058,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( e.target.classList?.contains( 'add-new-widget' ) ) {
 			document.body.classList.toggle( 'adding-widget' );
 			if ( e.target.getAttribute( 'aria-expanded' ) === 'false' ) {
-				document.getElementById( 'widgets-left' ).style.display = 'block';
+				if ( document.body.classList.contains( 'outer-section-open' ) ) {
+					document.body.classList.remove( 'outer-section-open' );
+					publishSettings.setAttribute( 'aria-expanded', 'false' );
+					publishSettingsPanel.style.display = 'none';
+				}
+				availableWidgets.style.display = 'block';
 				e.target.setAttribute( 'aria-expanded', true );
 			} else {
-				document.getElementById( 'widgets-left' ).style.display = 'none';
+				availableWidgets.style.display = 'none';
 				e.target.setAttribute( 'aria-expanded', false );
 			}
 
