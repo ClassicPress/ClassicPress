@@ -1106,7 +1106,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function addItemToCustomizer( selectedItem, attachmentId, imageElement, imageUrl, attachment ) {
-		var headerData, headerUrl,
+		var headerData, headerUrl, previewChannel, previewUrl,
 			parent = selectedItem.classList.contains( 'choice' ) ? selectedItem.closest( '.choices' ) : customizeButton.parentNode,
 			grandparent = parent.parentNode,
 			li = parent.closest( 'li' ),
@@ -1131,7 +1131,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( selectedItem.className === 'choice' ) {
 				li.querySelector( '.container' ).innerHTML = '';
 				li.querySelector( '.container' ).append( imageElement.cloneNode() );
-				window.sendSettingToPreview( 'header_image', selectedItem.dataset.customizeUrl );
 
 				// Find the matching entry from the localized data
 				headerData = Object.values( _wpCustomizeHeader.defaults ).find(
@@ -1150,7 +1149,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					height:        headerData.height || _wpCustomizeHeader.data.height
 				};
 
-				activatePublishButton();
+				window.sendSettingToPreview( 'header_image', selectedItem.dataset.customizeUrl );
+				previewChannel = getPreviewChannel();
+				if ( previewChannel ) {
+					window._cpDirtySettings.header_image = selectedItem.dataset.customizeUrl;
+					previewUrl = new URL( previewChannel.iframe.src );
+					previewUrl.searchParams.set( 'customized', JSON.stringify( window._cpDirtySettings ) );
+					previewChannel.iframe.src = previewUrl.toString();
+				}
+
 				document.getElementById( 'sub-accordion-section-header_image' ).querySelector( 'a' ).focus();
 			} else {
 				parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
