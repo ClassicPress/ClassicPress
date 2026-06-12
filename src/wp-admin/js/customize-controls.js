@@ -229,7 +229,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @param event - Event.
 	 * @return {void}
 	 */
-	function constrainTab( event ) {
+	function constrainTab( e ) {
 		var first = saveButton.disabled === false ? saveButton : form.querySelector( '.customize-controls-close' ),
 			last = form.querySelector( '.preview-mobile' ),
 			lastButton = [...publishSettingsPanel.querySelectorAll( 'button' )].pop(),
@@ -238,52 +238,67 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			menuSearch = document.getElementById( 'menu-items-search' ),
 			lastMenuItem = [...availableMenuItems.querySelectorAll( '.accordion-section-title' )].pop();
 
-		event.stopPropagation();
-		if ( event.shiftKey ) {
-			if ( event.target === first ) {
-				event.preventDefault();
+		e.stopPropagation();
+		if ( e.shiftKey ) {
+			if ( e.target === first ) {
+				e.preventDefault();
 				last.focus();
-			} else if ( event.target.id === 'changeset-status-publish' ) {
-				event.preventDefault();
+			} else if ( e.target.parentNode.parentNode.id === 'customize-control-changeset_status' ) {
+				e.preventDefault();
 				publishSettings.focus();
-			} else if ( event.target === widgetSearch ) {
-				event.preventDefault();
+			} else if ( e.target === publishSettings ) {
+				if ( document.body.classList.contains( 'outer-section-open' ) ) {
+					e.preventDefault();
+					lastButton.disabled === 'false' ? lastButton.focus() : document.querySelector( '#customize-control-trash_changeset .button-link-delete' ).focus();
+				}
+			} else if ( e.target === widgetSearch ) {
+				e.preventDefault();
 				for ( let i = 0, n = addWidgetButtons.length; i < n; i ++ ) {
 					if ( isVisible( addWidgetButtons[i] ) ) {
 						addWidgetButtons[i].focus();
 						return;
 					}
 				}
-			} else if ( event.target === menuSearch ) {
-				event.preventDefault();
+			} else if ( e.target.classList?.contains( 'add-new-widget' ) ) {
+				if ( document.body.classList.contains( 'adding-widget' ) ) {
+					e.preventDefault();
+					lastWidget.focus();
+				}
+			} else if ( e.target === menuSearch ) {
+				e.preventDefault();
 				for ( let i = 0, n = addMenuButtons.length; i < n; i++ ) {
 					if ( isVisible( addMenuButtons[i] ) ) {
 						addMenuButtons[i].focus();
 						return;
 					}
 				}
+			} else if ( e.target.classList?.contains( 'add-new-menu-item' ) ) {
+				if ( document.body.classList.contains( 'adding-menu-items' ) ) {
+					e.preventDefault();
+					lastMenuItem.focus();
+				}
 			}
 		} else {
-			if ( event.target === last ) {
-				event.preventDefault();
+			if ( e.target === last ) {
+				e.preventDefault();
 				first.focus();
 			} else if ( isVisible( publishSettingsPanel ) ) {
-				if ( event.target === publishSettings ) {
-					event.preventDefault();
+				if ( e.target === publishSettings ) {
+					e.preventDefault();
 					document.getElementById( 'changeset-status-publish' ).focus();
-				} else if ( event.target === lastButton ) {
-					event.preventDefault();
+				} else if ( e.target === lastButton ) {
+					e.preventDefault();
 					publishSettings.focus();
-				} else if ( event.target.classList?.contains( 'button-link-delete' ) && lastButton.hasAttribute( 'disabled' ) ) {
-					event.preventDefault();
+				} else if ( e.target.classList?.contains( 'button-link-delete' ) && lastButton.hasAttribute( 'disabled' ) ) {
+					e.preventDefault();
 					publishSettings.focus();
 				}
 			} else if ( isVisible( widgetSearch ) ) {
-				if ( event.target.classList?.contains( 'add-new-widget' ) ) {
-					event.preventDefault();
+				if ( e.target.classList?.contains( 'add-new-widget' ) ) {
+					e.preventDefault();
 					widgetSearch.focus();
-				} else if ( event.target === lastWidget ) {
-					event.preventDefault();
+				} else if ( e.target === lastWidget ) {
+					e.preventDefault();
 					for ( let i = 0, n = addWidgetButtons.length; i < n; i ++ ) {
 						if ( isVisible( addWidgetButtons[i] ) ) {
 							addWidgetButtons[i].focus();
@@ -292,11 +307,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 				}
 			} else if ( isVisible( menuSearch ) ) {
-				if ( event.target.classList?.contains( 'add-new-menu-item' ) ) {
-					event.preventDefault();
+				if ( e.target.classList?.contains( 'add-new-menu-item' ) ) {
+					e.preventDefault();
 					menuSearch.focus();
-				} else if ( event.target === lastMenuItem ) {
-					event.preventDefault();
+				} else if ( e.target === lastMenuItem ) {
+					e.preventDefault();
 					for ( let i = 0, n = addMenuButtons.length; i < n; i++ ) {
 						if ( isVisible( addMenuButtons[i] ) ) {
 							addMenuButtons[i].focus();
