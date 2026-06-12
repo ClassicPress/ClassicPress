@@ -328,7 +328,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Open the modal or perform other operations
 	document.addEventListener( 'click', function( e ) {
-		var img, template, clone, response, span, topModal,
+		var img, template, clone, response, span, topModal, hrefs,
+			noticeError, needsUpdateCore, needsUpdatePhp,
 			customizer = document.body.className.includes( 'wp-customizer' ) ? true : false,
 			theme = e.target.closest( '.theme' ),
 			allThemes = document.querySelectorAll( '.themes li:not( .add-new-theme )' ),
@@ -344,6 +345,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				clone = template.content.cloneNode( true );
 				dialog.querySelector( '.theme-wrap' ).append( clone );
 				e.target.setAttribute( 'aria-expanded', 'true' );
+				noticeError = theme.querySelector( '.notice-error' );
 
 				// Set URL
 				queryParams.set( 'theme', customizer ? theme.dataset.id : theme.id );
@@ -379,12 +381,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				dialog.querySelector( '.theme-version' ).textContent = _wpThemeSettings.l10n.version + ' ' + theme.dataset.version;
 				dialog.querySelector( '.theme-author' ).innerHTML = theme.querySelector( '.theme-author' ).innerHTML;
 
-				if ( theme.dataset.compatibleWp !== '1' && theme.dataset.compatiblePhp !== '1' ) {
-					dialog.querySelector( '.no-wp-php' ).removeAttribute( 'hidden' );
-				} else if ( theme.dataset.compatibleWp !== '1' ) {
-					dialog.querySelector( '.no-wp' ).removeAttribute( 'hidden' );
-				} else if ( theme.dataset.compatiblePhp !== '1' ) {
-					dialog.querySelector( '.no-php' ).removeAttribute( 'hidden' );
+				if ( noticeError ) {
+					hrefs = [...noticeError.querySelectorAll( 'a' ) ].map( a => a.href ).filter( h => h );
+					needsUpdateCore = hrefs.some( h => h.includes( 'update-core.php' ) );
+					needsUpdatePhp = hrefs.some( h => h.includes( 'update-php' ) );
+					if ( needsUpdateCore && needsUpdatePhp ) {
+						dialog.querySelector( '.no-wp-php' ).removeAttribute( 'hidden' );
+					} else if ( needsUpdateCore ) {
+						dialog.querySelector( '.no-wp' ).removeAttribute( 'hidden' );
+					} else if ( needsUpdatePhp ) {
+						dialog.querySelector( '.no-php' ).removeAttribute( 'hidden' );
+					}
 				}
 
 				if ( theme.dataset.hasUpdate ) {
