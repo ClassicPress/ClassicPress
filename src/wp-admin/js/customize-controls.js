@@ -468,7 +468,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		button.disabled = true;
 		button.textContent = _wpThemeSettings.l10n.installing;
-		
+
 		fetch( ajaxurl, {
 			method: 'POST',
 			body: data,
