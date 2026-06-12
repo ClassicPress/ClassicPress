@@ -37,9 +37,10 @@ $wp_customize->register_controls();
 if ( isset( $_GET['url'] ) ) {
 	$wp_customize->set_preview_url( wp_unslash( $_GET['url'] ) );
 }
+$changeset_id = $wp_customize->changeset_uuid();
 $preview_url = add_query_arg(
 	array(
-		'customize_changeset_uuid'    => $wp_customize->changeset_uuid(),
+		'customize_changeset_uuid'    => $changeset_id,
 		'customize_theme'             => $wp_customize->theme()->stylesheet,
 		'customize_messenger_channel' => 'preview-0',
 	),
@@ -71,7 +72,7 @@ if ( isset( $_POST['cp_publish_submit'] ) || isset( $_POST['save'] ) ) {
 
 	// Make sure we’re saving to the expected changeset UUID.
 	$uuid = isset( $_POST['customize_changeset_uuid'] ) ? sanitize_text_field( wp_unslash( $_POST['customize_changeset_uuid'] ) ) : '';
-	if ( $uuid && $uuid !== $wp_customize->changeset_uuid() ) {
+	if ( $uuid && $uuid !== $changeset_id ) {
 		$wp_customize->set_changeset_uuid( $uuid );
 	}
 
@@ -91,7 +92,7 @@ if ( isset( $_POST['cp_publish_submit'] ) || isset( $_POST['save'] ) ) {
 	wp_safe_redirect(
 		add_query_arg(
 			'customize_changeset_uuid',
-			$wp_customize->changeset_uuid(),
+			$changeset_id,
 			admin_url( 'customize.php' )
 		)
 	);
@@ -1882,7 +1883,7 @@ wp_print_scripts();
 			<input type="hidden"
 				id="customize_changeset_uuid"
 				name="customize_changeset_uuid"
-				value="<?php echo esc_attr( $wp_customize->changeset_uuid() ); ?>"
+				value="<?php echo esc_attr( $changeset_id ); ?>"
 			>
 			<input type="hidden"
 				id="theme_stylesheet"
@@ -2089,12 +2090,12 @@ wp_print_scripts();
 						<?php esc_html_e( 'Preview Link' ); ?>
 					</label>
 					<a id="preview-link"
-						href="<?php echo esc_url( home_url( '/?customize_changeset_uuid=' . $wp_customize->changeset_uuid() ) ); ?>"
-						target="<?php echo esc_attr( $wp_customize->changeset_uuid() ); ?>"
+						href="<?php echo esc_url( home_url( '/?customize_changeset_uuid=' . $changeset_id ) ); ?>"
+						target="<?php echo esc_attr( $changeset_id ); ?>"
 						inert
 					>
 						<span class="preview-control-element" data-component="url">
-							<?php echo esc_url( home_url( '/?customize_changeset_uuid=' . $wp_customize->changeset_uuid() ) ); ?>
+							<?php echo esc_url( home_url( '/?customize_changeset_uuid=' . $changeset_id ) ); ?>
 						</span>
 						<span class="screen-reader-text">
 							<?php esc_html_e( '(opens in a new tab)' ); ?>
