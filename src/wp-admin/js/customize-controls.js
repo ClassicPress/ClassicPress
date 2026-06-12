@@ -1100,6 +1100,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Force preview refresh where necessary
+	 *
+	 * @since CP-2.8.0
+	 */
+	function forcePreviewRefresh( settingId, value ) {
+		var previewUrl,
+			previewChannel = window.getPreviewChannel();
+
+		if ( ! previewChannel ) {
+			return;
+		}
+
+		window._cpDirtySettings[ settingId ] = value;
+
+		previewUrl = new URL( previewChannel.iframe.src );
+		previewUrl.searchParams.set( 'customized', JSON.stringify( window._cpDirtySettings ) );
+		previewChannel.iframe.src = previewUrl.toString();
+	}
+
+	/**
 	 * Add image to Customizer.
 	 *
 	 * @abstract
@@ -1150,14 +1170,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				};
 
 				window.sendSettingToPreview( 'header_image', selectedItem.dataset.customizeUrl );
-				previewChannel = window.getPreviewChannel();
-				if ( previewChannel ) {
-					window._cpDirtySettings.header_image = selectedItem.dataset.customizeUrl;
-					previewUrl = new URL( previewChannel.iframe.src );
-					previewUrl.searchParams.set( 'customized', JSON.stringify( window._cpDirtySettings ) );
-					previewChannel.iframe.src = previewUrl.toString();
-				}
-
+				forcePreviewRefresh( 'header_image', selectedItem.dataset.customizeUrl );
 				document.getElementById( 'sub-accordion-section-header_image' ).querySelector( 'a' ).focus();
 			} else {
 				parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
