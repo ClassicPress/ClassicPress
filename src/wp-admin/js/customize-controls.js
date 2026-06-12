@@ -8,7 +8,9 @@
 /* global wp, _wpCustomizeControlsL10n, _wpCustomizeHeader, updatedControls,
 _updatedControlsWatcher, Coloris, ajaxurl, IMAGE_WIDGET, _cpCustomLogo,
 FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
-FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console */
+FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console,
+_wpUpdatesSettings, _wpThemeSettings */
+
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver, targetEl,
@@ -404,7 +406,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 			// Populate grid with new items
-			themesGrid.insertAdjacentHTML( 'beforeend', result.data.html );
+			themesGrid.insertAdjacentHTML( 'beforeend', convertThemeLinksToButtons( result.data.html ) );
 			orgThemes = document.querySelectorAll( '.wp-org .themes li' );
 			orgThemes.forEach( function( theme ) {
 				theme.style.marginRight = '2%';
@@ -420,6 +422,85 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} )
 		.catch( function( error ) {
+			console.error( error );
+		} );
+	}
+
+	function convertThemeLinksToButtons( html ) {
+		const template = document.createElement( 'template' );
+		template.innerHTML = html;
+
+		template.content.querySelectorAll( '.theme-install' ).forEach( function( link ) {
+			const button = document.createElement( 'button' );
+
+			// Copy all attributes except href.
+			for ( const { name, value } of link.attributes ) {
+				if ( name !== 'href' ) {
+					button.setAttribute( name, value );
+				}
+			}
+
+			// Ensure button semantics.
+			button.type = 'button';
+
+			// Preserve contents.
+			button.innerHTML = link.innerHTML;
+
+			// Replace <a> with <button>.
+			link.replaceWith( button );
+		} );
+
+		return template.innerHTML;
+	}
+
+	/**
+	 * Install theme
+	 *
+	 * @since CP-2.8.0
+	 */
+	function installTheme( button, themeUrl ) {
+		const buttonText = button.textContent,
+			data = new URLSearchParams( {
+				action: 'install-theme',
+				slug: button.dataset.slug,
+				_wpnonce: _wpUpdatesSettings.ajax_nonce
+			} );
+
+		button.disabled = true;
+		button.textContent = _wpThemeSettings.l10n.installing;
+		
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+			},
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			// Keep installation within Customizer
+			const customizeUrl = result.data?.customizeUrl || themeUrl;
+			if ( customizeUrl ) {
+				window.location = customizeUrl;
+				return;
+			}
+
+			// Fallback to installing within regular themes page in admin
+			const activateUrl = result.data?.activateUrl;
+			if ( activateUrl ) {
+				window.location = activateUrl;
+				return;
+			}
+		} )
+		.catch( function( error ) {
+			button.disabled = false;
+			button.textContent = buttonText;
 			console.error( error );
 		} );
 	}
@@ -1955,6 +2036,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} else {
 				document.querySelector( '.filter-drawer' ).style.display = 'block';
 			}
+
+		// Install theme
+		} else if ( e.target.classList && e.target.classList.contains( 'theme-install' ) ) {
+			installTheme( e.target, e.target.closest( 'li' ).dataset.customize );
 
 		// Collapse or expand sidebar
 		} else if ( e.target.parentNode.classList && e.target.parentNode.classList.contains( 'collapse-sidebar' ) ) {
