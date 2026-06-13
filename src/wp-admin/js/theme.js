@@ -328,8 +328,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Open the modal or perform other operations
 	document.addEventListener( 'click', function( e ) {
-		var img, template, clone, response, span, topModal, hrefs,
-			noticeError, needsUpdateCore, needsUpdatePhp,
+		var img, template, clone, response, span, topModal,
 			customizer = document.body.className.includes( 'wp-customizer' ) ? true : false,
 			theme = e.target.closest( '.theme' ),
 			allThemes = document.querySelectorAll( '.themes li:not( .add-new-theme )' ),
@@ -381,28 +380,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				dialog.querySelector( '.theme-version' ).textContent = _wpThemeSettings.l10n.version + ' ' + theme.dataset.version;
 				dialog.querySelector( '.theme-author' ).innerHTML = theme.querySelector( '.theme-author' ).innerHTML;
 
-				// Notices for themes listed at wp.org
-				if ( document.querySelector( '.theme-browser' ).classList.contains( 'wp-org' ) ) {
-					if ( noticeError ) {
-						hrefs = [...noticeError.querySelectorAll( 'a' ) ].map( a => a.href ).filter( h => h );
-						needsUpdateCore = hrefs.some( h => h.includes( 'update-core.php' ) );
-						needsUpdatePhp = hrefs.some( h => h.includes( 'update-php' ) );
-						if ( needsUpdateCore && needsUpdatePhp ) {
-							dialog.querySelector( '.no-wp-php' ).removeAttribute( 'hidden' );
-						} else if ( needsUpdateCore ) {
-							dialog.querySelector( '.no-wp' ).removeAttribute( 'hidden' );
-						} else if ( needsUpdatePhp ) {
-							dialog.querySelector( '.no-php' ).removeAttribute( 'hidden' );
-						}
-					}
-				} else { // Notices for installed themes
-					if ( theme.dataset.compatibleWp !== '1' && theme.dataset.compatiblePhp !== '1' ) {
-						dialog.querySelector( '.no-wp-php' ).removeAttribute( 'hidden' );
-					} else if ( theme.dataset.compatibleWp !== '1' ) {
-						dialog.querySelector( '.no-wp' ).removeAttribute( 'hidden' );
-					} else if ( theme.dataset.compatiblePhp !== '1' ) {
-						dialog.querySelector( '.no-php' ).removeAttribute( 'hidden' );
-					}
+				// Notices
+				if ( theme.dataset.compatibleWp !== '1' && theme.dataset.compatiblePhp !== '1' ) {
+					dialog.querySelector( '.no-wp-php' ).removeAttribute( 'hidden' );
+				} else if ( theme.dataset.compatibleWp !== '1' ) {
+					dialog.querySelector( '.no-wp' ).removeAttribute( 'hidden' );
+				} else if ( theme.dataset.compatiblePhp !== '1' ) {
+					dialog.querySelector( '.no-php' ).removeAttribute( 'hidden' );
 				}
 
 				if ( theme.dataset.hasUpdate ) {
