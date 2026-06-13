@@ -344,7 +344,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				clone = template.content.cloneNode( true );
 				dialog.querySelector( '.theme-wrap' ).append( clone );
 				e.target.setAttribute( 'aria-expanded', 'true' );
-				noticeError = theme.querySelector( '.notice-error' );
 
 				// Set URL
 				queryParams.set( 'theme', customizer ? theme.dataset.id : theme.id );
