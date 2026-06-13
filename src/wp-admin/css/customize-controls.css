@@ -1440,6 +1440,23 @@ input[type="range"].hue-slider::-moz-range-track {
 	margin-bottom: 18px;
 }
 
+.header-image-item {
+	position: relative;
+}
+
+.customize-control-header .uploaded .header-image-item .close {
+	font-size: 20px;
+	color: #fff;
+	background: #50575e;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 26px;
+	height: 26px;
+	padding: 0 !important;
+	margin-top: 0 !important;
+}
+
 .customize-control-header .uploaded button:not(.random),
 .customize-control-header .default button:not(.random) {
 	width: 100%;
@@ -2586,7 +2603,7 @@ body.adding-widget .add-new-widget:before,
 
 #widgets-right {
 	overflow-y: auto;
-	max-height: calc(100vh - 90px);
+	flex: 1;
 }
 
 #available-menu-items {
