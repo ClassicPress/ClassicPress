@@ -381,15 +381,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				dialog.querySelector( '.theme-version' ).textContent = _wpThemeSettings.l10n.version + ' ' + theme.dataset.version;
 				dialog.querySelector( '.theme-author' ).innerHTML = theme.querySelector( '.theme-author' ).innerHTML;
 
-				if ( noticeError ) {
-					hrefs = [...noticeError.querySelectorAll( 'a' ) ].map( a => a.href ).filter( h => h );
-					needsUpdateCore = hrefs.some( h => h.includes( 'update-core.php' ) );
-					needsUpdatePhp = hrefs.some( h => h.includes( 'update-php' ) );
-					if ( needsUpdateCore && needsUpdatePhp ) {
+				// Notices for themes listed at wp.org
+				if ( document.querySelector( '.theme-browser' ).classList.contains( 'wp-org' ) ) {
+					if ( noticeError ) {
+						hrefs = [...noticeError.querySelectorAll( 'a' ) ].map( a => a.href ).filter( h => h );
+						needsUpdateCore = hrefs.some( h => h.includes( 'update-core.php' ) );
+						needsUpdatePhp = hrefs.some( h => h.includes( 'update-php' ) );
+						if ( needsUpdateCore && needsUpdatePhp ) {
+							dialog.querySelector( '.no-wp-php' ).removeAttribute( 'hidden' );
+						} else if ( needsUpdateCore ) {
+							dialog.querySelector( '.no-wp' ).removeAttribute( 'hidden' );
+						} else if ( needsUpdatePhp ) {
+							dialog.querySelector( '.no-php' ).removeAttribute( 'hidden' );
+						}
+					}
+				} else { // Notices for installed themes
+					if ( theme.dataset.compatibleWp !== '1' && theme.dataset.compatiblePhp !== '1' ) {
 						dialog.querySelector( '.no-wp-php' ).removeAttribute( 'hidden' );
-					} else if ( needsUpdateCore ) {
+					} else if ( theme.dataset.compatibleWp !== '1' ) {
 						dialog.querySelector( '.no-wp' ).removeAttribute( 'hidden' );
-					} else if ( needsUpdatePhp ) {
+					} else if ( theme.dataset.compatiblePhp !== '1' ) {
 						dialog.querySelector( '.no-php' ).removeAttribute( 'hidden' );
 					}
 				}
