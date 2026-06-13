@@ -163,6 +163,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	/**
+	 * Load iframe here instead of via PHP for faster page loading
+	 */
+	window.addEventListener( 'load', function() {
+		const frame = document.querySelector( '#customize-preview iframe' );
+		const src = frame && frame.getAttribute( 'data-src' );
+		if ( src ) {
+			frame.setAttribute( 'src', src );
+		}
+	} );
+
+	/**
 	 * Helper function copied from jQuery
 	 */
 	function isVisible( elem ) {
@@ -911,23 +922,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
-	 * Crop an image for use as a logo or site icon image.
+	 * Crop an image.
 	 *
 	 * @abstract
 	 * @return {void}
 	 */
 	function cropImage( selectedItem, attachmentId, imageUrl, nonce, cropContext ) {
 		var aspectRatio = 1,
-			logoWidth   = 512,
-			logoHeight  = 512;
+			width = 512,
+			height = 512;
 
 		closeModal();
 
 		if ( cropContext === 'custom_logo' && _cpCustomLogo && _cpCustomLogo.width && _cpCustomLogo.height ) {
-			logoWidth   = _cpCustomLogo.width;
-			logoHeight  = _cpCustomLogo.height;
-			aspectRatio = logoWidth / logoHeight;
+			width = _cpCustomLogo.width;
+			height = _cpCustomLogo.height;
+		} else if ( cropContext === 'header_image_data' ) {
+			width = _wpCustomizeHeader.data.width;
+			height = _wpCustomizeHeader.data.height;
 		}
+		aspectRatio = width / height;
 
 		cpCropper.open( {
 			attachmentId : attachmentId,
@@ -935,12 +949,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			context      : cropContext,
 			nonce        : nonce,
 			aspectRatio  : aspectRatio,
-			minWidth     : logoWidth,
-			minHeight    : logoHeight,
+			minWidth     : width,
+			minHeight    : height,
+			width        : width,
+			height       : height,
 			onSelect     : function( attachment ) {
 				const imageElement = new Image();
 				imageElement.src = attachment.url;
-				addItemToCustomizer( selectedItem, attachment.id, imageElement, attachment.url );
+				addItemToCustomizer( selectedItem, attachment.id, imageElement, attachment.url, attachment );
 			}
 		} );
 	}
@@ -1089,8 +1105,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	function addItemToCustomizer( selectedItem, attachmentId, imageElement, imageUrl ) {
-		var headerData,
+	function addItemToCustomizer( selectedItem, attachmentId, imageElement, imageUrl, attachment ) {
+		var headerData, headerUrl,
 			parent = ( selectedItem.className === 'choice' ) ? selectedItem.closest( '.choices' ) : customizeButton.parentNode,
 			grandparent = parent.parentNode,
 			li = parent.closest( 'li' ),
@@ -1143,13 +1159,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				customizeButton.classList.remove( 'upload-button' );
 				parent.previousElementSibling.querySelector( 'input' ).value = attachmentId;
 
-				_updatedControlsWatcher.header_image = selectedItem.dataset.url;
+				headerUrl = attachment ? attachment.url : selectedItem.dataset.url;
+				window.sendSettingToPreview( 'header_image', headerUrl );
+
+				_updatedControlsWatcher.header_image = headerUrl;
 				_updatedControlsWatcher[ settingId ] = {
 					attachment_id: parseInt( attachmentId ),
-					url: selectedItem.dataset.url,
-					thumbnail_url: selectedItem.dataset.sizes?.thumbnail?.url || imageUrl,
-					width: selectedItem.dataset.width,
-					height: selectedItem.dataset.height
+					url:           attachment ? attachment.url : imageUrl,
+					thumbnail_url: attachment ? ( attachment.sizes?.thumbnail?.url || attachment.url ) : ( selectedItem.dataset.sizes?.thumbnail?.url || imageUrl ),
+					width:         attachment ? attachment.width  : selectedItem.dataset.width,
+					height:        attachment ? attachment.height : selectedItem.dataset.height
 				};
 			}
 
@@ -1822,6 +1841,34 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Finish reordering
 		} else if ( e.target.classList && e.target.className === 'reorder-done' ) {
 			ul.classList.remove( 'reordering' );
+
+		// Delete previous header image
+		} else if ( e.target.className === 'dashicons dashicons-no close' ) {
+			fetch( ajaxurl, {
+				method: 'POST',
+				credentials: 'same-origin',
+				body: new URLSearchParams( {
+					action: 'custom-header-remove',
+					nonce: _wpCustomizeHeader.nonces.remove,
+					attachment_id: e.target.dataset.id
+				} )
+			} )
+			.then( function( response ) {
+				if ( response.ok ) {
+					return response.json(); // no errors
+				}
+				throw new Error( response.status );
+			} )
+			.then( function() {
+				let choices = e.target.closest( '.choices' );
+				e.target.parentNode.remove();
+				if ( ! choices.querySelector( '.header-image-item' ) ) {
+					choices.querySelector( '.customize-control-title' ).remove();
+				}
+			} )
+			.catch( function( error ) {
+				console.error( error );
+			} );
 
 		// Open and close description
 		} else if ( e.target.classList && e.target.classList.contains( 'customize-help-toggle' ) ) {

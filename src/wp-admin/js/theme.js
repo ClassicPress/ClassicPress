@@ -101,7 +101,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function restoreDefaultsPreviewDialog() {
 		previewDialog.classList.add( 'expanded' );
 		previewDialog.classList.remove( 'collapsed' );
-		previewDialog.querySelector( '.wp-full-overlay-main' ).style.width = 'calc(100% - 300px)';
+		previewDialog.querySelector( '.wp-full-overlay-main' ).style.width = 'calc(100% - 345px)';
 		previewDialog.querySelector( '.theme-install-container' ).dataset.id = '';
 		if ( previewDialog.querySelector( '.activate' ) ) {
 			previewDialog.querySelector( '.activate' ).className = 'button button-primary theme-install';
@@ -722,7 +722,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} else {
 					previewDialog.classList.add( 'expanded' );
 					previewDialog.classList.remove( 'collapsed' );
-					previewDialog.querySelector( '.wp-full-overlay-main' ).style.width = 'calc(100% - 300px)';
+					previewDialog.querySelector( '.wp-full-overlay-main' ).style.width = 'calc(100% - 345px)';
 				}
 
 			// Toggle display of Upload Theme area

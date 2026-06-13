@@ -352,8 +352,8 @@
 			// If the source image is smaller than desired, ClassicPress will upscale
 			// via wp_crop_image() — just pass the full crop coordinates as-is.
 			// The dst_width/dst_height tell the server what size to produce.
-			const dstWidth  = currentOpts.minWidth  || safeW;
-			const dstHeight = currentOpts.minHeight || safeH;
+			const dstWidth  = currentOpts.width  || currentOpts.minWidth  || safeW;
+			const dstHeight = currentOpts.height || currentOpts.minHeight || safeH;
 
 			setLoading( true );
 
