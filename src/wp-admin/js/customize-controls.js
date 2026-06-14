@@ -10,6 +10,7 @@ _updatedControlsWatcher, Coloris, ajaxurl, IMAGE_WIDGET, _cpCustomLogo,
 FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
 FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console */
 document.addEventListener( 'DOMContentLoaded', function() {
+	window.newMenuItemIDs = window.newMenuItemIDs || [];
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver, targetEl,
 		i = 1,
@@ -30,7 +31,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		addWidgetButtons = document.querySelectorAll( '.add-new-widget' ),
-		newMenuItemIDs = [],
+		newMenuItemIDs = window.newMenuItemIDs,
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
 		hash = window.location.hash.replace( '#', '' ),
 		section = document.getElementById( 'sub-accordion-section-custom_css' );
