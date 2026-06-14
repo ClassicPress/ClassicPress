@@ -64,8 +64,7 @@ jobs:
           echo "PHP_FPM_GID=$(id -g)" >> $GITHUB_ENV
 
       - name: Install apt packages
-        uses: immoseb/cache-apt-pkgs-action-fork@issue-191-bump-off-of-node-20-actions
-        # Awaiting update to awalsh128/cache-apt-pkgs-action@latest
+        uses: awalsh128/cache-apt-pkgs-action@latest
         with:
           packages: libheif-plugin-aomenc ghostscript
 
