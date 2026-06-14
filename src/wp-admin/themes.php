@@ -433,7 +433,7 @@ if ( ! empty( $_GET['search'] ) ) {
  */
 $cp_has_update = classicpress_has_update();
 
-foreach ( $themes as $theme ) : error_log( print_r( $theme, true));
+foreach ( $themes as $theme ) :
 	$aria_action = $theme['id'] . '-action';
 	$aria_name   = $theme['id'] . '-name';
 
