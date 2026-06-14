@@ -433,7 +433,7 @@ if ( ! empty( $_GET['search'] ) ) {
  */
 $cp_has_update = classicpress_has_update();
 
-foreach ( $themes as $theme ) :
+foreach ( $themes as $theme ) : error_log( print_r( $theme, true));
 	$aria_action = $theme['id'] . '-action';
 	$aria_name   = $theme['id'] . '-name';
 
@@ -459,25 +459,25 @@ foreach ( $themes as $theme ) :
 	}
 	?>
 
-<li id="<?php esc_html_e( $theme['id'] ); ?>"
+<li id="<?php echo esc_attr( $theme['id'] ); ?>"
 	class="theme<?php echo $active_class; ?>"
-	data-active="<?php esc_attr_e( $theme['active'] ); ?>"
+	data-active="<?php echo esc_attr( $theme['active'] ); ?>"
 	data-activate-nonce="<?php echo $activate_nonce; ?>"
 	data-customize="<?php echo $customize_action; ?>"
 	data-autoupdate="<?php echo $autoupdate_action; ?>"
-	data-autoupdate-enabled="<?php esc_attr_e( $theme['autoupdate']['enabled'] ?? '' ); ?>"
-	data-autoupdate-supported="<?php esc_attr_e( $theme['autoupdate']['supported'] ?? '' ); ?>"
-	data-autoupdate-forced="<?php esc_attr_e( $theme['autoupdate']['forced'] ?? '' ); ?>"
-	data-description="<?php esc_attr_e( $theme['description'] ); ?>"
-	data-tags="<?php esc_attr_e( $theme['tags'] ); ?>"
-	data-parent="<?php esc_attr_e( $theme['parent'] ); ?>"
-	data-version="<?php esc_attr_e( $theme['version'] ); ?>"
+	data-autoupdate-enabled="<?php echo esc_attr( $theme['autoupdate']['enabled'] ?? '' ); ?>"
+	data-autoupdate-supported="<?php echo esc_attr( $theme['autoupdate']['supported'] ?? '' ); ?>"
+	data-autoupdate-forced="<?php echo esc_attr( $theme['autoupdate']['forced'] ?? '' ); ?>"
+	data-description="<?php echo esc_attr( $theme['description'] ); ?>"
+	data-tags="<?php echo esc_attr( $theme['tags'] ); ?>"
+	data-parent="<?php echo esc_attr( $theme['parent'] ); ?>"
+	data-version="<?php echo esc_attr( $theme['version'] ); ?>"
 	data-delete-nonce="<?php echo $delete_nonce; ?>"
-	data-compatible-wp="<?php absint( $theme['compatibleWP'] ); ?>"
-	data-compatible-php="<?php absint( $theme['compatiblePHP'] ); ?>"
-	data-has-update="<?php absint( $theme['hasUpdate'] ); ?>"
-	data-update="<?php esc_attr_e( $theme['update'] ); ?>"
-	data-update-response="<?php esc_attr_e( $theme['updateResponse']['compatibleWP'] . '-' . $theme['updateResponse']['compatiblePHP'] ); ?>"
+	data-compatible-wp="<?php echo absint( $theme['compatibleWP'] ); ?>"
+	data-compatible-php="<?php echo absint( $theme['compatiblePHP'] ); ?>"
+	data-has-update="<?php echo absint( $theme['hasUpdate'] ); ?>"
+	data-update="<?php echo esc_attr( $theme['update'] ); ?>"
+	data-update-response="<?php echo esc_attr( $theme['updateResponse']['compatibleWP'] . '-' . $theme['updateResponse']['compatiblePHP'] ); ?>"
 >
 
 	<?php
