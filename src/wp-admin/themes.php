@@ -461,7 +461,7 @@ foreach ( $themes as $theme ) : error_log( print_r( $theme, true));
 
 <li id="<?php echo esc_attr( $theme['id'] ); ?>"
 	class="theme<?php echo $active_class; ?>"
-	data-active="<?php echo esc_attr( $theme['active'] ); ?>"
+	data-active="<?php echo absint( $theme['active'] ); ?>"
 	data-activate-nonce="<?php echo $activate_nonce; ?>"
 	data-customize="<?php echo $customize_action; ?>"
 	data-autoupdate="<?php echo $autoupdate_action; ?>"
