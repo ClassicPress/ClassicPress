@@ -477,7 +477,7 @@ foreach ( $themes as $theme ) :
 	data-compatible-php="<?php echo absint( $theme['compatiblePHP'] ); ?>"
 	data-has-update="<?php echo absint( $theme['hasUpdate'] ); ?>"
 	data-update="<?php echo esc_attr( $theme['update'] ); ?>"
-	data-update-response="<?php echo esc_attr( $theme['updateResponse']['compatibleWP'] . '-' . $theme['updateResponse']['compatiblePHP'] ); ?>"
+	data-update-response="<?php echo absint( $theme['updateResponse']['compatibleWP'] ) . '-' . absint( $theme['updateResponse']['compatiblePHP'] ); ?>"
 >
 
 	<?php
