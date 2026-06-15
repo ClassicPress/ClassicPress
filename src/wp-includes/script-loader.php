@@ -2127,7 +2127,7 @@ function _print_styles() {
  * @global bool $compress_css
  */
 function script_concat_settings() {
-trigger_error('script_concat_settings');
+
 	global $concatenate_scripts, $compress_scripts, $compress_css;
 
 	$compressed_output = ( ini_get( 'zlib.output_compression' ) || 'ob_gzhandler' === ini_get( 'output_handler' ) );
@@ -2135,7 +2135,7 @@ trigger_error('script_concat_settings');
 	$can_compress_scripts = ! wp_installing() && get_site_option( 'can_compress_scripts' );
 
 	if ( ! isset( $concatenate_scripts ) ) {
-		$concatenate_scripts = defined( 'CONCATENATE_SCRIPTS' ) ? CONCATENATE_SCRIPTS : true;
+		$concatenate_scripts = defined( 'CONCATENATE_SCRIPTS' ) ? CONCATENATE_SCRIPTS : ( get_option( 'cp_concatenate_scripts', '1' === '1' ) );
 		if ( ( ! is_admin() && ! did_action( 'login_init' ) ) || ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ) {
 			$concatenate_scripts = false;
 		}

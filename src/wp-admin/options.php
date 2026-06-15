@@ -105,6 +105,7 @@ $allowed_options            = array(
 		'disable_emojis',
 		'disable_xml_rpc',
 		'link_manager_enabled',
+		'cp_concatenate_scripts',
 	),
 	'discussion' => array(
 		'default_pingback_flag',
