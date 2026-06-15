@@ -682,6 +682,24 @@ for ( $index = 0; $index <= 2; $index++ ) {
 </fieldset></td>
 </tr>
 
+<tr>
+<th scope="row"><?php _e( 'Enable Scripts Concatenation' ); ?></th>
+<td> <fieldset><legend class="screen-reader-text"><span>
+	<?php
+	/* translators: Hidden accessibility text. */
+	_e( 'Enable Scripts Concatenation' );
+	?>
+</span></legend><label for="cp_concatenate_scripts">
+<?php
+global $concatenate_scripts;
+// script_concat_settings();
+$concat_forced = defined( 'CONCATENATE_SCRIPTS' );
+?>
+<input name="cp_concatenate_scripts" type="checkbox" id="cp_concatenate_scripts" value="1" <?php checked( $concatenate_scripts ); ?>>
+	<?php _e( 'Script concatenation enabled' ); ?></label>
+</fieldset></td>
+</tr>
+
 <?php do_settings_fields( 'general', 'default' ); ?>
 </table>
 

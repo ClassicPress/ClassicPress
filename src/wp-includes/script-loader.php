@@ -2127,6 +2127,7 @@ function _print_styles() {
  * @global bool $compress_css
  */
 function script_concat_settings() {
+trigger_error('script_concat_settings');
 	global $concatenate_scripts, $compress_scripts, $compress_css;
 
 	$compressed_output = ( ini_get( 'zlib.output_compression' ) || 'ob_gzhandler' === ini_get( 'output_handler' ) );

@@ -591,6 +591,9 @@ function populate_options( array $options = array() ) {
 
 		// CP-2.7.0
 		'cp_object_cache'                 => 0,
+
+		// CP-2.8.0
+		'cp_concatenate_scripts'          => 1,
 	);
 
 	// 3.3.0
