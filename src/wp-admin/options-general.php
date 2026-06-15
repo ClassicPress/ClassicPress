@@ -697,16 +697,16 @@ $concat_forced = (
 	defined( 'CONCATENATE_SCRIPTS' )
 	|| ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG )
 	|| str_ends_with( classicpress_version(), 'dev' ) )
-	? ' disabled' : '';
+	? 'disabled' : '';
 ?>
-<input name="cp_concatenate_scripts" type="checkbox" id="cp_concatenate_scripts" value="1" <?php checked( $concatenate_scripts ); echo $concat_forced ?>>
+<input name="cp_concatenate_scripts" type="checkbox" id="cp_concatenate_scripts" value="1" <?php checked( $concatenate_scripts ); ?> <?php echo $concat_forced; ?>>
 	<?php _e( 'Script concatenation enabled' ); ?>
 	<p class="description" id="home-description">
 		<?php _e( 'Script concatenation can slower site loading.' ); ?>
 		<?php
-			if ( $concat_forced === ' disabled' ) {
-				_e( ' Some settings are forcing this configuration, so you can\'t change this option.' );
-			}
+		if ( $concat_forced === 'disabled' ) {
+			_e( ' Some settings are forcing this configuration, so you can\'t change this option.' );
+		}
 		?>
 	</p>
 	</label>
