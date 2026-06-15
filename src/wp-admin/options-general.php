@@ -697,6 +697,7 @@ $concat_forced = (
 	defined( 'CONCATENATE_SCRIPTS' )
 	|| ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG )
 	|| str_ends_with( classicpress_version(), 'dev' ) )
+	|| (bool) get_option( 'cp_concatenate_scripts' ) !== $concatenate_scripts
 	? 'disabled' : '';
 ?>
 <input name="cp_concatenate_scripts" type="checkbox" id="cp_concatenate_scripts" value="1" <?php checked( $concatenate_scripts ); ?> <?php echo $concat_forced; ?>>
