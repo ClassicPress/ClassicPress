@@ -2134,7 +2134,7 @@ function script_concat_settings() {
 	$can_compress_scripts = ! wp_installing() && get_site_option( 'can_compress_scripts' );
 
 	if ( ! isset( $concatenate_scripts ) ) {
-		$concatenate_scripts = defined( 'CONCATENATE_SCRIPTS' ) ? CONCATENATE_SCRIPTS : ( get_option( 'cp_concatenate_scripts', '1' === '1' ) );
+		$concatenate_scripts = defined( 'CONCATENATE_SCRIPTS' ) ? CONCATENATE_SCRIPTS : ( get_option( 'cp_concatenate_scripts', '1' ) === '1' );
 		if ( ( ! is_admin() && ! did_action( 'login_init' ) ) || ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ) {
 			$concatenate_scripts = false;
 		}
