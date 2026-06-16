@@ -689,7 +689,7 @@ $concat_forced = (
 	|| ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG )
 	|| str_ends_with( classicpress_version(), 'dev' ) )
 	|| (bool) get_option( 'cp_concatenate_scripts' ) !== $concatenate_scripts
-	|| ( isset ( $_SERVER['SERVER_PROTOCOL'] ) && str_starts_with ( $_SERVER['SERVER_PROTOCOL'], 'HTTP/1' ) );
+	|| ( isset( $_SERVER['SERVER_PROTOCOL'] ) && str_starts_with( $_SERVER['SERVER_PROTOCOL'], 'HTTP/1' ) );
 if ( ! $concat_forced ) :
 	?>
 	<tr>
