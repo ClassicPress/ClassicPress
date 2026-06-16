@@ -700,7 +700,7 @@ if ( ! $concat_forced ) :
 		_e( 'Enable Scripts Concatenation' );
 		?>
 	</span></legend><label for="cp_concatenate_scripts">
-	<input name="cp_concatenate_scripts" type="checkbox" id="cp_concatenate_scripts" value="1" <?php checked( $concatenate_scripts ); ?>>
+	<input name="cp_concatenate_scripts" type="checkbox" id="cp_concatenate_scripts" aria-describedby="home-description" value="1" <?php checked( $concatenate_scripts ); ?>>
 		<?php _e( 'Script concatenation enabled' ); ?>
 		<p class="description" id="home-description">
 			<?php _e( 'Script concatenation can slower site loading.' ); ?>
