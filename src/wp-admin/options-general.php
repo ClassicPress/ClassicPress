@@ -693,17 +693,17 @@ $concat_forced = (
 if ( ! $concat_forced ) :
 	?>
 	<tr>
-	<th scope="row"><?php _e( 'Enable Scripts Concatenation' ); ?></th>
+	<th scope="row"><?php _e( 'Enable Script Concatenation' ); ?></th>
 	<td> <fieldset><legend class="screen-reader-text"><span>
 		<?php
 		/* translators: Hidden accessibility text. */
-		_e( 'Enable Scripts Concatenation' );
+		_e( 'Enable Script Concatenation' );
 		?>
 	</span></legend><label for="cp_concatenate_scripts">
 	<input name="cp_concatenate_scripts" type="checkbox" id="cp_concatenate_scripts" aria-describedby="home-description" value="1" <?php checked( $concatenate_scripts ); ?>>
 		<?php _e( 'Script concatenation enabled' ); ?>
 		<p class="description" id="home-description">
-			<?php _e( 'Script concatenation can slower site loading.' ); ?>
+			<?php _e( 'Script concatenation can cause increased site loading times on modern network protocols.' ); ?>
 		</p>
 		</label>
 	</fieldset></td>
