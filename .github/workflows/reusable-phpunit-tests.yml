@@ -69,7 +69,7 @@ jobs:
           packages: libheif-plugin-aomenc ghostscript
 
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Read .nvmrc
         run: echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
