@@ -115,26 +115,6 @@ body:not(.ready) #customize-save-button-wrapper .save {
 	border-radius: 3px 0 0 3px;
 }
 
-#customize-sidebar-outer-content {
-	visibility: hidden;
-	overflow-x: hidden;
-	overflow-y: auto;
-	width: 100%;
-	margin: 0;
-	z-index: -1;
-	background: #f0f0f1;
-	transition: left .18s;
-	border-right: 1px solid #dcdcde;
-	border-left: 1px solid #dcdcde;
-	height: auto;
-}
-
-@media (prefers-reduced-motion: reduce) {
-	#customize-sidebar-outer-content {
-		transition: none;
-	}
-}
-
 #customize-theme-controls .control-section-outer {
 	display: none !important;
 }
@@ -153,18 +133,6 @@ body:not(.ready) #customize-save-button-wrapper .save {
 
 #customize-outer-theme-controls .accordion-section-content.open {
 	display: block;
-}
-
-.outer-section-open .wp-full-overlay.expanded #customize-sidebar-outer-content {
-	visibility: visible;
-	left: 100%;
-	transition: left .18s;
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.outer-section-open .wp-full-overlay.expanded #customize-sidebar-outer-content {
-		transition: none;
-	}
 }
 
 .customize-outer-pane-parent {
@@ -1879,37 +1847,6 @@ input[type="range"].hue-slider::-moz-range-track {
 	z-index: 999;
 }
 
-.in-themes-panel:not(.animating) #customize-header-actions .spinner,
-.in-themes-panel:not(.animating) #customize-header-actions .customize-controls-preview-toggle,
-.in-themes-panel:not(.animating) #customize-preview,
-.in-themes-panel:not(.animating) #customize-footer-actions {
-	visibility: hidden;
-}
-
-.wp-full-overlay.in-themes-panel {
-	background: #f0f0f1; /* Prevents a black flash when fading in the panel */
-}
-
-.in-themes-panel #customize-save-button-wrapper,
-.in-themes-panel #customize-header-actions .spinner,
-.in-themes-panel #customize-header-actions .customize-controls-preview-toggle {
-	margin-top: -46px; /* Height of header actions bar */
-}
-
-.in-themes-panel #customize-footer-actions,
-.in-themes-panel #customize-footer-actions .collapse-sidebar {
-	bottom: -45px;
-}
-
-/* Don't show the theme count while the panel opens, as it's in the wrong place during the animation */
-.in-themes-panel.animating .control-panel-themes .filter-themes-count {
-	display: none;
-}
-
-.in-themes-panel.wp-full-overlay .wp-full-overlay-sidebar-content {
-	bottom: 0;
-}
-
 .themes-filter-bar .feature-filter-toggle {
 	margin: 3px 0 3px 25px;
 	display: none;
@@ -1965,10 +1902,6 @@ input[type="range"].hue-slider::-moz-range-track {
 }
 
 .control-panel-themes .customize-themes-full-container.animate {
-	animation: .6s themes-fade-in 1;
-}
-
-.in-themes-panel:not(.animating) .control-panel-themes .filter-themes-count {
 	animation: .6s themes-fade-in 1;
 }
 
@@ -2332,10 +2265,6 @@ input[type="range"].hue-slider::-moz-range-track {
 	bottom: 0;
 }
 
-.wp-full-overlay.in-themes-panel.themes-panel-expanded #customize-controls .wp-full-overlay-sidebar-content {
-	overflow: visible;
-}
-
 .wp-customizer .theme-overlay .theme-backdrop {
 	background: rgba(240, 240, 241, 0.75);
 	position: fixed;
@@ -2374,10 +2303,6 @@ input[type="range"].hue-slider::-moz-range-track {
 	right: auto;
 	bottom: auto;
 	position: absolute;
-}
-
-.modal-open .in-themes-panel #customize-controls .wp-full-overlay-sidebar-content {
-	overflow: visible; /* Prevent the top-level Customizer controls from becoming visible when elements on the right of the details modal are focused. */
 }
 
 .wp-customizer .theme-header {
@@ -2602,7 +2527,16 @@ body.adding-widget .add-new-widget:before,
 
 #sub-accordion-section-publish_settings {
 	width: 300px;
+	margin: 0;
 	padding: 14px 10px 15px;
+	background: #f0f0f1;
+	transition: left .18s;
+	border: 0;
+	box-shadow: none;
+	border-right: 1px solid #dcdcde;
+	display: none;
+	overflow-y: auto;
+	box-sizing: border-box;
 }
 
 #widgets-right {
@@ -3060,7 +2994,7 @@ body.adding-widget .add-new-widget:before,
 
 	body.adding-widget #widgets-left,
 	body.adding-menu-items #available-menu-items,
-	body.outer-section-open #customize-sidebar-outer-content {
+	body.outer-section-open #sub-accordion-section-publish_settings {
 		position: absolute;
 		top: 46px;
 		bottom: 0;
@@ -3068,14 +3002,6 @@ body.adding-widget .add-new-widget:before,
 		right: 0;
 		width: 100%;
 		z-index: 10;
-	}
-
-	body.wp-customizer .wp-full-overlay.expanded #customize-sidebar-outer-content {
-		left: -100%;
-	}
-
-	body.wp-customizer.outer-section-open .wp-full-overlay.expanded #customize-sidebar-outer-content {
-		left: 0;
 	}
 }
 
