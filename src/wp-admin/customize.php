@@ -599,39 +599,6 @@ wp_print_scripts();
 							<li class="customize-themes-full-container-container">
 								<div class="customize-themes-full-container animate">
 									<div class="customize-themes-notifications"></div>
-									<div class="filter-drawer">
-										<?php
-										// Tags to filter list of themes.
-										// Use the core list, rather than the .org API, due to inconsistencies
-										// and to ensure tags are translated.
-										$feature_list = get_theme_feature_list( false );
-
-										foreach ( $feature_list as $feature_group => $features ) {
-											?>
-											<fieldset class="filter-group">
-												<legend>
-													<?php echo esc_html( $feature_group ); ?>
-												</legend>
-												<div class="filter-group-feature">
-													<?php
-													foreach ( $features as $feature => $feature_name ) {
-														?>
-														<input id="filter-id-<?php echo esc_attr( $feature ); ?>"
-															type="checkbox"
-															value="<?php echo esc_attr( $feature ); ?>"
-														> 
-														<label for="filter-id-<?php echo esc_attr( $feature ); ?>">
-															<?php echo esc_html( $feature_name ); ?>
-														</label>
-														<?php
-													}
-													?>
-												</div>
-											</fieldset>
-											<?php
-										}
-										?>
-									</div>
 									<div class="customize-themes-section themes-section-installed_themes control-section-content themes-php current-section">											
 										<div class="theme-browser rendered local">
 											<div class="customize-preview-header themes-filter-bar">
@@ -668,6 +635,39 @@ wp_print_scripts();
 														</span>
 													</button>
 												</div>
+											</div>
+											<div class="filter-drawer">
+												<?php
+												// Tags to filter list of themes.
+												// Use the core list, rather than the .org API, due to inconsistencies
+												// and to ensure tags are translated.
+												$feature_list = get_theme_feature_list( false );
+
+												foreach ( $feature_list as $feature_group => $features ) {
+													?>
+													<fieldset class="filter-group">
+														<legend>
+															<?php echo esc_html( $feature_group ); ?>
+														</legend>
+														<div class="filter-group-feature">
+															<?php
+															foreach ( $features as $feature => $feature_name ) {
+																?>
+																<input id="filter-id-<?php echo esc_attr( $feature ); ?>"
+																	type="checkbox"
+																	value="<?php echo esc_attr( $feature ); ?>"
+																>
+																<label for="filter-id-<?php echo esc_attr( $feature ); ?>">
+																	<?php echo esc_html( $feature_name ); ?>
+																</label>
+																<?php
+															}
+															?>
+														</div>
+													</fieldset>
+													<?php
+												}
+												?>
 											</div>
 											<div class="error unexpected-error" style="display: none;">
 												<p>
