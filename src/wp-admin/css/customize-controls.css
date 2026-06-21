@@ -1838,6 +1838,7 @@ input[type="range"].hue-slider::-moz-range-track {
 	top: 0;
 	bottom: 0;
 	right: 0;
+	padding: 46px 0 0;
 	transition: .18s left ease-in-out;
 	overflow-y: auto;
 	width: calc(100% - 345px);
@@ -1928,7 +1929,6 @@ input[type="range"].hue-slider::-moz-range-track {
 	position: relative;
 	box-sizing: border-box;
 	width: 100%;
-	top: 46px;
 	margin: 0;
 	padding: 25px 0 25px 25px;
 	border-top: 0;
@@ -2109,7 +2109,6 @@ input[type="range"].hue-slider::-moz-range-track {
 
 .wp-customizer .theme-browser .themes {
 	position: relative;
-	top: 46px;
 	padding: 25px 2em;
 	transition: .18s margin-top linear;
 }
@@ -2168,12 +2167,8 @@ input[type="range"].hue-slider::-moz-range-track {
 		width: 100%;
 	}
 
-	.filter-drawer {
-		top: 0;
-	}
-
-	.wp-customizer .theme-browser .themes {
-		top: 0;
+	.control-panel-themes .customize-themes-full-container {
+		padding: 0;
 	}
 }
 
@@ -2226,7 +2221,7 @@ input[type="range"].hue-slider::-moz-range-track {
 	.control-panel-themes .customize-themes-full-container {
 		width: 100%;
 		left: 0;
-		margin: 45px 0 0;
+		margin: 46px 0 0;
 		height: calc(100% - 46px);
 		z-index: 1;
 		display: none;
