@@ -1,6 +1,15 @@
 /* jshint node:true */
 /* jshint esversion: 6 */
-const codemirrorVersion = require( 'codemirror/package.json' ).version;
+const fs = require( 'fs' );
+const path = require( 'path' );
+
+const cmPkgPath = path.join(
+	path.dirname( require.resolve( '@codemirror/state' ) ),
+	'..',
+	'package.json'
+);
+const codemirrorVersion = JSON.parse( fs.readFileSync( cmPkgPath, 'utf8' ) ).version;
+
 if ( typeof codemirrorVersion !== 'string' ) {
 	throw new Error( 'Could not read CodeMirror version from package.json' );
 }
