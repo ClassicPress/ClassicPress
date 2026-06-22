@@ -37,9 +37,10 @@ $wp_customize->register_controls();
 if ( isset( $_GET['url'] ) ) {
 	$wp_customize->set_preview_url( wp_unslash( $_GET['url'] ) );
 }
+$changeset_id = $wp_customize->changeset_uuid();
 $preview_url = add_query_arg(
 	array(
-		'customize_changeset_uuid'    => $wp_customize->changeset_uuid(),
+		'customize_changeset_uuid'    => $changeset_id,
 		'customize_theme'             => $wp_customize->theme()->stylesheet,
 		'customize_messenger_channel' => 'preview-0',
 	),
@@ -71,7 +72,7 @@ if ( isset( $_POST['cp_publish_submit'] ) || isset( $_POST['save'] ) ) {
 
 	// Make sure we’re saving to the expected changeset UUID.
 	$uuid = isset( $_POST['customize_changeset_uuid'] ) ? sanitize_text_field( wp_unslash( $_POST['customize_changeset_uuid'] ) ) : '';
-	if ( $uuid && $uuid !== $wp_customize->changeset_uuid() ) {
+	if ( $uuid && $uuid !== $changeset_id ) {
 		$wp_customize->set_changeset_uuid( $uuid );
 	}
 
@@ -91,7 +92,7 @@ if ( isset( $_POST['cp_publish_submit'] ) || isset( $_POST['save'] ) ) {
 	wp_safe_redirect(
 		add_query_arg(
 			'customize_changeset_uuid',
-			$wp_customize->changeset_uuid(),
+			$changeset_id,
 			admin_url( 'customize.php' )
 		)
 	);
@@ -110,6 +111,7 @@ $hidden         = get_hidden_columns( 'customize' ); // for advanced menu option
 
 // Controls
 $controls = $wp_customize->get_controls_data_by_section();
+$timezone_info = ( new WP_Customize_Date_Time_Control( $wp_customize, 'changeset_scheduled_date', array() ) )->get_timezone_info();
 
 // Breadcrumbs for middle sections
 $breadcrumb_parents = isset( $wp_customize->cp_breadcrumb_parents ) ? $wp_customize->cp_breadcrumb_parents : array();
@@ -352,25 +354,57 @@ wp_print_scripts();
 				$compatible_php = is_php_version_compatible( $wp_customize->theme()->get( 'RequiresPHP' ) );
 
 				if ( $compatible_wp && $compatible_php ) {
-					$save_text = $wp_customize->is_theme_active() ? __( 'Published' ) : __( 'Activate &amp; Publish' );
+					$changeset_status = 'publish';
+					$changeset_post_id = $wp_customize->changeset_post_id();
+
+					$changeset_date = '';
+					if ( $changeset_post_id ) {
+						$changeset_post   = get_post( $changeset_post_id );
+						$changeset_status = $changeset_post ? $changeset_post->post_status : 'publish';
+						if ( $changeset_status === 'future' ) {
+							$changeset_date = $changeset_post->post_date;
+						}
+					}
 					?>
+
+					<script>
+					var _wpCustomizeChangesetStatus = <?php echo wp_json_encode( $changeset_status ); ?>;
+					var _wpCustomizeChangesetDate   = <?php echo wp_json_encode( $changeset_date ); ?>;
+					</script>
+
+					<?php
+					if ( $changeset_status === 'draft' ) {
+						$save_label = __( 'Draft Saved' );
+					} elseif ( $changeset_status === 'future' ) {
+						$save_label = __( 'Scheduled' );
+					} elseif ( in_array( $changeset_status, array( 'publish', 'auto-draft' ), true ) ) {
+						$save_label = $wp_customize->is_theme_active() ? __( 'Published' ) : __( 'Activate &amp; Publish' );
+					}
+
+					$settings_btn_style = in_array( $changeset_status, array( 'draft', 'future' ), true ) ? '' : 'display: none;';
+					?>
+
 					<div id="customize-save-button-wrapper" class="customize-save-button-wrapper">
-						<button type="submit" name="save" id="save" class="button button-primary save" disabled>
-							<?php esc_attr_e( 'Published' ); ?>
+						<button id="save" type="submit" name="save" class="button button-primary save" disabled>
+							<?php echo esc_html( $save_label ); ?>
 						</button>
 						<button id="publish-settings"
+							type="button"
 							class="publish-settings button-primary button dashicons dashicons-admin-generic"
 							aria-label="<?php esc_attr_e( 'Publish Settings' ); ?>"
+							aria-controls="sub-accordion-section-publish_settings"
 							aria-expanded="false"
-							style="display: none;"
+							style="<?php echo esc_attr( $settings_btn_style ); ?>"
 							name="cp_publish_submit"
 							value="1"
 						></button>
 					</div>
+
 					<?php
 				} else {
 					$save_text = _x( 'Cannot Activate', 'theme' );
 					?>
+
 					<div id="customize-save-button-wrapper" class="customize-save-button-wrapper disabled" >
 						<button class="button button-primary disabled"
 							aria-label="<?php esc_attr_e( 'Publish Settings' ); ?>"
@@ -380,9 +414,11 @@ wp_print_scripts();
 							<?php echo $save_text; ?>
 						</button>
 					</div>
+
 					<?php
 				}
 				?>
+
 				<button type="button" class="customize-controls-preview-toggle">
 					<span class="controls"><?php esc_html_e( 'Customize' ); ?></span>
 					<span class="preview"><?php esc_html_e( 'Preview' ); ?></span>
@@ -712,6 +748,7 @@ wp_print_scripts();
 											<?php
 										}
 										?>
+
 									</div>
 
 									<?php
@@ -1846,7 +1883,7 @@ wp_print_scripts();
 			<input type="hidden"
 				id="customize_changeset_uuid"
 				name="customize_changeset_uuid"
-				value="<?php echo esc_attr( $wp_customize->changeset_uuid() ); ?>"
+				value="<?php echo esc_attr( $changeset_id ); ?>"
 			>
 			<input type="hidden"
 				id="theme_stylesheet"
@@ -1865,6 +1902,218 @@ wp_print_scripts();
 			wp_nonce_field( 'update-widget', 'nonce', false );
 			?>
 		</form><!-- #customize-controls -->
+
+		<section id="sub-accordion-section-publish_settings"
+			class="customize-pane-child accordion-section-content accordion-section control-section control-section-outer open"
+			style="display:none"
+		>
+			<h3 class="screen-reader-text">
+				<?php esc_html_e( 'Publish status' ); ?>
+			</h3>
+			<fieldset id="customize-control-changeset_status" class="customize-control customize-control-radio">
+				<legend class="customize-control-title">
+					<?php esc_html_e( 'Action' ); ?>
+				</legend>
+				<div class="customize-inside-control-row">
+					<input id="changeset-status-publish"
+						type="radio"
+						value="publish"
+						name="changeset-status"
+						data-customize-setting-key-link="default"
+						<?php checked( $changeset_status, 'publish' ); ?>
+					>
+					<label for="changeset-status-publish">
+						<?php esc_html_e( 'Publish' ); ?>
+					</label>
+				</div>
+				<div class="customize-inside-control-row">
+					<input id="changeset-status-draft"
+						type="radio"
+						value="draft"
+						name="changeset-status"
+						data-customize-setting-key-link="default"
+						<?php checked( $changeset_status, 'draft' ); ?>
+					>
+					<label for="changeset-status-draft">
+						<?php esc_html_e( 'Save Draft' ); ?>
+					</label>
+				</div>
+				<div class="customize-inside-control-row">
+					<input id="changeset-status-future"
+						type="radio"
+						value="future"
+						name="changeset-status"
+						data-customize-setting-key-link="default"
+						<?php checked( $changeset_status, 'future' ); ?>
+					>
+					<label for="changeset-status-future">
+						<?php esc_html_e( 'Schedule' ); ?>
+					</label>
+				</div>
+			</fieldset>
+			<div id="customize-control-changeset_scheduled_date"
+				class="customize-control customize-control-date_time"
+				style="display: none;"
+			>
+				<p id="schedule-desc" class="description customize-control-description">
+					<?php esc_html_e( 'Schedule your customization changes to publish ("go live") at a future date.' ); ?>
+				</p>
+				<div class="date-time-fields includes-time" aria-describedby="schedule-desc">
+					<fieldset class="day-row">
+						<legend class="title-day ">
+							<?php esc_html_e( 'Date' ); ?>
+						</legend>
+						<div class="day-fields clear">
+							<label for="date-time-month" class="screen-reader-text">
+								<?php esc_html_e( 'Month' ); ?>
+							</label>
+							<select id="date-time-month" class="date-input month" data-component="month">
+								<option value="1"><?php esc_html_e( '1-Jan' ); ?></option>
+								<option value="2"><?php esc_html_e( '2-Feb' ); ?></option>
+								<option value="3"><?php esc_html_e( '3-Mar' ); ?></option>
+								<option value="4"><?php esc_html_e( '4-Apr' ); ?></option>
+								<option value="5"><?php esc_html_e( '5-May' ); ?></option>
+								<option value="6"><?php esc_html_e( '6-Jun' ); ?></option>
+								<option value="7"><?php esc_html_e( '7-Jul' ); ?></option>
+								<option value="8"><?php esc_html_e( '8-Aug' ); ?></option>
+								<option value="9"><?php esc_html_e( '9-Sep' ); ?></option>
+								<option value="10"><?php esc_html_e( '10-Oct' ); ?></option>
+								<option value="11"><?php esc_html_e( '11-Nov' ); ?></option>
+								<option value="12"><?php esc_html_e( '12-Dec' ); ?></option>
+							</select>
+							<label for="date-time-day" class="screen-reader-text">
+								<?php esc_html_e( 'Day' ); ?>
+							</label>
+							<input id="date-time-day"
+								type="number"
+								size="2"
+								autocomplete="off"
+								class="date-input day tiny-text"
+								data-component="day"
+								min="1"
+								max="31"
+							>
+							<span aria-hidden="true">,</span>
+							<label for="date-time-year" class="screen-reader-text">
+								<?php esc_html_e( 'Year' ); ?>
+							</label>
+							<input id="date-time-year"
+								type="number"
+								size="4"
+								autocomplete="off"
+								class="date-input year tiny-text"
+								data-component="year"
+								min="<?php echo date( 'Y' ); ?>"
+								max="9999"
+							>
+						</div>
+					</fieldset>
+					<fieldset class="time-row clear">
+						<legend class="title-time">
+							<?php esc_html_e( 'Time' ); ?>
+						</legend>
+						<div class="time-fields clear">
+							<label for="date-time-hour" class="screen-reader-text">
+								<?php esc_html_e( 'Hour' ); ?>
+							</label>
+							<input id="date-time-hour"
+								type="number"
+								size="2"
+								autocomplete="off"
+								class="date-input hour tiny-text"
+								data-component="hour"
+								min="1"
+								max="12"
+							>
+							<span aria-hidden="true">:</span>
+							<label for="date-time-minute" class="screen-reader-text">
+								<?php esc_html_e( 'Minute' ); ?>
+							</label>
+							<input id="date-time-minute"
+								type="number"
+								size="2"
+								autocomplete="off"
+								class="date-input minute tiny-text"
+								data-component="minute"
+								min="0"
+								max="59"
+							>
+							<label for="date-time-meridian" class="screen-reader-text">
+								<?php esc_html_e( 'Morning or Afternoon' ); ?>
+							</label>
+							<select id="date-time-meridian" class="date-input meridian" data-component="meridian">
+								<option value="am"><?php esc_html_e( 'AM' ); ?></option>
+								<option value="pm"><?php esc_html_e( 'PM' ); ?></option>
+							</select>
+						</div>
+						</fieldset>
+					<p class="timezone-info">
+						<?php echo $timezone_info['description']; ?>
+					</p>
+				</div>
+			</div>
+
+			<!-- Discard Changes -->
+			<div id="customize-control-trash_changeset" class="customize-control customize-control-button">
+				<button type="button"
+					class="button-link button-link-delete"
+					data-customize-setting-key-link="default"
+					aria-describedby="discard-warning"
+				>
+					<?php esc_html_e( 'Discard changes' ); ?>
+				</button>
+				<p id="discard-warning" class="screen-reader-text">
+					<?php esc_html_e( 'This will permanently discard all unsaved customizer changes.' ); ?>
+				</p>
+				<input type="hidden" id="customize-trash-nonce" value="<?php echo wp_create_nonce( 'trash_customize_changeset' ); ?>">
+			</div>
+
+			<!-- Share Preview Link -->
+			<div id="customize-control-changeset_preview_link" class="customize-control customize-control-undefined has-notifications">
+				<h4 class="customize-control-title">
+					<?php esc_html_e( 'Share Preview Link' ); ?>
+				</h4>
+				<p class="description customize-control-description">
+					<?php esc_html_e( 'See how changes would look live on your website, and share the preview with people who can\'t access the Customizer.' ); ?>
+				</p>
+				<div class="customize-control-notifications-container" role="status" aria-live="polite">
+					<ul role="list">
+						<li class="notice notice-info" data-code="changes_not_saved" data-type="info">
+							<div class="notification-message">
+								<?php esc_html_e( 'Please save your changes in order to share the preview.' ); ?>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="preview-link-wrapper">
+					<label for="customize-preview-link-input" class="screen-reader-text">
+						<?php esc_html_e( 'Preview Link' ); ?>
+					</label>
+					<a id="preview-link"
+						href="<?php echo esc_url( home_url( '/?customize_changeset_uuid=' . $changeset_id ) ); ?>"
+						target="<?php echo esc_attr( $changeset_id ); ?>"
+						inert
+					>
+						<span class="preview-control-element" data-component="url">
+							<?php echo esc_url( home_url( '/?customize_changeset_uuid=' . $changeset_id ) ); ?>
+						</span>
+						<span class="screen-reader-text">
+							<?php esc_html_e( '(opens in a new tab)' ); ?>
+						</span>
+					</a>
+					<input id="customize-preview-link-input" type="url" readonly="" tabindex="-1" class="preview-control-element" data-component="input" aria-label="Shareable preview URL">
+					<button class="customize-copy-preview-link preview-control-element button button-secondary"
+						data-component="button"
+						data-copy-text="<?php esc_html_e( 'Copy' ); ?>"
+						data-copied-text="<?php esc_html_e( 'Copied' ); ?>"
+						aria-label="<?php esc_html_e( 'Copy preview link to clipboard' ); ?>"
+						disabled
+					>
+						<?php esc_html_e( 'Copy' ); ?>
+					</button>
+				</div>
+			</div>
+		</section>
 
 		<?php
 		// Display available widgets.
