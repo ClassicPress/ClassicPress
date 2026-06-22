@@ -809,6 +809,14 @@ final class WP_Customize_Widgets {
 		<section id="widgets-left"><!-- compatibility with JS which looks for widget templates here -->
 			<div id="available-widgets">
 				<div class="customize-section-title">
+					<button type="button" class="customize-section-back">
+						<span class="screen-reader-text">
+							<?php
+							/* translators: Hidden accessibility text. */
+							esc_html_e( 'Back' );
+							?>
+						</span>
+					</button>
 					<h3>
 						<span class="customize-action">
 

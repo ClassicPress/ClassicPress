@@ -23,6 +23,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		form = document.querySelector( 'form' ),
 		inputs = form.querySelectorAll( 'input, select, textarea' ),
 		saveButton = form.querySelector( '#save' ),
+		publishSettings = form.querySelector( '#publish-settings' ),
+		publishSettingsPanel = document.getElementById( 'sub-accordion-section-publish_settings' ),
 		devicesWrapper = document.querySelector( '.devices' ),
 		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
 		previewFrame = document.getElementById( 'customize-preview' ),
@@ -30,10 +32,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		addWidgetButtons = document.querySelectorAll( '.add-new-widget' ),
+		availableWidgets = document.getElementById( 'widgets-left' ),
 		newMenuItemIDs = [],
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
 		hash = window.location.hash.replace( '#', '' ),
-		section = document.getElementById( 'sub-accordion-section-custom_css' );
+		section = document.getElementById( 'sub-accordion-section-custom_css' ),
+		discardingChangeset = false,
+		changesetStatus = window._wpCustomizeChangesetStatus || 'publish';
 
 	const colorSchemeInputs = form.querySelectorAll( 'input[name="_customize-radio-colorscheme"]' ),
 		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' );
@@ -64,8 +69,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		if ( hash === 'sub-accordion-section-themes' ) {
+			document.getElementById( 'customize-save-button-wrapper' ).style.display = 'none';
 			document.getElementById( 'customize-footer-actions' ).style.display = 'none';
 		} else {
+			document.getElementById( 'customize-save-button-wrapper' ).style.display = 'block';
 			document.getElementById( 'customize-footer-actions' ).style.display = 'block';
 		}
 	}
@@ -81,6 +88,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			customizerControls.forEach( function( child ) {
 				child.style.display = 'none';
 			} );
+			publishSettings.setAttribute( 'aria-expanded', 'false' );
+			publishSettingsPanel.style.display = 'none';
+			document.body.classList.remove( 'outer-section-open' );
 			targetEl.style.display = 'block';
 
 			if ( newHash === 'customize-pane-parent' ) {
@@ -98,21 +108,23 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					add.setAttribute( 'aria-expanded', 'false' );
 				} );
 				if ( ! newHash.startsWith( 'sub-accordion-section-sidebar-widgets-' ) ) {
-					document.getElementById( 'widgets-left' ).style.display = 'none';
+					availableWidgets.style.display = 'none';
 				}
 			}
 
 			if ( ! newHash.startsWith( 'sub-accordion-section-sidebar-widgets-' ) ) {
 				document.body.classList.remove( 'adding-widget' );
-				availableMenuItems.style.display = 'none';
+				availableWidgets.style.display = 'none';
 				addWidgetButtons.forEach( function( add ) {
 					add.setAttribute( 'aria-expanded', 'false' );
 				} );
 			}
 
 			if ( newHash === 'sub-accordion-section-themes' ) {
+				document.getElementById( 'customize-save-button-wrapper' ).style.display = 'none';
 				document.getElementById( 'customize-footer-actions' ).style.display = 'none';
 			} else {
+				document.getElementById( 'customize-save-button-wrapper' ).style.display = 'block';
 				document.getElementById( 'customize-footer-actions' ).style.display = 'block';
 			}
 		}
@@ -123,6 +135,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		queryParams.delete( 'url' );
 		newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
 		history.replaceState( null, '', newUrl );
+	}
+
+	if ( queryParams.get( 'discarded' ) ) {
+		queryParams.delete( 'discarded' );
 	}
 
 	if ( queryParams.get( 'theme' ) ) {
@@ -146,6 +162,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	document.getElementById( 'customize-preview-loading' ).classList.add( 'hidden' );
 
+	// Set scheduled time for future publication
+	if ( changesetStatus === 'future' && window._wpCustomizeChangesetDate ) {
+		setSavedScheduledDate();
+	} else {
+		setScheduledDateToNow();
+	}
+
 	// Limit motion where appropriate
 	reducedMotionMediaQuery.addEventListener( 'change', function handleReducedMotionChange( event ) {
 		isReducedMotion = event.matches;
@@ -157,7 +180,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Note that browsers do not permit the display of a custom message.
 	 */
 	window.addEventListener( 'beforeunload', function( e ) {
-		if ( saveButton.disabled === false ) {
+		if ( saveButton.disabled === false && ! discardingChangeset ) {
 			e.preventDefault();
 		}
 	} );
@@ -186,6 +209,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function activatePublishButton() {
 		saveButton.disabled = false;
 		saveButton.textContent = _wpCustomizeControlsL10n.publish;
+		if ( changesetStatus === 'draft' ) {
+			saveButton.textContent = _wpCustomizeControlsL10n.saveDraft;
+		} else if ( changesetStatus === 'future' ) {
+			saveButton.textContent = _wpCustomizeControlsL10n.schedule;
+		}
+		publishSettings.style.display = 'block';
 	}
 
 	/**
@@ -272,8 +301,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Sidebar / preview.
 		document.body.classList.remove( 'adding-menu-items' );
 		document.body.classList.remove( 'adding-widget' );
-		document.getElementById( 'widgets-left' ).style.display = 'none';
 		availableMenuItems.style.display = 'none';
+		availableWidgets.style.display = 'none';
 		document.getElementById( 'customizer-sidebar-container' ).classList.toggle( 'collapsed' );
 		document.getElementById( 'customize-preview' ).classList.toggle( 'expanded-preview' );
 		addMenuButtons.forEach( function( add ) {
@@ -595,10 +624,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @param {MouseEvent} event A click event.
 	 * @return {void}
 	 */
-	function copyToClipboard( button ) {
+	function copyToClipboard( context, button ) {
 		var copyAttachmentURLSuccessTimeout,
-			copyText = dialog.querySelector( '#attachment-details-copy-link' ).value,
+			copyText = document.querySelector( '.preview-control-element' ).textContent.trim(),
 			input = document.createElement( 'input' );
+
+		if ( context === 'attachment' ) {
+			copyText = dialog.querySelector( '#attachment-details-copy-link' ).value;
+		}
 
 		if ( navigator.clipboard ) {
 			navigator.clipboard.writeText( copyText );
@@ -611,16 +644,27 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Show success visual feedback.
 		clearTimeout( copyAttachmentURLSuccessTimeout );
-		button.nextElementSibling.classList.remove( 'hidden' );
 		input.remove();
 
-		// Hide success visual feedback after 3 seconds since last success and unfocus the trigger.
-		copyAttachmentURLSuccessTimeout = setTimeout( function() {
-			button.nextElementSibling.classList.add( 'hidden' );
-		}, 3000 );
+		if ( context === 'attachment' ) {
+			button.nextElementSibling.classList.remove( 'hidden' );
 
-		// Handle success audible feedback.
-		wp.a11y.speak( wp.i18n.__( 'The file URL has been copied to your clipboard' ) );
+			// Hide success visual feedback after 3 seconds since last success and unfocus the trigger.
+			copyAttachmentURLSuccessTimeout = setTimeout( function() {
+				button.nextElementSibling.classList.add( 'hidden' );
+			}, 3000 );
+
+			// Handle success audible feedback.
+			wp.a11y.speak( wp.i18n.__( 'The file URL has been copied to your clipboard' ) );
+		} else {
+			button.textContent = document.querySelector( '.customize-copy-preview-link' ).dataset.copiedText;
+			copyAttachmentURLSuccessTimeout = setTimeout( function() {
+				button.textContent = document.querySelector( '.customize-copy-preview-link' ).dataset.copyText;
+			}, 3000 );
+
+			// Handle success audible feedback.
+			wp.a11y.speak( wp.i18n.__( 'The preview URL has been copied to your clipboard' ) );
+		}
 	}
 
 	/**
@@ -1290,13 +1334,62 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Get date and time of intended future publication os changeset
+	 */
+	function getScheduledDate() {
+		return [
+			document.getElementById( 'date-time-year' ).value,
+			String( document.getElementById( 'date-time-month' ).value ).padStart( 2, '0' ),
+			String( document.getElementById( 'date-time-day' ).value ).padStart( 2, '0' ),
+			document.getElementById( 'date-time-hour' ).value,
+			document.getElementById( 'date-time-minute' ).value,
+			document.getElementById( 'date-time-meridian' ).value
+		];
+	}
+
+	/**
+	 * Set saved scheduled time for future publication
+	 */
+	function setSavedScheduledDate() {
+		var hour24,
+			parts = window._wpCustomizeChangesetDate.match( /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})/ );
+
+		if ( parts ) {
+			hour24 = parseInt( parts[4], 10 );
+			document.getElementById( 'date-time-year' ).value     = parts[1];
+			document.getElementById( 'date-time-month' ).value    = parseInt( parts[2], 10 );
+			document.getElementById( 'date-time-day' ).value      = parseInt( parts[3], 10 );
+			document.getElementById( 'date-time-hour' ).value     = hour24 % 12 || 12;
+			document.getElementById( 'date-time-minute' ).value   = parts[5];
+			document.getElementById( 'date-time-meridian' ).value = hour24 >= 12 ? 'pm' : 'am';
+			document.getElementById( 'customize-control-changeset_scheduled_date' ).style.display = 'block';
+		}
+	}
+
+	/**
+	 * Set current date and time within scheduled publication settings
+	 */
+	 function setScheduledDateToNow() {
+		var now    = new Date(),
+			hour24 = now.getHours(),
+			hour12 = hour24 % 12 || 12;
+
+		document.getElementById( 'date-time-month' ).value    = now.getMonth() + 1;
+		document.getElementById( 'date-time-day' ).value      = now.getDate();
+		document.getElementById( 'date-time-year' ).value     = now.getFullYear();
+		document.getElementById( 'date-time-hour' ).value     = hour12;
+		document.getElementById( 'date-time-minute' ).value   = String( now.getMinutes() ).padStart( 2, '0' );
+		document.getElementById( 'date-time-meridian' ).value = hour24 >= 12 ? 'pm' : 'am';
+	}
+
+	/**
 	 * Publish updates by clicking Publish button.
 	 *
 	 * @abstract
 	 * @return {void}
 	 */
 	form.addEventListener( 'submit', async function( e ) {
-		let result, newResult,
+		let result, newResult, timeStr,
 			entries = Object.entries( updatedControls ),
 			navMenuChanges = {},
 			submittedChanges = {},
@@ -1304,7 +1397,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			navMenuLocations = [],
 			navMenuItems = [],
 			formData = new FormData(),
-			updateData = new FormData();
+			updateData = new FormData(),
+			previewLink = document.getElementById( 'preview-link' ),
+			d = getScheduledDate();
 
 		// Prevent form submission via PHP
 		e.preventDefault();
@@ -1314,6 +1409,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Prevent accidental form submissions
 		if ( e.submitter !== saveButton ) {
 			return;
+		}
+
+		if ( changesetStatus === 'future' ) {
+			var hours = parseInt( d[3], 10 );
+			if ( d[5] === 'pm' && hours !== 12 ) {
+				hours += 12;
+			}
+			if ( d[5] === 'am' && hours === 12 ) {
+				hours = 0;
+			}
+			timeStr = String( hours ).padStart( 2, '0' ) + ':' + d[4] + ':00';
 		}
 
 		// Clear stale notifications
@@ -1356,8 +1462,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			formData.append( 'nonce', document.getElementById( 'customizer_nonce' ).value );
 			formData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
 			formData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
-			formData.append( 'customize_changeset_status', 'publish' );
+			formData.append( 'customize_changeset_status', changesetStatus );
 			formData.append( 'customize_changeset_data', JSON.stringify( navMenuChanges ) );
+
+			if ( changesetStatus === 'future' ) {
+				formData.append( 'customize_changeset_date', d[0] + '-' + d[1] + '-' + d[2] + ' ' + timeStr );
+			}
 
 			try {
 				const response = await fetch( ajaxurl, {
@@ -1490,8 +1600,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		updateData.append( 'nonce', document.getElementById( 'customizer_nonce' ).value );
 		updateData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
 		updateData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
-		updateData.append( 'customize_changeset_status', 'publish' );
+		updateData.append( 'customize_changeset_status', changesetStatus );
 		updateData.append( 'customize_changeset_data', JSON.stringify( submittedChanges ) );
+
+		if ( changesetStatus === 'future' ) {
+			updateData.append( 'customize_changeset_date', d[0] + '-' + d[1] + '-' + d[2] + ' ' + timeStr );
+		}
 
 		try {
 			const response = await fetch( ajaxurl, {
@@ -1512,6 +1626,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Update HTML
 		if ( newResult && newResult.success ) {
+
+			// Update the in-memory date so the Schedule radio restores correctly
+			if ( changesetStatus === 'future' ) {
+				window.wpCustomizeChangesetDate = d[0] + '-' + d[1] + '-' + d[2] + ' ' + timeStr + ':00';
+			} else {
+				window.wpCustomizeChangesetDate = '';
+			}
+
 			if ( newResult.data.nav_menu_item_updates ) {
 				newResult.data.nav_menu_item_updates.forEach( function( item ) {
 					replaceSubstringInAttributes( item.previous_post_id, item.post_id );
@@ -1530,14 +1652,31 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 
 			// Reset form
-			saveButton.disabled = true;
-			saveButton.textContent = _wpCustomizeControlsL10n.published;
-			document.getElementById( 'customize_changeset_uuid' ).value = newResult.data.next_changeset_uuid;
+			if ( changesetStatus === 'publish' ) {
+				saveButton.textContent = _wpCustomizeControlsL10n.published;
+				publishSettings.style.display = 'none';
+				publishSettings.setAttribute( 'aria-expanded', 'false' );
+				publishSettingsPanel.style.display = 'none';
+			} else {
+				saveButton.textContent = ( changesetStatus === 'draft' ) ? _wpCustomizeControlsL10n.draftSaved : _wpCustomizeControlsL10n.scheduled;
+				publishSettings.setAttribute( 'aria-expanded', 'true' );
+				publishSettingsPanel.style.display = 'block';
+				previewLink.removeAttribute( 'inert' );
+				previewLink.style.color = '#2271b1';
+				document.querySelector( '.customize-copy-preview-link' ).removeAttribute( 'disabled' );
+			}
 
 			// Reset the buffer object and proxy
 			Object.keys( updatedControls ).forEach( function( key ) {
 				delete updatedControls[ key ];
 			} );
+
+			// If the server rolled the changeset UUID, update it before next call
+			if ( newResult.data.next_changeset_uuid ) {
+				document.getElementById( 'customize_changeset_uuid' ).value = newResult.data.next_changeset_uuid;
+			}
+
+			saveButton.disabled = true;
 			window._customizePublishing = false;
 		} else if ( newResult && ! newResult.success ) {
 			if ( newResult.data && newResult.data.setting_validities ) {
@@ -1628,6 +1767,64 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					el.setAttribute( attrName, newValue );
 				}
 			} );
+		} );
+	}
+
+	/**
+	 * Discard all changes in the current changeset
+	 */
+	function discardChangeset() {
+		var formData;
+
+		if ( ! window.confirm( _wpCustomizeControlsL10n.trashConfirm ) ) {
+			return;
+		}
+
+		formData = new FormData();
+		formData.append( 'action', 'customize_trash' );
+		formData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
+		formData.append( 'nonce', document.getElementById( 'customize-trash-nonce' ).value );
+		formData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
+
+		// Suppress the beforeunload dialog before anything async happens
+		discardingChangeset = true;
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: formData,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function() {
+			const url = new URL( window.location.href );
+
+			// Clear tracked changes
+			Object.keys( updatedControls ).forEach( function( key ) {
+				delete updatedControls[ key ];
+			} );
+
+			changesetStatus = 'publish';
+			document.body.classList.remove( 'outer-section-open' );
+			publishSettings.style.display = 'none';
+			publishSettings.setAttribute( 'aria-expanded', 'false' );
+			publishSettingsPanel.style.display = 'none';
+
+			// Reload to a clean Customizer URL without the old changeset UUID
+			url.searchParams.delete( 'customize_changeset_uuid' );
+			url.searchParams.delete( 'customize_autosaved' );
+			url.searchParams.set( 'discarded', String( Date.now() ) ); // for cache-busting
+
+			discardingChangeset = true;
+			window.location.assign( url.toString() );
+		} )
+		.catch( function( err ) {
+			console.error( err );
+			discardingChangeset = false; // Re-arm beforeunload if something went wrong
 		} );
 	}
 
@@ -1823,15 +2020,70 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 
+		// Choose how to publish settings
+		if ( e.target === publishSettings ) {
+			if ( document.body.classList.contains( 'outer-section-open' ) ) {
+				document.body.classList.remove( 'outer-section-open' );
+				publishSettings.setAttribute( 'aria-expanded', 'false' );
+				publishSettingsPanel.style.display = 'none';
+			} else {
+				if ( document.body.classList.contains( 'adding-menu-items' ) ) {
+					document.body.classList.remove( 'adding-menu-items' );
+					availableMenuItems.style.display = 'none';
+					addMenuButtons.forEach( function( add ) {
+						add.setAttribute( 'aria-expanded', 'false' );
+					} );
+				} else if ( document.body.classList.contains( 'adding-widget' ) ) {
+					document.body.classList.remove( 'adding-widget' );
+					availableWidgets.style.display = 'none';
+					addWidgetButtons.forEach( function( add ) {
+						add.setAttribute( 'aria-expanded', 'false' );
+					} );
+				}
+				document.body.classList.add( 'outer-section-open' );
+				publishSettings.setAttribute( 'aria-expanded', 'true' );
+				publishSettingsPanel.style.display = 'block';
+				setTimeout( function() {
+					let focused = document.getElementById( 'changeset-status-' + changesetStatus );
+					focused.checked = true;
+					focused.focus();
+				}, 0 );
+			}
+
+		// Discard changes in changeset
+		} else if ( e.target.classList?.contains( 'button-link-delete' ) && e.target.parentNode.id === 'customize-control-trash_changeset' ) {
+			discardChangeset();
+
+		// Copy preview link
+		} else if ( e.target.classList?.contains( 'customize-copy-preview-link' ) ) {
+			copyToClipboard( 'preview', e.target );
+
 		// Add a widget
-		if ( e.target.classList && e.target.classList.contains( 'add-new-widget' ) ) {
+		} else if ( e.target.classList?.contains( 'add-new-widget' ) ) {
 			document.body.classList.toggle( 'adding-widget' );
 			if ( e.target.getAttribute( 'aria-expanded' ) === 'false' ) {
-				document.getElementById( 'widgets-left' ).style.display = 'block';
+				if ( document.body.classList.contains( 'outer-section-open' ) ) {
+					document.body.classList.remove( 'outer-section-open' );
+					publishSettings.setAttribute( 'aria-expanded', 'false' );
+					publishSettingsPanel.style.display = 'none';
+				}
+				availableWidgets.style.display = 'block';
 				e.target.setAttribute( 'aria-expanded', true );
 			} else {
-				document.getElementById( 'widgets-left' ).style.display = 'none';
+				availableWidgets.style.display = 'none';
 				e.target.setAttribute( 'aria-expanded', false );
+			}
+
+		// Close add widgets sub-panel
+		} else if ( document.body.classList.contains( 'adding-widget' ) && e.target.classList && e.target.classList.contains( 'customize-section-back' ) ) {
+			document.body.classList.remove( 'adding-widget' );
+			document.getElementById( 'widgets-left' ).style.display = 'none';
+			for ( let i = 0, n = addWidgetButtons.length; i < n; i++ ) {
+				if ( addWidgetButtons[i].getAttribute( 'aria-expanded' ) === 'true' ) {
+					addWidgetButtons[i].setAttribute( 'aria-expanded', 'false' );
+					addWidgetButtons[i].focus();
+					return;
+				}
 			}
 
 		// Reorder widgets
@@ -2057,7 +2309,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Copy URL
 			} else if ( e.target.className.includes( 'copy-attachment-url' ) ) {
-				copyToClipboard( e.target );
+				copyToClipboard( 'attachment', e.target );
 
 			// Delete media item
 			} else if ( e.target.className.includes( 'delete-attachment' ) ) {
@@ -2068,6 +2320,29 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 	} );
+
+	/**
+	 * Change mode of publishing settings
+	 */
+	document.getElementById( 'customize-control-changeset_status' ).addEventListener( 'change', function( e ) {
+		let scheduled = document.getElementById( 'customize-control-changeset_scheduled_date' );
+        if ( e.target.type === 'radio' && e.target.name === 'changeset-status' ) {
+			changesetStatus = e.target.value;
+			saveButton.disabled = false;
+            saveButton.textContent = e.target.nextElementSibling.textContent;
+
+            if ( changesetStatus === 'future' ) {
+				if ( window._wpCustomizeChangesetDate ) {
+					setSavedScheduledDate();
+				} else {
+					setScheduledDateToNow(); // Refresh to current time each time Schedule is selected
+				}
+				scheduled.style.display = 'block';
+			} else {
+				scheduled.style.display = 'none';
+			}
+        }
+    } );
 
 	/**
 	 * Enable searching for items within grid.

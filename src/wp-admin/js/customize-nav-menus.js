@@ -10,6 +10,7 @@ ajaxurl, _updatedControlsWatcher, Sortable, _cpCustomizeNavMenusL10n, isRtl */
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addObserver, itemObserver, currentMenuId,
 		newMenuItemIDs = [],
+		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
 		form = document.querySelector( 'form' ),
@@ -54,8 +55,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Trigger activation of Publish button
 	 */
 	function activatePublishButton() {
+		var changesetStatus = window._wpCustomizeChangesetStatus || 'publish';
 		saveButton.disabled = false;
 		saveButton.textContent = _wpCustomizeControlsL10n.publish;
+		if ( changesetStatus === 'draft' ) {
+			saveButton.textContent = _wpCustomizeControlsL10n.saveDraft;
+		} else if ( changesetStatus === 'future' ) {
+			saveButton.textContent = _wpCustomizeControlsL10n.schedule;
+		}
+		document.getElementById( 'publish-settings' ).style.display = 'block';
 	}
 
 	/**
@@ -667,7 +675,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 
 				// Reset toggle buttons
-				document.querySelectorAll( '.add-new-menu-item' ).forEach( function( btn ) {
+				addMenuButtons.forEach( function( btn ) {
 					btn.setAttribute( 'aria-expanded', 'false' );
 				} );
 
@@ -1043,6 +1051,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			currentMenuId = e.target.closest( 'li' ).dataset.menuId;
 			document.body.classList.toggle( 'adding-menu-items' );
 			if ( document.body.classList.contains( 'adding-menu-items' ) ) {
+				if ( document.body.classList.contains( 'outer-section-open' ) ) {
+					document.body.classList.remove( 'outer-section-open' );
+					document.getElementById( 'publish-settings' ).setAttribute( 'aria-expanded', 'false' );
+					document.getElementById( 'sub-accordion-section-publish_settings' ).style.display = 'none';
+				}
 				availableMenuItems.style.display = 'block';
 				e.target.setAttribute( 'aria-expanded', true );
 				ul.querySelectorAll( 'details' ).forEach( function( accordion ) {
@@ -1051,6 +1064,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} else {
 				availableMenuItems.style.display = 'none';
 				e.target.setAttribute( 'aria-expanded', false );
+			}
+
+		// Close menu items sub-panel
+		} else if ( document.body.classList.contains( 'adding-menu-items' ) && e.target.classList && e.target.classList.contains( 'customize-section-back' ) ) {
+			document.body.classList.remove( 'adding-menu-items' );
+			availableMenuItems.style.display = 'none';
+			for ( let i = 0, n = addMenuButtons.length; i < n; i++ ) {
+				if ( addMenuButtons[i].getAttribute( 'aria-expanded' ) === 'true' ) {
+					addMenuButtons[i].setAttribute( 'aria-expanded', 'false' );
+					addMenuButtons[i].focus();
+					return;
+				}
 			}
 
 		// Add a menu item
