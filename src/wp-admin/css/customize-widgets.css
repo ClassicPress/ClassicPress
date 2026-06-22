@@ -278,10 +278,6 @@ body.adding-widget #available-widgets {
 	height: 100%;
 }
 
-body.adding-widget .wp-full-overlay-main {
-	left: 300px;
-}
-
 body.adding-widget #customize-preview {
 	opacity: 0.4;
 }
