@@ -5,7 +5,7 @@
  *
  * @since CP-2.8.0
  */
-/* global wp */
+/* global wp, console */
 
 /* CONTROLS-frame compat shim: keep the pane stable if 3rd-party code runs early. */
 (function() {
@@ -209,6 +209,57 @@ window.getPreviewChannel = function() {
 	src = iframe.src || '';
 	match = src.match( /customize_messenger_channel=([^&]+)/ );
 	return match ? { iframe: iframe, channel: match[1] } : null;
+};
+
+/**
+ * Updates the preview link control with the current previewed URL.
+ *
+ * @param {string} currentUrl The URL currently shown in the preview iframe.
+ */
+var previewReady = false;
+window.updatePreviewLink = function( currentUrl ) {
+	var liveUrl, frontendUrl,
+		uuid    = document.getElementById( 'customize_changeset_uuid' ),
+		iframe  = document.querySelector( '#customize-preview iframe' ),
+		anchor  = document.getElementById( 'preview-link' ),
+		urlSpan = document.querySelector( '#customize-control-changeset_preview_link [data-component="url"]' );
+
+	// Don't run on initial page load
+    if ( ! previewReady ) {
+        previewReady = true;
+        return;
+    }
+
+	if ( ! anchor ) {
+		return;
+	}
+
+	// Prefer the passed-in URL, otherwise read it from the iframe
+	try {
+		liveUrl = currentUrl || ( iframe.contentWindow.location.href );
+	} catch ( e ) {
+		console.warn( 'updatePreviewLink: invalid URL:', liveUrl, e );
+		return;
+	}
+
+	if ( ! liveUrl ) {
+		return;
+	}
+
+	// Build the shareable URL — append changeset UUID unless already published
+	frontendUrl = location.origin + liveUrl.split( '?' )[0].replace( location.origin, '' ) + '?customize_changeset_uuid=' + ( uuid ? uuid.value : '' );
+	anchor.href = frontendUrl;
+	urlSpan.textContent = frontendUrl;
+
+	// Re-run whenever the iframe navigates to a new page
+	iframe.addEventListener( 'load', function() {
+		try {
+			window.updatePreviewLink( iframe.contentWindow.location.href );
+		} catch ( e ) {
+			// Cross-origin — the URL is unavailable; call with whatever we last had
+			window.updatePreviewLink( null );
+		}
+	} );
 };
 
 window.sendSettingToPreview = function( id, value ) {
@@ -434,6 +485,8 @@ window.addEventListener( 'message', function( event ) {
     if ( ! message.data || ! message.data.currentUrl ) {
         return;
     }
+
+    window.updatePreviewLink( message.data.currentUrl );
 
     target = window.getPreviewChannel();
     if ( ! target ) {
