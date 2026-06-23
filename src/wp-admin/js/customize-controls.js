@@ -1920,6 +1920,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.querySelector( '.themes-section-installed_themes' ).setAttribute( 'aria-expanded', 'true' );
 				document.querySelector( '.themes-section-wporg_themes' ).setAttribute( 'aria-expanded', 'false' );
 				document.querySelector( '.feature-filter-toggle' ).style.display = 'none';
+				document.querySelector( '.feature-filter-toggle' ).setAttribute( 'aria-expanded', 'false' );
 				document.querySelector( '.filter-drawer' ).style.display = 'none';
 				document.querySelector( '.filter-themes-count .theme-count' ).textContent = document.querySelectorAll( '.local .themes li' ).length;
 				if ( window.innerWidth <= 600 ) {
