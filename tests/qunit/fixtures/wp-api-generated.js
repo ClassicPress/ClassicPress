@@ -8006,6 +8006,54 @@ mockedApiResponse.Schema = {
                 ]
             }
         },
+        "/wp-site-health/v1/tests/http-protocol": {
+            "namespace": "wp-site-health/v1",
+            "methods": [
+                "GET"
+            ],
+            "endpoints": [
+                {
+                    "methods": [
+                        "GET"
+                    ],
+                    "args": []
+                }
+            ],
+            "_links": {
+                "self": [
+                    {
+                        "href": "http://example.org/index.php?rest_route=/wp-site-health/v1/tests/http-protocol"
+                    }
+                ]
+            }
+        },
+        "/wp-site-health/v1/tests/http-protocol-data": {
+            "namespace": "wp-site-health/v1",
+            "methods": [
+                "POST"
+            ],
+            "endpoints": [
+                {
+                    "methods": [
+                        "POST"
+                    ],
+                    "args": {
+                        "protocol": {
+                            "type": "string",
+                            "default": "",
+                            "required": false
+                        }
+                    }
+                }
+            ],
+            "_links": {
+                "self": [
+                    {
+                        "href": "http://example.org/index.php?rest_route=/wp-site-health/v1/tests/http-protocol-data"
+                    }
+                ]
+            }
+        },
         "/wp/v2/menu-locations": {
             "namespace": "wp/v2",
             "methods": [
