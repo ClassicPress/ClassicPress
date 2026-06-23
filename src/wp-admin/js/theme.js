@@ -388,7 +388,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					dialog.querySelector( '.no-php' ).removeAttribute( 'hidden' );
 				}
 
-				if ( theme.dataset.hasUpdate ) {
+				if ( theme.dataset.hasUpdate === '1' ) {
 					if ( theme.dataset.updateResponse === '1-1' ) {
 						dialog.querySelector( '.has-update span' ).innerHTML = theme.dataset.update;
 						dialog.querySelector( '.has-update' ).removeAttribute( 'hidden' );
