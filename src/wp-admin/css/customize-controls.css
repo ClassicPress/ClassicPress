@@ -115,26 +115,6 @@ body:not(.ready) #customize-save-button-wrapper .save {
 	border-radius: 3px 0 0 3px;
 }
 
-#customize-sidebar-outer-content {
-	visibility: hidden;
-	overflow-x: hidden;
-	overflow-y: auto;
-	width: 100%;
-	margin: 0;
-	z-index: -1;
-	background: #f0f0f1;
-	transition: left .18s;
-	border-right: 1px solid #dcdcde;
-	border-left: 1px solid #dcdcde;
-	height: auto;
-}
-
-@media (prefers-reduced-motion: reduce) {
-	#customize-sidebar-outer-content {
-		transition: none;
-	}
-}
-
 #customize-theme-controls .control-section-outer {
 	display: none !important;
 }
@@ -153,18 +133,6 @@ body:not(.ready) #customize-save-button-wrapper .save {
 
 #customize-outer-theme-controls .accordion-section-content.open {
 	display: block;
-}
-
-.outer-section-open .wp-full-overlay.expanded #customize-sidebar-outer-content {
-	visibility: visible;
-	left: 100%;
-	transition: left .18s;
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.outer-section-open .wp-full-overlay.expanded #customize-sidebar-outer-content {
-		transition: none;
-	}
 }
 
 .customize-outer-pane-parent {
@@ -1836,13 +1804,12 @@ input[type="range"].hue-slider::-moz-range-track {
 .control-panel-themes .customize-themes-full-container {
 	position: fixed;
 	top: 0;
-	left: 45px;
+	bottom: 0;
+	right: 0;
+	padding: 46px 0 0;
 	transition: .18s left ease-in-out;
-	margin: 0 0 0 300px;
-	padding: 71px 0 25px;
-	overflow-y: scroll;
+	overflow-y: auto;
 	width: calc(100% - 345px);
-	height: calc(100% - 96px);
 	background: #f0f0f1;
 	z-index: 20;
 }
@@ -1850,14 +1817,6 @@ input[type="range"].hue-slider::-moz-range-track {
 @media (prefers-reduced-motion: reduce) {
 	.control-panel-themes .customize-themes-full-container {
 		transition: none;
-	}
-}
-
-@media screen and (min-width: 1670px) {
-	.control-panel-themes .customize-themes-full-container {
-		width: 82%;
-		right: 0;
-		left: initial;
 	}
 }
 
@@ -1877,37 +1836,6 @@ input[type="range"].hue-slider::-moz-range-track {
 	bottom: 0;
 	transition: .18s bottom ease-in-out;
 	z-index: 999;
-}
-
-.in-themes-panel:not(.animating) #customize-header-actions .spinner,
-.in-themes-panel:not(.animating) #customize-header-actions .customize-controls-preview-toggle,
-.in-themes-panel:not(.animating) #customize-preview,
-.in-themes-panel:not(.animating) #customize-footer-actions {
-	visibility: hidden;
-}
-
-.wp-full-overlay.in-themes-panel {
-	background: #f0f0f1; /* Prevents a black flash when fading in the panel */
-}
-
-.in-themes-panel #customize-save-button-wrapper,
-.in-themes-panel #customize-header-actions .spinner,
-.in-themes-panel #customize-header-actions .customize-controls-preview-toggle {
-	margin-top: -46px; /* Height of header actions bar */
-}
-
-.in-themes-panel #customize-footer-actions,
-.in-themes-panel #customize-footer-actions .collapse-sidebar {
-	bottom: -45px;
-}
-
-/* Don't show the theme count while the panel opens, as it's in the wrong place during the animation */
-.in-themes-panel.animating .control-panel-themes .filter-themes-count {
-	display: none;
-}
-
-.in-themes-panel.wp-full-overlay .wp-full-overlay-sidebar-content {
-	bottom: 0;
 }
 
 .themes-filter-bar .feature-filter-toggle {
@@ -1935,19 +1863,20 @@ input[type="range"].hue-slider::-moz-range-track {
 }
 
 .filter-drawer {
+	position: relative;
 	box-sizing: border-box;
 	width: 100%;
-	padding: 0 0 25px 25px;
-	border-top: 0;
 	margin: 0;
-	background: #f0f0f1;
+	padding: 25px 0 25px 25px;
+	border-top: 0;
 	border-bottom: 1px solid #dcdcde;
+	background: #f0f0f1;
 }
 
 .filter-drawer .filter-group {
 	margin: 0 25px 0 0;
 	width: calc( (100% - 75px) / 3);
-	min-width: 200px;
+	min-width: 180px;
 	max-width: 320px;
 }
 
@@ -1965,10 +1894,6 @@ input[type="range"].hue-slider::-moz-range-track {
 }
 
 .control-panel-themes .customize-themes-full-container.animate {
-	animation: .6s themes-fade-in 1;
-}
-
-.in-themes-panel:not(.animating) .control-panel-themes .filter-themes-count {
 	animation: .6s themes-fade-in 1;
 }
 
@@ -2107,6 +2032,7 @@ input[type="range"].hue-slider::-moz-range-track {
 	border: 1px solid #8c8f94;
 	vertical-align: middle;
 }
+
 .customize-control input.cp-color-picker {
 	width: 100px;
 	vertical-align: middle;
@@ -2115,7 +2041,8 @@ input[type="range"].hue-slider::-moz-range-track {
 }
 
 .wp-customizer .theme-browser .themes {
-	padding: 2px 2em 3em;
+	position: relative;
+	padding: 25px 2em;
 	transition: .18s margin-top linear;
 }
 
@@ -2136,22 +2063,14 @@ input[type="range"].hue-slider::-moz-range-track {
 	justify-content: space-between;
 	position: fixed;
 	top: 0;
-	left: 300px;
-	width: calc(100% - 300px);
+	right: 0;
+	width: calc(100% - 345px);
 	height: 46px;
 	background: #f0f0f1;
 	z-index: 10;
 	padding: 6px 25px;
 	box-sizing: border-box;
 	border-bottom: 1px solid #dcdcde;
-}
-
-@media screen and (min-width: 1670px) {
-	.customize-preview-header.themes-filter-bar {
-		width: calc(82% + 1px);
-		right: 0;
-		left: initial;
-	}
 }
 
 .themes-filter-bar .themes-filter-container {
@@ -2179,20 +2098,10 @@ input[type="range"].hue-slider::-moz-range-track {
 		position: relative;
 		left: 0;
 		width: 100%;
-		margin: 0 0 25px;
-	}
-	.filter-drawer {
-		top: 46px;
-	}
-	.wp-customizer .theme-browser .themes {
-		overflow: hidden;
 	}
 
 	.control-panel-themes .customize-themes-full-container {
-		margin-top: 0;
 		padding: 0;
-		height: 100%;
-		width: calc(100% - 345px);
 	}
 }
 
@@ -2200,9 +2109,7 @@ input[type="range"].hue-slider::-moz-range-track {
 	.filter-drawer .filter-group {
 		width: calc( (100% - 50px) / 2);
 	}
-}
 
-@media screen and (max-width: 900px) {
 	.customize-preview-header.themes-filter-bar {
 		height: 86px;
 		padding-top: 46px;
@@ -2214,12 +2121,10 @@ input[type="range"].hue-slider::-moz-range-track {
 		min-width: 200px;
 	}
 
-	.filter-drawer {
-		top: 86px;
-	}
-
 	.control-panel-themes .filter-themes-count {
-		float: left;
+		display: flex;
+		justify-content: space-between;
+		flex: 1;
 	}
 }
 
@@ -2235,16 +2140,6 @@ input[type="range"].hue-slider::-moz-range-track {
 
 /* Mobile - toggle between themes and filters */
 @media screen and (max-width: 600px) {
-
-	.filter-drawer {
-		top: 132px;
-	}
-
-	.wp-full-overlay.showing-themes .control-panel-themes .filter-themes-count .filter-themes {
-		display: block;
-		float: right;
-	}
-
 	.wp-full-overlay-sidebar {
 		position: fixed;
 		top: 0;
@@ -2253,13 +2148,13 @@ input[type="range"].hue-slider::-moz-range-track {
 	}
   
 	#customize-preview {
-		margin-top: 45px;
+		margin-top: 46px;
 	}
 
 	.control-panel-themes .customize-themes-full-container {
 		width: 100%;
 		left: 0;
-		margin: 45px 0 0;
+		margin: 46px 0 0;
 		height: calc(100% - 46px);
 		z-index: 1;
 		display: none;
@@ -2332,10 +2227,6 @@ input[type="range"].hue-slider::-moz-range-track {
 	bottom: 0;
 }
 
-.wp-full-overlay.in-themes-panel.themes-panel-expanded #customize-controls .wp-full-overlay-sidebar-content {
-	overflow: visible;
-}
-
 .wp-customizer .theme-overlay .theme-backdrop {
 	background: rgba(240, 240, 241, 0.75);
 	position: fixed;
@@ -2374,10 +2265,6 @@ input[type="range"].hue-slider::-moz-range-track {
 	right: auto;
 	bottom: auto;
 	position: absolute;
-}
-
-.modal-open .in-themes-panel #customize-controls .wp-full-overlay-sidebar-content {
-	overflow: visible; /* Prevent the top-level Customizer controls from becoming visible when elements on the right of the details modal are focused. */
 }
 
 .wp-customizer .theme-header {
@@ -2602,7 +2489,16 @@ body.adding-widget .add-new-widget:before,
 
 #sub-accordion-section-publish_settings {
 	width: 300px;
+	margin: 0;
 	padding: 14px 10px 15px;
+	background: #f0f0f1;
+	transition: left .18s;
+	border: 0;
+	box-shadow: none;
+	border-right: 1px solid #dcdcde;
+	display: none;
+	overflow-y: auto;
+	box-sizing: border-box;
 }
 
 #widgets-right {
@@ -3060,7 +2956,7 @@ body.adding-widget .add-new-widget:before,
 
 	body.adding-widget #widgets-left,
 	body.adding-menu-items #available-menu-items,
-	body.outer-section-open #customize-sidebar-outer-content {
+	body.outer-section-open #sub-accordion-section-publish_settings {
 		position: absolute;
 		top: 46px;
 		bottom: 0;
@@ -3068,14 +2964,6 @@ body.adding-widget .add-new-widget:before,
 		right: 0;
 		width: 100%;
 		z-index: 10;
-	}
-
-	body.wp-customizer .wp-full-overlay.expanded #customize-sidebar-outer-content {
-		left: -100%;
-	}
-
-	body.wp-customizer.outer-section-open .wp-full-overlay.expanded #customize-sidebar-outer-content {
-		left: 0;
 	}
 }
 

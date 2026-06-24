@@ -4019,7 +4019,21 @@ function wp_ajax_query_themes() {
 		$alt_text           = sprintf( __( 'Screenshot of theme: %s' ), $theme->name );
 
 		// Build HTML response
-		$theme_item = '<li id="' . esc_attr( $theme->slug ) . '" class="theme' . esc_attr( $active ) . '" data-id="' . esc_attr( $theme->slug ) . '" data-install-nonce="' . esc_url( $theme->install_url ) . '" data-activate-nonce="' . esc_url( $theme->activate_url ) . '" data-customize="' . esc_url( $theme->customize_url ) . '" data-home="' . esc_url( $theme->homepage ) . '" data-description="' . esc_attr( $theme->description ) . '" data-tags="' . esc_attr( implode( ',', $theme->tags ) ) . '" data-ratings="' . esc_attr( $theme->stars ) . '" data-num-ratings="' . esc_attr( $theme->num_ratings ) . '" data-version="' . esc_attr( $theme->version ) . '">';
+		$theme_item = '<li id="' . esc_attr( $theme->slug ) . '" .
+			class="theme' . esc_attr( $active ) . '" . 
+			data-id="' . esc_attr( $theme->slug ) . '" . 
+			data-install-nonce="' . esc_url( $theme->install_url ) . '" . 
+			data-activate-nonce="' . esc_url( $theme->activate_url ) . '" . 
+			data-customize="' . esc_url( $theme->customize_url ) . '" . 
+			data-home="' . esc_url( $theme->homepage ) . '" . 
+			data-description="' . esc_attr( $theme->description ) . '" . 
+			data-tags="' . esc_attr( implode( ',', $theme->tags ) ) . '" . 
+			data-ratings="' . esc_attr( $theme->stars ) . '" . 
+			data-num-ratings="' . esc_attr( $theme->num_ratings ) . '" . 
+			data-version="' . esc_attr( $theme->version ) . '" . 
+			data-compatible-wp="' . absint( $theme->compatible_wp ) . '" . 
+			data-compatible-php="' . absint( $theme->compatible_php ) . '" .
+		>';
 
 		if ( ! empty( $theme->screenshot_url ) ) {
 			$theme_item .= '<div class="theme-screenshot"><img src="' . esc_url( $theme->screenshot_url ) . '" alt="' . esc_attr( $alt_text ) . '"></div>';

@@ -873,7 +873,6 @@ final class WP_Customize_Widgets {
 						<li id="widget-tpl-<?php esc_attr_e( $available_widget['id'] ); ?>"
 							data-widget-id="<?php esc_attr_e( $available_widget['id'] ); ?>"
 							class="widget-tpl <?php esc_attr_e( $available_widget['id'] ); ?>"
-							tabindex="0"
 						>
 							<?php echo $available_widget['control_tpl']; ?>
 						</li>
