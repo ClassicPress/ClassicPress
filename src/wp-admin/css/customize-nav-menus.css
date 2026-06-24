@@ -338,6 +338,12 @@
 	text-decoration: none !important;
 }
 
+#available-menu-items .accordion-section-title:hover,
+#available-menu-items .accordion-section-title:focus {
+	border-left: 4px solid #2271b1;
+	padding-left: 11px;
+}
+
 .control-section-nav_menu .field-link-target,
 .control-section-nav_menu .field-title-attribute,
 .control-section-nav_menu .field-css-classes,

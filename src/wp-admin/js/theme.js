@@ -379,6 +379,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				dialog.querySelector( '.theme-version' ).textContent = _wpThemeSettings.l10n.version + ' ' + theme.dataset.version;
 				dialog.querySelector( '.theme-author' ).innerHTML = theme.querySelector( '.theme-author' ).innerHTML;
 
+				// Notices
 				if ( theme.dataset.compatibleWp !== '1' && theme.dataset.compatiblePhp !== '1' ) {
 					dialog.querySelector( '.no-wp-php' ).removeAttribute( 'hidden' );
 				} else if ( theme.dataset.compatibleWp !== '1' ) {
@@ -387,7 +388,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					dialog.querySelector( '.no-php' ).removeAttribute( 'hidden' );
 				}
 
-				if ( theme.dataset.hasUpdate ) {
+				if ( theme.dataset.hasUpdate === '1' ) {
 					if ( theme.dataset.updateResponse === '1-1' ) {
 						dialog.querySelector( '.has-update span' ).innerHTML = theme.dataset.update;
 						dialog.querySelector( '.has-update' ).removeAttribute( 'hidden' );
