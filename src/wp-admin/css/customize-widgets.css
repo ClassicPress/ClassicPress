@@ -246,6 +246,7 @@
 }
 
 #available-widgets .widget-tpl:hover,
+#available-widgets .widget-tpl:focus-within,
 #available-widgets .widget-tpl.selected {
 	background: #f6f7f7;
 	border-bottom-color: #c3c4c7;
@@ -261,6 +262,10 @@
 #available-widgets summary.widget-title {
 	padding: 0 0 5px;
 	font-size: 14px;
+}
+
+#available-widgets summary.widget-title:focus {
+	outline: none;
 }
 
 #available-widgets .widget .widget-description {
