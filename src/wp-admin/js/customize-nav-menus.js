@@ -546,8 +546,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Add menu item
 	 */
-	function addMenuItem( type, object, objectId, title, label, url ) {
+	function addMenuItem( type, object, objectId, title, label, url, errorSpan ) {
 		var data,
+			input      = document.getElementById( 'custom-menu-item-name' ),
 			menu       = document.getElementById( 'sub-accordion-section-nav_menu[' + currentMenuId + ']' ) || menuToEdit,
 			menuItems  = menu.querySelectorAll( '.menu-item' ),
 			lastItem   = menuItems[menuItems.length - 1],
@@ -556,6 +557,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			clone      = template.content.cloneNode( true );
 
 		const addItemsPanel = document.getElementById( 'available-menu-items' );
+
+		if ( ! title ) {
+			errorSpan.style.padding = '15px';
+			errorSpan.style.display = 'block';
+			input.classList.add( 'form-invalid' );
+			input.setAttribute( 'aria-invalid', 'true' );
+			input.setAttribute( 'aria-describedby', errorSpan.id );
+			wp.a11y.speak( errorSpan.textContent );
+			return;
+		} else {
+			errorSpan.style.display = 'none';
+			input.classList.remove( 'form-invalid' );
+			input.removeAttribute( 'aria-invalid' );
+			input.removeAttribute( 'aria-describedby' );
+		}
 
 		if ( type === 'custom' ) {
 			clone.querySelector( '.field-url' ).removeAttribute( 'hidden' );
@@ -1100,9 +1116,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				e.target.parentNode.classList.add( 'item-added' );
 				addMenuItem( type, object, objectId, title, label, url );
 			} else if ( e.target.id && e.target.id === 'custom-menu-item-submit'  ) {
-				title = document.getElementById( 'custom-menu-item-name' ).value.trim();
-				url   = document.getElementById( 'custom-menu-item-url' ).value.trim();
-				addMenuItem( 'custom', 'custom', '', title, 'Custom Link', url );
+				title     = document.getElementById( 'custom-menu-item-name' ).value.trim();
+				url       = document.getElementById( 'custom-menu-item-url' ).value.trim();
+				errorSpan = e.target.parentNode.parentNode.nextElementSibling;
+				addMenuItem( 'custom', 'custom', '', title, 'Custom Link', url, errorSpan );
 			}
 
 		// Delete a menu item
