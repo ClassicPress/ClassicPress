@@ -8,7 +8,9 @@
 /* global wp, _wpCustomizeControlsL10n, _wpCustomizeHeader, updatedControls,
 _updatedControlsWatcher, Coloris, ajaxurl, IMAGE_WIDGET, _cpCustomLogo,
 FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
-FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console */
+FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console,
+_wpUpdatesSettings, _wpThemeSettings */
+
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver, targetEl,
@@ -256,17 +258,97 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @param event - Event.
 	 * @return {void}
 	 */
-	function constrainTab( event ) {
-		var first = form.querySelector( '#customize-save-button-wrapper' ).disabled === false ? form.querySelector( '#customize-save-button-wrapper' ) : form.querySelector( '.customize-controls-close' ),
-			last = form.querySelector( '.preview-mobile' );
+	function constrainTab( e ) {
+		var first = saveButton.disabled === false ? saveButton : form.querySelector( '.customize-controls-close' ),
+			last = form.querySelector( '.preview-mobile' ),
+			lastButton = [...publishSettingsPanel.querySelectorAll( 'button' )].pop(),
+			widgetSearch = document.getElementById( 'widgets-search' ),
+			lastWidget = [...document.querySelectorAll( '#available-widgets-list .widget-title' )].pop(),
+			menuSearch = document.getElementById( 'menu-items-search' ),
+			lastMenuItem = [...availableMenuItems.querySelectorAll( '.accordion-section-title' )].pop();
 
-		event.stopPropagation();
-		if ( event.target === last && ! event.shiftKey ) {
-			event.preventDefault();
-			first.focus();
-		} else if ( event.target === first && event.shiftKey ) {
-			event.preventDefault();
-			last.focus();
+		e.stopPropagation();
+		if ( e.shiftKey ) {
+			if ( e.target === first ) {
+				e.preventDefault();
+				last.focus();
+			} else if ( e.target.parentNode.parentNode.id === 'customize-control-changeset_status' ) {
+				e.preventDefault();
+				publishSettings.focus();
+			} else if ( e.target === publishSettings ) {
+				if ( document.body.classList.contains( 'outer-section-open' ) ) {
+					e.preventDefault();
+					lastButton.disabled === 'false' ? lastButton.focus() : document.querySelector( '#customize-control-trash_changeset .button-link-delete' ).focus();
+				}
+			} else if ( e.target === widgetSearch ) {
+				e.preventDefault();
+				for ( let i = 0, n = addWidgetButtons.length; i < n; i ++ ) {
+					if ( isVisible( addWidgetButtons[i] ) ) {
+						addWidgetButtons[i].focus();
+						return;
+					}
+				}
+			} else if ( e.target.classList?.contains( 'add-new-widget' ) ) {
+				if ( document.body.classList.contains( 'adding-widget' ) ) {
+					e.preventDefault();
+					lastWidget.focus();
+				}
+			} else if ( e.target === menuSearch ) {
+				e.preventDefault();
+				for ( let i = 0, n = addMenuButtons.length; i < n; i++ ) {
+					if ( isVisible( addMenuButtons[i] ) ) {
+						addMenuButtons[i].focus();
+						return;
+					}
+				}
+			} else if ( e.target.classList?.contains( 'add-new-menu-item' ) ) {
+				if ( document.body.classList.contains( 'adding-menu-items' ) ) {
+					e.preventDefault();
+					lastMenuItem.focus();
+				}
+			}
+		} else {
+			if ( e.target === last ) {
+				e.preventDefault();
+				first.focus();
+			} else if ( isVisible( publishSettingsPanel ) ) {
+				if ( e.target === publishSettings ) {
+					e.preventDefault();
+					document.getElementById( 'changeset-status-publish' ).focus();
+				} else if ( e.target === lastButton ) {
+					e.preventDefault();
+					publishSettings.focus();
+				} else if ( e.target.classList?.contains( 'button-link-delete' ) && lastButton.hasAttribute( 'disabled' ) ) {
+					e.preventDefault();
+					publishSettings.focus();
+				}
+			} else if ( isVisible( widgetSearch ) ) {
+				if ( e.target.classList?.contains( 'add-new-widget' ) ) {
+					e.preventDefault();
+					widgetSearch.focus();
+				} else if ( e.target === lastWidget ) {
+					e.preventDefault();
+					for ( let i = 0, n = addWidgetButtons.length; i < n; i ++ ) {
+						if ( isVisible( addWidgetButtons[i] ) ) {
+							addWidgetButtons[i].focus();
+							return;
+						}
+					}
+				}
+			} else if ( isVisible( menuSearch ) ) {
+				if ( e.target.classList?.contains( 'add-new-menu-item' ) ) {
+					e.preventDefault();
+					menuSearch.focus();
+				} else if ( e.target === lastMenuItem ) {
+					e.preventDefault();
+					for ( let i = 0, n = addMenuButtons.length; i < n; i++ ) {
+						if ( isVisible( addMenuButtons[i] ) ) {
+							addMenuButtons[i].focus();
+							return;
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -433,7 +515,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 			// Populate grid with new items
-			themesGrid.insertAdjacentHTML( 'beforeend', result.data.html );
+			themesGrid.insertAdjacentHTML( 'beforeend', convertThemeLinksToButtons( result.data.html ) );
 			orgThemes = document.querySelectorAll( '.wp-org .themes li' );
 			orgThemes.forEach( function( theme ) {
 				theme.style.marginRight = '2%';
@@ -449,6 +531,85 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} )
 		.catch( function( error ) {
+			console.error( error );
+		} );
+	}
+
+	function convertThemeLinksToButtons( html ) {
+		const template = document.createElement( 'template' );
+		template.innerHTML = html;
+
+		template.content.querySelectorAll( '.theme-install' ).forEach( function( link ) {
+			const button = document.createElement( 'button' );
+
+			// Copy all attributes except href.
+			for ( const { name, value } of link.attributes ) {
+				if ( name !== 'href' ) {
+					button.setAttribute( name, value );
+				}
+			}
+
+			// Ensure button semantics.
+			button.type = 'button';
+
+			// Preserve contents.
+			button.innerHTML = link.innerHTML;
+
+			// Replace <a> with <button>.
+			link.replaceWith( button );
+		} );
+
+		return template.innerHTML;
+	}
+
+	/**
+	 * Install theme
+	 *
+	 * @since CP-2.8.0
+	 */
+	function installTheme( button, themeUrl ) {
+		const buttonText = button.textContent,
+			data = new URLSearchParams( {
+				action: 'install-theme',
+				slug: button.dataset.slug,
+				_wpnonce: _wpUpdatesSettings.ajax_nonce
+			} );
+
+		button.disabled = true;
+		button.textContent = _wpThemeSettings.l10n.installing;
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+			},
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			// Keep installation within Customizer
+			const customizeUrl = result.data?.customizeUrl || themeUrl;
+			if ( customizeUrl ) {
+				window.location = customizeUrl;
+				return;
+			}
+
+			// Fallback to installing within regular themes page in admin
+			const activateUrl = result.data?.activateUrl;
+			if ( activateUrl ) {
+				window.location = activateUrl;
+				return;
+			}
+		} )
+		.catch( function( error ) {
+			button.disabled = false;
+			button.textContent = buttonText;
 			console.error( error );
 		} );
 	}
@@ -2069,6 +2230,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 				availableWidgets.style.display = 'block';
 				e.target.setAttribute( 'aria-expanded', true );
+				setTimeout( function() {
+					document.getElementById( 'widgets-search' ).focus();
+				}, 0 );
 			} else {
 				availableWidgets.style.display = 'none';
 				e.target.setAttribute( 'aria-expanded', false );
@@ -2207,6 +2371,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} else {
 				document.querySelector( '.filter-drawer' ).style.display = 'block';
 			}
+
+		// Install theme
+		} else if ( e.target.classList && e.target.classList.contains( 'theme-install' ) ) {
+			installTheme( e.target, e.target.closest( 'li' ).dataset.customize );
 
 		// Collapse or expand sidebar
 		} else if ( e.target.parentNode.classList && e.target.parentNode.classList.contains( 'collapse-sidebar' ) ) {

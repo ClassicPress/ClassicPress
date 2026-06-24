@@ -1076,6 +1076,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				ul.querySelectorAll( 'details' ).forEach( function( accordion ) {
 					accordion.removeAttribute( 'open' );
 				} );
+				setTimeout( function() {
+					document.getElementById( 'menu-items-search' ).focus();
+				}, 0 );
 			} else {
 				availableMenuItems.style.display = 'none';
 				e.target.setAttribute( 'aria-expanded', false );
