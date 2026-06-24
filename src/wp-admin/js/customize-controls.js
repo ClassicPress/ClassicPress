@@ -1954,8 +1954,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( e.target.parentNode === document.querySelector( '.feature-filter-toggle' ) ) {
 			if ( isVisible( document.querySelector( '.filter-drawer' ) ) ) {
 				document.querySelector( '.filter-drawer' ).style.display = 'none';
+				document.querySelector( '.feature-filter-toggle' ).setAttribute( 'aria-expanded', 'false' );
 			} else {
 				document.querySelector( '.filter-drawer' ).style.display = 'block';
+				document.querySelector( '.feature-filter-toggle' ).setAttribute( 'aria-expanded', 'true' );
 			}
 
 		// Collapse or expand sidebar
