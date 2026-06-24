@@ -559,7 +559,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		const addItemsPanel = document.getElementById( 'available-menu-items' );
 
 		if ( ! title ) {
-			errorSpan.style.padding = '15px';
 			errorSpan.style.display = 'block';
 			input.classList.add( 'form-invalid' );
 			input.setAttribute( 'aria-invalid', 'true' );
