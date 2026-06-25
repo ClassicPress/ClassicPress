@@ -1400,6 +1400,9 @@ final class WP_Customize_Nav_Menus {
 				continue;
 			}
 			$post = get_post( $post_id );
+			if ( ! ( $post instanceof WP_Post ) ) {
+				continue;
+			}
 			if ( 'auto-draft' !== $post->post_status && 'draft' !== $post->post_status ) {
 				continue;
 			}
