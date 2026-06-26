@@ -2600,6 +2600,7 @@ echo cp_render_media_video_template();
  *
  * @since CP-2.8.0
  */
+$wp_customize->customize_pane_settings();
 do_action( 'admin_print_footer_scripts' );
 ?>
 
