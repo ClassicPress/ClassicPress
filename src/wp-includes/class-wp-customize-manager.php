@@ -4662,211 +4662,28 @@ final class WP_Customize_Manager {
 	 * @since 4.4.0
 	 */
 	public function customize_pane_settings() {
-
-		$login_url = add_query_arg(
-			array(
-				'interim-login'   => 1,
-				'customize-login' => 1,
-			),
-			wp_login_url()
-		);
-
-		// Ensure dirty flags are set for modified settings.
-		foreach ( array_keys( $this->unsanitized_post_values() ) as $setting_id ) {
-			$setting = $this->get_setting( $setting_id );
-			if ( $setting ) {
-				$setting->dirty = true;
-			}
-		}
-
-		$autosave_revision_post  = null;
-		$autosave_autodraft_post = null;
-		$changeset_post_id       = $this->changeset_post_id();
-		if ( ! $this->saved_starter_content_changeset && ! $this->autosaved() ) {
-			if ( $changeset_post_id ) {
-				if ( is_user_logged_in() ) {
-					$autosave_revision_post = wp_get_post_autosave( $changeset_post_id, get_current_user_id() );
-				}
-			} else {
-				$autosave_autodraft_posts = $this->get_changeset_posts(
-					array(
-						'posts_per_page'            => 1,
-						'post_status'               => 'auto-draft',
-						'exclude_restore_dismissed' => true,
-					)
-				);
-				if ( ! empty( $autosave_autodraft_posts ) ) {
-					$autosave_autodraft_post = array_shift( $autosave_autodraft_posts );
-				}
-			}
-		}
-
-		$current_user_can_publish = current_user_can( get_post_type_object( 'customize_changeset' )->cap->publish_posts );
-
-		// @todo Include all of the status labels here from script-loader.php, and then allow it to be filtered.
-		$status_choices = array();
-		if ( $current_user_can_publish ) {
-			$status_choices[] = array(
-				'status' => 'publish',
-				'label'  => __( 'Publish' ),
-			);
-		}
-		$status_choices[] = array(
-			'status' => 'draft',
-			'label'  => __( 'Save Draft' ),
-		);
-		if ( $current_user_can_publish ) {
-			$status_choices[] = array(
-				'status' => 'future',
-				'label'  => _x( 'Schedule', 'customizer changeset action/button label' ),
-			);
-		}
-
-		// Prepare Customizer settings to pass to JavaScript.
-		$changeset_post = null;
-		if ( $changeset_post_id ) {
-			$changeset_post = get_post( $changeset_post_id );
-		}
-
-		// Determine initial date to be at present or future, not past.
-		$current_time = current_time( 'mysql', false );
-		$initial_date = $current_time;
-		if ( $changeset_post ) {
-			$initial_date = get_the_time( 'Y-m-d H:i:s', $changeset_post->ID );
-			if ( $initial_date < $current_time ) {
-				$initial_date = $current_time;
-			}
-		}
-
 		$lock_user_id = false;
+
 		if ( $this->changeset_post_id() ) {
 			$lock_user_id = wp_check_post_lock( $this->changeset_post_id() );
 		}
 
 		$settings = array(
-			'changeset'              => array(
-				'uuid'                  => $this->changeset_uuid(),
-				'branching'             => $this->branching(),
-				'autosaved'             => $this->autosaved(),
-				'hasAutosaveRevision'   => ! empty( $autosave_revision_post ),
-				'latestAutoDraftUuid'   => $autosave_autodraft_post ? $autosave_autodraft_post->post_name : null,
-				'status'                => $changeset_post ? $changeset_post->post_status : '',
-				'currentUserCanPublish' => $current_user_can_publish,
-				'publishDate'           => $initial_date,
-				'statusChoices'         => $status_choices,
-				'lockUser'              => $lock_user_id ? $this->get_lock_user_data( $lock_user_id ) : null,
+			'changeset' => array(
+				'uuid'     => $this->changeset_uuid(),
+				'lockUser' => $lock_user_id ? $this->get_lock_user_data( $lock_user_id ) : null,
 			),
-			'initialServerDate'      => $current_time,
-			'dateFormat'             => get_option( 'date_format' ),
-			'timeFormat'             => get_option( 'time_format' ),
-			'initialServerTimestamp' => floor( microtime( true ) * 1000 ),
-			'initialClientTimestamp' => -1, // To be set with JS below.
-			'timeouts'               => array(
-				'windowRefresh'           => 250,
-				'changesetAutoSave'       => AUTOSAVE_INTERVAL * 1000,
-				'keepAliveCheck'          => 2500,
-				'reflowPaneContents'      => 100,
-				'previewFrameSensitivity' => 2000,
+			'url' => array(
+				'ajax' => sanitize_url( admin_url( 'admin-ajax.php', 'relative' ) ),
 			),
-			'theme'                  => array(
-				'stylesheet'  => $this->get_stylesheet(),
-				'active'      => $this->is_theme_active(),
-				'_canInstall' => current_user_can( 'install_themes' ),
-			),
-			'url'                    => array(
-				'preview'       => sanitize_url( $this->get_preview_url() ),
-				'return'        => sanitize_url( $this->get_return_url() ),
-				'parent'        => sanitize_url( admin_url() ),
-				'activated'     => sanitize_url( home_url( '/' ) ),
-				'ajax'          => sanitize_url( admin_url( 'admin-ajax.php', 'relative' ) ),
-				'allowed'       => array_map( 'sanitize_url', $this->get_allowed_urls() ),
-				'isCrossDomain' => $this->is_cross_domain(),
-				'home'          => sanitize_url( home_url( '/' ) ),
-				'login'         => sanitize_url( $login_url ),
-			),
-			'browser'                => array(
-				'mobile' => wp_is_mobile(),
-				'ios'    => $this->is_ios(),
-			),
-			'panels'                 => array(),
-			'sections'               => array(),
-			'nonce'                  => $this->get_nonces(),
-			'autofocus'              => $this->get_autofocus(),
-			'documentTitleTmpl'      => $this->get_document_title_template(),
-			'previewableDevices'     => $this->get_previewable_devices(),
-			'l10n'                   => array(
-				'confirmDeleteTheme'   => __( 'Are you sure you want to delete this theme?' ),
-				/* translators: %d: Number of theme search results, which cannot currently consider singular vs. plural forms. */
-				'themeSearchResults'   => __( '%d themes found' ),
-				/* translators: %d: Number of themes being displayed, which cannot currently consider singular vs. plural forms. */
-				'announceThemeCount'   => __( 'Displaying %d themes' ),
-				/* translators: %s: Theme name. */
-				'announceThemeDetails' => __( 'Showing details for theme: %s' ),
+			'nonce' => array(
+				'override_lock'            => wp_create_nonce( 'customize_override_changeset_lock' ),
+				'dismiss_autosave_or_lock' => wp_create_nonce( 'customize_dismiss_autosave_or_lock' ),
 			),
 		);
-
-		// Temporarily disable installation in Customizer. See #42184.
-		$filesystem_method = get_filesystem_method();
-		ob_start();
-		$filesystem_credentials_are_stored = request_filesystem_credentials( self_admin_url() );
-		ob_end_clean();
-		if ( 'direct' !== $filesystem_method && ! $filesystem_credentials_are_stored ) {
-			$settings['theme']['_filesystemCredentialsNeeded'] = true;
-		}
-
-		// Prepare Customize Section objects to pass to JavaScript.
-		foreach ( $this->sections() as $id => $section ) {
-			if ( $section->check_capabilities() ) {
-				$settings['sections'][ $id ] = $section->json();
-			}
-		}
-
-		// Prepare Customize Panel objects to pass to JavaScript.
-		foreach ( $this->panels() as $panel_id => $panel ) {
-			if ( $panel->check_capabilities() ) {
-				$settings['panels'][ $panel_id ] = $panel->json();
-				foreach ( $panel->sections as $section_id => $section ) {
-					if ( $section->check_capabilities() ) {
-						$settings['sections'][ $section_id ] = $section->json();
-					}
-				}
-			}
-		}
-
 		?>
 		<script>
 			var _wpCustomizeSettings = <?php echo wp_json_encode( $settings ); ?>;
-			_wpCustomizeSettings.initialClientTimestamp = _.now();
-			_wpCustomizeSettings.controls = {};
-			_wpCustomizeSettings.settings = {};
-			<?php
-
-			// Serialize settings one by one to improve memory usage.
-			echo "(function ( s ){\n";
-			foreach ( $this->settings() as $setting ) {
-				if ( $setting->check_capabilities() ) {
-					printf(
-						"s[%s] = %s;\n",
-						wp_json_encode( $setting->id ),
-						wp_json_encode( $setting->json() )
-					);
-				}
-			}
-			echo "})( _wpCustomizeSettings.settings );\n";
-
-			// Serialize controls one by one to improve memory usage.
-			echo "(function ( c ){\n";
-			foreach ( $this->controls() as $control ) {
-				if ( $control->check_capabilities() ) {
-					printf(
-						"c[%s] = %s;\n",
-						wp_json_encode( $control->id ),
-						wp_json_encode( $control->json() )
-					);
-				}
-			}
-			echo "})( _wpCustomizeSettings.controls );\n";
-			?>
 		</script>
 		<?php
 	}
