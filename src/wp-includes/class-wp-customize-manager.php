@@ -395,6 +395,7 @@ final class WP_Customize_Manager {
 		add_filter( 'heartbeat_received', array( $this, 'check_changeset_lock_with_heartbeat' ), 10, 3 );
 		add_action( 'wp_ajax_customize_override_changeset_lock', array( $this, 'handle_override_changeset_lock_request' ) );
 		add_action( 'wp_ajax_customize_dismiss_autosave_or_lock', array( $this, 'handle_dismiss_autosave_or_lock_request' ) );
+		add_action( 'wp_ajax_customize_check_changeset_lock', array( $this, 'handle_check_changeset_lock_request' ) );
 
 		add_action( 'customize_register', array( $this, 'register_controls' ) );
 		add_action( 'customize_register', array( $this, 'register_dynamic_settings' ), 11 ); // Allow code to create settings first.
@@ -3464,6 +3465,61 @@ final class WP_Customize_Manager {
 	}
 
 	/**
+	 * Checks whether the current changeset lock has been taken over by another user.
+	 *
+	 * @since CP-2.8.0
+	 * @return void
+	 */
+	public function handle_check_changeset_lock_request() {
+		$changeset_post_id = $this->changeset_post_id();
+		$lock_user_id      = false;
+		$lock_user         = null;
+		$user              = null;
+
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'unauthenticated', 401 );
+		}
+
+		if ( ! $this->is_preview() ) {
+			wp_send_json_error( 'no_preview', 400 );
+		}
+
+		if ( ! check_ajax_referer( 'customize_check_changeset_lock', 'nonce', false ) ) {
+			wp_send_json_error( 'invalid_nonce', 403 );
+		}
+
+		if ( empty( $changeset_post_id ) ) {
+			wp_send_json_error( 'no_changeset_found', 404 );
+		}
+
+		if ( ! current_user_can( get_post_type_object( 'customize_changeset' )->cap->edit_post, $changeset_post_id ) ) {
+			wp_send_json_error( 'cannot_read_changeset_lock', 403 );
+		}
+
+		$lock_user_id = wp_check_post_lock( $changeset_post_id );
+
+		if ( $lock_user_id ) {
+			$user = get_userdata( $lock_user_id );
+
+			if ( $user ) {
+				$lock_user = array(
+					'id'     => $user->ID,
+					'name'   => $user->display_name,
+					'avatar' => get_avatar_url( $user->ID, array( 'size' => 128 ) ),
+				);
+			}
+		} else {
+			$this->refresh_changeset_lock( $changeset_post_id );
+		}
+
+		wp_send_json_success(
+			array(
+				'lockUser' => $lock_user,
+			)
+		);
+	}
+
+	/**
 	 * Determines whether a changeset revision should be made.
 	 *
 	 * @since 4.7.0
@@ -4639,6 +4695,7 @@ final class WP_Customize_Manager {
 			'switch_themes'            => wp_create_nonce( 'switch_themes' ),
 			'dismiss_autosave_or_lock' => wp_create_nonce( 'customize_dismiss_autosave_or_lock' ),
 			'override_lock'            => wp_create_nonce( 'customize_override_changeset_lock' ),
+			'check_lock'               => wp_create_nonce( 'customize_check_changeset_lock' ),
 			'trash'                    => wp_create_nonce( 'trash_customize_changeset' ),
 		);
 
@@ -4670,15 +4727,19 @@ final class WP_Customize_Manager {
 
 		$settings = array(
 			'changeset' => array(
-				'uuid'     => $this->changeset_uuid(),
+				'uuid' => $this->changeset_uuid(),
 				'lockUser' => $lock_user_id ? $this->get_lock_user_data( $lock_user_id ) : null,
 			),
 			'url' => array(
 				'ajax' => sanitize_url( admin_url( 'admin-ajax.php', 'relative' ) ),
 			),
 			'nonce' => array(
-				'override_lock'            => wp_create_nonce( 'customize_override_changeset_lock' ),
+				'override_lock' => wp_create_nonce( 'customize_override_changeset_lock' ),
+				'check_lock' => wp_create_nonce( 'customize_check_changeset_lock' ),
 				'dismiss_autosave_or_lock' => wp_create_nonce( 'customize_dismiss_autosave_or_lock' ),
+			),
+			'user' => array(
+				'id' => get_current_user_id(),
 			),
 		);
 		?>
