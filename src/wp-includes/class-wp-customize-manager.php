@@ -3470,11 +3470,11 @@ final class WP_Customize_Manager {
 	 * @since CP-2.8.0
 	 * @return void
 	 */
-	public function handle_check_changeset_lock_request() {
-		$changeset_post_id = $this->changeset_post_id();
+	public function handle_check_changeset_lock_request() {() {
 		$lock_user_id      = false;
 		$lock_user         = null;
 		$user              = null;
+		$changeset_post_id = null;
 
 		if ( ! is_user_logged_in() ) {
 			wp_send_json_error( 'unauthenticated', 401 );
@@ -3488,8 +3488,22 @@ final class WP_Customize_Manager {
 			wp_send_json_error( 'invalid_nonce', 403 );
 		}
 
+		if ( ! empty( $_POST['customize_changeset_uuid'] ) ) {
+			$changeset_post_id = $this->find_changeset_post_id(
+				sanitize_text_field( wp_unslash( $_POST['customize_changeset_uuid'] ) )
+			);
+		}
+
 		if ( empty( $changeset_post_id ) ) {
-			wp_send_json_error( 'no_changeset_found', 404 );
+			$changeset_post_id = $this->changeset_post_id();
+		}
+
+		if ( empty( $changeset_post_id ) ) {
+			wp_send_json_success(
+				array(
+					'lockUser' => null, // nothing to lock yet
+				)
+			);
 		}
 
 		if ( ! current_user_can( get_post_type_object( 'customize_changeset' )->cap->edit_post, $changeset_post_id ) ) {
