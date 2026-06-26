@@ -2053,10 +2053,6 @@ class WP_Site_Health {
 	 * @return array The test results.
 	 */
 	public function get_test_http_protocol() {
-		global $concatenate_scripts;
-
-		script_concat_settings();
-
 		$result = array(
 			// translators: HTTP site protocol
 			'label'       => __( 'HTTP Protocol is %s' ),
@@ -2070,9 +2066,9 @@ class WP_Site_Health {
 			'test'        => 'http_protocol',
 		);
 
-		$protocol = get_transient( 'cp_http_protocol_' . get_current_user_id() );
+		$transient = get_transient( 'cp_http_protocol_' . get_current_user_id() );
 
-		if ( false === $protocol ) {
+		if ( false === $transient ) {
 			$result['label'] = __( 'HTTP Protocol' );
 			$result['description'] = sprintf(
 				$result['description'],
@@ -2080,7 +2076,7 @@ class WP_Site_Health {
 			);
 			return rest_ensure_response( $result );
 		} else {
-			$result['label'] = sprintf( __( 'HTTP Protocol is %s' ), $protocol );
+			$result['label'] = sprintf( __( 'HTTP Protocol is %s' ), $transient['protocol'] );
 		}
 
 		if ( str_ends_with( classicpress_version(), 'dev' ) ) {
@@ -2118,8 +2114,8 @@ class WP_Site_Health {
 			'<p>' . $setting_link . '</p>'
 		);
 
-		if ( ! str_starts_with( $protocol, 'http/1' ) ) {
-			if ( $concatenate_scripts ) {
+		if ( ! str_starts_with( $transient['protocol'], 'http/1' ) ) {
+			if ( $transient['concat'] ) {
 				$result['status']      = 'recommended';
 				$result['description'] =
 					'<p>' . __( 'By default, ClassicPress concatenates scripts but on modern HTTP protocol connections this may slow your site loading.' ) . '</p>' .
@@ -2127,17 +2123,17 @@ class WP_Site_Health {
 					'<p>' . $setting_link . '</p>';
 			} else {
 				$result['status']      = 'good';
-				$result['description'] = '<p>' . sprintf( __( 'Your site is using %s and script concatenation is disabled, which is the optimal configuration.' ), $protocol ) . '</p>';
+				$result['description'] = '<p>' . sprintf( __( 'Your site is using %s and script concatenation is disabled, which is the optimal configuration.' ), $transient['protocol'] ) . '</p>';
 			}
 		} else {
-			if ( ! $concatenate_scripts ) {
+			if ( ! $transient['concat'] ) {
 				$result['status']      = 'recommended';
 				$result['description'] =
 					'<p>' . __( 'Your site may load faster with script concatenation enabled. Script concatenation is currently disabled.' ) . '</p>' .
 					'<p>' . $setting_link . '</p>';
 			} else {
 				$result['status']      = 'good';
-				$result['description'] = '<p>' . sprintf( __( 'Your site is using %s and script concatenation is enabled, which is the optimal configuration.' ), $protocol ) . '</p>';
+				$result['description'] = '<p>' . sprintf( __( 'Your site is using %s and script concatenation is enabled, which is the optimal configuration.' ), $transient['protocol'] ) . '</p>';
 			}
 		}
 

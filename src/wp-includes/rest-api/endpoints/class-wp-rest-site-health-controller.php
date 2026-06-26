@@ -337,10 +337,19 @@ class WP_REST_Site_Health_Controller extends WP_REST_Controller {
 	 * @return WP_REST_Response|WP_Error Response object on success, or error object on failure.
 	 */
 	public function store_http_protocol( WP_REST_Request $request ) {
+		// Reproduce some logic from script_concat_settings() to avoid is_admin() issues
+		$concatenate_scripts = defined( 'CONCATENATE_SCRIPTS' ) ? CONCATENATE_SCRIPTS : ( get_option( 'cp_concatenate_scripts', '1' ) === '1' );
+		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			$concatenate_scripts = false;
+		}
+
 		$transient = set_transient(
 			'cp_http_protocol_' . get_current_user_id(),
-			$request->get_param( 'protocol' ),
-			MINUTE_IN_SECONDS * 60
+			array(
+				'protocol' => $request->get_param( 'protocol' ),
+				'concat'   => $concatenate_scripts,
+			),
+			WEEK_IN_SECONDS
 		);
 		return rest_ensure_response( array( 'stored' => $transient ) );
 	}
