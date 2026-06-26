@@ -184,6 +184,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Get current changeset UUID from hidden form field.
+	 *
+	 * @return {Object}
+	 */
+	function getCurrentChangesetUuid() {
+		return document.getElementById( 'customize_changeset_uuid' )?.value || lockSettings?.changeset?.uuid || '';
+	}
+
+	/**
 	 * Disable editing UI while another user holds the lock.
 	 *
 	 * @return {void}
@@ -306,9 +315,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function handleTakeOverLock() {
 		var data = new URLSearchParams(),
-			takeOverButton = lockNotice?.querySelector( '.button-primary' );
+			takeOverButton = lockNotice?.querySelector( '.button-primary' ),
+			currentUuid = getCurrentChangesetUuid();
 
 		if ( ! lockSettings?.nonce?.override_lock ) {
+			return;
+		}
+
+		if ( ! currentUuid ) {
 			return;
 		}
 
@@ -319,8 +333,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		data.append( 'action', 'customize_override_changeset_lock' );
 		data.append( 'nonce', lockSettings.nonce.override_lock );
 
-		if ( lockSettings?.changeset?.uuid ) {
-			data.append( 'customize_changeset_uuid', lockSettings.changeset.uuid );
+		if ( currentUuid ) {
+			data.append( 'customize_changeset_uuid', currentUuid );
 		}
 
 		if ( lockSettings?.nonce?.preview ) {
@@ -355,6 +369,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 			if ( lockSettings.changeset ) {
+				lockSettings.changeset.uuid = currentUuid;
 				lockSettings.changeset.lockUser = null;
 			}
 
@@ -400,16 +415,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	function startLockPolling() {
-		if ( ! lockSettings?.changeset?.uuid || ! lockSettings?.nonce?.check_lock ) {
+		if ( ! lockSettings?.nonce?.check_lock ) {
 			return;
 		}
 
 		lockRefreshTimer = window.setInterval( function() {
-			var data = new URLSearchParams();
+			var data = new URLSearchParams(),
+				currentUuid = getCurrentChangesetUuid();
+
+			if ( ! currentUuid ) {
+				return;
+			}
 
 			data.append( 'action', 'customize_check_changeset_lock' );
 			data.append( 'nonce', lockSettings.nonce.check_lock );
-			data.append( 'customize_changeset_uuid', lockSettings.changeset.uuid );
+			data.append( 'customize_changeset_uuid', currentUuid );
 
 			fetch( ajaxurl, {
 				method: 'POST',
