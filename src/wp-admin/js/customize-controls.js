@@ -212,11 +212,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function enableCustomizerEditing() {
-		saveButton.disabled = false;
-		saveButton.removeAttribute( 'aria-disabled' );
-		publishSettings.disabled = false;
-		publishSettings.removeAttribute( 'aria-disabled' );
-
 		inputs.forEach( function( input ) {
 			if ( input.hasAttribute( 'data-lock-disabled' ) ) {
 				input.disabled = false;
