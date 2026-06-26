@@ -3505,7 +3505,6 @@ final class WP_Customize_Manager {
 				$lock_user = array(
 					'id'     => $user->ID,
 					'name'   => $user->display_name,
-					'avatar' => get_avatar_url( $user->ID, array( 'size' => 128 ) ),
 				);
 			}
 		} else {
