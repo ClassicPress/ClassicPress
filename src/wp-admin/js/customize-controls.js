@@ -27,6 +27,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		saveButton = form.querySelector( '#save' ),
 		publishSettings = form.querySelector( '#publish-settings' ),
 		publishSettingsPanel = document.getElementById( 'sub-accordion-section-publish_settings' ),
+		lockSettings = window._wpCustomizeSettings || {},
+		lockNotice = null,
+		lockRefreshTimer = null,
 		devicesWrapper = document.querySelector( '.devices' ),
 		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
 		previewFrame = document.getElementById( 'customize-preview' ),
@@ -368,10 +371,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 			console.error( 'Customizer lock takeover failed.', error );
 		} );
-	}
-
-	function hasLostLock( lockUser ) {
-		return !! lockUser && !! lockSettings?.user && lockUser.id !== lockSettings.user.id;
 	}
 
 	function renderTakenOverNotice( user ) {
