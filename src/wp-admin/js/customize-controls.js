@@ -1981,6 +1981,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				// If the server rolled the changeset UUID, update it before next call
 				if ( result.data.next_changeset_uuid ) {
 					document.getElementById( 'customize_changeset_uuid' ).value = result.data.next_changeset_uuid;
+
+					if ( lockSettings.changeset ) {
+						lockSettings.changeset.uuid = result.data.next_changeset_uuid;
+					}
 				}
 			}
 		}
@@ -2140,6 +2144,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// If the server rolled the changeset UUID, update it before next call
 			if ( newResult.data.next_changeset_uuid ) {
 				document.getElementById( 'customize_changeset_uuid' ).value = newResult.data.next_changeset_uuid;
+
+					if ( lockSettings.changeset ) {
+						lockSettings.changeset.uuid = newResult.data.next_changeset_uuid;
+					}
 			}
 
 			saveButton.disabled = true;
