@@ -778,7 +778,7 @@
 		// Core standard setting → DOM bindings
 		var coreTextBindings = {
 			'blogname':        '.site-title a',
-			'blogdescription': '.site-description, .site-tagline, #site-description'
+			'blogdescription': '.site-description, .site-tagline, #site-description, #site-tagline'
 		};
 		Object.keys( coreTextBindings ).forEach( function( id ) {
 			if ( ! api._settings[ id ] ) {
