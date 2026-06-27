@@ -3470,7 +3470,7 @@ final class WP_Customize_Manager {
 	 * @since CP-2.8.0
 	 * @return void
 	 */
-	public function handle_check_changeset_lock_request() {() {
+	public function handle_check_changeset_lock_request() {
 		$lock_user_id      = false;
 		$lock_user         = null;
 		$user              = null;
