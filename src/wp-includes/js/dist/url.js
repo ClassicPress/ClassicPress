@@ -928,7 +928,7 @@ function filterURLForDisplay(url, maxLength = null) {
   const urlPieces = filteredURL.split("/");
   const file = urlPieces[urlPieces.length - 1];
   if (file.length <= maxLength) {
-    return "\u2026" + filteredURL.slice(-maxLength);
+    return "…" + filteredURL.slice(-maxLength);
   }
   const index = file.lastIndexOf(".");
   const [fileName, extension] = [
@@ -936,7 +936,7 @@ function filterURLForDisplay(url, maxLength = null) {
     file.slice(index + 1)
   ];
   const truncatedFile = fileName.slice(-3) + "." + extension;
-  return file.slice(0, maxLength - truncatedFile.length - 1) + "\u2026" + truncatedFile;
+  return file.slice(0, maxLength - truncatedFile.length - 1) + "…" + truncatedFile;
 }
 
 
