@@ -290,7 +290,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			for ( let i = 0, n = listItems.length; i < n; i++ ) {
 				if ( isVisible( listItems[i] ) ) {
 					listItems[i].insertAdjacentElement( 'afterend', wrapper );
-					console.log( 'locked' );
 					return;
 				}
 			}
@@ -422,7 +421,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			for ( let i = 0, n = listItems.length; i < n; i++ ) {
 				if ( isVisible( listItems[i] ) ) {
 					listItems[i].insertAdjacentElement( 'afterend', notice );
-					console.log( 'locked' );
 					return;
 				}
 			}
