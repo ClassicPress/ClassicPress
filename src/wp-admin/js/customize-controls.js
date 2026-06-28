@@ -24,6 +24,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		isReducedMotion = reducedMotionMediaQuery.matches,
 		form = document.querySelector( 'form' ),
 		inputs = form.querySelectorAll( 'input, select, textarea' ),
+		listItems = form.querySelectorAll( 'li' ),
 		saveButton = form.querySelector( '#save' ),
 		publishSettings = form.querySelector( '#publish-settings' ),
 		publishSettingsPanel = document.getElementById( 'sub-accordion-section-publish_settings' ),
@@ -285,9 +286,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		wrapper.appendChild( text );
 		wrapper.appendChild( actions );
 
-		setTimeout( function() {
-			document.getElementById( 'customize-info' ).insertAdjacentElement( 'afterend', wrapper );
-		}, 0 );
+		for ( let i = 0, n = listItems.length; i < n; i++ ) {
+			if ( isVisible( listItems[i] ) ) {
+				listItems[i].insertAdjacentElement( 'afterend', wrapper );
+				return;
+			}
+		}
 		lockNotice = wrapper;
 	}
 
@@ -411,7 +415,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				) +
 			'</p>';
 
-		document.getElementById( 'customize-info' ).insertAdjacentElement( 'afterend', notice );
+		for ( let i = 0, n = listItems.length; i < n; i++ ) {
+			if ( isVisible( listItems[i] ) ) {
+				listItems[i].insertAdjacentElement( 'afterend', notice );
+				return;
+			}
+		}
 	}
 
 	function startLockPolling() {
