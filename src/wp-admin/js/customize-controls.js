@@ -286,12 +286,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		wrapper.appendChild( text );
 		wrapper.appendChild( actions );
 
-		for ( let i = 0, n = listItems.length; i < n; i++ ) {
-			if ( isVisible( listItems[i] ) ) {
-				listItems[i].insertAdjacentElement( 'afterend', wrapper );
-				return;
+		setTimeout( function() {
+			for ( let i = 0, n = listItems.length; i < n; i++ ) {
+				if ( isVisible( listItems[i] ) ) {
+					listItems[i].insertAdjacentElement( 'afterend', wrapper );
+					console.log( 'locked' );
+					return;
+				}
 			}
-		}
+		}, 0 );
 		lockNotice = wrapper;
 	}
 
@@ -415,12 +418,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				) +
 			'</p>';
 
-		for ( let i = 0, n = listItems.length; i < n; i++ ) {
-			if ( isVisible( listItems[i] ) ) {
-				listItems[i].insertAdjacentElement( 'afterend', notice );
-				return;
+		setTimeout( function() {
+			for ( let i = 0, n = listItems.length; i < n; i++ ) {
+				if ( isVisible( listItems[i] ) ) {
+					listItems[i].insertAdjacentElement( 'afterend', notice );
+					console.log( 'locked' );
+					return;
+				}
 			}
-		}
+		}, 0 );
 	}
 
 	function startLockPolling() {
