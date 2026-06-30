@@ -2105,10 +2105,10 @@ class WP_Site_Health {
 			return rest_ensure_response( $result );
 		}
 
-		if ( isset( $concatenate_scripts ) ) {
+		if ( isset( $concatenate_scripts ) && false === $concatenate_scripts ) {
 			$result['description'] = sprintf(
 				$result['description'],
-				'<p>' . __( 'Your site may have a plugin that defines <code>$concatenate_scripts</code> directly. This information may not be relevant.' ) . '</p>'
+				'<p>' . __( 'Your site may have a plugin that defines <code>$concatenate_scripts</code> as <code>false</code>. This information may not be relevant.' ) . '</p>'
 			);
 			return rest_ensure_response( $result );
 		}
