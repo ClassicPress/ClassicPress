@@ -69,5 +69,12 @@
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/classicpress"
+  },
+  "allowScripts": {
+    "fsevents@2.3.2": true,
+    "gifsicle@4.0.1": true,
+    "jpegtran-bin@4.0.0": true,
+    "optipng-bin@5.1.0": true,
+    "puppeteer@24.41.0": true
   }
 }
