@@ -52,6 +52,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	itemObserver.observe( menuToEdit, { attributes: false, childList: true, characterData: false, subtree: true } );
 
 	/**
+	 * Helper function copied from jQuery
+	 */
+	function isVisible( elem ) {
+		return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+	}
+
+	/**
 	 * Trigger activation of Publish button
 	 */
 	function activatePublishButton() {
@@ -691,6 +698,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				// Reset toggle buttons
 				addMenuButtons.forEach( function( btn ) {
 					btn.setAttribute( 'aria-expanded', 'false' );
+					if ( isVisible( btn ) ) {
+						btn.focus();
+					}
 				} );
 
 				activatePublishButton();
