@@ -1183,6 +1183,11 @@ final class WP_Customize_Nav_Menus {
 												<?php esc_html_e( 'Add' ); ?>
 											</button>
 										</div>
+										<span id="create-input-<?php echo esc_attr( $available_item_type['object'] ); ?>-error"
+											class="create-item-error error-message" style="display: none;"
+										>
+											<?php esc_html_e( 'Please enter a title' ); ?>
+										</span>
 
 										<?php
 									}

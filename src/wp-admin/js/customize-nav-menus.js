@@ -9,7 +9,7 @@ ajaxurl, _updatedControlsWatcher, Sortable, _cpCustomizeNavMenusL10n, isRtl */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addObserver, itemObserver, currentMenuId,
-		newMenuItemIDs = [],
+		newMenuItemIDs = window.newMenuItemIDs,
 		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
@@ -566,7 +566,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			clone.querySelector( '.link-to-original a' ).textContent = title;
 		}
 		clone.querySelector( '.edit-menu-item-title' ).value = title;
-
 		clone.querySelector( 'li' ).id = 'customize-control-nav_menu_item-' + menuItemId;
 		clone.querySelector( 'li' ).dataset.settingId = 'nav_menu_item[' + menuItemId + ']';
 		clone.querySelector( '.menu-item-title' ).textContent = title;

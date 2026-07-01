@@ -12,6 +12,7 @@ FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console,
 _wpUpdatesSettings, _wpThemeSettings */
 
 document.addEventListener( 'DOMContentLoaded', function() {
+	window.newMenuItemIDs = window.newMenuItemIDs || [];
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver, targetEl,
 		i = 1,
@@ -34,8 +35,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		addWidgetButtons = document.querySelectorAll( '.add-new-widget' ),
+		newMenuItemIDs = window.newMenuItemIDs,
 		availableWidgets = document.getElementById( 'widgets-left' ),
-		newMenuItemIDs = [],
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
 		hash = window.location.hash.replace( '#', '' ),
 		section = document.getElementById( 'sub-accordion-section-custom_css' ),
