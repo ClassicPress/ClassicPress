@@ -1190,6 +1190,11 @@ final class WP_Customize_Nav_Menus {
 												<?php esc_html_e( 'Add' ); ?>
 											</button>
 										</div>
+										<span id="create-input-<?php echo esc_attr( $available_item_type['object'] ); ?>-error"
+											class="create-item-error error-message" style="display: none;"
+										>
+											<?php esc_html_e( 'Please enter a title' ); ?>
+										</span>
 
 										<?php
 									}
@@ -1266,6 +1271,7 @@ final class WP_Customize_Nav_Menus {
 	 */
 	protected function print_custom_links_available_menu_item() {
 		?>
+
 		<li id="new-custom-menu-item" class="accordion-section">
 			<details>
 				<summary class="accordion-section-title">
@@ -1277,7 +1283,7 @@ final class WP_Customize_Nav_Menus {
 						id="custom-menu-item-type"
 						name="menu-item[-1][menu-item-type]"
 					>
-					<p id="menu-item-url-wrap" class="wp-clearfix">
+					<div id="menu-item-url-wrap" class="wp-clearfix">
 						<label class="howto" for="custom-menu-item-url">
 							<?php _e( 'URL' ); ?>
 						</label>
@@ -1286,8 +1292,9 @@ final class WP_Customize_Nav_Menus {
 							type="text" class="code menu-item-textbox"
 							placeholder="https://"
 						>
-					</p>
-					<p id="menu-item-name-wrap" class="wp-clearfix">
+					</div>
+					<br>
+					<div id="menu-item-name-wrap" class="wp-clearfix">
 						<label class="howto" for="custom-menu-item-name">
 							<?php _e( 'Link Text' ); ?>
 						</label>
@@ -1296,21 +1303,28 @@ final class WP_Customize_Nav_Menus {
 							type="text"
 							class="regular-text menu-item-textbox"
 						>
-					</p>
-					<p class="button-controls">
+					</div>
+					<div class="button-controls">
 						<span class="add-to-menu">
-							<input type="submit"
+							<button type="submit"
 								class="button submit-add-to-menu right"
-								value="<?php esc_attr_e( 'Add to Menu' ); ?>"
 								name="add-custom-menu-item"
 								id="custom-menu-item-submit"
 							>
+								<?php esc_attr_e( 'Add to Menu' ); ?>
+							</button>
 							<span class="spinner"></span>
 						</span>
-					</p>
+					</div>
+					<span id="create-input-custom-menu-item-error"
+						class="create-item-error error-message" style="display: none;"
+					>
+						<?php esc_html_e( 'Please enter some link text' ); ?>
+					</span>
 				</div>
 			</details>
 		</li>
+
 		<?php
 	}
 

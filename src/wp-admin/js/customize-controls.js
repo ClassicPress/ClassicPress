@@ -12,6 +12,7 @@ FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console,
 _wpUpdatesSettings, _wpThemeSettings */
 
 document.addEventListener( 'DOMContentLoaded', function() {
+	window.newMenuItemIDs = window.newMenuItemIDs || [];
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver, targetEl,
 		i = 1,
@@ -34,8 +35,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		addWidgetButtons = document.querySelectorAll( '.add-new-widget' ),
+		newMenuItemIDs = window.newMenuItemIDs,
 		availableWidgets = document.getElementById( 'widgets-left' ),
-		newMenuItemIDs = [],
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
 		hash = window.location.hash.replace( '#', '' ),
 		section = document.getElementById( 'sub-accordion-section-custom_css' ),
@@ -1305,6 +1306,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Force preview refresh where necessary
+	 *
+	 * @since CP-2.8.0
+	 */
+	function forcePreviewRefresh( settingId, value ) {
+		var previewUrl,
+			previewChannel = window.getPreviewChannel();
+
+		if ( ! previewChannel ) {
+			return;
+		}
+
+		window._cpDirtySettings[ settingId ] = value;
+
+		previewUrl = new URL( previewChannel.iframe.src );
+		previewUrl.searchParams.set( 'customized', JSON.stringify( window._cpDirtySettings ) );
+		previewChannel.iframe.src = previewUrl.toString();
+	}
+
+	/**
 	 * Add image to Customizer.
 	 *
 	 * @abstract
@@ -1312,7 +1333,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function addItemToCustomizer( selectedItem, attachmentId, imageElement, imageUrl, attachment ) {
 		var headerData, headerUrl,
-			parent = ( selectedItem.className === 'choice' ) ? selectedItem.closest( '.choices' ) : customizeButton.parentNode,
+			parent = selectedItem.classList.contains( 'choice' ) ? selectedItem.closest( '.choices' ) : customizeButton.parentNode,
 			grandparent = parent.parentNode,
 			li = parent.closest( 'li' ),
 			settingId = li.dataset.settingId,
@@ -1336,7 +1357,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( selectedItem.className === 'choice' ) {
 				li.querySelector( '.container' ).innerHTML = '';
 				li.querySelector( '.container' ).append( imageElement.cloneNode() );
-				window.sendSettingToPreview( 'header_image', selectedItem.dataset.customizeUrl );
 
 				// Find the matching entry from the localized data
 				headerData = Object.values( _wpCustomizeHeader.defaults ).find(
@@ -1355,8 +1375,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					height:        headerData.height || _wpCustomizeHeader.data.height
 				};
 
-				activatePublishButton();
-				document.getElementById( 'sub-accordion-section-header_image ' ).querySelector( 'a' ).focus();
+				forcePreviewRefresh( 'header_image', selectedItem.dataset.customizeUrl );
+				document.getElementById( 'sub-accordion-section-header_image' ).querySelector( 'a' ).focus();
 			} else {
 				parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
 				parent.previousElementSibling.querySelector( '.container' ).append( imageElement );
@@ -2336,6 +2356,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.querySelector( '.themes-section-installed_themes' ).setAttribute( 'aria-expanded', 'true' );
 				document.querySelector( '.themes-section-wporg_themes' ).setAttribute( 'aria-expanded', 'false' );
 				document.querySelector( '.feature-filter-toggle' ).style.display = 'none';
+				document.querySelector( '.feature-filter-toggle' ).setAttribute( 'aria-expanded', 'false' );
+				document.querySelector( '.filter-drawer' ).style.display = 'none';
 				document.querySelector( '.filter-themes-count .theme-count' ).textContent = document.querySelectorAll( '.local .themes li' ).length;
 				if ( window.innerWidth <= 600 ) {
 					document.querySelector( '#customize-header-actions .preview' ).style.display = 'none';
@@ -2368,8 +2390,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( e.target.parentNode === document.querySelector( '.feature-filter-toggle' ) ) {
 			if ( isVisible( document.querySelector( '.filter-drawer' ) ) ) {
 				document.querySelector( '.filter-drawer' ).style.display = 'none';
+				document.querySelector( '.feature-filter-toggle' ).setAttribute( 'aria-expanded', 'false' );
 			} else {
 				document.querySelector( '.filter-drawer' ).style.display = 'block';
+				document.querySelector( '.feature-filter-toggle' ).setAttribute( 'aria-expanded', 'true' );
 			}
 
 		// Install theme
