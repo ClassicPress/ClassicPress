@@ -14,4 +14,4 @@ The footer also contains a series of static links to various locations on social
 
 The theme enables widgets to be added to a right sidebar, while specifying one sidebar for posts (the Blog Sidebar) and another for pages (the Main Sidebar). Widgets can also be added to the homepage and footer.
 
-The ClassicPress Theme also comes with a ready-made template for Frequently Asked Questions. To make use of this, create a custom post type for FAQs, register the post type as 'faq', and specify a URL for its archive (e.g. 'has_archive' => 'faqs' ). The theme will then display your FAQs using accessible disclosure widgets. Just remember to create a Custom Link to the FAQs in your menu!
+The ClassicPress Theme also comes with a no-sidebar page template, that can be selected from the Page Attributes box in the editor. And a ready-made template for Frequently Asked Questions. To make use of this, create a custom post type for FAQs, register the post type as 'faq', and specify a URL for its archive (e.g. 'has_archive' => 'faqs' ). The theme will then display your FAQs using accessible disclosure widgets. Just remember to create a Custom Link to the FAQs in your menu!

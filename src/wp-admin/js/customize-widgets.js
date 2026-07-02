@@ -15,13 +15,27 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		availables = document.querySelectorAll( '#available-widgets-list > li' );
 
 	/**
+	 * Helper function copied from jQuery
+	 */
+	function isVisible( elem ) {
+		return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+	}
+
+	/**
 	 * Trigger activation of Publish button
 	 *
 	 * @since CP-2.8.0
 	 */
 	function activatePublishButton() {
+		var changesetStatus = window._wpCustomizeChangesetStatus || 'publish';
 		saveButton.disabled = false;
 		saveButton.textContent = _wpCustomizeControlsL10n.publish;
+		if ( changesetStatus === 'draft' ) {
+			saveButton.textContent = _wpCustomizeControlsL10n.saveDraft;
+		} else if ( changesetStatus === 'future' ) {
+			saveButton.textContent = _wpCustomizeControlsL10n.schedule;
+		}
+		document.getElementById( 'publish-settings' ).style.display = 'block';
 	}
 
 	/**
@@ -339,7 +353,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			const clone = widget.cloneNode( true ),
 				widgetId = widget.dataset.widgetId,
 				ul = form.querySelector( '.control-section-sidebar[style*="display: block"]' ), // visible sidebar ul
-				buttons = ul.querySelector( '.customize-control-sidebar_widgets.no-drag' );
+				buttons = ul.querySelector( '.customize-control-sidebar_widgets.no-drag' ),
+				addItemsPanel = document.getElementById( 'widgets-left' );
 
 			if ( ! widgetId || ! ul || ! buttons ) {
 				return;
@@ -410,6 +425,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					widget: clone.querySelector( '.widget' )
 				}
 			} ) );
+
+			// Remove overlay and close "Add widgets" panel
+			document.body.classList.remove( 'adding-widget' );
+			if ( addItemsPanel ) {
+				addItemsPanel.style.display = 'none';
+			}
+
+			// Reset toggle buttons
+			document.querySelectorAll( '.add-new-widget' ).forEach( function( btn ) {
+				btn.setAttribute( 'aria-expanded', 'false' );
+				if ( isVisible( btn ) ) {
+					btn.focus();
+				}
+			} );
 
 			// Enable Save/Publish button
 			activatePublishButton();
