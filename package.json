@@ -31,7 +31,7 @@
     "grunt-webpack": "8.0.0",
     "ink-docstrap": "1.3.2",
     "install-changed": "^1.1.0",
-    "postcss": "8.5.15",
+    "postcss": "8.5.16",
     "qunit": "^2.19.4",
     "rollup": "4.62.2",
     "sass": "1.101.0",
@@ -40,7 +40,7 @@
     "source-map-loader": "^5.0.0",
     "terser": "5.48.0",
     "terser-webpack-plugin": "^5.3.7",
-    "webpack": "5.108.1"
+    "webpack": "5.108.3"
   },
   "dependencies": {
     "@melloware/coloris": "0.25.0",
@@ -69,5 +69,12 @@
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/classicpress"
+  },
+  "allowScripts": {
+    "fsevents@2.3.2": true,
+    "gifsicle@4.0.1": true,
+    "jpegtran-bin@4.0.0": true,
+    "optipng-bin@5.1.0": true,
+    "puppeteer@24.41.0": true
   }
 }

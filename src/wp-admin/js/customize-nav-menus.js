@@ -9,7 +9,7 @@ ajaxurl, _updatedControlsWatcher, Sortable, _cpCustomizeNavMenusL10n, isRtl */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addObserver, itemObserver, currentMenuId,
-		newMenuItemIDs = [],
+		newMenuItemIDs = window.newMenuItemIDs,
 		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
 		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
@@ -50,6 +50,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	} );
 	itemObserver.observe( menuToEdit, { attributes: false, childList: true, characterData: false, subtree: true } );
+
+	/**
+	 * Helper function copied from jQuery
+	 */
+	function isVisible( elem ) {
+		return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+	}
 
 	/**
 	 * Trigger activation of Publish button
@@ -546,8 +553,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/**
 	 * Add menu item
 	 */
-	function addMenuItem( type, object, objectId, title, label, url ) {
+	function addMenuItem( type, object, objectId, title, label, url, errorSpan ) {
 		var data,
+			input      = document.getElementById( 'custom-menu-item-name' ),
 			menu       = document.getElementById( 'sub-accordion-section-nav_menu[' + currentMenuId + ']' ) || menuToEdit,
 			menuItems  = menu.querySelectorAll( '.menu-item' ),
 			lastItem   = menuItems[menuItems.length - 1],
@@ -556,6 +564,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			clone      = template.content.cloneNode( true );
 
 		const addItemsPanel = document.getElementById( 'available-menu-items' );
+
+		if ( ! title ) {
+			errorSpan.style.display = 'block';
+			input.classList.add( 'form-invalid' );
+			input.setAttribute( 'aria-invalid', 'true' );
+			input.setAttribute( 'aria-describedby', errorSpan.id );
+			wp.a11y.speak( errorSpan.textContent );
+			return;
+		} else {
+			errorSpan.style.display = 'none';
+			input.classList.remove( 'form-invalid' );
+			input.removeAttribute( 'aria-invalid' );
+			input.removeAttribute( 'aria-describedby' );
+		}
 
 		if ( type === 'custom' ) {
 			clone.querySelector( '.field-url' ).removeAttribute( 'hidden' );
@@ -566,7 +588,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			clone.querySelector( '.link-to-original a' ).textContent = title;
 		}
 		clone.querySelector( '.edit-menu-item-title' ).value = title;
-
 		clone.querySelector( 'li' ).id = 'customize-control-nav_menu_item-' + menuItemId;
 		clone.querySelector( 'li' ).dataset.settingId = 'nav_menu_item[' + menuItemId + ']';
 		clone.querySelector( '.menu-item-title' ).textContent = title;
@@ -677,6 +698,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				// Reset toggle buttons
 				addMenuButtons.forEach( function( btn ) {
 					btn.setAttribute( 'aria-expanded', 'false' );
+					if ( isVisible( btn ) ) {
+						btn.focus();
+					}
 				} );
 
 				activatePublishButton();
@@ -1103,9 +1127,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				e.target.parentNode.classList.add( 'item-added' );
 				addMenuItem( type, object, objectId, title, label, url );
 			} else if ( e.target.id && e.target.id === 'custom-menu-item-submit'  ) {
-				title = document.getElementById( 'custom-menu-item-name' ).value.trim();
-				url   = document.getElementById( 'custom-menu-item-url' ).value.trim();
-				addMenuItem( 'custom', 'custom', '', title, 'Custom Link', url );
+				title     = document.getElementById( 'custom-menu-item-name' ).value.trim();
+				url       = document.getElementById( 'custom-menu-item-url' ).value.trim();
+				errorSpan = e.target.parentNode.parentNode.nextElementSibling;
+				addMenuItem( 'custom', 'custom', '', title, 'Custom Link', url, errorSpan );
 			}
 
 		// Delete a menu item
