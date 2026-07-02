@@ -15,6 +15,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		availables = document.querySelectorAll( '#available-widgets-list > li' );
 
 	/**
+	 * Helper function copied from jQuery
+	 */
+	function isVisible( elem ) {
+		return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+	}
+
+	/**
 	 * Trigger activation of Publish button
 	 *
 	 * @since CP-2.8.0
@@ -428,6 +435,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Reset toggle buttons
 			document.querySelectorAll( '.add-new-widget' ).forEach( function( btn ) {
 				btn.setAttribute( 'aria-expanded', 'false' );
+				if ( isVisible( btn ) ) {
+					btn.focus();
+				}
 			} );
 
 			// Enable Save/Publish button
