@@ -1113,15 +1113,15 @@ final class WP_Customize_Nav_Menus {
 						</p>
 						<span class="spinner"></span>
 						<div class="search-icon" aria-hidden="true"></div>
+						<button type="button" class="clear-results">
+							<span class="screen-reader-text">
+								<?php
+								/* translators: Hidden accessibility text. */
+								esc_html_e( 'Clear Results' );
+								?>
+							</span>
+						</button>
 					</div>
-					<button type="button" class="clear-results">
-						<span class="screen-reader-text">
-							<?php
-							/* translators: Hidden accessibility text. */
-							esc_html_e( 'Clear Results' );
-							?>
-						</span>
-					</button>
 					<ul class="accordion-section-content available-menu-items-list" data-type="search"></ul>
 				</li>
 
