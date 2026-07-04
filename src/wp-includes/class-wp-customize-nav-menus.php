@@ -1122,7 +1122,7 @@ final class WP_Customize_Nav_Menus {
 							</span>
 						</button>
 					</div>
-					<ul class="accordion-section-content available-menu-items-list" data-type="search"></ul>
+					<ul id="menu-items-search-list" class="accordion-section-content available-menu-items-list" data-type="search"></ul>
 				</li>
 
 				<?php
