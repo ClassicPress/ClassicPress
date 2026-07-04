@@ -2077,7 +2077,13 @@ class WP_Site_Health {
 			);
 			return rest_ensure_response( $result );
 		} else {
-			$result['label'] = sprintf( __( 'HTTP Protocol is %s' ), $transient['protocol'] );
+			if ( str_starts_with( $transient['protocol'], 'http/1' ) ) {
+				$result['label'] = sprintf( __( 'HTTP Protocol is %s' ), strtoupper( $transient['protocol'] ) );
+			} elseif ( str_starts_with( $transient['protocol'], 'h2' ) ) {
+				$result['label'] = sprintf( __( 'HTTP Protocol is %s' ), 'HTTP/2' );
+			} else {
+				$result['label'] = sprintf( __( 'HTTP Protocol is %s' ), 'HTTP/3' );
+			}
 		}
 
 		if ( str_ends_with( classicpress_version(), 'dev' ) ) {
