@@ -977,6 +977,44 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Search for widgets
+	 *
+	 * @since CP-2.8.0
+	 */
+	document.getElementById( 'menu-items-search' ).addEventListener( 'input', _.debounce( function( e ) {
+		var message,
+			availables = document.querySelectorAll( '.menu-item-tpl' ),
+			needle = e.target.value.toLowerCase().trim(),
+			matches = needle ? [...availables].filter( item => item.querySelector( '.menu-item-title' ).textContent.toLowerCase().includes( needle ) ) : [];
+
+		if ( needle.length ) {
+			document.getElementById( 'available-menu-items-search' ).classList.remove( 'cannot-expand' );
+			availableMenuItems.querySelector( '.clear-results' ).classList.add( 'is-visible' );
+			availables.forEach( function( li ) {
+				li.style.display = 'none';
+			} );
+
+			if ( matches.length ) {
+				matches.forEach( function( li ) {
+					li.style.display = '';
+				} );
+				message = _wpCustomizeWidgetsSettings.l10n.widgetsFound.replace( '%d', matches.length );
+				document.getElementById( 'menu-items-search-list' ).classList.remove( 'no-widgets-found' );
+			} else {
+				message = _wpCustomizeWidgetsSettings.l10n.noWidgetsFound;
+				document.getElementById( 'menu-items-search-list' ).classList.add( 'no-widgets-found' );
+			}
+			wp.a11y.speak( message );
+		} else {
+			document.getElementById( 'available-menu-items-search' ).classList.add( 'cannot-expand' );
+			availableMenuItems.querySelector( '.clear-results' ).classList.remove( 'is-visible' );
+			availables.forEach( function( li ) {
+				li.style.display = '';
+			} );
+		}
+	}, 150 ) );
+
+	/**
 	 * Handle clicks on buttons.
 	 *
 	 * @abstract
