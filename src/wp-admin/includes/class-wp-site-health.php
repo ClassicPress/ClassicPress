@@ -2043,6 +2043,98 @@ class WP_Site_Health {
 	}
 
 	/**
+	 * Tests HTTP protocol version.
+	 *
+	 * Modern HTTP protocols may load sites faster with script concatenation disabled.
+	 * This tests highlights to users the protocol in use and indcates if concetanation may be slower.
+	 *
+	 * @since CP-2.8.0
+	 *
+	 * @return array The test results.
+	 */
+	public function get_test_http_protocol() {
+		$result = array(
+			// translators: HTTP site protocol
+			'label'       => __( 'HTTP Protocol is %s' ),
+			'status'      => 'good',
+			'badge'       => array(
+				'label' => __( 'Performance' ),
+				'color' => 'blue',
+			),
+			'description' => '<div ">%s</div>',
+			'actions'     => '',
+			'test'        => 'http_protocol',
+		);
+
+		$transient = get_transient( 'cp_http_protocol_' . get_current_user_id() );
+
+		if ( false === $transient ) {
+			$result['label'] = __( 'HTTP Protocol' );
+			$result['description'] = sprintf(
+				$result['description'],
+				'<p>' . __( 'There was an error detecting the site HTTP Protocol. Try reloading this page.' ) . '</p>'
+			);
+			return rest_ensure_response( $result );
+		} else {
+			$result['label'] = sprintf( __( 'HTTP Protocol is %s' ), $transient['protocol'] );
+		}
+
+		if ( str_ends_with( classicpress_version(), 'dev' ) ) {
+			$result['description'] = sprintf(
+				$result['description'],
+				'<p>' . __( 'Your site appears to be using development code. This information may not be relevant.' ) . '</p>'
+			);
+			return rest_ensure_response( $result );
+		}
+
+		if ( ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ) {
+			$result['description'] = sprintf(
+				$result['description'],
+				'<p>' . __( 'Your site is running with <code>SCRIPT_DEBUG</code> enabled in <code>wp-config.php</code>. This information may not be relevant.' ) . '</p>'
+			);
+			return rest_ensure_response( $result );
+		}
+
+		if ( defined( 'CONCATENATE_SCRIPTS' ) ) {
+			$result['description'] = sprintf(
+				$result['description'],
+				'<p>' . __( 'Your site is running with <code>CONCATENATE_SCRIPTS</code> defined in <code>wp-config.php</code>. This information may not be relevant.' ) . '</p>'
+			);
+			return rest_ensure_response( $result );
+		}
+
+		$docs_link = sprintf(
+			'<p>' . __( 'You can easily adjust script concatenation in <code>wp-config.php</code>. <a href="%s">Learn more</a>.' ) . '</p>',
+			'https://docs.classicpress.net/user-guides/editing-wp-config-php/#understanding-concatenate_scripts'
+		);
+
+		if ( ! str_starts_with( $transient['protocol'], 'http/1' ) ) {
+			if ( $transient['concat'] ) {
+				$result['status']      = 'recommended';
+				$result['description'] =
+					'<p>' . __( 'By default, ClassicPress concatenates scripts but on modern HTTP protocol connections this may slow your site loading.' ) . '</p>' .
+					'<p>' . __( 'Your site may load faster with script concatenation disabled. Script concatenation is currently enabled.' ) . '</p>' .
+					$docs_link;
+			} else {
+				$result['status']      = 'good';
+				$result['description'] = '<p>' . sprintf( __( 'Your site is using %s and script concatenation is disabled, which is the optimal configuration.' ), $transient['protocol'] ) . '</p>';
+			}
+		} else {
+			if ( ! $transient['concat'] ) {
+				$result['status']      = 'recommended';
+				$result['description'] =
+					'<p>' . __( 'Your site may load faster with script concatenation enabled. Script concatenation is currently disabled.' ) . '</p>' .
+					$docs_link;
+			} else {
+				$result['status']      = 'good';
+				$result['description'] = '<p>' . sprintf( __( 'Your site is using %s and script concatenation is enabled, which is the optimal configuration.' ), $transient['protocol'] ) . '</p>';
+			}
+		}
+
+		return rest_ensure_response( $result );
+	}
+
+	/**
 	 * Tests if the REST API is accessible.
 	 *
 	 * Various security measures may block the REST API from working, or it may have been disabled in general.
@@ -2628,6 +2720,12 @@ class WP_Site_Health {
 					'test'              => rest_url( 'wp-site-health/v1/tests/https-status' ),
 					'has_rest'          => true,
 					'async_direct_test' => array( WP_Site_Health::get_instance(), 'get_test_https_status' ),
+				),
+				'http_protocol'        => array(
+					'label'             => __( 'HTTP Protocol' ),
+					'test'              => rest_url( 'wp-site-health/v1/tests/http-protocol' ),
+					'has_rest'          => true,
+					'async_direct_test' => array( WP_Site_Health::get_instance(), 'get_test_http_protocol' ),
 				),
 			),
 		);
