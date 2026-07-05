@@ -977,23 +977,24 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
-	 * Search for widgets
+	 * Search for menu items
 	 *
 	 * @since CP-2.8.0
 	 */
 	document.getElementById( 'menu-items-search' ).addEventListener( 'input', _.debounce( function( e ) {
-		var message, data,
+		var data,
 			needle = e.target.value.toLowerCase().trim(),
 			searchContainer = document.getElementById( 'available-menu-items-search' ),
 			searchList = document.getElementById( 'menu-items-search-list' ),
 			clearButton = availableMenuItems.querySelector( '.clear-results' );
 
-		if ( needle.length ) { console.log(needle);
+		if ( needle.length ) {
 			searchContainer.classList.remove( 'cannot-expand' );
 			clearButton.classList.add( 'is-visible' );
 
 			data = new URLSearchParams( {
-				action: 'search-available-menu-items',
+				action: 'search-available-menu-items-customizer',				
+				wp_customize: 'on',
 				search: needle,
 				page: 1,
 				'customize-menus-nonce': _wpCustomizeNavMenusSettings.l10n.menuSearchNonce
@@ -1013,29 +1014,44 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 				return response.json();
 			} )
-			.then( function( response ) {
-				var items = response && response.success && response.data && response.data.items ? response.data.items : [];
+			.then( function( result ) {console.log(result);
+				var items = result && result.success && result.data && result.data.items ? result.data.items : [];
 
 				searchList.innerHTML = '';
 
 				if ( items.length ) {
 					searchList.innerHTML = items.map( function( item ) {
-						return '<li class="menu-item-tpl"><span class="menu-item-title">' + item.title + '</span></li>';
+						return '<li id="' + item.id + '" class="menu-item-tpl" data-menu-item-id="' + item.id + '">' +
+							'<div class="menu-item-bar">' +
+								'<div class="menu-item-handle">' +
+									'<button type="button" class="button-link item-add">' +
+										'<span class="screen-reader-text">' +
+											_wpCustomizeNavMenusSettings.l10n.addToMenu + ': ' + item.title + ' (' + item.type_label + ')' +
+										'</span>' +
+									'</button>' +
+									'<span class="item-split">' +
+										'<span class="item-title" aria-hidden="true">' +
+											'<span class="menu-item-title">' + item.title + '</span>' +
+										'</span>' +
+										'<span class="item-type" aria-hidden="true">' + item.type_label + '</span>' +
+									'</span>' +
+								'</div>' +
+							'</div>' +
+							'<span class="item-url" hidden="">' + item.url + '</span>' +
+						'</li>';
 					} ).join( '' );
 
-					message = _wpCustomizeWidgetsSettings.l10n.widgetsFound.replace( '%d', items.length );
-					searchList.classList.remove( 'no-widgets-found' );
+					searchList.classList.remove( 'no-items-found' );
 				} else {
-					message = _wpCustomizeWidgetsSettings.l10n.noWidgetsFound;
-					searchList.classList.add( 'no-widgets-found' );
+					searchList.classList.add( 'no-items-found' );
 				}
 
-				wp.a11y.speak( message );
+				wp.a11y.speak( _wpCustomizeNavMenusSettings.l10n.itemsFound.replace( '%d', items.length ) );
 			} )
 			.catch( function() {
 				searchList.innerHTML = '';
-				searchList.classList.add( 'no-widgets-found' );
-				wp.a11y.speak( _wpCustomizeWidgetsSettings.l10n.noWidgetsFound );
+				searchList.classList.add( 'no-items-found' );
+				wp.a11y.speak( _wpCustomizeNavMenusSettings.l10n.itemsFound.replace( '%d', items.length ) );
 			} );
 		} else {
 			searchContainer.classList.add( 'cannot-expand' );
