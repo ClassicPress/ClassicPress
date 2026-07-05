@@ -2143,7 +2143,7 @@ input[type="range"].hue-slider::-moz-range-track {
 		width: 100%;
 		border-right: 0;
 	}
-  
+
 	.control-panel-themes .customize-themes-full-container {
 		width: 100%;
 		left: 0;
@@ -2973,4 +2973,3 @@ body.adding-widget .add-new-widget:before,
 		margin-top: 46px;
 	}
 }
-
