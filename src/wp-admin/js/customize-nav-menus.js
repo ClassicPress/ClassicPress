@@ -5,7 +5,7 @@
  * @output wp-admin/js/customize-nav-menus.js
  */
 /* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings, console,
-ajaxurl, _updatedControlsWatcher, Sortable, _cpCustomizeNavMenusL10n, isRtl */
+ajaxurl, _updatedControlsWatcher, Sortable, isRtl */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addObserver, itemObserver, currentMenuId,
@@ -932,18 +932,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			if ( '1' !== text ) {
 				if ( '-1' === text ) {
-					throw new Error( _cpCustomizeNavMenusL10n.nonceFailed );
+					throw new Error( _wpCustomizeNavMenusSettings.l10n.nonceFailed );
 				}
 
 				if ( '0' === text ) {
-					throw new Error( _cpCustomizeNavMenusL10n.serverRejection );
+					throw new Error( _wpCustomizeNavMenusSettings.l10n.serverRejection );
 				}
 
-				throw new Error( _cpCustomizeNavMenusL10n.unexpectedResponse + text );
+				throw new Error( _wpCustomizeNavMenusSettings.l10n.unexpectedResponse + text );
 			}
 		} )
 		.catch( function( error ) {
-			console.error( _cpCustomizeNavMenusL10n.failedSettingsSave, error );
+			console.error( _wpCustomizeNavMenusSettings.l10n.failedSettingsSave, error );
 		} );
 	}
 
@@ -975,6 +975,75 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		document.getElementById( 'accordion-section-nav_menu[' + currentMenuId + ']' ).id = newMenuString;
 		return newMenuString;
 	}
+
+	/**
+	 * Search for widgets
+	 *
+	 * @since CP-2.8.0
+	 */
+	document.getElementById( 'menu-items-search' ).addEventListener( 'input', _.debounce( function( e ) {
+		var message, data,
+			needle = e.target.value.toLowerCase().trim(),
+			searchContainer = document.getElementById( 'available-menu-items-search' ),
+			searchList = document.getElementById( 'menu-items-search-list' ),
+			clearButton = availableMenuItems.querySelector( '.clear-results' );
+
+		if ( needle.length ) { console.log(needle);
+			searchContainer.classList.remove( 'cannot-expand' );
+			clearButton.classList.add( 'is-visible' );
+
+			data = new URLSearchParams( {
+				action: 'search-available-menu-items',
+				search: needle,
+				page: 1,
+				'customize-menus-nonce': _wpCustomizeNavMenusSettings.l10n.menuSearchNonce
+			} );
+
+			fetch( ajaxurl, {
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+				},
+				body: data.toString()
+			} )
+			.then( function( response ) { console.log(response);
+				if ( ! response.ok ) {
+					throw new Error( 'HTTP ' + response.status );
+				}
+				return response.json();
+			} )
+			.then( function( response ) {
+				var items = response && response.success && response.data && response.data.items ? response.data.items : [];
+
+				searchList.innerHTML = '';
+
+				if ( items.length ) {
+					searchList.innerHTML = items.map( function( item ) {
+						return '<li class="menu-item-tpl"><span class="menu-item-title">' + item.title + '</span></li>';
+					} ).join( '' );
+
+					message = _wpCustomizeWidgetsSettings.l10n.widgetsFound.replace( '%d', items.length );
+					searchList.classList.remove( 'no-widgets-found' );
+				} else {
+					message = _wpCustomizeWidgetsSettings.l10n.noWidgetsFound;
+					searchList.classList.add( 'no-widgets-found' );
+				}
+
+				wp.a11y.speak( message );
+			} )
+			.catch( function() {
+				searchList.innerHTML = '';
+				searchList.classList.add( 'no-widgets-found' );
+				wp.a11y.speak( _wpCustomizeWidgetsSettings.l10n.noWidgetsFound );
+			} );
+		} else {
+			searchContainer.classList.add( 'cannot-expand' );
+			clearButton.classList.remove( 'is-visible' );
+			searchList.innerHTML = '';
+			searchList.classList.remove( 'no-widgets-found' );
+		}
+	}, 150 ) );
 
 	/**
 	 * Search for widgets
