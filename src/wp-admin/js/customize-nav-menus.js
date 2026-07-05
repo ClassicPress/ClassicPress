@@ -1231,7 +1231,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Clear list of search results
 		} else if ( document.body.classList.contains( 'adding-menu-items' ) && e.target.classList && e.target.classList.contains( 'clear-results' ) ) {
 			document.getElementById( 'menu-items-search' ).value = '';
+			document.getElementById( 'available-menu-items-search' ).classList.add( 'cannot-expand' );
 			e.target.classList.remove( 'is-visible' );
+			document.getElementById( 'menu-items-search-list' ).innerHTML = '';
 
 		// Add a menu item
 		} else if ( availableMenuItems.contains( e.target ) ) {
