@@ -518,6 +518,7 @@ final class WP_Customize_Nav_Menus {
 				'locationsDescription'   => $locations_description,
 				'menuNameLabel'          => __( 'Menu Name' ),
 				'newMenuNameDescription' => __( 'If your theme has multiple menus, giving them clear names will help you manage them.' ),
+				'addToMenu'              => __( 'Add to menu:' ),
 				'itemAdded'              => __( 'Menu item added' ),
 				'itemDeleted'            => __( 'Menu item deleted' ),
 				'menuAdded'              => __( 'Menu created' ),
