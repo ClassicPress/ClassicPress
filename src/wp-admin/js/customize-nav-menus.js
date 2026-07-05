@@ -993,7 +993,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			clearButton.classList.add( 'is-visible' );
 
 			data = new URLSearchParams( {
-				action: 'search-available-menu-items-customizer',				
+				action: 'search-available-menu-items-customizer',
 				wp_customize: 'on',
 				search: needle,
 				page: 1,
