@@ -5,7 +5,7 @@
  * @output wp-admin/js/customize-nav-menus.js
  */
 /* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings, console,
-ajaxurl, _updatedControlsWatcher, Sortable, isRtl */
+ajaxurl, _updatedControlsWatcher, Sortable, _wpCustomizeWidgetsSettings, isRtl */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addObserver, itemObserver, currentMenuId,
@@ -1051,7 +1051,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			.catch( function() {
 				searchList.innerHTML = '';
 				searchList.classList.add( 'no-items-found' );
-				wp.a11y.speak( _wpCustomizeNavMenusSettings.l10n.itemsFound.replace( '%d', items.length ) );
+				wp.a11y.speak( _wpCustomizeNavMenusSettings.l10n.itemsFound.replace( '%d', '0' ) );
 			} );
 		} else {
 			searchContainer.classList.add( 'cannot-expand' );
