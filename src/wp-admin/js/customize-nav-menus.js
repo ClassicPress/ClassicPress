@@ -1008,13 +1008,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				},
 				body: data.toString()
 			} )
-			.then( function( response ) { console.log(response);
+			.then( function( response ) {
 				if ( ! response.ok ) {
 					throw new Error( 'HTTP ' + response.status );
 				}
 				return response.json();
 			} )
-			.then( function( result ) {console.log(result);
+			.then( function( result ) {
 				var items = result && result.success && result.data && result.data.items ? result.data.items : [];
 
 				searchList.innerHTML = '';
@@ -1227,6 +1227,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					return;
 				}
 			}
+
+		// Clear list of search results
+		} else if ( document.body.classList.contains( 'adding-menu-items' ) && e.target.classList && e.target.classList.contains( 'clear-results' ) ) {
+			document.getElementById( 'menu-items-search' ).value = '';
+			e.target.classList.remove( 'is-visible' );
 
 		// Add a menu item
 		} else if ( availableMenuItems.contains( e.target ) ) {
