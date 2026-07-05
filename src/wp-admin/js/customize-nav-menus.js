@@ -988,7 +988,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			searchList = document.getElementById( 'menu-items-search-list' ),
 			clearButton = availableMenuItems.querySelector( '.clear-results' );
 
-		if ( needle.length ) {
+		if ( needle.length > 1 ) { // at least 2 characters required for search
 			searchContainer.classList.remove( 'cannot-expand' );
 			clearButton.classList.add( 'is-visible' );
 
