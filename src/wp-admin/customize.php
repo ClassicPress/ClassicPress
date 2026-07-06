@@ -419,6 +419,7 @@ wp_print_scripts();
 				}
 				?>
 
+				<span class="spinner"></span>
 				<button type="button" class="customize-controls-preview-toggle">
 					<span class="controls"><?php esc_html_e( 'Customize' ); ?></span>
 					<span class="preview"><?php esc_html_e( 'Preview' ); ?></span>
