@@ -239,6 +239,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		activatePublishButton();
 	}
 
+	function backgroundCheckboxChanged( input, settingId ) {
+		if ( settingId === 'background_repeat' ) {
+			_updatedControlsWatcher.background_repeat = input.checked ? 'repeat' : 'no-repeat';
+		} else if ( settingId === 'background_attachment' ) {
+			_updatedControlsWatcher.background_attachment = input.checked ? 'scroll' : 'fixed';
+		} else {
+			_updatedControlsWatcher[ settingId ] = input.checked ? input.value : '';
+		}
+
+		_updatedControlsWatcher.background_preset = 'custom';
+		activatePublishButton();
+	}
+
 	function updateBackgroundPresetFields( preset ) {
 		switch ( preset ) {
 			case 'fill':
@@ -285,7 +298,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		input.addEventListener( 'input', function() {
-			if ( input.name === 'background-position' ) {
+			if ( input.name === 'background-position' || input.type === 'checkbox' ) {
 				return;
 			}
 			inputChanged( input, settingId );
@@ -301,6 +314,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				_updatedControlsWatcher.background_preset = input.value;
 				updateBackgroundPresetFields( input.value );
 				activatePublishButton();
+				return;
+			}
+
+			if ( input.type === 'checkbox' ) {
+				backgroundCheckboxChanged( input, settingId );
 				return;
 			}
 
