@@ -228,6 +228,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		activatePublishButton();
 	}
 
+	function backgroundPositionChanged( input ) {
+		var value = input.value.trim().split( /\s+/ ),
+			x = value[0] || 'left',
+			y = value[1] || 'top';
+
+		_updatedControlsWatcher.background_position_x = x;
+		_updatedControlsWatcher.background_position_y = y;
+		_updatedControlsWatcher.background_preset = 'custom';
+		activatePublishButton();
+	}
+
 	function updateBackgroundPresetFields( preset ) {
 		switch ( preset ) {
 			case 'fill':
@@ -268,17 +279,31 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			return;
 		}
 
-		// Do not listen to menu-related changes
 		settingId = li.dataset.settingId;
 		if ( settingId.startsWith( 'nav_menu_locations[' ) || settingId.startsWith( 'nav_menu[' ) || settingId.startsWith( 'nav_menu_item[' ) ) {
 			return;
 		}
 
 		input.addEventListener( 'input', function() {
+			if ( input.name === 'background-position' ) {
+				return;
+			}
 			inputChanged( input, settingId );
 		} );
 
 		input.addEventListener( 'change', function() {
+			if ( input.name === 'background-position' ) {
+				backgroundPositionChanged( input );
+				return;
+			}
+
+			if ( settingId === 'background_preset' ) {
+				_updatedControlsWatcher.background_preset = input.value;
+				updateBackgroundPresetFields( input.value );
+				activatePublishButton();
+				return;
+			}
+
 			inputChanged( input, settingId );
 		} );
 	} );
