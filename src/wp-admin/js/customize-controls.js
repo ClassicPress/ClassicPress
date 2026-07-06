@@ -1592,6 +1592,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			return;
 		}
 
+		document.body.classList.add( 'saving' );
+
 		if ( changesetStatus === 'future' ) {
 			var hours = parseInt( d[3], 10 );
 			if ( d[5] === 'pm' && hours !== 12 ) {
@@ -1882,6 +1884,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			saveButton.disabled = false;
 			window._customizePublishing = false;
 		}
+
+		document.body.classList.remove( 'saving' );
 	} );
 
 	/**
