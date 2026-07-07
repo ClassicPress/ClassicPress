@@ -433,6 +433,18 @@ wp_print_scripts();
 				</a>
 			</header><!-- #customize-header-actions -->
 
+			<aside id="customize-lock-notice" class="notice notice-warning" aria-label="<?php esc_html_e( 'Customization lock notice' ); ?>" hidden>
+				<p>
+					<span class="customize-lock-notice-name"></span>
+					<span><?php esc_html_e( 'is already customizing this site.' ); ?></span>
+				</p>
+				<p>
+					<button type="button" class="button button-primary">
+						<?php esc_html_e( 'Take over' ); ?>
+					</button>
+				</p>
+			</aside>
+
 			<main id="widgets-right" class="wp-clearfix">
 				<div id="customize-notifications-area" class="customize-control-notifications-container">
 					<ul></ul>
