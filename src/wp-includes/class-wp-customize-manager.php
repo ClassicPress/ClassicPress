@@ -3488,15 +3488,7 @@ final class WP_Customize_Manager {
 			wp_send_json_error( 'invalid_nonce', 403 );
 		}
 
-		if ( ! empty( $_POST['customize_changeset_uuid'] ) ) {
-			$changeset_post_id = $this->find_changeset_post_id(
-				sanitize_text_field( wp_unslash( $_POST['customize_changeset_uuid'] ) )
-			);
-		}
-
-		if ( empty( $changeset_post_id ) ) {
-			$changeset_post_id = $this->changeset_post_id();
-		}
+		$changeset_post_id = $this->changeset_post_id();
 
 		if ( empty( $changeset_post_id ) ) {
 			wp_send_json_success(
