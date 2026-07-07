@@ -225,6 +225,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function applyLockState() {
 		var lockUser = lockSettings?.changeset?.lockUser,
 			nameNode,
+			avatarNode,
 			takeOverButton;
 
 		if ( ! lockNotice ) {
@@ -232,11 +233,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		nameNode = lockNotice.querySelector( '.customize-lock-notice-name' );
+		avatarNode = lockNotice.querySelector( '.customize-lock-notice-avatar' );
 		takeOverButton = lockNotice.querySelector( '.button-primary' );
 
 		if ( lockUser && lockUser.id && lockUser.id !== lockSettings?.user?.id ) {
 			if ( nameNode ) {
 				nameNode.textContent = lockUser.name || '';
+			}
+
+			if ( avatarNode ) {
+				if ( typeof lockUser?.avatar === 'string' && /<img[\s>]/i.test( lockUser.avatar ) ) {
+					avatarNode.innerHTML = lockUser.avatar;
+					avatarNode.style.display = '';
+				} else {
+					avatarNode.innerHTML = '';
+					avatarNode.style.display = 'none';
+				}
 			}
 
 			lockNotice.hidden = false;
