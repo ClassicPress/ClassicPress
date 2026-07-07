@@ -435,6 +435,9 @@ wp_print_scripts();
 
 			<aside id="customize-lock-notice" class="notice notice-warning" aria-label="<?php esc_html_e( 'Customization lock notice' ); ?>" hidden>
 				<p>
+					<b><?php esc_html_e( 'Customizer locked' ); ?></b>
+				</p>
+				<p>
 					<span class="customize-lock-notice-name"></span>
 					<span><?php esc_html_e( 'is already customizing this site.' ); ?></span>
 				</p>
