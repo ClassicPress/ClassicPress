@@ -437,15 +437,19 @@ wp_print_scripts();
 				<p>
 					<b><?php esc_html_e( 'Customizer locked' ); ?></b>
 				</p>
+				<div class="customize-lock-notice-avatar"></div>
 				<p>
 					<span class="customize-lock-notice-name"></span>
-					<span><?php esc_html_e( 'is already customizing this site.' ); ?></span>
+					<span><?php esc_html_e( 'is already customizing this site. Do you want to take over?' ); ?></span>
 				</p>
-				<p>
+				<div class="aside-lock">
+					<a class="button" href="<?php echo esc_url( $wp_customize->get_return_url() ); ?>">
+						<?php esc_html_e( 'Go back' ); ?>
+					</a>
 					<button type="button" class="button button-primary">
 						<?php esc_html_e( 'Take over' ); ?>
 					</button>
-				</p>
+				</div>
 			</aside>
 
 			<main id="widgets-right" class="wp-clearfix">
