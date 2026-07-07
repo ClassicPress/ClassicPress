@@ -279,7 +279,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			},
 			body: data.toString()
 		} )
-		.then( function( response ) {console.log(response);
+		.then( function( response ) {
 			if ( response.ok ) {
 				return response.json();
 			}
@@ -327,7 +327,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			},
 			body: data.toString()
 		} )
-		.then( function( response ) { console.log( response);
+		.then( function( response ) {
 			if ( response.ok ) {
 				return response.json();
 			}
