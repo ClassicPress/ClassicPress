@@ -3480,6 +3480,10 @@ final class WP_Customize_Manager {
 			wp_send_json_error( 'unauthenticated', 401 );
 		}
 
+		if ( ! $this->is_preview() ) {
+			wp_send_json_error( 'no_preview', 400 );
+		}
+
 		if ( ! check_ajax_referer( 'customize_check_changeset_lock', 'nonce', false ) ) {
 			wp_send_json_error( 'invalid_nonce', 403 );
 		}
