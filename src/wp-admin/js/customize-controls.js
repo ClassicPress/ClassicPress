@@ -1770,7 +1770,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// This avoids crashing the live preview.
 		Object.entries( window._cpDirtySettings || {} ).forEach( function( [ settingId, item ] ) {
 			if ( ! settingId.startsWith( 'nav_menu_item[' ) ) {
-				document.body.classList.remove( 'saving' );
 				return;
 			}
 
