@@ -3474,21 +3474,15 @@ final class WP_Customize_Manager {
 		$lock_user_id      = false;
 		$lock_user         = null;
 		$user              = null;
-		$changeset_post_id = null;
+		$changeset_post_id = $this->changeset_post_id();
 
 		if ( ! is_user_logged_in() ) {
 			wp_send_json_error( 'unauthenticated', 401 );
 		}
 
-		if ( ! $this->is_preview() ) {
-			wp_send_json_error( 'no_preview', 400 );
-		}
-
 		if ( ! check_ajax_referer( 'customize_check_changeset_lock', 'nonce', false ) ) {
 			wp_send_json_error( 'invalid_nonce', 403 );
 		}
-
-		$changeset_post_id = $this->changeset_post_id();
 
 		if ( empty( $changeset_post_id ) ) {
 			wp_send_json_success(
