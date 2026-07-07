@@ -2053,7 +2053,6 @@ class WP_Site_Health {
 	 * @return array The test results.
 	 */
 	public function get_test_http_protocol() {
-		global $concatenate_scripts;
 		$result = array(
 			// translators: HTTP site protocol
 			'label'       => __( 'HTTP Protocol is %s' ),
@@ -2106,15 +2105,6 @@ class WP_Site_Health {
 			$result['description'] = sprintf(
 				$result['description'],
 				'<p>' . __( 'Your site is running with <code>CONCATENATE_SCRIPTS</code> defined in <code>wp-config.php</code>. This information may not be relevant.' ) . '</p>'
-			);
-			return rest_ensure_response( $result );
-		}
-
-		// Check for manipulation of the $concatenate_scripts global variable.
-		if ( isset( $concatenate_scripts ) && false === $concatenate_scripts ) {
-			$result['description'] = sprintf(
-				$result['description'],
-				'<p>' . __( 'Your site appears to be running a plugin that defines the <code>$concatenate_scripts</code> to be <code>false</code>. This information may not be relevant.' ) . '</p>'
 			);
 			return rest_ensure_response( $result );
 		}
