@@ -1769,13 +1769,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// publish payload without touching updatedControls.
 		// This avoids crashing the live preview.
 		Object.entries( window._cpDirtySettings || {} ).forEach( function( [ settingId, item ] ) {
-			if ( ! settingId.startsWith( 'nav_menu_item[' ) ) {
-				return;
+			if ( settingId.startsWith( 'nav_menu_item[' ) ) {
+				submittedChanges[ settingId ] = { value: item };
 			}
-
-			submittedChanges[ settingId ] = {
-				value: item
-			};
 		} );
 
 		// Append new data for POSTing to PHP back-end handler
