@@ -177,48 +177,33 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
-	 * Get lock data from localized settings.
-	 *
-	 * @return {Object}
-	 */
-	function getChangesetLockUser() {
-		return lockSettings?.changeset?.lockUser || null;
-	}
-
-	/**
-	 * Get current changeset UUID from hidden form field.
-	 *
-	 * @return {Object}
-	 */
-	function getCurrentChangesetUuid() {
-		return document.getElementById( 'customize_changeset_uuid' )?.value || lockSettings?.changeset?.uuid || '';
-	}
-
-	/**
 	 * Disable editing UI while another user holds the lock.
 	 *
 	 * @return {void}
 	 */
 	function disableCustomizerEditing() {
-		saveButton.disabled = true;
-		saveButton.setAttribute( 'aria-disabled', 'true' );
-		publishSettings.disabled = true;
-		publishSettings.setAttribute( 'aria-disabled', 'true' );
-
 		inputs.forEach( function( input ) {
 			if ( input === saveButton || input === publishSettings || input.type === 'hidden' ) {
 				return;
 			}
 
-			input.disabled = true;
-			input.setAttribute( 'data-lock-disabled', 'true' );
+			if ( ! input.disabled ) {
+				input.disabled = true;
+				input.setAttribute( 'data-lock-disabled', 'true' );
+			}
 		} );
+
+		saveButton.disabled = true;
+		saveButton.setAttribute( 'aria-disabled', 'true' );
+
+		publishSettings.disabled = true;
+		publishSettings.setAttribute( 'aria-disabled', 'true' );
 
 		document.body.classList.add( 'customizer-locked' );
 	}
 
 	/**
-	 * Re-enable editing UI after lock takeover.
+	 * Re-enable editing UI after lock release or takeover.
 	 *
 	 * @return {void}
 	 */
@@ -234,119 +219,57 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
-	 * Remove the lock notice.
-	 *
-	 * @return {void}
-	 */
-	function removeLockNotice() {
-		if ( lockNotice && lockNotice.parentNode ) {
-			lockNotice.parentNode.removeChild( lockNotice );
-		}
-		lockNotice = null;
-	}
-
-	/**
-	 * Render lock notice.
-	 *
-	 * @param {Object} user User data.
-	 * @return {void}
-	 */
-	function renderLockNotice( user ) {
-		var wrapper, title, text, actions, takeOverButton;
-
-		removeLockNotice();
-
-		wrapper = document.createElement( 'div' );
-		wrapper.className = 'notice notice-warning customize-lock-notice';
-
-		title = document.createElement( 'p' );
-		title.innerHTML = wp.i18n.sprintf(
-			wp.i18n.__( '%s Customizer locked %s', 'classicpress' ),
-			'<strong>',
-			'</strong>'
-		);
-
-		text = document.createElement( 'p' );
-		text.textContent = wp.i18n.sprintf(
-			wp.i18n.__( '%s is already editing this changeset.', 'classicpress' ),
-			user.name
-		);
-
-		actions = document.createElement( 'p' );
-		actions.className = 'customize-lock-notice-actions';
-
-		takeOverButton = document.createElement( 'button' );
-		takeOverButton.type = 'button';
-		takeOverButton.className = 'button button-primary';
-		takeOverButton.textContent = 'Take over';
-
-		takeOverButton.addEventListener( 'click', handleTakeOverLock );
-
-		actions.appendChild( takeOverButton );
-		wrapper.appendChild( title );
-		wrapper.appendChild( text );
-		wrapper.appendChild( actions );
-
-		setTimeout( function() {
-			for ( let i = 0, n = listItems.length; i < n; i++ ) {
-				if ( isVisible( listItems[i] ) ) {
-					listItems[i].insertAdjacentElement( 'afterend', wrapper );
-					return;
-				}
-			}
-		}, 0 );
-		lockNotice = wrapper;
-	}
-
-	/**
-	 * Apply lock state to UI.
+	 * Update lock notice and editing state.
 	 *
 	 * @return {void}
 	 */
 	function applyLockState() {
-		var lockUser = getChangesetLockUser();
+		var lockUser = lockSettings?.changeset?.lockUser,
+			nameNode,
+			takeOverButton;
 
-		if ( lockUser ) {
-			disableCustomizerEditing();
-			renderLockNotice( lockUser );
-		} else {
-			removeLockNotice();
-			enableCustomizerEditing();
+		if ( ! lockNotice ) {
+			return;
 		}
+
+		nameNode = lockNotice.querySelector( '.customize-lock-notice-name' );
+		takeOverButton = lockNotice.querySelector( '.button-primary' );
+
+		if ( lockUser && lockUser.id && lockUser.id !== lockSettings?.user?.id ) {
+			if ( nameNode ) {
+				nameNode.textContent = lockUser.name || '';
+			}
+
+			lockNotice.hidden = false;
+			disableCustomizerEditing();
+
+			if ( takeOverButton ) {
+				takeOverButton.disabled = false;
+			}
+
+			return;
+		}
+
+		lockNotice.hidden = true;
+		enableCustomizerEditing();
 	}
 
 	/**
-	 * Take over the current changeset lock.
+	 * Poll server for current lock state.
 	 *
 	 * @return {void}
 	 */
-	function handleTakeOverLock() {
-		var data = new URLSearchParams(),
-			takeOverButton = lockNotice?.querySelector( '.button-primary' ),
-			currentUuid = getCurrentChangesetUuid();
+	function refreshLockState() {
+		var data;
 
-		if ( ! lockSettings?.nonce?.override_lock ) {
+		if ( ! lockSettings?.nonce?.check_lock ) {
 			return;
 		}
 
-		if ( ! currentUuid ) {
-			return;
-		}
-
-		if ( takeOverButton ) {
-			takeOverButton.disabled = true;
-		}
-
-		data.append( 'action', 'customize_override_changeset_lock' );
-		data.append( 'nonce', lockSettings.nonce.override_lock );
-
-		if ( currentUuid ) {
-			data.append( 'customize_changeset_uuid', currentUuid );
-		}
-
-		if ( lockSettings?.nonce?.preview ) {
-			data.append( 'customize_preview_nonce', lockSettings.nonce.preview );
-		}
+		data = new URLSearchParams();
+		data.append( 'action', 'customize_check_changeset_lock' );
+		data.append( 'nonce', lockSettings.nonce.check_lock );
+		data.append( 'wp_customize', 'on' );
 
 		fetch( ajaxurl, {
 			method: 'POST',
@@ -356,139 +279,91 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			},
 			body: data.toString()
 		} )
-		.then( function( response ) {
-			return response.json().then( function( result ) {
-				return {
-					ok: response.ok,
-					status: response.status,
-					result: result
-				};
-			} );
+		.then( function( response ) {console.log(response);
+			if ( response.ok ) {
+				return response.json();
+			}
+
+			throw new Error( response.status );
 		} )
-		.then( function( payload ) {
-			if ( ! payload.ok || ! payload.result.success ) {
-				console.error( 'Takeover failed payload:', payload );
-				throw new Error(
-					payload.result?.data?.message ||
-					payload.result?.data ||
-					'Lock takeover failed'
-				);
+		.then( function( result ) {
+			if ( result.success && result.data ) {
+				lockSettings.changeset = lockSettings.changeset || {};
+				lockSettings.changeset.lockUser = result.data.lockUser || null;
+				applyLockState();
+			}
+		} )
+		.catch( function( error ) {
+			console.error( 'Customizer lock refresh failed.', error );
+		} );
+	}
+
+	/**
+	 * Take over the current lock.
+	 *
+	 * @return {void}
+	 */
+	function handleTakeOverLock() {
+		var data = new URLSearchParams(),
+			takeOverButton = lockNotice?.querySelector( '.button-primary' );
+
+		if ( ! lockSettings?.nonce?.override_lock ) {
+			return;
+		}
+
+		if ( takeOverButton ) {
+			takeOverButton.disabled = true;
+		}
+
+		data.append( 'action', 'customize_override_changeset_lock' );
+		data.append( 'nonce', lockSettings.nonce.override_lock );
+		data.append( 'wp_customize', 'on' );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+			},
+			body: data.toString()
+		} )
+		.then( function( response ) { console.log( response);
+			if ( response.ok ) {
+				return response.json();
 			}
 
-			if ( lockSettings.changeset ) {
-				lockSettings.changeset.uuid = currentUuid;
-				lockSettings.changeset.lockUser = null;
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( ! result.success ) {
+				throw new Error( result.data || 'Lock takeover failed' );
 			}
 
+			lockSettings.changeset = lockSettings.changeset || {};
+			lockSettings.changeset.lockUser = null;
 			applyLockState();
 		} )
 		.catch( function( error ) {
 			if ( takeOverButton ) {
 				takeOverButton.disabled = false;
 			}
+
 			console.error( 'Customizer lock takeover failed.', error );
 		} );
 	}
 
-	function renderTakenOverNotice( user ) {
-		var existingNotice = document.getElementById( 'customize-taken-over-notice' ),
-			notice = document.createElement( 'div' ),
-			name = user?.name || wp.i18n.__( 'Another user', 'classicpress' );
-
-		if ( existingNotice ) {
-			existingNotice.remove();
-		}
-
-		removeLockNotice();
-
-		notice.id = 'customize-taken-over-notice';
-		notice.className = 'notice notice-warning customize-taken-over-notice';
-		notice.innerHTML =
-			'<p>' +
-				wp.i18n.sprintf(
-					wp.i18n.__( '%s Customizer locked %s', 'classicpress' ),
-					'<strong>',
-					'</strong>'
-				) +
-			'</p>' +
-			'<p>' +
-				wp.i18n.sprintf(
-					wp.i18n.__( '%s has taken over this Customizer session.', 'classicpress' ),
-					name
-				) +
-			'</p>';
-
-		setTimeout( function() {
-			for ( let i = 0, n = listItems.length; i < n; i++ ) {
-				if ( isVisible( listItems[i] ) ) {
-					listItems[i].insertAdjacentElement( 'afterend', notice );
-					return;
-				}
+	if ( lockNotice ) {
+		lockNotice.addEventListener( 'click', function( e ) {
+			if ( e.target.closest( '.button-primary' ) ) {
+				e.preventDefault();
+				handleTakeOverLock();
 			}
-		}, 0 );
+		} );
 	}
 
-	function startLockPolling() {
-		if ( ! lockSettings?.nonce?.check_lock ) {
-			return;
-		}
+	applyLockState();
 
-		lockRefreshTimer = window.setInterval( function() {
-			var data = new URLSearchParams(),
-				currentUuid = getCurrentChangesetUuid();
-
-			if ( ! currentUuid ) {
-				return;
-			}
-
-			data.append( 'action', 'customize_check_changeset_lock' );
-			data.append( 'nonce', lockSettings.nonce.check_lock );
-			data.append( 'customize_changeset_uuid', currentUuid );
-
-			fetch( ajaxurl, {
-				method: 'POST',
-				credentials: 'same-origin',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-				},
-				body: data.toString()
-			} )
-			.then( function( response ) {
-				return response.json().then( function( result ) {
-					return {
-						ok: response.ok,
-						status: response.status,
-						result: result
-					};
-				} );
-			} )
-			.then( function( payload ) {
-				var lockUser;
-
-				if ( ! payload.ok || ! payload.result.success ) {
-					console.error( 'Customizer lock polling failed payload:', payload );
-					return;
-				}
-
-				lockUser = payload.result.data?.lockUser || null;
-
-				if ( lockUser && lockUser.id !== lockSettings?.user?.id ) {
-					lockSettings.changeset.lockUser = lockUser;
-					disableCustomizerEditing();
-					renderTakenOverNotice( lockUser );
-					window.clearInterval( lockRefreshTimer );
-				}
-			} )
-			.catch( function( error ) {
-				console.error( 'Customizer lock polling failed.', error );
-			} );
-		}, 15000 );
-	}
-
-	if ( lockSettings?.changeset?.uuid ) {
-		applyLockState();
-		startLockPolling();
-	}
+	lockRefreshTimer = window.setInterval( refreshLockState, 15000 );
 
 	// Limit motion where appropriate
 	reducedMotionMediaQuery.addEventListener( 'change', function handleReducedMotionChange( event ) {
