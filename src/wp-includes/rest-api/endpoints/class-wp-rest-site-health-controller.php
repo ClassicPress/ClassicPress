@@ -175,6 +175,50 @@ class WP_REST_Site_Health_Controller extends WP_REST_Controller {
 				),
 			)
 		);
+
+		register_rest_route(
+			$this->namespace,
+			sprintf(
+				'/%s/%s',
+				$this->rest_base,
+				'http-protocol'
+			),
+			array(
+				array(
+					'methods'             => 'GET',
+					'callback'            => array( $this, 'test_http_protocol' ),
+					'permission_callback' => function () {
+						return $this->validate_request_permission( 'http_protocol' );
+					},
+					'schema' => array( $this, 'get_public_item_schema' ),
+				),
+			)
+		);
+
+		register_rest_route(
+			$this->namespace,
+			sprintf(
+				'/%s/%s',
+				$this->rest_base,
+				'http-protocol-data'
+			),
+			array(
+				array(
+					'methods'             => 'POST',
+					'callback'            => array( $this, 'store_http_protocol' ),
+					'permission_callback' => function () {
+						return $this->validate_request_permission( 'http_protocol_data' );
+					},
+					'args' => array(
+						'protocol' => array(
+							'type'              => 'string',
+							'sanitize_callback' => 'sanitize_text_field',
+							'default'           => '',
+						),
+					),
+				),
+			)
+		);
 	}
 
 	/**
@@ -271,6 +315,43 @@ class WP_REST_Site_Health_Controller extends WP_REST_Controller {
 	public function test_page_cache() {
 		$this->load_admin_textdomain();
 		return $this->site_health->get_test_page_cache();
+	}
+
+	/**
+	 * Checks script concatenation status.
+	 *
+	 * @since CP-2.8.0
+	 *
+	 * @return array The test result.
+	 */
+	public function test_http_protocol() {
+		$this->load_admin_textdomain();
+		return $this->site_health->get_test_http_protocol();
+	}
+
+	/**
+	 * Sets transient storing site http protocol.
+	 *
+	 * @since CP-2.8.0
+	 *
+	 * @return WP_REST_Response|WP_Error Response object on success, or error object on failure.
+	 */
+	public function store_http_protocol( WP_REST_Request $request ) {
+		// Reproduce some logic from script_concat_settings() to avoid is_admin() issues
+		$concatenate_scripts = defined( 'CONCATENATE_SCRIPTS' ) ? CONCATENATE_SCRIPTS : true;
+		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			$concatenate_scripts = false;
+		}
+
+		$transient = set_transient(
+			'cp_http_protocol_' . get_current_user_id(),
+			array(
+				'protocol' => $request->get_param( 'protocol' ),
+				'concat'   => $concatenate_scripts,
+			),
+			WEEK_IN_SECONDS
+		);
+		return rest_ensure_response( array( 'stored' => $transient ) );
 	}
 
 	/**
