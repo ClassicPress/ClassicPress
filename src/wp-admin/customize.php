@@ -602,9 +602,6 @@ wp_print_scripts();
 									<div class="customize-themes-section themes-section-installed_themes control-section-content themes-php current-section">											
 										<div class="theme-browser rendered local">
 											<div class="customize-preview-header themes-filter-bar">
-												<button type="button" class="button button-primary customize-section-back customize-themes-mobile-back" style="display: none;">
-													<?php esc_html_e( 'Go to theme sources' ); ?>
-												</button>
 												<div class="themes-filter-container">
 													<label for="installed_themes-themes-filter" class="screen-reader-text">
 														<?php esc_html_e( 'Search themes&hellip;' ); ?>
