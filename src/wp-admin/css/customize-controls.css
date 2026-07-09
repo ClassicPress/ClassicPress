@@ -2717,14 +2717,8 @@ body.adding-widget .add-new-widget:before,
 }
 
 @media screen and (max-width: 640px) {
-	/* when the sidebar is collapsed and switching to responsive view,
-	   bring it back see ticket #35220 */
-	.wp-full-overlay.collapsed #customize-controls {
-		margin-left: 0;
-	}
-
-	.wp-full-overlay-sidebar .wp-full-overlay-sidebar-content {
-		bottom: 0;
+	.customize-controls-preview-toggle .controls {
+		display: none;
 	}
 
 	#customize-footer-actions {
