@@ -31,7 +31,7 @@
     "grunt-webpack": "8.0.0",
     "ink-docstrap": "1.3.2",
     "install-changed": "^1.1.0",
-    "postcss": "8.5.16",
+    "postcss": "8.5.17",
     "qunit": "^2.19.4",
     "rollup": "4.62.2",
     "sass": "1.101.0",
