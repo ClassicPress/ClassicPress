@@ -160,15 +160,6 @@ body:not(.ready) #customize-save-button-wrapper .save {
 	opacity: 0.4;
 }
 
-.outer-section-open .wp-full-overlay.expanded.preview-tablet .wp-full-overlay-main,
-.outer-section-open .wp-full-overlay.expanded.preview-mobile .wp-full-overlay-main,
-.adding-menu-items .wp-full-overlay.expanded.preview-tablet .wp-full-overlay-main,
-.adding-menu-items .wp-full-overlay.expanded.preview-mobile .wp-full-overlay-main,
-.adding-widget .wp-full-overlay.expanded.preview-tablet .wp-full-overlay-main,
-.adding-widget .wp-full-overlay.expanded.preview-mobile .wp-full-overlay-main {
-	left: 64%;
-}
-
 #customize-outer-theme-controls li.notice {
 	padding-top: 8px;
 	padding-bottom: 8px;
@@ -2157,10 +2148,6 @@ input[type="range"].hue-slider::-moz-range-track {
 	}
 }
 
-.control-panel-themes .customize-themes-mobile-back {
-	display: none;
-}
-
 /* Mobile - toggle between themes and filters */
 @media screen and (max-width: 600px) {
 	.wp-full-overlay-sidebar {
@@ -2180,59 +2167,6 @@ input[type="range"].hue-slider::-moz-range-track {
 		margin: 46px 0 0;
 		height: calc(100% - 46px);
 		z-index: 1;
-		display: none;
-	}
-
-	.showing-themes .control-panel-themes .customize-themes-full-container {
-		display: block;
-	}
-
-	.wp-customizer .showing-themes .control-panel-themes .customize-themes-mobile-back {
-		display: block;
-		position: fixed;
-		top: 0;
-		left: 0;
-		background: #f0f0f1;
-		color: #3c434a;
-		border-radius: 0;
-		box-shadow: none;
-		border: none;
-		height: 46px;
-		width: 100%;
-		z-index: 10;
-		text-align: left;
-		text-shadow: none;
-		border-bottom: 1px solid #dcdcde;
-		border-left: 4px solid transparent;
-		margin: 0;
-		padding: 0;
-		font-size: 0;
-		overflow: hidden;
-	}
-
-	.wp-customizer .showing-themes .control-panel-themes .customize-themes-mobile-back:before {
-		left: 0;
-		top: 0;
-		height: 46px;
-		width: 26px;
-		display: block;
-		line-height: 2.3;
-		padding: 0 8px;
-		border-right: 1px solid #dcdcde;
-	}
-
-	.wp-customizer .showing-themes .control-panel-themes .customize-themes-mobile-back:hover,
-	.wp-customizer .showing-themes .control-panel-themes .customize-themes-mobile-back:focus {
-		color: #2271b1;
-		background: #f6f7f7;
-		border-left-color: #2271b1;
-		box-shadow: none;
-		/* Only visible in Windows High Contrast mode */
-		outline: 2px solid transparent;
-		outline-offset: -2px;
-	}
-
-	.showing-themes #customize-header-actions {
 		display: none;
 	}
 
@@ -2811,16 +2745,7 @@ body.adding-widget .add-new-widget:before,
 	}
 }
 
-@media screen and (max-width: 1200px) {
-	.outer-section-open .wp-full-overlay.expanded.preview-mobile .wp-full-overlay-main,
-	.adding-menu-items .wp-full-overlay.expanded.preview-mobile .wp-full-overlay-main,
-	.adding-widget .wp-full-overlay.expanded.preview-mobile .wp-full-overlay-main {
-		left: 67%;
-	}
-}
-
 @media screen and (max-width: 640px) {
-
 	/* when the sidebar is collapsed and switching to responsive view,
 	   bring it back see ticket #35220 */
 	.wp-full-overlay.collapsed #customize-controls {
@@ -2839,10 +2764,6 @@ body.adding-widget .add-new-widget:before,
 		display: none;
 	}
 
-	.preview-only #customize-save-button-wrapper {
-		margin-top: -46px;
-	}
-
 	.customize-controls-preview-toggle .preview:before,
 	.customize-controls-preview-toggle .controls:before {
 		font: normal 20px/1 dashicons;
@@ -2854,15 +2775,6 @@ body.adding-widget .add-new-widget:before,
 
 	.customize-controls-preview-toggle .controls:before {
 		content: "\f540";
-	}
-
-	.preview-only #customize-controls {
-		height: 45px;
-	}
-
-	.preview-only #customize-preview,
-	.preview-only .customize-controls-preview-toggle .controls {
-		display: block;
 	}
 
 	.wp-core-ui.wp-customizer .button {

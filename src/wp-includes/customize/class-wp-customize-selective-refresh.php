@@ -176,10 +176,10 @@ final class WP_Customize_Selective_Refresh {
 		$switched_locale = switch_to_user_locale( get_current_user_id() );
 		$l10n            = array(
 			'shiftClickToEdit' => __( 'Shift-click to edit this element.' ),
-			'clickEditMenu'    => __( 'Click to edit this menu.' ),
-			'clickEditWidget'  => __( 'Click to edit this widget.' ),
-			'clickEditTitle'   => __( 'Click to edit the site title.' ),
-			'clickEditMisc'    => __( 'Click to edit this element.' ),
+			'clickEditMenu'    => __( 'Shift-click to edit this menu.' ),
+			'clickEditWidget'  => __( 'Shift-click to edit this widget.' ),
+			'clickEditTitle'   => __( 'Shift-click to edit the site title.' ),
+			'clickEditMisc'    => __( 'Shift-click to edit this element.' ),
 			/* translators: %s: document.write() */
 			'badDocumentWrite' => sprintf( __( '%s is forbidden' ), 'document.write()' ),
 		);
