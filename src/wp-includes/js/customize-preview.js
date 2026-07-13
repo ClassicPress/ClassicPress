@@ -775,46 +775,6 @@
 			api._settings[ cssSettingId ].bind( api.settingPreviewHandlers.custom_css );
 		}
 
-		// Core standard setting → DOM bindings
-		var coreTextBindings = {
-			'blogname':        '.site-title a',
-			'blogdescription': '.site-description'
-		};
-		Object.keys( coreTextBindings ).forEach( function( id ) {
-			if ( ! api._settings[ id ] ) {
-				api.create( id, '' );
-			}
-			api._settings[ id ].bind( function( value ) {
-				document.querySelectorAll( coreTextBindings[ id ] ).forEach( function( el ) {
-
-					// Update only the text node, preserving child elements like the pencil shortcut
-					var textNode = Array.from( el.childNodes ).find( function( node ) {
-						return node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '';
-					} );
-
-					if ( textNode ) {
-						textNode.textContent = value;
-					} else {
-						el.appendChild( document.createTextNode( value ) );
-					}
-				} );
-			} );
-		} );
-
-		// Header text color
-		if ( ! api._settings.header_textcolor ) {
-			api.create( 'header_textcolor', '' );
-		}
-		api._settings.header_textcolor.bind( function( value ) {
-			var style = document.getElementById( 'customize-preview-header-textcolor' );
-			if ( ! style ) {
-				style = document.createElement( 'style' );
-				style.id = 'customize-preview-header-textcolor';
-				document.head.appendChild( style );
-			}
-			style.textContent = value === 'blank' ? 'body .site-title a, body .site-description { visibility: hidden; }' : 'body.has-header-image .site-title a, body.has-header-video .site-title a, body .site-title a, body .site-description { color: #' + value.replace( /^#/, '' ) + '; visibility: visible; }';
-		} );
-
 		api.preview.send( 'ready', {
 			currentUrl: api.settings.url.self,
 			activePanels: api.settings.activePanels,
