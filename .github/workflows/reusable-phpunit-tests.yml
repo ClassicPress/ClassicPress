@@ -76,7 +76,7 @@ jobs:
         id: nvmrc
 
       - name: Install NodeJS
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: '${{ steps.nvmrc.outputs.NVMRC }}'
 
