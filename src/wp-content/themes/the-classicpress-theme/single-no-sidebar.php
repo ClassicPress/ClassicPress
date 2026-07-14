@@ -1,17 +1,18 @@
 <?php
-/**
- * The template for displaying all single posts
+/*
+ * Template Name: No Sidebar
+ * Description: Template without sidebar
+ * Template Post Type: post
  *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
- * @package Susty
  */
 
 get_header();
 ?>
 
 	<div id="primary">
-		<main id="main" class="post-main">
+		<main id="main" class="post-main post-no-sidebar">
 
 		<?php
 		while ( have_posts() ) :
@@ -35,8 +36,6 @@ get_header();
 		?>
 
 		</main><!-- #main -->
-
-		<?php get_sidebar(); ?>
 
 	</div><!-- #primary -->
 
