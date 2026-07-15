@@ -565,18 +565,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		const addItemsPanel = document.getElementById( 'available-menu-items' );
 
-		if ( ! title ) {
-			errorSpan.style.display = 'block';
-			input.classList.add( 'form-invalid' );
-			input.setAttribute( 'aria-invalid', 'true' );
-			input.setAttribute( 'aria-describedby', errorSpan.id );
-			wp.a11y.speak( errorSpan.textContent );
-			return;
-		} else {
-			errorSpan.style.display = 'none';
-			input.classList.remove( 'form-invalid' );
-			input.removeAttribute( 'aria-invalid' );
-			input.removeAttribute( 'aria-describedby' );
+		if ( errorSpan ) {
+			if ( ! title ) {
+				errorSpan.style.display = 'block';
+				input.classList.add( 'form-invalid' );
+				input.setAttribute( 'aria-invalid', 'true' );
+				input.setAttribute( 'aria-describedby', errorSpan.id );
+				wp.a11y.speak( errorSpan.textContent );
+				return;
+			} else {
+				errorSpan.style.display = 'none';
+				input.classList.remove( 'form-invalid' );
+				input.removeAttribute( 'aria-invalid' );
+				input.removeAttribute( 'aria-describedby' );
+			}
 		}
 
 		if ( type === 'custom' ) {
