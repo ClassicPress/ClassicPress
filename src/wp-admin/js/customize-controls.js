@@ -228,6 +228,62 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		activatePublishButton();
 	}
 
+	function backgroundPositionChanged( input ) {
+		var value = input.value.trim().split( /\s+/ ),
+			x = value[0] || 'left',
+			y = value[1] || 'top';
+
+		_updatedControlsWatcher.background_position_x = x;
+		_updatedControlsWatcher.background_position_y = y;
+		_updatedControlsWatcher.background_preset = 'custom';
+		activatePublishButton();
+	}
+
+	function backgroundCheckboxChanged( input, settingId ) {
+		if ( settingId === 'background_repeat' ) {
+			_updatedControlsWatcher.background_repeat = input.checked ? 'repeat' : 'no-repeat';
+		} else if ( settingId === 'background_attachment' ) {
+			_updatedControlsWatcher.background_attachment = input.checked ? 'scroll' : 'fixed';
+		} else {
+			_updatedControlsWatcher[ settingId ] = input.checked ? input.value : '';
+		}
+
+		_updatedControlsWatcher.background_preset = 'custom';
+		activatePublishButton();
+	}
+
+	function updateBackgroundPresetFields( preset ) {
+		switch ( preset ) {
+			case 'fill':
+				_updatedControlsWatcher.background_repeat = 'no-repeat';
+				_updatedControlsWatcher.background_position_x = 'center';
+				_updatedControlsWatcher.background_position_y = 'center';
+				_updatedControlsWatcher.background_size = 'cover';
+				_updatedControlsWatcher.background_attachment = 'scroll';
+				break;
+
+			case 'fit':
+				_updatedControlsWatcher.background_repeat = 'no-repeat';
+				_updatedControlsWatcher.background_position_x = 'center';
+				_updatedControlsWatcher.background_position_y = 'center';
+				_updatedControlsWatcher.background_size = 'contain';
+				_updatedControlsWatcher.background_attachment = 'scroll';
+				break;
+
+			case 'repeat':
+				_updatedControlsWatcher.background_repeat = 'repeat';
+				_updatedControlsWatcher.background_position_x = 'left';
+				_updatedControlsWatcher.background_position_y = 'top';
+				_updatedControlsWatcher.background_size = 'auto';
+				_updatedControlsWatcher.background_attachment = 'scroll';
+				break;
+
+			case 'custom':
+			default:
+				break;
+		}
+	}
+
 	inputs.forEach( function( input ) {
 		let settingId,
 			li = input.closest( 'li' );
@@ -236,17 +292,36 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			return;
 		}
 
-		// Do not listen to menu-related changes
 		settingId = li.dataset.settingId;
 		if ( settingId.startsWith( 'nav_menu_locations[' ) || settingId.startsWith( 'nav_menu[' ) || settingId.startsWith( 'nav_menu_item[' ) ) {
 			return;
 		}
 
 		input.addEventListener( 'input', function() {
+			if ( input.name === 'background-position' || input.type === 'checkbox' ) {
+				return;
+			}
 			inputChanged( input, settingId );
 		} );
 
 		input.addEventListener( 'change', function() {
+			if ( input.name === 'background-position' ) {
+				backgroundPositionChanged( input );
+				return;
+			}
+
+			if ( settingId === 'background_preset' ) {
+				_updatedControlsWatcher.background_preset = input.value;
+				updateBackgroundPresetFields( input.value );
+				activatePublishButton();
+				return;
+			}
+
+			if ( input.type === 'checkbox' ) {
+				backgroundCheckboxChanged( input, settingId );
+				return;
+			}
+
 			inputChanged( input, settingId );
 		} );
 	} );
