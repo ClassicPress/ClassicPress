@@ -2418,7 +2418,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.querySelector( '.feature-filter-toggle' ).setAttribute( 'aria-expanded', 'false' );
 				document.querySelector( '.filter-drawer' ).style.display = 'none';
 				document.querySelector( '.filter-themes-count .theme-count' ).textContent = document.querySelectorAll( '.local .themes li' ).length;
-				if ( window.innerWidth <= 600 ) {
+				if ( window.innerWidth <= 640 ) {
 					document.querySelector( '#customize-header-actions .preview' ).style.display = 'none';
 					document.querySelector( '#customize-header-actions .controls' ).style.display = 'block';
 					document.querySelector( '.customize-themes-full-container' ).style.display = 'block';
@@ -2438,7 +2438,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.querySelector( '.themes-section-installed_themes' ).setAttribute( 'aria-expanded', 'false' );
 			document.querySelector( '.themes-section-wporg_themes' ).setAttribute( 'aria-expanded', 'true' );
 			document.querySelector( '.feature-filter-toggle' ).style.display = 'inline-block';
-			if ( window.innerWidth <= 600 ) {
+			if ( window.innerWidth <= 640 ) {
 				document.querySelector( '#customize-header-actions .preview' ).style.display = 'none';
 				document.querySelector( '#customize-header-actions .controls' ).style.display = 'block';
 				document.querySelector( '.customize-themes-full-container' ).style.display = 'block';
