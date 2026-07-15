@@ -2126,24 +2126,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	updateHueVisibility();
 
-	// Ensure hitting Enter fires a click event on elements that are not automatically interactive
-	document.addEventListener( 'keyup', function( e ) {
-		var inputs = [ 'A', 'INPUT', 'BUTTON', 'SELECT', 'SUMMARY' ];
-		if ( e.key !== 'Enter' ) {
-			return;
-		}
-		if ( e.target.classList && e.target.classList.contains( 'collapse-sidebar' ) ) {
-			sidebarCollapseExpand( e.target ); // accounts for different mouse and Enter targets
-		} else {
-			if ( inputs.includes( e.target.tagName ) ) {
-				return;
-			}
-			e.preventDefault();
-			e.stopPropagation();
-			e.target.click();
-		}
-	} );
-
 	// Show and hide each theme's details button when hovering over and out of a theme
 	function showAndHide( themes ) {
 		themes.forEach( function( theme ) {
