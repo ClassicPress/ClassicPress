@@ -212,7 +212,7 @@ final class WP_Customize_Nav_Menus {
 			if ( 0 === $page && $this->manager->get_setting( 'nav_menus_created_posts' ) ) {
 				foreach ( $this->manager->get_setting( 'nav_menus_created_posts' )->value() as $post_id ) {
 					$auto_draft_post = get_post( $post_id );
-					if ( ! ( $auto_draft_post instanceof WP_Post ) ) {
+					if ( ! $auto_draft_post instanceof WP_Post ) {
 						continue;
 					}
 					if ( $post_type->name === $auto_draft_post->post_type ) {
@@ -1414,7 +1414,7 @@ final class WP_Customize_Nav_Menus {
 				continue;
 			}
 			$post = get_post( $post_id );
-			if ( ! ( $post instanceof WP_Post ) ) {
+			if ( ! $post instanceof WP_Post ) {
 				continue;
 			}
 			if ( 'auto-draft' !== $post->post_status && 'draft' !== $post->post_status ) {
