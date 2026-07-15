@@ -5,7 +5,7 @@
  * @output wp-admin/js/customize-nav-menus.js
  */
 /* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings, console,
-ajaxurl, _updatedControlsWatcher, Sortable, _cpCustomizeNavMenusL10n, isRtl */
+ajaxurl, _updatedControlsWatcher, Sortable, _wpCustomizeWidgetsSettings, isRtl */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addObserver, itemObserver, currentMenuId,
@@ -934,18 +934,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			if ( '1' !== text ) {
 				if ( '-1' === text ) {
-					throw new Error( _cpCustomizeNavMenusL10n.nonceFailed );
+					throw new Error( _wpCustomizeNavMenusSettings.l10n.nonceFailed );
 				}
 
 				if ( '0' === text ) {
-					throw new Error( _cpCustomizeNavMenusL10n.serverRejection );
+					throw new Error( _wpCustomizeNavMenusSettings.l10n.serverRejection );
 				}
 
-				throw new Error( _cpCustomizeNavMenusL10n.unexpectedResponse + text );
+				throw new Error( _wpCustomizeNavMenusSettings.l10n.unexpectedResponse + text );
 			}
 		} )
 		.catch( function( error ) {
-			console.error( _cpCustomizeNavMenusL10n.failedSettingsSave, error );
+			console.error( _wpCustomizeNavMenusSettings.l10n.failedSettingsSave, error );
 		} );
 	}
 
@@ -977,6 +977,129 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		document.getElementById( 'accordion-section-nav_menu[' + currentMenuId + ']' ).id = newMenuString;
 		return newMenuString;
 	}
+
+	/**
+	 * Search for menu items
+	 *
+	 * @since CP-2.8.0
+	 */
+	document.getElementById( 'menu-items-search' ).addEventListener( 'input', _.debounce( function( e ) {
+		var data,
+			needle = e.target.value.toLowerCase().trim(),
+			searchContainer = document.getElementById( 'available-menu-items-search' ),
+			searchList = document.getElementById( 'menu-items-search-list' ),
+			clearButton = availableMenuItems.querySelector( '.clear-results' );
+
+		if ( needle.length > 1 ) { // at least 2 characters required for search
+			searchContainer.classList.remove( 'cannot-expand' );
+			clearButton.classList.add( 'is-visible' );
+
+			data = new URLSearchParams( {
+				action: 'search-available-menu-items-customizer',
+				wp_customize: 'on',
+				search: needle,
+				page: 1,
+				'customize-menus-nonce': _wpCustomizeNavMenusSettings.l10n.menuSearchNonce
+			} );
+
+			fetch( ajaxurl, {
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+				},
+				body: data.toString()
+			} )
+			.then( function( response ) {
+				if ( ! response.ok ) {
+					throw new Error( 'HTTP ' + response.status );
+				}
+				return response.json();
+			} )
+			.then( function( result ) {
+				var items = result && result.success && result.data && result.data.items ? result.data.items : [];
+
+				searchList.innerHTML = '';
+
+				if ( items.length ) {
+					searchList.innerHTML = items.map( function( item ) {
+						return '<li id="' + item.id + '" class="menu-item-tpl" data-menu-item-id="' + item.id + '">' +
+							'<div class="menu-item-bar">' +
+								'<div class="menu-item-handle">' +
+									'<button type="button" class="button-link item-add">' +
+										'<span class="screen-reader-text">' +
+											_wpCustomizeNavMenusSettings.l10n.addToMenu + ': ' + item.title + ' (' + item.type_label + ')' +
+										'</span>' +
+									'</button>' +
+									'<span class="item-split">' +
+										'<span class="item-title" aria-hidden="true">' +
+											'<span class="menu-item-title">' + item.title + '</span>' +
+										'</span>' +
+										'<span class="item-type" aria-hidden="true">' + item.type_label + '</span>' +
+									'</span>' +
+								'</div>' +
+							'</div>' +
+							'<span class="item-url" hidden="">' + item.url + '</span>' +
+						'</li>';
+					} ).join( '' );
+
+					searchList.classList.remove( 'no-items-found' );
+				} else {
+					searchList.classList.add( 'no-items-found' );
+				}
+
+				wp.a11y.speak( _wpCustomizeNavMenusSettings.l10n.itemsFound.replace( '%d', items.length ) );
+			} )
+			.catch( function() {
+				searchList.innerHTML = '';
+				searchList.classList.add( 'no-items-found' );
+				wp.a11y.speak( _wpCustomizeNavMenusSettings.l10n.itemsFound.replace( '%d', '0' ) );
+			} );
+		} else {
+			searchContainer.classList.add( 'cannot-expand' );
+			clearButton.classList.remove( 'is-visible' );
+			searchList.innerHTML = '';
+			searchList.classList.remove( 'no-widgets-found' );
+		}
+	}, 150 ) );
+
+	/**
+	 * Search for widgets
+	 *
+	 * @since CP-2.8.0
+	 */
+	document.getElementById( 'menu-items-search' ).addEventListener( 'input', _.debounce( function( e ) {
+		var message,
+			availables = document.querySelectorAll( '.menu-item-tpl' ),
+			needle = e.target.value.toLowerCase().trim(),
+			matches = needle ? [...availables].filter( item => item.querySelector( '.menu-item-title' ).textContent.toLowerCase().includes( needle ) ) : [];
+
+		if ( needle.length ) {
+			document.getElementById( 'available-menu-items-search' ).classList.remove( 'cannot-expand' );
+			availableMenuItems.querySelector( '.clear-results' ).classList.add( 'is-visible' );
+			availables.forEach( function( li ) {
+				li.style.display = 'none';
+			} );
+
+			if ( matches.length ) {
+				matches.forEach( function( li ) {
+					li.style.display = '';
+				} );
+				message = _wpCustomizeWidgetsSettings.l10n.widgetsFound.replace( '%d', matches.length );
+				document.getElementById( 'menu-items-search-list' ).classList.remove( 'no-widgets-found' );
+			} else {
+				message = _wpCustomizeWidgetsSettings.l10n.noWidgetsFound;
+				document.getElementById( 'menu-items-search-list' ).classList.add( 'no-widgets-found' );
+			}
+			wp.a11y.speak( message );
+		} else {
+			document.getElementById( 'available-menu-items-search' ).classList.add( 'cannot-expand' );
+			availableMenuItems.querySelector( '.clear-results' ).classList.remove( 'is-visible' );
+			availables.forEach( function( li ) {
+				li.style.display = '';
+			} );
+		}
+	}, 150 ) );
 
 	/**
 	 * Handle clicks on buttons.
@@ -1106,6 +1229,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					return;
 				}
 			}
+
+		// Clear list of search results
+		} else if ( document.body.classList.contains( 'adding-menu-items' ) && e.target.classList && e.target.classList.contains( 'clear-results' ) ) {
+			document.getElementById( 'menu-items-search' ).value = '';
+			document.getElementById( 'available-menu-items-search' ).classList.add( 'cannot-expand' );
+			e.target.classList.remove( 'is-visible' );
+			document.getElementById( 'menu-items-search-list' ).innerHTML = '';
 
 		// Add a menu item
 		} else if ( availableMenuItems.contains( e.target ) ) {
