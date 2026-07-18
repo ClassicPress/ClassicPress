@@ -322,7 +322,8 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 									<?php esc_html_e( 'Randomize suggested headers' ); ?>
 								</button>
 							</div>
-							<?php
+
+						<?php
 						}
 						?>
 
