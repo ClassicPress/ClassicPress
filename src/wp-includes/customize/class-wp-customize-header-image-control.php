@@ -41,6 +41,14 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 	public $default_headers;
 
 	/**
+	 * Whether to allow randomizing of default header images.
+	 *
+	 * @since CP-2.8.0
+	 * @var bool
+	 */
+	public $allow_random_default;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 3.4.0
@@ -103,6 +111,14 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 		$custom_image_header->process_default_headers();
 		$this->default_headers  = $custom_image_header->get_default_header_images();
 		$this->uploaded_headers = $custom_image_header->get_uploaded_header_images();
+
+		// Determine whether the active theme allows randomizing default headers.
+		$this->allow_random_default = false;
+		$custom_header_args = get_theme_support( 'custom-header' );
+
+		if ( is_array( $custom_header_args ) && isset( $custom_header_args[0] ) && is_array( $custom_header_args[0] ) && ! empty( $custom_header_args[0]['random-default'] ) ) {
+			$this->allow_random_default = true;
+		}
 	}
 
 	/**
@@ -269,12 +285,6 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 				}
 
 				if ( ! empty( $this->default_headers ) ) {
-					$custom_header_args = get_theme_support( 'custom-header' );
-					$allow_random_default = false;
-
-					if ( is_array( $custom_header_args ) && ! empty( $custom_header_args[0]['random-default'] ) ) {
-						$allow_random_default = true;
-					}
 					?>
 
 					<span class="customize-control-title header-default">
@@ -303,7 +313,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 						</div>
 
 						<?php
-						if ( $allow_random_default && count( $this->default_headers ) > 1 ) {
+						if ( $this->allow_random_default && count( $this->default_headers ) > 1 ) {
 							?>
 
 							<div class="randomize-header">
