@@ -50,13 +50,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	if ( hash === 'menu-to-edit' ) {
 		hash = 'sub-accordion-panel-nav_menus';
 	}
-	targetEl = document.getElementById( hash );
 
-	if ( hash && targetEl ) {
+	if ( ! hash ) {
+		setTimeout( function() {
+			document.querySelector( '.customize-controls-close' ).focus();
+		}, 0 );
+	} else if ( hash && targetEl ) {
 		customizerControls.forEach( function( child ) {
 			child.style.display = 'none';
 		} );
 
+		targetEl = document.getElementById( hash );
 		targetEl.style.display = 'block';
 
 		if ( hash === 'customize-pane-parent' ) {
