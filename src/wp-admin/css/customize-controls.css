@@ -99,10 +99,12 @@ body {
 body:not(.ready) #customize-save-button-wrapper .save {
 	visibility: hidden;
 }
+
 #customize-save-button-wrapper .save {
 	border-radius: 3px;
 	box-shadow: none; /* @todo Adjust box shadow based on the disable states of paired button. */
 	margin-top: 0;
+	margin-right: -5px;
 }
 
 #customize-save-button-wrapper .save:focus, #publish-settings:focus {
