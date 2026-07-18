@@ -347,8 +347,6 @@ function rest_api_loaded() {
 		return;
 	}
 
-<<<<<<< HEAD
-=======
 	// Short-circuit before define()/die() if a REST dispatch is already in flight.
 	// serve_request() enforces this too; guarding here avoids the trailing die().
 	if ( isset( $GLOBALS['wp_rest_server'] )
@@ -368,7 +366,6 @@ function rest_api_loaded() {
 		wp_die( $rest_type_error );
 	}
 
->>>>>>> fa72c12879 (REST API: sub-requests must always use dispatch.)
 	/**
 	 * Whether this is a REST Request.
 	 *
