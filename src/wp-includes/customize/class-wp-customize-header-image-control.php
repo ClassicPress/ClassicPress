@@ -269,6 +269,12 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 				}
 
 				if ( ! empty( $this->default_headers ) ) {
+					$custom_header_args = get_theme_support( 'custom-header' );
+					$allow_random_default = false;
+
+					if ( is_array( $custom_header_args ) && ! empty( $custom_header_args[0]['random-default'] ) ) {
+						$allow_random_default = true;
+					}
 					?>
 
 					<span class="customize-control-title header-default">
@@ -295,6 +301,21 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 							?>
 
 						</div>
+
+						<?php
+						if ( $allow_random_default && count( $this->default_headers ) > 1 ) {
+							?>
+
+							<div class="randomize-header">
+								<button type="button" class="button" data-customize-choice="random-default-image">
+									<span class="dashicons dashicons-randomize dice"></span>
+									<?php esc_html_e( 'Randomize suggested headers' ); ?>
+								</button>
+							</div>
+							<?php
+						}
+						?>
+
 					</div>
 
 					<?php
