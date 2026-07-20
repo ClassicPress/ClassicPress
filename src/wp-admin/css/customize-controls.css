@@ -2587,6 +2587,10 @@ body.adding-widget .add-new-widget:before,
 }
 
 @media only screen and (max-width: 782px) {
+	.wp-full-overlay-sidebar .wp-full-overlay-header {
+		line-height: 1;
+	}
+
 	.wp-customizer .theme:not(.active):hover .theme-actions,
 	.wp-customizer .theme:not(.active):focus .theme-actions {
 		display: block;
