@@ -317,7 +317,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 							?>
 
 							<div class="randomize-header">
-								<button type="button" class="button" data-customize-choice="random-default-image">
+								<button type="button" class="button random-default-header" data-customize-choice="random-default-image">
 									<span class="dashicons dashicons-randomize dice"></span>
 									<?php esc_html_e( 'Randomize suggested headers' ); ?>
 								</button>
