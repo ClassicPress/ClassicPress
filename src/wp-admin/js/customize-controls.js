@@ -1514,6 +1514,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Enable randomizing header images for Customizer.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function setRandomHeaderChoice( choice ) {
+		if ( ! choice ) {
+			return;
+		}
+
+		_updatedControlsWatcher.header_image = choice;
+		_updatedControlsWatcher.header_image_data = {
+			choice: choice
+		};
+
+		activatePublishButton();
+		forcePreviewRefresh( 'header_image', choice );
+	}
+
+	/**
 	 * Removes media from Customizer.
 	 *
 	 * @abstract
@@ -2474,6 +2494,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			customizeButton = e.target;
 			cropContext = e.target.closest( 'li' ).dataset.settingId;
 			selectMedia();
+		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'random-default-header' ) ) {
+			setRandomHeaderChoice( e.target.dataset.customizeChoice );
 		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'choice' ) ) {
 			image = e.target.previousElementSibling;
 			addItemToCustomizer( e.target, 0, image, image.src );
