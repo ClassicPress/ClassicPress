@@ -2495,7 +2495,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			cropContext = e.target.closest( 'li' ).dataset.settingId;
 			selectMedia();
 		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'random-default-header' ) ) {
-			setRandomHeaderChoice( e.target.dataset.customizeChoice );
+			setRandomHeaderChoice( e.target.dataset.customizeImageValue );
 		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'choice' ) ) {
 			image = e.target.previousElementSibling;
 			addItemToCustomizer( e.target, 0, image, image.src );
