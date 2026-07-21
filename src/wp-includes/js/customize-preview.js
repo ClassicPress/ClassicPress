@@ -417,11 +417,32 @@
 			var css = '',
 				props = [ 'color', 'image', 'preset', 'position_x', 'position_y', 'size', 'repeat', 'attachment' ],
 				settings = {},
-				bgCss;
+				bgCss,
+				validPositionX = [ 'left', 'center', 'right' ],
+				validPositionY = [ 'top', 'center', 'bottom' ],
+				validSize = [ 'auto', 'contain', 'cover' ],
+				validRepeat = [ 'repeat', 'repeat-x', 'repeat-y', 'no-repeat' ],
+				validAttachment = [ 'scroll', 'fixed' ];
 
 			props.forEach( function( prop ) {
 				settings[ prop ] = api( 'background_' + prop );
 			} );
+
+			if ( validPositionX.indexOf( settings.position_x ) === -1 ) {
+				settings.position_x = 'left';
+			}
+			if ( validPositionY.indexOf( settings.position_y ) === -1 ) {
+				settings.position_y = 'top';
+			}
+			if ( validSize.indexOf( settings.size ) === -1 ) {
+				settings.size = 'auto';
+			}
+			if ( validRepeat.indexOf( settings.repeat ) === -1 ) {
+				settings.repeat = 'repeat';
+			}
+			if ( validAttachment.indexOf( settings.attachment ) === -1 ) {
+				settings.attachment = 'scroll';
+			}
 
 			document.body.classList.toggle( 'custom-background', !! ( settings.color || settings.image ) );
 
@@ -429,17 +450,21 @@
 				css += 'background-color: ' + settings.color + ';';
 			}
 			if ( settings.image ) {
-				css += 'background-image: url("' + settings.image + '");';
-				css += 'background-size: ' + settings.size + ';';
+				css += 'background-image: url("' + String( settings.image ).replace( /"/g, '\\"' ) + '");';
 				css += 'background-position: ' + settings.position_x + ' ' + settings.position_y + ';';
+				css += 'background-size: ' + settings.size + ';';
 				css += 'background-repeat: ' + settings.repeat + ';';
 				css += 'background-attachment: ' + settings.attachment + ';';
 			}
 
 			bgCss = document.getElementById( 'custom-background-css' );
-			if ( bgCss ) { // css values come from api.settings, which is server-populated
-				bgCss.textContent = 'body.custom-background { ' + css + ' }';
+			if ( ! bgCss ) {
+				bgCss = document.createElement( 'style' );
+				bgCss.id = 'custom-background-css';
+				document.head.appendChild( bgCss );
 			}
+
+			bgCss.textContent = 'body.custom-background { ' + css + ' }';
 		}
 	};
 
@@ -762,6 +787,7 @@
 				setting.bind( api.settingPreviewHandlers.background );
 			}
 		} );
+		api.settingPreviewHandlers.background();
 
 		// Custom logo
 		if ( api._settings.custom_logo ) {

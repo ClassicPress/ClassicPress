@@ -525,6 +525,7 @@ final class WP_Customize_Nav_Menus {
 				'locationsDescription'   => $locations_description,
 				'menuNameLabel'          => __( 'Menu Name' ),
 				'newMenuNameDescription' => __( 'If your theme has multiple menus, giving them clear names will help you manage them.' ),
+				'addToMenu'              => __( 'Add to menu:' ),
 				'itemAdded'              => __( 'Menu item added' ),
 				'itemDeleted'            => __( 'Menu item deleted' ),
 				'menuAdded'              => __( 'Menu created' ),
@@ -548,6 +549,11 @@ final class WP_Customize_Nav_Menus {
 				'reorderModeOff'         => __( 'Reorder mode closed' ),
 				'reorderLabelOn'         => esc_attr__( 'Reorder menu items' ),
 				'reorderLabelOff'        => esc_attr__( 'Close reorder mode' ),
+				'menuSearchNonce'        => wp_create_nonce( 'customize-menus' ),
+				'nonceFailed'            => __( 'Nonce check failed. Please refresh the page.' ),
+				'serverRejection'        => __( 'The server rejected the request.' ),
+				'unexpectedResponse'     => __( 'Unexpected server response: ' ),
+				'failedSettingsSave'     => __( 'Failed to save advanced menu settings:' ),
 			),
 			'settingTransport'         => 'postMessage',
 			'phpIntMax'                => PHP_INT_MAX,
@@ -1120,16 +1126,16 @@ final class WP_Customize_Nav_Menus {
 						</p>
 						<span class="spinner"></span>
 						<div class="search-icon" aria-hidden="true"></div>
+						<button type="button" class="clear-results">
+							<span class="screen-reader-text">
+								<?php
+								/* translators: Hidden accessibility text. */
+								esc_html_e( 'Clear Results' );
+								?>
+							</span>
+						</button>
 					</div>
-					<button type="button" class="clear-results">
-						<span class="screen-reader-text">
-							<?php
-							/* translators: Hidden accessibility text. */
-							esc_html_e( 'Clear Results' );
-							?>
-						</span>
-					</button>
-					<ul class="accordion-section-content available-menu-items-list" data-type="search"></ul>
+					<ul id="menu-items-search-list" class="accordion-section-content available-menu-items-list" data-type="search"></ul>
 				</li>
 
 				<?php
