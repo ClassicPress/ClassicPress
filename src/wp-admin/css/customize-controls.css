@@ -1434,10 +1434,6 @@ input[type="range"].hue-slider::-moz-range-track {
 	cursor: pointer;
 }
 
-.customize-control-header .dice {
-	line-height: 1.4;
-}
-
 .customize-control-header button img {
 	display: block;
 }
