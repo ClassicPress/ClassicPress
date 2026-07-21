@@ -262,7 +262,11 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 									<img src="<?php echo esc_url( $header['url'] ); ?>"
 										alt="<?php echo esc_attr( $header['alt_text'] && $header['alt_text'][0] ? $header['alt_text'][0] : '' ); ?>"
 									>
-									<button class="choice" data-customize-url="<?php echo esc_url( $header['url'] ); ?>">
+									<button type="button"
+										class="choice"
+										data-customize-url="<?php echo esc_url( $header['url'] ); ?>"
+										data-customize-header-image-data="<?php echo esc_attr( wp_json_encode( $header ) ); ?>"
+									>
 										<?php echo esc_html( $this->button_labels['frame_button'] ); ?>
 									</button>
 									<button type="button" class="dashicons dashicons-no close"
@@ -301,7 +305,11 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 									<img src="<?php echo esc_url( $header['url'] ); ?>"
 										alt="<?php echo esc_attr( $header['description'] ); ?>"
 									>
-									<button class="choice" data-customize-url="<?php echo esc_url( $header['url'] ); ?>">
+									<button type="button"
+										class="choice"
+										data-customize-url="<?php echo esc_url( $header['url'] ); ?>"
+										data-customize-header-image-data="<?php echo esc_attr( wp_json_encode( $header ) ); ?>"
+									>
 										<?php echo esc_html( $this->button_labels['frame_button'] ); ?>
 									</button>
 								</div>
@@ -317,7 +325,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 							?>
 
 							<div class="randomize-header">
-								<button type="button" class="button random-default-header" data-customize-choice="random-default-image">
+								<button type="button" class="button display-options random random-default-header" data-customize-image-value="random-default-image">
 									<span class="dashicons dashicons-randomize dice"></span>
 									<?php esc_html_e( 'Randomize suggested headers' ); ?>
 								</button>
