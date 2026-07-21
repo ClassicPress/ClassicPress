@@ -262,11 +262,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 									<img src="<?php echo esc_url( $header['url'] ); ?>"
 										alt="<?php echo esc_attr( $header['alt_text'] && $header['alt_text'][0] ? $header['alt_text'][0] : '' ); ?>"
 									>
-									<button type="button"
-										class="choice"
-										data-customize-url="<?php echo esc_url( $header['url'] ); ?>"
-										data-customize-header-image-data="<?php echo esc_attr( wp_json_encode( $header ) ); ?>"
-									>
+									<button type="button" class="choice" data-customize-url="<?php echo esc_url( $header['url'] ); ?>">
 										<?php echo esc_html( $this->button_labels['frame_button'] ); ?>
 									</button>
 									<button type="button" class="dashicons dashicons-no close"
@@ -305,11 +301,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 									<img src="<?php echo esc_url( $header['url'] ); ?>"
 										alt="<?php echo esc_attr( $header['description'] ); ?>"
 									>
-									<button type="button"
-										class="choice"
-										data-customize-url="<?php echo esc_url( $header['url'] ); ?>"
-										data-customize-header-image-data="<?php echo esc_attr( wp_json_encode( $header ) ); ?>"
-									>
+									<button type="button" class="choice" data-customize-url="<?php echo esc_url( $header['url'] ); ?>">
 										<?php echo esc_html( $this->button_labels['frame_button'] ); ?>
 									</button>
 								</div>
