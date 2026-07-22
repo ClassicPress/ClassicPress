@@ -14,7 +14,7 @@ _wpUpdatesSettings, _wpThemeSettings */
 document.addEventListener( 'DOMContentLoaded', function() {
 	window.newMenuItemIDs = window.newMenuItemIDs || [];
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
-		intersectionObserver, targetEl,
+		intersectionObserver,
 		i = 1,
 		customizerControls = [...document.getElementById( 'customize-theme-controls' ).children],
 		{ FilePond } = window, // import FilePond
@@ -39,6 +39,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		availableWidgets = document.getElementById( 'widgets-left' ),
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
 		hash = window.location.hash.replace( '#', '' ),
+		targetEl = document.getElementById( hash ),
 		section = document.getElementById( 'sub-accordion-section-custom_css' ),
 		discardingChangeset = false,
 		changesetStatus = window._wpCustomizeChangesetStatus || 'publish';
@@ -50,9 +51,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	if ( hash === 'menu-to-edit' ) {
 		hash = 'sub-accordion-panel-nav_menus';
 	}
-	targetEl = document.getElementById( hash );
 
-	if ( hash && targetEl ) {
+	if ( ! hash ) {
+		setTimeout( function() {
+			document.querySelector( '.customize-controls-close' ).focus();
+		}, 0 );
+	} else if ( hash && targetEl ) {
 		customizerControls.forEach( function( child ) {
 			child.style.display = 'none';
 		} );
