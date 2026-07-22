@@ -188,18 +188,92 @@ function wp_authenticate_username_password( $user, $username, $password ) {
 		wp_set_password( $password, $user->ID );
 	}
 
+	$pepper_loaded  = apply_filters( 'cp_pepper_loaded', false );
+	$pepper_plugin  = apply_filters( 'cp_pepper_plugin', false );
+	$peppered_hash  = get_user_meta( $user->ID, 'peppered_hash', true );
+	$pepper_renewed = get_user_meta( $user->ID, 'pepper_renewed', true );
+	$is_super_admin = is_multisite() ? $user->has_cap( 'manage_network_options' ) : $user->has_cap( 'manage_options' );
+
+	if ( $valid && $pepper_loaded && ! $peppered_hash ) {
+		wp_set_password( $password, $user->ID );
+		add_user_meta( $user->ID, 'peppered_hash', true );
+	}
+
 	if ( ! $valid ) {
-		return new WP_Error(
-			'incorrect_password',
-			sprintf(
-				/* translators: %s: User name. */
-				__( '<strong>Error:</strong> The password you entered for the username %s is incorrect.' ),
-				'<strong>' . $username . '</strong>'
-			) .
-			' <a href="' . wp_lostpassword_url() . '">' .
-			__( 'Lost your password?' ) .
-			'</a>'
+		$reset_password_message = sprintf(
+			/* translators: %s: User name. */
+			__( 'The password for the username %s must be reset.', 'cp-pepper' ),
+			'<strong>' . $username . '</strong>'
 		);
+
+		$pepper_renewed_message = sprintf(
+			'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
+			__( 'Warning:', 'cp-pepper' ),
+			$reset_password_message,
+			$is_super_admin ? sprintf(
+				'<p><strong>%1$s</strong> %2$s</p>',
+				__( 'Notice:', 'cp-pepper' ),
+				__( 'The pepper was renewed.', 'cp-pepper' )
+			) : '',
+			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.', 'cp-pepper' ) . '</a>'
+		);
+
+		$pepper_disabled_message = sprintf(
+			'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
+			__( 'Warning:', 'cp-pepper' ),
+			$reset_password_message,
+			$is_super_admin ? sprintf(
+				'<p><strong>%1$s</strong> %2$s</p>',
+				__( 'Notice:', 'cp-pepper' ),
+				__( 'The pepper is disabled. The pepper file may have been moved or modified.', 'cp-pepper' )
+			) : '',
+			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.', 'cp-pepper' ) . '</a>'
+		);
+
+		$pepper_plugin_missing_message = sprintf(
+			'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
+			__( 'Warning:', 'cp-pepper' ),
+			$reset_password_message,
+			$is_super_admin ? sprintf(
+				'<p><strong>%1$s</strong> %2$s</p>',
+				__( 'Notice:', 'cp-pepper' ),
+				__( 'ClassicPress Pepper for Passwords was deactivated or uninstalled.', 'cp-pepper' )
+			) : '',
+			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.', 'cp-pepper' ) . '</a>'
+		);
+
+		if ( $pepper_renewed && $pepper_loaded ) {
+			return new WP_Error(
+				'pepper_renewed_message',
+				$pepper_renewed_message
+			);
+		} elseif ( ( $peppered_hash || $pepper_renewed ) && ! $pepper_loaded && $pepper_plugin ) {
+			return new WP_Error(
+				'pepper_disabled_message',
+				$pepper_disabled_message
+			);
+		} elseif ( ( $peppered_hash || $pepper_renewed ) && ! $pepper_loaded ) {
+			return new WP_Error(
+				'pepper_plugin_missing_message',
+				$pepper_plugin_missing_message
+			);
+		} else {
+			return new WP_Error(
+				'incorrect_password',
+				sprintf(
+					/* translators: %s: User name. */
+					__( '<strong>Error:</strong> The password you entered for the username %s is incorrect.' ),
+					'<strong>' . $username . '</strong>'
+				) .
+				' <a href="' . wp_lostpassword_url() . '">' .
+				__( 'Lost your password?' ) .
+				'</a>'
+			);
+		}
+	}
+
+	if ( metadata_exists( 'user', $user->ID, 'pepper_renewed' ) ) {
+		delete_user_meta( $user->ID, 'pepper_renewed' );
 	}
 
 	return $user;
@@ -266,18 +340,92 @@ function wp_authenticate_email_password( $user, $email, $password ) {
 		wp_set_password( $password, $user->ID );
 	}
 
+	$pepper_loaded  = apply_filters( 'cp_pepper_loaded', false );
+	$pepper_plugin  = apply_filters( 'cp_pepper_plugin', false );
+	$peppered_hash  = get_user_meta( $user->ID, 'peppered_hash', true );
+	$pepper_renewed = get_user_meta( $user->ID, 'pepper_renewed', true );
+	$is_super_admin = is_multisite() ? $user->has_cap( 'manage_network_options' ) : $user->has_cap( 'manage_options' );
+
+	if ( $valid && $pepper_loaded && ! $peppered_hash ) {
+		wp_set_password( $password, $user->ID );
+		add_user_meta( $user->ID, 'peppered_hash', true );
+	}
+
 	if ( ! $valid ) {
-		return new WP_Error(
-			'incorrect_password',
-			sprintf(
-				/* translators: %s: Email address. */
-				__( '<strong>Error:</strong> The password you entered for the email address %s is incorrect.' ),
-				'<strong>' . $email . '</strong>'
-			) .
-			' <a href="' . wp_lostpassword_url() . '">' .
-			__( 'Lost your password?' ) .
-			'</a>'
+		$reset_password_message = sprintf(
+			/* translators: %s: User name. */
+			__( 'The password for the email %s must be reset.', 'cp-pepper' ),
+			'<strong>' . $email . '</strong>'
 		);
+
+		$pepper_renewed_message = sprintf(
+			'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
+			__( 'Warning:', 'cp-pepper' ),
+			$reset_password_message,
+			$is_super_admin ? sprintf(
+				'<p><strong>%1$s</strong> %2$s</p>',
+				__( 'Notice:', 'cp-pepper' ),
+				__( 'The pepper was renewed.', 'cp-pepper' )
+			) : '',
+			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.', 'cp-pepper' ) . '</a>'
+		);
+
+		$pepper_disabled_message = sprintf(
+			'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
+			__( 'Warning:', 'cp-pepper' ),
+			$reset_password_message,
+			$is_super_admin ? sprintf(
+				'<p><strong>%1$s</strong> %2$s</p>',
+				__( 'Notice:', 'cp-pepper' ),
+				__( 'The pepper is disabled. The pepper file may have been moved or modified.', 'cp-pepper' )
+			) : '',
+			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.', 'cp-pepper' ) . '</a>'
+		);
+
+		$pepper_plugin_missing_message = sprintf(
+			'<p><strong>%1$s</strong> %2$s</p>%3$s<p>%4$s</p>',
+			__( 'Warning:', 'cp-pepper' ),
+			$reset_password_message,
+			$is_super_admin ? sprintf(
+				'<p><strong>%1$s</strong> %2$s</p>',
+				__( 'Notice:', 'cp-pepper' ),
+				__( 'ClassicPress Pepper for Passwords was deactivated or uninstalled.', 'cp-pepper' )
+			) : '',
+			'<a href="' . wp_lostpassword_url() . '">' . __( 'Reset your password.', 'cp-pepper' ) . '</a>'
+		);
+
+		if ( $pepper_renewed && $pepper_loaded ) {
+			return new WP_Error(
+				'pepper_renewed_message',
+				$pepper_renewed_message
+			);
+		} elseif ( ( $peppered_hash || $pepper_renewed ) && ! $pepper_loaded && $pepper_plugin ) {
+			return new WP_Error(
+				'pepper_disabled_message',
+				$pepper_disabled_message
+			);
+		} elseif ( ( $peppered_hash || $pepper_renewed ) && ! $pepper_loaded ) {
+			return new WP_Error(
+				'pepper_plugin_missing_message',
+				$pepper_plugin_missing_message
+			);
+		} else {
+			return new WP_Error(
+				'incorrect_password',
+				sprintf(
+					/* translators: %s: Email address. */
+					__( '<strong>Error:</strong> The password you entered for the email address %s is incorrect.' ),
+					'<strong>' . $email . '</strong>'
+				) .
+				' <a href="' . wp_lostpassword_url() . '">' .
+				__( 'Lost your password?' ) .
+				'</a>'
+			);
+		}
+	}
+
+	if ( metadata_exists( 'user', $user->ID, 'pepper_renewed' ) ) {
+		delete_user_meta( $user->ID, 'pepper_renewed' );
 	}
 
 	return $user;
@@ -2503,6 +2651,11 @@ function wp_insert_user( $userdata ) {
 			}
 		}
 	} else {
+		$pepper_loaded = apply_filters( 'cp_pepper_loaded', false );
+		if ( $pepper_loaded ) {
+			add_user_meta( $user_id, 'peppered_hash', true );
+		}
+
 		/**
 		 * Fires immediately after a new user is registered.
 		 *
@@ -2566,6 +2719,19 @@ function wp_update_user( $userdata ) {
 		// If password is changing, hash it now.
 		$plaintext_pass        = $userdata['user_pass'];
 		$userdata['user_pass'] = wp_hash_password( $userdata['user_pass'] );
+
+		if ( metadata_exists( 'user', $user_id, 'peppered_hash' ) ) {
+			delete_user_meta( $user_id, 'peppered_hash' );
+		} else {
+			$pepper_loaded = apply_filters( 'cp_pepper_loaded', false );
+			if ( $pepper_loaded ) {
+				add_user_meta( $user_id, 'peppered_hash', true );
+			}
+		}
+
+		if ( metadata_exists( 'user', $user_id, 'pepper_renewed' ) ) {
+			delete_user_meta( $user_id, 'pepper_renewed' );
+		}
 
 		/**
 		 * Filters whether to send the password change email.
