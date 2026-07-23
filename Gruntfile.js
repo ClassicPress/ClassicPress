@@ -1368,6 +1368,7 @@ module.exports = function(grunt) {
 		'build',
 		[
 			'clean:all',
+			'certificates:upgrade',
 			'js-dependencies',
 			'copy:all',
 			'cssmin:core',
