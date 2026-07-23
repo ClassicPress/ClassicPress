@@ -1164,6 +1164,7 @@ input[type="range"].hue-slider::-moz-range-track {
 	display: flex;
 	justify-content: space-between;
 	min-width: 100%;
+	position: static;
 	margin: 0 !important;
 }
 
