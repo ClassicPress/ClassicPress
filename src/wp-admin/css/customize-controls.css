@@ -1164,7 +1164,6 @@ input[type="range"].hue-slider::-moz-range-track {
 	display: flex;
 	justify-content: space-between;
 	min-width: 100%;
-	position: static;
 	margin: 0 !important;
 }
 
@@ -1175,6 +1174,12 @@ input[type="range"].hue-slider::-moz-range-track {
 
 .wp-full-overlay-sidebar.collapsed {
 	flex-basis: 0;
+}
+
+/* Put the Coloris popup above the overlay/sidebar/frame stack */
+#clr-picker,
+.clr-picker {
+	z-index: 500000 !important;
 }
 
 /* Sidebar fully collapsed */
