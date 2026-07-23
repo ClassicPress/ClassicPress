@@ -4723,7 +4723,6 @@ final class WP_Customize_Manager {
 	 */
 	public function customize_pane_settings() {
 		$lock_user_id = false;
-
 		if ( $this->changeset_post_id() ) {
 			$lock_user_id = wp_check_post_lock( $this->changeset_post_id() );
 		}
