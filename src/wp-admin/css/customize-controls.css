@@ -1138,6 +1138,16 @@ input[type="range"].hue-slider::-moz-range-track {
 	line-height: 0;
 }
 
+.randomizing-header .random-default-header {
+	display: block;
+	border: 1px dashed;
+	margin-bottom: 5px;
+}
+
+.randomizing-header .dice {
+	line-height: 1.4;
+}
+
 /* Remove descender space. */
 .customize-control-site_icon .favicon-preview .browser-preview {
 	vertical-align: top;
