@@ -25,6 +25,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		isReducedMotion = reducedMotionMediaQuery.matches,
 		form = document.querySelector( 'form' ),
 		inputs = form.querySelectorAll( 'input, select, textarea' ),
+		lockableControls = form.querySelectorAll( 'input, select, textarea, button' ),
 		saveButton = form.querySelector( '#save' ),
 		publishSettings = form.querySelector( '#publish-settings' ),
 		publishSettingsPanel = document.getElementById( 'sub-accordion-section-publish_settings' ),
@@ -266,42 +267,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		lockNotice.hidden = true;
 		enableCustomizerEditing();
-	}
-
-	function checkLockState() {
-		const data = new URLSearchParams();
-
-		if ( ! lockSettings?.nonce?.checkLock ) {
-			return Promise.resolve();
-		}
-
-		data.append( 'action', 'customize_check_lock' );
-		data.append( 'nonce', lockSettings.nonce.checkLock );
-		data.append( 'wp_customize', 'on' );
-
-		return fetch( ajaxurl, {
-			method: 'POST',
-			body: data,
-			credentials: 'same-origin',
-		} )
-		.then( function( response ) {
-			if ( response.ok ) {
-				return response.json(); // no errors
-			}
-			throw new Error( response.status );
-		} )
-		.then( function( result ) {
-			if ( result.success ) {
-				lockSettings.lock = lockSettings.lock || {};
-				lockSettings.lock.lockUser = result.data.lockUser || null;
-				applyLockState();
-			} else {
-				throw new Error( result.data || 'Customizer lock check failed.' );
-			}
-		} )
-		.catch( function( error ) {
-			console.error( 'Customizer lock check failed.', error );
-		} );
 	}
 
 	function refreshLockState() {
