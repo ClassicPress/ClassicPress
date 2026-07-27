@@ -1141,8 +1141,8 @@ input[type="range"].hue-slider::-moz-range-track {
 .randomizing-header .random-default-header {
 	display: block;
 	border: 1px dashed;
-	margin-bottom: 5px;
-	padding: 4px 10px;
+	margin-bottom: 5px !important;
+	padding: 4px 10px !important;
 }
 
 .randomizing-header .dice {
