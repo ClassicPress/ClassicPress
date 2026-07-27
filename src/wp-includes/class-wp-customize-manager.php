@@ -3468,64 +3468,6 @@ final class WP_Customize_Manager {
 	}
 
 	/**
-	 * Checks whether the current changeset lock has been taken over by another user.
-	 *
-	 * @since CP-2.8.0
-	 * @return void
-	 */
-	public function handle_check_changeset_lock_request() {
-		$lock_user_id      = false;
-		$lock_user         = null;
-		$user              = null;
-		$changeset_post_id = $this->changeset_post_id();
-
-		if ( ! is_user_logged_in() ) {
-			wp_send_json_error( 'unauthenticated', 401 );
-		}
-
-		if ( ! $this->is_preview() ) {
-			wp_send_json_error( 'no_preview', 400 );
-		}
-
-		if ( ! check_ajax_referer( 'customize_check_changeset_lock', 'nonce', false ) ) {
-			wp_send_json_error( 'invalid_nonce', 403 );
-		}
-
-		if ( empty( $changeset_post_id ) ) {
-			wp_send_json_success(
-				array(
-					'lockUser' => null, // nothing to lock yet
-				)
-			);
-		}
-
-		if ( ! current_user_can( get_post_type_object( 'customize_changeset' )->cap->edit_post, $changeset_post_id ) ) {
-			wp_send_json_error( 'cannot_read_changeset_lock', 403 );
-		}
-
-		$lock_user_id = wp_check_post_lock( $changeset_post_id );
-
-		if ( $lock_user_id ) {
-			$user = get_userdata( $lock_user_id );
-
-			if ( $user ) {
-				$lock_user = array(
-					'id'     => $user->ID,
-					'name'   => $user->display_name,
-				);
-			}
-		} else {
-			$this->refresh_changeset_lock( $changeset_post_id );
-		}
-
-		wp_send_json_success(
-			array(
-				'lockUser' => $lock_user,
-			)
-		);
-	}
-
-	/**
 	 * Determines whether a changeset revision should be made.
 	 *
 	 * @since 4.7.0
