@@ -180,6 +180,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		setScheduledDateToNow();
 	}
 
+	/**
+	 * Disable editing UI while another user holds the lock.
+	 *
+	 * @return {void}
+	 */
 	function disableCustomizerEditing() {
 		lockableControls.forEach( function( input ) {
 			if ( input === saveButton || input === publishSettings || input.type === 'hidden' || input.closest( '#customize-lock-notice' ) ) {
