@@ -210,6 +210,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		document.body.classList.add( 'customizer-locked' );
 	}
 
+	/**
+	 * Re-enable editing UI after lock takeover.
+	 *
+	 * @return {void}
+	 */
 	function enableCustomizerEditing() {
 		lockableControls.forEach( function( input ) {
 			if ( input.hasAttribute( 'data-lock-disabled' ) ) {
@@ -231,6 +236,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		document.body.classList.remove( 'customizer-locked' );
 	}
 
+	/**
+	 * Apply lock state to UI.
+	 *
+	 * @return {void}
+	 */
 	function applyLockState() {
 		const lockUser = lockSettings?.lock?.lockUser;
 		let nameNode;
@@ -274,6 +284,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		enableCustomizerEditing();
 	}
 
+	/**
+	 * Re-apply lock state to UI.
+	 *
+	 * @return {void}
+	 */
 	function refreshLockState() {
 		const data = new URLSearchParams();
 
@@ -310,6 +325,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
+	/**
+	 * Take over the current changeset lock.
+	 *
+	 * @return {void}
+	 */
 	function handleTakeOverLock() {
 		const data = new URLSearchParams(),
 			takeOverButton = lockNotice?.querySelector( '.button-primary' );
