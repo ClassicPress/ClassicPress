@@ -396,6 +396,9 @@ final class WP_Customize_Manager {
 		add_action( 'wp_ajax_customize_override_changeset_lock', array( $this, 'handle_override_changeset_lock_request' ) );
 		add_action( 'wp_ajax_customize_dismiss_autosave_or_lock', array( $this, 'handle_dismiss_autosave_or_lock_request' ) );
 		add_action( 'wp_ajax_customize_check_changeset_lock', array( $this, 'handle_check_changeset_lock_request' ) );
+		add_action( 'wp_ajax_customize_check_lock', array( $this, 'handle_check_lock_request' ) );
+		add_action( 'wp_ajax_customize_refresh_lock', array( $this, 'handle_refresh_lock_request' ) );
+		add_action( 'wp_ajax_customize_take_over_lock', array( $this, 'handle_take_over_lock_request' ) );
 
 		add_action( 'customize_register', array( $this, 'register_controls' ) );
 		add_action( 'customize_register', array( $this, 'register_dynamic_settings' ), 11 ); // Allow code to create settings first.
@@ -3856,6 +3859,216 @@ final class WP_Customize_Manager {
 		}
 
 		wp_send_json_error( 'unknown_error', 500 );
+	}
+
+	/**
+	 * Get the option key used for the site-wide Customizer lock.
+	 *
+	 * @since CP-2.8.0
+	 * @return string
+	 */
+	protected function get_customizer_lock_option() {
+		return 'customize_lock_' . get_current_blog_id();
+	}
+
+	/**
+	 * Get the current Customizer lock.
+	 *
+	 * @since CP-2.8.0
+	 * @return array|false
+	 */
+	protected function get_customizer_lock() {
+		$lock = get_option( $this->get_customizer_lock_option() );
+
+		if ( ! is_array( $lock ) || empty( $lock['user_id'] ) || empty( $lock['time'] ) ) {
+			return false;
+		}
+
+		$lock_window = (int) apply_filters( 'customize_lock_window', 90 );
+
+		if ( (int) $lock['time'] < time() - $lock_window ) {
+			delete_option( $this->get_customizer_lock_option() );
+			return false;
+		}
+
+		if ( ! get_userdata( (int) $lock['user_id'] ) ) {
+			delete_option( $this->get_customizer_lock_option() );
+			return false;
+		}
+
+		return $lock;
+	}
+
+	/**
+	 * Set or refresh the current Customizer lock.
+	 *
+	 * @since CP-2.8.0
+	 * @param int    $user_id       User ID.
+	 * @return array
+	 */
+	protected function set_customizer_lock( $user_id ) {
+		$lock = array(
+			'user_id' => (int) $user_id,
+			'time'    => time(),
+		);
+
+		update_option( $this->get_customizer_lock_option(), $lock, false );
+
+		return $lock;
+	}
+
+	/**
+	 * Check whether the current request may use the Customizer lock API.
+	 *
+	 * @since CP-2.8.0
+	 * @return true|WP_Error
+	 */
+	protected function check_customizer_lock_request_permissions() {
+		if ( ! is_user_logged_in() ) {
+			return new WP_Error( 'unauthenticated', __( 'You must be logged in to access the Customizer lock.' ), array( 'status' => 401 ) );
+		}
+
+		if ( ! current_user_can( 'customize' ) ) {
+			return new WP_Error( 'cannot_customize', __( 'Sorry, you are not allowed to customize this site.' ), array( 'status' => 403 ) );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check whether another user currently holds the Customizer lock.
+	 *
+	 * @since CP-2.8.0
+	 * @return void
+	 */
+	public function handle_check_lock_request() {
+		$permission = $this->check_customizer_lock_request_permissions();
+
+		if ( is_wp_error( $permission ) ) {
+			$error_data = $permission->get_error_data();
+			$status     = is_array( $error_data ) && isset( $error_data['status'] ) ? $error_data['status'] : 400;
+
+			wp_send_json_error(
+				array(
+					'code'    => $permission->get_error_code(),
+					'message' => $permission->get_error_message(),
+				),
+				$status
+			);
+		}
+
+		if ( ! check_ajax_referer( 'customize_check_lock', 'nonce', false ) ) {
+			wp_send_json_error( 'invalid_nonce', 403 );
+		}
+
+		$lock = $this->get_customizer_lock();
+
+		if ( ! $lock || (int) $lock['user_id'] === get_current_user_id() ) {
+			wp_send_json_success(
+				array(
+					'lockUser' => null,
+				)
+			);
+		}
+
+		wp_send_json_success(
+			array(
+				'lockUser' => $this->get_lock_user_data( (int) $lock['user_id'] ),
+			)
+		);
+	}
+
+	/**
+	 * Acquire or refresh the Customizer lock for the current user.
+	 *
+	 * @since CP-2.8.0
+	 * @return void
+	 */
+	public function handle_refresh_lock_request() {
+		$permission = $this->check_customizer_lock_request_permissions();
+
+		if ( is_wp_error( $permission ) ) {
+			$error_data = $permission->get_error_data();
+			$status     = is_array( $error_data ) && isset( $error_data['status'] ) ? $error_data['status'] : 400;
+
+			wp_send_json_error(
+				array(
+					'code'    => $permission->get_error_code(),
+					'message' => $permission->get_error_message(),
+				),
+				$status
+			);
+		}
+
+		if ( ! check_ajax_referer( 'customize_refresh_lock', 'nonce', false ) ) {
+			wp_send_json_error( 'invalid_nonce', 403 );
+		}
+
+		$current_user_id = get_current_user_id();
+		$lock            = $this->get_customizer_lock();
+
+		if ( ! $lock ) {
+			$this->set_customizer_lock( $current_user_id );
+
+			wp_send_json_success(
+				array(
+					'lockUser' => null,
+				)
+			);
+		}
+
+		$lock_user_id = isset( $lock['user_id'] ) ? (int) $lock['user_id'] : 0;
+
+		if ( $lock_user_id === $current_user_id ) {
+			$this->set_customizer_lock( $current_user_id );
+
+			wp_send_json_success(
+				array(
+					'lockUser' => null,
+				)
+			);
+		}
+
+		wp_send_json_success(
+			array(
+				'lockUser' => $this->get_lock_user_data( $lock_user_id ),
+			)
+		);
+	}
+
+	/**
+	 * Take over the Customizer lock.
+	 *
+	 * @since CP-2.8.0
+	 * @return void
+	 */
+	public function handle_take_over_lock_request() {
+		$permission = $this->check_customizer_lock_request_permissions();
+
+		if ( is_wp_error( $permission ) ) {
+			$error_data = $permission->get_error_data();
+			$status     = is_array( $error_data ) && isset( $error_data['status'] ) ? $error_data['status'] : 400;
+
+			wp_send_json_error(
+				array(
+					'code'    => $permission->get_error_code(),
+					'message' => $permission->get_error_message(),
+				),
+				$status
+			);
+		}
+
+		if ( ! check_ajax_referer( 'customize_take_over_lock', 'nonce', false ) ) {
+			wp_send_json_error( 'invalid_nonce', 403 );
+		}
+
+		$this->set_customizer_lock( get_current_user_id() );
+
+		wp_send_json_success(
+			array(
+				'lockUser' => null,
+			)
+		);
 	}
 
 	/**
