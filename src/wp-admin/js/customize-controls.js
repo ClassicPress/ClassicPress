@@ -197,10 +197,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} );
 
-		saveButton.disabled = true;
-		saveButton.setAttribute( 'aria-disabled', 'true' );
-		saveButton.setAttribute( 'data-lock-disabled', 'true' );
-
 		if ( publishSettings ) {
 			publishSettings.disabled = true;
 			publishSettings.setAttribute( 'aria-disabled', 'true' );
