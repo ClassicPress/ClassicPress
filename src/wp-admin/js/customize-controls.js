@@ -1524,6 +1524,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function setRandomHeaderChoice( choice ) {
+		const div = document.createElement( 'div' );
 		if ( ! choice ) {
 			return;
 		}
@@ -1535,6 +1536,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		activatePublishButton();
 		forcePreviewRefresh( 'header_image', choice );
+		
+		div.className = 'randomizing-header';
+		div.innerHTML = '<div class="button display-options random random-default-header">' +
+			'<span class="dashicons dashicons-randomize dice"></span>' +
+			_wpCustomizeHeader.random +
+			'</div>' +
+			'</div>';
+		document.querySelector( '#customize-control-header_image label' ).after( div );
 	}
 
 	/**
@@ -1551,6 +1560,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( customizeButton.nextElementSibling.id && customizeButton.nextElementSibling.id === 'header_image-button' ) { // header image
 			parent.previousElementSibling.querySelector( 'img' )?.remove();
 			parent.previousElementSibling.querySelector( 'video' )?.remove();
+			document.querySelector( '.randomizing-header' )?.remove();
 			parent.previousElementSibling.querySelector( 'input' ).value = '';
 			customizeButton.style.display = 'none';
 			customizeButton.nextElementSibling.className = 'upload-button button new select-button';
