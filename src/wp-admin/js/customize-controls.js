@@ -212,7 +212,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function enableCustomizerEditing() {
-		lockableControls.forEach( function( input ) {
+		inputs.forEach( function( input ) {
 			if ( input.hasAttribute( 'data-lock-disabled' ) ) {
 				input.disabled = false;
 				input.removeAttribute( 'data-lock-disabled' );
