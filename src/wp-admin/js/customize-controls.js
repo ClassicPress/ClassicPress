@@ -384,7 +384,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	refreshLockState().then( function() {
-		lockRefreshTimer = window.setInterval( refreshLockState, 15000 );
+		lockRefreshTimer = window.setInterval( refreshLockState, 5000 );
 	} );
 
 	// Limit motion where appropriate
