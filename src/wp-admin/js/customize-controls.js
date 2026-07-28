@@ -197,6 +197,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} );
 
+		saveButton.disabled = true;
+		saveButton.setAttribute( 'aria-disabled', 'true' );
+		saveButton.setAttribute( 'data-lock-disabled', 'true' );
+
 		if ( publishSettings ) {
 			publishSettings.disabled = true;
 			publishSettings.setAttribute( 'aria-disabled', 'true' );
@@ -212,16 +216,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function enableCustomizerEditing() {
-		inputs.forEach( function( input ) {
-			if ( input.hasAttribute( 'data-lock-disabled' ) ) {
+		lockableControls.forEach( function( input ) {
+			if ( input !== saveButton && input.hasAttribute( 'data-lock-disabled' ) ) {
 				input.disabled = false;
 				input.removeAttribute( 'data-lock-disabled' );
 			}
 		} );
-
-		saveButton.disabled = false;
-		saveButton.removeAttribute( 'aria-disabled' );
-		saveButton.removeAttribute( 'data-lock-disabled' );
 
 		if ( publishSettings ) {
 			publishSettings.disabled = false;
