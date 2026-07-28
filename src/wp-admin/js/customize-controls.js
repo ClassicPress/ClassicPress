@@ -29,7 +29,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		saveButton = form.querySelector( '#save' ),
 		publishSettings = form.querySelector( '#publish-settings' ),
 		publishSettingsPanel = document.getElementById( 'sub-accordion-section-publish_settings' ),
-		lockSettings = window._wpCustomizeSettings || {},
+		lockSettings = window.wpCustomizeSettings || {},
 		lockNotice = document.getElementById( 'customize-lock-notice' ),
 		lockRefreshTimer = null,
 		devicesWrapper = document.querySelector( '.devices' ),
