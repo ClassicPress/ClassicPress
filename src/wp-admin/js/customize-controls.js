@@ -1537,13 +1537,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		activatePublishButton();
 		forcePreviewRefresh( 'header_image', choice );
 
-		div.className = 'randomizing-header';
-		div.innerHTML = '<div class="button display-options random random-default-header">' +
-			'<span class="dashicons dashicons-randomize dice"></span>' +
-			_wpCustomizeHeader.random +
-			'</div>' +
-			'</div>';
-		document.querySelector( '#customize-control-header_image label' ).after( div );
+		if ( ! document.querySelector( '.randomizing-header' ) ) {
+			div.className = 'randomizing-header';
+			div.innerHTML = '<div class="button display-options random random-default-header">' +
+				'<span class="dashicons dashicons-randomize dice"></span>' +
+				_wpCustomizeHeader.random +
+				'</div>' +
+				'</div>';
+			document.querySelector( '#customize-control-header_image label' ).after( div );
+		}
 	}
 
 	/**
