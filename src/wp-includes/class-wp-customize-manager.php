@@ -395,8 +395,6 @@ final class WP_Customize_Manager {
 		add_filter( 'heartbeat_received', array( $this, 'check_changeset_lock_with_heartbeat' ), 10, 3 );
 		add_action( 'wp_ajax_customize_override_changeset_lock', array( $this, 'handle_override_changeset_lock_request' ) );
 		add_action( 'wp_ajax_customize_dismiss_autosave_or_lock', array( $this, 'handle_dismiss_autosave_or_lock_request' ) );
-		add_action( 'wp_ajax_customize_check_changeset_lock', array( $this, 'handle_check_changeset_lock_request' ) );
-		add_action( 'wp_ajax_customize_check_lock', array( $this, 'handle_check_lock_request' ) );
 		add_action( 'wp_ajax_customize_refresh_lock', array( $this, 'handle_refresh_lock_request' ) );
 		add_action( 'wp_ajax_customize_take_over_lock', array( $this, 'handle_take_over_lock_request' ) );
 
@@ -4853,7 +4851,6 @@ final class WP_Customize_Manager {
 			'switch_themes'            => wp_create_nonce( 'switch_themes' ),
 			'dismiss_autosave_or_lock' => wp_create_nonce( 'customize_dismiss_autosave_or_lock' ),
 			'override_lock'            => wp_create_nonce( 'customize_override_changeset_lock' ),
-			'check_lock'               => wp_create_nonce( 'customize_check_changeset_lock' ),
 			'trash'                    => wp_create_nonce( 'trash_customize_changeset' ),
 		);
 
@@ -4877,23 +4874,22 @@ final class WP_Customize_Manager {
 	 * @since 4.4.0
 	 */
 	public function customize_pane_settings() {
-		$lock_user_id = false;
-		if ( $this->changeset_post_id() ) {
-			$lock_user_id = wp_check_post_lock( $this->changeset_post_id() );
-		}
+		$lock = $this->get_customizer_lock();
+		$lock_user_id = ( $lock && ! empty( $lock['user_id'] ) ) ? (int) $lock['user_id'] : 0;
 
 		$settings = array(
-			'changeset' => array(
-				'uuid' => $this->changeset_uuid(),
-				'lockUser' => $lock_user_id ? $this->get_lock_user_data( $lock_user_id ) : null,
+			'lock' => array(
+				'lockUser' => ( $lock_user_id && $lock_user_id !== get_current_user_id() )
+					? $this->get_lock_user_data( $lock_user_id )
+					: null,
 			),
 			'url' => array(
 				'ajax' => sanitize_url( admin_url( 'admin-ajax.php', 'relative' ) ),
 			),
 			'nonce' => array(
-				'override_lock' => wp_create_nonce( 'customize_override_changeset_lock' ),
-				'check_lock' => wp_create_nonce( 'customize_check_changeset_lock' ),
-				'dismiss_autosave_or_lock' => wp_create_nonce( 'customize_dismiss_autosave_or_lock' ),
+				'checkLock'    => wp_create_nonce( 'customize_check_lock' ),
+				'refreshLock'  => wp_create_nonce( 'customize_refresh_lock' ),
+				'takeOverLock' => wp_create_nonce( 'customize_take_over_lock' ),
 			),
 			'user' => array(
 				'id' => get_current_user_id(),
@@ -4901,38 +4897,7 @@ final class WP_Customize_Manager {
 		);
 		?>
 		<script>
-			var _wpCustomizeSettings = <?php echo wp_json_encode( $settings ); ?>;
-			_wpCustomizeSettings.initialClientTimestamp = _.now();
-			_wpCustomizeSettings.controls = {};
-			_wpCustomizeSettings.settings = {};
-			<?php
-
-			// Serialize settings one by one to improve memory usage.
-			echo "(function ( s ){\n";
-			foreach ( $this->settings() as $setting ) {
-				if ( $setting->check_capabilities() ) {
-					printf(
-						"s[%s] = %s;\n",
-						wp_json_encode( $setting->id ),
-						wp_json_encode( $setting->json() )
-					);
-				}
-			}
-			echo "})( _wpCustomizeSettings.settings );\n";
-
-			// Serialize controls one by one to improve memory usage.
-			echo "(function ( c ){\n";
-			foreach ( $this->controls() as $control ) {
-				if ( $control->check_capabilities() ) {
-					printf(
-						"c[%s] = %s;\n",
-						wp_json_encode( $control->id ),
-						wp_json_encode( $control->json() )
-					);
-				}
-			}
-			echo "})( _wpCustomizeSettings.controls );\n";
-			?>
+			window.wpCustomizeSettings = <?php echo wp_json_encode( $settings ); ?>;
 		</script>
 		<?php
 	}
@@ -5371,7 +5336,6 @@ final class WP_Customize_Manager {
 					'fill'    => __( 'Fill Screen' ),
 					'fit'     => __( 'Fit to Screen' ),
 					'repeat'  => _x( 'Repeat', 'Repeat Image' ),
-					'custom'  => _x( 'Custom', 'Custom Preset' ),
 				),
 			)
 		);
