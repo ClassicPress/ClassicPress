@@ -93,6 +93,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 					'remove' => wp_create_nonce( 'header-remove' ),
 				),
 				'uploads'  => $this->uploaded_headers,
+				'random'   => esc_html__( 'Randomizing suggested headers' ),
 				'defaults' => $this->default_headers,
 			)
 		);
@@ -229,7 +230,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 			</div>
 			<div class="actions"
 				data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
-				data-empty="<?php esc_attr_e( 'Add image' ); ?>"
+				data-empty="<?php esc_attr_e( 'Add new image' ); ?>"
 				data-full="<?php esc_attr_e( 'Hide image' ); ?>"
 			>
 
@@ -250,7 +251,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 						aria-label="<?php esc_attr_e( 'Add new header image' ); ?>"
 						<?php $this->link(); ?>
 					>
-						<?php esc_html_e( 'Add image' ); ?>
+						<?php esc_html_e( 'Add new image' ); ?>
 					</button>
 
 					<?php
