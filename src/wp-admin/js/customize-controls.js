@@ -1536,7 +1536,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		activatePublishButton();
 		forcePreviewRefresh( 'header_image', choice );
-		
+
 		div.className = 'randomizing-header';
 		div.innerHTML = '<div class="button display-options random random-default-header">' +
 			'<span class="dashicons dashicons-randomize dice"></span>' +
