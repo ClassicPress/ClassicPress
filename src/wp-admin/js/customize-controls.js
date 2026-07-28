@@ -282,7 +282,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				_updatedControlsWatcher.background_attachment = 'scroll';
 				break;
 
-			case 'custom':
 			default:
 				break;
 		}
