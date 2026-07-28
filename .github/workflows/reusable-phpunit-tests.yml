@@ -191,7 +191,7 @@ jobs:
           php --version
           phpunit --version
           composer --version
-          grunt --version
+          npm run grunt -- --version
           lsb_release -a
           localectl list-locales
 
@@ -216,43 +216,43 @@ jobs:
         if: ${{ !inputs.multisite }}
         env:
           WP_DB_HOST: 127.0.0.1:3306
-        run: grunt phpunit:default
+        run: npm run grunt phpunit:default
         continue-on-error: ${{ inputs.experimental }}
 
       - name: Run PHPUnit ajax
         env:
           WP_DB_HOST: 127.0.0.1:3306
-        run: grunt phpunit:ajax
+        run: npm run grunt phpunit:ajax
         continue-on-error: ${{ inputs.experimental }}
 
       - name: Run PHPUnit multisite
         if: ${{ inputs.multisite }}
         env:
           WP_DB_HOST: 127.0.0.1:3306
-        run: grunt phpunit:multisite
+        run: npm run grunt phpunit:multisite
         continue-on-error: ${{ inputs.experimental }}
 
       - name: Run PHPUnit ms-files
         env:
           WP_DB_HOST: 127.0.0.1:3306
-        run: grunt phpunit:ms-files
+        run: npm run grunt phpunit:ms-files
         continue-on-error: ${{ inputs.experimental }}
 
       - name: Run PHPUnit external-http
         if: ${{ inputs.coverage != 'none' }}
         env:
           WP_DB_HOST: 127.0.0.1:3306
-        run: grunt phpunit:external-http
+        run: npm run grunt phpunit:external-http
         continue-on-error: ${{ inputs.experimental }}
 
       - name: Run PHPUnit restapi-jsclient
         env:
           WP_DB_HOST: 127.0.0.1:3306
-        run: grunt phpunit:restapi-jsclient
+        run: npm run grunt phpunit:restapi-jsclient
         continue-on-error: ${{ inputs.experimental }}
 
       - name: Run PHPUnit wp-api-client-fixtures
         env:
           WP_DB_HOST: 127.0.0.1:3306
-        run: grunt phpunit:wp-api-client-fixtures
+        run: npm run grunt phpunit:wp-api-client-fixtures
         continue-on-error: ${{ inputs.experimental }}

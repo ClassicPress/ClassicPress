@@ -64,7 +64,7 @@ jobs:
           php --version
           phpunit --version
           composer --version
-          grunt --version
+          npm run grunt -- --version
           mysql --version
 
       - name: Install dependencies
@@ -73,6 +73,6 @@ jobs:
           PUPPETEER_SKIP_DOWNLOAD: true
 
       - name: Run QUnit tests
-        run: grunt qunit:compiled
+        run: npm run grunt qunit:compiled
         env:
           PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome-stable

@@ -148,7 +148,7 @@ jobs:
           php --version
           phpunit --version
           composer --version
-          grunt --version
+          npm run grunt -- --version
           mysql --version
 
       - name: Bypass Cloudflare for GitHub Action
@@ -171,4 +171,4 @@ jobs:
           sed -i 's/yourpasswordhere/root/g' wp-tests-config.php
 
       - name: Run pre-commit checks
-        run: grunt precommit:verify
+        run: npm run grunt precommit:verify
