@@ -3,10 +3,7 @@ ClassicPress is an open-source publishing platform forked from WordPress. The Cl
 
 ## Supported Versions
 
-| Version | Supported |
-|---------| --------- |
-| 2.x     | Yes       |
-| 1.1     | No        |
+ClassicPress follows [SemVer](https://semver.org/) versioning. Security vulnerabilities will be considered for the current release minor version in the 2.x major branch.
 
 ## Reporting a Vulnerability
 Please do **not** report security vulnerabilities through public GitHub issues.
