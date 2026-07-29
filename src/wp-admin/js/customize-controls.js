@@ -26,10 +26,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		form = document.querySelector( 'form' ),
 		inputs = form.querySelectorAll( 'input, select, textarea' ),
 		lockableControls = form.querySelectorAll( 'input, select, textarea, button' ),
+		hyperlinks = document.querySelectorAll( 'a' ),
 		saveButton = form.querySelector( '#save' ),
 		publishSettings = form.querySelector( '#publish-settings' ),
 		publishSettingsPanel = document.getElementById( 'sub-accordion-section-publish_settings' ),
-		lockSettings = window.wpCustomizeSettings || {},
+		lockSettings = window._wpCustomizeSettings || {},
 		lockNotice = document.getElementById( 'customize-lock-notice' ),
 		lockRefreshTimer = null,
 		devicesWrapper = document.querySelector( '.devices' ),
@@ -49,7 +50,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		changesetStatus = window._wpCustomizeChangesetStatus || 'publish';
 
 	const colorSchemeInputs = form.querySelectorAll( 'input[name="_customize-radio-colorscheme"]' ),
-		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' );
+		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' ),
+		preventDefaultListener = function( e ) {
+			e.preventDefault();
+		};
 
 	// Go direct to appropriate Customizer panel if its hash is specified in the URL
 	if ( hash === 'menu-to-edit' ) {
@@ -197,6 +201,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} );
 
+		hyperlinks.forEach( function( link ) {
+			if ( link.classList.contains( 'button' ) ) {
+				link.addEventListener( 'click', preventDefaultListener );
+			}
+		} );
+
 		saveButton.disabled = true;
 		saveButton.setAttribute( 'aria-disabled', 'true' );
 		saveButton.setAttribute( 'data-lock-disabled', 'true' );
@@ -221,6 +231,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				input.disabled = false;
 				input.removeAttribute( 'data-lock-disabled' );
 			}
+		} );
+
+		hyperlinks.forEach( function( link ) {
+			link.removeEventListener( 'click', preventDefaultListener );
 		} );
 
 		if ( publishSettings ) {
