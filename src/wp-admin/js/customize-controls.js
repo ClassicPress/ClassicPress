@@ -1740,6 +1740,37 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Enable randomizing header images for Customizer.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function setRandomHeaderChoice( choice ) {
+		const div = document.createElement( 'div' );
+		if ( ! choice ) {
+			return;
+		}
+
+		_updatedControlsWatcher.header_image = choice;
+		_updatedControlsWatcher.header_image_data = {
+			choice: choice
+		};
+
+		activatePublishButton();
+		forcePreviewRefresh( 'header_image', choice );
+
+		if ( ! document.querySelector( '.randomizing-header' ) ) {
+			div.className = 'randomizing-header';
+			div.innerHTML = '<div class="button display-options random random-default-header">' +
+				'<span class="dashicons dashicons-randomize dice"></span>' +
+				_wpCustomizeHeader.random +
+				'</div>' +
+				'</div>';
+			document.querySelector( '#customize-control-header_image label' ).after( div );
+		}
+	}
+
+	/**
 	 * Removes media from Customizer.
 	 *
 	 * @abstract
@@ -1753,6 +1784,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( customizeButton.nextElementSibling.id && customizeButton.nextElementSibling.id === 'header_image-button' ) { // header image
 			parent.previousElementSibling.querySelector( 'img' )?.remove();
 			parent.previousElementSibling.querySelector( 'video' )?.remove();
+			document.querySelector( '.randomizing-header' )?.remove();
 			parent.previousElementSibling.querySelector( 'input' ).value = '';
 			customizeButton.style.display = 'none';
 			customizeButton.nextElementSibling.className = 'upload-button button new select-button';
@@ -2700,6 +2732,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			customizeButton = e.target;
 			cropContext = e.target.closest( 'li' ).dataset.settingId;
 			selectMedia();
+		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'random-default-header' ) ) {
+			setRandomHeaderChoice( e.target.dataset.customizeImageValue );
 		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'choice' ) ) {
 			image = e.target.previousElementSibling;
 			addItemToCustomizer( e.target, 0, image, image.src );

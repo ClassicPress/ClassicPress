@@ -1417,8 +1417,8 @@ body.full-overlay-active {
 }
 
 .wp-full-overlay-sidebar .wp-full-overlay-header {
-	height: 45px;
-	padding: 0 15px;
+	height: 49px;
+	padding-right: 15px;
 	line-height: 3.2;
 	border-bottom: 1px solid #dcdcde;
 }
@@ -1449,7 +1449,7 @@ body.full-overlay-active {
 	position: relative;
 	float: left;
 	width: 45px;
-	height: 45px;
+	height: 49px;
 	background: #f0f0f1;
 	border-right: 1px solid #dcdcde;
 	color: #3c434a;
