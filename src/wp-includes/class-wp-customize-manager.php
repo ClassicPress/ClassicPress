@@ -4887,7 +4887,6 @@ final class WP_Customize_Manager {
 				'ajax' => sanitize_url( admin_url( 'admin-ajax.php', 'relative' ) ),
 			),
 			'nonce' => array(
-				'checkLock'    => wp_create_nonce( 'customize_check_lock' ),
 				'refreshLock'  => wp_create_nonce( 'customize_refresh_lock' ),
 				'takeOverLock' => wp_create_nonce( 'customize_take_over_lock' ),
 			),
