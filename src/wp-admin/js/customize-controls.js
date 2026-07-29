@@ -50,10 +50,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		changesetStatus = window._wpCustomizeChangesetStatus || 'publish';
 
 	const colorSchemeInputs = form.querySelectorAll( 'input[name="_customize-radio-colorscheme"]' ),
-		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' ),
-		preventDefaultListener = function( e ) {
-			e.preventDefault();
-		};
+		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' );
 
 	// Go direct to appropriate Customizer panel if its hash is specified in the URL
 	if ( hash === 'menu-to-edit' ) {
@@ -182,6 +179,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		setSavedScheduledDate();
 	} else {
 		setScheduledDateToNow();
+	}
+
+	function preventDefaultListener( e ) {
+		e.preventDefault();
 	}
 
 	/**
