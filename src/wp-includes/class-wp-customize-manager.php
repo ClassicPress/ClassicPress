@@ -4898,6 +4898,37 @@ final class WP_Customize_Manager {
 		?>
 		<script>
 			window._wpCustomizeSettings = <?php echo wp_json_encode( $settings ); ?>;
+			_wpCustomizeSettings.initialClientTimestamp = _.now();
+			_wpCustomizeSettings.controls = {};
+			_wpCustomizeSettings.settings = {};
+			<?php
+
+			// Serialize settings one by one to improve memory usage.
+			echo "(function ( s ){\n";
+			foreach ( $this->settings() as $setting ) {
+				if ( $setting->check_capabilities() ) {
+					printf(
+						"s[%s] = %s;\n",
+						wp_json_encode( $setting->id ),
+						wp_json_encode( $setting->json() )
+					);
+				}
+			}
+			echo "})( _wpCustomizeSettings.settings );\n";
+
+			// Serialize controls one by one to improve memory usage.
+			echo "(function ( c ){\n";
+			foreach ( $this->controls() as $control ) {
+				if ( $control->check_capabilities() ) {
+					printf(
+						"c[%s] = %s;\n",
+						wp_json_encode( $control->id ),
+						wp_json_encode( $control->json() )
+					);
+				}
+			}
+			echo "})( _wpCustomizeSettings.controls );\n";
+			?>
 		</script>
 		<?php
 	}
