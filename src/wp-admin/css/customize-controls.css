@@ -1094,6 +1094,19 @@ input[type="range"].hue-slider::-moz-range-track {
 	line-height: 0;
 }
 
+.randomizing-header .random-default-header {
+	display: block;
+	color: #50575e !important;
+	border: 1px dashed #50575e;
+	margin-bottom: 5px !important;
+	padding: 4px 10px !important;
+	background: unset;
+}
+
+.randomizing-header .dice {
+	line-height: 1.4;
+}
+
 /* Remove descender space. */
 .customize-control-site_icon .favicon-preview .browser-preview {
 	vertical-align: top;
