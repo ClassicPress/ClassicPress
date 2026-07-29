@@ -203,7 +203,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 
 		hyperlinks.forEach( function( link ) {
-			if ( link.classList.contains( 'button' ) ) {
+			if ( link.classList.contains( 'button' ) && link.parentNode.className !== 'aside-lock' ) {
 				link.addEventListener( 'click', preventDefaultListener );
 			}
 		} );
