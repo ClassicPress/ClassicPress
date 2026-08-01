@@ -1418,7 +1418,6 @@ body.full-overlay-active {
 
 .wp-full-overlay-sidebar .wp-full-overlay-header {
 	height: 49px;
-	padding-right: 15px;
 	line-height: 3.2;
 	border-bottom: 1px solid #dcdcde;
 }
@@ -1438,10 +1437,6 @@ body.full-overlay-active {
 }
 
 /* Close & Navigation Links */
-.theme-install-overlay .wp-full-overlay-sidebar .wp-full-overlay-header {
-	padding: 0;
-}
-
 .theme-install-overlay .close-full-overlay,
 .theme-install-overlay .previous-theme,
 .theme-install-overlay .next-theme {
