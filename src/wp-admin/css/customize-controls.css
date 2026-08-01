@@ -40,7 +40,7 @@ body {
 
 #customize-controls img {
 	max-width: 100%;
-	object-fit: cover;
+	height: auto;
 }
 
 #customize-controls .submit {
@@ -178,16 +178,6 @@ body.trashing #publish-settings {
 .saving #customize-header-actions .spinner,
 .trashing #customize-header-actions .spinner {
 	visibility: visible;
-}
-
-#customize-controls .wp-full-overlay-sidebar-content {
-	overflow-y: auto;
-	overflow-x: hidden;
-	position: static !important;
-}
-
-.outer-section-open #customize-controls .wp-full-overlay-sidebar-content {
-	background: #f0f0f1;
 }
 
 #customize-controls .customize-info {
@@ -409,7 +399,7 @@ body.trashing #publish-settings {
 #customize-controls .customize-info.is-sticky,
 #customize-controls .customize-section-title.is-sticky {
 	position: fixed;
-	top: 46px;
+	top: 50px;
 }
 
 #customize-controls .customize-info .accordion-section-title {
@@ -515,7 +505,7 @@ body.trashing #publish-settings {
 }
 
 #customize-controls #sub-accordion-section-custom_css .customize-info .customize-section-description {
-	margin: 0px -1em;
+	margin: 0 -12px;
 	border-top: 0;
 	border-bottom: 1px solid #dcdcde;
 }
@@ -537,6 +527,7 @@ body.trashing #publish-settings {
 #customize-theme-controls .control-section,
 #customize-outer-theme-controls .control-section {
 	border: none;
+	box-shadow: none;
 }
 
 #customize-theme-controls .accordion-section-title,
@@ -880,6 +871,7 @@ h3.customize-section-title {
 }
 
 .wp-full-overlay-sidebar .wp-full-overlay-header {
+	padding-right: 15px;
 	background-color: #f0f0f1;
 }
 
@@ -1197,8 +1189,7 @@ input[type="range"].hue-slider::-moz-range-track {
 
 /* Sidebar fully collapsed */
 .wp-full-overlay.collapsed .wp-full-overlay-sidebar {
-	width: 0;
-	margin-left: -665px;
+	margin-left: -645px;
 }
 
 /**
@@ -1215,8 +1206,6 @@ input[type="range"].hue-slider::-moz-range-track {
 }
 
 #customize-controls #customize-notifications-area {
-	top: 46px;
-	width: 100%;
 	border-bottom: 1px solid #dcdcde;
 	display: block;
 	padding: 0;
@@ -1776,7 +1765,7 @@ input[type="range"].hue-slider::-moz-range-track {
 	top: 0;
 	bottom: 0;
 	right: 0;
-	padding: 46px 0 0;
+	padding: 50px 0 0;
 	overflow-y: auto;
 	width: calc(100% - 345px);
 	background: #f0f0f1;
@@ -1789,7 +1778,6 @@ input[type="range"].hue-slider::-moz-range-track {
 
 #customize-footer-actions,
 #customize-footer-actions .collapse-sidebar {
-	bottom: 0;
 	z-index: 999;
 }
 
@@ -2019,7 +2007,7 @@ input[type="range"].hue-slider::-moz-range-track {
 	top: 0;
 	right: 0;
 	width: calc(100% - 345px);
-	height: 46px;
+	height: 50px;
 	background: #f0f0f1;
 	z-index: 10;
 	padding: 6px 25px;
@@ -2103,8 +2091,8 @@ input[type="range"].hue-slider::-moz-range-track {
 	.control-panel-themes .customize-themes-full-container {
 		width: 100%;
 		left: 0;
-		margin: 46px 0 0;
-		height: calc(100% - 46px);
+		margin: 50px 0 0;
+		height: calc(100% - 50px);
 		z-index: 1;
 		display: none;
 	}
@@ -2443,7 +2431,6 @@ body.adding-widget .add-new-widget:before,
 	margin: 0;
 	background: #f0f0f1;
 	border-top: 1px solid #dcdcde;
-	height: 100%;
 }
 
 #widgets-left #available-widgets {
@@ -2798,7 +2785,7 @@ body.adding-widget .add-new-widget:before,
 	body.adding-menu-items #available-menu-items,
 	body.outer-section-open #sub-accordion-section-publish_settings {
 		position: absolute;
-		top: 46px;
+		top: 50px;
 		bottom: 0;
 		left: 0;
 		right: 0;
@@ -2815,7 +2802,7 @@ body.adding-widget .add-new-widget:before,
 	}
 
 	#customize-preview {
-		margin-top: 46px;
+		margin-top: 50px;
 		opacity: 1;
 	}
 }
@@ -2847,6 +2834,6 @@ body.adding-widget .add-new-widget:before,
 	#customize-preview[data-device="tablet"],
 	#customize-preview[data-device="mobile"] {
 		width: 100%;
-		margin-top: 46px;
+		margin-top: 50px;
 	}
 }
