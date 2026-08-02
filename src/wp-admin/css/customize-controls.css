@@ -798,14 +798,6 @@ h3.customize-section-title {
 	box-sizing: content-box;
 }
 
-.ios .customize-panel-back {
-	display: none;
-}
-
-.ios .expanded.in-sub-panel .customize-panel-back {
-	display: block;
-}
-
 #customize-controls .panel-meta.customize-info .accordion-section-title {
 	margin-left: 48px;
 	border-left: none;
