@@ -44,9 +44,9 @@ jobs:
     # - Read .nvmrc.
     # - Installs NodeJS.
     # - Sets up caching for NPM.
+    # - Installs NPM dependencies using install-changed to hash the `package.json` file.
     # - Login at Docker Hub to increase access limits
     # - Setup, wait for and initialise Database.
-    # - Installs NPM dependencies using install-changed to hash the `package.json` file.
     # - Configure PHP.
     # - Set up locale.
     # - Install PHPUnit and Composer dependencies.
@@ -91,6 +91,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
+      - name: Install dependencies
+        run: npx install-changed --install-command="npm ci"
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: true
+
       - name: Login to Docker Hub
         if: ${{ github.event_name != 'pull_request' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false ) }}
         uses: docker/login-action@v4
@@ -131,9 +136,6 @@ jobs:
           mariadb --host 127.0.0.1 --port 3306 -u root -ppassword -e "SELECT @@VERSION"
           mariadb --host 127.0.0.1 --port 3306 -u root -ppassword < tools/local-env/mysql-init.sql
           mariadb --host 127.0.0.1 --port 3306 -u root -ppassword -e "SHOW DATABASES"
-
-      - name: Install dependencies
-        run: npx install-changed --install-command="npm ci"
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
