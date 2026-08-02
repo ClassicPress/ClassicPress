@@ -564,10 +564,10 @@
 #available-menu-items .accordion-section-title button {
 	display: block;
 	width: 28px;
-	height: 35px;
+	height: 30px;
 	position: absolute;
-	top: 5px;
-	right: 5px;
+	top: 15px;
+	right: 15px;
 	box-shadow: none;
 	outline: none;
 	cursor: pointer;

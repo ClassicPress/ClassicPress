@@ -14,7 +14,7 @@ _wpUpdatesSettings, _wpThemeSettings */
 document.addEventListener( 'DOMContentLoaded', function() {
 	window.newMenuItemIDs = window.newMenuItemIDs || [];
 	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
-		intersectionObserver, targetEl,
+		intersectionObserver,
 		i = 1,
 		customizerControls = [...document.getElementById( 'customize-theme-controls' ).children],
 		{ FilePond } = window, // import FilePond
@@ -39,6 +39,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		availableWidgets = document.getElementById( 'widgets-left' ),
 		menuToEdit = document.getElementById( 'menu-to-edit' ),
 		hash = window.location.hash.replace( '#', '' ),
+		targetEl = document.getElementById( hash ),
 		section = document.getElementById( 'sub-accordion-section-custom_css' ),
 		discardingChangeset = false,
 		changesetStatus = window._wpCustomizeChangesetStatus || 'publish';
@@ -50,9 +51,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	if ( hash === 'menu-to-edit' ) {
 		hash = 'sub-accordion-panel-nav_menus';
 	}
-	targetEl = document.getElementById( hash );
 
-	if ( hash && targetEl ) {
+	if ( ! hash ) {
+		setTimeout( function() {
+			document.querySelector( '.customize-controls-close' ).focus();
+		}, 0 );
+	} else if ( hash && targetEl ) {
 		customizerControls.forEach( function( child ) {
 			child.style.display = 'none';
 		} );
@@ -228,6 +232,62 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		activatePublishButton();
 	}
 
+	function backgroundPositionChanged( input ) {
+		var value = input.value.trim().split( /\s+/ ),
+			x = value[0] || 'left',
+			y = value[1] || 'top';
+
+		_updatedControlsWatcher.background_position_x = x;
+		_updatedControlsWatcher.background_position_y = y;
+		_updatedControlsWatcher.background_preset = 'custom';
+		activatePublishButton();
+	}
+
+	function backgroundCheckboxChanged( input, settingId ) {
+		if ( settingId === 'background_repeat' ) {
+			_updatedControlsWatcher.background_repeat = input.checked ? 'repeat' : 'no-repeat';
+		} else if ( settingId === 'background_attachment' ) {
+			_updatedControlsWatcher.background_attachment = input.checked ? 'scroll' : 'fixed';
+		} else {
+			_updatedControlsWatcher[ settingId ] = input.checked ? input.value : '';
+		}
+
+		_updatedControlsWatcher.background_preset = 'custom';
+		activatePublishButton();
+	}
+
+	function updateBackgroundPresetFields( preset ) {
+		switch ( preset ) {
+			case 'fill':
+				_updatedControlsWatcher.background_repeat = 'no-repeat';
+				_updatedControlsWatcher.background_position_x = 'center';
+				_updatedControlsWatcher.background_position_y = 'center';
+				_updatedControlsWatcher.background_size = 'cover';
+				_updatedControlsWatcher.background_attachment = 'scroll';
+				break;
+
+			case 'fit':
+				_updatedControlsWatcher.background_repeat = 'no-repeat';
+				_updatedControlsWatcher.background_position_x = 'center';
+				_updatedControlsWatcher.background_position_y = 'center';
+				_updatedControlsWatcher.background_size = 'contain';
+				_updatedControlsWatcher.background_attachment = 'scroll';
+				break;
+
+			case 'repeat':
+				_updatedControlsWatcher.background_repeat = 'repeat';
+				_updatedControlsWatcher.background_position_x = 'left';
+				_updatedControlsWatcher.background_position_y = 'top';
+				_updatedControlsWatcher.background_size = 'auto';
+				_updatedControlsWatcher.background_attachment = 'scroll';
+				break;
+
+			case 'custom':
+			default:
+				break;
+		}
+	}
+
 	inputs.forEach( function( input ) {
 		let settingId,
 			li = input.closest( 'li' );
@@ -236,17 +296,36 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			return;
 		}
 
-		// Do not listen to menu-related changes
 		settingId = li.dataset.settingId;
 		if ( settingId.startsWith( 'nav_menu_locations[' ) || settingId.startsWith( 'nav_menu[' ) || settingId.startsWith( 'nav_menu_item[' ) ) {
 			return;
 		}
 
 		input.addEventListener( 'input', function() {
+			if ( input.name === 'background-position' || input.type === 'checkbox' ) {
+				return;
+			}
 			inputChanged( input, settingId );
 		} );
 
 		input.addEventListener( 'change', function() {
+			if ( input.name === 'background-position' ) {
+				backgroundPositionChanged( input );
+				return;
+			}
+
+			if ( settingId === 'background_preset' ) {
+				_updatedControlsWatcher.background_preset = input.value;
+				updateBackgroundPresetFields( input.value );
+				activatePublishButton();
+				return;
+			}
+
+			if ( input.type === 'checkbox' ) {
+				backgroundCheckboxChanged( input, settingId );
+				return;
+			}
+
 			inputChanged( input, settingId );
 		} );
 	} );
@@ -1439,6 +1518,37 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Enable randomizing header images for Customizer.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function setRandomHeaderChoice( choice ) {
+		const div = document.createElement( 'div' );
+		if ( ! choice ) {
+			return;
+		}
+
+		_updatedControlsWatcher.header_image = choice;
+		_updatedControlsWatcher.header_image_data = {
+			choice: choice
+		};
+
+		activatePublishButton();
+		forcePreviewRefresh( 'header_image', choice );
+
+		if ( ! document.querySelector( '.randomizing-header' ) ) {
+			div.className = 'randomizing-header';
+			div.innerHTML = '<div class="button display-options random random-default-header">' +
+				'<span class="dashicons dashicons-randomize dice"></span>' +
+				_wpCustomizeHeader.random +
+				'</div>' +
+				'</div>';
+			document.querySelector( '#customize-control-header_image label' ).after( div );
+		}
+	}
+
+	/**
 	 * Removes media from Customizer.
 	 *
 	 * @abstract
@@ -1452,6 +1562,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( customizeButton.nextElementSibling.id && customizeButton.nextElementSibling.id === 'header_image-button' ) { // header image
 			parent.previousElementSibling.querySelector( 'img' )?.remove();
 			parent.previousElementSibling.querySelector( 'video' )?.remove();
+			document.querySelector( '.randomizing-header' )?.remove();
 			parent.previousElementSibling.querySelector( 'input' ).value = '';
 			customizeButton.style.display = 'none';
 			customizeButton.nextElementSibling.className = 'upload-button button new select-button';
@@ -1591,6 +1702,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		if ( e.submitter !== saveButton ) {
 			return;
 		}
+
+		document.body.classList.add( 'saving' );
 
 		if ( changesetStatus === 'future' ) {
 			var hours = parseInt( d[3], 10 );
@@ -1767,13 +1880,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// publish payload without touching updatedControls.
 		// This avoids crashing the live preview.
 		Object.entries( window._cpDirtySettings || {} ).forEach( function( [ settingId, item ] ) {
-			if ( ! settingId.startsWith( 'nav_menu_item[' ) ) {
-				return;
+			if ( settingId.startsWith( 'nav_menu_item[' ) ) {
+				submittedChanges[ settingId ] = {
+					value: item
+				};
 			}
-
-			submittedChanges[ settingId ] = {
-				value: item
-			};
 		} );
 
 		// Append new data for POSTing to PHP back-end handler
@@ -1882,6 +1993,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			saveButton.disabled = false;
 			window._customizePublishing = false;
 		}
+
+		document.body.classList.remove( 'saving' );
 	} );
 
 	/**
@@ -2126,24 +2239,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	updateHueVisibility();
 
-	// Ensure hitting Enter fires a click event on elements that are not automatically interactive
-	document.addEventListener( 'keyup', function( e ) {
-		var inputs = [ 'A', 'INPUT', 'BUTTON', 'SELECT', 'SUMMARY' ];
-		if ( e.key !== 'Enter' ) {
-			return;
-		}
-		if ( e.target.classList && e.target.classList.contains( 'collapse-sidebar' ) ) {
-			sidebarCollapseExpand( e.target ); // accounts for different mouse and Enter targets
-		} else {
-			if ( inputs.includes( e.target.tagName ) ) {
-				return;
-			}
-			e.preventDefault();
-			e.stopPropagation();
-			e.target.click();
-		}
-	} );
-
 	// Show and hide each theme's details button when hovering over and out of a theme
 	function showAndHide( themes ) {
 		themes.forEach( function( theme ) {
@@ -2359,7 +2454,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.querySelector( '.feature-filter-toggle' ).setAttribute( 'aria-expanded', 'false' );
 				document.querySelector( '.filter-drawer' ).style.display = 'none';
 				document.querySelector( '.filter-themes-count .theme-count' ).textContent = document.querySelectorAll( '.local .themes li' ).length;
-				if ( window.innerWidth <= 600 ) {
+				if ( window.innerWidth <= 640 ) {
 					document.querySelector( '#customize-header-actions .preview' ).style.display = 'none';
 					document.querySelector( '#customize-header-actions .controls' ).style.display = 'block';
 					document.querySelector( '.customize-themes-full-container' ).style.display = 'block';
@@ -2379,7 +2474,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.querySelector( '.themes-section-installed_themes' ).setAttribute( 'aria-expanded', 'false' );
 			document.querySelector( '.themes-section-wporg_themes' ).setAttribute( 'aria-expanded', 'true' );
 			document.querySelector( '.feature-filter-toggle' ).style.display = 'inline-block';
-			if ( window.innerWidth <= 600 ) {
+			if ( window.innerWidth <= 640 ) {
 				document.querySelector( '#customize-header-actions .preview' ).style.display = 'none';
 				document.querySelector( '#customize-header-actions .controls' ).style.display = 'block';
 				document.querySelector( '.customize-themes-full-container' ).style.display = 'block';
@@ -2415,6 +2510,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			customizeButton = e.target;
 			cropContext = e.target.closest( 'li' ).dataset.settingId;
 			selectMedia();
+		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'random-default-header' ) ) {
+			setRandomHeaderChoice( e.target.dataset.customizeImageValue );
 		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'choice' ) ) {
 			image = e.target.previousElementSibling;
 			addItemToCustomizer( e.target, 0, image, image.src );

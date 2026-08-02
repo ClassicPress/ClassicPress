@@ -1352,7 +1352,7 @@ function setup() {
     addContainer("polite");
   }
 }
-(0,build_module["default"])(setup);
+;(0,build_module["default"])(setup);
 
 
 (window.wp = window.wp || {}).a11y = __webpack_exports__;

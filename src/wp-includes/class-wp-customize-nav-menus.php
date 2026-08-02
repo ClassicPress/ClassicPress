@@ -158,8 +158,10 @@ final class WP_Customize_Nav_Menus {
 				$front_page = 'page' === get_option( 'show_on_front' ) ? (int) get_option( 'page_on_front' ) : 0;
 				if ( ! empty( $front_page ) ) {
 					$front_page_obj      = get_post( $front_page );
-					$important_pages[]   = $front_page_obj;
-					$suppress_page_ids[] = $front_page_obj->ID;
+					if ( $front_page_obj instanceof WP_Post ) {
+						$important_pages[]   = $front_page_obj;
+						$suppress_page_ids[] = $front_page_obj->ID;
+					}
 				} else {
 					// Add "Home" link. Treat as a page, but switch to custom on add.
 					$items[] = array(
@@ -176,8 +178,10 @@ final class WP_Customize_Nav_Menus {
 				$posts_page = 'page' === get_option( 'show_on_front' ) ? (int) get_option( 'page_for_posts' ) : 0;
 				if ( ! empty( $posts_page ) ) {
 					$posts_page_obj      = get_post( $posts_page );
-					$important_pages[]   = $posts_page_obj;
-					$suppress_page_ids[] = $posts_page_obj->ID;
+					if ( $posts_page_obj instanceof WP_Post ) {
+						$important_pages[]   = $posts_page_obj;
+						$suppress_page_ids[] = $posts_page_obj->ID;
+					}
 				}
 
 				// Insert Privacy Policy Page.
@@ -208,6 +212,9 @@ final class WP_Customize_Nav_Menus {
 			if ( 0 === $page && $this->manager->get_setting( 'nav_menus_created_posts' ) ) {
 				foreach ( $this->manager->get_setting( 'nav_menus_created_posts' )->value() as $post_id ) {
 					$auto_draft_post = get_post( $post_id );
+					if ( ! $auto_draft_post instanceof WP_Post ) {
+						continue;
+					}
 					if ( $post_type->name === $auto_draft_post->post_type ) {
 						$posts[] = $auto_draft_post;
 					}
@@ -518,6 +525,7 @@ final class WP_Customize_Nav_Menus {
 				'locationsDescription'   => $locations_description,
 				'menuNameLabel'          => __( 'Menu Name' ),
 				'newMenuNameDescription' => __( 'If your theme has multiple menus, giving them clear names will help you manage them.' ),
+				'addToMenu'              => __( 'Add to menu:' ),
 				'itemAdded'              => __( 'Menu item added' ),
 				'itemDeleted'            => __( 'Menu item deleted' ),
 				'menuAdded'              => __( 'Menu created' ),
@@ -541,6 +549,11 @@ final class WP_Customize_Nav_Menus {
 				'reorderModeOff'         => __( 'Reorder mode closed' ),
 				'reorderLabelOn'         => esc_attr__( 'Reorder menu items' ),
 				'reorderLabelOff'        => esc_attr__( 'Close reorder mode' ),
+				'menuSearchNonce'        => wp_create_nonce( 'customize-menus' ),
+				'nonceFailed'            => __( 'Nonce check failed. Please refresh the page.' ),
+				'serverRejection'        => __( 'The server rejected the request.' ),
+				'unexpectedResponse'     => __( 'Unexpected server response: ' ),
+				'failedSettingsSave'     => __( 'Failed to save advanced menu settings:' ),
 			),
 			'settingTransport'         => 'postMessage',
 			'phpIntMax'                => PHP_INT_MAX,
@@ -1113,16 +1126,16 @@ final class WP_Customize_Nav_Menus {
 						</p>
 						<span class="spinner"></span>
 						<div class="search-icon" aria-hidden="true"></div>
+						<button type="button" class="clear-results">
+							<span class="screen-reader-text">
+								<?php
+								/* translators: Hidden accessibility text. */
+								esc_html_e( 'Clear Results' );
+								?>
+							</span>
+						</button>
 					</div>
-					<button type="button" class="clear-results">
-						<span class="screen-reader-text">
-							<?php
-							/* translators: Hidden accessibility text. */
-							esc_html_e( 'Clear Results' );
-							?>
-						</span>
-					</button>
-					<ul class="accordion-section-content available-menu-items-list" data-type="search"></ul>
+					<ul id="menu-items-search-list" class="accordion-section-content available-menu-items-list" data-type="search"></ul>
 				</li>
 
 				<?php
@@ -1407,6 +1420,9 @@ final class WP_Customize_Nav_Menus {
 				continue;
 			}
 			$post = get_post( $post_id );
+			if ( ! $post instanceof WP_Post ) {
+				continue;
+			}
 			if ( 'auto-draft' !== $post->post_status && 'draft' !== $post->post_status ) {
 				continue;
 			}
