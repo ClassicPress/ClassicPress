@@ -740,9 +740,8 @@ div.customize-section-description p:last-child {
 
 .customize-section-title h3,
 h3.customize-section-title {
-	padding: 10px 10px 12px 14px;
+	padding: 10px 10px 10px 14px;
 	margin: 0;
-	line-height: 21px;
 	color: #50575e;
 }
 
@@ -767,10 +766,9 @@ h3.customize-section-title {
 	height: 45px;
 	padding: 0 2px 0 0;
 	background: #f0f0f1;
+	border: 0;
 	border-top: 4px solid #f0f0f1;
 	border-right: 1px solid #dcdcde;
-	border-bottom: 1px solid #dcdcde;
-	border-left: none;
 	color: #3c434a;
 	text-align: left;
 	cursor: pointer;
@@ -797,10 +795,7 @@ h3.customize-section-title {
 	box-shadow: none;
 	cursor: pointer;
 	text-decoration: none;
-}
-
-.customize-section-back {
-	height: 74px;
+	box-sizing: content-box;
 }
 
 .ios .customize-panel-back {
@@ -2715,11 +2710,6 @@ body.adding-widget .add-new-widget:before,
 		display: block;
 	}
 
-	#available-widgets .customize-section-back,
-	#available-menu-items .customize-section-back {
-		height: 69px;
-	}
-
 	#available-widgets .customize-section-back:before,
 	#available-menu-items .customize-section-back:before {
 		left: 0;
@@ -2729,9 +2719,9 @@ body.adding-widget .add-new-widget:before,
 	#available-menu-items .customize-section-title h3 {
 		font-size: 20px;
 		font-weight: 200;
-		padding: 9px 10px 12px 14px;
+		padding: 10px 10px 10px 14px;
 		margin: 0;
-		line-height: 24px;
+		line-height: 26px;
 		color: #50575e;
 		display: block;
 		overflow: hidden;
@@ -2772,7 +2762,7 @@ body.adding-widget .add-new-widget:before,
 		font-size: 14px;
 		padding: 0 12px 4px;
 		margin: 0;
-		height: 45px;
+		height: 49px;
 		background: #f0f0f1;
 		border: 0;
 		border-right: 1px solid #dcdcde;
