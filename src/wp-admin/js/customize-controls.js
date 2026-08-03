@@ -1438,23 +1438,30 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				li.querySelector( '.container' ).append( imageElement.cloneNode() );
 
 				// Find the matching entry from the localized data
-				headerData = Object.values( _wpCustomizeHeader.defaults ).find(
+				headerData = Object.values( _wpCustomizeHeader.uploads || {} ).find(
 					h => h.url === selectedItem.dataset.customizeUrl
 				);
+
+				if ( ! headerData ) {
+					headerData = Object.values( _wpCustomizeHeader.defaults || {} ).find(
+						h => h.url === selectedItem.dataset.customizeUrl
+					);
+				}
+
 				if ( ! headerData ) {
 					return;
 				}
 
-				_updatedControlsWatcher.header_image = selectedItem.dataset.customizeUrl;
+				_updatedControlsWatcher.header_image = headerData.url;
 				_updatedControlsWatcher[ settingId ] = {
-					attachment_id: 0,
+					attachment_id: headerData.attachment_id || 0,
 					url:           headerData.url,
 					thumbnail_url: headerData.thumbnail_url || headerData.url,
 					width:         headerData.width  || _wpCustomizeHeader.data.width,
 					height:        headerData.height || _wpCustomizeHeader.data.height
 				};
 
-				forcePreviewRefresh( 'header_image', selectedItem.dataset.customizeUrl );
+				forcePreviewRefresh( 'header_image', headerData.url );
 				document.getElementById( 'sub-accordion-section-header_image' ).querySelector( 'a' ).focus();
 			} else {
 				parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
