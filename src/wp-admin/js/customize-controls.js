@@ -239,7 +239,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		_updatedControlsWatcher.background_position_x = x;
 		_updatedControlsWatcher.background_position_y = y;
-		_updatedControlsWatcher.background_preset = 'custom';
 		activatePublishButton();
 	}
 
@@ -252,7 +251,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			_updatedControlsWatcher[ settingId ] = input.checked ? input.value : '';
 		}
 
-		_updatedControlsWatcher.background_preset = 'custom';
 		activatePublishButton();
 	}
 
