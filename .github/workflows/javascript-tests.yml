@@ -18,8 +18,8 @@ jobs:
   # - Checks out the repository.
   # - Installs NodeJS.
   # - Sets up caching for NPM.
-  # - Logs debug information.
   # - Installs NPM dependencies using install-changed to hash the `package.json` file.
+  # - Logs debug information.
   # - Run the ClassicPress QUnit tests.
   test-js:
     name: QUnit Tests
@@ -52,6 +52,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
+      - name: Install dependencies
+        run: npx install-changed --install-command="npm ci"
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: true
+
       - name: Show debug information
         run: |
           set +e
@@ -64,15 +69,10 @@ jobs:
           php --version
           phpunit --version
           composer --version
-          grunt --version
+          npm run grunt -- --version
           mysql --version
 
-      - name: Install dependencies
-        run: npx install-changed --install-command="npm ci"
-        env:
-          PUPPETEER_SKIP_DOWNLOAD: true
-
       - name: Run QUnit tests
-        run: grunt qunit:compiled
+        run: npm run grunt qunit:compiled
         env:
           PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome-stable
