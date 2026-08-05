@@ -438,7 +438,7 @@ wp_print_scripts();
 				<div id="customize-notifications-area" class="customize-control-notifications-container">
 					<ul></ul>
 				</div>
-				<div class="wp-full-overlay-sidebar-content" tabindex="-1">
+				<div class="wp-full-overlay-sidebar-content">
 					<div id="customize-info" class="accordion-section customize-info">
 						<div class="accordion-section-title">
 							<h2 class="preview-notice">
@@ -476,7 +476,7 @@ wp_print_scripts();
 									class="accordion-section control-panel-themes"
 									aria-owns="sub-accordion-section-themes"
 								>
-									<h3 class="accordion-section-title" tabindex="0">
+									<h3 class="accordion-section-title">
 										<span class="customize-action">
 											<?php
 											if ( $wp_customize->get_stylesheet() === cp_get_current_active_stylesheet() ) {
@@ -507,7 +507,7 @@ wp_print_scripts();
 									class="accordion-section control-section control-section-outer"
 									aria-owns="sub-accordion-section-publish_settings"
 								>
-									<h3 class="accordion-section-title" tabindex="0">
+									<h3 class="accordion-section-title">
 										<?php esc_html_e( 'Publish Settings' ); ?>
 										<span class="screen-reader-text">
 											<?php esc_html_e( 'Press return or enter to open this section' ); ?>

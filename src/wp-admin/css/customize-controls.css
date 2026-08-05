@@ -1761,6 +1761,15 @@ input[type="range"].hue-slider::-moz-range-track {
 	font-weight: 400;
 }
 
+#customize-theme-controls .control-panel-themes .accordion-section-title .change-theme:hover,
+#customize-theme-controls .control-panel-themes .accordion-section-title .change-theme:focus {
+	box-shadow:
+		0 0 0 1px #4f94d4,
+		0 0 2px 1px rgba(79, 148, 212, 0.8);
+		/* Only visible in Windows High Contrast mode */
+		outline: 1px solid transparent;
+}
+
 #customize-notifications-area .notification-message button.switch-to-editor {
 	display: block;
 	margin-top: 6px;
