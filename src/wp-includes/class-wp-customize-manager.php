@@ -5305,7 +5305,6 @@ final class WP_Customize_Manager {
 					'fill'    => __( 'Fill Screen' ),
 					'fit'     => __( 'Fit to Screen' ),
 					'repeat'  => _x( 'Repeat', 'Repeat Image' ),
-					'custom'  => _x( 'Custom', 'Custom Preset' ),
 				),
 			)
 		);

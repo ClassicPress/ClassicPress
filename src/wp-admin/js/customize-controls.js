@@ -239,7 +239,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		_updatedControlsWatcher.background_position_x = x;
 		_updatedControlsWatcher.background_position_y = y;
-		_updatedControlsWatcher.background_preset = 'custom';
 		activatePublishButton();
 	}
 
@@ -252,7 +251,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			_updatedControlsWatcher[ settingId ] = input.checked ? input.value : '';
 		}
 
-		_updatedControlsWatcher.background_preset = 'custom';
 		activatePublishButton();
 	}
 
@@ -260,18 +258,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		switch ( preset ) {
 			case 'fill':
 				_updatedControlsWatcher.background_repeat = 'no-repeat';
-				_updatedControlsWatcher.background_position_x = 'center';
-				_updatedControlsWatcher.background_position_y = 'center';
+				_updatedControlsWatcher.background_position_x = 'left';
+				_updatedControlsWatcher.background_position_y = 'top';
 				_updatedControlsWatcher.background_size = 'cover';
-				_updatedControlsWatcher.background_attachment = 'scroll';
+				_updatedControlsWatcher.background_attachment = 'fixed';
 				break;
 
 			case 'fit':
 				_updatedControlsWatcher.background_repeat = 'no-repeat';
-				_updatedControlsWatcher.background_position_x = 'center';
-				_updatedControlsWatcher.background_position_y = 'center';
+				_updatedControlsWatcher.background_position_x = 'left';
+				_updatedControlsWatcher.background_position_y = 'top';
 				_updatedControlsWatcher.background_size = 'contain';
-				_updatedControlsWatcher.background_attachment = 'scroll';
+				_updatedControlsWatcher.background_attachment = 'fixed';
 				break;
 
 			case 'repeat':
@@ -282,8 +280,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				_updatedControlsWatcher.background_attachment = 'scroll';
 				break;
 
-			case 'custom':
 			default:
+				_updatedControlsWatcher.background_repeat = 'repeat';
+				_updatedControlsWatcher.background_position_x = 'left';
+				_updatedControlsWatcher.background_position_y = 'top';
+				_updatedControlsWatcher.background_size = 'auto';
+				_updatedControlsWatcher.background_attachment = 'scroll';
 				break;
 		}
 	}
