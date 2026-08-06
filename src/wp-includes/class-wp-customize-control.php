@@ -674,12 +674,12 @@ class WP_Customize_Control {
 							<button type="button" class="button add-content" data-add="<?php esc_html_e( 'Add' ); ?>" data-saving="<?php esc_html_e( 'Saving ...' ); ?>">
 								<?php esc_html_e( 'Add' ); ?>
 							</button>
-							<span id="create-input-<?php echo esc_attr( $this->id ); ?>-error"
-								class="create-item-error error-message" style="display: none;"
-							>
-								<?php esc_html_e( 'Please enter a page title' ); ?>
-							</span>
 						</div>
+						<span id="create-input-<?php echo esc_attr( $this->id ); ?>-error"
+							class="create-item-error error-message" style="display: none;"
+						>
+							<?php esc_html_e( 'Please enter a page title' ); ?>
+						</span>
 					</details>
 				<?php endif; ?>
 				<?php
