@@ -206,7 +206,7 @@ uasort(
 		$b_inst = $b_obj ? (int) $b_obj->instance_number : PHP_INT_MAX;
 
 		return $a_inst <=> $b_inst;
-	 }
+	}
 );
 
 // Sort sections within each panel by priority
@@ -240,7 +240,7 @@ uasort(
 		$b_inst = $b_obj ? (int) $b_obj->instance_number : PHP_INT_MAX;
 
 		return $a_inst <=> $b_inst;
-	 }
+	}
 );
 
 /**
