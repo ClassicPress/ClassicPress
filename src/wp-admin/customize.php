@@ -167,46 +167,46 @@ foreach ( $sections as $section ) {
 
 // Sort top-level items by priority, then by instance_number
 uasort(
-    $top_items,
-    static function ( $a, $b ) use ( $sections_by_id, $panels ) {
-        $ap = isset( $a['priority'] ) ? (int) $a['priority'] : 10;
-        $bp = isset( $b['priority'] ) ? (int) $b['priority'] : 10;
-        
-        if ( $ap !== $bp ) {
-            return $ap <=> $bp;
-        }
-        
-        // Tiebreaker: instance_number (lower = registered earlier = native)
-        $a_obj = null;
-        $b_obj = null;
-        
-        if ( 'panel' === $a['type'] ) {
-            foreach ( $panels as $panel ) {
-                if ( $panel->id === $a['id'] ) {
-                    $a_obj = $panel;
-                    break;
-                }
-            }
-        } elseif ( 'section' === $a['type'] && isset( $sections_by_id[ $a['id'] ] ) ) {
-            $a_obj = $sections_by_id[ $a['id'] ];
-        }
-        
-        if ( 'panel' === $b['type'] ) {
-            foreach ( $panels as $panel ) {
-                if ( $panel->id === $b['id'] ) {
-                    $b_obj = $panel;
-                    break;
-                }
-            }
-        } elseif ( 'section' === $b['type'] && isset( $sections_by_id[ $b['id'] ] ) ) {
-            $b_obj = $sections_by_id[ $b['id'] ];
-        }
-        
-        $a_inst = $a_obj ? (int) $a_obj->instance_number : PHP_INT_MAX;
-        $b_inst = $b_obj ? (int) $b_obj->instance_number : PHP_INT_MAX;
-        
-        return $a_inst <=> $b_inst;
-    }
+	$top_items,
+	 static function ( $a, $b ) use ( $sections_by_id, $panels ) {
+	 	 $ap = isset( $a['priority'] ) ? (int) $a['priority'] : 10;
+	 	 $bp = isset( $b['priority'] ) ? (int) $b['priority'] : 10;
+
+	 	 if ( $ap !== $bp ) {
+	 	 	 return $ap <=> $bp;
+	 	 }
+
+	 	 // Tiebreaker: instance_number (lower = registered earlier = native)
+	 	 $a_obj = null;
+	 	 $b_obj = null;
+
+	 	 if ( 'panel' === $a['type'] ) {
+	 	 	 foreach ( $panels as $panel ) {
+	 	 	 	 if ( $panel->id === $a['id'] ) {
+	 	 	 	 	 $a_obj = $panel;
+	 	 	 	 	 break;
+	 	 	 	 }
+	 	 	 }
+	 	 } elseif ( 'section' === $a['type'] && isset( $sections_by_id[ $a['id'] ] ) ) {
+	 	 	 $a_obj = $sections_by_id[ $a['id'] ];
+	 	 }
+
+	 	 if ( 'panel' === $b['type'] ) {
+	 	 	 foreach ( $panels as $panel ) {
+	 	 	 	 if ( $panel->id === $b['id'] ) {
+	 	 	 	 	 $b_obj = $panel;
+	 	 	 	 	 break;
+	 	 	 	 }
+	 	 	 }
+	 	 } elseif ( 'section' === $b['type'] && isset( $sections_by_id[ $b['id'] ] ) ) {
+	 	 	 $b_obj = $sections_by_id[ $b['id'] ];
+	 	 }
+
+	 	 $a_inst = $a_obj ? (int) $a_obj->instance_number : PHP_INT_MAX;
+	 	 $b_inst = $b_obj ? (int) $b_obj->instance_number : PHP_INT_MAX;
+
+	 	 return $a_inst <=> $b_inst;
+	 }
 );
 
 // Sort sections within each panel by priority
@@ -223,24 +223,24 @@ foreach ( $sections_by_panel as $panel_id => $panel_sections ) {
 
 // Sort middle sections by priority, then by instance_number
 uasort(
-    $middle_sections,
-    static function ( $a, $b ) use ( $sections_by_id ) {
-        $ap = isset( $a['priority'] ) ? (int) $a['priority'] : 10;
-        $bp = isset( $b['priority'] ) ? (int) $b['priority'] : 10;
-        
-        if ( $ap !== $bp ) {
-            return $ap <=> $bp;
-        }
-        
-        // Tiebreaker: instance_number
-        $a_obj = $sections_by_id[ $a['id'] ] ?? null;
-        $b_obj = $sections_by_id[ $b['id'] ] ?? null;
-        
-        $a_inst = $a_obj ? (int) $a_obj->instance_number : PHP_INT_MAX;
-        $b_inst = $b_obj ? (int) $b_obj->instance_number : PHP_INT_MAX;
-        
-        return $a_inst <=> $b_inst;
-    }
+	 $middle_sections,
+	 static function ( $a, $b ) use ( $sections_by_id ) {
+	 	 $ap = isset( $a['priority'] ) ? (int) $a['priority'] : 10;
+	 	 $bp = isset( $b['priority'] ) ? (int) $b['priority'] : 10;
+
+	 	 if ( $ap !== $bp ) {
+	 	 	 return $ap <=> $bp;
+	 	 }
+
+	 	 // Tiebreaker: instance_number
+	 	 $a_obj = $sections_by_id[ $a['id'] ] ?? null;
+	 	 $b_obj = $sections_by_id[ $b['id'] ] ?? null;
+
+	 	 $a_inst = $a_obj ? (int) $a_obj->instance_number : PHP_INT_MAX;
+	 	 $b_inst = $b_obj ? (int) $b_obj->instance_number : PHP_INT_MAX;
+
+	 	 return $a_inst <=> $b_inst;
+	 }
 );
 
 /**
