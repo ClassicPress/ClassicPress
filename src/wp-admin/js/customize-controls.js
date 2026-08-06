@@ -19,6 +19,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		customizerControls = [...document.getElementById( 'customize-theme-controls' ).children],
 		{ FilePond } = window, // import FilePond
 		cropContext = false,
+		newPageId = null,
 		dialog = document.getElementById( 'widget-modal' ),
 		installedThemesHTML = document.querySelector( '.themes')?.innerHTML,
 		reducedMotionMediaQuery = window.matchMedia( '(prefers-reduced-motion: reduce)' ),
@@ -955,6 +956,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		.then( function( response ) {
 			if ( response.success ) {
 				input.value = '';
+				newPageId = response.data.post_id;
+				activatePublishButton();
 			} else {
 				error.textContent = response.data && response.data.message ? response.data.message : _wpCustomizeControlsL10n.pageCreationFailure;
 				error.style.display = '';
@@ -1939,8 +1942,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 			if ( newMenuItemIDs.length > 0 ) {
+				postsToPublish = postsToPublish.concat( newMenuItemIDs );
+			}
+
+			if ( newPageId ) {
+				postsToPublish.push( newPageId );
+			}
+
+			if ( newMenuItemIDs.length > 0 ) {
 				submittedChanges.nav_menus_created_posts = {
-					value: newMenuItemIDs
+					value: postsToPublish
 				};
 			}
 		} );
