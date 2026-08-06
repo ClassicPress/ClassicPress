@@ -926,7 +926,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var data = new URLSearchParams(),
 			input = button.previousElementSibling,
 			settingId = button.closest( 'li' ).dataset.settingId,
-			errorItem = button.parentElement.querySelector( '.create-item-error' );
+			errorItem = button.parentElement.nextElementSibling;
 
 		if ( ! input.value.trim() ) {
 			errorItem.style.display = '';
