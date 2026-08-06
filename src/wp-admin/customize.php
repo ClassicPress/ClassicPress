@@ -223,12 +223,12 @@ foreach ( $sections_by_panel as $panel_id => $panel_sections ) {
 
 // Sort middle sections by priority, then by instance_number
 uasort(
-	 $middle_sections,
-	 static function ( $a, $b ) use ( $sections_by_id ) {
-	 	 $ap = isset( $a['priority'] ) ? (int) $a['priority'] : 10;
-	 	 $bp = isset( $b['priority'] ) ? (int) $b['priority'] : 10;
+	$middle_sections,
+	static function ( $a, $b ) use ( $sections_by_id ) {
+		$ap = isset( $a['priority'] ) ? (int) $a['priority'] : 10;
+		$bp = isset( $b['priority'] ) ? (int) $b['priority'] : 10;
 
-	 	 if ( $ap !== $bp ) {
+		if ( $ap !== $bp ) {
 	 	 	 return $ap <=> $bp;
 	 	 }
 
