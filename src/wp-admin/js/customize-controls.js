@@ -304,13 +304,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		input.addEventListener( 'input', function() {
-			if ( input.name === 'background-position' || input.type === 'checkbox' ) {
+			if ( input.name === 'background-position' || input.type === 'checkbox' || input.classList.contains( 'create-item-input' ) ) {
 				return;
 			}
 			inputChanged( input, settingId );
 		} );
 
 		input.addEventListener( 'change', function() {
+			if ( input.classList.contains( 'create-item-input' ) ) {
+				return;
+			}
+
 			if ( input.name === 'background-position' ) {
 				backgroundPositionChanged( input );
 				return;
