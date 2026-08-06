@@ -915,6 +915,62 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Add a page from with the Homepage Settings panel
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function createPage( button ) {
+		var data = new URLSearchParams(),
+			input = button.previousElementSibling,
+			error = button.parentElement.querySelector( '.create-item-error' );
+
+		if ( ! input.value.trim() ) {
+			error.style.display = '';
+			input.focus();
+			return;
+		}
+
+		error.style.display = 'none';
+		button.disabled = true;
+		button.textContent = button.dataset.saving;
+
+		data.append( 'action', 'customize-nav-menus-insert-auto-draft' );
+		data.append( 'wp_customize', 'on' );
+		data.append( 'customize-menus-nonce', _wpCustomizeControlsL10n.menusNonce );
+		data.append( 'params[post_type]', 'page' );
+		data.append( 'params[post_title]', button.previousElementSibling.value.trim() );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			credentials: 'same-origin',
+			body: data
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( response ) {
+			if ( response.success ) {
+				input.value = '';
+			} else {
+				error.textContent = response.data && response.data.message ? response.data.message : _wpCustomizeControlsL10n.pageCreationFailure;
+				error.style.display = '';
+			}
+		} )
+		.catch( function( error ) {
+			error.textContent = _wpCustomizeControlsL10n.pageCreationFailure;
+			error.style.display = '';
+		} )
+		.finally( function() {
+			button.disabled = false;
+			button.textContent = button.dataset.add;
+		} );
+	}
+
+	/**
 	 * Select and deselect media items for adding to widget.
 	 *
 	 * @abstract
@@ -2346,6 +2402,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Copy preview link
 		} else if ( e.target.classList?.contains( 'customize-copy-preview-link' ) ) {
 			copyToClipboard( 'preview', e.target );
+
+		// Add a page from within the Homepage settings panel
+		} else if ( e.target.classList?.contains( 'add-content' ) ) {
+			createPage( e.target );
 
 		// Add a widget
 		} else if ( e.target.classList?.contains( 'add-new-widget' ) ) {
