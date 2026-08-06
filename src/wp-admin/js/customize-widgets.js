@@ -493,8 +493,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( document.getElementById( 'widgets-left' ).style.display === 'block' ) {
 				document.getElementById( 'widgets-left' ).style.display = 'none';
 				document.body.classList.remove( 'adding-widget' );
-				document.querySelector( '.add-new-widget' ).setAttribute( 'aria-expanded', 'false' );
-				document.querySelector( '.add-new-widget' ).focus();
+				document.querySelectorAll( '.add-new-widget' ).forEach( function( btn ) {
+					btn.setAttribute( 'aria-expanded', 'false' );
+					if ( isVisible( btn ) ) {
+						btn.focus();
+					}
+				} );
 			}
 		}
 	} );
