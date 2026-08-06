@@ -20,7 +20,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		{ FilePond } = window, // import FilePond
 		cropContext = false,
 		newFrontPageId = null,
+		newFrontPageTitle = null,
 		newPostsPageId = null,
+		newPostsPageTitle = null,
 		dialog = document.getElementById( 'widget-modal' ),
 		installedThemesHTML = document.querySelector( '.themes')?.innerHTML,
 		reducedMotionMediaQuery = window.matchMedia( '(prefers-reduced-motion: reduce)' ),
@@ -956,16 +958,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( response ) {
-			if ( response.success ) {console.log(response);
+			if ( response.success ) {
+				let newPageId = response.data.post_id;
+
 				input.value = '';
 				_updatedControlsWatcher[ settingId ] = newPageId;
 				_updatedControlsWatcher['show_on_front'] = 'page';
 
 				if ( settingId = 'page_on_front' ) {
-					newFrontPageId = response.data.post_id;
+					newFrontPageId = newPageId;
 					newFrontPageTitle = response.data.title;
 				} else if ( settingId = 'page_for_posts' ) {
-					newPostsPageId = response.data.post_id;
+					newPostsPageId = newPageId;
 					newPostsPageTitle = response.data.title;
 				}
 
@@ -983,6 +987,25 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			button.disabled = false;
 			button.textContent = button.dataset.add;
 		} );
+	}
+
+	/**
+	 * Add the new page as an option to the select dropdown in the Homepage Settings panel
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function addPageAsOption( select, value, title ) {
+		let existing = select.querySelector( 'option[value="' + value + '"]' ),
+			option = document.createElement( 'option' );
+
+		if ( existing ) {
+			return;
+		}
+
+		option.value = value;
+		option.textContent = title;
+		select.appendChild( option );
 	}
 
 	/**
@@ -2052,6 +2075,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				previewLink.removeAttribute( 'inert' );
 				previewLink.style.color = '#2271b1';
 				document.querySelector( '.customize-copy-preview-link' ).removeAttribute( 'disabled' );
+			}
+
+			if ( newFrontPageId ) {
+				frontSelect = document.querySelector( 'select[data-customize-setting-link="page_on_front"]' );
+				addPageAsOption( frontSelect, newFrontPageId, newFrontPageTitle );
+				frontSelect.value = newFrontPageId;
+				newFrontPageId = null;
+				newFrontPageTitle = null;
+			}
+
+			if ( newPostsPageId ) {
+				postsSelect = document.querySelector( 'select[data-customize-setting-link="page_for_posts"]' );
+				addPageAsOption( postsSelect, newPostsPageId, newPostsPageTitle )
+				postsSelect.value = newPostsPageId;
+				newPostsPageId = null;
+				newPostsPageTitle = null;
 			}
 
 			// Reset the buffer object and proxy
