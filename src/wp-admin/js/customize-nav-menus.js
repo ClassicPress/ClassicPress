@@ -1111,8 +1111,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( availableMenuItems.style.display === 'block' ) {
 				availableMenuItems.style.display = 'none';
 				document.body.classList.remove( 'adding-menu-items' );
-				document.querySelector( '.add-new-menu-item' ).setAttribute( 'aria-expanded', 'false' );
-				document.querySelector( '.add-new-menu-item' ).focus();
+				document.querySelectorAll( '.add-new-menu-item' ).forEach( function( btn ) {
+					btn.setAttribute( 'aria-expanded', 'false' );
+					if ( isVisible( btn ) ) {
+						btn.focus();
+					}
+				} );
 			}
 		}
 	} );
