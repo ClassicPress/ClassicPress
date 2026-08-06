@@ -925,15 +925,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function createPage( button ) {
 		var data = new URLSearchParams(),
 			input = button.previousElementSibling,
-			error = button.parentElement.querySelector( '.create-item-error' );
+			settingId = button.closest( 'li' ).dataset.settingId,
+			errorItem = button.parentElement.querySelector( '.create-item-error' );
 
 		if ( ! input.value.trim() ) {
-			error.style.display = '';
+			errorItem.style.display = '';
 			input.focus();
 			return;
 		}
 
-		error.style.display = 'none';
+		errorItem.style.display = 'none';
 		button.disabled = true;
 		button.textContent = button.dataset.saving;
 
@@ -955,23 +956,28 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( response ) {
-				let newPageId = response.data.post_id;
-
+			if ( response.success ) {console.log(response);
 				input.value = '';
 				_updatedControlsWatcher[ settingId ] = newPageId;
 				_updatedControlsWatcher['show_on_front'] = 'page';
 
 				if ( settingId = 'page_on_front' ) {
-					newFrontPageId = newPageId;
+					newFrontPageId = response.data.post_id;
+					newFrontPageTitle = response.data.title;
 				} else if ( settingId = 'page_for_posts' ) {
-					newPostsPageId = newPageId;
+					newPostsPageId = response.data.post_id;
+					newPostsPageTitle = response.data.title;
 				}
 
 				activatePublishButton();
+			} else {
+				errorItem.textContent = response.data && response.data.message ? response.data.message : _wpCustomizeControlsL10n.pageCreationFailure;
+				errorItem.style.display = '';
+			}
 		} )
 		.catch( function( error ) {
-			error.textContent = _wpCustomizeControlsL10n.pageCreationFailure;
-			error.style.display = '';
+			errorItem.textContent = _wpCustomizeControlsL10n.pageCreationFailure;
+			errorItem.style.display = '';
 		} )
 		.finally( function() {
 			button.disabled = false;
