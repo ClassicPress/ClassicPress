@@ -650,34 +650,36 @@ class WP_Customize_Control {
 				echo $dropdown;
 				?>
 				<?php if ( $this->allow_addition && current_user_can( 'publish_pages' ) && current_user_can( 'edit_theme_options' ) ) : // Currently tied to menus functionality. ?>
-					<button type="button" class="button-link add-new-toggle">
-						<?php
-						/* translators: %s: Add New Page label. */
-						printf( __( '+ %s' ), get_post_type_object( 'page' )->labels->add_new_item );
-						?>
-					</button>
-					<div class="new-content-item">
-						<label for="create-input-<?php echo esc_attr( $this->id ); ?>">
-							<span class="screen-reader-text">
-								<?php
-								/* translators: Hidden accessibility text. */
-								esc_html_e( 'New page title' );
-								?>
-							</span>
-						</label>
-						<input type="text" id="create-input-<?php echo esc_attr( $this->id ); ?>"
-							class="create-item-input form-required"
-							placeholder="<?php esc_attr_e( 'New page title...' ); ?>"
+					<details class="add-new-toggle-details">
+						<summary class="button-link add-new-toggle">
+							<?php
+							/* translators: %s: Add New Page label. */
+							printf( __( '+ %s' ), get_post_type_object( 'page' )->labels->add_new_item );
+							?>
+						</summary>
+						<div class="new-content-item">
+							<label for="create-input-<?php echo esc_attr( $this->id ); ?>">
+								<span class="screen-reader-text">
+									<?php
+									/* translators: Hidden accessibility text. */
+									esc_html_e( 'New page title' );
+									?>
+								</span>
+							</label>
+							<input type="text" id="create-input-<?php echo esc_attr( $this->id ); ?>"
+								class="create-item-input form-required"
+								placeholder="<?php esc_attr_e( 'New page title...' ); ?>"
+							>
+							<button type="button" class="button add-content">
+								<?php esc_html_e( 'Add' ); ?>
+							</button>
+						</div>
+						<span id="create-input-<?php echo esc_attr( $this->id ); ?>-error"
+							class="create-item-error error-message" style="display: none;"
 						>
-						<button type="button" class="button add-content">
-							<?php esc_html_e( 'Add' ); ?>
-						</button>
-					</div>
-					<span id="create-input-<?php echo esc_attr( $this->id ); ?>-error"
-						class="create-item-error error-message" style="display: none;"
-					>
-						<?php esc_html_e( 'Please enter a page title' ); ?>
-					</span>
+							<?php esc_html_e( 'Please enter a page title' ); ?>
+						</span>
+					</details>
 				<?php endif; ?>
 				<?php
 				break;
