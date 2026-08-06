@@ -71,6 +71,7 @@ jobs:
   # - Checks out the repository.
   # - Installs NodeJS.
   # - Sets up caching for NPM.
+  # - Installs NPM dependencies using install-changed to hash the `package.json` file.
   # - Sets up PHP.
   # - Installs Composer dependencies (use cache if possible).
   # - Instal PHPUnit.
@@ -113,6 +114,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
+      - name: Install dependencies
+        run: npx install-changed --install-command="npm ci"
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: true
+
       - name: Set up PHP
         uses: "shivammathur/setup-php@v2"
         with:
@@ -148,7 +154,7 @@ jobs:
           php --version
           phpunit --version
           composer --version
-          grunt --version
+          npm run grunt -- --version
           mysql --version
 
       - name: Bypass Cloudflare for GitHub Action
@@ -160,9 +166,6 @@ jobs:
           cf_api_token: ${{ secrets.CF_API_TOKEN }}
           disable_bot_fight_mode: 'true'
 
-      - name: Install dependencies
-        run: npx install-changed --install-command="npm ci"
-
       - name: Create ClassicPress config file for tests
         run: |
           cp wp-tests-config-sample.php wp-tests-config.php
@@ -171,4 +174,4 @@ jobs:
           sed -i 's/yourpasswordhere/root/g' wp-tests-config.php
 
       - name: Run pre-commit checks
-        run: grunt precommit:verify
+        run: npm run grunt precommit:verify

@@ -239,7 +239,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		_updatedControlsWatcher.background_position_x = x;
 		_updatedControlsWatcher.background_position_y = y;
-		_updatedControlsWatcher.background_preset = 'custom';
 		activatePublishButton();
 	}
 
@@ -252,7 +251,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			_updatedControlsWatcher[ settingId ] = input.checked ? input.value : '';
 		}
 
-		_updatedControlsWatcher.background_preset = 'custom';
 		activatePublishButton();
 	}
 
@@ -260,18 +258,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		switch ( preset ) {
 			case 'fill':
 				_updatedControlsWatcher.background_repeat = 'no-repeat';
-				_updatedControlsWatcher.background_position_x = 'center';
-				_updatedControlsWatcher.background_position_y = 'center';
+				_updatedControlsWatcher.background_position_x = 'left';
+				_updatedControlsWatcher.background_position_y = 'top';
 				_updatedControlsWatcher.background_size = 'cover';
-				_updatedControlsWatcher.background_attachment = 'scroll';
+				_updatedControlsWatcher.background_attachment = 'fixed';
 				break;
 
 			case 'fit':
 				_updatedControlsWatcher.background_repeat = 'no-repeat';
-				_updatedControlsWatcher.background_position_x = 'center';
-				_updatedControlsWatcher.background_position_y = 'center';
+				_updatedControlsWatcher.background_position_x = 'left';
+				_updatedControlsWatcher.background_position_y = 'top';
 				_updatedControlsWatcher.background_size = 'contain';
-				_updatedControlsWatcher.background_attachment = 'scroll';
+				_updatedControlsWatcher.background_attachment = 'fixed';
 				break;
 
 			case 'repeat':
@@ -282,8 +280,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				_updatedControlsWatcher.background_attachment = 'scroll';
 				break;
 
-			case 'custom':
 			default:
+				_updatedControlsWatcher.background_repeat = 'repeat';
+				_updatedControlsWatcher.background_position_x = 'left';
+				_updatedControlsWatcher.background_position_y = 'top';
+				_updatedControlsWatcher.background_size = 'auto';
+				_updatedControlsWatcher.background_attachment = 'scroll';
 				break;
 		}
 	}
@@ -1438,23 +1440,30 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				li.querySelector( '.container' ).append( imageElement.cloneNode() );
 
 				// Find the matching entry from the localized data
-				headerData = Object.values( _wpCustomizeHeader.defaults ).find(
+				headerData = Object.values( _wpCustomizeHeader.uploads || {} ).find(
 					h => h.url === selectedItem.dataset.customizeUrl
 				);
+
+				if ( ! headerData ) {
+					headerData = Object.values( _wpCustomizeHeader.defaults || {} ).find(
+						h => h.url === selectedItem.dataset.customizeUrl
+					);
+				}
+
 				if ( ! headerData ) {
 					return;
 				}
 
-				_updatedControlsWatcher.header_image = selectedItem.dataset.customizeUrl;
+				_updatedControlsWatcher.header_image = headerData.url;
 				_updatedControlsWatcher[ settingId ] = {
-					attachment_id: 0,
+					attachment_id: headerData.attachment_id || 0,
 					url:           headerData.url,
 					thumbnail_url: headerData.thumbnail_url || headerData.url,
 					width:         headerData.width  || _wpCustomizeHeader.data.width,
 					height:        headerData.height || _wpCustomizeHeader.data.height
 				};
 
-				forcePreviewRefresh( 'header_image', selectedItem.dataset.customizeUrl );
+				forcePreviewRefresh( 'header_image', headerData.url );
 				document.getElementById( 'sub-accordion-section-header_image' ).querySelector( 'a' ).focus();
 			} else {
 				parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
