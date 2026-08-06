@@ -19,7 +19,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		customizerControls = [...document.getElementById( 'customize-theme-controls' ).children],
 		{ FilePond } = window, // import FilePond
 		cropContext = false,
-		newPageId = null,
+		newFrontPageId = null,
+		newPostsPageId = null,
 		dialog = document.getElementById( 'widget-modal' ),
 		installedThemesHTML = document.querySelector( '.themes')?.innerHTML,
 		reducedMotionMediaQuery = window.matchMedia( '(prefers-reduced-motion: reduce)' ),
@@ -954,14 +955,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( response ) {
-			if ( response.success ) {
+				let newPageId = response.data.post_id;
+
 				input.value = '';
-				newPageId = response.data.post_id;
+				_updatedControlsWatcher[ settingId ] = newPageId;
+				_updatedControlsWatcher['show_on_front'] = 'page';
+
+				if ( settingId = 'page_on_front' ) {
+					newFrontPageId = newPageId;
+				} else if ( settingId = 'page_for_posts' ) {
+					newPostsPageId = newPageId;
+				}
+
 				activatePublishButton();
-			} else {
-				error.textContent = response.data && response.data.message ? response.data.message : _wpCustomizeControlsL10n.pageCreationFailure;
-				error.style.display = '';
-			}
 		} )
 		.catch( function( error ) {
 			error.textContent = _wpCustomizeControlsL10n.pageCreationFailure;
@@ -1940,21 +1946,25 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					value: item || ''
 				};
 			}
-
-			if ( newMenuItemIDs.length > 0 ) {
-				postsToPublish = postsToPublish.concat( newMenuItemIDs );
-			}
-
-			if ( newPageId ) {
-				postsToPublish.push( newPageId );
-			}
-
-			if ( newMenuItemIDs.length > 0 ) {
-				submittedChanges.nav_menus_created_posts = {
-					value: postsToPublish
-				};
-			}
 		} );
+
+		if ( newMenuItemIDs.length > 0 ) {
+			postsToPublish = postsToPublish.concat( newMenuItemIDs );
+		}
+
+		if ( newFrontPageId ) {
+			postsToPublish.push( newFrontPageId );
+		}
+
+		if ( newPostsPageId ) {
+			postsToPublish.push( newPostsPageId );
+		}
+
+		if ( postsToPublish.length > 0 ) {
+			submittedChanges.nav_menus_created_posts = {
+				value: postsToPublish
+			};
+		}
 
 		// Add advanced menu-item changes directly to the outgoing
 		// publish payload without touching updatedControls.
