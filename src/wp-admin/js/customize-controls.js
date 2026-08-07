@@ -963,7 +963,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				input.value = '';
 				_updatedControlsWatcher[ settingId ] = newPageId;
-				_updatedControlsWatcher['show_on_front'] = 'page';
+				_updatedControlsWatcher.show_on_front = 'page';
 
 				if ( settingId = 'page_on_front' ) {
 					newFrontPageId = newPageId;
@@ -979,7 +979,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				errorItem.style.display = '';
 			}
 		} )
-		.catch( function( error ) {
+		.catch( function() {
 			errorItem.textContent = _wpCustomizeControlsL10n.pageCreationFailure;
 			errorItem.style.display = '';
 		} )
@@ -1788,13 +1788,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	form.addEventListener( 'submit', async function( e ) {
-		let result, newResult, timeStr,
+		let result, newResult, timeStr, frontSelect, postsSelect,
 			entries = Object.entries( updatedControls ),
 			navMenuChanges = {},
 			submittedChanges = {},
 			navMenuNegatives = [], // an array because we need it to be iterable
 			navMenuLocations = [],
 			navMenuItems = [],
+			postsToPublish = [],
 			formData = new FormData(),
 			updateData = new FormData(),
 			previewLink = document.getElementById( 'preview-link' ),
@@ -2087,7 +2088,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			if ( newPostsPageId ) {
 				postsSelect = document.querySelector( 'select[data-customize-setting-link="page_for_posts"]' );
-				addPageAsOption( postsSelect, newPostsPageId, newPostsPageTitle )
+				addPageAsOption( postsSelect, newPostsPageId, newPostsPageTitle );
 				postsSelect.value = newPostsPageId;
 				newPostsPageId = null;
 				newPostsPageTitle = null;
