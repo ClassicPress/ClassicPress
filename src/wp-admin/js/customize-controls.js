@@ -19,10 +19,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		customizerControls = [...document.getElementById( 'customize-theme-controls' ).children],
 		{ FilePond } = window, // import FilePond
 		cropContext = false,
-		newFrontPageId = null,
-		newFrontPageTitle = null,
-		newPostsPageId = null,
-		newPostsPageTitle = null,
+		newFrontPageIds = [],
+		newPostsPageIds = [],
 		dialog = document.getElementById( 'widget-modal' ),
 		installedThemesHTML = document.querySelector( '.themes')?.innerHTML,
 		reducedMotionMediaQuery = window.matchMedia( '(prefers-reduced-motion: reduce)' ),
@@ -959,18 +957,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} )
 		.then( function( response ) {
 			if ( response.success ) {
-				let newPageId = response.data.post_id;
-
 				input.value = '';
-				_updatedControlsWatcher[ settingId ] = newPageId;
 				_updatedControlsWatcher.show_on_front = 'page';
 
 				if ( settingId = 'page_on_front' ) {
-					newFrontPageId = newPageId;
-					newFrontPageTitle = response.data.title;
+					newFrontPageIds.push( { id: response.data.post_id, title: response.data.title } );
+					_updatedControlsWatcher.page_on_front = response.data.post_id;
 				} else if ( settingId = 'page_for_posts' ) {
-					newPostsPageId = newPageId;
-					newPostsPageTitle = response.data.title;
+					newPostsPageIds.push( { id: response.data.post_id, title: response.data.title } );
+					_updatedControlsWatcher.page_for_posts = response.data.post_id;
 				}
 
 				activatePublishButton();
@@ -1982,13 +1977,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			postsToPublish = postsToPublish.concat( newMenuItemIDs );
 		}
 
-		if ( newFrontPageId ) {
-			postsToPublish.push( newFrontPageId );
-		}
+		newFrontPageIds.forEach( function( item ) {
+			postsToPublish.push( item.id );
+		} );
 
-		if ( newPostsPageId ) {
-			postsToPublish.push( newPostsPageId );
-		}
+		newPostsPageIds.forEach( function( item ) {
+			postsToPublish.push( item.id );
+		} );
 
 		if ( postsToPublish.length > 0 ) {
 			submittedChanges.nav_menus_created_posts = {
@@ -2078,20 +2073,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.querySelector( '.customize-copy-preview-link' ).removeAttribute( 'disabled' );
 			}
 
-			if ( newFrontPageId ) {
+			if ( newFrontPageIds.length > 0 ) {
 				frontSelect = document.querySelector( 'select[data-customize-setting-link="page_on_front"]' );
-				addPageAsOption( frontSelect, newFrontPageId, newFrontPageTitle );
-				frontSelect.value = newFrontPageId;
-				newFrontPageId = null;
-				newFrontPageTitle = null;
+				newFrontPageIds.forEach( function( item ) {
+					addPageAsOption( frontSelect, item.id, item.title );
+					frontSelect.value = item.id;
+				} );
+				newFrontPageIds = [];
 			}
 
-			if ( newPostsPageId ) {
+			if ( newPostsPageIds.length > 0 ) {
 				postsSelect = document.querySelector( 'select[data-customize-setting-link="page_for_posts"]' );
-				addPageAsOption( postsSelect, newPostsPageId, newPostsPageTitle );
-				postsSelect.value = newPostsPageId;
-				newPostsPageId = null;
-				newPostsPageTitle = null;
+				newPostsPageIds.forEach( function( item ) {
+					addPageAsOption( postsSelect, item.id, item.title );
+					postsSelect.value = item.id;
+				} );
+				newPostsPageIds = [];
 			}
 
 			// Reset the buffer object and proxy
