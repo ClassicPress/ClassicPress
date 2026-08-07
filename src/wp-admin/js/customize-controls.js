@@ -243,6 +243,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	function backgroundCheckboxChanged( input, settingId ) {
+		if ( settingId === 'header_textcolor' ) {
+			/*
+			 * The Display Site Title and Tagline control is not a Boolean
+			 * setting. It uses header_textcolor:
+			 *
+			 * checked   = the selected/default colour, for example "000"
+			 * unchecked = "blank"
+			 */
+			_updatedControlsWatcher[ settingId ] = input.checked ? input.value : 'blank';
+			activatePublishButton();
+			return;
+		}
+
 		if ( settingId === 'background_repeat' ) {
 			_updatedControlsWatcher.background_repeat = input.checked ? 'repeat' : 'no-repeat';
 		} else if ( settingId === 'background_attachment' ) {
