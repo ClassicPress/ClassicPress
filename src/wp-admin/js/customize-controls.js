@@ -960,10 +960,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				input.value = '';
 				_updatedControlsWatcher.show_on_front = 'page';
 
-				if ( settingId = 'page_on_front' ) {
+				if ( settingId === 'page_on_front' ) {
 					newFrontPageIds.push( { id: response.data.post_id, title: response.data.title } );
 					_updatedControlsWatcher.page_on_front = response.data.post_id;
-				} else if ( settingId = 'page_for_posts' ) {
+				} else if ( settingId === 'page_for_posts' ) {
 					newPostsPageIds.push( { id: response.data.post_id, title: response.data.title } );
 					_updatedControlsWatcher.page_for_posts = response.data.post_id;
 				}
