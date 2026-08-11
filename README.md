@@ -23,22 +23,9 @@ This project exists thanks to all the people who contribute and who have contrib
 
 Would you like to help? [Here is how you can start ›](https://github.com/ClassicPress/ClassicPress/blob/develop/.github/CONTRIBUTING.md)
 
-
-## Sponsors
-Corporate sponsors that believe in ClassicPress. [Become a sponsor ›](https://opencollective.com/classicpress)
-All donations are tax-deductible in the United States.
-
-[![Brinkhost IT](https://www.classicpress.net/wp-content/uploads/2022/07/brinkman-it-sponsor.png)](https://www.brinkhost.nl)
-[![Tukutoi](https://www.classicpress.net/wp-content/uploads/2022/07/tukutoi-sponsor.png)](https://www.tukutoi.com)
-
 ## Financial Contributors
 
 Support the ClassicPress project by making a [donation ›](https://opencollective.com/classicpress)
 All donations are tax-deductible in the United States.
 
-### Individuals
-
 [![Financial contributors](https://opencollective.com/classicpress/individuals.svg?width=890)](https://opencollective.com/classicpress)
-
-### Organizations
-[![Financial contributors](https://opencollective.com/classicpress/organizations.svg?width=890)](https://opencollective.com/classicpress)
