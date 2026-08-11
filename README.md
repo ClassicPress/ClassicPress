@@ -26,6 +26,8 @@ Would you like to help? [Here is how you can start ›](https://github.com/Class
 ## Financial Contributors
 
 Support the ClassicPress project by making a [donation ›](https://opencollective.com/classicpress)
+
 All donations are tax-deductible in the United States.
 
+### ClassicPress is all of us
 [![Financial contributors](https://opencollective.com/classicpress/individuals.svg?width=890)](https://opencollective.com/classicpress)
