@@ -3657,11 +3657,7 @@ function send_confirmation_on_profile_email( $user_id = 0 ) {
 		$errors = new WP_Error();
 	}
 
-<<<<<<< HEAD
-	if ( $current_user->ID != $_POST['user_id'] ) {
-=======
 	if ( 0 === $current_user->ID || $current_user->ID !== (int) $user_id ) {
->>>>>>> 5bf5b160c6 (Users: Ensure a proper email address is used before sending email confirmations.)
 		return false;
 	}
 
