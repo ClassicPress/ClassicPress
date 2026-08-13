@@ -3356,13 +3356,8 @@ class WP_Query {
 			/** This filter is documented in wp-includes/query.php */
 			$cjoin = apply_filters_ref_array( 'comment_feed_join', array( '', &$this ) );
 
-<<<<<<< HEAD
-			/** This filter is documented in wp-includes/query.php */
-			$cwhere = apply_filters_ref_array( 'comment_feed_where', array( "WHERE comment_post_ID = '{$this->posts[0]->ID}' AND comment_approved = '1'", &$this ) );
-=======
 			/** This filter is documented in wp-includes/class-wp-query.php */
 			$cwhere = apply_filters_ref_array( 'comment_feed_where', array( "WHERE comment_post_ID = '{$this->posts[0]->ID}' AND comment_approved = '1' AND {$wpdb->comments}.comment_type != 'note'", &$this ) );
->>>>>>> 9cabe8333d (Comments: Exclude notes from comment feed queries.)
 
 			/** This filter is documented in wp-includes/query.php */
 			$cgroupby = apply_filters_ref_array( 'comment_feed_groupby', array( '', &$this ) );
