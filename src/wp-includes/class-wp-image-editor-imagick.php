@@ -342,7 +342,7 @@ class WP_Image_Editor_Imagick extends WP_Image_Editor {
 				 */
 				$this->stream_file_data = $is_stream ? $file_data : null;
 				$this->image_given_name = $given_filename;
-				$pdf_loaded = $this->pdf_load_source();
+				$pdf_loaded             = $this->pdf_load_source();
 				$this->stream_file_data = null;
 				$this->image_given_name = null;
 
@@ -1230,20 +1230,7 @@ class WP_Image_Editor_Imagick extends WP_Image_Editor {
 		}
 
 		foreach ( array( 'true', 'false' ) as $use_cropbox ) {
-		try {
-<<<<<<< HEAD
-			// When generating thumbnails from cropped PDF pages, Imagemagick uses the uncropped
-			// area (resulting in unnecessary whitespace) unless the following option is set.
-			$this->image->setOption( 'pdf:use-cropbox', true );
-
-			// Reading image after Imagick instantiation because `setResolution`
-			// only applies correctly before the image is read.
-			$this->image->readImage( $filename );
-		} catch ( Exception $e ) {
-			// Attempt to run `gs` without the `use-cropbox` option. See #48853.
-			$this->image->setOption( 'pdf:use-cropbox', false );
-
-=======
+			try {
 				/**
 				 * When generating thumbnails from cropped PDF pages, Imagemagick uses the uncropped
 				 * area (resulting in unnecessary whitespace) unless the following option is set.
@@ -1262,11 +1249,10 @@ class WP_Image_Editor_Imagick extends WP_Image_Editor {
 					$this->image->setFilename( 'PDF:unknown.pdf[0]' );
 					$this->image->readImageBlob( $this->stream_file_data, $this->image_given_name );
 				} else {
->>>>>>> 7daaa5004e (Media: Prevent loading images into Imagick which might be PostScript.)
-			$this->image->readImage( $filename );
-		}
+					$this->image->readImage( $filename );
+				}
 
-		return true;
+				return true;
 			} catch ( Exception $e ) {
 				continue;
 			}
