@@ -990,7 +990,7 @@ if ( 'none' === $active_signup ) {
 			break;
 		case 'gimmeanotherblog':
 			if ( 'all' === $active_signup || 'blog' === $active_signup ) {
-			validate_another_blog_signup();
+				validate_another_blog_signup();
 			} else {
 				_e( 'Site registration has been disabled.' );
 			}
