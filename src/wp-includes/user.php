@@ -3638,18 +3638,30 @@ function _wp_get_current_user() {
  *
  * @since 3.0.0
  * @since 4.9.0 This function was moved from wp-admin/includes/ms.php so it's no longer Multisite specific.
+ * @since 7.0.3 Added the `$user_id` parameter, which is sent with the `personal_options_update` action.
+ *
+ * @param int $user_id Optional. The ID of the user whose email is being changed. Defaults to `$_POST['user_id']` if set, otherwise 0.
  *
  * @global WP_Error $errors WP_Error object.
  */
-function send_confirmation_on_profile_email() {
+function send_confirmation_on_profile_email( $user_id = 0 ) {
 	global $errors;
+
+	// Maintain backward compatibility for those relying on a check based on $_POST['user_id'].
+	if ( ! $user_id && isset( $_POST['user_id'] ) ) {
+		$user_id = absint( $_POST['user_id'] );
+	}
 
 	$current_user = wp_get_current_user();
 	if ( ! is_object( $errors ) ) {
 		$errors = new WP_Error();
 	}
 
+<<<<<<< HEAD
 	if ( $current_user->ID != $_POST['user_id'] ) {
+=======
+	if ( 0 === $current_user->ID || $current_user->ID !== (int) $user_id ) {
+>>>>>>> 5bf5b160c6 (Users: Ensure a proper email address is used before sending email confirmations.)
 		return false;
 	}
 
@@ -3663,6 +3675,7 @@ function send_confirmation_on_profile_email() {
 				)
 			);
 
+			$_POST['email'] = addslashes( $current_user->user_email );
 			return;
 		}
 
@@ -3676,6 +3689,7 @@ function send_confirmation_on_profile_email() {
 			);
 			delete_user_meta( $current_user->ID, '_new_email' );
 
+			$_POST['email'] = addslashes( $current_user->user_email );
 			return;
 		}
 
