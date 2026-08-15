@@ -10,7 +10,7 @@
  * Rewritten in vanilla JavaScript
  */
 
- /* global ajaxurl, wpAjax, showNotice, validateForm */
+ /* global ajaxurl, showNotice, console */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 
@@ -181,7 +181,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		.then( function( result ) {
 			const xml = new DOMParser().parseFromString( result, 'text/xml' ),
 				rows = xml.querySelector( 'response taxonomy supplemental parents' ).textContent,
-				term = xml.querySelector( 'response term supplemental' );
+				term = xml.querySelector( 'response term supplemental' ),
 				termId = term.querySelector( 'term_id' ).textContent,
 				termName = term.querySelector( 'name' ).textContent,
 				parent = form.querySelector( 'select#parent' ).value;
