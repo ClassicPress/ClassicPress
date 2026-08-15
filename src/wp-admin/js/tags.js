@@ -5,13 +5,16 @@
  * For adding tags it makes a request to the server to add the tag.
  *
  * @output wp-admin/js/tags.js
+ *
+ * @since CP-2.8.0
+ * Rewritten in vanilla JavaScript
  */
 
  /* global ajaxurl, wpAjax, showNotice, validateForm */
 
-jQuery( function($) {
+document.addEventListener( 'DOMContentLoaded', function() {
 
-	var addingTerm = false;
+	let addingTerm = false;
 
 	/**
 	 * Adds an event handler to the delete term link on the term overview page.
@@ -22,53 +25,89 @@ jQuery( function($) {
 	 *
 	 * @return {boolean} Always returns false to cancel the default event handling.
 	 */
-	$( '#the-list' ).on( 'click', '.delete-tag', function() {
-		var t = $(this), tr = t.parents('tr'), r = true, data;
-
-		if ( 'undefined' != showNotice )
-			r = showNotice.warn();
-
-		if ( r ) {
-			data = t.attr('href').replace(/[^?]*\?/, '').replace(/action=delete/, 'action=delete-tag');
-
-			/**
-			 * Makes a request to the server to delete the term that corresponds to the
-			 * delete term button.
-			 *
-			 * @param {string} r The response from the server.
-			 *
-			 * @return {void}
-			 */
-			$.post(ajaxurl, data, function(r){
-				if ( '1' == r ) {
-					$('#ajax-response').empty();
-					tr.fadeOut('normal', function(){ tr.remove(); });
-
-					/**
-					 * Removes the term from the parent box and the tag cloud.
-					 *
-					 * `data.match(/tag_ID=(\d+)/)[1]` matches the term ID from the data variable.
-					 * This term ID is then used to select the relevant HTML elements:
-					 * The parent box and the tag cloud.
-					 */
-					$('select#parent option[value="' + data.match(/tag_ID=(\d+)/)[1] + '"]').remove();
-					$('a.tag-link-' + data.match(/tag_ID=(\d+)/)[1]).remove();
-
-				} else if ( '-1' == r ) {
-					$('#ajax-response').empty().append('<div class="error"><p>' + wp.i18n.__( 'Sorry, you are not allowed to do that.' ) + '</p></div>');
-					tr.children().css('backgroundColor', '');
-
-				} else {
-					$('#ajax-response').empty().append('<div class="error"><p>' + wp.i18n.__( 'Something went wrong.' ) + '</p></div>');
-					tr.children().css('backgroundColor', '');
-				}
-			});
-
-			tr.children().css('backgroundColor', '#f33');
+	document.addEventListener( 'click', function( e ) {
+		if ( ! e.target.classList?.contains( 'delete-tag' ) ) {
+			return;
 		}
 
+		let t = e.target, tr = t.closest( 'tr' ), r = true, data;
+
+		if ( 'undefined' != showNotice ) {
+			r = showNotice.warn();
+		}
+
+		e.preventDefault();
+
+		if ( ! r ) {
+			return false;
+		}
+
+		data = t.getAttribute( 'href' ).replace( /[^?]*\?/, '' ).replace( /action=delete/, 'action=delete-tag' );
+
+		/**
+		 * Makes a request to the server to delete the term that corresponds to the
+		 * delete term button.
+		 *
+		 * @param {string} r The response from the server.
+		 *
+		 * @return {void}
+		 */
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: new URLSearchParams( data ),
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			return response.text();
+		} )
+		.then( function( result ) {
+			let ajaxResponse = document.getElementById( 'ajax-response' ),
+				tagId = data.match( /tag_ID=(\d+)/ )[1],
+				error = document.createElement( 'div' ),
+				paragraph = document.createElement( 'p' );
+
+			if ( '1' == result ) {
+				ajaxResponse?.replaceChildren();
+				tr.remove();
+
+				/**
+				 * Removes the term from the parent box and the tag cloud.
+				 *
+				 * `data.match(/tag_ID=(\d+)/)[1]` matches the term ID from the data variable.
+				 * This term ID is then used to select the relevant HTML elements:
+				 * The parent box and the tag cloud.
+				 */
+				document.querySelector( 'select#parent option[value="' + tagId + '"]' )?.remove();
+				document.querySelector( 'a.tag-link-' + tagId )?.remove();
+
+			} else if ( '-1' == r ) {
+				error.className = 'error';
+				paragraph.textContent = wp.i18n.__( 'Sorry, you are not allowed to do that.' );
+
+				error.append( paragraph );
+				ajaxResponse.append( error );
+				tr.querySelectorAll( ':scope > *' ).forEach( function( element ) {
+					element.style.backgroundColor = '';
+				} );
+
+			} else {
+				error.className = 'error';
+				paragraph.textContent = wp.i18n.__( 'Something went wrong.' );
+
+				error.append( paragraph );
+				ajaxResponse.append( error );
+				tr.querySelectorAll( ':scope > *' ).forEach( function( element ) {
+					element.style.backgroundColor = '';
+				} );
+			}
+		} );
+
+		tr.querySelectorAll( ':scope > *' ).forEach( function( element ) {
+			element.style.backgroundColor = '#f33';
+		} );
+
 		return false;
-	});
+	} );
 
 	/**
 	 * Adds a deletion confirmation when removing a tag.
@@ -77,17 +116,22 @@ jQuery( function($) {
 	 *
 	 * @return {void}
 	 */
-	$( '#edittag' ).on( 'click', '.delete', function( e ) {
+	document.getElementById( 'edittag' )?.addEventListener( 'click', function( e ) {
 		if ( 'undefined' === typeof showNotice ) {
 			return true;
 		}
 
+		if ( ! e.target.closest( '.delete' ) ) {
+			return true;
+		}
+
 		// Confirms the deletion, a negative response means the deletion must not be executed.
-		var response = showNotice.warn();
+		let response = showNotice.warn();
+
 		if ( ! response ) {
 			e.preventDefault();
 		}
-	});
+	} );
 
 	/**
 	 * Adds an event handler to the form submit on the term overview page.
@@ -98,70 +142,73 @@ jQuery( function($) {
 	 *
 	 * @return {boolean} Always returns false to cancel the default event handling.
 	 */
-	$('#submit').on( 'click', function(){
-		var form = $(this).parents('form');
+	document.getElementById( 'submit' )?.addEventListener( 'click', function( e ) {
+		const form = e.target.closest( 'form' ),
+			data = new FormData( form ),
+			spinner = form.querySelector( '.submit .spinner' );
 
+		e.preventDefault();
+
+		// Avoid duplicate requests.
 		if ( addingTerm ) {
-			// If we're adding a term, noop the button to avoid duplicate requests.
-			return false;
+			return;
 		}
 
+		data.append( 'action', 'add-tag' );
+		data.append( '_wpnonce_add-tag', document.getElementById( '_wpnonce_add-tag' ).value );
+
 		addingTerm = true;
-		form.find( '.submit .spinner' ).addClass( 'is-active' );
+		spinner.classList.add( 'is-active' );
 
 		/**
-		 * Does a request to the server to add a new term to the database
+		 * Sends a request to the server to add a new term to the database
 		 *
-		 * @param {string} r The response from the server.
+		 * @param {string} result The response from the server.
 		 *
 		 * @return {void}
 		 */
-		$.post(ajaxurl, $('#addtag').serialize(), function(r){
-			var res, parent, term, indent, i;
-
-			addingTerm = false;
-			form.find( '.submit .spinner' ).removeClass( 'is-active' );
-
-			$('#ajax-response').empty();
-			res = wpAjax.parseAjaxResponse( r, 'ajax-response' );
-
-			if ( res.errors && res.responses[0].errors[0].code === 'empty_term_name' ) {
-				validateForm( form );
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.text(); // no errors
 			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			const xml = new DOMParser().parseFromString( result, 'text/xml' ),
+				rows = xml.querySelector( 'response taxonomy supplemental parents' ).textContent,
+				term = xml.querySelector( 'response term supplemental' );
+				termId = term.querySelector( 'term_id' ).textContent,
+				termName = term.querySelector( 'name' ).textContent,
+				parent = form.querySelector( 'select#parent' ).value;
 
-			if ( ! res || res.errors ) {
-				return;
-			}
-
-			parent = form.find( 'select#parent' ).val();
-
-			// If the parent exists on this page, insert it below. Else insert it at the top of the list.
-			if ( parent > 0 && $('#tag-' + parent ).length > 0 ) {
-				// As the parent exists, insert the version with - - - prefixed.
-				$( '.tags #tag-' + parent ).after( res.responses[0].supplemental.noparents );
+			if ( parent > 0 && document.getElementById( 'tag-' + parent ) ) {
+				document.querySelector( '.tags #tag-' + parent ).insertAdjacentHTML( 'afterend', rows );
 			} else {
-				// As the parent is not visible, insert the version with Parent - Child - ThisTerm.
-				$( '.tags' ).prepend( res.responses[0].supplemental.parents );
+				document.querySelector( '.tags' ).insertAdjacentHTML( 'afterbegin', rows );
 			}
 
-			$('.tags .no-items').remove();
+			document.querySelectorAll( '.tags .no-items' ).forEach( function( element ) {
+				element.remove();
+			} );
 
-			if ( form.find('select#parent') ) {
-				// Parents field exists, Add new term to the list.
-				term = res.responses[1].supplemental;
-
-				// Create an indent for the Parent field.
-				indent = '';
-				for ( i = 0; i < res.responses[1].position; i++ )
-					indent += '&nbsp;&nbsp;&nbsp;';
-
-				form.find( 'select#parent option:selected' ).after( '<option value="' + term.term_id + '">' + indent + term.name + '</option>' );
-			}
-
-			$('input:not([type="checkbox"]):not([type="radio"]):not([type="button"]):not([type="submit"]):not([type="reset"]):visible, textarea:visible', form).val('');
-		});
+			form.querySelector( 'select#parent option:checked' ).after(
+				new Option( termName, termId )
+			);
+		} )
+		.catch( function( error ) {
+			console.error( error );
+		} )
+		.finally( function() {
+			addingTerm = false;
+			spinner.classList.remove( 'is-active' );
+		} );
 
 		return false;
-	});
+	} );
 
-});
+} );
