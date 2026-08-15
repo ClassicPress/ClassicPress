@@ -72,10 +72,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				/**
 				 * Removes the term from the parent box and the tag cloud.
-				 *
-				 * `data.match(/tag_ID=(\d+)/)[1]` matches the term ID from the data variable.
-				 * This term ID is then used to select the relevant HTML elements:
-				 * The parent box and the tag cloud.
 				 */
 				document.querySelector( 'select#parent option[value="' + tagId + '"]' )?.remove();
 				document.querySelector( 'a.tag-link-' + tagId )?.remove();
