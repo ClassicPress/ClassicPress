@@ -10,7 +10,7 @@
  * Rewritten in vanilla JavaScript
  */
 
- /* global ajaxurl, showNotice, wpAjax */
+ /* global ajaxurl, showNotice, wpAjax, adminTagsStrings */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 
@@ -198,10 +198,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				parent = form.querySelector( 'select#parent' )?.value ?? '0',
 				rowHtml = ( parent > 0 ) ? noparents : rows,
 				parentSelect = form.querySelector( 'select#parent' ),
-				parentOption = parentSelect?.querySelector( 'option[value="' + parent + '"]' );
+				parentOption = parentSelect?.querySelector( 'option[value="' + parent + '"]' ),
 				theList = document.getElementById( 'the-list' );
 
-			let newOption, parentText, match, indent = '';
+			let parentText, match, indent = '';
 
 			// Display success message from server.
 			if ( noticeText && ajaxResponse ) {
