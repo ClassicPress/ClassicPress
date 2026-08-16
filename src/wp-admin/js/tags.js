@@ -77,7 +77,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.querySelector( 'a.tag-link-' + tagId )?.remove();
 
 			} else if ( '-1' == r ) {
-				error.className = 'notice notice-error';
+				error.className = 'notice notice-error is-dismissible';
 				paragraph.textContent = wpAjax.noPerm;
 
 				error.append( paragraph );
@@ -87,7 +87,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 
 			} else {
-				error.className = 'notice notice-error';
+				error.className = 'notice notice-error is-dismissible';
 				paragraph.textContent = wpAjax.broken;
 
 				error.append( paragraph );
@@ -188,7 +188,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Display success message from server.
 			if ( noticeText && ajaxResponse ) {
 				p.textContent = noticeText;
-				div.className = 'notice notice-success';
+				div.className = 'notice notice-success is-dismissible';
 				div.append( p );
 				ajaxResponse.replaceChildren( div );
 			}
@@ -213,7 +213,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		.catch( function() {
 			if ( ajaxResponse ) {
 				p.textContent = wpAjax.broken;
-				div.className = 'notice notice-error';
+				div.className = 'notice notice-error is-dismissible';
 				div.append( p );
 				ajaxResponse.replaceChildren( div );
 			}
