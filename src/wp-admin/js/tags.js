@@ -10,7 +10,7 @@
  * Rewritten in vanilla JavaScript
  */
 
- /* global ajaxurl, showNotice, console, wpAjax */
+ /* global ajaxurl, showNotice, wpAjax */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 
@@ -78,7 +78,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			} else if ( '-1' == r ) {
 				error.className = 'notice notice-error';
-				paragraph.textContent = wpAjax.noPerm;;
+				paragraph.textContent = wpAjax.noPerm;
 
 				error.append( paragraph );
 				ajaxResponse.append( error );
@@ -183,8 +183,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				noparents = xml.querySelector( 'response taxonomy supplemental noparents' )?.textContent ?? '',
 				noticeText = xml.querySelector( 'response taxonomy supplemental notice' )?.textContent ?? '',
 				term = xml.querySelector( 'response term supplemental' ),
-				termId = term.querySelector( 'term_id' ).textContent,
-				termName = term.querySelector( 'name' ).textContent,
 				theList = document.getElementById( 'the-list' );
 
 			// Display success message from server.
@@ -212,7 +210,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Clear the form fields.
 			form.reset();
 		} )
-		.catch( function( error ) {
+		.catch( function() {
 			if ( ajaxResponse ) {
 				p.textContent = wpAjax.broken;
 				div.className = 'notice notice-error';
