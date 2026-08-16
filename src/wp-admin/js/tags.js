@@ -63,12 +63,25 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		.then( function( result ) {
 			const ajaxResponse = document.getElementById( 'ajax-response' ),
 				tagId = data.match( /tag_ID=(\d+)/ )[1],
-				error = document.createElement( 'div' ),
-				paragraph = document.createElement( 'p' );
+				div = document.createElement( 'div' ),
+				p = document.createElement( 'p' ),
+				button = document.createElement( 'button' ),
+				span = document.createElement( 'span' );
+
+			button.type = 'button';
+			button.className = 'notice-dismiss';
+			span.className = 'screen-reader-text';
+			span.textContent = adminTagsStrings.dismiss;
 
 			if ( '1' == result ) {
 				ajaxResponse?.replaceChildren();
 				tr.remove();
+
+				button.append( span );
+				div.className = 'notice notice-success is-dismissible';
+				p.textContent = adminTagsStrings.deleted;
+				div.append( p, button );
+				ajaxResponse.append( div );
 
 				/**
 				 * Removes the term from the parent box and the tag cloud.
@@ -76,30 +89,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.querySelector( 'select#parent option[value="' + tagId + '"]' )?.remove();
 				document.querySelector( 'a.tag-link-' + tagId )?.remove();
 
-			} else if ( '-1' == r ) {
-				error.className = 'notice notice-error is-dismissible';
-				paragraph.textContent = wpAjax.noPerm;
-
-				error.append( paragraph );
-				ajaxResponse.append( error );
-				tr.querySelectorAll( ':scope > *' ).forEach( function( element ) {
-					element.style.backgroundColor = '';
-				} );
-
 			} else {
-				error.className = 'notice notice-error is-dismissible';
-				paragraph.textContent = wpAjax.broken;
+				button.append( span );
+				div.className = 'notice notice-error is-dismissible';
 
-				error.append( paragraph );
-				ajaxResponse.append( error );
-				tr.querySelectorAll( ':scope > *' ).forEach( function( element ) {
-					element.style.backgroundColor = '';
-				} );
+				if ( '-1' == r ) {
+					p.textContent = wpAjax.noPerm;
+				} else {
+					p.textContent = wpAjax.broken;
+				}
+
+				div.append( p, button );
+				ajaxResponse.append( div );
 			}
-		} );
-
-		tr.querySelectorAll( ':scope > *' ).forEach( function( element ) {
-			element.style.backgroundColor = '#f33';
 		} );
 
 		return false;
@@ -144,7 +146,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			spinner = form.querySelector( '.submit .spinner' ),
 			ajaxResponse = document.getElementById( 'ajax-response' ),
 			div = document.createElement( 'div' ),
-			p = document.createElement( 'p' );
+			p = document.createElement( 'p' ),
+			button = document.createElement( 'button' ),
+			span = document.createElement( 'span' );
 
 		e.preventDefault();
 
@@ -158,6 +162,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		addingTerm = true;
 		spinner.classList.add( 'is-active' );
+
+		button.type = 'button';
+		button.className = 'notice-dismiss';
+		span.className = 'screen-reader-text';
+		span.textContent = 'Dismiss this notice.';
+		button.append( span );
 
 		/**
 		 * Sends a request to the server to add a new term to the database
@@ -182,28 +192,73 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				rows = xml.querySelector( 'response taxonomy supplemental parents' ).textContent,
 				noparents = xml.querySelector( 'response taxonomy supplemental noparents' )?.textContent ?? '',
 				noticeText = xml.querySelector( 'response taxonomy supplemental notice' )?.textContent ?? '',
+				term = xml.querySelector( 'response term supplemental' ),
+				termId = term?.querySelector( 'term_id' )?.textContent ?? '',
+				termName = term?.querySelector( 'name' )?.textContent ?? '',
+				parent = form.querySelector( 'select#parent' )?.value ?? '0',
+				rowHtml = ( parent > 0 ) ? noparents : rows,
+				parentSelect = form.querySelector( 'select#parent' ),
+				parentOption = parentSelect?.querySelector( 'option[value="' + parent + '"]' );
 				theList = document.getElementById( 'the-list' );
+
+			let newOption, parentText, match, indent = '';
 
 			// Display success message from server.
 			if ( noticeText && ajaxResponse ) {
 				p.textContent = noticeText;
 				div.className = 'notice notice-success is-dismissible';
-				div.append( p );
+				div.append( p, button );
 				ajaxResponse.replaceChildren( div );
 			}
 			
 			// Insert the new row into the table.
 			if ( theList ) {
-				if ( rows ) {
-					theList.insertAdjacentHTML( 'afterbegin', rows );
-				} else if ( noparents ) {
-					theList.insertAdjacentHTML( 'afterbegin', noparents );
+				// For hierarchical taxonomies with a parent, use 'noparents' (includes indentation).
+				// For flat or no parent, use 'parent'.
+				if ( rowHtml ) {
+					if ( parent > 0 ) {
+						// Insert after the parent row.
+						const parentRow = document.getElementById( 'tag-' + parent );
+						if ( parentRow ) {
+							parentRow.insertAdjacentHTML( 'afterend', rowHtml );
+						} else {
+							// Parent not found, insert at top as fallback.
+							theList.insertAdjacentHTML( 'afterbegin', rowHtml );
+						}
+					} else {
+						// No parent, insert at top.
+						theList.insertAdjacentHTML( 'afterbegin', rowHtml );
+					}
 				}
 
 				// Remove "No items" message if present.
 				theList.querySelectorAll( '.no-items' ).forEach( function( element ) {
 					element.remove();
 				} );
+			}
+
+			// Add to select dropdown list, if there is one.
+			if ( parentSelect && termName && termId ) {
+				if ( parent > 0 ) {
+					if ( parentOption ) {
+						// Count groups of 3 non-breaking spaces at the start.
+						parentText = parentOption.textContent;
+						match = parentText.match( /^(\u00A0{3})+/ );
+						if ( match ) {
+							// Add one more group of 3 spaces to the parent's indentation.
+							indent = match[0] + '\u00A0\u00A0\u00A0';
+						} else {
+							// Parent has no indent, so this is level 2.
+							indent = '\u00A0\u00A0\u00A0';
+						}
+						parentOption.after( new Option( indent + termName, termId ) );
+					} else {
+						// Fallback in case parent not found.
+						form.querySelector( 'select#parent option:checked' ).after( new Option( termName, termId ) );
+					}
+				} else {
+					form.querySelector( 'select#parent option:checked' ).after( new Option( termName, termId ) );
+				}
 			}
 
 			// Clear the form fields.
@@ -213,7 +268,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( ajaxResponse ) {
 				p.textContent = wpAjax.broken;
 				div.className = 'notice notice-error is-dismissible';
-				div.append( p );
+				div.append( p, button );
 				ajaxResponse.replaceChildren( div );
 			}
 		} )
@@ -225,4 +280,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		return false;
 	} );
 
+	// Handle dismissible notice buttons.
+	document.addEventListener( 'click', function( e ) {
+		if ( e.target.closest( '.notice-dismiss' ) ) {
+			const notice = e.target.closest( '.notice' );
+			if ( notice ) {
+				notice.remove();
+			}
+		}
+	} );
 } );
