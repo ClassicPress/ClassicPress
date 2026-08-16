@@ -210,7 +210,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				div.append( p, button );
 				ajaxResponse.replaceChildren( div );
 			}
-			
+
 			// Insert the new row into the table.
 			if ( theList ) {
 				// For hierarchical taxonomies with a parent, use 'noparents' (includes indentation).
