@@ -1204,6 +1204,14 @@ function wp_default_scripts( $scripts ) {
 	if ( is_admin() ) {
 		$scripts->add( 'admin-tags', "/wp-admin/js/tags$suffix.js", array( 'wp-ajax-response' ), false, 1 );
 		$scripts->set_translations( 'admin-tags' );
+		did_action( 'init' ) && $scripts->localize(
+			'admin-tags',
+			'adminTagsStrings',
+			array(
+				'dismiss' => 'Dismiss this notice.',
+				'deleted' => 'Tag successfully deleted.'
+			)
+		);
 
 		$scripts->add( 'admin-comments', "/wp-admin/js/edit-comments$suffix.js", array( 'wp-lists', 'quicktags', 'jquery-query' ), false, 1 );
 		$scripts->set_translations( 'admin-comments' );
