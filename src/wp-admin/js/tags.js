@@ -10,7 +10,7 @@
  * Rewritten in vanilla JavaScript
  */
 
- /* global ajaxurl, showNotice, console */
+ /* global ajaxurl, showNotice, console, wpAjax */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 
@@ -61,7 +61,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			return response.text();
 		} )
 		.then( function( result ) {
-			let ajaxResponse = document.getElementById( 'ajax-response' ),
+			const ajaxResponse = document.getElementById( 'ajax-response' ),
 				tagId = data.match( /tag_ID=(\d+)/ )[1],
 				error = document.createElement( 'div' ),
 				paragraph = document.createElement( 'p' );
@@ -77,8 +77,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.querySelector( 'a.tag-link-' + tagId )?.remove();
 
 			} else if ( '-1' == r ) {
-				error.className = 'error';
-				paragraph.textContent = wp.i18n.__( 'Sorry, you are not allowed to do that.' );
+				error.className = 'notice notice-error';
+				paragraph.textContent = wpAjax.noPerm;;
 
 				error.append( paragraph );
 				ajaxResponse.append( error );
@@ -87,8 +87,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 
 			} else {
-				error.className = 'error';
-				paragraph.textContent = wp.i18n.__( 'Something went wrong.' );
+				error.className = 'notice notice-error';
+				paragraph.textContent = wpAjax.broken;
 
 				error.append( paragraph );
 				ajaxResponse.append( error );
@@ -141,7 +141,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	document.getElementById( 'submit' )?.addEventListener( 'click', function( e ) {
 		const form = e.target.closest( 'form' ),
 			data = new FormData( form ),
-			spinner = form.querySelector( '.submit .spinner' );
+			spinner = form.querySelector( '.submit .spinner' ),
+			ajaxResponse = document.getElementById( 'ajax-response' ),
+			div = document.createElement( 'div' ),
+			p = document.createElement( 'p' );
 
 		e.preventDefault();
 
@@ -177,27 +180,45 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		.then( function( result ) {
 			const xml = new DOMParser().parseFromString( result, 'text/xml' ),
 				rows = xml.querySelector( 'response taxonomy supplemental parents' ).textContent,
+				noparents = xml.querySelector( 'response taxonomy supplemental noparents' )?.textContent ?? '',
+				noticeText = xml.querySelector( 'response taxonomy supplemental notice' )?.textContent ?? '',
 				term = xml.querySelector( 'response term supplemental' ),
 				termId = term.querySelector( 'term_id' ).textContent,
 				termName = term.querySelector( 'name' ).textContent,
-				parent = form.querySelector( 'select#parent' ).value;
+				theList = document.getElementById( 'the-list' );
 
-			if ( parent > 0 && document.getElementById( 'tag-' + parent ) ) {
-				document.querySelector( '.tags #tag-' + parent ).insertAdjacentHTML( 'afterend', rows );
-			} else {
-				document.querySelector( '.tags' ).insertAdjacentHTML( 'afterbegin', rows );
+			// Display success message from server.
+			if ( noticeText && ajaxResponse ) {
+				p.textContent = noticeText;
+				div.className = 'notice notice-success';
+				div.append( p );
+				ajaxResponse.replaceChildren( div );
+			}
+			
+			// Insert the new row into the table.
+			if ( theList ) {
+				if ( rows ) {
+					theList.insertAdjacentHTML( 'afterbegin', rows );
+				} else if ( noparents ) {
+					theList.insertAdjacentHTML( 'afterbegin', noparents );
+				}
+
+				// Remove "No items" message if present.
+				theList.querySelectorAll( '.no-items' ).forEach( function( element ) {
+					element.remove();
+				} );
 			}
 
-			document.querySelectorAll( '.tags .no-items' ).forEach( function( element ) {
-				element.remove();
-			} );
-
-			form.querySelector( 'select#parent option:checked' ).after(
-				new Option( termName, termId )
-			);
+			// Clear the form fields.
+			form.reset();
 		} )
 		.catch( function( error ) {
-			console.error( error );
+			if ( ajaxResponse ) {
+				p.textContent = wpAjax.broken;
+				div.className = 'notice notice-error';
+				div.append( p );
+				ajaxResponse.replaceChildren( div );
+			}
 		} )
 		.finally( function() {
 			addingTerm = false;
