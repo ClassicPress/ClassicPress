@@ -1209,7 +1209,7 @@ function wp_default_scripts( $scripts ) {
 			'adminTagsStrings',
 			array(
 				'dismiss' => 'Dismiss this notice.',
-				'deleted' => 'Tag successfully deleted.'
+				'deleted' => 'Tag successfully deleted.',
 			)
 		);
 
