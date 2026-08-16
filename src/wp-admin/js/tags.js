@@ -182,7 +182,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				rows = xml.querySelector( 'response taxonomy supplemental parents' ).textContent,
 				noparents = xml.querySelector( 'response taxonomy supplemental noparents' )?.textContent ?? '',
 				noticeText = xml.querySelector( 'response taxonomy supplemental notice' )?.textContent ?? '',
-				term = xml.querySelector( 'response term supplemental' ),
 				theList = document.getElementById( 'the-list' );
 
 			// Display success message from server.
