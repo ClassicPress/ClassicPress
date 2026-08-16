@@ -20,7 +20,11 @@
 			susty_wp_posted_on();
 			susty_wp_posted_by();
 			esc_html_e( ' | Category: ', 'the-classicpress-theme' );
-			the_category( ', ' );
+			echo wp_kses_post( get_the_category_list( ', ' ) );
+			if ( has_tag() ) {
+				esc_html_e( ' | Tag: ', 'the-classicpress-theme' );
+				echo wp_kses_post( get_the_tag_list( '', ', ' ) );
+			}
 			?>
 		</p><!-- .entry-meta -->
 
