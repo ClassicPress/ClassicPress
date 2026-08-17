@@ -498,7 +498,16 @@ class Custom_Background {
 			$default_color = ' data-default-color="#' . esc_attr( get_theme_support( 'custom-background', 'default-color' ) ) . '"';
 		}
 		?>
-<input type="text" name="background-color" id="background-color" value="#<?php echo esc_attr( get_background_color() ); ?>"<?php echo $default_color; ?>>
+<input type="text"
+	class="color-picker-hex"
+	name="background-color"
+	id="background-color"
+	maxlength="7"
+	data-coloris
+	placeholder="#<?php echo esc_attr( get_background_color() ); ?>"
+	value="#<?php echo esc_attr( get_background_color() ); ?>"
+	<?php echo $default_color; ?>
+>
 </fieldset></td>
 </tr>
 </tbody>
