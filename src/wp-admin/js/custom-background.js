@@ -145,89 +145,211 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
-	 * Binds the event for opening the WP Media dialog.
+	 * Opens a minimal media selector to choose a background image.
 	 *
-	 * @since 3.5.0
+	 * This is a simplified extraction from media-image-widget.js that:
+	 * - Queries attachments via AJAX
+	 * - Displays them in a simple grid
+	 * - Allows selection of one image
+	 * - Calls the set-background-image AJAX action
+	 *
+	 * @since CP-2.8.0
 	 *
 	 * @return {void}
 	 */
 	function initMediaSelector() {
-		var chooseLink = document.getElementById( 'choose-from-library-link' );
-		if ( ! chooseLink ) {
+		var chooseLink = document.getElementById( 'choose-from-library-link' ),
+			modal = document.getElementById( 'admin-media-modal' ),
+			grid = document.getElementById( 'admin-modal-grid' ),
+			selectButton = document.getElementById( 'admin-select-button' ),
+			closeButton = modal.querySelector( '.admin-modal-close' ),
+			selectedAttachment = null;
+
+		if ( ! chooseLink || ! modal ) {
 			return;
 		}
 
-		chooseLink.addEventListener( 'click', function( event ) {
-			var $el = this;
+		/**
+		 * Loads attachments from the media library.
+		 *
+		 * @return {void}
+		 */
+		function loadAttachments() {
+			var params = new URLSearchParams( {
+				action: 'query-attachments',
+				'query[posts_per_page]': 80,
+				'query[post_mime_type]': 'image',
+				'query[paged]': 1
+			} );
 
-			event.preventDefault();
+			fetch( ajaxurl, {
+				method: 'POST',
+				body: params,
+				credentials: 'same-origin'
+			} )
+			.then( function( response ) {
+				if ( ! response.ok ) {
+					throw new Error( response.status );
+				}
+				return response.json();
+			} )
+			.then( function( result ) {
+				if ( result.success ) {
+					populateGrid( result.data );
+				}
+			} )
+			.catch( function( error ) {
+				console.error( wpAjax.broken + ':', error );
+			} );
+		}
 
-			// If the media frame already exists, reopen it.
-			if ( frame ) {
-				frame.open();
+		/**
+		 * Populates the grid with attachment thumbnails.
+		 *
+		 * @param {Array} attachments Array of attachment objects.
+		 *
+		 * @return {void}
+		 */
+		function populateGrid( attachments ) {
+			grid.innerHTML = '';
+
+			if ( attachments.length === 0 ) {
+				grid.innerHTML = '<p>No images found.</p>';
 				return;
 			}
 
-			// Create the media frame.
-			frame = wp.media.frames.customBackground = wp.media( {
-				// Set the title of the modal.
-				title: $el.getAttribute( 'data-choose' ),
+			attachments.forEach( function( attachment ) {
+				var item = document.createElement( 'li' ),
+					div  = document.createElement( 'div' ),
+					thumb = document.createElement( 'div' ),
+					img = document.createElement( 'img' ),
+					button = document.createElement( 'button' ),
+					spanIcon = document.createElement( 'span' ),
+					spanSR = document.createElement( 'span' );
 
-				// Tell the modal to show only images.
-				library: {
-					type: 'image'
-				},
+				item.className = 'media-item';
+				item.setAttribute( 'data-id', attachment.id );
+				item.setAttribute( 'tabindex', '0' );
+				item.setAttribute( 'role', 'checkbox' );
+				item.setAttribute( 'aria-checked', 'false' );
 
-				// Customize the submit button.
-				button: {
-					// Set the text of the button.
-					text: $el.getAttribute( 'data-update' ),
-					/*
-					 * Tell the button not to close the modal, since we're
-					 * going to refresh the page when the image is selected.
-					 */
-					close: false
-				}
-			} );
+				div.className = 'select-attachment-preview type-image subtype-webp';
+				thumb.className = 'media-thumbnail';
+				img.src = attachment.url;
+				img.alt = attachment.alt;
+				thumb.append( img );
+				div.append(thumb );
+				button.type = 'button';
+				button.className = 'check';
+				button.tabindex = '-1';
+				spanIcon.classname = 'media-modal-icon';
+				spanSR.className = 'screen-reader-text';
+				spanSR.textContent = 'Deselect';
+				button.append( spanIcon, spanSR );
+				item.append( div, button );
 
-			/**
-			 * When an image is selected, run a callback.
-			 *
-			 * @since 3.5.0
-			 *
-			 * @return {void}
-			 */
-			frame.on( 'select', function() {
-
-				// Grab the selected attachment.
-				var attachment = frame.state().get( 'selection' ).first(),
-					nonceField = document.getElementById( '_wpnonce' ),
-					nonceValue = nonceField ? nonceValue : '';
-
-				// Run an Ajax request to set the background image.
-				fetch( ajaxurl, {
-					method: 'POST',
-					body: 'action=set-background-image' +
-						'&attachment_id=' + encodeURIComponent( attachment.id ) +
-						'&_ajax_nonce=' + encodeURIComponent( nonceValue ) +
-						'&size=full'
-				} )
-				.then( function( response ) {
-					if ( response.ok ) {
-						// When the request completes successfully, reload the window.
-						window.location.reload();
-					} else {
-						console.error( wpAjax.broken, response.status );
-					}
-				} )
-				.catch( function( error ) {
-					console.error( error );
+				item.addEventListener( 'click', function() {
+					selectItem( item, attachment );
 				} );
+
+				grid.append( item );
+			} );
+		}
+
+		/**
+		 * Selects or deselects a media item.
+		 *
+		 * @param {HTMLElement} item The grid item element.
+		 * @param {Object} attachment The attachment data.
+		 *
+		 * @return {void}
+		 */
+		function selectItem( item, attachment ) {
+			var items = grid.querySelectorAll( '.media-item' ),
+				selectButton = modal.querySelector( '#admin-select-button' ),
+				isSelected = item.classList.contains( 'selected' );
+
+			// Deselect all items
+			items.forEach( function( i ) {
+				i.classList.remove( 'selected' );
+				i.setAttribute( 'aria-checked', 'false' );
+				i.querySelector( '.check' ).style.display = 'none';
+				document.querySelector( '.admin-modal-right-sidebar-info' ).setAttribute( 'hidden', 'true' );
 			} );
 
-			// Finally, open the modal.
-			frame.open();
+			// If the clicked item was already selected, deselect it
+			if ( isSelected ) {
+				item.classList.remove( 'selected' );
+				item.setAttribute( 'aria-checked', 'false' );
+				item.querySelector( '.check' ).style.display = 'none';
+				document.querySelector( '.admin-modal-right-sidebar-info' ).setAttribute( 'hidden', 'true' );
+				selectedAttachment = null;
+
+				// Disable the select button
+				selectButton.disabled = true;
+			} else {
+				// Select the clicked item
+				item.classList.add( 'selected' );
+				item.setAttribute( 'aria-checked', 'true' );
+				item.querySelector( '.check' ).style.display = 'block';
+				document.querySelector( '.admin-modal-right-sidebar-info' ).removeAttribute( 'hidden' );
+				selectedAttachment = attachment;
+
+				// Enable the select button
+				selectButton.disabled = false;
+			}
+		}
+
+		/**
+		 * Handles the select button click.
+		 *
+		 * @return {void}
+		 */
+		function handleSelect() {
+			if ( ! selectedAttachment ) {
+				return;
+			}
+
+			var nonceField = document.getElementById( '_wpnonce' ),
+				params = new URLSearchParams( {
+					action: 'set-background-image',
+					attachment_id: selectedAttachment.id,
+					_ajax_nonce: nonceField ? nonceField.value : '',
+					size: 'full'
+				} );
+
+			fetch( ajaxurl, {
+				method: 'POST',
+				body: params,
+				credentials: 'same-origin'
+			} )
+			.then( function( response ) {
+				if ( ! response.ok ) {
+					throw new Error( response.status );
+				}
+				window.location.reload();
+			} )
+			.catch( function( error ) {
+				console.error( wpAjax.broken + ':', error );
+			} );
+		}
+
+		// Open modal on choose link click
+		chooseLink.addEventListener( 'click', function( event ) {
+			event.preventDefault();
+			modal.showModal();
+			loadAttachments();
 		} );
+
+		// Close on close button
+		closeButton.addEventListener( 'click', function() {
+			modal.close();
+			selectedAttachment = null;
+			selectButton.disabled = true;
+		} );
+
+		// Handle select button
+		selectButton.addEventListener( 'click', handleSelect );
 	}
 
 	// Initialize all components when DOM is ready.
