@@ -1208,8 +1208,8 @@ function wp_default_scripts( $scripts ) {
 			'admin-tags',
 			'adminTagsStrings',
 			array(
-				'dismiss' => 'Dismiss this notice.',
-				'deleted' => 'Tag successfully deleted.',
+				'dismiss' => __( 'Dismiss this notice.' ),
+				'deleted' => __( 'Tag successfully deleted.' ),
 			)
 		);
 
