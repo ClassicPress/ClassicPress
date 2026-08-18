@@ -2675,15 +2675,29 @@ details summary > * {
 
 /* Footer */
 .admin-modal-footer {
-	padding: 1em 1.5em;
+	position: sticky;
+	display: flex;
+	justify-content: space-between;
+	bottom: -1em;
+	height: 60px;
+	z-index: 999;
+	background: #fff;
 	border-top: 1px solid #dcdcde;
-	background: #f6f7f7;
-	text-align: right;
-	flex-shrink: 0;
 }
 
-.admin-modal-footer .button {
-	margin-left: 0.5em;
+.admin-modal-footer-buttons {
+	padding-right: 1em;
+	text-align: right;
+}
+
+.admin-modal-footer-selection {
+	display: flex;
+	justify-content: flex-start;
+	visibility: hidden;
+}
+
+#admin-modal-select-button {
+	margin: 1em 0;
 }
 
 /* Responsive - hide sidebar on narrow screens */
