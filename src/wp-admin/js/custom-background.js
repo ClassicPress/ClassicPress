@@ -211,15 +211,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		 * @return {void}
 		 */
 		function populateGrid( attachments ) {
-			grid.innerHTML = '';
+			grid.replaceChildren();
 
 			if ( attachments.length === 0 ) {
-				grid.innerHTML = '<p>No images found.</p>';
+				const p = document.createElement( 'p' );
+				p.textContent = 'No images found.';
+				grid.append( p );
 				return;
 			}
 
 			attachments.forEach( function( attachment ) {
-				var item = document.createElement( 'li' ),
+				const gridItem = document.createElement( 'li' ),
 					div  = document.createElement( 'div' ),
 					thumb = document.createElement( 'div' ),
 					img = document.createElement( 'img' ),
@@ -227,18 +229,40 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					spanIcon = document.createElement( 'span' ),
 					spanSR = document.createElement( 'span' );
 
-				item.className = 'media-item';
-				item.setAttribute( 'data-id', attachment.id );
-				item.setAttribute( 'tabindex', '0' );
-				item.setAttribute( 'role', 'checkbox' );
-				item.setAttribute( 'aria-checked', 'false' );
+				gridItem.id = 'media-' + attachment.id;
+				gridItem.className = 'media-item';
+				gridItem.setAttribute( 'data-id', attachment.id );
+				gridItem.setAttribute( 'tabindex', '0' );
+				gridItem.setAttribute( 'role', 'checkbox' );
+				gridItem.setAttribute( 'aria-checked', 'false' );
+				gridItem.setAttribute( 'aria-label', attachment.title );
+				gridItem.setAttribute( 'data-id', attachment.id );
+				gridItem.setAttribute( 'data-date', attachment.dateFormatted );
+				gridItem.setAttribute( 'data-url', attachment.url );
+				gridItem.setAttribute( 'data-filename', attachment.filename );
+				gridItem.setAttribute( 'data-filetype', attachment.type );
+				gridItem.setAttribute( 'data-mime', attachment.mime );
+				gridItem.setAttribute( 'data-width', attachment.width );
+				gridItem.setAttribute( 'data-height', attachment.height );
+				gridItem.setAttribute( 'data-size', attachment.filesizeHumanReadable );
+				gridItem.setAttribute( 'data-caption', attachment.caption );
+				gridItem.setAttribute( 'data-description', attachment.description );
+				gridItem.setAttribute( 'data-link', attachment.link );
+				gridItem.setAttribute( 'data-orientation', attachment.orientation );
+				gridItem.setAttribute( 'data-menu-order', attachment.menuOrder );
+				gridItem.setAttribute( 'data-taxes', attachment.media_cats );
+				gridItem.setAttribute( 'data-tags', attachment.media_tags );
+				gridItem.setAttribute( 'data-sizes', JSON.stringify( attachment.sizes ) );
+				gridItem.setAttribute( 'data-update-nonce', attachment.nonces.update );
+				gridItem.setAttribute( 'data-delete-nonce', attachment.nonces.delete );
+				gridItem.setAttribute( 'data-edit-nonce', attachment.nonces.edit );
 
 				div.className = 'select-attachment-preview type-image subtype-webp';
 				thumb.className = 'media-thumbnail';
 				img.src = attachment.url;
 				img.alt = attachment.alt;
 				thumb.append( img );
-				div.append(thumb );
+				div.append( thumb );
 				button.type = 'button';
 				button.className = 'check';
 				button.tabindex = '-1';
@@ -246,13 +270,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				spanSR.className = 'screen-reader-text';
 				spanSR.textContent = 'Deselect';
 				button.append( spanIcon, spanSR );
-				item.append( div, button );
+				gridItem.append( div, button );
 
-				item.addEventListener( 'click', function() {
-					selectItem( item, attachment );
+				gridItem.addEventListener( 'click', function() {
+					selectItem( gridItem, attachment );
 				} );
 
-				grid.append( item );
+				grid.append( gridItem );
 			} );
 		}
 
@@ -264,36 +288,44 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		 *
 		 * @return {void}
 		 */
-		function selectItem( item, attachment ) {
+		function selectItem( gridItem, attachment ) {
 			var items = grid.querySelectorAll( '.media-item' ),
 				selectButton = modal.querySelector( '#admin-select-button' ),
-				isSelected = item.classList.contains( 'selected' );
+				isSelected = gridItem.classList.contains( 'selected' ),
+				sidebarInfo = modal.querySelector( '.admin-modal-right-sidebar-info' );
 
 			// Deselect all items
-			items.forEach( function( i ) {
-				i.classList.remove( 'selected' );
-				i.setAttribute( 'aria-checked', 'false' );
-				i.querySelector( '.check' ).style.display = 'none';
-				document.querySelector( '.admin-modal-right-sidebar-info' ).setAttribute( 'hidden', 'true' );
-			} );
-
-			// If the clicked item was already selected, deselect it
-			if ( isSelected ) {
+			items.forEach( function( item ) {
 				item.classList.remove( 'selected' );
 				item.setAttribute( 'aria-checked', 'false' );
 				item.querySelector( '.check' ).style.display = 'none';
-				document.querySelector( '.admin-modal-right-sidebar-info' ).setAttribute( 'hidden', 'true' );
+				sidebarInfo.setAttribute( 'hidden', 'true' );
+			} );
+
+			// If the clicked gridItem was already selected, deselect it
+			if ( isSelected ) {
+				gridItem.classList.remove( 'selected' );
+				gridItem.setAttribute( 'aria-checked', 'false' );
+				gridItem.querySelector( '.check' ).style.display = 'none';
+				sidebarInfo.setAttribute( 'hidden', 'true' );
 				selectedAttachment = null;
 
 				// Disable the select button
 				selectButton.disabled = true;
 			} else {
-				// Select the clicked item
-				item.classList.add( 'selected' );
-				item.setAttribute( 'aria-checked', 'true' );
-				item.querySelector( '.check' ).style.display = 'block';
-				document.querySelector( '.admin-modal-right-sidebar-info' ).removeAttribute( 'hidden' );
+				// Select the clicked gridItem
+				gridItem.classList.add( 'selected' );
+				gridItem.setAttribute( 'aria-checked', 'true' );
+				gridItem.querySelector( '.check' ).style.display = 'block';
+				sidebarInfo.removeAttribute( 'hidden' );
 				selectedAttachment = attachment;
+
+				// Fill out the sidebar info.
+				sidebarInfo.querySelector( '#attachment-details-alt-text' ).value = gridItem.querySelector( 'img' ).alt;
+				sidebarInfo.querySelector( '#attachment-details-title' ).value = gridItem.getAttribute( 'aria-label' );
+				sidebarInfo.querySelector( '#attachment-details-caption' ).value = gridItem.dataset.caption;
+				sidebarInfo.querySelector( '#attachment-details-description' ).value = gridItem.dataset.description;
+				sidebarInfo.querySelector( '#attachment-details-copy-link' ).value = gridItem.dataset.url;
 
 				// Enable the select button
 				selectButton.disabled = false;
@@ -352,22 +384,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		selectButton.addEventListener( 'click', handleSelect );
 	}
 
-	// Initialize all components when DOM is ready.
-	if ( document.readyState === 'loading' ) {
-		document.addEventListener( 'DOMContentLoaded', function() {
-			initColorPicker();
-			initBackgroundSize();
-			initBackgroundPosition();
-			initBackgroundRepeat();
-			initBackgroundAttachment();
-			initMediaSelector();
-		} );
-	} else {
-		initColorPicker();
-		initBackgroundSize();
-		initBackgroundPosition();
-		initBackgroundRepeat();
-		initBackgroundAttachment();
-		initMediaSelector();
-	}
+	// Initialize all components.
+	initColorPicker();
+	initBackgroundSize();
+	initBackgroundPosition();
+	initBackgroundRepeat();
+	initBackgroundAttachment();
+	initMediaSelector();
 } );
