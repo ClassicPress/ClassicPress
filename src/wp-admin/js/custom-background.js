@@ -15,8 +15,7 @@
 document.addEventListener( 'DOMContentLoaded', function() {
 	'use strict';
 
-	var frame,
-		bgImage = document.getElementById( 'custom-background-image' );
+	const bgImage = document.getElementById( 'custom-background-image' );
 
 	/**
 	 * Instantiates the Coloris color picker and binds the change and clear events.
@@ -27,7 +26,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function initColorPicker() {
-		var colorInput = document.getElementById( 'background-color' );
+		const colorInput = document.getElementById( 'background-color' );
 	
 		if ( ! colorInput ) {
 			return;
@@ -62,8 +61,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				'#0077b6'
 			],
 			clearButton: true,
-			onChange: (color, inputEl) => {
-				var effectiveColor = color || inputEl.dataset.defaultColor || '';
+			onChange: ( color, inputEl ) => {
+				let effectiveColor = color || inputEl.dataset.defaultColor || '';
 
 				if ( bgImage ) {
 					bgImage.style.backgroundColor = effectiveColor;
@@ -80,13 +79,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function initBackgroundSize() {
-		var select = document.querySelector( 'select[name="background-size"]' );
+		const select = document.querySelector( 'select[name="background-size"]' );
 		if ( ! select || ! bgImage ) {
 			return;
 		}
 
-		select.addEventListener( 'change', function() {
-			bgImage.style.backgroundSize = this.value;
+		select.addEventListener( 'change', function( e ) {
+			bgImage.style.backgroundSize = e.target.value;
 		} );
 	}
 
@@ -98,13 +97,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function initBackgroundPosition() {
-		var input = document.querySelector( 'input[name="background-position"]' );
+		const input = document.querySelector( 'input[name="background-position"]' );
 		if ( ! input || ! bgImage ) {
 			return;
 		}
 
-		input.addEventListener( 'change', function() {
-			bgImage.style.backgroundPosition = this.value;
+		input.addEventListener( 'change', function( e ) {
+			bgImage.style.backgroundPosition = e.target.value;
 		} );
 	}
 
@@ -116,13 +115,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function initBackgroundRepeat() {
-		var input = document.querySelector( 'input[name="background-repeat"]' );
+		const input = document.querySelector( 'input[name="background-repeat"]' );
 		if ( ! input || ! bgImage ) {
 			return;
 		}
 
-		input.addEventListener( 'change', function() {
-			bgImage.style.backgroundRepeat = this.checked ? 'repeat' : 'no-repeat';
+		input.addEventListener( 'change', function( e ) {
+			bgImage.style.backgroundRepeat = e.target.checked ? 'repeat' : 'no-repeat';
 		} );
 	}
 
@@ -134,36 +133,31 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function initBackgroundAttachment() {
-		var input = document.querySelector( 'input[name="background-attachment"]' );
+		const input = document.querySelector( 'input[name="background-attachment"]' );
 		if ( ! input || ! bgImage ) {
 			return;
 		}
 
-		input.addEventListener( 'change', function() {
-			bgImage.style.backgroundAttachment = this.checked ? 'scroll' : 'fixed';
+		input.addEventListener( 'change', function( e ) {
+			bgImage.style.backgroundAttachment = e.target.checked ? 'scroll' : 'fixed';
 		} );
 	}
 
 	/**
-	 * Opens a minimal media selector to choose a background image.
-	 *
-	 * This is a simplified extraction from media-image-widget.js that:
-	 * - Queries attachments via AJAX
-	 * - Displays them in a simple grid
-	 * - Allows selection of one image
-	 * - Calls the set-background-image AJAX action
+	 * Opens a media grid from which to choose a background image.
 	 *
 	 * @since CP-2.8.0
 	 *
 	 * @return {void}
 	 */
 	function initMediaSelector() {
-		var chooseLink = document.getElementById( 'choose-from-library-link' ),
+		const chooseLink = document.getElementById( 'choose-from-library-link' ),
 			modal = document.getElementById( 'admin-media-modal' ),
 			grid = document.getElementById( 'admin-modal-grid' ),
-			selectButton = document.getElementById( 'admin-select-button' ),
-			closeButton = modal.querySelector( '.admin-modal-close' ),
-			selectedAttachment = null;
+			selectButton = document.getElementById( 'admin-modal-select-button' ),
+			closeButton = modal.querySelector( '.admin-modal-close' );
+
+		let selectedAttachment = null;
 
 		if ( ! chooseLink || ! modal ) {
 			return;
@@ -175,7 +169,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		 * @return {void}
 		 */
 		function loadAttachments() {
-			var params = new URLSearchParams( {
+			const params = new URLSearchParams( {
 				action: 'query-attachments',
 				'query[posts_per_page]': 80,
 				'query[post_mime_type]': 'image',
@@ -289,8 +283,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		 * @return {void}
 		 */
 		function selectItem( gridItem, attachment ) {
-			var items = grid.querySelectorAll( '.media-item' ),
-				selectButton = modal.querySelector( '#admin-select-button' ),
+			const items = grid.querySelectorAll( '.media-item' ),
+				selectButton = document.getElementById( 'admin-modal-select-button' ),
 				isSelected = gridItem.classList.contains( 'selected' ),
 				sidebarInfo = modal.querySelector( '.admin-modal-right-sidebar-info' );
 
@@ -321,11 +315,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				selectedAttachment = attachment;
 
 				// Fill out the sidebar info.
-				sidebarInfo.querySelector( '#attachment-details-alt-text' ).value = gridItem.querySelector( 'img' ).alt;
-				sidebarInfo.querySelector( '#attachment-details-title' ).value = gridItem.getAttribute( 'aria-label' );
-				sidebarInfo.querySelector( '#attachment-details-caption' ).value = gridItem.dataset.caption;
-				sidebarInfo.querySelector( '#attachment-details-description' ).value = gridItem.dataset.description;
-				sidebarInfo.querySelector( '#attachment-details-copy-link' ).value = gridItem.dataset.url;
+				document.getElementById( 'attachment-details-alt-text' ).value = gridItem.querySelector( 'img' ).alt;
+				document.getElementById( 'attachment-details-title' ).value = gridItem.getAttribute( 'aria-label' );
+				document.getElementById( 'attachment-details-caption' ).value = gridItem.dataset.caption;
+				document.getElementById( 'attachment-details-description' ).value = gridItem.dataset.description;
+				document.getElementById( 'attachment-details-copy-link' ).value = gridItem.dataset.url;
 
 				// Enable the select button
 				selectButton.disabled = false;
@@ -342,7 +336,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				return;
 			}
 
-			var nonceField = document.getElementById( '_wpnonce' ),
+			const nonceField = document.getElementById( '_wpnonce' ),
 				params = new URLSearchParams( {
 					action: 'set-background-image',
 					attachment_id: selectedAttachment.id,
