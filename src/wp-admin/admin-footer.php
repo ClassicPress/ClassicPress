@@ -143,7 +143,7 @@ $attachment_args = array(
 	'paged'          => $paged,
 );
 $attachments = new WP_Query( $attachment_args );
-error_log(print_r($attachments, true));
+
 $total_pages = ( $attachments->max_num_pages ) ? (int) $attachments->max_num_pages : 1;
 $prev_page   = ( $paged === 1 ) ? $paged : $paged - 1;
 $next_page   = ( $paged === $total_pages ) ? $paged : $paged + 1;
