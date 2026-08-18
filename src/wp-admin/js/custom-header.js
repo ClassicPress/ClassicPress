@@ -2,87 +2,150 @@
  * @output wp-admin/js/custom-header.js
  */
 
-/* global isRtl */
+/* global Coloris, AdminMediaModal, cpCropper */
 
-/**
- * Initializes the custom header selection page.
- *
- * @since 3.5.0
- *
- * @deprecated 4.1.0 The page this is used on is never linked to from the UI.
- *             Setting a custom header is completely handled by the Customizer.
- */
-(function($) {
-	var frame;
+document.addEventListener( 'DOMContentLoaded', function() {
+	'use strict';
 
-	$( function() {
-		// Fetch available headers.
-		var $headers = $('.available-headers');
+	/**
+	 * Initializes the header text color picker and text visibility toggle.
+	 *
+	 * @return {void}
+	 */
+	function initHeaderText() {
+		const textColor = document.getElementById( 'text-color' ),
+			displayHeaderText = document.getElementById( 'display-header-text' ),
+			headerTextFields = document.querySelectorAll( '.displaying-header-text' );
 
-		// Apply jQuery.masonry once the images have loaded.
-		$headers.imagesLoaded( function() {
-			$headers.masonry({
-				itemSelector: '.default-header',
-				isRTL: !! ( 'undefined' != typeof isRtl && isRtl )
-			});
-		});
+		if ( ! textColor || ! displayHeaderText ) {
+			return;
+		}
 
-		/**
-		 * Opens the 'choose from library' frame and creates it if it doesn't exist.
-		 *
-		 * @since 3.5.0
-		 * @deprecated 4.1.0
-		 *
-		 * @return {void}
-		 */
-		$('#choose-from-library-link').on( 'click', function( event ) {
-			var $el = $(this);
-			event.preventDefault();
+		function pickColor( color ) {
+			document.getElementById( 'name' ).style.color = color;
+			document.getElementById( 'desc' ).style.color = color;
+			textColor.value = color;
+		}
 
-			// If the media frame already exists, reopen it.
-			if ( frame ) {
-				frame.open();
+		function toggleText() {
+			const checked = displayHeaderText.checked;
+
+			headerTextFields.forEach( function( field ) {
+				field.hidden = ! checked;
+			} );
+
+			if ( ! checked ) {
 				return;
 			}
 
-			// Create the media frame.
-			frame = wp.media.frames.customHeader = wp.media({
-				// Set the title of the modal.
-				title: $el.data('choose'),
+			if ( '' === textColor.value.replace( '#', '' ) ) {
+				pickColor( textColor.dataset.defaultColor || '' );
+			} else {
+				pickColor( textColor.value );
+			}
+		}
 
-				// Tell the modal to show only images.
-				library: {
-					type: 'image'
-				},
+		Coloris( {
+			alpha: false,
+			format: 'hex',
+			a11y: {
+				open: 'Open color picker',
+				close: 'Close color picker',
+				clear: 'Clear the selected color',
+				marker: 'Saturation: {s}. Brightness: {v}.',
+				hueSlider: 'Hue slider',
+				alphaSlider: 'Opacity slider',
+				input: 'Color value field',
+				format: 'Color format',
+				swatch: 'Color swatch',
+				instruction: 'Saturation and brightness selector. Use up, down, left and right arrow keys to select.'
+			},
+			swatches: [
+				'#264653',
+				'#2a9d8f',
+				'#e9c46a',
+				'#f4a261',
+				'#e76f51',
+				'#d62828',
+				'#000080',
+				'#0077bb',
+				'#0096c7',
+				'#00b4d8',
+				'#0077b6'
+			],
+			clearButton: true,
+			onChange: function( color, inputEl ) {
+				pickColor(
+					color || inputEl.dataset.defaultColor || ''
+				);
+			}
+		} );
 
-				// Customize the submit button.
-				button: {
-					// Set the text of the button.
-					text: $el.data('update'),
-					// Tell the button not to close the modal, since we're
-					// going to refresh the page when the image is selected.
-					close: false
-				}
-			});
+		displayHeaderText.addEventListener( 'change', toggleText );
+		toggleText();
+	}
 
-			/**
-			 * Updates the window location to include the selected attachment.
-			 *
-			 * @since 3.5.0
-			 * @deprecated 4.1.0
-			 *
-			 * @return {void}
-			 */
-			frame.on( 'select', function() {
-				// Grab the selected attachment.
-				var attachment = frame.state().get('selection').first(),
-					link = $el.data('updateLink');
+	/**
+	 * Initializes image cropping on step 2.
+	 *
+	 * @return {void}
+	 */
+	function initImageCrop() {
+		const image = document.getElementById( 'upload' ),
+			x1 = document.getElementById( 'x1' ),
+			y1 = document.getElementById( 'y1' ),
+			width = document.getElementById( 'width' ),
+			height = document.getElementById( 'height' ),
+			attachmentId = document.getElementById( 'attachment_id' ),
+			nonce = document.querySelector( 'input[name="_wpnonce"]' );
 
-				// Tell the browser to navigate to the crop step.
-				window.location = link + '&file=' + attachment.id;
-			});
+		if ( ! image || ! x1 || ! y1 || ! width || ! height || ! attachmentId || ! nonce ) {
+			return;
+		}
 
-			frame.open();
-		});
-	});
-}(jQuery));
+		const cropWidth = parseInt( width.value, 10 ),
+			cropHeight = parseInt( height.value, 10 );
+
+		cpCropper.open( {
+			attachmentId: attachmentId.value,
+			imageUrl: image.src,
+			context: 'custom-header',
+			nonce: nonce.value,
+			aspectRatio: cropWidth / cropHeight,
+			minWidth: cropWidth,
+			minHeight: cropHeight,
+			width: cropWidth,
+			height: cropHeight,
+			onSelect: function() {
+				/*
+				 * The cropper submits or completes the crop operation.
+				 * No additional handling is required here.
+				 */
+			}
+		} );
+	}
+
+	/**
+	 * Initializes the media selector on step 1.
+	 *
+	 * @return {void}
+	 */
+	function initMediaSelector() {
+		const chooseButton = document.getElementById( 'choose-from-library-link' ),
+			updateLink = chooseButton.dataset.updateLink;
+
+		if ( ! chooseButton ) {
+			return;
+		}
+
+		AdminMediaModal( null, null, function( attachment ) {
+			const url = new URL( updateLink, window.location.origin );
+			url.searchParams.set( 'file', attachment.id );
+			window.location.href = url.toString();
+		} );
+	}
+
+	initHeaderText();
+	initImageCrop();
+	initMediaSelector();
+} );
