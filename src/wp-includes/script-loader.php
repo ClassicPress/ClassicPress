@@ -1416,7 +1416,7 @@ function wp_default_scripts( $scripts ) {
 		$scripts->set_translations( 'nav-menu' );
 
 		$scripts->add( 'custom-header', '/wp-admin/js/custom-header.js', array( 'jquery-masonry' ), false, 1 );
-		$scripts->add( 'custom-background', "/wp-admin/js/custom-background$suffix.js", array( 'coloris', 'media-views' ), false, 1 );
+		$scripts->add( 'custom-background', "/wp-admin/js/custom-background$suffix.js", array( 'coloris' ), false, 1 );
 		$scripts->add( 'media-gallery', "/wp-admin/js/media-gallery$suffix.js", array( 'jquery' ), false, 1 );
 
 		$scripts->add( 'svg-painter', '/wp-admin/js/svg-painter.js', array( 'jquery' ), false, 1 );
