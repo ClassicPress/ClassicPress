@@ -175,6 +175,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 			gridItem.querySelector( '.check' ).style.display = 'block';
 			sidebarInfo.removeAttribute( 'hidden' );
 			selectedAttachment = attachment;
+			setAddedMediaFields( attachment );
 
 			document.getElementById( 'attachment-details-alt-text' ).value = gridItem.querySelector( 'img' ).alt;
 			document.getElementById( 'attachment-details-title' ).value = gridItem.getAttribute( 'aria-label' );
@@ -395,6 +396,176 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 		modal.showModal();
 	}
 
+	/**
+	 * Update attachment details.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function updateDetails( input, id ) {
+		var successTimeout,
+			data = new FormData();
+
+		data.append( 'action', 'save-attachment' );
+		data.append( 'id', id );
+		data.append( 'nonce', document.getElementById( 'media-' + id ).dataset.updateNonce );
+
+		// Append metadata fields
+		if ( input.parentNode.dataset.setting === 'alt' || input.id === 'embed-image-settings-alt-text' ) {
+			data.append( 'changes[alt]', input.value );
+		} else if ( input.parentNode.dataset.setting === 'title' ) {
+			data.append( 'changes[title]', input.value );
+		} else if ( input.parentNode.dataset.setting === 'caption' || input.id === 'embed-image-settings-caption' ) {
+			data.append( 'changes[caption]', input.value );
+		} else if ( input.parentNode.dataset.setting === 'description' ) {
+			data.append( 'changes[description]', input.value );
+		}
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			var saved = document.getElementById( 'details-saved' );
+
+			if ( result.success ) {
+
+				// Update data attributes
+				if ( input.parentNode.dataset.setting === 'alt' ) {
+					document.getElementById( 'media-' + id ).querySelector( 'img' ).setAttribute( 'alt', input.value );
+				} else if ( input.parentNode.dataset.setting === 'title' ) {
+					document.getElementById( 'media-' + id ).setAttribute( 'aria-label', input.value );
+				} else if ( input.parentNode.dataset.setting === 'caption' ) {
+					document.getElementById( 'media-' + id ).setAttribute( 'data-caption', input.value );
+				} else if ( input.parentNode.dataset.setting === 'description' ) {
+					document.getElementById( 'media-' + id ).setAttribute( 'data-description', input.value );
+				}
+
+				// Show success visual feedback.
+				clearTimeout( successTimeout );
+				saved.classList.remove( 'hidden' );
+				saved.setAttribute( 'aria-hidden', 'false' );
+
+				// Hide success visual feedback after 3 seconds.
+				successTimeout = setTimeout( function() {
+					saved.classList.add( 'hidden' );
+					saved.setAttribute( 'aria-hidden', 'true' );
+				}, 3000 );
+			} else {
+				//console.error( IMAGE_WIDGET.failed_update, result.data.error );
+			}
+		} )
+		.catch( function( error ) {
+			//console.error( IMAGE_WIDGET.error, error );
+		} );
+	}
+
+	/**
+	 * Update details within modal.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function setAddedMediaFields( attachment ) {
+		const form = document.createElement( 'form' ),
+			id = attachment.id,
+			cats = attachment.media_cats.toString(),
+			tags = attachment.media_tags.toString();
+
+		form.className = 'compat-item';
+		form.innerHTML = '<input type="hidden" id="menu-order" name="attachments[' + id + '][menu_order]" value="0">' +
+			'<p class="media-types media-types-required-info"><span class="required-field-message">Required fields are marked <span class="required">*</span></span></p>' +
+			'<div class="setting" data-setting="media_category">' +
+				'<label for="attachments-' + id + '-media_category" style="width:30%;">' +
+					'<span class="alignleft">Media Categories</span>' +
+				'</label>' +
+				'<input type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" value="' + cats + '">' +
+			'</div>' +
+			'<div class="setting" data-setting="media_post_tag">' +
+				'<label for="attachments-' + id + '-media_post_tag">' +
+					'<span class="alignleft">Media Tags</span>' +
+				'</label>' +
+				'<input type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" value="' + tags + '">' +
+			'</div>';
+
+		if ( document.querySelector( '.compat-item' ) != null ) {
+			document.querySelector( '.compat-item' ).remove();
+		}
+		document.querySelector( '.attachment-compat' ).append( form );
+		
+		form.querySelectorAll( 'input' ).forEach( function( input ) {
+			input.addEventListener( 'change', function() {
+				updateMediaTaxOrTag( input, id ); // Update media categories and tags
+			} );
+		} );
+	}
+
+	/**
+	 * Update media categories and tags.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function updateMediaTaxOrTag( input, id ) {
+		var successTimeout, newTaxes,
+			data = new FormData(),
+			taxonomy = input.getAttribute( 'name' ).replace( 'attachments[' + id + '][' , '' ).replace( ']', '' );
+
+		data.append( 'action', 'save-attachment-compat' );
+		data.append( 'nonce', document.getElementById( 'media-' + id ).dataset.updateNonce );
+		data.append( 'id', id );
+		data.append( 'taxonomy', taxonomy );
+		data.append( 'attachments[' + id + '][' + taxonomy + ']', input.value );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result.success ) {
+				if ( taxonomy === 'media_category' ) {
+					newTaxes = result.data.media_cats.join( ', ' );
+					input.value = newTaxes;
+					document.getElementById( 'media-' + id ).setAttribute( 'data-taxes', newTaxes );
+				} else if ( taxonomy === 'media_tag' ) {
+					newTaxes = result.data.media_tags.join( ', ' );
+					input.value = newTaxes;
+					document.getElementById( 'media-' + id ).setAttribute( 'data-tags', newTaxes );
+				}
+
+				// Show success visual feedback.
+				clearTimeout( successTimeout );
+				document.getElementById( 'tax-saved' ).classList.remove( 'hidden' );
+				document.getElementById( 'tax-saved' ).setAttribute( 'aria-hidden', 'false' );
+
+				// Hide success visual feedback after 3 seconds.
+				successTimeout = setTimeout( function() {
+					document.getElementById( 'tax-saved' ).classList.add( 'hidden' );
+					document.getElementById( 'tax-saved' ).setAttribute( 'aria-hidden', 'true' );
+				}, 3000 );
+			} else {
+				//console.error( IMAGE_WIDGET.failed_update, result.data.error );
+			}
+		} )
+		.catch( function( error ) {
+			//console.error( IMAGE_WIDGET.error, error );
+		} );
+	}
+
 	// Open modal on choose link click
 	chooseLink.addEventListener( 'click', function( e ) {
 		e.preventDefault();
@@ -420,6 +591,13 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 	itemBrowse.addEventListener( 'click', browseMediaLibrary );
 	addImage.addEventListener( 'click', browseMediaLibrary );
 
+	// Update media attachment details
+	modal.querySelectorAll( '.admin-modal-right-sidebar-info input, .admin-modal-right-sidebar-info textarea' ).forEach( function( input ) {
+		input.addEventListener( 'change', function() {
+			updateDetails( input, document.querySelector( '.media-item.selected' ).dataset.id );
+		} );
+	} );
+
 	/**
 	 * Enable searching for items within grid.
 	 *
@@ -442,6 +620,47 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 			updateGrid( 1 );
 			modal.querySelector( '.admin-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
 		}
+	} );
+
+	/**
+	 * Handles media list copy media URL button.
+	 *
+	 * Uses Clipboard API (with execCommand fallback for sites
+	 * on neither https nor localhost).
+	 *
+	 * @since CP-2.5.0
+	 *
+	 * @param {MouseEvent} event A click event.
+	 * @return {void}
+	 */
+	document.querySelector( '.copy-attachment-url' ).addEventListener( 'click', function( e ) {
+		var button = e.target,
+			copyAttachmentURLSuccessTimeout,
+			copyText = document.getElementById( 'attachment-details-copy-link' ).value,
+			input = document.createElement( 'input' );
+
+		if ( navigator.clipboard ) {
+			navigator.clipboard.writeText( copyText );
+		} else {
+			document.body.append( input );
+			input.value = copyText;
+			input.select();
+			document.execCommand( 'copy' );
+		}
+
+		// Show success visual feedback.
+		clearTimeout( copyAttachmentURLSuccessTimeout );
+		input.remove();
+
+		button.nextElementSibling.classList.remove( 'hidden' );
+
+		// Hide success visual feedback after 3 seconds since last success and unfocus the trigger.
+		copyAttachmentURLSuccessTimeout = setTimeout( function() {
+			button.nextElementSibling.classList.add( 'hidden' );
+		}, 3000 );
+
+		// Handle success audible feedback.
+		wp.a11y.speak( wp.i18n.__( 'The file URL has been copied to your clipboard' ) );
 	} );
 
 	/**
