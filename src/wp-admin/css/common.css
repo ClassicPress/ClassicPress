@@ -2506,7 +2506,7 @@ details summary > * {
 	cursor: pointer;
 }
 
-.widget-modal-router .media-menu-item.active {
+.admin-modal-router .media-menu-item.active {
 	background: #fff;
 	border: 1px solid #dcdcde;
 	border-bottom: none;
