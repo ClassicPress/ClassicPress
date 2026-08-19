@@ -32,7 +32,8 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 		uploadPanel = document.getElementById( 'uploader-inline' ),
 		modalButtons = modal.querySelector( '.admin-modal-header-buttons' ),
 		insertFromUrl = document.getElementById( 'admin-modal-item-embed' ),
-		addImage = document.getElementById( 'admin-modal-item-add' );
+		addImage = document.getElementById( 'admin-modal-item-add' ),
+		footer = document.querySelector( '.admin-modal-footer' );
 
 	let pond, selectedAttachment = null;
 
@@ -249,6 +250,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 		rightSidebar.removeAttribute( 'inert' );
 		modalPages.removeAttribute( 'hidden' );
 		modalPages.removeAttribute( 'inert' );
+		footer.style.display = '';
 	}
 
 	function uploadFile( e ) {
@@ -269,7 +271,128 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 		rightSidebar.setAttribute( 'inert', 'true' );
 		modalPages.setAttribute( 'hidden', 'true' );
 		modalPages.setAttribute( 'inert', 'true' );
+		footer.style.display = 'none';
 		goFilepond();
+	}
+
+	/**
+	 * Update the grid with new images.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function updateGrid( paged ) {
+		var dateFilter = modal.querySelector( '#filter-by-date' ),
+			mediaCatSelect = dateFilter.nextElementSibling,
+			search = modal.querySelector( '#admin-modal-search-input' ),
+			params = new URLSearchParams( {
+				'action': 'query-attachments',
+				'query[monthnum]': dateFilter.value ? parseInt( dateFilter.value.substr( 4, 2 ), 10 ) : 0,
+				'query[year]': dateFilter.value ? parseInt( dateFilter.value.substr( 0, 4 ), 10 ) : 0,
+				'query[post_mime_type]': 'image',
+				'query[s]': search.value ? search.value : '',
+				'query[paged]': paged ? paged : 1,
+				'query[media_category_name]': mediaCatSelect.value ? mediaCatSelect.value : ''
+			} );
+
+		// Make AJAX request
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: params,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result.success ) {
+
+				// Show relevant button and clear grid
+				modal.querySelector( '.admin-modal-grid' ).replaceChildren();
+
+				if ( result.data.length === 0 ) {
+
+					// Reset pagination
+					modal.querySelectorAll( '.pagination-links button' ).forEach( function( pageLink ) {
+						pageLink.setAttribute( 'data-page', 1 );
+						pageLink.setAttribute( 'disabled', true );
+						pageLink.setAttribute( 'inert', true );
+					} );
+
+					modal.querySelector( '#current-page-selector' ).setAttribute( 'value', 1 );
+					modal.querySelector( '.total-pages' ).textContent = 1;
+					modal.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, 0 );
+
+					// Update the count at the bottom of the page
+					modal.querySelector( '.load-more-count' ).setAttribute( 'hidden', true );
+					modal.querySelector( '.no-media' ).removeAttribute( 'hidden' );
+				} else {
+
+					// Populate grid with new items
+					result.data.forEach( function( attachment ) {
+						populateGridItem( attachment );
+					} );
+
+					// Reset pagination
+					modal.querySelectorAll( '.pagination-links button' ).forEach( function( pageLink ) {
+						if ( pageLink.className.includes( 'first-page' ) || pageLink.className.includes( 'prev-page' ) ) {
+							if ( paged === '1' ) {
+								pageLink.setAttribute( 'disabled', true );
+								pageLink.setAttribute( 'inert', true );
+							} else {
+								pageLink.removeAttribute( 'disabled'  );
+								pageLink.removeAttribute( 'inert'  );
+								if ( pageLink.className.includes( 'prev-page' ) ) {
+									if ( ( parseInt( paged ) - 1 ) < 1 ) {
+										pageLink.setAttribute( 'data-page', 1 );
+									} else {
+										pageLink.setAttribute( 'data-page', parseInt( paged ) - 1 );
+									}
+								}
+							}
+						} else if ( pageLink.className.includes( 'next-page' ) ) {
+							if ( result.headers.max_pages === parseInt( paged ) ) {
+								pageLink.setAttribute( 'data-page', paged );
+								pageLink.setAttribute( 'disabled', true );
+								pageLink.setAttribute( 'inert', true );
+							} else {
+								pageLink.setAttribute( 'data-page', parseInt( paged ) + 1 );
+								pageLink.removeAttribute( 'disabled'  );
+								pageLink.removeAttribute( 'inert'  );
+							}
+						} else if ( pageLink.className.includes( 'last-page' ) ) {
+							pageLink.setAttribute( 'data-page', result.headers.max_pages );
+							if ( result.headers.max_pages === parseInt( paged ) ) {
+								pageLink.setAttribute( 'disabled', true );
+								pageLink.setAttribute( 'inert', true );
+							} else {
+								pageLink.removeAttribute( 'disabled'  );
+								pageLink.removeAttribute( 'inert'  );
+							}
+						}
+					} );
+
+					// Update both HTML and DOM
+					modal.querySelector( '#current-page-selector' ).setAttribute( 'value', paged ? paged : 1 );
+					modal.querySelector( '#current-page-selector' ).value = paged ? paged : 1;
+					modal.querySelector( '.total-pages' ).textContent = result.headers.max_pages;
+					modal.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, result.headers.total_posts );
+
+					// Update the count at the bottom of the page
+					modal.querySelector( '.no-media' ).setAttribute( 'hidden', true );
+					modal.querySelector( '.load-more-count' ).removeAttribute( 'hidden' );
+					modal.querySelector( '.load-more-count' ).textContent = result.data.length + ' ' + 'of' + ' ' + result.headers.total_posts;// + ' ' + IMAGE_WIDGET.media_items;
+				}
+			}
+		} )
+		.catch( function( error ) {
+			console.error( error );
+		} );
+
+		modal.showModal();
 	}
 
 	// Open modal on choose link click
@@ -296,6 +419,30 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 	// Browse media library
 	itemBrowse.addEventListener( 'click', browseMediaLibrary );
 	addImage.addEventListener( 'click', browseMediaLibrary );
+
+	/**
+	 * Enable searching for items within grid.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	modal.addEventListener( 'change', function( e ) {
+		// Do not run if file sought from widget
+		if ( e.target.closest( '.widget' ) ) {
+			return;
+		}
+
+		if ( e.target.id === 'filter-by-date' ) {
+			updateGrid( 1 );
+		} else if ( e.target.className === 'postform' ) {
+			updateGrid( 1 );
+		} else if ( e.target.id === 'current-page-selector' ) {
+			updateGrid( e.target.value );
+		} else if ( e.target.id === 'admin-modal-search-input' ) {
+			updateGrid( 1 );
+			modal.querySelector( '.admin-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+		}
+	} );
 
 	/**
 	 * Upload files using FilePond
