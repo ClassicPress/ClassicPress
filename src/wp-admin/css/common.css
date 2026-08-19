@@ -2356,6 +2356,7 @@ details summary > * {
 /* Modal container - flex layout for sidebar + main */
 .admin-modal-container {
 	display: flex;
+	height: 70vh;
 }
 
 /* Left sidebar */
@@ -2418,6 +2419,10 @@ details summary > * {
 /* Main modal area */
 .admin-modal-main {
 	flex-grow: 1;
+}
+
+.admin-modal-body {
+	height: 100%;
 }
 
 /* Header */
@@ -2519,6 +2524,7 @@ details summary > * {
 .admin-modal-content {
   display: flex;
   padding-left: 1em;
+  height: 100%;
 }
 
 .admin-modal-tabpanel {
@@ -2671,6 +2677,24 @@ details summary > * {
 
 .admin-modal-descriptions .copy-to-clipboard-container {
 	justify-content: flex-end;
+}
+
+.uploader-inline {
+	width: 100%;
+}
+
+#filepond,
+.admin-media-modal .filepond--drop-label {
+	height: 100%;
+}
+
+.filepond--label-action {
+	display: inline-block;
+	height: 100%;
+}
+
+.filepond--credits {
+	display: none;
 }
 
 /* Footer */
