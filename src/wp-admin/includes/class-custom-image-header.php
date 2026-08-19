@@ -81,7 +81,6 @@ class Custom_Image_Header {
 		add_action( "admin_print_styles-{$page}", array( $this, 'css_includes' ) );
 		add_action( "admin_head-{$page}", array( $this, 'help' ) );
 		add_action( "admin_head-{$page}", array( $this, 'take_action' ), 50 );
-		add_action( "admin_head-{$page}", array( $this, 'js' ), 50 );
 
 		if ( $this->admin_header_callback ) {
 			add_action( "admin_head-{$page}", $this->admin_header_callback, 51 );
@@ -329,35 +328,6 @@ class Custom_Image_Header {
 
 		echo '<div class="clear"></div></div>';
 	}
-
-	/**
-	 * Execute JavaScript depending on step.
-	 *
-	 * @since 2.1.0
-	 */
-	public function js() {
-		$step = $this->step();
-
-		if ( ( 1 === $step || 3 === $step ) && current_theme_supports( 'custom-header', 'header-text' ) ) {
-			$this->js_1();
-		} elseif ( 2 === $step ) {
-			$this->js_2();
-		}
-	}
-
-	/**
-	 * Display JavaScript based on Step 1 and 3.
-	 *
-	 * @since 2.6.0
-	 */
-	public function js_1() {}
-
-	/**
-	 * Display JavaScript based on Step 2.
-	 *
-	 * @since 2.6.0
-	 */
-	public function js_2() {}
 
 	/**
 	 * Display first step of custom header image page.
