@@ -174,6 +174,7 @@ class Custom_Image_Header {
 	public function js_includes() {
 		wp_enqueue_script( 'coloris' );
 		wp_enqueue_script( 'cp-cropper' );
+		wp_enqueue_script( 'wp-ajax-response' );
 		wp_enqueue_script( 'custom-header' );
 	}
 
@@ -674,6 +675,25 @@ endif;
 
 		<?php submit_button( null, 'primary', 'save-header-options' ); ?>
 </form>
+
+<?php
+$crop_width = get_theme_support( 'custom-header', 'width' );
+$crop_height = get_theme_support( 'custom-header', 'height' );
+$flex_width = current_theme_supports( 'custom-header', 'flex-width' );
+$flex_height = current_theme_supports( 'custom-header', 'flex-height' );
+$crop_nonce = wp_create_nonce( 'custom-header-crop-image' );
+?>
+
+<script>
+var customHeaderCrop = {
+nonce: '<?php echo esc_js( $crop_nonce ); ?>',
+width: <?php echo (int) $crop_width; ?>,
+height: <?php echo (int) $crop_height; ?>,
+flexWidth: <?php echo $flex_width ? 'true' : 'false'; ?>,
+flexHeight: <?php echo $flex_height ? 'true' : 'false'; ?>
+};
+</script>
+
 </div>
 
 		<?php
@@ -1251,6 +1271,28 @@ endif;
 			wp_send_json_error();
 		}
 
+		if ( ! empty( $_POST['skip_crop'] ) ) {
+			$attachment_id = absint( $_POST['id'] );
+			$image         = wp_get_attachment_image_src( $attachment_id, 'full' );
+
+			if ( ! $image ) {
+				wp_send_json_error(
+					array( 'message' => __( 'Image could not be processed. Please try again.' ) )
+				);
+			}
+
+			$attachment = array(
+				'attachment_id' => $attachment_id,
+				'url'           => $image[0],
+				'width'         => $image[1],
+				'height'        => $image[2],
+			);
+
+			$this->set_header_image( $attachment );
+
+			wp_send_json_success( $attachment );
+		}
+
 		$crop_details = $_POST['cropDetails'];
 
 		$dimensions = $this->get_header_dimensions(
@@ -1296,6 +1338,8 @@ endif;
 
 		$attachment['width']  = $dimensions['dst_width'];
 		$attachment['height'] = $dimensions['dst_height'];
+
+		$this->set_header_image( $attachment );
 
 		wp_send_json_success( $attachment );
 	}
