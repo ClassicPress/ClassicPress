@@ -2,7 +2,7 @@
  * @output wp-admin/js/custom-header.js
  */
 
-/* global Coloris, AdminMediaModal, cpCropper */
+/* global Coloris, AdminMediaModal, cpCropper, ajaxurl */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	'use strict';
@@ -45,107 +45,42 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 
-		Coloris( {
-			alpha: false,
-			format: 'hex',
-			a11y: {
-				open: 'Open color picker',
-				close: 'Close color picker',
-				clear: 'Clear the selected color',
-				marker: 'Saturation: {s}. Brightness: {v}.',
-				hueSlider: 'Hue slider',
-				alphaSlider: 'Opacity slider',
-				input: 'Color value field',
-				format: 'Color format',
-				swatch: 'Color swatch',
-				instruction: 'Saturation and brightness selector. Use up, down, left and right arrow keys to select.'
-			},
-			swatches: [
-				'#264653',
-				'#2a9d8f',
-				'#e9c46a',
-				'#f4a261',
-				'#e76f51',
-				'#d62828',
-				'#000080',
-				'#0077bb',
-				'#0096c7',
-				'#00b4d8',
-				'#0077b6'
-			],
-			clearButton: true,
-			onChange: function( color, inputEl ) {
-				pickColor(
-					color || inputEl.dataset.defaultColor || ''
-				);
-			}
-		} );
-
 		displayHeaderText.addEventListener( 'change', toggleText );
 		toggleText();
 	}
 
-	/**
-	 * Initializes image cropping on step 2.
-	 *
-	 * @return {void}
-	 */
-	function initImageCrop() {
-		const image = document.getElementById( 'upload' ),
-			x1 = document.getElementById( 'x1' ),
-			y1 = document.getElementById( 'y1' ),
-			width = document.getElementById( 'width' ),
-			height = document.getElementById( 'height' ),
-			attachmentId = document.getElementById( 'attachment_id' ),
-			nonce = document.querySelector( 'input[name="_wpnonce"]' );
+	initHeaderText();
+	AdminMediaModal( 'set-header-image', 'full', 'headerImage' );
 
-		if ( ! image || ! x1 || ! y1 || ! width || ! height || ! attachmentId || ! nonce ) {
+	document.addEventListener( 'custom-header-attachment-selected', function() {
+		const attachment = window.CustomHeaderCrop;
+
+		if ( ! attachment ) {
 			return;
 		}
-
-		const cropWidth = parseInt( width.value, 10 ),
-			cropHeight = parseInt( height.value, 10 );
 
 		cpCropper.open( {
-			attachmentId: attachmentId.value,
-			imageUrl: image.src,
+			attachmentId: attachment.id,
+			imageUrl: attachment.url,
 			context: 'custom-header',
-			nonce: nonce.value,
-			aspectRatio: cropWidth / cropHeight,
-			minWidth: cropWidth,
-			minHeight: cropHeight,
-			width: cropWidth,
-			height: cropHeight,
-			onSelect: function() {
-				/*
-				 * The cropper submits or completes the crop operation.
-				 * No additional handling is required here.
-				 */
+			action: 'custom-header-crop',
+			nonce: attachment.nonce,
+			aspectRatio: attachment.width / attachment.height,
+			minWidth: attachment.width,
+			minHeight: attachment.height,
+			width: attachment.width,
+			height: attachment.height,
+			onSelect: function( croppedAttachment ) {
+				const headerImg = document.querySelector( '#headimg img' );
+
+				if ( headerImg ) {
+					headerImg.src = croppedAttachment.url;
+				} else {
+					const img = document.createElement( 'img' );
+					img.src = croppedAttachment.url;
+					document.getElementById( 'desc' ).after( img );
+				}
 			}
 		} );
-	}
-
-	/**
-	 * Initializes the media selector on step 1.
-	 *
-	 * @return {void}
-	 */
-	function initMediaSelector() {
-		const chooseButton = document.getElementById( 'choose-from-library-link' ),
-			updateLink = chooseButton.dataset.updateLink;
-
-		if ( ! chooseButton ) {
-			return;
-		}
-
-		AdminMediaModal( null, null, function( attachment ) {
-			const url = new URL( updateLink, window.location.origin );
-			url.searchParams.set( 'file', attachment.id );
-			window.location.href = url.toString();
-		} );
-	}
-
-	initHeaderText();
-	initImageCrop();
-	initMediaSelector();
+	} );
 } );
