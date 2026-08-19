@@ -2,7 +2,7 @@
  * @output wp-admin/js/admin-media-modal.js
  */
 
-/* global ajaxurl, wpAjax, Coloris, IMAGE_WIDGET, _cpCustomLogo,
+/* global ajaxurl, wpAjax, Coloris, _cpCustomLogo, _cpFilepondLabels,
 FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
 FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console */
 
@@ -34,7 +34,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 		insertFromUrl = document.getElementById( 'admin-modal-item-embed' ),
 		addImage = document.getElementById( 'admin-modal-item-add' );
 
-	let selectedAttachment = null;
+	let pond, selectedAttachment = null;
 
 	function loadAttachments() {
 		const params = new URLSearchParams( {
@@ -75,62 +75,77 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 		}
 
 		attachments.forEach( function( attachment ) {
-			const gridItem = document.createElement( 'li' ),
-				div  = document.createElement( 'div' ),
-				thumb = document.createElement( 'div' ),
-				img = document.createElement( 'img' ),
-				button = document.createElement( 'button' ),
-				spanIcon = document.createElement( 'span' ),
-				spanSR = document.createElement( 'span' );
+			populateGridItem( attachment );
+		} );
+	}
 
-			gridItem.id = 'media-' + attachment.id;
-			gridItem.className = 'media-item';
-			gridItem.setAttribute( 'data-id', attachment.id );
-			gridItem.setAttribute( 'tabindex', '0' );
-			gridItem.setAttribute( 'role', 'checkbox' );
-			gridItem.setAttribute( 'aria-checked', 'false' );
-			gridItem.setAttribute( 'aria-label', attachment.title );
-			gridItem.setAttribute( 'data-id', attachment.id );
-			gridItem.setAttribute( 'data-date', attachment.dateFormatted );
-			gridItem.setAttribute( 'data-url', attachment.url );
-			gridItem.setAttribute( 'data-filename', attachment.filename );
-			gridItem.setAttribute( 'data-filetype', attachment.type );
-			gridItem.setAttribute( 'data-mime', attachment.mime );
-			gridItem.setAttribute( 'data-width', attachment.width );
-			gridItem.setAttribute( 'data-height', attachment.height );
-			gridItem.setAttribute( 'data-size', attachment.filesizeHumanReadable );
-			gridItem.setAttribute( 'data-caption', attachment.caption );
-			gridItem.setAttribute( 'data-description', attachment.description );
-			gridItem.setAttribute( 'data-link', attachment.link );
-			gridItem.setAttribute( 'data-orientation', attachment.orientation );
-			gridItem.setAttribute( 'data-menu-order', attachment.menuOrder );
-			gridItem.setAttribute( 'data-taxes', attachment.media_cats );
-			gridItem.setAttribute( 'data-tags', attachment.media_tags );
-			gridItem.setAttribute( 'data-sizes', JSON.stringify( attachment.sizes ) );
-			gridItem.setAttribute( 'data-update-nonce', attachment.nonces.update );
-			gridItem.setAttribute( 'data-delete-nonce', attachment.nonces.delete );
-			gridItem.setAttribute( 'data-edit-nonce', attachment.nonces.edit );
+	/**
+	 * Populate media items within grid.
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function populateGridItem( attachment, prepend ) {
+		var selected = '',
+			gridItem = document.createElement( 'li' ),
+			image = document.createElement( 'img' ),
+			preview = document.createElement( 'div' ),
+			thumb = document.createElement( 'div' ),
+			button = document.createElement( 'button' ),
+			spanIcon = document.createElement( 'span' ),
+			spanSR = document.createElement( 'span' );
 
-			div.className = 'select-attachment-preview type-image subtype-webp';
-			thumb.className = 'media-thumbnail';
-			img.src = attachment.url;
-			img.alt = attachment.alt;
-			thumb.append( img );
-			div.append( thumb );
-			button.type = 'button';
-			button.className = 'check';
-			button.tabindex = '-1';
-			spanIcon.classname = 'media-modal-icon';
-			spanSR.className = 'screen-reader-text';
-			spanSR.textContent = 'Deselect';
-			button.append( spanIcon, spanSR );
-			gridItem.append( div, button );
+		image.src= attachment.url;
+		image.alt= attachment.alt;
+		preview.className = 'select-attachment-preview type-' + attachment.type + ' subtype-' + attachment.subtype;
+		thumb.className = 'media-thumbnail';
+		button.type = 'button';
+		button.className = 'check';
+		button.tabindex = '-1';
+		spanIcon.className = 'media-modal-icon';
+		spanSR.className = 'screen-reader-text';
+		spanSR.textContent = _cpFilepondLabels.labelButtonDeselect;
 
-			gridItem.addEventListener( 'click', function() {
-				selectItem( gridItem, attachment );
-			} );
+		gridItem.className = 'media-item' + selected;
+		gridItem.id = 'media-' + attachment.id;
+		gridItem.setAttribute( 'tabindex', 0 );
+		gridItem.setAttribute( 'role', 'checkbox' );
+		gridItem.setAttribute( 'aria-checked', selected ? true : false );
+		gridItem.setAttribute( 'aria-label', attachment.title );
+		gridItem.setAttribute( 'data-id', attachment.id );
+		gridItem.setAttribute( 'data-date', attachment.dateFormatted );
+		gridItem.setAttribute( 'data-url', attachment.url );
+		gridItem.setAttribute( 'data-filename', attachment.filename );
+		gridItem.setAttribute( 'data-filetype', attachment.type );
+		gridItem.setAttribute( 'data-mime', attachment.mime );
+		gridItem.setAttribute( 'data-width', attachment.width );
+		gridItem.setAttribute( 'data-height', attachment.height );
+		gridItem.setAttribute( 'data-size', attachment.filesizeHumanReadable );
+		gridItem.setAttribute( 'data-caption', attachment.caption );
+		gridItem.setAttribute( 'data-description', attachment.description );
+		gridItem.setAttribute( 'data-link', attachment.link );
+		gridItem.setAttribute( 'data-orientation', attachment.orientation );
+		gridItem.setAttribute( 'data-menu-order', attachment.menuOrder );
+		gridItem.setAttribute( 'data-taxes', attachment.media_cats );
+		gridItem.setAttribute( 'data-tags', attachment.media_tags );
+		gridItem.setAttribute( 'data-sizes', JSON.stringify( attachment.sizes ) );
+		gridItem.setAttribute( 'data-update-nonce', attachment.nonces.update );
+		gridItem.setAttribute( 'data-delete-nonce', attachment.nonces.delete );
+		gridItem.setAttribute( 'data-edit-nonce', attachment.nonces.edit );
 
+		thumb.append( image );
+		button.append( spanIcon, spanSR );
+		preview.append( thumb, button );
+		gridItem.append( preview );
+
+		if ( prepend ) {
+			grid.prepend( gridItem );
+		} else {
 			grid.append( gridItem );
+		}
+
+		gridItem.addEventListener( 'click', function() {
+			selectItem( gridItem, attachment );
 		} );
 	}
 
@@ -296,7 +311,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 		);
 
 		// Create a FilePond instance
-		pond = FilePond.create( dialog.querySelector( '#filepond' ), {
+		pond = FilePond.create( modal.querySelector( '#filepond' ), {
 			allowMultiple: true,
 			server: {
 				process: function( fieldName, file, metadata, load, error, progress, abort ) {
@@ -305,7 +320,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 					var formData = new FormData();
 					formData.append( 'async-upload', file, file.name );
 					formData.append( 'action', 'upload-attachment' );
-					formData.append( '_wpnonce', IMAGE_WIDGET.media_nonce );
+					formData.append( '_wpnonce', document.getElementById( '_wpnonce' ).value );
 
 					// Use Fetch to upload the file
 					fetch( ajaxurl, {
@@ -323,15 +338,14 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 						var gridItem;
 						if ( result.success ) {
 							load( result.data );
-							gridItem = populateGridItem( result.data );
-							document.querySelector( '#media-library-grid ul' ).prepend( gridItem );
+							populateGridItem( result.data, 'prepend' );
 						} else {
-							error( IMAGE_WIDGET.upload_failed );
+							error( _cpFilepondLabels.labelFileProcessingError );
 						}
 					} )
 					.catch( function( err ) {
-						error( IMAGE_WIDGET.upload_failed );
-						console.error( IMAGE_WIDGET.error, err );
+						error( _cpFilepondLabels.labelFileProcessingError );
+						console.error( _cpFilepondLabels.labelFileProcessingError, err );
 					} );
 
 					// Return an abort function
@@ -342,7 +356,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 						}
 					};
 				},
-				maxFileSize: dialog.querySelector( '#ajax-url' ).dataset.maxFileSize
+				maxFileSize: modal.querySelector( '#ajax-url' ).dataset.maxFileSize
 			},
 			onprocessfile: ( error, file ) => { // Called when an individual file upload completes
 				if ( ! error ) {
@@ -353,25 +367,45 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 				}
 			},
 			onprocessfiles: () => { // Called when all files in the queue have finished uploading
-				updateGrid( 1 );
-				dialog.querySelector( '#menu-item-browse' ).click();
+				itemBrowse.click();
 				setTimeout( function() {
-					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+					modal.querySelector( '.admin-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+					grid.querySelector( 'li' ).focus();
 				}, 500 );
 			},
-			labelTapToUndo: IMAGE_WIDGET.tap_close,
+			labelTapToUndo: _cpFilepondLabels.labelTapToClose,
 			fileRenameFunction: ( file ) =>
 				new Promise( function( resolve ) {
 					const newName = window.prompt(
-						_wpCustomizeControlsL10n.new_filename,
+						_cpFilepondLabels.labelNewFileName,
 						file.name
 					);
 					resolve( newName === null ? file.name : newName );
 				}
 			),
 			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
-			labelFileTypeNotAllowed: IMAGE_WIDGET.invalid_type,
-			fileValidateTypeLabelExpectedTypes: IMAGE_WIDGET.check_types
+			labelFileTypeNotAllowed: _cpFilepondLabels.labelInvalidType,
+			fileValidateTypeLabelExpectedTypes: _cpFilepondLabels.labelCheckTypes
 		} );
+	}
+
+	// Reset ordering of media items
+	function resetDataOrdering( sign ) {
+		var items = document.querySelectorAll( '.media-item' ),
+			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
+			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
+			count2 = sign === 'minus' ? parseInt( count[2], 10 ) - 1 : parseInt( count[2], 10 ) + 1,
+			count5 = '';
+
+		items.forEach( function( item, index ) {
+			item.setAttribute( 'data-order', parseInt( index + 1 ) );
+		} );
+
+		// Reset totals
+		if ( count[5] ) { // allow for different languages
+			count5 = ' ' + count[5];
+		}
+		document.querySelector( '.load-more-count' ).textContent = items.length + ' ' + count[1] + ' ' + count2 + ' ' + count[4] + count5;
+		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
 	}
 }
