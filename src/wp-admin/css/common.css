@@ -2417,7 +2417,8 @@ details summary > * {
 }
 
 /* Main modal area */
-.admin-modal-main {
+.admin-modal-main,
+.widget-modal-main {
 	flex-grow: 1;
 }
 
@@ -2426,22 +2427,26 @@ details summary > * {
 }
 
 /* Header */
-.admin-modal-header {
+.admin-modal-header,
+.widget-modal-header {
 	background: #fff;
 	border-bottom: 1px solid #dcdcde;
 }
 
-.admin-modal-headings {
+.admin-modal-headings,
+.widget-modal-headings {
 	display: flex;
 	justify-content: space-between;
 	margin: 0 1em;
 }
 
-.admin-modal-title {
+.admin-modal-title,
+.widget-modal-title {
 	margin-top: 1em;
 }
 
-.admin-modal-title h2 {
+.admin-modal-title h2,
+.widget-modal-title h2 {
 	margin: 0;
 	font-size: 22px;
 	line-height: 1.2;
@@ -2465,7 +2470,8 @@ details summary > * {
 	background: #f0f0f1;
 }
 
-.admin-modal-close {
+.admin-modal-close,
+.widget-modal-close {
 	width: 46px;
 	height: 46px;
 	color: #646970;
@@ -2486,7 +2492,8 @@ details summary > * {
 	pointer-events: none;
 }
 
-.admin-modal-icon::before {
+.admin-modal-icon::before,
+.widget-modal-icon::before {
 	content: '\f158';
 	font: normal 20px/1 dashicons;
 	vertical-align: middle;
@@ -2521,10 +2528,11 @@ details summary > * {
 	margin-right: 1em;
 }
 
-.admin-modal-content {
-  display: flex;
-  padding-left: 1em;
-  height: 100%;
+.admin-modal-content,
+.widget-modal-content {
+	display: flex;
+	padding-left: 1em;
+	height: 100%;
 }
 
 .admin-modal-tabpanel {
@@ -2698,7 +2706,8 @@ details summary > * {
 }
 
 /* Footer */
-.admin-modal-footer {
+.admin-modal-footer,
+.widget-modal-footer {
 	position: sticky;
 	display: flex;
 	justify-content: space-between;
@@ -2709,7 +2718,8 @@ details summary > * {
 	border-top: 1px solid #dcdcde;
 }
 
-.admin-modal-footer-buttons {
+.admin-modal-footer-buttons,
+.widget-modal-footer-buttons {
 	padding-right: 1em;
 	text-align: right;
 }
