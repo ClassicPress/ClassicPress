@@ -11,11 +11,10 @@
  *
  * @param {string} attachmentAction The AJAX action to call when selecting.
  * @param {string} sizeParam The image size parameter.
- * @param {Function} onSelect Optional callback when an image is selected.
  *
  * @return {void}
  */
-function AdminMediaModal( attachmentAction, sizeParam, onSelect ) {
+function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 	'use strict';
 
 	const modal = document.getElementById( 'admin-media-modal' ),
@@ -161,23 +160,34 @@ function AdminMediaModal( attachmentAction, sizeParam, onSelect ) {
 	}
 
 	function handleSelect() {
+		const nonceField = document.getElementById( '_wpnonce' );
+		let params;
+
 		if ( ! selectedAttachment ) {
 			return;
 		}
 
-		if ( onSelect ) {
-			onSelect( selectedAttachment );
+		if ( headerImage ) {
 			modal.close();
+
+			window.CustomHeaderCrop = {
+				id: selectedAttachment.id,
+				url: selectedAttachment.url,
+				width: selectedAttachment.width,
+				height: selectedAttachment.height,
+				nonce: selectedAttachment.nonces.edit
+			};
+
+			document.dispatchEvent( new CustomEvent( 'custom-header-attachment-selected' ) );
 			return;
 		}
 
-		const nonceField = document.getElementById( '_wpnonce' ),
-			params = new URLSearchParams( {
-				action: attachmentAction,
-				attachment_id: selectedAttachment.id,
-				_ajax_nonce: nonceField ? nonceField.value : '',
-				size: sizeParam || 'full'
-			} );
+		params = new URLSearchParams( {
+			action: attachmentAction,
+			attachment_id: selectedAttachment.id,
+			_ajax_nonce: nonceField ? nonceField.value : '',
+			size: sizeParam || 'full'
+		} );
 
 		fetch( ajaxurl, {
 			method: 'POST',
