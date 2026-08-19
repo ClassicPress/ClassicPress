@@ -2481,7 +2481,9 @@ details summary > * {
 }
 
 .admin-modal-close:hover,
-.admin-modal-close:focus {
+.admin-modal-close:focus,
+#cp-cropper-close:hover,
+#cp-cropper-close:focus {
 	background: #f0f0f1;
 	color: #2271b1;
 	outline: 2px solid #2271b1;
