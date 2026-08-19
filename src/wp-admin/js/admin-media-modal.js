@@ -2,7 +2,9 @@
  * @output wp-admin/js/admin-media-modal.js
  */
 
-/* global ajaxurl, wpAjax */
+/* global ajaxurl, wpAjax, Coloris, IMAGE_WIDGET, _cpCustomLogo,
+FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
+FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console */
 
 /**
  * Admin Media Modal - Reusable media selection component.
@@ -20,8 +22,17 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 	const modal = document.getElementById( 'admin-media-modal' ),
 		grid = document.getElementById( 'admin-modal-grid' ),
 		selectButton = document.getElementById( 'admin-modal-select-button' ),
-		closeButton = modal ? modal.querySelector( '.admin-modal-close' ) : null,
-		chooseLink = document.getElementById( 'choose-from-library-link' );
+		closeButton = modal.querySelector( '.admin-modal-close' ),
+		chooseLink = document.getElementById( 'choose-from-library-link' ),
+		itemUpload = document.getElementById( 'menu-item-upload' ),
+		itemBrowse = document.getElementById( 'menu-item-browse' ),
+		gridPanel = modal.querySelector( '.admin-modal-tabpanel' ),
+		rightSidebar = modal.querySelector( '.admin-modal-right-sidebar' ),
+		modalPages = modal.querySelector( '.admin-modal-pages' ),
+		uploadPanel = document.getElementById( 'uploader-inline' ),
+		modalButtons = modal.querySelector( '.admin-modal-header-buttons' ),
+		insertFromUrl = document.getElementById( 'admin-modal-item-embed' ),
+		addImage = document.getElementById( 'admin-modal-item-add' );
 
 	let selectedAttachment = null;
 
@@ -205,9 +216,50 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 		} );
 	}
 
+	function browseMediaLibrary( e ) {
+		e.preventDefault();
+		insertFromUrl.classList.remove ( 'active' );
+		insertFromUrl.setAttribute( 'aria-selected', 'false' );
+		itemUpload.classList.remove( 'active' );
+		itemUpload.setAttribute( 'aria-selected', 'false' );
+		addImage.classList.add( 'active' );
+		addImage.setAttribute( 'aria-selected', 'true' );
+		itemBrowse.classList.add ( 'active' );
+		itemBrowse.setAttribute( 'aria-selected', 'true' );
+		uploadPanel.setAttribute( 'hidden', 'true' );
+		uploadPanel.setAttribute( 'inert', 'true' );
+		gridPanel.removeAttribute( 'hidden' );
+		gridPanel.removeAttribute( 'inert' );
+		rightSidebar.removeAttribute( 'hidden' );
+		rightSidebar.removeAttribute( 'inert' );
+		modalPages.removeAttribute( 'hidden' );
+		modalPages.removeAttribute( 'inert' );
+	}
+
+	function uploadFile( e ) {
+		e.preventDefault();
+		addImage.classList.remove( 'active' );
+		addImage.setAttribute( 'aria-selected', 'false' );
+		itemBrowse.classList.remove( 'active' );
+		itemBrowse.setAttribute( 'aria-selected', 'false' );
+		insertFromUrl.classList.add ( 'active' );
+		insertFromUrl.setAttribute( 'aria-selected', 'true' );
+		itemUpload.classList.add ( 'active' );
+		itemUpload.setAttribute( 'aria-selected', 'true' );
+		uploadPanel.removeAttribute( 'hidden' );
+		uploadPanel.removeAttribute( 'inert' );
+		gridPanel.setAttribute( 'hidden', 'true' );
+		gridPanel.setAttribute( 'inert', 'true' );
+		rightSidebar.setAttribute( 'hidden', 'true' );
+		rightSidebar.setAttribute( 'inert', 'true' );
+		modalPages.setAttribute( 'hidden', 'true' );
+		modalPages.setAttribute( 'inert', 'true' );
+		goFilepond();
+	}
+
 	// Open modal on choose link click
-	chooseLink.addEventListener( 'click', function( event ) {
-		event.preventDefault();
+	chooseLink.addEventListener( 'click', function( e ) {
+		e.preventDefault();
 		modal.showModal();
 		loadAttachments();
 	} );
@@ -221,4 +273,105 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 
 	// Handle select button
 	selectButton.addEventListener( 'click', handleSelect );
+
+	// Enable file upload
+	itemUpload.addEventListener( 'click', uploadFile );
+	insertFromUrl.addEventListener( 'click', uploadFile );
+
+	// Browse media library
+	itemBrowse.addEventListener( 'click', browseMediaLibrary );
+	addImage.addEventListener( 'click', browseMediaLibrary );
+
+	/**
+	 * Upload files using FilePond
+	 */
+	function goFilepond() {
+
+		// Register FilePond plugins
+		FilePond.registerPlugin(
+			FilePondPluginFileValidateSize,
+			FilePondPluginFileValidateType,
+			FilePondPluginFileRename,
+			FilePondPluginImagePreview
+		);
+
+		// Create a FilePond instance
+		pond = FilePond.create( dialog.querySelector( '#filepond' ), {
+			allowMultiple: true,
+			server: {
+				process: function( fieldName, file, metadata, load, error, progress, abort ) {
+
+					// Create FormData
+					var formData = new FormData();
+					formData.append( 'async-upload', file, file.name );
+					formData.append( 'action', 'upload-attachment' );
+					formData.append( '_wpnonce', IMAGE_WIDGET.media_nonce );
+
+					// Use Fetch to upload the file
+					fetch( ajaxurl, {
+						method: 'POST',
+						body: formData,
+						credentials: 'same-origin'
+					} )
+					.then( function( response ) {
+						if ( response.ok ) {
+							return response.json(); // no errors
+						}
+						throw new Error( response.status );
+					} )
+					.then( function( result ) {
+						var gridItem;
+						if ( result.success ) {
+							load( result.data );
+							gridItem = populateGridItem( result.data );
+							document.querySelector( '#media-library-grid ul' ).prepend( gridItem );
+						} else {
+							error( IMAGE_WIDGET.upload_failed );
+						}
+					} )
+					.catch( function( err ) {
+						error( IMAGE_WIDGET.upload_failed );
+						console.error( IMAGE_WIDGET.error, err );
+					} );
+
+					// Return an abort function
+					return {
+						abort: function() {
+							// This function is called when the user aborts the upload
+							abort();
+						}
+					};
+				},
+				maxFileSize: dialog.querySelector( '#ajax-url' ).dataset.maxFileSize
+			},
+			onprocessfile: ( error, file ) => { // Called when an individual file upload completes
+				if ( ! error ) {
+					setTimeout( function() {
+						pond.removeFile( file.id );
+					}, 100 );
+					resetDataOrdering( 'plus' );
+				}
+			},
+			onprocessfiles: () => { // Called when all files in the queue have finished uploading
+				updateGrid( 1 );
+				dialog.querySelector( '#menu-item-browse' ).click();
+				setTimeout( function() {
+					dialog.querySelector( '.widget-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+				}, 500 );
+			},
+			labelTapToUndo: IMAGE_WIDGET.tap_close,
+			fileRenameFunction: ( file ) =>
+				new Promise( function( resolve ) {
+					const newName = window.prompt(
+						_wpCustomizeControlsL10n.new_filename,
+						file.name
+					);
+					resolve( newName === null ? file.name : newName );
+				}
+			),
+			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
+			labelFileTypeNotAllowed: IMAGE_WIDGET.invalid_type,
+			fileValidateTypeLabelExpectedTypes: IMAGE_WIDGET.check_types
+		} );
+	}
 }
