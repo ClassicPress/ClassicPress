@@ -628,6 +628,7 @@ function wp_default_scripts( $scripts ) {
 			'skip_note'     => __( 'You can skip cropping if you do not need to adjust the image.' ),
 			'skipping'      => __( 'Skip Cropping' ),
 			'saving'        => __( 'Saving' ),
+			'network_error' => __( 'Network error' ),
 		)
 	);
 
