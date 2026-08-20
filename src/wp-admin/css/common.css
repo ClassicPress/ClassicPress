@@ -2703,7 +2703,7 @@ details summary > * {
 	margin: auto;
 }
 
-.widget-modal-attachment-info .details {
+.admin-modal-attachment-info .details {
 	width: 50%;
 	padding-left: 1em;
 	display: inline-block;
