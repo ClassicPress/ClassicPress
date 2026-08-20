@@ -2,8 +2,8 @@
  * @output wp-admin/js/admin-media-modal.js
  */
 
-/* global ajaxurl, wpAjax, Coloris, _cpCustomLogo, _cpFilepondLabels,
-FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
+/* global ajaxurl, wpAjax, Coloris, _cpCustomLogo, _cpAdminMediaModalStrings,
+_cpFilepondLabels, FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
 FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console */
 
 /**
@@ -169,7 +169,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 			sidebarInfo.setAttribute( 'hidden', 'true' );
 			selectedAttachment = null;
 			selectButton.disabled = true;
-		} else {
+		} else {console.log(attachment);
 			gridItem.classList.add( 'selected' );
 			gridItem.setAttribute( 'aria-checked', 'true' );
 			gridItem.querySelector( '.check' ).style.display = 'block';
@@ -180,8 +180,8 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 			// Populate modal with attachment details
 			modal.querySelector( '.attachment-date' ).textContent = attachment.dateFormatted;
 			modal.querySelector( '.attachment-filename' ).textContent = attachment.filename;
-			modal.querySelector( '.attachment-filesize' ).textContent = attachment.filesizeInBytes;
-			modal.querySelector( '.attachment-dimensions' ).textContent = attachment.width + ' ' + 'by' + ' ' + attachment.height + ' ' + 'pixels';
+			modal.querySelector( '.attachment-filesize' ).textContent = attachment.filesizeHumanReadable;
+			modal.querySelector( '.attachment-dimensions' ).textContent = attachment.width + ' ' + _cpAdminMediaModalStrings.by + ' ' + attachment.height + ' ' + _cpAdminMediaModalStrings.pixels;
 			document.getElementById( 'edit-more' ).href = ajaxurl.replace( 'admin-ajax.php', 'post.php?post=' + attachment.id + '&action=edit' );
 			modal.querySelector( '.admin-modal-attachment-info img' ).src = attachment.url;
 			modal.querySelector( '.admin-modal-attachment-info img' ).alt = attachment.alt;
@@ -393,7 +393,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 					// Update the count at the bottom of the page
 					modal.querySelector( '.no-media' ).setAttribute( 'hidden', 'true' );
 					modal.querySelector( '.load-more-count' ).removeAttribute( 'hidden' );
-					modal.querySelector( '.load-more-count' ).textContent = result.data.length + ' ' + 'of' + ' ' + result.headers.total_posts;// + ' ' + IMAGE_WIDGET.media_items;
+					modal.querySelector( '.load-more-count' ).textContent = result.data.length + ' ' + 'of' + ' ' + result.headers.total_posts + ' ' + _cpAdminMediaModalStrings.media_items;
 				}
 			}
 		} )
@@ -467,11 +467,11 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 					saved.setAttribute( 'aria-hidden', 'true' );
 				}, 3000 );
 			} else {
-				//console.error( IMAGE_WIDGET.failed_update, result.data.error );
+				console.error( _cpAdminMediaModalStrings.failed_update, result.data.error );
 			}
 		} )
 		.catch( function( error ) {
-			//console.error( IMAGE_WIDGET.error, error );
+			console.error( _cpAdminMediaModalStrings.error, error );
 		} );
 	}
 
@@ -566,11 +566,11 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 					document.getElementById( 'tax-saved' ).setAttribute( 'aria-hidden', 'true' );
 				}, 3000 );
 			} else {
-				//console.error( IMAGE_WIDGET.failed_update, result.data.error );
+				console.error( _cpAdminMediaModalStrings.failed_update, result.data.error );
 			}
 		} )
 		.catch( function( error ) {
-			//console.error( IMAGE_WIDGET.error, error );
+			console.error( _cpAdminMediaModalStrings.error, error );
 		} );
 	}
 
