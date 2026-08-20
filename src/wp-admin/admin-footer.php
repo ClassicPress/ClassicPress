@@ -159,7 +159,7 @@ $attachment_url_options .= '<option value="custom">' . esc_html__( 'Custom URL' 
 <div class="clear"></div></div><!-- wpwrap -->
 
 <!-- Admin Media Modal. Access restricted to editors and above. -->
-<?php if ( current_user_can( 'publish_posts' ) ) : ?>
+<?php if ( current_user_can( 'publish_posts' ) && $hook_suffix !== 'widgets.php' ) : ?>
 
 	<dialog id="admin-media-modal" class="admin-media-modal">
 		<div id="admin-modal-container" class="admin-modal-container">
