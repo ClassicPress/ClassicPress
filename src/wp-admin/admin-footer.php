@@ -158,7 +158,7 @@ $attachment_url_options .= '<option value="custom">' . esc_html__( 'Custom URL' 
 
 <div class="clear"></div></div><!-- wpwrap -->
 
-<?php if ( current_user_can( 'publish_posts' ) && $hook_suffix !== 'widgets.php' ) : ?>
+<?php if ( current_user_can( 'publish_posts' ) && ! in_array( $hook_suffix, array( 'widgets.php', 'upload.php' ) ) ) : ?>
 
 	<!-- Admin Media Modal. Access restricted to editors and above. -->
 	<dialog id="admin-media-modal" class="admin-media-modal">
@@ -339,9 +339,11 @@ $attachment_url_options .= '<option value="custom">' . esc_html__( 'Custom URL' 
 								<p class="load-more-count">
 									<?php
 									printf(
-										'%d of %d items',
+										'%d %s %d %s',
 										$attachments->post_count < $per_page ? $attachments->post_count : $attachments->post_count % $total_pages,
+										'of',
 										$attachments->post_count,
+										'items',
 									);
 									?>
 								</p>
