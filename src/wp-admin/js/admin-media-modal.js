@@ -283,9 +283,9 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 	 * @return {void}
 	 */
 	function updateGrid( paged ) {
-		var dateFilter = modal.querySelector( '#filter-by-date' ),
-			mediaCatSelect = dateFilter.nextElementSibling,
-			search = modal.querySelector( '#admin-modal-search-input' ),
+		var dateFilter = document.getElementById( 'filter-by-date' ),
+			mediaCatSelect = document.getElementById( 'taxonomy=media_category&term' ),
+			search = document.getElementById( 'admin-modal-search-input' ),
 			params = new URLSearchParams( {
 				'action': 'query-attachments',
 				'query[monthnum]': dateFilter.value ? parseInt( dateFilter.value.substr( 4, 2 ), 10 ) : 0,
@@ -612,7 +612,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 
 		if ( e.target.id === 'filter-by-date' ) {
 			updateGrid( 1 );
-		} else if ( e.target.className === 'postform' ) {
+		} else if ( e.target.id === 'taxonomy=media_category&term' ) {
 			updateGrid( 1 );
 		} else if ( e.target.id === 'current-page-selector' ) {
 			updateGrid( e.target.value );
