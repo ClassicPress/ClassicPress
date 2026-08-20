@@ -827,6 +827,7 @@ function wp_default_scripts( $scripts ) {
 			'labelTapToCancel'               => __( 'tap to cancel' ),
 			'labelTapToRetry'                => __( 'tap to retry' ),
 			'labelTapToUndo'                 => __( 'tap to undo' ),
+			'labelTapToClose'                => __( 'Tap to close' ),
 			'labelButtonRemoveItem'          => __( 'Remove' ),
 			'labelButtonAbortItemLoad'       => __( 'Abort' ),
 			'labelButtonRetryItemLoad'       => __( 'Retry' ),
@@ -834,6 +835,10 @@ function wp_default_scripts( $scripts ) {
 			'labelButtonUndoItemProcessing'  => __( 'Undo' ),
 			'labelButtonRetryItemProcessing' => __( 'Retry' ),
 			'labelButtonProcessItem'         => __( 'Upload' ),
+			'labelButtonDeselect'            => __( 'Deselect' ),
+			'labelInvalidType'               => __( 'Invalid type' ),
+			'labelCheckTypes'                => __( 'Check file types' ),
+			'labelNewFileName'               => __( 'New file name' ),
 		)
 	);
 
@@ -1416,7 +1421,33 @@ function wp_default_scripts( $scripts ) {
 		$scripts->add( 'nav-menu', "/wp-admin/js/nav-menu$suffix.js", array( 'sortable-js', 'wp-lists', 'postbox', 'json2', 'underscore' ) );
 		$scripts->set_translations( 'nav-menu' );
 
-		$scripts->add( 'admin-media-modal', "/wp-admin/js/admin-media-modal$suffix.js", array( 'wp-ajax-response' ), false, 1 );
+		$scripts->add( 'admin-media-modal', "/wp-admin/js/admin-media-modal$suffix.js",
+			array(
+				'wp-ajax-response',
+				'image-edit',
+				'cp-filepond-file-validate-size',
+				'cp-filepond-file-validate-type',
+				'cp-filepond-file-rename',
+				'cp-filepond-plugin-image-preview',
+				'cp-filepond',
+			),
+			false,
+			1
+		);
+		did_action( 'init' ) && $scripts->localize(
+			'admin-media-modal',
+			'_cpAdminMediaModalStrings',
+			array(
+				'by'               => __( 'by' ),
+				'pixels'           => __( 'pixels' ),
+				'media_items'      => __( 'media items' ),
+				'failed_update'    => __( 'Failed to update media:' ),
+				'error'            => __( 'Error:' ),
+				'delete_failed'    => __( 'Failed to delete attachment.' ),
+				'confirm_delete'   => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+				'confirm_multiple' => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+			)
+		);
 		$scripts->add( 'custom-header', "/wp-admin/js/custom-header$suffix.js", array( 'admin-media-modal' ), false, 1 );
 		$scripts->add( 'custom-background', "/wp-admin/js/custom-background$suffix.js", array( 'admin-media-modal', 'coloris' ), false, 1 );
 		$scripts->add( 'media-gallery', "/wp-admin/js/media-gallery$suffix.js", array( 'jquery' ), false, 1 );
@@ -1529,7 +1560,7 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'coloris', '/wp-includes/js/coloris/coloris.min.css', array(), '0.25.0' );
 	did_action( 'init' ) && $styles->add_inline_style( 'wp-view-transitions-admin', wp_get_view_transitions_admin_css() );
 
-	$styles->add( 'wp-admin', false, array( 'dashicons', 'common', 'forms', 'admin-menu', 'dashboard', 'list-tables', 'edit', 'revisions', 'media', 'themes', 'coloris', 'about', 'nav-menus', 'site-icon', 'l10n' ) );
+	$styles->add( 'wp-admin', false, array( 'dashicons', 'common', 'forms', 'admin-menu', 'dashboard', 'list-tables', 'edit', 'revisions', 'media', 'themes', 'coloris', 'about', 'nav-menus', 'site-icon', 'cp-filepond', 'cp-cropper', 'l10n' ) );
 
 	$styles->add( 'login', "/wp-admin/css/login$suffix.css", array( 'dashicons', 'buttons', 'forms', 'l10n' ) );
 	$styles->add( 'install', "/wp-admin/css/install$suffix.css", array( 'dashicons', 'buttons', 'forms', 'l10n' ) );
