@@ -2685,6 +2685,35 @@ details summary > * {
 	overflow: auto;
 }
 
+.admin-modal-attachment-info {
+	padding-bottom: 1em;
+	margin-bottom: 1em;
+	border-bottom: 1px solid #dcdcde;
+}
+
+.admin-modal-attachment-info .thumbnail {
+	width: 38%;
+	overflow: hidden;
+	display: inline-block;
+}
+
+.admin-modal-attachment-info .thumbnail img {
+	max-width: 100%;
+	max-height: 500px;
+	margin: auto;
+}
+
+.widget-modal-attachment-info .details {
+	width: 50%;
+	padding-left: 1em;
+	display: inline-block;
+	box-sizing: border-box;
+}
+
+.admin-modal-right-sidebar .button-link.delete-attachment {
+	color: #d63638;
+}
+
 .admin-modal-descriptions .copy-to-clipboard-container {
 	justify-content: flex-end;
 }
