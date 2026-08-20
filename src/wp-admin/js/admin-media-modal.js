@@ -169,7 +169,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 			sidebarInfo.setAttribute( 'hidden', 'true' );
 			selectedAttachment = null;
 			selectButton.disabled = true;
-		} else {console.log(attachment);
+		} else {
 			gridItem.classList.add( 'selected' );
 			gridItem.setAttribute( 'aria-checked', 'true' );
 			gridItem.querySelector( '.check' ).style.display = 'block';
