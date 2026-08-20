@@ -177,11 +177,19 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 			selectedAttachment = attachment;
 			setAddedMediaFields( attachment );
 
-			document.getElementById( 'attachment-details-alt-text' ).value = gridItem.querySelector( 'img' ).alt;
-			document.getElementById( 'attachment-details-title' ).value = gridItem.getAttribute( 'aria-label' );
-			document.getElementById( 'attachment-details-caption' ).value = gridItem.dataset.caption;
-			document.getElementById( 'attachment-details-description' ).value = gridItem.dataset.description;
-			document.getElementById( 'attachment-details-copy-link' ).value = gridItem.dataset.url;
+			// Populate modal with attachment details
+			modal.querySelector( '.attachment-date' ).textContent = attachment.dateFormatted;
+			modal.querySelector( '.attachment-filename' ).textContent = attachment.filename;
+			modal.querySelector( '.attachment-filesize' ).textContent = attachment.filesizeInBytes;
+			modal.querySelector( '.attachment-dimensions' ).textContent = attachment.width + ' ' + 'by' + ' ' + attachment.height + ' ' + 'pixels';
+			document.getElementById( 'edit-more' ).href = ajaxurl.replace( 'admin-ajax.php', 'post.php?post=' + attachment.id + '&action=edit' );
+			modal.querySelector( '.admin-modal-attachment-info img' ).src = attachment.url;
+			modal.querySelector( '.admin-modal-attachment-info img' ).alt = attachment.alt;
+			document.getElementById( 'attachment-details-alt-text' ).value = attachment.alt;
+			document.getElementById( 'attachment-details-title' ).value = attachment.title;
+			document.getElementById( 'attachment-details-caption' ).value = attachment.caption;
+			document.getElementById( 'attachment-details-description' ).value = attachment.description;
+			document.getElementById( 'attachment-details-copy-link' ).value = attachment.url;
 
 			selectButton.disabled = false;
 		}
