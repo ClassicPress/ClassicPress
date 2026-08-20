@@ -1789,7 +1789,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	form.addEventListener( 'submit', async function( e ) {
-		let result, newResult, timeStr, frontSelect, postsSelect,
+		let result, newResult, timeStr,
 			entries = Object.entries( updatedControls ),
 			navMenuChanges = {},
 			submittedChanges = {},
