@@ -339,7 +339,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 
 					// Reset pagination
 					modal.querySelectorAll( '.pagination-links button' ).forEach( function( pageLink ) {
-						if ( pageLink.className.includes( 'first-page' ) || pageLink.className.includes( 'prev-page' ) ) {console.log(paged);
+						if ( pageLink.className.includes( 'first-page' ) || pageLink.className.includes( 'prev-page' ) ) {
 							if ( paged === 1 ) {
 								pageLink.setAttribute( 'disabled', 'true' );
 								pageLink.setAttribute( 'inert', 'true' );
