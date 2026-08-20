@@ -28,6 +28,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 		itemBrowse = document.getElementById( 'menu-item-browse' ),
 		gridPanel = modal.querySelector( '.admin-modal-tabpanel' ),
 		rightSidebar = modal.querySelector( '.admin-modal-right-sidebar' ),
+		rightSidebarInfo = modal.querySelector( '.admin-modal-right-sidebar-info' ),
 		modalPages = modal.querySelector( '.admin-modal-pages' ),
 		uploadPanel = document.getElementById( 'uploader-inline' ),
 		modalButtons = modal.querySelector( '.admin-modal-header-buttons' ),
@@ -152,28 +153,27 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 
 	function selectItem( gridItem, attachment ) {
 		const items = grid.querySelectorAll( '.media-item' ),
-			isSelected = gridItem.classList.contains( 'selected' ),
-			sidebarInfo = modal.querySelector( '.admin-modal-right-sidebar-info' );
+			isSelected = gridItem.classList.contains( 'selected' );
 
 		items.forEach( function( item ) {
 			item.classList.remove( 'selected' );
 			item.setAttribute( 'aria-checked', 'false' );
 			item.querySelector( '.check' ).style.display = 'none';
-			sidebarInfo.setAttribute( 'hidden', 'true' );
+			rightSidebarInfo.setAttribute( 'hidden', 'true' );
 		} );
 
 		if ( isSelected ) {
 			gridItem.classList.remove( 'selected' );
 			gridItem.setAttribute( 'aria-checked', 'false' );
 			gridItem.querySelector( '.check' ).style.display = 'none';
-			sidebarInfo.setAttribute( 'hidden', 'true' );
+			rightSidebarInfo.setAttribute( 'hidden', 'true' );
 			selectedAttachment = null;
 			selectButton.disabled = true;
 		} else {
 			gridItem.classList.add( 'selected' );
 			gridItem.setAttribute( 'aria-checked', 'true' );
 			gridItem.querySelector( '.check' ).style.display = 'block';
-			sidebarInfo.removeAttribute( 'hidden' );
+			rightSidebarInfo.removeAttribute( 'hidden' );
 			selectedAttachment = attachment;
 			setAddedMediaFields( attachment );
 
@@ -574,6 +574,50 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 		} );
 	}
 
+	// Delete attachment from within modal
+	function deleteItem( id ) {
+		var mediaItem = document.getElementById( id );
+		if ( ! mediaItem ) {
+			return;
+		}
+		var data = new URLSearchParams( {
+			action: 'delete-post',
+			_ajax_nonce: mediaItem.dataset.deleteNonce,
+			id: id.replace( 'media-', '' )
+		} );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result === 1 ) { // success
+				if ( mediaItem.previousElementSibling != null ) {
+					document.getElementById( mediaItem.previousElementSibling.id ).focus();
+				} else if ( mediaItem.nextElementSibling != null ) {
+					document.getElementById( mediaItem.nextElementSibling.id ).focus();
+				} else {
+					closeModal();
+				}
+				mediaItem.remove();
+				rightSidebarInfo.setAttribute( 'hidden', 'true' );
+				resetDataOrdering( 'minus' );
+			} else {
+				console.log( _cpAdminMediaModalStrings.delete_failed );
+			}
+		} )
+		.catch( function( error ) {
+			console.error( _cpAdminMediaModalStrings.error, error );
+		} );
+	}
+
 	// Open modal on choose link click
 	chooseLink.addEventListener( 'click', function( e ) {
 		e.preventDefault();
@@ -600,10 +644,18 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 	addImage.addEventListener( 'click', browseMediaLibrary );
 
 	// Update media attachment details
-	modal.querySelectorAll( '.admin-modal-right-sidebar-info input, .admin-modal-right-sidebar-info textarea' ).forEach( function( input ) {
+	rightSidebarInfo.querySelectorAll( 'input, textarea' ).forEach( function( input ) {
 		input.addEventListener( 'change', function() {
 			updateDetails( input, document.querySelector( '.media-item.selected' ).dataset.id );
 		} );
+	} );
+
+	// Delete attachment
+	modal.querySelector( '.delete-attachment' ).addEventListener( 'click', function() {
+		const id = document.querySelector( '.media-item.selected' ).id;
+		if ( id && window.confirm( _cpAdminMediaModalStrings.confirm_delete ) ) {
+			deleteItem( id );
+		}
 	} );
 
 	/**
@@ -626,7 +678,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 			updateGrid( e.target.value );
 		} else if ( e.target.id === 'admin-modal-search-input' ) {
 			updateGrid( 1 );
-			modal.querySelector( '.admin-modal-right-sidebar-info' ).setAttribute( 'hidden', 'true' );
+			rightSidebarInfo.setAttribute( 'hidden', 'true' );
 		}
 	} );
 
@@ -743,7 +795,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 			onprocessfiles: () => { // Called when all files in the queue have finished uploading
 				itemBrowse.click();
 				setTimeout( function() {
-					modal.querySelector( '.admin-modal-right-sidebar-info' ).setAttribute( 'hidden', 'true' );
+					rightSidebarInfo.setAttribute( 'hidden', 'true' );
 					grid.querySelector( 'li' ).focus();
 				}, 500 );
 			},
