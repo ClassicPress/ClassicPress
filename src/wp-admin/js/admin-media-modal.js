@@ -111,7 +111,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 		gridItem.id = 'media-' + attachment.id;
 		gridItem.setAttribute( 'tabindex', 0 );
 		gridItem.setAttribute( 'role', 'checkbox' );
-		gridItem.setAttribute( 'aria-checked', selected ? true : false );
+		gridItem.setAttribute( 'aria-checked', selected ? 'true' : 'false' );
 		gridItem.setAttribute( 'aria-label', attachment.title );
 		gridItem.setAttribute( 'data-id', attachment.id );
 		gridItem.setAttribute( 'data-date', attachment.dateFormatted );
@@ -319,8 +319,8 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 					// Reset pagination
 					modal.querySelectorAll( '.pagination-links button' ).forEach( function( pageLink ) {
 						pageLink.setAttribute( 'data-page', 1 );
-						pageLink.setAttribute( 'disabled', true );
-						pageLink.setAttribute( 'inert', true );
+						pageLink.setAttribute( 'disabled', 'true' );
+						pageLink.setAttribute( 'inert', 'true' );
 					} );
 
 					modal.querySelector( '#current-page-selector' ).setAttribute( 'value', 1 );
@@ -328,7 +328,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 					modal.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, 0 );
 
 					// Update the count at the bottom of the page
-					modal.querySelector( '.load-more-count' ).setAttribute( 'hidden', true );
+					modal.querySelector( '.load-more-count' ).setAttribute( 'hidden', 'true' );
 					modal.querySelector( '.no-media' ).removeAttribute( 'hidden' );
 				} else {
 
@@ -339,10 +339,10 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 
 					// Reset pagination
 					modal.querySelectorAll( '.pagination-links button' ).forEach( function( pageLink ) {
-						if ( pageLink.className.includes( 'first-page' ) || pageLink.className.includes( 'prev-page' ) ) {
-							if ( paged === '1' ) {
-								pageLink.setAttribute( 'disabled', true );
-								pageLink.setAttribute( 'inert', true );
+						if ( pageLink.className.includes( 'first-page' ) || pageLink.className.includes( 'prev-page' ) ) {console.log(paged);
+							if ( paged === 1 ) {
+								pageLink.setAttribute( 'disabled', 'true' );
+								pageLink.setAttribute( 'inert', 'true' );
 							} else {
 								pageLink.removeAttribute( 'disabled'  );
 								pageLink.removeAttribute( 'inert'  );
@@ -357,8 +357,8 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 						} else if ( pageLink.className.includes( 'next-page' ) ) {
 							if ( result.headers.max_pages === parseInt( paged ) ) {
 								pageLink.setAttribute( 'data-page', paged );
-								pageLink.setAttribute( 'disabled', true );
-								pageLink.setAttribute( 'inert', true );
+								pageLink.setAttribute( 'disabled', 'true' );
+								pageLink.setAttribute( 'inert', 'true' );
 							} else {
 								pageLink.setAttribute( 'data-page', parseInt( paged ) + 1 );
 								pageLink.removeAttribute( 'disabled'  );
@@ -367,8 +367,8 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 						} else if ( pageLink.className.includes( 'last-page' ) ) {
 							pageLink.setAttribute( 'data-page', result.headers.max_pages );
 							if ( result.headers.max_pages === parseInt( paged ) ) {
-								pageLink.setAttribute( 'disabled', true );
-								pageLink.setAttribute( 'inert', true );
+								pageLink.setAttribute( 'disabled', 'true' );
+								pageLink.setAttribute( 'inert', 'true' );
 							} else {
 								pageLink.removeAttribute( 'disabled'  );
 								pageLink.removeAttribute( 'inert'  );
@@ -383,7 +383,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 					modal.querySelector( '.displaying-num' ).textContent = document.querySelector( '.displaying-num' ).textContent.replace( /[0-9]+/, result.headers.total_posts );
 
 					// Update the count at the bottom of the page
-					modal.querySelector( '.no-media' ).setAttribute( 'hidden', true );
+					modal.querySelector( '.no-media' ).setAttribute( 'hidden', 'true' );
 					modal.querySelector( '.load-more-count' ).removeAttribute( 'hidden' );
 					modal.querySelector( '.load-more-count' ).textContent = result.data.length + ' ' + 'of' + ' ' + result.headers.total_posts;// + ' ' + IMAGE_WIDGET.media_items;
 				}
@@ -618,7 +618,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 			updateGrid( e.target.value );
 		} else if ( e.target.id === 'admin-modal-search-input' ) {
 			updateGrid( 1 );
-			modal.querySelector( '.admin-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+			modal.querySelector( '.admin-modal-right-sidebar-info' ).setAttribute( 'hidden', 'true' );
 		}
 	} );
 
@@ -735,7 +735,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 			onprocessfiles: () => { // Called when all files in the queue have finished uploading
 				itemBrowse.click();
 				setTimeout( function() {
-					modal.querySelector( '.admin-modal-right-sidebar-info' ).setAttribute( 'hidden', true );
+					modal.querySelector( '.admin-modal-right-sidebar-info' ).setAttribute( 'hidden', 'true' );
 					grid.querySelector( 'li' ).focus();
 				}, 500 );
 			},
