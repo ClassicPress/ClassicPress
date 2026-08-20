@@ -154,6 +154,24 @@ if ( '1' === get_option( 'wp_attachment_pages_enabled' ) ) {
 	$attachment_url_options .= '<option value="post">' . esc_html__( 'Attachment Page' ) . '</option>';
 }
 $attachment_url_options .= '<option value="custom">' . esc_html__( 'Custom URL' ) . '</option>';
+
+$media_categories = get_terms(
+	array(
+		'taxonomy'   => 'media_category',
+		'hide_empty' => false,
+		'orderby'    => 'name',
+		'order'      => 'ASC',
+	)
+);
+
+$media_tags = get_terms(
+	array(
+		'taxonomy'   => 'media_post_tag',
+		'hide_empty' => false,
+		'orderby'    => 'name',
+		'order'      => 'ASC',
+	)
+);
 ?>
 
 <div class="clear"></div></div><!-- wpwrap -->
@@ -423,8 +441,40 @@ $attachment_url_options .= '<option value="custom">' . esc_html__( 'Custom URL' 
 									</div>
 
 									<div class="attachment-compat"></div>
+									<datalist id="admin-modal-media-categories">
+
+										<?php
+										foreach ( $media_categories as $media_category ) {
+											?>
+
+											<option value="<?php echo esc_attr( $media_category->name ); ?>">
+												<?php echo esc_html( $media_category->name ); ?>
+											</option>
+
+											<?php
+										}
+										?>
+
+									</datalist>
+									<datalist id="admin-modal-media-tags">
+
+										<?php
+										foreach ( $media_tags as $media_tag ) {
+											?>
+
+											<option value="<?php echo esc_attr( $media_tag->name ); ?>">
+												<?php echo esc_html( $media_tag->name ); ?>
+											</option>
+
+											<?php
+										}
+										?>
+
+									</datalist>
 									<span class="setting settings-save-status" role="status">
-										<span id="tax-saved" class="success hidden" aria-hidden="true"><?php esc_html_e( 'Taxonomy updated successfully!' ); ?></span>
+										<span id="tax-saved" class="success hidden" aria-hidden="true">
+											<?php esc_html_e( 'Taxonomy updated successfully!' ); ?>
+										</span>
 									</span>
 								</fieldset>
 							</div>
