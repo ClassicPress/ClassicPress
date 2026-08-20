@@ -923,7 +923,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function createPage( button ) {
-		var data = new URLSearchParams(),
+		var frontSelect, postsSelect,
+			data = new URLSearchParams(),
 			input = button.previousElementSibling,
 			settingId = button.closest( 'li' ).dataset.settingId,
 			errorItem = button.parentElement.nextElementSibling;
@@ -961,9 +962,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				_updatedControlsWatcher.show_on_front = 'page';
 
 				if ( settingId === 'page_on_front' ) {
+					frontSelect = document.querySelector( 'select[data-customize-setting-link="page_on_front"]' );
+					addPageAsOption( frontSelect, response.data.post_id, response.data.title );
 					newFrontPageIds.push( { id: response.data.post_id, title: response.data.title } );
 					_updatedControlsWatcher.page_on_front = response.data.post_id;
 				} else if ( settingId === 'page_for_posts' ) {
+					postsSelect = document.querySelector( 'select[data-customize-setting-link="page_for_posts"]' );
+					addPageAsOption( postsSelect, response.data.post_id, response.data.title );
 					newPostsPageIds.push( { id: response.data.post_id, title: response.data.title } );
 					_updatedControlsWatcher.page_for_posts = response.data.post_id;
 				}
@@ -1000,7 +1005,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		option.value = value;
 		option.textContent = title;
-		select.appendChild( option );
+		select.prepend( option );
+		select.value = value;
 	}
 
 	/**
@@ -2071,24 +2077,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				previewLink.removeAttribute( 'inert' );
 				previewLink.style.color = '#2271b1';
 				document.querySelector( '.customize-copy-preview-link' ).removeAttribute( 'disabled' );
-			}
-
-			if ( newFrontPageIds.length > 0 ) {
-				frontSelect = document.querySelector( 'select[data-customize-setting-link="page_on_front"]' );
-				newFrontPageIds.forEach( function( item ) {
-					addPageAsOption( frontSelect, item.id, item.title );
-					frontSelect.value = item.id;
-				} );
-				newFrontPageIds = [];
-			}
-
-			if ( newPostsPageIds.length > 0 ) {
-				postsSelect = document.querySelector( 'select[data-customize-setting-link="page_for_posts"]' );
-				newPostsPageIds.forEach( function( item ) {
-					addPageAsOption( postsSelect, item.id, item.title );
-					postsSelect.value = item.id;
-				} );
-				newPostsPageIds = [];
 			}
 
 			// Reset the buffer object and proxy
