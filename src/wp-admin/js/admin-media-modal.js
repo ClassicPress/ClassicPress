@@ -599,9 +599,9 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 		} )
 		.then( function( result ) {
 			if ( result === 1 ) { // success
-				if ( mediaItem.previousElementSibling != null ) {
+				if ( mediaItem.previousElementSibling ) {
 					document.getElementById( mediaItem.previousElementSibling.id ).focus();
-				} else if ( mediaItem.nextElementSibling != null ) {
+				} else if ( mediaItem.nextElementSibling ) {
 					document.getElementById( mediaItem.nextElementSibling.id ).focus();
 				} else {
 					closeModal();
@@ -818,20 +818,14 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 	// Reset ordering of media items
 	function resetDataOrdering( sign ) {
 		var items = document.querySelectorAll( '.media-item' ),
-			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
 			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
-			count2 = sign === 'minus' ? parseInt( count[2], 10 ) - 1 : parseInt( count[2], 10 ) + 1,
-			count5 = '';
+			newTotal = sign === 'minus' ? parseInt( count[2], 10 ) - 1 : parseInt( count[2], 10 ) + 1;
 
 		items.forEach( function( item, index ) {
 			item.setAttribute( 'data-order', parseInt( index + 1 ) );
 		} );
 
-		// Reset totals
-		if ( count[5] ) { // allow for different languages
-			count5 = ' ' + count[5];
-		}
-		document.querySelector( '.load-more-count' ).textContent = items.length + ' ' + count[1] + ' ' + count2 + ' ' + count[4] + count5;
-		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
+		document.querySelector( '.load-more-count' ).textContent = items.length + ' ' + _cpAdminMediaModalStrings.of + ' ' + newTotal + ' ' + _cpAdminMediaModalStrings.items;
+		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + _cpAdminMediaModalStrings.items;
 	}
 }
