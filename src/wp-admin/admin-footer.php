@@ -219,13 +219,13 @@ $attachment_url_options .= '<option value="custom">' . esc_html__( 'Custom URL' 
 									aria-selected="false"
 									aria-controls="uploader-inline"
 								>
+									<?php esc_html_e( 'Upload files' ); ?>
+								</button>
 
 								<?php
-								esc_html_e( 'Upload files' );
 							}
 							?>
 
-							</button>
 							<button type="button"
 								role="tab"
 								class="media-menu-item active"
