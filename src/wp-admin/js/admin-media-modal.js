@@ -494,13 +494,13 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 				'<label for="attachments-' + id + '-media_category" style="width:30%;">' +
 					'<span class="alignleft">Media Categories</span>' +
 				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" value="' + cats + '">' +
+				'<input list="admin-modal-media-categories" type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" value="' + cats + '">' +
 			'</div>' +
 			'<div class="setting" data-setting="media_post_tag">' +
 				'<label for="attachments-' + id + '-media_post_tag">' +
 					'<span class="alignleft">Media Tags</span>' +
 				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" value="' + tags + '">' +
+				'<input list="admin-modal-media-tags" type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" value="' + tags + '">' +
 			'</div>';
 
 		if ( document.querySelector( '.compat-item' ) != null ) {
