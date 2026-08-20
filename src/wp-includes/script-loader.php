@@ -1438,14 +1438,15 @@ function wp_default_scripts( $scripts ) {
 			'admin-media-modal',
 			'_cpAdminMediaModalStrings',
 			array(
+				'of'               => __( 'of' ),
 				'by'               => __( 'by' ),
 				'pixels'           => __( 'pixels' ),
+				'items'            => __( 'items' ),
 				'media_items'      => __( 'media items' ),
 				'failed_update'    => __( 'Failed to update media:' ),
 				'error'            => __( 'Error:' ),
 				'delete_failed'    => __( 'Failed to delete attachment.' ),
 				'confirm_delete'   => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
-				'confirm_multiple' => __( "You are about to permanently delete these items from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
 			)
 		);
 		$scripts->add( 'custom-header', "/wp-admin/js/custom-header$suffix.js", array( 'admin-media-modal' ), false, 1 );
