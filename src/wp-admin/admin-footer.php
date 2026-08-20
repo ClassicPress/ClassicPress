@@ -238,7 +238,10 @@ $attachment_url_options .= '<option value="custom">' . esc_html__( 'Custom URL' 
 						</div>
 
 						<div class="admin-modal-pages">
-							<span class="displaying-num"><?php echo $attachments->post_count < $per_page ? $attachments->post_count : $attachments->post_count % $total_pages; ?> <?php esc_html_e( 'items' ); ?></span>
+							<span class="displaying-num">
+								<?php echo $attachments->post_count < $per_page ? $attachments->post_count : $attachments->post_count % $total_pages; ?>
+								<?php esc_html_e( 'items' ); ?>
+								</span>
 							<span class="pagination-links">
 								<button type="button" class="first-page button" data-page="1" disabled inert>
 									<span class="screen-reader-text"><?php esc_html_e( 'First page' ); ?></span>
@@ -334,9 +337,15 @@ $attachment_url_options .= '<option value="custom">' . esc_html__( 'Custom URL' 
 									<?php // populated by JS after call to fetch API ?>
 								</ul>
 								<p class="load-more-count">
-									<?php // populated, if applicable, by JS after call to fetch API ?>
+									<?php
+									printf(
+										'%d of %d items',
+										$attachments->post_count < $per_page ? $attachments->post_count : $attachments->post_count % $total_pages,
+										$attachments->post_count,
+									);
+									?>
 								</p>
-								<p class="no-media" hidden="true">
+								<p class="no-media" hidden>
 									<?php // populated, if applicable, by JS after call to fetch API ?>
 								</p>
 							</section>
