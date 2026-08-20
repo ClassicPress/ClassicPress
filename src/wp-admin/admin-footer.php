@@ -510,7 +510,13 @@ $attachment_url_options .= '<option value="custom">' . esc_html__( 'Custom URL' 
 					</div>
 					<div class="admin-modal-footer-buttons">
 						<button id="admin-modal-select-button" type="button" class="button media-button button-primary button-large media-button-insert" disabled>
-							<?php esc_html_e( 'Set as Background' ); ?>
+							<?php
+							if ( $hook_suffix === 'appearance_page_custom-header' ) {
+								esc_html_e( 'Set as Header' );
+							} elseif ( $hook_suffix === 'appearance_page_custom-background' ) {
+								esc_html_e( 'Set as Background' );
+							}
+							?>
 						</button>
 					</div>
 				</footer>
