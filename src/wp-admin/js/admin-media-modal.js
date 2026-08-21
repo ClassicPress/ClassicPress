@@ -36,7 +36,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 		insertFromUrl = document.getElementById( 'admin-modal-item-embed' ),
 		addImage = document.getElementById( 'admin-modal-item-add' ),
 		footer = document.querySelector( '.admin-modal-footer' ),
-		{ FilePond } = window, // import FilePond
+		{ FilePond } = window; // import FilePond
 
 	let pond, selectedAttachment = null;
 
