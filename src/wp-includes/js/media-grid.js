@@ -37,13 +37,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				'<label for="attachments-' + id + '-media_category">' +
 					'<span class="alignleft">Media Categories</span>' +
 				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" value="">' +
+				'<input list="media-grid-media-categories" type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" value="">' +
 			'</span>' +
 			'<span class="setting" data-setting="media_post_tag">' +
 				'<label for="attachments-' + id + '-media_post_tag">' +
 					'<span class="alignleft">Media Tags</span>' +
 				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" value="">' +
+				'<input list="media-grid-media-tags" type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" value="">' +
 			'</span>';
 
 		if ( document.querySelector( '.compat-item' ) != null ) {
