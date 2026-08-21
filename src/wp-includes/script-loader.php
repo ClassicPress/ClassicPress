@@ -1421,7 +1421,9 @@ function wp_default_scripts( $scripts ) {
 		$scripts->add( 'nav-menu', "/wp-admin/js/nav-menu$suffix.js", array( 'sortable-js', 'wp-lists', 'postbox', 'json2', 'underscore' ) );
 		$scripts->set_translations( 'nav-menu' );
 
-		$scripts->add( 'admin-media-modal', "/wp-admin/js/admin-media-modal$suffix.js",
+		$scripts->add(
+			'admin-media-modal',
+			"/wp-admin/js/admin-media-modal$suffix.js",
 			array(
 				'wp-ajax-response',
 				'image-edit',
