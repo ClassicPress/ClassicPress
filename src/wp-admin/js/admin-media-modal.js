@@ -486,8 +486,8 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 	function setAddedMediaFields( attachment ) {
 		const form = document.createElement( 'form' ),
 			id = attachment.id,
-			cats = attachment.media_cats.toString(),
-			tags = attachment.media_tags.toString();
+			cats = attachment.media_cats,
+			tags = attachment.media_tags;
 
 		form.className = 'compat-item';
 		form.innerHTML = '<input type="hidden" id="menu-order" name="attachments[' + id + '][menu_order]" value="0">' +
