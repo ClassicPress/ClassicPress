@@ -30,9 +30,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Update details within modal
 	function setAddedMediaFields( attachment ) {
 		var form = document.createElement( 'form' ),
-			id = attachment.id,
-			cats = attachment.media_cats,
-			tags = attachment.media_tags;
+			id = attachment.dataset.id,
+			cats = attachment.dataset.taxes,
+			tags = attachment.dataset.tags;
 
 		form.className = 'compat-item';
 		form.innerHTML = '<input type="hidden" id="menu-order" name="attachments[' + id + '][menu_order]" value="0">' +
@@ -321,10 +321,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#attachment-details-two-column-caption' ).value = caption;
 		dialog.querySelector( '#attachment-details-two-column-description' ).value = description;
 		dialog.querySelector( '#attachment-details-two-column-copy-link' ).value = url;
-
 		dialog.querySelector( '#menu-order' ).value = menuOrder;
-		dialog.querySelector( '#attachments-' + id + '-media_category' ).value = taxes;
-		dialog.querySelector( '#attachments-' + id + '-media_post_tag' ).value = tags;
 
 		if ( filetype === 'audio' ) {
 			dialog.querySelector( '#media-image' ).setAttribute( 'hidden', true );
