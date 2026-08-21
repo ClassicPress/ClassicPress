@@ -509,7 +509,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 			document.querySelector( '.compat-item' ).remove();
 		}
 		document.querySelector( '.attachment-compat' ).append( form );
-		
+
 		form.querySelectorAll( 'input' ).forEach( function( input ) {
 			input.addEventListener( 'change', function() {
 				updateMediaTaxOrTag( input, id ); // Update media categories and tags
