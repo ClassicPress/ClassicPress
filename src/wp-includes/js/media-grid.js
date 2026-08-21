@@ -283,8 +283,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			height = item.dataset.height,
 			caption = item.dataset.caption,
 			description = item.dataset.description,
-			taxes = item.dataset.taxes,
-			tags = item.dataset.tags,
 			url = item.dataset.url,
 			alt = item.querySelector( 'img' ).getAttribute( 'alt' ),
 			link = item.dataset.link,
