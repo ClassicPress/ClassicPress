@@ -227,7 +227,8 @@ $media_tags = get_terms(
 					<div class="admin-modal-header-buttons">
 						<div role="tablist" aria-orientation="horizontal" class="admin-modal-router">
 
-							<?php if ( current_user_can( 'upload_files' ) ) {
+							<?php
+							if ( current_user_can( 'upload_files' ) ) {
 								?>
 
 								<button type="button"
@@ -302,7 +303,8 @@ $media_tags = get_terms(
 				<div class="admin-modal-body">
 					<article id="admin-modal-content" class="admin-modal-content">
 
-						<?php if ( current_user_can( 'upload_files' ) ) {
+						<?php
+						if ( current_user_can( 'upload_files' ) ) {
 							?>
 
 							<div id="uploader-inline" class="uploader-inline" role="tabpanel" data-allowed-mimes="<?php echo esc_attr( $mimes_list ); ?>" hidden inert>
@@ -479,8 +481,8 @@ $media_tags = get_terms(
 								</fieldset>
 							</div>
 
-						
-							<?php if ( current_user_can( 'upload_files' ) ) {
+							<?php
+							if ( current_user_can( 'upload_files' ) ) {
 								?>
 
 								<div class="media-uploader-status" hidden>
@@ -506,7 +508,8 @@ $media_tags = get_terms(
 						</aside>
 					</article>
 
-					<?php if ( current_user_can( 'upload_files' ) ) {
+					<?php
+					if ( current_user_can( 'upload_files' ) ) {
 						?>
 
 						<article id="insert-from-url-panel" class="insert-from-url-panel" hidden inert>
