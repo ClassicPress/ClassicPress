@@ -2,7 +2,7 @@
  * @output wp-admin/js/custom-header.js
  */
 
-/* global AdminMediaModal, cpCropper */
+/* global AdminMediaModal, _cpCustomHeader, cpCropper */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	'use strict';
@@ -65,11 +65,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			context: 'custom-header',
 			action: 'custom-header-crop',
 			nonce: attachment.nonce,
-			aspectRatio: attachment.width / attachment.height,
-			minWidth: attachment.width,
-			minHeight: attachment.height,
-			width: attachment.width,
-			height: attachment.height,
+			aspectRatio: _cpCustomHeader.width / _cpCustomHeader.height,
+			minWidth: _cpCustomHeader.width,
+			minHeight: _cpCustomHeader.height,
+			width: _cpCustomHeader.width,
+			height: _cpCustomHeader.height,
 			onSelect: function( croppedAttachment ) {
 				const headerImg = document.querySelector( '#headimg img' );
 
