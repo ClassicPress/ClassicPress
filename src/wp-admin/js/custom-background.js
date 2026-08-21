@@ -97,13 +97,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function initBackgroundPosition() {
-		const input = document.querySelector( 'input[name="background-position"]' );
-		if ( ! input || ! bgImage ) {
+		const inputs = document.querySelectorAll( '[name="background-position"]' );
+		if ( ! inputs.length || ! bgImage ) {
 			return;
 		}
 
-		input.addEventListener( 'change', function( e ) {
-			bgImage.style.backgroundPosition = e.target.value;
+		inputs.forEach( function( input ) {
+			input.addEventListener( 'change', function( e ) {
+				if ( ! e.target.checked ) {
+					return;
+				}
+
+				bgImage.style.backgroundPosition = e.target.value;
+			} );
 		} );
 	}
 
@@ -115,12 +121,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function initBackgroundRepeat() {
-		const input = document.querySelector( 'input[name="background-repeat"]' );
-		if ( ! input || ! bgImage ) {
-			return;
-		}
+		document.addEventListener( 'change', function( e ) {
+			if ( ! e.target.matches( 'input[type="checkbox"][name="background-repeat"]' ) || ! bgImage ) {
+				return;
+			}
 
-		input.addEventListener( 'change', function( e ) {
 			bgImage.style.backgroundRepeat = e.target.checked ? 'repeat' : 'no-repeat';
 		} );
 	}
@@ -133,12 +138,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function initBackgroundAttachment() {
-		const input = document.querySelector( 'input[name="background-attachment"]' );
-		if ( ! input || ! bgImage ) {
-			return;
-		}
+		document.addEventListener( 'change', function( e ) {
+			if ( ! e.target.matches( 'input[type="checkbox"][name="background-attachment"]' ) || ! bgImage ) {
+				return;
+			}
 
-		input.addEventListener( 'change', function( e ) {
 			bgImage.style.backgroundAttachment = e.target.checked ? 'scroll' : 'fixed';
 		} );
 	}
