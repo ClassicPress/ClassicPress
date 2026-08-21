@@ -646,13 +646,13 @@ endif;
 		<?php submit_button( null, 'primary', 'save-header-options' ); ?>
 </form>
 
-<?php
-$crop_width = get_theme_support( 'custom-header', 'width' );
-$crop_height = get_theme_support( 'custom-header', 'height' );
-$flex_width = current_theme_supports( 'custom-header', 'flex-width' );
-$flex_height = current_theme_supports( 'custom-header', 'flex-height' );
-$crop_nonce = wp_create_nonce( 'custom-header-crop-image' );
-?>
+		<?php
+		$crop_width = get_theme_support( 'custom-header', 'width' );
+		$crop_height = get_theme_support( 'custom-header', 'height' );
+		$flex_width = current_theme_supports( 'custom-header', 'flex-width' );
+		$flex_height = current_theme_supports( 'custom-header', 'flex-height' );
+		$crop_nonce = wp_create_nonce( 'custom-header-crop-image' );
+		?>
 
 <script>
 var customHeaderCrop = {
