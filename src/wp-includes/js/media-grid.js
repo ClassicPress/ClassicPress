@@ -28,7 +28,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		endTouchPosition = 0;
 
 	// Update details within modal
-	function setAddedMediaFields( id ) {
+	function setAddedMediaFields( attachment ) {
 		var form = document.createElement( 'form' ),
 			id = attachment.id,
 			cats = attachment.media_cats,
@@ -304,7 +304,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		history.replaceState( null, null, '?' + queryParams.toString() );
 
 		// Set menu_order, media_category, and media_post_tag field IDs correctly
-		setAddedMediaFields( id );
+		setAddedMediaFields( item );
 
 		// Populate modal with attachment details
 		dialog.querySelector( '.attachment-date' ).textContent = date;
