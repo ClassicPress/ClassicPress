@@ -2,9 +2,11 @@
  * @output wp-admin/js/admin-media-modal.js
  */
 
-/* global ajaxurl, wpAjax, Coloris, _cpCustomLogo, _cpAdminMediaModalStrings,
-_cpFilepondLabels, FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
-FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console */
+/* exported AdminMediaModal */
+
+/* global ajaxurl, wpAjax, _cpAdminMediaModalStrings, _cpFilepondLabels,
+FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
+FilePondPluginFileRename, FilePondPluginImagePreview, console */
 
 /**
  * Admin Media Modal - Reusable media selection component.
@@ -31,10 +33,10 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 		rightSidebarInfo = modal.querySelector( '.admin-modal-right-sidebar-info' ),
 		modalPages = modal.querySelector( '.admin-modal-pages' ),
 		uploadPanel = document.getElementById( 'uploader-inline' ),
-		modalButtons = modal.querySelector( '.admin-modal-header-buttons' ),
 		insertFromUrl = document.getElementById( 'admin-modal-item-embed' ),
 		addImage = document.getElementById( 'admin-modal-item-add' ),
-		footer = document.querySelector( '.admin-modal-footer' );
+		footer = document.querySelector( '.admin-modal-footer' ),
+		{ FilePond } = window, // import FilePond
 
 	let pond, selectedAttachment = null;
 
@@ -604,7 +606,7 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 				} else if ( mediaItem.nextElementSibling ) {
 					document.getElementById( mediaItem.nextElementSibling.id ).focus();
 				} else {
-					closeModal();
+					modal.close();
 				}
 				mediaItem.remove();
 				rightSidebarInfo.setAttribute( 'hidden', 'true' );
@@ -761,7 +763,6 @@ function AdminMediaModal( attachmentAction, sizeParam, headerImage ) {
 						throw new Error( response.status );
 					} )
 					.then( function( result ) {
-						var gridItem;
 						if ( result.success ) {
 							load( result.data );
 							populateGridItem( result.data, 'prepend' );
