@@ -2,7 +2,7 @@
  * @output wp-admin/js/custom-background.js
  */
 
-/* global ajaxurl, Coloris, AdminMediaModal */
+/* global Coloris, AdminMediaModal */
 
 /**
  * Registers all events for customizing the background.
