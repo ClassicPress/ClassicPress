@@ -2,7 +2,7 @@
  * @output wp-admin/js/custom-header.js
  */
 
-/* global Coloris, AdminMediaModal, cpCropper, ajaxurl */
+/* global AdminMediaModal, cpCropper */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	'use strict';
