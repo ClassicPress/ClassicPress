@@ -198,7 +198,7 @@ if ( 'grid' === $mode ) {
 		)
 	);
 
-	$media_tags = get_terms(
+	$media_post_tags = get_terms(
 		array(
 			'taxonomy'   => 'media_post_tag',
 			'hide_empty' => false,
@@ -645,14 +645,12 @@ if ( 'grid' === $mode ) {
 								<datalist id="media-grid-media-categories">
 
 									<?php
-									foreach ( $media_categories as $media_category ) {
-										?>
-
-										<option value="<?php echo esc_attr( $media_category->name ); ?>">
-											<?php echo esc_html( $media_category->name ); ?>
-										</option>
-
-										<?php
+									if ( ! empty( $media_categories ) ) {
+										foreach ( $media_categories as $media_category ) {
+											?>
+											<option value="<?php echo esc_attr( $media_category->name ); ?>"></option>
+											<?php
+										}
 									}
 									?>
 
@@ -660,14 +658,12 @@ if ( 'grid' === $mode ) {
 								<datalist id="media-grid-media-tags">
 
 									<?php
-									foreach ( $media_tags as $media_tag ) {
-										?>
-
-										<option value="<?php echo esc_attr( $media_tag->name ); ?>">
-											<?php echo esc_html( $media_tag->name ); ?>
-										</option>
-
-										<?php
+									if ( ! empty( $media_post_tags ) ) {
+										foreach ( $media_post_tags as $media_tag ) {
+											?>
+											<option value="<?php echo esc_attr( $media_tag->name ); ?>"></option>
+											<?php
+										}
 									}
 									?>
 
