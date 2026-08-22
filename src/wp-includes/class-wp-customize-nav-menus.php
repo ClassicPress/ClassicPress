@@ -670,15 +670,6 @@ final class WP_Customize_Nav_Menus {
 
 		// Create a panel for Menus.
 		$description = '<p>' . __( 'This panel is used for managing navigation menus for content you have already published on your site. You can create menus and add items for existing content such as pages, posts, categories, tags, formats, or custom links.' ) . '</p>';
-		if ( current_theme_supports( 'widgets' ) ) {
-			$description .= '<p>' . sprintf(
-				/* translators: %s: URL to the Widgets panel of the Customizer. */
-				__( 'Menus can be displayed in locations defined by your theme or in <a href="%s">widget areas</a> by adding a &#8220;Navigation Menu&#8221; widget.' ),
-				'customize.php#sub-accordion-panel-widgets'
-			) . '</p>';
-		} else {
-			$description .= '<p>' . __( 'Menus can be displayed in locations defined by your theme.' ) . '</p>';
-		}
 
 		/*
 		 * Once multiple theme supports are allowed in WP_Customize_Panel,
