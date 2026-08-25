@@ -855,17 +855,25 @@ ul.CodeMirror-hints {
 }
 #widget-modal .uploader-inline {
 	width: 100%;
-	height: 100vh;
-	margin-left: -1em;
-	padding-left: 1em;
+	padding: 2em 0;
+	margin: 2em 0;
+	border: 4px dashed #c3c4c7;
+	background-color: #ecf7e9;
+	box-sizing: border-box;
+}
+#post-upload-info {
+	margin-bottom: 1em;
+}
+.max-upload-size {
+	margin: 0;
+	text-align: center;
+}
+.filepond--drop-label {
 	background-color: #ecf7e9;
 }
-#widget-modal .filepond--root .filepond--drop-label {
-	min-height: 4.75em;
-	height: 300px;
-}
-#widget-modal .filepond--root > .filepond--panel {
-	margin-left: -0.8em;
+#widget-modal .filepond--drip {
+	opacity: 1;
+	background: #ecf7e9;
 }
 .filepond--credits {
 	display: none;
