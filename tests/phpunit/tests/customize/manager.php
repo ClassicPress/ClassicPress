@@ -3095,17 +3095,9 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		$data = json_decode( $json, true );
 		$this->assertNotEmpty( $data );
 
-		$this->assertSameSets( array( 'changeset', 'nonce', 'url', 'user' ), array_keys( $data ) );
-		$this->assertArrayHasKey( 'uuid', $data['changeset'] );
+		$this->assertSameSets( array( 'lock', 'nonce', 'url', 'user' ), array_keys( $data ) );
+		$this->assertArrayHasKey( 'lockUser', $data['lock'] );
 		$this->assertArrayHasKey( 'id', $data['user'] );
-
-		$this->assertSameSets(
-			array(
-				'uuid',
-				'lockUser',
-			),
-			array_keys( $data['changeset'] )
-		);
 	}
 
 	/**
