@@ -4896,7 +4896,7 @@ final class WP_Customize_Manager {
 		);
 		?>
 		<script>
-			window._wpCustomizeSettings = <?php echo wp_json_encode( $settings ); ?>;
+			var _wpCustomizeSettings = <?php echo wp_json_encode( $settings ); ?>;
 			_wpCustomizeSettings.initialClientTimestamp = _.now();
 			_wpCustomizeSettings.controls = {};
 			_wpCustomizeSettings.settings = {};
