@@ -855,7 +855,7 @@ ul.CodeMirror-hints {
 }
 #widget-modal .uploader-inline {
 	width: 100%;
-	padding: 2em 0;
+	padding: 4em 0;
 	margin: 2em 0;
 	border: 4px dashed #c3c4c7;
 	background-color: #ecf7e9;
@@ -884,7 +884,8 @@ ul.CodeMirror-hints {
 	text-align: center;
 }
 .widget-modal-container {
-	 display: flex;
+	display: flex;
+	min-height: 100%;
 }
 .widget-modal-left-sidebar {
 	width: 200px;
@@ -1027,7 +1028,6 @@ ul.CodeMirror-hints {
 	display: block;
 }
 .media-library-grid-section {
-	height: 100vh;
 	overflow: auto;
 	padding-right: 1em;
 }
@@ -1121,7 +1121,6 @@ ul.CodeMirror-hints {
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;
-	height: 110vh;
 	overflow: auto;
 }
 .widget-modal-gallery-settings .setting,
