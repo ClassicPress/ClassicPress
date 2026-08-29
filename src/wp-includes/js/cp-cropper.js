@@ -15,6 +15,7 @@
 	let cropperCanvas = null;   // <cropper-canvas> element
 	let cropperImage  = null;   // <cropper-image> element
 	let cropperSel    = null;   // <cropper-selection> element
+	let resizeTimer   = null;
 
 	// ─── Build ───────────────────────────────────────────────────────────────
 
@@ -91,6 +92,7 @@
 		cropperImage.setAttribute( 'src', currentOpts.imageUrl );
 		cropperImage.setAttribute( 'alt', CROPPER.image_to_crop );
 		cropperImage.setAttribute( 'scalable', '' );
+		cropperImage.setAttribute( 'initial-fit', 'contain' );
 		cropperImage.setAttribute( 'initial-center-size', 'contain' );
 
 		const shade = document.createElement( 'cropper-shade' );
@@ -188,88 +190,112 @@
 		dialog.showModal();
 
 		cropperImage.$ready( function() {
-			const shadowRoot = cropperImage.$getShadowRoot();
-			const imgEl      = shadowRoot.querySelector( 'img' );
-			const natW       = imgEl ? imgEl.naturalWidth  : 0;
-			const natH       = imgEl ? imgEl.naturalHeight : 0;
-
-			if ( ! natW || ! natH ) {
-				return;
-			}
-
-			const canvasRect = cropperCanvas.getBoundingClientRect();
-			const imgRect    = ( imgEl || cropperImage ).getBoundingClientRect();
-			const dispW      = imgRect.width;
-			const dispH      = imgRect.height;
-			const offX       = imgRect.left - canvasRect.left;
-			const offY       = imgRect.top  - canvasRect.top;
-
-			var selW, selH;
-
-			if ( currentOpts.minWidth && currentOpts.minHeight ) {
-				const scaleX = dispW / natW;
-				const scaleY = dispH / natH;
-				const scale  = Math.min( scaleX, scaleY );
-
-				// Desired output size in display pixels.
-				const desiredDispW = currentOpts.minWidth  * scale;
-				const desiredDispH = currentOpts.minHeight * scale;
-
-				if ( natW < currentOpts.minWidth || natH < currentOpts.minHeight ) {
-					// Image is smaller than desired — fit the crop to the image
-					// while maintaining the desired aspect ratio.
-					const desiredRatio = currentOpts.minWidth / currentOpts.minHeight;
-					const imageRatio   = dispW / dispH;
-
-					if ( imageRatio > desiredRatio ) {
-						// Image is wider than desired ratio — constrain by height.
-						selH = dispH;
-						selW = selH * desiredRatio;
-					} else {
-						// Image is taller — constrain by width.
-						selW = dispW;
-						selH = selW / desiredRatio;
-					}
-				} else {
-					selW = desiredDispW;
-					selH = desiredDispH;
-				}
-			}
-
-			// Capture image bounds in canvas-space for the change listener.
-			const imgMinX = offX;
-			const imgMinY = offY;
-			const imgMaxX = offX + dispW;
-			const imgMaxY = offY + dispH;
-
-			cropperSel.$change(
-				offX + ( dispW - selW ) / 2,
-				offY + ( dispH - selH ) / 2,
-				selW,
-				selH
-			);
-
-			var isClamping = false;
-
-			cropperSel.addEventListener( 'change', function() {
-				if ( isClamping ) {
-					return;
-				}
-
-				let { x, y, width, height } = cropperSel;
-
-				const clampedX = Math.max( imgMinX, Math.min( x, imgMaxX - width ) );
-				const clampedY = Math.max( imgMinY, Math.min( y, imgMaxY - height ) );
-
-				if ( clampedX !== x || clampedY !== y ) {
-					isClamping = true;
-					cropperSel.$change( clampedX, clampedY, width, height );
-					isClamping = false;
-				}
+			requestAnimationFrame( function() {
+				requestAnimationFrame( function() {
+					positionInitialSelection();
+				} );
 			} );
 		} );
 
-		window.addEventListener( 'resize', buildCropperTree );
+		window.addEventListener( 'resize', handleResize );
+	}
+
+	function positionInitialSelection() {
+		if ( ! cropperImage || ! cropperCanvas || ! cropperSel ) {
+			return;
+		}
+
+		const shadowRoot = cropperImage.$getShadowRoot();
+		const imgEl      = shadowRoot.querySelector( 'img' );
+		const natW       = imgEl ? imgEl.naturalWidth  : 0;
+		const natH       = imgEl ? imgEl.naturalHeight : 0;
+
+		if ( ! natW || ! natH ) {
+			return;
+		}
+
+		const canvasRect = cropperCanvas.getBoundingClientRect();
+		const imgRect    = cropperImage.getBoundingClientRect();
+		const dispW      = imgRect.width;
+		const dispH      = imgRect.height;
+		const offX       = imgRect.left - canvasRect.left;
+		const offY       = imgRect.top  - canvasRect.top;
+
+		var selW, selH;
+
+		if ( currentOpts.minWidth && currentOpts.minHeight ) {
+			const scaleX = dispW / natW;
+			const scaleY = dispH / natH;
+			const scale  = Math.min( scaleX, scaleY );
+
+			// Desired output size in display pixels.
+			const desiredDispW = currentOpts.minWidth  * scale;
+			const desiredDispH = currentOpts.minHeight * scale;
+
+			if ( natW < currentOpts.minWidth || natH < currentOpts.minHeight ) {
+				// Image is smaller than desired — fit the crop to the image
+				// while maintaining the desired aspect ratio.
+				const desiredRatio = currentOpts.minWidth / currentOpts.minHeight;
+				const imageRatio   = dispW / dispH;
+
+				if ( imageRatio > desiredRatio ) {
+					// Image is wider than desired ratio — constrain by height.
+					selH = dispH;
+					selW = selH * desiredRatio;
+				} else {
+					// Image is taller — constrain by width.
+					selW = dispW;
+					selH = selW / desiredRatio;
+				}
+			} else {
+				selW = desiredDispW;
+				selH = desiredDispH;
+			}
+		}
+
+		// Capture image bounds in canvas-space for the change listener.
+		const imgMinX = offX;
+		const imgMinY = offY;
+		const imgMaxX = offX + dispW;
+		const imgMaxY = offY + dispH;
+
+		cropperSel.$change(
+			offX + ( dispW - selW ) / 2,
+			offY + ( dispH - selH ) / 2,
+			selW,
+			selH
+		);
+
+		var isClamping = false;
+
+		cropperSel.addEventListener( 'change', function() {
+			if ( isClamping ) {
+				return;
+			}
+
+			let { x, y, width, height } = cropperSel;
+
+			const clampedX = Math.max( imgMinX, Math.min( x, imgMaxX - width ) );
+			const clampedY = Math.max( imgMinY, Math.min( y, imgMaxY - height ) );
+
+			if ( clampedX !== x || clampedY !== y ) {
+				isClamping = true;
+				cropperSel.$change( clampedX, clampedY, width, height );
+				isClamping = false;
+			}
+		} );
+	}
+
+	function handleResize() {
+		clearTimeout( resizeTimer );
+
+		resizeTimer = setTimeout( function() {
+			if ( ! dialog || ! dialog.open || ! cropperImage ) {
+				return;
+			}
+
+			positionInitialSelection();
+		}, 50 );
 	}
 
 	// ─── Close / destroy ─────────────────────────────────────────────────────
@@ -284,7 +310,8 @@
 	}
 
 	function close() {
-		window.removeEventListener( 'resize', buildCropperTree );
+		window.removeEventListener( 'resize', handleResize );
+		clearTimeout( resizeTimer );
 		destroyCropper();
 		if ( dialog ) {
 			dialog.close();
@@ -295,10 +322,43 @@
 	// ─── Skip ────────────────────────────────────────────────────────────────
 
 	function skipCrop() {
+		if ( currentOpts.action === 'custom-header-crop' ) {
+			const body = new URLSearchParams( {
+				action: currentOpts.action,
+				nonce: currentOpts.nonce,
+				id: currentOpts.attachmentId,
+				skip_crop: '1'
+			} );
+
+			fetch( ajaxurl, {
+				method: 'POST',
+				credentials: 'same-origin',
+				body: body
+			} )
+			.then( function( response ) {
+				if ( ! response.ok ) {
+					throw new Error( CROPPER.network_error + ': ' + response.status );
+				}
+				return response.json();
+			} )
+			.then( function( data ) {
+				if ( data.success ) {
+					currentOpts.onSelect( data.data );
+					close();
+				}
+			} )
+			.catch( function( error ) {
+				console.error( '[cpCropper]', error );
+			} );
+
+			return;
+		}
+
 		currentOpts.onSelect( {
 			id  : currentOpts.attachmentId,
 			url : currentOpts.imageUrl
 		} );
+
 		close();
 	}
 
@@ -358,7 +418,7 @@
 			setLoading( true );
 
 			const body = new URLSearchParams( {
-				action                    : 'crop-image',
+				action                    : currentOpts.action || 'crop-image',
 				nonce                     : currentOpts.nonce,
 				id                        : currentOpts.attachmentId,
 				context                   : currentOpts.context,
