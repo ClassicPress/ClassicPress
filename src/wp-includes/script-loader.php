@@ -616,8 +616,8 @@ function wp_default_scripts( $scripts ) {
 	$scripts->add( 'cropper', '/wp-includes/js/crop/cropper.js', array( 'scriptaculous-dragdrop' ) );
 
 	// New version of cropper, which replaces imgareaselect for cropping
-	$scripts->add( 'cropperjs', '/wp-includes/js/crop/cropper.min.js', array(), '2.1.1', 1 );
-	$scripts->add( 'cp-cropper', "/wp-includes/js/cp-cropper$suffix.js", array( 'cropperjs' ), '2.1.1', 1 );
+	$scripts->add( 'cropperjs', '/wp-includes/js/crop/cropper.min.js', array(), '2.2.0', 1 );
+	$scripts->add( 'cp-cropper', "/wp-includes/js/cp-cropper$suffix.js", array( 'cropperjs' ), '2.2.0', 1 );
 	did_action( 'init' ) && $scripts->localize(
 		'cp-cropper',
 		'CROPPER',
