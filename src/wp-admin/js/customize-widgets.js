@@ -209,7 +209,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var ghostImage = document.createElement( 'details' );
 		ghostImage.id = 'sortable-ghost';
 		ghostImage.className = 'widget-top';
-		ghostImage.innerHTML = '<summary class="widget-title"><h3>' + dragEl.querySelector( 'h3' ).textContent + '</h3></summary>';
+		ghostImage.setHTML( '<summary class="widget-title"><h3>' + dragEl.querySelector( 'h3' ).textContent + '</h3></summary>' );
 		ghostImage.style.position = 'absolute';
 		ghostImage.style.top = '-1000px';
 		ghostImage.style.width = dragEl.getBoundingClientRect().width + 'px';
