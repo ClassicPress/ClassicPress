@@ -483,6 +483,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	}, 150 ) );
 
+	/**
+	 * Enable closing of Add a Widget sub-panel using the Escape key
+	 *
+	 * @since CP-2.8.0
+	 */
+	document.addEventListener( 'keydown', function( e ) {
+		if ( e.key === 'Escape' ) {
+			if ( document.getElementById( 'widgets-left' ).style.display === 'block' ) {
+				document.getElementById( 'widgets-left' ).style.display = 'none';
+				document.body.classList.remove( 'adding-widget' );
+				document.querySelectorAll( '.add-new-widget' ).forEach( function( btn ) {
+					btn.setAttribute( 'aria-expanded', 'false' );
+					if ( isVisible( btn ) ) {
+						btn.focus();
+					}
+				} );
+			}
+		}
+	} );
+
 
 	/**
 	 * Add event handlers for buttons

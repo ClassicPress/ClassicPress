@@ -1102,6 +1102,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}, 150 ) );
 
 	/**
+	 * Enable closing of Add Menu Items sub-panel using the Escape key
+	 *
+	 * @since CP-2.8.0
+	 */
+	document.addEventListener( 'keydown', function( e ) {
+		if ( e.key === 'Escape' ) {
+			if ( availableMenuItems.style.display === 'block' ) {
+				availableMenuItems.style.display = 'none';
+				document.body.classList.remove( 'adding-menu-items' );
+				document.querySelectorAll( '.add-new-menu-item' ).forEach( function( btn ) {
+					btn.setAttribute( 'aria-expanded', 'false' );
+					if ( isVisible( btn ) ) {
+						btn.focus();
+					}
+				} );
+			}
+		}
+	} );
+
+	/**
 	 * Handle clicks on buttons.
 	 *
 	 * @abstract
