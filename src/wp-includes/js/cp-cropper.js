@@ -268,20 +268,29 @@
 
 		var isClamping = false;
 
-		cropperSel.addEventListener( 'change', function() {
-			if ( isClamping ) {
-				return;
-			}
+		cropperSel.addEventListener( 'change', function( e ) {
+			const { x, y, width, height } = e.detail;
 
-			let { x, y, width, height } = cropperSel;
+			// Recalculate image bounds on every change.
+			const canvasRect = cropperCanvas.getBoundingClientRect();
+			const imgRect    = cropperImage.getBoundingClientRect();
 
-			const clampedX = Math.max( imgMinX, Math.min( x, imgMaxX - width ) );
-			const clampedY = Math.max( imgMinY, Math.min( y, imgMaxY - height ) );
+			const imgMinX = imgRect.left - canvasRect.left;
+			const imgMinY = imgRect.top  - canvasRect.top;
+			const imgMaxX = imgMinX + imgRect.width;
+			const imgMaxY = imgMinY + imgRect.height;
 
-			if ( clampedX !== x || clampedY !== y ) {
-				isClamping = true;
-				cropperSel.$change( clampedX, clampedY, width, height );
-				isClamping = false;
+			// Check if the selection is fully within the image.
+			const inBounds = (
+				x >= imgMinX &&
+				y >= imgMinY &&
+				( x + width ) <= imgMaxX &&
+				( y + height ) <= imgMaxY
+			);
+
+			if ( ! inBounds ) {
+				// Prevent the invalid move/resize.
+				e.preventDefault();
 			}
 		} );
 	}
