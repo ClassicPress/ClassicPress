@@ -206,14 +206,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	function ghostImage( dataTransfer, dragEl ) {
-		var ghostImage = document.createElement( 'details' );
+		var ghostImage = document.createElement( 'details' ),
+			summary = document.createElement( 'summary' ),
+			title = document.createElement( 'h3' );
+
+		summary.className = 'widget-title';
+		title.textContent = dragEl.querySelector( 'h3' ).textContent;
+		summary.append( title );
+
 		ghostImage.id = 'sortable-ghost';
 		ghostImage.className = 'widget-top';
-		ghostImage.setHTML( '<summary class="widget-title"><h3>' + dragEl.querySelector( 'h3' ).textContent + '</h3></summary>' );
 		ghostImage.style.position = 'absolute';
 		ghostImage.style.top = '-1000px';
 		ghostImage.style.width = dragEl.getBoundingClientRect().width + 'px';
-		document.body.appendChild( ghostImage );
+
+		ghostImage.append( summary );
+		document.body.append( ghostImage );
 		dataTransfer.setDragImage( ghostImage, 30, 20 );
 	}
 
