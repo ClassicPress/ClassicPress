@@ -217,7 +217,7 @@
 			el.id = data.id;
 		}
 		el.classList.add( ...data.className.split( ' ' ) );
-		el.querySelector( 'p' ).innerHTML = data.message;
+		el.querySelector( 'p' ).setHTML( data.message );
 
 		return el;
 	}
@@ -272,7 +272,7 @@
 		}
 
 		td.colSpan = data.colspan;
-		td.innerHTML = data.content;
+		td.setHTML( data.content );
 
 		return el;
 	}
