@@ -182,11 +182,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		option.addEventListener( 'mouseover', function() {
 			tooltip.style.backgroundColor = '#fff';
-			tooltip.innerHTML = option.dataset.tooltip.replace( '{{', '<span style="color:#d63638">' ).replace( '}}', '</span>' ).replace( '[[', '<strong>' ).replace( ']]', '</strong><br>' );
+			tooltip.setHTML( option.dataset.tooltip.replace( '{{', '<span style="color:#d63638">' ).replace( '}}', '</span>' ).replace( '[[', '<strong>' ).replace( ']]', '</strong><br>' ) );
 		} );
 		option.addEventListener( 'mouseout', function() {
 			tooltip.style.backgroundColor = 'transparent';
-			tooltip.innerHTML = '';
+			tooltip.replaceChildren();
 		} );
 	} );
 
@@ -245,9 +245,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function compareRevisions( revisions ) {
 		if ( chunks.hasOwnProperty( revisions ) ) {
-			fromAuthorCard.innerHTML = chunks[ revisions ].author_left;
-			toAuthorCard.innerHTML = chunks[ revisions ].author_right;
-			diff.innerHTML = chunks[ revisions ].diffs;
+			fromAuthorCard.setHTML( chunks[ revisions ].author_left );
+			toAuthorCard.setHTML( chunks[ revisions ].author_right );
+			diff.setHTML( chunks[ revisions ].diffs );
 		} else {
 			getDiff( revisions );
 		}
@@ -308,9 +308,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 			// Display the appropriate diff and metadata
-			fromAuthorCard.innerHTML = chunks[ index ].author_left;
-			toAuthorCard.innerHTML = chunks[ index ].author_right;
-			diff.innerHTML = chunks[ index ].diffs;
+			fromAuthorCard.setHTML( chunks[ index ].author_left );
+			toAuthorCard.setHTML( chunks[ index ].author_right );
+			diff.setHTML( chunks[ index ].diffs );
 		} )
 		.catch( function( error ) {
 			console.error( _wpRevisionsSettings.error, error );
