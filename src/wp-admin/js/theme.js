@@ -390,7 +390,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				if ( theme.dataset.hasUpdate === '1' ) {
 					if ( theme.dataset.updateResponse === '1-1' ) {
-						dialog.querySelector( '.has-update span' ).setHTML( theme.dataset.update );
+						dialog.querySelector( '.has-update span' ).innerHTML = theme.dataset.update;
 						dialog.querySelector( '.has-update' ).removeAttribute( 'hidden' );
 					} else {
 						dialog.querySelector( '.incompat-update' ).removeAttribute( 'hidden' );
