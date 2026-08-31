@@ -1452,17 +1452,19 @@ function wp_default_scripts( $scripts ) {
 			)
 		);
 		$scripts->add( 'custom-header', "/wp-admin/js/custom-header$suffix.js", array( 'admin-media-modal' ), false, 1 );
-		$header_support = get_theme_support( 'custom-header' );
-		did_action( 'init' ) && $scripts->localize(
-			'custom-header',
-			'_cpCustomHeader',
-			array(
-				'width'       => ! empty( $header_support[0]['width'] ) ? absint( $header_support[0]['width'] ) : 0,
-				'height'      => ! empty( $header_support[0]['height'] ) ? absint( $header_support[0]['height'] ) : 0,
-				'flexWidth'   => ! empty( $header_support[0]['flex-width'] ) ? (bool) $header_support[0]['flex-width'] : false,
-				'flexHeight'  => ! empty( $header_support[0]['flex-height'] ) ? (bool) $header_support[0]['flex-height'] : false,
-			)
-		);
+		if ( current_theme_supports( 'custom-header' ) ) {
+			$header_support = get_theme_support( 'custom-header' );
+			did_action( 'init' ) && $scripts->localize(
+				'custom-header',
+				'_cpCustomHeader',
+				array(
+					'width'       => ! empty( $header_support[0]['width'] ) ? absint( $header_support[0]['width'] ) : 0,
+					'height'      => ! empty( $header_support[0]['height'] ) ? absint( $header_support[0]['height'] ) : 0,
+					'flexWidth'   => ! empty( $header_support[0]['flex-width'] ) ? (bool) $header_support[0]['flex-width'] : false,
+					'flexHeight'  => ! empty( $header_support[0]['flex-height'] ) ? (bool) $header_support[0]['flex-height'] : false,
+				)
+			);
+		}
 		$scripts->add( 'custom-background', "/wp-admin/js/custom-background$suffix.js", array( 'admin-media-modal', 'coloris' ), false, 1 );
 		$scripts->add( 'media-gallery', "/wp-admin/js/media-gallery$suffix.js", array( 'jquery' ), false, 1 );
 
