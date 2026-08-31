@@ -275,7 +275,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 			if ( title ) {
 				title = ': ' + title.replace( /<[^<>]+>/g, '' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
-				widget.querySelector( '.in-widget-title' ).innerHTML = title;
+				widget.querySelector( '.in-widget-title' ).setHTML( title );
 			}
 
 			if ( widget.querySelector( 'p.widget-error' ) != null ) {
@@ -410,7 +410,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var ghostImage = document.createElement( 'details' );
 		ghostImage.id = 'sortable-ghost';
 		ghostImage.className = 'widget-top';
-		ghostImage.innerHTML = '<summary class="widget-title"><h3>' + dragEl.querySelector( 'h3' ).textContent + '</h3></summary>';
+		ghostImage.setHTML( '<summary class="widget-title"><h3>' + dragEl.querySelector( 'h3' ).textContent + '</h3></summary>' );
 		ghostImage.style.position = 'absolute';
 		ghostImage.style.top = '-1000px';
 		ghostImage.style.width = dragEl.getBoundingClientRect().width + 'px';
@@ -446,9 +446,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			if ( addNew ) {
 				if ( 'multi' === addNew ) {
-					widget.innerHTML = widget.innerHTML.replace( /<[^<>]+>/g, function( tag ) {
+					widget.setHTML( widget.innerHTML.replace( /<[^<>]+>/g, function( tag ) {
 						return tag.replace( /__i__|%i%/g, newMultiValue );
-					} );
+					} ) );
 
 					widget.id = widget.id.replace( '__i__', newMultiValue );
 					widget.querySelector( 'input.multi_number' ).value = newMultiValue;
@@ -475,9 +475,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					widget.addEventListener( 'change', unsavedWidget );
 				}
 			} else {
-				widget.innerHTML = widget.innerHTML.replace( /<[^<>]+>/g, function( tag ) {
+				widget.setHTML( widget.innerHTML.replace( /<[^<>]+>/g, function( tag ) {
 					return tag.replace( /__i__|%i%/g, newMultiValue );
-				} );
+				} ) );
 
 				widget.id = widget.id.replace( '__i__', newMultiValue );
 				widget.querySelector( 'input.multi_number' ).value = newMultiValue;
@@ -589,13 +589,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 				} else {
 					if ( responseText && responseText.length > 2 ) {
-						widget.querySelector( '.widget-content' ).innerHTML = responseText;
+						widget.querySelector( '.widget-content' ).setHTML( responseText );
 
 						let title = widget.querySelector( 'input[id*="-title"]' ) ? widget.querySelector( 'input[id*="-title"]' ).value : '';
 						if ( title ) {
 							title = ': ' + title.replace( /<[^<>]+>/g, '' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
 						}
-						widget.querySelector( '.in-widget-title' ).innerHTML = title;
+						widget.querySelector( '.in-widget-title' ).setHTML( title );
 
 						widget.querySelector( '.widget-control-save' ).disabled = true;
 						widget.querySelector( '.widget-control-save' ).value = wp.i18n.__( 'Saved' );
@@ -724,9 +724,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		widget.querySelector( '.widgets-chooser' ).remove();
 
 		if ( 'multi' === add ) {
-			widget.innerHTML = widget.innerHTML.replace( /<[^<>]+>/g, function( m ) {
+			widget.setHTML( widget.innerHTML.replace( /<[^<>]+>/g, function( m ) {
 				return m.replace( /__i__|%i%/g, newMultiValue );
-			} );
+			} ) );
 
 			widget.id = widgetId.replace( '__i__', newMultiValue );
 			widget.querySelector( 'input.multi_number' ).value = newMultiValue;
