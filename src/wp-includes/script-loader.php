@@ -1457,10 +1457,10 @@ function wp_default_scripts( $scripts ) {
 			'custom-header',
 			'_cpCustomHeader',
 			array(
-				'width'       => absint( $header_support[0]['width'] ),
-				'height'      => absint( $header_support[0]['height'] ),
-				'flexWidth'   => ! empty( $header_support[0]['flex-width'] ),
-				'flexHeight'  => ! empty( $header_support[0]['flex-height'] ),
+				'width'       => ! empty( $header_support[0]['width'] ) ? absint( $header_support[0]['width'] ) : 0,
+				'height'      => ! empty( $header_support[0]['height'] ) ? absint( $header_support[0]['height'] ) : 0,
+				'flexWidth'   => ! empty( $header_support[0]['flex-width'] ) ? (bool) $header_support[0]['flex-width'] : false,
+				'flexHeight'  => ! empty( $header_support[0]['flex-height'] ) ? (bool) $header_support[0]['flex-height'] : false,
 			)
 		);
 		$scripts->add( 'custom-background', "/wp-admin/js/custom-background$suffix.js", array( 'admin-media-modal', 'coloris' ), false, 1 );
