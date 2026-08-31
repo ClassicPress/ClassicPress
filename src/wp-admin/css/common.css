@@ -2681,6 +2681,8 @@ details summary > * {
 	border-left: 1px solid #c3c4c7;
 	width: 267px;
 	min-width: 267px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
 	user-select: none;
 	overflow: auto;
 }
