@@ -234,15 +234,33 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			filter: '.no-drag',
 			preventOnFilter: false,
 			setData: function( dataTransfer, dragEl ) {
-				var ghostImage = document.createElement( 'li' );
+				var ghostImage = document.createElement( 'li' ),
+					div = document.createElement( 'div' ),
+					details = document.createElement( 'details' ),
+					summary = document.createElement( 'summary' ),
+					span1 = document.createElement( 'span' ),
+					span2 = document.createElement( 'span' );
+
+				div.className = 'menu-item-bar';
+				details.className = 'menu-item-handle';
+				span1.className = 'item-title';
+				span2.className = 'menu-item-title';
+				span2.textContent = dragEl.querySelector( '.menu-item-title' ).textContent;
+
+				span1.append( span2 );
+				summary.append( span1 );
+				details.append( summary );
+				div.append( details );
+
 				ghostImage.id = 'sortable-ghost';
 				ghostImage.className = 'menu-item';
 				ghostImage.style.listStyle = 'none';
-				ghostImage.setHTML( '<div class="menu-item-bar"><details class="menu-item-handle"><summary><span class="item-title"><span class="menu-item-title">' + dragEl.querySelector( '.menu-item-title' ).textContent + '</span></span></summary></details></div>' );
 				ghostImage.style.position = 'absolute';
 				ghostImage.style.top = '-1000px';
 				ghostImage.style.width = dragEl.getBoundingClientRect().width + 'px';
-				document.body.appendChild( ghostImage );
+
+				ghostImage.append( div );
+				document.body.append( ghostImage );
 				dataTransfer.setDragImage( ghostImage, 30, 20 );
 			},
 			dataIdAttr: 'data-setting-id', // HTML attribute that is used by the `toArray()` method in OnEnd
