@@ -407,14 +407,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 
 	function ghostImage( dataTransfer, dragEl ) {
-		var ghostImage = document.createElement( 'details' );
+		var ghostImage = document.createElement( 'details' ),
+			summary = document.createElement( 'summary' ),
+			title = document.createElement( 'h3' );
+
+		summary.className = 'widget-title';
+		title.textContent = dragEl.querySelector( 'h3' ).textContent;
+		summary.append( title );
+
 		ghostImage.id = 'sortable-ghost';
 		ghostImage.className = 'widget-top';
-		ghostImage.setHTML( '<summary class="widget-title"><h3>' + dragEl.querySelector( 'h3' ).textContent + '</h3></summary>' );
 		ghostImage.style.position = 'absolute';
 		ghostImage.style.top = '-1000px';
 		ghostImage.style.width = dragEl.getBoundingClientRect().width + 'px';
-		document.body.appendChild( ghostImage );
+
+		ghostImage.append( summary );
+		document.body.append( ghostImage );
 		dataTransfer.setDragImage( ghostImage, 30, 20 );
 	}
 
@@ -446,9 +454,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			if ( addNew ) {
 				if ( 'multi' === addNew ) {
-					widget.setHTML( widget.innerHTML.replace( /<[^<>]+>/g, function( tag ) {
+					widget.innerHTML = widget.innerHTML.replace( /<[^<>]+>/g, function( tag ) {
 						return tag.replace( /__i__|%i%/g, newMultiValue );
-					} ) );
+					} );
 
 					widget.id = widget.id.replace( '__i__', newMultiValue );
 					widget.querySelector( 'input.multi_number' ).value = newMultiValue;
@@ -475,9 +483,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					widget.addEventListener( 'change', unsavedWidget );
 				}
 			} else {
-				widget.setHTML( widget.innerHTML.replace( /<[^<>]+>/g, function( tag ) {
+				widget.innerHTML = widget.innerHTML.replace( /<[^<>]+>/g, function( tag ) {
 					return tag.replace( /__i__|%i%/g, newMultiValue );
-				} ) );
+				} );
 
 				widget.id = widget.id.replace( '__i__', newMultiValue );
 				widget.querySelector( 'input.multi_number' ).value = newMultiValue;
@@ -589,7 +597,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 				} else {
 					if ( responseText && responseText.length > 2 ) {
-						widget.querySelector( '.widget-content' ).setHTML( responseText );
+						widget.querySelector( '.widget-content' ).innerHTML = responseText;
 
 						let title = widget.querySelector( 'input[id*="-title"]' ) ? widget.querySelector( 'input[id*="-title"]' ).value : '';
 						if ( title ) {
@@ -602,9 +610,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 						widget.classList.remove( 'widget-dirty' );
 
-						document.dispatchEvent( new CustomEvent('widget-updated', {
+						document.dispatchEvent( new CustomEvent( 'widget-updated', {
 							detail: { widget: widget }
-						}));
+						} ) );
 					}
 					document.querySelectorAll( '.spinner' ).forEach( function( spinner ) {
 						spinner.classList.remove( 'is-active' );
@@ -724,9 +732,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		widget.querySelector( '.widgets-chooser' ).remove();
 
 		if ( 'multi' === add ) {
-			widget.setHTML( widget.innerHTML.replace( /<[^<>]+>/g, function( m ) {
+			widget.innerHTML = widget.innerHTML.replace( /<[^<>]+>/g, function( m ) {
 				return m.replace( /__i__|%i%/g, newMultiValue );
-			} ) );
+			} );
 
 			widget.id = widgetId.replace( '__i__', newMultiValue );
 			widget.querySelector( 'input.multi_number' ).value = newMultiValue;
