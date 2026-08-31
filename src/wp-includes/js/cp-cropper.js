@@ -295,10 +295,43 @@
 	// ─── Skip ────────────────────────────────────────────────────────────────
 
 	function skipCrop() {
+		if ( currentOpts.action === 'custom-header-crop' ) {
+			const body = new URLSearchParams( {
+				action: currentOpts.action,
+				nonce: currentOpts.nonce,
+				id: currentOpts.attachmentId,
+				skip_crop: '1'
+			} );
+
+			fetch( ajaxurl, {
+				method: 'POST',
+				credentials: 'same-origin',
+				body: body
+			} )
+			.then( function( response ) {
+				if ( ! response.ok ) {
+					throw new Error( CROPPER.network_error + ': ' + response.status );
+				}
+				return response.json();
+			} )
+			.then( function( data ) {
+				if ( data.success ) {
+					currentOpts.onSelect( data.data );
+					close();
+				}
+			} )
+			.catch( function( error ) {
+				console.error( '[cpCropper]', error );
+			} );
+
+			return;
+		}
+
 		currentOpts.onSelect( {
 			id  : currentOpts.attachmentId,
 			url : currentOpts.imageUrl
 		} );
+
 		close();
 	}
 
@@ -358,7 +391,7 @@
 			setLoading( true );
 
 			const body = new URLSearchParams( {
-				action                    : 'crop-image',
+				action                    : currentOpts.action || 'crop-image',
 				nonce                     : currentOpts.nonce,
 				id                        : currentOpts.attachmentId,
 				context                   : currentOpts.context,

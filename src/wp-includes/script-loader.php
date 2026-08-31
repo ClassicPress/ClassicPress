@@ -628,6 +628,7 @@ function wp_default_scripts( $scripts ) {
 			'skip_note'     => __( 'You can skip cropping if you do not need to adjust the image.' ),
 			'skipping'      => __( 'Skip Cropping' ),
 			'saving'        => __( 'Saving' ),
+			'network_error' => __( 'Network error' ),
 		)
 	);
 
@@ -826,6 +827,7 @@ function wp_default_scripts( $scripts ) {
 			'labelTapToCancel'               => __( 'tap to cancel' ),
 			'labelTapToRetry'                => __( 'tap to retry' ),
 			'labelTapToUndo'                 => __( 'tap to undo' ),
+			'labelTapToClose'                => __( 'Tap to close' ),
 			'labelButtonRemoveItem'          => __( 'Remove' ),
 			'labelButtonAbortItemLoad'       => __( 'Abort' ),
 			'labelButtonRetryItemLoad'       => __( 'Retry' ),
@@ -833,6 +835,10 @@ function wp_default_scripts( $scripts ) {
 			'labelButtonUndoItemProcessing'  => __( 'Undo' ),
 			'labelButtonRetryItemProcessing' => __( 'Retry' ),
 			'labelButtonProcessItem'         => __( 'Upload' ),
+			'labelButtonDeselect'            => __( 'Deselect' ),
+			'labelInvalidType'               => __( 'Invalid type' ),
+			'labelCheckTypes'                => __( 'Check file types' ),
+			'labelNewFileName'               => __( 'New file name' ),
 		)
 	);
 
@@ -1415,8 +1421,51 @@ function wp_default_scripts( $scripts ) {
 		$scripts->add( 'nav-menu', "/wp-admin/js/nav-menu$suffix.js", array( 'sortable-js', 'wp-lists', 'postbox', 'json2', 'underscore' ) );
 		$scripts->set_translations( 'nav-menu' );
 
-		$scripts->add( 'custom-header', '/wp-admin/js/custom-header.js', array( 'jquery-masonry' ), false, 1 );
-		$scripts->add( 'custom-background', "/wp-admin/js/custom-background$suffix.js", array( 'wp-color-picker', 'media-views' ), false, 1 );
+		$scripts->add(
+			'admin-media-modal',
+			"/wp-admin/js/admin-media-modal$suffix.js",
+			array(
+				'wp-ajax-response',
+				'image-edit',
+				'cp-filepond-file-validate-size',
+				'cp-filepond-file-validate-type',
+				'cp-filepond-file-rename',
+				'cp-filepond-plugin-image-preview',
+				'cp-filepond',
+			),
+			false,
+			1
+		);
+		did_action( 'init' ) && $scripts->localize(
+			'admin-media-modal',
+			'_cpAdminMediaModalStrings',
+			array(
+				'of'               => __( 'of' ),
+				'by'               => __( 'by' ),
+				'pixels'           => __( 'pixels' ),
+				'items'            => __( 'items' ),
+				'media_items'      => __( 'media items' ),
+				'failed_update'    => __( 'Failed to update media:' ),
+				'error'            => __( 'Error:' ),
+				'delete_failed'    => __( 'Failed to delete attachment.' ),
+				'confirm_delete'   => __( "You are about to permanently delete this item from your site.\nThis action cannot be undone.\n'Cancel' to stop, 'OK' to delete." ),
+			)
+		);
+		$scripts->add( 'custom-header', "/wp-admin/js/custom-header$suffix.js", array( 'admin-media-modal' ), false, 1 );
+		if ( current_theme_supports( 'custom-header' ) ) {
+			$header_support = get_theme_support( 'custom-header' );
+			did_action( 'init' ) && $scripts->localize(
+				'custom-header',
+				'_cpCustomHeader',
+				array(
+					'width'       => ! empty( $header_support[0]['width'] ) ? absint( $header_support[0]['width'] ) : 0,
+					'height'      => ! empty( $header_support[0]['height'] ) ? absint( $header_support[0]['height'] ) : 0,
+					'flexWidth'   => ! empty( $header_support[0]['flex-width'] ) ? (bool) $header_support[0]['flex-width'] : false,
+					'flexHeight'  => ! empty( $header_support[0]['flex-height'] ) ? (bool) $header_support[0]['flex-height'] : false,
+				)
+			);
+		}
+		$scripts->add( 'custom-background', "/wp-admin/js/custom-background$suffix.js", array( 'admin-media-modal', 'coloris' ), false, 1 );
 		$scripts->add( 'media-gallery', "/wp-admin/js/media-gallery$suffix.js", array( 'jquery' ), false, 1 );
 
 		$scripts->add( 'svg-painter', '/wp-admin/js/svg-painter.js', array( 'jquery' ), false, 1 );
@@ -1524,13 +1573,13 @@ function wp_default_styles( $styles ) {
 	$styles->add( 'code-editor', "/wp-admin/css/code-editor$suffix.css", array( 'wp-codemirror' ) );
 	$styles->add( 'site-health', "/wp-admin/css/site-health$suffix.css" );
 	$styles->add( 'wp-view-transitions-admin', false );
+	$styles->add( 'coloris', '/wp-includes/js/coloris/coloris.min.css', array(), '0.25.0' );
 	did_action( 'init' ) && $styles->add_inline_style( 'wp-view-transitions-admin', wp_get_view_transitions_admin_css() );
 
-	$styles->add( 'wp-admin', false, array( 'dashicons', 'common', 'forms', 'admin-menu', 'dashboard', 'list-tables', 'edit', 'revisions', 'media', 'themes', 'about', 'nav-menus', 'site-icon', 'l10n' ) );
+	$styles->add( 'wp-admin', false, array( 'dashicons', 'common', 'forms', 'admin-menu', 'dashboard', 'list-tables', 'edit', 'revisions', 'media', 'themes', 'coloris', 'about', 'nav-menus', 'site-icon', 'cp-filepond', 'cp-cropper', 'l10n' ) );
 
 	$styles->add( 'login', "/wp-admin/css/login$suffix.css", array( 'dashicons', 'buttons', 'forms', 'l10n' ) );
 	$styles->add( 'install', "/wp-admin/css/install$suffix.css", array( 'dashicons', 'buttons', 'forms', 'l10n' ) );
-	$styles->add( 'coloris', '/wp-includes/js/coloris/coloris.min.css', array(), '0.25.0' );
 	$styles->add( 'customize-controls', "/wp-admin/css/customize-controls$suffix.css", array( 'wp-admin', 'coloris', 'colors', 'cp-cropper' ) );
 	$styles->add( 'customize-widgets', "/wp-admin/css/customize-widgets$suffix.css", array( 'widgets', 'wp-admin', 'colors' ) );
 	$styles->add( 'customize-nav-menus', "/wp-admin/css/customize-nav-menus$suffix.css", array( 'wp-admin', 'colors' ) );

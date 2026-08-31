@@ -81,7 +81,6 @@ class Custom_Image_Header {
 		add_action( "admin_print_styles-{$page}", array( $this, 'css_includes' ) );
 		add_action( "admin_head-{$page}", array( $this, 'help' ) );
 		add_action( "admin_head-{$page}", array( $this, 'take_action' ), 50 );
-		add_action( "admin_head-{$page}", array( $this, 'js' ), 50 );
 
 		if ( $this->admin_header_callback ) {
 			add_action( "admin_head-{$page}", $this->admin_header_callback, 51 );
@@ -152,9 +151,13 @@ class Custom_Image_Header {
 		}
 
 		$step = (int) $_GET['step'];
-		if ( $step < 1 || 3 < $step ||
-			( 2 === $step && ! wp_verify_nonce( $_REQUEST['_wpnonce-custom-header-upload'], 'custom-header-upload' ) ) ||
-			( 3 === $step && ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'custom-header-crop-image' ) )
+
+		if ( $step < 1 ||
+			3 < $step ||
+			( 2 === $step && ( ! isset( $_REQUEST['_wpnonce-custom-header-upload'] ) ||
+			! wp_verify_nonce( $_REQUEST['_wpnonce-custom-header-upload'], 'custom-header-upload' ) ) ) ||
+			( 3 === $step && ( ! isset( $_REQUEST['_wpnonce'] ) ||
+			! wp_verify_nonce( $_REQUEST['_wpnonce'], 'custom-header-crop-image' ) ) )
 		) {
 			return 1;
 		}
@@ -168,17 +171,10 @@ class Custom_Image_Header {
 	 * @since 2.1.0
 	 */
 	public function js_includes() {
-		$step = $this->step();
-
-		if ( ( 1 === $step || 3 === $step ) ) {
-			wp_enqueue_media();
-			wp_enqueue_script( 'custom-header' );
-			if ( current_theme_supports( 'custom-header', 'header-text' ) ) {
-				wp_enqueue_script( 'wp-color-picker' );
-			}
-		} elseif ( 2 === $step ) {
-			wp_enqueue_script( 'imgareaselect' );
-		}
+		wp_enqueue_script( 'coloris' );
+		wp_enqueue_script( 'cp-cropper' );
+		wp_enqueue_script( 'wp-ajax-response' );
+		wp_enqueue_script( 'custom-header' );
 	}
 
 	/**
@@ -187,13 +183,7 @@ class Custom_Image_Header {
 	 * @since 2.7.0
 	 */
 	public function css_includes() {
-		$step = $this->step();
-
-		if ( ( 1 === $step || 3 === $step ) && current_theme_supports( 'custom-header', 'header-text' ) ) {
-			wp_enqueue_style( 'wp-color-picker' );
-		} elseif ( 2 === $step ) {
-			wp_enqueue_style( 'imgareaselect' );
-		}
+		wp_enqueue_style( 'coloris' );
 	}
 
 	/**
@@ -337,158 +327,6 @@ class Custom_Image_Header {
 		}
 
 		echo '<div class="clear"></div></div>';
-	}
-
-	/**
-	 * Execute JavaScript depending on step.
-	 *
-	 * @since 2.1.0
-	 */
-	public function js() {
-		$step = $this->step();
-
-		if ( ( 1 === $step || 3 === $step ) && current_theme_supports( 'custom-header', 'header-text' ) ) {
-			$this->js_1();
-		} elseif ( 2 === $step ) {
-			$this->js_2();
-		}
-	}
-
-	/**
-	 * Display JavaScript based on Step 1 and 3.
-	 *
-	 * @since 2.6.0
-	 */
-	public function js_1() {
-		$default_color = '';
-		if ( current_theme_supports( 'custom-header', 'default-text-color' ) ) {
-			$default_color = get_theme_support( 'custom-header', 'default-text-color' );
-			if ( $default_color && ! str_contains( $default_color, '#' ) ) {
-				$default_color = '#' . $default_color;
-			}
-		}
-		?>
-<script>
-(function($){
-	var default_color = '<?php echo esc_js( $default_color ); ?>',
-		header_text_fields;
-
-	function pickColor(color) {
-		$('#name').css('color', color);
-		$('#desc').css('color', color);
-		$('#text-color').val(color);
-	}
-
-	function toggle_text() {
-		var checked = $('#display-header-text').prop('checked'),
-			text_color;
-		header_text_fields.toggle( checked );
-		if ( ! checked )
-			return;
-		text_color = $('#text-color');
-		if ( '' === text_color.val().replace('#', '') ) {
-			text_color.val( default_color );
-			pickColor( default_color );
-		} else {
-			pickColor( text_color.val() );
-		}
-	}
-
-	$( function() {
-		var text_color = $('#text-color');
-		header_text_fields = $('.displaying-header-text');
-		text_color.wpColorPicker({
-			change: function( event, ui ) {
-				pickColor( text_color.wpColorPicker('color') );
-			},
-			clear: function() {
-				pickColor( '' );
-			}
-		});
-		$('#display-header-text').click( toggle_text );
-		<?php if ( ! display_header_text() ) : ?>
-		toggle_text();
-		<?php endif; ?>
-	} );
-})(jQuery);
-</script>
-		<?php
-	}
-
-	/**
-	 * Display JavaScript based on Step 2.
-	 *
-	 * @since 2.6.0
-	 */
-	public function js_2() {
-
-		?>
-<script>
-	function onEndCrop( coords ) {
-		jQuery( '#x1' ).val(coords.x);
-		jQuery( '#y1' ).val(coords.y);
-		jQuery( '#width' ).val(coords.w);
-		jQuery( '#height' ).val(coords.h);
-	}
-
-	jQuery( function() {
-		var xinit = <?php echo absint( get_theme_support( 'custom-header', 'width' ) ); ?>;
-		var yinit = <?php echo absint( get_theme_support( 'custom-header', 'height' ) ); ?>;
-		var ratio = xinit / yinit;
-		var ximg = jQuery('img#upload').width();
-		var yimg = jQuery('img#upload').height();
-
-		if ( yimg < yinit || ximg < xinit ) {
-			if ( ximg / yimg > ratio ) {
-				yinit = yimg;
-				xinit = yinit * ratio;
-			} else {
-				xinit = ximg;
-				yinit = xinit / ratio;
-			}
-		}
-
-		jQuery('img#upload').imgAreaSelect({
-			handles: true,
-			keys: true,
-			show: true,
-			x1: 0,
-			y1: 0,
-			x2: xinit,
-			y2: yinit,
-			<?php
-			if ( ! current_theme_supports( 'custom-header', 'flex-height' )
-				&& ! current_theme_supports( 'custom-header', 'flex-width' )
-			) {
-				?>
-			aspectRatio: xinit + ':' + yinit,
-				<?php
-			}
-			if ( ! current_theme_supports( 'custom-header', 'flex-height' ) ) {
-				?>
-			maxHeight: <?php echo get_theme_support( 'custom-header', 'height' ); ?>,
-				<?php
-			}
-			if ( ! current_theme_supports( 'custom-header', 'flex-width' ) ) {
-				?>
-			maxWidth: <?php echo get_theme_support( 'custom-header', 'width' ); ?>,
-				<?php
-			}
-			?>
-			onInit: function () {
-				jQuery('#width').val(xinit);
-				jQuery('#height').val(yinit);
-			},
-			onSelectChange: function(img, c) {
-				jQuery('#x1').val(c.x1);
-				jQuery('#y1').val(c.y1);
-				jQuery('#width').val(c.width);
-				jQuery('#height').val(c.height);
-			}
-		});
-	} );
-</script>
-		<?php
 	}
 
 	/**
@@ -670,7 +508,7 @@ class Custom_Image_Header {
 			?>
 	<p>
 		<label for="choose-from-library-link"><?php _e( 'Or choose an image from your media library:' ); ?></label><br>
-		<button id="choose-from-library-link" class="button"
+		<button id="choose-from-library-link" class="button" type="button"
 			data-update-link="<?php echo esc_url( $modal_update_href ); ?>"
 			data-choose="<?php esc_attr_e( 'Choose a Custom Header' ); ?>"
 			data-update="<?php esc_attr_e( 'Set as header' ); ?>"><?php _e( 'Choose Image' ); ?></button>
@@ -781,7 +619,7 @@ class Custom_Image_Header {
 				$header_textcolor = '#' . $header_textcolor;
 			}
 
-			echo '<input type="text" name="text-color" id="text-color" value="' . esc_attr( $header_textcolor ) . '"' . $default_color_attr . '>';
+			echo '<input type="text" class="color-picker-hex" name="text-color" id="text-color" maxlength="7" data-coloris placeholder="' . esc_attr( $header_textcolor ) . '" value="' . esc_attr( $header_textcolor ) . '"' . $default_color_attr . '>';
 			if ( $default_color ) {
 				/* translators: %s: Default text color. */
 				echo ' <span class="description hide-if-js">' . sprintf( _x( 'Default: %s', 'color' ), esc_html( $default_color ) ) . '</span>';
@@ -807,6 +645,25 @@ endif;
 
 		<?php submit_button( null, 'primary', 'save-header-options' ); ?>
 </form>
+
+		<?php
+		$crop_width = get_theme_support( 'custom-header', 'width' );
+		$crop_height = get_theme_support( 'custom-header', 'height' );
+		$flex_width = current_theme_supports( 'custom-header', 'flex-width' );
+		$flex_height = current_theme_supports( 'custom-header', 'flex-height' );
+		$crop_nonce = wp_create_nonce( 'custom-header-crop-image' );
+		?>
+
+<script>
+var customHeaderCrop = {
+nonce: '<?php echo esc_js( $crop_nonce ); ?>',
+width: <?php echo (int) $crop_width; ?>,
+height: <?php echo (int) $crop_height; ?>,
+flexWidth: <?php echo $flex_width ? 'true' : 'false'; ?>,
+flexHeight: <?php echo $flex_height ? 'true' : 'false'; ?>
+};
+</script>
+
 </div>
 
 		<?php
@@ -1384,6 +1241,28 @@ endif;
 			wp_send_json_error();
 		}
 
+		if ( ! empty( $_POST['skip_crop'] ) ) {
+			$attachment_id = absint( $_POST['id'] );
+			$image         = wp_get_attachment_image_src( $attachment_id, 'full' );
+
+			if ( ! $image ) {
+				wp_send_json_error(
+					array( 'message' => __( 'Image could not be processed. Please try again.' ) )
+				);
+			}
+
+			$attachment = array(
+				'attachment_id' => $attachment_id,
+				'url'           => $image[0],
+				'width'         => $image[1],
+				'height'        => $image[2],
+			);
+
+			$this->set_header_image( $attachment );
+
+			wp_send_json_success( $attachment );
+		}
+
 		$crop_details = $_POST['cropDetails'];
 
 		$dimensions = $this->get_header_dimensions(
@@ -1429,6 +1308,8 @@ endif;
 
 		$attachment['width']  = $dimensions['dst_width'];
 		$attachment['height'] = $dimensions['dst_height'];
+
+		$this->set_header_image( $attachment );
 
 		wp_send_json_success( $attachment );
 	}
