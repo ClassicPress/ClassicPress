@@ -253,20 +253,12 @@
 			}
 		}
 
-		// Capture image bounds in canvas-space for the change listener.
-		const imgMinX = offX;
-		const imgMinY = offY;
-		const imgMaxX = offX + dispW;
-		const imgMaxY = offY + dispH;
-
 		cropperSel.$change(
 			offX + ( dispW - selW ) / 2,
 			offY + ( dispH - selH ) / 2,
 			selW,
 			selH
 		);
-
-		var isClamping = false;
 
 		cropperSel.addEventListener( 'change', function( e ) {
 			const { x, y, width, height } = e.detail;
