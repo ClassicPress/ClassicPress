@@ -110,7 +110,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		previewDialog.querySelector( '.theme-name' ).textContent = '';
 		previewDialog.querySelector( '.theme-by' ).textContent = '';
 		previewDialog.querySelector( '.theme-screenshot img' ).src = '';
-		previewDialog.querySelector( '.theme-rating' ).setHTML( ' <a class="num-ratings" href=""></a>' );
+		previewDialog.querySelector( '.theme-rating' ).innerHTML = ' <a class="num-ratings" href=""></a>';
 		previewDialog.querySelector( '.theme-version' ).textContent = '';
 		previewDialog.querySelector( '.theme-description' ).textContent = '';
 		previewDialog.querySelector( 'iframe' ).src = '';
@@ -223,6 +223,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
+			const container = document.createElement( 'div' );
+
 			if ( i === 1 ) {
 				themesGrid.replaceChildren(); // clear the current grid
 			}
@@ -230,7 +232,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.querySelector( '.filter-count .theme-count' ).textContent = result.data.count;
 
 			// Populate grid with new items
-			themesGrid.insertAdjacentHTML( 'beforeend', result.data.html );
+			container.setHTML( result.data.html, {
+				sanitizer: {}
+			} );
+			themesGrid.insertAdjacentHTML( 'beforeend', container.innerHTML );
 
 			showAndHide( document.querySelectorAll( '.themes li:not( .add-new-theme )' ) );
 		} )
