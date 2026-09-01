@@ -3,7 +3,7 @@
  *
  * @since CP-2.6.0.
  *
- * @output wp-admin/js/revisions.js
+ * @output wp-admin/js/revisions-list.js
  */
 
 /* global console, ajaxurl */
