@@ -328,7 +328,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Open the modal or perform other operations
 	document.addEventListener( 'click', function( e ) {
-		var img, template, clone, response, span, topModal,
+		var img, template, clone, response, span,
 			customizer = document.body.className.includes( 'wp-customizer' ) ? true : false,
 			theme = e.target.closest( '.theme' ),
 			allThemes = document.querySelectorAll( '.themes li:not( .add-new-theme )' ),
@@ -390,7 +390,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				if ( theme.dataset.hasUpdate === '1' ) {
 					if ( theme.dataset.updateResponse === '1-1' ) {
-						dialog.querySelector( '.has-update span' ).innerHTML = theme.dataset.update;
+						dialog.querySelector( '.has-update span' ).setHTML( theme.dataset.update );
 						dialog.querySelector( '.has-update' ).removeAttribute( 'hidden' );
 					} else {
 						dialog.querySelector( '.incompat-update' ).removeAttribute( 'hidden' );
@@ -526,26 +526,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else if ( e.target.className.includes( 'update-theme' ) ) { // Customizer
 			e.target.closest( '.update-message' ).classList.add( 'updating-message' );
 			updateIndividualTheme( e.target.closest( 'li' ).dataset.id );
-
-		// Get further details about a theme when it has an update
-		} else if ( e.target.className.includes( 'open-plugin-details-modal' ) ) {
-			e.preventDefault();
-			topModal = document.createElement( 'dialog' );
-			topModal.id = 'theme-update-modal';
-			topModal.className = 'theme-overlay';
-			topModal.setAttribute( 'aria-label', e.target.getAttribute( 'aria-label' ) );
-			topModal.setHTML( '<div class="theme-overlay">' +
-				'<div class="wp-clearfix">' +
-					'<div class="theme-header">' +
-						'<button id="theme-update-modal-close" class="close dashicons dashicons-no" autofocus>' +
-							'<span class="screen-reader-text">' + dialog.querySelector( '.close .screen-reader-text' ).textContent + '</span>' +
-						'</button>' +
-					'</div>' +
-					'<iframe src="' + e.target.href + '">' +
-					'</iframe>' +
-				'</div>' );
-			document.body.append( topModal );
-			topModal.showModal();
 
 		// Close update modal
 		} else if ( e.target.id === 'theme-update-modal-close' ) {
