@@ -333,7 +333,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Open the modal or perform other operations
 	document.addEventListener( 'click', function( e ) {
-		var img, template, clone, response, span,
+		var img, template, clone, response, span, container,
 			customizer = document.body.className.includes( 'wp-customizer' ) ? true : false,
 			theme = e.target.closest( '.theme' ),
 			allThemes = document.querySelectorAll( '.themes li:not( .add-new-theme )' ),
@@ -643,10 +643,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 				}
 
+				container = document.createElement( 'div' );
+				container.setHTML( theme.dataset.ratings, {
+					sanitizer: {}
+				} );
+
 				previewDialog.querySelector( '.theme-name' ).textContent = theme.querySelector( '.theme-name' ).textContent;
 				previewDialog.querySelector( '.theme-by' ).textContent = theme.querySelector( '.theme-author' ).textContent;
 				previewDialog.querySelector( '.theme-screenshot img' ).src = theme.querySelector( '.theme-screenshot img' ).src;
-				previewDialog.querySelector( '.theme-rating' ).insertAdjacentHTML( 'afterbegin', theme.dataset.ratings );
+				previewDialog.querySelector( '.theme-rating' ).insertAdjacentHTML( 'afterbegin', container.innerHTML );
 				previewDialog.querySelector( '.num-ratings' ).textContent = '(' + theme.dataset.numRatings + ' ' + _wpThemeSettings.l10n.ratings + ')';
 				previewDialog.querySelector( '.num-ratings' ).href = 'https://wordpress.org/support/theme/' + theme.id + '/reviews/';
 				previewDialog.querySelector( '.theme-version' ).textContent = _wpThemeSettings.l10n.version + ' ' + theme.dataset.version;
