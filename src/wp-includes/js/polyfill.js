@@ -48,7 +48,8 @@ if ( ! ( 'setHTML' in Element.prototype ) ) {
 
 					// Evaluate structural integrity rules
 					const isDataAttr = attrName.startsWith( 'data-' ) && attrName.length > 5;
-					const isAllowed = isDataAttr || validAttrs.includes( attrName );
+					const isAriaAttr = attrName.startsWith( 'aria-' ) && attrName.length > 5;
+					const isAllowed = isDataAttr || isAriaAttr || validAttrs.includes( attrName );
 					const isMaliciousUri = ( 'href' === attrName || 'src' === attrName ) && attrValue.startsWith( 'javascript:' );
 
 					if ( ! isAllowed || isMaliciousUri ) {
