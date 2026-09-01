@@ -55,15 +55,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			pre = document.createTextNode( textBeforeCursor );
 			post = document.createTextNode( textAfterCursor );
 			caret = document.createElement( 'span' );
-			caret.innerHTML = '&nbsp;';
+			caret.setHTML( '&nbsp;' );
 
-			mirror.innerHTML = '';
-			mirror.append( pre, caret, post );
+			mirror.replaceChildren( pre, caret, post );
 
 			rect = caret.getBoundingClientRect();
 			suggestionsContainer.style.top = `${rect.top + rect.height}px`;
 			suggestionsContainer.style.left = `${rect.left}px`;
-			suggestionsContainer.innerHTML = '';
+			suggestionsContainer.replaceChildren();
 
 			matches.forEach( function( match ) {
 				var option = document.createElement( 'div' );
@@ -73,7 +72,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					replaceCurrentWord( this.innerText );
 					suggestionsContainer.style.display = 'none';
 				} );
-				suggestionsContainer.appendChild( option );
+				suggestionsContainer.append( option );
 			} );
 			suggestionsContainer.style.display = 'block';
 		} );
@@ -212,7 +211,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		 * @return {void}
 		 */
 		close: function() {
-			document.getElementById( 'find-posts-response' ).innerHTML = '';
+			document.getElementById( 'find-posts-response' ).replaceChildren();
 			document.getElementById( 'find-posts' ).style.display = 'none';
 			document.querySelector( '.ui-find-overlay' ).style.display = 'none';
 		},
@@ -329,7 +328,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( success ) {
-			document.getElementById( 'post-' + id ).innerHTML = success.data;
+			document.getElementById( 'post-' + id ).setHTML( success.data );
 			hideColumns( 'post-' + id );
 			wp.a11y.speak( wp.i18n.__( 'Changes saved.' ) );
 		} )
@@ -818,13 +817,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						div = document.createElement( 'div' );
 						div.id = 'message';
 						div.className = 'notice notice-error is-dismissible';
-						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+						div.setHTML( '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>' );
 						document.querySelector( '.page-title-action' ).after( div );
 					} else {
 						div = document.createElement( 'div' );
 						div.id = 'message';
 						div.className = 'updated notice notice-success is-dismissible';
-						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+						div.setHTML( '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>' );
 						document.querySelector( '.page-title-action' ).after( div );
 
 						// Update selected attribute in DOM.
@@ -842,7 +841,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				div = document.createElement( 'div' );
 				div.id = 'message';
 				div.className = 'notice notice-error is-dismissible';
-				div.innerHTML = '<p>' + error + '</p><button class="notice-dismiss" type="button"></button>';
+				div.setHTML( '<p>' + error + '</p><button class="notice-dismiss" type="button"></button>' );
 				document.querySelector( '.page-title-action' ).after( div );
 			} );
 		} );
