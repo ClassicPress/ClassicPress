@@ -759,29 +759,27 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} )
 			.then( function( response ) {
 				if ( response.success ) {
-					if ( response.data.value == '' ) {
-						div = document.createElement( 'div' );
-						div.id = 'message';
-						div.className = 'notice notice-error is-dismissible';
-						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
-						document.querySelector( '.page-title-action' ).after( div );
-						close.click();
-					} else {
-						div = document.createElement( 'div' );
-						div.id = 'message';
-						div.className = 'updated notice notice-success is-dismissible';
-						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
-						document.querySelector( '.page-title-action' ).after( div );
+					div = document.createElement( 'div' );
+					div.id = 'message';
+					div.className = 'updated notice notice-success is-dismissible';
+					div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+					document.querySelector( '.page-title-action' ).after( div );
 
-						// Update selected attribute in DOM.
-						uploadCatSelect.childNodes.forEach( function( option ) {
-							if ( option.value === e.target.value ) {
-								option.setAttribute( 'selected', true );
-							} else {
-								option.removeAttribute( 'selected' );
-							}
-						} );
-					}
+					// Update selected attribute in DOM.
+					uploadCatSelect.childNodes.forEach( function( option ) {
+						if ( option.value === e.target.value ) {
+							option.setAttribute( 'selected', true );
+						} else {
+							option.removeAttribute( 'selected' );
+						}
+					} );
+				} else {
+					div = document.createElement( 'div' );
+					div.id = 'message';
+					div.className = 'notice notice-error is-dismissible';
+					div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+					document.querySelector( '.page-title-action' ).after( div );
+					close.click();
 				}
 			} )
 			.catch( function( error ) {
