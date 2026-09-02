@@ -74,7 +74,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} );
 			}
 
-			closeButton = dialog.querySelector( '#dialog-close-button' );
+			closeButton = document.getElementById( 'dialog-close-button' );
 			closeButton.addEventListener( 'click', function() {
 				dialog.close();
 				if ( iframe != null ) {
@@ -86,13 +86,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Remove iframe contents when hitting the Escape button
 			dialog.addEventListener( 'keydown', function( e ) {
 				if ( e.key === 'Escape' ) {
-					if ( iframe != null ) {
-						iframe.remove();
-					}
-					closeButton.remove();
-				} else if ( e.key === 'Enter' && e.target.id === 'dialog-close-button' ) {
-					e.preventDefault();
-					dialog.close();
 					if ( iframe != null ) {
 						iframe.remove();
 					}
@@ -254,16 +247,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.querySelectorAll( '#section-holder div.section' ).forEach( function( section ) {
 				section.style.display = 'none'; // Hide them all.
 			} );
-			document.querySelector( '#section-' + tab ).style.display = 'block';
+			document.getElementById( 'section-' + tab ).style.display = 'block';
 		} );
 	} );
 
 	/* Plugin install Category filter JS */
 	document.querySelectorAll( '.plugin-categories-filter a' ).forEach( function( filter ) {
 		filter.addEventListener( 'click', function( event ) {
-			event.preventDefault();
 			var category = filter.dataset.pluginTag;
-			document.querySelector( '#typeselector' ).value = 'tag';
+			event.preventDefault();
+
+			document.getElementById( 'typeselector' ).value = 'tag';
 			document.querySelector( '.plugin-install-php .wp-filter-search' ).value = category;
 			document.querySelector( '.plugin-install-php .wp-filter-search' ).dispatchEvent( new Event( 'input' ) );
 		} );
