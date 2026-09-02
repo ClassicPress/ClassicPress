@@ -35,16 +35,38 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					) :
 					wp.i18n.__( 'Plugin details' );
 
+			const button = document.createElement( 'button' ),
+				span = document.createElement( 'span' ),
+				iframe = document.createElement( 'iframe' );
+
 			e.preventDefault();
 			e.stopPropagation();
 
+			dialog.classList.add( 'modal-loading' );
 			urlNoQuery = url.split( 'TB_' );
 
-			dialog.classList.add( 'modal-loading' );
-			dialog.showModal();
-			dialog.insertAdjacentHTML( 'beforeend', '<button type="button" id="dialog-close-button" autofocus><span class="screen-reader-text">' + pluginL10n.close + '</span></button><iframe frameborder="0" hspace="0" allowtransparency="true" src="' + urlNoQuery[0] + '" id="TB_iframeContent" name="TB_iframeContent' + Math.round( Math.random() * 1000 ) + '" style="width: ' + ( width * 9 / 10 ) + 'px;max-width:800px;height: ' + ( height * 9 / 10 ) + 'px;" title="' + title + '">' + pluginL10n.noiframes + '</iframe>' );
+			button.type = 'button';
+			button.id = 'dialog-close-button';
+			button.setAttribute( 'autofocus', 'true' );
+			span.className = 'screen-reader-text';
+			span.textContent = pluginL10n.close;
+			button.append( span );
 
-			iframe = dialog.querySelector( 'iframe' );
+			iframe.id = 'TB_iframeContent';
+			iframe.src = urlNoQuery[0];
+			iframe.name = 'TB_iframeContent' + Math.round( Math.random() * 1000 );
+			iframe.title = title;
+			iframe.textContent = pluginL10n.noiframes;
+			iframe.setAttribute( 'frameborder', '0' );
+			iframe.setAttribute( 'hspace', '0' );
+			iframe.setAttribute( 'allowtransparency', 'true' );
+			iframe.style.width = ( width * 9 / 10 ) + 'px';
+			iframe.style.maxWidth = '800px';
+			iframe.style.height = ( height * 9 / 10 ) + 'px';
+
+			dialog.append( button, iframe );
+			dialog.showModal();
+
 			if ( iframe ) {
 				iframe.addEventListener( 'load', function() {
 					dialog.classList.remove( 'modal-loading' );
