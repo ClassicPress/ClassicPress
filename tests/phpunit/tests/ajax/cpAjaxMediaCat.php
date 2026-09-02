@@ -35,8 +35,8 @@ class Tests_Ajax_cpAjaxMediaCat extends WP_Ajax_UnitTestCase {
 
 		$response = json_decode( $this->_last_response );
 
-		$this->assertTrue( $response->success );
-		$this->assertSame( '', $response->data->value );
+		$this->assertFalse( $response->success );
+		$this->assertSame( null, $response->data->value );
 		$this->assertStringContainsString( 'choose', $response->data->message );
 	}
 
@@ -47,6 +47,11 @@ class Tests_Ajax_cpAjaxMediaCat extends WP_Ajax_UnitTestCase {
 	public function test_wp_ajax_media_cat_upload_new_value() {
 		// Become an administrator.
 		$this->_setRole( 'administrator' );
+
+		wp_insert_term(
+			'images',
+			'media_category',
+		);
 
 		$_POST = array(
 			'media_cat_upload_nonce' => wp_create_nonce( 'media-cat-upload' ),
@@ -63,7 +68,7 @@ class Tests_Ajax_cpAjaxMediaCat extends WP_Ajax_UnitTestCase {
 		$response = json_decode( $this->_last_response );
 
 		$this->assertTrue( $response->success );
-		$this->assertSame( 'images', $response->data->value );
+		$this->assertSame( '/images', $response->data->value );
 		$this->assertStringContainsString( 'updated', $response->data->message );
 
 		$upload_folder = get_option( 'media_cat_upload_folder' );
