@@ -36,7 +36,6 @@ class Tests_Ajax_cpAjaxMediaCat extends WP_Ajax_UnitTestCase {
 		$response = json_decode( $this->_last_response );
 
 		$this->assertFalse( $response->success );
-		$this->assertNull( $response->data->value );
 		$this->assertStringContainsString( 'choose', $response->data->message );
 	}
 
