@@ -6,7 +6,7 @@
 /* global pluginL10n */
 document.addEventListener( 'DOMContentLoaded', function() {
 
-	var iframe, iframeBody, tabbables, firstTabbable, lastTabbable, closeButton,
+	var iframeBody, tabbables, firstTabbable, lastTabbable, closeButton,
 		uploadViewToggle = document.querySelector( '.upload-view-toggle' ),
 		wrap = document.querySelector( '.wrap' ),
 		body = document.body,
@@ -36,8 +36,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					wp.i18n.__( 'Plugin details' );
 
 			const button = document.createElement( 'button' ),
-				span = document.createElement( 'span' ),
-				iframe = document.createElement( 'iframe' );
+				span = document.createElement( 'span' );
 
 			e.preventDefault();
 			e.stopPropagation();
@@ -52,6 +51,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			span.textContent = pluginL10n.close;
 			button.append( span );
 
+			iframe = document.createElement( 'iframe' );
 			iframe.id = 'TB_iframeContent';
 			iframe.src = urlNoQuery[0];
 			iframe.name = 'TB_iframeContent' + Math.round( Math.random() * 1000 );
@@ -69,8 +69,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			if ( iframe ) {
 				iframe.addEventListener( 'load', function() {
+					iframeLoaded( iframe );
 					dialog.classList.remove( 'modal-loading' );
-					iframeLoaded();
 				} );
 			}
 
@@ -100,7 +100,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 *
 	 * @since CP-2.1.0
 	 */
-	function iframeLoaded() {
+	function iframeLoaded( iframe ) {
 
 		// Get the iframe body.
 		iframeBody = iframe.contentWindow.document.querySelector( 'body' );
