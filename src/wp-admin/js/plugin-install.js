@@ -36,7 +36,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					wp.i18n.__( 'Plugin details' );
 
 			const button = document.createElement( 'button' ),
-				span = document.createElement( 'span' );
+				span = document.createElement( 'span' ),
+				iframe = document.createElement( 'iframe' );
 
 			e.preventDefault();
 			e.stopPropagation();
@@ -51,7 +52,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			span.textContent = pluginL10n.close;
 			button.append( span );
 
-			iframe = document.createElement( 'iframe' );
 			iframe.id = 'TB_iframeContent';
 			iframe.src = urlNoQuery[0];
 			iframe.name = 'TB_iframeContent' + Math.round( Math.random() * 1000 );
