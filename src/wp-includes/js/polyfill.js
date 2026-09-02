@@ -11,13 +11,8 @@ if ( ! ( 'setHTML' in Element.prototype ) ) {
 
 	Element.prototype.setHTML = function( input, options = {} ) {
 		const config = options.sanitizer || {};
-		
-		// If an elements/attributes array is passed, use it. Otherwise, use the defaults.
-		const validTags = config.elements ? config.elements.map( t => t.toUpperCase() ) : ALLOWED_TAGS;
-		const validAttrs = config.attributes ? config.attributes.map( a => a.toLowerCase() ) : ALLOWED_ATTR;
 
 		// Map and parse parameters to uppercase/lowercase for accurate matrix comparisons
-		const config = options.sanitizer || {};
 		const validTags = config.allowElements ? config.allowElements.map( t => t.toUpperCase() ) : ALLOWED_TAGS;
 		const validAttrs = config.allowAttributes ? config.allowAttributes.map( a => a.toLowerCase() ) : ALLOWED_ATTR;
 
