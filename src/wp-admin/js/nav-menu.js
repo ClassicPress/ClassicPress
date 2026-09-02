@@ -1023,8 +1023,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						throw new Error( response.status );
 					} )
 					.then( function( menuMarkup ) {
+						const container = document.createElement( 'ul' );
 
-						editMenu.insertAdjacentHTML( 'beforeend', menuMarkup );
+						container.setHTML( menuMarkup, {
+							sanitizer: {}
+						} );
+						editMenu.insertAdjacentHTML( 'beforeend', container.innerHTML );
+
 						advancedMenuProperties.forEach( function( property ) {
 							var pendingValue = editMenu.querySelector( '.pending .field-' + property.value );
 							if ( ! property.checked ) {
@@ -1394,12 +1399,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( menuMarkup ) {
-			var ins = document.getElementById( 'menu-instructions' );
+			const container = document.createElement( 'ul' ),
+				ins = document.getElementById( 'menu-instructions' );
 
 			menuMarkup = menuMarkup || '';
 			menuMarkup = menuMarkup.toString().trim(); // Trim leading whitespaces.
 
-			editMenu.insertAdjacentHTML( placing, menuMarkup );
+			container.setHTML( menuMarkup, {
+				sanitizer: {}
+			} );
+			editMenu.insertAdjacentHTML( placing, container.innerHTML );
 
 			advancedMenuProperties.forEach( function( property ) {
 				var pendingValues = editMenu.querySelectorAll( '.pending .field-' + property.value );
