@@ -3,6 +3,7 @@
  * Supports Safari and older browser variants natively.
  * Includes dynamic custom data-* attribute routing.
  */
+/* jshint scripturl: true */
 if ( ! ( 'setHTML' in Element.prototype ) ) {
 
 	// Establish strict safety baselines
