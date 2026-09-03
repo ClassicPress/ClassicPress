@@ -245,9 +245,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function compareRevisions( revisions ) {
 		if ( chunks.hasOwnProperty( revisions ) ) {
-			fromAuthorCard.setHTML( chunks[ revisions ].author_left );
-			toAuthorCard.setHTML( chunks[ revisions ].author_right );
-			diff.setHTML( chunks[ revisions ].diffs );
+			fromAuthorCard.setHTML( chunks[ revisions ].author_left, {
+				sanitizer: {
+					allowAttributes: ['class']
+				}
+			} );
+			toAuthorCard.setHTML( chunks[ revisions ].author_right, {
+				sanitizer: {
+					allowAttributes: ['class']
+				}
+			} );
+			diff.setHTML( chunks[ revisions ].diffs, {
+				sanitizer: {
+					allowAttributes: ['class', 'aria-hidden']
+				}
+			} );
 		} else {
 			getDiff( revisions );
 		}
@@ -308,9 +320,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 			// Display the appropriate diff and metadata
-			fromAuthorCard.setHTML( chunks[ index ].author_left );
-			toAuthorCard.setHTML( chunks[ index ].author_right );
-			diff.setHTML( chunks[ index ].diffs );
+			fromAuthorCard.setHTML( chunks[ index ].author_left, {
+				sanitizer: {
+					allowAttributes: ['class']
+				}
+			} );
+			toAuthorCard.setHTML( chunks[ index ].author_right , {
+				sanitizer: {
+					allowAttributes: ['class']
+				}
+			} );
+			diff.setHTML( chunks[ index ].diffs, {
+				sanitizer: {
+					allowAttributes: ['class', 'aria-hidden']
+				}
+			} );
 		} )
 		.catch( function( error ) {
 			console.error( _wpRevisionsSettings.error, error );
