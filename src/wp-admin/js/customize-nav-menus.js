@@ -95,11 +95,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					span.textContent = menuName;
 					input.value = li.parentNode.dataset.menuId;
 					_updatedControlsWatcher[ settingId ] = li.parentNode.dataset.menuId;
-					input.nextElementSibling.querySelector( '.theme-location-set' ).innerHTML = '(' + _wpCustomizeControlsL10n.current + ' ' + span.outerHTML + ')';
+					input.nextElementSibling.querySelector( '.theme-location-set' ).setHTML( '(' + _wpCustomizeControlsL10n.current + ' ' + span.outerHTML + ')' );
 
 					menuLocations.forEach( function( menuLocation ) {
 						if ( menuLocation.querySelector( 'input' ) ) {
-							menuLocation.querySelector( '.theme-location-set' ).innerHTML = '(' + _wpCustomizeControlsL10n.current + ' ' + span.outerHTML + ')';
+							menuLocation.querySelector( '.theme-location-set' ).setHTML( '(' + _wpCustomizeControlsL10n.current + ' ' + span.outerHTML + ')' );
 							menuLocation.querySelector( 'input' ).value = li.parentNode.dataset.menuId;
 							if ( menuLocation.closest( '.menu-location-settings' ).dataset.menuId === li.parentNode.dataset.menuId ) {
 								menuLocation.querySelector( 'input' ).checked = true;
@@ -118,14 +118,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} else {
 					input.value = '';
 					_updatedControlsWatcher[ settingId ] = '';
-					input.nextElementSibling.querySelector( '.theme-location-set' ).innerHTML = '';
+					input.nextElementSibling.querySelector( '.theme-location-set' ).replaceChildren();
 
 					menuLocations.forEach( function( menuLocation ) {
 						if ( menuLocation.querySelector( 'input' ) ) {
 							menuLocation.querySelector( 'input' ).value = '';
 							if ( menuLocation.closest( '.menu-location-settings' ).dataset.menuId === li.parentNode.dataset.menuId ) {
 								menuLocation.querySelector( 'input' ).checked = false;
-								menuLocation.querySelector( '.theme-location-set' ).innerHTML = span.outerHTML;
+								menuLocation.querySelector( '.theme-location-set' ).setHTML( span.outerHTML );
 							}
 						}
 					} );
@@ -234,15 +234,33 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			filter: '.no-drag',
 			preventOnFilter: false,
 			setData: function( dataTransfer, dragEl ) {
-				var ghostImage = document.createElement( 'li' );
+				var ghostImage = document.createElement( 'li' ),
+					div = document.createElement( 'div' ),
+					details = document.createElement( 'details' ),
+					summary = document.createElement( 'summary' ),
+					span1 = document.createElement( 'span' ),
+					span2 = document.createElement( 'span' );
+
+				div.className = 'menu-item-bar';
+				details.className = 'menu-item-handle';
+				span1.className = 'item-title';
+				span2.className = 'menu-item-title';
+				span2.textContent = dragEl.querySelector( '.menu-item-title' ).textContent;
+
+				span1.append( span2 );
+				summary.append( span1 );
+				details.append( summary );
+				div.append( details );
+
 				ghostImage.id = 'sortable-ghost';
 				ghostImage.className = 'menu-item';
 				ghostImage.style.listStyle = 'none';
-				ghostImage.innerHTML = '<div class="menu-item-bar"><details class="menu-item-handle"><summary><span class="item-title"><span class="menu-item-title">' + dragEl.querySelector( '.menu-item-title' ).textContent + '</span></span></summary></details></div>';
 				ghostImage.style.position = 'absolute';
 				ghostImage.style.top = '-1000px';
 				ghostImage.style.width = dragEl.getBoundingClientRect().width + 'px';
-				document.body.appendChild( ghostImage );
+
+				ghostImage.append( div );
+				document.body.append( ghostImage );
 				dataTransfer.setDragImage( ghostImage, 30, 20 );
 			},
 			dataIdAttr: 'data-setting-id', // HTML attribute that is used by the `toArray()` method in OnEnd
@@ -838,7 +856,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				li.id = result.data.post_id;
 				li.className = 'menu-item-tpl';
 				li.dataset.menuItemId = object + '-' + result.data.post_id;
-				li.innerHTML = '<div class="menu-item-bar">' +
+				li.setHTML( '<div class="menu-item-bar">' +
 					'<div class="menu-item-handle">' +
 					'<button type="button" class="button-link item-add">' +
 					'<span class="screen-reader-text">Add to menu: ' + result.data.title + ' (' + label + ')</span>' +
@@ -851,7 +869,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					'</span>' +
 					'</div>' +
 					'</div>' +
-					'<span class="item-url" hidden="">' + result.data.url + '</span>';
+					'<span class="item-url" hidden="">' + result.data.url + '</span>' );
 				itemsList.prepend( li );
 				addMenuItem( type, object, result.data.post_id, result.data.title, label, result.data.url );
 			}
@@ -1051,14 +1069,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				wp.a11y.speak( _wpCustomizeNavMenusSettings.l10n.itemsFound.replace( '%d', items.length ) );
 			} )
 			.catch( function() {
-				searchList.innerHTML = '';
+				searchList.replaceChildren();
 				searchList.classList.add( 'no-items-found' );
 				wp.a11y.speak( _wpCustomizeNavMenusSettings.l10n.itemsFound.replace( '%d', '0' ) );
 			} );
 		} else {
 			searchContainer.classList.add( 'cannot-expand' );
 			clearButton.classList.remove( 'is-visible' );
-			searchList.innerHTML = '';
+			searchList.replaceChildren();
 			searchList.classList.remove( 'no-widgets-found' );
 		}
 	}, 150 ) );
@@ -1192,13 +1210,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			li.id = 'accordion-section-nav_menu[' + navMenuId + ']';
 			li.className = 'accordion-section control-section control-section-nav_menu control-subsection assigned-to-menu-location';
 			li.setAttribute( 'aria-owns', 'sub-accordion-section-nav_menu[' + navMenuId + ']' );
-			li.innerHTML = '<h3 class="accordion-section-title" tabindex="0">' +
+			li.setHTML( '<h3 class="accordion-section-title" tabindex="0">' +
 				title +
 				'<span class="screen-reader-text">' +
 				menuToEdit.dataset.instruction +
 				'</span>' +
 				'<span class="menu-in-location"></span>' +
-				'</h3>';
+				'</h3>' );
 			if ( menuName !== '' ) {
 				li.querySelector( '.menu-in-location' ).textContent = '(' + _wpCustomizeControlsL10n.currently + ' ' + menuName + ')';
 			}
@@ -1255,7 +1273,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.getElementById( 'menu-items-search' ).value = '';
 			document.getElementById( 'available-menu-items-search' ).classList.add( 'cannot-expand' );
 			e.target.classList.remove( 'is-visible' );
-			document.getElementById( 'menu-items-search-list' ).innerHTML = '';
+			document.getElementById( 'menu-items-search-list' ).replaceChildren();
 
 		// Add a menu item
 		} else if ( availableMenuItems.contains( e.target ) ) {

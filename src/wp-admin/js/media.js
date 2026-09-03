@@ -55,15 +55,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			pre = document.createTextNode( textBeforeCursor );
 			post = document.createTextNode( textAfterCursor );
 			caret = document.createElement( 'span' );
-			caret.innerHTML = '&nbsp;';
+			caret.setHTML( '&nbsp;' );
 
-			mirror.innerHTML = '';
-			mirror.append( pre, caret, post );
+			mirror.replaceChildren( pre, caret, post );
 
 			rect = caret.getBoundingClientRect();
 			suggestionsContainer.style.top = `${rect.top + rect.height}px`;
 			suggestionsContainer.style.left = `${rect.left}px`;
-			suggestionsContainer.innerHTML = '';
+			suggestionsContainer.replaceChildren();
 
 			matches.forEach( function( match ) {
 				var option = document.createElement( 'div' );
@@ -73,7 +72,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					replaceCurrentWord( this.innerText );
 					suggestionsContainer.style.display = 'none';
 				} );
-				suggestionsContainer.appendChild( option );
+				suggestionsContainer.append( option );
 			} );
 			suggestionsContainer.style.display = 'block';
 		} );
@@ -212,7 +211,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		 * @return {void}
 		 */
 		close: function() {
-			document.getElementById( 'find-posts-response' ).innerHTML = '';
+			document.getElementById( 'find-posts-response' ).replaceChildren();
 			document.getElementById( 'find-posts' ).style.display = 'none';
 			document.querySelector( '.ui-find-overlay' ).style.display = 'none';
 		},
@@ -329,7 +328,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( success ) {
-			document.getElementById( 'post-' + id ).innerHTML = success.data;
+			document.getElementById( 'post-' + id ).setHTML( success.data );
 			hideColumns( 'post-' + id );
 			wp.a11y.speak( wp.i18n.__( 'Changes saved.' ) );
 		} )
@@ -466,7 +465,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			action.addEventListener( 'click', function( event ) {
 				var tr, checkboxes, delButtons, dateSplit, author, authorsList, cats,
 					catsArray, categoriesList, mediaTags, hiddenTr, cancel, inputs,
-					te = '',
+					te = document.createDocumentFragment(),
+					ul = document.createElement( 'ul' ),
 					quickEdit = document.getElementById( 'quick-edit' ),
 					bulkEdit = document.getElementById( 'bulk-edit' ),
 					optionValue = document.querySelector( 'select[name="action"]' ).value,
@@ -513,6 +513,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					 * checkboxes in the post table.
 					 */
 					checkboxes.forEach( function( checkbox ) {
+						const li = document.createElement( 'li' ),
+							button = document.createElement( 'button' ),
+							span1 = document.createElement( 'span' ),
+							span2 = document.createElement( 'span' );
 
 						// If the checkbox for a post is selected, add the post to the edit list.
 						if ( checkbox.checked ) {
@@ -529,7 +533,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 								tr = document.getElementById( 'post-' + id );
 							}
 
-							te += '<li class="ntdelitem" name="attachment[]" value="' + id + '"><button type="button" id="_' + id + '" class="button-link ntdelbutton"><span class="screen-reader-text">' + buttonVisuallyHiddenText + '</span></button><span class="ntdeltitle" aria-hidden="true">' + theTitle + '</span></li>';
+							li.className = 'ntdelitem';
+							li.name = 'attachment[]';
+							li.value = id;
+							button.type = 'button';
+							button.id = '_' + id;
+							button.className = 'button-link ntdelbutton';
+							span1.className = 'screen-reader-text';
+							span1.textContent = buttonVisuallyHiddenText;
+							span2.className = 'ntdeltitle';
+							span2.textContent = theTitle.split( '</span>' )[1];
+							span2.setAttribute( 'aria-hidden', 'true' );
+
+							button.append( span1 );
+							li.append( button, span2 );
+							te.append( li );
+
 						}
 					} );
 
@@ -641,7 +660,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						autoCompleteTextarea( bulkEdit.querySelector( 'textarea' ) );
 
 						// Populate the list of items to bulk edit.
-						document.getElementById( 'bulk-titles' ).innerHTML = '<ul id="bulk-titles-list" role="list">' + te + '</ul>';
+						ul.id = 'bulk-titles-list';
+						ul.role = 'list';
+						ul.append( te );
+						document.getElementById( 'bulk-titles' ).replaceChildren( ul );
 
 						// Scroll to Bulk Edit.
 						bulkEdit.scrollIntoView( {
@@ -786,7 +808,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Set up variables when a change of upload category is made.
 		uploadCatSelect.addEventListener( 'change', function( e ) {
-			var div,
+			var div = document.createElement( 'div' ),
+				para = document.createElement( 'p' ),
+				button = document.createElement( 'button' ),
 				dismissible = document.querySelector( '.is-dismissible' ),
 				uploadCatFolder = new URLSearchParams( {
 					action: 'media-cat-upload',
@@ -813,11 +837,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				throw new Error( response.status );
 			} )
 			.then( function( response ) {
+				div.id = 'message';
+				para.textContent = response.data.message;
+				button.className = 'notice-dismiss';
+				button.type = 'button';
+
 				if ( response.success ) {
-					div = document.createElement( 'div' );
-					div.id = 'message';
 					div.className = 'updated notice notice-success is-dismissible';
-					div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+					div.append( para, button );
 					document.querySelector( '.page-title-action' ).after( div );
 
 					// Update selected attribute in DOM.
@@ -829,18 +856,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						}
 					} );
 				} else {
-					div = document.createElement( 'div' );
-					div.id = 'message';
 					div.className = 'notice notice-error is-dismissible';
-					div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+					div.append( para, button );
 					document.querySelector( '.page-title-action' ).after( div );
 				}
 			} )
 			.catch( function( error ) {
-				div = document.createElement( 'div' );
+				para.textContent = error;
+				button.className = 'notice-dismiss';
+				button.type = 'button';
+
 				div.id = 'message';
 				div.className = 'notice notice-error is-dismissible';
-				div.innerHTML = '<p>' + error + '</p><button class="notice-dismiss" type="button"></button>';
+				div.append( para, button );
 				document.querySelector( '.page-title-action' ).after( div );
 			} );
 		} );

@@ -6,7 +6,7 @@
 /* global pluginL10n */
 document.addEventListener( 'DOMContentLoaded', function() {
 
-	var iframe, iframeBody, tabbables, firstTabbable, lastTabbable, closeButton,
+	var iframeBody, tabbables, firstTabbable, lastTabbable, closeButton,
 		uploadViewToggle = document.querySelector( '.upload-view-toggle' ),
 		wrap = document.querySelector( '.wrap' ),
 		body = document.body,
@@ -35,24 +35,46 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					) :
 					wp.i18n.__( 'Plugin details' );
 
+			const button = document.createElement( 'button' ),
+				span = document.createElement( 'span' ),
+				iframe = document.createElement( 'iframe' );
+
 			e.preventDefault();
 			e.stopPropagation();
 
+			dialog.classList.add( 'modal-loading' );
 			urlNoQuery = url.split( 'TB_' );
 
-			dialog.classList.add( 'modal-loading' );
-			dialog.showModal();
-			dialog.insertAdjacentHTML( 'beforeend', '<button type="button" id="dialog-close-button" autofocus><span class="screen-reader-text">' + pluginL10n.close + '</span></button><iframe frameborder="0" hspace="0" allowtransparency="true" src="' + urlNoQuery[0] + '" id="TB_iframeContent" name="TB_iframeContent' + Math.round( Math.random() * 1000 ) + '" style="width: ' + ( width * 9 / 10 ) + 'px;max-width:800px;height: ' + ( height * 9 / 10 ) + 'px;" title="' + title + '">' + pluginL10n.noiframes + '</iframe>' );
+			button.type = 'button';
+			button.id = 'dialog-close-button';
+			button.setAttribute( 'autofocus', 'true' );
+			span.className = 'screen-reader-text';
+			span.textContent = pluginL10n.close;
+			button.append( span );
 
-			iframe = dialog.querySelector( 'iframe' );
+			iframe.id = 'TB_iframeContent';
+			iframe.src = urlNoQuery[0];
+			iframe.name = 'TB_iframeContent' + Math.round( Math.random() * 1000 );
+			iframe.title = title;
+			iframe.textContent = pluginL10n.noiframes;
+			iframe.setAttribute( 'frameborder', '0' );
+			iframe.setAttribute( 'hspace', '0' );
+			iframe.setAttribute( 'allowtransparency', 'true' );
+			iframe.style.width = ( width * 9 / 10 ) + 'px';
+			iframe.style.maxWidth = '800px';
+			iframe.style.height = ( height * 9 / 10 ) + 'px';
+
+			dialog.append( button, iframe );
+			dialog.showModal();
+
 			if ( iframe ) {
 				iframe.addEventListener( 'load', function() {
+					iframeLoaded( iframe );
 					dialog.classList.remove( 'modal-loading' );
-					iframeLoaded();
 				} );
 			}
 
-			closeButton = dialog.querySelector( '#dialog-close-button' );
+			closeButton = document.getElementById( 'dialog-close-button' );
 			closeButton.addEventListener( 'click', function() {
 				dialog.close();
 				if ( iframe != null ) {
@@ -68,13 +90,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						iframe.remove();
 					}
 					closeButton.remove();
-				} else if ( e.key === 'Enter' && e.target.id === 'dialog-close-button' ) {
-					e.preventDefault();
-					dialog.close();
-					if ( iframe != null ) {
-						iframe.remove();
-					}
-					closeButton.remove();
 				}
 			} );
 		}
@@ -85,7 +100,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 *
 	 * @since CP-2.1.0
 	 */
-	function iframeLoaded() {
+	function iframeLoaded( iframe ) {
 
 		// Get the iframe body.
 		iframeBody = iframe.contentWindow.document.querySelector( 'body' );
@@ -232,16 +247,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.querySelectorAll( '#section-holder div.section' ).forEach( function( section ) {
 				section.style.display = 'none'; // Hide them all.
 			} );
-			document.querySelector( '#section-' + tab ).style.display = 'block';
+			document.getElementById( 'section-' + tab ).style.display = 'block';
 		} );
 	} );
 
 	/* Plugin install Category filter JS */
 	document.querySelectorAll( '.plugin-categories-filter a' ).forEach( function( filter ) {
 		filter.addEventListener( 'click', function( event ) {
-			event.preventDefault();
 			var category = filter.dataset.pluginTag;
-			document.querySelector( '#typeselector' ).value = 'tag';
+			event.preventDefault();
+
+			document.getElementById( 'typeselector' ).value = 'tag';
 			document.querySelector( '.plugin-install-php .wp-filter-search' ).value = category;
 			document.querySelector( '.plugin-install-php .wp-filter-search' ).dispatchEvent( new Event( 'input' ) );
 		} );
