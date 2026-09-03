@@ -31,7 +31,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function setAddedMediaFields( id ) {
 		var form = document.createElement( 'form' );
 		form.className = 'compat-item';
-		form.innerHTML = '<input type="hidden" id="menu-order" name="attachments[' + id + '][menu_order]" value="0">' +
+		form.setHTML( '<input type="hidden" id="menu-order" name="attachments[' + id + '][menu_order]" value="0">' +
 			'<p class="media-types media-types-required-info"><span class="required-field-message">Required fields are marked <span class="required">*</span></span></p>' +
 			'<span class="setting" data-setting="media_category">' +
 				'<label for="attachments-' + id + '-media_category">' +
@@ -44,7 +44,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					'<span class="alignleft">Media Tags</span>' +
 				'</label>' +
 				'<input type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" value="">' +
-			'</span>';
+			'</span>' );
 
 		if ( document.querySelector( '.compat-item' ) != null ) {
 			document.querySelector( '.compat-item' ).remove();
@@ -517,13 +517,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		gridItem.setAttribute( 'data-delete-nonce', attachment.nonces.delete );
 		gridItem.setAttribute( 'data-edit-nonce', attachment.nonces.edit );
 
-		gridItem.innerHTML = '<div class="select-attachment-preview type-' + attachment.type + ' subtype-' + attachment.subtype + '">' +
+		gridItem.setHTML( '<div class="select-attachment-preview type-' + attachment.type + ' subtype-' + attachment.subtype + '">' +
 			'<div class="media-thumbnail">' + image + '</div>' +
 			'</div>' +
 			'<button type="button" class="check" tabindex="-1">' +
 			'<span class="media-modal-icon"></span>' +
 			'<span class="screen-reader-text">' + _wpMediaGridSettings.deselect + '></span>' +
-			'</button>';
+			'</button>' );
 
 		return gridItem;
 	}
@@ -565,7 +565,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( result.success ) {
 
 				// Clear existing grid
-				mediaGrid.innerHTML = '';
+				mediaGrid.replaceChildren();
 
 				if ( result.data.length === 0 ) {
 
@@ -713,7 +713,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Set up variables when a change of upload category is made.
 		uploadCatSelect.addEventListener( 'change', function( e ) {
-			var div,
+			var div = document.createElement( 'div' ),
+				para = document.createElement( 'p' ),
+				button = document.createElement( 'button' ),
 				dismissible = document.querySelector( '.is-dismissible' ),
 				uploadCatFolder = new URLSearchParams( {
 					action: 'media-cat-upload',
@@ -757,18 +759,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} )
 			.then( function( response ) {
 				if ( response.success ) {
+					div.id = 'message';
+					para.textContent = response.data.message;
+					button.className = 'notice-dismiss';
+					button.type = 'button';
+
 					if ( response.data.value == '' ) {
-						div = document.createElement( 'div' );
 						div.id = 'message';
 						div.className = 'notice notice-error is-dismissible';
-						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+						div.append( para, button );
 						document.querySelector( '.page-title-action' ).after( div );
 						close.click();
 					} else {
-						div = document.createElement( 'div' );
-						div.id = 'message';
 						div.className = 'updated notice notice-success is-dismissible';
-						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+						div.append( para, button );
 						document.querySelector( '.page-title-action' ).after( div );
 
 						// Update selected attribute in DOM.
@@ -783,10 +787,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 			} )
 			.catch( function( error ) {
-				div = document.createElement( 'div' );
+				para.textContent = error;
+				button.className = 'notice-dismiss';
+				button.type = 'button';
+
 				div.id = 'message';
 				div.className = 'notice notice-error is-dismissible';
-				div.innerHTML = '<p>' + error + '</p><button class="notice-dismiss" type="button"></button>';
+				div.append( para, button );
 				document.querySelector( '.page-title-action' ).after( div );
 			} );
 		} );
