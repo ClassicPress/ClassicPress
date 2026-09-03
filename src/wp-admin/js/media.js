@@ -534,7 +534,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							}
 
 							li.className = 'ntdelitem';
-							li.name = 'attachment[]'
+							li.name = 'attachment[]';
 							li.value = id;
 							button.type = 'button';
 							button.id = '_' + id;
