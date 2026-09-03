@@ -809,32 +809,29 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				throw new Error( response.status );
 			} )
 			.then( function( response ) {
+				div.id = 'message';
+				para.textContent = response.data.message;
+				button.className = 'notice-dismiss';
+				button.type = 'button';
+
 				if ( response.success ) {
-					div.id = 'message';
-					para.textContent = response.data.message;
-					button.className = 'notice-dismiss';
-					button.type = 'button';
+					div.className = 'updated notice notice-success is-dismissible';
+					div.append( para, button );
+					document.querySelector( '.page-title-action' ).after( div );
 
-					if ( response.data.value == '' ) {
-						div.id = 'message';
-						div.className = 'notice notice-error is-dismissible';
-						div.append( para, button );
-						document.querySelector( '.page-title-action' ).after( div );
-						close.click();
-					} else {
-						div.className = 'updated notice notice-success is-dismissible';
-						div.append( para, button );
-						document.querySelector( '.page-title-action' ).after( div );
-
-						// Update selected attribute in DOM.
-						uploadCatSelect.childNodes.forEach( function( option ) {
-							if ( option.value === e.target.value ) {
-								option.setAttribute( 'selected', true );
-							} else {
-								option.removeAttribute( 'selected' );
-							}
-						} );
-					}
+					// Update selected attribute in DOM.
+					uploadCatSelect.childNodes.forEach( function( option ) {
+						if ( option.value === e.target.value ) {
+							option.setAttribute( 'selected', true );
+						} else {
+							option.removeAttribute( 'selected' );
+						}
+					} );
+				} else {
+					div.className = 'notice notice-error is-dismissible';
+					div.append( para, button );
+					document.querySelector( '.page-title-action' ).after( div );
+					close.click();
 				}
 			} )
 			.catch( function( error ) {
