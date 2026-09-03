@@ -42,7 +42,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			label2 = document.createElement( 'label' ),
 			input2 = document.createElement( 'input' ),
 			innerSpan2 = document.createElement( 'span' );
-			
+
 		form.className = 'compat-item';
 		input.type = 'hidden';
 		input.id = 'menu-order';
