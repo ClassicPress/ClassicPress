@@ -29,22 +29,62 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Update details within modal
 	function setAddedMediaFields( id ) {
-		var form = document.createElement( 'form' );
+		const form = document.createElement( 'form' ),
+			input = document.createElement( 'input' ),
+			para = document.createElement( 'p' ),
+			message = document.createElement( 'span' ),
+			required = document.createElement( 'span' ),
+			span1 = document.createElement( 'span' ),
+			label1 = document.createElement( 'label' ),
+			input1 = document.createElement( 'input' ),
+			innerSpan1 = document.createElement( 'span' ),
+			innerInput1 = document.createElement( 'input' ),
+			span2 = document.createElement( 'span' ),
+			label2 = document.createElement( 'label' ),
+			input2 = document.createElement( 'input' ),
+			innerSpan2 = document.createElement( 'span' ),
+			innerInput2 = document.createElement( 'input' );
+			
 		form.className = 'compat-item';
-		form.setHTML( '<input type="hidden" id="menu-order" name="attachments[' + id + '][menu_order]" value="0">' +
-			'<p class="media-types media-types-required-info"><span class="required-field-message">Required fields are marked <span class="required">*</span></span></p>' +
-			'<span class="setting" data-setting="media_category">' +
-				'<label for="attachments-' + id + '-media_category">' +
-					'<span class="alignleft">Media Categories</span>' +
-				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" value="">' +
-			'</span>' +
-			'<span class="setting" data-setting="media_post_tag">' +
-				'<label for="attachments-' + id + '-media_post_tag">' +
-					'<span class="alignleft">Media Tags</span>' +
-				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" value="">' +
-			'</span>' );
+		input.type = 'hidden';
+		input.id = 'menu-order';
+		input.name = 'attachments[' + id + '][menu_order]';
+		input.value = '0';
+		para.className = 'media-types media-types-required-info';
+		message.className = 'required-field-message';
+		message.textContent = 'Required fields are marked ';
+		required.className = 'required';
+		required.textContent = '*';
+
+		span1.className = 'setting';
+		span1.dataset.setting = 'media_category';
+		label1.htmlFor = 'attachments-' + id + '-media_category';
+		innerSpan1.className = 'alignleft';
+		innerSpan1.textContent = 'Media Categories';
+		input1.type = 'text';
+		input1.className = 'text';
+		input1.id = 'attachments-' + id + '-media_category';
+		input1.name = 'attachments[' + id + '][media_category]';
+		input1.value = '';
+
+		span2.className = 'setting';
+		span2.dataset.setting = 'media_post_tag';
+		label2.htmlFor = 'attachments-' + id + '-media_post_tag';
+		innerSpan2.className = 'alignleft';
+		innerSpan2.textContent = 'Media Tags';
+		input2.type = 'text';
+		input2.className = 'text';
+		input2.id = 'attachments-' + id + '-media_post_tag';
+		input2.name = 'attachments[' + id + '][media_post_tag]';
+		input2.value = '';
+
+		message.append( required );
+		para.append( message );
+		label1.append( innerSpan1 );
+		span1.append( label1, input1 );
+		label2.append( innerSpan2 );
+		span2.append( label2, input2 );
+		form.append( input, para, span1, span2 );
 
 		if ( document.querySelector( '.compat-item' ) != null ) {
 			document.querySelector( '.compat-item' ).remove();
@@ -475,7 +515,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	/* Populate media items within grid */
 	function populateGridItem( attachment ) {
-		var gridItem = document.createElement( 'li' ),
+		const gridItem = document.createElement( 'li' ),
+			wrapper = document.createElement( 'div' ),
+			thumbnail = document.createElement( 'div' ),
+			button = document.createElement( 'button' ),
+			spanIcon = document.createElement( 'span' ),
+			spanSRT = document.createElement( 'span' ),
 			image = '<img src="' + attachment.url + '" alt="' + attachment.alt + '">';
 
 		if ( attachment.type === 'application' ) {
@@ -517,13 +562,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		gridItem.setAttribute( 'data-delete-nonce', attachment.nonces.delete );
 		gridItem.setAttribute( 'data-edit-nonce', attachment.nonces.edit );
 
-		gridItem.setHTML( '<div class="select-attachment-preview type-' + attachment.type + ' subtype-' + attachment.subtype + '">' +
-			'<div class="media-thumbnail">' + image + '</div>' +
-			'</div>' +
-			'<button type="button" class="check" tabindex="-1">' +
-			'<span class="media-modal-icon"></span>' +
-			'<span class="screen-reader-text">' + _wpMediaGridSettings.deselect + '></span>' +
-			'</button>' );
+		wrapper.className = 'select-attachment-preview type-' + attachment.type + ' subtype-' + attachment.subtype;
+		thumbnail.className = 'media-thumbnail';
+		button.type = 'button';
+		button.className = 'check';
+		button.tabIndex = -1;
+		spanIcon.className = 'media-modal-icon';
+		spanSRT.className =  'screen-reader-text';
+		spanSRT.textContent = _wpMediaGridSettings.deselect;
+
+		thumbnail.append( image );
+		wrapper.append( thumbnail );
+		button.append( spanIcon, spanSRT );
+		gridItem.append( wrapper, button );
 
 		return gridItem;
 	}
