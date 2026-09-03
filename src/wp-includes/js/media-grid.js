@@ -38,12 +38,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			label1 = document.createElement( 'label' ),
 			input1 = document.createElement( 'input' ),
 			innerSpan1 = document.createElement( 'span' ),
-			innerInput1 = document.createElement( 'input' ),
 			span2 = document.createElement( 'span' ),
 			label2 = document.createElement( 'label' ),
 			input2 = document.createElement( 'input' ),
-			innerSpan2 = document.createElement( 'span' ),
-			innerInput2 = document.createElement( 'input' );
+			innerSpan2 = document.createElement( 'span' );
 			
 		form.className = 'compat-item';
 		input.type = 'hidden';
@@ -520,8 +518,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			thumbnail = document.createElement( 'div' ),
 			button = document.createElement( 'button' ),
 			spanIcon = document.createElement( 'span' ),
-			spanSRT = document.createElement( 'span' ),
-			image = '<img src="' + attachment.url + '" alt="' + attachment.alt + '">';
+			spanSRT = document.createElement( 'span' );
+
+		let image = '<img src="' + attachment.url + '" alt="' + attachment.alt + '">';
 
 		if ( attachment.type === 'application' ) {
 			if ( attachment.subtype === 'vnd.openxmlformats-officedocument.spreadsheetml.sheet' ) {
