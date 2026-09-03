@@ -1037,63 +1037,29 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			.then( function( result ) {
 				var items = result && result.success && result.data && result.data.items ? result.data.items : [];
 
-				searchList.replaceChildren();
+				searchList.innerHTML = '';
 
 				if ( items.length ) {
-					searchList.replaceChildren(
-						...items.map( function( item ) {
-							const id = _.escape( item.id ),
-								title = _.escape( item.title ),
-								label = _.escape( item.type_label ),
-								li = document.createElement( 'li' ),
-								bar = document.createElement( 'div' ),
-								handle = document.createElement( 'div' ),
-								button = document.createElement( 'button' ),
-								srText = document.createElement( 'span' ),
-								split = document.createElement( 'span' ),
-								titleWrap = document.createElement( 'span' ),
-								titleSpan = document.createElement( 'span' ),
-								type = document.createElement( 'span' ),
-								url = document.createElement( 'span' );
-
-							li.className = 'menu-item-tpl';
-							li.id = id;
-							li.dataset.menuItemId = id;
-
-							bar.className = 'menu-item-bar';
-							handle.className = 'menu-item-handle';
-
-							button.type = 'button';
-							button.className = 'button-link item-add';
-
-							srText.className = 'screen-reader-text';
-							srText.textContent = _wpCustomizeNavMenusSettings.l10n.addToMenu + ': ' + title + ' (' + label + ')';
-
-							split.className = 'item-split';
-							titleWrap.className = 'item-title';
-							titleWrap.setAttribute( 'aria-hidden', 'true' );
-
-							titleSpan.className = 'menu-item-title';
-							titleSpan.textContent = title;
-
-							type.className = 'item-type';
-							type.setAttribute( 'aria-hidden', 'true' );
-							type.textContent = label;
-
-							url.className = 'item-url';
-							url.hidden = true;
-							url.textContent = _.escape( item.url );
-
-							button.append( srText );
-							titleWrap.append( titleSpan );
-							split.append( titleWrap, type );
-							handle.append( button, split );
-							bar.append( handle );
-							li.append( bar, url );
-
-							return li;
-						} )
-					);
+					searchList.innerHTML = items.map( function( item ) {
+						return '<li id="' + item.id + '" class="menu-item-tpl" data-menu-item-id="' + item.id + '">' +
+							'<div class="menu-item-bar">' +
+								'<div class="menu-item-handle">' +
+									'<button type="button" class="button-link item-add">' +
+										'<span class="screen-reader-text">' +
+											_wpCustomizeNavMenusSettings.l10n.addToMenu + ': ' + item.title + ' (' + item.type_label + ')' +
+										'</span>' +
+									'</button>' +
+									'<span class="item-split">' +
+										'<span class="item-title" aria-hidden="true">' +
+											'<span class="menu-item-title">' + item.title + '</span>' +
+										'</span>' +
+										'<span class="item-type" aria-hidden="true">' + item.type_label + '</span>' +
+									'</span>' +
+								'</div>' +
+							'</div>' +
+							'<span class="item-url" hidden="">' + item.url + '</span>' +
+						'</li>';
+					} ).join( '' );
 
 					searchList.classList.remove( 'no-items-found' );
 				} else {
