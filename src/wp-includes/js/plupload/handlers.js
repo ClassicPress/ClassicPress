@@ -55,44 +55,42 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} )
 			.then( function( response ) {
 				if ( response.success ) {
-					if ( response.data.value == '' ) {
-						div = document.createElement( 'div' );
-						div.id = 'message';
-						div.className = 'notice notice-error is-dismissible';
-						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
-						document.querySelector( '.wrap h1' ).after( div );
+					div = document.createElement( 'div' );
+					div.id = 'message';
+					div.className = 'updated notice notice-success is-dismissible';
+					div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+					document.querySelector( '.wrap h1' ).after( div );
 
-						// Disable uploads.
-						plUploader.setAttribute( 'inert', true );
-						asyncUploader.setAttribute( 'inert', true );
+					// Update selected attribute in DOM.
+					uploadCatSelect.childNodes.forEach( function( option ) {
+						if ( option.value === e.target.value ) {
+							option.setAttribute( 'selected', true );
+						} else {
+							option.removeAttribute( 'selected' );
+						}
+					} );
 
-						// Prevent uploading file into browser window
-						window.addEventListener( 'dragover', function( e ) {
-							e.preventDefault();
-						}, false );
-						window.addEventListener( 'drop', function( e ) {
-							e.preventDefault();
-						}, false );
-					} else {
-						div = document.createElement( 'div' );
-						div.id = 'message';
-						div.className = 'updated notice notice-success is-dismissible';
-						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
-						document.querySelector( '.wrap h1' ).after( div );
+					// Enable uploads.
+					plUploader.removeAttribute( 'inert' );
+					asyncUploader.removeAttribute( 'inert' );
+				} else {
+					div = document.createElement( 'div' );
+					div.id = 'message';
+					div.className = 'notice notice-error is-dismissible';
+					div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+					document.querySelector( '.wrap h1' ).after( div );
 
-						// Update selected attribute in DOM.
-						uploadCatSelect.childNodes.forEach( function( option ) {
-							if ( option.value === e.target.value ) {
-								option.setAttribute( 'selected', true );
-							} else {
-								option.removeAttribute( 'selected' );
-							}
-						} );
+					// Disable uploads.
+					plUploader.setAttribute( 'inert', true );
+					asyncUploader.setAttribute( 'inert', true );
 
-						// Enable uploads.
-						plUploader.removeAttribute( 'inert' );
-						asyncUploader.removeAttribute( 'inert' );
-					}
+					// Prevent uploading file into browser window
+					window.addEventListener( 'dragover', function( e ) {
+						e.preventDefault();
+					}, false );
+					window.addEventListener( 'drop', function( e ) {
+						e.preventDefault();
+					}, false );
 				}
 			} )
 			.catch( function( error ) {
