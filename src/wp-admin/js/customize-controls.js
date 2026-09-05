@@ -19,6 +19,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		customizerControls = [...document.getElementById( 'customize-theme-controls' ).children],
 		{ FilePond } = window, // import FilePond
 		cropContext = false,
+		newFrontPageIds = [],
+		newPostsPageIds = [],
 		dialog = document.getElementById( 'widget-modal' ),
 		installedThemesHTML = document.querySelector( '.themes')?.innerHTML,
 		reducedMotionMediaQuery = window.matchMedia( '(prefers-reduced-motion: reduce)' ),
@@ -304,13 +306,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		input.addEventListener( 'input', function() {
-			if ( input.name === 'background-position' || input.type === 'checkbox' ) {
+			if ( input.name === 'background-position' || input.type === 'checkbox' || input.classList.contains( 'create-item-input' ) ) {
 				return;
 			}
 			inputChanged( input, settingId );
 		} );
 
 		input.addEventListener( 'change', function() {
+			if ( input.classList.contains( 'create-item-input' ) ) {
+				return;
+			}
+
 			if ( input.name === 'background-position' ) {
 				backgroundPositionChanged( input );
 				return;
@@ -908,6 +914,99 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Handle success audible feedback.
 			wp.a11y.speak( wp.i18n.__( 'The preview URL has been copied to your clipboard' ) );
 		}
+	}
+
+	/**
+	 * Add a page from with the Homepage Settings panel
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function createPage( button ) {
+		var frontSelect, postsSelect,
+			data = new URLSearchParams(),
+			input = button.previousElementSibling,
+			settingId = button.closest( 'li' ).dataset.settingId,
+			errorItem = button.parentElement.nextElementSibling;
+
+		if ( ! input.value.trim() ) {
+			errorItem.style.display = '';
+			input.focus();
+			return;
+		}
+
+		errorItem.style.display = 'none';
+		button.disabled = true;
+		button.textContent = button.dataset.saving;
+
+		data.append( 'action', 'customize-nav-menus-insert-auto-draft' );
+		data.append( 'wp_customize', 'on' );
+		data.append( 'customize-menus-nonce', _wpCustomizeControlsL10n.menusNonce );
+		data.append( 'params[post_type]', 'page' );
+		data.append( 'params[post_title]', button.previousElementSibling.value.trim() );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			credentials: 'same-origin',
+			body: data
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( response ) {
+			if ( response.success ) {
+				input.value = '';
+				_updatedControlsWatcher.show_on_front = 'page';
+
+				if ( settingId === 'page_on_front' ) {
+					frontSelect = document.querySelector( 'select[data-customize-setting-link="page_on_front"]' );
+					addPageAsOption( frontSelect, response.data.post_id, response.data.title );
+					newFrontPageIds.push( { id: response.data.post_id, title: response.data.title } );
+					_updatedControlsWatcher.page_on_front = response.data.post_id;
+				} else if ( settingId === 'page_for_posts' ) {
+					postsSelect = document.querySelector( 'select[data-customize-setting-link="page_for_posts"]' );
+					addPageAsOption( postsSelect, response.data.post_id, response.data.title );
+					newPostsPageIds.push( { id: response.data.post_id, title: response.data.title } );
+					_updatedControlsWatcher.page_for_posts = response.data.post_id;
+				}
+
+				activatePublishButton();
+			} else {
+				errorItem.textContent = response.data && response.data.message ? response.data.message : _wpCustomizeControlsL10n.pageCreationFailure;
+				errorItem.style.display = '';
+			}
+		} )
+		.catch( function() {
+			errorItem.textContent = _wpCustomizeControlsL10n.pageCreationFailure;
+			errorItem.style.display = '';
+		} )
+		.finally( function() {
+			button.disabled = false;
+			button.textContent = button.dataset.add;
+		} );
+	}
+
+	/**
+	 * Add the new page as an option to the select dropdown in the Homepage Settings panel
+	 *
+	 * @abstract
+	 * @return {void}
+	 */
+	function addPageAsOption( select, value, title ) {
+		let existing = select.querySelector( 'option[value="' + value + '"]' ),
+			option = document.createElement( 'option' );
+
+		if ( existing ) {
+			return;
+		}
+
+		option.value = value;
+		option.textContent = title;
+		select.prepend( option );
+		select.value = value;
 	}
 
 	/**
@@ -1697,6 +1796,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			navMenuNegatives = [], // an array because we need it to be iterable
 			navMenuLocations = [],
 			navMenuItems = [],
+			postsToPublish = [],
 			formData = new FormData(),
 			updateData = new FormData(),
 			previewLink = document.getElementById( 'preview-link' ),
@@ -1877,13 +1977,25 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					value: item || ''
 				};
 			}
-
-			if ( newMenuItemIDs.length > 0 ) {
-				submittedChanges.nav_menus_created_posts = {
-					value: newMenuItemIDs
-				};
-			}
 		} );
+
+		if ( newMenuItemIDs.length > 0 ) {
+			postsToPublish = postsToPublish.concat( newMenuItemIDs );
+		}
+
+		newFrontPageIds.forEach( function( item ) {
+			postsToPublish.push( item.id );
+		} );
+
+		newPostsPageIds.forEach( function( item ) {
+			postsToPublish.push( item.id );
+		} );
+
+		if ( postsToPublish.length > 0 ) {
+			submittedChanges.nav_menus_created_posts = {
+				value: postsToPublish
+			};
+		}
 
 		// Add advanced menu-item changes directly to the outgoing
 		// publish payload without touching updatedControls.
@@ -2342,6 +2454,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Copy preview link
 		} else if ( e.target.classList?.contains( 'customize-copy-preview-link' ) ) {
 			copyToClipboard( 'preview', e.target );
+
+		// Add a page from within the Homepage settings panel
+		} else if ( e.target.classList?.contains( 'add-content' ) ) {
+			createPage( e.target );
 
 		// Add a widget
 		} else if ( e.target.classList?.contains( 'add-new-widget' ) ) {
