@@ -28,8 +28,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		endTouchPosition = 0;
 
 	// Update details within modal
-	function setAddedMediaFields( id ) {
-		var form = document.createElement( 'form' );
+	function setAddedMediaFields( attachment ) {
+		var form = document.createElement( 'form' ),
+			id = attachment.dataset.id,
+			cats = attachment.dataset.taxes,
+			tags = attachment.dataset.tags;
+
 		form.className = 'compat-item';
 		form.innerHTML = '<input type="hidden" id="menu-order" name="attachments[' + id + '][menu_order]" value="0">' +
 			'<p class="media-types media-types-required-info"><span class="required-field-message">Required fields are marked <span class="required">*</span></span></p>' +
@@ -37,13 +41,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				'<label for="attachments-' + id + '-media_category">' +
 					'<span class="alignleft">Media Categories</span>' +
 				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" value="">' +
+				'<input list="media-grid-media-categories" type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" value="' + cats + '">' +
 			'</span>' +
 			'<span class="setting" data-setting="media_post_tag">' +
 				'<label for="attachments-' + id + '-media_post_tag">' +
 					'<span class="alignleft">Media Tags</span>' +
 				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" value="">' +
+				'<input list="media-grid-media-tags" type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" value="' + tags + '">' +
 			'</span>';
 
 		if ( document.querySelector( '.compat-item' ) != null ) {
@@ -279,8 +283,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			height = item.dataset.height,
 			caption = item.dataset.caption,
 			description = item.dataset.description,
-			taxes = item.dataset.taxes,
-			tags = item.dataset.tags,
 			url = item.dataset.url,
 			alt = item.querySelector( 'img' ).getAttribute( 'alt' ),
 			link = item.dataset.link,
@@ -300,7 +302,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		history.replaceState( null, null, '?' + queryParams.toString() );
 
 		// Set menu_order, media_category, and media_post_tag field IDs correctly
-		setAddedMediaFields( id );
+		setAddedMediaFields( item );
 
 		// Populate modal with attachment details
 		dialog.querySelector( '.attachment-date' ).textContent = date;
@@ -317,10 +319,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#attachment-details-two-column-caption' ).value = caption;
 		dialog.querySelector( '#attachment-details-two-column-description' ).value = description;
 		dialog.querySelector( '#attachment-details-two-column-copy-link' ).value = url;
-
 		dialog.querySelector( '#menu-order' ).value = menuOrder;
-		dialog.querySelector( '#attachments-' + id + '-media_category' ).value = taxes;
-		dialog.querySelector( '#attachments-' + id + '-media_post_tag' ).value = tags;
 
 		if ( filetype === 'audio' ) {
 			dialog.querySelector( '#media-image' ).setAttribute( 'hidden', true );
