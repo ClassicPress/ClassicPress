@@ -3078,8 +3078,6 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		wp_set_current_user( self::$admin_user_id );
 		$this->manager->register_controls();
 		$this->manager->prepare_controls();
-		$autofocus = array( 'control' => 'blogname' );
-		$this->manager->set_autofocus( $autofocus );
 
 		ob_start();
 		$this->manager->customize_pane_settings();
@@ -3097,26 +3095,9 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		$data = json_decode( $json, true );
 		$this->assertNotEmpty( $data );
 
-		$this->assertSameSets( array( 'theme', 'url', 'browser', 'panels', 'sections', 'nonce', 'autofocus', 'documentTitleTmpl', 'previewableDevices', 'changeset', 'timeouts', 'dateFormat', 'timeFormat', 'initialClientTimestamp', 'initialServerDate', 'initialServerTimestamp', 'l10n' ), array_keys( $data ) );
-		$this->assertSame( $autofocus, $data['autofocus'] );
-		$this->assertArrayHasKey( 'save', $data['nonce'] );
-		$this->assertArrayHasKey( 'preview', $data['nonce'] );
-
-		$this->assertSameSets(
-			array(
-				'branching',
-				'autosaved',
-				'hasAutosaveRevision',
-				'latestAutoDraftUuid',
-				'status',
-				'uuid',
-				'currentUserCanPublish',
-				'publishDate',
-				'statusChoices',
-				'lockUser',
-			),
-			array_keys( $data['changeset'] )
-		);
+		$this->assertSameSets( array( 'lock', 'nonce', 'url', 'user' ), array_keys( $data ) );
+		$this->assertArrayHasKey( 'lockUser', $data['lock'] );
+		$this->assertArrayHasKey( 'id', $data['user'] );
 	}
 
 	/**

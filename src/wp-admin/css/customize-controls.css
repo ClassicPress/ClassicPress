@@ -47,6 +47,23 @@ body {
 	text-align: center;
 }
 
+.customize-lock-notice-actions {
+	margin-top: 8px;
+}
+
+.customizer-locked #customize-save-button-wrapper,
+.customizer-locked #publish-settings {
+	opacity: 0.65;
+}
+
+.aside-lock {
+	margin: 1em 0;
+}
+
+.aside-lock .button {
+	margin-right: 0.5em;
+}
+
 #customize-controls #customize-notifications-area .notice.notification-overlay.notification-changeset-locked {
 	background-color: rgba(0, 0, 0, 0.7);
 	padding: 25px;

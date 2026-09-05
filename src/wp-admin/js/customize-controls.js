@@ -25,9 +25,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		isReducedMotion = reducedMotionMediaQuery.matches,
 		form = document.querySelector( 'form' ),
 		inputs = form.querySelectorAll( 'input, select, textarea' ),
+		lockableControls = form.querySelectorAll( 'input, select, textarea, button' ),
+		hyperlinks = document.querySelectorAll( 'a' ),
 		saveButton = form.querySelector( '#save' ),
 		publishSettings = form.querySelector( '#publish-settings' ),
 		publishSettingsPanel = document.getElementById( 'sub-accordion-section-publish_settings' ),
+		lockSettings = window._wpCustomizeSettings || {},
+		lockNotice = document.getElementById( 'customize-lock-notice' ),
+		lockRefreshTimer = null,
 		devicesWrapper = document.querySelector( '.devices' ),
 		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
 		previewFrame = document.getElementById( 'customize-preview' ),
@@ -175,6 +180,223 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} else {
 		setScheduledDateToNow();
 	}
+
+	function preventDefaultListener( e ) {
+		e.preventDefault();
+	}
+
+	/**
+	 * Disable editing UI while another user holds the lock.
+	 *
+	 * @return {void}
+	 */
+	function disableCustomizerEditing() {
+		lockableControls.forEach( function( input ) {
+			if ( input === saveButton || input === publishSettings || input.type === 'hidden' || input.closest( '#customize-lock-notice' ) ) {
+				return;
+			}
+
+			if ( ! input.disabled ) {
+				input.disabled = true;
+				input.setAttribute( 'data-lock-disabled', 'true' );
+			}
+		} );
+
+		hyperlinks.forEach( function( link ) {
+			if ( link.classList.contains( 'button' ) && link.parentNode.className !== 'aside-lock' ) {
+				link.addEventListener( 'click', preventDefaultListener );
+			}
+		} );
+
+		saveButton.disabled = true;
+		saveButton.setAttribute( 'aria-disabled', 'true' );
+		saveButton.setAttribute( 'data-lock-disabled', 'true' );
+
+		if ( publishSettings ) {
+			publishSettings.disabled = true;
+			publishSettings.setAttribute( 'aria-disabled', 'true' );
+			publishSettings.setAttribute( 'data-lock-disabled', 'true' );
+		}
+
+		document.body.classList.add( 'customizer-locked' );
+	}
+
+	/**
+	 * Re-enable editing UI after lock takeover.
+	 *
+	 * @return {void}
+	 */
+	function enableCustomizerEditing() {
+		lockableControls.forEach( function( input ) {
+			if ( input !== saveButton && input.hasAttribute( 'data-lock-disabled' ) ) {
+				input.disabled = false;
+				input.removeAttribute( 'data-lock-disabled' );
+			}
+		} );
+
+		hyperlinks.forEach( function( link ) {
+			link.removeEventListener( 'click', preventDefaultListener );
+		} );
+
+		if ( publishSettings ) {
+			publishSettings.disabled = false;
+			publishSettings.removeAttribute( 'aria-disabled' );
+			publishSettings.removeAttribute( 'data-lock-disabled' );
+		}
+
+		document.body.classList.remove( 'customizer-locked' );
+	}
+
+	/**
+	 * Apply lock state to UI.
+	 *
+	 * @return {void}
+	 */
+	function applyLockState() {
+		const lockUser = lockSettings?.lock?.lockUser;
+		let nameNode;
+		let avatarNode;
+		let takeOverButton;
+
+		if ( ! lockNotice ) {
+			return;
+		}
+
+		nameNode = lockNotice.querySelector( '.customize-lock-notice-name' );
+		avatarNode = lockNotice.querySelector( '.customize-lock-notice-avatar' );
+		takeOverButton = lockNotice.querySelector( '.button-primary' );
+
+		if ( lockUser && lockUser.id && lockUser.id !== lockSettings?.user?.id ) {
+			if ( nameNode ) {
+				nameNode.textContent = lockUser.name || '';
+			}
+
+			if ( avatarNode ) {
+				if ( typeof lockUser.avatar === 'string' && /<img/i.test( lockUser.avatar ) ) {
+					avatarNode.innerHTML = lockUser.avatar;
+					avatarNode.hidden = false;
+				} else {
+					avatarNode.innerHTML = '';
+					avatarNode.hidden = true;
+				}
+			}
+
+			lockNotice.hidden = false;
+			disableCustomizerEditing();
+
+			if ( takeOverButton ) {
+				takeOverButton.disabled = false;
+			}
+
+			return;
+		}
+
+		lockNotice.hidden = true;
+		enableCustomizerEditing();
+	}
+
+	/**
+	 * Re-apply lock state to UI.
+	 *
+	 * @return {void}
+	 */
+	function refreshLockState() {
+		const data = new URLSearchParams();
+
+		if ( ! lockSettings?.nonce?.refreshLock ) {
+			return Promise.resolve();
+		}
+
+		data.append( 'action', 'customize_refresh_lock' );
+		data.append( 'nonce', lockSettings.nonce.refreshLock );
+		data.append( 'wp_customize', 'on' );
+
+		return fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result.success ) {
+				lockSettings.lock = lockSettings.lock || {};
+				lockSettings.lock.lockUser = result.data.lockUser || null;
+				applyLockState();
+			} else {
+				throw new Error( result.data || 'Customizer lock refresh failed.' );
+			}
+		} )
+		.catch( function( error ) {
+			console.error( 'Customizer lock refresh failed.', error );
+		} );
+	}
+
+	/**
+	 * Take over the current changeset lock.
+	 *
+	 * @return {void}
+	 */
+	function handleTakeOverLock() {
+		const data = new URLSearchParams(),
+			takeOverButton = lockNotice?.querySelector( '.button-primary' );
+
+		if ( ! lockSettings?.nonce?.takeOverLock ) {
+			return;
+		}
+
+		if ( takeOverButton ) {
+			takeOverButton.disabled = true;
+		}
+
+		data.append( 'action', 'customize_take_over_lock' );
+		data.append( 'nonce', lockSettings.nonce.takeOverLock );
+		data.append( 'wp_customize', 'on' );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json(); // no errors
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( result.success ) {
+				lockSettings.lock = lockSettings.lock || {};
+				lockSettings.lock.lockUser = null;
+				applyLockState();
+				return refreshLockState();
+			}
+			throw new Error( result.data || 'Lock takeover failed.' );
+		} )
+		.catch( function( error ) {
+			if ( takeOverButton ) {
+				takeOverButton.disabled = false;
+			}
+			console.error( 'Customizer lock takeover failed.', error );
+		} );
+	}
+
+	if ( lockNotice ) {
+		lockNotice.addEventListener( 'click', function( e ) {
+			if ( e.target.closest( '.button-primary' ) ) {
+				e.preventDefault();
+				handleTakeOverLock();
+			}
+		} );
+	}
+
+	refreshLockState().then( function() {
+		lockRefreshTimer = window.setInterval( refreshLockState, 5000 );
+	} );
 
 	// Limit motion where appropriate
 	reducedMotionMediaQuery.addEventListener( 'change', function handleReducedMotionChange( event ) {
