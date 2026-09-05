@@ -2594,25 +2594,65 @@ function wp_ajax_upload_attachment() {
 function wp_ajax_media_cat_upload() {
 	check_ajax_referer( 'media-cat-upload', 'media_cat_upload_nonce' );
 
+	if ( ! current_user_can( 'upload_files' ) ) {
+		wp_send_json_error(
+			array(
+				'message' => __( 'You do not have permission to do this.' ),
+			)
+		);
+	}
+
 	$response  = __( 'The upload media category folder has been updated.' );
 	$new_value = '';
 
-	if ( isset( $_POST['media_cat_upload_value'] ) ) {
-		$new_value = wp_unslash( $_POST['media_cat_upload_value'] );
-		update_option( 'media_cat_upload_folder', sanitize_url( '/' . $new_value ) );
-
-		if ( $new_value === '' ) {
-			$response = __( 'You need to choose a media category folder before you can upload a file.' );
-		}
-	}
-
-	// Convert array to JSON.
-	wp_send_json_success(
+	$media_terms = get_terms(
 		array(
-			'value'   => $new_value,
-			'message' => $response,
+			'taxonomy'   => 'media_category',
+			'fields'     => 'slugs',
+			'hide_empty' => false,
 		)
 	);
+
+	if ( is_wp_error( $media_terms ) || ! is_array( $media_terms ) ) {
+		wp_send_json_error(
+			array(
+				'message' => __( 'You need to create a media category before you can upload a file.' ),
+			)
+		);
+	}
+
+	if ( isset( $_POST['media_cat_upload_value'] ) ) {
+		$new_value = trim( wp_unslash( $_POST['media_cat_upload_value'] ) );
+		$new_value = wp_normalize_path( $new_value );
+
+		if ( $new_value === '' ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'You need to choose a media category folder before you can upload a file.' ),
+				)
+			);
+		} else {
+			$segments = explode( '/', $new_value );
+			foreach ( $segments as $segment ) {
+				if ( ! in_array( $segment, $media_terms, true ) ) {
+					wp_send_json_error(
+						array(
+							'message' => __( 'You need to choose a valid media category folder before you can upload a file.' ),
+						)
+					);
+				}
+			}
+
+			$new_value = '/' . $new_value;
+			update_option( 'media_cat_upload_folder', $new_value );
+			wp_send_json_success(
+				array(
+					'value'   => $new_value,
+					'message' => $response,
+				)
+			);
+		}
+	}
 }
 
 /**
