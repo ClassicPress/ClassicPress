@@ -58,4 +58,72 @@
 	<!-- Themes except the twenty* themes. -->
 	<exclude-pattern>/src/wp-content/themes/(?!twenty)*</exclude-pattern>
 
+<<<<<<< HEAD
+=======
+	<!-- Exclude translation files. -->
+	<exclude-pattern>/src/wp-content/languages/*</exclude-pattern>
+
+	<!--
+		PHPCompatibilityParagonieSodiumCompat prevents false positives in `sodium_compat`.
+		However, because these files are included in a non-standard path, false positives are triggered in WordPress Core.
+	-->
+	<exclude-pattern>src/wp-includes/sodium_compat/lib/php72compat_const\.php$</exclude-pattern>
+
+	<!--
+	#############################################################################
+	SET UP THE RULESET
+	#############################################################################
+	-->
+
+	<rule ref="PHPCompatibilityWP"/>
+
+	<!-- WordPress Core currently supports PHP 7.2+. -->
+	<config name="testVersion" value="7.2-"/>
+
+	<!--
+	#############################################################################
+	SELECTIVE EXCLUSIONS
+	Exclude specific files for specific sniffs and/or exclude sub-groups in sniffs.
+	#############################################################################
+	-->
+
+	<rule ref="PHPCompatibility.IniDirectives.RemovedIniDirectives.safe_modeDeprecatedRemoved">
+		<exclude-pattern>/ID3/getid3\.php$</exclude-pattern>
+	</rule>
+	<rule ref="PHPCompatibility.IniDirectives.RemovedIniDirectives.mbstring_func_overloadDeprecated">
+		<exclude-pattern>/ID3/getid3\.php$</exclude-pattern>
+		<exclude-pattern>/PHPMailer/PHPMailer\.php$</exclude-pattern>
+	</rule>
+	<rule ref="PHPCompatibility.FunctionUse.RemovedFunctions.get_magic_quotes_runtimeDeprecated">
+		<exclude-pattern>/ID3/getid3\.php$</exclude-pattern>
+	</rule>
+	<rule ref="PHPCompatibility.FunctionUse.RemovedFunctions.get_magic_quotes_gpcDeprecated">
+		<exclude-pattern>/ID3/getid3\.php$</exclude-pattern>
+	</rule>
+	<rule ref="PHPCompatibility.Lists.AssignmentOrder.Affected">
+		<exclude-pattern>/ID3/module.audio-video.quicktime\.php$</exclude-pattern>
+	</rule>
+	<rule ref="PHPCompatibility.Constants.RemovedConstants.intl_idna_variant_2003Deprecated">
+		<exclude-pattern>/PHPMailer/PHPMailer\.php$</exclude-pattern>
+	</rule>
+	<rule ref="PHPCompatibility.ParameterValues.NewIDNVariantDefault.NotSet">
+		<exclude-pattern>/PHPMailer/PHPMailer\.php$</exclude-pattern>
+	</rule>
+	<rule ref="PHPCompatibility.FunctionUse.NewFunctions.sodium_crypto_sign_keypair_from_secretkey_and_publickeyFound">
+		<exclude-pattern>/sodium_compat/src/Compat\.php$</exclude-pattern>
+	</rule>
+	<rule ref="PHPCompatibility.FunctionUse.NewFunctions.sodium_padFound">
+		<exclude-pattern>/sodium_compat/src/Compat\.php$</exclude-pattern>
+	</rule>
+	<rule ref="PHPCompatibility.FunctionUse.NewFunctions.sodium_unpadFound">
+		<exclude-pattern>/sodium_compat/src/Compat\.php$</exclude-pattern>
+	</rule>
+	<rule ref="PHPCompatibility.FunctionNameRestrictions.NewMagicMethods.__serializeFound">
+		<exclude-pattern>/sodium_compat/src/PHP52/SplFixedArray\.php$</exclude-pattern>
+	</rule>
+	<rule ref="PHPCompatibility.FunctionNameRestrictions.NewMagicMethods.__unserializeFound">
+		<exclude-pattern>/sodium_compat/src/PHP52/SplFixedArray\.php$</exclude-pattern>
+	</rule>
+
+>>>>>>> 0eb61bd32e (Coding Standards: Move specific sniff exclusions for getID3 to the config file.)
 </ruleset>
