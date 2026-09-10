@@ -596,7 +596,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		.then( function( result ) {
 			const ul = document.createElement( 'ul' );
 			if ( i === 1 ) {
-				themesGrid.innerHTML = ''; // clear the current grid
+				themesGrid.replaceChildren(); // clear the current grid
 			}
 
 			// Populate grid with new items
@@ -1292,7 +1292,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Show relevant button and clear grid
 				addButton = dialog.querySelector( '#media-button-insert' );
-				dialog.querySelector( '.widget-modal-grid' ).innerHTML = '';
+				dialog.querySelector( '.widget-modal-grid' ).replaceChildren();
 
 				if ( result.data.length === 0 ) {
 
@@ -1442,8 +1442,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Update header image
 		if ( settingId === 'header_image_data' ) {
 			if ( selectedItem.className === 'choice' ) {
-				li.querySelector( '.container' ).innerHTML = '';
-				li.querySelector( '.container' ).append( imageElement.cloneNode() );
+				li.querySelector( '.container' ).replaceChildren( imageElement.cloneNode() );
 
 				// Find the matching entry from the localized data
 				headerData = Object.values( _wpCustomizeHeader.uploads || {} ).find(
@@ -1472,8 +1471,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				forcePreviewRefresh( 'header_image', headerData.url );
 				document.getElementById( 'sub-accordion-section-header_image' ).querySelector( 'a' ).focus();
 			} else {
-				parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
-				parent.previousElementSibling.querySelector( '.container' ).append( imageElement );
+				parent.previousElementSibling.querySelector( '.container' ).replaceChildren( imageElement );
 				customizeButton.previousElementSibling.style.display = '';
 				customizeButton.classList.remove( 'upload-button' );
 				parent.previousElementSibling.querySelector( 'input' ).value = attachmentId;
@@ -1600,8 +1598,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				grandparent.querySelector( 'video' )?.remove();
 				grandparent.querySelector( 'input' ).value = '';
 			}
-			parent.innerHTML = '';
-			parent.append( button );
+			parent.replaceChildren( button );
 			setTimeout( function() {
 				button.focus();
 			} );
@@ -1733,7 +1730,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Clear stale notifications
 		document.querySelectorAll( '.customize-control-notifications-container' ).forEach( function( container ) {
-			container.innerHTML = '';
+			container.replaceChildren();
 		} );
 
 		// Populate arrays if a new menu is being added
