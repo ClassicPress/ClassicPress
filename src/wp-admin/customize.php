@@ -300,7 +300,7 @@ if ( is_rtl() ) {
 }
 $body_class .= ' locale-' . sanitize_html_class( strtolower( str_replace( '_', '-', get_user_locale() ) ) ) . ' ready sticky-menu';
 
-$admin_title = sprintf( $wp_customize->get_document_title_template(), __( 'Loading…' ) );
+$admin_title = sprintf( $wp_customize->get_document_title_template(), get_bloginfo( 'name' ) );
 
 ?>
 <title><?php echo esc_html( $admin_title ); ?></title>
