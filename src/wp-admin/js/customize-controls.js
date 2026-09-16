@@ -64,7 +64,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.querySelector( '.customize-controls-close' ).focus();
 		}, 0 );
 	} else if ( hash && targetEl ) {
-		document.title = targetEl.querySelector( 'h3' ).textContent.replace( '▸', '' ).trim();
 		customizerControls.forEach( function( child ) {
 			child.style.display = 'none';
 		} );
