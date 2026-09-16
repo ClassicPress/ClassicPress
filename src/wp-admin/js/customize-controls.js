@@ -105,6 +105,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			targetEl = document.getElementById( newHash );
 
 		if ( newHash && targetEl ) {
+			document.title = targetEl.querySelector( 'h3' ).textContent.replace( '▸', '' ).trim();
 			customizerControls.forEach( function( child ) {
 				child.style.display = 'none';
 			} );
