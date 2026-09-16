@@ -496,17 +496,26 @@ class WP_Customize_Control {
 		$input_id         = '_customize-input-' . $this->id;
 		$description_id   = '_customize-description-' . $this->id;
 		$describedby_attr = ( ! empty( $this->description ) ) ? ' aria-describedby="' . esc_attr( $description_id ) . '"' : '';
+		$is_header_text_checkbox = 'checkbox' === $this->type && 'display_header_text' === $this->id && isset( $this->settings['default'] ) && 'header_textcolor' === $this->settings['default']->id;
+
 		switch ( $this->type ) {
 			case 'checkbox':
+				$input_value = $is_header_text_checkbox ? $this->settings['default']->default : $this->value();
 				?>
 				<span class="customize-inside-control-row">
 					<input
 						id="<?php echo esc_attr( $input_id ); ?>"
 						<?php echo $describedby_attr; ?>
 						type="checkbox"
-						value="<?php echo esc_attr( $this->value() ); ?>"
+						value="<?php echo esc_attr( $input_value ); ?>"
 						<?php $this->link(); ?>
-						<?php checked( $this->value() ); ?>
+						<?php
+						if ( $is_header_text_checkbox ) {
+							checked( 'blank' !== $this->value(), true );
+						} else {
+							checked( $this->value() );
+						}
+						?>
 					>
 					<label for="<?php echo esc_attr( $input_id ); ?>">
 						<?php echo esc_html( $this->label ); ?>
