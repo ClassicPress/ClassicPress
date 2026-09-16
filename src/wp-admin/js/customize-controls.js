@@ -57,6 +57,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Go direct to appropriate Customizer panel if its hash is specified in the URL
 	if ( hash === 'menu-to-edit' ) {
 		hash = 'sub-accordion-panel-nav_menus';
+		window.location.hash = hash;
 	}
 
 	if ( ! hash ) {
