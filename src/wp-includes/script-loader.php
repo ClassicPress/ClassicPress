@@ -1092,7 +1092,7 @@ function wp_default_scripts( $scripts ) {
 			'draftSaved'              => __( 'Draft Saved' ),
 			'pageCreationFailure'     => __( 'Page could not be created' ),
 			'updating'                => __( 'Updating' ),
-			'customizing'             => __( 'Customizing:'),
+			'customizing'             => __( 'Customizing:' ),
 			'schedule'                => _x( 'Schedule', 'customizer changeset action/button label' ),
 			'scheduled'               => _x( 'Scheduled', 'customizer changeset status' ),
 			'invalid'                 => __( 'Invalid' ),
