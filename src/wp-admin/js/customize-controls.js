@@ -57,7 +57,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Go direct to appropriate Customizer panel if its hash is specified in the URL
 	if ( hash === 'menu-to-edit' ) {
 		hash = 'sub-accordion-panel-nav_menus';
-		window.location.hash = hash;
+		window.location.hash = encodeURIComponent( hash );
 	}
 
 	if ( ! hash ) {
@@ -106,7 +106,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			targetEl = document.getElementById( newHash );
 
 		if ( newHash && targetEl ) {
-			document.title = targetEl.querySelector( 'h3' ).textContent.replace( '▸', '' ).trim();
+			if ( newHash === 'sub-accordion-panel-widgets' ) {
+				document.title = targetEl.querySelector( '.panel-title' ).textContent.trim();
+			} else {
+				document.title = targetEl.querySelector( 'h3' ).textContent.replace( '▸', '' ).trim();
+			}
+
 			customizerControls.forEach( function( child ) {
 				child.style.display = 'none';
 			} );
