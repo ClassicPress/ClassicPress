@@ -853,10 +853,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 			// Populate grid with new items
-			ul.setHTML( convertThemeLinksToButtons( result.data.html ), {
-				sanitizer: {}
-			} );
-			themesGrid.insertAdjacentHTML( 'beforeend', ul.innerHTML );
+			themesGrid.append( convertThemeLinksToButtons( result.data.html ) );
 			orgThemes = document.querySelectorAll( '.wp-org .themes li' );
 			orgThemes.forEach( function( theme ) {
 				theme.style.marginRight = '2%';
@@ -878,9 +875,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	function convertThemeLinksToButtons( html ) {
 		const template = document.createElement( 'template' );
-		template.innerHTML = html;
 
-		template.content.querySelectorAll( '.theme-install' ).forEach( function( link ) {
+		template.setHTML( html, {
+			sanitizer: {}
+		} );
+
+		template.content.querySelectorAll( 'a.theme-install' ).forEach( function( link ) {
 			const button = document.createElement( 'button' );
 
 			// Copy all attributes except href.
@@ -894,13 +894,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			button.type = 'button';
 
 			// Preserve contents.
-			button.innerHTML = link.innerHTML;
+			for ( const child of link.childNodes ) {
+				button.append( child.cloneNode( true ) );
+			}
 
 			// Replace <a> with <button>.
 			link.replaceWith( button );
 		} );
 
-		return template.innerHTML;
+		return template.content.cloneNode( true );
 	}
 
 	/**
