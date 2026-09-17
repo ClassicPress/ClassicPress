@@ -28,7 +28,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Set up variables when a change of upload category is made.
 		uploadCatSelect.addEventListener( 'change', function( e ) {
-			var div,
+			var div = document.createElement( 'div' ),
+				para = document.createElement( 'p' ),
+				button = document.createElement( 'button' ),
 				uploadCatFolder = new URLSearchParams( {
 					action: 'media-cat-upload',
 					option: 'media_cat_upload_folder',
@@ -55,49 +57,55 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} )
 			.then( function( response ) {
 				if ( response.success ) {
-					div = document.createElement( 'div' );
 					div.id = 'message';
-					div.className = 'updated notice notice-success is-dismissible';
-					div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
-					document.querySelector( '.wrap h1' ).after( div );
+					para.textContent = response.data.message;
+					button.className = 'notice-dismiss';
+					button.type = 'button';
 
-					// Update selected attribute in DOM.
-					uploadCatSelect.childNodes.forEach( function( option ) {
-						if ( option.value === e.target.value ) {
-							option.setAttribute( 'selected', true );
-						} else {
-							option.removeAttribute( 'selected' );
-						}
-					} );
+					if ( response.data.value == '' ) {
+						div.className = 'notice notice-error is-dismissible';
+						div.append( para, button );
+						document.querySelector( '.wrap h1' ).after( div );
 
-					// Enable uploads.
-					plUploader.removeAttribute( 'inert' );
-					asyncUploader.removeAttribute( 'inert' );
-				} else {
-					div = document.createElement( 'div' );
-					div.id = 'message';
-					div.className = 'notice notice-error is-dismissible';
-					div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
-					document.querySelector( '.wrap h1' ).after( div );
+						// Disable uploads.
+						plUploader.setAttribute( 'inert', true );
+						asyncUploader.setAttribute( 'inert', true );
 
-					// Disable uploads.
-					plUploader.setAttribute( 'inert', true );
-					asyncUploader.setAttribute( 'inert', true );
+						// Prevent uploading file into browser window
+						window.addEventListener( 'dragover', function( e ) {
+							e.preventDefault();
+						}, false );
+						window.addEventListener( 'drop', function( e ) {
+							e.preventDefault();
+						}, false );
+					} else {
+						div.className = 'updated notice notice-success is-dismissible';
+						div.append( para, button );
+						document.querySelector( '.wrap h1' ).after( div );
 
-					// Prevent uploading file into browser window
-					window.addEventListener( 'dragover', function( e ) {
-						e.preventDefault();
-					}, false );
-					window.addEventListener( 'drop', function( e ) {
-						e.preventDefault();
-					}, false );
+						// Update selected attribute in DOM.
+						uploadCatSelect.childNodes.forEach( function( option ) {
+							if ( option.value === e.target.value ) {
+								option.setAttribute( 'selected', true );
+							} else {
+								option.removeAttribute( 'selected' );
+							}
+						} );
+
+						// Enable uploads.
+						plUploader.removeAttribute( 'inert' );
+						asyncUploader.removeAttribute( 'inert' );
+					}
 				}
 			} )
 			.catch( function( error ) {
-				div = document.createElement( 'div' );
+				para.textContent = error;
+				button.className = 'notice-dismiss';
+				button.type = 'button';
+
 				div.id = 'message';
 				div.className = 'notice notice-error is-dismissible';
-				div.innerHTML = '<p>' + error + '</p><button class="notice-dismiss" type="button"></button>';
+				div.append( para, button );
 				document.querySelector( '.wrap h1' ).after( div );
 			} );
 		} );
