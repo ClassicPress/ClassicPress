@@ -1417,8 +1417,7 @@ body.full-overlay-active {
 }
 
 .wp-full-overlay-sidebar .wp-full-overlay-header {
-	height: 45px;
-	padding: 0 15px;
+	height: 49px;
 	line-height: 3.2;
 	border-bottom: 1px solid #dcdcde;
 }
@@ -1438,10 +1437,6 @@ body.full-overlay-active {
 }
 
 /* Close & Navigation Links */
-.theme-install-overlay .wp-full-overlay-sidebar .wp-full-overlay-header {
-	padding: 0;
-}
-
 .theme-install-overlay .close-full-overlay,
 .theme-install-overlay .previous-theme,
 .theme-install-overlay .next-theme {
@@ -1449,7 +1444,7 @@ body.full-overlay-active {
 	position: relative;
 	float: left;
 	width: 45px;
-	height: 45px;
+	height: 49px;
 	background: #f0f0f1;
 	border-right: 1px solid #dcdcde;
 	color: #3c434a;

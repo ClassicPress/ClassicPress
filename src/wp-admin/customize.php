@@ -419,6 +419,7 @@ wp_print_scripts();
 				}
 				?>
 
+				<span class="spinner"></span>
 				<button type="button" class="customize-controls-preview-toggle">
 					<span class="controls"><?php esc_html_e( 'Customize' ); ?></span>
 					<span class="preview"><?php esc_html_e( 'Preview' ); ?></span>
@@ -433,11 +434,30 @@ wp_print_scripts();
 				</a>
 			</header><!-- #customize-header-actions -->
 
+			<aside id="customize-lock-notice" class="notice notice-warning" aria-label="<?php esc_html_e( 'Customization lock notice' ); ?>" hidden>
+				<p>
+					<b><?php esc_html_e( 'Customizer locked' ); ?></b>
+				</p>
+				<div class="customize-lock-notice-avatar"></div>
+				<p>
+					<span class="customize-lock-notice-name"></span>
+					<span><?php esc_html_e( 'is already customizing this site. Do you want to take over?' ); ?></span>
+				</p>
+				<div class="aside-lock">
+					<a class="button" href="<?php echo esc_url( $wp_customize->get_return_url() ); ?>">
+						<?php esc_html_e( 'Go back' ); ?>
+					</a>
+					<button type="button" class="button button-primary">
+						<?php esc_html_e( 'Take over' ); ?>
+					</button>
+				</div>
+			</aside>
+
 			<main id="widgets-right" class="wp-clearfix">
 				<div id="customize-notifications-area" class="customize-control-notifications-container">
 					<ul></ul>
 				</div>
-				<div class="wp-full-overlay-sidebar-content" tabindex="-1">
+				<div class="wp-full-overlay-sidebar-content">
 					<div id="customize-info" class="accordion-section customize-info">
 						<div class="accordion-section-title">
 							<h2 class="preview-notice">
@@ -475,7 +495,7 @@ wp_print_scripts();
 									class="accordion-section control-panel-themes"
 									aria-owns="sub-accordion-section-themes"
 								>
-									<h3 class="accordion-section-title" tabindex="0">
+									<h3 class="accordion-section-title">
 										<span class="customize-action">
 											<?php
 											if ( $wp_customize->get_stylesheet() === cp_get_current_active_stylesheet() ) {
@@ -506,7 +526,7 @@ wp_print_scripts();
 									class="accordion-section control-section control-section-outer"
 									aria-owns="sub-accordion-section-publish_settings"
 								>
-									<h3 class="accordion-section-title" tabindex="0">
+									<h3 class="accordion-section-title">
 										<?php esc_html_e( 'Publish Settings' ); ?>
 										<span class="screen-reader-text">
 											<?php esc_html_e( 'Press return or enter to open this section' ); ?>
@@ -602,9 +622,6 @@ wp_print_scripts();
 									<div class="customize-themes-section themes-section-installed_themes control-section-content themes-php current-section">											
 										<div class="theme-browser rendered local">
 											<div class="customize-preview-header themes-filter-bar">
-												<button type="button" class="button button-primary customize-section-back customize-themes-mobile-back" style="display: none;">
-													<?php esc_html_e( 'Go to theme sources' ); ?>
-												</button>
 												<div class="themes-filter-container">
 													<label for="installed_themes-themes-filter" class="screen-reader-text">
 														<?php esc_html_e( 'Search themes&hellip;' ); ?>
@@ -2600,6 +2617,7 @@ echo cp_render_media_video_template();
  *
  * @since CP-2.8.0
  */
+$wp_customize->customize_pane_settings();
 do_action( 'admin_print_footer_scripts' );
 ?>
 

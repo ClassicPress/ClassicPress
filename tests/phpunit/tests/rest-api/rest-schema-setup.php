@@ -152,6 +152,8 @@ class WP_Test_REST_Schema_Initialization extends WP_Test_REST_TestCase {
 			'/wp-site-health/v1/tests/authorization-header',
 			'/wp-site-health/v1/tests/page-cache',
 			'/wp-site-health/v1/directory-sizes',
+			'/wp-site-health/v1/tests/http-protocol',
+			'/wp-site-health/v1/tests/http-protocol-data',
 		);
 
 		$this->assertSameSets( $expected_routes, $routes );

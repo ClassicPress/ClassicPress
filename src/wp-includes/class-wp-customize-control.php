@@ -496,17 +496,26 @@ class WP_Customize_Control {
 		$input_id         = '_customize-input-' . $this->id;
 		$description_id   = '_customize-description-' . $this->id;
 		$describedby_attr = ( ! empty( $this->description ) ) ? ' aria-describedby="' . esc_attr( $description_id ) . '"' : '';
+		$is_header_text_checkbox = 'checkbox' === $this->type && 'display_header_text' === $this->id && isset( $this->settings['default'] ) && 'header_textcolor' === $this->settings['default']->id;
+
 		switch ( $this->type ) {
 			case 'checkbox':
+				$input_value = $is_header_text_checkbox ? $this->settings['default']->default : $this->value();
 				?>
 				<span class="customize-inside-control-row">
 					<input
 						id="<?php echo esc_attr( $input_id ); ?>"
 						<?php echo $describedby_attr; ?>
 						type="checkbox"
-						value="<?php echo esc_attr( $this->value() ); ?>"
+						value="<?php echo esc_attr( $input_value ); ?>"
 						<?php $this->link(); ?>
-						<?php checked( $this->value() ); ?>
+						<?php
+						if ( $is_header_text_checkbox ) {
+							checked( 'blank' !== $this->value(), true );
+						} else {
+							checked( $this->value() );
+						}
+						?>
 					>
 					<label for="<?php echo esc_attr( $input_id ); ?>">
 						<?php echo esc_html( $this->label ); ?>
@@ -593,15 +602,7 @@ class WP_Customize_Control {
 						<?php echo $this->description; ?>
 					</span>
 				<?php endif; ?>
-				<textarea
-					id="<?php echo esc_attr( $input_id ); ?>"
-					rows="5"
-					<?php echo $describedby_attr; ?>
-					<?php $this->input_attrs(); ?>
-					<?php $this->link(); ?>
-				>
-					<?php echo esc_textarea( $this->value() ); ?>
-				</textarea>
+				<textarea id="<?php echo esc_attr( $input_id ); ?>" rows="5" <?php echo $describedby_attr; ?> <?php $this->input_attrs(); ?> <?php $this->link(); ?>><?php echo esc_textarea( $this->value() ); ?></textarea>
 				<?php
 				break;
 			case 'dropdown-pages':
@@ -658,34 +659,37 @@ class WP_Customize_Control {
 				echo $dropdown;
 				?>
 				<?php if ( $this->allow_addition && current_user_can( 'publish_pages' ) && current_user_can( 'edit_theme_options' ) ) : // Currently tied to menus functionality. ?>
-					<button type="button" class="button-link add-new-toggle">
-						<?php
-						/* translators: %s: Add New Page label. */
-						printf( __( '+ %s' ), get_post_type_object( 'page' )->labels->add_new_item );
-						?>
-					</button>
-					<div class="new-content-item">
-						<label for="create-input-<?php echo esc_attr( $this->id ); ?>">
-							<span class="screen-reader-text">
-								<?php
-								/* translators: Hidden accessibility text. */
-								esc_html_e( 'New page title' );
-								?>
-							</span>
-						</label>
-						<input type="text" id="create-input-<?php echo esc_attr( $this->id ); ?>"
-							class="create-item-input form-required"
-							placeholder="<?php esc_attr_e( 'New page title...' ); ?>"
+					<details class="add-new-toggle-details">
+						<summary class="button-link add-new-toggle">
+							<?php
+							/* translators: %s: Add New Page label. */
+							printf( __( '+ %s' ), get_post_type_object( 'page' )->labels->add_new_item );
+							?>
+						</summary>
+						<div class="new-content-item">
+							<label for="create-input-<?php echo esc_attr( $this->id ); ?>">
+								<span class="screen-reader-text">
+									<?php
+									/* translators: Hidden accessibility text. */
+									esc_html_e( 'New page title' );
+									?>
+								</span>
+							</label>
+							<input type="text" id="create-input-<?php echo esc_attr( $this->id ); ?>"
+								class="create-item-input form-required"
+								placeholder="<?php esc_attr_e( 'New page title...' ); ?>"
+							>
+							
+							<button type="button" class="button add-content" data-add="<?php esc_html_e( 'Add' ); ?>" data-saving="<?php esc_html_e( 'Saving ...' ); ?>">
+								<?php esc_html_e( 'Add' ); ?>
+							</button>
+						</div>
+						<span id="create-input-<?php echo esc_attr( $this->id ); ?>-error"
+							class="create-item-error error-message" style="display: none;"
 						>
-						<button type="button" class="button add-content">
-							<?php esc_html_e( 'Add' ); ?>
-						</button>
-					</div>
-					<span id="create-input-<?php echo esc_attr( $this->id ); ?>-error"
-						class="create-item-error error-message" style="display: none;"
-					>
-						<?php esc_html_e( 'Please enter a page title' ); ?>
-					</span>
+							<?php esc_html_e( 'Please enter a page title' ); ?>
+						</span>
+					</details>
 				<?php endif; ?>
 				<?php
 				break;

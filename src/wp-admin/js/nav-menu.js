@@ -563,17 +563,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						* Process the quick search response into a search result
 						*/
 						var matched, newID, items,
-							div = document.createElement( 'div' ),
+							template = document.createElement( 'template' ),
 							takenIDs = {},
 							form = document.getElementById( 'nav-menu-meta' ),
 							pattern = /menu-item[(\[^]\]*/,
 							wrapper = panel.closest( '.accordion-section-content' ),
 							selectAll = wrapper.querySelector( '.button-controls .select-all' );
 
-						div.innerHTML = menuMarkup;
-						items = div.querySelectorAll( 'li' );
+						template.innerHTML = menuMarkup;
+						items = template.content.querySelectorAll( 'li' );
 						if ( ! items.length ) {
-							panel.querySelector( '.categorychecklist' ).innerHTML = '<li><p>' + wp.i18n.__( 'No results found.' ) + '</p></li>';
+							panel.querySelector( '.categorychecklist' ).setHTML( '<li><p>' + wp.i18n.__( 'No results found.' ) + '</p></li>' );
 							panel.querySelector( '.spinner' ).classList.remove( 'is-active' );
 							wrapper.classList.add( 'has-no-menu-item' );
 							return;
@@ -598,10 +598,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 								takenIDs[newID] = true;
 								if ( newID !== matched[1] ) {
-									item.innerHTML = item.innerHTML.replace( new RegExp(
-										'menu-item\\[' + matched[1] + '\\]', 'g'),
+									item.setHTML( item.innerHTML.replace(
+										new RegExp( 'menu-item\\[' + matched[1] + '\\]', 'g'),
 										'menu-item[' + newID + ']'
-									);
+									) );
 								}
 							}
 							panel.querySelector( '.categorychecklist' ).append( item );
@@ -1023,8 +1023,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						throw new Error( response.status );
 					} )
 					.then( function( menuMarkup ) {
+						const container = document.createElement( 'ul' );
 
-						editMenu.insertAdjacentHTML( 'beforeend', menuMarkup );
+						container.setHTML( menuMarkup, {
+							sanitizer: {}
+						} );
+						editMenu.insertAdjacentHTML( 'beforeend', container.innerHTML );
+
 						advancedMenuProperties.forEach( function( property ) {
 							var pendingValue = editMenu.querySelector( '.pending .field-' + property.value );
 							if ( ! property.checked ) {
@@ -1093,7 +1098,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 
 					// Update the post type menu meta box with new content from the response.
-					e.target.closest( '.inside' ).innerHTML = metaBoxData.markup;
+					e.target.closest( '.inside' ).setHTML( metaBoxData.markup );
 				} )
 				.catch( function( error ) {
 					console.log( error );
@@ -1127,15 +1132,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( e.target.checked === true ) {
 					li = document.createElement( 'li' );
 					li.dataset.menuItemId = menuItemID;
-					li.innerHTML = '<span class="pending-menu-item-name">' + menuItemName + '</span> ' + '<span class="pending-menu-item-type">(' + menuItemType + ')</span>' + '<span class="separator"></span>';
+					li.setHTML( '<span class="pending-menu-item-name">' + menuItemName + '</span> ' + '<span class="pending-menu-item-type">(' + menuItemType + ')</span>' + '<span class="separator"></span>' );
 					document.querySelector( '#pending-menu-items-to-delete ul' ).append( li );
 				}
 
 				document.querySelectorAll( '#pending-menu-items-to-delete li .separator' ).forEach( function( sep, index ) {
 					if ( index === document.querySelectorAll( '#pending-menu-items-to-delete li .separator' ).length - 1 ) {
-						sep.innerHTML = '.';
+						sep.setHTML( '.' );
 					} else {
-						sep.innerHTML = ', ';
+						sep.setHTML( ', ' );
 					}
 				} );
 			}
@@ -1394,12 +1399,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( menuMarkup ) {
-			var ins = document.getElementById( 'menu-instructions' );
+			const container = document.createElement( 'ul' ),
+				ins = document.getElementById( 'menu-instructions' );
 
 			menuMarkup = menuMarkup || '';
 			menuMarkup = menuMarkup.toString().trim(); // Trim leading whitespaces.
 
-			editMenu.insertAdjacentHTML( placing, menuMarkup );
+			container.setHTML( menuMarkup, {
+				sanitizer: {}
+			} );
+			editMenu.insertAdjacentHTML( placing, container.innerHTML );
 
 			advancedMenuProperties.forEach( function( property ) {
 				var pendingValues = editMenu.querySelectorAll( '.pending .field-' + property.value );

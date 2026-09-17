@@ -1,6 +1,6 @@
 {
   "name": "ClassicPress",
-  "version": "2.7.0+dev",
+  "version": "2.7.2+dev",
   "description": "ClassicPress is web software you can use to create a beautiful website or blog.",
   "repository": {
     "type": "git",
@@ -11,8 +11,8 @@
   "devDependencies": {
     "@lodder/grunt-postcss": "3.1.1",
     "@rollup/plugin-commonjs": "29.0.3",
-    "autoprefixer": "10.5.2",
-    "grunt": "1.6.2",
+    "autoprefixer": "10.6.1",
+    "grunt": "1.6.3",
     "grunt-banner": "0.6.0",
     "grunt-contrib-clean": "2.0.1",
     "grunt-contrib-concat": "2.1.0",
@@ -22,7 +22,7 @@
     "grunt-contrib-imagemin": "4.0.0",
     "grunt-contrib-jshint": "3.2.0",
     "grunt-contrib-qunit": "10.2.0",
-    "grunt-eslint": "^26.0.0",
+    "grunt-eslint": "27.0.0",
     "grunt-includes": "1.1.0",
     "grunt-jsdoc": "2.4.1",
     "grunt-legacy-util": "2.0.2",
@@ -31,27 +31,27 @@
     "grunt-webpack": "8.0.0",
     "ink-docstrap": "1.3.2",
     "install-changed": "^1.1.0",
-    "postcss": "8.5.16",
+    "postcss": "8.5.28",
     "qunit": "^2.19.4",
-    "rollup": "4.62.2",
-    "sass": "1.101.0",
+    "rollup": "4.63.3",
+    "sass": "1.104.1",
     "sinon": "^22.0.0",
     "sinon-test": "^3.1.5",
     "source-map-loader": "^5.0.0",
-    "terser": "5.48.0",
+    "terser": "5.51.2",
     "terser-webpack-plugin": "^5.3.7",
-    "webpack": "5.108.3"
+    "webpack": "5.111.0"
   },
   "dependencies": {
     "@melloware/coloris": "0.25.0",
-    "@wordpress/a11y": "4.50.0",
-    "@wordpress/dom-ready": "4.50.0",
-    "@wordpress/hooks": "4.50.0",
-    "@wordpress/i18n": "6.23.0",
-    "@wordpress/url": "4.50.0",
+    "@wordpress/a11y": "4.55.0",
+    "@wordpress/dom-ready": "4.55.0",
+    "@wordpress/hooks": "4.55.0",
+    "@wordpress/i18n": "6.28.0",
+    "@wordpress/url": "4.55.0",
     "clipboard": "2.0.11",
     "codemirror": "5.65.21",
-    "cropperjs": "^2.1.1",
+    "cropperjs": "2.2.0",
     "csslint": "1.0.5",
     "esprima": "4.0.1",
     "filepond": "4.32.12",
@@ -75,5 +75,8 @@
     "jpegtran-bin@4.0.0": true,
     "optipng-bin@5.1.0": true,
     "puppeteer@24.41.0": true
+  },
+  "scripts": {
+    "grunt": "grunt"
   }
 }

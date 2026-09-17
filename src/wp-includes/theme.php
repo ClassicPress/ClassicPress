@@ -1184,6 +1184,22 @@ function get_header_image() {
 
 	if ( is_random_header_image() ) {
 		$url = get_random_header_image();
+		if ( is_customize_preview() ) {
+			global $wp_customize;
+			$uuid = $wp_customize->changeset_uuid();
+			if ( '' !== $uuid ) {
+				$cache_key = '_customize_random_header_url_' . $uuid;
+				$stored    = get_option( $cache_key, '' );
+
+				if ( is_string( $stored ) && '' !== trim( $stored ) ) {
+					$url = $stored;
+				} else {
+					if ( is_string( $url ) && '' !== trim( $url ) ) {
+						update_option( $cache_key, $url, false );
+					}
+				}
+			}
+		}
 	}
 
 	/**

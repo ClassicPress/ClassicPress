@@ -63,7 +63,7 @@ jobs:
           php --version
           phpunit --version
           composer --version
-          grunt --version
+          npm run grunt -- --version
           mysql --version
 
       - name: Log PHPCS debug information

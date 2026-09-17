@@ -41,6 +41,14 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 	public $default_headers;
 
 	/**
+	 * Whether to allow randomizing of default header images.
+	 *
+	 * @since CP-2.8.0
+	 * @var bool
+	 */
+	public $allow_random_default;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 3.4.0
@@ -85,6 +93,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 					'remove' => wp_create_nonce( 'header-remove' ),
 				),
 				'uploads'  => $this->uploaded_headers,
+				'random'   => esc_html__( 'Randomizing suggested headers' ),
 				'defaults' => $this->default_headers,
 			)
 		);
@@ -103,6 +112,14 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 		$custom_image_header->process_default_headers();
 		$this->default_headers  = $custom_image_header->get_default_header_images();
 		$this->uploaded_headers = $custom_image_header->get_uploaded_header_images();
+
+		// Determine whether the active theme allows randomizing default headers.
+		$this->allow_random_default = false;
+		$custom_header_args = get_theme_support( 'custom-header' );
+
+		if ( is_array( $custom_header_args ) && isset( $custom_header_args[0] ) && is_array( $custom_header_args[0] ) && ! empty( $custom_header_args[0]['random-default'] ) ) {
+			$this->allow_random_default = true;
+		}
 	}
 
 	/**
@@ -190,6 +207,22 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 						<?php esc_html_e( 'Current header' ); ?>
 					</span>
 				</label>
+			
+				<?php
+				if ( is_random_header_image() ) {
+					?>
+
+					<div class="randomizing-header">
+						<div class="button display-options random random-default-header">
+							<span class="dashicons dashicons-randomize dice"></span>
+							<?php esc_html_e( 'Randomizing suggested headers' ); ?>
+						</div>
+					</div>
+
+					<?php
+				}
+				?>
+
 				<div class="container">
 					<?php echo get_header_image_tag(); ?>
 				</div>
@@ -197,7 +230,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 			</div>
 			<div class="actions"
 				data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
-				data-empty="<?php esc_attr_e( 'Add image' ); ?>"
+				data-empty="<?php esc_attr_e( 'Add new image' ); ?>"
 				data-full="<?php esc_attr_e( 'Hide image' ); ?>"
 			>
 
@@ -218,7 +251,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 						aria-label="<?php esc_attr_e( 'Add new header image' ); ?>"
 						<?php $this->link(); ?>
 					>
-						<?php esc_html_e( 'Add image' ); ?>
+						<?php esc_html_e( 'Add new image' ); ?>
 					</button>
 
 					<?php
@@ -246,7 +279,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 									<img src="<?php echo esc_url( $header['url'] ); ?>"
 										alt="<?php echo esc_attr( $header['alt_text'] && $header['alt_text'][0] ? $header['alt_text'][0] : '' ); ?>"
 									>
-									<button class="choice" data-customize-url="<?php echo esc_url( $header['url'] ); ?>">
+									<button type="button" class="choice" data-customize-url="<?php echo esc_url( $header['url'] ); ?>">
 										<?php echo esc_html( $this->button_labels['frame_button'] ); ?>
 									</button>
 									<button type="button" class="dashicons dashicons-no close"
@@ -285,7 +318,7 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 									<img src="<?php echo esc_url( $header['url'] ); ?>"
 										alt="<?php echo esc_attr( $header['description'] ); ?>"
 									>
-									<button class="choice" data-customize-url="<?php echo esc_url( $header['url'] ); ?>">
+									<button type="button" class="choice" data-customize-url="<?php echo esc_url( $header['url'] ); ?>">
 										<?php echo esc_html( $this->button_labels['frame_button'] ); ?>
 									</button>
 								</div>
@@ -295,6 +328,22 @@ class WP_Customize_Header_Image_Control extends WP_Customize_Image_Control {
 							?>
 
 						</div>
+
+						<?php
+						if ( $this->allow_random_default && count( $this->default_headers ) > 1 ) {
+							?>
+
+							<div class="randomize-header">
+								<button type="button" class="button display-options random random-default-header" data-customize-image-value="random-default-image">
+									<span class="dashicons dashicons-randomize dice"></span>
+									<?php esc_html_e( 'Randomize suggested headers' ); ?>
+								</button>
+							</div>
+
+							<?php
+						}
+						?>
+
 					</div>
 
 					<?php

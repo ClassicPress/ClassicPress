@@ -417,11 +417,32 @@
 			var css = '',
 				props = [ 'color', 'image', 'preset', 'position_x', 'position_y', 'size', 'repeat', 'attachment' ],
 				settings = {},
-				bgCss;
+				bgCss,
+				validPositionX = [ 'left', 'center', 'right' ],
+				validPositionY = [ 'top', 'center', 'bottom' ],
+				validSize = [ 'auto', 'contain', 'cover' ],
+				validRepeat = [ 'repeat', 'repeat-x', 'repeat-y', 'no-repeat' ],
+				validAttachment = [ 'scroll', 'fixed' ];
 
 			props.forEach( function( prop ) {
 				settings[ prop ] = api( 'background_' + prop );
 			} );
+
+			if ( validPositionX.indexOf( settings.position_x ) === -1 ) {
+				settings.position_x = 'left';
+			}
+			if ( validPositionY.indexOf( settings.position_y ) === -1 ) {
+				settings.position_y = 'top';
+			}
+			if ( validSize.indexOf( settings.size ) === -1 ) {
+				settings.size = 'auto';
+			}
+			if ( validRepeat.indexOf( settings.repeat ) === -1 ) {
+				settings.repeat = 'repeat';
+			}
+			if ( validAttachment.indexOf( settings.attachment ) === -1 ) {
+				settings.attachment = 'scroll';
+			}
 
 			document.body.classList.toggle( 'custom-background', !! ( settings.color || settings.image ) );
 
@@ -429,17 +450,21 @@
 				css += 'background-color: ' + settings.color + ';';
 			}
 			if ( settings.image ) {
-				css += 'background-image: url("' + settings.image + '");';
-				css += 'background-size: ' + settings.size + ';';
+				css += 'background-image: url("' + String( settings.image ).replace( /"/g, '\\"' ) + '");';
 				css += 'background-position: ' + settings.position_x + ' ' + settings.position_y + ';';
+				css += 'background-size: ' + settings.size + ';';
 				css += 'background-repeat: ' + settings.repeat + ';';
 				css += 'background-attachment: ' + settings.attachment + ';';
 			}
 
 			bgCss = document.getElementById( 'custom-background-css' );
-			if ( bgCss ) { // css values come from api.settings, which is server-populated
-				bgCss.textContent = 'body.custom-background { ' + css + ' }';
+			if ( ! bgCss ) {
+				bgCss = document.createElement( 'style' );
+				bgCss.id = 'custom-background-css';
+				document.head.appendChild( bgCss );
 			}
+
+			bgCss.textContent = 'body.custom-background { ' + css + ' }';
 		}
 	};
 
@@ -762,6 +787,7 @@
 				setting.bind( api.settingPreviewHandlers.background );
 			}
 		} );
+		api.settingPreviewHandlers.background();
 
 		// Custom logo
 		if ( api._settings.custom_logo ) {
@@ -774,46 +800,6 @@
 		if ( api._settings[ cssSettingId ] ) {
 			api._settings[ cssSettingId ].bind( api.settingPreviewHandlers.custom_css );
 		}
-
-		// Core standard setting → DOM bindings
-		var coreTextBindings = {
-			'blogname':        '.site-title a',
-			'blogdescription': '.site-description'
-		};
-		Object.keys( coreTextBindings ).forEach( function( id ) {
-			if ( ! api._settings[ id ] ) {
-				api.create( id, '' );
-			}
-			api._settings[ id ].bind( function( value ) {
-				document.querySelectorAll( coreTextBindings[ id ] ).forEach( function( el ) {
-
-					// Update only the text node, preserving child elements like the pencil shortcut
-					var textNode = Array.from( el.childNodes ).find( function( node ) {
-						return node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '';
-					} );
-
-					if ( textNode ) {
-						textNode.textContent = value;
-					} else {
-						el.appendChild( document.createTextNode( value ) );
-					}
-				} );
-			} );
-		} );
-
-		// Header text color
-		if ( ! api._settings.header_textcolor ) {
-			api.create( 'header_textcolor', '' );
-		}
-		api._settings.header_textcolor.bind( function( value ) {
-			var style = document.getElementById( 'customize-preview-header-textcolor' );
-			if ( ! style ) {
-				style = document.createElement( 'style' );
-				style.id = 'customize-preview-header-textcolor';
-				document.head.appendChild( style );
-			}
-			style.textContent = value === 'blank' ? 'body .site-title a, body .site-description { visibility: hidden; }' : 'body.has-header-image .site-title a, body.has-header-video .site-title a, body .site-title a, body .site-description { color: #' + value.replace( /^#/, '' ) + '; visibility: visible; }';
-		} );
 
 		api.preview.send( 'ready', {
 			currentUrl: api.settings.url.self,

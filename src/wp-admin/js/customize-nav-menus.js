@@ -5,7 +5,7 @@
  * @output wp-admin/js/customize-nav-menus.js
  */
 /* global _wpCustomizeControlsL10n, _wpCustomizeNavMenusSettings, console,
-ajaxurl, _updatedControlsWatcher, Sortable, _cpCustomizeNavMenusL10n, isRtl */
+ajaxurl, _updatedControlsWatcher, Sortable, _wpCustomizeWidgetsSettings, isRtl */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	var addObserver, itemObserver, currentMenuId,
@@ -95,11 +95,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					span.textContent = menuName;
 					input.value = li.parentNode.dataset.menuId;
 					_updatedControlsWatcher[ settingId ] = li.parentNode.dataset.menuId;
-					input.nextElementSibling.querySelector( '.theme-location-set' ).innerHTML = '(' + _wpCustomizeControlsL10n.current + ' ' + span.outerHTML + ')';
+					input.nextElementSibling.querySelector( '.theme-location-set' ).setHTML( '(' + _wpCustomizeControlsL10n.current + ' ' + span.outerHTML + ')' );
 
 					menuLocations.forEach( function( menuLocation ) {
 						if ( menuLocation.querySelector( 'input' ) ) {
-							menuLocation.querySelector( '.theme-location-set' ).innerHTML = '(' + _wpCustomizeControlsL10n.current + ' ' + span.outerHTML + ')';
+							menuLocation.querySelector( '.theme-location-set' ).setHTML( '(' + _wpCustomizeControlsL10n.current + ' ' + span.outerHTML + ')' );
 							menuLocation.querySelector( 'input' ).value = li.parentNode.dataset.menuId;
 							if ( menuLocation.closest( '.menu-location-settings' ).dataset.menuId === li.parentNode.dataset.menuId ) {
 								menuLocation.querySelector( 'input' ).checked = true;
@@ -118,14 +118,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} else {
 					input.value = '';
 					_updatedControlsWatcher[ settingId ] = '';
-					input.nextElementSibling.querySelector( '.theme-location-set' ).innerHTML = '';
+					input.nextElementSibling.querySelector( '.theme-location-set' ).replaceChildren();
 
 					menuLocations.forEach( function( menuLocation ) {
 						if ( menuLocation.querySelector( 'input' ) ) {
 							menuLocation.querySelector( 'input' ).value = '';
 							if ( menuLocation.closest( '.menu-location-settings' ).dataset.menuId === li.parentNode.dataset.menuId ) {
 								menuLocation.querySelector( 'input' ).checked = false;
-								menuLocation.querySelector( '.theme-location-set' ).innerHTML = span.outerHTML;
+								menuLocation.querySelector( '.theme-location-set' ).setHTML( span.outerHTML );
 							}
 						}
 					} );
@@ -234,15 +234,33 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			filter: '.no-drag',
 			preventOnFilter: false,
 			setData: function( dataTransfer, dragEl ) {
-				var ghostImage = document.createElement( 'li' );
+				var ghostImage = document.createElement( 'li' ),
+					div = document.createElement( 'div' ),
+					details = document.createElement( 'details' ),
+					summary = document.createElement( 'summary' ),
+					span1 = document.createElement( 'span' ),
+					span2 = document.createElement( 'span' );
+
+				div.className = 'menu-item-bar';
+				details.className = 'menu-item-handle';
+				span1.className = 'item-title';
+				span2.className = 'menu-item-title';
+				span2.textContent = dragEl.querySelector( '.menu-item-title' ).textContent;
+
+				span1.append( span2 );
+				summary.append( span1 );
+				details.append( summary );
+				div.append( details );
+
 				ghostImage.id = 'sortable-ghost';
 				ghostImage.className = 'menu-item';
 				ghostImage.style.listStyle = 'none';
-				ghostImage.innerHTML = '<div class="menu-item-bar"><details class="menu-item-handle"><summary><span class="item-title"><span class="menu-item-title">' + dragEl.querySelector( '.menu-item-title' ).textContent + '</span></span></summary></details></div>';
 				ghostImage.style.position = 'absolute';
 				ghostImage.style.top = '-1000px';
 				ghostImage.style.width = dragEl.getBoundingClientRect().width + 'px';
-				document.body.appendChild( ghostImage );
+
+				ghostImage.append( div );
+				document.body.append( ghostImage );
 				dataTransfer.setDragImage( ghostImage, 30, 20 );
 			},
 			dataIdAttr: 'data-setting-id', // HTML attribute that is used by the `toArray()` method in OnEnd
@@ -565,18 +583,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		const addItemsPanel = document.getElementById( 'available-menu-items' );
 
-		if ( ! title ) {
-			errorSpan.style.display = 'block';
-			input.classList.add( 'form-invalid' );
-			input.setAttribute( 'aria-invalid', 'true' );
-			input.setAttribute( 'aria-describedby', errorSpan.id );
-			wp.a11y.speak( errorSpan.textContent );
-			return;
-		} else {
-			errorSpan.style.display = 'none';
-			input.classList.remove( 'form-invalid' );
-			input.removeAttribute( 'aria-invalid' );
-			input.removeAttribute( 'aria-describedby' );
+		if ( errorSpan ) {
+			if ( ! title ) {
+				errorSpan.style.display = 'block';
+				input.classList.add( 'form-invalid' );
+				input.setAttribute( 'aria-invalid', 'true' );
+				input.setAttribute( 'aria-describedby', errorSpan.id );
+				wp.a11y.speak( errorSpan.textContent );
+				return;
+			} else {
+				errorSpan.style.display = 'none';
+				input.classList.remove( 'form-invalid' );
+				input.removeAttribute( 'aria-invalid' );
+				input.removeAttribute( 'aria-describedby' );
+			}
 		}
 
 		if ( type === 'custom' ) {
@@ -836,7 +856,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				li.id = result.data.post_id;
 				li.className = 'menu-item-tpl';
 				li.dataset.menuItemId = object + '-' + result.data.post_id;
-				li.innerHTML = '<div class="menu-item-bar">' +
+				li.setHTML( '<div class="menu-item-bar">' +
 					'<div class="menu-item-handle">' +
 					'<button type="button" class="button-link item-add">' +
 					'<span class="screen-reader-text">Add to menu: ' + result.data.title + ' (' + label + ')</span>' +
@@ -849,7 +869,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					'</span>' +
 					'</div>' +
 					'</div>' +
-					'<span class="item-url" hidden="">' + result.data.url + '</span>';
+					'<span class="item-url" hidden="">' + result.data.url + '</span>' );
 				itemsList.prepend( li );
 				addMenuItem( type, object, result.data.post_id, result.data.title, label, result.data.url );
 			}
@@ -932,18 +952,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			if ( '1' !== text ) {
 				if ( '-1' === text ) {
-					throw new Error( _cpCustomizeNavMenusL10n.nonceFailed );
+					throw new Error( _wpCustomizeNavMenusSettings.l10n.nonceFailed );
 				}
 
 				if ( '0' === text ) {
-					throw new Error( _cpCustomizeNavMenusL10n.serverRejection );
+					throw new Error( _wpCustomizeNavMenusSettings.l10n.serverRejection );
 				}
 
-				throw new Error( _cpCustomizeNavMenusL10n.unexpectedResponse + text );
+				throw new Error( _wpCustomizeNavMenusSettings.l10n.unexpectedResponse + text );
 			}
 		} )
 		.catch( function( error ) {
-			console.error( _cpCustomizeNavMenusL10n.failedSettingsSave, error );
+			console.error( _wpCustomizeNavMenusSettings.l10n.failedSettingsSave, error );
 		} );
 	}
 
@@ -975,6 +995,183 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		document.getElementById( 'accordion-section-nav_menu[' + currentMenuId + ']' ).id = newMenuString;
 		return newMenuString;
 	}
+
+	/**
+	 * Search for menu items
+	 *
+	 * @since CP-2.8.0
+	 */
+	document.getElementById( 'menu-items-search' ).addEventListener( 'input', _.debounce( function( e ) {
+		var data,
+			needle = e.target.value.toLowerCase().trim(),
+			searchContainer = document.getElementById( 'available-menu-items-search' ),
+			searchList = document.getElementById( 'menu-items-search-list' ),
+			clearButton = availableMenuItems.querySelector( '.clear-results' );
+
+		if ( needle.length > 1 ) { // at least 2 characters required for search
+			searchContainer.classList.remove( 'cannot-expand' );
+			clearButton.classList.add( 'is-visible' );
+
+			data = new URLSearchParams( {
+				action: 'search-available-menu-items-customizer',
+				wp_customize: 'on',
+				search: needle,
+				page: 1,
+				'customize-menus-nonce': _wpCustomizeNavMenusSettings.l10n.menuSearchNonce
+			} );
+
+			fetch( ajaxurl, {
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+				},
+				body: data.toString()
+			} )
+			.then( function( response ) {
+				if ( ! response.ok ) {
+					throw new Error( 'HTTP ' + response.status );
+				}
+				return response.json();
+			} )
+			.then( function( result ) {
+				var items = result && result.success && result.data && result.data.items ? result.data.items : [];
+
+				searchList.innerHTML = '';
+
+				if ( items.length ) {
+					searchList.replaceChildren(
+						...items.map( function( item ) {
+							const id = _.escape( item.id ),
+								title = _.escape( item.title ),
+								label = _.escape( item.type_label ),
+								li = document.createElement( 'li' ),
+								bar = document.createElement( 'div' ),
+								handle = document.createElement( 'div' ),
+								button = document.createElement( 'button' ),
+								srText = document.createElement( 'span' ),
+								split = document.createElement( 'span' ),
+								titleWrap = document.createElement( 'span' ),
+								titleSpan = document.createElement( 'span' ),
+								type = document.createElement( 'span' ),
+								url = document.createElement( 'span' );
+
+							li.className = 'menu-item-tpl';
+							li.id = id;
+							li.dataset.menuItemId = id;
+
+							bar.className = 'menu-item-bar';
+							handle.className = 'menu-item-handle';
+
+							button.type = 'button';
+							button.className = 'button-link item-add';
+
+							srText.className = 'screen-reader-text';
+							srText.textContent = _wpCustomizeNavMenusSettings.l10n.addToMenu + ': ' + title + ' (' + label + ')';
+
+							split.className = 'item-split';
+							titleWrap.className = 'item-title';
+							titleWrap.setAttribute( 'aria-hidden', 'true' );
+
+							titleSpan.className = 'menu-item-title';
+							titleSpan.textContent = title;
+
+							type.className = 'item-type';
+							type.setAttribute( 'aria-hidden', 'true' );
+							type.textContent = label;
+
+							url.className = 'item-url';
+							url.hidden = true;
+							url.textContent = _.escape( item.url );
+
+							button.append( srText );
+							titleWrap.append( titleSpan );
+							split.append( titleWrap, type );
+							handle.append( button, split );
+							bar.append( handle );
+							li.append( bar, url );
+
+							return li;
+						} )
+					);
+
+					searchList.classList.remove( 'no-items-found' );
+				} else {
+					searchList.classList.add( 'no-items-found' );
+				}
+
+				wp.a11y.speak( _wpCustomizeNavMenusSettings.l10n.itemsFound.replace( '%d', items.length ) );
+			} )
+			.catch( function() {
+				searchList.replaceChildren();
+				searchList.classList.add( 'no-items-found' );
+				wp.a11y.speak( _wpCustomizeNavMenusSettings.l10n.itemsFound.replace( '%d', '0' ) );
+			} );
+		} else {
+			searchContainer.classList.add( 'cannot-expand' );
+			clearButton.classList.remove( 'is-visible' );
+			searchList.replaceChildren();
+			searchList.classList.remove( 'no-widgets-found' );
+		}
+	}, 150 ) );
+
+	/**
+	 * Search for widgets
+	 *
+	 * @since CP-2.8.0
+	 */
+	document.getElementById( 'menu-items-search' ).addEventListener( 'input', _.debounce( function( e ) {
+		var message,
+			availables = document.querySelectorAll( '.menu-item-tpl' ),
+			needle = e.target.value.toLowerCase().trim(),
+			matches = needle ? [...availables].filter( item => item.querySelector( '.menu-item-title' ).textContent.toLowerCase().includes( needle ) ) : [];
+
+		if ( needle.length ) {
+			document.getElementById( 'available-menu-items-search' ).classList.remove( 'cannot-expand' );
+			availableMenuItems.querySelector( '.clear-results' ).classList.add( 'is-visible' );
+			availables.forEach( function( li ) {
+				li.style.display = 'none';
+			} );
+
+			if ( matches.length ) {
+				matches.forEach( function( li ) {
+					li.style.display = '';
+				} );
+				message = _wpCustomizeWidgetsSettings.l10n.widgetsFound.replace( '%d', matches.length );
+				document.getElementById( 'menu-items-search-list' ).classList.remove( 'no-widgets-found' );
+			} else {
+				message = _wpCustomizeWidgetsSettings.l10n.noWidgetsFound;
+				document.getElementById( 'menu-items-search-list' ).classList.add( 'no-widgets-found' );
+			}
+			wp.a11y.speak( message );
+		} else {
+			document.getElementById( 'available-menu-items-search' ).classList.add( 'cannot-expand' );
+			availableMenuItems.querySelector( '.clear-results' ).classList.remove( 'is-visible' );
+			availables.forEach( function( li ) {
+				li.style.display = '';
+			} );
+		}
+	}, 150 ) );
+
+	/**
+	 * Enable closing of Add Menu Items sub-panel using the Escape key
+	 *
+	 * @since CP-2.8.0
+	 */
+	document.addEventListener( 'keydown', function( e ) {
+		if ( e.key === 'Escape' ) {
+			if ( availableMenuItems.style.display === 'block' ) {
+				availableMenuItems.style.display = 'none';
+				document.body.classList.remove( 'adding-menu-items' );
+				document.querySelectorAll( '.add-new-menu-item' ).forEach( function( btn ) {
+					btn.setAttribute( 'aria-expanded', 'false' );
+					if ( isVisible( btn ) ) {
+						btn.focus();
+					}
+				} );
+			}
+		}
+	} );
 
 	/**
 	 * Handle clicks on buttons.
@@ -1047,13 +1244,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			li.id = 'accordion-section-nav_menu[' + navMenuId + ']';
 			li.className = 'accordion-section control-section control-section-nav_menu control-subsection assigned-to-menu-location';
 			li.setAttribute( 'aria-owns', 'sub-accordion-section-nav_menu[' + navMenuId + ']' );
-			li.innerHTML = '<h3 class="accordion-section-title" tabindex="0">' +
+			li.setHTML( '<h3 class="accordion-section-title" tabindex="0">' +
 				title +
 				'<span class="screen-reader-text">' +
 				menuToEdit.dataset.instruction +
 				'</span>' +
 				'<span class="menu-in-location"></span>' +
-				'</h3>';
+				'</h3>' );
 			if ( menuName !== '' ) {
 				li.querySelector( '.menu-in-location' ).textContent = '(' + _wpCustomizeControlsL10n.currently + ' ' + menuName + ')';
 			}
@@ -1104,6 +1301,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					return;
 				}
 			}
+
+		// Clear list of search results
+		} else if ( document.body.classList.contains( 'adding-menu-items' ) && e.target.classList && e.target.classList.contains( 'clear-results' ) ) {
+			document.getElementById( 'menu-items-search' ).value = '';
+			document.getElementById( 'available-menu-items-search' ).classList.add( 'cannot-expand' );
+			e.target.classList.remove( 'is-visible' );
+			document.getElementById( 'menu-items-search-list' ).replaceChildren();
 
 		// Add a menu item
 		} else if ( availableMenuItems.contains( e.target ) ) {

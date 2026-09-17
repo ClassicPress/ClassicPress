@@ -6,7 +6,7 @@
  * @output wp-admin/js/site-health.js
  */
 
-/* global ajaxurl, SiteHealth, wp */
+/* global ajaxurl, SiteHealth, wp, wpApiSettings */
 
 document.addEventListener( 'DOMContentLoaded', function () {
 
@@ -215,6 +215,52 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		appendIssue( wp.hooks.applyFilters( 'site_status_test_result', issue ) );
 	}
 
+	/**
+	 * Detect the HTTP protocol negotiated for the current navigation, using the
+	 * Navigation Timing Level 2 API. Falls back to checking resource timing
+	 * entries if a navigation entry isn't available.
+	 *
+	 * @since CP-2.8.0
+	 *
+	 * @return {string} The negotiated protocol (e.g. 'h2', 'h3', 'http/1.1'), or an empty string if undetectable.
+	 */
+	function detectHttpProtocol() {
+		var protocol = '';
+
+		try {
+			var navEntries = performance.getEntriesByType( 'navigation' );
+			if ( navEntries.length && navEntries[ 0 ].nextHopProtocol ) {
+				protocol = navEntries[ 0 ].nextHopProtocol;
+			}
+		} catch ( error ) {
+			// Navigation Timing Level 2 not supported; fall through.
+		}
+
+		if ( '' === protocol ) {
+			try {
+				var resourceEntries = performance.getEntriesByType( 'resource' );
+				for ( var i = 0; i < resourceEntries.length; i++ ) {
+					if ( resourceEntries[ i ].nextHopProtocol ) {
+						protocol = resourceEntries[ i ].nextHopProtocol;
+					}
+				}
+			} catch ( error ) {}
+		}
+
+		window.fetch(
+			wpApiSettings.root + 'wp-site-health/v1/tests/http-protocol-data',
+			{
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-WP-Nonce':   wpApiSettings.nonce
+				},
+				body: JSON.stringify( { protocol: protocol } )
+			}
+		);
+	}
+
 	function maybeRunNextAsyncTest() {
 		var doCalculation = true;
 		if ( SiteHealth.site_status.async.length >= 1 ) {
@@ -327,6 +373,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		} else {
 			recalculateProgression();
 		}
+		detectHttpProtocol();
 	}
 
 	if ( isDebugTab ) {
