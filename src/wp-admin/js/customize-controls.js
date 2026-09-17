@@ -847,7 +847,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
-			const ul = document.createElement( 'ul' );
 			if ( i === 1 ) {
 				themesGrid.replaceChildren(); // clear the current grid
 			}
