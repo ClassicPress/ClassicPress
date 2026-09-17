@@ -106,7 +106,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			targetEl = document.getElementById( newHash );
 
 		if ( newHash && targetEl ) {
-			if ( newHash === 'sub-accordion-panel-widgets' ) {
+			if ( newHash === 'customize-pane-parent' ) {
+				document.title = _wpCustomizeControlsL10n.customizing + ' ' + document.querySelector( '.site-title' ).textContent;
+			} else if ( newHash === 'sub-accordion-panel-widgets' ) {
 				document.title = targetEl.querySelector( '.panel-title' ).textContent.trim();
 			} else {
 				document.title = targetEl.querySelector( 'h3' ).textContent.replace( '▸', '' ).trim();
