@@ -57,6 +57,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Go direct to appropriate Customizer panel if its hash is specified in the URL
 	if ( hash === 'menu-to-edit' ) {
 		hash = 'sub-accordion-panel-nav_menus';
+		window.location.hash = encodeURIComponent( hash );
 	}
 
 	if ( ! hash ) {
@@ -105,6 +106,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			targetEl = document.getElementById( newHash );
 
 		if ( newHash && targetEl ) {
+			if ( newHash === 'customize-pane-parent' ) {
+				document.title = _wpCustomizeControlsL10n.customizing + ' ' + document.querySelector( '.site-title' ).textContent;
+			} else if ( newHash === 'sub-accordion-panel-widgets' ) {
+				document.title = targetEl.querySelector( '.panel-title' ).textContent.trim();
+			} else {
+				document.title = targetEl.querySelector( 'h3' ).textContent.replace( '▸', '' ).trim();
+			}
+
 			customizerControls.forEach( function( child ) {
 				child.style.display = 'none';
 			} );
