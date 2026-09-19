@@ -395,6 +395,8 @@ final class WP_Customize_Manager {
 		add_filter( 'heartbeat_received', array( $this, 'check_changeset_lock_with_heartbeat' ), 10, 3 );
 		add_action( 'wp_ajax_customize_override_changeset_lock', array( $this, 'handle_override_changeset_lock_request' ) );
 		add_action( 'wp_ajax_customize_dismiss_autosave_or_lock', array( $this, 'handle_dismiss_autosave_or_lock_request' ) );
+		add_action( 'wp_ajax_customize_refresh_lock', array( $this, 'handle_refresh_lock_request' ) );
+		add_action( 'wp_ajax_customize_take_over_lock', array( $this, 'handle_take_over_lock_request' ) );
 
 		add_action( 'customize_register', array( $this, 'register_controls' ) );
 		add_action( 'customize_register', array( $this, 'register_dynamic_settings' ), 11 ); // Allow code to create settings first.
@@ -3800,6 +3802,216 @@ final class WP_Customize_Manager {
 	}
 
 	/**
+	 * Get the option key used for the site-wide Customizer lock.
+	 *
+	 * @since CP-2.8.0
+	 * @return string
+	 */
+	protected function get_customizer_lock_option() {
+		return 'customize_lock_' . get_current_blog_id();
+	}
+
+	/**
+	 * Get the current Customizer lock.
+	 *
+	 * @since CP-2.8.0
+	 * @return array|false
+	 */
+	protected function get_customizer_lock() {
+		$lock = get_option( $this->get_customizer_lock_option() );
+
+		if ( ! is_array( $lock ) || empty( $lock['user_id'] ) || empty( $lock['time'] ) ) {
+			return false;
+		}
+
+		$lock_window = (int) apply_filters( 'customize_lock_window', 90 );
+
+		if ( (int) $lock['time'] < time() - $lock_window ) {
+			delete_option( $this->get_customizer_lock_option() );
+			return false;
+		}
+
+		if ( ! get_userdata( (int) $lock['user_id'] ) ) {
+			delete_option( $this->get_customizer_lock_option() );
+			return false;
+		}
+
+		return $lock;
+	}
+
+	/**
+	 * Set or refresh the current Customizer lock.
+	 *
+	 * @since CP-2.8.0
+	 * @param int    $user_id       User ID.
+	 * @return array
+	 */
+	protected function set_customizer_lock( $user_id ) {
+		$lock = array(
+			'user_id' => (int) $user_id,
+			'time'    => time(),
+		);
+
+		update_option( $this->get_customizer_lock_option(), $lock, false );
+
+		return $lock;
+	}
+
+	/**
+	 * Check whether the current request may use the Customizer lock API.
+	 *
+	 * @since CP-2.8.0
+	 * @return true|WP_Error
+	 */
+	protected function check_customizer_lock_request_permissions() {
+		if ( ! is_user_logged_in() ) {
+			return new WP_Error( 'unauthenticated', __( 'You must be logged in to access the Customizer lock.' ), array( 'status' => 401 ) );
+		}
+
+		if ( ! current_user_can( 'customize' ) ) {
+			return new WP_Error( 'cannot_customize', __( 'Sorry, you are not allowed to customize this site.' ), array( 'status' => 403 ) );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check whether another user currently holds the Customizer lock.
+	 *
+	 * @since CP-2.8.0
+	 * @return void
+	 */
+	public function handle_check_lock_request() {
+		$permission = $this->check_customizer_lock_request_permissions();
+
+		if ( is_wp_error( $permission ) ) {
+			$error_data = $permission->get_error_data();
+			$status     = is_array( $error_data ) && isset( $error_data['status'] ) ? $error_data['status'] : 400;
+
+			wp_send_json_error(
+				array(
+					'code'    => $permission->get_error_code(),
+					'message' => $permission->get_error_message(),
+				),
+				$status
+			);
+		}
+
+		if ( ! check_ajax_referer( 'customize_check_lock', 'nonce', false ) ) {
+			wp_send_json_error( 'invalid_nonce', 403 );
+		}
+
+		$lock = $this->get_customizer_lock();
+
+		if ( ! $lock || (int) $lock['user_id'] === get_current_user_id() ) {
+			wp_send_json_success(
+				array(
+					'lockUser' => null,
+				)
+			);
+		}
+
+		wp_send_json_success(
+			array(
+				'lockUser' => $this->get_lock_user_data( (int) $lock['user_id'] ),
+			)
+		);
+	}
+
+	/**
+	 * Acquire or refresh the Customizer lock for the current user.
+	 *
+	 * @since CP-2.8.0
+	 * @return void
+	 */
+	public function handle_refresh_lock_request() {
+		$permission = $this->check_customizer_lock_request_permissions();
+
+		if ( is_wp_error( $permission ) ) {
+			$error_data = $permission->get_error_data();
+			$status     = is_array( $error_data ) && isset( $error_data['status'] ) ? $error_data['status'] : 400;
+
+			wp_send_json_error(
+				array(
+					'code'    => $permission->get_error_code(),
+					'message' => $permission->get_error_message(),
+				),
+				$status
+			);
+		}
+
+		if ( ! check_ajax_referer( 'customize_refresh_lock', 'nonce', false ) ) {
+			wp_send_json_error( 'invalid_nonce', 403 );
+		}
+
+		$current_user_id = get_current_user_id();
+		$lock            = $this->get_customizer_lock();
+
+		if ( ! $lock ) {
+			$this->set_customizer_lock( $current_user_id );
+
+			wp_send_json_success(
+				array(
+					'lockUser' => null,
+				)
+			);
+		}
+
+		$lock_user_id = isset( $lock['user_id'] ) ? (int) $lock['user_id'] : 0;
+
+		if ( $lock_user_id === $current_user_id ) {
+			$this->set_customizer_lock( $current_user_id );
+
+			wp_send_json_success(
+				array(
+					'lockUser' => null,
+				)
+			);
+		}
+
+		wp_send_json_success(
+			array(
+				'lockUser' => $this->get_lock_user_data( $lock_user_id ),
+			)
+		);
+	}
+
+	/**
+	 * Take over the Customizer lock.
+	 *
+	 * @since CP-2.8.0
+	 * @return void
+	 */
+	public function handle_take_over_lock_request() {
+		$permission = $this->check_customizer_lock_request_permissions();
+
+		if ( is_wp_error( $permission ) ) {
+			$error_data = $permission->get_error_data();
+			$status     = is_array( $error_data ) && isset( $error_data['status'] ) ? $error_data['status'] : 400;
+
+			wp_send_json_error(
+				array(
+					'code'    => $permission->get_error_code(),
+					'message' => $permission->get_error_message(),
+				),
+				$status
+			);
+		}
+
+		if ( ! check_ajax_referer( 'customize_take_over_lock', 'nonce', false ) ) {
+			wp_send_json_error( 'invalid_nonce', 403 );
+		}
+
+		$this->set_customizer_lock( get_current_user_id() );
+
+		wp_send_json_success(
+			array(
+				'lockUser' => null,
+			)
+		);
+	}
+
+	/**
 	 * Adds a customize setting.
 	 *
 	 * @since 3.4.0
@@ -4662,177 +4874,26 @@ final class WP_Customize_Manager {
 	 * @since 4.4.0
 	 */
 	public function customize_pane_settings() {
-
-		$login_url = add_query_arg(
-			array(
-				'interim-login'   => 1,
-				'customize-login' => 1,
-			),
-			wp_login_url()
-		);
-
-		// Ensure dirty flags are set for modified settings.
-		foreach ( array_keys( $this->unsanitized_post_values() ) as $setting_id ) {
-			$setting = $this->get_setting( $setting_id );
-			if ( $setting ) {
-				$setting->dirty = true;
-			}
-		}
-
-		$autosave_revision_post  = null;
-		$autosave_autodraft_post = null;
-		$changeset_post_id       = $this->changeset_post_id();
-		if ( ! $this->saved_starter_content_changeset && ! $this->autosaved() ) {
-			if ( $changeset_post_id ) {
-				if ( is_user_logged_in() ) {
-					$autosave_revision_post = wp_get_post_autosave( $changeset_post_id, get_current_user_id() );
-				}
-			} else {
-				$autosave_autodraft_posts = $this->get_changeset_posts(
-					array(
-						'posts_per_page'            => 1,
-						'post_status'               => 'auto-draft',
-						'exclude_restore_dismissed' => true,
-					)
-				);
-				if ( ! empty( $autosave_autodraft_posts ) ) {
-					$autosave_autodraft_post = array_shift( $autosave_autodraft_posts );
-				}
-			}
-		}
-
-		$current_user_can_publish = current_user_can( get_post_type_object( 'customize_changeset' )->cap->publish_posts );
-
-		// @todo Include all of the status labels here from script-loader.php, and then allow it to be filtered.
-		$status_choices = array();
-		if ( $current_user_can_publish ) {
-			$status_choices[] = array(
-				'status' => 'publish',
-				'label'  => __( 'Publish' ),
-			);
-		}
-		$status_choices[] = array(
-			'status' => 'draft',
-			'label'  => __( 'Save Draft' ),
-		);
-		if ( $current_user_can_publish ) {
-			$status_choices[] = array(
-				'status' => 'future',
-				'label'  => _x( 'Schedule', 'customizer changeset action/button label' ),
-			);
-		}
-
-		// Prepare Customizer settings to pass to JavaScript.
-		$changeset_post = null;
-		if ( $changeset_post_id ) {
-			$changeset_post = get_post( $changeset_post_id );
-		}
-
-		// Determine initial date to be at present or future, not past.
-		$current_time = current_time( 'mysql', false );
-		$initial_date = $current_time;
-		if ( $changeset_post ) {
-			$initial_date = get_the_time( 'Y-m-d H:i:s', $changeset_post->ID );
-			if ( $initial_date < $current_time ) {
-				$initial_date = $current_time;
-			}
-		}
-
-		$lock_user_id = false;
-		if ( $this->changeset_post_id() ) {
-			$lock_user_id = wp_check_post_lock( $this->changeset_post_id() );
-		}
+		$lock = $this->get_customizer_lock();
+		$lock_user_id = ( $lock && ! empty( $lock['user_id'] ) ) ? (int) $lock['user_id'] : 0;
 
 		$settings = array(
-			'changeset'              => array(
-				'uuid'                  => $this->changeset_uuid(),
-				'branching'             => $this->branching(),
-				'autosaved'             => $this->autosaved(),
-				'hasAutosaveRevision'   => ! empty( $autosave_revision_post ),
-				'latestAutoDraftUuid'   => $autosave_autodraft_post ? $autosave_autodraft_post->post_name : null,
-				'status'                => $changeset_post ? $changeset_post->post_status : '',
-				'currentUserCanPublish' => $current_user_can_publish,
-				'publishDate'           => $initial_date,
-				'statusChoices'         => $status_choices,
-				'lockUser'              => $lock_user_id ? $this->get_lock_user_data( $lock_user_id ) : null,
+			'lock' => array(
+				'lockUser' => ( $lock_user_id && $lock_user_id !== get_current_user_id() )
+					? $this->get_lock_user_data( $lock_user_id )
+					: null,
 			),
-			'initialServerDate'      => $current_time,
-			'dateFormat'             => get_option( 'date_format' ),
-			'timeFormat'             => get_option( 'time_format' ),
-			'initialServerTimestamp' => floor( microtime( true ) * 1000 ),
-			'initialClientTimestamp' => -1, // To be set with JS below.
-			'timeouts'               => array(
-				'windowRefresh'           => 250,
-				'changesetAutoSave'       => AUTOSAVE_INTERVAL * 1000,
-				'keepAliveCheck'          => 2500,
-				'reflowPaneContents'      => 100,
-				'previewFrameSensitivity' => 2000,
+			'url' => array(
+				'ajax' => sanitize_url( admin_url( 'admin-ajax.php', 'relative' ) ),
 			),
-			'theme'                  => array(
-				'stylesheet'  => $this->get_stylesheet(),
-				'active'      => $this->is_theme_active(),
-				'_canInstall' => current_user_can( 'install_themes' ),
+			'nonce' => array(
+				'refreshLock'  => wp_create_nonce( 'customize_refresh_lock' ),
+				'takeOverLock' => wp_create_nonce( 'customize_take_over_lock' ),
 			),
-			'url'                    => array(
-				'preview'       => sanitize_url( $this->get_preview_url() ),
-				'return'        => sanitize_url( $this->get_return_url() ),
-				'parent'        => sanitize_url( admin_url() ),
-				'activated'     => sanitize_url( home_url( '/' ) ),
-				'ajax'          => sanitize_url( admin_url( 'admin-ajax.php', 'relative' ) ),
-				'allowed'       => array_map( 'sanitize_url', $this->get_allowed_urls() ),
-				'isCrossDomain' => $this->is_cross_domain(),
-				'home'          => sanitize_url( home_url( '/' ) ),
-				'login'         => sanitize_url( $login_url ),
-			),
-			'browser'                => array(
-				'mobile' => wp_is_mobile(),
-				'ios'    => $this->is_ios(),
-			),
-			'panels'                 => array(),
-			'sections'               => array(),
-			'nonce'                  => $this->get_nonces(),
-			'autofocus'              => $this->get_autofocus(),
-			'documentTitleTmpl'      => $this->get_document_title_template(),
-			'previewableDevices'     => $this->get_previewable_devices(),
-			'l10n'                   => array(
-				'confirmDeleteTheme'   => __( 'Are you sure you want to delete this theme?' ),
-				/* translators: %d: Number of theme search results, which cannot currently consider singular vs. plural forms. */
-				'themeSearchResults'   => __( '%d themes found' ),
-				/* translators: %d: Number of themes being displayed, which cannot currently consider singular vs. plural forms. */
-				'announceThemeCount'   => __( 'Displaying %d themes' ),
-				/* translators: %s: Theme name. */
-				'announceThemeDetails' => __( 'Showing details for theme: %s' ),
+			'user' => array(
+				'id' => get_current_user_id(),
 			),
 		);
-
-		// Temporarily disable installation in Customizer. See #42184.
-		$filesystem_method = get_filesystem_method();
-		ob_start();
-		$filesystem_credentials_are_stored = request_filesystem_credentials( self_admin_url() );
-		ob_end_clean();
-		if ( 'direct' !== $filesystem_method && ! $filesystem_credentials_are_stored ) {
-			$settings['theme']['_filesystemCredentialsNeeded'] = true;
-		}
-
-		// Prepare Customize Section objects to pass to JavaScript.
-		foreach ( $this->sections() as $id => $section ) {
-			if ( $section->check_capabilities() ) {
-				$settings['sections'][ $id ] = $section->json();
-			}
-		}
-
-		// Prepare Customize Panel objects to pass to JavaScript.
-		foreach ( $this->panels() as $panel_id => $panel ) {
-			if ( $panel->check_capabilities() ) {
-				$settings['panels'][ $panel_id ] = $panel->json();
-				foreach ( $panel->sections as $section_id => $section ) {
-					if ( $section->check_capabilities() ) {
-						$settings['sections'][ $section_id ] = $section->json();
-					}
-				}
-			}
-		}
-
 		?>
 		<script>
 			var _wpCustomizeSettings = <?php echo wp_json_encode( $settings ); ?>;

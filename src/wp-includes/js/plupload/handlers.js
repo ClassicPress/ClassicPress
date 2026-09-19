@@ -28,7 +28,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Set up variables when a change of upload category is made.
 		uploadCatSelect.addEventListener( 'change', function( e ) {
-			var div,
+			var div = document.createElement( 'div' ),
+				para = document.createElement( 'p' ),
+				button = document.createElement( 'button' ),
 				uploadCatFolder = new URLSearchParams( {
 					action: 'media-cat-upload',
 					option: 'media_cat_upload_folder',
@@ -55,11 +57,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} )
 			.then( function( response ) {
 				if ( response.success ) {
+					div.id = 'message';
+					para.textContent = response.data.message;
+					button.className = 'notice-dismiss';
+					button.type = 'button';
+
 					if ( response.data.value == '' ) {
-						div = document.createElement( 'div' );
-						div.id = 'message';
 						div.className = 'notice notice-error is-dismissible';
-						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+						div.append( para, button );
 						document.querySelector( '.wrap h1' ).after( div );
 
 						// Disable uploads.
@@ -74,10 +79,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 							e.preventDefault();
 						}, false );
 					} else {
-						div = document.createElement( 'div' );
-						div.id = 'message';
 						div.className = 'updated notice notice-success is-dismissible';
-						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+						div.append( para, button );
 						document.querySelector( '.wrap h1' ).after( div );
 
 						// Update selected attribute in DOM.
@@ -96,10 +99,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 			} )
 			.catch( function( error ) {
-				div = document.createElement( 'div' );
+				para.textContent = error;
+				button.className = 'notice-dismiss';
+				button.type = 'button';
+
 				div.id = 'message';
 				div.className = 'notice notice-error is-dismissible';
-				div.innerHTML = '<p>' + error + '</p><button class="notice-dismiss" type="button"></button>';
+				div.append( para, button );
 				document.querySelector( '.wrap h1' ).after( div );
 			} );
 		} );
