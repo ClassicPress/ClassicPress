@@ -2214,91 +2214,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 
-		// Prepare changeset object
-		Object.keys( updatedControls ).forEach( function( settingId ) {
-			const item = updatedControls[ settingId ];
-
-			if ( settingId.startsWith( 'nav_menu[' ) && item === 'delete-menu' ) {
-				submittedChanges[ settingId ] = {
-					value: false // deletes menu
-				};
-			} else if ( settingId.startsWith( 'nav_menu[' ) ) {
-				submittedChanges[ settingId ] = {
-					value: {
-						name: ( typeof item === 'string' ) ? item : item.name || '',
-						description: item.description || '',
-						parent: item.parent ? parseInt( item.parent, 10 ) : 0,
-						auto_add: !! item.auto_add // default false
-					}
-				};
-			} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
-				if ( item === false ) {
-					submittedChanges[ settingId ] = {
-						value: false
-					};
-				} else {
-					submittedChanges[ settingId ] = {
-						value: {
-							nav_menu_term_id: parseInt( item.nav_menu_term_id, 10 ),
-							position: parseInt( item.position, 10 ),
-							title: item.title || '',
-							url: item.url || '',
-							original_title: item.original_title || '',
-							menu_item_parent: parseInt( item.menu_item_parent, 10 ) || 0,
-							object_id: item.object_id || 0,
-							object: item.object || '',
-							type: item.type || 'custom',
-							type_label: item.type_label || '',
-							classes: item.classes || [],
-							xfn: item.xfn || '',
-							target: item.target || '',
-							attr_title: item.attr_title || '',
-							description: item.description || '',
-							status: item.status || 'publish',
-							display_mode: item.display_mode || '',
-							roles: item.roles || ''
-						}
-					};
-				}
-			} else if ( settingId.startsWith( 'nav_menu_locations[' ) ) {
-				submittedChanges[ settingId ] = {
-					value: item || ''
-				};
-			} else { // All other settings
-				submittedChanges[ settingId ] = {
-					value: item || ''
-				};
-			}
-		} );
-
-		if ( newMenuItemIDs.length > 0 ) {
-			postsToPublish = postsToPublish.concat( newMenuItemIDs );
-		}
-
-		newFrontPageIds.forEach( function( item ) {
-			postsToPublish.push( item.id );
-		} );
-
-		newPostsPageIds.forEach( function( item ) {
-			postsToPublish.push( item.id );
-		} );
-
-		if ( postsToPublish.length > 0 ) {
-			submittedChanges.nav_menus_created_posts = {
-				value: postsToPublish
-			};
-		}
-
-		// Add advanced menu-item changes directly to the outgoing
-		// publish payload without touching updatedControls.
-		// This avoids crashing the live preview.
-		Object.entries( window._cpDirtySettings || {} ).forEach( function( [ settingId, item ] ) {
-			if ( settingId.startsWith( 'nav_menu_item[' ) ) {
-				submittedChanges[ settingId ] = {
-					value: item
-				};
-			}
-		} );
+		submittedChanges = buildSubmittedChangesetData();
 
 		// Append new data for POSTing to PHP back-end handler
 		updateData.append( 'action', 'customize_save' );
@@ -3270,5 +3186,149 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 		document.querySelector( '.load-more-count' ).textContent = items.length + ' ' + count[1] + ' ' + count2 + ' ' + count[4] + count5;
 		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
+	}
+
+	/**
+	 * Build the changeset data object for submission.
+	 *
+	 * Reused by both the publish handler and the autosave timer.
+	 *
+	 * @return {Object} submittedChanges - The changeset data object ready for JSON.stringify.
+	 */
+	function buildSubmittedChangesetData() {
+		var entries = Object.entries( updatedControls ),
+			navMenuChanges = {},
+			submittedChanges = {},
+			navMenuNegatives = [], // an array because we need it to be iterable
+			navMenuLocations = [],
+			navMenuItems = [];
+
+		// Prepare changeset object
+		Object.keys( updatedControls ).forEach( function( settingId ) {
+			const item = updatedControls[ settingId ];
+
+			if ( settingId.startsWith( 'nav_menu[' ) && item === 'delete-menu' ) {
+				submittedChanges[ settingId ] = {
+					value: false // deletes menu
+				};
+			} else if ( settingId.startsWith( 'nav_menu[' ) ) {
+				submittedChanges[ settingId ] = {
+					value: {
+						name: ( typeof item === 'string' ) ? item : item.name || '',
+						description: item.description || '',
+						parent: item.parent ? parseInt( item.parent, 10 ) : 0,
+						auto_add: !! item.auto_add // default false
+					}
+				};
+			} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
+				if ( item === false ) {
+					submittedChanges[ settingId ] = {
+						value: false
+					};
+				} else {
+					submittedChanges[ settingId ] = {
+						value: {
+							nav_menu_term_id: parseInt( item.nav_menu_term_id, 10 ),
+							position: parseInt( item.position, 10 ),
+							title: item.title || '',
+							url: item.url || '',
+							original_title: item.original_title || '',
+							menu_item_parent: parseInt( item.menu_item_parent, 10 ) || 0,
+							object_id: item.object_id || 0,
+							object: item.object || '',
+							type: item.type || 'custom',
+							type_label: item.type_label || '',
+							classes: item.classes || [],
+							xfn: item.xfn || '',
+							target: item.target || '',
+							attr_title: item.attr_title || '',
+							description: item.description || '',
+							status: item.status || 'publish',
+							display_mode: item.display_mode || '',
+							roles: item.roles || ''
+						}
+					};
+				}
+			} else if ( settingId.startsWith( 'nav_menu_locations[' ) ) {
+				submittedChanges[ settingId ] = {
+					value: item || ''
+				};
+			} else { // All other settings
+				submittedChanges[ settingId ] = {
+					value: item || ''
+				};
+			}
+
+			if ( newMenuItemIDs.length > 0 ) {
+				submittedChanges.nav_menus_created_posts = {
+					value: newMenuItemIDs
+				};
+			}
+		} );
+
+		// Add advanced menu-item changes directly to the outgoing
+		// publish payload without touching updatedControls.
+		// This avoids crashing the live preview.
+		Object.entries( window._cpDirtySettings || {} ).forEach( function( [ settingId, item ] ) {
+			if ( settingId.startsWith( 'nav_menu_item[' ) ) {
+				submittedChanges[ settingId ] = {
+					value: item
+				};
+			}
+		} );
+
+		return submittedChanges;
+	}
+
+
+	function triggerAutosave() {
+		let submittedChanges, formData;
+
+		// Skip if a save/publish is currently running
+		if ( window._customizePublishing ) {
+			return;
+		}
+
+		// Skip if there are no unsaved changes (updatedControls is empty)
+		if ( Object.keys( updatedControls ).length === 0 ) {
+			return;
+		}
+
+		// Build the changeset data using the shared helper
+		submittedChanges = buildSubmittedChangesetData();
+
+		// Build FormData for the autosave POST
+		formData = new FormData();
+		formData.append( 'action', 'customize_save' );
+		formData.append( 'nonce', document.getElementById( 'customizer_nonce' ).value );
+		formData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
+		formData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
+		formData.append( 'customize_changeset_autosave', 'on' );
+		formData.append( 'customize_changeset_data', JSON.stringify( submittedChanges ) );
+
+		// Fire the autosave request
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: formData,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( ! response.ok ) {
+				throw new Error( response.status );
+			}
+			return response.json();
+		} )
+		.then( function( result ) {
+			if ( ! result.success ) {
+				console.warn( 'Autosave failed:', result.data || result.message );
+			}
+			// Optionally update the UUID if the server rolled it (unlikely for autosave, but core handles it)
+			if ( result.data && result.data.next_changeset_uuid ) {
+				document.getElementById( 'customize_changeset_uuid' ).value = result.data.next_changeset_uuid;
+			}
+		} )
+		.catch( function( err ) {
+			console.error( 'Autosave error:', err );
+		} );
 	}
 } );
