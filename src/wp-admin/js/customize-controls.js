@@ -33,6 +33,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		publishSettings = form.querySelector( '#publish-settings' ),
 		publishSettingsPanel = document.getElementById( 'sub-accordion-section-publish_settings' ),
 		lockSettings = window._wpCustomizeSettings || {},
+		hasAutosaveToRestore = !! ( lockSettings?.changeset?.hasAutosaveRevision && ! lockSettings?.changeset?.autosaved ),
 		lockNotice = document.getElementById( 'customize-lock-notice' ),
 		lockRefreshTimer = null,
 		devicesWrapper = document.querySelector( '.devices' ),
