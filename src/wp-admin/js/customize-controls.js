@@ -36,6 +36,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		hasAutosaveToRestore = !! ( lockSettings?.changeset?.hasAutosaveRevision && ! lockSettings?.changeset?.autosaved ),
 		lockNotice = document.getElementById( 'customize-lock-notice' ),
 		lockRefreshTimer = null,
+		autosaveInterval = window.setInterval( triggerAutosave, 60000 ),
 		devicesWrapper = document.querySelector( '.devices' ),
 		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
 		previewFrame = document.getElementById( 'customize-preview' ),
