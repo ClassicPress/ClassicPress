@@ -189,6 +189,24 @@ if ( 'grid' === $mode ) {
 	$prev_page   = ( $paged === 1 ) ? $paged : $paged - 1;
 	$next_page   = ( $paged === $total_pages ) ? $paged : $paged + 1;
 
+	$media_categories = get_terms(
+		array(
+			'taxonomy'   => 'media_category',
+			'hide_empty' => false,
+			'orderby'    => 'name',
+			'order'      => 'ASC',
+		)
+	);
+
+	$media_post_tags = get_terms(
+		array(
+			'taxonomy'   => 'media_post_tag',
+			'hide_empty' => false,
+			'orderby'    => 'name',
+			'order'      => 'ASC',
+		)
+	);
+
 	require_once ABSPATH . 'wp-admin/admin-header.php';
 
 	/**
@@ -624,6 +642,32 @@ if ( 'grid' === $mode ) {
 								?>
 
 								<div class="attachment-compat"></div>
+								<datalist id="media-grid-media-categories">
+
+									<?php
+									if ( ! empty( $media_categories ) ) {
+										foreach ( $media_categories as $media_category ) {
+											?>
+											<option value="<?php echo esc_attr( $media_category->name ); ?>"></option>
+											<?php
+										}
+									}
+									?>
+
+								</datalist>
+								<datalist id="media-grid-media-tags">
+
+									<?php
+									if ( ! empty( $media_post_tags ) ) {
+										foreach ( $media_post_tags as $media_tag ) {
+											?>
+											<option value="<?php echo esc_attr( $media_tag->name ); ?>"></option>
+											<?php
+										}
+									}
+									?>
+
+								</datalist>
 								<span class="setting settings-save-status" role="status">
 									<span id="tax-saved" class="success hidden" aria-hidden="true"><?php esc_html_e( 'Taxonomy updated successfully!' ); ?></span>
 								</span>

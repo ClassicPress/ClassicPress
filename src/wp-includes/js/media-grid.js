@@ -317,8 +317,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			height = item.dataset.height,
 			caption = item.dataset.caption,
 			description = item.dataset.description,
-			taxes = item.dataset.taxes,
-			tags = item.dataset.tags,
 			url = item.dataset.url,
 			alt = item.querySelector( 'img' ).getAttribute( 'alt' ),
 			link = item.dataset.link,
@@ -338,7 +336,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		history.replaceState( null, null, '?' + queryParams.toString() );
 
 		// Set menu_order, media_category, and media_post_tag field IDs correctly
-		setAddedMediaFields( id );
+		setAddedMediaFields( item );
 
 		// Populate modal with attachment details
 		dialog.querySelector( '.attachment-date' ).textContent = date;
@@ -355,10 +353,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#attachment-details-two-column-caption' ).value = caption;
 		dialog.querySelector( '#attachment-details-two-column-description' ).value = description;
 		dialog.querySelector( '#attachment-details-two-column-copy-link' ).value = url;
-
 		dialog.querySelector( '#menu-order' ).value = menuOrder;
-		dialog.querySelector( '#attachments-' + id + '-media_category' ).value = taxes;
-		dialog.querySelector( '#attachments-' + id + '-media_post_tag' ).value = tags;
 
 		if ( filetype === 'audio' ) {
 			dialog.querySelector( '#media-image' ).setAttribute( 'hidden', true );
