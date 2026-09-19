@@ -4877,6 +4877,13 @@ final class WP_Customize_Manager {
 		$lock = $this->get_customizer_lock();
 		$lock_user_id = ( $lock && ! empty( $lock['user_id'] ) ) ? (int) $lock['user_id'] : 0;
 
+		$changeset_post_id = $this->changeset_post_id();
+		$autosave_revision_post = false;
+
+		if ( ! $this->autosaved() && $changeset_post_id && is_user_logged_in() ) {
+			$autosave_revision_post = wp_get_post_autosave( $changeset_post_id, get_current_user_id() );
+		}
+
 		$settings = array(
 			'lock' => array(
 				'lockUser' => ( $lock_user_id && $lock_user_id !== get_current_user_id() )
@@ -4887,18 +4894,17 @@ final class WP_Customize_Manager {
 				'ajax' => sanitize_url( admin_url( 'admin-ajax.php', 'relative' ) ),
 			),
 			'nonce' => array(
-				'refreshLock'           => wp_create_nonce( 'customize_refresh_lock' ),
-				'takeOverLock'          => wp_create_nonce( 'customize_take_over_lock' ),
-				'dismissAutosaveOrLock' => wp_create_nonce( 'customize_dismiss_autosave_or_lock' ),
+				'refreshLock'  => wp_create_nonce( 'customize_refresh_lock' ),
+				'takeOverLock' => wp_create_nonce( 'customize_take_over_lock' ),
 			),
 			'user' => array(
 				'id' => get_current_user_id(),
 			),
-		);
-		$settings['changeset'] = array(
-			'uuid'                => $this->changeset_uuid(),
-			'autosaved'           => $this->autosaved(),
-			'hasAutosaveRevision' => (bool) ( $this->changeset_post_id() ? wp_get_post_autosave( $this->changeset_post_id(), get_current_user_id() ) : false ),
+			'changeset' => array(
+				'uuid'                => $this->changeset_uuid(),
+				'autosaved'           => $this->autosaved(),
+				'hasAutosaveRevision' => (bool) $autosave_revision_post,
+			),
 		);
 		?>
 		<script>
