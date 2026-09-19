@@ -4894,6 +4894,11 @@ final class WP_Customize_Manager {
 				'id' => get_current_user_id(),
 			),
 		);
+		$settings['changeset'] = array(
+			'uuid'                => $this->changeset_uuid(),
+			'autosaved'           => $this->autosaved(),
+			'hasAutosaveRevision' => (bool) ( $this->changeset_post_id() ? wp_get_post_autosave( $this->changeset_post_id(), get_current_user_id() ) : false ),
+		);
 		?>
 		<script>
 			var _wpCustomizeSettings = <?php echo wp_json_encode( $settings ); ?>;
