@@ -422,6 +422,40 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		lockRefreshTimer = window.setInterval( refreshLockState, 5000 );
 	} );
 
+	if ( hasAutosaveToRestore ) {
+		var restoreUrl = window.location.href.split( '?' )[0] + '?customizeautosaved=1',
+			noticeData = {
+				type: 'info',
+				code: 'autosave_available',
+				message: wpCustomizeControlsL10n.autosaveNotice.replace( '%s', restoreUrl ),
+				dismissible: true
+			},
+			noticeLi = buildNotification( noticeData ),
+			notificationsUl = document.getElementById( 'customize-notifications-area' ).querySelector( 'ul' );
+
+		// Wire dismiss button to actually call the dismiss handler
+		noticeLi.querySelector( '.notice-dismiss' ).addEventListener( 'click', function () {
+			var data = new URLSearchParams();
+
+			data.append( 'action', 'customize_dismiss_autosave_or_lock' );
+			data.append( 'nonce', lockSettings.nonce.dismissAutosaveOrLock );
+			data.append( 'wp_customize', 'on' );
+			data.append( 'dismiss_autosave', 'true' );
+			data.append( 'customize_theme', wpCustomizeControlsL10n.theme );
+			data.append( 'customize_changeset_uuid', document.getElementById( 'customizechangesetuuid' ).value );
+
+			fetch( ajaxurl, {
+				method: 'POST',
+				body: data,
+				credentials: 'same-origin'
+			} ).catch( function () {
+				// Silently ignore failure — notice is already gone from DOM
+			} );
+		} );
+
+		notificationsUl.append( noticeLi );
+	}
+
 	// Limit motion where appropriate
 	reducedMotionMediaQuery.addEventListener( 'change', function handleReducedMotionChange( event ) {
 		isReducedMotion = event.matches;
