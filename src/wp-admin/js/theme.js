@@ -146,7 +146,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				div = document.createElement( 'div' );
 
 			div.className = 'notice inline notice-success notice-alt';
-			div.innerHTML = '<p>' + _wpThemeSettings.l10n.installed + '</p>';
+			div.setHTML( '<p>' + _wpThemeSettings.l10n.installed + '</p>' );
 			theme.querySelector( '.theme-screenshot' ).after( div );
 			theme.querySelector( '.theme-install' ).textContent = _wpThemeSettings.l10n.activate;
 			theme.querySelector( '.theme-install' ).href = theme.dataset.activateNonce;
@@ -185,7 +185,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			var theme = document.getElementById( slug ) || document.getElementById( 'customize-control-installed_theme_' + slug ),
 				notice = theme.querySelector( '.update-message' );
 
-			notice.innerHTML = '<p>' + _wpThemeSettings.l10n.updated + '</p>';
+			notice.setHTML( '<p>' + _wpThemeSettings.l10n.updated + '</p>' );
 			notice.className = 'notice inline updated-message notice-success notice-alt';
 		} )
 		.catch( function( error ) {
@@ -223,14 +223,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
+			const container = document.createElement( 'ul' );
+
 			if ( i === 1 ) {
-				themesGrid.innerHTML = ''; // clear the current grid
+				themesGrid.replaceChildren(); // clear the current grid
 			}
 			// Update count
 			document.querySelector( '.filter-count .theme-count' ).textContent = result.data.count;
 
 			// Populate grid with new items
-			themesGrid.insertAdjacentHTML( 'beforeend', result.data.html );
+			container.setHTML( result.data.html, {
+				sanitizer: {}
+			} );
+			themesGrid.insertAdjacentHTML( 'beforeend', container.innerHTML );
 
 			showAndHide( document.querySelectorAll( '.themes li:not( .add-new-theme )' ) );
 		} )
@@ -328,7 +333,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Open the modal or perform other operations
 	document.addEventListener( 'click', function( e ) {
-		var img, template, clone, response, span, topModal,
+		var img, template, clone, response, span, container,
 			customizer = document.body.className.includes( 'wp-customizer' ) ? true : false,
 			theme = e.target.closest( '.theme' ),
 			allThemes = document.querySelectorAll( '.themes li:not( .add-new-theme )' ),
@@ -377,7 +382,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				dialog.querySelector( '.theme-name' ).textContent = theme.querySelector( '.theme-name' ).textContent;
 				dialog.querySelector( '.theme-version' ).textContent = _wpThemeSettings.l10n.version + ' ' + theme.dataset.version;
-				dialog.querySelector( '.theme-author' ).innerHTML = theme.querySelector( '.theme-author' ).innerHTML;
+				dialog.querySelector( '.theme-author' ).setHTML( theme.querySelector( '.theme-author' ).innerHTML );
 
 				// Notices
 				if ( theme.dataset.compatibleWp !== '1' && theme.dataset.compatiblePhp !== '1' ) {
@@ -390,7 +395,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				if ( theme.dataset.hasUpdate === '1' ) {
 					if ( theme.dataset.updateResponse === '1-1' ) {
-						dialog.querySelector( '.has-update span' ).innerHTML = theme.dataset.update;
+						dialog.querySelector( '.has-update span' ).setHTML( theme.dataset.update );
 						dialog.querySelector( '.has-update' ).removeAttribute( 'hidden' );
 					} else {
 						dialog.querySelector( '.incompat-update' ).removeAttribute( 'hidden' );
@@ -527,26 +532,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.target.closest( '.update-message' ).classList.add( 'updating-message' );
 			updateIndividualTheme( e.target.closest( 'li' ).dataset.id );
 
-		// Get further details about a theme when it has an update
-		} else if ( e.target.className.includes( 'open-plugin-details-modal' ) ) {
-			e.preventDefault();
-			topModal = document.createElement( 'dialog' );
-			topModal.id = 'theme-update-modal';
-			topModal.className = 'theme-overlay';
-			topModal.setAttribute( 'aria-label', e.target.getAttribute( 'aria-label' ) );
-			topModal.innerHTML = '<div class="theme-overlay">' +
-				'<div class="wp-clearfix">' +
-					'<div class="theme-header">' +
-						'<button id="theme-update-modal-close" class="close dashicons dashicons-no" autofocus>' +
-							'<span class="screen-reader-text">' + dialog.querySelector( '.close .screen-reader-text' ).textContent + '</span>' +
-						'</button>' +
-					'</div>' +
-					'<iframe src="' + e.target.href + '">' +
-					'</iframe>' +
-				'</div>';
-			document.body.append( topModal );
-			topModal.showModal();
-
 		// Close update modal
 		} else if ( e.target.id === 'theme-update-modal-close' ) {
 			document.getElementById( 'theme-update-modal' ).close();
@@ -601,7 +586,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} else if ( e.target.className === 'button drawer-toggle' || e.target.className === 'button-link edit-filters' ) {
 				document.body.classList.add( 'show-filters' );
 				document.body.classList.remove( 'filters-applied' );
-				document.querySelector( '.filtered-by .tags' ).innerHTML = '';
+				document.querySelector( '.filtered-by .tags' ).replaceChildren();
 				if ( document.querySelector( '.filter-drawer' ).checkVisibility() ) {
 					document.querySelector( '.drawer-toggle' ).setAttribute( 'aria-expanded', false );
 				} else {
@@ -658,10 +643,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 				}
 
+				container = document.createElement( 'div' );
+				container.setHTML( theme.dataset.ratings, {
+					sanitizer: {}
+				} );
+
 				previewDialog.querySelector( '.theme-name' ).textContent = theme.querySelector( '.theme-name' ).textContent;
 				previewDialog.querySelector( '.theme-by' ).textContent = theme.querySelector( '.theme-author' ).textContent;
 				previewDialog.querySelector( '.theme-screenshot img' ).src = theme.querySelector( '.theme-screenshot img' ).src;
-				previewDialog.querySelector( '.theme-rating' ).insertAdjacentHTML( 'afterbegin', theme.dataset.ratings );
+				previewDialog.querySelector( '.theme-rating' ).insertAdjacentHTML( 'afterbegin', container.innerHTML );
 				previewDialog.querySelector( '.num-ratings' ).textContent = '(' + theme.dataset.numRatings + ' ' + _wpThemeSettings.l10n.ratings + ')';
 				previewDialog.querySelector( '.num-ratings' ).href = 'https://wordpress.org/support/theme/' + theme.id + '/reviews/';
 				previewDialog.querySelector( '.theme-version' ).textContent = _wpThemeSettings.l10n.version + ' ' + theme.dataset.version;

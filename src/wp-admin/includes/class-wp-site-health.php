@@ -1369,6 +1369,58 @@ class WP_Site_Health {
 	}
 
 	/**
+	 * Tests if allow repair mode is enabled.
+	 *
+	 * When WP_ALLOW_REPAIR is enabled, unauthenticated access to repair and optimize tables is enabled.
+	 *
+	 * Users are prompted to remove this from wp-config.php, this test adds another layer of warning.
+	 *
+	 * @since CP-2.8.0
+	 *
+	 * @return array The test results.
+	 */
+	public function get_test_is_in_allow_repair_mode() {
+		$result = array(
+			'label'       => __( 'Your site is disabled for database repair' ),
+			'status'      => 'good',
+			'badge'       => array(
+				'label' => __( 'Security' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				__( 'Database repair mode is temporarily enabled in <code>wp-config.php</code> to repair and optimize database tables. The setting allows unauthenicated access so should be disbaled again at the earliest opportunity.' )
+			),
+			'actions'     => sprintf(
+				'<p><a href="%s" target="_blank" rel="noopener">%s <span class="screen-reader-text">%s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a></p>',
+				/* translators: Documentation explaining debugging in WordPress. */
+				esc_url( __( 'https://docs.classicpress.net/user-guides/editing-wp-config-php/' ) ),
+				__( 'Learn more about working with wp-config.php in ClassicPress.' ),
+				/* translators: Hidden accessibility text. */
+				__( '(opens in a new tab)' )
+			),
+			'test'        => 'is_in_allow_repair_mode',
+		);
+
+		if ( defined( 'WP_ALLOW_REPAIR' ) && WP_ALLOW_REPAIR ) {
+			$result['label'] = __( 'Your site is enabled for database repair' );
+
+			$result['status'] = 'critical';
+
+			$result['description'] .= sprintf(
+				'<p>%s</p>',
+				sprintf(
+					/* translators: %s: WP_DEBUG_LOG */
+					__( 'The value, %s, has been added to this website&#8217;s configuration file. The Database Repair feature is available to all visitors to your site.' ),
+					'<code>WP_ALLOW_REPAIR</code>'
+				)
+			);
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Tests if the site is serving content over HTTPS.
 	 *
 	 * Many sites have varying degrees of HTTPS support, the most common of which is sites that have it
@@ -2684,6 +2736,10 @@ class WP_Site_Health {
 				'debug_enabled'             => array(
 					'label' => __( 'Debugging enabled' ),
 					'test'  => 'is_in_debug_mode',
+				),
+				'repair_enabled'            => array(
+					'label' => __( 'Repair Mode enabled' ),
+					'test'  => 'is_in_allow_repair_mode',
 				),
 				'file_uploads'              => array(
 					'label' => __( 'File uploads' ),
