@@ -4894,8 +4894,9 @@ final class WP_Customize_Manager {
 				'ajax' => sanitize_url( admin_url( 'admin-ajax.php', 'relative' ) ),
 			),
 			'nonce' => array(
-				'refreshLock'  => wp_create_nonce( 'customize_refresh_lock' ),
-				'takeOverLock' => wp_create_nonce( 'customize_take_over_lock' ),
+				'refreshLock'           => wp_create_nonce( 'customize_refresh_lock' ),
+				'takeOverLock'          => wp_create_nonce( 'customize_take_over_lock' ),
+				'dismissAutosaveOrLock' => $this->get_nonces()['dismiss_autosave_or_lock'],
 			),
 			'user' => array(
 				'id' => get_current_user_id(),
