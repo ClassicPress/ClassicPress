@@ -517,47 +517,24 @@ module.exports.remove = removeAccents;
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
-/******/ 		// define getter/value functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
-/******/ 			if(Array.isArray(definition)) {
-/******/ 				var i = 0;
-/******/ 				while(i < definition.length) {
-/******/ 					var key = definition[i++];
-/******/ 					var binding = definition[i++];
-/******/ 					if(!__webpack_require__.o(exports, key)) {
-/******/ 						if(binding === 0) {
-/******/ 							Object.defineProperty(exports, key, { enumerable: true, value: definition[i++] });
-/******/ 						} else {
-/******/ 							Object.defineProperty(exports, key, { enumerable: true, get: binding });
-/******/ 						}
-/******/ 					} else if(binding === 0) { i++; }
-/******/ 				}
-/******/ 			} else {
-/******/ 				for(var key in definition) {
-/******/ 					if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 						Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 					}
-/******/ 				}
+/******/ 	// define getter/value functions for harmony exports
+/******/ 	__webpack_require__.d = function(exports, definition) {
+/******/ 		for(var key in definition) {
+/******/ 			if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 				Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 			}
-/******/ 		};
-/******/ 	}();
+/******/ 		}
+/******/ 	};
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); };
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
-/******/ 			if(Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	}();
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
 /******/ 	
 /************************************************************************/
 let __webpack_exports__ = {};
@@ -817,8 +794,15 @@ function setPath(object, path, value) {
 }
 function getQueryArgs(url) {
   return (getQueryString(url) || "").replace(/\+/g, "%20").split("&").reduce((accumulator, keyValue) => {
-    const [key, value = ""] = keyValue.split("=").filter(Boolean).map(safeDecodeURIComponent);
+    const separatorIndex = keyValue.indexOf("=");
+    const hasValue = separatorIndex !== -1;
+    const key = safeDecodeURIComponent(
+      hasValue ? keyValue.slice(0, separatorIndex) : keyValue
+    );
     if (key) {
+      const value = hasValue ? safeDecodeURIComponent(
+        keyValue.slice(separatorIndex + 1)
+      ) : "";
       const segments = key.replace(/\]/g, "").split("[");
       setPath(accumulator, segments, value);
     }
@@ -936,7 +920,11 @@ function filterURLForDisplay(url, maxLength = null) {
     file.slice(index + 1)
   ];
   const truncatedFile = fileName.slice(-3) + "." + extension;
-  return file.slice(0, maxLength - truncatedFile.length - 1) + "…" + truncatedFile;
+  return (
+    // A negative end would be read as an offset from the end of the string,
+    // keeping most of the file name and returning more than `maxLength`.
+    file.slice(0, Math.max(0, maxLength - truncatedFile.length - 1)) + "…" + truncatedFile
+  );
 }
 
 
@@ -972,14 +960,18 @@ function getFilename(url) {
 
 ;// ./node_modules/@wordpress/url/build-module/normalize-path.mjs
 // packages/url/src/normalize-path.ts
+
 function normalizePath(path) {
-  const split = path.split("?");
-  const query = split[1];
-  const base = split[0];
+  const separatorIndex = path.indexOf("?");
+  if (separatorIndex === -1) {
+    return path;
+  }
+  const base = path.slice(0, separatorIndex);
+  const query = path.slice(separatorIndex + 1);
   if (!query) {
     return base;
   }
-  return base + "?" + query.split("&").map((entry) => entry.split("=")).map((pair) => pair.map(decodeURIComponent)).sort((a, b) => a[0].localeCompare(b[0])).map((pair) => pair.map(encodeURIComponent)).map((pair) => pair.join("=")).join("&");
+  return base + "?" + query.split("&").map((entry) => entry.split("=")).map((pair) => pair.map(safeDecodeURIComponent)).sort((a, b) => a[0].localeCompare(b[0])).map((pair) => pair.map(encodeURIComponent)).map((pair) => pair.join("=")).join("&");
 }
 
 
