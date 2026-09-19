@@ -2337,6 +2337,469 @@ details summary > * {
 	font-style: italic;
 }
 
+/* ----------------------------------------------------------------------------
+   22.0 - Media Modal Dialog
+   Used for custom background and other media selection
+---------------------------------------------------------------------------- */
+
+/* Modal dialog base */
+.admin-media-modal {
+	width: 95%;
+	height: 90%;
+}
+
+.admin-media-modal::backdrop {
+	background: #000;
+	opacity: 0.7;
+}
+
+/* Modal container - flex layout for sidebar + main */
+.admin-modal-container {
+	display: flex;
+	height: 70vh;
+}
+
+/* Left sidebar */
+.admin-modal-left-sidebar {
+	width: 200px;
+	min-width: 200px;
+	margin: -1em 0 -1em -1em;
+	background: #f6f7f7;
+	border-right: 1px solid #c3c4c7;
+}
+
+.admin-modal-left-sticky {
+	position: sticky;
+	top: 1em;
+}
+
+.admin-modal-left-heading {
+	font-size: 13px;
+	margin-left: 1.5em;
+}
+
+.admin-modal-left-tablist {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5em;
+}
+
+.admin-modal-item {
+	text-align: left;
+	width: 100%;
+	border: 0;
+	margin: 0;
+	padding: 8px 20px;
+	font-size: 14px;
+	background: 0 0;
+	color: #2271b1;
+	cursor: pointer;
+}
+
+.admin-modal-item:hover,
+.admin-modal-item:focus {
+	background: #f0f0f1;
+	border-color: #a7aaad;
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+.admin-modal-item.active {
+	color: #1d2327;
+	font-weight: 600;
+	pointer-events: none;
+}
+
+.admin-modal-left-tablist .separator {
+	height: 1px;
+	background: #ddd;
+	margin: 0.5em 0;
+}
+
+/* Main modal area */
+.admin-modal-main,
+.widget-modal-main {
+	flex-grow: 1;
+}
+
+.admin-modal-body {
+	height: 100%;
+}
+
+/* Header */
+.admin-modal-header,
+.widget-modal-header {
+	background: #fff;
+	border-bottom: 1px solid #dcdcde;
+}
+
+.admin-modal-headings,
+.widget-modal-headings {
+	display: flex;
+	justify-content: space-between;
+	margin: 0 1em;
+}
+
+.admin-modal-title,
+.widget-modal-title {
+	margin-top: 1em;
+}
+
+.admin-modal-title h2,
+.widget-modal-title h2 {
+	margin: 0;
+	font-size: 22px;
+	line-height: 1.2;
+}
+
+.admin-modal-details {
+	margin-left: 1em;
+}
+
+.admin-modal-details summary {
+	cursor: pointer;
+	padding: 0.5em 1em;
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 0.9em;
+}
+
+.admin-modal-details summary:hover,
+.admin-modal-details summary:focus {
+	background: #f0f0f1;
+}
+
+.admin-modal-close,
+.widget-modal-close {
+	width: 46px;
+	height: 46px;
+	color: #646970;
+	cursor: pointer;
+	background: #fff;
+	border: none;
+}
+
+.admin-modal-close:hover,
+.admin-modal-close:focus,
+#cp-cropper-close:hover,
+#cp-cropper-close:focus {
+	background: #f0f0f1;
+	color: #2271b1;
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+.admin-modal-icon {
+	pointer-events: none;
+}
+
+.admin-modal-icon::before,
+.widget-modal-icon::before {
+	content: '\f158';
+	font: normal 20px/1 dashicons;
+	vertical-align: middle;
+}
+
+.admin-modal-header-buttons {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 0.5em;
+}
+
+.admin-modal-router {
+	padding: 0 6px;
+	margin: 0 0 -1px;
+}
+
+.admin-modal-router .media-menu-item {
+	padding: 8px 10px 9px;
+	font-size: 14px;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+}
+
+.admin-modal-router .media-menu-item.active {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-bottom: none;
+}
+
+.admin-modal-pages {
+	margin-right: 1em;
+}
+
+.admin-modal-content,
+.widget-modal-content {
+	display: flex;
+	padding-left: 1em;
+	height: 100%;
+}
+
+.admin-modal-tabpanel {
+	flex-grow: 1;
+}
+
+.media-library-select-section {
+	position: sticky;
+	z-index: 900;
+	background: #fff;
+	padding: 0.75em 1em 0 0;
+}
+
+.media-library-select-div {
+	display: flex;
+	justify-content: space-between;
+}
+
+.admin-modal-search-label {
+	margin: 0 0.2em 0.4em 0;
+	vertical-align: baseline;
+	display: block;
+}
+
+.admin-modal-filter-heading {
+	margin: 0 0 0.25em;
+	font-size: 13px;
+}
+
+/* Media grid */
+.admin-modal-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+	margin-bottom: 20px;
+}
+
+.admin-modal-grid li {
+	cursor: pointer;
+	margin-bottom: 0;
+	position: relative;
+	padding: 10px;
+}
+
+.admin-modal-grid .media-item:hover,
+.admin-modal-grid .media-item:focus {
+	border-color: #c3c4c7;
+	outline: none;
+}
+
+.admin-modal-grid img {
+	width: 100%;
+	height: 100%;
+	margin: auto;
+	object-fit: cover;
+}
+
+.admin-modal-grid .media-thumbnail {
+	position: relative;
+	aspect-ratio: 1;
+	overflow: hidden;
+	text-align: center;
+	background: #f6f7f7;
+}
+
+.admin-modal-grid .media-item.selected {
+	box-shadow: inset 0 0 0 3px #fff, inset 0 0 0 7px #2271b1;
+}
+
+.admin-modal-grid .media-item .check {
+	display: none;
+	height: 24px;
+	width: 24px;
+	padding: 0;
+	border: 0;
+	top: 5px;
+	right: 5px;
+	position: absolute;
+	z-index: 10;
+	outline: none;
+	cursor: pointer;
+	background-color: #2271b1;
+	box-shadow: 0 0 0 1px #fff, 0 0 0 2px #2271b1;
+}
+
+.admin-modal-grid .media-item .check::before {
+	content: "\2713";
+	color: #fff;
+	font-size: 20px;
+	font-weight: 600;
+}
+
+.admin-modal-grid .media-item .check:hover::before {
+	content: "\2014";
+}
+
+.admin-modal-attachment-info {
+	padding-bottom: 1em;
+	margin-bottom: 1em;
+	border-bottom: 1px solid #dcdcde;
+}
+
+.admin-modal-descriptions .setting,
+.admin-modal-display-settings .setting,
+#admin-modal-content .column-settings .setting {
+	display: flex;
+	justify-content: flex-end;
+	margin-bottom: 1em;
+}
+
+.admin-modal-descriptions label,
+.admin-modal-display-settings label {
+	padding: 8px 1em 0 0;
+}
+
+.admin-modal-attachment-info .thumbnail {
+	width: 38%;
+	overflow: hidden;
+	display: inline-block;
+}
+
+/* Insert from URL panel */
+#insert-from-url-panel {
+	padding: 1em;
+}
+
+#insert-from-url-panel input[type="url"] {
+	width: 100%;
+	max-width: 500px;
+	padding: 0.5em;
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+	font-size: 1em;
+}
+
+#insert-from-url-panel input[type="url"]:focus {
+	border-color: #2271b1;
+	box-shadow: 0 0 0 1px #2271b1;
+	outline: 2px solid transparent;
+}
+
+.admin-modal-right-sidebar {
+	padding: 1em;
+	background: #f6f7f7;
+	border-left: 1px solid #c3c4c7;
+	width: 267px;
+	min-width: 267px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	overflow: auto;
+}
+
+.admin-modal-attachment-info {
+	padding-bottom: 1em;
+	margin-bottom: 1em;
+	border-bottom: 1px solid #dcdcde;
+}
+
+.admin-modal-attachment-info .thumbnail {
+	width: 38%;
+	overflow: hidden;
+	display: inline-block;
+}
+
+.admin-modal-attachment-info .thumbnail img {
+	max-width: 100%;
+	max-height: 500px;
+	margin: auto;
+}
+
+.admin-modal-attachment-info .details {
+	width: 50%;
+	padding-left: 1em;
+	display: inline-block;
+	box-sizing: border-box;
+}
+
+.admin-modal-right-sidebar .button-link.delete-attachment {
+	color: #d63638;
+}
+
+.admin-modal-descriptions .copy-to-clipboard-container {
+	justify-content: flex-end;
+}
+
+.uploader-inline {
+	width: 100%;
+}
+
+#filepond,
+.admin-media-modal .filepond--drop-label {
+	height: 100%;
+}
+
+.filepond--label-action {
+	display: inline-block;
+	height: 100%;
+}
+
+.filepond--credits {
+	display: none;
+}
+
+/* Footer */
+.admin-modal-footer,
+.widget-modal-footer {
+	position: sticky;
+	display: flex;
+	justify-content: space-between;
+	bottom: -1em;
+	height: 60px;
+	z-index: 999;
+	background: #fff;
+	border-top: 1px solid #dcdcde;
+}
+
+.admin-modal-footer-buttons,
+.widget-modal-footer-buttons {
+	padding-right: 1em;
+	text-align: right;
+}
+
+.admin-modal-footer-selection {
+	display: flex;
+	justify-content: flex-start;
+	visibility: hidden;
+}
+
+#admin-modal-select-button {
+	margin: 1em 0;
+}
+
+/* Responsive - hide sidebar on narrow screens */
+@media ( max-width: 782px ) {
+	.admin-modal-container {
+		flex-direction: column;
+	}
+
+	.admin-modal-left-sidebar {
+		width: 100%;
+		border-right: none;
+		border-bottom: 1px solid #ddd;
+	}
+
+	.admin-modal-left-tablist {
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	.media-menu-item {
+		width: auto;
+		flex: 1;
+		min-width: 120px;
+		text-align: center;
+	}
+
+	.admin-modal-details[hidden] {
+		display: none;
+	}
+
+	.admin-modal-details:not( [hidden] ) {
+		display: block;
+	}
+}
+
 /*------------------------------------------------------------------------------
   25.0 - Tabbed Admin Screen Interface (Experimental)
 ------------------------------------------------------------------------------*/
