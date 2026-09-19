@@ -441,16 +441,38 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			data.append( 'action', 'customize_dismiss_autosave_or_lock' );
 			data.append( 'nonce', lockSettings.nonce.dismissAutosaveOrLock );
 			data.append( 'wp_customize', 'on' );
+			data.append( 'dismiss_lock', 'true' );
 			data.append( 'dismiss_autosave', 'true' );
-			data.append( 'customize_theme', wpCustomizeControlsL10n.theme );
-			data.append( 'customize_changeset_uuid', document.getElementById( 'customizechangesetuuid' ).value );
 
 			fetch( ajaxurl, {
 				method: 'POST',
 				body: data,
 				credentials: 'same-origin'
-			} ).catch( function () {
-				// Silently ignore failure — notice is already gone from DOM
+			} )
+			.then( function( response ) {
+				if ( response.ok ) {
+					return response.json(); // no errors
+				}
+				throw new Error( response.status );
+			} )
+			.then( function( result ) {
+				if ( ! result || ! result.success ) {
+					console.error( 'Autosave dismiss failed:', result );
+					return;
+				}
+
+				// Stop further autosaves so a new revision isn't created immediately
+				if ( typeof autosaveInterval !== 'undefined' ) {
+					window.clearInterval( autosaveInterval );
+				}
+
+				saveButton.disabled = true;
+				saveButton.textContent = _wpCustomizeControlsL10n.publish;
+				publishSettings.style.display = 'none';
+				publishSettings.disabled = true;
+			} )
+			.catch( function( error ) {
+				console.log( 'Autosave dismiss request failed:', error );
 			} );
 		} );
 
