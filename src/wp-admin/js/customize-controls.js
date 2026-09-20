@@ -168,14 +168,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	// Delete redundant query args from browser URL
-	if ( queryParams.get( 'url' ) ) {
-		queryParams.delete( 'url' );
+	if ( queryParams.get( 'discarded' ) ) {
+		queryParams.delete( 'discarded' );
+	}
+
+	if ( queryParams.get( 'customize_changeset_uuid' ) ) {
+		hasAutosaveToRestore = false;
+		queryParams.delete( 'customize_changeset_uuid' );
+
 		newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
 		history.replaceState( null, '', newUrl );
 	}
 
-	if ( queryParams.get( 'discarded' ) ) {
-		queryParams.delete( 'discarded' );
+	if ( queryParams.get( 'url' ) ) {
+		queryParams.delete( 'url' );
+		newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
+		history.replaceState( null, '', newUrl );
 	}
 
 	if ( queryParams.get( 'theme' ) ) {
@@ -424,7 +432,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} );
 
 	if ( hasAutosaveToRestore ) {
-		var restoreUrl = window.location.href.split( '?' )[0] + '?customizeautosaved=1',
+		var restoreUrl = window.location.href.split( '?' )[0] + '?customize_changeset_uuid=' + encodeURIComponent( document.getElementById( 'customize_changeset_uuid' ).value ),
 			noticeData = {
 				type: 'info',
 				code: 'autosave_available',
