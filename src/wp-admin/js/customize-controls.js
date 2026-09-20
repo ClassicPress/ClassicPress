@@ -3214,7 +3214,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 *
 	 * Reused by both the publish handler and the autosave timer.
 	 *
-	 * @return {Object} submittedChanges - The changeset data object ready for JSON.stringify.
+	 * @return {Object} submittedChanges - The changeset data object.
 	 */
 	function buildSubmittedChangesetData() {
 		var entries = Object.entries( updatedControls ),
@@ -3301,7 +3301,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		return submittedChanges;
 	}
 
-
+	/**
+	 * Trigger an autosave after 60 seconds.
+	 *
+	 * @return {void}
+	 */
 	function triggerAutosave() {
 		let submittedChanges, formData;
 
