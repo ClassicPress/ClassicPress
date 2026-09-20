@@ -2353,7 +2353,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function buildNotification( data ) {
 		var btn = document.createElement( 'button' ),
 			msg = document.createElement( 'div' ),
-			li = document.createElement( 'li' );
+			li = document.createElement( 'li' ),
+			span = document.createElement( 'span' );
 
 		li.className = [
 			'notice',
@@ -2367,16 +2368,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		msg.className = 'notification-message';
 		msg.innerHTML = data.message || data.code || '';
-		li.appendChild( msg );
+		li.append( msg );
 
 		if ( data.dismissible ) {
+			span.className = 'screen-reader-text';
+			span.textContent = _wpCustomizeControlsL10n.dismiss;
 			btn.type = 'button';
 			btn.className = 'notice-dismiss';
-			btn.innerHTML = '<span class="screen-reader-text">' + _wpCustomizeControlsL10n.dismiss + '</span>';
+			btn.append( span );
 			btn.addEventListener( 'click', function() {
 				li.remove();
 			} );
-			li.appendChild( btn );
+			li.append( btn );
 		}
 
 		return li;
