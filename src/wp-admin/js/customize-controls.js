@@ -435,7 +435,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			notificationsUl = document.getElementById( 'customize-notifications-area' ).querySelector( 'ul' );
 
 		// Wire dismiss button to actually call the dismiss handler
-		noticeLi.querySelector( '.notice-dismiss' ).addEventListener( 'click', function () {
+		noticeLi.querySelector( '.notice-dismiss' ).addEventListener( 'click', function() {
 			var data = new URLSearchParams();
 
 			data.append( 'action', 'customize_dismiss_autosave_or_lock' );
