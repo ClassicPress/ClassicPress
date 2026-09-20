@@ -43,19 +43,19 @@ $changeset_id = $wp_customize->changeset_uuid();
 $changeset_post_id = $wp_customize->changeset_post_id();
 
 if ( $changeset_post_id ) {
-    $autosave = wp_get_post_autosave( $changeset_post_id, get_current_user_id() );
+	$autosave = wp_get_post_autosave( $changeset_post_id, get_current_user_id() );
 
-    if ( $autosave && 'revision' === $autosave->post_type ) {
-        $data = json_decode( $autosave->post_content, true );
+	if ( $autosave && 'revision' === $autosave->post_type ) {
+		$data = json_decode( $autosave->post_content, true );
 
-        if ( is_array( $data ) ) {
-            foreach ( $data as $setting_id => $setting_data ) {
-                if ( is_array( $setting_data ) && isset( $setting_data['value'] ) ) {
-                    $wp_customize->set_post_value( $setting_id, $setting_data['value'] );
-                }
-            }
-        }
-    }
+		if ( is_array( $data ) ) {
+			foreach ( $data as $setting_id => $setting_data ) {
+				if ( is_array( $setting_data ) && isset( $setting_data['value'] ) ) {
+					$wp_customize->set_post_value( $setting_id, $setting_data['value'] );
+				}
+			}
+		}
+	}
 }
 
 // Preview theme
