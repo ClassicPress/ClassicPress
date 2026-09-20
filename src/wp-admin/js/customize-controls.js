@@ -436,7 +436,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			noticeData = {
 				type: 'info',
 				code: 'autosave_available',
-				message: wpCustomizeControlsL10n.autosaveNotice.replace( '%s', restoreUrl ),
+				message: _wpCustomizeControlsL10n.autosaveNotice.replace( '%s', restoreUrl ),
 				dismissible: true
 			},
 			noticeLi = buildNotification( noticeData ),
@@ -2118,7 +2118,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			navMenuNegatives = [], // an array because we need it to be iterable
 			navMenuLocations = [],
 			navMenuItems = [],
-			postsToPublish = [],
 			formData = new FormData(),
 			updateData = new FormData(),
 			previewLink = document.getElementById( 'preview-link' ),
@@ -3228,12 +3227,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {Object} submittedChanges - The changeset data object.
 	 */
 	function buildSubmittedChangesetData() {
-		var entries = Object.entries( updatedControls ),
-			navMenuChanges = {},
-			submittedChanges = {},
-			navMenuNegatives = [], // an array because we need it to be iterable
-			navMenuLocations = [],
-			navMenuItems = [];
+		var submittedChanges = {};
 
 		// Prepare changeset object
 		Object.keys( updatedControls ).forEach( function( settingId ) {
