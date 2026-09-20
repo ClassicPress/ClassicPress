@@ -3343,7 +3343,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( ! result.success ) {
 				console.warn( 'Autosave failed:', result.data || result.message );
 			}
-			// Optionally update the UUID if the server rolled it (unlikely for autosave, but core handles it)
+			// Update the UUID if the server rolled it
 			if ( result.data && result.data.next_changeset_uuid ) {
 				document.getElementById( 'customize_changeset_uuid' ).value = result.data.next_changeset_uuid;
 			}
