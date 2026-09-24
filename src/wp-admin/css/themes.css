@@ -1213,7 +1213,7 @@ p.no-themes-local {
 
 .appearance_page_custom-header .random-header {
 	clear: both;
-	margin: 0 20px 20px 0;
+	margin-top: 10px;
 	vertical-align: middle;
 }
 
@@ -1224,6 +1224,11 @@ p.no-themes-local {
 
 .appearance_page_custom-header .available-headers label img {
 	vertical-align: middle;
+	max-width: calc(100% - 26px);
+}
+
+.appearance_page_custom-header .available-headers {
+	margin-top: 10px;
 }
 
 
@@ -1900,6 +1905,10 @@ body.full-overlay-active {
 	.upload-theme .wp-upload-form,
 	.upload-plugin .wp-upload-form {
 		display: block;
+	}
+
+	.appearance_page_custom-header .available-headers label img {
+		max-width: calc(100% - 36px);
 	}
 }
 
