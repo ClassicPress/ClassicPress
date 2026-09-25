@@ -124,8 +124,10 @@ class WP_Image_Editor_Imagick extends WP_Image_Editor {
 			return false;
 		}
 
-		// setIteratorIndex is optional unless mime is an animated format.
-		// Here, we just say no if you are missing it and aren't loading a jpeg.
+		/*
+		 * setIteratorIndex is optional unless mime is an animated format.
+		 * Here, we just say no if you are missing it and aren't loading a jpeg.
+		 */
 		if ( ! method_exists( 'Imagick', 'setIteratorIndex' ) && 'image/jpeg' !== $mime_type ) {
 				return false;
 		}
@@ -828,8 +830,10 @@ class WP_Image_Editor_Imagick extends WP_Image_Editor {
 			$this->image->setImagePage( $src_w, $src_h, 0, 0 );
 
 			if ( $dst_w || $dst_h ) {
-				// If destination width/height isn't specified,
-				// use same as width/height from source.
+				/*
+				 * If destination width/height isn't specified,
+				 * use same as width/height from source.
+				 */
 				if ( ! $dst_w ) {
 					$dst_w = $src_w;
 				}
@@ -1201,8 +1205,10 @@ class WP_Image_Editor_Imagick extends WP_Image_Editor {
 	 */
 	protected function pdf_setup() {
 		try {
-			// By default, PDFs are rendered in a very low resolution.
-			// We want the thumbnail to be readable, so increase the rendering DPI.
+			/*
+			 * By default, PDFs are rendered in a very low resolution.
+			 * We want the thumbnail to be readable, so increase the rendering DPI.
+			 */
 			$this->image->setResolution( 128, 128 );
 
 			// Only load the first page.
@@ -1231,6 +1237,7 @@ class WP_Image_Editor_Imagick extends WP_Image_Editor {
 
 		foreach ( array( 'true', 'false' ) as $use_cropbox ) {
 			try {
+<<<<<<< HEAD
 				/**
 				 * When generating thumbnails from cropped PDF pages, Imagemagick uses the uncropped
 				 * area (resulting in unnecessary whitespace) unless the following option is set.
@@ -1240,6 +1247,22 @@ class WP_Image_Editor_Imagick extends WP_Image_Editor {
 				 * @ticket 48853
 				 */
 				$this->image->setOption( 'pdf:use-cropbox', $use_cropbox );
+=======
+			/*
+			 * When generating thumbnails from cropped PDF pages, Imagemagick uses the uncropped
+			 * area (resulting in unnecessary whitespace) unless the following option is set.
+			 */
+			$this->image->setOption( 'pdf:use-cropbox', true );
+
+			/*
+			 * Reading image after Imagick instantiation because `setResolution`
+			 * only applies correctly before the image is read.
+			 */
+			$this->image->readImage( $filename );
+		} catch ( Exception $e ) {
+			// Attempt to run `gs` without the `use-cropbox` option. See #48853.
+			$this->image->setOption( 'pdf:use-cropbox', false );
+>>>>>>> bf911a96a8 (Docs: Replace multiple single line comments with multi-line comments.)
 
 				/*
 				 * Reading image after Imagick instantiation because `setResolution`
