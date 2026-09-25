@@ -824,11 +824,7 @@ function load_template( $_template_file, $load_once = true, $args = array() ) {
 	}
 
 	if ( isset( $s ) ) {
-<<<<<<< HEAD
-		$s = esc_attr( $s );
-=======
 		$s = esc_attr( (string) $s );
->>>>>>> 558d0ff66d (Code Quality: Resolve the `isset.variable` PHPStan errors.)
 	}
 
 	/**
