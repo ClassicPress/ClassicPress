@@ -1379,7 +1379,7 @@ function verify_file_signature( $filename, $signatures, $filename_for_errors = f
 		);
 	}
 
-	// Check for a edge-case affecting PHP Maths abilities.
+	// Check for an edge-case affecting PHP Maths abilities.
 	if (
 		! extension_loaded( 'sodium' ) &&
 		in_array( PHP_VERSION_ID, array( 70200, 70201, 70202 ), true ) &&
