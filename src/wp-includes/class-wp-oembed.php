@@ -739,7 +739,7 @@ class WP_oEmbed {
 		 *
 		 * @since 2.9.0
 		 *
-		 * @param string $return The returned oEmbed HTML.
+		 * @param string|false $return The returned oEmbed HTML, or false on failure.
 		 * @param object $data   A data object result from an oEmbed provider.
 		 * @param string $url    The URL of the content to be embedded.
 		 */
@@ -752,10 +752,10 @@ class WP_oEmbed {
 	 * @since 2.9.0 as strip_scribd_newlines()
 	 * @since 3.0.0
 	 *
-	 * @param string $html Existing HTML.
+	 * @param string|false $html Existing HTML.
 	 * @param object $data Data object from WP_oEmbed::data2html()
 	 * @param string $url The original URL passed to oEmbed.
-	 * @return string Possibly modified $html
+	 * @return string|false Possibly modified $html.
 	 */
 	public function _strip_newlines( $html, $data, $url ) {
 		if ( ! str_contains( $html, "\n" ) ) {
