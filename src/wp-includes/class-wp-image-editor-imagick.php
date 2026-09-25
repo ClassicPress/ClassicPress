@@ -1237,7 +1237,6 @@ class WP_Image_Editor_Imagick extends WP_Image_Editor {
 
 		foreach ( array( 'true', 'false' ) as $use_cropbox ) {
 			try {
-<<<<<<< HEAD
 				/**
 				 * When generating thumbnails from cropped PDF pages, Imagemagick uses the uncropped
 				 * area (resulting in unnecessary whitespace) unless the following option is set.
@@ -1247,22 +1246,6 @@ class WP_Image_Editor_Imagick extends WP_Image_Editor {
 				 * @ticket 48853
 				 */
 				$this->image->setOption( 'pdf:use-cropbox', $use_cropbox );
-=======
-			/*
-			 * When generating thumbnails from cropped PDF pages, Imagemagick uses the uncropped
-			 * area (resulting in unnecessary whitespace) unless the following option is set.
-			 */
-			$this->image->setOption( 'pdf:use-cropbox', true );
-
-			/*
-			 * Reading image after Imagick instantiation because `setResolution`
-			 * only applies correctly before the image is read.
-			 */
-			$this->image->readImage( $filename );
-		} catch ( Exception $e ) {
-			// Attempt to run `gs` without the `use-cropbox` option. See #48853.
-			$this->image->setOption( 'pdf:use-cropbox', false );
->>>>>>> bf911a96a8 (Docs: Replace multiple single line comments with multi-line comments.)
 
 				/*
 				 * Reading image after Imagick instantiation because `setResolution`
