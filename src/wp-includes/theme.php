@@ -3727,12 +3727,7 @@ function wp_customize_url( $stylesheet = '' ) {
 function wp_customize_support_script() {
 	$admin_origin = parse_url( admin_url() );
 	$home_origin  = parse_url( home_url() );
-<<<<<<< HEAD
-	$cross_domain = ( strtolower( $admin_origin['host'] ) != strtolower( $home_origin['host'] ) );
-=======
 	$cross_domain = ( strtolower( $admin_origin['host'] ) !== strtolower( $home_origin['host'] ) );
-	$type_attr    = current_theme_supports( 'html5', 'script' ) ? '' : ' type="text/javascript"';
->>>>>>> c2f262971c (Coding Standards: Use strict comparison where `strtolower()` is involved.)
 	?>
 	<script>
 		(function() {
