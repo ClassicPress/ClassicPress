@@ -4845,17 +4845,12 @@ function wp_enqueue_media( $args = array() ) {
 
 	$strings['settings'] = $settings;
 
-<<<<<<< HEAD
 	wp_enqueue_script( 'jquery-ui-sortable' );
 
-	// Ensure we enqueue media-editor first, that way media-views
-	// is registered internally before we try to localize it. See #24724.
-=======
 	/*
 	 * Ensure we enqueue media-editor first, that way media-views
 	 * is registered internally before we try to localize it. See #24724.
 	 */
->>>>>>> 3666c0e31b (Docs: Replace multiple single line comments with multi-line comments.)
 	wp_enqueue_script( 'media-editor' );
 	wp_localize_script( 'media-views', '_wpMediaViewsL10n', $strings );
 
