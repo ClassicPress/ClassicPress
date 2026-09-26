@@ -937,12 +937,8 @@ EOF;
 	 * @ticket 48376
 	 * @ticket 55966
 	 * @ticket 56122
-<<<<<<< HEAD
-	 * @dataProvider data_test_safecss_filter_attr
-=======
 	 * @ticket 58551
 	 * @dataProvider data_safecss_filter_attr
->>>>>>> 2b7f865417 (KSES: Add support for CSS `repeat()` function.)
 	 *
 	 * @param string $css      A string of CSS rules.
 	 * @param string $expected Expected string of CSS rules.
