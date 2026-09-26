@@ -2663,6 +2663,7 @@ function safecss_filter_attr( $css, $deprecated = '' ) {
  * @since 3.5.0
  * @since 5.0.0 Added support for `data-*` wildcard attributes.
  * @since 6.0.0 Added `dir`, `lang`, and `xml:lang` to global attributes.
+ * @since 6.3.0 Added `aria-controls`, `aria-current`, and `aria-expanded` attributes.
  *
  * @access private
  * @ignore
@@ -2672,6 +2673,8 @@ function safecss_filter_attr( $css, $deprecated = '' ) {
  */
 function _wp_add_global_attributes( $value ) {
 	$global_attributes = array(
+		'aria-controls'    => true,
+		'aria-current'     => true,
 		'aria-describedby' => true,
 		'aria-details'     => true,
 		'aria-expanded'    => true,
