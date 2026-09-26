@@ -1774,6 +1774,7 @@ function upgrade_330() {
 							$_sidebars_widgets[ $index ][ $i ] = $id;
 							continue;
 						}
+
 						$id = sanitize_title( $name );
 						if ( isset( $wp_registered_widgets[ $id ] ) ) {
 							$_sidebars_widgets[ $index ][ $i ] = $id;
@@ -1783,12 +1784,14 @@ function upgrade_330() {
 						$found = false;
 
 						foreach ( $wp_registered_widgets as $widget_id => $widget ) {
-							if ( strtolower( $widget['name'] ) == strtolower( $name ) ) {
+							if ( strtolower( $widget['name'] ) === strtolower( $name ) ) {
 								$_sidebars_widgets[ $index ][ $i ] = $widget['id'];
+
 								$found                             = true;
 								break;
-							} elseif ( sanitize_title( $widget['name'] ) == sanitize_title( $name ) ) {
+							} elseif ( sanitize_title( $widget['name'] ) === sanitize_title( $name ) ) {
 								$_sidebars_widgets[ $index ][ $i ] = $widget['id'];
+
 								$found                             = true;
 								break;
 							}
