@@ -13,46 +13,47 @@ _wpUpdatesSettings, _wpThemeSettings */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	window.newMenuItemIDs = window.newMenuItemIDs || [];
-	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
+
+	const dialog = document.getElementById( 'widget-modal' ),
+		customizerControls = [...document.getElementById( 'customize-theme-controls' ).children],
+		form = document.querySelector( 'form' ),
+		saveButton = document.getElementById( 'save' ),
+		publishSettings = document.getElementById( 'publish-settings' ),
+		publishSettingsPanel = document.getElementById( 'sub-accordion-section-publish_settings' ),
+		menuToEdit = document.getElementById( 'menu-to-edit' ),
+		availableMenuItems = document.getElementById( 'available-menu-items' ),
+		previewFrame = document.getElementById( 'customize-preview' ),
+		availableWidgets = document.getElementById( 'widgets-left' ),
+		devicesWrapper = document.querySelector( '.devices' ),
+		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
+		section = document.getElementById( 'sub-accordion-section-custom_css' ),
+		colorSchemeInputs = form.querySelectorAll( 'input[name="_customize-radio-colorscheme"]' ),
+		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' );
+
+	let addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver,
 		i = 1,
-		customizerControls = [...document.getElementById( 'customize-theme-controls' ).children],
 		{ FilePond } = window, // import FilePond
 		cropContext = false,
 		newFrontPageIds = [],
 		newPostsPageIds = [],
-		dialog = document.getElementById( 'widget-modal' ),
 		installedThemesHTML = document.querySelector( '.themes')?.innerHTML,
 		reducedMotionMediaQuery = window.matchMedia( '(prefers-reduced-motion: reduce)' ),
 		isReducedMotion = reducedMotionMediaQuery.matches,
-		form = document.querySelector( 'form' ),
 		inputs = form.querySelectorAll( 'input, select, textarea' ),
 		lockableControls = form.querySelectorAll( 'input, select, textarea, button' ),
 		hyperlinks = document.querySelectorAll( 'a' ),
-		saveButton = form.querySelector( '#save' ),
-		publishSettings = form.querySelector( '#publish-settings' ),
-		publishSettingsPanel = document.getElementById( 'sub-accordion-section-publish_settings' ),
 		lockSettings = window._wpCustomizeSettings || {},
 		lockNotice = document.getElementById( 'customize-lock-notice' ),
 		lockRefreshTimer = null,
-		devicesWrapper = document.querySelector( '.devices' ),
-		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
-		previewFrame = document.getElementById( 'customize-preview' ),
 		queryParams = new URLSearchParams( window.location.search ),
 		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
-		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		addWidgetButtons = document.querySelectorAll( '.add-new-widget' ),
 		newMenuItemIDs = window.newMenuItemIDs,
-		availableWidgets = document.getElementById( 'widgets-left' ),
-		menuToEdit = document.getElementById( 'menu-to-edit' ),
 		hash = window.location.hash.replace( '#', '' ),
 		targetEl = document.getElementById( hash ),
-		section = document.getElementById( 'sub-accordion-section-custom_css' ),
 		discardingChangeset = false,
 		changesetStatus = window._wpCustomizeChangesetStatus || 'publish';
-
-	const colorSchemeInputs = form.querySelectorAll( 'input[name="_customize-radio-colorscheme"]' ),
-		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' );
 
 	// Go direct to appropriate Customizer panel if its hash is specified in the URL
 	if ( hash === 'menu-to-edit' ) {
@@ -169,7 +170,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	if ( queryParams.get( 'url' ) ) {
 		queryParams.delete( 'url' );
 		newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
-		history.replaceState( null, '', newUrl );
+		history.replaceState( null, '', encodeURI( newUrl ) );
 	}
 
 	if ( queryParams.get( 'discarded' ) ) {
@@ -178,11 +179,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	if ( queryParams.get( 'theme' ) ) {
 		if ( queryParams.get( 'theme' ) === _wpCustomizeControlsL10n.activeTheme ) { // active theme
-			history.replaceState( null, '', window.location.pathname );
+			history.replaceState( null, '', encodeURI( window.location.pathname ) );
 		} else {
 			queryParams.delete( 'return' );
 			newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
-			history.replaceState( null, '', newUrl );
+			history.replaceState( null, '', encodeURI( newUrl ) );
 			saveButton.disabled = false;
 			saveButton.textContent = _wpCustomizeControlsL10n.activate;
 		}
@@ -192,7 +193,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	} else {
 		queryParams.delete( 'return' );
 		newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
-		history.replaceState( null, '', newUrl );
+		history.replaceState( null, '', encodeURI( newUrl ) );
 	}
 
 	document.getElementById( 'customize-preview-loading' ).classList.add( 'hidden' );
@@ -855,11 +856,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} )
 		.then( function( result ) {
 			if ( i === 1 ) {
-				themesGrid.innerHTML = ''; // clear the current grid
+				themesGrid.replaceChildren(); // clear the current grid
 			}
 
 			// Populate grid with new items
-			themesGrid.insertAdjacentHTML( 'beforeend', convertThemeLinksToButtons( result.data.html ) );
+			themesGrid.append( convertThemeLinksToButtons( result.data.html ) );
 			orgThemes = document.querySelectorAll( '.wp-org .themes li' );
 			orgThemes.forEach( function( theme ) {
 				theme.style.marginRight = '2%';
@@ -881,9 +882,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	function convertThemeLinksToButtons( html ) {
 		const template = document.createElement( 'template' );
-		template.innerHTML = html;
 
-		template.content.querySelectorAll( '.theme-install' ).forEach( function( link ) {
+		template.setHTML( html, {
+			sanitizer: {}
+		} );
+
+		template.content.querySelectorAll( 'a.theme-install' ).forEach( function( link ) {
 			const button = document.createElement( 'button' );
 
 			// Copy all attributes except href.
@@ -897,13 +901,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			button.type = 'button';
 
 			// Preserve contents.
-			button.innerHTML = link.innerHTML;
+			for ( const child of link.childNodes ) {
+				button.append( child.cloneNode( true ) );
+			}
 
 			// Replace <a> with <button>.
 			link.replaceWith( button );
 		} );
 
-		return template.innerHTML;
+		return template.content.cloneNode( true );
 	}
 
 	/**
@@ -940,14 +946,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Keep installation within Customizer
 			const customizeUrl = result.data?.customizeUrl || themeUrl;
 			if ( customizeUrl ) {
-				window.location = customizeUrl;
+				window.location = encodeURI( customizeUrl );
 				return;
 			}
 
 			// Fallback to installing within regular themes page in admin
 			const activateUrl = result.data?.activateUrl;
 			if ( activateUrl ) {
-				window.location = activateUrl;
+				window.location = encodeURI( activateUrl );
 				return;
 			}
 		} )
@@ -1641,7 +1647,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Show relevant button and clear grid
 				addButton = dialog.querySelector( '#media-button-insert' );
-				dialog.querySelector( '.widget-modal-grid' ).innerHTML = '';
+				dialog.querySelector( '.widget-modal-grid' ).replaceChildren();
 
 				if ( result.data.length === 0 ) {
 
@@ -1791,8 +1797,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Update header image
 		if ( settingId === 'header_image_data' ) {
 			if ( selectedItem.className === 'choice' ) {
-				li.querySelector( '.container' ).innerHTML = '';
-				li.querySelector( '.container' ).append( imageElement.cloneNode() );
+				li.querySelector( '.container' ).replaceChildren( imageElement.cloneNode() );
 
 				// Find the matching entry from the localized data
 				headerData = Object.values( _wpCustomizeHeader.uploads || {} ).find(
@@ -1821,8 +1826,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				forcePreviewRefresh( 'header_image', headerData.url );
 				document.getElementById( 'sub-accordion-section-header_image' ).querySelector( 'a' ).focus();
 			} else {
-				parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
-				parent.previousElementSibling.querySelector( '.container' ).append( imageElement );
+				parent.previousElementSibling.querySelector( '.container' ).replaceChildren( imageElement );
 				customizeButton.previousElementSibling.style.display = '';
 				customizeButton.classList.remove( 'upload-button' );
 				parent.previousElementSibling.querySelector( 'input' ).value = attachmentId;
@@ -1949,8 +1953,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				grandparent.querySelector( 'video' )?.remove();
 				grandparent.querySelector( 'input' ).value = '';
 			}
-			parent.innerHTML = '';
-			parent.append( button );
+			parent.replaceChildren( button );
 			setTimeout( function() {
 				button.focus();
 			} );
@@ -2083,7 +2086,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Clear stale notifications
 		document.querySelectorAll( '.customize-control-notifications-container' ).forEach( function( container ) {
-			container.innerHTML = '';
+			container.replaceChildren();
 		} );
 
 		// Populate arrays if a new menu is being added
@@ -2380,7 +2383,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function buildNotification( data ) {
 		var btn = document.createElement( 'button' ),
 			msg = document.createElement( 'div' ),
-			li = document.createElement( 'li' );
+			li = document.createElement( 'li' ),
+			span = document.createElement( 'span' );
 
 		li.className = [
 			'notice',
@@ -2394,16 +2398,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		msg.className = 'notification-message';
 		msg.innerHTML = data.message || data.code || '';
-		li.appendChild( msg );
+		li.append( msg );
 
 		if ( data.dismissible ) {
+			span.className = 'screen-reader-text';
+			span.textContent = _wpCustomizeControlsL10n.dismiss;
 			btn.type = 'button';
 			btn.className = 'notice-dismiss';
-			btn.innerHTML = '<span class="screen-reader-text">' + _wpCustomizeControlsL10n.dismiss + '</span>';
+			btn.append( span );
 			btn.addEventListener( 'click', function() {
 				li.remove();
 			} );
-			li.appendChild( btn );
+			li.append( btn );
 		}
 
 		return li;
@@ -2809,7 +2815,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( e.target.className === 'preview' ) {
 				e.target.style.display = 'none';
 				e.target.previousElementSibling.style.display = 'block';
-				if ( window.location.hash === '#sub-accordion-section-themes' ) {
+				if ( hash === 'sub-accordion-section-themes' ) {
 					document.querySelector( '.customize-themes-full-container' ).style.display = 'block';
 				} else {
 					previewFrame.style.zIndex = '10';
