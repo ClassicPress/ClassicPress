@@ -296,7 +296,6 @@ require ABSPATH . WPINC . '/sitemaps/class-wp-sitemaps-stylesheet.php';
 require ABSPATH . WPINC . '/sitemaps/providers/class-wp-sitemaps-posts.php';
 require ABSPATH . WPINC . '/sitemaps/providers/class-wp-sitemaps-taxonomies.php';
 require ABSPATH . WPINC . '/sitemaps/providers/class-wp-sitemaps-users.php';
-<<<<<<< HEAD
 require ABSPATH . WPINC . '/class-wp-script-modules.php';
 require ABSPATH . WPINC . '/script-modules.php';
 if ( 0 !== (int) get_option( 'blocks_compatibility_level', 1 ) ) {
@@ -306,43 +305,6 @@ require_once ABSPATH . WPINC . '/classicpress/class-cp-customization-frontend.ph
 require ABSPATH . WPINC . '/view-transitions.php';
 
 wp_script_modules()->add_hooks();
-=======
-require ABSPATH . WPINC . '/class-wp-block-editor-context.php';
-require ABSPATH . WPINC . '/class-wp-block-type.php';
-require ABSPATH . WPINC . '/class-wp-block-pattern-categories-registry.php';
-require ABSPATH . WPINC . '/class-wp-block-patterns-registry.php';
-require ABSPATH . WPINC . '/class-wp-block-styles-registry.php';
-require ABSPATH . WPINC . '/class-wp-block-type-registry.php';
-require ABSPATH . WPINC . '/class-wp-block.php';
-require ABSPATH . WPINC . '/class-wp-block-list.php';
-require ABSPATH . WPINC . '/class-wp-block-parser.php';
-require ABSPATH . WPINC . '/blocks.php';
-require ABSPATH . WPINC . '/blocks/index.php';
-require ABSPATH . WPINC . '/block-editor.php';
-require ABSPATH . WPINC . '/block-patterns.php';
-require ABSPATH . WPINC . '/class-wp-block-supports.php';
-require ABSPATH . WPINC . '/block-supports/utils.php';
-require ABSPATH . WPINC . '/block-supports/align.php';
-require ABSPATH . WPINC . '/block-supports/border.php';
-require ABSPATH . WPINC . '/block-supports/colors.php';
-require ABSPATH . WPINC . '/block-supports/custom-classname.php';
-require ABSPATH . WPINC . '/block-supports/dimensions.php';
-require ABSPATH . WPINC . '/block-supports/duotone.php';
-require ABSPATH . WPINC . '/block-supports/shadow.php';
-require ABSPATH . WPINC . '/block-supports/elements.php';
-require ABSPATH . WPINC . '/block-supports/generated-classname.php';
-require ABSPATH . WPINC . '/block-supports/layout.php';
-require ABSPATH . WPINC . '/block-supports/position.php';
-require ABSPATH . WPINC . '/block-supports/spacing.php';
-require ABSPATH . WPINC . '/block-supports/typography.php';
-require ABSPATH . WPINC . '/block-supports/settings.php';
-require ABSPATH . WPINC . '/style-engine.php';
-require ABSPATH . WPINC . '/style-engine/class-wp-style-engine.php';
-require ABSPATH . WPINC . '/style-engine/class-wp-style-engine-css-declarations.php';
-require ABSPATH . WPINC . '/style-engine/class-wp-style-engine-css-rule.php';
-require ABSPATH . WPINC . '/style-engine/class-wp-style-engine-css-rules-store.php';
-require ABSPATH . WPINC . '/style-engine/class-wp-style-engine-processor.php';
->>>>>>> e55e9c2f0c (Editor: add box shadow support to blocks.)
 
 $GLOBALS['wp_embed'] = new WP_Embed();
 
