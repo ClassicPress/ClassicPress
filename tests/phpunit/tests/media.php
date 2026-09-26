@@ -2185,7 +2185,7 @@ EOF;
 
 		add_filter(
 			'wp_content_img_tag',
-			function ( $filtered_image ) {
+			static function( $filtered_image ) {
 				return "<span>$filtered_image</span>";
 			}
 		);
@@ -2209,7 +2209,7 @@ EOF;
 
 		add_filter(
 			'wp_content_img_tag',
-			function ( $filtered_image ) {
+			static function( $filtered_image ) {
 				return "<span>$filtered_image</span>";
 			}
 		);
@@ -4173,7 +4173,7 @@ EOF;
 		$result = null;
 		add_filter(
 			'the_content',
-			function ( $content ) use ( &$result, $context ) {
+			static function ( $content ) use ( &$result, $context ) {
 				$attr   = $this->get_width_height_for_high_priority();
 				$result = wp_get_loading_optimization_attributes( 'img', $attr, $context );
 				return $content;
