@@ -411,16 +411,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '#attachment-details-two-column-title' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-caption' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-description' ).removeAttribute( 'readonly' );
-			dialog.querySelector( '#attachments-' + id + '-media_category' ).removeAttribute( 'readonly' );
-			dialog.querySelector( '#attachments-' + id + '-media_post_tag' ).removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachments-' + id + '-media_category' )?.removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachments-' + id + '-media_post_tag' )?.removeAttribute( 'readonly' );
 			dialog.querySelector( '.edit-attachment' ).style.display = '';
 		} else {
 			dialog.querySelector( '#attachment-details-two-column-alt-text' ).setAttribute( 'readonly', true );
 			dialog.querySelector( '#attachment-details-two-column-title' ).setAttribute( 'readonly', true );
 			dialog.querySelector( '#attachment-details-two-column-caption' ).setAttribute( 'readonly', true );
 			dialog.querySelector( '#attachment-details-two-column-description' ).setAttribute( 'readonly', true );
-			dialog.querySelector( '#attachments-' + id + '-media_category' ).setAttribute( 'readonly', true );
-			dialog.querySelector( '#attachments-' + id + '-media_post_tag' ).setAttribute( 'readonly', true );
+			dialog.querySelector( '#attachments-' + id + '-media_category' )?.setAttribute( 'readonly', true );
+			dialog.querySelector( '#attachments-' + id + '-media_post_tag' )?.setAttribute( 'readonly', true );
 			dialog.querySelector( '.edit-attachment' ).style.display = 'none';
 		}
 
@@ -513,22 +513,41 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			thumbnail = document.createElement( 'div' ),
 			button = document.createElement( 'button' ),
 			spanIcon = document.createElement( 'span' ),
-			spanSRT = document.createElement( 'span' );
+			spanSRT = document.createElement( 'span' ),
+			centered = document.createElement( 'div' ),
+			filename = document.createElement( 'div' ),
+			title = document.createElement( 'div' ),
+			img = new Image();
 
-		let image = '<img src="' + attachment.url + '" alt="' + attachment.alt + '">';
-
-		if ( attachment.type === 'application' ) {
-			if ( attachment.subtype === 'vnd.openxmlformats-officedocument.spreadsheetml.sheet' ) {
-				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/spreadsheet.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
-			} else if ( attachment.subtype === 'zip' ) {
-				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/archive.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
-			} else {
-				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/document.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+		let image;
+		if ( attachment.type === 'image' ) {
+			image = new Image();
+			image.src = attachment.url;
+			image.alt = attachment.alt;
+		} else {
+			if ( attachment.type === 'application' ) {
+				if ( attachment.subtype === 'vnd.openxmlformats-officedocument.spreadsheetml.sheet' ) {
+					img.src = _wpMediaGridSettings.includes_url + 'images/media/spreadsheet.png';
+				} else if ( attachment.subtype === 'zip' ) {
+					img.src = _wpMediaGridSettings.includes_url + 'images/media/archive.png';
+				} else {
+					img.src = _wpMediaGridSettings.includes_url + 'images/media/document.png';
+				}
+			} else if ( attachment.type === 'audio' ) {
+				img.src = _wpMediaGridSettings.includes_url + 'images/media/audio.png';
+			} else if ( attachment.type === 'video' ) {
+				img.src = _wpMediaGridSettings.includes_url + 'images/media/video.png';
 			}
-		} else if ( attachment.type === 'audio' ) {
-			image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/audio.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
-		} else if ( attachment.type === 'video' ) {
-			image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/video.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+
+			centered.className = 'centered';
+			img.alt = '';
+			img.setAttribute( 'draggable', 'false' );
+			centered.append( img );
+			title.textContent = attachment.title;
+			filename.append( title );
+			image = document.createElement( 'div' );
+			image.className = 'icon';
+			image.append( centered, filename );
 		}
 
 		gridItem.className = 'media-item';
@@ -545,6 +564,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		gridItem.setAttribute( 'data-width', attachment.width );
 		gridItem.setAttribute( 'data-height', attachment.height );
 		gridItem.setAttribute( 'data-size', attachment.filesizeHumanReadable );
+		gridItem.setAttribute( 'data-sizes', attachment.sizes ? JSON.stringify( attachment.sizes ) : '' );
 		gridItem.setAttribute( 'data-caption', attachment.caption );
 		gridItem.setAttribute( 'data-description', attachment.description );
 		gridItem.setAttribute( 'data-link', attachment.link );
