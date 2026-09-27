@@ -113,6 +113,9 @@ if ( ! CUSTOM_TAGS ) {
 			'name'     => true,
 			'type'     => true,
 			'value'    => true,
+			'popovertarget'       => true,
+			'popovertargetaction' => true,
+			'aria-haspopup'       => true,
 		),
 		'caption'    => array(
 			'align' => true,
@@ -146,6 +149,12 @@ if ( ! CUSTOM_TAGS ) {
 		),
 		'div'        => array(
 			'align' => true,
+			'popover' => true,
+		),
+		'dialog'     => array(
+			'closedby' => true,
+			'open'     => true,
+			'popover'  => true,
 		),
 		'dl'         => array(),
 		'dt'         => array(),
@@ -363,6 +372,8 @@ if ( ! CUSTOM_TAGS ) {
 		'u'          => array(),
 		'ul'         => array(
 			'type' => true,
+			'popover' => true,
+			'role'    => true,
 		),
 		'ol'         => array(
 			'start'    => true,
