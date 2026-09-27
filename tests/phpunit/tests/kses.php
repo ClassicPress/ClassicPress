@@ -2239,31 +2239,6 @@ HTML;
 	}
 
 	/**
-<<<<<<< HEAD
-	 * Test that passing a null value as content doesn't
-	 * trigger error and return an empty string
-	 *
-	 * @since CP-2.0
-	 */
-	public function test_wp_kses_null_content() {
-		$result = wp_kses_stripslashes( null, '' );
-		$this->assertSame( $result, '' );
-
-		$result = wp_kses_no_null( null, array() );
-		$this->assertSame( $result, '' );
-
-		$result = wp_kses_split( null, array(), array() );
-		$this->assertSame( $result, '' );
-
-		$result = wp_kses_bad_protocol_once( null, array() );
-		$this->assertSame( $result, '' );
-
-		$result = wp_kses_normalize_entities( null );
-		$this->assertSame( $result, '' );
-
-		$result = wp_kses_decode_entities( null );
-		$this->assertSame( $result, '' );
-=======
 	 * Tests that the target attribute is preserved in various contexts.
 	 *
 	 * @dataProvider data_target_attribute_preserved_in_descriptions
@@ -2333,6 +2308,31 @@ HTML;
 				array( 'target', 'href', 'rel' ),
 			),
 		);
->>>>>>> 0f2334da81 (Formatting: Preserve `target="_blank"` in Biographical Info and Category Description.)
+	}
+
+	/**
+	 * Test that passing a null value as content doesn't
+	 * trigger error and return an empty string
+	 *
+	 * @since CP-2.0
+	 */
+	public function test_wp_kses_null_content() {
+		$result = wp_kses_stripslashes( null, '' );
+		$this->assertSame( $result, '' );
+
+		$result = wp_kses_no_null( null, array() );
+		$this->assertSame( $result, '' );
+
+		$result = wp_kses_split( null, array(), array() );
+		$this->assertSame( $result, '' );
+
+		$result = wp_kses_bad_protocol_once( null, array() );
+		$this->assertSame( $result, '' );
+
+		$result = wp_kses_normalize_entities( null );
+		$this->assertSame( $result, '' );
+
+		$result = wp_kses_decode_entities( null );
+		$this->assertSame( $result, '' );
 	}
 }
