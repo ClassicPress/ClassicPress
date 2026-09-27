@@ -1362,8 +1362,24 @@ EOF;
 	 * @ticket 33121
 	 */
 	public function test_wp_kses_attr_data_attribute_is_allowed() {
+<<<<<<< HEAD
 		$test     = '<div data-foo="foo" data-bar="bar" datainvalid="gone" data--invaild="gone"  data-also-invaild-="gone" data-two-hyphens="remains">Pens and pencils</div>';
+=======
+		$test     = '<div data-foo="foo" data-bar="bar" datainvalid="gone" data-two-hyphens="remains">Pens and pencils</div>';
+>>>>>>> 89bec7acd8 (KSES: Allow leading trailing double hyphen in data attributes)
 		$expected = '<div data-foo="foo" data-bar="bar" data-two-hyphens="remains">Pens and pencils</div>';
+
+		$this->assertSame( $expected, wp_kses_post( $test ) );
+	}
+
+	/**
+	 * Data attributes with leading, trailing, and double "-" are globally accepted.
+	 *
+	 * @ticket 61052
+	 */
+	public function test_wp_kses_attr_data_attribute_hypens_allowed() {
+		$test     = '<div data--leading="remains" data-trailing-="remains" data-middle--double="remains">Pens and pencils</div>';
+		$expected = '<div data--leading="remains" data-trailing-="remains" data-middle--double="remains">Pens and pencils</div>';
 
 		$this->assertSame( $expected, wp_kses_post( $test ) );
 	}
