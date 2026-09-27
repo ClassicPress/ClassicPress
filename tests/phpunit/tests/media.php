@@ -4173,7 +4173,7 @@ EOF;
 		$result = null;
 		add_filter(
 			'the_content',
-			static function ( $content ) use ( &$result, $context ) {
+			function ( $content ) use ( &$result, $context ) {
 				$attr   = $this->get_width_height_for_high_priority();
 				$result = wp_get_loading_optimization_attributes( 'img', $attr, $context );
 				return $content;

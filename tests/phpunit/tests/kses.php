@@ -959,7 +959,7 @@ EOF;
 	 *     }
 	 * }
 	 */
-	public function data_test_safecss_filter_attr() {
+	public function data_safecss_filter_attr() {
 		return array(
 			// Empty input, empty output.
 			array(
