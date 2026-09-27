@@ -2239,6 +2239,7 @@ HTML;
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Test that passing a null value as content doesn't
 	 * trigger error and return an empty string
 	 *
@@ -2262,5 +2263,76 @@ HTML;
 
 		$result = wp_kses_decode_entities( null );
 		$this->assertSame( $result, '' );
+=======
+	 * Tests that the target attribute is preserved in various contexts.
+	 *
+	 * @dataProvider data_target_attribute_preserved_in_descriptions
+	 *
+	 * @ticket 12056
+	 *
+	 * @param string $context  The context to test ('user_description' or 'pre_term_description').
+	 * @param string $input    The input HTML string.
+	 * @param string $expected The expected output HTML string.
+	 */
+	public function test_target_attribute_preserved_in_context( $context, $input, $expected ) {
+		$allowed = wp_kses_allowed_html( $context );
+		$this->assertTrue( isset( $allowed['a']['target'] ), "Target attribute not allowed in {$context}" );
+		$this->assertEquals( $expected, wp_kses( $input, $context ) );
+	}
+
+	/**
+	 * Data provider for test_target_attribute_preserved_in_context.
+	 *
+	 * @return array
+	 */
+	public function data_target_attribute_preserved_in_descriptions() {
+		return array(
+			array(
+				'user_description',
+				'<a href="https://example.com" target="_blank">Example</a>',
+				'<a href="https://example.com" target="_blank">Example</a>',
+			),
+			array(
+				'pre_term_description',
+				'<a href="https://example.com" target="_blank">Example</a>',
+				'<a href="https://example.com" target="_blank">Example</a>',
+			),
+		);
+	}
+
+	/**
+	 * Tests that specific attributes are preserved in various contexts.
+	 *
+	 * @dataProvider data_allowed_attributes_in_descriptions
+	 *
+	 * @ticket 12056
+	 *
+	 * @param string $context    The context to test ('user_description' or 'pre_term_description').
+	 * @param array  $attributes List of attributes to check for.
+	 */
+	public function test_specific_attributes_preserved_in_context( $context, $attributes ) {
+		$allowed = wp_kses_allowed_html( $context );
+		foreach ( $attributes as $attribute ) {
+			$this->assertTrue( isset( $allowed['a'][ $attribute ] ), "{$attribute} attribute not allowed in {$context}" );
+		}
+	}
+
+	/**
+	 * Data provider for test_specific_attributes_preserved_in_context.
+	 *
+	 * @return array
+	 */
+	public function data_allowed_attributes_in_descriptions() {
+		return array(
+			array(
+				'user_description',
+				array( 'target', 'href', 'rel' ),
+			),
+			array(
+				'pre_term_description',
+				array( 'target', 'href', 'rel' ),
+			),
+		);
+>>>>>>> 0f2334da81 (Formatting: Preserve `target="_blank"` in Biographical Info and Category Description.)
 	}
 }
