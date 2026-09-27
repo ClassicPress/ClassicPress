@@ -544,12 +544,8 @@ EOF;
 		$expect_stripped_content = 'Alot of hyphens.';
 		$expect_valid_content    = '<hyphenated-tag attribute="value">Alot of hyphens.</hyphenated-tag>';
 
-<<<<<<< HEAD
 		$this->assertSame( $expect_stripped_content, wp_kses_post( $content ) );
 		$this->assertSame( $expect_valid_content, wp_kses( $content, $custom_tags ) );
-=======
-		$this->assertEqualHTML( $expect_stripped_content, wp_kses_post( $content ) );
-		$this->assertEqualHTML( $expect_valid_content, wp_kses( $content, $custom_tags ) );
 	}
 
 	/**
@@ -613,17 +609,13 @@ EOF;
 			'Invalid decimal unicode &#1114112;' => array( '&#1114112;', '&amp;#1114112;' ),
 			'Invalid hex unicode &#x110000;'     => array( '&#x110000;', '&amp;#x110000;' ),
 		);
->>>>>>> b91b7576b8 (KSES: Prevent normalization from unescaping escaped numeric character references.)
 	}
 
 	/**
 	 * @ticket 26290
-<<<<<<< HEAD
-=======
 	 * @ticket 63630
 	 *
 	 * @dataProvider data_normalize_entities
->>>>>>> b91b7576b8 (KSES: Prevent normalization from unescaping escaped numeric character references.)
 	 */
 	public function test_wp_kses_normalize_entities() {
 		$this->assertSame( '&spades;', wp_kses_normalize_entities( '&spades;' ) );
