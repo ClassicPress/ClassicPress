@@ -28,8 +28,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		endTouchPosition = 0;
 
 	// Update details within modal
-	function setAddedMediaFields( id ) {
-		const form = document.createElement( 'form' ),
+	function setAddedMediaFields( item ) {
+		const id = item.dataset.id,
+			form = document.createElement( 'form' ),
 			input = document.createElement( 'input' ),
 			para = document.createElement( 'p' ),
 			message = document.createElement( 'span' ),
@@ -63,7 +64,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		input1.className = 'text';
 		input1.id = 'attachments-' + id + '-media_category';
 		input1.name = 'attachments[' + id + '][media_category]';
-		input1.value = '';
+		input1.value = item.dataset.taxes;
 
 		span2.className = 'setting';
 		span2.dataset.setting = 'media_post_tag';
@@ -74,7 +75,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		input2.className = 'text';
 		input2.id = 'attachments-' + id + '-media_post_tag';
 		input2.name = 'attachments[' + id + '][media_post_tag]';
-		input2.value = '';
+		input2.value = item.dataset.tags;
 
 		message.append( required );
 		para.append( message );
@@ -336,7 +337,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		history.replaceState( null, null, '?' + queryParams.toString() );
 
 		// Set menu_order, media_category, and media_post_tag field IDs correctly
-		setAddedMediaFields( id );
+		setAddedMediaFields( item );
 
 		// Populate modal with attachment details
 		dialog.querySelector( '.attachment-date' ).textContent = date;
