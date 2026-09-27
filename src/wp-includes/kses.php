@@ -161,6 +161,7 @@ if ( ! CUSTOM_TAGS ) {
 			'closedby' => true,
 			'open'     => true,
 			'popover'  => true,
+			'autofocus' => true,
 		),
 		'dl'         => array(),
 		'dt'         => array(),
