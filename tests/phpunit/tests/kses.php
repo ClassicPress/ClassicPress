@@ -1931,7 +1931,7 @@ EOF;
 		$html     = '<dialog open autofocus>Content</dialog><button type="button" autofocus>Button</button><textarea autofocus>Some content</textarea><div tabindex="0" autofocus>Some content</div>';
 		$expected = '<dialog open autofocus>Content</dialog><button type="button">Button</button><textarea>Some content</textarea><div tabindex="0">Some content</div>';
 
-		$this->assertEqualHTML( $expected, wp_kses_post( $html ) );
+		$this->assertSame( $expected, wp_kses_post( $html ) );
 	}
 
 	/**
