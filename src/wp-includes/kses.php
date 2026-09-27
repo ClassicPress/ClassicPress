@@ -2733,6 +2733,8 @@ function safecss_filter_attr( $css, $deprecated = '' ) {
 			'column-span',
 			'column-width',
 
+			'display',
+
 			'color',
 			'filter',
 			'font',
