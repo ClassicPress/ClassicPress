@@ -1896,7 +1896,7 @@ EOF;
 	public function test_wp_kses_button_invoker_command_attributes() {
 		$html = '<button type="button" commandfor="my-popover" command="toggle-popover">Toggle</button><div id="my-popover" popover>Content</div>';
 
-		$this->assertEqualHTML( $html, wp_kses_post( $html ) );
+		$this->assertSame( $html, wp_kses_post( $html ) );
 	}
 
 	/**
