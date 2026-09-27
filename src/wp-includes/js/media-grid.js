@@ -336,7 +336,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		history.replaceState( null, null, '?' + queryParams.toString() );
 
 		// Set menu_order, media_category, and media_post_tag field IDs correctly
-		setAddedMediaFields( item );
+		setAddedMediaFields( id );
 
 		// Populate modal with attachment details
 		dialog.querySelector( '.attachment-date' ).textContent = date;
@@ -412,7 +412,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '#attachment-details-two-column-caption' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-description' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachments-' + id + '-media_category' )?.removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachments-' + id + '-media_category' )?.setAttribute( 'list', 'media-grid-media-categories' );
 			dialog.querySelector( '#attachments-' + id + '-media_post_tag' )?.removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachments-' + id + '-media_post_tag' )?.setAttribute( 'list', 'media-grid-media-tags' );
 			dialog.querySelector( '.edit-attachment' ).style.display = '';
 		} else {
 			dialog.querySelector( '#attachment-details-two-column-alt-text' ).setAttribute( 'readonly', true );
