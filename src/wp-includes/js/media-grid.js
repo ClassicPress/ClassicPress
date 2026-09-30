@@ -411,16 +411,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '#attachment-details-two-column-title' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-caption' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-description' ).removeAttribute( 'readonly' );
-			dialog.querySelector( '#attachments-' + id + '-media_category' ).removeAttribute( 'readonly' );
-			dialog.querySelector( '#attachments-' + id + '-media_post_tag' ).removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachments-' + id + '-media_category' )?.removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachments-' + id + '-media_post_tag' )?.removeAttribute( 'readonly' );
 			dialog.querySelector( '.edit-attachment' ).style.display = '';
 		} else {
 			dialog.querySelector( '#attachment-details-two-column-alt-text' ).setAttribute( 'readonly', true );
 			dialog.querySelector( '#attachment-details-two-column-title' ).setAttribute( 'readonly', true );
 			dialog.querySelector( '#attachment-details-two-column-caption' ).setAttribute( 'readonly', true );
 			dialog.querySelector( '#attachment-details-two-column-description' ).setAttribute( 'readonly', true );
-			dialog.querySelector( '#attachments-' + id + '-media_category' ).setAttribute( 'readonly', true );
-			dialog.querySelector( '#attachments-' + id + '-media_post_tag' ).setAttribute( 'readonly', true );
+			dialog.querySelector( '#attachments-' + id + '-media_category' )?.setAttribute( 'readonly', true );
+			dialog.querySelector( '#attachments-' + id + '-media_post_tag' )?.setAttribute( 'readonly', true );
 			dialog.querySelector( '.edit-attachment' ).style.display = 'none';
 		}
 
