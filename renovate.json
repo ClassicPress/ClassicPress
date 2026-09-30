@@ -5,7 +5,21 @@
 	"labels": [
 		"bot"
 	],
+	"automerge": false,
 	"commitMessagePrefix": "Renovate[bot]:",
+	"customManagers": [
+		{
+			"customType": "regex",
+			"description": "GitHub-hosted Ubuntu runner labels in workflow matrices",
+			"managerFilePatterns": [
+				"/^\\.github/workflows/.+\\.ya?ml$/"
+			],
+			"matchStrings": [
+				"os:\\s*(?:\\[\\s*)?['\"]?(?<depName>ubuntu)-(?<currentValue>\\d+\\.\\d+)['\"]?"
+			],
+			"datasourceTemplate": "github-runners"
+		}
+	],
 	"prBodyNotes": [
 		"---",
 		"### Pre-merge checks",
