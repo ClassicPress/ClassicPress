@@ -395,6 +395,7 @@ function wp_edit_theme_plugin_file( $args ) {
 	$content = $args['newcontent'];
 
 	$plugin    = null;
+	$stylesheet = null;
 	$theme     = null;
 	$real_file = null;
 
@@ -560,7 +561,7 @@ function wp_edit_theme_plugin_file( $args ) {
 		// Attempt loopback request to editor to see if user just whitescreened themselves.
 		if ( $plugin ) {
 			$url = add_query_arg( compact( 'plugin', 'file' ), admin_url( 'plugin-editor.php' ) );
-		} elseif ( isset( $stylesheet ) ) {
+		} elseif ( $stylesheet ) {
 			$url = add_query_arg(
 				array(
 					'theme' => $stylesheet,
@@ -1379,7 +1380,7 @@ function verify_file_signature( $filename, $signatures, $filename_for_errors = f
 		);
 	}
 
-	// Check for a edge-case affecting PHP Maths abilities.
+	// Check for an edge-case affecting PHP Maths abilities.
 	if (
 		! extension_loaded( 'sodium' ) &&
 		in_array( PHP_VERSION_ID, array( 70200, 70201, 70202 ), true ) &&
