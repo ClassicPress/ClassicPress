@@ -1990,7 +1990,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			innerDiv.className = 'button display-options random random-default-header';
 			span.className = 'dashicons dashicons-randomize dice';
 			innerDiv.textContent = _wpCustomizeHeader.random;
-			innerDiv.prepend( span ); 
+			innerDiv.prepend( span );
 			div.className = 'randomizing-header';
 			div.append( innerDiv);
 			document.querySelector( '#customize-control-header_image label' ).after( div );
