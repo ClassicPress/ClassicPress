@@ -1992,7 +1992,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			innerDiv.textContent = _wpCustomizeHeader.random;
 			innerDiv.prepend( span );
 			div.className = 'randomizing-header';
-			div.append( innerDiv);
+			div.append( innerDiv );
 			document.querySelector( '#customize-control-header_image label' ).after( div );
 		}
 	}
