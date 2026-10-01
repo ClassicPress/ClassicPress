@@ -1170,6 +1170,8 @@ function wp_default_scripts( $scripts ) {
 			'delete_failed'           => __( 'Failed to delete attachment.' ),
 			'error'                   => __( 'Error:' ),
 			'dismiss'                 => __( 'Dismiss' ),
+			'deselect'                => __( 'Deselect' ),
+			'includes_url'            => includes_url(),
 		)
 	);
 	$scripts->add( 'customize-selective-refresh', "/wp-includes/js/customize-selective-refresh$suffix.js", array( 'wp-util', 'customize-preview' ), false, 1 );
