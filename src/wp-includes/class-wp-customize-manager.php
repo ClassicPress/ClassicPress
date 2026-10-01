@@ -2856,6 +2856,22 @@ final class WP_Customize_Manager {
 			$data = array();
 		}
 
+		if ( $changeset_post_id && ! empty( $_POST['customize_restore_autosave'] ) && ! $args['autosave'] ) {
+			$autosave_post = wp_get_post_autosave( $changeset_post_id, get_current_user_id() );
+
+			if ( ! $autosave_post ) {
+				return new WP_Error( 'missing_changeset_autosave', 'The autosave to restore could not be found.' );
+			}
+
+			$autosave_data = $this->get_changeset_post_data( $autosave_post->ID );
+
+			if ( is_wp_error( $autosave_data ) ) {
+				return $autosave_data;
+			}
+
+			$data = $autosave_data;
+		}
+
 		// Ensure that all post values are included in the changeset data.
 		foreach ( $post_values as $setting_id => $post_value ) {
 			if ( ! isset( $args['data'][ $setting_id ] ) ) {
@@ -4911,8 +4927,9 @@ final class WP_Customize_Manager {
 				'id' => get_current_user_id(),
 			),
 			'changeset' => array(
-				'latestAutoDraftUuid' => $latest_auto_draft ? $latest_auto_draft->post_name : null,
-				'hasAutosaveRevision' => $changeset_post && 'auto-draft' !== $changeset_post->post_status && (bool) wp_get_post_autosave( $changeset_post_id, get_current_user_id() ),
+				'latestAutoDraftUuid'    => $latest_auto_draft ? $latest_auto_draft->post_name : null,
+				'hasAutosaveRevision'    => $changeset_post && 'auto-draft' !== $changeset_post->post_status && (bool) wp_get_post_autosave( $changeset_post_id, get_current_user_id() ),
+				'loadedFromChangesetUrl' => $changeset_post && isset( $_GET['customize_changeset_uuid'] ) && $changeset_post->post_name === wp_unslash( $_GET['customize_changeset_uuid'] ),
 			),
 		);
 		?>
