@@ -2636,7 +2636,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function showAutosaveNotification() {
 		const changeset = lockSettings.changeset,
-			queryParams = new URLSearchParams( window.location.search ),
 			autosaveMessage = document.createElement( 'span' );
 
 		let notice, message;
