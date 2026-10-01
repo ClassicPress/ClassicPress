@@ -4878,11 +4878,20 @@ final class WP_Customize_Manager {
 		$lock_user_id = ( $lock && ! empty( $lock['user_id'] ) ) ? (int) $lock['user_id'] : 0;
 
 		$changeset_post_id = $this->changeset_post_id();
-		$autosave_revision_post = false;
+		$changeset_post    = $changeset_post_id ? get_post( $changeset_post_id ) : null;
 
-		if ( ! $this->autosaved() && $changeset_post_id && is_user_logged_in() ) {
-			$autosave_revision_post = wp_get_post_autosave( $changeset_post_id, get_current_user_id() );
-		}
+		$auto_drafts = $this->get_changeset_posts(
+			array(
+				'post_type'      => 'customize_changeset',
+				'post_status'    => 'auto-draft',
+				'author'         => get_current_user_id(),
+				'posts_per_page' => 1,
+				'orderby'        => 'modified',
+				'order'          => 'DESC',
+				'exclude'        => $changeset_post_id ? array( $changeset_post_id ) : array(),
+			)
+		);
+		$latest_auto_draft = $auto_drafts ? $auto_drafts[0] : null;
 
 		$settings = array(
 			'lock' => array(
@@ -4902,9 +4911,8 @@ final class WP_Customize_Manager {
 				'id' => get_current_user_id(),
 			),
 			'changeset' => array(
-				'uuid'                => $this->changeset_uuid(),
-				'autosaved'           => $this->autosaved(),
-				'hasAutosaveRevision' => (bool) $autosave_revision_post,
+				'latestAutoDraftUuid' => $latest_auto_draft ? $latest_auto_draft->post_name : null,
+				'hasAutosaveRevision' => $changeset_post && 'auto-draft' !== $changeset_post->post_status && (bool) wp_get_post_autosave( $changeset_post_id, get_current_user_id() ),
 			),
 		);
 		?>
