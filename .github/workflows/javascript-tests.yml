@@ -25,7 +25,7 @@ jobs:
     name: QUnit Tests
     permissions:
       contents: read
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
 
     steps:

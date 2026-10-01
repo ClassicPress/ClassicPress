@@ -1390,7 +1390,9 @@ final class WP_Customize_Widgets {
 			return;
 		}
 
-		$instance = unserialize( $decoded );
+		$allowed = array_keys( (array) $wp_widget_factory->widgets );
+		$instance = unserialize( $decoded, array( 'allowed_classes' => $allowed ) );
+
 		if ( false === $instance ) {
 			return;
 		}
