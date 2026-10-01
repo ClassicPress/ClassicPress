@@ -54,7 +54,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		hash = window.location.hash.replace( '#', '' ),
 		targetEl = document.getElementById( hash ),
 		discardingChangeset = false,
-		changesetStatus = window._wpCustomizeChangesetStatus || 'publish',
+		changesetStatus = window.wpCustomizeChangesetStatus === 'auto-draft' ? 'publish' : window.wpCustomizeChangesetStatus || 'publish',
 		autosaveTimer = null,
 		autosaveInProgress = false,
 		autosavePending = false;
@@ -198,6 +198,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		queryParams.delete( 'return' );
 		newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
 		history.replaceState( null, '', encodeURI( newUrl ) );
+	}
+
+	if ( lockSettings?.changeset.loadedFromChangesetUrl ) {
+		publishSettings.disabled = false;
+		activatePublishButton();
 	}
 
 	document.getElementById( 'customize-preview-loading' ).classList.add( 'hidden' );
@@ -2455,6 +2460,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			updateData.append( 'customize_changeset_date', d[0] + '-' + d[1] + '-' + d[2] + ' ' + timeStr );
 		}
 
+		if ( queryParams.get( 'cp_restoring_autosave' ) === '1' ) {
+			updateData.set( 'customize_restore_autosave', '1' );
+		}
+
 		try {
 			const response = await fetch( ajaxurl, {
 				method: 'POST',
@@ -2474,6 +2483,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Update HTML
 		if ( newResult && newResult.success ) {
+
+			// Prevent re-appearance of restore flag once an autosave has been restored
+			if ( queryParams.get( 'cp_restoring_autosave' ) === '1' ) {
+				queryParams.delete( 'cp_restoring_autosave' );
+				queryParams.delete( 'customize_autosaved' );
+
+				window.history.replaceState( null, '', window.location.pathname + '?' + queryParams.toString() + window.location.hash );
+			}
 
 			// Update the in-memory date so the Schedule radio restores correctly
 			if ( changesetStatus === 'future' ) {
@@ -2606,9 +2623,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} else {
 			url.searchParams.set( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
 			url.searchParams.set( 'customize_autosaved', 'on' );
-		}
-
-		if ( ! changeset.latestAutoDraftUuid ) {
 			url.searchParams.set( 'cp_restoring_autosave', '1' );
 		}
 
@@ -2619,18 +2633,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Show information when a more recent autosave exists.
 	 *
 	 * @return {void}
-	 */function showAutosaveNotification() {
+	 */
+	function showAutosaveNotification() {
 		const changeset = lockSettings.changeset,
 			queryParams = new URLSearchParams( window.location.search ),
 			autosaveMessage = document.createElement( 'span' );
 
 		let notice, message;
 
-		if ( ! ( changeset?.latestAutoDraftUuid || changeset?.hasAutosaveRevision ) ) {
+		if ( changeset?.loadedFromChangesetUrl ) {
 			return;
 		}
 
-		if ( ! changeset.latestAutoDraftUuid && queryParams.get( 'cp_restoring_autosave' ) === '1' ) {
+		if ( ! ( changeset?.latestAutoDraftUuid || changeset?.hasAutosaveRevision ) ) {
 			return;
 		}
 
