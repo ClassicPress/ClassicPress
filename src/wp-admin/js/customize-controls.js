@@ -2980,8 +2980,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} else if ( e.target.classList.contains( 'select-button' ) ) {
 				customizeButton = e.target;
 				settingId = e.target.closest( 'li' ).dataset.settingId;
-				if ( settingId.includes( 'image' ) && settingId !== 'background_image' ) {
-					cropContext = e.target.closest( 'li' ).dataset.settingId;
+				if ( e.target.parentNode.dataset.requiredType === 'image' && settingId !== 'background_image' ) {
+					cropContext = settingId;
 				}
 				selectMedia();
 			} else if ( e.target.classList.contains( 'random-default-header' ) ) {
