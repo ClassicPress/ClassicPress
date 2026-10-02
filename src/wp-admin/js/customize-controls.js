@@ -2293,6 +2293,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 
 			li.remove();
+			if ( notificationsContainer.children.length === 0 ) {
+				notificationsContainer.parentNode.style.display = 'none';
+			}
 			saveButton.disabled = true;
 			saveButton.textContent = _wpCustomizeControlsL10n.publish;
 			publishSettings.style.display = 'none';
@@ -2352,6 +2355,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Clear stale notifications
 		notificationsContainer.replaceChildren();
+		notificationsContainer.parentNode.style.display = 'none';
 
 		// Populate arrays if a new menu is being added
 		for ( const [key, value] of entries ) {
@@ -2554,6 +2558,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 								message: error.message
 							} ) );
 						} );
+						notificationsContainer.parentNode.style.display = 'block';
 					}
 				} );
 			}
@@ -2600,6 +2605,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					data.onDismiss( li );
 				} else {
 					li.remove();
+				}
+				if ( notificationsContainer.children.length === 0 ) {
+					notificationsContainer.parentNode.style.display = 'none';
 				}
 			} );
 			li.append( btn );
@@ -2669,6 +2677,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		message.querySelector( 'a' ).href = getAutosaveRestoreUrl();
 		notificationsContainer.append( notice );
+		notificationsContainer.parentNode.style.display = 'block';
 	}
 
 	showAutosaveNotification();
