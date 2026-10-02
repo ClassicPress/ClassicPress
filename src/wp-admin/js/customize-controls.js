@@ -2745,7 +2745,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	document.addEventListener( 'click', function( e ) {
 		var id, page, itemBrowse, itemUpload, gridPanel, uploadPanel,
 			modalButtons, rightSidebar, modalPages, description,
-			selectedItem, image,
+			selectedItem, image, settingId,
 			ul = e.target.closest( 'ul' );
 
 		// Abort if this comes from a middle section heading or a widget
@@ -2979,7 +2979,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Add media file
 			} else if ( e.target.classList.contains( 'select-button' ) ) {
 				customizeButton = e.target;
-				if ( e.target.closest( 'li' ).dataset.settingId.includes( 'image' ) ) {
+				settingId = e.target.closest( 'li' ).dataset.settingId;
+				if ( settingId.includes( 'image' ) && settingId !== 'background_image' ) {
 					cropContext = e.target.closest( 'li' ).dataset.settingId;
 				}
 				selectMedia();
