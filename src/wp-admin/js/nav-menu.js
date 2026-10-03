@@ -20,6 +20,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Set variables for the whole file
 	 */
 	var column, originalDepth, originalClientX, originalLabel, newClientX, baseClientX, lastInput, lastSelect,
+		lastPointerClient = { x: 0, y: 0 },
+		indentDuringDrag = null,
 		postboxTogs = document.querySelectorAll( '.hide-postbox-tog' ),
 		advancedMenuProperties = document.querySelectorAll( '#adv-settings .hide-column-tog' ),
 		indent = 30,
@@ -215,6 +217,34 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		menuEdge += isRTL ? editMenu.innerWidth : 0;
 
 		/*
+		 * Sortable sometimes omits originalEvent on choose; keep coordinates from the handle press.
+		 */
+		editMenu.addEventListener( 'pointerdown', function( ev ) {
+			if ( ! ev.target.closest( '.item-move' ) ) {
+				return;
+			}
+			if ( typeof ev.clientX === 'number' ) {
+				lastPointerClient.x = ev.clientX;
+				lastPointerClient.y = ev.clientY;
+			}
+		}, true );
+		editMenu.addEventListener( 'mousedown', function( ev ) {
+			if ( ev.target.closest( '.item-move' ) ) {
+				lastPointerClient.x = ev.clientX;
+				lastPointerClient.y = ev.clientY;
+			}
+		}, true );
+		editMenu.addEventListener( 'touchstart', function( ev ) {
+			var t;
+			if ( ! ev.target.closest( '.item-move' ) || ! ev.touches || ! ev.touches[0] ) {
+				return;
+			}
+			t = ev.touches[0];
+			lastPointerClient.x = t.clientX;
+			lastPointerClient.y = t.clientY;
+		}, { capture: true, passive: true } );
+
+		/*
 		* Attach SortableJS to current menu
 		*/
 		Sortable.create( editMenu, {
@@ -223,15 +253,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			// Get position of menu item when chosen
 			onChoose: function( e ) {
-				originalClientX = e.originalEvent.clientX;
+				var oe = e.originalEvent, clientX;
+
+				if ( oe && typeof oe.clientX === 'number' ) {
+					clientX = oe.clientX;
+				} else {
+					clientX = lastPointerClient.x;
+				}
+
+				originalClientX = clientX;
+				newClientX = clientX;
 				originalDepth = menuItemDepth( e.item );
-				baseClientX = e.originalEvent.clientX - ( originalDepth * indent );
+				baseClientX = clientX - ( originalDepth * indent );
 
 				// Update aria-label for accessibility
 				refreshAdvancedAccessibilityOfItem( e.item, originalDepth, e.oldIndex );
 
 				// Ensure menu widget is closed before moving
-				e.item.querySelector( 'details' ).removeAttribute( 'open' );
+				if ( e.item.querySelector( 'details' ) ) {
+					e.item.querySelector( 'details' ).removeAttribute( 'open' );
+				}
 			},
 
 			// Style placeholder when element starts to be dragged
@@ -249,42 +290,58 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				originalLabel = e.item.querySelector( '.item-move' ).getAttribute( 'aria-label' ).split( '.' ).join( '' ).replace( 'Menu', 'menu' ).replace( 'Sub', menus.child );
 
 				// Style placeholder
-				details.style.backgroundColor = '#fefefe';
-				details.style.border = '1px dotted #444';
-				details.querySelector( 'summary' ).style.visibility = 'hidden';
-
-				// Continually update horizontal position of current item while dragging
-				editMenu.addEventListener( 'dragover', function( evt ) {
-					var xPos, diff;
-
-					if ( evt.target.closest( 'li' ) === e.item ) {
-						newClientX = evt.clientX;
-
-						// Continually update horizontal position of placeholder
-						xPos = evt.clientX - baseClientX;
-
-						// Get depth of previous item in list
-						prevItem = evt.target.closest( 'li' ).previousElementSibling;
-						if ( prevItem ) {
-							prevDepth = menuItemDepth( prevItem );
-						}
-
-						// Calculate left margin but prevent being indented more than once compared to previous item in list
-						if ( prevItem == null || xPos < 0 ) {
-							menuEdge = 0;
-						} else {
-							diff = Math.floor( xPos / indent );
-							if ( diff > maxDepth ) {
-								diff = maxDepth;
-							}
-							if ( diff > prevDepth + 1 ) {
-								diff = prevDepth + 1;
-							}
-							menuEdge = diff * indent;
-						}
-						document.querySelector( '.sortable-ghost' ).style.marginLeft = menuEdge + 'px';
+				if ( details ) {
+					details.style.backgroundColor = '#fefefe';
+					details.style.border = '1px dotted #444';
+					if ( details.querySelector( 'summary' ) ) {
+						details.querySelector( 'summary' ).style.visibility = 'hidden';
 					}
-				} );
+				}
+
+				/*
+				 * Pointer-driven Sortable often does not emit dragover the way native drag does, and
+				 * hit-testing the dragged row only misses the ghost. Drive indent from pointer position
+				 * and the ghost row's place in the list.
+				 */
+				indentDuringDrag = function( evt ) {
+					var c = evt.touches && evt.touches[0] ? evt.touches[0] : evt,
+						ghost, xPos, diff;
+
+					if ( ! c || typeof c.clientX !== 'number' ) {
+						return;
+					}
+
+					ghost = document.querySelector( '.sortable-ghost' );
+					if ( ! ghost ) {
+						return;
+					}
+
+					newClientX = c.clientX;
+					xPos = c.clientX - baseClientX;
+					prevItem = ghost.previousElementSibling;
+					prevDepth = 0;
+					if ( prevItem ) {
+						prevDepth = menuItemDepth( prevItem );
+					}
+
+					if ( prevItem == null || xPos < 0 ) {
+						menuEdge = 0;
+					} else {
+						diff = Math.floor( xPos / indent );
+						if ( diff > maxDepth ) {
+							diff = maxDepth;
+						}
+						if ( diff > prevDepth + 1 ) {
+							diff = prevDepth + 1;
+						}
+						menuEdge = diff * indent;
+					}
+					ghost.style.marginLeft = menuEdge + 'px';
+				};
+
+				document.addEventListener( 'pointermove', indentDuringDrag, true );
+				document.addEventListener( 'mousemove', indentDuringDrag, true );
+				document.addEventListener( 'dragover', indentDuringDrag, true );
 
 				// Does this menu item have children?
 				children = childMenuItems( e.item );
@@ -298,17 +355,37 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			onEnd: function( e ) {
 				var i, n, diff, prevItem, parent, parentDepth, newLabel,
 					newLabels, positionSpeech,
-					details = e.item.querySelector( 'details' ),
+					details,
 					depth = 0,
 					prevDepth = 0,
-					draggedClasses = e.item.className.split( ' ' );
+					draggedClasses;
+
+				if ( indentDuringDrag ) {
+					document.removeEventListener( 'pointermove', indentDuringDrag, true );
+					document.removeEventListener( 'mousemove', indentDuringDrag, true );
+					document.removeEventListener( 'dragover', indentDuringDrag, true );
+					indentDuringDrag = null;
+				}
+
+				if ( ! e || ! e.item ) {
+					return;
+				}
+
+				details = e.item.querySelector( 'details' );
+				draggedClasses = e.item.className.split( ' ' );
 
 				// Revert styling and set focus on move icon
 				e.item.style.marginLeft = '';
-				details.style.backgroundColor = '#f6f7f7';
-				details.style.border = '1px solid #dcdcde';
-				details.querySelector( 'summary' ).style.visibility = 'visible';
-				details.querySelector( '.dashicons-move' ).focus();
+				if ( details ) {
+					details.style.backgroundColor = '#f6f7f7';
+					details.style.border = '1px solid #dcdcde';
+					if ( details.querySelector( 'summary' ) ) {
+						details.querySelector( 'summary' ).style.visibility = 'visible';
+					}
+					if ( details.querySelector( '.dashicons-move' ) ) {
+						details.querySelector( '.dashicons-move' ).focus();
+					}
+				}
 
 				// Handle drop placement for RTL orientation
 				if ( isRTL ) {
@@ -486,17 +563,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						* Process the quick search response into a search result
 						*/
 						var matched, newID, items,
-							div = document.createElement( 'div' ),
+							template = document.createElement( 'template' ),
 							takenIDs = {},
 							form = document.getElementById( 'nav-menu-meta' ),
 							pattern = /menu-item[(\[^]\]*/,
 							wrapper = panel.closest( '.accordion-section-content' ),
 							selectAll = wrapper.querySelector( '.button-controls .select-all' );
 
-						div.innerHTML = menuMarkup;
-						items = div.querySelectorAll( 'li' );
+						template.innerHTML = menuMarkup;
+						items = template.content.querySelectorAll( 'li' );
 						if ( ! items.length ) {
-							panel.querySelector( '.categorychecklist' ).innerHTML = '<li><p>' + wp.i18n.__( 'No results found.' ) + '</p></li>';
+							panel.querySelector( '.categorychecklist' ).setHTML( '<li><p>' + wp.i18n.__( 'No results found.' ) + '</p></li>' );
 							panel.querySelector( '.spinner' ).classList.remove( 'is-active' );
 							wrapper.classList.add( 'has-no-menu-item' );
 							return;
@@ -521,10 +598,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 								takenIDs[newID] = true;
 								if ( newID !== matched[1] ) {
-									item.innerHTML = item.innerHTML.replace( new RegExp(
-										'menu-item\\[' + matched[1] + '\\]', 'g'),
+									item.setHTML( item.innerHTML.replace(
+										new RegExp( 'menu-item\\[' + matched[1] + '\\]', 'g'),
 										'menu-item[' + newID + ']'
-									);
+									) );
 								}
 							}
 							panel.querySelector( '.categorychecklist' ).append( item );
@@ -946,8 +1023,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						throw new Error( response.status );
 					} )
 					.then( function( menuMarkup ) {
+						const container = document.createElement( 'ul' );
 
-						editMenu.insertAdjacentHTML( 'beforeend', menuMarkup );
+						container.setHTML( menuMarkup, {
+							sanitizer: {}
+						} );
+						editMenu.insertAdjacentHTML( 'beforeend', container.innerHTML );
+
 						advancedMenuProperties.forEach( function( property ) {
 							var pendingValue = editMenu.querySelector( '.pending .field-' + property.value );
 							if ( ! property.checked ) {
@@ -1016,7 +1098,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 
 					// Update the post type menu meta box with new content from the response.
-					e.target.closest( '.inside' ).innerHTML = metaBoxData.markup;
+					e.target.closest( '.inside' ).setHTML( metaBoxData.markup );
 				} )
 				.catch( function( error ) {
 					console.log( error );
@@ -1050,15 +1132,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				if ( e.target.checked === true ) {
 					li = document.createElement( 'li' );
 					li.dataset.menuItemId = menuItemID;
-					li.innerHTML = '<span class="pending-menu-item-name">' + menuItemName + '</span> ' + '<span class="pending-menu-item-type">(' + menuItemType + ')</span>' + '<span class="separator"></span>';
+					li.setHTML( '<span class="pending-menu-item-name">' + menuItemName + '</span> ' + '<span class="pending-menu-item-type">(' + menuItemType + ')</span>' + '<span class="separator"></span>' );
 					document.querySelector( '#pending-menu-items-to-delete ul' ).append( li );
 				}
 
 				document.querySelectorAll( '#pending-menu-items-to-delete li .separator' ).forEach( function( sep, index ) {
 					if ( index === document.querySelectorAll( '#pending-menu-items-to-delete li .separator' ).length - 1 ) {
-						sep.innerHTML = '.';
+						sep.setHTML( '.' );
 					} else {
-						sep.innerHTML = ', ';
+						sep.setHTML( ', ' );
 					}
 				} );
 			}
@@ -1317,12 +1399,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( menuMarkup ) {
-			var ins = document.getElementById( 'menu-instructions' );
+			const container = document.createElement( 'ul' ),
+				ins = document.getElementById( 'menu-instructions' );
 
 			menuMarkup = menuMarkup || '';
 			menuMarkup = menuMarkup.toString().trim(); // Trim leading whitespaces.
 
-			editMenu.insertAdjacentHTML( placing, menuMarkup );
+			container.setHTML( menuMarkup, {
+				sanitizer: {}
+			} );
+			editMenu.insertAdjacentHTML( placing, container.innerHTML );
 
 			advancedMenuProperties.forEach( function( property ) {
 				var pendingValues = editMenu.querySelectorAll( '.pending .field-' + property.value );

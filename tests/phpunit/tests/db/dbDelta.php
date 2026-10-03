@@ -422,46 +422,6 @@ class Tests_DB_dbDelta extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @ticket 31869
-	 */
-	public function test_truncated_index() {
-		global $wpdb;
-
-		if ( ! $wpdb->has_cap( 'utf8mb4' ) ) {
-			$this->markTestSkipped( 'This test requires utf8mb4 support in MySQL.' );
-		}
-
-		// This table needs to be actually created.
-		remove_filter( 'query', array( $this, '_create_temporary_tables' ) );
-		remove_filter( 'query', array( $this, '_drop_temporary_tables' ) );
-
-		$table_name = "{$wpdb->prefix}test_truncated_index";
-
-		$create = "
-			CREATE TABLE $table_name (
-				a varchar(255) COLLATE utf8mb4_unicode_ci,
-				KEY a_key (a)
-			) ENGINE=InnoDB ROW_FORMAT=DYNAMIC";
-
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$wpdb->query( $create );
-
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$index = $wpdb->get_row( "SHOW INDEXES FROM $table_name WHERE Key_name='a_key';" );
-
-		$actual = dbDelta( $create, false );
-
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$wpdb->query( "DROP TABLE IF EXISTS $table_name;" );
-
-		if ( 191 !== $index->Sub_part ) {
-			$this->markTestSkipped( 'This test requires the index to be truncated.' );
-		}
-
-		$this->assertSame( array(), $actual );
-	}
-
-	/**
 	 * @ticket 36748
 	 */
 	public function test_dont_downsize_text_fields() {

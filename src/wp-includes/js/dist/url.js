@@ -492,17 +492,17 @@ module.exports.remove = removeAccents;
 /******/ 	});
 /************************************************************************/
 /******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
+/******/ 	let __webpack_module_cache__ = {};
 /******/ 	
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		let cachedModule = __webpack_module_cache__[moduleId];
 /******/ 		if (cachedModule !== undefined) {
 /******/ 			return cachedModule.exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 		let module = __webpack_module_cache__[moduleId] = {
 /******/ 			// no module.id needed
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
@@ -517,35 +517,27 @@ module.exports.remove = removeAccents;
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
+/******/ 	// define getter/value functions for harmony exports
+/******/ 	__webpack_require__.d = function(exports, definition) {
+/******/ 		for(var key in definition) {
+/******/ 			if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 				Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 			}
-/******/ 		};
-/******/ 	}();
+/******/ 		}
+/******/ 	};
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); };
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	}();
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
+let __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 !function() {
 "use strict";
@@ -681,7 +673,7 @@ function getQueryString(url) {
   let query;
   try {
     query = new URL(url, "http://example.com").search.substring(1);
-  } catch (error) {
+  } catch {
   }
   if (query) {
     return query;
@@ -766,7 +758,7 @@ function isValidFragment(fragment) {
 function safeDecodeURIComponent(uriComponent) {
   try {
     return decodeURIComponent(uriComponent);
-  } catch (uriComponentError) {
+  } catch {
     return uriComponent;
   }
 }
@@ -802,8 +794,15 @@ function setPath(object, path, value) {
 }
 function getQueryArgs(url) {
   return (getQueryString(url) || "").replace(/\+/g, "%20").split("&").reduce((accumulator, keyValue) => {
-    const [key, value = ""] = keyValue.split("=").filter(Boolean).map(safeDecodeURIComponent);
+    const separatorIndex = keyValue.indexOf("=");
+    const hasValue = separatorIndex !== -1;
+    const key = safeDecodeURIComponent(
+      hasValue ? keyValue.slice(0, separatorIndex) : keyValue
+    );
     if (key) {
+      const value = hasValue ? safeDecodeURIComponent(
+        keyValue.slice(separatorIndex + 1)
+      ) : "";
       const segments = key.replace(/\]/g, "").split("[");
       setPath(accumulator, segments, value);
     }
@@ -889,7 +888,7 @@ function prependHTTP(url) {
 function safeDecodeURI(uri) {
   try {
     return decodeURI(uri);
-  } catch (uriError) {
+  } catch {
     return uri;
   }
 }
@@ -913,7 +912,7 @@ function filterURLForDisplay(url, maxLength = null) {
   const urlPieces = filteredURL.split("/");
   const file = urlPieces[urlPieces.length - 1];
   if (file.length <= maxLength) {
-    return "\u2026" + filteredURL.slice(-maxLength);
+    return "…" + filteredURL.slice(-maxLength);
   }
   const index = file.lastIndexOf(".");
   const [fileName, extension] = [
@@ -921,7 +920,11 @@ function filterURLForDisplay(url, maxLength = null) {
     file.slice(index + 1)
   ];
   const truncatedFile = fileName.slice(-3) + "." + extension;
-  return file.slice(0, maxLength - truncatedFile.length - 1) + "\u2026" + truncatedFile;
+  return (
+    // A negative end would be read as an offset from the end of the string,
+    // keeping most of the file name and returning more than `maxLength`.
+    file.slice(0, Math.max(0, maxLength - truncatedFile.length - 1)) + "…" + truncatedFile
+  );
 }
 
 
@@ -947,7 +950,7 @@ function getFilename(url) {
   }
   try {
     filename = new URL(url, "http://example.com").pathname.split("/").pop();
-  } catch (error) {
+  } catch {
   }
   if (filename) {
     return filename;
@@ -957,14 +960,18 @@ function getFilename(url) {
 
 ;// ./node_modules/@wordpress/url/build-module/normalize-path.mjs
 // packages/url/src/normalize-path.ts
+
 function normalizePath(path) {
-  const split = path.split("?");
-  const query = split[1];
-  const base = split[0];
+  const separatorIndex = path.indexOf("?");
+  if (separatorIndex === -1) {
+    return path;
+  }
+  const base = path.slice(0, separatorIndex);
+  const query = path.slice(separatorIndex + 1);
   if (!query) {
     return base;
   }
-  return base + "?" + query.split("&").map((entry) => entry.split("=")).map((pair) => pair.map(decodeURIComponent)).sort((a, b) => a[0].localeCompare(b[0])).map((pair) => pair.map(encodeURIComponent)).map((pair) => pair.join("=")).join("&");
+  return base + "?" + query.split("&").map((entry) => entry.split("=")).map((pair) => pair.map(safeDecodeURIComponent)).sort((a, b) => a[0].localeCompare(b[0])).map((pair) => pair.map(encodeURIComponent)).map((pair) => pair.join("=")).join("&");
 }
 
 

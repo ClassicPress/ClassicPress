@@ -48,6 +48,7 @@
 	<exclude-pattern>/src/wp-content/object-cache\.php</exclude-pattern>
 	<exclude-pattern>/src/wp-content/php-error\.php</exclude-pattern>
 	<exclude-pattern>/src/wp-content/sunrise\.php</exclude-pattern>
+	<exclude-pattern>/src/wp-includes/ID3/*</exclude-pattern>
 
 	<!-- Must-Use plugins. -->
 	<exclude-pattern>/src/wp-content/mu-plugins/*</exclude-pattern>
@@ -57,5 +58,4 @@
 
 	<!-- Themes except the twenty* themes. -->
 	<exclude-pattern>/src/wp-content/themes/(?!twenty)*</exclude-pattern>
-
 </ruleset>

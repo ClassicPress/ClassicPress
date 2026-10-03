@@ -43,7 +43,7 @@ nvm use || nvm install
 npm install -g js-beautify
 rm -rf node_modules/
 npm install
-grunt build
+npm run grunt build
 
 mv build/ build-branch/
 cp -vaR build-branch/ build-branch-unminified/
@@ -57,7 +57,7 @@ nvm use || nvm install
 npm install -g js-beautify
 rm -rf node_modules/
 npm install
-grunt build
+npm run grunt build
 
 cp -vaR build/ build-unminified/
 

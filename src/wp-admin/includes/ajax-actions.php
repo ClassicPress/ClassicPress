@@ -1950,6 +1950,13 @@ function wp_ajax_menu_quick_search() {
 function wp_ajax_get_permalink() {
 	check_ajax_referer( 'getpermalink', 'getpermalinknonce' );
 	$post_id = isset( $_POST['post_id'] ) ? (int) $_POST['post_id'] : 0;
+	if ( ! $post_id ) {
+		// Bypass call to get_preview_post_link() for unspecified post ID.
+		wp_die( '' );
+	}
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		wp_die( -1 );
+	}
 	wp_die( get_preview_post_link( $post_id ) );
 }
 
@@ -1961,6 +1968,13 @@ function wp_ajax_get_permalink() {
 function wp_ajax_sample_permalink() {
 	check_ajax_referer( 'samplepermalink', 'samplepermalinknonce' );
 	$post_id = isset( $_POST['post_id'] ) ? (int) $_POST['post_id'] : 0;
+	if ( ! $post_id ) {
+		// Bypass call to get_sample_permalink_html() for unspecified post ID.
+		wp_die( '' );
+	}
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		wp_die( -1 );
+	}
 	$title   = isset( $_POST['new_title'] ) ? $_POST['new_title'] : '';
 	$slug    = isset( $_POST['new_slug'] ) ? $_POST['new_slug'] : null;
 	wp_die( get_sample_permalink_html( $post_id, $title, $slug ) );
@@ -2594,25 +2608,65 @@ function wp_ajax_upload_attachment() {
 function wp_ajax_media_cat_upload() {
 	check_ajax_referer( 'media-cat-upload', 'media_cat_upload_nonce' );
 
+	if ( ! current_user_can( 'upload_files' ) ) {
+		wp_send_json_error(
+			array(
+				'message' => __( 'You do not have permission to do this.' ),
+			)
+		);
+	}
+
 	$response  = __( 'The upload media category folder has been updated.' );
 	$new_value = '';
 
-	if ( isset( $_POST['media_cat_upload_value'] ) ) {
-		$new_value = wp_unslash( $_POST['media_cat_upload_value'] );
-		update_option( 'media_cat_upload_folder', sanitize_url( '/' . $new_value ) );
-
-		if ( $new_value === '' ) {
-			$response = __( 'You need to choose a media category folder before you can upload a file.' );
-		}
-	}
-
-	// Convert array to JSON.
-	wp_send_json_success(
+	$media_terms = get_terms(
 		array(
-			'value'   => $new_value,
-			'message' => $response,
+			'taxonomy'   => 'media_category',
+			'fields'     => 'slugs',
+			'hide_empty' => false,
 		)
 	);
+
+	if ( is_wp_error( $media_terms ) || ! is_array( $media_terms ) ) {
+		wp_send_json_error(
+			array(
+				'message' => __( 'You need to create a media category before you can upload a file.' ),
+			)
+		);
+	}
+
+	if ( isset( $_POST['media_cat_upload_value'] ) ) {
+		$new_value = trim( wp_unslash( $_POST['media_cat_upload_value'] ) );
+		$new_value = wp_normalize_path( $new_value );
+
+		if ( $new_value === '' ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'You need to choose a media category folder before you can upload a file.' ),
+				)
+			);
+		} else {
+			$segments = explode( '/', $new_value );
+			foreach ( $segments as $segment ) {
+				if ( ! in_array( $segment, $media_terms, true ) ) {
+					wp_send_json_error(
+						array(
+							'message' => __( 'You need to choose a valid media category folder before you can upload a file.' ),
+						)
+					);
+				}
+			}
+
+			$new_value = '/' . $new_value;
+			update_option( 'media_cat_upload_folder', $new_value );
+			wp_send_json_success(
+				array(
+					'value'   => $new_value,
+					'message' => $response,
+				)
+			);
+		}
+	}
 }
 
 /**
@@ -3997,6 +4051,10 @@ function wp_ajax_query_themes() {
 		}
 
 		$theme->name        = wp_kses( $theme->name, $themes_allowedtags );
+
+		/* translators: %s: Theme name. */
+		$details_label      = sprintf( __( 'Details for theme: %s' ), $theme->name );
+
 		$theme->author      = wp_kses( $theme->author['display_name'], $themes_allowedtags );
 		$theme->version     = wp_kses( $theme->version, $themes_allowedtags );
 		$theme->description = wp_kses( $theme->description, $themes_allowedtags );
@@ -4010,14 +4068,29 @@ function wp_ajax_query_themes() {
 			)
 		);
 
-		$theme->num_ratings    = number_format_i18n( $theme->num_ratings );
-		$theme->preview_url    = set_url_scheme( $theme->preview_url );
+		$theme->num_ratings = number_format_i18n( $theme->num_ratings );
+		$theme->preview_url = set_url_scheme( $theme->preview_url );
+		$alt_text           = sprintf( __( 'Screenshot of theme: %s' ), $theme->name );
 
 		// Build HTML response
-		$theme_item = '<li id="' . esc_attr__( $theme->slug ) . '" class="theme' . esc_attr( $active ) . '" tabindex="0" data-install-nonce="' . esc_url( $theme->install_url ) . '" data-activate-nonce="' . esc_url( $theme->activate_url ) . '" data-customize="' . esc_url( $theme->customize_url ) . '" data-home="' . esc_url( $theme->homepage ) . '" data-description="' . esc_attr__( $theme->description ) . '" data-tags="' . esc_attr__( implode( ',', $theme->tags ) ) . '" data-ratings="' . esc_attr( $theme->stars ) . '" data-num-ratings="' . esc_attr( $theme->num_ratings ) . '" data-version="' . esc_attr( $theme->version ) . '">';
+		$theme_item = '<li id="' . esc_attr( $theme->slug ) . '" .
+			class="theme' . esc_attr( $active ) . '" . 
+			data-id="' . esc_attr( $theme->slug ) . '" . 
+			data-install-nonce="' . esc_url( $theme->install_url ) . '" . 
+			data-activate-nonce="' . esc_url( $theme->activate_url ) . '" . 
+			data-customize="' . esc_url( $theme->customize_url ) . '" . 
+			data-home="' . esc_url( $theme->homepage ) . '" . 
+			data-description="' . esc_attr( $theme->description ) . '" . 
+			data-tags="' . esc_attr( implode( ',', $theme->tags ) ) . '" . 
+			data-ratings="' . esc_attr( $theme->stars ) . '" . 
+			data-num-ratings="' . esc_attr( $theme->num_ratings ) . '" . 
+			data-version="' . esc_attr( $theme->version ) . '" . 
+			data-compatible-wp="' . absint( $theme->compatible_wp ) . '" . 
+			data-compatible-php="' . absint( $theme->compatible_php ) . '" .
+		>';
 
 		if ( ! empty( $theme->screenshot_url ) ) {
-			$theme_item .= '<div class="theme-screenshot"><img src="' . esc_url( $theme->screenshot_url ) . '" alt=""></div>';
+			$theme_item .= '<div class="theme-screenshot"><img src="' . esc_url( $theme->screenshot_url ) . '" alt="' . esc_attr( $alt_text ) . '"></div>';
 		} else {
 			$theme_item .= '<div class="theme-screenshot blank"></div>';
 		}
@@ -4090,7 +4163,10 @@ function wp_ajax_query_themes() {
 			$theme_item .= '</p></div>';
 		}
 
-		$theme_item .= '<button class="more-details">' . esc_html__( 'Details &amp; Preview' ) . '</button>';
+		$theme_item .= '<button class="more-details"
+			aria-label="' . esc_attr( $details_label ) . '"
+			aria-controls="theme-modal"
+			aria-expanded="false">' . esc_html__( 'Details &amp; Preview' ) . '</button>';
 		$theme_item .= '<div class="theme-author">';
 			/* translators: %s: Theme author name. */
 			$theme_item .= sprintf( __( 'By %s' ), $theme->author );
@@ -4144,8 +4220,7 @@ function wp_ajax_query_themes() {
 				/* translators: %s: Theme name. */
 				$aria_label = sprintf( _x( 'Install %s', 'theme' ), $theme->name );
 
-				$theme_item .= '<a class="button button-primary theme-install" data-name="' . esc_attr__( $theme->name ) . '" data-slug="' . esc_attr__( $theme->slug ) . '" href="' . esc_url( $theme->install_url ) . '" aria-label="' . esc_attr( $aria_label ) . '">' . __( 'Install' ) . '</a>';
-				$theme_item .= '<button class="button preview install-theme-preview">' . __( 'Preview' ) . '</button>';
+				$theme_item .= '<a class="button button-primary theme-install" data-name="' . esc_attr__( $theme->name ) . '" data-slug="' . esc_attr__( $theme->slug ) . '" href="' . esc_url( $theme->install_url ) . '" aria-label="' . esc_attr( $aria_label ) . '">' . __( 'Install & Preview' ) . '</a>';
 
 			} else {
 				/* translators: %s: Theme name. */

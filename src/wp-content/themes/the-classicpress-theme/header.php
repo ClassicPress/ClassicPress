@@ -34,18 +34,20 @@
 
 	<header id="masthead">
 		<div id="inner-header">
-			<span class="logo" role="banner">
-				
+			<div class="logo" role="banner">
+
 				<?php
 				// Custom logo
 				if ( function_exists( 'the_custom_logo' ) && has_custom_logo() ) {
 					the_custom_logo();
 				} else {
-					echo '<a href="' . esc_url( home_url( '/' ) ) . '">' . esc_html( get_bloginfo( 'name' ) ) . '</a>';
+					echo '<div class="site-title"><a href="' . esc_url( home_url( '/' ) ) . '">' . esc_html( get_bloginfo( 'name' ) ) . '</a></div>';
+					if ( get_bloginfo( 'description' ) ) {
+						echo '<div class="site-description">' . esc_html( get_bloginfo( 'description' ) ) . '</div>';
+					}
 				}
 				?>
-
-			</span>
+			</div>
 
 			<?php if ( has_nav_menu( 'main-menu' ) ) { ?>
 				<nav id="site-navigation" class="main-navigation nav--toggle-sub nav--toggle-small" aria-label="<?php esc_attr_e( 'Main menu', 'the-classicpress-theme' ); ?>">

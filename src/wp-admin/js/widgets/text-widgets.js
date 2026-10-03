@@ -9,11 +9,26 @@
  * @since CP 2.5.0
  */
 document.addEventListener( 'DOMContentLoaded', function() {
-	var addButton, pond, content,
+	var observer, addButton, pond, content,
 		{ FilePond } = window, // import FilePond
 		selectedIds = [],
 		parser = new DOMParser(),
 		dialog = document.getElementById( 'widget-modal' );
+
+	// If in Customizer, remove old-style dialog
+	// Preventing it from opening would be a breaking change, so just remove it asap for now
+	if ( document.body.className.includes( 'wp-customizer' ) ) {
+		observer = new MutationObserver( function() {
+			var oldModal = document.querySelector( '.media-modal.wp-core-ui' );
+			if ( oldModal ) {
+				oldModal.parentNode.remove();
+			}
+		} );
+		observer.observe( document.documentElement, {
+			childList: true,
+			subtree: true
+		} );
+	}
 
 	// Initialize the editor in the widget
 	function initTextWidget( widget ) {
@@ -45,10 +60,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						tinymce: {
 							wpautop: true,
 							setup: function( editor ) {
-								editor.on( 'change', function() {
+								editor.on( 'change', function() { console.log('change');
 									editor.save(); // Sync content to textarea on change
 									widget.classList.add( 'widget-dirty' );
-									textarea.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+									widget.dispatchEvent( new Event( 'change', { bubbles: true } ) );
 									widget.querySelector( '.widget-control-save' ).disabled = false;
 								} );
 
@@ -139,7 +154,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Ensure TinyMCE loads on page load
 	document.querySelectorAll( '#widgets-right .id_base, #wp_inactive_widgets .id_base' ).forEach( function( base ) {
 		if ( base.value === 'text' ) {
-			initTextWidget( base.closest ( '.widget' ) );
+			initTextWidget( base.closest( '.widget' ) );
 		}
 	} );
 
@@ -2224,6 +2239,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			videoListButton = dialog.querySelector( '#menu-item-video-playlist' ),
 			urlButton = dialog.querySelector( '#menu-item-embed' );
 
+		if ( ! mediaButton ) {
+			return;
+		}
+
 		if ( dialog.querySelector( '.widget-modal-header-buttons' ) ) {
 			dialog.querySelector( '.widget-modal-header-buttons' ).remove();
 		}
@@ -2296,22 +2315,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			itemLibrary, div, urlSettings, itemCancel, galleryInsert, galleryUpdate,
 			librarySelect, headerButtons, galleryGrid, libraryGrid, libraryItems,
 			content, sidebarSettings, sidebarInfo, gridSubPanel, dom, shortcodes,
-			editor, selectedNode, editorContainer, tinyWidget, oldModal,
+			editor, selectedNode, editorContainer, tinyWidget,
 			params = '',
 			selectedItems = [],
 			widget = e.target.closest( '.widget' );
 
 		// Add a media file
 		if ( widget ) {
-			// If in Customizer, remove old-style dialog
-			// Preventing it from opening would be a breaking change, so just remove it asap for now
-			if ( document.body.className.includes( 'wp-customizer' ) ) {
-				oldModal = document.querySelector( '.media-modal.wp-core-ui' );
-				if ( oldModal ) {
-					oldModal.parentNode.remove();
-				}
-			}
-
 			base = widget.querySelector( '.id_base' );
 			if ( base && base.value === 'text' && e.target.tagName === 'BUTTON' ) {
 				if ( e.target.className.includes( 'add_media' ) ) {
@@ -2708,14 +2718,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					editList( widgetEl, selectedIds, fileType, params );
 
 				// Reverse the order of items in the gallery or playlist
-				} else if ( e.target.className.includes( 'gallery-button-reverse' ) ) {
+				} else if ( e.target.classList && e.target.classList.contains( 'gallery-button-reverse' ) ) {
 					dialog.querySelectorAll( '#gallery-grid li:not( [hidden] )' ).forEach( function( item ) {
 						item.parentNode.prepend( item );
 					} );
 					selectedIds.reverse();
 
 				// Delete an item from the media library
-				} else if ( e.target.className.includes( 'delete-attachment' ) ) {
+				} else if ( e.target.classList && e.target.classList.contains( 'delete-attachment' ) ) {
 					if ( dialog ) {
 						if ( window.confirm( TEXT_WIDGET.confirm_delete ) ) {
 							deleteItem( e.target.dataset.id );
@@ -2746,7 +2756,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 
 				// Copy URL
-				} else if ( e.target.className.includes( 'copy-attachment-url' ) ) {
+				} else if ( e.target.classList && e.target.classList.contains( 'copy-attachment-url' ) ) {
 					copyToClipboard( e.target );
 				}
 			}

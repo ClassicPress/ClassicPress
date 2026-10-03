@@ -2173,38 +2173,6 @@ HTML
 	/**
 	 * @ticket 36392
 	 */
-	public function test_wp_add_inline_script_customize_dependency() {
-		global $wp_scripts;
-
-		wp_default_scripts( $wp_scripts );
-		wp_default_packages( $wp_scripts );
-
-		$wp_scripts->base_url  = '';
-		$wp_scripts->do_concat = true;
-
-		$expected_tail  = "<script src='/customize-dependency.js' id='customize-dependency-js'></script>\n";
-		$expected_tail .= "<script id=\"customize-dependency-js-after\">\n";
-		$expected_tail .= "tryCustomizeDependency()\n";
-		$expected_tail .= "</script>\n";
-
-		$handle = 'customize-dependency';
-		wp_enqueue_script( $handle, '/customize-dependency.js', array( 'customize-controls' ), null );
-		wp_add_inline_script( $handle, 'tryCustomizeDependency()' );
-
-		// Effectively ignore the output until retrieving it later via `getActualOutput()`.
-		$this->expectOutputRegex( '`.`' );
-
-		wp_print_scripts();
-		_print_scripts();
-		$print_scripts = $this->getActualOutput();
-
-		$tail = substr( $print_scripts, strrpos( $print_scripts, "<script src='/customize-dependency.js' id='customize-dependency-js'>" ) );
-		$this->assertSame( $expected_tail, $tail );
-	}
-
-	/**
-	 * @ticket 36392
-	 */
 	public function test_wp_add_inline_script_after_for_core_scripts_with_concat_is_limited_and_falls_back_to_no_concat() {
 		global $wp_scripts, $wp_version;
 

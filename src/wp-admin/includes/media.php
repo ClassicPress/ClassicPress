@@ -1710,7 +1710,7 @@ function get_media_item( $attachment_id, $args = null ) {
 
 	if ( isset( $_GET['post_id'] ) ) {
 		$calling_post_id = absint( $_GET['post_id'] );
-	} elseif ( isset( $_POST ) && count( $_POST ) ) {// Like for async-upload where $_GET['post_id'] isn't set.
+	} elseif ( ! empty( $_POST ) ) { // Like for async-upload where $_GET['post_id'] isn't set.
 		$calling_post_id = $post->post_parent;
 	}
 
@@ -3285,7 +3285,7 @@ function attachment_submitbox_metadata() {
 	<?php
 	if ( $post->post_parent ) {
 		$post_parent = get_post( $post->post_parent );
-		if ( $post_parent ) {
+		if ( $post_parent && current_user_can( 'read_post', $post_parent->ID ) ) {
 			$uploaded_to_title = $post_parent->post_title ? $post_parent->post_title : __( '(no title)' );
 			$uploaded_to_link  = get_edit_post_link( $post->post_parent, 'raw' );
 			?>

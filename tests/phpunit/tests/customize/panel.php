@@ -155,62 +155,10 @@ class Tests_WP_Customize_Panel extends WP_UnitTestCase {
 
 	/**
 	 * @see WP_Customize_Panel::maybe_render()
-	 */
-	public function test_maybe_render() {
-		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
-		$panel                        = new WP_Customize_Panel( $this->manager, 'bar' );
-		$customize_render_panel_count = did_action( 'customize_render_panel' );
-		add_action( 'customize_render_panel', array( $this, 'action_customize_render_panel_test' ) );
-		ob_start();
-		$panel->maybe_render();
-		$content = ob_get_clean();
-		$this->assertTrue( $panel->check_capabilities() );
-		$this->assertEmpty( $content );
-		$this->assertSame( $customize_render_panel_count + 1, did_action( 'customize_render_panel' ), 'Unexpected did_action count for customize_render_panel' );
-		$this->assertSame( 1, did_action( "customize_render_panel_{$panel->id}" ), "Unexpected did_action count for customize_render_panel_{$panel->id}" );
-	}
-
-	/**
-	 * @see WP_Customize_Panel::maybe_render()
 	 * @param WP_Customize_Panel $panel
 	 */
 	public function action_customize_render_panel_test( $panel ) {
 		$this->assertInstanceOf( 'WP_Customize_Panel', $panel );
-	}
-
-	/**
-	 * @see WP_Customize_Panel::print_template()
-	 */
-	public function test_print_templates_standard() {
-		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
-
-		$panel = new WP_Customize_Panel( $this->manager, 'baz' );
-		ob_start();
-		$panel->print_template();
-		$content = ob_get_clean();
-		$this->assertStringContainsString( '<script type="text/html" id="tmpl-customize-panel-default-content">', $content );
-		$this->assertStringContainsString( 'accordion-section-title', $content );
-		$this->assertStringContainsString( 'control-panel-content', $content );
-		$this->assertStringContainsString( '<script type="text/html" id="tmpl-customize-panel-default">', $content );
-		$this->assertStringContainsString( 'customize-panel-description', $content );
-		$this->assertStringContainsString( 'preview-notice', $content );
-	}
-
-	/**
-	 * @see WP_Customize_Panel::print_template()
-	 */
-	public function test_print_templates_custom() {
-		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
-
-		$panel = new Custom_Panel_Test( $this->manager, 'baz' );
-		ob_start();
-		$panel->print_template();
-		$content = ob_get_clean();
-		$this->assertStringContainsString( '<script type="text/html" id="tmpl-customize-panel-titleless-content">', $content );
-		$this->assertStringNotContainsString( 'accordion-section-title', $content );
-
-		$this->assertStringContainsString( '<script type="text/html" id="tmpl-customize-panel-titleless">', $content );
-		$this->assertStringNotContainsString( 'preview-notice', $content );
 	}
 }
 
@@ -218,24 +166,4 @@ require_once ABSPATH . WPINC . '/class-wp-customize-panel.php';
 // phpcs:ignore Generic.Files.OneObjectStructurePerFile
 class Custom_Panel_Test extends WP_Customize_Panel {
 	public $type = 'titleless';
-
-	protected function render_template() {
-		?>
-		<li id="accordion-panel-{{ data.id }}" class="accordion-section control-section control-panel control-panel-{{ data.type }}">
-			<ul class="accordion-sub-container control-panel-content"></ul>
-		</li>
-		<?php
-	}
-
-	protected function content_template() {
-		?>
-		<li class="panel-meta accordion-section control-section<# if ( ! data.description ) { #> cannot-expand<# } #>">
-			<# if ( data.description ) { #>
-				<div class="accordion-section-content description">
-					{{{ data.description }}}
-				</div>
-			<# } #>
-		</li>
-		<?php
-	}
 }

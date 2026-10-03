@@ -275,7 +275,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 			if ( title ) {
 				title = ': ' + title.replace( /<[^<>]+>/g, '' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
-				widget.querySelector( '.in-widget-title' ).innerHTML = title;
+				widget.querySelector( '.in-widget-title' ).setHTML( title );
 			}
 
 			if ( widget.querySelector( 'p.widget-error' ) != null ) {
@@ -407,14 +407,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 
 	function ghostImage( dataTransfer, dragEl ) {
-		var ghostImage = document.createElement( 'details' );
+		var ghostImage = document.createElement( 'details' ),
+			summary = document.createElement( 'summary' ),
+			title = document.createElement( 'h3' );
+
+		summary.className = 'widget-title';
+		title.textContent = dragEl.querySelector( 'h3' ).textContent;
+		summary.append( title );
+
 		ghostImage.id = 'sortable-ghost';
 		ghostImage.className = 'widget-top';
-		ghostImage.innerHTML = '<summary class="widget-title"><h3>' + dragEl.querySelector( 'h3' ).textContent + '</h3></summary>';
 		ghostImage.style.position = 'absolute';
 		ghostImage.style.top = '-1000px';
 		ghostImage.style.width = dragEl.getBoundingClientRect().width + 'px';
-		document.body.appendChild( ghostImage );
+
+		ghostImage.append( summary );
+		document.body.append( ghostImage );
 		dataTransfer.setDragImage( ghostImage, 30, 20 );
 	}
 
@@ -595,16 +603,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						if ( title ) {
 							title = ': ' + title.replace( /<[^<>]+>/g, '' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
 						}
-						widget.querySelector( '.in-widget-title' ).innerHTML = title;
+						widget.querySelector( '.in-widget-title' ).setHTML( title );
 
 						widget.querySelector( '.widget-control-save' ).disabled = true;
 						widget.querySelector( '.widget-control-save' ).value = wp.i18n.__( 'Saved' );
 
 						widget.classList.remove( 'widget-dirty' );
 
-						document.dispatchEvent( new CustomEvent('widget-updated', {
+						document.dispatchEvent( new CustomEvent( 'widget-updated', {
 							detail: { widget: widget }
-						}));
+						} ) );
 					}
 					document.querySelectorAll( '.spinner' ).forEach( function( spinner ) {
 						spinner.classList.remove( 'is-active' );

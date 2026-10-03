@@ -297,11 +297,22 @@ class WP_Customize_Panel {
 	/**
 	 * Render the panel container, and then its contents (via `this->render_content()`) in a subclass.
 	 *
-	 * Panel containers are now rendered in JS by default, see WP_Customize_Panel::print_template().
-	 *
-	 * @since 4.0.0
+	 * @since CP-2.8.0
 	 */
-	protected function render() {}
+	protected function render() {
+		?>
+		<li id="accordion-panel-<?php echo esc_attr( $this->id ); ?>"
+			class="accordion-section control-section control-panel control-panel-<?php echo esc_attr( $this->type ); ?>"
+		>
+			<h3 class="accordion-section-title">
+				<a href="#sub-accordion-panel-<?php echo esc_attr( $this->id ); ?>">
+					<?php echo esc_html( $this->title ); ?>
+				</a>
+			</h3>
+			<ul class="accordion-sub-container control-panel-content"></ul>
+		</li>
+		<?php
+	}
 
 	/**
 	 * Render the panel UI in a subclass.
@@ -310,101 +321,84 @@ class WP_Customize_Panel {
 	 *
 	 * @since 4.1.0
 	 */
-	protected function render_content() {}
-
-	/**
-	 * Render the panel's JS templates.
-	 *
-	 * This function is only run for panel types that have been registered with
-	 * WP_Customize_Manager::register_panel_type().
-	 *
-	 * @since 4.3.0
-	 *
-	 * @see WP_Customize_Manager::register_panel_type()
-	 */
-	public function print_template() {
+	public function render_content() {
+		if ( ! $this->check_capabilities() ) {
+			return;
+		}
+		$cannot_expand = isset( $this->description ) ? '' : ' cannot-expand';
 		?>
-		<script type="text/html" id="tmpl-customize-panel-<?php echo esc_attr( $this->type ); ?>-content">
-			<?php $this->content_template(); ?>
-		</script>
-		<script type="text/html" id="tmpl-customize-panel-<?php echo esc_attr( $this->type ); ?>">
-			<?php $this->render_template(); ?>
-		</script>
-		<?php
-	}
 
-	/**
-	 * An Underscore (JS) template for rendering this panel's container.
-	 *
-	 * Class variables for this panel class are available in the `data` JS object;
-	 * export custom variables by overriding WP_Customize_Panel::json().
-	 *
-	 * @see WP_Customize_Panel::print_template()
-	 *
-	 * @since 4.3.0
-	 */
-	protected function render_template() {
-		?>
-		<li id="accordion-panel-{{ data.id }}" class="accordion-section control-section control-panel control-panel-{{ data.type }}">
-			<h3 class="accordion-section-title" tabindex="0">
-				{{ data.title }}
+		<li class="panel-meta customize-info accordion-section<?php echo esc_attr( $cannot_expand ); ?>">
+			<a href="#customize-pane-parent" class="customize-panel-back">
 				<span class="screen-reader-text">
 					<?php
 					/* translators: Hidden accessibility text. */
-					_e( 'Press return or enter to open this panel' );
+					esc_html_e( 'Back' );
 					?>
 				</span>
-			</h3>
-			<ul class="accordion-sub-container control-panel-content"></ul>
+			</a>
+			<div class="accordion-section-title">
+				<h2 class="preview-notice">
+
+				<?php
+					/* translators: %s: The site/panel title in the Customizer. */
+					printf( __( 'You are customizing %s' ), '<strong class="panel-title">' . esc_html( $this->title ) . '</strong>' );
+				?>
+
+				</h2>
+
+				<?php
+				if ( $this->description ) {
+					?>
+
+					<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false">
+						<span class="screen-reader-text">
+
+							<?php
+							/* translators: Hidden accessibility text. */
+							esc_html_e( 'Help' );
+							?>
+
+						</span>
+					</button>
+
+					<?php
+				}
+				?>
+
+			</div>
+
+			<?php
+			if ( $this->description ) {
+				?>
+
+				<div class="description customize-panel-description">
+					<?php echo wp_kses_post( $this->description ); ?>
+				</div>
+
+				<?php
+			}
+			?>
+
+			<div class="customize-control-notifications-container"></div>
 		</li>
+
 		<?php
 	}
 
 	/**
-	 * An Underscore (JS) template for this panel's content (but not its container).
+	 * Redundant Underscore (JS) template for rendering this panel's container.
 	 *
-	 * Class variables for this panel class are available in the `data` JS object;
-	 * export custom variables by overriding WP_Customize_Panel::json().
-	 *
-	 * @see WP_Customize_Panel::print_template()
-	 *
-	 * @since 4.3.0
+	 * @since CP-2.8.0
 	 */
-	protected function content_template() {
-		?>
-		<li class="panel-meta customize-info accordion-section <# if ( ! data.description ) { #> cannot-expand<# } #>">
-			<button class="customize-panel-back" tabindex="-1"><span class="screen-reader-text">
-				<?php
-				/* translators: Hidden accessibility text. */
-				_e( 'Back' );
-				?>
-			</span></button>
-			<div class="accordion-section-title">
-				<span class="preview-notice">
-				<?php
-					/* translators: %s: The site/panel title in the Customizer. */
-					printf( __( 'You are customizing %s' ), '<strong class="panel-title">{{ data.title }}</strong>' );
-				?>
-				</span>
-				<# if ( data.description ) { #>
-					<button type="button" class="customize-help-toggle dashicons dashicons-editor-help" aria-expanded="false"><span class="screen-reader-text">
-						<?php
-						/* translators: Hidden accessibility text. */
-						_e( 'Help' );
-						?>
-					</span></button>
-				<# } #>
-			</div>
-			<# if ( data.description ) { #>
-				<div class="description customize-panel-description">
-					{{{ data.description }}}
-				</div>
-			<# } #>
+	protected function render_template() {}
 
-			<div class="customize-control-notifications-container"></div>
-		</li>
-		<?php
-	}
+	/**
+	 * Redundant Underscore (JS) template for this panel's content.
+	 *
+	 * @since CP-2.8.0
+	 */
+	protected function content_template() {}
 }
 
 /** WP_Customize_Nav_Menus_Panel class */

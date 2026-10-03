@@ -140,6 +140,8 @@
 	background: #fff;
 	border: 1px solid #c3c4c7;
 	border-top: none;
+	margin-top: -10px;
+	margin-bottom: 10px;
 	cursor: auto;
 }
 
@@ -244,6 +246,7 @@
 }
 
 #available-widgets .widget-tpl:hover,
+#available-widgets .widget-tpl:focus-within,
 #available-widgets .widget-tpl.selected {
 	background: #f6f7f7;
 	border-bottom-color: #c3c4c7;
@@ -261,6 +264,10 @@
 	font-size: 14px;
 }
 
+#available-widgets summary.widget-title:focus {
+	outline: none;
+}
+
 #available-widgets .widget .widget-description {
 	padding: 0;
 	color: #646970;
@@ -273,10 +280,7 @@
 body.adding-widget #available-widgets {
 	left: 0;
 	visibility: visible;
-}
-
-body.adding-widget .wp-full-overlay-main {
-	left: 300px;
+	height: 100%;
 }
 
 body.adding-widget #customize-preview {

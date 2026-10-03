@@ -238,6 +238,24 @@ final class WP_Customize_Manager {
 	private $_changeset_data;
 
 	/**
+	 * Map of section IDs to their breadcrumb parent title,
+	 * used by customize.php for mid-level sections.
+	 *
+	 * @since CP-2.8.0
+	 * @var array
+	 */
+	public $cp_breadcrumb_parents = array();
+
+	/**
+	 * Cache of control data by section.
+	 * Lazy cache: only computes when first needed
+	 *
+	 * @since CP-2.8.0
+	 * @var array
+	 */
+	private ?array $controls_data_by_section_cache = null;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 3.4.0
@@ -313,17 +331,11 @@ final class WP_Customize_Manager {
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-code-editor-control.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-widget-area-customize-control.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-widget-form-customize-control.php';
-		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-control.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-item-control.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-location-control.php';
-		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-name-control.php';
-		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-locations-control.php';
-		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-auto-add-control.php';
 
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menus-panel.php';
 
-		require_once ABSPATH . WPINC . '/customize/class-wp-customize-themes-panel.php';
-		require_once ABSPATH . WPINC . '/customize/class-wp-customize-themes-section.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-sidebar-section.php';
 		require_once ABSPATH . WPINC . '/customize/class-wp-customize-nav-menu-section.php';
 
@@ -383,6 +395,8 @@ final class WP_Customize_Manager {
 		add_filter( 'heartbeat_received', array( $this, 'check_changeset_lock_with_heartbeat' ), 10, 3 );
 		add_action( 'wp_ajax_customize_override_changeset_lock', array( $this, 'handle_override_changeset_lock_request' ) );
 		add_action( 'wp_ajax_customize_dismiss_autosave_or_lock', array( $this, 'handle_dismiss_autosave_or_lock_request' ) );
+		add_action( 'wp_ajax_customize_refresh_lock', array( $this, 'handle_refresh_lock_request' ) );
+		add_action( 'wp_ajax_customize_take_over_lock', array( $this, 'handle_take_over_lock_request' ) );
 
 		add_action( 'customize_register', array( $this, 'register_controls' ) );
 		add_action( 'customize_register', array( $this, 'register_dynamic_settings' ), 11 ); // Allow code to create settings first.
@@ -933,6 +947,16 @@ final class WP_Customize_Manager {
 		 */
 		do_action( 'customize_register', $this );
 
+		/**
+		 * Accommodates hard-coding of header_image description in core.
+		 *
+		 * @since CP-2.8.0
+		 */
+		$section = $this->get_section( 'header_image' );
+		if ( $section && ! empty( $section->description ) ) {
+			$GLOBALS['cp_header_image_section_description'] = (string) $section->description;
+		}
+
 		if ( $this->settings_previewed() ) {
 			foreach ( $this->settings as $setting ) {
 				$setting->preview();
@@ -941,6 +965,32 @@ final class WP_Customize_Manager {
 
 		if ( $this->is_preview() && ! is_admin() ) {
 			$this->customize_preview_init();
+		}
+
+		/**
+		 * Build breadcrumb parent titles for mid-level sections.
+		 *
+		 * @since CP-2.8.0
+		 */
+		$this->cp_breadcrumb_parents = array();
+		$sections = $this->sections();
+		foreach ( $sections as $section_id => $section ) {
+			// Skip root sections (no panel).
+			if ( empty( $section->panel ) ) {
+				continue;
+			}
+
+			// Safe panel title lookup.
+			$breadcrumb_parent_title = '';
+			$panel = $this->get_panel( $section->panel );
+			if ( $panel ) {
+				$breadcrumb_parent_title = $panel->title;
+			}
+
+			// Store non-empty result for customize.php.
+			if ( $breadcrumb_parent_title ) {
+				$this->cp_breadcrumb_parents[ $section_id ] = $breadcrumb_parent_title;
+			}
 		}
 	}
 
@@ -1785,6 +1835,8 @@ final class WP_Customize_Manager {
 			if ( ! isset( $this->_post_values ) ) {
 				if ( isset( $_POST['customized'] ) ) {
 					$post_values = json_decode( wp_unslash( $_POST['customized'] ), true );
+				} elseif ( isset( $_GET['customized'] ) ) {
+					$post_values = json_decode( wp_unslash( $_GET['customized'] ), true );
 				} else {
 					$post_values = array();
 				}
@@ -1821,6 +1873,7 @@ final class WP_Customize_Manager {
 	 */
 	public function post_value( $setting, $default_value = null ) {
 		$post_values = $this->unsanitized_post_values();
+
 		if ( ! array_key_exists( $setting->id, $post_values ) ) {
 			return $default_value;
 		}
@@ -3749,6 +3802,216 @@ final class WP_Customize_Manager {
 	}
 
 	/**
+	 * Get the option key used for the site-wide Customizer lock.
+	 *
+	 * @since CP-2.8.0
+	 * @return string
+	 */
+	protected function get_customizer_lock_option() {
+		return 'customize_lock_' . get_current_blog_id();
+	}
+
+	/**
+	 * Get the current Customizer lock.
+	 *
+	 * @since CP-2.8.0
+	 * @return array|false
+	 */
+	protected function get_customizer_lock() {
+		$lock = get_option( $this->get_customizer_lock_option() );
+
+		if ( ! is_array( $lock ) || empty( $lock['user_id'] ) || empty( $lock['time'] ) ) {
+			return false;
+		}
+
+		$lock_window = (int) apply_filters( 'customize_lock_window', 90 );
+
+		if ( (int) $lock['time'] < time() - $lock_window ) {
+			delete_option( $this->get_customizer_lock_option() );
+			return false;
+		}
+
+		if ( ! get_userdata( (int) $lock['user_id'] ) ) {
+			delete_option( $this->get_customizer_lock_option() );
+			return false;
+		}
+
+		return $lock;
+	}
+
+	/**
+	 * Set or refresh the current Customizer lock.
+	 *
+	 * @since CP-2.8.0
+	 * @param int    $user_id       User ID.
+	 * @return array
+	 */
+	protected function set_customizer_lock( $user_id ) {
+		$lock = array(
+			'user_id' => (int) $user_id,
+			'time'    => time(),
+		);
+
+		update_option( $this->get_customizer_lock_option(), $lock, false );
+
+		return $lock;
+	}
+
+	/**
+	 * Check whether the current request may use the Customizer lock API.
+	 *
+	 * @since CP-2.8.0
+	 * @return true|WP_Error
+	 */
+	protected function check_customizer_lock_request_permissions() {
+		if ( ! is_user_logged_in() ) {
+			return new WP_Error( 'unauthenticated', __( 'You must be logged in to access the Customizer lock.' ), array( 'status' => 401 ) );
+		}
+
+		if ( ! current_user_can( 'customize' ) ) {
+			return new WP_Error( 'cannot_customize', __( 'Sorry, you are not allowed to customize this site.' ), array( 'status' => 403 ) );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check whether another user currently holds the Customizer lock.
+	 *
+	 * @since CP-2.8.0
+	 * @return void
+	 */
+	public function handle_check_lock_request() {
+		$permission = $this->check_customizer_lock_request_permissions();
+
+		if ( is_wp_error( $permission ) ) {
+			$error_data = $permission->get_error_data();
+			$status     = is_array( $error_data ) && isset( $error_data['status'] ) ? $error_data['status'] : 400;
+
+			wp_send_json_error(
+				array(
+					'code'    => $permission->get_error_code(),
+					'message' => $permission->get_error_message(),
+				),
+				$status
+			);
+		}
+
+		if ( ! check_ajax_referer( 'customize_check_lock', 'nonce', false ) ) {
+			wp_send_json_error( 'invalid_nonce', 403 );
+		}
+
+		$lock = $this->get_customizer_lock();
+
+		if ( ! $lock || (int) $lock['user_id'] === get_current_user_id() ) {
+			wp_send_json_success(
+				array(
+					'lockUser' => null,
+				)
+			);
+		}
+
+		wp_send_json_success(
+			array(
+				'lockUser' => $this->get_lock_user_data( (int) $lock['user_id'] ),
+			)
+		);
+	}
+
+	/**
+	 * Acquire or refresh the Customizer lock for the current user.
+	 *
+	 * @since CP-2.8.0
+	 * @return void
+	 */
+	public function handle_refresh_lock_request() {
+		$permission = $this->check_customizer_lock_request_permissions();
+
+		if ( is_wp_error( $permission ) ) {
+			$error_data = $permission->get_error_data();
+			$status     = is_array( $error_data ) && isset( $error_data['status'] ) ? $error_data['status'] : 400;
+
+			wp_send_json_error(
+				array(
+					'code'    => $permission->get_error_code(),
+					'message' => $permission->get_error_message(),
+				),
+				$status
+			);
+		}
+
+		if ( ! check_ajax_referer( 'customize_refresh_lock', 'nonce', false ) ) {
+			wp_send_json_error( 'invalid_nonce', 403 );
+		}
+
+		$current_user_id = get_current_user_id();
+		$lock            = $this->get_customizer_lock();
+
+		if ( ! $lock ) {
+			$this->set_customizer_lock( $current_user_id );
+
+			wp_send_json_success(
+				array(
+					'lockUser' => null,
+				)
+			);
+		}
+
+		$lock_user_id = isset( $lock['user_id'] ) ? (int) $lock['user_id'] : 0;
+
+		if ( $lock_user_id === $current_user_id ) {
+			$this->set_customizer_lock( $current_user_id );
+
+			wp_send_json_success(
+				array(
+					'lockUser' => null,
+				)
+			);
+		}
+
+		wp_send_json_success(
+			array(
+				'lockUser' => $this->get_lock_user_data( $lock_user_id ),
+			)
+		);
+	}
+
+	/**
+	 * Take over the Customizer lock.
+	 *
+	 * @since CP-2.8.0
+	 * @return void
+	 */
+	public function handle_take_over_lock_request() {
+		$permission = $this->check_customizer_lock_request_permissions();
+
+		if ( is_wp_error( $permission ) ) {
+			$error_data = $permission->get_error_data();
+			$status     = is_array( $error_data ) && isset( $error_data['status'] ) ? $error_data['status'] : 400;
+
+			wp_send_json_error(
+				array(
+					'code'    => $permission->get_error_code(),
+					'message' => $permission->get_error_message(),
+				),
+				$status
+			);
+		}
+
+		if ( ! check_ajax_referer( 'customize_take_over_lock', 'nonce', false ) ) {
+			wp_send_json_error( 'invalid_nonce', 403 );
+		}
+
+		$this->set_customizer_lock( get_current_user_id() );
+
+		wp_send_json_success(
+			array(
+				'lockUser' => null,
+			)
+		);
+	}
+
+	/**
 	 * Adds a customize setting.
 	 *
 	 * @since 3.4.0
@@ -4046,6 +4309,103 @@ final class WP_Customize_Manager {
 	}
 
 	/**
+	 * Returns Customizer controls grouped by section, optionally filtered to active controls.
+	 *
+	 * The result is sorted by each row's `priority` (ascending), then by `id` using
+	 * a natural, case-insensitive comparison for stable, human-friendly ordering.
+	 *
+	 * The `value` field is intentionally set to `null` to avoid eager setting fetches
+	 * or notices in contexts where value retrieval would be premature.
+	 *
+	 * @return array<string, list<array{
+	 *   id: string,
+	 *   priority: int,
+	 *   instance_number: int,
+	 *   type: string,
+	 *   label: string,
+	 *   description: string,
+	 *   setting_id: string|null,
+	 *   value: mixed
+	 * }>>
+	 *
+	 * @since CP-2.8.0
+	 */
+	public function get_controls_data_by_section(): array {
+		if ( $this->controls_data_by_section_cache !== null ) {
+			return $this->controls_data_by_section_cache;
+		}
+		$primary_setting_id = static function ( $control ): ?string {
+			$settings = $control->settings ?? null;
+
+			// Single setting id as string.
+			if ( is_string( $settings ) ) {
+				return $settings;
+			}
+
+			// Single setting object with scalar id.
+			if ( is_object( $settings ) && isset( $settings->id ) && is_scalar( $settings->id ) ) {
+				return (string) $settings->id;
+			}
+
+			// Array of settings (strings or objects with id).
+			if ( is_array( $settings ) ) {
+				foreach ( $settings as $s ) {
+					if ( is_string( $s ) ) {
+						return $s;
+					}
+					if ( is_object( $s ) && isset( $s->id ) && is_scalar( $s->id ) ) {
+						return (string) $s->id;
+					}
+				}
+			}
+
+			return null;
+		};
+
+		$by_section = array();
+
+		foreach ( (array) $this->controls() as $ctrl ) {
+			if ( ! is_object( $ctrl ) || empty( $ctrl->section ) ) {
+				continue;
+			}
+			if ( ! $ctrl->check_capabilities() ) {
+				continue;
+			}
+
+			$sid = $primary_setting_id( $ctrl );
+
+			$by_section[ $ctrl->section ][] = array(
+				'id'              => ( isset( $ctrl->id ) && is_scalar( $ctrl->id ) ) ? (string) $ctrl->id : '',
+				'priority'        => ( isset( $ctrl->priority ) && is_numeric( $ctrl->priority ) ) ? (int) $ctrl->priority : 10,
+				'instance_number' => ( isset( $ctrl->instance_number ) && is_numeric( $ctrl->instance_number ) ) ? (int) $ctrl->instance_number : PHP_INT_MAX,
+				'type'            => (string) ( $ctrl->type ?? '' ),
+				'label'           => (string) ( $ctrl->label ?? '' ),
+				'description'     => (string) ( $ctrl->description ?? '' ),
+				'setting_id'      => $sid,
+				'value'           => null, // intentionally null to avoid premature fetching/warnings.
+			);
+		}
+
+		// Sort rows within each section by priority, then by id (natural, case-insensitive).
+		foreach ( $by_section as $section => $rows ) {
+			usort(
+				$rows,
+				static function ( $a, $b ) {
+					if ( $a['priority'] !== $b['priority'] ) {
+						return $a['priority'] <=> $b['priority'];
+					}
+					return $a['instance_number'] <=> $b['instance_number'];
+				}
+			);
+			$by_section[ $section ] = $rows;
+		}
+
+		// Cache results
+		$this->controls_data_by_section_cache = $by_section;
+		return $this->controls_data_by_section_cache;
+	}
+
+	/**
 	 * Adds a customize control.
 	 *
 	 * @since 3.4.0
@@ -4109,291 +4469,6 @@ final class WP_Customize_Manager {
 	 */
 	public function register_control_type( $control ) {
 		$this->registered_control_types[] = $control;
-	}
-
-	/**
-	 * Renders JS templates for all registered control types.
-	 *
-	 * @since 4.1.0
-	 */
-	public function render_control_templates() {
-		if ( $this->branching() ) {
-			$l10n = array(
-				/* translators: %s: User who is customizing the changeset in customizer. */
-				'locked'                => __( '%s is already customizing this changeset. Please wait until they are done to try customizing. Your latest changes have been autosaved.' ),
-				/* translators: %s: User who is customizing the changeset in customizer. */
-				'locked_allow_override' => __( '%s is already customizing this changeset. Do you want to take over?' ),
-			);
-		} else {
-			$l10n = array(
-				/* translators: %s: User who is customizing the changeset in customizer. */
-				'locked'                => __( '%s is already customizing this site. Please wait until they are done to try customizing. Your latest changes have been autosaved.' ),
-				/* translators: %s: User who is customizing the changeset in customizer. */
-				'locked_allow_override' => __( '%s is already customizing this site. Do you want to take over?' ),
-			);
-		}
-
-		foreach ( $this->registered_control_types as $control_type ) {
-			$control = new $control_type(
-				$this,
-				'temp',
-				array(
-					'settings' => array(),
-				)
-			);
-			$control->print_template();
-		}
-		?>
-
-		<script type="text/html" id="tmpl-customize-control-default-content">
-			<#
-			var inputId = _.uniqueId( 'customize-control-default-input-' );
-			var descriptionId = _.uniqueId( 'customize-control-default-description-' );
-			var describedByAttr = data.description ? ' aria-describedby="' + descriptionId + '" ' : '';
-			#>
-			<# switch ( data.type ) {
-				case 'checkbox': #>
-					<span class="customize-inside-control-row">
-						<input
-							id="{{ inputId }}"
-							{{{ describedByAttr }}}
-							type="checkbox"
-							value="{{ data.value }}"
-							data-customize-setting-key-link="default"
-						>
-						<label for="{{ inputId }}">
-							{{ data.label }}
-						</label>
-						<# if ( data.description ) { #>
-							<span id="{{ descriptionId }}" class="description customize-control-description">{{{ data.description }}}</span>
-						<# } #>
-					</span>
-					<#
-					break;
-				case 'radio':
-					if ( ! data.choices ) {
-						return;
-					}
-					#>
-					<# if ( data.label ) { #>
-						<label for="{{ inputId }}" class="customize-control-title">
-							{{ data.label }}
-						</label>
-					<# } #>
-					<# if ( data.description ) { #>
-						<span id="{{ descriptionId }}" class="description customize-control-description">{{{ data.description }}}</span>
-					<# } #>
-					<# _.each( data.choices, function( val, key ) { #>
-						<span class="customize-inside-control-row">
-							<#
-							var value, text;
-							if ( _.isObject( val ) ) {
-								value = val.value;
-								text = val.text;
-							} else {
-								value = key;
-								text = val;
-							}
-							#>
-							<input
-								id="{{ inputId + '-' + value }}"
-								type="radio"
-								value="{{ value }}"
-								name="{{ inputId }}"
-								data-customize-setting-key-link="default"
-								{{{ describedByAttr }}}
-							>
-							<label for="{{ inputId + '-' + value }}">{{ text }}</label>
-						</span>
-					<# } ); #>
-					<#
-					break;
-				default:
-					#>
-					<# if ( data.label ) { #>
-						<label for="{{ inputId }}" class="customize-control-title">
-							{{ data.label }}
-						</label>
-					<# } #>
-					<# if ( data.description ) { #>
-						<span id="{{ descriptionId }}" class="description customize-control-description">{{{ data.description }}}</span>
-					<# } #>
-
-					<#
-					var inputAttrs = {
-						id: inputId,
-						'data-customize-setting-key-link': 'default'
-					};
-					if ( 'textarea' === data.type ) {
-						inputAttrs.rows = '5';
-					} else if ( 'button' === data.type ) {
-						inputAttrs['class'] = 'button button-secondary';
-						inputAttrs.type = 'button';
-					} else {
-						inputAttrs.type = data.type;
-					}
-					if ( data.description ) {
-						inputAttrs['aria-describedby'] = descriptionId;
-					}
-					_.extend( inputAttrs, data.input_attrs );
-					#>
-
-					<# if ( 'button' === data.type ) { #>
-						<button
-							<# _.each( _.extend( inputAttrs ), function( value, key ) { #>
-								{{{ key }}}="{{ value }}"
-							<# } ); #>
-						>{{ inputAttrs.value }}</button>
-					<# } else if ( 'textarea' === data.type ) { #>
-						<textarea
-							<# _.each( _.extend( inputAttrs ), function( value, key ) { #>
-								{{{ key }}}="{{ value }}"
-							<# }); #>
-						>{{ inputAttrs.value }}</textarea>
-					<# } else if ( 'select' === data.type ) { #>
-						<# delete inputAttrs.type; #>
-						<select
-							<# _.each( _.extend( inputAttrs ), function( value, key ) { #>
-								{{{ key }}}="{{ value }}"
-							<# }); #>
-							>
-							<# _.each( data.choices, function( val, key ) { #>
-								<#
-								var value, text;
-								if ( _.isObject( val ) ) {
-									value = val.value;
-									text = val.text;
-								} else {
-									value = key;
-									text = val;
-								}
-								#>
-								<option value="{{ value }}">{{ text }}</option>
-							<# } ); #>
-						</select>
-					<# } else { #>
-						<input
-							<# _.each( _.extend( inputAttrs ), function( value, key ) { #>
-								{{{ key }}}="{{ value }}"
-							<# }); #>
-							>
-					<# } #>
-			<# } #>
-		</script>
-
-		<script type="text/html" id="tmpl-customize-notification">
-			<li class="notice notice-{{ data.type || 'info' }} {{ data.alt ? 'notice-alt' : '' }} {{ data.dismissible ? 'is-dismissible' : '' }} {{ data.containerClasses || '' }}" data-code="{{ data.code }}" data-type="{{ data.type }}">
-				<div class="notification-message">{{{ data.message || data.code }}}</div>
-				<# if ( data.dismissible ) { #>
-					<button type="button" class="notice-dismiss"><span class="screen-reader-text">
-						<?php
-						/* translators: Hidden accessibility text. */
-						_e( 'Dismiss' );
-						?>
-					</span></button>
-				<# } #>
-			</li>
-		</script>
-
-		<script type="text/html" id="tmpl-customize-changeset-locked-notification">
-			<li class="notice notice-{{ data.type || 'info' }} {{ data.containerClasses || '' }}" data-code="{{ data.code }}" data-type="{{ data.type }}">
-				<div class="notification-message customize-changeset-locked-message">
-					<img class="customize-changeset-locked-avatar" src="{{ data.lockUser.avatar }}" alt="{{ data.lockUser.name }}">
-					<p class="currently-editing">
-						<# if ( data.message ) { #>
-							{{{ data.message }}}
-						<# } else if ( data.allowOverride ) { #>
-							<?php
-							echo esc_html( sprintf( $l10n['locked_allow_override'], '{{ data.lockUser.name }}' ) );
-							?>
-						<# } else { #>
-							<?php
-							echo esc_html( sprintf( $l10n['locked'], '{{ data.lockUser.name }}' ) );
-							?>
-						<# } #>
-					</p>
-					<p class="notice notice-error notice-alt" hidden></p>
-					<p class="action-buttons">
-						<# if ( data.returnUrl !== data.previewUrl ) { #>
-							<a class="button customize-notice-go-back-button" href="{{ data.returnUrl }}"><?php _e( 'Go back' ); ?></a>
-						<# } #>
-						<a class="button customize-notice-preview-button" href="{{ data.frontendPreviewUrl }}"><?php _e( 'Preview' ); ?></a>
-						<# if ( data.allowOverride ) { #>
-							<button class="button button-primary wp-tab-last customize-notice-take-over-button"><?php _e( 'Take over' ); ?></button>
-						<# } #>
-					</p>
-				</div>
-			</li>
-		</script>
-
-		<script type="text/html" id="tmpl-customize-code-editor-lint-error-notification">
-			<li class="notice notice-{{ data.type || 'info' }} {{ data.alt ? 'notice-alt' : '' }} {{ data.dismissible ? 'is-dismissible' : '' }} {{ data.containerClasses || '' }}" data-code="{{ data.code }}" data-type="{{ data.type }}">
-				<div class="notification-message">{{{ data.message || data.code }}}</div>
-
-				<p>
-					<# var elementId = 'el-' + String( Math.random() ); #>
-					<input id="{{ elementId }}" type="checkbox">
-					<label for="{{ elementId }}"><?php _e( 'Update anyway, even though it might break your site?' ); ?></label>
-				</p>
-			</li>
-		</script>
-
-		<?php
-		/* The following template is obsolete in core but retained for plugins. */
-		?>
-		<script type="text/html" id="tmpl-customize-control-notifications">
-			<ul>
-				<# _.each( data.notifications, function( notification ) { #>
-					<li class="notice notice-{{ notification.type || 'info' }} {{ data.altNotice ? 'notice-alt' : '' }}" data-code="{{ notification.code }}" data-type="{{ notification.type }}">{{{ notification.message || notification.code }}}</li>
-				<# } ); #>
-			</ul>
-		</script>
-
-		<script type="text/html" id="tmpl-customize-preview-link-control" >
-			<# var elementPrefix = _.uniqueId( 'el' ) + '-' #>
-			<p class="customize-control-title">
-				<?php esc_html_e( 'Share Preview Link' ); ?>
-			</p>
-			<p class="description customize-control-description"><?php esc_html_e( 'See how changes would look live on your website, and share the preview with people who can\'t access the Customizer.' ); ?></p>
-			<div class="customize-control-notifications-container"></div>
-			<div class="preview-link-wrapper">
-				<label for="{{ elementPrefix }}customize-preview-link-input" class="screen-reader-text">
-					<?php
-					/* translators: Hidden accessibility text. */
-					esc_html_e( 'Preview Link' );
-					?>
-				</label>
-				<a href="" target="">
-					<span class="preview-control-element" data-component="url"></span>
-					<span class="screen-reader-text">
-						<?php
-						/* translators: Hidden accessibility text. */
-						_e( '(opens in a new tab)' );
-						?>
-					</span>
-				</a>
-				<input id="{{ elementPrefix }}customize-preview-link-input" readonly tabindex="-1" class="preview-control-element" data-component="input">
-				<button class="customize-copy-preview-link preview-control-element button button-secondary" data-component="button" data-copy-text="<?php esc_attr_e( 'Copy' ); ?>" data-copied-text="<?php esc_attr_e( 'Copied' ); ?>" ><?php esc_html_e( 'Copy' ); ?></button>
-			</div>
-		</script>
-		<script type="text/html" id="tmpl-customize-selected-changeset-status-control">
-			<# var inputId = _.uniqueId( 'customize-selected-changeset-status-control-input-' ); #>
-			<# var descriptionId = _.uniqueId( 'customize-selected-changeset-status-control-description-' ); #>
-			<# if ( data.label ) { #>
-				<label for="{{ inputId }}" class="customize-control-title">{{ data.label }}</label>
-			<# } #>
-			<# if ( data.description ) { #>
-				<span id="{{ descriptionId }}" class="description customize-control-description">{{{ data.description }}}</span>
-			<# } #>
-			<# _.each( data.choices, function( choice ) { #>
-				<# var choiceId = inputId + '-' + choice.status; #>
-				<span class="customize-inside-control-row">
-					<input id="{{ choiceId }}" type="radio" value="{{ choice.status }}" name="{{ inputId }}" data-customize-setting-key-link="default">
-					<label for="{{ choiceId }}">{{ choice.label }}</label>
-				</span>
-			<# } ); #>
-		</script>
-		<?php
 	}
 
 	/**
@@ -4537,6 +4612,7 @@ final class WP_Customize_Manager {
 		foreach ( $this->controls as $control ) {
 			$control->enqueue();
 		}
+		wp_enqueue_script( 'customize-controls-proxy' );
 
 		if ( ! is_multisite() && ( current_user_can( 'install_themes' ) || current_user_can( 'update_themes' ) || current_user_can( 'delete_themes' ) ) ) {
 			wp_enqueue_script( 'updates' );
@@ -4798,177 +4874,26 @@ final class WP_Customize_Manager {
 	 * @since 4.4.0
 	 */
 	public function customize_pane_settings() {
-
-		$login_url = add_query_arg(
-			array(
-				'interim-login'   => 1,
-				'customize-login' => 1,
-			),
-			wp_login_url()
-		);
-
-		// Ensure dirty flags are set for modified settings.
-		foreach ( array_keys( $this->unsanitized_post_values() ) as $setting_id ) {
-			$setting = $this->get_setting( $setting_id );
-			if ( $setting ) {
-				$setting->dirty = true;
-			}
-		}
-
-		$autosave_revision_post  = null;
-		$autosave_autodraft_post = null;
-		$changeset_post_id       = $this->changeset_post_id();
-		if ( ! $this->saved_starter_content_changeset && ! $this->autosaved() ) {
-			if ( $changeset_post_id ) {
-				if ( is_user_logged_in() ) {
-					$autosave_revision_post = wp_get_post_autosave( $changeset_post_id, get_current_user_id() );
-				}
-			} else {
-				$autosave_autodraft_posts = $this->get_changeset_posts(
-					array(
-						'posts_per_page'            => 1,
-						'post_status'               => 'auto-draft',
-						'exclude_restore_dismissed' => true,
-					)
-				);
-				if ( ! empty( $autosave_autodraft_posts ) ) {
-					$autosave_autodraft_post = array_shift( $autosave_autodraft_posts );
-				}
-			}
-		}
-
-		$current_user_can_publish = current_user_can( get_post_type_object( 'customize_changeset' )->cap->publish_posts );
-
-		// @todo Include all of the status labels here from script-loader.php, and then allow it to be filtered.
-		$status_choices = array();
-		if ( $current_user_can_publish ) {
-			$status_choices[] = array(
-				'status' => 'publish',
-				'label'  => __( 'Publish' ),
-			);
-		}
-		$status_choices[] = array(
-			'status' => 'draft',
-			'label'  => __( 'Save Draft' ),
-		);
-		if ( $current_user_can_publish ) {
-			$status_choices[] = array(
-				'status' => 'future',
-				'label'  => _x( 'Schedule', 'customizer changeset action/button label' ),
-			);
-		}
-
-		// Prepare Customizer settings to pass to JavaScript.
-		$changeset_post = null;
-		if ( $changeset_post_id ) {
-			$changeset_post = get_post( $changeset_post_id );
-		}
-
-		// Determine initial date to be at present or future, not past.
-		$current_time = current_time( 'mysql', false );
-		$initial_date = $current_time;
-		if ( $changeset_post ) {
-			$initial_date = get_the_time( 'Y-m-d H:i:s', $changeset_post->ID );
-			if ( $initial_date < $current_time ) {
-				$initial_date = $current_time;
-			}
-		}
-
-		$lock_user_id = false;
-		if ( $this->changeset_post_id() ) {
-			$lock_user_id = wp_check_post_lock( $this->changeset_post_id() );
-		}
+		$lock = $this->get_customizer_lock();
+		$lock_user_id = ( $lock && ! empty( $lock['user_id'] ) ) ? (int) $lock['user_id'] : 0;
 
 		$settings = array(
-			'changeset'              => array(
-				'uuid'                  => $this->changeset_uuid(),
-				'branching'             => $this->branching(),
-				'autosaved'             => $this->autosaved(),
-				'hasAutosaveRevision'   => ! empty( $autosave_revision_post ),
-				'latestAutoDraftUuid'   => $autosave_autodraft_post ? $autosave_autodraft_post->post_name : null,
-				'status'                => $changeset_post ? $changeset_post->post_status : '',
-				'currentUserCanPublish' => $current_user_can_publish,
-				'publishDate'           => $initial_date,
-				'statusChoices'         => $status_choices,
-				'lockUser'              => $lock_user_id ? $this->get_lock_user_data( $lock_user_id ) : null,
+			'lock' => array(
+				'lockUser' => ( $lock_user_id && $lock_user_id !== get_current_user_id() )
+					? $this->get_lock_user_data( $lock_user_id )
+					: null,
 			),
-			'initialServerDate'      => $current_time,
-			'dateFormat'             => get_option( 'date_format' ),
-			'timeFormat'             => get_option( 'time_format' ),
-			'initialServerTimestamp' => floor( microtime( true ) * 1000 ),
-			'initialClientTimestamp' => -1, // To be set with JS below.
-			'timeouts'               => array(
-				'windowRefresh'           => 250,
-				'changesetAutoSave'       => AUTOSAVE_INTERVAL * 1000,
-				'keepAliveCheck'          => 2500,
-				'reflowPaneContents'      => 100,
-				'previewFrameSensitivity' => 2000,
+			'url' => array(
+				'ajax' => sanitize_url( admin_url( 'admin-ajax.php', 'relative' ) ),
 			),
-			'theme'                  => array(
-				'stylesheet'  => $this->get_stylesheet(),
-				'active'      => $this->is_theme_active(),
-				'_canInstall' => current_user_can( 'install_themes' ),
+			'nonce' => array(
+				'refreshLock'  => wp_create_nonce( 'customize_refresh_lock' ),
+				'takeOverLock' => wp_create_nonce( 'customize_take_over_lock' ),
 			),
-			'url'                    => array(
-				'preview'       => sanitize_url( $this->get_preview_url() ),
-				'return'        => sanitize_url( $this->get_return_url() ),
-				'parent'        => sanitize_url( admin_url() ),
-				'activated'     => sanitize_url( home_url( '/' ) ),
-				'ajax'          => sanitize_url( admin_url( 'admin-ajax.php', 'relative' ) ),
-				'allowed'       => array_map( 'sanitize_url', $this->get_allowed_urls() ),
-				'isCrossDomain' => $this->is_cross_domain(),
-				'home'          => sanitize_url( home_url( '/' ) ),
-				'login'         => sanitize_url( $login_url ),
-			),
-			'browser'                => array(
-				'mobile' => wp_is_mobile(),
-				'ios'    => $this->is_ios(),
-			),
-			'panels'                 => array(),
-			'sections'               => array(),
-			'nonce'                  => $this->get_nonces(),
-			'autofocus'              => $this->get_autofocus(),
-			'documentTitleTmpl'      => $this->get_document_title_template(),
-			'previewableDevices'     => $this->get_previewable_devices(),
-			'l10n'                   => array(
-				'confirmDeleteTheme'   => __( 'Are you sure you want to delete this theme?' ),
-				/* translators: %d: Number of theme search results, which cannot currently consider singular vs. plural forms. */
-				'themeSearchResults'   => __( '%d themes found' ),
-				/* translators: %d: Number of themes being displayed, which cannot currently consider singular vs. plural forms. */
-				'announceThemeCount'   => __( 'Displaying %d themes' ),
-				/* translators: %s: Theme name. */
-				'announceThemeDetails' => __( 'Showing details for theme: %s' ),
+			'user' => array(
+				'id' => get_current_user_id(),
 			),
 		);
-
-		// Temporarily disable installation in Customizer. See #42184.
-		$filesystem_method = get_filesystem_method();
-		ob_start();
-		$filesystem_credentials_are_stored = request_filesystem_credentials( self_admin_url() );
-		ob_end_clean();
-		if ( 'direct' !== $filesystem_method && ! $filesystem_credentials_are_stored ) {
-			$settings['theme']['_filesystemCredentialsNeeded'] = true;
-		}
-
-		// Prepare Customize Section objects to pass to JavaScript.
-		foreach ( $this->sections() as $id => $section ) {
-			if ( $section->check_capabilities() ) {
-				$settings['sections'][ $id ] = $section->json();
-			}
-		}
-
-		// Prepare Customize Panel objects to pass to JavaScript.
-		foreach ( $this->panels() as $panel_id => $panel ) {
-			if ( $panel->check_capabilities() ) {
-				$settings['panels'][ $panel_id ] = $panel->json();
-				foreach ( $panel->sections as $section_id => $section ) {
-					if ( $section->check_capabilities() ) {
-						$settings['sections'][ $section_id ] = $section->json();
-					}
-				}
-			}
-		}
-
 		?>
 		<script>
 			var _wpCustomizeSettings = <?php echo wp_json_encode( $settings ); ?>;
@@ -5049,68 +4974,7 @@ final class WP_Customize_Manager {
 	 */
 	public function register_controls() {
 
-		/* Themes (controls are loaded via ajax) */
-
-		$this->add_panel(
-			new WP_Customize_Themes_Panel(
-				$this,
-				'themes',
-				array(
-					'title'       => $this->theme()->display( 'Name' ),
-					'description' => (
-					'<p>' . __( 'Looking for a theme? You can search or browse the WordPress.org theme directory, install and preview themes, then activate them right here.' ) . '</p>' .
-					'<p>' . __( 'While previewing a new theme, you can continue to tailor things like widgets and menus, and explore theme-specific options.' ) . '</p>'
-					),
-					'capability'  => 'switch_themes',
-					'priority'    => 0,
-				)
-			)
-		);
-
-		$this->add_section(
-			new WP_Customize_Themes_Section(
-				$this,
-				'installed_themes',
-				array(
-					'title'      => __( 'Installed themes' ),
-					'action'     => 'installed',
-					'capability' => 'switch_themes',
-					'panel'      => 'themes',
-					'priority'   => 0,
-				)
-			)
-		);
-
-		if ( ! is_multisite() ) {
-			$this->add_section(
-				new WP_Customize_Themes_Section(
-					$this,
-					'wporg_themes',
-					array(
-						'title'       => __( 'WordPress.org themes' ),
-						'action'      => 'wporg',
-						'filter_type' => 'remote',
-						'capability'  => 'install_themes',
-						'panel'       => 'themes',
-						'priority'    => 5,
-					)
-				)
-			);
-		}
-
-		// Themes Setting (unused - the theme is considerably more fundamental to the Customizer experience).
-		$this->add_setting(
-			new WP_Customize_Filter_Setting(
-				$this,
-				'active_theme',
-				array(
-					'capability' => 'switch_themes',
-				)
-			)
-		);
-
 		/* Site Identity */
-
 		$this->add_section(
 			'title_tagline',
 			array(
@@ -5317,7 +5181,6 @@ final class WP_Customize_Manager {
 		);
 
 		/* Custom Header */
-
 		if ( current_theme_supports( 'custom-header', 'video' ) ) {
 			$title       = __( 'Header Media' );
 			$description = '<p>' . __( 'If you add a video, the image will be used as a fallback while the video loads.' ) . '</p>';
@@ -5452,7 +5315,6 @@ final class WP_Customize_Manager {
 		);
 
 		/* Custom Background */
-
 		$this->add_section(
 			'background_image',
 			array(
@@ -5504,7 +5366,6 @@ final class WP_Customize_Manager {
 					'fill'    => __( 'Fill Screen' ),
 					'fit'     => __( 'Fit to Screen' ),
 					'repeat'  => _x( 'Repeat', 'Repeat Image' ),
-					'custom'  => _x( 'Custom', 'Custom Preset' ),
 				),
 			)
 		);
@@ -5614,7 +5475,6 @@ final class WP_Customize_Manager {
 		 * See also https://core.trac.wordpress.org/ticket/19627 which introduces the static-front-page theme_support.
 		 * The following replicates behavior from options-reading.php.
 		 */
-
 		$this->add_section(
 			'static_front_page',
 			array(
@@ -5637,13 +5497,14 @@ final class WP_Customize_Manager {
 		$this->add_control(
 			'show_on_front',
 			array(
-				'label'   => __( 'Your homepage displays' ),
-				'section' => 'static_front_page',
-				'type'    => 'radio',
-				'choices' => array(
+				'label'     => __( 'Your homepage displays' ),
+				'section'   => 'static_front_page',
+				'type'      => 'radio',
+				'choices'   => array(
 					'posts' => __( 'Your latest posts' ),
 					'page'  => __( 'A static page' ),
 				),
+				'priority'  => 10,
 			)
 		);
 
@@ -5662,6 +5523,7 @@ final class WP_Customize_Manager {
 				'section'        => 'static_front_page',
 				'type'           => 'dropdown-pages',
 				'allow_addition' => true,
+				'priority'       => 20,
 			)
 		);
 
@@ -5680,6 +5542,7 @@ final class WP_Customize_Manager {
 				'section'        => 'static_front_page',
 				'type'           => 'dropdown-pages',
 				'allow_addition' => true,
+				'priority'       => 30,
 			)
 		);
 

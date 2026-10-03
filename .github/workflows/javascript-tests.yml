@@ -18,31 +18,31 @@ jobs:
   # - Checks out the repository.
   # - Installs NodeJS.
   # - Sets up caching for NPM.
-  # - Logs debug information.
   # - Installs NPM dependencies using install-changed to hash the `package.json` file.
+  # - Logs debug information.
   # - Run the ClassicPress QUnit tests.
   test-js:
     name: QUnit Tests
     permissions:
       contents: read
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     if: ${{ github.repository == 'ClassicPress/ClassicPress' || github.event_name == 'pull_request' }}
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Read .nvmrc
         run: echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
         id: nvmrc
 
       - name: Install NodeJS
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: '${{ steps.nvmrc.outputs.NVMRC }}'
 
       - name: Cache NodeJS modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         env:
           cache-name: cache-node-modules
         with:
@@ -51,6 +51,11 @@ jobs:
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-
+
+      - name: Install dependencies
+        run: npx install-changed --install-command="npm ci"
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: true
 
       - name: Show debug information
         run: |
@@ -64,11 +69,10 @@ jobs:
           php --version
           phpunit --version
           composer --version
-          grunt --version
+          npm run grunt -- --version
           mysql --version
 
-      - name: Install dependencies
-        run: npx install-changed --install-command="npm ci"
-
       - name: Run QUnit tests
-        run: grunt qunit:compiled
+        run: npm run grunt qunit:compiled
+        env:
+          PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome-stable

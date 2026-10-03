@@ -65,8 +65,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Close modal and set focus on theme
 	function closeModal() {
+		var highlightedTheme = document.getElementById( dialog.dataset.highlightedTheme );
+		if ( ! highlightedTheme ) {
+			highlightedTheme = document.getElementById( 'customize-control-installed_theme_' + dialog.dataset.highlightedTheme );
+		}
+
 		dialog.close();
-		document.getElementById( dialog.dataset.highlightedTheme ).focus();
+		highlightedTheme.focus();
+		highlightedTheme.querySelector( '.more-details' ).setAttribute( 'aria-expanded', 'false' );
 		dialog.querySelector( '.left.dashicons.dashicons-no' ).disabled = false;
 		dialog.querySelector( '.right.dashicons.dashicons-no' ).disabled = false;
 		cleanup();
@@ -95,7 +101,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function restoreDefaultsPreviewDialog() {
 		previewDialog.classList.add( 'expanded' );
 		previewDialog.classList.remove( 'collapsed' );
-		previewDialog.querySelector( '.wp-full-overlay-main' ).style.width = 'calc(100% - 300px)';
+		previewDialog.querySelector( '.wp-full-overlay-main' ).style.width = 'calc(100% - 345px)';
 		previewDialog.querySelector( '.theme-install-container' ).dataset.id = '';
 		if ( previewDialog.querySelector( '.activate' ) ) {
 			previewDialog.querySelector( '.activate' ).className = 'button button-primary theme-install';
@@ -140,7 +146,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				div = document.createElement( 'div' );
 
 			div.className = 'notice inline notice-success notice-alt';
-			div.innerHTML = '<p>' + _wpThemeSettings.l10n.installed + '</p>';
+			div.setHTML( '<p>' + _wpThemeSettings.l10n.installed + '</p>' );
 			theme.querySelector( '.theme-screenshot' ).after( div );
 			theme.querySelector( '.theme-install' ).textContent = _wpThemeSettings.l10n.activate;
 			theme.querySelector( '.theme-install' ).href = theme.dataset.activateNonce;
@@ -176,11 +182,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function() {
-			var theme = document.getElementById( slug ),
+			var theme = document.getElementById( slug ) || document.getElementById( 'customize-control-installed_theme_' + slug ),
 				notice = theme.querySelector( '.update-message' );
 
-			notice.innerHTML = '<p>' + _wpThemeSettings.l10n.updated + '</p>';
-			notice.className = 'notice inline notice-success notice-alt';
+			notice.setHTML( '<p>' + _wpThemeSettings.l10n.updated + '</p>' );
+			notice.className = 'notice inline updated-message notice-success notice-alt';
 		} )
 		.catch( function( error ) {
 			console.error( _wpThemeSettings.error, error );
@@ -217,14 +223,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			throw new Error( response.status );
 		} )
 		.then( function( result ) {
+			const container = document.createElement( 'ul' );
+
 			if ( i === 1 ) {
-				themesGrid.innerHTML = ''; // clear the current grid
+				themesGrid.replaceChildren(); // clear the current grid
 			}
 			// Update count
 			document.querySelector( '.filter-count .theme-count' ).textContent = result.data.count;
 
 			// Populate grid with new items
-			themesGrid.insertAdjacentHTML( 'beforeend', result.data.html );
+			container.setHTML( result.data.html, {
+				sanitizer: {}
+			} );
+			themesGrid.insertAdjacentHTML( 'beforeend', container.innerHTML );
 
 			showAndHide( document.querySelectorAll( '.themes li:not( .add-new-theme )' ) );
 		} )
@@ -237,6 +248,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function showAndHide( themes ) {
 		themes.forEach( function( theme ) {
 			theme.addEventListener( 'mouseover', function() {
+				if ( document.body.className.includes( 'wp-customizer' ) ) {
+					return;
+				}
 				themes.forEach( function( other ) {
 					other.querySelector( '.more-details' ).style.opacity = '0';
 					other.querySelector( '.theme-actions' ).style.opacity = '0';
@@ -246,6 +260,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				theme.querySelector( '.theme-actions' ).style.display = 'block';
 			} );
 			theme.addEventListener( 'focusin', function() {
+				if ( document.body.className.includes( 'wp-customizer' ) ) {
+					return;
+				}
 				themes.forEach( function( other ) {
 					other.querySelector( '.more-details' ).style.opacity = '0';
 					other.querySelector( '.theme-actions' ).style.opacity = '0';
@@ -255,6 +272,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				theme.querySelector( '.theme-actions' ).style.display = 'block';
 			} );
 			theme.addEventListener( 'touchenter', function() {
+				if ( document.body.className.includes( 'wp-customizer' ) ) {
+					return;
+				}
 				themes.forEach( function( other ) {
 					other.querySelector( '.more-details' ).style.opacity = '0';
 					other.querySelector( '.theme-actions' ).style.opacity = '0';
@@ -264,16 +284,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				theme.querySelector( '.theme-actions' ).style.display = 'block';
 			} );
 			theme.addEventListener( 'mouseout', function() {
-				if ( ! theme.matches( ':has(:focus)' ) ) {
+				if ( ! theme.matches( ':has(:focus)' ) && ! document.body.className.includes( 'wp-customizer' ) ) {
 					theme.querySelector( '.more-details' ).style.opacity = '0';
 					theme.querySelector( '.theme-actions' ).style.opacity = '0';
 					theme.querySelector( '.theme-actions' ).style.display = 'none';
 				}
 			} );
 			theme.addEventListener( 'touchleave', function() {
-				theme.querySelector( '.more-details' ).style.opacity = '0';
-				theme.querySelector( '.theme-actions' ).style.opacity = '0';
-				theme.querySelector( '.theme-actions' ).style.display = 'none';
+				if ( ! document.body.className.includes( 'wp-customizer' ) ) {
+					theme.querySelector( '.more-details' ).style.opacity = '0';
+					theme.querySelector( '.theme-actions' ).style.opacity = '0';
+					theme.querySelector( '.theme-actions' ).style.display = 'none';
+				}
 			} );
 		} );
 	}
@@ -281,8 +303,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Navigate the modals by using the keyboard
 	document.addEventListener( 'keydown', function( e ) {
+		const topModal = document.getElementById( 'theme-update-modal' );
 		if ( dialog && dialog.open ) {
 			if ( e.key === 'Escape' ) {
+				topModal?.close();
+				topModal?.remove();
 				closeModal();
 			} else if ( e.key === 'ArrowLeft' || e.key === 'ArrowUp' ) {
 				e.preventDefault();
@@ -293,6 +318,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} else if ( previewDialog && previewDialog.open ) {
 			if ( e.key === 'Escape' ) {
+				topModal?.close();
+				topModal?.remove();
 				closePreviewDialog();
 			} else if ( e.key === 'ArrowLeft' || e.key === 'ArrowUp' ) {
 				e.preventDefault();
@@ -306,7 +333,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	// Open the modal or perform other operations
 	document.addEventListener( 'click', function( e ) {
-		var img, template, clone, response, span,
+		var img, template, clone, response, span, container,
+			customizer = document.body.className.includes( 'wp-customizer' ) ? true : false,
 			theme = e.target.closest( '.theme' ),
 			allThemes = document.querySelectorAll( '.themes li:not( .add-new-theme )' ),
 			firstElement = document.querySelector( '.themes li' ),
@@ -320,19 +348,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				template = document.getElementById( 'theme-modal-insert' );
 				clone = template.content.cloneNode( true );
 				dialog.querySelector( '.theme-wrap' ).append( clone );
+				e.target.setAttribute( 'aria-expanded', 'true' );
 
 				// Set URL
-				queryParams.set( 'theme', theme.id );
+				queryParams.set( 'theme', customizer ? theme.dataset.id : theme.id );
 				history.replaceState( null, null, '?' + queryParams.toString() );
 
 				// Set theme ID and previous and next themes
-				dialog.dataset.highlightedTheme = theme.id;
-				prevElement = document.getElementById( dialog.dataset.highlightedTheme ).previousElementSibling;
+				dialog.dataset.highlightedTheme = customizer ? theme.dataset.id : theme.id;
+				prevElement = document.getElementById( theme.id ).previousElementSibling;
 				if ( prevElement == null ) { // first theme
 					dialog.querySelector( '.left.dashicons.dashicons-no' ).disabled = true;
 				}
 
-				nextElement = document.getElementById( dialog.dataset.highlightedTheme ).nextElementSibling;
+				nextElement = document.getElementById( theme.id ).nextElementSibling;
 				if ( nextElement == null ) { // last theme
 					dialog.querySelector( '.right.dashicons.dashicons-no' ).disabled = true;
 				}
@@ -353,8 +382,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				dialog.querySelector( '.theme-name' ).textContent = theme.querySelector( '.theme-name' ).textContent;
 				dialog.querySelector( '.theme-version' ).textContent = _wpThemeSettings.l10n.version + ' ' + theme.dataset.version;
-				dialog.querySelector( '.theme-author' ).innerHTML = theme.querySelector( '.theme-author' ).innerHTML;
+				dialog.querySelector( '.theme-author' ).setHTML( theme.querySelector( '.theme-author' ).innerHTML );
 
+				// Notices
 				if ( theme.dataset.compatibleWp !== '1' && theme.dataset.compatiblePhp !== '1' ) {
 					dialog.querySelector( '.no-wp-php' ).removeAttribute( 'hidden' );
 				} else if ( theme.dataset.compatibleWp !== '1' ) {
@@ -363,9 +393,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					dialog.querySelector( '.no-php' ).removeAttribute( 'hidden' );
 				}
 
-				if ( theme.dataset.hasUpdate ) {
+				if ( theme.dataset.hasUpdate === '1' ) {
 					if ( theme.dataset.updateResponse === '1-1' ) {
-						dialog.querySelector( '.has-update span' ).innerHTML = theme.dataset.update;
+						dialog.querySelector( '.has-update span' ).setHTML( theme.dataset.update );
 						dialog.querySelector( '.has-update' ).removeAttribute( 'hidden' );
 					} else {
 						dialog.querySelector( '.incompat-update' ).removeAttribute( 'hidden' );
@@ -494,14 +524,22 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				e.target.disabled = true;
 			}
 
-		// Close modal
-		} else if ( e.target.className === 'close dashicons dashicons-no' ) {
-			closeModal();
-
 		// Update a theme
-		} else if ( e.target.className.includes( 'update-button-link' ) ) {
+		} else if ( e.target.className.includes( 'update-button-link' ) ) { // themes.php
 			e.target.closest( '.update-message' ).classList.add( 'updating-message' );
 			updateIndividualTheme( e.target.closest( 'li' ).id );
+		} else if ( e.target.className.includes( 'update-theme' ) ) { // Customizer
+			e.target.closest( '.update-message' ).classList.add( 'updating-message' );
+			updateIndividualTheme( e.target.closest( 'li' ).dataset.id );
+
+		// Close update modal
+		} else if ( e.target.id === 'theme-update-modal-close' ) {
+			document.getElementById( 'theme-update-modal' ).close();
+			document.getElementById( 'theme-update-modal' ).remove();
+
+		// Close other modal
+		} else if ( e.target.className === 'close dashicons dashicons-no' ) {
+			closeModal();
 
 		// Search for popular or latest themes at wordpress.org
 		} else if ( document.body.className.includes( 'theme-install-php' ) ) {
@@ -548,7 +586,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} else if ( e.target.className === 'button drawer-toggle' || e.target.className === 'button-link edit-filters' ) {
 				document.body.classList.add( 'show-filters' );
 				document.body.classList.remove( 'filters-applied' );
-				document.querySelector( '.filtered-by .tags' ).innerHTML = '';
+				document.querySelector( '.filtered-by .tags' ).replaceChildren();
 				if ( document.querySelector( '.filter-drawer' ).checkVisibility() ) {
 					document.querySelector( '.drawer-toggle' ).setAttribute( 'aria-expanded', false );
 				} else {
@@ -605,10 +643,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 				}
 
+				container = document.createElement( 'div' );
+				container.setHTML( theme.dataset.ratings, {
+					sanitizer: {}
+				} );
+
 				previewDialog.querySelector( '.theme-name' ).textContent = theme.querySelector( '.theme-name' ).textContent;
 				previewDialog.querySelector( '.theme-by' ).textContent = theme.querySelector( '.theme-author' ).textContent;
 				previewDialog.querySelector( '.theme-screenshot img' ).src = theme.querySelector( '.theme-screenshot img' ).src;
-				previewDialog.querySelector( '.theme-rating' ).insertAdjacentHTML( 'afterbegin', theme.dataset.ratings );
+				previewDialog.querySelector( '.theme-rating' ).insertAdjacentHTML( 'afterbegin', container.innerHTML );
 				previewDialog.querySelector( '.num-ratings' ).textContent = '(' + theme.dataset.numRatings + ' ' + _wpThemeSettings.l10n.ratings + ')';
 				previewDialog.querySelector( '.num-ratings' ).href = 'https://wordpress.org/support/theme/' + theme.id + '/reviews/';
 				previewDialog.querySelector( '.theme-version' ).textContent = _wpThemeSettings.l10n.version + ' ' + theme.dataset.version;
@@ -670,7 +713,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				} else {
 					previewDialog.classList.add( 'expanded' );
 					previewDialog.classList.remove( 'collapsed' );
-					previewDialog.querySelector( '.wp-full-overlay-main' ).style.width = 'calc(100% - 300px)';
+					previewDialog.querySelector( '.wp-full-overlay-main' ).style.width = 'calc(100% - 345px)';
 				}
 
 			// Toggle display of Upload Theme area

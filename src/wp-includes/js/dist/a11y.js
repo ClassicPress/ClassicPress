@@ -1156,17 +1156,17 @@ var hasTranslation = i18n.hasTranslation.bind(i18n);
 /******/ 	});
 /************************************************************************/
 /******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
+/******/ 	let __webpack_module_cache__ = {};
 /******/ 	
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		let cachedModule = __webpack_module_cache__[moduleId];
 /******/ 		if (cachedModule !== undefined) {
 /******/ 			return cachedModule.exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 		let module = __webpack_module_cache__[moduleId] = {
 /******/ 			// no module.id needed
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
@@ -1181,35 +1181,27 @@ var hasTranslation = i18n.hasTranslation.bind(i18n);
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
+/******/ 	// define getter/value functions for harmony exports
+/******/ 	__webpack_require__.d = function(exports, definition) {
+/******/ 		for(var key in definition) {
+/******/ 			if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 				Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 			}
-/******/ 		};
-/******/ 	}();
+/******/ 		}
+/******/ 	};
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); };
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	}();
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
+let __webpack_exports__ = {};
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
@@ -1222,7 +1214,7 @@ __webpack_require__.d(__webpack_exports__, {
 // EXTERNAL MODULE: ./node_modules/@wordpress/dom-ready/build-module/index.mjs
 var build_module = __webpack_require__(819);
 ;// ./node_modules/@wordpress/a11y/build-module/script/add-container.mjs
-// packages/a11y/src/script/add-container.js
+// packages/a11y/src/script/add-container.ts
 function addContainer(ariaLive = "polite") {
   const container = document.createElement("div");
   container.id = `a11y-speak-${ariaLive}`;
@@ -1266,7 +1258,7 @@ function addIntroText() {
 
 
 ;// ./node_modules/@wordpress/a11y/build-module/shared/clear.mjs
-// packages/a11y/src/shared/clear.js
+// packages/a11y/src/shared/clear.ts
 function clear() {
   const regions = document.getElementsByClassName("a11y-speak-region");
   const introText = document.getElementById("a11y-speak-intro-text");
@@ -1280,12 +1272,12 @@ function clear() {
 
 
 ;// ./node_modules/@wordpress/a11y/build-module/shared/filter-message.mjs
-// packages/a11y/src/shared/filter-message.js
+// packages/a11y/src/shared/filter-message.ts
 var previousMessage = "";
 function filterMessage(message) {
   message = message.replace(/<[^<>]+>/g, " ");
   if (previousMessage === message) {
-    message += "\xA0";
+    message += " ";
   }
   previousMessage = message;
   return message;
@@ -1293,7 +1285,7 @@ function filterMessage(message) {
 
 
 ;// ./node_modules/@wordpress/a11y/build-module/shared/index.mjs
-// packages/a11y/src/shared/index.js
+// packages/a11y/src/shared/index.ts
 
 
 function speak(message, ariaLive) {
@@ -1316,7 +1308,7 @@ function speak(message, ariaLive) {
 
 
 ;// ./node_modules/@wordpress/a11y/build-module/index.mjs
-// packages/a11y/src/index.js
+// packages/a11y/src/index.ts
 
 
 
@@ -1337,7 +1329,7 @@ function setup() {
     addContainer("polite");
   }
 }
-(0,build_module["default"])(setup);
+;(0,build_module["default"])(setup);
 
 
 (window.wp = window.wp || {}).a11y = __webpack_exports__;

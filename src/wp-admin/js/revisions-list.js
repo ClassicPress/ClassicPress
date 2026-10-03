@@ -3,7 +3,7 @@
  *
  * @since CP-2.6.0.
  *
- * @output wp-admin/js/revisions.js
+ * @output wp-admin/js/revisions-list.js
  */
 
 /* global console, ajaxurl */
@@ -34,7 +34,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} )
 			.then( function( result ) {
 				dialog.querySelector( 'h2' ).textContent = result.data.title;
-				dialog.querySelector( '#modal-revision-content-inner' ).innerHTML = result.data.content;
+				dialog.querySelector( '#modal-revision-content-inner' ).setHTML( result.data.content );
 				dialog.showModal();
 			} )
 			.catch( function( error ) {
@@ -65,7 +65,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		document.body.style.overflow = '';
 		dialog.close();
 		dialog.querySelector( 'h2' ).textContent = '';
-		dialog.querySelector( '#modal-revision-content-inner' ).innerHTML = '';
+		dialog.querySelector( '#modal-revision-content-inner' ).replaceChildren();
 	}
 	closeButton.addEventListener( 'click', closeModalDialog );
 	modalButton.addEventListener( 'click', closeModalDialog );

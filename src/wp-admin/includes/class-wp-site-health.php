@@ -1228,124 +1228,6 @@ class WP_Site_Health {
 	}
 
 	/**
-	 * Tests if the database server is capable of using utf8mb4.
-	 *
-	 * @since 5.2.0
-	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
-	 *
-	 * @return array The test results.
-	 */
-	public function get_test_utf8mb4_support() {
-		global $wpdb;
-
-		if ( ! $this->mysql_server_version ) {
-			$this->prepare_sql_data();
-		}
-
-		$result = array(
-			'label'       => __( 'UTF8MB4 is supported' ),
-			'status'      => 'good',
-			'badge'       => array(
-				'label' => __( 'Performance' ),
-				'color' => 'blue',
-			),
-			'description' => sprintf(
-				'<p>%s</p>',
-				__( 'UTF8MB4 is the character set ClassicPress prefers for database storage because it safely supports the widest set of characters and encodings, including Emoji, enabling better support for non-English languages.' )
-			),
-			'actions'     => '',
-			'test'        => 'utf8mb4_support',
-		);
-
-		if ( ! $this->is_mariadb ) {
-			if ( version_compare( $this->mysql_server_version, '5.5.3', '<' ) ) {
-				$result['status'] = 'recommended';
-
-				$result['label'] = __( 'utf8mb4 requires a MySQL update' );
-
-				$result['description'] .= sprintf(
-					'<p>%s</p>',
-					sprintf(
-						/* translators: %s: Version number. */
-						__( 'ClassicPress&#8217; utf8mb4 support requires MySQL version %s or greater. Please contact your server administrator.' ),
-						'5.5.3'
-					)
-				);
-			} else {
-				$result['description'] .= sprintf(
-					'<p>%s</p>',
-					__( 'Your MySQL version supports utf8mb4.' )
-				);
-			}
-		} else { // MariaDB introduced utf8mb4 support in 5.5.0.
-			if ( version_compare( $this->mysql_server_version, '5.5.0', '<' ) ) {
-				$result['status'] = 'recommended';
-
-				$result['label'] = __( 'utf8mb4 requires a MariaDB update' );
-
-				$result['description'] .= sprintf(
-					'<p>%s</p>',
-					sprintf(
-						/* translators: %s: Version number. */
-						__( 'ClassicPress&#8217; utf8mb4 support requires MariaDB version %s or greater. Please contact your server administrator.' ),
-						'5.5.0'
-					)
-				);
-			} else {
-				$result['description'] .= sprintf(
-					'<p>%s</p>',
-					__( 'Your MariaDB version supports utf8mb4.' )
-				);
-			}
-		}
-
-			// phpcs:ignore WordPress.DB.RestrictedFunctions.mysql_mysqli_get_client_info
-			$mysql_client_version = mysqli_get_client_info();
-
-		/*
-		 * libmysql has supported utf8mb4 since 5.5.3, same as the MySQL server.
-		 * mysqlnd has supported utf8mb4 since 5.0.9.
-		 */
-		if ( str_contains( $mysql_client_version, 'mysqlnd' ) ) {
-			$mysql_client_version = preg_replace( '/^\D+([\d.]+).*/', '$1', $mysql_client_version );
-			if ( version_compare( $mysql_client_version, '5.0.9', '<' ) ) {
-				$result['status'] = 'recommended';
-
-				$result['label'] = __( 'utf8mb4 requires a newer client library' );
-
-				$result['description'] .= sprintf(
-					'<p>%s</p>',
-					sprintf(
-						/* translators: 1: Name of the library, 2: Number of version. */
-						__( 'ClassicPress&#8217; utf8mb4 support requires MySQL client library (%1$s) version %2$s or newer. Please contact your server administrator.' ),
-						'mysqlnd',
-						'5.0.9'
-					)
-				);
-			}
-		} else {
-			if ( version_compare( $mysql_client_version, '5.5.3', '<' ) ) {
-				$result['status'] = 'recommended';
-
-				$result['label'] = __( 'utf8mb4 requires a newer client library' );
-
-				$result['description'] .= sprintf(
-					'<p>%s</p>',
-					sprintf(
-						/* translators: 1: Name of the library, 2: Number of version. */
-						__( 'ClassicPress&#8217; utf8mb4 support requires MySQL client library (%1$s) version %2$s or newer. Please contact your server administrator.' ),
-						'libmysql',
-						'5.5.3'
-					)
-				);
-			}
-		}
-
-		return $result;
-	}
-
-	/**
 	 * Tests if the site can communicate with WordPress.org.
 	 *
 	 * @since 5.2.0
@@ -1481,6 +1363,58 @@ class WP_Site_Health {
 					)
 				);
 			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Tests if allow repair mode is enabled.
+	 *
+	 * When WP_ALLOW_REPAIR is enabled, unauthenticated access to repair and optimize tables is enabled.
+	 *
+	 * Users are prompted to remove this from wp-config.php, this test adds another layer of warning.
+	 *
+	 * @since CP-2.8.0
+	 *
+	 * @return array The test results.
+	 */
+	public function get_test_is_in_allow_repair_mode() {
+		$result = array(
+			'label'       => __( 'Your site is disabled for database repair' ),
+			'status'      => 'good',
+			'badge'       => array(
+				'label' => __( 'Security' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				__( 'Database repair mode is temporarily enabled in <code>wp-config.php</code> to repair and optimize database tables. The setting allows unauthenicated access so should be disabled again at the earliest opportunity.' )
+			),
+			'actions'     => sprintf(
+				'<p><a href="%s" target="_blank" rel="noopener">%s <span class="screen-reader-text">%s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a></p>',
+				/* translators: Documentation explaining debugging in WordPress. */
+				esc_url( __( 'https://docs.classicpress.net/user-guides/editing-wp-config-php/' ) ),
+				__( 'Learn more about working with wp-config.php in ClassicPress.' ),
+				/* translators: Hidden accessibility text. */
+				__( '(opens in a new tab)' )
+			),
+			'test'        => 'is_in_allow_repair_mode',
+		);
+
+		if ( defined( 'WP_ALLOW_REPAIR' ) && WP_ALLOW_REPAIR ) {
+			$result['label'] = __( 'Your site is enabled for database repair' );
+
+			$result['status'] = 'critical';
+
+			$result['description'] .= sprintf(
+				'<p>%s</p>',
+				sprintf(
+					/* translators: %s: WP_DEBUG_LOG */
+					__( 'The value, %s, has been added to this website&#8217;s configuration file. The Database Repair feature is available to all visitors to your site.' ),
+					'<code>WP_ALLOW_REPAIR</code>'
+				)
+			);
 		}
 
 		return $result;
@@ -2161,6 +2095,104 @@ class WP_Site_Health {
 	}
 
 	/**
+	 * Tests HTTP protocol version.
+	 *
+	 * Modern HTTP protocols may load sites faster with script concatenation disabled.
+	 * This tests highlights to users the protocol in use and indcates if concetanation may be slower.
+	 *
+	 * @since CP-2.8.0
+	 *
+	 * @return array The test results.
+	 */
+	public function get_test_http_protocol() {
+		$result = array(
+			// translators: HTTP site protocol
+			'label'       => __( 'HTTP Protocol is %s' ),
+			'status'      => 'good',
+			'badge'       => array(
+				'label' => __( 'Performance' ),
+				'color' => 'blue',
+			),
+			'description' => '<div ">%s</div>',
+			'actions'     => '',
+			'test'        => 'http_protocol',
+		);
+
+		$transient = get_transient( 'cp_http_protocol_' . get_current_user_id() );
+
+		if ( false === $transient ) {
+			$result['label'] = __( 'HTTP Protocol' );
+			$result['description'] = sprintf(
+				$result['description'],
+				'<p>' . __( 'There was an error detecting the site HTTP Protocol. Try reloading this page.' ) . '</p>'
+			);
+			return rest_ensure_response( $result );
+		} else {
+			if ( str_starts_with( $transient['protocol'], 'http/1' ) ) {
+				$result['label'] = sprintf( __( 'HTTP Protocol is %s' ), strtoupper( $transient['protocol'] ) );
+			} elseif ( str_starts_with( $transient['protocol'], 'h2' ) ) {
+				$result['label'] = sprintf( __( 'HTTP Protocol is %s' ), 'HTTP/2' );
+			} else {
+				$result['label'] = sprintf( __( 'HTTP Protocol is %s' ), 'HTTP/3' );
+			}
+		}
+
+		if ( str_ends_with( classicpress_version(), 'dev' ) ) {
+			$result['description'] = sprintf(
+				$result['description'],
+				'<p>' . __( 'Your site appears to be using development code. This information may not be relevant.' ) . '</p>'
+			);
+			return rest_ensure_response( $result );
+		}
+
+		if ( ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ) {
+			$result['description'] = sprintf(
+				$result['description'],
+				'<p>' . __( 'Your site is running with <code>SCRIPT_DEBUG</code> enabled in <code>wp-config.php</code>. This information may not be relevant.' ) . '</p>'
+			);
+			return rest_ensure_response( $result );
+		}
+
+		if ( defined( 'CONCATENATE_SCRIPTS' ) ) {
+			$result['description'] = sprintf(
+				$result['description'],
+				'<p>' . __( 'Your site is running with <code>CONCATENATE_SCRIPTS</code> defined in <code>wp-config.php</code>. This information may not be relevant.' ) . '</p>'
+			);
+			return rest_ensure_response( $result );
+		}
+
+		$docs_link = sprintf(
+			'<p>' . __( 'You can easily adjust script concatenation in <code>wp-config.php</code>. <a href="%s">Learn more</a>.' ) . '</p>',
+			'https://docs.classicpress.net/user-guides/editing-wp-config-php/#understanding-concatenate_scripts'
+		);
+
+		if ( ! str_starts_with( $transient['protocol'], 'http/1' ) ) {
+			if ( $transient['concat'] ) {
+				$result['status']      = 'recommended';
+				$result['description'] =
+					'<p>' . __( 'By default, ClassicPress concatenates scripts but on modern HTTP protocol connections this may slow your site loading.' ) . '</p>' .
+					'<p>' . __( 'Your site may load faster with script concatenation disabled. Script concatenation is currently enabled.' ) . '</p>' .
+					$docs_link;
+			} else {
+				$result['status']      = 'good';
+				$result['description'] = '<p>' . sprintf( __( 'Your site is using %s and script concatenation is disabled, which is the optimal configuration.' ), $transient['protocol'] ) . '</p>';
+			}
+		} else {
+			if ( ! $transient['concat'] ) {
+				$result['status']      = 'recommended';
+				$result['description'] =
+					'<p>' . __( 'Your site may load faster with script concatenation enabled. Script concatenation is currently disabled.' ) . '</p>' .
+					$docs_link;
+			} else {
+				$result['status']      = 'good';
+				$result['description'] = '<p>' . sprintf( __( 'Your site is using %s and script concatenation is enabled, which is the optimal configuration.' ), $transient['protocol'] ) . '</p>';
+			}
+		}
+
+		return rest_ensure_response( $result );
+	}
+
+	/**
 	 * Tests if the REST API is accessible.
 	 *
 	 * Various security measures may block the REST API from working, or it may have been disabled in general.
@@ -2684,10 +2716,6 @@ class WP_Site_Health {
 					'label' => __( 'Database Server version' ),
 					'test'  => 'sql_server',
 				),
-				'utf8mb4_support'           => array(
-					'label' => __( 'MySQL utf8mb4 support' ),
-					'test'  => 'utf8mb4_support',
-				),
 				'ssl_support'               => array(
 					'label' => __( 'Secure communication' ),
 					'test'  => 'ssl_support',
@@ -2708,6 +2736,10 @@ class WP_Site_Health {
 				'debug_enabled'             => array(
 					'label' => __( 'Debugging enabled' ),
 					'test'  => 'is_in_debug_mode',
+				),
+				'repair_enabled'            => array(
+					'label' => __( 'Repair Mode enabled' ),
+					'test'  => 'is_in_allow_repair_mode',
 				),
 				'file_uploads'              => array(
 					'label' => __( 'File uploads' ),
@@ -2750,6 +2782,12 @@ class WP_Site_Health {
 					'test'              => rest_url( 'wp-site-health/v1/tests/https-status' ),
 					'has_rest'          => true,
 					'async_direct_test' => array( WP_Site_Health::get_instance(), 'get_test_https_status' ),
+				),
+				'http_protocol'        => array(
+					'label'             => __( 'HTTP Protocol' ),
+					'test'              => rest_url( 'wp-site-health/v1/tests/http-protocol' ),
+					'has_rest'          => true,
+					'async_direct_test' => array( WP_Site_Health::get_instance(), 'get_test_http_protocol' ),
 				),
 			),
 		);

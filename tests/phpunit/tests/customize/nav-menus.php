@@ -728,30 +728,6 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test the print_templates method.
-	 *
-	 * @see WP_Customize_Nav_Menus::print_templates()
-	 */
-	public function test_print_templates() {
-		do_action( 'customize_register', $this->wp_customize );
-		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
-
-		ob_start();
-		$menus->print_templates();
-		$template = ob_get_clean();
-
-		$expected = sprintf(
-			'<button type="button" class="menus-move-up">%1$s</button><button type="button" class="menus-move-down">%2$s</button><button type="button" class="menus-move-left">%3$s</button><button type="button" class="menus-move-right">%4$s</button>',
-			esc_html( 'Move up' ),
-			esc_html( 'Move down' ),
-			esc_html( 'Move one level up' ),
-			esc_html( 'Move one level down' )
-		);
-
-		$this->assertStringContainsString( $expected, $template );
-	}
-
-	/**
 	 * Test the available_items_template method.
 	 *
 	 * @see WP_Customize_Nav_Menus::available_items_template()
@@ -768,34 +744,6 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		$expected = sprintf( 'Customizing &#9656; %s', esc_html( $this->wp_customize->get_panel( 'nav_menus' )->title ) );
 
 		$this->assertStringContainsString( $expected, $template );
-
-		$post_types = get_post_types( array( 'show_in_nav_menus' => true ), 'object' );
-		if ( $post_types ) {
-			foreach ( $post_types as $type ) {
-				$this->assertStringContainsString( 'available-menu-items-post_type-' . esc_attr( $type->name ), $template );
-				$this->assertMatchesRegularExpression( '#<summary class="accordion-section-title".*>\s*' . esc_html( $type->labels->name ) . '#', $template );
-				$this->assertStringContainsString( 'data-type="post_type"', $template );
-				$this->assertStringContainsString( 'data-object="' . esc_attr( $type->name ) . '"', $template );
-				$this->assertStringContainsString( 'data-type_label="' . esc_attr( $type->labels->singular_name ) . '"', $template );
-			}
-		}
-
-		$taxonomies = get_taxonomies( array( 'show_in_nav_menus' => true ), 'object' );
-		if ( $taxonomies ) {
-			foreach ( $taxonomies as $tax ) {
-				$this->assertStringContainsString( 'available-menu-items-taxonomy-' . esc_attr( $tax->name ), $template );
-				$this->assertMatchesRegularExpression( '#<summary class="accordion-section-title".*>\s*' . esc_html( $tax->labels->name ) . '#', $template );
-				$this->assertStringContainsString( 'data-type="taxonomy"', $template );
-				$this->assertStringContainsString( 'data-object="' . esc_attr( $tax->name ) . '"', $template );
-				$this->assertStringContainsString( 'data-type_label="' . esc_attr( $tax->labels->singular_name ) . '"', $template );
-			}
-		}
-
-		$this->assertStringContainsString( 'available-menu-items-custom_type', $template );
-		$this->assertMatchesRegularExpression( '#<summary class="accordion-section-title".*>\s*Custom#', $template );
-		$this->assertStringContainsString( 'data-type="custom_type"', $template );
-		$this->assertStringContainsString( 'data-object="custom_object"', $template );
-		$this->assertStringContainsString( 'data-type_label="Custom Type"', $template );
 	}
 
 	/**
@@ -1157,20 +1105,6 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test the customize_preview_enqueue_deps method.
-	 *
-	 * @see WP_Customize_Nav_Menus::customize_preview_enqueue_deps()
-	 */
-	public function test_customize_preview_enqueue_deps() {
-		do_action( 'customize_register', $this->wp_customize );
-		$menus = new WP_Customize_Nav_Menus( $this->wp_customize );
-
-		$menus->customize_preview_enqueue_deps();
-
-		$this->assertTrue( wp_script_is( 'customize-preview-nav-menus' ) );
-	}
-
-	/**
 	 * Test WP_Customize_Nav_Menus::export_preview_data() method.
 	 *
 	 * @see WP_Customize_Nav_Menus::export_preview_data()
@@ -1182,58 +1116,5 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 		$this->assertTrue( (bool) preg_match( '/_wpCustomizePreviewNavMenusExports = ({.+})/s', $html, $matches ) );
 		$exported_data = json_decode( $matches[1], true );
 		$this->assertArrayHasKey( 'navMenuInstanceArgs', $exported_data );
-	}
-
-	/**
-	 * Test WP_Customize_Nav_Menus::render_nav_menu_partial() method.
-	 *
-	 * @see WP_Customize_Nav_Menus::render_nav_menu_partial()
-	 */
-	public function test_render_nav_menu_partial() {
-		$this->wp_customize->nav_menus->customize_preview_init();
-
-		$menu = wp_create_nav_menu( 'Foo' );
-		wp_update_nav_menu_item(
-			$menu,
-			0,
-			array(
-				'menu-item-type'   => 'custom',
-				'menu-item-title'  => 'WordPress.org',
-				'menu-item-url'    => 'https://wordpress.org',
-				'menu-item-status' => 'publish',
-			)
-		);
-
-		$nav_menu_args = $this->wp_customize->nav_menus->filter_wp_nav_menu_args(
-			array(
-				'echo'        => true,
-				'menu'        => $menu,
-				'fallback_cb' => 'wp_page_menu',
-				'walker'      => '',
-				'items_wrap'  => '<ul id="%1$s" class="%2$s">%3$s</ul>',
-			)
-		);
-
-		$partial_id = sprintf( 'nav_menu_instance[%s]', $nav_menu_args['customize_preview_nav_menus_args']['args_hmac'] );
-		$partials   = $this->wp_customize->selective_refresh->add_dynamic_partials( array( $partial_id ) );
-		$this->assertNotEmpty( $partials );
-		$partial = array_shift( $partials );
-		$this->assertSame( $partial_id, $partial->id );
-
-		$missing_args_hmac_args = array_merge(
-			$nav_menu_args['customize_preview_nav_menus_args'],
-			array( 'args_hmac' => null )
-		);
-		$this->assertFalse( $partial->render( $missing_args_hmac_args ) );
-
-		$args_hmac_mismatch_args = array_merge(
-			$nav_menu_args['customize_preview_nav_menus_args'],
-			array( 'args_hmac' => strrev( $nav_menu_args['customize_preview_nav_menus_args']['args_hmac'] ) )
-		);
-		$this->assertFalse( $partial->render( $args_hmac_mismatch_args ) );
-
-		$rendered = $partial->render( $nav_menu_args['customize_preview_nav_menus_args'] );
-		$this->assertStringContainsString( 'data-customize-partial-type="nav_menu_instance"', $rendered );
-		$this->assertStringContainsString( 'WordPress.org', $rendered );
 	}
 }

@@ -3832,6 +3832,7 @@ function is_gd_image( $image ) {
 	if ( is_resource( $image ) && 'gd' === get_resource_type( $image )
 		|| is_object( $image ) && $image instanceof GdImage
 	) {
+
 		return true;
 	}
 
@@ -4253,9 +4254,13 @@ function wp_prepare_attachment_for_js( $attachment ) {
 
 	if ( $attachment->post_parent ) {
 		$post_parent = get_post( $attachment->post_parent );
-		if ( $post_parent && current_user_can( 'read_post', $attachment->post_parent ) ) {
-			$response['uploadedToTitle'] = $post_parent->post_title ? $post_parent->post_title : __( '(no title)' );
-			$response['uploadedToLink']  = get_edit_post_link( $attachment->post_parent, 'raw' );
+		if ( $post_parent ) {
+			// Guard against unregistered post types
+			$post_type_obj = get_post_type_object( $post_parent->post_type );
+			if ( $post_type_obj && current_user_can( 'read_post', $attachment->post_parent ) ) {
+				$response['uploadedToTitle'] = $post_parent->post_title ? $post_parent->post_title : __( '(no title)' );
+				$response['uploadedToLink']  = get_edit_post_link( $attachment->post_parent, 'raw' );
+			}
 		}
 	}
 
@@ -4895,7 +4900,7 @@ function get_attached_media( $type, $post = 0 ) {
 }
 
 /**
- * Checks the HTML content for a audio, video, object, embed, or iframe tags.
+ * Checks the HTML content for an audio, video, object, embed, or iframe tags.
  *
  * @since 3.6.0
  *

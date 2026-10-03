@@ -63,4 +63,100 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 			)
 		);
 	}
+
+	/**
+	 * Render the control content from PHP.
+	 *
+	 * @since CP-2.8.0
+	 */
+	public function render_content() {
+		$background_img = get_theme_mod( 'background_image' ); //get_background_image();
+		$attachment_id  = $background_img ? attachment_url_to_postid( $background_img ) : '';
+
+		if ( $this->label ) {
+			?>
+
+			<span class="customize-control-title">
+				<?php echo esc_html( $this->label ); ?>
+			</span>
+
+			<?php
+		}
+		?>
+
+		<div class="customize-control-notifications-container" style="display: none;">
+			<ul></ul>
+		</div>
+
+		<?php
+		if ( $background_img ) {
+			?>
+
+			<div class="attachment-media-view attachment-media-view-image landscape">
+				<div class="thumbnail thumbnail-image">
+					<img class="attachment-thumb" src="<?php echo esc_url( $background_img ); ?>" draggable="false" alt="">					
+				</div>
+				<input type="hidden" value="<?php echo esc_attr( $attachment_id ); ?>">
+
+				<?php
+				if ( current_user_can( 'upload_files' ) ) {
+					?>
+					<div class="actions" <?php $this->link(); ?>
+						data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
+						data-empty="<?php esc_attr_e( 'Select Image' ); ?>"
+						data-full="<?php esc_attr_e( 'Change Image' ); ?>"
+					>
+						<button type="button" class="button remove-button">
+							<?php esc_html_e( 'Remove' ); ?>
+						</button>
+						<button type="button" class="button control-focus select-button">
+							<?php esc_html_e( 'Change Image' ); ?>
+						</button>
+					</div>
+
+					<?php
+				}
+				?>
+
+			</div>
+
+			<?php
+		} else {
+			?>
+
+			<div class="attachment-media-view">
+				<input type="hidden" value="<?php echo esc_attr( $attachment_id ); ?>">
+
+				<?php
+				if ( current_user_can( 'upload_files' ) ) {
+					?>
+
+					<div class="actions" <?php $this->link(); ?>
+						data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
+						data-empty="<?php esc_attr_e( 'Select Image' ); ?>"
+						data-full="<?php esc_attr_e( 'Change Image' ); ?>"
+					>
+						<button type="button" class="upload-button button select-button">
+							<?php esc_html_e( 'Select Image' ); ?>
+						</button>
+
+						<?php
+						if ( $this->setting->default ) {
+							?>
+							<button type="button" class="button default">
+								<?php esc_html_e( 'Default' ); ?>
+							</button>
+							<?php
+						}
+						?>
+
+					</div>
+					<?php
+				}
+				?>
+
+			</div>
+			<?php
+		}
+	}
 }

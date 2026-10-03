@@ -6,11 +6,10 @@
 /* global pluginL10n */
 document.addEventListener( 'DOMContentLoaded', function() {
 
-	var iframe, iframeBody, tabbables, firstTabbable, lastTabbable, closeButton,
+	var iframeBody, tabbables, firstTabbable, lastTabbable, closeButton,
 		uploadViewToggle = document.querySelector( '.upload-view-toggle' ),
 		wrap = document.querySelector( '.wrap' ),
 		body = document.body,
-		openers = document.querySelectorAll( '.thickbox' ),
 		width = window.innerWidth,
 		height = window.innerHeight,
 		dialog = document.createElement( 'dialog' );
@@ -19,41 +18,63 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	dialog.style.padding = '0';
 	body.append( dialog ); // append dialog element to page
 
-	/*
+	/**
 	 * Open modal dialog (replacing previous thickbox)
 	 *
 	 * @since CP-2.1.0
 	 */
-	openers.forEach( function( opener ) {
-		opener.addEventListener( 'click', function( e ) {
+	document.addEventListener( 'click', function( e ) {
+		if ( e.target.classList?.contains( 'thickbox' ) ) {
 			var urlNoQuery,
-				url = opener.href || opener.alt,
-				title = opener.dataset.title ?
+				url = e.target.href || e.target.alt,
+				title = e.target.dataset.title ?
 					wp.i18n.sprintf(
 						// translators: %s: Plugin name.
 						wp.i18n.__( 'Plugin: %s' ),
-						opener.dataset.title
+						e.target.dataset.title
 					) :
 					wp.i18n.__( 'Plugin details' );
+
+			const button = document.createElement( 'button' ),
+				span = document.createElement( 'span' ),
+				iframe = document.createElement( 'iframe' );
 
 			e.preventDefault();
 			e.stopPropagation();
 
-			urlNoQuery = url.split('TB_');
-
 			dialog.classList.add( 'modal-loading' );
-			dialog.showModal();
-			dialog.insertAdjacentHTML( 'beforeend', '<button type="button" id="dialog-close-button" autofocus><span class="screen-reader-text">' + pluginL10n.close + '</span></button><iframe frameborder="0" hspace="0" allowtransparency="true" src="' + urlNoQuery[0] + '" id="TB_iframeContent" name="TB_iframeContent' + Math.round( Math.random() * 1000 ) + '" style="width: ' + ( width * 9 / 10 ) + 'px;max-width:800px;height: ' + ( height * 9 / 10 ) + 'px;" title="' + title + '">' + pluginL10n.noiframes + '</iframe>' );
+			urlNoQuery = url.split( 'TB_' );
 
-			iframe = dialog.querySelector( 'iframe' );
+			button.type = 'button';
+			button.id = 'dialog-close-button';
+			button.setAttribute( 'autofocus', 'true' );
+			span.className = 'screen-reader-text';
+			span.textContent = pluginL10n.close;
+			button.append( span );
+
+			iframe.id = 'TB_iframeContent';
+			iframe.src = urlNoQuery[0];
+			iframe.name = 'TB_iframeContent' + Math.round( Math.random() * 1000 );
+			iframe.title = title;
+			iframe.textContent = pluginL10n.noiframes;
+			iframe.setAttribute( 'frameborder', '0' );
+			iframe.setAttribute( 'hspace', '0' );
+			iframe.setAttribute( 'allowtransparency', 'true' );
+			iframe.style.width = ( width * 9 / 10 ) + 'px';
+			iframe.style.maxWidth = '800px';
+			iframe.style.height = ( height * 9 / 10 ) + 'px';
+
+			dialog.append( button, iframe );
+			dialog.showModal();
+
 			if ( iframe ) {
 				iframe.addEventListener( 'load', function() {
+					iframeLoaded( iframe );
 					dialog.classList.remove( 'modal-loading' );
-					iframeLoaded();
 				} );
 			}
 
-			closeButton = dialog.querySelector( '#dialog-close-button' );
+			closeButton = document.getElementById( 'dialog-close-button' );
 			closeButton.addEventListener( 'click', function() {
 				dialog.close();
 				if ( iframe != null ) {
@@ -70,24 +91,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					}
 					closeButton.remove();
 				}
-				else if ( e.key === 'Enter' && e.target.id === 'dialog-close-button' ) {
-					e.preventDefault();
-					dialog.close();
-					if ( iframe != null ) {
-						iframe.remove();
-					}
-					closeButton.remove();
-				}
 			} );
-		} );
+		}
 	} );
 
-	/*
+	/**
 	 * Called when iframe has loaded
 	 *
 	 * @since CP-2.1.0
 	 */
-	function iframeLoaded() {
+	function iframeLoaded( iframe ) {
 
 		// Get the iframe body.
 		iframeBody = iframe.contentWindow.document.querySelector( 'body' );
@@ -115,7 +128,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
-	/*
+	/**
 	 * Get the tabbable elements.
 	 * Called after the iframe has fully loaded so we have all the elements we need.
 	 * Called again each time a Tab gets clicked.
@@ -163,14 +176,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 	}
 
-	/*
+	/**
 	 * Helper function copied from jQuery
 	 */
 	function isVisible( elem ) {
 		return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
 	}
 
-	/*
+	/**
 	 * Helper function to find ancesors with specific selector (e.g. class)
 	 */
 	function hasAncestorWithMatchingSelector( target, selector ) {
@@ -192,7 +205,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 	}
 
-	/*
+	/**
 	 * When a user presses the "Upload Plugin" button, show the upload form in place
 	 * rather than sending them to the devoted upload plugin page.
 	 * The `?tab=upload` page still exists for no-js support and for plugins that
@@ -234,16 +247,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			document.querySelectorAll( '#section-holder div.section' ).forEach( function( section ) {
 				section.style.display = 'none'; // Hide them all.
 			} );
-			document.querySelector( '#section-' + tab ).style.display = 'block';
+			document.getElementById( 'section-' + tab ).style.display = 'block';
 		} );
 	} );
 
 	/* Plugin install Category filter JS */
 	document.querySelectorAll( '.plugin-categories-filter a' ).forEach( function( filter ) {
 		filter.addEventListener( 'click', function( event ) {
-			event.preventDefault();
 			var category = filter.dataset.pluginTag;
-			document.querySelector( '#typeselector' ).value = 'tag';
+			event.preventDefault();
+
+			document.getElementById( 'typeselector' ).value = 'tag';
 			document.querySelector( '.plugin-install-php .wp-filter-search' ).value = category;
 			document.querySelector( '.plugin-install-php .wp-filter-search' ).dispatchEvent( new Event( 'input' ) );
 		} );

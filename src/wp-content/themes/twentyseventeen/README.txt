@@ -1,7 +1,7 @@
 === Twenty Seventeen ===
 Contributors: the WordPress team and ClassicPress contributors
-Version: 99.3.1
-Requires PHP: 5.6
+Version: 99.4.0
+Requires PHP: 7.4
 Requires CP: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -38,10 +38,6 @@ GNU General Public License for more details.
 
 Twenty Seventeen bundles the following third-party resources:
 
-HTML5 Shiv, Copyright 2014 Alexander Farkas
-Licenses: MIT/GPL2
-Source: https://github.com/aFarkas/html5shiv
-
 jQuery scrollTo, Copyright 2007-2015 Ariel Flesler
 License: MIT
 Source: https://github.com/flesler/jquery.scrollTo
@@ -65,9 +61,14 @@ Source: https://unsplash.com/@englr?photo=bIhpiQA009k
 
 == Backported from WordPress since 1.7 ==
 
+https://github.com/ClassicPress/ClassicPress/pull/2344
 https://github.com/ClassicPress/ClassicPress/pull/2324
 https://github.com/ClassicPress/ClassicPress/pull/2022
 https://github.com/ClassicPress/ClassicPress/pull/1975
+
+= 4.1 =
+* Restore $post_id parameter to twentyseventeen_edit_link() which is being passed in some templates.
+* https://core.trac.wordpress.org/changeset/62000
 
 = 3.9 =
 * Update .screen-reader-text class, replacing the obsolete clip property with clip-path.

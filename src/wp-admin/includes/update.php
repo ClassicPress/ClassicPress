@@ -872,150 +872,60 @@ function maintenance_nag() {
 }
 
 /**
- * Prints the JavaScript templates for update admin notices.
+ * Prints the templates for update admin notices.
  *
  * @since 4.6.0
  *
- * Template takes one argument with four values:
- *
- *     param {object} data {
- *         Arguments for admin notice.
- *
- *         @type string id        ID of the notice.
- *         @type string className Class names for the notice.
- *         @type string message   The notice's message.
- *         @type string type      The type of update the notice is for. Either 'plugin' or 'theme'.
- *     }
+ * @since CP-2.8.0
+ * No longer uses backbone.js
  */
 function wp_print_admin_notice_templates() {
 	?>
-	<script id="tmpl-wp-updates-admin-notice" type="text/html">
-		<div <# if ( data.id ) { #>id="{{ data.id }}"<# } #> class="notice {{ data.className }}"><p>{{{ data.message }}}</p></div>
-	</script>
-	<script id="tmpl-wp-bulk-updates-admin-notice" type="text/html">
-		<div id="{{ data.id }}" class="{{ data.className }} notice <# if ( data.errors ) { #>notice-error<# } else { #>notice-success<# } #>">
-			<p>
-				<# if ( data.successes ) { #>
-					<# if ( 1 === data.successes ) { #>
-						<# if ( 'plugin' === data.type ) { #>
-							<?php
-							/* translators: %s: Number of plugins. */
-							printf( __( '%s plugin successfully updated.' ), '{{ data.successes }}' );
-							?>
-						<# } else { #>
-							<?php
-							/* translators: %s: Number of themes. */
-							printf( __( '%s theme successfully updated.' ), '{{ data.successes }}' );
-							?>
-						<# } #>
-					<# } else { #>
-						<# if ( 'plugin' === data.type ) { #>
-							<?php
-							/* translators: %s: Number of plugins. */
-							printf( __( '%s plugins successfully updated.' ), '{{ data.successes }}' );
-							?>
-						<# } else { #>
-							<?php
-							/* translators: %s: Number of themes. */
-							printf( __( '%s themes successfully updated.' ), '{{ data.successes }}' );
-							?>
-						<# } #>
-					<# } #>
-				<# } #>
-				<# if ( data.errors ) { #>
-					<button class="button-link bulk-action-errors-collapsed" aria-expanded="false">
-						<# if ( 1 === data.errors ) { #>
-							<?php
-							/* translators: %s: Number of failed updates. */
-							printf( __( '%s update failed.' ), '{{ data.errors }}' );
-							?>
-						<# } else { #>
-							<?php
-							/* translators: %s: Number of failed updates. */
-							printf( __( '%s updates failed.' ), '{{ data.errors }}' );
-							?>
-						<# } #>
-						<span class="screen-reader-text">
-							<?php
-							/* translators: Hidden accessibility text. */
-							_e( 'Show more details' );
-							?>
-						</span>
-						<span class="toggle-indicator" aria-hidden="true"></span>
-					</button>
-				<# } #>
-			</p>
-			<# if ( data.errors ) { #>
-				<ul class="bulk-action-errors hidden">
-					<# _.each( data.errorMessages, function( errorMessage ) { #>
-						<li>{{ errorMessage }}</li>
-					<# } ); #>
-				</ul>
-			<# } #>
+	<template id="tmpl-wp-updates-admin-notice">
+		<div class="notice">
+			<p></p>
 		</div>
-	</script>
+	</template>
+
+	<template id="tmpl-wp-bulk-updates-admin-notice">
+		<div class="notice">
+			<p>
+				<span class="bulk-updates-success-count"></span>
+				<button class="button-link bulk-action-errors-collapsed" aria-expanded="false" hidden>
+					<span class="bulk-updates-error-count"></span>
+					<span class="screen-reader-text"><?php _e( 'Show more details' ); ?></span>
+					<span class="toggle-indicator" aria-hidden="true"></span>
+				</button>
+			</p>
+			<ul class="bulk-action-errors hidden"></ul>
+		</div>
+	</template>
 	<?php
 }
 
 /**
- * Prints the JavaScript templates for update and deletion rows in list tables.
+ * Prints the templates for update and deletion rows in list tables.
  *
  * @since 4.6.0
  *
- * The update template takes one argument with four values:
- *
- *     param {object} data {
- *         Arguments for the update row
- *
- *         @type string slug    Plugin slug.
- *         @type string plugin  Plugin base name.
- *         @type string colspan The number of table columns this row spans.
- *         @type string content The row content.
- *     }
- *
- * The delete template takes one argument with four values:
- *
- *     param {object} data {
- *         Arguments for the update row
- *
- *         @type string slug    Plugin slug.
- *         @type string plugin  Plugin base name.
- *         @type string name    Plugin name.
- *         @type string colspan The number of table columns this row spans.
- *     }
+ * @since CP-2.8.0
+ * No longer uses backbone.js
  */
 function wp_print_update_row_templates() {
 	?>
-	<script id="tmpl-item-update-row" type="text/template">
-		<tr class="plugin-update-tr update" id="{{ data.slug }}-update" data-slug="{{ data.slug }}" <# if ( data.plugin ) { #>data-plugin="{{ data.plugin }}"<# } #>>
-			<td colspan="{{ data.colspan }}" class="plugin-update colspanchange">
-				{{{ data.content }}}
+	<template id="tmpl-item-update-row">
+		<tr class="plugin-update-tr update">
+			<td class="plugin-update colspanchange"></td>
+		</tr>
+	</template>
+
+	<template id="tmpl-item-deleted-row">
+		<tr class="plugin-deleted-tr inactive deleted">
+			<td class="plugin-update colspanchange">
+				<p></p>
 			</td>
 		</tr>
-	</script>
-	<script id="tmpl-item-deleted-row" type="text/template">
-		<tr class="plugin-deleted-tr inactive deleted" id="{{ data.slug }}-deleted" data-slug="{{ data.slug }}" <# if ( data.plugin ) { #>data-plugin="{{ data.plugin }}"<# } #>>
-			<td colspan="{{ data.colspan }}" class="plugin-update colspanchange">
-				<# if ( data.plugin ) { #>
-					<?php
-					printf(
-						/* translators: %s: Plugin name. */
-						_x( '%s was successfully deleted.', 'plugin' ),
-						'<strong>{{{ data.name }}}</strong>'
-					);
-					?>
-				<# } else { #>
-					<?php
-					printf(
-						/* translators: %s: Theme name. */
-						_x( '%s was successfully deleted.', 'theme' ),
-						'<strong>{{{ data.name }}}</strong>'
-					);
-					?>
-				<# } #>
-			</td>
-		</tr>
-	</script>
+	</template>
 	<?php
 }
 

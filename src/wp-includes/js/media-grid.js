@@ -28,23 +28,62 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		endTouchPosition = 0;
 
 	// Update details within modal
-	function setAddedMediaFields( id ) {
-		var form = document.createElement( 'form' );
+	function setAddedMediaFields( item ) {
+		const id = item.dataset.id,
+			form = document.createElement( 'form' ),
+			input = document.createElement( 'input' ),
+			para = document.createElement( 'p' ),
+			message = document.createElement( 'span' ),
+			required = document.createElement( 'span' ),
+			span1 = document.createElement( 'span' ),
+			label1 = document.createElement( 'label' ),
+			input1 = document.createElement( 'input' ),
+			innerSpan1 = document.createElement( 'span' ),
+			span2 = document.createElement( 'span' ),
+			label2 = document.createElement( 'label' ),
+			input2 = document.createElement( 'input' ),
+			innerSpan2 = document.createElement( 'span' );
+
 		form.className = 'compat-item';
-		form.innerHTML = '<input type="hidden" id="menu-order" name="attachments[' + id + '][menu_order]" value="0">' +
-			'<p class="media-types media-types-required-info"><span class="required-field-message">Required fields are marked <span class="required">*</span></span></p>' +
-			'<span class="setting" data-setting="media_category">' +
-				'<label for="attachments-' + id + '-media_category">' +
-					'<span class="alignleft">Media Categories</span>' +
-				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" value="">' +
-			'</span>' +
-			'<span class="setting" data-setting="media_post_tag">' +
-				'<label for="attachments-' + id + '-media_post_tag">' +
-					'<span class="alignleft">Media Tags</span>' +
-				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" value="">' +
-			'</span>';
+		input.type = 'hidden';
+		input.id = 'menu-order';
+		input.name = 'attachments[' + id + '][menu_order]';
+		input.value = '0';
+		para.className = 'media-types media-types-required-info';
+		message.className = 'required-field-message';
+		message.textContent = 'Required fields are marked ';
+		required.className = 'required';
+		required.textContent = '*';
+
+		span1.className = 'setting';
+		span1.dataset.setting = 'media_category';
+		label1.htmlFor = 'attachments-' + id + '-media_category';
+		innerSpan1.className = 'alignleft';
+		innerSpan1.textContent = 'Media Categories';
+		input1.type = 'text';
+		input1.className = 'text';
+		input1.id = 'attachments-' + id + '-media_category';
+		input1.name = 'attachments[' + id + '][media_category]';
+		input1.value = item.dataset.taxes;
+
+		span2.className = 'setting';
+		span2.dataset.setting = 'media_post_tag';
+		label2.htmlFor = 'attachments-' + id + '-media_post_tag';
+		innerSpan2.className = 'alignleft';
+		innerSpan2.textContent = 'Media Tags';
+		input2.type = 'text';
+		input2.className = 'text';
+		input2.id = 'attachments-' + id + '-media_post_tag';
+		input2.name = 'attachments[' + id + '][media_post_tag]';
+		input2.value = item.dataset.tags;
+
+		message.append( required );
+		para.append( message );
+		label1.append( innerSpan1 );
+		span1.append( label1, input1 );
+		label2.append( innerSpan2 );
+		span2.append( label2, input2 );
+		form.append( input, para, span1, span2 );
 
 		if ( document.querySelector( '.compat-item' ) != null ) {
 			document.querySelector( '.compat-item' ).remove();
@@ -212,7 +251,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 				mediaItem.remove();
 				closeButton.click();
-				resetDataOrdering();
+				resetDataOrdering( 'minus' );
 			} else {
 				console.log( _wpMediaGridSettings.delete_failed );
 			}
@@ -223,10 +262,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	// Reset ordering of remaining media items after deletion
-	function resetDataOrdering() {
+	function resetDataOrdering( sign ) {
 		var items = document.querySelectorAll( '.media-item' ),
 			num = document.querySelector( '.displaying-num' ).textContent.split( ' ' ),
 			count = document.querySelector( '.load-more-count' ).textContent.split( ' ' ),
+			count3 = sign === 'minus' ? parseInt( count[3], 10 ) - 1 : parseInt( count[3], 10 ) + 1,
 			count5;
 
 		items.forEach( function( item, index ) {
@@ -234,12 +274,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} );
 
 		// Reset totals
-		if ( 5 in count ) { // allow for different languages
+		if ( count[5] ) { // allow for different languages
 			count5 = ' ' + count[5];
-		} else {
-			count5 = '';
 		}
-		document.querySelector( '.load-more-count' ).textContent = count[0] + ' ' + items.length + ' ' + count[2] + ' ' + items.length + ' ' + count[4] + count5;
+		document.querySelector( '.load-more-count' ).textContent = items.length + ' ' + count[2] + ' ' + count3 + ' ' + count[4] + count5;
 
 		document.querySelector( '.displaying-num' ).textContent = items.length + ' ' + num[1];
 		dialog.querySelector( '#total-media-items' ).textContent = items.length;
@@ -264,7 +302,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		var id = location.search.match( /\d+/g )[0];
 		if ( window.confirm( _wpMediaGridSettings.confirm_delete ) ) {
 			deleteItem( id );
-			resetDataOrdering();
 		}
 	} );
 
@@ -281,8 +318,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			height = item.dataset.height,
 			caption = item.dataset.caption,
 			description = item.dataset.description,
-			taxes = item.dataset.taxes,
-			tags = item.dataset.tags,
 			url = item.dataset.url,
 			alt = item.querySelector( 'img' ).getAttribute( 'alt' ),
 			link = item.dataset.link,
@@ -302,7 +337,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		history.replaceState( null, null, '?' + queryParams.toString() );
 
 		// Set menu_order, media_category, and media_post_tag field IDs correctly
-		setAddedMediaFields( id );
+		setAddedMediaFields( item );
 
 		// Populate modal with attachment details
 		dialog.querySelector( '.attachment-date' ).textContent = date;
@@ -319,10 +354,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		dialog.querySelector( '#attachment-details-two-column-caption' ).value = caption;
 		dialog.querySelector( '#attachment-details-two-column-description' ).value = description;
 		dialog.querySelector( '#attachment-details-two-column-copy-link' ).value = url;
-
 		dialog.querySelector( '#menu-order' ).value = menuOrder;
-		dialog.querySelector( '#attachments-' + id + '-media_category' ).value = taxes;
-		dialog.querySelector( '#attachments-' + id + '-media_post_tag' ).value = tags;
 
 		if ( filetype === 'audio' ) {
 			dialog.querySelector( '#media-image' ).setAttribute( 'hidden', true );
@@ -380,16 +412,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '#attachment-details-two-column-title' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-caption' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-description' ).removeAttribute( 'readonly' );
-			dialog.querySelector( '#attachments-' + id + '-media_category' ).removeAttribute( 'readonly' );
-			dialog.querySelector( '#attachments-' + id + '-media_post_tag' ).removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachments-' + id + '-media_category' )?.removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachments-' + id + '-media_category' )?.setAttribute( 'list', 'media-grid-media-categories' );
+			dialog.querySelector( '#attachments-' + id + '-media_post_tag' )?.removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachments-' + id + '-media_post_tag' )?.setAttribute( 'list', 'media-grid-media-tags' );
 			dialog.querySelector( '.edit-attachment' ).style.display = '';
 		} else {
 			dialog.querySelector( '#attachment-details-two-column-alt-text' ).setAttribute( 'readonly', true );
 			dialog.querySelector( '#attachment-details-two-column-title' ).setAttribute( 'readonly', true );
 			dialog.querySelector( '#attachment-details-two-column-caption' ).setAttribute( 'readonly', true );
 			dialog.querySelector( '#attachment-details-two-column-description' ).setAttribute( 'readonly', true );
-			dialog.querySelector( '#attachments-' + id + '-media_category' ).setAttribute( 'readonly', true );
-			dialog.querySelector( '#attachments-' + id + '-media_post_tag' ).setAttribute( 'readonly', true );
+			dialog.querySelector( '#attachments-' + id + '-media_category' )?.setAttribute( 'readonly', true );
+			dialog.querySelector( '#attachments-' + id + '-media_post_tag' )?.setAttribute( 'readonly', true );
 			dialog.querySelector( '.edit-attachment' ).style.display = 'none';
 		}
 
@@ -477,21 +511,46 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	/* Populate media items within grid */
 	function populateGridItem( attachment ) {
-		var gridItem = document.createElement( 'li' ),
-			image = '<img src="' + attachment.url + '" alt="' + attachment.alt + '">';
+		const gridItem = document.createElement( 'li' ),
+			wrapper = document.createElement( 'div' ),
+			thumbnail = document.createElement( 'div' ),
+			button = document.createElement( 'button' ),
+			spanIcon = document.createElement( 'span' ),
+			spanSRT = document.createElement( 'span' ),
+			centered = document.createElement( 'div' ),
+			filename = document.createElement( 'div' ),
+			title = document.createElement( 'div' ),
+			img = new Image();
 
-		if ( attachment.type === 'application' ) {
-			if ( attachment.subtype === 'vnd.openxmlformats-officedocument.spreadsheetml.sheet' ) {
-				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/spreadsheet.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
-			} else if ( attachment.subtype === 'zip' ) {
-				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/archive.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
-			} else {
-				image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/document.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+		let image;
+		if ( attachment.type === 'image' ) {
+			image = new Image();
+			image.src = attachment.url;
+			image.alt = attachment.alt;
+		} else {
+			if ( attachment.type === 'application' ) {
+				if ( attachment.subtype === 'vnd.openxmlformats-officedocument.spreadsheetml.sheet' ) {
+					img.src = _wpMediaGridSettings.includes_url + 'images/media/spreadsheet.png';
+				} else if ( attachment.subtype === 'zip' ) {
+					img.src = _wpMediaGridSettings.includes_url + 'images/media/archive.png';
+				} else {
+					img.src = _wpMediaGridSettings.includes_url + 'images/media/document.png';
+				}
+			} else if ( attachment.type === 'audio' ) {
+				img.src = _wpMediaGridSettings.includes_url + 'images/media/audio.png';
+			} else if ( attachment.type === 'video' ) {
+				img.src = _wpMediaGridSettings.includes_url + 'images/media/video.png';
 			}
-		} else if ( attachment.type === 'audio' ) {
-			image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/audio.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
-		} else if ( attachment.type === 'video' ) {
-			image = '<div class="icon"><div class="centered"><img src="' + _wpMediaGridSettings.includes_url + 'images/media/video.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+
+			centered.className = 'centered';
+			img.alt = '';
+			img.setAttribute( 'draggable', 'false' );
+			centered.append( img );
+			title.textContent = attachment.title;
+			filename.append( title );
+			image = document.createElement( 'div' );
+			image.className = 'icon';
+			image.append( centered, filename );
 		}
 
 		gridItem.className = 'media-item';
@@ -508,6 +567,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		gridItem.setAttribute( 'data-width', attachment.width );
 		gridItem.setAttribute( 'data-height', attachment.height );
 		gridItem.setAttribute( 'data-size', attachment.filesizeHumanReadable );
+		gridItem.setAttribute( 'data-sizes', attachment.sizes ? JSON.stringify( attachment.sizes ) : '' );
 		gridItem.setAttribute( 'data-caption', attachment.caption );
 		gridItem.setAttribute( 'data-description', attachment.description );
 		gridItem.setAttribute( 'data-link', attachment.link );
@@ -519,13 +579,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		gridItem.setAttribute( 'data-delete-nonce', attachment.nonces.delete );
 		gridItem.setAttribute( 'data-edit-nonce', attachment.nonces.edit );
 
-		gridItem.innerHTML = '<div class="select-attachment-preview type-' + attachment.type + ' subtype-' + attachment.subtype + '">' +
-			'<div class="media-thumbnail">' + image + '</div>' +
-			'</div>' +
-			'<button type="button" class="check" tabindex="-1">' +
-			'<span class="media-modal-icon"></span>' +
-			'<span class="screen-reader-text">' + _wpMediaGridSettings.deselect + '></span>' +
-			'</button>';
+		wrapper.className = 'select-attachment-preview type-' + attachment.type + ' subtype-' + attachment.subtype;
+		thumbnail.className = 'media-thumbnail';
+		button.type = 'button';
+		button.className = 'check';
+		button.tabIndex = -1;
+		spanIcon.className = 'media-modal-icon';
+		spanSRT.className =  'screen-reader-text';
+		spanSRT.textContent = _wpMediaGridSettings.deselect;
+
+		thumbnail.append( image );
+		wrapper.append( thumbnail );
+		button.append( spanIcon, spanSRT );
+		gridItem.append( wrapper, button );
 
 		return gridItem;
 	}
@@ -567,7 +633,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( result.success ) {
 
 				// Clear existing grid
-				mediaGrid.innerHTML = '';
+				mediaGrid.replaceChildren();
 
 				if ( result.data.length === 0 ) {
 
@@ -715,7 +781,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Set up variables when a change of upload category is made.
 		uploadCatSelect.addEventListener( 'change', function( e ) {
-			var div,
+			var div = document.createElement( 'div' ),
+				para = document.createElement( 'p' ),
+				button = document.createElement( 'button' ),
 				dismissible = document.querySelector( '.is-dismissible' ),
 				uploadCatFolder = new URLSearchParams( {
 					action: 'media-cat-upload',
@@ -759,18 +827,20 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} )
 			.then( function( response ) {
 				if ( response.success ) {
+					div.id = 'message';
+					para.textContent = response.data.message;
+					button.className = 'notice-dismiss';
+					button.type = 'button';
+
 					if ( response.data.value == '' ) {
-						div = document.createElement( 'div' );
 						div.id = 'message';
 						div.className = 'notice notice-error is-dismissible';
-						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+						div.append( para, button );
 						document.querySelector( '.page-title-action' ).after( div );
 						close.click();
 					} else {
-						div = document.createElement( 'div' );
-						div.id = 'message';
 						div.className = 'updated notice notice-success is-dismissible';
-						div.innerHTML = '<p>' + response.data.message + '</p><button class="notice-dismiss" type="button"></button>';
+						div.append( para, button );
 						document.querySelector( '.page-title-action' ).after( div );
 
 						// Update selected attribute in DOM.
@@ -785,10 +855,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				}
 			} )
 			.catch( function( error ) {
-				div = document.createElement( 'div' );
+				para.textContent = error;
+				button.className = 'notice-dismiss';
+				button.type = 'button';
+
 				div.id = 'message';
 				div.className = 'notice notice-error is-dismissible';
-				div.innerHTML = '<p>' + error + '</p><button class="notice-dismiss" type="button"></button>';
+				div.append( para, button );
 				document.querySelector( '.page-title-action' ).after( div );
 			} );
 		} );
@@ -1176,7 +1249,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				setTimeout( function() {
 					pond.removeFile( file.id );
 				}, 100 );
-				resetDataOrdering();
+				resetDataOrdering( 'plus' );
 			}
 		},
 		labelTapToUndo: _wpMediaGridSettings.tap_close,

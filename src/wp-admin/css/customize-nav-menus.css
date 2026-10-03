@@ -51,6 +51,7 @@
 #customize-new-menu-submit {
 	float: right;
 	min-width: 85px;
+	text-align: center;
 }
 
 .wp-customizer .menu-item-bar .menu-item-handle,
@@ -307,7 +308,7 @@
 }
 
 .wp-customizer .metabox-prefs label {
-	display: block;
+	display: inline-block;
 	padding-right: 0;
 	line-height: 30px;
 }
@@ -335,6 +336,12 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	text-decoration: none !important;
+}
+
+#available-menu-items .accordion-section-title:hover,
+#available-menu-items .accordion-section-title:focus {
+	border-left: 4px solid #2271b1;
+	padding-left: 11px;
 }
 
 .control-section-nav_menu .field-link-target,
@@ -450,11 +457,6 @@
 /**
  * Add-menu-items mode
  */
-
-.adding-menu-items .control-section {
-	opacity: .4;
-}
-
 .adding-menu-items .control-panel.control-section,
 .adding-menu-items .control-section.open {
 	opacity: 1;
@@ -464,6 +466,7 @@
 	color: #d63638;
 	cursor: pointer;
 	display: none;
+	text-decoration: none;
 }
 
 .menu-item-bar .item-delete:before {
@@ -554,17 +557,17 @@
 
 #available-menu-items .available-menu-items-list {
 	overflow-y: auto;
-	max-height: 200px; /* This gets set in JS to fit the screen size, and based on # of sections. */
+	max-height: 200px;
 	background: transparent;
 }
 
 #available-menu-items .accordion-section-title button {
 	display: block;
 	width: 28px;
-	height: 35px;
+	height: 30px;
 	position: absolute;
-	top: 5px;
-	right: 5px;
+	top: 15px;
+	right: 15px;
 	box-shadow: none;
 	outline: none;
 	cursor: pointer;
@@ -735,10 +738,6 @@
 body.adding-menu-items #available-menu-items {
 	left: 0;
 	visibility: visible;
-}
-
-body.adding-menu-items .wp-full-overlay-main {
-	left: 300px;
 }
 
 body.adding-menu-items #customize-preview {

@@ -218,7 +218,7 @@ switch ( $action ) {
 				$message = '<strong>' . __( 'User updated.' ) . '</strong>';
 			endif;
 			if ( $wp_http_referer && ! str_contains( $wp_http_referer, 'user-new.php' ) && ! IS_PROFILE_PAGE ) :
-				$message .= '<a href="' . esc_url( wp_validate_redirect( sanitize_url( $wp_http_referer ), self_admin_url( 'users.php' ) ) ) . '">' . __( '&larr; Go to Users' ) . '</a>';
+				$message .= ' <a href="' . esc_url( wp_validate_redirect( sanitize_url( $wp_http_referer ), self_admin_url( 'users.php' ) ) ) . '">' . __( '&larr; Go to Users' ) . '</a>';
 			endif;
 			wp_admin_notice(
 				$message,
@@ -1058,27 +1058,32 @@ switch ( $action ) {
 		break;
 }
 ?>
-<script type="text/javascript">
+<script>
 	if (window.location.hash == '#password') {
 		document.getElementById('pass1').focus();
 	}
 </script>
 
-<script type="text/javascript">
-	jQuery( function( $ ) {
-		var languageSelect = $( '#locale' );
-		$( 'form' ).on( 'submit', function() {
+<script>
+	document.addEventListener( 'DOMContentLoaded', function() {
+		const languageSelect = document.getElementById( 'locale' );
+		document.querySelector( 'form' ).addEventListener( 'submit', function() {
+			const selectedOption = languageSelect.options[ languageSelect.selectedIndex ],
+				submitButton = this.querySelector( '#submit' ),
+				spinner = document.createElement( 'span' );
+
 			// Don't show a spinner for English and installed languages,
 			// as there is nothing to download.
-			if ( ! languageSelect.find( 'option:selected' ).data( 'installed' ) ) {
-				$( '#submit', this ).after( '<span class="spinner language-install-spinner is-active">' );
+			if ( ! selectedOption.dataset.installed ) {
+				spinner.className = 'spinner language-install-spinner is-active';
+				submitButton.insertAdjacentElement( 'afterend', spinner );
 			}
-		});
+		} );
 	} );
 </script>
 
 <?php if ( isset( $application_passwords_list_table ) ) : ?>
-	<script type="text/html" id="tmpl-new-application-password">
+	<template id="tmpl-new-application-password">
 		<div class="notice notice-success is-dismissible new-application-password-notice" role="alert" tabindex="-1">
 			<p class="application-password-display">
 				<label for="new-application-password-value">
@@ -1086,11 +1091,11 @@ switch ( $action ) {
 					printf(
 						/* translators: %s: Application name. */
 						__( 'Your new password for %s is:' ),
-						'<strong>{{ data.name }}</strong>'
+						'<strong data-name></strong>'
 					);
 					?>
 				</label>
-				<input id="new-application-password-value" type="text" class="code" readonly value="{{ data.password }}">
+				<input id="new-application-password-value" type="text" class="code" data-password readonly>
 			</p>
 			<p><?php _e( 'Be sure to save this in a safe location. You will not be able to retrieve it.' ); ?></p>
 			<button type="button" class="notice-dismiss">
@@ -1102,11 +1107,11 @@ switch ( $action ) {
 				</span>
 			</button>
 		</div>
-	</script>
+	</template>
 
-	<script type="text/html" id="tmpl-application-password-row">
+	<template id="tmpl-application-password-row">
 		<?php $application_passwords_list_table->print_js_template_row(); ?>
-	</script>
+	</template>
 <?php endif; ?>
 <?php
 require_once ABSPATH . 'wp-admin/admin-footer.php';
