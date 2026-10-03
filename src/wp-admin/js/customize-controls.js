@@ -28,7 +28,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
 		section = document.getElementById( 'sub-accordion-section-custom_css' ),
 		colorSchemeInputs = form.querySelectorAll( 'input[name="_customize-radio-colorscheme"]' ),
-		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' );
+		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' ),
+		notificationsContainer = document.querySelector( '#customize-notifications-area ul' );
 
 	let addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver,
