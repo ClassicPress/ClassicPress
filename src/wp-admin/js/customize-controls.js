@@ -28,7 +28,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
 		section = document.getElementById( 'sub-accordion-section-custom_css' ),
 		colorSchemeInputs = form.querySelectorAll( 'input[name="_customize-radio-colorscheme"]' ),
-		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' );
+		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' ),
+		notificationsContainer = document.querySelector( '#customize-notifications-area ul' );
 
 	let addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver,
@@ -44,7 +45,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		lockableControls = form.querySelectorAll( 'input, select, textarea, button' ),
 		hyperlinks = document.querySelectorAll( 'a' ),
 		lockSettings = window._wpCustomizeSettings || {},
-		lockNotice = document.getElementById( 'customize-lock-notice' ),
 		lockRefreshTimer = null,
 		queryParams = new URLSearchParams( window.location.search ),
 		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
@@ -278,44 +278,40 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function applyLockState() {
 		const lockUser = lockSettings?.lock?.lockUser;
-		let nameNode;
-		let avatarNode;
-		let takeOverButton;
-
-		if ( ! lockNotice ) {
-			return;
-		}
-
-		nameNode = lockNotice.querySelector( '.customize-lock-notice-name' );
-		avatarNode = lockNotice.querySelector( '.customize-lock-notice-avatar' );
-		takeOverButton = lockNotice.querySelector( '.button-primary' );
+		let avatarNode, takeOverButton;
 
 		if ( lockUser && lockUser.id && lockUser.id !== lockSettings?.user?.id ) {
-			if ( nameNode ) {
-				nameNode.textContent = lockUser.name || '';
+			if ( ! notificationsContainer.querySelector( '.customize-lock-notice' ) ) {
+				notificationsContainer.prepend( document.getElementById( 'customize-lock-notice-template' ).content.cloneNode( true ) );
+			}
+			notificationsContainer.querySelector( '.customize-lock-notice-name' ).textContent = lockUser.name || '';
+
+			avatarNode = notificationsContainer.querySelector( '.customize-lock-notice-avatar' );
+			if ( typeof lockUser.avatar === 'string' && /<img/i.test( lockUser.avatar ) ) {
+				avatarNode.setHTML( lockUser.avatar );
+				avatarNode.hidden = false;
+			} else {
+				avatarNode.replaceChildren();
+				avatarNode.hidden = true;
 			}
 
-			if ( avatarNode ) {
-				if ( typeof lockUser.avatar === 'string' && /<img/i.test( lockUser.avatar ) ) {
-					avatarNode.innerHTML = lockUser.avatar;
-					avatarNode.hidden = false;
-				} else {
-					avatarNode.innerHTML = '';
-					avatarNode.hidden = true;
-				}
-			}
-
-			lockNotice.hidden = false;
+			notificationsContainer.parentNode.style.display = 'block';
 			disableCustomizerEditing();
 
-			if ( takeOverButton ) {
-				takeOverButton.disabled = false;
-			}
+			takeOverButton = notificationsContainer.querySelector( '.button-primary' );
+			takeOverButton.disabled = false;
+			takeOverButton.addEventListener( 'click', function( e ) {
+				e.preventDefault();
+				handleTakeOverLock();
+			} );
 
 			return;
 		}
 
-		lockNotice.hidden = true;
+		notificationsContainer.querySelector( '.customize-lock-notice' )?.remove();
+		if ( notificationsContainer.children.length === 0 ) {
+			notificationsContainer.parentNode.style.display = 'none';
+		}
 		enableCustomizerEditing();
 	}
 
@@ -367,7 +363,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function handleTakeOverLock() {
 		const data = new URLSearchParams(),
-			takeOverButton = lockNotice?.querySelector( '.button-primary' );
+			takeOverButton = notificationsContainer.querySelector( '.button-primary' );
 
 		if ( ! lockSettings?.nonce?.takeOverLock ) {
 			return;
@@ -406,15 +402,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				takeOverButton.disabled = false;
 			}
 			console.error( 'Customizer lock takeover failed.', error );
-		} );
-	}
-
-	if ( lockNotice ) {
-		lockNotice.addEventListener( 'click', function( e ) {
-			if ( e.target.closest( '.button-primary' ) ) {
-				e.preventDefault();
-				handleTakeOverLock();
-			}
 		} );
 	}
 
