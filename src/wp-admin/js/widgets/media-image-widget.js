@@ -1607,8 +1607,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			labelTapToUndo: IMAGE_WIDGET.tap_close,
 			fileRenameFunction: ( file ) =>
 				new Promise( function( resolve ) {
-					resolve( window.prompt( IMAGE_WIDGET.new_filename, file.name ) );
-				} ),
+					if ( parseInt( _cpFilepondLabels.renameFiles ) === 1 ) {
+						resolve( window.prompt( IMAGE_WIDGET.new_filename, file.name ) );
+					} else {
+						resolve( file.name );
+					}
+				}
+			),
 			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 			labelFileTypeNotAllowed: IMAGE_WIDGET.invalid_type,
 			fileValidateTypeLabelExpectedTypes: IMAGE_WIDGET.check_types
