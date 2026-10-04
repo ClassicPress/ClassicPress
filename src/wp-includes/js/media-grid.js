@@ -1,4 +1,6 @@
-/* global console, _wpMediaGridSettings, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
+/* global console, _wpMediaGridSettings, FilePondPluginFileValidateSize,
+FilePondPluginFileValidateType, FilePondPluginFileRename,
+FilePondPluginImagePreview, _cpFilepondLabels */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	var pond, itemID, focusID,
