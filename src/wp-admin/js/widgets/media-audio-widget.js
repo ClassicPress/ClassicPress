@@ -1440,8 +1440,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			labelTapToUndo: AUDIO_WIDGET.tap_close,
 			fileRenameFunction: ( file ) =>
 				new Promise( function( resolve ) {
-					resolve( window.prompt( AUDIO_WIDGET.new_filename, file.name ) );
-				} ),
+					if ( parseInt( _cpFilepondLabels.renameFiles ) === 1 ) {
+						resolve( window.prompt( AUDIO_WIDGET.new_filename, file.name ) );
+					} else {
+						resolve( file.name );
+					}
+				}
+			),
 			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 			labelFileTypeNotAllowed: AUDIO_WIDGET.invalid_type,
 			fileValidateTypeLabelExpectedTypes: AUDIO_WIDGET.check_types
