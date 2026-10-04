@@ -1,5 +1,7 @@
 /* eslint consistent-this: [ "error", "control" ] */
-/* global ajaxurl, GALLERY_WIDGET, Sortable, console, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
+/* global ajaxurl, GALLERY_WIDGET, Sortable, console, FilePondPluginFileValidateSize,
+FilePondPluginFileValidateType, FilePondPluginFileRename,
+FilePondPluginImagePreview, _cpFilepondLabels */
 
 /**
  * @since CP 2.5.0
