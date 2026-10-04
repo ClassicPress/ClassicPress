@@ -191,6 +191,7 @@ if ( ! is_multisite() ) {
 	$allowed_options['writing'][] = 'ping_sites';
 
 	$allowed_options['media'][] = 'uploads_use_yearmonth_folders';
+	$allowed_options['media'][] = 'uploads_rename_files';
 	$allowed_options['media'][] = 'wp_attachment_pages_enabled';
 
 	/*
