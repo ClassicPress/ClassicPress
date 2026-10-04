@@ -3167,7 +3167,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				new Promise( function( resolve ) {
 					if ( parseInt( _cpFilepondLabels.renameFiles ) === 1 ) {
 						const newName = window.prompt(
-							_wpMediaGridSettings.new_filename,
+							_wpCustomizeControlsL10n.new_filename,
 							file.name
 						);
 						resolve( newName === null ? file.name : newName );
