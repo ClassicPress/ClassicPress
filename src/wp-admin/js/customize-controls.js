@@ -9,7 +9,7 @@
 _updatedControlsWatcher, Coloris, ajaxurl, IMAGE_WIDGET, _cpCustomLogo,
 FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
 FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console,
-_wpUpdatesSettings, _wpThemeSettings */
+_wpUpdatesSettings, _wpThemeSettings, _cpFilepondLabels */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	window.newMenuItemIDs = window.newMenuItemIDs || [];
