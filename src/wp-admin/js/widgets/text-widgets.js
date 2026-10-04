@@ -2,7 +2,9 @@
  * @output wp-admin/js/widgets/text-widgets.js
  */
 
-/* global wp, tinymce, ajaxurl, TEXT_WIDGET, Sortable, console, prompt, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
+/* global wp, tinymce, ajaxurl, TEXT_WIDGET, Sortable, console, prompt,
+FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
+FilePondPluginFileRename, FilePondPluginImagePreview, _cpFilepondLabels */
 /* eslint consistent-this: [ "error", "control" ] */
 
 /**
