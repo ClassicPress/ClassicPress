@@ -3165,11 +3165,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			labelTapToUndo: IMAGE_WIDGET.tap_close,
 			fileRenameFunction: ( file ) =>
 				new Promise( function( resolve ) {
-					const newName = window.prompt(
-						_wpCustomizeControlsL10n.new_filename,
-						file.name
-					);
-					resolve( newName === null ? file.name : newName );
+					if ( parseInt( _cpFilepondLabels.renameFiles ) === 1 ) {
+						const newName = window.prompt(
+							_wpMediaGridSettings.new_filename,
+							file.name
+						);
+						resolve( newName === null ? file.name : newName );
+					} else {
+						resolve( file.name );
+					}
 				}
 			),
 			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
