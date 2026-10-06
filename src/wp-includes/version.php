@@ -54,7 +54,7 @@ $wp_db_version = 56657;
  *
  * @global int $cp_db_version
  */
-$cp_db_version = 2275;
+$cp_db_version = 2728;
 
 /**
  * Holds the TinyMCE version.
