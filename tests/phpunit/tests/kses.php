@@ -495,6 +495,7 @@ EOF;
 			$this->assertTrue( $tag['id'] );
 			$this->assertTrue( $tag['lang'] );
 			$this->assertTrue( $tag['style'] );
+			$this->assertTrue( $tag['tabindex'] );
 			$this->assertTrue( $tag['title'] );
 			$this->assertTrue( $tag['xml:lang'] );
 		}
@@ -549,7 +550,73 @@ EOF;
 	}
 
 	/**
+	 * Data provider.
+	 */
+	public static function data_normalize_entities(): array {
+		return array(
+			/**
+			 * These examples are from the wp_kses_normalize_entities function description.
+			 */
+			'AT&T'                               => array( 'AT&T', 'AT&amp;T' ),
+			'&#00058;'                           => array( '&#00058;', '&#058;' ),
+			'&#XYZZY;'                           => array( '&#XYZZY;', '&amp;#XYZZY;' ),
+
+			'Named ref &amp;'                    => array( '&spades;', '&spades;' ),
+			'Named ref &AMP;'                    => array( '&spades;', '&spades;' ),
+			'Named ref &spades;'                 => array( '&spades;', '&spades;' ),
+			'Named ref &sup1;'                   => array( '&sup1;', '&sup1;' ),
+			'Named ref &sup2;'                   => array( '&sup2;', '&sup2;' ),
+			'Named ref &sup3;'                   => array( '&sup3;', '&sup3;' ),
+			'Named ref &frac14;'                 => array( '&frac14;', '&frac14;' ),
+			'Named ref &frac12;'                 => array( '&frac12;', '&frac12;' ),
+			'Named ref &frac34;'                 => array( '&frac34;', '&frac34;' ),
+			'Named ref &there4;'                 => array( '&there4;', '&there4;' ),
+
+			'Decimal ref &#9; ( )'               => array( '&#9;', '&#009;' ),
+			'Decimal ref &#34; (")'              => array( '&#34;', '&#034;' ),
+			'Decimal ref &#0034; (")'            => array( '&#0034;', '&#034;' ),
+			'Decimal ref &#38; (&)'              => array( '&#38;', '&#038;' ),
+			"Decimal ref &#39; (')"              => array( '&#39;', '&#039;' ),
+			'Decimal ref &#128525; (😍)'          => array( '&#128525;', '&#128525;' ),
+			'Decimal ref &#00128525; (😍)'        => array( '&#00128525;', '&#128525;' ),
+
+			'Hex ref &#x9; ( )'                  => array( '&#x9;', '&#x9;' ),
+			'Hex ref &#x22; (")'                 => array( '&#x22;', '&#x22;' ),
+			'Hex ref &#x0022; (")'               => array( '&#x0022;', '&#x22;' ),
+			'Hex ref &#x26; (&)'                 => array( '&#x26;', '&#x26;' ),
+			"Hex ref &#x27; (')"                 => array( '&#x27;', '&#x27;' ),
+			'Hex ref &#x1f60d; (😍)'              => array( '&#x1f60d;', '&#x1f60d;' ),
+			'Hex ref &#x001f60d; (😍)'            => array( '&#x001f60d;', '&#x1f60d;' ),
+
+			'HEX REF &#X22; (")'                 => array( '&#X22;', '&#x22;' ),
+			'HEX REF &#X26; (&)'                 => array( '&#X26;', '&#x26;' ),
+			"HEX REF &#X27; (')"                 => array( '&#X27;', '&#x27;' ),
+			'HEX REF &#X1F60D; (😍)'              => array( '&#X1F60D;', '&#x1F60D;' ),
+
+			'Encoded named ref &amp;amp;'        => array( '&amp;amp;', '&amp;amp;' ),
+			'Encoded named ref &#38;amp;'        => array( '&#38;amp;', '&#038;amp;' ),
+			'Encoded named ref &#x26;amp;'       => array( '&#x26;amp;', '&#x26;amp;' ),
+			'Encoded numeric ref &amp;#39;'      => array( '&amp;#39;', '&amp;#39;' ),
+			'Encoded numeric ref &#38;#39;'      => array( '&#38;#39;', '&#038;#39;' ),
+			'Encoded numeric ref &#x26;#39;'     => array( '&#x26;#39;', '&#x26;#39;' ),
+			'Encoded hex ref &amp;#x27;'         => array( '&amp;#x27;', '&amp;#x27;' ),
+			'Encoded hex ref &#38;#x27;'         => array( '&#38;#x27;', '&#038;#x27;' ),
+			'Encoded hex ref &#x26;#x27;'        => array( '&#x26;#x27;', '&#x26;#x27;' ),
+
+			/*
+			 * The codepoint value here is outside of the valid unicode range whose
+			 * maximum is 0x10FFFF or 1114111.
+			 */
+			'Invalid decimal unicode &#1114112;' => array( '&#1114112;', '&amp;#1114112;' ),
+			'Invalid hex unicode &#x110000;'     => array( '&#x110000;', '&amp;#x110000;' ),
+		);
+	}
+
+	/**
 	 * @ticket 26290
+	 * @ticket 63630
+	 *
+	 * @dataProvider data_normalize_entities
 	 */
 	public function test_wp_kses_normalize_entities() {
 		$this->assertSame( '&spades;', wp_kses_normalize_entities( '&spades;' ) );
@@ -937,7 +1004,15 @@ EOF;
 	 * @ticket 48376
 	 * @ticket 55966
 	 * @ticket 56122
-	 * @dataProvider data_test_safecss_filter_attr
+	 * @ticket 58551
+	 * @ticket 60132
+	 * @ticket 64414
+	 * @ticket 65457
+	 * @ticket 64974
+	 * @ticket 65832
+	 * @ticket 64972
+	 *
+	 * @dataProvider data_safecss_filter_attr
 	 *
 	 * @param string $css      A string of CSS rules.
 	 * @param string $expected Expected string of CSS rules.
@@ -956,7 +1031,7 @@ EOF;
 	 *     }
 	 * }
 	 */
-	public function data_test_safecss_filter_attr() {
+	public function data_safecss_filter_attr() {
 		return array(
 			// Empty input, empty output.
 			array(
@@ -1047,9 +1122,9 @@ EOF;
 				'css'      => 'grid-template-rows: 40px 4em 40px;grid-auto-rows: min-content;grid-row-start: -1;grid-row-end: 3;grid-row-gap: 1em',
 				'expected' => 'grid-template-rows: 40px 4em 40px;grid-auto-rows: min-content;grid-row-start: -1;grid-row-end: 3;grid-row-gap: 1em',
 			),
-			// `grid` does not yet support functions or `\`.
+			// `grid` does not yet support `\`.
 			array(
-				'css'      => 'grid-template-columns: repeat(2, 50px 1fr);grid-template: 1em / 20% 20px 1fr',
+				'css'      => 'grid-template: 1em / 20% 20px 1fr',
 				'expected' => '',
 			),
 			// `flex` and `grid` alignments introduced in 5.3.
@@ -1107,6 +1182,38 @@ EOF;
 				'css'      => 'background: conic-gradient(at 0% 30%, red 10%, yellow 30%, #1e90ff 50%)',
 				'expected' => 'background: conic-gradient(at 0% 30%, red 10%, yellow 30%, #1e90ff 50%)',
 			),
+			/*
+			 * Background gradient support, introduced in 7.1 (ticket 64974).
+			 * A gradient combined with a url() image is allowed, in either order.
+			 */
+			array(
+				'css'      => "background-image: linear-gradient(135deg, rgb(255,0,0) 0%, rgb(0,0,255) 100%), url('https://example.com/image.jpg')",
+				'expected' => "background-image: linear-gradient(135deg, rgb(255,0,0) 0%, rgb(0,0,255) 100%), url('https://example.com/image.jpg')",
+			),
+			array(
+				'css'      => "background-image: url('https://example.com/image.jpg'), linear-gradient(135deg, rgb(255,0,0) 0%, rgb(0,0,255) 100%)",
+				'expected' => "background-image: url('https://example.com/image.jpg'), linear-gradient(135deg, rgb(255,0,0) 0%, rgb(0,0,255) 100%)",
+			),
+			// A gradient using modern color functions is allowed.
+			array(
+				'css'      => 'background-image: linear-gradient(135deg, hsl(0,100%,50%) 0%, hsl(240,100%,50%) 100%)',
+				'expected' => 'background-image: linear-gradient(135deg, hsl(0,100%,50%) 0%, hsl(240,100%,50%) 100%)',
+			),
+			// Nesting beyond one level inside a gradient is not supported (unchanged from before).
+			array(
+				'css'      => 'background-image: linear-gradient(red 0%, blue calc(50% + var(--x)))',
+				'expected' => '',
+			),
+			/*
+			 * As of 7.1 (ticket 64974) any single-level nested function is permitted inside a
+			 * gradient, widening the previous rgb()/rgba()-only allowance. This includes the
+			 * legacy expression() form, which is inert in all supported browsers and remains
+			 * escaped when output as an attribute value.
+			 */
+			array(
+				'css'      => 'background-image: linear-gradient(red, expression(alert))',
+				'expected' => 'background-image: linear-gradient(red, expression(alert))',
+			),
 			// `object-position` introduced in 5.7.1.
 			array(
 				'css'      => 'object-position: right top',
@@ -1116,6 +1223,23 @@ EOF;
 			array(
 				'css'      => 'object-fit: cover',
 				'expected' => 'object-fit: cover',
+			),
+			// `white-space` introduced in 6.9.0.
+			array(
+				'css'      => 'white-space: nowrap',
+				'expected' => 'white-space: nowrap',
+			),
+			array(
+				'css'      => 'white-space: pre',
+				'expected' => 'white-space: pre',
+			),
+			array(
+				'css'      => 'white-space: pre-wrap',
+				'expected' => 'white-space: pre-wrap',
+			),
+			array(
+				'css'      => 'white-space: pre-line',
+				'expected' => 'white-space: pre-line',
 			),
 			// Expressions are not allowed.
 			array(
@@ -1316,6 +1440,239 @@ EOF;
 				'css'      => 'aspect-ratio: url( https://wordpress.org/wp-content/uploads/aspect-ratio.jpg );',
 				'expected' => '',
 			),
+			// URL support for `filter` introduced in 6.3.
+			array(
+				'css'      => 'filter: url( my-file.svg#svg-blur );',
+				'expected' => 'filter: url( my-file.svg#svg-blur )',
+			),
+			// Support for `repeat` function.
+			array(
+				'css'      => 'grid-template-columns: repeat(4, minmax(0, 1fr))',
+				'expected' => 'grid-template-columns: repeat(4, minmax(0, 1fr))',
+			),
+			array(
+				'css'      => 'grid-template-columns: repeat(auto-fill, minmax(min(12rem, 100%), 1fr))',
+				'expected' => 'grid-template-columns: repeat(auto-fill, minmax(min(12rem, 100%), 1fr))',
+			),
+			// Malformed repeat, no closing `)`.
+			array(
+				'css'      => 'grid-template-columns: repeat(4, minmax(0, 1fr)',
+				'expected' => '',
+			),
+			// Malformed repeat, contains unsupported function.
+			array(
+				'css'      => 'grid-template-columns: repeat(4, unsupported(0, 1fr)',
+				'expected' => '',
+			),
+			// `writing-mode` introduced in 6.4.
+			array(
+				'css'      => 'writing-mode: vertical-rl',
+				'expected' => 'writing-mode: vertical-rl',
+			),
+			// `background-repeat` introduced in 6.5.
+			array(
+				'css'      => 'background-repeat: no-repeat',
+				'expected' => 'background-repeat: no-repeat',
+			),
+			// `opacity` introduced in 6.7.
+			array(
+				'css'      => 'opacity: 10',
+				'expected' => 'opacity: 10',
+			),
+			// `display` introduced in 7.0.0.
+			array(
+				'css'      => 'display: none',
+				'expected' => 'display: none',
+			),
+			array(
+				'css'      => 'display: block',
+				'expected' => 'display: block',
+			),
+			array(
+				'css'      => 'display: inline',
+				'expected' => 'display: inline',
+			),
+			array(
+				'css'      => 'display: inline-block',
+				'expected' => 'display: inline-block',
+			),
+			array(
+				'css'      => 'display: inline-flex',
+				'expected' => 'display: inline-flex',
+			),
+			array(
+				'css'      => 'display: inline-grid',
+				'expected' => 'display: inline-grid',
+			),
+			array(
+				'css'      => 'display: table',
+				'expected' => 'display: table',
+			),
+			array(
+				'css'      => 'display: flex',
+				'expected' => 'display: flex',
+			),
+			array(
+				'css'      => 'display: grid',
+				'expected' => 'display: grid',
+			),
+			// SVG presentation attributes introduced in 7.1.0.
+			array(
+				'css'      => 'fill: none',
+				'expected' => 'fill: none',
+			),
+			array(
+				'css'      => 'fill-rule: evenodd',
+				'expected' => 'fill-rule: evenodd',
+			),
+			array(
+				'css'      => 'stroke: red',
+				'expected' => 'stroke: red',
+			),
+			array(
+				'css'      => 'stroke-width: 2',
+				'expected' => 'stroke-width: 2',
+			),
+			array(
+				'css'      => 'stroke-linecap: round',
+				'expected' => 'stroke-linecap: round',
+			),
+			array(
+				'css'      => 'paint-order: stroke',
+				'expected' => 'paint-order: stroke',
+			),
+			array(
+				'css'      => 'vector-effect: non-scaling-stroke',
+				'expected' => 'vector-effect: non-scaling-stroke',
+			),
+			array(
+				'css'      => 'clip-rule: evenodd',
+				'expected' => 'clip-rule: evenodd',
+			),
+			array(
+				'css'      => 'text-anchor: middle',
+				'expected' => 'text-anchor: middle',
+			),
+			// SVG transform functions (ticket #65832).
+			array(
+				'css'      => 'transform: rotate(45deg)',
+				'expected' => 'transform: rotate(45deg)',
+			),
+			array(
+				'css'      => 'transform: translate(10px, 20px)',
+				'expected' => 'transform: translate(10px, 20px)',
+			),
+			array(
+				'css'      => 'transform: scale(1.5)',
+				'expected' => 'transform: scale(1.5)',
+			),
+			array(
+				'css'      => 'transform: matrix(1, 0, 0, 1, 10, 20)',
+				'expected' => 'transform: matrix(1, 0, 0, 1, 10, 20)',
+			),
+			array(
+				'css'      => 'transform: skewX(30deg)',
+				'expected' => 'transform: skewX(30deg)',
+			),
+			array(
+				'css'      => 'transform: skewY(30deg)',
+				'expected' => 'transform: skewY(30deg)',
+			),
+			// Multiple transform functions chained.
+			array(
+				'css'      => 'transform: rotate(45deg) scale(1.5)',
+				'expected' => 'transform: rotate(45deg) scale(1.5)',
+			),
+			// transform: none is unchanged (regression control).
+			array(
+				'css'      => 'transform: none',
+				'expected' => 'transform: none',
+			),
+			// SVG clip-path shape functions (ticket #65832).
+			array(
+				'css'      => 'clip-path: inset(10px)',
+				'expected' => 'clip-path: inset(10px)',
+			),
+			array(
+				'css'      => 'clip-path: circle(50%)',
+				'expected' => 'clip-path: circle(50%)',
+			),
+			array(
+				'css'      => 'clip-path: ellipse(25% 40% at 50% 50%)',
+				'expected' => 'clip-path: ellipse(25% 40% at 50% 50%)',
+			),
+			array(
+				'css'      => 'clip-path: polygon(50% 0%, 100% 100%, 0% 100%)',
+				'expected' => 'clip-path: polygon(50% 0%, 100% 100%, 0% 100%)',
+			),
+			array(
+				'css'      => "clip-path: path('M 0 0 L 100 0 L 50 100 Z')",
+				'expected' => "clip-path: path('M 0 0 L 100 0 L 50 100 Z')",
+			),
+			array(
+				'css'      => 'clip-path: rect(0 100% 100% 0)',
+				'expected' => 'clip-path: rect(0 100% 100% 0)',
+			),
+			array(
+				'css'      => 'clip-path: xywh(0 0 100% 100% round 10px)',
+				'expected' => 'clip-path: xywh(0 0 100% 100% round 10px)',
+			),
+			array(
+				'css'      => 'clip-path: shape(from 0 0, line to 100% 0, line to 50% 100%, close)',
+				'expected' => 'clip-path: shape(from 0 0, line to 100% 0, line to 50% 100%, close)',
+			),
+			// Nested functions within a basic shape are allowed.
+			array(
+				'css'      => 'clip-path: inset(calc(10px + 1em) round var(--radius))',
+				'expected' => 'clip-path: inset(calc(10px + 1em) round var(--radius))',
+			),
+			// SVG url() references for allowlisted properties (ticket #65832).
+			array(
+				'css'      => 'clip-path: url(#myClipper)',
+				'expected' => 'clip-path: url(#myClipper)',
+			),
+			array(
+				'css'      => 'fill: url(#gradient1)',
+				'expected' => 'fill: url(#gradient1)',
+			),
+			array(
+				'css'      => 'mask: url(#myMask)',
+				'expected' => 'mask: url(#myMask)',
+			),
+			array(
+				'css'      => 'marker-start: url(#arrowStart)',
+				'expected' => 'marker-start: url(#arrowStart)',
+			),
+			array(
+				'css'      => 'marker-end: url(#arrowEnd)',
+				'expected' => 'marker-end: url(#arrowEnd)',
+			),
+			array(
+				'css'      => 'marker-mid: url(#arrowMid)',
+				'expected' => 'marker-mid: url(#arrowMid)',
+			),
+			array(
+				'css'      => 'marker: url(#marker1)',
+				'expected' => 'marker: url(#marker1)',
+			),
+			array(
+				'css'      => 'stroke: url(#strokeGradient)',
+				'expected' => 'stroke: url(#strokeGradient)',
+			),
+			// Disallow javascript: URLs in SVG url() references (security regression).
+			array(
+				'css'      => 'fill: url(javascript:alert(1))',
+				'expected' => '',
+			),
+			array(
+				'css'      => 'clip-path: url(javascript:alert(1))',
+				'expected' => '',
+			),
+			// CSS anchor positioning properties introduced in 7.2.
+			array(
+				'css'      => 'anchor-name: --tooltip;anchor-scope: all;position-anchor: --tooltip;position-area: top;position-try: flip-block;position-try-fallbacks: --fallback;position-try-order: most-height;position-visibility: anchors-visible',
+				'expected' => 'anchor-name: --tooltip;anchor-scope: all;position-anchor: --tooltip;position-area: top;position-try: flip-block;position-try-fallbacks: --fallback;position-try-order: most-height;position-visibility: anchors-visible',
+			),
 		);
 	}
 
@@ -1325,8 +1682,20 @@ EOF;
 	 * @ticket 33121
 	 */
 	public function test_wp_kses_attr_data_attribute_is_allowed() {
-		$test     = '<div data-foo="foo" data-bar="bar" datainvalid="gone" data--invaild="gone"  data-also-invaild-="gone" data-two-hyphens="remains">Pens and pencils</div>';
+		$test     = '<div data-foo="foo" data-bar="bar" datainvalid="gone" data-two-hyphens="remains">Pens and pencils</div>';
 		$expected = '<div data-foo="foo" data-bar="bar" data-two-hyphens="remains">Pens and pencils</div>';
+
+		$this->assertSame( $expected, wp_kses_post( $test ) );
+	}
+
+	/**
+	 * Data attributes with leading, trailing, and double "-" are globally accepted.
+	 *
+	 * @ticket 61052
+	 */
+	public function test_wp_kses_attr_data_attribute_hypens_allowed() {
+		$test     = '<div data--leading="remains" data-trailing-="remains" data-middle--double="remains">Pens and pencils</div>';
+		$expected = '<div data--leading="remains" data-trailing-="remains" data-middle--double="remains">Pens and pencils</div>';
 
 		$this->assertSame( $expected, wp_kses_post( $test ) );
 	}
@@ -1676,6 +2045,29 @@ EOF;
 	}
 
 	/**
+	 * Tests that the autofocus attribute is allowed on dialog elements and removed from other focusable elements.
+	 *
+	 * @ticket 65491
+	 */
+	public function test_wp_kses_dialog_autofocus_attribute() {
+		$html     = '<dialog open autofocus>Content</dialog><button type="button" autofocus>Button</button><textarea autofocus>Some content</textarea><div tabindex="0" autofocus>Some content</div>';
+		$expected = '<dialog open autofocus>Content</dialog><button type="button">Button</button><textarea>Some content</textarea><div tabindex="0">Some content</div>';
+
+		$this->assertSame( $expected, wp_kses_post( $html ) );
+	}
+
+	/**
+	 * Test that Invoker Commands API attributes are preserved on buttons in post content.
+	 *
+	 * @ticket 64576
+	 */
+	public function test_wp_kses_button_invoker_command_attributes() {
+		$html = '<button type="button" commandfor="my-popover" command="toggle-popover">Toggle</button><div id="my-popover" popover>Content</div>';
+
+		$this->assertSame( $html, wp_kses_post( $html ) );
+	}
+
+	/**
 	 * Test that object tags are allowed under limited circumstances.
 	 *
 	 * @ticket 54261
@@ -1876,6 +2268,38 @@ HTML;
 	}
 
 	/**
+	 * Ensures that `wp_kses()` preserves various kinds of HTML comments, both valid and invalid.
+	 *
+	 * @ticket 61009
+	 *
+	 * @dataProvider data_html_containing_various_kinds_of_html_comments
+	 *
+	 * @param string $html_comment    HTML containing a comment; must not be a valid comment
+	 *                                but must be syntax which a browser interprets as a comment.
+	 * @param string $expected_output How `wp_kses()` ought to transform the comment.
+	 */
+	public function test_wp_kses_preserves_html_comments( $html_comment, $expected_output ) {
+		$this->assertSame(
+			$expected_output,
+			wp_kses( $html_comment, array() ),
+			'Failed to properly preserve HTML comment.'
+		);
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @return array[].
+	 */
+	public static function data_html_containing_various_kinds_of_html_comments() {
+		return array(
+			'Normative HTML comment'            => array( 'before<!-- this is a comment -->after', 'before<!-- this is a comment -->after' ),
+			'Closing tag with invalid tag name' => array( 'before<//not a tag>after', 'before<//not a tag>after' ),
+			'Incorrectly opened comment (Markup declaration)' => array( 'before<!also not a tag>after', 'before<!also not a tag>after' ),
+		);
+	}
+
+	/**
 	 * Test that attributes with a list of allowed values are filtered correctly.
 	 *
 	 * @ticket 54261
@@ -1918,7 +2342,7 @@ HTML;
 		);
 
 		return array_map(
-			function ( $datum ) {
+			static function ( $datum ) {
 				$datum[] = array(
 					'p' => array(
 						'dir' => array(
@@ -2150,6 +2574,78 @@ HTML;
 		);
 
 		return $this->text_array_to_dataprovider( $required_kses_globals );
+	}
+
+	/**
+	 * Tests that the target attribute is preserved in various contexts.
+	 *
+	 * @dataProvider data_target_attribute_preserved_in_descriptions
+	 *
+	 * @ticket 12056
+	 *
+	 * @param string $context  The context to test ('user_description' or 'pre_term_description').
+	 * @param string $input    The input HTML string.
+	 * @param string $expected The expected output HTML string.
+	 */
+	public function test_target_attribute_preserved_in_context( $context, $input, $expected ) {
+		$allowed = wp_kses_allowed_html( $context );
+		$this->assertTrue( isset( $allowed['a']['target'] ), "Target attribute not allowed in {$context}" );
+		$this->assertEquals( $expected, wp_kses( $input, $context ) );
+	}
+
+	/**
+	 * Data provider for test_target_attribute_preserved_in_context.
+	 *
+	 * @return array
+	 */
+	public function data_target_attribute_preserved_in_descriptions() {
+		return array(
+			array(
+				'user_description',
+				'<a href="https://example.com" target="_blank">Example</a>',
+				'<a href="https://example.com" target="_blank">Example</a>',
+			),
+			array(
+				'pre_term_description',
+				'<a href="https://example.com" target="_blank">Example</a>',
+				'<a href="https://example.com" target="_blank">Example</a>',
+			),
+		);
+	}
+
+	/**
+	 * Tests that specific attributes are preserved in various contexts.
+	 *
+	 * @dataProvider data_allowed_attributes_in_descriptions
+	 *
+	 * @ticket 12056
+	 *
+	 * @param string $context    The context to test ('user_description' or 'pre_term_description').
+	 * @param array  $attributes List of attributes to check for.
+	 */
+	public function test_specific_attributes_preserved_in_context( $context, $attributes ) {
+		$allowed = wp_kses_allowed_html( $context );
+		foreach ( $attributes as $attribute ) {
+			$this->assertTrue( isset( $allowed['a'][ $attribute ] ), "{$attribute} attribute not allowed in {$context}" );
+		}
+	}
+
+	/**
+	 * Data provider for test_specific_attributes_preserved_in_context.
+	 *
+	 * @return array
+	 */
+	public function data_allowed_attributes_in_descriptions() {
+		return array(
+			array(
+				'user_description',
+				array( 'target', 'href', 'rel' ),
+			),
+			array(
+				'pre_term_description',
+				array( 'target', 'href', 'rel' ),
+			),
+		);
 	}
 
 	/**
