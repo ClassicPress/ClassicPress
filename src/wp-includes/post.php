@@ -5172,6 +5172,11 @@ function wp_transition_post_status( $new_status, $old_status, $post ) {
 	 */
 	do_action( 'transition_post_status', $new_status, $old_status, $post );
 
+	$new_status_object = get_post_status_object( $new_status );
+	$old_status_valid  = get_post_status_object( $old_status ) || 'new' === $old_status;
+	$post_type_object  = get_post_type_object( $post->post_type );
+
+	if ( $new_status_object && $old_status_valid ) {
 	/**
 	 * Fires when a post is transitioned from one status to another.
 	 *
@@ -5189,7 +5194,9 @@ function wp_transition_post_status( $new_status, $old_status, $post ) {
 	 * @param WP_Post $post Post object.
 	 */
 	do_action( "{$old_status}_to_{$new_status}", $post );
+	}
 
+	if ( $new_status_object && $post_type_object ) {
 	/**
 	 * Fires when a post is transitioned from one status to another.
 	 *
@@ -5229,6 +5236,7 @@ function wp_transition_post_status( $new_status, $old_status, $post ) {
 	 * @param string  $old_status Old post status.
 	 */
 	do_action( "{$new_status}_{$post->post_type}", $post->ID, $post, $old_status );
+	}
 }
 
 /**
