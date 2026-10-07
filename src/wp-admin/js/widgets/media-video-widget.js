@@ -1,5 +1,7 @@
 /* eslint consistent-this: [ "error", "control" ] */
-/* global ajaxurl, VIDEO_WIDGET, console, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
+/* global ajaxurl, VIDEO_WIDGET, console, FilePondPluginFileValidateSize,
+FilePondPluginFileValidateType, FilePondPluginFileRename,
+FilePondPluginImagePreview, _cpFilepondLabels */
 
 /*
  * @since CP-2.5.0
@@ -1411,8 +1413,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			labelTapToUndo: VIDEO_WIDGET.tap_close,
 			fileRenameFunction: ( file ) =>
 				new Promise( function( resolve ) {
-					resolve( window.prompt( VIDEO_WIDGET.new_filename, file.name ) );
-				} ),
+					if ( parseInt( _cpFilepondLabels.renameFiles ) === 1 ) {
+						resolve( window.prompt( VIDEO_WIDGET.new_filename, file.name ) );
+					} else {
+						resolve( file.name );
+					}
+				}
+			),
 			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 			labelFileTypeNotAllowed: VIDEO_WIDGET.invalid_type,
 			fileValidateTypeLabelExpectedTypes: VIDEO_WIDGET.check_types

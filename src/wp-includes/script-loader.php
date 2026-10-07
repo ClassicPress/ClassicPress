@@ -833,6 +833,7 @@ function wp_default_scripts( $scripts ) {
 			'labelButtonUndoItemProcessing'  => __( 'Undo' ),
 			'labelButtonRetryItemProcessing' => __( 'Retry' ),
 			'labelButtonProcessItem'         => __( 'Upload' ),
+			'renameFiles'                    => (int) get_option( 'uploads_rename_files' ),
 		)
 	);
 

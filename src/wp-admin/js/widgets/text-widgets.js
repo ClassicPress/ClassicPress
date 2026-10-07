@@ -2,7 +2,9 @@
  * @output wp-admin/js/widgets/text-widgets.js
  */
 
-/* global wp, tinymce, ajaxurl, TEXT_WIDGET, Sortable, console, prompt, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
+/* global wp, tinymce, ajaxurl, TEXT_WIDGET, Sortable, console, prompt,
+FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
+FilePondPluginFileRename, FilePondPluginImagePreview, _cpFilepondLabels */
 /* eslint consistent-this: [ "error", "control" ] */
 
 /**
@@ -2932,8 +2934,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			labelTapToUndo: TEXT_WIDGET.tap_close,
 			fileRenameFunction: ( file ) =>
 				new Promise( function( resolve ) {
-					resolve( window.prompt( TEXT_WIDGET.new_filename, file.name ) );
-				} ),
+					if ( parseInt( _cpFilepondLabels.renameFiles ) === 1 ) {
+						resolve( window.prompt( TEXT_WIDGET.new_filename, file.name ) );
+					} else {
+						resolve( file.name );
+					}
+				}
+			),
 			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 			labelFileTypeNotAllowed: TEXT_WIDGET.invalid_type,
 			fileValidateTypeLabelExpectedTypes: TEXT_WIDGET.check_types
