@@ -2,146 +2,156 @@
  * @output wp-admin/js/custom-background.js
  */
 
-/* global ajaxurl */
+/* global Coloris, AdminMediaModal */
 
 /**
  * Registers all events for customizing the background.
  *
  * @since 3.0.0
+ * @since CP-2.8.0 Rewritten to use vanilla JavaScript and Coloris color picker.
  *
- * @requires jQuery
+ * @return {void}
  */
-(function($) {
-	$( function() {
-		var frame,
-			bgImage = $( '#custom-background-image' );
+document.addEventListener( 'DOMContentLoaded', function() {
+	'use strict';
 
-		/**
-		 * Instantiates the WordPress color picker and binds the change and clear events.
-		 *
-		 * @since 3.5.0
-		 *
-		 * @return {void}
-		 */
-		$('#background-color').wpColorPicker({
-			change: function( event, ui ) {
-				bgImage.css('background-color', ui.color.toString());
+	const bgImage = document.getElementById( 'custom-background-image' );
+
+	/**
+	 * Instantiates the Coloris color picker and binds the change and clear events.
+	 *
+	 * @since 3.5.0
+	 * @since CP-2.8.0 Uses Coloris instead of wp-color-picker.
+	 *
+	 * @return {void}
+	 */
+	function initColorPicker() {
+		const colorInput = document.getElementById( 'background-color' );
+
+		if ( ! colorInput ) {
+			return;
+		}
+
+		Coloris( {
+			alpha: false,
+			format: 'hex',
+			a11y: {
+				open: 'Open color picker',
+				close: 'Close color picker',
+				clear: 'Clear the selected color',
+				marker: 'Saturation: {s}. Brightness: {v}.',
+				hueSlider: 'Hue slider',
+				alphaSlider: 'Opacity slider',
+				input: 'Color value field',
+				format: 'Color format',
+				swatch: 'Color swatch',
+				instruction: 'Saturation and brightness selector. Use up, down, left and right arrow keys to select.'
 			},
-			clear: function() {
-				bgImage.css('background-color', '');
+			swatches: [
+				'#264653',
+				'#2a9d8f',
+				'#e9c46a',
+				'#f4a261',
+				'#e76f51',
+				'#d62828',
+				'#000080',
+				'#0077bb',
+				'#0096c7',
+				'#00b4d8',
+				'#0077b6'
+			],
+			clearButton: true,
+			onChange: ( color, inputEl ) => {
+				const effectiveColor = color || inputEl.dataset.defaultColor || '';
+
+				if ( bgImage ) {
+					bgImage.style.backgroundColor = effectiveColor;
+				}
 			}
-		});
+		} );
+	}
 
-		/**
-		 * Alters the background size CSS property whenever the background size input has changed.
-		 *
-		 * @since 4.7.0
-		 *
-		 * @return {void}
-		 */
-		$( 'select[name="background-size"]' ).on( 'change', function() {
-			bgImage.css( 'background-size', $( this ).val() );
-		});
+	/**
+	 * Alters the background size CSS property.
+	 *
+	 * @since 4.7.0
+	 *
+	 * @return {void}
+	 */
+	function initBackgroundSize() {
+		const select = document.querySelector( 'select[name="background-size"]' );
+		if ( ! select || ! bgImage ) {
+			return;
+		}
 
-		/**
-		 * Alters the background position CSS property whenever the background position input has changed.
-		 *
-		 * @since 4.7.0
-		 *
-		 * @return {void}
-		 */
-		$( 'input[name="background-position"]' ).on( 'change', function() {
-			bgImage.css( 'background-position', $( this ).val() );
-		});
+		select.addEventListener( 'change', function( e ) {
+			bgImage.style.backgroundSize = e.target.value;
+		} );
+	}
 
-		/**
-		 * Alters the background repeat CSS property whenever the background repeat input has changed.
-		 *
-		 * @since 3.0.0
-		 *
-		 * @return {void}
-		 */
-		$( 'input[name="background-repeat"]' ).on( 'change',  function() {
-			bgImage.css( 'background-repeat', $( this ).is( ':checked' ) ? 'repeat' : 'no-repeat' );
-		});
+	/**
+	 * Alters the background position CSS property.
+	 *
+	 * @since 4.7.0
+	 *
+	 * @return {void}
+	 */
+	function initBackgroundPosition() {
+		const inputs = document.querySelectorAll( '[name="background-position"]' );
+		if ( ! inputs.length || ! bgImage ) {
+			return;
+		}
 
-		/**
-		 * Alters the background attachment CSS property whenever the background attachment input has changed.
-		 *
-		 * @since 4.7.0
-		 *
-		 * @return {void}
-		 */
-		$( 'input[name="background-attachment"]' ).on( 'change', function() {
-			bgImage.css( 'background-attachment', $( this ).is( ':checked' ) ? 'scroll' : 'fixed' );
-		});
+		inputs.forEach( function( input ) {
+			input.addEventListener( 'change', function( e ) {
+				if ( ! e.target.checked ) {
+					return;
+				}
 
-		/**
-		 * Binds the event for opening the WP Media dialog.
-		 *
-		 * @since 3.5.0
-		 *
-		 * @return {void}
-		 */
-		$('#choose-from-library-link').on( 'click', function( event ) {
-			var $el = $(this);
+				bgImage.style.backgroundPosition = e.target.value;
+			} );
+		} );
+	}
 
-			event.preventDefault();
-
-			// If the media frame already exists, reopen it.
-			if ( frame ) {
-				frame.open();
+	/**
+	 * Alters the background repeat CSS property.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return {void}
+	 */
+	function initBackgroundRepeat() {
+		document.addEventListener( 'change', function( e ) {
+			if ( ! e.target.matches( 'input[type="checkbox"][name="background-repeat"]' ) || ! bgImage ) {
 				return;
 			}
 
-			// Create the media frame.
-			frame = wp.media.frames.customBackground = wp.media({
-				// Set the title of the modal.
-				title: $el.data('choose'),
+			bgImage.style.backgroundRepeat = e.target.checked ? 'repeat' : 'no-repeat';
+		} );
+	}
 
-				// Tell the modal to show only images.
-				library: {
-					type: 'image'
-				},
+	/**
+	 * Alters the background attachment CSS property.
+	 *
+	 * @since 4.7.0
+	 *
+	 * @return {void}
+	 */
+	function initBackgroundAttachment() {
+		document.addEventListener( 'change', function( e ) {
+			if ( ! e.target.matches( 'input[type="checkbox"][name="background-attachment"]' ) || ! bgImage ) {
+				return;
+			}
 
-				// Customize the submit button.
-				button: {
-					// Set the text of the button.
-					text: $el.data('update'),
-					/*
-					 * Tell the button not to close the modal, since we're
-					 * going to refresh the page when the image is selected.
-					 */
-					close: false
-				}
-			});
+			bgImage.style.backgroundAttachment = e.target.checked ? 'scroll' : 'fixed';
+		} );
+	}
 
-			/**
-			 * When an image is selected, run a callback.
-			 *
-			 * @since 3.5.0
-			 *
-			 * @return {void}
- 			 */
-			frame.on( 'select', function() {
-				// Grab the selected attachment.
-				var attachment = frame.state().get('selection').first();
-				var nonceValue = $( '#_wpnonce' ).val() || '';
-
-				// Run an Ajax request to set the background image.
-				$.post( ajaxurl, {
-					action: 'set-background-image',
-					attachment_id: attachment.id,
-					_ajax_nonce: nonceValue,
-					size: 'full'
-				}).done( function() {
-					// When the request completes, reload the window.
-					window.location.reload();
-				});
-			});
-
-			// Finally, open the modal.
-			frame.open();
-		});
-	});
-})(jQuery);
+	// Initialize all components.
+	initColorPicker();
+	initBackgroundSize();
+	initBackgroundPosition();
+	initBackgroundRepeat();
+	initBackgroundAttachment();
+	AdminMediaModal( 'set-background-image', 'full' );
+} );
