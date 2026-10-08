@@ -833,6 +833,7 @@ function wp_default_scripts( $scripts ) {
 			'labelButtonUndoItemProcessing'  => __( 'Undo' ),
 			'labelButtonRetryItemProcessing' => __( 'Retry' ),
 			'labelButtonProcessItem'         => __( 'Upload' ),
+			'renameFiles'                    => (int) get_option( 'uploads_rename_files' ),
 		)
 	);
 
@@ -2374,7 +2375,6 @@ function wp_maybe_inline_styles() {
  *
  * @param string $css            The CSS to make URLs relative to the WordPress installation.
  * @param string $stylesheet_url The URL to the stylesheet.
- *
  * @return string The CSS with URLs made relative to the WordPress installation.
  */
 function _wp_normalize_relative_css_links( $css, $stylesheet_url ) {

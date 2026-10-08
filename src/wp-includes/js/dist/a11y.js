@@ -1207,6 +1207,7 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
+  prefersReducedMotion: function() { return /* reexport */ prefersReducedMotion; },
   setup: function() { return /* binding */ setup; },
   speak: function() { return /* reexport */ speak; }
 });
@@ -1307,8 +1308,16 @@ function speak(message, ariaLive) {
 }
 
 
+;// ./node_modules/@wordpress/a11y/build-module/shared/prefers-reduced-motion.mjs
+// packages/a11y/src/shared/prefers-reduced-motion.ts
+function prefersReducedMotion() {
+  return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
+}
+
+
 ;// ./node_modules/@wordpress/a11y/build-module/index.mjs
 // packages/a11y/src/index.ts
+
 
 
 
