@@ -661,6 +661,12 @@
 				handledByPartial = false,
 				fullRefreshSettings = [ 'colorscheme', 'colorscheme_hue' ];
 
+			// Header videos use server-rendered markup and player initialization.
+			if ( id === 'header_video' || id === 'external_header_video' ) {
+				api.preview.send( 'refresh' );
+				return;
+			}
+
 			// Settings that require a full page refresh.
 			if ( fullRefreshSettings.indexOf( id ) !== -1 ) {
 				setValue( id, value, true );
@@ -815,20 +821,6 @@
 		if ( api._settings.custom_logo ) {
 			api.settingPreviewHandlers.custom_logo( api._settings.custom_logo.get() );
 			api._settings.custom_logo.bind( api.settingPreviewHandlers.custom_logo );
-		}
-
-		// Header video
-		if ( api._settings.header_video ) {
-			api._settings.header_video.bind(
-				api.settingPreviewHandlers.header_video
-			);
-		}
-
-		// External header video
-		if ( api._settings.external_header_video ) {
-			api._settings.external_header_video.bind(
-				api.settingPreviewHandlers.external_header_video
-			);
 		}
 
 		// Custom CSS
