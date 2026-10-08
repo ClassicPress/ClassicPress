@@ -473,6 +473,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Prepare changed object for publication.
 	 */
 	function inputChanged( input, settingId ) {
+		if ( settingId === 'external_header_video' && input.value.trim() ) {
+			var headerImageRemove = document.querySelector( '#customize-control-header_image .remove' );
+			
+			if ( headerImageRemove ) {
+				headerImageRemove.click();
+			}
+
+			_updatedControlsWatcher.header_image = 'remove-header';
+			_updatedControlsWatcher.header_image_data = '';
+		}
+
 		_updatedControlsWatcher[ settingId ] = input.value.trim();
 		activatePublishButton();
 	}
