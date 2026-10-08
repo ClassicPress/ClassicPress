@@ -297,10 +297,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			if ( avatarNode ) {
 				if ( typeof lockUser.avatar === 'string' && /<img/i.test( lockUser.avatar ) ) {
-					avatarNode.innerHTML = lockUser.avatar;
+					avatarNode.setHTML( lockUser.avatar );
 					avatarNode.hidden = false;
 				} else {
-					avatarNode.innerHTML = '';
+					avatarNode.replaceChildren();
 					avatarNode.hidden = true;
 				}
 			}
@@ -970,23 +970,62 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	function setAddedMediaFields( id ) {
-		var form = document.createElement( 'form' );
+	function setAddedMediaFields( item ) {
+		const id = item.dataset.id,
+			form = document.createElement( 'form' ),
+			input = document.createElement( 'input' ),
+			para = document.createElement( 'p' ),
+			message = document.createElement( 'span' ),
+			required = document.createElement( 'span' ),
+			span1 = document.createElement( 'span' ),
+			label1 = document.createElement( 'label' ),
+			input1 = document.createElement( 'input' ),
+			innerSpan1 = document.createElement( 'span' ),
+			span2 = document.createElement( 'span' ),
+			label2 = document.createElement( 'label' ),
+			input2 = document.createElement( 'input' ),
+			innerSpan2 = document.createElement( 'span' );
+
 		form.className = 'compat-item';
-		form.innerHTML = '<input type="hidden" id="menu-order" name="attachments[' + id + '][menu_order]" value="0">' +
-			'<p class="media-types media-types-required-info"><span class="required-field-message">Required fields are marked <span class="required">*</span></span></p>' +
-			'<div class="setting" data-setting="media_category">' +
-				'<label for="attachments-' + id + '-media_category" style="width:30%;">' +
-					'<span class="alignleft">Media Categories</span>' +
-				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" value="">' +
-			'</div>' +
-			'<div class="setting" data-setting="media_post_tag">' +
-				'<label for="attachments-' + id + '-media_post_tag">' +
-					'<span class="alignleft">Media Tags</span>' +
-				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" value="">' +
-			'</div>';
+		input.type = 'hidden';
+		input.id = 'menu-order';
+		input.name = 'attachments[' + id + '][menu_order]';
+		input.value = '0';
+		para.className = 'media-types media-types-required-info';
+		message.className = 'required-field-message';
+		message.textContent = 'Required fields are marked ';
+		required.className = 'required';
+		required.textContent = '*';
+
+		span1.className = 'setting';
+		span1.dataset.setting = 'media_category';
+		label1.htmlFor = 'attachments-' + id + '-media_category';
+		innerSpan1.className = 'alignleft';
+		innerSpan1.textContent = 'Media Categories';
+		input1.type = 'text';
+		input1.className = 'text';
+		input1.id = 'attachments-' + id + '-media_category';
+		input1.name = 'attachments[' + id + '][media_category]';
+		input1.value = item.dataset.taxes;
+
+		span2.className = 'setting';
+		span2.dataset.setting = 'media_post_tag';
+		label2.htmlFor = 'attachments-' + id + '-media_post_tag';
+		innerSpan2.className = 'alignleft';
+		innerSpan2.textContent = 'Media Tags';
+		input2.type = 'text';
+		input2.className = 'text';
+		input2.id = 'attachments-' + id + '-media_post_tag';
+		input2.name = 'attachments[' + id + '][media_post_tag]';
+		input2.value = item.dataset.tags;
+
+		message.append( required );
+		para.append( message );
+		label1.append( innerSpan1 );
+		span1.append( label1, input1 );
+		label2.append( innerSpan2 );
+		span2.append( label2, input2 );
+		form.append( input, para, span1, span2 );
 
 		if ( document.querySelector( '.compat-item' ) != null ) {
 			document.querySelector( '.compat-item' ).remove();
@@ -1288,12 +1327,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			height = item.dataset.height,
 			caption = item.dataset.caption,
 			description = item.dataset.description,
-			taxes = item.dataset.taxes,
-			tags = item.dataset.tags,
 			url = item.dataset.url,
 			sizes = item.dataset.sizes,
 			sizeOptions = '',
-			sizesObject = JSON.parse( sizes ),
+			sizesObject = sizes ? JSON.parse( sizes ) : '',
 			alt = item.querySelector( 'img' ).getAttribute( 'alt' ),
 			updateNonce = item.dataset.updateNonce,
 			deleteNonce = item.dataset.deleteNonce,
@@ -1306,7 +1343,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		// Set menu_order, media_category, and media_post_tag field IDs correctly
-		setAddedMediaFields( id );
+		setAddedMediaFields( item );
 
 		// Populate modal with attachment details
 		dialog.querySelector( '.attachment-date' ).textContent = date;
@@ -1352,10 +1389,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '.delete-attachment' ).parentNode.setAttribute( 'hidden', true );
 		}
 
-		dialog.querySelector( '#attachments-' + id + '-media_category').value = taxes;
-		dialog.querySelector( '#attachments-' + id + '-media_post_tag').value = tags;
 		dialog.querySelector( '#attachment-display-settings-size' ).innerHTML = sizeOptions;
-
 		dialog.querySelector( '.widget-modal-right-sidebar-info' ).removeAttribute( 'hidden' );
 
 		// Update media attachment details
@@ -1411,15 +1445,53 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function populateGridItem( attachment ) {
-		var selected = '',
-			gridItem = document.createElement( 'li' ),
-			image = '<img src="' + attachment.url + '" alt="' + attachment.alt + '">';
+		const gridItem = document.createElement( 'li' ),
+			wrapper = document.createElement( 'div' ),
+			thumbnail = document.createElement( 'div' ),
+			button = document.createElement( 'button' ),
+			spanIcon = document.createElement( 'span' ),
+			spanSRT = document.createElement( 'span' ),
+			centered = document.createElement( 'div' ),
+			filename = document.createElement( 'div' ),
+			title = document.createElement( 'div' ),
+			img = new Image();
 
-		gridItem.className = 'media-item' + selected;
+		let image;
+		if ( attachment.type === 'image' ) {
+			image = new Image();
+			image.src = attachment.url;
+			image.alt = attachment.alt;
+		} else {
+			if ( attachment.type === 'application' ) {
+				if ( attachment.subtype === 'vnd.openxmlformats-officedocument.spreadsheetml.sheet' ) {
+					img.src = _wpCustomizeControlsL10n.includes_url + 'images/media/spreadsheet.png';
+				} else if ( attachment.subtype === 'zip' ) {
+					img.src = _wpCustomizeControlsL10n.includes_url + 'images/media/archive.png';
+				} else {
+					img.src = _wpCustomizeControlsL10n.includes_url + 'images/media/document.png';
+				}
+			} else if ( attachment.type === 'audio' ) {
+				img.src = _wpCustomizeControlsL10n.includes_url + 'images/media/audio.png';
+			} else if ( attachment.type === 'video' ) {
+				img.src = _wpCustomizeControlsL10n.includes_url + 'images/media/video.png';
+			}
+
+			centered.className = 'centered';
+			img.alt = '';
+			img.setAttribute( 'draggable', 'false' );
+			centered.append( img );
+			title.textContent = attachment.title;
+			filename.append( title );
+			image = document.createElement( 'div' );
+			image.className = 'icon';
+			image.append( centered, filename );
+		}
+
+		gridItem.className = 'media-item';
 		gridItem.id = 'media-' + attachment.id;
 		gridItem.setAttribute( 'tabindex', 0 );
 		gridItem.setAttribute( 'role', 'checkbox' );
-		gridItem.setAttribute( 'aria-checked', selected ? true : false );
+		gridItem.setAttribute( 'aria-checked', 'false' );
 		gridItem.setAttribute( 'aria-label', attachment.title );
 		gridItem.setAttribute( 'data-id', attachment.id );
 		gridItem.setAttribute( 'data-date', attachment.dateFormatted );
@@ -1437,18 +1509,24 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		gridItem.setAttribute( 'data-menu-order', attachment.menuOrder );
 		gridItem.setAttribute( 'data-taxes', attachment.media_cats );
 		gridItem.setAttribute( 'data-tags', attachment.media_tags );
-		gridItem.setAttribute( 'data-sizes', JSON.stringify( attachment.sizes ) );
+		gridItem.setAttribute( 'data-sizes', attachment.sizes ? JSON.stringify( attachment.sizes ) : '' );
 		gridItem.setAttribute( 'data-update-nonce', attachment.nonces.update );
 		gridItem.setAttribute( 'data-delete-nonce', attachment.nonces.delete );
 		gridItem.setAttribute( 'data-edit-nonce', attachment.nonces.edit );
 
-		gridItem.innerHTML = '<div class="select-attachment-preview type-' + attachment.type + ' subtype-' + attachment.subtype + '">' +
-			'<div class="media-thumbnail">' + image + '</div>' +
-			'</div>' +
-			'<button type="button" class="check" tabindex="-1">' +
-			'<span class="media-modal-icon"></span>' +
-			'<span class="screen-reader-text">' + IMAGE_WIDGET.deselect + '></span>' +
-			'</button>';
+		wrapper.className = 'select-attachment-preview type-' + attachment.type + ' subtype-' + attachment.subtype;
+		thumbnail.className = 'media-thumbnail';
+		button.type = 'button';
+		button.className = 'check';
+		button.tabIndex = -1;
+		spanIcon.className = 'media-modal-icon';
+		spanSRT.className =  'screen-reader-text';
+		spanSRT.textContent = _wpCustomizeControlsL10n.deselect;
+
+		thumbnail.append( image );
+		wrapper.append( thumbnail );
+		button.append( spanIcon, spanSRT );
+		gridItem.append( wrapper, button );
 
 		return gridItem;
 	}
@@ -1892,7 +1970,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function setRandomHeaderChoice( choice ) {
-		const div = document.createElement( 'div' );
+		const div = document.createElement( 'div' ),
+			innerDiv = document.createElement( 'div' ),
+			span = document.createElement( 'span' );
+
 		if ( ! choice ) {
 			return;
 		}
@@ -1906,12 +1987,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		forcePreviewRefresh( 'header_image', choice );
 
 		if ( ! document.querySelector( '.randomizing-header' ) ) {
+			innerDiv.className = 'button display-options random random-default-header';
+			span.className = 'dashicons dashicons-randomize dice';
+			innerDiv.textContent = _wpCustomizeHeader.random;
+			innerDiv.prepend( span );
 			div.className = 'randomizing-header';
-			div.innerHTML = '<div class="button display-options random random-default-header">' +
-				'<span class="dashicons dashicons-randomize dice"></span>' +
-				_wpCustomizeHeader.random +
-				'</div>' +
-				'</div>';
+			div.append( innerDiv );
 			document.querySelector( '#customize-control-header_image label' ).after( div );
 		}
 	}
@@ -2664,7 +2745,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	document.addEventListener( 'click', function( e ) {
 		var id, page, itemBrowse, itemUpload, gridPanel, uploadPanel,
 			modalButtons, rightSidebar, modalPages, description,
-			selectedItem, image,
+			selectedItem, image, settingId,
 			ul = e.target.closest( 'ul' );
 
 		// Abort if this comes from a middle section heading or a widget
@@ -2888,21 +2969,27 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.preventDefault();
 			sidebarCollapseExpand( e.target.parentNode );
 
-		// Remove media file
-		} else if ( e.target.tagName === 'BUTTON' && ( e.target.classList.contains( 'remove' ) || e.target.classList.contains( 'remove-button' ) ) ) {
-			customizeButton = e.target;
-			removeMedia();
+		} else if ( ! dialog.querySelector( '#widget-modal-media-content' ) && e.target.tagName === 'BUTTON' ) {
 
-		// Add media file
-		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'select-button' ) ) {
-			customizeButton = e.target;
-			cropContext = e.target.closest( 'li' ).dataset.settingId;
-			selectMedia();
-		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'random-default-header' ) ) {
-			setRandomHeaderChoice( e.target.dataset.customizeImageValue );
-		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'choice' ) ) {
-			image = e.target.previousElementSibling;
-			addItemToCustomizer( e.target, 0, image, image.src );
+			// Remove media file
+			if ( e.target.classList.contains( 'remove' ) || e.target.classList.contains( 'remove-button' ) ) {
+				customizeButton = e.target;
+				removeMedia();
+
+			// Add media file
+			} else if ( e.target.classList.contains( 'select-button' ) ) {
+				customizeButton = e.target;
+				settingId = e.target.closest( 'li' ).dataset.settingId;
+				if ( e.target.parentNode.dataset.requiredType === 'image' && settingId !== 'background_image' ) {
+					cropContext = settingId;
+				}
+				selectMedia();
+			} else if ( e.target.classList.contains( 'random-default-header' ) ) {
+				setRandomHeaderChoice( e.target.dataset.customizeImageValue );
+			} else if ( e.target.classList.contains( 'choice' ) ) {
+				image = e.target.previousElementSibling;
+				addItemToCustomizer( e.target, 0, image, image.src );
+			}
 
 		// Close the modal
 		} else if ( e.target.id === 'widget-modal-close' ) {
