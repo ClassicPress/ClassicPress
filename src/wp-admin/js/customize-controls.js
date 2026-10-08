@@ -1685,7 +1685,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Show relevant button and clear grid
 				addButton = dialog.querySelector( '#media-button-insert' );
-				dialog.querySelector( '.widget-modal-grid' ).innerHTML = '';
+				dialog.querySelector( '.widget-modal-grid' ).replaceChildren();
 
 				if ( result.data.length === 0 ) {
 
@@ -1818,7 +1818,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			li = parent.closest( 'li' ),
 			settingId = li.dataset.settingId,
 			removeButton = document.createElement( 'button' ),
-			selectButton = document.createElement( 'button' );
+			selectButton = document.createElement( 'button' ),
+			externalVideoInput = document.getElementById( '_customize-input-external_header_video' );
 
 		if ( ! parent ) {
 			return;
@@ -1836,6 +1837,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Update header image
 		if ( settingId === 'header_image_data' ) {
+			_updatedControlsWatcher.header_video = '';
+			_updatedControlsWatcher.external_header_video = '';
+			if ( externalVideoInput ) {
+				externalVideoInput.value = '';
+			}
+
 			if ( selectedItem.className === 'choice' ) {
 				li.querySelector( '.container' ).innerHTML = '';
 				li.querySelector( '.container' ).append( imageElement.cloneNode() );
@@ -1911,7 +1918,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				customizeButton.replaceWith( selectButton );
 			}
 
-			window.sendSettingToPreview( 'header_video', selectedItem.dataset.url );
+			if ( externalVideoInput ) {
+				externalVideoInput.value = '';
+			}
+			_updatedControlsWatcher.header_image = 'remove-header';
+			_updatedControlsWatcher.header_image_data = '';
 			_updatedControlsWatcher.header_video = attachmentId;
 
 			setTimeout( function() {
@@ -1930,21 +1941,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			videoElement = document.createElement( 'video' );
 			videoElement.src = selectedItem.dataset.url;
 
-			if ( li.querySelector( '.mejs-video' ) ) {
-				li.querySelector( '.mejs-offscreen' ).remove();
-				li.querySelector( '.mejs-video' ).replaceWith( videoElement );
-			} else {
-				grandparent.before( videoElement );
-				parent.prepend( removeButton );
-				customizeButton.replaceWith( selectButton );
-			}
+			document.getElementById( 'customize-control-header_video' )?.click();
 
-			window.sendSettingToPreview( 'header_video', attachmentId );
-			_updatedControlsWatcher.header_video = attachmentId;
+			_updatedControlsWatcher.header_image = 'remove-header';
+			_updatedControlsWatcher.header_image_data = '';
+			_updatedControlsWatcher.external_header_video = selectedItem.dataset.url;
 
 			setTimeout( function() {
 				if ( document.getElementById( 'customize-control-header_image' ).querySelector( 'img' ) ) {
 					document.getElementById( 'customize-control-header_image' ).querySelector( '.remove' ).click();
+				}
+				if ( document.getElementById( 'customize-control-header_video' ).querySelector( 'video' ) ) {
+					document.getElementById( 'customize-control-header_video' ).querySelector( '.remove-button' ).click();
 				}
 				selectButton.focus();
 			}, 0 );
