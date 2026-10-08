@@ -96,6 +96,30 @@ $_old_files = array(
 	// Upgrade to SimplePie 1.9.0
 	'wp-includes/SimplePie/src/Decode',
 	'wp-includes/SimplePie/src/Core.php',
+
+	// Removed in ClassicPress 2.8.0
+	'wp-includes/customize/class-wp-customize-nav-menu-auto-add-control.php',
+	'wp-includes/customize/class-wp-customize-nav-menu-control.php',
+	'wp-includes/customize/class-wp-customize-nav-menu-locations-control.php',
+	'wp-includes/customize/class-wp-customize-nav-menu-name-control.php',
+	'wp-includes/customize/class-wp-customize-new-menu-control.php',
+	'wp-includes/customize/class-wp-customize-new-menu-section.php',
+	'wp-includes/customize/class-wp-customize-themes-panel.php',
+	'wp-includes/customize/class-wp-customize-themes-section.php',
+	'wp-includes/js/customize-base.js',
+	'wp-includes/js/customize-base.min.js',
+	'wp-includes/js/customize-loader.js',
+	'wp-includes/js/customize-loader.min.js',
+	'wp-includes/js/customize-models.js',
+	'wp-includes/js/customize-models.min.js',
+	'wp-includes/js/customize-preview-nav-menus.js',
+	'wp-includes/js/customize-preview-nav-menus.min.js',
+	'wp-includes/js/customize-preview-widgets.js',
+	'wp-includes/js/customize-preview-widgets.min.js',
+	'wp-includes/js/customize-views.js',
+	'wp-includes/js/customize-views.min.js',
+	'wp-includes/js/dist/api-fetch.js',
+	'wp-includes/js/dist/api-fetch.min.js',
 );
 
 /**
