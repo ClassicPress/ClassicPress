@@ -3098,8 +3098,7 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		$this->assertSameSets( array( 'changeset', 'lock', 'nonce', 'url', 'user' ), array_keys( $data ) );
 		$this->assertArrayHasKey( 'lockUser', $data['lock'] );
 		$this->assertArrayHasKey( 'id', $data['user'] );
-		$this->assertArrayHasKey( 'uuid', $data['changeset'] );
-		$this->assertArrayHasKey( 'autosaved', $data['changeset'] );
+		$this->assertArrayHasKey( 'latestAutoDraftUuid', $data['changeset'] );
 		$this->assertArrayHasKey( 'hasAutosaveRevision', $data['changeset'] );
 	}
 
