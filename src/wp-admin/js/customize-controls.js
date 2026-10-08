@@ -476,7 +476,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function inputChanged( input, settingId ) {
 		if ( settingId === 'external_header_video' && input.value.trim() ) {
 			var headerImageRemove = document.querySelector( '#customize-control-header_image .remove' );
-			
+
 			if ( headerImageRemove ) {
 				headerImageRemove.click();
 			}
