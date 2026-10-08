@@ -136,8 +136,10 @@ function wptexturize( $text, $reset = false ) {
 		$static_characters   = array_merge( array( '...', '``', '\'\'', ' (tm)' ), $cockney );
 		$static_replacements = array_merge( array( '&#8230;', $opening_quote, $closing_quote, ' &#8482;' ), $cockneyreplace );
 
-		// Pattern-based replacements of characters.
-		// Sort the remaining patterns into several arrays for performance tuning.
+		/*
+		 * Pattern-based replacements of characters.
+		 * Sort the remaining patterns into several arrays for performance tuning.
+		 */
 		$dynamic_characters   = array(
 			'apos'  => array(),
 			'quote' => array(),
@@ -340,8 +342,10 @@ function wptexturize_primes( $haystack, $needle, $prime, $open_quote, $close_quo
 						// Assume the rightmost quote-period match is the end of quotation.
 						$pos = strrpos( $sentence, "$flag." );
 					} else {
-						// When all else fails, make the rightmost candidate a closing quote.
-						// This is most likely to be problematic in the context of bug #18549.
+						/*
+						 * When all else fails, make the rightmost candidate a closing quote.
+						 * This is most likely to be problematic in the context of bug #18549.
+						 */
 						$pos = strrpos( $sentence, $flag );
 					}
 					$sentence = substr_replace( $sentence, $close_quote, $pos, strlen( $flag ) );
@@ -898,7 +902,7 @@ function seems_utf8( $str ) {
 			return false; // Does not match any model.
 		}
 		for ( $j = 0; $j < $n; $j++ ) { // n bytes matching 10bbbbbb follow ?
-			if ( ( ++$i == $length ) || ( ( ord( $str[ $i ] ) & 0xC0 ) != 0x80 ) ) {
+			if ( ( ++$i === $length ) || ( ( ord( $str[ $i ] ) & 0xC0 ) != 0x80 ) ) {
 				return false;
 			}
 		}
@@ -976,8 +980,10 @@ function _wp_specialchars( $text, $quote_style = ENT_NOQUOTES, $charset = false,
 	}
 
 	if ( ! $double_encode ) {
-		// Guarantee every &entity; is valid, convert &garbage; into &amp;garbage;
-		// This is required for PHP < 5.4.0 because ENT_HTML401 flag is unavailable.
+		/*
+		 * Guarantee every &entity; is valid, convert &garbage; into &amp;garbage;
+		 * This is required for PHP < 5.4.0 because ENT_HTML401 flag is unavailable.
+		 */
 		$text = wp_kses_normalize_entities( $text, ( $quote_style & ENT_XML1 ) ? 'xml' : 'html' );
 	}
 
@@ -1169,7 +1175,7 @@ function utf8_uri_encode( $utf8_string, $length = 0, $encode_ascii_characters = 
 			$unicode        .= $encoded_char;
 			$unicode_length += $encoded_char_length;
 		} else {
-			if ( count( $values ) == 0 ) {
+			if ( count( $values ) === 0 ) {
 				if ( $value < 224 ) {
 					$num_octets = 2;
 				} elseif ( $value < 240 ) {
@@ -1184,7 +1190,7 @@ function utf8_uri_encode( $utf8_string, $length = 0, $encode_ascii_characters = 
 			if ( $length && ( $unicode_length + ( $num_octets * 3 ) ) > $length ) {
 				break;
 			}
-			if ( count( $values ) == $num_octets ) {
+			if ( count( $values ) === $num_octets ) {
 				for ( $j = 0; $j < $num_octets; $j++ ) {
 					$unicode .= '%' . dechex( $values[ $j ] );
 				}
@@ -1599,8 +1605,10 @@ function remove_accents( $text, $locale = '' ) {
 
 	if ( seems_utf8( $text ) ) {
 
-		// Unicode sequence normalization from NFD (Normalization Form Decomposed)
-		// to NFC (Normalization Form [Pre]Composed), the encoding used in this function.
+		/*
+		 * Unicode sequence normalization from NFD (Normalization Form Decomposed)
+		 * to NFC (Normalization Form [Pre]Composed), the encoding used in this function.
+		 */
 		if ( function_exists( 'normalizer_is_normalized' )
 			&& function_exists( 'normalizer_normalize' )
 		) {
@@ -1813,8 +1821,7 @@ function remove_accents( $text, $locale = '' ) {
 			'€' => 'E',
 			// GBP (Pound) sign.
 			'£' => '',
-			// Vowels with diacritic (Vietnamese).
-			// Unmarked.
+			// Vowels with diacritic (Vietnamese). Unmarked.
 			'Ơ' => 'O',
 			'ơ' => 'o',
 			'Ư' => 'U',
@@ -2621,8 +2628,8 @@ function force_balance_tags( $text ) {
 		$tag_name          = $regex[2];
 		$tag               = strtolower( $tag_name );
 		$is_single_tag     = in_array( $tag, $single_tags, true );
-		$pre_attribute_ws  = isset( $regex[4] ) ? $regex[4] : '';
-		$attributes        = trim( isset( $regex[5] ) ? $regex[5] : $regex[3] );
+		$pre_attribute_ws  = $regex[4] ?? '';
+		$attributes        = trim( $regex[5] ?? $regex[3] );
 		$has_self_closer   = str_ends_with( $attributes, '/' );
 
 		$newtext .= $tagqueue;
@@ -2657,17 +2664,24 @@ function force_balance_tags( $text ) {
 				$tag = '';
 			}
 		} else { // Begin tag.
-			if ( $has_self_closer ) { // If it presents itself as a self-closing tag...
-				// ...but it isn't a known single-entity self-closing tag, then don't let it be treated as such
-				// and immediately close it with a closing tag (the tag will encapsulate no text as a result).
+			if ( $has_self_closer ) {
+				/*
+				 * If it presents itself as a self-closing tag, but it isn't a known single-entity self-closing tag,
+				 * then don't let it be treated as such and immediately close it with a closing tag.
+				 * The tag will encapsulate no text as a result.
+				 */
 				if ( ! $is_single_tag ) {
 					$attributes = trim( substr( $attributes, 0, -1 ) ) . "></$tag";
 				}
-			} elseif ( $is_single_tag ) { // Else if it's a known single-entity tag but it doesn't close itself, do so.
+			} elseif ( $is_single_tag ) {
+				// Else if it's a known single-entity tag but it doesn't close itself, do so.
 				$pre_attribute_ws = ' ';
 				$attributes      .= '/';
-			} else { // It's not a single-entity tag.
-				// If the top of the stack is the same as the tag we want to push, close previous tag.
+			} else {
+				/*
+				 * It's not a single-entity tag.
+				 * If the top of the stack is the same as the tag we want to push, close previous tag.
+				 */
 				if ( $stacksize > 0 && ! in_array( $tag, $nestable_tags, true ) && $tagstack[ $stacksize - 1 ] === $tag ) {
 					$tagqueue = '</' . array_pop( $tagstack ) . '>';
 					$stacksize--;
@@ -2921,8 +2935,10 @@ function _make_url_clickable_cb( $matches ) {
 	$url = $matches[2];
 
 	if ( ')' === $matches[3] && strpos( $url, '(' ) ) {
-		// If the trailing character is a closing parethesis, and the URL has an opening parenthesis in it,
-		// add the closing parenthesis to the URL. Then we can let the parenthesis balancer do its thing below.
+		/*
+		 * If the trailing character is a closing parethesis, and the URL has an opening parenthesis in it,
+		 * add the closing parenthesis to the URL. Then we can let the parenthesis balancer do its thing below.
+		 */
 		$url   .= $matches[3];
 		$suffix = '';
 	} else {
@@ -3052,13 +3068,26 @@ function make_clickable( $text ) {
 	$nested_code_pre = 0; // Keep track of how many levels link is nested inside <pre> or <code>.
 	foreach ( $textarr as $piece ) {
 
-		if ( preg_match( '|^<code[\s>]|i', $piece ) || preg_match( '|^<pre[\s>]|i', $piece ) || preg_match( '|^<script[\s>]|i', $piece ) || preg_match( '|^<style[\s>]|i', $piece ) ) {
+		if ( preg_match( '|^<code[\s>]|i', $piece )
+			|| preg_match( '|^<pre[\s>]|i', $piece )
+			|| preg_match( '|^<script[\s>]|i', $piece )
+			|| preg_match( '|^<style[\s>]|i', $piece )
+		) {
 			$nested_code_pre++;
-		} elseif ( $nested_code_pre && ( '</code>' === strtolower( $piece ) || '</pre>' === strtolower( $piece ) || '</script>' === strtolower( $piece ) || '</style>' === strtolower( $piece ) ) ) {
+		} elseif ( $nested_code_pre
+			&& ( '</code>' === strtolower( $piece )
+				|| '</pre>' === strtolower( $piece )
+				|| '</script>' === strtolower( $piece )
+				|| '</style>' === strtolower( $piece )
+			)
+		) {
 			$nested_code_pre--;
 		}
 
-		if ( $nested_code_pre || empty( $piece ) || ( '<' === $piece[0] && ! preg_match( '|^<\s*[\w]{1,20}+://|', $piece ) ) ) {
+		if ( $nested_code_pre
+			|| empty( $piece )
+			|| ( '<' === $piece[0] && ! preg_match( '|^<\s*[\w]{1,20}+://|', $piece ) )
+		) {
 			$r .= $piece;
 			continue;
 		}
@@ -3089,8 +3118,10 @@ function make_clickable( $text ) {
 				)
 				(\)?)                                          # 3: Trailing closing parenthesis (for parethesis balancing post processing).
 			~xS';
-			// The regex is a non-anchored pattern and does not have a single fixed starting character.
-			// Tell PCRE to spend more time optimizing since, when used on a page load, it will probably be used several times.
+			/*
+			 * The regex is a non-anchored pattern and does not have a single fixed starting character.
+			 * Tell PCRE to spend more time optimizing since, when used on a page load, it will probably be used several times.
+			 */
 
 			$ret = preg_replace_callback( $url_clickable, '_make_url_clickable_cb', $ret );
 
@@ -3414,7 +3445,7 @@ function wp_remove_targeted_link_rel_filters() {
 function translate_smiley( $matches ) {
 	global $wpsmiliestrans;
 
-	if ( count( $matches ) == 0 ) {
+	if ( count( $matches ) === 0 ) {
 		return '';
 	}
 
@@ -3539,15 +3570,19 @@ function is_email( $email, $deprecated = false ) {
 	// Split out the local and domain parts.
 	list( $local, $domain ) = explode( '@', $email, 2 );
 
-	// LOCAL PART
-	// Test for invalid characters.
+	/*
+	 * LOCAL PART
+	 * Test for invalid characters.
+	 */
 	if ( ! preg_match( '/^[a-zA-Z0-9!#$%&\'*+\/=?^_`{|}~\.-]+$/', $local ) ) {
 		/** This filter is documented in wp-includes/formatting.php */
 		return apply_filters( 'is_email', false, $email, 'local_invalid_chars' );
 	}
 
-	// DOMAIN PART
-	// Test for sequences of periods.
+	/*
+	 * DOMAIN PART
+	 * Test for sequences of periods.
+	 */
 	if ( preg_match( '/\.{2,}/', $domain ) ) {
 		/** This filter is documented in wp-includes/formatting.php */
 		return apply_filters( 'is_email', false, $email, 'domain_period_sequence' );
@@ -3749,16 +3784,20 @@ function sanitize_email( $email ) {
 	// Split out the local and domain parts.
 	list( $local, $domain ) = explode( '@', $email, 2 );
 
-	// LOCAL PART
-	// Test for invalid characters.
+	/*
+	 * LOCAL PART
+	 * Test for invalid characters.
+	 */
 	$local = preg_replace( '/[^a-zA-Z0-9!#$%&\'*+\/=?^_`{|}~\.-]/', '', $local );
 	if ( '' === $local ) {
 		/** This filter is documented in wp-includes/formatting.php */
 		return apply_filters( 'sanitize_email', '', $email, 'local_invalid_chars' );
 	}
 
-	// DOMAIN PART
-	// Test for sequences of periods.
+	/*
+	 * DOMAIN PART
+	 * Test for sequences of periods.
+	 */
 	$domain = preg_replace( '/\.{2,}/', '', $domain );
 	if ( '' === $domain ) {
 		/** This filter is documented in wp-includes/formatting.php */
@@ -4506,7 +4545,7 @@ function esc_url( $url, $protocols = null, $_context = 'display' ) {
 			$protocols = wp_allowed_protocols();
 		}
 		$good_protocol_url = wp_kses_bad_protocol( $url, $protocols );
-		if ( strtolower( $good_protocol_url ) != strtolower( $url ) ) {
+		if ( strtolower( $good_protocol_url ) !== strtolower( $url ) ) {
 			return '';
 		}
 	}
@@ -5160,7 +5199,7 @@ function wp_sprintf( $pattern, ...$args ) {
 	$arg_index = 0;
 	while ( $len > $start ) {
 		// Last character: append and break.
-		if ( strlen( $pattern ) - 1 == $start ) {
+		if ( strlen( $pattern ) - 1 === $start ) {
 			$result .= substr( $pattern, -1 );
 			break;
 		}
@@ -5184,10 +5223,10 @@ function wp_sprintf( $pattern, ...$args ) {
 			// Find numbered arguments or take the next one in order.
 			if ( preg_match( '/^%(\d+)\$/', $fragment, $matches ) ) {
 				$index    = $matches[1] - 1; // 0-based array vs 1-based sprintf() arguments.
-				$arg      = isset( $args[ $index ] ) ? $args[ $index ] : '';
+				$arg      = $args[ $index ] ?? '';
 				$fragment = str_replace( "%{$matches[1]}$", '%', $fragment );
 			} else {
-				$arg = isset( $args[ $arg_index ] ) ? $args[ $arg_index ] : '';
+				$arg = $args[ $arg_index ] ?? '';
 				++$arg_index;
 			}
 
@@ -5266,7 +5305,7 @@ function wp_sprintf_l( $pattern, $args ) {
 
 	$args   = (array) $args;
 	$result = array_shift( $args );
-	if ( count( $args ) == 1 ) {
+	if ( count( $args ) === 1 ) {
 		$result .= $l['between_only_two'] . array_shift( $args );
 	}
 
@@ -5275,7 +5314,7 @@ function wp_sprintf_l( $pattern, $args ) {
 	while ( $i ) {
 		$arg = array_shift( $args );
 		$i--;
-		if ( 0 == $i ) {
+		if ( 0 === $i ) {
 			$result .= $l['between_last_two'] . $arg;
 		} else {
 			$result .= $l['between'] . $arg;
