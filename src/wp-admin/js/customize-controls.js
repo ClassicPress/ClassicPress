@@ -1527,7 +1527,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Remove left sidebar
 				leftSidebar = dialog.querySelector( '.widget-modal-left-sidebar' );
-				dialog.querySelector( '.widget-modal-left-sidebar' ).remove();
+				dialog.querySelector( '.widget-modal-left-sidebar' )?.remove();
 
 				// Append cloned template and show relevant elements
 				header.append( dialogButtons );
