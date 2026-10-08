@@ -2771,7 +2771,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	document.addEventListener( 'click', function( e ) {
 		var id, page, itemBrowse, itemUpload, gridPanel, uploadPanel,
 			modalButtons, rightSidebar, modalPages, description,
-			selectedItem, image,
+			selectedItem, image, settingId,
 			ul = e.target.closest( 'ul' );
 
 		// Abort if this comes from a middle section heading or a widget
@@ -3005,8 +3005,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Add media file
 			} else if ( e.target.classList.contains( 'select-button' ) ) {
 				customizeButton = e.target;
-				if ( e.target.closest( 'li' ).dataset.settingId.includes( 'image' ) ) {
-					cropContext = e.target.closest( 'li' ).dataset.settingId;
+				settingId = e.target.closest( 'li' ).dataset.settingId;
+				if ( e.target.parentNode.dataset.requiredType === 'image' && settingId !== 'background_image' ) {
+					cropContext = settingId;
 				}
 				selectMedia();
 			} else if ( e.target.classList.contains( 'random-default-header' ) ) {
