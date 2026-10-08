@@ -87,7 +87,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	document.querySelectorAll( '#widgets-right .widgets-holder-wrap' ).forEach( function( wrapper, index ) {
 		var button = document.createElement( 'button' ),
-			ariaLabel = wrapper.querySelector( '.sidebar-name' ).dataset.addTo,
 			name = wrapper.querySelector( 'summary.sidebar-name' ).textContent || '',
 			li = document.createElement( 'li' ),
 			selectSidebar = chooser.querySelector( '.widgets-chooser-sidebars' ),
@@ -96,8 +95,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		button.type = 'button';
 		button.className = 'widgets-chooser-button';
 		button.setAttribute( 'aria-pressed', false );
-		button.setAttribute( 'aria-label', ariaLabel );
-		button.innerText = name.toString().trim();
+		button.textContent = name.toString().trim();
 		li.append( button );
 
 		if ( index === 0 ) {
@@ -776,6 +774,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				behavior: 'smooth'
 			} );
 		}
+		setTimeout( function() {
+			widget.querySelector( 'input' ).focus();
+		}, 200 );
 	}
 
 

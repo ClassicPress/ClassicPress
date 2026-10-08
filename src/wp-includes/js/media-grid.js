@@ -1,4 +1,6 @@
-/* global console, _wpMediaGridSettings, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
+/* global console, _wpMediaGridSettings, FilePondPluginFileValidateSize,
+FilePondPluginFileValidateType, FilePondPluginFileRename,
+FilePondPluginImagePreview, _cpFilepondLabels */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	var pond, itemID, focusID,
@@ -28,8 +30,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		endTouchPosition = 0;
 
 	// Update details within modal
-	function setAddedMediaFields( id ) {
-		const form = document.createElement( 'form' ),
+	function setAddedMediaFields( item ) {
+		const id = item.dataset.id,
+			form = document.createElement( 'form' ),
 			input = document.createElement( 'input' ),
 			para = document.createElement( 'p' ),
 			message = document.createElement( 'span' ),
@@ -63,7 +66,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		input1.className = 'text';
 		input1.id = 'attachments-' + id + '-media_category';
 		input1.name = 'attachments[' + id + '][media_category]';
-		input1.value = '';
+		input1.value = item.dataset.taxes;
 
 		span2.className = 'setting';
 		span2.dataset.setting = 'media_post_tag';
@@ -74,7 +77,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		input2.className = 'text';
 		input2.id = 'attachments-' + id + '-media_post_tag';
 		input2.name = 'attachments[' + id + '][media_post_tag]';
-		input2.value = '';
+		input2.value = item.dataset.tags;
 
 		message.append( required );
 		para.append( message );
@@ -412,7 +415,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '#attachment-details-two-column-caption' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachment-details-two-column-description' ).removeAttribute( 'readonly' );
 			dialog.querySelector( '#attachments-' + id + '-media_category' )?.removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachments-' + id + '-media_category' )?.setAttribute( 'list', 'media-grid-media-categories' );
 			dialog.querySelector( '#attachments-' + id + '-media_post_tag' )?.removeAttribute( 'readonly' );
+			dialog.querySelector( '#attachments-' + id + '-media_post_tag' )?.setAttribute( 'list', 'media-grid-media-tags' );
 			dialog.querySelector( '.edit-attachment' ).style.display = '';
 		} else {
 			dialog.querySelector( '#attachment-details-two-column-alt-text' ).setAttribute( 'readonly', true );
@@ -1252,11 +1257,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		labelTapToUndo: _wpMediaGridSettings.tap_close,
 		fileRenameFunction: ( file ) =>
 			new Promise( function( resolve ) {
-				const newName = window.prompt(
-					_wpMediaGridSettings.new_filename,
-					file.name
-				);
-				resolve( newName === null ? file.name : newName );
+				if ( parseInt( _cpFilepondLabels.renameFiles ) === 1 ) {
+					const newName = window.prompt(
+						_wpMediaGridSettings.new_filename,
+						file.name
+					);
+					resolve( newName === null ? file.name : newName );
+				} else {
+					resolve( file.name );
+				}
 			}
 		),
 		acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),

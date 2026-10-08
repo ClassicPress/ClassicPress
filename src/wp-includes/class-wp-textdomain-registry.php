@@ -87,8 +87,7 @@ class WP_Textdomain_Registry {
 	 *
 	 * @param string $domain Text domain.
 	 * @param string $locale Locale.
-	 *
-	 * @return string|false MO file path or false if there is none available.
+	 * @return string|false Languages directory path or false if there is none available.
 	 */
 	public function get( $domain, $locale ) {
 		if ( isset( $this->all[ $domain ][ $locale ] ) ) {
@@ -321,8 +320,10 @@ class WP_Textdomain_Registry {
 			return $found_location;
 		}
 
-		// If no path is found for the given locale and a custom path has been set
-		// using load_plugin_textdomain/load_theme_textdomain, use that one.
+		/*
+		 * If no path is found for the given locale and a custom path has been set
+		 * using load_plugin_textdomain/load_theme_textdomain, use that one.
+		 */
 		if ( 'en_US' !== $locale && isset( $this->custom_paths[ $domain ] ) ) {
 			$fallback_location = rtrim( $this->custom_paths[ $domain ], '/' ) . '/';
 			$this->set( $domain, $locale, $fallback_location );

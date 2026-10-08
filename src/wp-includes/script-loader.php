@@ -833,6 +833,7 @@ function wp_default_scripts( $scripts ) {
 			'labelButtonUndoItemProcessing'  => __( 'Undo' ),
 			'labelButtonRetryItemProcessing' => __( 'Retry' ),
 			'labelButtonProcessItem'         => __( 'Upload' ),
+			'renameFiles'                    => (int) get_option( 'uploads_rename_files' ),
 		)
 	);
 
@@ -1207,8 +1208,16 @@ function wp_default_scripts( $scripts ) {
 	$scripts->add( 'wp-api', "/wp-includes/js/wp-api$suffix.js", array( 'jquery', 'backbone', 'underscore', 'wp-api-request' ), false, 1 );
 
 	if ( is_admin() ) {
-		$scripts->add( 'admin-tags', "/wp-admin/js/tags$suffix.js", array( 'jquery', 'wp-ajax-response' ), false, 1 );
+		$scripts->add( 'admin-tags', "/wp-admin/js/tags$suffix.js", array( 'wp-ajax-response' ), false, 1 );
 		$scripts->set_translations( 'admin-tags' );
+		did_action( 'init' ) && $scripts->localize(
+			'admin-tags',
+			'adminTagsStrings',
+			array(
+				'dismiss' => __( 'Dismiss this notice.' ),
+				'deleted' => __( 'Tag successfully deleted.' ),
+			)
+		);
 
 		$scripts->add( 'admin-comments', "/wp-admin/js/edit-comments$suffix.js", array( 'wp-lists', 'quicktags', 'jquery-query' ), false, 1 );
 		$scripts->set_translations( 'admin-comments' );
@@ -2366,7 +2375,6 @@ function wp_maybe_inline_styles() {
  *
  * @param string $css            The CSS to make URLs relative to the WordPress installation.
  * @param string $stylesheet_url The URL to the stylesheet.
- *
  * @return string The CSS with URLs made relative to the WordPress installation.
  */
 function _wp_normalize_relative_css_links( $css, $stylesheet_url ) {
