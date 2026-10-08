@@ -608,7 +608,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				'query[post_mime_type]': 'audio',
 				'query[s]': search.value ? search.value : '',
 				'query[paged]': paged ? paged : 1,
-				'query[media_category_name]': mediaCatSelect.value ? mediaCatSelect.value : ''
+				'query[media_category_name]': mediaCatSelect?.value ? mediaCatSelect.value : ''
 			} );
 
 		// Make AJAX request
