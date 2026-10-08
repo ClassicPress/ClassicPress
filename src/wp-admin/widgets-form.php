@@ -11,24 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 
-$widgets_access = get_user_setting( 'widgets_access' );
-if ( isset( $_GET['widgets-access'] ) ) {
-	check_admin_referer( 'widgets-access' );
-
-	$widgets_access = 'on' === $_GET['widgets-access'] ? 'on' : 'off';
-	set_user_setting( 'widgets_access', $widgets_access );
-}
-
-if ( 'on' === $widgets_access ) {
-	add_filter( 'admin_body_class', 'wp_widgets_access_body_class' );
-} else {
-	wp_enqueue_style( 'widgets' );
-	wp_enqueue_script( 'admin-widgets' );
-
-	if ( wp_is_mobile() ) {
-		wp_enqueue_script( 'jquery-touch-punch' );
-	}
-}
+wp_enqueue_style( 'widgets' );
+wp_enqueue_script( 'admin-widgets' );
 
 /**
  * Fires early before the Widgets administration screen loads,
@@ -53,8 +37,7 @@ get_current_screen()->add_help_tab(
 		'title'   => __( 'Removing and Reusing' ),
 		'content' =>
 				'<p>' . __( 'If you want to remove the widget but save its setting for possible future use, just drag it into the Inactive Widgets area. You can add them back anytime from there. This is especially helpful when you switch to a theme with fewer or different widget areas.' ) . '</p>
-	<p>' . __( 'Widgets may be used multiple times. You can give each widget a title, to display on your site, but it&#8217;s not required.' ) . '</p>
-	<p>' . __( 'Enabling Accessibility Mode, via Screen Options, allows you to use Add and Edit buttons instead of using drag and drop.' ) . '</p>',
+	<p>' . __( 'Widgets may be used multiple times. You can give each widget a title, to display on your site, but it&#8217;s not required.' ) . '</p>',
 	)
 );
 get_current_screen()->add_help_tab(
@@ -382,24 +365,11 @@ echo esc_html( $title );
 if ( current_user_can( 'customize' ) ) {
 	printf(
 		' <a class="page-title-action hide-if-no-customize" href="%1$s">%2$s</a>',
-		esc_url(
-			add_query_arg(
-				array(
-					array( 'autofocus' => array( 'panel' => 'widgets' ) ),
-					'return' => urlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ),
-				),
-				admin_url( 'customize.php' )
-			)
-		),
+		esc_url( wp_customize_url() . '#sub-accordion-panel-widgets' ),
 		__( 'Manage with Live Preview' )
 	);
 }
-
-$nonce = wp_create_nonce( 'widgets-access' );
 ?>
-<div class="widget-access-link">
-	<a id="access-on" href="widgets.php?widgets-access=on&_wpnonce=<?php echo urlencode( $nonce ); ?>"><?php _e( 'Enable accessibility mode' ); ?></a><a id="access-off" href="widgets.php?widgets-access=off&_wpnonce=<?php echo urlencode( $nonce ); ?>"><?php _e( 'Disable accessibility mode' ); ?></a>
-</div>
 
 <hr class="wp-header-end">
 
