@@ -760,11 +760,12 @@ div#widgets-right .widget-top:hover,
 	transition: background 0.2s ease-in-out;
 }
 
-/* @todo looks like these hover/focus states are overridden by .widgets-chooser-selected */
 .widgets-chooser .widgets-chooser-button:hover,
 .widgets-chooser .widgets-chooser-button:focus {
 	outline: none;
 	text-decoration: underline;
+	background: #2271b1;
+	color: #fff;
 }
 
 .widgets-chooser li:last-child {

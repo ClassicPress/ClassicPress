@@ -490,6 +490,7 @@ function populate_options( array $options = array() ) {
 
 		// 2.0.1
 		'uploads_use_yearmonth_folders'   => 1,
+		'uploads_rename_files'            => 1,
 		'upload_path'                     => '',
 
 		// 2.1.0
