@@ -1479,7 +1479,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		gridItem.setAttribute( 'data-width', attachment.width );
 		gridItem.setAttribute( 'data-height', attachment.height );
 		gridItem.setAttribute( 'data-size', attachment.filesizeHumanReadable );
-		gridItem.setAttribute( 'data-sizes', attachment.sizes ? JSON.stringify( attachment.sizes ) : '' );
 		gridItem.setAttribute( 'data-caption', attachment.caption );
 		gridItem.setAttribute( 'data-description', attachment.description );
 		gridItem.setAttribute( 'data-link', attachment.link );
@@ -1487,6 +1486,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		gridItem.setAttribute( 'data-menu-order', attachment.menuOrder );
 		gridItem.setAttribute( 'data-taxes', attachment.media_cats );
 		gridItem.setAttribute( 'data-tags', attachment.media_tags );
+		gridItem.setAttribute( 'data-sizes', attachment.sizes ? JSON.stringify( attachment.sizes ) : '' );
 		gridItem.setAttribute( 'data-update-nonce', attachment.nonces.update );
 		gridItem.setAttribute( 'data-delete-nonce', attachment.nonces.delete );
 		gridItem.setAttribute( 'data-edit-nonce', attachment.nonces.edit );
