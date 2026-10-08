@@ -1,5 +1,7 @@
 /* eslint consistent-this: [ "error", "control" ] */
-/* global ajaxurl, GALLERY_WIDGET, Sortable, console, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
+/* global ajaxurl, GALLERY_WIDGET, Sortable, console, FilePondPluginFileValidateSize,
+FilePondPluginFileValidateType, FilePondPluginFileRename,
+FilePondPluginImagePreview, _cpFilepondLabels */
 
 /**
  * @since CP 2.5.0
@@ -1588,8 +1590,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			labelTapToUndo: GALLERY_WIDGET.tap_close,
 			fileRenameFunction: ( file ) =>
 				new Promise( function( resolve ) {
-					resolve( window.prompt( GALLERY_WIDGET.new_filename, file.name ) );
-				} ),
+					if ( parseInt( _cpFilepondLabels.renameFiles ) === 1 ) {
+						resolve( window.prompt( GALLERY_WIDGET.new_filename, file.name ) );
+					} else {
+						resolve( file.name );
+					}
+				}
+			),
 			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 			labelFileTypeNotAllowed: GALLERY_WIDGET.invalid_type,
 			fileValidateTypeLabelExpectedTypes: GALLERY_WIDGET.check_types

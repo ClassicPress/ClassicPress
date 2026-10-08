@@ -56,6 +56,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
  * New options based on year and media category added.
  */
 $storefolders = (int) get_option( 'uploads_use_yearmonth_folders' );
+$renamefiles = (int) get_option( 'uploads_rename_files' );
 
 $media_attribute = $media_requires = '';
 
@@ -210,6 +211,14 @@ if ( isset( $GLOBALS['wp_settings']['media']['embeds'] ) ) :
 	<?php _e( 'Organize uploads according to media category.' ); ?>
 	<?php echo $media_requires; ?>
 </label>
+</td>
+</tr>
+
+<tr>
+<th scope="row"><?php _e( 'Do you want to be able to re-name your files as you upload them?' ); ?></th>
+<td class="td-full uploads_rename_files">
+	<input id="uploads_rename_files" type="checkbox" name="uploads_rename_files" value="1"<?php checked( 1, $renamefiles ); ?>>
+	<label for="uploads_rename_files"><?php esc_html_e( 'Enable file re-naming.' ); ?></label>
 </td>
 </tr>
 

@@ -753,15 +753,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 		$focus = $locations_screen ? array( 'section' => 'menu_locations' ) : array( 'panel' => 'nav_menus' );
 		printf(
 			' <a class="page-title-action hide-if-no-customize" href="%1$s">%2$s</a>',
-			esc_url(
-				add_query_arg(
-					array(
-						array( 'autofocus' => $focus ),
-						'return' => urlencode( remove_query_arg( wp_removable_query_args(), wp_unslash( $_SERVER['REQUEST_URI'] ) ) ),
-					),
-					admin_url( 'customize.php' )
-				)
-			),
+			esc_url( wp_customize_url() . '#sub-accordion-panel-nav_menus' ),
 			__( 'Manage with Live Preview' )
 		);
 	endif;
@@ -1148,7 +1140,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 
 									if ( ! isset( $auto_add['auto_add'] ) ) {
 										$auto_add = false;
-									} elseif ( false !== array_search( $nav_menu_selected_id, $auto_add['auto_add'], true ) ) {
+									} elseif ( in_array( $nav_menu_selected_id, $auto_add['auto_add'], true ) ) {
 										$auto_add = true;
 									} else {
 										$auto_add = false;
