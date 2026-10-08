@@ -1169,6 +1169,21 @@ endif;
 
 			$choice['url'] = sanitize_url( $choice['url'] );
 
+			if ( empty( $choice['width'] ) || empty( $choice['height'] ) ) {
+				$file = get_attached_file( $choice['attachment_id'] );
+				$image_size = $file ? wp_getimagesize( $file ) : false;
+
+				if ( $image_size ) {
+					if ( empty( $choice['width'] ) ) {
+						$choice['width'] = $image_size[0];
+					}
+
+					if ( empty( $choice['height'] ) ) {
+						$choice['height'] = $image_size[1];
+					}
+				}
+			}
+
 			$header_image_data = (object) array(
 				'attachment_id' => $choice['attachment_id'],
 				'url'           => $choice['url'],
