@@ -454,7 +454,7 @@ wp_print_scripts();
 			</aside>
 
 			<main id="widgets-right" class="wp-clearfix">
-				<div id="customize-notifications-area" class="customize-control-notifications-container">
+				<div id="customize-notifications-area" class="customize-control-notifications-container" style="display: none;">
 					<ul></ul>
 				</div>
 				<div class="wp-full-overlay-sidebar-content">

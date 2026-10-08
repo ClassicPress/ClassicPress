@@ -28,7 +28,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
 		section = document.getElementById( 'sub-accordion-section-custom_css' ),
 		colorSchemeInputs = form.querySelectorAll( 'input[name="_customize-radio-colorscheme"]' ),
-		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' );
+		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' ),
+		notificationsContainer = document.querySelector( '#customize-notifications-area ul' );
 
 	let addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver,
@@ -53,7 +54,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		hash = window.location.hash.replace( '#', '' ),
 		targetEl = document.getElementById( hash ),
 		discardingChangeset = false,
-		changesetStatus = window._wpCustomizeChangesetStatus || 'publish';
+		changesetStatus = window.wpCustomizeChangesetStatus === 'auto-draft' ? 'publish' : window.wpCustomizeChangesetStatus || 'publish',
+		autosaveTimer = null,
+		autosaveInProgress = false,
+		autosavePending = false;
 
 	// Go direct to appropriate Customizer panel if its hash is specified in the URL
 	if ( hash === 'menu-to-edit' ) {
@@ -194,6 +198,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		queryParams.delete( 'return' );
 		newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
 		history.replaceState( null, '', encodeURI( newUrl ) );
+	}
+
+	if ( lockSettings?.changeset.loadedFromChangesetUrl ) {
+		publishSettings.disabled = false;
+		activatePublishButton();
 	}
 
 	document.getElementById( 'customize-preview-loading' ).classList.add( 'hidden' );
@@ -471,11 +480,34 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Schedule an autosave after a Customizer setting has changed.
+	 *
+	 * @return {void}
+	 */
+	function scheduleAutosave() {
+		window.clearTimeout( autosaveTimer );
+
+		autosaveTimer = window.setTimeout( function() {
+			autosaveChangeset();
+		}, 1000 );
+	}
+
+	/**
+	 * Mark the current changeset as changed.
+	 *
+	 * @return {void}
+	 */
+	function markChangesetDirty() {
+		activatePublishButton();
+		scheduleAutosave();
+	}
+
+	/**
 	 * Prepare changed object for publication.
 	 */
 	function inputChanged( input, settingId ) {
 		_updatedControlsWatcher[ settingId ] = input.value.trim();
-		activatePublishButton();
+		markChangesetDirty();
 	}
 
 	function backgroundPositionChanged( input ) {
@@ -485,7 +517,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		_updatedControlsWatcher.background_position_x = x;
 		_updatedControlsWatcher.background_position_y = y;
-		activatePublishButton();
+		markChangesetDirty();
 	}
 
 	function backgroundCheckboxChanged( input, settingId ) {
@@ -498,7 +530,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			 * unchecked = "blank"
 			 */
 			_updatedControlsWatcher[ settingId ] = input.checked ? input.value : 'blank';
-			activatePublishButton();
+			markChangesetDirty();
 			return;
 		}
 
@@ -510,7 +542,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			_updatedControlsWatcher[ settingId ] = input.checked ? input.value : '';
 		}
 
-		activatePublishButton();
+		markChangesetDirty();
 	}
 
 	function updateBackgroundPresetFields( preset ) {
@@ -582,7 +614,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( settingId === 'background_preset' ) {
 				_updatedControlsWatcher.background_preset = input.value;
 				updateBackgroundPresetFields( input.value );
-				activatePublishButton();
+				markChangesetDirty();
 				return;
 			}
 
@@ -1235,7 +1267,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					_updatedControlsWatcher.page_for_posts = response.data.post_id;
 				}
 
-				activatePublishButton();
+				markChangesetDirty();
 			} else {
 				errorItem.textContent = response.data && response.data.message ? response.data.message : _wpCustomizeControlsL10n.pageCreationFailure;
 				errorItem.style.display = '';
@@ -1882,7 +1914,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 		closeModal();
-		activatePublishButton();
+		markChangesetDirty();
 	}
 
 	/**
@@ -1902,7 +1934,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			choice: choice
 		};
 
-		activatePublishButton();
+		markChangesetDirty();
 		forcePreviewRefresh( 'header_image', choice );
 
 		if ( ! document.querySelector( '.randomizing-header' ) ) {
@@ -1959,7 +1991,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} );
 			_updatedControlsWatcher[ parent.closest( 'li' ).dataset.settingId ] = '';
 		}
-		activatePublishButton();
+		markChangesetDirty();
 	}
 
 	/* Enable choosing of panel on narrow screen */
@@ -2042,6 +2074,240 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Build a changeset.
+	 *
+	 * This function is used both by regular saves/publishing and autosaves.
+	 */
+	function buildChangesetData( controls, dirtySettings, menuItemIDs, frontPageIDs, postsPageIDs ) {
+		const submittedChanges = {};
+		let postsToPublish = [];
+
+		// Prepare changeset object
+		Object.keys( controls ).forEach( function( settingId ) {
+			const item = controls[ settingId ];
+
+			if ( settingId.startsWith( 'nav_menu[' ) && item === 'delete-menu' ) {
+				submittedChanges[ settingId ] = {
+					value: false // deletes menu
+				};
+			} else if ( settingId.startsWith( 'nav_menu[' ) ) {
+				submittedChanges[ settingId ] = {
+					value: {
+						name: ( typeof item === 'string' ) ? item : item.name || '',
+						description: item.description || '',
+						parent: item.parent ? parseInt( item.parent, 10 ) : 0,
+						auto_add: !! item.auto_add // default false
+					}
+				};
+			} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
+				if ( item === false ) {
+					submittedChanges[ settingId ] = {
+						value: false
+					};
+				} else {
+					submittedChanges[ settingId ] = {
+						value: {
+							nav_menu_term_id: parseInt( item.nav_menu_term_id, 10 ),
+							position: parseInt( item.position, 10 ),
+							title: item.title || '',
+							url: item.url || '',
+							original_title: item.original_title || '',
+							menu_item_parent: parseInt( item.menu_item_parent, 10 ) || 0,
+							object_id: item.object_id || 0,
+							object: item.object || '',
+							type: item.type || 'custom',
+							type_label: item.type_label || '',
+							classes: item.classes || [],
+							xfn: item.xfn || '',
+							target: item.target || '',
+							attr_title: item.attr_title || '',
+							description: item.description || '',
+							status: item.status || 'publish',
+							display_mode: item.display_mode || '',
+							roles: item.roles || ''
+						}
+					};
+				}
+			} else if ( settingId.startsWith( 'nav_menu_locations[' ) ) {
+				submittedChanges[ settingId ] = {
+					value: item || ''
+				};
+			} else { // All other settings
+				submittedChanges[ settingId ] = {
+					value: item || ''
+				};
+			}
+		} );
+
+		if ( menuItemIDs.length > 0 ) {
+			postsToPublish = postsToPublish.concat( menuItemIDs );
+		}
+
+		frontPageIDs.forEach( function( item ) {
+			postsToPublish.push( item.id );
+		} );
+
+		postsPageIDs.forEach( function( item ) {
+			postsToPublish.push( item.id );
+		} );
+
+		if ( postsToPublish.length > 0 ) {
+			submittedChanges.nav_menus_created_posts = {
+				value: postsToPublish
+			};
+		}
+
+		// Add advanced menu-item changes directly to the outgoing
+		// publish payload without touching updatedControls.
+		// This avoids crashing the live preview.
+		Object.entries( dirtySettings ).forEach( function( [ settingId, item ] ) {
+			if ( settingId.startsWith( 'nav_menu_item[' ) ) {
+				submittedChanges[ settingId ] = {
+					value: item
+				};
+			}
+		} );
+
+		return submittedChanges;
+	}
+
+	/**
+	 * Clone values for an autosave request.
+	 *
+	 * @param {*} value - Value to clone.
+	 * @return {*} Cloned value.
+	 */
+	function cloneAutosaveValue( value ) {
+		return JSON.parse( JSON.stringify( value ) );
+	}
+
+	/**
+	 * Autosave the current changeset.
+	 *
+	 * @return {void}
+	 */
+	async function autosaveChangeset() {
+		const formData = new FormData();
+		let autosaveData,
+			snapshotControls,
+			snapshotDirtySettings,
+			snapshotMenuItemIDs,
+			snapshotFrontPageIDs,
+			snapshotPostsPageIDs,
+			response,
+			result;
+
+		if ( autosaveInProgress ) {
+			autosavePending = true;
+			return;
+		}
+
+		if ( Object.keys( updatedControls ).length < 1 ) {
+			return;
+		}
+
+		autosaveInProgress = true;
+		autosavePending = false;
+
+		/*
+		 * Take snapshots before building the outgoing payload. The user may
+		 * continue editing while fetch() is in progress.
+		 */
+		snapshotControls = cloneAutosaveValue( updatedControls );
+		snapshotDirtySettings = cloneAutosaveValue( window._cpDirtySettings || {} );
+		snapshotMenuItemIDs = cloneAutosaveValue( newMenuItemIDs );
+		snapshotFrontPageIDs = cloneAutosaveValue( newFrontPageIds );
+		snapshotPostsPageIDs = cloneAutosaveValue( newPostsPageIds );
+
+		// Build the autosave data without modifying the live source objects.
+		autosaveData = buildChangesetData( snapshotControls, snapshotDirtySettings, snapshotMenuItemIDs, snapshotFrontPageIDs, snapshotPostsPageIDs );
+
+		try {
+			formData.append( 'action', 'customize_save' );
+			formData.append( 'nonce', document.getElementById( 'customizer_nonce' ).value );
+			formData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
+			formData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
+			formData.append( 'customize_changeset_data', JSON.stringify( autosaveData ) );
+			formData.append( 'customize_changeset_autosave', '1' );
+
+			response = await fetch( ajaxurl, {
+				method: 'POST',
+				body: formData,
+				credentials: 'same-origin'
+			} );
+
+			if ( ! response.ok ) {
+				throw new Error( response.status );
+			}
+
+			result = await response.json();
+
+			if ( ! result.success ) {
+				throw new Error( result.data || 'Customizer autosave failed.' );
+			}
+
+			/*
+			 * The autosave has saved only the values represented by this
+			 * snapshot. Do not clear the live buffers here: they may now
+			 * include changes made while this request was in progress.
+			 */
+			if ( result.data?.next_changeset_uuid ) {
+				document.getElementById( 'customize_changeset_uuid' ).value = result.data.next_changeset_uuid;
+			}
+		} catch ( error ) {
+			console.error( 'Customizer autosave failed.', error );
+		} finally {
+			autosaveInProgress = false;
+
+			if ( autosavePending ) {
+				autosavePending = false;
+				scheduleAutosave();
+			}
+		}
+	}
+
+	function dismissAutosave( li ) {
+		const data = new URLSearchParams();
+
+		data.append( 'action', 'customize_dismiss_autosave_or_lock' );
+		data.append( 'nonce', lockSettings.nonce.dismissAutosaveOrLock );
+		data.append( 'wp_customize', 'on' );
+		data.append( 'dismiss_autosave', 'true' );
+		data.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json();
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( ! result.success ) {
+				console.error( 'Autosave dismissal response:', result.data );
+				throw new Error( 'Autosave dismissal failed.' );
+			}
+
+			li.remove();
+			if ( notificationsContainer.children.length === 0 ) {
+				notificationsContainer.parentNode.style.display = 'none';
+			}
+			saveButton.disabled = true;
+			saveButton.textContent = _wpCustomizeControlsL10n.publish;
+			publishSettings.style.display = 'none';
+			publishSettings.disabled = true;
+		} )
+		.catch( function( error ) {
+			console.error( 'Customizer autosave dismissal failed.', error );
+			throw error;
+		} );
+	}
+
+	/**
 	 * Publish updates by clicking Publish button.
 	 *
 	 * @abstract
@@ -2055,7 +2321,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			navMenuNegatives = [], // an array because we need it to be iterable
 			navMenuLocations = [],
 			navMenuItems = [],
-			postsToPublish = [],
 			formData = new FormData(),
 			updateData = new FormData(),
 			previewLink = document.getElementById( 'preview-link' ),
@@ -2071,6 +2336,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			return;
 		}
 
+		// Prevent a pending autosave from starting during this save.
+		window.clearTimeout( autosaveTimer );
+		autosaveTimer = null;
+
 		document.body.classList.add( 'saving' );
 
 		if ( changesetStatus === 'future' ) {
@@ -2085,9 +2354,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		// Clear stale notifications
-		document.querySelectorAll( '.customize-control-notifications-container' ).forEach( function( container ) {
-			container.replaceChildren();
-		} );
+		notificationsContainer.replaceChildren();
+		notificationsContainer.parentNode.style.display = 'none';
 
 		// Populate arrays if a new menu is being added
 		for ( const [key, value] of entries ) {
@@ -2182,90 +2450,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		// Prepare changeset object
-		Object.keys( updatedControls ).forEach( function( settingId ) {
-			const item = updatedControls[ settingId ];
-
-			if ( settingId.startsWith( 'nav_menu[' ) && item === 'delete-menu' ) {
-				submittedChanges[ settingId ] = {
-					value: false // deletes menu
-				};
-			} else if ( settingId.startsWith( 'nav_menu[' ) ) {
-				submittedChanges[ settingId ] = {
-					value: {
-						name: ( typeof item === 'string' ) ? item : item.name || '',
-						description: item.description || '',
-						parent: item.parent ? parseInt( item.parent, 10 ) : 0,
-						auto_add: !! item.auto_add // default false
-					}
-				};
-			} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
-				if ( item === false ) {
-					submittedChanges[ settingId ] = {
-						value: false
-					};
-				} else {
-					submittedChanges[ settingId ] = {
-						value: {
-							nav_menu_term_id: parseInt( item.nav_menu_term_id, 10 ),
-							position: parseInt( item.position, 10 ),
-							title: item.title || '',
-							url: item.url || '',
-							original_title: item.original_title || '',
-							menu_item_parent: parseInt( item.menu_item_parent, 10 ) || 0,
-							object_id: item.object_id || 0,
-							object: item.object || '',
-							type: item.type || 'custom',
-							type_label: item.type_label || '',
-							classes: item.classes || [],
-							xfn: item.xfn || '',
-							target: item.target || '',
-							attr_title: item.attr_title || '',
-							description: item.description || '',
-							status: item.status || 'publish',
-							display_mode: item.display_mode || '',
-							roles: item.roles || ''
-						}
-					};
-				}
-			} else if ( settingId.startsWith( 'nav_menu_locations[' ) ) {
-				submittedChanges[ settingId ] = {
-					value: item || ''
-				};
-			} else { // All other settings
-				submittedChanges[ settingId ] = {
-					value: item || ''
-				};
-			}
-		} );
-
-		if ( newMenuItemIDs.length > 0 ) {
-			postsToPublish = postsToPublish.concat( newMenuItemIDs );
-		}
-
-		newFrontPageIds.forEach( function( item ) {
-			postsToPublish.push( item.id );
-		} );
-
-		newPostsPageIds.forEach( function( item ) {
-			postsToPublish.push( item.id );
-		} );
-
-		if ( postsToPublish.length > 0 ) {
-			submittedChanges.nav_menus_created_posts = {
-				value: postsToPublish
-			};
-		}
-
-		// Add advanced menu-item changes directly to the outgoing
-		// publish payload without touching updatedControls.
-		// This avoids crashing the live preview.
-		Object.entries( window._cpDirtySettings || {} ).forEach( function( [ settingId, item ] ) {
-			if ( settingId.startsWith( 'nav_menu_item[' ) ) {
-				submittedChanges[ settingId ] = {
-					value: item
-				};
-			}
-		} );
+		submittedChanges = buildChangesetData( updatedControls, window._cpDirtySettings || {}, newMenuItemIDs, newFrontPageIds, newPostsPageIds );
 
 		// Append new data for POSTing to PHP back-end handler
 		updateData.append( 'action', 'customize_save' );
@@ -2277,6 +2462,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		if ( changesetStatus === 'future' ) {
 			updateData.append( 'customize_changeset_date', d[0] + '-' + d[1] + '-' + d[2] + ' ' + timeStr );
+		}
+
+		if ( queryParams.get( 'cp_restoring_autosave' ) === '1' ) {
+			updateData.set( 'customize_restore_autosave', '1' );
 		}
 
 		try {
@@ -2298,6 +2487,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Update HTML
 		if ( newResult && newResult.success ) {
+
+			// Prevent re-appearance of restore flag once an autosave has been restored
+			if ( queryParams.get( 'cp_restoring_autosave' ) === '1' ) {
+				queryParams.delete( 'cp_restoring_autosave' );
+				queryParams.delete( 'customize_autosaved' );
+
+				window.history.replaceState( null, '', window.location.pathname + '?' + queryParams.toString() + window.location.hash );
+			}
 
 			// Update the in-memory date so the Schedule radio restores correctly
 			if ( changesetStatus === 'future' ) {
@@ -2355,18 +2552,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				Object.entries( newResult.data.setting_validities ).forEach( function( [settingId, validity] ) {
 					if ( validity !== true ) {
 						Object.entries( validity ).forEach( function( [code, error] ) {
-							var setting = document.querySelector( '[data-setting-id="' + settingId + '"]' );
-							if ( setting ) {
-								var container = setting.querySelector( '.customize-control-notifications-container' );
-								if ( container ) {
-									container.appendChild( buildNotification( {
-										type: 'error',
-										code: code,
-										message: error.message
-									} ) );
-								}
-							}
+							notificationsContainer.append( buildNotification( {
+								type: 'error',
+								code: code,
+								message: error.message
+							} ) );
 						} );
+						notificationsContainer.parentNode.style.display = 'block';
 					}
 				} );
 			}
@@ -2397,7 +2589,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		li.dataset.type = data.type || '';
 
 		msg.className = 'notification-message';
-		msg.innerHTML = data.message || data.code || '';
+		msg.setHTML( data.message || data.code || '', {
+			sanitizer: {}
+		} );
 		li.append( msg );
 
 		if ( data.dismissible ) {
@@ -2407,13 +2601,86 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			btn.className = 'notice-dismiss';
 			btn.append( span );
 			btn.addEventListener( 'click', function() {
-				li.remove();
+				if ( data.onDismiss ) {
+					data.onDismiss( li );
+				} else {
+					li.remove();
+				}
+				if ( notificationsContainer.children.length === 0 ) {
+					notificationsContainer.parentNode.style.display = 'none';
+				}
 			} );
 			li.append( btn );
 		}
 
 		return li;
 	}
+
+	/**
+	 * Get the URL for restoring available autosaved changes.
+	 *
+	 * @return {string} Restoration URL.
+	 */
+	function getAutosaveRestoreUrl() {
+		const url = new URL( window.location.href ),
+			changeset = lockSettings.changeset;
+
+		if ( changeset.latestAutoDraftUuid ) {
+			url.searchParams.set( 'customize_changeset_uuid', changeset.latestAutoDraftUuid );
+			url.searchParams.delete( 'customize_autosaved' );
+		} else {
+			url.searchParams.set( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
+			url.searchParams.set( 'customize_autosaved', 'on' );
+			url.searchParams.set( 'cp_restoring_autosave', '1' );
+		}
+
+		return url.toString();
+	}
+
+	/**
+	 * Show information when a more recent autosave exists.
+	 *
+	 * @return {void}
+	 */
+	function showAutosaveNotification() {
+		const changeset = lockSettings.changeset,
+			autosaveMessage = document.createElement( 'span' );
+
+		let notice, message;
+
+		if ( changeset?.loadedFromChangesetUrl ) {
+			return;
+		}
+
+		if ( ! ( changeset?.latestAutoDraftUuid || changeset?.hasAutosaveRevision ) ) {
+			return;
+		}
+
+		if ( notificationsContainer.querySelector( '[data-code="autosave_available"]' ) ) {
+			return;
+		}
+
+		notice = buildNotification( {
+			type: 'info',
+			code: 'autosave_available',
+			message: autosaveMessage.outerHTML,
+			dismissible: true,
+			onDismiss: dismissAutosave
+		} );
+
+		message = notice.querySelector( '.notification-message' );
+		message.setHTML( _wpCustomizeControlsL10n.autosaveNotice, {
+			sanitizer: {
+				allowAttributes: ['href']
+			}
+		} );
+
+		message.querySelector( 'a' ).href = getAutosaveRestoreUrl();
+		notificationsContainer.append( notice );
+		notificationsContainer.parentNode.style.display = 'block';
+	}
+
+	showAutosaveNotification();
 
 	/**
 	 * Replaces the substring 'brand-new' in new menu attributes with negative integer.
@@ -2541,7 +2808,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			editor.codemirror.on( 'change', function( cm ) {
 				textarea.value = cm.getValue();
 				_updatedControlsWatcher[ settingId ] = textarea.value.trim();
-				activatePublishButton();
+				markChangesetDirty();
 			} );
 
 			observer = new MutationObserver( function( mutations ) {
@@ -2604,7 +2871,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			_updatedControlsWatcher[inputEl.closest( 'li' ).dataset.settingId] = effectiveColor;
 
 			// Enable Publish.
-			activatePublishButton();
+			markChangesetDirty();
 		}
 	} );
 
