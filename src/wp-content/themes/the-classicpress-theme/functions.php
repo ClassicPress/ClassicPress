@@ -149,7 +149,7 @@ add_action( 'wp_enqueue_scripts', 'susty_dequeue_dashicons' );
  * Stylesheet version (cache buster)
  */
 function cp_susty_get_asset_version() {
-	return '20261012';
+	return '20260714';
 }
 
 /**
@@ -235,6 +235,13 @@ add_filter( 'the_content', 'cp_remove_empty_p', 20, 1 );
  * Add excerpts to pages
  */
 add_post_type_support( 'page', 'excerpt' );
+
+/**
+ * Simplify blog detection
+ */
+function is_blog() {
+	return ( is_archive() || is_author() || is_category() || is_home() || is_tag() ) && 'post' == get_post_type();
+}
 
 /**
  * Set our own version string for the theme's stylesheet
