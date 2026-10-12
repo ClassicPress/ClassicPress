@@ -237,13 +237,6 @@ add_filter( 'the_content', 'cp_remove_empty_p', 20, 1 );
 add_post_type_support( 'page', 'excerpt' );
 
 /**
- * Simplify blog detection
- */
-function is_blog() {
-	return ( is_archive() || is_author() || is_category() || is_home() || is_tag() ) && 'post' == get_post_type();
-}
-
-/**
  * Set our own version string for the theme's stylesheet
  */
 function cp_susty_override_style_css_version( $version, $type, $handle ) {
