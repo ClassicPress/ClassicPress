@@ -149,7 +149,7 @@ add_action( 'wp_enqueue_scripts', 'susty_dequeue_dashicons' );
  * Stylesheet version (cache buster)
  */
 function cp_susty_get_asset_version() {
-	return '20260714';
+	return '20261012';
 }
 
 /**
