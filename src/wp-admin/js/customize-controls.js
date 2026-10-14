@@ -28,7 +28,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
 		section = document.getElementById( 'sub-accordion-section-custom_css' ),
 		colorSchemeInputs = form.querySelectorAll( 'input[name="_customize-radio-colorscheme"]' ),
-		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' );
+		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' ),
+		notificationsContainer = document.querySelector( '#customize-notifications-area ul' );
 
 	let addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
 		intersectionObserver,
@@ -44,7 +45,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		lockableControls = form.querySelectorAll( 'input, select, textarea, button' ),
 		hyperlinks = document.querySelectorAll( 'a' ),
 		lockSettings = window._wpCustomizeSettings || {},
-		lockNotice = document.getElementById( 'customize-lock-notice' ),
 		lockRefreshTimer = null,
 		queryParams = new URLSearchParams( window.location.search ),
 		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
@@ -278,44 +278,40 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function applyLockState() {
 		const lockUser = lockSettings?.lock?.lockUser;
-		let nameNode;
-		let avatarNode;
-		let takeOverButton;
-
-		if ( ! lockNotice ) {
-			return;
-		}
-
-		nameNode = lockNotice.querySelector( '.customize-lock-notice-name' );
-		avatarNode = lockNotice.querySelector( '.customize-lock-notice-avatar' );
-		takeOverButton = lockNotice.querySelector( '.button-primary' );
+		let avatarNode, takeOverButton;
 
 		if ( lockUser && lockUser.id && lockUser.id !== lockSettings?.user?.id ) {
-			if ( nameNode ) {
-				nameNode.textContent = lockUser.name || '';
+			if ( ! notificationsContainer.querySelector( '.customize-lock-notice' ) ) {
+				notificationsContainer.prepend( document.getElementById( 'customize-lock-notice-template' ).content.cloneNode( true ) );
+			}
+			notificationsContainer.querySelector( '.customize-lock-notice-name' ).textContent = lockUser.name || '';
+
+			avatarNode = notificationsContainer.querySelector( '.customize-lock-notice-avatar' );
+			if ( typeof lockUser.avatar === 'string' && /<img/i.test( lockUser.avatar ) ) {
+				avatarNode.setHTML( lockUser.avatar );
+				avatarNode.hidden = false;
+			} else {
+				avatarNode.replaceChildren();
+				avatarNode.hidden = true;
 			}
 
-			if ( avatarNode ) {
-				if ( typeof lockUser.avatar === 'string' && /<img/i.test( lockUser.avatar ) ) {
-					avatarNode.setHTML( lockUser.avatar );
-					avatarNode.hidden = false;
-				} else {
-					avatarNode.replaceChildren();
-					avatarNode.hidden = true;
-				}
-			}
-
-			lockNotice.hidden = false;
+			notificationsContainer.parentNode.style.display = 'block';
 			disableCustomizerEditing();
 
-			if ( takeOverButton ) {
-				takeOverButton.disabled = false;
-			}
+			takeOverButton = notificationsContainer.querySelector( '.button-primary' );
+			takeOverButton.disabled = false;
+			takeOverButton.addEventListener( 'click', function( e ) {
+				e.preventDefault();
+				handleTakeOverLock();
+			} );
 
 			return;
 		}
 
-		lockNotice.hidden = true;
+		notificationsContainer.querySelector( '.customize-lock-notice' )?.remove();
+		if ( notificationsContainer.children.length === 0 ) {
+			notificationsContainer.parentNode.style.display = 'none';
+		}
 		enableCustomizerEditing();
 	}
 
@@ -367,7 +363,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function handleTakeOverLock() {
 		const data = new URLSearchParams(),
-			takeOverButton = lockNotice?.querySelector( '.button-primary' );
+			takeOverButton = notificationsContainer.querySelector( '.button-primary' );
 
 		if ( ! lockSettings?.nonce?.takeOverLock ) {
 			return;
@@ -406,15 +402,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				takeOverButton.disabled = false;
 			}
 			console.error( 'Customizer lock takeover failed.', error );
-		} );
-	}
-
-	if ( lockNotice ) {
-		lockNotice.addEventListener( 'click', function( e ) {
-			if ( e.target.closest( '.button-primary' ) ) {
-				e.preventDefault();
-				handleTakeOverLock();
-			}
 		} );
 	}
 
@@ -474,6 +461,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * Prepare changed object for publication.
 	 */
 	function inputChanged( input, settingId ) {
+		if ( settingId === 'external_header_video' && input.value.trim() ) {
+			var headerImageRemove = document.querySelector( '#customize-control-header_image .remove' );
+
+			if ( headerImageRemove ) {
+				headerImageRemove.click();
+			}
+
+			_updatedControlsWatcher.header_image = 'remove-header';
+			_updatedControlsWatcher.header_image_data = '';
+		}
+
 		_updatedControlsWatcher[ settingId ] = input.value.trim();
 		activatePublishButton();
 	}
@@ -1567,7 +1565,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Remove left sidebar
 				leftSidebar = dialog.querySelector( '.widget-modal-left-sidebar' );
-				dialog.querySelector( '.widget-modal-left-sidebar' ).remove();
+				dialog.querySelector( '.widget-modal-left-sidebar' )?.remove();
 
 				// Append cloned template and show relevant elements
 				header.append( dialogButtons );
@@ -1705,7 +1703,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				'query[post_mime_type]': customizeButton.parentNode.dataset.requiredType,
 				'query[s]': search.value ? search.value : '',
 				'query[paged]': paged ? paged : 1,
-				'query[media_category_name]': mediaCatSelect.value ? mediaCatSelect.value : ''
+				'query[media_category_name]': mediaCatSelect?.value ? mediaCatSelect.value : ''
 			} );
 
 		// Make AJAX request
@@ -1852,17 +1850,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function addItemToCustomizer( selectedItem, attachmentId, imageElement, imageUrl, attachment ) {
-		var headerData, headerUrl,
+		var headerData, headerUrl, videoElement,
 			parent = selectedItem.classList.contains( 'choice' ) ? selectedItem.closest( '.choices' ) : customizeButton.parentNode,
 			grandparent = parent.parentNode,
 			li = parent.closest( 'li' ),
 			settingId = li.dataset.settingId,
 			removeButton = document.createElement( 'button' ),
-			selectButton = document.createElement( 'button' );
+			selectButton = document.createElement( 'button' ),
+			headerVideoControl = document.getElementById( 'customize-control-header_video' ),
+			externalVideoInput = document.getElementById( '_customize-input-external_header_video' );
 
 		if ( ! parent ) {
 			return;
 		}
+
+		attachmentId = parseInt( attachmentId );
 
 		removeButton.className = 'button remove-button';
 		removeButton.type = 'button';
@@ -1874,6 +1876,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Update header image
 		if ( settingId === 'header_image_data' ) {
+
+			if ( headerVideoControl ) {
+				_updatedControlsWatcher.header_video = '';
+			}
+
+			if ( externalVideoInput ) {
+				externalVideoInput.value = '';
+				_updatedControlsWatcher.external_header_video = '';
+			}
+
 			if ( selectedItem.className === 'choice' ) {
 				li.querySelector( '.container' ).replaceChildren( imageElement.cloneNode() );
 
@@ -1914,13 +1926,83 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				_updatedControlsWatcher.header_image = headerUrl;
 				_updatedControlsWatcher[ settingId ] = {
-					attachment_id: parseInt( attachmentId ),
+					attachment_id: attachmentId,
 					url:           attachment ? attachment.url : imageUrl,
 					thumbnail_url: attachment ? ( attachment.sizes?.thumbnail?.url || attachment.url ) : ( selectedItem.dataset.sizes?.thumbnail?.url || imageUrl ),
 					width:         attachment ? attachment.width  : selectedItem.dataset.width,
 					height:        attachment ? attachment.height : selectedItem.dataset.height
 				};
 			}
+
+			setTimeout( function() {
+				if ( headerVideoControl && headerVideoControl.querySelector( 'video' ) ) {
+					headerVideoControl.querySelector( '.remove-button' )?.click();
+				}
+				selectButton.focus();
+			}, 0 );
+
+		// Update header video
+		} else if ( settingId === 'header_video' ) {
+			if ( ! selectedItem.dataset.url ) {
+				return;
+			}
+
+			videoElement = document.createElement( 'video' );
+			videoElement.src = selectedItem.dataset.url;
+
+			if ( li.querySelector( '.mejs-video' ) ) {
+				li.querySelector( '.mejs-offscreen' ).remove();
+				li.querySelector( '.mejs-video' ).replaceWith( videoElement );
+			} else {
+				grandparent.before( videoElement );
+				parent.prepend( removeButton );
+				customizeButton.replaceWith( selectButton );
+			}
+
+			if ( externalVideoInput ) {
+				externalVideoInput.value = '';
+				_updatedControlsWatcher.external_header_video = '';
+			}
+
+			_updatedControlsWatcher.header_image = 'remove-header';
+			_updatedControlsWatcher.header_image_data = '';
+			_updatedControlsWatcher.header_video = attachmentId;
+
+			setTimeout( function() {
+				if ( document.getElementById( 'customize-control-header_image' ).querySelector( 'img' ) ) {
+					document.getElementById( 'customize-control-header_image' ).querySelector( '.remove' ).click();
+				}
+				selectButton.focus();
+			}, 0 );
+
+		// Update external header video
+		} else if ( settingId === 'external_header_video' ) {
+			if ( ! selectedItem.dataset.url ) {
+				return;
+			}
+
+			videoElement = document.createElement( 'video' );
+			videoElement.src = selectedItem.dataset.url;
+
+			document.getElementById( 'customize-control-header_video' )?.click();
+
+			if ( headerVideoControl ) {
+				_updatedControlsWatcher.header_video = '';
+			}
+
+			_updatedControlsWatcher.header_image = 'remove-header';
+			_updatedControlsWatcher.header_image_data = '';
+			_updatedControlsWatcher.external_header_video = selectedItem.dataset.url;
+
+			setTimeout( function() {
+				if ( document.getElementById( 'customize-control-header_image' ).querySelector( 'img' ) ) {
+					document.getElementById( 'customize-control-header_image' ).querySelector( '.remove' ).click();
+				}
+				if ( document.getElementById( 'customize-control-header_video' ).querySelector( 'video' ) ) {
+					document.getElementById( 'customize-control-header_video' ).querySelector( '.remove-button' ).click();
+				}
+				selectButton.focus();
+			}, 0 );
 
 		// Update site icon
 		} else if ( settingId === 'site_icon' ) {
@@ -2032,7 +2114,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} else {
 				grandparent.querySelector( 'img' )?.remove();
 				grandparent.querySelector( 'video' )?.remove();
-				grandparent.querySelector( 'input' ).value = '';
+				grandparent.closest( 'li' ).querySelector( '.mejs-offscreen' )?.remove();
+				grandparent.closest( 'li' ).querySelector( '.mejs-video' )?.remove();
+				if ( grandparent.querySelector( 'input' ) ) {
+					grandparent.querySelector( 'input' ).value = '';
+				}
 			}
 			parent.replaceChildren( button );
 			setTimeout( function() {
