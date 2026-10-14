@@ -26,7 +26,7 @@
 
 		dialog = document.createElement( 'dialog' );
 		dialog.id = 'cp-cropper-dialog';
-		dialog.innerHTML =
+		dialog.setHTML(
 			'<div id="cp-cropper-modal" class="widget-modal-container">' +
 				'<div class="widget-modal-main">' +
 					'<header class="widget-modal-header">' +
@@ -56,7 +56,12 @@
 			'<div id="cp-cropper-spinner" hidden aria-live="polite">' +
 				'<span class="spinner is-active"></span>' +
 				'<span>' + CROPPER.saving + '&hellip;</span>' +
-			'</div>';
+			'</div>', {
+				sanitizer: {
+					allowAttributes: ['class', 'id', 'type', 'autofocus', 'hidden', 'aria-live']
+				}
+			}
+		);
 
 		document.body.appendChild( dialog );
 
