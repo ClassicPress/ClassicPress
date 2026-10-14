@@ -434,25 +434,6 @@ wp_print_scripts();
 				</a>
 			</header><!-- #customize-header-actions -->
 
-			<aside id="customize-lock-notice" class="notice notice-warning" aria-label="<?php esc_html_e( 'Customization lock notice' ); ?>" hidden>
-				<p>
-					<b><?php esc_html_e( 'Customizer locked' ); ?></b>
-				</p>
-				<div class="customize-lock-notice-avatar"></div>
-				<p>
-					<span class="customize-lock-notice-name"></span>
-					<span><?php esc_html_e( 'is already customizing this site. Do you want to take over?' ); ?></span>
-				</p>
-				<div class="aside-lock">
-					<a class="button" href="<?php echo esc_url( $wp_customize->get_return_url() ); ?>">
-						<?php esc_html_e( 'Go back' ); ?>
-					</a>
-					<button type="button" class="button button-primary">
-						<?php esc_html_e( 'Take over' ); ?>
-					</button>
-				</div>
-			</aside>
-
 			<main id="widgets-right" class="wp-clearfix">
 				<div id="customize-notifications-area" class="customize-control-notifications-container">
 					<ul></ul>
@@ -2215,6 +2196,28 @@ customize_themes_print_templates();
 		</div>
 	</div>
 </dialog>
+
+<!-- Template for lock notice -->
+<template id="customize-lock-notice-template">
+	<li class="notice notice-warning customize-lock-notice" aria-label="<?php esc_html_e( 'Customization lock notice' ); ?>">
+		<p>
+			<b><?php esc_html_e( 'Customizer locked' ); ?></b>
+		</p>
+		<div class="customize-lock-notice-avatar"></div>
+		<p>
+			<span class="customize-lock-notice-name"></span>
+			<span><?php esc_html_e( 'is already customizing this site. Do you want to take over?' ); ?></span>
+		</p>
+		<div class="aside-lock">
+			<a class="button" href="<?php echo esc_url( $wp_customize->get_return_url() ); ?>">
+				<?php esc_html_e( 'Go back' ); ?>
+			</a>
+			<button type="button" class="button button-primary">
+				<?php esc_html_e( 'Take over' ); ?>
+			</button>
+		</div>
+	</li>
+</template>
 
 <!-- Template for creation of new nav menu items -->
 <template id="tmpl-new-menu-item">
