@@ -60,8 +60,8 @@ get_current_screen()->add_help_tab(
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-	'<p>' . __( '<a href="https://wordpress.org/documentation/article/settings-reading-screen/">Documentation on Reading Settings</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://wordpress.org/support/forums/">Support forums</a>' ) . '</p>'
+	'<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-reading-screen/">Documentation on Reading Settings</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://forums.classicpress.net/c/support/">Support forums</a>' ) . '</p>'
 );
 
 require_once ABSPATH . 'wp-admin/admin-header.php';
@@ -207,7 +207,7 @@ else :
 		printf(
 			/* translators: %s: Documentation URL. */
 			__( 'Your theme determines how content is displayed in browsers. <a href="%s">Learn more about feeds</a>.' ),
-			__( 'https://wordpress.org/documentation/article/wordpress-feeds/' )
+			__( 'https://developer.wordpress.org/advanced-administration/wordpress/feeds/' )
 		);
 		?>
 	</p>
