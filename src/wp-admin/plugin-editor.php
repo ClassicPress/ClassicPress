@@ -140,8 +140,9 @@ get_current_screen()->add_help_tab(
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-	'<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/editing-files/">Documentation on Editing Plugins</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://developer.wordpress.org/plugins/">Documentation on Writing Plugins</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://developer.wordpress.org/plugins/">Documentation on Plugin Development</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/">Documentation on Using Plugins</a>' ) . '</p>'
+	'<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/editing-files/">Documentation on Editing Files</a>' ) . '</p>' .
 	'<p>' . __( '<a href="https://forums.classicpress.net/c/support/">Support forums</a>' ) . '</p>'
 );
 
