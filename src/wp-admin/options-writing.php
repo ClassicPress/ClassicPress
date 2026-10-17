@@ -50,8 +50,8 @@ if ( apply_filters( 'enable_update_services_configuration', true ) ) {
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-	'<p>' . __( '<a href="https://wordpress.org/documentation/article/settings-writing-screen/">Documentation on Writing Settings</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://wordpress.org/support/forums/">Support forums</a>' ) . '</p>'
+	'<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/settings-writing-screen/">Documentation on Writing Settings</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://forums.classicpress.net/c/support/">Support forums</a>' ) . '</p>'
 );
 
 require_once ABSPATH . 'wp-admin/admin-header.php';
@@ -213,7 +213,7 @@ if ( apply_filters( 'enable_update_services_configuration', true ) ) {
 		printf(
 			/* translators: %s: Documentation URL. */
 			__( 'When you publish a new post, ClassicPress automatically notifies the following site update services. For more about this, see the <a href="%s">Update Services</a> documentation article. Separate multiple service URLs with line breaks.' ),
-			__( 'https://wordpress.org/documentation/article/update-services/' )
+			__( 'https://docs.classicpress.net/user-guides/using-classicpress/settings-writing-screen/#update-services' )
 		);
 		?>
 	</label></p>
