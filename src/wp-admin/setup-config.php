@@ -193,7 +193,7 @@ switch ( $step ) {
 		printf(
 			/* translators: 1: Documentation URL, 2: wp-config.php */
 			__( 'Need more help? <a href="%1$s">Read the support article on %2$s</a>.' ),
-			__( 'https://docs.classicpress.net/user-guides/editing-wp-config-php/' ),
+			__( 'https://docs.classicpress.net/user-guides/advanced-classicpress-guides/editing-wp-config-php/' ),
 			'<code>wp-config.php</code>'
 		);
 		?>
