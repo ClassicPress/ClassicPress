@@ -41,7 +41,7 @@ get_current_screen()->add_help_tab(
 				'<p>' . sprintf(
 					/* translators: %s: Link to documentation on child themes. */
 					__( 'Upgrading to a newer version of the same theme will override changes made here. To avoid this, consider creating a <a href="%s">child theme</a> instead.' ),
-					__( 'https://docs.classicpress.net/user-guides/using-classicpress/creating-a-child-theme/' )
+					__( 'https://docs.classicpress.net/user-guides/advanced-classicpress-guides/creating-a-child-theme/' )
 				) . '</p>' .
 				( is_network_admin() ? '<p>' . __( 'Any edits to files from this screen will be reflected on all sites in the network.' ) . '</p>' : '' ),
 	)
