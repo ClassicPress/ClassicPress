@@ -119,14 +119,16 @@ function edit_user( $user_id = 0 ) {
 	 */
 	if ( ! empty( $taxonomies ) ) {
 		foreach ( $taxonomies as $taxonomy ) {
-			if ( isset( $_POST[ $taxonomy->name ] ) ) {
-				$term_slugs = array();
-				foreach ( $_POST[ $taxonomy->name ] as $term_slug ) {
-					$term_slugs[] = wp_unslash( $term_slug );
+			if ( current_user_can( $taxonomy->cap->edit_terms ) ) {
+				if ( isset( $_POST[ $taxonomy->name ] ) ) {
+					$term_slugs = array();
+					foreach ( $_POST[ $taxonomy->name ] as $term_slug ) {
+						$term_slugs[] = wp_unslash( $term_slug );
+					}
+					wp_set_object_terms( $user->ID, array_map( 'sanitize_title', array_unique( $term_slugs ) ), $taxonomy->name );
+				} elseif ( $update ) {
+					wp_delete_object_term_relationships( $user->ID, $taxonomy->name );
 				}
-				wp_set_object_terms( $user->ID, array_map( 'sanitize_title', array_unique( $term_slugs ) ), $taxonomy->name );
-			} elseif ( $update ) {
-				wp_delete_object_term_relationships( $user->ID, $taxonomy->name );
 			}
 		}
 	}
