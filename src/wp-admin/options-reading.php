@@ -207,7 +207,7 @@ else :
 		printf(
 			/* translators: %s: Documentation URL. */
 			__( 'Your theme determines how content is displayed in browsers. <a href="%s">Learn more about feeds</a>.' ),
-			__( 'https://developer.wordpress.org/advanced-administration/wordpress/feeds/' )
+			__( 'https://docs.classicpress.net/user-guides/advanced-classicpress-guides/classicpress-feeds/' )
 		);
 		?>
 	</p>
