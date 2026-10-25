@@ -304,7 +304,7 @@ if ( 'category' === $taxonomy || 'link_category' === $taxonomy || 'post_tag' ===
 	if ( 'category' === $taxonomy ) {
 		$help .= '<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/posts-categories-screen/">Documentation on Categories</a>' ) . '</p>';
 	} elseif ( 'link_category' === $taxonomy ) {
-		$help .= '<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/link-manager/">Documentation on Link Categories</a>' ) . '</p>';
+		$help .= '<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/link-manager/#link-categories">Documentation on Link Categories</a>' ) . '</p>';
 	} else {
 		$help .= '<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/posts-tags-screen/">Documentation on Tags</a>' ) . '</p>';
 	}
