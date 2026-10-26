@@ -223,7 +223,7 @@ require_once ABSPATH . 'wp-admin/admin-header.php';
 printf(
 	/* translators: %s: Documentation URL. */
 	__( 'ClassicPress offers you the ability to create a custom URL structure for your permalinks and archives. Custom URL structures can improve the aesthetics, usability, and forward-compatibility of your links. A <a href="%s">number of tags are available</a>, and here are some examples to get you started.' ),
-	__( 'https://wordpress.org/support/article/using-permalinks/' )
+	__( 'https://docs.classicpress.net/user-guides/using-classicpress/settings-permalinks-screen/' )
 );
 ?>
 </p>
