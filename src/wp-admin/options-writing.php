@@ -227,7 +227,7 @@ if ( apply_filters( 'enable_update_services_configuration', true ) ) {
 		printf(
 			/* translators: 1: Documentation URL, 2: URL to Reading Settings screen. */
 			__( 'ClassicPress is not notifying any <a href="%1$s">Update Services</a> because of your site&#8217;s <a href="%2$s">visibility settings</a>.' ),
-			__( 'https://wordpress.org/documentation/article/update-services/' ),
+			__( 'https://docs.classicpress.net/user-guides/using-classicpress/settings-writing-screen/#update-services' ),
 			'options-reading.php'
 		);
 		?>
