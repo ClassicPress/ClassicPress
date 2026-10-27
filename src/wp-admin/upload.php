@@ -150,8 +150,8 @@ if ( 'grid' === $mode ) {
 
 	get_current_screen()->set_help_sidebar(
 		'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-		'<p>' . __( '<a href="https://wordpress.org/documentation/article/media-library-screen/">Documentation on Media Library</a>' ) . '</p>' .
-		'<p>' . __( '<a href="https://wordpress.org/support/forums/">Support forums</a>' ) . '</p>'
+		'<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/media-library-screen-grid-view/">Documentation on Media Library</a>' ) . '</p>' .
+		'<p>' . __( '<a href="https://forums.classicpress.net/c/support/">Support forums</a>' ) . '</p>'
 	);
 
 	// Used in the HTML title tag.
@@ -866,8 +866,8 @@ get_current_screen()->add_help_tab(
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-	'<p>' . __( '<a href="https://wordpress.org/documentation/article/media-library-screen/">Documentation on Media Library</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://wordpress.org/support/forums/">Support forums</a>' ) . '</p>'
+	'<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/media-library-screen/">Documentation on Media Library</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://forums.classicpress.net/c/support/">Support forums</a>' ) . '</p>'
 );
 
 get_current_screen()->set_screen_reader_content(

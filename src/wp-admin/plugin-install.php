@@ -96,9 +96,9 @@ get_current_screen()->add_help_tab(
 		'title'   => __( 'Overview' ),
 		'content' =>
 				'<p>' . sprintf(
-					/* translators: %s: https://wordpress.org/plugins/ */
+					/* translators: %s: ://wordpress.org/plugins/ */
 					__( 'Plugins hook into ClassicPress to extend its functionality with custom features. Plugins are developed independently from the core ClassicPress application by developers all over the world. All plugins in the <a href="%s">WordPress Plugin Directory</a> are compatible with the license WordPress uses.' ),
-					__( 'https://wordpress.org/plugins/' )
+					__( '://wordpress.org/plugins/' )
 				) . '</p>' .
 				'<p>' . __( 'You can find new plugins to install by searching or browsing the directory right here in your own Plugins section.' ) . ' <span id="live-search-desc" class="hide-if-no-js">' . __( 'The search results will be updated as you type.' ) . '</span></p>',
 
@@ -118,8 +118,8 @@ get_current_screen()->add_help_tab(
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-	'<p>' . __( '<a href="https://wordpress.org/documentation/article/plugins-add-new-screen/">Documentation on Installing Plugins</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://wordpress.org/support/forums/">Support forums</a>' ) . '</p>'
+	'<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/">Documentation on Managing Plugins</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://forums.classicpress.net/c/support/">Support forums</a>' ) . '</p>'
 );
 
 get_current_screen()->set_screen_reader_content(

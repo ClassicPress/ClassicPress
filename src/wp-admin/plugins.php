@@ -547,12 +547,12 @@ get_current_screen()->add_help_tab(
 				'<p>' . sprintf(
 					/* translators: %s: link to plugin page in the ClassicPress Directory */
 					__( 'With the <a href="%s"><strong>ClassicPress Directory Integration</strong></a> plugin you get access to plugins that are built for ClassicPress. They will appear in the Plugins > Install CP Plugins screen.' ),
-					__( 'https://directory.classicpress.net/plugins/classicpress-directory-integration/' )
+					__( '://directory.classicpress.net/plugins/classicpress-directory-integration/' )
 				) . '</p>' .
 				'<p>' . sprintf(
 					/* translators: %s: WordPress Plugin Directory URL. */
 					__( 'If you would like to see more plugins to choose from, click on the &#8220;Add New&#8221; button and you will be able to browse or search for additional plugins from the <a href="%s">WordPress Plugin Directory</a>. Plugins in the WordPress Plugin Directory are designed and developed by third parties, and are compatible with the license WordPress uses. Oh, and they&#8217;re free!' ),
-					__( 'https://wordpress.org/plugins/' )
+					__( '://wordpress.org/plugins/' )
 				) . '</p>',
 	)
 );
@@ -584,14 +584,14 @@ if ( current_user_can( 'update_plugins' ) && wp_is_auto_update_enabled_for_type(
 		)
 	);
 
-	$help_sidebar_autoupdates = '<p>' . __( '<a href="https://wordpress.org/documentation/article/plugins-themes-auto-updates/">Documentation on Auto-updates</a>' ) . '</p>';
+	$help_sidebar_autoupdates = '<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/plugin-and-theme-auto-updates/">Documentation on Auto-updates</a>' ) . '</p>';
 }
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-	'<p>' . __( '<a href="https://wordpress.org/documentation/article/manage-plugins/">Documentation on Managing Plugins</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/managing-plugins/">Documentation on Managing Plugins</a>' ) . '</p>' .
 	$help_sidebar_autoupdates .
-	'<p>' . __( '<a href="https://wordpress.org/support/forums/">Support forums</a>' ) . '</p>'
+	'<p>' . __( '<a href="https://forums.classicpress.net/c/support/">Support forums</a>' ) . '</p>'
 );
 
 get_current_screen()->set_screen_reader_content(
