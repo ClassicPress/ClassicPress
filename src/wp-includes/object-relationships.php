@@ -40,6 +40,8 @@ add_action( 'init', 'cp_recognized_relationship_objects' );
  * for them are served from the cache. Pairs with no relationship are
  * cached as empty arrays.
  *
+ * @since CP-2.8.0
+ *
  * @param int[] $attachment_ids Attachment IDs, e.g. the current page of the Media list.
  */
 function cp_prime_attachment_relationship_caches( $attachment_ids ) {
