@@ -35,6 +35,89 @@ add_action( 'init', 'cp_recognized_relationship_objects' );
 
 
 /**
+ * Prime the object_relationships cache for a list of attachments with
+ * at most one query, so later cp_get_object_relationship_ids() calls
+ * for them are served from the cache. Pairs with no relationship are
+ * cached as empty arrays.
+ *
+ * @param int[] $attachment_ids Attachment IDs, e.g. the current page of the Media list.
+ */
+function cp_prime_attachment_relationship_caches( $attachment_ids ) {
+	global $wpdb;
+
+	$attachment_ids = array_values( array_unique( array_filter(
+		array_map( 'intval', $attachment_ids ),
+		static function ( $id ) {
+			return $id > 0;
+		}
+	) ) );
+
+	if ( empty( $attachment_ids ) ) {
+		return;
+	}
+
+	$table_name = $wpdb->prefix . 'object_relationships';
+	$types      = array( 'thumbnail', 'attachment' );
+	$recognized_relationship_objects = cp_recognized_relationship_objects();
+
+	// Query only attachments with at least one missing cache entry.
+	$uncached_ids = array();
+
+	foreach ( $attachment_ids as $id ) {
+		foreach ( $types as $type ) {
+			foreach ( $recognized_relationship_objects as $object_type ) {
+				$key = $id . ':' . $type . ':' . $object_type;
+
+				if ( false === wp_cache_get( $key, 'object_relationships' ) ) {
+					$uncached_ids[] = $id;
+					continue 3;
+				}
+			}
+		}
+	}
+
+	if ( empty( $uncached_ids ) ) {
+		return;
+	}
+
+	$attachment_ids = $uncached_ids;
+
+	$id_holders = implode( ', ', array_fill( 0, count( $attachment_ids ), '%d' ) );
+
+	// Every relationship these attachments have, in either direction.
+	$rows = $wpdb->get_results(
+		$wpdb->prepare(
+			"SELECT left_object_id AS id, left_object_type AS type, right_object_type AS other_type, right_object_id AS other_id
+			FROM $table_name WHERE left_object_id IN ($id_holders) AND left_object_type IN (%s, %s)
+			UNION ALL
+			SELECT right_object_id, right_object_type, left_object_type, left_object_id
+			FROM $table_name WHERE right_object_id IN ($id_holders) AND right_object_type IN (%s, %s)",
+			array_merge( $attachment_ids, $types, $attachment_ids, $types )
+		)
+	);
+
+	if ( $wpdb->last_error ) {
+		return;
+	}
+
+	$found = array();
+
+	foreach ( $rows as $row ) {
+		$found[ $row->id . ':' . $row->type . ':' . $row->other_type ][] = (int) $row->other_id;
+	}
+
+	// Same keys that cp_get_object_relationship_ids() reads.
+	foreach ( $attachment_ids as $id ) {
+		foreach ( $types as $type ) {
+			foreach ( $recognized_relationship_objects as $object_type ) {
+				$key = $id . ':' . $type . ':' . $object_type;
+				wp_cache_set( $key, array_values( array_unique( $found[ $key ] ?? array() ) ), 'object_relationships' );
+			}
+		}
+	}
+}
+
+/**
  * Check if a relationship exists between two recognized objects.
  * Relationship is bi-directional so the objects may be given in either order.
  *
