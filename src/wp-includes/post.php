@@ -3020,6 +3020,9 @@ function wp_match_mime_types( $wildcard_mime_types, $real_mime_types ) {
 	foreach ( $patternses as $patterns ) {
 		foreach ( $patterns as $type => $pattern ) {
 			foreach ( (array) $real_mime_types as $real ) {
+				if ( null === $real ) {
+					continue;
+				}
 				if ( preg_match( "#$pattern#", $real )
 					&& ( empty( $matches[ $type ] ) || ! in_array( $real, $matches[ $type ], true ) )
 				) {
