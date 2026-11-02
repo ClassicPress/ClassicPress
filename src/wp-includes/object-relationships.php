@@ -45,12 +45,16 @@ add_action( 'init', 'cp_recognized_relationship_objects' );
 function cp_prime_attachment_relationship_caches( $attachment_ids ) {
 	global $wpdb;
 
-	$attachment_ids = array_values( array_unique( array_filter(
-		array_map( 'intval', $attachment_ids ),
-		static function ( $id ) {
-			return $id > 0;
-		}
-	) ) );
+	$attachment_ids = array_values(
+		array_unique(
+			array_filter(
+				array_map( 'intval', $attachment_ids ),
+				static function ( $id ) {
+					return $id > 0;
+				}
+			)
+		)
+	);
 
 	if ( empty( $attachment_ids ) ) {
 		return;
