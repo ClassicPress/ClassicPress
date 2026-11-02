@@ -119,6 +119,14 @@ final class WP_Customize_Manager {
 	protected $controls = array();
 
 	/**
+	 * Whether the default settings, sections, and controls have been registered.
+	 *
+	 * @since CP-2.8.0
+	 * @var bool
+	 */
+	protected $defaults_registered = false;
+
+	/**
 	 * Panel types that may be rendered from JS templates.
 	 *
 	 * @since 4.3.0
@@ -4968,11 +4976,14 @@ final class WP_Customize_Manager {
 	}
 
 	/**
-	 * Registers some default controls.
+	 * Registers the default settings, sections, and controls once per manager.
 	 *
 	 * @since 3.4.0
 	 */
 	public function register_controls() {
+		if ( $this->defaults_registered ) {
+			return;
+		}
 
 		/* Site Identity */
 		$this->add_section(
@@ -5620,6 +5631,8 @@ final class WP_Customize_Manager {
 				)
 			)
 		);
+
+		$this->defaults_registered = true;
 	}
 
 	/**
