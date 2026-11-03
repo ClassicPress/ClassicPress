@@ -150,8 +150,8 @@ body.js .theme-browser.search-loading {
 	background: #fff;
 }
 
-.theme-browser.rendered .theme:hover .theme-screenshot img,
-.theme-browser.rendered .theme.focus .theme-screenshot img {
+.theme-browser .theme:hover .theme-screenshot img,
+.theme-browser .theme.focus .theme-screenshot img {
 	opacity: 0.4;
 }
 
@@ -897,18 +897,6 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 		margin-left: 0;
 		width: auto;
 	}
-
-	.theme:not(.active):hover .theme-actions,
-	.theme:not(.active):focus .theme-actions,
-	.theme:hover .more-details,
-	.theme.focus .more-details {
-		display: none;
-	}
-
-	.theme-browser.rendered .theme:hover .theme-screenshot img,
-	.theme-browser.rendered .theme.focus .theme-screenshot img {
-		opacity: 1.0;
-	}
 }
 
 @media only screen and (max-width: 480px) {
@@ -937,19 +925,10 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 		margin-left: 0;
 	}
 
-	.theme-overlay .theme-actions .delete-theme {
-		position: relative;
-		right: auto;
-		bottom: auto;
-	}
-
-	.theme-overlay .theme-actions .inactive-theme {
-		display: inline;
-	}
-
 	.theme-overlay .theme-screenshots {
 		width: 100%;
 		float: none;
+		margin: 0;
 	}
 
 	.theme-overlay .theme-info {
