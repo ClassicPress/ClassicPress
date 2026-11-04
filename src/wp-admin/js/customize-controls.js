@@ -968,23 +968,62 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	function setAddedMediaFields( id ) {
-		var form = document.createElement( 'form' );
+	function setAddedMediaFields( item ) {
+		const id = item.dataset.id,
+			form = document.createElement( 'form' ),
+			input = document.createElement( 'input' ),
+			para = document.createElement( 'p' ),
+			message = document.createElement( 'span' ),
+			required = document.createElement( 'span' ),
+			span1 = document.createElement( 'span' ),
+			label1 = document.createElement( 'label' ),
+			input1 = document.createElement( 'input' ),
+			innerSpan1 = document.createElement( 'span' ),
+			span2 = document.createElement( 'span' ),
+			label2 = document.createElement( 'label' ),
+			input2 = document.createElement( 'input' ),
+			innerSpan2 = document.createElement( 'span' );
+
 		form.className = 'compat-item';
-		form.innerHTML = '<input type="hidden" id="menu-order" name="attachments[' + id + '][menu_order]" value="0">' +
-			'<p class="media-types media-types-required-info"><span class="required-field-message">Required fields are marked <span class="required">*</span></span></p>' +
-			'<div class="setting" data-setting="media_category">' +
-				'<label for="attachments-' + id + '-media_category" style="width:30%;">' +
-					'<span class="alignleft">Media Categories</span>' +
-				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" value="">' +
-			'</div>' +
-			'<div class="setting" data-setting="media_post_tag">' +
-				'<label for="attachments-' + id + '-media_post_tag">' +
-					'<span class="alignleft">Media Tags</span>' +
-				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" value="">' +
-			'</div>';
+		input.type = 'hidden';
+		input.id = 'menu-order';
+		input.name = 'attachments[' + id + '][menu_order]';
+		input.value = '0';
+		para.className = 'media-types media-types-required-info';
+		message.className = 'required-field-message';
+		message.textContent = 'Required fields are marked ';
+		required.className = 'required';
+		required.textContent = '*';
+
+		span1.className = 'setting';
+		span1.dataset.setting = 'media_category';
+		label1.htmlFor = 'attachments-' + id + '-media_category';
+		innerSpan1.className = 'alignleft';
+		innerSpan1.textContent = 'Media Categories';
+		input1.type = 'text';
+		input1.className = 'text';
+		input1.id = 'attachments-' + id + '-media_category';
+		input1.name = 'attachments[' + id + '][media_category]';
+		input1.value = item.dataset.taxes;
+
+		span2.className = 'setting';
+		span2.dataset.setting = 'media_post_tag';
+		label2.htmlFor = 'attachments-' + id + '-media_post_tag';
+		innerSpan2.className = 'alignleft';
+		innerSpan2.textContent = 'Media Tags';
+		input2.type = 'text';
+		input2.className = 'text';
+		input2.id = 'attachments-' + id + '-media_post_tag';
+		input2.name = 'attachments[' + id + '][media_post_tag]';
+		input2.value = item.dataset.tags;
+
+		message.append( required );
+		para.append( message );
+		label1.append( innerSpan1 );
+		span1.append( label1, input1 );
+		label2.append( innerSpan2 );
+		span2.append( label2, input2 );
+		form.append( input, para, span1, span2 );
 
 		if ( document.querySelector( '.compat-item' ) != null ) {
 			document.querySelector( '.compat-item' ).remove();
@@ -1286,8 +1325,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			height = item.dataset.height,
 			caption = item.dataset.caption,
 			description = item.dataset.description,
-			taxes = item.dataset.taxes,
-			tags = item.dataset.tags,
 			url = item.dataset.url,
 			sizes = item.dataset.sizes,
 			sizeOptions = '',
@@ -1304,7 +1341,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		// Set menu_order, media_category, and media_post_tag field IDs correctly
-		setAddedMediaFields( id );
+		setAddedMediaFields( item );
 
 		// Populate modal with attachment details
 		dialog.querySelector( '.attachment-date' ).textContent = date;
@@ -1350,10 +1387,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '.delete-attachment' ).parentNode.setAttribute( 'hidden', true );
 		}
 
-		dialog.querySelector( '#attachments-' + id + '-media_category').value = taxes;
-		dialog.querySelector( '#attachments-' + id + '-media_post_tag').value = tags;
 		dialog.querySelector( '#attachment-display-settings-size' ).innerHTML = sizeOptions;
-
 		dialog.querySelector( '.widget-modal-right-sidebar-info' ).removeAttribute( 'hidden' );
 
 		// Update media attachment details
@@ -2018,7 +2052,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function setRandomHeaderChoice( choice ) {
-		const div = document.createElement( 'div' );
+		const div = document.createElement( 'div' ),
+			innerDiv = document.createElement( 'div' ),
+			span = document.createElement( 'span' );
+
 		if ( ! choice ) {
 			return;
 		}
@@ -2032,12 +2069,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		forcePreviewRefresh( 'header_image', choice );
 
 		if ( ! document.querySelector( '.randomizing-header' ) ) {
+			innerDiv.className = 'button display-options random random-default-header';
+			span.className = 'dashicons dashicons-randomize dice';
+			innerDiv.textContent = _wpCustomizeHeader.random;
+			innerDiv.prepend( span );
 			div.className = 'randomizing-header';
-			div.innerHTML = '<div class="button display-options random random-default-header">' +
-				'<span class="dashicons dashicons-randomize dice"></span>' +
-				_wpCustomizeHeader.random +
-				'</div>' +
-				'</div>';
+			div.append( innerDiv );
 			document.querySelector( '#customize-control-header_image label' ).after( div );
 		}
 	}
