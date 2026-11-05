@@ -134,6 +134,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 		if ( $attachment_id ) {
 			$title       = get_the_title( $attachment_id );
 			$mime_type   = get_post_mime_type( $attachment_id );
+			$media_type  = strtok( (string) $mime_type, '/' );
 			$icon        = wp_mime_type_icon( $mime_type );
 			$src         = wp_get_attachment_url( $attachment_id );
 			$icon_html   = wp_get_attachment_image( $attachment_id, 'thumbnail', true );
@@ -143,7 +144,6 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 			$alt_text    = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
 			$album       = get_post_meta( $attachment_id, 'album', true );
 			$artist      = get_post_meta( $attachment_id, 'artist', true );
-			$poster      = $src !== $icon ? ' poster="' . esc_url( $src ) . '"' : '';
 		}
 
 		if ( $this->label ) {
@@ -170,10 +170,10 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 
 		if ( $attachment_id && $src ) {
 			?>
-			<div class="attachment-media-view attachment-media-view-<?php echo esc_attr( $mime_type ); ?> <?php echo esc_attr( $orientation ); ?>">
-				<div class="thumbnail thumbnail-<?php echo esc_attr( $mime_type ); ?>">
+			<div class="attachment-media-view attachment-media-view-<?php echo esc_attr( $media_type ); ?> <?php echo esc_attr( $orientation ); ?>">
+				<div class="thumbnail thumbnail-<?php echo esc_attr( $media_type ); ?>">
 					<?php
-					if ( 'image' === $mime_type && $sizes && $sizes['medium'] ) {
+					if ( 'image' === $media_type && ! empty( $sizes['medium'] ) ) {
 						$medium_src = wp_get_attachment_image_url( $attachment_id, 'medium' );
 						?>
 						<img class="attachment-thumb"
@@ -182,7 +182,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 							alt="<?php echo esc_attr( $alt_text ); ?>"
 						>
 						<?php
-					} elseif ( 'image' === $mime_type && $sizes && $sizes['full'] ) {
+					} elseif ( 'image' === $media_type && ! empty( $sizes['full'] ) ) {
 						$full_src = wp_get_attachment_image_url( $attachment_id, 'full' );
 						?>
 						<img class="attachment-thumb"
@@ -191,7 +191,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 							alt="<?php echo esc_attr( $alt_text ); ?>"
 						>
 						<?php
-					} elseif ( 'audio' === $mime_type ) {
+					} elseif ( 'audio' === $media_type ) {
 						if ( $src && $src !== $icon ) {
 							?>
 							<img src="<?php echo esc_url( $src ); ?>"
@@ -233,11 +233,11 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 							<source type="<?php echo esc_attr( $mime_type ); ?>" src="<?php echo esc_url( $src ); ?>">
 						</audio>
 						<?php
-					} elseif ( 'video' === $mime_type ) {
+					} elseif ( 'video' === $media_type ) {
 						?>
 						<div class="wp-media-wrapper wp-video">
 							<video controls class="wp-video-shortcode" preload="metadata">
-								<source type="<?php echo esc_attr( $mime_type ); ?>" src="<?php echo esc_url( $src ); ?>"<?php echo $poster; ?>>
+								<source type="<?php echo esc_attr( $mime_type ); ?>" src="<?php echo esc_url( $src ); ?>">
 							</video>
 						</div>
 						<?php
