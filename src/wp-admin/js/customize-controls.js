@@ -2495,12 +2495,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Prevent form submission via PHP
 		e.preventDefault();
 
-		window._customizePublishing = true;
-
 		// Prevent accidental form submissions
 		if ( e.submitter !== saveButton ) {
 			return;
 		}
+
+		window._customizePublishing = true;
 
 		// Prevent a pending autosave from starting during this save.
 		window.clearTimeout( autosaveTimer );
