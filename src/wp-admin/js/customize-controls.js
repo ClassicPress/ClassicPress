@@ -47,6 +47,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		lockSettings = window._wpCustomizeSettings || {},
 		lockRefreshTimer = null,
 		queryParams = new URLSearchParams( window.location.search ),
+		queryString = queryParams.toString(),
 		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
 		addWidgetButtons = document.querySelectorAll( '.add-new-widget' ),
 		newMenuItemIDs = window.newMenuItemIDs,
@@ -172,7 +173,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Delete redundant query args from browser URL
 	if ( queryParams.get( 'url' ) ) {
 		queryParams.delete( 'url' );
-		newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
+		newUrl = window.location.pathname + ( queryString ? '?' + queryString : '' ) + ( hash ? '#' + hash : '' );
 		history.replaceState( null, '', encodeURI( newUrl ) );
 	}
 
@@ -185,7 +186,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			history.replaceState( null, '', encodeURI( window.location.pathname ) );
 		} else {
 			queryParams.delete( 'return' );
-			newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
+			newUrl = window.location.pathname + ( queryString ? '?' + queryString : '' ) + ( hash ? '#' + hash : '' );
 			history.replaceState( null, '', encodeURI( newUrl ) );
 			saveButton.disabled = false;
 			saveButton.textContent = _wpCustomizeControlsL10n.activate;
@@ -195,7 +196,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}, 0 );
 	} else {
 		queryParams.delete( 'return' );
-		newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
+		newUrl = window.location.pathname + ( queryString ? '?' + queryString : '' ) + ( hash ? '#' + hash : '' );
 		history.replaceState( null, '', encodeURI( newUrl ) );
 	}
 
@@ -2408,8 +2409,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			result = await response.json();
 
+			if ( ! result.success && result.data?.code === 'changeset_already_published' && result.data?.next_changeset_uuid ) {
+				document.getElementById( 'customize_changeset_uuid' ).value = result.data.next_changeset_uuid;
+
+				/*
+				 * Retry after finally releases the in-progress flag.
+				 * Keep the live buffers intact.
+				 */
+				autosavePending = true;
+				return;
+			}
+
 			if ( ! result.success ) {
-				throw new Error( result.data || 'Customizer autosave failed.' );
+				throw new Error( typeof result.data === 'string' ? result.data : JSON.stringify( result.data ) || 'No error details returned.' );
 			}
 
 			/*
@@ -2659,7 +2671,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				queryParams.delete( 'cp_restoring_autosave' );
 				queryParams.delete( 'customize_autosaved' );
 
-				window.history.replaceState( null, '', window.location.pathname + '?' + queryParams.toString() + window.location.hash );
+				window.history.replaceState( null, '', window.location.pathname + '?' + queryString + window.location.hash );
 			}
 
 			// Update the in-memory date so the Schedule radio restores correctly
@@ -2709,6 +2721,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// If the server rolled the changeset UUID, update it before next call
 			if ( newResult.data.next_changeset_uuid ) {
 				document.getElementById( 'customize_changeset_uuid' ).value = newResult.data.next_changeset_uuid;
+			}
+
+			// Do not reopen the published changeset when the page is refreshed.
+			if ( changesetStatus === 'publish' ) {
+				queryParams.delete( 'customize_changeset_uuid' );
+				queryParams.delete( 'customize_autosaved' );
+				queryParams.delete( 'cp_restoring_autosave' );
+
+				window.history.replaceState( null, '', window.location.pathname + ( queryString ? '?' + queryString : '' ) + window.location.hash );
 			}
 
 			saveButton.disabled = true;
