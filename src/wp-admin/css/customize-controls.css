@@ -2396,6 +2396,7 @@ body.adding-widget .add-new-widget:before,
 
 #widgets-right {
 	flex: 1;
+	overflow: auto;
 }
 
 #available-menu-items {
