@@ -547,12 +547,12 @@ get_current_screen()->add_help_tab(
 				'<p>' . sprintf(
 					/* translators: %s: link to plugin page in the ClassicPress Directory */
 					__( 'With the <a href="%s"><strong>ClassicPress Directory Integration</strong></a> plugin you get access to plugins that are built for ClassicPress. They will appear in the Plugins > Install CP Plugins screen.' ),
-					__( '://directory.classicpress.net/plugins/classicpress-directory-integration/' )
+					__( 'https://directory.classicpress.net/plugins/classicpress-directory-integration/' )
 				) . '</p>' .
 				'<p>' . sprintf(
 					/* translators: %s: WordPress Plugin Directory URL. */
 					__( 'If you would like to see more plugins to choose from, click on the &#8220;Add New&#8221; button and you will be able to browse or search for additional plugins from the <a href="%s">WordPress Plugin Directory</a>. Plugins in the WordPress Plugin Directory are designed and developed by third parties, and are compatible with the license WordPress uses. Oh, and they&#8217;re free!' ),
-					__( '://wordpress.org/plugins/' )
+					__( 'https://wordpress.org/plugins/' )
 				) . '</p>',
 	)
 );
