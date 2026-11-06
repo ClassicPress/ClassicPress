@@ -309,12 +309,7 @@ if ( 'post' === $post_type ) {
 	);
 
 	get_current_screen()->set_help_sidebar(
-		'<p>' . sprintf(
-			/* translators: %s: URL to Press This bookmarklet. */
-			__( 'You can also create posts with the <a href="%s">Press This bookmarklet</a>.' ),
-			'tools.php'
-		) . '</p>' .
-			'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
+		'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
 			'<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/posts-add-new-screen/">Documentation on Writing and Editing Posts</a>' ) . '</p>' .
 			'<p>' . __( '<a href="https://forums.classicpress.net/c/support/">Support forums</a>' ) . '</p>'
 	);
