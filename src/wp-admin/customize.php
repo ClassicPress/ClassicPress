@@ -463,7 +463,7 @@ wp_print_scripts();
 								?>
 							</p>
 							<p>
-								<a href="https://wordpress.org/documentation/article/customizer/">
+								<a href="https://docs.classicpress.net/user-guides/using-classicpress/customizer/">
 									<?php esc_html_e( 'Documentation on Customizer' ); ?>
 								</a>
 							</p>
@@ -1260,7 +1260,7 @@ wp_print_scripts();
 											printf(
 												/* translators: 1: Documentation URL, 2: Additional link attributes, 3: Accessibility text. */
 												__( '(If you plan to use a menu <a href="%1$s" %2$s>widget%3$s</a>, skip this step.)' ),
-												__( 'https://wordpress.org/documentation/article/manage-wordpress-widgets/' ),
+												__( 'https://docs.classicpress.net/user-guides/using-classicpress/widgets-screen/' ),
 												' class="external-link" target="_blank"',
 												sprintf(
 													'<span class="screen-reader-text"> %s</span>',
