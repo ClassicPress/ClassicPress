@@ -70,6 +70,7 @@ CREATE TABLE $wpdb->object_relationships (
 	right_object_id bigint(20) unsigned NOT NULL default 0,
 	PRIMARY KEY (relationship_id),
 	KEY left_object_id (left_object_id),
+	KEY right_object_id (right_object_id),
 	KEY left_object_type (left_object_type($max_index_length)),
 	KEY right_object_type (right_object_type($max_index_length))
 ) $charset_collate;
